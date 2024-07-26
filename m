@@ -1,232 +1,145 @@
-Return-Path: <linux-kselftest+bounces-14275-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14276-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8EDA93D792
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 19:27:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A05B293D7AA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 19:32:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5B1B1C23134
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 17:27:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D096282485
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 17:32:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 819AC17C9F3;
-	Fri, 26 Jul 2024 17:27:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AEE817CA10;
+	Fri, 26 Jul 2024 17:32:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="FdiAcVPy"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="TqwiDsSl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1AD617C208
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 17:27:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0099E748A
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 17:32:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722014859; cv=none; b=Ie+ynSTewT4lw3k/tyjkZJed48hVQZ+Q92Jrszj6A4I3a2EhP5E8+i1slLdFFuQHFegaZVHwNG7SKyGldMsiFPXwS3ZErT+0nrY9P+wg283x+iRflBG4ptXLGg6AT9qshWGzUOfh5xDuyuDV9dkPDYL2+uGh1DmellkLd3T+7eM=
+	t=1722015166; cv=none; b=ZsWDJ80tayqn1RbjP3/AfL5aFn0Q/J8dOSPuUzGJCWswwuBUSt3YzuS8mFM9/niPw1ry96wVtwLasJ4DAtOaR7L7mTEU3JtCkfEFdA2qjr+LM5z73oweZ9E8hDQFrYVA/iRQABLcu5uyik9E3z7es4hmmKHUs5AEarCYEN63CeE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722014859; c=relaxed/simple;
-	bh=qFGlvMhteFMAaqJUl6N6Xqh/+JZvLGYqyFFAThGVfPw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=V6/rcaA46kRhx2N3E7vmm986ENyFBi/fhiekU7zC6YMcPzg1xslNbvRIx6f5yEHYvZjQj7gGY/gDwA9DtyK3R5xNABYcHk0IYSHjhQKet19dGD1z+emjqBVQL6yW17QWKGJ7XcU/KrcJ6+ihrCbheSDhNhnSR2adp2X0KBqDvxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=FdiAcVPy; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5a10bb7bcd0so3019607a12.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 10:27:37 -0700 (PDT)
+	s=arc-20240116; t=1722015166; c=relaxed/simple;
+	bh=xGHmK9gWGUp0gHCFdD6XGO+i8NLts1NPaIMeFMTYSnI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BSzOTx6RLHKj/G4oEg+AJt0CDOB6A+hSOKOwhXwmdXkCCtwp49mJu0yIQGnC8ltdQLOjIirbcem2G/tahT2DJoNS286cLyHK/bn3uEouOdBcdhJBTHFBqnmf7z3jB+skxG2HIAeFxHyzmWx0hqSz3KI6QIsixTU/oSyfpWnV+5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=TqwiDsSl; arc=none smtp.client-ip=209.85.166.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-81f82478b70so9783839f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 10:32:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1722014856; x=1722619656; darn=vger.kernel.org;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8EyOtirsWmopDCe9GEITwcgKLVaDmjcC2IWcfFdj4as=;
-        b=FdiAcVPylSmsObz1AIiSgfOzBnHxjeMKeXdSNIe9ZHlGLLLgyDGOMVKUWqh/4EgRqn
-         3txQ28itDx7+JueNKIZY6k2RMY4NgNa5F+pkTHdjlD3X4KqgZP2s5WC89EAUuVrdxh3/
-         wF1t8nl/SEcEXrLgMhfTGS31BeKPUGHmno79mnb9bac6VlohruNv10JJUn/+IP96wyhN
-         WTkwRbROgz0QP1H/jDXfsHVLPsjQz5C/Sqagd63zmHxabLK8sHNT3y6tCJqYs5zqWV6T
-         gjuQ75o8DkzhOyOVqlAFkOwuS5ZeDKrqYwZ2syW1fnfSRiIN4f4gn3BVDQMQay+YRvlE
-         GcQg==
+        d=linuxfoundation.org; s=google; t=1722015163; x=1722619963; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=k4GinbwCPpupZoTNERMGOO+CrpcJ/xxlN9pDIVPEVvg=;
+        b=TqwiDsSlxmH0txvSaWHWJOkHSM4D+3xUOftZRUZVCpH/lXyGx5TwNHR7+XAfM4tg6t
+         FxqfXp+62k8AuKXQjNz86BiFzbnhzDaO1iifmlAAgxr1Ef8yTfWLuOlbBzCOa3asDWXf
+         r8WS1/G6awfnmx0bBDR19vyv2psBnELROmW60=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722014856; x=1722619656;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8EyOtirsWmopDCe9GEITwcgKLVaDmjcC2IWcfFdj4as=;
-        b=NXsoKGmW97e500y7AbhpDp8nSFsana1ttguKSqvgW5y7rJw4ppycasuzox3oRgVpbD
-         rfzYkaSVGtn6MnEbBr6SSNZTuvw2blUWHH91k6K2rV+PVx0zAD1nvgvnU2U8ABKIibUy
-         QGGy14KUdCU0IdVMFKFERvFMXzd+7dkdCA1lVQuVxW5kMgp3T3MEWaD2HL4dZTUKOfWN
-         ZmFHOX59yYz8YJaWwzPwTrz0HkwnXBQaCifMJAFdkHvjdO0e8OciOLbecpYRG4uF4pw9
-         IT0Wn3Ier4wx3pssx6dcm4YH09l0FNyeJ12mniP4ivzuyKfB/I4q9RpgKeyhbXhr7D9C
-         WSXA==
-X-Forwarded-Encrypted: i=1; AJvYcCWVdRvX3VlOtcOHA8EfFbNT7gigYtTVBsUTjdGiz/x9EqBgPjBMj9EQG1lkzur/vLAj4vR7jlmpyeQmVtSMjpV7tRLb+d3efM3YSjX44AUl
-X-Gm-Message-State: AOJu0Yx1RY4oNdx0zU6XEs+nZFE+1s0xmDMdzNZL8effkG6rxxNPCvUG
-	p06xc8aySZYwGyqJ58t1NUrpB7ikGUWlaTGs7IeXI0X13b7LBZRISe2XwcUfSiE=
-X-Google-Smtp-Source: AGHT+IHvx2x2riTEqoxuCBwrXZm2KqzJYh/bqylu0umjwLin316iEYSM6CBdYzfcsDW46OEMhID5rw==
-X-Received: by 2002:a17:907:7d86:b0:a72:5f9a:159a with SMTP id a640c23a62f3a-a7d3ff583a6mr16652066b.2.1722014856217;
-        Fri, 26 Jul 2024 10:27:36 -0700 (PDT)
-Received: from cloudflare.com ([2a09:bac5:5063:2387::38a:4c])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7acab50cbfsm197311866b.47.2024.07.26.10.27.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jul 2024 10:27:35 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Michal Luczaj <mhal@rbox.co>
-Cc: Andrii Nakryiko <andrii@kernel.org>,  Eduard Zingerman
- <eddyz87@gmail.com>,  Mykola Lysenko <mykolal@fb.com>,  Alexei Starovoitov
- <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,  Martin KaFai
- Lau <martin.lau@linux.dev>,  Song Liu <song@kernel.org>,  Yonghong Song
- <yonghong.song@linux.dev>,  John Fastabend <john.fastabend@gmail.com>,  KP
- Singh <kpsingh@kernel.org>,  Stanislav Fomichev <sdf@fomichev.me>,  Hao
- Luo <haoluo@google.com>,  Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
- <shuah@kernel.org>,  bpf@vger.kernel.org,  netdev@vger.kernel.org,
-  linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf 6/6] selftest/bpf: Introduce
- __attribute__((cleanup)) in create_pair()
-In-Reply-To: <20240724-sockmap-selftest-fixes-v1-6-46165d224712@rbox.co>
-	(Michal Luczaj's message of "Wed, 24 Jul 2024 13:32:42 +0200")
-References: <20240724-sockmap-selftest-fixes-v1-0-46165d224712@rbox.co>
-	<20240724-sockmap-selftest-fixes-v1-6-46165d224712@rbox.co>
-User-Agent: mu4e 1.12.4; emacs 29.1
-Date: Fri, 26 Jul 2024 19:27:34 +0200
-Message-ID: <878qxokqrd.fsf@cloudflare.com>
+        d=1e100.net; s=20230601; t=1722015163; x=1722619963;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=k4GinbwCPpupZoTNERMGOO+CrpcJ/xxlN9pDIVPEVvg=;
+        b=LB5VKaxkCE6lGh4nbWPCyL6Ic+9SbrfbGO9beWUEMOy4/imhdwqeqhgNSD6LDUNlG4
+         2yNkasd9mD/ic+l21pkt1B+1fGn8lYiYbEkb4QnQLIBBe6pJg07pdT31tXRQOEYHvDo/
+         HEeo5ffZEvnGEoqj+DZljQCi/YYKEK6EtlbzsAc0oZiGyXeWhulO8Wgs8HZEFzCv88K9
+         eYTdR1rRxOxv6gZffaFEGHyobpOOSomoNTRqxRVL2dO3yY90DYKwZ0q9TTODOex0G/8Y
+         iog0nNGyrcI1LUFA00vp5eE+qszLzD7AnZDpauDZG+0IaqDCZCWEGE0ueFZjjWTU+P1S
+         m4hg==
+X-Forwarded-Encrypted: i=1; AJvYcCXXKENanshpSos04Y1JWGNaCTmyIg7qJY8GPeMdz2DBAtRB8p/uFxrQDhvDaV4+K/YRg/rNBxh4Lri33x5JgsY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBZaHc4YVrZlMt+jEqZqnmJWPqFNrKWtOUMy7SowKZ31vOdWS3
+	wOCEBj+gRXEStQdJN5+cV9HpA5LsWL4REQ35cXx9oZTjjeXs1lJb5pRxbmm2REw=
+X-Google-Smtp-Source: AGHT+IHbRT3iZRW+Jej5kqYMWBksmgKgeIxN4ONjndWGY3FhrB7Ej8wWWEhyyeycHxTk96AcFxZGNg==
+X-Received: by 2002:a5e:8342:0:b0:81f:8f3a:5689 with SMTP id ca18e2360f4ac-81f8f3a5894mr144339139f.0.1722015163088;
+        Fri, 26 Jul 2024 10:32:43 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-81f7d7fee0csm118731839f.43.2024.07.26.10.32.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 26 Jul 2024 10:32:42 -0700 (PDT)
+Message-ID: <3e3d94d5-2a7f-4c05-b4ce-c6c8ca4e1186@linuxfoundation.org>
+Date: Fri, 26 Jul 2024 11:32:41 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5] tools/testing:Fix the wrong format specifier
+To: Zhu Jun <zhujun2@cmss.chinamobile.com>, zhang.lyra@gmail.com
+Cc: shuah@kernel.org, kees@kernel.org, luto@amacapital.net, wad@chromium.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240726023241.17295-1-zhujun2@cmss.chinamobile.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240726023241.17295-1-zhujun2@cmss.chinamobile.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 24, 2024 at 01:32 PM +02, Michal Luczaj wrote:
-> Rewrite function to have (unneeded) socket descriptors automatically
-> close()d when leaving the scope. Make sure the "ownership" of fds is
-> correctly passed via take_fd(); i.e. descriptor returned to caller will
-> remain valid.
->
-> Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+On 7/25/24 20:32, Zhu Jun wrote:
+> The format specifier in fprintf is "%u", that "%u" should use
+> unsigned int type instead.the problem is discovered by reading code.
+> 
+> Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
 > ---
->  .../selftests/bpf/prog_tests/sockmap_helpers.h     | 57 ++++++++++++----------
->  1 file changed, 32 insertions(+), 25 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h b/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
-> index ead8ea4fd0da..2e0f9fe459be 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
-> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
-> @@ -182,6 +182,21 @@
->  		__ret;                                                         \
->  	})
->  
-> +#define take_fd(fd)                                                            \
-> +	({                                                                     \
-> +		__auto_type __val = (fd);                                      \
-> +		fd = -EBADF;                                                   \
-> +		__val;                                                         \
-> +	})
+>   v1->v2:
+>   	modify commit info add how to find the problem in the log
+>   v2->v3:
+>   	Seems this can use macro WTERMSIG like those above usage, rather than
+>   	changing the print format.
+>   v3->v4:
+>   	Now the commit summary doesn't match the change you are making.
+> 	 Also WTERMSIG() is incorrect for this conditional code path.
+> 	 See comments below in the code path.
+> 
+> 	 I would leave the v2 code intact. How are you testing this change?
+> 	 Please include the details in the change log.
 
-Probably should operate on a pointer to fd to avoid side effects, like
-__get_and_null macro in include/linux/cleanup.h. take_fd is effectively
-__get_and_null(fd, -EBADFD).
+I am asking you to send the v2 change with updated change log
+to show how this change is tested.
 
-> +
-> +static inline void close_fd(int *fd)
-> +{
-> +	if (*fd >= 0)
-> +		xclose(*fd);
-> +}
-> +
-> +#define __close_fd __attribute__((cleanup(close_fd)))
-> +
->  static inline int poll_connect(int fd, unsigned int timeout_sec)
->  {
->  	struct timeval timeout = { .tv_sec = timeout_sec };
-> @@ -369,9 +384,10 @@ static inline int socket_loopback(int family, int sotype)
->  
->  static inline int create_pair(int family, int sotype, int *p0, int *p1)
->  {
-> +	__close_fd int s, c = -1, p = -1;
->  	struct sockaddr_storage addr;
->  	socklen_t len = sizeof(addr);
-> -	int s, c, p, err;
-> +	int err;
->  
->  	s = socket_loopback(family, sotype);
->  	if (s < 0)
-> @@ -379,25 +395,23 @@ static inline int create_pair(int family, int sotype, int *p0, int *p1)
->  
->  	err = xgetsockname(s, sockaddr(&addr), &len);
->  	if (err)
-> -		goto close_s;
-> +		return err;
->  
->  	c = xsocket(family, sotype, 0);
-> -	if (c < 0) {
-> -		err = c;
-> -		goto close_s;
-> -	}
-> +	if (c < 0)
-> +		return c;
->  
->  	err = connect(c, sockaddr(&addr), len);
->  	if (err) {
->  		if (errno != EINPROGRESS) {
->  			FAIL_ERRNO("connect");
-> -			goto close_c;
-> +			return err;
->  		}
->  
->  		err = poll_connect(c, IO_TIMEOUT_SEC);
->  		if (err) {
->  			FAIL_ERRNO("poll_connect");
-> -			goto close_c;
-> +			return err;
->  		}
->  	}
->  
-> @@ -405,36 +419,29 @@ static inline int create_pair(int family, int sotype, int *p0, int *p1)
->  	case SOCK_DGRAM:
->  		err = xgetsockname(c, sockaddr(&addr), &len);
->  		if (err)
-> -			goto close_c;
-> +			return err;
->  
->  		err = xconnect(s, sockaddr(&addr), len);
-> -		if (!err) {
-> -			*p0 = s;
-> -			*p1 = c;
-> +		if (err)
->  			return err;
-> -		}
-> +
-> +		*p0 = take_fd(s);
->  		break;
->  	case SOCK_STREAM:
->  	case SOCK_SEQPACKET:
->  		p = xaccept_nonblock(s, NULL, NULL);
-> -		if (p >= 0) {
-> -			*p0 = p;
-> -			*p1 = c;
-> -			goto close_s;
-> -		}
-> +		if (p < 0)
-> +			return p;
->  
-> -		err = p;
-> +		*p0 = take_fd(p);
->  		break;
->  	default:
->  		FAIL("Unsupported socket type %#x", sotype);
-> -		err = -EOPNOTSUPP;
-> +		return -EOPNOTSUPP;
->  	}
->  
-> -close_c:
-> -	close(c);
-> -close_s:
-> -	close(s);
-> -	return err;
-> +	*p1 = take_fd(c);
-> +	return 0;
->  }
->  
->  static inline int create_socket_pairs(int family, int sotype, int *c0, int *c1,
+> v4->v5:
+> 	Compile the kernel for testing using make
 
-This turned out nice and readable, IMHO.
+Running make isn't sufficient - please verify running the tests
+making sure there are no regressions. Since you are changing the
+harness, you want to make sure this change You are changing the
+harness.
+
+> 
+> 
+>   tools/testing/selftests/kselftest_harness.h | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+> index e05ac8261046..675b8f43e148 100644
+> --- a/tools/testing/selftests/kselftest_harness.h
+> +++ b/tools/testing/selftests/kselftest_harness.h
+> @@ -910,7 +910,7 @@ void __wait_for_test(struct __test_metadata *t)
+>   		.sa_flags = SA_SIGINFO,
+>   	};
+>   	struct sigaction saved_action;
+> -	int status;
+> +	unsigned int status;
+
+I am asking you to send the v2 change with updated change log
+to show how this change is tested.
+		fprintf(TH_LOG_STREAM,
+-			"# %s: Test ended in some other way [%u]\n",
++			"# %s: Test ended in some other way [%d]\n",
+  			t->name,
+
+%d makes sense here in this message.
+
+thanks,
+-- Shuah
 
