@@ -1,71 +1,60 @@
-Return-Path: <linux-kselftest+bounces-14270-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14271-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C51C493D1B1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 13:08:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 399F993D495
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 15:50:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7657228448B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 11:08:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D98231F21D2D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 13:50:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC8B917A5A8;
-	Fri, 26 Jul 2024 11:07:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED1AC1E87B;
+	Fri, 26 Jul 2024 13:50:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="32x/hB9c"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="nlOsVcbG"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 517C217A5A3;
-	Fri, 26 Jul 2024 11:07:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8C41E533;
+	Fri, 26 Jul 2024 13:50:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721992062; cv=none; b=gct4gtsX61BUzopUevMU9gFa0PqRRx9QuQ2fa/Q/qn/GK00lyvUq09d8hDG9ua5kpFtLbBG1sFh7k6LLkQc/oaDgMfPsYk+jhr8oAf+wyx6F2hFXEWNic/2IRVhdG5d5WL5sRz2K8dzHaXSLEZTdFYx0GNSjxfEWjq7INLndjZs=
+	t=1722001840; cv=none; b=b8xfNHlpTo6Ex527NKV9eFQh1M+OUmZsgg4UJ724vw5183IkHY+bCLcqPqKjfu/E6tqdXoR5t1mbGPzQLmHNPTUxxPos7Gv2IXxFFqRqXpoDu1gmqee+feTe/+vmQof3zEeC//+9xJ9+awGh8oLKV9nf1h1xjE8WX5h5MVtWQhk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721992062; c=relaxed/simple;
-	bh=uMgsqZ1f9h0sRaq2TSzfX4gpb1CnCYYdd+RDbwevyKE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=r7oEqpdjupTOYnT0r73bn+hAaevqz3XcCx59uV15SoCJlteEDEccK1o9ft/HiJIKEWrhgiWCQmLTleGwqLDPdGKXgoPGZ+JI/FwM0Kyw2PuTbUqQIuhrm4oQJMfYAftxW5fhJQyrHU6k3g1Eub0CBy3GNb/PrmlOgdQCrNkzTpU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=32x/hB9c; arc=none smtp.client-ip=46.235.227.194
+	s=arc-20240116; t=1722001840; c=relaxed/simple;
+	bh=Iyax8yzW+8JlNwyoV0RroXKbzsmNZ93yFf8MATkzhX0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=nFlZUE7dqyUDtrJhUybEvQhO8ESA0QCXNex+ViDne8j6vRk7JxeuJCcCGXkC0vaqf3dJf5/EwAmlNVXEsCJghHTTVZGpZWuUMAWReQYgLIUmB0IdGWa45DU0ROpbSPidE4AtAs9LPScj4WVy6ZHRH3osCgbYQ3U8drnOQ1ew2r0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=nlOsVcbG; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1721992059;
-	bh=uMgsqZ1f9h0sRaq2TSzfX4gpb1CnCYYdd+RDbwevyKE=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=32x/hB9cR4RrwLzjG6REuhX7KLC6NOYZCSlu9YunFQWZF4PB1t8Feolf5qc9xiGpZ
-	 5alH0uCoqM7aELcByb9o1MozVqazXqolX+W3cF0WjWmxtskLD1P9NWzMqGvsNZJCy7
-	 BqdJotuiDBrWLbfi9Icgi2KJ9V1Yr424P17CB/hH76QkftmUvYSJ3C5Ifyp7Q188mX
-	 X1anGN2GoxsiW8GwtjF0ZuK4kS77JIQrFRio3fC/++JGwm6uasbEz+ayS0wiHWaEyG
-	 jGoeKwZW+3ClVA8mQWS1BF65TynA9VAEeqSjCy0swl5r74MD2wyO+GmDCKvPI3Ra+p
-	 NVUnoqF7h4Qow==
-Received: from localhost.localdomain (broslavsky.collaboradmins.com [68.183.210.73])
+	s=mail; t=1722001837;
+	bh=Iyax8yzW+8JlNwyoV0RroXKbzsmNZ93yFf8MATkzhX0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=nlOsVcbG+Hg7At42isUuQKbEt1q8tAyo+u2TyBkCjkh3zucN+INueuJ/TS70VRUrW
+	 lL0w7t8Akb56vv6Y7uQI1pNamPwiXa4V0Jdf1CpmljKgtf61pnzl+UOq412+/JJ8Bx
+	 NhXhSITZorALMfJgzmKpBiVoesezRH4MZ2pFQbjyeQ6Be/VsPMRWaFA05rWYtWAyCH
+	 IONr+S1s0/4V56gqF7k5c0d+7LvGaDzZEavnmtiVDX2CsHtFRf75RzoS3W3HBPTrNO
+	 GAtCQRckfWwnHxWV+Lph59hTgP1Oxy5dZHe+4JCmaHEqB53d96S8JrOJDEbo4cpHmb
+	 jwfXeUlFcZS3A==
+Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id AC5DB37821C0;
-	Fri, 26 Jul 2024 11:07:34 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Yury Norov <yury.norov@gmail.com>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Shuah Khan <shuah@kernel.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kees@kernel.org,
-	David Gow <davidgow@google.com>,
-	John Hubbard <jhubbard@nvidia.com>
-Cc: kernel@collabora.com
-Subject: [PATCH 3/3] selftests: lib: remove test_bitmap
-Date: Fri, 26 Jul 2024 16:06:58 +0500
-Message-Id: <20240726110658.2281070-4-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240726110658.2281070-1-usama.anjum@collabora.com>
-References: <20240726110658.2281070-1-usama.anjum@collabora.com>
+	(Authenticated sender: laura.nao)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id C754B37804CE;
+	Fri, 26 Jul 2024 13:50:36 +0000 (UTC)
+From: Laura Nao <laura.nao@collabora.com>
+To: kernelci@lists.linux.dev
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Testing Quality Call notes - 2024-07-25
+Date: Fri, 26 Jul 2024 15:51:01 +0200
+Message-Id: <20240726135101.45018-1-laura.nao@collabora.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,50 +63,74 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Remove the test_bitmap as it has been converted to kunit test.
+Hello,
 
-Cc: kees@kernel.org
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/lib/Makefile  | 2 +-
- tools/testing/selftests/lib/bitmap.sh | 3 ---
- tools/testing/selftests/lib/config    | 1 -
- 3 files changed, 1 insertion(+), 5 deletions(-)
- delete mode 100755 tools/testing/selftests/lib/bitmap.sh
+KernelCI is hosting a bi-weekly call on Thursday to discuss improvements 
+to existing upstream tests, the development of new tests to increase 
+kernel testing coverage, and the enablement of these tests in KernelCI. 
+In recent months, we at Collabora have focused on various kernel areas,
+assessing the tests already available upstream and contributing patches 
+to make them easily runnable in CIs.
 
-diff --git a/tools/testing/selftests/lib/Makefile b/tools/testing/selftests/lib/Makefile
-index ee71fc99d5b51..386c5887c0d65 100644
---- a/tools/testing/selftests/lib/Makefile
-+++ b/tools/testing/selftests/lib/Makefile
-@@ -4,6 +4,6 @@
- # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
- all:
- 
--TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh scanf.sh strscpy.sh
-+TEST_PROGS := printf.sh prime_numbers.sh scanf.sh strscpy.sh
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/lib/bitmap.sh b/tools/testing/selftests/lib/bitmap.sh
-deleted file mode 100755
-index 00a416fbc0ef0..0000000000000
---- a/tools/testing/selftests/lib/bitmap.sh
-+++ /dev/null
-@@ -1,3 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0
--$(dirname $0)/../kselftest/module.sh "bitmap" test_bitmap
-diff --git a/tools/testing/selftests/lib/config b/tools/testing/selftests/lib/config
-index 645839b50b0a2..7d3b1de29d3d6 100644
---- a/tools/testing/selftests/lib/config
-+++ b/tools/testing/selftests/lib/config
-@@ -1,6 +1,5 @@
- CONFIG_TEST_PRINTF=m
- CONFIG_TEST_SCANF=m
--CONFIG_TEST_BITMAP=m
- CONFIG_PRIME_NUMBERS=m
- CONFIG_TEST_STRSCPY=m
- CONFIG_TEST_BITOPS=m
--- 
-2.39.2
+Below is a list of the tests we've been working on and their latest 
+status updates, as discussed in the last meeting held on 2024-07-25:
 
+*USB/PCI devices kselftest*
+
+- Upstream test to detect unprobed devices on discoverable buses: 
+  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=dacf1d7a78bf8a131346c47bfba7fe1f3ff44beb 
+- Test location changed 
+  (https://lore.kernel.org/all/20240705-dev-err-log-selftest-v2-1-163b9cd7b3c1@collabora.com/), 
+  updated KernelCI PRs accordingly: 
+  https://github.com/kernelci/kernelci-core/pull/2577 and https://github.com/kernelci/kernelci-pipeline/pull/642
+- Will need to figure out how to structure the files to ensure 
+  scalability. A YAML schema would be useful too.
+
+*Error log test*
+
+- Proposing new kselftest to report device log errors: 
+  https://lore.kernel.org/all/20240423-dev-err-log-selftest-v1-0-690c1741d68b@collabora.com/
+- Now merged upstream
+
+*Missing devices kselftest*
+
+- Proposing new kselftest to report devices that go missing in the system: 
+  https://lore.kernel.org/all/20240724-kselftest-dev-exist-v1-1-9bc21aa761b5@collabora.com/#r
+- The test checks the number of devices present against a reference file, 
+  generated by the program at a previous point on a known-good kernel, 
+  and reports any missing device.
+- Helps identifying missing kernel configs or broken driver features
+
+*Suspend/resume in cpufreq kselftest*
+
+- Enabling suspend/resume test within the cpufreq kselftest in KernelCI
+- Sent v2 for patch adding RTC wakeup alarm in the cpufreq kselftest: 
+  https://lore.kernel.org/lkml/20240715192634.19272-1-shreeya.patel@collabora.com/
+- The test now uses rtcwake, as suggested by Rafael J. Wysocki in the 
+  first review. There's no easy way to declare the dependency in the 
+  kselftest itself.
+- Patch got acked by the cpufreq kselftest author Viresh Kumar
+
+*Boot time test*
+
+- Sent first RFC:
+  https://lore.kernel.org/all/20240725110622.96301-1-laura.nao@collabora.com/T/#ma568382acdc81af65c30fe3823a7be3e49f98108
+
+*TAP conformance in kselftests*
+
+- Ongoing discussion upstream on TAP headers: 
+  https://lore.kernel.org/all/87fbfba4-8d4d-44ff-9fe5-e101cce3d6cb@collabora.com
+- Working to convert test modules used by kselftests into kunit. Cleanup 
+  patches sent:
+  https://lore.kernel.org/all/20240725110817.659099-1-usama.anjum@collabora.com 
+  and https://lore.kernel.org/all/20240725121212.808206-1-usama.anjum@collabora.com
+
+Please reply to this thread if you'd like to join the call or discuss 
+any of the topics further. We look forward to collaborating with the 
+community to improve upstream tests and expand coverage to more areas 
+of interest within the kernel.
+
+Best regards,
+
+Laura Nao
 
