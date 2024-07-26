@@ -1,71 +1,70 @@
-Return-Path: <linux-kselftest+bounces-14281-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14282-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AD6D93D8F8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 21:26:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51B2193D8FE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 21:35:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B43F281810
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 19:26:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82C961C22765
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 19:35:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F7474CB2B;
-	Fri, 26 Jul 2024 19:26:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C72E2433B9;
+	Fri, 26 Jul 2024 19:35:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Y4jUdV8H"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="S8peiIIc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E6F328DA5
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 19:26:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3515F210EC
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 19:35:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722022012; cv=none; b=FlDftQhrUP48PFTsd9lxYkoR6e8DlO7DaKZVknOeBjvnMCdR480c3QPCeoAei+tE8WjgJEXEwihyRgUpB2kVmVcHTgyrHi8oBCVFUMenj8eH2RWkUUUJw9gc+XLHtmSm7yBmsmm4Gx74g6D8ehf1qErMHrxfeRJkQ/SodbyzQhE=
+	t=1722022504; cv=none; b=PesEbCFh5eZl12GJ2XGVJRIQTUH/SNMzS7FBVNvTh4VEEtdQHamhJ7DbxiD5B59zHXktF24aYsAP/2zfZmXcSL+y2OsSgQh4DngVvuPismMzmeeb+g7oLfchPIppn9EvCrWeEUoeFTyqO/SntvYZ23X/6FGuf4ZDUtZR6ZPKjoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722022012; c=relaxed/simple;
-	bh=xU+NuJAVvnfK0Tt0DxSZJg16xqKjr2ItMkKT+rDMuYA=;
+	s=arc-20240116; t=1722022504; c=relaxed/simple;
+	bh=24jLkCF+CBq9uB6ATrQWCbHLtjoiCw3tZ5O0cb9KmXE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tWfHuZ5e4mGNznub3E8doNCZ4XmsrjzKMDh819M3/+1FnwFbNFuGQNKryjv7Ff6s34nPBDBsew00pxX9ciKZLezLDAX9cc0ni84W+IJAVZMkSc/FQepThZ06XJzxkn/HuTy0WAdJxzAvsPfvPltTsSxzKwUluY+MtHuSSvH3sRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Y4jUdV8H; arc=none smtp.client-ip=209.85.166.47
+	 In-Reply-To:Content-Type; b=t/7E3r8arBpP+WPKPwpZOMg/rc8bicCsqmXKm19Sy2rd6CTBQJHmctWw2TB2Zl0oxL27y15h1YO3CpmNwTdMA1Bm7OfDcrvOg/Pox40OBzpO2P71O1tyDQklFjy9Cyx2BFlVoKd6lisW3M8IJ/5KPIMIoVaFz5pkazumn8D0ifM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=S8peiIIc; arc=none smtp.client-ip=209.85.166.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-81f7faff04dso11690039f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 12:26:50 -0700 (PDT)
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-81f8add99b6so8274339f.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 12:35:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1722022009; x=1722626809; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1722022502; x=1722627302; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=+jJKylBpwwm05oEQSoX/zpt3YZYbZUxbR6vDFCN0mDU=;
-        b=Y4jUdV8Hrs+JBcs8j1kf/qt08s/RslTNls3wDmQx2LlhzPLPkQD01MKS7EfiIxNPD7
-         o5WgyJpV3g/JIJrCsffrZ6rIQ1pkca440dnSnz0PLCNrAsKSJhoi8F4TTexqyoEtUc/v
-         qISipbKlyWzO0XgZjm4bOn9KDcPhIZYwDi7ow=
+        bh=tGSqip6SjsIuRJdlh5NYKeJ/7a5iCVukcKeNYY8a5hc=;
+        b=S8peiIIclt4jp/kL5qlPq/3RV4Yh0mtRsrvwxLu41lV5p8kyS2o+bVy120RgpqUccQ
+         zJlhFgO0WarVa4JJW4P8WtZ4ml84Wi64L+rqnpJD+L9F54U50cTR+JH8Bqi+f7iSRAMk
+         Zzv+9Tign16j01VICQbQa6q2bYb9OU7tbLSDU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722022010; x=1722626810;
+        d=1e100.net; s=20230601; t=1722022502; x=1722627302;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+jJKylBpwwm05oEQSoX/zpt3YZYbZUxbR6vDFCN0mDU=;
-        b=V9n0K5JzTMHB4Zd67ewojITkP9/YA6pklfOYWb97g5ausRskjEMQ86PWXuAHtZ5Xk6
-         RQoJzsBkR2P2XMtqnSHJAQI5FlEvM1/bHRVYF7PNIVK2UQFuTAF807Ay4JANDmwGV8eK
-         quLomsMTRtix/ZPFrU7bMxR8M7XGPVidXPIFgPjgBNpEU5QnxiBq+a4iCOvHMj6Im+Yy
-         UqDzxtyCWq4z2i0ZYEPPyVmW623urW8ViabRWPDT8l4BGyRK5mh1Yzv3Bg1PUP8RdtKt
-         /8i9kishpoxlhjDz+VwnR0oQ3MFAaTzibrCOu1JrO/v+6wQ8XMrqMMqGBbJoM1kUiyco
-         r05Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVsBxJpYZwX3EajtOCGI67FBi1mOm62BQxM6OJY7jLbDCvD9DJREs3uFZxJSREdgvCDbiNBMe6UjFZ2ZOy2293jPs6w3sCyhiiGrnfi+Y5C
-X-Gm-Message-State: AOJu0YztWvt80zYkLqcfbFFJXy816yZ9f9VKpF5k5UC+Yu2zCVtUSw3N
-	AC9rWm5qHaYp/2PCY2C4nE4XoSYj1Fefu0TEbhyCbIGpz+ro3wdlb2+O3zgb45E=
-X-Google-Smtp-Source: AGHT+IFPA7PtN7Bp2QNiGUCl8+IMXQa13JiVDx3mjdBw1anwpAyUd1xhXUlRcZgW9nKVJ5HPxHLUqQ==
-X-Received: by 2002:a05:6e02:1feb:b0:38e:cdf9:8878 with SMTP id e9e14a558f8ab-39a22d0f3e4mr46349175ab.5.1722022009646;
-        Fri, 26 Jul 2024 12:26:49 -0700 (PDT)
+        bh=tGSqip6SjsIuRJdlh5NYKeJ/7a5iCVukcKeNYY8a5hc=;
+        b=L7hfIYu+Q3lmN4rre5tLIWyKgu4MbFVJW86Qg8NmKqhmwMVaeQTITEf/RJqtXKMh25
+         jhyXsBcj15WCXO3UxIr+F9flza/1RmCt3x/reOXrJuPiQragQYARvIedzAFl4eD7zGXY
+         j9CwbFcsweFsplIQd8B+D2JYGamJsDUTtSF0cR04u/5nGU8Kxe6xi2CWRf8DxsdYPNJ0
+         RSO2jGEk+YPvK4f47fgvBE3f2Cww5MduRCTeVlW5yXa6OpktDK7KAm0v9VClShE/Zmt5
+         ZjBbreENAxNCxhy/HF4Vik9/oQhR5qwkIX1zxNItcnLE7QAordJAwwBtouD3u8iYI+bL
+         VEaA==
+X-Gm-Message-State: AOJu0YxDNm3TiYU2fQDAsKOqbEeaPF9hXgTbUbSuyHvNm2eabQLUd0kS
+	H5NkkIi6vAy2apyljfu1jZHTzkW63mzzLhkuHZCH/XuRe7nNHyvj/tr/1EIyE3c=
+X-Google-Smtp-Source: AGHT+IH/5nnM/8R4mp4A6vXNaHfd2PfinlE5+3dCX0BOyjbWuhQ/mMRdAGmkZdUOkBPoAVRhSH2U4A==
+X-Received: by 2002:a05:6602:4f88:b0:81f:8295:fec5 with SMTP id ca18e2360f4ac-81f82a54258mr391577139f.1.1722022502313;
+        Fri, 26 Jul 2024 12:35:02 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-39a23105f76sm16314535ab.74.2024.07.26.12.26.48
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c29fa43dc5sm984760173.21.2024.07.26.12.35.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Jul 2024 12:26:49 -0700 (PDT)
-Message-ID: <27b91030-b01f-44e4-82f7-93b3e11e8d74@linuxfoundation.org>
-Date: Fri, 26 Jul 2024 13:26:48 -0600
+        Fri, 26 Jul 2024 12:35:01 -0700 (PDT)
+Message-ID: <533826b3-8bc4-40f8-a491-5bb5614469c3@linuxfoundation.org>
+Date: Fri, 26 Jul 2024 13:35:01 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,53 +72,58 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] bitmap: Convert test_bitmap to kunit test
+Subject: Re: Converting kselftest test modules to kunit
 To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Andrew Morton <akpm@linux-foundation.org>, Yury Norov
- <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kees@kernel.org,
- David Gow <davidgow@google.com>, John Hubbard <jhubbard@nvidia.com>
-Cc: kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240726110658.2281070-1-usama.anjum@collabora.com>
+ Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+ davidgow@google.com
+Cc: "open list : KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+ kunit-dev@googlegroups.com, "kernel@collabora.com" <kernel@collabora.com>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <327831fb-47ab-4555-8f0b-19a8dbcaacd7@collabora.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240726110658.2281070-1-usama.anjum@collabora.com>
+In-Reply-To: <327831fb-47ab-4555-8f0b-19a8dbcaacd7@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 7/26/24 05:06, Muhammad Usama Anjum wrote:
-> In this series, test_bitmap is being converted to kunit test. Multiple
-> patches will make the review process smooth.
+On 7/15/24 04:09, Muhammad Usama Anjum wrote:
+> Hi Kees and All,
 > 
-> - Patch-1: Convert the tests in lib/test_bitmap.c to kunit
-> - Patch-2: Rename the lib/test_bitmap.c to lib/bitmap_kunit.c and other
->             configuration options
-> - Patch-3: Remove the bitmap.sh selftest
+> There are several tests in kselftest subsystem which load modules to tests
+> the internals of the kernel. Most of these test modules are just loaded by
+> the kselftest, their status isn't read and reported to the user logs. Hence
+> they don't provide benefit of executing those tests.
 > 
-> Muhammad Usama Anjum (3):
->    bitmap: convert test_bitmap to KUnit test
->    bitmap: Rename module
->    selftests: lib: remove test_bitmap
+> I've found patches from Kees where he has been converting such kselftests
+> to kunit tests [1]. The probable motivation is to move tests output of
+> kselftest subsystem which only triggers tests without correctly reporting
+> the results. On the other hand, kunit is there to test the kernel's
+> internal functions which can't be done by userspace.
 > 
->   MAINTAINERS                           |   2 +-
->   lib/Kconfig.debug                     |  15 +-
->   lib/Makefile                          |   2 +-
->   lib/{test_bitmap.c => bitmap_kunit.c} | 624 ++++++++++++--------------
->   tools/testing/selftests/lib/Makefile  |   2 +-
->   tools/testing/selftests/lib/bitmap.sh |   3 -
->   tools/testing/selftests/lib/config    |   1 -
->   7 files changed, 295 insertions(+), 354 deletions(-)
->   rename lib/{test_bitmap.c => bitmap_kunit.c} (70%)
->   delete mode 100755 tools/testing/selftests/lib/bitmap.sh
+> Kselftest:	Test user facing APIs from userspace
+> Kunit:		Test kernel's internal functions from kernelspace
+> 
+> This brings me to conclusion that kselftest which are loading modules to
+> test kernelspace should be converted to kunit tests. I've noted several
+> such kselftests.
+> 
+> This is just my understanding. Please mention if I'm correct above or more
+> reasons to support kselftest test modules transformation into kunit test.
+> 
+> [1] https://lore.kernel.org/all/20221018082824.never.845-kees@kernel.org/
 > 
 
-Can you tell me how this conversion helps?
+Please make sure you aren't taking away the ability to run these tests during
+boot. It doesn't make sense to convert every single test especially when it
+is intended to be run during boot without dependencies - not as a kunit test
+but a regression test during boot.
 
-It is removing the ability to run bitmap tests during boot.
-It doesn't make sense to blindly convert all test under lib
-to kunit - Nack on this change or any change that takes away
-the ability to run tests and makes them dependent on kunit.
+bitmap is one example - pay attention to the config help test - bitmap
+one clearly states it runs regression testing during boot. Any test that
+says that isn't a candidate for conversion.
+
+I am going to nack any such conversions.
 
 thanks,
 -- Shuah
