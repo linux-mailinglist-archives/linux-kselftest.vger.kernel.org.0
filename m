@@ -1,114 +1,128 @@
-Return-Path: <linux-kselftest+bounces-14262-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14263-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06BBA93CFA3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 10:31:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CB0693CFDE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 10:51:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 58422B21187
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 08:31:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CDE34B22EEF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 08:51:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 550E677F11;
-	Fri, 26 Jul 2024 08:31:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA74A17839F;
+	Fri, 26 Jul 2024 08:50:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="vM+sCIFW"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="CxFFVRmF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D92536D;
-	Fri, 26 Jul 2024 08:31:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 436791791FC
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 08:49:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721982681; cv=none; b=dvNyNs2JdlI5bHd5vWM0I72ujUUZZUyq+8viNaa0l1WYOAQAr9xq2AJX+AJuOtv7AcNrZ6CVNYO6muzqkDVlcL7cWp/d4XF0WYizwXu6J4Ta2CxEVW5LQhTyV/jEyf9FeXiyJeLuuiMDPjxCFhrT5fORWKvyL1FOvfEz45LTpGU=
+	t=1721983800; cv=none; b=KDCZ0+aXT8iLHBbnAyU+zk+lbi7pEO2Moaa+GlK44L5EP9H0Mp0rIf3pqRAvEEn12AO2k+Fo3JlTv7W7Xu3hp8e+RINDEqPXRsnQ9zvKsoGvX/gPIy/kKo3s2Kob5Z9dvyT74zYAvTDIH5W3x+m6zcHBXUe2rBxKbDNGv4P3VrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721982681; c=relaxed/simple;
-	bh=WgrBFmHArYyVhxcUzIbxiPQ+jnmeSlQJXjZUSxN9QiU=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=mpYFWfU1GYTKRjfJn9K1OEEiQfBI4kHT6xhOuxGt2Yv5VXZc4uObbjB00tob/oriDajCZo5UpL3keOwKFoS/0P2pf5YAkgIHC0unPGtoar8uTpmBR5vwJ7UBNsfSW6BRfnDqEpPMdj+sVql6NTkph8A+t1Wdv4Emen4LEyozPPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=vM+sCIFW; arc=none smtp.client-ip=212.227.17.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1721982651; x=1722587451; i=markus.elfring@web.de;
-	bh=N6uKTvQILWUf3JbCAcziR3v7aPqVCaBhYrZUg4iAHhQ=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=vM+sCIFW3fwgjbKcs+VOeZMyw97VRmeQvQ/Rn67u9I+AwM2h1mp5Wk+WyHSZD99R
-	 M4zOmwPflRPd/TL4DdGesO2e5KIebz6SzeqzobhYhyR/t/8eJ360f5KtYijb+iGJ0
-	 tL3jo88gutUlFMSZBrZ4vDF2D2vKm0FCXpnH+0Z4pY7Lk+49Wz8O7vubstP5HKepo
-	 BpbmP4NtsEUQTafNVC2Xy0jOF3RXzJR2xDI8nCjzR3vYXtclaDtsgy9gBNDIpyA3k
-	 U22ev6BoMSTr7c7GsEqGsG5JkdouIDhCMxygEDLmjhPPMfRB0uQhK7MGPPdcRpWpJ
-	 Ophv3e6wbz3lxjwJvA==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.84.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1N1uAl-1s8ste1qjx-0124Fb; Fri, 26
- Jul 2024 10:30:51 +0200
-Message-ID: <0987e828-f7c3-4d11-ab1b-a671d091fbea@web.de>
-Date: Fri, 26 Jul 2024 10:30:20 +0200
+	s=arc-20240116; t=1721983800; c=relaxed/simple;
+	bh=kmSTht2ay/WaraC9QeCfGlPsOABUHyhKUYCSzPBi1L4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=nI073MtrdYJhPsp1agh90RdShgHNVS6Yn4VtNxm1/OmcC+8IrLtxxbe1S0pj0oKgkqhQtn8PmIiFlyjccReyZmyEGqUcHR4mPUPBRM1Z6a0K2zQdP7duyhO5Pv4k2iqv27rECbF+1N4dCjDSvJ1nrFyCsegberi0ozD+wW5sACU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=CxFFVRmF; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-70d2d7e692eso666289b3a.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 01:49:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1721983799; x=1722588599; darn=vger.kernel.org;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3dXGB9M68kLUD7MhXnrJa0QNMQINVnKrW/fzYtIxsFQ=;
+        b=CxFFVRmFHFy6MxsDV+oQVaL+MsLkLMOD65lg+QUK/kYEnqJ1Ffku2st1o6fh3cQzQ5
+         cZanjUhP+a4FgL/X8pwVdI9k94GbgMgYGY7LushkSGYr2wxZVV1DkxdQNiXh1r1JDBS9
+         44SSz/fTCrDR5m3ObmsqFCe4ktHzR7irvZQsC1cVi7IRJJ4nQT7RRxIR6MtJZbkODvag
+         0aT06NpshgvmPRSZkKTXdyBxF3XcdjttW2TFyv79FVsJob1tLD6NomGLmnm7Q8DTsPsy
+         QwzX7S11KTAsrUF40PN/msYGaU0K16ALDjy0H06GhTe/nUfZH3r6a2ChWohMjt302b1W
+         H91w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1721983799; x=1722588599;
+        h=references:in-reply-to:message-id:date:subject:cc:to:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3dXGB9M68kLUD7MhXnrJa0QNMQINVnKrW/fzYtIxsFQ=;
+        b=FTZdodLxcItQSiuDpnV33ymcuErBQo69PYwTLu1UQ05ZWWDuDZQ/5gRiHy5hZMAbdP
+         3RGjX7ifh45Dz0aks+ZBdo+gyF8iRRd2HcUA5KKxtm8DL8LJx/FXL+VFcG9qKLMR20pM
+         MZGh36+NGvYvhF7PJASCOlET9FtKx0A3ELcQ5saRrUugWeuxDykzZHDUHzjz4ufaqMEE
+         OWlGSEACnAnKYco5T8clq1g/2yDkXE+KPyHf+yH0iqlEosQEECgLgUcQXACVkHEU6k3A
+         G6Ff1f/zsGnbifXh7NNX+TxrDQhHsGIhpFqyfgjK3bSlN1pFt7LTqiRWXt5Z8YLHrPgD
+         3bSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX48xqH9+jLrMrB8UGtVQ1yMyrsZEHUwd/XBmcZOgO0dN4M5TwXr/eAIB+S+D1IGthSAcex5vlT+mZoR0jvpQaz1MKWYaxfA0FXmNDfWRlV
+X-Gm-Message-State: AOJu0Yx75XQ6W8ROex+W0E02m+moXhAUxoRsgpShaCLXq5jhchfHpxfX
+	6YrnPaQiBp1B8LJzRisPcwbKpCXj6IyaOc5rgYXit1MRGpnqos7E1J9CfYoV4RU=
+X-Google-Smtp-Source: AGHT+IGznbiFSiAI8Fl6vXmZOoRo3AgApK1TPweDDMBRdHNs5h5IX0DOrE9eMPt7tTokhtzC2+Ebew==
+X-Received: by 2002:a05:6a20:2451:b0:1c4:7d53:bf76 with SMTP id adf61e73a8af0-1c47d53c6c7mr4526810637.38.1721983798630;
+        Fri, 26 Jul 2024 01:49:58 -0700 (PDT)
+Received: from hsinchu26.internal.sifive.com (59-124-168-89.hinet-ip.hinet.net. [59.124.168.89])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7a9f816db18sm2049645a12.33.2024.07.26.01.49.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jul 2024 01:49:58 -0700 (PDT)
+From: Yong-Xuan Wang <yongxuan.wang@sifive.com>
+To: linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	kvm-riscv@lists.infradead.org,
+	kvm@vger.kernel.org
+Cc: greentime.hu@sifive.com,
+	vincent.chen@sifive.com,
+	Yong-Xuan Wang <yongxuan.wang@sifive.com>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atishp@atishpatra.org>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	=?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v8 4/5] KVM: riscv: selftests: Fix compile error
+Date: Fri, 26 Jul 2024 16:49:29 +0800
+Message-Id: <20240726084931.28924-5-yongxuan.wang@sifive.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20240726084931.28924-1-yongxuan.wang@sifive.com>
+References: <20240726084931.28924-1-yongxuan.wang@sifive.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: Zhu Jun <zhujun2@cmss.chinamobile.com>, linux-kselftest@vger.kernel.org,
- Chunyan Zhang <zhang.lyra@gmail.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, Andy Lutomirski
- <luto@amacapital.net>, Kees Cook <kees@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Will Drewry <wad@chromium.org>
-References: <20240726023241.17295-1-zhujun2@cmss.chinamobile.com>
-Subject: Re: [PATCH v5] tools/testing: Fix the wrong format specifier
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20240726023241.17295-1-zhujun2@cmss.chinamobile.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:bike388/vrpcWqb9/dd9p0Wln5y1Yeq3HUZp/FH9h5fNHIbv/Tc
- X2NHQbcAsmvh71OH5mMMkbniI/p0Gxmqr8jAVr9nJ8nXrxr8xLkxnndr8oZMiRTCjxvp9E2
- tvZYbZ2SXgqpbxI9p8xNInWwKoyGW3Rk8cHy0J4bZ4WKLK90MnoRr3WQbE2CxPjjLcX1pT2
- RWEKzf1HpkolcyVS9WYKQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:4yyP7CHdToQ=;9ayUQvqPK/YkUBDoX0UT4/YXkO2
- ZA2pCfCjY/zUNMeywR6ErabCKgAj33VUtNXVJ3ENuZdlN2q02e8yFlqHHPE3gGYIboZUzMJNH
- 1vnpP0msXf+3LKV+t2SBZ1rfMKDZV86rVlou5O+n8aPQK/qn2EhYnZGHbAS89/EosSLSjNJzB
- zTRQ7T52eWugDtlfJnGljRn0KLjjJ0s3lhjO9vV3UYk5mJcy9BmeBAyyoCY0cx30K3dRBOB6c
- Ehr/ELRB9GZH67pkyqkS9Ak0wLplyqyPhJ8N8VQ5ESpY3Dth5JyyscnwvRD3MSSQYUIY2Mcnl
- yg36hGxBDr1DEHDCx8gtbaJiwlcIDoMTuFvBfYEbjK8uaB6eH4pkAhiIciAyITMId3Tify6x3
- sF+b4meKejazrEUKWBJOb6tdu8aZmlq/TjDzcwExNNIVxtk++1C8QH1gTpuJ4q+sAOt8d/6R5
- jQrubbmSEKPWt2Wpr5Z3w7D6/XoHdpLFTTzmUA0akmdqvtINso2euY4niGAzzjmMDpn0Pc9Mi
- fdyoaubAJkp42XKhfcrP9y25TVMQ7nPWHebKAdZmVCs79ILFS3h9EZIab+486MT6vvr4EC9Tp
- 3TRE4Ej9MxfOWhK5CIWrlxnjp04y+rRGnTlQAMj0hJAR2SE9RDcIshoaMXlt8JXs3Ix3yiaez
- vdrv3a/9DsJm8A5Mnjb1XYmA6jlegWg5MsDmuqqMfTcCgvCZ32vyDoYBJAl9k2dVC6/9DAs9j
- uhL8fFcbXWl1QdV5fxDji30uHp3v5WvXUP+ArOM0cC6LzV8ues7K0ruztmHjPemTvUnzjHZS7
- UiFgn35z6qcO76HItklCOcWA==
 
-> The format specifier in fprintf is "%u", that "%u" should use
-> unsigned int type instead.
+Fix compile error introduced by commit d27c34a73514 ("KVM: riscv:
+selftests: Add some Zc* extensions to get-reg-list test"). These
+4 lines should be end with ";".
 
-* Please improve the change description with imperative wordings.
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
-Documentation/process/submitting-patches.rst?h=3Dv6.10#n94
+Fixes: d27c34a73514 ("KVM: riscv: selftests: Add some Zc* extensions to get-reg-list test")
+Signed-off-by: Yong-Xuan Wang <yongxuan.wang@sifive.com>
+---
+ tools/testing/selftests/kvm/riscv/get-reg-list.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-* Would you like to add any tags (like =E2=80=9CFixes=E2=80=9D and =E2=80=
-=9CCc=E2=80=9D) accordingly?
-  https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/=
-Documentation/process/submitting-patches.rst?h=3Dv6.10#n145
+diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+index f92c2fb23fcd..8e34f7fa44e9 100644
+--- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
++++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+@@ -961,10 +961,10 @@ KVM_ISA_EXT_SIMPLE_CONFIG(zbkb, ZBKB);
+ KVM_ISA_EXT_SIMPLE_CONFIG(zbkc, ZBKC);
+ KVM_ISA_EXT_SIMPLE_CONFIG(zbkx, ZBKX);
+ KVM_ISA_EXT_SIMPLE_CONFIG(zbs, ZBS);
+-KVM_ISA_EXT_SIMPLE_CONFIG(zca, ZCA),
+-KVM_ISA_EXT_SIMPLE_CONFIG(zcb, ZCB),
+-KVM_ISA_EXT_SIMPLE_CONFIG(zcd, ZCD),
+-KVM_ISA_EXT_SIMPLE_CONFIG(zcf, ZCF),
++KVM_ISA_EXT_SIMPLE_CONFIG(zca, ZCA);
++KVM_ISA_EXT_SIMPLE_CONFIG(zcb, ZCB);
++KVM_ISA_EXT_SIMPLE_CONFIG(zcd, ZCD);
++KVM_ISA_EXT_SIMPLE_CONFIG(zcf, ZCF);
+ KVM_ISA_EXT_SIMPLE_CONFIG(zcmop, ZCMOP);
+ KVM_ISA_EXT_SIMPLE_CONFIG(zfa, ZFA);
+ KVM_ISA_EXT_SIMPLE_CONFIG(zfh, ZFH);
+-- 
+2.17.1
 
-* How good does the summary phrase fit to your proposal?
-
-
->                           the problem is discovered by reading code.
-
-How do you think about to detect such change possibilities by more systema=
-tic
-source code analyses?
-
-Regards,
-Markus
 
