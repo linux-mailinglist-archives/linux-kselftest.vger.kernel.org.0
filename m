@@ -1,191 +1,157 @@
-Return-Path: <linux-kselftest+bounces-14255-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14256-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15BC493CEA5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 09:14:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6082D93CEFE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 09:48:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A1631F22BCD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 07:14:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83EC11C218A8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 07:48:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 239571741C3;
-	Fri, 26 Jul 2024 07:14:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 927A217623E;
+	Fri, 26 Jul 2024 07:48:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dWxo1fNo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NXoczIPf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F4E217623E
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 07:14:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44631741FB;
+	Fri, 26 Jul 2024 07:48:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721978095; cv=none; b=V0d6YetnfGc1Rdwi2xLSaLVB0aLScw8mbitd0FFctwpeb+VxnuOQgDet909BMX0nnMJLvobzPF+ZhudbWkz7HAZLMpxHXu9MMjQmkgNQNJkTjCGyqYRhrAJLnubVRbXWlfDPKOO5+oA9l7lCvB7ndkkDGT6ECby6uC5Xk8iMnhY=
+	t=1721980115; cv=none; b=HIFCFU7K3/IYN4U3o33UFDETcTg6qr6yC3M3aNI8vkqX4uigZvcbtdOu9ZqSQ8ib5r3Fb55bvP7+cFVuuefYsrvjl65IDHw64cQzEikMA6uQ6HGxXu9Zumns7zMZInLTPLV+iHmEW0TIrrx9+rPpREVUj14YtBT1BShIS7WHDNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721978095; c=relaxed/simple;
-	bh=pl7Z9ITBug/RhDFsfERLjQpX/MiWxXEFJ/5Xi4TJIWM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xka8U0M34tJ5bSVsoaJ0+kMHJALjQcon7Es9EIaWyo7QPtESZOjre/h70JODg65oC0YvsMutyV6RARW1syhp+PiGDGpTIAI0hzNTlIDE5uIhQtwS+hud6NuL7RoCtpNQYqLKz92gU/POrKSviRrMyVdJ/HbsRGM/ByFc4E+Kx7Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dWxo1fNo; arc=none smtp.client-ip=209.85.160.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-44fdc70e695so148291cf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 00:14:53 -0700 (PDT)
+	s=arc-20240116; t=1721980115; c=relaxed/simple;
+	bh=5ON6IusU5v7qrydb7czcU0yYORsRRJri7xK6Rr4x24w=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=a0gmZHMBHWH10N/CP3hm9fikjg2C6kRSht8q4Iv/ESzobhbljkA56X19V6IRWmBf1riV4vOYTbiR899Pz/RBnK3UfTWsUs/bbUYp6jP0ZL77bYRbvEuQ9u6nJyK32+5i0QX8ZgJ/N5hgd49k70Ef8ceNVgxOgEEQjTFMS2ZO964=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NXoczIPf; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-428098e2b3bso1037035e9.3;
+        Fri, 26 Jul 2024 00:48:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1721978092; x=1722582892; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=pl7Z9ITBug/RhDFsfERLjQpX/MiWxXEFJ/5Xi4TJIWM=;
-        b=dWxo1fNo3w9duWG6+n5M44f9szBRPL/oawMN2DbElNCTYQFFAa4WUIPveMOo90uI0J
-         embl7y7Q0d+AbyxV3fSW3Y6HEswrA584Umnw6R7XuFhdXgDbDBjlYItJ3tiEtpFR52LH
-         kjBeURhKbpzpS3VNZ/RLOH6hPJYbJirFgwLScySt/LfG+96u0Sc2+U1UQg+kZKaICfJF
-         1NH+WVHjr4hzykM2zv2dqp+eX2BnUtYR9wOh/BKwFtnalrGL1qk2ilZysbmwYAGFZ5Im
-         zmG4GZ0rj0nGNwg0dmDf+DRliGkwhh1TZkWrw+/+ASIFeo9J0xzfVMNKX5Js9VUv5y4D
-         oKfA==
+        d=gmail.com; s=20230601; t=1721980112; x=1722584912; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=j7STCBcMZoBcNkHRG9IYlvtYZY+jcGZj/eZGXSHCEQA=;
+        b=NXoczIPfgrrxY+fNWFPXGIqj3dPGK1CAAzlAutSHM6kNEulthaMoZyOZp9pYcSv5nj
+         fvTKULweCEC9UeY8b0AIoxNc+PZXZD642VYvI2bo2xvFbHGeENcjEqdaslVRyfDJ2h8R
+         X3GXjVPicxwFdhFkoYqyxaixrqHTZ9g5jJdjFgNN35N7rx8nW9sfFov0N8RyuFcANRCC
+         g3eSrOXMqEz2Db0FdyJyBpRUtqjxa1Fw8C6RehR8ubWvKdLgSbKD9QVjJARYakCh2jZE
+         00zlSZsPAhn5aHgmyfMrRolYXc0lhHGuvCt6lI/rgoHcaCI9T+DpqwERNzwSQuVHiWvj
+         KFTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1721978092; x=1722582892;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1721980112; x=1722584912;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=pl7Z9ITBug/RhDFsfERLjQpX/MiWxXEFJ/5Xi4TJIWM=;
-        b=O2Po0Ud6BQmmVhzbHxPMhQ6XSLlY227nd4cHcaDGHgMRfNdT9V8+3gvri1j5Gt//0y
-         qcvCSsjlZTQf8qIk9LkTPYWGdu9D1jVN5U8XsUl+uII20MhD6TTDRCp8rAhxWrwehYJU
-         zVyBHmS5uX3mET6wNl8O+nU2ZGbRuOvQW2NuwfbpfIGAws4MZBP7KHcmjn7YGS0kYV8a
-         0aXaQkZnHfIVuerGRJ3Uh9e7oS7NLwXbyB41we0/KWesuzq6Al9LUaDQA5Nl+AxKnwyD
-         N2Gnbc1BiKFAC12qbAEGV9yZLpzTmqpk+Ed2H8sVSTLzVTyQGkzjwkbg/ImrUpZhOUoq
-         2vVg==
-X-Forwarded-Encrypted: i=1; AJvYcCXCVheM42LsAXHiNi5XD7I40k6g3cDXgPKhxrdofjFoCI6swcKhaGmIexYzyLhJahzdCzkTrAuQzWX9o5rlINXV4YTlO8saNfe6Q8+/FQ43
-X-Gm-Message-State: AOJu0Yzu8s5nSykx/unY2gdL2opOrlXRXXAjKX1tvyXIcHLiH6GWt2Xf
-	CWySF8NqkC3nGCTPhUbeJ3bqUjz2nJCJN1A7pkaxRxcvkRa97RzDq1klFtHiLULgYwcFZ3txfee
-	Nk8PByD1onMJC2S0VZtUUKy/iZZHPy6vs5CM9
-X-Google-Smtp-Source: AGHT+IHsrLxY9ZdyqO525tDx0nWcyk90PA5eQ0nUeQmK7znJDAJF7gOtprtD76fs+N4PCATz5lI8rod3UJ0eTrdUNX0=
-X-Received: by 2002:ac8:7f93:0:b0:447:e497:95d0 with SMTP id
- d75a77b69052e-44ff3e8af82mr2283451cf.17.1721978092268; Fri, 26 Jul 2024
- 00:14:52 -0700 (PDT)
+        bh=j7STCBcMZoBcNkHRG9IYlvtYZY+jcGZj/eZGXSHCEQA=;
+        b=ckYufXy/vzPKKasjtDTSbqmyCrzY8p2oigix6gBiLAhgbKuFKHOqs9VUUr1zyXTgxP
+         +yFYXPCVa6vcCHmyhGDGIjILorrppbhLQ01s9eCkcyAmqg4PkTJPSjUaJBILGRag75XK
+         /oKSLu2CWOy8lGKlSArxbeNJHl069vJSV9g4p5IZP9x6vmnTJ/EFppUMK7sL/khKNusR
+         4yOigqt0bfB3MWDlOHi/xR+jlyWBWGReRhSa1bXAiO5fvNbL91X7ew848/+T8e6OX91K
+         rX4/oGlKwX+/CBypMD1IDefEfwxvxcuUFF4GoQ43eoYJmCB/uLZzQ1flJec7bwv6IKPi
+         Wpeg==
+X-Forwarded-Encrypted: i=1; AJvYcCWxqxc4LxOE67FT3wcwuXSwo0G+e3rYa2b575zNyXt4Hv+ZW7NWmMgT7sa1xF+8TaoN9XLsVR6nhO+Y/WDqlnxjtv8+BZGrZvi5CiUdwG21Brg5Xvi0iQuP9ByYZwZSauxQkT5+YTzh4bDugHSTbfPpFJrbp1mDKlhAwGSY5ICmd3S1daP3JPziBXN97VZ8eX9UTpzT51rHjNcGTRfaMPSXmyTb8V8=
+X-Gm-Message-State: AOJu0YyT02eHFgP765fgplrefUa/QRCsNwwCy/+dZhEHh+RgOnCFdPA+
+	NxDZIj8/oQxvSfxpgKBGFHrfdgB78dUxQVkkR1eCWOCECVC3jZga
+X-Google-Smtp-Source: AGHT+IFjpz/7j0G/aN/7uXAqlqfX5pso/gmcLd8tUV2EhE7wpv7H5UoFFdvgPWnhdAQIGAJFn+acLA==
+X-Received: by 2002:a05:600c:3b87:b0:426:5f08:542b with SMTP id 5b1f17b1804b1-428053c9c55mr20937075e9.0.1721980111737;
+        Fri, 26 Jul 2024 00:48:31 -0700 (PDT)
+Received: from ivan-HLYL-WXX9.. ([2a01:4b00:d20e:7300:68e5:11ce:4d88:9958])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-428057a6368sm66045565e9.38.2024.07.26.00.48.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jul 2024 00:48:31 -0700 (PDT)
+From: Ivan Orlov <ivan.orlov0322@gmail.com>
+To: perex@perex.cz,
+	tiwai@suse.com,
+	corbet@lwn.net,
+	broonie@kernel.org,
+	shuah@kernel.org
+Cc: Ivan Orlov <ivan.orlov0322@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	aholzinger@gmx.de
+Subject: [PATCH 0/4] Introduce userspace-driven ALSA timers
+Date: Fri, 26 Jul 2024 08:47:45 +0100
+Message-Id: <20240726074750.626671-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240724201354.make.730-kees@kernel.org>
-In-Reply-To: <20240724201354.make.730-kees@kernel.org>
-From: David Gow <davidgow@google.com>
-Date: Fri, 26 Jul 2024 15:14:36 +0800
-Message-ID: <CABVgOSmXqv_+20OKjVAPJoqrP1EvBk+1WUqF4wBsefegxYNiWA@mail.gmail.com>
-Subject: Re: [PATCH v3] Documentation: KUnit: Update filename best practices
-To: Kees Cook <kees@kernel.org>
-Cc: John Hubbard <jhubbard@nvidia.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	Rae Moar <rmoar@google.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Linus Torvalds <torvalds@linux-foundation.org>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000886c66061e21444d"
+Content-Transfer-Encoding: 8bit
 
---000000000000886c66061e21444d
-Content-Type: text/plain; charset="UTF-8"
+There are multiple possible timer sources which could be useful for
+the sound stream synchronization: hrtimers, hardware clocks (e.g. PTP),
+timer wheels (jiffies). Currently, using one of them to synchronize
+the audio stream of snd-aloop module would require writing a
+kernel-space driver which exports an ALSA timer through the
+snd_timer interface.
 
-On Thu, 25 Jul 2024 at 04:14, Kees Cook <kees@kernel.org> wrote:
->
-> Based on feedback from Linus[1] and follow-up discussions, change the
-> suggested file naming for KUnit tests.
->
-> Link: https://lore.kernel.org/lkml/CAHk-=wgim6pNiGTBMhP8Kd3tsB7_JTAuvNJ=XYd3wPvvk=OHog@mail.gmail.com/ [1]
-> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
+However, it is not really convenient for application developers, who may
+want to define their custom timer sources for audio synchronization.
 
-Looks good to me. (And it seems like sphinx is okay with it, too,
-which is always nice.)
+For instance, we could have a network application which receives frames
+and sends them to snd-aloop pcm device, and another application
+listening on the other end of snd-aloop. It makes sense to transfer a
+new period of data only when certain amount of frames is received
+through the network, but definitely not when a certain amount of jiffies
+on a local system elapses. Since all of the devices are purely virtual
+it won't introduce any glitches and will help the application developers
+to avoid using sample-rate conversion.
 
-We normally take these changes in via the kunit tree, but if you want
-to try to push it through along with the naming changes, that's fine
-by me.
+This patch series introduces userspace-driven ALSA timers: virtual
+timers which are created and controlled from userspace. The timer can
+be created from the userspace using the new ioctl SNDRV_TIMER_IOCTL_CREATE.
+After creating a timer, it becomes available for use system-wide, so it
+can be passed to snd-aloop as a timer source (timer_source parameter
+would be "-1.SNDRV_TIMER_GLOBAL_UDRIVEN.{timer_id}"). When the userspace
+app decides to trigger a timer, it calls another ioctl
+SNDRV_TIMER_IOCTL_TRIGGER on the file descriptor of a timer. It
+initiates a transfer of a new period of data.
 
-Reviewed-by: David Gow <davidgow@google.com>
+Userspace-driven timers are associated with file descriptors. If the
+application wishes to destroy the timer, it can simply release the file
+descriptor of a virtual timer.
 
-Thanks,
--- David
+I believe introducing new ioctl calls is quite inconvenient (as we have
+a limited amount of them), but other possible ways of app <-> kernel
+communication (like virtual FS) seem completely inappropriate for this
+task (but I'd love to discuss alternative solutions).
 
---000000000000886c66061e21444d
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+This patch series also updates the snd-aloop module so the global timers
+can be used as a timer_source for it (it allows using userspace-driven
+timers as timer source).
 
-MIIPqgYJKoZIhvcNAQcCoIIPmzCCD5cCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg0EMIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-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
-JEfDtvHU6wy3MSBE3/TrMFcGA1UdIARQME4wCQYHZ4EMAQUBATBBBgkrBgEEAaAyASgwNDAyBggr
-BgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/
-BAIwADCBmgYIKwYBBQUHAQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNp
-Z24uY29tL2NhL2dzYXRsYXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgw
-FoAUfMwKaNei6x4schvRzV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9i
-YWxzaWduLmNvbS9jYS9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEB
-AGwXYwvLVjByVooZ+uKzQVW2nnClCIizd0jfARuMRTPNAWI2uOBSKoR0T6XWsGsVvX1vBF0FA+a9
-DQOd8GYqzEaKOiHDIjq/o455YXkiKhPpxDSIM+7st/OZnlkRbgAyq4rAhAjbZlceKp+1vj0wIvCa
-4evQZvJNnJvTb4Vcnqf4Xg2Pl57hSUAgejWvIGAxfiAKG8Zk09I9DNd84hucIS2UIgoRGGWw3eIg
-GQs0EfiilyTgsH8iMOPqUJ1h4oX9z1FpaiJzfxcvcGG46SCieSFP0USs9aMl7GeERue37kBf14Pd
-kOYIfx09Pcv/N6lHV6kXlzG0xeUuV3RxtLtszQgxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
-MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
-IFNNSU1FIENBIDIwMjACEAFsPHWl8lqMEwx3lAnpufYwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
-hvcNAQkEMSIEIO9CwRQo9z7xrtSefNJ+O+Rt65NDXWrHG5qNq1U4xcFsMBgGCSqGSIb3DQEJAzEL
-BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDcyNjA3MTQ1MlowaQYJKoZIhvcNAQkPMVww
-WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
-hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBgRXkw
-eWkr+SiN3nL/3e6L/bQqhiTQpV1hzH4xWDlbl2cLbjNRRhHkOkpMhJz8DjhV3sUJALDK/v+U8f+b
-VOKNPOoF/soxTyisGXB5QlJO+t4kQpe/zvbVDl6q3MKV9AjmlhmGyIeFEPaVImUDPdaVH421gSk5
-/XdNkR3sCS5EH1kbj25/FU/twxyy2GvLshyHV+FQi3TTaUq/aVZ2zGVhoHNZyk5z9VeSXh2Y4wFO
-fC6tVhOI3Pc94s4rFC3nKQiqjOfWd5DtVACkxcmhkhmCMNoszoUNAjuSLacuYy3iSaQOOn2Lmtte
-oMp8IW9pCO64G8eEBP/Lovi7UfGw9e5O
---000000000000886c66061e21444d--
+Ivan Orlov (4):
+  ALSA: aloop: Allow using global timers
+  Docs/sound: Add documentation for userspace-driven ALSA timers
+  ALSA: timer: Introduce virtual userspace-driven timers
+  selftests: ALSA: Cover userspace-driven timers with test
+
+ Documentation/sound/index.rst               |   1 +
+ Documentation/sound/utimers.rst             | 120 +++++++++++
+ include/uapi/sound/asound.h                 |  17 ++
+ sound/core/Kconfig                          |  11 +
+ sound/core/timer.c                          | 226 ++++++++++++++++++++
+ sound/drivers/aloop.c                       |   2 +
+ tools/testing/selftests/alsa/Makefile       |   2 +-
+ tools/testing/selftests/alsa/global-timer.c |  87 ++++++++
+ tools/testing/selftests/alsa/utimer-test.c  | 133 ++++++++++++
+ 9 files changed, 598 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/sound/utimers.rst
+ create mode 100644 tools/testing/selftests/alsa/global-timer.c
+ create mode 100644 tools/testing/selftests/alsa/utimer-test.c
+
+-- 
+2.34.1
+
 
