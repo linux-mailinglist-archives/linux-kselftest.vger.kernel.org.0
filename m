@@ -1,95 +1,101 @@
-Return-Path: <linux-kselftest+bounces-14266-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14267-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B381B93D11B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 12:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B592993D1AB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 13:07:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BA64282074
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 10:27:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 769C9283DFA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 11:07:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 818F1178CC3;
-	Fri, 26 Jul 2024 10:27:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5C69178CDE;
+	Fri, 26 Jul 2024 11:07:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="OUYwRHen"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="UAF8k873"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5302B9C4;
-	Fri, 26 Jul 2024 10:27:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B3C417838A;
+	Fri, 26 Jul 2024 11:07:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721989641; cv=none; b=XouiFfZQGfirdY4KaG9K66zRoOMkJ0m7QmgieBI4g9cSCwyCvRSHrRmeipa0/SSqUaYx3gOXAfOT00Q+SfiJ/s85upMvdI73/WUGdELypWAevBVaM5IsXuZWCnD4BZ+j8HRbK25LLZrTURnozVYGHtuceMTzSGUfzA0CHY4Phw0=
+	t=1721992044; cv=none; b=EzDdx/JYv1dPLNqdCucU5JtLY0DpURYztV5x0yL/Kqc6aPsSfIZKyX3uExj1YrqxeNa6bnoIjJPNBcZ7l507132szSrz2EUxYkbq4nIx1MihCG3VQD9MiSt39wNRT0f7duC2X0MTy8lVJik/Rpt0uit1qHct/1Dx71JrEQS05og=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721989641; c=relaxed/simple;
-	bh=CYJ9+RV8RP+wnm+A3mW0JV2X0JjvWYVeKw9feENPbq0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d//n4X+Kd8EYncVVHSmlw3+luiPRP1SnedB3i1t+9XjJOnoZ8Gli/tri8pDBRkaWNJIFN/hAaEGh2DBmWIEm6Ut3a5SWfMHoj1fpprBc8E3BtDZNiRjCKr73HqvZWnSJ1avCRcIpDKI28/RXyoPnT+TI7w6Y5hGABrZDnIXMwn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=OUYwRHen; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1sXIA7-00E0Mm-6w; Fri, 26 Jul 2024 12:26:59 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=QNU5SWIVB3Ip5Gyd6oYlfDuASwK+ulpWrf4D1omspng=; b=OUYwRHenPnSUfs4gqsnQeqpxv6
-	kwZzDdNDOUxH/+KJLdYan37dZyYHn4+vLuz6YHOFy4QevdaCE1BMnoTWYGMmYiS+SuQPzJXsoGvD/
-	Bw5sm4HsWBx7OyCvj6UNBoBM9sJKZ3sXZswEBJwNNpY5LPjpwvyYxhC1TL/LOfSOjUcONcblTaZ6l
-	5OtxS0wGqXNOHnY7Aq6fZ8KQw4jVqdtFXPYllW1nb3m6Jy1KUv2nCGPpQ4agDKRl2lO7uEwFhf1/Z
-	FgyD5e0fGdmJx68l5HqEejj4mVjwWcsi5o7WsaYe43rTYi2eO84TRNRMqlXXcifxhK+gFA+BeK5sy
-	0cZts+Jg==;
-Received: from [10.9.9.72] (helo=submission01.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1sXIA6-0007JO-Bg; Fri, 26 Jul 2024 12:26:58 +0200
-Received: by submission01.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1sXIA0-0060hj-Nh; Fri, 26 Jul 2024 12:26:52 +0200
-Message-ID: <2ecb3f66-0806-4854-b2ee-cfd4845949e4@rbox.co>
-Date: Fri, 26 Jul 2024 12:26:51 +0200
+	s=arc-20240116; t=1721992044; c=relaxed/simple;
+	bh=2+geS2b0XsrpvyOoq75+4P0MzSMplaC8G6tV9qamZ+8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=qmFM9iX4UMd0UW3bmUF2U8YAmkh9ZeZk6XSE32M7oKqwMwJ/1k9IgT8/87VFqKgHX0L/05lcxMESW4xCYPX+LrDbtUU0zh/fuUxG3m9Vs/2bS3yCL/Yt/oH+JboDUgFGVhhjpuNGm4qe9L5ohYn1PKaMFZmDCzelUv5hXf0JAHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=UAF8k873; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1721992041;
+	bh=2+geS2b0XsrpvyOoq75+4P0MzSMplaC8G6tV9qamZ+8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=UAF8k8737zGePmGrCmUUL7IUQuZxgQvHW6INNxteWuwrPoR2b/p6pfnCOYKY36i5T
+	 Y5lqjQWcdmlvHlSxlErLqpi9MDzJLPM+HFBXC0yN7ZiZeHvLU8fFmrx9+jRA9CG9of
+	 go34senmcaWUaQ6jJS5WVr1pNr/kbnTZIL9Cgi3tRfr/2TUsV5p2IovGJaZsHiQ4Xk
+	 olgRTZLbsaP/cdwKPdKXkn5vBT5xpBSjxNbpuLcidVPgOHuxQT4mJDaiuOBn7kMXhN
+	 FlDvmv3lo9+rt8Wu1josNxtp9XMKY3FjAzDhRuQhW4W0pUvIG8hbfe7+nJJywLD1AS
+	 v9YA5Z0GOW55Q==
+Received: from localhost.localdomain (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id DB78637821B7;
+	Fri, 26 Jul 2024 11:07:17 +0000 (UTC)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Shuah Khan <shuah@kernel.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kees@kernel.org,
+	David Gow <davidgow@google.com>,
+	John Hubbard <jhubbard@nvidia.com>
+Cc: kernel@collabora.com
+Subject: [PATCH 0/3] bitmap: Convert test_bitmap to kunit test
+Date: Fri, 26 Jul 2024 16:06:55 +0500
+Message-Id: <20240726110658.2281070-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf 3/6] selftest/bpf: Simplify inet_socketpair() and
- vsock_unix_redir_connectible()
-To: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Jakub Sitnicki <jakub@cloudflare.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20240724-sockmap-selftest-fixes-v1-0-46165d224712@rbox.co>
- <20240724-sockmap-selftest-fixes-v1-3-46165d224712@rbox.co>
-Content-Language: pl-PL, en-GB
-From: Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <20240724-sockmap-selftest-fixes-v1-3-46165d224712@rbox.co>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 7/24/24 13:32, Michal Luczaj wrote:
-> Replace implementation with a call to a generic function.
-> 
-> Signed-off-by: Michal Luczaj <mhal@rbox.co>
+In this series, test_bitmap is being converted to kunit test. Multiple
+patches will make the review process smooth.
 
-Patch subject is incorrect, it should be: "... and
-vsock_socketpair_connectible()". Sorry for confusion.
+- Patch-1: Convert the tests in lib/test_bitmap.c to kunit
+- Patch-2: Rename the lib/test_bitmap.c to lib/bitmap_kunit.c and other
+           configuration options
+- Patch-3: Remove the bitmap.sh selftest
 
-Michal
+Muhammad Usama Anjum (3):
+  bitmap: convert test_bitmap to KUnit test
+  bitmap: Rename module
+  selftests: lib: remove test_bitmap
+
+ MAINTAINERS                           |   2 +-
+ lib/Kconfig.debug                     |  15 +-
+ lib/Makefile                          |   2 +-
+ lib/{test_bitmap.c => bitmap_kunit.c} | 624 ++++++++++++--------------
+ tools/testing/selftests/lib/Makefile  |   2 +-
+ tools/testing/selftests/lib/bitmap.sh |   3 -
+ tools/testing/selftests/lib/config    |   1 -
+ 7 files changed, 295 insertions(+), 354 deletions(-)
+ rename lib/{test_bitmap.c => bitmap_kunit.c} (70%)
+ delete mode 100755 tools/testing/selftests/lib/bitmap.sh
+
+-- 
+2.39.2
 
 
