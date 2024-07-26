@@ -1,145 +1,112 @@
-Return-Path: <linux-kselftest+bounces-14276-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14277-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A05B293D7AA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 19:32:51 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8A0593D7BB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 19:36:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D096282485
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 17:32:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9E1A1C212BD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 17:36:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AEE817CA10;
-	Fri, 26 Jul 2024 17:32:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0D9817D358;
+	Fri, 26 Jul 2024 17:36:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="TqwiDsSl"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="B0wnUgTg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0099E748A
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 17:32:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60DA18AEA
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 17:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722015166; cv=none; b=ZsWDJ80tayqn1RbjP3/AfL5aFn0Q/J8dOSPuUzGJCWswwuBUSt3YzuS8mFM9/niPw1ry96wVtwLasJ4DAtOaR7L7mTEU3JtCkfEFdA2qjr+LM5z73oweZ9E8hDQFrYVA/iRQABLcu5uyik9E3z7es4hmmKHUs5AEarCYEN63CeE=
+	t=1722015371; cv=none; b=BGvAG+41vBGikSuS9mc9cp5NzFSi1dnIfYIsrfYhLcsLptr4doshKal/zAGBLMatBAlYonGU6c+L/8C1F9RSBhMMf0i6oJhqvPoJ3ljFQ7v274h3OrQZUK1RS+22EUfPlwnyC9O5J+BcV/vv2YOzQzTtRr7iZ8GerrOCE02HBk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722015166; c=relaxed/simple;
-	bh=xGHmK9gWGUp0gHCFdD6XGO+i8NLts1NPaIMeFMTYSnI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BSzOTx6RLHKj/G4oEg+AJt0CDOB6A+hSOKOwhXwmdXkCCtwp49mJu0yIQGnC8ltdQLOjIirbcem2G/tahT2DJoNS286cLyHK/bn3uEouOdBcdhJBTHFBqnmf7z3jB+skxG2HIAeFxHyzmWx0hqSz3KI6QIsixTU/oSyfpWnV+5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=TqwiDsSl; arc=none smtp.client-ip=209.85.166.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-81f82478b70so9783839f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 10:32:43 -0700 (PDT)
+	s=arc-20240116; t=1722015371; c=relaxed/simple;
+	bh=P3XyIo3R4arE45x8ffW/mmiyN4CSBGFSQO01bTvWo8A=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Cp0uTXid3yH9wgGktAIz/yPepNAXY8cFitPisOiNUAWD8P27rJv7BqIjYjetnjf5NAY+x6Nz/fkj5viWlVs3Oyf/mevtZrufj6gxttdMMzX/UNxgssvNuB736paOCqSw3Xu0dV/pi0WyK3GtSrKAt7yfs7Vxal2CCFBTsBGglvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=B0wnUgTg; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a7a9cf7d3f3so210417266b.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 10:36:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1722015163; x=1722619963; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k4GinbwCPpupZoTNERMGOO+CrpcJ/xxlN9pDIVPEVvg=;
-        b=TqwiDsSlxmH0txvSaWHWJOkHSM4D+3xUOftZRUZVCpH/lXyGx5TwNHR7+XAfM4tg6t
-         FxqfXp+62k8AuKXQjNz86BiFzbnhzDaO1iifmlAAgxr1Ef8yTfWLuOlbBzCOa3asDWXf
-         r8WS1/G6awfnmx0bBDR19vyv2psBnELROmW60=
+        d=cloudflare.com; s=google09082023; t=1722015367; x=1722620167; darn=vger.kernel.org;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ho3v43VUSeiXA5xt2OR6F6u287xxMm9s+P8qGJiEG2w=;
+        b=B0wnUgTgOW2AVpThET/ZEPVIN7EF4O4k3XBoMoGhjmA702g3lEtw/SAsUZVDGLg2/N
+         5izsB0iaYIMJ/ysUkg17m7BdPT8fThbvU90k81+amEcJ2DK4P/eX+SwCQ+C8Z1elM4jE
+         X9nQHonEj3tqNvUqk3UblsxOaCGZ2bDNM98jurh/Ikl0w+Y3e+bV95ygNFiZ4MWhlmLl
+         SZJT7BYFEAu9qZpLel0JMrbBJk/OTb0JO1Fjwq4HeO16amIap58EE1o3QcWs2VUofo12
+         QVOY0yy4BBuKJLCLLUKfOfVtsGS+NeancbiawEyhRpM1uzNCkB2LvAlqqLlad+rQSEC2
+         cYyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722015163; x=1722619963;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k4GinbwCPpupZoTNERMGOO+CrpcJ/xxlN9pDIVPEVvg=;
-        b=LB5VKaxkCE6lGh4nbWPCyL6Ic+9SbrfbGO9beWUEMOy4/imhdwqeqhgNSD6LDUNlG4
-         2yNkasd9mD/ic+l21pkt1B+1fGn8lYiYbEkb4QnQLIBBe6pJg07pdT31tXRQOEYHvDo/
-         HEeo5ffZEvnGEoqj+DZljQCi/YYKEK6EtlbzsAc0oZiGyXeWhulO8Wgs8HZEFzCv88K9
-         eYTdR1rRxOxv6gZffaFEGHyobpOOSomoNTRqxRVL2dO3yY90DYKwZ0q9TTODOex0G/8Y
-         iog0nNGyrcI1LUFA00vp5eE+qszLzD7AnZDpauDZG+0IaqDCZCWEGE0ueFZjjWTU+P1S
-         m4hg==
-X-Forwarded-Encrypted: i=1; AJvYcCXXKENanshpSos04Y1JWGNaCTmyIg7qJY8GPeMdz2DBAtRB8p/uFxrQDhvDaV4+K/YRg/rNBxh4Lri33x5JgsY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBZaHc4YVrZlMt+jEqZqnmJWPqFNrKWtOUMy7SowKZ31vOdWS3
-	wOCEBj+gRXEStQdJN5+cV9HpA5LsWL4REQ35cXx9oZTjjeXs1lJb5pRxbmm2REw=
-X-Google-Smtp-Source: AGHT+IHbRT3iZRW+Jej5kqYMWBksmgKgeIxN4ONjndWGY3FhrB7Ej8wWWEhyyeycHxTk96AcFxZGNg==
-X-Received: by 2002:a5e:8342:0:b0:81f:8f3a:5689 with SMTP id ca18e2360f4ac-81f8f3a5894mr144339139f.0.1722015163088;
-        Fri, 26 Jul 2024 10:32:43 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-81f7d7fee0csm118731839f.43.2024.07.26.10.32.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Jul 2024 10:32:42 -0700 (PDT)
-Message-ID: <3e3d94d5-2a7f-4c05-b4ce-c6c8ca4e1186@linuxfoundation.org>
-Date: Fri, 26 Jul 2024 11:32:41 -0600
+        d=1e100.net; s=20230601; t=1722015367; x=1722620167;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ho3v43VUSeiXA5xt2OR6F6u287xxMm9s+P8qGJiEG2w=;
+        b=P51oDrD12BzahADOEVzkw0PYLTcINt6G0Z0YviiH88QcXmsVM4RBZeP7UY+aYmh9rC
+         zyrvw/1DXtVY3JYi4ar7dkGW6cj5F8zo4T++o+V+qIMnPV+pPoIKo6BR/7LzPs+3FQoI
+         GbAQmY4Kr1KSVtmcFmJIK/PRtFnlOjEk/Z/PUF2mVLJNcYaktiT48o4o9yEZmKWtMsW6
+         aYwa2PsWn9qYHWln5q2ef5l0Tk3zRubZ3dEfgjoI5OsAip3kNH3695tso7VdafMB7e+F
+         Y34WP9G79VH1lCPKlg5iL4mxG5/ijsBEdBHAgzpYykTgiZLA7aRltl4uXK8rJs5zvZIn
+         pR/A==
+X-Forwarded-Encrypted: i=1; AJvYcCVnY+8o5+WkY/cWWHkUJF/X/En4QJ6jitBHGK1nXbaiWT2/oL+e4NNK0RxyKXzWFc5GYENAkVrY6UT4nFJjU3zXTjLCHi7mhGDww6Hhd3RQ
+X-Gm-Message-State: AOJu0Ywevupzd7D4kWxIXWpcMk1qPBF9W+INfH9U9GuKS/5Jow3tCq67
+	hU8ZUG+X7xMMwmAQWEp9mS682SketBDLz0I8qB2gp0cvlkQZueTgOugTIzb9fBk=
+X-Google-Smtp-Source: AGHT+IHAAs6rashs3VUJdqFq7L9KZw0J+O+BWPDkdi/7GTQuTGrXRGsfwBjXUcOXij9YKstTeHW0KA==
+X-Received: by 2002:a17:906:c142:b0:a77:e48d:bae with SMTP id a640c23a62f3a-a7d3ffe7145mr20773366b.28.1722015367224;
+        Fri, 26 Jul 2024 10:36:07 -0700 (PDT)
+Received: from cloudflare.com ([2a09:bac5:5063:2387::38a:4c])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7acadafd9asm198150266b.187.2024.07.26.10.36.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 26 Jul 2024 10:36:06 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Michal Luczaj <mhal@rbox.co>
+Cc: Andrii Nakryiko <andrii@kernel.org>,  Eduard Zingerman
+ <eddyz87@gmail.com>,  Mykola Lysenko <mykolal@fb.com>,  Alexei Starovoitov
+ <ast@kernel.org>,  Daniel Borkmann <daniel@iogearbox.net>,  Martin KaFai
+ Lau <martin.lau@linux.dev>,  Song Liu <song@kernel.org>,  Yonghong Song
+ <yonghong.song@linux.dev>,  John Fastabend <john.fastabend@gmail.com>,  KP
+ Singh <kpsingh@kernel.org>,  Stanislav Fomichev <sdf@fomichev.me>,  Hao
+ Luo <haoluo@google.com>,  Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
+ <shuah@kernel.org>,  bpf@vger.kernel.org,  netdev@vger.kernel.org,
+  linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf 0/6] selftest/bpf: Various sockmap-related fixes
+In-Reply-To: <20240724-sockmap-selftest-fixes-v1-0-46165d224712@rbox.co>
+	(Michal Luczaj's message of "Wed, 24 Jul 2024 13:32:36 +0200")
+References: <20240724-sockmap-selftest-fixes-v1-0-46165d224712@rbox.co>
+User-Agent: mu4e 1.12.4; emacs 29.1
+Date: Fri, 26 Jul 2024 19:36:05 +0200
+Message-ID: <871q3gkqd6.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5] tools/testing:Fix the wrong format specifier
-To: Zhu Jun <zhujun2@cmss.chinamobile.com>, zhang.lyra@gmail.com
-Cc: shuah@kernel.org, kees@kernel.org, luto@amacapital.net, wad@chromium.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240726023241.17295-1-zhujun2@cmss.chinamobile.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240726023241.17295-1-zhujun2@cmss.chinamobile.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 7/25/24 20:32, Zhu Jun wrote:
-> The format specifier in fprintf is "%u", that "%u" should use
-> unsigned int type instead.the problem is discovered by reading code.
-> 
-> Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
+On Wed, Jul 24, 2024 at 01:32 PM +02, Michal Luczaj wrote:
+> Series takes care of few bugs and missing features with the aim to improve
+> the test coverage of sockmap/sockhash.
+>
+> Last patch is a create_pair() rewrite making use of
+> __attribute__((cleanup)) to handle socket fd lifetime.
+>
+> v0: https://lore.kernel.org/netdev/027fdb41-ee11-4be0-a493-22f28a1abd7c@rbox.co/
+>   - No declarations in function body (Jakub)
+>   - Don't touch output arguments until function succeeds (Jakub)
+>
+> Signed-off-by: Michal Luczaj <mhal@rbox.co>
 > ---
->   v1->v2:
->   	modify commit info add how to find the problem in the log
->   v2->v3:
->   	Seems this can use macro WTERMSIG like those above usage, rather than
->   	changing the print format.
->   v3->v4:
->   	Now the commit summary doesn't match the change you are making.
-> 	 Also WTERMSIG() is incorrect for this conditional code path.
-> 	 See comments below in the code path.
-> 
-> 	 I would leave the v2 code intact. How are you testing this change?
-> 	 Please include the details in the change log.
 
-I am asking you to send the v2 change with updated change log
-to show how this change is tested.
-
-> v4->v5:
-> 	Compile the kernel for testing using make
-
-Running make isn't sufficient - please verify running the tests
-making sure there are no regressions. Since you are changing the
-harness, you want to make sure this change You are changing the
-harness.
-
-> 
-> 
->   tools/testing/selftests/kselftest_harness.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-> index e05ac8261046..675b8f43e148 100644
-> --- a/tools/testing/selftests/kselftest_harness.h
-> +++ b/tools/testing/selftests/kselftest_harness.h
-> @@ -910,7 +910,7 @@ void __wait_for_test(struct __test_metadata *t)
->   		.sa_flags = SA_SIGINFO,
->   	};
->   	struct sigaction saved_action;
-> -	int status;
-> +	unsigned int status;
-
-I am asking you to send the v2 change with updated change log
-to show how this change is tested.
-		fprintf(TH_LOG_STREAM,
--			"# %s: Test ended in some other way [%u]\n",
-+			"# %s: Test ended in some other way [%d]\n",
-  			t->name,
-
-%d makes sense here in this message.
-
-thanks,
--- Shuah
+I see this depends on your previous series that got applied onto bpf
+tree, but this seems more like bpf-next material considering it's all
+tests, and a mix of improvements and fixups.
 
