@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-14279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14280-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E90FD93D8F0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 21:23:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD0E593D8F2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 21:25:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 763B0B22DFD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 19:23:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E55CB1C2257D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 26 Jul 2024 19:25:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FF7838DEE;
-	Fri, 26 Jul 2024 19:23:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E846547A7C;
+	Fri, 26 Jul 2024 19:24:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GqnfLT0H"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="TStDRQ0u"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 804FB39FDD
-	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 19:22:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D6B55897
+	for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 19:24:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722021780; cv=none; b=XZV8YypPgBPVJKM6yGgrwTcV4nb9AHhLth099X7l8zqjXiW6ucyWNFgx2ofDoYqY6Y73mbYfEM5WQIL2KEA3jJULLh663U5UpHU+N3/rlfEXYf+x3vPJH2ODrGylIpG+NAmP7SZ816sr63vNaDqGlUK+ZmgUvSB+4E6gcE+4C6k=
+	t=1722021896; cv=none; b=k+qkfwJo530jTK01DxQ5kRHstC8Ei2nTd1tDFO3CXi3D+2ZTWbIP+bdYJSnga+b44j9N6K2VAYWBWd0qix00Av+E72oIyKvuSM915esmOByDvyAHbrOCNJkGQhdmR85NW+sIl+d38oKzq5oVGuIb1vFJet3ASQ4orOiGE1mZW2U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722021780; c=relaxed/simple;
-	bh=uPi2/QCuL1L6gevpvRup/e/Yocdn5tdYrzX01UdxSUY=;
+	s=arc-20240116; t=1722021896; c=relaxed/simple;
+	bh=0rldXxTm42IMY5pZAkh4BHK0b1KE3f0no1736ppFpW8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pdvXP8rPr4g+6kv1KAWlV6j18BP0JwBhIYIbwZ4nf4WTMTL2W6g3ad5UYya4Dxx2muXBvJ3xwdGSkqRLZ3UkqCHfw2Goexs8RU3K1IjREZ1AkgrNSUZ53GfSCkf26+JV8BbSXLTbzMeMRCbNJ2AlKgmqSam4DtB7QG3IqMpAIs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GqnfLT0H; arc=none smtp.client-ip=209.85.166.47
+	 In-Reply-To:Content-Type; b=WMmap7ScLaKBrr6yJPEpeoJYWc9+4Ag8g7KlztffuzVMuFCPrJygPuHpmaYwZIy3CjvLkVrbK/QjASg8mWn+C1K28H9fJM3659Ixiwrj4TUwZoIcc7h9GW+GY4ytP10FIQNCNaPl5aBfhbfCpyOYpv1Q576pph25zMVU//34RIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=TStDRQ0u; arc=none smtp.client-ip=209.85.166.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-81f8add99b6so8210339f.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 12:22:58 -0700 (PDT)
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-81d05359badso11813539f.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 26 Jul 2024 12:24:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1722021777; x=1722626577; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1722021893; x=1722626693; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=eW06teyGDvI4Lz5n4M9E/YeQcIqHaO4UJHqvG8OK2OY=;
-        b=GqnfLT0HmFdWKrBJW1mFy+rDWPeir9q8UIUX+60shxgyOxJpxbCKJlwoP6zSO4HUO3
-         XBVH3SmNBQ/rzJKz/4gyWqwV5ba/N49jKbwsX0AVjHkCjlWAtTmSj9L9VYDuUVdGnQrG
-         P5A75/kLk77KqjoKc9AjUUJX3E6LoNsQBtub4=
+        bh=g8bPjvgxcg0NQqkD2IayRMVzQ8xyFyTCFKfJZrOpROk=;
+        b=TStDRQ0uco8P/jTSpfDovOU+ytgxZ5DNLtPJXtFmPj0z76OxKrfVndQoW9VQEq9ls1
+         qHtvGBoe/w1q5z8qoc2j5N+xuguAntstqarMShUVaNQQ1YsO09SMbpr9/6TJowoeHAoc
+         zAoXr04HuFKpa7CzLXaEelq+LO6EYFYD/CgWM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722021777; x=1722626577;
+        d=1e100.net; s=20230601; t=1722021893; x=1722626693;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eW06teyGDvI4Lz5n4M9E/YeQcIqHaO4UJHqvG8OK2OY=;
-        b=fQQG/VWx4hAOGgyvJsL4eUN2+Xgu5s6VLVYcrTKeK/GGua3AWMwiTt8yNb+LHxHo49
-         bb+fGjH6vI4JYah1S2yUoKS9YJ8JFFl0tLZGkqDU577Qcpfw+MVMuUJV9ffUDvXFSM1e
-         wt/F/hoT/7Kjiky75TAEwu1GNwIm+mxgVMKj+GJZmWjtoPHAUpHrzjfFUVPDYDEp8b2q
-         CjymIAv73RKfbj4RMwlbcLWRSkzwstaKoDSAIdeGkIjuV56Eo0iVu+BCiRrslWq3Liws
-         6RA6vFeWfJ64zE/U85aH3F9ti4P8RDmM0xbTzl683qJxezeUyCAFDgjgMJHFBdJPuMqa
-         gKvg==
-X-Forwarded-Encrypted: i=1; AJvYcCUZnUMic4t6BYsHYJ7ef67uiVy4AACzITKZ7GXXwhY+Qx9XwvZqdzPi6C0gbwFueMRKnVy3Zi+MKqoGjgn/I8U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxk+4IWyixuUCdWLMge24HlAHSGf2Cf901CGJ/bGwJh8wt+VTZA
-	siqL62bUtw22Wlhl7ZSOocPy3oNCCEpmW6bYnusZbyyr1LpmGF9ln4HmWW7OMIY=
-X-Google-Smtp-Source: AGHT+IE/Xpqjus/XbsRArDFYHuM7ATEqowy0ociDJbvuna0HrVkV9l/qKkgJyFzW/YcnXzbdxXVTgg==
-X-Received: by 2002:a5d:9605:0:b0:807:6708:e35b with SMTP id ca18e2360f4ac-81f7cf104a5mr471055339f.0.1722021777603;
-        Fri, 26 Jul 2024 12:22:57 -0700 (PDT)
+        bh=g8bPjvgxcg0NQqkD2IayRMVzQ8xyFyTCFKfJZrOpROk=;
+        b=BmOYyBytafT2Ptd2vYqhEUGeEShWJyUvNUP5FwB0YDtbSODnzSmPsZxY63ocdEe5R4
+         if6gKOcejYD9/KGiVGIwxRJgaMyPWfYX698Nt4YOXQDywzMg9LOBtSDIh05PHwYl+c+Y
+         DQmlgeV+ProHmGHaB9oj1/6YBZK8TtNAOAmLNjPbZe5DdfsvkbsgqiOQEd7HAPdskLee
+         xVGM0M+Qu9Lr9TqqQgr5YDfzZZ/MgAYKslJM5RH9qJXmC43WVTNd386pEj1mEo64bO2H
+         yAU5O3qA1YccpVJ48FOsNLhHgc7DTu+JH9uxIsz/eVQ+JFCx2kPXoBE/cDV4dBjoh1gz
+         k07w==
+X-Forwarded-Encrypted: i=1; AJvYcCWn45fKAZ9dSr7ipL+iTpvpZ2B91y87txUYDe3gfTOu5MpnN7zL5j1SozMruRBU3HOZ4KuxY84DkP6qn9tb+Cs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjWjKreF6jrs4N9lYjRvNGlSeAbKxthiDmQZ6wYaaUn5LGWQA3
+	Q2rzFaFuuyqLptJy7Dcl7tfEYulIv1bZN+UjuDnLTg/JUd/arRtUUltk8XLeIrY=
+X-Google-Smtp-Source: AGHT+IEpNVO685ix7hRt+JN/Kvx7SoZErJW5kTfbGwQ732dbBX2Lhszk8tucKhAxc2dRcxJz9qjwEg==
+X-Received: by 2002:a05:6e02:1c42:b0:383:297a:bdfb with SMTP id e9e14a558f8ab-39a22cc31b2mr43392525ab.2.1722021893473;
+        Fri, 26 Jul 2024 12:24:53 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c29fc414desm964613173.155.2024.07.26.12.22.56
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-39a22e974efsm16428515ab.19.2024.07.26.12.24.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 26 Jul 2024 12:22:56 -0700 (PDT)
-Message-ID: <55294e1b-c6ac-4c6d-a9b5-cd3d030468bc@linuxfoundation.org>
-Date: Fri, 26 Jul 2024 13:22:56 -0600
+        Fri, 26 Jul 2024 12:24:53 -0700 (PDT)
+Message-ID: <21671af5-94fe-48bd-a32e-d7f6204563f1@linuxfoundation.org>
+Date: Fri, 26 Jul 2024 13:24:52 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,7 +73,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] selftests: lib: remove test_bitmap
+Subject: Re: [PATCH 2/3] bitmap: Rename module
 To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
  Andrew Morton <akpm@linux-foundation.org>, Yury Norov
  <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
@@ -82,66 +82,70 @@ To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
  David Gow <davidgow@google.com>, John Hubbard <jhubbard@nvidia.com>
 Cc: kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>
 References: <20240726110658.2281070-1-usama.anjum@collabora.com>
- <20240726110658.2281070-4-usama.anjum@collabora.com>
+ <20240726110658.2281070-3-usama.anjum@collabora.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240726110658.2281070-4-usama.anjum@collabora.com>
+In-Reply-To: <20240726110658.2281070-3-usama.anjum@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 7/26/24 05:06, Muhammad Usama Anjum wrote:
-> Remove the test_bitmap as it has been converted to kunit test.
+> Rename module to bitmap_kunit and rename the configuration option
+> compliant with kunit framework.
 > 
-
-Care to give some commit information on this change?
-This change will take the ability away to run bitmap tests during
-boot - as it will now be dependent on kunit
-
-Why are we making changing like this without thinking through?
-
 > Cc: kees@kernel.org
 > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 > ---
->   tools/testing/selftests/lib/Makefile  | 2 +-
->   tools/testing/selftests/lib/bitmap.sh | 3 ---
->   tools/testing/selftests/lib/config    | 1 -
->   3 files changed, 1 insertion(+), 5 deletions(-)
->   delete mode 100755 tools/testing/selftests/lib/bitmap.sh
+>   MAINTAINERS                           |  2 +-
+>   lib/Kconfig.debug                     | 15 ++++++++-------
+>   lib/Makefile                          |  2 +-
+>   lib/{test_bitmap.c => bitmap_kunit.c} |  0
+>   4 files changed, 10 insertions(+), 9 deletions(-)
+>   rename lib/{test_bitmap.c => bitmap_kunit.c} (100%)
 > 
-> diff --git a/tools/testing/selftests/lib/Makefile b/tools/testing/selftests/lib/Makefile
-> index ee71fc99d5b51..386c5887c0d65 100644
-> --- a/tools/testing/selftests/lib/Makefile
-> +++ b/tools/testing/selftests/lib/Makefile
-> @@ -4,6 +4,6 @@
->   # No binaries, but make sure arg-less "make" doesn't trigger "run_tests"
->   all:
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 12b870712da4a..289b727344d64 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -3814,13 +3814,13 @@ F:	include/linux/find.h
+>   F:	include/linux/nodemask.h
+>   F:	include/linux/nodemask_types.h
+>   F:	include/vdso/bits.h
+> +F:	lib/bitmap_kunit.c
+>   F:	lib/bitmap-str.c
+>   F:	lib/bitmap.c
+>   F:	lib/cpumask.c
+>   F:	lib/cpumask_kunit.c
+>   F:	lib/find_bit.c
+>   F:	lib/find_bit_benchmark.c
+> -F:	lib/test_bitmap.c
+>   F:	tools/include/linux/bitfield.h
+>   F:	tools/include/linux/bitmap.h
+>   F:	tools/include/linux/bits.h
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index a30c03a661726..6bb02990a73e7 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2420,13 +2420,6 @@ config TEST_PRINTF
+>   config TEST_SCANF
+>   	tristate "Test scanf() family of functions at runtime"
 >   
-> -TEST_PROGS := printf.sh bitmap.sh prime_numbers.sh scanf.sh strscpy.sh
-> +TEST_PROGS := printf.sh prime_numbers.sh scanf.sh strscpy.sh
->   
->   include ../lib.mk
-> diff --git a/tools/testing/selftests/lib/bitmap.sh b/tools/testing/selftests/lib/bitmap.sh
-> deleted file mode 100755
-> index 00a416fbc0ef0..0000000000000
-> --- a/tools/testing/selftests/lib/bitmap.sh
-> +++ /dev/null
-> @@ -1,3 +0,0 @@
-> -#!/bin/sh
-> -# SPDX-License-Identifier: GPL-2.0
-> -$(dirname $0)/../kselftest/module.sh "bitmap" test_bitmap
-> diff --git a/tools/testing/selftests/lib/config b/tools/testing/selftests/lib/config
-> index 645839b50b0a2..7d3b1de29d3d6 100644
-> --- a/tools/testing/selftests/lib/config
-> +++ b/tools/testing/selftests/lib/config
-> @@ -1,6 +1,5 @@
->   CONFIG_TEST_PRINTF=m
->   CONFIG_TEST_SCANF=m
-> -CONFIG_TEST_BITMAP=m
->   CONFIG_PRIME_NUMBERS=m
->   CONFIG_TEST_STRSCPY=m
->   CONFIG_TEST_BITOPS=m
+> -config TEST_BITMAP
+> -	tristate "Test bitmap_*() family of functions at runtime"
+> -	help
+> -	  Enable this option to test the bitmap functions at boot.
+> -
+> -	  If unsure, say N.
+> -
+
+This change will take away the ability to run bitmap tests during
+boot on a non-kunit kernel.
+
+Nack on this change. I wan to see all tests that are being removed
+from lib because they have been converted - also it doesn't make
+sense to convert some tests like this one that add the ability test
+during boot.
 
 thanks,
 -- Shuah
-
 
