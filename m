@@ -1,52 +1,52 @@
-Return-Path: <linux-kselftest+bounces-14293-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14294-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E16993DDBB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 09:58:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AA8993DDBF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 10:02:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 926AE1C21847
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 07:58:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B3F01C214F8
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 08:02:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 337B738FA5;
-	Sat, 27 Jul 2024 07:58:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB12429422;
+	Sat, 27 Jul 2024 08:02:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="heRvaIr0"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Wa9q5I+T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A315929406;
-	Sat, 27 Jul 2024 07:58:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB68F1D6AA;
+	Sat, 27 Jul 2024 08:02:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722067128; cv=none; b=bAU7nuUIOI0joZPn4mbI+spHsdNVTkzw9zA62xXQ4A9icaSM4QR25pNNx984w08E1LXUVlWuLF9DzEHdq59m+4SGk4ZrL6ZYCIlZxLFGpMwMe4D3WX6gF3KeerrOASPPfRQPZgkzUgmwqwcT2HaJYrvLh+Qh7WxS2cFoqqa46pk=
+	t=1722067323; cv=none; b=G1SnSnEEhPvZAfNOP+BZbPLRckozNbx8EP7SMGNhfIx8Vqovv3tiFAWAUZsR1/uA083yHECFGD8nK486y4LSFjCrfQKa4NGL1VZZL6riD8jHlU30EA8b0GBbBnMt6lkFik2fNbkugwfWLf8fn6wXcI6UGm2GSaZ9+NHlYG7XeZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722067128; c=relaxed/simple;
-	bh=DmIQpTO+/bFZnml12ErnGYWk9fY2KsM1vrj7hx1HAsM=;
+	s=arc-20240116; t=1722067323; c=relaxed/simple;
+	bh=mdcJkFB49JmOpnRi+kpVlAJl4fXO5aIGn39/HbtdPsc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jo/Q59m0PZGEhdcpeffADH5uLlHspDSxitd37lz2hjG4BhgU1dDpPwVaxvHFp94Tb9jskd6IXDlgsdzCxNZIjR/hDyDG456bEwntV0awL55WGfskmMRmIGc0hjI29Dgv8qkPfbX4pzi4YxFSJ5VMhnMOZl4fsmrkWzPEN2YfB+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=heRvaIr0; arc=none smtp.client-ip=217.70.183.197
+	 In-Reply-To:Content-Type; b=NbbJi3kQhhSkWq88KmWq9vGfgcnLNtpTMRILuXEQQoxfcvyml9LVRbv6gaEBQdRg6HGp7IHnyCKja9WboE2B3OF9/A12Nyd392jsTpkXVI352A3SEgu+g1wLLeNY+A1LYWDP+Xv5SZCMk1YZhU7l/HWm6d+BkhN1fRNirw6q5gs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Wa9q5I+T; arc=none smtp.client-ip=217.70.183.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 86CA01C0004;
-	Sat, 27 Jul 2024 07:58:35 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BB31560002;
+	Sat, 27 Jul 2024 08:01:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1722067116;
+	t=1722067312;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=IX0+P3Id008eNk2KpJpmLWSM0D2kf6EvzjpHfL7w4Zo=;
-	b=heRvaIr0Pg5ieB2IMkselGgQQqH2MEqiTk9yaMI/foVpXRCCqNBxKkiqHKZutEqiGJvphg
-	L32JJXVCIMi6T2UpkiUOc6bAFRUWRAsuCxYS1NKDS7CYtYdFcRP+z+grsrEBEF3Q9XVfA7
-	jKTnBn4DjzTPDkHTunddZEmh9KoW8mpbc1UPBxEIdezEV6EuPkhdSVeW7Toyxvec/Z0qGz
-	iEOy5GgcHCPPzPwg9XoGV8yE3bDp3rYQU8FXBcqIJjXN6RWavFH74Iqg6l79fX3MQRb1de
-	JOhFeOAwAu2ZMECuxnm++lPjBzhlmvkGzxqVCyeJF/aQNQlSf221Mb/4MKVYIw==
-Message-ID: <e42a3622-c0a4-4cfd-994e-2261662c1cfd@bootlin.com>
-Date: Sat, 27 Jul 2024 09:58:35 +0200
+	bh=6uMBuMchtwex6uGK0qq/OZQ28GDoazXlDxQCkRDqwnI=;
+	b=Wa9q5I+TUVQWnSo2LVPkjd8wjlmryMWGo6OD4H0icEnCRgKYjc+3CVmiYq0LSpCOUVjw9G
+	hOcTgCV/gN/C8+IkuSQ9qxscIFAKJ9WRNy8HudFxoMh4oIXutEigMH6IeyQceiO4aqgXhK
+	Ss9AQi9+5gFKwud+aYUDQw4pF3AmE4iDmpN1HuQl7OQjaJBJeiVMcZXQ2L6rNIcwMjpfiF
+	KhqpqFsAI46ZZ8gqZq/bR1O5Yr0RliWoUSqDGLo5V/1HLMR3z52wnyDgKHRvvbwWalDmCD
+	C9wYbrjNt6gnwNmhX7tbysS6MkMi8bHozpp2LFjfIH0M/SXH7ghCXQHtA6tUJA==
+Message-ID: <62dcbdd6-c648-40a5-8346-3a290d8d0020@bootlin.com>
+Date: Sat, 27 Jul 2024 10:01:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,7 +54,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] selftests/bpf: convert test_dev_cgroup to test_progs
+Subject: Re: [PATCH 0/3] selftests/bpf: convert test_dev_cgroup to test_progs
 To: Stanislav Fomichev <sdf@fomichev.me>
 Cc: Alexei Starovoitov <ast@kernel.org>,
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
@@ -68,64 +68,48 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20240725-convert_dev_cgroup-v1-0-2c8cbd487c44@bootlin.com>
- <20240725-convert_dev_cgroup-v1-2-2c8cbd487c44@bootlin.com>
- <ZqQnrxyZ1nT93PLo@mini-arch>
+ <ZqQoCNV-VFD7z0UD@mini-arch>
 From: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
 Content-Language: en-US
-In-Reply-To: <ZqQnrxyZ1nT93PLo@mini-arch>
+In-Reply-To: <ZqQoCNV-VFD7z0UD@mini-arch>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: alexis.lothore@bootlin.com
 
-Hello Stanislas, thanks for the review
-
-On 7/27/24 00:48, Stanislav Fomichev wrote:
+On 7/27/24 00:49, Stanislav Fomichev wrote:
 > On 07/25, Alexis Lothoré (eBPF Foundation) wrote:
+>> Hello,
+>> this small series aims to integrate test_dev_cgroup in test_progs so it
+>> could be run automatically in CI. The new version brings a few differences
+>> with the current one:
+>> - test now uses directly syscalls instead of wrapping commandline tools
+>>   into system() calls
+>> - test_progs manipulates /dev/null (eg: redirecting test logs into it), so
+>>   disabling access to it in the bpf program confuses the tests. To fix this,
+>>   the first commit modifies the bpf program to allow access to char devices
+>>   1:3 (/dev/null), and disable access to char devices 1:5 (/dev/zero)
+>> - once test is converted, add a small subtest to also check for device type
+>>   interpretation (char or block)
+>> - paths used in mknod tests are now in /dev instead of /tmp: due to the CI
+>>   runner organisation and mountpoints manipulations, trying to create nodes
+>>   in /tmp leads to errors unrelated to the test (ie, mknod calls refused by
+>>   kernel, not the bpf program). I don't understand exactly the root cause
+>>   at the deepest point (all I see in CI is an -ENXIO error on mknod when trying to
+>>   create the node in tmp, and I can not make sense out of it neither
+>>   replicate it locally), so I would gladly take inputs from anyone more
+>>   educated than me about this.
+>>
 
 [...]
 
->> +	if (should_fail)
->> +		ASSERT_ERR(ret, "mknod");
->> +	else
->> +		ASSERT_OK(ret, "mknod");
-> 
-> Optional: might be easier to use something like expected_ret instead
-> of should_fail and then do:
-> 
-> ASSERT_EQ(ret, expected_ret)
+> Going forward, can you pls use [PATCH bpf-next] as a subject (or bpf when
+> targeting bpf tree)? I'm not sure whether patchworks picks up
+> plain [PATCH] messages..
 
-Yes, you are right. I initially went with a version relying on system() to
-perform the mknods/dd calls, which could return different errors codes so I used
-this should_fail. But while debugging some issues in CI with this series, I
-realized that the needed commands are basic enough to be replaced with direct
-library calls and I forgot to update this part, which can now assert an exact
-return value. I will update this accordingly.
-
-> I see this part being copy-pasted in a bunch of places below.
-> 
->> +	unlink(path);
->> +}
->> +
->> +static void test_read(const char *path, int should_fail)
->> +{
->> +	char buf[TEST_BUFFER_SIZE];
->> +	int ret, fd;
->> +
->> +	fd = open(path, O_RDONLY);
->> +
->> +	/* A bare open on unauthorized device should fail */
->> +	if (should_fail) {
->> +		ASSERT_ERR(fd, "open file for read");
-> 
-> [..]
-> 
->> +		if (fd)
->> +			close(fd);
-> 
-> nit: should this be 'if (fd >= 0)'? I'm assuming the intention is to
-> avoid close(-1)?
-
-Right as well, I'll fix it (here and below) in v2
+Yes, my bad, I realized some time after sending that I may have missed some
+proper patch prefix. I have just checked on patchwork and see this series and
+the one I have sent before, so I guess there is no need to resend those, but
+I'll make sure to apply the relevant prefix for next series.
 
 Thanks,
 
