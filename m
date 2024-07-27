@@ -1,75 +1,75 @@
-Return-Path: <linux-kselftest+bounces-14289-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14290-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F7B693DD1E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 05:34:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A586593DD28
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 05:48:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5E281F241B0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 03:34:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0D11B22353
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 03:48:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0B961878;
-	Sat, 27 Jul 2024 03:34:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE7081FA1;
+	Sat, 27 Jul 2024 03:48:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kbbXRb6O"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mu64gUQQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ACE015BB;
-	Sat, 27 Jul 2024 03:34:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A9F197;
+	Sat, 27 Jul 2024 03:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722051293; cv=none; b=EbECB8I6VzoYNDE3mKqWVmf0X/Bm95rmLvswYabJNJ+IslwpTnplr3kFsMMSCVGI9DcmHxjOFQASqymE0q5zNP2QlhsEIkFmWEd7JnM5nAflo2fqXMYjYoe5BUiRLYZJQqo/0gulDnUhmlwpkmXcxrOeIJa5NzQSEHIo3F+pmqY=
+	t=1722052087; cv=none; b=eAmMdvg88AzFhaQnOOkIQGU3t6L1cbMLZ7wEmJbqh6UjbkCMS1AJibrc5kfwzbL8PoFmXvJRxUNT+V4aLeHOR17OvEjfV5uSev8jLOqvFz7Atr2jgsD99J1hA6infc3UXc6CIRjvdw3a05oL3L3gREZRKZM6H5bSar0WhcWeSjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722051293; c=relaxed/simple;
-	bh=yaDJdeq/hqaYjATvvvDDIvhTLkEIsJ9rLBCq1itV/8k=;
+	s=arc-20240116; t=1722052087; c=relaxed/simple;
+	bh=6tZJ8trUX3kxkP3hyNdbVibiQHgkfVShNelwnL/tvl0=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qyEipMG0n0GgmWMfdwoVmMV0rPBTMWqZWTrQswFjIvINg1QCIadzzDFF+v7VYz9WumqI+wukDmCZs5N+qCHswU3pftPxGFLxIhLLA61+O2REMX1Aca0DA5/TdMs/ZqaezaxNdgZJTfqdUWNHy2CTcKdLL7Bs/8nblPagfMqv+bE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kbbXRb6O; arc=none smtp.client-ip=209.85.161.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=XlsZF3DrhCrpscaYJPguCDnhBszPZ0vLINGLKs29gxB51YhceuoZ2bM9jNigWswGOwTHRWl30+qxLYHAXbf94fU399fnz0tRc7G9LIt7us4PbFfx22gfSyzPtTFSVySUIZhmQoEIxoPLFMfX8dpoUbthPZ8Q540gcF0B/VqqVJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mu64gUQQ; arc=none smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5d4071e9b93so1050628eaf.2;
-        Fri, 26 Jul 2024 20:34:52 -0700 (PDT)
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-70b2421471aso1090056a12.0;
+        Fri, 26 Jul 2024 20:48:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722051291; x=1722656091; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722052085; x=1722656885; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:date:from:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=RUY2D6aIOhI+i59kEpaPmqdG9/yA6sTt0ktfeY1jnsA=;
-        b=kbbXRb6OJtR+nhd+tUorqKyrU4DEQ9qMhAb5X57l4Fc+ED7lcVy9BSGwYG2Sda5CyK
-         MRKekFDAD9EjuvFchetUYsm2zBdvPu9Js5uPzxto4AJwaWhJeY90b23kmAASY8yl/3Qf
-         JdKC4BTVNlIdZX02BkkZcDPI0q9oENvAKSGSRpZ1MglaNUFfhLaKXYWifVeAeNhbrwSE
-         h7j3mrOeOpxjQXDNUGEMXsPNu10yWL69fAbqNch2gQ5aPUPEoaDjb+O19TsURiFv3Kxq
-         IJvCiG+CkoZYxRttnbrevkOD8tamNl4FgW8iTiV3+PoORV6CxiTOkevEfkFXZjbFiqkl
-         VFyg==
+        bh=Na2f54Fshfejc1GiyIkCh8yZjzirAGqjnUIQPdgXC/8=;
+        b=mu64gUQQPNz7qNKgi1lAJDN2Zg5yg+cP6ih/AJNOdmen6buZ3jP4l2AlCQT7gs0sDb
+         zk25XY9tlywRJMetZx3mQErdNpf9m916uAjgSaoRjCc+cuT0tfU7eXmt87zsFKE4VzYu
+         GWqdr+LtB01iTEFZxw0qRTEu+U87E4METH12226BDs0TrvuBQoJsZ+yaGinnN5Vg9x8a
+         z3vU6kTnwgkewNfhUFJA+vmkJlcMR8Wlqpodpi9LRCsKtvZwZ0GS5V9cF/JIRa5xQhcA
+         38MzN9MUn8473Kcc8lqD64Zz6wDES15WjSlx5toUghnm4msAUwfkr93nflUZYjAiDk0I
+         Vl4A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722051291; x=1722656091;
+        d=1e100.net; s=20230601; t=1722052085; x=1722656885;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:date:from
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RUY2D6aIOhI+i59kEpaPmqdG9/yA6sTt0ktfeY1jnsA=;
-        b=ECya3fDivpkfymEZDZ5bVHbAXaZSjCrBLNegTyck2yh2oMQEM4owYsnFv3wM0SBSiQ
-         S04F86bZNusoeaczsPuDOFufIleNCNdo9JSkA6YgFScUK1SV3XemjrB8F380auFmXu1u
-         SBmHeMnAr0R9QvqQrK8HBi9RCFFRtlFRWrKw9dByixhAbvl5UfVIOg5L9IHeTT018fHC
-         HvRZlpd5UgiWG13IomBaWFsgfwXRICeZ4aljcvcdVlN0N8cNBL61kwk8Quvx3a06f/0k
-         VX07C4hZjxsW0E4zSFX6+83YxKtS4sZQwEyHg65cDjZbzk8I60TNma7uf+/3jvVz5MRa
-         0PrA==
-X-Forwarded-Encrypted: i=1; AJvYcCUZGmsNZfcAjypUKvYQN0xWViHZytuqPcFS4dKw8nZyuYoD+xi4kU4T2m/B5/yV/btZ2+7pic8BkeuhcVl6uksfyOcFB0CUbaczbLKxvvgAxYJkFYMWq21ap72/8lOkei9YI5WtU+2c
-X-Gm-Message-State: AOJu0YzcO1ikTfxd0bN3alACuTNjXZxNElDw+YCbm5b2JtM6Hni5L0/4
-	4JnD2ds2GUkfqSBDMF3Th7cSlvQiTS0RYp0e7rLDq16Y3Ah56alL
-X-Google-Smtp-Source: AGHT+IFpl9ckg/yLErKtgalQwPuaJJ4cU5wCNODkAx0umK+ml8T7MahWXSRw6tiE+/8b+GTmc+WQQA==
-X-Received: by 2002:a05:6870:213:b0:261:1f7d:cf6e with SMTP id 586e51a60fabf-267d4f336ddmr2171873fac.41.1722051291494;
-        Fri, 26 Jul 2024 20:34:51 -0700 (PDT)
+        bh=Na2f54Fshfejc1GiyIkCh8yZjzirAGqjnUIQPdgXC/8=;
+        b=rJ0GNrw9JLpynDlWVdZcgsL0RyYmwv+o5hEwW6e9yRnggw46iPeD764WK51eRnmwZR
+         WbD3I6Bgrr9KNdA5XaQZES0wXeHMOe5/pLlbpzU7/7yvuLlgYtWDO3wfbtiVrMz2A5Ju
+         TJyLIa7POzQ7oKcx0WecLJzzdi0lv3s9mU0fpnQqZzDE3ONfj84LaJkYM2ELgwwkQvO1
+         dQFsJYmC2loayHcsNVMclmlyGUNpnFWOQ+doJRjt4grJ3ZRQCVNLd/1hCQork9oYc3A3
+         XvpCW4zUQ0aTwSoFXjgS2yKtrbaWEaqRFQrKEsejwRM22BcaIuxHVSufaozPsRH5HQ2O
+         v+Jw==
+X-Forwarded-Encrypted: i=1; AJvYcCUy8phrpZDILOGJ+1vRh3LKp7CMGxnMXheg1LnfAy91k+BMCcE5/vqvVn+KRCOziU3izqHaIf1J5OeOaGECa5ePqk6j9rqh8USyiVAws8WEoap6c5V7nNk7J+Eaj+sXLGXl09kqK4N0
+X-Gm-Message-State: AOJu0Yw+CdkxZT1KgnPMjqs4YHJEhAvMTWYr2sHpq30o4WMOnTjcUQQc
+	d1Qs1CALp69u7UQdmtQAhm1ZYhlDlGBrHpSf4zyxYC0cpPidtGJm
+X-Google-Smtp-Source: AGHT+IERlY5auygYdVq3h7iUGB2mNzGGCR4dHsvHEcSjSpGZ7jN8iwg0mst6I8sKUb0SPouR5h9HSg==
+X-Received: by 2002:a17:902:da89:b0:1ff:4b1:dfe1 with SMTP id d9443c01a7336-1ff04b1e02amr16781545ad.7.1722052085346;
+        Fri, 26 Jul 2024 20:48:05 -0700 (PDT)
 Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70ead874af9sm3502700b3a.170.2024.07.26.20.34.50
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7ee6a1esm40820285ad.164.2024.07.26.20.48.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jul 2024 20:34:50 -0700 (PDT)
+        Fri, 26 Jul 2024 20:48:04 -0700 (PDT)
 From: Tony Ambardar <tony.ambardar@gmail.com>
 X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
-Date: Fri, 26 Jul 2024 20:34:48 -0700
+Date: Fri, 26 Jul 2024 20:48:02 -0700
 To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
 Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
@@ -88,12 +88,12 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	Jonathan Lemon <jonathan.lemon@gmail.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Yan Zhai <yan@cloudflare.com>
-Subject: Re: [PATCH bpf-next v1 2/8] selftests/bpf: Fix arg parsing in
- veristat, test_progs
-Message-ID: <ZqRq2MB/axSchiQP@kodidev-ubuntu>
+Subject: Re: [PATCH bpf-next v1 6/8] selftests/bpf: Fix compile if backtrace
+ support missing in libc
+Message-ID: <ZqRt8jdbWj6oQHov@kodidev-ubuntu>
 References: <cover.1721903630.git.tony.ambardar@gmail.com>
- <b488b997e1b966f6d35a2767da738fc9a44023a8.1721903630.git.tony.ambardar@gmail.com>
- <CAEf4Bzbb3hPzKN2-wEg24JNMaJsUDiwpx9=xjvOK7TnAaSk4wQ@mail.gmail.com>
+ <472c94bd42cda20154a26ef384b73488abf026c0.1721903630.git.tony.ambardar@gmail.com>
+ <CAEf4Bza_y15T4gU=Kiu2d+RbWpxEzrLe6T71bCpK383xHD8JMg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -103,36 +103,81 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4Bzbb3hPzKN2-wEg24JNMaJsUDiwpx9=xjvOK7TnAaSk4wQ@mail.gmail.com>
+In-Reply-To: <CAEf4Bza_y15T4gU=Kiu2d+RbWpxEzrLe6T71bCpK383xHD8JMg@mail.gmail.com>
 
-On Thu, Jul 25, 2024 at 01:09:24PM -0700, Andrii Nakryiko wrote:
+On Thu, Jul 25, 2024 at 01:22:37PM -0700, Andrii Nakryiko wrote:
 > On Thu, Jul 25, 2024 at 3:39 AM Tony Ambardar <tony.ambardar@gmail.com> wrote:
 > >
-
-...
-
-> > --- a/tools/testing/selftests/bpf/testing_helpers.c
-> > +++ b/tools/testing/selftests/bpf/testing_helpers.c
-> > @@ -227,7 +227,7 @@ int parse_test_list(const char *s,
-> >         if (!input)
-> >                 return -ENOMEM;
+> > From: Tony Ambardar <tony.ambardar@gmail.com>
 > >
-> > -       while ((test_spec = strtok_r(state ? NULL : input, ",", &state))) {
-> > +       for (test_spec = strtok_r(input, ",", &state); test_spec; test_spec = strtok_r(NULL, ",", &state)) {
+> > Use backtrace functions only with glibc and otherwise provide stubs in
+> > test_progs.c. This avoids compile errors (e.g. with musl libc) like:
+> >
+> >   test_progs.c:13:10: fatal error: execinfo.h: No such file or directory
+> >      13 | #include <execinfo.h> /* backtrace */
+> >         |          ^~~~~~~~~~~~
+> >   test_progs.c: In function 'crash_handler':
+> >   test_progs.c:1034:14: error: implicit declaration of function 'backtrace' [-Werror=implicit-function-declaration]
+> >    1034 |         sz = backtrace(bt, ARRAY_SIZE(bt));
+> >         |              ^~~~~~~~~
+> >   test_progs.c:1045:9: error: implicit declaration of function 'backtrace_symbols_fd' [-Werror=implicit-function-declaration]
+> >    1045 |         backtrace_symbols_fd(bt, sz, STDERR_FILENO);
+> >         |         ^~~~~~~~~~~~~~~~~~~~
+> >
+> > Fixes: 9fb156bb82a3 ("selftests/bpf: Print backtrace on SIGSEGV in test_progs")
+> > Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
+> > ---
+> >  tools/testing/selftests/bpf/test_progs.c | 9 ++++++++-
+> >  1 file changed, 8 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+> > index 60c5ec0f6abf..f6cfc6a8e8f0 100644
+> > --- a/tools/testing/selftests/bpf/test_progs.c
+> > +++ b/tools/testing/selftests/bpf/test_progs.c
+> > @@ -10,7 +10,6 @@
+> >  #include <sched.h>
+> >  #include <signal.h>
+> >  #include <string.h>
+> > -#include <execinfo.h> /* backtrace */
+> >  #include <sys/sysinfo.h> /* get_nprocs */
+> >  #include <netinet/in.h>
+> >  #include <sys/select.h>
+> > @@ -19,6 +18,14 @@
+> >  #include <bpf/btf.h>
+> >  #include "json_writer.h"
+> >
+> > +#ifdef __GLIBC__
+> > +#include <execinfo.h> /* backtrace */
+> > +#else
+> > +#define backtrace(...) (0)
+> > +#define backtrace_symbols_fd(bt, sz, fd) \
+> > +       dprintf(fd, "<backtrace not supported>\n", bt, sz)
+> > +#endif
 > 
-> oh, this is so long and verbose, let's just add a counter and use that
-> to determine whether to pass NULL or input, ok?
+> First, let's define backtrace() and backtrace_symbols_fd() as proper
+> functions, not a macro?
+> 
+> And second, what if we then make those functions __weak, so they
+> provide default implementations if libc doesn't provide those
+> functions?
+> 
+> This parts seems unavoidable, though:
+> 
+> #ifdef __GLIBC__
+> #include <execinfo.h>
+> #endif
 > 
 
-...
+I agree that would be cleaner, will work on a v2 with this.
 
-> > -       while ((next = strtok_r(state ? NULL : input, ",", &state))) {
-> > +       for (next = strtok_r(input, ",", &state); next; next = strtok_r(NULL, ",", &state)) {
+Out of curiosity, I saw that tools/build includes feature-detection code
+(incl backtrace) and wondered if selftests/bpf ever used this facility?
 > 
-> ditto, let's not duplicate strtok_r() calls
-> 
-
-Sounds good. I'll update for v2 and thanks for the suggestion.
-
-...
+> > +
+> >  static bool verbose(void)
+> >  {
+> >         return env.verbosity > VERBOSE_NONE;
+> > --
+> > 2.34.1
+> >
 
