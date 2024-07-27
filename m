@@ -1,123 +1,122 @@
-Return-Path: <linux-kselftest+bounces-14294-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14295-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AA8993DDBF
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 10:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D74FB93DDEE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 11:04:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B3F01C214F8
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 08:02:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBABB1C214A6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 09:04:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB12429422;
-	Sat, 27 Jul 2024 08:02:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BB4F3CF58;
+	Sat, 27 Jul 2024 09:04:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Wa9q5I+T"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i/Sk8GaY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB68F1D6AA;
-	Sat, 27 Jul 2024 08:02:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66D682E851;
+	Sat, 27 Jul 2024 09:04:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722067323; cv=none; b=G1SnSnEEhPvZAfNOP+BZbPLRckozNbx8EP7SMGNhfIx8Vqovv3tiFAWAUZsR1/uA083yHECFGD8nK486y4LSFjCrfQKa4NGL1VZZL6riD8jHlU30EA8b0GBbBnMt6lkFik2fNbkugwfWLf8fn6wXcI6UGm2GSaZ9+NHlYG7XeZE=
+	t=1722071070; cv=none; b=XrwsZg2l6yjY2GphT6EiJfedy6kc9imEzglnwBMql3CRS6rFcWlcJKbYkYeytLxbe6w96IrXdgzXRkfqp+0Ej3Sso0uzHRcEkiHmsI9SLS/n2vG5+rNSk4nt4oG+qC4aioIsYN8k58akY11j4Xc7MbNQirRWRxrGqKSuohdlSoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722067323; c=relaxed/simple;
-	bh=mdcJkFB49JmOpnRi+kpVlAJl4fXO5aIGn39/HbtdPsc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NbbJi3kQhhSkWq88KmWq9vGfgcnLNtpTMRILuXEQQoxfcvyml9LVRbv6gaEBQdRg6HGp7IHnyCKja9WboE2B3OF9/A12Nyd392jsTpkXVI352A3SEgu+g1wLLeNY+A1LYWDP+Xv5SZCMk1YZhU7l/HWm6d+BkhN1fRNirw6q5gs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Wa9q5I+T; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BB31560002;
-	Sat, 27 Jul 2024 08:01:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1722067312;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6uMBuMchtwex6uGK0qq/OZQ28GDoazXlDxQCkRDqwnI=;
-	b=Wa9q5I+TUVQWnSo2LVPkjd8wjlmryMWGo6OD4H0icEnCRgKYjc+3CVmiYq0LSpCOUVjw9G
-	hOcTgCV/gN/C8+IkuSQ9qxscIFAKJ9WRNy8HudFxoMh4oIXutEigMH6IeyQceiO4aqgXhK
-	Ss9AQi9+5gFKwud+aYUDQw4pF3AmE4iDmpN1HuQl7OQjaJBJeiVMcZXQ2L6rNIcwMjpfiF
-	KhqpqFsAI46ZZ8gqZq/bR1O5Yr0RliWoUSqDGLo5V/1HLMR3z52wnyDgKHRvvbwWalDmCD
-	C9wYbrjNt6gnwNmhX7tbysS6MkMi8bHozpp2LFjfIH0M/SXH7ghCXQHtA6tUJA==
-Message-ID: <62dcbdd6-c648-40a5-8346-3a290d8d0020@bootlin.com>
-Date: Sat, 27 Jul 2024 10:01:51 +0200
+	s=arc-20240116; t=1722071070; c=relaxed/simple;
+	bh=/WInVHz5/5nRA9OxCUOUNLKXu8jpoFq68RMMSbHKe5E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=u5sBNPm2rIm3VsNpcPYGHS37WtoM4tcXTLUefusT7Q+ZIQ5cuzfB1LCN0olFR7EvkfjN/cY0KgY8O4Gro9wNc1HLV9FKDMPSUCC34ZQ64FDniL/uGaXYgYG3yNRLCZZ0s7rQwIi3WI885YBxPcDPkQxfjylTawE8WVEtUlA3eXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i/Sk8GaY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F9AFC32781;
+	Sat, 27 Jul 2024 09:04:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722071070;
+	bh=/WInVHz5/5nRA9OxCUOUNLKXu8jpoFq68RMMSbHKe5E=;
+	h=From:Subject:Date:To:Cc:From;
+	b=i/Sk8GaYSHLmG6xaru9tAb1cXQ0Yhp6rlJxa+yZlVjkDJRdcPJTxuueQf9jqpAS1+
+	 bQfYYt7dA7f05m1yY6PfKiY7z9EOk8cza8texrdD0RUvYxPD5iqAmsQp6TnUyyGW2C
+	 nsWnjFtJNsioJE08dODQATkLd/CmBCbzj6fvN1wpVeaTjt86t4bbybOQVar5KoCiMH
+	 19ekswhA7fkFeVYwwl5hKOgcndVX5BDCu3jX/otlBz76ggBqChP1ubNfNJHmd6kJaG
+	 V5CKVPnyK74KBOXc61yXVTpfSy6p6vJZOlLkdVHKm/xcTUpL0oYqvP8uYYBvVCchXr
+	 hMD0hmqCdL0FA==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net 0/5] mptcp: fix signal endpoint readd
+Date: Sat, 27 Jul 2024 11:03:58 +0200
+Message-Id: <20240727-upstream-net-20240726-mptcp-fix-signal-readd-v1-0-1e7d25a23362@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/3] selftests/bpf: convert test_dev_cgroup to test_progs
-To: Stanislav Fomichev <sdf@fomichev.me>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
- <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- ebpf@linuxfoundation.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240725-convert_dev_cgroup-v1-0-2c8cbd487c44@bootlin.com>
- <ZqQoCNV-VFD7z0UD@mini-arch>
-From: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <ZqQoCNV-VFD7z0UD@mini-arch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: alexis.lothore@bootlin.com
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAP63pGYC/z2NQQqDMBBFryKz7oBNpUKvUrpIJqMOaBoyUQTx7
+ h1cdPk+j/cPUC7CCq/mgMKbqHyTwf3WAE0+jYwSjcG1rmt798Q1ay3sF0xc8b8uuVLGQXZUGZO
+ f0ZQYcXhQ70KgQBzAkrmwOdfdGywAn/P8AZb+Ik2DAAAA
+To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org, 
+ Liu Jing <liujing@cmss.chinamobile.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1574; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=/WInVHz5/5nRA9OxCUOUNLKXu8jpoFq68RMMSbHKe5E=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmpLgaBDm+3i6X4MsqXmUeEy7qTiBIm9QanpXIW
+ fP6uG6a68SJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZqS4GgAKCRD2t4JPQmmg
+ c9tkD/95oI0gsFL0AZCjhsBoaM4P0cWBz8nY8uTAVquxZyNe688ZZxp124XHZrFzRBhQzhDm6u0
+ ZR+zXx/gtbubfeDbmuSrYrLeD439KiZpfKsIwVq06u7ngI+UpfbgD5TN/zYCM3SiONV0Mnz8SSz
+ AaTl0qk87C4lCfpEU3OYOYYxonY82NrClJIG4GgW7Gegid4TfKUtxvk0inMMX3BcT23rdUFxGkX
+ hdM0jkq2g3R/4knwrK3+fIgFzAD5+3Bsy4NaZN4iwCIB8JOGOXcWbHXSKBDEck83U0DVJn5AE0m
+ GOMv+G/ozdBYpFdX9m546Yx/JMjdUTf92fsMwQx34SOwWlFCZZA9Kos1A5rt0sOV9Ny5m9Po9Ec
+ v5aUZIcrc4/BlWNjiRGNKIlO6atwNsgTPL/E9u8Dc0W0O9RoFm6kGV2nqqNUY/iO7rn5+Jesdxp
+ rGr/DG+LzwgoXEESD0JoqcoV3iRzkTKOA+W2AZ8d2fjC33SDZK1wGAcu2OiNPz/MKVUQRjDsdXg
+ DdXVTM4SBQPdK5VF1hw+NljhpgWweU/7l8lLVYqpJLQ6t0mWPkb/odiBhn1dn5OD2E1TOGdT/Sc
+ ldX8AbHZAOERl9V7vZs8EGq+GT7iDwmDL9Hn93oDJs9WOMEOsDlojaogwOVX4H0TBkbf2pV8GTs
+ +OYf6C1+hsfiOpA==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On 7/27/24 00:49, Stanislav Fomichev wrote:
-> On 07/25, Alexis Lothoré (eBPF Foundation) wrote:
->> Hello,
->> this small series aims to integrate test_dev_cgroup in test_progs so it
->> could be run automatically in CI. The new version brings a few differences
->> with the current one:
->> - test now uses directly syscalls instead of wrapping commandline tools
->>   into system() calls
->> - test_progs manipulates /dev/null (eg: redirecting test logs into it), so
->>   disabling access to it in the bpf program confuses the tests. To fix this,
->>   the first commit modifies the bpf program to allow access to char devices
->>   1:3 (/dev/null), and disable access to char devices 1:5 (/dev/zero)
->> - once test is converted, add a small subtest to also check for device type
->>   interpretation (char or block)
->> - paths used in mknod tests are now in /dev instead of /tmp: due to the CI
->>   runner organisation and mountpoints manipulations, trying to create nodes
->>   in /tmp leads to errors unrelated to the test (ie, mknod calls refused by
->>   kernel, not the bpf program). I don't understand exactly the root cause
->>   at the deepest point (all I see in CI is an -ENXIO error on mknod when trying to
->>   create the node in tmp, and I can not make sense out of it neither
->>   replicate it locally), so I would gladly take inputs from anyone more
->>   educated than me about this.
->>
+Issue #501 [1] showed that the Netlink PM currently doesn't correctly
+support removal and re-add of signal endpoints.
 
-[...]
+Patches 1 and 2 address the issue: the first one in the userspace path-
+manager, introduced in v5.19 ; and the second one in the in-kernel path-
+manager, introduced in v5.7.
 
-> Going forward, can you pls use [PATCH bpf-next] as a subject (or bpf when
-> targeting bpf tree)? I'm not sure whether patchworks picks up
-> plain [PATCH] messages..
+Patch 3 introduces a related selftest. There is no 'Fixes' tag, because
+it might be hard to backport it automatically, as missing helpers in
+Bash will not be caught when compiling the kernel or the selftests.
 
-Yes, my bad, I realized some time after sending that I may have missed some
-proper patch prefix. I have just checked on patchwork and see this series and
-the one I have sent before, so I guess there is no need to resend those, but
-I'll make sure to apply the relevant prefix for next series.
+The last two patches address two small issues in the MPTCP selftests,
+one introduced in v6.6., and the other one in v5.17.
 
-Thanks,
+Link: https://github.com/multipath-tcp/mptcp_net-next/issues/501 [1]
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Liu Jing (1):
+      selftests: mptcp: always close input's FD if opened
 
-Alexis
+Paolo Abeni (4):
+      mptcp: fix user-space PM announced address accounting
+      mptcp: fix NL PM announced address accounting
+      selftests: mptcp: add explicit test case for remove/readd
+      selftests: mptcp: fix error path
 
+ net/mptcp/pm_netlink.c                            | 27 ++++++++++++++------
+ tools/testing/selftests/net/mptcp/mptcp_connect.c |  8 +++---
+ tools/testing/selftests/net/mptcp/mptcp_join.sh   | 31 ++++++++++++++++++++++-
+ 3 files changed, 53 insertions(+), 13 deletions(-)
+---
+base-commit: 301927d2d2eb8e541357ba850bc7a1a74dbbd670
+change-id: 20240726-upstream-net-20240726-mptcp-fix-signal-readd-f3c72bbcbceb
+
+Best regards,
 -- 
-Alexis Lothoré, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
 
