@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-14308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14309-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A7C793DE9C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 12:05:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 541C493DE9F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 12:05:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6D19AB22736
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 10:05:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A6B32839E6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 10:05:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CB957D40D;
-	Sat, 27 Jul 2024 10:03:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD15E7FBB7;
+	Sat, 27 Jul 2024 10:03:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mqmi80Z+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RdVqDUwj"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5653A7D3E4;
-	Sat, 27 Jul 2024 10:03:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA44457CAC;
+	Sat, 27 Jul 2024 10:03:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722074623; cv=none; b=H4GsYOCUMRGAprVQl82HExPlof4Z7jPZP7Zb4czPLiAfXpLJuoi1JSzt35w6gvAT/JQISMaQ+pJxnhgQyOCmXN2Vn/gAW5Tb7mTkBeW3NnJPlJ1iIsxG7PL0n7yAfiBoZVQHsRLG8RFUZG9yVOY+2XWBfAtvJvJs5L71VwziNa8=
+	t=1722074626; cv=none; b=OMdCmNvKgCOyMjeT2kTm0u3XjIMkHV65FAZvrnEedGslevaUVqT1LQFc/Co3RIjFyuL0SsNQvRA4N6+etcljiD+bQc8/DwCT3zi8cGGMW1duUFQ2zLPnJobtkpqJmzP7YkesO/xKmAvL7rD6LlNC136I7WM0MqAcWUOQuLuKwHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722074623; c=relaxed/simple;
-	bh=3eBeJjC4t1puEN/DFkciKEIb9P2a1z/Rqf7oJB53lzY=;
+	s=arc-20240116; t=1722074626; c=relaxed/simple;
+	bh=B2vhK+0RBBQJO+CkqazxYwoIfSfpFJCq0O68Tg4d5m0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WQL35Q7gxKERfKwS2sYqyC1w85Nginl0CeURb4GSD0pmcMbQWzaT3dcqn/kA93t2AbxqwgXM6VlTTrD7rZftsdE808J/jJw1mqjwBl1Ec2FUVcx7Dq9ipQpuRYXJHpdyZIsYqr7i+gHtorKqiuF7/lUuXB/7izvKZPzwkkY+3aQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mqmi80Z+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AC07C32786;
-	Sat, 27 Jul 2024 10:03:39 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=VQ4NtPFiAVCC/gutJPw8m83wvrmNH4d3R0erG1ZBWouVam2LSuMeS64PHwop1phbTT+QwnAjYQFXX06+u9gVN4M9M+bSGbgYajRDQHUY1jzTlWNookDNBY2doulHeSeuGuPbVSi5M0QCBIa3w0pWaNHW1Ex1Urrvv+mnn8FCrQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RdVqDUwj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A790C4AF0E;
+	Sat, 27 Jul 2024 10:03:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722074622;
-	bh=3eBeJjC4t1puEN/DFkciKEIb9P2a1z/Rqf7oJB53lzY=;
+	s=k20201202; t=1722074626;
+	bh=B2vhK+0RBBQJO+CkqazxYwoIfSfpFJCq0O68Tg4d5m0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Mqmi80Z+YcU/hMOVO9dxBKFa7YmZ+uZKhxDHD6ImR9OWBcl9jtYA32hoBsm2f/v8u
-	 iw7OzS8ihbYN4bNU7cDWQVCB8f4uqHtOvc1yBZTNpOR9tlj+iLW5Yc02JAx8NK/Xzr
-	 ddb6MNMHybIUn7wCiQlb3tSD/eTn/hXVdrAMTHz01ZmoAPE6FaamXnU2UcRqEotCh+
-	 9/cE+iVPT8LuxG9rojFw3ZKD5La0Ibkb+50gabk0vhB4ulaEUUvSrwtDeLoGZxcxjo
-	 JdUpc6KAH8EjBBDdVrw66QJ0YxSi0xzK13qgZmkzmTqHWGKvH4Rp4Pdj+lPqgj3ZSo
-	 rVgRzdGRSKwoA==
+	b=RdVqDUwj4I/Mb/qdteXi0uD7bg/HXL9bqVg9UsM8vZZAey0WtwwBUc42TNwwV72KT
+	 s9l15zbeQ6hql64CLydekW5QHaHSlni6FuS3TLfsqsfdYMWzbhG71ZO9kHBWDnJox7
+	 pY2UIjsnju+ubfUg2MKuOuJpr0sAdIqjOrjHmFs+eIrJaRUy6YRjNwCrG+Y2xBeapS
+	 XpXSB+5VrPTuB0llYQZhydq4JxxtIm3Wr3qNq4L59FbVH9Y729C1Y4n+4If4dPMX4U
+	 PQ/LixXAGPXwNMwkrKbteis6a3ktSm/xuTTsHBQlvkAhBURmL5zFETcXaRB8aCDhTj
+	 4fQ4EqOFkvMKg==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Sat, 27 Jul 2024 12:01:28 +0200
-Subject: [PATCH net 6/7] mptcp: pm: fix backup support in signal endpoints
+Date: Sat, 27 Jul 2024 12:01:29 +0200
+Subject: [PATCH net 7/7] selftests: mptcp: join: check backup support in
+ signal endp
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240727-upstream-net-20240727-mptcp-backup-signal-v1-6-f50b31604cf1@kernel.org>
+Message-Id: <20240727-upstream-net-20240727-mptcp-backup-signal-v1-7-f50b31604cf1@kernel.org>
 References: <20240727-upstream-net-20240727-mptcp-backup-signal-v1-0-f50b31604cf1@kernel.org>
 In-Reply-To: <20240727-upstream-net-20240727-mptcp-backup-signal-v1-0-f50b31604cf1@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -64,167 +65,119 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5482; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=3eBeJjC4t1puEN/DFkciKEIb9P2a1z/Rqf7oJB53lzY=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmpMXm48IiIoe9TbUuJLqVBqHwCV4EWiQHsBIjZ
- oqKlwv1wDKJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZqTF5gAKCRD2t4JPQmmg
- c+upEACoj2je6IWxQFx+/Dtzy1HWILngsJ9yAq/LzaEXW7yz7bG6SHpGCu8ad2/KpOOc0R8e+1K
- mh/u+KbGedjxmArJgxoxf/TOucdQNW8jKnwvpnDQAedPE53p/5/h5gKkeVZZfgRBjzWYZe7p3MK
- r4xkPJeanEPuL4uiwylcDJw/MdbKOvRLJmxI1XSZ/9hLU2gNvD4hn5ZuZuPPgnyxEm1vx1FGNGs
- SWLiChvFUUoOjJqwecb9UqBVFCduzt1Eh8zidElb5P10FgX5/kwH3YhanaQ2wio+rb3QOTQ1pxQ
- dv/McdigEHDcxBjioiFIjBUNJRvErdKHT0hcVygEeoUDEPpknhf6ce1IVXJXe3Htd3OgqJVzsvI
- 51NuIQSpORum2JawUAaxdi/Aibqjx6PY6GUiEtk7gQwMtA9Yn1gg6Dsvly/q3fIK3kJbK2xStfK
- Rfiq4YH2vZiHHtG+FLVIJyr4x2Gnounc3Aa1XkHg4++6jULdN9DXHw3Qw02wSAGmDlPK5a8ezOp
- 9R26ak+c2UR5skCY24l63xvxM/Dn4vnv3auoxd4r4RgNl+77F1HGDMQ4RMorkQblwe3Ez0aWfcO
- 7GxaxXZVl3Tl0ElilMLnU90U3e4BimLXb7U512D1kJmYNE1oitcrwYwpotxeol4fYCggArwKyoF
- uPEX06czsp8cnMg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3761; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=B2vhK+0RBBQJO+CkqazxYwoIfSfpFJCq0O68Tg4d5m0=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmpMXm5+RoMvMHoX9uSbfCV0l6chDQbp4wHe0+n
+ KM+1XYUaOyJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZqTF5gAKCRD2t4JPQmmg
+ c5f3D/9jwEMQsW92OQ4X+b2puhWmRoxg2fhuoJIECewgRDDWjb/W0+wywo1SPlKREk9Qd5G8Jht
+ XwFNuQ0bvICTFN5/mZ+3uk3B0fPAo8AK86T0A+cTQT8xshLhsWRZmjA9lJlGHqynXPRmS7NzwhL
+ jF/htRv0O3TN8kKfNjqCK41JqYxrCPEtNoaiwJ4BQfHnVZKaVjR+aX7H1V8i9pkNpTA+VF/+3Bq
+ 4lA3j+gC/8V4ftGkdVrd8vAgDU9L0GZSPeF88EbaURZMuHzPkjl5bP7wx0f6MzNAHkN4yrvxiLR
+ y0BtlmavYPI15vFuuZFprhq9FrioSpg/rTqQ92/iNC4UmNQR6Y+6LA2qZ5IMZOUUQ3tCk17ilB7
+ BuFamGHh0zIWiSjqO4fM1eVRITYtPPL8pkk+Yl5yl+DbE/gYgEnnDgY/dudbEYy8sbW+QtSqqzf
+ XPR5QTSJ0wqUZb5SAnIZYlQl6zlMCBdZz6y82q8Cd/lNJvHvDigR3WM+uUT5y7a7AN6Yu3OetpI
+ OZAbtA7263pb3EJss5ILLFPNuzG9O5e0QcnvAPEu8JCBpCbbF7zsS8MQ0SGEra7gwK1pFJ7l8AH
+ s+TvNbSbFENuboBPanz30UaqEkNvKt8e9wELwbn+sA3Lc29ktMI8mEHO0A+JnhyfcXS3ysH1WEd
+ pFLKIVnCc61O8Wg==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-There was a support for signal endpoints, but only when the endpoint's
-flag was changed during a connection. If an endpoint with the signal and
-backup was already present, the MP_JOIN reply was not containing the
-backup flag as expected.
+Before the previous commit, 'signal' endpoints with the 'backup' flag
+were ignored when sending the MP_JOIN.
 
-That's confusing to have this inconsistent behaviour. On the other hand,
-the infrastructure to set the backup flag in the SYN + ACK + MP_JOIN was
-already there, it was just never set before. Now when requesting the
-local ID from the path-manager, the backup status is also requested.
+The MPTCP Join selftest has then been modified to validate this case:
+the "single address, backup" test, is now validating the MP_JOIN with a
+backup flag as it is what we expect it to do with such name. The
+previous version has been kept, but renamed to "single address, switch
+to backup" to avoid confusions.
 
-Note that when the userspace PM is used, the backup flag can be set if
-the local address was already used before with a backup flag, e.g. if
-the address was announced with the 'backup' flag, or a subflow was
-created with the 'backup' flag.
+The "single address with port, backup" test is also now validating the
+MPJ with a backup flag, which makes more sense than checking the switch
+to backup with an MP_PRIO.
+
+The "mpc backup both sides" test is now validating that the backup flag
+is also set in MP_JOIN from and to the addresses used in the initial
+subflow, using the special ID 0.
+
+The 'Fixes' tag here below is the same as the one from the previous
+commit: this patch here is not fixing anything wrong in the selftests,
+but it validates the previous fix for an issue introduced by this commit
+ID.
 
 Fixes: 4596a2c1b7f5 ("mptcp: allow creating non-backup subflows")
 Cc: stable@vger.kernel.org
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/507
 Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- net/mptcp/pm.c           | 12 ++++++++++++
- net/mptcp/pm_netlink.c   | 18 ++++++++++++++++++
- net/mptcp/pm_userspace.c | 18 ++++++++++++++++++
- net/mptcp/protocol.h     |  3 +++
- net/mptcp/subflow.c      |  3 +++
- 5 files changed, 54 insertions(+)
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 34 ++++++++++++++++++++-----
+ 1 file changed, 28 insertions(+), 6 deletions(-)
 
-diff --git a/net/mptcp/pm.c b/net/mptcp/pm.c
-index 55406720c607..23bb89c94e90 100644
---- a/net/mptcp/pm.c
-+++ b/net/mptcp/pm.c
-@@ -426,6 +426,18 @@ int mptcp_pm_get_local_id(struct mptcp_sock *msk, struct sock_common *skc)
- 	return mptcp_pm_nl_get_local_id(msk, &skc_local);
- }
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+index 655715c8c6d9..9c7d0ab106d0 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+@@ -2639,6 +2639,19 @@ backup_tests()
  
-+bool mptcp_pm_is_backup(struct mptcp_sock *msk, struct sock_common *skc)
-+{
-+	struct mptcp_addr_info skc_local;
+ 	# single address, backup
+ 	if reset "single address, backup" &&
++	   continue_if mptcp_lib_kallsyms_has "subflow_rebuild_header$"; then
++		pm_nl_set_limits $ns1 0 1
++		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal,backup
++		pm_nl_set_limits $ns2 1 1
++		sflags=nobackup speed=slow \
++			run_tests $ns1 $ns2 10.0.1.1
++		chk_join_nr 1 1 1
++		chk_add_nr 1 1
++		chk_prio_nr 1 0 0 1
++	fi
 +
-+	mptcp_local_address((struct sock_common *)skc, &skc_local);
-+
-+	if (mptcp_pm_is_userspace(msk))
-+		return mptcp_userspace_pm_is_backup(msk, &skc_local);
-+
-+	return mptcp_pm_nl_is_backup(msk, &skc_local);
-+}
-+
- int mptcp_pm_get_flags_and_ifindex_by_id(struct mptcp_sock *msk, unsigned int id,
- 					 u8 *flags, int *ifindex)
- {
-diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-index 59527335c68e..85346db71d0f 100644
---- a/net/mptcp/pm_netlink.c
-+++ b/net/mptcp/pm_netlink.c
-@@ -1101,6 +1101,24 @@ int mptcp_pm_nl_get_local_id(struct mptcp_sock *msk, struct mptcp_addr_info *skc
- 	return ret;
- }
++	# single address, switch to backup
++	if reset "single address, switch to backup" &&
+ 	   continue_if mptcp_lib_kallsyms_has "subflow_rebuild_header$"; then
+ 		pm_nl_set_limits $ns1 0 1
+ 		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal
+@@ -2654,13 +2667,13 @@ backup_tests()
+ 	if reset "single address with port, backup" &&
+ 	   continue_if mptcp_lib_kallsyms_has "subflow_rebuild_header$"; then
+ 		pm_nl_set_limits $ns1 0 1
+-		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal port 10100
++		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal,backup port 10100
+ 		pm_nl_set_limits $ns2 1 1
+-		sflags=backup speed=slow \
++		sflags=nobackup speed=slow \
+ 			run_tests $ns1 $ns2 10.0.1.1
+ 		chk_join_nr 1 1 1
+ 		chk_add_nr 1 1
+-		chk_prio_nr 1 1 0 0
++		chk_prio_nr 1 0 0 1
+ 	fi
  
-+bool mptcp_pm_nl_is_backup(struct mptcp_sock *msk, struct mptcp_addr_info *skc)
-+{
-+	struct pm_nl_pernet *pernet = pm_nl_get_pernet_from_msk(msk);
-+	struct mptcp_pm_addr_entry *entry;
-+	bool backup = false;
-+
-+	rcu_read_lock();
-+	list_for_each_entry_rcu(entry, &pernet->local_addr_list, list) {
-+		if (mptcp_addresses_equal(&entry->addr, skc, entry->addr.port)) {
-+			backup = !!(entry->flags & MPTCP_PM_ADDR_FLAG_BACKUP);
-+			break;
-+		}
-+	}
-+	rcu_read_unlock();
-+
-+	return backup;
-+}
-+
- #define MPTCP_PM_CMD_GRP_OFFSET       0
- #define MPTCP_PM_EV_GRP_OFFSET        1
+ 	if reset "mpc backup" &&
+@@ -2674,12 +2687,21 @@ backup_tests()
  
-diff --git a/net/mptcp/pm_userspace.c b/net/mptcp/pm_userspace.c
-index f0a4590506c6..8eaa9fbe3e34 100644
---- a/net/mptcp/pm_userspace.c
-+++ b/net/mptcp/pm_userspace.c
-@@ -165,6 +165,24 @@ int mptcp_userspace_pm_get_local_id(struct mptcp_sock *msk,
- 	return mptcp_userspace_pm_append_new_local_addr(msk, &new_entry, true);
- }
- 
-+bool mptcp_userspace_pm_is_backup(struct mptcp_sock *msk,
-+				  struct mptcp_addr_info *skc)
-+{
-+	struct mptcp_pm_addr_entry *entry;
-+	bool backup = false;
+ 	if reset "mpc backup both sides" &&
+ 	   continue_if mptcp_lib_kallsyms_doesnt_have "T mptcp_subflow_send_ack$"; then
+-		pm_nl_add_endpoint $ns1 10.0.1.1 flags subflow,backup
++		pm_nl_set_limits $ns1 0 2
++		pm_nl_set_limits $ns2 1 2
++		pm_nl_add_endpoint $ns1 10.0.1.1 flags signal,backup
+ 		pm_nl_add_endpoint $ns2 10.0.1.2 flags subflow,backup
 +
-+	spin_lock_bh(&msk->pm.lock);
-+	list_for_each_entry(entry, &msk->pm.userspace_pm_local_addr_list, list) {
-+		if (mptcp_addresses_equal(&entry->addr, skc, false)) {
-+			backup = !!(entry->flags & MPTCP_PM_ADDR_FLAG_BACKUP);
-+			break;
-+		}
-+	}
-+	spin_unlock_bh(&msk->pm.lock);
++		# 10.0.2.2 (non-backup) -> 10.0.1.1 (backup)
++		pm_nl_add_endpoint $ns2 10.0.2.2 flags subflow
++		# 10.0.1.2 (backup) -> 10.0.2.1 (non-backup)
++		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal
++		ip -net "$ns2" route add 10.0.2.1 via 10.0.1.1 dev ns2eth1 # force this path
 +
-+	return backup;
-+}
-+
- int mptcp_pm_nl_announce_doit(struct sk_buff *skb, struct genl_info *info)
- {
- 	struct nlattr *token = info->attrs[MPTCP_PM_ATTR_TOKEN];
-diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-index b8b25124e7de..60c6b073d65f 100644
---- a/net/mptcp/protocol.h
-+++ b/net/mptcp/protocol.h
-@@ -1109,6 +1109,9 @@ bool mptcp_pm_rm_addr_signal(struct mptcp_sock *msk, unsigned int remaining,
- int mptcp_pm_get_local_id(struct mptcp_sock *msk, struct sock_common *skc);
- int mptcp_pm_nl_get_local_id(struct mptcp_sock *msk, struct mptcp_addr_info *skc);
- int mptcp_userspace_pm_get_local_id(struct mptcp_sock *msk, struct mptcp_addr_info *skc);
-+bool mptcp_pm_is_backup(struct mptcp_sock *msk, struct sock_common *skc);
-+bool mptcp_pm_nl_is_backup(struct mptcp_sock *msk, struct mptcp_addr_info *skc);
-+bool mptcp_userspace_pm_is_backup(struct mptcp_sock *msk, struct mptcp_addr_info *skc);
- int mptcp_pm_dump_addr(struct sk_buff *msg, struct netlink_callback *cb);
- int mptcp_pm_nl_dump_addr(struct sk_buff *msg,
- 			  struct netlink_callback *cb);
-diff --git a/net/mptcp/subflow.c b/net/mptcp/subflow.c
-index be406197b1c4..0e4b5bfbeaa1 100644
---- a/net/mptcp/subflow.c
-+++ b/net/mptcp/subflow.c
-@@ -100,6 +100,7 @@ static struct mptcp_sock *subflow_token_join_request(struct request_sock *req)
- 		return NULL;
- 	}
- 	subflow_req->local_id = local_id;
-+	subflow_req->request_bkup = mptcp_pm_is_backup(msk, (struct sock_common *)req);
+ 		speed=slow \
+ 			run_tests $ns1 $ns2 10.0.1.1
+-		chk_join_nr 0 0 0
+-		chk_prio_nr 1 1 0 0
++		chk_join_nr 2 2 2
++		chk_prio_nr 1 1 1 1
+ 	fi
  
- 	return msk;
- }
-@@ -620,6 +621,8 @@ static int subflow_chk_local_id(struct sock *sk)
- 		return err;
- 
- 	subflow_set_local_id(subflow, err);
-+	subflow->request_bkup = mptcp_pm_is_backup(msk, (struct sock_common *)sk);
-+
- 	return 0;
- }
- 
+ 	if reset "mpc switch to backup" &&
 
 -- 
 2.45.2
