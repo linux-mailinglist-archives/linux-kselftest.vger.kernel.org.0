@@ -1,50 +1,49 @@
-Return-Path: <linux-kselftest+bounces-14298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14299-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4922393DDFB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 11:05:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5BE493DDFF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 11:05:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0944128372C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 09:05:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 364B1B22760
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 09:05:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F62C6F06D;
-	Sat, 27 Jul 2024 09:04:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A879873478;
+	Sat, 27 Jul 2024 09:04:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pduMOcX8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E6KJCa9C"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 609DB6CDCC;
-	Sat, 27 Jul 2024 09:04:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F83C7345B;
+	Sat, 27 Jul 2024 09:04:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722071079; cv=none; b=gOfiGWFmGUtTeaCPqZ5t2P2MU64fsVRntCdIEICy5m1qne2ZzdvXwg/rBfgssnFwftSdKE7paCUO15ySYQDIu9Ovg+4073Pu7c1VFzXYFC+lazvjiJkPwmQ2g4B1hHvnBkpytLRQ1yRDE2rF64ydK+4pqENOo4vjljC7UbNDEw4=
+	t=1722071082; cv=none; b=DtYwS61zVxEs/j1g34skcOx7L+Nk7dm1VEAHSwlfMnWdGO6mAZ08gXW7a+SkC1m0834cOIFIY09pLFoGi45gXvr65K5R4s9DrcX7eAj1yakrylruSYVadSc5ycYHdzz8HfrMSmfaGRoBoCEMI2u2j5cqhomSoP0y8MJ/0XEe1kU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722071079; c=relaxed/simple;
-	bh=V3zN+OxK0C/dybQY9jqujF+bUKvkdcqvyAUmVdnWlww=;
+	s=arc-20240116; t=1722071082; c=relaxed/simple;
+	bh=bSOt8metnNP3/iqWxOWzMI46nYQl9PqNnxav/zmkGn0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=k6/2/xKPNvGN04MgEGVBoZi65GuSnBePskOo2MPgXsuppAqhBJPm+E0lk82hNC108IK3Q1NoOtrhnEGbMIMbhTYzs1uHkWeFmyCT1qiAV3sv23UGvG0lKq7/CsmYKZbO++hjTGs90rinXPiJKFVctKXfkgZ6eU7EgISmpmwnO8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pduMOcX8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A703C4AF0E;
-	Sat, 27 Jul 2024 09:04:36 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=fQV0CYeNjpQPsiETQAmDUkhr8zEu0xoc0yjzraGhjhg/1DgPgKJ+ThGIV36tV5iAItzeefP7NJkM+p6nDN/Qk51zCGraKNPT7rTJzJaAwmeEiifI00kMFOYNDGOT8Q5ZxTmd13hZGwz7BRgGrM3DPp6539JJt/YsR3qyO/sLvEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E6KJCa9C; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A12AC32781;
+	Sat, 27 Jul 2024 09:04:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722071079;
-	bh=V3zN+OxK0C/dybQY9jqujF+bUKvkdcqvyAUmVdnWlww=;
+	s=k20201202; t=1722071082;
+	bh=bSOt8metnNP3/iqWxOWzMI46nYQl9PqNnxav/zmkGn0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=pduMOcX8mQt60o3+uketKw4yrSScpNlKrEzuStS05LnuA42IEiITrfyNZB5xlo9I1
-	 yHIQl1V7o2I7YqvxSBzxeLSAfCD4qfwDhgIrA+GIaGFa0lkntmS9w4tBJfWcf/Vynl
-	 C9C9gYzrLUHdJbIPvrCxKenZ/mAvaGFygSSrjZTB06wfMoclVdDM4O9RHR68dY5RvZ
-	 6jsN5tuH1Ey0YSqDfG9XcFQImAqq5m7+iTWCffACUI+DVJmHYmfByVFPa+vnqxAgEn
-	 Zrd5U4U5B3uHHTWFDRBS7qR7vEIzdqmt53NVaWK49SV/wVMJbHodP5uw6yiveF+zvG
-	 PpMXNTSUtMvqA==
+	b=E6KJCa9CZCTMltum0Icev5f3AeNvpq7pGg48Q74ruuiIUMxwRA6goUWgASSyhoz3q
+	 d7M4JtXA/j1lLLpaDuJ/Gdl6qjc/I4aBOw8tBVvCFLYIN4vFArGz6kx3+mU4unsH8R
+	 0YuSg5FS0w4tbnc5+YNwTAULuZWp7BuvjjL4UJYxCPxGZF4R9gKAmnOuxY0G6WArMG
+	 jqf3RgkpgHOgVbdHSA4vbVu9sl3P7o6btT3hRuIqSFZDbzukEx0uMJjG5+6FJdZ2AN
+	 Hy5bnTw3XZ0VRBgYyu10/Dt3BJHZ/P3H3uoTWHyKt3Ljn2o4Pq7BOCn+A8AqhIHklT
+	 XIOp+YGrhzTqQ==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Sat, 27 Jul 2024 11:04:01 +0200
-Subject: [PATCH net 3/5] selftests: mptcp: add explicit test case for
- remove/readd
+Date: Sat, 27 Jul 2024 11:04:02 +0200
+Subject: [PATCH net 4/5] selftests: mptcp: fix error path
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240727-upstream-net-20240726-mptcp-fix-signal-readd-v1-3-1e7d25a23362@kernel.org>
+Message-Id: <20240727-upstream-net-20240726-mptcp-fix-signal-readd-v1-4-1e7d25a23362@kernel.org>
 References: <20240727-upstream-net-20240726-mptcp-fix-signal-readd-v1-0-1e7d25a23362@kernel.org>
 In-Reply-To: <20240727-upstream-net-20240726-mptcp-fix-signal-readd-v1-0-1e7d25a23362@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -62,77 +61,52 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
  Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1660; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=jQIxgQ8nPpyNkqG+0+5KEG8+ixuEiDZsNbtus6NCsR0=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmpLga+KUGo6bpQhqq177WYWGobQbcjc5pi2xM8
- hudz3Z9HmKJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZqS4GgAKCRD2t4JPQmmg
- c+jgD/92TC8t1uxryKpSxJv77Z8Y0ug0of9QZHbZfEFKkRRLzknZajSRgvnAOZWi1wCVY7cenQQ
- 7NufOm9Oa5i6N0fEBPuMPgDuofQMINa6qdzT30Q5nFgRXoSorvdNq5lOOt8yhBDaXWpclYinJSb
- hq2Wsu/w1EIFEvJLIY9q8thwM0Uyhh67ll+9cQG+lD4yF0vl+r7v0jqsAFdPuR5+Ci4p1GtVMq2
- fn+rgW93OOwxzY5XcIsFu5ivFk2M+swszZbZsIxMm9D7HjSCKFPN+YsSE7T96LiRrTp/GSs0uTQ
- 01hf0jO1LM+q7eb9PbBvRtbu0l8WTTjS7U9XsI/xjUf0RaqTHSpNOAfOc+UiSxy9D4PX50Kpsfg
- nljlEJszuHnGv0FNtp/UuP2qwOzrucCC7LxAUJ92XNSpBGHHMbw32jRaO1ije5xwCXk3sF94vCY
- CCuQ/0CnRl89pgylFY7C5UWP9K9bgWF4XcgRpNYLJuzUEWNSrVViC9RJpJMhw1UnYwdnB5t6VPl
- +iQngthhrEGRBjQEFWhJVCT4CPN7iNxscWLy9C2ku9R7fIfJ7WnmOa4dBVjIiBqdpmn1geCrTn9
- U8Hy6Zz9dLOr0eizBqvpSZqqjIHBnmnYQsndiP9P9NcsC+6a21cc12xXuDpRdLKCCbt5NGpeA59
- ojLzxIo4+ScrPuw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=966; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=e5G+qBWEYbAT7+emrmtR+ukYBzYToM7rlgjg4Y+sDZE=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmpLga749PMCC/7juHKqBn/sepRpTMVAoI7FFvG
+ hYa2qz00E2JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZqS4GgAKCRD2t4JPQmmg
+ cw+oD/0YZ26mQwpGF/ugZqhRj8FrJhJJcFTPrK9O+MqePopy0NHUEK+M6PkqDx51RXMlwGzgpDH
+ JDoyRB1ZDwhvX/vvKcKuyM+b0jiFIAfq17njzdgE1UTt0NFzwH/2pg4PRvU+nRPpW9t0CYRePuW
+ Aru8SnouAY8SMtAgPlfWHjp5dNtqmhB/4SU7uS96bwuEPOAuHd8DeLLdcs6d/4Nh4jPoY1u/ima
+ 2xX8GlEZLo4p5rca//4dJQpk1WI3QfiOcAEETKEnqmivnik0k6M2FUaJauHzvuMLk8kJWIrM2W5
+ gQJyrWZzEdBfQxiD+LaZ0NFMaIrJmluB7dczjfOe0N3SO756BWxKgyh67c5MMlR6FXiawOPSi6+
+ 5rEB9m+EyWVfC4b04I0Qop3tIkoBlBL8j9RNSqhqB8W2iSRxNIkW4Kya21AveOPftpIiBPXQzVD
+ dYtoI6+pUpQYRnY8Xs0/ryME7CRuyq02FN/OzbS9sVZOec1iUwhUcqVzy7w7jfSjUvlVedo5beL
+ BneJy+guyclTJZtefdWiB2HzI3hkGZOppQLx5z8rleBT3O4wECSsQpU9z8tRegaKSUB2Xu4TjJM
+ yqYAffFYbyvclfA/HlJg7dm9qEKrzqIx9/PBHYbWKEiMHd2B6/hBIoRUO/YYBdePbK0xLsYEPGu
+ eBwap7k/QRxGxVw==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Paolo Abeni <pabeni@redhat.com>
 
-Delete and re-create a signal endpoint and ensure that the PM
-actually deletes and re-create the subflow.
+pm_nl_check_endpoint() currently calls an not existing helper
+to mark the test as failed. Fix the wrong call.
 
+Fixes: 03668c65d153 ("selftests: mptcp: join: rework detailed report")
+Cc: stable@vger.kernel.org
 Signed-off-by: Paolo Abeni <pabeni@redhat.com>
 Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 29 +++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 108aeeb84ef1..9c091fc267c4 100755
+index 9c091fc267c4..55d84a1bde15 100755
 --- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
 +++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -3526,6 +3526,35 @@ endpoint_tests()
- 		chk_mptcp_info subflows 1 subflows 1
- 		mptcp_lib_kill_wait $tests_pid
- 	fi
-+
-+	# remove and re-add
-+	if reset "delete re-add signal" &&
-+	   mptcp_lib_kallsyms_has "subflow_rebuild_header$"; then
-+		pm_nl_set_limits $ns1 1 1
-+		pm_nl_set_limits $ns2 1 1
-+		pm_nl_add_endpoint $ns1 10.0.2.1 id 1 flags signal
-+		test_linkfail=4 speed=20 \
-+			run_tests $ns1 $ns2 10.0.1.1 &
-+		local tests_pid=$!
-+
-+		wait_mpj $ns2
-+		pm_nl_check_endpoint "creation" \
-+			$ns1 10.0.2.1 id 1 flags signal
-+		chk_subflow_nr "before delete" 2
-+		chk_mptcp_info subflows 1 subflows 1
-+
-+		pm_nl_del_endpoint $ns1 1 10.0.2.1
-+		sleep 0.5
-+		chk_subflow_nr "after delete" 1
-+		chk_mptcp_info subflows 0 subflows 0
-+
-+		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal
-+		wait_mpj $ns2
-+		chk_subflow_nr "after re-add" 2
-+		chk_mptcp_info subflows 1 subflows 1
-+		mptcp_lib_kill_wait $tests_pid
-+	fi
-+
- }
+@@ -661,7 +661,7 @@ pm_nl_check_endpoint()
+ 	done
  
- # [$1: error message]
+ 	if [ -z "${id}" ]; then
+-		test_fail "bad test - missing endpoint id"
++		fail_test "bad test - missing endpoint id"
+ 		return
+ 	fi
+ 
 
 -- 
 2.45.2
