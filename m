@@ -1,124 +1,95 @@
-Return-Path: <linux-kselftest+bounces-14300-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14301-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00B2593DE02
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 11:06:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7341D93DE0F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 11:16:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6071283B72
-	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 09:06:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 202B5282FB9
+	for <lists+linux-kselftest@lfdr.de>; Sat, 27 Jul 2024 09:16:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB681763EE;
-	Sat, 27 Jul 2024 09:04:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Qm4FU4OT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4777743AD5;
+	Sat, 27 Jul 2024 09:16:05 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B939E7605E;
-	Sat, 27 Jul 2024 09:04:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C363120B33
+	for <linux-kselftest@vger.kernel.org>; Sat, 27 Jul 2024 09:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722071085; cv=none; b=PZqXVEQCT739aZ0jXmg1uxvYk7sLfOwlt0VVyfecLzUEJxl/vjlCA5T6L+GpP61DuWAq7TlpsUtQtRjc6DvfMpFrNplF5IJLa9snp+LIuc7oPWwnUqZ7LcBc030y0yg49MPRabmIo5aL6VLrKOG95ZnIydnf9E3nou6KUccBVM0=
+	t=1722071765; cv=none; b=kV7INBMuv7VoYQ27LRMA59hB5RZcZI6Jp/ZRza79CyBZdYTQcJsk5ns1SpMUughdJ6NwfKPqKlz7+h6a0tq4WwkQX1LW4kI+l5jthn1i3/iC7fjkX/OKugI+dVxiQYUXh+yOr+IOExI+SAqjBZSLCR8b5eKiUzcTeqW85MjiJ5c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722071085; c=relaxed/simple;
-	bh=q39VdB8mNDwQCHK2MaVvtUOIGr7ySla1YQ4BspARZ0s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pNOM3wh/s3RGCnbyQbYW8z98yLQAg2A2/geFgFRR+RYkOoxxU8nAq12MzxHhTbw36xho/PqthOa21VqXhJNfQhRmeRPtecaOhTiyJqMv5zSXYr0Ga7vMiWzQX3E7jVLvOoyso3GB0taf8XPe5RbqGIcNU7w/8E+hrX9orVme1F4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Qm4FU4OT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 752BEC32786;
-	Sat, 27 Jul 2024 09:04:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722071085;
-	bh=q39VdB8mNDwQCHK2MaVvtUOIGr7ySla1YQ4BspARZ0s=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Qm4FU4OT67yK7L/vLx+ZfptuNxuaf+R5Sj4eNaMkOoV1F6pEAG3DbzGmn+bPF4NGP
-	 E5+hdwtIOdKKAojjYqpnPq1740xt8nbJCKtaWXwFGXE1AP7pQdnSek+rOx/nt7pHes
-	 UzsrpRMuryE4+Q5+KorwqUqgSbBXZSqMy50p/JacPqe8dwF5RPqmh/J4/ZeaI9judE
-	 McaqQVbE0O9iB896xZM+AxivktKL9IaFUYQJJbgJWfHJpBFfRYVLRLJ2OegbfCRA1W
-	 7E6P/dB4EdrAKqtB8KsxgmMpT2yDZ1OAAN2KylExjXg0ygRAaWjqR3mJEz+QD9gYg8
-	 vdfhZ5w7keybQ==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Sat, 27 Jul 2024 11:04:03 +0200
-Subject: [PATCH net 5/5] selftests: mptcp: always close input's FD if
- opened
+	s=arc-20240116; t=1722071765; c=relaxed/simple;
+	bh=dtvUBiAawgrbk/2NPnFXCKh/rwYKsAYierU6VX78Dls=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=qqElQnla6Nqh7WI13wAo8barjqyWCOU3yreHIzKmugbvAHzOqusZTg1dKUGMivnAPtsdxUb6fmZA3oF65CdNeqgfPo84icQOKTsFL9RkaX7+5H02iIq2sfSe/BX/yGEJAddIl4Fwqjklu8h8jpqQvOmaCV5xwkbPjjhI12lxHek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-81f7fb0103fso239646539f.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 27 Jul 2024 02:16:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722071763; x=1722676563;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qtgwoy9Z2Qa1FGZaJIoMnbuyZFsJQYJvV6j3oH+HdZo=;
+        b=S+KQL9Ze+iPOBRqIqSY/+iN7pVVT6cx2qpyAkxN9UTiFUZLyM0MDFFH8TsuLGPd8IF
+         oqmXpPdhd3mjVTRZwZMVfA0RgXwqapEdrat7GkITz2IDwgw7WkH2dnnWHUAwZxGEsUMV
+         R5ffVQf1aMhntToFpCModlfi/vNTutE23NNE1Kj30e42ITrAbgOrQIc90fnP+PUP1fVC
+         07tnWfroH7sGx1k6lpdm4h34rEJXCgQJEM9xkzChfKaNDCYedLhBiRaMmvmn7CuXgTYq
+         kADZICXNZqvIdCyOuKqxVkHJd7BI7J5+fau5y/BCrnBn89SdQl4pRwi3vte6LF09tlqu
+         6+SA==
+X-Forwarded-Encrypted: i=1; AJvYcCVIgxfiNB8Sec9Z79Jk5q7RxAmOZAdbLxAxz5aQEJJOu2WlN9QcvYeRwXn+6A+t8nZl/WpDziXGVGTauqUrjiN6hNx8lYTa8Ei3T1Tn+wG8
+X-Gm-Message-State: AOJu0YyTGkx31A3pDOxIWIdXhByFhjnKQNE/yICvdl9t7NZS7aTQ993g
+	Vh6rFW5NTGOeqA40znKRz0m+3o4YEVz3Gjx62wmv0GJblK7538AbKnCrBGfGqEpk66BC3MaT8Gf
+	K6kFTpVJypcq8tPxDhPBG7srmQahD2yeo6teh7QuXCf8WNfj7e0sg+rQ=
+X-Google-Smtp-Source: AGHT+IErWPbCOrtbq/dbUnqctTf2rtdkbh1lbkPC+maSPidZr2xjge9XRYxMaBhgfp08AMHsfmVRold/vyjY2spnOGlOdDgWTLkS
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240727-upstream-net-20240726-mptcp-fix-signal-readd-v1-5-1e7d25a23362@kernel.org>
-References: <20240727-upstream-net-20240726-mptcp-fix-signal-readd-v1-0-1e7d25a23362@kernel.org>
-In-Reply-To: <20240727-upstream-net-20240726-mptcp-fix-signal-readd-v1-0-1e7d25a23362@kernel.org>
-To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
- Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Liu Jing <liujing@cmss.chinamobile.com>, stable@vger.kernel.org
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1072; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=NLv7vDmMfDiB+NnrIJN7GOD0VoD4/6JVrrZIzXMgiKk=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmpLgad50O+zraWBHV/l9cPIPKdcvCuD6dSZTjz
- MRljk8mIp+JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZqS4GgAKCRD2t4JPQmmg
- c1xbEADnqbeI0hlFn8X6aE504BR9NWZQuFFUH+RMgnSH1dUBjKorIj9cCF6z24fDPOjueOheMWu
- ab45Sf2hOSVTreB2dHmbgGgPHC2t5fUByAfCCqWQiUQiO3ImOnRqahiuZRXUm3a5J9Qxw/RCc8b
- XTiTpwdiYyt5Jk1ZTrtlLwjIdZ6v26CBbKHipatyh47Rbp/GrAXOndHg6nd9o1sx25xOkdmrcC4
- 8pE+nykqWfkysh2Mm4rxS2y8zV5mfVXugQmfNOKO7Zm33ySxfkqGXbehFt/6FIEa9GrlSd2o+XP
- zKArv0xLIDWkLLYaW/LjprtExNyCe6Qdh9mGSyqlwnXD0cF38TdD/V70TozVjUHKhqQBmu48doJ
- 7DH5uelxfowf7fsBAC0IkAAT1vqbpQNcKtTVWT3uN97DLncqvGox8M1A4sGCo6R3mvq31apTc7n
- WI2FccZgIe9L+KqxgbIPVJ2O8fZGBXkZZx88HL18tAOIx4yNz2lqnx3uL1mN3b5TyGUduOTusjf
- Y0VJiDSXijgVQO6FAIoat9nO5bW4kxAIDwbE4nEiwqKyZEjveFYtSSjsKqWcCB+5evAICiRs3h5
- JnwqOMKv3ak+1dqJyshuw0NWjp6Jwum9xuKpyB8UlJJCoVEN5mJGzzqtxQtejBRCP7s3f3nyYzt
- UjfU/hV9j8jPfSA==
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+X-Received: by 2002:a92:cd8c:0:b0:395:fa9a:3187 with SMTP id
+ e9e14a558f8ab-39aebd77810mr1691265ab.3.1722071763015; Sat, 27 Jul 2024
+ 02:16:03 -0700 (PDT)
+Date: Sat, 27 Jul 2024 02:16:02 -0700
+In-Reply-To: <0000000000004fe821060e0a68d1@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b66dc7061e371339@google.com>
+Subject: Re: [syzbot] [net?] INFO: rcu detected stall in ipv6_rcv (4)
+From: syzbot <syzbot+d9b3e95a78490389cfb7@syzkaller.appspotmail.com>
+To: davem@davemloft.net, dcaratti@redhat.com, dsahern@kernel.org, 
+	edumazet@google.com, jhs@mojatatu.com, jiri@resnulli.us, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	netdev@vger.kernel.org, pabeni@redhat.com, pctammela@mojatatu.com, 
+	shuah@kernel.org, syzkaller-bugs@googlegroups.com, vinicius.gomes@intel.com, 
+	vladimir.oltean@nxp.com, xiyou.wangcong@gmail.com
+Content-Type: text/plain; charset="UTF-8"
 
-From: Liu Jing <liujing@cmss.chinamobile.com>
+syzbot suspects this issue was fixed by commit:
 
-In main_loop_s function, when the open(cfg_input, O_RDONLY) function is
-run, the last fd is not closed if the "--cfg_repeat > 0" branch is not
-taken.
+commit fb66df20a7201e60f2b13d7f95d031b31a8831d3
+Author: Vladimir Oltean <vladimir.oltean@nxp.com>
+Date:   Mon May 27 15:39:55 2024 +0000
 
-Fixes: 05be5e273c84 ("selftests: mptcp: add disconnect tests")
-Cc: stable@vger.kernel.org
-Signed-off-by: Liu Jing <liujing@cmss.chinamobile.com>
-Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
- tools/testing/selftests/net/mptcp/mptcp_connect.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+    net/sched: taprio: extend minimum interval restriction to entire cycle too
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.c b/tools/testing/selftests/net/mptcp/mptcp_connect.c
-index d2043ec3bf6d..4209b9569039 100644
---- a/tools/testing/selftests/net/mptcp/mptcp_connect.c
-+++ b/tools/testing/selftests/net/mptcp/mptcp_connect.c
-@@ -1115,11 +1115,11 @@ int main_loop_s(int listensock)
- 		return 1;
- 	}
- 
--	if (--cfg_repeat > 0) {
--		if (cfg_input)
--			close(fd);
-+	if (cfg_input)
-+		close(fd);
-+
-+	if (--cfg_repeat > 0)
- 		goto again;
--	}
- 
- 	return 0;
- }
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=179b2623980000
+start commit:   2cf4f94d8e86 Merge tag 'scsi-fixes' of git://git.kernel.or..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=314e9ad033a7d3a7
+dashboard link: https://syzkaller.appspot.com/bug?extid=d9b3e95a78490389cfb7
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1487fc06e80000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11e5b4d6e80000
 
--- 
-2.45.2
+If the result looks correct, please mark the issue as fixed by replying with:
 
+#syz fix: net/sched: taprio: extend minimum interval restriction to entire cycle too
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
