@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-14317-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14318-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 082DF93E2D0
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 03:17:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65D5F93E300
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 03:22:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 85EB5B226D8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 01:17:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D34BC1F21A6E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 01:22:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 172FB195801;
-	Sun, 28 Jul 2024 00:54:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D567B19F473;
+	Sun, 28 Jul 2024 00:55:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jLOsPk+r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fFeYLMa4"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF8831957F9;
-	Sun, 28 Jul 2024 00:54:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8348143740;
+	Sun, 28 Jul 2024 00:55:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722128095; cv=none; b=M93gDDCPk9ls6O4iLdSFPqhyZf2h883DEhR1zgKVoYpuKEUXsK8hWexGkbSySrHLTuLgQpZcBgV6b+qH8j/JdzW+UPgAjeUNrnwOW5SgqoNtCNmz1gtfXLZq4ZLqKWGJdCyAn0+2yOcJ8JsZJQ8HY5Ys1GM27wABXna1IOnYFLg=
+	t=1722128132; cv=none; b=i8vZs44+3ZOwj75Wf+HIFtzCco6RENU6E1gHpfj1ookKeFwYzIGx7nItaTiSJp0f4HdpDYLlHOgNsTB96/IPUM4jv1TQUA5si2BKshAd7d2ynOrx2dOA5AwxojM0psi/iE+cG3H/MNpuAN3y7boBXPIKstbanLqTDSJXnkyidQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722128095; c=relaxed/simple;
-	bh=L/GoA1tF2gCu+94ZbsKDs/BVkRgk6FSJklJuagUeHJY=;
+	s=arc-20240116; t=1722128132; c=relaxed/simple;
+	bh=vfzgqECC80chWSIjyVguiE2s2cIyYSeO5cxEO3OIjLQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LeItV51kugLqlOwWPfBNDEedgWzt/BaCT8r1L1z1DzRwddnuwXDZ2qMMdJD6teKvjaUbVhFd+v2GdMOu1NhCDDgcQSnrLBXXqcTExiyeUT29jVD2ueDVlUAAmmVDVdOZ2c02DeHisjUuPwinLjC3fJA9CN2+FsnXig/yb3yc2Xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jLOsPk+r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D9C3C32781;
-	Sun, 28 Jul 2024 00:54:53 +0000 (UTC)
+	 MIME-Version; b=Pgivg6tbfIpB+ajriUaP62QXsWb8/UabcAIwJdYugU2S3WZAgcPxtQKEFL9BT5I0lloZxXM15aNR3XMiwJLTNdD1EeoZzhVqbTT9AB9T8mOYazA/axSqUI+PwHoeXNlY3181OyzFT1ULIBXUJvPJo4J8TQlhQ+DY7anGHA9EeN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fFeYLMa4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12704C32781;
+	Sun, 28 Jul 2024 00:55:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722128094;
-	bh=L/GoA1tF2gCu+94ZbsKDs/BVkRgk6FSJklJuagUeHJY=;
+	s=k20201202; t=1722128132;
+	bh=vfzgqECC80chWSIjyVguiE2s2cIyYSeO5cxEO3OIjLQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jLOsPk+ruoYKxAmTjLX4jFQr670L8Y4vnoDolBHUeDNsDzulUkHwbE1WVDAadfvQt
-	 y5BgGXGYEFGISKoc4DO0y1QOuLwnPMUuBMNLuZE0aEdajGaGPriuAR8+1PXvzGz/Tq
-	 EA4Rg83YIkeL9Z0namEl4bBCu+EI8YtfrN7Vvpaq7E+y96J2RYHkywdjdQeu3csUEC
-	 2jdHa8+ii5koqBD/JFzYUEa60GuQZidcWjDV1gBVeri595sMOh4toRFNwROFKiAPNz
-	 /1JslHzJj2ghmlpsKixxfGevrqHCjh/+FvPeBEc79qD74y5nnFmHmD1yZgVIDu8buY
-	 /9ysH1M6sFqIA==
+	b=fFeYLMa4EUIWPrmGfkYJWo5cX716OB2NPie7DMpTVMCxtjohpMHSoHYSj13y/VPfZ
+	 iOL0g3YtovhkY+en5eUHFW4NjLeNYEcph+lNVLUrpaBLcnlm7udRGcioSYu47g4EBf
+	 47MySXn/OCbwBRizo02TTdaSW60qENJb2sYD89sraSvwa1H5ioXRjRB/LYo4tA8rSu
+	 8MfRfJZQdOsJMGW14ZMPbPRjeOS2a0qJY/YCuUOb0rGTcDrG+Koc23+j9tAWqdVQRw
+	 CvmLAhyr8q7huIxdVdLxVe1DU744yuL+IISju8IHgmCuGycX+fNDFeDLLPJsl2Jkr0
+	 nGH86vytfincg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -54,12 +54,12 @@ Cc: Yonghong Song <yonghong.song@linux.dev>,
 	pulehui@huawei.com,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 05/15] selftests/bpf: Fix send_signal test with nested CONFIG_PARAVIRT
-Date: Sat, 27 Jul 2024 20:54:26 -0400
-Message-ID: <20240728005442.1729384-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 04/11] selftests/bpf: Fix send_signal test with nested CONFIG_PARAVIRT
+Date: Sat, 27 Jul 2024 20:55:09 -0400
+Message-ID: <20240728005522.1731999-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240728005442.1729384-1-sashal@kernel.org>
-References: <20240728005442.1729384-1-sashal@kernel.org>
+In-Reply-To: <20240728005522.1731999-1-sashal@kernel.org>
+References: <20240728005522.1731999-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.6.43
+X-stable-base: Linux 6.1.102
 Content-Transfer-Encoding: 8bit
 
 From: Yonghong Song <yonghong.song@linux.dev>
@@ -170,10 +170,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/send_signal.c b/tools/testing/selftests/bpf/prog_tests/send_signal.c
-index b15b343ebb6b1..9adcda7f1fedc 100644
+index d63a20fbed339..210b806351bcf 100644
 --- a/tools/testing/selftests/bpf/prog_tests/send_signal.c
 +++ b/tools/testing/selftests/bpf/prog_tests/send_signal.c
-@@ -156,7 +156,8 @@ static void test_send_signal_tracepoint(bool signal_thread)
+@@ -152,7 +152,8 @@ static void test_send_signal_tracepoint(bool signal_thread)
  static void test_send_signal_perf(bool signal_thread)
  {
  	struct perf_event_attr attr = {
