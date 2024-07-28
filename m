@@ -1,65 +1,74 @@
-Return-Path: <linux-kselftest+bounces-14343-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14344-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7436C93E4B5
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 13:17:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4A1393E4FB
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 13:55:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED27328122A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 11:16:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59CF31F219C8
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 11:55:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E6A433986;
-	Sun, 28 Jul 2024 11:16:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68ED13B78D;
+	Sun, 28 Jul 2024 11:55:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="boH6xZrx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="exCTy/SZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C378472;
-	Sun, 28 Jul 2024 11:16:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC318EAD0;
+	Sun, 28 Jul 2024 11:54:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722165416; cv=none; b=g7b5DP1LNuxk2TdUuHSrN+qQC2X93e5cnDpLDHLhIn9FqB+2oyVN8d7RJZNDWRYhwJnHQtBOIVRwRrvJ/6Ll7wVLwyd2q1QcHqomy50Cg1+EPgH+rwbMk1f2L2CzWQaDC2hEed5wJb1nm+8dXSdSF8ampp1a6L8dtcWYFPLv6gY=
+	t=1722167701; cv=none; b=DrQpiMcJPq9Ar/deB4n7AyQ61iYf/mQzizx42mRO9VkvLg/ZD5lX+zGsG8Yl3GQOOA+3dHJxiL6R4n+Hjvyc9s2p4140YJ+CtB16EdEQyIAs7YfZF5M0T32z0B3hmyzGh3Tsvq8iPVIFSkuNN6eN74m3SSOtE+k9MhHU7hHa7eU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722165416; c=relaxed/simple;
-	bh=1JKGz+l/9tFKb3tLci1KBK86LYVt9Ga7B8yR/DX71fU=;
+	s=arc-20240116; t=1722167701; c=relaxed/simple;
+	bh=ebEmE6yxa72kDlnAPNumxA/Rzcxn7AaMkp24552T6fw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SOWDHCrdiv5Zwodd0uda5+uyQOnZhDbWOnKlvvzC6E4r2xOHYrU+b0j8edsqn5+c/5oqo95ycyJ5NjSHZduznHDjoZIte86PU0BAwLf0LwB7xcnKw3Du8BBIr6k8sFfFfJEtmK4S8UDxLkPehM2wFDkqJ5EMoAWAvBzIGMCSj0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=boH6xZrx; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1722165414; x=1753701414;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=1JKGz+l/9tFKb3tLci1KBK86LYVt9Ga7B8yR/DX71fU=;
-  b=boH6xZrxboRbLq7VvEqB1ZdotbCgZZC5DZa6bhwxoy+XkyIZsF9etzyZ
-   XuCP5QNWaWFe3Q2WLF68gFZiW38dgARC0lT3sGXoc7jzqqpN2o2fhwO51
-   7Iv8jiWZ/33dNarxdDEQd9YwVcLiVwcusQTthOi7i2LJMut7fbXpnAbj3
-   uQthj5yCxp/J6tVDY/spdL9SBM6i7j6cog7/zGJrW3Nhc14oi1WxlJ65s
-   MpwbS7Gq1MCZmyk9b//9sjp3pT/f/hSiRDTDWbyfVAjFRX7nQ8rCF1VHW
-   A4ll1eHi8WRBu1fjGyxNiquczGC9dY1cmFC7w7tqBTJMYnhXmvopqgDZH
-   Q==;
-X-CSE-ConnectionGUID: ih42jCNUTb+7Uw2JNjLfvA==
-X-CSE-MsgGUID: pMShbKcdTOOsFyAZPrlcxg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11146"; a="37416188"
-X-IronPort-AV: E=Sophos;i="6.09,243,1716274800"; 
-   d="scan'208";a="37416188"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2024 04:16:53 -0700
-X-CSE-ConnectionGUID: oOIPNndLQUKUQA0YxAVaVQ==
-X-CSE-MsgGUID: 4O7e87TSTiqCnO1mXOsPWQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,243,1716274800"; 
-   d="scan'208";a="58476523"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.241.187]) ([10.124.241.187])
-  by orviesa005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jul 2024 04:16:47 -0700
-Message-ID: <18729cf6-bf3a-4a11-a9fc-a35792cd1736@linux.intel.com>
-Date: Sun, 28 Jul 2024 19:16:44 +0800
+	 In-Reply-To:Content-Type; b=s8tOT9YUPYWKqcDkl3WOHHhxzlhTXrM6D6psefmhFWLhYaNHKIIXCJJ8gLYV9TBuRhtHmDFHA67hILRrJpFt6KrFO1DET1vEJTT72nXDu8sX4wlpkvXYVC71ZVWKO280tCyKDC3WnoysOinKxV4MTfNWIvd/VNsx0OCRy3SqvP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=exCTy/SZ; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-36874d7f70bso196314f8f.1;
+        Sun, 28 Jul 2024 04:54:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722167698; x=1722772498; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8xmpSOBK68vpqOxcO8IAsD8IIZwNUgCDMrjM2ilo6Vo=;
+        b=exCTy/SZZwCcq43wzF+bWPFz6OI4duQ1LX8byf8gQDA3JkghLuU1iIzB1GuZhAhDGI
+         zNNAkjMC85JfXtWa7env/R8fO3YXv14XqtmKlVWAz41V/sdNFUszIAT76NxYA3H5NKCR
+         yqbGt0ZxJXy2poch/H49L6TL9hMkBSyjhEGjGDLcS36z2EMYQjtke4eukFVSY2JzFU2J
+         nhPNuOSipEPiVRjJENRC0zxzBVRVSlLccBWufEPgg3/BB22JY/XpfmCXpxLlwJBUadoC
+         d84MRnCralpW+3nmHmUsyufrNuGxACpbnWfQX9pXFhSD0LotHQ5HcmyuR94LegEKgGUK
+         RQAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722167698; x=1722772498;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8xmpSOBK68vpqOxcO8IAsD8IIZwNUgCDMrjM2ilo6Vo=;
+        b=FGJ3NAvTdCJrYRa57U++c4n72gy4oIKHoqsfwvaK4yNFRiwKTiLv6nSAPFn+uBre0C
+         P59Y4ac8gcYJuMs7paizHjhQD3N1aosahbi5FTmGDpqdf5uvK2CcwbbkYgHJMfKZOb4O
+         Emc5LS84G1oeDoarkuqbP/QNNweQJaKykjs6CpAjKy+sHAPGtUu4yp3f6JIVOgYkxsRN
+         z/od/gYLTpV6+BXHh84PsYCgwgX8nZaSeEvb+njg6434Lf1hQUivwNhdSc/vBvkqK+sX
+         HnV/+E6FSPOtU3HvYwgNw3lvsOsnCsFPQ7+RP9x2jbXhDyWCtN5PFmyeXpBRvAAWzhd5
+         5/+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU5j8B+jL2j6tGgmnYBctiTqapQrHQo/lCbq1cVT8wmFbWJu92MyFmz9RZTunvBDLldAeMnrsJk9m/HIIdM@vger.kernel.org, AJvYcCVmLqExAcxul6peAzdURLhhNffNUfq2oCzyZvrJJiGRssSxl3Nv9oiwxiSd66l/DtQv48FjqB1ZxQE=@vger.kernel.org, AJvYcCWL28nHjdKHKSKqhjc9uQDeq6dnXhxaK1rJHkpi9Yu+U/Zki55HIOaWxWjdsjUPhLWSLpWo2AGXfGcrN4Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTj5prkQCkXLo9V7i7Cv+dDCGa5e7bVjwXTsqnYb8aM4yh8ffS
+	9peUjtEkyb2BGL1egBkt/ob+Axz1ADWYKzAXyF/wTOJSVHVP6pPD
+X-Google-Smtp-Source: AGHT+IGVymRTomVtW5etCRWyLm9nm566X+zs1ZwGWNnf1O596eq4IbUw3D6Gl+lQ4o8znDqETUm+TA==
+X-Received: by 2002:a5d:64c4:0:b0:366:ea51:be79 with SMTP id ffacd0b85a97d-36b34e4dbdemr4718187f8f.6.1722167697727;
+        Sun, 28 Jul 2024 04:54:57 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:d20e:7300:1d00:5943:7f74:2af0? ([2a01:4b00:d20e:7300:1d00:5943:7f74:2af0])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b36863d87sm9643407f8f.110.2024.07.28.04.54.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Jul 2024 04:54:57 -0700 (PDT)
+Message-ID: <b9ac0ee3-18af-459d-958e-3b8122e7bb9d@gmail.com>
+Date: Sun, 28 Jul 2024 12:54:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,130 +76,66 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v5 09/29] KVM: selftests: TDX: Add report_fatal_error
- test
-To: Sean Christopherson <seanjc@google.com>, Yan Zhao <yan.y.zhao@intel.com>
-Cc: Ackerley Tng <ackerleytng@google.com>, sagis@google.com,
- linux-kselftest@vger.kernel.org, afranji@google.com, erdemaktas@google.com,
- isaku.yamahata@intel.com, pbonzini@redhat.com, shuah@kernel.org,
- pgonda@google.com, haibo1.xu@intel.com, chao.p.peng@linux.intel.com,
- vannapurve@google.com, runanwang@google.com, vipinsh@google.com,
- jmattson@google.com, dmatlack@google.com, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, linux-mm@kvack.org
-References: <ZhkhvtijbhxKKAEk@yzhao56-desk.sh.intel.com>
- <diqzr0f7jbj6.fsf@ctop-sg.c.googlers.com>
- <Zhz8xNpQoi0wCQgL@yzhao56-desk.sh.intel.com> <Zh7Iay40VQgNvsFW@google.com>
- <ZiBP/j6Ic7hGrbxN@yzhao56-desk.sh.intel.com> <ZibVbYawGJFcJqd1@google.com>
+Subject: Re: [PATCH 3/4] ALSA: timer: Introduce virtual userspace-driven
+ timers
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>, perex@perex.cz,
+ tiwai@suse.com, corbet@lwn.net, broonie@kernel.org, shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, aholzinger@gmx.de
+References: <20240726074750.626671-1-ivan.orlov0322@gmail.com>
+ <20240726074750.626671-4-ivan.orlov0322@gmail.com>
+ <0576f5dd-656b-4085-8c8d-b0f845875f0f@wanadoo.fr>
+ <3ab0aa72-4f89-4911-8546-ce17f362c981@gmail.com>
+ <42ba79ad-3354-448d-ae03-6f68d51f46c5@wanadoo.fr>
+ <08bdc510-da39-42d4-a104-9c7119d082ea@gmail.com>
+ <c73da5fd-51a9-4744-9687-0ebc56c34fca@wanadoo.fr>
 Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <ZibVbYawGJFcJqd1@google.com>
+From: Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <c73da5fd-51a9-4744-9687-0ebc56c34fca@wanadoo.fr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+On 7/28/24 11:29, Christophe JAILLET wrote:
+> 
+> I may be wrong but I think that ida allocates hunks for 1024 bits (128 
+> bytes * 8) at a time. (see [1])
+> 
+> So with this extra sape and the sapce for the xarray, it would waste a 
+> few bytes of memory, yes.
+> 
+> With ida, there is also some locking that may be unnecessary (but harmless)
+> 
+> 
+> Hoping, I got it right, here are a few numbers:
+> 
+> On a x86_64, with allmodconfig:
+> 
+> Your initial patch:
+>     text       data        bss        dec        hex    filename
+>    55020       1783        268      57071       deef    sound/core/timer.o
+> 
+> With ida:
+>    54763       1631        116      56510       dcbe    sound/core/timer.o
+> + 128 bytes of runtime memory allocation
+> 
+> With bitmap:
+>    54805       1535        132      56472       dc98    sound/core/timer.o
+> 
+> 
+> I think that the code would be slightly more elegant with ida, but 
+> implementing it with a bitmap does not add that much complexity.
+> 
 
+Ah, alright, I agree that the code would be cleaner when using IDA, and 
+such a small memory overhead won't be significant/noticeable. I'm going 
+to use IDA in the V2 instead of bitmap API, thank you so much for 
+pointing me to it (I was wondering if the Kernel has a generic ID 
+allocator and now I finally know it does :) ).
 
-On 4/23/2024 5:23 AM, Sean Christopherson wrote:
-> On Thu, Apr 18, 2024, Yan Zhao wrote:
->> On Tue, Apr 16, 2024 at 11:50:19AM -0700, Sean Christopherson wrote:
->>> On Mon, Apr 15, 2024, Yan Zhao wrote:
->>>> On Mon, Apr 15, 2024 at 08:05:49AM +0000, Ackerley Tng wrote:
->>>>>>> The Intel GHCI Spec says in R12, bit 63 is set if the GPA is valid. As a
->>>>>> But above "__LINE__" is obviously not a valid GPA.
->>>>>>
->>>>>> Do you think it's better to check "data_gpa" is with shared bit on and
->>>>>> aligned in 4K before setting bit 63?
->>>>>>
->>>>> I read "valid" in the spec to mean that the value in R13 "should be
->>>>> considered as useful" or "should be passed on to the host VMM via the
->>>>> TDX module", and not so much as in "validated".
->>>>>
->>>>> We could validate the data_gpa as you suggested to check alignment and
->>>>> shared bit, but perhaps that could be a higher-level function that calls
->>>>> tdg_vp_vmcall_report_fatal_error()?
->>>>>
->>>>> If it helps, shall we rename "data_gpa" to "data" for this lower-level,
->>>>> generic helper function and remove these two lines
->>>>>
->>>>> if (data_gpa)
->>>>> 	error_code |= 0x8000000000000000;
->>>>>
->>>>> A higher-level function could perhaps do the validation as you suggested
->>>>> and then set bit 63.
->>>> This could be all right. But I'm not sure if it would be a burden for
->>>> higher-level function to set bit 63 which is of GHCI details.
->>>>
->>>> What about adding another "data_gpa_valid" parameter and then test
->>>> "data_gpa_valid" rather than test "data_gpa" to set bit 63?
->>> Who cares what the GHCI says about validity?  The GHCI is a spec for getting
->>> random guests to play nice with random hosts.  Selftests own both, and the goal
->>> of selftests is to test that KVM (and KVM's dependencies) adhere to their relevant
->>> specs.  And more importantly, KVM is NOT inheriting the GHCI ABI verbatim[*].
->>>
->>> So except for the bits and bobs that *KVM* (or the TDX module) gets involved in,
->>> just ignore the GHCI (or even deliberately abuse it).  To put it differently, use
->>> selftests verify *KVM's* ABI and functionality.
->>>
->>> As it pertains to this thread, while I haven't looked at any of this in detail,
->>> I'm guessing that whether or not bit 63 is set is a complete "don't care", i.e.
->>> KVM and the TDX Module should pass it through as-is.
->>>
->>> [*] https://lore.kernel.org/all/Zg18ul8Q4PGQMWam@google.com
->> Ok. It makes sense to KVM_EXIT_TDX.
->> But what if the TDVMCALL is handled in TDX specific code in kernel in future?
->> (not possible?)
-> KVM will "handle" ReportFatalError, and will do so before this code lands[*], but
-> I *highly* doubt KVM will ever do anything but forward the information to userspace,
-> e.g. as KVM_SYSTEM_EVENT_CRASH with data[] filled in with the raw register information.
->
->> Should guest set bits correctly according to GHCI?
-> No.  Selftests exist first and foremost to verify KVM behavior, not to verify
-> firmware behavior.  We can and should use selftests to verify that *KVM* doesn't
-> *violate* the GHCI, but that doesn't mean that selftests themselves can't ignore
-> and/or abuse the GCHI, especially since the GHCI definition for ReportFatalError
-> is frankly awful.
->
-> E.g. the GHCI prescibes actual behavior for R13, but then doesn't say *anything*
-> about what's in the data page.  Why!?!?!  If the format in the data page is
-> completely undefined, what's the point of restricting R13 to only be allowed to
-> hold a GPA?
+Thank you!
 
-The description of R13 in GHCI:
-   4KB-aligned GPA where additional error data is shared by the TD. The
-   VMM must validate that this GPA has the Shared bit set. In other words,
-   that a shared-mapping is used, and that this is a valid mapping for the
-   TD. This shared memory region is expected to hold a zero-terminated
-   string.
-
-IIUC, according the GHCI, R13 is a 4K aligned shared buffer provided by
-the TDX guest to pass additional error message to VMM, i.e., it needs to
-be a shared GPA.  And the content in the buffer is expected to hold a
-zero-terminated string.
-
-Do you think "a zero-terminated string" describes the format in the data
-page?
-
-
->
-> And the wording is just as awful:
->
->    The VMM must validate that this GPA has the Shared bit set. In other words,
->    that a shared-mapping is used, and that this is a valid mapping for the TD.
->
-> I'm pretty sure it's just saying that the TDX module isn't going to verify the
-> operate, i.e. that the VMM needs to protect itself, but it would be so much
-> better to simply state "The TDX Module does not verify this GPA", because saying
-> the VMM "must" do something leads to pointless discussions like this one, where
-> we're debating over whether or *our* VMM should inject an error into *our* guest.
->
-> Anyways, we should do what makes sense for selftests and ignore the stupidity of
-> the GHCI when doing so yields better code.  If that means abusing R13, go for it.
-> If it's a sticking point for anyone, just use one of the "optional" registers.
->
-> Whatever we do, bury the host and guest side of selftests behind #defines or helpers
-> so that there are at most two pieces of code that care which register holds which
-> piece of information.
->
-> [*] https://lore.kernel.org/all/20240404230247.GU2444378@ls.amr.corp.intel.com
->
+-- 
+Kind regards,
+Ivan Orlov
 
 
