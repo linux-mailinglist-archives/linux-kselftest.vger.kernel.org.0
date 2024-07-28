@@ -1,55 +1,74 @@
-Return-Path: <linux-kselftest+bounces-14324-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14325-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 169DD93E3E1
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 09:08:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13E2893E429
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 10:49:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5192EB211DD
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 07:08:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD4861F21A84
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 08:49:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05F418C09;
-	Sun, 28 Jul 2024 07:08:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 196A3125DB;
+	Sun, 28 Jul 2024 08:49:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="XGb0oC4f"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dLnVvN2Y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4AA22F30;
-	Sun, 28 Jul 2024 07:08:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.26
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA5117756;
+	Sun, 28 Jul 2024 08:49:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722150516; cv=none; b=UFdgmmvQb0jIoufDonw0FdTWfauFP7Ew39Uy3WgGRgVWVP4FsIMF2pA0b56rBU8FlwjR+AkP9iccWKPKSk3+XhHN2gKHt93OfFPLZiZ1lWu95LDCmhyynXSeXMkPza/+6WPdXkLMFz6IrzsETbcOIfhZhGpgid1MatrwyBdgXxw=
+	t=1722156549; cv=none; b=Ues4fuXQcSUh//YGohI/Vx1jxKtKTzVSUkusL2xTGpikJstlG29CKGmkSqcE2Ju8FuACSQuVPgbPWW4MGpu2qDml+UDP2Zt9T/FT/beIHLAdny2RxVTSOku1cc3+ypBrmosSSsQIIM/GIszBUdvfwJ4NziuH1o6XHgSQIEQg5KQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722150516; c=relaxed/simple;
-	bh=XPloegrAQj5If0URiRrdUc1LA1dXgbBo0/Y44IynSjU=;
+	s=arc-20240116; t=1722156549; c=relaxed/simple;
+	bh=B0esyC3vDM3rQQi2aj0eDWOTot2ydHWRm3x5/KRF+88=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dE0u9nJ1Dt9k0bm7eq2DyoSmr0+q9bq/BnRcaYXDnDJTg2EwzQZPMa1JUr5xLqkBvOOw5nAaXV0AzYIJLVBYxt5CgLT154E3w36ylhhlmnQ83USWggm57cmXsgkfCcZrO90yNONJy4sZiz44upgQcIz2jpKoqxf0Og5O2vUL3YM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=XGb0oC4f; arc=none smtp.client-ip=80.12.242.26
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [192.168.1.37] ([90.11.132.44])
-	by smtp.orange.fr with ESMTPA
-	id Xxs2sX5MAGdLxXxs2sF2Sj; Sun, 28 Jul 2024 08:59:08 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1722149948;
-	bh=n3xHZPZxtqhkSm8JPGNh+hOGTvxd4rcXGKbmto4kynk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=XGb0oC4fNxtR7RUJGTgOVGegcJz5jhAsIk0Co8K92L8WsZFkhH0vAKLy2WAkMSlcy
-	 IbmoPIRg7eoYnG1bFLJaR8GaLbKBHwgBIMR1b12G/QUxx9hLA+nmp2rHR9SnFtP5LH
-	 ocffLueqU1fW9Wgu48Yl4mIHiywaD5oF2g827+UrOyEeBIeZ0mo5Cc9wevyPkeNyU4
-	 G5mvvYhQSHVjIuIu8NuuaVy7NsZ11OKtKZtHMYv70+yq/chClNBY0kohl+QbNQUoGE
-	 NyZumvdFquu8zjy1Vd79uPW8nma9gEVQbEJ3sYJ09MK1OyeXb+7SU0LXiAZVHr4kjn
-	 ohAyEQ2aNrO5w==
-X-ME-Helo: [192.168.1.37]
-X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Sun, 28 Jul 2024 08:59:08 +0200
-X-ME-IP: 90.11.132.44
-Message-ID: <0576f5dd-656b-4085-8c8d-b0f845875f0f@wanadoo.fr>
-Date: Sun, 28 Jul 2024 08:59:06 +0200
+	 In-Reply-To:Content-Type; b=QF9Gtab1pyYSGXNtfU9/FLg53DgIcJg8PIuDvLdnDfWivWE2wHdhuMCmlkZjlakJ6loHnyPn7jC7jKrwXe/HRWg2qW1N0NWt2THY9fnfpQ8sLMxsAY1MLqcDlF9few3zoc4CI3tuhhxjUTd1hlB8kgvwTJ3EwhWZmBn4bdLI3zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dLnVvN2Y; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-36841f56cf6so174699f8f.3;
+        Sun, 28 Jul 2024 01:49:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722156546; x=1722761346; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=evXFs/LDhclMF9Lmn3M5N/hyBTPMP9UOlkTmgh1mwjc=;
+        b=dLnVvN2Yu29Vzj473m1kS1eUPKX1BsEt5UsQXzfX5Hou+WH5axDhqnOAzttwuGcBX/
+         4uvJyXWA3aT6oXnjYnlkwG0YbibTv7tKx9Zx5nNv41sHF6ogZr5nUfur7aseuUYV5Ul3
+         TV0srKc0bi15KSUS87ZV5rRcUMKwHG6I2d7gJ9V8DsyapeOUE0h+V03zSc1YYh4EcEQu
+         6tP2ec2QfiyRHIINH8hUgYW0NCCd+JGWieM+srwj/NooaJTlBshe7DusifVC2oxXE/+F
+         ePouBL0QwoVFtIKcrk8Hbxj65ryt2PkX1MXIFnsXRD2nPSG9d3IFC6r+t2K29BCqMPsQ
+         aStg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722156546; x=1722761346;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=evXFs/LDhclMF9Lmn3M5N/hyBTPMP9UOlkTmgh1mwjc=;
+        b=gypY/IYtTprHFejr0m4yf9mHdzHjlUzqspyVU9dmmUz8hHHUxkLJKV/S9saC4kbCCJ
+         dGoJyU+va7fRhH2EWLV91yYWEhdSNuQjJwzfaJt4fBl1fsW6gHa+jg71b/ymeOfsBk7t
+         I04qU4DMobRIqXWYgXbDACYus4golv5yEush26GSOUHLu5KkfzZG3yJHgFCg0CDa8BmN
+         XiFikPMzk2prLYPsMOMLP31qUOEsCB9qOLgFibygSa24tRU6gW5w66wxoZo7tpP+Hcqm
+         3vPDLupqLsdhXPCqYjOtLiOVW7Dtp+dTXD3IcOnbJ2iI+UfVn3nGO2WE9BH5ZrkZ6Kmj
+         HpLA==
+X-Forwarded-Encrypted: i=1; AJvYcCW0znQMVwr3kycrgIzciPbMK5H5nGT1f9f5c8NuNjZQmiM/XeaUGy8E+gOWgUatAwthhIezQgQekQk=@vger.kernel.org, AJvYcCWDev4215RxUeNESvJ1teKOl+71rA/3dxq6W1JIQky96a3chnY9Ey3s+waYZjfMM4xxMj6QqU6HuVXodQ0=@vger.kernel.org, AJvYcCXhx0c/SN07PaQtkF+W8Uc56YGmz0SgoVyyX8hZECYm6jV9y7KPXDxcVtAyXrO/eScpU5P4GY9oN0TgiOjD@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTfKZZWSVDlWkhOTOLYu2/EHVc9sfCd4nu1Va293BEU3hSI59s
+	qB6QNw4/b1WyT48B18UzCMsg0JzM6PxEAsT1cK9b2KkBnchyRJPV
+X-Google-Smtp-Source: AGHT+IGfcV2eLH9UxDIWhtuJCcit8EsekBMHUr7GUyCrCLXfkrQCfKUu8FmHJO9a8w/WhUexmjSiTw==
+X-Received: by 2002:a5d:6d8d:0:b0:364:8215:7142 with SMTP id ffacd0b85a97d-36b34d1840emr4655827f8f.1.1722156545352;
+        Sun, 28 Jul 2024 01:49:05 -0700 (PDT)
+Received: from ?IPV6:2a01:4b00:d20e:7300:1d00:5943:7f74:2af0? ([2a01:4b00:d20e:7300:1d00:5943:7f74:2af0])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36b368622c3sm9335264f8f.100.2024.07.28.01.49.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 28 Jul 2024 01:49:04 -0700 (PDT)
+Message-ID: <b45e7719-3ffa-48d9-bac5-a33db3c4e589@gmail.com>
+Date: Sun, 28 Jul 2024 09:49:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,82 +78,97 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 3/4] ALSA: timer: Introduce virtual userspace-driven
  timers
-To: Ivan Orlov <ivan.orlov0322@gmail.com>, perex@perex.cz, tiwai@suse.com,
- corbet@lwn.net, broonie@kernel.org, shuah@kernel.org
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>, perex@perex.cz,
+ tiwai@suse.com, corbet@lwn.net, broonie@kernel.org, shuah@kernel.org
 Cc: linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, aholzinger@gmx.de
 References: <20240726074750.626671-1-ivan.orlov0322@gmail.com>
  <20240726074750.626671-4-ivan.orlov0322@gmail.com>
-Content-Language: en-US, fr-FR
-From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20240726074750.626671-4-ivan.orlov0322@gmail.com>
+ <6b0a39f4-1a0c-4e3e-955e-31bbb33ba54a@wanadoo.fr>
+Content-Language: en-US
+From: Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <6b0a39f4-1a0c-4e3e-955e-31bbb33ba54a@wanadoo.fr>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Le 26/07/2024 à 09:47, Ivan Orlov a écrit :
-> Implement two ioctl calls in order to support virtual userspace-driven
-> ALSA timers.
+On 7/28/24 07:52, Christophe JAILLET wrote:
+> Hi,
 > 
-> The first ioctl is SNDRV_TIMER_IOCTL_CREATE, which gets the
-> snd_utimer_info struct as a parameter and returns a file descriptor of
-> a virtual timer. It also updates the `id` field of the snd_utimer_info
-> struct, which provides a unique identifier for the timer (basically,
-> the subdevice number which can be used when creating timer instances).
-> 
-> This patch also introduces a tiny id allocator for the userspace-driven
-> timers, which guarantees that we don't have more than 128 of them in the
-> system.
-> 
-> Another ioctl is SNDRV_TIMER_IOCTL_TRIGGER, which allows us to trigger
-> the virtual timer (and calls snd_timer_interrupt for the timer under
-> the hood), causing all of the timer instances binded to this timer to
-> execute their callbacks.
-> 
-> The maximum amount of ticks available for the timer is 1 for the sake of
-> simplification of the userspace API. 'start', 'stop', 'open' and 'close'
-> callbacks for the userspace-driven timers are empty since we don't
-> really do any hardware initialization here.
-> 
-> Suggested-by: Axel Holzinger <aholzinger@gmx.de>
-> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
-> ---
 
-...
+Hi Christophe,
 
-> +#ifdef CONFIG_SND_UTIMER
-> +/*
-> + * Since userspace-driven timers are passed to userspace, we need to have an identifier
-> + * which will allow us to use them (basically, the subdevice number of udriven timer).
-> + *
-> + * We have a pool of SNDRV_UTIMERS_MAX_COUNT ids from 0 to (SNDRV_UTIMERS_MAX_COUNT - 1).
-> + * When we take one of them, the corresponding entry in snd_utimer_ids becomes true.
-> + */
-> +static bool snd_utimer_ids[SNDRV_UTIMERS_MAX_COUNT];
-> +
-> +static void snd_utimer_put_id(struct snd_utimer *utimer)
-> +{
-> +	int timer_id = utimer->id;
-> +
-> +	snd_BUG_ON(timer_id < 0 || timer_id >= SNDRV_UTIMERS_MAX_COUNT);
-> +	snd_utimer_ids[timer_id] = false;
-> +}
-> +
-> +static int snd_utimer_take_id(void)
-> +{
-> +	size_t i;
-> +
-> +	for (i = 0; i < SNDRV_UTIMERS_MAX_COUNT; i++) {
-> +		if (!snd_utimer_ids[i]) {
-> +			snd_utimer_ids[i] = true;
-> +			return i;
-> +		}
-> +	}
-> +
-> +	return -EBUSY;
-> +}
+> ...
+> 
+>> diff --git a/sound/core/Kconfig b/sound/core/Kconfig
+>> index b970a1734647..3cf82641fc67 100644
+>> --- a/sound/core/Kconfig
+>> +++ b/sound/core/Kconfig
+>> @@ -251,6 +251,17 @@ config SND_JACK_INJECTION_DEBUG
+>>         Say Y if you are debugging via jack injection interface.
+>>         If unsure select "N".
+>> +config SND_UTIMER
+>> +    bool "Enable support for userspace-controlled virtual timers"
+>> +    depends on SND_TIMER
+>> +    help
+>> +      Say Y to enable the support of userspace-controlled timers. These
+>> +      timers are purely virtual, and they are supposed to be triggered
+>> +      from userspace. They could be quite useful when synchronizing the
+>> +      sound timing with userspace applications (for instance, when 
+>> sending
+>> +      data through snd-aloop).
+>> +
+> 
+> Unneeded extra new line.
+> 
+>> +
+>>   config SND_VMASTER
+>>       bool
+> 
+> ...
+> 
+>> +static void snd_utimer_free(struct snd_utimer *utimer)
+>> +{
+>> +    snd_timer_free(utimer->timer);
+>> +    snd_utimer_put_id(utimer);
+> 
+> Missing kfree(utimer->name); ?
+> 
 
-Also the bitmap API could be useful here.
+Yeah, it definitely should be here... Thank you for finding this!
 
-CJ
+>> +    kfree(utimer);
+>> +}
+> 
+> ...
+> 
+>> +static int snd_utimer_create(struct snd_utimer_info *utimer_info,
+>> +                 struct snd_utimer **r_utimer)
+>> +{
+>> +    struct snd_utimer *utimer;
+>> +    struct snd_timer *timer;
+>> +    struct snd_timer_id tid;
+>> +    int utimer_id;
+>> +    int err = 0;
+>> +    char *timer_name;
+>> +
+>> +    utimer = kzalloc(sizeof(*utimer), GFP_KERNEL);
+>> +    if (!utimer)
+>> +        return -ENOMEM;
+>> +
+>> +    timer_name = kzalloc(SNDRV_UTIMER_NAME_LEN, GFP_KERNEL);
+> 
+> kasprintf(GFP_KERNEL, "snd-utimer%d", utimer_id); ?
+> and SNDRV_UTIMER_NAME_LEN becomes useless too.
+> 
+> In snd_timer_new() it is copied in a char[64] anyway, and if utimer_id 
+> is small, we could even save a few bytes of memory.
+> 
+
+Wow, cool, I haven't heard of kasprintf but now I'll use it here in V2. 
+Thanks!
+
+-- 
+Kind regards,
+Ivan Orlov
 
 
