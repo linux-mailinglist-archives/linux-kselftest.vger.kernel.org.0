@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-14323-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14324-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B19B93E3B8
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 08:52:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 169DD93E3E1
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 09:08:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 88902B21305
-	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 06:52:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5192EB211DD
+	for <lists+linux-kselftest@lfdr.de>; Sun, 28 Jul 2024 07:08:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C82068C07;
-	Sun, 28 Jul 2024 06:52:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05F418C09;
+	Sun, 28 Jul 2024 07:08:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="tLyXTU/w"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="XGb0oC4f"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
+Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2976C8BEC;
-	Sun, 28 Jul 2024 06:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4AA22F30;
+	Sun, 28 Jul 2024 07:08:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.26
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722149559; cv=none; b=kuP5fhDkyZdTENn4Xb5UIrk/IhpZB2X/QYcW1KLNiaOq/mP/DtVdxXvtGoiynFdHJIvlVcc2caqBdGvSVMjB5jsOjtjlx8qrSIIG5Zg7VwZ2GGlZcsXy3HgVdMH67PPH12w6cjJEVY8Za2hfP5oQhnKBVcFmzOgKe9nvVRI5TB4=
+	t=1722150516; cv=none; b=UFdgmmvQb0jIoufDonw0FdTWfauFP7Ew39Uy3WgGRgVWVP4FsIMF2pA0b56rBU8FlwjR+AkP9iccWKPKSk3+XhHN2gKHt93OfFPLZiZ1lWu95LDCmhyynXSeXMkPza/+6WPdXkLMFz6IrzsETbcOIfhZhGpgid1MatrwyBdgXxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722149559; c=relaxed/simple;
-	bh=w4VBB9LsLEaXL66z8li/akJJRFq8/zQyhynB6iTnz1Y=;
+	s=arc-20240116; t=1722150516; c=relaxed/simple;
+	bh=XPloegrAQj5If0URiRrdUc1LA1dXgbBo0/Y44IynSjU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XiGr3g1Bp+A+mWg7/K1IZzW0jglXE6F+ygOzDYpBvfC6cUqNfmyZoRZw4nreP4rt0zbUn7+fF5buMmTO4zYsLfDTOLtOuMyhIElzrEMVTahxxf5M/OxpzDwgCRbMbUg3JsZvJenTKWrMqQ2vZfeFw3IRlWkrnuvdmjepEh8wqIs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=tLyXTU/w; arc=none smtp.client-ip=80.12.242.21
+	 In-Reply-To:Content-Type; b=dE0u9nJ1Dt9k0bm7eq2DyoSmr0+q9bq/BnRcaYXDnDJTg2EwzQZPMa1JUr5xLqkBvOOw5nAaXV0AzYIJLVBYxt5CgLT154E3w36ylhhlmnQ83USWggm57cmXsgkfCcZrO90yNONJy4sZiz44upgQcIz2jpKoqxf0Og5O2vUL3YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=XGb0oC4f; arc=none smtp.client-ip=80.12.242.26
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Received: from [192.168.1.37] ([90.11.132.44])
 	by smtp.orange.fr with ESMTPA
-	id XxlfsACLZx5lnXxlgszGbA; Sun, 28 Jul 2024 08:52:34 +0200
+	id Xxs2sX5MAGdLxXxs2sF2Sj; Sun, 28 Jul 2024 08:59:08 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1722149554;
-	bh=OFUunbe0HaG1IV8wUY0jJuTqlXVNzTwhJ7cRVKBT2/o=;
+	s=t20230301; t=1722149948;
+	bh=n3xHZPZxtqhkSm8JPGNh+hOGTvxd4rcXGKbmto4kynk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=tLyXTU/wdkPEVD/Wa24n5UbJo/Fam9aRnKNXNKKNvoSj6WVk07y9er1HlF9zGFr1I
-	 qoi/kmVv3uJllZLmH8pJ7tLr1Ak1nmpR4/vsRH4JS43nbqRiT5nytrQmWaBFEI5mnV
-	 kzZfYSVXIV2cGJ96JmU4R8pCdCNSbzyw5YhDlPVjkbxJACyaDdRzIvzRqgGDNVUB3j
-	 EZCWo1U8XCTPI0SFpw0QRqcA9hXCURyAkKXSfJ6rxmkQPpYUr9/w0FkLqhdrQ8nUoX
-	 I2cKpb03fR/dFfQPv6unAMH1saSZ/DBNQNJN3WFJAs5IzV80t6f5bDcpPZJIBRaODl
-	 pLkqj/2vHYkGg==
+	b=XGb0oC4fNxtR7RUJGTgOVGegcJz5jhAsIk0Co8K92L8WsZFkhH0vAKLy2WAkMSlcy
+	 IbmoPIRg7eoYnG1bFLJaR8GaLbKBHwgBIMR1b12G/QUxx9hLA+nmp2rHR9SnFtP5LH
+	 ocffLueqU1fW9Wgu48Yl4mIHiywaD5oF2g827+UrOyEeBIeZ0mo5Cc9wevyPkeNyU4
+	 G5mvvYhQSHVjIuIu8NuuaVy7NsZ11OKtKZtHMYv70+yq/chClNBY0kohl+QbNQUoGE
+	 NyZumvdFquu8zjy1Vd79uPW8nma9gEVQbEJ3sYJ09MK1OyeXb+7SU0LXiAZVHr4kjn
+	 ohAyEQ2aNrO5w==
 X-ME-Helo: [192.168.1.37]
 X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Sun, 28 Jul 2024 08:52:34 +0200
+X-ME-Date: Sun, 28 Jul 2024 08:59:08 +0200
 X-ME-IP: 90.11.132.44
-Message-ID: <6b0a39f4-1a0c-4e3e-955e-31bbb33ba54a@wanadoo.fr>
-Date: Sun, 28 Jul 2024 08:52:30 +0200
+Message-ID: <0576f5dd-656b-4085-8c8d-b0f845875f0f@wanadoo.fr>
+Date: Sun, 28 Jul 2024 08:59:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -99,90 +99,42 @@ Le 26/07/2024 à 09:47, Ivan Orlov a écrit :
 > Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
 > ---
 
-Hi,
-
 ...
 
-> diff --git a/sound/core/Kconfig b/sound/core/Kconfig
-> index b970a1734647..3cf82641fc67 100644
-> --- a/sound/core/Kconfig
-> +++ b/sound/core/Kconfig
-> @@ -251,6 +251,17 @@ config SND_JACK_INJECTION_DEBUG
->   	  Say Y if you are debugging via jack injection interface.
->   	  If unsure select "N".
->   
-> +config SND_UTIMER
-> +	bool "Enable support for userspace-controlled virtual timers"
-> +	depends on SND_TIMER
-> +	help
-> +	  Say Y to enable the support of userspace-controlled timers. These
-> +	  timers are purely virtual, and they are supposed to be triggered
-> +	  from userspace. They could be quite useful when synchronizing the
-> +	  sound timing with userspace applications (for instance, when sending
-> +	  data through snd-aloop).
+> +#ifdef CONFIG_SND_UTIMER
+> +/*
+> + * Since userspace-driven timers are passed to userspace, we need to have an identifier
+> + * which will allow us to use them (basically, the subdevice number of udriven timer).
+> + *
+> + * We have a pool of SNDRV_UTIMERS_MAX_COUNT ids from 0 to (SNDRV_UTIMERS_MAX_COUNT - 1).
+> + * When we take one of them, the corresponding entry in snd_utimer_ids becomes true.
+> + */
+> +static bool snd_utimer_ids[SNDRV_UTIMERS_MAX_COUNT];
 > +
-
-Unneeded extra new line.
-
-> +
->   config SND_VMASTER
->   	bool
->   
-
-...
-
-> +static void snd_utimer_free(struct snd_utimer *utimer)
+> +static void snd_utimer_put_id(struct snd_utimer *utimer)
 > +{
-> +	snd_timer_free(utimer->timer);
-> +	snd_utimer_put_id(utimer);
-
-Missing kfree(utimer->name); ?
-
-> +	kfree(utimer);
+> +	int timer_id = utimer->id;
+> +
+> +	snd_BUG_ON(timer_id < 0 || timer_id >= SNDRV_UTIMERS_MAX_COUNT);
+> +	snd_utimer_ids[timer_id] = false;
+> +}
+> +
+> +static int snd_utimer_take_id(void)
+> +{
+> +	size_t i;
+> +
+> +	for (i = 0; i < SNDRV_UTIMERS_MAX_COUNT; i++) {
+> +		if (!snd_utimer_ids[i]) {
+> +			snd_utimer_ids[i] = true;
+> +			return i;
+> +		}
+> +	}
+> +
+> +	return -EBUSY;
 > +}
 
-...
-
-> +static int snd_utimer_create(struct snd_utimer_info *utimer_info,
-> +			     struct snd_utimer **r_utimer)
-> +{
-> +	struct snd_utimer *utimer;
-> +	struct snd_timer *timer;
-> +	struct snd_timer_id tid;
-> +	int utimer_id;
-> +	int err = 0;
-> +	char *timer_name;
-> +
-> +	utimer = kzalloc(sizeof(*utimer), GFP_KERNEL);
-> +	if (!utimer)
-> +		return -ENOMEM;
-> +
-> +	timer_name = kzalloc(SNDRV_UTIMER_NAME_LEN, GFP_KERNEL);
-
-kasprintf(GFP_KERNEL, "snd-utimer%d", utimer_id); ?
-and SNDRV_UTIMER_NAME_LEN becomes useless too.
-
-In snd_timer_new() it is copied in a char[64] anyway, and if utimer_id 
-is small, we could even save a few bytes of memory.
+Also the bitmap API could be useful here.
 
 CJ
-
-> +	if (!timer_name) {
-> +		kfree(utimer);
-> +		return -ENOMEM;
-> +	}
-> +
-> +	/* We hold the ioctl lock here so we won't get a race condition when allocating id */
-> +	utimer_id = snd_utimer_take_id();
-> +	if (utimer_id < 0) {
-> +		err = utimer_id;
-> +		goto err_take_id;
-> +	}
-> +
-> +	sprintf(timer_name, "snd-utimer%d", utimer_id);
-> +	utimer->name = timer_name;
-> +	utimer->id = utimer_id;
-
-...
 
 
