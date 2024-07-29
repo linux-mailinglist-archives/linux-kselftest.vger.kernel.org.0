@@ -1,115 +1,134 @@
-Return-Path: <linux-kselftest+bounces-14347-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14348-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5558F93EB8E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 04:46:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6337993ECAD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 06:46:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D229283360
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 02:46:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0C702813D8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 04:46:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7466879B9D;
-	Mon, 29 Jul 2024 02:46:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7603839E3;
+	Mon, 29 Jul 2024 04:46:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="KE8V/R7l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83A0A1E49E;
-	Mon, 29 Jul 2024 02:46:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47968288C
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jul 2024 04:46:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722221181; cv=none; b=iyL3aBtmMA88vaXC9jsyUT49FLihooom9NvzwL9RlqOCHqSbOywkDySc6J8DBvvHW2hCYiOB1Oauvk0y/yr2KD1oQFlO1d+QyeuqlpQjeLvAUUXMc73gWMrOtZyxrNn87P9KcQtqEyomU5V0ysMK/2RMLoNuu36rHc4VSurJsuI=
+	t=1722228400; cv=none; b=D+yL6VsYsXajgjSXj+ah0aj/AzLhS2Qb0uy0c14gXXpX+j9bIvYG80EMqGO6gS15I5mCl2y5LVgw6cuRo6PQLI0o9D5mKVfmw3gLXDwWvpFLehlipZmbFp8EqISY4mu3KFSgur86lHnyn3OrKSmkaiyb/B9jwtEW2UPZ9+bKPN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722221181; c=relaxed/simple;
-	bh=FSF5xeNzAjX1piM425d0v2L4nVOpwYSnjtMrdLDWcMU=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=e1EwUEyQ/2MoArlpFshnJ2DXpeSuJ6NfTdj8gADZKQU5UjTV0DyGKCBl6h2jsFJIP2XqB1Zr0qDEoF6hDSNJp6E7HBV9Joa/ihkuHxdfDjc8e8xdgcOefpgQ/Qs8UXqXGaLtWzPIvpziWr++6OyZA+Vm+GuoeWGEGKe/VjruhtI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.17])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4WXN142Df4z20krH;
-	Mon, 29 Jul 2024 10:42:00 +0800 (CST)
-Received: from kwepemm600007.china.huawei.com (unknown [7.193.23.208])
-	by mail.maildlp.com (Postfix) with ESMTPS id 432FE1A0190;
-	Mon, 29 Jul 2024 10:46:16 +0800 (CST)
-Received: from DESKTOP-8RFUVS3.china.huawei.com (10.174.178.219) by
- kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 29 Jul 2024 10:46:15 +0800
-From: Zenghui Yu <yuzenghui@huawei.com>
-To: <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-	<linaro-mm-sig@lists.linaro.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-CC: <sumit.semwal@linaro.org>, <benjamin.gaignard@collabora.com>,
-	<Brian.Starkey@arm.com>, <jstultz@google.com>, <tjmercier@google.com>,
-	<shuah@kernel.org>, <wanghaibin.wang@huawei.com>, Zenghui Yu
-	<yuzenghui@huawei.com>
-Subject: [PATCH v2] kselftests: dmabuf-heaps: Ensure the driver name is null-terminated
-Date: Mon, 29 Jul 2024 10:46:04 +0800
-Message-ID: <20240729024604.2046-1-yuzenghui@huawei.com>
-X-Mailer: git-send-email 2.23.0.windows.1
+	s=arc-20240116; t=1722228400; c=relaxed/simple;
+	bh=2w4uyh/GOZovEWb83IxHnqPcuR/YIdWIEouPZ22d3wo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=edRtcCw8lXRuNV5A1nnFhAFoz2YSNwcXy7QimJpUjK255QwhTtB0js/EH0iZLpShEqgohtnyOlZuh5WfpfRY1/VvbnIx8xnhG6ZLlN9tJK8O5JQl48Prwn6ESppLahFr/GEq5D5exetiCC30cY5D0rYawPeg2vfffCbelEmqDvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=KE8V/R7l; arc=none smtp.client-ip=209.85.166.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3737dc4a669so15576995ab.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 28 Jul 2024 21:46:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1722228398; x=1722833198; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OW7iKI5VA6V8XgNVOHyNoqHMEwUK7QtSHaQ1viyOIsc=;
+        b=KE8V/R7lY77p1fG4iLiKe7vSnU+7ewBUfDt7wON5EPxtLe2Ssa5V3+TDbRMJV+LWd7
+         SVnv0yFr3bMjtpPSm8LF/L3TLmIbpLV6k41h2uq6xDWDQvQkfOIDI60XnqqPcDZmVbOf
+         wWpqGtUjgvLSvhaERR2c1U7skGeFzJxkaG1NccyRu6buBRpjUR6C0Ol3bIsvBE65qJPT
+         0BLXhYzyEt7vg6GE1NXhR5gO8fuEG+t9GjKQaKaLKil401x24VvNNa5VqCwXcQWYQAke
+         bY54sTaGDsHTlc7qzvqmHiOV10KYgshzzEcy/mP6wiME7aelkEJ6QWc9TMomEQ3GQSyA
+         YWPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722228398; x=1722833198;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OW7iKI5VA6V8XgNVOHyNoqHMEwUK7QtSHaQ1viyOIsc=;
+        b=SbD5VIyLyRksWQ5G5J+Jw9kGuzVyoVyNAOiIBsdUBR57fiq16YyirL3nm2au39JiU7
+         XCqSqXuMpsqV5bVZQIT1yuZC5AZiOYJycThIcxjaEHLp2FE8E/RBPfU5Z6fOqaPHemB4
+         +BDVMTK65Pgb92rFA1be71u3fZk2vr0e7Kb5McXFFSxfPhHVea4uSb23Wk3AKs3sBMjU
+         SNSc2ve8x90U1KtL4+4NN9kgx4ggG6+3kRcfwdaGRyKS89Wy3GZJCjggTqy2zCs8lkem
+         t6H8/962Rm5VuIIrPdbj7WOG7l5H4h/rlz21A/d4IQ35cwHGr0g+kTxTwvNeKh/kcbyB
+         6HsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWT8lqpugU+WJjO8ulsrN6fttSHQIw4siNpBfp66GpPSFIJpd7v8/gCpBVExwIKPKOVoptWgTNWGBX+UJ/jNkfPj7vyAJHgk0wpllPDEYjt
+X-Gm-Message-State: AOJu0Yy4ZTa3PQBgYpPZfujtII73y9QVh/Aim8h3TC2X8Fa8YQ+8pqag
+	DC7MODZL/nxdfbHOsrOv37so+TBA/nabieuRA5cnKPzECEWv5qrqtqNlOL1fWvnVD573xF4Sgn8
+	h9msZc3aUNJWN1OBKTrBvE1PxsPBrexwKaQxSgg==
+X-Google-Smtp-Source: AGHT+IHBbVydjPrAC5zGlF7xgbsY+f63BZCI3Qdtaq/cb1kuBVX2K7LOkNc3W9JJ2Y0boEOPjiAkAJkUZnp9b/68Qjg=
+X-Received: by 2002:a05:6e02:2163:b0:37a:601c:9147 with SMTP id
+ e9e14a558f8ab-39aec2d8533mr72590785ab.10.1722228397863; Sun, 28 Jul 2024
+ 21:46:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600007.china.huawei.com (7.193.23.208)
+References: <20240726084931.28924-1-yongxuan.wang@sifive.com> <20240726084931.28924-5-yongxuan.wang@sifive.com>
+In-Reply-To: <20240726084931.28924-5-yongxuan.wang@sifive.com>
+From: Anup Patel <anup@brainfault.org>
+Date: Mon, 29 Jul 2024 10:16:26 +0530
+Message-ID: <CAAhSdy2Tvt3+w4=zwKOJJF4absZBGxacWmV2y517RqVqLWGEiQ@mail.gmail.com>
+Subject: Re: [PATCH v8 4/5] KVM: riscv: selftests: Fix compile error
+To: Yong-Xuan Wang <yongxuan.wang@sifive.com>
+Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, greentime.hu@sifive.com, 
+	vincent.chen@sifive.com, Atish Patra <atishp@atishpatra.org>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Even if a vgem device is configured in, we will skip the import_vgem_fd()
-test almost every time.
+On Fri, Jul 26, 2024 at 2:19=E2=80=AFPM Yong-Xuan Wang <yongxuan.wang@sifiv=
+e.com> wrote:
+>
+> Fix compile error introduced by commit d27c34a73514 ("KVM: riscv:
+> selftests: Add some Zc* extensions to get-reg-list test"). These
+> 4 lines should be end with ";".
+>
+> Fixes: d27c34a73514 ("KVM: riscv: selftests: Add some Zc* extensions to g=
+et-reg-list test")
+> Signed-off-by: Yong-Xuan Wang <yongxuan.wang@sifive.com>
 
-  TAP version 13
-  1..11
-  # Testing heap: system
-  # =======================================
-  # Testing allocation and importing:
-  ok 1 # SKIP Could not open vgem -1
+Queued this patch for Linux-6.11-rc1 fixes.
 
-The problem is that we use the DRM_IOCTL_VERSION ioctl to query the driver
-version information but leave the name field a non-null-terminated string.
-Terminate it properly to actually test against the vgem device.
+Thanks,
+Anup
 
-While at it, let's check the length of the driver name is exactly 4 bytes
-and return early otherwise (in case there is a name like "vgemfoo" that
-gets converted to "vgem\0" unexpectedly).
-
-Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
----
-* From v1 [1]:
-  - Check version.name_len is exactly 4 bytes and return early otherwise
-
-[1] https://lore.kernel.org/r/20240708134654.1725-1-yuzenghui@huawei.com
-
-P.S., Maybe worth including the kselftests file into "DMA-BUF HEAPS
-FRAMEWORK" MAINTAINERS entry?
-
- tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-index 5f541522364f..5d0a809dc2df 100644
---- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-+++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-@@ -29,9 +29,11 @@ static int check_vgem(int fd)
- 	version.name = name;
- 
- 	ret = ioctl(fd, DRM_IOCTL_VERSION, &version);
--	if (ret)
-+	if (ret || version.name_len != 4)
- 		return 0;
- 
-+	name[4] = '\0';
-+
- 	return !strcmp(name, "vgem");
- }
- 
--- 
-2.33.0
-
+> ---
+>  tools/testing/selftests/kvm/riscv/get-reg-list.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/tes=
+ting/selftests/kvm/riscv/get-reg-list.c
+> index f92c2fb23fcd..8e34f7fa44e9 100644
+> --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> @@ -961,10 +961,10 @@ KVM_ISA_EXT_SIMPLE_CONFIG(zbkb, ZBKB);
+>  KVM_ISA_EXT_SIMPLE_CONFIG(zbkc, ZBKC);
+>  KVM_ISA_EXT_SIMPLE_CONFIG(zbkx, ZBKX);
+>  KVM_ISA_EXT_SIMPLE_CONFIG(zbs, ZBS);
+> -KVM_ISA_EXT_SIMPLE_CONFIG(zca, ZCA),
+> -KVM_ISA_EXT_SIMPLE_CONFIG(zcb, ZCB),
+> -KVM_ISA_EXT_SIMPLE_CONFIG(zcd, ZCD),
+> -KVM_ISA_EXT_SIMPLE_CONFIG(zcf, ZCF),
+> +KVM_ISA_EXT_SIMPLE_CONFIG(zca, ZCA);
+> +KVM_ISA_EXT_SIMPLE_CONFIG(zcb, ZCB);
+> +KVM_ISA_EXT_SIMPLE_CONFIG(zcd, ZCD);
+> +KVM_ISA_EXT_SIMPLE_CONFIG(zcf, ZCF);
+>  KVM_ISA_EXT_SIMPLE_CONFIG(zcmop, ZCMOP);
+>  KVM_ISA_EXT_SIMPLE_CONFIG(zfa, ZFA);
+>  KVM_ISA_EXT_SIMPLE_CONFIG(zfh, ZFH);
+> --
+> 2.17.1
+>
 
