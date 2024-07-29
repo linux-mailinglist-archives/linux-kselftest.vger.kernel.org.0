@@ -1,134 +1,163 @@
-Return-Path: <linux-kselftest+bounces-14348-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14349-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6337993ECAD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 06:46:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3209293EDE2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 09:03:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0C702813D8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 04:46:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53EEE1C21DA5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 07:03:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7603839E3;
-	Mon, 29 Jul 2024 04:46:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B096C126F2A;
+	Mon, 29 Jul 2024 07:02:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="KE8V/R7l"
+	dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b="BSwQEp+y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47968288C
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jul 2024 04:46:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BECB28615A
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jul 2024 07:02:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722228400; cv=none; b=D+yL6VsYsXajgjSXj+ah0aj/AzLhS2Qb0uy0c14gXXpX+j9bIvYG80EMqGO6gS15I5mCl2y5LVgw6cuRo6PQLI0o9D5mKVfmw3gLXDwWvpFLehlipZmbFp8EqISY4mu3KFSgur86lHnyn3OrKSmkaiyb/B9jwtEW2UPZ9+bKPN0=
+	t=1722236523; cv=none; b=Ilo2yo/X+M5z92S2jTKGX2KQ6Yc1HD3WM5eNVPCEQ0va4wEx4CtH1pnCicfNEk9PXZN6KM0S3ud1RkOk2H2tkXz6Oa/iOs8/iN1/EPu+RRJYfvKUmUWf5N2dNoil6y22ttDqWeQ55eLzqSWPFjkLB1bdQWsXMyxyg+h/RvYK/ME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722228400; c=relaxed/simple;
-	bh=2w4uyh/GOZovEWb83IxHnqPcuR/YIdWIEouPZ22d3wo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=edRtcCw8lXRuNV5A1nnFhAFoz2YSNwcXy7QimJpUjK255QwhTtB0js/EH0iZLpShEqgohtnyOlZuh5WfpfRY1/VvbnIx8xnhG6ZLlN9tJK8O5JQl48Prwn6ESppLahFr/GEq5D5exetiCC30cY5D0rYawPeg2vfffCbelEmqDvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=KE8V/R7l; arc=none smtp.client-ip=209.85.166.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3737dc4a669so15576995ab.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 28 Jul 2024 21:46:38 -0700 (PDT)
+	s=arc-20240116; t=1722236523; c=relaxed/simple;
+	bh=OfOwg30Kz1gJciOmBHTSSNW3kho05OpZx0+UKqjPXek=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P2xHNZkvjEFpZ1K11Qn10/nNgY1SS5Suybjr5gWWA5dip1cI0+36ILGun9aUvLFZ9/QUAHOuhXbL4JTs2amIzZN8ZiJ+chpYXd6G7ALm+aiT2mst1nn7HMcXihlOwx1p6qZyfQYZU1npeqyLkIXNd9yZ6VWBl2/JrYz+v2g1AEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch; spf=none smtp.mailfrom=ffwll.ch; dkim=pass (1024-bit key) header.d=ffwll.ch header.i=@ffwll.ch header.b=BSwQEp+y; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ffwll.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ffwll.ch
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-42111cf2706so2473195e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jul 2024 00:02:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1722228398; x=1722833198; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OW7iKI5VA6V8XgNVOHyNoqHMEwUK7QtSHaQ1viyOIsc=;
-        b=KE8V/R7lY77p1fG4iLiKe7vSnU+7ewBUfDt7wON5EPxtLe2Ssa5V3+TDbRMJV+LWd7
-         SVnv0yFr3bMjtpPSm8LF/L3TLmIbpLV6k41h2uq6xDWDQvQkfOIDI60XnqqPcDZmVbOf
-         wWpqGtUjgvLSvhaERR2c1U7skGeFzJxkaG1NccyRu6buBRpjUR6C0Ol3bIsvBE65qJPT
-         0BLXhYzyEt7vg6GE1NXhR5gO8fuEG+t9GjKQaKaLKil401x24VvNNa5VqCwXcQWYQAke
-         bY54sTaGDsHTlc7qzvqmHiOV10KYgshzzEcy/mP6wiME7aelkEJ6QWc9TMomEQ3GQSyA
-         YWPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722228398; x=1722833198;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=ffwll.ch; s=google; t=1722236520; x=1722841320; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OW7iKI5VA6V8XgNVOHyNoqHMEwUK7QtSHaQ1viyOIsc=;
-        b=SbD5VIyLyRksWQ5G5J+Jw9kGuzVyoVyNAOiIBsdUBR57fiq16YyirL3nm2au39JiU7
-         XCqSqXuMpsqV5bVZQIT1yuZC5AZiOYJycThIcxjaEHLp2FE8E/RBPfU5Z6fOqaPHemB4
-         +BDVMTK65Pgb92rFA1be71u3fZk2vr0e7Kb5McXFFSxfPhHVea4uSb23Wk3AKs3sBMjU
-         SNSc2ve8x90U1KtL4+4NN9kgx4ggG6+3kRcfwdaGRyKS89Wy3GZJCjggTqy2zCs8lkem
-         t6H8/962Rm5VuIIrPdbj7WOG7l5H4h/rlz21A/d4IQ35cwHGr0g+kTxTwvNeKh/kcbyB
-         6HsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWT8lqpugU+WJjO8ulsrN6fttSHQIw4siNpBfp66GpPSFIJpd7v8/gCpBVExwIKPKOVoptWgTNWGBX+UJ/jNkfPj7vyAJHgk0wpllPDEYjt
-X-Gm-Message-State: AOJu0Yy4ZTa3PQBgYpPZfujtII73y9QVh/Aim8h3TC2X8Fa8YQ+8pqag
-	DC7MODZL/nxdfbHOsrOv37so+TBA/nabieuRA5cnKPzECEWv5qrqtqNlOL1fWvnVD573xF4Sgn8
-	h9msZc3aUNJWN1OBKTrBvE1PxsPBrexwKaQxSgg==
-X-Google-Smtp-Source: AGHT+IHBbVydjPrAC5zGlF7xgbsY+f63BZCI3Qdtaq/cb1kuBVX2K7LOkNc3W9JJ2Y0boEOPjiAkAJkUZnp9b/68Qjg=
-X-Received: by 2002:a05:6e02:2163:b0:37a:601c:9147 with SMTP id
- e9e14a558f8ab-39aec2d8533mr72590785ab.10.1722228397863; Sun, 28 Jul 2024
- 21:46:37 -0700 (PDT)
+        bh=Jiq86OgV8aN77ZK3gSdcC84nDSEMhthS0/eJkO/i+l0=;
+        b=BSwQEp+ySpncpgp63OameFPhiH6ErcJioouSgYkOB6drGXlemsvgB71njPs50gSOZK
+         S69kyESkhmfal7dOmYV+iHrPGaAM16liGAqeKR6XH69h8i94HPv2/LRHjkuucbrucdUH
+         Jyc8nHam4I7ZqzDlfSFB5tbETd0ooeMq931/o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722236520; x=1722841320;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Jiq86OgV8aN77ZK3gSdcC84nDSEMhthS0/eJkO/i+l0=;
+        b=G7Q+3ZsiHsWr1AgoO2qWKlUY1SA3RviUK5m0yCJb51QVW/aJfAop1aNMku5tXccGcp
+         EKJj/tUYhnj8RNsP7F7d9oozE7aeXmzIPAMg4oWukCQ7mjcoYFC/sfi0Zykz4cevwT0w
+         qJlFxwolTTAyu6JOsqKaKxmctps0MlAgQJWjlX/nFymjS8XrXKbVCiiXRPswGzvKFbAZ
+         bdkQ4ZoxbcBbkH6bIyoWcG9anTSzrUSjPs//U/FNy3Our+K85gGowdkvAuU6A71xw6rv
+         0iQhi67TxjcDFVqNaRo0CDGuD6JzONC0WaP9nwkUvlC4esK+rxS6xYZ36re9Q1cPxg6h
+         uBAw==
+X-Forwarded-Encrypted: i=1; AJvYcCXeE5j3CfspkdMBimo4n4dWy06quxqOI+9uFwwgu+E2nQaySPzTXwDKZFhFD+s3/q9RzdeX6OAl5SP4tLdRYS7qk8M8MmOThlqPsaRMpcNo
+X-Gm-Message-State: AOJu0Yxrd98tXx6HLCySHZ41somMUXskl1qrhBgTBOwc9XO11m+laMo4
+	ThIwpci0HREgtbwVaXFfr1+IFsn8HRwcRUJOyiAL8w0/rtF6nzi8cjwgeaKSc18=
+X-Google-Smtp-Source: AGHT+IEiT+O8ufmV6ZCYKgzAur7uD7ABX1l7m8G+4knDu8SiWra9FtLVycZ8kwh2N41DGIzudaMzfQ==
+X-Received: by 2002:a05:600c:4511:b0:425:65b1:abb4 with SMTP id 5b1f17b1804b1-428053beee0mr56974615e9.0.1722236519848;
+        Mon, 29 Jul 2024 00:01:59 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4281225141dsm83180525e9.45.2024.07.29.00.01.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 29 Jul 2024 00:01:59 -0700 (PDT)
+Date: Mon, 29 Jul 2024 09:01:57 +0200
+From: Daniel Vetter <daniel.vetter@ffwll.ch>
+To: Zenghui Yu <yuzenghui@huawei.com>
+Cc: linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, sumit.semwal@linaro.org,
+	benjamin.gaignard@collabora.com, Brian.Starkey@arm.com,
+	jstultz@google.com, tjmercier@google.com, shuah@kernel.org,
+	wanghaibin.wang@huawei.com
+Subject: Re: [PATCH v2] kselftests: dmabuf-heaps: Ensure the driver name is
+ null-terminated
+Message-ID: <Zqc-ZWlTYwnKHoQK@phenom.ffwll.local>
+Mail-Followup-To: Zenghui Yu <yuzenghui@huawei.com>,
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linaro-mm-sig@lists.linaro.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, sumit.semwal@linaro.org,
+	benjamin.gaignard@collabora.com, Brian.Starkey@arm.com,
+	jstultz@google.com, tjmercier@google.com, shuah@kernel.org,
+	wanghaibin.wang@huawei.com
+References: <20240729024604.2046-1-yuzenghui@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240726084931.28924-1-yongxuan.wang@sifive.com> <20240726084931.28924-5-yongxuan.wang@sifive.com>
-In-Reply-To: <20240726084931.28924-5-yongxuan.wang@sifive.com>
-From: Anup Patel <anup@brainfault.org>
-Date: Mon, 29 Jul 2024 10:16:26 +0530
-Message-ID: <CAAhSdy2Tvt3+w4=zwKOJJF4absZBGxacWmV2y517RqVqLWGEiQ@mail.gmail.com>
-Subject: Re: [PATCH v8 4/5] KVM: riscv: selftests: Fix compile error
-To: Yong-Xuan Wang <yongxuan.wang@sifive.com>
-Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	kvm-riscv@lists.infradead.org, kvm@vger.kernel.org, greentime.hu@sifive.com, 
-	vincent.chen@sifive.com, Atish Patra <atishp@atishpatra.org>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <cleger@rivosinc.com>, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240729024604.2046-1-yuzenghui@huawei.com>
+X-Operating-System: Linux phenom 6.9.7-amd64 
 
-On Fri, Jul 26, 2024 at 2:19=E2=80=AFPM Yong-Xuan Wang <yongxuan.wang@sifiv=
-e.com> wrote:
->
-> Fix compile error introduced by commit d27c34a73514 ("KVM: riscv:
-> selftests: Add some Zc* extensions to get-reg-list test"). These
-> 4 lines should be end with ";".
->
-> Fixes: d27c34a73514 ("KVM: riscv: selftests: Add some Zc* extensions to g=
-et-reg-list test")
-> Signed-off-by: Yong-Xuan Wang <yongxuan.wang@sifive.com>
-
-Queued this patch for Linux-6.11-rc1 fixes.
-
-Thanks,
-Anup
-
+On Mon, Jul 29, 2024 at 10:46:04AM +0800, Zenghui Yu wrote:
+> Even if a vgem device is configured in, we will skip the import_vgem_fd()
+> test almost every time.
+> 
+>   TAP version 13
+>   1..11
+>   # Testing heap: system
+>   # =======================================
+>   # Testing allocation and importing:
+>   ok 1 # SKIP Could not open vgem -1
+> 
+> The problem is that we use the DRM_IOCTL_VERSION ioctl to query the driver
+> version information but leave the name field a non-null-terminated string.
+> Terminate it properly to actually test against the vgem device.
+> 
+> While at it, let's check the length of the driver name is exactly 4 bytes
+> and return early otherwise (in case there is a name like "vgemfoo" that
+> gets converted to "vgem\0" unexpectedly).
+> 
+> Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
 > ---
->  tools/testing/selftests/kvm/riscv/get-reg-list.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/tes=
-ting/selftests/kvm/riscv/get-reg-list.c
-> index f92c2fb23fcd..8e34f7fa44e9 100644
-> --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> @@ -961,10 +961,10 @@ KVM_ISA_EXT_SIMPLE_CONFIG(zbkb, ZBKB);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zbkc, ZBKC);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zbkx, ZBKX);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zbs, ZBS);
-> -KVM_ISA_EXT_SIMPLE_CONFIG(zca, ZCA),
-> -KVM_ISA_EXT_SIMPLE_CONFIG(zcb, ZCB),
-> -KVM_ISA_EXT_SIMPLE_CONFIG(zcd, ZCD),
-> -KVM_ISA_EXT_SIMPLE_CONFIG(zcf, ZCF),
-> +KVM_ISA_EXT_SIMPLE_CONFIG(zca, ZCA);
-> +KVM_ISA_EXT_SIMPLE_CONFIG(zcb, ZCB);
-> +KVM_ISA_EXT_SIMPLE_CONFIG(zcd, ZCD);
-> +KVM_ISA_EXT_SIMPLE_CONFIG(zcf, ZCF);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zcmop, ZCMOP);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zfa, ZFA);
->  KVM_ISA_EXT_SIMPLE_CONFIG(zfh, ZFH);
-> --
-> 2.17.1
->
+> * From v1 [1]:
+>   - Check version.name_len is exactly 4 bytes and return early otherwise
+> 
+> [1] https://lore.kernel.org/r/20240708134654.1725-1-yuzenghui@huawei.com
+
+Thanks for your patch, I'll push it to drm-misc-next-fixes.
+
+> P.S., Maybe worth including the kselftests file into "DMA-BUF HEAPS
+> FRAMEWORK" MAINTAINERS entry?
+
+Good idea, want to do the patch for that too?
+
+Cheers, Sima
+
+
+> 
+>  tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+> index 5f541522364f..5d0a809dc2df 100644
+> --- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+> +++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
+> @@ -29,9 +29,11 @@ static int check_vgem(int fd)
+>  	version.name = name;
+>  
+>  	ret = ioctl(fd, DRM_IOCTL_VERSION, &version);
+> -	if (ret)
+> +	if (ret || version.name_len != 4)
+>  		return 0;
+>  
+> +	name[4] = '\0';
+> +
+>  	return !strcmp(name, "vgem");
+>  }
+>  
+> -- 
+> 2.33.0
+> 
+
+-- 
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
 
