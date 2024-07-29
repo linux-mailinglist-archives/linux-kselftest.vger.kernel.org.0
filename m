@@ -1,113 +1,121 @@
-Return-Path: <linux-kselftest+bounces-14360-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14362-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDA8493EFCA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 10:21:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A279D93EFE6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 10:30:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73C1D1F22CC3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 08:21:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AB2A1F22C91
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 08:30:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8463613D53F;
-	Mon, 29 Jul 2024 08:20:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19B4513B597;
+	Mon, 29 Jul 2024 08:29:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="bel8l+zF"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="2GIutL1H"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3826313C3CF;
-	Mon, 29 Jul 2024 08:20:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842D0130A7D;
+	Mon, 29 Jul 2024 08:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722241252; cv=none; b=cEiJTUQT4L4w90xuLWyqNcZ5l/CXPG6eDI/dGTueGiJIJR9kL2nIyxZkRUkC+DWJt3tZ5Sd2gH/C6EJNBdVUpm4XFmSTukdENPlp5EO4HYrQ6xLycYmVHija2aPeqNSgjyD6FxB+XFQmO9qdp/Sc0RpllDSah8KiHUqRR3cD1iQ=
+	t=1722241796; cv=none; b=tNS238wSOYeTWOUXn9tkGi0rs+6qhkxmG2SNd89z3gSW8Hhl8BY4ov7UiDi3R03jUpnon2QeyoNrfw/AI4A27gYrBsanCX4aJBulMve+QzNayvxmwvy6F8MnrsDueuEg4fNkXnLpV8gyuzZi8OKY6Q54g9GwmipFP5/v5ELbCIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722241252; c=relaxed/simple;
-	bh=dhuUeMeg6A+6tpCx9Iav6D7D/rHdFvL/tF62fjAuDE4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NtDuVsHclOpJLkwC4yV1Om70f2PYsjvkQdk4+E4AxkylGohTLGeKgPnXxAJZj8puznbywx6l09atZFNb1A2mTdxE4kK5mxhmUXXZOZdBsxL7Z8kVxFwxGcHfm/ImXmV+xHuJAngcBqd3XafDTY28xXyV2T3EdXMNL4nJwGJ1FVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=bel8l+zF; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id CBE2B60008;
-	Mon, 29 Jul 2024 08:20:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1722241242;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xXhPvfso1gEmmax+ETmwIuRk4s9Y1kZ7mG5mtrN6ID0=;
-	b=bel8l+zFGKQDvazjMIF4BeA5Yutp3XjmQhMv3DMl7s8EwhzXdq/zMFEcKmIM+H0BpI6Dzh
-	CzIOeu0w+Wn/ElbeMdFDjYj7aBwEx84iQSUzlF02fILECw/FdFDQdLc00uEPp83JFf29Y6
-	RQ2e3ZW5/bkYQvnsuBa6rL67IbnZAUAU+FewjTaMn4ngKVrJi02SRLTS3K/G0l3rjjPc50
-	oKKZTgYE2CxzPRcbYGdKHZVFkkR+Ohl6i2qnoBEb4LXZEKXFKcsU2bWMjANNRfpKNPeKQb
-	kRQvcngyOtHJCXH0FnuLv/tgNgMm9W5Kld88hy745F19GSjrcs/UwbzKunfeAw==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Mon, 29 Jul 2024 10:20:31 +0200
-Subject: [PATCH bpf-next v2 3/3] selftests/bpf: add wrong type test to
- cgroup dev
+	s=arc-20240116; t=1722241796; c=relaxed/simple;
+	bh=SQtWsaa0Wk3Mf10zCh4eJU/N27v9lwbRkQk9wBgdq9Q=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Nq7sbOfmsZ/j6+gJh0zsz2Wev3Lwh7gzJW/HadAuKiOkY3IOBP1St65DRhscHIhWQQz7v/tKmAD2N7n35PtU1XC9KesyHJOOJ77SQVDCEnqGH1svI0+/SfF1oUp/fIBpuuWdXsBrrsqATeEMCA6mlCOr3HmwMOQuaoxHu5DErJk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=2GIutL1H; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1722241792;
+	bh=SQtWsaa0Wk3Mf10zCh4eJU/N27v9lwbRkQk9wBgdq9Q=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=2GIutL1HBHwBMdYQm+Cmb/4ZmAR9xi5NsbFTwEEnzUAP/7gScHgUdgptT3I+RxYqh
+	 PunJqO8ylVjaO1y0nhCknF5g7sAHQVXV1q6XaSdyJuhXx2lvDfL7vKfBkO60fJQr+7
+	 j8GjPjlgNEy4x3dMeYZ607eNkHITmFwaxDWfX9Ag294KAk1jBrp+NwXWPipezDFHWH
+	 G07Qfez35Q089pApnSNL6aFQsr6veUxDORx/IRTKRMhp0EwlSZ23IfDQgsI6VBw/l8
+	 Y0OdpJiyAhcIvFLJ9iDqbvLcQVo73Q7PGIvKRGsfGk/sx4AU+m/3Jehq/0oMu/SwP9
+	 N2j/ujL7DD88A==
+Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 55DF83780BC9;
+	Mon, 29 Jul 2024 08:29:50 +0000 (UTC)
+Message-ID: <49108735-c776-4b6f-8264-62a827dd7b26@collabora.com>
+Date: Mon, 29 Jul 2024 13:29:48 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com
+Subject: Re: [PATCH 0/3] bitmap: Convert test_bitmap to kunit test
+To: Shuah Khan <skhan@linuxfoundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Yury Norov
+ <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kees@kernel.org,
+ David Gow <davidgow@google.com>, John Hubbard <jhubbard@nvidia.com>
+References: <20240726110658.2281070-1-usama.anjum@collabora.com>
+ <27b91030-b01f-44e4-82f7-93b3e11e8d74@linuxfoundation.org>
+Content-Language: en-US
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <27b91030-b01f-44e4-82f7-93b3e11e8d74@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240729-convert_dev_cgroup-v2-3-4c1fc0520545@bootlin.com>
-References: <20240729-convert_dev_cgroup-v2-0-4c1fc0520545@bootlin.com>
-In-Reply-To: <20240729-convert_dev_cgroup-v2-0-4c1fc0520545@bootlin.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.14.1
-X-GND-Sasl: alexis.lothore@bootlin.com
 
-Current cgroup_dev test mostly tests that device operation is accepted or
-refused base on passed major/minor (and so, any operation performed during
-test involves only char device)
+On 7/27/24 12:26 AM, Shuah Khan wrote:
+> On 7/26/24 05:06, Muhammad Usama Anjum wrote:
+>> In this series, test_bitmap is being converted to kunit test. Multiple
+>> patches will make the review process smooth.
+>>
+>> - Patch-1: Convert the tests in lib/test_bitmap.c to kunit
+>> - Patch-2: Rename the lib/test_bitmap.c to lib/bitmap_kunit.c and other
+>>             configuration options
+>> - Patch-3: Remove the bitmap.sh selftest
+>>
+>> Muhammad Usama Anjum (3):
+>>    bitmap: convert test_bitmap to KUnit test
+>>    bitmap: Rename module
+>>    selftests: lib: remove test_bitmap
+>>
+>>   MAINTAINERS                           |   2 +-
+>>   lib/Kconfig.debug                     |  15 +-
+>>   lib/Makefile                          |   2 +-
+>>   lib/{test_bitmap.c => bitmap_kunit.c} | 624 ++++++++++++--------------
+>>   tools/testing/selftests/lib/Makefile  |   2 +-
+>>   tools/testing/selftests/lib/bitmap.sh |   3 -
+>>   tools/testing/selftests/lib/config    |   1 -
+>>   7 files changed, 295 insertions(+), 354 deletions(-)
+>>   rename lib/{test_bitmap.c => bitmap_kunit.c} (70%)
+>>   delete mode 100755 tools/testing/selftests/lib/bitmap.sh
+>>
+> 
+> Can you tell me how this conversion helps?
+> 
+> It is removing the ability to run bitmap tests during boot.
+> It doesn't make sense to blindly convert all test under lib
+> to kunit - Nack on this change or any change that takes away
+> the ability to run tests and makes them dependent on kunit.
+Let's discuss this on discussion thread [1].
 
-Add a small subtest ensuring that the device type passed to bpf program
-allows it to take decisions as well.
+[1]
+https://lore.kernel.org/all/a3083ad4-e9dc-40da-bf57-8391bcd96a6c@collabora.com
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
----
-Changes in v2:
-- change test name ("null" block device does not make sense)
-- use updated subtest API for this new subtest
----
- tools/testing/selftests/bpf/prog_tests/cgroup_dev.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_dev.c b/tools/testing/selftests/bpf/prog_tests/cgroup_dev.c
-index af0b70086c21..a840973c87b1 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_dev.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_dev.c
-@@ -91,6 +91,9 @@ void test_cgroup_dev(void)
- 	if (test__start_subtest("allow-mknod"))
- 		test_mknod("/dev/test_dev_cgroup_null", S_IFCHR, 1, 3, 0);
- 
-+	if (test__start_subtest("deny-mknod-wrong-type"))
-+		test_mknod("/dev/test_dev_cgroup_block", S_IFBLK, 1, 3, -EPERM);
-+
- 	if (test__start_subtest("allow-read"))
- 		test_read("/dev/urandom", buf, TEST_BUFFER_SIZE, TEST_BUFFER_SIZE);
- 
+> 
+> thanks,
+> -- Shuah
 
 -- 
-2.45.2
-
+BR,
+Muhammad Usama Anjum
 
