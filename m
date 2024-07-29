@@ -1,183 +1,85 @@
-Return-Path: <linux-kselftest+bounces-14403-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14404-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBB5C9400ED
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 00:10:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F61C94012A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 00:37:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 020FC1C22235
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 22:10:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61B3A1C21369
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 22:37:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68A3118EFDF;
-	Mon, 29 Jul 2024 22:10:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85A6918F2D7;
+	Mon, 29 Jul 2024 22:37:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="osqzTVr6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81D6918E75C;
-	Mon, 29 Jul 2024 22:10:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A46318EFE2;
+	Mon, 29 Jul 2024 22:37:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722291048; cv=none; b=V7wQpQuUbQWPUkg/DgxJLiI6xcEpkJMrkx8kyq4+JYyAdDx8AebjsfgKuCrMccf7HqAqYcowX3SpWc9C5RNSZp8LftiXIlI5qZv2A2jb5Zr8lCerDmmnV/Y2QeoOfXZ9sJhzoJ4PQ8XTVloo306Pt2CJ1CaidG6z87OqL7ObIHM=
+	t=1722292629; cv=none; b=h7Tqa69lQyqc4QtoNP4FvvNhXawhU61Jn62BgSqm/6vGe684ksCF+7MHY/k9Pmtf5xwGNXBIVzfvOe1fe85LzJklOrlEpU/lc6Ei0vyXqG0uAv6jAOxk/ms82nJfMLJawFujlf+Tgp3hEdY0NfQQPuDdE40fNwzPXufAkxgizDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722291048; c=relaxed/simple;
-	bh=Dk214mxztzvWyeIrTyzDucKVtnvYCgeVAsvCu+M+ruY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SYZ+vG6DFLE3hng69rGCHb1y7FGtrzv97zZohrlu04qpu5xgdQRD8k+XESHmg5vXaAAjIc+sIzB12K8jhdo3YZs2w4BJCwfUFWW/n3/VFu4VRcex+ecUE+qMY9h9Z36TiNmZ2fJ2SRRwhTEjPjCsoRYbNBvbS9Zhzk7yOB4oxLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2cb5789297eso2247887a91.3;
-        Mon, 29 Jul 2024 15:10:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722291045; x=1722895845;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pOiPyoNdl7TPztzL8etHRqD2fbBoXV6bGhf/vraszoA=;
-        b=f2rVWuSuSSfumCCLoWexB0Hk7x3jJc1VncYx5FzavRnasDoK3HUqeOJo6RyGwSni54
-         HnbEpl5dbkJR2OXkpa4sAbXQkfUtBpCCbzvFcszQa2alRtk6UjaAzwzXBB/DSWEHIQNq
-         lpK41srJd+WPRV85Pwcaig/QcOb8hZtOc6njSX1xtwPXHQCtxvyRr6pN1T13pXM1jhOc
-         X5X0fPLG9kb6+wUsC0dCodLWYP4obaojMVofu+4p0cf25E9ChSrsOqNyB2XKfP+2pMIw
-         VjpLcKCvFIXyUEDNVRHZwzmFvdnVtY8OQYlURB90D71saIklhD2Pxeu0cs/LDi+rCsex
-         uP1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW8I8TbSyFoLUwMY86ydZkCLga7x3bJM/YO1alXou7cCeenjVl/7tA5t5JLb0Esth942UH2ULOj1VvfBIo/KYggrxbl9kqSsq39V8RmgmWv
-X-Gm-Message-State: AOJu0YxTf+g37VL+A64l5eYB8UEyC1oHJHpT1FWlk2zwuY1GCm3xbUoe
-	kNBVm0+qBgxQlCOQE9kF1E31/xqB1tV6oclF5/Sf7Juony6h1LJKpvCKJOU=
-X-Google-Smtp-Source: AGHT+IF77MQGSfHl7ZRZR+Kak1oX9tNEjGEbERLvWXD/szso1fslZwK0vS+pGsdF0hoUyb5Se6h7Pg==
-X-Received: by 2002:a17:90a:6581:b0:2ca:8684:401a with SMTP id 98e67ed59e1d1-2cf7e5f27a9mr7164747a91.32.1722291045284;
-        Mon, 29 Jul 2024 15:10:45 -0700 (PDT)
-Received: from localhost ([2601:646:9e00:f56e:73b6:7410:eb24:cba4])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2cdba3e527esm10931103a91.16.2024.07.29.15.10.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 15:10:44 -0700 (PDT)
-From: Stanislav Fomichev <sdf@fomichev.me>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	Shuah Khan <shuah@kernel.org>,
-	Joe Damato <jdamato@fastly.com>,
-	Petr Machata <petrm@nvidia.com>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 2/2] selftests: net: ksft: support marking tests as disruptive
-Date: Mon, 29 Jul 2024 15:10:42 -0700
-Message-ID: <20240729221042.2700882-2-sdf@fomichev.me>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240729221042.2700882-1-sdf@fomichev.me>
-References: <20240729221042.2700882-1-sdf@fomichev.me>
+	s=arc-20240116; t=1722292629; c=relaxed/simple;
+	bh=8IYqgOjBiK5evvB8DTQRkGBtrOUfdrQWjrJtQZudLxU=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=bFuA3lPHN10f9qbW8c/46nZVzzhqHR/Q9REr0An5KW8eU0JTef+dBX9IfYPwy4gtFAz30+GtgL8Lc7c0yj1M+n4jY6D/EjXWH/wCbZgfKz4bAR/TJbdvu3xxzKl9WnKpCiPg5teupYNt0IHEJOsoLwST/NcbAR3/tfRH7WMsiRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=osqzTVr6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9D4FC4AF07;
+	Mon, 29 Jul 2024 22:37:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722292628;
+	bh=8IYqgOjBiK5evvB8DTQRkGBtrOUfdrQWjrJtQZudLxU=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=osqzTVr6Q5iEdxrZpr/33qDw1B/oKca/Y7T+lDFGxZgpYo7zZSfnIV2zlY02/VGmV
+	 imZZxIVHkOmDb7nU+v3FmGkctH6t7Tt8vQpCke6iNp5dOjSkpASgXsJvwxno/8tsg9
+	 OZeWLNwnMpq+lx0V+T6XKjyTjuSQSfpmrQj+SBnaHJnTQR77lPDyrLE/eM0oEZl4yy
+	 q65LM8M+FdE4PWMp2D/82ep9kIUhqXk0ynAhxVpcuz2iN+lWcVbVRzpmAWGWQKFDda
+	 aNbDMN5lJJvfraFPP0OccQn1ozkiZ+s5HhQdhJr+9w1Vx62OOYP8DZi0CmjxwyqNW4
+	 d2MRi5nmuMyWw==
+Message-ID: <d0064808c62ff78efb5c5899cbfd4584.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20240718210513.3801024-2-sboyd@kernel.org>
+References: <20240718210513.3801024-1-sboyd@kernel.org> <20240718210513.3801024-2-sboyd@kernel.org>
+Subject: Re: [PATCH v8 1/8] of/platform: Allow overlays to create platform devices from the root node
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, patches@lists.linux.dev, kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rafael J . Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, Daniel Latypov <dlatypov@google.com>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Maxime Ripard <maxime@cerno.tech>, Geert Uytterhoeven <geert+renesas@glider.be>
+To: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>
+Date: Mon, 29 Jul 2024 15:37:06 -0700
+User-Agent: alot/0.10
 
-(not sure we want this, but just throwing it out there..)
+Quoting Stephen Boyd (2024-07-18 14:05:00)
+> We'd like to apply overlays to the root node in KUnit so we can test
+> platform devices created as children of the root node.
+>=20
+> On some architectures (powerpc), the root node isn't marked with
+> OF_POPULATED_BUS. If an overlay tries to modify the root node on these
+> platforms it will fail, while on other platforms, such as ARM, it will
+> succeed. This is because the root node is marked with OF_POPULATED_BUS
+> by of_platform_default_populate_init() calling
+> of_platform_default_populate() with NULL as the first argument.
+>=20
+> Loosen the requirement here so that platform devices can be created for
+> nodes created as children of the root node via DT overlays even if the
+> platform bus wasn't populated for the root node.
+>=20
+> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+> Cc: Saravana Kannan <saravanak@google.com>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> [sboyd@kernel.org: Folded in condition fix]
+> Signed-off-by: Stephen Boyd <sboyd@kernel.org>
+> ---
 
-Add new @ksft_disruptive decorator to mark the tests that might
-be disruptive to the system. Depending on how well the previous
-test works in the CI we might want to disable disruptive tests
-by default and only let the developers run them manually.
-
-In the future we can add similar decorators to, for example, avoid
-running slow tests all the time. And/or have some option to run
-only 'fast' tests for some sort of smoke test scenario.
-
-$ ./stats.py --skip-disruptive
-KTAP version 1
-1..5
-ok 1 stats.check_pause
-ok 2 stats.check_fec
-ok 3 stats.pkt_byte_sum
-ok 4 stats.qstat_by_ifindex
-ok 5 stats.check_down # SKIP marked as disruptive
-\# Totals: pass:4 fail:0 xfail:0 xpass:0 skip:1 error:0
-
-Signed-off-by: Stanislav Fomichev <sdf@fomichev.me>
---
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Joe Damato <jdamato@fastly.com>
-Cc: Petr Machata <petrm@nvidia.com>
-Cc: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/drivers/net/stats.py |  2 ++
- tools/testing/selftests/net/lib/py/ksft.py   | 22 ++++++++++++++++++++
- 2 files changed, 24 insertions(+)
-
-diff --git a/tools/testing/selftests/drivers/net/stats.py b/tools/testing/selftests/drivers/net/stats.py
-index 6f8bef379565..04508894ef9c 100755
---- a/tools/testing/selftests/drivers/net/stats.py
-+++ b/tools/testing/selftests/drivers/net/stats.py
-@@ -3,6 +3,7 @@
- 
- from lib.py import ksft_run, ksft_exit, ksft_pr
- from lib.py import ksft_ge, ksft_eq, ksft_in, ksft_true, ksft_raises, KsftSkipEx, KsftXfailEx
-+from lib.py import ksft_disruptive
- from lib.py import EthtoolFamily, NetdevFamily, RtnlFamily, NlError
- from lib.py import NetDrvEnv
- from lib.py import ip
-@@ -134,6 +135,7 @@ rtnl = RtnlFamily()
-     ksft_eq(cm.exception.nl_msg.extack['bad-attr'], '.ifindex')
- 
- 
-+@ksft_disruptive
- def check_down(cfg) -> None:
-     try:
-         qstat = netfam.qstats_get({"ifindex": cfg.ifindex}, dump=True)
-diff --git a/tools/testing/selftests/net/lib/py/ksft.py b/tools/testing/selftests/net/lib/py/ksft.py
-index f26c20df9db4..f6545a45942a 100644
---- a/tools/testing/selftests/net/lib/py/ksft.py
-+++ b/tools/testing/selftests/net/lib/py/ksft.py
-@@ -1,6 +1,8 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+import argparse
- import builtins
-+import functools
- import inspect
- import sys
- import time
-@@ -10,6 +12,7 @@ from .utils import global_defer_queue
- 
- KSFT_RESULT = None
- KSFT_RESULT_ALL = True
-+KSFT_ARGS = None
- 
- 
- class KsftFailEx(Exception):
-@@ -127,7 +130,26 @@ KSFT_RESULT_ALL = True
-             KSFT_RESULT = False
- 
- 
-+def ksft_disruptive(func):
-+    """
-+    Decorator that marks the test as disruptive. Disruptive tests
-+    can be skipped by adding --skip-disruptive argument.
-+    """
-+
-+    @functools.wraps(func)
-+    def wrapper(*args, **kwargs):
-+        if KSFT_ARGS.skip_disruptive:
-+            raise KsftSkipEx(f"marked as disruptive")
-+        return func(*args, **kwargs)
-+    return wrapper
-+
-+
- def ksft_run(cases=None, globs=None, case_pfx=None, args=()):
-+    parser = argparse.ArgumentParser()
-+    parser.add_argument('--skip-disruptive', default=False, action='store_true', help='skip tests that might be disruptive (e.g. restart the interface)')
-+    global KSFT_ARGS
-+    KSFT_ARGS = parser.parse_args()
-+
-     cases = cases or []
- 
-     if globs and case_pfx:
--- 
-2.45.2
-
+Applied to clk-next
 
