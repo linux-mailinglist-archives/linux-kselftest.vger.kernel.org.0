@@ -1,123 +1,109 @@
-Return-Path: <linux-kselftest+bounces-14350-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14351-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41A8693EE53
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 09:18:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5824C93EEA5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 09:41:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7190E1C211C1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 07:18:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E3681F213AB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 07:41:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F28748002A;
-	Mon, 29 Jul 2024 07:18:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="zO/PJJfK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B5312CD96;
+	Mon, 29 Jul 2024 07:40:47 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4698E6A8DB;
-	Mon, 29 Jul 2024 07:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D54D12C554;
+	Mon, 29 Jul 2024 07:40:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722237533; cv=none; b=CZWoNYXS2UdOXJ/zPvQaDzkblAGVkOI9eyh8cKSnCH8rduQIJPlKMGlUNwa/AjiHOAgs1oIM6CdPYvcYMen+H8uZKyBEgxi9UbkE1ggkEpzytfGCoINn2h7GwpQffKsf7MWxFWHPE8K5KX/03mtflMJfxmt2a29/iQSVnCuWyHE=
+	t=1722238847; cv=none; b=GHxw+yYyBdj2GryFbse0+84gTXxAjX0RNX6AithlvFuXljVyLYRSZSK7CQJh8p2T1MFPYejKayVc9lE7xrNyjkLMMjeiwgrVgCUo+yGGPpj70t6bO+o9yvkSLTL4G69yny96bm1I9un4wmCk/f7h1XYSu3z0ABl6izZHE+mc4jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722237533; c=relaxed/simple;
-	bh=z6KHZK1xSxvXcOyG2UkjvdCIgxXb9wTAErDgrylYw+0=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=fckj72aaT7HsjbBh8BpDsv5ZEzj01nacXRXjW4aeJff1vSO3Do7CihIOiRnYUFiNaiqm8EGXkvGtZ/JOvlWVRpsVmfSwE7zNJNQJ6G1cl2IbFD/XmAf2XUsyGv3mugyhzvF04KTkSr4ZdUc7hVbVov0ge0ylu742FPpL3MF2zAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=zO/PJJfK; arc=none smtp.client-ip=46.235.227.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1722237530;
-	bh=z6KHZK1xSxvXcOyG2UkjvdCIgxXb9wTAErDgrylYw+0=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=zO/PJJfKXuvoUn6t7QG53vXVDj5Y9+4Trfbn8LxK5qNHb3JEqecWo27a65zGI8GBa
-	 g/T+AOJNVtjGsOAWmQ93XhnaqMOPnOeujLT++Hhrib2EMkqS47n7RknrozApCUVwTv
-	 7j1JILaN8QxohbXO6dKmoPgEnD3Mcs7lMAzhGvlOOmqH3Yj5TnlfeLE39i1T1m+Xw+
-	 4z2RvUmdN2Bi8khEm6RB5u2d3AYwQFxuNq4/N3Oq5uO3wE91BjAyKJUvMuNI3zbtE9
-	 PV4msL8MtJgylFxSply9swegAPmDuhgCofteIUA6OG9AukJttBxvJN/2d5PcQ1c0Hr
-	 sImH4IUgxy9Xw==
-Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 4D0CF3781480;
-	Mon, 29 Jul 2024 07:18:48 +0000 (UTC)
-Message-ID: <e5472489-f430-46f2-b9ef-bc625242e8d6@collabora.com>
-Date: Mon, 29 Jul 2024 12:18:44 +0500
+	s=arc-20240116; t=1722238847; c=relaxed/simple;
+	bh=eia76iIeQOuBae5ZXANmVL9PqBgSGOaTFqg0hi9Qbi8=;
+	h=Subject:To:References:CC:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=Rc3hTHH5nmBVzlZvVp2vSPBryjWfe5uLyxXjaJE8USuNZX8k10d5f2LxPHaUuWnDcISw4MpDI+Z0bkk39SJVjmiJ5d9qMUdUEqJqCg+nZpL0sf1aQubEBLofco3xUrgWoxX50Fm1Yi1Qj3JCe0EAgqsuv+7GytvPqkhqgX1fiSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4WXVbc0HX5zdkPh;
+	Mon, 29 Jul 2024 15:38:52 +0800 (CST)
+Received: from kwepemm600007.china.huawei.com (unknown [7.193.23.208])
+	by mail.maildlp.com (Postfix) with ESMTPS id 7EFC41404F8;
+	Mon, 29 Jul 2024 15:40:41 +0800 (CST)
+Received: from [10.174.178.219] (10.174.178.219) by
+ kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Mon, 29 Jul 2024 15:40:40 +0800
+Subject: Re: [PATCH v2] kselftests: dmabuf-heaps: Ensure the driver name is
+ null-terminated
+To: <daniel.vetter@ffwll.ch>
+References: <20240729024604.2046-1-yuzenghui@huawei.com>
+ <Zqc-ZWlTYwnKHoQK@phenom.ffwll.local>
+CC: <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+	<linaro-mm-sig@lists.linaro.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <sumit.semwal@linaro.org>,
+	<benjamin.gaignard@collabora.com>, <Brian.Starkey@arm.com>,
+	<jstultz@google.com>, <tjmercier@google.com>, <shuah@kernel.org>,
+	<wanghaibin.wang@huawei.com>
+From: Zenghui Yu <yuzenghui@huawei.com>
+Message-ID: <8d318883-4ea3-b1d8-6613-6ca21a4ba2d2@huawei.com>
+Date: Mon, 29 Jul 2024 15:40:39 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: user: remove user suite
-To: Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>,
- Kees Cook <kees@kernel.org>, David Gow <davidgow@google.com>,
- Vitor Massaru Iha <vitor@massaru.org>
-References: <20240725110817.659099-1-usama.anjum@collabora.com>
- <23d0926f-293d-4a8c-b503-bd8b2253b7a8@linuxfoundation.org>
- <01d804a2-3370-44ec-af99-c21af5df0bde@collabora.com>
- <cd028a09-c6e2-4c54-82ac-04fe1aa2d20c@linuxfoundation.org>
+In-Reply-To: <Zqc-ZWlTYwnKHoQK@phenom.ffwll.local>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <cd028a09-c6e2-4c54-82ac-04fe1aa2d20c@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600007.china.huawei.com (7.193.23.208)
 
-On 7/26/24 10:19 PM, Shuah Khan wrote:
-> On 7/26/24 02:16, Muhammad Usama Anjum wrote:
->> On 7/25/24 7:44 PM, Shuah Khan wrote:
->>> On 7/25/24 05:08, Muhammad Usama Anjum wrote:
->>>> The user test suite has only one test, test_user_copy which loads
->>>> test_user_copy module for testing. But test_user_copy module has already
->>>> been converted to kunit (see fixes). Hence remove the entire suite.
->>>>
->>>> Fixes: cf6219ee889f ("usercopy: Convert test_user_copy to KUnit test")
->>>
->>> Remove fixes tag - this isn't a fix and we don't want this propagating
->>> to stable releases without kunit test for this.
->> The user test suite has been failing since cf6219ee889f as the test module
->> wasn't found. So this is fixing the failure of kselftest. It just causes
->> noise and may mask other failures. If you still think that fixes isn't
->> needed, I can send a new version by removing the fixes tag.
->>
+On 2024/7/29 15:01, Daniel Vetter wrote:
+> On Mon, Jul 29, 2024 at 10:46:04AM +0800, Zenghui Yu wrote:
+> > Even if a vgem device is configured in, we will skip the import_vgem_fd()
+> > test almost every time.
+> >
+> >   TAP version 13
+> >   1..11
+> >   # Testing heap: system
+> >   # =======================================
+> >   # Testing allocation and importing:
+> >   ok 1 # SKIP Could not open vgem -1
+> >
+> > The problem is that we use the DRM_IOCTL_VERSION ioctl to query the driver
+> > version information but leave the name field a non-null-terminated string.
+> > Terminate it properly to actually test against the vgem device.
+> >
+> > While at it, let's check the length of the driver name is exactly 4 bytes
+> > and return early otherwise (in case there is a name like "vgemfoo" that
+> > gets converted to "vgem\0" unexpectedly).
+> >
+> > Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
+> > ---
+> > * From v1 [1]:
+> >   - Check version.name_len is exactly 4 bytes and return early otherwise
+> >
+> > [1] https://lore.kernel.org/r/20240708134654.1725-1-yuzenghui@huawei.com
 > 
-> In which case this information should have been part of the change log to
-> make it clear this is a fix.
-Sorry, I should have mentioned explicitly. Please let me know if I should
-send another version for this and the other patch for acceptance [1]?
-
-> Fixes tag should also mention the releases
-> this is applicable to so this patch doesn't make it to stables releases
-> without cf6219ee889f - so this test still runs.
-Release tag is unnecessary as the fix can be applied easily to fixes
-commit. From stable-kernel-rules:
-
-  Note, such tagging is unnecessary if the stable team can derive the
-  appropriate versions from Fixes: tags.
-
+> Thanks for your patch, I'll push it to drm-misc-next-fixes.
 > 
-> If you are adding Fixes tag it should mention the releases this is
-> applicable to. Can you get me that information?
+> > P.S., Maybe worth including the kselftests file into "DMA-BUF HEAPS
+> > FRAMEWORK" MAINTAINERS entry?
 > 
-> thanks,
-> -- Shuah
-> 
-> 
+> Good idea, want to do the patch for that too?
 
-[1]
-https://lore.kernel.org/all/20240725121212.808206-1-usama.anjum@collabora.com
+Sure, I can send a patch for that today.
 
--- 
-BR,
-Muhammad Usama Anjum
+Thanks,
+Zenghui
 
