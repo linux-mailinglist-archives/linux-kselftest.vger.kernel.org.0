@@ -1,102 +1,153 @@
-Return-Path: <linux-kselftest+bounces-14383-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14384-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C065493F74E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 16:10:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1B0F93F8C0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 16:52:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1401282794
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 14:10:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C0A01F2289D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 14:52:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 302D11514F6;
-	Mon, 29 Jul 2024 14:09:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28F5F1552E0;
+	Mon, 29 Jul 2024 14:52:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="AxDGDwdQ"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="QUqEX4Sj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA8E1E515;
-	Mon, 29 Jul 2024 14:09:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 672AA15383A;
+	Mon, 29 Jul 2024 14:52:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722262198; cv=none; b=roz3jVKSoy0LD7O9/hqK0uDZVGFnt1BvjP0LpuPECHbcZ24SkgYms/LV62fxRLMSDYXv7QoBTDK21J/MWqOPxMGFZ8yhh+eAHjCY9ZUeGFuv7OrffqDv0UVXEoiNuvSA5c023I6LcNaOhr8YSSk1jxMx1bgZfmh19bkU+0dKhHE=
+	t=1722264735; cv=none; b=OFoZB36NUQ/INpgvrGfwg3z0oPtIozIu5W9Ylx1sgw8z9rdovc86ARC0OMwY9JE0ZkBaI/bfj2oTuhxINN39iR61rDHMIttzgmhiP5r5EH+JwXl1ql0ajys/R9rU86XSDUDht8vkjlrPezc8d2PbdL8Xo6LUZRDyfgOmNvrnv60=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722262198; c=relaxed/simple;
-	bh=G2ICX+0B0sJ4OTP8KnB/JRwckHNWcsVzpMUwi7GmNC0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZG/6c94SoQa+eB3J+YrpeDch9Tslvy0HwecYMHDo9KGWtxzzxaBShV3+M1cqafsTAzgNVTRDOx7pd7tkHtkMd36UKQxea5YJWOClJqlLDWfbdSrOrCqTMrw8YhtWeIciWXJzVtmpLBW6nq1FTsp1nC0rdLidpTClQSw6aT01ong=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=AxDGDwdQ; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=YKMg1eR49nU9mP5BT5H80HJtVwM4UN3XCxiq9AlD6Qs=; b=AxDGDwdQkUIyPfzsG2RzIdV5Jz
-	CMpT6EUqG7pfoDOQoF96JLLvy5tb4Asm5+5cSoZwrrJdg9i5CmZ9U8aTtq7VQhQaAJbYDGCkt+VvI
-	jIME6iXfONJePp9guNLFtNktysPG1T8zX6EZ99tJydbg2CbCf8gd7fDLMM5dIPSYjTnc6rFhMmpca
-	MU9w1vQPUUOC2SG0KNb6JXnvQRF6ulWJQtgV1x3H567bMse2x/jdm4MzAi2ih+Xa+RPEmrSTL0uQX
-	/QgQfHAdY5pe2Fi2CD+7FeS89eN4nXl5/PY/MTliZ9iOKUoq3m80rd8/vSsUzadjWHme5FZOoAltJ
-	vCE+TFkA==;
-Received: from [50.53.4.147] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1sYR4U-0000000BW64-0izi;
-	Mon, 29 Jul 2024 14:09:54 +0000
-Message-ID: <c0e5978b-7c11-4657-bd07-9962cd04bf9a@infradead.org>
-Date: Mon, 29 Jul 2024 07:09:52 -0700
+	s=arc-20240116; t=1722264735; c=relaxed/simple;
+	bh=vxcbGccfMSfGNehJ2LcMJTELjJug/egUl7ukelRUedo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tQ9XZaIbmtVFJ0cF04wCh2NbECTBL2VXEWDrX3u/cyT70UpQQ1RBhRXGO58SXcDPMNfqvUqApm2MrrNo9pcEjv69or43/8j777kUsa8Y2OVpCAvC1GHGoRLs0DqHDvn77RNCKt3OmeoeAqL5+++H05bu4N50wItHfdF5YCyv3C0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=QUqEX4Sj; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1722264731;
+	bh=vxcbGccfMSfGNehJ2LcMJTELjJug/egUl7ukelRUedo=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=QUqEX4Sj2ycGyTrVvE8RkKiPFIGE41YXymnDIF+2nFf/dln7xFJCWydFBFNFKQldk
+	 TPvSMzeNJtsiLJrzLhIkcqnFGOZO1ioaQVAuEPcRggzE7R5Fn6UfooYhglsQ6SvEAz
+	 /kocTbQJJ583TYKhhUXx1ZdVRnep06tfBLQ4ZyevZ27UDERiqqEV9UktrbRPwi7PB7
+	 oZVA+Td1d48Hawk68G+QpsOBJfO6kWoWE43tvXw4ppwrYjChhdyPEXf4CnTJkdv43e
+	 ii+sBPVKrCvByhZDFdhlUMjKezvJHQ3nxaEqIx0gq60obYR3vpIVjgJo/vKCm49+mm
+	 mO3owTCNZV+Pw==
+Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: laura.nao)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 2C75B3780480;
+	Mon, 29 Jul 2024 14:52:11 +0000 (UTC)
+From: Laura Nao <laura.nao@collabora.com>
+To: skhan@linuxfoundation.org
+Cc: gregkh@linuxfoundation.org,
+	kernel@collabora.com,
+	laura.nao@collabora.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	nfraprado@collabora.com,
+	shuah@kernel.org
+Subject: Re: [PATCH] selftests: ksft: Track skipped tests when finishing the test suite
+Date: Mon, 29 Jul 2024 16:52:22 +0200
+Message-Id: <20240729145222.119830-1-laura.nao@collabora.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <9009f4df-ca7e-4961-97e4-446afc4e87d2@linuxfoundation.org>
+References: <9009f4df-ca7e-4961-97e4-446afc4e87d2@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] bitmap: Rename module
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Yury Norov <yury.norov@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Rasmus Villemoes <linux@rasmusvillemoes.dk>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kees@kernel.org, David Gow <davidgow@google.com>,
- John Hubbard <jhubbard@nvidia.com>, kernel@collabora.com
-References: <20240726110658.2281070-1-usama.anjum@collabora.com>
- <20240726110658.2281070-3-usama.anjum@collabora.com>
- <ZqUvy_h4YblYkIXU@yury-ThinkPad>
- <85f575b4-4842-4189-9bba-9ee1085a5e80@collabora.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <85f575b4-4842-4189-9bba-9ee1085a5e80@collabora.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+Hi Shuah,
 
-
-On 7/29/24 1:07 AM, Muhammad Usama Anjum wrote:
-> On 7/27/24 10:35 PM, Yury Norov wrote:
->> On Fri, Jul 26, 2024 at 04:06:57PM +0500, Muhammad Usama Anjum wrote:
->>> Rename module to bitmap_kunit and rename the configuration option
->>> compliant with kunit framework.
+On 7/23/24 18:17, Shuah Khan wrote:
+> On 7/22/24 09:43, Laura Nao wrote:
+>> Consider skipped tests in addition to passed tests when evaluating the
+>> overall result of the test suite in the finished() helper.
 >>
->> ... , so those enabling bitmaps testing in their configs by setting
->> "CONFIG_TEST_BITMAP=y" will suddenly get it broken, and will likely
->> not realize it until something nasty will happen.
-> CONFIG_TEST_BITMAP was being enabled by the kselftest suite lib. The bitmap
-> test and its config option would disappear. The same test can be run by
-> just enabling KUNIT default config option:
-> 
-> KUNIT_ALL_TESTS=y enables this bitmap config by default.
-> 
+>> Signed-off-by: Laura Nao <laura.nao@collabora.com>
+>> ---
+>>   tools/testing/selftests/kselftest/ksft.py | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
 >>
->> Sorry, NAK for config rename.
->>  
+>> diff --git a/tools/testing/selftests/kselftest/ksft.py 
+>> b/tools/testing/selftests/kselftest/ksft.py
+>> index cd89fb2bc10e..bf215790a89d 100644
+>> --- a/tools/testing/selftests/kselftest/ksft.py
+>> +++ b/tools/testing/selftests/kselftest/ksft.py
+>> @@ -70,7 +70,7 @@ def test_result(condition, description=""):
+>>   def finished():
+>> -    if ksft_cnt["pass"] == ksft_num_tests:
+>> +    if ksft_cnt["pass"] + ksft_cnt["skip"] == ksft_num_tests:
+>>           exit_code = KSFT_PASS
+> 
+> Laura and Nícolas,
+> 
+> I saw both your emails explaining how this fixes the problem in
+> a previous patch.
+> 
+> However looks like you haven't see my response about the implications
+> of the exit_code = KSFT_PASS when tests are skipped.
+> 
+> if ksft_cnt["pass"] + ksft_cnt["skip"] == ksft_num_tests:
+>>           exit_code = KSFT_PASS
+> 
+> Let me reiterate in case you missed it:
+> 
+> There is a reason why you don't want to mark all tests passed
+> when there are several skips.Skips are an indication that
+> there are several tests and/or test cases that couldn't not
+> be run because of unmet dependencies. This condition needs
+> to be investigated to see if there are any config options
+> that could be enabled to get a better coverage.
+> 
+> Including skips to determine pass gives a false sense security
+> that all is well when it isn't.
+> 
+> So it is incorrect to set the exit code to KSFT_PASS when there
+> are skipped tests.
 
-I agree with Yury. Using KUNIT takes away test coverage for people who
-are willing to run selftests but not use KUNIT.
+Just to be clear, the logic in ksft_finished() in kselftest.h (the C
+helper) is to exit with KSFT_PASS when there are only passed and skipped 
+tests. You're suggesting we change it to exit with KSFT_FAIL in that 
+case?
 
+Under this new logic, the runner would effectively treat skips as 
+failures, impacting existing kselftests.
 
--- 
-~Randy
+> +    if ksft_cnt["pass"] + ksft_cnt["skip"] == ksft_num_tests:
+> 
+> 
+>>       else:
+>>           exit_code = KSFT_FAIL
+> 
+> The logic here seems to not take into account when you have a
+> conditions where you have a mixed results of passed tests,
+> skipped tests, and failed tests.
+>
+> Please revisit and figure out how to address this and report
+> the status correctly.
+
+The logic ensures that if there’s a mix of passed, skipped, and failed 
+tests, the exit code returned is KSFT_FAIL. I believe that if there is at 
+least one failed test, the overall test should be reported as failed, 
+which is what happens in this case.
+
+Thanks,
+
+Laura
 
