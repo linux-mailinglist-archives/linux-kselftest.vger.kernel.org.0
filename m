@@ -1,124 +1,105 @@
-Return-Path: <linux-kselftest+bounces-14393-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14396-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0BF593FE38
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 21:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 31715940051
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 23:23:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8BBF1C21B46
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 19:27:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62E5D1C220BE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 21:23:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9685E187336;
-	Mon, 29 Jul 2024 19:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62BC718D4D0;
+	Mon, 29 Jul 2024 21:23:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CvaUuqao"
+	dkim=pass (1024-bit key) header.d=relay.vimeo.com header.i=@relay.vimeo.com header.b="ffqgKZRz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
+Received: from m35-116.mailgun.net (m35-116.mailgun.net [69.72.35.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146B018732C
-	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jul 2024 19:27:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4771F18D4DF
+	for <linux-kselftest@vger.kernel.org>; Mon, 29 Jul 2024 21:23:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=69.72.35.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722281232; cv=none; b=Db6e2nCp5WhTdEnJ0h26/wuOtid/qnptjCchiIeOjabvttn55ibwaZ0LhZrp5vdlxoH04UEWCCHLKyEltA68faq9ZWUmvdMX6EOCLr2tsYdt/aMcvvOluPnRqQj/Gi3KggNf5B7MdEBB4kXaLRXYOHNRuaHdOdPveawC0JKeB7E=
+	t=1722288185; cv=none; b=agSw15qMV+NRsKJYUMQZ+xET6b2ty5UvudShB+j0J9Y18+RBLtC0b2/RN8lgksTz3u/26eBWWRSxQ9cM8BOeI/MMIrUAcio36/BhwjWtvXXmFW0KtUyk8tINFyJP41GLN89lTO8M9bjkdQHbIXB0FsC/PBrPUfPfE1bJ7PRfWcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722281232; c=relaxed/simple;
-	bh=KPAl0JCyGgkO27w8Km3wJa2M5W0ST6/UnzvgrZeKc4Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hQM5uecY/FQ8/bVieQag4yCyH0UreufmkmrvwuBcOxSBdLmqiauS0p2d0EXoGxWaYSw4YI3+y68mfwTeejJfokoNJYVHhMI9UPxrPs3FM4ItTCri2DRNkioUV6Xm2HAn228S42aXuWR6Ki4g1t2+Tu/a7/lW+PEvYB5dMwQ7+1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CvaUuqao; arc=none smtp.client-ip=209.85.166.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-81f902e94e6so15994039f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jul 2024 12:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1722281230; x=1722886030; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5cW8vdpmHZjx4o0iwoSWJOQySAtf51wBr3QE0Onm+KQ=;
-        b=CvaUuqaoxvv3nNLioYdZQDv4ION/+4NRb1CIt0jamvo3hqqrRDpoR6h/s4ZhbPPxWZ
-         kA9hp4k8ygjVVXqwg9JIZVCl32pWykBOwpnx3n3bpLi/aQ9ezF5FkIsTVrY2VuBSFYgR
-         7XJ8ZknuOAsRS6yd5dKfkH+bfO3JRSbCAmGIA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722281230; x=1722886030;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5cW8vdpmHZjx4o0iwoSWJOQySAtf51wBr3QE0Onm+KQ=;
-        b=xOevPy+/Fes3A8fg9djETBy2RE0/fjQR8TMD4EJnL9mtt5lmmbMsJul62Dd+8jWTpq
-         uTnFySNsOsi9X8eHm11gvHCDk4xgJGfnZe17iu2l20VXvjVWfjbF0EtLGkVMIiF8oUwO
-         T23PVwVNUU5G3D4nPoVf5D57E6WbpW41WzyOdFfTD1opK7uWNQ1ML8RwZEK6YzIKQjhP
-         BKYcIRb8fdjYJonga82V96KCu+piHDBUf1L7qiQVvO8Iie15W7RRpzdvBlhHnp2H905h
-         Z7VThHmvzv0RJm5ZPzbW0D4sV3sQ1mvZQjyko2NRaiQS7YHCJWpbB+iDSN20XfNNmLag
-         s77w==
-X-Forwarded-Encrypted: i=1; AJvYcCVJvarjbsmQGhoGYuhnIU0+T9W0GVG4Hc/7PVeNwsCH53c0Y4qc6z5W4xKr8loce3b3sZ8/KiRdmDabEVhI8KZl9J+iMF9Ru2BcWr2JFATn
-X-Gm-Message-State: AOJu0YwjbU2pS2Yz6VbAZVS8/NtLfU2mXkpV+K6SHw4hd0ZulxwjiHbJ
-	02TtFQGUmw11GuwDjLKirDIFfKCB1Ww+aqK7ZkghKyCIir6ykQj2Ib7rZe88Uxo=
-X-Google-Smtp-Source: AGHT+IHUZkdFsVsNGpZDf2aO8T0ZaQZI+ZlmK97a9tJrrCNC6Ki8EhoG0g0kiTt63koA21WlEGn5OQ==
-X-Received: by 2002:a05:6e02:1a09:b0:39a:f26b:3557 with SMTP id e9e14a558f8ab-39af26b37cemr28705455ab.5.1722281230233;
-        Mon, 29 Jul 2024 12:27:10 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-39a22f13f81sm41185415ab.70.2024.07.29.12.27.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 29 Jul 2024 12:27:09 -0700 (PDT)
-Message-ID: <abc8b199-694c-42b8-a2cf-7d34f45f51de@linuxfoundation.org>
-Date: Mon, 29 Jul 2024 13:27:09 -0600
+	s=arc-20240116; t=1722288185; c=relaxed/simple;
+	bh=54Ak1+K4R79/npDbs4UtUU9rG6vREN5KRCLxgY0YgX0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=W8t/Pu/tKotMUftc1ane7IYDbfnoUdafyfdR3X2QlgdxghODgF7u2a8Xnfd/xdUFujIA6DMzX87B6RCwdx7szrRrugLn61UR5gTdiGMfqpHfzk6NHOjTHAOhQNi8xUSfz7cYeuJgLZGnX4wuPk3R+IuNUUmx+D8Z10AiTIPM0Yo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com; spf=pass smtp.mailfrom=relay.vimeo.com; dkim=pass (1024-bit key) header.d=relay.vimeo.com header.i=@relay.vimeo.com header.b=ffqgKZRz; arc=none smtp.client-ip=69.72.35.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=vimeo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=relay.vimeo.com
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=relay.vimeo.com; q=dns/txt; s=mailo; t=1722288182; x=1722295382;
+ h=Content-Transfer-Encoding: MIME-Version: Message-Id: Date: Subject: Subject: Cc: To: To: From: From: Sender: Sender;
+ bh=a7Ljw3AXkZDzOFLBKFNTY35O0ifJdJ40YsuUE1AtXfE=;
+ b=ffqgKZRzwWe/rjwPkeU0auwsgZE8n2OXANRPo2taxUJDP0teyQ4lDzl9KAoWMQDz6Vi3AkQYEEsFq7Zi8tFTJ4tx4GDVV7Kc3rRIxBKnd4mM1Wi1rHVoow4GSeaC/aqKf/TWK8teWRy6j+WIyIieLSgxGzM/u9FBtrxxp7rjo6c=
+X-Mailgun-Sending-Ip: 69.72.35.116
+X-Mailgun-Sid: WyI5MTQwZiIsImxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5vcmciLCI5ZDJhMWMiXQ==
+Received: from smtp.vimeo.com (215.71.185.35.bc.googleusercontent.com [35.185.71.215])
+ by 1ba2f445e949 with SMTP id 66a80836c423567e51c57d52 (version=TLS1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 29 Jul 2024 21:23:02 GMT
+Sender: davidf=vimeo.com@relay.vimeo.com
+Received: from nutau (gke-sre-us-east1-main-c45160e0-ow8k.c.vimeo-core.internal [10.56.27.211])
+	by smtp.vimeo.com (Postfix) with ESMTP id 120CA64FC7;
+	Mon, 29 Jul 2024 21:23:02 +0000 (UTC)
+Received: by nutau (Postfix, from userid 1001)
+	id 5BB66B409D2; Mon, 29 Jul 2024 10:38:00 -0400 (EDT)
+From: David Finkel <davidf@vimeo.com>
+To: Muchun Song <muchun.song@linux.dev>,
+	Tejun Heo <tj@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: core-services@vimeo.com,
+	Jonathan Corbet <corbet@lwn.net>,
+	Michal Hocko <mhocko@kernel.org>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Zefan Li <lizefan.x@bytedance.com>,
+	cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+Subject: [PATCH v6] mm, memcg: cg2 memory{.swap,}.peak write handlers
+Date: Mon, 29 Jul 2024 10:37:41 -0400
+Message-Id: <20240729143743.34236-1-davidf@vimeo.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/12] tools/nolibc: improve LLVM/clang support
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240728-nolibc-llvm-v1-0-bc384269bc35@weissschuh.net>
- <120ddb22-34c4-4d18-8238-306485680c5a@linuxfoundation.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <120ddb22-34c4-4d18-8238-306485680c5a@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 7/29/24 13:26, Shuah Khan wrote:
-> On 7/28/24 04:09, Thomas Weißschuh wrote:
->> The current support for LLVM and clang in nolibc and its testsuite is
->> very limited.
->>
->> * Various architectures plain do not compile
->> * The user *has* to specify "-Os" otherwise the program crashes
->> * Cross-compilation of the tests does not work
->> * Using clang is not wired up in run-tests.sh
->>
->> This series extends this support.
->>
->> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
->> ---
->> Thomas Weißschuh (12):
->>        tools/nolibc: use clang-compatible asm syntax in arch-arm.h
->>        tools/nolibc: limit powerpc stack-protector workaround to GCC
->>        tools/nolibc: move entrypoint specifics to compiler.h
->>        tools/nolibc: use attribute((naked)) if available
->>        selftests/nolibc: report failure if no testcase passed
->>        selftests/nolibc: avoid passing NULL to printf("%s")
->>        selftests/nolibc: determine $(srctree) first
->>        selftests/nolibc: setup objtree without Makefile.include
->>        selftests/nolibc: add support for LLVM= parameter
->>        selftests/nolibc: add cc-option compatible with clang cross builds
->>        selftests/nolibc: run-tests.sh: avoid overwriting CFLAGS_EXTRA
->>        selftests/nolibc: run-tests.sh: allow building through LLVM
->>
-> 
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+This is an updated patchset rebasing onto -torvalds master (post
+6.11-rc1), and addressing comments from Michal and Tejun.
 
-For the selftest changes.
+As requested by Tejun and Johannes, I've removed the explicit check for
+the string "reset", so it now allows any non-empty string. (Empty
+strings get filtered before our write handler executes)
 
-thanks,
--- Shuah
+I've also made several of the field reads and writes atomic with
+{READ,WRITE}_ONCE, and adjusted more of the types to be unsigned.
+
+Documentation/admin-guide/cgroup-v2.rst          |  22 ++--
+include/linux/cgroup-defs.h                      |   5 +
+include/linux/cgroup.h                           |   3 +
+include/linux/memcontrol.h                       |   5 +
+include/linux/page_counter.h                     |  11 +-
+kernel/cgroup/cgroup-internal.h                  |   2 +
+kernel/cgroup/cgroup.c                           |   7 +
+mm/memcontrol.c                                  | 116 +++++++++++++++--
+mm/page_counter.c                                |  30 +++--
+tools/testing/selftests/cgroup/cgroup_util.c     |  22 ++++
+tools/testing/selftests/cgroup/cgroup_util.h     |   2 +
+tools/testing/selftests/cgroup/test_memcontrol.c | 229 +++++++++++++++++++++++++++++++--
+12 files changed, 419 insertions(+), 35 deletions(-)
+
+[1]: https://lore.kernel.org/cgroups/20240724161942.3448841-3-davidf@vimeo.com/T/
+
+
+
 
