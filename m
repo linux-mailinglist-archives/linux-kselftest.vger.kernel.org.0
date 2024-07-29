@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-14375-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14376-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 794FF93F0FD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 11:25:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A017493F100
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 11:25:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 187BA2846DE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 09:25:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01D58284792
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 09:25:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43FEB13E41D;
-	Mon, 29 Jul 2024 09:25:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70FCC13F43E;
+	Mon, 29 Jul 2024 09:25:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kX2ED9Tx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="guJPp+3w"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C36A613E032;
-	Mon, 29 Jul 2024 09:25:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9DC139568;
+	Mon, 29 Jul 2024 09:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722245116; cv=none; b=YRlJgHIiiObYrKjMBysewC8RiLuvArW+mG78gxad0QfM4WFdHjuf8YBxozj7bJt6FiXk/vIG/wKMqL07NEu/vJmgj4ww4W29KiY6KTlwteIdex6HCOZwcXBpzj1pCged4liJGoc3bI6uwg+NQ1h0reuZ6IZd6KMU2xRQEDcUnd4=
+	t=1722245123; cv=none; b=ckyqzDds7TlyJ/zRHc+VQQjOA+5uQCwjKbWRtTSvDbzxbGpG03kVCpCEX+G1KXwifd2k4B6gMbviNb8xcgZrPzF5zsqVmAg6yOWGHkMl4vK0nkD84oB4d8SiUmi4NLxzYyw7nx3jtt9v/QaO1t/tGrX3lO9Cm8C91QMZ4PLGCEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722245116; c=relaxed/simple;
-	bh=U+72Zu68YsWKSCq/gROuLbLA0RkiJaRjm3nFdugE3VM=;
+	s=arc-20240116; t=1722245123; c=relaxed/simple;
+	bh=S4CH8iGlwN8+2X01xU5p4ifa0Xxtjty5cyPwjOQSZb8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rZTf9DO2AzhFJJE8TTw65P4JPoFFzn7W2AcpA12vMKZkQCMUKPlALkD/cNpDiU7LWI5vM8P+rAhtgvzh9nVOZARlZGmq4Gd6ZNXojc+7w8vFHmBQP90F1w4d9grBVr3W5UlP4s3XbTityVnbiep0sN8TRViJTWzm+MNomJz3dfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kX2ED9Tx; arc=none smtp.client-ip=209.85.214.175
+	 MIME-Version; b=pOl6iRaHk7KRq8xZ9f8AEuQrLtuMDXLznpV0UG57t6c0fYaCMs4xD5V+KoV4PQ2XBgHMU1LXwrgYnhfMBCZM4NU2+71Is3LhLCQghArQxo1nGdE9bKT8oHWUmxYY5/aBeessTfaVrYtiBE9vdF4nJRkoSz6fN17Z4+vYLEEjAzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=guJPp+3w; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1fd78c165eeso23989835ad.2;
-        Mon, 29 Jul 2024 02:25:14 -0700 (PDT)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-1fd9e70b592so15841475ad.3;
+        Mon, 29 Jul 2024 02:25:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722245114; x=1722849914; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722245121; x=1722849921; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4NI7AuS3CWDWcwh3iYGbh1+P/lJIWDLh+u4INWitysM=;
-        b=kX2ED9TxjNqyRIsp3RHYgnuSSejUSuYp6OVapkWWnoDT6p9+OcJjCOe3Knhp30nRIv
-         GfR4IzxfhwhlCa1WANog0mSyDEJCbvtXDH866g5Dbf2TIRIM4DbQHsux1LlQQYg8WI90
-         SxfYAEiy4JTn7CFYOxz8vryB6YemRHAleICaeEMHoSoD7WuKWE7McrDwRknQ1BLjsdAn
-         tDe3EZMIsQ4Vo89BJ1xv1c7vxDP3R2isSgk9849REcBT7Mro0qPikpdAzHyb1wrEPnVN
-         kIC2NQX3SGJPO5txhp8dn86EVLKN/qYqHmURqtNRi5JpGze2MozFefCHU7K7V+xNFCaX
-         BZKA==
+        bh=97RFtqxKV1tDanXoh3iDjlFW9B65/Wlhvry0/woasgU=;
+        b=guJPp+3wKsvXJbTulYrtbwoo09Xly1kZSwsUYjkH4uOHdsvormO9Rw+2uZar7DXYGL
+         5ZI+JaBlOoNDY1FZNPUE88DOiT87OnYGND1xi5CGLc0qFHO11mo0mI0LJ+1aLS0guLB6
+         NPQBXhNfiNbLJukLvx8Z9mlRU6OA/csM8Fab5LdwccVte78e7dRn9bEfyBDUqdZqUuMI
+         qGf4jOqKZLVuqrTNwyCoiY01zYX8yoT2YBo2zeeY8LeJLFzbgwl/h1V2rDsoCizXPUOb
+         ErumQw+mymx56D4pCKr+NceG8hTZW4Aow0Xcz7Aw4NeZ5quktkjBtLhHWY+YthSBE+Ns
+         bTjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722245114; x=1722849914;
+        d=1e100.net; s=20230601; t=1722245121; x=1722849921;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4NI7AuS3CWDWcwh3iYGbh1+P/lJIWDLh+u4INWitysM=;
-        b=YSMYtsRfnw8U3xMxKh8p8Exf536XfBX2db9g5MeIMI6+o9FsT2rz9m71tArQMDZ9OM
-         l/GJJkexdOnGxMMZFcNYHZ7GEJlSROk9D3Y0bDmVAmoYskx0KFUkgD8R3VgoBOtuBdlS
-         MzReoSAcV00j7Gl5oqGaM5RnFC5Exp6oYl+CqG/bbgahkmvKZ66qzrvb7ft2zgw7aqyi
-         Oz3HMo5vzEM3t7ijvrFyjFGjMxKky4xs503LbJ5/U5hdtEi8oNEABKH2O1kAZ9uy83RG
-         I3D3q42BPBT5emg/173XIRSS8R2CnwAq9/qoeta2OoglS/OooIToxMOpa8Q1ZcjqzMTT
-         IJkA==
-X-Forwarded-Encrypted: i=1; AJvYcCXCi0dC/dB56Oeo9LGgFunyAkFv3CFsaVdG1DvlCdT9qSUhHDHcFle5ggLnB0Tc1cpMNprGqcF0Au49yWTSyALNVUhU58OP/XvYaKDJTQf3uj+Io/djGcXg4CrKiSJUS6w0VgVyBz8f
-X-Gm-Message-State: AOJu0YwninBHb7iaR2+ZRdcXxi+L/Y7W4dSr0sxLWUOWGrad+lGe0aq6
-	pRAHLcOAj9g+HkpabhyREjL3RNpF1pWknpCPBx0Nz+b17lfgUsy4bWHWxiJS
-X-Google-Smtp-Source: AGHT+IGaaHe7YvfpkEUFCTmGQ1zmd0UBbH2J5zDAyfeOGm/x+Af4UIn2PMOsotW1EqUw0dNPaz/+kg==
-X-Received: by 2002:a17:902:b090:b0:1fc:5879:1d08 with SMTP id d9443c01a7336-1ff0483bf36mr82870165ad.32.1722245113875;
-        Mon, 29 Jul 2024 02:25:13 -0700 (PDT)
+        bh=97RFtqxKV1tDanXoh3iDjlFW9B65/Wlhvry0/woasgU=;
+        b=hCMbIfPAgE7ay5cp83zlaEamGQcsmuSzSTTU7EUrkQWjROzx7LU8Hj6gqm9r/QAqJr
+         M+pUMxRga2xDUxHDj7OhRlgr9WgkQL6VjwoF30uh/UPlpTzMdoGx1V2J+wuiIr+5ZOZH
+         nDKG5oSlQH4af0+buWNzTrDbgaYmaH8TGRdknUvHEpMCipFB5WwtXLkR5ozyQFM00P73
+         FxGH0FwbwHhcxdx2xfSFE8gUspypYRWzTOvQcZFcs/6LLLvN3iCGdRLeorxTvjo121bb
+         VoKpvxwohPaFfQyhUl7mCwiV8hrQAyEVYBbfgPouMT+vudYei8kZtePWTHTgkfOHCxpk
+         GVYw==
+X-Forwarded-Encrypted: i=1; AJvYcCUxCaOQEmwe06qWrxwABM82R6NIhlGWUA27fqTovI36PX7uuA9bZJmG6ODII1Qrvdilxiwjd+NKvvHG/ZTlh4UU+EQHmWcmw9Ch9tmKTTQpS3xgE5PzO6oLL38fQhMzXmS+YrLbIu4N
+X-Gm-Message-State: AOJu0YwLaXD+31Xh2WFNWUWWWflzs5UAtLOkNuKqajX2ycRpckJMBBw3
+	TjctHric2OVHISWAr6xzHUcB/x/rUcgpxevDKyjfsXutjKNUmn+l/U1kv2Dy
+X-Google-Smtp-Source: AGHT+IHp+J1QWRbn/WpF8YMiUiaSgf0ZS8cTUL9W412rawZYWAluLxNaQC6rABvsWFOvil0bWZuJ4w==
+X-Received: by 2002:a17:902:c40e:b0:1fb:8797:befb with SMTP id d9443c01a7336-1ff047dd2edmr50976205ad.35.1722245121227;
+        Mon, 29 Jul 2024 02:25:21 -0700 (PDT)
 Received: from localhost.localdomain (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7c8c19dsm78119145ad.54.2024.07.29.02.25.12
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7c8c19dsm78119145ad.54.2024.07.29.02.25.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 02:25:13 -0700 (PDT)
+        Mon, 29 Jul 2024 02:25:20 -0700 (PDT)
 From: Tony Ambardar <tony.ambardar@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Tony Ambardar <tony.ambardar@gmail.com>,
@@ -92,9 +92,9 @@ Cc: Tony Ambardar <tony.ambardar@gmail.com>,
 	Jonathan Lemon <jonathan.lemon@gmail.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Yan Zhai <yan@cloudflare.com>
-Subject: [PATCH bpf-next v2 5/8] selftests/bpf: Fix redefinition errors compiling lwt_reroute.c
-Date: Mon, 29 Jul 2024 02:24:21 -0700
-Message-Id: <bd2908aec0755ba8b75f5dc41848b00585f5c73e.1722244708.git.tony.ambardar@gmail.com>
+Subject: [PATCH bpf-next v2 6/8] selftests/bpf: Fix compile if backtrace support missing in libc
+Date: Mon, 29 Jul 2024 02:24:22 -0700
+Message-Id: <aa6dc8e23710cb457b278039d0081de7e7b4847d.1722244708.git.tony.ambardar@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1722244708.git.tony.ambardar@gmail.com>
 References: <cover.1721903630.git.tony.ambardar@gmail.com> <cover.1722244708.git.tony.ambardar@gmail.com>
@@ -106,59 +106,61 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Compiling lwt_reroute.c with GCC 12.3 for mips64el/musl-libc yields errors:
+Include GNU <execinfo.h> header only with glibc and provide weak, stubbed
+backtrace functions as a fallback in test_progs.c. This allows for non-GNU
+replacements while avoiding compile errors (e.g. with musl libc) like:
 
-In file included from .../include/arpa/inet.h:9,
-                 from ./test_progs.h:18,
-                 from tools/testing/selftests/bpf/prog_tests/lwt_helpers.h:11,
-                 from tools/testing/selftests/bpf/prog_tests/lwt_reroute.c:52:
-.../include/netinet/in.h:23:8: error: redefinition of 'struct in6_addr'
-   23 | struct in6_addr {
-      |        ^~~~~~~~
-In file included from .../include/linux/icmp.h:24,
-                 from tools/testing/selftests/bpf/prog_tests/lwt_helpers.h:9:
-.../include/linux/in6.h:33:8: note: originally defined here
-   33 | struct in6_addr {
-      |        ^~~~~~~~
-.../include/netinet/in.h:34:8: error: redefinition of 'struct sockaddr_in6'
-   34 | struct sockaddr_in6 {
-      |        ^~~~~~~~~~~~
-.../include/linux/in6.h:50:8: note: originally defined here
-   50 | struct sockaddr_in6 {
-      |        ^~~~~~~~~~~~
-.../include/netinet/in.h:42:8: error: redefinition of 'struct ipv6_mreq'
-   42 | struct ipv6_mreq {
-      |        ^~~~~~~~~
-.../include/linux/in6.h:60:8: note: originally defined here
-   60 | struct ipv6_mreq {
-      |        ^~~~~~~~~
+  test_progs.c:13:10: fatal error: execinfo.h: No such file or directory
+     13 | #include <execinfo.h> /* backtrace */
+        |          ^~~~~~~~~~~~
+  test_progs.c: In function 'crash_handler':
+  test_progs.c:1034:14: error: implicit declaration of function 'backtrace' [-Werror=implicit-function-declaration]
+   1034 |         sz = backtrace(bt, ARRAY_SIZE(bt));
+        |              ^~~~~~~~~
+  test_progs.c:1045:9: error: implicit declaration of function 'backtrace_symbols_fd' [-Werror=implicit-function-declaration]
+   1045 |         backtrace_symbols_fd(bt, sz, STDERR_FILENO);
+        |         ^~~~~~~~~~~~~~~~~~~~
 
-These errors occur because <linux/in6.h> is included before <netinet/in.h>,
-bypassing the Linux uapi/libc compat mechanism's partial musl support. As
-described in [1] and [2], fix these errors by including <netinet/in.h> in
-lwt_reroute.c before any uapi headers.
-
-[1]: commit c0bace798436 ("uapi libc compat: add fallback for unsupported libcs")
-[2]: https://git.musl-libc.org/cgit/musl/commit/?id=04983f227238
-
-Fixes: 6c77997bc639 ("selftests/bpf: Add lwt_xmit tests for BPF_REROUTE")
+Fixes: 9fb156bb82a3 ("selftests/bpf: Print backtrace on SIGSEGV in test_progs")
 Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
 ---
- tools/testing/selftests/bpf/prog_tests/lwt_reroute.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/bpf/test_progs.c | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c b/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c
-index 03825d2b45a8..6c50c0f63f43 100644
---- a/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c
-+++ b/tools/testing/selftests/bpf/prog_tests/lwt_reroute.c
-@@ -49,6 +49,7 @@
-  *  is not crashed, it is considered successful.
-  */
- #define NETNS "ns_lwt_reroute"
-+#include <netinet/in.h>
- #include "lwt_helpers.h"
- #include "network_helpers.h"
- #include <linux/net_tstamp.h>
+diff --git a/tools/testing/selftests/bpf/test_progs.c b/tools/testing/selftests/bpf/test_progs.c
+index 60c5ec0f6abf..d5d0cb4eb197 100644
+--- a/tools/testing/selftests/bpf/test_progs.c
++++ b/tools/testing/selftests/bpf/test_progs.c
+@@ -10,7 +10,6 @@
+ #include <sched.h>
+ #include <signal.h>
+ #include <string.h>
+-#include <execinfo.h> /* backtrace */
+ #include <sys/sysinfo.h> /* get_nprocs */
+ #include <netinet/in.h>
+ #include <sys/select.h>
+@@ -19,6 +18,21 @@
+ #include <bpf/btf.h>
+ #include "json_writer.h"
+ 
++#ifdef __GLIBC__
++#include <execinfo.h> /* backtrace */
++#endif
++
++/* Default backtrace funcs if missing at link */
++__weak int backtrace(void **buffer, int size)
++{
++	return 0;
++}
++
++__weak void backtrace_symbols_fd(void *const *buffer, int size, int fd)
++{
++	dprintf(fd, "<backtrace not supported>\n");
++}
++
+ static bool verbose(void)
+ {
+ 	return env.verbosity > VERBOSE_NONE;
 -- 
 2.34.1
 
