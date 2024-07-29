@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-14353-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14354-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA34F93EF39
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 09:58:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CF8893EF5B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 10:03:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7AB711F221F5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 07:58:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B49DB20D70
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 08:03:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13B9A12EBC7;
-	Mon, 29 Jul 2024 07:57:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6BC3139568;
+	Mon, 29 Jul 2024 08:02:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="dcp82qsb"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="AJ3LP8Ui"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B43112D1FD;
-	Mon, 29 Jul 2024 07:57:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34BF0137905;
+	Mon, 29 Jul 2024 08:02:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722239871; cv=none; b=MU7PK7l+aNSNXdadp1Ka9/CIpOBnmeOyaj1NfEFWPD13TPrdxhezaEcTDsNvenJ/53MgteiBjA8VKc+8vR/zyo+BGZlcac4SvclQUk+0+y3NA+aS5RLYala4ffQnMt5HZ1r8tyi8tv6Z9Zw5DnhbYrADKcLi7L0k/vaw0j3z3Nc=
+	t=1722240176; cv=none; b=XLbcpYkei4TvwXrueHkQg6rsCkpC2sDhkwGxp1VZ+5hfV9mpSzg/Kxl9+77PA7+JQ529iw8K3b7Ktaa8uGnCDMuIEzoOhjL5GgjaA7IX0+GYM+cdyT+0Tm2EoLcfL9CxTHGUJtUjH3mEZi6gbjoV2S2yq+ndkfNDb6GASkYTnWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722239871; c=relaxed/simple;
-	bh=rd+cf3hmcj9TDEtVadV6eKgFpK0vDNsBJh4Z4k7rdh0=;
+	s=arc-20240116; t=1722240176; c=relaxed/simple;
+	bh=K5Blu4NhVstcTox6CDtmdVnku5ODDvROtVnHv5REhxQ=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=g6cYRpcSAfWlgh1819uUI9cgsLzRRpZk1IVPcK0C7hcYuEXckcFGDuyG9q2acwBDB56WGQ3N/T72SddGbkeg8+GU63XwKTExMK29zaS9M9F/MiffKgfmawHujCP/n6lNuMmQbyM4FxP6zEmQ7+PVahmHRdDKUivZv0B/jnDmWAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=dcp82qsb; arc=none smtp.client-ip=46.235.227.194
+	 In-Reply-To:Content-Type; b=kEdCevyENuPi7Eg1zHJAP9eOJeNNH0P5zFO+ZlFx+XHiSNodS3EynlN9mnajubd006IApF39wZ0WslkBNN0zl7JDQGTDR4anYP76tswt6C6VG8RF8aF+XbNtTanfZw9+z30TZzJoXdnI/tEL1KjB+wNHqgoUtYFs9Pd0QhroPqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=AJ3LP8Ui; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1722239866;
-	bh=rd+cf3hmcj9TDEtVadV6eKgFpK0vDNsBJh4Z4k7rdh0=;
+	s=mail; t=1722240173;
+	bh=K5Blu4NhVstcTox6CDtmdVnku5ODDvROtVnHv5REhxQ=;
 	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=dcp82qsbtUdoel9myWwIZmA4YlNAQ8IqXAN/8ivZ+6rV1NlSCXwV9DlYPtdKytVFn
-	 ye9RlkW+hJNVBesetntCcS3htgACxDefzTkhC49osRxrsAODa7KT7azf97xFdpSizN
-	 x66RmoNHTc1i7koziYyed5AdaQRLVkfUXudXQM3ORpfXDgbaQjcXsKGzHnaXKF0OoI
-	 gXA2j971Ga5m/nc46iJoJ0ZDGaHzquQxTsneuQfWpbdv8i09pA5RyHqT9s9JRxNFc+
-	 qY4YyOAYiuu1h6TiqUpDvOGN2mwKGFECOgr0TFhbX1zh5CvXbfJnDpAg7EeXXSjEy8
-	 M8MYXPoFxYPyA==
+	b=AJ3LP8UiPvTSDi2C/BbD57pQzgZrq5ZitylHnbJxMFZNaDAtDqvkhcYZVe9kaXEn9
+	 Ge4nes8/RZ3NkUPAaBGKy4HRsUAEdVH1yHb7A/uekENPysR/dTPHhanuMlLYxCdytY
+	 u7mEinavvhnC4/BoLldY1yKLJckGjlLeUhvoNxFRzDKg8j2GmqjUTCA2EYJ9lFony9
+	 cFyDHwUg7u36E+fD63U5HVgyT2mN8Oy66+kaQWdJ3RRxdqCYWqk8IH1ZFuMaVPpn2t
+	 HcRX2/i04V7f013AXNr5PHCzZY4pHscDOF8c4eOH6D/9nlJt7N5ybf+CFzLhO/JFsg
+	 P99p28E3f6vuw==
 Received: from [10.193.1.1] (broslavsky.collaboradmins.com [68.183.210.73])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 46D7837809CE;
-	Mon, 29 Jul 2024 07:57:44 +0000 (UTC)
-Message-ID: <ba6cac02-615b-4db3-a591-fb1cb4e52823@collabora.com>
-Date: Mon, 29 Jul 2024 12:57:41 +0500
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 9EF683780480;
+	Mon, 29 Jul 2024 08:02:49 +0000 (UTC)
+Message-ID: <ad570a42-fe22-4045-ac93-35b35d92713a@collabora.com>
+Date: Mon, 29 Jul 2024 13:02:46 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,25 +57,25 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
+ John Hubbard <jhubbard@nvidia.com>, David Gow <davidgow@google.com>,
+ kees@kernel.org, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Yury Norov <yury.norov@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>
 Subject: Re: [PATCH 2/3] bitmap: Rename module
-To: John Hubbard <jhubbard@nvidia.com>,
- Andrew Morton <akpm@linux-foundation.org>, Yury Norov
- <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kees@kernel.org,
- David Gow <davidgow@google.com>
+To: Kees Cook <kees@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
 References: <20240726110658.2281070-1-usama.anjum@collabora.com>
  <20240726110658.2281070-3-usama.anjum@collabora.com>
- <f5aeeea3-1b6f-4ace-b346-b6650d6937a4@nvidia.com>
+ <21671af5-94fe-48bd-a32e-d7f6204563f1@linuxfoundation.org>
 Content-Language: en-US
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <f5aeeea3-1b6f-4ace-b346-b6650d6937a4@nvidia.com>
+In-Reply-To: <21671af5-94fe-48bd-a32e-d7f6204563f1@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 7/26/24 11:45 PM, John Hubbard wrote:
-> On 7/26/24 4:06 AM, Muhammad Usama Anjum wrote:
+On 7/27/24 12:24 AM, Shuah Khan wrote:
+> On 7/26/24 05:06, Muhammad Usama Anjum wrote:
 >> Rename module to bitmap_kunit and rename the configuration option
 >> compliant with kunit framework.
 >>
@@ -105,23 +105,38 @@ On 7/26/24 11:45 PM, John Hubbard wrote:
 >>   F:    lib/find_bit.c
 >>   F:    lib/find_bit_benchmark.c
 >> -F:    lib/test_bitmap.c
+>>   F:    tools/include/linux/bitfield.h
+>>   F:    tools/include/linux/bitmap.h
+>>   F:    tools/include/linux/bits.h
+>> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+>> index a30c03a661726..6bb02990a73e7 100644
+>> --- a/lib/Kconfig.debug
+>> +++ b/lib/Kconfig.debug
+>> @@ -2420,13 +2420,6 @@ config TEST_PRINTF
+>>   config TEST_SCANF
+>>       tristate "Test scanf() family of functions at runtime"
+>>   -config TEST_BITMAP
+>> -    tristate "Test bitmap_*() family of functions at runtime"
+>> -    help
+>> -      Enable this option to test the bitmap functions at boot.
+>> -
+>> -      If unsure, say N.
+>> -
 > 
-> This changes the situation from "works for Linus' tab completion
-> case", to "causes a tab completion problem"! :)
-> 
-> I think a tests/ subdir is how we eventually decided to do this [1],
-> right?
-Yes, Thank you for mentioning it. I'd missed the naming scheme. I'll fix it.
+> This change will take away the ability to run bitmap tests during
+> boot on a non-kunit kernel.
+Kees, what opinion do you have on this? [1] has all the discussion though
+and my recent thoughts on why I sent this patch.
 
 > 
-> So:
-> 
->     lib/tests/bitmap_kunit.c
-> 
-> 
-> [1] https://lore.kernel.org/20240724201354.make.730-kees@kernel.org
+> Nack on this change. I wan to see all tests that are being removed
+> from lib because they have been converted - also it doesn't make
+> sense to convert some tests like this one that add the ability test
+> during boot.
 > 
 > thanks,
+> -- Shuah
+> 
 
 -- 
 BR,
