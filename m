@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-14373-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14374-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CF6D93F0F7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 11:25:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9968493F0FA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 11:25:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF4A2284283
-	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 09:25:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE5831C21BC5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 29 Jul 2024 09:25:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DA7613E41D;
-	Mon, 29 Jul 2024 09:24:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF44713E41A;
+	Mon, 29 Jul 2024 09:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kb9NNUyb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aB/PTN4r"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5EB5139568;
-	Mon, 29 Jul 2024 09:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720E2135A63;
+	Mon, 29 Jul 2024 09:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722245095; cv=none; b=jF515a9wXtWHbo/V8WUQiZ9SvfO6NDLcu8xHUZjI1cn4IlRn4WeCUsXMqoqr91nqcadj45SJa8kRyvpa20AeIzY8mNUytXF1vz6aper6HwP2/JdPdKktp0HTAvIgCJ1N1OVmdD6Hy1Nxf4l/LxlQ8UXOpwLCdmNkYbDaADq2Izk=
+	t=1722245105; cv=none; b=YvaDn7j7ErAS/F4Y5MRFMkrs8l+r4aEdoeGpcFabz+Ifydm+lSrfUSBOBye/BGxqBA4YwO4Th9bvW8yxyDKm/cDvz7QPb0f6edBX+jGT6uuWLopUVYPVtN6MxTAC6PcDA8IeAeWSRYAxAamuHaOyljkcRtaWCY+6wzZKIn5AHSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722245095; c=relaxed/simple;
-	bh=GgpBzyfhRSLYC+TLXnY4y4ChT4cl4MHuMO36o+bpnTw=;
+	s=arc-20240116; t=1722245105; c=relaxed/simple;
+	bh=FQrcOOy+m/blf8ix9UP7S4A0ij3wHldqUVHF9z9y2/I=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=f44vp6Qi7pcbUiZ2h9QcfUKMfjxyZMYA3QS3z6f+mxeN3O0G3THlmKoYFBATt8yzFh8vYAFaoRa1eQ5d380iZTxJ90rJsa+jEav/thShHlP9yq8u15opNAHqQOvh2c6M/NGAQ6t5vLhmZTuRxsLfltndsGUQy79pfRZNvuvvE3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kb9NNUyb; arc=none smtp.client-ip=209.85.214.171
+	 MIME-Version; b=g2e8hQIoc01+HEpIHLyTeG+ZLsxRQ2NuH9OMY3qo2GZyVxhy9h3pkfRoTrsCl5qtyD1JCLviih9ZEIMM54zehcdvwuqDiqd4k+QIq7l0E9Qn0UK3DbL6DBE6o3Y2f1jvvM1nNqSiXLKtp3vyBnV+2gD2DtIw6R1y0seB05cZ9cU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aB/PTN4r; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1fd66cddd07so17021445ad.2;
-        Mon, 29 Jul 2024 02:24:53 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1fd6ed7688cso18289055ad.3;
+        Mon, 29 Jul 2024 02:25:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722245092; x=1722849892; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722245104; x=1722849904; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8KCgWkgZpj/xjXSot0+cYlFbdfSHY/0HVZ5q0fJohp8=;
-        b=kb9NNUybzOSZig45zqDc0/4vDCbKcsm5fxPPlYjHYQsqNIMagh+BCF7F9iJoQVZJMU
-         6bOtd4qXIIayjNmG3l3dxPfdCkoMQa33Iwq/F0AjZuxestJ5r9ntSeIe3u3dpCEhGrsp
-         E0SmnLJPrKJwSGWV5ETf2UireEJrS+YOAsVhvXi3Coz+NaJoWgUtfkPObR+lMvwQxnsJ
-         3rPPtzjtgzrwi7OnytttfZ+kJtaI/X4P+9Tz8dGV2toX/mdJZjlHaPu/dM9OA6Daxqjy
-         qluw9aGgHAbEBe+RibquBvC1PlDMS0/XiwHi7pY2PwlAtkVbyQEv5RfFtP1RVoQH5GIr
-         a5fQ==
+        bh=ss5Trmaz8d1KChsteoiB0CfEnS7j0drXtuJsrgRgs5k=;
+        b=aB/PTN4rx+Y0dyni48NWpC4rDOtbvoHIGu0hsKY2X7vtek94Btwy56Pgj6jWAaVcP7
+         Xm1vx3mjqoSSv0zxt71Rvh6+6aEf+109NroYssPxBPhlxlMWJZySotl1IPvLffH3cNL5
+         u5Siqtj56NdC360QDc8QDyx1PorKpisjlrQo2EZN+oij3zKF8tRUM9alvN8JXFkwNLSF
+         WUP8zlvQd5GZ7KViNyojVV1DvVT80/GzgGPZx0NWwuT3XVvKqvwQMpbx+bVxMZexVWZy
+         9JTo2uBPX/wDwtYVYrXFSHZEVEgg1Q0QQmljN0+QnKNtEbq0b1AOWdSCGipvNcBxjJlx
+         /V4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722245092; x=1722849892;
+        d=1e100.net; s=20230601; t=1722245104; x=1722849904;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8KCgWkgZpj/xjXSot0+cYlFbdfSHY/0HVZ5q0fJohp8=;
-        b=G/z7CJrrU02/JD9wFBT865yl/nz85kIjvrWEpKX3Kf7NW5ho543Lxcs2jwW4cI3Uf1
-         aTG4R8U6pNpBCM4TZKMO31h/BusOUXPJA4wZlSZkt0VwJ1alCuoIHUg0zQuRN+E/c/6r
-         Rtzr1oWD4dmShqvGeVj7QsmEP5cPTpsuGCY4NRcGsZUFmcAypwsDexkaKEMeH+wAjg/N
-         NRuKDeJl7fZqGfNXjDLJWODl/bnzQWhsjRYUJiT+aYs/W9MFPtiVahb33qDCZHH8o4DQ
-         p1dwEw0h4J5FPoeXgO+aUiOfTbpz9JB56gYU0nYFPWhpSf7aqU9+RfgmXLfEkBOs0VCT
-         17Vw==
-X-Forwarded-Encrypted: i=1; AJvYcCU5k6VmlTNLDZjpOzm60TCeM2EAemBtzU2heKKXa8PWvP5kwDrFixZUzHdpsaH2pr/1EL/FamcDXeEPpM0tGTrqdNTu3Q05+rKjda1ZO9CvznavU44ramIdWbfDhq+rKQu6NI+v78Ag
-X-Gm-Message-State: AOJu0YxQdFKYvcnA1gEfPYyxcglB7TXI2Tta8iUAx/3lmKIfHBH8QV1q
-	Y8Tt0nuIw6BAIBgEA1rLKGgsfqrr3kVfQH/nxpWKp5TlBTwWpcqMm1DO34xw
-X-Google-Smtp-Source: AGHT+IHSomnBFfcQ/Q1STjT0wbSvVrxsNvJahShlp3GqWRbvdrcQ9ZyRRWcqcR5do1ulTXeCQQSipg==
-X-Received: by 2002:a17:902:c411:b0:1fd:6eec:1b4 with SMTP id d9443c01a7336-1ff0483805cmr41067875ad.19.1722245092514;
-        Mon, 29 Jul 2024 02:24:52 -0700 (PDT)
+        bh=ss5Trmaz8d1KChsteoiB0CfEnS7j0drXtuJsrgRgs5k=;
+        b=eQ7ES/8G0D09Vl94975d7CGcVtyp+EBK4TngFA+S314Q8Pa6Ybsx7LbjscOPmZO0NJ
+         b1dGcByZL8WjCKF39hFAH23mXa2MaJiC3dBzuLM1v/deUvhES5cSzrCRVcSi1FU5t6lc
+         shMbDzogcAWa5ELyklnVhy7mQZ/M97BZG/A/Nutz3qWHmfaP8lgXESvikKjxJjDYhQyZ
+         /TAf1jCBWc7aG+UzGJdpaTbBZodLoLYRSt7NpVn1k8yuZ1MvJJjW8PywvOg4l03aon7s
+         u2Sp7zf+BiwAi/lTlSpNR0Y8dVWRzVeHjwJ0Fa0P0SwaEG5qKfQAsrcTNSrE+E9f/XS1
+         JjVA==
+X-Forwarded-Encrypted: i=1; AJvYcCW03z6BWaANlg5mNH02So4Ow+DwVTVyJSa4dujGsqavVHQBhRsxkzYawPdM9lIRIXPDUgfsPGWNxsByYzgQM8nVWnyOq76/J+7q8pDjxwvO/DX0dS2vpevLLwKPqWqfR6N2I3EjEPI5
+X-Gm-Message-State: AOJu0Yw/u3SN4kXhHIoi6QD8fUG4B5WZoTuGpFuFdtb7mQ6N7eGW2nq2
+	qIMZ1DjQL0cjyi+P02G9bYSls9Zrql+f9woXOmXkpSfw9qWmeXzJY3yp9WBq
+X-Google-Smtp-Source: AGHT+IGWUH5D5srqRgCA4MK0mZYlxqSGcj/oxvfwHH4bGr19xe12SQdBOw+pnofS/O5kftsXZxojGQ==
+X-Received: by 2002:a17:903:2304:b0:1fc:6a13:a394 with SMTP id d9443c01a7336-1ff0483e1e7mr54259495ad.23.1722245103531;
+        Mon, 29 Jul 2024 02:25:03 -0700 (PDT)
 Received: from localhost.localdomain (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7c8c19dsm78119145ad.54.2024.07.29.02.24.51
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7c8c19dsm78119145ad.54.2024.07.29.02.25.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 02:24:52 -0700 (PDT)
+        Mon, 29 Jul 2024 02:25:03 -0700 (PDT)
 From: Tony Ambardar <tony.ambardar@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Tony Ambardar <tony.ambardar@gmail.com>,
@@ -92,9 +92,9 @@ Cc: Tony Ambardar <tony.ambardar@gmail.com>,
 	Jonathan Lemon <jonathan.lemon@gmail.com>,
 	"David S. Miller" <davem@davemloft.net>,
 	Yan Zhai <yan@cloudflare.com>
-Subject: [PATCH bpf-next v2 3/8] selftests/bpf: Fix error compiling test_lru_map.c
-Date: Mon, 29 Jul 2024 02:24:19 -0700
-Message-Id: <22993dfb11ccf27925a626b32672fd3324cb76c4.1722244708.git.tony.ambardar@gmail.com>
+Subject: [PATCH bpf-next v2 4/8] selftests/bpf: Fix C++ compile error from missing _Bool type
+Date: Mon, 29 Jul 2024 02:24:20 -0700
+Message-Id: <6fc1dd28b8bda49e51e4f610bdc9d22f4455632d.1722244708.git.tony.ambardar@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1722244708.git.tony.ambardar@gmail.com>
 References: <cover.1721903630.git.tony.ambardar@gmail.com> <cover.1722244708.git.tony.ambardar@gmail.com>
@@ -106,37 +106,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Although the post-increment in macro 'CPU_SET(next++, &cpuset)' seems safe,
-the sequencing can raise compile errors, so move the increment outside the
-macro. This avoids an error seen using gcc 12.3.0 for mips64el/musl-libc:
+While building, bpftool makes a skeleton from test_core_extern.c, which
+itself includes <stdbool.h> and uses the 'bool' type. However, the skeleton
+test_core_extern.skel.h generated *does not* include <stdbool.h> or use the
+'bool' type, instead using the C-only '_Bool' type. Compiling test_cpp.cpp
+with g++ 12.3 for mips64el/musl-libc then fails with error:
 
-  In file included from test_lru_map.c:11:
-  test_lru_map.c: In function 'sched_next_online':
-  test_lru_map.c:129:29: error: operation on 'next' may be undefined [-Werror=sequence-point]
-    129 |                 CPU_SET(next++, &cpuset);
-        |                             ^
-  cc1: all warnings being treated as errors
+  In file included from test_cpp.cpp:9:
+  test_core_extern.skel.h:45:17: error: '_Bool' does not name a type
+     45 |                 _Bool CONFIG_BOOL;
+        |                 ^~~~~
 
-Fixes: 3fbfadce6012 ("bpf: Fix test_lru_sanity5() in test_lru_map.c")
+This was likely missed previously because glibc uses a GNU extension for
+<stdbool.h> with C++ (#define _Bool bool), not supported by musl libc.
+
+Normally, a C fragment would include <stdbool.h> and use the 'bool' type,
+and thus cleanly work after import by C++. The ideal fix would be for
+'bpftool gen skeleton' to output the correct type/include supporting C++,
+but in the meantime add a conditional define as above.
+
+Fixes: 7c8dce4b1661 ("bpftool: Make skeleton C code compilable with C++ compiler")
 Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
 ---
- tools/testing/selftests/bpf/test_lru_map.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/test_cpp.cpp | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/test_lru_map.c b/tools/testing/selftests/bpf/test_lru_map.c
-index 4d0650cfb5cd..fda7589c5023 100644
---- a/tools/testing/selftests/bpf/test_lru_map.c
-+++ b/tools/testing/selftests/bpf/test_lru_map.c
-@@ -126,7 +126,8 @@ static int sched_next_online(int pid, int *next_to_try)
+diff --git a/tools/testing/selftests/bpf/test_cpp.cpp b/tools/testing/selftests/bpf/test_cpp.cpp
+index dde0bb16e782..abc2a56ab261 100644
+--- a/tools/testing/selftests/bpf/test_cpp.cpp
++++ b/tools/testing/selftests/bpf/test_cpp.cpp
+@@ -6,6 +6,10 @@
+ #include <bpf/libbpf.h>
+ #include <bpf/bpf.h>
+ #include <bpf/btf.h>
++
++#ifndef _Bool
++#define _Bool bool
++#endif
+ #include "test_core_extern.skel.h"
+ #include "struct_ops_module.skel.h"
  
- 	while (next < nr_cpus) {
- 		CPU_ZERO(&cpuset);
--		CPU_SET(next++, &cpuset);
-+		CPU_SET(next, &cpuset);
-+		next++;
- 		if (!sched_setaffinity(pid, sizeof(cpuset), &cpuset)) {
- 			ret = 0;
- 			break;
 -- 
 2.34.1
 
