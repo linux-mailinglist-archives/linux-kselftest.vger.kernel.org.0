@@ -1,82 +1,82 @@
-Return-Path: <linux-kselftest+bounces-14470-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4A05941195
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 14:10:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62A4F9412DE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 15:14:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 20E7FB299D2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 12:05:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19BFB281AB2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 13:14:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A251719AD8D;
-	Tue, 30 Jul 2024 12:04:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB30319E7E2;
+	Tue, 30 Jul 2024 13:14:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="h6+KkeYV"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="q/2OYhyi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10DF418F2FF;
-	Tue, 30 Jul 2024 12:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED611993BD;
+	Tue, 30 Jul 2024 13:14:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722341098; cv=none; b=NqT1Cy51WYI02yYb+VS7ui5jAroegElwy14afb5ka7lWCGFWTm+b4aZT+KHrqE6Twb6omwd7qk5LrUBrC3s9KygirYtSkpHc5TEpxosaDWW3Usl43tQuy/QIAKpmmXzDvKjqYG+HoMdwPAp4AAVbQVb75+SOwBCMZkS39sreK0c=
+	t=1722345260; cv=none; b=cHf7ga4OGBvEtH69XW2cT5+rAK17k8sWQ4JNb8WV0Q92x5AKXKoZjUlnFUdk8GSchP9ZrDZDdfAdnLivvQOf9f9lnC7UoxyZphWWxq3DLznj7MzcYez9KpMDN+PTFcAoI6zhKB3eUIULu/g+/LmZr1iVdh1gBpqF/rUKYYiRQFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722341098; c=relaxed/simple;
-	bh=OQY9Gp3UwesbsrfgTMnSB1kd6hwhfV96CisesqYv41k=;
+	s=arc-20240116; t=1722345260; c=relaxed/simple;
+	bh=SqgHxMUzx1gyNkNBXigqNgk6zgMYzXbiHv0Jb9/xhnU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=o/2ZZtQiDkGN73ipByRpXtx8sN0SiucAY98TsO07Ep4Z6CWRQPYJMxzzpHoJjp2I+cZSuAqym0PXr/4KeKidyVgBW5zLxE0PMDAMxKcji05juahKE/7KY327+UKjF0rVtn7lTVJivhJjNS20fOybYiAEO7P5Z8KywIcPfka4klQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=h6+KkeYV; arc=none smtp.client-ip=148.163.158.5
+	 In-Reply-To:Content-Type; b=SJYhOzBb0nSfOe+eZocp9r4hVYrRclC7x/EW+r84WTgSSj7z6qM5o4mAZW7Nan66/21g8gfDDaosFgdLiGkRCrWdusksNbCgUYcVhZBF1B0lv9inR65NFiF2o8P+M8veukZ9J/xgXnoolJP9dPIENxg2DlNWHkFgf9ElIXeToVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=q/2OYhyi; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46UAxEkL018420;
-	Tue, 30 Jul 2024 12:04:47 GMT
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 46UBSmn2027063;
+	Tue, 30 Jul 2024 13:14:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
 	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=6
-	eOv6aqryUu/xbmMdzb2Q1SlIusrN4FGTInhK6o806Y=; b=h6+KkeYVk3ej36SZg
-	1S6/QzHUMB3ndcwZw47UiqtqQVqPZivnYSw9MJZ5wqXj3bqnI5Ox0lqkB1IpFVoJ
-	Zq8Yr3yqic/+C1xH4XxuF/anmV6IAlSNTac0Y2p436tiU2BzNwPkoJcAJmIo8X3F
-	uc/Ngv1HkR24VD0kDDp82Bw22+5jYq0LAt8VtzjMlg8IMwsCmp5RERsF75zKKhW/
-	oG9uw6/NJX5HU3DBPwd2wnz6MNkb7M1nJsG+G/3jVt7DtewdHGaY/ZE1XylkDNC0
-	ogIjrbJ5FDBGuqbLzLwM7bWrIdMPAShUnMKNTpXQfRuaXt7aidWwZIFo+YDwqmaP
-	ECB2A==
+	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=/
+	l6WOPb/2aqZ/8rml8BE+zvzP/hvDFFh7F9Od1Qj+yU=; b=q/2OYhyi8tG0Owlmv
+	evonHilwGFQScLHNFdnC6cCVphc8j7TswE+cAg4YpNsMTFBFuo3DFoB5XLE7nMpg
+	ZZPnRfZEFTiKIRGVMiS/5zbemLhwoOfrgJXCCFHJLKBi7iVKVIBJqCSS4/vOdsMJ
+	ruGdjKBgUjSRLduCkn7IgC0Cu4yHQiAdyb8xsAVcwPAccdG6czuYaJYhnTVi/6c8
+	DL4zpsrMuqfJ60UTRogrF0gcYpenE3tX5a2aFUFErNZKLyQWEqNTA9iK1IyNZaxt
+	WqR1m1zKAr4mmZOYnGJkzu+KZMxZij1liY5oXcUvcYmzmzfbDficRGsYn6LkB6LI
+	ha84w==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40pxw0g3y6-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40pyb90807-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 30 Jul 2024 12:04:47 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 46UC4knA028018;
-	Tue, 30 Jul 2024 12:04:46 GMT
+	Tue, 30 Jul 2024 13:14:14 +0000 (GMT)
+Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 46UDEDfq019071;
+	Tue, 30 Jul 2024 13:14:14 GMT
 Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40pxw0g3y4-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40pyb90804-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 30 Jul 2024 12:04:46 +0000 (GMT)
+	Tue, 30 Jul 2024 13:14:13 +0000 (GMT)
 Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 46U8AjJK003748;
-	Tue, 30 Jul 2024 12:04:45 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 40ndemc890-1
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 46UCWoZ7003745;
+	Tue, 30 Jul 2024 13:14:12 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 40ndemch4x-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 30 Jul 2024 12:04:45 +0000
+	Tue, 30 Jul 2024 13:14:12 +0000
 Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 46UC4eN716384454
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 46UDE7Va29360768
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 30 Jul 2024 12:04:42 GMT
+	Tue, 30 Jul 2024 13:14:09 GMT
 Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 21FA42004D;
-	Tue, 30 Jul 2024 12:04:40 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 5A2E820049;
+	Tue, 30 Jul 2024 13:14:07 +0000 (GMT)
 Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id AD6E020040;
-	Tue, 30 Jul 2024 12:04:39 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 9119120040;
+	Tue, 30 Jul 2024 13:14:06 +0000 (GMT)
 Received: from [9.179.12.59] (unknown [9.179.12.59])
 	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 30 Jul 2024 12:04:39 +0000 (GMT)
-Message-ID: <b987be60-288f-4e19-9ede-d5964377b0e7@linux.ibm.com>
-Date: Tue, 30 Jul 2024 14:04:39 +0200
+	Tue, 30 Jul 2024 13:14:06 +0000 (GMT)
+Message-ID: <24add950-ebe3-4f9a-964a-605806f9e06d@linux.ibm.com>
+Date: Tue, 30 Jul 2024 15:14:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,8 +84,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 02/10] selftests: kvm: s390: Add kvm_s390_sie_block
- definition for userspace tests
+Subject: Re: [PATCH v3 03/10] selftests: kvm: s390: Add s390x ucontrol test
+ suite with hpage test
 To: Christoph Schlameuss <schlameuss@linux.ibm.com>, kvm@vger.kernel.org
 Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
@@ -94,7 +94,7 @@ Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
         David Hildenbrand <david@redhat.com>,
         Nina Schoetterl-Glausch <nsg@linux.ibm.com>
 References: <20240730072413.143556-1-schlameuss@linux.ibm.com>
- <20240730072413.143556-3-schlameuss@linux.ibm.com>
+ <20240730072413.143556-4-schlameuss@linux.ibm.com>
 Content-Language: en-US
 From: Janosch Frank <frankja@linux.ibm.com>
 Autocrypt: addr=frankja@linux.ibm.com; keydata=
@@ -139,36 +139,39 @@ Autocrypt: addr=frankja@linux.ibm.com; keydata=
  DchCqFm5adiSP5+OT4NjkKUeGpBe/aRyQSle/RropTgCi85pje/juYEn2P9UAgkfBJrOHvQ9
  Z+2Sva8FRd61NJLkCJ4LFumRn9wQlX2icFbi8UDV3do0hXJRRYTWCxrHscMhkrFWLhYiPF4i
  phX7UNdOWBQ90qpHyAxHmDazdo27gEjfvsgYMdveKknEOTEb5phwxWgg7BcIDoJf9UMC
-In-Reply-To: <20240730072413.143556-3-schlameuss@linux.ibm.com>
+In-Reply-To: <20240730072413.143556-4-schlameuss@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: W_2jnhrP_UaA4bJH3Reg6gYIco0zreK4
-X-Proofpoint-GUID: yjRDP9u1xNPiTDV-0QVS7yo91Ohep1gz
+X-Proofpoint-ORIG-GUID: 44ewccDOFwRzanRHp7D1FZaPjiUDCCVA
+X-Proofpoint-GUID: Y1EPKgfcAsuLNB1alYG54-n4wgx9JiXx
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-07-30_11,2024-07-30_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 phishscore=0 impostorscore=0 adultscore=0 clxscore=1015
- malwarescore=0 suspectscore=0 spamscore=0 mlxlogscore=765 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2407300084
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 adultscore=0
+ phishscore=0 mlxlogscore=956 mlxscore=0 priorityscore=1501
+ lowpriorityscore=0 clxscore=1015 impostorscore=0 bulkscore=0
+ malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2407300089
 
 On 7/30/24 9:24 AM, Christoph Schlameuss wrote:
-> Subsequent tests do require direct manipulation of the SIE control
-> block. This commit introduces the SIE control block definition for use
-> within the selftests.
+> Add test suite to validate the s390x architecture specific ucontrol KVM
+> interface.
 > 
-> There are already definitions of this within the kernel.
-> This differs in two ways.
-> * This is the first definition of this in userspace.
-> * In the context of the selftests this does not require atomicity for
->    the flags.
+> Make use of the selftest test harness.
 > 
-> With the userspace definition of the SIE block layout now being present
-> we can reuse the values in other tests where applicable.
+> * uc_cap_hpage testcase verifies that a ucontrol VM cannot be run with
+>    hugepages.
+> 
+> To allow testing of the ucontrol interface the kernel needs a
+> non-default config containing CONFIG_KVM_S390_UCONTROL.
+> This config needs to be set to built-in (y) as this cannot be built as
+> module.
 > 
 > Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
 
 Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+
+
+
 
