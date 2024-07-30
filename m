@@ -1,134 +1,111 @@
-Return-Path: <linux-kselftest+bounces-14460-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14461-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AF4B940BFB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 10:42:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5B50940C55
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 10:52:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B487BB25802
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 08:42:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D72E61C20EEA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 08:52:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3971418FDD7;
-	Tue, 30 Jul 2024 08:42:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B07C194A7C;
+	Tue, 30 Jul 2024 08:50:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OYN4N27H"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="faJf7yM4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCDD41922F3;
-	Tue, 30 Jul 2024 08:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D48C01940B3;
+	Tue, 30 Jul 2024 08:50:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722328931; cv=none; b=R6E7fLwJMx9L24jSSwu2RgMNS37pZPad21Cyb8U0zlvahlbqoIlmWSrKxpU9oWxhlh70BQtbW4FwpZGtK7bOSMiaNoTzvcUf8FAOrXjSYl+FQxj0EnN4DeCv6OkmxtBtwnFwB3s79Mlc5W7ZqxerpLQRVbHdbhKLBlR+aVDQbEA=
+	t=1722329438; cv=none; b=QnbzlM+os3jXf2jTzgrqF71+za+l6QZrGZ43Q6kp8l38W2CnCdCXHiqCgsX6fyMJKJXc3VN2bqanVAxkckWbnMVCHQ1aMZVp9m3RYtIoBFmSI9XwcwQkYxIkj4v7osvNWlqy0jrCl41O4ILi8+4Jcq2Eb64paiZOk9eqYRtvKwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722328931; c=relaxed/simple;
-	bh=LMnzgd+Feav2wYV4oglUxLJGBvcpwXxoqyGpw7qOgmM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SLu73/6N4WGbSsJGauXdxO9tEa7D/fZV1hXKwMjHAozSt2lWOWLEZ9NaNUBFQD4PHulD+sd+3wfwHvJmYDdDvCeb6++hMXKVAjR12Ow4Pc1o60XZE11S8CXgPpEvugQZZ+unLUsDpPdvaiVv0gK/1DnDq5gjp6YJ86k/+np0eEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OYN4N27H; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id BF7E924000B;
-	Tue, 30 Jul 2024 08:42:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1722328925;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=onNPQ+wT2NHH+VlsYS0o+kNVGZeHSK/I67IhJY1D0LQ=;
-	b=OYN4N27H/vb3J15B5p3qqRZxxtXT/5DGZNqDIwIBW2ZE8cQ9Sl6P2ebyXKBfFHJesPW1sR
-	DHlkkqHDn2iuJ2o6xQZO2nswLqnGhYc7b+kcknu5tUjAUnbbfdFPD0I5Rajrgn4X/1MNjg
-	sOnwgSD9d762MibFPoGsM8fx/YjaZfVN52I/TZyADb/sCXNPnFic5rKakPG1BPIyXPU8Iv
-	LeW56f8MuIJJxHo9idGAdjZVXmJ6MG1AjKToqh1QGT5zE3XieECzonlMGc4t5vUoRznxrB
-	g1i2pXvcBRBzZyOs0p+g7zChtaz3xrZs4e0B0lW+cwyevs1Qtaq6EMRjHqKVHA==
-Message-ID: <df287de3-8b06-42dd-8353-fae5cffae6a2@bootlin.com>
-Date: Tue, 30 Jul 2024 10:42:04 +0200
+	s=arc-20240116; t=1722329438; c=relaxed/simple;
+	bh=7xEjnu+XxywJICOBC6mbxvdShii78kN4dRkz0XvgP/4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=fcmk6gxT+lQXyClvR23bXhZt9f4oToFk92VfmRAdQ0J5oiwXE6taDYwi66pZrlFfvCsGKo0r+B8EemBKlVsrR8KknXcSYSY8LJUEZ9TCeNgxe7yb0Yco9xlqVnkrBWVbcrWOLMK4xgw2YbIz8DQIIFwKI+nBZN60Ciggb/Ptqng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=faJf7yM4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6148AC4AF0B;
+	Tue, 30 Jul 2024 08:50:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722329437;
+	bh=7xEjnu+XxywJICOBC6mbxvdShii78kN4dRkz0XvgP/4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=faJf7yM4pW/Z8oVEhOY0PK+6doI9ABS/OqbbgJ8IIBlA0uejeK9fyfJYCK2Y8uoIJ
+	 XeHWOozrBdwiqcjqM9/LPcCk+ac0aWyaz9jE+zHJXuktyX/zkAg8MEUxJnRIkHKOCx
+	 4g65iScziMyJM4vt7SbCyOcq/+7MBcvIp4eE6pX4wLTu4FEB3KTgNXi5a8eSwm4+px
+	 5qtTgBm3FTVRuLUkC5I5gm47Z0QJ+eNTJJh3HQKCTusaFwtbW+g4CiDjKUUjd/FoA+
+	 5Ve4ay9Ff4eQ9vTr42bD/1Al0YVRfvaeCP/knmx7ZIQhzBp3cGDJULprkEms7PCAJ4
+	 TrSFL++L889CQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 512B0C43619;
+	Tue, 30 Jul 2024 08:50:37 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/3] selftests/bpf: do not disable /dev/null
- device access in cgroup dev test
-To: Alan Maguire <alan.maguire@oracle.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240729-convert_dev_cgroup-v2-0-4c1fc0520545@bootlin.com>
- <20240729-convert_dev_cgroup-v2-1-4c1fc0520545@bootlin.com>
- <39781c99-95db-4c48-b363-a482a426e3b0@oracle.com>
- <3d809ae0-d228-4ba0-baa4-c1b299024c55@bootlin.com>
- <012176d7-646b-49fe-b139-c8072340ecdb@oracle.com>
-From: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <012176d7-646b-49fe-b139-c8072340ecdb@oracle.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-GND-Sasl: alexis.lothore@bootlin.com
+Subject: Re: [PATCH net 0/7] mptcp: fix inconsistent backup usage
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172232943732.24083.9277579847408417971.git-patchwork-notify@kernel.org>
+Date: Tue, 30 Jul 2024 08:50:37 +0000
+References: <20240727-upstream-net-20240727-mptcp-backup-signal-v1-0-f50b31604cf1@kernel.org>
+In-Reply-To: <20240727-upstream-net-20240727-mptcp-backup-signal-v1-0-f50b31604cf1@kernel.org>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: mptcp@lists.linux.dev, martineau@kernel.org, geliang@kernel.org,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ fw@strlen.de, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ stable@vger.kernel.org, rostedt@goodmis.org, mhiramat@kernel.org,
+ mathieu.desnoyers@efficios.com, linux-trace-kernel@vger.kernel.org
 
-On 7/30/24 10:16, Alan Maguire wrote:
-> On 29/07/2024 18:30, Alexis Lothoré wrote:
->> Hello Alan,
+Hello:
 
-[...]
+This series was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
->>> Not a big deal, but I found it a bit confusing that this file was
->>> modified then deleted in patch 2. Would it work having patch 1 stop
->>> building the standalone test/remove it and .gitignore entry, patch 2
->>> updating progs/dev_cgroup.c to allow /dev/zero, /dev/urandom access,
->>> patch 3 add cgroup_dev.c test support, and patch 4 add the device type
->>> subtest? Or are there issues with doing things that way? Thanks!
->>
->> I've done this to make sure that at any point in the git history, there is one
->> working test for the targeted feature, either the old or the new one. I've done
->> it this way because the old test also helped me validate the new one while
->> developing it, but also because if at some point there is a (major) issue with
->> the new test, reverting only the relevant commit brings back the old test while
->> disabling the new one.
->>
->> But maybe this concern is not worth the trouble (especially since the old tests
->> are not run automatically) ? If that's indeed the case, I can do it the way you
->> are suggesting :)
->>
+On Sat, 27 Jul 2024 12:01:22 +0200 you wrote:
+> In all the MPTCP backup related tests, the backup flag was set on one
+> side, and the expected behaviour is to have both sides respecting this
+> decision. That's also the "natural" way, and what the users seem to
+> expect.
 > 
-> If no-one complains, it seems fine to me to stick with the way you've
-> constructed the series the next respin. Thanks!
-
-ACK, thanks, I'll keep it that way then.
-
-For the record, I am accumulating a few other converted tests that I will send
-soon, and those follow the same logic (keeping one working test at any point of
-time, and pushing it to the point where I start by fixing broken tests before
-converting those), so if anyone has an opinion in favor of this or rather in
-favor of Alan's suggestion, do not hesitate to share it, so I can adjust before
-sending.
-
-Thanks,
-
+> On the scheduler side, only the 'backup' field was checked, which is
+> supposed to be set only if the other peer flagged a subflow as backup.
+> But in various places, this flag was also set when the local host
+> flagged the subflow as backup, certainly to have the expected behaviour
+> mentioned above.
 > 
->> Thanks,
->>
->> Alexis
->>
-> 
+> [...]
 
+Here is the summary with links:
+  - [net,1/7] mptcp: sched: check both directions for backup
+    https://git.kernel.org/netdev/net/c/b6a66e521a20
+  - [net,2/7] mptcp: distinguish rcv vs sent backup flag in requests
+    https://git.kernel.org/netdev/net/c/efd340bf3d77
+  - [net,3/7] mptcp: pm: only set request_bkup flag when sending MP_PRIO
+    https://git.kernel.org/netdev/net/c/4258b94831bb
+  - [net,4/7] mptcp: mib: count MPJ with backup flag
+    https://git.kernel.org/netdev/net/c/4dde0d72ccec
+  - [net,5/7] selftests: mptcp: join: validate backup in MPJ
+    https://git.kernel.org/netdev/net/c/935ff5bb8a1c
+  - [net,6/7] mptcp: pm: fix backup support in signal endpoints
+    https://git.kernel.org/netdev/net/c/6834097fc38c
+  - [net,7/7] selftests: mptcp: join: check backup support in signal endp
+    https://git.kernel.org/netdev/net/c/f833470c2783
+
+You are awesome, thank you!
 -- 
-Alexis Lothoré, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
