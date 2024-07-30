@@ -1,88 +1,79 @@
-Return-Path: <linux-kselftest+bounces-14439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A251594055A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 04:38:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5772594058E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 04:58:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 570B8285850
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 02:38:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 10BDA282E78
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 02:58:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 722411CD25;
-	Tue, 30 Jul 2024 02:38:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9E5357CB5;
+	Tue, 30 Jul 2024 02:58:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b="VLvr3CoM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XvUZhhsQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0628C12E1C2
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jul 2024 02:38:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F10B3CA6F;
+	Tue, 30 Jul 2024 02:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722307132; cv=none; b=mFjYlZ03GBI1DSSHAQscPTOBKPnKzFlcE0wE53vbwG55NBe9epFvajPnS/Yo1IGA8JCQXYDG33rNUJpXsg9M4YbmjB4Xv9P6dvyTBncYGc0QYWwXumgMZmI04/vEeLbXRnAsXbB2v5/YDmDWcgXNlsRiO/Y8G6+hphWeEKr6YSw=
+	t=1722308303; cv=none; b=GbyGiuO6UVXBCl6aQMtYwi+L2ysoLmjgBFjwfdC+FviFq6rfvwGBt4QNISRGDungoW5bNdMPDAk0gjVnm23+8Ge3of49dEcaV1x1K8ylX8Q+YN5oQ9VkXIujxycziZCYNMHf/BmQY7ijfi/daUZg/x7DT2DqR3dxMyQlJkAOEJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722307132; c=relaxed/simple;
-	bh=PavMPhXq78uOF4k0sgCk8akNMjXYQvjNvBovwxo8Odk=;
+	s=arc-20240116; t=1722308303; c=relaxed/simple;
+	bh=oJEsx3xbe0US5zKtnHkifmq15x8BlK/2xDiLeLK2+JQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F/oZETxvv9qT6TwtSnB3fdhYH+NmG6NsekYVIJ8u3pF/UKzamvOd/xMF1afX5wLYYHe42jb1+64niTN9vNepTecCmC9DsB5zKTRBFDwiGDDBoVE2Fki2XgotiNMg4Rj31VhrkPb0R+4t4aaoupmXS9Foy/65AD+cphhwQzsALy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org; spf=pass smtp.mailfrom=cmpxchg.org; dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b=VLvr3CoM; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cmpxchg.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmpxchg.org
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7a1d42da3baso290279185a.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 29 Jul 2024 19:38:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20230601.gappssmtp.com; s=20230601; t=1722307129; x=1722911929; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PyUDu60PCAuM2zRNcpq+Dc/3a1+n03wqWjS5ucpFVHU=;
-        b=VLvr3CoMSDvqRig03XitVFRaBJ3d9K5FHnK+YpwUlGEgkuKC2IkVszxA3DrY9wMai1
-         L1iiaHO+imyUdj54mBlP+vfBXUVns8bzCRy2qSoF4l4yAUzXqceVxmSasG+AMtRUlQXj
-         rtxdxINXk7BSc6qXf8G9DiERIurxUcPbx8+q3BvKH0vcwDPy37ft8fswC3KHgKxVtUL0
-         o2ZeZ1laqFAlBpot1Lk5rgGE4xJiUMCmLZT7bAxAiKHv6Y/IFmyDqB5PlSV+JN+feYnp
-         mUEKpV1AWelD9YNy9hxx67BzhUf1A1NV9Ry0POh0Rg0mToEvIwx1SXiU16PPW9hhsxmZ
-         VjWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722307129; x=1722911929;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PyUDu60PCAuM2zRNcpq+Dc/3a1+n03wqWjS5ucpFVHU=;
-        b=I8CZmhQDdZuNRWf/VsXcNn7Hxz6jO+1Y80G/oprzsLdVrZ+8R6qLWEj1lYb6NoXO+9
-         3kgGN9ee6KjC3tt/aQlzptH4A+KOD4mjIJ3yBaz4LsGf1sX+vTRdY/jB1Kk1a3De2wHX
-         iguJgyTG+xVl0miNwIY9b5P1eXtzbj9eGZE+AH18UW71mMY+Eu9a/U2g3W7rrLWLyCHp
-         VDuk6sKfvR2D8R0gnN5vEI5qfmaoAhpOSc3h8lhboFsTrXuJUJj37PhjykXVB/7MUaYZ
-         RXg3fcLYcwQMdrKAZku+69UM02X+Ch76ovZrwZ39pa2tSo8ZHKKZsxCQmUnmaYhXO/Xt
-         kMaw==
-X-Forwarded-Encrypted: i=1; AJvYcCWKle+gP35aSDDcypAMP+7AM+tmNIbIxxLPlQecwngu1oOdiGCEVHmmdeGKu5KRdkWQLkGELdDsDysk8SDG/QLlKVdA/8C3YFHVNf8CQGMG
-X-Gm-Message-State: AOJu0YzcmOC26V4ZsUfLDsR54Eo9T9i3lxyB6N6n44jOvNLSddT1yumf
-	RvB6HId3dWF/HPGSW9IXTANuErWWEuDzIMthleELBIeaJm/PLVab4DlVDeYe3eM=
-X-Google-Smtp-Source: AGHT+IFUGolmZq/G9ttSj13GVAYbDNH+XIHcDQUS+VIQDesWEnVNI2yCkrS+idWQDi7u+ZKdaSWM4Q==
-X-Received: by 2002:a05:620a:1a1f:b0:79f:709:a38e with SMTP id af79cd13be357-7a1e524c72bmr1260215585a.19.1722307128647;
-        Mon, 29 Jul 2024 19:38:48 -0700 (PDT)
-Received: from localhost ([2603:7000:c01:2716:da5e:d3ff:fee7:26e7])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a1d7435509sm592811485a.84.2024.07.29.19.38.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 29 Jul 2024 19:38:48 -0700 (PDT)
-Date: Mon, 29 Jul 2024 22:38:47 -0400
-From: Johannes Weiner <hannes@cmpxchg.org>
-To: David Finkel <davidf@vimeo.com>
-Cc: Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>, core-services@vimeo.com,
-	Jonathan Corbet <corbet@lwn.net>, Michal Hocko <mhocko@kernel.org>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Shuah Khan <shuah@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Waiman Long <longman@redhat.com>
-Subject: Re: [PATCH v6 1/2] mm, memcg: cg2 memory{.swap,}.peak write handlers
-Message-ID: <20240730023847.GA2866591@cmpxchg.org>
-References: <20240729143743.34236-1-davidf@vimeo.com>
- <20240729143743.34236-2-davidf@vimeo.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=fO9O8oOnlEnq8Wk4UvITKUb5rTxjjB1WaQdXejfqI2h3f9wbkoEMFcZKNd2HSfwYv++0xOHjZ4GZL2CP59PPFJbBs1/SWdPHIFLagyF3gErLecxnpGF9f69Wfz7uYBbWXVq6UyBYz9knm5gf6VXksRXhZvxdGHF0J8Q7qBuk6SU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XvUZhhsQ; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1722308302; x=1753844302;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oJEsx3xbe0US5zKtnHkifmq15x8BlK/2xDiLeLK2+JQ=;
+  b=XvUZhhsQz8AkoFQbXffipdW5SEe44jUCcbQiW1BGqRlG4VXrhGBJQphV
+   4gfSv80akAetOhEbdZylS327Km5uVX+jNbGxHjtGEp2nDesd7rBe4E3oB
+   qia3vWNzqazhMaTrzsjzOc4H5h9X+5nwpCpbBC5D+VKHRkimi4fLgP2zZ
+   m/NsesFfCSGuKrQcQe3sSPPiOt4Fh3+Xz8PpFY97DiuNmJpgbhPFqvuuC
+   ymwZuY9m8T14ivISlBKx//EsAqIAzXu16AMO0AQidF14PVOtGYTuUl/0O
+   hBBND/qthvJJMryVbwQcK8PvSyKzzM1ez8SSFrr4WT5m8aEn/ZNl8eN9W
+   Q==;
+X-CSE-ConnectionGUID: kCB5EPRaQiSMf7ECrxl9rQ==
+X-CSE-MsgGUID: rDD93Z6pTMuIasD2nRigkQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11148"; a="31496393"
+X-IronPort-AV: E=Sophos;i="6.09,247,1716274800"; 
+   d="scan'208";a="31496393"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jul 2024 19:58:21 -0700
+X-CSE-ConnectionGUID: SnWCYWfWTYm4KsasHgyTAw==
+X-CSE-MsgGUID: tCPHR/58QA2oVwgK2BcKuw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,247,1716274800"; 
+   d="scan'208";a="59007393"
+Received: from lkp-server01.sh.intel.com (HELO 68891e0c336b) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 29 Jul 2024 19:58:18 -0700
+Received: from kbuild by 68891e0c336b with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sYd43-000sP4-31;
+	Tue, 30 Jul 2024 02:58:15 +0000
+Date: Tue, 30 Jul 2024 10:57:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ivan Orlov <ivan.orlov0322@gmail.com>, perex@perex.cz, tiwai@suse.com,
+	corbet@lwn.net, broonie@kernel.org, shuah@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Ivan Orlov <ivan.orlov0322@gmail.com>,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
+	christophe.jaillet@wanadoo.fr, Axel Holzinger <aholzinger@gmx.de>
+Subject: Re: [PATCH v2 3/4] ALSA: timer: Introduce virtual userspace-driven
+ timers
+Message-ID: <202407301002.SaoBM0NA-lkp@intel.com>
+References: <20240729085905.6602-4-ivan.orlov0322@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -91,60 +82,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240729143743.34236-2-davidf@vimeo.com>
+In-Reply-To: <20240729085905.6602-4-ivan.orlov0322@gmail.com>
 
-On Mon, Jul 29, 2024 at 10:37:42AM -0400, David Finkel wrote:
-> Other mechanisms for querying the peak memory usage of either a process
-> or v1 memory cgroup allow for resetting the high watermark. Restore
-> parity with those mechanisms, but with a less racy API.
-> 
-> For example:
->  - Any write to memory.max_usage_in_bytes in a cgroup v1 mount resets
->    the high watermark.
->  - writing "5" to the clear_refs pseudo-file in a processes's proc
->    directory resets the peak RSS.
-> 
-> This change is an evolution of a previous patch, which mostly copied the
-> cgroup v1 behavior, however, there were concerns about races/ownership
-> issues with a global reset, so instead this change makes the reset
-> filedescriptor-local.
-> 
-> Writing any non-empty string to the memory.peak and memory.swap.peak
-> pseudo-files reset the high watermark to the current usage for
-> subsequent reads through that same FD.
-> 
-> Notably, following Johannes's suggestion, this implementation moves the
-> O(FDs that have written) behavior onto the FD write(2) path. Instead, on
-> the page-allocation path, we simply add one additional watermark to
-> conditionally bump per-hierarchy level in the page-counter.
-> 
-> Additionally, this takes Longman's suggestion of nesting the
-> page-charging-path checks for the two watermarks to reduce the number of
-> common-case comparisons.
-> 
-> This behavior is particularly useful for work scheduling systems that
-> need to track memory usage of worker processes/cgroups per-work-item.
-> Since memory can't be squeezed like CPU can (the OOM-killer has
-> opinions), these systems need to track the peak memory usage to compute
-> system/container fullness when binpacking workitems.
-> 
-> Most notably, Vimeo's use-case involves a system that's doing global
-> binpacking across many Kubernetes pods/containers, and while we can use
-> PSI for some local decisions about overload, we strive to avoid packing
-> workloads too tightly in the first place. To facilitate this, we track
-> the peak memory usage. However, since we run with long-lived workers (to
-> amortize startup costs) we need a way to track the high watermark while
-> a work-item is executing. Polling runs the risk of missing short spikes
-> that last for timescales below the polling interval, and peak memory
-> tracking at the cgroup level is otherwise perfect for this use-case.
-> 
-> As this data is used to ensure that binpacked work ends up with
-> sufficient headroom, this use-case mostly avoids the inaccuracies
-> surrounding reclaimable memory.
-> 
-> Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
-> Suggested-by: Waiman Long <longman@redhat.com>
-> Signed-off-by: David Finkel <davidf@vimeo.com>
+Hi Ivan,
 
-Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on tiwai-sound/for-next]
+[also build test WARNING on tiwai-sound/for-linus linus/master v6.11-rc1 next-20240729]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ivan-Orlov/ALSA-aloop-Allow-using-global-timers/20240729-171015
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+patch link:    https://lore.kernel.org/r/20240729085905.6602-4-ivan.orlov0322%40gmail.com
+patch subject: [PATCH v2 3/4] ALSA: timer: Introduce virtual userspace-driven timers
+config: nios2-randconfig-r113-20240730 (https://download.01.org/0day-ci/archive/20240730/202407301002.SaoBM0NA-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 14.1.0
+reproduce: (https://download.01.org/0day-ci/archive/20240730/202407301002.SaoBM0NA-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202407301002.SaoBM0NA-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> sound/core/timer.c:2030:1: sparse: sparse: symbol 'snd_utimer_ids' was not declared. Should it be static?
+   sound/core/timer.c:230:12: sparse: sparse: context imbalance in 'check_matching_master_slave' - different lock contexts for basic block
+   sound/core/timer.c:405:9: sparse: sparse: context imbalance in 'remove_slave_links' - wrong count at exit
+   sound/core/timer.c:456:9: sparse: sparse: context imbalance in 'snd_timer_close_locked' - wrong count at exit
+   sound/core/timer.c:492:15: sparse: sparse: context imbalance in 'snd_timer_resolution' - different lock contexts for basic block
+   sound/core/timer.c:541:12: sparse: sparse: context imbalance in 'snd_timer_start1' - wrong count at exit
+   sound/core/timer.c:596:12: sparse: sparse: context imbalance in 'snd_timer_start_slave' - wrong count at exit
+   sound/core/timer.c:616:12: sparse: sparse: context imbalance in 'snd_timer_stop1' - wrong count at exit
+   sound/core/timer.c:673:9: sparse: sparse: context imbalance in 'snd_timer_stop_slave' - wrong count at exit
+   sound/core/timer.c:780:25: sparse: sparse: context imbalance in 'snd_timer_process_callbacks' - unexpected unlock
+   sound/core/timer.c:798:9: sparse: sparse: context imbalance in 'snd_timer_clear_callbacks' - wrong count at exit
+   sound/core/timer.c:806:13: sparse: sparse: context imbalance in 'snd_timer_work' - different lock contexts for basic block
+   sound/core/timer.c:825:6: sparse: sparse: context imbalance in 'snd_timer_interrupt' - different lock contexts for basic block
+   sound/core/timer.c:1049:6: sparse: sparse: context imbalance in 'snd_timer_notify' - different lock contexts for basic block
+   sound/core/timer.c:1323:9: sparse: sparse: context imbalance in 'snd_timer_user_interrupt' - wrong count at exit
+   sound/core/timer.c:1430:12: sparse: sparse: context imbalance in 'realloc_user_queue' - wrong count at exit
+   sound/core/timer.c:1672:12: sparse: sparse: context imbalance in 'snd_timer_user_gstatus' - different lock contexts for basic block
+   sound/core/timer.c:2412:9: sparse: sparse: context imbalance in 'snd_timer_user_poll' - wrong count at exit
+
+vim +/snd_utimer_ids +2030 sound/core/timer.c
+
+  2024	
+  2025	#ifdef CONFIG_SND_UTIMER
+  2026	/*
+  2027	 * Since userspace-driven timers are passed to userspace, we need to have an identifier
+  2028	 * which will allow us to use them (basically, the subdevice number of udriven timer).
+  2029	 */
+> 2030	DEFINE_IDA(snd_utimer_ids);
+  2031	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
