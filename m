@@ -1,237 +1,280 @@
-Return-Path: <linux-kselftest+bounces-14489-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14490-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFB39941FEC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 20:44:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B757494203E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 21:04:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 482211F24C38
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 18:44:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA7C31C233D2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 19:04:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A771F1AA3DF;
-	Tue, 30 Jul 2024 18:44:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F4121898E9;
+	Tue, 30 Jul 2024 19:04:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Wy14m+fX"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="M4URxwe+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2051.outbound.protection.outlook.com [40.107.244.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4211AA3C6;
-	Tue, 30 Jul 2024 18:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722365062; cv=fail; b=LfVmwN0odUec9I9oOuYbo/1SEhlOOmop0rOcmXaFlZQDIG/fiS0WR+wBvsNSdrZ0Rt1TpEHDK7ej2+lRhdfB7gfZA9hkN6sSWsqy9ZuHabjC/dWRpi9+Bp/SYj6ucFGtvwYN9kwpPkUcf6j0VjwGaZQ7vtjUt3QvFmeFgK80Uxs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722365062; c=relaxed/simple;
-	bh=oXRQ4ZPb21CDdSnk8yKZ16xp9H6KGNM6hhCU/ojP/zc=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=X7ktoe3R9ipDYhKxmGNOitxp3UxZs+hZeOD5CnJXb0DMdURyzPPHsUliP5xgpa+StwRtNc33RjWGrMXsHXwboMNV5AtRdDpdYL8JzpHOY9mNYrqVJR1X7/SKkbF+du3T2Y8qS3PiuawB5Baf3nETGd2+woQIAOP0ATd0k2sFbxw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Wy14m+fX; arc=fail smtp.client-ip=40.107.244.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dZg94PwDzOedRG58DtOjvUHGpuRbs0AqidZzUTE3KzZBBA9ftVhy6LA3hRUe1RS8yzTKNlqXucSh4R79WxpBq3Z7yDQsreEMLnvwtTbt8WECGySCES0nodVaLNzDCEzm0LkeOwNBQC0TQL5b0zoVEKZwMVa5I7znNCFVL7m6ucH+Sao00hKU6M2QPA4eb7JDZxhXPb+JTIduB/HRaXE7FkkOpSja84oU7VBcbEr71LzWp1JC2EfsIugAgTEQzSgKULVVT+bf2SIG/7zuSVFdfBQkugejcPIUtgwUsnXZtHxnh8sTVIolOgqC8glm/evIdk50kdkqa/BNH2lmg/fnkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zQmGBAGQZuPJ4Zw+fdXgaW03KEk9m1vCCGIjQ3trW70=;
- b=CdFTtU6nEXzG1R2c0gTMT6h2C4/M9NRkhTTpPXS2MlDNhxE/R20vAmHq0EKpBUKqOKRChHfuy91q5bMsPb6zOhpyA5i7TcFpYMVMsBM+mNACJVg1IVQdKgA9PcMkpYTXBok4G3PuuijdonIwFCNpvF3fAvSzRMLnnMsJOAZf3BZigzc5J9NzK/ljf5LYDdaGdcZc5bVVbIdjnnxb+92E4Xg+EDfGXMtXqZPZMWyy6vJDoOoMFqaWEXWWbNNRonatQJs07mRvQ0ONwFqNw2nBj/NLnbK8XtdETuPJGhUSr2maS8LZpMZh7aZEVAPP1VaiA0a5u9M3agwjVhDVYtorNg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zQmGBAGQZuPJ4Zw+fdXgaW03KEk9m1vCCGIjQ3trW70=;
- b=Wy14m+fXnuby0T5ruX0PQZyYyfHgloY929fYdRK3Pqqm9/xoVgUO7rVukN6xv/1OzzQAO+2coqak8L3EQ+vuUhfjaGrdyTa/P9i2A3oRpzuPrlcBpfjIJLZ/56jh03xq+yuCNyRBFiqhTkBnirSoNsPrkTGqvql4J6DMN3rtzNK1fhgjNMThwF43CwUtVJBFs4FncRG07SKyTxyoMcBWOzaAo1ETBD4PAy/xmnuut816MzT/DFtb8wItHn1DqXwC4NtC1STRj4ga0OVVatXoWnPkfTJyjRvnJhlzGgIw+mQ8byDnUyKTFxvhywTMDxlWSOt8uwOxQTLZANL0D+M9eg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SJ0PR12MB5469.namprd12.prod.outlook.com (2603:10b6:a03:37f::16)
- by CH3PR12MB9077.namprd12.prod.outlook.com (2603:10b6:610:1a2::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.28; Tue, 30 Jul
- 2024 18:44:17 +0000
-Received: from SJ0PR12MB5469.namprd12.prod.outlook.com
- ([fe80::ff21:d180:55f2:d0c0]) by SJ0PR12MB5469.namprd12.prod.outlook.com
- ([fe80::ff21:d180:55f2:d0c0%5]) with mapi id 15.20.7807.026; Tue, 30 Jul 2024
- 18:44:15 +0000
-Message-ID: <504beb91-f0a3-47f4-8d68-d62577bb17d1@nvidia.com>
-Date: Tue, 30 Jul 2024 11:44:14 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] bitmap: Rename module
-To: Shuah Khan <skhan@linuxfoundation.org>, David Gow <davidgow@google.com>,
- Randy Dunlap <rdunlap@infradead.org>, kees@kernel.org,
- Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Yury Norov <yury.norov@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Rasmus Villemoes <linux@rasmusvillemoes.dk>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel@collabora.com
-References: <20240726110658.2281070-1-usama.anjum@collabora.com>
- <20240726110658.2281070-3-usama.anjum@collabora.com>
- <ZqUvy_h4YblYkIXU@yury-ThinkPad>
- <85f575b4-4842-4189-9bba-9ee1085a5e80@collabora.com>
- <c0e5978b-7c11-4657-bd07-9962cd04bf9a@infradead.org>
- <CABVgOSnkxgeXXXm9xp5_PvBxtMGbyFN-Jmd6YJ1u6g81MF_fyw@mail.gmail.com>
- <714e7642-6f92-4e41-aa36-c854668e0bb0@linuxfoundation.org>
- <75a2960e-d489-4440-a8e1-487a7f84902e@linuxfoundation.org>
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <75a2960e-d489-4440-a8e1-487a7f84902e@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BYAPR01CA0055.prod.exchangelabs.com (2603:10b6:a03:94::32)
- To SJ0PR12MB5469.namprd12.prod.outlook.com (2603:10b6:a03:37f::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51E2C25570
+	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jul 2024 19:03:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722366240; cv=none; b=OohymuCA4omfpqzhLdbufVNYoWS2CZwCVGXZTsRlcL2VGfoRn6YhGrJ4/e/w0sJH2CbsFTUp69FVeMxokqQFd4MM9HKZXD2W4UD0VOZzGNCEICv1/fGeQ8bzKAnstFhDT+DXuEJBn+SH3nPSmoNB2mHnOkPjSwvoF6k3D90Wnvk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722366240; c=relaxed/simple;
+	bh=IC3UoEhYTh2WtP4rnCb850lFSL6P1IuRKOhEzQit4co=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FRFrJfFffwiL45UdnbdeTe7Po8hc4k9wgRwW0zIUfQVHp8/HBQ9ox1j5kQAu5Tgr/X1zKGh6iZTcxNundHgEcCekfBLvX5X/6zkLKtPi42/q4Bc0gWPZkSdfBBO9WG6pJK912MH7ASepqWGatY4j82pLnqkmRt3hKnqk2r8rkhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=M4URxwe+; arc=none smtp.client-ip=209.85.219.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e0b9589a72dso1835784276.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jul 2024 12:03:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1722366237; x=1722971037; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lqbSWDGfRec05xcYpphHjOYwTWmAIvqjJnT7JYSLr4w=;
+        b=M4URxwe+4IfVI9c36GwzRJvTREe1r42eh7gs82bMTUd6Zw6WXOiYZuAFLkJqV2zHlO
+         DD1n4NSZMr/RD2V/bx+okvpJonDEqScsURvb7ZWUO3qzoo6Ivs4/XiNXYjmtUaIVCUob
+         wquVk5pAQ4U3oF0rewxEicmiXVIKcTVxH/SLig4cciKO5kKgtD0qzzf+WSTvKgvbA6AL
+         aoxK3RLtjvljiIZoUyNKxbb8v9hnGaNZkKnlTMACB2QucN+xQ1dZw/a4Ibi7hwDmWbPV
+         K/h1B/Ye9gzLSynLJHXOel4oi5uZNoL18bT4yq6oEwm3b6mP5DJ6sL2KP9McnMnrongG
+         eQ0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722366237; x=1722971037;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lqbSWDGfRec05xcYpphHjOYwTWmAIvqjJnT7JYSLr4w=;
+        b=BnYLcxUhDnHtNFxtOOb6BNSQavyR7OpgPgw+eBioFJ84gf8tRkk/0V9TwUr3KNxX2L
+         aoxHjV6U/8D5kL6v3LA7+QwlWk4b00+cR1YiqoLm9B59tSjiPaqYnRfMV8KxW0fubbUt
+         D5s5itbhsv3hpyfdi9cqNqHaZl/NxZLNUeM/wkJ04uQ+8VYkWCDqR35kiPeM6W97j03j
+         m51nTtvZC9WozaTRPeUFy7j53L1S4dOqTSDsXkyK91FCR+dS8XahT3jzxm1fEEQhMm/v
+         wFXREg0cQE+PZyI0Nts1C0jj2Ywm0XRLzliWUQb2RV+wjpJarypjiYGFtwp55EZPj399
+         rXBw==
+X-Gm-Message-State: AOJu0Ywe9eSw7n6NVQubM+sd1RN8QliKbIgHS+Ync9/mJNz9RRFZ5aNA
+	ci+ezXe9kqsVQNEefk/LVnFBhrwOQ9diRX6cjNpGqJ7gvDIqNrCxqAX3BjAAW2pew7tm/S8V1G+
+	sQHPlbkK5eMqRFd6Npj8C29WnMrIn+JpOh3Y6
+X-Google-Smtp-Source: AGHT+IFKjqscjO6pouY8hxpbbCNPXhKKZjqEjRpJorpb+m2dfdtr1Xa6zlfgVyytvMdm/UvcP/s4zCEhMTkJmOLNAao=
+X-Received: by 2002:a05:6902:2d07:b0:e0b:ace9:be9d with SMTP id
+ 3f1490d57ef6-e0bace9c02cmr1726522276.35.1722366237068; Tue, 30 Jul 2024
+ 12:03:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR12MB5469:EE_|CH3PR12MB9077:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5ca36c1a-7948-497a-98f2-08dcb0c79cf4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ZTRaMm05SDV0VFM2ZHdFM3huVEk2Qmp1ckk3OHFYc2xqWXBXS2F1N2N4cG5t?=
- =?utf-8?B?bEVzL21FZ0ZOTllGa3JsODRReG5SWFJyaFdaWldYN2FKRko4bmt0ZlJaUEpM?=
- =?utf-8?B?Wk81YXIrREMxVU1QQ0Y3d2h6amI5Nnk4WmU4VmU3RXlaNnRuUVhqbm5LOW53?=
- =?utf-8?B?cDFtNUU2cjdCT0E4STJ4d0V4Zm55bWUwS1BITDBOaDlTUk5CTTJvK0ZrQWtV?=
- =?utf-8?B?OER2ZnZYa2UrY2paQzZKWE1iNVF1bmhxcGJCSGVWVm5BclpYR0dVb2VaSHda?=
- =?utf-8?B?VmkrS0dzTHRrb002VFlSbGxLRGJmSGJUcFRMQkVTeTVBWTA5VWlaOGtnS1JU?=
- =?utf-8?B?NkpoWElhYmxRUEljbGhVNXRiRDhndjJCZitsKzFwWkZqanAxZUx3aXQwVWtT?=
- =?utf-8?B?amdzVmlWaE4rVzVPRnlkRFFXalZFL0R5ZC9vczhkcXRTZ3VuWXhpbUtDZkxX?=
- =?utf-8?B?em81NlVaUWdBUFZNNVN5MVFoOWVDUVowbU1RTlhyVkpWalRzU2dwWkg0NkE2?=
- =?utf-8?B?TFNwS2xJSWo5ak9SS0UvbU0rSnd1Mk9jaVZZNzM2bmtWenp4SG8yQXJFL1Bn?=
- =?utf-8?B?TDJob1FVMG1UYzVJWEFEcEVIYmxnL1cxUlVHQ2N3NkJOb3hkUVgrY1dmVlhB?=
- =?utf-8?B?dHlldDRTaldHeGlIMklheG44Nkt5bERWbHFGaGVJdHdOSEVkWjNBdHplYjA2?=
- =?utf-8?B?aGQrbHpvUzNjcFJTVnlOclR4NHcxS2ZXVE0vSWVzRnVLQ1BjTWZ4SjNxenVP?=
- =?utf-8?B?YWFzRThONlRHaGxMVjRiL3d2WjM5S3VsSDZ2MWhlVU9WQzNxMy9FeW9LYUtJ?=
- =?utf-8?B?T0ZYc0RZYUFmQXBvWmR1VVo4L2RyZ1A5bUtyYi9NZVBFMmNla3FHb1d3NTlC?=
- =?utf-8?B?U3FoZElGV0JqTkQxazdSZFBrejVLVTF2aGN4cG5xR2lhRXJORTl5SjI4eWt1?=
- =?utf-8?B?N0Zvc0RCdXVjNWhQa0t2R0pLcE0zZ1R0RmlFZzYvc3lBQ2U0KzdEVC8wWkV4?=
- =?utf-8?B?eEQ3YU44SURaWklhdUk0ZTJiZ1dNNXBucTQ3TnRIbi9kTlhxVFJta0llQys5?=
- =?utf-8?B?b1NXdWFLQXRMREYzU2RlMUZsc0dYQVJTUTMrME1zRmlubkZVU0U5ZTBiWXFh?=
- =?utf-8?B?b2F6amI5Q2pBbVVEY3Q0RUNpbmRPbFNkZ3p5dEJqbythanE1d0ZhTmFaRnF3?=
- =?utf-8?B?elFQSEVNdnlDTFZQUDM3VjhjRW5aTTk1Z0sveXo2NEVXTzlORmVPMkRtSnlE?=
- =?utf-8?B?ZThuYmk3YVlwbEpzTHVMS1FMVVZ4eHd5REN3cVdCWlVZNWJTb3FBS2ZLc0pu?=
- =?utf-8?B?Y1ZwcEhQbERLS1h0NFJYSkt3VmppdU5qWkdQR0dMNzJlNmJwTjB2L1kweWRr?=
- =?utf-8?B?Yno5eW5tRzQ5MUowenRIcGNwVC8ralJPYmMvQWdISWFvYzIrYWFoYlVSTTla?=
- =?utf-8?B?aDJQWDJucDluNkw0RTd5bG1TWENlYy9MMDY5dnpveFB3WXlmYUVnTGRJekdi?=
- =?utf-8?B?ZGtERldhMFd6UUFHTXo0ZkQydDcxTGJXc0pQRkFVeXd1WlRZb1JCUkVZRlNP?=
- =?utf-8?B?cFVwb1k5eVpBMnczQS9rUEluRzVWVTZSMlBzdy9UZzJqTEFVTjBCMmowc2dL?=
- =?utf-8?B?dU5OVGtmMzI3bVFCdE9DNkQ5Rk1nd1hMOVZVb0tDMy94NkdCVDl5d2Qzc0N3?=
- =?utf-8?B?aXJaZXhkRGE4bDN2OFpwVGVFTE5ia2hqUXh0aThINEFpTlRkRTBzT01wOUVE?=
- =?utf-8?B?V3h2Y2lpVGVrWUg3T2ZzN0hLVVByZ0Z0SEkrTDRCVEZGWHA2QURtZThXa2V1?=
- =?utf-8?B?c3RTUjFmR09NVSt0bC9BZz09?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR12MB5469.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?dFY5NzIzUGcyS1VOQ2VUdk5tSHgrMzFhVXl0eHVwSERKZjQ2VGovZXJORmFo?=
- =?utf-8?B?WnRvY0hWTFkvR1g1NE02dUdtZzh1WjltTmRzZXhxQVVxMUpQaHgyM0g1cVB5?=
- =?utf-8?B?Sk5jSFVOWnBPaTlhT3BLVlVoQ2dpVjQrV3F1dHo1anZHMjZUNU5lR2QwSU16?=
- =?utf-8?B?TEgrZ2h2ZmhWSWR4bk01cjFDa3kyMW9lZERLbnNBWE9lRkRCSWdabFJReTMx?=
- =?utf-8?B?OEMzMkxwVExqMDRYSncrRHlNYnc0NEJpOXlrU2VoTEhUYzgrcGFvSjdRZnI2?=
- =?utf-8?B?UU8wb1hNRHd5bXZoMzBhdXgxdGNnTi9jT2NOZXphcmFCZFhvZ3hCd0VTUXMw?=
- =?utf-8?B?RDg4ZW9QQ1JtdjdweGUwRzBhck96VVY3UUVSa0lQbzgzT3lUejlSMk5DWjR1?=
- =?utf-8?B?OWhuOHRFREYvWmYyeGIxRFpBaDUvb3JqNkdKS0FHMHFoRmdLVCtZZnBkMjJF?=
- =?utf-8?B?ZXZrWmUwbDczTDVNK1lycFRxM1RxSkl0eXZQbVU2RG1iRFhVQXlOT0hpSzVO?=
- =?utf-8?B?TWxMdjExRTBzWUhDNENmV3BFRWNVUzNJVEhqNitENzR6akRHd0MxNWZLOFhn?=
- =?utf-8?B?QXNMZDQ3QjZqWUs2S2NvZERxcU9zbExZRGFBSDRvQWNGckh3a2V4bGszNngy?=
- =?utf-8?B?WGozUHFkallvQ0Y3RkdrZWw4MW5Jc3ZqNUFIc2doNTRYUHB4dXBhMmwrWklo?=
- =?utf-8?B?dVFUS29lUUw5cHJUMDdTalVEUHc4T1lMcTR2WktSNUhqSXRZMEtlTlNpUnho?=
- =?utf-8?B?MXR4NmNKZ3lTRkNtbWFYYmFBb1c4MnM0bzVvSVpWd0ZRUWdOQVBFa29pZ0VF?=
- =?utf-8?B?TGE1dEorUFpFSkFYT2lydDR3V09EeTVrRzBVOHdUd29id2w1TUR4NU1hcHM1?=
- =?utf-8?B?dzZSZlh5aWxuM0xydUFTY1BtTXk5ckFOWjhiTkhaSnoxUytuSlNjWlFDOEwr?=
- =?utf-8?B?bFZHWHZMRmtPeXNGbTNwN0FQVDRVbUZ4L2RsZUJteldaTkk4N0wxSFlCMFp5?=
- =?utf-8?B?Z1R5VmpZYitaeElwUWtuVGx6K3l1U29pZk05MVFHSjhpS1JBUHpiK001NUdR?=
- =?utf-8?B?S240TmNjMXZDdmMzYTVOay9jNVdhVUU4aVZhTG1FREJqWWJDa1dIWXhrZXd5?=
- =?utf-8?B?UUVza2tvQ2lSZkFzWVdLaXJYNStwb3NtWURtcEd6R3hWU3V3UTlvMjVCeWE0?=
- =?utf-8?B?YjZRY3BJWWlIRzBHWTJUTnVZb2xQSmdCWlhBUDFlcllmVlNDOG95WEdZWHZj?=
- =?utf-8?B?dGdUcGRad3ZTZnFpall5ZkJuOXF3cElYczVQYm1QYW1QRlJna3UvYzhMZ2tM?=
- =?utf-8?B?T2diQXJmRHZrNGhUQy85UU01ZENTay9EMURzdjJKUXlIQ2ZlZHlDR3R5Z2pi?=
- =?utf-8?B?cExtT05wai9VeThaMEprQXlmUnp4N1dEL3gySGZudzFDUFIvNFNKZjh6Qmxr?=
- =?utf-8?B?MFF3cE9xU0wvUVNwV3pVTTE3SnlqTGljcW1Vd1Y2ZGl5aWFpM3JzemJUZ0gr?=
- =?utf-8?B?OE1IcUFmU01mbys5dlIrT29kNFdPZUgvTENSZWk0ZGl0NnJNeUFVQjRzZlo5?=
- =?utf-8?B?YUtqQ2RDakxjYnY0dU43ZFREMGl2SXg1ejJjYXY4N3NLd3pPV2h0TzMrQnY0?=
- =?utf-8?B?NDNMbnI5cVlVamUrRC9SaXdzZ2FCVklUNjc0d1FFbm5PSG5zbEtLUzQrMGI1?=
- =?utf-8?B?bUVhUFFBVjhURUY3S2owVStsMGFTdkRaVmM2bDFVaUNWOVBZeDF4ejEvbXpD?=
- =?utf-8?B?cWFMbFBqSXJhZjlHaVVsOWVtb0JyZUtmenNIcUswKzQwMVppc0xJcnZqUmlP?=
- =?utf-8?B?TURacEIrQnFvOEVOak1aa1oraFphNUhYSkJBY1BNOGNwYzBGRnBWV3hTa09C?=
- =?utf-8?B?ckpWZEtndU5xRTcwR3YzOER6elRyWkx5QUt2aW5EdHZSbXhjUXc3K2xGTyty?=
- =?utf-8?B?a2NqWlQ0WE9XTTlhNjNlNmc2UTJWaEltM1pBTUFoQ0dhdEd1RE55ZytxR0VF?=
- =?utf-8?B?V0lrWk1CeExBUmNySndmTk51MTk4d1BiZmdhekRydlJVdDlwdWFnandNTDVh?=
- =?utf-8?B?NXY5RDY3R1Fwa29kdXZhQTd5OXVJa3NjcnpDTUhIbGxRSG9NdC9lNmljaXhn?=
- =?utf-8?Q?M5SWNeH6Nw8WrC4n1A01fUVyy?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ca36c1a-7948-497a-98f2-08dcb0c79cf4
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR12MB5469.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2024 18:44:15.8946
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hBnTlVja+5WqZ5o8fk3WJQb9y4u9T/ZbeDV5oPwgqZyS6jMagf1xs4KNC6ndsC3RvlSkTbtCljvwcJlU0w6X3Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9077
+References: <20231212204647.2170650-1-sagis@google.com> <20231212204647.2170650-19-sagis@google.com>
+ <ZebeuMoz8izs/SoG@yzhao56-desk.sh.intel.com>
+In-Reply-To: <ZebeuMoz8izs/SoG@yzhao56-desk.sh.intel.com>
+From: Sagi Shahar <sagis@google.com>
+Date: Tue, 30 Jul 2024 14:03:44 -0500
+Message-ID: <CAAhR5DHxMYWsBzs=FrjGdBjygEeohz8hMpBAiOJvu6tDKJCGrg@mail.gmail.com>
+Subject: Re: [RFC PATCH v5 18/29] KVM: selftests: TDX: Add TDX MMIO writes test
+To: Yan Zhao <yan.y.zhao@intel.com>
+Cc: linux-kselftest@vger.kernel.org, Ackerley Tng <ackerleytng@google.com>, 
+	Ryan Afranji <afranji@google.com>, Erdem Aktas <erdemaktas@google.com>, 
+	Isaku Yamahata <isaku.yamahata@intel.com>, Sean Christopherson <seanjc@google.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Peter Gonda <pgonda@google.com>, 
+	Haibo Xu <haibo1.xu@intel.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
+	Vishal Annapurve <vannapurve@google.com>, Roger Wang <runanwang@google.com>, 
+	Vipin Sharma <vipinsh@google.com>, jmattson@google.com, dmatlack@google.com, 
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 7/30/24 11:17 AM, Shuah Khan wrote:
-> On 7/30/24 09:55, Shuah Khan wrote:
->> On 7/30/24 04:10, David Gow wrote:
->>> On Mon, 29 Jul 2024 at 22:09, Randy Dunlap <rdunlap@infradead.org> 
-...
->>> I can see the point that renaming the config option is just churn, but
->>> is there a reason people would run the bitmap selftest but be unable
->>> or unwilling to use KUnit?
->>>
->>> Beyond a brief period of adjustment (which could probably be made
->>> quite minimal with a wrapper script or something), there shouldn't
->>> really be any fundamental difference: KUnit tests can already run at
->>> boot, be configured with a config option, and write output to the
->>> kernel log. There's nothing really being taken away here, and the
->>> bonus of having easier access to run the tests with KUnit's tooling
->>> (or have them automatically run by systems which run KUnit tests)
->>> would seem worthwhile to me, especially since it's optional. And
->>> CONFIG_KUNIT shouldn't be heavy enough to cause problems.
->>>
-> 
-> Shouldn't be is the operative word? This doesn't help people who
-> want run a run bitmap test on a running system. This is a wrong
-> direction to go to say all testing has to be done under kunit.
-> 
-> What happened to the effort to run selftests as is under KUnit? What
-> is the motivation to convert all tests to kunit instead of trying to
-> provide support to run kselftest under kunit environment?
-> 
-> We discussed this a few years ago as I recall. Let's work on that
-> instead of removing existing selftests and regressing current use-cases?
-> 
-> Can we look into providing:
-> 
-> 1. running kselftest under kunit environment without changes
->     as user space applications?
-
-Yes. I suggested this earlier: if something fits neatly into
-a KUnit test, then with some additional work, it can also be
-run from kselftest. Just supporting both would be very nice,
-because people don't have to change anything about their testing
-flow.
-
-
-> 2. Leave kselftests alone so we don't weaken kernel testing
-
-Or augment them as above, so that we don't weaken kernel testing,
-yes.
-
-
-thanks,
-
--- 
-John Hubbard
-NVIDIA
+On Tue, Mar 5, 2024 at 3:28=E2=80=AFAM Yan Zhao <yan.y.zhao@intel.com> wrot=
+e:
+>
+> On Tue, Dec 12, 2023 at 12:46:33PM -0800, Sagi Shahar wrote:
+> > The test verifies MMIO writes of various sizes from the guest to the ho=
+st.
+> >
+> > Signed-off-by: Sagi Shahar <sagis@google.com>
+> > Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> > Signed-off-by: Ryan Afranji <afranji@google.com>
+> > ---
+> >  .../selftests/kvm/include/x86_64/tdx/tdx.h    |  2 +
+> >  .../selftests/kvm/lib/x86_64/tdx/tdx.c        | 14 +++
+> >  .../selftests/kvm/x86_64/tdx_vm_tests.c       | 85 +++++++++++++++++++
+> >  3 files changed, 101 insertions(+)
+> >
+> > diff --git a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h b/too=
+ls/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+> > index 13ce60df5684..502b670ea699 100644
+> > --- a/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+> > +++ b/tools/testing/selftests/kvm/include/x86_64/tdx/tdx.h
+> > @@ -25,5 +25,7 @@ uint64_t tdg_vp_vmcall_instruction_wrmsr(uint64_t ind=
+ex, uint64_t value);
+> >  uint64_t tdg_vp_vmcall_instruction_hlt(uint64_t interrupt_blocked_flag=
+);
+> >  uint64_t tdg_vp_vmcall_ve_request_mmio_read(uint64_t address, uint64_t=
+ size,
+> >                                       uint64_t *data_out);
+> > +uint64_t tdg_vp_vmcall_ve_request_mmio_write(uint64_t address, uint64_=
+t size,
+> > +                                     uint64_t data_in);
+> >
+> >  #endif // SELFTEST_TDX_TDX_H
+> > diff --git a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c b/tools/t=
+esting/selftests/kvm/lib/x86_64/tdx/tdx.c
+> > index b19f07ebc0e7..f4afa09f7e3d 100644
+> > --- a/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+> > +++ b/tools/testing/selftests/kvm/lib/x86_64/tdx/tdx.c
+> > @@ -143,3 +143,17 @@ uint64_t tdg_vp_vmcall_ve_request_mmio_read(uint64=
+_t address, uint64_t size,
+> >
+> >       return ret;
+> >  }
+> > +
+> > +uint64_t tdg_vp_vmcall_ve_request_mmio_write(uint64_t address, uint64_=
+t size,
+> > +                                     uint64_t data_in)
+> > +{
+> > +     struct tdx_hypercall_args args =3D {
+> > +             .r11 =3D TDG_VP_VMCALL_VE_REQUEST_MMIO,
+> > +             .r12 =3D size,
+> > +             .r13 =3D TDG_VP_VMCALL_VE_REQUEST_MMIO_WRITE,
+> > +             .r14 =3D address,
+> > +             .r15 =3D data_in,
+> > +     };
+> > +
+> > +     return __tdx_hypercall(&args, 0);
+> > +}
+> > diff --git a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c b/tools/=
+testing/selftests/kvm/x86_64/tdx_vm_tests.c
+> > index 48902b69d13e..5e28ba828a92 100644
+> > --- a/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+> > +++ b/tools/testing/selftests/kvm/x86_64/tdx_vm_tests.c
+> > @@ -885,6 +885,90 @@ void verify_mmio_reads(void)
+> >       printf("\t ... PASSED\n");
+> >  }
+> >
+> > +void guest_mmio_writes(void)
+> > +{
+> > +     uint64_t ret;
+> > +
+> > +     ret =3D tdg_vp_vmcall_ve_request_mmio_write(TDX_MMIO_TEST_ADDR, 1=
+, 0x12);
+> > +     if (ret)
+> > +             tdx_test_fatal(ret);
+> > +
+> > +     ret =3D tdg_vp_vmcall_ve_request_mmio_write(TDX_MMIO_TEST_ADDR, 2=
+, 0x1234);
+> > +     if (ret)
+> > +             tdx_test_fatal(ret);
+> > +
+> > +     ret =3D tdg_vp_vmcall_ve_request_mmio_write(TDX_MMIO_TEST_ADDR, 4=
+, 0x12345678);
+> > +     if (ret)
+> > +             tdx_test_fatal(ret);
+> > +
+> > +     ret =3D tdg_vp_vmcall_ve_request_mmio_write(TDX_MMIO_TEST_ADDR, 8=
+, 0x1234567890ABCDEF);
+> > +     if (ret)
+> > +             tdx_test_fatal(ret);
+> > +
+> > +     // Write across page boundary.
+> > +     ret =3D tdg_vp_vmcall_ve_request_mmio_write(PAGE_SIZE - 1, 8, 0);
+> > +     if (ret)
+> > +             tdx_test_fatal(ret);
+> > +
+> > +     tdx_test_success();
+> > +}
+> > +
+> > +/*
+> > + * Varifies guest MMIO writes.
+> > + */
+> > +void verify_mmio_writes(void)
+> > +{
+> > +     struct kvm_vm *vm;
+> > +     struct kvm_vcpu *vcpu;
+> > +
+> > +     uint8_t byte_1;
+> > +     uint16_t byte_2;
+> > +     uint32_t byte_4;
+> > +     uint64_t byte_8;
+> > +
+> > +     vm =3D td_create();
+> > +     td_initialize(vm, VM_MEM_SRC_ANONYMOUS, 0);
+> > +     vcpu =3D td_vcpu_add(vm, 0, guest_mmio_writes);
+> > +     td_finalize(vm);
+> > +
+> > +     printf("Verifying TD MMIO writes:\n");
+> > +
+> > +     td_vcpu_run(vcpu);
+> > +     TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+> > +     TDX_TEST_ASSERT_MMIO(vcpu, TDX_MMIO_TEST_ADDR, 1, TDG_VP_VMCALL_V=
+E_REQUEST_MMIO_WRITE);
+> > +     byte_1 =3D *(uint8_t *)(vcpu->run->mmio.data);
+> > +
+> > +     td_vcpu_run(vcpu);
+> > +     TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+> > +     TDX_TEST_ASSERT_MMIO(vcpu, TDX_MMIO_TEST_ADDR, 2, TDG_VP_VMCALL_V=
+E_REQUEST_MMIO_WRITE);
+> > +     byte_2 =3D *(uint16_t *)(vcpu->run->mmio.data);
+> > +
+> > +     td_vcpu_run(vcpu);
+> > +     TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+> > +     TDX_TEST_ASSERT_MMIO(vcpu, TDX_MMIO_TEST_ADDR, 4, TDG_VP_VMCALL_V=
+E_REQUEST_MMIO_WRITE);
+> > +     byte_4 =3D *(uint32_t *)(vcpu->run->mmio.data);
+> > +
+> > +     td_vcpu_run(vcpu);
+> > +     TDX_TEST_CHECK_GUEST_FAILURE(vcpu);
+> > +     TDX_TEST_ASSERT_MMIO(vcpu, TDX_MMIO_TEST_ADDR, 8, TDG_VP_VMCALL_V=
+E_REQUEST_MMIO_WRITE);
+> > +     byte_8 =3D *(uint64_t *)(vcpu->run->mmio.data);
+> > +
+> > +     TEST_ASSERT_EQ(byte_1, 0x12);
+> > +     TEST_ASSERT_EQ(byte_2, 0x1234);
+> > +     TEST_ASSERT_EQ(byte_4, 0x12345678);
+> > +     TEST_ASSERT_EQ(byte_8, 0x1234567890ABCDEF);
+> > +
+> > +     td_vcpu_run(vcpu);
+> > +     TEST_ASSERT_EQ(vcpu->run->exit_reason, KVM_EXIT_SYSTEM_EVENT);
+> > +     TEST_ASSERT_EQ(vcpu->run->system_event.data[1], TDG_VP_VMCALL_INV=
+ALID_OPERAND);
+> Is it possible that this event is caused by an failure of the last 8 byte=
+ write?
+> i.e. though MMIO exit to host with correct value 0x1234567890ABCDEF, but =
+guest
+> sees ret as TDG_VP_VMCALL_INVALID_OPERAND.
+>
+> And if, coincidently, guest gets a ret=3D0 in the next across page bounda=
+ry write,
+> the selftest will show "PASSED", which is not right.
+>
+We can add another tdx_test_report_to_user_space to synchronize
+between guest and host execution making sure that the guest is done
+with all the valid writes before testing the negative case.
+>
+> > +     td_vcpu_run(vcpu);
+> > +     TDX_TEST_ASSERT_SUCCESS(vcpu);
+> > +
+> > +     kvm_vm_free(vm);
+> > +     printf("\t ... PASSED\n");
+> > +}
+> > +
+> >  int main(int argc, char **argv)
+> >  {
+> >       setbuf(stdout, NULL);
+> > @@ -905,6 +989,7 @@ int main(int argc, char **argv)
+> >       run_in_new_process(&verify_guest_msr_reads);
+> >       run_in_new_process(&verify_guest_hlt);
+> >       run_in_new_process(&verify_mmio_reads);
+> > +     run_in_new_process(&verify_mmio_writes);
+> >
+> >       return 0;
+> >  }
+> > --
+> > 2.43.0.472.g3155946c3a-goog
+> >
+> >
 
