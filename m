@@ -1,112 +1,108 @@
-Return-Path: <linux-kselftest+bounces-14463-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14464-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 512AD940F7E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 12:34:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB2FF940FA6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 12:41:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CF18289F7A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 10:34:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82C301F24359
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 10:41:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0C6F1A070F;
-	Tue, 30 Jul 2024 10:29:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9939D1A0719;
+	Tue, 30 Jul 2024 10:35:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="b2SYuI/x"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="bggJ3AuP"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC5B91A0714;
-	Tue, 30 Jul 2024 10:29:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7E912EBCE;
+	Tue, 30 Jul 2024 10:35:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722335376; cv=none; b=WNbkzCad+f671OBjBjRo8d2VYBiGa6hBTHhHSEOtOefxLFm49h6CPeNNDKhH9Hpu1qKrkPq2Fl0rHSiTtRGZrj36DEJz8A/46s6bFfohcyvEd5H7AHJPcNFSDP7M3I6KknFSS68Y4dSfHzcjoZoyNSX+CQN7ZZXjx8roUT1fKW8=
+	t=1722335722; cv=none; b=TM/46MI9biAumchCaoMQ53C6lJGRaQx8d/JLypaLVwbNSs/InKSUNUeULEpbiawEM5MhP0yE0792ZAKkc3jx82K2xoCPqhP4CduwuuJIseRUyuB9LzPIS0zfWYqE9YUG7Ga5dUXkrEuAZXa2qpHTx7PDssJrX+4eEvORPRqWxnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722335376; c=relaxed/simple;
-	bh=0DaKkFeF0sPPzz/ypFknhiD/bWgWmC4UDgSB0SdNoYs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=po0zXF/C2s0GCy1J8RhuiNnQx3yLdM8zqIItUXFNRkcxoKlfqln/U8+1U4VAbfQuMXdRVwXh1XhYMb8AbkIlKEAhCS0cl8ZEh8wwmiZuZIgcYBW4C+hPJ32wNLa4toy/aIi8NyWupCT2SnJUQDS/TdfekU3aUs5Y/THfAJfWgr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=b2SYuI/x; arc=none smtp.client-ip=46.235.227.194
+	s=arc-20240116; t=1722335722; c=relaxed/simple;
+	bh=rxxG15P5dtUF0Ys7cOHlwSHSam9D2lCrV5gOJFfMim8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=s3dpCNVZ9ufFITr/tdjzVAVv/fg5r72H7V40GC3k4XuVb3zUyuHOdrck8t0o8S6Cxu0n9nnEkCjXLng1Gsws6H21XQNx9sMxd79PeQpn1XnpNQ7ZO5XwzTCstfLtHB2VObBRWSrGFTOnM/c3hFVTPPxJzg4X96JeysaVKNcjUpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=bggJ3AuP; arc=none smtp.client-ip=46.235.227.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1722335372;
-	bh=0DaKkFeF0sPPzz/ypFknhiD/bWgWmC4UDgSB0SdNoYs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=b2SYuI/xTR39uJ4oTU5U3oGEooMeNxvuc/Vin6TTulx2yGafKHOZHD/WJJ8a3iZWk
-	 e4bg4Q3IQfkTnrPzGnQl5XaK+teNz8utlq5XAKRfjIjG/7yQJBtinfDksTTulC/MIh
-	 xmXQNERArKK0FgHMOfdBxPMLHFJ+GQCyiygy0mfCikUv90mxgcDJJI+s/GV2xjVnsf
-	 W6letLpdX/MNeNTmEM3SANARgL/WQfMIso2pTAgLQfKFuEbObC8qzbOF9LPO1Bo9sa
-	 cGLFj/DCY6eyMkORQlggcCnTLtbRsc3hF6f+l3Kbwp+byUGokDGt09FS7OvDFkR0Vx
-	 BVO6qy8Ro4qiw==
+	s=mail; t=1722335719;
+	bh=rxxG15P5dtUF0Ys7cOHlwSHSam9D2lCrV5gOJFfMim8=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=bggJ3AuP9Z+21DuCxjktjNK8n80+Ug3I6LACgVCIAo3vmBR75Jt4+9aFuJzWXQ00J
+	 W4s9ACe3TwiizC7zlfj+HwlXS7xknsKIPZzY9bllHFCKdl09Z3NgEdGK3asgSuLgyW
+	 sPB0xAozmraZRzUmCtbdkLVghlneMiEsPfhjqQgbsKzSBzVHkA03O54yrKj+02s4XO
+	 u850WLyow/P7+uc53jyNEryO+n6Fe7R3qtf5y8KjCTaP6gaH9D9+7jT5g/9v7fcVVx
+	 WutHAI8jlI/ntJB7079sqBUqfLrrTxC8liIWfYRD8T0MfUoJ0RfxdmWq4uAUNvz2rn
+	 fjf5dxh51kv8g==
 Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: laura.nao)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 09D903780B50;
-	Tue, 30 Jul 2024 10:29:31 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 91A4E3780B50;
+	Tue, 30 Jul 2024 10:35:18 +0000 (UTC)
 From: Laura Nao <laura.nao@collabora.com>
-To: shuah@kernel.org
+To: skhan@linuxfoundation.org
 Cc: gregkh@linuxfoundation.org,
-	nfraprado@collabora.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
 	kernel@collabora.com,
-	Laura Nao <laura.nao@collabora.com>
-Subject: [PATCH v2] selftests: ksft: Fix finished() helper exit code on skipped tests
-Date: Tue, 30 Jul 2024 12:29:28 +0200
-Message-Id: <20240730102928.33182-1-laura.nao@collabora.com>
+	laura.nao@collabora.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	nfraprado@collabora.com,
+	shuah@kernel.org
+Subject: Re: [PATCH] selftests: ksft: Track skipped tests when finishing the test suite
+Date: Tue, 30 Jul 2024 12:35:43 +0200
+Message-Id: <20240730103543.33884-1-laura.nao@collabora.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <2bb2d338-cd00-4ac2-b8bd-5579eae82637@linuxfoundation.org>
+References: <2bb2d338-cd00-4ac2-b8bd-5579eae82637@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-The Python finished() helper currently exits with KSFT_FAIL when there
-are only passed and skipped tests. Fix the logic to exit with KSFT_PASS
-instead, making it consistent with its C and bash counterparts
-(ksft_finished() and ktap_finished() respectively).
+On 7/29/24 22:06, Shuah Khan wrote:
+> On 7/29/24 08:52, Laura Nao wrote:
+>> Hi Shuah,
+>>
+>> On 7/23/24 18:17, Shuah Khan wrote:
+>>> On 7/22/24 09:43, Laura Nao wrote:
+>>>> Consider skipped tests in addition to passed tests when evaluating the
+>>>> overall result of the test suite in the finished() helper.
+>>>>
+> 
+> I am finally with you now. Can you please more information in your
+> short log and commit log.
+> 
+> Isn't this a bug fix? Current logic before this change will report
+> tests failed if there are any skipped tests?
+> 
+> Can you send v2 calling it a fix and explain the problem clearly.
+>
 
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Fixes: dacf1d7a78bf ("kselftest: Add test to verify probe of devices from discoverable buses")
-Signed-off-by: Laura Nao <laura.nao@collabora.com>
----
-This is a revised version of the patch initially submitted as "[PATCH]
-selftests: ksft: Track skipped tests when finishing the test suite":
-https://lore.kernel.org/all/20240722154319.619944-1-laura.nao@collabora.com/
-
-Depends on "[PATCH v2 2/3] kselftest: Move ksft helper module to common
-directory":
-https://lore.kernel.org/all/20240705-dev-err-log-selftest-v2-2-163b9cd7b3c1@collabora.com/
-(picked through the usb tree, queued for 6.11-rc1)
-
-Changes in v2:
-- Reworded the commit title and message to more accurately describe the
-incorrect behavior of the finished() helper addressed by the patch.
----
- tools/testing/selftests/kselftest/ksft.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/kselftest/ksft.py b/tools/testing/selftests/kselftest/ksft.py
-index cd89fb2bc10e..bf215790a89d 100644
---- a/tools/testing/selftests/kselftest/ksft.py
-+++ b/tools/testing/selftests/kselftest/ksft.py
-@@ -70,7 +70,7 @@ def test_result(condition, description=""):
+v2 sent: https://lore.kernel.org/all/20240730102928.33182-1-laura.nao@collabora.com/
  
- 
- def finished():
--    if ksft_cnt["pass"] == ksft_num_tests:
-+    if ksft_cnt["pass"] + ksft_cnt["skip"] == ksft_num_tests:
-         exit_code = KSFT_PASS
-     else:
-         exit_code = KSFT_FAIL
--- 
-2.30.2
+> This isn't problem in this patch, but I am concerned about how
+> simply calling tests passed without calling out skipped tests.
+> 
+> This problem could be solved by printing a message at the end of tests
+> for non-zero skipped test conditions to say the coverage could be
+> increased by enabling config options.
+>
 
+Right. We can send a separate patch to address this.
+
+Thanks!
+
+Laura
 
