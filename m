@@ -1,363 +1,237 @@
-Return-Path: <linux-kselftest+bounces-14488-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14489-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F169941FE8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 20:42:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFB39941FEC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 20:44:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6213A1C23580
-	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 18:42:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 482211F24C38
+	for <lists+linux-kselftest@lfdr.de>; Tue, 30 Jul 2024 18:44:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB2C1AA3E3;
-	Tue, 30 Jul 2024 18:41:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A771F1AA3DF;
+	Tue, 30 Jul 2024 18:44:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="hXeM36iD"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Wy14m+fX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2051.outbound.protection.outlook.com [40.107.244.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C4D718A6D4
-	for <linux-kselftest@vger.kernel.org>; Tue, 30 Jul 2024 18:41:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722364918; cv=none; b=hP3E219SNO+I6znww8TG199ucYGvQZJerrSpuzfWAgTlwZ3d9jaFoWZ0rgEjjMAKaOzJ9VWTshQnEwbHKgh640ASa+3SICGG8UKwGhY1wpIM0g9o5uB4ETuHmIwGPOHlVrFPYzZaQD2BiIVpnFdidihAgMJM603B7joDW30PyZ0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722364918; c=relaxed/simple;
-	bh=eVwjcXh08v/BloRCWi+Au5NPRXGgBtqnMqSrhA86WPE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=B+EoB7gYiu93A776oqKBBpOnaLbgNqhtJj0e6pROJYv7DdThi04BOrqA/V+jCGrO/AhOJt83r9bMjBBY9+NvDzkoMQgge7HM9PXbBxKyjcyThbmdm1Eyje6q4Lz/T6aCyNHWClZmN02W0UYy/wSLFUD61sOkBfMS/I777MQ5ayo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=hXeM36iD; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6b7a8cada97so24438076d6.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jul 2024 11:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1722364916; x=1722969716; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NFMubqDRuXqmoPI75vXrJ4qmre3+FeuST3BNycNrURg=;
-        b=hXeM36iD6OHIsil52wi4n4FE7dcH7zsMPiZ52xBq1wkrJ9bR9xcA2JXbKrb1Qs/Bhe
-         Sg+W9KcYrRGs/cSbbm7sM2Yeeuj8rKg7bs8FKl2PSthrEEPsHKRsy0whzDjlpb+bQk7H
-         qTWZmXRUQl5YiYhQPWr6R22sXQTgHrfRmrxC52AejtOJbCQGECA1JoF0snwkdGvxc6MY
-         j9/wi9ukXD9NnBUwKsZDYqvEf+GCfGWBKGo0bdjFBUIHoNkYXsLs6kB1m7Reo22TGmeg
-         kL/YotP9qHGB8OBwEXZnQLuO77mydYYqnBClkoV0NF4PqmVOCTSFh4VQe4fEANnAzgTa
-         IQMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722364916; x=1722969716;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NFMubqDRuXqmoPI75vXrJ4qmre3+FeuST3BNycNrURg=;
-        b=g9V9dQOG8jiw5ECUWMkvXCqbM121ZFCv2oyjB0qEI27Vb2dpQAgZRzqsjHkks6QYb4
-         JOGdFW7O+8rdOxwjHQpbJeNLFrf7Qn7dUPlgHDMiH6kU0CaIkuT8gujGXuqpG1OYI7bz
-         vGQyPGTSpXKLYCsKoeFwN8Of9fvszAL8PJ5LuMfxThXcYWF/8fOmEciXtWRTGGVmLjN5
-         PwvZ17LKgfOtEIv5R/rtYHNg/P9If53U+KAovmtwb/k5jrV/aqNAP3axVNUInwa4Bica
-         a3EeQYrQF7BVrljVrcl1dXHjX2ff96vIEsZ8vDxYr0zXS5kORJ+7GNAO3zsuX19W5xgV
-         rS6A==
-X-Forwarded-Encrypted: i=1; AJvYcCWZk3tRMKkVr/prJm//S0u+59jK7bib0hcRXYIX8KrCMMstxOVg+tLB2pHX0fManVJYTQIrQH8Kna/9wfbkhCWMuGQCAzqN+BKI953z0bnf
-X-Gm-Message-State: AOJu0Yx1Oh+tN0S6x9/PewNFT8YtpKreD9YZU10yx7u08AFv5z7kYWAp
-	mezSlj6OmhT5j67FRxhTKkPuPESAfSj5lMtRBvY/DiqlSFnbjQZ9Yia/vXZ3FKc=
-X-Google-Smtp-Source: AGHT+IGqMyyvOhsKtdiERws+A5taOq1D0dtDaWZ6YlDnhO029w/RAeUiX/89Qw+mJRbm+r6IQGTcBg==
-X-Received: by 2002:a05:6214:dc6:b0:6b5:434:cc86 with SMTP id 6a1803df08f44-6bb559f9338mr224388956d6.10.1722364915909;
-        Tue, 30 Jul 2024 11:41:55 -0700 (PDT)
-Received: from n191-036-066.byted.org ([139.177.233.173])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6bb3fb07bf7sm66132716d6.137.2024.07.30.11.41.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Jul 2024 11:41:54 -0700 (PDT)
-From: zijianzhang@bytedance.com
-To: netdev@vger.kernel.org
-Cc: linux-api@vger.kernel.org,
-	willemdebruijn.kernel@gmail.com,
-	almasrymina@google.com,
-	edumazet@google.com,
-	davem@davemloft.net,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	dsahern@kernel.org,
-	axboe@kernel.dk,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	cong.wang@bytedance.com,
-	xiaochun.lu@bytedance.com,
-	Zijian Zhang <zijianzhang@bytedance.com>
-Subject: [PATCH net-next v8 3/3] selftests: add MSG_ZEROCOPY msg_control notification test
-Date: Tue, 30 Jul 2024 18:41:20 +0000
-Message-Id: <20240730184120.4089835-4-zijianzhang@bytedance.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20240730184120.4089835-1-zijianzhang@bytedance.com>
-References: <20240730184120.4089835-1-zijianzhang@bytedance.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC4211AA3C6;
+	Tue, 30 Jul 2024 18:44:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.51
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722365062; cv=fail; b=LfVmwN0odUec9I9oOuYbo/1SEhlOOmop0rOcmXaFlZQDIG/fiS0WR+wBvsNSdrZ0Rt1TpEHDK7ej2+lRhdfB7gfZA9hkN6sSWsqy9ZuHabjC/dWRpi9+Bp/SYj6ucFGtvwYN9kwpPkUcf6j0VjwGaZQ7vtjUt3QvFmeFgK80Uxs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722365062; c=relaxed/simple;
+	bh=oXRQ4ZPb21CDdSnk8yKZ16xp9H6KGNM6hhCU/ojP/zc=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=X7ktoe3R9ipDYhKxmGNOitxp3UxZs+hZeOD5CnJXb0DMdURyzPPHsUliP5xgpa+StwRtNc33RjWGrMXsHXwboMNV5AtRdDpdYL8JzpHOY9mNYrqVJR1X7/SKkbF+du3T2Y8qS3PiuawB5Baf3nETGd2+woQIAOP0ATd0k2sFbxw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Wy14m+fX; arc=fail smtp.client-ip=40.107.244.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=dZg94PwDzOedRG58DtOjvUHGpuRbs0AqidZzUTE3KzZBBA9ftVhy6LA3hRUe1RS8yzTKNlqXucSh4R79WxpBq3Z7yDQsreEMLnvwtTbt8WECGySCES0nodVaLNzDCEzm0LkeOwNBQC0TQL5b0zoVEKZwMVa5I7znNCFVL7m6ucH+Sao00hKU6M2QPA4eb7JDZxhXPb+JTIduB/HRaXE7FkkOpSja84oU7VBcbEr71LzWp1JC2EfsIugAgTEQzSgKULVVT+bf2SIG/7zuSVFdfBQkugejcPIUtgwUsnXZtHxnh8sTVIolOgqC8glm/evIdk50kdkqa/BNH2lmg/fnkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zQmGBAGQZuPJ4Zw+fdXgaW03KEk9m1vCCGIjQ3trW70=;
+ b=CdFTtU6nEXzG1R2c0gTMT6h2C4/M9NRkhTTpPXS2MlDNhxE/R20vAmHq0EKpBUKqOKRChHfuy91q5bMsPb6zOhpyA5i7TcFpYMVMsBM+mNACJVg1IVQdKgA9PcMkpYTXBok4G3PuuijdonIwFCNpvF3fAvSzRMLnnMsJOAZf3BZigzc5J9NzK/ljf5LYDdaGdcZc5bVVbIdjnnxb+92E4Xg+EDfGXMtXqZPZMWyy6vJDoOoMFqaWEXWWbNNRonatQJs07mRvQ0ONwFqNw2nBj/NLnbK8XtdETuPJGhUSr2maS8LZpMZh7aZEVAPP1VaiA0a5u9M3agwjVhDVYtorNg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zQmGBAGQZuPJ4Zw+fdXgaW03KEk9m1vCCGIjQ3trW70=;
+ b=Wy14m+fXnuby0T5ruX0PQZyYyfHgloY929fYdRK3Pqqm9/xoVgUO7rVukN6xv/1OzzQAO+2coqak8L3EQ+vuUhfjaGrdyTa/P9i2A3oRpzuPrlcBpfjIJLZ/56jh03xq+yuCNyRBFiqhTkBnirSoNsPrkTGqvql4J6DMN3rtzNK1fhgjNMThwF43CwUtVJBFs4FncRG07SKyTxyoMcBWOzaAo1ETBD4PAy/xmnuut816MzT/DFtb8wItHn1DqXwC4NtC1STRj4ga0OVVatXoWnPkfTJyjRvnJhlzGgIw+mQ8byDnUyKTFxvhywTMDxlWSOt8uwOxQTLZANL0D+M9eg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from SJ0PR12MB5469.namprd12.prod.outlook.com (2603:10b6:a03:37f::16)
+ by CH3PR12MB9077.namprd12.prod.outlook.com (2603:10b6:610:1a2::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.28; Tue, 30 Jul
+ 2024 18:44:17 +0000
+Received: from SJ0PR12MB5469.namprd12.prod.outlook.com
+ ([fe80::ff21:d180:55f2:d0c0]) by SJ0PR12MB5469.namprd12.prod.outlook.com
+ ([fe80::ff21:d180:55f2:d0c0%5]) with mapi id 15.20.7807.026; Tue, 30 Jul 2024
+ 18:44:15 +0000
+Message-ID: <504beb91-f0a3-47f4-8d68-d62577bb17d1@nvidia.com>
+Date: Tue, 30 Jul 2024 11:44:14 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] bitmap: Rename module
+To: Shuah Khan <skhan@linuxfoundation.org>, David Gow <davidgow@google.com>,
+ Randy Dunlap <rdunlap@infradead.org>, kees@kernel.org,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Yury Norov <yury.norov@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel@collabora.com
+References: <20240726110658.2281070-1-usama.anjum@collabora.com>
+ <20240726110658.2281070-3-usama.anjum@collabora.com>
+ <ZqUvy_h4YblYkIXU@yury-ThinkPad>
+ <85f575b4-4842-4189-9bba-9ee1085a5e80@collabora.com>
+ <c0e5978b-7c11-4657-bd07-9962cd04bf9a@infradead.org>
+ <CABVgOSnkxgeXXXm9xp5_PvBxtMGbyFN-Jmd6YJ1u6g81MF_fyw@mail.gmail.com>
+ <714e7642-6f92-4e41-aa36-c854668e0bb0@linuxfoundation.org>
+ <75a2960e-d489-4440-a8e1-487a7f84902e@linuxfoundation.org>
+Content-Language: en-US
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <75a2960e-d489-4440-a8e1-487a7f84902e@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BYAPR01CA0055.prod.exchangelabs.com (2603:10b6:a03:94::32)
+ To SJ0PR12MB5469.namprd12.prod.outlook.com (2603:10b6:a03:37f::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR12MB5469:EE_|CH3PR12MB9077:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5ca36c1a-7948-497a-98f2-08dcb0c79cf4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZTRaMm05SDV0VFM2ZHdFM3huVEk2Qmp1ckk3OHFYc2xqWXBXS2F1N2N4cG5t?=
+ =?utf-8?B?bEVzL21FZ0ZOTllGa3JsODRReG5SWFJyaFdaWldYN2FKRko4bmt0ZlJaUEpM?=
+ =?utf-8?B?Wk81YXIrREMxVU1QQ0Y3d2h6amI5Nnk4WmU4VmU3RXlaNnRuUVhqbm5LOW53?=
+ =?utf-8?B?cDFtNUU2cjdCT0E4STJ4d0V4Zm55bWUwS1BITDBOaDlTUk5CTTJvK0ZrQWtV?=
+ =?utf-8?B?OER2ZnZYa2UrY2paQzZKWE1iNVF1bmhxcGJCSGVWVm5BclpYR0dVb2VaSHda?=
+ =?utf-8?B?VmkrS0dzTHRrb002VFlSbGxLRGJmSGJUcFRMQkVTeTVBWTA5VWlaOGtnS1JU?=
+ =?utf-8?B?NkpoWElhYmxRUEljbGhVNXRiRDhndjJCZitsKzFwWkZqanAxZUx3aXQwVWtT?=
+ =?utf-8?B?amdzVmlWaE4rVzVPRnlkRFFXalZFL0R5ZC9vczhkcXRTZ3VuWXhpbUtDZkxX?=
+ =?utf-8?B?em81NlVaUWdBUFZNNVN5MVFoOWVDUVowbU1RTlhyVkpWalRzU2dwWkg0NkE2?=
+ =?utf-8?B?TFNwS2xJSWo5ak9SS0UvbU0rSnd1Mk9jaVZZNzM2bmtWenp4SG8yQXJFL1Bn?=
+ =?utf-8?B?TDJob1FVMG1UYzVJWEFEcEVIYmxnL1cxUlVHQ2N3NkJOb3hkUVgrY1dmVlhB?=
+ =?utf-8?B?dHlldDRTaldHeGlIMklheG44Nkt5bERWbHFGaGVJdHdOSEVkWjNBdHplYjA2?=
+ =?utf-8?B?aGQrbHpvUzNjcFJTVnlOclR4NHcxS2ZXVE0vSWVzRnVLQ1BjTWZ4SjNxenVP?=
+ =?utf-8?B?YWFzRThONlRHaGxMVjRiL3d2WjM5S3VsSDZ2MWhlVU9WQzNxMy9FeW9LYUtJ?=
+ =?utf-8?B?T0ZYc0RZYUFmQXBvWmR1VVo4L2RyZ1A5bUtyYi9NZVBFMmNla3FHb1d3NTlC?=
+ =?utf-8?B?U3FoZElGV0JqTkQxazdSZFBrejVLVTF2aGN4cG5xR2lhRXJORTl5SjI4eWt1?=
+ =?utf-8?B?N0Zvc0RCdXVjNWhQa0t2R0pLcE0zZ1R0RmlFZzYvc3lBQ2U0KzdEVC8wWkV4?=
+ =?utf-8?B?eEQ3YU44SURaWklhdUk0ZTJiZ1dNNXBucTQ3TnRIbi9kTlhxVFJta0llQys5?=
+ =?utf-8?B?b1NXdWFLQXRMREYzU2RlMUZsc0dYQVJTUTMrME1zRmlubkZVU0U5ZTBiWXFh?=
+ =?utf-8?B?b2F6amI5Q2pBbVVEY3Q0RUNpbmRPbFNkZ3p5dEJqbythanE1d0ZhTmFaRnF3?=
+ =?utf-8?B?elFQSEVNdnlDTFZQUDM3VjhjRW5aTTk1Z0sveXo2NEVXTzlORmVPMkRtSnlE?=
+ =?utf-8?B?ZThuYmk3YVlwbEpzTHVMS1FMVVZ4eHd5REN3cVdCWlVZNWJTb3FBS2ZLc0pu?=
+ =?utf-8?B?Y1ZwcEhQbERLS1h0NFJYSkt3VmppdU5qWkdQR0dMNzJlNmJwTjB2L1kweWRr?=
+ =?utf-8?B?Yno5eW5tRzQ5MUowenRIcGNwVC8ralJPYmMvQWdISWFvYzIrYWFoYlVSTTla?=
+ =?utf-8?B?aDJQWDJucDluNkw0RTd5bG1TWENlYy9MMDY5dnpveFB3WXlmYUVnTGRJekdi?=
+ =?utf-8?B?ZGtERldhMFd6UUFHTXo0ZkQydDcxTGJXc0pQRkFVeXd1WlRZb1JCUkVZRlNP?=
+ =?utf-8?B?cFVwb1k5eVpBMnczQS9rUEluRzVWVTZSMlBzdy9UZzJqTEFVTjBCMmowc2dL?=
+ =?utf-8?B?dU5OVGtmMzI3bVFCdE9DNkQ5Rk1nd1hMOVZVb0tDMy94NkdCVDl5d2Qzc0N3?=
+ =?utf-8?B?aXJaZXhkRGE4bDN2OFpwVGVFTE5ia2hqUXh0aThINEFpTlRkRTBzT01wOUVE?=
+ =?utf-8?B?V3h2Y2lpVGVrWUg3T2ZzN0hLVVByZ0Z0SEkrTDRCVEZGWHA2QURtZThXa2V1?=
+ =?utf-8?B?c3RTUjFmR09NVSt0bC9BZz09?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR12MB5469.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?dFY5NzIzUGcyS1VOQ2VUdk5tSHgrMzFhVXl0eHVwSERKZjQ2VGovZXJORmFo?=
+ =?utf-8?B?WnRvY0hWTFkvR1g1NE02dUdtZzh1WjltTmRzZXhxQVVxMUpQaHgyM0g1cVB5?=
+ =?utf-8?B?Sk5jSFVOWnBPaTlhT3BLVlVoQ2dpVjQrV3F1dHo1anZHMjZUNU5lR2QwSU16?=
+ =?utf-8?B?TEgrZ2h2ZmhWSWR4bk01cjFDa3kyMW9lZERLbnNBWE9lRkRCSWdabFJReTMx?=
+ =?utf-8?B?OEMzMkxwVExqMDRYSncrRHlNYnc0NEJpOXlrU2VoTEhUYzgrcGFvSjdRZnI2?=
+ =?utf-8?B?UU8wb1hNRHd5bXZoMzBhdXgxdGNnTi9jT2NOZXphcmFCZFhvZ3hCd0VTUXMw?=
+ =?utf-8?B?RDg4ZW9QQ1JtdjdweGUwRzBhck96VVY3UUVSa0lQbzgzT3lUejlSMk5DWjR1?=
+ =?utf-8?B?OWhuOHRFREYvWmYyeGIxRFpBaDUvb3JqNkdKS0FHMHFoRmdLVCtZZnBkMjJF?=
+ =?utf-8?B?ZXZrWmUwbDczTDVNK1lycFRxM1RxSkl0eXZQbVU2RG1iRFhVQXlOT0hpSzVO?=
+ =?utf-8?B?TWxMdjExRTBzWUhDNENmV3BFRWNVUzNJVEhqNitENzR6akRHd0MxNWZLOFhn?=
+ =?utf-8?B?QXNMZDQ3QjZqWUs2S2NvZERxcU9zbExZRGFBSDRvQWNGckh3a2V4bGszNngy?=
+ =?utf-8?B?WGozUHFkallvQ0Y3RkdrZWw4MW5Jc3ZqNUFIc2doNTRYUHB4dXBhMmwrWklo?=
+ =?utf-8?B?dVFUS29lUUw5cHJUMDdTalVEUHc4T1lMcTR2WktSNUhqSXRZMEtlTlNpUnho?=
+ =?utf-8?B?MXR4NmNKZ3lTRkNtbWFYYmFBb1c4MnM0bzVvSVpWd0ZRUWdOQVBFa29pZ0VF?=
+ =?utf-8?B?TGE1dEorUFpFSkFYT2lydDR3V09EeTVrRzBVOHdUd29id2w1TUR4NU1hcHM1?=
+ =?utf-8?B?dzZSZlh5aWxuM0xydUFTY1BtTXk5ckFOWjhiTkhaSnoxUytuSlNjWlFDOEwr?=
+ =?utf-8?B?bFZHWHZMRmtPeXNGbTNwN0FQVDRVbUZ4L2RsZUJteldaTkk4N0wxSFlCMFp5?=
+ =?utf-8?B?Z1R5VmpZYitaeElwUWtuVGx6K3l1U29pZk05MVFHSjhpS1JBUHpiK001NUdR?=
+ =?utf-8?B?S240TmNjMXZDdmMzYTVOay9jNVdhVUU4aVZhTG1FREJqWWJDa1dIWXhrZXd5?=
+ =?utf-8?B?UUVza2tvQ2lSZkFzWVdLaXJYNStwb3NtWURtcEd6R3hWU3V3UTlvMjVCeWE0?=
+ =?utf-8?B?YjZRY3BJWWlIRzBHWTJUTnVZb2xQSmdCWlhBUDFlcllmVlNDOG95WEdZWHZj?=
+ =?utf-8?B?dGdUcGRad3ZTZnFpall5ZkJuOXF3cElYczVQYm1QYW1QRlJna3UvYzhMZ2tM?=
+ =?utf-8?B?T2diQXJmRHZrNGhUQy85UU01ZENTay9EMURzdjJKUXlIQ2ZlZHlDR3R5Z2pi?=
+ =?utf-8?B?cExtT05wai9VeThaMEprQXlmUnp4N1dEL3gySGZudzFDUFIvNFNKZjh6Qmxr?=
+ =?utf-8?B?MFF3cE9xU0wvUVNwV3pVTTE3SnlqTGljcW1Vd1Y2ZGl5aWFpM3JzemJUZ0gr?=
+ =?utf-8?B?OE1IcUFmU01mbys5dlIrT29kNFdPZUgvTENSZWk0ZGl0NnJNeUFVQjRzZlo5?=
+ =?utf-8?B?YUtqQ2RDakxjYnY0dU43ZFREMGl2SXg1ejJjYXY4N3NLd3pPV2h0TzMrQnY0?=
+ =?utf-8?B?NDNMbnI5cVlVamUrRC9SaXdzZ2FCVklUNjc0d1FFbm5PSG5zbEtLUzQrMGI1?=
+ =?utf-8?B?bUVhUFFBVjhURUY3S2owVStsMGFTdkRaVmM2bDFVaUNWOVBZeDF4ejEvbXpD?=
+ =?utf-8?B?cWFMbFBqSXJhZjlHaVVsOWVtb0JyZUtmenNIcUswKzQwMVppc0xJcnZqUmlP?=
+ =?utf-8?B?TURacEIrQnFvOEVOak1aa1oraFphNUhYSkJBY1BNOGNwYzBGRnBWV3hTa09C?=
+ =?utf-8?B?ckpWZEtndU5xRTcwR3YzOER6elRyWkx5QUt2aW5EdHZSbXhjUXc3K2xGTyty?=
+ =?utf-8?B?a2NqWlQ0WE9XTTlhNjNlNmc2UTJWaEltM1pBTUFoQ0dhdEd1RE55ZytxR0VF?=
+ =?utf-8?B?V0lrWk1CeExBUmNySndmTk51MTk4d1BiZmdhekRydlJVdDlwdWFnandNTDVh?=
+ =?utf-8?B?NXY5RDY3R1Fwa29kdXZhQTd5OXVJa3NjcnpDTUhIbGxRSG9NdC9lNmljaXhn?=
+ =?utf-8?Q?M5SWNeH6Nw8WrC4n1A01fUVyy?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5ca36c1a-7948-497a-98f2-08dcb0c79cf4
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR12MB5469.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jul 2024 18:44:15.8946
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hBnTlVja+5WqZ5o8fk3WJQb9y4u9T/ZbeDV5oPwgqZyS6jMagf1xs4KNC6ndsC3RvlSkTbtCljvwcJlU0w6X3Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9077
 
-From: Zijian Zhang <zijianzhang@bytedance.com>
+On 7/30/24 11:17 AM, Shuah Khan wrote:
+> On 7/30/24 09:55, Shuah Khan wrote:
+>> On 7/30/24 04:10, David Gow wrote:
+>>> On Mon, 29 Jul 2024 at 22:09, Randy Dunlap <rdunlap@infradead.org> 
+...
+>>> I can see the point that renaming the config option is just churn, but
+>>> is there a reason people would run the bitmap selftest but be unable
+>>> or unwilling to use KUnit?
+>>>
+>>> Beyond a brief period of adjustment (which could probably be made
+>>> quite minimal with a wrapper script or something), there shouldn't
+>>> really be any fundamental difference: KUnit tests can already run at
+>>> boot, be configured with a config option, and write output to the
+>>> kernel log. There's nothing really being taken away here, and the
+>>> bonus of having easier access to run the tests with KUnit's tooling
+>>> (or have them automatically run by systems which run KUnit tests)
+>>> would seem worthwhile to me, especially since it's optional. And
+>>> CONFIG_KUNIT shouldn't be heavy enough to cause problems.
+>>>
+> 
+> Shouldn't be is the operative word? This doesn't help people who
+> want run a run bitmap test on a running system. This is a wrong
+> direction to go to say all testing has to be done under kunit.
+> 
+> What happened to the effort to run selftests as is under KUnit? What
+> is the motivation to convert all tests to kunit instead of trying to
+> provide support to run kselftest under kunit environment?
+> 
+> We discussed this a few years ago as I recall. Let's work on that
+> instead of removing existing selftests and regressing current use-cases?
+> 
+> Can we look into providing:
+> 
+> 1. running kselftest under kunit environment without changes
+>     as user space applications?
 
-We update selftests/net/msg_zerocopy.c to accommodate the new mechanism,
-cfg_notification_limit has the same semantics for both methods. Test
-results are as follows, we update skb_orphan_frags_rx to the same as
-skb_orphan_frags to support zerocopy in the localhost test.
+Yes. I suggested this earlier: if something fits neatly into
+a KUnit test, then with some additional work, it can also be
+run from kselftest. Just supporting both would be very nice,
+because people don't have to change anything about their testing
+flow.
 
-cfg_notification_limit = 1, both method get notifications after 1 calling
-of sendmsg. In this case, the new method has around 17% cpu savings in TCP
-and 23% cpu savings in UDP.
-+---------------------+---------+---------+---------+---------+
-| Test Type / Protocol| TCP v4  | TCP v6  | UDP v4  | UDP v6  |
-+---------------------+---------+---------+---------+---------+
-| ZCopy (MB)          | 7523    | 7706    | 7489    | 7304    |
-+---------------------+---------+---------+---------+---------+
-| New ZCopy (MB)      | 8834    | 8993    | 9053    | 9228    |
-+---------------------+---------+---------+---------+---------+
-| New ZCopy / ZCopy   | 117.42% | 116.70% | 120.88% | 126.34% |
-+---------------------+---------+---------+---------+---------+
 
-cfg_notification_limit = 32, both get notifications after 32 calling of
-sendmsg, which means more chances to coalesce notifications, and less
-overhead of poll + recvmsg for the original method. In this case, the new
-method has around 7% cpu savings in TCP and slightly better cpu usage in
-UDP. In the env of selftest, notifications of TCP are more likely to be
-out of order than UDP, it's easier to coalesce more notifications in UDP.
-The original method can get one notification with range of 32 in a recvmsg
-most of the time. In TCP, most notifications' range is around 2, so the
-original method needs around 16 recvmsgs to get notified in one round.
-That's the reason for the "New ZCopy / ZCopy" diff in TCP and UDP here.
-+---------------------+---------+---------+---------+---------+
-| Test Type / Protocol| TCP v4  | TCP v6  | UDP v4  | UDP v6  |
-+---------------------+---------+---------+---------+---------+
-| ZCopy (MB)          | 8842    | 8735    | 10072   | 9380    |
-+---------------------+---------+---------+---------+---------+
-| New ZCopy (MB)      | 9366    | 9477    | 10108   | 9385    |
-+---------------------+---------+---------+---------+---------+
-| New ZCopy / ZCopy   | 106.00% | 108.28% | 100.31% | 100.01% |
-+---------------------+---------+---------+---------+---------+
+> 2. Leave kselftests alone so we don't weaken kernel testing
 
-In conclusion, when notification interval is small or notifications are
-hard to be coalesced, the new mechanism is highly recommended. Otherwise,
-the performance gain from the new mechanism is very limited.
+Or augment them as above, so that we don't weaken kernel testing,
+yes.
 
-Signed-off-by: Zijian Zhang <zijianzhang@bytedance.com>
-Signed-off-by: Xiaochun Lu <xiaochun.lu@bytedance.com>
----
- tools/testing/selftests/net/msg_zerocopy.c  | 101 ++++++++++++++++++--
- tools/testing/selftests/net/msg_zerocopy.sh |   1 +
- 2 files changed, 95 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/net/msg_zerocopy.c b/tools/testing/selftests/net/msg_zerocopy.c
-index 7ea5fb28c93d..cf227f0011b5 100644
---- a/tools/testing/selftests/net/msg_zerocopy.c
-+++ b/tools/testing/selftests/net/msg_zerocopy.c
-@@ -66,6 +66,10 @@
- #define SO_ZEROCOPY	60
- #endif
- 
-+#ifndef SCM_ZC_NOTIFICATION
-+#define SCM_ZC_NOTIFICATION	78
-+#endif
-+
- #ifndef SO_EE_CODE_ZEROCOPY_COPIED
- #define SO_EE_CODE_ZEROCOPY_COPIED	1
- #endif
-@@ -74,6 +78,14 @@
- #define MSG_ZEROCOPY	0x4000000
- #endif
- 
-+#define ZC_INFO_ARR_SIZE (ZC_NOTIFICATION_MAX * sizeof(struct zc_info_elem))
-+#define ZC_INFO_SIZE	(sizeof(struct zc_info) + ZC_INFO_ARR_SIZE)
-+
-+enum notification_type {
-+	MSG_ZEROCOPY_NOTIFY_ERRQUEUE = 1,
-+	MSG_ZEROCOPY_NOTIFY_SENDMSG = 2,
-+};
-+
- static int  cfg_cork;
- static bool cfg_cork_mixed;
- static int  cfg_cpu		= -1;		/* default: pin to last cpu */
-@@ -86,7 +98,7 @@ static int  cfg_runtime_ms	= 4200;
- static int  cfg_verbose;
- static int  cfg_waittime_ms	= 500;
- static int  cfg_notification_limit = 32;
--static bool cfg_zerocopy;
-+static enum notification_type cfg_zerocopy;
- 
- static socklen_t cfg_alen;
- static struct sockaddr_storage cfg_dst_addr;
-@@ -97,6 +109,8 @@ static long packets, bytes, completions, expected_completions;
- static int  zerocopied = -1;
- static uint32_t next_completion;
- static uint32_t sends_since_notify;
-+static char	zc_ckbuf[CMSG_SPACE(ZC_INFO_SIZE)];
-+static bool	added_zcopy_info;
- 
- static unsigned long gettimeofday_ms(void)
- {
-@@ -182,7 +196,26 @@ static void add_zcopy_cookie(struct msghdr *msg, uint32_t cookie)
- 	memcpy(CMSG_DATA(cm), &cookie, sizeof(cookie));
- }
- 
--static bool do_sendmsg(int fd, struct msghdr *msg, bool do_zerocopy, int domain)
-+static void add_zcopy_info(struct msghdr *msg)
-+{
-+	struct zc_info *zc_info;
-+	struct cmsghdr *cm;
-+
-+	if (!msg->msg_control)
-+		error(1, errno, "NULL user arg");
-+	cm = (struct cmsghdr *)msg->msg_control;
-+	cm->cmsg_len = CMSG_LEN(ZC_INFO_SIZE);
-+	cm->cmsg_level = SOL_SOCKET;
-+	cm->cmsg_type = SCM_ZC_NOTIFICATION;
-+
-+	zc_info = (struct zc_info *)CMSG_DATA(cm);
-+	zc_info->size = ZC_NOTIFICATION_MAX;
-+
-+	added_zcopy_info = true;
-+}
-+
-+static bool do_sendmsg(int fd, struct msghdr *msg,
-+		       enum notification_type do_zerocopy, int domain)
- {
- 	int ret, len, i, flags;
- 	static uint32_t cookie;
-@@ -200,6 +233,12 @@ static bool do_sendmsg(int fd, struct msghdr *msg, bool do_zerocopy, int domain)
- 			msg->msg_controllen = CMSG_SPACE(sizeof(cookie));
- 			msg->msg_control = (struct cmsghdr *)ckbuf;
- 			add_zcopy_cookie(msg, ++cookie);
-+		} else if (do_zerocopy == MSG_ZEROCOPY_NOTIFY_SENDMSG &&
-+			   sends_since_notify + 1 >= cfg_notification_limit) {
-+			memset(&msg->msg_control, 0, sizeof(msg->msg_control));
-+			msg->msg_controllen = CMSG_SPACE(ZC_INFO_SIZE);
-+			msg->msg_control = (struct cmsghdr *)zc_ckbuf;
-+			add_zcopy_info(msg);
- 		}
- 	}
- 
-@@ -218,7 +257,7 @@ static bool do_sendmsg(int fd, struct msghdr *msg, bool do_zerocopy, int domain)
- 		if (do_zerocopy && ret)
- 			expected_completions++;
- 	}
--	if (do_zerocopy && domain == PF_RDS) {
-+	if (msg->msg_control) {
- 		msg->msg_control = NULL;
- 		msg->msg_controllen = 0;
- 	}
-@@ -466,6 +505,44 @@ static void do_recv_completions(int fd, int domain)
- 	sends_since_notify = 0;
- }
- 
-+static void do_recv_completions2(void)
-+{
-+	struct cmsghdr *cm = (struct cmsghdr *)zc_ckbuf;
-+	struct zc_info *zc_info;
-+	__u32 hi, lo, range;
-+	__u8 zerocopy;
-+	int i;
-+
-+	zc_info = (struct zc_info *)CMSG_DATA(cm);
-+	for (i = 0; i < zc_info->size; i++) {
-+		hi = zc_info->arr[i].hi;
-+		lo = zc_info->arr[i].lo;
-+		zerocopy = zc_info->arr[i].zerocopy;
-+		range = hi - lo + 1;
-+
-+		if (cfg_verbose && lo != next_completion)
-+			fprintf(stderr, "gap: %u..%u does not append to %u\n",
-+				lo, hi, next_completion);
-+		next_completion = hi + 1;
-+
-+		if (zerocopied == -1) {
-+			zerocopied = zerocopy;
-+		} else if (zerocopied != zerocopy) {
-+			fprintf(stderr, "serr: inconsistent\n");
-+			zerocopied = zerocopy;
-+		}
-+
-+		completions += range;
-+		sends_since_notify -= range;
-+
-+		if (cfg_verbose >= 2)
-+			fprintf(stderr, "completed: %u (h=%u l=%u)\n",
-+				range, hi, lo);
-+	}
-+
-+	added_zcopy_info = false;
-+}
-+
- /* Wait for all remaining completions on the errqueue */
- static void do_recv_remaining_completions(int fd, int domain)
- {
-@@ -553,11 +630,16 @@ static void do_tx(int domain, int type, int protocol)
- 		else
- 			do_sendmsg(fd, &msg, cfg_zerocopy, domain);
- 
--		if (cfg_zerocopy && sends_since_notify >= cfg_notification_limit)
-+		if (cfg_zerocopy == MSG_ZEROCOPY_NOTIFY_ERRQUEUE &&
-+		    sends_since_notify >= cfg_notification_limit)
- 			do_recv_completions(fd, domain);
- 
-+		if (cfg_zerocopy == MSG_ZEROCOPY_NOTIFY_SENDMSG &&
-+		    added_zcopy_info)
-+			do_recv_completions2();
-+
- 		while (!do_poll(fd, POLLOUT)) {
--			if (cfg_zerocopy)
-+			if (cfg_zerocopy == MSG_ZEROCOPY_NOTIFY_ERRQUEUE)
- 				do_recv_completions(fd, domain);
- 		}
- 
-@@ -715,7 +797,7 @@ static void parse_opts(int argc, char **argv)
- 
- 	cfg_payload_len = max_payload_len;
- 
--	while ((c = getopt(argc, argv, "46c:C:D:i:l:mp:rs:S:t:vz")) != -1) {
-+	while ((c = getopt(argc, argv, "46c:C:D:i:l:mnp:rs:S:t:vz")) != -1) {
- 		switch (c) {
- 		case '4':
- 			if (cfg_family != PF_UNSPEC)
-@@ -749,6 +831,9 @@ static void parse_opts(int argc, char **argv)
- 		case 'm':
- 			cfg_cork_mixed = true;
- 			break;
-+		case 'n':
-+			cfg_zerocopy = MSG_ZEROCOPY_NOTIFY_SENDMSG;
-+			break;
- 		case 'p':
- 			cfg_port = strtoul(optarg, NULL, 0);
- 			break;
-@@ -768,7 +853,7 @@ static void parse_opts(int argc, char **argv)
- 			cfg_verbose++;
- 			break;
- 		case 'z':
--			cfg_zerocopy = true;
-+			cfg_zerocopy = MSG_ZEROCOPY_NOTIFY_ERRQUEUE;
- 			break;
- 		}
- 	}
-@@ -779,6 +864,8 @@ static void parse_opts(int argc, char **argv)
- 			error(1, 0, "-D <server addr> required for PF_RDS\n");
- 		if (!cfg_rx && !saddr)
- 			error(1, 0, "-S <client addr> required for PF_RDS\n");
-+		if (cfg_zerocopy == MSG_ZEROCOPY_NOTIFY_SENDMSG)
-+			error(1, 0, "PF_RDS does not support ZC_NOTIF_SENDMSG");
- 	}
- 	setup_sockaddr(cfg_family, daddr, &cfg_dst_addr);
- 	setup_sockaddr(cfg_family, saddr, &cfg_src_addr);
-diff --git a/tools/testing/selftests/net/msg_zerocopy.sh b/tools/testing/selftests/net/msg_zerocopy.sh
-index 89c22f5320e0..022a6936d86f 100755
---- a/tools/testing/selftests/net/msg_zerocopy.sh
-+++ b/tools/testing/selftests/net/msg_zerocopy.sh
-@@ -118,4 +118,5 @@ do_test() {
- 
- do_test "${EXTRA_ARGS}"
- do_test "-z ${EXTRA_ARGS}"
-+do_test "-n ${EXTRA_ARGS}"
- echo ok
+thanks,
+
 -- 
-2.20.1
-
+John Hubbard
+NVIDIA
 
