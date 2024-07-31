@@ -1,124 +1,228 @@
-Return-Path: <linux-kselftest+bounces-14512-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14513-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A37194270B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 08:38:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC239942742
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 09:02:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31D6828474A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 06:38:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2E23284226
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 07:02:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A909E16EB51;
-	Wed, 31 Jul 2024 06:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CFAC1A4B39;
+	Wed, 31 Jul 2024 07:02:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="FrtfgSzD"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qNgtwcfF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CDED16D4CC;
-	Wed, 31 Jul 2024 06:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 033A2161328
+	for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 07:02:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722407866; cv=none; b=YYjzKyAylTRnGuhnbVR4oL5Nb3zHvcDLk85NEHGfDu6550LiW6ZJMPyGEoXDjbmCfUlZecypKHA3vi4bk7MCx3Haoj77aNdDQCalLsVkZtBAPfd4M1xLP88Txcjt/iTPlx+YtHGeRicycfUNpGByCximhXXaY1shvpVYkP1r2Bc=
+	t=1722409346; cv=none; b=e6uAU4ERUCDpSFD43KJNyzoN4Id6C2r80ITil0KXbkwxMswK2pgo53fEa9yvAzZLlVmM7pvC3YVgDJLpxy9CQV3PHSvA1SkOOnIK6FETBOFitHKUj848CVVrCdx3OPx82yuvqE3kuHGhDZe4FCCBA9tMU2C0nSXuB4bDwuGn8cw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722407866; c=relaxed/simple;
-	bh=oGqGN98+teCVsumZkvZBF5tx4Nr+UtAmKTXVPhiWj54=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=pBdrNJZ6tOqdQbBxaeryFxUA24PeujiB2D0N4VLgiDrj7ufU23CKydacHgJBOyQg5kuirjliDOMunZwW/yxUgJ0HU8r4ve6/e76Zlupq3orT8qY2BCEaE3Sfwd+B2OSnbhLfeatOJMzy6OJfzpqbyAaCqV+xHLNsJMx8vC0FeXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=FrtfgSzD; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7EC5CC0007;
-	Wed, 31 Jul 2024 06:37:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1722407857;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ev28OYDmUbsqAmB9uXzO3SMs9tRUOMJ/SmpgfsPedY0=;
-	b=FrtfgSzDzROgnSCe5sqP+VOBka5ja4MtGX7QdGkij6m/CyVc9Gvj6HKYkwn+/4fztGNqsA
-	5QZ7O3Qb7wLskPuNvocvt3mpM5hu05HooADIUN7A8fpkjMS4qodoZVghWK6VxAk5cWRqLi
-	qVRnjfCcGo1iHJlXGJaERNe9WF5QUQ6jh1L/8Qaby4N9X7Z+X75bX9+RXCQjlufXM06UEI
-	a8K38/dPiJ/igPMfomMbSaowXiMq2cH14MpMzzYohqDBvaGttp90KTC/RRPhOBEzAsithu
-	Xza3iyMGa81OoBMO4byeoZGrpYZO7Zv1zclRtuYAct09rQ0am5/lgm9SzDO9Fw==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Wed, 31 Jul 2024 08:37:27 +0200
-Subject: [PATCH bpf-next v4 3/3] selftests/bpf: add wrong type test to
- cgroup dev
+	s=arc-20240116; t=1722409346; c=relaxed/simple;
+	bh=UvGS2KNgksmGdxRxMB/KVioF0rHo3JEoWgRJlI3psks=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=ms2shu2mDKHpbD5GJT2Lp3VS348THcKpaXCDjqDoihTtLq26hLplj6dytZrqNud9yg51eDYhMsV+NfSbL56UKTCJ91hBMMNphRMdPIdN/W57RmmH2oPY9sR1sxOieYfxgLt6S4ikOcjlDv5jXM+AIY7OsMNKicFK8z46QH5coGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qNgtwcfF; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-66b3b4415c7so111826787b3.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 00:02:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1722409343; x=1723014143; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=088JFC1WZ8ZgSpH7zRMZEF3/RcvpIxuKl/0OLwbt5dE=;
+        b=qNgtwcfFVQdzzMsxEn63UyeFDKtU0eC7NRQgJrIxzyOnZJtx+RxDBoq1ptDKqZC52Y
+         rymLI1CIR4o+Z5uvcwX38hqmyp5liRDBZmJMYJKFSgI6FFnON+NZPDNg+taEQFdeQjOy
+         zJ5Ka5qRr2hfwq3wDpQZV8QOOQYVXiPP3Z427eIaiOWaPtK3o41qdVm7PQUx31tGIe+0
+         063hoiix+b97XVqcKGGvg5xX2xtpb9XJ4zRgj+7Wb8CAxc/TQqHHtNo9yoze1LkNc3X4
+         kTH3hhXYFBpToQHeZr8mut4eS10j01kK8DpCwyod3Hx2Q1HbRKG/+U4j3NYFf+4Xl8vh
+         Lc+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722409343; x=1723014143;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=088JFC1WZ8ZgSpH7zRMZEF3/RcvpIxuKl/0OLwbt5dE=;
+        b=R8jpyKgPH5+jWnMtnRoMPyGknqnBFuGLwuy3QzpErEIOTXwIY97cbIVBX6BdovAcaB
+         IkCF+vahAIQ3GPen+wZUSla2+TgH6BWfBk0bkdUfUy07pJUQj26rL6W4+UKwt8sElOHF
+         vWgBBEQlrIHnlK1mOqg3cC+xtxcyzp4YWd/PuJH/+o71cQfMf+vcdEmTFzJ8VCgFEHwT
+         1Qbf/ES8fUOCfUawgC6FSOToVJVnd++0s/3nTmKiS8wCew69La1lhzY/HoTjg4/17uQ+
+         0RfpNvDymXDJ86tU4SWiNvxV5kMRmuR3GlA9Nl/4MvO5e7FhGexTb8fX64UmFQaoUIsD
+         6UxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUAoGEPfI9/BAN9rCbqfxqYDprJGBlvIqOVzjFF4FBkgpijlC5+HkYyM1j+yS6QRnUiKGYuzFt1E+YG7fGOe3s++vFHeMNvFu4IfIJZ+fPn
+X-Gm-Message-State: AOJu0YyGOanEiCwZuNW5RoBpMRXmcMW05P9rkn2fPBJWaqZQuW8Em89m
+	LbRWlZEbuqbtf9vWVxlZe3qy8lceEoO92aE/dLp4URAHf0eLA0Oc4Ir22zKJYQ9DzF9AM5p7Goz
+	OHIY8yHuTjA==
+X-Google-Smtp-Source: AGHT+IEvcL19rB/+XJE1g92cQ/lu74+Om7niyk0FqxVzSWQtmKy7T05Ze92qeC+Wk1rlur/edUgwreXL+ZLrXg==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:949:0:b0:e0b:bafe:a7ff with SMTP id
+ 3f1490d57ef6-e0bbafea980mr1564276.6.1722409342902; Wed, 31 Jul 2024 00:02:22
+ -0700 (PDT)
+Date: Wed, 31 Jul 2024 15:02:06 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240731-convert_dev_cgroup-v4-3-849425d90de6@bootlin.com>
-References: <20240731-convert_dev_cgroup-v4-0-849425d90de6@bootlin.com>
-In-Reply-To: <20240731-convert_dev_cgroup-v4-0-849425d90de6@bootlin.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Alan Maguire <alan.maguire@oracle.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.14.1
-X-GND-Sasl: alexis.lothore@bootlin.com
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.46.0.rc1.232.g9752f9e123-goog
+Message-ID: <20240731070207.3918687-1-davidgow@google.com>
+Subject: [PATCH] kunit: Device wrappers should also manage driver name
+From: David Gow <davidgow@google.com>
+To: Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Matti Vaittinen <mazziesaccount@gmail.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Maxime Ripard <mripard@kernel.org>, 
+	Kees Cook <kees@kernel.org>, Nico Pache <npache@redhat.com>
+Cc: David Gow <davidgow@google.com>, kunit-dev@googlegroups.com, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Current cgroup_dev test mostly tests that device operation is accepted or
-refused base on passed major/minor (and so, any operation performed during
-test involves only char device)
+kunit_driver_create() accepts a name for the driver, but does not copy
+it, so if that name is either on the stack, or otherwise freed, we end
+up with a use-after-free when the driver is cleaned up.
 
-Add a small subtest ensuring that the device type passed to bpf program
-allows it to take decisions as well.
+Instead, strdup() the name, and manage it as another KUnit allocation.
+As there was no existing kunit_kstrdup(), we add one. Further, add a
+kunit_ variant of strdup_const() and kfree_const(), so we don't need to
+allocate and manage the string in the majority of cases where it's a
+constant.
 
-Reviewed-by: Alan Maguire <alan.maguire@oracle.com>
-Acked-by: Stanislav Fomichev <sdf@fomichev.me>
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+This fixes a KASAN splat with overflow.overflow_allocation_test, when
+built as a module.
+
+Fixes: d03c720e03bd ("kunit: Add APIs for managing devices")
+Reported-by: Nico Pache <npache@redhat.com>
+Closes: https://groups.google.com/g/kunit-dev/c/81V9b9QYON0
+Signed-off-by: David Gow <davidgow@google.com>
+Reviewed-by: Kees Cook <kees@kernel.org>
 ---
-Changes in v4:
-- update parameters to test both ret and errno
 
-Changes in v3:
-- reorganize subtests order
+There's some more serious changes since the RFC I sent, so please take a
+closer look.
 
-Changes in v2:
-- change test name ("null" block device does not make sense)
-- use updated subtest API for this new subtest
+Thanks,
+-- David
+
+Changes since RFC:
+https://groups.google.com/g/kunit-dev/c/81V9b9QYON0/m/PFKNKDKAAAAJ
+- Add and use the kunit_kstrdup_const() and kunit_free_const()
+  functions.
+- Fix a typo in the doc comments.
+
+
 ---
- tools/testing/selftests/bpf/prog_tests/cgroup_dev.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ include/kunit/test.h | 58 ++++++++++++++++++++++++++++++++++++++++++++
+ lib/kunit/device.c   |  7 ++++--
+ 2 files changed, 63 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_dev.c b/tools/testing/selftests/bpf/prog_tests/cgroup_dev.c
-index 8661e145ba84..5ab7547e38c0 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_dev.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_dev.c
-@@ -114,6 +114,10 @@ void test_cgroup_dev(void)
- 	if (test__start_subtest("deny-write"))
- 		test_write("/dev/zero", buf, TEST_BUFFER_SIZE, -1, EPERM);
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index e2a1f0928e8b..da9e84de14c0 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -28,6 +28,7 @@
+ #include <linux/types.h>
  
-+	if (test__start_subtest("deny-mknod-wrong-type"))
-+		test_mknod("/dev/test_dev_cgroup_block", S_IFBLK, 1, 3, -1,
-+			   EPERM);
+ #include <asm/rwonce.h>
++#include <asm/sections.h>
+ 
+ /* Static key: true if any KUnit tests are currently running */
+ DECLARE_STATIC_KEY_FALSE(kunit_running);
+@@ -480,6 +481,63 @@ static inline void *kunit_kcalloc(struct kunit *test, size_t n, size_t size, gfp
+ 	return kunit_kmalloc_array(test, n, size, gfp | __GFP_ZERO);
+ }
+ 
 +
- cleanup_progs:
- 	dev_cgroup__destroy(skel);
- cleanup_cgroup:
-
++/**
++ * kunit_kfree_const() - conditionally free test managed memory
++ * @x: pointer to the memory
++ *
++ * Calls kunit_kfree() only if @x is not in .rodata section.
++ * See kunit_kstrdup_const() for more information.
++ */
++static inline void kunit_kfree_const(struct kunit *test, const void *x)
++{
++	if (!is_kernel_rodata((unsigned long)x))
++		kunit_kfree(test, x);
++}
++
++/**
++ * kunit_kstrdup() - Duplicates a string into a test managed allocation.
++ *
++ * @test: The test context object.
++ * @str: The NULL-terminated string to duplicate.
++ * @gfp: flags passed to underlying kmalloc().
++ *
++ * See kstrdup() and kunit_kmalloc_array() for more information.
++ */
++static inline char *kunit_kstrdup(struct kunit *test, const char *str, gfp_t gfp)
++{
++	size_t len;
++	char *buf;
++
++	if (!str)
++		return NULL;
++
++	len = strlen(str) + 1;
++	buf = kunit_kmalloc(test, len, gfp);
++	if (buf)
++		memcpy(buf, str, len);
++	return buf;
++}
++
++/**
++ * kunit_kstrdup_const() - Conditionally duplicates a string into a test managed allocation.
++ *
++ * @test: The test context object.
++ * @str: The NULL-terminated string to duplicate.
++ * @gfp: flags passed to underlying kmalloc().
++ *
++ * Calls kunit_kstrdup() only if @str is not in the rodata section. Must be freed with
++ * kunit_free_const() -- not kunit_free().
++ * See kstrdup_const() and kunit_kmalloc_array() for more information.
++ */
++static inline const char *kunit_kstrdup_const(struct kunit *test, const char *str, gfp_t gfp)
++{
++	if (is_kernel_rodata((unsigned long)str))
++		return str;
++
++	return kunit_kstrdup(test, str, gfp);
++}
++
+ /**
+  * kunit_vm_mmap() - Allocate KUnit-tracked vm_mmap() area
+  * @test: The test context object.
+diff --git a/lib/kunit/device.c b/lib/kunit/device.c
+index 25c81ed465fb..520c1fccee8a 100644
+--- a/lib/kunit/device.c
++++ b/lib/kunit/device.c
+@@ -89,7 +89,7 @@ struct device_driver *kunit_driver_create(struct kunit *test, const char *name)
+ 	if (!driver)
+ 		return ERR_PTR(err);
+ 
+-	driver->name = name;
++	driver->name = kunit_kstrdup_const(test, name, GFP_KERNEL);
+ 	driver->bus = &kunit_bus_type;
+ 	driver->owner = THIS_MODULE;
+ 
+@@ -192,8 +192,11 @@ void kunit_device_unregister(struct kunit *test, struct device *dev)
+ 	const struct device_driver *driver = to_kunit_device(dev)->driver;
+ 
+ 	kunit_release_action(test, device_unregister_wrapper, dev);
+-	if (driver)
++	if (driver) {
++		const char *driver_name = driver->name;
+ 		kunit_release_action(test, driver_unregister_wrapper, (void *)driver);
++		kunit_kfree_const(test, driver_name);
++	}
+ }
+ EXPORT_SYMBOL_GPL(kunit_device_unregister);
+ 
 -- 
-2.45.2
+2.46.0.rc1.232.g9752f9e123-goog
 
 
