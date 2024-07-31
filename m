@@ -1,122 +1,111 @@
-Return-Path: <linux-kselftest+bounces-14562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0C6C943528
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 19:48:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74EF594356A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 20:07:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFF741C21787
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 17:48:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A771E1C2155E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 18:07:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D69763C6BA;
-	Wed, 31 Jul 2024 17:47:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3712A288B5;
+	Wed, 31 Jul 2024 18:07:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QFYJJGWO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OHi8WS+7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E88F02E62C
-	for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 17:47:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8CEE4776A;
+	Wed, 31 Jul 2024 18:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722448076; cv=none; b=cMws99IIijgNfknrJ/TKPy0+CrTT2DjM+5g+eY0CkgqZY1WKBOK1lGbdmaG25/sS2mD2I27O3zQOlTiOycWZMwpoc7wBtih8m377kFqshXl/LbVv/tnzGQH9TG3cxNKjQU/xqQEjl2jKWKk1RaQlmDyfRNDgTCkYIzu1DXEjet0=
+	t=1722449264; cv=none; b=IsvfPnhKxBK+I9RfLPpydmHDh+M3uilaM7wMEnDRI9j0XBecdXOKGCm57LyV11GgHGU6qeXEBt5KbbAx3VfHgrijYWJodNTgWA6LwKgPqsevklxEkT0AEtsH50tZZuMz8yZCqKIFe4Y6PTz38v1Goz4Vfqah4mWX8F6QF6o6AEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722448076; c=relaxed/simple;
-	bh=6jAUuW7/ivNq+Elvq+AsbUz2cQ7h+vFt+C9fBmkMu1Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UquT1kCN8ehC7BCcaOplbDxYbvDysF14nmFb7AbjmdLGNzUqYOAPaqHnqZD8cpWetlO1UYDH0gGZGoul7rMpK4CrCq1+twltqVxIJqNKT9cmWTnGiaMMe4mMBZGCxuzfTwVm3IzQsbXuyC898LD9QZ80ABY5+SwKdRFIsA/aptU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QFYJJGWO; arc=none smtp.client-ip=209.85.166.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-81f7faff04dso38205939f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 10:47:53 -0700 (PDT)
+	s=arc-20240116; t=1722449264; c=relaxed/simple;
+	bh=wlwyUDdk+glkVmWzVpN0PT2B/PBZ8qoo54dvMQfFCMU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=f70EmKBGFd7x8A2tUfS4kU5egZJ0DPwcZiHiMuN2raOVjUqOI5Wf2ON500ghwN/WCUkPDJbEkLeU+rCqeaisrGsf6Pa9daN1DA5/edeCJlR9U28aHcWs3y2fYWgEfLg/bC8tK+/qs6j4PRcxCAx1oT74sbPyJOF/EZ4En5UihPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OHi8WS+7; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7104f93a20eso813943b3a.1;
+        Wed, 31 Jul 2024 11:07:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1722448073; x=1723052873; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20230601; t=1722449262; x=1723054062; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=89oZyEHSOTKQRd9fOydMJ2/AkOE+4xTOTMGuEKoBp3k=;
-        b=QFYJJGWOhD8sMtSKnPz2iG8qgnWbyJ/SQb/kQjdBaPxrHE/D96SRs8TNNv44EOBDTh
-         eFzPOTltoo15r7qovNSHTpSBf1/FSeRt8ZjAjclFketqMTFyhOt6YkLIbGYz+s7GlEuV
-         imqtGJHguuOkLADieVI2l8tEYBiffyEhv4kFI=
+        bh=H/z4Ls39b3YeZyEIMdUMB9gw4yNYyChcTS8DQMKP+kM=;
+        b=OHi8WS+7rRMcPxa3A16wU8twb3GJIMT2N56VsxQp7yD4W6Ir16gBCBnRw3X3qfW5cZ
+         /xBvPYr0XMxbJJ6PTN8Bim7PVebPSFilgzovCaFA60PJzl7jGT822XBXSn4Y6oXxz974
+         aEQ+2RptNMTieZWPBdp+vOmx+3xYAM2cEjZtm7YgPJIHuGYxaREjyVlZwKnCHB9W/xSf
+         egszlyIImuQxM4iooZmW548bsOZHcEl+Vr3KZXxkS7E3twv411Mzh21nC6fSiKhBF2AC
+         0/JLpC3uExiMi+BI6ddqIVPcBfP+8SywWB0pP6/9fw/mdPw70O8kDLzG0n52TfnwICzf
+         MB4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722448073; x=1723052873;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1722449262; x=1723054062;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=89oZyEHSOTKQRd9fOydMJ2/AkOE+4xTOTMGuEKoBp3k=;
-        b=TMUjp88dWMCS/FOc68r3xEhX1WzJQh/Z67TjAusF8jEKXtJh2HMPRYdEYOJK8jdIQ9
-         ri3UqjtkvXqQvUFbTNTVRHp4zBetwEWX7b5uBZxk+kk3uoZukDTdCbGbIzSmK2NCBEc3
-         YaDzaXFgEIl9+GmpqChMmBluAjIlAVYcitVR5NOFu+Q5Jn4VL/W8NoJggViskQ8cYJWY
-         /BvuzFkOYL2Fe3Fy+EY+uvkwHWPN3BpiNvBOJkiLrqQF05MvaavNJzxhaNYfzG6cZQj4
-         C87ZT4w2xMSaMG38spj48Fm+BTQ4h3X6O6X2KgHD8/ganiBSgXEEB5yqY9tI2/8AIaQt
-         ebwA==
-X-Forwarded-Encrypted: i=1; AJvYcCV7ni3fqD+LwzGsuqNddqoClnWQ6v00P9FIEPgpzudHSoSxILBr/f46hsI5vnysD//RhNk0ZxN1uwsReLUWd6s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5noqu+7DQcqMlynxfj6jBCreyFVR0wx0dGXdvaH7rw9JwSDz3
-	lOFvRFGhnKNUZnW0hDP+VxFZaDrkqLi5tyV8UdP2pKjc6iS+oWB8/oX1/mbLzaytVly8AY4EsaX
-	w
-X-Google-Smtp-Source: AGHT+IEhJu3l0EIAj6YjUUurkN2Co+0z9S6OdQ7KpdRzQff+24Fw5qN8NoTOnlbNR3NsSWXea1YNyg==
-X-Received: by 2002:a05:6602:586:b0:80a:9c66:3842 with SMTP id ca18e2360f4ac-81fcc17995bmr1839239f.3.1722448073025;
-        Wed, 31 Jul 2024 10:47:53 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c29fa40509sm3268043173.7.2024.07.31.10.47.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 31 Jul 2024 10:47:52 -0700 (PDT)
-Message-ID: <2a62bb4c-f701-482c-b83d-ec3e489b0f7e@linuxfoundation.org>
-Date: Wed, 31 Jul 2024 11:47:52 -0600
+        bh=H/z4Ls39b3YeZyEIMdUMB9gw4yNYyChcTS8DQMKP+kM=;
+        b=uggxZQ6hzq4bAYvViNBZXgKpugvoYWXs62y8UMpG5aDTOrmuFnA1LVdRPY925cPv11
+         PEWw4J6abzwsJlF4gtKXSUasTeG8Y8ggtyU4EJ2j+BUIMJ+5i7Gz33onrCZDEYg2ummM
+         WEWHEeCCzOSFwd3KHe4ITPh08XZ66YcawBDb8kA3BhBUennE5ziX6T4NS5TGMnCIMjrt
+         tb0TWiUk8vcpNzVuCKD+Kygagj1Bv2y7IyXzx6GQVF+yS1X+0uD71Zd3z6aEwvlP/f34
+         T8p/CGjP47IIcc5x4C48xG05Lg0014TBC57z9GtXA01n+iQfKMg/5FHjPDbfBw6xEcsg
+         oFrA==
+X-Forwarded-Encrypted: i=1; AJvYcCUw58/jdjlsGtX85EL8qBDLbydQrwA8L9QIiHVusloblMXhTr2RBcmZ/0hb4e8dcRNKfzyyNCnlf7hw8Eg+2ABuSaT30YKNWJxttbGRkG4TXtagJ22e5X03bj0UC3S4+Qnw74e/DKduKuhti1qxfi3RAJAuC/NgNSqBSzEJK6sw38qSEI8y
+X-Gm-Message-State: AOJu0Yzujy8f9vJ7byThERzjSfGHz8qA+XsD3YBJOgn9slNgs8tqPdB7
+	1SIxygxwqg7M+yeCVENrxzrQiErV/OyV8+aH9zoP8vCrcuoJOwlT
+X-Google-Smtp-Source: AGHT+IExHjnuHIHhiKnfD7PgAec7VBsRU/u68Qc66aDoay96q4LeW6baWuHjfXc3EkVbgRtFJxRB9w==
+X-Received: by 2002:a05:6a20:7fa1:b0:1c4:17e1:14d0 with SMTP id adf61e73a8af0-1c68d10d77fmr273276637.47.1722449261896;
+        Wed, 31 Jul 2024 11:07:41 -0700 (PDT)
+Received: from Emma ([2401:4900:1c21:dad1:5054:ff:fe53:2787])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70ead86ffabsm10585931b3a.143.2024.07.31.11.07.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Jul 2024 11:07:41 -0700 (PDT)
+Date: Wed, 31 Jul 2024 18:07:38 +0000
+From: Karan Sanghavi <karansanghvi98@gmail.com>
+To: Jamal Hadi Salim <jhs@mojatatu.com>,
+	Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
+	Shuah Khan <shuah@kernel.org>,
+	Karan Sanghavi <karansanghvi98@gmail.com>, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Karan Sanghavi <karansanghvi98@gmail.com>
+Subject: [PATCH] selftests: tc-testing: Fixed Typo error
+Message-ID: <Zqp9asVA-q_OzDP-@Emma>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests: ksft: Fix finished() helper exit code on
- skipped tests
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Laura Nao <laura.nao@collabora.com>, shuah@kernel.org
-Cc: gregkh@linuxfoundation.org, nfraprado@collabora.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- kernel@collabora.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240730102928.33182-1-laura.nao@collabora.com>
- <ffea6ae8-a5e3-47f9-8d01-efe5e58ab2c8@collabora.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <ffea6ae8-a5e3-47f9-8d01-efe5e58ab2c8@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 7/31/24 07:05, Muhammad Usama Anjum wrote:
-> On 7/30/24 3:29 PM, Laura Nao wrote:
->> The Python finished() helper currently exits with KSFT_FAIL when there
->> are only passed and skipped tests. Fix the logic to exit with KSFT_PASS
->> instead, making it consistent with its C and bash counterparts
->> (ksft_finished() and ktap_finished() respectively).
->>
->> Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
->> Fixes: dacf1d7a78bf ("kselftest: Add test to verify probe of devices from discoverable buses")
->> Signed-off-by: Laura Nao <laura.nao@collabora.com>
-> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> 
->> ---
->> This is a revised version of the patch initially submitted as "[PATCH]
->> selftests: ksft: Track skipped tests when finishing the test suite":
->> https://lore.kernel.org/all/20240722154319.619944-1-laura.nao@collabora.com/
->>
->> Depends on "[PATCH v2 2/3] kselftest: Move ksft helper module to common
->> directory":
->> https://lore.kernel.org/all/20240705-dev-err-log-selftest-v2-2-163b9cd7b3c1@collabora.com/
->> (picked through the usb tree, queued for 6.11-rc1)
->>
->> Changes in v2:
->> - Reworded the commit title and message to more accurately describe the
->> incorrect behavior of the finished() helper addressed by the patch.
+Corrected the typographical of the word  "different"
+in the "name" field of the JSON object with ID "4319".
 
-Thank you - Applied to linux-kselftest fixes for Linux 6.11-rc2
+Signed-off-by: Karan Sanghavi <karansanghvi98@gmail.com>
+---
+ tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json b/tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json
+index 03723cf84..6897ff5ad 100644
+--- a/tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json
++++ b/tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json
+@@ -1189,7 +1189,7 @@
+     },
+     {
+         "id": "4319",
+-        "name": "Replace cgroup filter with diffferent match",
++        "name": "Replace cgroup filter with different match",
+         "category": [
+             "filter",
+             "cgroup"
+-- 
+2.43.0
+
 
