@@ -1,168 +1,104 @@
-Return-Path: <linux-kselftest+bounces-14579-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14580-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8422E9437BF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 23:23:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ED509437C1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 23:23:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F7C92839EE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 21:23:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC2811F22F01
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 21:23:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D698208D1;
-	Wed, 31 Jul 2024 21:23:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2562816B3BF;
+	Wed, 31 Jul 2024 21:23:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="q9Q3/auq"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="snr4hs8v"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1873C099
-	for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 21:23:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369E9208D1;
+	Wed, 31 Jul 2024 21:23:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722460983; cv=none; b=dnZzqx32iET7K6cPhk5mosS00Vb96yFKYlFlk8QvqibC1GHnu2498nAZ9sjoRFlHdloitnBI3cv6SZsI/oUgZ1L2t6IxknfM8ybbttNJg1+IHRupNWScnwoKTJcLkZQbJsPHO1JW0yYK1FoCODs/czk6Z+L4tadcWcB/bGa5Msk=
+	t=1722461018; cv=none; b=tLhoVqKhWZU6P/DHWrV3schxdAaq/TN7h6H1oGXFe8rSXURMF37AEIQIeEofTBYrqXCCfdDShKxMt0YVhVXm0OhbVTyX28iPLCbjbBFzPvvJ40jq6BJ/YUdG1PxzHRF69WVqSi8BQCgQMSwmGs8sFZL6tpR67o3yzNTz2k0VzxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722460983; c=relaxed/simple;
-	bh=GfO55b+2JVxSvDqBxCzypiim8opRWyBpZbr5KXHzR/4=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=XFay6Eeux/BEKukv+8ggu4kWji1qT6xnOzRYirsNZ77o9627yZieCqflbc/qHQiPth7boDgEcOlXo2IcmM02R20PRr6Ts52F/TNPLnYBpujv43hnSyuxR7OLZ9kN9dyeO5w3nx7cAyqvnTvjJJxbR2H9bTbPKgLrgiUUav7ApGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=q9Q3/auq; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1fc6a017abdso40836485ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 14:23:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1722460981; x=1723065781; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=nK3gaH2rnWK7tnNJ+cHm6BKybIiZQMLLOHfx8Ur48uo=;
-        b=q9Q3/auqaUaQA1qB+xn4KxSmc+/z/icKHOFeEmbhr92RMjJHgT4PG+P1lSgNkouW7A
-         S7WAfJpQ5X5xMoMDPWQjGwoihlcwhRcSjjAUtZVTbmbfJKIaj6UDGtOL2LscMvLBaSgD
-         vDTyi8EYE+sr69nsScpQhqkNBHb9+/Qh/SEPUwvu+r7GOKFW/nRBlr+YF+D1/W7i3W3m
-         tSorfdWDQgQqCyUAnKatQzL62Mq5TF9q8w1btm6hmR+hdgnL17scYqFW2GF7v5ViEraI
-         E4V7byjT7K0w/wgEy6HNwGPhUHdoVmV6KILh+TkWQlhEheT9/Vje0li8l++tIg6W5+ng
-         d7vQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722460981; x=1723065781;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nK3gaH2rnWK7tnNJ+cHm6BKybIiZQMLLOHfx8Ur48uo=;
-        b=kWgW7v/eyeLFhuVvrp8KLcXv8AMLeinZ+RE9QLnznzkvsiRX2yI3gvHEww2AehGZlp
-         T/oIaUUDXx9Kada+lHLuWIj/dZaoY9122FqQcZsuwOUHB1EYt2fgKYjo3tm6pAIIf/iX
-         s01EbScP+OcxSs5E/2ZKLIw7CGM4kzByAlWYXpVybVwMmmAjAxcyq2z6SfU1+inV3Q3/
-         TNcgSxMutefXsNtB+eGDJKo2VLHqksL6ngINBxKADaL2K7y0KT2vQYZolWEQEpYqffF6
-         Vl+GX5Zr2Xub/Ku1b/b3dtBvJDUSFM0saz2/4IdrEqzjvqVFu7EgRPjBQ+9rrzdhmg5S
-         pgvA==
-X-Forwarded-Encrypted: i=1; AJvYcCUY4K+Zd4LOZnOS4Sd9M5EXFEBV6/fzM3EnKZhIXkwfyquVY0c4cQ/0fqRtyV5tNtDuqblMGHMCMQYHLQGX4asQyZG8vcEtyhLeB6jBe7Df
-X-Gm-Message-State: AOJu0Yz/gd+/yw9oVqTyQyjXgnSL7wKowI2qY7OsUFSZeHS8ePrF9gfT
-	8474BkL/4aYIgo86I/If+5nswxlFSeSi6P9EzNRozTeiindscpbSn9yGVF5sYkY=
-X-Google-Smtp-Source: AGHT+IH4jJBy1T5is5CptcEoN0grAiPp3GiQV62HKJuFSoHKyrZAuM857shOt0wJ9nPfcwacXNg29Q==
-X-Received: by 2002:a17:903:234f:b0:1fb:72b4:8775 with SMTP id d9443c01a7336-1ff4d2135c7mr6436145ad.40.1722460981413;
-        Wed, 31 Jul 2024 14:23:01 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7ffb53csm124630585ad.304.2024.07.31.14.23.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jul 2024 14:23:01 -0700 (PDT)
-Message-ID: <66aaab35.170a0220.28631.0f23@mx.google.com>
-Date: Wed, 31 Jul 2024 14:23:01 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1722461018; c=relaxed/simple;
+	bh=osoUFGGb18R2Lb9zuekVkl7jBzHtvin4+eWyeWpzfkk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GjnaDR7cQNCuN/ezYa39UaDMW2v+/kiPsIg9RPjcsd0OF224vcPXYf4DNjbuqRF6S8ZqPT4yPQOo9/g/9iwATHHJoSmP4/wGDd2saDYBwxnZUSRzgwOcP+mAsKT9iG+peFH0YuH5mEnSf/JcUs6zBgC5iUEC/h9QJVFNU7YMScI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=snr4hs8v; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=s+phKS5FVZBLaCYfZ7urh2US5nBaT+rwZbSHvhzsxtI=; b=snr4hs8v5N7wl0yV3/1mVU6t8n
+	8S4Ygp1IvdyVJpeVk+EZ3EBQoIM/9VLM6ZkOMmhiM5FbLV1OXLzq/TExbtDZUzxuW1H/Zz97erPLA
+	EzdR+j1vAqdCl23pd9Sknpw+v1C9a+eWgixEYldll1I57L79jscB0o+Wvmv5ux8rVao9nr1YFylvl
+	5+Gl+Mny0L61KjqwvrBxQByKIr2JzO1N1GgBo+AXBljRwrzyJQ6lfiz1ZpW8utXGgCxUJGsRO5PAF
+	ajcKC9gjn/3GZvNXL2ESIWF3amIJFzlPBhC3qgYf6AoeJJw47gBp0zhnO2HEU+ZXluhI4jQpbTCZp
+	EDY9r07w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.97.1 #2 (Red Hat Linux))
+	id 1sZGn8-0000000Ga75-3fz1;
+	Wed, 31 Jul 2024 21:23:26 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 056E9300820; Wed, 31 Jul 2024 23:23:26 +0200 (CEST)
+Date: Wed, 31 Jul 2024 23:23:25 +0200
+From: Peter Zijlstra <peterz@infradead.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kernel@collabora.com
+Subject: Re: [PATCH] MAINTAINERS: Add selftests/x86 entry
+Message-ID: <20240731212325.GY40213@noisy.programming.kicks-ass.net>
+References: <20240610052810.1488793-1-usama.anjum@collabora.com>
+ <83d0c57a-dd87-42eb-935a-e4104c17a5ed@collabora.com>
+ <3518e3ef-3444-419d-94ce-331f4e7fb391@collabora.com>
+ <257c9106-c33a-46c1-9761-111505309176@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.11-rc1-6-g38cde27f74d8
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-Subject: kselftest/next build: 6 builds: 2 failed, 4 passed,
- 1 warning (v6.11-rc1-6-g38cde27f74d8)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <257c9106-c33a-46c1-9761-111505309176@linuxfoundation.org>
 
-kselftest/next build: 6 builds: 2 failed, 4 passed, 1 warning (v6.11-rc1-6-=
-g38cde27f74d8)
+On Wed, Jul 31, 2024 at 12:14:16PM -0600, Shuah Khan wrote:
+> On 7/31/24 07:42, Muhammad Usama Anjum wrote:
+> > Kind reminder
+> > 
+> > On 7/2/24 3:17 PM, Muhammad Usama Anjum wrote:
+> > > Kind reminder
+> 
+> Top post ???
+> 
+> > > 
+> > > On 6/10/24 10:28 AM, Muhammad Usama Anjum wrote:
+> > > > There are no maintainers specified for tools/testing/selftests/x86.
+> > > > Shuah has mentioned [1] that the patches should go through x86 tree or
+> > > > in special cases directly to Shuah's tree after getting ack-ed from x86
+> > > > maintainers. Different people have been confused when sending patches as
+> > > > correct maintainers aren't found by get_maintainer.pl script. Fix
+> > > > this by adding entry to MAINTAINERS file.
+> > > > 
+> > > > [1] https://lore.kernel.org/all/90dc0dfc-4c67-4ea1-b705-0585d6e2ec47@linuxfoundation.org
+> > > > 
+> > > > Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> > > > ---
+> > > >   MAINTAINERS | 1 +
+> > > >   1 file changed, 1 insertion(+)
+> > > > 
+> 
+> Applied to linux-kselftest next for Linux 6.12-rc1.
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/v6.11-rc1-6-g38cde27f74d8/
-
-Tree: kselftest
-Branch: next
-Git Describe: v6.11-rc1-6-g38cde27f74d8
-Git Commit: 38cde27f74d8bbe2f705fb1f80384acab9762e9e
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
-
-Build Failures Detected:
-
-arm64:
-    defconfig+kselftest+arm64-chromebook: (clang-16) FAIL
-    defconfig+kselftest+arm64-chromebook: (gcc-12) FAIL
-
-Warnings Detected:
-
-arm64:
-
-arm:
-
-i386:
-
-x86_64:
-    x86_64_defconfig+kselftest (clang-16): 1 warning
-
-
-Warnings summary:
-
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
- !ENDBR: .text+0x14ef94
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, clang-16) =E2=80=94 FAIL, 0 er=
-rors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-12) =E2=80=94 FAIL, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
-arning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
-BR: .text+0x14ef94
-
----
-For more info write to <info@kernelci.org>
+You are applying things for the x86 entry, without an x86 ack, srsly?
 
