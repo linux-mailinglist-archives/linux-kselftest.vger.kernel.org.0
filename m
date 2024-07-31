@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-14526-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14527-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55460942C21
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 12:40:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25AF3942C24
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 12:40:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79C3C1C230A9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 10:40:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE8822857A6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 10:40:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7211AC45E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF7C81AD3F8;
 	Wed, 31 Jul 2024 10:40:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RnpSjTzt"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LMAnadpo"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82C11AC435;
-	Wed, 31 Jul 2024 10:40:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17171A8C0B;
+	Wed, 31 Jul 2024 10:40:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722422423; cv=none; b=Uzox5YEe+XgrY1n++kpY+B/tjvZNv0/Xq1yVV+gMH6k9zBGBA8spjKSOefWJm+7AXemGxig6XRRYrGVcKAssDAs1stCBe9M4v2quRxYwO69+KykWF1IhcgE8uXZUj9gPtlXB0lMcL7it7ks1N8HNY6tgtwD5jlaLlOPhvriAMAU=
+	t=1722422423; cv=none; b=KKSiF8MiKHfoWAHjqpozfElACh0DUnoLBBPe7sO0P7e5/9eFzgxR+HwHAnCS+Ta9w71sRWOp4o6v9IoWKlQsly1w0AaM7MLCliJ+LsC1WB0Z7kNCDTh5VDToSrM9a18c9SXLDDmLdCYvzLH6mFWgBaPH/48qfSoFYGyacql9E/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1722422423; c=relaxed/simple;
-	bh=UMjxSCykvpzOYHoz5NQZQaJXvLVRMCEzVgJJEy/st8I=;
+	bh=LgTCFGjKc96Y9nDOwPIum4wGZAmcX7adX0/KCJZ9IlI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=D4hPIWBpZT1PEH7H2uQ3PeDrXrQL3UamA2RMqYmOHNhRW9oQAqRNa7zj7PnKhm9LXSuKRDVyFALeyc7IHqjp8rr7iXEFx72BDf8QcSMZgGmTYA1W1AxRYiqlk+sjiqcQH812djpfK9dZGGu+NHDejODy31H+hh7hBf1A7mNo5G8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RnpSjTzt; arc=none smtp.client-ip=217.70.183.196
+	 In-Reply-To:To:Cc; b=gVzEpIvXWnT0t9vY8a7Svmnv/Iq3/IfnySMrhNApR4K8CA90nzWVKTLmRi3rSCSJAqvoXSd4F3A6AhqZzHbinFVxvG+5LJV720EDsNEHrwTOM/WzTNQMeLrfFPnSjhODdMIv72C2uh4Pe1ibF656eJ7HRVK3FKx9NyTgL1eLK5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LMAnadpo; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 2BD9AE0008;
-	Wed, 31 Jul 2024 10:40:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 2CC34E0005;
+	Wed, 31 Jul 2024 10:40:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1722422418;
+	t=1722422419;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=m3okzZLldPTdnF4e7F87Xs4oryzzy0zNuKOJ3uMpzis=;
-	b=RnpSjTztQUJsRNvh3dwjTIyG6oQiVRm03RfGoYQ9SvZkWS0KP6GXbdE8QqOP4YkPEZzHZv
-	c7QwZtufAxosuXzvjjwyDvBZ6GlPZWxvW0ianU+lWCoo5GfUMmiV3iUUVtZcLJO6f6GlBr
-	Xy0fvvXZJ2XF46hYQciAJ2NO5sfyLTFdtSwMhIT6dHEk3bkzYhykZzhhvajxlZeOoIbbDf
-	XX0yw3wzAETNkqPN/th2xGlFOvr2f/uWRuPu4IiIipvAqScvqXa6IZ461qHW+7yYDy89rH
-	86l1as3u8dHRQ4OeQu242udKHXeNqr0RuZSfm493sSuvZR7+wV63/AqUvq8TBQ==
+	bh=qVvoGk2FvEZPT8DLnJ3Xemae0p+DGdG/L68bx2Ni87g=;
+	b=LMAnadpovcy+jcLdENIny92btBWNGSy9altSU/C5r42UkWOAfV2CmpZcCE2EL3DIEnFNYN
+	IrYFrd6qMSpr7eWeUHWztmiOmsWtez+06jIMOX/M/9whUTuTilYDc1hZsB18C8FJFUPssk
+	jAU+nbopVvIcNh0cP77nCpAzbKM5hd7V473ayQd78Wla5TtbmzaXp3UR6hpPwQFGrXZY5O
+	xvxmf7tbCSKhDGlnMQoPXkhqOM3pPbSg4ca88Axdxc40o3/hKMQ+QDACcdMTSVvvMKH43U
+	MsPpNb1EtFUoXHnIrrPS5CC977nP4+Ho/iHeZ1ulRLOn3h/YE8/s7RWUHZt0yA==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Wed, 31 Jul 2024 12:38:24 +0200
-Subject: [PATCH bpf-next 1/4] selftests/bpf: convert
- get_current_cgroup_id_user to test_progs
+Date: Wed, 31 Jul 2024 12:38:25 +0200
+Subject: [PATCH bpf-next 2/4] selftests/bpf: convert test_cgroup_storage to
+ test_progs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240731-convert_cgroup_tests-v1-1-14cbc51b6947@bootlin.com>
+Message-Id: <20240731-convert_cgroup_tests-v1-2-14cbc51b6947@bootlin.com>
 References: <20240731-convert_cgroup_tests-v1-0-14cbc51b6947@bootlin.com>
 In-Reply-To: <20240731-convert_cgroup_tests-v1-0-14cbc51b6947@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -77,287 +77,349 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.14.1
 X-GND-Sasl: alexis.lothore@bootlin.com
 
-get_current_cgroup_id_user allows testing for bpf_get_current_cgroup_id()
-bpf API but is not integrated into test_progs, and so is not tested
-automatically in CI.
+test_cgroup_storage is currently a standalone program which is not run
+when executing test_progs.
 
-Convert it to the test_progs framework to allow running it automatically.
-The most notable differences with the old test are the following:
-- the new test relies on autoattach instead of manually hooking/enabling
-  the targeted tracepoint through perf_event, which reduces quite a lot the
-  test code size
-- sleep duration passed to nanosleep syscall has been reduced to its
-  minimum to not impact overall CI duration (we only care about the syscall
-  being properly triggered, not about the passed duration)
+Convert it to the test_progs framework so it can be automatically executed
+in CI. The conversion led to the following changes:
+- converted the raw bpf program in the userspace test file into a dedicated
+  test program in progs/ dir
+- reduced the scope of cgroup_storage test: the content from this test
+  overlaps with some other tests already present in test_progs, most
+  notably netcnt and cgroup_storage_multi*. Those tests already check
+  extensively local storage, per-cpu local storage, cgroups interaction,
+  etc. So the new test only keep the part testing that the program return
+  code (based on map content) properly leads to packet being passed or
+  dropped.
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
-The new test_progs part has been tested in a local qemu environment:
+Tested in a local qemu environment:
 
-  ./test_progs -a cgroup_get_current_cgroup_id
-  47      cgroup_get_current_cgroup_id:OK
+  ./test_progs -a cgroup_storage
+  53      cgroup_storage:OK
   Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
 ---
  tools/testing/selftests/bpf/.gitignore             |   1 -
- tools/testing/selftests/bpf/Makefile               |   3 +-
- tools/testing/selftests/bpf/get_cgroup_id_user.c   | 151 ---------------------
- .../bpf/prog_tests/cgroup_get_current_cgroup_id.c  |  58 ++++++++
- 4 files changed, 59 insertions(+), 154 deletions(-)
+ tools/testing/selftests/bpf/Makefile               |   2 -
+ .../selftests/bpf/prog_tests/cgroup_storage.c      |  65 ++++++++
+ tools/testing/selftests/bpf/progs/cgroup_storage.c |  24 +++
+ tools/testing/selftests/bpf/test_cgroup_storage.c  | 174 ---------------------
+ 5 files changed, 89 insertions(+), 177 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index 4e4aae8aa7ec..108eb10626b9 100644
+index 108eb10626b9..a45f11f81337 100644
 --- a/tools/testing/selftests/bpf/.gitignore
 +++ b/tools/testing/selftests/bpf/.gitignore
-@@ -20,7 +20,6 @@ test_sock
- urandom_read
+@@ -21,7 +21,6 @@ urandom_read
  test_sockmap
  test_lirc_mode2_user
--get_cgroup_id_user
  test_skb_cgroup_id_user
- test_cgroup_storage
+-test_cgroup_storage
  test_flow_dissector
+ flow_dissector_load
+ test_tcpnotify_user
 diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 1d7a62e7deff..8d8483f81009 100644
+index 8d8483f81009..0ac0f9dbc2f8 100644
 --- a/tools/testing/selftests/bpf/Makefile
 +++ b/tools/testing/selftests/bpf/Makefile
-@@ -68,7 +68,7 @@ endif
- # Order correspond to 'make run_tests' order
+@@ -69,7 +69,6 @@ endif
  TEST_GEN_PROGS = test_verifier test_tag test_maps test_lru_map test_lpm_map test_progs \
  	test_dev_cgroup \
--	test_sock test_sockmap get_cgroup_id_user \
-+	test_sock test_sockmap \
- 	test_cgroup_storage \
+ 	test_sock test_sockmap \
+-	test_cgroup_storage \
  	test_tcpnotify_user test_sysctl \
  	test_progs-no_alu32
-@@ -297,7 +297,6 @@ $(OUTPUT)/test_skb_cgroup_id_user: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+ TEST_INST_SUBDIRS := no_alu32
+@@ -297,7 +296,6 @@ $(OUTPUT)/test_skb_cgroup_id_user: $(CGROUP_HELPERS) $(TESTING_HELPERS)
  $(OUTPUT)/test_sock: $(CGROUP_HELPERS) $(TESTING_HELPERS)
  $(OUTPUT)/test_sockmap: $(CGROUP_HELPERS) $(TESTING_HELPERS)
  $(OUTPUT)/test_tcpnotify_user: $(CGROUP_HELPERS) $(TESTING_HELPERS) $(TRACE_HELPERS)
--$(OUTPUT)/get_cgroup_id_user: $(CGROUP_HELPERS) $(TESTING_HELPERS)
- $(OUTPUT)/test_cgroup_storage: $(CGROUP_HELPERS) $(TESTING_HELPERS)
+-$(OUTPUT)/test_cgroup_storage: $(CGROUP_HELPERS) $(TESTING_HELPERS)
  $(OUTPUT)/test_sock_fields: $(CGROUP_HELPERS) $(TESTING_HELPERS)
  $(OUTPUT)/test_sysctl: $(CGROUP_HELPERS) $(TESTING_HELPERS)
-diff --git a/tools/testing/selftests/bpf/get_cgroup_id_user.c b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+ $(OUTPUT)/test_tag: $(TESTING_HELPERS)
+diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c b/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
+new file mode 100644
+index 000000000000..c116fc22b460
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/cgroup_storage.c
+@@ -0,0 +1,65 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <test_progs.h>
++#include "cgroup_helpers.h"
++#include "cgroup_storage.skel.h"
++
++#define TEST_CGROUP "/test-bpf-cgroup-storage-buf/"
++#define PING_CMD "ping localhost -c 1 -W 1 -q"
++
++void test_cgroup_storage(void)
++{
++	struct bpf_cgroup_storage_key key;
++	struct cgroup_storage *skel;
++	unsigned long long value;
++	int cgroup_fd;
++	int err;
++
++	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
++	if (!ASSERT_OK_FD(cgroup_fd, "create cgroup"))
++		return;
++
++	skel = cgroup_storage__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "load program"))
++		goto cleanup_cgroup;
++
++	skel->links.bpf_prog =
++		bpf_program__attach_cgroup(skel->progs.bpf_prog, cgroup_fd);
++	if (!ASSERT_OK_PTR(skel->links.bpf_prog, "attach program"))
++		goto cleanup_progs;
++
++	/* Check that one out of every two packets is dropped */
++	err = SYS_NOFAIL(PING_CMD);
++	ASSERT_OK(err, "first ping");
++	err = SYS_NOFAIL(PING_CMD);
++	ASSERT_NEQ(err, 0, "second ping");
++	err = SYS_NOFAIL(PING_CMD);
++	ASSERT_OK(err, "third ping");
++
++	err = bpf_map__get_next_key(skel->maps.cgroup_storage, NULL, &key,
++				    sizeof(key));
++	if (!ASSERT_OK(err, "get first key"))
++		goto cleanup_progs;
++	err = bpf_map__lookup_elem(skel->maps.cgroup_storage, &key, sizeof(key),
++				   &value, sizeof(value), 0);
++	if (!ASSERT_OK(err, "first packet count read"))
++		goto cleanup_progs;
++
++	/* Add one to the packet counter, check again packet filtering */
++	value++;
++	err = bpf_map__update_elem(skel->maps.cgroup_storage, &key, sizeof(key),
++				   &value, sizeof(value), 0);
++	if (!ASSERT_OK(err, "increment packet counter"))
++		goto cleanup_progs;
++	err = SYS_NOFAIL(PING_CMD);
++	ASSERT_OK(err, "fourth ping");
++	err = SYS_NOFAIL(PING_CMD);
++	ASSERT_NEQ(err, 0, "fifth ping");
++	err = SYS_NOFAIL(PING_CMD);
++	ASSERT_OK(err, "sixth ping");
++
++cleanup_progs:
++	cgroup_storage__destroy(skel);
++cleanup_cgroup:
++	cleanup_cgroup_environment();
++}
+diff --git a/tools/testing/selftests/bpf/progs/cgroup_storage.c b/tools/testing/selftests/bpf/progs/cgroup_storage.c
+new file mode 100644
+index 000000000000..db1e4d2d3281
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/cgroup_storage.c
+@@ -0,0 +1,24 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/bpf.h>
++#include <bpf/bpf_helpers.h>
++
++struct {
++	__uint(type, BPF_MAP_TYPE_CGROUP_STORAGE);
++	__type(key, struct bpf_cgroup_storage_key);
++	__type(value, __u64);
++} cgroup_storage SEC(".maps");
++
++SEC("cgroup_skb/egress")
++int bpf_prog(struct __sk_buff *skb)
++{
++	__u64 *counter;
++
++	counter = bpf_get_local_storage(&cgroup_storage, 0);
++	__sync_fetch_and_add(counter, 1);
++
++	/* Drop one out of every two packets */
++	return (*counter & 1);
++}
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/test_cgroup_storage.c b/tools/testing/selftests/bpf/test_cgroup_storage.c
 deleted file mode 100644
-index aefd83ebdcd7..000000000000
---- a/tools/testing/selftests/bpf/get_cgroup_id_user.c
+index 0861ea60dcdd..000000000000
+--- a/tools/testing/selftests/bpf/test_cgroup_storage.c
 +++ /dev/null
-@@ -1,151 +0,0 @@
+@@ -1,174 +0,0 @@
 -// SPDX-License-Identifier: GPL-2.0
--// Copyright (c) 2018 Facebook
--
+-#include <assert.h>
+-#include <bpf/bpf.h>
+-#include <linux/filter.h>
 -#include <stdio.h>
 -#include <stdlib.h>
--#include <string.h>
--#include <errno.h>
--#include <fcntl.h>
--#include <syscall.h>
--#include <unistd.h>
--#include <linux/perf_event.h>
--#include <sys/ioctl.h>
--#include <sys/time.h>
--#include <sys/types.h>
--#include <sys/stat.h>
+-#include <sys/sysinfo.h>
 -
--#include <linux/bpf.h>
--#include <bpf/bpf.h>
--#include <bpf/libbpf.h>
--
+-#include "bpf_util.h"
 -#include "cgroup_helpers.h"
 -#include "testing_helpers.h"
 -
--#define CHECK(condition, tag, format...) ({		\
--	int __ret = !!(condition);			\
--	if (__ret) {					\
--		printf("%s:FAIL:%s ", __func__, tag);	\
--		printf(format);				\
--	} else {					\
--		printf("%s:PASS:%s\n", __func__, tag);	\
--	}						\
--	__ret;						\
--})
+-char bpf_log_buf[BPF_LOG_BUF_SIZE];
 -
--static int bpf_find_map(const char *test, struct bpf_object *obj,
--			const char *name)
--{
--	struct bpf_map *map;
--
--	map = bpf_object__find_map_by_name(obj, name);
--	if (!map)
--		return -1;
--	return bpf_map__fd(map);
--}
--
--#define TEST_CGROUP "/test-bpf-get-cgroup-id/"
+-#define TEST_CGROUP "/test-bpf-cgroup-storage-buf/"
 -
 -int main(int argc, char **argv)
 -{
--	const char *probe_name = "syscalls/sys_enter_nanosleep";
--	const char *file = "get_cgroup_id_kern.bpf.o";
--	int err, bytes, efd, prog_fd, pmu_fd;
--	int cgroup_fd, cgidmap_fd, pidmap_fd;
--	struct perf_event_attr attr = {};
--	struct bpf_object *obj;
--	__u64 kcgid = 0, ucgid;
--	__u32 key = 0, pid;
--	int exit_code = 1;
--	char buf[256];
--	const struct timespec req = {
--		.tv_sec = 1,
--		.tv_nsec = 0,
--	};
+-	struct bpf_insn prog[] = {
+-		BPF_LD_MAP_FD(BPF_REG_1, 0), /* percpu map fd */
+-		BPF_MOV64_IMM(BPF_REG_2, 0), /* flags, not used */
+-		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
+-			     BPF_FUNC_get_local_storage),
+-		BPF_LDX_MEM(BPF_DW, BPF_REG_3, BPF_REG_0, 0),
+-		BPF_ALU64_IMM(BPF_ADD, BPF_REG_3, 0x1),
+-		BPF_STX_MEM(BPF_DW, BPF_REG_0, BPF_REG_3, 0),
 -
--	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
--	if (CHECK(cgroup_fd < 0, "cgroup_setup_and_join", "err %d errno %d\n", cgroup_fd, errno))
--		return 1;
+-		BPF_LD_MAP_FD(BPF_REG_1, 0), /* map fd */
+-		BPF_MOV64_IMM(BPF_REG_2, 0), /* flags, not used */
+-		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0,
+-			     BPF_FUNC_get_local_storage),
+-		BPF_MOV64_IMM(BPF_REG_1, 1),
+-		BPF_ATOMIC_OP(BPF_DW, BPF_ADD, BPF_REG_0, BPF_REG_1, 0),
+-		BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_0, 0),
+-		BPF_ALU64_IMM(BPF_AND, BPF_REG_1, 0x1),
+-		BPF_MOV64_REG(BPF_REG_0, BPF_REG_1),
+-		BPF_EXIT_INSN(),
+-	};
+-	size_t insns_cnt = ARRAY_SIZE(prog);
+-	int error = EXIT_FAILURE;
+-	int map_fd, percpu_map_fd, prog_fd, cgroup_fd;
+-	struct bpf_cgroup_storage_key key;
+-	unsigned long long value;
+-	unsigned long long *percpu_value;
+-	int cpu, nproc;
+-
+-	nproc = bpf_num_possible_cpus();
+-	percpu_value = malloc(sizeof(*percpu_value) * nproc);
+-	if (!percpu_value) {
+-		printf("Not enough memory for per-cpu area (%d cpus)\n", nproc);
+-		goto err;
+-	}
 -
 -	/* Use libbpf 1.0 API mode */
 -	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
 -
--	err = bpf_prog_test_load(file, BPF_PROG_TYPE_TRACEPOINT, &obj, &prog_fd);
--	if (CHECK(err, "bpf_prog_test_load", "err %d errno %d\n", err, errno))
--		goto cleanup_cgroup_env;
--
--	cgidmap_fd = bpf_find_map(__func__, obj, "cg_ids");
--	if (CHECK(cgidmap_fd < 0, "bpf_find_map", "err %d errno %d\n",
--		  cgidmap_fd, errno))
--		goto close_prog;
--
--	pidmap_fd = bpf_find_map(__func__, obj, "pidmap");
--	if (CHECK(pidmap_fd < 0, "bpf_find_map", "err %d errno %d\n",
--		  pidmap_fd, errno))
--		goto close_prog;
--
--	pid = getpid();
--	bpf_map_update_elem(pidmap_fd, &key, &pid, 0);
--
--	if (access("/sys/kernel/tracing/trace", F_OK) == 0) {
--		snprintf(buf, sizeof(buf),
--			 "/sys/kernel/tracing/events/%s/id", probe_name);
--	} else {
--		snprintf(buf, sizeof(buf),
--			 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
+-	map_fd = bpf_map_create(BPF_MAP_TYPE_CGROUP_STORAGE, NULL, sizeof(key),
+-				sizeof(value), 0, NULL);
+-	if (map_fd < 0) {
+-		printf("Failed to create map: %s\n", strerror(errno));
+-		goto out;
 -	}
--	efd = open(buf, O_RDONLY, 0);
--	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
--		goto close_prog;
--	bytes = read(efd, buf, sizeof(buf));
--	close(efd);
--	if (CHECK(bytes <= 0 || bytes >= sizeof(buf), "read",
--		  "bytes %d errno %d\n", bytes, errno))
--		goto close_prog;
 -
--	attr.config = strtol(buf, NULL, 0);
--	attr.type = PERF_TYPE_TRACEPOINT;
--	attr.sample_type = PERF_SAMPLE_RAW;
--	attr.sample_period = 1;
--	attr.wakeup_events = 1;
+-	percpu_map_fd = bpf_map_create(BPF_MAP_TYPE_PERCPU_CGROUP_STORAGE, NULL,
+-				       sizeof(key), sizeof(value), 0, NULL);
+-	if (percpu_map_fd < 0) {
+-		printf("Failed to create map: %s\n", strerror(errno));
+-		goto out;
+-	}
 -
--	/* attach to this pid so the all bpf invocations will be in the
--	 * cgroup associated with this pid.
--	 */
--	pmu_fd = syscall(__NR_perf_event_open, &attr, getpid(), -1, -1, 0);
--	if (CHECK(pmu_fd < 0, "perf_event_open", "err %d errno %d\n", pmu_fd,
--		  errno))
--		goto close_prog;
+-	prog[0].imm = percpu_map_fd;
+-	prog[7].imm = map_fd;
+-	prog_fd = bpf_test_load_program(BPF_PROG_TYPE_CGROUP_SKB,
+-				   prog, insns_cnt, "GPL", 0,
+-				   bpf_log_buf, BPF_LOG_BUF_SIZE);
+-	if (prog_fd < 0) {
+-		printf("Failed to load bpf program: %s\n", bpf_log_buf);
+-		goto out;
+-	}
 -
--	err = ioctl(pmu_fd, PERF_EVENT_IOC_ENABLE, 0);
--	if (CHECK(err, "perf_event_ioc_enable", "err %d errno %d\n", err,
--		  errno))
--		goto close_pmu;
+-	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
 -
--	err = ioctl(pmu_fd, PERF_EVENT_IOC_SET_BPF, prog_fd);
--	if (CHECK(err, "perf_event_ioc_set_bpf", "err %d errno %d\n", err,
--		  errno))
--		goto close_pmu;
+-	/* Attach the bpf program */
+-	if (bpf_prog_attach(prog_fd, cgroup_fd, BPF_CGROUP_INET_EGRESS, 0)) {
+-		printf("Failed to attach bpf program\n");
+-		goto err;
+-	}
 -
--	/* trigger some syscalls */
--	syscall(__NR_nanosleep, &req, NULL);
+-	if (bpf_map_get_next_key(map_fd, NULL, &key)) {
+-		printf("Failed to get the first key in cgroup storage\n");
+-		goto err;
+-	}
 -
--	err = bpf_map_lookup_elem(cgidmap_fd, &key, &kcgid);
--	if (CHECK(err, "bpf_map_lookup_elem", "err %d errno %d\n", err, errno))
--		goto close_pmu;
+-	if (bpf_map_lookup_elem(map_fd, &key, &value)) {
+-		printf("Failed to lookup cgroup storage 0\n");
+-		goto err;
+-	}
 -
--	ucgid = get_cgroup_id(TEST_CGROUP);
--	if (CHECK(kcgid != ucgid, "compare_cgroup_id",
--		  "kern cgid %llx user cgid %llx", kcgid, ucgid))
--		goto close_pmu;
+-	for (cpu = 0; cpu < nproc; cpu++)
+-		percpu_value[cpu] = 1000;
 -
--	exit_code = 0;
--	printf("%s:PASS\n", argv[0]);
+-	if (bpf_map_update_elem(percpu_map_fd, &key, percpu_value, 0)) {
+-		printf("Failed to update the data in the cgroup storage\n");
+-		goto err;
+-	}
 -
--close_pmu:
--	close(pmu_fd);
--close_prog:
--	bpf_object__close(obj);
--cleanup_cgroup_env:
+-	/* Every second packet should be dropped */
+-	assert(system("ping localhost -c 1 -W 1 -q > /dev/null") == 0);
+-	assert(system("ping localhost -c 1 -W 1 -q > /dev/null"));
+-	assert(system("ping localhost -c 1 -W 1 -q > /dev/null") == 0);
+-
+-	/* Check the counter in the cgroup local storage */
+-	if (bpf_map_lookup_elem(map_fd, &key, &value)) {
+-		printf("Failed to lookup cgroup storage\n");
+-		goto err;
+-	}
+-
+-	if (value != 3) {
+-		printf("Unexpected data in the cgroup storage: %llu\n", value);
+-		goto err;
+-	}
+-
+-	/* Bump the counter in the cgroup local storage */
+-	value++;
+-	if (bpf_map_update_elem(map_fd, &key, &value, 0)) {
+-		printf("Failed to update the data in the cgroup storage\n");
+-		goto err;
+-	}
+-
+-	/* Every second packet should be dropped */
+-	assert(system("ping localhost -c 1 -W 1 -q > /dev/null") == 0);
+-	assert(system("ping localhost -c 1 -W 1 -q > /dev/null"));
+-	assert(system("ping localhost -c 1 -W 1 -q > /dev/null") == 0);
+-
+-	/* Check the final value of the counter in the cgroup local storage */
+-	if (bpf_map_lookup_elem(map_fd, &key, &value)) {
+-		printf("Failed to lookup the cgroup storage\n");
+-		goto err;
+-	}
+-
+-	if (value != 7) {
+-		printf("Unexpected data in the cgroup storage: %llu\n", value);
+-		goto err;
+-	}
+-
+-	/* Check the final value of the counter in the percpu local storage */
+-
+-	for (cpu = 0; cpu < nproc; cpu++)
+-		percpu_value[cpu] = 0;
+-
+-	if (bpf_map_lookup_elem(percpu_map_fd, &key, percpu_value)) {
+-		printf("Failed to lookup the per-cpu cgroup storage\n");
+-		goto err;
+-	}
+-
+-	value = 0;
+-	for (cpu = 0; cpu < nproc; cpu++)
+-		value += percpu_value[cpu];
+-
+-	if (value != nproc * 1000 + 6) {
+-		printf("Unexpected data in the per-cpu cgroup storage\n");
+-		goto err;
+-	}
+-
+-	error = 0;
+-	printf("test_cgroup_storage:PASS\n");
+-
+-err:
 -	cleanup_cgroup_environment();
--	return exit_code;
+-	free(percpu_value);
+-
+-out:
+-	return error;
 -}
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_get_current_cgroup_id.c b/tools/testing/selftests/bpf/prog_tests/cgroup_get_current_cgroup_id.c
-new file mode 100644
-index 000000000000..dd8835a63a00
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_get_current_cgroup_id.c
-@@ -0,0 +1,58 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <sys/stat.h>
-+#include <sys/sysmacros.h>
-+#include "test_progs.h"
-+#include "cgroup_helpers.h"
-+#include "get_cgroup_id_kern.skel.h"
-+
-+#define TEST_CGROUP "/test-bpf-get-cgroup-id/"
-+
-+void test_cgroup_get_current_cgroup_id(void)
-+{
-+	struct get_cgroup_id_kern *skel;
-+	const struct timespec req = {
-+		.tv_sec = 0,
-+		.tv_nsec = 1,
-+	};
-+	__u64 kcgid, ucgid;
-+	int cgroup_fd;
-+	int key = 0;
-+	int pid;
-+
-+	cgroup_fd = cgroup_setup_and_join(TEST_CGROUP);
-+	if (!ASSERT_OK_FD(cgroup_fd, "cgroup switch"))
-+		return;
-+
-+	skel = get_cgroup_id_kern__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "load program"))
-+		goto cleanup_cgroup;
-+
-+	if (!ASSERT_OK(get_cgroup_id_kern__attach(skel), "attach bpf program"))
-+		goto cleanup_progs;
-+
-+	pid = getpid();
-+	if (!ASSERT_OK(bpf_map__update_elem(skel->maps.pidmap, &key,
-+					    sizeof(key), &pid, sizeof(pid), 0),
-+		       "write pid"))
-+		goto cleanup_progs;
-+
-+	/* trigger the syscall on which is attached the tested prog */
-+	if (!ASSERT_OK(syscall(__NR_nanosleep, &req, NULL), "nanosleep"))
-+		goto cleanup_progs;
-+
-+	if (!ASSERT_OK(bpf_map__lookup_elem(skel->maps.cg_ids, &key,
-+					    sizeof(key), &kcgid, sizeof(kcgid),
-+					    0),
-+		       "read bpf cgroup id"))
-+		goto cleanup_progs;
-+
-+	ucgid = get_cgroup_id(TEST_CGROUP);
-+
-+	ASSERT_EQ(kcgid, ucgid, "compare cgroup ids");
-+
-+cleanup_progs:
-+	get_cgroup_id_kern__destroy(skel);
-+cleanup_cgroup:
-+	cleanup_cgroup_environment();
-+}
 
 -- 
 2.45.2
