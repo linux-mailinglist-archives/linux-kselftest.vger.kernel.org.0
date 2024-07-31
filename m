@@ -1,179 +1,156 @@
-Return-Path: <linux-kselftest+bounces-14577-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14578-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B92FA94375D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 22:47:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A82D59437AE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 23:19:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD14A1C226EC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 20:47:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 325D81F23284
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 21:19:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76F7516C684;
-	Wed, 31 Jul 2024 20:47:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4640F16C861;
+	Wed, 31 Jul 2024 21:19:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G5AOJVde"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F94B166302;
-	Wed, 31 Jul 2024 20:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F4F16C684
+	for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 21:19:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722458869; cv=none; b=tXyi5C3XZ1MCWGvMBIuTItVNoqsrqG/4G4i8BZDDndIsKpga/xu42i63eipArf3ECldMXszrLJ9PoTASgRyL+KKWoExLhxZw9i7Lew5E3ZMd3X8OLWHN6FPDhDEph5uvBimAVqOJ8ghZWEC4+THz9iBo2DXBv3qTvGoNYbpJufI=
+	t=1722460771; cv=none; b=N2umoN/T6rTTlSB6jNno0n2s/ykNmvP8bKyzZPriTNujzjPnM0FSp8AZS8TAtMVujHxccTvxrPm+PtZSl9NAiD6BKXSHDg9lo+0v4qWsCjO/8BsDMyjZk05681qT8pRCmBIx2/AUrNh2CClpiga5GuY13RBq8rvlhZCWtyHpZuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722458869; c=relaxed/simple;
-	bh=wvwzBvVYGlnPkZwpUgnXDs/VKolXcK8kB6VaNsLt8cM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IZZaSdVrTZ0CGCOKa0WUZqe3NYTDF5KeRl2TwDkbJvOBwNKlMLlZOqeeT+JmY2OJ0Pkrjr8bHGWqtQl8HMGHWvQxrHHd8TYSEbuAunOUveG/vM/4EJKO2tbE5pE7+WmYCFdqlnvYSPxxFOZYKexm6ShBl+ksBuecRSqRLmDLIvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1ff4568676eso9319495ad.0;
-        Wed, 31 Jul 2024 13:47:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722458866; x=1723063666;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+	s=arc-20240116; t=1722460771; c=relaxed/simple;
+	bh=dEiu0hhQh0Jy26qjQV9Cqq27juU/IGB072cpo+oEEG0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TcZSaEc9UM2xcMA/++96tx1hptj/VYy+nHzWGjwY/iTJs9zxx10dvqxlPG8/UoFoe0sukaWVY0ee8IOaIjQRFhKTqtQwhxcPGrHlEMXv0CLwG534rcATK/HJcufEH++R8EljS6j8Rxz5JJZ4i9PH9vjiyoYr1jC8EcpaCpxFTpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=G5AOJVde; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-367990aaef3so3308093f8f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 14:19:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1722460767; x=1723065567; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7OVE8lD+bcDnTawhtJUlCaaG770gkL35RjxhQ3R4n5Y=;
-        b=qpPPWh+2S0kXnzFfrsYlxe04ceBGpbx3Suv5Sjwahwlset3YB7tyzTJBt0IXGYlrKD
-         75IeGN1MZWLuLlve82VX22vH+2ykTGjtgWjR5zdkna0EjUnoocwOn4cffHxi5XizhUOJ
-         PjlQRIJJT8AV+68p11qlQXYkUnOgB1Dy6Hcy5i8kPVbDGJyGhQME/0E3WMy4x8/sRAgf
-         +3W5FEAtqFd6XZk7aa+Z2vKIJMJrmERm2ff0Pz/G+wbvRBDH5Y6ia14DuOpjzw6IBF3G
-         cBDz7RMw2zSjSbkuemjh9jQ2ZW48uDkLEW7UiR0/QXeWETB2wZUWs99LK3RBLOvZpex2
-         tkQA==
-X-Forwarded-Encrypted: i=1; AJvYcCW2536lv8pbqV/ztz/KgptzNeSK9B+fB33OGnkD4jPn5p5CGpdCMAfUokCsjgao8qRDIvRLuamY26K8v8fMh6TVJvXtCAx7qaIkxc1b7rSg
-X-Gm-Message-State: AOJu0YziiNXscJbT1vCyT4EBfO8Va6Ut4DpqNb1qga0O6fxJ1MyBZpt7
-	lOLwj9bUaRE5wMaCzwGxoJNlCLsUvAEj9DQoXKzV8zojjeoOxsklmiqs5iM=
-X-Google-Smtp-Source: AGHT+IFSgpmn53WE4TxsX/0XyZnKp/h2eyZI0b57n7EPQLZb4aJ06yfVfFzeepPcU8jkjgRUArmIIA==
-X-Received: by 2002:a17:902:c94d:b0:1fb:a1cb:cb25 with SMTP id d9443c01a7336-1ff4d2363ebmr6551645ad.40.1722458865498;
-        Wed, 31 Jul 2024 13:47:45 -0700 (PDT)
-Received: from localhost ([2601:646:9e00:f56e:73b6:7410:eb24:cba4])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7fb2d12sm125038845ad.259.2024.07.31.13.47.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jul 2024 13:47:45 -0700 (PDT)
-Date: Wed, 31 Jul 2024 13:47:44 -0700
-From: Stanislav Fomichev <sdf@fomichev.me>
-To: Petr Machata <petrm@nvidia.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, Shuah Khan <shuah@kernel.org>,
-	Joe Damato <jdamato@fastly.com>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/2] selftests: net: ksft: support marking
- tests as disruptive
-Message-ID: <Zqqi8LhvSn1MXu9B@mini-arch>
-References: <20240730223932.3432862-1-sdf@fomichev.me>
- <20240730223932.3432862-2-sdf@fomichev.me>
- <878qxh7mf4.fsf@nvidia.com>
+        bh=dEiu0hhQh0Jy26qjQV9Cqq27juU/IGB072cpo+oEEG0=;
+        b=G5AOJVdeww95s7Qb7CjW1AIB44U8JoB3hsMVjtKEas3JXf1vwCfGamISn0W9Aq/kdy
+         yNL1Zqv/cr4RhFQKyRJmPJ6INVWA7HaLN4BA3TPWJOgIpZunPibJa8lDt4dea35PXJMa
+         WJnXVfFa8qRDUEOjUhndXkLLFeV3WIfifKMKBtqyAQTnivbTT+brnZBgFMNZdAo8vEjt
+         AHpE8w7Pa18w2XjTHFuKm63OtcCWPoxDqHBhXedIrvxFQBDm2ZqArJ12gP+H0TWV+pTi
+         hMTXlVceo15PAg4VK22DsRHYu0TuNLhY74kcM8C3XJhIyn3vkFywG3eHmMbwTKrnO4Hh
+         vx9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722460767; x=1723065567;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dEiu0hhQh0Jy26qjQV9Cqq27juU/IGB072cpo+oEEG0=;
+        b=U9e1QEg54EqxU0caN03T0TOJBhtKi1bAyirvD7RTFaMj6Z8ktAn8WN+jzlloy9oecp
+         C/Cw7NAKhVFghAxC5Uq6TdgObqIb5B0oEdqfAJFa1awHUaOHhGLceWlTsSjHk9SQ0cqs
+         bc8IfuCvlVKtQKzsQF5u2bT8WBH2+oTtIOK4Jr9rTF76BQP9realLRa03kO1DFmNHg86
+         TM8FnMtqMg/yM38xsKd4pQ0XiguCvLSwKzeObSNsdJpnqDUIdGowk1YjFPJx+YEE50Jy
+         Nv9oGIeqQTwYYfyOZ2UwNMgXEcRVwsucsjAnCZ14Bzhlbdf86vmKXsOphpmsc1qxT09U
+         5m5A==
+X-Forwarded-Encrypted: i=1; AJvYcCW45AA9p6H8RgEQSNezZU8mHguAmfBgV0j5feT3uxh32YkHiDk6L9NVcHFUrpotc/MobqqSBuApyS2O9zGElegI7kJYaAF46T50Dqru/R+E
+X-Gm-Message-State: AOJu0YxFlmt4zbnmPafN8p8D5PqWkTJcc9dU3lGg5Q5dRqpK//T3ER4Z
+	k95iMWwaANo70Tmi4u/fZHajb38kWDcZkI424w0lKdF12cCv+LfKQzsifXPshGjE1iaUrAZnxVj
+	NLPd6+4Sb386c5XUOG8xJRlcnjSq1Eo55ufhj
+X-Google-Smtp-Source: AGHT+IGCGvp/48H8qaH6fLYg7SPbNiiWFxJtKT/J7GEsXh7PoxMKp+lvuqPbXyBiSW9seEuLTTgslLee6nJ92gY4vjU=
+X-Received: by 2002:a5d:4483:0:b0:368:6d75:1bde with SMTP id
+ ffacd0b85a97d-36baacdd8aamr351815f8f.15.1722460767120; Wed, 31 Jul 2024
+ 14:19:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <878qxh7mf4.fsf@nvidia.com>
+References: <20240730022623.98909-1-almasrymina@google.com>
+ <20240730022623.98909-2-almasrymina@google.com> <1722327259.5659568-1-xuanzhuo@linux.alibaba.com>
+In-Reply-To: <1722327259.5659568-1-xuanzhuo@linux.alibaba.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Wed, 31 Jul 2024 17:19:11 -0400
+Message-ID: <CAHS8izMZQLsBWPXWiqPwaQHfupKc5VAuxW+6kpWmzi-vw8JEWQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v17 01/14] netdev: add netdev_rx_queue_restart()
+To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
+	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 07/31, Petr Machata wrote:
-> 
-> Stanislav Fomichev <sdf@fomichev.me> writes:
-> 
-> > Add new @ksft_disruptive decorator to mark the tests that might
-> > be disruptive to the system. Depending on how well the previous
-> > test works in the CI we might want to disable disruptive tests
-> > by default and only let the developers run them manually.
-> >
-> > KSFT framework runs disruptive tests by default. DISRUPTIVE=False
-> > environment (or config file) can be used to disable these tests.
-> > ksft_setup should be called by the test cases that want to use
-> > new decorator (ksft_setup is only called via NetDrvEnv/NetDrvEpEnv for now).
-> 
-> Is that something that tests would want to genuinely do, manage this
-> stuff by hand? I don't really mind having the helper globally
-> accessible, but default I'd keep it inside env.py and expect others to
-> inherit appropriately.
+On Tue, Jul 30, 2024 at 4:17=E2=80=AFAM Xuan Zhuo <xuanzhuo@linux.alibaba.c=
+om> wrote:
+>
+> On Tue, 30 Jul 2024 02:26:05 +0000, Mina Almasry <almasrymina@google.com>=
+ wrote:
+> > Add netdev_rx_queue_restart() function to netdev_rx_queue.h
+>
+>
+> Can you say more? As far as I understand, we just release the buffer
+> submitted to the rx ring and get a new page pool.
+>
 
-Hard to say how well it's gonna work tbh. But at least from
-what I've seen, large code bases (outside of kernel) usually
-have some way to attach metadata to the testcase to indicate
-various things. For example, this is how the timeout
-can be controlled:
+Yes, I just noticed that this commit message is underwritten. I'll add
+more color. Maybe something like;
 
-https://bazel.build/reference/test-encyclopedia#role-test-runner
+=3D=3D=3D=3D
+Add netdev_rx_queue_restart(), which resets an rx queue using the
+queue API recently merged[1].
 
-So I'd imagine we can eventually have @kstf_short/@ksft_long to
-control that using similar techniques.
+The queue API was merged to enable the core net stack reset individual
+rx queues to actuate changes in the rx queue's configuration. In later
+patches in this series, we will use netdev_rx_queue_restart() to reset
+rx queues after binding or unbinding dmabuf configuration, which will
+cause reallocation of the page_pool to repopulate its memory using the
+new configuration.
 
-Regarding keeping it inside env.py: can you expand more on what
-you mean by having the default in env.py?
+[1] https://lore.kernel.org/netdev/20240430231420.699177-1-shailend@google.=
+com/T/
+=3D=3D=3D=3D
 
-> > @@ -127,6 +129,36 @@ KSFT_RESULT_ALL = True
-> >              KSFT_RESULT = False
-> >  
-> >  
-> > +def ksft_disruptive(func):
-> > +    """
-> > +    Decorator that marks the test as disruptive (e.g. the test
-> > +    that can down the interface). Disruptive tests can be skipped
-> > +    by passing DISRUPTIVE=False environment variable.
-> > +    """
-> > +
-> > +    @functools.wraps(func)
-> > +    def wrapper(*args, **kwargs):
-> > +        if not KSFT_DISRUPTIVE:
-> > +            raise KsftSkipEx(f"marked as disruptive")
-> 
-> Since this is a skip, it will fail the overall run. But that happened
-> because the user themselves set DISRUPTIVE=0 to avoid, um, disruption to
-> the system. I think it should either be xfail, or something else
-> dedicated that conveys the idea that we didn't run the test, but that's
-> fine.
-> 
-> Using xfail for this somehow doesn't seem correct, nothing failed. Maybe
-> we need KsftOmitEx, which would basically be an xfail with a more
-> appropriate name?
+> But I personally feel that the interface here is a bit too complicated. I=
+n
+> particular, we also need to copy the rx struct memory, which means it is =
+a
+> dangerous operation for many pointers.
+>
 
-Are you sure skip will fail the overall run? At least looking at
-tools/testing/selftests/net/lib/py/ksft.py, both skip and xfail are
-considered KSFT_RESULT=True. Or am I looking at the wrong place?
+Understood, but the complication is necessary based on previous
+discussions. Jakub requests that we must allocate memory for a new rx
+queues before bringing down the existing queue, to guard against the
+interface remaining down on ENOMEM error.
 
-> > +def ksft_setup(env):
-> > +    """
-> > +    Setup test framework global state from the environment.
-> > +    """
-> > +
-> > +    def get_bool(env, name):
-> > +        return env.get(name, "").lower() in ["true", "1"]
-> 
-> "yes" should alse be considered, for compatibility with the bash
-> selftests.
-> 
-> It's also odd that 0 is false, 1 is true, but 2 is false again. How
-> about something like this?
-> 
->     def get_bool(env, name):
->         value = env.get(name, "").lower()
->         if value in ["yes", "true"]:
->             return True
->         if value in ["no", "false"]:
->             return False
-> 
->         try:
->             return bool(int(value))
->         except:
->             raise something something invalid value
-> 
-> So that people at least know if they set it to nonsense that it's
-> nonsense?
-> 
-> Dunno. The bash selftests just take "yes" and don't care about being
-> very user friendly in that regard at all. _load_env_file() likewise
-> looks like it just takes strings and doesn't care about the semantics.
-> So I don't feel too strongly about this at all. Besides the "yes" bit,
-> that should be recognized.
-
-Sure, will do!
-
-(will also apply your suggestions for 1/2 so want reply separately)
+Btw, I notice the series was marked as changes requested; the only
+feedback I got was this one and the incorrect netmem_priv.h header.
+I'll fix and repost. It's just slightly weird because both v16 and v17
+are marked as changes requested in patchwork.
 
