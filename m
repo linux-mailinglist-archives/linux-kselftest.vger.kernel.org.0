@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-14533-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14534-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49E57942CC1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 13:07:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E614942CC4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 13:07:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C5361C209D4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 11:07:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B8D71F217AC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 11:07:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 269971AED2B;
-	Wed, 31 Jul 2024 11:06:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05A8B1AED55;
+	Wed, 31 Jul 2024 11:06:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J9O1HjEJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AyXPVGwE"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB2B1AED20;
-	Wed, 31 Jul 2024 11:06:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5EBF1AD9C6;
+	Wed, 31 Jul 2024 11:06:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722423983; cv=none; b=slBkKyU5sLP/YN4z70l6TKaR5KR+dMcO1hI4IjefZ4C/gf1e3UqoInTSzkqM1yp28gLyikjKDilYkbnC5eAZJvvYvaqWUWnEprJa+N6ksLg+F00GJ0zfXGFDDi7Re1VEnJ5Y5hP6VZ6vRGCzRClFia9FS7f8B/2EkEInpP1oxlM=
+	t=1722423986; cv=none; b=moS+5P6DqM7pQgh6mWhNJUpAWY7fjXqyNmtGua04F7EgQt+7pbMJedlvlLgcbr6xadATgsYvngkBej34ToMtGFwNIQtFnXzkrmnax9jMb6y3tiWGvSP5dsQgvc3wVrnnGSTaEk/awiHbOSG51P42N5bQqAtIgSTihuOCA0hCMsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722423983; c=relaxed/simple;
-	bh=soS1IItRiwvU3ZcudsCwRfsm4gIP9t7k7P3OTrfne/k=;
+	s=arc-20240116; t=1722423986; c=relaxed/simple;
+	bh=ucPLpyidAabxDmr1HFVxowabnIMprlmWSuibzybqmAA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ndV5SROreFfCzdH5UaBBf9AovB2CeBqFobqSJ0UK8Lt1+0YcYsl/H3SCO/YdHZ5IrgL42evNtx0ETKsgFpHt8WQya3yNGm0C81c2GHtVA4gGeM3Jqzi+A2JkL8sKVltXqAfnaoFAriG/cCl4mwJXEtkNvqCe9KCEIfz3IEP5+t8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J9O1HjEJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C653C4AF09;
-	Wed, 31 Jul 2024 11:06:20 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=WP1ogo+ROg9PfA2f060o+ECfz43Tlai3lm7LxW0yjVUmXAw4iVQ0nlxl0Vlz05vFX2m7po6Orv/9CP4q6rcFZd6N4FAYoQLrkqB8bT81cuJJ5JS/1J4UdAujv1dHILcPDFpn+KOl+JCCErJtNl16sAdfCROWEUxh+9hWm1IyvJU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AyXPVGwE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BDF3C116B1;
+	Wed, 31 Jul 2024 11:06:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722423982;
-	bh=soS1IItRiwvU3ZcudsCwRfsm4gIP9t7k7P3OTrfne/k=;
+	s=k20201202; t=1722423986;
+	bh=ucPLpyidAabxDmr1HFVxowabnIMprlmWSuibzybqmAA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=J9O1HjEJYfO+Lvvf5oFcLPjzi1LUc0Vgu92YmIIkaoxiG9tsu5hJXUQJwYzmjHSGe
-	 pB3euWZxDGJSWXdr1tUjNb9psKcxILhUdwfCAREaEwzwzvwbyUQ3iYH8Sn+pdmK7d3
-	 ZOLPlW9wJtzwz6JZzWeolCAVolHVeWG49V2zEylj7lxLBsM6aVHiNIR9/b3R/EsKmR
-	 dFImaOU7jBio8HTo+c7pWebe5TN8JR9L+984O+wuPUAxKizegQMfSkFt7B/g98/gTc
-	 d7KShE0T8nXCsAZKF9XRnNRKEUNI1W7nByp4WiMq7hcuU/vf41sIS23KaqXHuCrV9U
-	 xi3QzVsx9xZ0g==
+	b=AyXPVGwEjyG6x+3m+yBeLcssWdtZx2ABrkQYAA0Fm7BFn+BV2znAMxYk35LdEPXyQ
+	 MckvKrBJ/qtHrWeR4onoYTm7hW+HCcyAdUmn0QURcJcABGa80cmPL2pZan5Ytev8k1
+	 94tY4dobSSLKeohEjI7jyzgdDPL7icn6gt7sMxf/H4icIGV+LPCL1lAL4zwOxDhHAk
+	 RYbx/V9cZ6CDsuFQYsm/V6equZ4Cxt+3NYShC6u5EOPHV4mFtu6tgwocSciVWddmX1
+	 njFIPM06MDqITCH71qy59vPnhM0cQf+R+6THxRK6H3VFLjMq53URlIfeCclPAjrMfM
+	 Zk4j1aiuDFV1A==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Wed, 31 Jul 2024 13:05:55 +0200
-Subject: [PATCH net 3/7] mptcp: pm: reduce indentation blocks
+Date: Wed, 31 Jul 2024 13:05:56 +0200
+Subject: [PATCH net 4/7] mptcp: pm: don't try to create sf if alloc failed
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240731-upstream-net-20240731-mptcp-endp-subflow-signal-v1-3-c8a9b036493b@kernel.org>
+Message-Id: <20240731-upstream-net-20240731-mptcp-endp-subflow-signal-v1-4-c8a9b036493b@kernel.org>
 References: <20240731-upstream-net-20240731-mptcp-endp-subflow-signal-v1-0-c8a9b036493b@kernel.org>
 In-Reply-To: <20240731-upstream-net-20240731-mptcp-endp-subflow-signal-v1-0-c8a9b036493b@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -61,68 +61,82 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
  Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1430; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=soS1IItRiwvU3ZcudsCwRfsm4gIP9t7k7P3OTrfne/k=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmqhqiNZDjMzEbvK6znw3TvawjCFq4p2dY7gQaM
- LGj2wO/O4eJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZqoaogAKCRD2t4JPQmmg
- c5BLEACUSAZDLIvcllvvIGr6OYFIVspsg8xLHr2ouEyUlYAKa/hl1p94ivC12DKB2/qkm/i21QN
- qJ0a9KWxyRnzuvUCw9Irzfqq9VCSTRhSOviExSSFEXOtMuny/Q7qo5k7734O7jQDORqWux7Tis5
- BGOK5botmN1Meen2SLD0A0qLhuEy363JCnt3SevbGUwbysi8l0F3UNhT5iXhBY7N3OytnPWnddZ
- xV3bQ5+cHYdQP4L6SnBf8hdljdplgs1B4Ci+rTk3WcztK641Q2M8Pm0HAblyYnqpUhOHG1TTcXu
- DTu1FejDhS7go/LN5u0jBj2WYuK4rwBVCRPNLHyrQ1wVcqXXUqq4YiAl660CzUFi9aiR47kR0d3
- QyOxHzjvsvWjMuwGLDRs4ZBRI6F60eaLdhxT5rPhMtBJyzL5hbRdbzvUnbZ197eR5P1QuGlVByF
- jPevRAIMMN1cK5GTRa4XqE2O1Ay5V9oYuUBpdvISYy02Yao7ovtFBkki9VK8/dz1jiR/7Zg6tUh
- bdd6qa/M8KDXzfqep+p8YDXRYhp9tRC7U80k7l/SL5c9M7FaoUtYUUxw5nX3E/YJ8ynV4PdmUv3
- Oog83rht8PMajvaAOX04qVFl2pN78TZDrAy9pXcd0xE4HF+nFPWQA2X2q3/LYMeayB2eBK6PIb3
- Ru1TErPI9h+ffWg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2240; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=ucPLpyidAabxDmr1HFVxowabnIMprlmWSuibzybqmAA=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmqhqiEzR0/Bx3PYsDk6c9qKT1TOf03HKnCKWrW
+ Cp4i7OpwJSJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZqoaogAKCRD2t4JPQmmg
+ czScEADD382M04ZC2EZjc7pwk7OJrYE+/GJgo4BQnBAINQofX8YQT+krva4UQS6haHZ82kfqABO
+ H7VEUSRBeu71jEGsp2CwopTcR/gRr20BBKyOOAAmY9nA9Ti2uMFFzOt6UFz7PQN6X/8i8jWfMGz
+ M+Y59imDUwedWHR4eZ1a2KazMmcm+Y4Ly6ng+RcVNYD8eI5oZAOpVP88IOJUe1oa0sMB5PCfON6
+ cJPZVooOMsIz69eFJWzkWN1vEksvNHZ2ERkCga+dJjE8AmezLISVbonVyFOdtrnKb4/pMyK+xlz
+ 6P49u9GLh11YZOiUPeSaARr1dnFeYbZhxqFi4a2IXzCHbYsWF0ObCDGFPjDZPx/Lsrvp/Z56E19
+ vIerovE3Y1g8YklatplfGvTbwTtZHbriakjhJ9Vl9C25siqJR5tVmKRTCNH5bTWUH6eH4jJ3R+W
+ gaFyz/gZmoxTKqiacZW4GyYIhvY1et9KJLH7J2ihTffK9XQHCok2Yx1BRzeoKlApx91Yxo0QHiu
+ 8BkszTlx2b2OOudk913MIxmaKYHdWvA5FbDsXBZgrBk1Xgicj9vYLJXsp/Wn4nmjilkMJ/LTQBn
+ sPMquwWb5eMWpaHfikM0xs4Y09eHAnwLa/yaFgEQTW1EB7UJLeoNd3LlgrpIo+Aa1DVkddkWTfT
+ 5bTgstTLYFGt35w==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-That will simplify the following commits.
+It sounds better to avoid wasting cycles and / or put extreme memory
+pressure on the system by trying to create new subflows if it was not
+possible to add a new item in the announce list.
 
-No functional changes intended.
+While at it, a warning is now printed if the entry was already in the
+list as it should not happen with the in-kernel path-manager. With this
+PM, mptcp_pm_alloc_anno_list() should only fail in case of memory
+pressure.
 
+Fixes: b6c08380860b ("mptcp: remove addr and subflow in PM netlink")
+Cc: stable@vger.kernel.org
 Suggested-by: Paolo Abeni <pabeni@redhat.com>
 Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- net/mptcp/pm_netlink.c | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+ net/mptcp/pm_netlink.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
 diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-index c921d07e5940..780f4cca165c 100644
+index 780f4cca165c..2be7af377cda 100644
 --- a/net/mptcp/pm_netlink.c
 +++ b/net/mptcp/pm_netlink.c
-@@ -567,16 +567,19 @@ static void mptcp_pm_create_subflow_or_signal_addr(struct mptcp_sock *msk)
+@@ -348,7 +348,7 @@ bool mptcp_pm_alloc_anno_list(struct mptcp_sock *msk,
+ 	add_entry = mptcp_lookup_anno_list_by_saddr(msk, addr);
+ 
+ 	if (add_entry) {
+-		if (mptcp_pm_is_kernel(msk))
++		if (WARN_ON_ONCE(mptcp_pm_is_kernel(msk)))
+ 			return false;
+ 
+ 		sk_reset_timer(sk, &add_entry->add_timer,
+@@ -555,8 +555,6 @@ static void mptcp_pm_create_subflow_or_signal_addr(struct mptcp_sock *msk)
+ 
+ 	/* check first for announce */
+ 	if (msk->pm.add_addr_signaled < add_addr_signal_max) {
+-		local = select_signal_address(pernet, msk);
+-
+ 		/* due to racing events on both ends we can reach here while
+ 		 * previous add address is still running: if we invoke now
+ 		 * mptcp_pm_announce_addr(), that will fail and the
+@@ -567,11 +565,15 @@ static void mptcp_pm_create_subflow_or_signal_addr(struct mptcp_sock *msk)
  		if (msk->pm.addr_signal & BIT(MPTCP_ADD_ADDR_SIGNAL))
  			return;
  
--		if (local) {
--			if (mptcp_pm_alloc_anno_list(msk, &local->addr)) {
--				__clear_bit(local->addr.id, msk->pm.id_avail_bitmap);
--				msk->pm.add_addr_signaled++;
--				mptcp_pm_announce_addr(msk, &local->addr, false);
--				mptcp_pm_nl_addr_send_ack(msk);
--			}
--		}
-+		if (!local)
-+			goto subflow;
-+
-+		if (!mptcp_pm_alloc_anno_list(msk, &local->addr))
-+			goto subflow;
-+
-+		__clear_bit(local->addr.id, msk->pm.id_avail_bitmap);
-+		msk->pm.add_addr_signaled++;
-+		mptcp_pm_announce_addr(msk, &local->addr, false);
-+		mptcp_pm_nl_addr_send_ack(msk);
- 	}
++		local = select_signal_address(pernet, msk);
+ 		if (!local)
+ 			goto subflow;
  
-+subflow:
- 	/* check if should create a new subflow */
- 	while (msk->pm.local_addr_used < local_addr_max &&
- 	       msk->pm.subflows < subflows_max) {
++		/* If the alloc fails, we are on memory pressure, not worth
++		 * continuing, and trying to create subflows.
++		 */
+ 		if (!mptcp_pm_alloc_anno_list(msk, &local->addr))
+-			goto subflow;
++			return;
+ 
+ 		__clear_bit(local->addr.id, msk->pm.id_avail_bitmap);
+ 		msk->pm.add_addr_signaled++;
 
 -- 
 2.45.2
