@@ -1,69 +1,69 @@
-Return-Path: <linux-kselftest+bounces-14505-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14506-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C258E9424BD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 05:06:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 905339424BF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 05:06:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6A781C21569
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 03:06:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E454CB234C5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 03:06:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 854AD14F70;
-	Wed, 31 Jul 2024 03:05:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B07E14F70;
+	Wed, 31 Jul 2024 03:06:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uqfXbv4i"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U0XZPEKM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABF4D18B09
-	for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 03:05:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69B517BA2
+	for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 03:06:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722395151; cv=none; b=jmwqwrQfe5d5vKy5u318zL6TOqrne8hk1d+PNb/Zhzsb5zJfUl1PyAfRmVzeu3vyftWs4MOTUN6nwCwFPQeEcOGqIBmcQ4JgpqLhaUrtOpwhwJgDcShKGaalJzexwwJRv8FHT4GjrxPZMj0Ah0+qsu3un6VbwySRJMZKmkb/3Qg=
+	t=1722395179; cv=none; b=dXMEE4iMtBYPnw5Wcoo/i4QF4Z9pLRv84TgnhSY11FCAbwua+KHByQc3+YWGF7Bs1ZpGGAxT7kPhWFBcs3Z/aD6N4ZNAyICQGo6fQ+tP107pZsBRi7kRpHwVmzW9hCtkW9qGsE3L6cJKXFhg4BEpEevCQDq+CsJPdy1wyX4rZzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722395151; c=relaxed/simple;
-	bh=/QSV0UrowOQNKfK1idUb0Wk4rcWVY3rnH9vnHYDUEFA=;
+	s=arc-20240116; t=1722395179; c=relaxed/simple;
+	bh=1WP5OehfJAI76PqeNlDSi0pg1mFnKkUaDVjz0r+bsBs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L/N7a6C6DM9NBgvtWPUd2zUVjeNybQ2UzOl2Gk/AI1XdQDRZz87Md2eJEMg8LkrJ7DqoTeuURJNa8Hh7MHJqELOILSrgW0djytXe6gPv8JF4WcU/Lx+cbE9BKA3rPbupubUW3J27N23qUx2dawZnxHZwox4Ql3Mvp4oFhmsyoHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uqfXbv4i; arc=none smtp.client-ip=209.85.160.180
+	 To:Cc:Content-Type; b=aa6gDcjbuKKdIZpIm1UYbqXipqrM/uISFRolttSZ8vrgDjF9XeJZvoX/gUF0XjhVyYtDeRbuGUAPt0Zl5kM2STJBF3WhxTFlhwQjKAy11clS8ED7sZMbmoFkjXQ3NIkW2dHHP2LcNFVkr+gRKxwomXe8Nss11TPlcRFAcEhFQ9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U0XZPEKM; arc=none smtp.client-ip=209.85.160.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-44fee2bfd28so189951cf.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jul 2024 20:05:49 -0700 (PDT)
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-44fee2bfd28so190101cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 30 Jul 2024 20:06:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722395148; x=1722999948; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1722395176; x=1722999976; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=G4pJlkYBXxmSszHTGg+uu/zw8a7liwlKv6G6X2Z0+m8=;
-        b=uqfXbv4iPImqwiWdack8yYs0Ib5XlddbOqfr7OoWGceN/JYP8cy2464g10KZ1FJGft
-         2RIGrRm+ZgwUuPKhy3c40kqyVft9zRnty5ugz4oKDBS1vBu/DQzyscCyT9UTfo/pOx6Y
-         CnTND3QVUQyn0iCwit+jB6L7sh4M0J86SMqzKLQcBb76JRnS57vxlLU+lDpULf58hZ7c
-         766/hNIJ/aHsm4yPWFn2PXCkF8/gLVZ9yXgmR0RI3e/jRZCpv2ZNO1G7DQn9x1Z+fuZL
-         eY8EI5oFq0+t93UicXhZrGsHaPBj6lZ8sNDJ/AKuDLF0SJ9i4pgavrHrWfc1CAfq1pfm
-         Lb6w==
+        bh=KqWnr2tB2EAR1VMPA5HfqWSbBLimEFFpFZrgedD7mng=;
+        b=U0XZPEKMxwnuJKvi6NXzWsjCfg7W4OrEeWas1rsK3Fhr9fWkgdEZvc3LSiVGN4dmH/
+         ehTkUfYui6CEfw+MB2gCJQ4t4WtuD8I1prsh6NbJA7OFSBDOjbujFb6HXrce1dTSsBBz
+         QPjEziCBYCPXRLx05/SAP4udLZilPyzAhKAShOcqI1hNbGRI63/X8ccQcYCVGPXifVlt
+         izHI/F+JUecaIywob5EKPMkPwrIWsLMs6tYn/BEK+Bc1Wsu2xSAW6MwQqTZaQTHOa7qP
+         H7LMstcM69EZo1qvJmJahKaQ9jP4bfQmMrkHIDE6SjSCYdQbLpetfJiB77gihGR5VPnM
+         4gJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722395148; x=1722999948;
+        d=1e100.net; s=20230601; t=1722395176; x=1722999976;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=G4pJlkYBXxmSszHTGg+uu/zw8a7liwlKv6G6X2Z0+m8=;
-        b=q1aBvXLa08dFb7VLBnq/xrGtjXdFqyUcmLev9aV3C8cQ3f2VnYfuQOIEqTxsHNnlQ3
-         Kwvt+qPJV8l8lNC56fDwG3iyS0CoSdbd27854IHd3X8tl5hiqXkBWjpufUmyHuaHum6r
-         X2oyk1kx2kJykv5qrPzjhQUS+nFklL0od870sCj9BZVEnA0l7qRWsmo4n+9XIiWwUINo
-         py/6Ab1RHXmOCGTOrJ8BikbyCR1SveAA9cxwNPzUHU886zl4RHNqnzRizf+328Df20yD
-         rHofteb5tyfvBHskvHf8hXSzMK15bAZd4xgbHYLqaQ1r+Hm2B8wqUDsyc7gLZTyaq1kA
-         LamA==
-X-Forwarded-Encrypted: i=1; AJvYcCXuOevUEnKmJLXpRqCiC6u/et9JvSQDBYcqhAdkTNzyjRclfplZR5oDEflBScA6eEi/aJBTI3aWBYBRhNX4YRmLawGBn+xdFKLCebvc1u8V
-X-Gm-Message-State: AOJu0YyWBgwY2eiFRJKZT3kSVjsFiwd5tTIP24Nk6g9Vvgywh55Luwcj
-	t16SMKtmF5p9JJMAqUOi2kr1XUB3RqNi/SyS3tc72TMG7ZnpMREVKtiz/Qe1y05ptaPU6jf0AG3
-	JQkivI90OXlRyxsaR1FaGXwg4Rc4HN5GTgy/4
-X-Google-Smtp-Source: AGHT+IF4nrP6uOB7D9St9sGyXDen0FmRdSnwBPYzsYZtu3mEju6hHsK1e2qtOYto+i96nw4fapmlq1HF5GiHrQB0Fws=
-X-Received: by 2002:a05:622a:4cd:b0:44f:ee20:d189 with SMTP id
- d75a77b69052e-4504199fe9emr2196951cf.8.1722395148321; Tue, 30 Jul 2024
- 20:05:48 -0700 (PDT)
+        bh=KqWnr2tB2EAR1VMPA5HfqWSbBLimEFFpFZrgedD7mng=;
+        b=J00WMeV7lCeltDituN+E4j837v3LTFSDP2ECz+eSt1GB+CVkDWLu1H5bwdhiRhKIia
+         qY5j0uJFw721inXc7O8U2Ye5qFAc3O37QtdK+nqeng0htw1T2WyQFtbHP+EdS8J2VDw6
+         EQJauiNCD4fALgt6MoN9rb2ZM8vAezwAY0b8QHmkJoUW4eOzTjYHlxeWr3J7SGx+D+A1
+         JRxqoo+5k66zfmpnJXZgeUFQo0EEOBw3po7UUsg9+bWvsr13o3JTLBvAJZY7DxMGNz1Q
+         0srg8JscUuXl0+QGUtaF/rIpIMppEjhBTisY08Pc1lAXRygFr5EZaPO2+yyt5xh55kNp
+         AQVg==
+X-Forwarded-Encrypted: i=1; AJvYcCXT+LtLJ/E6BYAG2hSBtUOZiHCuqj7Rw9FalLidW60FzOpzFY088DyzfLAJHjiTSN8aV/Ykt9wZdd8DqND5hr9/c0paWl8bSvhp5ry/ijxf
+X-Gm-Message-State: AOJu0YyaxyLNOOXLFh/UC2JcEBRd4sRVD75NC64UP4Birh99NmQUQOar
+	qjhz/2BqNub7x2P1mYRlGKdai2pvoef7HkR3UcvD8zafyzh9N795YHeYfSWewvN4JwzZh4/ieVK
+	C/CQn9jR0zl4J/0yxqdBhzqQAokh+8tcIzj3G
+X-Google-Smtp-Source: AGHT+IHq6aUQGeXlOf/Q1UYSu80byimCj04UgEyuJYoGmvtNtsZ6g05MMU/rGmASAuzcgzrYXPgwbE5E+1ATceelIoE=
+X-Received: by 2002:ac8:5889:0:b0:447:dbac:facd with SMTP id
+ d75a77b69052e-45041a4965bmr2159861cf.24.1722395176366; Tue, 30 Jul 2024
+ 20:06:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,169 +72,139 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240726110658.2281070-1-usama.anjum@collabora.com>
  <27b91030-b01f-44e4-82f7-93b3e11e8d74@linuxfoundation.org>
- <ZqU4FANdHOvpGc5t@yury-ThinkPad> <5d5b2042-f006-4c9b-b8a5-a28cbc3c7f5e@collabora.com>
- <38f98707-3317-47f6-97f6-ef1f80bfeadd@linuxfoundation.org>
-In-Reply-To: <38f98707-3317-47f6-97f6-ef1f80bfeadd@linuxfoundation.org>
+ <49108735-c776-4b6f-8264-62a827dd7b26@collabora.com> <0c2a5c8e-e48a-40f1-bc84-01669a5b8741@linuxfoundation.org>
+In-Reply-To: <0c2a5c8e-e48a-40f1-bc84-01669a5b8741@linuxfoundation.org>
 From: David Gow <davidgow@google.com>
-Date: Wed, 31 Jul 2024 11:05:36 +0800
-Message-ID: <CABVgOSmMoPD3JfzVd4VTkzGL2fZCo8LfwzaVSzeFimPrhgLa5w@mail.gmail.com>
+Date: Wed, 31 Jul 2024 11:06:05 +0800
+Message-ID: <CABVgOSmTtox4kdEFHwkZR=N0iHQY3tpugWSFU0exYzHOHYJp_Q@mail.gmail.com>
 Subject: Re: [PATCH 0/3] bitmap: Convert test_bitmap to kunit test
 To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, Yury Norov <yury.norov@gmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Yury Norov <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
 	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, kees@kernel.org, 
 	John Hubbard <jhubbard@nvidia.com>, kernel@collabora.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000040ae4061e825fd4"
+	boundary="000000000000af0de7061e826039"
 
---000000000000040ae4061e825fd4
+--000000000000af0de7061e826039
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 30 Jul 2024 at 23:39, Shuah Khan <skhan@linuxfoundation.org> wrote:
+On Tue, 30 Jul 2024 at 23:49, Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
-> On 7/29/24 02:15, Muhammad Usama Anjum wrote:
-> > On 7/27/24 11:10 PM, Yury Norov wrote:
-> >> On Fri, Jul 26, 2024 at 01:26:48PM -0600, Shuah Khan wrote:
-> >>> On 7/26/24 05:06, Muhammad Usama Anjum wrote:
-> >>>> In this series, test_bitmap is being converted to kunit test. Multiple
-> >>>> patches will make the review process smooth.
-> >>>>
-> >>>> - Patch-1: Convert the tests in lib/test_bitmap.c to kunit
-> >>>> - Patch-2: Rename the lib/test_bitmap.c to lib/bitmap_kunit.c and other
-> >>>>              configuration options
-> >>>> - Patch-3: Remove the bitmap.sh selftest
-> >>>>
-> >>>> Muhammad Usama Anjum (3):
-> >>>>     bitmap: convert test_bitmap to KUnit test
-> >>>>     bitmap: Rename module
-> >>>>     selftests: lib: remove test_bitmap
-> >>>>
-> >>>>    MAINTAINERS                           |   2 +-
-> >>>>    lib/Kconfig.debug                     |  15 +-
-> >>>>    lib/Makefile                          |   2 +-
-> >>>>    lib/{test_bitmap.c => bitmap_kunit.c} | 624 ++++++++++++--------------
-> >>>>    tools/testing/selftests/lib/Makefile  |   2 +-
-> >>>>    tools/testing/selftests/lib/bitmap.sh |   3 -
-> >>>>    tools/testing/selftests/lib/config    |   1 -
-> >>>>    7 files changed, 295 insertions(+), 354 deletions(-)
-> >>>>    rename lib/{test_bitmap.c => bitmap_kunit.c} (70%)
-> >>>>    delete mode 100755 tools/testing/selftests/lib/bitmap.sh
-> >>>>
+> On 7/29/24 02:29, Muhammad Usama Anjum wrote:
+> > On 7/27/24 12:26 AM, Shuah Khan wrote:
+> >> On 7/26/24 05:06, Muhammad Usama Anjum wrote:
+> >>> In this series, test_bitmap is being converted to kunit test. Multiple
+> >>> patches will make the review process smooth.
 > >>>
-> >>> Can you tell me how this conversion helps?
+> >>> - Patch-1: Convert the tests in lib/test_bitmap.c to kunit
+> >>> - Patch-2: Rename the lib/test_bitmap.c to lib/bitmap_kunit.c and other
+> >>>              configuration options
+> >>> - Patch-3: Remove the bitmap.sh selftest
 > >>>
-> >>> It is removing the ability to run bitmap tests during boot.
-> >>> It doesn't make sense to blindly convert all test under lib
-> >>> to kunit - Nack on this change or any change that takes away
-> >>> the ability to run tests and makes them dependent on kunit.
+> >>> Muhammad Usama Anjum (3):
+> >>>     bitmap: convert test_bitmap to KUnit test
+> >>>     bitmap: Rename module
+> >>>     selftests: lib: remove test_bitmap
+> >>>
+> >>>    MAINTAINERS                           |   2 +-
+> >>>    lib/Kconfig.debug                     |  15 +-
+> >>>    lib/Makefile                          |   2 +-
+> >>>    lib/{test_bitmap.c => bitmap_kunit.c} | 624 ++++++++++++--------------
+> >>>    tools/testing/selftests/lib/Makefile  |   2 +-
+> >>>    tools/testing/selftests/lib/bitmap.sh |   3 -
+> >>>    tools/testing/selftests/lib/config    |   1 -
+> >>>    7 files changed, 295 insertions(+), 354 deletions(-)
+> >>>    rename lib/{test_bitmap.c => bitmap_kunit.c} (70%)
+> >>>    delete mode 100755 tools/testing/selftests/lib/bitmap.sh
+> >>>
 > >>
-> >> Hi Muhammad,
+> >> Can you tell me how this conversion helps?
 > >>
-> >> In addition to Shuah's and John's reasoning. This patch wipes the
-> >> test history (git blame will point on you for most of the test),
-> > When files are renamed, their history isn't lost. We just need to use
-> > --follow option with git log to get complete history[1].
-> >
-> >> breaks boot-time testing support, messes with config names and
-> >> usability, and drops kselftest support for ... exactly, what?
-> > AFAIU the kselftest wasn't detected the test results that's why I started
-> > thinking on which could be best way to detect if any failure happens in
-> > this test. Triggering the test from kselftest doesn't grantee the test it
-> > would pass every time until we check results. For this kind of in-kernel
-> > testing, kunit is best suites. Please find earlier discussion [2].
-> >
+> >> It is removing the ability to run bitmap tests during boot.
+> >> It doesn't make sense to blindly convert all test under lib
+> >> to kunit - Nack on this change or any change that takes away
+> >> the ability to run tests and makes them dependent on kunit.
+> > Let's discuss this on discussion thread [1].
 >
-> KUnit isn't idea for cases where people would want to check a subsystem
-> on a running kernel - KUnit covers some use-cases and kselftest covers
-> others.
-
-Thanks, Shuah. That clarifies a lot. So the use-case we're concerned about is:
-- We have an existing running kernel, which has CONFIG_KUNIT=n.
-- Something breaks, and we want to check (for example) test_bitmap.
-- We can modprobe test_bitmap on the current kernel.
-
-That's definitely something KUnit can't do at the moment (though the
-workaround of always building with CONFIG_KUNIT=m is working for Red
-Hat and Android, and seems the closest equivalent). Maybe we need to
-work out a way for KUnit tests to handle this case more smoothly.
-Because I don't think there's anything special about this test which
-makes this use-case more likely than any of the other KUnit tests we
-have.
-
-> What happens if we are debugging a problem that requires us to debug on
-> a running system? Please don't go converting kselftest into kunit without
-> understanding how these are intended to be used.
-
-I don't think it's clear that this _is_ how the test is intended to be
-used: the config help text (and earlier messages in this thread) were
-all about running tests at boot, which is distinct from "debugging a
-problem on a running system". I think this is where I've been most
-confused. We've been happy to assume the "testing at runtime" case is
-against a kernel with test configs enabled, too.
-
-When it comes to test_bitmap specifically, I can't find any difference
-(save possibly for a couple of performance test functions) between it
-and any of the other tests we've converted to or written with KUnit in
-the past. I'd imagine (and correct me if I'm wrong) that it's pretty
-rare for there to be an issue which will be caught by test_bitmap on a
-running kernel, but not on a fresh boot / in a kernel with KUnit
-enabled. So the "debug a running system" situation seems to me only
-decrease coverage of some very rare situations. (Of course, that's
-ignoring that running the module against the current kernel might be
-most convenient, but that's a separate issue from coverage.)
-
-> Yes kselftest results need to be looked at. Write a parser which can
-> be improved. What you are doing is reducing the coverage and talking
-> away the ability to debug and test on running system.
+> So - it doesn't mean that it is a done deal. Each patch will be
+> reviewed on individual basis. This test in particular clearly its
+> use-case right in the config which was deleted without understanding
+> it.
 >
-> Fix what needs to be fixed instead of deleting tests.
+> -config TEST_BITMAP
+> -       tristate "Test bitmap_*() family of functions at runtime"
+> -       help
+> -         Enable this option to test the bitmap functions at boot.
 >
-> >>
-> >> KUNIT engine here doesn't improve on readability, neither shorten
-> >> the test length, to my taste.
-> >>
-> >> If you'd like to contribute to bitmaps testing - I'm all for that.
-> >> This is the very core and performance-sensitive piece of kernel,
-> >> and any extra-coverage is always welcome.
-> >>
 >
-> +1 on this. Add new tests and look at the reports.
+> This line above is the important piece of information which tells
+> you how the test is intended to be used.
 >
-> >> But I think the best way would be either adding new cases to the
-> >> existing test, or writing a new test, KUNIT-based, if you like.
-> >>
-> >
+> 1. You can enable this option and boot the kernel to check for regressions.
+
+Converting the test to KUnit _does not break this_. You can still
+enable this option and boot the kernel to test for regressions if it's
+a KUnit test.
+
+> 2. You can load the module on a running kernel to check for health.
+
+This is where the disagreement lies in my mind. While you can do this
+with KUnit, the kernel does have to have been built with CONFIG_KUNIT
+enabled (either built-in or as a module).
+
+(Indeed, KUnit adds the ability to trigger a test at runtime even if
+it's built-in, via debugfs, so it's possible to do so even if
+CONFIG_MODULES is disabled. That's a pretty niche use-case, I admit,
+but I'd guess that the bitmap functionailty breaking in a way which
+disappears when CONFIG_KUNIT is enabled is as well.)
+
+In general, though, my interpretation of "Test ... at runtime" in
+config option descriptions has not precluded introducing the
+CONFIG_KUNIT dependency. We already have several KUnit tests with that
+in their description, several of which were ported to KUnit later.
+
 >
-> +1
+> Converting it to kunit drops support for these two use-cases which
+> are user-space regressions. You don't want to do that.
 >
-> As I mentioned in my earlier message, I am going to nack all patches
-> that convert existing selftests to kunit such as this one.
+> -
+> -         If unsure, say N.
+> -
+>   config TEST_UUID
+>         tristate "Test functions located in the uuid module at runtime"
+>
+> @@ -2813,6 +2806,14 @@ config USERCOPY_KUNIT_TEST
+>           on the copy_to/from_user infrastructure, making sure basic
+>           user/kernel boundary testing is working.
+>
+> +config BITMAP_KUNIT_TEST
+> +       tristate "KUnit Test for bitmap_*() family of functions"
+> +       depends on KUNIT
+> +       default KUNIT_ALL_TESTS
+> +       help
+> +         This builds the "bitmap_kunit" module that runs tests for
+> +         bitmaps int the kernel making sure that there isn't any bug.
+>
+> And this isn't complete even. I don'ty see tristate in here.
 
-I should point out that we've already been porting a lot of tests in
-lib/ to KUnit for years, sometimes with the help of the test author,
-sometimes by encouraging it as a task for new contributors. And while
-most of those are not actually selftests (though we may have ported
-one or two), they differ from test_bitmap only in that there's a
-selftest wrapper script. The authors and users of those tests have
-thus far found this a worthwhile trade -- I've not heard any
-complaints -- so I'd rather we leave this as a "pause" on new
-conversions while we sort this out, rather than do something drastic
-like revert existing conversion.
+(This looks like it's tristate to me?)
 
-Personally, I'd still prefer these sorts of conversions to go ahead --
-I think the benefits outweightthe costs -- but I can totally get
-behind doing it on a case-per-case basis. I'd be disappointed if we
-NACKed changes like this in the case where the authors and users of
-that individual test would like it to be converted, though.
+>
+> I responded to the thread that started this flurry of conversion activity
+> stating that converting tests without thinking through the use-cases
+> isn't what we want to do.
+>
+> Reports aren't everything. The primary reason we have these tests is for
+> developers to be able to test. Reports can be improved and shouldn't
+> come at the expense of coverage and testing. Any patch that does that
+> will be NACKed.
+>
+> thanks,
+> -- Shuah
 
-Regardless, I think there's more discussion to be had here, and I'll
-look into what changes we can make either to KUnit or to the testing
-documentation to make sure we're all on the same page.
-
--- David
-
---000000000000040ae4061e825fd4
+--000000000000af0de7061e826039
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -302,14 +272,14 @@ GQs0EfiilyTgsH8iMOPqUJ1h4oX9z1FpaiJzfxcvcGG46SCieSFP0USs9aMl7GeERue37kBf14Pd
 kOYIfx09Pcv/N6lHV6kXlzG0xeUuV3RxtLtszQgxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
 MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
 IFNNSU1FIENBIDIwMjACEAFsPHWl8lqMEwx3lAnpufYwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
-hvcNAQkEMSIEIPw4oQwsrOvn2oz9lJO9kLpqcmt7BOJPM2fjYfz8b6ORMBgGCSqGSIb3DQEJAzEL
-BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDczMTAzMDU0OFowaQYJKoZIhvcNAQkPMVww
+hvcNAQkEMSIEIJk24MM2OVbCE3PMX80g9gMPCXNaUD15bcaXlO9dB1DgMBgGCSqGSIb3DQEJAzEL
+BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDczMTAzMDYxNlowaQYJKoZIhvcNAQkPMVww
 WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
-hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAJQDtB
-BvWlBUkal5TW6FpXl3awIJH6sawDLMsFZvOzT6v9i5PYsL1ZCcvADiYdK/Gj+ZLKXj+N2ELC1576
-FLFahM8CSTWfle5KwekgwCEK7uQbj3x/FYgKjVRpvfkDfZffVd60BbuqEy1rcZruWfe4vDJY1Al9
-W8LU02hmzl5QawZGk8SKBcEjKopecqOYP0BAu81Jl8hTGalPeffC7xV6iClatEpQF4Fj2QpgLw74
-V7RwFNuqr7gHRPh8fOALRPnH3n6ii3SOjARvQ0wL6si1tGT4IGG1EMSJCrJB3DnmAMkBBpNpclDX
-TRKvP/rP9Kdf+847hgw170XaKL3K5+WH
---000000000000040ae4061e825fd4--
+hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAd6wrS
+2ZDiCPLdToluc+DJ900o/Nsn1KYd4sZgvDnFjPQ1ihGQj4y/1D3oKLRzfyd/wKnj1v3+Twzxcid7
+jA7fswVRbXhIcxWSbNOHgvAW9IYnYeOuRbHs9lTEbkwTRVjjBPgcVjSQgX4njRlYFPoZCTDw6W3D
+wNb3+cACC3zqh0piRh0JIO/1rurGENTO39IqEnvPtZpcpBB7nYEOzp8Nj98kk9g+1D43l2XeGxPs
+CJ5/UCTnwPtRPwDX29IS38L44vGdAbzAkHo4QgriwYLFcQSpCnV6VHIKwG9BVHyVKu+LXFvW29DV
+IQLCPfHW1BXtvZ4Acq2DpjuUyHfZvZ2N
+--000000000000af0de7061e826039--
 
