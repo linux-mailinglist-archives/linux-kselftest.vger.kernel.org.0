@@ -1,156 +1,168 @@
-Return-Path: <linux-kselftest+bounces-14578-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14579-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A82D59437AE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 23:19:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8422E9437BF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 23:23:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 325D81F23284
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 21:19:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F7C92839EE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 21:23:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4640F16C861;
-	Wed, 31 Jul 2024 21:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D698208D1;
+	Wed, 31 Jul 2024 21:23:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="G5AOJVde"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="q9Q3/auq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F4F16C684
-	for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 21:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B1873C099
+	for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 21:23:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722460771; cv=none; b=N2umoN/T6rTTlSB6jNno0n2s/ykNmvP8bKyzZPriTNujzjPnM0FSp8AZS8TAtMVujHxccTvxrPm+PtZSl9NAiD6BKXSHDg9lo+0v4qWsCjO/8BsDMyjZk05681qT8pRCmBIx2/AUrNh2CClpiga5GuY13RBq8rvlhZCWtyHpZuk=
+	t=1722460983; cv=none; b=dnZzqx32iET7K6cPhk5mosS00Vb96yFKYlFlk8QvqibC1GHnu2498nAZ9sjoRFlHdloitnBI3cv6SZsI/oUgZ1L2t6IxknfM8ybbttNJg1+IHRupNWScnwoKTJcLkZQbJsPHO1JW0yYK1FoCODs/czk6Z+L4tadcWcB/bGa5Msk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722460771; c=relaxed/simple;
-	bh=dEiu0hhQh0Jy26qjQV9Cqq27juU/IGB072cpo+oEEG0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TcZSaEc9UM2xcMA/++96tx1hptj/VYy+nHzWGjwY/iTJs9zxx10dvqxlPG8/UoFoe0sukaWVY0ee8IOaIjQRFhKTqtQwhxcPGrHlEMXv0CLwG534rcATK/HJcufEH++R8EljS6j8Rxz5JJZ4i9PH9vjiyoYr1jC8EcpaCpxFTpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=G5AOJVde; arc=none smtp.client-ip=209.85.221.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-367990aaef3so3308093f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 14:19:28 -0700 (PDT)
+	s=arc-20240116; t=1722460983; c=relaxed/simple;
+	bh=GfO55b+2JVxSvDqBxCzypiim8opRWyBpZbr5KXHzR/4=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=XFay6Eeux/BEKukv+8ggu4kWji1qT6xnOzRYirsNZ77o9627yZieCqflbc/qHQiPth7boDgEcOlXo2IcmM02R20PRr6Ts52F/TNPLnYBpujv43hnSyuxR7OLZ9kN9dyeO5w3nx7cAyqvnTvjJJxbR2H9bTbPKgLrgiUUav7ApGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=q9Q3/auq; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-1fc6a017abdso40836485ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 31 Jul 2024 14:23:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722460767; x=1723065567; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dEiu0hhQh0Jy26qjQV9Cqq27juU/IGB072cpo+oEEG0=;
-        b=G5AOJVdeww95s7Qb7CjW1AIB44U8JoB3hsMVjtKEas3JXf1vwCfGamISn0W9Aq/kdy
-         yNL1Zqv/cr4RhFQKyRJmPJ6INVWA7HaLN4BA3TPWJOgIpZunPibJa8lDt4dea35PXJMa
-         WJnXVfFa8qRDUEOjUhndXkLLFeV3WIfifKMKBtqyAQTnivbTT+brnZBgFMNZdAo8vEjt
-         AHpE8w7Pa18w2XjTHFuKm63OtcCWPoxDqHBhXedIrvxFQBDm2ZqArJ12gP+H0TWV+pTi
-         hMTXlVceo15PAg4VK22DsRHYu0TuNLhY74kcM8C3XJhIyn3vkFywG3eHmMbwTKrnO4Hh
-         vx9w==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1722460981; x=1723065781; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=nK3gaH2rnWK7tnNJ+cHm6BKybIiZQMLLOHfx8Ur48uo=;
+        b=q9Q3/auqaUaQA1qB+xn4KxSmc+/z/icKHOFeEmbhr92RMjJHgT4PG+P1lSgNkouW7A
+         S7WAfJpQ5X5xMoMDPWQjGwoihlcwhRcSjjAUtZVTbmbfJKIaj6UDGtOL2LscMvLBaSgD
+         vDTyi8EYE+sr69nsScpQhqkNBHb9+/Qh/SEPUwvu+r7GOKFW/nRBlr+YF+D1/W7i3W3m
+         tSorfdWDQgQqCyUAnKatQzL62Mq5TF9q8w1btm6hmR+hdgnL17scYqFW2GF7v5ViEraI
+         E4V7byjT7K0w/wgEy6HNwGPhUHdoVmV6KILh+TkWQlhEheT9/Vje0li8l++tIg6W5+ng
+         d7vQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722460767; x=1723065567;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dEiu0hhQh0Jy26qjQV9Cqq27juU/IGB072cpo+oEEG0=;
-        b=U9e1QEg54EqxU0caN03T0TOJBhtKi1bAyirvD7RTFaMj6Z8ktAn8WN+jzlloy9oecp
-         C/Cw7NAKhVFghAxC5Uq6TdgObqIb5B0oEdqfAJFa1awHUaOHhGLceWlTsSjHk9SQ0cqs
-         bc8IfuCvlVKtQKzsQF5u2bT8WBH2+oTtIOK4Jr9rTF76BQP9realLRa03kO1DFmNHg86
-         TM8FnMtqMg/yM38xsKd4pQ0XiguCvLSwKzeObSNsdJpnqDUIdGowk1YjFPJx+YEE50Jy
-         Nv9oGIeqQTwYYfyOZ2UwNMgXEcRVwsucsjAnCZ14Bzhlbdf86vmKXsOphpmsc1qxT09U
-         5m5A==
-X-Forwarded-Encrypted: i=1; AJvYcCW45AA9p6H8RgEQSNezZU8mHguAmfBgV0j5feT3uxh32YkHiDk6L9NVcHFUrpotc/MobqqSBuApyS2O9zGElegI7kJYaAF46T50Dqru/R+E
-X-Gm-Message-State: AOJu0YxFlmt4zbnmPafN8p8D5PqWkTJcc9dU3lGg5Q5dRqpK//T3ER4Z
-	k95iMWwaANo70Tmi4u/fZHajb38kWDcZkI424w0lKdF12cCv+LfKQzsifXPshGjE1iaUrAZnxVj
-	NLPd6+4Sb386c5XUOG8xJRlcnjSq1Eo55ufhj
-X-Google-Smtp-Source: AGHT+IGCGvp/48H8qaH6fLYg7SPbNiiWFxJtKT/J7GEsXh7PoxMKp+lvuqPbXyBiSW9seEuLTTgslLee6nJ92gY4vjU=
-X-Received: by 2002:a5d:4483:0:b0:368:6d75:1bde with SMTP id
- ffacd0b85a97d-36baacdd8aamr351815f8f.15.1722460767120; Wed, 31 Jul 2024
- 14:19:27 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1722460981; x=1723065781;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nK3gaH2rnWK7tnNJ+cHm6BKybIiZQMLLOHfx8Ur48uo=;
+        b=kWgW7v/eyeLFhuVvrp8KLcXv8AMLeinZ+RE9QLnznzkvsiRX2yI3gvHEww2AehGZlp
+         T/oIaUUDXx9Kada+lHLuWIj/dZaoY9122FqQcZsuwOUHB1EYt2fgKYjo3tm6pAIIf/iX
+         s01EbScP+OcxSs5E/2ZKLIw7CGM4kzByAlWYXpVybVwMmmAjAxcyq2z6SfU1+inV3Q3/
+         TNcgSxMutefXsNtB+eGDJKo2VLHqksL6ngINBxKADaL2K7y0KT2vQYZolWEQEpYqffF6
+         Vl+GX5Zr2Xub/Ku1b/b3dtBvJDUSFM0saz2/4IdrEqzjvqVFu7EgRPjBQ+9rrzdhmg5S
+         pgvA==
+X-Forwarded-Encrypted: i=1; AJvYcCUY4K+Zd4LOZnOS4Sd9M5EXFEBV6/fzM3EnKZhIXkwfyquVY0c4cQ/0fqRtyV5tNtDuqblMGHMCMQYHLQGX4asQyZG8vcEtyhLeB6jBe7Df
+X-Gm-Message-State: AOJu0Yz/gd+/yw9oVqTyQyjXgnSL7wKowI2qY7OsUFSZeHS8ePrF9gfT
+	8474BkL/4aYIgo86I/If+5nswxlFSeSi6P9EzNRozTeiindscpbSn9yGVF5sYkY=
+X-Google-Smtp-Source: AGHT+IH4jJBy1T5is5CptcEoN0grAiPp3GiQV62HKJuFSoHKyrZAuM857shOt0wJ9nPfcwacXNg29Q==
+X-Received: by 2002:a17:903:234f:b0:1fb:72b4:8775 with SMTP id d9443c01a7336-1ff4d2135c7mr6436145ad.40.1722460981413;
+        Wed, 31 Jul 2024 14:23:01 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fed7ffb53csm124630585ad.304.2024.07.31.14.23.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 31 Jul 2024 14:23:01 -0700 (PDT)
+Message-ID: <66aaab35.170a0220.28631.0f23@mx.google.com>
+Date: Wed, 31 Jul 2024 14:23:01 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240730022623.98909-1-almasrymina@google.com>
- <20240730022623.98909-2-almasrymina@google.com> <1722327259.5659568-1-xuanzhuo@linux.alibaba.com>
-In-Reply-To: <1722327259.5659568-1-xuanzhuo@linux.alibaba.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 31 Jul 2024 17:19:11 -0400
-Message-ID: <CAHS8izMZQLsBWPXWiqPwaQHfupKc5VAuxW+6kpWmzi-vw8JEWQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v17 01/14] netdev: add netdev_rx_queue_restart()
-To: Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Kernel: v6.11-rc1-6-g38cde27f74d8
+X-Kernelci-Report-Type: build
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next build: 6 builds: 2 failed, 4 passed,
+ 1 warning (v6.11-rc1-6-g38cde27f74d8)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Tue, Jul 30, 2024 at 4:17=E2=80=AFAM Xuan Zhuo <xuanzhuo@linux.alibaba.c=
-om> wrote:
->
-> On Tue, 30 Jul 2024 02:26:05 +0000, Mina Almasry <almasrymina@google.com>=
- wrote:
-> > Add netdev_rx_queue_restart() function to netdev_rx_queue.h
->
->
-> Can you say more? As far as I understand, we just release the buffer
-> submitted to the rx ring and get a new page pool.
->
+kselftest/next build: 6 builds: 2 failed, 4 passed, 1 warning (v6.11-rc1-6-=
+g38cde27f74d8)
 
-Yes, I just noticed that this commit message is underwritten. I'll add
-more color. Maybe something like;
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v6.11-rc1-6-g38cde27f74d8/
 
-=3D=3D=3D=3D
-Add netdev_rx_queue_restart(), which resets an rx queue using the
-queue API recently merged[1].
+Tree: kselftest
+Branch: next
+Git Describe: v6.11-rc1-6-g38cde27f74d8
+Git Commit: 38cde27f74d8bbe2f705fb1f80384acab9762e9e
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
-The queue API was merged to enable the core net stack reset individual
-rx queues to actuate changes in the rx queue's configuration. In later
-patches in this series, we will use netdev_rx_queue_restart() to reset
-rx queues after binding or unbinding dmabuf configuration, which will
-cause reallocation of the page_pool to repopulate its memory using the
-new configuration.
+Build Failures Detected:
 
-[1] https://lore.kernel.org/netdev/20240430231420.699177-1-shailend@google.=
-com/T/
-=3D=3D=3D=3D
+arm64:
+    defconfig+kselftest+arm64-chromebook: (clang-16) FAIL
+    defconfig+kselftest+arm64-chromebook: (gcc-12) FAIL
 
-> But I personally feel that the interface here is a bit too complicated. I=
-n
-> particular, we also need to copy the rx struct memory, which means it is =
-a
-> dangerous operation for many pointers.
->
+Warnings Detected:
 
-Understood, but the complication is necessary based on previous
-discussions. Jakub requests that we must allocate memory for a new rx
-queues before bringing down the existing queue, to guard against the
-interface remaining down on ENOMEM error.
+arm64:
 
-Btw, I notice the series was marked as changes requested; the only
-feedback I got was this one and the incorrect netmem_priv.h header.
-I'll fix and repost. It's just slightly weird because both v16 and v17
-are marked as changes requested in patchwork.
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
+ !ENDBR: .text+0x14ef94
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, clang-16) =E2=80=94 FAIL, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-12) =E2=80=94 FAIL, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
+BR: .text+0x14ef94
+
+---
+For more info write to <info@kernelci.org>
 
