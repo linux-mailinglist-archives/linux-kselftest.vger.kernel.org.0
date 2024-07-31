@@ -1,54 +1,50 @@
-Return-Path: <linux-kselftest+bounces-14529-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14530-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 855C0942C2B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 12:41:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 01CD5942CB4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 13:06:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A442C1C21F99
-	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 10:41:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 338991C215AA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 31 Jul 2024 11:06:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7D901AD9EA;
-	Wed, 31 Jul 2024 10:40:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ED731AD3FD;
+	Wed, 31 Jul 2024 11:06:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="f2s3xZhZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qF7LA2TX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBAA41AC458;
-	Wed, 31 Jul 2024 10:40:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F691AD3E0;
+	Wed, 31 Jul 2024 11:06:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722422425; cv=none; b=F8VSobd0EI8otEk/mbwYBYOYI8/+25T1eaViFVQkUCKbc2SMYqq/BVd6+JU/lLSk9JFAxvQktqvPrfbjrDVzg6o5Fa3Kvn8T//NYe7Wn+2/GJWmXfd/Q1OU/vEb2Ki+tsbwHgyi+S+uIogY/MwySszuC90twONBUSIlNeHjsylE=
+	t=1722423974; cv=none; b=ZkPpkxOwWdYb377cxHNyuFQJYggyJi5EPgsVWwI5N7jyYfwf0yB0gfzoci/WUUgbLeUciO8tqDefP9CnaefNg9kFcIWvBMyZajYHX0286/Qi8Uif8S1tLd3FFcqUjlQoYZ8dhGbtC0cPUYPltBJNlji7OMas1F2GVCmZ3ShN4Mc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722422425; c=relaxed/simple;
-	bh=+Gf9SLD0Q60A/y8RzdEKh6l0iGmQ7mq+6ZahsjKTu9s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sxo7NvemvMpkcxlma4TpRZFVJz7oe0iAJ2LG8w5uRHDrBYq3uApIJkAOHoURbP6Yimz+Ez6FH2U4K+6BMJnkN+7/MBoaoR4D2zjtbraw5WCc/OvCqSrJzWKLOoKzOXJXamw/dX0UyDs9Dj5sN2Z9r9hTu4zn3O0eWF4uqm9Wxrs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=f2s3xZhZ; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 55803E000B;
-	Wed, 31 Jul 2024 10:40:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1722422421;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=QBnx2o8Mg6xN64pkgaDCu7wfn5EoN6dF6NRZql2co6Q=;
-	b=f2s3xZhZWkAd3/xwAykDJ+2BGmmMP/sdHzgeXS39nsnBrzmjHxGL7gjZ1wuwAAXgpdY1Go
-	ziA5/L4Y2TWtFNqD0YoGGYvhei4ygm6r8Z7c66ABgU77s+IYWDKyYgIQ9E2D2NNjr0x3HW
-	A1oq1U7fSdB++/9CeunnUGAS/Mh+uD00wMYMAkdSEz1B0Se1Jd9dfSwNYAqvMcOXIqa0oM
-	PangWoHj7+enT/Dfh73fQhovGr6+9SYo8quUgLQQvE4e7Br1HM/thYET4vqS1U82fzlLaT
-	A/yCGaMGWiyqDBfMIXF2AZHxkJyqqjsO5K1YyQe4oHDrGb+7uPYGPJVuu0xHsg==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Wed, 31 Jul 2024 12:38:27 +0200
-Subject: [PATCH bpf-next 4/4] selftests/bpf: convert
- test_skb_cgroup_id_user to test_progs
+	s=arc-20240116; t=1722423974; c=relaxed/simple;
+	bh=/rfAcMxmb9Inbh+7ExU4M83JIezLRz9H62MSXp9vrNo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=tDGzAYoOk6cXBqVuhaUjUlwlMuMxE+lj+/kuFIBgEvJJRX/lWl1sPSDBYM4zWE4w5agR/CEkT83iIm3jmPPvHF38T+eG5lmmtYlAnCAGbecgYkuHixVQjrAUOL7cI9jZvvE5jlSC0k+nvjbZL3ZNKVbxUaBBFitU3OQ8+OeWiHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qF7LA2TX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21661C116B1;
+	Wed, 31 Jul 2024 11:06:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722423973;
+	bh=/rfAcMxmb9Inbh+7ExU4M83JIezLRz9H62MSXp9vrNo=;
+	h=From:Subject:Date:To:Cc:From;
+	b=qF7LA2TXrhtxHz0qspjrfYX0o76b0TLfCxZ1BeLRgJ9RURp5+BUXm3nDornSLbPnM
+	 sJF2LyRn4bgB8gmDsbBtkZU2qCmOxDlzQg97V5hFZGBySFA2uBmW/eovCMH8jftrB6
+	 n3XtTwLxaxl3Ft+U6zwBnY2iFCezA68b/eTFKhxdgDpsRTOz4AOaWCeuq/YziGOARp
+	 TCPu09ZYSnpi/BCfD7w+5MwDi9+ciB341xNPPc0GM0Lk9AytBprMGcExzzL1dTBs1Q
+	 DGTVGNpyp65/Sazlg8x+bup5uJmHDntFiPiedh1piJk3t8AWObSxlu6x3EgikBskz5
+	 RXbmfv+IlzgSw==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net 0/7] mptcp: fix endpoints with 'signal' and 'subflow'
+ flags
+Date: Wed, 31 Jul 2024 13:05:52 +0200
+Message-Id: <20240731-upstream-net-20240731-mptcp-endp-subflow-signal-v1-0-c8a9b036493b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,525 +52,84 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240731-convert_cgroup_tests-v1-4-14cbc51b6947@bootlin.com>
-References: <20240731-convert_cgroup_tests-v1-0-14cbc51b6947@bootlin.com>
-In-Reply-To: <20240731-convert_cgroup_tests-v1-0-14cbc51b6947@bootlin.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJAaqmYC/z2NQQ6CMBAAv0L27CYtohK/YjyUdoubwNJ0i5IQ/
+ m7jwePMYWYHpcykcG92yPRm5UUq2FMD/uVkJORQGVrTduZ2trgmLZncjEIF/3ZOxSckCQl1HeK
+ 0fFB5FDeh7W24dsbHC/VQqylT5O13fEBtwPM4vt5JEOuGAAAA
+To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.14.1
-X-GND-Sasl: alexis.lothore@bootlin.com
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2643; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=/rfAcMxmb9Inbh+7ExU4M83JIezLRz9H62MSXp9vrNo=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmqhqizHzJ45FoScJiCMQ7UFLVRlOv2AdAuCj+x
+ vdgEnTPdlCJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZqoaogAKCRD2t4JPQmmg
+ cwO9D/9jqHN2oEdo0gttmKyD1a4kT3fCPO1IKQNDrfNuky/PjBx6gIYpyHNeAKHVs3GzN2anlyF
+ pKzYHhOyK0s5hQaOoBraWzCJJ+xE0ChUOUt8K/R8zvUn2PdNocuPGGeXEfrnAe4eaVZLKIPtfwy
+ U5dsNzWpQKHEFNwTwy+6dcwtQXPzYKpEZF2tRXoQl39cLrw6aMryHvJn2Zn5moRnEcsXFtnyOxz
+ dI9G+9XKPwzbGFfz+8Ujru1KJNFkhPwkXh8c7pUE/zH6ZhtFnSXcfjhxKPR0dPizZQWQiMRTX8D
+ 7KfiyiDK1qxkz1CsJIgiHH///JyWUjuiLqvoCQZ8w0Mogr9Dxss+NU3TLSFnskWRa0vaVXq0iX2
+ 3/2BrqLbfafS32XeQ7biX8un0kxORRm82N2gYZdL4n/5c2m6WiRuaLQZcOKM4rh5gbhmc0cYO2E
+ cCQNf1wdqd0o97/3YIIXpiSnq0Yys6zTKSRUQ3VPXSrVuK7Wccp65adYdt36/d1YWEKdFVdIHfs
+ VdYxc86G118tVf5zczzx9nK4BDwF270KUxoljII7P3IotkyUZhWmlRVy9jqL13VZjks/7Kl1cWP
+ JHOfBT9InfKaB1U3+n7f8qJsgPGtdBQDI4tGk4A4zEuN0IDOnXI2qg9KLnhVZFdZMN6kw4aOJSB
+ 8sgTIweTqNIj+bA==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-test_skb_cgroup_id_user allows testing skb cgroup id retrieval at different
-levels, but is not integrated in test_progs, so it is not run
-automatically in CI. The test overlaps a bit with
-cgroup_skb_sk_lookup_kern, which is integrated in test_progs and test
-extensively skb cgroup helpers, but there is still one major difference
-between the two tests which justifies the conversion:
-cgroup_skb_sk_lookup_kern deals with a BPF_PROG_TYPE_CGROUP_SKB (attached
-on a cgroup), while test_skb_cgroup_id_user deals with a
-BPF_PROG_TYPE_SCHED_CLS (attached on a qdisc)
+When looking at improving the user experience around the MPTCP endpoints
+setup, I noticed that setting an endpoint with both the 'signal' and the
+'subflow' flags -- as it has been done in the past by users according to
+bug reports we got -- was resulting on only announcing the endpoint, but
+not using it to create subflows: the 'subflow' flag was then ignored.
 
-Convert test_skb_cgroup_id_user into test_progs framework in order to run
-it automatically in CI. The main differences with the original test are the
-following:
-- rename the test to make it shorter and more straightforward regarding
-  tested feature
-- the wrapping shell script has been dropped since every setup step is now
-  handled in the main C test file
-- the test has been renamed for a shorter name and reflecting the tested
-  API
-- add dedicated assert log per level to ease test failure debugging
+My initial thought was to modify IPRoute2 to warn the user when the two
+flags were set, but it doesn't sound normal to ignore one of them. I
+then looked at modifying the kernel not to allow having the two flags
+set, but when discussing about that with Mat, we thought it was maybe
+not ideal to do that, as there might be use-cases, we might break some
+configs. Then I saw it was working before v5.17. So instead, I fixed the
+support on the kernel side (patch 5) using Paolo's suggestion. This also
+includes a fix on the options side (patch 1: for v5.11+), an explicit
+deny of some options combinations (patch 2: for v5.18+), and some
+refactoring (patches 3 and 4) to ease the inclusion of the patch 5.
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+While at it, I added a new selftest (patch 7) to validate this case --
+including a modification of the chk_add_nr helper to inverse the sides
+were the counters are checked (patch 6) -- and allowed ADD_ADDR echo
+just after the MP_JOIN 3WHS.
+
+The selftests modification have the same Fixes tag as the previous
+commit, but no 'Cc: Stable': if the backport can work, that's good --
+but it still need to be verified by running the selftests -- if not, no
+need to worry, many CIs will use the selftests from the last stable
+version to validate previous stable releases.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-The new test has been tested in a qemu environment:
+Matthieu Baerts (NGI0) (7):
+      mptcp: fully established after ADD_ADDR echo on MPJ
+      mptcp: pm: deny endp with signal + subflow + port
+      mptcp: pm: reduce indentation blocks
+      mptcp: pm: don't try to create sf if alloc failed
+      mptcp: pm: do not ignore 'subflow' if 'signal' flag is also set
+      selftests: mptcp: join: ability to invert ADD_ADDR check
+      selftests: mptcp: join: test both signal & subflow
 
-  ./test_progs -a cgroup_ancestor
-  44      cgroup_ancestor:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
+ net/mptcp/options.c                             |  3 +-
+ net/mptcp/pm_netlink.c                          | 47 +++++++++++++--------
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 55 ++++++++++++++++++-------
+ 3 files changed, 73 insertions(+), 32 deletions(-)
 ---
- tools/testing/selftests/bpf/.gitignore             |   1 -
- tools/testing/selftests/bpf/Makefile               |   3 +-
- .../selftests/bpf/prog_tests/cgroup_ancestor.c     | 159 ++++++++++++++++++
- tools/testing/selftests/bpf/test_skb_cgroup_id.sh  |  67 --------
- .../selftests/bpf/test_skb_cgroup_id_user.c        | 183 ---------------------
- 5 files changed, 160 insertions(+), 253 deletions(-)
+base-commit: 0bf50cead4c4710d9f704778c32ab8af47ddf070
+change-id: 20240731-upstream-net-20240731-mptcp-endp-subflow-signal-181d640cf5e8
 
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index a45f11f81337..c46950d4ef53 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -20,7 +20,6 @@ test_sock
- urandom_read
- test_sockmap
- test_lirc_mode2_user
--test_skb_cgroup_id_user
- test_flow_dissector
- flow_dissector_load
- test_tcpnotify_user
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 0ac0f9dbc2f8..057e6ba003f1 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -138,7 +138,7 @@ TEST_PROGS_EXTENDED := with_addr.sh \
- 	test_xdp_vlan.sh test_bpftool.py
- 
- # Compile but not part of 'make run_tests'
--TEST_GEN_PROGS_EXTENDED = test_skb_cgroup_id_user \
-+TEST_GEN_PROGS_EXTENDED = \
- 	flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
- 	test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
- 	xskxceiver xdp_redirect_multi xdp_synproxy veristat xdp_hw_metadata \
-@@ -292,7 +292,6 @@ CAP_HELPERS	:= $(OUTPUT)/cap_helpers.o
- NETWORK_HELPERS := $(OUTPUT)/network_helpers.o
- 
- $(OUTPUT)/test_dev_cgroup: $(CGROUP_HELPERS) $(TESTING_HELPERS)
--$(OUTPUT)/test_skb_cgroup_id_user: $(CGROUP_HELPERS) $(TESTING_HELPERS)
- $(OUTPUT)/test_sock: $(CGROUP_HELPERS) $(TESTING_HELPERS)
- $(OUTPUT)/test_sockmap: $(CGROUP_HELPERS) $(TESTING_HELPERS)
- $(OUTPUT)/test_tcpnotify_user: $(CGROUP_HELPERS) $(TESTING_HELPERS) $(TRACE_HELPERS)
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_ancestor.c b/tools/testing/selftests/bpf/prog_tests/cgroup_ancestor.c
-new file mode 100644
-index 000000000000..796aa3af75e8
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_ancestor.c
-@@ -0,0 +1,159 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "test_progs.h"
-+#include "network_helpers.h"
-+#include "cgroup_helpers.h"
-+#include "cgroup_ancestor.skel.h"
-+
-+#define VETH_PREFIX "test_cgid_"
-+#define VETH_1 VETH_PREFIX "1"
-+#define VETH_2 VETH_PREFIX "2"
-+#define CGROUP_PATH "/skb_cgroup_test"
-+#define NUM_CGROUP_LEVELS 4
-+#define WAIT_AUTO_IP_MAX_ATTEMPT 10
-+#define DST_ADDR "ff02::1"
-+#define DST_PORT 1234
-+#define MAX_ASSERT_NAME 32
-+
-+struct test_data {
-+	struct cgroup_ancestor *skel;
-+	struct bpf_tc_hook qdisc;
-+	struct bpf_tc_opts tc_attach;
-+};
-+
-+static int send_datagram(void)
-+{
-+	unsigned char buf[] = "some random test data";
-+	struct sockaddr_in6 addr = { .sin6_family = AF_INET6,
-+				     .sin6_port = htons(DST_PORT),
-+				     .sin6_scope_id = if_nametoindex(VETH_1) };
-+	int sock, n;
-+
-+	if (!ASSERT_EQ(inet_pton(AF_INET6, DST_ADDR, &addr.sin6_addr), 1,
-+		       "inet_pton"))
-+		return -1;
-+
-+	sock = socket(AF_INET6, SOCK_DGRAM, 0);
-+	if (!ASSERT_OK_FD(sock, "create socket"))
-+		return sock;
-+
-+	n = sendto(sock, buf, sizeof(buf), 0, (const struct sockaddr *)&addr,
-+		   sizeof(addr));
-+	if (!ASSERT_EQ(n, sizeof(buf), "send data"))
-+		return n;
-+
-+	return 0;
-+}
-+
-+static int wait_local_ip(void)
-+{
-+	char *ping_cmd = ping_command(AF_INET6);
-+	int i, err;
-+
-+	for (i = 0; i < WAIT_AUTO_IP_MAX_ATTEMPT; i++) {
-+		err = SYS_NOFAIL("%s -c 1 -W 1 %s%%%s", ping_cmd, DST_ADDR,
-+				 VETH_1);
-+		if (!err)
-+			break;
-+	}
-+
-+	return err;
-+}
-+
-+static int setup_network(struct test_data *t)
-+{
-+	int ret;
-+
-+	SYS(fail, "ip link add dev %s type veth peer name %s", VETH_1, VETH_2);
-+	SYS(fail, "ip link set %s up", VETH_1);
-+	SYS(fail, "ip link set %s up", VETH_2);
-+
-+	ret = wait_local_ip();
-+	if (!ASSERT_EQ(ret, 0, "wait local ip"))
-+		goto fail;
-+
-+	memset(&t->qdisc, 0, sizeof(t->qdisc));
-+	t->qdisc.sz = sizeof(t->qdisc);
-+	t->qdisc.attach_point = BPF_TC_EGRESS;
-+	t->qdisc.ifindex = if_nametoindex(VETH_1);
-+	if (!ASSERT_NEQ(t->qdisc.ifindex, 0, "if_nametoindex"))
-+		goto cleanup_interfaces;
-+	if (!ASSERT_OK(bpf_tc_hook_create(&t->qdisc), "qdisc add"))
-+		goto cleanup_interfaces;
-+
-+	memset(&t->tc_attach, 0, sizeof(t->tc_attach));
-+	t->tc_attach.sz = sizeof(t->tc_attach);
-+	t->tc_attach.prog_fd = bpf_program__fd(t->skel->progs.log_cgroup_id);
-+	if (!ASSERT_OK(bpf_tc_attach(&t->qdisc, &t->tc_attach), "filter add"))
-+		goto cleanup_qdisc;
-+
-+	return 0;
-+
-+cleanup_qdisc:
-+	bpf_tc_hook_destroy(&t->qdisc);
-+cleanup_interfaces:
-+	SYS_NOFAIL("ip link del %s", VETH_1);
-+fail:
-+	return 1;
-+}
-+
-+static void cleanup_network(struct test_data *t)
-+{
-+	bpf_tc_detach(&t->qdisc, &t->tc_attach);
-+	bpf_tc_hook_destroy(&t->qdisc);
-+	/* Deleting first interface will also delete peer interface */
-+	SYS_NOFAIL("ip link del %s", VETH_1);
-+}
-+
-+static void check_ancestors_ids(struct test_data *t)
-+{
-+	__u64 actual_ids[NUM_CGROUP_LEVELS], expected_ids[NUM_CGROUP_LEVELS];
-+	char assert_name[MAX_ASSERT_NAME];
-+	__u32 level;
-+	int err;
-+
-+	expected_ids[0] = get_cgroup_id("/.."); /* root cgroup */
-+	expected_ids[1] = get_cgroup_id("");
-+	expected_ids[2] = get_cgroup_id(CGROUP_PATH);
-+	expected_ids[3] = 0; /* non-existent cgroup */
-+
-+	for (level = 0; level < NUM_CGROUP_LEVELS; level++) {
-+		err = bpf_map__lookup_elem(t->skel->maps.cgroup_ids, &level,
-+					   sizeof(level), &actual_ids[level],
-+					   sizeof(__u64), 0);
-+		if (!ASSERT_OK(err, "read map"))
-+			continue;
-+		snprintf(assert_name, MAX_ASSERT_NAME,
-+			 "ancestor id at level %d", level);
-+		ASSERT_EQ(actual_ids[level], expected_ids[level], assert_name);
-+	}
-+}
-+
-+void test_cgroup_ancestor(void)
-+{
-+	struct test_data t;
-+	int cgroup_fd;
-+
-+	t.skel = cgroup_ancestor__open_and_load();
-+	if (!ASSERT_OK_PTR(t.skel, "open and load"))
-+		return;
-+
-+	if (setup_network(&t))
-+		goto cleanup_progs;
-+
-+	cgroup_fd = cgroup_setup_and_join(CGROUP_PATH);
-+	if (cgroup_fd < 0)
-+		goto cleanup_network;
-+
-+	if (send_datagram())
-+		goto cleanup_cgroups;
-+
-+	check_ancestors_ids(&t);
-+
-+cleanup_cgroups:
-+	cleanup_cgroup_environment();
-+cleanup_network:
-+	cleanup_network(&t);
-+cleanup_progs:
-+	cgroup_ancestor__destroy(t.skel);
-+}
-diff --git a/tools/testing/selftests/bpf/test_skb_cgroup_id.sh b/tools/testing/selftests/bpf/test_skb_cgroup_id.sh
-deleted file mode 100755
-index d7dad49175c2..000000000000
---- a/tools/testing/selftests/bpf/test_skb_cgroup_id.sh
-+++ /dev/null
-@@ -1,67 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0
--# Copyright (c) 2018 Facebook
--
--set -eu
--
--wait_for_ip()
--{
--	local _i
--	echo -n "Wait for testing link-local IP to become available "
--	for _i in $(seq ${MAX_PING_TRIES}); do
--		echo -n "."
--		if $PING6 -c 1 -W 1 ff02::1%${TEST_IF} >/dev/null 2>&1; then
--			echo " OK"
--			return
--		fi
--		sleep 1
--	done
--	echo 1>&2 "ERROR: Timeout waiting for test IP to become available."
--	exit 1
--}
--
--setup()
--{
--	# Create testing interfaces not to interfere with current environment.
--	ip link add dev ${TEST_IF} type veth peer name ${TEST_IF_PEER}
--	ip link set ${TEST_IF} up
--	ip link set ${TEST_IF_PEER} up
--
--	wait_for_ip
--
--	tc qdisc add dev ${TEST_IF} clsact
--	mkdir -p /sys/fs/bpf/${BPF_PROG_PIN}
--	bpftool prog loadall ${BPF_PROG_OBJ} /sys/fs/bpf/${BPF_PROG_PIN} type tc
--	tc filter add dev ${TEST_IF} egress bpf da object-pinned \
--		/sys/fs/bpf/${BPF_PROG_PIN}/${BPF_PROG_NAME}
--
--	BPF_PROG_ID=$(tc filter show dev ${TEST_IF} egress | \
--			awk '/ id / {sub(/.* id /, "", $0); print($1)}')
--}
--
--cleanup()
--{
--	ip link del ${TEST_IF} 2>/dev/null || :
--	ip link del ${TEST_IF_PEER} 2>/dev/null || :
--	rm -rf /sys/fs/bpf/${BPF_PROG_PIN}
--}
--
--main()
--{
--	trap cleanup EXIT 2 3 6 15
--	setup
--	${PROG} ${TEST_IF} ${BPF_PROG_ID}
--}
--
--DIR=$(dirname $0)
--TEST_IF="test_cgid_1"
--TEST_IF_PEER="test_cgid_2"
--MAX_PING_TRIES=5
--BPF_PROG_PIN="cgroup_ancestor"
--BPF_PROG_OBJ="${DIR}/${BPF_PROG_PIN}.bpf.o"
--BPF_PROG_NAME="log_cgroup_id"
--BPF_PROG_ID=0
--PROG="${DIR}/test_skb_cgroup_id_user"
--type ping6 >/dev/null 2>&1 && PING6="ping6" || PING6="ping -6"
--
--main
-diff --git a/tools/testing/selftests/bpf/test_skb_cgroup_id_user.c b/tools/testing/selftests/bpf/test_skb_cgroup_id_user.c
-deleted file mode 100644
-index ed518d075d1d..000000000000
---- a/tools/testing/selftests/bpf/test_skb_cgroup_id_user.c
-+++ /dev/null
-@@ -1,183 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--// Copyright (c) 2018 Facebook
--
--#include <stdlib.h>
--#include <string.h>
--#include <unistd.h>
--
--#include <arpa/inet.h>
--#include <net/if.h>
--#include <netinet/in.h>
--#include <sys/socket.h>
--#include <sys/types.h>
--
--
--#include <bpf/bpf.h>
--#include <bpf/libbpf.h>
--
--#include "cgroup_helpers.h"
--
--#define CGROUP_PATH		"/skb_cgroup_test"
--#define NUM_CGROUP_LEVELS	4
--
--/* RFC 4291, Section 2.7.1 */
--#define LINKLOCAL_MULTICAST	"ff02::1"
--
--static int mk_dst_addr(const char *ip, const char *iface,
--		       struct sockaddr_in6 *dst)
--{
--	memset(dst, 0, sizeof(*dst));
--
--	dst->sin6_family = AF_INET6;
--	dst->sin6_port = htons(1025);
--
--	if (inet_pton(AF_INET6, ip, &dst->sin6_addr) != 1) {
--		log_err("Invalid IPv6: %s", ip);
--		return -1;
--	}
--
--	dst->sin6_scope_id = if_nametoindex(iface);
--	if (!dst->sin6_scope_id) {
--		log_err("Failed to get index of iface: %s", iface);
--		return -1;
--	}
--
--	return 0;
--}
--
--static int send_packet(const char *iface)
--{
--	struct sockaddr_in6 dst;
--	char msg[] = "msg";
--	int err = 0;
--	int fd = -1;
--
--	if (mk_dst_addr(LINKLOCAL_MULTICAST, iface, &dst))
--		goto err;
--
--	fd = socket(AF_INET6, SOCK_DGRAM, 0);
--	if (fd == -1) {
--		log_err("Failed to create UDP socket");
--		goto err;
--	}
--
--	if (sendto(fd, &msg, sizeof(msg), 0, (const struct sockaddr *)&dst,
--		   sizeof(dst)) == -1) {
--		log_err("Failed to send datagram");
--		goto err;
--	}
--
--	goto out;
--err:
--	err = -1;
--out:
--	if (fd >= 0)
--		close(fd);
--	return err;
--}
--
--int get_map_fd_by_prog_id(int prog_id)
--{
--	struct bpf_prog_info info = {};
--	__u32 info_len = sizeof(info);
--	__u32 map_ids[1];
--	int prog_fd = -1;
--	int map_fd = -1;
--
--	prog_fd = bpf_prog_get_fd_by_id(prog_id);
--	if (prog_fd < 0) {
--		log_err("Failed to get fd by prog id %d", prog_id);
--		goto err;
--	}
--
--	info.nr_map_ids = 1;
--	info.map_ids = (__u64) (unsigned long) map_ids;
--
--	if (bpf_prog_get_info_by_fd(prog_fd, &info, &info_len)) {
--		log_err("Failed to get info by prog fd %d", prog_fd);
--		goto err;
--	}
--
--	if (!info.nr_map_ids) {
--		log_err("No maps found for prog fd %d", prog_fd);
--		goto err;
--	}
--
--	map_fd = bpf_map_get_fd_by_id(map_ids[0]);
--	if (map_fd < 0)
--		log_err("Failed to get fd by map id %d", map_ids[0]);
--err:
--	if (prog_fd >= 0)
--		close(prog_fd);
--	return map_fd;
--}
--
--int check_ancestor_cgroup_ids(int prog_id)
--{
--	__u64 actual_ids[NUM_CGROUP_LEVELS], expected_ids[NUM_CGROUP_LEVELS];
--	__u32 level;
--	int err = 0;
--	int map_fd;
--
--	expected_ids[0] = get_cgroup_id("/..");	/* root cgroup */
--	expected_ids[1] = get_cgroup_id("");
--	expected_ids[2] = get_cgroup_id(CGROUP_PATH);
--	expected_ids[3] = 0; /* non-existent cgroup */
--
--	map_fd = get_map_fd_by_prog_id(prog_id);
--	if (map_fd < 0)
--		goto err;
--
--	for (level = 0; level < NUM_CGROUP_LEVELS; ++level) {
--		if (bpf_map_lookup_elem(map_fd, &level, &actual_ids[level])) {
--			log_err("Failed to lookup key %d", level);
--			goto err;
--		}
--		if (actual_ids[level] != expected_ids[level]) {
--			log_err("%llx (actual) != %llx (expected), level: %u\n",
--				actual_ids[level], expected_ids[level], level);
--			goto err;
--		}
--	}
--
--	goto out;
--err:
--	err = -1;
--out:
--	if (map_fd >= 0)
--		close(map_fd);
--	return err;
--}
--
--int main(int argc, char **argv)
--{
--	int cgfd = -1;
--	int err = 0;
--
--	if (argc < 3) {
--		fprintf(stderr, "Usage: %s iface prog_id\n", argv[0]);
--		exit(EXIT_FAILURE);
--	}
--
--	/* Use libbpf 1.0 API mode */
--	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
--
--	cgfd = cgroup_setup_and_join(CGROUP_PATH);
--	if (cgfd < 0)
--		goto err;
--
--	if (send_packet(argv[1]))
--		goto err;
--
--	if (check_ancestor_cgroup_ids(atoi(argv[2])))
--		goto err;
--
--	goto out;
--err:
--	err = -1;
--out:
--	close(cgfd);
--	cleanup_cgroup_environment();
--	printf("[%s]\n", err ? "FAIL" : "PASS");
--	return err;
--}
-
+Best regards,
 -- 
-2.45.2
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
 
