@@ -1,165 +1,91 @@
-Return-Path: <linux-kselftest+bounces-14656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F9DA944CB7
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2024 15:11:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A08F1944DAA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2024 16:07:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2BF7284C1E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2024 13:11:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D73EB2363F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2024 14:07:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71A531BE225;
-	Thu,  1 Aug 2024 13:02:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7656C1A4896;
+	Thu,  1 Aug 2024 14:07:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EOypttz1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QkIeY0Ge"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BBBA1A38FD;
-	Thu,  1 Aug 2024 13:02:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D3E61A488A;
+	Thu,  1 Aug 2024 14:07:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722517321; cv=none; b=R2G+VJev8Ggk1UFqDKMS2tCwz3qmfdsTI5H4I/3mU4F9owRbqXIxTRymI615MaWfKHzt1gD4j7YKRyud8dL9yn4Bo+rskbs2Hf0VLxBMePUM/EkDxiZV1SVvvjQ5z5Ze4u2vqlVOvuYuyRtiQ5jPPAAY0PWJsC7je7Ht83oaY/Y=
+	t=1722521262; cv=none; b=aPpVIrSakQgfBWB5Rz0zXkJRuOjy3Mnhf7sChb5HpJA9m2ptR9/Hm5Xw/JsWsyqqLKNNYUrr4VneOd0E136nzVn3qu8F4ayU1R7P6eSEy2KKg9DmEOETmKB+r+mVftWkIKH/W463LpP/7nGfK17H8XPzolb87NHiyZz4faPPD08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722517321; c=relaxed/simple;
-	bh=2o7H97U54cEmD5Tv71kF1eEpEycy3n5iAga6TGpYn58=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=udckuX4csP3n1BwERt9fvK3jvduWQOkeBVPFr0MYUsLVaOLM/C+9+33AaO0qbLyynthH/LYNckoTlrmoS9k2mNa07dMJ7dk1GpktjxWrdW/3BLwvd/i5CxntxLmLIJ0zZK4H0TljDqPABx3Pw1Pq0E1CW/S7xv/vTdPEXviuBoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EOypttz1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4528C4AF0A;
-	Thu,  1 Aug 2024 13:01:54 +0000 (UTC)
+	s=arc-20240116; t=1722521262; c=relaxed/simple;
+	bh=YX0KgtYQVa5YzigsQeAAQyteVvcaWRSiNqCBfz5+BPY=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=iQvrd0RWhtGJEO4r6+u/w4jUkB+R56byEf6NbHFPXvgj6xtICeijDI6FkwyybrcffcVhF88P/emAceSddQ0UNGejqHqwZuB+TlDw4k1d7Vf3D7JaP5GwgfzioBF8qLuTFsc/UGH7Zt0Gj+kbiVyormhlUq7nOIMS58AtYI2sL/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QkIeY0Ge; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EEE5C32786;
+	Thu,  1 Aug 2024 14:07:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722517321;
-	bh=2o7H97U54cEmD5Tv71kF1eEpEycy3n5iAga6TGpYn58=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=EOypttz1iUC6Oqt2kwkwmd4hYK/iYBJyUlsSGBCxML2MrAMFnoFqWmEE8yplv/Zf2
-	 g8lM4YlFhj9+fdD1LFcVHcxhbj4wVXGv9AFclgyBJJdQI8TN26iUHLke/PjeQJ6pha
-	 qtzIUteV2oxLMg4GPFfIUSHThfXVm5pvBCWlc0/TXAbN+PB65tYEWVsOkGR0/ooeu3
-	 wR3cCoXFofGIvrX3WiieIBTXZzDojnzLlQJTv+YC7WLr+WhDa3+nuZN0FbZnNlAel4
-	 HYAP0fEe7Pdb1UGWHxPOw1/2ocSKJhL8rPBXlAIPbaw2nrLP0p+9aBvD0dE10tKzcX
-	 caaPVWssBnNAw==
-From: Mark Brown <broonie@kernel.org>
-Date: Thu, 01 Aug 2024 13:07:07 +0100
-Subject: [PATCH v10 40/40] KVM: selftests: arm64: Add GCS registers to
- get-reg-list
+	s=k20201202; t=1722521261;
+	bh=YX0KgtYQVa5YzigsQeAAQyteVvcaWRSiNqCBfz5+BPY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=QkIeY0Ge6mBJtUYLXFLSGLvbad8OPzCfNFb+WTpe26AIxANxKgcC468Dli1myUbxq
+	 rkac/cGcdFGrvOs+Bzaf6HK/jbRaHtNXyZysRmWo6DxbXaI1QAYbv89Wdf5KdJ414o
+	 KSMjLpFPiQxGzXV4zfL3HgCRGliPaxK1caI0/iGPb3QHim5iLgsHyzCOo+iN9FePSh
+	 VXLZByBgET9fld/mboN8MhMrBaLPeLzVrNZqFThaWLWKrkVUfS45mzmtp08uVgr+32
+	 cEmRSK917S5uniuytQDn/4wvUHLiG6Ji3pXLX1EM+RBxDS8xTUrB31WUxR0leHXLLc
+	 eD37J2yHo1+DQ==
+Date: Thu, 1 Aug 2024 07:07:40 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Petr Machata <petrm@nvidia.com>
+Cc: Stanislav Fomichev <sdf@fomichev.me>, <netdev@vger.kernel.org>,
+ <davem@davemloft.net>, <edumazet@google.com>, <pabeni@redhat.com>, Shuah
+ Khan <shuah@kernel.org>, Joe Damato <jdamato@fastly.com>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next v2 2/2] selftests: net: ksft: support marking
+ tests as disruptive
+Message-ID: <20240801070740.4ae582df@kernel.org>
+In-Reply-To: <87zfpw62hi.fsf@nvidia.com>
+References: <20240730223932.3432862-1-sdf@fomichev.me>
+	<20240730223932.3432862-2-sdf@fomichev.me>
+	<878qxh7mf4.fsf@nvidia.com>
+	<Zqqi8LhvSn1MXu9B@mini-arch>
+	<87zfpw62hi.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240801-arm64-gcs-v10-40-699e2bd2190b@kernel.org>
-References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
-In-Reply-To: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Andrew Morton <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, 
- Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
- Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, 
- Shuah Khan <shuah@kernel.org>, 
- "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
- Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, 
- Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>
-Cc: "H.J. Lu" <hjl.tools@gmail.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Florian Weimer <fweimer@redhat.com>, Christian Brauner <brauner@kernel.org>, 
- Thiago Jung Bauermann <thiago.bauermann@linaro.org>, 
- Ross Burton <ross.burton@arm.com>, linux-arm-kernel@lists.infradead.org, 
- linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, 
- linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, 
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-37811
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2352; i=broonie@kernel.org;
- h=from:subject:message-id; bh=2o7H97U54cEmD5Tv71kF1eEpEycy3n5iAga6TGpYn58=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmq4Yl2GIZXXyTb/zmM1+n2z4UQxnV39+pL7mDiQag
- cFTi6HGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZquGJQAKCRAk1otyXVSH0PXDB/
- 4j5qGQGsGNdUNY04r8BP8DhGZFseiQkyBLks8Be56HfC2p51Bs37kAiCN7vw5o6FNjV7nHuKordgf8
- yw8h5xIw20SOGbtSiJzK+Ytmcij7dKixG3lRNnjLjqaDdEBHYQd36UkkNAQgXrVYEHb3uGUdeSe4Pf
- bVg2h3X4uA2HXpmx1Re6duBQnFxQkT9rwDaPrUVUJ8O1yGDA6GES8iwokMeuWIm1IuG8kk4/ryxjLS
- MQuOjZLd4+rfnA99YvtwSC6d7LH3XTe6kZlg8lx4hPJ/2a1XoSi//5g2fntfcaHvPuz/xHErMA3FRH
- FgQKeE4l1SWZJYN8U5tIpu0CgGk3wq
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-GCS adds new registers GCSCR_EL1, GCSCRE0_EL1, GCSPR_EL1 and GCSPR_EL0. Add
-these to those validated by get-reg-list.
+On Thu, 1 Aug 2024 10:36:18 +0200 Petr Machata wrote:
+> You seem to be right about the exit code. This was discussed some time
+> ago, that SKIP is considered a sort of a failure. As the person running
+> the test you would want to go in and fix whatever configuration issue is
+> preventing the test from running. I'm not sure how it works in practice,
+> whether people look for skips in the test log explicitly or rely on exit
+> codes.
+> 
+> Maybe Jakub can chime in, since he's the one that cajoled me into
+> handling this whole SKIP / XFAIL business properly in bash selftests.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/kvm/aarch64/get-reg-list.c | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+For HW testing there is a lot more variables than just "is there some
+tool missing in the VM image". Not sure how well we can do in detecting
+HW capabilities and XFAILing without making the tests super long.
+And this case itself is not very clear cut. On one hand, you expect 
+the test not to run if it's disruptive and executor can't deal with
+disruptive - IOW it's an eXpected FAIL. But it is an executor
+limitation, the device/driver could have been tested if it wasn't
+for the executor, so not entirely dissimilar to a tool missing.
 
-diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-index 709d7d721760..9785f41e6042 100644
---- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-@@ -29,6 +29,24 @@ static struct feature_id_reg feat_id_regs[] = {
- 		0,
- 		1
- 	},
-+	{
-+		ARM64_SYS_REG(3, 0, 2, 5, 0),	/* GCSCR_EL1 */
-+		ARM64_SYS_REG(3, 0, 0, 4, 1),	/* ID_AA64PFR1_EL1 */
-+		44,
-+		1
-+	},
-+	{
-+		ARM64_SYS_REG(3, 0, 2, 5, 1),	/* GCSPR_EL1 */
-+		ARM64_SYS_REG(3, 0, 0, 4, 1),	/* ID_AA64PFR1_EL1 */
-+		44,
-+		1
-+	},
-+	{
-+		ARM64_SYS_REG(3, 0, 2, 5, 2),	/* GCSCRE0_EL1 */
-+		ARM64_SYS_REG(3, 0, 0, 4, 1),	/* ID_AA64PFR1_EL1 */
-+		44,
-+		1
-+	},
- 	{
- 		ARM64_SYS_REG(3, 0, 10, 2, 2),	/* PIRE0_EL1 */
- 		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
-@@ -40,6 +58,12 @@ static struct feature_id_reg feat_id_regs[] = {
- 		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
- 		4,
- 		1
-+	},
-+	{
-+		ARM64_SYS_REG(3, 3, 2, 5, 1),	/* GCSPR_EL0 */
-+		ARM64_SYS_REG(3, 0, 0, 4, 1),	/* ID_AA64PFR1_EL1 */
-+		44,
-+		1
- 	}
- };
- 
-@@ -460,6 +484,9 @@ static __u64 base_regs[] = {
- 	ARM64_SYS_REG(3, 0, 2, 0, 1),	/* TTBR1_EL1 */
- 	ARM64_SYS_REG(3, 0, 2, 0, 2),	/* TCR_EL1 */
- 	ARM64_SYS_REG(3, 0, 2, 0, 3),	/* TCR2_EL1 */
-+	ARM64_SYS_REG(3, 0, 2, 5, 0),	/* GCSCR_EL1 */
-+	ARM64_SYS_REG(3, 0, 2, 5, 1),	/* GCSPR_EL1 */
-+	ARM64_SYS_REG(3, 0, 2, 5, 2),	/* GCSCRE0_EL1 */
- 	ARM64_SYS_REG(3, 0, 5, 1, 0),	/* AFSR0_EL1 */
- 	ARM64_SYS_REG(3, 0, 5, 1, 1),	/* AFSR1_EL1 */
- 	ARM64_SYS_REG(3, 0, 5, 2, 0),	/* ESR_EL1 */
-@@ -475,6 +502,7 @@ static __u64 base_regs[] = {
- 	ARM64_SYS_REG(3, 0, 13, 0, 4),	/* TPIDR_EL1 */
- 	ARM64_SYS_REG(3, 0, 14, 1, 0),	/* CNTKCTL_EL1 */
- 	ARM64_SYS_REG(3, 2, 0, 0, 0),	/* CSSELR_EL1 */
-+	ARM64_SYS_REG(3, 3, 2, 5, 1),	/* GCSPR_EL0 */
- 	ARM64_SYS_REG(3, 3, 13, 0, 2),	/* TPIDR_EL0 */
- 	ARM64_SYS_REG(3, 3, 13, 0, 3),	/* TPIDRRO_EL0 */
- 	ARM64_SYS_REG(3, 3, 14, 0, 1),	/* CNTPCT_EL0 */
-
--- 
-2.39.2
-
+Either way - no strong opinion as of yet, we need someone to actually
+continuously run these to get experience :(
 
