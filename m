@@ -1,110 +1,160 @@
-Return-Path: <linux-kselftest+bounces-14676-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C466D94532A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2024 21:15:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D9A8945330
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2024 21:16:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A12D1F24AEC
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2024 19:15:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57CB22866EE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2024 19:16:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65A6E14A602;
-	Thu,  1 Aug 2024 19:14:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E782149C5E;
+	Thu,  1 Aug 2024 19:15:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RO6UZUDA"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="oEBk+Hvx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EB9114A4EB;
-	Thu,  1 Aug 2024 19:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11D1114264C;
+	Thu,  1 Aug 2024 19:15:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.227.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722539684; cv=none; b=NiaUUtJNWez7L6aP5CdhtvMNQrVDK6zU/kRitx2P43r/RiWi8NioQgZugXa5FVDcQSeLsELNxnihSCVrfnZ4neC8T5axxC7B9fff4VK3UO6K+FQSLBb2U3/LWWWbNFoJjTTxhN0Gl9CE9RznVDJeN+F2P9pyBzkS52bkvhM0mhQ=
+	t=1722539722; cv=none; b=X5gb89gxXUZeIw0vU+BZwfV3eROJriOL8QD/m0vq95VIEVQ7Hi+iEC6BBLAMFCOtzr77Vwnlcq1rKbKJ1mVI/yFeaiUBuvn+Wc2Etelfo84NVPmQQlwORG/1OJGEuNPALpKynR6otsHFolPcM+DpetCmDgBDAftt5oceQrqliSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722539684; c=relaxed/simple;
-	bh=01anIdeFIR/TWrwSz1YbUxgJaSbTkSDm5rr3OWMkjdM=;
+	s=arc-20240116; t=1722539722; c=relaxed/simple;
+	bh=a2UKdRPHOfZKuMRoOuVdiKVAX31X7Rz6FkukL3fUsJg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q/RD1CAdhASdFVUFLGIJ8ip0e4vTejXYZB2HJfAbWYsn5EzudXT9g1SSARE8u9g+ID6ScdagUEwSe2gVXoNZeFZKRCWR42drVvhd9kp2YNz0z7H75L3gVLH9sCsYtTIIsdcBPatMhg428/u6sQ5xRt8ncOKWq90jdVV2UewO+F4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RO6UZUDA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2774DC32786;
-	Thu,  1 Aug 2024 19:14:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722539683;
-	bh=01anIdeFIR/TWrwSz1YbUxgJaSbTkSDm5rr3OWMkjdM=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=U5gmWAwrau8Jr+R7Kr3EhaEtxINomPmi5ULRxRpBmDtCH88AOWGKcZyKIHLmth/NgfE/6y1ICAy3po4BRWC2sI880ebOXGZMEsAOC1CtzekS/tgFpmzSnXW5w2fspzAtDHg+hcGUAuNUBq8TvcGUDHHaUxVEJ35j5uhEuey7rEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=oEBk+Hvx; arc=none smtp.client-ip=46.235.227.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1722539717;
+	bh=a2UKdRPHOfZKuMRoOuVdiKVAX31X7Rz6FkukL3fUsJg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RO6UZUDAEWZsWglXXKwTFsO9xVKhj0mTi/mnbKGJ3sSIk2oDgZUW9OUdoYGuJgXPa
-	 C/yFMnWp+SIejEgWyGoD/6I+ULSONP7a0ZFnOavGK8fQc2YyiIpwFAUbdAmEZtRAvM
-	 h+85u7I2JI+JzDN72osT7qL8MvzQFgl30lT6HrjfHdtTyrbzGQxy/YGiD7ynitZ7iU
-	 1w2Wcno/6JehBQOutAcGaqGiQnu+CZAo/YxNlED1kB9cc8+jnllBVUHkWvZcE3s7kv
-	 hbSj247qiGc2OLqocHmEJPVlCApYkY4FL7OzBoH8Wsq/RmvjxsFTqADVza06CvBeq8
-	 9kaR6WsVHUbVg==
-Date: Thu, 1 Aug 2024 20:14:38 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Joey Gouly <joey.gouly@arm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: selftests: arm64: Correct feature test for S1PIE in
- get-reg-list
-Message-ID: <811ea0eb-bc87-4ac3-8bca-27c787e43051@sirena.org.uk>
-References: <20240731-kvm-arm64-fix-s1pie-test-v1-1-a9253f3b7db4@kernel.org>
- <86le1g19aa.wl-maz@kernel.org>
+	b=oEBk+HvxU+PUjpgyENa6TCRXPyIXRBj4LR74OLj11r0LPtYUQx5HtoNXC/KQfQAtn
+	 fi0s5jF1oiMRocVhVEbMlI/cYAa947rtbE58QXZ+1fkJiohBYuJCH98Fyp0AatxxNN
+	 XjGXwF2FX+v9WflRHZNMYRo5fXgfCwLV/nO1vmLxEhxHubX+g8rpzruuGYOihRof6e
+	 Yvkl/b1xWbtji0NS3PpENTBd4mF1apAbxVX5E36D16uTU1RPYHBKp4ixvqlcWG99i0
+	 nH+PwMRcUVdq8eWQrIIueU5mli0L+gvEOv3S+bBjmI/AiHEpeoyOaBkMcprKGUXaxJ
+	 m9w13CpFI0+zA==
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 12B2B3782139;
+	Thu,  1 Aug 2024 19:15:13 +0000 (UTC)
+Date: Thu, 1 Aug 2024 15:15:11 -0400
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Shuah Khan <shuah@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Bird, Tim" <Tim.Bird@sony.com>,
+	Laura Nao <laura.nao@collabora.com>,
+	Saravana Kannan <saravanak@google.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	kernel@collabora.com, kernelci@lists.linux.dev,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC] kselftest: devices: Add test to detect missing
+ devices
+Message-ID: <f9a457c8-f558-4c45-96e0-baa97d143c7b@notapiano>
+References: <20240724-kselftest-dev-exist-v1-1-9bc21aa761b5@collabora.com>
+ <9d0b73ce-704c-4633-bb11-06ca4cb7a9a1@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Yi/EHoEl7X6dkR4r"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <86le1g19aa.wl-maz@kernel.org>
-X-Cookie: Be cautious in your daily affairs.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9d0b73ce-704c-4633-bb11-06ca4cb7a9a1@linuxfoundation.org>
 
+On Wed, Jul 31, 2024 at 05:19:45PM -0600, Shuah Khan wrote:
+> On 7/24/24 15:40, Nícolas F. R. A. Prado wrote:
+> > Introduce a new test to identify regressions causing devices to go
+> > missing on the system.
+> > 
+> > For each bus and class on the system the test checks the number of
+> > devices present against a reference file, which needs to have been
+> > generated by the program at a previous point on a known-good kernel, and
+> > if there are missing devices they are reported.
+> 
+> Can you elaborate on how to generate reference file? It isn't clear.
 
---Yi/EHoEl7X6dkR4r
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Indeed, I'll make that information clearer in future versions.
 
-On Thu, Aug 01, 2024 at 05:45:49PM +0100, Marc Zyngier wrote:
+The reference file is generated by passing the --generate-reference flag to the
+test:
 
-> Can we please switch all this stuff to symbolic naming instead of
-> magic numbers? Given how much effort is going into the "automated
-> generation" thing, it is mind-boggling that the tests still rely on
-> handcrafted numbers. We just end-up with two different sets of bugs.
+./exist.py --generate-reference
 
-> At the moment, the level of confidence I have in this stuff is
-> sub-zero.
+It will be printed as standard output.
 
-Yeah, I was wondering why this wasn't using the generated values
-especially given that the generated headers are available to tools - I
-wasn't sure if this was a deliberate decision to cross check the data
-entry or something.  I'd certainly be happy to convert, though that does
-seem a bit invasive for a fix.
+> 
+> > 
+> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > ---
+> > Hi,
+> > 
+> > Key points about this test:
+> > * Goal: Identify regressions causing devices to go missing on the system
+> > * Focus:
+> >    * Ease of maintenance: the reference file is generated programatically
+> >    * Minimum of false-positives: the script makes as few assumptions as possible
+> >      about the stability of device identifiers to ensure renames/refactors don't
+> >      trigger false-positives
+> > * How it works: For each bus and class on the system the test checks the number
+> >    of devices present against a reference file, which needs to have been
+> >    generated by the program at a previous point on a known-good kernel, and if
+> >    there are missing devices they are reported.
+> > * Comparison to other tests: It might be possible(*) to replace the discoverable
+> >    devices test [1] with this. The benefits of this test is that it's easier
+> >    to setup and maintain and has wider coverage of devices.
+> > 
+> > Additional detail:
+> > * Having more devices on the running system than the reference does not cause a
+> >    failure, but a warning is printed in that case to suggest that the reference
+> >    be updated.
+> > * Missing devices are detected per bus/class based on the number of devices.
+> >    When the test fails, the known metadata for each of the expected and detected
+> >    devices is printed and some simple similitarity comparison is done to suggest
+> >    the devices that are the most likely to be missing.
+> > * The proposed place to store the generated reference files is the
+> >    'platform-test-parameters' repository in KernelCI [2].
+> 
+> How would a user run this on their systems - do they need to access
+> this repository in KernelCI?
 
---Yi/EHoEl7X6dkR4r
-Content-Type: application/pgp-signature; name="signature.asc"
+No, that repository would just be a place where people could find pre-generated
+reference files (which we'll be using when running this test in KernelCI), but
+anyone can always generate their own reference files and store them wherever
+they want.
 
------BEGIN PGP SIGNATURE-----
+> 
+> This is what I see when I run the test on my system:
+> 
+> make -C tools/testing/selftests/devices/exist/ run_tests
+> make: Entering directory '/linux/linux_6.11/tools/testing/selftests/devices/exist'
+> TAP version 13
+> 1..1
+> # timeout set to 45
+> # selftests: devices/exist: exist.py
+> # TAP version 13
+> # # No matching reference file found (tried './LENOVO,20XH005JUS.yaml')
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmar3p0ACgkQJNaLcl1U
-h9CLLQf/eEUB37vfZfDmSeqDsqzTJxrgeoFWmua8m3kh7D1xJkT/G8sCyaJjErpr
-4HYDfLgkBajnm+kHRk742Ou8t9nMA9FXfkmf7c/dV1aoAXkBPFXfEtixXsTNZE6M
-S8qxvb8jtvEMRWkxwONbifDelVkIn2sYwNpIDhPLPuU91evqBJyOh12BJi7k7TEq
-jwERSrSZGFmkfxetToXyj/sVcydl7etTttU8Nl5UleaXOT/aRaCM0TbJX58osaKn
-ajLQt7TiDEqYYGulWDePcmZIRWaYMdjx10FmZek8HkzqHYdUGLMofK6b6Girs+Jn
-RnAHOD+8aLKjAHUakhF1I4E9eFkIQA==
-=XmxA
------END PGP SIGNATURE-----
+First generate the reference file for your system like so:
 
---Yi/EHoEl7X6dkR4r--
+tools/testing/selftests/devices/exist/exist.py --generate-reference > tools/testing/selftests/devices/exist/LENOVO,20XH005JUS.yaml
+
+Then you can run the test and it should work.
+
+Thanks,
+Nícolas
 
