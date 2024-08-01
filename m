@@ -1,90 +1,78 @@
-Return-Path: <linux-kselftest+bounces-14596-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14597-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36E489440A0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2024 04:12:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2C079440AC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2024 04:14:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6F482827C4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2024 02:12:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B9C328152F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  1 Aug 2024 02:14:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58C4714AD29;
-	Thu,  1 Aug 2024 01:23:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC6931A38C8;
+	Thu,  1 Aug 2024 01:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h3XS/uqe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 161AC14A615;
-	Thu,  1 Aug 2024 01:23:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FD81A38C5;
+	Thu,  1 Aug 2024 01:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722475438; cv=none; b=ggX2XcMtVeKoVwuAH4HHDSeW9Z33cKwdrxagXkJxcCsuJGOzvz3c6V9QaCO3TTPmEhSTrxfc7IGcCUKt7SqIXVde5/nCwK0r4zuaWPJTQ9mk16K8q3bGBwp+4Yd2HmiLtnFPFuIxahoTa3mrQ2QmuKtT81XK+SXIEQK/yDgJAkk=
+	t=1722475750; cv=none; b=DYZqcg98U9CJC6KySGf5FUe4kKk23ZaZC8tHntdxkStbhC4wo6Aqe80+tl2Vz4BwH1/H9r6wC2UcyKQ+ce1DqpdnGRVqrV9aQTlU5IOSO4R2rJSVJfNfAoVx6AqHQlMOwY4gA4iMpWKhUhrU/IN+S0tAVmDx9zkU4RBofWR4keU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722475438; c=relaxed/simple;
-	bh=7gKNExuJaLbKHqudrhoMB30SU3z2Hfw0CoP3Fh1sNpU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r0qXmXTScSLnfQW+tNFHp/jzsxXpbb2mhgV2FF9clg3UuRm9VtzKMH++Ls9ut7KWhA7s/DoK8Oga0E+UsWz70dQp7qwbaU4uF94Q93YDLKE4wKe6HlGb5INgXeaMA00j/9tw/vM3U+BNzQu8164ALnoufrZQTZD3vWt2H2p4c6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-70d1cbbeeaeso4719572b3a.0;
-        Wed, 31 Jul 2024 18:23:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722475435; x=1723080235;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/8i9GP7nhcFbKM690bSVhwjZ922fix8UAoNWE6DVUwo=;
-        b=sQ/pWnoHXwLT1/pSXVvGKRZeO7G0Y7GtU0j5HEULcAyF3zmgYmimw76rJI2/yLC9Gh
-         Gfgl2fU3L+tbleKmc5bHosomMOdRvM6BfxXrQ+UJsdiL19UbrasF+u5JgJVmCvj6WkJH
-         DSC8CU2Nb2n0UDQbkjF5FDBVvJYfiEXntUlf8Z8LgGxLAMDQtgV1wZTH+EaiMD+/K8Mj
-         iJIzwrZn7skBfEGKHl8wMUpB7zWwg8OVNXHUtfiwv+TEWd0nG2SdsCXei3Brzmmje2xj
-         p2vJ97X6SWnOXOXPp1108S6ayQMYghxbj9Ms+nSJAJCGZQogqkHcT9TMDb2fGm6xN5jY
-         RcZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWgmDrw5eVZwQvBakHPUaoulegQaNID0Ex0qldiNfTcycMNMq4yODWLvzBXNe+c6KTpDMI/uDgdM9L7dk8T0G/IgLijPzybabMPr1SDLzNwVdQMUHfxlp9xZ6ppMMrnBUjqlz4xVvL2
-X-Gm-Message-State: AOJu0Yyf62uMs9kX7NsjyAJgMMYuFAATTaIKq0lcQjKSNqmy5fIus79h
-	n+mIjBAAtuRtR5Bk7jHV6jxtWUsOv8HvgHHLtlVUHsE+IwOdB20=
-X-Google-Smtp-Source: AGHT+IEcXnLHBRC17MZ5D9MdnU0NytnyFeyo6X87DLLoWtY+0waRql4ttVvJfAZenZEYXie0ivaFiQ==
-X-Received: by 2002:a05:6a00:188d:b0:70d:311b:8569 with SMTP id d2e1a72fcca58-7105d7da884mr1309849b3a.26.1722475435318;
-        Wed, 31 Jul 2024 18:23:55 -0700 (PDT)
-Received: from localhost ([2601:646:9e00:f56e:73b6:7410:eb24:cba4])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-70ead81234dsm10540631b3a.115.2024.07.31.18.23.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 31 Jul 2024 18:23:54 -0700 (PDT)
-Date: Wed, 31 Jul 2024 18:23:54 -0700
-From: Stanislav Fomichev <sdf@fomichev.me>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Petr Machata <petrm@nvidia.com>, netdev@vger.kernel.org,
-	davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-	Shuah Khan <shuah@kernel.org>, Joe Damato <jdamato@fastly.com>,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2 1/2] selftests: net-drv: exercise queue stats
- when the device is down
-Message-ID: <ZqrjqpKJRgMhlvr2@mini-arch>
-References: <20240730223932.3432862-1-sdf@fomichev.me>
- <87cymt7pmu.fsf@nvidia.com>
- <20240731173245.2968988d@kernel.org>
+	s=arc-20240116; t=1722475750; c=relaxed/simple;
+	bh=0ciPDLSIU3NmNwDhhqJ3yS+YnqcZMn08ZeVju1s27Pw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=p7S6LenhIrR90hJ+UI6f8R258doxqXhna5VJ3xbBWFJ//JXaf1RPbHpV1G1/DSVjsOmtQ/QiJVwKtlJ7Eai4bwfeK2BSJ8PLhgLg1/4SFotcLRo9bvcfSq3JSPqpR7rrUycFJYfahmbCOBHJje6SnhT/VSkg9WC4jNCTk4TJusI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h3XS/uqe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA004C116B1;
+	Thu,  1 Aug 2024 01:29:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722475750;
+	bh=0ciPDLSIU3NmNwDhhqJ3yS+YnqcZMn08ZeVju1s27Pw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=h3XS/uqeuehoDY0pTa2rNDdtjNnr8MlBnU+7Z1quTQgEOmqLXffwQBUoU4ERavcLB
+	 peicV4ebIh62+UJa6BUejRqP0b/GweCrxnROJ86tebX4f8u6BlfDO3G5DSQXpNR/Gf
+	 lEiQtp2fEx5HfZNMcflLifaPRrRVmpMOph0HIMpvgFsTdr3Nwbg27f3rvLRCmAxjUO
+	 4kzwIag/wZhQc6p31to+9N5QiU9Ul1Ce6QhKSql7Y/9TWg4lSKOZ0+vKC4rWa2OyhT
+	 mrEev+R3y+QlztRzxCalkz3UebZqmaHuiSCb4i05SKz6jy/cvKwYVmXhf/bPG2LbGe
+	 AU0sQzrzqNfNg==
+Date: Wed, 31 Jul 2024 18:29:08 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: zijianzhang@bytedance.com, netdev@vger.kernel.org,
+ linux-api@vger.kernel.org, almasrymina@google.com, edumazet@google.com,
+ davem@davemloft.net, pabeni@redhat.com, dsahern@kernel.org,
+ axboe@kernel.dk, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ cong.wang@bytedance.com, xiaochun.lu@bytedance.com
+Subject: Re: [PATCH net-next v8 2/3] sock: add MSG_ZEROCOPY notification
+ mechanism based on msg_control
+Message-ID: <20240731182908.4584a3e1@kernel.org>
+In-Reply-To: <66aab8b37157d_21c08c2941@willemb.c.googlers.com.notmuch>
+References: <20240730184120.4089835-1-zijianzhang@bytedance.com>
+	<20240730184120.4089835-3-zijianzhang@bytedance.com>
+	<66aab8b37157d_21c08c2941@willemb.c.googlers.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240731173245.2968988d@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 07/31, Jakub Kicinski wrote:
-> On Wed, 31 Jul 2024 13:34:58 +0200 Petr Machata wrote:
-> > > +        qstat = netfam.qstats_get({"ifindex": cfg.ifindex}, dump=True)
-> > > +    except NlError as e:
-> > > +        if e.error == 95:  
-> > 
-> > Could you do this as if e.error == errno.ENOTSUP?
-> 
-> just to be clear EOPNOTSUPP ..
+On Wed, 31 Jul 2024 18:20:35 -0400 Willem de Bruijn wrote:
+> Btw patchwork shows red for patch 1/3 due to a new error or warning.
+> Not sure if it's a false positive, but take a look.
 
-That might be the reason it's coded explicitly as 95? :-D
+Patchwork is not for contributors, I keep repeating this :|
+Were you not in the room at netdev when I was talking about NIPA
+or am I this shit at communicating?
+
+Next person pointing someone to patchwork will get a task to fix
+something in NIPA.
 
