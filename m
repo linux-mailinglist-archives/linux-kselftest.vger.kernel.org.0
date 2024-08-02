@@ -1,256 +1,145 @@
-Return-Path: <linux-kselftest+bounces-14730-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14731-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBA24946268
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 19:28:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89C349462B5
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 19:46:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF2021C21A0D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 17:28:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FD4B283286
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 17:46:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 497D515C12A;
-	Fri,  2 Aug 2024 17:28:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF58B25632;
+	Fri,  2 Aug 2024 17:46:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kSqngSBM"
+	dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b="YvsMsO+w"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96F901537C5
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Aug 2024 17:28:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.173
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722619708; cv=none; b=qaiQfYVNHXWiSB6j5jy+ROu/Lj0MMTwpFw/n79vx0SJItb2QFDJ6XJBZkZq21hH5oVcSSBIDLS48XWM1oPzIsdnfERPtyeywySVAawJrE+24nJvqki0u2ODmvC7axC1VhBg06bp60ENC/NGhDARiYm0zfI4m/bti65vUZmFNG8M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722619708; c=relaxed/simple;
-	bh=F3g430AFcd5fktOgTWAO9/9FNUn0gfLYsMRiXbuhse8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oS6mMpnmw3QuhtxpmV4yWm6Ha7a50X52cmfU+IoQcX8RXBaihrxvsd1xXHMySp4BqoS4ETOBh/Aj7ZF9rkA0qj8YG1VPceIliV/POYgJRBRVEPukRXIk3TYQZpKtWcKrDgHpW2GEWLxTjT1aUP1q7DawScU6C3jsWwttdWQ8Q84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kSqngSBM; arc=none smtp.client-ip=209.85.160.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-44fdc70e695so1470691cf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Aug 2024 10:28:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722619705; x=1723224505; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lSSS4E3zuKvWBv0XQ9yYM+WcI7zxzF47G/3hGsx+ctc=;
-        b=kSqngSBMVj6W9IFzwsBH29Gnz+3M9sMiToP98yqb6OxuQHL585EIBYoa3ToRCGJJwg
-         tE15mjhdlDO42yOXFS8jQR9KO/toQEQKifkziTeWMHxK3Vheen9bnmha8F0D5woA2kx+
-         jRnbuHUAVF1chU7uGJQt2dlF+7MbDdDfJmH08JCBlZVctbKpc78Ojkg4+lJ3b8tcqKoe
-         1rnzFN5KBu1vMsnLN4lIF9s3aLnJfkk+FoUVV0BMF7Ar3f3LEYzmATc8sY4yX97KHiUl
-         KiMS5Y4m/XmhIXxVFhiv656y8eiDTY4ZLiYupBOO/6gF1ezZdczydFycAa5UEw30okfK
-         rZZQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722619705; x=1723224505;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lSSS4E3zuKvWBv0XQ9yYM+WcI7zxzF47G/3hGsx+ctc=;
-        b=kLXZHENwjm8D/TGBs1RP8jPuxrBrrP6RzF+7Zs1BBA3dh8WYW3gpDdHuYs1GwCxo4m
-         C8fyL68USfSRcT2w31SvfS84w0bb3GB2TyIHrImAkL7IVzlkphA7pk75HVbFg4YIGes2
-         1dCwzbfh6mGVFnpnjLpsnknHV02ky+WxGlbo3ULTSOg2Jxv/Z4OxZmWRMSKg26Ufu6Dq
-         g9Yvk3VfP9v594yjxE7K893DdQc+NJ0iU4jjzLzDnJt21IsX/TJIP6MpCjdFz67yDv6W
-         vRZcqR/TNzQdLchHxb/Me1IYGEz2sByCunWGOWrF1Qgt0HVCGW4nr0fLQVTvHdbnpMzv
-         Cdqg==
-X-Forwarded-Encrypted: i=1; AJvYcCUBO95enzRuxCtmIDg0uaBceKeU9+weSy7YEF6+MCC6LAPepXvrhJItMDLTPFI9ggvUndedsTD/+Q4hc5R9MkANnRJECQtDeZqL4r5+nhK1
-X-Gm-Message-State: AOJu0YyD1ECncUcNhwevgb5JMd6R9zolWddGh/0ArrMUVShjo4OEidzI
-	xYRfBCUaZ0dd8PMJIeJKxjKqh9g2uzelNk9tILsukMcWl2ZRaY8ja7Fk/WC7akGViscJwxNBJkS
-	xdHqdiJVu0gK61FQMy9VdFwzD6ejE63rFpyqu
-X-Google-Smtp-Source: AGHT+IEW8VIhs9YamiW05dBEhB7BQ3Do4tGZnbt1vWnlgmGeqasRzyUtOO85UW1YZdi4lv8hQmL5M3LA+U1y8BvQHY8=
-X-Received: by 2002:ac8:5a01:0:b0:447:f958:ab83 with SMTP id
- d75a77b69052e-4518ccc2c8dmr3261391cf.21.1722619705228; Fri, 02 Aug 2024
- 10:28:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0C951AE02E;
+	Fri,  2 Aug 2024 17:46:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=185.185.170.37
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722620779; cv=pass; b=Yy81ZsYMkCReqzgeNvhL533MQ2/s4zuBtNjXdAhIKFfwl/BVA5TVqbjtJZBnT3NdtDdpRRGbvJj5BrDOWLIwsqIYX6486PZc/UmUGC0pkepBSw7UI8z0/QkjfHz6XqbJSlYCddMQqIzFvNGYjAKC5L40EYaT8jaTnzcHumXJAEc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722620779; c=relaxed/simple;
+	bh=FaSy9z5/BKbRyNYMvsp7Zib7UTxTj9ufwAnK5qE4gdU=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=Y5DrU5GQudPUedscMcNfXR5QAEeH74q5jqzJaMiIvx5qgWUOwxZXGaXjisnPJ3Cx+X2CV6qVgo9rV2z3zIzx7jYezWlkoBvjTQxE2qpQZ9/sR9faTz0TOxPw+JwgMQ6E5CR+M3s5snaYB/02DNHj77qXsL043wt4irewZ8lA2rw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi; spf=pass smtp.mailfrom=iki.fi; dkim=pass (2048-bit key) header.d=iki.fi header.i=@iki.fi header.b=YvsMsO+w; arc=pass smtp.client-ip=185.185.170.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iki.fi
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iki.fi
+Received: from localhost (91-154-92-171.elisa-laajakaista.fi [91.154.92.171])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sakkinen)
+	by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4WbCtX2ZK0z49Pv3;
+	Fri,  2 Aug 2024 20:46:11 +0300 (EEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+	t=1722620772;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EJA5dz6GT1ZPM1EjDcSFSj0xz36BOkfodV/mooPCX64=;
+	b=YvsMsO+w2yl7JvT6prNmcGULOsmsSUNO8p+g/57AkH2HGSjY4Q+ha+zVLy3defbXX5aKV/
+	UZqdkoms4EDkJnQA8oR8sEev0fR45v2YYtLuEux2JdkOY7rtl/3aWZ/odsdlUQPTyJtyye
+	LEBBMfwnBFfqImTPbDNcHsl5uBLCmYOeC0NcZrKb66U56rOaJGuqUVX2FPd51IAiQhV/Tr
+	ht2F6ISgmmr3OJQPFJpjWdLdgP5YQ83r4H1WTU5J7ekCKNCewdFS/bXwQ+lMJHL5TKvdby
+	7Osw7DfhZ8UKEUy/az78xWxI9yw9kkSYFEKr8vRkjkU1WFM2w/i9QiDsDgx19w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+	s=lahtoruutu; t=1722620772;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EJA5dz6GT1ZPM1EjDcSFSj0xz36BOkfodV/mooPCX64=;
+	b=OjgtywO+ZzXIeSzuyXr72K3aTrvCa2zcnLpJSmEW3arU7Zy0xtxExN7bh3J9YDBTHWYnZv
+	21cPNn3lVkzLr7TpS7+Xj3HQodzegr+N6cCFomtwAQqQ4rzouYhQbScwnBuwJOChIzdYXQ
+	WV9N7tQVO50mPMsAP6smAEfbUAmlNPthpDHp0BLCHrB9d8sF4zHUeH0RoQz6S6ZXKMqF1J
+	bAwSrO3MElegkJdbDmwTNdVTcsRVckVJnrS0rV/Qjzc7y3fgK4Zp4pFEfQJ9WsoNLTkoe2
+	SdjpriiG1qOlitg/QQKIVKI82lL4Ki/mNAsxYXKp17mlPhOUzEyzV3+sPhh5Ng==
+ARC-Authentication-Results: i=1;
+	ORIGINATING;
+	auth=pass smtp.auth=sakkinen smtp.mailfrom=jarkko.sakkinen@iki.fi
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1722620772; a=rsa-sha256;
+	cv=none;
+	b=kSjNsjxJonm2XFSz2z1T+mGe15fzaoWVVaM18lSFkdLqFzkoK+981ndvH96m/YKe6PekcD
+	E9lPgIVVUK+fZmEZ3AMGH/zxZjwaOMiXlXxSzjPPta52CGVTs2wu1tNhn66o1qj5P0NKcS
+	4LpEbd5u4VAfiOtnEEg+8wMoWkWy4oj1HQB77eKdRLR4qZf+HVQbaqRaA/OUjnMlRNMZvG
+	VPx2zq5ck9aJrR+t2YcgapEo9ASByPfnGEwWuFraLkPfxvVj4ZYUh5XQO2Jl2SWZZEyfzc
+	/cCZbBqU6aBgo0YEi79jebqoh16gjQ699hW0fbl9LDVzczQxKA1YEjtD4IzEBA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240731070207.3918687-1-davidgow@google.com>
-In-Reply-To: <20240731070207.3918687-1-davidgow@google.com>
-From: Rae Moar <rmoar@google.com>
-Date: Fri, 2 Aug 2024 13:28:13 -0400
-Message-ID: <CA+GJov5k2a6OEj-E2ULbimeMcY9Rq2Lh58-juBm=AMbPy0s4sA@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Device wrappers should also manage driver name
-To: David Gow <davidgow@google.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Matti Vaittinen <mazziesaccount@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Maxime Ripard <mripard@kernel.org>, Kees Cook <kees@kernel.org>, Nico Pache <npache@redhat.com>, 
-	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 02 Aug 2024 20:46:10 +0300
+Message-Id: <D35M3L2PFQFK.RYW2GMO04RYI@iki.fi>
+Cc: <kernel@collabora.com>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] selftests: tpm2: redirect python unittest logs to
+ stdout
+From: "Jarkko Sakkinen" <jarkko.sakkinen@iki.fi>
+To: "Shuah Khan" <skhan@linuxfoundation.org>, "Jarkko Sakkinen"
+ <jarkko@kernel.org>, "Muhammad Usama Anjum" <usama.anjum@collabora.com>,
+ "Shuah Khan" <shuah@kernel.org>
+X-Mailer: aerc 0.17.0
+References: <20240710081539.1741132-1-usama.anjum@collabora.com>
+ <47ea7423-3aae-4bb3-a41f-1fcb5c07e74b@collabora.com>
+ <8696338c-fcd7-4c0f-87ec-9303c9c1ce88@linuxfoundation.org>
+ <D34XE10GQHIY.1H7BTET3DOREV@kernel.org>
+ <deda17e1-328f-4eed-b14b-84b47d36e8d7@linuxfoundation.org>
+In-Reply-To: <deda17e1-328f-4eed-b14b-84b47d36e8d7@linuxfoundation.org>
 
-On Wed, Jul 31, 2024 at 3:02=E2=80=AFAM David Gow <davidgow@google.com> wro=
-te:
+On Fri Aug 2, 2024 at 1:58 AM EEST, Shuah Khan wrote:
+> On 8/1/24 16:24, Jarkko Sakkinen wrote:
+> > On Wed Jul 31, 2024 at 8:45 PM EEST, Shuah Khan wrote:
+> >> On 7/31/24 07:42, Muhammad Usama Anjum wrote:
+> >>> Reminder
+> >>>
+> >>
+> >> top post???
+> >>
+> >>> On 7/10/24 1:15 PM, Muhammad Usama Anjum wrote:
+> >>>> The python unittest module writes all its output to stderr, even whe=
+n
+> >>>> the run is clean. Redirect its output logs to stdout.
+> >>>>
+> >>>> Cc: Jarkko Sakkinen <jarkko@kernel.org>
+> >>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> >>>> ---
+> >>>>    tools/testing/selftests/tpm2/test_async.sh | 2 +-
+> >>>>    tools/testing/selftests/tpm2/test_smoke.sh | 2 +-
+> >>>>    tools/testing/selftests/tpm2/test_space.sh | 2 +-
+> >>>>    3 files changed, 3 insertions(+), 3 deletions(-)
+> >>>>
+> >>
+> >> Applied to linux-kselftest next for Linux 6.12-rc1
+> >>
+> >> thanks,
+> >> -- Shuah
+> >=20
+> > OK, great. Maybe it is not *that* critical to backport this.
+> >=20
 >
-> kunit_driver_create() accepts a name for the driver, but does not copy
-> it, so if that name is either on the stack, or otherwise freed, we end
-> up with a use-after-free when the driver is cleaned up.
+> I took the liberty to pull this in. I agree that this doesn't need
+> backport. It suppresses messages and doesn't really fix any bug.
 >
-> Instead, strdup() the name, and manage it as another KUnit allocation.
-> As there was no existing kunit_kstrdup(), we add one. Further, add a
-> kunit_ variant of strdup_const() and kfree_const(), so we don't need to
-> allocate and manage the string in the majority of cases where it's a
-> constant.
->
-> This fixes a KASAN splat with overflow.overflow_allocation_test, when
-> built as a module.
->
-> Fixes: d03c720e03bd ("kunit: Add APIs for managing devices")
-> Reported-by: Nico Pache <npache@redhat.com>
-> Closes: https://groups.google.com/g/kunit-dev/c/81V9b9QYON0
-> Signed-off-by: David Gow <davidgow@google.com>
-> Reviewed-by: Kees Cook <kees@kernel.org>
-> ---
->
-> There's some more serious changes since the RFC I sent, so please take a
-> closer look.
->
-> Thanks,
-> -- David
->
+> I tested it to make sure it doesn't suppress important messages.
 
-Hello!
+OK, great thanks a lot!
 
-These changes look good to me. Fun patch to review! Only comment is
-that we could potentially add tests for these functions in a future
-patch.
+>
+> thanks,
+> -- Shuah
 
-Reviewed-by: Rae Moar <rmoar@google.com>
+BR, Jarkko
 
-Thanks!
--Rae
-
-> Changes since RFC:
-> https://groups.google.com/g/kunit-dev/c/81V9b9QYON0/m/PFKNKDKAAAAJ
-> - Add and use the kunit_kstrdup_const() and kunit_free_const()
->   functions.
-> - Fix a typo in the doc comments.
->
->
-> ---
->  include/kunit/test.h | 58 ++++++++++++++++++++++++++++++++++++++++++++
->  lib/kunit/device.c   |  7 ++++--
->  2 files changed, 63 insertions(+), 2 deletions(-)
->
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index e2a1f0928e8b..da9e84de14c0 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -28,6 +28,7 @@
->  #include <linux/types.h>
->
->  #include <asm/rwonce.h>
-> +#include <asm/sections.h>
->
->  /* Static key: true if any KUnit tests are currently running */
->  DECLARE_STATIC_KEY_FALSE(kunit_running);
-> @@ -480,6 +481,63 @@ static inline void *kunit_kcalloc(struct kunit *test=
-, size_t n, size_t size, gfp
->         return kunit_kmalloc_array(test, n, size, gfp | __GFP_ZERO);
->  }
->
-> +
-> +/**
-> + * kunit_kfree_const() - conditionally free test managed memory
-> + * @x: pointer to the memory
-> + *
-> + * Calls kunit_kfree() only if @x is not in .rodata section.
-> + * See kunit_kstrdup_const() for more information.
-> + */
-> +static inline void kunit_kfree_const(struct kunit *test, const void *x)
-> +{
-> +       if (!is_kernel_rodata((unsigned long)x))
-> +               kunit_kfree(test, x);
-> +}
-> +
-> +/**
-> + * kunit_kstrdup() - Duplicates a string into a test managed allocation.
-> + *
-> + * @test: The test context object.
-> + * @str: The NULL-terminated string to duplicate.
-> + * @gfp: flags passed to underlying kmalloc().
-> + *
-> + * See kstrdup() and kunit_kmalloc_array() for more information.
-> + */
-> +static inline char *kunit_kstrdup(struct kunit *test, const char *str, g=
-fp_t gfp)
-> +{
-> +       size_t len;
-> +       char *buf;
-> +
-> +       if (!str)
-> +               return NULL;
-> +
-> +       len =3D strlen(str) + 1;
-> +       buf =3D kunit_kmalloc(test, len, gfp);
-> +       if (buf)
-> +               memcpy(buf, str, len);
-> +       return buf;
-> +}
-> +
-> +/**
-> + * kunit_kstrdup_const() - Conditionally duplicates a string into a test=
- managed allocation.
-> + *
-> + * @test: The test context object.
-> + * @str: The NULL-terminated string to duplicate.
-> + * @gfp: flags passed to underlying kmalloc().
-> + *
-> + * Calls kunit_kstrdup() only if @str is not in the rodata section. Must=
- be freed with
-> + * kunit_free_const() -- not kunit_free().
-> + * See kstrdup_const() and kunit_kmalloc_array() for more information.
-> + */
-> +static inline const char *kunit_kstrdup_const(struct kunit *test, const =
-char *str, gfp_t gfp)
-> +{
-> +       if (is_kernel_rodata((unsigned long)str))
-> +               return str;
-> +
-> +       return kunit_kstrdup(test, str, gfp);
-> +}
-> +
->  /**
->   * kunit_vm_mmap() - Allocate KUnit-tracked vm_mmap() area
->   * @test: The test context object.
-> diff --git a/lib/kunit/device.c b/lib/kunit/device.c
-> index 25c81ed465fb..520c1fccee8a 100644
-> --- a/lib/kunit/device.c
-> +++ b/lib/kunit/device.c
-> @@ -89,7 +89,7 @@ struct device_driver *kunit_driver_create(struct kunit =
-*test, const char *name)
->         if (!driver)
->                 return ERR_PTR(err);
->
-> -       driver->name =3D name;
-> +       driver->name =3D kunit_kstrdup_const(test, name, GFP_KERNEL);
->         driver->bus =3D &kunit_bus_type;
->         driver->owner =3D THIS_MODULE;
->
-> @@ -192,8 +192,11 @@ void kunit_device_unregister(struct kunit *test, str=
-uct device *dev)
->         const struct device_driver *driver =3D to_kunit_device(dev)->driv=
-er;
->
->         kunit_release_action(test, device_unregister_wrapper, dev);
-> -       if (driver)
-> +       if (driver) {
-> +               const char *driver_name =3D driver->name;
->                 kunit_release_action(test, driver_unregister_wrapper, (vo=
-id *)driver);
-> +               kunit_kfree_const(test, driver_name);
-> +       }
->  }
->  EXPORT_SYMBOL_GPL(kunit_device_unregister);
->
-> --
-> 2.46.0.rc1.232.g9752f9e123-goog
->
 
