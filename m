@@ -1,285 +1,225 @@
-Return-Path: <linux-kselftest+bounces-14716-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14723-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89DB99460CE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 17:48:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 407DF94613E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 18:01:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14FCF1F21297
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 15:48:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBACD283E8A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 16:01:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1547136347;
-	Fri,  2 Aug 2024 15:48:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9EDB166F26;
+	Fri,  2 Aug 2024 15:59:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="qquajbMG"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="M8LRgSXi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEBB2136341;
-	Fri,  2 Aug 2024 15:48:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2C21A34C3;
+	Fri,  2 Aug 2024 15:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722613702; cv=none; b=E9Xk8WszZj2wiRd+iEa7/cGSAHj22IybOu8hggluZjZg35KtWiAWdPUF5loGvjJ5EyWNoa9ztZs5/LGGRZXj06RcRN/DgBCEjRF8X9cERlF05SfOewExaFEypEmwDlQR+UrvB8nKW3pSqLPGGCMM43LNUPdAXg9dD5eGn6HsrGk=
+	t=1722614398; cv=none; b=Fz5do/5bv5X6vWp6l4jsTj7HLtHK4C0XkA7+7S0BLffd5E7p8zP6uk7TEPMJ82NRmXaAidnfgw9UChjjzgI8cGhwobU456dd7wr7CeTAesjrjLoSG3Zs68wVVuPtarn6JcYkvl3vhXQAodFlZ6oef1/x26oi/z6OinWaM2jWRiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722613702; c=relaxed/simple;
-	bh=laWMCHNuzj/wltnWdMcvnIWeUr5J4xYYVvmfO2V8pJc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fiDGr7gFvxb1eMYFvgpKOR8v+ex8KEkOZwcTgjf9xLTJQ0wT7iP1dNRrFGZF64PFQRR1yt5Tbs+ZeYcxknzCrT6Ty199jCbSJW7zMc7CvC9zqZxkYD6zxPzFOz7bpL0L8V+g65Xxh78msSl8qF8rFhgjeyp0Lp5ovnXNvDJXBaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=qquajbMG; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1722613694;
-	bh=laWMCHNuzj/wltnWdMcvnIWeUr5J4xYYVvmfO2V8pJc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qquajbMGP2Bg8S3BzEO8ua3hM5ge0zHj3AFXbU/AXIuiWBTkkCb2HHyt2238G5oNy
-	 HoPl3mxbEve8z32F8Vnhw60E6faXkfO6Qir+IRpha/GpcNfamssev2GtMjg6KHwfX2
-	 7dAH8J5dNaiLN+vSSvfD08riadDBBHwAIS/wgC6I=
-Date: Fri, 2 Aug 2024 17:48:13 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] tools/nolibc: add support for [v]sscanf()
-Message-ID: <5db920e0-51e8-48d9-b0ae-95479e875fad@t-8ch.de>
-References: <20240731-nolibc-scanf-v1-0-f71bcc4abb9e@weissschuh.net>
- <20240731-nolibc-scanf-v1-1-f71bcc4abb9e@weissschuh.net>
- <3956cee8-1623-42d6-bbc6-71b5abd67759@linuxfoundation.org>
+	s=arc-20240116; t=1722614398; c=relaxed/simple;
+	bh=oGMTRd1Xm8VYZo3Acnb9UzIAod1983sCpUHw6YDFHbs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GrpMNN8BS462DFGcwmreeYgNyJceKyUDYrTKoGXqv5H+MOGxDYeUZ5Zi3k/rv/4lQR45+snjdYAOSAGeVMJONExecNFC9MIqqKO8rbEzvWNQJ4lz/Cw72uIZk9LwBMzk61Mxx2ihXBONLVGyaYZCn2F0dHTIM+sod534Q5Gdqp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=M8LRgSXi; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 472FSrkc013306;
+	Fri, 2 Aug 2024 15:59:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
+	:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=pp1; bh=X9HbMKos5B8R0xg9qxVLzEHcAv
+	27CFyBU6a6FDa8TMo=; b=M8LRgSXiV1J49DRmnoWUcyL/ktWf3txh9jbyntAhR4
+	8LAdxw8wlVuyf08YpgWjYWLNRfhPCjZKIgPO/UaoRI5WdiH1Y3bDmU2bxGA7BpnQ
+	DfnEY0ctDXJ9EX1fam/mF60T1coIqLnSObkpY2qXZe1T83LFNEOPzg3LcmshvJ6Z
+	XD69otPoMSHjZ7s3S1ZAmBRFJaBdkPxETRLtzZdQFKkKee8mQEhZTZmrwI4Z/2O3
+	38YwB4KTo3V/bPaoPE0IqmMJE4xDBs2VxufFpYTkUTfKPHUs8RL64wqEr9U1Yetk
+	EtJ060otbpJqNZQvJax1vq3YmEtPJjXyIE5hW4VRpwfA==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40s1pf048j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Aug 2024 15:59:46 +0000 (GMT)
+Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 472Fxkg5003753;
+	Fri, 2 Aug 2024 15:59:46 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40s1pf048g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Aug 2024 15:59:45 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 472ElfTf011143;
+	Fri, 2 Aug 2024 15:59:44 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40ncqn7wby-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 02 Aug 2024 15:59:44 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 472FxcOP47448530
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 2 Aug 2024 15:59:41 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id D33C520049;
+	Fri,  2 Aug 2024 15:59:38 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4151F20040;
+	Fri,  2 Aug 2024 15:59:38 +0000 (GMT)
+Received: from darkmoore.ibmuc.com (unknown [9.171.84.102])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  2 Aug 2024 15:59:38 +0000 (GMT)
+From: Christoph Schlameuss <schlameuss@linux.ibm.com>
+To: kvm@vger.kernel.org
+Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+Subject: [PATCH v4 00/10] selftests: kvm: s390: Add s390x ucontrol selftests
+Date: Fri,  2 Aug 2024 17:59:03 +0200
+Message-ID: <20240802155913.261891-1-schlameuss@linux.ibm.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <3956cee8-1623-42d6-bbc6-71b5abd67759@linuxfoundation.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: DL8WDFs6MTZidyGVr-9k-c03JTry-Vpu
+X-Proofpoint-GUID: 0T-SfdAkPb5j2f81CTBLnopgzTToGapI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-02_11,2024-08-02_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ priorityscore=1501 spamscore=0 malwarescore=0 suspectscore=0 bulkscore=0
+ mlxlogscore=694 phishscore=0 mlxscore=0 lowpriorityscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
+ definitions=main-2408020110
 
-On 2024-07-31 17:01:09+0000, Shuah Khan wrote:
-> On 7/31/24 12:32, Thomas Weißschuh wrote:
-> > The implementation is limited and only supports numeric arguments.
-> 
-> I would like to see more information in here. Why is this needed
-> etc. etc.
+This patch series adds a selftest suite to validate the s390x
+architecture specific ucontrol KVM interface.
 
-Ack.
+When creating a VM on s390x it is possible to create it as userspace
+controlled VM or in short ucontrol VM.
+These VMs delegates the management of the VM to userspace instead
+of handling most events within the kernel. Consequently the userspace
+has to manage interrupts, memory allocation etc.
 
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > ---
-> >   tools/include/nolibc/stdio.h                 | 93 ++++++++++++++++++++++++++++
-> >   tools/testing/selftests/nolibc/nolibc-test.c | 59 ++++++++++++++++++
-> >   2 files changed, 152 insertions(+)
-> > 
-> > diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
-> > index c968dbbc4ef8..d63c45c06d8e 100644
-> > --- a/tools/include/nolibc/stdio.h
-> > +++ b/tools/include/nolibc/stdio.h
-> > @@ -348,6 +348,99 @@ int printf(const char *fmt, ...)
-> >   	return ret;
-> >   }
-> > +static __attribute__((unused))
-> > +int vsscanf(const char *str, const char *format, va_list args)
-> 
-> Is there a reason why you didn't use the same code in lib/vsprintf.c?
-> You could simply duplicate the code here?
+Before this patch set this functionality lacks any public test cases.
+It is desirable to add test cases for this interface to be able to
+reduce the risk of breaking changes in the future.
 
-lib/vsprintf.c is GPL-2.0-only while nolibc is LGPL-2.1 OR MIT,
-so code reuse isn't really possible.
-Furthermore I think the vsprintf.c implements the custom kernel formats,
-while nolibc should use posix ones.
+In order to provision a ucontrol VM the kernel needs to be compiled with
+the CONFIG_KVM_S390_UCONTROL enabled. The users with sys_admin capability
+can then create a new ucontrol VM providing the KVM_VM_S390_UCONTROL
+parameter to the KVM_CREATE_VM ioctl.
 
-> With all these libc functionality added, it isn't nolibc looks like :)
+The kernels existing selftest helper functions can only be partially be
+reused for these tests.
 
-Well :-)
+The test cases cover existing special handling of ucontrol VMs within the
+implementation and basic VM creation and handling cases:
+* Reject setting HPAGE when VM is ucontrol
+* Assert KVM_GET_DIRTY_LOG is rejected
+* Assert KVM_S390_VM_MEM_LIMIT_SIZE is rejected
+* Assert state of initial SIE flags setup by the kernel
+* Run simple program in VM with and without DAT
+* Assert KVM_EXIT_S390_UCONTROL exit on not mapped memory access
+* Assert functionality of storage keys in ucontrol VM
 
-The main motivation is to provide kselftests compatibility.
-Maybe Willy disagrees.
+Running the test cases requires sys_admin capabilities to start the
+ucontrol VM.
+This can be achieved by running as root or with a command like:
 
-> > +{
-> > +	uintmax_t uval;
-> > +	intmax_t ival;
-> > +	int base;
-> > +	char *endptr;
-> > +	int matches;
-> > +	int lpref;
-> > +
-> > +	matches = 0;
-> > +
-> > +	while (1) {
-> > +		if (*format == '%') {
-> > +			lpref = 0;
-> > +			format++;
-> > +
-> > +			if (*format == 'l') {
-> > +				lpref = 1;
-> > +				format++;
-> > +				if (*format == 'l') {
-> > +					lpref = 2;
-> > +					format++;
-> > +				}
-> > +			}
-> > +
-> > +			if (*format == '%') {
-> > +				if ('%' != *str)
-> > +					goto done;
-> > +				str++;
-> > +				format++;
-> > +				continue;
-> > +			} else if (*format == 'd') {
-> > +				ival = strtoll(str, &endptr, 10);
-> > +				if (lpref == 0)
-> > +					*va_arg(args, int *) = ival;
-> > +				else if (lpref == 1)
-> > +					*va_arg(args, long *) = ival;
-> > +				else if (lpref == 2)
-> > +					*va_arg(args, long long *) = ival;
-> > +			} else if (*format == 'u' || *format == 'x' || *format == 'X') {
-> > +				base = *format == 'u' ? 10 : 16;
-> > +				uval = strtoull(str, &endptr, base);
-> > +				if (lpref == 0)
-> > +					*va_arg(args, unsigned int *) = uval;
-> > +				else if (lpref == 1)
-> > +					*va_arg(args, unsigned long *) = uval;
-> > +				else if (lpref == 2)
-> > +					*va_arg(args, unsigned long long *) = uval;
-> > +			} else if (*format == 'p') {
-> > +				*va_arg(args, void **) = (void *)strtoul(str, &endptr, 16);
-> > +			} else {
-> > +				SET_ERRNO(EILSEQ);
-> > +				goto done;
-> > +			}
-> > +
-> > +			format++;
-> > +			str = endptr;
-> > +			matches++;
-> > +
-> > +		} else if (*format == '\0') {
-> > +			goto done;
-> > +		} else if (isspace(*format)) {
-> > +			while (isspace(*format))
-> > +				format++;
-> > +			while (isspace(*str))
-> > +				str++;
-> > +		} else if (*format == *str) {
-> > +			format++;
-> > +			str++;
-> > +		} else {
-> > +			if (!matches)
-> > +				matches = EOF;
-> > +			goto done;
-> > +		}
-> > +	}
-> > +
-> > +done:
-> > +	return matches;
-> > +}
-> > +
-> > +static __attribute__((unused, format(scanf, 2, 3)))
-> > +int sscanf(const char *str, const char *format, ...)
-> > +{
-> > +	va_list args;
-> > +	int ret;
-> > +
-> > +	va_start(args, format);
-> > +	ret = vsscanf(str, format, args);
-> > +	va_end(args);
-> > +	return ret;
-> > +}
-> > +
-> >   static __attribute__((unused))
-> >   void perror(const char *msg)
-> >   {
-> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> > index 093d0512f4c5..addbceb0b276 100644
-> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > @@ -1277,6 +1277,64 @@ static int expect_vfprintf(int llen, int c, const char *expected, const char *fm
-> >   	return ret;
-> >   }
-> > +static int test_scanf(void)
-> > +{
-> > +	unsigned long long ull;
-> > +	unsigned long ul;
-> > +	unsigned int u;
-> > +	long long ll;
-> > +	long l;
-> > +	void *p;
-> > +	int i;
-> > +
-> > +	if (sscanf("", "foo") != EOF)
-> > +		return 1;
-> > +
-> > +	if (sscanf("foo", "foo") != 0)
-> > +		return 2;
-> > +
-> > +	if (sscanf("123", "%d", &i) != 1)
-> > +		return 3;
-> > +
-> > +	if (i != 123)
-> > +		return 4;
-> > +
-> > +	if (sscanf("a123b456c0x90", "a%db%uc%p", &i, &u, &p) != 3)
-> > +		return 5;
-> > +
-> > +	if (i != 123)
-> > +		return 6;
-> > +
-> > +	if (u != 456)
-> > +		return 7;
-> > +
-> > +	if (p != (void *)0x90)
-> > +		return 8;
-> > +
-> > +	if (sscanf("a    b1", "a b%d", &i) != 1)
-> > +		return 9;
-> > +
-> > +	if (i != 1)
-> > +		return 10;
-> > +
-> > +	if (sscanf("a%1", "a%%%d", &i) != 1)
-> > +		return 11;
-> > +
-> > +	if (i != 1)
-> > +		return 12;
-> > +
-> > +	if (sscanf("1|2|3|4|5|6",
-> > +		   "%d|%ld|%lld|%u|%lu|%llu",
-> > +		   &i, &l, &ll, &u, &ul, &ull) != 6)
-> > +		return 13;
-> > +
-> > +	if (i != 1 || l != 2 || ll != 3 ||
-> > +	    u != 4 || ul != 5 || ull != 6)
-> > +		return 14;
-> > +
-> > +	return 0;
-> 
-> Can we simplify this code? It is hard to read code with too
-> many conditions. Maybe defining an array test conditions
-> instead of a series ifs.
+    sudo setpriv --reuid nobody --inh-caps -all,+sys_admin \
+      --ambient-caps -all,+sys_admin --bounding-set -all,+sys_admin \
+      ./ucontrol_test
 
-I tried that and didn't find a way.
-Any pointers are welcome.
+The patch set does also contain some code cleanup / consolidation of
+architecture specific defines that are now used in multiple test cases.
 
-> > +
-> > +
-> >   static int run_vfprintf(int min, int max)
-> >   {
-> >   	int test;
-> > @@ -1298,6 +1356,7 @@ static int run_vfprintf(int min, int max)
-> >   		CASE_TEST(char);         EXPECT_VFPRINTF(1, "c", "%c", 'c'); break;
-> >   		CASE_TEST(hex);          EXPECT_VFPRINTF(1, "f", "%x", 0xf); break;
-> >   		CASE_TEST(pointer);      EXPECT_VFPRINTF(3, "0x1", "%p", (void *) 0x1); break;
-> > +		CASE_TEST(scanf);        EXPECT_ZR(1, test_scanf()); break;
-> >   		case __LINE__:
-> >   			return ret; /* must be last */
-> >   		/* note: do not set any defaults so as to permit holes above */
-> > 
-> 
-> thanks,
-> -- Shuah
+---
+
+v4:
+- PATCH 5: Remove not yet used include for debug print functions
+- PATCH 6: Add include for debug print functions (removed from patch 5)
+           Remove no longer needed code since stopped but is reset
+           before starting since v3 (thanks Janosch)
+           Adjust test output to use leading zeros instead of spaces in sieic
+- PATCH 7: Rename constant to PGM_SEGMENT_TRANSLATION (thanks Janosch)
+           Put comments on their own lines
+
+v3:
+- Remove stopped bit before starting the VM (no initial stop in multiple
+  test cases) (thanks Janosch)
+- PATCH 2: Clarified SIE control block vs SIE instruction (thanks
+           Janosch)
+- PATCH 3: Make use of CAP_TO_MASK(CAP_SYS_ADMIN) instead of custom
+           define (thanks Janosch)
+           Removed Reviewed-By: Claudio
+- PATCH 4: Remove erroneous 1MB offset from self->base_hva (thanks
+           Janosch)
+- PATCH 6-8: Change name of test program _pgm to _asm to prevent confusion
+- PATCH 10: Move KVM_S390_UCONTROL default option to actual debug config
+            (thanks Christian)
+
+v2:
+- add ucontrol to s390 debug config (new patch)
+- PATCH 2: changed atomic_t to __u32 (thanks Claudio)
+- PATCH 4: reformatted comment in FIXTURE_SETUP(uc_kvm)
+- PATCH 5: refactored to display 8 byte blocks + more internal reuse
+           (thanks Claudio)
+- PATCH 7: make use of more declarative defines instead of magic values
+- PATCH 8: make use of more declarative defines instead of magic values
+           (thanks Claudio)
+- PATCH 9: add reference to fix verified by the test case
+
+
+Christoph Schlameuss (10):
+  selftests: kvm: s390: Define page sizes in shared header
+  selftests: kvm: s390: Add kvm_s390_sie_block definition for userspace
+    tests
+  selftests: kvm: s390: Add s390x ucontrol test suite with hpage test
+  selftests: kvm: s390: Add test fixture and simple VM setup tests
+  selftests: kvm: s390: Add debug print functions
+  selftests: kvm: s390: Add VM run test case
+  selftests: kvm: s390: Add uc_map_unmap VM test case
+  selftests: kvm: s390: Add uc_skey VM test case
+  selftests: kvm: s390: Verify reject memory region operations for
+    ucontrol VMs
+  s390: Enable KVM_S390_UCONTROL config in debug_defconfig
+
+ arch/s390/configs/debug_defconfig             |   1 +
+ tools/testing/selftests/kvm/.gitignore        |   1 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/include/s390x/debug_print.h |  69 ++
+ .../selftests/kvm/include/s390x/processor.h   |   5 +
+ .../testing/selftests/kvm/include/s390x/sie.h | 240 +++++++
+ .../selftests/kvm/lib/s390x/processor.c       |  10 +-
+ tools/testing/selftests/kvm/s390x/cmma_test.c |   7 +-
+ tools/testing/selftests/kvm/s390x/config      |   2 +
+ .../testing/selftests/kvm/s390x/debug_test.c  |   4 +-
+ tools/testing/selftests/kvm/s390x/memop.c     |   4 +-
+ tools/testing/selftests/kvm/s390x/tprot.c     |   5 +-
+ .../selftests/kvm/s390x/ucontrol_test.c       | 596 ++++++++++++++++++
+ 13 files changed, 929 insertions(+), 16 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/include/s390x/debug_print.h
+ create mode 100644 tools/testing/selftests/kvm/include/s390x/sie.h
+ create mode 100644 tools/testing/selftests/kvm/s390x/config
+ create mode 100644 tools/testing/selftests/kvm/s390x/ucontrol_test.c
+
+
+base-commit: c0ecd6388360d930440cc5554026818895199923
+-- 
+2.45.2
+
 
