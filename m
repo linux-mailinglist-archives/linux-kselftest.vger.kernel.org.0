@@ -1,385 +1,202 @@
-Return-Path: <linux-kselftest+bounces-14749-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14750-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C11A9465B0
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 23:59:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3FCC946616
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Aug 2024 01:11:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F08D1C20EE3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 21:59:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8064F282CC9
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 23:10:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB03F13CF86;
-	Fri,  2 Aug 2024 21:58:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86FF013A402;
+	Fri,  2 Aug 2024 23:10:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G9j8Hy9O"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="N60NviUs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC7C13C9C4;
-	Fri,  2 Aug 2024 21:58:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2BC11ABEB5
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Aug 2024 23:10:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722635898; cv=none; b=TdpVkSHMwjTp0pKZReIpOjW/CrVRqnROs6tXSTJFxRUmHdI6UgycxtXT3xsaPMY0PAHFEoDqflvoUjJuVfQ6fUl4Cz8gpRyJQCJTYs7Y2HvfddJv+kvAhugf6agKwTYpJzUL0+5Mtr6xmPksKfvUJDiq/zEoUCLUdh+ZtiFJB1c=
+	t=1722640256; cv=none; b=jaIKfACnnc89mYZKRPyhyzJvPPsTVSY3AuL5jVyi0cqhgE1+SjDWq/AgKpcUThhprUqT87gpxTsGDLeATz75eYU3vIorhp9WRrmx5gKPF/mhA3DJCdNg/U8UNk9FRPNfl1DnlmwKubgyOJrtpPGvkaeNcEYNdHTOUg22EnTOEqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722635898; c=relaxed/simple;
-	bh=VoSJImacX+kY6vdGrODiJZGx2cTYlpBVWC6lRFq1lJs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Di5aUKVyWxmQ7b7SOt1epq8QjMNONyzaBnl8Z8NNXu2RDcL0MKlADC54X4v3kGENbVJNjURG8jdotB8/5obBmud84HNek4/nsaW8VUV5jbcFyAJ9+hOtHe3gBddalfMw0Sav5j+hYV9Kj0UBFWiFjJZQeFCvmE24GUl9+tXzjjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G9j8Hy9O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A2C1C4AF0A;
-	Fri,  2 Aug 2024 21:58:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722635898;
-	bh=VoSJImacX+kY6vdGrODiJZGx2cTYlpBVWC6lRFq1lJs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=G9j8Hy9OeTb8EmMFmjr6avJ6B2j3krD+pJhUG1APmXBpEN9jOOGIMdSs3vj10VdAK
-	 l00ltjg38VN2wprlXljw4CTTSq/Uzerpd3bGnWlAduIHcsGucxt7ExavLpKK3FZdS2
-	 v5Z9VX0lijqRUbykpzk1vxgDsYzQ88zPh5gHhb6ifRvaVUrzGJYGSFQDQXlG8cQsdL
-	 0EiChI9rojO7eMcpyNeyk/n8L5eR7qliNIOct/dqSPepUn2gl+wuDoYcFFrM1aNBrj
-	 JHlcwDGlDkXx3J/kv8uWuJXIgATSGezNvrx1pSEvyDMghPN6uqD2RpPKIFJqcymYYZ
-	 kJjw3bKtqxENw==
-From: Mark Brown <broonie@kernel.org>
-Date: Fri, 02 Aug 2024 22:57:54 +0100
-Subject: [PATCH 2/2] KVM: selftests: arm64: Use generated defines for named
- system registers
+	s=arc-20240116; t=1722640256; c=relaxed/simple;
+	bh=ZvkTx1+EBn2AL2301uxOLcdHVVDBq23matLKcxBKGyw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=njVh5/g7wBqkDCQYRJQoP5fJzX07ohGuMUhQpPAZ0I0fMdF8dcAfeuDpvS6z64i/6fIVXFzDXoBdx0G9UhByFx92R+f2FIfHJ+7EWY2JuQPV7P8vdtxW2sY0j7LjdMwdte0j49Xv0DdOIZSpWTqPATfLb60NRkyL8EDrqt6su80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=N60NviUs; arc=none smtp.client-ip=209.85.166.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-812796ac793so39943039f.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Aug 2024 16:10:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1722640254; x=1723245054; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CRFKf5qzMHoSED0gCD78PwbVthWaoZnGQl+PAi2Z4zs=;
+        b=N60NviUs5AbPt/3Nn7TbKBb73MPa7PMXJmJohzLmrKci8z/IwKJHLBiaWN0cThze2o
+         Zh/QZJDkw50J6BqK22knH78AqL8FqTC7lGwU7sL4ke5s+AYUJ/GTt6E3cbRDaUIhVzdc
+         iJobSfknx9JtLeaFsI8mnWtn1SDUvU5O8EHiM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722640254; x=1723245054;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CRFKf5qzMHoSED0gCD78PwbVthWaoZnGQl+PAi2Z4zs=;
+        b=CCuA+zpLK7vlEiK6lA4WURZZw5eAEMAFFeI4XS+ww80DkQlqigRYBCFXeWX9i1h86E
+         jKgZN26Ax+zhiVJVzXUSEGUx7XAw83GzOxuHXivluwX/FzMeKatrT4LAJWymv6lYNdkL
+         l9iCyTtVC2vVWy/ehi8EVQT+qo/uvWas0nqbnKtSao0eOq0nXcxtifh2/6JPsPJf+RA9
+         l7TDZ3oic+4ueNS9SEGfTMn5czr0L6QomEDXSrsQVOAmHuSCShy71C6pAd8zgRcuKHDW
+         +2lTTfTi9CKVlY0veseT2is1riCsJ/WlwVuYxd8uwXji3AbIm9mdH60N9rEcLe9Wegp6
+         cKPw==
+X-Forwarded-Encrypted: i=1; AJvYcCV2Euvf0PJj169LSElAxGcn84zWTs0RL/BU5T5XV3823AZwQ+V+IoVTyTyvrSaaDSYoKrctvcJi4cGOIwyBsHo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzVcSxP5+t9t65hupalSPaPMC8BCnvJ58iGEbiLJ/ssvCrBsBy
+	SrzHk/pwVW4rJElgkfxqF/lzGAlLjkWmLx4S9qPCXurYFvcmT5zUXNtBJ32YEzI=
+X-Google-Smtp-Source: AGHT+IG4YhnBxlvfM+Pna3a9JI1Fz26gLKM+Cn6KxC4Yo5lYYUsISZwDwAKQgOqUHuJvzNOfvc3RGw==
+X-Received: by 2002:a6b:7c4c:0:b0:81f:8f3a:5689 with SMTP id ca18e2360f4ac-81fd42bcd22mr362897339f.0.1722640253702;
+        Fri, 02 Aug 2024 16:10:53 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c8d6a2733bsm665167173.101.2024.08.02.16.10.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 02 Aug 2024 16:10:53 -0700 (PDT)
+Message-ID: <6180198e-5086-40a2-bd0a-305009342020@linuxfoundation.org>
+Date: Fri, 2 Aug 2024 17:10:52 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240802-kvm-arm64-get-reg-list-v1-2-3a5bf8f80765@kernel.org>
-References: <20240802-kvm-arm64-get-reg-list-v1-0-3a5bf8f80765@kernel.org>
-In-Reply-To: <20240802-kvm-arm64-get-reg-list-v1-0-3a5bf8f80765@kernel.org>
-To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
- James Morse <james.morse@arm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, 
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- Catalin Marinas <catalin.marinas@arm.com>, Joey Gouly <joey.gouly@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-37811
-X-Developer-Signature: v=1; a=openpgp-sha256; l=12914; i=broonie@kernel.org;
- h=from:subject:message-id; bh=VoSJImacX+kY6vdGrODiJZGx2cTYlpBVWC6lRFq1lJs=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmrVZw0VmwKwRA4y3IJkIxFqM4Wr/pdN25rzGyUc4O
- yxeh2ImJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZq1WcAAKCRAk1otyXVSH0O0JB/
- 4teQM72Wwp4fMh8rdKcU6+ke9mdpokyhRYLklCZPgYdaxEHU3vUd/QGOxWODtoYDuRzCaPiyrGLYTJ
- GuozqMB+YRF8lMB7vDjBqpUfa8RL0xsjOdaG5td4shwDnUahSS9OgptjFcUPdMmn5i5S8ApWnHaKcf
- TaSPs/NRmiXVrodpLMqILnOSCQnZcctVsZJ8Q3EJyz7VlKpleQMb4WLfcge4kYCehI5ZvmMUfKelJO
- 6vdeKxWy1KTwHOIie94Zn/necUDMnGbHyg9V57buV05JbmZFZ32G3KsCkUA8auFj2Af7pTtUxDAuJO
- z+kywfYyrXJOn1oy6z9MopEL/ofVIs
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests: openat2: don't print total number of tests
+ and then skip
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: Aleksa Sarai <cyphar@cyphar.com>, kernel@collabora.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240731133951.404933-1-usama.anjum@collabora.com>
+ <c1414d9d-61b1-4f92-bc8a-333679362283@linuxfoundation.org>
+ <d30aa38c-5dbd-4c18-b20f-a6eb9e9e722b@collabora.com>
+ <f560819b-3a3c-4999-ad63-422ca31e9b08@linuxfoundation.org>
+ <ff70e502-c3c8-4046-9447-5eff56028c9d@collabora.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <ff70e502-c3c8-4046-9447-5eff56028c9d@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Currently the get-reg-list test uses directly specified numeric values to
-define system registers to validate. Since we already have a macro which
-allows us to use the generated system register definitions from the main
-kernel easily let's update all the registers where we have specified the
-name in a comment to just use that macro. This reduces the number of
-places where we need to validate the name to number mapping.
+On 8/1/24 23:38, Muhammad Usama Anjum wrote:
+> On 8/1/24 9:27 PM, Shuah Khan wrote:
+>> On 8/1/24 02:42, Muhammad Usama Anjum wrote:
+>>> On 7/31/24 9:57 PM, Shuah Khan wrote:
+>>>> On 7/31/24 07:39, Muhammad Usama Anjum wrote:
+>>>>> Don't print that 88 sub-tests are going to be executed, but then skip.
+>>>>> This is against TAP compliance. Instead check pre-requisites first
+>>>>> before printing total number of tests.
+>>>>
+>>>> Does TAP clearly mention this?
+>>> Yes from https://testanything.org/tap-version-13-specification.html
+>>>
+>>> Skipping everything
+>>> This listing shows that the entire listing is a skip. No tests were run.
+>>>
+>>> TAP version 13
+>>> 1..0 # skip because English-to-French translator isn't installed
+>>
+>> I don't see how this is applicable to the current scenario. The user
+>> needs to have root privilege to run the test.
+>>
+>> It is important to mention how many tests could have been run.
+>> As mentioned before, this information is important for users and testers.
+>>
+>> I would like to see this information in the output.
+>>
+>>>
+>>> We can see above that we need to print 1..0 and skip without printing the
+>>> total number of tests to be executed as they are going to be skipped.
+>>>
+>>>>
+>>>>>
+>>>>> Old non-tap compliant output:
+>>>>>      TAP version 13
+>>>>>      1..88
+>>>>>      ok 2 # SKIP all tests require euid == 0
+>>>>>      # Planned tests != run tests (88 != 1)>>>     # Totals: pass:0
+>>>>> fail:0 xfail:0 xpass:0 skip:1 error:0
+>>>>>
+>>>>> New and correct output:
+>>>>>      TAP version 13
+>>>>>      1..0 # SKIP all tests require euid == 0
+>>>>
+>>>> The problem is that this new output doesn't show how many tests
+>>>> are in this test suite that could be run.
+>>>>
+>>>> I am not use if this is better for communicating coverage information
+>>>> even if meets the TAP compliance.
+>>> I think the number of tests represents the number of planned tests. If we
+>>> don't plan to run X number of tests, we shouldn't print it.
+>>
+>> 88 tests are planned to be run except for the fact the first check
+>> failed.
+>>
+>> Planned tests could not be run because of user privileges. So these
+>> tests are all skips because of unmet dependencies.
+> Agreed.
+> 
+>>
+>> So the a good report would show that 88 tests could have been run. You
+>> can meet the specification and still make it work for us. When we
+>> adapt TAP 13 we didn't require 100% compliance.
+>>
+>> There are cases where you can comply and still provide how many test
+>> could be run.
+>>
+>> I think you are applying the spec strictly thereby removing useful
+>> information from the report.
+>>
+>> Can you tell me what would fail because of this "non-compliance"?
+> Some months ago, someone had reported for one of my test that it says it is
+> going to execute X number of tests. But then it just skips saying it
+> couldn't run X tests and final footer of tests also didn't had the correct
+> number of tests in it.
+> 
+>> TAP version 13
+>> 1..88
+> This gives information that 88 tests are going to be executed.
+>> ok 2 # SKIP all tests require euid == 0
 
-This conversion was done with the sed command:
+I agree this should be 1 if we ran just one test.
 
-  sed -i -E 's-ARM64_SYS_REG.*/\* (.*) \*/-KVM_ARM64_SYS_REG(SYS_\1),-' tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> Why not ok 1 here?
+>> # Planned tests != run tests (88 != 1)
+> This gives a error occured signal instead of telling us that preconditions
+> failed.
 
-We still have a number of numerically specified registers, some of these
-are reserved registers without defined names (eg, unallocated ID registers)
-and others don't have kernel macro definitions yet.
+This is correct. We report skip and don't fail when dependencies aren't
+met. If we did that it would be reporting false failures since tests
+couldn't run tests.
 
-No change in the generated output.
+I have asked Laura to see if we can add a message to tell the user
+that we couldn't run tests that could have run so they can look at the
+config and make changes as needed to increase coverage of testing.
 
-Suggested-by: Marc Zyngier <maz@kernel.org>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/kvm/aarch64/get-reg-list.c | 208 ++++++++++-----------
- 1 file changed, 104 insertions(+), 104 deletions(-)
+>> # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
 
-diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-index a00322970578..4d786c4ab28a 100644
---- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-@@ -313,14 +313,14 @@ static __u64 base_regs[] = {
- 	KVM_REG_ARM_FW_FEAT_BMAP_REG(0),	/* KVM_REG_ARM_STD_BMAP */
- 	KVM_REG_ARM_FW_FEAT_BMAP_REG(1),	/* KVM_REG_ARM_STD_HYP_BMAP */
- 	KVM_REG_ARM_FW_FEAT_BMAP_REG(2),	/* KVM_REG_ARM_VENDOR_HYP_BMAP */
--	ARM64_SYS_REG(3, 3, 14, 3, 1),	/* CNTV_CTL_EL0 */
--	ARM64_SYS_REG(3, 3, 14, 3, 2),	/* CNTV_CVAL_EL0 */
-+	KVM_ARM64_SYS_REG(SYS_CNTV_CTL_EL0),
-+	KVM_ARM64_SYS_REG(SYS_CNTV_CVAL_EL0),
- 	ARM64_SYS_REG(3, 3, 14, 0, 2),
--	ARM64_SYS_REG(3, 0, 0, 0, 0),	/* MIDR_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 0, 6),	/* REVIDR_EL1 */
--	ARM64_SYS_REG(3, 1, 0, 0, 1),	/* CLIDR_EL1 */
--	ARM64_SYS_REG(3, 1, 0, 0, 7),	/* AIDR_EL1 */
--	ARM64_SYS_REG(3, 3, 0, 0, 1),	/* CTR_EL0 */
-+	KVM_ARM64_SYS_REG(SYS_MIDR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_REVIDR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_CLIDR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_AIDR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_CTR_EL0),
- 	ARM64_SYS_REG(2, 0, 0, 0, 4),
- 	ARM64_SYS_REG(2, 0, 0, 0, 5),
- 	ARM64_SYS_REG(2, 0, 0, 0, 6),
-@@ -329,8 +329,8 @@ static __u64 base_regs[] = {
- 	ARM64_SYS_REG(2, 0, 0, 1, 5),
- 	ARM64_SYS_REG(2, 0, 0, 1, 6),
- 	ARM64_SYS_REG(2, 0, 0, 1, 7),
--	ARM64_SYS_REG(2, 0, 0, 2, 0),	/* MDCCINT_EL1 */
--	ARM64_SYS_REG(2, 0, 0, 2, 2),	/* MDSCR_EL1 */
-+	KVM_ARM64_SYS_REG(SYS_MDCCINT_EL1),
-+	KVM_ARM64_SYS_REG(SYS_MDSCR_EL1),
- 	ARM64_SYS_REG(2, 0, 0, 2, 4),
- 	ARM64_SYS_REG(2, 0, 0, 2, 5),
- 	ARM64_SYS_REG(2, 0, 0, 2, 6),
-@@ -387,109 +387,109 @@ static __u64 base_regs[] = {
- 	ARM64_SYS_REG(2, 0, 0, 15, 5),
- 	ARM64_SYS_REG(2, 0, 0, 15, 6),
- 	ARM64_SYS_REG(2, 0, 0, 15, 7),
--	ARM64_SYS_REG(2, 0, 1, 1, 4),	/* OSLSR_EL1 */
--	ARM64_SYS_REG(2, 4, 0, 7, 0),	/* DBGVCR32_EL2 */
--	ARM64_SYS_REG(3, 0, 0, 0, 5),	/* MPIDR_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 1, 0),	/* ID_PFR0_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 1, 1),	/* ID_PFR1_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 1, 2),	/* ID_DFR0_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 1, 3),	/* ID_AFR0_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 1, 4),	/* ID_MMFR0_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 1, 5),	/* ID_MMFR1_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 1, 6),	/* ID_MMFR2_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 1, 7),	/* ID_MMFR3_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 2, 0),	/* ID_ISAR0_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 2, 1),	/* ID_ISAR1_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 2, 2),	/* ID_ISAR2_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 2, 3),	/* ID_ISAR3_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 2, 4),	/* ID_ISAR4_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 2, 5),	/* ID_ISAR5_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 2, 6),	/* ID_MMFR4_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 2, 7),	/* ID_ISAR6_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 3, 0),	/* MVFR0_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 3, 1),	/* MVFR1_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 3, 2),	/* MVFR2_EL1 */
-+	KVM_ARM64_SYS_REG(SYS_OSLSR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_DBGVCR32_EL2),
-+	KVM_ARM64_SYS_REG(SYS_MPIDR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_PFR0_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_PFR1_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_DFR0_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_AFR0_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_MMFR0_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_MMFR1_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_MMFR2_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_MMFR3_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_ISAR0_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_ISAR1_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_ISAR2_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_ISAR3_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_ISAR4_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_ISAR5_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_MMFR4_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_ISAR6_EL1),
-+	KVM_ARM64_SYS_REG(SYS_MVFR0_EL1),
-+	KVM_ARM64_SYS_REG(SYS_MVFR1_EL1),
-+	KVM_ARM64_SYS_REG(SYS_MVFR2_EL1),
- 	ARM64_SYS_REG(3, 0, 0, 3, 3),
--	ARM64_SYS_REG(3, 0, 0, 3, 4),	/* ID_PFR2_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 3, 5),	/* ID_DFR1_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 3, 6),	/* ID_MMFR5_EL1 */
-+	KVM_ARM64_SYS_REG(SYS_ID_PFR2_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_DFR1_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_MMFR5_EL1),
- 	ARM64_SYS_REG(3, 0, 0, 3, 7),
--	ARM64_SYS_REG(3, 0, 0, 4, 0),	/* ID_AA64PFR0_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 4, 1),	/* ID_AA64PFR1_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 4, 2),	/* ID_AA64PFR2_EL1 */
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64PFR0_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64PFR1_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64PFR2_EL1),
- 	ARM64_SYS_REG(3, 0, 0, 4, 3),
--	ARM64_SYS_REG(3, 0, 0, 4, 4),	/* ID_AA64ZFR0_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 4, 5),	/* ID_AA64SMFR0_EL1 */
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64ZFR0_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64SMFR0_EL1),
- 	ARM64_SYS_REG(3, 0, 0, 4, 6),
- 	ARM64_SYS_REG(3, 0, 0, 4, 7),
--	ARM64_SYS_REG(3, 0, 0, 5, 0),	/* ID_AA64DFR0_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 5, 1),	/* ID_AA64DFR1_EL1 */
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64DFR0_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64DFR1_EL1),
- 	ARM64_SYS_REG(3, 0, 0, 5, 2),
- 	ARM64_SYS_REG(3, 0, 0, 5, 3),
--	ARM64_SYS_REG(3, 0, 0, 5, 4),	/* ID_AA64AFR0_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 5, 5),	/* ID_AA64AFR1_EL1 */
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64AFR0_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64AFR1_EL1),
- 	ARM64_SYS_REG(3, 0, 0, 5, 6),
- 	ARM64_SYS_REG(3, 0, 0, 5, 7),
--	ARM64_SYS_REG(3, 0, 0, 6, 0),	/* ID_AA64ISAR0_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 6, 1),	/* ID_AA64ISAR1_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 6, 2),	/* ID_AA64ISAR2_EL1 */
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64ISAR0_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64ISAR1_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64ISAR2_EL1),
- 	ARM64_SYS_REG(3, 0, 0, 6, 3),
- 	ARM64_SYS_REG(3, 0, 0, 6, 4),
- 	ARM64_SYS_REG(3, 0, 0, 6, 5),
- 	ARM64_SYS_REG(3, 0, 0, 6, 6),
- 	ARM64_SYS_REG(3, 0, 0, 6, 7),
--	ARM64_SYS_REG(3, 0, 0, 7, 0),	/* ID_AA64MMFR0_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 7, 1),	/* ID_AA64MMFR1_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 7, 2),	/* ID_AA64MMFR2_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
--	ARM64_SYS_REG(3, 0, 0, 7, 4),	/* ID_AA64MMFR4_EL1 */
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64MMFR0_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64MMFR1_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64MMFR2_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64MMFR3_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ID_AA64MMFR4_EL1),
- 	ARM64_SYS_REG(3, 0, 0, 7, 5),
- 	ARM64_SYS_REG(3, 0, 0, 7, 6),
- 	ARM64_SYS_REG(3, 0, 0, 7, 7),
--	ARM64_SYS_REG(3, 0, 1, 0, 0),	/* SCTLR_EL1 */
--	ARM64_SYS_REG(3, 0, 1, 0, 1),	/* ACTLR_EL1 */
--	ARM64_SYS_REG(3, 0, 1, 0, 2),	/* CPACR_EL1 */
--	ARM64_SYS_REG(3, 0, 2, 0, 0),	/* TTBR0_EL1 */
--	ARM64_SYS_REG(3, 0, 2, 0, 1),	/* TTBR1_EL1 */
--	ARM64_SYS_REG(3, 0, 2, 0, 2),	/* TCR_EL1 */
--	ARM64_SYS_REG(3, 0, 2, 0, 3),	/* TCR2_EL1 */
--	ARM64_SYS_REG(3, 0, 5, 1, 0),	/* AFSR0_EL1 */
--	ARM64_SYS_REG(3, 0, 5, 1, 1),	/* AFSR1_EL1 */
--	ARM64_SYS_REG(3, 0, 5, 2, 0),	/* ESR_EL1 */
--	ARM64_SYS_REG(3, 0, 6, 0, 0),	/* FAR_EL1 */
--	ARM64_SYS_REG(3, 0, 7, 4, 0),	/* PAR_EL1 */
--	ARM64_SYS_REG(3, 0, 10, 2, 0),	/* MAIR_EL1 */
--	ARM64_SYS_REG(3, 0, 10, 2, 2),	/* PIRE0_EL1 */
--	ARM64_SYS_REG(3, 0, 10, 2, 3),	/* PIR_EL1 */
--	ARM64_SYS_REG(3, 0, 10, 3, 0),	/* AMAIR_EL1 */
--	ARM64_SYS_REG(3, 0, 12, 0, 0),	/* VBAR_EL1 */
--	ARM64_SYS_REG(3, 0, 12, 1, 1),	/* DISR_EL1 */
--	ARM64_SYS_REG(3, 0, 13, 0, 1),	/* CONTEXTIDR_EL1 */
--	ARM64_SYS_REG(3, 0, 13, 0, 4),	/* TPIDR_EL1 */
--	ARM64_SYS_REG(3, 0, 14, 1, 0),	/* CNTKCTL_EL1 */
--	ARM64_SYS_REG(3, 2, 0, 0, 0),	/* CSSELR_EL1 */
--	ARM64_SYS_REG(3, 3, 13, 0, 2),	/* TPIDR_EL0 */
--	ARM64_SYS_REG(3, 3, 13, 0, 3),	/* TPIDRRO_EL0 */
--	ARM64_SYS_REG(3, 3, 14, 0, 1),	/* CNTPCT_EL0 */
--	ARM64_SYS_REG(3, 3, 14, 2, 1),	/* CNTP_CTL_EL0 */
--	ARM64_SYS_REG(3, 3, 14, 2, 2),	/* CNTP_CVAL_EL0 */
--	ARM64_SYS_REG(3, 4, 3, 0, 0),	/* DACR32_EL2 */
--	ARM64_SYS_REG(3, 4, 5, 0, 1),	/* IFSR32_EL2 */
--	ARM64_SYS_REG(3, 4, 5, 3, 0),	/* FPEXC32_EL2 */
-+	KVM_ARM64_SYS_REG(SYS_SCTLR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ACTLR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_CPACR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_TTBR0_EL1),
-+	KVM_ARM64_SYS_REG(SYS_TTBR1_EL1),
-+	KVM_ARM64_SYS_REG(SYS_TCR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_TCR2_EL1),
-+	KVM_ARM64_SYS_REG(SYS_AFSR0_EL1),
-+	KVM_ARM64_SYS_REG(SYS_AFSR1_EL1),
-+	KVM_ARM64_SYS_REG(SYS_ESR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_FAR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_PAR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_MAIR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_PIRE0_EL1),
-+	KVM_ARM64_SYS_REG(SYS_PIR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_AMAIR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_VBAR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_DISR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_CONTEXTIDR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_TPIDR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_CNTKCTL_EL1),
-+	KVM_ARM64_SYS_REG(SYS_CSSELR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_TPIDR_EL0),
-+	KVM_ARM64_SYS_REG(SYS_TPIDRRO_EL0),
-+	KVM_ARM64_SYS_REG(SYS_CNTPCT_EL0),
-+	KVM_ARM64_SYS_REG(SYS_CNTP_CTL_EL0),
-+	KVM_ARM64_SYS_REG(SYS_CNTP_CVAL_EL0),
-+	KVM_ARM64_SYS_REG(SYS_DACR32_EL2),
-+	KVM_ARM64_SYS_REG(SYS_IFSR32_EL2),
-+	KVM_ARM64_SYS_REG(SYS_FPEXC32_EL2),
- };
- 
- static __u64 pmu_regs[] = {
--	ARM64_SYS_REG(3, 0, 9, 14, 1),	/* PMINTENSET_EL1 */
--	ARM64_SYS_REG(3, 0, 9, 14, 2),	/* PMINTENCLR_EL1 */
--	ARM64_SYS_REG(3, 3, 9, 12, 0),	/* PMCR_EL0 */
--	ARM64_SYS_REG(3, 3, 9, 12, 1),	/* PMCNTENSET_EL0 */
--	ARM64_SYS_REG(3, 3, 9, 12, 2),	/* PMCNTENCLR_EL0 */
--	ARM64_SYS_REG(3, 3, 9, 12, 3),	/* PMOVSCLR_EL0 */
--	ARM64_SYS_REG(3, 3, 9, 12, 4),	/* PMSWINC_EL0 */
--	ARM64_SYS_REG(3, 3, 9, 12, 5),	/* PMSELR_EL0 */
--	ARM64_SYS_REG(3, 3, 9, 13, 0),	/* PMCCNTR_EL0 */
--	ARM64_SYS_REG(3, 3, 9, 14, 0),	/* PMUSERENR_EL0 */
--	ARM64_SYS_REG(3, 3, 9, 14, 3),	/* PMOVSSET_EL0 */
-+	KVM_ARM64_SYS_REG(SYS_PMINTENSET_EL1),
-+	KVM_ARM64_SYS_REG(SYS_PMINTENCLR_EL1),
-+	KVM_ARM64_SYS_REG(SYS_PMCR_EL0),
-+	KVM_ARM64_SYS_REG(SYS_PMCNTENSET_EL0),
-+	KVM_ARM64_SYS_REG(SYS_PMCNTENCLR_EL0),
-+	KVM_ARM64_SYS_REG(SYS_PMOVSCLR_EL0),
-+	KVM_ARM64_SYS_REG(SYS_PMSWINC_EL0),
-+	KVM_ARM64_SYS_REG(SYS_PMSELR_EL0),
-+	KVM_ARM64_SYS_REG(SYS_PMCCNTR_EL0),
-+	KVM_ARM64_SYS_REG(SYS_PMUSERENR_EL0),
-+	KVM_ARM64_SYS_REG(SYS_PMOVSSET_EL0),
- 	ARM64_SYS_REG(3, 3, 14, 8, 0),
- 	ARM64_SYS_REG(3, 3, 14, 8, 1),
- 	ARM64_SYS_REG(3, 3, 14, 8, 2),
-@@ -552,7 +552,7 @@ static __u64 pmu_regs[] = {
- 	ARM64_SYS_REG(3, 3, 14, 15, 4),
- 	ARM64_SYS_REG(3, 3, 14, 15, 5),
- 	ARM64_SYS_REG(3, 3, 14, 15, 6),
--	ARM64_SYS_REG(3, 3, 14, 15, 7),	/* PMCCFILTR_EL0 */
-+	KVM_ARM64_SYS_REG(SYS_PMCCFILTR_EL0),
- };
- 
- static __u64 vregs[] = {
-@@ -641,7 +641,7 @@ static __u64 sve_regs[] = {
- 	KVM_REG_ARM64_SVE_PREG(14, 0),
- 	KVM_REG_ARM64_SVE_PREG(15, 0),
- 	KVM_REG_ARM64_SVE_FFR(0),
--	ARM64_SYS_REG(3, 0, 1, 2, 0),   /* ZCR_EL1 */
-+	KVM_ARM64_SYS_REG(SYS_ZCR_EL1),
- };
- 
- static __u64 sve_rejects_set[] = {
-@@ -649,19 +649,19 @@ static __u64 sve_rejects_set[] = {
- };
- 
- static __u64 pauth_addr_regs[] = {
--	ARM64_SYS_REG(3, 0, 2, 1, 0),	/* APIAKEYLO_EL1 */
--	ARM64_SYS_REG(3, 0, 2, 1, 1),	/* APIAKEYHI_EL1 */
--	ARM64_SYS_REG(3, 0, 2, 1, 2),	/* APIBKEYLO_EL1 */
--	ARM64_SYS_REG(3, 0, 2, 1, 3),	/* APIBKEYHI_EL1 */
--	ARM64_SYS_REG(3, 0, 2, 2, 0),	/* APDAKEYLO_EL1 */
--	ARM64_SYS_REG(3, 0, 2, 2, 1),	/* APDAKEYHI_EL1 */
--	ARM64_SYS_REG(3, 0, 2, 2, 2),	/* APDBKEYLO_EL1 */
--	ARM64_SYS_REG(3, 0, 2, 2, 3)	/* APDBKEYHI_EL1 */
-+	KVM_ARM64_SYS_REG(SYS_APIAKEYLO_EL1),
-+	KVM_ARM64_SYS_REG(SYS_APIAKEYHI_EL1),
-+	KVM_ARM64_SYS_REG(SYS_APIBKEYLO_EL1),
-+	KVM_ARM64_SYS_REG(SYS_APIBKEYHI_EL1),
-+	KVM_ARM64_SYS_REG(SYS_APDAKEYLO_EL1),
-+	KVM_ARM64_SYS_REG(SYS_APDAKEYHI_EL1),
-+	KVM_ARM64_SYS_REG(SYS_APDBKEYLO_EL1),
-+	KVM_ARM64_SYS_REG(SYS_APDBKEYHI_EL1),
- };
- 
- static __u64 pauth_generic_regs[] = {
--	ARM64_SYS_REG(3, 0, 2, 3, 0),	/* APGAKEYLO_EL1 */
--	ARM64_SYS_REG(3, 0, 2, 3, 1),	/* APGAKEYHI_EL1 */
-+	KVM_ARM64_SYS_REG(SYS_APGAKEYLO_EL1),
-+	KVM_ARM64_SYS_REG(SYS_APGAKEYHI_EL1),
- };
- 
- #define BASE_SUBLIST \
+This is correct - it shows 1 skip and rest are zero.
 
--- 
-2.39.2
+> The tests exit with KSFT_FAIL instead of KSFT_SKIP. This was the biggest
+> concern from the report.
+> 
 
+Exiting with KSFT_FAIL is the real problem that needs to be fixed.
+Please take a look to see why this is and send me the fix.
+
+thanks,
+-- Shuah
 
