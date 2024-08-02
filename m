@@ -1,237 +1,186 @@
-Return-Path: <linux-kselftest+bounces-14740-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14741-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E2FB9464F2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 23:20:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D31B49464FB
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 23:24:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62AAD1C2093F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 21:20:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9569C2814EA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 21:24:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1257749634;
-	Fri,  2 Aug 2024 21:20:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17FA36BFD2;
+	Fri,  2 Aug 2024 21:24:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hgzVJ5Ry"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="H6IqNMES"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2069.outbound.protection.outlook.com [40.107.212.69])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C9197D07D
-	for <linux-kselftest@vger.kernel.org>; Fri,  2 Aug 2024 21:20:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722633655; cv=none; b=rbTGYDti24zvyG+pMrMdMDmCw9HMWRdNfYOmoi+9xsh0RZFh+HP9GLJ3T4aIT4L+8ItzgR1fr2uGQ8KXHlkhpUL8D+/nhZ/TeJVJydTIAk1/75+zebd3VEIB9z47LYffh5eKmY8NPtnOZFAqsiU1vO0H3W+D2kGCOqJbDm8c6Fo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722633655; c=relaxed/simple;
-	bh=hPTm8twJbQwP1gA57rf1nLexQTY1IA3FxQkljDvuAUo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ksYS1pKGCd+FbqYg/Vj0VcqQfVbGPciaAbsMKxWxkTaPgyk+lMJ4N4V/2oNG1HR6EPWu4P45s5Zjgh8MZWufT4bHE1qNFfa9dW5w7e7jwBwPtd6gUQmFCJ3V56gcMPDS8upO8Fe+8EA/59sO1+n/0gyUCLmxgwLVB3+QKfgzXy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hgzVJ5Ry; arc=none smtp.client-ip=209.85.166.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-39aecad3ea7so1623115ab.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 02 Aug 2024 14:20:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1722633652; x=1723238452; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GUVOjx3qvNsCDEecpqknYfmTs+/UlFgyedU0CA/KD7A=;
-        b=hgzVJ5RypqIelpgQWFyI5/qk8DueP5zFQsYMVzlCdZStrFG08ZxyQGiy+6H3qsGJub
-         ofuZ3NytAB/cdLxvQKJU0gD6kUU+dHD9tjYTBlEpaUyS8wClDEy23NoAOqDag+detChD
-         a9LHLqvTp1GLaGZPZ5rY9ETgTfVjDkipvDluY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722633652; x=1723238452;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GUVOjx3qvNsCDEecpqknYfmTs+/UlFgyedU0CA/KD7A=;
-        b=qRlrARaFAEDM9jrQWSv8uwBHHDVzS0PwdYpo5Y8hMJEx8saGTmNWeCNuge0Rq5M+yr
-         6l2pSczTr+FctrtvS2hEYljAseSODoSMKavl6S6HDEWcGNU7Nb+edEopmPJZAYkPy+AM
-         G6i9yA+ngA67PZlsULu1YrGKSWjq+/wW6V7I0iLsD/HtC9v4U3XdMH+H29Y8EsWRC2Li
-         N5Wz53ZPworfyUfJKJP/gXxjk+azKBzpaWFKq5a79fWQVh9Q9uNbXwVgodDHbUV/kYYG
-         /GR7dChw+dh179Yu0gSbJ1PXVZ63/v8L8qBd4zpbzHXMblMuyX6MjgqA9UDsViIL3Wff
-         zbdg==
-X-Forwarded-Encrypted: i=1; AJvYcCWSZf0FcGZpMn2Pu9u06vSSjNWwjsypsziTB3lfNvAOr/TlTHoixGLO50K1V3ZwupDEYqarc9RFO1ruDHpnqm2qVicVnAKutG/EVOWla5T6
-X-Gm-Message-State: AOJu0Ywym5uRvn94Qr+1Lo6fz943kwKoUwK7x2SNTPlOgkziQ9u+DKFY
-	b2v6dqK49LGZ5YvU+3u08vdxIYGqXb1bVK1E6Tx+vgjBPttxFzyHy58bYm+2dKQ=
-X-Google-Smtp-Source: AGHT+IFVau0I++EGUzffsnsNKUNWsupcmCH5zGbYtBcWlZKAnldqk0URodLsZDCVj07G8p0H5y1gIw==
-X-Received: by 2002:a6b:f415:0:b0:81f:8cd4:2015 with SMTP id ca18e2360f4ac-81fd4395206mr364445939f.2.1722633652288;
-        Fri, 02 Aug 2024 14:20:52 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-81fd4d3a1e2sm71986339f.26.2024.08.02.14.20.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 02 Aug 2024 14:20:51 -0700 (PDT)
-Message-ID: <fc8a6e83-98fa-4809-8b05-ea9f94dd2c71@linuxfoundation.org>
-Date: Fri, 2 Aug 2024 15:20:51 -0600
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A17149658;
+	Fri,  2 Aug 2024 21:24:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.69
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1722633858; cv=fail; b=P8uiKsDwUGgT/rDgsA+QjYDljiDPJnpBKDSB4aUY/kHugeMsTbBIKEZ7jxbNomrnCHZ4YQGsL9mhnPXlso8uY1ZMv3FDJIvZH0lpLym71GAQ01O8ue67W7Tv3HN5vpXDbt1cjMz6/j400kTgIXuo0AtlsxS8A4m5tuyuHULdwoM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1722633858; c=relaxed/simple;
+	bh=F2+zpI359Nn51duoBDfuQS369GkNkqGWoyT7hPThwhI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hmAKwoAeRydpyT/f0yn/1lyjTLMItn0qKAkxcXHa1x+zHPjhnTTxll+HXlSE1JvcZPhmdPTs6tpTNb0QeneAlpKdgnW/Fkl+1G7EyoptR5N2y/k+/OKpydG1m8ZFC6cckEtlT+q1CtdBSTV4kANSO2YBtLEsK9qvj98yz8Ch0v4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=H6IqNMES; arc=fail smtp.client-ip=40.107.212.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NXXBh9hjDFAO4mZNdXaaZzGa/mGGA9tfHiMUyTAYnoHTakaq63DaVbiNZ9EU5p9+mFcoL/hEcGqoODUtbyUaDA0hqK1hSXMsnPbNwfjnYy9Nzjzi1GljPH5KndenmRBR/hITLLKqom0A/IIlVDJ+ROLe1gxGhymgOrQWEq+8HAEmakyP923oVQ4XjmsA2XOnLMKhWvXGvuzpXpPqY4hcOmZ+VXCexvsDMFwB366WL3EAHzk9f4naqekbH+KbHuB0hOLpfBu4xGsuRGqg/LhBCkB0pb39qk7cjgVcRrsy/PZVHUrpviUdm2+MxaceHFLayoXc6jppE5tdD8KR0RczhQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kMaiPw17zw2a+L6QZ1aihZannvNM+ViH6sZ/89cuKDk=;
+ b=fU2fQB5fPogYK+rKMrLuUYLuh2rz1aTfkEgv2zoryZTAzaqmSHqo0Zn1Mjy4EasfQy5TFDR/Ebm3IbogTQ11Swow83dTrTOddQPe55d818V23SBT1rTiOx/0XoGNXEa4AstRQddG9Eb3VxAOEgj62Jqw2+p1cplRp+bVVCHBIbMrr1J8en5NCwBdz0v+jB06diLr3rTZG5dM7WxjGduYNrl5QVUxugT4Ygv2+ISju8YQ/yni/khuBlZYwrAWe36O6Zt8Aj469kLMuxm4tXj4bvFddTUtCs0eO+1EHjEkh6ZozAyfoJcHv6qqRwPJjeKETzTc+/7mXwxnP2bRJ212ZA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kMaiPw17zw2a+L6QZ1aihZannvNM+ViH6sZ/89cuKDk=;
+ b=H6IqNMESb7zanyKio1LragkzC9QC6ivV7+Wzv4dLEyoYZ1a6z0e5ogN730tV8AkTRZw7WCT0ixWewkHcYXmsKTke0Um6TT6IPHU0Ca46CUsyBfbFt+iL5TX8B23dVieAcxaZCnzfiyLzZ2XqGQVcxu4wNvxf9BGQYjXs2TbUgdtZC/l5IIiiAn99RjaO8ouKdioPXr95BqPHpoBy2rdasyOJODkS5vN0JmnG1GXHpAlnkDoTHjb9QviXpfUlTxLXmfQvC+zTG/7H3StPG9SPkQz/kuJSmQ0dHPjzz8B4Mr4Id4sTJvrDRhLm0BgYFlWCTmll4iU/FI1dWlM7knHEtw==
+Received: from BN9PR03CA0031.namprd03.prod.outlook.com (2603:10b6:408:fb::6)
+ by SN7PR12MB6930.namprd12.prod.outlook.com (2603:10b6:806:262::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7807.28; Fri, 2 Aug
+ 2024 21:24:12 +0000
+Received: from BN2PEPF000044A8.namprd04.prod.outlook.com
+ (2603:10b6:408:fb:cafe::8b) by BN9PR03CA0031.outlook.office365.com
+ (2603:10b6:408:fb::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.21 via Frontend
+ Transport; Fri, 2 Aug 2024 21:24:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN2PEPF000044A8.mail.protection.outlook.com (10.167.243.102) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7828.19 via Frontend Transport; Fri, 2 Aug 2024 21:24:11 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 2 Aug 2024
+ 14:24:01 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 2 Aug 2024
+ 14:24:01 -0700
+Received: from Asurada-Nvidia.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
+ Transport; Fri, 2 Aug 2024 14:24:00 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: <jgg@nvidia.com>, <kevin.tian@intel.com>
+CC: <robin.murphy@arm.com>, <joro@8bytes.org>, <will@kernel.org>,
+	<shuah@kernel.org>, <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+Subject: [PATCH 0/3] iommufd: Add selftest coverage for reserved IOVAs
+Date: Fri, 2 Aug 2024 14:23:45 -0700
+Message-ID: <cover.1722633199.git.nicolinc@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] tools/nolibc: add support for [v]sscanf()
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240731-nolibc-scanf-v1-0-f71bcc4abb9e@weissschuh.net>
- <20240731-nolibc-scanf-v1-1-f71bcc4abb9e@weissschuh.net>
- <3956cee8-1623-42d6-bbc6-71b5abd67759@linuxfoundation.org>
- <5db920e0-51e8-48d9-b0ae-95479e875fad@t-8ch.de>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <5db920e0-51e8-48d9-b0ae-95479e875fad@t-8ch.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN2PEPF000044A8:EE_|SN7PR12MB6930:EE_
+X-MS-Office365-Filtering-Correlation-Id: 900f24a0-1364-44db-1805-08dcb33973d8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|376014|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?v+G70+FB26eKxko2J6rfE1pp/iIkqLHNyuxa1o8Zow8sQk8TCr0aCIaBU0RZ?=
+ =?us-ascii?Q?PHFTORKoRSbvbewGnnX6Tl0CVQemOIOKRiFblEEJR2oi6EZTGsCUp8sGuma0?=
+ =?us-ascii?Q?cIIqdde2ozxDCphCVWlY0B4pwOeqtMOABJblokEvnN0BqKVIAxd6hUi6fZl8?=
+ =?us-ascii?Q?v9zqvBgXTclDjyHgS+06UjUkqF7RPvs65hsHl8UhXX5ySoKL6SA96dkUL5pJ?=
+ =?us-ascii?Q?1MkKw60uD8EFE8kw8gEe6eGXULVF7CZ/epSIhn4iI7EOF+pET6t9P44HLPFT?=
+ =?us-ascii?Q?xDsE9Ys0uX3bFj11Efo9sb6HhSbj+b+FCiXLUufPa87mvjb040IuhruQEHun?=
+ =?us-ascii?Q?7F6giCt87vd6WpYzGDAxP+alPdf+ouVchu3Ppdhj4GuNIFKqLhzyeKdpDmNI?=
+ =?us-ascii?Q?iEqtUrbCD9SQfCebLYh1RWS9Slh7Z/MQ3MQThwamR4jhHbvlNwjBaV046ZaW?=
+ =?us-ascii?Q?gO48qPtt+iiH+vIGfYP64JYJ1FiIsOi4NgwaSy/8MK5RniIsE1bxjbL8wFLm?=
+ =?us-ascii?Q?mVQ+kof5lXlNlaqXexgRrW+PLs1vFjiObxq42JAWVfmHaLyBeiOepgbhi/46?=
+ =?us-ascii?Q?aYPH+PEw9tvx0kpOxFK2rjPmIt2aCgsQJSB4QSvvYqaTj7DBo3IJBVpRuWfL?=
+ =?us-ascii?Q?05k1GJKxhMZPWTnj9ahW7KdmjCWxvEhwpUfdIQ2oW0Ox0nnKR93qNdcPxF9+?=
+ =?us-ascii?Q?JkwjHxL29qSLHG6r/ZiWOLphpEu8vrldkioAqfc8ooDAY8aIfHICtwkgoOYy?=
+ =?us-ascii?Q?aS5h4JJInlDW5BnvBaxe1gafjz7EqNCFekmTOfb3uuRfhgLY+ZHR+NSvFr7S?=
+ =?us-ascii?Q?AKwPiQUTD/gK45IRrYcBCTPX3yIBVNCxyucuqKRqSNXt/pLGy+MLvgoe51o2?=
+ =?us-ascii?Q?T7y5Zd9/pVojUsMVuLe/J3eV+Yt17I/x+vLvD5e3PPEi1yhhRY9soQe3sbh1?=
+ =?us-ascii?Q?eXP3HOyvwk/G0DBa695ljm1u3x8JQ9OPkB0B9uLU/yT8nTlw3QDbn/DZ6uuu?=
+ =?us-ascii?Q?s++RbXQw2VUAAdI0cTPwu2/JOyGlxxRPT/q/kEJo39sbAP2y0W13IQGru43s?=
+ =?us-ascii?Q?OxALVrceslKkg9ALOrZ/bCEotSkGNrmjYRR2MyQHGZSTKp7O5QQ8qU45fsmn?=
+ =?us-ascii?Q?JLCe2zraeewswR6u6zDK/b/6DoyUVfd4ZVdRDnH58Ec9TQUnkwdVoItYQH1r?=
+ =?us-ascii?Q?gbSVqJ+YgXoUSXpJGU243PKrHEvm00bgde5b4c5Jgg1zwskJGfElkITOLj4P?=
+ =?us-ascii?Q?sos131h5gjZohjqOQwBcSB2SjPm/BygKrPsGw7jS3vdBTtI1uRSp+SQ3hBot?=
+ =?us-ascii?Q?V80Xeku1OtZzPqWsZKJznKod725g4zn+QYe+wbv5eUc8eC3RbCPzWAaExXf5?=
+ =?us-ascii?Q?H1Hax6haOhYyvB5zcB9QQ9lEna4wrAG/ofIT0B2yrMbyvjww+Wsu+fm9/HG6?=
+ =?us-ascii?Q?vK2yPKOKZsh9ovHzMvcWu7TnZRpNUDu/?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(376014)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Aug 2024 21:24:11.6411
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 900f24a0-1364-44db-1805-08dcb33973d8
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN2PEPF000044A8.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6930
 
-On 8/2/24 09:48, Thomas Weißschuh wrote:
-> On 2024-07-31 17:01:09+0000, Shuah Khan wrote:
->> On 7/31/24 12:32, Thomas Weißschuh wrote:
->>> The implementation is limited and only supports numeric arguments.
->>
->> I would like to see more information in here. Why is this needed
->> etc. etc.
-> 
-> Ack.
-> 
->>>
->>> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
->>> ---
->>>    tools/include/nolibc/stdio.h                 | 93 ++++++++++++++++++++++++++++
->>>    tools/testing/selftests/nolibc/nolibc-test.c | 59 ++++++++++++++++++
->>>    2 files changed, 152 insertions(+)
->>>
->>> diff --git a/tools/include/nolibc/stdio.h b/tools/include/nolibc/stdio.h
->>> index c968dbbc4ef8..d63c45c06d8e 100644
->>> --- a/tools/include/nolibc/stdio.h
->>> +++ b/tools/include/nolibc/stdio.h
->>> @@ -348,6 +348,99 @@ int printf(const char *fmt, ...)
->>>    	return ret;
->>>    }
->>> +static __attribute__((unused))
->>> +int vsscanf(const char *str, const char *format, va_list args)
->>
->> Is there a reason why you didn't use the same code in lib/vsprintf.c?
->> You could simply duplicate the code here?
-> 
-> lib/vsprintf.c is GPL-2.0-only while nolibc is LGPL-2.1 OR MIT,
-> so code reuse isn't really possible.
-> Furthermore I think the vsprintf.c implements the custom kernel formats,
-> while nolibc should use posix ones.
+This adds a small series to cover the reserved-IOVA change:
+https://lore.kernel.org/all/20240802053458.2754673-1-nicolinc@nvidia.com/
 
-Ack.
+PATCH-1 is an optional cleanup. PATCH-2 is an essential infrastructure
+for PATCH-3 to verify the loopback for IOMMU_RESV_SW_MSI.
 
-> 
->> With all these libc functionality added, it isn't nolibc looks like :)
-> 
-> Well :-)
-> 
-> The main motivation is to provide kselftests compatibility.
-> Maybe Willy disagrees.
-> 
->>> +{
+You can find this series applied on the other two earlier patches here:
+https://github.com/nicolinc/iommufd/commits/iommufd_selftest_sw_msi/
 
->>> +done:
->>> +	return matches;
->>> +}
->>> +
->>> +static __attribute__((unused, format(scanf, 2, 3)))
->>> +int sscanf(const char *str, const char *format, ...)
->>> +{
->>> +	va_list args;
->>> +	int ret;
->>> +
->>> +	va_start(args, format);
->>> +	ret = vsscanf(str, format, args);
->>> +	va_end(args);
->>> +	return ret;
->>> +}
->>> +
->>>    static __attribute__((unused))
->>>    void perror(const char *msg)
->>>    {
->>> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
->>> index 093d0512f4c5..addbceb0b276 100644
->>> --- a/tools/testing/selftests/nolibc/nolibc-test.c
->>> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
->>> @@ -1277,6 +1277,64 @@ static int expect_vfprintf(int llen, int c, const char *expected, const char *fm
->>>    	return ret;
->>>    }
->>> +static int test_scanf(void)
+Thanks
+Nicolin
 
-Is there a rationale for the return values 1 - 14. It will be
-easier to understand if there are comments in the code.
+Nicolin Chen (2):
+  iommufd: Reorder include files
+  iommufd/selftest: Add coverage for reserved IOVAs
 
->>> +{
->>> +	unsigned long long ull;
->>> +	unsigned long ul;
->>> +	unsigned int u;
->>> +	long long ll;
->>> +	long l;
->>> +	void *p;
->>> +	int i;
->>> +
->>> +	if (sscanf("", "foo") != EOF)
->>> +		return 1;
->>> +
->>> +	if (sscanf("foo", "foo") != 0)
->>> +		return 2;
->>> +
->>> +	if (sscanf("123", "%d", &i) != 1)
->>> +		return 3;>>> +
->>> +	if (i != 123)
->>> +		return 4;
->>> +
->>> +	if (sscanf("a123b456c0x90", "a%db%uc%p", &i, &u, &p) != 3)
->>> +		return 5;
->>> +
->>> +	if (i != 123)
->>> +		return 6;
->>> +
->>> +	if (u != 456)
->>> +		return 7;
->>> +
->>> +	if (p != (void *)0x90)
->>> +		return 8;
->>> +
->>> +	if (sscanf("a    b1", "a b%d", &i) != 1)
->>> +		return 9;
->>> +
->>> +	if (i != 1)
->>> +		return 10;
->>> +
->>> +	if (sscanf("a%1", "a%%%d", &i) != 1)
->>> +		return 11;
->>> +
->>> +	if (i != 1)
->>> +		return 12;
->>> +
->>> +	if (sscanf("1|2|3|4|5|6",
->>> +		   "%d|%ld|%lld|%u|%lu|%llu",
->>> +		   &i, &l, &ll, &u, &ul, &ull) != 6)
->>> +		return 13;
->>> +
->>> +	if (i != 1 || l != 2 || ll != 3 ||
->>> +	    u != 4 || ul != 5 || ull != 6)
->>> +		return 14;
->>> +
->>> +	return 0;
->>
->> Can we simplify this code? It is hard to read code with too
->> many conditions. Maybe defining an array test conditions
->> instead of a series ifs.
-> 
-> I tried that and didn't find a way.
-> Any pointers are welcome.
+Robin Murphy (1):
+  iommu/dma: Support MSIs through nested domains
 
-I played with this some and couldn't think of way to simplify
-this without making it hard to read. It would help adding
-comments though.
+ drivers/iommu/dma-iommu.c                     | 18 +++-
+ drivers/iommu/iommufd/device.c                |  4 +-
+ drivers/iommu/iommufd/fault.c                 |  4 +-
+ drivers/iommu/iommufd/io_pagetable.c          |  8 +-
+ drivers/iommu/iommufd/io_pagetable.h          |  2 +-
+ drivers/iommu/iommufd/ioas.c                  |  2 +-
+ drivers/iommu/iommufd/iommufd_private.h       |  9 +-
+ drivers/iommu/iommufd/iommufd_test.h          |  6 +-
+ drivers/iommu/iommufd/iova_bitmap.c           |  2 +-
+ drivers/iommu/iommufd/main.c                  |  8 +-
+ drivers/iommu/iommufd/pages.c                 | 10 +--
+ drivers/iommu/iommufd/selftest.c              | 86 ++++++++++++++++++-
+ include/linux/iommu.h                         |  4 +
+ include/linux/iommufd.h                       |  4 +-
+ include/uapi/linux/iommufd.h                  |  2 +-
+ tools/testing/selftests/iommu/iommufd_utils.h |  9 ++
+ 16 files changed, 144 insertions(+), 34 deletions(-)
 
-thanks,
--- Shuah
+-- 
+2.43.0
+
 
