@@ -1,122 +1,119 @@
-Return-Path: <linux-kselftest+bounces-14707-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14708-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE986945E02
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 14:43:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33637945E08
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 14:45:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 925F1282D00
-	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 12:43:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A6451C20DF4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  2 Aug 2024 12:45:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62EE61E3CA6;
-	Fri,  2 Aug 2024 12:43:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3A761E2899;
+	Fri,  2 Aug 2024 12:45:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YIBV7iZT"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BDHU9Iws"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 319B4A31;
-	Fri,  2 Aug 2024 12:43:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B13D1DF670
+	for <linux-kselftest@vger.kernel.org>; Fri,  2 Aug 2024 12:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722602590; cv=none; b=Fe/Yr6sz/iDCbHQwJ5ogenr5Do+sVTVb8mhuOg0QmQRjFLdgzePOWq6T41DhyCiY8w8soLriORVPznAzixPt4tArlhkSoCDQwzOyeLSrNYxa4wPETZiiTjihjzsIzfqnZ7QLOwo3Su9B12fH6B52VnU6v1ewoG5Rc6iR6wMK3zM=
+	t=1722602743; cv=none; b=m+lF5IpH8NBUEAg5TwjLJxFdRHKWWdLHFcHKCNptwd1HNQAE8IYvbsXsBJkj2PpenZHEXE6Sq1iLhEUHOiHR3a3LCdSyhzoplnhQ5eEaOnz6yenCInx2B8IVRG10mLNCiJszpuOydSYo4IFgw3RkB86hY08FPHuFD//GvWNk/WA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722602590; c=relaxed/simple;
-	bh=633lVYjHNRU3EjRX/nYwTZxzcH0uaJwWa8OgY7HscFw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mU/ajVw4qvH8s384y8S7wu4SJRpUW0A2YeGpCnzxp4LYdCk/gmpcjke0aCtrw8HN1+bMH/0RCaU9TPoJ5+xCHlCIQqb1FYpE3rknXifVH3NpOMah6fPuP3fFBlbSunPxUHa7klLf0wc5bRoGD7wcM0IDRVd4YaVpIxvVgJY6vVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YIBV7iZT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13F8BC32782;
-	Fri,  2 Aug 2024 12:43:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722602588;
-	bh=633lVYjHNRU3EjRX/nYwTZxzcH0uaJwWa8OgY7HscFw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YIBV7iZTMmq2Z5PgLMx4dEAx7osuIAdcyHHr7XtgSLzBNk9EmyRGUtYBqZueJTlEe
-	 Yoe4zkJ1Wrb641tuC/3m4R160s+aO55ZE7WCWJaV8kYmfIlUOStsdcG+3jLrJNEar0
-	 Fo3MSS4pim+5DOwnj2QWgU8O/YkI0uZ5V2Rf4VbFdEEqQqHaNCmSW+1UdBcdDU/Uwv
-	 TGCS05qgKKRDDT/7E8y8pvO9RrptgjlbpjFZ6ue6nXhxV4VqlmcevKqfj5nOxdlMaI
-	 IhP4nbGzfO5pcbmtBP+61scNwYBFnNSwuNDStJiTxN7+Zn7wmj0jMnCsIzMnhQXCa1
-	 A9BF40NdLyTRQ==
-Date: Fri, 2 Aug 2024 13:43:03 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Joey Gouly <joey.gouly@arm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: selftests: arm64: Correct feature test for S1PIE in
- get-reg-list
-Message-ID: <7b9b3ef4-66da-4314-8265-5947998758e9@sirena.org.uk>
-References: <20240731-kvm-arm64-fix-s1pie-test-v1-1-a9253f3b7db4@kernel.org>
- <86le1g19aa.wl-maz@kernel.org>
- <811ea0eb-bc87-4ac3-8bca-27c787e43051@sirena.org.uk>
- <86jzgz1eqb.wl-maz@kernel.org>
+	s=arc-20240116; t=1722602743; c=relaxed/simple;
+	bh=tiHV62W1WLgEASnBkRMbzZagftzo0qxoQXN58XE/beQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CqvTYWPatXDJ+p4Ng4npkB57/47kjiYAQg5+VAg7aeo5aKd/E4epnaEynBjD8mvQMAXER6Jp5PIcJhKJJ5pHrh2KVyJrdk8+UJvKgBCKnURkc2zgVAZcuPlh0lK3DMuFSghI+m0Q0/lA4JAoP3esf45XsxcfvW9Ar6CgMMQ8EoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BDHU9Iws; arc=none smtp.client-ip=209.85.208.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2ef2d582e31so95321081fa.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 02 Aug 2024 05:45:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1722602740; x=1723207540; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=kQadfcLj0dbMeA91m7FGzai+vkUYG1DvlG0x0uq/CWQ=;
+        b=BDHU9IwsyPc8Kxp6Shf6D8mk5SRsKDOGAWneg8zYgzdz5YTHBLQGRjGuxaDas1svgF
+         Doj6+F/qllxfgLvKESC/OnZQYBpRsCOsfNvrn9pfLNmwjyD50+8Olnu6EGmw57aK6vnL
+         DXtWkTWmKWJ9RTsYE2/wW9PasY0/UsUEN5F8JUAJA2j55E80ctkj+HcWH7SXQxWrNMUc
+         1MyHfVByzmIJQcrNNtq4scXxfaT3gOM6vnIG6wsCH5MwU3ArARUyOS7s/ERt7Q0LQt7T
+         zRCOGzn+imRxRyrqyBE1E9uSsRx5BWIJd4CYEXH9EnA7gZHbBUONxdcUgbCPALAWM73/
+         dTFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722602740; x=1723207540;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kQadfcLj0dbMeA91m7FGzai+vkUYG1DvlG0x0uq/CWQ=;
+        b=YEQSWUvygpDPZhU3APyQ8xshlAaH/qL+APIg+sW5VXMEUoq8x9pOZRU8tUYr6bhvb7
+         F5pUmFe7kwbtmVuoeSWtmZEY4jo9WCiyfZax3FxqDfDo620LJr0s3RDvDKMkR+suA41t
+         lZD4LeVI+wap1cmojyhrLgY6yIHgXUi5bcdrgprl2MqAykBKsSQF5Fy5McdW3ptxZsyu
+         V2pnZYzJrmgc37gsuPm+zpgof4AyrXEjk0d9sT01qEevSPzm4cLZYugny7nSHSuIp8cE
+         fJhIyk8SLjZfwl21v7DGhuvkapuIdx6tH/JiGqPQr9e6NxeS9vaoFHIErjJ61R5zh9GS
+         hxuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVvhL9bUewJjkz+B3TI8QeaB4GVbqokkpsWTD8sGfYYDaI5m2D3/FWDeOHQVjkKEYK6VZMuTpwCRDJbnl6paaC2dGXaiJ28m2C4m/YqGvfB
+X-Gm-Message-State: AOJu0Yxvz7vEqtfgHGA+CUaPTDdKR6S+70jNt0RFYuV+p3zYt40oZ8ax
+	C0ov10yNaKs5KF8ObnXVypZG9cdsQAxLKID8zcoM77QyWXFJsQh3B+HtJd951mk=
+X-Google-Smtp-Source: AGHT+IGPr/cTRmNKJixkMUcjn1GhBezt4VMjTUceJqHStS9ST6UWMb+IoVyz7mZbggjMOS71BVFYIA==
+X-Received: by 2002:a05:6512:3e15:b0:52c:e0fb:92c0 with SMTP id 2adb3069b0e04-530bb385315mr1973294e87.34.1722602739950;
+        Fri, 02 Aug 2024 05:45:39 -0700 (PDT)
+Received: from localhost (c-9b0ee555.07-21-73746f28.bbcust.telenor.se. [85.229.14.155])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-530bba07e6fsm218765e87.39.2024.08.02.05.45.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Aug 2024 05:45:39 -0700 (PDT)
+From: Anders Roxell <anders.roxell@linaro.org>
+To: ojeda@kernel.org,
+	alex.gaynor@gmail.com,
+	wedsonaf@gmail.com,
+	shuah@kernel.org
+Cc: rust-for-linux@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH 1/2] selftests: rust: config: add trailing newline
+Date: Fri,  2 Aug 2024 14:45:35 +0200
+Message-ID: <20240802124536.2905797-1-anders.roxell@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="eCayuY2LI5Ibm307"
-Content-Disposition: inline
-In-Reply-To: <86jzgz1eqb.wl-maz@kernel.org>
-X-Cookie: -- I have seen the FUN --
+Content-Transfer-Encoding: 8bit
 
+If adding multiple config files to the merge_config.sh script and
+rust/config is the fist one, then the last config fragment in this file
+and the first config fragment in the second file wont be set, since
+there isn't a newline in this file, so those two fragements end up at
+the same row like:
+CONFIG_SAMPLE_RUST_PRINT=mCONFIG_FRAGMENT=y
 
---eCayuY2LI5Ibm307
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+And non of those will be enabled when running 'olddefconfig' after.
 
-On Fri, Aug 02, 2024 at 10:00:28AM +0100, Marc Zyngier wrote:
+Fixing the issue by adding a newline to the file.
 
-> Also, the test predates the generated stuff by some margin.
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+---
+ tools/testing/selftests/rust/config | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yeah, there were still defines in the main kernel source that were being
-retyped rather than shared previously which made me wonder.
+diff --git a/tools/testing/selftests/rust/config b/tools/testing/selftests/rust/config
+index b4002acd40bc..fa06cebae232 100644
+--- a/tools/testing/selftests/rust/config
++++ b/tools/testing/selftests/rust/config
+@@ -2,4 +2,4 @@ CONFIG_RUST=y
+ CONFIG_SAMPLES=y
+ CONFIG_SAMPLES_RUST=y
+ CONFIG_SAMPLE_RUST_MINIMAL=m
+-CONFIG_SAMPLE_RUST_PRINT=m
+\ No newline at end of file
++CONFIG_SAMPLE_RUST_PRINT=m
+-- 
+2.43.0
 
-> Mark Brown <broonie@kernel.org> wrote:
-
-> > I'd certainly be happy to convert, though that does
-> > seem a bit invasive for a fix.
-
-> Not for a point fix, for sure. And if you do, make sure it is entirely
-> scripted.
-
-When you say "entirely scripted" here I take it you're referring to the
-list of registers as well, and I guess also to the information about
-what is enumerated by which ID register values?  I'd already been
-thinking about looking at the latter bit, and possibly also tracking
-wiring things up to traps (though that's only relevant inside the
-kernel).  I agree that seems sensible, but I do think we can usefully do
-things in stages - even just replacing the magic numbers with use of the
-defines would be less error prone.  It would be great if we just
-automatically covered every sysreg we know about in this test without
-any manual steps.
-
---eCayuY2LI5Ibm307
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmas1FYACgkQJNaLcl1U
-h9DpJAf/U25LzOtlHywYKGpxk73rxEA/68hitfX505a0+ZlIYHFFD6RqH0x+Kw/A
-ngf/3/BlP5kbKJ2pOysyUlh0RZWCei3IAToZpAINczoiNaEvXdpe+cZgi3nQUAL+
-DZmG7uN2og56sEGReLy9bUQbyjretNRF//+7Og6186yXBYenL4rNlDUB0CikT9sT
-Aehvs+6RWM3/DQCi0oGm4LoLaf64MGlFFYMw+6mA8N4aPYWEwxkiUFdd/NOHhJ0T
-PifGAPV3f6fFosjPtUsPS4por6cHubvXl/s67zqwbMKS2pxfXIk5GTGlI0h+7+GU
-V0VrWdmAtowwcrU+Mz6h1EHAmjxDAg==
-=ERtX
------END PGP SIGNATURE-----
-
---eCayuY2LI5Ibm307--
 
