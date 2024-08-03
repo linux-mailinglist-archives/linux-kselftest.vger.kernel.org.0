@@ -1,170 +1,69 @@
-Return-Path: <linux-kselftest+bounces-14762-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14763-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 420689468DD
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Aug 2024 11:36:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B28E29468E3
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Aug 2024 11:40:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F55A1C20D60
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Aug 2024 09:36:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55792281F4C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Aug 2024 09:40:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 952C014E2CB;
-	Sat,  3 Aug 2024 09:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QM+nyj2r"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2028414E2DE;
+	Sat,  3 Aug 2024 09:40:31 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6117E2EAEA;
-	Sat,  3 Aug 2024 09:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A5712EAEA;
+	Sat,  3 Aug 2024 09:40:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722677757; cv=none; b=Hut75TLVwJBMCoEouAInJ3IYmLeZAbvASVOmIrI54978+EldmKAzKuKP40XRpgF8vxduLrlLON1bLcGij0/u6hhNAGAEUjQk5XZdgnL/DsNOf9DmI+Q1c0ddrNDOa2bnJArQG01x6XZDYONtDLCuYZ8bqhkCXXcodHK67mYzFvc=
+	t=1722678031; cv=none; b=vFVgssgwwG08GkHRPTlazok/lcM80OSc3OaApjVQqdH83H2xThUrTGjzzTpT7DJPjvxFYscjsgjaveLRcNHxitiinMhVzFg3inw28Xj/DPaUqERhW5sNwhanQQwN3OTzRdwBIwx9vWMtp3PWXH6M3Xh5+1RJYmNPV4TkzvVWWKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722677757; c=relaxed/simple;
-	bh=JEbsnrTzSmhOmnx/e5esxkcGV3rSX/GncsC3HN+bUFQ=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LKvetop4G6fzM4ipQ3Xg8Q+Tv1BpM2PKQKEafClEvDjxKmH8aIG2EklWft2f7j5mNDLG9xLmtH4bAHh3a1qc54IUprlOHrG1Cw+kuJmYOzgutxL5wDNHlY5ge+mI+ZnxNWoETsI4BWsFrzlm8KprIku4ZCYtifQ+7dfpJvNz8YE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QM+nyj2r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFEB8C116B1;
-	Sat,  3 Aug 2024 09:35:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722677757;
-	bh=JEbsnrTzSmhOmnx/e5esxkcGV3rSX/GncsC3HN+bUFQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=QM+nyj2rOf9eNpv7HTwm4Yvl582CUak/+I/ywihkAhigADTLUmGK3qsrg3uF8Us4q
-	 T9yLXq2uDCIwL7Pv0MCAOhngtRrfD9MkmfEWacBXfwJW9UrymMbMp4zQGJnXS2Vqzu
-	 ZFAJYky7XnrZ7rBfaYXLSf+E2LvM6d2JWJVc92KWaHOxqu3QOwIToL5Ce/1HFSCq4t
-	 cgbQ/quWJmy1EQGKjMI4WT7a+9mVA2bKKVXtkynyv197wWgqq0k+ModGmORY0nMJb6
-	 BrRnR2rYJXBCHjIUePO74SA0IZQt6ZswKVvxHOmNHEW2cOVm/BAumIgH7ohiaG6gbI
-	 FSG+KbS1j28zw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1saBB4-000Ymy-Mz;
-	Sat, 03 Aug 2024 10:35:54 +0100
-Date: Sat, 03 Aug 2024 10:35:54 +0100
-Message-ID: <868qxe0wzp.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Joey Gouly <joey.gouly@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] KVM: selftests: arm64: Use generated defines for named system registers
-In-Reply-To: <20240802-kvm-arm64-get-reg-list-v1-2-3a5bf8f80765@kernel.org>
-References: <20240802-kvm-arm64-get-reg-list-v1-0-3a5bf8f80765@kernel.org>
-	<20240802-kvm-arm64-get-reg-list-v1-2-3a5bf8f80765@kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.3
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1722678031; c=relaxed/simple;
+	bh=JdpUm+MsI2Cq5Q0UNZ8MsHARNEcPvrAocvzO1vuiI14=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gyt8/e1vllenzp8KbpZj29UEw0dZJlPuydKHTruM7Qncxwae4e/IH9P6gMatX3m/kF9xM+9U2hAjQRwMoE1S4Tvdpl2xwizGJMj+gfQywtpWecj2jOzhP+Xl2iEOrtnGMEV22e0Dd6tTahvKrScqkqtpuZ7Z1bbVO81s5i1Svvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+Received: (from willy@localhost)
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 4739eO6x029257;
+	Sat, 3 Aug 2024 11:40:24 +0200
+Date: Sat, 3 Aug 2024 11:40:24 +0200
+From: Willy Tarreau <w@1wt.eu>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 07/12] selftests/nolibc: determine $(srctree) first
+Message-ID: <20240803094024.GD29127@1wt.eu>
+References: <20240728-nolibc-llvm-v1-0-bc384269bc35@weissschuh.net>
+ <20240728-nolibc-llvm-v1-7-bc384269bc35@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: broonie@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, shuah@kernel.org, catalin.marinas@arm.com, joey.gouly@arm.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240728-nolibc-llvm-v1-7-bc384269bc35@weissschuh.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Fri, 02 Aug 2024 22:57:54 +0100,
-Mark Brown <broonie@kernel.org> wrote:
-> 
-> Currently the get-reg-list test uses directly specified numeric values to
-> define system registers to validate. Since we already have a macro which
-> allows us to use the generated system register definitions from the main
-> kernel easily let's update all the registers where we have specified the
-> name in a comment to just use that macro. This reduces the number of
-> places where we need to validate the name to number mapping.
-> 
-> This conversion was done with the sed command:
-> 
->   sed -i -E 's-ARM64_SYS_REG.*/\* (.*) \*/-KVM_ARM64_SYS_REG(SYS_\1),-' tools/testing/selftests/kvm/aarch64/get-reg-list.c
->
+On Sun, Jul 28, 2024 at 12:10:01PM +0200, Thomas Weißschuh wrote:
+> Avoid needing relative includes.
 
-[Eyes rolling]
+I'm not opposed, but what's the benefit ? IMHO relative paths are
+generally more flexible and robust. you could imagine a completely
+made up example in which you have a symlink to selftests/nolibc in
+your home dir, which works perfectly with relative paths when you
+cd into it while it would not anymore with absolute paths (unless
+you use cd -P).
 
-What I asked about scripting the whole thing, it never occurred to me
-that you would use the *comments* as a reliable source of information.
-Do we have anything less reliable than comments in the kernel?
-
-The matching must be done from the arch/arm64/tools/sysreg file,
-because that's the (admittedly dubious) source of truth. We actually
-trust the encodings because they are reported by the kernel itself.
-The comment is hand-written, and likely wrong.
-
-Also, this hides the horrible truth about existing ABI bugs, see
-below.
-
-> We still have a number of numerically specified registers, some of these
-> are reserved registers without defined names (eg, unallocated ID registers)
-> and others don't have kernel macro definitions yet.
-> 
-> No change in the generated output.
-> 
-> Suggested-by: Marc Zyngier <maz@kernel.org>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  tools/testing/selftests/kvm/aarch64/get-reg-list.c | 208 ++++++++++-----------
->  1 file changed, 104 insertions(+), 104 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-> index a00322970578..4d786c4ab28a 100644
-> --- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-> +++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-> @@ -313,14 +313,14 @@ static __u64 base_regs[] = {
->  	KVM_REG_ARM_FW_FEAT_BMAP_REG(0),	/* KVM_REG_ARM_STD_BMAP */
->  	KVM_REG_ARM_FW_FEAT_BMAP_REG(1),	/* KVM_REG_ARM_STD_HYP_BMAP */
->  	KVM_REG_ARM_FW_FEAT_BMAP_REG(2),	/* KVM_REG_ARM_VENDOR_HYP_BMAP */
-> -	ARM64_SYS_REG(3, 3, 14, 3, 1),	/* CNTV_CTL_EL0 */
-> -	ARM64_SYS_REG(3, 3, 14, 3, 2),	/* CNTV_CVAL_EL0 */
-> +	KVM_ARM64_SYS_REG(SYS_CNTV_CTL_EL0),
-> +	KVM_ARM64_SYS_REG(SYS_CNTV_CVAL_EL0),
->  	ARM64_SYS_REG(3, 3, 14, 0, 2),
-
-Great. So not only you fail convert a register, but you also ignore
-the nugget described in arch/arm64/invlude/uapi/asm/kvm.h:267.
-
-Sure, having both described hides the crap, as we don't attach any
-significance to the registers themselves. But that shows how
-untrustworthy the comments are.
-
-> -	ARM64_SYS_REG(3, 0, 0, 0, 0),	/* MIDR_EL1 */
-> -	ARM64_SYS_REG(3, 0, 0, 0, 6),	/* REVIDR_EL1 */
-> -	ARM64_SYS_REG(3, 1, 0, 0, 1),	/* CLIDR_EL1 */
-> -	ARM64_SYS_REG(3, 1, 0, 0, 7),	/* AIDR_EL1 */
-> -	ARM64_SYS_REG(3, 3, 0, 0, 1),	/* CTR_EL0 */
-> +	KVM_ARM64_SYS_REG(SYS_MIDR_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_REVIDR_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_CLIDR_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_AIDR_EL1),
-> +	KVM_ARM64_SYS_REG(SYS_CTR_EL0),
->  	ARM64_SYS_REG(2, 0, 0, 0, 4),
->  	ARM64_SYS_REG(2, 0, 0, 0, 5),
->  	ARM64_SYS_REG(2, 0, 0, 0, 6),
-
-As far as I can tell, these registers are not unallocated, and they
-should be named.
+Thus if we are decided to lose that flexibility at least it should
+be argumented in the commit message.
 
 Thanks,
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+Willy
 
