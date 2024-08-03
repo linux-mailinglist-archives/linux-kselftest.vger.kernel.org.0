@@ -1,135 +1,203 @@
-Return-Path: <linux-kselftest+bounces-14756-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14757-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF42F94668D
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Aug 2024 02:50:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E88C99466F4
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Aug 2024 04:58:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2D911C20F64
-	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Aug 2024 00:50:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 572E6B2148F
+	for <lists+linux-kselftest@lfdr.de>; Sat,  3 Aug 2024 02:58:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ADCB2914;
-	Sat,  3 Aug 2024 00:50:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D550AD4B;
+	Sat,  3 Aug 2024 02:58:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gIS4+0yM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cUhp/iXr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E69B46FB8;
-	Sat,  3 Aug 2024 00:50:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46B02D53B;
+	Sat,  3 Aug 2024 02:58:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722646234; cv=none; b=UCfD8GYVDz2UxbyTb6AmNEuS4/d+FRM10cJeaLQtKVwyfzJx77FZqMdtrK/Cesp2ZbPZDWTnZyI2tZuuEVWl2g9q4q7YPLkE0WD3g25Bt3UeB4x8iQ13r4UuVLge7ML6gBg7VtzbMEqEQuXmX/kTq+QUThUj7PxdSCvmXhvl2aU=
+	t=1722653911; cv=none; b=hT9GPifI6ZBoI8If/z2JN7w/6iW6+pKZVBfMsB0/M54uRubYChy0M2ENBDnSXJ/E2u7CDwrunpbA4q9T3RzD9RTU6aryUgCXL+DNgLvEKV7IjigEeikMyUaZopJOYAr0IvxhYw2O3D1KKYI8BDaZyJpBbUQdqvoyuZjzxD5q+l4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722646234; c=relaxed/simple;
-	bh=TKgDbZppliFfj6siqWPyZeGhtXYn1QemkYs5GVnMb84=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=t+Jg+/a5qHNIqcfT0m5pwBj04TbvZM+8JvZeNmO72A+ObGDxrcWhOksAL2twpHKnZeEFYDA70uuNABPLtu1zlPKq0U6rnXF93Y4F7HUUZobV69MPo4y+Th6iqSo52h73JeG7i7n+TVqwpdbKRMYdUiRqCTu5PIJaypLGSMgmJhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gIS4+0yM; arc=none smtp.client-ip=209.85.215.170
+	s=arc-20240116; t=1722653911; c=relaxed/simple;
+	bh=nvkTLskiSjR1wEWCGet8hWznszuqHulbDw6SUh1768k=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=L3g2oVhhjaXNOcUTwcZvuLT5K1H9MyeVqwKYhBapGLZURRJvwPjx97tYgEBNoBZeZ+kl63DcJ5qpVmm8gidwhTzTuiO11ojoiUMjqZcN3bZosmf2EaQiaaXq8jzZP+UgZVAlAUo498WD6rHsIX8aQwsk/355PZKSKcH6XeuJVmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cUhp/iXr; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-7a18ba4143bso6353446a12.2;
-        Fri, 02 Aug 2024 17:50:31 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-428243f928fso51725075e9.0;
+        Fri, 02 Aug 2024 19:58:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722646231; x=1723251031; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1722653907; x=1723258707; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ii9TRHHbYfqeTNA8urSRUIghL0nSQM2uHrE3DtyGbx0=;
-        b=gIS4+0yMBFCuAjHJ3eRIQJbXE2r1bJcdm0fw/E2hLHk7i826kNCGtJzgPWAncro34b
-         Q8bcQYCW0d4U+kzsSDXl+V2v1jO5oVAtJ/dnT71q0Qy2nKcQY9oVkCWP9dSE80X6Q6sw
-         TiIW5uBlVQ7118ugnHubpwm74MU3SbMX/HXzEKO32JHWYE1nXb+7sHlgP9F0gJPkSSp6
-         89JAhLExygqGk1q2xsVEV58Gt79MKyC1BWo1nLk7OK9aJHFvbJXZ9uZiIePcB2w2bZNT
-         xIkFtEGsp1m5MFfnrGJ/LZgZM/oh5xa8wXSyVaONsBVkOC9s/DfIgAXldxbFdufnV4mj
-         Y+xA==
+        bh=bPOGNQoOVZHDwCKu6mfQ/96DtFXkwzO8aleJ5SEVjrg=;
+        b=cUhp/iXr7jBo0EhKQhL/xhg53JXsOX/l0lY3HTDw9Ap3A15Tuc6lICxoogmqAgdSY6
+         3q0MC9V2M7X3MYoMDqElTOd5aeXyg8UqhG/vRwOZgjp2uaNBCrIaf8rCZXk5GCqsLobF
+         78VQDeXjEuEa49aW3/kPeSHWFWQ1F48YGqZncknEcT7QtutPAK7Sdd9HRgHTZWgyMBRW
+         2uyJN8mBod6OrYS3R2rbqSqzEgkAeTY/Gi1QvDKLHcKBkqac7IMqXWdupCsaKtsC+vqh
+         HDhtUHrLapVd65vHSTWEYmft3lg/F3t9DB8qDhwHd93DHYwhidl/GYZZhEEgTVIiW7iX
+         RXWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722646231; x=1723251031;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1722653907; x=1723258707;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ii9TRHHbYfqeTNA8urSRUIghL0nSQM2uHrE3DtyGbx0=;
-        b=vQbYMiomn6djMEwh+d+LedcncCYL6Xj0zT41UPEVTbZXGRpQ0TJyFxspUxOY7TC09u
-         U3R3pVSivL/91eD/KKiC7eB0sj7v1DssjKMFqRJVWpog72c8dbZUxGl/8N+Rq0fTcq32
-         +u6smKTDSWAvinvUBCf3ZB+wStvCyoaD55tLK0ZttoR8kC3ix0Gzs3dUf0XAVyz0CI3s
-         Rl+iwP9iSSoWjyU4oMiujRTrxi9ao/NoIqsaLhUWEZCpU8NcCs9XirEFuxOid8k4RG3r
-         e4Mq19p3Gu9UTVGunLphnhBDp/RgucG2/kQCpGKa/GPhn8ePBQn//lJ5QFBKtARN7Qmf
-         nc3A==
-X-Forwarded-Encrypted: i=1; AJvYcCVwzsVFVW0hUJwSO3wSjpna1pgQsH/xtr1tO3u1NZZ4abCAClQ1BO11dev8pQYGtHwq07U7+nme/D22qtRSgJa3UjBeI17XFV1M2ABy6l6vFqM3tf875JOhu9urcX5Lm2VRPdZkIOU3WGf7czhW9hFMCCk5Ln5vzSHSHpS8ob6m+E5CfMSX
-X-Gm-Message-State: AOJu0Yx7Y/K74IsSQKBY3gZgLZ5lkoGxSk8YTl+29YcSjDtJTqM/HN40
-	luwEOZo5Bhn4cwcrDXoyvDzv4TtqmX1VivTjsVf4u9vQVDIdB9pZQJDAxXqJ+11kmYD6vXfO4fc
-	NrNVcNiKlyonobKuBALjjgn8LLRI=
-X-Google-Smtp-Source: AGHT+IGS4mvqY8Wvdxe/ZNRlFzeeItVUD/tp7A8aKWLj/K9xpJDlvLtJUOmC2keDnxNAnMHO8RMvCbjb2AaWzLyNhxI=
-X-Received: by 2002:a05:6a20:1596:b0:1c3:f4b6:6c0d with SMTP id
- adf61e73a8af0-1c6996aca7emr7300214637.52.1722646231208; Fri, 02 Aug 2024
- 17:50:31 -0700 (PDT)
+        bh=bPOGNQoOVZHDwCKu6mfQ/96DtFXkwzO8aleJ5SEVjrg=;
+        b=FKt8uE2MFTtr2kpm2VGfjbMqHsayx05nJKiR/MZhneigOfp68IDQlMiJxv1YGTfKby
+         251+CiNX3OpJXSR0MFrmPqEY4HvJW/g0mI8aM8zohsAs9p0M0kI9XUnIobfrC+GAGs2a
+         zJsMRPdmAhcLDdtTuxWfBWGBGGhkCK7vvpSETsoYmvqilg57TgHdyMpaaKo0dsJ24pMO
+         Cvwe5lcV7U23h0p9ykJ+3QWbGSpJemQWyrSsCazO7Qf4fRbKi/XMQYajZkmVrGVeOD0C
+         bOx23a6iO1cZDWMEzQLp/CihixAvvbgWpXbC+MqRJ+s411XDFPQm38s7SlXRJaRmqBVz
+         D31A==
+X-Forwarded-Encrypted: i=1; AJvYcCV7yF79Hab555vOa3sw+fvR+ec/IItrDHFxIFGVEkHvcnR5jcZnfEjqnM4AvhE17g/aUeT2UsMnos0yg/ytKI2RfnCDit+c+74Ilph8IhyI
+X-Gm-Message-State: AOJu0YzUQzSQubTVZhmfpyaEGF6LOnJSY4zJ7I8y4Z3deLT1W+umdFxa
+	DmQ73MEcrDlcQ0PNOzvB30CtaRNOolXV713UxljwbyuxtRaACj2zhoDgSfST
+X-Google-Smtp-Source: AGHT+IH5yFQp8sN2zNZuyARDBFzkp8I+/2l99N/SK+7YiO0hHq6HcBK/a6EsVdx8TIlxFBtVAin1SQ==
+X-Received: by 2002:a05:600c:5102:b0:428:29e:8c42 with SMTP id 5b1f17b1804b1-428e6b0239dmr40835555e9.9.1722653906845;
+        Fri, 02 Aug 2024 19:58:26 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-021.fbsv.net. [2a03:2880:31ff:15::face:b00c])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-428e6e9d1edsm50887775e9.40.2024.08.02.19.58.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Aug 2024 19:58:26 -0700 (PDT)
+From: Mohsin Bashir <mohsin.bashr@gmail.com>
+To: netdev@vger.kernel.org
+Cc: shuah@kernel.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	willemb@google.com,
+	petrm@nvidia.com,
+	dw@davidwei.uk,
+	przemyslaw.kitszel@intel.com,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: net: py: support verbose printing, display executed commands
+Date: Fri,  2 Aug 2024 19:58:09 -0700
+Message-ID: <20240803025809.674347-1-mohsin.bashr@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <87bk2yrkcs.fsf@nvidia.com>
+References: <87bk2yrkcs.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240802-tcp-ao-selftests-upd-6-12-v2-0-370c99358161@gmail.com> <20240802081823.67a27db3@kernel.org>
-In-Reply-To: <20240802081823.67a27db3@kernel.org>
-From: Dmitry Safonov <0x7f454c46@gmail.com>
-Date: Sat, 3 Aug 2024 01:50:19 +0100
-Message-ID: <CAJwJo6b1UHoCuyzy4UnLRu1W-GWx5jM2RhoddbzzuWXaEVG5yA@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 0/7] net/selftests: TCP-AO selftests updates
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Mohammad Nassiri <mnassiri@ciena.com>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Jakub,
+Add verbosity support to show the commands executed while
+running tests. Enable verbosity if either an environment
+variable 'VERBOSE' is set to a non-zero number or it is defined
+in a config file under driver tests as discussed here:
+https://github.com/linux-netdev/nipa/wiki/Running-driver-tests.
 
-On Fri, 2 Aug 2024 at 16:18, Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Fri, 02 Aug 2024 10:23:24 +0100 Dmitry Safonov via B4 Relay wrote:
-> > First 4 patches are more-or-less cleanups/preparations.
-> >
-> > Patch 5 was sent to me/contributed off-list by Mohammad, who wants 32-b=
-it
-> > kernels to run TCP-AO.
-> >
-> > Patch 6 is a workaround/fix for slow VMs. Albeit, I can't reproduce
-> > the issue, but I hope it will fix netdev flakes for connect-deny-*
-> > tests.
->
-> Hm, could be a coincidence but we did hit:
->
-> # not ok 55 # error 381[unsigned-md5.c:24] Failed to add a VRF: -17
-> # not ok 56 # error 383[unsigned-md5.c:33] Failed to add a route to VRF: =
--22: Key was rejected by service
->
-> https://netdev-3.bots.linux.dev/vmksft-tcp-ao-dbg/results/710001/4-unsign=
-ed-md5-ipv6/stdout
+Signed-off-by: Mohsin Bashir <mohsin.bashr@gmail.com>
+---
+ tools/testing/selftests/drivers/net/lib/py/env.py | 14 +++++++++++++-
+ tools/testing/selftests/net/lib/py/__init__.py    |  7 +++++++
+ tools/testing/selftests/net/lib/py/utils.py       | 14 ++++++++++++++
+ 3 files changed, 34 insertions(+), 1 deletion(-)
 
-Yeah, I think I've seen that previously on netdev as well, but quite rarely=
-.
-Let me take a look and see why adding a VRF table sometimes fails with EEXI=
-ST.
+diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
+index a5e800b8f103..ec53cf59e104 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/env.py
++++ b/tools/testing/selftests/drivers/net/lib/py/env.py
+@@ -4,7 +4,7 @@ import os
+ import time
+ from pathlib import Path
+ from lib.py import KsftSkipEx, KsftXfailEx
+-from lib.py import cmd, ethtool, ip
++from lib.py import cmd, ethtool, ip, verbosity_ctl
+ from lib.py import NetNS, NetdevSimDev
+ from .remote import Remote
+ 
+@@ -42,6 +42,12 @@ class NetDrvEnv:
+ 
+         self.env = _load_env_file(src_path)
+ 
++        try:
++            verbosity_ctl(level=int(self.env.get('VERBOSE', 0)))
++        except ValueError as e:
++            print(f'Ignoring \'VERBOSE\'. Unknown value \'{self.env.get("VERBOSE")}\'')
++            verbosity_ctl(level=0)
++
+         if 'NETIF' in self.env:
+             self.dev = ip("link show dev " + self.env['NETIF'], json=True)[0]
+         else:
+@@ -92,6 +98,12 @@ class NetDrvEpEnv:
+         self._ns = None
+         self._ns_peer = None
+ 
++        try:
++            verbosity_ctl(level=int(self.env.get('VERBOSE', 0)))
++        except ValueError as e:
++            print(f'Ignoring \'VERBOSE\'. Unknown value \'{self.env.get("VERBOSE")}\'')
++            verbosity_ctl(level=0)
++
+         if "NETIF" in self.env:
+             if nsim_test is True:
+                 raise KsftXfailEx("Test only works on netdevsim")
+diff --git a/tools/testing/selftests/net/lib/py/__init__.py b/tools/testing/selftests/net/lib/py/__init__.py
+index b6d498d125fe..1541079fadce 100644
+--- a/tools/testing/selftests/net/lib/py/__init__.py
++++ b/tools/testing/selftests/net/lib/py/__init__.py
+@@ -1,8 +1,15 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
++import os
+ from .consts import KSRC
+ from .ksft import *
+ from .netns import NetNS
+ from .nsim import *
+ from .utils import *
+ from .ynl import NlError, YnlFamily, EthtoolFamily, NetdevFamily, RtnlFamily
++
++try:
++    verbosity_ctl(level=int(os.environ.get('VERBOSE', 0)))
++except ValueError as e:
++    print(f'Ignoring \'VERBOSE\'. Unknown value \'{os.environ.get("VERBOSE")}\'')
++    verbosity_ctl(level=0)
+diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
+index 72590c3f90f1..4a59958649be 100644
+--- a/tools/testing/selftests/net/lib/py/utils.py
++++ b/tools/testing/selftests/net/lib/py/utils.py
+@@ -9,6 +9,18 @@ import subprocess
+ import time
+ 
+ 
++def verbosity_ctl(level=None):
++    global VERBOSITY_LEVEL
++    if level is not None:
++        VERBOSITY_LEVEL = level
++    return VERBOSITY_LEVEL
++
++
++def verbose(*objs, **kwargs):
++    if verbosity_ctl() >= 1:
++        print(*objs, **kwargs)
++
++
+ class CmdExitFailure(Exception):
+     pass
+ 
+@@ -22,6 +34,8 @@ class cmd:
+         self.stderr = None
+         self.ret = None
+ 
++        verbose("#cmd|", comm)
++
+         self.comm = comm
+         if host:
+             self.proc = host.cmd(comm)
+-- 
+2.43.0
 
-> in the first run after this got queued. But the retry worked:
->
-> https://netdev-3.bots.linux.dev/vmksft-tcp-ao-dbg/results/710001/4-unsign=
-ed-md5-ipv6-retry/stdout
->
-> =F0=9F=A4=B7=EF=B8=8F
-
-[from another email]
-> oooh another run, another (different) flake:
-> https://netdev-3.bots.linux.dev/vmksft-tcp-ao-dbg/results/710181/11-key-m=
-anagement-ipv4/stdout
-
-Yeah, this is related to this very patch set.
-Some more work clearly needed :-)
-
-Thanks,
-             Dmitry
 
