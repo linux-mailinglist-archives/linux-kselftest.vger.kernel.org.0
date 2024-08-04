@@ -1,113 +1,157 @@
-Return-Path: <linux-kselftest+bounces-14776-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14777-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A029946E04
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Aug 2024 11:48:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92122946E63
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Aug 2024 13:24:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3235E1F21460
-	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Aug 2024 09:48:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EC6B7B217E2
+	for <lists+linux-kselftest@lfdr.de>; Sun,  4 Aug 2024 11:24:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78A242374E;
-	Sun,  4 Aug 2024 09:47:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 280672D030;
+	Sun,  4 Aug 2024 11:24:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sC8kizr5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hPvnVOiX"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FE102261D;
-	Sun,  4 Aug 2024 09:47:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E530617C9E;
+	Sun,  4 Aug 2024 11:24:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722764877; cv=none; b=COoOC5hXPvrJr3oAWLiSuUI59C0ulBQOorcCi3lkKbjRo4p0/o4tqB8nOL8EoqOgnsvW75eR430cY5gE3hgdAPMYHCHCM4NIOH83NCDC/vzxXxCAON4VfsKb5xANUC/p86fAzhxiKkjz/eD9ZNGR1uuE627FMj0j3sNPfNakceo=
+	t=1722770688; cv=none; b=AlkLUr7V2doimVMCsQ79eeycXUWuxkg1WJTo/grB2C+mMLUE8YVN5DxQZvX6xKGSiwDnozFOLRZFuwbvT6zhkCK1Qt9LxGJKTigvpNiiFntY2bYPV9o+iF/Zb9mIsI/URo4wOavrCkqv0JTqNcfWKB4F8/aM7HNQlHwyC6C9g0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722764877; c=relaxed/simple;
-	bh=Y4yAUSj7QlQcoQO23GqfLCmwwtbokos9WK+Uvxuiluk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kt2GDhtGDGNnYULQcSSwd+ewfoTwlTDKf5aYIl8bRR41pJzyh84h4/8BImHWksY9FhY8seu8+0k+Q1+eLIl/Ayt8cOkiDDZYUtydfQ42hcm4SOWmelYpLrr3ATS2iSFk/gNqaal85EvRp6vsiiRiwAMQTPSg0lKJpqxitok87ME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sC8kizr5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2571C4AF0C;
-	Sun,  4 Aug 2024 09:47:54 +0000 (UTC)
+	s=arc-20240116; t=1722770688; c=relaxed/simple;
+	bh=jfqjxc5xPJuMgsSjsvqDsL7sb1Gzrg2zNgXmKJd1RW4=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=p1SVRfMgP+jvc8DIwiO6mpf6KIvpe1kfVfNfFunHFYNRKaCJeSZ9SBB2IKDoWVUbT8JS2aNdH73MOqhuPDNe2w5pJnoi8iZ8Gn3sRAEqK10L+mWgqMPjnpypkqvILcuASkw9x/WCRvgW2LqpP452XT0bnWof/JzYO/uvBuEOIys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hPvnVOiX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70A82C32786;
+	Sun,  4 Aug 2024 11:24:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722764877;
-	bh=Y4yAUSj7QlQcoQO23GqfLCmwwtbokos9WK+Uvxuiluk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=sC8kizr5zjsY+Xtf1ki45epTasq37SPx/lADE2WXNHlexOHZagganrAH0grQ1QhBX
-	 X0O67lmLxCllk2DcPRP2DF1VIQ7CNEJYblTiXS4meoLmLysPajy5E2cmEt3oUnOWGm
-	 RQ0bH+384g3aKEQ9TTqRv4clfRWDGO4uT9+jaJjlUmaZqsNzkbWN1SahPoa+MDtbCN
-	 1+WVUtwab/lTFbRxOZsBtAzr1fH12Sc878eY1ZRrhg+SpcDXO0cyJ9Hi6cBFD6zDY+
-	 ulob7hlECqUapbuX7lwvHSvHPu0iFVvdBNAbU2s9/cGd2tpPZNGVWhK9CO0vI+lPqI
-	 dnmjqp9VbV6iQ==
-Date: Sun, 4 Aug 2024 10:47:51 +0100
-From: Simon Horman <horms@kernel.org>
-To: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	s=k20201202; t=1722770687;
+	bh=jfqjxc5xPJuMgsSjsvqDsL7sb1Gzrg2zNgXmKJd1RW4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=hPvnVOiXthTCqw0/iV56gPy/TMy2T4AkkOp5tsUnNZz6CS5dtk9Yof7AYm/h/Rf2z
+	 F7Ra0+Vr9o1lNzSrTqSFIP3DTbPVzw3PHVxtxtWLSTPwPKJtiiDaD7SaobPt/GC0G8
+	 TpA6GnJKe20aSTTbL0ANvK+2pfpPlseoot5T2+uSQ0WEQ8G8OYZB0DkG3d2miXu/tP
+	 1sf8jyRPRRxVrzt2JEeIVDfXelPO9ak4PpkPii/9QOBibN+trHbkB5fiH1w0kxE9Q+
+	 u+F7dpYCmlkib7H+ltxBPtsXNOSMmjJz8ZjEPSE0QfD5CynpDxsiY/DRGpLzjtvilS
+	 HaBn3avYTHsNQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1saZLx-000l99-7K;
+	Sun, 04 Aug 2024 12:24:45 +0100
+Date: Sun, 04 Aug 2024 12:24:44 +0100
+Message-ID: <87r0b44jk3.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Mohammad Nassiri <mnassiri@ciena.com>, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Dmitry Safonov <0x7f454c46@gmail.com>
-Subject: Re: [PATCH net-next v2 6/7] selftests/net: Synchronize client/server
- before counters checks
-Message-ID: <20240804094751.GH2504122@kernel.org>
-References: <20240802-tcp-ao-selftests-upd-6-12-v2-0-370c99358161@gmail.com>
- <20240802-tcp-ao-selftests-upd-6-12-v2-6-370c99358161@gmail.com>
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] KVM: selftests: arm64: Simplify specification of filtered registers
+In-Reply-To: <20240802-kvm-arm64-get-reg-list-v1-1-3a5bf8f80765@kernel.org>
+References: <20240802-kvm-arm64-get-reg-list-v1-0-3a5bf8f80765@kernel.org>
+	<20240802-kvm-arm64-get-reg-list-v1-1-3a5bf8f80765@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240802-tcp-ao-selftests-upd-6-12-v2-6-370c99358161@gmail.com>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, shuah@kernel.org, catalin.marinas@arm.com, joey.gouly@arm.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Fri, Aug 02, 2024 at 10:23:30AM +0100, Dmitry Safonov via B4 Relay wrote:
-> From: Dmitry Safonov <0x7f454c46@gmail.com>
+On Fri, 02 Aug 2024 22:57:53 +0100,
+Mark Brown <broonie@kernel.org> wrote:
 > 
-> On tests that are expecting failure the timeout value is
-> TEST_RETRANSMIT_SEC == 1 second. Which is big enough for most of devices
-> under tests. But on a particularly slow machine/VM, 1 second might be
-> not enough for another thread to be scheduled and attempt to connect().
-> It is not a problem for tests that expect connect() to succeed as
-> the timeout value for them (TEST_TIMEOUT_SEC) is intentionally bigger.
+> Since we already import the generated sysreg definitions from the main
+> kernel and reference them in processor.h for use in other KVM tests we
+> can also make use of them for get-reg-list as well instead of having hard
+> coded magic numbers in the program. Do this for the table defining which
+> registers should be gated on ID register values, using a macro which allows
+> us to specify the register and ID register field in a much more compact
+> and direct fashion.
 > 
-> One obvious way to solve this would be to increase TEST_RETRANSMIT_SEC.
-> But as all tests would increase the timeouts, that's going to sum up.
+> In the process we fix the ID register checked for S1PIE specific registers
+> which was using an incorrect shift of 4, checking SCTLRX support instead.
+> No other change is seen in the generated data.
 > 
-> But here is less obvious way that keeps timeouts for expected connect()
-> failures low: just synchronize the two threads, which will assure that
-> before counter checks the other thread got a chance to run and timeout
-> on connect(). The expected increase of the related counter for listen()
-> socket will yet test the expected failure.
+> Fixes: 5f0419a0083b ("KVM: selftests: get-reg-list: add Permission Indirection registers")
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  tools/testing/selftests/kvm/aarch64/get-reg-list.c | 29 ++++++++--------------
+>  1 file changed, 11 insertions(+), 18 deletions(-)
 > 
-> Never happens on my machine, but I suppose the majority of netdev's
-> connect-deny-* flakes [1] are caused by this.
-> 
-> Fixes:
+> diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> index 709d7d721760..a00322970578 100644
+> --- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> +++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> @@ -22,25 +22,18 @@ struct feature_id_reg {
+>  	__u64 feat_min;
+>  };
+>  
+> -static struct feature_id_reg feat_id_regs[] = {
+> -	{
+> -		ARM64_SYS_REG(3, 0, 2, 0, 3),	/* TCR2_EL1 */
+> -		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
+> -		0,
+> -		1
+> -	},
+> -	{
+> -		ARM64_SYS_REG(3, 0, 10, 2, 2),	/* PIRE0_EL1 */
+> -		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
+> -		4,
+> -		1
+> -	},
+> -	{
+> -		ARM64_SYS_REG(3, 0, 10, 2, 3),	/* PIR_EL1 */
+> -		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
+> -		4,
+> -		1
+> +#define FEAT_ID_CHECK(reg, id_reg, id_field, id_val)	\
+> +	{						\
+> +		KVM_ARM64_SYS_REG(SYS_##reg),		\
+> +		KVM_ARM64_SYS_REG(SYS_##id_reg),	\
+> +		id_reg##_##id_field##_SHIFT,		\
+> +		id_reg##_##id_field##_##id_val,		\
 
-Hi Dmitry,
+Please use designated initialisers.
 
-I realise it probably wasn't intended to be a fixes tag,
-but it turns out to be an invalid one. Could you express this
-in a different way?
+>  	}
+> +
+> +static struct feature_id_reg feat_id_regs[] = {
+> +	FEAT_ID_CHECK(TCR2_EL1, ID_AA64MMFR3_EL1, TCRX, IMP),
+> +	FEAT_ID_CHECK(PIRE0_EL1, ID_AA64MMFR3_EL1, S1PIE, IMP),
+> +	FEAT_ID_CHECK(PIR_EL1, ID_AA64MMFR3_EL1, S1PIE, IMP),
+>  };
+>  
+>  bool filter_reg(__u64 reg)
 
-> > # selftests: net/tcp_ao: connect-deny_ipv6
-> > # 1..21
-> > # # 462[lib/setup.c:243] rand seed 1720905426
-> > # TAP version 13
-> > # ok 1 Non-AO server + AO client
-> > # not ok 2 Non-AO server + AO client: TCPAOKeyNotFound counter did not increase: 0 <= 0
-> > # ok 3 AO server + Non-AO client
-> > # ok 4 AO server + Non-AO client: counter TCPAORequired increased 0 => 1
-> ...
-> 
-> [1]: https://netdev-3.bots.linux.dev/vmksft-tcp-ao/results/681741/6-connect-deny-ipv6/stdout
-> Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
+Thanks,
 
-...
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
 
