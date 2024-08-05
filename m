@@ -1,244 +1,312 @@
-Return-Path: <linux-kselftest+bounces-14816-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14817-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A35F9484E1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 23:35:16 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFB1B94851B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 23:57:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 728B3B2247A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 21:35:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 755F52816F4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 21:57:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B89C1741DA;
-	Mon,  5 Aug 2024 21:29:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1953616C426;
+	Mon,  5 Aug 2024 21:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IR0gQkiL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kCEty5Jo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 971CA16F0D2
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Aug 2024 21:29:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D3B14A099;
+	Mon,  5 Aug 2024 21:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722893390; cv=none; b=fAMkXs2NNfn8XXtRJs07GdJjBi2uW4BhxJV3zdb5w+7lopmpxAL3nNdCFN+5DsQFKRMtV221q7aDKI07kcbF8bPLzSy+rwemVh7gQkDfh40ZNHNpyZLnLPIbpRol6hcua2sIcDBIy7dg7CHgblnGC94dEFO35ikbmtAIACk86nk=
+	t=1722895019; cv=none; b=BZLv3EJseZI5s1GOycfBYD9liCDpn9wFHCwrEEvu1wXTv3c5Qdi4cv0Pw6fHA2MidwkPq4RSSy8jn0/4ttgT2Bs5fJsNxfhFsrx1AgefA0bzBuLfwNxwUYqI753EIIWtwHP64ht6F7PRUmio5PkC5LLbOCoHOSdEvVhnLZGngR8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722893390; c=relaxed/simple;
-	bh=f4gATws6BsDpnv+whFd/nT2RtFoVIT7P8QJCgccSmgo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KnRAYDGKn5lSadaoLjUDGL/j2v4YWPFKn3WVuoDq3ElaeDIehzx0/Wptp+fmdrvJYh1HprLdzCEZNymu44SM0n+ysP/mdzCnwVfBTh5lLm3DH+RoKhYl3DOrXbfQpXJ599eQgKtCGzoGEZwLSScXMFaPU1jyU11JbLH1K8xJkQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IR0gQkiL; arc=none smtp.client-ip=209.85.166.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-39b3c36d429so225195ab.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Aug 2024 14:29:48 -0700 (PDT)
+	s=arc-20240116; t=1722895019; c=relaxed/simple;
+	bh=ZgDcPUTpCF4Mm5Z/yZQGDB6kwws0YMUdErBwO2XQ4o8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=UI3HBQRZt2PR39w6pZNNJbTC+u3lvMVx+f6UF+Jwrdkkx+pOutICZYPEteNnc82ZQVrviH4QmRuuN1b1sbyN+Ihgu66uJ/j+1/To/bFzU+VXr/FhORKCOx6MGjxDe4JNfOtVju6fkFTh9o5AiV5duh81khnP1UWPaNJuHadxQHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kCEty5Jo; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4280bca3960so470965e9.3;
+        Mon, 05 Aug 2024 14:56:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1722893388; x=1723498188; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=77vUSIhEXolQ7LP/swg34WCGlFiT86L+fvCS5JakSjE=;
-        b=IR0gQkiLIwzJeXxqZpk8+ykB5oDvFy9axQnXufnJUqqks8bPwfoqZoCElb+tRtONUM
-         N3fsAyRu3bHTTjYSHOyICnpmJXEctI2PBZUnSj8MzkV+O9yxC2yA6uhX3Ut/kq6m1xBl
-         N1ASuKdrrjXHiPvDf9URhJ6jfnXq7v7p/TzH4=
+        d=gmail.com; s=20230601; t=1722895015; x=1723499815; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=28/uDi1EiKJll8jhWDtTNE12TCXwHFNwlesnqMVZB28=;
+        b=kCEty5Jo+Ha9JjKsz/4muyXjcre7KEeWtEg7uub5aqaHBaqlbEEHIksf0SmWljek0p
+         BxCPfFI2hKSJjP8SIQPeR4HK/gzY9bAHYyB4OGpX3khNvdFGmig38lM7iiw+lzP1Jv2G
+         hlnCd9phYtMEkPxTR+Br8IOnPLXk5k+0ZklRQkjSNVIlGee5iglPomNXHLE1sP7El83Z
+         59sWK//GPp0x2cT6aQRqtF6j9rBhbUl41HILE4iHG9Hx+yv9JRLY4z/FRTuTwxqOFyWw
+         EXRWo0xW+THtQ/5SdhoNjNvH5ehfTfQQGxx+qxgA29mGHgkAMjw8tTw9HGfyalWsYbFs
+         t42Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722893388; x=1723498188;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=77vUSIhEXolQ7LP/swg34WCGlFiT86L+fvCS5JakSjE=;
-        b=pD5/gyF75Xi2B8UPlLozwFk/df9n6xWCz1RH5Npxi5udxhdvRxO9J31v2vQvGZvKpq
-         mYkqaeCJ2dDjDt/DQzJL29bJxgm4sMOkd8f3zIzTAErwx6nQBYqn0d7I2W+vMtPo44OJ
-         bEX9WC7e044BGPr9w0HiToDPLu5m3EJSAh/j5taCo/39t/UPyCMKmJFZ1t24e03nBr2R
-         BrhGz/HHX3Jrd4UI0Y2NlNn8jxw8fH1UcxngZE78cdFYj+xIi+ALYmUEmo+okIm0io3K
-         fXEVhII5mChtkzj/K4q95kZWFgCUu+RUx4pz/htMJrsb/k8ltA74p7dkXMzOrJd3n2KL
-         aQNw==
-X-Forwarded-Encrypted: i=1; AJvYcCUp/2ki//XNx4HlFELsAmQzAplMh4Kz1tsbnvTlk88XEP2ChRGV1HgGtumZk7zsUnoknOEx4gHL/fBj8w/PsrvyYr1aIB1ahB7qictdtxyO
-X-Gm-Message-State: AOJu0YwAU9X5DdSGxfMgcT9X639upvOri7ZNLtG5x+mLN2Lvj+zPV++C
-	N3L29QHN31P0dwvDAPQ+34AvyDL9UDUhTGBglCAUCxGykbE9pg7orXQvcHhaayU=
-X-Google-Smtp-Source: AGHT+IHaD5F3UB86KedRRHTA+tJQV3ceKsNfMpZP7mnoDYE8YjQUmsCzQ3zy37i0Pc0NnOXGdSO4eA==
-X-Received: by 2002:a92:ca47:0:b0:376:3918:c50 with SMTP id e9e14a558f8ab-39b1f780a14mr81387545ab.0.1722893387639;
-        Mon, 05 Aug 2024 14:29:47 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c8d6987eaesm1925178173.20.2024.08.05.14.29.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 Aug 2024 14:29:47 -0700 (PDT)
-Message-ID: <f7ffadc4-16ed-4d11-8baf-ea2887305d18@linuxfoundation.org>
-Date: Mon, 5 Aug 2024 15:29:45 -0600
+        d=1e100.net; s=20230601; t=1722895015; x=1723499815;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=28/uDi1EiKJll8jhWDtTNE12TCXwHFNwlesnqMVZB28=;
+        b=ENZjvPI40J5Kj4HZIm3jsvGyjsz/RjsBz0+c2lTo6m5UNh1Ig/CBV1ouGWXYDU6Zkw
+         PbWukAty7fXUa59ZYkW8nSD80oh5rhDcTyeEL4Sba+n8E+Ve5M4U9/zhDnjbPf56uG3w
+         xizegrytLiLTf8XsDN7qj+vGaW7oJ1OdCYFOXC5tzz14+3aUoLwT/l2+OF7FymH/WKVS
+         LwUSTrWzdkXfXYgUdylWwLSfWzs+hg5eJ4BXeBPy/LWt1/thk1AZuCLIE5pqVEnKOWBP
+         vbSw1hmqXEopejm92IT3UBZVvTAZrqt7eOuCErTk2vBpdgSeI2SIvGmhBiWciDDPKvQ2
+         KZeA==
+X-Forwarded-Encrypted: i=1; AJvYcCUO/+CJbT2TWEjNjO+pXTM66ebsmL1t0u2RIQ42ojIe+pTzCpiqYhq21czxtXdFhx2nL2Z2S6wRvkFhhoSccK8T7hrx8fOA6AoKUJUeGNXEXgacfAz0eqLAbRjN/dSNoc7ry80PiGgUP36LeACB6+E=
+X-Gm-Message-State: AOJu0YwUoJlZLXU7Fz1/gwBBoGFdHmmPe+pBSB7PlVfzMTa1EBxDloFw
+	10lSxhP9UVJ6xHMonN3K80tI1uWMAjHcukzxC1Jv1EGmkJVzUpKW
+X-Google-Smtp-Source: AGHT+IEUPcGHYYsoUSKcErZm6gE08kk6KDrurtp/QGjGvauxalr2L6o0kQ5GMjJyBLFnQKsWU77Ytg==
+X-Received: by 2002:a05:600c:4e16:b0:426:5b51:109d with SMTP id 5b1f17b1804b1-428e6b83835mr81794195e9.36.1722895015250;
+        Mon, 05 Aug 2024 14:56:55 -0700 (PDT)
+Received: from laptop.. (220.red-83-52-58.dynamicip.rima-tde.net. [83.52.58.220])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-428fe2d4adcsm2688085e9.1.2024.08.05.14.56.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Aug 2024 14:56:54 -0700 (PDT)
+From: =?UTF-8?q?Sergio=20Gonz=C3=A1lez=20Collado?= <sergio.collado@gmail.com>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	sergio.collado@gmail.com
+Cc: Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	David Rheinsberg <david@readahead.eu>,
+	rust-for-linux@vger.kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	skhan@linuxfoundation.org,
+	Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Subject: [PATCH v3] Kunit to check the longest symbol length
+Date: Mon,  5 Aug 2024 23:56:22 +0200
+Message-Id: <20240805215622.102133-1-sergio.collado@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFT v7 0/9] fork: Support shadow stacks in clone3()
-To: Mark Brown <broonie@kernel.org>,
- "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
- Deepak Gupta <debug@rivosinc.com>, Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
- "H.J. Lu" <hjl.tools@gmail.com>, Florian Weimer <fweimer@redhat.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Daniel Bristot de Oliveira
- <bristot@redhat.com>, Valentin Schneider <vschneid@redhat.com>,
- Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, jannh@google.com,
- linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
- Kees Cook <kees@kernel.org>, David Hildenbrand <david@redhat.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240731-clone3-shadow-stack-v7-0-a9532eebfb1d@kernel.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240731-clone3-shadow-stack-v7-0-a9532eebfb1d@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 7/31/24 06:14, Mark Brown wrote:
-> The kernel has recently added support for shadow stacks, currently
-> x86 only using their CET feature but both arm64 and RISC-V have
-> equivalent features (GCS and Zicfiss respectively), I am actively
-> working on GCS[1].  With shadow stacks the hardware maintains an
-> additional stack containing only the return addresses for branch
-> instructions which is not generally writeable by userspace and ensures
-> that any returns are to the recorded addresses.  This provides some
-> protection against ROP attacks and making it easier to collect call
-> stacks.  These shadow stacks are allocated in the address space of the
-> userspace process.
-> 
-> Our API for shadow stacks does not currently offer userspace any
-> flexiblity for managing the allocation of shadow stacks for newly
-> created threads, instead the kernel allocates a new shadow stack with
-> the same size as the normal stack whenever a thread is created with the
-> feature enabled.  The stacks allocated in this way are freed by the
-> kernel when the thread exits or shadow stacks are disabled for the
-> thread.  This lack of flexibility and control isn't ideal, in the vast
-> majority of cases the shadow stack will be over allocated and the
-> implicit allocation and deallocation is not consistent with other
-> interfaces.  As far as I can tell the interface is done in this manner
-> mainly because the shadow stack patches were in development since before
-> clone3() was implemented.
-> 
-> Since clone3() is readily extensible let's add support for specifying a
-> shadow stack when creating a new thread or process in a similar manner
-> to how the normal stack is specified, keeping the current implicit
-> allocation behaviour if one is not specified either with clone3() or
-> through the use of clone().  The user must provide a shadow stack
-> address and size, this must point to memory mapped for use as a shadow
-> stackby map_shadow_stack() with a shadow stack token at the top of the
-> stack.
-> 
-> Please note that the x86 portions of this code are build tested only, I
-> don't appear to have a system that can run CET avaible to me, I have
-> done testing with an integration into my pending work for GCS.  There is
-> some possibility that the arm64 implementation may require the use of
-> clone3() and explicit userspace allocation of shadow stacks, this is
-> still under discussion.
-> 
-> Please further note that the token consumption done by clone3() is not
-> currently implemented in an atomic fashion, Rick indicated that he would
-> look into fixing this if people are OK with the implementation.
-> 
-> A new architecture feature Kconfig option for shadow stacks is added as
-> here, this was suggested as part of the review comments for the arm64
-> GCS series and since we need to detect if shadow stacks are supported it
-> seemed sensible to roll it in here.
-> 
-> [1] https://lore.kernel.org/r/20231009-arm64-gcs-v6-0-78e55deaa4dd@kernel.org/
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
-> Changes in v7:
-> - Rebase onto v6.11-rc1.
-> - Typo fixes.
-> - Link to v6: https://lore.kernel.org/r/20240623-clone3-shadow-stack-v6-0-9ee7783b1fb9@kernel.org
-> 
-> Changes in v6:
-> - Rebase onto v6.10-rc3.
-> - Ensure we don't try to free the parent shadow stack in error paths of
->    x86 arch code.
-> - Spelling fixes in userspace API document.
-> - Additional cleanups and improvements to the clone3() tests to support
->    the shadow stack tests.
-> - Link to v5: https://lore.kernel.org/r/20240203-clone3-shadow-stack-v5-0-322c69598e4b@kernel.org
-> 
-> Changes in v5:
-> - Rebase onto v6.8-rc2.
-> - Rework ABI to have the user allocate the shadow stack memory with
->    map_shadow_stack() and a token.
-> - Force inlining of the x86 shadow stack enablement.
-> - Move shadow stack enablement out into a shared header for reuse by
->    other tests.
-> - Link to v4: https://lore.kernel.org/r/20231128-clone3-shadow-stack-v4-0-8b28ffe4f676@kernel.org
-> 
-> Changes in v4:
-> - Formatting changes.
-> - Use a define for minimum shadow stack size and move some basic
->    validation to fork.c.
-> - Link to v3: https://lore.kernel.org/r/20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org
-> 
-> Changes in v3:
-> - Rebase onto v6.7-rc2.
-> - Remove stale shadow_stack in internal kargs.
-> - If a shadow stack is specified unconditionally use it regardless of
->    CLONE_ parameters.
-> - Force enable shadow stacks in the selftest.
-> - Update changelogs for RISC-V feature rename.
-> - Link to v2: https://lore.kernel.org/r/20231114-clone3-shadow-stack-v2-0-b613f8681155@kernel.org
-> 
-> Changes in v2:
-> - Rebase onto v6.7-rc1.
-> - Remove ability to provide preallocated shadow stack, just specify the
->    desired size.
-> - Link to v1: https://lore.kernel.org/r/20231023-clone3-shadow-stack-v1-0-d867d0b5d4d0@kernel.org
-> 
-> ---
-> Mark Brown (9):
->        Documentation: userspace-api: Add shadow stack API documentation
->        selftests: Provide helper header for shadow stack testing
->        mm: Introduce ARCH_HAS_USER_SHADOW_STACK
->        fork: Add shadow stack support to clone3()
->        selftests/clone3: Remove redundant flushes of output streams
->        selftests/clone3: Factor more of main loop into test_clone3()
->        selftests/clone3: Explicitly handle child exits due to signals
->        selftests/clone3: Allow tests to flag if -E2BIG is a valid error code
->        selftests/clone3: Test shadow stack support
-> 
->   Documentation/userspace-api/index.rst             |   1 +
->   Documentation/userspace-api/shadow_stack.rst      |  41 ++++
->   arch/x86/Kconfig                                  |   1 +
->   arch/x86/include/asm/shstk.h                      |  11 +-
->   arch/x86/kernel/process.c                         |   2 +-
->   arch/x86/kernel/shstk.c                           | 104 +++++++---
->   fs/proc/task_mmu.c                                |   2 +-
->   include/linux/mm.h                                |   2 +-
->   include/linux/sched/task.h                        |  13 ++
->   include/uapi/linux/sched.h                        |  13 +-
->   kernel/fork.c                                     |  76 ++++++--
->   mm/Kconfig                                        |   6 +
->   tools/testing/selftests/clone3/clone3.c           | 224 ++++++++++++++++++----
->   tools/testing/selftests/clone3/clone3_selftests.h |  40 +++-
->   tools/testing/selftests/ksft_shstk.h              |  63 ++++++
->   15 files changed, 511 insertions(+), 88 deletions(-)
-> ---
-> base-commit: 8400291e289ee6b2bf9779ff1c83a291501f017b
-> change-id: 20231019-clone3-shadow-stack-15d40d2bf536
-> 
-> Best regards,
+The longest length of a symbol (KSYM_NAME_LEN) was increased to 512
+in the reference [1]. This patch adds a kunit test to check the longest
+symbol length.
 
+[1] https://lore.kernel.org/lkml/20220802015052.10452-6-ojeda@kernel.org/
 
-For selftests:
+Tested-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
+Signed-off-by: Sergio González Collado <sergio.collado@gmail.com>
+---
+V1 -> V2: corrected CI tests. Added fix proposed at [2]
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+[2] https://lore.kernel.org/lkml/Y9ES4UKl%2F+DtvAVS@gmail.com/T/#m3ef0e12bb834d01ed1ebdcae12ef5f2add342077
+---
+V2 -> V3: updated base and added MODULE_DESCRIPTION() and MODULE_AUTHOR()
+---
+ arch/x86/tools/insn_decoder_test.c |   3 +-
+ lib/Kconfig.debug                  |   9 +++
+ lib/Makefile                       |   2 +
+ lib/longest_symbol_kunit.c         | 124 +++++++++++++++++++++++++++++
+ 4 files changed, 137 insertions(+), 1 deletion(-)
+ create mode 100644 lib/longest_symbol_kunit.c
 
-thanks,
--- Shuah
+diff --git a/arch/x86/tools/insn_decoder_test.c b/arch/x86/tools/insn_decoder_test.c
+index 472540aeabc2..3bde35ea4188 100644
+--- a/arch/x86/tools/insn_decoder_test.c
++++ b/arch/x86/tools/insn_decoder_test.c
+@@ -10,6 +10,7 @@
+ #include <assert.h>
+ #include <unistd.h>
+ #include <stdarg.h>
++#include <linux/kallsysms.h>
+ 
+ #define unlikely(cond) (cond)
+ 
+@@ -106,7 +107,7 @@ static void parse_args(int argc, char **argv)
+ 	}
+ }
+ 
+-#define BUFSIZE 256
++#define BUFSIZE (256 + KSYM_NAME_LEN)
+ 
+ int main(int argc, char **argv)
+ {
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index a30c03a66172..4587466f7d07 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2783,6 +2783,15 @@ config FORTIFY_KUNIT_TEST
+ 	  by the str*() and mem*() family of functions. For testing runtime
+ 	  traps of FORTIFY_SOURCE, see LKDTM's "FORTIFY_*" tests.
+ 
++config LONGEST_SYM_KUNIT_TEST
++	tristate "Test the longest symbol possible" if !KUNIT_ALL_TESTS
++	depends on KUNIT && KPROBES
++	default KUNIT_ALL_TESTS
++	help
++	  Tests the longest symbol possible
++
++	  If unsure, say N.
++
+ config HW_BREAKPOINT_KUNIT_TEST
+ 	bool "Test hw_breakpoint constraints accounting" if !KUNIT_ALL_TESTS
+ 	depends on HAVE_HW_BREAKPOINT
+diff --git a/lib/Makefile b/lib/Makefile
+index 322bb127b4dc..4241807025b8 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -388,6 +388,8 @@ CFLAGS_fortify_kunit.o += $(DISABLE_STRUCTLEAK_PLUGIN)
+ obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
+ obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
+ obj-$(CONFIG_USERCOPY_KUNIT_TEST) += usercopy_kunit.o
++obj-$(CONFIG_LONGEST_SYM_KUNIT_TEST) += longest_symbol_kunit.o
++CFLAGS_longest_symbol_kunit.o += $(call cc-disable-warning, missing-prototypes)
+ 
+ obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
+ 
+diff --git a/lib/longest_symbol_kunit.c b/lib/longest_symbol_kunit.c
+new file mode 100644
+index 000000000000..557ad6eae56c
+--- /dev/null
++++ b/lib/longest_symbol_kunit.c
+@@ -0,0 +1,124 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Test the longest symbol length. Execute with:
++ *  ./tools/testing/kunit/kunit.py run longest-symbol
++ *  --arch=x86_64 --kconfig_add CONFIG_KPROBES=y --kconfig_add CONFIG_MODULES=y
++ *  --kconfig_add CONFIG_RETPOLINE=n
++ */
++
++#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
++
++#include <kunit/test.h>
++#include <linux/stringify.h>
++#include <linux/kprobes.h>
++#include <linux/kallsyms.h>
++
++#define DI(name) s##name##name
++#define DDI(name) DI(n##name##name)
++#define DDDI(name) DDI(n##name##name)
++#define DDDDI(name) DDDI(n##name##name)
++#define DDDDDI(name) DDDDI(n##name##name)
++
++#define PLUS1(name) __PASTE(name, e)
++
++/*Generate a symbol whose name length is 511 */
++#define LONGEST_SYM_NAME  DDDDDI(g1h2i3j4k5l6m7n)
++
++/*Generate a symbol whose name length is 512 */
++#define LONGEST_SYM_NAME_PLUS1 PLUS1(LONGEST_SYM_NAME)
++
++#define RETURN_LONGEST_SYM 0xAAAAA
++#define RETURN_LONGEST_SYM_PLUS1 0x55555
++
++noinline int LONGEST_SYM_NAME(void);
++noinline int LONGEST_SYM_NAME(void)
++{
++	return RETURN_LONGEST_SYM;
++}
++
++noinline int LONGEST_SYM_NAME_PLUS1(void);
++noinline int LONGEST_SYM_NAME_PLUS1(void)
++{
++	return RETURN_LONGEST_SYM_PLUS1;
++}
++
++_Static_assert(sizeof(__stringify(LONGEST_SYM_NAME)) == KSYM_NAME_LEN,
++"Incorrect symbol length found. Expected KSYM_NAME_LEN: "
++__stringify(KSYM_NAME) ", but found: "
++__stringify(sizeof(LONGEST_SYM_NAME)));
++
++static void test_longest_symbol(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, RETURN_LONGEST_SYM, LONGEST_SYM_NAME());
++};
++
++static void test_longest_symbol_kallsyms(struct kunit *test)
++{
++	unsigned long (*kallsyms_lookup_name)(const char *name);
++	static int (*longest_sym)(void);
++
++	struct kprobe kp = {
++		.symbol_name = "kallsyms_lookup_name",
++	};
++
++	if (register_kprobe(&kp) < 0) {
++		pr_info("%s: kprobe not registered\n", __func__);
++		KUNIT_FAIL(test, "test_longest_symbol kallsysms: kprobe not registered\n");
++		return;
++	}
++
++	kunit_warn(test, "test_longest_symbol kallsyms: kprobe registered\n");
++	kallsyms_lookup_name = (unsigned long (*)(const char *name))kp.addr;
++	unregister_kprobe(&kp);
++
++	longest_sym =
++		(void *) kallsyms_lookup_name(__stringify(LONGEST_SYM_NAME));
++	KUNIT_EXPECT_EQ(test, RETURN_LONGEST_SYM, longest_sym());
++};
++
++static void test_longest_symbol_plus1(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, RETURN_LONGEST_SYM_PLUS1, LONGEST_SYM_NAME_PLUS1());
++};
++
++static void test_longest_symbol_plus1_kallsyms(struct kunit *test)
++{
++	unsigned long (*kallsyms_lookup_name)(const char *name);
++	static int (*longest_sym_plus1)(void);
++
++	struct kprobe kp = {
++		.symbol_name = "kallsyms_lookup_name",
++	};
++
++	if (register_kprobe(&kp) < 0) {
++		pr_info("%s: kprobe not registered\n", __func__);
++		KUNIT_FAIL(test, "test_longest_symbol kallsysms: kprobe not registered\n");
++		return;
++	}
++
++	kunit_warn(test, "test_longest_symbol_plus1 kallsyms: kprobe registered\n");
++	kallsyms_lookup_name = (unsigned long (*)(const char *name))kp.addr;
++	unregister_kprobe(&kp);
++
++	longest_sym_plus1 =
++		(void *) kallsyms_lookup_name(__stringify(LONGEST_SYM_NAME_PLUS1));
++	KUNIT_EXPECT_NULL(test, longest_sym_plus1);
++};
++
++static struct kunit_case longest_symbol_test_cases[] = {
++	KUNIT_CASE(test_longest_symbol),
++	KUNIT_CASE(test_longest_symbol_kallsyms),
++	KUNIT_CASE(test_longest_symbol_plus1),
++	KUNIT_CASE(test_longest_symbol_plus1_kallsyms),
++	{}
++};
++
++static struct kunit_suite longest_symbol_test_suite = {
++	.name = "longest-symbol",
++	.test_cases = longest_symbol_test_cases,
++};
++kunit_test_suite(longest_symbol_test_suite);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Test the longest symbol length");
++MODULE_AUTHOR("Sergio González Collado");
 
+base-commit: de9c2c66ad8e787abec7c9d7eff4f8c3cdd28aed
+-- 
+2.39.2
 
 
