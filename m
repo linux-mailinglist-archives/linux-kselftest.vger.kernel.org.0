@@ -1,106 +1,132 @@
-Return-Path: <linux-kselftest+bounces-14796-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14797-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D3DD9482AE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 21:54:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29CA29483B9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 22:53:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD23C280CD6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 19:54:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDF8D1F2350D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 20:53:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBD7716BE00;
-	Mon,  5 Aug 2024 19:54:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 890FF15F30D;
+	Mon,  5 Aug 2024 20:53:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="roFgdKG/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tv67lRO/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EE2715F3FE;
-	Mon,  5 Aug 2024 19:54:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08AC18469;
+	Mon,  5 Aug 2024 20:53:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722887667; cv=none; b=QZ6v0LBMO3A75bsGp5ULhMIhamUHT+w5ixGFV7AA/yS0++1uc+tp9r2a6iIHa9fb/oCUfcGg48T53y4rVc6+gQdAlUryDaQ31o9lxKleiNOjsTA5cUjSZyvrTzzCD1gwsYuiQqbXQHEKojsK95DjkpJTFXT70H/tCTwz6Rddkio=
+	t=1722891202; cv=none; b=q0MKbgNnWibKNVuOKhazn05saMr2rw+nRcmO2a+acxjvtCMdpF0rzhREgwYspTATj0p/Ls16WzmLubF5KBHYVeXti8uTQs897k3bMggbHhkML35AygQLqSyyPiCa1MRwBTCQqzChHfehYaEgesX8H4W7MHOnRPz+2dwLt7qEWpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722887667; c=relaxed/simple;
-	bh=HZb1KKtE8Me4IRUo9soQ3qk4AZtiCCWu2OpLhxAXO/0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ln0O6vfuJ7pnr9ydFR6xWqbp+0U2lIfkPB1xcZmV37myH8XlADlIevaiEdQ3COxKJg5KOF3m9HrTREhEcgjptyh5JP4NqRxXqV5DFV4aS+GJQgEh6u9W0ytaq88T0lBY2WI4qw4qKGDpXJQaoU5UkoqpuVI48bhFjMPV3Vy1TZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=roFgdKG/; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
-Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1sb3mZ-00BN7h-D1; Mon, 05 Aug 2024 21:54:15 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=LETjiGOjSAe6wLQ9jWSXj9vxRADp2ZzD8f44Fu34bLY=; b=roFgdKG/qtlDmzuGLgzychYH3H
-	oT/cWG4BTuVkB55Zh3gBAJXy/qRZH3Luqmy7oHylSpVxPaIdnMIqXqejXSodBntInJWnOOqYXTpHU
-	j5SDR9SumIgcpPIL0deSD+WfYKaKzaQM9WoCF430haCnmogvM66qOL6KTsKsus8nMHjO9MsmjS2M/
-	EiQ+P25NSecj4eeq/xtqj/LnGylRMdmAbnLsZ/P+ZlCT/Wbve579B+VzgjztQ3G4x40X02KDLzDk+
-	oqXD3xCjcxFG8/NkJhT5veT9Z2bg3oIvaGSxSD3EjZhbDHHFaNMaZ9EnzE8DfyYGf/D2+cga32rVO
-	VzJFpVVQ==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1sb3mY-0002KF-N2; Mon, 05 Aug 2024 21:54:14 +0200
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1sb3mR-00GKZb-6j; Mon, 05 Aug 2024 21:54:07 +0200
-Message-ID: <39b9aa89-ac81-497d-8aa0-94e851044676@rbox.co>
-Date: Mon, 5 Aug 2024 21:54:05 +0200
+	s=arc-20240116; t=1722891202; c=relaxed/simple;
+	bh=y1xo8rwkPsGbX5QYPhg43l5VAHouRl6947m47UdVhfE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TAiIkHjIpKl1kd0ice2CC7rLbvgPfL0yCo7VSTgi/1nzt3+E7jkJ1a4AwzsO7Fsv3Xu6FBiJUNa4Qusc8PJEDSumAD2G3d8Em6v4kygLP7pqb//1HQjfXwcB8JYWe7ltutGppfEMLLYUT3iR4hyEEvuAPgLw5Ga1W1+wRcpVHlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tv67lRO/; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1ff3d5c6e9eso51262465ad.1;
+        Mon, 05 Aug 2024 13:53:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722891200; x=1723496000; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0HoHqms9+0/tY2gizWucMJ9q6stXqDnf9Flrxt6daeU=;
+        b=Tv67lRO/JBPb8jegHj33o9xmR7NrzQc3RxMnVD7PRXczaJQgEM5RI1C7UaJqO+eMXI
+         XeUSqR9D6V/YC/2mo5EVgvBe4Oes/0QxU5LHaz6sk6Jwc2V/kizuamw7lZUTc45RXURQ
+         f82bRnRVL23R6FgoosT9Qem2j7svWBb72buzW2G8H4OxCBeqa9NT7cWBjKvDIe0D4fy0
+         gm1oMswF7/q/Yn9kv94McyWwUTsHIGq2OhZ7XF3jNxEqvaclLbUtUJ7Y3S1BdepAYQOY
+         ycuDmo80R8fuAPNRVjKAXnXeI0Ur7IsTiX+1tcovlD+VYYDEES/GmYNKMBkZJlc9/ECK
+         4RwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722891200; x=1723496000;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0HoHqms9+0/tY2gizWucMJ9q6stXqDnf9Flrxt6daeU=;
+        b=mYbPqksPXbifF0on3tdqQP+j4RRYxeb00eQgTGaZW2Wzkm5oCJaYXYZtw5o5zjEX66
+         RZjhRGLeUkErtiJ2dm49tD418kBOV8/1UANLvb3JKiilPhO0N1XJnPC4nG0nBwZH99yu
+         ta24FCPDZ92LuZkVS2Kfi4LdhNtcvDJ7v1f7JV/ygjo/Zna5xbxBq5B3kpYgbvI+Dsnx
+         rkk2hSGUbbZ4mNBa1RWDHZFR67d6m59pjPvIOThN3qIWsp4K5LbXcM2j/QAOhJvF+23G
+         ymRgVfOSFlK9H3zYCsuAgDzsRlh0rXaBx2NzAAmKFn7GeMEfBvSv95syT6RaHO5BNnvN
+         9sQA==
+X-Forwarded-Encrypted: i=1; AJvYcCUXIKv7g1Ow7SrjcJAhSFdTImfjktYHYfd54clQ2G3Bhp12Ira9UhveLE5aA/2R8TWHC64X010QrmY1iyN2bA/4N9s4cyyuLVkxwT7RSP6X6rod2WgBdwnY1jzjktgaWTVfjuX793kXiCfl5JDexNuQz7gYuPRmTZa9U7rU1+CB2RmAJcCjxg==
+X-Gm-Message-State: AOJu0Yya4FJ5x/KPGhe2YwECC1vyNP8miOaEpV0wUaln1qrtZVryVNYm
+	CO8VB48ER/e6KY14U4TSZE5X5f4hG19HNNdY6ekE/XkMvkhgykGx
+X-Google-Smtp-Source: AGHT+IER7MImBl1ax6v5k1mCVCuO9iad5adNijX3pUG8zDdywVTk9JecqjehUPEVVLbLmp9HprRSjQ==
+X-Received: by 2002:a17:903:1c2:b0:1f7:1655:825c with SMTP id d9443c01a7336-1ff573d903bmr114138625ad.36.1722891200121;
+        Mon, 05 Aug 2024 13:53:20 -0700 (PDT)
+Received: from localhost (dhcp-72-235-129-167.hawaiiantel.net. [72.235.129.167])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff58f26064sm73042265ad.57.2024.08.05.13.53.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Aug 2024 13:53:19 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date: Mon, 5 Aug 2024 10:53:18 -1000
+From: Tejun Heo <tj@kernel.org>
+To: Waiman Long <longman@redhat.com>
+Cc: Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Chen Ridong <chenridong@huawei.com>
+Subject: Re: [PATCH-cgroup 2/5] cgroup/cpuset: Clear effective_xcpus on
+ cpus_allowed clearing only if cpus.exclusive not set
+Message-ID: <ZrE7vkGZsBRdlaQP@slm.duckdns.org>
+References: <20240805013019.724300-1-longman@redhat.com>
+ <20240805013019.724300-3-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related
- fixes
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
- <877ccvyoyb.fsf@cloudflare.com>
-From: Michal Luczaj <mhal@rbox.co>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <877ccvyoyb.fsf@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240805013019.724300-3-longman@redhat.com>
 
-On 8/5/24 17:22, Jakub Sitnicki wrote:
-> On Wed, Jul 31, 2024 at 12:01 PM +02, Michal Luczaj wrote:
->> Series takes care of few bugs and missing features with the aim to improve
->> the test coverage of sockmap/sockhash.
->>
->> Last patch is a create_pair() rewrite making use of
->> __attribute__((cleanup)) to handle socket fd lifetime.
->>
->> Signed-off-by: Michal Luczaj <mhal@rbox.co>
->> ---
+On Sun, Aug 04, 2024 at 09:30:16PM -0400, Waiman Long wrote:
+> Commit e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for
+> v2") adds a user writable cpuset.cpus.exclusive file for setting
+> exclusive CPUs to be used for the creation of partitions. Since then
+> effective_xcpus depends on both the cpuset.cpus and cpuset.cpus.exclusive
+> setting. If cpuset.cpus.exclusive is set, effective_xcpus will depend
+> only on cpuset.cpus.exclusive.  When it is not set, effective_xcpus
+> will be set according to the cpuset.cpus value when the cpuset becomes
+> a valid partition root.
 > 
-> Sorry for the long turn-around time.
+> When cpuset.cpus is being cleared by the user, effective_xcpus should
+> only be cleared when cpuset.cpus.exclusive is not set. However, that
+> is not currently the case.
 > 
-> I have opened some kind of Pandora's box with a recent USO change and
-> been battling a regression even since. Also it was CfP deadline week.
+>   # cd /sys/fs/cgroup/
+>   # mkdir test
+>   # echo +cpuset > cgroup.subtree_control
+>   # cd test
+>   # echo 3 > cpuset.cpus.exclusive
+>   # cat cpuset.cpus.exclusive.effective
+>   3
+>   # echo > cpuset.cpus
+>   # cat cpuset.cpus.exclusive.effective // was cleared
 > 
-> I will run & review this today / tomorrow latest.
+> Fix it by clearing effective_xcpus only if cpuset.cpus.exclusive is
+> not set.
+> 
+> Fixes: e2ffe502ba45 ("cgroup/cpuset: Add cpuset.cpus.exclusive for v2")
+> Reported-by: Chen Ridong <chenridong@huawei.com>
+> Signed-off-by: Waiman Long <longman@redhat.com>
 
-Thanks for the update. But, really, as far as I'm concerned, no need for
-any rush.
+Applied 1-2 to cgroup/for-6.11-fixes w/ stable cc'd.
 
+Thanks.
+
+-- 
+tejun
 
