@@ -1,159 +1,152 @@
-Return-Path: <linux-kselftest+bounces-14787-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14788-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 060E5947754
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 10:30:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E60C49478B7
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 11:53:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5CB1281AD5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 08:30:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 965F11F2264A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 09:53:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 917B16BFB5;
-	Mon,  5 Aug 2024 08:30:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51076137C37;
+	Mon,  5 Aug 2024 09:53:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ojXCZUqa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EnBIguov"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F252D1494D7
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Aug 2024 08:30:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15E5B10953;
+	Mon,  5 Aug 2024 09:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722846645; cv=none; b=ZmlKXLTNaOpXxu3sjoZY+8RcHch9BpwJdZJ0voONNnqCwxIWTp0e0sBEw6XNpVNYeCk6RSNGznyC6qVvfKbVFvZduwNSaOzoDIN0fuP2qtG31Nec64LW7+yrsxz4UZzIT/fgWNJY3mysO3BgsEcjpfkGDxd4MdDdcRiX98yGlP0=
+	t=1722851609; cv=none; b=fXN+We9cGg0/fOK7Sps/5v6SXSCUix6Ir7cVokWaVTsohT5un42vfdsFX0ua0mLvXx55AvUXcX4nc8cbB2qzNR8g4SSNpf5igI3nxL6AHp4zt4au3ZtHN7OXcg9zNm8B6oZV9nyO2rvSw/sNyll4B6xUnSuTkOcHIQc4Ichznmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722846645; c=relaxed/simple;
-	bh=vh6m3DXlOSTU9mE/qg80HwyKoygyyyjNi2pjGAL7FHk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R5R2ZcMt4wZkrD4tobtDvQPEFX+kkkIeGqc6wXkUUMrBxJMEjoh1phF/M3PGFWSeB2H/FPouejl8OTA1/3t+4v3pv8a8/ojPpOswsYOkxxM1JoTN+NONkq8EkHu7gGerdvw6KLRtYYw0lGXU0MfdISYy2NGlzRGW/IcNF2dCE7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ojXCZUqa; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4757QvH0019471;
-	Mon, 5 Aug 2024 08:30:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
-	:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding; s=pp1; bh=aU1juYkRWLxHWYuhJnl41ZEMkN
-	6C7AcnKWhOslnC960=; b=ojXCZUqaHb16zvJyMYZAwiSJ71d22TKVCig7Kr5JR0
-	PRO9q0780GmvRzXrrmwlXK9TKYi8DnMK4xLmXbhWhNc0kWuk8lV9DhW+Q0YBTWQg
-	6ASr7TEt12ywKoqEk3oEZn3Ev1ZliPyKLgdLkHWlVFX/9mm0KfVi4HRrkPkNSsJE
-	bYHekVl2F4RGfoSCjlvyJUU/mW+eKFThhdwbqEfhOsHg5a8VSaesD0K5RJi20ebA
-	8VKg4cmOx4LP5iW88jX8AUBSec3gNbZtUyzSX2uYwxpFL6SKLMKkW/2SqrphiT0P
-	TfPmvMkHzUfWU5N0SYhq/asJomg3iDRxOvt1jp6gNqZA==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40tqr6rebw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 05 Aug 2024 08:30:27 +0000 (GMT)
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 4758URQa027719;
-	Mon, 5 Aug 2024 08:30:27 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40tqr6rebt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 05 Aug 2024 08:30:27 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 47571VfY024333;
-	Mon, 5 Aug 2024 08:30:26 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40sy90dmj1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 05 Aug 2024 08:30:26 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4758UMmo34406930
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 5 Aug 2024 08:30:24 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A08BB20063;
-	Mon,  5 Aug 2024 08:30:22 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 31C4F2004E;
-	Mon,  5 Aug 2024 08:30:20 +0000 (GMT)
-Received: from li-c439904c-24ed-11b2-a85c-b284a6847472.ibm.com.com (unknown [9.43.50.105])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  5 Aug 2024 08:30:19 +0000 (GMT)
-From: Madhavan Srinivasan <maddy@linux.ibm.com>
-To: mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        shuah@kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-        Madhavan Srinivasan <maddy@linux.ibm.com>
-Subject: [PATCH] selftest/powerpc/benchmark: remove requirement libc-dev
-Date: Mon,  5 Aug 2024 14:00:08 +0530
-Message-ID: <20240805083008.1300853-1-maddy@linux.ibm.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1722851609; c=relaxed/simple;
+	bh=SU0EHwZ6lgMt+LIxNwzJIdzR27SS/eEgLSHXuN8l1D8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=nd8U0Ou0QvjU2PVW4us5veoxS4u8KzgP609T62HcxWKqx6xLRSmp8rmxdLj+RRaYwyIAEke/g2jFYAlIV2w/P1K/mLGPlsQzpFWgMNfCjeHZuLBv9T0lRjV3QpAwMLK0CD142gOZ5yrKUsFMnzmK0H4UOCcc5b7RMWTKJ+dJm3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EnBIguov; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B544C32782;
+	Mon,  5 Aug 2024 09:53:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722851608;
+	bh=SU0EHwZ6lgMt+LIxNwzJIdzR27SS/eEgLSHXuN8l1D8=;
+	h=From:Subject:Date:To:Cc:From;
+	b=EnBIguovbyUcwzkJOJXwWMzn0xNps4zAz9ocN1XAzXUfGjCporW5VfrykVaA1gLgx
+	 bhT1iAGo0LZ/AcDKCRFE4Htg4c58MVM8Eobw/2xtWwyYoKe7y2Pa4aTbDzzzR33M/6
+	 siW62CHDjROeJLrAp+uRRqXNTV/mbnOyst1/vM0Dj7HGpt1zOASKanhRBEg42hUszS
+	 jg0AWub7wvR0DmOuIKaPoJ4oGW7TbbHXVAAtPeXrWTCBsglHTyRXxecLLKFPbN4k1m
+	 UNjwlZyyxKbpRi4vj0mRFfuKoH5De0NWvXInNIJO98TXiJlNOjBh2UL/n4fSALtZyI
+	 u4RjKBtizXvug==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH bpf-next v4 0/2] selftests/bpf: new MPTCP subflow subtest
+Date: Mon, 05 Aug 2024 11:52:55 +0200
+Message-Id: <20240805-upstream-bpf-next-20240506-mptcp-subflow-test-v4-0-2b4ca6994993@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: UcCnTbyK5E7krc1rj4KnJDBa9WzhoXKR
-X-Proofpoint-ORIG-GUID: InY13efj-2sAbO-N9ep6oEVo7VPdG_GP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-04_14,2024-08-02_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- spamscore=0 impostorscore=0 lowpriorityscore=0 adultscore=0 clxscore=1011
- suspectscore=0 phishscore=0 priorityscore=1501 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408050059
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPegsGYC/5XPyw7CIBAF0F8xrB2DlD5w5X8YF4UOLVFbArRqT
+ P9dbHzGVZeTm5x750Y8OoOebBY34nAw3nRtPPhyQVRTtjWCqeJNGGWcpjSD3vrgsDyBtBpavAR
+ 4RycblAXfS33szhDQB9Al6ixLudRlQqJpHWpzmfp25CWQfUwa40PnrtOQYT3lTzif2TmsgQIyq
+ WSluSjSfHtA1+Jx1bl6qhrYNy/m8izynPJCMcGL+Nwfn3z4nCZz+eSxXlaKVVzEGvHDj+N4B0b
+ rJjqzAQAA
+To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Nicolas Rybowski <nicolas.rybowski@tessares.net>, 
+ Geliang Tang <geliang@kernel.org>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2772; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=SU0EHwZ6lgMt+LIxNwzJIdzR27SS/eEgLSHXuN8l1D8=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmsKEMQhEAHkTbJuBf+rR7NGABX2J2IuEMznpEX
+ SmGcNbNmJGJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZrChDAAKCRD2t4JPQmmg
+ c5rKEADBOjPgICkTVHdgLmnWT8LBxJSMepN/eWpObbvQMKGtVE9PKh9Q40MvD+uu7fnbUQ2xvED
+ ovy6uoTHOJzFO0gpxwCdq/TjwSyqOXj0cCFGT6rbkq5BWOX7BNb0OMdLYqx33RtE47LyWLBnlr3
+ p7csCM8eQU4WRYueuGbbqn4caQE/NMiRvHtJlSmvjhi+yuOtls2VJcy9K+ENw8sKKDCB4WpvKC7
+ bU4TWVXpfZsBgJWxpns1UGiMx1h1ZhFwTtLEVZ7r4ThxjMIL/0CXr4Bu1HQAG812P76tUhqOcIG
+ mUqCAB9xhcbQNBf6g7WXWhFKADaS0WtuCmXUtDX8fk2E2ihA3xE6MBmilgTDoWtmOTDk0aLCWzm
+ Lg9P357enp/N5FEzo6jGO3u6JkCtbKq0qg2pizhiE73MmDqvyx1ZriZiylTFii8C4OSpBuXlB+7
+ YvAAj2gsdzMV2K6J3pZrRCQ0o259yAvMmprceD87O+1gM+nqbYrfVbk2Jjd8hBpdumF7EZXiWXZ
+ qnqVrjx5JYGtDgBJPZI3dwUDPPJOfNciEPQN9fptVU03VhkrfAIW/0a4JCS9i1vyzEPbUcXA4Tr
+ Zvou6qLMnCHsLebhgPEdCJS3SypvVI6GDimNqg/G6cZ+JcdKAbYQM+vcr/8qoXF+Gyq/cNzzPAu
+ wv9ar4/GmRN5C5g==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Currently exec-target.c file is linked as static and this
-post a requirement to install libc dev package to build.
-Without it, build-breaks when compiling selftest/powerpc/benchmark.
+In this series from Geliang, modifying MPTCP BPF selftests, we have:
 
-  CC       exec_target
-/usr/bin/ld: cannot find -lc: No such file or directory
-collect2: error: ld returned 1 exit status
+- A new MPTCP subflow BPF program setting socket options per subflow: it
+  looks better to have this old test program in the BPF selftests to
+  track regressions and to serve as example.
 
-exec_target.c is using "syscall" library function which
-could be replaced with a inline assembly and the same is
-proposed as a fix here.
+  Note: Nicolas is no longer working for Tessares, but he did this work
+  while working for them, and his email address is no longer available.
 
-Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
-Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
+- A new MPTCP BPF subtest validating the new BPF program added in the
+  first patch.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/powerpc/benchmarks/Makefile    |  2 +-
- .../testing/selftests/powerpc/benchmarks/exec_target.c | 10 ++++++++--
- 2 files changed, 9 insertions(+), 3 deletions(-)
+Changes in v4:
+- Drop former patch 2/3: MPTCP's pm_nl_ctl requires a new header file:
+  - I will check later if it is possible to avoid having duplicated
+    header files in tools/include/uapi, but no need to block this series
+    for that. Patch 2/3 can be added later if needed.
+- Patch 2/2: skip the test if 'ip mptcp' is not available.
+- Link to v3: https://lore.kernel.org/r/20240703-upstream-bpf-next-20240506-mptcp-subflow-test-v3-0-ebdc2d494049@kernel.org
 
-diff --git a/tools/testing/selftests/powerpc/benchmarks/Makefile b/tools/testing/selftests/powerpc/benchmarks/Makefile
-index 1321922038d0..ca4483c238b9 100644
---- a/tools/testing/selftests/powerpc/benchmarks/Makefile
-+++ b/tools/testing/selftests/powerpc/benchmarks/Makefile
-@@ -18,4 +18,4 @@ $(OUTPUT)/context_switch: LDLIBS += -lpthread
- 
- $(OUTPUT)/fork: LDLIBS += -lpthread
- 
--$(OUTPUT)/exec_target: CFLAGS += -static -nostartfiles
-+$(OUTPUT)/exec_target: CFLAGS += -nostartfiles
-diff --git a/tools/testing/selftests/powerpc/benchmarks/exec_target.c b/tools/testing/selftests/powerpc/benchmarks/exec_target.c
-index c14b0fc1edde..20027a23b594 100644
---- a/tools/testing/selftests/powerpc/benchmarks/exec_target.c
-+++ b/tools/testing/selftests/powerpc/benchmarks/exec_target.c
-@@ -7,10 +7,16 @@
-  */
- 
- #define _GNU_SOURCE
--#include <unistd.h>
- #include <sys/syscall.h>
- 
- void _start(void)
- {
--	syscall(SYS_exit, 0);
-+	asm volatile (
-+		"li %%r0, %[sys_exit];"
-+		"li %%r3, 0;"
-+		"sc;"
-+		:
-+		: [sys_exit] "i" (SYS_exit)
-+		: "r0", "r3"
-+	);
- }
+Changes in v3:
+- Sorry for the delay between v2 and v3, this series was conflicting
+  with the "add netns helpers", but it looks like it is on hold:
+  https://lore.kernel.org/cover.1715821541.git.tanggeliang@kylinos.cn
+- Patch 1/3 includes "bpf_tracing_net.h", introduced in between.
+- New patch 2/3: "selftests/bpf: Add mptcp pm_nl_ctl link".
+- Patch 3/3: use the tool introduced in patch 2/3 + SYS_NOFAIL() helper.
+- Link to v2: https://lore.kernel.org/r/20240509-upstream-bpf-next-20240506-mptcp-subflow-test-v2-0-4048c2948665@kernel.org
+
+Changes in v2:
+- Previous patches 1/4 and 2/4 have been dropped from this series:
+  - 1/4: "selftests/bpf: Handle SIGINT when creating netns":
+    - A new version, more generic and no longer specific to MPTCP BPF
+      selftest will be sent later, as part of a new series. (Alexei)
+  - 2/4: "selftests/bpf: Add RUN_MPTCP_TEST macro":
+    - Removed, not to hide helper functions in macros. (Alexei)
+- The commit message of patch 1/2 has been clarified to avoid some
+  possible confusions spot by Alexei.
+- Link to v1: https://lore.kernel.org/r/20240507-upstream-bpf-next-20240506-mptcp-subflow-test-v1-0-e2bcbdf49857@kernel.org
+
+---
+Geliang Tang (1):
+      selftests/bpf: Add mptcp subflow subtest
+
+Nicolas Rybowski (1):
+      selftests/bpf: Add mptcp subflow example
+
+ tools/testing/selftests/bpf/prog_tests/mptcp.c    | 105 ++++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/mptcp_subflow.c |  59 ++++++++++++
+ 2 files changed, 164 insertions(+)
+---
+base-commit: 3d650ab5e7d9c4d7306e4c116f8aa9980bf13295
+change-id: 20240506-upstream-bpf-next-20240506-mptcp-subflow-test-faef6654bfa3
+
+Best regards,
 -- 
-2.45.2
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
 
