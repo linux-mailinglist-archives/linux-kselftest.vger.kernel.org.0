@@ -1,246 +1,130 @@
-Return-Path: <linux-kselftest+bounces-14790-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14791-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35EBB9478BF
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 11:54:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48DEC9479F5
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 12:38:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E016C280E73
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 09:54:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79CE71C20EC5
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 10:38:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E00B51553BD;
-	Mon,  5 Aug 2024 09:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B451E1547DB;
+	Mon,  5 Aug 2024 10:38:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ewYqvmRB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FqxfVvDh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB135155353;
-	Mon,  5 Aug 2024 09:53:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07B7B13CFAD;
+	Mon,  5 Aug 2024 10:37:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722851618; cv=none; b=JPXGxo8VLjeGaGfoRCTP0fvIv0QqrV2/9JWVnQ1XGhFOuTD7cmDNKy+OawxY85+OGIa7D7PfEW9ScCwZUfNfyVwFcn5SLts6MSmfLVoWO5DeyxpOyJzBy1hGTFbmG5KsdXE1woXLGVAwrBNOdqkw+Vz2mnibQ26vZiLfGn7EPYw=
+	t=1722854281; cv=none; b=uaKiaLVVZJsZSMWdhJ3zUx0KcLUbjs+bExoBkXv3j53xQ3So/vmxgQJRdjRLau0BMr0K/5B7j+rq7C1S+YaNa8vi7RektjYpvKFXj4rQvwh+mMBsGGLpZrcRSuf4CBU+csWKZoYUbuDv6JYaSfYEtBxEW6tLq8LvjA0o+b7KPHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722851618; c=relaxed/simple;
-	bh=v8V8NsYqx5U0o5pTyv3XffdmocZLP0sMUWIWr5UKJPM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=V1QvQ/H9qV/G++o4v0inG5/RgvnRKnMaeev7dBiHRlo5/zSi2QV08jneLzJb3nGDOxFplt70N6c3b/BjnY2mqEcBFP1a93TWF1qCt36TBzdt2zSoOCzrjc+HJs1EZTgKZrHAxNSozEhxA1f5ouZtk/cxdGhTv0JiWHWi+e7QQCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ewYqvmRB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08298C4AF0D;
-	Mon,  5 Aug 2024 09:53:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722851618;
-	bh=v8V8NsYqx5U0o5pTyv3XffdmocZLP0sMUWIWr5UKJPM=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ewYqvmRB8ArH3+CYzIX1ly4M/jHVUnS9iqEZWQTA8/aqTs0HbxAFJXKrrvGIlUDje
-	 ohOXVKUrdaB2jbMivPbEySD7/xMyQb6zJI1jsr/7S4zCuzMOdKCAW4KNmFOoHDZdSt
-	 VMGCIyWPd6bToOEOsDiG43nX+QU9Im4PisnNq9YTQS35p3Rn1rbYWgJ+oGT+VDU2Ct
-	 PYfd+fJfah5Lw5O9QunNRApweoiOLVHRoPuKwiaLAanMM6TpRngmX/KwPi5hLYaG8k
-	 /tHZ/D6kYX/BatgY5q2vt9I2NsxLm6wsg+0c2iOa6VHXMauXGnAKMw7HnBweThtyHR
-	 84SGvFOLEsa2w==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Mon, 05 Aug 2024 11:52:57 +0200
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Add mptcp subflow subtest
+	s=arc-20240116; t=1722854281; c=relaxed/simple;
+	bh=/L+U9FbrdikimI3DRTL457yT/JB6HgXqIbnp6SX/S6c=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mVvDD2tEf8rnH+irUcgcA6I792evVtkwsnCGBtx/xDF6nTQP6bJaXBZ1xDf3iFKLMrp1nlzE2pRaHTn14n2yy3qfIiat7+ZW7Wv2gzGbGAXO/a8vu8v5Cbsy3nECkp7bhsgTYf+LDW3NiJ0nehYHsf5WSS1aCxQf/yeUhESGwpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FqxfVvDh; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a7a9185e1c0so951801266b.1;
+        Mon, 05 Aug 2024 03:37:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1722854278; x=1723459078; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=t0KFjt2jSVlj6oBnjiTQlukHgWUqVqy0s7ndwfYzMwY=;
+        b=FqxfVvDhXZtla/CcvK9NLTwqu03J/BvrvW6qN4583JIw2javp0Lfc638zrrDymB7r/
+         pLyaTgZa/ashW3X1wH3PbKyQWMKSKgFAO/rGfPYrKl+RCjVCM9fHhJPc3V56IWMf5zwG
+         ZBOGylaZvBfp1UiGRKNoLOnWrh/Wu7VikLfL4MM+GscgT7VIdoBc7jco0hipt563alJ7
+         u3bBnSBt+f7c7AHpB58PcUNT1QRZ7YHyC3iu/ilMGrfpEPlFWGufVWFA3c35GdDT2ueX
+         wloJhcQvyYNY15q1eIf9KNFfMtZTeFTfIguEtX02dFHIbNBQX55EFWO2OkWPPQR1PRoq
+         a47g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722854278; x=1723459078;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t0KFjt2jSVlj6oBnjiTQlukHgWUqVqy0s7ndwfYzMwY=;
+        b=LEkaKhEX0+QSjdfchexFFtJdeHVxCrCrpv1/Wvu+uHCIWbU6tjjbJSn2guavcK0SL3
+         WSUZVb71mdiUT6gXqiK4wje7cHzPinZoYnaU/AyYOtqO8MC/jJQmvBo5PZCWuqDlhuEF
+         k8aH94VEYGFJaEeIrfZ3AvsxmJI4nScWGV0BvW2BvABMXAxygSocbGu6G6Z/0sSsg0Rk
+         jLCZ1JaxqkSuXuOLPOW38UKaGcOzRU6OYuvFWrEQGqJOytKuE9OYOGox8yxt79aF7aNq
+         WjdfXxHr2C9g+GaSTUKNFk9+XG2H3zq3y1jyxPGOFYXZRjh1/nDLtAa1ZDAe/9UEv9/+
+         ncTA==
+X-Forwarded-Encrypted: i=1; AJvYcCWJ8iL9rseKwtst0+NOKpT73DrnwRIIadPBDtIFkcXGcLFtdsYegNwjKGLtw0n6DcDYQ5ILAz2Ern4iiJXkhe07JBxaAAOX5qRNf/iLdFiz3nfsR6jVhGn1q9819qT3I+Hbnor3gPOnkvp1l7VW
+X-Gm-Message-State: AOJu0YzGxbcjaT+MxgtLxEwAEZIZqmwLknp0C1QWNgGCwdzTo3ZRaTOF
+	/X4uahq9WS11YY1fU4NGRgnL6tm/kt8BwKnXFLTJfqEmyozxu6ww
+X-Google-Smtp-Source: AGHT+IF9Lu1Jxzs3cJgtMaUfd+K3om2rFfXNQPcCN/rXeTlClGg8Vq+ijHaiD8cNXiSBiNeSZp/YPQ==
+X-Received: by 2002:a17:907:94cc:b0:a7a:a960:99ee with SMTP id a640c23a62f3a-a7dc4fbac60mr864480266b.32.1722854277845;
+        Mon, 05 Aug 2024 03:37:57 -0700 (PDT)
+Received: from alessandro-pc.station (net-2-44-111-137.cust.vodafonedsl.it. [2.44.111.137])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9d42680sm436635966b.118.2024.08.05.03.37.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Aug 2024 03:37:57 -0700 (PDT)
+From: Alessandro Zanni <alessandro.zanni87@gmail.com>
+To: shuah@kernel.org,
+	gregkh@linuxfoundation.org,
+	nfraprado@collabora.com,
+	skhan@linuxfoundation.org
+Cc: Alessandro Zanni <alessandro.zanni87@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] kselftest/devices/probe: Fix SyntaxWarning in regex strings for Python 3
+Date: Mon,  5 Aug 2024 12:37:37 +0200
+Message-ID: <20240805103742.10844-1-alessandro.zanni87@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240805-upstream-bpf-next-20240506-mptcp-subflow-test-v4-2-2b4ca6994993@kernel.org>
-References: <20240805-upstream-bpf-next-20240506-mptcp-subflow-test-v4-0-2b4ca6994993@kernel.org>
-In-Reply-To: <20240805-upstream-bpf-next-20240506-mptcp-subflow-test-v4-0-2b4ca6994993@kernel.org>
-To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
- Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <geliang@kernel.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4710; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=2hmbi+FkyvyFNw1rfk0tf+u5UMK3sb/cD/zwQAToiXI=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmsKETTOzGznQXdDJm+VGh6aU5ocfU8uVAzVdjG
- O9BUcf6rfaJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZrChEwAKCRD2t4JPQmmg
- c2ZCEADKCMA3p85IK3NP7i/Nay+1tjmxstFtFsczsMZDfXfhDd2Ox7ZuElX3q86F0tppDUs0tHK
- ce7lb2GfpHbiD+lzkdDHSCDWM82M+UzLx4L8rQTc+RW5qhPTYrraGXikEfjxdGhH4SOZmg1aVyj
- EIcVDbVFW+sWN2LdbSPRYVpxxWbMnE7pKeAir2YjhoMzTdpVLQsVMKmStUZoVC5u4cOY55F5EED
- M3c1B1zfhWb98xHiJFN/j8oJPzt7yW5E36d1xtgTpP7BKtoT6n7y2mQ2ianymOAzo6ZxoQ7NTjj
- uyleEmKblp0MY7tSncNhhIoJELfvAh97mYGUJmvvzaM2vMIaX1YmkVwaXDcWB9g/WfwXxxP49Ub
- HhLfPvraLKUcivtz0JQrZ2yu9puNCEp70u87Qaxw2HQb8C3EB/MAwyYHkMqWvTVyeBaoFEDdwzU
- U6iYglj8Ao5piBYRBQVcEhHKPBC+wNcFV7bB/IsnX06XhUc7+GKEQWTCtcwJGWJrBskhEDiKrJx
- ZnpnUP8Arupu6hApglxxG3CiC4ZJ/maheZi+o58RP04spfg01Wn8T5AFyvldK6kgCQmnnqYEja1
- wuOf+ZzryHq2cYWjVSXWYfTG2W1PnfnW1punVdmuXrdNlTB1g/O9xUDhUmWBUmOMvTwq3lDq5Iw
- WdPPWJCO9O8e4bw==
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-From: Geliang Tang <geliang@kernel.org>
+Insert raw strings to prevent Python3 from interpreting string literals as Unicode strings
+and, consequently, '\d' as an invalid escaped sequence.
+Avoid the 'SyntaxWarning: invalid escape sequence '\d'' warning for Python versions greater than 3.6.
 
-This patch adds a subtest named test_subflow to load and verify the newly
-added mptcp subflow example in test_mptcp. Add a helper endpoint_init()
-to add a new subflow endpoint. Add another helper ss_search() to verify the
-fwmark and congestion values set by mptcp_subflow prog using setsockopts.
+Fixes: dacf1d7a78bf ("kselftest: Add test to verify probe of devices from discoverable buses")
 
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/76
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Reviewed-by: Mat Martineau <martineau@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
 ---
+
 Notes:
- - v2 -> v3:
-   - Use './mptcp_pm_nl_ctl' instead of 'ip mptcp', not supported by the
-     BPF CI running IPRoute 5.5.0.
-   - Use SYS_NOFAIL() in _ss_search() instead of calling system()
- - v3 -> v4:
-   - Drop './mptcp_pm_nl_ctl', but skip this new test if 'ip mptcp' is
-     not supported.
----
- tools/testing/selftests/bpf/prog_tests/mptcp.c | 105 +++++++++++++++++++++++++
- 1 file changed, 105 insertions(+)
+    v2: Imperative mode description for the inserted changes, added previous commit tag fixed by this patch
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-index d2ca32fa3b21..d06be03cc0f0 100644
---- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
-+++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-@@ -9,8 +9,12 @@
- #include "network_helpers.h"
- #include "mptcp_sock.skel.h"
- #include "mptcpify.skel.h"
-+#include "mptcp_subflow.skel.h"
- 
- #define NS_TEST "mptcp_ns"
-+#define ADDR_1	"10.0.1.1"
-+#define ADDR_2	"10.0.1.2"
-+#define PORT_1	10001
- 
- #ifndef IPPROTO_MPTCP
- #define IPPROTO_MPTCP 262
-@@ -335,10 +339,111 @@ static void test_mptcpify(void)
- 	close(cgroup_fd);
- }
- 
-+static int endpoint_init(char *flags)
-+{
-+	SYS(fail, "ip -net %s link add veth1 type veth peer name veth2", NS_TEST);
-+	SYS(fail, "ip -net %s addr add %s/24 dev veth1", NS_TEST, ADDR_1);
-+	SYS(fail, "ip -net %s link set dev veth1 up", NS_TEST);
-+	SYS(fail, "ip -net %s addr add %s/24 dev veth2", NS_TEST, ADDR_2);
-+	SYS(fail, "ip -net %s link set dev veth2 up", NS_TEST);
-+	if (SYS_NOFAIL("ip -net %s mptcp endpoint add %s %s", NS_TEST, ADDR_2, flags)) {
-+		printf("'ip mptcp' not supported, skip this test.\n");
-+		test__skip();
-+		goto fail;
-+	}
-+
-+	return 0;
-+fail:
-+	return -1;
-+}
-+
-+static int _ss_search(char *src, char *dst, char *port, char *keyword)
-+{
-+	return SYS_NOFAIL("ip netns exec %s ss -enita src %s dst %s %s %d | grep -q '%s'",
-+			  NS_TEST, src, dst, port, PORT_1, keyword);
-+}
-+
-+static int ss_search(char *src, char *keyword)
-+{
-+	return _ss_search(src, ADDR_1, "dport", keyword);
-+}
-+
-+static void run_subflow(char *new)
-+{
-+	int server_fd, client_fd, err;
-+	char cc[TCP_CA_NAME_MAX];
-+	socklen_t len = sizeof(cc);
-+
-+	server_fd = start_mptcp_server(AF_INET, ADDR_1, PORT_1, 0);
-+	if (!ASSERT_GE(server_fd, 0, "start_mptcp_server"))
-+		return;
-+
-+	client_fd = connect_to_fd(server_fd, 0);
-+	if (!ASSERT_GE(client_fd, 0, "connect to fd"))
-+		goto fail;
-+
-+	err = getsockopt(server_fd, SOL_TCP, TCP_CONGESTION, cc, &len);
-+	if (!ASSERT_OK(err, "getsockopt(srv_fd, TCP_CONGESTION)"))
-+		goto fail;
-+
-+	send_byte(client_fd);
-+
-+	ASSERT_OK(ss_search(ADDR_1, "fwmark:0x1"), "ss_search fwmark:0x1");
-+	ASSERT_OK(ss_search(ADDR_2, "fwmark:0x2"), "ss_search fwmark:0x2");
-+	ASSERT_OK(ss_search(ADDR_1, new), "ss_search new cc");
-+	ASSERT_OK(ss_search(ADDR_2, cc), "ss_search default cc");
-+
-+	close(client_fd);
-+fail:
-+	close(server_fd);
-+}
-+
-+static void test_subflow(void)
-+{
-+	int cgroup_fd, prog_fd, err;
-+	struct mptcp_subflow *skel;
-+	struct nstoken *nstoken;
-+
-+	cgroup_fd = test__join_cgroup("/mptcp_subflow");
-+	if (!ASSERT_GE(cgroup_fd, 0, "join_cgroup: mptcp_subflow"))
-+		return;
-+
-+	skel = mptcp_subflow__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_load: mptcp_subflow"))
-+		goto close_cgroup;
-+
-+	err = mptcp_subflow__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach: mptcp_subflow"))
-+		goto skel_destroy;
-+
-+	prog_fd = bpf_program__fd(skel->progs.mptcp_subflow);
-+	err = bpf_prog_attach(prog_fd, cgroup_fd, BPF_CGROUP_SOCK_OPS, 0);
-+	if (!ASSERT_OK(err, "prog_attach"))
-+		goto skel_destroy;
-+
-+	nstoken = create_netns();
-+	if (!ASSERT_OK_PTR(nstoken, "create_netns: mptcp_subflow"))
-+		goto skel_destroy;
-+
-+	if (endpoint_init("subflow") < 0)
-+		goto close_netns;
-+
-+	run_subflow(skel->data->cc);
-+
-+close_netns:
-+	cleanup_netns(nstoken);
-+skel_destroy:
-+	mptcp_subflow__destroy(skel);
-+close_cgroup:
-+	close(cgroup_fd);
-+}
-+
- void test_mptcp(void)
- {
- 	if (test__start_subtest("base"))
- 		test_base();
- 	if (test__start_subtest("mptcpify"))
- 		test_mptcpify();
-+	if (test__start_subtest("subflow"))
-+		test_subflow();
- }
+ .../selftests/devices/probe/test_discoverable_devices.py      | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/tools/testing/selftests/devices/probe/test_discoverable_devices.py b/tools/testing/selftests/devices/probe/test_discoverable_devices.py
+index d94a74b8a054..d7a2bb91c807 100755
+--- a/tools/testing/selftests/devices/probe/test_discoverable_devices.py
++++ b/tools/testing/selftests/devices/probe/test_discoverable_devices.py
+@@ -45,7 +45,7 @@ def find_pci_controller_dirs():
+ 
+ 
+ def find_usb_controller_dirs():
+-    usb_controller_sysfs_dir = "usb[\d]+"
++    usb_controller_sysfs_dir = r"usb[\d]+"
+ 
+     dir_regex = re.compile(usb_controller_sysfs_dir)
+     for d in os.scandir(sysfs_usb_devices):
+@@ -91,7 +91,7 @@ def get_acpi_uid(sysfs_dev_dir):
+ 
+ 
+ def get_usb_version(sysfs_dev_dir):
+-    re_usb_version = re.compile("PRODUCT=.*/(\d)/.*")
++    re_usb_version = re.compile(r"PRODUCT=.*/(\d)/.*")
+     with open(os.path.join(sysfs_dev_dir, "uevent")) as f:
+         return int(re_usb_version.search(f.read()).group(1))
+ 
 -- 
-2.45.2
+2.43.0
 
 
