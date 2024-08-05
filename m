@@ -1,107 +1,148 @@
-Return-Path: <linux-kselftest+bounces-14799-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14800-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2FA59483C5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 22:58:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83C3F9483D6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 23:08:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89FE81F21C06
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 20:58:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BC59C1C21EF9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 21:08:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0343816BE26;
-	Mon,  5 Aug 2024 20:58:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BA5616C69A;
+	Mon,  5 Aug 2024 21:08:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a3PK2FVQ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CCOp4SjD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-io1-f46.google.com (mail-io1-f46.google.com [209.85.166.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D4D014AD30;
-	Mon,  5 Aug 2024 20:58:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE2616ABF3
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Aug 2024 21:08:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722891506; cv=none; b=FPgwsqW60NXEeWGyPj44qlwcrSjy6cmgdWaqSUC3tBWJ50CRqlSl8uBdAxOhagaO9corzCRuYEtgI1D8zn/b5U0CeugKhP0rrzpmGGLLU3QtzHn0bCr6UxHlp/Er3EfQfgjzq73Jd2yswl6FOupoAvk2efcrNVPO1NMCRuXp5t0=
+	t=1722892095; cv=none; b=e2Yj7CniPnEiEpKTkDNzNEXepDEtCyOzSeRarsl+aIkxU34QHWDN/g4iY4MWLAlNx6p1XFX3Wty77J/gOUWHMvIykGWLpOi9g+UiOacjUkKW1SdlTpQhY2BCCmGV03uIk+VpcBBHKZ/o4YqHJTLFn9088pWzBsi1HoHFMvWvOs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722891506; c=relaxed/simple;
-	bh=bOpswM3jL2JL6Tb3adEvtARdBGij6hauib29LexUvN4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F465bu2wxvatZgy0i/wiLPvh5mFOLmW/8diTiqJ4Gc+BaWwcA+tAlC2rzNj8xdDY5cLDet+ZjFwnfk8nw94oZUmm26iqYn4L/v+fjeegfAj/ywNtZJ1/dKYZL3zapGeAWY8fYS11bI3MsMlDNCnv6Z+pOZASk1QbqNeP1cWHGTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a3PK2FVQ; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1fd6ed7688cso1026775ad.3;
-        Mon, 05 Aug 2024 13:58:25 -0700 (PDT)
+	s=arc-20240116; t=1722892095; c=relaxed/simple;
+	bh=1hgE1tHYTzoNT4ZaVAJ9uX7zwlujJ5HbNKj22V8PvTg=;
+	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=BE1Iz8rc8MjXOchdoX9ZZ7IhgiWJPzKB9ztv9rgFL0j1a+zxfvenPwiCQMpT3VOaZFQz/gvAvXrGs3BhrxHg6RhKY9tPPhSs1eNWg7F1KPrD6eCeZIrBer7PIlJx+gN88fr3A4HDARYGVNU3jBCiB1ffyu1/MtdhG61k6w66D8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CCOp4SjD; arc=none smtp.client-ip=209.85.166.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f46.google.com with SMTP id ca18e2360f4ac-81f7faff04dso279439f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Aug 2024 14:08:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722891505; x=1723496305; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N/aHUA7NaygOYxjLndyaWBEQcFONjtMdvXj+fBkS/0A=;
-        b=a3PK2FVQx56lZJb77sOw4vmRCCIrPRkS03IUURFNrL+rc2DJ7JDFPzt4RVeqqxYUG0
-         1buZuYRqK9hIVgeAvWxJK1Jz5EsnIgSdoCphH1ayT2M4M6Bo1S8C0aa6VStHdegHOcIx
-         H2v2/H5NzTu9nLyvGTVI7U7M+jrpU5qpaLLXVxsZVYE87vmmCRcfbrsbuU+qxbsUyEjl
-         iczO/Vh1nvklhLGarTJqowK5idwRR3HB0nkpNISelo+9kTJc6ZQPbHePvjcOLtClSbtG
-         CQbnrjCPKmZNccqoKbmzMJ47Pi9x7Zn442crVRL1BawEU/dBWoijhXyNveNJyQznIdr8
-         OZPw==
+        d=linuxfoundation.org; s=google; t=1722892091; x=1723496891; darn=vger.kernel.org;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=RoZN9WiORe0ITjlZlmSzWf3fhNCsHe6Tv0uWDr+78DY=;
+        b=CCOp4SjDrTb9uWQitAer6R3CNc17jeUszVR3sXWB0cnxT0zba7Jjj0s87FJ65y3jYH
+         vvew9mFtNWURCfXuy0qNaEI4VX2t3jmK9z80LCl5R/0//5UkWQ7tCYqNyP5730aBkCtK
+         dziEunfYEHrYOKp1Wrqyr5QRyy9u1SDbhxiRc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722891505; x=1723496305;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N/aHUA7NaygOYxjLndyaWBEQcFONjtMdvXj+fBkS/0A=;
-        b=oyT3ZmnJwNGrIBurK9Ru5eX3MjX+nIaA5B7VFxKTO4RnYzciRANvpdvyHSkVAoiBhi
-         Ri5DhHUh3CuRVkIz+7d5Ek980YJ5XlwX3FQ/BLUCncdHMNXWN28YpJWQ6lYTVX2cR5Zf
-         gtFF7qgTrKES05zvDuC7zX9hbiegHTLuRZobiz/cJ7/CdLuBnjFcVeo0XeTr5A4PBJIS
-         OVly0zuCRu1MuQcsgVGJgk5b++j5DO77lCNufvxINW2IQcJkxv5KdaAixtx5BvpvVj0c
-         elM1Qdyc1gFpFC2j94d+EGkP6yG1Ev3kvM64rNfqvze670R6lCVrRNJTMNzrLa3p79MV
-         RU+w==
-X-Forwarded-Encrypted: i=1; AJvYcCUFOfm7nlN4aVj+BYC3axe4Rr6kePgdf4h3ewyEnLAkLgoHZZH28t5c5rhY8B+pYHMUhWvBmdrWeUMlstqVt5RFZFdVp5U33QTyERSQxtlv29KOkxjcjBM7kYpRG2VvwKbulwXYiz460HwMEdaFIkrNUv5O66WwKgNpxqYc9au5Sjd8d1kyXg==
-X-Gm-Message-State: AOJu0YyQRbMu0qfuXkFBFFj+sVUTxnrJETjB1wFGeZwsvhaBvNBhQdMM
-	m35lFx1f4NMYod45o+EQ0yz6jS+f3u+tpD0FpYOPL8G//hEm04aJ
-X-Google-Smtp-Source: AGHT+IHUrxB8SJcgTptVefh4jkluWfFm8A+YLA74X/mbOtAqFw0/wopz+86nlxb8HD7GI495Muecvg==
-X-Received: by 2002:a17:903:228b:b0:1fc:71fb:10d6 with SMTP id d9443c01a7336-1ff5723e5c6mr117747085ad.6.1722891504585;
-        Mon, 05 Aug 2024 13:58:24 -0700 (PDT)
-Received: from localhost (dhcp-72-235-129-167.hawaiiantel.net. [72.235.129.167])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1ff592aadd5sm72408645ad.278.2024.08.05.13.58.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 05 Aug 2024 13:58:24 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date: Mon, 5 Aug 2024 10:58:22 -1000
-From: Tejun Heo <tj@kernel.org>
-To: Waiman Long <longman@redhat.com>
-Cc: Zefan Li <lizefan.x@bytedance.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Chen Ridong <chenridong@huawei.com>
-Subject: Re: [PATCH-cgroup 5/5] selftest/cgroup: Add new test cases to
- test_cpuset_prs.sh
-Message-ID: <ZrE87nrqimsCxMzA@slm.duckdns.org>
-References: <20240805013019.724300-1-longman@redhat.com>
- <20240805013019.724300-6-longman@redhat.com>
+        d=1e100.net; s=20230601; t=1722892091; x=1723496891;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RoZN9WiORe0ITjlZlmSzWf3fhNCsHe6Tv0uWDr+78DY=;
+        b=UVMu5xj8NvgCEkzdB7M3AJC1Q9/uoiLuShdQAoxnVkWjBR8Hjjri6DQMBdtOPMCRV+
+         YGeShf5bRQ8jpd/9rsapMtf10oUmyVgNZODaHYi9tRxokEVfBT4fSLhax35twltzewlR
+         kLWJD+lzCVUUfDHpoNmFY3la37MUW9rLrdnAlObfMWj++AUrU1RzmOVcWOEGY1FcV+zE
+         2+dI4GqbWF6aUjY6k3vHSZfao2qEKOIChEjxD79IgqvbmvYNy69L79ST+ApiVjf0PTsx
+         1xQXNY+XCJgCDmJgA7vyprh1jAvBIJQ0RMY3nmA5cOMyFTLD182tbrX7HLFqe2azjv4k
+         4Pbw==
+X-Forwarded-Encrypted: i=1; AJvYcCXB3nhYTAXK98aKGd9DRwCXPgD91b10rmjopKqrsg4DWtUd0wUXQ5fCLh3XBHLDsvXDx22Yq1Ivu7tqxgP/LY6V0jF5ZTperTqOuPd7YDxg
+X-Gm-Message-State: AOJu0YyXSDCBDjbIO5WH4dmT3YwAecTwF13dHxsy+J0uIwBXh7AeUbS/
+	kiIqoEv2h3aWIcqy7MuoRFep89b6wIhijfL8LZ50U55Vc7/IIbd3sooQx2g7LyQ=
+X-Google-Smtp-Source: AGHT+IG06IJu0JjiFmVnxTP6Y8qg0xKaMfM6fJWXNb6BQKehWJuVWwjXR3HnoavVyGtfFIUnPoP4fA==
+X-Received: by 2002:a5d:8b0a:0:b0:81f:dccd:844e with SMTP id ca18e2360f4ac-81fdccd8609mr580759839f.0.1722892091241;
+        Mon, 05 Aug 2024 14:08:11 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c8d6a5ad04sm1907722173.178.2024.08.05.14.08.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Aug 2024 14:08:10 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------LlER0KbKGvSKZ6L4wyCWLfpp"
+Message-ID: <732e15a1-f219-45b1-8836-ebd5ca3101cf@linuxfoundation.org>
+Date: Mon, 5 Aug 2024 15:08:10 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240805013019.724300-6-longman@redhat.com>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From: Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest fixes update for Linux 6.11-rc3
 
-On Sun, Aug 04, 2024 at 09:30:19PM -0400, Waiman Long wrote:
-> Add new test cases to test_cpuset_prs.sh to cover corner cases reported
-> in previous fix commits.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
+This is a multi-part message in MIME format.
+--------------LlER0KbKGvSKZ6L4wyCWLfpp
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Applied 4-5 to cgroup/for-6.12 after pulling in cgroup/for-6.11-fixes.
+Hi Linus,
 
-Thanks.
+Please pull the kselftest fixes update for Linux 6.11-rc3.
 
--- 
-tejun
+This kselftest fixes update consists of a single fix to the conditional
+in ksft.py script which incorrectly flags a test suite failed when there
+are skipped tests in the mix. The logic is fixed to take skipped tests
+into account and report the test as passed.
+
+diff is attached.
+
+thanks,
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
+
+   Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-fixes-6.11-rc3
+
+for you to fetch changes up to 170c966cbe274e664288cfc12ee919d5e706dc50:
+
+   selftests: ksft: Fix finished() helper exit code on skipped tests (2024-07-31 11:38:56 -0600)
+
+----------------------------------------------------------------
+linux_kselftest-fixes-6.11-rc3
+
+This kselftest fixes update consists of a single fix to the conditional
+in ksft.py script which incorrectly flags a test suite failed when there
+are skipped tests in the mix. The logic is fixed to take skipped tests
+into account and report the test as passed.
+
+----------------------------------------------------------------
+Laura Nao (1):
+       selftests: ksft: Fix finished() helper exit code on skipped tests
+
+  tools/testing/selftests/kselftest/ksft.py | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+----------------------------------------------------------------
+--------------LlER0KbKGvSKZ6L4wyCWLfpp
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux_kselftest-fixes-6.11-rc3.diff"
+Content-Disposition: attachment;
+ filename="linux_kselftest-fixes-6.11-rc3.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2tzZWxmdGVzdC9rc2Z0LnB5
+IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3NlbGZ0ZXN0L2tzZnQucHkKaW5kZXggY2Q4
+OWZiMmJjMTBlLi5iZjIxNTc5MGE4OWQgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2Vs
+ZnRlc3RzL2tzZWxmdGVzdC9rc2Z0LnB5CisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
+L2tzZWxmdGVzdC9rc2Z0LnB5CkBAIC03MCw3ICs3MCw3IEBAIGRlZiB0ZXN0X3Jlc3VsdChj
+b25kaXRpb24sIGRlc2NyaXB0aW9uPSIiKToKIAogCiBkZWYgZmluaXNoZWQoKToKLSAgICBp
+ZiBrc2Z0X2NudFsicGFzcyJdID09IGtzZnRfbnVtX3Rlc3RzOgorICAgIGlmIGtzZnRfY250
+WyJwYXNzIl0gKyBrc2Z0X2NudFsic2tpcCJdID09IGtzZnRfbnVtX3Rlc3RzOgogICAgICAg
+ICBleGl0X2NvZGUgPSBLU0ZUX1BBU1MKICAgICBlbHNlOgogICAgICAgICBleGl0X2NvZGUg
+PSBLU0ZUX0ZBSUwK
+
+--------------LlER0KbKGvSKZ6L4wyCWLfpp--
 
