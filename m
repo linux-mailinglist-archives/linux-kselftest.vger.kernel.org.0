@@ -1,171 +1,138 @@
-Return-Path: <linux-kselftest+bounces-14794-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14795-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49F79947F0E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 18:16:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99F0E947F72
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 18:34:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F28271F21DD4
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 16:16:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 541DB28391F
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 16:34:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2303D15B102;
-	Mon,  5 Aug 2024 16:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E6D215E5CA;
+	Mon,  5 Aug 2024 16:34:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dE9vq1Bu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ooMfse3W"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31FC376F5;
-	Mon,  5 Aug 2024 16:16:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DFBA131BDF
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Aug 2024 16:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722874610; cv=none; b=KiShkVMzy3riGBIWjU6WexpAhqQrLXPCcN67Ho7Ct/PUjhg686UGaa+GcQzcyv6e3hR/J3liKIQ9Rkd5xxvmI5NIYBO6XgDEKS3EAki1URQmyG5JQ5sQsyfv/hqR4mZ0oDz9xC1FQ9iSr60AMlovL/DaJESfc4Iu9cm4eVQFxyM=
+	t=1722875653; cv=none; b=uGkiplc1hR2uR4XuYUwrOzKa7NzR0a/JSEYvCGrrXa3JdKHAvc6L9xSahJdVuvxxnCLFBi2v2DjQD2bC2LG5rUbZaz6JFZw9V8Rjo3RD/nvMpnWvWtg5N+eqKs0oOwl3zHTLuTiIGd4ZL0huZWOENaJ+EvExedSS70nEQni3RNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722874610; c=relaxed/simple;
-	bh=y9ldZbTyfHtWmV56N6wsb2EpJn4YFyke+2byGlPJ2Ck=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oqDlFTXSmSzJKkne3TIKWJ/9Q9iMA8m60W/+A0kE1L9pdsYSddQM2DvuZ1rEjhGFepTzjYeQU1UnZgt/qLIcyI1yDxeXpdP/C5JKZSDx9bu3KlTxob7C5XgQ7TaCYVi5B11f5rIUY+pFfoocNvnw7nl4Ud88D+SAFT8XKbZBtp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dE9vq1Bu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C69E9C4AF0C;
-	Mon,  5 Aug 2024 16:16:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722874609;
-	bh=y9ldZbTyfHtWmV56N6wsb2EpJn4YFyke+2byGlPJ2Ck=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dE9vq1BuB7DySNJ0jmsO8oDVdSmXiOtDPZZ+qMEI4JVqefYufKzfUqg36Y8Gtymsn
-	 yw8UXACxwiu7eOw2VaFkkLc9DKj+IcG8GYXfAQ7axO+sy+4Opse6dwr+CwW795gh8I
-	 Yy6XsxPaiwvT55c5+H2DphPa9LPRBo7WzA/TKvrZcGTy6LsO6m1iXKKZedZzwVB504
-	 QjmY78WVHFacbV9dV2pWObXlY4M94SsfzOB7Qh40ctDl74gMT+EI9RHeQlieTk7c+6
-	 CJ71uHEUxPNKvoJxM44gmoUiTq6g1QfZFJY3baXmSMWlbwiJAcTvBXyD+N4ly0eZ4k
-	 fI8UPtwF5DtqQ==
-Date: Mon, 5 Aug 2024 17:16:43 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Joey Gouly <joey.gouly@arm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] KVM: selftests: arm64: Use generated defines for
- named system registers
-Message-ID: <6c1beda4-7211-4f64-95c8-7a11c489b145@sirena.org.uk>
-References: <20240802-kvm-arm64-get-reg-list-v1-0-3a5bf8f80765@kernel.org>
- <20240802-kvm-arm64-get-reg-list-v1-2-3a5bf8f80765@kernel.org>
- <868qxe0wzp.wl-maz@kernel.org>
+	s=arc-20240116; t=1722875653; c=relaxed/simple;
+	bh=WShIfcyB1WIBp1LMFRNAOGPYq4so52JcsO4pudunr3k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=o/3T61rALvNwaqAQCFWsjA1Kvca3sY05A9RUJtznaeKZ24JzfGydrZvjchWLrgLGf3kJNnW7hIWSfDzxTz+161e4wEifLWUvhbWb3Nqrvtxm6F2XitQN1fyNr/3kmFh73sroBsAG/m4Vgq0Z6zcMaA54lHakaXQhyQGex2C9yxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ooMfse3W; arc=none smtp.client-ip=209.85.219.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6b7a0ef0e75so61472196d6.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Aug 2024 09:34:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1722875649; x=1723480449; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WShIfcyB1WIBp1LMFRNAOGPYq4so52JcsO4pudunr3k=;
+        b=ooMfse3WVKfuxOLSSKdlcT9aqFqVw/RtyRXpOBsgOCTn9wKceQcM71mSUyFUCGbjdh
+         26+ROdikowegVtjSUS4uWVUhtc95hLL23dlnWFj8cp65MVc4drKNIX9u43DWF2Bats8h
+         t0heAI4eFDoxqmiGWoYtMgQD56gP+7qgIFOqzvLbDpke6iJR6YapJ+kA8HjUL+DyHiKy
+         +7NkKP96kiTMdLcfY8EpRMfItKrh6siytmWkC/b0tGgiJkDeyeXjOqlFRgZJ9luyNyNG
+         6FpewpnZhlzpQ9biBgMEY7x44yXFsfP3XIyl2lb1fAFA0jwMYwVdtCGFuyqF5RwPlBAL
+         hg0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722875649; x=1723480449;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WShIfcyB1WIBp1LMFRNAOGPYq4so52JcsO4pudunr3k=;
+        b=sbsiE+pzsLzHYt30jwsX24TxXKGZBU+8aW9BVMrLxaYhn50Ts/dV4Ej84i6HwKoliN
+         eMlA6xXZCsDPhu8hpXlFvABjQRhSBTT8OAp+wbJomiZXg4y94W3B4Su9HNwx6NM23eG6
+         MG7Jl9BnGmTV5HxzpyGkII0tHO39r36CXv4KKcdcBB97kqujyeGzt1J+HCfQY/fZOlD6
+         8DMLqwZiftqqRvlYjZSqE9LLGK66p7TJdhqO/+vd/x4HcEH1Zbm7bFTBz1OKYSD7dMwM
+         u1Dn3295HBSKk9r8kqI5npx5mPNmU9YuiD3akaYlkzNOOoLn0Q4eWGcjprVU+2DcIoB1
+         1jCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX6MqLI9nuPtoZa8KazmUr4INe76RBDrj09gYoKOybGekZSHndTiCdZ+kK2X5CvU2i8t03XpgX0kBlgkOG8w+C60qA0BTokvlREARAtxr9Z
+X-Gm-Message-State: AOJu0YyYPxQWsiumB8DGc7PmRfeVT1lFuy6iDKuhwBReFkI0D6FKCmqP
+	6EISMH84DyP6ntMS3ZXBgSwtxVlLsINbniD3oXG13m3AjvA5Vr1yZE9hBM4aOLK+Qq4WTvVv+QF
+	gNjmp+vBXtaX9GQB9wChmqVp4GPS7o0VYhCne
+X-Google-Smtp-Source: AGHT+IE3X2dzKDTfvW579W1ONWZvzHmSuPdaFYmL6fjjzD5I45yXHVQPoF1XfHnvXWK/VzgEqMK+gXEJqks0i1Xyhdk=
+X-Received: by 2002:a05:6214:4412:b0:6b5:7e97:7151 with SMTP id
+ 6a1803df08f44-6bb98345fa9mr131458736d6.17.1722875648824; Mon, 05 Aug 2024
+ 09:34:08 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vBXB/GZWADW/Ncoh"
-Content-Disposition: inline
-In-Reply-To: <868qxe0wzp.wl-maz@kernel.org>
-X-Cookie: Goodbye, cool world.
+References: <20240730022623.98909-4-almasrymina@google.com> <5d3c74da-7d44-4b88-8961-60f21f84f0ac@web.de>
+In-Reply-To: <5d3c74da-7d44-4b88-8961-60f21f84f0ac@web.de>
+From: Mina Almasry <almasrymina@google.com>
+Date: Mon, 5 Aug 2024 12:33:55 -0400
+Message-ID: <CAHS8izPxfCv1VMFBK1FahGTjVmUSSfrabgY5y6V+XtaszoHQ4w@mail.gmail.com>
+Subject: Re: [PATCH net-next v17 03/14] netdev: support binding dma-buf to netdevice
+To: Markus Elfring <Markus.Elfring@web.de>
+Cc: Daniel Vetter <daniel.vetter@ffwll.ch>, Kaiyuan Zhang <kaiyuanz@google.com>, 
+	Pavel Begunkov <asml.silence@gmail.com>, Willem de Bruijn <willemb@google.com>, netdev@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, LKML <linux-kernel@vger.kernel.org>, 
+	Andreas Larsson <andreas@gaisler.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Bagas Sanjaya <bagasdotme@gmail.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Christoph Hellwig <hch@infradead.org>, David Ahern <dsahern@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, David Wei <dw@davidwei.uk>, 
+	Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>, 
+	Harshitha Ramamurthy <hramamurthy@google.com>, Helge Deller <deller@gmx.de>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+	Jakub Kicinski <kuba@kernel.org>, 
+	"James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Jeroen de Borst <jeroendb@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Matt Turner <mattst88@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Praveen Kaligineedi <pkaligineedi@google.com>, 
+	Richard Henderson <richard.henderson@linaro.org>, Shailend Chand <shailend@google.com>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+	Steffen Klassert <steffen.klassert@secunet.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Sumit Semwal <sumit.semwal@linaro.org>, Taehee Yoo <ap420073@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Yunsheng Lin <linyunsheng@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Jul 30, 2024 at 4:38=E2=80=AFAM Markus Elfring <Markus.Elfring@web.=
+de> wrote:
+>
+> =E2=80=A6
+> > +++ b/include/net/devmem.h
+> > @@ -0,0 +1,115 @@
+> =E2=80=A6
+> > +#ifndef _NET_DEVMEM_H
+> > +#define _NET_DEVMEM_H
+> =E2=80=A6
+>
+> I suggest to omit leading underscores from such identifiers.
+> https://wiki.sei.cmu.edu/confluence/display/c/DCL37-C.+Do+not+declare+or+=
+define+a+reserved+identifier
+>
 
---vBXB/GZWADW/Ncoh
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+I was gonna apply this change, but I ack'd existing files and I find
+that all of them include leading underscores, including some very
+recently added files like net/core/page_pool_priv.h.
 
-On Sat, Aug 03, 2024 at 10:35:54AM +0100, Marc Zyngier wrote:
-> Mark Brown <broonie@kernel.org> wrote:
+I would prefer to stick to existing conventions if that's OK, unless
+there is widespread agreement to the contrary.
 
-> > This conversion was done with the sed command:
-
-> >   sed -i -E 's-ARM64_SYS_REG.*/\* (.*) \*/-KVM_ARM64_SYS_REG(SYS_\1),-' tools/testing/selftests/kvm/aarch64/get-reg-list.c
-
-> [Eyes rolling]
-
-> What I asked about scripting the whole thing, it never occurred to me
-> that you would use the *comments* as a reliable source of information.
-> Do we have anything less reliable than comments in the kernel?
-
-I think we should ultimately be using both the comments and the
-encodings - the comments indicate what people thought was being tested
-and it's useful to make sure we have that coverage even if the
-implementation were to have been wrong.
-
-Doing this step is also going to have picked up registers which we don't
-yet have in the sysreg file, some of which are going to be painful to
-add there (things like ESR for example) so aren't likely to get done in
-a hurry due to complexity in their definitions.
-
-This was quick to do, represents progress, and offers a hint to anyone
-adding new registers that they should use the symbolic definitions.
-
-> The matching must be done from the arch/arm64/tools/sysreg file,
-> because that's the (admittedly dubious) source of truth. We actually
-> trust the encodings because they are reported by the kernel itself.
-> The comment is hand-written, and likely wrong.
-
-Sure, there's a reason I compared the resulting binaries rather than
-just trusting that the conversion gave the same result.
-
-> > -	ARM64_SYS_REG(3, 3, 14, 3, 1),	/* CNTV_CTL_EL0 */
-> > -	ARM64_SYS_REG(3, 3, 14, 3, 2),	/* CNTV_CVAL_EL0 */
-> > +	KVM_ARM64_SYS_REG(SYS_CNTV_CTL_EL0),
-> > +	KVM_ARM64_SYS_REG(SYS_CNTV_CVAL_EL0),
-> >  	ARM64_SYS_REG(3, 3, 14, 0, 2),
-
-> Great. So not only you fail convert a register, but you also ignore
-> the nugget described in arch/arm64/invlude/uapi/asm/kvm.h:267.
-
-That's that CNTV_CTL_EL0 and CNTV_CVAL_EL0 have their encodings
-reversed in the ABI.
-
-> Sure, having both described hides the crap, as we don't attach any
-> significance to the registers themselves. But that shows how
-> untrustworthy the comments are.
-
-I'm afraid that any automated conversion is likely to trip over an ABI
-issue like that - the obvious thing to do when looking up by encoding
-would be to just emit a KVM_ARM64_SYS_REG() if we find the encoding
-which would give the same end result.  I'll add a separate manual update
-of these registers.
-
-Are there any other similar issues?  I didn't spot anything in kvm.h.
-
-> >  	ARM64_SYS_REG(2, 0, 0, 0, 4),
-> >  	ARM64_SYS_REG(2, 0, 0, 0, 5),
-> >  	ARM64_SYS_REG(2, 0, 0, 0, 6),
-
-> As far as I can tell, these registers are not unallocated, and they
-> should be named.
-
-I agree that we should do all named registers eventually, the above are
-numbered debug registers (DBGBVR0_EL1, DBGBCR0_EL1 and DBGWVR0_EL1)
-which aren't in the sysreg file yet so wouldn't currently be covered by
-a conversion based on pulling encodings from there.  They could also be
-done immediately with a generator script as there are DBGBVRn_EL1 style
-macros there.
-
-Like I say this is a quick first step and does improve things, there's
-still more to do but I do think this moves us forward.  We can and
-should come back later and build on things as people have time.
-
---vBXB/GZWADW/Ncoh
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaw+usACgkQJNaLcl1U
-h9A5QQf/eq0ZOdpYjJXRG4CZ3SHDFIZ/NM9H8ZnuG8wQ5BVfd1DI1hdEiZ9P+jT5
-IgxAmzyq0jBtYm+llNM9Bh/KmjK9rLDfqIDPmfgpIKithc/IVo56E5SYXakQG5Fl
-7pAT1nQt9Favk+dUlWY/4gShcfvJw12CpZn6hGI+6ZYr5tfYL7WbCrSlJ9XXlVPX
-NU3YDGHDj0x2jiQDLndhAEeg53i3KwXSsngtyXQejpaI5GB6EIdTUKQ0bOVBoDq2
-2PUjl74LLOZ/ELvCZsRGm7bPhZeMV5QBafI4H2Dl2fE02TM5ObCIjSW3sDdQXZTf
-v6kOGV2I6Y9d+DfFwOec3a308g10rQ==
-=TkJy
------END PGP SIGNATURE-----
-
---vBXB/GZWADW/Ncoh--
+--=20
+Thanks,
+Mina
 
