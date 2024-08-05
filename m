@@ -1,314 +1,244 @@
-Return-Path: <linux-kselftest+bounces-14815-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14816-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F29F99484C2
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 23:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A35F9484E1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 23:35:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E2AEB233CD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 21:31:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 728B3B2247A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  5 Aug 2024 21:35:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F8F117BB04;
-	Mon,  5 Aug 2024 21:26:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B89C1741DA;
+	Mon,  5 Aug 2024 21:29:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AHHJcXQc"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IR0gQkiL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC1A0176FDB
-	for <linux-kselftest@vger.kernel.org>; Mon,  5 Aug 2024 21:26:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 971CA16F0D2
+	for <linux-kselftest@vger.kernel.org>; Mon,  5 Aug 2024 21:29:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722893173; cv=none; b=H2Dm1hmeSwy4cyFHe/HHjEp4iof/H/6L0abuRo6Fy2F0lBXyxwz9a/HUEjSbiV0hERCIPydxYWLz2sVrSt+NvCoLnaGMZtGKWXWpLCpwlcmmUb7yIsQWXuI0SRRFXxU+ihq8VXkuW4nd2IrLfQ8PsEr/fLZaIuyfv0AScJm0UzY=
+	t=1722893390; cv=none; b=fAMkXs2NNfn8XXtRJs07GdJjBi2uW4BhxJV3zdb5w+7lopmpxAL3nNdCFN+5DsQFKRMtV221q7aDKI07kcbF8bPLzSy+rwemVh7gQkDfh40ZNHNpyZLnLPIbpRol6hcua2sIcDBIy7dg7CHgblnGC94dEFO35ikbmtAIACk86nk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722893173; c=relaxed/simple;
-	bh=wF0fKAubblsstfScosCTiCqfX0FmE1CGehpsgu/r8P4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=lbRsZ2fadTjAbOfmhpDzMWCa8uAzFnUkvbiIGJvIuX5FMeORazH+ANlMwdiQG/8c7K45bFKBihtZqN2Gi90BX5SP9ts2ZvEM7Rdq1/kF7ujZdY2MuYK0oeXz9WqYjvQ6La+0L1doQYB9ih6muBBaSqFrbGRIpyb26DiZmmimZz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AHHJcXQc; arc=none smtp.client-ip=209.85.219.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e0bebbbebeaso6150645276.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 05 Aug 2024 14:26:06 -0700 (PDT)
+	s=arc-20240116; t=1722893390; c=relaxed/simple;
+	bh=f4gATws6BsDpnv+whFd/nT2RtFoVIT7P8QJCgccSmgo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KnRAYDGKn5lSadaoLjUDGL/j2v4YWPFKn3WVuoDq3ElaeDIehzx0/Wptp+fmdrvJYh1HprLdzCEZNymu44SM0n+ysP/mdzCnwVfBTh5lLm3DH+RoKhYl3DOrXbfQpXJ599eQgKtCGzoGEZwLSScXMFaPU1jyU11JbLH1K8xJkQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IR0gQkiL; arc=none smtp.client-ip=209.85.166.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-39b3c36d429so225195ab.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 05 Aug 2024 14:29:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1722893165; x=1723497965; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cxnbg2gRYn4LeOU4CWxMJeU8Zw6y6eLxEpOcLvaAmUQ=;
-        b=AHHJcXQcfzYRr84xfpL23YyO8y0aBq9VOM6rpm7OC60LGpAK5ojftsG7fJe//dTGIk
-         1NPtd8MLF0lrf74DFM8M9xIBX/v74C+7bOcYWjsNdNhd9VFvpAHex+oL+02WhBBx9mZl
-         K3/3Gw7rQoENakVqn2wIMct34acL6EtCAdK9ZgtaEne6jhltkHpiT/vAc4WHVxRPn14p
-         2t//0xtNyUlSjN/cBkDaA7NRA1x+4mZU3QTQK6aTq1zB4XMT1gboV/O29A5CRhly0CUi
-         VtjNdrHi4dh8vUAnVgOkGtlxaDE7DFWVt4BYreM5Atml6n4tBLWkWGZPHESUmNBuEHw6
-         kbhA==
+        d=linuxfoundation.org; s=google; t=1722893388; x=1723498188; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=77vUSIhEXolQ7LP/swg34WCGlFiT86L+fvCS5JakSjE=;
+        b=IR0gQkiLIwzJeXxqZpk8+ykB5oDvFy9axQnXufnJUqqks8bPwfoqZoCElb+tRtONUM
+         N3fsAyRu3bHTTjYSHOyICnpmJXEctI2PBZUnSj8MzkV+O9yxC2yA6uhX3Ut/kq6m1xBl
+         N1ASuKdrrjXHiPvDf9URhJ6jfnXq7v7p/TzH4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722893165; x=1723497965;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Cxnbg2gRYn4LeOU4CWxMJeU8Zw6y6eLxEpOcLvaAmUQ=;
-        b=xOfB/1WMHh6MK5rxInVa1CO5U8+HbW26Yol4LeRtZxXiA+wjDHTB8MBL0WUc00rU/b
-         waQSncnl6T4KxchkLyleYCzrPY/dtyIxM0PptzaAYcS0rL52iUi9qzGdNKoGsAenN70p
-         SfspDZJYJUQACKOVvZIeLu26B+tWxwJaKwlElmNQEwU1GXb19HdMaCjnY/t90hli4Qpw
-         BJs/BvaAovnYOOKO4LUk+8XfXiQD0UBoc8BKsXhFktWxok9d7PqOMc/6guuitwVX3cka
-         YHkF8FzHqOaowVBI9j4CvHNZzxRCDm0kCsA2aEA+sw0U75fr/9HAq/WThWMvRToOQx4q
-         hzuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVoN5ijuOiVgVTnbn+VApV4qAJiBjmf/7iLQMG49KGab84BaE8s07o/r1cSKhUMIq/60uni7sV32eKwyZna9lCM5am0VHPoU1S/1jb0UqMl
-X-Gm-Message-State: AOJu0YyOevW0w0HssT+oLVFhrtrp8WnE48RWqKcXli7wd1vengPTVVGM
-	MN8IvjLV718VuL2yb2sXLUryyzkbzh23eylsuXpOMcexJX78IAhj0eFMtIRm5tO5CoExo2BiEYL
-	zw9CTbcSII69Ar4leU37VMg==
-X-Google-Smtp-Source: AGHT+IEkV1ijZAyYSziEgd67bBu7N/m6t8dv5aDI4jnUJKJrhZLw43w9JbplBfPvmPwI4UYOjtdz9TFDbsSiP2Xw0w==
-X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
- (user=almasrymina job=sendgmr) by 2002:a05:6902:2483:b0:e03:a0b2:f73 with
- SMTP id 3f1490d57ef6-e0bde2f3cdbmr108795276.6.1722893164768; Mon, 05 Aug 2024
- 14:26:04 -0700 (PDT)
-Date: Mon,  5 Aug 2024 21:25:27 +0000
-In-Reply-To: <20240805212536.2172174-1-almasrymina@google.com>
+        d=1e100.net; s=20230601; t=1722893388; x=1723498188;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=77vUSIhEXolQ7LP/swg34WCGlFiT86L+fvCS5JakSjE=;
+        b=pD5/gyF75Xi2B8UPlLozwFk/df9n6xWCz1RH5Npxi5udxhdvRxO9J31v2vQvGZvKpq
+         mYkqaeCJ2dDjDt/DQzJL29bJxgm4sMOkd8f3zIzTAErwx6nQBYqn0d7I2W+vMtPo44OJ
+         bEX9WC7e044BGPr9w0HiToDPLu5m3EJSAh/j5taCo/39t/UPyCMKmJFZ1t24e03nBr2R
+         BrhGz/HHX3Jrd4UI0Y2NlNn8jxw8fH1UcxngZE78cdFYj+xIi+ALYmUEmo+okIm0io3K
+         fXEVhII5mChtkzj/K4q95kZWFgCUu+RUx4pz/htMJrsb/k8ltA74p7dkXMzOrJd3n2KL
+         aQNw==
+X-Forwarded-Encrypted: i=1; AJvYcCUp/2ki//XNx4HlFELsAmQzAplMh4Kz1tsbnvTlk88XEP2ChRGV1HgGtumZk7zsUnoknOEx4gHL/fBj8w/PsrvyYr1aIB1ahB7qictdtxyO
+X-Gm-Message-State: AOJu0YwAU9X5DdSGxfMgcT9X639upvOri7ZNLtG5x+mLN2Lvj+zPV++C
+	N3L29QHN31P0dwvDAPQ+34AvyDL9UDUhTGBglCAUCxGykbE9pg7orXQvcHhaayU=
+X-Google-Smtp-Source: AGHT+IHaD5F3UB86KedRRHTA+tJQV3ceKsNfMpZP7mnoDYE8YjQUmsCzQ3zy37i0Pc0NnOXGdSO4eA==
+X-Received: by 2002:a92:ca47:0:b0:376:3918:c50 with SMTP id e9e14a558f8ab-39b1f780a14mr81387545ab.0.1722893387639;
+        Mon, 05 Aug 2024 14:29:47 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c8d6987eaesm1925178173.20.2024.08.05.14.29.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 Aug 2024 14:29:47 -0700 (PDT)
+Message-ID: <f7ffadc4-16ed-4d11-8baf-ea2887305d18@linuxfoundation.org>
+Date: Mon, 5 Aug 2024 15:29:45 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240805212536.2172174-1-almasrymina@google.com>
-X-Mailer: git-send-email 2.46.0.rc2.264.g509ed76dc8-goog
-Message-ID: <20240805212536.2172174-15-almasrymina@google.com>
-Subject: [PATCH net-next v18 14/14] netdev: add dmabuf introspection
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Cc: Mina Almasry <almasrymina@google.com>, Donald Hunter <donald.hunter@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, 
-	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFT v7 0/9] fork: Support shadow stacks in clone3()
+To: Mark Brown <broonie@kernel.org>,
+ "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+ Deepak Gupta <debug@rivosinc.com>, Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+ "H.J. Lu" <hjl.tools@gmail.com>, Florian Weimer <fweimer@redhat.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Daniel Bristot de Oliveira
+ <bristot@redhat.com>, Valentin Schneider <vschneid@redhat.com>,
+ Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, jannh@google.com,
+ linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
+ Kees Cook <kees@kernel.org>, David Hildenbrand <david@redhat.com>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240731-clone3-shadow-stack-v7-0-a9532eebfb1d@kernel.org>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240731-clone3-shadow-stack-v7-0-a9532eebfb1d@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add dmabuf information to page_pool stats:
+On 7/31/24 06:14, Mark Brown wrote:
+> The kernel has recently added support for shadow stacks, currently
+> x86 only using their CET feature but both arm64 and RISC-V have
+> equivalent features (GCS and Zicfiss respectively), I am actively
+> working on GCS[1].  With shadow stacks the hardware maintains an
+> additional stack containing only the return addresses for branch
+> instructions which is not generally writeable by userspace and ensures
+> that any returns are to the recorded addresses.  This provides some
+> protection against ROP attacks and making it easier to collect call
+> stacks.  These shadow stacks are allocated in the address space of the
+> userspace process.
+> 
+> Our API for shadow stacks does not currently offer userspace any
+> flexiblity for managing the allocation of shadow stacks for newly
+> created threads, instead the kernel allocates a new shadow stack with
+> the same size as the normal stack whenever a thread is created with the
+> feature enabled.  The stacks allocated in this way are freed by the
+> kernel when the thread exits or shadow stacks are disabled for the
+> thread.  This lack of flexibility and control isn't ideal, in the vast
+> majority of cases the shadow stack will be over allocated and the
+> implicit allocation and deallocation is not consistent with other
+> interfaces.  As far as I can tell the interface is done in this manner
+> mainly because the shadow stack patches were in development since before
+> clone3() was implemented.
+> 
+> Since clone3() is readily extensible let's add support for specifying a
+> shadow stack when creating a new thread or process in a similar manner
+> to how the normal stack is specified, keeping the current implicit
+> allocation behaviour if one is not specified either with clone3() or
+> through the use of clone().  The user must provide a shadow stack
+> address and size, this must point to memory mapped for use as a shadow
+> stackby map_shadow_stack() with a shadow stack token at the top of the
+> stack.
+> 
+> Please note that the x86 portions of this code are build tested only, I
+> don't appear to have a system that can run CET avaible to me, I have
+> done testing with an integration into my pending work for GCS.  There is
+> some possibility that the arm64 implementation may require the use of
+> clone3() and explicit userspace allocation of shadow stacks, this is
+> still under discussion.
+> 
+> Please further note that the token consumption done by clone3() is not
+> currently implemented in an atomic fashion, Rick indicated that he would
+> look into fixing this if people are OK with the implementation.
+> 
+> A new architecture feature Kconfig option for shadow stacks is added as
+> here, this was suggested as part of the review comments for the arm64
+> GCS series and since we need to detect if shadow stacks are supported it
+> seemed sensible to roll it in here.
+> 
+> [1] https://lore.kernel.org/r/20231009-arm64-gcs-v6-0-78e55deaa4dd@kernel.org/
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+> Changes in v7:
+> - Rebase onto v6.11-rc1.
+> - Typo fixes.
+> - Link to v6: https://lore.kernel.org/r/20240623-clone3-shadow-stack-v6-0-9ee7783b1fb9@kernel.org
+> 
+> Changes in v6:
+> - Rebase onto v6.10-rc3.
+> - Ensure we don't try to free the parent shadow stack in error paths of
+>    x86 arch code.
+> - Spelling fixes in userspace API document.
+> - Additional cleanups and improvements to the clone3() tests to support
+>    the shadow stack tests.
+> - Link to v5: https://lore.kernel.org/r/20240203-clone3-shadow-stack-v5-0-322c69598e4b@kernel.org
+> 
+> Changes in v5:
+> - Rebase onto v6.8-rc2.
+> - Rework ABI to have the user allocate the shadow stack memory with
+>    map_shadow_stack() and a token.
+> - Force inlining of the x86 shadow stack enablement.
+> - Move shadow stack enablement out into a shared header for reuse by
+>    other tests.
+> - Link to v4: https://lore.kernel.org/r/20231128-clone3-shadow-stack-v4-0-8b28ffe4f676@kernel.org
+> 
+> Changes in v4:
+> - Formatting changes.
+> - Use a define for minimum shadow stack size and move some basic
+>    validation to fork.c.
+> - Link to v3: https://lore.kernel.org/r/20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org
+> 
+> Changes in v3:
+> - Rebase onto v6.7-rc2.
+> - Remove stale shadow_stack in internal kargs.
+> - If a shadow stack is specified unconditionally use it regardless of
+>    CLONE_ parameters.
+> - Force enable shadow stacks in the selftest.
+> - Update changelogs for RISC-V feature rename.
+> - Link to v2: https://lore.kernel.org/r/20231114-clone3-shadow-stack-v2-0-b613f8681155@kernel.org
+> 
+> Changes in v2:
+> - Rebase onto v6.7-rc1.
+> - Remove ability to provide preallocated shadow stack, just specify the
+>    desired size.
+> - Link to v1: https://lore.kernel.org/r/20231023-clone3-shadow-stack-v1-0-d867d0b5d4d0@kernel.org
+> 
+> ---
+> Mark Brown (9):
+>        Documentation: userspace-api: Add shadow stack API documentation
+>        selftests: Provide helper header for shadow stack testing
+>        mm: Introduce ARCH_HAS_USER_SHADOW_STACK
+>        fork: Add shadow stack support to clone3()
+>        selftests/clone3: Remove redundant flushes of output streams
+>        selftests/clone3: Factor more of main loop into test_clone3()
+>        selftests/clone3: Explicitly handle child exits due to signals
+>        selftests/clone3: Allow tests to flag if -E2BIG is a valid error code
+>        selftests/clone3: Test shadow stack support
+> 
+>   Documentation/userspace-api/index.rst             |   1 +
+>   Documentation/userspace-api/shadow_stack.rst      |  41 ++++
+>   arch/x86/Kconfig                                  |   1 +
+>   arch/x86/include/asm/shstk.h                      |  11 +-
+>   arch/x86/kernel/process.c                         |   2 +-
+>   arch/x86/kernel/shstk.c                           | 104 +++++++---
+>   fs/proc/task_mmu.c                                |   2 +-
+>   include/linux/mm.h                                |   2 +-
+>   include/linux/sched/task.h                        |  13 ++
+>   include/uapi/linux/sched.h                        |  13 +-
+>   kernel/fork.c                                     |  76 ++++++--
+>   mm/Kconfig                                        |   6 +
+>   tools/testing/selftests/clone3/clone3.c           | 224 ++++++++++++++++++----
+>   tools/testing/selftests/clone3/clone3_selftests.h |  40 +++-
+>   tools/testing/selftests/ksft_shstk.h              |  63 ++++++
+>   15 files changed, 511 insertions(+), 88 deletions(-)
+> ---
+> base-commit: 8400291e289ee6b2bf9779ff1c83a291501f017b
+> change-id: 20231019-clone3-shadow-stack-15d40d2bf536
+> 
+> Best regards,
 
-$ ./cli.py --spec ../netlink/specs/netdev.yaml --dump page-pool-get
-...
- {'dmabuf': 10,
-  'id': 456,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 455,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 454,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 453,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 452,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 451,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 450,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 449,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
 
-And queue stats:
+For selftests:
 
-$ ./cli.py --spec ../netlink/specs/netdev.yaml --dump queue-get
-...
-{'dmabuf': 10, 'id': 8, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 9, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 10, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 11, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 12, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 13, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 14, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 15, 'ifindex': 3, 'type': 'rx'},
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Mina Almasry <almasrymina@google.com>
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+thanks,
+-- Shuah
 
----
- Documentation/netlink/specs/netdev.yaml | 10 ++++++++++
- include/uapi/linux/netdev.h             |  2 ++
- net/core/netdev-genl.c                  | 10 ++++++++++
- net/core/page_pool_user.c               |  4 ++++
- tools/include/uapi/linux/netdev.h       |  2 ++
- 5 files changed, 28 insertions(+)
-
-diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index 0c747530c275e..08412c279297b 100644
---- a/Documentation/netlink/specs/netdev.yaml
-+++ b/Documentation/netlink/specs/netdev.yaml
-@@ -167,6 +167,10 @@ attribute-sets:
-           "re-attached", they are just waiting to disappear.
-           Attribute is absent if Page Pool has not been detached, and
-           can still be used to allocate new memory.
-+      -
-+        name: dmabuf
-+        doc: ID of the dmabuf this page-pool is attached to.
-+        type: u32
-   -
-     name: page-pool-info
-     subset-of: page-pool
-@@ -268,6 +272,10 @@ attribute-sets:
-         name: napi-id
-         doc: ID of the NAPI instance which services this queue.
-         type: u32
-+      -
-+        name: dmabuf
-+        doc: ID of the dmabuf attached to this queue, if any.
-+        type: u32
- 
-   -
-     name: qstats
-@@ -543,6 +551,7 @@ operations:
-             - inflight
-             - inflight-mem
-             - detach-time
-+            - dmabuf
-       dump:
-         reply: *pp-reply
-       config-cond: page-pool
-@@ -607,6 +616,7 @@ operations:
-             - type
-             - napi-id
-             - ifindex
-+            - dmabuf
-       dump:
-         request:
-           attributes:
-diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index 91bf3ecc5f1d9..7c308f04e7a06 100644
---- a/include/uapi/linux/netdev.h
-+++ b/include/uapi/linux/netdev.h
-@@ -93,6 +93,7 @@ enum {
- 	NETDEV_A_PAGE_POOL_INFLIGHT,
- 	NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
- 	NETDEV_A_PAGE_POOL_DETACH_TIME,
-+	NETDEV_A_PAGE_POOL_DMABUF,
- 
- 	__NETDEV_A_PAGE_POOL_MAX,
- 	NETDEV_A_PAGE_POOL_MAX = (__NETDEV_A_PAGE_POOL_MAX - 1)
-@@ -131,6 +132,7 @@ enum {
- 	NETDEV_A_QUEUE_IFINDEX,
- 	NETDEV_A_QUEUE_TYPE,
- 	NETDEV_A_QUEUE_NAPI_ID,
-+	NETDEV_A_QUEUE_DMABUF,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index bd54cf50b658a..e944fd56c6b8e 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -293,6 +293,7 @@ static int
- netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 			 u32 q_idx, u32 q_type, const struct genl_info *info)
- {
-+	struct net_devmem_dmabuf_binding *binding;
- 	struct netdev_rx_queue *rxq;
- 	struct netdev_queue *txq;
- 	void *hdr;
-@@ -312,6 +313,15 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 		if (rxq->napi && nla_put_u32(rsp, NETDEV_A_QUEUE_NAPI_ID,
- 					     rxq->napi->napi_id))
- 			goto nla_put_failure;
-+
-+		binding = (struct net_devmem_dmabuf_binding *)
-+				  rxq->mp_params.mp_priv;
-+		if (binding) {
-+			if (nla_put_u32(rsp, NETDEV_A_QUEUE_DMABUF,
-+					binding->id))
-+				goto nla_put_failure;
-+		}
-+
- 		break;
- 	case NETDEV_QUEUE_TYPE_TX:
- 		txq = netdev_get_tx_queue(netdev, q_idx);
-diff --git a/net/core/page_pool_user.c b/net/core/page_pool_user.c
-index 3a3277ba167b1..ca13363aea343 100644
---- a/net/core/page_pool_user.c
-+++ b/net/core/page_pool_user.c
-@@ -212,6 +212,7 @@ static int
- page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
- 		  const struct genl_info *info)
- {
-+	struct net_devmem_dmabuf_binding *binding = pool->mp_priv;
- 	size_t inflight, refsz;
- 	void *hdr;
- 
-@@ -241,6 +242,9 @@ page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
- 			 pool->user.detach_time))
- 		goto err_cancel;
- 
-+	if (binding && nla_put_u32(rsp, NETDEV_A_PAGE_POOL_DMABUF, binding->id))
-+		goto err_cancel;
-+
- 	genlmsg_end(rsp, hdr);
- 
- 	return 0;
-diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index 91bf3ecc5f1d9..7c308f04e7a06 100644
---- a/tools/include/uapi/linux/netdev.h
-+++ b/tools/include/uapi/linux/netdev.h
-@@ -93,6 +93,7 @@ enum {
- 	NETDEV_A_PAGE_POOL_INFLIGHT,
- 	NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
- 	NETDEV_A_PAGE_POOL_DETACH_TIME,
-+	NETDEV_A_PAGE_POOL_DMABUF,
- 
- 	__NETDEV_A_PAGE_POOL_MAX,
- 	NETDEV_A_PAGE_POOL_MAX = (__NETDEV_A_PAGE_POOL_MAX - 1)
-@@ -131,6 +132,7 @@ enum {
- 	NETDEV_A_QUEUE_IFINDEX,
- 	NETDEV_A_QUEUE_TYPE,
- 	NETDEV_A_QUEUE_NAPI_ID,
-+	NETDEV_A_QUEUE_DMABUF,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
--- 
-2.46.0.rc2.264.g509ed76dc8-goog
 
 
