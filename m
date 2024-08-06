@@ -1,90 +1,128 @@
-Return-Path: <linux-kselftest+bounces-14878-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14879-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 360D0949861
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 21:34:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C409949871
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 21:36:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE19F1F21A2D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 19:34:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA58C281D37
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 19:36:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E2C4823CE;
-	Tue,  6 Aug 2024 19:34:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AEDC154C03;
+	Tue,  6 Aug 2024 19:36:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cdZFIVKK"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="dgXFt8rq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5608812C499;
-	Tue,  6 Aug 2024 19:34:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027CE1494A3
+	for <linux-kselftest@vger.kernel.org>; Tue,  6 Aug 2024 19:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722972864; cv=none; b=KT8WHYnUbGXwIQfrY7ABYD8BDdqSP35sp3lAnY9bYLK0J1Qj9NRleQK8IDK4z4a+xY1wqaDlN24+PDsuK6aqngyhE8Ftpap2+bnU4VLfgoBjgcoDduFOPc9gTTbcOWv28kHL0jpEftcbRTMUQkB1QuysUIWPtTwoN78kuvhM/P8=
+	t=1722972987; cv=none; b=DKlJUQ8yDHZCWBtuSOszqv1nOd4cxxpm7TBUXdi6mCnV7ZbE28GZMQO9eayuVfH9yxpnVN1Wi2OoPeq/YeEEyUwA/KOgpNWfAB5imvk92aC5XQXymOkT+wwm3cvv4nYCAHOBp0qMEeyVW6u0dpUMXA6JCjjoXGanbAn0OAnTxjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722972864; c=relaxed/simple;
-	bh=eTj0TWL2vBtXKJLs5erh4BI8TewdvBdBvOodO4DPvdM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fYFwidSCHURpt46EkOu6VEdcjLjJStvySUeP71C++0aZ6XC7ln05iGkUIMDwrDgx4NbJx96bkvEmoaW+GGVEzmD1rLQi8mNPokYKZb87Hcy8ZFxyOVZ2RqWkrbmb/gcciuUIX0WZN+jRqAjJ7ju2tTK282ecVv9fP+BYuzLPbJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cdZFIVKK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31499C32786;
-	Tue,  6 Aug 2024 19:34:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722972864;
-	bh=eTj0TWL2vBtXKJLs5erh4BI8TewdvBdBvOodO4DPvdM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cdZFIVKKbK2oBPjIqsyRyOAMv+cG0btdr+BjgXqKHSZemwNZ8j6GsVHIw8HYxG1Zn
-	 ieC81gIMp/VhRc0zHOBi5kUEQC79JTqcTPn29u/lZg71DZpqMThcq3MjvoTIniB6Pj
-	 GlSd+L7UL84JgZYDBNs2PUHhpWbC4P9pfLYboUCanJi3Gnl9GgBeNmILPi3xlU0v6i
-	 XrWaSy4I79FSiLzsxXwZ9WjJRP2T7QVkcVhAGYavMZhkn+IvsenJGzSV5ydA9nE0JL
-	 0bzet8VAJgw+D6XtIGPnciACfAxzWhthRG2xmrOs4lLKSEuwpAE+Y/pNh4ThVH5zbE
-	 qmAvQ9pduI+2g==
-Date: Tue, 6 Aug 2024 12:34:23 -0700
-From: Kees Cook <kees@kernel.org>
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Vitor Massaru Iha <vitor@massaru.org>, kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	brendanhiggins@google.com, davidgow@google.com,
-	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH v3] lib: Convert test_user_copy to KUnit test
-Message-ID: <202408061232.B6382B6DA0@keescook>
-References: <20200721174654.72132-1-vitor@massaru.org>
- <a41ab091-42d3-4e03-b0e8-89af354faadc@roeck-us.net>
+	s=arc-20240116; t=1722972987; c=relaxed/simple;
+	bh=iEz7lCKN6LmqkDmIh7w+RAirspZH+Yr49vveXIUCT2Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GEva/q1ovesetIKtmgznhxPfUlwftGJrIRDfSp/m/NLDdZa3jPKg1qTjIFiDAqKApSmMv9GKflQMJL5yyVZL+tdGdk0vseVW5K5AlfTTmw7XtNRQFU+CX71l8EVAhEIXQu4EhjhK5zVsqlG59WldCrCWBipuodqqeuGTp/az0hw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=dgXFt8rq; arc=none smtp.client-ip=209.85.166.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3989f6acc90so862775ab.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Aug 2024 12:36:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1722972984; x=1723577784; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+IcNnXdUnkI1mV+s9deswScXVelqj2JzGCxi8Q1hYao=;
+        b=dgXFt8rq338v9mNPgwgFpyQeEyP9PhlbTH0gd/5M7tHssveTygnJUSoOPDz1s7zoEE
+         vrXqctZJ3rctpjXUVqMPwL6X/tRQnb/2HsOyBqlkjG+8c0fMU5I73PouwXQytmKaxy2b
+         I6DfJ98qKJ91h8g816wg/YeFcfIfIoxRJQTdY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722972984; x=1723577784;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+IcNnXdUnkI1mV+s9deswScXVelqj2JzGCxi8Q1hYao=;
+        b=tIhWB+0XbOBTuRCaWqLGb4nytZ+gmYZhSsF4aeK1CI85Y6UjdysM7/aKZFvo5RaZmA
+         Kr5r1t38ZrLPfDbx1iEbkDnm1OEb5/ZATfC4q73Lebx3ujquwa9L8JV+GZjheAw5Sfg6
+         7DrVyu6PypIPjQQgUUtvSCTDXkuPhQQIcrIZPIe9VdO9q9HRv8fK2o/Gb5ro3DLBsppW
+         MAJxaXAvvIlUTe6sNaMkKsFRON5OTxfXKxKF7rldGWHqve99fkKh0pCsrLPaoB/75/BF
+         yMfPJUDQze1t8ZCeiKrz1KHznDDcZaWlgsL1U4ACLpkxQvuKnIfytBATFRWjMLOErRwS
+         6HjA==
+X-Forwarded-Encrypted: i=1; AJvYcCXh0x2Efk2/dpLF8w3lkGbXx9Ap5SWMADSwuiuXY8N/+19jvy8wK2EQ+ystfxnF3yz5pyxHBbuD6mJuZCyV21o6jt+0On1ZLsAnnC7IpIRh
+X-Gm-Message-State: AOJu0YzdGj5XQ2KikFGq6BvQQI3haDGty/eKkRpXhj8HLW3+muJr7L7q
+	uqlb54Dn7rCmRsPmT4xiih6ElOmc4DxgqK5iHEoutyL8A06AwI6W4Erle5L0Gf4=
+X-Google-Smtp-Source: AGHT+IEZoVlqN5oqC2UZRAj8/ipXO6L3aUE6bBqVulf2yqdJndVbcARXaKrOBMfnhl2rIFv8JufbBQ==
+X-Received: by 2002:a6b:7b02:0:b0:81f:a783:e595 with SMTP id ca18e2360f4ac-81fd434de8bmr1018147939f.1.1722972983992;
+        Tue, 06 Aug 2024 12:36:23 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-81fd4d830afsm267206139f.55.2024.08.06.12.36.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Aug 2024 12:36:23 -0700 (PDT)
+Message-ID: <ed207f8a-893d-489f-8e41-d698292ab918@linuxfoundation.org>
+Date: Tue, 6 Aug 2024 13:36:22 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a41ab091-42d3-4e03-b0e8-89af354faadc@roeck-us.net>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/2] selftests: harness: refactor __constructor_order
+To: Kees Cook <kees@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
+ linux-kernel@vger.kernel.org,
+ Alexandre Belloni <alexandre.belloni@bootlin.com>,
+ Benjamin Tissoires <bentiss@kernel.org>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ David Hildenbrand <david@redhat.com>, Janosch Frank <frankja@linux.ibm.com>,
+ Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ bpf@vger.kernel.org, kvm@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-rtc@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240727143816.1808657-1-masahiroy@kernel.org>
+ <202408052126.E8A8120C1@keescook>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <202408052126.E8A8120C1@keescook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Aug 06, 2024 at 08:48:43AM -0700, Guenter Roeck wrote:
-> Hi,
+On 8/5/24 22:27, Kees Cook wrote:
+> On Sat, Jul 27, 2024 at 11:37:35PM +0900, Masahiro Yamada wrote:
+>>
+>> This series refactors __constructor_order because
+>> __constructor_order_last() is unneeded.
+>>
+>> No code change since v1.
+>> I reworded "reverse-order" to "backward-order" in commit description.
+>>
+>>
+>> Masahiro Yamada (2):
+>>    selftests: harness: remove unneeded __constructor_order_last()
+>>    selftests: harness: rename __constructor_order for clarification
 > 
-> On Tue, Jul 21, 2020 at 02:46:54PM -0300, Vitor Massaru Iha wrote:
-> > This adds the conversion of the runtime tests of test_user_copy fuctions,
-> > from `lib/test_user_copy.c`to KUnit tests.
-> > 
-> > Signed-off-by: Vitor Massaru Iha <vitor@massaru.org>
+> Thanks for resending this!
 > 
-> These tests are failing (at least) for arm-v7, loongarch, and mips
-> qemu emulations; see below for failure logs.
+> Reviewed-by: Kees Cook <kees@kernel.org>
+> 
+> Shuah, do you want to take this via kselftest? If not, I can carry it...
+> 
+> -Kees
+> 
 
-Oh my. Good thing this got added to KUnit, then -- the core of the tests
-haven't actually changed. I will see what I can uncover.
+Just about to ask you if you want me take it :)
 
-> Any idea if those might be architecture problems, problems with qemu,
-> or problems with the test ?
+Yes I can take this - I will apply this for Linux 6.12-rc1.
 
-The last two look like NULL derefs (??) and the first seems like maybe a
-test problem (the failure looks kind of like the CONFIG_MMU=n cases that
-were fixed earlier).
+thanks,
+-- Shuah
 
--- 
-Kees Cook
+
 
