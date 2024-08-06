@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-14859-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14860-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76D2C94923D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 15:55:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98FE794924C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 15:57:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F1FD2847CF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 13:55:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C95851C214A2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 13:57:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF95B20FA93;
-	Tue,  6 Aug 2024 13:53:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6826E1D47D3;
+	Tue,  6 Aug 2024 13:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b7LEkFXq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NzxQZzWK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F42021EA0BD;
-	Tue,  6 Aug 2024 13:53:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA5711C579D;
+	Tue,  6 Aug 2024 13:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722952391; cv=none; b=Nj7k2CSsOWaxlBiTcp4Wc3Ya5fhSH9oMWV83hxOBqd0xEhWJamVIEEtYHHoUGdh7nm0bSxqAgfKX5tl/eJtIxvLoTvK5qsVYHOHh/7zV7eG50BBsuVzrlzbIefcpuHaOpaD4ro8UF6QiRMU/H8Hn/TC9OwGf/xImA8xBdcofY7s=
+	t=1722952616; cv=none; b=lf23c+D3oWG/vq4yauyxKmk0BRdPk9BVvyQUwa97zC4Lp2w6fmJTg0z7Rb8X3n2xNAtrTzd57KlwAXbyj8OkFNYtmuywGBJNQVkeYNvxI+ifxxTxbzHloW6LhUewffXz4x7x66vPRnBkpi0eDJkPQWPcQ+YKpBvXNCQh9QHs90E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722952391; c=relaxed/simple;
-	bh=HvFHdNSXsI7+QfH5LiWr9J9QYWprpWMl/4cvaIuvVMQ=;
+	s=arc-20240116; t=1722952616; c=relaxed/simple;
+	bh=P9EbeoRT60rQDkcM4qaVG4RD3YBobJKZcRP/nEPc5/Y=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Gw7tL2b/FRjkM4pt1HNp+V6bP/8/uXtZkBxTA/dBzI6lp8RZ2U7aNnRMv8q2azbh2aoOg8HSA3WRCdpe4NUIZoi4UqqsebPYH9QBkx1o/Nx9hcqYH3tTaAd98jnP46pWDWX5Q84K/7GFUr/VlyI8ChtkS4CZAEEx2uhCAwviPH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b7LEkFXq; arc=none smtp.client-ip=209.85.128.51
+	 In-Reply-To:Content-Type; b=Vfl/k20Ql8Be1v1SFyY3uZRboVu5VFslVfkUmMX8ahO/t9sEb/AGEjCnMMaE0vkyIrCM1PkuDiXIqW+apx0q9/sG9FLml/0B5FDR1Y7nPHlbmEczO4ggM0o9VhGjCjQSS1L4ehZZ/Es9KDBfYHYFefJ6q5O++YyPYWOwoEZ7fIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NzxQZzWK; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-427d71e746aso123465e9.1;
-        Tue, 06 Aug 2024 06:53:09 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4281e715904so380635e9.0;
+        Tue, 06 Aug 2024 06:56:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722952388; x=1723557188; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1722952613; x=1723557413; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ESWuuRI+S8LlXsCQ7zsswRjv/m7jikQQ1fbrdUBF+y8=;
-        b=b7LEkFXq6R1YXhE6l40e3rUz80Rlrz5Mzgm2SkJ/1QdzSshiUYpyPugUTurBesUVXH
-         GmcErHGhIepuZEvyBj61Giewzu7wBRDX0ftBUlb42a+BTtGT/FK1gGHS0rJqqgzNLZZZ
-         zmDgeeaqMdxuR27RJPh5inubqEaXwFHnpzaqY+nb+b6DGbTZfF46YspPqH06I7SAwLU8
-         GZHH6USZyVplI628r1dmJo+UzokoCIN0eOQA+B4UmDcGe3Ufwby3hRoH0Wv5xUCuaE++
-         HRYr74kJDaJm9kx6IZz8oxrvEwBcQjIql3+cTKuz1i9h7uq7uTeKQGB0TNx5flLHiOuK
-         ii6A==
+        bh=rGYRmrw93lyT9+EcZR8YwD5h3/xRcHadaUPb+Q7HbDM=;
+        b=NzxQZzWKcHweG0y8n6N0INqEt/1u6laSogE9Vz+W4Y87IbWee2ZkCNctX746bd6+qH
+         HslU8ghP2em+pvzNoUUhjcIAQZVtvB8hqBxY3NpcGuMwjvQgUYx+qdOE1JJ+bsnLnAsy
+         8e13uLSuuPy8j+Bl43fVc33FF+fa1BDjMQzwC1/hFS8/4gb1FYTUaEDSmhoV/kweGmTu
+         tmMreklv1ARfkyyf4d6Tp/04BQhfn/t/QFtb4ie2D2SFLRiCws5Qr/fP4Rc/Re9GX4xx
+         IZxTxjUw3YzKKEXOIl+/BAib7WJ3ccgw2b4ILdTepnDSnCwiZKJNLG0rAhl0/tdyIHf0
+         njoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722952388; x=1723557188;
+        d=1e100.net; s=20230601; t=1722952613; x=1723557413;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ESWuuRI+S8LlXsCQ7zsswRjv/m7jikQQ1fbrdUBF+y8=;
-        b=u748pWdoDNwQXxa1fr+Fv0O0k552XMomHC2zjgQVwFmzPSjwTIV4VhikmaOpOUPVvY
-         RetvGuQBCLtlHdL6RF3fczjn31yvhg6hHzEfhK1sprtmMGCuBBV3o2xrm1iamz7OG0zD
-         /UkAE1kQWugMHBtXM4wyeXqRXICQM9PehcibgCkvQV2yb2j+348+CHGhkN4Hffiqajli
-         S7Eb778mM+rl/Oe2odjnFs5j++AI/NZntxEVLfnABUeF+PfAZtxfFdYSWb3UgeG/gqV7
-         q/zio2j7Pr8XG9WASUgLx9JPet7ulNhS2NDjM1Cus+9leqi/1Z7Bpx0B7zJ+wAvuCH5w
-         325A==
-X-Forwarded-Encrypted: i=1; AJvYcCV+94qXR0kHqYzlxmNRpFXBX+8OoHjm/a95yOu+6qR5Vrvmw5a4EiBZJk7lElwGLXkwGzeUnR9EGeY=@vger.kernel.org, AJvYcCVAHHq1FTf1ywb/g4jVWdsAZt6proGY3HynkcgK82tSijxU7EYoH78REnjs+vP9KD3s33A9txCzrGhvtBps@vger.kernel.org, AJvYcCW1FawjrP2VgSCHempiQiD/CzRbpEXXXr4cf+fD3zEmTWJPXkjXzeK6Nw7y9W+RTVSnM/jwQl3/VaPAtFvvJWa+@vger.kernel.org, AJvYcCWuLLTEb+lEmHrs5jpDI1p+YH3auIcYKcIqaG5F5WSjzwtf9cBaG6EVDGxctyFuwUomsO8bQK6DZ1QuN3U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTClRPijG3JFUJo2LbQqyM1IKTtuqo8SxaWCtH3xo4fLihwJNi
-	qi7CBSo2sJG2CLyGmExavjQyKnPBcd3xKNSGg1tz+nz5FDjAXQ+h
-X-Google-Smtp-Source: AGHT+IE3B97iqF+o2EyfNUzNzruvfVcTRIeX9q/YkXCwXDoGFn+N6ekjHInQAAjvVAVxszERARpnhA==
-X-Received: by 2002:a05:600c:3b9b:b0:426:6fc0:5910 with SMTP id 5b1f17b1804b1-428e6aeff6dmr65884775e9.1.1722952388042;
-        Tue, 06 Aug 2024 06:53:08 -0700 (PDT)
+        bh=rGYRmrw93lyT9+EcZR8YwD5h3/xRcHadaUPb+Q7HbDM=;
+        b=IEj22B0b5ZHGdigODKTTIe4E03ipp7I0VZNyKfrhK8Cu+cMlVY/stab4KlcdR0M1lq
+         +8VJmsB/1+EL42eTnO0qyLoErh5yJe9nyN7aO7V+RgGh+ip3xw6Q1+vHFvL+ZC/Y8fUU
+         oolt3GeS42ZNFIVJg/Kmn7W1D6DsG1ljv/VQoMgSot39jfnaNAe5icXvV5ybIwrhONcX
+         bGVheqmckXXZM0n/6BOA8tUIcCvmVc7ajoWEsDUSRsYGIxCHT9f32EL8CNn+KNXFuCp0
+         e46wm4HYPvuKZ2cFGWtCUaBYiFYi85MuBRGTTBRs0AbOpZaeDsBYxYPoO4tGPbu4Y3JV
+         4qOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVV9hBfFzMLcLTUkwqPlXG4YuZOpyaXJE5fYHoFIECX8YPT61daRQcl2IxYvHOUfleL573ZH8eOLpxMGPH6MaD5CKOGNCW2/cPZKXhuB0WoRY1TKHv6pOmCz6fYGZhcJuw8bNL53VgYAHvdd47vADTQsDaGVFFtcKvaSLJUL78cZ/QN8b4=
+X-Gm-Message-State: AOJu0YzHlgRSjqm/XxNU9e23NE5IltML3xGPf7oJnoVmcYlq5pdlgZuY
+	pXyYsg2/C3xUK6CUnIhi9FcrKRzzUVyzTd0eI9tv6fhKONfAt09n
+X-Google-Smtp-Source: AGHT+IEY7UGmH6pDeX7ipw00m+WWJP3MfsJP+s7AIwqszU79s04STakugi2gaQ8mejKlJdjQ6BterQ==
+X-Received: by 2002:a05:600c:3152:b0:427:9f6f:4913 with SMTP id 5b1f17b1804b1-428ea0fd688mr64176135e9.5.1722952612705;
+        Tue, 06 Aug 2024 06:56:52 -0700 (PDT)
 Received: from ?IPV6:2a01:4b00:d20e:7300:b50e:24fa:fd17:c835? ([2a01:4b00:d20e:7300:b50e:24fa:fd17:c835])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36bbcf0c314sm12914617f8f.12.2024.08.06.06.53.06
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4282babaaa8sm245028995e9.24.2024.08.06.06.56.51
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 06 Aug 2024 06:53:07 -0700 (PDT)
-Message-ID: <a6be66bd-1133-48aa-b892-48b132e7a0c2@gmail.com>
-Date: Tue, 6 Aug 2024 14:53:06 +0100
+        Tue, 06 Aug 2024 06:56:52 -0700 (PDT)
+Message-ID: <c5624841-fa50-4bd1-841f-071bef166fd8@gmail.com>
+Date: Tue, 6 Aug 2024 14:56:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,60 +76,55 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/4] selftests: ALSA: Cover userspace-driven timers
- with test
-To: Mark Brown <broonie@kernel.org>
-Cc: perex@perex.cz, tiwai@suse.com, corbet@lwn.net, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+Subject: Re: [PATCH v3 3/4] ALSA: timer: Introduce virtual userspace-driven
+ timers
+To: Jaroslav Kysela <perex@perex.cz>, tiwai@suse.com, corbet@lwn.net,
+ broonie@kernel.org, shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
  christophe.jaillet@wanadoo.fr, aholzinger@gmx.de
 References: <20240806125243.449959-1-ivan.orlov0322@gmail.com>
- <20240806125243.449959-5-ivan.orlov0322@gmail.com>
- <038cb9ff-4028-4179-9722-df324e29c73d@sirena.org.uk>
+ <20240806125243.449959-4-ivan.orlov0322@gmail.com>
+ <8bcfd160-8c6a-4a1f-807c-f76e7f069b49@perex.cz>
 Content-Language: en-US
 From: Ivan Orlov <ivan.orlov0322@gmail.com>
-In-Reply-To: <038cb9ff-4028-4179-9722-df324e29c73d@sirena.org.uk>
+In-Reply-To: <8bcfd160-8c6a-4a1f-807c-f76e7f069b49@perex.cz>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/6/24 14:04, Mark Brown wrote:
-> On Tue, Aug 06, 2024 at 01:52:43PM +0100, Ivan Orlov wrote:
+On 8/6/24 14:11, Jaroslav Kysela wrote:
+> On 06. 08. 24 14:52, Ivan Orlov wrote:
+>> Implement two ioctl calls in order to support virtual userspace-driven
+>> ALSA timers.
 > 
->> -TEST_GEN_PROGS := mixer-test pcm-test test-pcmtest-driver
->> +TEST_GEN_PROGS := mixer-test pcm-test utimer-test test-pcmtest-driver global-timer
+> ...
 > 
-> This is adding the timer timer tests as standard kselftests to be run by
-> the wrapper script...
-> 
->> index 000000000000..c15ec0ba851a
->> --- /dev/null
->> +++ b/tools/testing/selftests/alsa/global-timer.c
-> 
->> +int main(int argc, char *argv[])
->> +{
->> +	int device, subdevice, timeout;
->> +
->> +	if (argc < 4) {
->> +		perror("Usage: %s <device> <subdevice> <timeout>");
->> +		return EXIT_FAILURE;
->> +	}
-> 
-> ...but this requires specific arguments to be run which the kselftest
-> runner won't supply.  I'd expect it to be a good default to enumerate
-> and test every possible device and generate a test for each.  However it
-> looks like this is really intended not as a standalone test but rather
-> as something run from within utimer-test, in that case it should be a
-> TEST_GEN_PROGS_EXTENDED.
 
-Hi Mark,
+Hi Jaroslav,
 
-Yes, the 'global-timer' application is not a standalone test and it 
-should be ran by 'utimer-test'. I had to extract the timer-binding 
-functionality into a different application as we can't have 
-'sound/asound.h' and 'alsa/asoundlib.h' in single source due to some 
-declarations overlap problems.
+>> +struct snd_utimer_info {
+>> +    /*
+>> +     * To pretend being a normal timer, we need to know the frame 
+>> rate and
+>> +     * the period size in frames.
+>> +     */
+>> +    __u64 frame_rate;
+>> +    __u64 period_size;
+> 
+> There should be just one timer resolution in ns member (like in struct 
+> snd_timer_ginfo - not frame/period members here - it's too specific). 
+> The resolution can be calculated in the user space from the rate and 
+> period size.
+> 
 
-I'll move the 'global-timer' tool into the TEST_GEN_PROGS_EXTENDED list.
+Ah, yes, I agree... Also, it should help us to avoid complex 
+calculations and sanity checks in the kernel space. I'll replace these 
+two fields with 'resolution' field in V4, thanks!
+
+> Also naming - the timer API uses snd_timer prefix for structures, thus 
+> snd_timer_uinfo should be more appropriate.
+> 
+Alright, I'll rename the structure.
 
 Thank you so much for the review!
 
