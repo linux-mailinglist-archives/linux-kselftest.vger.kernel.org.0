@@ -1,56 +1,75 @@
-Return-Path: <linux-kselftest+bounces-14830-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14832-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 968359489D0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 09:11:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2380948A2F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 09:34:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C407283EA4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 07:11:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 880711F2124F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 07:34:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C72A166F31;
-	Tue,  6 Aug 2024 07:11:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A494C165F0E;
+	Tue,  6 Aug 2024 07:34:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="aLC7wrbu"
+	dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b="FbjRBqio"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6801C165F08;
-	Tue,  6 Aug 2024 07:11:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2DB1F4FA
+	for <linux-kselftest@vger.kernel.org>; Tue,  6 Aug 2024 07:34:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722928289; cv=none; b=QFgLB4SHdvVNqSR1aoWk7ap+uoF1BBb+WVECraaqvmJqzn49rfLwfkJj6Y4zW8WcRHl0ydZHk+Wq6aWLKMV37z0iT35J3hT2Z6w87o+PvyzJ+EQ0+3tAcNG3Irg5xFdxr2xDpVsuHOiEtv12jl87vARzVrZINHJsf09xbQeG1bI=
+	t=1722929687; cv=none; b=N9H4R6QVFa8likn8052E1itIFIe1d0IE8ys8kNlv7SutrCrWmKcfs+aGByNs4catq+2V3jXGQEANZ2btjJvTEUi+5fIvw0XY6KqmnWFkKxaphhKkf+5/oIEJy074TAf70J93cycfthW4MDFypblzfAZeD4gFlQsgODD8/SzOraY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722928289; c=relaxed/simple;
-	bh=7HePuyoWPygVPxh4qKr24Yod2wxAsQz31TbzWEQpLRQ=;
+	s=arc-20240116; t=1722929687; c=relaxed/simple;
+	bh=55gWQtAXMFTTpi7jpzXMXqKEJTXZZmmHsBtPR9LbyxE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bCPHua2SW85CCcYg73datwMjbM2HOssSC0l2FUnJzHmw6Q6J92DxDxL8aAX1fPVQLB4wMheE+eVeEIrpshAhF0vzpcoHz9PwAmf+px6K3lYlLnnho3Z53SnQZB5tfXCdRuZe/HvMIQ38j3sF6KfLD+Vmrv5L/SmuvXjwtXoPWCU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=aLC7wrbu; arc=none smtp.client-ip=212.227.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1722928283; x=1723533083; i=markus.elfring@web.de;
-	bh=7HePuyoWPygVPxh4qKr24Yod2wxAsQz31TbzWEQpLRQ=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=aLC7wrbugvHbc7JitVGK+UbcVshwtENRbS63MrtuGO+FdCGD2lnXqmw9CP9GnaeC
-	 TFfrydT8yJue9bUo/wS8AtmAk6nut6jcbgQIBqgITOjiRRLa3VB1qGG0JiIl4CYsR
-	 CkEQXMkLNvcXuDaYsPfRyyJZTDNY6Srf0tSU0Q3anf3BEVehnreZ+oVlvm7JJAl5g
-	 4nC0KYEBxKRytoI1WgG+epHzc7IVXjXLUweerikYV6Bjs16L/pZuhHC0tOthxGXfY
-	 SkQboLneSY9dYwF4taCPUoAcJcTqxWmK357OMq33GxwfPee2lBJx6wmYhg27NInOU
-	 L1ATh6GHpOYXVQoftw==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.90.95]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MbTL1-1s3oIK0Nk9-00mINb; Tue, 06
- Aug 2024 09:04:09 +0200
-Message-ID: <9aad36fe-cd4c-4ce5-b4d8-6c8619d10c46@web.de>
-Date: Tue, 6 Aug 2024 09:03:33 +0200
+	 In-Reply-To:Content-Type; b=KpeyGdNK+xLwORPjDrAGrzE0tdcMSB4u9sosdern3b9YV5lZWs8Se3uFtyj10KB/Zvt9TgLKT7caB4Ujm7aYLZd2FBI35dXE6cjln35ctaARScvx8YeDyqWsB14LV1XfrmuVzwOHxKigDA8yrT0+hp48ciuXLhZBaVwqpYOfT9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com; spf=pass smtp.mailfrom=6wind.com; dkim=pass (2048-bit key) header.d=6wind.com header.i=@6wind.com header.b=FbjRBqio; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=6wind.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=6wind.com
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2f149845d81so4516591fa.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 06 Aug 2024 00:34:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=6wind.com; s=google; t=1722929684; x=1723534484; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=cojje0NgqQhFEUPTcwEliyWCA6eVmhHl0uuQefpE1jk=;
+        b=FbjRBqioc1AL10u2/Qr3e7cVX85tnocqPHOL3DHc56SpC+30wx4ZAmJ0sGKlGKGVoY
+         hX2KTy+ebTIZQeqr/lYAbtaIsNzJRb81g5swaP2jXnvYuFtbBNurpCm5oHN0lUTDvrfV
+         r8/FPM7PPsQPZ2/Kck+n1+lfsgF79xBIPng9Bcu6/MUufEHT0lGJ47pctHoFq1ksRoCm
+         SijuxRQIkP8c+Tb5fyNEl+EknIwv2q5ip8HYWOT/e+tdg6q4XO4XFcOLaRNOVh86DYr/
+         s5mpIbdS4Teo2JvAeXPUgWiPdtxDUpPopjM0bbnIpLd1lwaQY7ZSm5sBEzHIPODs/QWS
+         V9jA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1722929684; x=1723534484;
+        h=content-transfer-encoding:in-reply-to:organization:content-language
+         :from:references:cc:to:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cojje0NgqQhFEUPTcwEliyWCA6eVmhHl0uuQefpE1jk=;
+        b=MYCtHUo+32J74gFHkJnEoQRQL1VnkcpG2DXoIxekX9n95gUXJhqhxSSppS6Z+GuUgw
+         dXorzGiO1uzaa8Ebiflv7jE5u2Dtpfb235ttQIf4uyaBDp0RnhdxFhX9hFitS7QMumLj
+         Kdnv80jl7TqFuM0kgFUqwRtm5I+e1muECxwBvBV31P8iMVWfXGeXhUqDzNmOdYFCShhO
+         3Zuym9fE2Gf4hAA9zpm3haxewoNHI5NZ4iF28/UGbtZb1iREzcpJPax06lOMrt0AFNlF
+         cBxhhFrJXKFkII01mh36bi0UruFGY0k1/d+jlz/mkE4I8boe69T+33E5FSpeqSjrd16Y
+         eCnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXXQtDzjH/qrx3Bvb5JhAIjPQZ3iZ8uQsEjTbhfTlGh8vpiKFI2Xb0uVfFhAjaTodHg3xomkvG31DMNoh06ev2wMkuzKAREtAua54n0WA2z
+X-Gm-Message-State: AOJu0YyfNsn5vyPKszMnSV0nBJggz0uCI4d9LgEtuNmiDyQbVHDJULkG
+	qIxCAZH5T8fzjyGPT/ZVJvV9xm4II1sC0IqCBFaH/JyMJ4AR7YU5lEFN2fFQZ4A=
+X-Google-Smtp-Source: AGHT+IEKUUDFBc25n+DfFynKB6ukFiPCNzwQXURUKaLlve+6TgRpyJmxzz/8c7Kqgmg1asqozL2iEA==
+X-Received: by 2002:a2e:97ce:0:b0:2ef:2e6b:4102 with SMTP id 38308e7fff4ca-2f15ab38302mr84697931fa.43.1722929683713;
+        Tue, 06 Aug 2024 00:34:43 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:b41:c160:400c:6f2d:f80c:1b34? ([2a01:e0a:b41:c160:400c:6f2d:f80c:1b34])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4282b8adaadsm229930205e9.12.2024.08.06.00.34.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 Aug 2024 00:34:43 -0700 (PDT)
+Message-ID: <3bcdec5a-a93c-45c4-83a1-e941a39cf1fd@6wind.com>
+Date: Tue, 6 Aug 2024 09:34:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,99 +77,73 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v17 03/14] netdev: support binding dma-buf to
- netdevice
-To: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>,
- Kaiyuan Zhang <kaiyuanz@google.com>, Pavel Begunkov
- <asml.silence@gmail.com>, Willem de Bruijn <willemb@google.com>,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- LKML <linux-kernel@vger.kernel.org>, Andreas Larsson <andreas@gaisler.com>,
- Arnd Bergmann <arnd@arndb.de>, Bagas Sanjaya <bagasdotme@gmail.com>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Christoph Hellwig <hch@infradead.org>, David Ahern <dsahern@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, David Wei <dw@davidwei.uk>,
- Donald Hunter <donald.hunter@gmail.com>, Eric Dumazet <edumazet@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>, Helge Deller <deller@gmx.de>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Jakub Kicinski
- <kuba@kernel.org>,
- "James E. J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Jason Gunthorpe <jgg@ziepe.ca>, Jeroen de Borst <jeroendb@google.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Matt Turner <mattst88@gmail.com>, Nikolay Aleksandrov <razor@blackwall.org>,
- Paolo Abeni <pabeni@redhat.com>,
- Praveen Kaligineedi <pkaligineedi@google.com>,
- Richard Henderson <richard.henderson@linaro.org>,
- Shailend Chand <shailend@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Shuah Khan <shuah@kernel.org>,
- Steffen Klassert <steffen.klassert@secunet.com>,
- Steven Rostedt <rostedt@goodmis.org>, Sumit Semwal
- <sumit.semwal@linaro.org>, Taehee Yoo <ap420073@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Yunsheng Lin <linyunsheng@huawei.com>
-References: <20240730022623.98909-4-almasrymina@google.com>
- <5d3c74da-7d44-4b88-8961-60f21f84f0ac@web.de>
- <CAHS8izPxfCv1VMFBK1FahGTjVmUSSfrabgY5y6V+XtaszoHQ4w@mail.gmail.com>
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <CAHS8izPxfCv1VMFBK1FahGTjVmUSSfrabgY5y6V+XtaszoHQ4w@mail.gmail.com>
+Reply-To: nicolas.dichtel@6wind.com
+Subject: Re: [PATCH net-next] selftests: forwarding: lib.sh: ignore "Address
+ not found"
+To: Geliang Tang <geliang@kernel.org>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
+ Hangbin Liu <liuhangbin@gmail.com>, Benjamin Poirier <bpoirier@nvidia.com>,
+ Ido Schimmel <idosch@nvidia.com>, Jiri Pirko <jiri@resnulli.us>,
+ Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <764585b6852537a93c6fba3260e311b79280267a.1722917654.git.tanggeliang@kylinos.cn>
+From: Nicolas Dichtel <nicolas.dichtel@6wind.com>
+Content-Language: en-US
+Organization: 6WIND
+In-Reply-To: <764585b6852537a93c6fba3260e311b79280267a.1722917654.git.tanggeliang@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:ud03T+VJ0WQWkNGa/SuDGe/nuF0sGbh6xFVs6sj7mBpoHZmEK9m
- /g8pgN0ga+9LIF+xkm8yuxipRI1qpxk9O/iv4my6GHrRWDZdHWWggRKyAqliCerii6f6rsb
- 4m+YAthbpuAnnWrnfbwf6MXbKNd/W6OA+m2MMbRtZr+OncP4jJnp6T9Z97ykCCWrjKOacd6
- hZrRGnLMzDmwJNYA5qgFQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:zPsCc1lrsyU=;Y7DEz/vBBmk+SeE6JgoellZvOuX
- kcZRuFvCRXoAHvpu4L73XmcVhTOHNgehO96ILvjt1EA+Yfwm+WDObNm8eksbv1ELbJYKHqYuz
- C40nciD9oSUI3qebeUWhWAWNw7O1ZrFCxPEqgZbaIkIgGvz/ZvU+Edr2+r3atRNSYhdojMJGs
- qWNCXPBNGKklLG5YXjAmVynAryjZPyB4DRUWZuWuUZbVGnrzr/dfLX/m4iZiFVpuknIlxfLaS
- xWcqEOkcpgXpzyLmDKyCj2LOpicZIF8SfFwd5XFuIKa3K66sjfL+BkUlwpxAv7IpIijQA5uFB
- NMsuhO3BGbozyiyAPZ7SxPzrj+NoB+HSLSdffc9wC8m9fIO9zlY+RDpLSBXtfaqoSFdlE8Az+
- LQ4ucimoajT41/N7wv7fvsZri+AdA955Db3MF3Dd+TUWIr4dx5BdvpTc9KN8qH8s4Z3U6YKrq
- A6ohigBF8yZiYbPlA7HiLOZaWbX3o6tzjjX0bezEBmpfmnPEa63AfPvVSwsUGK8N2420+lMCV
- g1jPz/Et77QWGhKdme4mxWFmIYMlkhE4IVdnOfRmy2yYk28FC16LtnfwsXRLH+TzXHEznXqv+
- 1OteD/9c2ul0sK2Y4eVn7vXLx2oN9+dzooNND404WbnJfqoRnLeEAdhrRHOc6IBP8m3r252jT
- e9hstn4baSSLD5NLSETphdL/3gwE897NmkuQvEGSR36s5Wk5yJSaRRiWtAHAZFN9pzMnJzQRn
- MySFB0ZEJi/ForUpyXH7UsRV8W2zYGkuWK9oriuaNLDHkUvpbnFnBefK38oMRYALjMqQRa8IU
- qJ0sxMyEwM1fCeDOojdWCPwQ==
+Content-Transfer-Encoding: 8bit
 
->> =E2=80=A6
->>> +++ b/include/net/devmem.h
->>> @@ -0,0 +1,115 @@
->> =E2=80=A6
->>> +#ifndef _NET_DEVMEM_H
->>> +#define _NET_DEVMEM_H
->> =E2=80=A6
->>
->> I suggest to omit leading underscores from such identifiers.
->> https://wiki.sei.cmu.edu/confluence/display/c/DCL37-C.+Do+not+declare+o=
-r+define+a+reserved+identifier
->>
->
-> I was gonna apply this change, but I ack'd existing files and I find
-> that all of them include leading underscores, including some very
-> recently added files like net/core/page_pool_priv.h.
->
-> I would prefer to stick to existing conventions if that's OK, unless
-> there is widespread agreement to the contrary.
+Le 06/08/2024 à 06:20, Geliang Tang a écrit :
+> From: Geliang Tang <tanggeliang@kylinos.cn>
+> 
+> So many "Address not found" messages occur at the end of forwarding tests
+> when using "ip address del" command for an invalid address:
+> 
+> TEST: FDB limits interacting with FDB type local                    [ OK ]
+> Error: ipv4: Address not found.
+> 
+> ... ...
+> TEST: IGMPv3 S,G port entry automatic add to a *,G port             [ OK ]
+> Error: ipv4: Address not found.
+> Error: ipv6: address not found.
+> 
+> ... ...
+> TEST: Isolated port flooding                                        [ OK ]
+> Error: ipv4: Address not found.
+> Error: ipv6: address not found.
+> 
+> ... ...
+> TEST: Externally learned FDB entry - ageing & roaming               [ OK ]
+> Error: ipv4: Address not found.
+> Error: ipv6: address not found.
+> 
+> This patch gnores these messages and redirects them to /dev/null in
+typo: s/gnores/ignores or 'hides'
 
-Under which circumstances would you become interested to reduce developmen=
-t risks
-also according to undefined behaviour?
-https://wiki.sei.cmu.edu/confluence/display/c/CC.+Undefined+Behavior#CC.Un=
-definedBehavior-ub_106
+Nicolas
 
-Regards,
-Markus
+> __addr_add_del().
+> 
+> Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+> ---
+>  tools/testing/selftests/net/forwarding/lib.sh | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+> index ff96bb7535ff..8670b6053cde 100644
+> --- a/tools/testing/selftests/net/forwarding/lib.sh
+> +++ b/tools/testing/selftests/net/forwarding/lib.sh
+> @@ -839,7 +839,7 @@ __addr_add_del()
+>  	array=("${@}")
+>  
+>  	for addrstr in "${array[@]}"; do
+> -		ip address $add_del $addrstr dev $if_name
+> +		ip address $add_del $addrstr dev $if_name &> /dev/null
+>  	done
+>  }
+>  
 
