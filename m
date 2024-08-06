@@ -1,419 +1,169 @@
-Return-Path: <linux-kselftest+bounces-14853-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14854-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEAF1948F95
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 14:53:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BFBD948FE4
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 15:02:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BD882834C1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 12:53:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE250B25A90
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 13:02:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE461C68AE;
-	Tue,  6 Aug 2024 12:52:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9550D1BF311;
+	Tue,  6 Aug 2024 13:02:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IKh1XZWm"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OQa/XMP6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 313611C688D;
-	Tue,  6 Aug 2024 12:52:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE371C3F3A;
+	Tue,  6 Aug 2024 13:02:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722948777; cv=none; b=G2jGpZqN7fY2vSuXdJTTjWDQmkxKF+yxVMgb348nYo5LymnKj1ARkQWH2yhagEACKOcg2Ajzl9CUpMahC8/FmSWtwB8s3mwvxHwCefoH7A7rloCY1WJvM4eAWbanB7DtWugoH4lcP3Ma4NC+ky34K04ckWRpzuPtcJfXPBAOnlY=
+	t=1722949342; cv=none; b=XA8/DZl6kFkuykGcnKyVcWz7DnfNY1JxXInyFegZ0UMoiqFE3sxFKa3YOnxp1la21LagJsVneQok7hAnKw2Yi42j368UfuF29yh0vTRHPBxo3CV6r9zYOT8w86esT64Dczhb+3Jpq2KoWQWeugKH/ar2sCXK97Jekms2uVRwipw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722948777; c=relaxed/simple;
-	bh=/55xrf/HuMLBT6TGFOESB6Qj7so2A9YjCR50+l6/JaM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Q2Y8cTE9eTpnxGfTI5y+mDdesuvTj5t91C+BoH42VBnSRVLo18WD1ucbvM0AqaPFfMdlrXS3HKBUA77WEQda/+GoJ2a/ygL0zssBesI2UhIncWhf3Jm2iUmOxlR4lRsj4/6kr+VeLKhKQlQiK/lj4NxLbuv12tO6QjN8XdFTTfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IKh1XZWm; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4281da2cdaeso711035e9.2;
-        Tue, 06 Aug 2024 05:52:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1722948773; x=1723553573; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jwC3+x5PmJt8tLZdNyQYdkJXkd65oNOA/vjxCPkni7k=;
-        b=IKh1XZWm2soWkzdWnHRzvGgLpygQbq/Hq55ZBo2T9olvvbWQZUloFQFykUxjWl2S9Y
-         XnKcT615qDxGDF+zwYOrisQtq4qbG1Ifw81LBCM5nUQg9kVfPDEZiiJYrWrgUHWrndzZ
-         Ak3J+0guMd5S1NFh/c2JzfrA6GIbDbNvj8Ue5jZcVe2BL6HpHujxf8EQlyrMy+AV7uKo
-         a4Ky5yYkhc7c8Mz599tZCsc2L7mlSWF8Hb1WTyxu1X7/b1fagqCsqo6gAHR21zbeMkI2
-         BmbElep7EuGS8mSuIctKJ9h3Dlc0cLuO5mcE6RM7joJjKxtI303hHP0fUOTYecbvf8jr
-         9Fbg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722948773; x=1723553573;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jwC3+x5PmJt8tLZdNyQYdkJXkd65oNOA/vjxCPkni7k=;
-        b=bObXXXhKe3MA7bKebSnvFYf1VzowzWjO4vqQPThSNKIAKsh+WxyySs6bwowdPwL5Jw
-         tyo/n1DoVLctEIO0fkB8e+ovTOOdRPYGxH59lQxyAOpK9GYL6zf5uSz8Z4ypw+ksOrUE
-         lP/Su7x4pjxVc9aC0PpkEjkWMno47Ixe9K4UYY8FqW/ML3gRTkmrBJs5vYMcG+N2v9un
-         i+0h+36zD46EvIcrwsawftG3QRK8JsZB114kPgSDYVUsdh01BPsZq83wif3E/C+Quzhg
-         MknGwDqMwgDoDMVgi3i7K8PGYs2A7p63t3KUJAFqvEnRcf+FWqyi84V1thkORS8msreS
-         GzJg==
-X-Forwarded-Encrypted: i=1; AJvYcCV7aiztsGby+Bvowbe7DqKJkgiH+I9AE9fZmZVwXhs9CCmd1zfEgS0nvhV8SzojgBY3UMZKq/yErPU=@vger.kernel.org, AJvYcCVBplm6LHW3a7/Q04v4JOkpWTI+LlklaW+GVqOqmbxOEh4wiNbQNpJLLBlLvnaaViCex5tUeDJXVkr5L34v@vger.kernel.org, AJvYcCVZmZx5uGcXCjPd6q5MCPcgvMx2nlnAgzbV5fYz6OKlbtliq+cUqlGOsA/5jGJdLu6AcH8HL11LXasFyUke463N@vger.kernel.org, AJvYcCVqczIJe4nYaoo1g2NtOjsJEhS6sawddiogGRrEch64YSJwbCR9XhUZ6956MZAYQBbtjNpNWzkpMZL1T10=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yykjg5jipIITWhpj2VfyJ0WvP1sbwE0j+3xQrkCoTD/4jDqukap
-	9r2votB2nKg081WX7S3tlJG/u8sjEd1SkUoMQjKfXWX7kagrsP3P
-X-Google-Smtp-Source: AGHT+IEkEkXNKeqwp+uHF5MIDYP23+ex35LTXHBjQB29zk0y1ZqwFJXKCLAB3ZudDVib1YsoGtjHvg==
-X-Received: by 2002:a05:600c:1d04:b0:424:8b08:26aa with SMTP id 5b1f17b1804b1-428e6b80263mr64997365e9.3.1722948773334;
-        Tue, 06 Aug 2024 05:52:53 -0700 (PDT)
-Received: from ivan-HLYL-WXX9.. ([2a01:4b00:d20e:7300:b50e:24fa:fd17:c835])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-428e6d648a0sm179487255e9.10.2024.08.06.05.52.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Aug 2024 05:52:52 -0700 (PDT)
-From: Ivan Orlov <ivan.orlov0322@gmail.com>
-To: perex@perex.cz,
-	tiwai@suse.com,
-	corbet@lwn.net,
-	broonie@kernel.org,
-	shuah@kernel.org
-Cc: Ivan Orlov <ivan.orlov0322@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	christophe.jaillet@wanadoo.fr,
-	aholzinger@gmx.de
-Subject: [PATCH v3 4/4] selftests: ALSA: Cover userspace-driven timers with test
-Date: Tue,  6 Aug 2024 13:52:43 +0100
-Message-Id: <20240806125243.449959-5-ivan.orlov0322@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240806125243.449959-1-ivan.orlov0322@gmail.com>
-References: <20240806125243.449959-1-ivan.orlov0322@gmail.com>
+	s=arc-20240116; t=1722949342; c=relaxed/simple;
+	bh=v/u2+Ot5HPWyKFfLnpjfw3T437vdEj+uG86syAQjjCY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AxDtobIMG0qHrN/2sq3V1f5RiOHTnEBFhT0uraLret7+ENdmgMskBZihWz2GnMQRsK1cMavM85ZDJQ6ifszRDdaBRUaZANEh0468XdGFKIe1UNjT7FBeVgIh7hjpFLKLwx9n5BW+vfLwvWwo0kGH2HpEk0kRt5ebqRvsjXuY0xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OQa/XMP6; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 476CxJDp002607;
+	Tue, 6 Aug 2024 13:02:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=z
+	9Xt0NeVuoV+TMUihP/55csyAvhwKI49eGWDlmUB2CM=; b=OQa/XMP6XxlP1twwP
+	0VI+qI7wUM0p1Dz+B6FIaiKtEFYQjC5JwHUCC+VBasXHvjxiNV/i6EavKnU7U/xT
+	hyZQO50KHgIXaDntngDobPz9/b1+8CrEVHb4Sa5WwDNaxsFa2Lp0ni8oHGDtmdqG
+	M8TCNlGon1B3rwhSxEUxkRkqqTQrPM9n1cae/aVysdKTjjOAWmR0+S1xifK0jGaE
+	sGYCfwLiKPO0wMRYbdD1BrakOu4RdlRl/K+Q/s+Pgs9mExRLat7j1CR8o0LKmZEs
+	MNEfGArHi/DKb/Z6T9vtjk9hMZlkvlrLHNmrqxeurun9rZ4NreH6RweLfCpOqLDg
+	+yUlQ==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40uma800ap-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 06 Aug 2024 13:02:15 +0000 (GMT)
+Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 476D2EwB006907;
+	Tue, 6 Aug 2024 13:02:14 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40uma800ak-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 06 Aug 2024 13:02:14 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 476B6grl018818;
+	Tue, 6 Aug 2024 13:02:13 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 40sxvu3y1n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 06 Aug 2024 13:02:13 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 476D28xH21889390
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 6 Aug 2024 13:02:10 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5E34020049;
+	Tue,  6 Aug 2024 13:02:08 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E50DE20040;
+	Tue,  6 Aug 2024 13:02:07 +0000 (GMT)
+Received: from [9.171.47.164] (unknown [9.171.47.164])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  6 Aug 2024 13:02:07 +0000 (GMT)
+Message-ID: <9d45d403-6441-40da-8886-eb3e115dfe31@linux.ibm.com>
+Date: Tue, 6 Aug 2024 15:02:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 06/10] selftests: kvm: s390: Add VM run test case
+To: Christoph Schlameuss <schlameuss@linux.ibm.com>, kvm@vger.kernel.org
+Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+References: <20240802155913.261891-1-schlameuss@linux.ibm.com>
+ <20240802155913.261891-7-schlameuss@linux.ibm.com>
+Content-Language: en-US
+From: Janosch Frank <frankja@linux.ibm.com>
+Autocrypt: addr=frankja@linux.ibm.com; keydata=
+ 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
+In-Reply-To: <20240802155913.261891-7-schlameuss@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: mZ8YOX-H7K-IVXloHXP97C6PB-IhTCX0
+X-Proofpoint-GUID: t3Jzs7uv_W_qKyCTzaogAYsDGlAc_zks
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-06_10,2024-08-06_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ lowpriorityscore=0 priorityscore=1501 phishscore=0 bulkscore=0
+ mlxlogscore=747 adultscore=0 suspectscore=0 mlxscore=0 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408060090
 
-Add a test for the new functionality of userspace-driven timers and the
-tool which allows us to count timer ticks in a certain time period. The
-test:
+On 8/2/24 5:59 PM, Christoph Schlameuss wrote:
+> Add test case running code interacting with registers within a
+> ucontrol VM.
+> 
+> * Add uc_gprs test case
+> 
+> The test uses the same VM setup using the fixture and debug macros
+> introduced in earlier patches in this series.
+> 
+> Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
 
-1. Creates a userspace-driven timer with ioctl to /dev/snd/timer
-2. Starts the `global-timer` application to count the ticks of the timer
-from step 1.
-3. Asynchronously triggers the timer multiple times with some interval
-4. Compares the amount of caught ticks with the amount of trigger calls.
-
-Since we can't include <alsa/asoundlib.h> and <sound/asound.h> in one
-file due to overlapping declarations, I have to split the test into two
-applications: one of them counts the amount of timer ticks in the
-defined time period, and another one is the actual test which creates
-the timer, triggers it periodically and starts the first app to count
-the amount of ticks in a separate thread.
-
-Besides from testing the functionality itself, the test represents a
-sample application showing userspace-driven ALSA timers API.
-
-Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
----
-V1 -> V2:
-- Return NULL in the pthreaded function (ticking_func)
-- Process TIMER_NO_EVENT enum in the timer app output processing loop
-V2 -> V3:
-- Add new test case to cover invalid period sizes and frame rates for
-the userspace-driven timers (to test the sanity checks in
-snd_utimer_create)
-
- tools/testing/selftests/alsa/Makefile       |   2 +-
- tools/testing/selftests/alsa/global-timer.c |  87 ++++++++++
- tools/testing/selftests/alsa/utimer-test.c  | 170 ++++++++++++++++++++
- 3 files changed, 258 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/alsa/global-timer.c
- create mode 100644 tools/testing/selftests/alsa/utimer-test.c
-
-diff --git a/tools/testing/selftests/alsa/Makefile b/tools/testing/selftests/alsa/Makefile
-index c1ce39874e2b..0d5bd8ea900b 100644
---- a/tools/testing/selftests/alsa/Makefile
-+++ b/tools/testing/selftests/alsa/Makefile
-@@ -12,7 +12,7 @@ LDLIBS+=-lpthread
- 
- OVERRIDE_TARGETS = 1
- 
--TEST_GEN_PROGS := mixer-test pcm-test test-pcmtest-driver
-+TEST_GEN_PROGS := mixer-test pcm-test utimer-test test-pcmtest-driver global-timer
- 
- TEST_GEN_PROGS_EXTENDED := libatest.so
- 
-diff --git a/tools/testing/selftests/alsa/global-timer.c b/tools/testing/selftests/alsa/global-timer.c
-new file mode 100644
-index 000000000000..c15ec0ba851a
---- /dev/null
-+++ b/tools/testing/selftests/alsa/global-timer.c
-@@ -0,0 +1,87 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * This tool is used by the utimer test, and it allows us to
-+ * count the ticks of a global timer in a certain time frame
-+ * (which is set by `timeout` parameter).
-+ *
-+ * Author: Ivan Orlov <ivan.orlov0322@gmail.com>
-+ */
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <alsa/asoundlib.h>
-+#include <time.h>
-+
-+static int ticked;
-+static void async_callback(snd_async_handler_t *ahandler)
-+{
-+	ticked++;
-+}
-+
-+static char timer_name[64];
-+static void bind_to_timer(int device, int subdevice, int timeout)
-+{
-+	snd_timer_t *handle;
-+	snd_timer_params_t *params;
-+	snd_async_handler_t *ahandler;
-+
-+	time_t end;
-+
-+	sprintf(timer_name, "hw:CLASS=%d,SCLASS=%d,DEV=%d,SUBDEV=%d",
-+		SND_TIMER_CLASS_GLOBAL, SND_TIMER_SCLASS_NONE,
-+		device, subdevice);
-+
-+	snd_timer_params_alloca(&params);
-+
-+	if (snd_timer_open(&handle, timer_name, SND_TIMER_OPEN_NONBLOCK) < 0) {
-+		perror("Can't open the timer");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	snd_timer_params_set_auto_start(params, 1);
-+	snd_timer_params_set_ticks(params, 1);
-+	if (snd_timer_params(handle, params) < 0) {
-+		perror("Can't set timer params");
-+		exit(EXIT_FAILURE);
-+	}
-+
-+	if (snd_async_add_timer_handler(&ahandler, handle, async_callback, NULL) < 0) {
-+		perror("Can't create a handler");
-+		exit(EXIT_FAILURE);
-+	}
-+	end = time(NULL) + timeout;
-+	if (snd_timer_start(handle) < 0) {
-+		perror("Failed to start the timer");
-+		exit(EXIT_FAILURE);
-+	}
-+	printf("Timer has started\n");
-+	while (time(NULL) <= end) {
-+		/*
-+		 * Waiting for the timeout to elapse. Can't use sleep here, as it gets
-+		 * constantly interrupted by the signal from the timer (SIGIO)
-+		 */
-+	}
-+	snd_timer_stop(handle);
-+	snd_timer_close(handle);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	int device, subdevice, timeout;
-+
-+	if (argc < 4) {
-+		perror("Usage: %s <device> <subdevice> <timeout>");
-+		return EXIT_FAILURE;
-+	}
-+
-+	setlinebuf(stdout);
-+
-+	device = atoi(argv[1]);
-+	subdevice = atoi(argv[2]);
-+	timeout = atoi(argv[3]);
-+
-+	bind_to_timer(device, subdevice, timeout);
-+
-+	printf("Total ticks count: %d\n", ticked);
-+
-+	return EXIT_SUCCESS;
-+}
-diff --git a/tools/testing/selftests/alsa/utimer-test.c b/tools/testing/selftests/alsa/utimer-test.c
-new file mode 100644
-index 000000000000..fee4d21a1955
---- /dev/null
-+++ b/tools/testing/selftests/alsa/utimer-test.c
-@@ -0,0 +1,170 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * This test covers the functionality of userspace-driven ALSA timers. Such timers
-+ * are purely virtual (so they don't directly depend on the hardware), and they could be
-+ * created and triggered by userspace applications.
-+ *
-+ * Author: Ivan Orlov <ivan.orlov0322@gmail.com>
-+ */
-+#include "../kselftest_harness.h"
-+#include <sound/asound.h>
-+#include <unistd.h>
-+#include <fcntl.h>
-+#include <limits.h>
-+#include <sys/ioctl.h>
-+#include <stdlib.h>
-+#include <pthread.h>
-+#include <string.h>
-+
-+#define FRAME_RATE 8000
-+#define PERIOD_SIZE 4410
-+#define UTIMER_DEFAULT_ID -1
-+#define NANO 1000000000ULL
-+#define TICKS_COUNT 10
-+#define TICKS_RECORDING_DELTA 5
-+#define TIMER_OUTPUT_BUF_LEN 1024
-+#define TIMER_FREQ_SEC 1
-+#define RESULT_PREFIX_LEN strlen("Total ticks count: ")
-+
-+enum timer_app_event {
-+	TIMER_APP_STARTED,
-+	TIMER_APP_RESULT,
-+	TIMER_NO_EVENT,
-+};
-+
-+FIXTURE(timer_f) {
-+	int utimer_fd;
-+	struct snd_utimer_info *utimer_info;
-+};
-+
-+FIXTURE_SETUP(timer_f) {
-+	int timer_dev_fd;
-+
-+	if (geteuid())
-+		SKIP(return, "This test needs root to run!");
-+
-+	self->utimer_info = calloc(1, sizeof(*self->utimer_info));
-+	ASSERT_NE(NULL, self->utimer_info);
-+
-+	self->utimer_info->frame_rate = FRAME_RATE;
-+	self->utimer_info->period_size = PERIOD_SIZE;
-+	self->utimer_info->id = UTIMER_DEFAULT_ID;
-+
-+	timer_dev_fd = open("/dev/snd/timer", O_RDONLY);
-+	ASSERT_GE(timer_dev_fd, 0);
-+
-+	self->utimer_fd = ioctl(timer_dev_fd, SNDRV_TIMER_IOCTL_CREATE, self->utimer_info);
-+	ASSERT_GE(self->utimer_fd, 0);
-+
-+	close(timer_dev_fd);
-+}
-+
-+FIXTURE_TEARDOWN(timer_f) {
-+	close(self->utimer_fd);
-+	free(self->utimer_info);
-+}
-+
-+static void *ticking_func(void *data)
-+{
-+	int i;
-+	int *fd = (int *)data;
-+
-+	for (i = 0; i < TICKS_COUNT; i++) {
-+		/* Well, trigger the timer! */
-+		ioctl(*fd, SNDRV_TIMER_IOCTL_TRIGGER, NULL);
-+		sleep(TIMER_FREQ_SEC);
-+	}
-+
-+	return NULL;
-+}
-+
-+static enum timer_app_event parse_timer_output(const char *s)
-+{
-+	if (strstr(s, "Timer has started"))
-+		return TIMER_APP_STARTED;
-+	if (strstr(s, "Total ticks count"))
-+		return TIMER_APP_RESULT;
-+
-+	return TIMER_NO_EVENT;
-+}
-+
-+static int parse_timer_result(const char *s)
-+{
-+	char *end;
-+	long d;
-+
-+	d = strtol(s + RESULT_PREFIX_LEN, &end, 10);
-+	if (end == s + RESULT_PREFIX_LEN)
-+		return -1;
-+
-+	return d;
-+}
-+
-+/*
-+ * This test triggers the timer and counts ticks at the same time. The amount
-+ * of the timer trigger calls should be equal to the amount of ticks received.
-+ */
-+TEST_F(timer_f, utimer) {
-+	char command[64];
-+	pthread_t ticking_thread;
-+	int total_ticks = 0;
-+	FILE *rfp;
-+	char *buf = malloc(TIMER_OUTPUT_BUF_LEN);
-+
-+	ASSERT_NE(buf, NULL);
-+
-+	/* The timeout should be the ticks interval * count of ticks + some delta */
-+	sprintf(command, "./global-timer %d %d %d", SNDRV_TIMER_GLOBAL_UDRIVEN,
-+		self->utimer_info->id, TICKS_COUNT * TIMER_FREQ_SEC + TICKS_RECORDING_DELTA);
-+
-+	rfp = popen(command, "r");
-+	while (fgets(buf, TIMER_OUTPUT_BUF_LEN, rfp)) {
-+		buf[TIMER_OUTPUT_BUF_LEN - 1] = 0;
-+		switch (parse_timer_output(buf)) {
-+		case TIMER_APP_STARTED:
-+			/* global-timer waits for timer to trigger, so start the ticking thread */
-+			pthread_create(&ticking_thread, NULL, ticking_func,
-+				       &self->utimer_fd);
-+			break;
-+		case TIMER_APP_RESULT:
-+			total_ticks = parse_timer_result(buf);
-+			break;
-+		case TIMER_NO_EVENT:
-+			break;
-+		}
-+	}
-+	pthread_join(ticking_thread, NULL);
-+	ASSERT_EQ(total_ticks, TICKS_COUNT);
-+	pclose(rfp);
-+}
-+
-+static struct snd_utimer_info wrong_timers[] = {
-+	/* Period size is not valid (=0) */
-+	{ .frame_rate = FRAME_RATE, .period_size = 0, .id = UTIMER_DEFAULT_ID },
-+	/* Frame rate is not valid (=0) */
-+	{ .frame_rate = 0, .period_size = PERIOD_SIZE, .id = UTIMER_DEFAULT_ID },
-+	/* Frame rate is too high (which results in resolution = 0) */
-+	{ .frame_rate = NANO + 1, .period_size = PERIOD_SIZE, .id = UTIMER_DEFAULT_ID },
-+	/* Causes overflow in resolution */
-+	{ .frame_rate = 1, .period_size = ULONG_MAX / NANO + 1, .id = UTIMER_DEFAULT_ID },
-+};
-+
-+TEST(wrong_timers_test) {
-+	int timer_dev_fd;
-+	int utimer_id;
-+	size_t i;
-+
-+	timer_dev_fd = open("/dev/snd/timer", O_RDONLY);
-+	ASSERT_GE(timer_dev_fd, 0);
-+
-+	for (i = 0; i < ARRAY_SIZE(wrong_timers); i++) {
-+		utimer_id = ioctl(timer_dev_fd, SNDRV_TIMER_IOCTL_CREATE, &wrong_timers[i]);
-+		ASSERT_LT(utimer_id, 0);
-+		/* Check that id was not updated */
-+		ASSERT_EQ(wrong_timers[i].id, UTIMER_DEFAULT_ID);
-+	}
-+
-+	close(timer_dev_fd);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.34.1
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
 
