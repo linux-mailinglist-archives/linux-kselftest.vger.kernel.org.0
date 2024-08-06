@@ -1,181 +1,117 @@
-Return-Path: <linux-kselftest+bounces-14827-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14828-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F639948831
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 06:06:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF1CC94884E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 06:21:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D2E39B21B14
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 04:06:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C07E1C22055
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 04:21:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D20E31BA885;
-	Tue,  6 Aug 2024 04:06:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE7B015ADA6;
+	Tue,  6 Aug 2024 04:20:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iV67uOxS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hdBaojYI"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A78CF13BC11;
-	Tue,  6 Aug 2024 04:06:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8512164A8F;
+	Tue,  6 Aug 2024 04:20:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722917162; cv=none; b=Bo66vBUcfCiLMsS5tmxO9SJfgExbf+HxumhBwmGCevRLVOEdbUkjQOkdr7Tks2z+Nz2Hfpv7Mi/PSgimidTlBQv3osItVEcAuA1tG+351fOUBjpp1tcL6WJwdnrbigbTZSbJ+U7NptdLwqoYgRxKDXhl1/94uSN09Zq2sy/A0TE=
+	t=1722918052; cv=none; b=FpBSO68jPRyLzDELDwcT35fo/tPXVa4lm5bDStuYZY+HmbUdB9HVNcqS0EZrxNKOHbNh1YXiPpMFM7c5APjW0pWUoR86Dm4Lp7cEXtYZ3vcK7Bk+4hT0CNe4PhTQyqMbSVOlsm0T9x/MnY794/ZDWXHRvr8oLXq02vA8/Ks2Hvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722917162; c=relaxed/simple;
-	bh=zthMYi5whGTYCixA97k0CFISLk8x5aAZu/+fkQBgnQc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U37fWAWi6hofwVxdVwbk1bLGz1HPcYfPzzfCOnubj/ZW1u9p0OiKj2xS9ALVZRu7Rqq/YsgQNHtiZ6+H5FntxLBaklhdzqz7WF5/u+TnBo9JnCGBDk0lLbkcJBCQVoMP3lPtUVg7za45AWfDMgFZIpr9x53mzUMbF3OF9Urgj/M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iV67uOxS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FD9DC32786;
-	Tue,  6 Aug 2024 04:06:02 +0000 (UTC)
+	s=arc-20240116; t=1722918052; c=relaxed/simple;
+	bh=649dI+6k39/ZeqTlqJv33Bt0T5RIfetUkcckWynydNs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qHJyRZ/ScC1UPZRT5Vyn5QEFwcTQUQE9aR0EFf9RbNiIkLQERdaRRidPVM0kFh4pp33BpFH+5HRKyK7KQc9oMOqg8+H1VXXceJOx7V8Q830Ad142g5uyFgosLBam4dvUBCNibRfJ76xJ4OOty0f0C9wbJQiyhrZ8QF+JfIVUCzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hdBaojYI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A62CBC32786;
+	Tue,  6 Aug 2024 04:20:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722917162;
-	bh=zthMYi5whGTYCixA97k0CFISLk8x5aAZu/+fkQBgnQc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iV67uOxSzYlDEdHVyJvBogitQzZlH7yc+aVnTQBAuCHSzBOCUrWzcZ+NcSeyEIwou
-	 lL8gZ4PHKKiftK9Mbwu9xRMf4g8OkG/+m4q64OobQDk5iQnnSBOK+MlSl/Ws0NnEm7
-	 aT1L74f/wHpR8Etmye8p5c238aEeA8O4/WAuZiwCm6ZTtpdGhcOxMimD7iJJ+bsheQ
-	 1G2spWE/zhJj7NIcnbv4sjcHyN5eHLLJqB9o/iH/6tIs+JeMqVe0I/FVK79r11jMKf
-	 zsBRM7eBqYa9SwxAltIEuhIjAgu7SpT+U7nzM3GQJTeZhjK0A2R/QSeHom/SWqG6uD
-	 z/HFZv+oGpXBg==
-Date: Mon, 5 Aug 2024 21:06:01 -0700
-From: Kees Cook <kees@kernel.org>
-To: David Gow <davidgow@google.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>,
-	Rae Moar <rmoar@google.com>, Shuah Khan <skhan@linuxfoundation.org>,
-	Maxime Ripard <mripard@kernel.org>, Nico Pache <npache@redhat.com>,
-	Stephen Rothwell <sfr@canb.auug.org.au>, kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kunit: Fix kunit_kstrdup_const() with modules
-Message-ID: <202408052100.74A2316C27@keescook>
-References: <20240806020136.3481593-1-davidgow@google.com>
+	s=k20201202; t=1722918052;
+	bh=649dI+6k39/ZeqTlqJv33Bt0T5RIfetUkcckWynydNs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=hdBaojYIvEIuw96Gl9nbay7xzSuw0+rdpVcIec2yo+PvLM8z01/WQ30zkU348R/mT
+	 xD9pudLe5kIwBdpBQyDGLuJK0dULXYLWrwJ1tjGYQz9YGXjGsgrZnWvq0TL73r8D3o
+	 nGAzMX6B5uAnlxdRANLw91QuFPcksr3mqQUVBaGdYP8ICv/i8eda+6rQqmFn6Qirje
+	 1P5q+E+sleir2oDy12V9ilzvev4dQgxox5Th/8AmQhNspUxvbFHDOIdW4zY4G1W2/O
+	 Ff0vNC3bx1HYH5uVD1XAeAUnvNfss/ApOGGCxZ7EbwXh++zHmkcbY5SnC18Vtr4bvg
+	 Z6U68CyrYWgtg==
+From: Geliang Tang <geliang@kernel.org>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Petr Machata <petrm@nvidia.com>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	Benjamin Poirier <bpoirier@nvidia.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: Geliang Tang <tanggeliang@kylinos.cn>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next] selftests: forwarding: lib.sh: ignore "Address not found"
+Date: Tue,  6 Aug 2024 12:20:38 +0800
+Message-ID: <764585b6852537a93c6fba3260e311b79280267a.1722917654.git.tanggeliang@kylinos.cn>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240806020136.3481593-1-davidgow@google.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 06, 2024 at 10:01:34AM +0800, David Gow wrote:
-> In commit 7d3c33b290b1 ("kunit: Device wrappers should also manage driver name"),
-> the kunit_kstrdup_const() and kunit_kfree_const() were introduced as an
-> optimisation of kunit_kstrdup(), which only copy/free strings from the
-> kernel rodata.
-> 
-> However, these are inline functions, and is_kernel_rodata() only works
-> for built-in code. This causes problems in two cases:
-> - If kunit is built as a module, __{start,end}_rodata is not defined.
-> - If a kunit test using these functions is built as a module, it will
->   suffer the same fate.
-> 
-> Restrict the is_kernel_rodata() case to when KUnit is built as a module,
-> which fixes the first case, at the cost of losing the optimisation.
-> 
-> Also, make kunit_{kstrdup,kfree}_const non-inline, so that other modules
-> using them will not accidentally depend on is_kernel_rodata(). If KUnit
-> is built-in, they'll benefit from the optimisation, if KUnit is not,
-> they won't, but the string will be properly duplicated.
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-I wonder if this series should be refreshed:
-https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/log/?h=devel/hardening/is_rodata
+So many "Address not found" messages occur at the end of forwarding tests
+when using "ip address del" command for an invalid address:
 
-We gained is_kernel_rodata() and is_kernel_ro_after_init() since this
-original proposal, which is what the proposed core_kernel_rodata()
-checks.
+TEST: FDB limits interacting with FDB type local                    [ OK ]
+Error: ipv4: Address not found.
 
-It adds a is_module_rodata...() check, so with the is_kernel_*() checks,
-it's possible to do a check across the entire kernel and all modules.
+... ...
+TEST: IGMPv3 S,G port entry automatic add to a *,G port             [ OK ]
+Error: ipv4: Address not found.
+Error: ipv6: address not found.
 
--Kees
+... ...
+TEST: Isolated port flooding                                        [ OK ]
+Error: ipv4: Address not found.
+Error: ipv6: address not found.
 
-> 
-> (And fix a couple of typos in the doc comment, too.)
-> 
-> Reported-by: Nico Pache <npache@redhat.com>
-> Closes: https://lore.kernel.org/all/CAA1CXcDKht4vOL-acxrARbm6JhGna8_k8wjYJ-vHONink8aZ=w@mail.gmail.com/
-> Fixes: 7d3c33b290b1 ("kunit: Device wrappers should also manage driver name")
-> Signed-off-by: David Gow <davidgow@google.com>
-> ---
->  include/kunit/test.h | 16 +++-------------
->  lib/kunit/test.c     | 19 +++++++++++++++++++
->  2 files changed, 22 insertions(+), 13 deletions(-)
-> 
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index da9e84de14c0..5ac237c949a0 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -489,11 +489,7 @@ static inline void *kunit_kcalloc(struct kunit *test, size_t n, size_t size, gfp
->   * Calls kunit_kfree() only if @x is not in .rodata section.
->   * See kunit_kstrdup_const() for more information.
->   */
-> -static inline void kunit_kfree_const(struct kunit *test, const void *x)
-> -{
-> -	if (!is_kernel_rodata((unsigned long)x))
-> -		kunit_kfree(test, x);
-> -}
-> +void kunit_kfree_const(struct kunit *test, const void *x);
->  
->  /**
->   * kunit_kstrdup() - Duplicates a string into a test managed allocation.
-> @@ -527,16 +523,10 @@ static inline char *kunit_kstrdup(struct kunit *test, const char *str, gfp_t gfp
->   * @gfp: flags passed to underlying kmalloc().
->   *
->   * Calls kunit_kstrdup() only if @str is not in the rodata section. Must be freed with
-> - * kunit_free_const() -- not kunit_free().
-> + * kunit_kfree_const() -- not kunit_kfree().
->   * See kstrdup_const() and kunit_kmalloc_array() for more information.
->   */
-> -static inline const char *kunit_kstrdup_const(struct kunit *test, const char *str, gfp_t gfp)
-> -{
-> -	if (is_kernel_rodata((unsigned long)str))
-> -		return str;
-> -
-> -	return kunit_kstrdup(test, str, gfp);
-> -}
-> +const char *kunit_kstrdup_const(struct kunit *test, const char *str, gfp_t gfp);
->  
->  /**
->   * kunit_vm_mmap() - Allocate KUnit-tracked vm_mmap() area
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index e8b1b52a19ab..089c832e3cdb 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -874,6 +874,25 @@ void kunit_kfree(struct kunit *test, const void *ptr)
->  }
->  EXPORT_SYMBOL_GPL(kunit_kfree);
->  
-> +void kunit_kfree_const(struct kunit *test, const void *x)
-> +{
-> +#if !IS_MODULE(CONFIG_KUNIT)
-> +	if (!is_kernel_rodata((unsigned long)x))
-> +#endif
-> +		kunit_kfree(test, x);
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_kfree_const);
-> +
-> +const char *kunit_kstrdup_const(struct kunit *test, const char *str, gfp_t gfp)
-> +{
-> +#if !IS_MODULE(CONFIG_KUNIT)
-> +	if (is_kernel_rodata((unsigned long)str))
-> +		return str;
-> +#endif
-> +	return kunit_kstrdup(test, str, gfp);
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_kstrdup_const);
-> +
->  void kunit_cleanup(struct kunit *test)
->  {
->  	struct kunit_resource *res;
-> -- 
-> 2.46.0.rc2.264.g509ed76dc8-goog
-> 
+... ...
+TEST: Externally learned FDB entry - ageing & roaming               [ OK ]
+Error: ipv4: Address not found.
+Error: ipv6: address not found.
 
+This patch gnores these messages and redirects them to /dev/null in
+__addr_add_del().
+
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+---
+ tools/testing/selftests/net/forwarding/lib.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index ff96bb7535ff..8670b6053cde 100644
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -839,7 +839,7 @@ __addr_add_del()
+ 	array=("${@}")
+ 
+ 	for addrstr in "${array[@]}"; do
+-		ip address $add_del $addrstr dev $if_name
++		ip address $add_del $addrstr dev $if_name &> /dev/null
+ 	done
+ }
+ 
 -- 
-Kees Cook
+2.43.0
+
 
