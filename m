@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-14884-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14885-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D973E94993C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 22:37:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47C3894995B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 22:44:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 49BA4B25AF5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 20:37:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0281628784F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 20:44:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AEB2150990;
-	Tue,  6 Aug 2024 20:37:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3508416EB47;
+	Tue,  6 Aug 2024 20:42:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X8YxGWgP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R8zSpgND"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA03440875;
-	Tue,  6 Aug 2024 20:37:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9C0416D9DC;
+	Tue,  6 Aug 2024 20:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722976642; cv=none; b=e1UywqPh5Z+jweJs3fYBe26pJ/IfwukLn/m9ckGASEOM3LOI2fFlfHMY5HZ1YszePqpsS7xp5hjwfGYoA9OQAaz8a6/QUi97zpYr0e8cG3uL/922elDOQkdXYw4wGxe3QKRiB9DqYgn/oWmcpxFxOclUHHDa4mUGIPrMYg7bW7k=
+	t=1722976978; cv=none; b=sLlfVW/1PTmT87cGOdjTbLrbKTYtkPBEnwkc3IXyWc87c8VOeC8x9T/W0R+M9Xvls53rOY2edB6MLg1Euv7PMMNW6pf1zCsk6CushhntWuNlNKvb49ZBnuKxALsjfIRjN7qGBu2LdFZCu1kioiIDACFfLSwOl1IG05zqPaMnr0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722976642; c=relaxed/simple;
-	bh=g7QmdLe9IFWfz7C77+mSFv4ErgmVpHHeVChQmimHYG8=;
+	s=arc-20240116; t=1722976978; c=relaxed/simple;
+	bh=DaWt36xVGk9LrklCuq9Y0WSIGFkdQ2NrucnH139qhVI=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=vEkR2Sih9hN6YqOQJbx3rNxW2RwuyeGL+6UAKwT7b9PkKvDpFV8FtRNM2N+B9FdB/S7+8WORFnPHGop5IOtyMZ7ukzXFfEbjrSL/rYMElPBMOam3iJvmVON2y9AbaXSV6AdxiNwTjboaPQY4+/dciggFe0imMTNhZHLGLbZsr4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X8YxGWgP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2EDAC32786;
-	Tue,  6 Aug 2024 20:37:19 +0000 (UTC)
+	 MIME-Version:Content-Type; b=WirFopVNhzVmvlENe3gj+ukigyCMyU+eTnnFh7do3IeovVtnotkk4ABiSaXdVx04XhKYqX6jFoON5OEZs+g4ofvfpay9FeYPK04UiaheniwcPJ5zpT0PUvFp8bBCvbyKeuk2PBng6bbBO8tiA9SAbNlbU/S0CxiYeaqKm/wp+gQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R8zSpgND; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47D02C4AF0C;
+	Tue,  6 Aug 2024 20:42:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722976642;
-	bh=g7QmdLe9IFWfz7C77+mSFv4ErgmVpHHeVChQmimHYG8=;
+	s=k20201202; t=1722976977;
+	bh=DaWt36xVGk9LrklCuq9Y0WSIGFkdQ2NrucnH139qhVI=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=X8YxGWgP2UMFZzmnwxFTZacJCBIWbq/z7d+2P/PY9Q5HIpRaRo5UUK629pTV5bU+K
-	 L3ODKR2S5C8Cly3RBZpnOtbw5A5RD74DNc4Aj4LRaY63F5SOWYn6WNAABfQVNaoSB4
-	 FnE3lOClziNlgKZEPEYmJBdLpHfq+tGNeTW7non+xpfZ8H3Lr3TTodHiZ+fYNm7oFa
-	 r005iJn+WbIbLd0BIb+hBF88OkmE45EdIBQjJcPcfRT2D2o5UiOYQ/EiQLGXjGO1tH
-	 AfKdXhSddmFMc8kSMXFn4WyrWcVQtGQCNAtdpP2AnK1qNaK4TzeqntlXV0d0ds42aS
-	 r3Mb4dSi5D2ZA==
-Date: Tue, 6 Aug 2024 13:37:18 -0700
+	b=R8zSpgNDpucslJ9LhHrQaMFd6aOxtjVFNEMk72wbX0BbIXsv1hWz5ikW325uy5hAX
+	 b9LL2LirkHn6itCJ2gENxcbo+u4UY28lITGzhQfEk1w1qEblRxpxf0KGH1/tbuIFIj
+	 B8qkvfb7eya3zycothhbQgRmzJoqJYIYuDVblJoKiRyk0ezPjDEnOEkIikiLyOw4lM
+	 MbQ3rHHYOVNtFYvjsXeFob26WqDOEfua5n4XkL1yftJAKY+pZysVkedFwKlNtoxU6l
+	 cOWmdEg7sfcXdnL031h9LxhlO28iHpjp8CJWr3VjvOUXn96T6a+mmquVofe/a0KqTO
+	 /FAxA9i1hII4w==
+Date: Tue, 6 Aug 2024 13:42:54 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Mina Almasry <almasrymina@google.com>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -72,14 +72,13 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
  Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
  Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, Kaiyuan
- Zhang <kaiyuanz@google.com>, Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: Re: [PATCH net-next v18 03/14] netdev: support binding dma-buf to
- netdevice
-Message-ID: <20240806133718.71a53a4f@kernel.org>
-In-Reply-To: <20240805212536.2172174-4-almasrymina@google.com>
+ <pkaligineedi@google.com>
+Subject: Re: [PATCH net-next v18 05/14] page_pool: move dmaddr helpers to .c
+ file
+Message-ID: <20240806134254.265e2bfb@kernel.org>
+In-Reply-To: <20240805212536.2172174-6-almasrymina@google.com>
 References: <20240805212536.2172174-1-almasrymina@google.com>
-	<20240805212536.2172174-4-almasrymina@google.com>
+	<20240805212536.2172174-6-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,157 +88,41 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon,  5 Aug 2024 21:25:16 +0000 Mina Almasry wrote:
-> +/* Protected by rtnl_lock() */
-> +static DEFINE_XARRAY_FLAGS(net_devmem_dmabuf_bindings, XA_FLAGS_ALLOC1);
-
-nit: global variable declarations before any code
-
-> +void net_devmem_unbind_dmabuf(struct net_devmem_dmabuf_binding *binding)
+On Mon,  5 Aug 2024 21:25:18 +0000 Mina Almasry wrote:
+> +dma_addr_t page_pool_get_dma_addr_netmem(netmem_ref netmem)
 > +{
-> +	struct netdev_rx_queue *rxq;
-> +	unsigned long xa_idx;
-> +	unsigned int rxq_idx;
+> +	struct page *page = netmem_to_page(netmem);
 > +
-> +	if (binding->list.next)
-> +		list_del(&binding->list);
+> +	dma_addr_t ret = page->dma_addr;
 > +
-> +	xa_for_each(&binding->bound_rxqs, xa_idx, rxq) {
-> +		if (rxq->mp_params.mp_priv == binding) {
-> +			rxq->mp_params.mp_priv = NULL;
+> +	if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA)
+> +		ret <<= PAGE_SHIFT;
 > +
-> +			rxq_idx = get_netdev_rx_queue_index(rxq);
-> +
-> +			netdev_rx_queue_restart(binding->dev, rxq_idx);
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL(page_pool_get_dma_addr_netmem);
 
-Throw in a WARN_ON() around this, hopefully we'll get to addressing it
-later..
+Get should stay in the header.
 
-> +		}
+> +bool page_pool_set_dma_addr_netmem(netmem_ref netmem, dma_addr_t addr)
+> +{
+> +	struct page *page = netmem_to_page(netmem);
+> +
+> +	if (PAGE_POOL_32BIT_ARCH_WITH_64BIT_DMA) {
+> +		page->dma_addr = addr >> PAGE_SHIFT;
+> +
+> +		/* We assume page alignment to shave off bottom bits,
+> +		 * if this "compression" doesn't work we need to drop.
+> +		 */
+> +		return addr != (dma_addr_t)page->dma_addr << PAGE_SHIFT;
 > +	}
 > +
-> +	xa_erase(&net_devmem_dmabuf_bindings, binding->id);
-> +
-> +	net_devmem_dmabuf_binding_put(binding);
+> +	page->dma_addr = addr;
+> +	return false;
 > +}
-> +
-> +int net_devmem_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
-> +				    struct net_devmem_dmabuf_binding *binding)
-> +{
-> +	struct netdev_rx_queue *rxq;
-> +	u32 xa_idx;
-> +	int err;
-> +
-> +	if (rxq_idx >= dev->real_num_rx_queues)
-> +		return -ERANGE;
+> +EXPORT_SYMBOL(page_pool_set_dma_addr_netmem);
 
-If we prevent binding to an inactive queue we should also prevent
-deactivation.
-
-Please take a look at the (two?) callers of
-ethtool_get_max_rxnfc_channel() and ethtool_get_max_rxfh_channel().
-Wrap those into a new function for reading max active channel, and
-take mp binds into account as well (send the refactor separately 
-from the series to avoid making it longer).
-
-> +	rxq = __netif_get_rx_queue(dev, rxq_idx);
-> +	if (rxq->mp_params.mp_priv)
-> +		return -EEXIST;
-> +
-> +	err = xa_alloc(&binding->bound_rxqs, &xa_idx, rxq, xa_limit_32b,
-> +		       GFP_KERNEL);
-> +	if (err)
-> +		return err;
-> +
-> +	rxq->mp_params.mp_priv = binding;
-> +
-> +	err = netdev_rx_queue_restart(dev, rxq_idx);
-> +	if (err)
-> +		goto err_xa_erase;
-> +
-> +	return 0;
-> +
-> +err_xa_erase:
-> +	rxq->mp_params.mp_priv = NULL;
-> +	xa_erase(&binding->bound_rxqs, xa_idx);
-> +
-> +	return err;
-> +}
-
-> +void dev_dmabuf_uninstall(struct net_device *dev)
-> +{
-> +	unsigned int i, count = dev->num_rx_queues;
-
-nit: why stash the value of num_rx_queues ?
-
-> +	struct net_devmem_dmabuf_binding *binding;
-> +	struct netdev_rx_queue *rxq;
-> +	unsigned long xa_idx;
-> +
-> +	for (i = 0; i < count; i++) {
-> +		binding = dev->_rx[i].mp_params.mp_priv;
-> +		if (binding)
-> +			xa_for_each(&binding->bound_rxqs, xa_idx, rxq)
-> +				if (rxq == &dev->_rx[i])
-> +					xa_erase(&binding->bound_rxqs, xa_idx);
-
-nit: Please use "continue", this is too deeply indented
-
-> +	nla_for_each_attr_type(attr, NETDEV_A_DMABUF_QUEUES,
-> +			       genlmsg_data(info->genlhdr),
-> +			       genlmsg_len(info->genlhdr), rem) {
-> +		err = nla_parse_nested(
-> +			tb, ARRAY_SIZE(netdev_queue_id_nl_policy) - 1, attr,
-> +			netdev_queue_id_nl_policy, info->extack);
-> +		if (err < 0)
-> +			goto err_unbind;
-> +
-> +		rxq_idx = nla_get_u32(tb[NETDEV_A_QUEUE_ID]);
-
-How do we know this attribute is present?  NL_REQ_ATTR_CHECK()
-
-> +		err = net_devmem_bind_dmabuf_to_queue(netdev, rxq_idx, binding);
-> +		if (err)
-> +			goto err_unbind;
-> +	}
-> +
-> +	list_add(&binding->list, sock_binding_list);
-> +
-> +	nla_put_u32(rsp, NETDEV_A_DMABUF_ID, binding->id);
-> +	genlmsg_end(rsp, hdr);
-> +
-> +	rtnl_unlock();
-
-nit: for symmetry you should also unlock after list_add(),
-     netlink msg alloc and prep are before rtnl_lock()
-
-> +	return genlmsg_reply(rsp, info);
-> +
-> +err_unbind:
-> +	net_devmem_unbind_dmabuf(binding);
-> +err_unlock:
-> +	rtnl_unlock();
-> +err_genlmsg_free:
-> +	nlmsg_free(rsp);
-> +	return err;
->  }
-
-> +void netdev_nl_sock_priv_init(struct list_head *priv)
-> +{
-> +	INIT_LIST_HEAD(priv);
-> +}
-> +
-> +void netdev_nl_sock_priv_destroy(struct list_head *priv)
-> +{
-> +	struct net_devmem_dmabuf_binding *binding;
-> +	struct net_devmem_dmabuf_binding *temp;
-> +
-> +	list_for_each_entry_safe(binding, temp, priv, list) {
-> +		rtnl_lock();
-> +		net_devmem_unbind_dmabuf(binding);
-> +		rtnl_unlock();
-> +	}
-> +}
-
-nit: move these before the subsys_initcall.. and what it calls
+Set should not be in the public (include/linux) header at all,
+and should not be exported. net/core/page_pool_priv.h already
+exists. Feel free to break this out of the series.
 
