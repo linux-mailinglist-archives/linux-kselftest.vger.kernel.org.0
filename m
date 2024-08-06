@@ -1,169 +1,117 @@
-Return-Path: <linux-kselftest+bounces-14854-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14855-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BFBD948FE4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 15:02:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F64F948FF8
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 15:04:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE250B25A90
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 13:02:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AAB228343B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 13:04:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9550D1BF311;
-	Tue,  6 Aug 2024 13:02:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BFFD1C9ECC;
+	Tue,  6 Aug 2024 13:04:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OQa/XMP6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dOHrafx4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE371C3F3A;
-	Tue,  6 Aug 2024 13:02:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 429441C579A;
+	Tue,  6 Aug 2024 13:04:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722949342; cv=none; b=XA8/DZl6kFkuykGcnKyVcWz7DnfNY1JxXInyFegZ0UMoiqFE3sxFKa3YOnxp1la21LagJsVneQok7hAnKw2Yi42j368UfuF29yh0vTRHPBxo3CV6r9zYOT8w86esT64Dczhb+3Jpq2KoWQWeugKH/ar2sCXK97Jekms2uVRwipw=
+	t=1722949462; cv=none; b=L7w5dV2fLLBMO1Zgcj0Cwk8vrQns4VY0O4f5gwUmL3kMPJP8nVjgGPlIqFaAXyAEWuK4E5BPlbVPhMVI+BlclzTSIJJyJ0UnoKVmMSW+CbVOeQVOy+fxaQCWvB2E81u0WUcn8hEbQQ9N68/lwzsTMXC0h5w0zRQnVadouSagvuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722949342; c=relaxed/simple;
-	bh=v/u2+Ot5HPWyKFfLnpjfw3T437vdEj+uG86syAQjjCY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AxDtobIMG0qHrN/2sq3V1f5RiOHTnEBFhT0uraLret7+ENdmgMskBZihWz2GnMQRsK1cMavM85ZDJQ6ifszRDdaBRUaZANEh0468XdGFKIe1UNjT7FBeVgIh7hjpFLKLwx9n5BW+vfLwvWwo0kGH2HpEk0kRt5ebqRvsjXuY0xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OQa/XMP6; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 476CxJDp002607;
-	Tue, 6 Aug 2024 13:02:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
-	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=z
-	9Xt0NeVuoV+TMUihP/55csyAvhwKI49eGWDlmUB2CM=; b=OQa/XMP6XxlP1twwP
-	0VI+qI7wUM0p1Dz+B6FIaiKtEFYQjC5JwHUCC+VBasXHvjxiNV/i6EavKnU7U/xT
-	hyZQO50KHgIXaDntngDobPz9/b1+8CrEVHb4Sa5WwDNaxsFa2Lp0ni8oHGDtmdqG
-	M8TCNlGon1B3rwhSxEUxkRkqqTQrPM9n1cae/aVysdKTjjOAWmR0+S1xifK0jGaE
-	sGYCfwLiKPO0wMRYbdD1BrakOu4RdlRl/K+Q/s+Pgs9mExRLat7j1CR8o0LKmZEs
-	MNEfGArHi/DKb/Z6T9vtjk9hMZlkvlrLHNmrqxeurun9rZ4NreH6RweLfCpOqLDg
-	+yUlQ==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40uma800ap-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 06 Aug 2024 13:02:15 +0000 (GMT)
-Received: from m0353722.ppops.net (m0353722.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 476D2EwB006907;
-	Tue, 6 Aug 2024 13:02:14 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40uma800ak-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 06 Aug 2024 13:02:14 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 476B6grl018818;
-	Tue, 6 Aug 2024 13:02:13 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 40sxvu3y1n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 06 Aug 2024 13:02:13 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 476D28xH21889390
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 6 Aug 2024 13:02:10 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5E34020049;
-	Tue,  6 Aug 2024 13:02:08 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E50DE20040;
-	Tue,  6 Aug 2024 13:02:07 +0000 (GMT)
-Received: from [9.171.47.164] (unknown [9.171.47.164])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  6 Aug 2024 13:02:07 +0000 (GMT)
-Message-ID: <9d45d403-6441-40da-8886-eb3e115dfe31@linux.ibm.com>
-Date: Tue, 6 Aug 2024 15:02:07 +0200
+	s=arc-20240116; t=1722949462; c=relaxed/simple;
+	bh=3fm4dJikrDQXPdImpdjzGgIkMNn1BpK3X8FtFGLW8fg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AaYt+LkcJnpBjWlPE/OPlaHbCwt/YcHV9omBPj/N7MrZHDiHQx8pcrDx1oJ1T48yXBQJiBi3Xr7dXNmWVzIjVfMgSfkLUmPrt+98kVDtKE3uQYuigQrINnNldaIOLanOkRgeH5X2yW9VwAErXT5Ctnenb+Bfl9CWYz9wL8BCF9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dOHrafx4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79977C4AF09;
+	Tue,  6 Aug 2024 13:04:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722949461;
+	bh=3fm4dJikrDQXPdImpdjzGgIkMNn1BpK3X8FtFGLW8fg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dOHrafx4C5f4gjmBQTbibSHhrcs80YWJeUPw4gRrtYNRVU2c6ioEsSGLTacTiaF8x
+	 LIrY8c0Wnyn6RpAWKcaEDwu+siPiP0M9VdpUMeer307YPUvYEJWdW0NN3eMKM8F7uY
+	 Kc/vAqHSh6C2Xj3ELbd9aOOwocSPreUm9hYEJQhjki5nFro8L/QY+TePRMYOJoew6V
+	 9M4auph7/2oM5hkQ19bGlR/KNsyCX2s+cWPxwnRacOtTBu3nnWkIx6Uk/P7Ak/1hCn
+	 m/490guar2k+8+DEeDXhHtKl+TsyRVW2JPwvSeMFVl1prirwTaI1HYrvHEffK+hORQ
+	 U16E10B/LEuXg==
+Date: Tue, 6 Aug 2024 14:04:16 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Ivan Orlov <ivan.orlov0322@gmail.com>
+Cc: perex@perex.cz, tiwai@suse.com, corbet@lwn.net, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
+	christophe.jaillet@wanadoo.fr, aholzinger@gmx.de
+Subject: Re: [PATCH v3 4/4] selftests: ALSA: Cover userspace-driven timers
+ with test
+Message-ID: <038cb9ff-4028-4179-9722-df324e29c73d@sirena.org.uk>
+References: <20240806125243.449959-1-ivan.orlov0322@gmail.com>
+ <20240806125243.449959-5-ivan.orlov0322@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 06/10] selftests: kvm: s390: Add VM run test case
-To: Christoph Schlameuss <schlameuss@linux.ibm.com>, kvm@vger.kernel.org
-Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>,
-        Nina Schoetterl-Glausch <nsg@linux.ibm.com>
-References: <20240802155913.261891-1-schlameuss@linux.ibm.com>
- <20240802155913.261891-7-schlameuss@linux.ibm.com>
-Content-Language: en-US
-From: Janosch Frank <frankja@linux.ibm.com>
-Autocrypt: addr=frankja@linux.ibm.com; keydata=
- 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
-In-Reply-To: <20240802155913.261891-7-schlameuss@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: mZ8YOX-H7K-IVXloHXP97C6PB-IhTCX0
-X-Proofpoint-GUID: t3Jzs7uv_W_qKyCTzaogAYsDGlAc_zks
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-06_10,2024-08-06_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- lowpriorityscore=0 priorityscore=1501 phishscore=0 bulkscore=0
- mlxlogscore=747 adultscore=0 suspectscore=0 mlxscore=0 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408060090
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="RMCFLusiTb812Ih/"
+Content-Disposition: inline
+In-Reply-To: <20240806125243.449959-5-ivan.orlov0322@gmail.com>
+X-Cookie: One picture is worth 128K words.
 
-On 8/2/24 5:59 PM, Christoph Schlameuss wrote:
-> Add test case running code interacting with registers within a
-> ucontrol VM.
-> 
-> * Add uc_gprs test case
-> 
-> The test uses the same VM setup using the fixture and debug macros
-> introduced in earlier patches in this series.
-> 
-> Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
 
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+--RMCFLusiTb812Ih/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+On Tue, Aug 06, 2024 at 01:52:43PM +0100, Ivan Orlov wrote:
+
+> -TEST_GEN_PROGS := mixer-test pcm-test test-pcmtest-driver
+> +TEST_GEN_PROGS := mixer-test pcm-test utimer-test test-pcmtest-driver global-timer
+
+This is adding the timer timer tests as standard kselftests to be run by
+the wrapper script...
+
+> index 000000000000..c15ec0ba851a
+> --- /dev/null
+> +++ b/tools/testing/selftests/alsa/global-timer.c
+
+> +int main(int argc, char *argv[])
+> +{
+> +	int device, subdevice, timeout;
+> +
+> +	if (argc < 4) {
+> +		perror("Usage: %s <device> <subdevice> <timeout>");
+> +		return EXIT_FAILURE;
+> +	}
+
+...but this requires specific arguments to be run which the kselftest
+runner won't supply.  I'd expect it to be a good default to enumerate
+and test every possible device and generate a test for each.  However it
+looks like this is really intended not as a standalone test but rather
+as something run from within utimer-test, in that case it should be a
+TEST_GEN_PROGS_EXTENDED.
+
+--RMCFLusiTb812Ih/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmayH08ACgkQJNaLcl1U
+h9DVfwf/a9QwUeXEBDc36TW+3+RklKKoqRdN88NVI10XuBsSFPzPFxw4GgVsNWP2
+eX1PLdmNPmQb6nFxHfmgXpFpURjZt/jl6ylMzfi+haDgorIQwerh8lcDrz89rWCV
+4ckzPWX9+5VMA7zc0xC8qj59JlJFIVAZ2aCG33DochRL88PQpNeDtvt8SV4mzuyf
+bnrdslJmgrbS+YYqfUjJ/egEe689AtQTnaWPFVSn4eZk7oLUX06g/4wpU6t3MquT
+RGusbsQDrAPc/kEyCe3dBXfkIwhEQtaUiGf6L4urncjxuKLhd1VSkiT2KG9kG6wa
+5cx9r/wWC9/EAAwJydZ5NXgUl65JxQ==
+=Wsrf
+-----END PGP SIGNATURE-----
+
+--RMCFLusiTb812Ih/--
 
