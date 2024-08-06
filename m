@@ -1,117 +1,95 @@
-Return-Path: <linux-kselftest+bounces-14828-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14829-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF1CC94884E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 06:21:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E563194885A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 06:27:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C07E1C22055
-	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 04:21:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A249A2825AD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  6 Aug 2024 04:27:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE7B015ADA6;
-	Tue,  6 Aug 2024 04:20:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 839F71BA87B;
+	Tue,  6 Aug 2024 04:27:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hdBaojYI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gIXyXEq6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8512164A8F;
-	Tue,  6 Aug 2024 04:20:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5F3EADC;
+	Tue,  6 Aug 2024 04:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722918052; cv=none; b=FpBSO68jPRyLzDELDwcT35fo/tPXVa4lm5bDStuYZY+HmbUdB9HVNcqS0EZrxNKOHbNh1YXiPpMFM7c5APjW0pWUoR86Dm4Lp7cEXtYZ3vcK7Bk+4hT0CNe4PhTQyqMbSVOlsm0T9x/MnY794/ZDWXHRvr8oLXq02vA8/Ks2Hvg=
+	t=1722918444; cv=none; b=a6j+KnlwrIZRV/TKYX7plJ6RPVvi8cn3gVRXhWRLW7SvxyxhWkcnuYxUy9vi4Aw4Y6qKhdW4Z0O1NqWipNm31kvTD+itwsq4ujlfi9AcPcd8OznzcwJEZgXdlewZRyL4DrKDh9i6IMgFryXjb4z8IZy6BziATRiWU6sUfJoXRtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722918052; c=relaxed/simple;
-	bh=649dI+6k39/ZeqTlqJv33Bt0T5RIfetUkcckWynydNs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qHJyRZ/ScC1UPZRT5Vyn5QEFwcTQUQE9aR0EFf9RbNiIkLQERdaRRidPVM0kFh4pp33BpFH+5HRKyK7KQc9oMOqg8+H1VXXceJOx7V8Q830Ad142g5uyFgosLBam4dvUBCNibRfJ76xJ4OOty0f0C9wbJQiyhrZ8QF+JfIVUCzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hdBaojYI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A62CBC32786;
-	Tue,  6 Aug 2024 04:20:48 +0000 (UTC)
+	s=arc-20240116; t=1722918444; c=relaxed/simple;
+	bh=AZzy/I51vgXjxJSQvB6NDee/pSQvkl/ELAdj2zwi0es=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n/rLMS40l1HmwRLMxUZvmVqmSvZLjR7SXoDDKDeeZpcUYLkICtOgMVN8BeTOi9yaY+zwLjNM89P7fb0/jREmAQ0KrkOh8ywtD4anqYHt9ivrz6a2TMvI/8hLKd9mmqIIoMIvNs/MTdoTeRX5o/HYf99rk88QRVzAJgOnc8fevRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gIXyXEq6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF8FAC32786;
+	Tue,  6 Aug 2024 04:27:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1722918052;
-	bh=649dI+6k39/ZeqTlqJv33Bt0T5RIfetUkcckWynydNs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=hdBaojYIvEIuw96Gl9nbay7xzSuw0+rdpVcIec2yo+PvLM8z01/WQ30zkU348R/mT
-	 xD9pudLe5kIwBdpBQyDGLuJK0dULXYLWrwJ1tjGYQz9YGXjGsgrZnWvq0TL73r8D3o
-	 nGAzMX6B5uAnlxdRANLw91QuFPcksr3mqQUVBaGdYP8ICv/i8eda+6rQqmFn6Qirje
-	 1P5q+E+sleir2oDy12V9ilzvev4dQgxox5Th/8AmQhNspUxvbFHDOIdW4zY4G1W2/O
-	 Ff0vNC3bx1HYH5uVD1XAeAUnvNfss/ApOGGCxZ7EbwXh++zHmkcbY5SnC18Vtr4bvg
-	 Z6U68CyrYWgtg==
-From: Geliang Tang <geliang@kernel.org>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Petr Machata <petrm@nvidia.com>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Benjamin Poirier <bpoirier@nvidia.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: Geliang Tang <tanggeliang@kylinos.cn>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next] selftests: forwarding: lib.sh: ignore "Address not found"
-Date: Tue,  6 Aug 2024 12:20:38 +0800
-Message-ID: <764585b6852537a93c6fba3260e311b79280267a.1722917654.git.tanggeliang@kylinos.cn>
-X-Mailer: git-send-email 2.43.0
+	s=k20201202; t=1722918443;
+	bh=AZzy/I51vgXjxJSQvB6NDee/pSQvkl/ELAdj2zwi0es=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gIXyXEq6bDAqnFjFEN3iXLi/wiYv8IqNv2XLV5j2si3yZCU7rnzJISPVX/dgFq0NS
+	 Vqhm+P/Cu4PxAaXoEOfgNenZMAo72oEeFUsibER62z7/MawhvCeE9iSFzJ+gTTkLv0
+	 Rqi1KQi4PH9FPXLs52Lu1geS8Nmr2yWiXAyhhBk+lEV+yuUFun913JJQMxOhon5V1t
+	 /nAQSjDOxbrJi4pQiCn3XzHlFGO2qcWVL0CzY/cZSHxRYnyr7Q/gsTTHiUZW3buyvm
+	 4qAXewx7CPGy9dRB7I/8h3HALw6kxjFQ7OJmllUIJoHDfIcGTG7uyM3omyYkp3dMIu
+	 iRgHG/EyuiSMQ==
+Date: Mon, 5 Aug 2024 21:27:23 -0700
+From: Kees Cook <kees@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
+	linux-kernel@vger.kernel.org,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	David Hildenbrand <david@redhat.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org, kvm@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] selftests: harness: refactor __constructor_order
+Message-ID: <202408052126.E8A8120C1@keescook>
+References: <20240727143816.1808657-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240727143816.1808657-1-masahiroy@kernel.org>
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+On Sat, Jul 27, 2024 at 11:37:35PM +0900, Masahiro Yamada wrote:
+> 
+> This series refactors __constructor_order because
+> __constructor_order_last() is unneeded.
+> 
+> No code change since v1.
+> I reworded "reverse-order" to "backward-order" in commit description.
+> 
+> 
+> Masahiro Yamada (2):
+>   selftests: harness: remove unneeded __constructor_order_last()
+>   selftests: harness: rename __constructor_order for clarification
 
-So many "Address not found" messages occur at the end of forwarding tests
-when using "ip address del" command for an invalid address:
+Thanks for resending this!
 
-TEST: FDB limits interacting with FDB type local                    [ OK ]
-Error: ipv4: Address not found.
+Reviewed-by: Kees Cook <kees@kernel.org>
 
-... ...
-TEST: IGMPv3 S,G port entry automatic add to a *,G port             [ OK ]
-Error: ipv4: Address not found.
-Error: ipv6: address not found.
+Shuah, do you want to take this via kselftest? If not, I can carry it...
 
-... ...
-TEST: Isolated port flooding                                        [ OK ]
-Error: ipv4: Address not found.
-Error: ipv6: address not found.
+-Kees
 
-... ...
-TEST: Externally learned FDB entry - ageing & roaming               [ OK ]
-Error: ipv4: Address not found.
-Error: ipv6: address not found.
-
-This patch gnores these messages and redirects them to /dev/null in
-__addr_add_del().
-
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
----
- tools/testing/selftests/net/forwarding/lib.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index ff96bb7535ff..8670b6053cde 100644
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -839,7 +839,7 @@ __addr_add_del()
- 	array=("${@}")
- 
- 	for addrstr in "${array[@]}"; do
--		ip address $add_del $addrstr dev $if_name
-+		ip address $add_del $addrstr dev $if_name &> /dev/null
- 	done
- }
- 
 -- 
-2.43.0
-
+Kees Cook
 
