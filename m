@@ -1,111 +1,86 @@
-Return-Path: <linux-kselftest+bounces-14950-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14951-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E4B994B06F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 21:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 53E8994B077
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 21:32:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F380D1F22853
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 19:26:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8AF31F226F5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 19:31:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6DF51442E8;
-	Wed,  7 Aug 2024 19:25:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DF5878C7E;
+	Wed,  7 Aug 2024 19:31:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gG1DCMNF"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="qPrex5OH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5499B14388F;
-	Wed,  7 Aug 2024 19:25:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE6163CB;
+	Wed,  7 Aug 2024 19:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723058759; cv=none; b=dl3hTClNYWnUXdU3nq0bOmIDou//dpLGXKJE/6XKYobyAtKoCuozi3N7AHtfa6HHTOh1f7m4yuT5WeYdDq4gPNxiitWI1vnvIkC/3dSoJvIPe85oJDvEOXGWG6oEYkUXHRXIEdzdxGR6h7Kc3aX8RnmerYdTaEuDlNMCa9BKoIQ=
+	t=1723059114; cv=none; b=lSZKl1rVWR57y8ZERRhNzr/UztvsPHe1P2jaJmX4y6S3GXpRegC6bUsEOf4S/Ob1u5l70xF4B+VaVrhAiFC/SAoCxvQnucaLZZUNoHMrGgrOexUnGhlHIFfWiaxusi8Bjoj6orcub/bhp8Dudd08KUn5/ilJgxuQsg/RhJgAZiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723058759; c=relaxed/simple;
-	bh=jq/PqrXLEa3pxfqcv0R+71WNrpDHLU/hS0kqTy3ln6Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JMqvbITFSOxTkVW8CiI1bTBNSpLoPBwYh11XLD1wBq/Z/lLtUhvT9Z5eQJCkw8E7PxVo7528ZcTguB6Rd4U9qKjvgwJH7vi120EPIW2Zy7HwUA/FhueLzggMFwdKhnd2oFjt2lyBR/hj+RQO9RyvWQ0oOnBpz1lLtmsGSC5Scn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gG1DCMNF; arc=none smtp.client-ip=209.85.221.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-4f6b7250d6dso97486e0c.0;
-        Wed, 07 Aug 2024 12:25:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723058757; x=1723663557; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=E7+ks3dDwY2zSJcOKPPopRCqEmx2fHtiEAIp/0e5Fjw=;
-        b=gG1DCMNFE0bfYxaFCQtiolrrWka3DgCMsDAoqd0Cc7W4XSRuxMc7ldqggSvAQ3KnyE
-         eOdAhGxKD9NhcZQhjwCM2CeCsxzxoieDeQfPNrSx3o6k4ZokWVKs3hbf6aqG7fxpAFI4
-         vIEVJ5nFBtg+AuuaOopwiF9T186BqcGrulwVs7O3gCrRRrSUq9fxCVh4rstP5idYmM1K
-         QjflaP0FcuF1fcRU/TaPgTBM33UDJ2y3T30OMMVZnAK81Tp0Hc+noLIvmK6DhR/wzL3t
-         K1wJX0udh3D/5rIwYLhd5URn137zCKonVvrUrW2fU1INwnqy1OfbvL/+rCDkTUf/WwjJ
-         lDWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723058757; x=1723663557;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=E7+ks3dDwY2zSJcOKPPopRCqEmx2fHtiEAIp/0e5Fjw=;
-        b=t+f2S5IwVSYv1nrGXL04baqfcT6lSy4n46J2M+gx0sQmzJ8sU0popKhrLmGxzYZk1N
-         by+Rx431sid0I1Fh5pwtUSen1DhG+IFswOqeaguFGJ72opOtZ9bwnbBddDyv4OVl71Lh
-         NqZu0XeRLk7hMm11JWHnsBgkT5XWyx1p+16XcUH4aJkKs4epjnoT6ElCQjLbFyFyAxJz
-         ZuqAJoV2o4N8r38Yg4i5OagBfOThxLlgcuJv3bPlWuxZF+Qp18wPHRhBv2EQIFvyHR34
-         sYdDD3AQvTN37oak1OBXBzGZV8HAay1oUXl0eZ+P1SFdgdL60+JivyGD+AvBoiFkpDoT
-         T+rA==
-X-Forwarded-Encrypted: i=1; AJvYcCUtzodsFCQ5nwX/Ai3O44EGAm4NqPDCQaPl/P+UN8ywWg06mHzbg4a6a/65nqgW03tF9d/ED9kZS+NKnLo9WKEfRC+MW0J0aSwfkyjaRLTOZzqfwacxRqgvy6gVbqx7qEuV51RAfI2JwGLX40HjCiR0yfCtPMsO6w7AoAoXmznKjBt+z7wJ
-X-Gm-Message-State: AOJu0YwZYSN1DuTt4hG0wl3TRsv8I5qaDZVIofiGfdq6M8NbutHsRpy/
-	dR1NMKg50R6m9rlhaYVUhftTDgEN5Gpiu90Kqe1e6NBXAsZe7KxJ1qa2d015pHTeZFWVhJkcaAj
-	VZUttVdfkMGI0eU6U63pmsBmYHl0JlNYT
-X-Google-Smtp-Source: AGHT+IHZ7Hy8CfkwRCjo+waNwMVTOTTSZrBT7/8h6o4tUqtJGoi7Eb7+cllEHgdxtssEJIOKNM/PlmLj39cKWdmqvjQ=
-X-Received: by 2002:a05:6122:3c50:b0:4f5:1d9a:ad5c with SMTP id
- 71dfb90a1353d-4f8a002274amr23871247e0c.14.1723058757092; Wed, 07 Aug 2024
- 12:25:57 -0700 (PDT)
+	s=arc-20240116; t=1723059114; c=relaxed/simple;
+	bh=bOrep78qwpQ+ZvCf1wppZmAp3VaReel1+oiiqrsO3as=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=iiM3189j3GCJTo0aQkh4VLEQCGAU8W9IK/DW8Q2oZqH4LA0MaZDO3bM2QoCIMmmrd21TlU5TW7v++2oBiwu3OfMH05FhhblNBB2HHgvqFxvZz0bWnmqDtGiMmqCT5mVp/+R+ebAHShwLArhZuFeqgjm0lNZz5IjvVqc9ZvKohKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=qPrex5OH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1CA6C32781;
+	Wed,  7 Aug 2024 19:31:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1723059114;
+	bh=bOrep78qwpQ+ZvCf1wppZmAp3VaReel1+oiiqrsO3as=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=qPrex5OHq6DgLB1AlO3lxni+t8gZLu0zfMQdVPA9KDHBQbDTxrTHLCbqlub4N1mYw
+	 8vrCxOplGGmhcr5ApHNyYI3Zx6JRsbTTIMbr08aMkQVkdmaBEUDSgrvQtcSQi5FmsN
+	 dmYBQZsxW8D+g8fA/MyGlNnx0U1mEoLGgGsrBJT0=
+Date: Wed, 7 Aug 2024 12:31:53 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Pedro Falcato <pedro.falcato@gmail.com>
+Cc: Shuah Khan <shuah@kernel.org>, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Jeff Xu <jeffxu@chromium.org>, Kees Cook
+ <kees@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/2] mseal: Fix is_madv_discard()
+Message-Id: <20240807123153.227390ebb7c6dff911b5fddf@linux-foundation.org>
+In-Reply-To: <CAKbZUD3kNTKfV5yMQW7YYbRx2XJiMNM4owGiYue1Y-A=yVbWog@mail.gmail.com>
+References: <20240807173336.2523757-1-pedro.falcato@gmail.com>
+	<20240807173336.2523757-2-pedro.falcato@gmail.com>
+	<20240807115824.f5c29702dda952abd709351d@linux-foundation.org>
+	<CAKbZUD3kNTKfV5yMQW7YYbRx2XJiMNM4owGiYue1Y-A=yVbWog@mail.gmail.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240807173336.2523757-1-pedro.falcato@gmail.com>
- <20240807173336.2523757-2-pedro.falcato@gmail.com> <20240807115824.f5c29702dda952abd709351d@linux-foundation.org>
-In-Reply-To: <20240807115824.f5c29702dda952abd709351d@linux-foundation.org>
-From: Pedro Falcato <pedro.falcato@gmail.com>
-Date: Wed, 7 Aug 2024 20:25:45 +0100
-Message-ID: <CAKbZUD3kNTKfV5yMQW7YYbRx2XJiMNM4owGiYue1Y-A=yVbWog@mail.gmail.com>
-Subject: Re: [PATCH 1/2] mseal: Fix is_madv_discard()
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Shuah Khan <shuah@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Jeff Xu <jeffxu@chromium.org>, Kees Cook <kees@kernel.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Aug 7, 2024 at 7:58=E2=80=AFPM Andrew Morton <akpm@linux-foundation=
-.org> wrote:
->
-> On Wed,  7 Aug 2024 18:33:35 +0100 Pedro Falcato <pedro.falcato@gmail.com=
-> wrote:
->
-> > is_madv_discard did its check wrong. MADV_ flags are not bitwise,
-> > they're normal sequential numbers. So, for instance:
-> >       behavior & (/* ... */ | MADV_REMOVE)
+On Wed, 7 Aug 2024 20:25:45 +0100 Pedro Falcato <pedro.falcato@gmail.com> wrote:
+
+> On Wed, Aug 7, 2024 at 7:58 PM Andrew Morton <akpm@linux-foundation.org> wrote:
 > >
-> > tagged both MADV_REMOVE and MADV_RANDOM (bit 0 set) as
-> > discard operations. This is obviously incorrect, so use
-> > a switch statement instead.
->
-> Please describe the userspace-visible runtime effects of this bug?
+> > On Wed,  7 Aug 2024 18:33:35 +0100 Pedro Falcato <pedro.falcato@gmail.com> wrote:
+> >
+> > > is_madv_discard did its check wrong. MADV_ flags are not bitwise,
+> > > they're normal sequential numbers. So, for instance:
+> > >       behavior & (/* ... */ | MADV_REMOVE)
+> > >
+> > > tagged both MADV_REMOVE and MADV_RANDOM (bit 0 set) as
+> > > discard operations. This is obviously incorrect, so use
+> > > a switch statement instead.
+> >
+> > Please describe the userspace-visible runtime effects of this bug?
+> 
+> The kernel could erroneously block certain madvises (e.g MADV_RANDOM
+> or MADV_HUGEPAGE) on sealed VMAs due to them sharing bits with blocked
+> MADV operations (e.g REMOVE or WIPEONFORK).
 
-The kernel could erroneously block certain madvises (e.g MADV_RANDOM
-or MADV_HUGEPAGE) on sealed VMAs due to them sharing bits with blocked
-MADV operations (e.g REMOVE or WIPEONFORK).
-
-Thanks,
-Pedro
+Thanks, I updated the changelog.
 
