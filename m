@@ -1,126 +1,156 @@
-Return-Path: <linux-kselftest+bounces-14994-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14995-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 579A794B2A3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 00:03:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E82BB94B2DA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 00:09:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03AE21F21806
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 22:03:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB4241C209AE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 22:09:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06FCC146017;
-	Wed,  7 Aug 2024 22:03:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E51CC1514F8;
+	Wed,  7 Aug 2024 22:09:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cnCA1i1k"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bjAIxSyX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01264D5BD;
-	Wed,  7 Aug 2024 22:03:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18B6B146599
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Aug 2024 22:09:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723068211; cv=none; b=Ycl8rDyEllpoJXxX6vPGT4mdeFepCj1WIG5+CYcVm5f7bwAe1/FRMhMOrMPrgiUsMCca+ijsvxnVXI4DRdRfzFEX31ikL98NgCYgB+4rpsp+2yS6FEhtNGnaZhOq81qtHHXow/yoM2ADR8PHrFDbowr069BUKKE4USRalT83DGY=
+	t=1723068584; cv=none; b=O5CjJJa39v0Zl8fzL/U2VyZxu9W83eo9O4SZZGmtzCXQn7mv/BHivKchP9aA264daURJZUxAqbHAOxk6rbMlKGBiINLjy6GZ6By9dRKFzNcNi3sqW7HYyETsSyhg6Ntpnsj6U9HlsF7SpOykRT9B9f5P8hEI+nsmNNb5jFSJ9jU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723068211; c=relaxed/simple;
-	bh=apRbtHOpMOwo9Hq95H+j9Ifiaa3qhuwqc+VapwBrbuY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HVctSOV1cFAWdEc2JU3HWdFb1FnquojAAfUxidfjVqmun9vJuOEwXg11S+5Cr38TWEUqO2BJynNmoGY1foIVRZI+lr+vkAmaO/WcJC8rg+44mn7SKb70ExmiPo+iv9vgjWftx6G24NxcZvn3/aSGJf9nwhk7kgAAkK14Wyh+YRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cnCA1i1k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0568FC32781;
-	Wed,  7 Aug 2024 22:03:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723068210;
-	bh=apRbtHOpMOwo9Hq95H+j9Ifiaa3qhuwqc+VapwBrbuY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cnCA1i1kifnnzgJ9HyTRIu1WmXkPE4kMXfBiuxZnmrSEKokxbBR4ostuNjIkE5cuP
-	 wDzNdX9ujwbTZtTfOTNmbvGj36DbL/N7JM/T1vxBk5p0vV9w0/RlQbkJ3g6JW5JIL4
-	 ro5eSOpNQZzA5pmRn6bZ6alCN6RaCPJS3xGv03VQhm8OvNY/V8AZxSTr5CIk9YLKkt
-	 wp7OoT6gGScSKiNpAiCucS/vr7D98pP6E0IObQ7HKWYRnMW2zutFWKMWDsyHTMDkMP
-	 HbleBZg0xqXDzWkc4hShMZMherSa0SS7S5mT/TY19jsqLxrI/avzy+ZUy8XAtjIH9g
-	 mv1MXWqYSs6ZQ==
-Date: Wed, 7 Aug 2024 23:03:24 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Kees Cook <kees@kernel.org>
-Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, jannh@google.com,
-	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
-Subject: Re: [PATCH RFT v7 9/9] selftests/clone3: Test shadow stack support
-Message-ID: <ZrPvLIjW0p8j5C1x@finisterre.sirena.org.uk>
-References: <20240731-clone3-shadow-stack-v7-0-a9532eebfb1d@kernel.org>
- <20240731-clone3-shadow-stack-v7-9-a9532eebfb1d@kernel.org>
- <202408052046.00BC7CBC@keescook>
- <19ee6fc9-94d7-4420-abd3-7cfdf612df0c@sirena.org.uk>
- <202408062022.34F3558@keescook>
- <e5e5c0fc-3425-4020-ae7c-4b7fd0f1f263@sirena.org.uk>
- <202408071221.92B6E385C@keescook>
+	s=arc-20240116; t=1723068584; c=relaxed/simple;
+	bh=a1jn30+zr5YPPYyEso2pGd6m1pmN4PsGzGLycJHRVv8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aHoITyMUfYhFVrYjEYS0vfcs3LPZOaA1Is318cpCSdb5TqVQgbBqWUYfaDdXQgo8BSP2uBsHRrB2857lORknwaLS8iK69/ZnGtptobHptx2++YjtW5eXoy1MvYPu9cIC0KJRUYTE22rgWyqs1i82PKMO3YsMxd/EXicuBDQzGhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bjAIxSyX; arc=none smtp.client-ip=209.85.166.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-8223c72bfcfso482639f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Aug 2024 15:09:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1723068582; x=1723673382; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mFQTF2qes7rLwWDtDPYNEGJ3zLf1qCnO6NbUYmp12hw=;
+        b=bjAIxSyXS69W9/IgiUkWmqWYL8ukx7gaRFN7HxN9FtPYIe+GZSQ2YS3OQc1Tvj+HzK
+         VpR5spJ5M+WflttxVdRuq875yMZcQ2Hr7AFQ3i1j6LY8CKYMUastFwru2UY5T0Y4aKdo
+         ss1PlNGthDVFlWxMf9+Zf9Pdq9bN6gToJ0cv8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723068582; x=1723673382;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mFQTF2qes7rLwWDtDPYNEGJ3zLf1qCnO6NbUYmp12hw=;
+        b=Qeln4Ee16hOriwcwTPIjxoF1PmXg1c2bej7/36Thtimb0qkZNZ2SKHube0eGPJ9vAl
+         iwpjoSkiGRmpwN2ZZj82gtO5clpK1q7eBtZT7l8NFobf+muwWps9geUhUg3ozUaYN0Xr
+         Rhtm7CvK8U2UMo/UxoBRn7qJaxvWqDS8nv8+9dr8r0VceFyCkLZ14aUzG5LV0dJcclLm
+         hXeSqfqJaE8oP/ji5XggAoJNiVLud6xh4zvN/pJuC0Y9UQbIRb4o0vUx5yG9gbsz7i9f
+         UC1725LRI65/2Z3nQOB8kTOH2ySSzptxJ7gvREwHGbH2dJkAwJQssK3MRiTBWbG/9xVB
+         G8dA==
+X-Forwarded-Encrypted: i=1; AJvYcCW45g5yO87RpfXP347fx1NvGRB/toi6+ro/2k6kSVhZMIsfpcZL2miOcX8zg4XfS5A2mXbo5mosTs+9wz5aPIU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKt05U1wLEfxCQ2Ovg0yW0vZkQPk9hedLpRxW1YqTCtckXQDsR
+	heOug74c4LJkmg9fqyR9YgaV+qCYBuLp7iwVKZZaCjT2CyVUP9Z8ukpr+6U2cmU=
+X-Google-Smtp-Source: AGHT+IGPZD++Q5SqVElCF4N3hdjTRe/prDOceMSWZpgjkcEzrguk30YA/HWodlJQQVLmZN9Uaw1lWQ==
+X-Received: by 2002:a5e:834b:0:b0:81f:9219:4494 with SMTP id ca18e2360f4ac-82253829aafmr9702139f.2.1723068582147;
+        Wed, 07 Aug 2024 15:09:42 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c8d69c4d88sm2922264173.77.2024.08.07.15.09.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Aug 2024 15:09:41 -0700 (PDT)
+Message-ID: <dc3b8c77-8051-4232-9feb-753ea0b44f4f@linuxfoundation.org>
+Date: Wed, 7 Aug 2024 16:09:41 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ovsSsFUoGuk43J7e"
-Content-Disposition: inline
-In-Reply-To: <202408071221.92B6E385C@keescook>
-X-Cookie: Your love life will be... interesting.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/15] tools/nolibc: improve LLVM/clang support
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+On 8/7/24 15:51, Thomas Weißschuh wrote:
+> The current support for LLVM and clang in nolibc and its testsuite is
+> very limited.
+> 
+> * Various architectures plain do not compile
+> * The user *has* to specify "-Os" otherwise the program crashes
+> * Cross-compilation of the tests does not work
+> * Using clang is not wired up in run-tests.sh
+> 
+> This series extends this support.
+> 
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> ---
+> Changes in v2:
+> - Add support for all architectures
+>    - powerpc: "selftests/nolibc: don't use libgcc when building with clang"
+>    - mips: "tools/nolibc: mips: load current function to $t9"
+>    - s390: "selftests/nolibc: use correct clang target for s390/powerz"
+> - Expand commit messages
+> - Use __nolibc_ prefix for custom macros
+> - Link to v1: https://lore.kernel.org/r/20240728-nolibc-llvm-v1-0-bc384269bc35@weissschuh.net
+> 
+> ---
+> Thomas Weißschuh (15):
+>        tools/nolibc: arm: use clang-compatible asm syntax
+>        tools/nolibc: mips: load current function to $t9
+>        tools/nolibc: powerpc: limit stack-protector workaround to GCC
+>        tools/nolibc: compiler: introduce __nolibc_has_attribute()
+>        tools/nolibc: move entrypoint specifics to compiler.h
+>        tools/nolibc: compiler: use attribute((naked)) if available
+>        selftests/nolibc: report failure if no testcase passed
+>        selftests/nolibc: avoid passing NULL to printf("%s")
+>        selftests/nolibc: determine $(srctree) first
+>        selftests/nolibc: add support for LLVM= parameter
+>        selftests/nolibc: add cc-option compatible with clang cross builds
+>        selftests/nolibc: run-tests.sh: avoid overwriting CFLAGS_EXTRA
+>        selftests/nolibc: don't use libgcc when building with clang
+>        selftests/nolibc: use correct clang target for s390/powerz
+>        selftests/nolibc: run-tests.sh: allow building through LLVM
+> 
+>   tools/include/nolibc/arch-aarch64.h          |  4 +--
+>   tools/include/nolibc/arch-arm.h              |  8 +++---
+>   tools/include/nolibc/arch-i386.h             |  4 +--
+>   tools/include/nolibc/arch-loongarch.h        |  4 +--
+>   tools/include/nolibc/arch-mips.h             |  8 ++++--
+>   tools/include/nolibc/arch-powerpc.h          |  6 ++--
+>   tools/include/nolibc/arch-riscv.h            |  4 +--
+>   tools/include/nolibc/arch-s390.h             |  4 +--
+>   tools/include/nolibc/arch-x86_64.h           |  4 +--
+>   tools/include/nolibc/compiler.h              | 24 +++++++++++-----
+>   tools/testing/selftests/nolibc/Makefile      | 41 +++++++++++++++++++---------
+>   tools/testing/selftests/nolibc/nolibc-test.c |  4 +--
+>   tools/testing/selftests/nolibc/run-tests.sh  | 16 ++++++++---
+>   13 files changed, 83 insertions(+), 48 deletions(-)
+> ---
+> base-commit: ae1f550efc11eaf1496c431d9c6e784cb49124c5
+> change-id: 20240727-nolibc-llvm-3fad68590d4c
+> 
+> Best regards,
+
+Looks good to me. For selftests patches:
+
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
 
 
---ovsSsFUoGuk43J7e
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Wed, Aug 07, 2024 at 12:23:01PM -0700, Kees Cook wrote:
-> On Wed, Aug 07, 2024 at 01:39:27PM +0100, Mark Brown wrote:
-
-> >  		size = args->shadow_stack_size;
-> > +		shstk->base = 0;
-> > +		shstk->size = 0;
-
-> Yup, that fixes it!
-
->   # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:1 error:0
-
-> (The skip is "Shadow stack on system without shadow stack")
-
-Excellent, thanks!  It's amazing how many dumb mistakes you can find if
-you actually try running the code :/ .
-
---ovsSsFUoGuk43J7e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaz7ysACgkQJNaLcl1U
-h9D6nQf471aSpWTp9hbNlp8vMCtiJWKUaAuZ+t0OiPrxl5alZkAidQfo1tJ4gpH6
-OxPxfAinXgzcWFgHMsnjUD1Rfpvqb9jA2Ni7fMoDkNIfeGXCF7ocedEG2SZQAa2L
-04Z2R8i2Tq3AcBLHLSyuX7YTSaK25ZyhLUJWXMZNq+ytNPVTZ2XsfQ1LbQhRdQ4P
-UpL4WPYWnPMJ56UzmoD/NaYS5ED750CNiMJfRSEicCCHuZ3u9nPqTb3DBxDVPNeu
-P3fDaHPsq0ZKqg1LQdxmn2TyZCf/ydyJal0DSDHBF+/QF+jZWZltRUfCqKgOiR5m
-stJBoppOCGUxXbeFnFtS2fsy/o+4
-=Vmt3
------END PGP SIGNATURE-----
-
---ovsSsFUoGuk43J7e--
 
