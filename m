@@ -1,155 +1,203 @@
-Return-Path: <linux-kselftest+bounces-14941-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14942-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F83494AF57
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 20:03:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D80F94AF99
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 20:23:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CC641C213C6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 18:03:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D7F11F22D55
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 18:23:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EA5613E04B;
-	Wed,  7 Aug 2024 18:03:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B341411DF;
+	Wed,  7 Aug 2024 18:23:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3ufnjhZ9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hSMXXN5W"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E7513B58E
-	for <linux-kselftest@vger.kernel.org>; Wed,  7 Aug 2024 18:03:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2FCA13BC12;
+	Wed,  7 Aug 2024 18:23:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723053819; cv=none; b=D2antU6ccZhnl7lXeJ5ZTBsz8B039T+BOgfSfS4IN/NK/nX4haKAVh9J98X9O3tEbSDUf/H9lWRvRTsneX592Iq4iE7QyL65SLUAH2f3aNArtFFqS7NOL083ngq+dPv7YNHU8a+9WyeuDyZgR8xlZcON1VIIUFH0ohRpKDKmKrQ=
+	t=1723054985; cv=none; b=B1Zz8BQtjG4bp71a4bZJs62oGLa/8Xd8NorEdZCNK8qmEtmdtlXcmNvfVigWnha6YdFe7ePQ93XvQm7rIOMPADVYU0JTYBkRYCIx4wYXxYjG5Q3Sx80I7RCsFhzih4vh/qXr72vp8kOxaDHx2vPh40CsV9xkyAtnvr2XxgBnALE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723053819; c=relaxed/simple;
-	bh=/igLW5cGKyvrc8xeJe9spHKRE8+5cRBzFIFSVqv7Cd8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s+igygGBDk9VyqPrGzbBnwkRcD9tAqxzadzJ9XukoGp9OpN2QV7tZduFiNQt4T2Fh8wVQHMY+qodtHhzpF49fI4n+EKUlI9kywTlIRwaKm+3rU9iZFWpBYaovNyeHZmoVrA+w5jk5xMGJl2wbx3fSougAMn74K1IDTCT8ZRMPek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3ufnjhZ9; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5a28b61b880so1943a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Aug 2024 11:03:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723053815; x=1723658615; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xyQtOF1vxDhDuNycgpsX5NQIqDKmQIL//+OA3nFwfHM=;
-        b=3ufnjhZ96PTsUkxMdHTxgQQu15Op4lb7FHtEybxD5WpVn5GmhQcEn1kUsWDFJX4U88
-         riiDWEa22mlSzz5TWRygjZzgldCvz/bvfBC1U/rnmuDutm6W6KgfKqzOArEM/A8a8zv/
-         gpXW/oQx0oCJn123trJX9u1HV6SC6pQC6HBPHLRLcr0oJHUhX4LDqG0lfBDyRc4hApFm
-         a5ud5twZ1Gn/fH0UXgOQGnE0ac8FiOGkJA+e/B1D5OMp608nK3s5QssRwwEjhGTSi86q
-         WXbSplftxr4d8fqq0olX5ypI48BzMELLigrDxK4Rwh/oezyFQ7YjPTzvcU8S0vCvUogU
-         Ax3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723053815; x=1723658615;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xyQtOF1vxDhDuNycgpsX5NQIqDKmQIL//+OA3nFwfHM=;
-        b=ppgzG+K3xh61c2PsH0AD4tS3KvBV86kMh7+ZuQ8JR6I02aThi39zAs4SNgaRjS2p3D
-         sGOjJQsjFfuEmuA4lL+6GU3ZpJh9aDhD6ON1FmNW8PMMu+KoPR+CSQDp7OBJdkv+QZG7
-         QasAuDz7IZjSh4xCkiqTsVFaKArOuZYegB1pv/nPQLQobJVJFuYxpRQSC6It9JwiXbaI
-         dHSqHXLVs7w9gxo5i5h0oKr/tuG/9tAqR9gHH6irqveQ2/qlxg9QAiS+WNp3n/3yeHnT
-         cjSMm81CjHnd5E9DgJsQAnWpT6uI1vFHMHav9sp8SyA7/X4EiTSjJ2F0b6WpKTG8o6Ar
-         e5lA==
-X-Forwarded-Encrypted: i=1; AJvYcCW01fN+T4sJue913bCwvy3LeU/uhv4CBq4YVR7Gye14SEGMYyUnGAtQsn91A+hfM1q5V0oWwwBvGfqMSucGgLI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxcp6ib5zY+L1nO4rNz2YZuwu2ChEAkPL76F8y2DFv/Sm2Z4cqS
-	fLBAuStCbrLpli+b13pEe4O0XlgzJ0aoNWAfNR0ETfN76sXVoTY29kbMzYp9DLLrsY2fbb12xNB
-	F/rodVKogWEtQjiAJRgVlHZVBLxM+6F2U7iUU
-X-Google-Smtp-Source: AGHT+IHNgXjgqrAbiQnTxyfIC4MSApJgByOFffPeEqrpJGfxkuZ/yQYeD3R3pXQSk7hIuBatYSkKH+LlCFukduDyhC8=
-X-Received: by 2002:a05:6402:2751:b0:58b:93:b623 with SMTP id
- 4fb4d7f45d1cf-5bbb002ac8dmr3758a12.5.1723053814540; Wed, 07 Aug 2024 11:03:34
- -0700 (PDT)
+	s=arc-20240116; t=1723054985; c=relaxed/simple;
+	bh=GIIg4NFIrWlEe7X4kkyZwtgzGRqAM7FVGbehXNHySJM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XGIpKMFk9VXImc8/xx1dUWNz6NDGFhzrhueKaKdeNt3u0LQz93BOmbitHDR4+Ox4zrWLEZrALK1EoOexg/rgDKlAoPrg0hdvhYzwiMELDl3BC1cFM7qj7iZzVQDJtuxJwXnWTivnSlcFaBQtK1UauU497MYp7NlWNwpU4kzxt3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hSMXXN5W; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20C88C32781;
+	Wed,  7 Aug 2024 18:23:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723054985;
+	bh=GIIg4NFIrWlEe7X4kkyZwtgzGRqAM7FVGbehXNHySJM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hSMXXN5WZgmqR5swHaeSWo+Yrd3zD8zgE3QW9R5c7BKFe/hdDsHjtUVoWfZfNfk6L
+	 FcEC+vd01QZ9i3zQ4f8/x2hhaa2DUKqd86l7iKQgypCapFRehb7nPE4x72kbeht9/Y
+	 pwbgZh0pB4GJSwH/wqkkOKFl8ADQ1B+stF0HJ7PKezKHyIRv5WnQBEzmG6UyWW6Byx
+	 boD5JmBlopWVG/yvTqCrKFI95TRF7RE7OBJuOsgOS5IEhGbQEwOVeeYyElNGDwu3FF
+	 VdarA/uixhVskB8FMrdWaftoeG4Y8tDfNLaCZ+g6Bezq7xsYvH1DpGrrQmie/V7v8F
+	 +5RpRABVtRgYg==
+Date: Wed, 7 Aug 2024 11:23:04 -0700
+From: Kees Cook <kees@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, jannh@google.com,
+	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
+Subject: Re: [PATCH RFT v7 9/9] selftests/clone3: Test shadow stack support
+Message-ID: <202408071118.0C8A04C42@keescook>
+References: <20240731-clone3-shadow-stack-v7-0-a9532eebfb1d@kernel.org>
+ <20240731-clone3-shadow-stack-v7-9-a9532eebfb1d@kernel.org>
+ <202408052046.00BC7CBC@keescook>
+ <19ee6fc9-94d7-4420-abd3-7cfdf612df0c@sirena.org.uk>
+ <202408062022.34F3558@keescook>
+ <e5e5c0fc-3425-4020-ae7c-4b7fd0f1f263@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240807153544.2754247-1-jeffxu@chromium.org> <CAKbZUD2xDdbxOTvR3-P=636jvhG_JPO3h79tgB59dfPmv046hg@mail.gmail.com>
-In-Reply-To: <CAKbZUD2xDdbxOTvR3-P=636jvhG_JPO3h79tgB59dfPmv046hg@mail.gmail.com>
-From: Jeff Xu <jeffxu@google.com>
-Date: Wed, 7 Aug 2024 11:02:54 -0700
-Message-ID: <CALmYWFvDH=8U8wsaSjMrfCg1__S66SS-9Zo0f826XJDJT7hOSQ@mail.gmail.com>
-Subject: Re: [PATCH v1] selftest mm/mseal: fix test_seal_mremap_move_dontunmap_anyaddr
-To: Pedro Falcato <pedro.falcato@gmail.com>
-Cc: jeffxu@chromium.org, akpm@linux-foundation.org, willy@infradead.org, 
-	torvalds@linux-foundation.org, Liam.Howlett@oracle.com, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, dave.hansen@intel.com, linux-hardening@vger.kernel.org, 
-	lorenzo.stoakes@oracle.com, mpe@ellerman.id.au, oliver.sang@intel.com, 
-	vbabka@suse.cz
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e5e5c0fc-3425-4020-ae7c-4b7fd0f1f263@sirena.org.uk>
 
-On Wed, Aug 7, 2024 at 9:38=E2=80=AFAM Pedro Falcato <pedro.falcato@gmail.c=
-om> wrote:
->
-> On Wed, Aug 7, 2024 at 4:35=E2=80=AFPM <jeffxu@chromium.org> wrote:
-> <snip>
-> >         /* shrink from 4 pages to 2 pages. */
-> > -       ret2 =3D mremap(ptr, size, 2 * page_size, 0, 0);
-> > +       ret2 =3D sys_mremap(ptr, size, 2 * page_size, 0, 0);
-> >         if (seal) {
-> > -               FAIL_TEST_IF_FALSE(ret2 =3D=3D MAP_FAILED);
-> > +               FAIL_TEST_IF_FALSE(ret2 =3D=3D (void *) MAP_FAILED);
->
-> MAP_FAILED is already void *
->
-> <snip>
-> > @@ -1449,18 +1457,16 @@ static void test_seal_mremap_move_dontunmap_any=
-addr(bool seal)
-> >         }
-> >
-> >         /*
-> > -        * The 0xdeaddead should not have effect on dest addr
-> > +        * The 0xdead0000 should not have effect on dest addr
-> >          * when MREMAP_DONTUNMAP is set.
-> >          */
-> > -       ret2 =3D mremap(ptr, size, size, MREMAP_MAYMOVE | MREMAP_DONTUN=
-MAP,
-> > -                       0xdeaddead);
-> > +       ret2 =3D sys_mremap(ptr, size, size, MREMAP_MAYMOVE | MREMAP_DO=
-NTUNMAP,
-> > +                       (void *) 0xdead0000);
->
-> You still didn't explain why this test is actually needed. Why are you
-> testing MREMAP_DONTUNMAP's hint system?
+On Wed, Aug 07, 2024 at 01:39:27PM +0100, Mark Brown wrote:
+> On Tue, Aug 06, 2024 at 10:08:44PM -0700, Kees Cook wrote:
+> > On Tue, Aug 06, 2024 at 04:10:02PM +0100, Mark Brown wrote:
+> 
+> > > >   # Running test 'Shadow stack with no token'
+> 
+> > It took me a while to figure out where a thread switches shstk (even
+> > without this series):
+> 
+> > kernel_clone, copy_process, copy_thread, fpu_clone, update_fpu_shstk
+> > (and shstk_alloc_thread_stack is called just before update_fpu_shstk).
+> 
+> > I don't understand the token consumption in arch_shstk_post_fork(). This
+> > wasn't needed before with the fixed-size new shstk, why is it needed
+> > now?
+> 
+> Concerns were raised on earlier rounds of review that since instead of
+> allocating the shadow stack as part of creating the new thread we are
+> using a previously allocated shadow stack someone could use this as part
+> of an exploit.  You could just jump on top of any existing shadow stack
+> and cause writes to it.
+> 
+> > Anyway, my attempt to trace the shstk changes for the test:
+> 
+> > write(1, "TAP version 13\n", 15)        = 15
+> > write(1, "1..2\n", 5)                   = 5
+> > clone3({flags=0, exit_signal=18446744073709551615, stack=NULL, stack_size=0}, 104) = -1 EINVAL (Invalid argument)
+> > write(1, "# clone3() syscall supported\n", 29) = 29
+> > map_shadow_stack(NULL, 4096, 0)         = 125837480497152
+> > write(1, "# Shadow stack supportd\n", 24) = 24
+> > write(1, "# Running test 'Shadow stack wit"..., 44) = 44
+> > getpid()                                = 4943
+> > write(1, "# [4943] Trying clone3() with fl"..., 51) = 51
+> > map_shadow_stack(NULL, 4096, 0)         = 125837480488960
+> > clone3({flags=CLONE_VM, exit_signal=SIGCHLD, stack=NULL, stack_size=0, /* bytes 88..103 */ "\x00\xf0\x52\xd2\x72\x72\x00\x00\x00\x10\x00\x00\x00\x00\x00\x00"} => {/* bytes 88..103 */ "\x00\xf0\x52\xd2\x72\x72\x00\x00\x00\x10\x00\x00\x00\x00\x00\x00"}, 104) = 4944
+> > getpid()                                = 4943
+> > write(1, "# I am the parent (4943). My chi"..., 49strace: Process 4944 attached
+> > ) = 49
+> > [pid  4944] --- SIGSEGV {si_signo=SIGSEGV, si_code=SEGV_CPERR, si_addr=NULL} ---
+> > [pid  4943] wait4(-1,  <unfinished ...>
+> > [pid  4944] +++ killed by SIGSEGV (core dumped) +++
+> 
+> So we created the thread, then before we get to the wait4() in the
+> parent we start delivering a SEGV_CPERR to the child.  The flow for the
+> child is as expected.
+> 
+> > <... wait4 resumed>[{WIFSIGNALED(s) && WTERMSIG(s) == SIGSEGV && WCOREDUMP(s)}], __WALL, NULL) = 4944
+> > --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_DUMPED, si_pid=4944, si_uid=0, si_status=SIGSEGV, si_utime=0, si_stime=0} ---
+> > --- SIGSEGV {si_signo=SIGSEGV, si_code=SEGV_MAPERR, si_addr=0x7272d21fffe8} ---
+> > +++ killed by SIGSEGV (core dumped) +++
+> 
+> Then the parent gets an ordinary segfault, not a shadow stack specific
+> one, like some memory got deallocated underneath it or a pointer got
+> corrupted.
+> 
+> > [  569.153288] shstk_setup: clone3[4943] ssp:7272d2200000
+> > [  569.153998] process: copy_thread: clone3[4943] new_ssp:7272d2530000
+> > [  569.154002] update_fpu_shstk: clone3[4943] ssp:7272d2530000
+> > [  569.154008] shstk_post_fork: clone3[4944]
+> > [  569.154011] shstk_post_fork: clone3[4944] sending SIGSEGV post fork
+> 
+> > I don't see an update_fpu_shstk for 4944? Should I with this test?
+> 
+> I'd only expect to see one update, my understanding is that that update
+> is for the child but happening in the context of the parent as the hild
+> is not yet started.
 
-I responded in my previous email. The test is to make sure when
-sealing is applied, the call fails with correct error code. I will
-update the comment in v2 to clarify that.
+What's weird here that I don't understand is that the parent is 4943, so
+this report makes sense:
 
-> This has nothing to do with mseal, you already test the
-> MREMAP_DONTUNMAP and MREMAP_FIXED paths in other tests.
-The remap code path is quite tricky, with many flags directing the call flo=
-w.
-The difference might not be that obvious:
+> > [  569.153288] shstk_setup: clone3[4943] ssp:7272d2200000
 
-test_seal_mremap_move_dontunmap use 0 as new_addr, 0 indicates
-allocating a new memory.
-test_seal_mremap_move_dontunmap_anyaddr uses any arbitrary address as
-a new address.
+The child is 4944, yet I see:
 
-> You also don't know if 0xdead0000 is a valid page (hexagon for
-> instance seems to support 256KiB and 1MiB pages, so does ppc32, and
-> this is not something that should be hardcoded).
->
-usually hardcode value is not good practice, but the point of this
-test is to show
-mremap can really relocate the mapping to an arbitrary address.
+> > [  569.153998] process: copy_thread: clone3[4943] new_ssp:7272d2530000
+> > [  569.154002] update_fpu_shstk: clone3[4943] ssp:7272d2530000
 
-Do you have any suggestions here ? I can think of two options to choose fro=
-m:
+These map to my logging:
 
-1> use 0xd0000000
-2> allocate a memory then free it, reuse the ptr.
+copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+	...
+	new_ssp = shstk_alloc_thread_stack(p, args);
+	pr_err("%s: %s[%d] new_ssp:%lx\n", __func__, p->comm, task_pid_nr(p), new_ssp);
 
-Thanks
--Jeff
+and
+
+update_fpu_shstk(struct task_struct *dst, unsigned long ssp)
+	...
+        xstate->user_ssp = (u64)ssp;
+	pr_err("%s: %s[%d] ssp:%lx\n", __func__, dst->comm, task_pid_nr(dst), ssp);
+
+The child should be "p" (and "dst") here -- stuff is being copied from
+current to p, but p is reporting itself as 4943 here? (Oh, this is
+reporting pid, not tid... I bet that's what I've got wrong.)
+
+> Does this help:
+> 
+> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+> index 27acbdf44c5f..d7005974aff5 100644
+> --- a/arch/x86/kernel/shstk.c
+> +++ b/arch/x86/kernel/shstk.c
+> @@ -258,6 +258,8 @@ unsigned long shstk_alloc_thread_stack(struct task_struct *tsk,
+>  	if (args->shadow_stack) {
+>  		addr = args->shadow_stack;
+>  		size = args->shadow_stack_size;
+> +		shstk->base = 0;
+> +		shstk->size = 0;
+>  	} else {
+>  		/*
+>  		 * For CLONE_VFORK the child will share the parents
+
+I'll fix my reporting and give this patch a try too. Thanks!
+
+-Kees
+
+-- 
+Kees Cook
 
