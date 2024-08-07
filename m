@@ -1,152 +1,315 @@
-Return-Path: <linux-kselftest+bounces-14916-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14917-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1856E949FD8
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 08:34:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0773D94A145
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 09:00:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49D261C22809
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 06:34:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2AB791C2514D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 07:00:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1089C1B5813;
-	Wed,  7 Aug 2024 06:34:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EC6A197A97;
+	Wed,  7 Aug 2024 07:00:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="OcCMCGd+"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="bD7XIhQQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2071.outbound.protection.outlook.com [40.107.220.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4662B1B5805;
-	Wed,  7 Aug 2024 06:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 598C917ADE2;
+	Wed,  7 Aug 2024 07:00:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.71
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723012459; cv=pass; b=iYviWVHZhggXaaIq3khj1UKs2gzxiBMnGSIHwvXK0woct37fVKlqVdjsq5oTjNbQEm/sJ76WRCMpehmJ/rfAPwPsMleQuiTMDyFpAHxF2bUFPu9ta93e/8jPE06h7yJwBXvWLfCRZAqx1Lnx7XE9ydScwdl6bd4gXisCcUcbDw0=
+	t=1723014014; cv=fail; b=D2cZRHTmLxSPFJaoZw6mXiu4Rz4V0ZHEku3UCoXIQo/DgMTKrh3hVktyRMOJSN1CFTbeIY+QFYkNkE0scJqbdoe64q/k0fZTTIap/THEOoQW56qzjGVXdqxXdsWPYHZexRHh1EAigxu28OufKeNCL9ysa9Tk3DWa3njyNIchNKY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723012459; c=relaxed/simple;
-	bh=PjY1kIXXa/+Uvf6D4rCAZkO8Q7OqC9WNlDXVzCDIaYA=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Ywud1RAUJWd+23f46LfK3p5Pxg9Q9SVA7wJelAvX9WzDfoPuyzjSYQwVdmfgipaHWbhzzoF1zwKG6iMZjYs0DS6LyEGsZlNx1PbUQMr3NaAszPgZPU/fVArbZgU/yHt9sCyGUjG8jwe2JHF5pVFt/50W14B6TjyqUJY6IBoGSZ4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=OcCMCGd+; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Delivered-To: Usama.Anjum@collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1723012446; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=IWZNbuVjFdgfwNfwnjJxv9fWk0L8MnWfKZSuFDTFJCewZNaJRWuyYZKyyruqu6GU1x40O6CWWPTu5D4MuDY9IDUffiVlWZ9QF5B+OUWpSXM9St3giP4pFtITUh4NYVEwA5J1Ue+H/I8jLds9VCpnQtEfhnZQxF9RH0BFi2yzFOw=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1723012446; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=cN9VwZ3ux/dSwp942c5/KewkPym2XQ/3TqOiMuYs6Ok=; 
-	b=Od1flUVT55hKI3FWebFnHRSg2u7/hZYwYPpBibzQL0QjcSzsYrP91lgSwPcA18mq0GOQYh2pF/TAmv6q+UMZaPb8IehpCS905ko8lcICJxGwJbeM7J/Sanw3fO0EbtMELRlNKdWm8sxeb4RTACWfM6Kda8zWrdfJtt/N9HvM24w=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
-	dmarc=pass header.from=<Usama.Anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1723012446;
-	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=cN9VwZ3ux/dSwp942c5/KewkPym2XQ/3TqOiMuYs6Ok=;
-	b=OcCMCGd+QC227b27+w1f9IIQvzqCqH49GS9cJ2ST9ND/2J+3Itl1iFD9+bFRXWT2
-	/2FFwTmViXUq2JRzVpfLRlSK4g6T5YjdXFQUrTolWBdIjB8UJmXCDBp1Zg17CddLdkb
-	4dhNRS03hKoYX9R1HvAqLgEXXZoBCdygsb+JwRdM=
-Received: by mx.zohomail.com with SMTPS id 1723012444268333.907844900133;
-	Tue, 6 Aug 2024 23:34:04 -0700 (PDT)
-Message-ID: <5703a55a-95ab-44ee-a070-2bca6e9e23bc@collabora.com>
-Date: Wed, 7 Aug 2024 11:33:58 +0500
+	s=arc-20240116; t=1723014014; c=relaxed/simple;
+	bh=qKGotrXjiY119mKCE799NOwZm5vDFmPXVYxxTcYMOXM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=s8SLgA4T0irH3LHmE2TiGXd9zZ56NTU2XwXDAFmFaNnbosJpCJsgm36p0LmD0+5rIpP4ts527aFN9YI79thEw7yDdjwa4vO+Ky2nvL2CKSCc8T0uPdiT+F+QdliuUh5PZcpWeRRFFeLN5GDJQkh76DjiAa0faiBMyullqFOGvTw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=fail (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=bD7XIhQQ reason="signature verification failed"; arc=fail smtp.client-ip=40.107.220.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=u483L3dORFa2NM6Q42zmQwvZWG5JyAMn7/Fu2AxSe6ci1cRNsIj6xND7CpIMs8+D0cDEjQA9xbxEmpZbO4BLd0qDgh3dLAKLxKD+OOwdOT0LRlLdRzkLPK9vli45HCWJPNqV9GALWTDhujJpI4rppEiQwki7rkafkrkDarMsQgBEkeQJ/oLvVTL+pTzFCO1vUpIn6GgmC5nYDUiKgys7FaT5oF4EY+ShxD6o12tkfKkpAYVCosQu2VombIdUPVYYSALSIwWnlF17CxpWSq/xXWnqtnizZdJDDof5wxAZXk7PJBlaPePY02Rfc65RBCIJUgixmTsZ6CNvqwV8v0QRcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BGpv/NEnr+OvOTzbMrPAADXwWZRW0T9pviqYjD4JRoc=;
+ b=kwvMi20IgCeoI4+ANyOF9jFm/7JVA5B+ToUScgSlnvttMg6cmKudO0gsJ+/iECxYPCQGT2nZdWXEBcYM6mkYiuqS6mDZqs9JU6NqIQsT6UVWrlaYUr/OiTVuxwuQAASaxzoySLMuaBmb8PXB/K/gKGH1OVWFcpqAQ2gQsgCPYnrsyVVkvZm8Dsb9yGhIif6RtEZUUsCha6jqFFTw2W0WLXeNPac78IVYrj95Agytju3qtaUsduyho8dJiEUVUan2h5CeR4xvYuw0tNH6sVdG+7qEG3G8s/xIUulym0J6ZqXFYjlTW7S4LMJwOrWDUeqgOAED6kKu6eVd4t4ZgvBSUg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BGpv/NEnr+OvOTzbMrPAADXwWZRW0T9pviqYjD4JRoc=;
+ b=bD7XIhQQIu2SLDMqaIYbGL1/uZKh3FpicE0D4seZz9zgkqFvdaPSlwg3Mhi73MVPR0/mk3syWyJOyjcji2VuhjUdAQvBczqdEZXJYOV3yHkpYNil4T2XV42nVvTO6V/mwauLIDWQ9IjMRlXceYW69OK5tvIjr/fjQ8A2L+zLoM22slxo5KGybf4estlJkRikHzVaUSx+fnOZaanxPuXEa9bEQeAeA5sAZLAz+BAGfcOOy161Kngp3+zZukxYrs5iGDPVRSojn9pzydg7tbxE+Ha5Ie7gD8AnezVqbcDztBbJeIgGPymO91rrYCmTKjXviAZTUkdCYxa4+BGdVuF/8w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
+ by MW6PR12MB7086.namprd12.prod.outlook.com (2603:10b6:303:238::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.24; Wed, 7 Aug
+ 2024 07:00:09 +0000
+Received: from CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::9ec8:2099:689a:b41f]) by CY5PR12MB6179.namprd12.prod.outlook.com
+ ([fe80::9ec8:2099:689a:b41f%5]) with mapi id 15.20.7828.023; Wed, 7 Aug 2024
+ 07:00:08 +0000
+Date: Wed, 7 Aug 2024 09:59:56 +0300
+From: Ido Schimmel <idosch@nvidia.com>
+To: Geliang Tang <geliang@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	Benjamin Poirier <bpoirier@nvidia.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Vladimir Oltean <vladimir.oltean@nxp.com>,
+	Geliang Tang <tanggeliang@kylinos.cn>, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: forwarding: lib.sh: ignore "Address
+ not found"
+Message-ID: <ZrMbbIrNpCISI63I@shredder.lan>
+References: <764585b6852537a93c6fba3260e311b79280267a.1722917654.git.tanggeliang@kylinos.cn>
+ <ZrHTafNilRs6dx6E@shredder.mtl.com>
+ <a22d9e0eb835e40000bc1955b57ae115ae44353c.camel@kernel.org>
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a22d9e0eb835e40000bc1955b57ae115ae44353c.camel@kernel.org>
+X-ClientProxiedBy: TLZP290CA0015.ISRP290.PROD.OUTLOOK.COM
+ (2603:1096:950:9::11) To CY5PR12MB6179.namprd12.prod.outlook.com
+ (2603:10b6:930:24::22)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Usama.Anjum@collabora.com, kernel@collabora.com, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH] selftests: kvm: fix mkdir error when building for
- non-supported arch
-To: Paolo Bonzini <pbonzini@redhat.com>
-References: <20240806121029.1199794-1-usama.anjum@collabora.com>
- <6a3b2f3c-b733-4f64-a550-2f7dcbaf7cb7@linuxfoundation.org>
- <ca500f5c-57e7-43bc-9a1a-015021582af2@collabora.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
-In-Reply-To: <ca500f5c-57e7-43bc-9a1a-015021582af2@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|MW6PR12MB7086:EE_
+X-MS-Office365-Filtering-Correlation-Id: c2581b88-75e9-4f71-93f0-08dcb6ae92fc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?iso-8859-1?Q?s/ALGVfOripf5rYHw6t5SxeTkqAyR5XMZBSkeZWDK8c0EhVTKLhTkZZEct?=
+ =?iso-8859-1?Q?McHl1pp7HpiL4F6wiOfUPtVEw0SD7XXriH1GBqMzx0pi/iiELh7n/xQRmT?=
+ =?iso-8859-1?Q?p4KaJpOWZ+vPv4tRjfO2NIQoKXmOtkv6mjiMAOdUhZNsVZXFCCy2ZGiESp?=
+ =?iso-8859-1?Q?BNzQawynITIdta0zrAWM6FyQmdHx/m216+p5mx6VRwzNpx0YGp5zhrvAqI?=
+ =?iso-8859-1?Q?eBCyWD5TM0/FtB3hHjcDJv7s4FI/AtyduM/cuCB5lx67G8eIW+bMW6mVNb?=
+ =?iso-8859-1?Q?3sVZTz9kXrL3E2vrkHoNQTpvclryroL/JjwoTuWV78HaHV/D452dygK/BH?=
+ =?iso-8859-1?Q?rIQY1YnHpJJniYrsFbRBAN1sD555BEyVMG+8O9rOHccpsu5FZgmxzRmmlM?=
+ =?iso-8859-1?Q?u8BRFoz28/zXW6DGVotIwjPqj/JdSfhikExOJyOIOcZJsJSRTJi+TGP+oA?=
+ =?iso-8859-1?Q?q2wXx1M9MZgHR29EGQmvp2q1Ooxevh34zLw3/U6mOt3sA7aARqnd9EuAbn?=
+ =?iso-8859-1?Q?F1GsA2KPPuI7H+8jW9dpduFpwsJE+ExLpCEDIvhMIKoYoAANqIfdP2526W?=
+ =?iso-8859-1?Q?QzZqEeieggqsJYKQ6QLW1DNgL6gGdq5Ksg5UmLbKXAflILg5SnZb6RaLcc?=
+ =?iso-8859-1?Q?UGMB5LsinQPU+zp081Ti/Y1Udk9BYNUwiqOflzlzb0MK7QnXOMAuwWPf0G?=
+ =?iso-8859-1?Q?TinY7PzqacKt4YzQqEqUM4w2UufANdd2bjM5i26AR7vb7SN3nSKZjgiUem?=
+ =?iso-8859-1?Q?8Mf1g3qBZgvLpj26alFAw5/OF2vQCiTUeMwm3YjeuzmiyOWYSlKuIDIw42?=
+ =?iso-8859-1?Q?1eDW7ATx29ZzG25CWVV1isCFvmLF4T31X7ruJWDvOz/8/6KbRTWVCaz7XI?=
+ =?iso-8859-1?Q?KMA4qiBhyhIJ2wigvOilnuieZhDIoGsQQyx6ug8SLK6tKBYLLDy2Cus9c/?=
+ =?iso-8859-1?Q?n25qDxOSeTWLtqPhKbARWX5lpLJyJPJl7AXn3hBsZZJjLIKW8UEvomaMXa?=
+ =?iso-8859-1?Q?x8WOxC3u+yAcjqKSdsnRd+Ly5oRZ+aC+yk1kiT+ol93XishhY5QBbV/h/I?=
+ =?iso-8859-1?Q?msyIBGgFzH3Sn2JMbAcTCOR1c3kfXrnabnx5cH410ZspsrfWMVFwnd8FiM?=
+ =?iso-8859-1?Q?rul7KrSLl+kE9hNt82AlbHqDv0wtVyPorQkPQmumZ5x6hPJGqF7Hs+sAAD?=
+ =?iso-8859-1?Q?ZPVmAELpW0bDJZWHFwqK8b+ANf3i9H5c6g4lGUwzlCM3NJkKV/9Y1FZT2s?=
+ =?iso-8859-1?Q?GojsSX5nXIh4VGrn4qRxZBfdu4P2pm5QP1dwjhBxzkaWjEdRtg1SBGH/65?=
+ =?iso-8859-1?Q?NLPAIjPWOrClWYB7FCku0brj7mvL0JHYY999q9L+5OReJLlNyRrCZhKfQD?=
+ =?iso-8859-1?Q?UT0YyRuRJvxzTCWTq19OKAMY4AacMHDw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?iso-8859-1?Q?yUtGmsR1ODS40pOHksWKUpwRmuORO/xkLsw+jzESTa4k+vqWn43RSrsGFe?=
+ =?iso-8859-1?Q?mVQEKhOAeeYvfamUgTk195E/UXf/EQSGumPTSN+lUc4k4pvE++bowiQ50e?=
+ =?iso-8859-1?Q?XENhohJL3aoiyfRGnjVsnd7QKV4PsREmTjDxWRbSnuoQZyfvdyv0DPLepX?=
+ =?iso-8859-1?Q?dkbQIIPoVvatFe3lw16LNQsiGiBXSUH/VMqcywnIsNLnBQOtY11PV7XF3/?=
+ =?iso-8859-1?Q?q5zaHRb64qVj4w2e33X0n0E17exFpr4WaxmR7hGZbKv1vPbs93WT7HLpJI?=
+ =?iso-8859-1?Q?cTb19qXeLn1UDY9vNwGhwQ9dexfWOGg6vyEDxK/LGUfhka5QV6jELxnnp9?=
+ =?iso-8859-1?Q?cvoYwPR0v8vwAypRa9VvhTnLYjk7uCTw1y9u3H5euF10BM6kZSe0mQFfX5?=
+ =?iso-8859-1?Q?SWpJWVkjuRG45KkZFjCiwASg/r9cMUS+6iS4mkVb+pf9Bzo7woDkOd18a1?=
+ =?iso-8859-1?Q?ShAaR1efIr5Z6Fu+JNhYxswvuk5IzbdcMzlHkIjjlIIKiygiHa6TZtpMMA?=
+ =?iso-8859-1?Q?GbaBhnKwZV+HX3/d/SJlMkYdShNHt2ap9vYBm/sbxETxF07rK5efpxsPMR?=
+ =?iso-8859-1?Q?vPIhrYjM/NsU9YOmnVJ1+54vToclRR7XGJDKtw4Af8Uu/Epu1FNj4xnWnM?=
+ =?iso-8859-1?Q?L8cy9vEaQuXZBOto7TPq3CvDA/JNxLZLiC4bcPbtQBBaksQGi8di8KAlQm?=
+ =?iso-8859-1?Q?VmI1eCGthLsvAs3qqhkTdtLhlGBd7bmtcLkKtlE8+HfMljZEapW1yrJduD?=
+ =?iso-8859-1?Q?JKEjqTVTWPqwEJe7NjdAMXN5JnYFmZarBnPPOZBGdDLPtG0CZWSV5eOFLM?=
+ =?iso-8859-1?Q?q+c00ss1VcxpwSdXbufDNoS0GN9McLbl2LDgvQ7x2SvwtcC9PQX1ym7Iwt?=
+ =?iso-8859-1?Q?xfeN2jtICKJ7WWyn/xaJsHzV6lb2tkJefylHcDSA02YsOy009TNPHJ2nye?=
+ =?iso-8859-1?Q?gohFd9t5Ax3yvxPcdWC+vxKIrp0/qax0J/idcSSAr4SlrILbSKHDyzIC8P?=
+ =?iso-8859-1?Q?7DqwiUjTvNDepIpaSSwoatOivSS2i6g4V99ta4ZesaDbhTc2XF2Js4mt4L?=
+ =?iso-8859-1?Q?8xwV9tRnHBrlP90EHOvGq9XTwEjiC8+DhAGOmk6yD0UvndiExV/6GfPhj1?=
+ =?iso-8859-1?Q?IE2iv+jToauLTlvb5t6WrREWDxGMn260/DtIGWhJADyCWlGFCbheu2htM4?=
+ =?iso-8859-1?Q?dBD8SRUjpKTLAyj5Sdj6NfjPria6DPH0e90Ovw71Te0FnCuDW5GOjDX64W?=
+ =?iso-8859-1?Q?hEIrF4QHehw46hw4MS2FDidXcHh/sQY/KxjjhpLaQ7nWSUWZ6/K6ZWoZZv?=
+ =?iso-8859-1?Q?iVOXyPV63yVlS1UxJNMalnEc6UhkVGaKoiDX6mTSpBZ0Dz3MqLSHSRBVS0?=
+ =?iso-8859-1?Q?q+85gvGtnd52dAgIq5IUagQlPv+k/Jo+p60kjSKM3QInN8scYce+Ox7kkf?=
+ =?iso-8859-1?Q?qAuDIBAOarNEUFXowW/K1oEt027ckQ26h0HmS2x1ex1C5QFNejL49Xsacs?=
+ =?iso-8859-1?Q?W8DAwyDUB+RxVlyYsX0FzBLJOG/zODvB3YpQcEdgHzUGAF/CBMa7IW3FqO?=
+ =?iso-8859-1?Q?PZsGtT2TXA8PcS30OxnkzTeC8BTsKYJ63nTorsYXrO2PbaTW9OCcZ9DEZK?=
+ =?iso-8859-1?Q?J4uuJJ4GR0acLyPVBPjO8Q9rpwVVGsiyn5?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2581b88-75e9-4f71-93f0-08dcb6ae92fc
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Aug 2024 07:00:08.7331
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: yXlt8fGJZ+uwOc9pHJZheh9NC11Hs4hXjQrOikIVqNpv7c6N3rcg1vooqTmO/1vHgFt28lrPOsKljRSs39fhjw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB7086
 
-On 8/7/24 11:08 AM, Muhammad Usama Anjum wrote:
-> On 8/6/24 9:00 PM, Shuah Khan wrote:
->> On 8/6/24 06:10, Muhammad Usama Anjum wrote:
->>> The mkdir generates an error when kvm suite is build for non-supported
->>
->> built
->> unsupported
->>
->>> architecture such as arm. Fix it by ignoring the error from mkdir.
->>>
->>> mkdir: missing operand
->>> Try 'mkdir --help' for more information.
->>
->> Simply suppressing the message isn't a good fix. Can you investigate
->> a bit more on why mkdir is failing and the architectures it is failing
->> on?
->>
->> This change simply suppresses the error message and continues - Should
->> this error end the build process or not run mkdir to begin with by
->> checking why $(sort $(dir $(TEST_GEN_PROGS)))) results in an empty
->> string?
-> The tests are specified on per architecture basis. As KVM isn't supported on arm, there are no tests in TEST_GEN_PROGS and it is empty. While lib.mk infrastructure has support to ignore and not build anything in such cases, the Makefile's behaviour isn't robust enough.
+On Wed, Aug 07, 2024 at 12:08:15PM +0800, Geliang Tang wrote:
+> On Tue, 2024-08-06 at 10:40 +0300, Ido Schimmel wrote:
+> > On Tue, Aug 06, 2024 at 12:20:38PM +0800, Geliang Tang wrote:
+> > > From: Geliang Tang <tanggeliang@kylinos.cn>
+> > > 
+> > > So many "Address not found" messages occur at the end of forwarding
+> > > tests
+> > > when using "ip address del" command for an invalid address:
+> > 
+> > Can you give an example of an invalid address that triggers this
+> > message?
+> > 
+> > > 
+> > > TEST: FDB limits interacting with FDB type local                   
+> > > [ OK ]
+> > > Error: ipv4: Address not found.
+> > > 
+> > > ... ...
+> > > TEST: IGMPv3 S,G port entry automatic add to a *,G port            
+> > > [ OK ]
+> > > Error: ipv4: Address not found.
+> > > Error: ipv6: address not found.
+> > > 
+> > > ... ...
+> > > TEST: Isolated port flooding                                       
+> > > [ OK ]
+> > > Error: ipv4: Address not found.
+> > > Error: ipv6: address not found.
+> > > 
+> > > ... ...
+> > > TEST: Externally learned FDB entry - ageing & roaming              
+> > > [ OK ]
+> > > Error: ipv4: Address not found.
+> > > Error: ipv6: address not found.
+> > 
+> > I'm unable to reproduce these with net-next and iproute2-next. Please
+> > debug this to understand the root cause or provide more details on
+> > how
+> > to reproduce.
 > 
-> I think the better fix would be to check if TEST_GEN_PROGS isn't empty and then call mkdir. I'll reiterate and send the fix.
+> I did get these errors with the latest net-next and iproute2-next. For
+> example, I got these errors of "bridge_mdb_port_down.sh":
+> 
+> $ sudo ./bridge_mdb_port_down.sh 
+> TEST: MDB add/del entry to port with state down                  [ OK ]
+> Error: ipv4: Address not found.
+> Error: ipv6: address not found.
+> Error: ipv4: Address not found.
+> Error: ipv6: address not found.
+> 
+> These errors occur when using h1_destroy() and h2_destroy() to delete
+> the addresses of h1 (192.0.2.1, 2001:db8:1::1) and h2 (192.0.2.2,
+> 2001:db8:1::2):
+> 
+> h1_destroy()
+> {
+>         simple_if_fini $h1 192.0.2.1/24 2001:db8:1::1/64
+> }
+> 
+> h2_destroy()
+> {
+>         simple_if_fini $h2 192.0.2.2/24 2001:db8:1::2/64
+> }
+> 
+> It seems that when invoking h1_destroy() and h2_destroy(), both h1 and
+> h2 no longer have IP addresses.
 
-Waiting on Paolo's response before sending the following fix. Maybe he
-has better idea here.
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -317,7 +317,9 @@ $(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S $(GEN_HDRS)
- $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
- 	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -ffreestanding $< -o $@
+This is unexpected, I do see the addresses on my end. Maybe you have
+some network manager that is deleting these addresses for some reason?
 
--$(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
-+ifneq ($(strip $(TEST_GEN_PROGS)),)
-+$(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
-+endif
- $(SPLIT_TEST_GEN_OBJ): $(GEN_HDRS)
- $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
- $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
+Try tracing __inet_del_ifa() while running the tests:
 
+# bpftrace -e 'k:__inet_del_ifa { @bla[comm] = count(); }'
+Attaching 1 probe...
+^C
+
+@bla[ip]: 2
 
 > 
->>
->>>
->>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>> ---
->>> Â  tools/testing/selftests/kvm/Makefile | 2 +-
->>> Â  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
->>> index 48d32c5aa3eb7..8ff46a0a8d1cd 100644
->>> --- a/tools/testing/selftests/kvm/Makefile
->>> +++ b/tools/testing/selftests/kvm/Makefile
->>> @@ -317,7 +317,7 @@ $(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S $(GEN_HDRS)
->>> Â  $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
->>> Â Â Â Â Â  $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -ffreestanding $< -o $@
->>> Â  -$(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
->>> +$(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))) > /dev/null 2>&1)
->>> Â  $(SPLIT_TEST_GEN_OBJ): $(GEN_HDRS)
->>> Â  $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
->>> Â  $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
->>
->>
->> thanks,
->> -- Shuah
+> I added "ifconfig" to show the addresses of h1 and h2 before invoking
+> h1_destroy() and h2_destroy() like this:
 > 
-
--- 
-BR,
-Muhammad Usama Anjum
-
+> '''
+> @@ -105,7 +105,9 @@ cleanup()
+>         pre_cleanup
+>  
+>         switch_destroy
+> +       ifconfig $h1
+>         h1_destroy
+> +       ifconfig $h2
+>         h2_destroy
+>  
+>         vrf_cleanup
+> '''
+> 
+> And got these messages:
+> 
+> TEST: MDB add/del entry to port with state down                 [ OK ]
+> veth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+>         ether f2:ca:02:ee:05:19  txqueuelen 1000  (Ethernet)
+>         RX packets 149  bytes 17355 (17.3 KB)
+>         RX errors 0  dropped 0  overruns 0  frame 0
+>         TX packets 81  bytes 9165 (9.1 KB)
+>         TX errors 0  dropped 12 overruns 0  carrier 0  collisions 0
+> 
+> Error: ipv4: Address not found.
+> Error: ipv6: address not found.
+> veth3: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
+>         ether 92:df:97:5c:98:7e  txqueuelen 1000  (Ethernet)
+>         RX packets 67  bytes 6252 (6.2 KB)
+>         RX errors 0  dropped 0  overruns 0  frame 0
+>         TX packets 39  bytes 4997 (4.9 KB)
+>         TX errors 0  dropped 56 overruns 0  carrier 0  collisions 0
+> 
+> Error: ipv4: Address not found.
+> Error: ipv6: address not found.
+> 
+> -Geliang
+> 
+> > 
+> > > 
+> > > This patch gnores these messages and redirects them to /dev/null in
+> > > __addr_add_del().
+> > > 
+> > > Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+> > > ---
+> > >  tools/testing/selftests/net/forwarding/lib.sh | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/tools/testing/selftests/net/forwarding/lib.sh
+> > > b/tools/testing/selftests/net/forwarding/lib.sh
+> > > index ff96bb7535ff..8670b6053cde 100644
+> > > --- a/tools/testing/selftests/net/forwarding/lib.sh
+> > > +++ b/tools/testing/selftests/net/forwarding/lib.sh
+> > > @@ -839,7 +839,7 @@ __addr_add_del()
+> > >  	array=("${@}")
+> > >  
+> > >  	for addrstr in "${array[@]}"; do
+> > > -		ip address $add_del $addrstr dev $if_name
+> > > +		ip address $add_del $addrstr dev $if_name &>
+> > > /dev/null
+> > >  	done
+> > >  }
+> > >  
+> > > -- 
+> > > 2.43.0
+> > > 
+> 
 
