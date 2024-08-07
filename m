@@ -1,122 +1,116 @@
-Return-Path: <linux-kselftest+bounces-14971-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B87694B17C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 22:37:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD8C794B195
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 22:47:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D8331C216D0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 20:37:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F6812830F0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 20:47:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B254145B29;
-	Wed,  7 Aug 2024 20:37:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94E251482E1;
+	Wed,  7 Aug 2024 20:46:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KjeZ3v7i"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CMqUanrO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 733792A1D1;
-	Wed,  7 Aug 2024 20:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1DEB146D53
+	for <linux-kselftest@vger.kernel.org>; Wed,  7 Aug 2024 20:46:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723063058; cv=none; b=tDj0tXxgeBeGb0u6rxENGlts0vYVmiOjUgh4AA/8STEOtT0zLoag+4izxZG+blawAgL714EVIBLIYT0gCf8CSE6yjJjCL+Z8GWFM8LCZQJ2JD/SStYeyYCsDNiK7+IPFd0abieUujCrUL1lbWjBBUIziRLscnvrK9YYhCujZH2M=
+	t=1723063619; cv=none; b=UzzX9/ByU4Kb9s70oLPpzVHssC0R4MKHYYrEubG00FFSwZ1U2PTN3g8MxuUeruR7m2eV+fmcYCtk21DnqvvEhF+ufyvhJBQcvOfbAkESmf/o6Sszp0TsfwshqTnrWhIiujKoqNqlZ9HS/HU+NWWpPlNpK46fROXjeovLXXmB6qQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723063058; c=relaxed/simple;
-	bh=XppvwH6P+YroeBc9mNU+12vhKV+A3Jx4a4pnvsbgqfs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=j2d9TTo/rAbwWuzBb8DXgWJWQZDsRmVn2TBec0bG7tUH/EcMB3whSFqFk5MFPRzch9djrxasEHwjnCif3E6FombfvrOF1aJhCqKv88BMLnEn2SxdcxSRDDg7zxpIJkDaEYcVcW6YuSa68ZrISTvLLptyf3Iti9KQv+3KrHV8tVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KjeZ3v7i; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-368380828d6so126507f8f.1;
-        Wed, 07 Aug 2024 13:37:36 -0700 (PDT)
+	s=arc-20240116; t=1723063619; c=relaxed/simple;
+	bh=EdBhtzfqLSsBAVJRjdv1ckOtbFndr92/RF3/x62BOCk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=mTFLJtIxp+zNoJ7fS/kncAYjqumwjfAStx71xpgbK6Z1Ko/9vhL9zJ+hxcPmpGqXIsYnC2P6QjU1bqnGrYnnzTSQgsn0XynKHfKVm+v1cbQVM8BbgeeMG4TzAqWiMBFzr9ahajF5OMd3Icmor0J6A5WgvgathTbFrm9W/5Lz9a8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CMqUanrO; arc=none smtp.client-ip=209.85.166.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f180.google.com with SMTP id e9e14a558f8ab-39b051817e0so228005ab.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 07 Aug 2024 13:46:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723063055; x=1723667855; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2MmaFumpYxx53X7+tTMs8NnH+I8o6dRYOWw21OJtXhs=;
-        b=KjeZ3v7i+QZaYAk6R8XcuKJ6Bm6EJAPNPanFI5mSaN/7uIkf/vM7pMv0hvOj9IMaTg
-         kghRJIcJl7d+5Ps0kLxOGNw74byei+sk1qb1JCjpRFBOAL9ggZqaqkysKi0NypG/XmJg
-         uytHBgiqbQIq1lUQeTLqARUJdYLZ9XgdSHj55nplqQ0PW1jyZ7mx//BYEtaiwA3fbf1q
-         dM02WQgbGLOoNN0ZUOUQwWlmxcE/EI5/nijtltezlk40vW4FOX8Xkt4MNtWGqefkzZh2
-         ySKLoJ+V1qe1rR63mE1e0b1GADz255mmF4DiP7Tmc0fcdaYu7UAFAQYbBuhPMaRlbHv6
-         PXiQ==
+        d=linuxfoundation.org; s=google; t=1723063616; x=1723668416; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RqgcGDUaTNp/sTXO9LQ0+BWl+Zjdb1Zqdieng1PIeM4=;
+        b=CMqUanrO4/kfSRTt3dV83U1cPAbnV/CdKhmO6SLiI2+NhdZ/RoIrHoGZbsRO0v/A7u
+         MZuyNN8mM86+ovQfqLoYMT/YCp6XxeF57uBtWEpBhVdJ/rd04bL+PBo5PWCvadZEWthg
+         yFbF/pkHVeVCSwv4R6A08hrmIF8BZ0rsZyUPs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723063055; x=1723667855;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2MmaFumpYxx53X7+tTMs8NnH+I8o6dRYOWw21OJtXhs=;
-        b=pgGFh6Y11PD5/F4Ll9phcNe+I+HE8677jvoUivh/XAr0fyMuwSgUP4oAtZBZ/I50ia
-         ZRjg752nuRnky0wY+HvE9V9AiS2g74i9p7TArUfO6XOjC2CavTO3xobNA6rdf2GNBWx9
-         ZcxTj2TpAKkpKnP/i1MvX+DZCpFRD/5RqZPAN1OI2Jdfl2nhEsBRNUP16xW7S2HqnwvX
-         mhqtO+5Dec852PSQYr0rLeLfejQvlbL7u+ZixE2FH7gOlKE+aEGDEawX/rX0OEYebSPG
-         4hjzDM6WOPeQANcDp2L7y0zasxPt8UuZ0m5Ynlw2ir8+lmIOWt2szTek6EUSZEMrFp2p
-         lP1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX+oDUVCBGoE+tQIw5jQDIMoQh9LmcFfjYSQh+IqWVjCj4RYEL09GjQ4rMQN8asZvjSk0hwpHe/QXCqGmLREYZNmbSKRwib10iTg35G18k5Th63waU2jJ7Rdu3/GVx0JNWgtXrjQmqpvqfhwnjb
-X-Gm-Message-State: AOJu0Yw+TA12Dn0vZnJ9sZVEqaQlpSnr/MaIAviZjaQPE/0RkPwa+CEe
-	c00sJ8rBTRxNkbqP+mcf9Jd8BflRhhtn1EWv4MF13Br7gfUWx8yz
-X-Google-Smtp-Source: AGHT+IE61kFXwqm9Rh8xnuvCuNL8UJuGX36F/y+p9CbI7arO4EcDSFiG1ZFM90I06yh52+467O3GJg==
-X-Received: by 2002:a5d:4e90:0:b0:367:434f:ca9a with SMTP id ffacd0b85a97d-36bbbffe12emr13325706f8f.0.1723063054378;
-        Wed, 07 Aug 2024 13:37:34 -0700 (PDT)
-Received: from PC-PEDRO-ARCH.lan ([2001:818:e92f:6400:96b:aa92:afc0:2d3d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4290598e236sm44492585e9.22.2024.08.07.13.37.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Aug 2024 13:37:34 -0700 (PDT)
-From: Pedro Falcato <pedro.falcato@gmail.com>
-To: pedro.falcato@gmail.com,
-	akpm@linux-foundation.org
-Cc: Liam.Howlett@oracle.com,
-	jeffxu@chromium.org,
-	kees@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	shuah@kernel.org
-Subject: [PATCH] fixup! selftests/mm: Add mseal test for no-discard madvise
-Date: Wed,  7 Aug 2024 21:37:24 +0100
-Message-ID: <20240807203724.2686144-1-pedro.falcato@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240807173336.2523757-3-pedro.falcato@gmail.com>
-References: <20240807173336.2523757-3-pedro.falcato@gmail.com>
+        d=1e100.net; s=20230601; t=1723063616; x=1723668416;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RqgcGDUaTNp/sTXO9LQ0+BWl+Zjdb1Zqdieng1PIeM4=;
+        b=Yaawz5y3MEEmG/pTpTBGAX5cuwbykFD9R6SutFzp00UMrOCamNbSwoiUpQgD4/zVpf
+         gzMUrVOsBtRAdLdWot15l73knDgw0fsdWN7IgdDtVISaC6A4hnwVIwb9Xx7lSiCs1s+j
+         bOl/QBmTk5zTUu+uCC7PUjlRYOiadRNNhJw3X7EaPBiSHoF+KXzIfwygn5Vx9ZfcD+LA
+         ZQCRCX53RxyRdZ0Fu6pTkpzIZPJPtJF2/+zZInU3KpJZSJgrt1H/O8KB7klKQJC9t6lN
+         BuhdbPK2gMIsAASYTaHukBQfOshFQ5eGrkBRRLb4jGwb8zE5kwPfsPyoM8GRKJe7+H/h
+         29hQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVnl4Vv8fDLcE4SnGmZkj0QJ21Riw18HEB4huXVHldzeMQQVRlO+VsLTLAVLj+2A+DUDo82whMP0ilEGZ3fSbE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzF3PebInMvfq5w0P9UjmExum4AslRoKJUHIUT22P1piXpD+iTx
+	TOd/nJBC8MskD7yojcLmWkvBxGXD1NXu/ncRDqxu4mKjxOSClXkfk7hOOBFH58Q=
+X-Google-Smtp-Source: AGHT+IFB+Zx0494eTKzW3GVBD7MHU8uPNoAfHKFsQqBPKr+K5SAwkwE8u/oTmRkBv6+IFzrktgEChw==
+X-Received: by 2002:a6b:7c4c:0:b0:81f:8f3a:5689 with SMTP id ca18e2360f4ac-81fd42bcd22mr1222964139f.0.1723063615771;
+        Wed, 07 Aug 2024 13:46:55 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4c8d69a87b4sm3007508173.64.2024.08.07.13.46.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 07 Aug 2024 13:46:55 -0700 (PDT)
+Message-ID: <5cbf7f15-cea7-4f82-ae9f-62e08d1afa93@linuxfoundation.org>
+Date: Wed, 7 Aug 2024 14:46:54 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/uprobes: Add a basic uprobe testcase
+To: Steven Rostedt <rostedt@goodmis.org>,
+ "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ oleg@redhat.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <171651179523.161068.3164659198838770307.stgit@devnote2>
+ <20240807163638.528b72a1@gandalf.local.home>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240807163638.528b72a1@gandalf.local.home>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Adjust the mseal test's plan.
+On 8/7/24 14:36, Steven Rostedt wrote:
+> On Fri, 24 May 2024 09:49:55 +0900
+> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+> 
+>> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>>
+>> Add a basic uprobe testcase which checks whether add/remove/trace
+>> operations works on /bin/sh.
+>>
+>> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> 
+> Shuah, can you take this too.
 
-Signed-off-by: Pedro Falcato <pedro.falcato@gmail.com>
+Yes.
 
----
+> 
+> -- Steve
 
-Andrew, please squash this small fix into "selftests/mm: Add mseal test for no-discard madvise".
-Thank you!
+Applied to linux-kselftest next for Linux 6.12-rc1.
 
- tools/testing/selftests/mm/mseal_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
-index 2dcda7440eb..7eec3f0152e 100644
---- a/tools/testing/selftests/mm/mseal_test.c
-+++ b/tools/testing/selftests/mm/mseal_test.c
-@@ -1775,7 +1775,7 @@ int main(int argc, char **argv)
- 	if (!pkey_supported())
- 		ksft_print_msg("PKEY not supported\n");
- 
--	ksft_set_plan(80);
-+	ksft_set_plan(82);
- 
- 	test_seal_addseal();
- 	test_seal_unmapped_start();
--- 
-2.46.0
+thanks,
+-- Shuah
 
 
