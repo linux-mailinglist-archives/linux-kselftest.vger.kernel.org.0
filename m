@@ -1,125 +1,126 @@
-Return-Path: <linux-kselftest+bounces-14984-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-14994-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04B7394B262
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 23:52:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 579A794B2A3
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 00:03:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35DE71C212DD
-	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 21:52:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03AE21F21806
+	for <lists+linux-kselftest@lfdr.de>; Wed,  7 Aug 2024 22:03:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CA49156F20;
-	Wed,  7 Aug 2024 21:52:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06FCC146017;
+	Wed,  7 Aug 2024 22:03:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="dAkQyPKy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cnCA1i1k"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF38155A56;
-	Wed,  7 Aug 2024 21:52:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01264D5BD;
+	Wed,  7 Aug 2024 22:03:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723067525; cv=none; b=r9qXUgMA+kkNbtCYj555ZxH6c2wKGOgkoa5jxfa2Le8g1ywUiWfzriBlAUVPAuMWbyPwpYl9VnUgxuIC97vktxLsFXU0HAVpnyRv2+npEoNGvtUXbw5Rr5L3Cfc48ivWy5kZkTFPfJ6gkh4A6lWEqBkjIAHqCul0Gw8rjtSPFDw=
+	t=1723068211; cv=none; b=Ycl8rDyEllpoJXxX6vPGT4mdeFepCj1WIG5+CYcVm5f7bwAe1/FRMhMOrMPrgiUsMCca+ijsvxnVXI4DRdRfzFEX31ikL98NgCYgB+4rpsp+2yS6FEhtNGnaZhOq81qtHHXow/yoM2ADR8PHrFDbowr069BUKKE4USRalT83DGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723067525; c=relaxed/simple;
-	bh=oRgMb/2rEclPwfWBKF/mGGZvwsZktVlEyUFTfYwp+Po=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=VBEumIOjwp0kX55DTL7qaZ+eS7cK8VSbXCCDPufEatP4TAFglnIJFT+o12IK7n/37TsoGxLpDaVBREvBp0j5EIhw+jJaLisSlEyfqQe6rvWjdJfvIdjG0VxRYFzyqDLvvrqrEgA87qm19idf6Bd7gqEwuI90dOTPqrpa7S6an9U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=dAkQyPKy; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1723067511;
-	bh=oRgMb/2rEclPwfWBKF/mGGZvwsZktVlEyUFTfYwp+Po=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=dAkQyPKy4uwTVzuytsCYWt21hxmOmlF8kx7127JJvxZ7RhnacsTWZ8RlR1nkD2kyv
-	 Ml7pmqB4OOI/Iz4vq3/lBK9nTXDAiaaNwMpW74/+7Uz60drSHPw4FSUOHMVHwSu+Gh
-	 x9dvitXW6zxhiolwzicQV9j2UgGkeWEpyJRM6zLo=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 07 Aug 2024 23:51:51 +0200
-Subject: [PATCH v2 15/15] selftests/nolibc: run-tests.sh: allow building
- through LLVM
+	s=arc-20240116; t=1723068211; c=relaxed/simple;
+	bh=apRbtHOpMOwo9Hq95H+j9Ifiaa3qhuwqc+VapwBrbuY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HVctSOV1cFAWdEc2JU3HWdFb1FnquojAAfUxidfjVqmun9vJuOEwXg11S+5Cr38TWEUqO2BJynNmoGY1foIVRZI+lr+vkAmaO/WcJC8rg+44mn7SKb70ExmiPo+iv9vgjWftx6G24NxcZvn3/aSGJf9nwhk7kgAAkK14Wyh+YRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cnCA1i1k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0568FC32781;
+	Wed,  7 Aug 2024 22:03:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723068210;
+	bh=apRbtHOpMOwo9Hq95H+j9Ifiaa3qhuwqc+VapwBrbuY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cnCA1i1kifnnzgJ9HyTRIu1WmXkPE4kMXfBiuxZnmrSEKokxbBR4ostuNjIkE5cuP
+	 wDzNdX9ujwbTZtTfOTNmbvGj36DbL/N7JM/T1vxBk5p0vV9w0/RlQbkJ3g6JW5JIL4
+	 ro5eSOpNQZzA5pmRn6bZ6alCN6RaCPJS3xGv03VQhm8OvNY/V8AZxSTr5CIk9YLKkt
+	 wp7OoT6gGScSKiNpAiCucS/vr7D98pP6E0IObQ7HKWYRnMW2zutFWKMWDsyHTMDkMP
+	 HbleBZg0xqXDzWkc4hShMZMherSa0SS7S5mT/TY19jsqLxrI/avzy+ZUy8XAtjIH9g
+	 mv1MXWqYSs6ZQ==
+Date: Wed, 7 Aug 2024 23:03:24 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Kees Cook <kees@kernel.org>
+Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, jannh@google.com,
+	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
+Subject: Re: [PATCH RFT v7 9/9] selftests/clone3: Test shadow stack support
+Message-ID: <ZrPvLIjW0p8j5C1x@finisterre.sirena.org.uk>
+References: <20240731-clone3-shadow-stack-v7-0-a9532eebfb1d@kernel.org>
+ <20240731-clone3-shadow-stack-v7-9-a9532eebfb1d@kernel.org>
+ <202408052046.00BC7CBC@keescook>
+ <19ee6fc9-94d7-4420-abd3-7cfdf612df0c@sirena.org.uk>
+ <202408062022.34F3558@keescook>
+ <e5e5c0fc-3425-4020-ae7c-4b7fd0f1f263@sirena.org.uk>
+ <202408071221.92B6E385C@keescook>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240807-nolibc-llvm-v2-15-c20f2f5fc7c2@weissschuh.net>
-References: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
-In-Reply-To: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
- Shuah Khan <skhan@linuxfoundation.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1723067509; l=1785;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=oRgMb/2rEclPwfWBKF/mGGZvwsZktVlEyUFTfYwp+Po=;
- b=V3kzjxBkkhKxs515hjrbUo+Lgi32z8Bw+QSJbS3AbkLsRgF4IaRzPkdKqTU0X83jOANjysvjW
- CGH07nGVaD2Csm/kQQD5DISrRV0H5di503S9Uv4evzBzSoMEF0XX3KM
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ovsSsFUoGuk43J7e"
+Content-Disposition: inline
+In-Reply-To: <202408071221.92B6E385C@keescook>
+X-Cookie: Your love life will be... interesting.
 
-The nolibc tests can now be properly built with LLVM.
-Expose this through run-tests.sh.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
----
- tools/testing/selftests/nolibc/run-tests.sh | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+--ovsSsFUoGuk43J7e
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/tools/testing/selftests/nolibc/run-tests.sh b/tools/testing/selftests/nolibc/run-tests.sh
-index 324509b99e2c..e7ecda4ae796 100755
---- a/tools/testing/selftests/nolibc/run-tests.sh
-+++ b/tools/testing/selftests/nolibc/run-tests.sh
-@@ -16,9 +16,10 @@ build_location="$(realpath "${cache_dir}"/nolibc-tests/)"
- perform_download=0
- test_mode=system
- werror=1
-+llvm=
- archs="i386 x86_64 arm64 arm mips32le mips32be ppc ppc64 ppc64le riscv s390 loongarch"
- 
--TEMP=$(getopt -o 'j:d:c:b:a:m:peh' -n "$0" -- "$@")
-+TEMP=$(getopt -o 'j:d:c:b:a:m:pelh' -n "$0" -- "$@")
- 
- eval set -- "$TEMP"
- unset TEMP
-@@ -42,6 +43,7 @@ Options:
-  -b [DIR]       Build location (default: ${build_location})
-  -m [MODE]      Test mode user/system (default: ${test_mode})
-  -e             Disable -Werror
-+ -l             Build with LLVM/clang
- EOF
- }
- 
-@@ -71,6 +73,9 @@ while true; do
- 		'-e')
- 			werror=0
- 			shift; continue ;;
-+		'-l')
-+			llvm=1
-+			shift; continue ;;
- 		'-h')
- 			print_usage
- 			exit 0
-@@ -143,7 +148,7 @@ test_arch() {
- 	if [ "$werror" -ne 0 ]; then
- 		CFLAGS_EXTRA="$CFLAGS_EXTRA -Werror"
- 	fi
--	MAKE=(make -j"${nproc}" XARCH="${arch}" CROSS_COMPILE="${cross_compile}" O="${build_dir}")
-+	MAKE=(make -j"${nproc}" XARCH="${arch}" CROSS_COMPILE="${cross_compile}" LLVM="${llvm}" O="${build_dir}")
- 
- 	mkdir -p "$build_dir"
- 	if [ "$test_mode" = "system" ] && [ ! -f "${build_dir}/.config" ]; then
+On Wed, Aug 07, 2024 at 12:23:01PM -0700, Kees Cook wrote:
+> On Wed, Aug 07, 2024 at 01:39:27PM +0100, Mark Brown wrote:
 
--- 
-2.46.0
+> >  		size = args->shadow_stack_size;
+> > +		shstk->base = 0;
+> > +		shstk->size = 0;
 
+> Yup, that fixes it!
+
+>   # Totals: pass:23 fail:0 xfail:0 xpass:0 skip:1 error:0
+
+> (The skip is "Shadow stack on system without shadow stack")
+
+Excellent, thanks!  It's amazing how many dumb mistakes you can find if
+you actually try running the code :/ .
+
+--ovsSsFUoGuk43J7e
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmaz7ysACgkQJNaLcl1U
+h9D6nQf471aSpWTp9hbNlp8vMCtiJWKUaAuZ+t0OiPrxl5alZkAidQfo1tJ4gpH6
+OxPxfAinXgzcWFgHMsnjUD1Rfpvqb9jA2Ni7fMoDkNIfeGXCF7ocedEG2SZQAa2L
+04Z2R8i2Tq3AcBLHLSyuX7YTSaK25ZyhLUJWXMZNq+ytNPVTZ2XsfQ1LbQhRdQ4P
+UpL4WPYWnPMJ56UzmoD/NaYS5ED750CNiMJfRSEicCCHuZ3u9nPqTb3DBxDVPNeu
+P3fDaHPsq0ZKqg1LQdxmn2TyZCf/ydyJal0DSDHBF+/QF+jZWZltRUfCqKgOiR5m
+stJBoppOCGUxXbeFnFtS2fsy/o+4
+=Vmt3
+-----END PGP SIGNATURE-----
+
+--ovsSsFUoGuk43J7e--
 
