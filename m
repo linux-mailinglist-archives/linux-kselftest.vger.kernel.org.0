@@ -1,282 +1,247 @@
-Return-Path: <linux-kselftest+bounces-15020-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15022-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0126394B959
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 10:54:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FB5094B99E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 11:24:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C1041F219EC
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 08:54:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 495461F20FF5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 09:24:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A35D2189B92;
-	Thu,  8 Aug 2024 08:53:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05360189B9A;
+	Thu,  8 Aug 2024 09:24:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NK8lQ3g2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gXaJql3Y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78B1D146019;
-	Thu,  8 Aug 2024 08:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8D1C148823;
+	Thu,  8 Aug 2024 09:24:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723107238; cv=none; b=VIzTNjTBDLjd87R5sZbMcLNb2kq2wxzFvpB7RidJwW7CIviitYNP7RuzjyHbMYVaF7DcxqKqcfCRgjhyttjKPmlhdfjwbyM1vTKrLfNWhQIzoeZe3LpTLzeKaS+c4EYKqq3baGdC5bwQ86WsFM+fwmKyNGGDhaNb7Mcr06EQVLU=
+	t=1723109072; cv=none; b=VTjxCje1VwkTOAZmCAsfrxR76BYO12uo5LGu/zRpGPlqA1gQHBHjZWLBbhNlM+9WG8LH8RC9BZzITpDAlcUS9pUorPIKUGZ5+HlHS+KcokE9yEe5aXG0E1LHYxcwhbK2hp9BbKPV/MMnvvA9n/4pY6h0Isjgzv+UbzVA8RtgUrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723107238; c=relaxed/simple;
-	bh=gZrWnBAuUCvrkVq9DeGaE1/Xcu2JHw98lkPfGDe46xI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YsnH70h5ERzqinaNwtW0lR8NDaKcXQD6tY2qIx11BYpgYma4OkVQNEltA0rR9jY6R04y54J8bUsx7EoaBTiPN4+DydrAaF2MTdaVlL6oGu9+oMlR1ATpckpSFKAE3vAeV9LPyeLPJ5TTEOuFPQ8HM1emn7LZU5GJApkxv8i0klQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NK8lQ3g2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF68AC32782;
-	Thu,  8 Aug 2024 08:53:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723107238;
-	bh=gZrWnBAuUCvrkVq9DeGaE1/Xcu2JHw98lkPfGDe46xI=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-	b=NK8lQ3g2ViF69knaHl8GC6+bqs8YR13WwZ8/+KSxPQgd2e181iZKxu+zW9sOASkcy
-	 g87WUunM7aJ634STyyfb4S91N+cbUvBj1eTbyhvSO1YFqtBYp59dyPXDGD8c3YjUDt
-	 52Mx7cro1uYMRDWOlvh8YuzIwybiFAF09S9etOn4C+NWcQWHE5ntt5TJBAV1+ujkDk
-	 WdjWzpouYX3CwVqQ6zqVoDxZpnFq9SFpnYh7xyOuloXf7dMksOwtADApY8wBSHXo9y
-	 wxBX2UyRDWhSqjoCYiJB0MKpuRFiecHTC5fq8naKrfQQBiGMGfeLY/AeTex9ZhBD+z
-	 UUVM9yq8BQWIA==
-Message-ID: <95b6f3afa55f607c4328b686144a9005f954dc80.camel@kernel.org>
-Subject: Re: [PATCH net-next] selftests: forwarding: lib.sh: ignore "Address
- not found"
-From: Geliang Tang <geliang@kernel.org>
-To: Ido Schimmel <idosch@nvidia.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
- <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,  Petr Machata
- <petrm@nvidia.com>, Hangbin Liu <liuhangbin@gmail.com>, Benjamin Poirier
- <bpoirier@nvidia.com>,  Jiri Pirko <jiri@resnulli.us>, Vladimir Oltean
- <vladimir.oltean@nxp.com>, Geliang Tang <tanggeliang@kylinos.cn>,
- netdev@vger.kernel.org,  linux-kselftest@vger.kernel.org
-Date: Thu, 08 Aug 2024 16:53:51 +0800
-In-Reply-To: <ZrMbbIrNpCISI63I@shredder.lan>
-References: 
-	<764585b6852537a93c6fba3260e311b79280267a.1722917654.git.tanggeliang@kylinos.cn>
-	 <ZrHTafNilRs6dx6E@shredder.mtl.com>
-	 <a22d9e0eb835e40000bc1955b57ae115ae44353c.camel@kernel.org>
-	 <ZrMbbIrNpCISI63I@shredder.lan>
-Autocrypt: addr=geliang@kernel.org; prefer-encrypt=mutual;
- keydata=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
- Px+2P2cKc7LXXedb/qQ3M
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1723109072; c=relaxed/simple;
+	bh=SOQnEtBvleji89IyJOxm5wCC0qJiPC98MXc3jWBM3hI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CamKvG5DjBHOt9Z/HBoKRFY+U0X6v4U3GNYyMmcjsYpz1oaO3UZdUe3nHToTJdi5QwmNfMA/Zaz0wnIUv0ZsWZXd/FPnbIIrXokVzhuRCeaZR6buLPfNxAW0bmNsorkp/TYoBedALF6N7YSFZgirfcjfhhA2dFpKsr+pVW1rPkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gXaJql3Y; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723109071; x=1754645071;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SOQnEtBvleji89IyJOxm5wCC0qJiPC98MXc3jWBM3hI=;
+  b=gXaJql3YSdwbJZ5sN5i+6vDGp/hOOJ036FF+3tVVT7GayKmJLYaXEsFb
+   adUPMp3Pzt/KjEP0hEv1emjf6J0o1p6oHE5Ly3N+zifLIZRnvsBq+S1M+
+   w7Yiipq6QELvTYpLIKqtLIxHArhEPYCyx84cKDvubYIjA+pnatXtETQIr
+   tIqOZ9qM7egJOiD6w0tmdk7EgXc5NORWS+O5D2Bu1sLKi1e+aqkLLZKGN
+   kyNILOFDq0byzTO6xPaPMLX0DLWrqv8gps7wh1B5nEWCPmuiiuMPJr/l5
+   uHTbPEvdTLdxV7aV98b8oihZ7yqnHRjx9906cM+9mmyi/iJTY+qyYmpky
+   Q==;
+X-CSE-ConnectionGUID: Gvy4AtZHTUS+Q+AQEPPA7A==
+X-CSE-MsgGUID: gkJmuiXOSwqy1E03v5HoHA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11157"; a="21390950"
+X-IronPort-AV: E=Sophos;i="6.09,272,1716274800"; 
+   d="scan'208";a="21390950"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2024 02:24:30 -0700
+X-CSE-ConnectionGUID: yrB9vEkUTFaKwU2RzBSCSw==
+X-CSE-MsgGUID: xS7a7xWERVmYhDPINGWdtw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,272,1716274800"; 
+   d="scan'208";a="87809875"
+Received: from unknown (HELO b6bf6c95bbab) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 08 Aug 2024 02:24:27 -0700
+Received: from kbuild by b6bf6c95bbab with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sbzNb-00065M-0q;
+	Thu, 08 Aug 2024 09:24:21 +0000
+Date: Thu, 8 Aug 2024 17:22:38 +0800
+From: kernel test robot <lkp@intel.com>
+To: Ivan Orlov <ivan.orlov0322@gmail.com>, perex@perex.cz, tiwai@suse.com,
+	corbet@lwn.net, broonie@kernel.org, shuah@kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Ivan Orlov <ivan.orlov0322@gmail.com>,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
+	christophe.jaillet@wanadoo.fr, aholzinger@gmx.de
+Subject: Re: [PATCH v3 3/4] ALSA: timer: Introduce virtual userspace-driven
+ timers
+Message-ID: <202408081612.hvfwzVlB-lkp@intel.com>
+References: <20240806125243.449959-4-ivan.orlov0322@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240806125243.449959-4-ivan.orlov0322@gmail.com>
 
-On Wed, 2024-08-07 at 09:59 +0300, Ido Schimmel wrote:
-> On Wed, Aug 07, 2024 at 12:08:15PM +0800, Geliang Tang wrote:
-> > On Tue, 2024-08-06 at 10:40 +0300, Ido Schimmel wrote:
-> > > On Tue, Aug 06, 2024 at 12:20:38PM +0800, Geliang Tang wrote:
-> > > > From: Geliang Tang <tanggeliang@kylinos.cn>
-> > > > 
-> > > > So many "Address not found" messages occur at the end of
-> > > > forwarding
-> > > > tests
-> > > > when using "ip address del" command for an invalid address:
-> > > 
-> > > Can you give an example of an invalid address that triggers this
-> > > message?
-> > > 
-> > > > 
-> > > > TEST: FDB limits interacting with FDB type
-> > > > local                   
-> > > > [ OK ]
-> > > > Error: ipv4: Address not found.
-> > > > 
-> > > > ... ...
-> > > > TEST: IGMPv3 S,G port entry automatic add to a *,G
-> > > > port            
-> > > > [ OK ]
-> > > > Error: ipv4: Address not found.
-> > > > Error: ipv6: address not found.
-> > > > 
-> > > > ... ...
-> > > > TEST: Isolated port
-> > > > flooding                                       
-> > > > [ OK ]
-> > > > Error: ipv4: Address not found.
-> > > > Error: ipv6: address not found.
-> > > > 
-> > > > ... ...
-> > > > TEST: Externally learned FDB entry - ageing &
-> > > > roaming              
-> > > > [ OK ]
-> > > > Error: ipv4: Address not found.
-> > > > Error: ipv6: address not found.
-> > > 
-> > > I'm unable to reproduce these with net-next and iproute2-next.
-> > > Please
-> > > debug this to understand the root cause or provide more details
-> > > on
-> > > how
-> > > to reproduce.
-> > 
-> > I did get these errors with the latest net-next and iproute2-next.
-> > For
-> > example, I got these errors of "bridge_mdb_port_down.sh":
-> > 
-> > $ sudo ./bridge_mdb_port_down.sh 
-> > TEST: MDB add/del entry to port with state down                  [
-> > OK ]
-> > Error: ipv4: Address not found.
-> > Error: ipv6: address not found.
-> > Error: ipv4: Address not found.
-> > Error: ipv6: address not found.
-> > 
-> > These errors occur when using h1_destroy() and h2_destroy() to
-> > delete
-> > the addresses of h1 (192.0.2.1, 2001:db8:1::1) and h2 (192.0.2.2,
-> > 2001:db8:1::2):
-> > 
-> > h1_destroy()
-> > {
-> >         simple_if_fini $h1 192.0.2.1/24 2001:db8:1::1/64
-> > }
-> > 
-> > h2_destroy()
-> > {
-> >         simple_if_fini $h2 192.0.2.2/24 2001:db8:1::2/64
-> > }
-> > 
-> > It seems that when invoking h1_destroy() and h2_destroy(), both h1
-> > and
-> > h2 no longer have IP addresses.
-> 
-> This is unexpected, I do see the addresses on my end. Maybe you have
-> some network manager that is deleting these addresses for some
-> reason?
-> 
-> Try tracing __inet_del_ifa() while running the tests:
-> 
-> # bpftrace -e 'k:__inet_del_ifa { @bla[comm] = count(); }'
-> Attaching 1 probe...
-> ^C
-> 
-> @bla[ip]: 2
+Hi Ivan,
 
-@bla[NetworkManager]: 2
+kernel test robot noticed the following build errors:
 
-Yes indeed, the addresses are deleted by NetworkManager. Does this mean
-that this test will be affected by the network environment in which it
-is running? Is it necessary to run this test in a new network
-namespace? If necessary, I can add it.
+[auto build test ERROR on tiwai-sound/for-next]
+[also build test ERROR on tiwai-sound/for-linus linus/master v6.11-rc2 next-20240808]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Thanks,
--Geliang
+url:    https://github.com/intel-lab-lkp/linux/commits/Ivan-Orlov/ALSA-aloop-Allow-using-global-timers/20240806-210332
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+patch link:    https://lore.kernel.org/r/20240806125243.449959-4-ivan.orlov0322%40gmail.com
+patch subject: [PATCH v3 3/4] ALSA: timer: Introduce virtual userspace-driven timers
+config: arm-randconfig-r064-20240807 (https://download.01.org/0day-ci/archive/20240808/202408081612.hvfwzVlB-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 14.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240808/202408081612.hvfwzVlB-lkp@intel.com/reproduce)
 
-> 
-> > 
-> > I added "ifconfig" to show the addresses of h1 and h2 before
-> > invoking
-> > h1_destroy() and h2_destroy() like this:
-> > 
-> > '''
-> > @@ -105,7 +105,9 @@ cleanup()
-> >         pre_cleanup
-> >  
-> >         switch_destroy
-> > +       ifconfig $h1
-> >         h1_destroy
-> > +       ifconfig $h2
-> >         h2_destroy
-> >  
-> >         vrf_cleanup
-> > '''
-> > 
-> > And got these messages:
-> > 
-> > TEST: MDB add/del entry to port with state down                 [
-> > OK ]
-> > veth0: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-> >         ether f2:ca:02:ee:05:19  txqueuelen 1000  (Ethernet)
-> >         RX packets 149  bytes 17355 (17.3 KB)
-> >         RX errors 0  dropped 0  overruns 0  frame 0
-> >         TX packets 81  bytes 9165 (9.1 KB)
-> >         TX errors 0  dropped 12 overruns 0  carrier 0  collisions 0
-> > 
-> > Error: ipv4: Address not found.
-> > Error: ipv6: address not found.
-> > veth3: flags=4099<UP,BROADCAST,MULTICAST>  mtu 1500
-> >         ether 92:df:97:5c:98:7e  txqueuelen 1000  (Ethernet)
-> >         RX packets 67  bytes 6252 (6.2 KB)
-> >         RX errors 0  dropped 0  overruns 0  frame 0
-> >         TX packets 39  bytes 4997 (4.9 KB)
-> >         TX errors 0  dropped 56 overruns 0  carrier 0  collisions 0
-> > 
-> > Error: ipv4: Address not found.
-> > Error: ipv6: address not found.
-> > 
-> > -Geliang
-> > 
-> > > 
-> > > > 
-> > > > This patch gnores these messages and redirects them to
-> > > > /dev/null in
-> > > > __addr_add_del().
-> > > > 
-> > > > Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-> > > > ---
-> > > >  tools/testing/selftests/net/forwarding/lib.sh | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > 
-> > > > diff --git a/tools/testing/selftests/net/forwarding/lib.sh
-> > > > b/tools/testing/selftests/net/forwarding/lib.sh
-> > > > index ff96bb7535ff..8670b6053cde 100644
-> > > > --- a/tools/testing/selftests/net/forwarding/lib.sh
-> > > > +++ b/tools/testing/selftests/net/forwarding/lib.sh
-> > > > @@ -839,7 +839,7 @@ __addr_add_del()
-> > > >  	array=("${@}")
-> > > >  
-> > > >  	for addrstr in "${array[@]}"; do
-> > > > -		ip address $add_del $addrstr dev $if_name
-> > > > +		ip address $add_del $addrstr dev $if_name &>
-> > > > /dev/null
-> > > >  	done
-> > > >  }
-> > > >  
-> > > > -- 
-> > > > 2.43.0
-> > > > 
-> > 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408081612.hvfwzVlB-lkp@intel.com/
 
+All errors (new ones prefixed by >>):
+
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.o: in function `btmtk_usb_submit_wmt_recv_urb':
+   drivers/bluetooth/btmtk.c:531:(.text+0x6c2): undefined reference to `usb_alloc_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:537:(.text+0x6e6): undefined reference to `usb_free_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:561:(.text+0x750): undefined reference to `usb_anchor_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:562:(.text+0x75a): undefined reference to `usb_submit_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:567:(.text+0x796): undefined reference to `usb_unanchor_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:570:(.text+0x7a0): undefined reference to `usb_free_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.o: in function `btmtk_submit_intr_urb':
+   drivers/bluetooth/btmtk.c:1174:(.text+0x80e): undefined reference to `usb_alloc_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:1181:(.text+0x83a): undefined reference to `usb_free_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:1195:(.text+0x8c4): undefined reference to `usb_anchor_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:1197:(.text+0x8cc): undefined reference to `usb_submit_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:1202:(.text+0x908): undefined reference to `usb_unanchor_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:1205:(.text+0x912): undefined reference to `usb_free_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.o: in function `btmtk_usb_suspend':
+   drivers/bluetooth/btmtk.c:1265:(.text+0x988): undefined reference to `usb_kill_anchored_urbs'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.o: in function `btmtk_intr_complete':
+   drivers/bluetooth/btmtk.c:1145:(.text+0xbf2): undefined reference to `usb_anchor_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:1147:(.text+0xbfc): undefined reference to `usb_submit_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:1157:(.text+0xc48): undefined reference to `usb_unanchor_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.o: in function `__set_mtk_intr_interface':
+   drivers/bluetooth/btmtk.c:991:(.text+0xcf4): undefined reference to `usb_set_interface'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.o: in function `btmtk_usb_isointf_init':
+   drivers/bluetooth/btmtk.c:1224:(.text+0xd30): undefined reference to `usb_kill_anchored_urbs'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.o: in function `btmtk_usb_hci_wmt_sync':
+   drivers/bluetooth/btmtk.c:610:(.text+0xf26): undefined reference to `usb_autopm_get_interface'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:618:(.text+0xf54): undefined reference to `usb_autopm_put_interface'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:625:(.text+0xf7e): undefined reference to `usb_autopm_put_interface'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.o: in function `btmtk_usb_reg_read':
+   drivers/bluetooth/btmtk.c:790:(.text+0x1248): undefined reference to `usb_control_msg'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.o: in function `btmtk_usb_uhw_reg_write':
+   drivers/bluetooth/btmtk.c:738:(.text+0x12e0): undefined reference to `usb_control_msg'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.o: in function `btmtk_usb_uhw_reg_read':
+   drivers/bluetooth/btmtk.c:761:(.text+0x1374): undefined reference to `usb_control_msg'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.o: in function `btmtk_usb_recv_acl':
+   drivers/bluetooth/btmtk.c:946:(.text+0x1e06): undefined reference to `usb_disable_autosuspend'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.o: in function `btmtk_usb_wmt_recv':
+   drivers/bluetooth/btmtk.c:508:(.text+0x1e72): undefined reference to `usb_anchor_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:509:(.text+0x1e7c): undefined reference to `usb_submit_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.c:518:(.text+0x1ec0): undefined reference to `usb_unanchor_urb'
+   arm-linux-gnueabi-ld: drivers/bluetooth/btmtk.o: in function `alloc_mtk_intr_urb':
+   drivers/bluetooth/btmtk.c:1037:(.text+0x1fc8): undefined reference to `usb_alloc_urb'
+   arm-linux-gnueabi-ld: sound/core/timer.o: in function `snd_utimer_create':
+>> sound/core/timer.c:2127:(.text+0x255c): undefined reference to `__aeabi_uldivmod'
+
+
+vim +2127 sound/core/timer.c
+
+  2112	
+  2113	static int snd_utimer_create(struct snd_utimer_info *utimer_info,
+  2114				     struct snd_utimer **r_utimer)
+  2115	{
+  2116		struct snd_utimer *utimer;
+  2117		struct snd_timer *timer;
+  2118		struct snd_timer_id tid;
+  2119		int utimer_id;
+  2120		int err = 0;
+  2121		u64 resolution;
+  2122	
+  2123		if (!utimer_info || utimer_info->frame_rate == 0 || utimer_info->period_size == 0)
+  2124			return -EINVAL;
+  2125	
+  2126		/* Let's check that we won't get an overflow in the resolution */
+> 2127		if (NANO / utimer_info->frame_rate > U64_MAX / utimer_info->period_size)
+  2128			return -EINVAL;
+  2129	
+  2130		resolution = NANO / utimer_info->frame_rate * utimer_info->period_size;
+  2131	
+  2132		if (resolution == 0)
+  2133			return -EINVAL;
+  2134	
+  2135		utimer = kzalloc(sizeof(*utimer), GFP_KERNEL);
+  2136		if (!utimer)
+  2137			return -ENOMEM;
+  2138	
+  2139		/* We hold the ioctl lock here so we won't get a race condition when allocating id */
+  2140		utimer_id = snd_utimer_take_id();
+  2141		if (utimer_id < 0) {
+  2142			err = utimer_id;
+  2143			goto err_take_id;
+  2144		}
+  2145	
+  2146		utimer->name = kasprintf(GFP_KERNEL, "snd-utimer%d", utimer_id);
+  2147		if (!utimer->name) {
+  2148			err = -ENOMEM;
+  2149			goto err_get_name;
+  2150		}
+  2151	
+  2152		utimer->id = utimer_id;
+  2153	
+  2154		tid.dev_sclass = SNDRV_TIMER_SCLASS_APPLICATION;
+  2155		tid.dev_class = SNDRV_TIMER_CLASS_GLOBAL;
+  2156		tid.card = -1;
+  2157		tid.device = SNDRV_TIMER_GLOBAL_UDRIVEN;
+  2158		tid.subdevice = utimer_id;
+  2159	
+  2160		err = snd_timer_new(NULL, utimer->name, &tid, &timer);
+  2161		if (err < 0) {
+  2162			pr_err("Can't create userspace-driven timer\n");
+  2163			goto err_timer_new;
+  2164		}
+  2165	
+  2166		timer->module = THIS_MODULE;
+  2167		timer->hw = timer_hw;
+  2168		timer->hw.resolution = resolution;
+  2169		timer->hw.ticks = 1;
+  2170		timer->max_instances = MAX_SLAVE_INSTANCES;
+  2171	
+  2172		utimer->timer = timer;
+  2173	
+  2174		err = snd_timer_global_register(timer);
+  2175		if (err < 0) {
+  2176			pr_err("Can't register a userspace-driven timer\n");
+  2177			goto err_timer_reg;
+  2178		}
+  2179	
+  2180		*r_utimer = utimer;
+  2181		return 0;
+  2182	
+  2183	err_timer_reg:
+  2184		snd_timer_free(timer);
+  2185	err_timer_new:
+  2186		kfree(utimer->name);
+  2187	err_get_name:
+  2188		snd_utimer_put_id(utimer);
+  2189	err_take_id:
+  2190		kfree(utimer);
+  2191	
+  2192		return err;
+  2193	}
+  2194	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
