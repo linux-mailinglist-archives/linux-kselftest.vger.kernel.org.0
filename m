@@ -1,129 +1,153 @@
-Return-Path: <linux-kselftest+bounces-15007-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15008-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41F0F94B6AA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 08:25:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2C6294B87A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 10:01:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7372A1C20F4F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 06:25:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B617A284160
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 08:01:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AABFC186E51;
-	Thu,  8 Aug 2024 06:25:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFA2C189538;
+	Thu,  8 Aug 2024 08:01:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WmGLmIUu"
+	dkim=pass (2048-bit key) header.d=fiberby.net header.i=@fiberby.net header.b="sP2joL0F"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail1.fiberby.net (mail1.fiberby.net [193.104.135.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2779B186E3F
-	for <linux-kselftest@vger.kernel.org>; Thu,  8 Aug 2024 06:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF00E186289;
+	Thu,  8 Aug 2024 08:01:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.104.135.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723098328; cv=none; b=kcJLAsMaVPJbxpm8AX9+RozC7x1AQ9Vd5NI2zqJZkDgJvwsCrXp5sJz5G7ES3Z9DZo4XeMMEewbD9ETBgVYjzD8D3r4tPOLBN6w+Ij93K3siZ0y67lEOcb9BYRcO7+LJyS8n6bdS4hWbFpVPYbiv4mJhS1nA7NpOpS+suRRPNyI=
+	t=1723104066; cv=none; b=jaWjp6Rsfr0qNu5JotSIenobz2VfkXdpHFMqHGl0n0geAsT+BBbY8dfpuPbuwMg1ku9I/oT8dOlW7X0213d59CkkYrQ1QoUnReOaBam+0surArRAkE1HdUkAkw0EqY6C72VHUuyzD18/gcu6Irfw2A1CfhtNaY3dZiwTwhIIHeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723098328; c=relaxed/simple;
-	bh=vLLuKNqR9XU5O+YIcehGr09FLrfxLy2W9TjakvRNxc4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=f5FY8zA7X5TjyyaNkaWcqIiSuZefGHxgV3IlApMgGpiw6XLjsgecT8eGlBg3NwwE3W+hMcY2lKxI4N4tSfMmLoYYCAR4W/7my2oD7Q7tKqnQ49nFPFoUjY5RsPT0wEvLN99xsRnm1Ic46ECl63Gvq18fWp/wH0ILAJRKtN0Nmvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WmGLmIUu; arc=none smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2cb4c4de4cbso506557a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 07 Aug 2024 23:25:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1723098326; x=1723703126; darn=vger.kernel.org;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sJzbBpFNwwY6e+GIMU5iIyI4LLoSSqWXmhkhActO1pM=;
-        b=WmGLmIUuyf/l/oP5Hc2I25c7ckQjT7UoU3H/6dcJrZmI2maX7Bev/9eznq4a+khWXP
-         /LC+JVPWu2e/M62gXdMw7ykdMV+5da8AdUr6dfQVlmsGBVWAKThLy4+iUS5xcdCD/7Ku
-         lBZ79qs1pffGXIkx0MrEe2vV2LdTkbTQ6ZT1rgWfPeYiYyyGFimBWirEeqrIXoabg3Ou
-         RgsGIFLJWbNHCyOHAJdJTXQFuur9jj0EXzMYoYz0wWmFGl/mXEoLzC/E6Fso2p/ImABX
-         GL4pI9+q5ClclOpBH85/56Fa1uZRD1ciupe8PIaiAtVUyvLQD2KKJe//G0DKddq5+al4
-         J0kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723098326; x=1723703126;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sJzbBpFNwwY6e+GIMU5iIyI4LLoSSqWXmhkhActO1pM=;
-        b=ugDifXpoDqUsBhud+0rv6cgXpox8jK/DFjZNU/0WFXEkYBkVm3F+G+IKMunVW+s/AB
-         EZSUOgj4jzrLna4mdHKHpwcb/di3Jprg6df9ySF76U91V4healyPXvT/xjrGMDvx0UXP
-         McDNsUViecL0Jh92MsQN5QAcuKXVwZ5S/x3zhsc3fJacRm0kr+86EbBW2c3DUOrTzBzr
-         15bYLz6clTUbc6vBKqZ2TBkZAebhd7ekEsKJolsnC/PtHbYRVaAt0+c8bRdmwloziSBv
-         2VWQ33m+qbu6EhxdRhMLYsXZi246dnqXNDOWPnEuiB24fowv1i7GsDbbiLR9aIxZp2jR
-         56Aw==
-X-Forwarded-Encrypted: i=1; AJvYcCX3y6NsrvQNZ5SNXnTuAzQJBOsW9/zgjVKOuMeWbYHPS7wdWG9xcTbpKGHY+H97c3ik7iZffTZ3hCQBGqNWZJsvxOCEYVvBWm0kAiil0WeT
-X-Gm-Message-State: AOJu0YwbIYz+66sh02zys2mBf/ME3eSqcDXl0jXu6w9EIbARztmEOfAN
-	zaKNn1BBWsVJ898QGJTnn5Eh/KuS/Z7CvupmU1d8zPY5KBPnRvn+yUOl4++BLLY=
-X-Google-Smtp-Source: AGHT+IG5Sh4RPZDFGIdFKwM0iRTPb/2nHrMhAgBHSqeUq3wn62Dbr5Jen5m7Eo7OeNMhWJA7SfHwfg==
-X-Received: by 2002:a17:90b:4ac9:b0:2c4:dc63:96d7 with SMTP id 98e67ed59e1d1-2d1c349446emr921727a91.41.1723098326578;
-        Wed, 07 Aug 2024 23:25:26 -0700 (PDT)
-Received: from localhost ([2804:14c:87d5:5261:ed46:7c69:6cee:3c20])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d1c9db74a0sm328001a91.47.2024.08.07.23.25.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 07 Aug 2024 23:25:26 -0700 (PDT)
-From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,  Will Deacon
- <will@kernel.org>,  Jonathan Corbet <corbet@lwn.net>,  Andrew Morton
- <akpm@linux-foundation.org>,  Marc Zyngier <maz@kernel.org>,  Oliver Upton
- <oliver.upton@linux.dev>,  James Morse <james.morse@arm.com>,  Suzuki K
- Poulose <suzuki.poulose@arm.com>,  Arnd Bergmann <arnd@arndb.de>,  Oleg
- Nesterov <oleg@redhat.com>,  Eric Biederman <ebiederm@xmission.com>,
-  Shuah Khan <shuah@kernel.org>,  "Rick P. Edgecombe"
- <rick.p.edgecombe@intel.com>,  Deepak Gupta <debug@rivosinc.com>,  Ard
- Biesheuvel <ardb@kernel.org>,  Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-  Kees Cook <kees@kernel.org>,  "H.J. Lu" <hjl.tools@gmail.com>,  Paul
- Walmsley <paul.walmsley@sifive.com>,  Palmer Dabbelt <palmer@dabbelt.com>,
-  Albert Ou <aou@eecs.berkeley.edu>,  Florian Weimer <fweimer@redhat.com>,
-  Christian Brauner <brauner@kernel.org>,  Ross Burton
- <ross.burton@arm.com>,  linux-arm-kernel@lists.infradead.org,
-  linux-doc@vger.kernel.org,  kvmarm@lists.linux.dev,
-  linux-fsdevel@vger.kernel.org,  linux-arch@vger.kernel.org,
-  linux-mm@kvack.org,  linux-kselftest@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v10 39/40] kselftest/arm64: Enable GCS for the FP stress
- tests
-In-Reply-To: <20240801-arm64-gcs-v10-39-699e2bd2190b@kernel.org> (Mark Brown's
-	message of "Thu, 01 Aug 2024 13:07:06 +0100")
-References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
-	<20240801-arm64-gcs-v10-39-699e2bd2190b@kernel.org>
-Date: Thu, 08 Aug 2024 03:25:23 -0300
-Message-ID: <87v80bcyzw.fsf@linaro.org>
+	s=arc-20240116; t=1723104066; c=relaxed/simple;
+	bh=RWh44ibT1OVXVkS6LOhCJHv00CcuvNPdegD/w3KXWug=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Uj1ZditJrX9LhmMYrASNrvWo1UmmqRPY3rxuNqqseukICfeaGxLeNe3CjBErEyWhACDGhMJFXpTZfvP6zPy1n97BUCNPrfORkTAbMR1TjAt6kP0hB+qs39rY1jiw0xsjypOck7zQrlLoVXrbUmzmQvYBvJJGaYDzr0AgqixcQj8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fiberby.net; spf=pass smtp.mailfrom=fiberby.net; dkim=pass (2048-bit key) header.d=fiberby.net header.i=@fiberby.net header.b=sP2joL0F; arc=none smtp.client-ip=193.104.135.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=fiberby.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fiberby.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fiberby.net;
+	s=202008; t=1723104058;
+	bh=RWh44ibT1OVXVkS6LOhCJHv00CcuvNPdegD/w3KXWug=;
+	h=From:To:Cc:Subject:Date:From;
+	b=sP2joL0Fq8GhKMyYaxcHb9q2P9pmOFGuvSnf1Xsi41RdprY8zS8U3u927CeScJZDL
+	 optsYomQ9stB2MGKdzl0vAbIL/OlMyiBDt13gS9WiOUXRaVMM7e12kUREMP2YxPRqr
+	 ae8/FWD2wvv2pJ74NDWiRH5TS4z07wH6dh4ZN5RphIOkM+NhCYeU0lDjld++JOsFzN
+	 BTqHdDfiPeYmSAappR+ne5E8TbSWTq1XjWmQGr5PZ41QjlF1BrEjlvcLqf53HP9ONc
+	 aI4RmQ9CdxaM7NdvTVhIY+yw9VhMOnsDhC+o9jGGV2T+QyCnOwF153dHhhQOmVXj56
+	 IWgjQjLVilGMQ==
+Received: from x201s (193-104-135-243.ip4.fiberby.net [193.104.135.243])
+	by mail1.fiberby.net (Postfix) with ESMTPSA id 1639C60078;
+	Thu,  8 Aug 2024 07:59:18 +0000 (UTC)
+Received: by x201s (Postfix, from userid 1000)
+	id BECD0202330; Thu, 08 Aug 2024 07:59:09 +0000 (UTC)
+From: =?UTF-8?q?Asbj=C3=B8rn=20Sloth=20T=C3=B8nnesen?= <ast@fiberby.net>
+To: bpf@vger.kernel.org
+Cc: =?UTF-8?q?Asbj=C3=B8rn=20Sloth=20T=C3=B8nnesen?= <ast@fiberby.net>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Tushar Vyavahare <tushar.vyavahare@intel.com>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Willem de Bruijn <willemb@google.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] selftests/bpf: Avoid subtraction after htons() in ipip tests
+Date: Thu,  8 Aug 2024 07:59:02 +0000
+Message-ID: <20240808075906.1849564-1-ast@fiberby.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Mark Brown <broonie@kernel.org> writes:
+On little-endian systems, doing subtraction after htons()
+leads to interesting results:
 
-> While it's a bit off topic for them the floating point stress tests do give
-> us some coverage of context thrashing cases, and also of active signal
-> delivery separate to the relatively complicated framework in the actual
-> signals tests. Have the tests enable GCS on startup, ignoring failures so
-> they continue to work as before on systems without GCS.
->
-> Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  tools/testing/selftests/arm64/fp/assembler.h   | 15 +++++++++++++++
->  tools/testing/selftests/arm64/fp/fpsimd-test.S |  2 ++
->  tools/testing/selftests/arm64/fp/sve-test.S    |  2 ++
->  tools/testing/selftests/arm64/fp/za-test.S     |  2 ++
->  tools/testing/selftests/arm64/fp/zt-test.S     |  2 ++
->  5 files changed, 23 insertions(+)
+Given:
+  MAGIC_BYTES = 123 = 0x007B aka. in big endian: 0x7B00 = 31488
+  sizeof(struct iphdr) = 20
 
-The fpsimd, sve, za and zt tests don't find any errors on my FVP setup
-when left running for a while:
+Before this patch:
+__bpf_constant_htons(MAGIC_BYTES) - sizeof(struct iphdr) = 0x7AEC
+0x7AEC = htons(0xEC7A) = htons(60538)
 
-Tested-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+So these were outer IP packets with a total length of 123 bytes,
+containing an inner IP packet with a total length of 60538 bytes.
 
+After this patch:
+__bpf_constant_htons(MAGIC_BYTES - sizeof(struct iphdr)) = htons(103)
+
+Now these packets are outer IP packets with a total length of 123 bytes,
+containing an inner IP packet with a total length of 103 bytes.
+
+Signed-off-by: Asbjørn Sloth Tønnesen <ast@fiberby.net>
+---
+I didn't target bpf and add a Fixes: e853ae776a58 ("selftests/bpf:
+support BPF_FLOW_DISSECTOR_F_STOP_AT_ENCAP"), since it only breaks
+when I change the BPF flow dissector to interact with tot_len.
+
+ .../selftests/bpf/prog_tests/flow_dissector.c        | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+index 9e5f38739104..6b3078dd5645 100644
+--- a/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
++++ b/tools/testing/selftests/bpf/prog_tests/flow_dissector.c
+@@ -378,8 +378,8 @@ struct test tests[] = {
+ 			.iph_inner.ihl = 5,
+ 			.iph_inner.protocol = IPPROTO_TCP,
+ 			.iph_inner.tot_len =
+-				__bpf_constant_htons(MAGIC_BYTES) -
+-				sizeof(struct iphdr),
++				__bpf_constant_htons(MAGIC_BYTES -
++				sizeof(struct iphdr)),
+ 			.tcp.doff = 5,
+ 			.tcp.source = 80,
+ 			.tcp.dest = 8080,
+@@ -407,8 +407,8 @@ struct test tests[] = {
+ 			.iph_inner.ihl = 5,
+ 			.iph_inner.protocol = IPPROTO_TCP,
+ 			.iph_inner.tot_len =
+-				__bpf_constant_htons(MAGIC_BYTES) -
+-				sizeof(struct iphdr),
++				__bpf_constant_htons(MAGIC_BYTES -
++				sizeof(struct iphdr)),
+ 			.tcp.doff = 5,
+ 			.tcp.source = 80,
+ 			.tcp.dest = 8080,
+@@ -436,8 +436,8 @@ struct test tests[] = {
+ 			.iph_inner.ihl = 5,
+ 			.iph_inner.protocol = IPPROTO_TCP,
+ 			.iph_inner.tot_len =
+-				__bpf_constant_htons(MAGIC_BYTES) -
+-				sizeof(struct iphdr),
++				__bpf_constant_htons(MAGIC_BYTES -
++				sizeof(struct iphdr)),
+ 			.tcp.doff = 5,
+ 			.tcp.source = 99,
+ 			.tcp.dest = 9090,
 -- 
-Thiago
+2.45.2
+
 
