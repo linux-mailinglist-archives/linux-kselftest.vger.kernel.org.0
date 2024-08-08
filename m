@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-15026-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15027-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8403B94BD59
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 14:25:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 75E3E94BD5F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 14:26:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1985A1F236A3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 12:25:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29B711F239B5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 12:26:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01E6518C910;
-	Thu,  8 Aug 2024 12:25:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9210218DF6F;
+	Thu,  8 Aug 2024 12:25:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cZrBj44n"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d5ApKnDT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0B963D;
-	Thu,  8 Aug 2024 12:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B87818DF61;
+	Thu,  8 Aug 2024 12:25:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723119923; cv=none; b=KwE+RZ7mxIxpc2DlGkoBtqDSJhjBK/TpnvFldTWxaBquiW1BYWbDMHDVJ1j+U6UfJwifScaDQxndskZ8sZQT9XiYuJwnsL1mhCPNRoKmQau/pB6kDajWDWUtrhD+VWuQ3gaPli86+gp3axX+pygz7wwP+h9hGQ/r3YHphQC7p6k=
+	t=1723119930; cv=none; b=kLqq7AMUaJh/Qi2g9f7I/dVZ5pygPjlJaO0StLeJ4+SqNPft4hZOx59hxwET77i+Bh9qvZbrAwiHzi8gd4ecZ/21c29fNhPIkmQcXpckq3wuX9dNWUfZ2FG+T+Z3WyM/mrI6g0KnOytLS1BuVDtS9YpxhLhT30edAqNChE8uL5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723119923; c=relaxed/simple;
-	bh=BEOj7P4xJeFSnOj0Ju6Rm9KsxDM/MTPYKwQ7Ti+PJ1w=;
+	s=arc-20240116; t=1723119930; c=relaxed/simple;
+	bh=jtalaf4i0vBrVvnWmgxU3qfha27p3Pcpv6SHl8PIUGQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PGeV6mXqjJ9+yks6nKCZ9eDyzxtOxDqwPRagpnw2TOr51xz/Y97Qa27+NHQJMxqWNWgpK7J+XzCGTe/LYaF0UBdw5P5Um9KseVra9iV7/p1dB8iSQEQ0Jr3nLsqam0HLaDxIGC2+aUP/LHlVbVMrdmdkNDvOxvwhVbJb6D+UeGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cZrBj44n; arc=none smtp.client-ip=209.85.166.172
+	 MIME-Version; b=V2gyf2WG71TSzljb/lqQ3TwVsWbXnQxP1vgAU/SWn4tlFy93qStg3Ar9qgpoPckYpx9yPmPfYEY20/ryy+pNxkuLHsnNRET8bVedY4jF8zGr4PWyDxC/HvRDHcWhcHZRWo8zYQ/aM2OUZS2ymjtGCH2fG6wQDzQChqr4fAbAvfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d5ApKnDT; arc=none smtp.client-ip=209.85.210.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3992195d08aso4352945ab.0;
-        Thu, 08 Aug 2024 05:25:22 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-70d19d768c2so681156b3a.3;
+        Thu, 08 Aug 2024 05:25:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723119921; x=1723724721; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1723119928; x=1723724728; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=A2r9/EW3jCvQa7Bv9foKbr5PU4TW2LXHUdYb6h2YrHw=;
-        b=cZrBj44nvDO8xYt9r3ZhMaKRI+xL+eLSYMgVmvdM3P22ESX5BvK2qbsu4aHO1E6u2A
-         Jjf7bZ/RpmJQQ+i6m0FpYWtOIOzocjEbokU1aM8e9rTsyItZDXRqWTV0ETj/io2ktxbo
-         hj5EZFS/BWU1hBmMXu+lJClvJ35HCO1rR0xpmaFJE7Hy/1P74qYleOwmIXLDqp+slP78
-         fiDBJXAExFtOf4LnhBhfYCjai7jdmYehVDfKiYtIAyMPmzkM6M/FYfpOkunDECMNa/aH
-         1fgmHBJxSJTGdckIwxGG50A4CkXusBpIwAsoUQJCuUTnSHYaNkVtSRjXJGsEUvkHyA7u
-         +4UQ==
+        bh=SEXn+6uaDaibQ3LCSAfL1ofGJtzehJXz9fPnsXVCy5U=;
+        b=d5ApKnDT8OdSZqMKINK+T85dhzgQxW0QX+cfQo+mZTl6kUm7//6AeE2HeDMvI+sjZw
+         rwZ7I8R+15C+4D1DVyKcfPBKTZ+uZ1bbe341LrRgQ/iGmFukC1NRNEgzTTcn/MuZzwSi
+         xNVfXb8jig7rP1cqTFdliraRsmM0TaFHk6ujBjVaiYn7xpvyqlFMdQHYrFDzxLkGWQi8
+         0D/6qtwVMbwhfmOXI/94UMJsAJoqoRGEbzoj6kyaMrR3oq/NluSS0B0Gt9J5+PSDq32D
+         Rp5hcD7jv2HRadKOgWbAWF0VruaORH6UwuDqbdlvJ9G7943gcYXq+Ybetsrzfle6t4Rc
+         op3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723119921; x=1723724721;
+        d=1e100.net; s=20230601; t=1723119928; x=1723724728;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=A2r9/EW3jCvQa7Bv9foKbr5PU4TW2LXHUdYb6h2YrHw=;
-        b=ZDpaVQd9vAmTn2uqHI2bsbJSZS1dhb5XD5LNJiPq3pdeG0wO8lcdweJsWJRFt3v0Ac
-         cJ6/IINeEIBgxJqNH2QCHSObRAOGoyS/v0tY07THhwBYrdynNv3CnehIlKPmgdTznS+6
-         1vLGqnY6A3/K4o26Zl0zUXbukACjF8q4UDqoOKAGf/Nc+UBE0Rd83v5BhLXkaE1lcTgF
-         xTvkurhqcic/yjkk0Y4btw5fT28yKRPeayMZdHYXFjdG8EKiJDJN6WIMRo2gC+RjjDEI
-         JtUAjlHxIfQlyp3g09TvPB9KDSx2IC6ScR+efSpaYPMZGlSrVhpghuiYimBsVElW+H2C
-         gNCw==
-X-Forwarded-Encrypted: i=1; AJvYcCWLuCyz8jpX1Xi3kkOsQADE+/uSh5cWb6MaX4oncYFm+Css62BA2zEL0IYMtCxJ0/XYxNaoDebHSvzkXKxHTnkhVBNO5hOBlvvfuL3AvxyZFnHZuihIkgYn6gBXYqOb9cZ6FQ02+Xcu5SeT6eAtzdv4I2pPxYJ8r/qojegcanlBJ99BkC9B
-X-Gm-Message-State: AOJu0YxIffisqsQGY+xxKxvIBKFs7nBr32vBAmYD649r5nfpH7n6n+Yz
-	DITu5cGkWTYq2r7wF9uQKd8hRYQh+tbcL/UehObHg7LFuJk0LiJR
-X-Google-Smtp-Source: AGHT+IFij7QgIminx3zQ326DgNnXLdzGL0ae9IGkEvZoVLWHWcnsgdUGF2Es7GGgesyb77tvAxq8eA==
-X-Received: by 2002:a05:6e02:1c22:b0:399:4535:b66e with SMTP id e9e14a558f8ab-39b5ec74835mr22452425ab.9.1723119921397;
-        Thu, 08 Aug 2024 05:25:21 -0700 (PDT)
+        bh=SEXn+6uaDaibQ3LCSAfL1ofGJtzehJXz9fPnsXVCy5U=;
+        b=udor4NgH9hhYVZqf1JlxnuYcSBLq9hjSX8fSI9mJfJ7+fbUtYlEo035mvs/GKxidMY
+         WqYPOPSIi9+uuKFzYiygwE86CDfFBCXTR3wb1EW8jdZ746GwxzFNhFSGh+1iM+3bjsMz
+         FiP89SpJYIw6HZ9bSdveUZLlxib9wK2Gbp+BKw8JSeUWwelUH2b4zqgK07t4b1TlqLZM
+         8ma0X7uCFjhFdNtwnCfyEZGKeQZCQNqYHnQcMQFvEo3sCJNRp4i2CtcXDUmu87zFwUq8
+         I+OU/WEy44ODNKE0A6HfWmtnwIuzAUZeG0O2Mj/Adr1EnQT8oWJBh4DfKx8kcwymztGe
+         QKrA==
+X-Forwarded-Encrypted: i=1; AJvYcCUVSWSpYc8xunFxmht2kMadOLw9Y8/spK3y4gsKWl6UPpzcD6bCZYT0iSGUAu2XQUH9CY32RSE8dxMFaMglD4nlLocXboPq8tvUne5taPfLg0qZCZeyLbaYyVKq7r+HNFR6kUDQqH/oQe3Brjo9kvU8g+XypDnxOa3mgBuZxL+an4yD9y7J
+X-Gm-Message-State: AOJu0YxgFWGuG4HHgiUJocxwQ7YCgIbdoZVI48EkGE3F34QZ+trnucGB
+	btA1GPhjkWl7TLM54WXBa0tm8e4QUbSxDD0ezmRA8QqtIHPXaCYQ
+X-Google-Smtp-Source: AGHT+IEFssPBy/dfrma+UX+DTVHqmYI5LRvhGTgwyO96rTwXS4qFoS47jS6PHtERr/iaieQ+YoKbxA==
+X-Received: by 2002:a05:6a20:f389:b0:1c3:b2b3:442d with SMTP id adf61e73a8af0-1c6fcf7b099mr1325792637.40.1723119927838;
+        Thu, 08 Aug 2024 05:25:27 -0700 (PDT)
 Received: from dev0.. ([49.43.168.245])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7bb819e782csm5530478a12.48.2024.08.08.05.25.16
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7bb819e782csm5530478a12.48.2024.08.08.05.25.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Aug 2024 05:25:21 -0700 (PDT)
+        Thu, 08 Aug 2024 05:25:27 -0700 (PDT)
 From: Abhinav Jain <jain.abhinav177@gmail.com>
 To: davem@davemloft.net,
 	edumazet@google.com,
@@ -79,9 +79,9 @@ To: davem@davemloft.net,
 Cc: skhan@linuxfoundation.org,
 	javier.carrasco.cruz@gmail.com,
 	Abhinav Jain <jain.abhinav177@gmail.com>
-Subject: [PATCH v5 1/2] selftests: net: Create veth pair for testing in networkless kernel
-Date: Thu,  8 Aug 2024 12:24:51 +0000
-Message-Id: <20240808122452.25683-2-jain.abhinav177@gmail.com>
+Subject: [PATCH v5 2/2] selftests: net: Add on/off checks for non-fixed features of interface
+Date: Thu,  8 Aug 2024 12:24:52 +0000
+Message-Id: <20240808122452.25683-3-jain.abhinav177@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240808122452.25683-1-jain.abhinav177@gmail.com>
 References: <20240808122452.25683-1-jain.abhinav177@gmail.com>
@@ -93,53 +93,62 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Check if the netdev list is empty and create veth pair to be used for
-feature on/off testing.
-Remove the veth pair after testing is complete.
+Implement on/off testing for all non-fixed features via while loop.
+Save the initial state so that it can be restored after on/off checks.
 
 Signed-off-by: Abhinav Jain <jain.abhinav177@gmail.com>
 ---
- tools/testing/selftests/net/netdevice.sh | 16 ++++++++++++++++
- 1 file changed, 16 insertions(+)
+ tools/testing/selftests/net/netdevice.sh | 37 +++++++++++++++++++++++-
+ 1 file changed, 36 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/net/netdevice.sh b/tools/testing/selftests/net/netdevice.sh
-index e3afcb424710..0c32950fdd17 100755
+index 0c32950fdd17..50f7b9d1163d 100755
 --- a/tools/testing/selftests/net/netdevice.sh
 +++ b/tools/testing/selftests/net/netdevice.sh
-@@ -129,6 +129,7 @@ kci_netdev_ethtool()
+@@ -124,7 +124,42 @@ kci_netdev_ethtool()
+ 		return 1
+ 	fi
+ 	echo "PASS: $netdev: ethtool list features"
+-	#TODO for each non fixed features, try to turn them on/off
++
++	while read -r FEATURE VALUE FIXED; do
++		[ "$FEATURE" != "Features" ] || continue # Skip "Features"
++		[ "$FIXED" != "[fixed]" ] || continue # Skip fixed features
++		feature="${FEATURE%:*}"
++
++		initial_state=$(ethtool -k "$netdev" | grep "$feature:" \
++			| awk '{print $2}')
++		ethtool --offload "$netdev" "$feature" off
++		if [ $? -eq 0 ]; then
++			echo "PASS: $netdev: Turned off feature: $feature"
++		else
++			echo "FAIL: $netdev: Failed to turn off feature:" \
++				"$feature"
++		fi
++
++		ethtool --offload "$netdev" "$feature" on
++		if [ $? -eq 0 ]; then
++			echo "PASS: $netdev: Turned on feature: $feature"
++		else
++			echo "FAIL: $netdev: Failed to turn on feature:" \
++				"$feature"
++		fi
++
++		#restore the feature to its initial state
++		ethtool --offload "$netdev" "$feature" "$initial_state"
++		if [ $? -eq 0 ]; then
++			echo "PASS: $netdev: Restore feature $feature" \
++				"to initial state $initial_state"
++		else
++			echo "FAIL: $netdev: Failed to restore feature" \
++				"$feature to default $initial_state"
++		fi
++
++	done < "$TMP_ETHTOOL_FEATURES"
++
+ 	rm "$TMP_ETHTOOL_FEATURES"
  
  	kci_netdev_ethtool_test 74 'dump' "ethtool -d $netdev"
- 	kci_netdev_ethtool_test 94 'stats' "ethtool -S $netdev"
-+
- 	return 0
- }
- 
-@@ -196,10 +197,25 @@ if [ ! -e "$TMP_LIST_NETDEV" ];then
- fi
- 
- ip link show |grep '^[0-9]' | grep -oE '[[:space:]].*eth[0-9]*:|[[:space:]].*enp[0-9]s[0-9]:' | cut -d\  -f2 | cut -d: -f1> "$TMP_LIST_NETDEV"
-+
-+if [ ! -s "$TMP_LIST_NETDEV" ]; then
-+	echo "No valid network device found, creating veth pair"
-+	ip link add veth0 type veth peer name veth1
-+	echo "veth0" > "$TMP_LIST_NETDEV"
-+	echo "veth1" >> "$TMP_LIST_NETDEV"
-+	veth_created=1
-+fi
-+
- while read netdev
- do
- 	kci_test_netdev "$netdev"
- done < "$TMP_LIST_NETDEV"
- 
-+#clean up veth interface pair if it was created
-+if [ "$veth_created" ]; then
-+	ip link delete veth0
-+	echo "Removed veth pair"
-+fi
-+
- rm "$TMP_LIST_NETDEV"
- exit 0
 -- 
 2.34.1
 
