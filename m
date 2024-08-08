@@ -1,161 +1,167 @@
-Return-Path: <linux-kselftest+bounces-15024-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15025-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 342AB94BD21
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 14:13:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAE4C94BD55
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 14:25:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 073881C227D9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 12:13:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE9D21C2217F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 12:25:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B94E218C346;
-	Thu,  8 Aug 2024 12:13:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6006818C352;
+	Thu,  8 Aug 2024 12:25:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="hc4vZEWs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VnxJa4P9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E1AE18C33F;
-	Thu,  8 Aug 2024 12:13:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723119221; cv=pass; b=oNofKVVrMQzBMkkxJ27vkb1R6AjSvZ+diZqrYrwT2iCHhsMH9ylWDv1ICV+M8pw0cPeK2VqY8z0fQS7ussKD6nos9L69M+Jvfnxd3M+Et//5jo8aibv6i0wgpKmkc6AyzQMTuA46RlNwRDhIofE52MmHGLnymJbXHViUR49YQXQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723119221; c=relaxed/simple;
-	bh=QzvagPocBMPggTIX12bFJFKHgxeSG5y1VbNlylh5auc=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Soj1nZTZBViavvEpXPNIg6KurQs/dlrHR8G/o/uyafkkX/Rv12RZk9Hf6ILvHwdsfdm5aQo6x9jYH3gjWq+dOl7wOT3VGGowZouQ8o0xiMcePoW1zNXAHcbJYA5zz73m6mteR+FNez7pYCWUmbTe6W80PScsb3QbHP85aO0Kx+k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=hc4vZEWs; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Delivered-To: Usama.Anjum@collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1723119202; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=U99jicL82PCU1jrffm1R1ZbeESCSBg/8lvQ+9bAGyhCmzFLK0lOej7eAPYmikE5k2CDYBkVcRH4N0Bd48CqlRQMbuHPyujEEE4zJIMvPee2wsuZLeLyuYBs2BPNyqyIDtcGB+e8EIRLEsvGl5kXWrd2x/Wn4mtujfglO5sJE/7g=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1723119202; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=hq/XaxzCcWVgtRDvj+CIXL2RHMKW1r7R6H31mG379zE=; 
-	b=JfvEGCaD/+W1DgbcT7VRX3rbOkuysH0VlxtIKeTABn9/hUMhQuyt/3NaP4X/FQ5OedHm6o1+qialv/cwuT3NLlzrJTOHQeG7Ud3BdRYqwdi/lyI/Fc91wMqUJU9v+QgL45ixs9cng3VhTI82v22acGhOvkhS5JYoL7CewN//wCs=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
-	dmarc=pass header.from=<Usama.Anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1723119202;
-	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=hq/XaxzCcWVgtRDvj+CIXL2RHMKW1r7R6H31mG379zE=;
-	b=hc4vZEWshPSf5fKC1bwqzBqN7xmtwi1FLpzXxR3rylQKjyy5i15u3YGWNUMzJQ/R
-	LwjUDHplhxD7lyuMKt8dAIQn8fg6spylzDwfEy9iMJm57LBS1HUuFK59BKTrwW37WLY
-	0Im6RWethigeqy0zCVLaEsfu1ku5u6Ufw70F4Hwk=
-Received: by mx.zohomail.com with SMTPS id 1723119200600165.83064247266782;
-	Thu, 8 Aug 2024 05:13:20 -0700 (PDT)
-Message-ID: <c2aaa06e-e86d-4af9-bce4-6067e53cdf39@collabora.com>
-Date: Thu, 8 Aug 2024 17:13:12 +0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C399963D;
+	Thu,  8 Aug 2024 12:25:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723119910; cv=none; b=atFrUtuln7zGbEaLi17bTuGBGTEE1PSwLZZu9SzNEAZ0YC7PO3TVbNDEQiaUprv+DyXaTwg0U10TC42q3SU13aHe9rqcnKMevMOyhaeeEDXrGHnXG29rCGKWTqkrtw9r/VC7bfClEKaWQGQyqdDfNS4kn6PIKAzelAHDrPKE904=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723119910; c=relaxed/simple;
+	bh=83O01skhPNEyX6b1nkJXchmdN8vo3orVhlU0WqlHJxQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=A7yzaQmgJ6pScHc/Q5npVxcCjQ6AkUUFlfiRj1AXF7QbMRME/3eF9pE88xNO9Lu6XIMt+u+VSjH4BAc5EIzvReT+lHP1dP8VpRulTSB4+ZRhUxdsq01ytdybMPRepIhxOXUSDu5Xf7kmkzhfUd2apd08ZCS7o3r3jYySos8kizM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VnxJa4P9; arc=none smtp.client-ip=209.85.167.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3dab336717fso633332b6e.0;
+        Thu, 08 Aug 2024 05:25:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723119908; x=1723724708; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=V11qWEGhEyP7hThEnp51V2Dz5DUj4qW2UBjRZILqErI=;
+        b=VnxJa4P9qdzPz48ss/P8H8G6I9+Mgmi5RUMTd/r63dCQhd1QRKb+4GjU5L7SNVWpno
+         /zo4DUyfxfEiN79NBxAQjeoySSiBKuVsfukLbDylo03iA2GqVo225V9wbgq92kWmoq9a
+         cg08xQ4Fkxq2/zhESlO/buHoI3PvutFbQf4GzBizdpv8/rFsZu/hY1rs3IBiG4PEHXJo
+         TKAueMSGG8C7dp/Hm+hiJ1r7AXm3oRO3I7kxmqnq7v9/g8X35cS3fFsLWt5aRKYdZXWj
+         2+Cch3VSgXRrxwAEb8cRlTAzWeIThRLnK36iK9AfwdkhqIaTXTXYdKGzV8W1WOeV3hJV
+         VnfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723119908; x=1723724708;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V11qWEGhEyP7hThEnp51V2Dz5DUj4qW2UBjRZILqErI=;
+        b=ddvgkQaifg8JTaNFkKh2mveR5tIfmHgz2mIuUL7pEDqwLPi2q03uTTkHfxo4wJHU2W
+         9Bss7an6j7ASRvF1wM07memTuUHAMHWhIwLvoBzcXSZUuPaLJwxYvhV4t3AgU7zHgbym
+         8Xqlq1VBHCUrj7wMl1tO0WHAKjJdCCsizy1IPdNMU/1Rqn6LQRcFLdRAqElm6O1XTIfc
+         xSxhSlhx2gKSpeaB2+fRMQLi6ZmHZ3HWeCo2c6vsH4COyElHImG2mdSeBi6S7BwA5sa+
+         Nsbry7Mb5o4Q1hK7v5qOF31qxcsZXMti71c5e4yII6EFixiDxC92YqcMgomxc6qnTyIW
+         Inng==
+X-Forwarded-Encrypted: i=1; AJvYcCWnwpTa5onKz/INM/6gDTE250e2JtiiDIIkHUQ62EP31SrgMzTg6TGXDzNyGDJc/vLNqXcbv5Z+V5fshPOUzWi6sX9y6uLqn8wutR0sbv3qjm/BpFv0LY8/s3EfQcLAQSPVa3vXzLfKUKVcV8PU32tbyo9K04kQh5eGtv0Odi5/s2k/CXe0
+X-Gm-Message-State: AOJu0YzWuvs75iim6MFxZmQ/+VmHp5yfO0uAGa/eKHpge5CQ0xr9o+6i
+	lJWaHz7qEtKXrCOABXMQ4CC41ZkdZLZLmGHgm+uIotl3r3tyhKTb
+X-Google-Smtp-Source: AGHT+IFNF4/TI/RiZzBmCojYf0q0UhYhR9ISOwG+XMI5KF4KMxeYzVN7hNhuuscPM8M7bTDbGfqRKg==
+X-Received: by 2002:a05:6808:1a05:b0:3d9:30a2:f8f9 with SMTP id 5614622812f47-3dc3b1bf4camr2122895b6e.0.1723119907581;
+        Thu, 08 Aug 2024 05:25:07 -0700 (PDT)
+Received: from dev0.. ([49.43.168.245])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7bb819e782csm5530478a12.48.2024.08.08.05.25.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 08 Aug 2024 05:25:07 -0700 (PDT)
+From: Abhinav Jain <jain.abhinav177@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: skhan@linuxfoundation.org,
+	javier.carrasco.cruz@gmail.com,
+	Abhinav Jain <jain.abhinav177@gmail.com>
+Subject: [PATCH v5 0/2] Enhance network interface feature testing
+Date: Thu,  8 Aug 2024 12:24:50 +0000
+Message-Id: <20240808122452.25683-1-jain.abhinav177@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Usama.Anjum@collabora.com, kernel@collabora.com, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH] selftests: kvm: fix mkdir error when building for
- non-supported arch
-To: Paolo Bonzini <pbonzini@redhat.com>,
- Sean Christopherson <seanjc@google.com>
-References: <20240806121029.1199794-1-usama.anjum@collabora.com>
- <6a3b2f3c-b733-4f64-a550-2f7dcbaf7cb7@linuxfoundation.org>
- <ca500f5c-57e7-43bc-9a1a-015021582af2@collabora.com>
- <5703a55a-95ab-44ee-a070-2bca6e9e23bc@collabora.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
-In-Reply-To: <5703a55a-95ab-44ee-a070-2bca6e9e23bc@collabora.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 
-Adding Sean
+This small series includes fixes for creation of veth pairs for
+networkless kernels & adds tests for turning the different network
+interface features on and off in selftests/net/netdevice.sh script.
 
-On 8/7/24 11:33 AM, Muhammad Usama Anjum wrote:
-> On 8/7/24 11:08 AM, Muhammad Usama Anjum wrote:
->> On 8/6/24 9:00 PM, Shuah Khan wrote:
->>> On 8/6/24 06:10, Muhammad Usama Anjum wrote:
->>>> The mkdir generates an error when kvm suite is build for non-supported
->>>
->>> built
->>> unsupported
->>>
->>>> architecture such as arm. Fix it by ignoring the error from mkdir.
->>>>
->>>> mkdir: missing operand
->>>> Try 'mkdir --help' for more information.
->>>
->>> Simply suppressing the message isn't a good fix. Can you investigate
->>> a bit more on why mkdir is failing and the architectures it is failing
->>> on?
->>>
->>> This change simply suppresses the error message and continues - Should
->>> this error end the build process or not run mkdir to begin with by
->>> checking why $(sort $(dir $(TEST_GEN_PROGS)))) results in an empty
->>> string?
->> The tests are specified on per architecture basis. As KVM isn't supported on arm, there are no tests in TEST_GEN_PROGS and it is empty. While lib.mk infrastructure has support to ignore and not build anything in such cases, the Makefile's behaviour isn't robust enough.
->>
->> I think the better fix would be to check if TEST_GEN_PROGS isn't empty and then call mkdir. I'll reiterate and send the fix.
-> 
-> Waiting on Paolo's response before sending the following fix. Maybe he
-> has better idea here.
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -317,7 +317,9 @@ $(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S $(GEN_HDRS)
->  $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
->  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -ffreestanding $< -o $@
-> 
-> -$(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
-> +ifneq ($(strip $(TEST_GEN_PROGS)),)
-> +$(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
-> +endif
->  $(SPLIT_TEST_GEN_OBJ): $(GEN_HDRS)
->  $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
->  $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
-Do you agree with the fix or is there better fix? Please feel free to
-jump in to propose better fix here.
+Changes in v5:
+Rectify the syntax for ip add link.
+Fix the veth_created condition check.
 
-> 
-> 
->>
->>>
->>>>
->>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>>> ---
->>>>   tools/testing/selftests/kvm/Makefile | 2 +-
->>>>   1 file changed, 1 insertion(+), 1 deletion(-)
->>>>
->>>> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
->>>> index 48d32c5aa3eb7..8ff46a0a8d1cd 100644
->>>> --- a/tools/testing/selftests/kvm/Makefile
->>>> +++ b/tools/testing/selftests/kvm/Makefile
->>>> @@ -317,7 +317,7 @@ $(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S $(GEN_HDRS)
->>>>   $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
->>>>       $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -ffreestanding $< -o $@
->>>>   -$(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
->>>> +$(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))) > /dev/null 2>&1)
->>>>   $(SPLIT_TEST_GEN_OBJ): $(GEN_HDRS)
->>>>   $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
->>>>   $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
->>>
->>>
->>> thanks,
->>> -- Shuah
->>
-> 
+Changes in v4:
+https://lore.kernel.org/all/20240807175717.7775-1-jain.abhinav177@gmail.com/
 
--- 
-BR,
-Muhammad Usama Anjum
+Move veth creation/removal to the main shell script.
+Tested using vng on a networkless kernel and the script works, sample
+output below the changes.
 
+Changes in v3:
+https://lore.kernel.org/all/20240614113240.41550-1-jain.abhinav177@gmail.com/
+
+Add a check for netdev, create veth pair for testing.
+Restore feature to its initial state.
+
+Changes in v2:
+https://lore.kernel.org/all/20240609132124.51683-1-jain.abhinav177@gmail.com/
+
+Remove tail usage; use read to parse the features from temp file.
+
+v1:
+https://lore.kernel.org/all/20240606212714.27472-1-jain.abhinav177@gmail.com/
+
+```
+# selftests: net: netdevice.sh
+# No valid network device found, creating veth pair
+# PASS: veth0: set interface up
+# PASS: veth0: set MAC address
+# SKIP: veth0: set IP address
+# PASS: veth0: ethtool list features
+# PASS: veth0: Turned off feature: rx-checksumming
+# PASS: veth0: Turned on feature: rx-checksumming
+# PASS: veth0: Restore feature rx-checksumming to initial state on
+# Actual changes:
+# tx-checksum-ip-generic: off
+# tx-tcp-segmentation: off [not requested]
+....
+....
+....
+# PASS: veth1: Restore feature tx-nocache-copy to initial state off
+# PASS: veth1: Turned off feature: tx-vlan-stag-hw-insert
+# PASS: veth1: Turned on feature: tx-vlan-stag-hw-insert
+# PASS: veth1: Restore feature tx-vlan-stag-hw-insert to initial state on
+# PASS: veth1: Turned off feature: rx-vlan-stag-hw-parse
+# PASS: veth1: Turned on feature: rx-vlan-stag-hw-parse
+# PASS: veth1: Restore feature rx-vlan-stag-hw-parse to initial state on
+# PASS: veth1: Turned off feature: rx-gro-list
+# PASS: veth1: Turned on feature: rx-gro-list
+# PASS: veth1: Restore feature rx-gro-list to initial state off
+# PASS: veth1: Turned off feature: rx-udp-gro-forwarding
+# PASS: veth1: Turned on feature: rx-udp-gro-forwarding
+# PASS: veth1: Restore feature rx-udp-gro-forwarding to initial state off
+# Cannot get register dump: Operation not supported
+# SKIP: veth1: ethtool dump not supported
+# PASS: veth1: ethtool stats
+# PASS: veth1: stop interface
+# Removed veth pair
+ok 12 selftests: net: netdevice.sh
+```
+
+Abhinav Jain (2):
+  selftests: net: Create veth pair for testing in networkless kernel
+  selftests: net: Add on/off checks for non-fixed features of interface
+
+ tools/testing/selftests/net/netdevice.sh | 53 +++++++++++++++++++++++-
+ 1 file changed, 52 insertions(+), 1 deletion(-)
+
+--
+2.34.1
 
