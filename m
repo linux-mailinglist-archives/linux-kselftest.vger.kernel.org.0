@@ -1,225 +1,194 @@
-Return-Path: <linux-kselftest+bounces-15033-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15029-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ACE894BDD9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 14:44:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AC4394BDA9
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 14:39:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67542B23AFE
-	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 12:44:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 728D9B242E2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  8 Aug 2024 12:38:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A974118EFC5;
-	Thu,  8 Aug 2024 12:43:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C1C718C918;
+	Thu,  8 Aug 2024 12:38:53 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E57618DF65;
-	Thu,  8 Aug 2024 12:43:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AF8B18C910;
+	Thu,  8 Aug 2024 12:38:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723120992; cv=none; b=ptFM5UruknoqRVXoFVUZgc3fpJ9xB2ld+s9KgSNDp418PtkVWY3ulzvS/5SEEcgYZrQ+E8eacZq7cZTmRpC6zF7UOL8wGvG0rQaN/Bz3ezb4MoC2a+mWIu+0QzdjcWljlXwUadmYU9VYQC8V9VVTB1Jc/UziiVK0mu+5fom4tIg=
+	t=1723120733; cv=none; b=q8yeH86BAM810YEVC8Fdsd28XwDV3QsUwnH7D4Ic4AMzrJZY9/Ps03jvmmwe0EOwD9eYjIoBTa09fe5EKSUHJBK6WIEoBwF/8cLKrqGWspwgG1h59fX3N98uBjBZBT3nXwluuTA0XnF7o1qNBmQ/JY9Af3T1GJzJwfDqw9ILM9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723120992; c=relaxed/simple;
-	bh=CI3zxLH0zZj018ZWJV+vX4G8HpwhfIULDnyKWg02Dwo=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=aD8ngFfjPxbRbtbIT+0fXBfIGey9PnemsCqD4htRwy3HhPP9g+Il0iIK2h2VzDZrPpbXrPz23VpVtD8BtQyaNzHFhTBgg/e3Nv56qyLWnGtZJPCX9Jd6FN2a5n9oAb6oiQ4MWqQDMmaqUZFRwOBdY4ZV7i7QGm22dFVaNQtGk8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Wfmsf2PcYz1T6t7;
-	Thu,  8 Aug 2024 20:42:46 +0800 (CST)
-Received: from dggpemf200006.china.huawei.com (unknown [7.185.36.61])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4515D180106;
-	Thu,  8 Aug 2024 20:43:08 +0800 (CST)
-Received: from localhost.localdomain (10.90.30.45) by
- dggpemf200006.china.huawei.com (7.185.36.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 8 Aug 2024 20:43:07 +0800
-From: Yunsheng Lin <linyunsheng@huawei.com>
-To: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Yunsheng Lin
-	<linyunsheng@huawei.com>, Alexander Duyck <alexander.duyck@gmail.com>,
-	Alexander Duyck <alexanderduyck@fb.com>, Chuck Lever
-	<chuck.lever@oracle.com>, "Michael S. Tsirkin" <mst@redhat.com>, Jason Wang
-	<jasowang@redhat.com>, =?UTF-8?q?Eugenio=20P=C3=A9rez?=
-	<eperezma@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, Eric
- Dumazet <edumazet@google.com>, David Howells <dhowells@redhat.com>, Marc
- Dionne <marc.dionne@auristor.com>, Trond Myklebust <trondmy@kernel.org>, Anna
- Schumaker <anna@kernel.org>, Jeff Layton <jlayton@kernel.org>, Neil Brown
-	<neilb@suse.de>, Olga Kornievskaia <kolga@netapp.com>, Dai Ngo
-	<Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, Shuah Khan
-	<shuah@kernel.org>, <kvm@vger.kernel.org>, <virtualization@lists.linux.dev>,
-	<linux-mm@kvack.org>, <linux-afs@lists.infradead.org>,
-	<linux-nfs@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next v13 05/14] mm: page_frag: avoid caller accessing 'page_frag_cache' directly
-Date: Thu, 8 Aug 2024 20:37:05 +0800
-Message-ID: <20240808123714.462740-6-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20240808123714.462740-1-linyunsheng@huawei.com>
-References: <20240808123714.462740-1-linyunsheng@huawei.com>
+	s=arc-20240116; t=1723120733; c=relaxed/simple;
+	bh=GcvSFJMKHLhNFNdb66dJFFYuo+iitWi4Lo3O6EpjwWo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BUdvVZ94+OFYXsIU386WYWzle4UU8XzAQuQEZ9lkSPZYrkGeIoihCJ2rCcJjc8KKrHv6HLT5wxAQmkOQlQ/w3GACoRvWBNpeARWEzMV9wJBCSvO/ZtG3q5m0K5h5VrcZ6MKiFbFXAgGCju6zSkYuao1fFQVo3K9hMpNP833aTbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E407FEC;
+	Thu,  8 Aug 2024 05:39:16 -0700 (PDT)
+Received: from [10.1.196.40] (e121345-lin.cambridge.arm.com [10.1.196.40])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 50E703F766;
+	Thu,  8 Aug 2024 05:38:49 -0700 (PDT)
+Message-ID: <6da4f216-594b-4c51-848c-86e281402820@arm.com>
+Date: Thu, 8 Aug 2024 13:38:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemf200006.china.huawei.com (7.185.36.61)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/3] iommu/dma: Support MSIs through nested domains
+To: "Tian, Kevin" <kevin.tian@intel.com>, Nicolin Chen <nicolinc@nvidia.com>,
+ "jgg@nvidia.com" <jgg@nvidia.com>
+Cc: "joro@8bytes.org" <joro@8bytes.org>, "will@kernel.org" <will@kernel.org>,
+ "shuah@kernel.org" <shuah@kernel.org>,
+ "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <cover.1722644866.git.nicolinc@nvidia.com>
+ <b1b8ff9c716f22f524be0313ad12e5c6d10f5bd4.1722644866.git.nicolinc@nvidia.com>
+ <BN9PR11MB5276E59FBD67B1119B3E2A858CBF2@BN9PR11MB5276.namprd11.prod.outlook.com>
+From: Robin Murphy <robin.murphy@arm.com>
+Content-Language: en-GB
+In-Reply-To: <BN9PR11MB5276E59FBD67B1119B3E2A858CBF2@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Use appropriate frag_page API instead of caller accessing
-'page_frag_cache' directly.
+On 06/08/2024 9:25 am, Tian, Kevin wrote:
+>> From: Nicolin Chen <nicolinc@nvidia.com>
+>> Sent: Saturday, August 3, 2024 8:32 AM
+>>
+>> From: Robin Murphy <robin.murphy@arm.com>
+>>
+>> Currently, iommu-dma is the only place outside of IOMMUFD and drivers
+>> which might need to be aware of the stage 2 domain encapsulated within
+>> a nested domain. This would be in the legacy-VFIO-style case where we're
+> 
+> why is it a legacy-VFIO-style? We only support nested in IOMMUFD.
 
-CC: Alexander Duyck <alexander.duyck@gmail.com>
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
-Acked-by: Chuck Lever <chuck.lever@oracle.com>
----
- drivers/vhost/net.c                                   |  2 +-
- include/linux/page_frag_cache.h                       | 10 ++++++++++
- net/core/skbuff.c                                     |  6 +++---
- net/rxrpc/conn_object.c                               |  4 +---
- net/rxrpc/local_object.c                              |  4 +---
- net/sunrpc/svcsock.c                                  |  6 ++----
- tools/testing/selftests/mm/page_frag/page_frag_test.c |  2 +-
- 7 files changed, 19 insertions(+), 15 deletions(-)
+Because with proper nesting we ideally shouldn't need the host-managed 
+MSI mess at all, which all stems from the old VFIO paradigm of 
+completely abstracting interrupts from userspace. I'm still hoping 
+IOMMUFD can grow its own interface for efficient MSI passthrough, where 
+the VMM can simply map the physical MSI doorbell into whatever IPA (GPA) 
+it wants it to appear at in the S2 domain, then whatever the guest does 
+with S1 it can program the MSI address into the endpoint accordingly 
+without us having to fiddle with it.
 
-diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-index 6691fac01e0d..b2737dc0dc50 100644
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -1325,7 +1325,7 @@ static int vhost_net_open(struct inode *inode, struct file *f)
- 			vqs[VHOST_NET_VQ_RX]);
- 
- 	f->private_data = n;
--	n->pf_cache.va = NULL;
-+	page_frag_cache_init(&n->pf_cache);
- 
- 	return 0;
- }
-diff --git a/include/linux/page_frag_cache.h b/include/linux/page_frag_cache.h
-index ef038a07925c..7c9125a9aed3 100644
---- a/include/linux/page_frag_cache.h
-+++ b/include/linux/page_frag_cache.h
-@@ -7,6 +7,16 @@
- #include <linux/types.h>
- #include <linux/mm_types_task.h>
- 
-+static inline void page_frag_cache_init(struct page_frag_cache *nc)
-+{
-+	nc->va = NULL;
-+}
-+
-+static inline bool page_frag_cache_is_pfmemalloc(struct page_frag_cache *nc)
-+{
-+	return !!nc->pfmemalloc;
-+}
-+
- void page_frag_cache_drain(struct page_frag_cache *nc);
- void __page_frag_cache_drain(struct page *page, unsigned int count);
- void *__page_frag_alloc_va_align(struct page_frag_cache *nc,
-diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-index 6cf2c51a34e1..bb77c3fd192f 100644
---- a/net/core/skbuff.c
-+++ b/net/core/skbuff.c
-@@ -752,14 +752,14 @@ struct sk_buff *__netdev_alloc_skb(struct net_device *dev, unsigned int len,
- 	if (in_hardirq() || irqs_disabled()) {
- 		nc = this_cpu_ptr(&netdev_alloc_cache);
- 		data = page_frag_alloc_va(nc, len, gfp_mask);
--		pfmemalloc = nc->pfmemalloc;
-+		pfmemalloc = page_frag_cache_is_pfmemalloc(nc);
- 	} else {
- 		local_bh_disable();
- 		local_lock_nested_bh(&napi_alloc_cache.bh_lock);
- 
- 		nc = this_cpu_ptr(&napi_alloc_cache.page);
- 		data = page_frag_alloc_va(nc, len, gfp_mask);
--		pfmemalloc = nc->pfmemalloc;
-+		pfmemalloc = page_frag_cache_is_pfmemalloc(nc);
- 
- 		local_unlock_nested_bh(&napi_alloc_cache.bh_lock);
- 		local_bh_enable();
-@@ -849,7 +849,7 @@ struct sk_buff *napi_alloc_skb(struct napi_struct *napi, unsigned int len)
- 		len = SKB_HEAD_ALIGN(len);
- 
- 		data = page_frag_alloc_va(&nc->page, len, gfp_mask);
--		pfmemalloc = nc->page.pfmemalloc;
-+		pfmemalloc = page_frag_cache_is_pfmemalloc(&nc->page);
- 	}
- 	local_unlock_nested_bh(&napi_alloc_cache.bh_lock);
- 
-diff --git a/net/rxrpc/conn_object.c b/net/rxrpc/conn_object.c
-index 1539d315afe7..694c4df7a1a3 100644
---- a/net/rxrpc/conn_object.c
-+++ b/net/rxrpc/conn_object.c
-@@ -337,9 +337,7 @@ static void rxrpc_clean_up_connection(struct work_struct *work)
- 	 */
- 	rxrpc_purge_queue(&conn->rx_queue);
- 
--	if (conn->tx_data_alloc.va)
--		__page_frag_cache_drain(virt_to_page(conn->tx_data_alloc.va),
--					conn->tx_data_alloc.pagecnt_bias);
-+	page_frag_cache_drain(&conn->tx_data_alloc);
- 	call_rcu(&conn->rcu, rxrpc_rcu_free_connection);
- }
- 
-diff --git a/net/rxrpc/local_object.c b/net/rxrpc/local_object.c
-index 504453c688d7..a8cffe47cf01 100644
---- a/net/rxrpc/local_object.c
-+++ b/net/rxrpc/local_object.c
-@@ -452,9 +452,7 @@ void rxrpc_destroy_local(struct rxrpc_local *local)
- #endif
- 	rxrpc_purge_queue(&local->rx_queue);
- 	rxrpc_purge_client_connections(local);
--	if (local->tx_alloc.va)
--		__page_frag_cache_drain(virt_to_page(local->tx_alloc.va),
--					local->tx_alloc.pagecnt_bias);
-+	page_frag_cache_drain(&local->tx_alloc);
- }
- 
- /*
-diff --git a/net/sunrpc/svcsock.c b/net/sunrpc/svcsock.c
-index 42d20412c1c3..4b1e87187614 100644
---- a/net/sunrpc/svcsock.c
-+++ b/net/sunrpc/svcsock.c
-@@ -1609,7 +1609,6 @@ static void svc_tcp_sock_detach(struct svc_xprt *xprt)
- static void svc_sock_free(struct svc_xprt *xprt)
- {
- 	struct svc_sock *svsk = container_of(xprt, struct svc_sock, sk_xprt);
--	struct page_frag_cache *pfc = &svsk->sk_frag_cache;
- 	struct socket *sock = svsk->sk_sock;
- 
- 	trace_svcsock_free(svsk, sock);
-@@ -1619,8 +1618,7 @@ static void svc_sock_free(struct svc_xprt *xprt)
- 		sockfd_put(sock);
- 	else
- 		sock_release(sock);
--	if (pfc->va)
--		__page_frag_cache_drain(virt_to_head_page(pfc->va),
--					pfc->pagecnt_bias);
-+
-+	page_frag_cache_drain(&svsk->sk_frag_cache);
- 	kfree(svsk);
- }
-diff --git a/tools/testing/selftests/mm/page_frag/page_frag_test.c b/tools/testing/selftests/mm/page_frag/page_frag_test.c
-index e522611452c9..3b98df379ce6 100644
---- a/tools/testing/selftests/mm/page_frag/page_frag_test.c
-+++ b/tools/testing/selftests/mm/page_frag/page_frag_test.c
-@@ -120,7 +120,7 @@ static int __init page_frag_test_init(void)
- 	u64 duration;
- 	int ret;
- 
--	test_frag.va = NULL;
-+	page_frag_cache_init(&test_frag);
- 	atomic_set(&nthreads, 2);
- 	init_completion(&wait);
- 
--- 
-2.33.0
+FWIW, apart from IOMMUFD, we may also end up wanting something along 
+those lines for Arm CCA (if non-Secure proxying of T=1 MSIs becomes an 
+unavoidable thing).
 
+>> using host-managed MSIs with an identity mapping at stage 1, where it is
+>> the underlying stage 2 domain which owns an MSI cookie and holds the
+>> corresponding dynamic mappings. Hook up the new op to resolve what we
+>> need from a nested domain.
+>>
+>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+>> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+>> ---
+>>   drivers/iommu/dma-iommu.c | 18 ++++++++++++++++--
+>>   include/linux/iommu.h     |  4 ++++
+>>   2 files changed, 20 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/iommu/dma-iommu.c b/drivers/iommu/dma-iommu.c
+>> index 7b1dfa0665df6..05e04934a5f81 100644
+>> --- a/drivers/iommu/dma-iommu.c
+>> +++ b/drivers/iommu/dma-iommu.c
+>> @@ -1799,6 +1799,20 @@ static struct iommu_dma_msi_page
+>> *iommu_dma_get_msi_page(struct device *dev,
+>>   	return NULL;
+>>   }
+>>
+>> +/*
+>> + * Nested domains may not have an MSI cookie or accept mappings, but
+>> they may
+>> + * be related to a domain which does, so we let them tell us what they need.
+>> + */
+>> +static struct iommu_domain
+>> *iommu_dma_get_msi_mapping_domain(struct device *dev)
+>> +{
+>> +	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
+>> +
+>> +	if (domain && domain->type == IOMMU_DOMAIN_NESTED &&
+>> +	    domain->ops->get_msi_mapping_domain)
+> 
+> I'm not sure the core should restrict it to the NESTED type. Given
+> there is a new domain ops any type restriction can be handled
+> inside the callback. Anyway the driver should register the op
+> for a domain only when there is a need.
+
+Nested should remain the only case where domains are chained together 
+such that the VFIO MSI cookie may be hiding somewhere else. This is 
+effectively documenting that implementing the callback for any other 
+domain type would be a bad smell. Much like how the mapping-related ops 
+are explicitly short-circuited for non-paging domain types.
+
+Thanks,
+Robin.
+
+>> +		domain = domain->ops->get_msi_mapping_domain(domain);
+>> +	return domain;
+>> +}
+>> +
+>>   /**
+>>    * iommu_dma_prepare_msi() - Map the MSI page in the IOMMU domain
+>>    * @desc: MSI descriptor, will store the MSI page
+>> @@ -1809,7 +1823,7 @@ static struct iommu_dma_msi_page
+>> *iommu_dma_get_msi_page(struct device *dev,
+>>   int iommu_dma_prepare_msi(struct msi_desc *desc, phys_addr_t msi_addr)
+>>   {
+>>   	struct device *dev = msi_desc_to_dev(desc);
+>> -	struct iommu_domain *domain = iommu_get_domain_for_dev(dev);
+>> +	struct iommu_domain *domain =
+>> iommu_dma_get_msi_mapping_domain(dev);
+>>   	struct iommu_dma_msi_page *msi_page;
+>>   	static DEFINE_MUTEX(msi_prepare_lock); /* see below */
+>>
+>> @@ -1842,7 +1856,7 @@ int iommu_dma_prepare_msi(struct msi_desc
+>> *desc, phys_addr_t msi_addr)
+>>   void iommu_dma_compose_msi_msg(struct msi_desc *desc, struct msi_msg
+>> *msg)
+>>   {
+>>   	struct device *dev = msi_desc_to_dev(desc);
+>> -	const struct iommu_domain *domain =
+>> iommu_get_domain_for_dev(dev);
+>> +	const struct iommu_domain *domain =
+>> iommu_dma_get_msi_mapping_domain(dev);
+>>   	const struct iommu_dma_msi_page *msi_page;
+>>
+>>   	msi_page = msi_desc_get_iommu_cookie(desc);
+>> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+>> index 4d47f2c333118..69ed76f9c3ec4 100644
+>> --- a/include/linux/iommu.h
+>> +++ b/include/linux/iommu.h
+>> @@ -638,6 +638,8 @@ struct iommu_ops {
+>>    * @enable_nesting: Enable nesting
+>>    * @set_pgtable_quirks: Set io page table quirks (IO_PGTABLE_QUIRK_*)
+>>    * @free: Release the domain after use.
+>> + * @get_msi_mapping_domain: Return the related iommu_domain that
+>> should hold the
+>> + *                          MSI cookie and accept mapping(s).
+>>    */
+>>   struct iommu_domain_ops {
+>>   	int (*attach_dev)(struct iommu_domain *domain, struct device *dev);
+>> @@ -668,6 +670,8 @@ struct iommu_domain_ops {
+>>   				  unsigned long quirks);
+>>
+>>   	void (*free)(struct iommu_domain *domain);
+>> +	struct iommu_domain *
+>> +		(*get_msi_mapping_domain)(struct iommu_domain
+>> *domain);
+>>   };
+>>
+>>   /**
+>> --
+>> 2.43.0
+>>
+> 
 
