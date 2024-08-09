@@ -1,166 +1,261 @@
-Return-Path: <linux-kselftest+bounces-15088-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15089-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 974B394D59A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 19:43:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C01394D638
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 20:19:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F044280D79
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 17:43:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53231282B09
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 18:19:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C54817E59A;
-	Fri,  9 Aug 2024 17:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ED8314D29B;
+	Fri,  9 Aug 2024 18:19:34 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D40E60DCF;
-	Fri,  9 Aug 2024 17:43:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 408D520309;
+	Fri,  9 Aug 2024 18:19:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723225434; cv=none; b=AlOzw1P2T1XFeQQNzb+9uPS0iiuNW+Jc13cNM5cbqRObZuF/bxlE67EuLcw8lyZDWpqtoNSW1ahEZ/inHm2DVdiy8jPVuYPukicqFXlAYup+6csxFRAC/geoxo/2kXXCUt6hyriNxqNH+Ut3yHhztko5tmAryascre7LnlVDqJw=
+	t=1723227574; cv=none; b=a4oOj501GB4k5j3mURh3V1vA/SpYZL40vhQqGtO8PFTku5KMsevwdiJtgFhSfjISPW44foXvLitSUmlMLL+uUSJQtO0AIsvSejs/iM/6VgV6AgbANpgexvT0lW742RZd+hbwpSPHbTYucFXKiBhZ783T4JOlCpgnXR7SotZ4XyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723225434; c=relaxed/simple;
-	bh=cM/0CrQLED8CsE5zqK/fBlp7UuuJHwRTMRWCvCDrJxk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rO+vItfaagGelcXB2HLAB35MhI4W11k8qBDCJUPHHgGX4dLerg2ic0yK93TRBBCtzqa81S8rmiO0LmQawiUHpP9fSMkpcp8t+aK/Dva7Wz6r8mQKz7Iyd25zaiUnRK6nGicovzqQzD0Zc8oFD6Qjs7kSL/Yi8+2izM6+RVrpbUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BBA3A13D5;
-	Fri,  9 Aug 2024 10:44:17 -0700 (PDT)
-Received: from [10.57.46.232] (unknown [10.57.46.232])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 35A9B3F6A8;
-	Fri,  9 Aug 2024 10:43:50 -0700 (PDT)
-Message-ID: <f4c4a142-d0bb-44c5-8bb9-56136c8f7cf2@arm.com>
-Date: Fri, 9 Aug 2024 18:43:47 +0100
+	s=arc-20240116; t=1723227574; c=relaxed/simple;
+	bh=FhTN8MVGmHdQhGdUvdXqfTR8ItK/k7hfsYmmMHr2RsU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UmdBsk9rpeaL2YshcoZCu4q++V7EqCJFkkEbP6qDCDgAZ8JiHQWSsIu5QL0mEUlXYApVCqR7njrS2B/iGmflkGCfcIvAi06xF3Hp7opzFJBNLzV7XptYHzmz1edMWulRQCFYiSzhV5XNDp2GHoDT2ACKvH1/7VKMtcQySeSzfHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDC50C32782;
+	Fri,  9 Aug 2024 18:19:28 +0000 (UTC)
+Date: Fri, 9 Aug 2024 19:19:26 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	Will Deacon <will@kernel.org>, jannh@google.com,
+	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
+	Kees Cook <kees@kernel.org>
+Subject: Re: [PATCH RFT v8 4/9] fork: Add shadow stack support to clone3()
+Message-ID: <ZrZdrgOQVHhCyWmA@arm.com>
+References: <20240808-clone3-shadow-stack-v8-0-0acf37caf14c@kernel.org>
+ <20240808-clone3-shadow-stack-v8-4-0acf37caf14c@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] iommu/dma: Support MSIs through nested domains
-To: "Tian, Kevin" <kevin.tian@intel.com>, Nicolin Chen <nicolinc@nvidia.com>
-Cc: "jgg@nvidia.com" <jgg@nvidia.com>, "joro@8bytes.org" <joro@8bytes.org>,
- "will@kernel.org" <will@kernel.org>, "shuah@kernel.org" <shuah@kernel.org>,
- "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-References: <cover.1722644866.git.nicolinc@nvidia.com>
- <b1b8ff9c716f22f524be0313ad12e5c6d10f5bd4.1722644866.git.nicolinc@nvidia.com>
- <BN9PR11MB5276E59FBD67B1119B3E2A858CBF2@BN9PR11MB5276.namprd11.prod.outlook.com>
- <6da4f216-594b-4c51-848c-86e281402820@arm.com>
- <ZrVN05VylFq8lK4q@Asurada-Nvidia>
- <BN9PR11MB5276D9387CB50D58E4A7585F8CBA2@BN9PR11MB5276.namprd11.prod.outlook.com>
-From: Robin Murphy <robin.murphy@arm.com>
-Content-Language: en-GB
-In-Reply-To: <BN9PR11MB5276D9387CB50D58E4A7585F8CBA2@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240808-clone3-shadow-stack-v8-4-0acf37caf14c@kernel.org>
 
-On 2024-08-09 9:00 am, Tian, Kevin wrote:
->> From: Nicolin Chen <nicolinc@nvidia.com>
->> Sent: Friday, August 9, 2024 7:00 AM
->>
->> On Thu, Aug 08, 2024 at 01:38:44PM +0100, Robin Murphy wrote:
->>> On 06/08/2024 9:25 am, Tian, Kevin wrote:
->>>>> From: Nicolin Chen <nicolinc@nvidia.com>
->>>>> Sent: Saturday, August 3, 2024 8:32 AM
->>>>>
->>>>> From: Robin Murphy <robin.murphy@arm.com>
->>>>>
->>>>> Currently, iommu-dma is the only place outside of IOMMUFD and
->> drivers
->>>>> which might need to be aware of the stage 2 domain encapsulated
->> within
->>>>> a nested domain. This would be in the legacy-VFIO-style case where
->> we're
->>>>
->>>> why is it a legacy-VFIO-style? We only support nested in IOMMUFD.
->>>
->>> Because with proper nesting we ideally shouldn't need the host-managed
->>> MSI mess at all, which all stems from the old VFIO paradigm of
->>> completely abstracting interrupts from userspace. I'm still hoping
->>> IOMMUFD can grow its own interface for efficient MSI passthrough, where
->>> the VMM can simply map the physical MSI doorbell into whatever IPA (GPA)
->>> it wants it to appear at in the S2 domain, then whatever the guest does
->>> with S1 it can program the MSI address into the endpoint accordingly
->>> without us having to fiddle with it.
->>
->> Hmm, until now I wasn't so convinced myself that it could work as I
->> was worried about the data. But having a second thought, since the
->> host configures the MSI, it can still set the correct data. What we
->> only need is to change the MSI address from a RMRed IPA/gIOVA to a
->> real gIOVA of the vITS page.
->>
->> I did a quick hack to test that loop. MSI in the guest still works
->> fine without having the RMR node in its IORT. Sweet!
->>
->> To go further on this path, we will need the following changes:
->> - MSI configuration in the host (via a VFIO_IRQ_SET_ACTION_TRIGGER
->>    hypercall) should set gIOVA instead of fetching from msi_cookie.
->>    That hypercall doesn't forward an address currently, since host
->>    kernel pre-sets the msi_cookie. So, we need a way to forward the
->>    gIOVA to kernel and pack it into the msi_msg structure. I haven't
->>    read the VFIO PCI code thoroughly, yet wonder if we could just
->>    let the guest program the gIOVA to the PCI register and fall it
->>    through to the hardware, so host kernel handling that hypercall
->>    can just read it back from the register?
->> - IOMMUFD should provide VMM a way to tell the gPA (or directly +
->>    GITS_TRANSLATER?). Then kernel should do the stage-2 mapping. I
->>    have talked to Jason about this a while ago, and we have a few
->>    thoughts how to implement it. But eventually, I think we still
->>    can't avoid a middle man like msi_cookie to associate the gPA in
->>    IOMMUFD to PA in irqchip?
-> 
-> Probably a new IOMMU_DMA_MSI_COOKIE_USER type which uses
-> GPA (passed in in ALLOC_HWPT for a nested_parent type) as IOVA
-> in iommu_dma_get_msi_page()?
+On Thu, Aug 08, 2024 at 09:15:25AM +0100, Mark Brown wrote:
+> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+> index 059685612362..d7005974aff5 100644
+> --- a/arch/x86/kernel/shstk.c
+> +++ b/arch/x86/kernel/shstk.c
+> @@ -191,44 +191,105 @@ void reset_thread_features(void)
+>  	current->thread.features_locked = 0;
+>  }
+>  
+> -unsigned long shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
+> -				       unsigned long stack_size)
+> +int arch_shstk_post_fork(struct task_struct *t, struct kernel_clone_args *args)
+> +{
+> +	/*
+> +	 * SSP is aligned, so reserved bits and mode bit are a zero, just mark
+> +	 * the token 64-bit.
+> +	 */
+> +	struct mm_struct *mm;
+> +	unsigned long addr, ssp;
+> +	u64 expected;
+> +	u64 val;
+> +	int ret = -EINVAL;
+> +
+> +	ssp = args->shadow_stack + args->shadow_stack_size;
+> +	addr = ssp - SS_FRAME_SIZE;
+> +	expected = ssp | BIT(0);
+> +
+> +	mm = get_task_mm(t);
+> +	if (!mm)
+> +		return -EFAULT;
+> +
+> +	/* This should really be an atomic cmpxchg.  It is not. */
+> +	if (access_remote_vm(mm, addr, &val, sizeof(val),
+> +			     FOLL_FORCE) != sizeof(val))
+> +		goto out;
 
-No, the whole point is to get away from cookies and having to keep track 
-of things in the kernel that can and should just be simple regular 
-user-owned S2 mappings.
+If we restrict the shadow stack creation only to the CLONE_VM case, we'd
+not need the remote vm access, it's in the current mm context already.
+More on this below.
 
->> One more concern is the MSI window size. VMM sets up a MSI region
->> that must fit the hardware window size. Most of ITS versions have
->> only one page size but one of them can have multiple pages? What
->> if vITS is one-page size while the underlying pITS has multiple?
->>
->> My understanding of the current kernel-defined 1MB size is also a
->> hard-coding window to potential fit all cases, since IOMMU code in
->> the code can just eyeball what's going on in the irqchip subsystem
->> and adjust accordingly if someday it needs to. But VMM can't?
+> +
+> +	if (val != expected)
+> +		goto out;
+> +	val = 0;
+> +	if (access_remote_vm(mm, addr, &val, sizeof(val),
+> +			     FOLL_FORCE | FOLL_WRITE) != sizeof(val))
+> +		goto out;
 
-The existing design is based around the kernel potentially having to 
-stuff multiple different mappings for different devices into the MSI 
-hole in a single domain, since VFIO userspace is allowed to do wacky 
-things like emulate INTx using an underlying physical MSI, so there may 
-not be any actual vITS region in the VM IPA space at all. I think that 
-was also why it ended up being a fake reserved region exposed by the 
-SMMU drivers rather than relying on userspace to say where to put it - 
-making things look superficially a bit more x86-like meant fewer changes 
-to userspace, which I think by now we can consider a tasty slice of 
-technical debt.
+I'm confused that we need to consume the token here. I could not find
+the default shadow stack allocation doing this, only setting it via
+create_rstor_token() (or I did not search enough). In the default case,
+is the user consuming it? To me the only difference should been the
+default allocation vs the one passed by the user via clone3(), with the
+latter maybe requiring the user to set the token initially.
 
-For a dedicated "MSI passthrough" model where, in parallel to IOMMU 
-nesting, the abstraction is thinner and userspace is in on the game of 
-knowingly emulating a GIC ITS backed by a GIC ITS, I'd imagine it could 
-be pretty straightforward, at least conceptually. Userspace has 
-something like an IOAS_MAP_MSI(device, IOVA) to indicate where it's 
-placing a vITS to which it wants that device's MSIs to be able to go, 
-the kernel resolves the PA from the IRQ layer and maps it, job done. If 
-userspace wants to associate two devices with the same vITS when they 
-have different physical ITSes, either we split the IOAS into two HWPTs 
-to hold the different mappings, or we punt it back to userspace to 
-resolve at the IOAS level.
+> +
+> +	ret = 0;
+> +
+> +out:
+> +	mmput(mm);
+> +	return ret;
+> +}
+> +
+> +unsigned long shstk_alloc_thread_stack(struct task_struct *tsk,
+> +				       const struct kernel_clone_args *args)
+>  {
+>  	struct thread_shstk *shstk = &tsk->thread.shstk;
+> +	unsigned long clone_flags = args->flags;
+>  	unsigned long addr, size;
+>  
+>  	/*
+>  	 * If shadow stack is not enabled on the new thread, skip any
+> -	 * switch to a new shadow stack.
+> +	 * implicit switch to a new shadow stack and reject attempts to
+> +	 * explciitly specify one.
 
-Or I guess the really cheeky version is the IRQ layer exposes its own 
-thing for userspace to mmap the ITS, then it can call a literal IOAS_MAP 
-on that mapping... :D
+Nit: explicitly.
 
-Thanks,
-Robin.
+>  	 */
+> -	if (!features_enabled(ARCH_SHSTK_SHSTK))
+> +	if (!features_enabled(ARCH_SHSTK_SHSTK)) {
+> +		if (args->shadow_stack || args->shadow_stack_size)
+> +			return (unsigned long)ERR_PTR(-EINVAL);
+> +
+>  		return 0;
+> +	}
+>  
+>  	/*
+> -	 * For CLONE_VFORK the child will share the parents shadow stack.
+> -	 * Make sure to clear the internal tracking of the thread shadow
+> -	 * stack so the freeing logic run for child knows to leave it alone.
+> +	 * If the user specified a shadow stack then do some basic
+> +	 * validation and use it, otherwise fall back to a default
+> +	 * shadow stack size if the clone_flags don't indicate an
+> +	 * allocation is unneeded.
+>  	 */
+> -	if (clone_flags & CLONE_VFORK) {
+> +	if (args->shadow_stack) {
+> +		addr = args->shadow_stack;
+> +		size = args->shadow_stack_size;
+>  		shstk->base = 0;
+>  		shstk->size = 0;
+> -		return 0;
+> -	}
+> +	} else {
+> +		/*
+> +		 * For CLONE_VFORK the child will share the parents
+> +		 * shadow stack.  Make sure to clear the internal
+> +		 * tracking of the thread shadow stack so the freeing
+> +		 * logic run for child knows to leave it alone.
+> +		 */
+> +		if (clone_flags & CLONE_VFORK) {
+> +			shstk->base = 0;
+> +			shstk->size = 0;
+> +			return 0;
+> +		}
+
+I think we should leave the CLONE_VFORK check on its own independent of
+the clone3() arguments. If one passes both CLONE_VFORK and specific
+shadow stack address/size, they should be ignored (or maybe return an
+error if you want to make it stricter).
+
+>  
+> -	/*
+> -	 * For !CLONE_VM the child will use a copy of the parents shadow
+> -	 * stack.
+> -	 */
+> -	if (!(clone_flags & CLONE_VM))
+> -		return 0;
+> +		/*
+> +		 * For !CLONE_VM the child will use a copy of the
+> +		 * parents shadow stack.
+> +		 */
+> +		if (!(clone_flags & CLONE_VM))
+> +			return 0;
+
+Is the !CLONE_VM case specific only to the default shadow stack
+allocation? Sorry if this has been discussed already (or I completely
+forgot) but I thought we'd only implement this for the thread creation
+case. The typical fork() for a new process should inherit the parent's
+layout, so applicable to the clone3() with the shadow stack arguments as
+well (which should be ignored or maybe return an error with !CLONE_VM).
+
+[...]
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index cc760491f201..18278c72681c 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -128,6 +128,11 @@
+>   */
+>  #define MAX_THREADS FUTEX_TID_MASK
+>  
+> +/*
+> + * Require that shadow stacks can store at least one element
+> + */
+> +#define SHADOW_STACK_SIZE_MIN sizeof(void *)
+> +
+>  /*
+>   * Protected counters by write_lock_irq(&tasklist_lock)
+>   */
+> @@ -2729,6 +2734,19 @@ struct task_struct *create_io_thread(int (*fn)(void *), void *arg, int node)
+>  	return copy_process(NULL, 0, node, &args);
+>  }
+>  
+> +static void shstk_post_fork(struct task_struct *p,
+> +			    struct kernel_clone_args *args)
+> +{
+> +	if (!IS_ENABLED(CONFIG_ARCH_HAS_USER_SHADOW_STACK))
+> +		return;
+> +
+> +	if (!args->shadow_stack)
+> +		return;
+> +
+> +	if (arch_shstk_post_fork(p, args) != 0)
+> +		force_sig_fault_to_task(SIGSEGV, SEGV_CPERR, NULL, p);
+> +}
+> +
+>  /*
+>   *  Ok, this is the main fork-routine.
+>   *
+> @@ -2790,6 +2808,8 @@ pid_t kernel_clone(struct kernel_clone_args *args)
+>  	 */
+>  	trace_sched_process_fork(current, p);
+>  
+> +	shstk_post_fork(p, args);
+
+Do we need this post fork call? Can we not handle the setup via the
+copy_thread() path in shstk_alloc_thread_stack()?
+
+-- 
+Catalin
 
