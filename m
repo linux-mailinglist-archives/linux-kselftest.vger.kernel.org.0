@@ -1,159 +1,146 @@
-Return-Path: <linux-kselftest+bounces-15075-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15076-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A71C994D3C9
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 17:40:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8083894D3D6
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 17:45:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5F761C224B9
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 15:40:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 306942847BE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 15:45:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0A17198A39;
-	Fri,  9 Aug 2024 15:40:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99B3919414A;
+	Fri,  9 Aug 2024 15:45:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rTukblR+"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ags7VAjT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303A3198A2F
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Aug 2024 15:40:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0557F18C93F
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Aug 2024 15:45:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723218047; cv=none; b=fzGOYzbis8xNCvrjvYlzzHbl5yRNcupGeGS2nmBCaKnakfpLwI4cOlmeKuTqQJ1QT9Po/ottL1Y3L1C6NPIk3ofJeAR6yniqwEvtU9I/M/BgltC2IjSyvhNweI8CFLIUyzrqaEdZDuw2a84J6kylX83x8X1QFb4Ac/BZquRsUeY=
+	t=1723218315; cv=none; b=P9bwxvSvqwp00kjxyRTWqWkPgRtAp8zs0UuZFjMGq4Pu3yxXEhhwcVLcj55lpTzIzV3lVhlrapKiKf3JtoLB0CVmEHQueOazfTCJ5DgRsIk1s4shRve2gXEKJoGqJm5CS3KdiCNmLJaX+EntUUSMvnmE/X+ZwNVdQyAEJpX7GOg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723218047; c=relaxed/simple;
-	bh=qYLK/8+7XbwXyc5gcegIRBpIsaI+pvRczdbaYtaSCdE=;
+	s=arc-20240116; t=1723218315; c=relaxed/simple;
+	bh=4xKAdAddRSzH31ADhKLaPGKj1tnhAdZ+HE6xwKWHgfw=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=V56Kzqcj0ZYsMMSoZtMyyMc/FtXyGqZHY9V8elz1yCXEKbMLaQGCN6xkb8jjb9roVSc28lCOeG49onvm0EK8X74yU2E4zh8I4jj2dEoLs5i+koNs92gfP8hg4Hq5goyYEbs3f1IEmUnERdpyOrP7ZlUX5Ocd7PxDKp5o2eQY0dU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rTukblR+; arc=none smtp.client-ip=209.85.215.202
+	 To:Cc:Content-Type; b=pAoReWobpfCLKdN8nBw2CJzID8Xwj8Y8/8qx3ZZaUsc3Nl11o4gCXiyqCn6/mNxauN7Han5og2qZnkAS5AcUFBee/ESwZ5RRuwtfJVPPQGfU+D1v2TKU2c60Qx3XC/kpMaxtJkr3LNHJ+OrAvXbLB12/XHiRNIjSrlIhU/U3upw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ags7VAjT; arc=none smtp.client-ip=209.85.128.202
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-7a3c6dd559aso2444966a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Aug 2024 08:40:46 -0700 (PDT)
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6886cd07673so49891147b3.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Aug 2024 08:45:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723218045; x=1723822845; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1723218313; x=1723823113; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ErMc17L04Y+frI1FBkQ+3nAwLH6q7Xg4kpfE9NJb3g8=;
-        b=rTukblR+lXJim9aJNe/7HYybeb6EyBeiNVE7XKqVlglAFg3q4MmEtTVq2SVUD9UkHT
-         9Rc6NiJrfradZSSb7gp9cztf3ZCy9125X8olpgxHccfvc5fNRJgqhDLU7p22Sj4VKs5o
-         gIPcZPa83VcdcSWdT1xxKiREIYExuhunQk5pki8qNybKIF61EML+jp6VJKLkVVEVcGD/
-         V7PqhthgZjrlPdJW+aA/ydYUHHTia3cYBND6tuyBSM7UvoYgnfUVJpD7DLaYcsSDFOle
-         OV3slopw4zhonHNA86AsxS+CEK3FuK7SM+WWPkhCHVC5AbJmF+ETYVDbCvfCZCQad2m3
-         pNbw==
+        bh=ufzxNYpm833F4D+it9EVre+p13feWMXlScCKKRbhPtg=;
+        b=Ags7VAjTEKTy69FBDkWR/XJ5jldPb/DhIGL4gTq7FIeNqV0WdSc28yWvkCj8XOANxF
+         1jviKApndwtFJNKzB/hgm9dX3I+3WiWBTREUUHqnAgQazJWQ4YnpZE7U8Kj1ceOuNus5
+         WjusSSsDTsAvG7kwQXam1lCgkj9o3bRbdrvkiFkHNNsX/p0oZkulGvXw5TC/QiSJ4pP0
+         eRRgiYDxt65JJd0NTTJlWGFG1xjqD1ZDYzz0SNb9FoDrE994jSA+KFGCLe4ryVwg4yUt
+         UR8HuqTOUBLSvuV6IDSU0cyXRzM2MRtWtkG1j1nEosOtFmKtKWUb9LIqSD2n2jljhQ3H
+         JTzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723218045; x=1723822845;
+        d=1e100.net; s=20230601; t=1723218313; x=1723823113;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ErMc17L04Y+frI1FBkQ+3nAwLH6q7Xg4kpfE9NJb3g8=;
-        b=NqxS8sxTAQzMXEEgTIOjcXSma+EBWa86g3IvCuTQkpfr6jHZs7r2L29hNJxyCfgkAd
-         PzL33QFhqoeP5ukzDJ/H1nBnw+fxSSnc7uvK2Wqlaohf//LqfFROGXyndi6jby/WQEkh
-         h5YjiFaoaaLNVdqiPjz8lDaRPbp0xRPq6PvCSSiZo4wszAx9LF2RCu2Q+wcj5bCnGz4z
-         Pw+rPHw27kxvVejR7S0rr7q34NDrWpGJt52710d3Q9Id8A21m2G0kFXcBkyZZpdI3lQv
-         y+qY+TfqGYwOielgj9HUtq4BY6UDX069fDAm+65niuypzSS9/u46cYnbzYQyPp+q57DN
-         AR7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWSMtgjENrgjMLFvE3PNUe8C2Nb1RuKP1/uSJZIBGjlWgPQ57O7B6XmPLMFguY4X4QlB0j/VXwZdzbxz5hTjS7kzXMmJt5OcU1I6Fp53twr
-X-Gm-Message-State: AOJu0Yx0U3ATMGOoLz6DBD2tUNVJNXXOLIzBHZfs3G74bKHe0p5QWx8+
-	Ec9d7zBgO3o2PAROyP3aTyDY1KYnylhD9DVPiBW5N/ZgyafYzr4jCKv5eOnxNq56PW73+uxUCRd
-	Opg==
-X-Google-Smtp-Source: AGHT+IGwKw2KKUU7sXggWm9RjiZAHKpy2+WRk1B7z9K2MDWh7RD36JKtkCJ+xCXkC9ifEG/LznRinzDK984=
+        bh=ufzxNYpm833F4D+it9EVre+p13feWMXlScCKKRbhPtg=;
+        b=YDb7zqOmJpIMUqXuTxu8Seuihv4d+CIbWKT3CTeBPZiQsOBpgu3bdhW3PLvCr4A09j
+         Fxns8QjuZdkfJgC3Q/z03f5qjlx+sSe2VFnyJk5f8vlcekyXKP0VVhNAQYxurECLh84i
+         dTyWkVThy+x3lgbw5AOoqOTnBfjlC2GcLOVMze9RA7M2Hdr71xwWK4UUHlDNGs8M0WjB
+         UaYR7KTUaEkbC6SsYe/S/YZgVB9JZcBYeMEqfcI7zhbM+/gKYbKD1YbZkPjgX/8/Jl2/
+         t7cnAnEJdei8ppHoDmJsBoul5YBjH+QvWXrf5mZnrJQVOgILl2kYpYq+/UbRvHl3SUa7
+         LJiA==
+X-Forwarded-Encrypted: i=1; AJvYcCU7yhsp9Vh7aB1tfR8bNWmxwyE/iHZCcAfJf6DCBd2hv5OztqflCwzIR7Ap7TH9M1oOfN/6jXehd8oHCHASrQ4zRsLDAxNDa5N6UJ9Cx+xx
+X-Gm-Message-State: AOJu0YwMqfeuXANTIlYBupwf2twIcx/ZNWff4gjvlsT5HqoJzd0vowbu
+	NLRvaY7Yf2uko8KpLk8oulRvIjg+xX9OMXNygQS29b9nxaEVeRUfu7mmyhbQGjEzFjUVjPXP1cX
+	icw==
+X-Google-Smtp-Source: AGHT+IGmKxWqzG8EPgakjna8JtWGPg62vJdK+0Bc2Qodmrlh2F+IyIYu6Pp5IsmyEemyLyeZWsSJxb5C0rY=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:66c4:0:b0:78b:4703:17af with SMTP id
- 41be03b00d2f7-7c3d2bed86emr3612a12.6.1723218045232; Fri, 09 Aug 2024 08:40:45
- -0700 (PDT)
-Date: Fri, 9 Aug 2024 08:40:43 -0700
-In-Reply-To: <20240710220540.188239-3-pratikrajesh.sampat@amd.com>
+ (user=seanjc job=sendgmr) by 2002:a05:690c:2f04:b0:65c:1db1:9235 with SMTP id
+ 00721157ae682-69ebf29b861mr647807b3.0.1723218312835; Fri, 09 Aug 2024
+ 08:45:12 -0700 (PDT)
+Date: Fri, 9 Aug 2024 08:45:11 -0700
+In-Reply-To: <98c1f8e2-3b24-49c4-b5fc-506e4283248d@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20240710220540.188239-1-pratikrajesh.sampat@amd.com> <20240710220540.188239-3-pratikrajesh.sampat@amd.com>
-Message-ID: <ZrY4e39Q2_WxhrkI@google.com>
-Subject: Re: [RFC 2/5] selftests: KVM: Decouple SEV ioctls from asserts
+References: <20240710220540.188239-1-pratikrajesh.sampat@amd.com>
+ <20240710220540.188239-4-pratikrajesh.sampat@amd.com> <8870ca39-f5a9-8d33-3372-77a6693ad739@amd.com>
+ <98c1f8e2-3b24-49c4-b5fc-506e4283248d@amd.com>
+Message-ID: <ZrY5h746smS4j5ak@google.com>
+Subject: Re: [RFC 3/5] selftests: KVM: SEV IOCTL test
 From: Sean Christopherson <seanjc@google.com>
-To: "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>
-Cc: kvm@vger.kernel.org, shuah@kernel.org, thomas.lendacky@amd.com, 
+To: Pratik Rajesh Sampat <pratikrajesh.sampat@amd.com>
+Cc: Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org, shuah@kernel.org, 
 	michael.roth@amd.com, pbonzini@redhat.com, pgonda@google.com, 
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="us-ascii"
 
-On Wed, Jul 10, 2024, Pratik R. Sampat wrote:
-> This commit separates the SEV, SEV-ES, SEV-SNP ioctl calls from its
-
-Don't start with "This commit".  Please read Documentation/process/maintainer-kvm-x86.rst,
-and by extension, Documentation/process/maintainer-tip.rst.
-
-> positive test asserts. This is done so that negative tests can be
-> introduced and both kinds of testing can be performed independently
-> using the same base helpers of the ioctl.
+On Thu, Jul 11, 2024, Pratik Rajesh Sampat wrote:
+> >> +static void sev_guest_status_assert(struct kvm_vm *vm, uint32_t type)
+> >> +{
+> >> +	struct kvm_sev_guest_status status;
+> >> +	bool cond;
+> >> +	int ret;
+> >> +
+> >> +	ret = __vm_sev_ioctl(vm, KVM_SEV_GUEST_STATUS, &status);
+> >> +	cond = type == KVM_X86_SEV_VM ? !ret : ret;
+> >> +	TEST_ASSERT(cond,
+> >> +		    "KVM_SEV_GUEST_STATUS should fail, invalid VM Type.");
+> >> +}
+> >> +
+> >> +static void test_sev_launch(void *guest_code, uint32_t type, uint64_t policy)
+> >> +{
+> >> +	struct kvm_vcpu *vcpu;
+> >> +	struct kvm_vm *vm;
+> >> +	struct ucall uc;
+> >> +	bool cond;
+> >> +	int ret;
+> >> +
+> > 
+> > Maybe a block comment here indicating what you're actually doing would
+> > be good, because I'm a bit confused.
+> > 
+> > A policy value of 0 is valid for SEV, so you expect each call to
+> > succeed, right? And, actually, for SEV-ES the launch start will succeed,
+> > too, but the launch update will fail because LAUNCH_UPDATE_VMSA is not
+> > valid for SEV, but then the launch measure should succeed. Is that
+> > right? What about the other calls?
+> > 
 > 
-> This commit also adds additional parameters such as flags to improve
-> testing coverage for the ioctls.
+> Sure, I can do that.
+> Yes for SEV, the policy value of 0 succeeds for everything except when
+> we try to run and we see a KVM_EXIT_IO.
 > 
-> Cleanups performed with no functional change intended.
-> 
-> Signed-off-by: Pratik R. Sampat <pratikrajesh.sampat@amd.com>
-> ---
->  .../selftests/kvm/include/x86_64/sev.h        |  20 +--
->  tools/testing/selftests/kvm/lib/x86_64/sev.c  | 145 ++++++++++++------
->  2 files changed, 108 insertions(+), 57 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/include/x86_64/sev.h b/tools/testing/selftests/kvm/include/x86_64/sev.h
-> index 43b6c52831b2..ef99151e13a7 100644
-> --- a/tools/testing/selftests/kvm/include/x86_64/sev.h
-> +++ b/tools/testing/selftests/kvm/include/x86_64/sev.h
-> @@ -37,14 +37,16 @@ enum sev_guest_state {
->  #define GHCB_MSR_TERM_REQ	0x100
->  
->  void sev_vm_launch(struct kvm_vm *vm, uint32_t policy);
-> -void sev_vm_launch_measure(struct kvm_vm *vm, uint8_t *measurement);
-> -void sev_vm_launch_finish(struct kvm_vm *vm);
-> +int sev_vm_launch_start(struct kvm_vm *vm, uint32_t policy);
-> +int sev_vm_launch_update(struct kvm_vm *vm, uint32_t policy);
-> +int sev_vm_launch_measure(struct kvm_vm *vm, uint8_t *measurement);
-> +int sev_vm_launch_finish(struct kvm_vm *vm);
->  
->  bool is_kvm_snp_supported(void);
->  
-> -void snp_vm_launch(struct kvm_vm *vm, uint32_t policy);
-> -void snp_vm_launch_update(struct kvm_vm *vm);
-> -void snp_vm_launch_finish(struct kvm_vm *vm);
-> +int snp_vm_launch(struct kvm_vm *vm, uint32_t policy, uint8_t flags);
-> +int snp_vm_launch_update(struct kvm_vm *vm, uint8_t page_type);
-> +int snp_vm_launch_finish(struct kvm_vm *vm, uint16_t flags);
->  
->  struct kvm_vm *vm_sev_create_with_one_vcpu(uint32_t type, void *guest_code,
->  					   struct kvm_vcpu **cpu);
-> @@ -98,7 +100,7 @@ static inline void sev_register_encrypted_memory(struct kvm_vm *vm,
->  	vm_ioctl(vm, KVM_MEMORY_ENCRYPT_REG_REGION, &range);
->  }
->  
-> -static inline void snp_launch_update_data(struct kvm_vm *vm, vm_paddr_t gpa,
-> +static inline int snp_launch_update_data(struct kvm_vm *vm, vm_paddr_t gpa,
->  					   uint64_t size, uint8_t type)
->  {
->  	struct kvm_sev_snp_launch_update update_data = {
-> @@ -108,10 +110,10 @@ static inline void snp_launch_update_data(struct kvm_vm *vm, vm_paddr_t gpa,
->  		.type = type,
->  	};
->  
-> -	vm_sev_ioctl(vm, KVM_SEV_SNP_LAUNCH_UPDATE, &update_data);
-> +	return __vm_sev_ioctl(vm, KVM_SEV_SNP_LAUNCH_UPDATE, &update_data);
+> For SEV-ES, with the policy value of 0 - we don't see launch_start
+> succeed. It fails with EIO in this case. Post that all the calls for
+> SEV-ES also fail subsequent to that. I guess the core idea behind this
+> test is to ensure that once the first bad case of launch_start fails, we
+> should see a cascading list of failures.
+>
+> >> +	vm = vm_sev_create_with_one_vcpu(type, guest_code, &vcpu);
+> >> +	ret = sev_vm_launch_start(vm, 0);
+> >> +	cond = type == KVM_X86_SEV_VM ? !ret : ret;
+> >> +	TEST_ASSERT(cond,
 
-Don't introduce APIs and then immediately rewrite all of the users.  If you want
-to rework similar APIs, do the rework, then add the new APIs.  Doing things in
-this order adds a pile of pointless churn.
+Don't bury the result in a local boolean.  It's confusing, and _worse_ for debug
+as it makes it impossible to see what actually failed (the assert message will
+simply print "cond", which is useless).
 
-But that's a moot point, because it's far easier to just add __snp_launch_update_data().
-And if you look through other APIs in kvm_util.h, you'll see that the strong
-preference is to let vm_ioctl(), or in this case vm_sev_ioctl(), do the heavy
-lifting.  Yeah, it requires copy+pasting marshalling parameters into the struct,
-but that's relatively uninteresting code, _and_ piggybacking the "good" version
-means you can't do things like pass in a garbage virtual address (because the
-"good" version always guarantees a good virtual address).
+
+> >> +		    "KVM_SEV_LAUNCH_START should fail, invalid policy.");
+
+This is a blatant lie, because the KVM_X86_SEV_VM case apparently expects success.
+Similar to Tom's comments about explaing what this code is doing, these assert
+messages need to explain what the actually expected result it, provide a hint as
+to _why_ that result is expected, and print the result.  As is, this will be
+unnecessarily difficult to debug if/when it fails.
 
