@@ -1,86 +1,117 @@
-Return-Path: <linux-kselftest+bounces-15099-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15096-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AC7594D8F3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Aug 2024 01:05:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D558F94D8C0
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Aug 2024 00:31:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA2101C21FDA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 23:05:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E433281783
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 22:31:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCF7716CD3B;
-	Fri,  9 Aug 2024 23:03:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20E0916728B;
+	Fri,  9 Aug 2024 22:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="lVSwrjsC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IdfNHUFS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from gentwo.org (gentwo.org [62.72.0.81])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 289F040BE5;
-	Fri,  9 Aug 2024 23:03:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A6BC8D1;
+	Fri,  9 Aug 2024 22:31:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723244633; cv=none; b=PAJdvI2Mjh75OCE65Rp5V9eMSBQIZMf5C0nvDvjD3LPZEgfE2khMntJP/qEjgXEeMgSGCLdkprkmixPS+Y9Ge/rEXxNg0opQ+xxUeaaZdnvSsclZ+3Jm59etl62HglaVDZ9m/dFr7lLFQzA5LiHBl7V3TVmEJJpWapmI2eTP/6k=
+	t=1723242683; cv=none; b=JZTG/exRkOu0hAcOTgYIQPp2bHuw+SHlzH7zNAySKSgE7ZrPEeSE0PB3QphJCucP0xkcUi/neiRFDZdvVbhhmvlgGfRRUTcwpbLmNUBRbKvvGX1u3NMl79l5gfdwZnnso49BOCROqrQpauZipKZrF4pIJ+f2n45hO91eb0JJcN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723244633; c=relaxed/simple;
-	bh=xOjgbVHoq+qMvCIiyrVGLH7gR4Niui5wdTSkXOeAFfU=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=aJ+9tmh/lB9/Xdq/NhV1wWWrjfK30GfuVHP15mnd/tYlc9Iux3MNvJyx1DE709HS2gJT+emOy/7+4TeD0dJVg8k6eM4MW2KZGFiaZBu2WAO7+vSlnEY5qgbow9gzBqewUe/GjDIY93A6i/T5DVdNsOSBwJHKNTYUrbjFzGVazwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=lVSwrjsC; arc=none smtp.client-ip=62.72.0.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
-	s=default; t=1723237814;
-	bh=xOjgbVHoq+qMvCIiyrVGLH7gR4Niui5wdTSkXOeAFfU=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=lVSwrjsC+sZuKS1DLVhy9GDaCag024tcjIOx6qIXLECPuE/JY2mtxhusObORDnwly
-	 gwjYSd3ly7ynuRLm87I362QuIsonLOUnfDcRKIJsclRYwXBr5AeGjIMjmiYG9W+bBq
-	 0Zp18W1uCvWBpE4cwSPCkuo3o8C6w3vZ2JtWwe/8=
-Received: by gentwo.org (Postfix, from userid 1003)
-	id 6BA864040E; Fri,  9 Aug 2024 14:10:14 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-	by gentwo.org (Postfix) with ESMTP id 69F024035C;
-	Fri,  9 Aug 2024 14:10:14 -0700 (PDT)
-Date: Fri, 9 Aug 2024 14:10:14 -0700 (PDT)
-From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
-To: Shuah Khan <skhan@linuxfoundation.org>
-cc: Dev Jain <dev.jain@arm.com>, akpm@linux-foundation.org, shuah@kernel.org, 
-    david@redhat.com, willy@infradead.org, ryan.roberts@arm.com, 
-    anshuman.khandual@arm.com, catalin.marinas@arm.com, vbabka@suse.cz, 
-    mhocko@suse.com, apopple@nvidia.com, osalvador@suse.de, 
-    baolin.wang@linux.alibaba.com, dave.hansen@linux.intel.com, 
-    will@kernel.org, baohua@kernel.org, ioworker0@gmail.com, gshan@redhat.com, 
-    mark.rutland@arm.com, kirill.shutemov@linux.intel.com, hughd@google.com, 
-    aneesh.kumar@kernel.org, yang@os.amperecomputing.com, peterx@redhat.com, 
-    broonie@kernel.org, mgorman@techsingularity.net, 
-    linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-    linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftests/mm: Do not fail test for a single migration
- failure
-In-Reply-To: <e3bf3d2b-eb19-4678-916e-7a7f572b2936@linuxfoundation.org>
-Message-ID: <aead8fc9-c60a-9ac6-280e-b2b9de85727c@gentwo.org>
-References: <20240809103129.365029-1-dev.jain@arm.com> <20240809103129.365029-3-dev.jain@arm.com> <e3bf3d2b-eb19-4678-916e-7a7f572b2936@linuxfoundation.org>
+	s=arc-20240116; t=1723242683; c=relaxed/simple;
+	bh=ST2yZJ1z3NPLh4z1Z9oZd5wDiM05Ls+yHvSmTrATXTA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mAnXjmF5LNwXE7YdYLaY3BWD4El+SOuFzhkasv2P0557ram4o9VZ+Wv9U7ohPjcbc961AU7KvLlQhiBOgP0GV1huva0wAlU8O9u7CQHykRH8IgEz9WWW/W97anzfZ3q10/qbMH/cMoUyPFzyDdBuInjKvvYamufs+SDW0i7s4LQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IdfNHUFS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7583BC32782;
+	Fri,  9 Aug 2024 22:31:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723242682;
+	bh=ST2yZJ1z3NPLh4z1Z9oZd5wDiM05Ls+yHvSmTrATXTA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IdfNHUFSCvgO3CKBq6FBAR2WeVIHxj1nhcVXFpM90cS4e3R4lvmJlY0jAlCdyiao7
+	 bTvJg/0lzSHLV2vMiVmamYiBijYQA7Pk2WZwG1Oz99TlRYq9G0qi36ZCnWiBELc8Yk
+	 GfwK3agTSeyPYjBV0GypsBfN0gzSVGty7jXfSJzACMBD9gTH0M3QegApEtBVPfkeux
+	 ELsWhY/ZLNszj9JXhqp/fWzZ4s8WZOi84U2YqzhC8CkAd4vT5rzdhPbDvI2X1azdyS
+	 PC+9Lmwr28VwuRYElgTjS2Anp0/hkhMnQK7CtWsea9xdVT0ZwIV1fR9oepAD0hYJq3
+	 lvy0RwPbyqe6w==
+Date: Fri, 9 Aug 2024 23:31:15 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Guo Ren <guoren@kernel.org>, Evan Green <evan@rivosinc.com>,
+	Andy Chiu <andy.chiu@sifive.com>,
+	Jessica Clarke <jrtc27@jrtc27.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Heiko Stuebner <heiko@sntech.de>
+Subject: Re: [PATCH v9 00/13] riscv: Add support for xtheadvector
+Message-ID: <20240809-slapping-graph-461287bac506@spud>
+References: <20240806-xtheadvector-v9-0-62a56d2da5d0@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="UxYzrmqfRoz1zos6"
+Content-Disposition: inline
+In-Reply-To: <20240806-xtheadvector-v9-0-62a56d2da5d0@rivosinc.com>
 
-On Fri, 9 Aug 2024, Shuah Khan wrote:
 
-> "Given that migration is a best-effort service, it is wrong to fail the
-> test for just a single failure; hence, fail the test after 100 consecutive
-> failures (where 100 is still a subjective choice)."
->
-> You do want to mention the above here.
->
-> The reason being, I would like to know what this does to the run-time of
-> this test if migration fails and retried 100 times.
+--UxYzrmqfRoz1zos6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-If we backoff earlier without engaging too much with the page then we can 
-in turn affort to retry more times.
+On Tue, Aug 06, 2024 at 05:31:36PM -0700, Charlie Jenkins wrote:
+> xtheadvector is a custom extension that is based upon riscv vector
+> version 0.7.1 [1]. All of the vector routines have been modified to
+> support this alternative vector version based upon whether xtheadvector
+> was determined to be supported at boot.
+>=20
+> vlenb is not supported on the existing xtheadvector hardware, so a
+> devicetree property thead,vlenb is added to provide the vlenb to Linux.
+>=20
+> There is a new hwprobe key RISCV_HWPROBE_KEY_VENDOR_EXT_THEAD_0 that is
+> used to request which thead vendor extensions are supported on the
+> current platform. This allows future vendors to allocate hwprobe keys
+> for their vendor.
+>=20
+> Support for xtheadvector is also added to the vector kselftests.
+
+So uh, since noone seems to have brought it up, in the light of the issues
+with thead's vector implementation, (https://ghostwriteattack.com/) do we
+want to enable it at all?
+
+--UxYzrmqfRoz1zos6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZraYswAKCRB4tDGHoIJi
+0tonAQDXX0xZWgDaeNkL+G/im0IoleTzmXCNVYAibHmhnDOBLQEAu5Jwr4Jh84y8
+So09QD8P3MlYkua1tqt96HA8i7/76ws=
+=PJBU
+-----END PGP SIGNATURE-----
+
+--UxYzrmqfRoz1zos6--
 
