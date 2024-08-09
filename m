@@ -1,116 +1,152 @@
-Return-Path: <linux-kselftest+bounces-15049-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15050-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6B3794C7DA
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 03:01:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8010A94C875
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 04:24:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 61A51B2190C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 01:01:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBB731F26912
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 02:24:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DCF42F2A;
-	Fri,  9 Aug 2024 01:01:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1C5317555;
+	Fri,  9 Aug 2024 02:24:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="jQlgvrVr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vKaWvUP+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A20748D
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Aug 2024 01:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DBCC11CA0;
+	Fri,  9 Aug 2024 02:24:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723165260; cv=none; b=alJibal4tijWNB0tinC5nN22EgCqcGLLUBqZg3mFFpHc82OfCQ3z0i4pQk3BOy53jicpFZHZ4im2USwaHMAVocHeY9aIfDj+++a5OCag+iQ6uZV11pgDw90ho8ltGMxjkvM+8rXDmeTDA7Xa/o+rDIrgxVDVkjGhSWSRfqPMh54=
+	t=1723170254; cv=none; b=rcavAV/HxHaRlMZB/K9gN27K+y8C8qql+R6MjoMeNcrwRNOnvKpy5/F4WqhGCYe+uCWm3dGvAIesC9YkpZfXzA0p/LLdNTzJjD4VLtExNv4nr9kT0XoR8sgW9p8IcvIFRPq3nW3/SHNiNhTSRxSLiVHb0mpnYwb3jsa9N5UrPAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723165260; c=relaxed/simple;
-	bh=TzrW3y6SzsbNFighfe8q6Qkw+b/AgGKoiKBOEDWYo2k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LvxM3//6UzhL2H1TXCNyMX6E1fm2DVWhZ+skHXKZrhazobSQx32YPQycEflDqvianqk+4AupPQRweXI+6HhrWOele4wM5kFoE7iBOnfkEaRDxX3xRC/AVVufuwiDv8p6sTnyoZuWRfFd1P89g5D2d9G6CyT7UdINqeDCBZLjsyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=jQlgvrVr; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1723165257;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=FUh2ZcyYR28eZFFdQirdhBUZopZzvCQuM/XbmHwKiM8=;
-	b=jQlgvrVrBEZZ+ToogrLZI8TZS9t8bjiiyJEuwNFloqjBJRZ00vACZpaOpxpmUc9rwQF/7y
-	a7/GkcLvxr4zfBslbnEpeObYUrov3N5IMsDI3HhGtPfbT6eHDeN99o08ZvqIPyDmoyTCwJ
-	MPijO+HKeGFI/e/m5q6YuncaarHcquo=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-467-5hjdLnQtP42zcJyK7MW5VA-1; Thu,
- 08 Aug 2024 21:00:54 -0400
-X-MC-Unique: 5hjdLnQtP42zcJyK7MW5VA-1
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 44FB31945104;
-	Fri,  9 Aug 2024 01:00:53 +0000 (UTC)
-Received: from asgard.redhat.com (unknown [10.45.242.6])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 2B4BB19560A3;
-	Fri,  9 Aug 2024 01:00:49 +0000 (UTC)
-Date: Fri, 9 Aug 2024 03:00:44 +0200
-From: Eugene Syromiatnikov <esyr@redhat.com>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Artem Savkov <asavkov@redhat.com>, linux-sound@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH] selftests/alsa/Makefile: fix relative rpath usage
-Message-ID: <20240809010044.GA28665@asgard.redhat.com>
-References: <20240808145639.GA20510@asgard.redhat.com>
- <83d4e1a3-73fc-4634-b133-82b9e883b98b@linuxfoundation.org>
+	s=arc-20240116; t=1723170254; c=relaxed/simple;
+	bh=a4NH/DyOZYr+hQdPVdV/xn3d1kqB1GhzzrD+9MYKuho=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dAQReQjed2MaNUAAQRcVm6y66OwGRzyymcG6Qb9zr9ZZFX4kE1TT1jAN9SqZZ2+42YHNMH3uT6XJ8ukEJ/sVR7sXLpx1LJxo7hfVX5MpfCHhttjrDm8OyRoaK5loHbvs9vo3NrDSSo55k/zFpEsnHLaKL0ss45CzrxgVgX4e9vc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vKaWvUP+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C56DC32782;
+	Fri,  9 Aug 2024 02:24:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723170253;
+	bh=a4NH/DyOZYr+hQdPVdV/xn3d1kqB1GhzzrD+9MYKuho=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=vKaWvUP+gW8ZxGS17B65tL1nrDAvJqciL9lSUQksuPZ4Iy4KhEGJQGOpNkkXmO+kV
+	 pkdaDInHp2dgMHzollw10zS4gIySrBFG6IgrrwYHj8LsAscwBWBwWjLcNHYy5tTzNE
+	 KSKa+C7m9EwkOjuzA8zG5VWtu7bn8KHoTxxNt5UYMtqglx1DnjyChjgN286dWqm0WA
+	 rT4bNmb9sUeUr0tdrbHNHwMsbmKPhEiAz7/jK5pb3Y5hSQ728/DeRHxDA8I+BOaR8Y
+	 khTAMu7d9Hv788u9Zd01H6xUkCZfx7Afr0wMZbiiN0Z1P7b+nVi/ftr6us3vFG5KWz
+	 4W9X6eOb829Uw==
+Date: Thu, 8 Aug 2024 19:24:10 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
+ <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
+ Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
+ Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
+ de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
+ <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
+ Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Taehee Yoo <ap420073@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, Kaiyuan
+ Zhang <kaiyuanz@google.com>
+Subject: Re: [PATCH net-next v18 07/14] memory-provider: dmabuf devmem
+ memory provider
+Message-ID: <20240808192410.37a49724@kernel.org>
+In-Reply-To: <CAHS8izOA80dxpB9rzOwv7Oe_1w4A7vo5S3c3=uCES8TSnjyzpg@mail.gmail.com>
+References: <20240805212536.2172174-1-almasrymina@google.com>
+	<20240805212536.2172174-8-almasrymina@google.com>
+	<20240806135924.5bb65ec7@kernel.org>
+	<CAHS8izOA80dxpB9rzOwv7Oe_1w4A7vo5S3c3=uCES8TSnjyzpg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <83d4e1a3-73fc-4634-b133-82b9e883b98b@linuxfoundation.org>
-User-Agent: Mutt/1.5.23 (2014-03-12)
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Aug 08, 2024 at 02:20:21PM -0600, Shuah Khan wrote:
-> Wouldn't make sense to fix fix this in selftests main Makefile
-> instead of changing the all the test makefiles
-
-As of now, the usage of rpath is localised, so it is relatively easy
-to evaluate the effect/prudence of such a change;  I am not so confident
-in imposing rpath on all of the selftests (and, if doing so, I would
-rather opt for runpath, to leave out an ability to override the search
-path via LD_LIBRARY_PATH, if such need arises);  in that case it is possibly
-also worth to add -L$(OUTPUT) to the CFLAGS as well, as the compile-time
-counterpart.  But, again, I was trying to avoid the task of evaluating
-the possible side effects of such a change, considering the variability
-in environments and setups selftests are run.
-
-> Same comment on all other files.
-
-> It would be easier to send these as series
-
-I hesitated to do so due to the fact that different selftests are seemingly
-maintained by different people.
-
-> please mentioned the tests run as well after this change.
-
-I have checked the ldd output after the change remained the same (and that ldd
-is able to find the libraries used when run outside the directory the tests
-reside in) and did a cursory check of the results of the run of the affected
-tests (but not so sure about the BPF selftests, as they don't compile as-is
-due to numerous "incompatible pointer types" warnings that are forced
-into errors by -Werror and the fact that it hanged the machine I tried
-to run them on).
-
-> thanks,
-> -- Shuah
+On Thu, 8 Aug 2024 16:36:24 -0400 Mina Almasry wrote:
+> > How do you know that the driver:
+> >  - supports net_iov at all (let's not make implicit assumptions based
+> >    on presence of queue API);
+> >  - supports net_iov in current configuration (eg header-data split is
+> >    enabled)
+> >  - supports net_iov for _this_ pool (all drivers must have separate
+> >    buffer pools for headers and data for this to work, some will use
+> >    page pool for both)
+> >
+> > What comes to mind is adding an "I can gobble up net_iovs from this
+> > pool" flag in page pool params (the struct that comes from the driver),  
 > 
+> This already sorta exists in the current iteration, although maybe in
+> an implicit way. As written, drivers need to set params.queue,
+> otherwise core will not attempt to grab the mp information from
+> params.queue. A driver can set params.queue for its data pages pool
+> and not set it for the headers pool. AFAICT that deals with all 3
+> issues you present above.
 > 
+> The awkward part is if params.queue starts getting used for other
+> reasons rather than passing mp configuration, but as of today that's
+> not the case so I didn't add the secondary flag. If you want a second
+> flag to be added preemptively, I can do that, no problem. Can you
+> confirm params.queue is not good enough?
 
+I'd prefer a flag. The setting queue in a param struct is not a good
+API for conveying that the page pool is for netmem payloads only.
+
+> > and then on the installation path we can check if after queue reset
+> > the refcount of the binding has increased. If it did - driver has
+> > created a pool as we expected, otherwise - fail, something must be off.
+> > Maybe that's a bit hacky?  
+> 
+> What's missing is for core to check at binding time that the driver
+> supports net_iov. I had relied on the implicit presence of the
+> queue-API.
+> 
+> What you're proposing works, but AFAICT it's quite hacky, yes. I
+> basically need to ASSERT_RTNL in net_devmem_binding_get() to ensure
+> nothing can increment the refcount while the binding is happening so
+> that the refcount check is valid.
+
+True. Shooting from the hip, but we could walk the page pools of the
+netdev and find the one that has the right mp installed, and matches
+queue? The page pools are on a list hooked up to the netdev, trivial
+to walk.
+
+> I think a less hacky approach is to add a function to the queue-API
+> like ndo_queue_supported_features(), which lets the driver declare
+> that it supports net_iov at a given rx queue. However I'm open to both
+> approaches. What do you prefer?
+
+I kinda like trying to query the page pools more, because it's both
+fewer driver changes, and it actually validates that the driver did 
+the right thing based on outcomes. Driver callback may have bugs.
+
+If you prefer strongly - fine, but hm.
 
