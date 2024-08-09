@@ -1,37 +1,38 @@
-Return-Path: <linux-kselftest+bounces-15063-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15064-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 838E994CEAB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 12:32:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1E7894CEAE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 12:32:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F848282E68
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 10:32:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94C14283004
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 10:32:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F9A0190490;
-	Fri,  9 Aug 2024 10:32:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F19D1922DF;
+	Fri,  9 Aug 2024 10:32:23 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8646176237;
-	Fri,  9 Aug 2024 10:31:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69AA0166F14;
+	Fri,  9 Aug 2024 10:32:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723199520; cv=none; b=Uom10n41gfuvf85TVXsQJUyonyQLblK6GX2uJ3VOEaDDW300EKpSORdRpbyci4uaXfiPNvD3B6oJvWYrfLqfr14YmHLbK1hYKQzJrdZ4hqstWui0wKrPSiNxypfugKlVZTXuidPoJkzCF4efdnZcOvmHiWOGWijMsGEXrXoBF0I=
+	t=1723199543; cv=none; b=G4eQXgj6UEjHOr+Uon71tjyYu044e64t/eHswaudIbNazYgEajotrH5DRU9pfIx7QSQx/+s7lZEP+kNUIysfLGynCzWb8L6CqXiNm2OViws+j5Y8qCJMLqJIbtBNo/HAM5rFtbA9fGw5y4QezTaVs/Pzw4cGRpXoMTSW3XGwCBM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723199520; c=relaxed/simple;
-	bh=FCbXMjwRhSxGWG+KGEb6VZ0zlgypTmf8rZa+aiS38L0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=je0rEBD1kIQ5XrN53aAlE4lNRT/kWVE1Q++/Q3pk9/iIdhCOe9BpeLG+HE1h0ohptcTiSAxjIhJE6/LY/cXWg9f82EXlTskswGTPLwX0anAbegm+I8FV6HpFe3d9LiRLVzEsg1hDwbt/bDiog1o/ER2CSfNVGLlA92e9TO2sNvg=
+	s=arc-20240116; t=1723199543; c=relaxed/simple;
+	bh=ev/EK1AR6F6ZUr2IjZuvFJmQ7zyf0HVKj/yvMRngDaw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=G7sKu8k2RMJvFduqnUJggBPtkFW8BFEkIkNuKhtocVV9yOTutOLvXsmdZyo9qu875OreJH95dglRRNmvBWtsMiq9Xogk03UrODh8WSU13wajK8Q8lRzgDzM9DfAi4fRyRKVESo0pasXdnMS42H80fBxwFHudE8XUqacy9eoYxtE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B0DD913D5;
-	Fri,  9 Aug 2024 03:32:23 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D281E13D5;
+	Fri,  9 Aug 2024 03:32:46 -0700 (PDT)
 Received: from e116581.blr.arm.com (e116581.arm.com [10.162.42.15])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 157CC3F766;
-	Fri,  9 Aug 2024 03:31:42 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2551F3F766;
+	Fri,  9 Aug 2024 03:31:58 -0700 (PDT)
 From: Dev Jain <dev.jain@arm.com>
 To: akpm@linux-foundation.org,
 	shuah@kernel.org,
@@ -64,10 +65,12 @@ Cc: ryan.roberts@arm.com,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	Dev Jain <dev.jain@arm.com>
-Subject: [PATCH 0/2] Improve migration by backing off earlier
-Date: Fri,  9 Aug 2024 16:01:27 +0530
-Message-Id: <20240809103129.365029-1-dev.jain@arm.com>
+Subject: [PATCH 1/2] mm: Retry migration earlier upon refcount mismatch
+Date: Fri,  9 Aug 2024 16:01:28 +0530
+Message-Id: <20240809103129.365029-2-dev.jain@arm.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240809103129.365029-1-dev.jain@arm.com>
+References: <20240809103129.365029-1-dev.jain@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,37 +79,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-It was recently observed at [1] that during the folio unmapping stage
-of migration, when the PTEs are cleared, a racing thread faulting on that
-folio may increase the refcount of the folio, sleep on the folio lock
-(the migration path has the lock), and migration ultimately fails
-when asserting the actual refcount against the expected.
+As already being done in __migrate_folio(), wherein we backoff if the
+folio refcount is wrong, make this check during the unmapping phase, upon
+the failure of which, the original state of the PTEs will be restored and
+the folio lock will be dropped via migrate_folio_undo_src(), any racing
+thread will make progress and migration will be retried.
 
-Migration is a best effort service; the unmapping and the moving phase
-are wrapped around loops for retrying. The refcount of the folio is
-currently being asserted during the move stage; if it fails, we retry.
-But, if a racing thread changes the refcount, and ends up sleeping on the
-folio lock (which is mostly the case), there is no way the refcount would
-be decremented; as a result, this renders the retrying useless. In the
-first patch, we make the refcount check also during the unmap stage; if
-it fails, we restore the original state of the PTE, drop the folio lock,
-let the system make progress, and retry unmapping again. This improves the
-probability of migration winning the race.
+Signed-off-by: Dev Jain <dev.jain@arm.com>
+---
+ mm/migrate.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Given that migration is a best-effort service, it is wrong to fail the
-test for just a single failure; hence, fail the test after 100 consecutive
-failures (where 100 is still a subjective choice).
-
-[1] https://lore.kernel.org/all/20240801081657.1386743-1-dev.jain@arm.com/
-
-Dev Jain (2):
-  mm: Retry migration earlier upon refcount mismatch
-  selftests/mm: Do not fail test for a single migration failure
-
- mm/migrate.c                           |  9 +++++++++
- tools/testing/selftests/mm/migration.c | 17 +++++++++++------
- 2 files changed, 20 insertions(+), 6 deletions(-)
-
+diff --git a/mm/migrate.c b/mm/migrate.c
+index e7296c0fb5d5..477acf996951 100644
+--- a/mm/migrate.c
++++ b/mm/migrate.c
+@@ -1250,6 +1250,15 @@ static int migrate_folio_unmap(new_folio_t get_new_folio,
+ 	}
+ 
+ 	if (!folio_mapped(src)) {
++		/*
++		 * Someone may have changed the refcount and maybe sleeping
++		 * on the folio lock. In case of refcount mismatch, bail out,
++		 * let the system make progress and retry.
++		 */
++		struct address_space *mapping = folio_mapping(src);
++
++		if (folio_ref_count(src) != folio_expected_refs(mapping, src))
++			goto out;
+ 		__migrate_folio_record(dst, old_page_state, anon_vma);
+ 		return MIGRATEPAGE_UNMAP;
+ 	}
 -- 
 2.30.2
 
