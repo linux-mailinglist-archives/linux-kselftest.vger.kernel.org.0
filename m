@@ -1,119 +1,156 @@
-Return-Path: <linux-kselftest+bounces-15082-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15083-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6F8994D513
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 18:53:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5363294D527
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 19:01:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EB2A285764
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 16:53:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 863C51C2039A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 17:01:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B599D22087;
-	Fri,  9 Aug 2024 16:53:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 455F538384;
+	Fri,  9 Aug 2024 17:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e3ysCgGD"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fyZecz6t"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 533D82F855;
-	Fri,  9 Aug 2024 16:53:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D9C117C7C
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Aug 2024 17:01:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723222416; cv=none; b=Wqgy2RmDIsYAykzGZM9ymHhacSbHUqB0XE/mp9pkYuUVAJoET0Io6GsrIgV/PNSY3i0VTMLWPeZQIRKvog87DyBRNKdQDYXwOTRZnMLU7whCMVt20WmST3tyvZapf4JBoFU0gzin7d/fuZbhQyo79+G7fXz+oNgvAvvDCOX79AE=
+	t=1723222912; cv=none; b=EAe4+kj6EnqZrn4MJYvvZnWEQkvnP68mVuCQbRrLgZh9ci/67g+xZslYU6pNOJQOw+7GAq/ARuYNEW9UXp4ie17irEwhnNMz6swOCv2ebiyLpQAbPqK8DSY32I4ZT4ekfUKYrODtdjP1IZNI+v46GgTrQG+uyKjqA2wG6Wk5p+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723222416; c=relaxed/simple;
-	bh=W/q0Lo5fEvvh+mgQSJQvkXtSXnB9SHntg1Uak/T2Tog=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=fSvajX6blXo5UQNSyVdoh/0cOEsyqgmGPfAVhJrWeGR0KI1q82YET3TcyYDAF/lKUWcZTELI4jmOSH9i7A8dhWzaUCGfLooi6vCSYLV8QAg1r5SDnxieeGzktc5wDzM6VDvd43/Fb5tqxNwIMj1mLS1POH8R/8qTFCsmT/bZnqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e3ysCgGD; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7a264a24ea7so1718649a12.3;
-        Fri, 09 Aug 2024 09:53:35 -0700 (PDT)
+	s=arc-20240116; t=1723222912; c=relaxed/simple;
+	bh=kO+4Qg2Kos2wHUaffFnXRBuCVtxo8Uf72SitEfqHUNg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=l5qdB00WeOWGzjxby/qTEhY12MlN6XqU5GM2VwIqkDYuMtbd2AVwtPzyJ03xc+NzL/m5G1A0oN3yILINhgQ+kplmPO70VCZYDTINcTsbzf96FDNmQhpb4UcYRLosLcRRqHdKIHoGAkk8nKwlx0ymeLPtvDUuzO8ukAjvRlgEYTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fyZecz6t; arc=none smtp.client-ip=209.85.166.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-81fdcd41e4cso7265539f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Aug 2024 10:01:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723222414; x=1723827214; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W/q0Lo5fEvvh+mgQSJQvkXtSXnB9SHntg1Uak/T2Tog=;
-        b=e3ysCgGD4yS5BCxi534a1LSDGavOcXz70D4XTPak6TfL1R5y/t1CiHyolkDeyckjnO
-         LdDxOPrqjsAKxhaUOcrFcFKe7UNIUQS6Vnod3zRtnvYQSJA9xrK6usBnLmFL+DFzIZsz
-         uUlbOvjpVb6sbgWET05RZvLA3Q8edAW6dgAOKUSFFFu9ugd2gZqBqAVw5Vo31fUs0OkF
-         4jk9O3uSPIvhwyjLXU8iBE3jyt/hfJTOPAueqPqkPRmAAcI4PdO85qGBu4AgOJUv2bDK
-         H3AaGaTAwnsz4B3CY/MTsT2xzdRkjHnU7xUwqZ+7ZOxHS648NfW1MEofAvWI3j0YH8GR
-         Wwwg==
+        d=linuxfoundation.org; s=google; t=1723222909; x=1723827709; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cDDjHGtk+i/sBtfC6S1Ya7WBwtIwzRoHly+Mr+MUcXc=;
+        b=fyZecz6txWfWabkJ5SO8+fnoemqimtdBt2U84K9lxPKxAUN4ueK4cxRavlcFHAfud/
+         0PPAlBbmbj3PdhdfJ04l5nL664pBkc2OM5PEhSm7AtUqh+TGBZYmwN2WKk74Vmp97Fkd
+         NLrs2gAFDEcZvqzqN6f4a1cwUREZaXO5zsgSc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723222414; x=1723827214;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W/q0Lo5fEvvh+mgQSJQvkXtSXnB9SHntg1Uak/T2Tog=;
-        b=wLSE+eNg49t7djwgLMsC1sjwlNqKUfgZhzCaNyhjrQ1XtrEMUGc6iRMyqAMJmIXcdQ
-         pIvXDEC5Wd/mjY2WxMyKUaCP3C3F9YsbXxFErZjNjwn0x/ma4O6TuybDfnd4O/uwu+kF
-         yzJoktZEIRILNRh1olglyx9OZJJFu+//0GIxokpPneHnFZ93Y+XbJ1BEO6LMTZb7koN8
-         oJR3/ICb6qic6FCUW+xtJwlU9VkJnT+jrRo3ZfDXHGI7CkG2x352/S/iNmB55AkyE3GW
-         tYy8krAD2W1QdQH8Tm4zoK591px9BsM3216s1tynDKUYdolY+T7JrByPk+PrWV3nrDc7
-         S6jQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVmg6OUZs438FEh8UFn9UykR1NpBmnQY10ItEzqq8cj+DsBq/jWmbeEFfcaTfYu2UaPz5ExCeNIWpeFswtxRGBv4+jSQZY+bowWwEDvB08xZ5H1zdJBgOprWkPwdkK4VYisQ25O7hIbWVZvvI6yF+QpSKuefqruywOj0tpezZ3Hm3Twv162
-X-Gm-Message-State: AOJu0YxIn5Q3l5i+3GkxI7J5Sb05NDakdoUagNkWrodI3PDtXOQfICrF
-	f9L7hF5tfBj4m4X+x/FBezhbCNdSk0+3I3wxF9t1Y47eeOI0Uszp
-X-Google-Smtp-Source: AGHT+IGG5UW+BLY2K7kyUpG/5+/cGAzOozdPxAzCcDq6IniYY3vrKnO0nehWL7flnvtJvhpEN+dd4g==
-X-Received: by 2002:a17:90b:951:b0:2c7:aba6:d32f with SMTP id 98e67ed59e1d1-2d1e7ff2687mr2603822a91.22.1723222414471;
-        Fri, 09 Aug 2024 09:53:34 -0700 (PDT)
-Received: from dev0.. ([49.43.168.245])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d1b3b36067sm5536126a91.41.2024.08.09.09.53.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Aug 2024 09:53:33 -0700 (PDT)
-From: Abhinav Jain <jain.abhinav177@gmail.com>
-To: kuba@kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	jain.abhinav177@gmail.com,
-	javier.carrasco.cruz@gmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH v5 1/2] selftests: net: Create veth pair for testing in networkless kernel
-Date: Fri,  9 Aug 2024 16:53:26 +0000
-Message-Id: <20240809165326.382044-1-jain.abhinav177@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240808092309.2a811cf4@kernel.org>
-References: <20240808092309.2a811cf4@kernel.org>
+        d=1e100.net; s=20230601; t=1723222909; x=1723827709;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cDDjHGtk+i/sBtfC6S1Ya7WBwtIwzRoHly+Mr+MUcXc=;
+        b=LjFTat5B7y760fPrZYLRmuQeJLwIC8bbTn8qFdrcbem+DwqPz5EFi+OMBrhXgeN4EL
+         ug3Yw2D3bglkHt56wSW/bzxTIGYUPWms2zEHbe/xAGe2nBvaGW29+eO2lsUjPHsWAgiz
+         QJt8zt+QP7gQCXjJxDulYzqzxWaT7ppmwhCCft18dluZPEQL7s7d+NwWsqdeCfqEwlYI
+         qVlk6crTasCOWsr9oT3lq7/pQQvOineUzYwpsR2SrlQevhZspEMy3osUWJGOjC6a6kzL
+         FOg1JptLgnJQoVkbfF2ReyuZjrqy1Efd3GS43zwN/2wUID7JhZKc4+LNRPKz/VXOuC5P
+         AY/A==
+X-Forwarded-Encrypted: i=1; AJvYcCXN+BdyU14JX8dN1+Xc/ePPrR/Cd29tFB1m4Dnlp3IRYrOKiDs53ilXDE7XT32YEu0g6zsgWPgWqEfCMuvj4eU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwiF3RqbcNI31aPrtjgwANfor/ZSYAdhnZ4VRxeFOHUKtMTjw7A
+	mLXsZKF2LdSknNEmGgnx01DAAuFWgjRdtFR2b1SzrXqcmihUjd9EqghW/b9x7Jg=
+X-Google-Smtp-Source: AGHT+IEVM26zTJDnq4KUOavT/txNlVM1PwFY7bjzhsFY01vmETUlAlxZW29W+mujXaC/jkXCKqSlMA==
+X-Received: by 2002:a5d:9755:0:b0:822:3c35:5fc0 with SMTP id ca18e2360f4ac-8225ee4d6a1mr150211739f.3.1723222909444;
+        Fri, 09 Aug 2024 10:01:49 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ca769105cbsm9501173.27.2024.08.09.10.01.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Aug 2024 10:01:49 -0700 (PDT)
+Message-ID: <41cb60af-3175-42ab-896f-b890e51cde0d@linuxfoundation.org>
+Date: Fri, 9 Aug 2024 11:01:48 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/alsa/Makefile: fix relative rpath usage
+To: Eugene Syromiatnikov <esyr@redhat.com>
+Cc: Artem Savkov <asavkov@redhat.com>, linux-sound@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240808145639.GA20510@asgard.redhat.com>
+ <83d4e1a3-73fc-4634-b133-82b9e883b98b@linuxfoundation.org>
+ <20240809010044.GA28665@asgard.redhat.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240809010044.GA28665@asgard.redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, 8 Aug 2024 09:23:09 -0700, Jakub Kicinski wrote:
-> A number of checks now return SKIP because veth doesn't support all
-> ethtool APIs.
->
-> In netdev selftests we try to make sure SKIP is only used when test
-> cannot be performed because of limitations of the environment.
-> For example some tool is not installed, kernel doesn't have a config.
-> Something that the person running the test is able to fix by fixing
-> how the test is run.
->
-> Running this test on veth will always SKIP, nothing CI system can do.
-> Please make the test use the keyword XFAIL instead of SKIP when
-> functionality is not supported by the underlying driver.
+On 8/8/24 19:00, Eugene Syromiatnikov wrote:
+> On Thu, Aug 08, 2024 at 02:20:21PM -0600, Shuah Khan wrote:
+>> Wouldn't make sense to fix fix this in selftests main Makefile
+>> instead of changing the all the test makefiles
+> 
+> As of now, the usage of rpath is localised, so it is relatively easy
+> to evaluate the effect/prudence of such a change;  I am not so confident
+> in imposing rpath on all of the selftests (and, if doing so, I would
+> rather opt for runpath, to leave out an ability to override the search
+> path via LD_LIBRARY_PATH, if such need arises);  in that case it is possibly
+> also worth to add -L$(OUTPUT) to the CFLAGS as well, as the compile-time
+> counterpart.  But, again, I was trying to avoid the task of evaluating
+> the possible side effects of such a change, considering the variability
+> in environments and setups selftests are run.
 
-Ack, understood. I will do that, one clarification though.
-Currently, the tests are using either PASS or FAIL and no SKIP. Based on
-the above suggestion, it seems that I have replace FAIL with XFAIL for all
-the tests that fail due to functionality not being supported by the
-underlying driver.
+Okay.
 
-Please confirm if my understanding is correct and I will send a v6 of the
-series in accordance with netdev patch submission guidelines.
----
+> 
+>> Same comment on all other files.
+> 
+>> It would be easier to send these as series
+> 
+> I hesitated to do so due to the fact that different selftests are seemingly
+> maintained by different people.
+
+You can cc everybody on the cover-letter explaining the change
+and the individual patches can be sent selectively.
+
+This is a kind of change it would be good to go as a series so
+it will be easier for reviewers.
+
+I had to comment on all 3 patches you sent - instead I could have
+sent one reply to the cover letter. It makes it so much easier for
+people to follow the discussion and add to it.
+
+> 
+>> please mentioned the tests run as well after this change.
+> 
+> I have checked the ldd output after the change remained the same (and that ldd
+> is able to find the libraries used when run outside the directory the tests
+> reside in) and did a cursory check of the results of the run of the affected
+> tests
+
+Please mention that then in the change log.
+
+I applied this patch and ran alsa test without any issues. You
+could do the same with:
+
+make kselftest TARGETS=alsa
+
+(but not so sure about the BPF selftests, as they don't compile as-is
+> due to numerous "incompatible pointer types" warnings that are forced
+> into errors by -Werror and the fact that it hanged the machine I tried
+> to run them on).
+> 
+
+I see a bpf patch from you in the inbox - if you mention the issues bpf
+people might be able to help you.
+
+I am not replying to your other patches. Take these as comments on others
+as well.
+
+thanks,
+-- Shuah
+
+
 
