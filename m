@@ -1,252 +1,163 @@
-Return-Path: <linux-kselftest+bounces-15061-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15062-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E51E94CC25
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 10:25:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 547DF94CC95
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 10:46:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DCAADB23F37
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 08:25:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E54CF1F238B9
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 08:46:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 162FB18DF8F;
-	Fri,  9 Aug 2024 08:25:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56E2618E047;
+	Fri,  9 Aug 2024 08:45:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="J5y08/sJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XKomwMlS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA0017556C;
-	Fri,  9 Aug 2024 08:25:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723191944; cv=pass; b=MtCUnLPbYqlbGn96MQrQ8lj6il7ISE4/VCWFBW0weBuVp9RcXWIC/0YhY8YAGnnGDYjwOhp5ngvOUX3SoKaydW3r/HQn0zyEJqFwDjgbmzctvcHP1NoTDmlvUbnlbgyFIIiTj2UiJmWUqDin7gtUrK/ZmY92pb8KYkxGHIDOObM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723191944; c=relaxed/simple;
-	bh=hNhkS5s4pZ/TvPiMVzZP4/+E4B4Kp6Tp4r2or3Nb49g=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=LOcsIEG3lJvUNfIpGV/tBAkgpIjaBRlwVpwBpUDdyxIUh28JSxlxQhSEXJFtNJOEdx6hcuRk/QewBP8O0nk4d+Jss4J/NiBDc9638cAiM2RZTJiu62rX8Dk4ljLc+gxPW3FwJeNpriO380T9C3vp09hq94OGXRToKDLlRgx+19Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=J5y08/sJ; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Delivered-To: usama.anjum@collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1723191931; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=X5r0Hj1uIIiLsjBYiKa6Z37Abt5npPlrIY9CPYNSQjGU8ICmGL7Dmdo6rxJm3FKZOQ4eESI+mJUjdYJE+Dmc4f3sMVV+9wXlDNMbgoayjDrroQXRwIy6kTc5FhEZ/0O0Zg8QuTJHIVhIki0qh5koPVO/PNPeBirrsfTn075Ck74=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1723191931; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=ARoGuwCRmzTNnu/zj+XGQUUTD1/UnUzYPaVkcwelbf8=; 
-	b=n2L+1UcFnl5J/P9X9bzVXOyKpO/aTZZ6Fo2AaF9d0fEYbNa0d4kGeIkhU05xmieTSr5/oaXihqXcRw/1hJmjMGt+5KqX8soK4llU8h4UUwAoBQNVZvlCvxzutRoVkf2W2HRsqWGmR9HRUPAxYfqllni70Ig6iJk6DXVZQKIdU48=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
-	dmarc=pass header.from=<usama.anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1723191931;
-	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=ARoGuwCRmzTNnu/zj+XGQUUTD1/UnUzYPaVkcwelbf8=;
-	b=J5y08/sJWA/tUY8j5hz3pFViQRkicFYOGrpqydElIaUGGgFtoieRS2zEGS0NKx38
-	FB7MvyyWlMP1ciJHyCAW0A/YIUJ3UcQD9z7ulLk+g4icNRjjKHpbh67L2QCj1z1b7bw
-	qE5GvcexW8dK94Em0/m3iPSuNsRitistGVh0sf00=
-Received: by mx.zohomail.com with SMTPS id 1723191930315384.302913310908;
-	Fri, 9 Aug 2024 01:25:30 -0700 (PDT)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Jeff Xu <jeffxu@chromium.org>,
-	Kees Cook <kees@kernel.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	kernel@collabora.com,
-	stable@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: mm: Fix build errors on armhf
-Date: Fri,  9 Aug 2024 13:25:11 +0500
-Message-Id: <20240809082511.497266-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8546219E1;
+	Fri,  9 Aug 2024 08:45:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723193159; cv=none; b=hzTHx9LbkYbhd9AM7jMwPPpzOyxHSkCHWlD9L0ET779LfZjSkKmZGrAP+arvs0vu9kq2TMSEFj7vhUJW6xatVdbA4fCZyjUYciOn42L1P3UkwBuYiI/UtIDzBnTmLRBhCU0eWaLy2yIsnN7DCdHnwt6bLp91d0Vj67E1Knjc9WQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723193159; c=relaxed/simple;
+	bh=wEhcj53DkrlZmffVI00o4H9SljxYA7hs7RXC4Jh+eTw=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=rRTyHxqNqEiBubfs6D29pPe1iwrzdkkMh2Qj2zJFDbSJ7wk34shl+xrTk0+LsoOdb5A60SwkttRe/wtncSmRDBlYB59RNd10/nKjabJm+7zNeCfn9TSK9XNg+489IifZ+TkOM4L6AKyN/VWHYtr86wmQisDd0VDgXNUen2yu28E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XKomwMlS; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1723193158; x=1754729158;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=wEhcj53DkrlZmffVI00o4H9SljxYA7hs7RXC4Jh+eTw=;
+  b=XKomwMlSehdviTSyeLzWhtki1tJscinnJ2LOGUHitxqYPfae12ERMuWz
+   WEws7ALLe8RNFnSuzE1v7e6n/3qBQBqV1/RkbBOxrx9I3AaavOzSwY6/E
+   HYDoW5VIMwFUjAeqT4Ub0ZdyHPCmJVIiPh8BdDgmwh0Q3iTHr5C7DmQT0
+   akHPz9+vv6GsRrFmh5Bs8G1cz1UxZxpy+pxi6XzLzOelse30YE3qbxocm
+   TVhILjsKvWtAZEj81wp8uQhC9zD1K8NWsTM/qI5S3tI1yFxAAdaKc/9Vi
+   PRn3QQ7QxaPDGZo4r9aBN9BhQAf/PEl1cuPdBTZhY0aPqnewfjOGfOucD
+   Q==;
+X-CSE-ConnectionGUID: DLz+7GDMQNKHrweEz2x+yg==
+X-CSE-MsgGUID: ZoqlrVNcQBmFUs3Ganfc/g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11158"; a="32505126"
+X-IronPort-AV: E=Sophos;i="6.09,275,1716274800"; 
+   d="scan'208";a="32505126"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2024 01:45:57 -0700
+X-CSE-ConnectionGUID: opBM65RkRL+uosEHDpSRDw==
+X-CSE-MsgGUID: QOAfpaoASRm4xvWeXWQ0fw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.09,275,1716274800"; 
+   d="scan'208";a="57161883"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.245.119])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2024 01:45:53 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 9 Aug 2024 11:45:50 +0300 (EEST)
+To: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
+cc: Fenghua Yu <fenghua.yu@intel.com>, 
+    Reinette Chatre <reinette.chatre@intel.com>, 
+    Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>, kernel@collabora.com, 
+    Shuah Khan <skhan@linuxfoundation.org>, 
+    LKML <linux-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org, 
+    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>
+Subject: Re: [PATCH] selftests: resctrl: ignore builds for unsupported
+ architectures
+In-Reply-To: <080c4692-c53c-417f-9975-0b4ced0b044c@collabora.com>
+Message-ID: <f7593344-203a-8e73-d53e-574ca511d003@linux.intel.com>
+References: <20240809071059.265914-1-usama.anjum@collabora.com> <d60cf782-9ab0-ed4a-0b3e-ba7a73ae8d51@linux.intel.com> <080c4692-c53c-417f-9975-0b4ced0b044c@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Content-Type: multipart/mixed; BOUNDARY="8323328-280030225-1723192289=:1401"
+Content-ID: <e640bbdd-99ee-22b9-28b0-2dfdef844a94@linux.intel.com>
 
-The __NR_mmap isn't found on armhf. The mmap() is commonly available
-system call and its wrapper is presnet on all architectures. So it
-should be used directly. It solves problem for armhf and doesn't create
-problem for architectures as well. Remove sys_mmap() functions as they
-aren't doing anything else other than calling mmap(). There is no need
-to set errno = 0 manually as glibc always resets it.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-For reference errors are as following:
+--8323328-280030225-1723192289=:1401
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <961a97e4-08a8-5b5e-d23b-d78ff5216cdc@linux.intel.com>
 
-  CC       seal_elf
-seal_elf.c: In function 'sys_mmap':
-seal_elf.c:39:33: error: '__NR_mmap' undeclared (first use in this function)
-   39 |         sret = (void *) syscall(__NR_mmap, addr, len, prot,
-      |                                 ^~~~~~~~~
+Adding Maciej.
 
-mseal_test.c: In function 'sys_mmap':
-mseal_test.c:90:33: error: '__NR_mmap' undeclared (first use in this function)
-   90 |         sret = (void *) syscall(__NR_mmap, addr, len, prot,
-      |                                 ^~~~~~~~~
+On Fri, 9 Aug 2024, Muhammad Usama Anjum wrote:
+> On 8/9/24 12:23 PM, Ilpo J=E4rvinen wrote:
+> > On Fri, 9 Aug 2024, Muhammad Usama Anjum wrote:
+> >=20
+> >> This test doesn't have support for other architectures. Altough resctr=
+l
+> >> is supported on x86 and ARM, but arch_supports_noncont_cat() shows tha=
+t
+> >> only x86 for AMD and Intel are supported by the test.
+> >=20
+> > One does not follow from the other. arch_supports_noncont_cat() is only=
+=20
+> > small part of the tests so saying "This test" based on a small subset o=
+f=20
+> > all tests is bogus. Also, I don't see any reason why ARCH_ARM could not=
+ be=20
+> > added and arch_supports_noncont_cat() adapted accordingly.
+> I'm not familiar with resctrl and the architectural part of it. Feel
+> free to fix it and ignore this patch.
+>=20
+> If more things are missing than just adjusting
+> arch_supports_noncont_cat(), the test should be turned off until proper
+> support is added to the test.
+>
+> >> We get build
+> >> errors when built for ARM and ARM64.
+> >=20
+> > As this seems the real reason, please quote any errors when you use the=
+m=20
+> > as justification so it can be reviewed if the reasoning is sound or not=
+=2E
+>=20
+>   CC       resctrl_tests
+> In file included from resctrl.h:24,
+>                  from cat_test.c:11:
+> In function 'arch_supports_noncont_cat',
+>     inlined from 'noncont_cat_run_test' at cat_test.c:323:6:
+> ../kselftest.h:74:9: error: impossible constraint in 'asm'
+>    74 |         __asm__ __volatile__ ("cpuid\n\t"
+>        \
+>       |         ^~~~~~~
+> cat_test.c:301:17: note: in expansion of macro '__cpuid_count'
+>   301 |                 __cpuid_count(0x10, 1, eax, ebx, ecx, edx);
+>       |                 ^~~~~~~~~~~~~
+> ../kselftest.h:74:9: error: impossible constraint in 'asm'
+>    74 |         __asm__ __volatile__ ("cpuid\n\t"
+>        \
+>       |         ^~~~~~~
+> cat_test.c:303:17: note: in expansion of macro '__cpuid_count'
+>   303 |                 __cpuid_count(0x10, 2, eax, ebx, ecx, edx);
+>       |                 ^~~~~~~~~~~~~
 
-Cc: stable@vger.kernel.org
-Fixes: 4926c7a52de7 ("selftest mm/mseal memory sealing")
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/mm/mseal_test.c | 37 +++++++++----------------
- tools/testing/selftests/mm/seal_elf.c   | 13 +--------
- 2 files changed, 14 insertions(+), 36 deletions(-)
+Okay, so it's specific to lack of CPUID. This seems a kselftest common=20
+level problem to me, since __cpuid_count() is provided in kselftest.h.
 
-diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
-index a818f010de479..bfcea5cf9a484 100644
---- a/tools/testing/selftests/mm/mseal_test.c
-+++ b/tools/testing/selftests/mm/mseal_test.c
-@@ -81,17 +81,6 @@ static int sys_mprotect_pkey(void *ptr, size_t size, unsigned long orig_prot,
- 	return sret;
- }
- 
--static void *sys_mmap(void *addr, unsigned long len, unsigned long prot,
--	unsigned long flags, unsigned long fd, unsigned long offset)
--{
--	void *sret;
--
--	errno = 0;
--	sret = (void *) syscall(__NR_mmap, addr, len, prot,
--		flags, fd, offset);
--	return sret;
--}
--
- static int sys_munmap(void *ptr, size_t size)
- {
- 	int sret;
-@@ -172,7 +161,7 @@ static void setup_single_address(int size, void **ptrOut)
- {
- 	void *ptr;
- 
--	ptr = sys_mmap(NULL, size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	ptr = mmap(NULL, size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
- 	*ptrOut = ptr;
- }
- 
-@@ -181,7 +170,7 @@ static void setup_single_address_rw(int size, void **ptrOut)
- 	void *ptr;
- 	unsigned long mapflags = MAP_ANONYMOUS | MAP_PRIVATE;
- 
--	ptr = sys_mmap(NULL, size, PROT_READ | PROT_WRITE, mapflags, -1, 0);
-+	ptr = mmap(NULL, size, PROT_READ | PROT_WRITE, mapflags, -1, 0);
- 	*ptrOut = ptr;
- }
- 
-@@ -205,7 +194,7 @@ bool seal_support(void)
- 	void *ptr;
- 	unsigned long page_size = getpagesize();
- 
--	ptr = sys_mmap(NULL, page_size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	ptr = mmap(NULL, page_size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
- 	if (ptr == (void *) -1)
- 		return false;
- 
-@@ -481,8 +470,8 @@ static void test_seal_zero_address(void)
- 	int prot;
- 
- 	/* use mmap to change protection. */
--	ptr = sys_mmap(0, size, PROT_NONE,
--			MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
-+	ptr = mmap(0, size, PROT_NONE,
-+		   MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
- 	FAIL_TEST_IF_FALSE(ptr == 0);
- 
- 	size = get_vma_size(ptr, &prot);
-@@ -1209,8 +1198,8 @@ static void test_seal_mmap_overwrite_prot(bool seal)
- 	}
- 
- 	/* use mmap to change protection. */
--	ret2 = sys_mmap(ptr, size, PROT_NONE,
--			MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
-+	ret2 = mmap(ptr, size, PROT_NONE,
-+		    MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
- 	if (seal) {
- 		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
- 		FAIL_TEST_IF_FALSE(errno == EPERM);
-@@ -1240,8 +1229,8 @@ static void test_seal_mmap_expand(bool seal)
- 	}
- 
- 	/* use mmap to expand. */
--	ret2 = sys_mmap(ptr, size, PROT_READ,
--			MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
-+	ret2 = mmap(ptr, size, PROT_READ,
-+		    MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
- 	if (seal) {
- 		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
- 		FAIL_TEST_IF_FALSE(errno == EPERM);
-@@ -1268,8 +1257,8 @@ static void test_seal_mmap_shrink(bool seal)
- 	}
- 
- 	/* use mmap to shrink. */
--	ret2 = sys_mmap(ptr, 8 * page_size, PROT_READ,
--			MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
-+	ret2 = mmap(ptr, 8 * page_size, PROT_READ,
-+		    MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
- 	if (seal) {
- 		FAIL_TEST_IF_FALSE(ret2 == MAP_FAILED);
- 		FAIL_TEST_IF_FALSE(errno == EPERM);
-@@ -1650,7 +1639,7 @@ static void test_seal_discard_ro_anon_on_filebacked(bool seal)
- 	ret = fallocate(fd, 0, 0, size);
- 	FAIL_TEST_IF_FALSE(!ret);
- 
--	ptr = sys_mmap(NULL, size, PROT_READ, mapflags, fd, 0);
-+	ptr = mmap(NULL, size, PROT_READ, mapflags, fd, 0);
- 	FAIL_TEST_IF_FALSE(ptr != MAP_FAILED);
- 
- 	if (seal) {
-@@ -1680,7 +1669,7 @@ static void test_seal_discard_ro_anon_on_shared(bool seal)
- 	int ret;
- 	unsigned long mapflags = MAP_ANONYMOUS | MAP_SHARED;
- 
--	ptr = sys_mmap(NULL, size, PROT_READ, mapflags, -1, 0);
-+	ptr = mmap(NULL, size, PROT_READ, mapflags, -1, 0);
- 	FAIL_TEST_IF_FALSE(ptr != (void *)-1);
- 
- 	if (seal) {
-diff --git a/tools/testing/selftests/mm/seal_elf.c b/tools/testing/selftests/mm/seal_elf.c
-index 7aa1366063e4e..d9f8ba8d5050b 100644
---- a/tools/testing/selftests/mm/seal_elf.c
-+++ b/tools/testing/selftests/mm/seal_elf.c
-@@ -30,17 +30,6 @@ static int sys_mseal(void *start, size_t len)
- 	return sret;
- }
- 
--static void *sys_mmap(void *addr, unsigned long len, unsigned long prot,
--	unsigned long flags, unsigned long fd, unsigned long offset)
--{
--	void *sret;
--
--	errno = 0;
--	sret = (void *) syscall(__NR_mmap, addr, len, prot,
--		flags, fd, offset);
--	return sret;
--}
--
- static inline int sys_mprotect(void *ptr, size_t size, unsigned long prot)
- {
- 	int sret;
-@@ -56,7 +45,7 @@ static bool seal_support(void)
- 	void *ptr;
- 	unsigned long page_size = getpagesize();
- 
--	ptr = sys_mmap(NULL, page_size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	ptr = mmap(NULL, page_size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
- 	if (ptr == (void *) -1)
- 		return false;
- 
--- 
-2.39.2
+Shuah (or others), what is the intended mechanism for selftests to know if=
+=20
+it can be used or not since as is, it's always defined?
 
+I see some Makefiles use compile testing a trivial program to decide whethe=
+r=20
+they build some x86_64 tests or not. Is that what should be done here too,=
+=20
+test if __cpuid_count() compiles or not (and then build some #ifdeffery=20
+based on the result of that compile testing)?
+
+--=20
+ i.
+--8323328-280030225-1723192289=:1401--
 
