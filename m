@@ -1,146 +1,194 @@
-Return-Path: <linux-kselftest+bounces-15076-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15077-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8083894D3D6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 17:45:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A544794D3DD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 17:45:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 306942847BE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 15:45:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9A141C20F4B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 15:45:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99B3919414A;
-	Fri,  9 Aug 2024 15:45:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DACA41991A5;
+	Fri,  9 Aug 2024 15:45:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ags7VAjT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W4XRIGju"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0557F18C93F
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Aug 2024 15:45:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1CCA1990C3;
+	Fri,  9 Aug 2024 15:45:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723218315; cv=none; b=P9bwxvSvqwp00kjxyRTWqWkPgRtAp8zs0UuZFjMGq4Pu3yxXEhhwcVLcj55lpTzIzV3lVhlrapKiKf3JtoLB0CVmEHQueOazfTCJ5DgRsIk1s4shRve2gXEKJoGqJm5CS3KdiCNmLJaX+EntUUSMvnmE/X+ZwNVdQyAEJpX7GOg=
+	t=1723218323; cv=none; b=o77Qps3mt2JAQoidVyVSxRUAu7eRZgeVpFxy/IttbUJgbPQwrRg6rHqzYpU1OaVhxau9fY5oZMBtHUUK1u0bghz6UaK92ChQ4wcw3oPQ7jx1vEih8EvQfZZe3BEC0XCX3I4KFNrRz1V6kstggbuZ8kLFLNHbeU1v8gerpqdZuCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723218315; c=relaxed/simple;
-	bh=4xKAdAddRSzH31ADhKLaPGKj1tnhAdZ+HE6xwKWHgfw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=pAoReWobpfCLKdN8nBw2CJzID8Xwj8Y8/8qx3ZZaUsc3Nl11o4gCXiyqCn6/mNxauN7Han5og2qZnkAS5AcUFBee/ESwZ5RRuwtfJVPPQGfU+D1v2TKU2c60Qx3XC/kpMaxtJkr3LNHJ+OrAvXbLB12/XHiRNIjSrlIhU/U3upw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ags7VAjT; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6886cd07673so49891147b3.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Aug 2024 08:45:13 -0700 (PDT)
+	s=arc-20240116; t=1723218323; c=relaxed/simple;
+	bh=Bd6gp8vS1KnlhuO7wKJxo1DLFOwvyo1WP/CqGQTLnXQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FXcOi6frJN0oXRrUnuo1RRu7xLeXIFz/3dqz6btKCPsYmSuDF+/qQaBocCkzZMmddp0xHS4HfEpZpyJhYMFGUqYh7yMivcArpPTH4muRpfXCz17b1tsvP0bWiB7E9iCEjXtvrpZLUDdU/rPdoXovkQHIKIiPcFYXq8hEroEc9Js=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W4XRIGju; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a7ac469e4c4so366688866b.0;
+        Fri, 09 Aug 2024 08:45:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723218313; x=1723823113; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ufzxNYpm833F4D+it9EVre+p13feWMXlScCKKRbhPtg=;
-        b=Ags7VAjTEKTy69FBDkWR/XJ5jldPb/DhIGL4gTq7FIeNqV0WdSc28yWvkCj8XOANxF
-         1jviKApndwtFJNKzB/hgm9dX3I+3WiWBTREUUHqnAgQazJWQ4YnpZE7U8Kj1ceOuNus5
-         WjusSSsDTsAvG7kwQXam1lCgkj9o3bRbdrvkiFkHNNsX/p0oZkulGvXw5TC/QiSJ4pP0
-         eRRgiYDxt65JJd0NTTJlWGFG1xjqD1ZDYzz0SNb9FoDrE994jSA+KFGCLe4ryVwg4yUt
-         UR8HuqTOUBLSvuV6IDSU0cyXRzM2MRtWtkG1j1nEosOtFmKtKWUb9LIqSD2n2jljhQ3H
-         JTzQ==
+        d=gmail.com; s=20230601; t=1723218320; x=1723823120; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Wa1W3WV7VpGrEaPcisbcd/cWnkBoUbT/sIRi8LearZg=;
+        b=W4XRIGjulb1hhqjAyCp1O8TsdHK84PqMuKKM93hSEjVdTnLzQkSRL90qAOFYqhdc2x
+         GHHRQ6iOT4UtmN3GVhlzQjLa0vDteJEAyLn714ra0LYy3BuponwmsNGMW/Vslir6VdCC
+         v+hTJYFqi3DEF+FXs2c6a4WeWQ8IerANOeYarjUGhAP4fxi/3U992SwlEA2kuBFZopgb
+         XkxENzw3feEJkIzmv5il4b/5DJAJb8mLi8fNOZrvMQpxWz/SBRJXJ4GHzhwDqmGAQ1ou
+         BtpoCepeF9L/xlED6ZgqbH1/56yaTKh4461zxjnMxi8WFonr1C7T14acXOjq/DSDHhGH
+         SzmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723218313; x=1723823113;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ufzxNYpm833F4D+it9EVre+p13feWMXlScCKKRbhPtg=;
-        b=YDb7zqOmJpIMUqXuTxu8Seuihv4d+CIbWKT3CTeBPZiQsOBpgu3bdhW3PLvCr4A09j
-         Fxns8QjuZdkfJgC3Q/z03f5qjlx+sSe2VFnyJk5f8vlcekyXKP0VVhNAQYxurECLh84i
-         dTyWkVThy+x3lgbw5AOoqOTnBfjlC2GcLOVMze9RA7M2Hdr71xwWK4UUHlDNGs8M0WjB
-         UaYR7KTUaEkbC6SsYe/S/YZgVB9JZcBYeMEqfcI7zhbM+/gKYbKD1YbZkPjgX/8/Jl2/
-         t7cnAnEJdei8ppHoDmJsBoul5YBjH+QvWXrf5mZnrJQVOgILl2kYpYq+/UbRvHl3SUa7
-         LJiA==
-X-Forwarded-Encrypted: i=1; AJvYcCU7yhsp9Vh7aB1tfR8bNWmxwyE/iHZCcAfJf6DCBd2hv5OztqflCwzIR7Ap7TH9M1oOfN/6jXehd8oHCHASrQ4zRsLDAxNDa5N6UJ9Cx+xx
-X-Gm-Message-State: AOJu0YwMqfeuXANTIlYBupwf2twIcx/ZNWff4gjvlsT5HqoJzd0vowbu
-	NLRvaY7Yf2uko8KpLk8oulRvIjg+xX9OMXNygQS29b9nxaEVeRUfu7mmyhbQGjEzFjUVjPXP1cX
-	icw==
-X-Google-Smtp-Source: AGHT+IGmKxWqzG8EPgakjna8JtWGPg62vJdK+0Bc2Qodmrlh2F+IyIYu6Pp5IsmyEemyLyeZWsSJxb5C0rY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:690c:2f04:b0:65c:1db1:9235 with SMTP id
- 00721157ae682-69ebf29b861mr647807b3.0.1723218312835; Fri, 09 Aug 2024
- 08:45:12 -0700 (PDT)
-Date: Fri, 9 Aug 2024 08:45:11 -0700
-In-Reply-To: <98c1f8e2-3b24-49c4-b5fc-506e4283248d@amd.com>
+        d=1e100.net; s=20230601; t=1723218320; x=1723823120;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Wa1W3WV7VpGrEaPcisbcd/cWnkBoUbT/sIRi8LearZg=;
+        b=xIIjkLwrXoma+d/hYXaVKjoUW1yxiBMWJvWC92d95xm7YMETni6VkPKuvGxvPQ1Hj5
+         ihjFrxc5mOzKA5ip9CedgUaTV0a+n+cEilyOXuU0SxVOLMZrm8/6INcJ2g3P55QAqsUw
+         6JBqubANfazW+hgyh5Ldt2s/rrIgMNgFZQsgMI4+wRjyRJ33DMqPyQwqSOO3608YBAkb
+         d1HdD5voBvpsBxDPplLg7nqcOfJJRCmbzT27Uq/bVnc/MoqtFMkjZkIm8PJwPXehDDaS
+         gVpr33Atdn4Yueq+8URtwyooMjld6L5GQwyJx12/RIBYMd15rOgd5gWcrI2tyG5KGyuA
+         Er8w==
+X-Forwarded-Encrypted: i=1; AJvYcCWh11OvVxxylBmePJXMeNLWZ+psob5agcVwUIU/0NtWNfocc+5cedl+ogFaUWOceQKCLbtZqMz50Rbo4yz22maNRgxDE7zigUXbA+o3vxjqJxDDXeoiqIrUv41LrExF8L2yHawBAK5b4frFexEt6CIfv425yjuTYD6DbAh7zWS3PGHRZupYAw3f79UqzF5Xl/GCi3A9MlPqHAxbVoA3uuxNNSJSq66UQoUEqKVKuwT8INUFXHp8r8goCKUniByQzBpYm2SI9Gth6QBPYw6e0qQFbDn6sDRIzpPVfgmIWLyHSFpt7105PFi+ynhB1CPkkAyrGUzE0zJZAzPANOx/L9aIDbEaJQsYxEYGehaQ+QV9LX3lj33R/LwICNcjIlfhgKz4AoKH9ARGIroMLK1BkPFlrrBXl2zc3stNyqxNLUFrifK3Nmkz8zx/+Wm69cDg6h2A5unnHqqFBSBY4dkPdPGO+k/v2p0mixd5dWMTQQ==
+X-Gm-Message-State: AOJu0YztZaIFx2AatPbhRTbcpSwEYFLaToikQzct0+VFDUdUET4TcY1T
+	p415RZPlkcrbJfWwFG9Akvf+TP3khg7Me8ee0W4qFUopFUfLkGn7
+X-Google-Smtp-Source: AGHT+IGaWJiDPaSc3UHkzWGM2j8RhpJMnAUdZZgUzu3ws85xIf7phwHYyeL4ZJReXHb3Sd+69ayIRw==
+X-Received: by 2002:a17:907:6d14:b0:a7a:8a38:9d99 with SMTP id a640c23a62f3a-a80aba196d6mr130567366b.35.1723218319823;
+        Fri, 09 Aug 2024 08:45:19 -0700 (PDT)
+Received: from [192.168.42.29] (82-132-212-15.dab.02.net. [82.132.212.15])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9e80e77sm847390266b.169.2024.08.09.08.45.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Aug 2024 08:45:19 -0700 (PDT)
+Message-ID: <fc6a8f0a-cdb4-4705-a08f-7033ef15213e@gmail.com>
+Date: Fri, 9 Aug 2024 16:45:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240710220540.188239-1-pratikrajesh.sampat@amd.com>
- <20240710220540.188239-4-pratikrajesh.sampat@amd.com> <8870ca39-f5a9-8d33-3372-77a6693ad739@amd.com>
- <98c1f8e2-3b24-49c4-b5fc-506e4283248d@amd.com>
-Message-ID: <ZrY5h746smS4j5ak@google.com>
-Subject: Re: [RFC 3/5] selftests: KVM: SEV IOCTL test
-From: Sean Christopherson <seanjc@google.com>
-To: Pratik Rajesh Sampat <pratikrajesh.sampat@amd.com>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>, kvm@vger.kernel.org, shuah@kernel.org, 
-	michael.roth@amd.com, pbonzini@redhat.com, pgonda@google.com, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v18 07/14] memory-provider: dmabuf devmem memory
+ provider
+To: Mina Almasry <almasrymina@google.com>, Jakub Kicinski <kuba@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Arnd Bergmann <arnd@arndb.de>,
+ Steffen Klassert <steffen.klassert@secunet.com>,
+ Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>,
+ Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20240805212536.2172174-1-almasrymina@google.com>
+ <20240805212536.2172174-8-almasrymina@google.com>
+ <20240806135924.5bb65ec7@kernel.org>
+ <CAHS8izOA80dxpB9rzOwv7Oe_1w4A7vo5S3c3=uCES8TSnjyzpg@mail.gmail.com>
+ <20240808192410.37a49724@kernel.org>
+ <CAHS8izMH4UhD+UDYqMjt9d=gu-wpGPQBLyewzVrCWRyoVtQcgA@mail.gmail.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CAHS8izMH4UhD+UDYqMjt9d=gu-wpGPQBLyewzVrCWRyoVtQcgA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 11, 2024, Pratik Rajesh Sampat wrote:
-> >> +static void sev_guest_status_assert(struct kvm_vm *vm, uint32_t type)
-> >> +{
-> >> +	struct kvm_sev_guest_status status;
-> >> +	bool cond;
-> >> +	int ret;
-> >> +
-> >> +	ret = __vm_sev_ioctl(vm, KVM_SEV_GUEST_STATUS, &status);
-> >> +	cond = type == KVM_X86_SEV_VM ? !ret : ret;
-> >> +	TEST_ASSERT(cond,
-> >> +		    "KVM_SEV_GUEST_STATUS should fail, invalid VM Type.");
-> >> +}
-> >> +
-> >> +static void test_sev_launch(void *guest_code, uint32_t type, uint64_t policy)
-> >> +{
-> >> +	struct kvm_vcpu *vcpu;
-> >> +	struct kvm_vm *vm;
-> >> +	struct ucall uc;
-> >> +	bool cond;
-> >> +	int ret;
-> >> +
-> > 
-> > Maybe a block comment here indicating what you're actually doing would
-> > be good, because I'm a bit confused.
-> > 
-> > A policy value of 0 is valid for SEV, so you expect each call to
-> > succeed, right? And, actually, for SEV-ES the launch start will succeed,
-> > too, but the launch update will fail because LAUNCH_UPDATE_VMSA is not
-> > valid for SEV, but then the launch measure should succeed. Is that
-> > right? What about the other calls?
-> > 
+On 8/9/24 15:10, Mina Almasry wrote:
+> On Thu, Aug 8, 2024 at 10:24 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>>
+>> On Thu, 8 Aug 2024 16:36:24 -0400 Mina Almasry wrote:
+>>>> How do you know that the driver:
+>>>>   - supports net_iov at all (let's not make implicit assumptions based
+>>>>     on presence of queue API);
+>>>>   - supports net_iov in current configuration (eg header-data split is
+>>>>     enabled)
+>>>>   - supports net_iov for _this_ pool (all drivers must have separate
+>>>>     buffer pools for headers and data for this to work, some will use
+>>>>     page pool for both)
+>>>>
+>>>> What comes to mind is adding an "I can gobble up net_iovs from this
+>>>> pool" flag in page pool params (the struct that comes from the driver),
+>>>
+>>> This already sorta exists in the current iteration, although maybe in
+>>> an implicit way. As written, drivers need to set params.queue,
+>>> otherwise core will not attempt to grab the mp information from
+>>> params.queue. A driver can set params.queue for its data pages pool
+>>> and not set it for the headers pool. AFAICT that deals with all 3
+>>> issues you present above.
+>>>
+>>> The awkward part is if params.queue starts getting used for other
+>>> reasons rather than passing mp configuration, but as of today that's
+>>> not the case so I didn't add the secondary flag. If you want a second
+>>> flag to be added preemptively, I can do that, no problem. Can you
+>>> confirm params.queue is not good enough?
+>>
+>> I'd prefer a flag. The setting queue in a param struct is not a good
+>> API for conveying that the page pool is for netmem payloads only.
+>>
+>>>> and then on the installation path we can check if after queue reset
+>>>> the refcount of the binding has increased. If it did - driver has
+>>>> created a pool as we expected, otherwise - fail, something must be off.
+>>>> Maybe that's a bit hacky?
+>>>
+>>> What's missing is for core to check at binding time that the driver
+>>> supports net_iov. I had relied on the implicit presence of the
+>>> queue-API.
+>>>
+>>> What you're proposing works, but AFAICT it's quite hacky, yes. I
+>>> basically need to ASSERT_RTNL in net_devmem_binding_get() to ensure
+>>> nothing can increment the refcount while the binding is happening so
+>>> that the refcount check is valid.
+>>
+>> True. Shooting from the hip, but we could walk the page pools of the
+>> netdev and find the one that has the right mp installed, and matches
+>> queue? The page pools are on a list hooked up to the netdev, trivial
+>> to walk.
+>>
 > 
-> Sure, I can do that.
-> Yes for SEV, the policy value of 0 succeeds for everything except when
-> we try to run and we see a KVM_EXIT_IO.
-> 
-> For SEV-ES, with the policy value of 0 - we don't see launch_start
-> succeed. It fails with EIO in this case. Post that all the calls for
-> SEV-ES also fail subsequent to that. I guess the core idea behind this
-> test is to ensure that once the first bad case of launch_start fails, we
-> should see a cascading list of failures.
->
-> >> +	vm = vm_sev_create_with_one_vcpu(type, guest_code, &vcpu);
-> >> +	ret = sev_vm_launch_start(vm, 0);
-> >> +	cond = type == KVM_X86_SEV_VM ? !ret : ret;
-> >> +	TEST_ASSERT(cond,
+> I think this is good, and it doesn't seem hacky to me, because we can
+> check the page_pools of the netdev while we hold rtnl, so we can be
+> sure nothing is messing with the pp configuration in the meantime.
+> Like you say below it does validate the driver rather than rely on the
+> driver saying it's doing the right thing. I'll look into putting this
+> in the next version.
 
-Don't bury the result in a local boolean.  It's confusing, and _worse_ for debug
-as it makes it impossible to see what actually failed (the assert message will
-simply print "cond", which is useless).
+Why not have a flag set by the driver and advertising whether it
+supports providers or not, which should be checked for instance in
+netdev_rx_queue_restart()? If set, the driver should do the right
+thing. That's in addition to a new pp_params flag explicitly telling
+if pp should use providers. It's more explicit and feels a little
+less hacky.
 
-
-> >> +		    "KVM_SEV_LAUNCH_START should fail, invalid policy.");
-
-This is a blatant lie, because the KVM_X86_SEV_VM case apparently expects success.
-Similar to Tom's comments about explaing what this code is doing, these assert
-messages need to explain what the actually expected result it, provide a hint as
-to _why_ that result is expected, and print the result.  As is, this will be
-unnecessarily difficult to debug if/when it fails.
+-- 
+Pavel Begunkov
 
