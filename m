@@ -1,71 +1,40 @@
-Return-Path: <linux-kselftest+bounces-15087-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15088-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C27E94D551
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 19:21:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 974B394D59A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 19:43:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3A31B20BBE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 17:20:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F044280D79
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 17:43:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB71947F69;
-	Fri,  9 Aug 2024 17:20:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="UNzLhwPm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C54817E59A;
+	Fri,  9 Aug 2024 17:43:54 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F250828689
-	for <linux-kselftest@vger.kernel.org>; Fri,  9 Aug 2024 17:20:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D40E60DCF;
+	Fri,  9 Aug 2024 17:43:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723224052; cv=none; b=MnBt8c22+f7IbITLIheqFskP12y7xL2eYzwY9QonPBAdGv+vlqzGwOjWTsQHcfgpa0mNzRIm2KCrLY+WAsGU3ZkVzv89q9Pv05DRWCGDCzN5SF8wdnzqBYVrLIdkdXYqkHAVFoqdpTkkQy5faGxUxj9GIwESIep5inM9i/57sWI=
+	t=1723225434; cv=none; b=AlOzw1P2T1XFeQQNzb+9uPS0iiuNW+Jc13cNM5cbqRObZuF/bxlE67EuLcw8lyZDWpqtoNSW1ahEZ/inHm2DVdiy8jPVuYPukicqFXlAYup+6csxFRAC/geoxo/2kXXCUt6hyriNxqNH+Ut3yHhztko5tmAryascre7LnlVDqJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723224052; c=relaxed/simple;
-	bh=VX0GHmStDkrYMdFhonCa5iBMpED55dhUQufG4AGVFbE=;
+	s=arc-20240116; t=1723225434; c=relaxed/simple;
+	bh=cM/0CrQLED8CsE5zqK/fBlp7UuuJHwRTMRWCvCDrJxk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hCJ0xZSd3MeIUNLiOt1W7stL0y+dR0VnNMUJr/i8tApVTPUl3OPtckYCAgFiSbQVontn8teC5vYl5wOxMJhQ/s0vMOSFtSQZMs3nHLMBJIruZ4rPOB141HWBfrvQL44tMoweLdQj08Bw3Asb8rdzAkE4f1ZbduUyoVe5ldJyOi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=UNzLhwPm; arc=none smtp.client-ip=209.85.166.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-812796ac793so8430239f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 09 Aug 2024 10:20:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1723224050; x=1723828850; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=V0VlmBrSrKPI0nvLOBL3lacDzUDCnPoKiOWhQVarU+s=;
-        b=UNzLhwPmbH71csQ4hTt2BRT2yjrbaD2HoXPdX911ai05lPTjOpkIiex212lLVMRTtv
-         9XrODhQfbY1qETG1anDW5GVgQdNcpDliw465t8D1+n3qmmHHGdC8foXVLmxA3dR6/VtI
-         4EWsDLe6OSlbYFvWXASZOuUDqL912ab9ce9nU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723224050; x=1723828850;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V0VlmBrSrKPI0nvLOBL3lacDzUDCnPoKiOWhQVarU+s=;
-        b=wy7J4o16hhAdtYJQrcMt99qg1WT14wefCCFegGTMsCcZOJE+0McaEkFKecSL7D0eUp
-         bF2HFj0yZh7Ptuvs8BQUkRekwwEREl3nLi5k3inFGv9yEGLhDO7P8CA/TxeyPQhfx4OI
-         GqDMebeX3CL3fqp81THSaTk5ZPg6ZTcwNqf5KkIYUNh/ss2GptolKKdRltbT9yCVch6r
-         bVDshvpqrLf1rY2oY9iAaIkHQZF6tnHYYFeXzDVxbtZansEj1ssrJVGV7cXULV62UHVL
-         j+Y6eBzEXIpoRW8Ln1Ma59RSscICukiWnUISH3XsPmdQyz2PHTY2ZBvsh5vNbk5CgyJr
-         kKEw==
-X-Forwarded-Encrypted: i=1; AJvYcCVDnFS+pXDlyPZtA63zRGmELp3NqaMc8/bj/3ONN+1O0dr3KbAzHIr8Qjb4ZE19u8JBVh1T4S0Pi/4GNEENTTA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywaew1ZEkA0bejJppu8A9CAhhIWy/Y4Ku9CUNrQtaBihGw3uyxS
-	6H/YlOOzeHTfqnP4YINTjStHoD14TAUIxccc+SKOQ+8KNJpyjIVcwjkd+7rrV4s=
-X-Google-Smtp-Source: AGHT+IFCIxawOy6BLCebkOf6m3SU/t1bf8oP/2bn7t0rnS01Eibjkom6BbLknNPEfkJ4Vfow8JDQhw==
-X-Received: by 2002:a5d:97ce:0:b0:81f:8f3a:5689 with SMTP id ca18e2360f4ac-8225ecc63d8mr174936339f.0.1723224049926;
-        Fri, 09 Aug 2024 10:20:49 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ca769102e2sm19814173.10.2024.08.09.10.20.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 09 Aug 2024 10:20:49 -0700 (PDT)
-Message-ID: <4c709253-50de-45ee-9cbf-8bed65eff857@linuxfoundation.org>
-Date: Fri, 9 Aug 2024 11:20:48 -0600
+	 In-Reply-To:Content-Type; b=rO+vItfaagGelcXB2HLAB35MhI4W11k8qBDCJUPHHgGX4dLerg2ic0yK93TRBBCtzqa81S8rmiO0LmQawiUHpP9fSMkpcp8t+aK/Dva7Wz6r8mQKz7Iyd25zaiUnRK6nGicovzqQzD0Zc8oFD6Qjs7kSL/Yi8+2izM6+RVrpbUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BBA3A13D5;
+	Fri,  9 Aug 2024 10:44:17 -0700 (PDT)
+Received: from [10.57.46.232] (unknown [10.57.46.232])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 35A9B3F6A8;
+	Fri,  9 Aug 2024 10:43:50 -0700 (PDT)
+Message-ID: <f4c4a142-d0bb-44c5-8bb9-56136c8f7cf2@arm.com>
+Date: Fri, 9 Aug 2024 18:43:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,57 +42,125 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: compaction_test: Fix off by one in
- check_compaction()
-To: Dan Carpenter <dan.carpenter@linaro.org>, Dev Jain <dev.jain@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <87470c06-b45a-4e83-92ff-aac2e7b9c6ba@stanley.mountain>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <87470c06-b45a-4e83-92ff-aac2e7b9c6ba@stanley.mountain>
+Subject: Re: [PATCH v2 2/3] iommu/dma: Support MSIs through nested domains
+To: "Tian, Kevin" <kevin.tian@intel.com>, Nicolin Chen <nicolinc@nvidia.com>
+Cc: "jgg@nvidia.com" <jgg@nvidia.com>, "joro@8bytes.org" <joro@8bytes.org>,
+ "will@kernel.org" <will@kernel.org>, "shuah@kernel.org" <shuah@kernel.org>,
+ "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+References: <cover.1722644866.git.nicolinc@nvidia.com>
+ <b1b8ff9c716f22f524be0313ad12e5c6d10f5bd4.1722644866.git.nicolinc@nvidia.com>
+ <BN9PR11MB5276E59FBD67B1119B3E2A858CBF2@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <6da4f216-594b-4c51-848c-86e281402820@arm.com>
+ <ZrVN05VylFq8lK4q@Asurada-Nvidia>
+ <BN9PR11MB5276D9387CB50D58E4A7585F8CBA2@BN9PR11MB5276.namprd11.prod.outlook.com>
+From: Robin Murphy <robin.murphy@arm.com>
+Content-Language: en-GB
+In-Reply-To: <BN9PR11MB5276D9387CB50D58E4A7585F8CBA2@BN9PR11MB5276.namprd11.prod.outlook.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 8/9/24 06:32, Dan Carpenter wrote:
-> The "initial_nr_hugepages" variable is unsigned long so it takes up to
-> 20 characters to print, plus 1 more character for the NUL terminator.
-> Unfortunately, this buffer is not quite large enough for the terminator
-> to fit.  Also use snprintf() for a belt and suspenders approach.
+On 2024-08-09 9:00 am, Tian, Kevin wrote:
+>> From: Nicolin Chen <nicolinc@nvidia.com>
+>> Sent: Friday, August 9, 2024 7:00 AM
+>>
+>> On Thu, Aug 08, 2024 at 01:38:44PM +0100, Robin Murphy wrote:
+>>> On 06/08/2024 9:25 am, Tian, Kevin wrote:
+>>>>> From: Nicolin Chen <nicolinc@nvidia.com>
+>>>>> Sent: Saturday, August 3, 2024 8:32 AM
+>>>>>
+>>>>> From: Robin Murphy <robin.murphy@arm.com>
+>>>>>
+>>>>> Currently, iommu-dma is the only place outside of IOMMUFD and
+>> drivers
+>>>>> which might need to be aware of the stage 2 domain encapsulated
+>> within
+>>>>> a nested domain. This would be in the legacy-VFIO-style case where
+>> we're
+>>>>
+>>>> why is it a legacy-VFIO-style? We only support nested in IOMMUFD.
+>>>
+>>> Because with proper nesting we ideally shouldn't need the host-managed
+>>> MSI mess at all, which all stems from the old VFIO paradigm of
+>>> completely abstracting interrupts from userspace. I'm still hoping
+>>> IOMMUFD can grow its own interface for efficient MSI passthrough, where
+>>> the VMM can simply map the physical MSI doorbell into whatever IPA (GPA)
+>>> it wants it to appear at in the S2 domain, then whatever the guest does
+>>> with S1 it can program the MSI address into the endpoint accordingly
+>>> without us having to fiddle with it.
+>>
+>> Hmm, until now I wasn't so convinced myself that it could work as I
+>> was worried about the data. But having a second thought, since the
+>> host configures the MSI, it can still set the correct data. What we
+>> only need is to change the MSI address from a RMRed IPA/gIOVA to a
+>> real gIOVA of the vITS page.
+>>
+>> I did a quick hack to test that loop. MSI in the guest still works
+>> fine without having the RMR node in its IORT. Sweet!
+>>
+>> To go further on this path, we will need the following changes:
+>> - MSI configuration in the host (via a VFIO_IRQ_SET_ACTION_TRIGGER
+>>    hypercall) should set gIOVA instead of fetching from msi_cookie.
+>>    That hypercall doesn't forward an address currently, since host
+>>    kernel pre-sets the msi_cookie. So, we need a way to forward the
+>>    gIOVA to kernel and pack it into the msi_msg structure. I haven't
+>>    read the VFIO PCI code thoroughly, yet wonder if we could just
+>>    let the guest program the gIOVA to the PCI register and fall it
+>>    through to the hardware, so host kernel handling that hypercall
+>>    can just read it back from the register?
+>> - IOMMUFD should provide VMM a way to tell the gPA (or directly +
+>>    GITS_TRANSLATER?). Then kernel should do the stage-2 mapping. I
+>>    have talked to Jason about this a while ago, and we have a few
+>>    thoughts how to implement it. But eventually, I think we still
+>>    can't avoid a middle man like msi_cookie to associate the gPA in
+>>    IOMMUFD to PA in irqchip?
 > 
-> Fixes: fb9293b6b015 ("selftests/mm: compaction_test: fix bogus test success and reduce probability of OOM-killer invocation")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> ---
->   tools/testing/selftests/mm/compaction_test.c | 5 +++--
->   1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
-> index e140558e6f53..2c3a0eb6b22d 100644
-> --- a/tools/testing/selftests/mm/compaction_test.c
-> +++ b/tools/testing/selftests/mm/compaction_test.c
-> @@ -89,9 +89,10 @@ int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
->   	int fd, ret = -1;
->   	int compaction_index = 0;
->   	char nr_hugepages[20] = {0};
-> -	char init_nr_hugepages[20] = {0};
-> +	char init_nr_hugepages[24] = {0};
+> Probably a new IOMMU_DMA_MSI_COOKIE_USER type which uses
+> GPA (passed in in ALLOC_HWPT for a nested_parent type) as IOVA
+> in iommu_dma_get_msi_page()?
 
-Can we exceed this limit too? Can you make this a define?
+No, the whole point is to get away from cookies and having to keep track 
+of things in the kernel that can and should just be simple regular 
+user-owned S2 mappings.
 
->   
-> -	sprintf(init_nr_hugepages, "%lu", initial_nr_hugepages);
-> +	snprintf(init_nr_hugepages, sizeof(init_nr_hugepages),
-> +		 "%lu", initial_nr_hugepages);
->   
->   	/* We want to test with 80% of available memory. Else, OOM killer comes
->   	   in to play */
+>> One more concern is the MSI window size. VMM sets up a MSI region
+>> that must fit the hardware window size. Most of ITS versions have
+>> only one page size but one of them can have multiple pages? What
+>> if vITS is one-page size while the underlying pITS has multiple?
+>>
+>> My understanding of the current kernel-defined 1MB size is also a
+>> hard-coding window to potential fit all cases, since IOMMU code in
+>> the code can just eyeball what's going on in the irqchip subsystem
+>> and adjust accordingly if someday it needs to. But VMM can't?
 
-With that change:
+The existing design is based around the kernel potentially having to 
+stuff multiple different mappings for different devices into the MSI 
+hole in a single domain, since VFIO userspace is allowed to do wacky 
+things like emulate INTx using an underlying physical MSI, so there may 
+not be any actual vITS region in the VM IPA space at all. I think that 
+was also why it ended up being a fake reserved region exposed by the 
+SMMU drivers rather than relying on userspace to say where to put it - 
+making things look superficially a bit more x86-like meant fewer changes 
+to userspace, which I think by now we can consider a tasty slice of 
+technical debt.
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+For a dedicated "MSI passthrough" model where, in parallel to IOMMU 
+nesting, the abstraction is thinner and userspace is in on the game of 
+knowingly emulating a GIC ITS backed by a GIC ITS, I'd imagine it could 
+be pretty straightforward, at least conceptually. Userspace has 
+something like an IOAS_MAP_MSI(device, IOVA) to indicate where it's 
+placing a vITS to which it wants that device's MSIs to be able to go, 
+the kernel resolves the PA from the IRQ layer and maps it, job done. If 
+userspace wants to associate two devices with the same vITS when they 
+have different physical ITSes, either we split the IOAS into two HWPTs 
+to hold the different mappings, or we punt it back to userspace to 
+resolve at the IOAS level.
 
-thanks,
--- Shuah
+Or I guess the really cheeky version is the IRQ layer exposes its own 
+thing for userspace to mmap the ITS, then it can call a literal IOAS_MAP 
+on that mapping... :D
+
+Thanks,
+Robin.
 
