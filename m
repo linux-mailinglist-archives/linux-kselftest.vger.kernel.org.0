@@ -1,266 +1,206 @@
-Return-Path: <linux-kselftest+bounces-15072-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15073-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17B3894D05F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 14:42:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16B8B94D189
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 15:48:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 979531F220EC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 12:42:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3AEC51C20F92
+	for <lists+linux-kselftest@lfdr.de>; Fri,  9 Aug 2024 13:48:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AABD1946B4;
-	Fri,  9 Aug 2024 12:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F4F0196455;
+	Fri,  9 Aug 2024 13:47:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CUw2dkSz"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UT81Uh87"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2065.outbound.protection.outlook.com [40.107.236.65])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3817717BBF;
-	Fri,  9 Aug 2024 12:42:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723207323; cv=fail; b=ttMyr3UK0mCMeuW0PveGG6GBQV41PGgApFjQxqRWPnzdJ1uSU5Zr4wAI5JN7xZEopwAAXo8UKh6Q9rFV2nQb0JL+hEz3T8Dy3iMnd+/pDp++Zr8lY8nfD4pgn166LOuqzMauPYKJqxlV5PdhVDtOyfpTiqRk3zjVwVXMmy6G7U0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723207323; c=relaxed/simple;
-	bh=1Sb2JDa2+GvAjwE5wHptupHvE/b6bFhESbqATNcbNi8=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=Iddvjg2PjUSDqPWZibYs0a9vmmvtG11LfEZQ5zd+ydUVD6La3PjcXYY2uOC0R33JzJuEmvPdkqm3+mk/QUpIOkx1doHRYnl+V59ttm6IzvrNRs79AYTGRunuL8MjLmRYTj6dRRfDxwOrcM5w9ilrwcfAA8bqh4atNq/aLMrgeOY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=CUw2dkSz; arc=fail smtp.client-ip=40.107.236.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Svj2QzklO85WISOvFEA4KlSyodyUeJ6QzJ9IbSCKKTV1MuXQCC3t5A8uBylWdR8t8rKeYbyHTtDMF4HKj2nCYmIZ1IwFSv4+ycu4mio7S6o+QpFljgk6MNuqbqpNj30GVdZRKIHMAe/r3uP7eGsOLURlBKyWNY8ZIsdK54CsxbLBsFe5ryVl0pKXQ4crV3wD5IhPFgSc5Dv+/2O5PyP8SRlHXbLISXo45kvuRO67gzEiw6oJ69PDxrhwbRmcKgwEnHdihg0jVgtnkg2FrUmVulQuedIqbWx7oAWtPrdPawQwY4Hx+q4qWzF2htjM9DGdnkuCj6wmQIY8a71NKMAnXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=k6U8AnFHhYc5GYUoDDwBAozX7pSH1Q/qlxP6P8+gErQ=;
- b=LYZThu/OhysQDSugQo1pBbynxpqPg9uPrK/LpCXFPWIxUV3IQIhVUErL9xNBkC12Fesd/UK8O/tm0uKzh2anL/zhhNZedE+/vqQme/RV9eHr7pBVXW/GP3vtXPUz4r3Z6YPuv0YOwLGOxAbeEHTOcmzn8Ddu/dCc9cq0bfxNA5SfontIPit67rTjKII4wdz3y8sU2/GxxX3fnbmnCWEME73J8glibT5SFDPzvdrXInWHpcAhoS5Pf604pu0YINifCLBugp6+mT7EAKOaADutOO2MjXxxKUivGbVftieZlaWknhGGAQjlfsfOAm8d8FSAVhFBOyPGJL2YWTQupdLBHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=k6U8AnFHhYc5GYUoDDwBAozX7pSH1Q/qlxP6P8+gErQ=;
- b=CUw2dkSz1aO/O8CONMLym1MjIDC/zi+fM5K71d6q44JsN0d+lUugoops+WlnCQGAH842+rFDp8Y0LHkNr7IlFc7X0MhnRMeTi5X7xJE6FCkwEFA0vsR1PLQmQZOMnPBMaGdy1JTH/0fxN8TBgHgDnKEQpZvd5M8KFewGA3lkegLb5FylHW6yROqyPnmO+TeTyRfpfgCWT2gr0I9SAc1vo/rDdMMfIWe5pUo3nxzOfo8+eaar0eBunJG4MvLegb6Ltz91fpNSbWbI/Ydneb1KJW28/Y8rC8jc3UulKxLTm1inX4Wi9QeTpV7vw5+PR6U4H6I8kjba9zEJiP0aOjJpcQ==
-Received: from BN9PR03CA0793.namprd03.prod.outlook.com (2603:10b6:408:13f::18)
- by PH0PR12MB5679.namprd12.prod.outlook.com (2603:10b6:510:14f::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.14; Fri, 9 Aug
- 2024 12:41:57 +0000
-Received: from BL02EPF0001A100.namprd03.prod.outlook.com
- (2603:10b6:408:13f:cafe::51) by BN9PR03CA0793.outlook.office365.com
- (2603:10b6:408:13f::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7828.31 via Frontend
- Transport; Fri, 9 Aug 2024 12:41:56 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL02EPF0001A100.mail.protection.outlook.com (10.167.242.107) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7828.19 via Frontend Transport; Fri, 9 Aug 2024 12:41:56 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 9 Aug 2024
- 05:41:36 -0700
-Received: from fedora (10.126.230.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Fri, 9 Aug 2024
- 05:41:31 -0700
-References: <20240807002445.3833895-1-mohsin.bashr@gmail.com>
-User-agent: mu4e 1.8.14; emacs 29.4
-From: Petr Machata <petrm@nvidia.com>
-To: Mohsin Bashir <mohsin.bashr@gmail.com>
-CC: <netdev@vger.kernel.org>, <shuah@kernel.org>, <davem@davemloft.net>,
-	<edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-	<willemb@google.com>, <petrm@nvidia.com>, <dw@davidwei.uk>,
-	<przemyslaw.kitszel@intel.com>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next v2] selftests: net: py: support verbose
- printing, display executed commands
-Date: Fri, 9 Aug 2024 14:36:17 +0200
-In-Reply-To: <20240807002445.3833895-1-mohsin.bashr@gmail.com>
-Message-ID: <87jzgpna14.fsf@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69415195FEC
+	for <linux-kselftest@vger.kernel.org>; Fri,  9 Aug 2024 13:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723211277; cv=none; b=Ldf2q7XxSxpXHD8W0KlN7MMYgtLa4WsoRyvKEgZnxnvwamsQNAeeREd+r6xkbqryD4lmBJfYB+ATf86u50YX2faPpXdRyS97ppRnx7aH8fLGKKaqdXtwnYvMI5H8YImJjghHl69l0F+Q0YjK3ybLCQ5cyDFk0TzFFHg/ggtKjAA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723211277; c=relaxed/simple;
+	bh=h/gETMxwSX7PKWGfoK6CtdX0CU+AONkas3R8CWNCc4w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LAg+YdYl02bO1OSeGwW6tKrfNINdnXaXAnM6+rLO68dzCdB96kfx/pD1DvjX1g253LTFUPUeQVnmwXfsO6PRNDO1VhbFJgN/M2yTvvd8ebuoPBQH4yRmCLMcLCYWay1KgMVLJ+ITGfbnai+jJDWZG7/G1ZjxWAKs3diEJFbq9Ac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UT81Uh87; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1723211274;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=abAgUi1+Zy9/7Tnhw4Fiy6iRsAPB01YF1mBbZxXtcPw=;
+	b=UT81Uh87wSmwLbjvzPL9jVCgRfIgVXMYw0Suivl64Rjuu+aSXvN5mwPp4k7zHONFO1/6Ly
+	eKHnK/JLAZyOY3wpE8QYTeYBP0NdDmeoAoOfE05p19X1G8jy3t8VOxxdiH/Owscp6LbW9s
+	tw3sJZ5spZgBuimNPD1g15jeXDpMLE4=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-564-dSUnlNvWMFiGoozeK3bZxw-1; Fri, 09 Aug 2024 09:47:53 -0400
+X-MC-Unique: dSUnlNvWMFiGoozeK3bZxw-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-428076fef5dso14742165e9.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 09 Aug 2024 06:47:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723211272; x=1723816072;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=abAgUi1+Zy9/7Tnhw4Fiy6iRsAPB01YF1mBbZxXtcPw=;
+        b=BIct7F1QwLTXkFtLoEMKhwJBRg2mSoWx3ct2bNnSfClCpViYzXoJgyv9YoVeLK3h7N
+         eLjQJ8rlsoiq6p/TihXRu4u2S1O65ed8O99euvkhdQn+F4wEmO/NOVIPJR9XiMhJq1oq
+         NxcRCxiBvk2B76LdqP3LFD98fMD4b+3dnLLHUUUBj7YDxPC35GAXUvMapSm9XZOwCAOz
+         EdZjwcHINUJvJas8xtVScEghLZJBPXNn5NnYMJz9yYtwlsDHQAOFwYA9jyF9YGPivRtP
+         e56u85Xo/8M4v870PnXM74yzgR0Irbgt0WGrzkWpzHAwJ2aG+r5svxLlvkXuE3SwGaWv
+         0TPQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWxCXY79gHaaEyw03/xtL+7mY2c9IQxzzw9RNUJzgx8pcnHvnGcQqVOSSZVZeRKqi0wCjRyE2J9iBvll3mrrxiUtEZnWLJvFxNR96dICwAV
+X-Gm-Message-State: AOJu0YyT8rC13PkYSfIQ5r1Zvdhz3k4bPqdTijUojtfyY0hNSEiA0Sjy
+	jPe31ZVbWE0yZ0RRazmDzeYJKTvQeM1XWZ+46IVPajXwnaPRCmLN7t94FcBrtWpcDjVCQNJRB7B
+	y7nl2gb/cxXjLifkakRdrnm1YLFC8ZY/ukpJezm5stv8CTY+srE7UrbfO8D6mdM+mMw==
+X-Received: by 2002:a05:600c:81e:b0:426:6ed2:6130 with SMTP id 5b1f17b1804b1-429c3a22f76mr10113355e9.14.1723211271806;
+        Fri, 09 Aug 2024 06:47:51 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH9qBwJZyeDlqvfoQ6FAb16ltqAXPnmsE5wmIP3HkLigyWZbF2pZDcU9Kn8974AQAtPb2jfSA==
+X-Received: by 2002:a05:600c:81e:b0:426:6ed2:6130 with SMTP id 5b1f17b1804b1-429c3a22f76mr10113115e9.14.1723211271304;
+        Fri, 09 Aug 2024 06:47:51 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f09:3f00:d228:bd67:7baa:d604? (p200300d82f093f00d228bd677baad604.dip0.t-ipconnect.de. [2003:d8:2f09:3f00:d228:bd67:7baa:d604])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429059713c4sm132070245e9.12.2024.08.09.06.47.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 09 Aug 2024 06:47:50 -0700 (PDT)
+Message-ID: <761ba58e-9d6f-4a14-a513-dcc098c2aa94@redhat.com>
+Date: Fri, 9 Aug 2024 15:47:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0001A100:EE_|PH0PR12MB5679:EE_
-X-MS-Office365-Filtering-Correlation-Id: 04da7bc9-0bd2-4b3d-d697-08dcb870a791
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|1800799024|7416014|82310400026|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?rIfXBb3sv2u0PCaDr6RJQUCBkltDr/BowXWAj1vcVWgTvcJZEZ0479gUmP2o?=
- =?us-ascii?Q?Xbievy7yIKNjDuh1Z/dLPsztGkludYSepqJmgksK9Ek3x5y+kcEpY0SknUMb?=
- =?us-ascii?Q?n1El4/3FopxEs3FNA5J9vyqZ8K0GBL5cxZ+9cTF2BqtACMtlI/z77uCVWj1L?=
- =?us-ascii?Q?J3bL8ev7Scb2KCLEUXvyezIqhB+TvVEV2ANLsJJgZAHg8n+PakFj0wf27yoc?=
- =?us-ascii?Q?vz4b+bj7gU+nNyoI5aZKB6Fu7JN9/Hyfa+mtD/nJellvfyPFOzYRYk0mFbs0?=
- =?us-ascii?Q?qrTUFlsI2oHNo1qLzQuM/cyTCY4Rj0xjTMtxp2u812rbX7syHKMFxvnj1wAl?=
- =?us-ascii?Q?8So/rDhI0oN2XJ3NB2G0aLHSrqU1/46RkDJ/G6FXB97o4G04T14P2/2tT3ED?=
- =?us-ascii?Q?8T1vb+972JazCOH8BpWzh38u8mYiACJFI69+EJ/ndYOW6n8Yyeeh0uvlj2TV?=
- =?us-ascii?Q?l9BM17j1PzGVouDhWBlK619OxXIOVvxviw8u5f8s+YiTA/Mhd0CX2W5MaJdH?=
- =?us-ascii?Q?arHSMX7yiEZ6oYDu8+18ug27PqiY+An28fGeu7XcEGTgeONw7UDYiLx4o87V?=
- =?us-ascii?Q?8TC8FEh2w+S+jODPfYm/II9/xYUPVjTL77lQ5PGCgXDUMutD0vG+P2WUBQrq?=
- =?us-ascii?Q?PTtRUfmI7A26LhlF0bRmIij6DLUBTi55rzHQPGLHlwRycAM+uiaQpM/1w1PD?=
- =?us-ascii?Q?A3QIv6NATqHx4PtnWZZvr/aajK7Alzo1nrChjvXRWAlKx1oEouB5NxlxaU+c?=
- =?us-ascii?Q?FVbMJjqRTc23TWAVG2ao3VTdIWXdXvvuaThIJd0TIu4U8OmIxiCSWzxZ1SLO?=
- =?us-ascii?Q?23M/LiwFkyKwPwRbXNjjHjiRYCkyZb/+YoJln5pc78nbR4VkacmlzzlErhVO?=
- =?us-ascii?Q?IPUly0PZ66H2d/cU61EBQXTWjciPPdJBQk+tkdDcAmHAx+/XdYQnOZdqNzCT?=
- =?us-ascii?Q?JlUWOTGdWNG3rIkICCAZ6RjgIjdZ3l6utgTNeUqPSEJwhGy5JFRRZmHl8YNQ?=
- =?us-ascii?Q?ncUMcjCDKCaX4H1WUK1HgIlizWHbbulvxrfxESuO9d/SYYMTjxVSJT9IItCy?=
- =?us-ascii?Q?YILYvLIV9TPeoZPdwbuMVsB5JJGq3q/V5hM67L31ZNaqGGbFACsn+goVqHK/?=
- =?us-ascii?Q?wUZIuU3MbVk6fY7comn8Sf+m/+nqjxrDvQkTbkbomQi6SMxXG5FXcWA4Uuev?=
- =?us-ascii?Q?Aeg0wP/x5Wdww66Ofu5KYdxmAMyfEaEgSCflpLFQgvEloJOrlfj6pEg4QYGs?=
- =?us-ascii?Q?VisFnlg7xVlGIFur9a06eO3SeC0/c14IkNivUqtvadQYmotWiNpTs+c+s1PB?=
- =?us-ascii?Q?94VgNBPpnevPs73AjHu/lkyCBoOW2EWHSKtCV7P5Jrz/4Pi2INKOCSEHxzuY?=
- =?us-ascii?Q?peMLrNGgt41sqgwCndOM6htIpQ3z64SWovjBMqTbneDkq05g6xuv6RWbuPPE?=
- =?us-ascii?Q?Sq9l0PWhEe+ZJG7fhMbYWE03KwaQ683j?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(7416014)(82310400026)(376014);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2024 12:41:56.4937
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 04da7bc9-0bd2-4b3d-d697-08dcb870a791
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0001A100.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5679
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] mm: Retry migration earlier upon refcount mismatch
+To: Dev Jain <dev.jain@arm.com>, akpm@linux-foundation.org, shuah@kernel.org,
+ willy@infradead.org
+Cc: ryan.roberts@arm.com, anshuman.khandual@arm.com, catalin.marinas@arm.com,
+ cl@gentwo.org, vbabka@suse.cz, mhocko@suse.com, apopple@nvidia.com,
+ osalvador@suse.de, baolin.wang@linux.alibaba.com,
+ dave.hansen@linux.intel.com, will@kernel.org, baohua@kernel.org,
+ ioworker0@gmail.com, gshan@redhat.com, mark.rutland@arm.com,
+ kirill.shutemov@linux.intel.com, hughd@google.com, aneesh.kumar@kernel.org,
+ yang@os.amperecomputing.com, peterx@redhat.com, broonie@kernel.org,
+ mgorman@techsingularity.net, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+References: <20240809103129.365029-1-dev.jain@arm.com>
+ <20240809103129.365029-2-dev.jain@arm.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <20240809103129.365029-2-dev.jain@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-Mohsin Bashir <mohsin.bashr@gmail.com> writes:
-
-> Add verbosity support to show the commands executed while
-> running tests. Enable verbosity if either an environment
-> variable 'VERBOSE' is set to a non-zero number or it is defined
-> in a config file under driver tests as discussed here:
-> https://github.com/linux-netdev/nipa/wiki/Running-driver-tests.
->
-> Signed-off-by: Mohsin Bashir <mohsin.bashr@gmail.com>
+On 09.08.24 12:31, Dev Jain wrote:
+> As already being done in __migrate_folio(), wherein we backoff if the
+> folio refcount is wrong, make this check during the unmapping phase, upon
+> the failure of which, the original state of the PTEs will be restored and
+> the folio lock will be dropped via migrate_folio_undo_src(), any racing
+> thread will make progress and migration will be retried.
+> 
+> Signed-off-by: Dev Jain <dev.jain@arm.com>
 > ---
-> Changes in v2:
-> - change verbosity_ctl to set_verbosity
-> - remove redundency in the code
->
-> v1: https://lore.kernel.org/netdev/20240715030723.1768360-1-mohsin.bashr@gmail.com
->
->  .../selftests/drivers/net/lib/py/env.py       |  6 ++++-
->  .../testing/selftests/net/lib/py/__init__.py  |  4 +++
->  tools/testing/selftests/net/lib/py/utils.py   | 26 +++++++++++++++++++
->  3 files changed, 35 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/drivers/net/lib/py/env.py b/tools/testing/selftests/drivers/net/lib/py/env.py
-> index 1ea9bb695e94..c7cf52d9b988 100644
-> --- a/tools/testing/selftests/drivers/net/lib/py/env.py
-> +++ b/tools/testing/selftests/drivers/net/lib/py/env.py
-> @@ -5,7 +5,7 @@ import time
->  from pathlib import Path
->  from lib.py import KsftSkipEx, KsftXfailEx
->  from lib.py import ksft_setup
-> -from lib.py import cmd, ethtool, ip
-> +from lib.py import cmd, ethtool, ip, set_verbosity
->  from lib.py import NetNS, NetdevSimDev
->  from .remote import Remote
->  
-> @@ -31,6 +31,10 @@ def _load_env_file(src_path):
->              if len(pair) != 2:
->                  raise Exception("Can't parse configuration line:", full_file)
->              env[pair[0]] = pair[1]
+>   mm/migrate.c | 9 +++++++++
+>   1 file changed, 9 insertions(+)
+> 
+> diff --git a/mm/migrate.c b/mm/migrate.c
+> index e7296c0fb5d5..477acf996951 100644
+> --- a/mm/migrate.c
+> +++ b/mm/migrate.c
+> @@ -1250,6 +1250,15 @@ static int migrate_folio_unmap(new_folio_t get_new_folio,
+>   	}
+>   
+>   	if (!folio_mapped(src)) {
+> +		/*
+> +		 * Someone may have changed the refcount and maybe sleeping
+> +		 * on the folio lock. In case of refcount mismatch, bail out,
+> +		 * let the system make progress and retry.
+> +		 */
+> +		struct address_space *mapping = folio_mapping(src);
 > +
-> +    env_level = env.get('VERBOSE')
-> +    set_verbosity(env_level)
-> +
+> +		if (folio_ref_count(src) != folio_expected_refs(mapping, src))
+> +			goto out;
 
-Actually, the ksft_setup() here was merged last week, and I think that
-would be a better place to put this stuff. It already handles
-DISRUPTIVE, it should IMHO handle VERBOSE as well.
+This really seems to be the latest point where we can "easily" back off 
+and unlock the source folio -- in this function :)
 
->      return ksft_setup(env)
->  
->  
-> diff --git a/tools/testing/selftests/net/lib/py/__init__.py b/tools/testing/selftests/net/lib/py/__init__.py
-> index b6d498d125fe..eb4860dea26a 100644
-> --- a/tools/testing/selftests/net/lib/py/__init__.py
-> +++ b/tools/testing/selftests/net/lib/py/__init__.py
-> @@ -1,8 +1,12 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
-> +import os
->  from .consts import KSRC
->  from .ksft import *
->  from .netns import NetNS
->  from .nsim import *
->  from .utils import *
->  from .ynl import NlError, YnlFamily, EthtoolFamily, NetdevFamily, RtnlFamily
-> +
-> +env_level = os.environ.get('VERBOSE')
-> +set_verbosity(env_level)
-> diff --git a/tools/testing/selftests/net/lib/py/utils.py b/tools/testing/selftests/net/lib/py/utils.py
-> index 72590c3f90f1..d475f131a598 100644
-> --- a/tools/testing/selftests/net/lib/py/utils.py
-> +++ b/tools/testing/selftests/net/lib/py/utils.py
-> @@ -8,11 +8,35 @@ import socket
->  import subprocess
->  import time
->  
-> +VERBOSITY_LEVEL = 0
-> +
->  
->  class CmdExitFailure(Exception):
->      pass
->  
->  
-> +def set_verbosity(level=None):
-> +    global VERBOSITY_LEVEL
-> +
-> +    if level is not None:
-> +        try:
-> +            level = int(level)
-> +        except ValueError as e:
-> +            print(f'Ignoring \'VERBOSE\'. Unknown value \'{level}\'')
-> +            level = 0
-> +
-> +        VERBOSITY_LEVEL = level
-> +
-> +    return VERBOSITY_LEVEL
-> +
-> +
-> +def verbose(*objs, **kwargs):
-> +    global VERBOSITY_LEVEL
-> +
-> +    if VERBOSITY_LEVEL >= 1:
-> +        print(*objs, **kwargs)
-> +
-> +
->  class cmd:
->      def __init__(self, comm, shell=True, fail=True, ns=None, background=False, host=None, timeout=5):
->          if ns:
-> @@ -22,6 +46,8 @@ class cmd:
->          self.stderr = None
->          self.ret = None
->  
-> +        verbose("#cmd|", comm)
-> +
->          self.comm = comm
->          if host:
->              self.proc = host.cmd(comm)
+I wonder if we should be smarter in the migrate_pages_batch() loop when 
+we start the actual migrations via migrate_folio_move(): if we detect 
+that a folio has unexpected references *and* it has waiters 
+(PG_waiters), back off then and retry the folio later. If it only has 
+unexpected references, just keep retrying: no waiters -> nobody is 
+waiting for the lock to make progress.
+
+For example, when migrate_folio_move() fails with -EAGAIN, check if 
+there are waiters (PG_waiter?) and undo+unlock to try again later.
+
+But I'm not really a migration expert, so only my 2 cents :)
+
+>   		__migrate_folio_record(dst, old_page_state, anon_vma);
+>   		return MIGRATEPAGE_UNMAP;
+>   	}
+
+-- 
+Cheers,
+
+David / dhildenb
 
 
