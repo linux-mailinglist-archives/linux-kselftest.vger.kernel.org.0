@@ -1,82 +1,82 @@
-Return-Path: <linux-kselftest+bounces-15109-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15110-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABE0694DC4E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Aug 2024 12:33:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9120F94DC50
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Aug 2024 12:35:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F8771F21B3A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Aug 2024 10:33:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F40E281D18
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Aug 2024 10:35:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D07514EC62;
-	Sat, 10 Aug 2024 10:33:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0867D156C4B;
+	Sat, 10 Aug 2024 10:34:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I9PrzCQ8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PI1l3Kko"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E182D21A0B;
-	Sat, 10 Aug 2024 10:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C9914E2C0;
+	Sat, 10 Aug 2024 10:34:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723286027; cv=none; b=LadTyOn+pyVnPIKyQOcj7FpwXaudVPJ9P/GmLeyDvPOwE6kfLeI72DSVX5zHfhfjn0cK3N/uf5GPqiZb2h0QFBRIt4KjA3sqdb6d7MKFJyQLLCoZt6l8JhPSbgpDlPfKII72by5jHQZg526ab91Zdp0uuTznbyHuzTm5oSpRIak=
+	t=1723286097; cv=none; b=dToWKoY4verSQJ5ZQlrbhf11OIPOwPuMEzlfYfBEih6wn7UBt70OF9v1xlmVFSPRFSKZvfcIKnb2YuYY9c1zCqeZEFkQjzU9H0F8rVMDeb0pNRIz2E60sA+pbu8yeLHF5PveJ9QpPHBcmbI0P4HUeBXZ7H4A7nftJPy9ZFqylJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723286027; c=relaxed/simple;
-	bh=nI7ih2gOYl5MyaoHRNLJqWXVN7z2+2CR5szL++U3ldo=;
+	s=arc-20240116; t=1723286097; c=relaxed/simple;
+	bh=bZW3wVjp7+9zA4pIm9iIi9zx0S5TgK2QEyTc0Gze+bg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=J4AF2pxULLCY865yW5mt971VEMg/nhdknWv5bgAeLusymNII5P/LxLTT8grfBSqSd29eNshXlh7t/bRUil79q0yYp8gG9vjb5gTHoPbbDeOjic6CRRhai51Jye9cSyHTx5YvynjGi57iFCvKXolg9qlYzvZdZWCj7ptJNEwhFSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I9PrzCQ8; arc=none smtp.client-ip=209.85.215.178
+	 To:Cc:Content-Type; b=l+FOjdGZUGkrfCLRqGCZg9uLvfgzog8x3sRbgNEDmQgWzAHuJjwRox/vuwrVfkipU/2Q3fQKTaWfgSUl3k2vEO7mKAUieoJZlxtvmnuQSGXtU7KiTyZdQCoxWsVlf2GYVtKTszi4Kx5vUtRhbLvo//dWtIuGTsg9DWfT1X0gvNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PI1l3Kko; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7a0e8b76813so2020175a12.3;
-        Sat, 10 Aug 2024 03:33:45 -0700 (PDT)
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-7afd1aeac83so2838985a12.0;
+        Sat, 10 Aug 2024 03:34:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723286025; x=1723890825; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1723286096; x=1723890896; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nI7ih2gOYl5MyaoHRNLJqWXVN7z2+2CR5szL++U3ldo=;
-        b=I9PrzCQ8+jHFejY3W2vWUslGjOi89TLSYiM8aG5zKzdahU6yTH8eJxVk/qwxVW/FAl
-         DjAHF7zRLKIu2nU9Tu9p0NkuulSNutshYZsfvttdgOD9xKNJ48e8hFs26EM9T+CRmTXm
-         88iRq2MilpT6JK4nw49HKFrwagWeZqMnPadVHRJVm6x7XH7/5fOHpSe1yvdfppgjZ/Mh
-         Yew6iqOIGSwakj1Co6adWlIigxkfb75gjR4fB5VTmYTqAMdPk1WScp9MVcmo07diXEv6
-         UrxcVZ71JZ/ME58zFBGdj0n6/zc/fgoBVDGltgJ9cs/8Rmxkc61an0hJjyR4RWUp2AJH
-         zZSQ==
+        bh=bZW3wVjp7+9zA4pIm9iIi9zx0S5TgK2QEyTc0Gze+bg=;
+        b=PI1l3KkooR6On9MhkQsTFEbhWCWEAktHf37/j/0k8OzoGtue60D4trCWZ7Usgn36BE
+         AiqjbU+GjtUE+LHn5G4QsVrw2NaPzUikK8sNJjCFoyOBMGsd0Co0CPM/8Cvu3VeUV/jI
+         rs+pvL0oQSE/XR0wG71Adh3bQ/Y4+7Rkz0E0axBIjYM5EcX24HwbVgcJVJIvTW5ibdqi
+         t/XfMu4FsNh3Ojf5DlrPqV1q8VHLAwJfYS37y92lLXW4jFQAfJ46pGvZNINcVvqOdyT7
+         bxlxQDgebuSf2d1HVAEoaHm9Dxx13pSg1tiwZXr+pxMwg4uYjMY/sDSppBUkzKr0z6dE
+         eVKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723286025; x=1723890825;
+        d=1e100.net; s=20230601; t=1723286096; x=1723890896;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nI7ih2gOYl5MyaoHRNLJqWXVN7z2+2CR5szL++U3ldo=;
-        b=f7wiXDm2IwexxmZHFbGhJRnYQSgJdE4dksQZz375dygZkujD1pfsLhFFPQTZPTK2HN
-         FNHMi8Taq5evRRm9fAWFIxpXBZkpAUKQCUZoYBFVtqokuQ3NgMlc88kkWTpAvWdtgW6l
-         fuLvI9sGJKApcWaNPK61WPROFkvoNoW3YevgCdkLtSQcd8xqlzmr4hPjwz6d4oH2lBCn
-         VYRqnxO8w2LJxmy4WXX8c+6o6HQooSpboG4diYRixgXwpQoyH6XjBnSiO5/q3sbF/ueW
-         Ct/Wg/nr7qDpqiEPLIV58bAZ6Ntk004AUJTtdD881+mvEh0WB2692oOZfkRL1VS4SY3x
-         BcZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWB7CoQYOm/pyDrOQlvzcT3xzB7n3+8seB7RAhbfb8mh0uTrUUWoC2dZqzxfsLxZQiwLT0W3VyQN6kmbYJAKcWtmpC7KMzv5P6kuU8fsYYsC+teNyCN4XSS0y3pzTy/sLjEQebLnMAMN9fpvdU5+Lc60AEB5I5fgiktYD8xmG0FHA59JA4tuns94f0QCtc=
-X-Gm-Message-State: AOJu0Yz6ez6xU0Iq6nDN4D1bvPpd6+ua8/JkYoIWdPPv7+2U4D+ABayb
-	VpjnogfwHnm8GTx6X/s2JP5acLCp+ldqv5QUwjgo9Ig4EhYUXiZaGj5bNJ9xokgMs+nE9lj3E9P
-	faZAX4WkzKkGMDISv/+/tb2ifKkU=
-X-Google-Smtp-Source: AGHT+IHHJ3ZHq4puHlDfT8AAzXDPrL61Am9r3Ee6U6noqrOwUCfhCXSbKw6J1SprOLXhvrrPkQRBSMxioHzaul4bsh0=
-X-Received: by 2002:a17:90a:1301:b0:2c9:9fcd:aa51 with SMTP id
- 98e67ed59e1d1-2d1e7f96d90mr4508840a91.5.1723286024997; Sat, 10 Aug 2024
- 03:33:44 -0700 (PDT)
+        bh=bZW3wVjp7+9zA4pIm9iIi9zx0S5TgK2QEyTc0Gze+bg=;
+        b=QsRzLY3EnAn9QuzrpvZOQpOdNb1pNYHazzrlm3hMCY8l/XVQH8OxDXF7oJ95CoMdru
+         3GR7+9Nxzzh1WQkYOL4s+1EoDazcKk39fdu8ZosO3nMHE/4g1+ZprkO+3k4GYRD4lDmQ
+         Ah7Eonp5fEv9LZjmGhjO3Shgk5Cc9kH8G2mZy0jmQ1IK8YhTRJ8vftqv3426/xa/hEqc
+         y9gcviePM1sfYzY1smdGgSu2ZsWZJTn1kWg/uDb4MCqBOrYHG3cfclxyhU1xumuTHywb
+         aWNJzhiTI9ZI/dggWLU6dbVGcGDQCMd9QBXk7T33EKKMsr8fXcd9SaOyUrILFR4NgM1d
+         3Uog==
+X-Forwarded-Encrypted: i=1; AJvYcCWlL/0569EAwo3A2YUtalSiJ/s7tj4lyUXGQm0rTwZGLKFSG2hjOyVYjlczvNK4iIlKt0ggklY4+mRQBAfVvsy5gvT4CgB+DQrqS7FJJuPkBtsLp21/R4uMjrb3GCxJFJOCuIQWt88P8wVhTokJdYUSBC1zp/zPjquKFy1NQ3dd506/UZ+vHskDDhxzB7g=
+X-Gm-Message-State: AOJu0Yw4WFJZGgL+HgfYVftweaHdPESeNvApm8XlF33XHxE/4rhC5rBN
+	DJW3HGysyVNk+FNA7eYIiBcWYSIRnl5IRkI/jdNsa+2mOL2qgPHUPVMLe+Qz+0/9RdhUu9Inoqu
+	/M9MVzeKBIAwvVXAk6YsNlu54/r7n5x8UXRk=
+X-Google-Smtp-Source: AGHT+IG2EhrfCQGZpybZk9Zk/Risy0Rk6+C7uAFv1cW8iDmmShSmLA5zvW3rWSvXfscTYf4ZvlCpOXAdQRHTafHPw5U=
+X-Received: by 2002:a17:90b:1e49:b0:2c8:2cd1:881b with SMTP id
+ 98e67ed59e1d1-2d1c4c468demr11570308a91.20.1723286095818; Sat, 10 Aug 2024
+ 03:34:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240802124536.2905797-1-anders.roxell@linaro.org>
-In-Reply-To: <20240802124536.2905797-1-anders.roxell@linaro.org>
+References: <20240802124536.2905797-1-anders.roxell@linaro.org> <20240802124536.2905797-2-anders.roxell@linaro.org>
+In-Reply-To: <20240802124536.2905797-2-anders.roxell@linaro.org>
 From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Sat, 10 Aug 2024 12:33:32 +0200
-Message-ID: <CANiq72kM1RsZCrK-3gFZufgeZQRvOBAbO=DwRHpukX5W=T=UAg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] selftests: rust: config: add trailing newline
+Date: Sat, 10 Aug 2024 12:34:43 +0200
+Message-ID: <CANiq72kb9mDd0xndGFnMQXP4Hg-GE91eQ07yYiQW1HwWv75Qtw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests: rust: config: disable GCC_PLUGINS
 To: Anders Roxell <anders.roxell@linaro.org>
 Cc: ojeda@kernel.org, alex.gaynor@gmail.com, wedsonaf@gmail.com, 
 	shuah@kernel.org, rust-for-linux@vger.kernel.org, 
@@ -87,22 +87,16 @@ Content-Transfer-Encoding: quoted-printable
 On Fri, Aug 2, 2024 at 2:45=E2=80=AFPM Anders Roxell <anders.roxell@linaro.=
 org> wrote:
 >
-> If adding multiple config files to the merge_config.sh script and
-> rust/config is the fist one, then the last config fragment in this file
-> and the first config fragment in the second file wont be set, since
-> there isn't a newline in this file, so those two fragements end up at
-> the same row like:
-> CONFIG_SAMPLE_RUST_PRINT=3DmCONFIG_FRAGMENT=3Dy
+> CONFIG_RUST depends on !CONFIG_GCC_PLUGINS. Disable CONFIG_GCC_PLUGINS
+> in rust/config file to make sure it doesn't get enabled.
 >
-> And non of those will be enabled when running 'olddefconfig' after.
->
-> Fixing the issue by adding a newline to the file.
-
-Could `merge_config.sh` be improved too?
-
-Shuah, if you plan to pick this:
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 
 Acked-by: Miguel Ojeda <ojeda@kernel.org>
+
+When https://lore.kernel.org/rust-for-linux/20240731125615.3368813-1-neal@g=
+ompa.dev/
+goes in, this could also be relaxed.
 
 Thanks!
 
