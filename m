@@ -1,128 +1,144 @@
-Return-Path: <linux-kselftest+bounces-15114-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15115-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D601394DD62
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Aug 2024 16:57:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A2E794DDD6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Aug 2024 19:55:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7993F281E0D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Aug 2024 14:57:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C225B281D3B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Aug 2024 17:55:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF3371607A1;
-	Sat, 10 Aug 2024 14:57:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88C1416A925;
+	Sat, 10 Aug 2024 17:55:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lnczJst0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C61E1C28E;
-	Sat, 10 Aug 2024 14:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1765C15F41D;
+	Sat, 10 Aug 2024 17:55:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723301841; cv=none; b=dRaGkKobbRx2oM9EhSa6nsiPeG7n7r/km8LtPWOedJhqb13GMUYW0hTu1dOOjHMpqNyt3d8iGCpsSmhDvMFk0RlalPeWmN3ri54wOe1ZuT+tzI7WxQFcHyoDeAaBeY5xd3di7XzoBe9RiEEXAUveZJXSMeCnZbf+q3XgJ7N7BBY=
+	t=1723312519; cv=none; b=TaurzAUBhN0aSqC/FNsMNs9puxqrZ222Y5/sk0pRPRqEWRlrAf94vvIL50ocwGPC9jAmDgVb/H+lq/gR9jgX5ybnULE4L+FjhDWcgrF4is2oNjc9Xbncvckn+4lDJWsjWrZr3FLpK+aRcLQY4u/6eQP9ooNq4t9lcwmiLYMgfd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723301841; c=relaxed/simple;
-	bh=6XYSJ2mZrjHZt8VI4dBSBoz2Kw0t5F1Trt0QbRAoIWM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HCEe8XV5tMQpYjneX5u9IGcizTG88dT2ygjf2bT6lBLzUytlJFAvex0qdHLnJBYDSSOkq3eQg8HOJB0CfMj6VTwGNHca5HTMoCfCp3Pk+0FuR4pJP0PKDVx+ao7/mPIsstpjzQbbBYAuE8XcSMOufQA12+yMeTtmghkFfmurJEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
-Received: (from willy@localhost)
-	by pcw.home.local (8.15.2/8.15.2/Submit) id 47AEvDFj009492;
-	Sat, 10 Aug 2024 16:57:13 +0200
-Date: Sat, 10 Aug 2024 16:57:13 +0200
-From: Willy Tarreau <w@1wt.eu>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 00/15] tools/nolibc: improve LLVM/clang support
-Message-ID: <20240810145713.GC9168@1wt.eu>
-References: <20240807-nolibc-llvm-v2-0-c20f2f5fc7c2@weissschuh.net>
- <dc3b8c77-8051-4232-9feb-753ea0b44f4f@linuxfoundation.org>
+	s=arc-20240116; t=1723312519; c=relaxed/simple;
+	bh=tdaviMc2TG3WkTjS6C7+l204PFwlWjyYpWMbyuQCMIM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Adrtnynks+zNzgh8vyMESycwe7/zr6LZSh59Pv5k8pftzB4RBSqqt8936BpxpP1am8vZZ9hxyHdJglyt5rzRzQYf5zcd/titPWrzq+C5hfesjN1BqnEPOJbRI8UoBww1NdYoIYMjAwgG5WeCgvDpy1ORve7+wyxTnsDTpL5wtLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lnczJst0; arc=none smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-70d23caf8ddso2807431b3a.0;
+        Sat, 10 Aug 2024 10:55:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723312517; x=1723917317; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cuMWPq3zFnrRfqIZyBDjzbfpHEka0Q64/eSHWhAQ05E=;
+        b=lnczJst0etgqCzT4e6Cr2l1jdJOTSQYa3XEAQYnS7GVV21uPeqjpCxjG3PhCWGlYJk
+         P/VAHSdzTpvQJze42IP2wowVNeJt/MtnIVeGo3oF3O0LdlDxGTx5OJeZ5NmOFjLo+pTF
+         iSD9bozjXTkFBiUSbYZW+MR5V6gCdGbCi1iaB84/CkQ44/vBP730juVGIPmCJ0Uwx2Ih
+         srcrQsGaFRmbV5pGU5F/EBlGeU2hroM03yPnISF4pkwDyj2ObbbLt2xroQILxIrs10JG
+         PbZamYnyUIJ4sLxjmk5LGLQQSe2yG9IP/PPqB8G0auoX+RjxB10Lq/7AaxaVihfBeJ1T
+         s5eQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723312517; x=1723917317;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cuMWPq3zFnrRfqIZyBDjzbfpHEka0Q64/eSHWhAQ05E=;
+        b=NJKpZ/47ED8wZgHkcoS8xNflqJG0cJFNTbrAev2Zy0RIsf0Jg+S0R7HRXVUjl5EAms
+         o89JBTZYniWVIYFff5nmyFkJk37dYWFFOwGPvns7WM8ApWay54sIomGWBKi/n2OBAbYf
+         Jf9p4OJCWbBSm+SfN5PMJDn08BC8Sla5fYsKrSneCvFi3rn9UBUVxXUXUIwqmM3JoCxF
+         IHLMUod9CyVQoYaK1qPaTlYMNDtnZWay2QT5ym3j8mrgdmoTsrCn1YD7lOoNdMo6Qr1T
+         GVKBtCZAgT7lCNJBtLh/0sQr2uT0Y1JMr19RhAETlpypSZzW1bO/kgwrG2PTUEQibbS0
+         wiDA==
+X-Forwarded-Encrypted: i=1; AJvYcCWpZ3HjkJkHKmrdJnab/dZxUdKSoOg/zBxq3EPIQZP/n9WNhPfaUO3iIOUczmmvqWy2KankazEPl2Hb8/6lhzchRlC+ECcXZ/RgRSiGg9hbMtmpDd90dHMIsNLv1oqzgHf5G5+x+rTYpsYo0CGvrOu/e7JBxI/EnaykQkM3g27qvAKKIXq7
+X-Gm-Message-State: AOJu0Yyg9zsIpJT9B3jp7IFrxLMsTE5bpoZfLVx3BRbrL/lWLN4SfkXy
+	PrJVnLsW7ztwTrt4CeoD02Qgm5aS+rc9cEF+h4FYmPdv3MvnHmtRWR3y+lAW
+X-Google-Smtp-Source: AGHT+IHkec/yLGTRhkhmkBsz89ZalfED3kUVTPgt9AJXwwhzlR+HuPlHN6rMVXvOeKw0lqa/C4IFoQ==
+X-Received: by 2002:a05:6a21:b8b:b0:1c4:818c:299d with SMTP id adf61e73a8af0-1c89fbbe138mr6716274637.11.1723312517242;
+        Sat, 10 Aug 2024 10:55:17 -0700 (PDT)
+Received: from dev0.. ([49.43.168.43])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7c3dbe12ff2sm1568868a12.33.2024.08.10.10.55.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 10 Aug 2024 10:55:16 -0700 (PDT)
+From: Abhinav Jain <jain.abhinav177@gmail.com>
+To: kuba@kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	jain.abhinav177@gmail.com,
+	javier.carrasco.cruz@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	skhan@linuxfoundation.org
+Subject: Re: [PATCH v5 1/2] selftests: net: Create veth pair for testing in networkless kernel
+Date: Sat, 10 Aug 2024 17:55:09 +0000
+Message-Id: <20240810175509.404094-1-jain.abhinav177@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240809211911.1445c965@kernel.org>
+References: <20240809211911.1445c965@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <dc3b8c77-8051-4232-9feb-753ea0b44f4f@linuxfoundation.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
 
-On Wed, Aug 07, 2024 at 04:09:41PM -0600, Shuah Khan wrote:
-> On 8/7/24 15:51, Thomas Weiﬂschuh wrote:
-> > The current support for LLVM and clang in nolibc and its testsuite is
-> > very limited.
-> > 
-> > * Various architectures plain do not compile
-> > * The user *has* to specify "-Os" otherwise the program crashes
-> > * Cross-compilation of the tests does not work
-> > * Using clang is not wired up in run-tests.sh
-> > 
-> > This series extends this support.
-> > 
-> > Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> > ---
-> > Changes in v2:
-> > - Add support for all architectures
-> >    - powerpc: "selftests/nolibc: don't use libgcc when building with clang"
-> >    - mips: "tools/nolibc: mips: load current function to $t9"
-> >    - s390: "selftests/nolibc: use correct clang target for s390/powerz"
-> > - Expand commit messages
-> > - Use __nolibc_ prefix for custom macros
-> > - Link to v1: https://lore.kernel.org/r/20240728-nolibc-llvm-v1-0-bc384269bc35@weissschuh.net
-> > 
-> > ---
-> > Thomas Weiﬂschuh (15):
-> >        tools/nolibc: arm: use clang-compatible asm syntax
-> >        tools/nolibc: mips: load current function to $t9
-> >        tools/nolibc: powerpc: limit stack-protector workaround to GCC
-> >        tools/nolibc: compiler: introduce __nolibc_has_attribute()
-> >        tools/nolibc: move entrypoint specifics to compiler.h
-> >        tools/nolibc: compiler: use attribute((naked)) if available
-> >        selftests/nolibc: report failure if no testcase passed
-> >        selftests/nolibc: avoid passing NULL to printf("%s")
-> >        selftests/nolibc: determine $(srctree) first
-> >        selftests/nolibc: add support for LLVM= parameter
-> >        selftests/nolibc: add cc-option compatible with clang cross builds
-> >        selftests/nolibc: run-tests.sh: avoid overwriting CFLAGS_EXTRA
-> >        selftests/nolibc: don't use libgcc when building with clang
-> >        selftests/nolibc: use correct clang target for s390/powerz
-> >        selftests/nolibc: run-tests.sh: allow building through LLVM
-> > 
-> >   tools/include/nolibc/arch-aarch64.h          |  4 +--
-> >   tools/include/nolibc/arch-arm.h              |  8 +++---
-> >   tools/include/nolibc/arch-i386.h             |  4 +--
-> >   tools/include/nolibc/arch-loongarch.h        |  4 +--
-> >   tools/include/nolibc/arch-mips.h             |  8 ++++--
-> >   tools/include/nolibc/arch-powerpc.h          |  6 ++--
-> >   tools/include/nolibc/arch-riscv.h            |  4 +--
-> >   tools/include/nolibc/arch-s390.h             |  4 +--
-> >   tools/include/nolibc/arch-x86_64.h           |  4 +--
-> >   tools/include/nolibc/compiler.h              | 24 +++++++++++-----
-> >   tools/testing/selftests/nolibc/Makefile      | 41 +++++++++++++++++++---------
-> >   tools/testing/selftests/nolibc/nolibc-test.c |  4 +--
-> >   tools/testing/selftests/nolibc/run-tests.sh  | 16 ++++++++---
-> >   13 files changed, 83 insertions(+), 48 deletions(-)
-> > ---
-> > base-commit: ae1f550efc11eaf1496c431d9c6e784cb49124c5
-> > change-id: 20240727-nolibc-llvm-3fad68590d4c
-> > 
-> > Best regards,
-> 
-> Looks good to me. For selftests patches:
-> 
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+On Fri, 9 Aug 2024 21:19:11 -0700, Jakub Kicinski wrote:
 
-And all the series looks good to me as well (modulo that tiny "powerz"
-vs "systemz" mentioned in the 14th patch's commit message). The commit
-messages are now way more detailed and more pleasant to go through,
-thanks for that!
+> > On Thu, 8 Aug 2024 09:23:09 -0700, Jakub Kicinski wrote:
+> > > A number of checks now return SKIP because veth doesn't support all
+> > > ethtool APIs.
+> > >
+> > > In netdev selftests we try to make sure SKIP is only used when test
+> > > cannot be performed because of limitations of the environment.
+> > > For example some tool is not installed, kernel doesn't have a config.
+> > > Something that the person running the test is able to fix by fixing
+> > > how the test is run.
+> > >
+> > > Running this test on veth will always SKIP, nothing CI system can do.
+> > > Please make the test use the keyword XFAIL instead of SKIP when
+> > > functionality is not supported by the underlying driver.  
+> > 
+> > Ack, understood. I will do that, one clarification though.
+> > Currently, the tests are using either PASS or FAIL and no SKIP. Based on
+> > the above suggestion, it seems that I have replace FAIL with XFAIL for all
+> > the tests that fail due to functionality not being supported by the
+> > underlying driver.
+>
+> Right, sorry for lack of clarity.
+>
+> Our CI doesn't fully trust the exit codes, so even though the test
+> exits with zero the CI parses the output and finds the "SKIP: ..."
+> lines. You need to replace those "SKIP"s in the output with "XFAIL".
 
-Acked-by: Willy Tarreau <w@1wt.eu>
+I re-tested and found that currently only two APIs are tested, "dump" and
+"stats". For veth pair, the only test that fails currently with a SKIP is
+the dump operation.
 
-Willy
+```
+# Cannot get register dump: Operation not supported
+# SKIP: veth1: ethtool dump not supported
+```
+
+This is present in kci_netdev_ethtool_test function, please confirm if this
+is the one that I need to change to XFAIL. The logic to incorporate
+the failure exit code for dump operation (74) is already in place.
+
+```
+kci_netdev_ethtool_test 74 'dump' "ethtool -d $netdev"
+```
+
+I just need to change the SKIP in this function to XFAIL. In case, if you
+were referring to any other tests that are failing (features on/off),
+please let me know. Thank you for prompt feedbacks, really appreciated.
 
