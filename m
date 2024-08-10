@@ -1,144 +1,182 @@
-Return-Path: <linux-kselftest+bounces-15115-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15116-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A2E794DDD6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Aug 2024 19:55:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1299594DDFA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Aug 2024 20:43:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C225B281D3B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Aug 2024 17:55:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E74B1F21EE6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 10 Aug 2024 18:43:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88C1416A925;
-	Sat, 10 Aug 2024 17:55:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lnczJst0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A797349626;
+	Sat, 10 Aug 2024 18:43:05 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1765C15F41D;
-	Sat, 10 Aug 2024 17:55:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B6CA441F;
+	Sat, 10 Aug 2024 18:43:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723312519; cv=none; b=TaurzAUBhN0aSqC/FNsMNs9puxqrZ222Y5/sk0pRPRqEWRlrAf94vvIL50ocwGPC9jAmDgVb/H+lq/gR9jgX5ybnULE4L+FjhDWcgrF4is2oNjc9Xbncvckn+4lDJWsjWrZr3FLpK+aRcLQY4u/6eQP9ooNq4t9lcwmiLYMgfd4=
+	t=1723315385; cv=none; b=beHV65bdUKtX3dPY6qAM7chu8T/AyqGdoUWg2L42reCN6NA2YsFhgvbQz9+cszY5iPiqJccHMNOVLd7OO8YgSb+wrHXm1h1LEAOF+GfC8dbVeSIrdX4Chhgt59dilzYIFfZ4l6Jxt8hbWQJMnJBIVGZjLoxqhpw+S0FN+vR0dRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723312519; c=relaxed/simple;
-	bh=tdaviMc2TG3WkTjS6C7+l204PFwlWjyYpWMbyuQCMIM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Adrtnynks+zNzgh8vyMESycwe7/zr6LZSh59Pv5k8pftzB4RBSqqt8936BpxpP1am8vZZ9hxyHdJglyt5rzRzQYf5zcd/titPWrzq+C5hfesjN1BqnEPOJbRI8UoBww1NdYoIYMjAwgG5WeCgvDpy1ORve7+wyxTnsDTpL5wtLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lnczJst0; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-70d23caf8ddso2807431b3a.0;
-        Sat, 10 Aug 2024 10:55:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723312517; x=1723917317; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cuMWPq3zFnrRfqIZyBDjzbfpHEka0Q64/eSHWhAQ05E=;
-        b=lnczJst0etgqCzT4e6Cr2l1jdJOTSQYa3XEAQYnS7GVV21uPeqjpCxjG3PhCWGlYJk
-         P/VAHSdzTpvQJze42IP2wowVNeJt/MtnIVeGo3oF3O0LdlDxGTx5OJeZ5NmOFjLo+pTF
-         iSD9bozjXTkFBiUSbYZW+MR5V6gCdGbCi1iaB84/CkQ44/vBP730juVGIPmCJ0Uwx2Ih
-         srcrQsGaFRmbV5pGU5F/EBlGeU2hroM03yPnISF4pkwDyj2ObbbLt2xroQILxIrs10JG
-         PbZamYnyUIJ4sLxjmk5LGLQQSe2yG9IP/PPqB8G0auoX+RjxB10Lq/7AaxaVihfBeJ1T
-         s5eQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723312517; x=1723917317;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cuMWPq3zFnrRfqIZyBDjzbfpHEka0Q64/eSHWhAQ05E=;
-        b=NJKpZ/47ED8wZgHkcoS8xNflqJG0cJFNTbrAev2Zy0RIsf0Jg+S0R7HRXVUjl5EAms
-         o89JBTZYniWVIYFff5nmyFkJk37dYWFFOwGPvns7WM8ApWay54sIomGWBKi/n2OBAbYf
-         Jf9p4OJCWbBSm+SfN5PMJDn08BC8Sla5fYsKrSneCvFi3rn9UBUVxXUXUIwqmM3JoCxF
-         IHLMUod9CyVQoYaK1qPaTlYMNDtnZWay2QT5ym3j8mrgdmoTsrCn1YD7lOoNdMo6Qr1T
-         GVKBtCZAgT7lCNJBtLh/0sQr2uT0Y1JMr19RhAETlpypSZzW1bO/kgwrG2PTUEQibbS0
-         wiDA==
-X-Forwarded-Encrypted: i=1; AJvYcCWpZ3HjkJkHKmrdJnab/dZxUdKSoOg/zBxq3EPIQZP/n9WNhPfaUO3iIOUczmmvqWy2KankazEPl2Hb8/6lhzchRlC+ECcXZ/RgRSiGg9hbMtmpDd90dHMIsNLv1oqzgHf5G5+x+rTYpsYo0CGvrOu/e7JBxI/EnaykQkM3g27qvAKKIXq7
-X-Gm-Message-State: AOJu0Yyg9zsIpJT9B3jp7IFrxLMsTE5bpoZfLVx3BRbrL/lWLN4SfkXy
-	PrJVnLsW7ztwTrt4CeoD02Qgm5aS+rc9cEF+h4FYmPdv3MvnHmtRWR3y+lAW
-X-Google-Smtp-Source: AGHT+IHkec/yLGTRhkhmkBsz89ZalfED3kUVTPgt9AJXwwhzlR+HuPlHN6rMVXvOeKw0lqa/C4IFoQ==
-X-Received: by 2002:a05:6a21:b8b:b0:1c4:818c:299d with SMTP id adf61e73a8af0-1c89fbbe138mr6716274637.11.1723312517242;
-        Sat, 10 Aug 2024 10:55:17 -0700 (PDT)
-Received: from dev0.. ([49.43.168.43])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7c3dbe12ff2sm1568868a12.33.2024.08.10.10.55.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 10 Aug 2024 10:55:16 -0700 (PDT)
-From: Abhinav Jain <jain.abhinav177@gmail.com>
-To: kuba@kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	jain.abhinav177@gmail.com,
-	javier.carrasco.cruz@gmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH v5 1/2] selftests: net: Create veth pair for testing in networkless kernel
-Date: Sat, 10 Aug 2024 17:55:09 +0000
-Message-Id: <20240810175509.404094-1-jain.abhinav177@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240809211911.1445c965@kernel.org>
-References: <20240809211911.1445c965@kernel.org>
+	s=arc-20240116; t=1723315385; c=relaxed/simple;
+	bh=Dm9WfJRUoHBGXJN1A+UviXh2kbATf2tzBSS+wUFKbs0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CUA1pGmSqUlU0pdKpJitAgJ4+P7w6JdWQAC55vZHKmPEVyy99vtu9Q5uksbUxuk1VTj0k8wtagK2roqY6yoM3jFfGpEhtx5sv6q9R1k4GXvv0mNhDHm2Eiqyfd5aV06+3ayUnEoPY2MB5w/47oDgg92aPqObJU17nCHvpQ0eh20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A76C3FEC;
+	Sat, 10 Aug 2024 11:43:26 -0700 (PDT)
+Received: from [10.163.56.130] (unknown [10.163.56.130])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 995183F71E;
+	Sat, 10 Aug 2024 11:42:51 -0700 (PDT)
+Message-ID: <5a4ae1d3-d753-4261-97a8-926e44d4217a@arm.com>
+Date: Sun, 11 Aug 2024 00:12:43 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] mm: Retry migration earlier upon refcount mismatch
+To: David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
+ shuah@kernel.org, willy@infradead.org
+Cc: ryan.roberts@arm.com, anshuman.khandual@arm.com, catalin.marinas@arm.com,
+ cl@gentwo.org, vbabka@suse.cz, mhocko@suse.com, apopple@nvidia.com,
+ osalvador@suse.de, baolin.wang@linux.alibaba.com,
+ dave.hansen@linux.intel.com, will@kernel.org, baohua@kernel.org,
+ ioworker0@gmail.com, gshan@redhat.com, mark.rutland@arm.com,
+ kirill.shutemov@linux.intel.com, hughd@google.com, aneesh.kumar@kernel.org,
+ yang@os.amperecomputing.com, peterx@redhat.com, broonie@kernel.org,
+ mgorman@techsingularity.net, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+References: <20240809103129.365029-1-dev.jain@arm.com>
+ <20240809103129.365029-2-dev.jain@arm.com>
+ <761ba58e-9d6f-4a14-a513-dcc098c2aa94@redhat.com>
+Content-Language: en-US
+From: Dev Jain <dev.jain@arm.com>
+In-Reply-To: <761ba58e-9d6f-4a14-a513-dcc098c2aa94@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On Fri, 9 Aug 2024 21:19:11 -0700, Jakub Kicinski wrote:
 
-> > On Thu, 8 Aug 2024 09:23:09 -0700, Jakub Kicinski wrote:
-> > > A number of checks now return SKIP because veth doesn't support all
-> > > ethtool APIs.
-> > >
-> > > In netdev selftests we try to make sure SKIP is only used when test
-> > > cannot be performed because of limitations of the environment.
-> > > For example some tool is not installed, kernel doesn't have a config.
-> > > Something that the person running the test is able to fix by fixing
-> > > how the test is run.
-> > >
-> > > Running this test on veth will always SKIP, nothing CI system can do.
-> > > Please make the test use the keyword XFAIL instead of SKIP when
-> > > functionality is not supported by the underlying driver.  
-> > 
-> > Ack, understood. I will do that, one clarification though.
-> > Currently, the tests are using either PASS or FAIL and no SKIP. Based on
-> > the above suggestion, it seems that I have replace FAIL with XFAIL for all
-> > the tests that fail due to functionality not being supported by the
-> > underlying driver.
+On 8/9/24 19:17, David Hildenbrand wrote:
+> On 09.08.24 12:31, Dev Jain wrote:
+>> As already being done in __migrate_folio(), wherein we backoff if the
+>> folio refcount is wrong, make this check during the unmapping phase, 
+>> upon
+>> the failure of which, the original state of the PTEs will be restored 
+>> and
+>> the folio lock will be dropped via migrate_folio_undo_src(), any racing
+>> thread will make progress and migration will be retried.
+>>
+>> Signed-off-by: Dev Jain <dev.jain@arm.com>
+>> ---
+>>   mm/migrate.c | 9 +++++++++
+>>   1 file changed, 9 insertions(+)
+>>
+>> diff --git a/mm/migrate.c b/mm/migrate.c
+>> index e7296c0fb5d5..477acf996951 100644
+>> --- a/mm/migrate.c
+>> +++ b/mm/migrate.c
+>> @@ -1250,6 +1250,15 @@ static int migrate_folio_unmap(new_folio_t 
+>> get_new_folio,
+>>       }
+>>         if (!folio_mapped(src)) {
+>> +        /*
+>> +         * Someone may have changed the refcount and maybe sleeping
+>> +         * on the folio lock. In case of refcount mismatch, bail out,
+>> +         * let the system make progress and retry.
+>> +         */
+>> +        struct address_space *mapping = folio_mapping(src);
+>> +
+>> +        if (folio_ref_count(src) != folio_expected_refs(mapping, src))
+>> +            goto out;
 >
-> Right, sorry for lack of clarity.
+> This really seems to be the latest point where we can "easily" back 
+> off and unlock the source folio -- in this function :)
 >
-> Our CI doesn't fully trust the exit codes, so even though the test
-> exits with zero the CI parses the output and finds the "SKIP: ..."
-> lines. You need to replace those "SKIP"s in the output with "XFAIL".
+> I wonder if we should be smarter in the migrate_pages_batch() loop 
+> when we start the actual migrations via migrate_folio_move(): if we 
+> detect that a folio has unexpected references *and* it has waiters 
+> (PG_waiters), back off then and retry the folio later. If it only has 
+> unexpected references, just keep retrying: no waiters -> nobody is 
+> waiting for the lock to make progress.
 
-I re-tested and found that currently only two APIs are tested, "dump" and
-"stats". For veth pair, the only test that fails currently with a SKIP is
-the dump operation.
 
-```
-# Cannot get register dump: Operation not supported
-# SKIP: veth1: ethtool dump not supported
-```
+The patch currently retries migration irrespective of the reason of 
+refcount change.
 
-This is present in kci_netdev_ethtool_test function, please confirm if this
-is the one that I need to change to XFAIL. The logic to incorporate
-the failure exit code for dump operation (74) is already in place.
+If you are suggesting that, break the retrying according to two conditions:
 
-```
-kci_netdev_ethtool_test 74 'dump' "ethtool -d $netdev"
-```
+1. If the folio has waiters, retry according to 
+NR_MAX_MIGRATE_PAGES_RETRY = 10.
 
-I just need to change the SKIP in this function to XFAIL. In case, if you
-were referring to any other tests that are failing (features on/off),
-please let me know. Thank you for prompt feedbacks, really appreciated.
+2. If not, retry for a large number of iterations, say 10,000, since we 
+just need to keep
+
+retrying till the racer finishes reading the folio/failing on 
+folio_trylock(), and decrementing
+
+refcount.
+
+If so, we will have to make the check as a refcount freeze(with 
+xas_lock()); if we don't do that,
+
+anyone can increase the refcount again, reading data from a stale 
+reference to the folio, making
+
+our check futile (which begs the question: is commit 0609139 correct? 
+Checking refcount mismatch
+
+in __migrate_folio() is ineffective since after that, and before 
+folio_ref_freeze() in __folio_migrate_mapping(),
+
+the refcount may change.) As a result, the freeze will have to take 
+place immediately after we unmap
+
+the folios from everyone's address space, something like:
+
+while (!folio_ref_freeze(src, expected_count) && ++retries < 10000) {
+
+         if (folio has waiters)
+
+                 break;    /* will be retried by the outer loop giving 
+us 10 chances in total */
+
+}
+
+
+> This really seems to be the latest point where we can "easily" back 
+> off and unlock the source folio -- in this function :)
+> For example, when migrate_folio_move() fails with -EAGAIN, check if 
+> there are waiters (PG_waiter?) and undo+unlock to try again later.
+
+
+Currently, on -EAGAIN, migrate_folio_move() returns without undoing src 
+and dst; even if we were to fall
+
+through to _undo_src/dst, the folios will not be unmapped again since 
+_unmap() and _move() are
+
+wrapped around different loops. This is what I was hinting to when I 
+wrote in the cover letter:
+
+"...there is no way the refcount would be decremented; as a result, this 
+renders the retrying
+
+useless" since upon the failure of _move(), the lock will not be dropped 
+(which is dropped
+
+through undo_src()), rendering the _move() loop useless. Sorry, should 
+have noted this there.
+
+
+
+
 
