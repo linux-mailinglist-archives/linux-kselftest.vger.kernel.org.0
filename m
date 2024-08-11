@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-15127-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15128-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D00594E2F1
-	for <lists+linux-kselftest@lfdr.de>; Sun, 11 Aug 2024 22:24:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18CCF94E2F4
+	for <lists+linux-kselftest@lfdr.de>; Sun, 11 Aug 2024 22:24:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61C331C208FB
-	for <lists+linux-kselftest@lfdr.de>; Sun, 11 Aug 2024 20:24:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6BF28B20D37
+	for <lists+linux-kselftest@lfdr.de>; Sun, 11 Aug 2024 20:24:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02CA5165EEE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6D4E166F13;
 	Sun, 11 Aug 2024 20:23:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CX6eSweE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SUZkGSNY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2E2C15C138;
-	Sun, 11 Aug 2024 20:23:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA78815F40B;
+	Sun, 11 Aug 2024 20:23:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723407827; cv=none; b=E29MH2V0WVJ8SKGO9xgAFGWxoJpoX6xmPG8Voxv24atgBT4lrqVQ8jrISKinlSp7SwsbdsmqvG/Pwq6VKm2drmOXDiekUxtXUWrUSFveyxTPvtYeCrQ1kuVsMCinIVGE4XicotiGV1kXz+ZyIxEfS0s9cD3srDxStSH8ltwoLzY=
+	t=1723407828; cv=none; b=IITr3mdtMwblTesXsYukIvyBbJNQ47yBnNpIhdTCn5d4XBmAWAXEBcfOYCBq1QmV9cX8jrCX1fauozPzdfF/ORSqMozQ+jWtaoWghsrQcQadp77uXY56NXslE9YwoxmAfc1rkaJQory2QqOIp2jWWYncC3pomdcVwJPFvNTTHxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723407827; c=relaxed/simple;
-	bh=MONJIIy9YOSEp1yhHyFFzzZG7r420/7YI2uxTLEAhGw=;
+	s=arc-20240116; t=1723407828; c=relaxed/simple;
+	bh=JjLluQklqpNwBZCHdf4Cyd/jl15V8S+7lKs23g7Duvw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=L+M8T+ayxJR3z9/9udHvIIGDx4WObJGMiKVm3pt6pyp57O2bMiZyEJnHxiE+CR3AFf/ji8kxLkQJyakOXEvEarqmSPzc/24mS5jcxwwwYaN296OXVNKLI2f3xpAng5HykPwJoBtEXjSoi9he7UVtaYGVHjkNwKR0oBCcMYJDm08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CX6eSweE; arc=none smtp.client-ip=209.85.128.41
+	 MIME-Version; b=m5Siwh3DBXXjxybRed8VV6ckbq2BqWQ3q8GgMjLcZuWPKHVgnxK3xIXSzqzlziKlMoEWqrHukk4a0aNI9r/A22aMa3D7D+/dnkBJFV90mGrwefuMpbElZkWmf/GP2VQwrlFT7zFvI27csTEtaOFrYIBWet2CKhrFF6l6NfnEZwo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SUZkGSNY; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-42802ddfaa6so4720365e9.1;
-        Sun, 11 Aug 2024 13:23:45 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-428098e2b3bso4713755e9.3;
+        Sun, 11 Aug 2024 13:23:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723407824; x=1724012624; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1723407825; x=1724012625; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xHZY//SIvzC3EDv+3VC7y9geqv9qzIoJMNAQJyat9y4=;
-        b=CX6eSweE/KnMH7TbIvTEunE1hefKqy5ulHpDySk92SA9Bhax4z/6ag4ohP/6MFoVzt
-         //t11kA2qxU8RodZPYteybxWv4jjCGNkoIsw6LAi4ndQEsPD8mVJdarTnXX1nezwNj9d
-         3gN/anXX5JQ+AaT568PY0fsm3WAhiJQ0whn3hSzq4CshhHJqO9DKOi0GveQktOKpXZ1U
-         rYxV5NTQrGtVV/x7bY3/uuA9e0htSgKz9KC0nbN/hW7/8sNEI3gPw0FWwXVhBSsz6Tr8
-         vAfuDlWiskbidoGzspk7dgsxispp07thMjqJ8mpBlHoGlm6PukfbRN7UyiRo3xEwVXte
-         J1Ug==
+        bh=uVutRztXV96m5hbYm4va8HGYVqLQMpPcXgqWeL4MLhg=;
+        b=SUZkGSNY9sof/KpDD9HAONBkN53OXY9kLb84QA9eg0djT+Q9V1BODZnG6YbmZGsvhg
+         ITKlAfNfpC//31/LSzcdkd9SbD4Rmj6aG9+JeYbW5GUdar0IWB9EGrdpOSk/XV+rEj8e
+         G+2cP28iYDp1+wwaKCi0x6/aXCqIrpjlu8kzqcWPSXLIjPr4xktOj87ROBfpCwrj7AHz
+         0PCwXOYoZlwhBiV8prncnE08l96aT19XnX4eLlJSYuUdaxjSDmyO/COMPSnA2kyJUbVz
+         Ch1ErCnue1Tp2SA8ODjElJn0NLiN4nMaVVYfIFAHtPLjcomgGgeW04jJPtgxOuyEu6xz
+         vEog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723407824; x=1724012624;
+        d=1e100.net; s=20230601; t=1723407825; x=1724012625;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xHZY//SIvzC3EDv+3VC7y9geqv9qzIoJMNAQJyat9y4=;
-        b=pYLvLsqXJ6D3mVf8s35iyFBkfIrTa+U7f5td6eQiYTv1sBi/JDUsxtqvztmYaJPAdb
-         xRlL2NC68Ni9t1yfo1DdtV72xNHJvl+T8VLcOlyPZClmuYsofvIXSKv688TVhRyOq5Gy
-         mX0RjcoGR1JoS+gPK9JhZ4ZNZ6ncvujKHv3mLPGE1lY6MYdeVaXTYp6oMqBWKyJ4XgdI
-         aJb5NV/G1Mud4TUW8dPb1cWmkW1WSiKgVm+pUJdjOOy1dUTVTSc16z7R6g+XgbEXm0E+
-         1KWefcnxPUKtEgQqlpRZGJQFMGBfjF0+J6We0856AY4G9A2tyEbBuourNAUaKxeazYK6
-         TRhw==
-X-Forwarded-Encrypted: i=1; AJvYcCWB/Qb1/Co7mLnmjNdewyrYzw8dwwtSzWLRuuWsZ2Goq/GIgWQ7q1vINIszKSM/h372mOuPs+w59XXTuqaD66y7moE/uDYD0GtzX3L6MjtN1jfhihStZDT26eS/Qy6GP0LSy0f9XMn0VHUqwRy8UA0BQk1UmUDfNwzzKPuCTo60+Elv0pa6PHCft3NOevGZYCnaotAB8kPFkzczm+/Dk++arQ1ChNk=
-X-Gm-Message-State: AOJu0YwJjxL8ukqd4mLJehBVfoksbtPlBaggbJroMZIdNGlFSIDhSDhV
-	RmxgEtPFr7sXRNJ6vmcPEHI/4g2K61WKOm0afa6aEQ3IHlJzU4bwxt7eMg==
-X-Google-Smtp-Source: AGHT+IG8Yk16DkxYil3TS+6L4R/vst0SfuCfm9J43ZRNxWgcX0wPhU0JyReX1clZhmwwPsvHrWcEzA==
-X-Received: by 2002:a05:6000:2a6:b0:36d:1d66:554f with SMTP id ffacd0b85a97d-36d5e4cc0f8mr3266505f8f.3.1723407823882;
-        Sun, 11 Aug 2024 13:23:43 -0700 (PDT)
+        bh=uVutRztXV96m5hbYm4va8HGYVqLQMpPcXgqWeL4MLhg=;
+        b=FHVmednw7MnDvR5V1H/zvypPtzX2zJ98tCa14yJf143DTu2XYicVhZER6QjaE9J7tl
+         jdVSIMtCUw+vJyu5rZsJZnjf2xUJWzw5+JWr94lrXCUUz+X7yliWEpef63CiPw+fPfgo
+         9T8qWgfYfKO+1KAhc2WIy5sqkNh+LmOkkXC+Ye97hCTwhciA8xUqE+zQxdBkHyYUi4Qy
+         CPI8AR8rPYu+MZlKyjwD5CVaypKePPQIfFxkUhQIFE+yFEQEE5+SZ2nMblKFIGDabHn6
+         o7qyrWZd6G51zUbYmyNAxpEgTWhS194J2x2deMrF60dfWcp00h3GZiCL0yrOhJoBKslU
+         eDjA==
+X-Forwarded-Encrypted: i=1; AJvYcCXs/TbRcdNEvTp65rW2QJn9RAbupokscYH2wMzexpc5uX+ZIKFMdNDfJdLuPcJw7HEAkbdupSMPXsrj3Bt5jVEQImTdAjNEG5K4lSQGIBJjOqizVRU/OOpkdNCDRPsgoocQrQnBas82ORzNSd6o1tjD/AxsG2ZaMyFF1VLXalM7QWDQmUv5Dq8ix7c6I99QyGZ3F/oh0cuj1WUYGcSg8S4zVC4737c=
+X-Gm-Message-State: AOJu0YxV47zkWpJ6Ps62+ELkHALawfEbMiQSiUVT2NTeMwJyrUYSF49p
+	h9dqonN8+M46NDFuIzGMy4pPwtSAhMBUt+iOR9fr4FEecliYggh3
+X-Google-Smtp-Source: AGHT+IHCTq1Zk/MD/Ujfw4d/tAUSwET+t+o+J8FV8aYZe12KaxouyY8RccXe1WSUosVyPZAbfPJrwA==
+X-Received: by 2002:a05:6000:1868:b0:366:e4b4:c055 with SMTP id ffacd0b85a97d-36d6035504dmr3461457f8f.7.1723407824663;
+        Sun, 11 Aug 2024 13:23:44 -0700 (PDT)
 Received: from ivan-HLYL-WXX9.. ([2a01:4b00:d20e:7300:24a1:28fd:3a06:5636])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4ebd31edsm5553305f8f.98.2024.08.11.13.23.42
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4ebd31edsm5553305f8f.98.2024.08.11.13.23.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 11 Aug 2024 13:23:43 -0700 (PDT)
+        Sun, 11 Aug 2024 13:23:44 -0700 (PDT)
 From: Ivan Orlov <ivan.orlov0322@gmail.com>
 To: perex@perex.cz,
 	tiwai@suse.com,
@@ -80,9 +80,9 @@ Cc: Ivan Orlov <ivan.orlov0322@gmail.com>,
 	linux-kernel@vger.kernel.org,
 	christophe.jaillet@wanadoo.fr,
 	aholzinger@gmx.de
-Subject: [PATCH v4 3/4] ALSA: timer: Introduce virtual userspace-driven timers
-Date: Sun, 11 Aug 2024 21:23:36 +0100
-Message-Id: <20240811202337.48381-4-ivan.orlov0322@gmail.com>
+Subject: [PATCH v4 4/4] selftests: ALSA: Cover userspace-driven timers with test
+Date: Sun, 11 Aug 2024 21:23:37 +0100
+Message-Id: <20240811202337.48381-5-ivan.orlov0322@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240811202337.48381-1-ivan.orlov0322@gmail.com>
 References: <20240811202337.48381-1-ivan.orlov0322@gmail.com>
@@ -94,372 +94,335 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Implement two ioctl calls in order to support virtual userspace-driven
-ALSA timers.
+Add a test for the new functionality of userspace-driven timers and the
+tool which allows us to count timer ticks in a certain time period. The
+test:
 
-The first ioctl is SNDRV_TIMER_IOCTL_CREATE, which gets the
-snd_timer_uinfo struct as a parameter and returns a file descriptor of
-a virtual timer. It also updates the `id` field of the snd_timer_uinfo
-struct, which provides a unique identifier for the timer (basically,
-the subdevice number which can be used when creating timer instances).
+1. Creates a userspace-driven timer with ioctl to /dev/snd/timer
+2. Starts the `global-timer` application to count the ticks of the timer
+from step 1.
+3. Asynchronously triggers the timer multiple times with some interval
+4. Compares the amount of caught ticks with the amount of trigger calls.
 
-This patch also introduces a tiny id allocator for the userspace-driven
-timers, which guarantees that we don't have more than 128 of them in the
-system.
+Since we can't include <alsa/asoundlib.h> and <sound/asound.h> in one
+file due to overlapping declarations, I have to split the test into two
+applications: one of them counts the amount of timer ticks in the
+defined time period, and another one is the actual test which creates
+the timer, triggers it periodically and starts the first app to count
+the amount of ticks in a separate thread.
 
-Another ioctl is SNDRV_TIMER_IOCTL_TRIGGER, which allows us to trigger
-the virtual timer (and calls snd_timer_interrupt for the timer under
-the hood), causing all of the timer instances binded to this timer to
-execute their callbacks.
+Besides from testing the functionality itself, the test represents a
+sample application showing userspace-driven ALSA timers API.
 
-The maximum amount of ticks available for the timer is 1 for the sake of
-simplicity of the userspace API. 'start', 'stop', 'open' and 'close'
-callbacks for the userspace-driven timers are empty since we don't
-really do any hardware initialization here.
+Also, the timer test includes a test case which tries to create a timer
+with invalid resolution (=0), and NULL as a timer info structure.
 
-Suggested-by: Axel Holzinger <aholzinger@gmx.de>
 Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
 ---
 V1 -> V2:
-- Add missing kfree for the utimer name in snd_utimer_free
-- Remove extra newline in sound core Kconfig
-- Use IDA allocator API to allocate utimer ids
-- Use kasprintf for the timer name instead of kzalloc + sprintf
+- Return NULL in the pthreaded function (ticking_func)
+- Process TIMER_NO_EVENT enum in the timer app output processing loop
 V2 -> V3:
-- Use __u64 instead of snd_pcm_uframes_t in snd_utimer_info struct
-- Add 16 reserved bytes to snd_utimer_info struct just in case we decide
-to add some other fields to this struct
-- Bump the timer protocol version in SNDRV_TIMER_VERSION to 2.0.8
-- Make the 'snd_utimer_ids' variable static
-- Add sanity checks to the 'snd_utimer_create' function: 0-check for
-period size and frame rate, overflow and 0- checks for resolution
-- Use automatic cleanup in 'snd_utimer_ioctl_create'
-- Return -ENOTTY instead of -EINVAL from ioctl if userspace-driven
-timers are disabled
+- Add new test case to cover invalid period sizes and frame rates for
+the userspace-driven timers (to test the sanity checks in
+snd_utimer_create)
 V3 -> V4:
-- Remove pcm-specific fields (frame_rate, period_size) from the
-userspace-driven ALSA timer info structure. Replace them with
-a timer-specific `resolution` field
-- Rename the structure to `snd_timer_uinfo`
-- Remove a part of sanity checks and resolution calculation from the
-timer creating function. It should be done in userspace instead
+- Use the new structure declarations to define timer info
+- Calculate the timer resolution in userspace from frame rate and
+period size
+- Remove majority of test-cases for invalid timer test as we don't do
+many sanity checks in the kernel anymore
+- Move `global-timer` into the TEST_GEN_PROGS_EXTENDED list as it is
+not a standalone test but an app called from `utimer-test.c`
+- Add test case which tries to pass NULL as a timer info structure for
+the timer creation ioctl
 
- include/uapi/sound/asound.h |  16 ++-
- sound/core/Kconfig          |  10 ++
- sound/core/timer.c          | 210 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 235 insertions(+), 1 deletion(-)
+ tools/testing/selftests/alsa/Makefile       |   4 +-
+ tools/testing/selftests/alsa/global-timer.c |  87 +++++++++++
+ tools/testing/selftests/alsa/utimer-test.c  | 164 ++++++++++++++++++++
+ 3 files changed, 253 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/alsa/global-timer.c
+ create mode 100644 tools/testing/selftests/alsa/utimer-test.c
 
-diff --git a/include/uapi/sound/asound.h b/include/uapi/sound/asound.h
-index 8bf7e8a0eb6f..2a2f5afc9a8f 100644
---- a/include/uapi/sound/asound.h
-+++ b/include/uapi/sound/asound.h
-@@ -869,7 +869,7 @@ struct snd_ump_block_info {
-  *  Timer section - /dev/snd/timer
-  */
+diff --git a/tools/testing/selftests/alsa/Makefile b/tools/testing/selftests/alsa/Makefile
+index c1ce39874e2b..25be68025290 100644
+--- a/tools/testing/selftests/alsa/Makefile
++++ b/tools/testing/selftests/alsa/Makefile
+@@ -12,9 +12,9 @@ LDLIBS+=-lpthread
  
--#define SNDRV_TIMER_VERSION		SNDRV_PROTOCOL_VERSION(2, 0, 7)
-+#define SNDRV_TIMER_VERSION		SNDRV_PROTOCOL_VERSION(2, 0, 8)
+ OVERRIDE_TARGETS = 1
  
- enum {
- 	SNDRV_TIMER_CLASS_NONE = -1,
-@@ -894,6 +894,7 @@ enum {
- #define SNDRV_TIMER_GLOBAL_RTC		1	/* unused */
- #define SNDRV_TIMER_GLOBAL_HPET		2
- #define SNDRV_TIMER_GLOBAL_HRTIMER	3
-+#define SNDRV_TIMER_GLOBAL_UDRIVEN	4
+-TEST_GEN_PROGS := mixer-test pcm-test test-pcmtest-driver
++TEST_GEN_PROGS := mixer-test pcm-test test-pcmtest-driver utimer-test
  
- /* info flags */
- #define SNDRV_TIMER_FLG_SLAVE		(1<<0)	/* cannot be controlled */
-@@ -974,6 +975,17 @@ struct snd_timer_status {
- };
- #endif
+-TEST_GEN_PROGS_EXTENDED := libatest.so
++TEST_GEN_PROGS_EXTENDED := libatest.so global-timer
  
+ TEST_FILES := conf.d pcm-test.conf
+ 
+diff --git a/tools/testing/selftests/alsa/global-timer.c b/tools/testing/selftests/alsa/global-timer.c
+new file mode 100644
+index 000000000000..c15ec0ba851a
+--- /dev/null
++++ b/tools/testing/selftests/alsa/global-timer.c
+@@ -0,0 +1,87 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * This structure describes the userspace-driven timer. Such timers are purely virtual,
-+ * and can only be triggered from software (for instance, by userspace application).
++ * This tool is used by the utimer test, and it allows us to
++ * count the ticks of a global timer in a certain time frame
++ * (which is set by `timeout` parameter).
++ *
++ * Author: Ivan Orlov <ivan.orlov0322@gmail.com>
 + */
-+struct snd_timer_uinfo {
-+	/* To pretend being a normal timer, we need to know the resolution in ns. */
-+	__u64 resolution;
-+	unsigned int id;
-+	unsigned char reserved[16];
-+};
++#include <stdio.h>
++#include <stdlib.h>
++#include <alsa/asoundlib.h>
++#include <time.h>
 +
- #define SNDRV_TIMER_IOCTL_PVERSION	_IOR('T', 0x00, int)
- #define SNDRV_TIMER_IOCTL_NEXT_DEVICE	_IOWR('T', 0x01, struct snd_timer_id)
- #define SNDRV_TIMER_IOCTL_TREAD_OLD	_IOW('T', 0x02, int)
-@@ -990,6 +1002,8 @@ struct snd_timer_status {
- #define SNDRV_TIMER_IOCTL_CONTINUE	_IO('T', 0xa2)
- #define SNDRV_TIMER_IOCTL_PAUSE		_IO('T', 0xa3)
- #define SNDRV_TIMER_IOCTL_TREAD64	_IOW('T', 0xa4, int)
-+#define SNDRV_TIMER_IOCTL_CREATE	_IOWR('T', 0xa5, struct snd_timer_uinfo)
-+#define SNDRV_TIMER_IOCTL_TRIGGER	_IO('T', 0xa6)
- 
- #if __BITS_PER_LONG == 64
- #define SNDRV_TIMER_IOCTL_TREAD SNDRV_TIMER_IOCTL_TREAD_OLD
-diff --git a/sound/core/Kconfig b/sound/core/Kconfig
-index b970a1734647..670b26cf3065 100644
---- a/sound/core/Kconfig
-+++ b/sound/core/Kconfig
-@@ -251,6 +251,16 @@ config SND_JACK_INJECTION_DEBUG
- 	  Say Y if you are debugging via jack injection interface.
- 	  If unsure select "N".
- 
-+config SND_UTIMER
-+	bool "Enable support for userspace-controlled virtual timers"
-+	depends on SND_TIMER
-+	help
-+	  Say Y to enable the support of userspace-controlled timers. These
-+	  timers are purely virtual, and they are supposed to be triggered
-+	  from userspace. They could be quite useful when synchronizing the
-+	  sound timing with userspace applications (for instance, when sending
-+	  data through snd-aloop).
++static int ticked;
++static void async_callback(snd_async_handler_t *ahandler)
++{
++	ticked++;
++}
 +
- config SND_VMASTER
- 	bool
- 
-diff --git a/sound/core/timer.c b/sound/core/timer.c
-index d104adc75a8b..42d29ed574c0 100644
---- a/sound/core/timer.c
-+++ b/sound/core/timer.c
-@@ -13,6 +13,8 @@
- #include <linux/module.h>
- #include <linux/string.h>
- #include <linux/sched/signal.h>
-+#include <linux/anon_inodes.h>
-+#include <linux/idr.h>
- #include <sound/core.h>
- #include <sound/timer.h>
- #include <sound/control.h>
-@@ -109,6 +111,16 @@ struct snd_timer_status64 {
- 	unsigned char reserved[64];	/* reserved */
- };
- 
-+#ifdef CONFIG_SND_UTIMER
-+#define SNDRV_UTIMERS_MAX_COUNT 128
-+/* Internal data structure for keeping the state of the userspace-driven timer */
-+struct snd_utimer {
-+	char *name;
-+	struct snd_timer *timer;
-+	unsigned int id;
-+};
-+#endif
++static char timer_name[64];
++static void bind_to_timer(int device, int subdevice, int timeout)
++{
++	snd_timer_t *handle;
++	snd_timer_params_t *params;
++	snd_async_handler_t *ahandler;
 +
- #define SNDRV_TIMER_IOCTL_STATUS64	_IOR('T', 0x14, struct snd_timer_status64)
- 
- /* list of timers */
-@@ -2009,6 +2021,202 @@ enum {
- 	SNDRV_TIMER_IOCTL_PAUSE_OLD = _IO('T', 0x23),
- };
- 
-+#ifdef CONFIG_SND_UTIMER
++	time_t end;
++
++	sprintf(timer_name, "hw:CLASS=%d,SCLASS=%d,DEV=%d,SUBDEV=%d",
++		SND_TIMER_CLASS_GLOBAL, SND_TIMER_SCLASS_NONE,
++		device, subdevice);
++
++	snd_timer_params_alloca(&params);
++
++	if (snd_timer_open(&handle, timer_name, SND_TIMER_OPEN_NONBLOCK) < 0) {
++		perror("Can't open the timer");
++		exit(EXIT_FAILURE);
++	}
++
++	snd_timer_params_set_auto_start(params, 1);
++	snd_timer_params_set_ticks(params, 1);
++	if (snd_timer_params(handle, params) < 0) {
++		perror("Can't set timer params");
++		exit(EXIT_FAILURE);
++	}
++
++	if (snd_async_add_timer_handler(&ahandler, handle, async_callback, NULL) < 0) {
++		perror("Can't create a handler");
++		exit(EXIT_FAILURE);
++	}
++	end = time(NULL) + timeout;
++	if (snd_timer_start(handle) < 0) {
++		perror("Failed to start the timer");
++		exit(EXIT_FAILURE);
++	}
++	printf("Timer has started\n");
++	while (time(NULL) <= end) {
++		/*
++		 * Waiting for the timeout to elapse. Can't use sleep here, as it gets
++		 * constantly interrupted by the signal from the timer (SIGIO)
++		 */
++	}
++	snd_timer_stop(handle);
++	snd_timer_close(handle);
++}
++
++int main(int argc, char *argv[])
++{
++	int device, subdevice, timeout;
++
++	if (argc < 4) {
++		perror("Usage: %s <device> <subdevice> <timeout>");
++		return EXIT_FAILURE;
++	}
++
++	setlinebuf(stdout);
++
++	device = atoi(argv[1]);
++	subdevice = atoi(argv[2]);
++	timeout = atoi(argv[3]);
++
++	bind_to_timer(device, subdevice, timeout);
++
++	printf("Total ticks count: %d\n", ticked);
++
++	return EXIT_SUCCESS;
++}
+diff --git a/tools/testing/selftests/alsa/utimer-test.c b/tools/testing/selftests/alsa/utimer-test.c
+new file mode 100644
+index 000000000000..f7a90ead8c5a
+--- /dev/null
++++ b/tools/testing/selftests/alsa/utimer-test.c
+@@ -0,0 +1,164 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Since userspace-driven timers are passed to userspace, we need to have an identifier
-+ * which will allow us to use them (basically, the subdevice number of udriven timer).
++ * This test covers the functionality of userspace-driven ALSA timers. Such timers
++ * are purely virtual (so they don't directly depend on the hardware), and they could be
++ * created and triggered by userspace applications.
++ *
++ * Author: Ivan Orlov <ivan.orlov0322@gmail.com>
 + */
-+static DEFINE_IDA(snd_utimer_ids);
++#include "../kselftest_harness.h"
++#include <sound/asound.h>
++#include <unistd.h>
++#include <fcntl.h>
++#include <limits.h>
++#include <sys/ioctl.h>
++#include <stdlib.h>
++#include <pthread.h>
++#include <string.h>
 +
-+static void snd_utimer_put_id(struct snd_utimer *utimer)
-+{
-+	int timer_id = utimer->id;
++#define FRAME_RATE 8000
++#define PERIOD_SIZE 4410
++#define UTIMER_DEFAULT_ID -1
++#define NANO 1000000000ULL
++#define TICKS_COUNT 10
++#define TICKS_RECORDING_DELTA 5
++#define TIMER_OUTPUT_BUF_LEN 1024
++#define TIMER_FREQ_SEC 1
++#define RESULT_PREFIX_LEN strlen("Total ticks count: ")
 +
-+	snd_BUG_ON(timer_id < 0 || timer_id >= SNDRV_UTIMERS_MAX_COUNT);
-+	ida_free(&snd_utimer_ids, timer_id);
-+}
-+
-+static int snd_utimer_take_id(void)
-+{
-+	return ida_alloc_max(&snd_utimer_ids, SNDRV_UTIMERS_MAX_COUNT - 1, GFP_KERNEL);
-+}
-+
-+static void snd_utimer_free(struct snd_utimer *utimer)
-+{
-+	snd_timer_free(utimer->timer);
-+	snd_utimer_put_id(utimer);
-+	kfree(utimer->name);
-+	kfree(utimer);
-+}
-+
-+static int snd_utimer_release(struct inode *inode, struct file *file)
-+{
-+	struct snd_utimer *utimer = (struct snd_utimer *)file->private_data;
-+
-+	snd_utimer_free(utimer);
-+	return 0;
-+}
-+
-+static int snd_utimer_trigger(struct file *file)
-+{
-+	struct snd_utimer *utimer = (struct snd_utimer *)file->private_data;
-+
-+	snd_timer_interrupt(utimer->timer, utimer->timer->sticks);
-+	return 0;
-+}
-+
-+static long snd_utimer_ioctl(struct file *file, unsigned int ioctl, unsigned long arg)
-+{
-+	switch (ioctl) {
-+	case SNDRV_TIMER_IOCTL_TRIGGER:
-+		return snd_utimer_trigger(file);
-+	}
-+
-+	return -ENOTTY;
-+}
-+
-+static const struct file_operations snd_utimer_fops = {
-+	.llseek = noop_llseek,
-+	.release = snd_utimer_release,
-+	.unlocked_ioctl = snd_utimer_ioctl,
++enum timer_app_event {
++	TIMER_APP_STARTED,
++	TIMER_APP_RESULT,
++	TIMER_NO_EVENT,
 +};
 +
-+static int snd_utimer_start(struct snd_timer *t)
-+{
-+	return 0;
-+}
-+
-+static int snd_utimer_stop(struct snd_timer *t)
-+{
-+	return 0;
-+}
-+
-+static int snd_utimer_open(struct snd_timer *t)
-+{
-+	return 0;
-+}
-+
-+static int snd_utimer_close(struct snd_timer *t)
-+{
-+	return 0;
-+}
-+
-+static const struct snd_timer_hardware timer_hw = {
-+	.flags = SNDRV_TIMER_HW_AUTO | SNDRV_TIMER_HW_WORK,
-+	.open = snd_utimer_open,
-+	.close = snd_utimer_close,
-+	.start = snd_utimer_start,
-+	.stop = snd_utimer_stop,
++FIXTURE(timer_f) {
++	int utimer_fd;
++	struct snd_timer_uinfo *utimer_info;
 +};
 +
-+static int snd_utimer_create(struct snd_timer_uinfo *utimer_info,
-+			     struct snd_utimer **r_utimer)
-+{
-+	struct snd_utimer *utimer;
-+	struct snd_timer *timer;
-+	struct snd_timer_id tid;
-+	int utimer_id;
-+	int err = 0;
++FIXTURE_SETUP(timer_f) {
++	int timer_dev_fd;
 +
-+	if (!utimer_info || utimer_info->resolution == 0)
-+		return -EINVAL;
++	if (geteuid())
++		SKIP(return, "This test needs root to run!");
 +
-+	utimer = kzalloc(sizeof(*utimer), GFP_KERNEL);
-+	if (!utimer)
-+		return -ENOMEM;
++	self->utimer_info = calloc(1, sizeof(*self->utimer_info));
++	ASSERT_NE(NULL, self->utimer_info);
 +
-+	/* We hold the ioctl lock here so we won't get a race condition when allocating id */
-+	utimer_id = snd_utimer_take_id();
-+	if (utimer_id < 0) {
-+		err = utimer_id;
-+		goto err_take_id;
-+	}
++	/* Resolution is the time the period of frames takes in nanoseconds */
++	self->utimer_info->resolution = (NANO / FRAME_RATE * PERIOD_SIZE);
 +
-+	utimer->name = kasprintf(GFP_KERNEL, "snd-utimer%d", utimer_id);
-+	if (!utimer->name) {
-+		err = -ENOMEM;
-+		goto err_get_name;
-+	}
++	timer_dev_fd = open("/dev/snd/timer", O_RDONLY);
++	ASSERT_GE(timer_dev_fd, 0);
 +
-+	utimer->id = utimer_id;
++	self->utimer_fd = ioctl(timer_dev_fd, SNDRV_TIMER_IOCTL_CREATE, self->utimer_info);
++	ASSERT_GE(self->utimer_fd, 0);
 +
-+	tid.dev_sclass = SNDRV_TIMER_SCLASS_APPLICATION;
-+	tid.dev_class = SNDRV_TIMER_CLASS_GLOBAL;
-+	tid.card = -1;
-+	tid.device = SNDRV_TIMER_GLOBAL_UDRIVEN;
-+	tid.subdevice = utimer_id;
-+
-+	err = snd_timer_new(NULL, utimer->name, &tid, &timer);
-+	if (err < 0) {
-+		pr_err("Can't create userspace-driven timer\n");
-+		goto err_timer_new;
-+	}
-+
-+	timer->module = THIS_MODULE;
-+	timer->hw = timer_hw;
-+	timer->hw.resolution = utimer_info->resolution;
-+	timer->hw.ticks = 1;
-+	timer->max_instances = MAX_SLAVE_INSTANCES;
-+
-+	utimer->timer = timer;
-+
-+	err = snd_timer_global_register(timer);
-+	if (err < 0) {
-+		pr_err("Can't register a userspace-driven timer\n");
-+		goto err_timer_reg;
-+	}
-+
-+	*r_utimer = utimer;
-+	return 0;
-+
-+err_timer_reg:
-+	snd_timer_free(timer);
-+err_timer_new:
-+	kfree(utimer->name);
-+err_get_name:
-+	snd_utimer_put_id(utimer);
-+err_take_id:
-+	kfree(utimer);
-+
-+	return err;
++	close(timer_dev_fd);
 +}
 +
-+static int snd_utimer_ioctl_create(struct file *file,
-+				   struct snd_timer_uinfo __user *_utimer_info)
++FIXTURE_TEARDOWN(timer_f) {
++	close(self->utimer_fd);
++	free(self->utimer_info);
++}
++
++static void *ticking_func(void *data)
 +{
-+	struct snd_utimer *utimer;
-+	struct snd_timer_uinfo *utimer_info __free(kfree) = NULL;
-+	int err;
++	int i;
++	int *fd = (int *)data;
 +
-+	utimer_info = memdup_user(_utimer_info, sizeof(*utimer_info));
-+	if (IS_ERR(utimer_info))
-+		return PTR_ERR(no_free_ptr(utimer_info));
-+
-+	err = snd_utimer_create(utimer_info, &utimer);
-+	if (err < 0)
-+		return err;
-+
-+	utimer_info->id = utimer->id;
-+
-+	err = copy_to_user(_utimer_info, utimer_info, sizeof(*utimer_info));
-+	if (err) {
-+		snd_utimer_free(utimer);
-+		return -EFAULT;
++	for (i = 0; i < TICKS_COUNT; i++) {
++		/* Well, trigger the timer! */
++		ioctl(*fd, SNDRV_TIMER_IOCTL_TRIGGER, NULL);
++		sleep(TIMER_FREQ_SEC);
 +	}
 +
-+	return anon_inode_getfd(utimer->name, &snd_utimer_fops, utimer, O_RDWR | O_CLOEXEC);
++	return NULL;
 +}
 +
-+#else
-+
-+static int snd_utimer_ioctl_create(struct file *file,
-+				   struct snd_timer_uinfo __user *_utimer_info)
++static enum timer_app_event parse_timer_output(const char *s)
 +{
-+	return -ENOTTY;
++	if (strstr(s, "Timer has started"))
++		return TIMER_APP_STARTED;
++	if (strstr(s, "Total ticks count"))
++		return TIMER_APP_RESULT;
++
++	return TIMER_NO_EVENT;
 +}
 +
-+#endif
++static int parse_timer_result(const char *s)
++{
++	char *end;
++	long d;
 +
- static long __snd_timer_user_ioctl(struct file *file, unsigned int cmd,
- 				 unsigned long arg, bool compat)
- {
-@@ -2053,6 +2261,8 @@ static long __snd_timer_user_ioctl(struct file *file, unsigned int cmd,
- 	case SNDRV_TIMER_IOCTL_PAUSE:
- 	case SNDRV_TIMER_IOCTL_PAUSE_OLD:
- 		return snd_timer_user_pause(file);
-+	case SNDRV_TIMER_IOCTL_CREATE:
-+		return snd_utimer_ioctl_create(file, argp);
- 	}
- 	return -ENOTTY;
- }
++	d = strtol(s + RESULT_PREFIX_LEN, &end, 10);
++	if (end == s + RESULT_PREFIX_LEN)
++		return -1;
++
++	return d;
++}
++
++/*
++ * This test triggers the timer and counts ticks at the same time. The amount
++ * of the timer trigger calls should be equal to the amount of ticks received.
++ */
++TEST_F(timer_f, utimer) {
++	char command[64];
++	pthread_t ticking_thread;
++	int total_ticks = 0;
++	FILE *rfp;
++	char *buf = malloc(TIMER_OUTPUT_BUF_LEN);
++
++	ASSERT_NE(buf, NULL);
++
++	/* The timeout should be the ticks interval * count of ticks + some delta */
++	sprintf(command, "./global-timer %d %d %d", SNDRV_TIMER_GLOBAL_UDRIVEN,
++		self->utimer_info->id, TICKS_COUNT * TIMER_FREQ_SEC + TICKS_RECORDING_DELTA);
++
++	rfp = popen(command, "r");
++	while (fgets(buf, TIMER_OUTPUT_BUF_LEN, rfp)) {
++		buf[TIMER_OUTPUT_BUF_LEN - 1] = 0;
++		switch (parse_timer_output(buf)) {
++		case TIMER_APP_STARTED:
++			/* global-timer waits for timer to trigger, so start the ticking thread */
++			pthread_create(&ticking_thread, NULL, ticking_func,
++				       &self->utimer_fd);
++			break;
++		case TIMER_APP_RESULT:
++			total_ticks = parse_timer_result(buf);
++			break;
++		case TIMER_NO_EVENT:
++			break;
++		}
++	}
++	pthread_join(ticking_thread, NULL);
++	ASSERT_EQ(total_ticks, TICKS_COUNT);
++	pclose(rfp);
++}
++
++TEST(wrong_timers_test) {
++	int timer_dev_fd;
++	int utimer_fd;
++	size_t i;
++	struct snd_timer_uinfo wrong_timer = {
++		.resolution = 0,
++		.id = UTIMER_DEFAULT_ID,
++	};
++
++	timer_dev_fd = open("/dev/snd/timer", O_RDONLY);
++	ASSERT_GE(timer_dev_fd, 0);
++
++	utimer_fd = ioctl(timer_dev_fd, SNDRV_TIMER_IOCTL_CREATE, &wrong_timer);
++	ASSERT_LT(utimer_fd, 0);
++	/* Check that id was not updated */
++	ASSERT_EQ(wrong_timer.id, UTIMER_DEFAULT_ID);
++
++	/* Test the NULL as an argument is processed correctly */
++	utimer_fd = ioctl(timer_dev_fd, SNDRV_TIMER_IOCTL_CREATE, NULL);
++	ASSERT_LT(utimer_fd, 0);
++
++	close(timer_dev_fd);
++}
++
++TEST_HARNESS_MAIN
 -- 
 2.34.1
 
