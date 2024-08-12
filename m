@@ -1,119 +1,170 @@
-Return-Path: <linux-kselftest+bounces-15156-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15157-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42A2E94E9E4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 11:35:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FAF394EA20
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 11:42:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04D0C2812B9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 09:35:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 438CD1C20BD9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 09:42:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49CC816D4FD;
-	Mon, 12 Aug 2024 09:35:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8769C16DC24;
+	Mon, 12 Aug 2024 09:42:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Qyl1BQTA"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="G8nE2qNm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9559015099B
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Aug 2024 09:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B85DC16D4FC
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Aug 2024 09:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723455333; cv=none; b=BQsWNsxzkwf7LWFLBql7Qyd7j5Fr3kFtMuBo1/1UaGnkHxvXL41/xkYohxj6bX3Xe10BSE3jFsTvmlhFQmdFGx73vKSvF1sYp7lOFe+uAZu+4VOM3ib70AHs09+brL5u0dqXkbSTkXZAMu69BVXePyBDsKQCuzTRNUSNPQAZeZc=
+	t=1723455751; cv=none; b=FV+2+pegxcVJHh+3XFu07yUXI5LJm/3nQFPFrACQ+EQYAbFhRu37OWYsBpk6CcJzSP91y3+L2Vt7+th4+x1l0Qbp46h5tECUo/P3Mt/CyZefBjBUeiiB9ukRkNyhB1XJTU4PqNES9kTIOO03RXg+oA7xWxkAVhcDg73i+T6TGUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723455333; c=relaxed/simple;
-	bh=PNupUm463iQE7T43+Zrxo6foOwsAjT1hssbqJKvS1nw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FtcqlX4IXJQtVFgxeaOVDukd4bfeRNyyjWTHdwzv2uPV+ANS1+rlRg4/Bd0HeHpqkjt3dc87dTHagoRG2Dbd4HfCNaUtg2dz9HbcEWHjr/0W0WeD2Qga0RDczoet2k2PD7gWbHPtLzKbX+LiYoS3tikPmJrJiUabzW6nwyRZoLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Qyl1BQTA; arc=none smtp.client-ip=209.85.160.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2644f7d0fb2so497090fac.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Aug 2024 02:35:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1723455329; x=1724060129; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LezxPZ2pblaIeFvj/f40IQFP8Cd13qWLMfSEX26uTrg=;
-        b=Qyl1BQTAHySkQ/pKl3Ih7zqE/4ejNF7mQNvms43yYPNRhHzvqETqUiTEl2rpK17vkq
-         Gcct5H9Njkg9NwOShXwwi6kr0+ygms1u9a+em798UjXcewizt5PnhR7zC4duRE5QTIWc
-         9Go6W5HgCmH7pZeb4OnHIJLK5NY3IoSc77FE8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723455329; x=1724060129;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LezxPZ2pblaIeFvj/f40IQFP8Cd13qWLMfSEX26uTrg=;
-        b=i2AY/dcji9PvsAxzLH5MtwD4Y9QtqXZgWatw2Ig+wAEdX0x9lgVzOmNZgbGm0G0qi4
-         ldTZXwwsUlzXUtJlfud8JL9nichVPGtdSBUbaA3FNxPRyBWUuS5D+Q2jBpXgZKx46t69
-         kiqGEuaUmCJWFuegARDXiiVCZ9LvHrPeiHjVVKKkfjmoymMqIvnZkL5+Od2/66HzFx2d
-         SyrGYXyMortXyFHNTwEJ3JnPehY41DpTO1j/wVQqrr/FzahXvxhJBMppAjfOQCS8qp37
-         JUmWrlTpT+3OGPEfI/ufHW6FAksiSuheUa4/GlkS91O7Z1KtlpYrazsYk15wNfd5cGJy
-         oy/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV/+yvDuFq72TIr0ekPBD4PzkG+dev3iSzk9yEm/XghUgsCWEnvbto3y8bLbwjFTxWb2QN+I+4IL3sp2Ai37CI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJLFtTRF3FpRs+tWpqOzrhQbNzxjw6l4LtEXaJudqXxXKHozhV
-	WMAj3WE8FEDCXYX1fJacBRiQ6mrR5z1zW+9oxukKfn86OGQDbo+XE7E2qi6PCXw=
-X-Google-Smtp-Source: AGHT+IEvaBJ1EAoM7XMitug7a/NQNwZ2GMcuPj+9Pyp+pxqnYpN4Y2JKVJZhBJ6VgvqO4qrwmTDuKQ==
-X-Received: by 2002:a05:6871:3390:b0:261:b94:b0b with SMTP id 586e51a60fabf-26c62c1a506mr5354178fac.1.1723455329347;
-        Mon, 12 Aug 2024 02:35:29 -0700 (PDT)
-Received: from [192.168.104.75] ([223.118.51.122])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-710e58a8f22sm3595976b3a.46.2024.08.12.02.35.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Aug 2024 02:35:28 -0700 (PDT)
-Message-ID: <7612504c-cd56-4fcd-a287-d3fbc89162ea@linuxfoundation.org>
-Date: Mon, 12 Aug 2024 03:35:23 -0600
+	s=arc-20240116; t=1723455751; c=relaxed/simple;
+	bh=uOYHILE8vEftIZDeMsR9Cpt5EGjdl2Emw3OSBMJX5iI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=G++hMSMfeHgNS72rfGvUukLSqg/obn4dasNfFIoLNuT+Oy8dib2kU1daGonRY0XUAofwmgUe7CgCLIwqecE5cUFzYk/u+BRvUKaeaO0lrUeivIYMxckonDW8Dj9N/BdGsFyZt0pY6w6yR9NKb3AVp3MFwxFml1ERSXd1VNX0K9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=G8nE2qNm; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47C4akWi025491;
+	Mon, 12 Aug 2024 09:42:15 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
+	:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=pp1; bh=jMyQHgS/ARMULcqGzPivRhrrVb
+	x/CVj4cEmhJf7UgdE=; b=G8nE2qNmqlD7ty4ryYdX9Fgm1W8UGwKK4kuU/WUsDE
+	giKWUTooOv3G/jXfsXYm7H6K+QocaVylPx1pBPpVspQ992Sk7TrFkv3cKCSFMA6P
+	Atq+x1bkTMy00v55a2/LMG0+Xnpz29gy74LKfCQ4E2A1yS6xPPt/2S6UIDDGen3P
+	H66RBKoAjnWX3c7GbR75kKybp0ZC3BoeM43opEyBCWjUSMl6LRusXewYFQFVkIIC
+	i+qAy1xOB7UdEFiMqcjE2jjht1PaWATx5nuKyxxaO0Wh9L5S3AlJoOsXpCGqzZvt
+	0bYvSaP3GxMBKpIEb3PjS5OOECd/nEfcPTt/VT49sI2w==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40wyq8mgav-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 Aug 2024 09:42:14 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 47C9gEb9032437;
+	Mon, 12 Aug 2024 09:42:14 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40wyq8mgat-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 Aug 2024 09:42:14 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 47C7eD0b015571;
+	Mon, 12 Aug 2024 09:42:12 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40xm1mdpry-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 12 Aug 2024 09:42:12 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 47C9g8jB54854080
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 12 Aug 2024 09:42:10 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id C70A92004B;
+	Mon, 12 Aug 2024 09:42:08 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1C48920040;
+	Mon, 12 Aug 2024 09:42:06 +0000 (GMT)
+Received: from li-c439904c-24ed-11b2-a85c-b284a6847472.ibm.com.com (unknown [9.43.61.128])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 12 Aug 2024 09:42:05 +0000 (GMT)
+From: Madhavan Srinivasan <maddy@linux.ibm.com>
+To: mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        shuah@kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+        Madhavan Srinivasan <maddy@linux.ibm.com>
+Subject: [PATCH v2] selftest/powerpc/benchmark: remove requirement libc-dev
+Date: Mon, 12 Aug 2024 15:11:52 +0530
+Message-ID: <20240812094152.418586-1-maddy@linux.ibm.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kselftest/cgroup: Add missing newline in test_zswap.c
-To: Mohammed Anees <pvmohammedanees2003@gmail.com>, hannes@cmpxchg.org,
- yosryahmed@google.com, nphamcs@gmail.com, chengming.zhou@linux.dev,
- tj@kernel.org, lizefan.x@bytedance.com, mkoutny@suse.com, shuah@kernel.org
-Cc: linux-mm@kvack.org, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240811145900.433711-1-pvmohammedanees2003@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240811145900.433711-1-pvmohammedanees2003@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: afWA52iJvVeHVwNyq0Zacm3cd2C6rY-H
+X-Proofpoint-ORIG-GUID: 643BMJGiJqfGfOOJMBRWiiyTzJ5sdWLt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-12_01,2024-08-07_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ suspectscore=0 mlxlogscore=999 priorityscore=1501 impostorscore=0
+ lowpriorityscore=0 mlxscore=0 malwarescore=0 clxscore=1015 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408120072
 
-On 8/11/24 08:58, Mohammed Anees wrote:
+Currently exec-target.c file is linked as static and this
+post a requirement to install libc dev package to build.
+Without it, build-break when compiling selftest/powerpc/benchmark.
 
-Missing change log
+  CC       exec_target
+/usr/bin/ld: cannot find -lc: No such file or directory
+collect2: error: ld returned 1 exit status
 
-> Signed-off-by: Mohammed Anees <pvmohammedanees2003@gmail.com>
-> ---
->   tools/testing/selftests/cgroup/test_zswap.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-> index 190096017..7c849d836 100644
-> --- a/tools/testing/selftests/cgroup/test_zswap.c
-> +++ b/tools/testing/selftests/cgroup/test_zswap.c
-> @@ -351,7 +351,7 @@ static int test_zswap_writeback(const char *root, bool wb)
->   		goto out;
->   
->   	if (wb != !!zswpwb_after) {
-> -		ksft_print_msg("zswpwb_after is %ld while wb is %s",
-> +		ksft_print_msg("zswpwb_after is %ld while wb is %s\n",
->   				zswpwb_after, wb ? "enabled" : "disabled");
->   		goto out;
->   	}
+exec_target.c is using "syscall" library function which
+could be replaced with a inline assembly and the same is
+proposed as a fix here.
 
-The change looks good to me.
+Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
+Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
+---
+Chnagelog v1:
+- Add comment for clobber register and proper list of
+  clobber registers as suggested by Michael Ellerman and
+  Christophe Leroy
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+ .../selftests/powerpc/benchmarks/Makefile        |  2 +-
+ .../selftests/powerpc/benchmarks/exec_target.c   | 16 ++++++++++++++--
+ 2 files changed, 15 insertions(+), 3 deletions(-)
 
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/powerpc/benchmarks/Makefile b/tools/testing/selftests/powerpc/benchmarks/Makefile
+index 1321922038d0..ca4483c238b9 100644
+--- a/tools/testing/selftests/powerpc/benchmarks/Makefile
++++ b/tools/testing/selftests/powerpc/benchmarks/Makefile
+@@ -18,4 +18,4 @@ $(OUTPUT)/context_switch: LDLIBS += -lpthread
+ 
+ $(OUTPUT)/fork: LDLIBS += -lpthread
+ 
+-$(OUTPUT)/exec_target: CFLAGS += -static -nostartfiles
++$(OUTPUT)/exec_target: CFLAGS += -nostartfiles
+diff --git a/tools/testing/selftests/powerpc/benchmarks/exec_target.c b/tools/testing/selftests/powerpc/benchmarks/exec_target.c
+index c14b0fc1edde..a6408d3f26cd 100644
+--- a/tools/testing/selftests/powerpc/benchmarks/exec_target.c
++++ b/tools/testing/selftests/powerpc/benchmarks/exec_target.c
+@@ -7,10 +7,22 @@
+  */
+ 
+ #define _GNU_SOURCE
+-#include <unistd.h>
+ #include <sys/syscall.h>
+ 
+ void _start(void)
+ {
+-	syscall(SYS_exit, 0);
++	asm volatile (
++		"li %%r0, %[sys_exit];"
++		"li %%r3, 0;"
++		"sc;"
++		:
++		: [sys_exit] "i" (SYS_exit)
++		/*
++		 * "sc" will clobber r0, r3-r13, cr0, ctr, xer and memory.
++		 * Even though sys_exit never returns, handle clobber
++		 * registers.
++		 */
++		: "r0", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10",
++		  "r11", "r12", "r13", "cr0", "ctr", "xer", "memory"
++	);
+ }
+-- 
+2.45.2
+
 
