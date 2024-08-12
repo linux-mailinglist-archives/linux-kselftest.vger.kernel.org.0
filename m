@@ -1,629 +1,296 @@
-Return-Path: <linux-kselftest+bounces-15154-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C32294E913
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 10:59:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F269B94E9D1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 11:30:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A14C71C217B8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 08:59:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23FA71C2167D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 09:30:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C62A16DC09;
-	Mon, 12 Aug 2024 08:58:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C2F16D9B5;
+	Mon, 12 Aug 2024 09:30:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="nSDqAx/S"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iuwn/3V/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD8916D31C;
-	Mon, 12 Aug 2024 08:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 673C016D4FB
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Aug 2024 09:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723453100; cv=none; b=iXJS5cyCQ0vCDo5sTsGF7IA/seqYRGKPM1Jan2o60+mt37SwZ0bF5qgfeh6qynNCqNfj41PNdWfDQeXWWjv5m6k1KFSGWoxnuaNAxTKKwSYSq14pIjlOlldL3G4V+k9kqvqZ9KvnelTgbWrkQVCfLo/NGJkGXYNDE7vhBuvtc6A=
+	t=1723455031; cv=none; b=odAmFylqljxp9uk18VH8u78yA/2L92sHsiEgpTlurSH81V7ONlrSa6nMbvFbJRsyVdMK9zasp2g3QO2eeOyDsaJv3F5JXFqqptmdv1uw69DajxCJbdX/qtmhhaA+BSxeoFdtNB/KVuEkyTMl83Z23W7BfL7R+bnDBOWGVMKqkbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723453100; c=relaxed/simple;
-	bh=QxpY4DE4P+H8UUMKCaK7Xmiwi628RrBiASQNmf1fadI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=LE/2cdGeQwwevIyCpeP1DdhtZPUXrJTcbHup+z11xX6540+aKo5JYUQyN8W/FUmsDK+hTRdrGk8xvZ6gQudEftCefup67fTQ8rArGSDBJ6mJkiCH2sIqjA8HHDn0EY0Pn5octdqHSuWFzyoYLAD+O9ixap5fRjwsXi9UkP4eu3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=nSDqAx/S; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3DB6EFF809;
-	Mon, 12 Aug 2024 08:58:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1723453096;
+	s=arc-20240116; t=1723455031; c=relaxed/simple;
+	bh=vzBBL1ZC3+7zIGGpMnRESBinlOVSn0i5ZzPm/BkJIjo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Roxq5bMFKB+UDgLO8qXNEb6L1vDRMHJEXiRqNBrbG4QgzkAegXEJ8FDPMr42NYUsqj1VPclDwMEB3zNGPceXzhAfqUgxML344a3GNEriN57spGd910pSkrSVJokiyaSyPJQbVdv9FgCjXTk6ONSam1/lKHOBU9iAUr0Q70iBNXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iuwn/3V/; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1723455028;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=k/GXn9h3RHM5wwphHbpwclVPQWg74W6yJBxLK9qZd1Q=;
-	b=nSDqAx/Si82nvJoK27J5Pk5NbnbxfXG55XRZ5f6OJnBPIiYRaHkhmCwu8QL7i1FgwXzV7l
-	jmzbYaAQnY4cpk53KsF8dCCC6J7cW5qVz2Bx/MuaiYeMZwYBPNvDs2y0TpgPb0x/ZEs5ZJ
-	G9WlL6bo4RC3GreHSV+l8apw9JdDIelj81kjG26BxTDlNYbquwtxJVWOlvGrupUiF54Ds3
-	o4yNso/w02Tgr+fOVJ7CbV8d0MNMUTOupmN2Ttn6LwySzRc5P5a3SwQdjJ3ZSaBnKvrczq
-	+BtPaLkpWlVbcJymx5jD+KHqWAvglJ8dJU3YbMs5QTdp3vTKroS7NBo++UlC/w==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Mon, 12 Aug 2024 10:58:06 +0200
-Subject: [PATCH bpf-next v3 4/4] selftests/bpf: convert
- test_skb_cgroup_id_user to test_progs
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=RlbAIG3U/FkMeN2DtHLFcCK+2wTph/qPAt3sAj3H4SA=;
+	b=iuwn/3V/6Fo7slFq7SkXioZLoHz/v9vhI6/KwwJAOBE/eI0W/PzyCI6DwOV+9wJzJgWcbl
+	eolEDOELMMJ9oaciqAl2pOzXb1zYbP68kvReH7nlppMr0be2kLYrYGVC2YBDoInCUZIVpn
+	GUzm7a2nKOiDrh3UYqBuuQo55cL5jzs=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-655-veI36rlPMH6QQBqh3MdjAg-1; Mon, 12 Aug 2024 05:30:22 -0400
+X-MC-Unique: veI36rlPMH6QQBqh3MdjAg-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-3686d709f6dso2473633f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Aug 2024 02:30:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723455021; x=1724059821;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:from:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=RlbAIG3U/FkMeN2DtHLFcCK+2wTph/qPAt3sAj3H4SA=;
+        b=wWJh5AdHA1SSo2xbOulPE31Qhc7m+J70Agrhj2vyB09FHKNoA60VvXrUl1f0g2Rmek
+         gFvMDFlgEyxCm9Pnm7QAgX0VXNy0FWjcEtXBYF2x9RZDOV4mmHrNLq+0tkS4Q+4URk+k
+         83gbR5vXf3qf+QOYDzF/3pla3HtphygknZQxuFO1sb16AuGMHl1Io2URgmTZpUwWnEJc
+         b9nkdeoO4uHAUC9ovxCsk8WY+vpNZ0ELgVqB3yHyz4b8d+eDvR4yWt6gpSXDKQHQii6a
+         UpmfXFuubcDRjJNKegLlRb2i/0tcr5VZRt13n/CVpZWGLcPEeDuegOQ8nmsEAI6rp7Fr
+         4agg==
+X-Forwarded-Encrypted: i=1; AJvYcCWuWf/zxhZXkVLgshfvgZZ8vcKJ9t6uG/T5lZfVS3VdO8E/E+Se4EwxkVB0cb3perwGbGxv2m83Wsg5DHucqN22Jq3gI2p/6+C89ZTTQq5G
+X-Gm-Message-State: AOJu0YykHBv6styb5I3TOH4K5ZArfU0ni/A61G+VlNrEf4surXW/BWTY
+	QlcQs2skOzXSsaS+9GMNtWnqMPzKlcIb65BTs6zPBzSfjhINbd1PJxLblabLSryw5cXDHh1ZirE
+	Yiz9CK8Wt2mwGANSU3Z7+tKxmU154AP+MEmb2yCxTgtZd1ikJnt7mW/gjvs4ZV9o+Sg==
+X-Received: by 2002:a5d:510f:0:b0:369:9358:4634 with SMTP id ffacd0b85a97d-36d5e4cb234mr5214801f8f.19.1723455020677;
+        Mon, 12 Aug 2024 02:30:20 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE+LE5JLv4epgU2WXufgtfc4m9ua8imHwjoTg51Xr3aHs998VDQnY94ZNURSbjf4We4Xxr8fA==
+X-Received: by 2002:a5d:510f:0:b0:369:9358:4634 with SMTP id ffacd0b85a97d-36d5e4cb234mr5214772f8f.19.1723455020129;
+        Mon, 12 Aug 2024 02:30:20 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f09:3f00:d228:bd67:7baa:d604? (p200300d82f093f00d228bd677baad604.dip0.t-ipconnect.de. [2003:d8:2f09:3f00:d228:bd67:7baa:d604])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-36e4cc18ee7sm6998882f8f.45.2024.08.12.02.30.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 12 Aug 2024 02:30:19 -0700 (PDT)
+Message-ID: <854cc5eb-0c60-4574-9291-e1c8dc84e5a6@redhat.com>
+Date: Mon, 12 Aug 2024 11:30:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] mm: Retry migration earlier upon refcount mismatch
+To: Dev Jain <dev.jain@arm.com>, akpm@linux-foundation.org, shuah@kernel.org,
+ willy@infradead.org
+Cc: ryan.roberts@arm.com, anshuman.khandual@arm.com, catalin.marinas@arm.com,
+ cl@gentwo.org, vbabka@suse.cz, mhocko@suse.com, apopple@nvidia.com,
+ osalvador@suse.de, baolin.wang@linux.alibaba.com,
+ dave.hansen@linux.intel.com, will@kernel.org, baohua@kernel.org,
+ ioworker0@gmail.com, gshan@redhat.com, mark.rutland@arm.com,
+ kirill.shutemov@linux.intel.com, hughd@google.com, aneesh.kumar@kernel.org,
+ yang@os.amperecomputing.com, peterx@redhat.com, broonie@kernel.org,
+ mgorman@techsingularity.net, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, ying.huang@intel.com
+References: <20240809103129.365029-1-dev.jain@arm.com>
+ <20240809103129.365029-2-dev.jain@arm.com>
+ <761ba58e-9d6f-4a14-a513-dcc098c2aa94@redhat.com>
+ <5a4ae1d3-d753-4261-97a8-926e44d4217a@arm.com>
+ <367b0403-7477-4857-9e7c-5a749c723432@redhat.com>
+ <ee1b9177-fb12-4bcb-a644-8d5d3d9f16fa@arm.com>
+ <04e12698-8f83-4033-91b2-3a402c59c17a@redhat.com>
+ <0d049ec4-ab39-441b-8560-5613f3527473@arm.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <0d049ec4-ab39-441b-8560-5613f3527473@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240812-convert_cgroup_tests-v3-4-47ac6ce4e88b@bootlin.com>
-References: <20240812-convert_cgroup_tests-v3-0-47ac6ce4e88b@bootlin.com>
-In-Reply-To: <20240812-convert_cgroup_tests-v3-0-47ac6ce4e88b@bootlin.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Alan Maguire <alan.maguire@oracle.com>, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.14.1
-X-GND-Sasl: alexis.lothore@bootlin.com
 
-test_skb_cgroup_id_user allows testing skb cgroup id retrieval at different
-levels, but is not integrated in test_progs, so it is not run
-automatically in CI. The test overlaps a bit with
-cgroup_skb_sk_lookup_kern, which is integrated in test_progs and test
-extensively skb cgroup helpers, but there is still one major difference
-between the two tests which justifies the conversion:
-cgroup_skb_sk_lookup_kern deals with a BPF_PROG_TYPE_CGROUP_SKB (attached
-on a cgroup), while test_skb_cgroup_id_user deals with a
-BPF_PROG_TYPE_SCHED_CLS (attached on a qdisc)
+On 12.08.24 07:35, Dev Jain wrote:
+> 
+> On 8/11/24 14:38, David Hildenbrand wrote:
+>> On 11.08.24 08:06, Dev Jain wrote:
+>>>
+>>> On 8/11/24 00:22, David Hildenbrand wrote:
+>>>> On 10.08.24 20:42, Dev Jain wrote:
+>>>>>
+>>>>> On 8/9/24 19:17, David Hildenbrand wrote:
+>>>>>> On 09.08.24 12:31, Dev Jain wrote:
+>>>>>>> As already being done in __migrate_folio(), wherein we backoff if
+>>>>>>> the
+>>>>>>> folio refcount is wrong, make this check during the unmapping phase,
+>>>>>>> upon
+>>>>>>> the failure of which, the original state of the PTEs will be
+>>>>>>> restored
+>>>>>>> and
+>>>>>>> the folio lock will be dropped via migrate_folio_undo_src(), any
+>>>>>>> racing
+>>>>>>> thread will make progress and migration will be retried.
+>>>>>>>
+>>>>>>> Signed-off-by: Dev Jain <dev.jain@arm.com>
+>>>>>>> ---
+>>>>>>>      mm/migrate.c | 9 +++++++++
+>>>>>>>      1 file changed, 9 insertions(+)
+>>>>>>>
+>>>>>>> diff --git a/mm/migrate.c b/mm/migrate.c
+>>>>>>> index e7296c0fb5d5..477acf996951 100644
+>>>>>>> --- a/mm/migrate.c
+>>>>>>> +++ b/mm/migrate.c
+>>>>>>> @@ -1250,6 +1250,15 @@ static int migrate_folio_unmap(new_folio_t
+>>>>>>> get_new_folio,
+>>>>>>>          }
+>>>>>>>            if (!folio_mapped(src)) {
+>>>>>>> +        /*
+>>>>>>> +         * Someone may have changed the refcount and maybe sleeping
+>>>>>>> +         * on the folio lock. In case of refcount mismatch, bail
+>>>>>>> out,
+>>>>>>> +         * let the system make progress and retry.
+>>>>>>> +         */
+>>>>>>> +        struct address_space *mapping = folio_mapping(src);
+>>>>>>> +
+>>>>>>> +        if (folio_ref_count(src) != folio_expected_refs(mapping,
+>>>>>>> src))
+>>>>>>> +            goto out;
+>>>>>>
+>>>>>> This really seems to be the latest point where we can "easily" back
+>>>>>> off and unlock the source folio -- in this function :)
+>>>>>>
+>>>>>> I wonder if we should be smarter in the migrate_pages_batch() loop
+>>>>>> when we start the actual migrations via migrate_folio_move(): if we
+>>>>>> detect that a folio has unexpected references *and* it has waiters
+>>>>>> (PG_waiters), back off then and retry the folio later. If it only has
+>>>>>> unexpected references, just keep retrying: no waiters -> nobody is
+>>>>>> waiting for the lock to make progress.
+>>>>>
+>>>>>
+>>>>> The patch currently retries migration irrespective of the reason of
+>>>>> refcount change.
+>>>>>
+>>>>> If you are suggesting that, break the retrying according to two
+>>>>> conditions:
+>>>>
+>>>> That's not what I am suggesting ...
+>>>>
+>>>>>
+>>>>>
+>>>>>> This really seems to be the latest point where we can "easily" back
+>>>>>> off and unlock the source folio -- in this function :)
+>>>>>> For example, when migrate_folio_move() fails with -EAGAIN, check if
+>>>>>> there are waiters (PG_waiter?) and undo+unlock to try again later.
+>>>>>
+>>>>>
+>>>>> Currently, on -EAGAIN, migrate_folio_move() returns without undoing
+>>>>> src
+>>>>> and dst; even if we were to fall
+>>>>
+>>>> ...
+>>>>
+>>>> I am wondering if we should detect here if there are waiters and undo
+>>>> src+dst.
+>>>
+>>> After undoing src+dst, which restores the PTEs, how are you going to
+>>> set the
+>>>
+>>> PTEs to migration again? That is being done through
+>>> migrate_folio_unmap(),
+>>>
+>>> and the loops of _unmap() and _move() are different. Or am I missing
+>>> something...
+>>
+>> Again, no expert on the code, but it would mean that if we detect that
+>> there are waiters, we would undo src+dst and add them to ret_folios,
+>> similar to what we do in "Cleanup remaining folios" at the end of
+>> migrate_pages_batch()?
+>>
+>> So instead of retrying migration of that folio, just give it up
+>> immediately and retry again later.
+>>
+>> Of course, this means that (without further modifications to that
+>> function), we would leave retrying these folios to the caller, such as
+>> in migrate_pages_sync(), where we move ret_folios to the tail of
+>> "folios" and retry migration.
+> 
+> So IIUC, you are saying to change the return value in
+> __folio_migrate_mapping(), so that when move_to_new_folio() fails
+> 
+> in migrate_folio_move(), we end up in the retrying loop of _sync() which
+> calls _batch() in synchronous mode. Here, we
+> 
+> will have to make a change to decide how much we want to retry?
 
-Convert test_skb_cgroup_id_user into test_progs framework in order to run
-it automatically in CI. The main differences with the original test are the
-following:
-- rename the test to make it shorter and more straightforward regarding
-  tested feature
-- the wrapping shell script has been dropped since every setup step is now
-  handled in the main C test file
-- the test has been renamed for a shorter name and reflecting the tested
-  API
-- add dedicated assert log per level to ease test failure debugging
-- use global variables instead of maps to access bpf prog data
+So essentially, instead of checking for "unexpected references" and 
+backing off once at the beginning (what you do in this patch), we would 
+*not* add new checks for "unexpected references" and not fail early in 
+that case.
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
----
-Changes in v3:
-- close leaking socket
-- close leaking cgroup file descriptor
-- run test in dedicated network namespace
+Instead, we would continuously check if there are waiters, and if there 
+are waiters, we back-off completely (->unlock) instead of retrying 
+something that cannot possibly make progress.
 
-Changes in v2:
-- use global variables instead of maps
+For "unexpected references" it can make sense to just retry immediately, 
+because these might just be speculative references or short-term 
+references that will go away soon.
 
-The new test has been tested in a qemu environment:
+For "unexpected reference with waiters" (or just "waiters" which should 
+be the same because "waiters" should imply "unexpected references"), 
+it's different as you discovered.
 
-  ./test_progs -a cgroup_ancestor
-  44      cgroup_ancestor:OK
-  Summary: 1/0 PASSED, 0 SKIPPED, 0 FAILED
----
- tools/testing/selftests/bpf/.gitignore             |   1 -
- tools/testing/selftests/bpf/Makefile               |   3 +-
- .../selftests/bpf/prog_tests/cgroup_ancestor.c     | 169 +++++++++++++++++++
- .../testing/selftests/bpf/progs/cgroup_ancestor.c  |  12 +-
- tools/testing/selftests/bpf/test_skb_cgroup_id.sh  |  67 --------
- .../selftests/bpf/test_skb_cgroup_id_user.c        | 183 ---------------------
- 6 files changed, 172 insertions(+), 263 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/.gitignore b/tools/testing/selftests/bpf/.gitignore
-index fd7ae37024e2..99ffea1fa5c6 100644
---- a/tools/testing/selftests/bpf/.gitignore
-+++ b/tools/testing/selftests/bpf/.gitignore
-@@ -19,7 +19,6 @@ test_sock
- urandom_read
- test_sockmap
- test_lirc_mode2_user
--test_skb_cgroup_id_user
- test_flow_dissector
- flow_dissector_load
- test_tcpnotify_user
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index 29d689610ba2..b1259922d0aa 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -137,7 +137,7 @@ TEST_PROGS_EXTENDED := with_addr.sh \
- 	test_xdp_vlan.sh test_bpftool.py
- 
- # Compile but not part of 'make run_tests'
--TEST_GEN_PROGS_EXTENDED = test_skb_cgroup_id_user \
-+TEST_GEN_PROGS_EXTENDED = \
- 	flow_dissector_load test_flow_dissector test_tcp_check_syncookie_user \
- 	test_lirc_mode2_user xdping test_cpp runqslower bench bpf_testmod.ko \
- 	xskxceiver xdp_redirect_multi xdp_synproxy veristat xdp_hw_metadata \
-@@ -290,7 +290,6 @@ JSON_WRITER		:= $(OUTPUT)/json_writer.o
- CAP_HELPERS	:= $(OUTPUT)/cap_helpers.o
- NETWORK_HELPERS := $(OUTPUT)/network_helpers.o
- 
--$(OUTPUT)/test_skb_cgroup_id_user: $(CGROUP_HELPERS) $(TESTING_HELPERS)
- $(OUTPUT)/test_sock: $(CGROUP_HELPERS) $(TESTING_HELPERS)
- $(OUTPUT)/test_sockmap: $(CGROUP_HELPERS) $(TESTING_HELPERS)
- $(OUTPUT)/test_tcpnotify_user: $(CGROUP_HELPERS) $(TESTING_HELPERS) $(TRACE_HELPERS)
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_ancestor.c b/tools/testing/selftests/bpf/prog_tests/cgroup_ancestor.c
-new file mode 100644
-index 000000000000..2965595cb166
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_ancestor.c
-@@ -0,0 +1,169 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "test_progs.h"
-+#include "network_helpers.h"
-+#include "cgroup_helpers.h"
-+#include "cgroup_ancestor.skel.h"
-+
-+#define VETH_PREFIX "test_cgid_"
-+#define VETH_1 VETH_PREFIX "1"
-+#define VETH_2 VETH_PREFIX "2"
-+#define CGROUP_PATH "/skb_cgroup_test"
-+#define TEST_NS "cgroup_ancestor_ns"
-+#define NUM_CGROUP_LEVELS 4
-+#define WAIT_AUTO_IP_MAX_ATTEMPT 10
-+#define DST_ADDR "ff02::1"
-+#define DST_PORT 1234
-+#define MAX_ASSERT_NAME 32
-+
-+struct test_data {
-+	struct cgroup_ancestor *skel;
-+	struct bpf_tc_hook qdisc;
-+	struct bpf_tc_opts tc_attach;
-+	struct nstoken *ns;
-+};
-+
-+static int send_datagram(void)
-+{
-+	unsigned char buf[] = "some random test data";
-+	struct sockaddr_in6 addr = { .sin6_family = AF_INET6,
-+				     .sin6_port = htons(DST_PORT),
-+				     .sin6_scope_id = if_nametoindex(VETH_1) };
-+	int sock, n;
-+
-+	if (!ASSERT_EQ(inet_pton(AF_INET6, DST_ADDR, &addr.sin6_addr), 1,
-+		       "inet_pton"))
-+		return -1;
-+
-+	sock = socket(AF_INET6, SOCK_DGRAM, 0);
-+	if (!ASSERT_OK_FD(sock, "create socket"))
-+		return sock;
-+
-+	n = sendto(sock, buf, sizeof(buf), 0, (const struct sockaddr *)&addr,
-+		   sizeof(addr));
-+	ASSERT_EQ(n, sizeof(buf), "send data");
-+	close(sock);
-+
-+	return n  == sizeof(buf) ? 0 : n;
-+}
-+
-+static int wait_local_ip(void)
-+{
-+	char *ping_cmd = ping_command(AF_INET6);
-+	int i, err;
-+
-+	for (i = 0; i < WAIT_AUTO_IP_MAX_ATTEMPT; i++) {
-+		err = SYS_NOFAIL("%s -c 1 -W 1 %s%%%s", ping_cmd, DST_ADDR,
-+				 VETH_1);
-+		if (!err)
-+			break;
-+	}
-+
-+	return err;
-+}
-+
-+static int setup_network(struct test_data *t)
-+{
-+	int ret;
-+
-+	SYS(fail, "ip netns add %s", TEST_NS);
-+	t->ns = open_netns(TEST_NS);
-+	if (!ASSERT_OK_PTR(t->ns, "open netns"))
-+		goto cleanup_ns;
-+
-+	SYS(close_ns, "ip link add dev %s type veth peer name %s",
-+	    VETH_1, VETH_2);
-+	SYS(close_ns, "ip link set %s up", VETH_1);
-+	SYS(close_ns, "ip link set %s up", VETH_2);
-+
-+	ret = wait_local_ip();
-+	if (!ASSERT_EQ(ret, 0, "wait local ip"))
-+		goto cleanup_interfaces;
-+
-+	memset(&t->qdisc, 0, sizeof(t->qdisc));
-+	t->qdisc.sz = sizeof(t->qdisc);
-+	t->qdisc.attach_point = BPF_TC_EGRESS;
-+	t->qdisc.ifindex = if_nametoindex(VETH_1);
-+	if (!ASSERT_NEQ(t->qdisc.ifindex, 0, "if_nametoindex"))
-+		goto cleanup_interfaces;
-+	if (!ASSERT_OK(bpf_tc_hook_create(&t->qdisc), "qdisc add"))
-+		goto cleanup_interfaces;
-+
-+	memset(&t->tc_attach, 0, sizeof(t->tc_attach));
-+	t->tc_attach.sz = sizeof(t->tc_attach);
-+	t->tc_attach.prog_fd = bpf_program__fd(t->skel->progs.log_cgroup_id);
-+	if (!ASSERT_OK(bpf_tc_attach(&t->qdisc, &t->tc_attach), "filter add"))
-+		goto cleanup_qdisc;
-+
-+	return 0;
-+
-+cleanup_qdisc:
-+	bpf_tc_hook_destroy(&t->qdisc);
-+cleanup_interfaces:
-+	SYS_NOFAIL("ip link del %s", VETH_1);
-+close_ns:
-+	close_netns(t->ns);
-+cleanup_ns:
-+	SYS_NOFAIL("ip netns del %s", TEST_NS);
-+fail:
-+	return 1;
-+}
-+
-+static void cleanup_network(struct test_data *t)
-+{
-+	bpf_tc_detach(&t->qdisc, &t->tc_attach);
-+	bpf_tc_hook_destroy(&t->qdisc);
-+	/* Deleting first interface will also delete peer interface */
-+	SYS_NOFAIL("ip link del %s", VETH_1);
-+	close_netns(t->ns);
-+	SYS_NOFAIL("ip netns del %s", TEST_NS);
-+}
-+
-+static void check_ancestors_ids(struct test_data *t)
-+{
-+	__u64 expected_ids[NUM_CGROUP_LEVELS];
-+	char assert_name[MAX_ASSERT_NAME];
-+	__u32 level;
-+
-+	expected_ids[0] = get_cgroup_id("/.."); /* root cgroup */
-+	expected_ids[1] = get_cgroup_id("");
-+	expected_ids[2] = get_cgroup_id(CGROUP_PATH);
-+	expected_ids[3] = 0; /* non-existent cgroup */
-+
-+	for (level = 0; level < NUM_CGROUP_LEVELS; level++) {
-+		snprintf(assert_name, MAX_ASSERT_NAME,
-+			 "ancestor id at level %d", level);
-+		ASSERT_EQ(t->skel->bss->cgroup_ids[level], expected_ids[level],
-+			  assert_name);
-+	}
-+}
-+
-+void test_cgroup_ancestor(void)
-+{
-+	struct test_data t;
-+	int cgroup_fd;
-+
-+	t.skel = cgroup_ancestor__open_and_load();
-+	if (!ASSERT_OK_PTR(t.skel, "open and load"))
-+		return;
-+
-+	cgroup_fd = cgroup_setup_and_join(CGROUP_PATH);
-+	if (cgroup_fd < 0)
-+		goto cleanup_progs;
-+
-+	if (setup_network(&t))
-+		goto cleanup_cgroups;
-+
-+	if (send_datagram())
-+		goto cleanup_network;
-+
-+	check_ancestors_ids(&t);
-+
-+cleanup_network:
-+	cleanup_network(&t);
-+cleanup_cgroups:
-+	close(cgroup_fd);
-+	cleanup_cgroup_environment();
-+cleanup_progs:
-+	cgroup_ancestor__destroy(t.skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_ancestor.c b/tools/testing/selftests/bpf/progs/cgroup_ancestor.c
-index 4879645f5827..23c2e63e77a2 100644
---- a/tools/testing/selftests/bpf/progs/cgroup_ancestor.c
-+++ b/tools/testing/selftests/bpf/progs/cgroup_ancestor.c
-@@ -10,22 +10,14 @@
- 
- #define NUM_CGROUP_LEVELS	4
- 
--struct {
--	__uint(type, BPF_MAP_TYPE_ARRAY);
--	__type(key, __u32);
--	__type(value, __u64);
--	__uint(max_entries, NUM_CGROUP_LEVELS);
--} cgroup_ids SEC(".maps");
-+__u64 cgroup_ids[NUM_CGROUP_LEVELS];
- 
- static __always_inline void log_nth_level(struct __sk_buff *skb, __u32 level)
- {
--	__u64 id;
--
- 	/* [1] &level passed to external function that may change it, it's
- 	 *     incompatible with loop unroll.
- 	 */
--	id = bpf_skb_ancestor_cgroup_id(skb, level);
--	bpf_map_update_elem(&cgroup_ids, &level, &id, 0);
-+	cgroup_ids[level] = bpf_skb_ancestor_cgroup_id(skb, level);
- }
- 
- SEC("tc")
-diff --git a/tools/testing/selftests/bpf/test_skb_cgroup_id.sh b/tools/testing/selftests/bpf/test_skb_cgroup_id.sh
-deleted file mode 100755
-index d7dad49175c2..000000000000
---- a/tools/testing/selftests/bpf/test_skb_cgroup_id.sh
-+++ /dev/null
-@@ -1,67 +0,0 @@
--#!/bin/sh
--# SPDX-License-Identifier: GPL-2.0
--# Copyright (c) 2018 Facebook
--
--set -eu
--
--wait_for_ip()
--{
--	local _i
--	echo -n "Wait for testing link-local IP to become available "
--	for _i in $(seq ${MAX_PING_TRIES}); do
--		echo -n "."
--		if $PING6 -c 1 -W 1 ff02::1%${TEST_IF} >/dev/null 2>&1; then
--			echo " OK"
--			return
--		fi
--		sleep 1
--	done
--	echo 1>&2 "ERROR: Timeout waiting for test IP to become available."
--	exit 1
--}
--
--setup()
--{
--	# Create testing interfaces not to interfere with current environment.
--	ip link add dev ${TEST_IF} type veth peer name ${TEST_IF_PEER}
--	ip link set ${TEST_IF} up
--	ip link set ${TEST_IF_PEER} up
--
--	wait_for_ip
--
--	tc qdisc add dev ${TEST_IF} clsact
--	mkdir -p /sys/fs/bpf/${BPF_PROG_PIN}
--	bpftool prog loadall ${BPF_PROG_OBJ} /sys/fs/bpf/${BPF_PROG_PIN} type tc
--	tc filter add dev ${TEST_IF} egress bpf da object-pinned \
--		/sys/fs/bpf/${BPF_PROG_PIN}/${BPF_PROG_NAME}
--
--	BPF_PROG_ID=$(tc filter show dev ${TEST_IF} egress | \
--			awk '/ id / {sub(/.* id /, "", $0); print($1)}')
--}
--
--cleanup()
--{
--	ip link del ${TEST_IF} 2>/dev/null || :
--	ip link del ${TEST_IF_PEER} 2>/dev/null || :
--	rm -rf /sys/fs/bpf/${BPF_PROG_PIN}
--}
--
--main()
--{
--	trap cleanup EXIT 2 3 6 15
--	setup
--	${PROG} ${TEST_IF} ${BPF_PROG_ID}
--}
--
--DIR=$(dirname $0)
--TEST_IF="test_cgid_1"
--TEST_IF_PEER="test_cgid_2"
--MAX_PING_TRIES=5
--BPF_PROG_PIN="cgroup_ancestor"
--BPF_PROG_OBJ="${DIR}/${BPF_PROG_PIN}.bpf.o"
--BPF_PROG_NAME="log_cgroup_id"
--BPF_PROG_ID=0
--PROG="${DIR}/test_skb_cgroup_id_user"
--type ping6 >/dev/null 2>&1 && PING6="ping6" || PING6="ping -6"
--
--main
-diff --git a/tools/testing/selftests/bpf/test_skb_cgroup_id_user.c b/tools/testing/selftests/bpf/test_skb_cgroup_id_user.c
-deleted file mode 100644
-index ed518d075d1d..000000000000
---- a/tools/testing/selftests/bpf/test_skb_cgroup_id_user.c
-+++ /dev/null
-@@ -1,183 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--// Copyright (c) 2018 Facebook
--
--#include <stdlib.h>
--#include <string.h>
--#include <unistd.h>
--
--#include <arpa/inet.h>
--#include <net/if.h>
--#include <netinet/in.h>
--#include <sys/socket.h>
--#include <sys/types.h>
--
--
--#include <bpf/bpf.h>
--#include <bpf/libbpf.h>
--
--#include "cgroup_helpers.h"
--
--#define CGROUP_PATH		"/skb_cgroup_test"
--#define NUM_CGROUP_LEVELS	4
--
--/* RFC 4291, Section 2.7.1 */
--#define LINKLOCAL_MULTICAST	"ff02::1"
--
--static int mk_dst_addr(const char *ip, const char *iface,
--		       struct sockaddr_in6 *dst)
--{
--	memset(dst, 0, sizeof(*dst));
--
--	dst->sin6_family = AF_INET6;
--	dst->sin6_port = htons(1025);
--
--	if (inet_pton(AF_INET6, ip, &dst->sin6_addr) != 1) {
--		log_err("Invalid IPv6: %s", ip);
--		return -1;
--	}
--
--	dst->sin6_scope_id = if_nametoindex(iface);
--	if (!dst->sin6_scope_id) {
--		log_err("Failed to get index of iface: %s", iface);
--		return -1;
--	}
--
--	return 0;
--}
--
--static int send_packet(const char *iface)
--{
--	struct sockaddr_in6 dst;
--	char msg[] = "msg";
--	int err = 0;
--	int fd = -1;
--
--	if (mk_dst_addr(LINKLOCAL_MULTICAST, iface, &dst))
--		goto err;
--
--	fd = socket(AF_INET6, SOCK_DGRAM, 0);
--	if (fd == -1) {
--		log_err("Failed to create UDP socket");
--		goto err;
--	}
--
--	if (sendto(fd, &msg, sizeof(msg), 0, (const struct sockaddr *)&dst,
--		   sizeof(dst)) == -1) {
--		log_err("Failed to send datagram");
--		goto err;
--	}
--
--	goto out;
--err:
--	err = -1;
--out:
--	if (fd >= 0)
--		close(fd);
--	return err;
--}
--
--int get_map_fd_by_prog_id(int prog_id)
--{
--	struct bpf_prog_info info = {};
--	__u32 info_len = sizeof(info);
--	__u32 map_ids[1];
--	int prog_fd = -1;
--	int map_fd = -1;
--
--	prog_fd = bpf_prog_get_fd_by_id(prog_id);
--	if (prog_fd < 0) {
--		log_err("Failed to get fd by prog id %d", prog_id);
--		goto err;
--	}
--
--	info.nr_map_ids = 1;
--	info.map_ids = (__u64) (unsigned long) map_ids;
--
--	if (bpf_prog_get_info_by_fd(prog_fd, &info, &info_len)) {
--		log_err("Failed to get info by prog fd %d", prog_fd);
--		goto err;
--	}
--
--	if (!info.nr_map_ids) {
--		log_err("No maps found for prog fd %d", prog_fd);
--		goto err;
--	}
--
--	map_fd = bpf_map_get_fd_by_id(map_ids[0]);
--	if (map_fd < 0)
--		log_err("Failed to get fd by map id %d", map_ids[0]);
--err:
--	if (prog_fd >= 0)
--		close(prog_fd);
--	return map_fd;
--}
--
--int check_ancestor_cgroup_ids(int prog_id)
--{
--	__u64 actual_ids[NUM_CGROUP_LEVELS], expected_ids[NUM_CGROUP_LEVELS];
--	__u32 level;
--	int err = 0;
--	int map_fd;
--
--	expected_ids[0] = get_cgroup_id("/..");	/* root cgroup */
--	expected_ids[1] = get_cgroup_id("");
--	expected_ids[2] = get_cgroup_id(CGROUP_PATH);
--	expected_ids[3] = 0; /* non-existent cgroup */
--
--	map_fd = get_map_fd_by_prog_id(prog_id);
--	if (map_fd < 0)
--		goto err;
--
--	for (level = 0; level < NUM_CGROUP_LEVELS; ++level) {
--		if (bpf_map_lookup_elem(map_fd, &level, &actual_ids[level])) {
--			log_err("Failed to lookup key %d", level);
--			goto err;
--		}
--		if (actual_ids[level] != expected_ids[level]) {
--			log_err("%llx (actual) != %llx (expected), level: %u\n",
--				actual_ids[level], expected_ids[level], level);
--			goto err;
--		}
--	}
--
--	goto out;
--err:
--	err = -1;
--out:
--	if (map_fd >= 0)
--		close(map_fd);
--	return err;
--}
--
--int main(int argc, char **argv)
--{
--	int cgfd = -1;
--	int err = 0;
--
--	if (argc < 3) {
--		fprintf(stderr, "Usage: %s iface prog_id\n", argv[0]);
--		exit(EXIT_FAILURE);
--	}
--
--	/* Use libbpf 1.0 API mode */
--	libbpf_set_strict_mode(LIBBPF_STRICT_ALL);
--
--	cgfd = cgroup_setup_and_join(CGROUP_PATH);
--	if (cgfd < 0)
--		goto err;
--
--	if (send_packet(argv[1]))
--		goto err;
--
--	if (check_ancestor_cgroup_ids(atoi(argv[2])))
--		goto err;
--
--	goto out;
--err:
--	err = -1;
--out:
--	close(cgfd);
--	cleanup_cgroup_environment();
--	printf("[%s]\n", err ? "FAIL" : "PASS");
--	return err;
--}
+What we do with these "somebody else is waiting to make progress" pages 
+is indeed a god question -- Ying seems to have some ideas in how to 
+optimize retrying further.
 
 -- 
-2.46.0
+Cheers,
+
+David / dhildenb
 
 
