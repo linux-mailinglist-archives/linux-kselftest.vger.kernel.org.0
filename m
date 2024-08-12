@@ -1,170 +1,101 @@
-Return-Path: <linux-kselftest+bounces-15157-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15158-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FAF394EA20
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 11:42:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E77294EA4A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 11:51:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 438CD1C20BD9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 09:42:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE77B28231A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 09:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8769C16DC24;
-	Mon, 12 Aug 2024 09:42:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CD1B16DEBA;
+	Mon, 12 Aug 2024 09:51:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="G8nE2qNm"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kEt5DQJ4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B85DC16D4FC
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Aug 2024 09:42:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2C9A16DC05;
+	Mon, 12 Aug 2024 09:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723455751; cv=none; b=FV+2+pegxcVJHh+3XFu07yUXI5LJm/3nQFPFrACQ+EQYAbFhRu37OWYsBpk6CcJzSP91y3+L2Vt7+th4+x1l0Qbp46h5tECUo/P3Mt/CyZefBjBUeiiB9ukRkNyhB1XJTU4PqNES9kTIOO03RXg+oA7xWxkAVhcDg73i+T6TGUo=
+	t=1723456275; cv=none; b=Yr0rOJl3p936TCmYoTj8hMFYDCqwnh0w7J8FH+klSL2Hoa4MlhzuC/eFmGIHUB3NCvqZ01/+mTzdISRHWWijXAge88L4+zllouRvJo6P9UwHLRCYdNXL4NGwv4gow2tw6cYwz+RoqoxN6o/lmkP6WWSnOicZ773izMouJyQG+GU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723455751; c=relaxed/simple;
-	bh=uOYHILE8vEftIZDeMsR9Cpt5EGjdl2Emw3OSBMJX5iI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=G++hMSMfeHgNS72rfGvUukLSqg/obn4dasNfFIoLNuT+Oy8dib2kU1daGonRY0XUAofwmgUe7CgCLIwqecE5cUFzYk/u+BRvUKaeaO0lrUeivIYMxckonDW8Dj9N/BdGsFyZt0pY6w6yR9NKb3AVp3MFwxFml1ERSXd1VNX0K9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=G8nE2qNm; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47C4akWi025491;
-	Mon, 12 Aug 2024 09:42:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
-	:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding; s=pp1; bh=jMyQHgS/ARMULcqGzPivRhrrVb
-	x/CVj4cEmhJf7UgdE=; b=G8nE2qNmqlD7ty4ryYdX9Fgm1W8UGwKK4kuU/WUsDE
-	giKWUTooOv3G/jXfsXYm7H6K+QocaVylPx1pBPpVspQ992Sk7TrFkv3cKCSFMA6P
-	Atq+x1bkTMy00v55a2/LMG0+Xnpz29gy74LKfCQ4E2A1yS6xPPt/2S6UIDDGen3P
-	H66RBKoAjnWX3c7GbR75kKybp0ZC3BoeM43opEyBCWjUSMl6LRusXewYFQFVkIIC
-	i+qAy1xOB7UdEFiMqcjE2jjht1PaWATx5nuKyxxaO0Wh9L5S3AlJoOsXpCGqzZvt
-	0bYvSaP3GxMBKpIEb3PjS5OOECd/nEfcPTt/VT49sI2w==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40wyq8mgav-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Aug 2024 09:42:14 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 47C9gEb9032437;
-	Mon, 12 Aug 2024 09:42:14 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 40wyq8mgat-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Aug 2024 09:42:14 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 47C7eD0b015571;
-	Mon, 12 Aug 2024 09:42:12 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40xm1mdpry-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 12 Aug 2024 09:42:12 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 47C9g8jB54854080
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 12 Aug 2024 09:42:10 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C70A92004B;
-	Mon, 12 Aug 2024 09:42:08 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1C48920040;
-	Mon, 12 Aug 2024 09:42:06 +0000 (GMT)
-Received: from li-c439904c-24ed-11b2-a85c-b284a6847472.ibm.com.com (unknown [9.43.61.128])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 12 Aug 2024 09:42:05 +0000 (GMT)
-From: Madhavan Srinivasan <maddy@linux.ibm.com>
-To: mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        shuah@kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-        Madhavan Srinivasan <maddy@linux.ibm.com>
-Subject: [PATCH v2] selftest/powerpc/benchmark: remove requirement libc-dev
-Date: Mon, 12 Aug 2024 15:11:52 +0530
-Message-ID: <20240812094152.418586-1-maddy@linux.ibm.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1723456275; c=relaxed/simple;
+	bh=N39pImIulu0yWXn8R68y+7zRjcDs45zt4/rjKD8+G50=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FgzAnojU3rYm78DdaDX/SulKvwR6Z5+wIkxiv0Yjt4CUaGX/VMvz/mt+nYv78uuKNr8kRRnzFunJo7y1uuai5YjMNAACLyS1EF9v/m8nWD13gw1yVPHFeU98AckBHyaqGI7L5FeM0A9+KK/kqR+/q/cYUSnUlttxz6V4umts9GU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kEt5DQJ4; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D336FC0006;
+	Mon, 12 Aug 2024 09:51:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1723456271;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IOLs8cJ464OCDM3eZnzqLL9Zk7yzPtLClQiYQw/1gFA=;
+	b=kEt5DQJ4JinzAjwIznC2iCvD2dB/wa48T3Pl8vqE0J+10kKcm3LtHL1CAa3wvqf4CXvS5c
+	fDX5SzcUpITYGzMCv0JTq/PVvUVnakfYcNLfFy0+Xziir6cJgJdHPF3WaNZuDs12V5K5Ty
+	9yFRyy45BxtQYppLmjFu1Du6azVbS6TL1AmfTvW1+5lmseYRe79ofU7DZBffojNxVIfbkK
+	/m+aNm50gNiGtQ/BlIbz9sCzktfuK8cqCAjRNk4GzoBnfQSZ3Mgms4ak7sDtkPG26pZ076
+	KYIfIZ7qXkV6SJLui2vACcEq5a9h6qKRCqQIFYkdjdKY4wV6l/t0yKRc6qbKIQ==
+Message-ID: <eb36ce16-3711-4388-9ebf-bc29577f6626@bootlin.com>
+Date: Mon, 12 Aug 2024 11:51:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v3 0/4] selftests/bpf: convert three other cgroup
+ tests to test_progs
+To: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Alan Maguire <alan.maguire@oracle.com>
+References: <20240812-convert_cgroup_tests-v3-0-47ac6ce4e88b@bootlin.com>
+From: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Content-Language: en-US
+In-Reply-To: <20240812-convert_cgroup_tests-v3-0-47ac6ce4e88b@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: afWA52iJvVeHVwNyq0Zacm3cd2C6rY-H
-X-Proofpoint-ORIG-GUID: 643BMJGiJqfGfOOJMBRWiiyTzJ5sdWLt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-12_01,2024-08-07_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- suspectscore=0 mlxlogscore=999 priorityscore=1501 impostorscore=0
- lowpriorityscore=0 mlxscore=0 malwarescore=0 clxscore=1015 phishscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408120072
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-Currently exec-target.c file is linked as static and this
-post a requirement to install libc dev package to build.
-Without it, build-break when compiling selftest/powerpc/benchmark.
+On 8/12/24 10:58, Alexis Lothoré (eBPF Foundation) wrote:
+> Hello,
+> this series brings a new set of test converted to the test_progs framework.
+> Since the tests are quite small, I chose to group three tests conversion in
+> the same series, but feel free to let me know if I should keep one series
+> per test. The series focuses on cgroup testing and converts the following
+> tests:
+> - get_cgroup_id_user
+> - cgroup_storage
+> - test_skb_cgroup_id_user
+> 
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
-  CC       exec_target
-/usr/bin/ld: cannot find -lc: No such file or directory
-collect2: error: ld returned 1 exit status
+So I messed up during the testing step for this revision and broke one of the
+new tests. Sorry for the noise, please ignore this revision.
 
-exec_target.c is using "syscall" library function which
-could be replaced with a inline assembly and the same is
-proposed as a fix here.
-
-Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
-Signed-off-by: Madhavan Srinivasan <maddy@linux.ibm.com>
----
-Chnagelog v1:
-- Add comment for clobber register and proper list of
-  clobber registers as suggested by Michael Ellerman and
-  Christophe Leroy
-
- .../selftests/powerpc/benchmarks/Makefile        |  2 +-
- .../selftests/powerpc/benchmarks/exec_target.c   | 16 ++++++++++++++--
- 2 files changed, 15 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/powerpc/benchmarks/Makefile b/tools/testing/selftests/powerpc/benchmarks/Makefile
-index 1321922038d0..ca4483c238b9 100644
---- a/tools/testing/selftests/powerpc/benchmarks/Makefile
-+++ b/tools/testing/selftests/powerpc/benchmarks/Makefile
-@@ -18,4 +18,4 @@ $(OUTPUT)/context_switch: LDLIBS += -lpthread
- 
- $(OUTPUT)/fork: LDLIBS += -lpthread
- 
--$(OUTPUT)/exec_target: CFLAGS += -static -nostartfiles
-+$(OUTPUT)/exec_target: CFLAGS += -nostartfiles
-diff --git a/tools/testing/selftests/powerpc/benchmarks/exec_target.c b/tools/testing/selftests/powerpc/benchmarks/exec_target.c
-index c14b0fc1edde..a6408d3f26cd 100644
---- a/tools/testing/selftests/powerpc/benchmarks/exec_target.c
-+++ b/tools/testing/selftests/powerpc/benchmarks/exec_target.c
-@@ -7,10 +7,22 @@
-  */
- 
- #define _GNU_SOURCE
--#include <unistd.h>
- #include <sys/syscall.h>
- 
- void _start(void)
- {
--	syscall(SYS_exit, 0);
-+	asm volatile (
-+		"li %%r0, %[sys_exit];"
-+		"li %%r3, 0;"
-+		"sc;"
-+		:
-+		: [sys_exit] "i" (SYS_exit)
-+		/*
-+		 * "sc" will clobber r0, r3-r13, cr0, ctr, xer and memory.
-+		 * Even though sys_exit never returns, handle clobber
-+		 * registers.
-+		 */
-+		: "r0", "r3", "r4", "r5", "r6", "r7", "r8", "r9", "r10",
-+		  "r11", "r12", "r13", "cr0", "ctr", "xer", "memory"
-+	);
- }
 -- 
-2.45.2
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
