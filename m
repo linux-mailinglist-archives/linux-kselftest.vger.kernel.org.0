@@ -1,40 +1,40 @@
-Return-Path: <linux-kselftest+bounces-15146-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15147-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18AA094E6C2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 08:33:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD00894E72D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 08:52:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49C981C21499
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 06:33:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63A781F20FB2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 06:52:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88CF014F9C5;
-	Mon, 12 Aug 2024 06:33:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8D0814F9E1;
+	Mon, 12 Aug 2024 06:52:17 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B243513BAEE;
-	Mon, 12 Aug 2024 06:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4109314E2C5;
+	Mon, 12 Aug 2024 06:52:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723444390; cv=none; b=Ya9i3hppPhAOKdVHCawMe6ORbCDCWGHxW4aZNy9HRif42CLm/Ku1T5AcJy4VRF6JsGiFJGZRcJLhGD+wGFpn2n2MPwPAcvjVUnIxhigfjStcXVyS8NQ3kEHaV920FWPoRmfBL+hIA4WK2bZ6D6LJWstNhP02lqw7uDPNNMeAwDA=
+	t=1723445537; cv=none; b=jJwLEAn6wKmhU3g4SvlnHmOdafZfo3ypx+SZi6iLYkYtkGKc4ElxXuIDF0txqxn1HwlpEcn9gYdZhCfg3GBS2KepQ5ty0GRxMfNAMUThBOPhTZnTZ/ZZ8UEb5MEtCXWvLwTfdc8kVbSzQJ1tuslMstsITQiGUteadUqbTiDYOLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723444390; c=relaxed/simple;
-	bh=VM2opmt6NPAPqN8bMcKi/ZF3TKtMFq3bhhKzow0dnDE=;
+	s=arc-20240116; t=1723445537; c=relaxed/simple;
+	bh=YBCMrMAPOMjFTUWwn6wPLBEDF03Y/0b6KU/3UWiGgHc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FZlFwAzh1P6RwKQBR/+r8/1hATYIE9XsLFEhkOPzHE1nrlpyIViw+T1QCZyjZuK8zhb8CBWfsUQIoHlAXQEQ/r8HbRAqGBlfJBscKbIY/p+xrY9b9ia2lVKB7w7ATDn3rnEXDHPPhQWDCzVoFovO0slCl4j383ww9g8dD/oqvtI=
+	 In-Reply-To:Content-Type; b=m2TU5voysxd5hSCcqXuqpcrRT9G3lczDb8LkRbF6cJ/iaH5wdf2meZUxSxBllS9f0zPBWVIqi1/Sz0C0zIOLkQfQtWL6A778Y28PnpvdYJxzvoBw7ZpEAjcGYtwsYlVTy/aQCXremkMQCC59tT6XefN3Fy9pLYAa1PZCiG1emp0=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D5D4EFEC;
-	Sun, 11 Aug 2024 23:33:33 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E7CFEFEC;
+	Sun, 11 Aug 2024 23:52:39 -0700 (PDT)
 Received: from [10.162.43.141] (e116581.arm.com [10.162.43.141])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A59D33F73B;
-	Sun, 11 Aug 2024 23:32:58 -0700 (PDT)
-Message-ID: <fd15bf5d-25ec-46d6-aa80-865cf0c925a9@arm.com>
-Date: Mon, 12 Aug 2024 12:02:55 +0530
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BDDEF3F6A8;
+	Sun, 11 Aug 2024 23:52:04 -0700 (PDT)
+Message-ID: <95b72817-5444-4ced-998a-1cb90f42bf49@arm.com>
+Date: Mon, 12 Aug 2024 12:22:01 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,16 +58,16 @@ Cc: akpm@linux-foundation.org, shuah@kernel.org, david@redhat.com,
 References: <20240809103129.365029-1-dev.jain@arm.com>
  <20240809103129.365029-2-dev.jain@arm.com>
  <87frrauwwv.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <cc1ababf-cda5-4eaf-9e67-47c26d5d70fe@arm.com>
- <877ccmuus2.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <15dbe4ac-a036-4029-ba08-e12a236f448a@arm.com>
+ <87bk1yuuzu.fsf@yhuang6-desk2.ccr.corp.intel.com>
 Content-Language: en-US
 From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <877ccmuus2.fsf@yhuang6-desk2.ccr.corp.intel.com>
+In-Reply-To: <87bk1yuuzu.fsf@yhuang6-desk2.ccr.corp.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
-On 8/12/24 11:50, Huang, Ying wrote:
+On 8/12/24 11:45, Huang, Ying wrote:
 > Dev Jain <dev.jain@arm.com> writes:
 >
 >> On 8/12/24 11:04, Huang, Ying wrote:
@@ -107,32 +107,37 @@ On 8/12/24 11:50, Huang, Ying wrote:
 >>>>    	}
 >>> Do you have some test results for this?  For example, after applying the
 >>> patch, the migration success rate increased XX%, etc.
->> Noting that the migration selftest is operating on a single page,
->> before the patch, the test fails on shared-anon mappings on an
->> average of 10 iterations of move_pages(), and after applying the
->> patch it fails on average of 100 iterations, which makes sense
->> because the unmapping() will get retried 3 + 7 = 10 times.
-> Thanks!  What is the test results for
->
-> https://lore.kernel.org/all/20240801081657.1386743-1-dev.jain@arm.com/
->
-> ?
-
-That solves the problem completely, makes the test pass. Although
-that still may not be a good solution since it solves the problem
-for this particular case (reader thread faulting and raising refcount).
-As David notes, a concurrent read()/write() should also create this
-refcount race problem.
-
-
->
+>> I'll get back to you on this.
+>>
 >>> My understanding for this issue is that the migration success rate can
 >>> increase if we undo all changes before retrying.  This is the current
 >>> behavior for sync migration, but not for async migration.  If so, we can
 >>> use migrate_pages_sync() for async migration too to increase success
 >>> rate?  Of course, we need to change the function name and comments.
+>>
+>> As per my understanding, this is not the current behaviour for sync
+>> migration. After successful unmapping, we fail in migrate_folio_move()
+>> with -EAGAIN, we do not call undo src+dst (rendering the loop around
+>> migrate_folio_move() futile), we do not push the failed folio onto the
+>> ret_folios list, therefore, in _sync(), _batch() is never tried again.
+> In migrate_pages_sync(), migrate_pages_batch(,MIGRATE_ASYNC) will be
+> called first, if failed, the folio will be restored to the original
+> state (unlocked).  Then migrate_pages_batch(,_SYNC*) is called again.
+> So, we unlock once.  If it's necessary, we can unlock more times via
+> another level of loop.
+
+Yes, that's my point. We need to undo src+dst and retry. We will have
+to decide where we want this retrying to be; do we want to change the
+return value, end up in the while loop wrapped around _sync(), and retry
+there by adding another level of loop, or do we want to make use of the
+existing retry loops, one of which is wrapped around _unmap(); the latter
+is my approach. The utility I see for the former approach is that, in case
+of a large number of page migrations (which should usually be the case),
+we are giving more time for the folio to get retried. The latter does not
+give much time and discards the folio if it did not succeed under 7 times.
+
+>
 > --
 > Best Regards,
 > Huang, Ying
->
 
