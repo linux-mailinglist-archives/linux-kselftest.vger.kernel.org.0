@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-15179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 023D194FA06
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 00:57:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CADB94FA1D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 01:04:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 762D91F26102
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 22:57:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBBD41F26666
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 23:04:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3017719AD73;
-	Mon, 12 Aug 2024 22:49:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BAB8199E9C;
+	Mon, 12 Aug 2024 23:03:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JRiGf4B4"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="iAFebA4Y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 587A419AA40
-	for <linux-kselftest@vger.kernel.org>; Mon, 12 Aug 2024 22:49:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CAC316849A
+	for <linux-kselftest@vger.kernel.org>; Mon, 12 Aug 2024 23:03:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723502966; cv=none; b=ZN8+RkBtnpVlLQnR3au70W902ajxCu36zjiUnjF+fAXBcPtkwBXz4rSoUFSljdNqV5iyyIJJTnF7We3pOgXOfxzlJrP3YUZrB2sKMm3Vh+CCPGCK+zrAGZAIMU4iSr3REBNzEvBiWgXs9eKTMsoIve1iH8hIwASb/AKLC2pxoS8=
+	t=1723503837; cv=none; b=llps9Ae/igIwi3prAAiNQdXo/x6f6goE+zD+SvbWSVgKUW07tyAGHg0n9LPOrwoWeMr92PC1o0yQgfB3/xjYHzgQPc4/N+wLiWi7H/7qc+GZBmm6SHVAAqwS+EC6U9vGVnKQAfBfeChlEe292MftrRziNxO8ikHEcF7ZshsN3PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723502966; c=relaxed/simple;
-	bh=9Geqm2eNxfmbidfN12t9YGa4gHMoM08dePXkh4q5E6c=;
+	s=arc-20240116; t=1723503837; c=relaxed/simple;
+	bh=YBiLFaPZjjaRkrtUK9kyWuh07zpn3P9QXmFySdar89E=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VSL5PWi1/OAo81RrVXXyvsanbAv8ySzh/HcMsdxnDoeG5G3wc13CaYLtXCx4zxJUU2vhz9IZMJQ2mSgTr/JtS9tX2aXpVCaeMLi98RZ9ix0yLvC2HnJhq/Qq9XMgE+jGweoN8yA1Lq9HCZYXk0hNdqLytCyu9kW8rDuG49VP7TA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JRiGf4B4; arc=none smtp.client-ip=209.85.160.42
+	 In-Reply-To:Content-Type; b=agpO6eDyJNlbjC81ybdfBybtmeoxpQc3EIOAtP9SCcOrybrLKIrucK4QWxi+EjQos/kuCKqbEbTwMU62uXQL7KkTE3PR+RWJ3j9IwMXuZiOcWbHHeEAt4YRzBXCTyVeNtVUK04A/nzesOjd0VxvArNDQXePd9zRRcH7L0/VIw4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=iAFebA4Y; arc=none smtp.client-ip=209.85.215.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-26123e59c8aso518460fac.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 12 Aug 2024 15:49:24 -0700 (PDT)
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-7c1b624e3b0so325506a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Aug 2024 16:03:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1723502963; x=1724107763; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1723503834; x=1724108634; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XpPGGocSzCpr41jGcOS4ZmlxuyG1JeA+rONg3hfVGdQ=;
-        b=JRiGf4B4yPSFv3ylNTnQtCI2j/ebC2Dd8QdHhOacNsYf+s/MooheS3EHdQtQOGT7gZ
-         +9OM8BFQ/4KhLxFzeDsfqnwvdZxhUbHsIoMgn5MCegt8jdJlHrpsBx6PFT7FEcezx5Z+
-         bo/5QKD8ovrITQITp0CdnAix96PG4dqkvrABU=
+        bh=QEKpiUP3xwZoC0DTSabt4UIs6f5YDF2qKl4QrqSYpJI=;
+        b=iAFebA4YYfeUXURbdde47vTzC30mCbtVUlfCyD9cbim8LJsHWd8fOCXs6/WRZ5OkgA
+         XXppdgnhG34TUyNxD5mg/fsIIrIzLHyDhqDUdjDI8aGEO8z33tiYOWvYp6FcwbkPTLiy
+         K8EW73r6iIDo6w9pvU3nTOZGYEWQ26gI4yZE4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723502963; x=1724107763;
+        d=1e100.net; s=20230601; t=1723503834; x=1724108634;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XpPGGocSzCpr41jGcOS4ZmlxuyG1JeA+rONg3hfVGdQ=;
-        b=SYUbLolk68kk1aCa+rcN/z4qebeA3Ecv8AhU1HLCk0McYfXT+H/Wq66dX6wn+AwOBx
-         vwJvM1S1PVKqBzpIkSiOmOiOQw5HYGrrrmIqc1J6yWle4yrXVs1NOHklTSPxBUrfyVU1
-         AFeJgzTMFZt3A7sWw2Oh7J+fJ4U17XqHC0TouKcz9C0HHQaHrCW4IV19HBhk5Pmo2sai
-         33oeZAJO/uVtqnS4LczyJjxBIYIGZHqcmkhTWSEj3nAcSfxf8QXi89qyvTslcqC4Gbre
-         jIbrJvvErXHH8gCXT/7Kco93cWRM6F3UD9kH/l8pmUfLjflgydiFZ6WgUUteTAdam9B1
-         YqVA==
-X-Forwarded-Encrypted: i=1; AJvYcCXfIzf70mvn5CMbbT4JYG3/rzSS6B0EDBS/TFTapCr1a6/ulfapH6MYYd/9fSRfssEKp5/kPgexS/NNzQKlAgQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YylCasQ/MN5tpD94JJ8m60NSGnmA81+JSLORNmT9xPzlDrE04CS
-	4bpv43d5F1rdC+vc7vX2pUXKfypSLJv6J2CLOC7zCkgiBc3BmKhxtx8TAIS/Cnc=
-X-Google-Smtp-Source: AGHT+IHe6d83/UlNNb5pR/cHNVG5k9VCD20VevZVPPNM/u/kk8qnB+ep1qft2HW7dn9dzzqG3dovRQ==
-X-Received: by 2002:a05:6871:5811:b0:260:eb27:1b83 with SMTP id 586e51a60fabf-26fd1af54a1mr259422fac.5.1723502963190;
-        Mon, 12 Aug 2024 15:49:23 -0700 (PDT)
+        bh=QEKpiUP3xwZoC0DTSabt4UIs6f5YDF2qKl4QrqSYpJI=;
+        b=r8oNXMpx3iPMlOu+HHth20TEu9w092Idx/cKYTQAmevn4DB6QXhYC2sbFO593LWnql
+         Fg1Oh01Jw48C/+JWdBXTuxgYx9HkxGR93kBcDj16h3g3ClSg+n3JQ9A9mS+897itzudQ
+         x0jevI8cHWdiZctSLdIcPRwYds2ltHUE+SbBx8m68OWJWaJ51NilNwrMeYkODFTL3IaT
+         xgQ07yuItEB9z64QYXiCB7XMzciJJlumTSlafk0exudAcv3M11jER+qNW1yXd07DVVaZ
+         mstkIcibVh34B+swjvzSSycsEwyNKWvw7ay7ciAuS9OQk9Trtg0uH9ljsmDebaUB0YtM
+         0aTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUvLPn3gWP5s2Eo3Y9J6RIvHmvlVA++Z3g5DsMfuAuIRHmc5d3sH7geR9pTzEHCkNvsqsRnlB4uY+U6RHwf6rM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkLBDEBZjqiLo7aKnQid/K0mcNQZedADjaGEiqbjuKrM/ksm/h
+	NjQMygo30vEQt2c1g+XPyZlEEmcUJFzrV0MQ/tov0tUZDf3irRSr4+3Skwe3tEA=
+X-Google-Smtp-Source: AGHT+IGb+9VJLkJYuRsUl48a3JmkbNs0x0SRG38sB9+apl0xp9rPYfz/uXrpREF3TxW5/mERjhINag==
+X-Received: by 2002:a05:6a20:431e:b0:1c4:b62f:fec7 with SMTP id adf61e73a8af0-1c8ddfc652dmr266014637.9.1723503833885;
+        Mon, 12 Aug 2024 16:03:53 -0700 (PDT)
 Received: from [10.229.70.3] (p525182-ipngn902koufu.yamanashi.ocn.ne.jp. [61.207.159.182])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7c6979d3d6fsm164651a12.1.2024.08.12.15.49.20
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7c697a06af5sm211486a12.45.2024.08.12.16.03.47
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 12 Aug 2024 15:49:22 -0700 (PDT)
-Message-ID: <4072bf51-1d37-4595-a2fa-b72f83c8298b@linuxfoundation.org>
-Date: Mon, 12 Aug 2024 16:49:18 -0600
+        Mon, 12 Aug 2024 16:03:53 -0700 (PDT)
+Message-ID: <3667e585-ecaa-4664-9e6e-75dc9de928e8@linuxfoundation.org>
+Date: Mon, 12 Aug 2024 17:03:45 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,104 +73,72 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: resctrl: ignore builds for unsupported
- architectures
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Muhammad Usama Anjum <Usama.Anjum@collabora.com>
-Cc: Fenghua Yu <fenghua.yu@intel.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>, kernel@collabora.com,
- LKML <linux-kernel@vger.kernel.org>, linux-kselftest@vger.kernel.org,
- =?UTF-8?Q?Maciej_Wiecz=C3=B3r-Retman?= <maciej.wieczor-retman@intel.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240809071059.265914-1-usama.anjum@collabora.com>
- <d60cf782-9ab0-ed4a-0b3e-ba7a73ae8d51@linux.intel.com>
- <080c4692-c53c-417f-9975-0b4ced0b044c@collabora.com>
- <f7593344-203a-8e73-d53e-574ca511d003@linux.intel.com>
+Subject: Re: [PATCH v2] selftests: fix relative rpath usage
+To: Eugene Syromiatnikov <esyr@redhat.com>, linux-kselftest@vger.kernel.org
+Cc: Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+ Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Peter Zijlstra <peterz@infradead.org>, "Paul E. McKenney"
+ <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>,
+ linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240812165650.GA5102@asgard.redhat.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <f7593344-203a-8e73-d53e-574ca511d003@linux.intel.com>
+In-Reply-To: <20240812165650.GA5102@asgard.redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 8/9/24 02:45, Ilpo Järvinen wrote:
-> Adding Maciej.
+On 8/12/24 10:56, Eugene Syromiatnikov wrote:
+> The relative RPATH ("./") supplied to linker options in CFLAGS is resolved
+> relative to current working directory and not the executable directory,
+> which will lead in incorrect resolution when the test executables are run
+> from elsewhere.  Changing it to $ORIGIN makes it resolve relative
+> to the directory in which the executables reside, which is supposedly
+> the desired behaviour.  This patch also moves these CFLAGS to lib.mk,
+> so the RPATH is provided for all selftest binaries, which is arguably
+> a useful default.
+
+Can you elaborate on the erros you would see if this isn't fixed? I understand
+that check-rpaths tool - howebver I would like to know how it manifests and
+how would you reproduce this problem while running selftests?
+
+
+> Discovered by the check-rpaths script[1][2] that checks for insecure
+> RPATH/RUNPATH[3], such as relative directories, during an attempt
+> to package BPF selftests for later use in CI:
 > 
-> On Fri, 9 Aug 2024, Muhammad Usama Anjum wrote:
->> On 8/9/24 12:23 PM, Ilpo Järvinen wrote:
->>> On Fri, 9 Aug 2024, Muhammad Usama Anjum wrote:
->>>
->>>> This test doesn't have support for other architectures. Altough resctrl
->>>> is supported on x86 and ARM, but arch_supports_noncont_cat() shows that
->>>> only x86 for AMD and Intel are supported by the test.
->>>
->>> One does not follow from the other. arch_supports_noncont_cat() is only
->>> small part of the tests so saying "This test" based on a small subset of
->>> all tests is bogus. Also, I don't see any reason why ARCH_ARM could not be
->>> added and arch_supports_noncont_cat() adapted accordingly.
->> I'm not familiar with resctrl and the architectural part of it. Feel
->> free to fix it and ignore this patch.
->>
->> If more things are missing than just adjusting
->> arch_supports_noncont_cat(), the test should be turned off until proper
->> support is added to the test.
->>
->>>> We get build
->>>> errors when built for ARM and ARM64.
->>>
->>> As this seems the real reason, please quote any errors when you use them
->>> as justification so it can be reviewed if the reasoning is sound or not.
->>
->>    CC       resctrl_tests
->> In file included from resctrl.h:24,
->>                   from cat_test.c:11:
->> In function 'arch_supports_noncont_cat',
->>      inlined from 'noncont_cat_run_test' at cat_test.c:323:6:
->> ../kselftest.h:74:9: error: impossible constraint in 'asm'
->>     74 |         __asm__ __volatile__ ("cpuid\n\t"
->>         \
->>        |         ^~~~~~~
->> cat_test.c:301:17: note: in expansion of macro '__cpuid_count'
->>    301 |                 __cpuid_count(0x10, 1, eax, ebx, ecx, edx);
->>        |                 ^~~~~~~~~~~~~
->> ../kselftest.h:74:9: error: impossible constraint in 'asm'
->>     74 |         __asm__ __volatile__ ("cpuid\n\t"
->>         \
->>        |         ^~~~~~~
->> cat_test.c:303:17: note: in expansion of macro '__cpuid_count'
->>    303 |                 __cpuid_count(0x10, 2, eax, ebx, ecx, edx);
->>        |                 ^~~~~~~~~~~~~
+>      ERROR   0004: file '/usr/libexec/kselftests/bpf/urandom_read' contains an insecure runpath '.' in [.]
 > 
-> Okay, so it's specific to lack of CPUID. This seems a kselftest common
-> level problem to me, since __cpuid_count() is provided in kselftest.h.
+> [1] https://github.com/rpm-software-management/rpm/blob/master/scripts/check-rpaths
+> [2] https://github.com/rpm-software-management/rpm/blob/master/scripts/check-rpaths-worker
+> [3] https://cwe.mitre.org/data/definitions/426.html
 > 
-> Shuah (or others), what is the intended mechanism for selftests to know if
-> it can be used or not since as is, it's always defined?
-_cpuid_count() gets defined in ksefltest.h if it can't find it.
-
-As the comment says both gcc and cland probide __cpuid_count()
-
-   gcc cpuid.h provides __cpuid_count() since v4.4.
-   Clang/LLVM cpuid.h provides  __cpuid_count() since v3.4.0.
-
-> 
-> I see some Makefiles use compile testing a trivial program to decide whether
-> they build some x86_64 tests or not. Is that what should be done here too,
-> test if __cpuid_count() compiles or not (and then build some #ifdeffery
-> based on the result of that compile testing)?
-> 
-
-These build errors need to be fixed instead of restricting the build.
-
-In some cases when the test can't be supported on an architecture then it is okay
-to suppress build. This is not a general solution to suppress build warnings
-
-I would recommend against adding suppress build code when it can be fixed.
-
-Let's investigate this problem to fix it properly. I don't see any arm and arm64
-maintainers and developers on this thread. It would be good to investigate to
-see if this can be fixed.
+> Signed-off-by: Eugene Syromiatnikov <esyr@redhat.com>
+> ---
+> v2:
+>    - Consolidated the updated -L/-Wl,-rpath setting into lib.mk
+>    - Described the testing done in the commit message
+> v1: https://lore.kernel.org/lkml/20240808145639.GA20510@asgard.redhat.com/
+>      https://lore.kernel.org/lkml/20240808151335.GA5495@asgard.redhat.com/
+>      https://lore.kernel.org/lkml/20240808151621.GA10025@asgard.redhat.com/
+>      https://lore.kernel.org/lkml/20240808151621.GA10025@asgard.redhat.com/
+> ---
+>   tools/testing/selftests/alsa/Makefile  | 1 -
+>   tools/testing/selftests/bpf/Makefile   | 5 ++---
+>   tools/testing/selftests/lib.mk         | 3 +++
+>   tools/testing/selftests/rseq/Makefile  | 2 +-
+>   tools/testing/selftests/sched/Makefile | 3 +--
+>   5 files changed, 7 insertions(+), 7 deletions(-)
 
 thanks,
 -- Shuah
+
 
