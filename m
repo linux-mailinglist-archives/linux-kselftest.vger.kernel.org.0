@@ -1,116 +1,164 @@
-Return-Path: <linux-kselftest+bounces-15166-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15167-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9FBA94F5CA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 19:28:01 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79F3994F627
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 19:57:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7F7E1C211C5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 17:28:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3120428428D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 12 Aug 2024 17:57:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F3B4188CB2;
-	Mon, 12 Aug 2024 17:27:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4717A189535;
+	Mon, 12 Aug 2024 17:57:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b="G9zG2Ark"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G9pSXQbI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.codeweavers.com (mail.codeweavers.com [4.36.192.163])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A84691804F;
-	Mon, 12 Aug 2024 17:27:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3DE913A3F2;
+	Mon, 12 Aug 2024 17:57:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723483676; cv=none; b=oPkQpu7W5+l/PWhZuAuhD0mtkgPPFJowtHyhHl/KUAXxn3OQ90wZps22SfM12FnYOBdbIalL986g1VNOF0r7ilhOXmfo3A44tNZap0LneXcPmTY8cOIsd5I2Wbf4g1hpFIDsK3OXpOsLy+RGMVBz+HBSoOAcHw+bZxNgNk8sL5I=
+	t=1723485456; cv=none; b=LBhpTtMbWfM2vQeCTBAWP9/lwHB2GxkSFngMO70cJnRmmTabkwCR6B5jG/6dFSJ3nlZU5L8FnNuMBEU9cDYZBROWjxf9tIsc+QHmQ5+Ucwj9vaqKBevzTPyZ+3hjzLt079lfERf2fTJEkWkD8e9Q1YHd1ACXr5eYdnitT6HBKoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723483676; c=relaxed/simple;
-	bh=IFMxJ0Br/sftBPuPaohb/P6aDtKUf9rUY46d2ecUm0M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nJyoOtlToqRAPZWuTvBNyps+tHzGRwJ9HijKVqNHXVK0wLOxDsCNatRJWYLfoFi3MQWDr4MjaWL9/gteIECKuNgR2G6hR3uL4xri79Cpw85xWyy+gHME3oZZwhWWloswZ1gpxy0r6eENfH5p6nPuoOPVYmmGJ2iwgYZnOIB+ZHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=codeweavers.com header.i=@codeweavers.com header.b=G9zG2Ark; arc=none smtp.client-ip=4.36.192.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeweavers.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=codeweavers.com; s=s1; h=Message-ID:Date:Subject:Cc:To:From:Sender;
-	bh=IFMxJ0Br/sftBPuPaohb/P6aDtKUf9rUY46d2ecUm0M=; b=G9zG2ArkCRinNETyPwuh+2xCOJ
-	iDgDhrFoVtcvIrsQ5r6F28AViF6ENkdbgVlZS6crklmsR8Bmq8r7CbJ3JVrkQYU9TP1HCPWrdDQ1F
-	yZ+5NLJr0OFq6Ja+pfu/X8WLHV/Pdx+4tT0EeyAm7dsjNwsHczh5SaTogf30Nm70iA7Lw8WEUtVHm
-	a2ljf+HFcN/9LH139tpUE37YNiSPr8kSmW1UV+aRJEzT1Tt0qNQDC4LwrHs5oiQ0p+9QyVuU6Bgmw
-	2yoO7J17rQT6ddUa3XxoCOt78JkFEWf8bEE6tvJlLRNL7YJlCj70d4AiGUxAQF8Br2DOU+aXmKuU0
-	xlbRlNOw==;
-Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.localnet)
-	by mail.codeweavers.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <zfigura@codeweavers.com>)
-	id 1sdYYG-008ulR-0n;
-	Mon, 12 Aug 2024 12:09:48 -0500
-From: Elizabeth Figura <zfigura@codeweavers.com>
-To: Peter Zijlstra <peterz@infradead.org>, wine-devel@winehq.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, linux-api@vger.kernel.org,
- wine-devel@winehq.org,
- =?ISO-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
- Wolfram Sang <wsa@kernel.org>, Andy Lutomirski <luto@kernel.org>,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Randy Dunlap <rdunlap@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Will Deacon <will@kernel.org>, Waiman Long <longman@redhat.com>,
- Boqun Feng <boqun.feng@gmail.com>, Elizabeth Figura <zfigura@codeweavers.com>
-Subject: Re: [PATCH v5 00/28] NT synchronization primitive driver
-Date: Mon, 12 Aug 2024 12:09:48 -0500
-Message-ID: <5805970.DvuYhMxLoT@camazotz>
-In-Reply-To: <2325658.ElGaqSPkdT@uriel>
-References:
- <20240519202454.1192826-1-zfigura@codeweavers.com> <2325658.ElGaqSPkdT@uriel>
+	s=arc-20240116; t=1723485456; c=relaxed/simple;
+	bh=PjEd0BdogsUTaZfCUMRZ31Ra4P2TNDube5tSGJ9f9sw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MloUkPoBGISIjK0uzF5sGypuqpOgnLmJKvGEYPxG7r3O+Yyzvt9nO3F3IfA1DmfB1LZnnfV2AkQ/cyT9F4blXzmQh8LplYDgUphOqchY4/684dZP101Eho8QCcO4oktwK4H5E7CZnzdJjPEiBLX/hS4TaJgsx1+Dmdwyb9BipeI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G9pSXQbI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5E1DC32782;
+	Mon, 12 Aug 2024 17:57:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723485455;
+	bh=PjEd0BdogsUTaZfCUMRZ31Ra4P2TNDube5tSGJ9f9sw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=G9pSXQbIwNKKdmOVG04ccy/1dIHLraWQ0G+g5z/MctkmVUUUXo81tnVQfF1RR+c1J
+	 Cvxt8qGSPA8JqYgFK4Wsisbb0RFx5KEJ2r00aZDsq7jtURbAetSPgcZbzv7tLhq3In
+	 X8cW65UhPResK30p4YVjVef/gIBciCKXIICBbwOv+MOkXOxEPR0kGDviaLOmGrQHjv
+	 1kVsTsVsho3L4Id+uxmWhHD1b/Ou3noRjVmbmLBl93blSGZxY3SAluidKUwiBL8YOv
+	 TqI1IrR/S8Qznu2rcbJ2YiWkSSF8CbSPSyNf8gpJaBr19k4+X1N8VCNVUteNnwEgHU
+	 0shtOIic2eEhw==
+Date: Mon, 12 Aug 2024 10:57:32 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, Donald Hunter
+ <donald.hunter@gmail.com>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan
+ Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>,
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
+ <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge
+ Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas
+ <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, Masami
+ Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Arnd Bergmann <arnd@arndb.de>, Steffen
+ Klassert <steffen.klassert@secunet.com>, Herbert Xu
+ <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem de
+ Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Sumit Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
+ <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
+ Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Taehee Yoo <ap420073@gmail.com>, David Wei <dw@davidwei.uk>, Jason
+ Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, Shailend
+ Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
+ <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+Subject: Re: [PATCH net-next v18 07/14] memory-provider: dmabuf devmem
+ memory provider
+Message-ID: <20240812105732.5d2845e4@kernel.org>
+In-Reply-To: <48f3a61f-9e04-4755-b50c-8fae6e6112eb@gmail.com>
+References: <20240805212536.2172174-1-almasrymina@google.com>
+	<20240805212536.2172174-8-almasrymina@google.com>
+	<20240806135924.5bb65ec7@kernel.org>
+	<CAHS8izOA80dxpB9rzOwv7Oe_1w4A7vo5S3c3=uCES8TSnjyzpg@mail.gmail.com>
+	<20240808192410.37a49724@kernel.org>
+	<CAHS8izMH4UhD+UDYqMjt9d=gu-wpGPQBLyewzVrCWRyoVtQcgA@mail.gmail.com>
+	<fc6a8f0a-cdb4-4705-a08f-7033ef15213e@gmail.com>
+	<20240809205236.77c959b0@kernel.org>
+	<CAHS8izOXwZS-8sfvn3DuT1XWhjc--7-ZLjr8rMn1XHr5F+ckbA@mail.gmail.com>
+	<48f3a61f-9e04-4755-b50c-8fae6e6112eb@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Monday, 10 June 2024 11:58:48 CDT Elizabeth Figura wrote:
-> On Sunday, May 19, 2024 3:24:26=E2=80=AFPM CDT Elizabeth Figura wrote:
-> > This patch series implements a new char misc driver, /dev/ntsync, which=
- is
-> > used to implement Windows NT synchronization primitives.
-> >=20
-> > NT synchronization primitives are unique in that the wait functions bot=
-h are
-> > vectored, operate on multiple types of object with different behaviour
-> > (mutex, semaphore, event), and affect the state of the objects they wait
-> > on. This model is not compatible with existing kernel synchronization
-> > objects or interfaces, and therefore the ntsync driver implements its o=
-wn
-> > wait queues and locking.
-> >=20
-> > This patch series is rebased against the "char-misc-next" branch of
-> > gregkh/char-misc.git.
->=20
-> Hi Peter,
->=20
-> Sorry to bother, but now that the Linux merge window is closed could I
-> request a review of this revision of the ntsync patch set, please (or a
-> review from another locking maintainer)?
->=20
-> I believe I've addressed all of the comments from the last review,
-> except those which would have changed the existing userspace API
-> (although since the driver isn't really functional yet, maybe this
-> would have been fine to do anyway?)
+On Sun, 11 Aug 2024 22:51:13 +0100 Pavel Begunkov wrote:
+> > I think we're talking about 2 slightly different flags, AFAIU.>
+> > Pavel and I are suggesting the driver reports "I support memory
+> > providers" directly to core (via the queue-api or what not), and we
+> > check that flag directly in netdev_rx_queue_restart(), and fail
+> > immediately if the support is not there.  
+> 
+> I might've misread Jakub, but yes, I believe it's different. It'd
+> communicate about support for providers to upper layers, so we can
+> fail even before attempting to allocate a new queue and init a
+> page pool.
 
-Hi,
+Got it. Since allocating memory happens before stopping traffic
+I think it's acceptable to stick to a single flag.
 
-Gentle ping on this=E2=80=94this series still needs another review.
+> > Jakub is suggesting a page_pool_params flag which lets the driver
+> > report "I support memory providers". If the driver doesn't support it
+> > but core is trying to configure that, then the page_pool_create will
+> > fail, which will cause the queue API operation
+> > (ndo_queue_alloc_mem_alloc) to fail, which causes
+> > netdev_rx_queue_restart() to fail.  
+> 
+> And I'm not against this way either if we explicitly get an error
+> back instead of trying to figure it out post-factum like by
+> checking the references and possibly reverting the allocation.
+> Maybe that's where I was confused, and that refcount thing was
+> suggested as a WARN_ONCE?
 
-If I should go ahead and make "breaking" API changes based on the last
-review, please let me know.
+Yup, the refcount (now: check of the page pool list) was meant
+as a WARN_ONCE() to catch bad drivers.
 
-Thanks,
-Zeb
+> FWIW, I think it warrants two flags. The first saying that the
+> driver supports providers at all:
+> 
+> page_pool_init() {
+> 	if (rxq->mp_params)
+> 		if (!(flags & PP_PROVIDERS_SUPPORTED))
+> 			goto fail;
+> }
+> 
+> And the second telling whether the driver wants to install
+> providers for this particular page pool, so if there is a
+> separate pool for headers we can set it with plain old kernel
+> pages.
 
+The implementation of the queue API should be resilient against
+failures in alloc, and not being MP capable is just a form of 
+alloc failure. I don't see the upside of double-flag. 
 
+> payload_pool = page_pool_create(rqx, PP_PROVIDERS_SUPPORTED);
+> header_pool = page_pool_create(rqx, PP_PROVIDERS_SUPPORTED |
+>                                      PP_IGNORE_PROVIDERS);
+
+Also don't see the upside of the explicit "non-capable" flag,
+but I haven't thought of that. Is there any use?
+
+One important note. The flag should not be tied to memory providers
+but rather to netmem, IOW unreadable memory. MP is an internal detail,
+the important fact from the driver-facing API perspective is that the
+driver doesn't need struct pages.
+
+> (or invert the flag). That's assuming page_pool_params::queue is
+> a generic thing and we don't want to draw equivalence between
+> it and memory providers.
 
