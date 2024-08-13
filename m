@@ -1,311 +1,297 @@
-Return-Path: <linux-kselftest+bounces-15280-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15281-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE3CD950EF9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 23:17:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B7F5950FC0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 00:29:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A18FE28449B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 21:17:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 050702857E9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 22:29:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C5DA1B012C;
-	Tue, 13 Aug 2024 21:13:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FA951AB51D;
+	Tue, 13 Aug 2024 22:29:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Uo3f19j/"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="IODBnvVC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B71D1AE85D
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Aug 2024 21:13:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F22449658
+	for <linux-kselftest@vger.kernel.org>; Tue, 13 Aug 2024 22:29:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723583632; cv=none; b=M7iFhiJHoukEC0MUfL/Yo6kLlhWAQ9ahAVcajuByMowBSx+ofHhxPP+fWaehLAknI7jYIscPEiodvuhVKV19lz2zZNn3PmwwqeiXvlNVUP6lBZT8tIY7mKDYvQ7JD8+tQDZX4QY+gBX+8Ydd1iKm6vHYuxUvrv4Va+NBC/fTgPI=
+	t=1723588172; cv=none; b=KEKTspVsLYamYqLeiVqXKg67gDv9+8mH4MSUzQvtMhKqKHCdbR1mTw33DYKB5dVnYD+jrTKdrZYax4vg7ulo0sGoSP8tcz2QjBk1dwWNdHqhuxNPUTXSqf3tswDOztWbqDWwcKLUGQd4P7w8LWF1xDZjAlxFwFVgcvwr46FNlOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723583632; c=relaxed/simple;
-	bh=e4G5JvNaur+zqHlm2owDRW9K+aQAG/77haI5TcQ7l1w=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=YJ5xaF0xgUBoy/lsfTPCoAyhM3DodEe4GRI8OaZQdLc79YhRAXMOdv2lHgWyOjsG1Gd6UI4RHJ83NHLQ3IO5b/AsosllXmv86o0pf+GuFFTRa7UFQ1vlYPbRpxVr6RgqkxoZOnnCl5UTxnjLHxVchhOWGbiiQFN1std0f9ZSeOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Uo3f19j/; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-690d5456d8aso138036297b3.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Aug 2024 14:13:47 -0700 (PDT)
+	s=arc-20240116; t=1723588172; c=relaxed/simple;
+	bh=DeBM2Jzf7ccIDFSZ1n1rUvgA11CE3Kqq+U6VPxsqQLI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HPYxwWZm5opPR+ggZmVBcQHVz+7YW82hcEPUQ2lXlyIAHraaEBXI6GpmBV6kqrJ/vQOxJckWiviiiwHuaDzEULy+baEiPpfBOG6qO5BrU5NjpvkdbkLUwAtvu8LSI4SrqJnj9YKe543Evpu+2wG9uceLfKtmDbeBvpUWyYJG5wk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=IODBnvVC; arc=none smtp.client-ip=209.85.167.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3db1eb76702so4392752b6e.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Aug 2024 15:29:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723583625; x=1724188425; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vVCV87jZy8PxhPLAls7YmMLOhmnFqtjE+KOvYzSFbII=;
-        b=Uo3f19j/2YevWTLyJx+U4ptOWemBHxZhbHNlUldnIxzQqWpv8YNqeUtBICQn07gDIj
-         jPciVtfD9AqyGvWJRPB9P796PF13EKIrIby3FiIkYo0dvQPIPu/vdUouljFTXgpSccZt
-         BRYt/xLhYPpCeFM9SF+xMf8Lir/HKgefOOWRZw1Dzs0hfD0IVLs6Yl8QshETJCLOOeL7
-         NUX22F693WMmIYW3QnH5IJDIkh9EoffIYxeHosKk3dvIvGIvlEJnzX2N/+ZVgZWzXZXb
-         5ByP0EPKuVbsX7wToIKmrYCfRI800EmOWvd80L32e8v1A+A8bgp8XX8DaG79Pk4y2459
-         ovDQ==
+        d=chromium.org; s=google; t=1723588168; x=1724192968; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ykgogzbyK4rVzg7RHnLmQ4IP974gSr6UIGGUTaoRMNw=;
+        b=IODBnvVCtIc/6qEKMLXKfXeo8Chb30o+j1ThuKPSovT3Xc/QgcQmYhDfEpNLz2iSyM
+         oS4lG5LMsYSy8cmJRarF0gGV1ptzPpXnh+I3qVThJpqdgkHsGyB8oTI3l0CwqfpKREfg
+         sskjDOWrxYluAo+Ot0iffxKHnQ4C/2PULlSkk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723583625; x=1724188425;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vVCV87jZy8PxhPLAls7YmMLOhmnFqtjE+KOvYzSFbII=;
-        b=L1uh03Vst8zFRPP7z1nH0QQLx9TBTCYaq40SNDBw1v5jzZanNG4bSRptkxo04JjySO
-         S1KTksw2CNgE9hD8toF4LXXPWdB6h1Q/ab7yBJ7VPXWdcngL+ecsSQOC59UXyEVL3ZUd
-         ctzh0ka2lt65yqy7Ikti8p5Em9Y0RrjBhCpv5QuvzCZkO75zNvHGVkn+gUHkKk4tyVyk
-         MezMIT7ZhA72WpHzseGPN0JOIh1KiT1KHdc5t/nKBLUVDBlx8cG4thKhFAdhJMKZx+ic
-         H/Mf6q1LBR1hN2BnZbD/ZMnjwO8vym0EsCA8I5DtCSqnNlPkJzvbq2G2Ple/gWN/Wg8w
-         1UyA==
-X-Forwarded-Encrypted: i=1; AJvYcCXxcTSqbr9VAk2ajU6dz0fdgHUpwOu7g+d1iuXDoJZ7UQzfKEstW3Kr1OZAG8kaQY1hMsCbW9S4P6aw4W048ak=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7qYTbudZV4+tYFb4YFbt3iqCUG7o4PoWejMA3X9Mmcglg9QlK
-	9vi3Q7aJGypihcIzMd6bq47o1NXffxU8EH2a5x+6P/xeZO3HJU/S5Ie/ldYH2hoVeEQTHHzWY1t
-	a186phawq/Ugx5UbhXLW2PA==
-X-Google-Smtp-Source: AGHT+IEUS873qk8VJeJaElarGm2oSh0h5cRThNQuqxPVzKK1sq1PaPCKqLN7RDPePKRRnOoG+C0KKCx0gcyeGVu8jA==
-X-Received: from almasrymina.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:4bc5])
- (user=almasrymina job=sendgmr) by 2002:a81:e80a:0:b0:62c:f6fd:5401 with SMTP
- id 00721157ae682-6ac99fa910bmr65837b3.6.1723583624619; Tue, 13 Aug 2024
- 14:13:44 -0700 (PDT)
-Date: Tue, 13 Aug 2024 21:13:15 +0000
+        d=1e100.net; s=20230601; t=1723588168; x=1724192968;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ykgogzbyK4rVzg7RHnLmQ4IP974gSr6UIGGUTaoRMNw=;
+        b=dSXP9Tk00ehszN5zzhoLh59bOXrKITdhjmsyOGzoD7j2DJ1iZLiprZ+5T09CV+/0c0
+         vdfgYCY+HOWUmsyKn4dJe3fKjyHb+RfkxUnIyZv3KZ87GMwkXPmBoZCT3vN5YZaH4kdi
+         kFs4e+L+KiV0Vx4+bSPF9hagqMUGi8N8d89F/vTRJGOW2kFJxquyrpsacRQKc2VwZXYv
+         pHtqR++xkMhLnns2UvcxQ+ol67AIEmlkeX/fBumnzp6fw4ADhW5sjmN8UPbv61T50uHo
+         uPQC/YvHa7g1cAhBv3sKcSvGmqHSYsiiZ6ktrADGHAsPykuIVSLPVxih+gRUSoLXGXSk
+         0wbg==
+X-Forwarded-Encrypted: i=1; AJvYcCV12nDlEE03OOPIdJrNXeYj1xeBl4kZmm+ECdCHopRP51T8E5pG+4uSQZXt5SNhcfRxDkVvaa6pL+E10hqX2NEgrUYdfxna+hWPaaC5aHLy
+X-Gm-Message-State: AOJu0YxPXbyfKeXnhGd6KKJ6UvVk89xfoXMBtu2rQvlfcIqfFD6L7uaI
+	ScQU23WYGz2ar1xd3iu6iIscxFUdNUi+VcKz2KKK7mNs9fl2IiPtR+IrtheNhO67QJ0aFcHwRQz
+	jJYVMPqniwIQZczkObw/RnhEEfoBAl2nXZfr8
+X-Google-Smtp-Source: AGHT+IGXHIA4OWX84r+ntsCxm1tIJRtPKmOxukETI3Iw8Kz6QgOTU2Exfj1kzAPmWxXmkmIxn7Epu9zjwMbuYGkdACw=
+X-Received: by 2002:a05:6870:56a1:b0:260:ff24:fb32 with SMTP id
+ 586e51a60fabf-26fe59dc7a3mr1176459fac.1.1723588168189; Tue, 13 Aug 2024
+ 15:29:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.46.0.76.ge559c4bf1a-goog
-Message-ID: <20240813211317.3381180-14-almasrymina@google.com>
-Subject: [PATCH net-next v19 13/13] netdev: add dmabuf introspection
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org
-Cc: Mina Almasry <almasrymina@google.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Donald Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	"=?UTF-8?q?Christian=20K=C3=B6nig?=" <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, 
-	Christoph Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, 
-	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, 
-	Harshitha Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>
+MIME-Version: 1.0
+References: <20240809082511.497266-1-usama.anjum@collabora.com>
+In-Reply-To: <20240809082511.497266-1-usama.anjum@collabora.com>
+From: Jeff Xu <jeffxu@chromium.org>
+Date: Tue, 13 Aug 2024 15:29:16 -0700
+Message-ID: <CABi2SkWgPoWJY_CMxDru7FPjtQBgv61PA2VoCumd3T8Xq3fjbg@mail.gmail.com>
+Subject: Re: [PATCH] selftests: mm: Fix build errors on armhf
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Kees Cook <kees@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, kernel@collabora.com, 
+	stable@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add dmabuf information to page_pool stats:
+Hi Muhammad
 
-$ ./cli.py --spec ../netlink/specs/netdev.yaml --dump page-pool-get
-...
- {'dmabuf': 10,
-  'id': 456,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 455,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 454,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 453,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 452,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 451,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 450,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
- {'dmabuf': 10,
-  'id': 449,
-  'ifindex': 3,
-  'inflight': 1023,
-  'inflight-mem': 4190208},
+On Fri, Aug 9, 2024 at 1:25=E2=80=AFAM Muhammad Usama Anjum
+<usama.anjum@collabora.com> wrote:
+>
+> The __NR_mmap isn't found on armhf. The mmap() is commonly available
+> system call and its wrapper is presnet on all architectures. So it
+> should be used directly. It solves problem for armhf and doesn't create
+> problem for architectures as well. Remove sys_mmap() functions as they
+> aren't doing anything else other than calling mmap(). There is no need
+> to set errno =3D 0 manually as glibc always resets it.
+>
+The mseal_test should't have dependency on libc, and mmap() is
+implemented by glibc, right ?
 
-And queue stats:
+I just fixed a bug to switch mremap() to sys_mremap to address an
+issue that different glibc version's behavior is slightly different
+for mremap().
 
-$ ./cli.py --spec ../netlink/specs/netdev.yaml --dump queue-get
-...
-{'dmabuf': 10, 'id': 8, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 9, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 10, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 11, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 12, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 13, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 14, 'ifindex': 3, 'type': 'rx'},
-{'dmabuf': 10, 'id': 15, 'ifindex': 3, 'type': 'rx'},
+What is the reason that __NR_mmap not available in armhf ? (maybe it
+is another name ?)  there must be a way to call syscall directly on
+armhf, can we use that instead ?
 
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Mina Almasry <almasrymina@google.com>
-Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+Thanks
+-Jeff
 
----
- Documentation/netlink/specs/netdev.yaml | 10 ++++++++++
- include/uapi/linux/netdev.h             |  2 ++
- net/core/netdev-genl.c                  | 10 ++++++++++
- net/core/page_pool_user.c               |  4 ++++
- tools/include/uapi/linux/netdev.h       |  2 ++
- 5 files changed, 28 insertions(+)
 
-diff --git a/Documentation/netlink/specs/netdev.yaml b/Documentation/netlink/specs/netdev.yaml
-index 0c747530c275..08412c279297 100644
---- a/Documentation/netlink/specs/netdev.yaml
-+++ b/Documentation/netlink/specs/netdev.yaml
-@@ -167,6 +167,10 @@ attribute-sets:
-           "re-attached", they are just waiting to disappear.
-           Attribute is absent if Page Pool has not been detached, and
-           can still be used to allocate new memory.
-+      -
-+        name: dmabuf
-+        doc: ID of the dmabuf this page-pool is attached to.
-+        type: u32
-   -
-     name: page-pool-info
-     subset-of: page-pool
-@@ -268,6 +272,10 @@ attribute-sets:
-         name: napi-id
-         doc: ID of the NAPI instance which services this queue.
-         type: u32
-+      -
-+        name: dmabuf
-+        doc: ID of the dmabuf attached to this queue, if any.
-+        type: u32
- 
-   -
-     name: qstats
-@@ -543,6 +551,7 @@ operations:
-             - inflight
-             - inflight-mem
-             - detach-time
-+            - dmabuf
-       dump:
-         reply: *pp-reply
-       config-cond: page-pool
-@@ -607,6 +616,7 @@ operations:
-             - type
-             - napi-id
-             - ifindex
-+            - dmabuf
-       dump:
-         request:
-           attributes:
-diff --git a/include/uapi/linux/netdev.h b/include/uapi/linux/netdev.h
-index 91bf3ecc5f1d..7c308f04e7a0 100644
---- a/include/uapi/linux/netdev.h
-+++ b/include/uapi/linux/netdev.h
-@@ -93,6 +93,7 @@ enum {
- 	NETDEV_A_PAGE_POOL_INFLIGHT,
- 	NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
- 	NETDEV_A_PAGE_POOL_DETACH_TIME,
-+	NETDEV_A_PAGE_POOL_DMABUF,
- 
- 	__NETDEV_A_PAGE_POOL_MAX,
- 	NETDEV_A_PAGE_POOL_MAX = (__NETDEV_A_PAGE_POOL_MAX - 1)
-@@ -131,6 +132,7 @@ enum {
- 	NETDEV_A_QUEUE_IFINDEX,
- 	NETDEV_A_QUEUE_TYPE,
- 	NETDEV_A_QUEUE_NAPI_ID,
-+	NETDEV_A_QUEUE_DMABUF,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
-diff --git a/net/core/netdev-genl.c b/net/core/netdev-genl.c
-index 88017ee22d2f..56b7790607b1 100644
---- a/net/core/netdev-genl.c
-+++ b/net/core/netdev-genl.c
-@@ -293,6 +293,7 @@ static int
- netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 			 u32 q_idx, u32 q_type, const struct genl_info *info)
- {
-+	struct net_devmem_dmabuf_binding *binding;
- 	struct netdev_rx_queue *rxq;
- 	struct netdev_queue *txq;
- 	void *hdr;
-@@ -312,6 +313,15 @@ netdev_nl_queue_fill_one(struct sk_buff *rsp, struct net_device *netdev,
- 		if (rxq->napi && nla_put_u32(rsp, NETDEV_A_QUEUE_NAPI_ID,
- 					     rxq->napi->napi_id))
- 			goto nla_put_failure;
-+
-+		binding = (struct net_devmem_dmabuf_binding *)
-+				  rxq->mp_params.mp_priv;
-+		if (binding) {
-+			if (nla_put_u32(rsp, NETDEV_A_QUEUE_DMABUF,
-+					binding->id))
-+				goto nla_put_failure;
-+		}
-+
- 		break;
- 	case NETDEV_QUEUE_TYPE_TX:
- 		txq = netdev_get_tx_queue(netdev, q_idx);
-diff --git a/net/core/page_pool_user.c b/net/core/page_pool_user.c
-index cbc54ee4f670..4e18db82450e 100644
---- a/net/core/page_pool_user.c
-+++ b/net/core/page_pool_user.c
-@@ -212,6 +212,7 @@ static int
- page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
- 		  const struct genl_info *info)
- {
-+	struct net_devmem_dmabuf_binding *binding = pool->mp_priv;
- 	size_t inflight, refsz;
- 	void *hdr;
- 
-@@ -241,6 +242,9 @@ page_pool_nl_fill(struct sk_buff *rsp, const struct page_pool *pool,
- 			 pool->user.detach_time))
- 		goto err_cancel;
- 
-+	if (binding && nla_put_u32(rsp, NETDEV_A_PAGE_POOL_DMABUF, binding->id))
-+		goto err_cancel;
-+
- 	genlmsg_end(rsp, hdr);
- 
- 	return 0;
-diff --git a/tools/include/uapi/linux/netdev.h b/tools/include/uapi/linux/netdev.h
-index 91bf3ecc5f1d..7c308f04e7a0 100644
---- a/tools/include/uapi/linux/netdev.h
-+++ b/tools/include/uapi/linux/netdev.h
-@@ -93,6 +93,7 @@ enum {
- 	NETDEV_A_PAGE_POOL_INFLIGHT,
- 	NETDEV_A_PAGE_POOL_INFLIGHT_MEM,
- 	NETDEV_A_PAGE_POOL_DETACH_TIME,
-+	NETDEV_A_PAGE_POOL_DMABUF,
- 
- 	__NETDEV_A_PAGE_POOL_MAX,
- 	NETDEV_A_PAGE_POOL_MAX = (__NETDEV_A_PAGE_POOL_MAX - 1)
-@@ -131,6 +132,7 @@ enum {
- 	NETDEV_A_QUEUE_IFINDEX,
- 	NETDEV_A_QUEUE_TYPE,
- 	NETDEV_A_QUEUE_NAPI_ID,
-+	NETDEV_A_QUEUE_DMABUF,
- 
- 	__NETDEV_A_QUEUE_MAX,
- 	NETDEV_A_QUEUE_MAX = (__NETDEV_A_QUEUE_MAX - 1)
--- 
-2.46.0.76.ge559c4bf1a-goog
-
+> For reference errors are as following:
+>
+>   CC       seal_elf
+> seal_elf.c: In function 'sys_mmap':
+> seal_elf.c:39:33: error: '__NR_mmap' undeclared (first use in this functi=
+on)
+>    39 |         sret =3D (void *) syscall(__NR_mmap, addr, len, prot,
+>       |                                 ^~~~~~~~~
+>
+> mseal_test.c: In function 'sys_mmap':
+> mseal_test.c:90:33: error: '__NR_mmap' undeclared (first use in this func=
+tion)
+>    90 |         sret =3D (void *) syscall(__NR_mmap, addr, len, prot,
+>       |                                 ^~~~~~~~~
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 4926c7a52de7 ("selftest mm/mseal memory sealing")
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>  tools/testing/selftests/mm/mseal_test.c | 37 +++++++++----------------
+>  tools/testing/selftests/mm/seal_elf.c   | 13 +--------
+>  2 files changed, 14 insertions(+), 36 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/self=
+tests/mm/mseal_test.c
+> index a818f010de479..bfcea5cf9a484 100644
+> --- a/tools/testing/selftests/mm/mseal_test.c
+> +++ b/tools/testing/selftests/mm/mseal_test.c
+> @@ -81,17 +81,6 @@ static int sys_mprotect_pkey(void *ptr, size_t size, u=
+nsigned long orig_prot,
+>         return sret;
+>  }
+>
+> -static void *sys_mmap(void *addr, unsigned long len, unsigned long prot,
+> -       unsigned long flags, unsigned long fd, unsigned long offset)
+> -{
+> -       void *sret;
+> -
+> -       errno =3D 0;
+> -       sret =3D (void *) syscall(__NR_mmap, addr, len, prot,
+> -               flags, fd, offset);
+> -       return sret;
+> -}
+> -
+>  static int sys_munmap(void *ptr, size_t size)
+>  {
+>         int sret;
+> @@ -172,7 +161,7 @@ static void setup_single_address(int size, void **ptr=
+Out)
+>  {
+>         void *ptr;
+>
+> -       ptr =3D sys_mmap(NULL, size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVA=
+TE, -1, 0);
+> +       ptr =3D mmap(NULL, size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE, =
+-1, 0);
+>         *ptrOut =3D ptr;
+>  }
+>
+> @@ -181,7 +170,7 @@ static void setup_single_address_rw(int size, void **=
+ptrOut)
+>         void *ptr;
+>         unsigned long mapflags =3D MAP_ANONYMOUS | MAP_PRIVATE;
+>
+> -       ptr =3D sys_mmap(NULL, size, PROT_READ | PROT_WRITE, mapflags, -1=
+, 0);
+> +       ptr =3D mmap(NULL, size, PROT_READ | PROT_WRITE, mapflags, -1, 0)=
+;
+>         *ptrOut =3D ptr;
+>  }
+>
+> @@ -205,7 +194,7 @@ bool seal_support(void)
+>         void *ptr;
+>         unsigned long page_size =3D getpagesize();
+>
+> -       ptr =3D sys_mmap(NULL, page_size, PROT_READ, MAP_ANONYMOUS | MAP_=
+PRIVATE, -1, 0);
+> +       ptr =3D mmap(NULL, page_size, PROT_READ, MAP_ANONYMOUS | MAP_PRIV=
+ATE, -1, 0);
+>         if (ptr =3D=3D (void *) -1)
+>                 return false;
+>
+> @@ -481,8 +470,8 @@ static void test_seal_zero_address(void)
+>         int prot;
+>
+>         /* use mmap to change protection. */
+> -       ptr =3D sys_mmap(0, size, PROT_NONE,
+> -                       MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
+> +       ptr =3D mmap(0, size, PROT_NONE,
+> +                  MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
+>         FAIL_TEST_IF_FALSE(ptr =3D=3D 0);
+>
+>         size =3D get_vma_size(ptr, &prot);
+> @@ -1209,8 +1198,8 @@ static void test_seal_mmap_overwrite_prot(bool seal=
+)
+>         }
+>
+>         /* use mmap to change protection. */
+> -       ret2 =3D sys_mmap(ptr, size, PROT_NONE,
+> -                       MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
+> +       ret2 =3D mmap(ptr, size, PROT_NONE,
+> +                   MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
+>         if (seal) {
+>                 FAIL_TEST_IF_FALSE(ret2 =3D=3D MAP_FAILED);
+>                 FAIL_TEST_IF_FALSE(errno =3D=3D EPERM);
+> @@ -1240,8 +1229,8 @@ static void test_seal_mmap_expand(bool seal)
+>         }
+>
+>         /* use mmap to expand. */
+> -       ret2 =3D sys_mmap(ptr, size, PROT_READ,
+> -                       MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
+> +       ret2 =3D mmap(ptr, size, PROT_READ,
+> +                   MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
+>         if (seal) {
+>                 FAIL_TEST_IF_FALSE(ret2 =3D=3D MAP_FAILED);
+>                 FAIL_TEST_IF_FALSE(errno =3D=3D EPERM);
+> @@ -1268,8 +1257,8 @@ static void test_seal_mmap_shrink(bool seal)
+>         }
+>
+>         /* use mmap to shrink. */
+> -       ret2 =3D sys_mmap(ptr, 8 * page_size, PROT_READ,
+> -                       MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
+> +       ret2 =3D mmap(ptr, 8 * page_size, PROT_READ,
+> +                   MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
+>         if (seal) {
+>                 FAIL_TEST_IF_FALSE(ret2 =3D=3D MAP_FAILED);
+>                 FAIL_TEST_IF_FALSE(errno =3D=3D EPERM);
+> @@ -1650,7 +1639,7 @@ static void test_seal_discard_ro_anon_on_filebacked=
+(bool seal)
+>         ret =3D fallocate(fd, 0, 0, size);
+>         FAIL_TEST_IF_FALSE(!ret);
+>
+> -       ptr =3D sys_mmap(NULL, size, PROT_READ, mapflags, fd, 0);
+> +       ptr =3D mmap(NULL, size, PROT_READ, mapflags, fd, 0);
+>         FAIL_TEST_IF_FALSE(ptr !=3D MAP_FAILED);
+>
+>         if (seal) {
+> @@ -1680,7 +1669,7 @@ static void test_seal_discard_ro_anon_on_shared(boo=
+l seal)
+>         int ret;
+>         unsigned long mapflags =3D MAP_ANONYMOUS | MAP_SHARED;
+>
+> -       ptr =3D sys_mmap(NULL, size, PROT_READ, mapflags, -1, 0);
+> +       ptr =3D mmap(NULL, size, PROT_READ, mapflags, -1, 0);
+>         FAIL_TEST_IF_FALSE(ptr !=3D (void *)-1);
+>
+>         if (seal) {
+> diff --git a/tools/testing/selftests/mm/seal_elf.c b/tools/testing/selfte=
+sts/mm/seal_elf.c
+> index 7aa1366063e4e..d9f8ba8d5050b 100644
+> --- a/tools/testing/selftests/mm/seal_elf.c
+> +++ b/tools/testing/selftests/mm/seal_elf.c
+> @@ -30,17 +30,6 @@ static int sys_mseal(void *start, size_t len)
+>         return sret;
+>  }
+>
+> -static void *sys_mmap(void *addr, unsigned long len, unsigned long prot,
+> -       unsigned long flags, unsigned long fd, unsigned long offset)
+> -{
+> -       void *sret;
+> -
+> -       errno =3D 0;
+> -       sret =3D (void *) syscall(__NR_mmap, addr, len, prot,
+> -               flags, fd, offset);
+> -       return sret;
+> -}
+> -
+>  static inline int sys_mprotect(void *ptr, size_t size, unsigned long pro=
+t)
+>  {
+>         int sret;
+> @@ -56,7 +45,7 @@ static bool seal_support(void)
+>         void *ptr;
+>         unsigned long page_size =3D getpagesize();
+>
+> -       ptr =3D sys_mmap(NULL, page_size, PROT_READ, MAP_ANONYMOUS | MAP_=
+PRIVATE, -1, 0);
+> +       ptr =3D mmap(NULL, page_size, PROT_READ, MAP_ANONYMOUS | MAP_PRIV=
+ATE, -1, 0);
+>         if (ptr =3D=3D (void *) -1)
+>                 return false;
+>
+> --
+> 2.39.2
+>
 
