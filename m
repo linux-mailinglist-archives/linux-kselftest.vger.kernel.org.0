@@ -1,229 +1,165 @@
-Return-Path: <linux-kselftest+bounces-15262-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15263-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56569950CA5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 20:58:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6583C950D0A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 21:19:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9BA11F227B3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 18:58:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 992F01C20BE9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 19:19:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87C2D1A3BC4;
-	Tue, 13 Aug 2024 18:58:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EF181A3BBC;
+	Tue, 13 Aug 2024 19:19:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XaTTFG/q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E/neOpbm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f43.google.com (mail-ua1-f43.google.com [209.85.222.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 539271A38EC;
-	Tue, 13 Aug 2024 18:58:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E41719D089;
+	Tue, 13 Aug 2024 19:19:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723575515; cv=none; b=mMnhlYu/5Pu1/AC15rQlZj3GV4YEq9bpLS7LQCX63e0wC0nU9YLR/K6gu4n+DI0VoTbk0dTtuqQRUsPxzpFu5yLnJasds0UxCHvI1oU0/AZ9rVrF5qbWNvfHkVPUB5+D1IL/r+6bM67y3l+ffnoi+TiZjehI1cJpxtTFtxrOr1o=
+	t=1723576780; cv=none; b=EU8FqYIzNgh9DPkrXIwZzSgOuwiGBLclQqY7cV6tRJnWII50q/b6d/M/K0Kw6PBHkbLB6LnHYLEcZk9sFUK4yJETibQwfiijvKMZ5CeUlhMycuwFhA7V2k/OU0itU5ltzb7z8injZGXr/FtnJIOXX/v1DNQen5vV4WR61YcscEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723575515; c=relaxed/simple;
-	bh=bzOTwvEQWgF/+KB1LS90zt/LDnDOFda+OzNJbVJMQVo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LwesdTMkYkTwhft7XXf/eXgJeQ9OKAsZkgKvSFHqnV2XhiA/huXCM6xkK+tfg1ibm4WHOCT/EAw7QoMd4k2DqW/5HVoaKBrejtpVO0Qf9mZeG1Z37Accq6cI+bMLeTejZI37GN4FfOS1UU0fKMV+P40aXpJvCiteQXx1FrD5hNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XaTTFG/q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 949C6C32782;
-	Tue, 13 Aug 2024 18:58:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723575514;
-	bh=bzOTwvEQWgF/+KB1LS90zt/LDnDOFda+OzNJbVJMQVo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XaTTFG/qw60F6ftoxoDHNTahfNuvmpeUBWrIdaiu5sEF7fWrAaM68hPz7ny4DMamj
-	 TU64xMWy7tEQUrr0+QKNKvGsvSTmuXQ34jMferkzHMsEocbMyTTfrH1xoVFEb2hdRP
-	 Jc0qw8HuI0JFeUINzVHNpmvqviB8HGn0l3E/FwQUoAY2UvnBzTLvalP0Ayq6vbHljE
-	 HqO9LF/bsJRDTjVyq/e2qR+ZZ1W5fWMcdNpjPjKJkAqvMH09SViYPBGnsshWszDeAM
-	 BWqMmihBTQWJe4iBoL5Lispz1wjx5Pna7yAspwEBdRY95tM4yQ++wf7DrMgKuWclU5
-	 cLisig/CXnSbw==
-Date: Tue, 13 Aug 2024 19:58:26 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	Will Deacon <will@kernel.org>, jannh@google.com,
-	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
-	Kees Cook <kees@kernel.org>
-Subject: Re: [PATCH RFT v8 4/9] fork: Add shadow stack support to clone3()
-Message-ID: <e24a93cb-e7ba-4046-a7c6-fe2ea12420e3@sirena.org.uk>
-References: <20240808-clone3-shadow-stack-v8-0-0acf37caf14c@kernel.org>
- <20240808-clone3-shadow-stack-v8-4-0acf37caf14c@kernel.org>
- <ZrZdrgOQVHhCyWmA@arm.com>
- <Zrag5A5K9pv1K9Uz@finisterre.sirena.org.uk>
- <ZruJCyXDRNhw6U5A@arm.com>
+	s=arc-20240116; t=1723576780; c=relaxed/simple;
+	bh=IZHBr6nBAgIqDpRpBynDI7Xlqc6bhu/1aMgMA6LlhEY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Y3gzwo0i4TEmiKePT9h/1KZTIIRDTT1RpakxQU5MacwpkFbozDiwWJT1vJN+gsFG5eOn2SIcd6IBSfuoXf8ti2DGZE9J4mewA9vjyIs9um3U+mWST0Zpxm5IMDta0EHKIXE+h11/iTPTnw1nRc/MQ9QJuiNgWmftJFNQi3f+EqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E/neOpbm; arc=none smtp.client-ip=209.85.222.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f43.google.com with SMTP id a1e0cc1a2514c-8231d67a168so1807307241.0;
+        Tue, 13 Aug 2024 12:19:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723576777; x=1724181577; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8/Zn/h+JQIsHvCLzDZYP0fiItezGPIXw+RuI0U0vrwg=;
+        b=E/neOpbmnb75gQPkd9yNNMEY0fEFq9bpDo2yruuxsqkvTEfVcJMECB/tdtIm5w4EDS
+         /9NKXg+TUiX16uLfCMOIcXAnRI8R7z2YBeDqKpslTlPjqFOgNdgTzCjuKuNJvzBf23rL
+         LKGshHOY44rCUvR8pqS0J60z1/u1ctu+mq89uxh3Wck4/U71rbmDqKsftw3y8ITYWwYT
+         QSJdw7lXqAq7cNS9HSRhqzx2vpMY9Tlv9c8CdbYRld3kgxu8HVN6J6WS39q0mWq4egM+
+         Lz9qeJKh+5g7hs/Qo08hWUtabR6WU3ntrwEZryTtowfIjgBmXbQYc5l2a6nj1YAAcnaU
+         q/kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723576777; x=1724181577;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8/Zn/h+JQIsHvCLzDZYP0fiItezGPIXw+RuI0U0vrwg=;
+        b=tGyGYv5Rtfo22c9JBQ0TQJxg8ynyxlFBNk16JpVQSpGJ3RYBvMR6kO8P36aD62BzsY
+         OdA0A0BWaVMZuDRySKlR9RNOF6gHOAlpHwDeGjbwLONjvPoDy4cphYIHokVsV9j9k/qL
+         AIMmbKrbWJ8jxfhEySBhF8Ktjnl67py/uNZEApsuu6CXfOxegRIhz48Mkpqrw10tf2Oi
+         dxMO8X43k6WMRiIlEexzIvM6TVqb8qcTBRM54aGRdV3E7RwDWBINSNECDOiW9tHVyP+S
+         U3mF1VL/T4Dirpd6kC9G3AsN6Bxb1nady45XUK2i9INOEUr89vrcvNenT5u+izLfyFio
+         ayhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXq28u4Nl7AXa0zELUwKEIJhBvoC5pcJXqLrpJ0xLDTWsWSMIEbU2qmbkHDabH7dNTyRk0+YSup5BfSzlpjIaA/PLye2UdJPbSqV91Bjv0KdLUYhuKc8TDED9qj6BINtoLupUDQ1qbLwN6GZrOBhsYk8HHPnyj2odxsGTz/uYsxI5NKS4e6
+X-Gm-Message-State: AOJu0Yye2T4lvqjhFbLdGN7j2PawU9mJaMWsdNwfwIxFbjKxF12Frjo9
+	p9h1Fg5uoFld4fUExJmZDqkXOlJu1eZicBsFI8wNqGb6eaHBs1Et
+X-Google-Smtp-Source: AGHT+IHY3fKEL2gZYzr1fjw0Xkz2Slgu4zpozSt8XU9NibbEYuPMCVOmeXxVBRY37DahLbkM+RQ2fQ==
+X-Received: by 2002:a05:6102:304b:b0:48f:420e:b684 with SMTP id ada2fe7eead31-497599f3db8mr694189137.27.1723576777229;
+        Tue, 13 Aug 2024 12:19:37 -0700 (PDT)
+Received: from localhost (57-135-107-183.static4.bluestreamfiber.net. [57.135.107.183])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-841366596cesm1014290241.6.2024.08.13.12.19.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Aug 2024 12:19:36 -0700 (PDT)
+From: David Hunter <david.hunter.linux@gmail.com>
+To: kuniyu@amazon.com
+Cc: davem@davemloft.net,
+	david.hunter.linux@gmail.com,
+	edumazet@google.com,
+	javier.carrasco.cruz@gmail.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org
+Subject: [PATCH 1/1 V2] Kselftest: msg_oob.c: Fix Compiler Warning For Incorrect Specifier
+Date: Tue, 13 Aug 2024 15:19:32 -0400
+Message-ID: <20240813191932.991638-1-david.hunter.linux@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20240813061254.36825-1-kuniyu@amazon.com>
+References: <20240813061254.36825-1-kuniyu@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="JaZr/mR7zRxR0n2p"
-Content-Disposition: inline
-In-Reply-To: <ZruJCyXDRNhw6U5A@arm.com>
-X-Cookie: Say no, then negotiate.
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+Change declaration to 'char *'. A specifier involved with a macro is
+causing a misleading warning to occur:
 
---JaZr/mR7zRxR0n2p
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+'''
+In file included from msg_oob.c:14:
+msg_oob.c: In function ‘__recvpair’:
+../../kselftest_harness.h:106:40: warning: format ‘%s’ expects
+	argument of type ‘char *’, but argument 6 has type
+	‘const void *’ [-Wformat=]
+  106 |                 fprintf(TH_LOG_STREAM, "# %s:%d:%s:" fmt "\n", \
+      |                                        ^~~~~~~~~~~~~
+../../kselftest_harness.h:101:17: note: in expansion of macro ‘__TH_LOG’
+  101 |                 __TH_LOG(fmt, ##__VA_ARGS__); \
+      |                 ^~~~~~~~
+msg_oob.c:235:17: note: in expansion of macro ‘TH_LOG’
+  235 |                 TH_LOG("Expected:%s", expected_errno ?
+			strerror(expected_errno) : expected_buf);
+      |                 ^~~~~~
+'''
 
-On Tue, Aug 13, 2024 at 05:25:47PM +0100, Catalin Marinas wrote:
+I ran the tests using the following command:
 
-> However, the x86 would be slightly inconsistent here between clone() and
-> clone3(). I guess it depends how you look at it. The classic clone()
-> syscall, if one doesn't pass CLONE_VM but does set new stack, there's no
-> new shadow stack allocated which I'd expect since it's a new stack.
-> Well, I doubt anyone cares about this scenario. Are there real cases of
-> !CLONE_VM but with a new stack?
+'''
+make kselftest TARGETS=net/af_unix
+'''
 
-ISTR the concerns were around someone being clever with vfork() but I
-don't remember anything super concrete.  In terms of the inconsistency
-here that was actually another thing that came up - if userspace
-specifies a stack for clone3() it'll just get used even with CLONE_VFORK
-so it seemed to make sense to do the same thing for the shadow stack.
-This was part of the thinking when we were looking at it, if you can
-specify a regular stack you should be able to specify a shadow stack.
+I used a diff to examine the difference in output among the three
+scenarios (1) before making the change, (2) after changing the
+specifier, and (3) after changing the declaration. I saw no difference
+in outputs among any of the tests; all three tests had the same exact
+output.
 
-> > > I'm confused that we need to consume the token here. I could not find
-> > > the default shadow stack allocation doing this, only setting it via
-> > > create_rstor_token() (or I did not search enough). In the default case,
+For "net/af_unix: msg_oob", all 38 tests passed for msg_oob. I received
+this result for all 3 scenarios. Should I have gotten a different
+result?
 
-> > As discussed for a couple of previous versions if we don't have the
-> > token and userspace can specify any old shadow stack page as the shadow
-> > stack this allows clone3() to be used to overwrite the shadow stack of
-> > another thread, you can point to a shadow stack page which is currently
+Signed-off-by: David Hunter <david.hunter.linux@gmail.com>
+---
+Apologies for not looking ahead of time. I definitely need to remember
+to check ahead of time. I understand that the other person was first; I
+just wanted to get some practice sending patches. This is all still new
+to me. 
 
-> IIUC, the kernel-allocated shadow stack will have the token always set
-> while the user-allocated one will be cleared. I was looking to
+V1 --> V2 
+	- Changed the declaration instead of the specifier. 
+	- Put number of patches for this bug fix. 
+	- Put in tests performed. 
 
-No, when the kernel allocates we don't bother with tokens at all.  We
-only look for and clear a token with the user specified shadow stack.
+---
+ tools/testing/selftests/net/af_unix/msg_oob.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> understand the inconsistency between these two cases in terms of the
-> final layout of the new shadow stack: one with the token, the other
-> without. I can see the need for checking but maybe start with requiring
-> it to be 0 and setting the token before returning, for consistency with
-> clone().
+diff --git a/tools/testing/selftests/net/af_unix/msg_oob.c b/tools/testing/selftests/net/af_unix/msg_oob.c
+index 16d0c172eaeb..535eb2c3d7d1 100644
+--- a/tools/testing/selftests/net/af_unix/msg_oob.c
++++ b/tools/testing/selftests/net/af_unix/msg_oob.c
+@@ -209,7 +209,7 @@ static void __sendpair(struct __test_metadata *_metadata,
+ 
+ static void __recvpair(struct __test_metadata *_metadata,
+ 		       FIXTURE_DATA(msg_oob) *self,
+-		       const void *expected_buf, int expected_len,
++		       const char *expected_buf, int expected_len,
+ 		       int buf_len, int flags)
+ {
+ 	int i, ret[2], recv_errno[2], expected_errno = 0;
+-- 
+2.43.0
 
-The layout should be the same, the shadow stack will point to where the
-token would be - the only difference is if we checked to see if there
-was a token there.  Since we either clear the token on use or allocate a
-fresh page in both cases the value there will be 0.
-
-> In the kernel-allocated shadow stack, is the token used for anything? I
-> can see it's used for signal delivery and return but I couldn't figure
-> out what it is used for in a thread's shadow stack.
-
-For arm64 we place differently formatted tokens there during signal
-handling, and a token is placed at the top of the stack as part of the
-architected stack pivoting instructions (and a token at the destination
-consumed).  I believe x86 has the same pivoting behaviour but ICBW.  A
-user specified shadow stack is handled in a very similar way to what
-would happen if the newly created thread immediately pivoted to the
-specified stack.
-
-> Also, can one not use the clone3() to point to the clone()-allocated
-> shadow stack? Maybe that's unlikely as an app tends to stick to one
-> syscall flavour or the other.
-
-A valid token will only be present on an inactive stack.  If a thread
-pivots away from a kernel allocated stack then another thread could be
-started using the original kernel allocated stack, any program doing
-this should think carefully about the lifecycle of the kernel allocated
-stack but it's possible.  If a thread has not pivoted away from it's
-stack then there won't be a token at the top of the stack and it won't
-be possible to pivot to it.
-
-> > > > +		/*
-> > > > +		 * For CLONE_VFORK the child will share the parents
-> > > > +		 * shadow stack.  Make sure to clear the internal
-> > > > +		 * tracking of the thread shadow stack so the freeing
-> > > > +		 * logic run for child knows to leave it alone.
-> > > > +		 */
-> > > > +		if (clone_flags & CLONE_VFORK) {
-> > > > +			shstk->base = 0;
-> > > > +			shstk->size = 0;
-> > > > +			return 0;
-> > > > +		}
-
-> > > I think we should leave the CLONE_VFORK check on its own independent of
-> > > the clone3() arguments. If one passes both CLONE_VFORK and specific
-> > > shadow stack address/size, they should be ignored (or maybe return an
-> > > error if you want to make it stricter).
-
-> > This is existing logic from the current x86 code that's been reindented
-> > due to the addition of explicitly specified shadow stacks, it's not new
-> > behaviour.  It is needed to stop the child thinking it has the parent's
-> > shadow stack in the CLONE_VFORK case.
-
-> I figured that. But similar to the current !CLONE_VM behaviour where no
-> new shadow stack is allocated even if a new stack is passed to clone(),
-> I was thinking of something similar here for consistency: don't set up a
-> shadow stack in the CLONE_VFORK case or at least allow it only if a new
-> stack is being set up (if we extend this to clone(), it would be a small
-> ABI change).
-
-We could restrict specifying a shadow stack to only be supported when a
-regular stack is also specified, if we're doing that I'd prefer to do it
-in all cases rather than only for vfork() since that reduces the number
-of special cases and we don't restrict normal stacks like that.
-
-> > This is again all existing behaviour for the case where the user has not
-> > specified a shadow stack reindented, as mentioned above if the user has
-> > specified one explicitly then we just do what we were asked.  The
-> > existing behaviour is to only create a new shadow stack for the child in
-> > the CLONE_VM case and leave the child using the same shadow stack as the
-> > parent in the copied mm for !CLONE_VM.
-
-> I guess I was rather questioning the current choices than the new
-> clone3() ABI. But even for the new clone3() ABI, does it make sense to
-> set up a shadow stack if the current stack isn't changed? We'll end up
-> with a lot of possible combinations that will never get tested but
-> potentially become obscure ABI. Limiting the options to the sane choices
-> only helps with validation and unsurprising changes later on.
-
-OTOH if we add the restrictions it's more code (and more test code) to
-check, and thinking about if we've missed some important use case.  Not
-that it's a *huge* amount of code, like I say I'd not be too unhappy
-with adding a restriction on having a regular stack specified in order
-to specify a shadow stack.
-
---JaZr/mR7zRxR0n2p
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAma7rNIACgkQJNaLcl1U
-h9CPOwgAhRsMUFUWqUBQAY87sn9Eho7e/XEGNBzG4wFsXhxo19m4mV9kO/6eZ4ZG
-wn2C3K4Dedbv0qtdLo6b8Z40gaL7KNNxO6zduSEU5nnPz8469NK2xXROJu1HsK/j
-D/dRe+BobnPBjowgToHsm2wtIVX8pplu++NlFKajKro5/4tm8d/iczguqTKw1pal
-AVVZOj74lRWr/CJ6TYsoOZuPAdHNd/iesrm6TseyYsUY6/XRYDHs4L+EibcW5FPx
-EMmBSb0d+AIJsymwo6W5ggkIXinkaZMIl56/dKc+rQCniqfIcobFcEET8NaN4R08
-a9+8oX9lWQ1A5WVsN9BDhBpqPGheNA==
-=5ECP
------END PGP SIGNATURE-----
-
---JaZr/mR7zRxR0n2p--
 
