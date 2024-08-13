@@ -1,113 +1,131 @@
-Return-Path: <linux-kselftest+bounces-15186-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15187-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE3C294FAA3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 02:25:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C9E294FAD2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 02:45:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 859821F2134C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 00:25:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 687FC1C21B3D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 00:45:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0624AA38;
-	Tue, 13 Aug 2024 00:25:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 755AF7F8;
+	Tue, 13 Aug 2024 00:45:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="fgqw/8UX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45D4184F;
-	Tue, 13 Aug 2024 00:25:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D489A5661
+	for <linux-kselftest@vger.kernel.org>; Tue, 13 Aug 2024 00:45:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723508701; cv=none; b=SngbPTgH+JBorJ5405R4vp1QgSrp2pi9EGree/ZFw/v5heuykek2cqFcsRNvkosGW0trxrrIv2+7SBnfwjCZ360jzhtqekLmHxB07ZTtXWsAfWn7uI00SycAIPfZHdqvq9zz3X7hMiVNGnlO9aWTNby4vfZLnMjp5dafrKHu6pI=
+	t=1723509936; cv=none; b=iTisKGDdBnwcZvP6ib8mUHVv1QXQivk6iHntwqRKGBpNIBktJwv0kVHxqg8ZL+Rr7prPOC44kNWip4dYoXHYLQNTXw+ktPhRnj72+vGTgIoLoB/kaYENxu/ix4uxVYT9QXO+okAW50QJPVWO522ZtLlIbfAkGSK9v8SSdEm899U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723508701; c=relaxed/simple;
-	bh=E3UgAigyPZ4GktOoWU3YxcQofkYxoQ2A8IuYC2xknQM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cMKAsHmY7Z6T5gJ60PFotV53Y53lY8EgHv7HaHe0yPqfJras1kCaR0xJnJvcromq5Pu68EKmsVhrPH5Lk3TDGfby08Ok+eY95TpvAlopmNfNHvV3jLS9toof1K4L62W2yGQgkEPR9/3Qa5pWWHZuvWzRUly6LuSfOVWaVoMxk+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F620C4AF0E;
-	Tue, 13 Aug 2024 00:24:57 +0000 (UTC)
-Date: Mon, 12 Aug 2024 20:25:07 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: Kees Cook <kees@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Yury Norov
- <yury.norov@gmail.com>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, David
- Gow <davidgow@google.com>, "Jason A. Donenfeld" <Jason@zx2c4.com>, Andy
- Shevchenko <andy@kernel.org>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
- Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, "David S. Miller"
- <davem@davemloft.net>, Masami Hiramatsu <mhiramat@kernel.org>, Mark Brown
- <broonie@kernel.org>, Matti Vaittinen <mazziesaccount@gmail.com>,
- linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, linux-trace-kernel@vger.kernel.org, Palmer
- Dabbelt <palmer@rivosinc.com>, Christophe Leroy
- <christophe.leroy@csgroup.eu>, Charlie Jenkins <charlie@rivosinc.com>,
- Simon Horman <horms@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Arnd
- Bergmann <arnd@arndb.de>, Shuah Khan <skhan@linuxfoundation.org>, Daniel
- Latypov <dlatypov@google.com>, Guenter Roeck <linux@roeck-us.net>, David
- Howells <dhowells@redhat.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?=
- <mic@digikod.net>, Marco Elver <elver@google.com>, Mark Rutland
- <mark.rutland@arm.com>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
- Vlastimil Babka <vbabka@suse.cz>, Geert Uytterhoeven
- <geert@linux-m68k.org>, Nathan Chancellor <nathan@kernel.org>, Fangrui Song
- <maskray@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] lib: Move KUnit tests into tests/ subdirectory
-Message-ID: <20240812202507.453bda6b@gandalf.local.home>
-In-Reply-To: <20240720181025.work.002-kees@kernel.org>
-References: <20240720181025.work.002-kees@kernel.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1723509936; c=relaxed/simple;
+	bh=1sBgTIKoJ6AjCZ9d/4YTN6ajHX8hpg8Jnb/EcKKS2RQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eQij6Ptj+wjKWpE62Nr3cDp5UY34X8tWZcJ6rE4JCHUqTW3G7p9ZLBC3cvbM3cdDeEvjWeAqYHOG6NNPOWpB9+4LX7Q+IHHvxrOE1nE7kTMV0xYqZyZmKFRNPX1SAzUFapkSteQeMFBGuJQb7EgXI5jthkSzeDo/bluC/MBZ6TU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=fgqw/8UX; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1fc65329979so45106495ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 12 Aug 2024 17:45:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1723509934; x=1724114734; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=1Beo73jI8KH5p03NxQPXLaupS8Ut84TtJmPr0+Y+H6g=;
+        b=fgqw/8UX/rOFKnGO4Qw7UTr3fPRrjchwCWqqDMVWrfrnA5KtNi8sApteK5xebfWEAe
+         3alttG2i/SY5X//HIcW09qGywlfHaMlJkjSlqm+YNeTQTR0r4RCLK4qsE2iO1wEZLcGd
+         LkGYpViyZ11vPUfG1DoRxRTGf2FVKI0vQ9xr5rHwbqlJYA7J+0wCB/QBdmM+NUjvfA2g
+         Dj9nD+zaR3Gun6corO4RDKART+aaAphUjomNCUfLmIf2JU7VFO8dKDt6RtPEMQfgcvnD
+         pIQVe1iuiG74phuO9Qpwnqv8uz57GXrzveaXy/2RKVD3XTHPRDClEvkV3ghkWrfP3u1j
+         1WBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723509934; x=1724114734;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1Beo73jI8KH5p03NxQPXLaupS8Ut84TtJmPr0+Y+H6g=;
+        b=VgKdWEAxqO7A9DOXdxmTRnju6Kwstnw7YaIb6OTu0dH30DF5MuE2iTrIn6LFLYb4Zo
+         s02PTw7gmSZP5N5tqfD+GW+Vni3yL5Qn9UiWd1k/lGtjpB3yOCR37fAP9fNQjTHnJLBj
+         sNrF9ssjnt/q1NBXwTZqLf44kEOxExRoi0gP8djrJ7DSxdyL1ogdjaPUrRea/LcrUqM2
+         vDwfVhTksKvekkhderm+/pa7FWcSWNp6yA2GG76gIGqUS8IVYOqAVrj9Z/GBCodsrtHW
+         3UWA6uvVstWqYQ9zXwUTh9KpANtRZ0GnMFZI1fcZJ41DZns9a92zg2QUTG/pi3F3jQ+n
+         aGlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXb0wZgbQ5wl1Uv0J3B9ZTOtSNZjh+cB2VoORSrTPvXH1qTG+Nfg+KFllGS7pTuO7LBYKakyyCoOiXZQ6vVajs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4s5jBiAY9jIfWV7iNkqonH9Ahc1chjcJgAZ1voM4EybD9cXj2
+	rMvFB6Gbd44aEhC0npyfBnh2LhJzDT6gg9EpcVILRS46Rnf8y/qTnP+MGR5m5g0=
+X-Google-Smtp-Source: AGHT+IHdEc1RzSfknb4O0tEELFITV1/FMiLC99gVJNOSQQB/c+hZmMPVy98DA8PMYeZcE4ZXSNQJNQ==
+X-Received: by 2002:a17:902:e80b:b0:1fb:57e7:5bb4 with SMTP id d9443c01a7336-201ca1831c4mr26201755ad.37.1723509934094;
+        Mon, 12 Aug 2024 17:45:34 -0700 (PDT)
+Received: from ghost ([2601:647:6700:64d0:239c:9f30:d4d6:f989])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201cd1c86ddsm2537295ad.263.2024.08.12.17.45.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Aug 2024 17:45:33 -0700 (PDT)
+Date: Mon, 12 Aug 2024 17:45:30 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Guo Ren <guoren@kernel.org>, Evan Green <evan@rivosinc.com>,
+	Andy Chiu <andy.chiu@sifive.com>,
+	Jessica Clarke <jrtc27@jrtc27.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Heiko Stuebner <heiko@sntech.de>
+Subject: Re: [PATCH v9 00/13] riscv: Add support for xtheadvector
+Message-ID: <ZrqsqsCtKwfG4Q5B@ghost>
+References: <20240806-xtheadvector-v9-0-62a56d2da5d0@rivosinc.com>
+ <20240809-slapping-graph-461287bac506@spud>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240809-slapping-graph-461287bac506@spud>
 
-On Sat, 20 Jul 2024 11:10:30 -0700
-Kees Cook <kees@kernel.org> wrote:
-
-> Following from the recent KUnit file naming discussion[1], move all
-> KUnit tests in lib/ into lib/tests/.
+On Fri, Aug 09, 2024 at 11:31:15PM +0100, Conor Dooley wrote:
+> On Tue, Aug 06, 2024 at 05:31:36PM -0700, Charlie Jenkins wrote:
+> > xtheadvector is a custom extension that is based upon riscv vector
+> > version 0.7.1 [1]. All of the vector routines have been modified to
+> > support this alternative vector version based upon whether xtheadvector
+> > was determined to be supported at boot.
+> > 
+> > vlenb is not supported on the existing xtheadvector hardware, so a
+> > devicetree property thead,vlenb is added to provide the vlenb to Linux.
+> > 
+> > There is a new hwprobe key RISCV_HWPROBE_KEY_VENDOR_EXT_THEAD_0 that is
+> > used to request which thead vendor extensions are supported on the
+> > current platform. This allows future vendors to allocate hwprobe keys
+> > for their vendor.
+> > 
+> > Support for xtheadvector is also added to the vector kselftests.
 > 
-> Link: https://lore.kernel.org/lkml/20240720165441.it.320-kees@kernel.org/ [1]
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
+> So uh, since noone seems to have brought it up, in the light of the issues
+> with thead's vector implementation, (https://ghostwriteattack.com/) do we
+> want to enable it at all?
 
-Strong-Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+I can make it clear in the kconfig that xtheadvector is succeptible to
+this attack and that it should be enabled with caution. I think we
+should let people that understand the risk to enable it.
 
-I was talking with Masami and asking him where the kunit test code lives
-and after pointing to lib/ I was disgusted with what I saw. I told him,
-"why isn't this in its own "tests/" directory"? And he mentioned this patch
-(which I forgot about).
+- Charlie
 
-So yes, please move it.
-
-Thanks,
-
--- Steve
-
-
-> I can carry this in the hardening tree. To disrupt people as little as
-> possible, I'm hoping to send this either at the end of -rc1 or early
-> in -rc2.
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Yury Norov <yury.norov@gmail.com>
-> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> Cc: David Gow <davidgow@google.com>
-> Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-> Cc: Andy Shevchenko <andy@kernel.org>
-> Cc: "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-> Cc: Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Matti Vaittinen <mazziesaccount@gmail.com>
-> Cc: linux-hardening@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: kunit-dev@googlegroups.com
-> Cc: linux-trace-kernel@vger.kernel.org
->
 
