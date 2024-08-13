@@ -1,74 +1,77 @@
-Return-Path: <linux-kselftest+bounces-15226-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15227-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38A2F950894
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 17:10:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C3679508EC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 17:23:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD30B1F22E32
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 15:10:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C56D1C22F08
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 15:23:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A3B91A00EE;
-	Tue, 13 Aug 2024 15:10:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CF6619EEB7;
+	Tue, 13 Aug 2024 15:23:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WkTipgfN"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="DtXFdbM/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2063.outbound.protection.outlook.com [40.107.220.63])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52AF919EEA4;
-	Tue, 13 Aug 2024 15:10:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723561847; cv=none; b=NoKkcQUWD9ZplkoXfSil+RbXjR7CQLgWDlP23Uyjd9QbXeQBfJCs1Bxh2AZFWISBsTtZZfxLeW+3+lSDdyNzpQlMzeCxQw16NJvFfSReEfbwV216Bl9Rv581KNN5NHrzgfP1aAkn1ilgzHgT6VjnTCKwB8AZ+2a6WbICiAdDbZU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723561847; c=relaxed/simple;
-	bh=pI7NJo+riq8hIU+FO7xdB5P09ot+AEQTqkbS5XscNBA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gRCynsBC0PWWu7wYMWOB7+uG1HHNXY5nrwiRfMIg2140cWK7m9pJ97L6G1m8Kf2bzvRIKyeRMwFcwznWygtVi+3SJ38dsmFMBPf0C5gpXWcyhRfZYUSDb0sJoT6829oQkDjpSoaYn+gPg/hBwrdrm3Df/CtwPVkSow318gv7Ddc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WkTipgfN; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a83597ce5beso36948366b.1;
-        Tue, 13 Aug 2024 08:10:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723561844; x=1724166644; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1DL27af2hm+nu7cPx2f4++LeZQVixre2oogzMUuwPfE=;
-        b=WkTipgfN7tfNmCBVk8tyjNMGCE8t4WgwY3vP+Yeyt5r8qrsd5JBVoNxEpOClqvS0AQ
-         8jTfWZjbWItdTkZAApW4OJZmdb3oH3Wwxan/6Q50vjPUpBIh67mrkbZdtqNGK7J14oRA
-         8GMP3+Hh/9p7MVgc7dlaWCtixGvzlQacnZdifbsqsHNkvaZYMjsVcpGlPVHx8UCmfp8d
-         Ty9DUXELEJ7F4Zx9ICUq3vVe3kWgEfI5KKS+BBnL5AuUwYxioa3QnVRaMYBVp5hDqmlV
-         VtU0RKj6PN4mgRxDtsszlUgMlsPJH+HtTwfFN5uRb2UvvpJxWPQpQxId2IJnbFPNGpOS
-         JKZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723561844; x=1724166644;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1DL27af2hm+nu7cPx2f4++LeZQVixre2oogzMUuwPfE=;
-        b=Ab3KjIVvYo/s9M4VBVQWE+Z/4EDXQXmB80TtXlJAdnGHTfUAVxUEUdVCeeo67+hrIb
-         ofRfhYZ/ciaCVwBciPOQBRqICoie7D1fHPcGq2kRuR1PDKelcIPZygn2Q49KGku6AFw1
-         xQxuwbHSusJqGJaKiZ7Rzq3kZXQVIYvxMRQhNXugT6kAltoBP1/OIZh2gL9uvXOHeEcb
-         gkMIJfodMoS+PbVxua2uP9rYNNU17LVTfPEU2RAkbVfNewz/BVbf7FY4pU8ILp9D346C
-         UPl7AdvGI8dRkXmo4JLvqKVkfcisSTb4sWP7x4XEs5xmfExwvW0OQy7FHy6HhoO1HQSk
-         t/vA==
-X-Forwarded-Encrypted: i=1; AJvYcCUWclAuE22nJxRlMOVWqvkF7aAMPNgXxfbNC8pmSkjoZd86KQOE+D/29eZmxTzNFoWCVe20h2xmbqZIOAHkclc4KwevTMkYmf/15yTlh7dhx86MVJ6lS1DDusy/yfR9VBtk7Wz6MfSaRTBLRORw34Q1A8NdQji8dMxQzA3eGevwL0yFNoUqyOxvG9hjoG3pNeUOSHi2qNQOuVXqfN0v0BMuB5ublIk0EU3sOpk09KUM75W9YFSL8MJVfxVB89HDuIF26ltFPcZtegDMFqG63WiA3QuzaDBHO1qWHOSLxoqYlWwqd+DjS3/Bv3Yi9M3/zWZJpBOFuiX7KvO0vCK/LtcagFNWWdQaVHeExlg8Q7K9WOL3ySPMGMeaGDyU6U0A+HDeeeWjs9OoULPRb+brHU6m7clutlEphIB9fHYUQY5RRamhh6EzdLo4UCgZNNQHvCUynaNzMYrAUVeGINK4qi06p7fk7GQjT9Oy8//oPVWULlgVfF22w+q3N2l5S2ihPplTtynn5Q==
-X-Gm-Message-State: AOJu0YwxnD18hWqDzhOQKUUPKxQsa/uCpiZOfpOZ8sTbOFSzzCUMIOt3
-	9T81ZXxSVcIhYoLk6FN0LQXOhOxfvWV4lqqLw0qcnwdOUd3rpzo3
-X-Google-Smtp-Source: AGHT+IEgp9b07/X8lBe3DTl0aD8UgrdTViu9k66B0d84BfuLitHAtBI4O1Nbqhy82P2v7UD6nlULfg==
-X-Received: by 2002:a17:907:3e13:b0:a6e:f869:d718 with SMTP id a640c23a62f3a-a836278bc29mr290666b.21.1723561844057;
-        Tue, 13 Aug 2024 08:10:44 -0700 (PDT)
-Received: from [192.168.42.131] (82-132-214-244.dab.02.net. [82.132.214.244])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a80f414e18csm77141966b.177.2024.08.13.08.10.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Aug 2024 08:10:43 -0700 (PDT)
-Message-ID: <6a779dbb-ad3a-47cf-bb8e-1a50732a9694@gmail.com>
-Date: Tue, 13 Aug 2024 16:11:15 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9854619925A;
+	Tue, 13 Aug 2024 15:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.63
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723562594; cv=fail; b=riXR+UryLSr3vP+NYHcbqLzUyQeagjUGinfzUBFvzuE5hJjwrIw6tvAbmNfuRsgqX9Jz8w6TzKZ20Ja7EYdX7eczt/t+RTJLHg/9S/eSdV5DWeQNLTratTCS+0q3FJrEc7PvlTrAqy+wahixa6dBlx96qsqMiMZveO1K/VE4FKA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723562594; c=relaxed/simple;
+	bh=XdVejaol+qYWTcvE/i7YtC0X9y7hlnG5WNkPISoz7uk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Vn1XPf+awPEwT2m9KFYPqKKKcrcFvU0vrF/gslptk3ZbYN8GFjl+USC3Bd9EJrRQmbIJjjk4Cw8eC2e+AFQZdZXSh4lv3CY7TCR3b1Z97ZNWZJhRLAhMu1UZfKr9tBK5NLcygjHDZ/8MDui3GJ6rz327hew3Ytp5hG9rfUliKcI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=DtXFdbM/; arc=fail smtp.client-ip=40.107.220.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gdhzsisqQhzakOoP8zgU5FiALv8lVhDKZmQNFTjRYgmZ7NvhTnRgJ6rd15Or4DRrEeDmdYZV+fJbZEsLHLL+nkioa5WlacoV0vGHnpGJnDnJZxKBV/Lil5zYwFgl26beCdxvPs/3E1NqTUR6qXCYQB0ZMx7I5By9qa4eWEblfSWNlaFvz67kC56fhDcc2MGoMgor0zZT9C5KVxpj86bFHpuZD2QhOwAnQzcy349QrcmPal5p6LfQvvOutksMuWrNkdTD1F00n1z4aiWZTW2BzZraqkEyYZ6onsD9N7FwOnHTmeEEDlRjXkogl0Rl0jqus8hVMbCtdtMzBrB6zbHaoA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MyQN+7vMFubnfGPDH818CrGGJWmV01Hkr4KzaR6GEAk=;
+ b=G3CTAxlKrZ9v688Olfs939wJtTp4KSRXPanzcpCnKuua7LtGLv0JtQfbCo4xIWVsB/jwfgwc8ZJwyYoIf2wZpzsq2CnpxOFhyfBz6NaIcFt62JldfZwA55YFhcATUCgqkzxs8bATlDkoqzZQe1IcOT5jLb3PhPexjT2bWDolZFsAxlpaMc/u5XCfTiEpf32MMxIa1XO6qWoXDdqy6j/cUBJbxIfaWPKtBM4itlQhX7vuu2mE4uw9K8+t2MzaGZvj/l9EEYlq0bRRvtTlvdJuOL7ut6aMEqM/GlwtE3XQSlRG29tFLQiCMooWTH2YLQs/FVnJi7/MON70r1PAABNS9g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=MyQN+7vMFubnfGPDH818CrGGJWmV01Hkr4KzaR6GEAk=;
+ b=DtXFdbM/JJDMjaZCpsNzH18GtmMMb219lh2A7qlq/h005tkqckXpoLueQZzHwQoIfX6jVam9kYCQWRyUJvYwNpaWDAVDBnx8314q99F5gLlpN25Kesgi8FqtVDRfC6EMdVs3Ve0lT65Tv2psO6KfYnFNR6ksICIuXbSl8NAGR1U=
+Received: from CH2PR10CA0019.namprd10.prod.outlook.com (2603:10b6:610:4c::29)
+ by PH7PR12MB6538.namprd12.prod.outlook.com (2603:10b6:510:1f1::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.20; Tue, 13 Aug
+ 2024 15:23:07 +0000
+Received: from CH1PEPF0000AD7A.namprd04.prod.outlook.com
+ (2603:10b6:610:4c:cafe::2d) by CH2PR10CA0019.outlook.office365.com
+ (2603:10b6:610:4c::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.23 via Frontend
+ Transport; Tue, 13 Aug 2024 15:23:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CH1PEPF0000AD7A.mail.protection.outlook.com (10.167.244.59) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7849.8 via Frontend Transport; Tue, 13 Aug 2024 15:23:06 +0000
+Received: from [10.236.31.51] (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 13 Aug
+ 2024 10:23:05 -0500
+Message-ID: <5b32da03-addf-4f34-bcf4-76fbe420b8f5@amd.com>
+Date: Tue, 13 Aug 2024 10:23:04 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,107 +79,171 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v18 07/14] memory-provider: dmabuf devmem memory
- provider
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
- Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner
- <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Arnd Bergmann <arnd@arndb.de>,
- Steffen Klassert <steffen.klassert@secunet.com>,
- Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>,
- Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>,
- Yunsheng Lin <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst
- <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
- Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20240805212536.2172174-1-almasrymina@google.com>
- <20240805212536.2172174-8-almasrymina@google.com>
- <20240806135924.5bb65ec7@kernel.org>
- <CAHS8izOA80dxpB9rzOwv7Oe_1w4A7vo5S3c3=uCES8TSnjyzpg@mail.gmail.com>
- <20240808192410.37a49724@kernel.org>
- <CAHS8izMH4UhD+UDYqMjt9d=gu-wpGPQBLyewzVrCWRyoVtQcgA@mail.gmail.com>
- <fc6a8f0a-cdb4-4705-a08f-7033ef15213e@gmail.com>
- <20240809205236.77c959b0@kernel.org>
- <CAHS8izOXwZS-8sfvn3DuT1XWhjc--7-ZLjr8rMn1XHr5F+ckbA@mail.gmail.com>
- <48f3a61f-9e04-4755-b50c-8fae6e6112eb@gmail.com>
- <20240812105732.5d2845e4@kernel.org>
- <CAHS8izPb51gvEHGHeQwWTs4YmimLLamau1c4j=Z4KGM8ZJrx5g@mail.gmail.com>
- <a6747b29-ed79-49d4-9ffe-b62074db1e09@gmail.com>
- <20240812165708.33234ed6@kernel.org>
- <5a51b11d-9c35-42a5-879b-08dc7ca2ca18@gmail.com>
- <20240813073917.690ac1cc@kernel.org>
+Subject: Re: [RFC 2/5] selftests: KVM: Decouple SEV ioctls from asserts
+To: Sean Christopherson <seanjc@google.com>
+CC: <kvm@vger.kernel.org>, <shuah@kernel.org>, <thomas.lendacky@amd.com>,
+	<michael.roth@amd.com>, <pbonzini@redhat.com>, <pgonda@google.com>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20240710220540.188239-1-pratikrajesh.sampat@amd.com>
+ <20240710220540.188239-3-pratikrajesh.sampat@amd.com>
+ <ZrY4e39Q2_WxhrkI@google.com>
 Content-Language: en-US
-From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <20240813073917.690ac1cc@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>
+In-Reply-To: <ZrY4e39Q2_WxhrkI@google.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD7A:EE_|PH7PR12MB6538:EE_
+X-MS-Office365-Filtering-Correlation-Id: 355200c3-5ced-44d8-cde7-08dcbbabd536
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|82310400026|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?S2FabEh2MTNpVjl2ekh6L01SMlozUU5hKzdrTVRDb1VqdEhNWEY1d25NRk5J?=
+ =?utf-8?B?T2pTSEttdzhJbjJwRWVrUXJoeTVhWEJSbkcrMjR2dTM2bGZXdXpONEtYZFR5?=
+ =?utf-8?B?RU1DbHYzb2o0UDJLMUNWR3dqbkNzRWEzNFlJV2N3T09GQVBjd0xSaUNRbnov?=
+ =?utf-8?B?MFFjb1QyMk1TVUkvUHhnVWxYUUI2MFNhYkxmUTZ1OG0rYkhFbGRDWWxackhq?=
+ =?utf-8?B?L2ZzY3hXWFIzZlp6NlpHcVdaVDh1MEJ3eXRWbGFoOXVCSzRUS2xhcFNYTW4y?=
+ =?utf-8?B?ZFcrci8xZWQ1Y0Frd2hyMDNnWHdhdUpRYnZtZ003Q05WaTdwUWVXS0N6WndT?=
+ =?utf-8?B?SlZnNS9EdHoyMGEwcjNtVy9aOThicHhFcnBib1JSZXl4RGVSeGs2MHRzcUZ4?=
+ =?utf-8?B?ZzZTUnpicXAwZ3RJNVRoOEF6UFpXTUo3NHlaajZ1Rlk4YTVqZ1ZTNlVKWVM2?=
+ =?utf-8?B?Z0krN3UyTC84OTVNMHpxMExxbGJIS0UvNTl4UHk2TmZMR0JlNXdpbmRCYzgw?=
+ =?utf-8?B?aFVpOWVPRzZmRGErT1hkTTU1aG05a0laZzlUZWVOeFpGU29TM2Y0K2pleDZm?=
+ =?utf-8?B?TFc4MENBdEpaUXBJa0UzQ2NsbnloYjhlQ2VlZzFqalZCVHBaZVZhOWVrUkY5?=
+ =?utf-8?B?cTI5eW1PVFhISU03ZkR1L0NZclRPckozREhsdjRvWWZIU2FhVmdDcHdpMHEz?=
+ =?utf-8?B?VyswZWd4Z0cxSEt6Q3E0Y0ZBMTcwY1BxNzQ5TWRxOHVlUnVKTlZjNlBXd1RL?=
+ =?utf-8?B?dUppMWErRnRhbzVBNDF2Um9rdUlxY0wwdnF6TnF6cXBURDFXOHNoV2IyMmhS?=
+ =?utf-8?B?dG9FKzdmMjU5Z3FDRXpPVmRkTnlBOHVhRGdNMk1JRTh1bHJnem10akVndDBl?=
+ =?utf-8?B?MTVqQ3VDLzZjSEN0ZDh4MGQ4SDBoeGZQZzhtTnZzUStSdTBDYlV2aTNDWkhh?=
+ =?utf-8?B?V1BsRVkweUJIVnpzeTB0bi9XSVU2RWRhSkRYWnRGNnQ0dzlkdTJLZktneE9T?=
+ =?utf-8?B?YWtPb2RtNFZ3RlJseGZHMnd1Q2lhM3FVMTFUUmVBK0c2WHk2VWY1bm55UlNq?=
+ =?utf-8?B?UkxkY1hBRkhBVXRscXdoK3FqbFVrSmxrU0FTN2hDOFllQ1h6eUxOQW4wMnhM?=
+ =?utf-8?B?bHY5ajh6U3IveVk1MEo4c2JwZzgvRTB4Wk05a28vSzNYRm11dU5NbkM4WENh?=
+ =?utf-8?B?WVZWZFJJcHNBeUpQODAyVU44S0o1OE8vRjRWS3h3cmYxSG96WVVUSFl1dUty?=
+ =?utf-8?B?a01QZGFwUHdlSldNKzZZaDVKdHlXMTdlcDRNSmhNem1NcHdJYnlINmhwSmZB?=
+ =?utf-8?B?YWI1RGljTVljc0FYRUdqRkVpbzZqUnI3V3hDMHVKcFUwRVc3QWhKazZGTlN2?=
+ =?utf-8?B?ZkQwYmxmenZ4dWs4S1pYdnFVakp1NFlhVDNyeThzUFgrYTB6VVo4REN0bU1H?=
+ =?utf-8?B?SUJFbHpZK0ZHTnJWbGdzdzdXc3REWS9Mb0J6MzdEdmliU3BpSVFtQ3FjSGp2?=
+ =?utf-8?B?OHhwT3dEZnBiV29wcE1vUmo0dHRWZlJBWU1LS3JibTRYYllDKzErbU12aXdP?=
+ =?utf-8?B?T1RVMEtrU2lPQ3FSd3QxR29uRFl0eWNiOU5Na1VpZHdZZ2duT0lCZG1XU09M?=
+ =?utf-8?B?MG1EWW9USWRUbk5qaTlwOXh0S25JejNzSUhxRzloV05HMzNKZlRWSnVvQVcw?=
+ =?utf-8?B?Q0xpNjR5bHN6bThxSFVHZktiWUthVzg2NjZTYllZTUljVUwwNURUbE5NUEoz?=
+ =?utf-8?B?VmJaY2VKYVpISVJYbFFVMW5tbFBVZ3doa2lKS2pGVjlsTTFMQ3pnMWtsWlBn?=
+ =?utf-8?B?MDUwVllQbXZpUXNjcjhNTW4wb2RTMmlwZDlVa1hyemowQTF4eCtWNkFVbUZ1?=
+ =?utf-8?B?bld5b0VCWFJRay9WNWRzVDIvV2p3UVVtdUtMbEtnQmU5a1NyM3VlM1BpekZT?=
+ =?utf-8?Q?H8q1LuffESkz1rpM10VmSt03OZCzsGSe?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2024 15:23:06.9772
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 355200c3-5ced-44d8-cde7-08dcbbabd536
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH1PEPF0000AD7A.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6538
 
-On 8/13/24 15:39, Jakub Kicinski wrote:
-> On Tue, 13 Aug 2024 03:31:13 +0100 Pavel Begunkov wrote:
->> I'm getting lost, so repeating myself a bit. What I think
->> would be a good approach is if we get an error back from
->> the driver if it doesn't support netiov / providers.
->>
->> netdev_rx_queue_restart() {
->> 	...
->> 	err = dev->queue_mgmt_ops->ndo_queue_mem_alloc();
->> 	if (err == -EOPNOTSUPP) // the driver doesn't support netiov
->> 		return -EOPNOTSUPP;
->> 	...
->> }
->>
->> That can be done if drivers opt in to support providers,
->> e.g. via a page pool flag.
->>
->> What I think wouldn't be a great option is getting back a
->> "success" from the driver even though it ignored
+Hi Sean,
+
+Thanks for your review.
+
+On 8/9/2024 10:40 AM, Sean Christopherson wrote:
+> On Wed, Jul 10, 2024, Pratik R. Sampat wrote:
+>> This commit separates the SEV, SEV-ES, SEV-SNP ioctl calls from its
 > 
-> page pool params are not the right place for a supported flag.
-> Sooner or later we'll want to expose this flag to user space.
+> Don't start with "This commit".  Please read Documentation/process/maintainer-kvm-x86.rst,
+> and by extension, Documentation/process/maintainer-tip.rst.
 
-Fair enough, it appeared to me that's what you was suggesting
+Sure, I will frame the message better.
 
-"What comes to mind is adding an "I can gobble up net_iovs from this
-pool" flag in page pool params (the struct that comes from the driver),
-and then on the installation path we can check ..."
+> 
+>> positive test asserts. This is done so that negative tests can be
+>> introduced and both kinds of testing can be performed independently
+>> using the same base helpers of the ioctl.
+>>
+>> This commit also adds additional parameters such as flags to improve
+>> testing coverage for the ioctls.
+>>
+>> Cleanups performed with no functional change intended.
+>>
+>> Signed-off-by: Pratik R. Sampat <pratikrajesh.sampat@amd.com>
+>> ---
+>>  .../selftests/kvm/include/x86_64/sev.h        |  20 +--
+>>  tools/testing/selftests/kvm/lib/x86_64/sev.c  | 145 ++++++++++++------
+>>  2 files changed, 108 insertions(+), 57 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/kvm/include/x86_64/sev.h b/tools/testing/selftests/kvm/include/x86_64/sev.h
+>> index 43b6c52831b2..ef99151e13a7 100644
+>> --- a/tools/testing/selftests/kvm/include/x86_64/sev.h
+>> +++ b/tools/testing/selftests/kvm/include/x86_64/sev.h
+>> @@ -37,14 +37,16 @@ enum sev_guest_state {
+>>  #define GHCB_MSR_TERM_REQ	0x100
+>>  
+>>  void sev_vm_launch(struct kvm_vm *vm, uint32_t policy);
+>> -void sev_vm_launch_measure(struct kvm_vm *vm, uint8_t *measurement);
+>> -void sev_vm_launch_finish(struct kvm_vm *vm);
+>> +int sev_vm_launch_start(struct kvm_vm *vm, uint32_t policy);
+>> +int sev_vm_launch_update(struct kvm_vm *vm, uint32_t policy);
+>> +int sev_vm_launch_measure(struct kvm_vm *vm, uint8_t *measurement);
+>> +int sev_vm_launch_finish(struct kvm_vm *vm);
+>>  
+>>  bool is_kvm_snp_supported(void);
+>>  
+>> -void snp_vm_launch(struct kvm_vm *vm, uint32_t policy);
+>> -void snp_vm_launch_update(struct kvm_vm *vm);
+>> -void snp_vm_launch_finish(struct kvm_vm *vm);
+>> +int snp_vm_launch(struct kvm_vm *vm, uint32_t policy, uint8_t flags);
+>> +int snp_vm_launch_update(struct kvm_vm *vm, uint8_t page_type);
+>> +int snp_vm_launch_finish(struct kvm_vm *vm, uint16_t flags);
+>>  
+>>  struct kvm_vm *vm_sev_create_with_one_vcpu(uint32_t type, void *guest_code,
+>>  					   struct kvm_vcpu **cpu);
+>> @@ -98,7 +100,7 @@ static inline void sev_register_encrypted_memory(struct kvm_vm *vm,
+>>  	vm_ioctl(vm, KVM_MEMORY_ENCRYPT_REG_REGION, &range);
+>>  }
+>>  
+>> -static inline void snp_launch_update_data(struct kvm_vm *vm, vm_paddr_t gpa,
+>> +static inline int snp_launch_update_data(struct kvm_vm *vm, vm_paddr_t gpa,
+>>  					   uint64_t size, uint8_t type)
+>>  {
+>>  	struct kvm_sev_snp_launch_update update_data = {
+>> @@ -108,10 +110,10 @@ static inline void snp_launch_update_data(struct kvm_vm *vm, vm_paddr_t gpa,
+>>  		.type = type,
+>>  	};
+>>  
+>> -	vm_sev_ioctl(vm, KVM_SEV_SNP_LAUNCH_UPDATE, &update_data);
+>> +	return __vm_sev_ioctl(vm, KVM_SEV_SNP_LAUNCH_UPDATE, &update_data);
+> 
+> Don't introduce APIs and then immediately rewrite all of the users.  If you want
+> to rework similar APIs, do the rework, then add the new APIs.  Doing things in
+> this order adds a pile of pointless churn.
+> 
+> But that's a moot point, because it's far easier to just add __snp_launch_update_data().
+> And if you look through other APIs in kvm_util.h, you'll see that the strong
+> preference is to let vm_ioctl(), or in this case vm_sev_ioctl(), do the heavy
+> lifting.  Yeah, it requires copy+pasting marshalling parameters into the struct,
+> but that's relatively uninteresting code, _and_ piggybacking the "good" version
+> means you can't do things like pass in a garbage virtual address (because the
+> "good" version always guarantees a good virtual address).
 
-We can also move it from pp flags to queue API callbacks, however if we
-want to expose it to the userspace, I'd imagine we need a queue flag set
-by the driver, which then can be queried by netlink or whichever
-interface is appropriate. And it can be used can be used to fail
-netdev_rx_queue_restart() for queues/drivers that don't support mp.
+I am a little confused by this.
 
-netdev_rx_queue_restart() {
-	if (rxq->mp_params && !rxq->netiov_supported)
-		fail;
-}
+Are you suggesting that I leave the original functions intact with using
+vm_sev_ioctl() and have an additional variant such as
+__snp_launch_update_data() which calls into __vm_sev_ioctl() to decouple
+the ioctl from the assert for negative asserts?
 
-Perhaps, I don't understand what approach you contemplate, but
-maybe Mina has cracked it.
+Or, do you suggest that I alter vm_sev_ioctl() to handle both positive
+and negative asserts?
 
--- 
-Pavel Begunkov
+Thanks!
+-Pratik
+
 
