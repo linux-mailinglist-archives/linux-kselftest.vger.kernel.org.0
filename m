@@ -1,153 +1,116 @@
-Return-Path: <linux-kselftest+bounces-15233-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0ADA950938
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 17:37:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25BF595093B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 17:38:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E57261C228B7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 15:37:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D72F72830CD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 15:38:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6A241A0706;
-	Tue, 13 Aug 2024 15:37:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF65119AD6C;
+	Tue, 13 Aug 2024 15:38:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ftY0zj6W"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="onDHvVdj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DB51199245;
-	Tue, 13 Aug 2024 15:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47577191F71
+	for <linux-kselftest@vger.kernel.org>; Tue, 13 Aug 2024 15:38:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723563429; cv=none; b=lnyfC4nNESnTjnWxoxKcFVLbhgI5PDLRmcakFVjicEnvcN3x1xBEzLB857/rdywdF+llre0cnCh68doIOonZEkOrRgjx4ijb6tWhUyvVWWo9omxXFoOd2CMELK13jGAEpHTmZWO+df3FWy+XI8dFGUIKZzsA3eXmITgL+qU5IWk=
+	t=1723563490; cv=none; b=WINZT+67vr6oyjAerFOsCOFW7tqCEcFA8JdcRNbpjSDZXHdtL3t2ZmJPwva/4pIEIDnJ8+P8P/v5uAvclGnu2AXrRs3EXzXBA7AL1rVszW8B5JQUpLlKRiB4Q/0UNOfrp2uldFMfVSqjVbeomtgF+WWAMA5CxN86OhZfJ6aFNto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723563429; c=relaxed/simple;
-	bh=QVJpNiVerk9xPP/kZXVkpqNKK+oHO9hrON1+2Sbx5EM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YmuH0x0X+nKvupuFV/VMt+LvpidEE0hwAua/GhB6cH6hdyoCZJLQIbRbKk2BOSPWf5ajWpyuGH0AtNGeqy6m/7lfolexZlo26+aWhU6wSndNHtV3Rhyn9mqkTCiDJ7MtpQfuCwfyMJehsHsTDXxPF3oatwGlITTBNim5pUe2GXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ftY0zj6W; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5bd1a9bdce4so3825873a12.3;
-        Tue, 13 Aug 2024 08:37:07 -0700 (PDT)
+	s=arc-20240116; t=1723563490; c=relaxed/simple;
+	bh=0c7sx9C1jet5WdcmyMpMYsHb/i7UcO2KmcsxAf7KKwU=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=XAZ16R18Ck4oY77SQm5uBZ0PlvEHwc8sTLjiSJ2vt3XHX3p09YmhO8m+h4/dw/falflqrTbHNBtcm6Yg087H1FxhCNLgct04vLDuWFSfAp7PUhimeiQND18sNqCsWNzzQYbSnuaKEq+hhayieJEegc9SULPBl+2QzKWSJi640mI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=onDHvVdj; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-66890dbb7b8so127662807b3.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 13 Aug 2024 08:38:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723563426; x=1724168226; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OHvjoU9H+Sgc7R6GwAwflnlqFXRVRCL0RMPB/ZWgdjQ=;
-        b=ftY0zj6WEtpvzBRGabqeH6QcbB6rjbxVAvJ80w0YK5UJ/1J3yrms+vNlpTTCKEHV/w
-         hrkfw02iqV0VTyl+rwSzXmW7LQTHUAOUV4XDtQJ6YxTWYyTHnTwqctqyfPhD0fe5BbjK
-         I6LKcIvFX9Gymr34V1XucBGFbbycHRCHJrTh+KFSfnY4MFmZeetu/Mf6yEqabssBfpo9
-         WO3MBpXks9SoHSjsU7ibhfSPdRkDPH/ogOWFXwEhBTNfNRbpH5SYvYAsNjhIUt0zQ372
-         GMO/K0eQ8Mu5uepD27p49NLIjasuxDcn6kGSw5Drq6akgkAJiFxN1zmH0f/X/GNiZTna
-         1gsQ==
+        d=google.com; s=20230601; t=1723563488; x=1724168288; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=7kMHZ1GdUJDWple2nUqgyCrw9nVKP78R5QKQXwtWMxY=;
+        b=onDHvVdjonoCqEgmVmdh2AF12EWK0H3RUS03tyRqISJhXVgvoEtnMBOzFkts5KYTAU
+         2PEekqYYmaHNuL6vN7ALRhVkIeFGlGfSOrhgX7ESiGEVTSCBHqHBLVpKRHqeRaOvSQi5
+         SMUkNz7Yxr7OZ4xOJjwPPxIOP6xvJhSpchWX/LlK6xCEwf27paOVK37O5/3UoMNhWYXU
+         1f/pb47N09xK0Ptn1zSi6fn29GqJFdLVAFD5/tNFXp4+SMzPevXfGKhsvTehn/GvbA3O
+         VZB068KhSZ87nU6uOPHmP+onBwulaPiKdXht/XxlPUNuzE8WckSay2DiKBN+mM/d7BxD
+         kScQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723563426; x=1724168226;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OHvjoU9H+Sgc7R6GwAwflnlqFXRVRCL0RMPB/ZWgdjQ=;
-        b=T+E9C7+3Yx0ly/m2Nl38bgovdmgx7PulJJtgA/6JjSgPHuA6mplTNNm+4Te1AUFqXV
-         y31htHGGCNPENpVwF1+aXI8999n/by8Sy2NHtRVkIQi+a97+Ykt5KuH1bmFg+NZnhpHG
-         0ITOOe0atM4sKj7dqXCbj0C/aaPeIhoj4AAdxDTt1ToXswFgM6Za4C+/D2wlxYv5hIeE
-         yl5DphUNc1bXFASFoy7nhIQg5rPYgtADwzpc4XrfILJdVufyaQMfgPelIHwrI9W+ioMd
-         cCAndk6+gfWsM7h9ibz2lnPdCLeeLXjht2DCvddLVs49JWTw8odsQTEko1cP+hHWSGww
-         tseg==
-X-Forwarded-Encrypted: i=1; AJvYcCUieHzsPZHblNAfOXBA144dldpmxn4jT90wncrcniAF2rNI9SAJ5Xw/VFxtsfr+L13sDl7juOXd1DAo9Z/usVD7qVxhpFZ5dVqoIv4PTSSiJuYx6TNH8DCWKSKrqQktQjUszHNqvDNvGwmx8ejWl4hJUpL6gpE57rpVuLRpJ3x87vqAs3xB
-X-Gm-Message-State: AOJu0YwlZOt49HPeKcfieG6fUxw4uZcalIqGq/tjIAr8mTdAvBKZzjHj
-	SmPbdFXh1SwKWW/XxcZ6jrCCAJo3X7zF8aNOULFFA9R79Two+YOBmMmzWQ==
-X-Google-Smtp-Source: AGHT+IEQlDbnLbzSs4uXeAi5uFLqqcCOEWgKmEg9oXeIQtjqLte9jlaPMXzHCYFh30qYZAq1w3tIQg==
-X-Received: by 2002:a17:907:f186:b0:a7d:a29e:5c33 with SMTP id a640c23a62f3a-a80ed1c1d76mr303743366b.28.1723563425896;
-        Tue, 13 Aug 2024 08:37:05 -0700 (PDT)
-Received: from [192.168.178.20] (dh207-40-227.xnet.hr. [88.207.40.227])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a80f3f45c86sm78694066b.25.2024.08.13.08.37.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Aug 2024 08:37:05 -0700 (PDT)
-Message-ID: <391af1fe-53ff-4678-a78c-74262724c2e9@gmail.com>
-Date: Tue, 13 Aug 2024 17:36:41 +0200
+        d=1e100.net; s=20230601; t=1723563488; x=1724168288;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7kMHZ1GdUJDWple2nUqgyCrw9nVKP78R5QKQXwtWMxY=;
+        b=tjC+9NKr+gSlK+qUeg5p/91Fm1oJEQmp9QR18t1hnIguQ2ulAnIEyrxapz4uhORTeb
+         nYL17Avmb/g5+o3CAjubC0ZSDWQ1ZcIn1tPLt71LOTPWEcAvU72rORvS6Sqr/E/cGqA0
+         XYq7QPsWPYpnw4PpBzzSUfS+un8n7925BV5GBgSCMIj171iCrliU6qgDRldsVq5f9p9h
+         WT8cFaIbktLVq+zFn8T0Z54okCLCmlMY4MTgVRkyOefvrmG9uZmiDRb4LGiDG4421bLW
+         Ct2BVd/SpqBzwGbCsBwESObFgD3wzscv0Y6rwh0AQfHYl8UBYcjZpWETiGv+UKju8Asp
+         BmJg==
+X-Forwarded-Encrypted: i=1; AJvYcCXV43bTvSOOjlZ6rENGhF8j/ffYHE+WQuMs7a5DudvuiJVed2QaDlIOtHp7nqZssNB8imC9F3sLXfbLuMR5KVR+EhubOLAWvSV5yxx88qo/
+X-Gm-Message-State: AOJu0YwcX7jCtEoM39sDxoD5/2tphkRUGaJEazyU0ZfYklcM1gSj2fA5
+	u6vpEzcejinQy/ZFBUg/Ggac1q7zimMIXhTtbwbUjSoqd9D8K5f0yb8VtdULyl1+RsOs7xQPz1P
+	d8A==
+X-Google-Smtp-Source: AGHT+IGOOFdbk3PmOx25fWh05KbLnU14MAEXTZc2fD/h9QtctdaISVEo25EHB58NCnb+Ip+BcGxnuI2+OWc=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:eb11:0:b0:e0e:89e6:aad4 with SMTP id
+ 3f1490d57ef6-e113c907c61mr140833276.0.1723563488277; Tue, 13 Aug 2024
+ 08:38:08 -0700 (PDT)
+Date: Tue, 13 Aug 2024 08:38:06 -0700
+In-Reply-To: <ZllzCoYvMQOkMo90@chao-email>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/1] selftests: net: af_unix: cast void* to char* in
- call to macro TH_LOG()
-To: Simon Horman <horms@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>, Kuniyuki Iwashima <kuniyu@amazon.com>,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Shuah Khan <shuah@kernel.org>
-References: <20240812002257.23447-2-mtodorovac69@gmail.com>
- <20240812151725.GB21855@kernel.org>
-Content-Language: en-US
-From: Mirsad Todorovac <mtodorovac69@gmail.com>
-In-Reply-To: <20240812151725.GB21855@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20240528041926.3989-1-manali.shukla@amd.com> <20240528041926.3989-6-manali.shukla@amd.com>
+ <ZlWLupfpODawPX3P@chao-email> <b45bc797-9087-4456-ba18-463c3f638096@amd.com> <ZllzCoYvMQOkMo90@chao-email>
+Message-ID: <Zrt93t29X6A0nmys@google.com>
+Subject: Re: [PATCH v3 5/5] KVM: selftests: KVM: SVM: Add Idle HLT intercept test
+From: Sean Christopherson <seanjc@google.com>
+To: Chao Gao <chao.gao@intel.com>
+Cc: Manali Shukla <manali.shukla@amd.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org, 
+	nikunj@amd.com, thomas.lendacky@amd.com, vkuznets@redhat.com, bp@alien8.de, 
+	ajones@ventanamicro.com
+Content-Type: text/plain; charset="us-ascii"
 
-Hi, Simon,
-
-On 8/12/24 17:17, Simon Horman wrote:
-> On Mon, Aug 12, 2024 at 02:22:58AM +0200, Mirsad Todorovac wrote:
->> GCC 13.2.0 reported warning about (void *) beeing used as a param where (char *) is expected:
+On Fri, May 31, 2024, Chao Gao wrote:
+> On Thu, May 30, 2024 at 06:49:56PM +0530, Manali Shukla wrote:
+> >>> +	/* Check the extension for binary stats */
+> >>> +	TEST_REQUIRE(this_cpu_has(X86_FEATURE_IDLE_HLT));
+> >> 
+> >> IIUC, this test assumes that the IDLE_HLT feature is enabled for guests if it
+> >> is supported by the CPU. But this isn't true in some cases:
+> >> 
+> >I understand you are intending to create a capability for IDLE HLT intercept
+> >feature, but in my opinion, the IDLE Halt intercept feature doesn't require
+> >user space to do anything for the feature itself.
 > 
-> nit: being
-
-Ouch! No patch is small enough that one should take its correctness for granted. :-O
-
->> In file included from msg_oob.c:14:
->> msg_oob.c: In function ‘__recvpair’:
->> ../../kselftest_harness.h:106:40: warning: format ‘%s’ expects argument of type ‘char *’,
->> 							but argument 6 has type ‘const void *’ [-Wformat=]
->>   106 |                 fprintf(TH_LOG_STREAM, "# %s:%d:%s:" fmt "\n", \
->>       |                                        ^~~~~~~~~~~~~
->> ../../kselftest_harness.h:101:17: note: in expansion of macro ‘__TH_LOG’
->>   101 |                 __TH_LOG(fmt, ##__VA_ARGS__); \
->>       |                 ^~~~~~~~
->> msg_oob.c:235:17: note: in expansion of macro ‘TH_LOG’
->>   235 |                 TH_LOG("Expected:%s", expected_errno ? strerror(expected_errno) : expected_buf);
->>       |                 ^~~~~~
->> ../../kselftest_harness.h:106:40: warning: format ‘%s’ expects argument of type ‘char *’,
->> 							but argument 6 has type ‘const void *’ [-Wformat=]
->>   106 |                 fprintf(TH_LOG_STREAM, "# %s:%d:%s:" fmt "\n", \
->>       |                                        ^~~~~~~~~~~~~
->> ../../kselftest_harness.h:101:17: note: in expansion of macro ‘__TH_LOG’
->>   101 |                 __TH_LOG(fmt, ##__VA_ARGS__); \
->>       |                 ^~~~~~~~
->> msg_oob.c:259:25: note: in expansion of macro ‘TH_LOG’
->>   259 |                 TH_LOG("Expected:%s", expected_errno ? strerror(expected_errno) : expected_buf);
->>       |                 ^~~~~~
+> Yes, I agree. Actually, I was thinking about:
 > 
-> Thanks, I see this too.
+> 1. make the feature bit visible from /proc/cpuinfo by removing the leading ""
+>    from the comment following the bit definition in patch 1
 > 
->> Casting param to (char *) silences the warning.
-> 
-> It seems that all callers pass a string as the expected_errno argument.
-> Perhaps it's type could be updated to char *, if that is what it is.
-> I think this would avoid the need to cast.
+> 2. parse /proc/cpuinfo to determine if this IDLE_HLT feature is supported by the
+>    kernel
 
-Agreed and verified. If it is OK with you, I might post a v2.
+Neither of these is sufficient/correct.  E.g. they'll get false positives if run
+on a kernel that recognizes IDLE_HLT, but that doesn't have KVM support for
+enabling the feature.
 
-Best regards,
-Mirsad Todorovac
+The canonical way to check for features in KVM selftests is kvm_cpu_has(), which
+looks at KVM_GET_SUPPORTED_CPUID (by default, selftests VMs enable all features,
+i.e. reflect the result of KVM_GET_SUPPORTED_CPUID into KVM_SET_CPUID2).
 
->> Fixes: d098d77232c37 ("selftest: af_unix: Add msg_oob.c.")
->> Cc: "David S. Miller" <davem@davemloft.net>
->> Cc: Eric Dumazet <edumazet@google.com>
->> Cc: Jakub Kicinski <kuba@kernel.org>
->> Cc: Paolo Abeni <pabeni@redhat.com>
->> Cc: Shuah Khan <shuah@kernel.org>
->> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
->> Cc: netdev@vger.kernel.org
->> Cc: linux-kselftest@vger.kernel.org
->> Signed-off-by: Mirsad Todorovac <mtodorovac69@gmail.com>
-> 
-> ...
+> But I am not sure if it's worth it. I'll defer to maintainers.
 
