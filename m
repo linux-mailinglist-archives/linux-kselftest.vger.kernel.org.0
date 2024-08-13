@@ -1,116 +1,132 @@
-Return-Path: <linux-kselftest+bounces-15234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15235-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25BF595093B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 17:38:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 093C695098E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 17:55:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D72F72830CD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 15:38:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BB951C21F1C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 15:55:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF65119AD6C;
-	Tue, 13 Aug 2024 15:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 293EA1A08C4;
+	Tue, 13 Aug 2024 15:55:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="onDHvVdj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TdDaa/og"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47577191F71
-	for <linux-kselftest@vger.kernel.org>; Tue, 13 Aug 2024 15:38:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E019D1A073C;
+	Tue, 13 Aug 2024 15:55:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723563490; cv=none; b=WINZT+67vr6oyjAerFOsCOFW7tqCEcFA8JdcRNbpjSDZXHdtL3t2ZmJPwva/4pIEIDnJ8+P8P/v5uAvclGnu2AXrRs3EXzXBA7AL1rVszW8B5JQUpLlKRiB4Q/0UNOfrp2uldFMfVSqjVbeomtgF+WWAMA5CxN86OhZfJ6aFNto=
+	t=1723564535; cv=none; b=FEDzJLoLl5J4UaTWQ6lo4XJI0+ig5QZMZhmbEPlWbCV+frhla7s3FiJHY99nOFazJcVxvyszMy3ESDMNa0NCimQwhcubeKp/ZeEQZyU4fqraMVt1zUCxRvS52N5ODcSV37QWCjcaWBKlZhaV+5558hes0e/+iipYJnBmZANPmlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723563490; c=relaxed/simple;
-	bh=0c7sx9C1jet5WdcmyMpMYsHb/i7UcO2KmcsxAf7KKwU=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XAZ16R18Ck4oY77SQm5uBZ0PlvEHwc8sTLjiSJ2vt3XHX3p09YmhO8m+h4/dw/falflqrTbHNBtcm6Yg087H1FxhCNLgct04vLDuWFSfAp7PUhimeiQND18sNqCsWNzzQYbSnuaKEq+hhayieJEegc9SULPBl+2QzKWSJi640mI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=onDHvVdj; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-66890dbb7b8so127662807b3.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 13 Aug 2024 08:38:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723563488; x=1724168288; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=7kMHZ1GdUJDWple2nUqgyCrw9nVKP78R5QKQXwtWMxY=;
-        b=onDHvVdjonoCqEgmVmdh2AF12EWK0H3RUS03tyRqISJhXVgvoEtnMBOzFkts5KYTAU
-         2PEekqYYmaHNuL6vN7ALRhVkIeFGlGfSOrhgX7ESiGEVTSCBHqHBLVpKRHqeRaOvSQi5
-         SMUkNz7Yxr7OZ4xOJjwPPxIOP6xvJhSpchWX/LlK6xCEwf27paOVK37O5/3UoMNhWYXU
-         1f/pb47N09xK0Ptn1zSi6fn29GqJFdLVAFD5/tNFXp4+SMzPevXfGKhsvTehn/GvbA3O
-         VZB068KhSZ87nU6uOPHmP+onBwulaPiKdXht/XxlPUNuzE8WckSay2DiKBN+mM/d7BxD
-         kScQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723563488; x=1724168288;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7kMHZ1GdUJDWple2nUqgyCrw9nVKP78R5QKQXwtWMxY=;
-        b=tjC+9NKr+gSlK+qUeg5p/91Fm1oJEQmp9QR18t1hnIguQ2ulAnIEyrxapz4uhORTeb
-         nYL17Avmb/g5+o3CAjubC0ZSDWQ1ZcIn1tPLt71LOTPWEcAvU72rORvS6Sqr/E/cGqA0
-         XYq7QPsWPYpnw4PpBzzSUfS+un8n7925BV5GBgSCMIj171iCrliU6qgDRldsVq5f9p9h
-         WT8cFaIbktLVq+zFn8T0Z54okCLCmlMY4MTgVRkyOefvrmG9uZmiDRb4LGiDG4421bLW
-         Ct2BVd/SpqBzwGbCsBwESObFgD3wzscv0Y6rwh0AQfHYl8UBYcjZpWETiGv+UKju8Asp
-         BmJg==
-X-Forwarded-Encrypted: i=1; AJvYcCXV43bTvSOOjlZ6rENGhF8j/ffYHE+WQuMs7a5DudvuiJVed2QaDlIOtHp7nqZssNB8imC9F3sLXfbLuMR5KVR+EhubOLAWvSV5yxx88qo/
-X-Gm-Message-State: AOJu0YwcX7jCtEoM39sDxoD5/2tphkRUGaJEazyU0ZfYklcM1gSj2fA5
-	u6vpEzcejinQy/ZFBUg/Ggac1q7zimMIXhTtbwbUjSoqd9D8K5f0yb8VtdULyl1+RsOs7xQPz1P
-	d8A==
-X-Google-Smtp-Source: AGHT+IGOOFdbk3PmOx25fWh05KbLnU14MAEXTZc2fD/h9QtctdaISVEo25EHB58NCnb+Ip+BcGxnuI2+OWc=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:eb11:0:b0:e0e:89e6:aad4 with SMTP id
- 3f1490d57ef6-e113c907c61mr140833276.0.1723563488277; Tue, 13 Aug 2024
- 08:38:08 -0700 (PDT)
-Date: Tue, 13 Aug 2024 08:38:06 -0700
-In-Reply-To: <ZllzCoYvMQOkMo90@chao-email>
+	s=arc-20240116; t=1723564535; c=relaxed/simple;
+	bh=2qbznLVAWa/HOCkibpwEKuFx9BRG0jfLiyGPm/O5D0U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DrysTMLe8/lW4Ac9VRJvwngkcSIWbSRXJGhNcYxhEy9FCfbpQhDsehFYZW9P19vR8u/vCZWaDb7HQJ6WUf4mU2LtpUmB4R8laEoloNWTQL2ST8KIm+sSd2ev+NNZSZLf9f/TpYmSZXRIGiQxMrDllAsS5F5JHlv0Cok5LgPjG48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TdDaa/og; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B120C4AF09;
+	Tue, 13 Aug 2024 15:55:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723564534;
+	bh=2qbznLVAWa/HOCkibpwEKuFx9BRG0jfLiyGPm/O5D0U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TdDaa/og08j0LYWxMjIfmT62Kse6nlmDNAqFUWXRmeAOd4L8HUcdtoNGpFIKZ2ovK
+	 Wo8eroMPA7ljNcvycCtAJoCPSOW0sL4ez8CU0njPbAl5s4w3e1pL1xt0z/5bkAsd3W
+	 AyI8VSs3BZHOYosptDMzpeCBZYGxHn2H8y8LbYAnhcsMLr91GM20TL0ixceE9tPfzb
+	 Vx1zlFj6nEUair4k8rdOYdoG4DTk8CIJwZHafLxB8o8P/RrW8+9bZFSBxfXNpqDFNr
+	 VwMB5tfnO4Fx23eAhjULiqlqOWHy4r2C5DEKNZSBu0vrreLkayROtBxCfuvWvflTI4
+	 xxXxYgEv0gapw==
+Date: Tue, 13 Aug 2024 16:55:27 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	Guo Ren <guoren@kernel.org>, Evan Green <evan@rivosinc.com>,
+	Andy Chiu <andy.chiu@sifive.com>,
+	Jessica Clarke <jrtc27@jrtc27.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Heiko Stuebner <heiko@sntech.de>
+Subject: Re: [PATCH v9 00/13] riscv: Add support for xtheadvector
+Message-ID: <20240813-strode-revival-07b8556a8bfe@spud>
+References: <20240806-xtheadvector-v9-0-62a56d2da5d0@rivosinc.com>
+ <20240809-slapping-graph-461287bac506@spud>
+ <ZrqsqsCtKwfG4Q5B@ghost>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240528041926.3989-1-manali.shukla@amd.com> <20240528041926.3989-6-manali.shukla@amd.com>
- <ZlWLupfpODawPX3P@chao-email> <b45bc797-9087-4456-ba18-463c3f638096@amd.com> <ZllzCoYvMQOkMo90@chao-email>
-Message-ID: <Zrt93t29X6A0nmys@google.com>
-Subject: Re: [PATCH v3 5/5] KVM: selftests: KVM: SVM: Add Idle HLT intercept test
-From: Sean Christopherson <seanjc@google.com>
-To: Chao Gao <chao.gao@intel.com>
-Cc: Manali Shukla <manali.shukla@amd.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org, 
-	nikunj@amd.com, thomas.lendacky@amd.com, vkuznets@redhat.com, bp@alien8.de, 
-	ajones@ventanamicro.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="wVALGEdsN5/GZu0E"
+Content-Disposition: inline
+In-Reply-To: <ZrqsqsCtKwfG4Q5B@ghost>
 
-On Fri, May 31, 2024, Chao Gao wrote:
-> On Thu, May 30, 2024 at 06:49:56PM +0530, Manali Shukla wrote:
-> >>> +	/* Check the extension for binary stats */
-> >>> +	TEST_REQUIRE(this_cpu_has(X86_FEATURE_IDLE_HLT));
-> >> 
-> >> IIUC, this test assumes that the IDLE_HLT feature is enabled for guests if it
-> >> is supported by the CPU. But this isn't true in some cases:
-> >> 
-> >I understand you are intending to create a capability for IDLE HLT intercept
-> >feature, but in my opinion, the IDLE Halt intercept feature doesn't require
-> >user space to do anything for the feature itself.
-> 
-> Yes, I agree. Actually, I was thinking about:
-> 
-> 1. make the feature bit visible from /proc/cpuinfo by removing the leading ""
->    from the comment following the bit definition in patch 1
-> 
-> 2. parse /proc/cpuinfo to determine if this IDLE_HLT feature is supported by the
->    kernel
 
-Neither of these is sufficient/correct.  E.g. they'll get false positives if run
-on a kernel that recognizes IDLE_HLT, but that doesn't have KVM support for
-enabling the feature.
+--wVALGEdsN5/GZu0E
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The canonical way to check for features in KVM selftests is kvm_cpu_has(), which
-looks at KVM_GET_SUPPORTED_CPUID (by default, selftests VMs enable all features,
-i.e. reflect the result of KVM_GET_SUPPORTED_CPUID into KVM_SET_CPUID2).
+On Mon, Aug 12, 2024 at 05:45:30PM -0700, Charlie Jenkins wrote:
+> On Fri, Aug 09, 2024 at 11:31:15PM +0100, Conor Dooley wrote:
+> > On Tue, Aug 06, 2024 at 05:31:36PM -0700, Charlie Jenkins wrote:
+> > > xtheadvector is a custom extension that is based upon riscv vector
+> > > version 0.7.1 [1]. All of the vector routines have been modified to
+> > > support this alternative vector version based upon whether xtheadvect=
+or
+> > > was determined to be supported at boot.
+> > >=20
+> > > vlenb is not supported on the existing xtheadvector hardware, so a
+> > > devicetree property thead,vlenb is added to provide the vlenb to Linu=
+x.
+> > >=20
+> > > There is a new hwprobe key RISCV_HWPROBE_KEY_VENDOR_EXT_THEAD_0 that =
+is
+> > > used to request which thead vendor extensions are supported on the
+> > > current platform. This allows future vendors to allocate hwprobe keys
+> > > for their vendor.
+> > >=20
+> > > Support for xtheadvector is also added to the vector kselftests.
+> >=20
+> > So uh, since noone seems to have brought it up, in the light of the iss=
+ues
+> > with thead's vector implementation, (https://ghostwriteattack.com/) do =
+we
+> > want to enable it at all?
+>=20
+> I can make it clear in the kconfig that xtheadvector is succeptible to
+> this attack and that it should be enabled with caution. I think we
+> should let people that understand the risk to enable it.
 
-> But I am not sure if it's worth it. I'll defer to maintainers.
+I think the clearest way might be "depends on BROKEN"?
+
+--wVALGEdsN5/GZu0E
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZruB7wAKCRB4tDGHoIJi
+0tDJAQCrAAwyJAAGcGaB0lSjHQowc1+M+60A33xWLVpFubDEggD+PdA/5VviAMYd
+FtjIx2BGIAbBB5DLVfsxw4duVA3eAQc=
+=/cR1
+-----END PGP SIGNATURE-----
+
+--wVALGEdsN5/GZu0E--
 
