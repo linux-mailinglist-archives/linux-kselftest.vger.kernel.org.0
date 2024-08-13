@@ -1,184 +1,97 @@
-Return-Path: <linux-kselftest+bounces-15193-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15194-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D45A94FD84
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 08:02:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 612F894FD9E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 08:13:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17B62B213D3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 06:02:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F175C283BDE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 13 Aug 2024 06:13:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF01C36AFE;
-	Tue, 13 Aug 2024 06:02:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF92B39AFD;
+	Tue, 13 Aug 2024 06:13:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="yfonxd4A";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="2FLaanZn";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="yfonxd4A";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="2FLaanZn"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="k/wSoJUC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D06942374C;
-	Tue, 13 Aug 2024 06:02:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 234612262B;
+	Tue, 13 Aug 2024 06:13:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=72.21.196.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723528935; cv=none; b=Eqb40expiSzc9MGf9Li8D2WKMWsAyL+jCGWfk/nmYLT2Sx5zN2Dw+yFth81Vh/ojY9KHlmaRRyzZvt6BuaN6+mtUsB3eAxls4+rYUxjapQ3ga06dWTj+omQ7X5KydGdqOts3T01zDmexAncOJz0htOyibwtX4V1gUzxgBwm0WV4=
+	t=1723529593; cv=none; b=kXfWpN9pII73KVR9h+sV6/KO0PenTzYrv3J7MOqdXXffdJAbOZOmnLIgumCCIN1+vqNTMyD9btaF5N009WP7aVdag6KZrWkhXdmojvTXayaub7olDOJGFByvFVycDH9LJUSOJJ0by22trismJGT9FPsqnevhXoB6m++ekZV3Vss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723528935; c=relaxed/simple;
-	bh=OjLN19HU3mLCsXhYlfdKT7dHHQUZUv/OjRXggZr1QsA=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DB2+pypdsKh7iHhCW11iACdnc0vs9C73x1NrXWyOPk0sEIhLTLbW2ggRkRcEautpJlcP/wahBh71e0O7EKDckBZv5fDp0YEJifxh3O1/AC1t5kipcGi/6afRagGtdQJ6wLBZLX92j9yGfUNXpX6FMiHK3WBcj5/iPtjpcKcgZNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=yfonxd4A; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=2FLaanZn; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=yfonxd4A; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=2FLaanZn; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id B5E312270A;
-	Tue, 13 Aug 2024 06:02:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1723528931; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jYVkwWKxTSpRkPweEImYn5jNfhe+tzmk8OXzSLOoKwg=;
-	b=yfonxd4AO6qRrG9eo8KSQB83I0rwb/ixXqcVyvDW9aAyJ7lJffFzz4kL07tcpjrzDMguP+
-	pIO1tbRdEK+7g97fDeoe/tJmiG/8I0TiqPxFWaVK6KCuZHUMfBKw04SyHKfm1DqW/5OCVm
-	anAlmcSnsKYNzEJEOXsF+bEAYg21Sq4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1723528931;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jYVkwWKxTSpRkPweEImYn5jNfhe+tzmk8OXzSLOoKwg=;
-	b=2FLaanZnIGDZKboPEcw0bPT0FsBmQhguEWH06OxnhxMNumCqP9gdHzoW6+DnxpNaIcXRYf
-	7xMKNovBZx9DJKCw==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=yfonxd4A;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=2FLaanZn
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1723528931; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jYVkwWKxTSpRkPweEImYn5jNfhe+tzmk8OXzSLOoKwg=;
-	b=yfonxd4AO6qRrG9eo8KSQB83I0rwb/ixXqcVyvDW9aAyJ7lJffFzz4kL07tcpjrzDMguP+
-	pIO1tbRdEK+7g97fDeoe/tJmiG/8I0TiqPxFWaVK6KCuZHUMfBKw04SyHKfm1DqW/5OCVm
-	anAlmcSnsKYNzEJEOXsF+bEAYg21Sq4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1723528931;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=jYVkwWKxTSpRkPweEImYn5jNfhe+tzmk8OXzSLOoKwg=;
-	b=2FLaanZnIGDZKboPEcw0bPT0FsBmQhguEWH06OxnhxMNumCqP9gdHzoW6+DnxpNaIcXRYf
-	7xMKNovBZx9DJKCw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 60F4013ABD;
-	Tue, 13 Aug 2024 06:02:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 3rMMFuP2umZvCgAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Tue, 13 Aug 2024 06:02:11 +0000
-Date: Tue, 13 Aug 2024 08:02:51 +0200
-Message-ID: <87ikw5c644.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Ivan Orlov <ivan.orlov0322@gmail.com>
-Cc: perex@perex.cz,
-	tiwai@suse.com,
-	corbet@lwn.net,
-	broonie@kernel.org,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	christophe.jaillet@wanadoo.fr,
-	aholzinger@gmx.de
-Subject: Re: [PATCH v4 3/4] ALSA: timer: Introduce virtual userspace-driven timers
-In-Reply-To: <20240811202337.48381-4-ivan.orlov0322@gmail.com>
-References: <20240811202337.48381-1-ivan.orlov0322@gmail.com>
-	<20240811202337.48381-4-ivan.orlov0322@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1723529593; c=relaxed/simple;
+	bh=gKFhI0S2mlLMqPuudOyLilnNWOeupixtPdSxKimBLLs=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=s8HWVyIHOBUccFc8TAs3Tkzjwlfm+gw89l5DZS3q9wX/H+36Jw3XjHDxvKrVsm8i9paxN4QczxkKs16YIfuEFmm8MBGwG2QlrHYnEfwLbLXEjOwO8R1PS9/Z+ccLn2hFJugay4lt0KbZ0P/VkMvq1TyFTbMAQiTBrcCfF4eqQIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=k/wSoJUC; arc=none smtp.client-ip=72.21.196.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1723529592; x=1755065592;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gKFhI0S2mlLMqPuudOyLilnNWOeupixtPdSxKimBLLs=;
+  b=k/wSoJUC/guXrTE/4tHCYL0P8/rMQONi1MLDxyE+FoMpVKpoSDYdvHAx
+   0mjO355h/gh+8JB7xB7docWhB4/MiMr4H/oGDT8J/ajIgW6LmB/Uu2nTd
+   gLnxEsgYFKyelQUFQhSmiAo5MWFI4/DMWUmbBuuqs7CYBLdF8lAT/AHvu
+   o=;
+X-IronPort-AV: E=Sophos;i="6.09,285,1716249600"; 
+   d="scan'208";a="420886268"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2024 06:13:08 +0000
+Received: from EX19MTAUWC002.ant.amazon.com [10.0.7.35:5817]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.15.23:2525] with esmtp (Farcaster)
+ id bdc15a2d-7174-4d53-9c6f-090ba981ef3d; Tue, 13 Aug 2024 06:13:08 +0000 (UTC)
+X-Farcaster-Flow-ID: bdc15a2d-7174-4d53-9c6f-090ba981ef3d
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWC002.ant.amazon.com (10.250.64.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Tue, 13 Aug 2024 06:13:05 +0000
+Received: from 88665a182662.ant.amazon.com (10.142.139.164) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Tue, 13 Aug 2024 06:13:02 +0000
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+To: <david.hunter.linux@gmail.com>
+CC: <davem@davemloft.net>, <edumazet@google.com>,
+	<javier.carrasco.cruz@gmail.com>, <kuba@kernel.org>, <kuniyu@amazon.com>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <pabeni@redhat.com>, <shuah@kernel.org>
+Subject: Re: [PATCH] Kselftest: msg_oob.c: Fix warning for Incorrect Specifier
+Date: Mon, 12 Aug 2024 23:12:54 -0700
+Message-ID: <20240813061254.36825-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20240813060036.754213-1-david.hunter.linux@gmail.com>
+References: <20240813060036.754213-1-david.hunter.linux@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Score: -4.01
-X-Rspamd-Queue-Id: B5E312270A
-X-Spamd-Result: default: False [-4.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	DWL_DNSWL_MED(-2.00)[suse.de:dkim];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	FREEMAIL_TO(0.00)[gmail.com];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.de,wanadoo.fr];
-	FREEMAIL_CC(0.00)[perex.cz,suse.com,lwn.net,kernel.org,vger.kernel.org,wanadoo.fr,gmx.de];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.de:dkim]
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Level: 
-X-Spam-Flag: NO
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D036UWC003.ant.amazon.com (10.13.139.214) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
-On Sun, 11 Aug 2024 22:23:36 +0200,
-Ivan Orlov wrote:
-> +static int snd_utimer_ioctl_create(struct file *file,
-> +				   struct snd_timer_uinfo __user *_utimer_info)
-> +{
-> +	struct snd_utimer *utimer;
-> +	struct snd_timer_uinfo *utimer_info __free(kfree) = NULL;
-> +	int err;
-> +
-> +	utimer_info = memdup_user(_utimer_info, sizeof(*utimer_info));
-> +	if (IS_ERR(utimer_info))
-> +		return PTR_ERR(no_free_ptr(utimer_info));
-> +
-> +	err = snd_utimer_create(utimer_info, &utimer);
-> +	if (err < 0)
-> +		return err;
-> +
-> +	utimer_info->id = utimer->id;
-> +
-> +	err = copy_to_user(_utimer_info, utimer_info, sizeof(*utimer_info));
-> +	if (err) {
-> +		snd_utimer_free(utimer);
-> +		return -EFAULT;
-> +	}
-> +
-> +	return anon_inode_getfd(utimer->name, &snd_utimer_fops, utimer, O_RDWR | O_CLOEXEC);
+From: David Hunter <david.hunter.linux@gmail.com>
+Date: Tue, 13 Aug 2024 01:59:57 -0400
+> Change specifier to %p to correctly substitute type 'const void *'. A
+> specifer involved with a macro is causing a misleading warning to occur:
 
-Wouldn't utimer be left unfreed if this returns an error?
+You may want to run the test before/after the patch.
 
+This is the 3rd patch posted for this warning, so it would be nice to
+check lore before posting if the patch/issue is simple enough :)
 
-thanks,
+And here's the correct fix.
+https://lore.kernel.org/netdev/20240812191122.1092806-1-jain.abhinav177@gmail.com/
 
-Takashi
+Thanks !
 
