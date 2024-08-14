@@ -1,114 +1,112 @@
-Return-Path: <linux-kselftest+bounces-15331-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15335-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC500951F71
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 18:07:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98AFF951FFD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 18:29:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64DEC1F2287C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 16:07:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04705B2E3F0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 16:25:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A2401B86C1;
-	Wed, 14 Aug 2024 16:07:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 768761B9B40;
+	Wed, 14 Aug 2024 16:20:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="sQ5edDfk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F06028DC3;
-	Wed, 14 Aug 2024 16:07:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392A41B32A2;
+	Wed, 14 Aug 2024 16:20:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723651673; cv=none; b=JBQ7UdKc00RVRH4s452IHHIY3B3bvlPkokPgvMvr0u8CZXzBO7j7WTZmVnw6WScvE7nB9SrnSIfwjMehvgvqYDFYGa4367r/64otOVLJ8DWHuIfm6Fz1HZtVM6wzuthUkfmgMFv7Fs/EJXKuEKirgBaeydluKcObAhAkBa6obNc=
+	t=1723652456; cv=none; b=ZZ/oFFtOtNfKCv8q/hk4OYQMB4hdwB84krTbi5FTlrLwskark5TWQ5FLdTa/VWk/A5CZINAALU/uNXEE9dQtPChG+WzmJOW2j9AXOWKyi/eWbGhOGGUt1mnLGiUXagmVGFrIpefWqKOv3IGl2bmbtvBYgrHqPYjNWK5Qzl3ga/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723651673; c=relaxed/simple;
-	bh=vRqPIkdIHBdVxzhU5h0+EbYULZKLvrrnreeIG3lYDCU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NeHzi+8+Ehye5SyzfXmALPihRHzYtpc8S/4L/1HngDjOnK9tL+oUTG0/Lj140NE5TfotVhOwshBABXQ46sur05zv40NGFDzjyTBA+0488VqYEO3XZLojGNq3Mo6BUxKbLUxppEHgdcNIiY5KOgwj/usHQUBMySq2u8G6d+40kTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5b8c2a611adso119302a12.1;
-        Wed, 14 Aug 2024 09:07:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723651670; x=1724256470;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/D24Yl42RVGhmCxoQ5g0FIFfYf6T2QUPv5Ei3NAhCks=;
-        b=hktxFfGogGRqOavB+GgPoODpKgRnuXOyx4SM2e1Yjgr3iL2I6o0DEOuE4P6gZv7/2B
-         OPCDXoLkLisBABorzEDzBLfo0Y351r9H+o3HuFMqFoxBUdmynamnKvNybU+bvUIE2dCF
-         D/APQ5/rtn+QoTiAsMLkv7TxehKPI1t5mBSiEPSo4lN1asMrwCihtIlJ4ZaZDMrs9qXA
-         yyZiDUhRJo3p9MhgNGUwLBDiqRDMpNFoUf/Vd+8Cw7Q93UxtbGWhSuD72+yntBNxbyFo
-         uFnGM80hQ0akc9YONkXrDF4IFXQ8cK1dG+BTX69QTqfsb5u4zN6YpTp8nHyPy+FIe4wK
-         I9wg==
-X-Forwarded-Encrypted: i=1; AJvYcCXVXJZfvfvsHCw7wTdH3LuwXGpziXtkDPkV88dskeDYk8bxqWUFBnX+ieY2BfypSZe3jc46Nkjo2qs8oIcDbH5pdt7YYyLfgvxFkO62NPwb+SPqVHARRsBtTOte0Qf8hvYCybhKDJa5pEvjLvmbi/DrGwYYL91f7kHUV8uCeGPiW3lUKrnX
-X-Gm-Message-State: AOJu0YzvlGhXLJho/I49KRnxcYg95n+DsOzENYZ672Cq9gMy7z9v5038
-	IBu4hs0HuDAVyNxkUYZV4u03JTbIPfdiPc7gfUg9TypT8IRmAFls
-X-Google-Smtp-Source: AGHT+IF+REZ+2INSPDwDp4WqYsoBUywOEBF4z8ulD1n402ji4MyEW9fs06hjPCi4UU9+IDKyuNzwHw==
-X-Received: by 2002:a05:6402:90d:b0:5a3:a9f8:cf20 with SMTP id 4fb4d7f45d1cf-5bea1cb4babmr2249617a12.34.1723651669085;
-        Wed, 14 Aug 2024 09:07:49 -0700 (PDT)
-Received: from gmail.com (fwdproxy-lla-002.fbsv.net. [2a03:2880:30ff:2::face:b00c])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5bd190adc42sm3973995a12.21.2024.08.14.09.07.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Aug 2024 09:07:48 -0700 (PDT)
-Date: Wed, 14 Aug 2024 09:07:46 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Petr Machata <petrm@nvidia.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, David Wei <dw@davidwei.uk>,
-	Willem de Bruijn <willemb@google.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Matthieu Baerts <matttbe@kernel.org>
-Subject: Re: [PATCH net-next v2] net: netconsole: selftests: Create a new
- netconsole selftest
-Message-ID: <ZrzWUg4SGJv7Byp6@gmail.com>
-References: <20240813183825.837091-1-leitao@debian.org>
- <87r0arl5qw.fsf@nvidia.com>
+	s=arc-20240116; t=1723652456; c=relaxed/simple;
+	bh=w6DukgVdh/SeaYiuJZwiSsb19olegSRrDqb9Lls4kO0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AM6iB/QAt6fJJEAywv2lzfLB4F4cWFXCPN2IEaFjpfJld3oum15y1j4/bhPPTBLPWfLjpe0R/lh97jI+DrFf/F2ER2amIok4v6Ze/6F2rXf0MdaLKz8b1HE02RHJvI4zvN6x+7361DjTFXulc+2J3i1+7RaiwmOY2aQpJ6cnGHo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=sQ5edDfk; arc=none smtp.client-ip=185.226.149.37
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
+Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+	(Exim 4.93)
+	(envelope-from <mhal@rbox.co>)
+	id 1seGeX-00GwGz-Jl; Wed, 14 Aug 2024 18:15:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
+	bh=8gEuZoqquS008o2flgsV7w+43AvF3jk+PJRlBs+g2p0=; b=sQ5edDfkRzc9YUM4Nk/REh0Inu
+	f9DlCRgI9C1WcPcuDVa3dOe+fflSCNMCq4Y7cBkeFwBKas6iQCWoBUKkHBV0twXBtYw1a8C3UHYUW
+	uSGqZt80FwF3nFxwMq0F9VaQ4qBJ+SxcTQ6ax1+FHFwp5eTi/rq/j23cx1CZG7z4rv3qFhrh0b5zT
+	S/2zMG6l5YIzOqUXJMlY9IbRiLYBHtCLFY5VMK3Sj9wwd3gPCbC8jtbl3LcpoeGRWlu0Nmxtuk00P
+	ogGYsU8isI2SSBEfsU5PHrczKZbt79pqBDPaF602HapFg9iHTeUTUWxZGq8xlXs6hNa5VzbkmFbRr
+	EmNnS9fA==;
+Received: from [10.9.9.74] (helo=submission03.runbox)
+	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	(envelope-from <mhal@rbox.co>)
+	id 1seGeR-0003LT-GH; Wed, 14 Aug 2024 18:15:07 +0200
+Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.93)
+	id 1seGeH-00EOaa-Nw; Wed, 14 Aug 2024 18:14:57 +0200
+Message-ID: <42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co>
+Date: Wed, 14 Aug 2024 18:14:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87r0arl5qw.fsf@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related
+ fixes
+To: Jakub Sitnicki <jakub@cloudflare.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
+ <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
+ <87y159yi5m.fsf@cloudflare.com>
+ <249a7dc3-34e2-4579-aae7-8b38b145e4bb@rbox.co>
+ <87ttfxy28s.fsf@cloudflare.com>
+Content-Language: pl-PL, en-GB
+From: Michal Luczaj <mhal@rbox.co>
+In-Reply-To: <87ttfxy28s.fsf@cloudflare.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 14, 2024 at 12:24:46PM +0200, Petr Machata wrote:
+On 8/6/24 19:45, Jakub Sitnicki wrote:
+> On Tue, Aug 06, 2024 at 07:18 PM +02, Michal Luczaj wrote:
+>> Great, thanks for the review. With this completed, I guess we can unwind
+>> the (mail) stack to [1]. Is that ingress-to-local et al. something you
+>> wanted to take care of yourself or can I give it a try?
+>> [1] https://lore.kernel.org/netdev/87msmqn9ws.fsf@cloudflare.com/
 > 
-> Breno Leitao <leitao@debian.org> writes:
-
-> > +	fi
-> > +
-> > +	if ! grep -q "${MSG}" "${TMPFILENAME}"; then
-> > +	    echo "FAIL: ${MSG} not found in ${TMPFILENAME}" >&2
-> > +	    cat "${TMPFILENAME}" >&2
-> > +	    return ${ksft_fail}
-> > +	fi
-> > +
-> > +	# Delete the file once it is validated, otherwise keep it
-> > +	# for debugging purposes
-> > +	rm "${TMPFILENAME}"
+> I haven't stated any work on. You're welcome to tackle that.
 > 
-> Seeing the removal within the validation function is odd, I would expect
-> it to be part of cleanup().
+> All I have is a toy test that I've used to generate the redirect matrix.
+> Perhaps it can serve as inspiration:
+> 
+> https://github.com/jsitnicki/sockmap-redir-matrix
 
-Thanks for all the other feedbacks, all of them make sense.
+All right, please let me know if this is more or less what you meant and
+I'll post the whole series for a review (+patch to purge sockmap_listen of
+redir tests, fix misnomers). Mostly I've just copypasted your code
+(mangling it terribly along the way), so I feel silly claiming the
+authorship. Should I assign you as an author?
 
-Regarding this one, I kept like this, because I only remove the file if
-the test succeed, otherwise I keep the file here for debugging purposes,
-as described in the comment above.
+Note that the patches are based on [2], which has not reached bpf-next
+(patchwork says: "Needs ACK").
 
-If that is not a good practice, I am more than happy to move this
-to cleanup.
-
-
-Thanks for the detailed review,
---breno
+[2] [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related fixes
+    https://lore.kernel.org/bpf/20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co/
 
