@@ -1,136 +1,90 @@
-Return-Path: <linux-kselftest+bounces-15316-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15317-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52394951BB8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 15:21:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 94C3C951BD0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 15:28:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E76971F22D64
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 13:21:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E1201F22622
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 13:28:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 532251B29A7;
-	Wed, 14 Aug 2024 13:20:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yhzj/ulf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A96081B012D;
+	Wed, 14 Aug 2024 13:28:07 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 255441B29A3;
-	Wed, 14 Aug 2024 13:20:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 946811879
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Aug 2024 13:28:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723641651; cv=none; b=oWpaEDYtukJzfvpbeRN5toy0LI/nbKLkWrsqBB22w5KRriygEzZ6q3GvsHdsFje0dybz1cv+rC+FNRMAjq7xjqnRGBrdJv6ZtM3gzpFNrPC/iyIILTSS6OSEWnz9HMSUdnHRRQ2Klh8PmYvbNrSdh7hqz4+ShisYAbjLRkcrphc=
+	t=1723642087; cv=none; b=CQDUJSN4NRRr0EU2njN2YKac0TJf8MXuexqiM89yut/7EYNX5On5Dp5k/vgyqr/q2x4eo81/XJpI8sw/JbOo/UqJQ0SCQrloh7fiWmfqaTlLJ7gAUuo6nIEPtbUGqfDyzmpfQq70l9OulGUqNOB1eC/iUdmrgReZc5SnURL26uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723641651; c=relaxed/simple;
-	bh=H8B+ZeihPN20CX76N3ba7SG1HkcJJ+LNDpRzNR81ZzY=;
+	s=arc-20240116; t=1723642087; c=relaxed/simple;
+	bh=trKvhccKbOqrKAkK0fIjUhwMUFgvH+CeZAMgKLE94lc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=op1OaWmoVDq6SZVhl6kFKfBfWA364Jc8RZdaddU/QQ5YfFwYfFB/7gS6E5DoKHdchSZoNJcOLvqTE/vsekxUI/C/tILCF2OqJy3g8mFuR2R/EVQ3RV78qSAQZwCCVltg028ydaJXXFwYzESKcNWSeDEoYVoo9U4wzww29+ggr2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yhzj/ulf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81FE6C4AF0F;
-	Wed, 14 Aug 2024 13:20:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723641650;
-	bh=H8B+ZeihPN20CX76N3ba7SG1HkcJJ+LNDpRzNR81ZzY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Yhzj/ulfO0RJII9o9/PauauDjXBPiy2XS7584unItmKwL7+fT4wLT8d8AeVqPD5GB
-	 Z2I76H3JxQ0PRbxbpXZORjqjA9jihtTi/t71quMLorIP+Bo8kQYwb9S/WoJ6Cr48MC
-	 Q2Od0TNRsXhsQpQv7mu/XMcX+i3nJfFhsf6g0vAAuL+5xcNWCr5JsIgR+1VzD5Hii/
-	 ylKJ/Cdm3LwojtPVv9GN0iiPI/h4arM2teruKWRPNiCzfekkicEUopVORG7aUqNmyR
-	 6f/prE89LnQMKrKwLpHfcgZPoZ028mWM0PbFOOzcQFkmgCSgmQoGUG1Y8ZLDtN2c1x
-	 K9+hBsK/N0mQg==
-Date: Wed, 14 Aug 2024 14:20:42 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	Will Deacon <will@kernel.org>, jannh@google.com,
-	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org,
-	Kees Cook <kees@kernel.org>
-Subject: Re: [PATCH RFT v8 4/9] fork: Add shadow stack support to clone3()
-Message-ID: <b789831b-d744-4173-84a6-61a07bff905e@sirena.org.uk>
-References: <20240808-clone3-shadow-stack-v8-0-0acf37caf14c@kernel.org>
- <20240808-clone3-shadow-stack-v8-4-0acf37caf14c@kernel.org>
- <ZrZdrgOQVHhCyWmA@arm.com>
- <Zrag5A5K9pv1K9Uz@finisterre.sirena.org.uk>
- <ZruJCyXDRNhw6U5A@arm.com>
- <e24a93cb-e7ba-4046-a7c6-fe2ea12420e3@sirena.org.uk>
- <Zrx7Lj09b99ozgAE@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=QqyJBzo7WpRrR6crYkVjGHZ6mL2RTrq8UNCyGX02TM5BSBZJww2erAo8INCNfqdZ7+QrfDVTY7w2ZssGMA8vvP+zonW6FwpL8hsmqWmIHN/cMhacsRJIX1usaGSvMQAB/yxnPJjAVT5mNuw7BNwMBn7mrVKPFAQmRrNmwJb40yY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7E30DDA7;
+	Wed, 14 Aug 2024 06:28:30 -0700 (PDT)
+Received: from e133380.arm.com (e133380.arm.com [10.1.197.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9D91B3F73B;
+	Wed, 14 Aug 2024 06:28:03 -0700 (PDT)
+Date: Wed, 14 Aug 2024 14:27:54 +0100
+From: Dave Martin <Dave.Martin@arm.com>
+To: Andre Przywara <andre.przywara@arm.com>
+Cc: Mark Brown <broonie@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] kselftest/arm64: signal: fix/refactor SVE vector length
+ enumeration
+Message-ID: <Zryw2o0lAzKX0ZDj@e133380.arm.com>
+References: <20240812140924.2100643-1-andre.przywara@arm.com>
+ <561f31a7-6813-499a-a6b5-83bccb69a3e0@sirena.org.uk>
+ <20240813135546.6c91fc8b@donnerap.manchester.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="l+gPSwKlPgIWiTU7"
-Content-Disposition: inline
-In-Reply-To: <Zrx7Lj09b99ozgAE@arm.com>
-X-Cookie: The second best policy is dishonesty.
-
-
---l+gPSwKlPgIWiTU7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240813135546.6c91fc8b@donnerap.manchester.arm.com>
 
-On Wed, Aug 14, 2024 at 10:38:54AM +0100, Catalin Marinas wrote:
-> On Tue, Aug 13, 2024 at 07:58:26PM +0100, Mark Brown wrote:
+On Tue, Aug 13, 2024 at 01:55:46PM +0100, Andre Przywara wrote:
+> On Tue, 13 Aug 2024 12:00:06 +0100
+> Mark Brown <broonie@kernel.org> wrote:
+> 
+> Hi broonie,
+> 
+> > On Mon, Aug 12, 2024 at 03:09:24PM +0100, Andre Przywara wrote:
+> > 
+> > > +		/* Did we find the lowest supported VL? */
+> > > +		if (use_sme && vq < sve_vq_from_vl(vl))
+> > > +			break;  
+> > 
+> > We don't need the use_sme check here, SVE is just architecturally
+> > guaranteed to never trip the && case.  Unless you add a warning for
+> > broken implementations I'd just skip it.
+> 
+> Ah, thanks, I wasn't sure about that, and wanted to mimic the existing
+> code as close as possible. Will surely just drop it.
+> 
+> Thanks,
+> Andre
 
-> > ISTR the concerns were around someone being clever with vfork() but I
-> > don't remember anything super concrete.  In terms of the inconsistency
-> > here that was actually another thing that came up - if userspace
-> > specifies a stack for clone3() it'll just get used even with CLONE_VFORK
-> > so it seemed to make sense to do the same thing for the shadow stack.
-> > This was part of the thinking when we were looking at it, if you can
-> > specify a regular stack you should be able to specify a shadow stack.
+Maybe at least worth a comment?
 
-> Yes, I agree. But by this logic, I was wondering why the current clone()
-> behaviour does not allocate a shadow stack when a new stack is
-> requested with CLONE_VFORK. That's rather theoretical though and we may
-> not want to change the ABI.
+I was looking at this code the other week, and this puzzled me until I
+went and looked back at the architecture.
 
-The default for vfork() is to reuse both the normal and shadow stacks,
-clone3() does make it all much more flexible.  All the shadow stack
-ABI predates clone3(), even if it ended up getting merged after.
-
-> Anyway, I understood this patch now and the ABI decisions. FWIW:
-
-> Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
-
-Thanks!
-
---l+gPSwKlPgIWiTU7
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAma8rykACgkQJNaLcl1U
-h9BYmQf/YgJrH3MQHcexvWEKefsPyqgzIhddLhnB043UPgEOWfxP5jw/EwXt9URd
-Zm0BqKwhm/pYyNq6E49xVmubE1QUYrA27iJ1W8h9YN/w7zjcLYui946FOFdJgouS
-HThXKY2D5ggFIvjI72l9D8H38c/HCQIcpEjJ/jaVdPkbrTO7mf4KUYo2jUVmPlvS
-ZxjwZIPZr/ubMi7aS5eL9vhZ42FELPkBi/bkMZ1su+96awHbZU6g9V9fpjnkt84N
-9EowvCYQGhVNAxg3936eMYGY9+ciXMysqXeN1UVv/lN9yfgI95ANQqzCwLaR71AH
-SGMpBjWQXE/T6uVxcSByywNgzDxY7A==
-=q9y2
------END PGP SIGNATURE-----
-
---l+gPSwKlPgIWiTU7--
+Cheers
+---Dave
+> 
 
