@@ -1,196 +1,282 @@
-Return-Path: <linux-kselftest+bounces-15312-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15313-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E9949519EA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 13:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0059A951A09
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 13:38:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93A4A1C210B2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 11:32:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 258D71C213B8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 11:38:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D0AE1AED27;
-	Wed, 14 Aug 2024 11:32:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 351361AED4C;
+	Wed, 14 Aug 2024 11:38:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ssByd1aw"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Y6A8IUj7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AAA21420A8;
-	Wed, 14 Aug 2024 11:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E54CF13D52A
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Aug 2024 11:38:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723635128; cv=none; b=fPNG3NBS8DnUj/+77ksT+KqSbYjVdqweT3SBH/vtyN2KtsaAJ4wnFxNS+9raaqb3d9NBiF2sKA8iF5Xe6B5zdknZOLBHI6f+LfehcY0aJSmSOYiKmbODMJyPFIqUwjtTCIXkCz/4s54hiPFUE4ELYwub5+6evtkyg2dCSB2i6Rs=
+	t=1723635513; cv=none; b=ePkkRKwtYF3haqeyA3BKp9WJiZBW1kCvjLFWJsnLW4OJVElL/Z01QgeWSXg8UCGu1S86Tj+Avy9zLxAVZVLJ3jEWvaZEOaWuyZ8ns98/14RipfCHJwNUYRADOOAOfEepu/ofG1atFmVET/PfEB3X8IuQVmtciTu6xmh6ls0cadw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723635128; c=relaxed/simple;
-	bh=AWE3CobVL05Gs8NLBwN0sPmICHJ3iutsNZuS3OojKLs=;
+	s=arc-20240116; t=1723635513; c=relaxed/simple;
+	bh=JSPcamH+sNGiM5g1Yg2W18/X/3so4oRE7sqdh0jPD7k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dS46kgPWeUg6OeKrfKnPZNFekrGTMi+Br4UGLzf7uwUVFQD8hji2a3PwdMbLHvIHthXjvJYV4j9bTkZ671B6JNlUmMk/bKU9eKrnd0PbzT3BqL8H5fA5esCRW7V7yT7KcqncJ43/8jxysVfMK3nfqrnahLRHlaKTJf1U8UF3bQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ssByd1aw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE50BC32786;
-	Wed, 14 Aug 2024 11:32:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723635127;
-	bh=AWE3CobVL05Gs8NLBwN0sPmICHJ3iutsNZuS3OojKLs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ssByd1awoSbcCzi7aTkTckxm+kJMN601gT9A9I0ycGleIO7LsS5QttvS3Bs1nP4qR
-	 3ie3I216kNjnh8ZkRQs6JUpFjJdu6EpprWCVv4TntxzGkUDH1be5/RqWNNPmpFtlIQ
-	 h8cne6kKlT2qc5TbHVX0zz/gFRSb5sxlRBWKC/nl0WfRfvegTz4cC1H0X4Afk2rsIm
-	 7lqGqBFjzBQqNb62Z19eNe4Ipr2btSgyFr5gCbbPYrIzCiYOs+56lgCYoAWqNZyc/C
-	 X24Nhnth36xuG7VOX8hmvaEDlMzKdFyQCTA14TgOxCmLlD+xef+F5dDmcG1P8OS8h2
-	 s1anNbIwJn6cQ==
-Message-ID: <af896c55-723e-4c2b-b153-132f863e2f68@kernel.org>
-Date: Wed, 14 Aug 2024 13:31:50 +0200
+	 In-Reply-To:Content-Type; b=p/hnxo361xcQKvgY650rtTPS+gzy6m3lHv2eincaxXolVuAH9s5DO9twAV6sy/Az6GBecgmG7SWGZ6JU7EF5N+T5uyhGe7/DUSrGrq141eBLRM8Py4/rBIqs+NyJ49uSuoM7wJJgsX6Z0wkSsKVSBC7iMd8AScdYnobRW2x+SCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Y6A8IUj7; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2cdae2bc04dso101701a91.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Aug 2024 04:38:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1723635510; x=1724240310; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=asggk/QXp9CMUZLmCX38cnR4hEwxRfJpnzjB+4PaQdM=;
+        b=Y6A8IUj7nRR7RurErhYLV8NGefPwKd2K+fKfSKDierPtKYVJ2kstiV1wcxByQS/jSq
+         tvW+mAyp8x0J7Hap0od/SkZwv6p9rqP+5wwSVvv0GIuGTNUAL5/EtQz0APlC81FEv2/X
+         faK676Q0wXjzD19c6z8EB55LB+T28cwHxvWHU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723635510; x=1724240310;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=asggk/QXp9CMUZLmCX38cnR4hEwxRfJpnzjB+4PaQdM=;
+        b=Hv8Yl6XpCaEdKDbFBwTNO/5i6lcMpLOluxrv1XfKUUD5HJJM2Oouj27vuJIY0j4kFM
+         CWhCKNOzmf2w/MKpygtnhkN2vDOy5Ub8pbkUwKVOS2nUh6WC+VXkz9uy67671r7mrWgw
+         VU+z33zZGYJUsH9Pd9qr/pzRRMPRusyFjsyBOzd+MKKoea7A2+ZiqLkvIR0Yhuc0+c8H
+         gAd1HDRta/pYQO7za7BDj5SfoBqH//NthXGVMSBExY7Bcy7k4Y7sCxleaDqJqw2shPEH
+         HYEAKV56Ng0/KuHXoblspfqQu/KjnaDnDzvROKuw6MQYY1QUjjIQ0iwFHsMYuHnJlNDp
+         hdlg==
+X-Forwarded-Encrypted: i=1; AJvYcCU6Oi3oQdqQmalg28WM47nb7BJ9y2SNpzI8JRGDDJCWTMJX9X3YqkgHFmtQ7JQME97leugsMItoMwJc/xytWwh+RFj5hJHs/PiRiFQ4rXsK
+X-Gm-Message-State: AOJu0YynZOWkOZWEkAaKC1OIN5jP+SakkW5oHGxdFRs1HowTmOwuqiH9
+	Zo2goJeXs2p716BJ6lSWxl0CZwXna/5jx6cNmeqRaAmEu2UV7A1WdaMmejTejpT1JO9gyLIQXQ2
+	b
+X-Google-Smtp-Source: AGHT+IE4/SfOX9SrqC8Lo28qMZlrqPPd9smyceqkhnEHoaDeCM97VxNhJioQDkrnbMi/8elozNCKOQ==
+X-Received: by 2002:a17:90a:1f42:b0:2c8:4bca:f904 with SMTP id 98e67ed59e1d1-2d3aa879f6cmr1674581a91.0.1723635509945;
+        Wed, 14 Aug 2024 04:38:29 -0700 (PDT)
+Received: from [192.168.104.75] ([223.118.51.114])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d3ac7dd3f0sm1464865a91.18.2024.08.14.04.38.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 14 Aug 2024 04:38:29 -0700 (PDT)
+Message-ID: <2c13840e-2717-4f88-b613-f6a770be2d75@linuxfoundation.org>
+Date: Wed, 14 Aug 2024 05:38:24 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next v2] net: netconsole: selftests: Create a new
- netconsole selftest
-Content-Language: en-GB
-To: Petr Machata <petrm@nvidia.com>, Breno Leitao <leitao@debian.org>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
- David Wei <dw@davidwei.uk>, Willem de Bruijn <willemb@google.com>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- Geliang Tang <geliang@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>
-References: <20240813183825.837091-1-leitao@debian.org>
- <87r0arl5qw.fsf@nvidia.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <87r0arl5qw.fsf@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 3/3] selftests/tracing: Add hist poll() support test
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Shuah Khan <shuah@kernel.org>
+Cc: Tom Zanussi <zanussi@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <172359427367.323666.6446548762874507863.stgit@devnote2>
+ <172359430351.323666.9768554440535494357.stgit@devnote2>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <172359430351.323666.9768554440535494357.stgit@devnote2>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Petr, Breno,
-
-On 14/08/2024 12:24, Petr Machata wrote:
+On 8/13/24 18:11, Masami Hiramatsu (Google) wrote:
+> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > 
-> Breno Leitao <leitao@debian.org> writes:
+> Add a testcase for poll() on hist file. This introduces a helper binary
+> to the ftracetest, because there is no good way to reliably execute
+> poll() on hist file.
 > 
->> Adds a selftest that creates two virtual interfaces, assigns one to a
->> new namespace, and assigns IP addresses to both.
->>
->> It listens on the destination interface using socat and configures a
->> dynamic target on netconsole, pointing to the destination IP address.
->>
->> The test then checks if the message was received properly on the
->> destination interface.
-
-(...)
-
->> diff --git a/tools/testing/selftests/drivers/net/netcons_basic.sh b/tools/testing/selftests/drivers/net/netcons_basic.sh
->> new file mode 100755
->> index 000000000000..e0e58fc7e89f
->> --- /dev/null
->> +++ b/tools/testing/selftests/drivers/net/netcons_basic.sh
->> @@ -0,0 +1,223 @@
-
-(...)
-
-> +NAMESPACE="netconsns_dst"
-
-(...)
-
->> +function set_network() {
->> +	# This is coming from lib.sh. And it does unbound variable access
->> +	set +u
->> +	setup_ns "${NAMESPACE}"
->> +	set -u
+> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> ---
+>   Changes in v2:
+>    - Update poll command to support both of POLLIN and POLLPRI, and timeout.
+>    - Identify unsupported stable kernel if poll-in returns soon.
+>    - Test both of POLLIN and POLLPRI.
+> ---
+>   tools/testing/selftests/ftrace/Makefile            |    2 +
+>   tools/testing/selftests/ftrace/poll.c              |   62 +++++++++++++++++
+>   .../ftrace/test.d/trigger/trigger-hist-poll.tc     |   74 ++++++++++++++++++++
+>   3 files changed, 138 insertions(+)
+>   create mode 100644 tools/testing/selftests/ftrace/poll.c
+>   create mode 100644 tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-poll.tc
 > 
-> It would make sense to fix lib.sh. I think this is what is needed?
+> diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
+> index a1e955d2de4c..49d96bb16355 100644
+> --- a/tools/testing/selftests/ftrace/Makefile
+> +++ b/tools/testing/selftests/ftrace/Makefile
+> @@ -6,4 +6,6 @@ TEST_PROGS := ftracetest-ktap
+>   TEST_FILES := test.d settings
+>   EXTRA_CLEAN := $(OUTPUT)/logs/*
+>   
+> +TEST_GEN_PROGS = poll
+> +
+>   include ../lib.mk
+> diff --git a/tools/testing/selftests/ftrace/poll.c b/tools/testing/selftests/ftrace/poll.c
+> new file mode 100644
+> index 000000000000..8003a59fe042
+> --- /dev/null
+> +++ b/tools/testing/selftests/ftrace/poll.c
+> @@ -0,0 +1,62 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Simple poll on a file.
+> + *
+> + * Copyright (c) 2024 Google LLC.
+> + */
+> +
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <poll.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <unistd.h>
+> +
+> +#define BUFSIZE 4096
+> +
+> +/*
+> + * Usage:
+> + *  poll <in|pri> <FILE> [timeout]
+> + */
+> +int main(int argc, char *argv[])
+> +{
+> +	struct pollfd pfd;
+> +	char buf[BUFSIZE];
+> +	int timeout = -1;
+> +	int ret;
+> +
+> +	if (argc < 3)
+> +		return -1;
+> +
+> +	if (!strcmp(argv[1], "in"))
+> +		pfd.events = POLLIN;
+> +	else if (!strcmp(argv[1], "pri"))
+> +		pfd.events = POLLPRI;
+> +
+> +	pfd.fd = open(argv[2], O_RDONLY);
+> +	if (pfd.fd < 0) {
+> +		perror("open");
+> +		return -1;
+> +	}
+> +
+> +	if (argc == 4)
+> +		timeout = atoi(argv[3]);
+
+This code can be simpler and more maintainable using getopt.
+Any reason why you didn't use it?
+
+> +
+> +	/* Reset poll by read if POLLIN is specified. */
+> +	if (pfd.events & POLLIN)
+> +		do {} while (read(pfd.fd, buf, BUFSIZE) == BUFSIZE);
+> +
+> +	ret = poll(&pfd, 1, timeout);
+> +	if (ret < 0 && errno != EINTR) {
+> +		perror("poll")> +		return -1;
+> +	}
+> +	close(pfd.fd);
+> +
+> +	/* If timeout happned, return code is 0 */
+
+Spelling - happened
+
+> +	if (ret == 0)
+> +		return 1;
+> +
+> +	return 0;
+> +}
+> diff --git a/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-poll.tc b/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-poll.tc
+> new file mode 100644
+> index 000000000000..53bea74e2234
+> --- /dev/null
+> +++ b/tools/testing/selftests/ftrace/test.d/trigger/trigger-hist-poll.tc
+> @@ -0,0 +1,74 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +# description: event trigger - test poll wait on histogram
+> +# requires: set_event events/sched/sched_process_free/trigger events/sched/sched_process_free/hist
+> +# flags: instance
+> +
+> +POLL=${FTRACETEST_ROOT}/poll
+> +
+> +if [ ! -x ${POLL} ]; then
+> +  echo "poll program is not compiled!"
+> +  exit_unresolved
+> +fi
+> +
+> +EVENT=events/sched/sched_process_free/
+> +
+> +# Check poll ops is supported. Before implementing poll on hist file, it
+> +# returns soon with POLLIN | POLLOUT, but not POLLPRI.
+> +
+> +# This must wait >1 sec and return 1 (timeout).
+> +set +e
+> +${POLL} in ${EVENT}/hist 1000
+> +ret=$?
+> +set -e
+> +if [ ${ret} != 1 ]; then
+> +  echo "poll on hist file is not supported"
+> +  exit_unsupported
+> +fi
+> +
+> +# Test POLLIN
+> +echo > trace
+> +echo "hist:key=comm" > ${EVENT}/trigger
+> +echo 1 > ${EVENT}/enable
+> +
+> +# This sleep command will exit after 2 seconds.
+> +sleep 2 &
+> +BGPID=$!
+> +# if timeout happens, poll returns 1.
+> +${POLL} in ${EVENT}/hist 4000
+> +echo 0 > tracing_on
+> +
+> +if [ -d /proc/${BGPID} ]; then
+> +  echo "poll exits too soon"
+> +  kill -KILL ${BGPID} ||:
+> +  exit_fail
+> +fi
+> +
+> +if ! grep -qw "sleep" trace; then
+> +  echo "poll exits before event happens"
+> +  exit_fail
+> +fi
+> +
+> +# Test POLLPRI
+> +echo > trace
+> +echo 1 > tracing_on
+> +
+> +# This sleep command will exit after 2 seconds.
+> +sleep 2 &
+> +BGPID=$!
+> +# if timeout happens, poll returns 1.
+> +${POLL} pri ${EVENT}/hist 4000
+> +echo 0 > tracing_on
+> +
+> +if [ -d /proc/${BGPID} ]; then
+> +  echo "poll exits too soon"
+> +  kill -KILL ${BGPID} ||:
+> +  exit_fail
+> +fi
+> +
+> +if ! grep -qw "sleep" trace; then
+> +  echo "poll exits before event happens"
+> +  exit_fail
+> +fi
+> +
+> +exit_pass
 > 
-> modified   tools/testing/selftests/net/lib.sh
-> @@ -178,7 +178,7 @@ setup_ns()
->  		fi
->  
->  		# Some test may setup/remove same netns multi times
-> -		if [ -z "${!ns_name}" ]; then
-> +		if ! declare -p "$ns_name" &> /dev/null; then
->  			eval "${ns_name}=${ns_name,,}-$(mktemp -u XXXXXX)"
->  		else
->  			cleanup_ns "${!ns_name}"
-> 
-> CC'd Geliang Tang <geliang@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>,
-> Matthieu Baerts (NGI0) <matttbe@kernel.org> who were in the vicinity
-> in the past.
-Thank you for having CCed me.
 
-I don't know if lib.sh needs to be modified: setup_ns() is supposed to
-be called with the name of an existing variable. Can you not define this
-variable before?
-
-I mean: the modification from Petr looks good to me to support 'set -u',
-but it sounds safer to define the variable before in the script, just in
-case it is defined by in the environment, before starting the test, and
-not taking the expected path.
-
-Note that in all the other selftests, setup_ns() is called with the name
-of the variable, not a variable like you did, e.g.
-
-  NAMESPACE=
-  setup_ns NAMESPACE
-
-instead of:
-
-  NAMESPACE="netconsns_dst"
-  setup_ns "${NAMESPACE}"
-  NAMESPACE=${NS_LIST[0]}
-
-Maybe better to do like the others?
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
+thanks,
+-- Shuah
 
