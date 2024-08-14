@@ -1,70 +1,72 @@
-Return-Path: <linux-kselftest+bounces-15297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D413A9515EB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 09:58:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A98F9515EE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 09:58:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60E87281FFF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 07:58:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E89291F21FA9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 07:58:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A17213C906;
-	Wed, 14 Aug 2024 07:58:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFAD013D28A;
+	Wed, 14 Aug 2024 07:58:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zh3TiEtg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YkezNfoP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA89886126;
-	Wed, 14 Aug 2024 07:58:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D23086126;
+	Wed, 14 Aug 2024 07:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723622298; cv=none; b=t1oFtsutBy9l6uiGmqUV/k7tZKPT2TKAxNgg80mp/DrzPjjAHlOR5L6E8BrAjoGS8h72hLmj7vU40hdIpfZ60KNn0JqI8p9vX0NPmFZkBj8UrCaaOcp5TSAcza4nJCGv1p2RJ/TAI3+yL6MaEHOCVEz/wgHK2bbPbsdljWcBwYw=
+	t=1723622302; cv=none; b=glVzhzz0SWQ1zwrS1Zq8byzaZvrCe9IQ2P9zqAHLxT8kl0l5/XNMfFXwsiTlwI46XUFL/t0Vs68MVZjJl992x6OoVwe9kWxnZFdEwl+8EP558GkTw8ZrsT0Ve9NxK/FDYWOS8Snd81CaCdTRMzrrEmjAXU26QCGb1FsGt8Fj8Tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723622298; c=relaxed/simple;
-	bh=YnmbWsjte4BOXcRrSzwnRp5cVWo7GygJIUKhoeu2JXw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eYyYgqm8kpPG9KYIkGdAMwfLgxiV6rKv8be2l7SVYkMTc0tqpH+F1YML2uN1ZJE3SzyL9QvXfjUluwGBZzAue+wxw5hh+xU2yllgAVpepuV+NgnRjrJAvAG+gjfIRmRAL7HlzP8f5f4qPakWZABqE77i3oK6H4HauZTI9G8c+ko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zh3TiEtg; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1723622302; c=relaxed/simple;
+	bh=5ehB49R2pGsW4AXFpwHjINbiSJM6SBCKjy7zrbMO+9U=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qYrFuQncu3OybnXXug0K1i1QIjnvm4i2n6dain68AutQZKCmVg4/GqYlG6QCWiX6tMLK8QbIxd/gWv1SZTyi5UkLZi49TvYKxidnwAo82ngyF54V8KMrBZF9efAO+qnLBFEL0Krs6FuyQBJ9NdO6tB4xCw6FXt3r/jCGnDJE4Zk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YkezNfoP; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-1fdd6d81812so63132595ad.1;
-        Wed, 14 Aug 2024 00:58:16 -0700 (PDT)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1fc569440e1so58280115ad.3;
+        Wed, 14 Aug 2024 00:58:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723622296; x=1724227096; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=2IdN5++kXzWrx997bDJISLJ4GNTuvxuoXHiEOMrsgcY=;
-        b=Zh3TiEtgOFGuIzOym0Mas20iFA6TWS3njE7l+PCsvs5QwKvrc8KF3KJyGMlwifEbWL
-         bUWLRR884WK1UXoYDIjwdgcIFPjdTRJbmZibuE8RwfH7vwOA6+ogY6Ap+bSl1mXyX3f5
-         Od66B2MRh46A8uH6al4M1GQ7xn1dugfpsSs5MS5g+BzsPxNaqEInj6icX9nJsTNIqy8V
-         FUW4Xc3+VjlYGEhiSeaS8JKdVfCMft08WOBXG5cqDCenQ+fKrCiNo0ZLL5Md/P2t+qlp
-         I3PBFuS5yTbs8VGjrVW0ryNgdIwGUOUGoHWXwRnSAewhk+8znqv0iUzwq5ISghAtnZZH
-         ny3A==
+        d=gmail.com; s=20230601; t=1723622300; x=1724227100; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gI1uFNMAgefINTV6709quHoxTKHlUabYhuIVTkxBxpU=;
+        b=YkezNfoPJNcl9+SmCI8VSF1ciaOYFQxY5/AtQ5r7pXJZH6xe279onrrfo5fuTp5r7P
+         D+5QcPd7/o0KqocH9j/q8rFAcyYO2iqzvFlXmYsr+mU+/K2eH1Q/tx4bcI+vNgEZ+tth
+         LeSdxxaQm4amh5YrnBtUnJ9f5R4zepHgH6bRzstmXPktGzC6DpHUROByeW+UAET2EkCo
+         LPKZMaCvtcq50/EH8OL1VTjyzmhlFil/8vbHbsbM8GdMeUXYvUQ/V5FRZ+9Ws7225jjW
+         GdLbzi3UFhCNOFmnP0miC2+tKJMa84I9mjia5P23NW9Zscx3bbsth8cC7VlAIffJq/ZI
+         wKKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723622296; x=1724227096;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2IdN5++kXzWrx997bDJISLJ4GNTuvxuoXHiEOMrsgcY=;
-        b=hpDl2QaLgvRNO4cfIAL50yZFUvvYBjL6MrEogObmnyaT8ZhaV8KNXkTf8KjZol2/SN
-         raZs5uVRdYrTTPzDccd6ENsrC5YiTbQYVO+N1BolnihdN/0MLjEkCic0OybkSjuzEFR8
-         U2+B73tivNqWZnjsM2UJpj+3PShZLpKmfl1JF/iyUsV7Qh7krfoy50WDdWcoeehLa/cO
-         moTWxgu614LBLvPrvhWua9t01lOr0aDiTu7YzcmWlG6auaeKHItp7Qrv4vpUYi5P/Buo
-         ioynHREliRzKF0F2vHTJtyLOXm9ybEUVkvts5uVi0K56/zdshkl7O/f5TYKISRZkWThL
-         TFrg==
-X-Forwarded-Encrypted: i=1; AJvYcCVpukAFxDzNPJ5TfxucR5qEu7kWMD8c+bpmIIpq9kmV/QFX99JCtF2EJcPcqIF0s/KI0Oo=@vger.kernel.org, AJvYcCWop+5IGULEs/+bAyBxOXh/WtHSdtYV//3x6GbX/72jaT8uxSocIkOB2/qxTqbUr8i5ZIZLDMJz+2X2OkrUcI1Z@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywfs8bYrjP5o+bAL3kW0EFTmrbi++ICutG29JPIfCLczpNEd3tA
-	krxuRGaoiQxf0gQv69UmGek3THdKN3Hn7TCB0w4jff+f3FOXWL+YbPmayz/XYmJ1dw==
-X-Google-Smtp-Source: AGHT+IEeNp/WGYGC17+9CyobXFz2KUd/hXu6ssdQln7rBTpseklUVIGhGtYnKgj/+CGq3ZEIpzNKOA==
-X-Received: by 2002:a17:902:f648:b0:1f9:d0da:5b2f with SMTP id d9443c01a7336-201d6447a23mr23224295ad.39.1723622295709;
-        Wed, 14 Aug 2024 00:58:15 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1723622300; x=1724227100;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gI1uFNMAgefINTV6709quHoxTKHlUabYhuIVTkxBxpU=;
+        b=NaPWkdlQdkJgC/5zrOrlwTIZGvSd+4m5e4zoNQkQdr7fmUbztQp7wVApKFNgWWyPs9
+         NF1P6OVRTGgXkDG9bTBdssCcsj/sfa0UpE8YZzuAH3emQS7j5SjBEteSKGifqRHF/9nb
+         UuRMJaU/8afyUbRNPMqFU+OCAxFrSXl6zLa8aFsjBX9qnIv1F8DLMSBZd6MYMeHkxXKF
+         u0ruYcQNuiWdYgXIhWnfowBeKpwPewZR905SFnv65TSKtsy5uNkBB24WaFnSNss6sFUR
+         g0qi8KPhp1AVwk678Iwupn9MyA1do9vSFtVxm2ygUbFKeZ+1b/20NO7fAw0CiOX1G0DL
+         7QSA==
+X-Forwarded-Encrypted: i=1; AJvYcCVdiyIh9QheOQ7P35PjJiVLlXgEWyc2XQ53LcHmhuaIUcRS7TiGGz86uFzjEsj6GBFz/3xv4BmzEufmfihLlvIsMq6tEnwK0RILEuqyehapjtzsHoIRQRlPGFUKTSzAsZn49www
+X-Gm-Message-State: AOJu0YypVGydh62P6CrrO5FZ2thynyGgWXGBVc5dcUM1aYd9Y7g3NtOL
+	E/om7d7UYLuxRyoLQKmqlCHv7ffTOJs/RpIZfuebPE7hxgz4JFHG8EISCQDZnkGQIw==
+X-Google-Smtp-Source: AGHT+IGw+NwV2FkUO2uCTJf3MtKEd2xGpjn6tdukKp/g/y/PVMdmC/j1yrAfkIVKEpt19GCSHxVmRQ==
+X-Received: by 2002:a17:903:360d:b0:1fd:5e91:2b13 with SMTP id d9443c01a7336-201d638d811mr25618965ad.1.1723622300363;
+        Wed, 14 Aug 2024 00:58:20 -0700 (PDT)
 Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201cd1ba02bsm24475865ad.229.2024.08.14.00.58.10
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201cd1ba02bsm24475865ad.229.2024.08.14.00.58.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Aug 2024 00:58:15 -0700 (PDT)
+        Wed, 14 Aug 2024 00:58:20 -0700 (PDT)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -81,10 +83,12 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	linux-kselftest@vger.kernel.org,
 	bpf@vger.kernel.org,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net 0/2] selftests: Fix udpgro failures
-Date: Wed, 14 Aug 2024 15:57:56 +0800
-Message-ID: <20240814075758.163065-1-liuhangbin@gmail.com>
+Subject: [PATCH net 1/2] selftests: udpgro: report error when receive failed
+Date: Wed, 14 Aug 2024 15:57:57 +0800
+Message-ID: <20240814075758.163065-2-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.45.0
+In-Reply-To: <20240814075758.163065-1-liuhangbin@gmail.com>
+References: <20240814075758.163065-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -93,22 +97,114 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-There are 2 issues for the current udpgro test. The first one is the testing
-doesn't record all the failures, which may report pass but the test actually
-failed. e.g.
-https://netdev-3.bots.linux.dev/vmksft-net/results/725661/45-udpgro-sh/stdout
+Currently, we only check the latest senders's exit code. If the receiver
+report failed, it is not recoreded. Fix it by checking the exit code
+of all the involved processes.
 
-The other one is after commit d7db7775ea2e ("net: veth: do not manipulate
-GRO when using XDP"), there is no need to load xdp program to enable GRO
-on veth device.
+Before:
+  bad GRO lookup                          ok
+  multiple GRO socks                      ./udpgso_bench_rx: recv: bad packet len, got 1452, expected 14520
 
-Hangbin Liu (2):
-  selftests: udpgro: report error when receive failed
-  selftests: udpgro: no need to load xdp for gro
+ ./udpgso_bench_rx: recv: bad packet len, got 1452, expected 14520
 
- tools/testing/selftests/net/udpgro.sh | 50 +++++++++++++--------------
- 1 file changed, 25 insertions(+), 25 deletions(-)
+ failed
+ $ echo $?
+ 0
 
+After:
+  bad GRO lookup                          ok
+  multiple GRO socks                      ./udpgso_bench_rx: recv: bad packet len, got 1452, expected 14520
+
+ ./udpgso_bench_rx: recv: bad packet len, got 1452, expected 14520
+
+ failed
+ $ echo $?
+ 1
+
+Fixes: 3327a9c46352 ("selftests: add functionals test for UDP GRO")
+Suggested-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+---
+ tools/testing/selftests/net/udpgro.sh | 41 ++++++++++++++++-----------
+ 1 file changed, 24 insertions(+), 17 deletions(-)
+
+diff --git a/tools/testing/selftests/net/udpgro.sh b/tools/testing/selftests/net/udpgro.sh
+index 11a1ebda564f..7e0164247b83 100755
+--- a/tools/testing/selftests/net/udpgro.sh
++++ b/tools/testing/selftests/net/udpgro.sh
+@@ -49,14 +49,15 @@ run_one() {
+ 
+ 	cfg_veth
+ 
+-	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -C 1000 -R 10 ${rx_args} && \
+-		echo "ok" || \
+-		echo "failed" &
++	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -C 1000 -R 10 ${rx_args} &
++	local PID1=$!
+ 
+ 	wait_local_port_listen ${PEER_NS} 8000 udp
+ 	./udpgso_bench_tx ${tx_args}
+-	ret=$?
+-	wait $(jobs -p)
++	check_err $?
++	wait ${PID1}
++	check_err $?
++	[ "$ret" -eq 0 ] && echo "ok" || echo "failed"
+ 	return $ret
+ }
+ 
+@@ -93,16 +94,17 @@ run_one_nat() {
+ 	# ... so that GRO will match the UDP_GRO enabled socket, but packets
+ 	# will land on the 'plain' one
+ 	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -G ${family} -b ${addr1} -n 0 &
+-	pid=$!
+-	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -C 1000 -R 10 ${family} -b ${addr2%/*} ${rx_args} && \
+-		echo "ok" || \
+-		echo "failed"&
++	local PID1=$!
++	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -C 1000 -R 10 ${family} -b ${addr2%/*} ${rx_args} &
++	local PID2=$!
+ 
+ 	wait_local_port_listen "${PEER_NS}" 8000 udp
+ 	./udpgso_bench_tx ${tx_args}
+-	ret=$?
+-	kill -INT $pid
+-	wait $(jobs -p)
++	check_err $?
++	kill -INT ${PID1}
++	wait ${PID2}
++	check_err $?
++	[ "$ret" -eq 0 ] && echo "ok" || echo "failed"
+ 	return $ret
+ }
+ 
+@@ -115,16 +117,21 @@ run_one_2sock() {
+ 	cfg_veth
+ 
+ 	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -C 1000 -R 10 ${rx_args} -p 12345 &
+-	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -C 2000 -R 10 ${rx_args} && \
+-		echo "ok" || \
+-		echo "failed" &
++	local PID1=$!
++	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -C 2000 -R 10 ${rx_args} &
++	local PID2=$!
+ 
+ 	wait_local_port_listen "${PEER_NS}" 12345 udp
+ 	./udpgso_bench_tx ${tx_args} -p 12345
++	check_err $?
+ 	wait_local_port_listen "${PEER_NS}" 8000 udp
+ 	./udpgso_bench_tx ${tx_args}
+-	ret=$?
+-	wait $(jobs -p)
++	check_err $?
++	wait ${PID1}
++	check_err $?
++	wait ${PID2}
++	check_err $?
++	[ "$ret" -eq 0 ] && echo "ok" || echo "failed"
+ 	return $ret
+ }
+ 
 -- 
 2.45.0
 
