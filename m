@@ -1,124 +1,111 @@
-Return-Path: <linux-kselftest+bounces-15344-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15345-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6465952124
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 19:31:19 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28214952139
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 19:32:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0555F1C20C53
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 17:31:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C2221C21347
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 17:32:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B60BE1BC062;
-	Wed, 14 Aug 2024 17:30:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1FA81BC092;
+	Wed, 14 Aug 2024 17:31:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gEwMyUpe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KQeLuUmG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B7942E3E5;
-	Wed, 14 Aug 2024 17:30:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CBFD1BC080;
+	Wed, 14 Aug 2024 17:31:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723656652; cv=none; b=bOq9tlF0SaPHrEbFovBAXpDa5DPrJqHEW309zCTWNLpcEk0ST5VZ/yzS0gYmDn2yM/ehlCrVLsSzMH/vAZZRA0gYlS2Nel5e/CoKrPcZPXEvmscDy4+dpYbn64clVnKlbkVVOVNUSJxvWi6gXNZ/DbnMwXwl3LPJEuL2B4xQFZ8=
+	t=1723656718; cv=none; b=ir1IMmYVdTCURvQrAhkLDu5HwAFLXxWOtITOD1iSmM2otgTPRJBV3A/Aw6zhmruTigbmBt9k+iobpy68dj+M6yDp7FKfNPD8ZidPopr5KsMip+Ex+a4dsPR0FYrHOW3ahvy/aR0L5VVuwaGppEDPJ8N5hYs9ANEeIS6Md0wZNfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723656652; c=relaxed/simple;
-	bh=wWHERfWY68t43c/I0nTa2dlB6DGK9M9cJU/cQg1GFRc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UdJBqwy4JGM8EYmCkapVHpVgzjfdOAkGRa3r5ZqJXElOtNV/9IKqZaGZg+apW8x715qpwu55kTmYsosUSytwC869TuMUHmFFdcwLXPDRwCXABk12K0uJYg0/dNe/oivcgGM5offVcS4d3yOqFsvifANjmlCGRnlQoxgH+rlxJ+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gEwMyUpe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C86B2C4AF09;
-	Wed, 14 Aug 2024 17:30:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723656651;
-	bh=wWHERfWY68t43c/I0nTa2dlB6DGK9M9cJU/cQg1GFRc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=gEwMyUpeNPru3Xnvr2ilgC6PztNBLoeEdZ8ljTX9udmARzUvA9tkqTJZfy3yTn6fq
-	 CC9tyjWcRnePf7SmaBwaTEHJyhBH+xxVOIwaS6ReKH9/JKW/+lyEAovr9qNpoMrHMg
-	 7zHdLphV5CaALjf4WmDfwutI2/blIXXAqRWfHcNqCCem8svfdm6I9QIQKeUZA0sS8W
-	 6n2URHv+udD6i037bJJvn5y84H/PIUz8+xYAd3KJplA6M4XmJAmWU4eo8P2dcQaii3
-	 PdA/UOkZN3gLKvNdxbnXqcLXVv7klKRFi8fGIYk3SScvZEX/E1nwb92PRJ1s9dyEg4
-	 1EqU+ww04GwTg==
-Date: Wed, 14 Aug 2024 10:30:48 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Donald
- Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Richard
- Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
- <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
- Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
- de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Sumit
- Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
- <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>,
- David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>
-Subject: Re: [PATCH net-next v19 00/13] Device Memory TCP
-Message-ID: <20240814103048.670378e9@kernel.org>
-In-Reply-To: <20240813211317.3381180-1-almasrymina@google.com>
-References: <20240813211317.3381180-1-almasrymina@google.com>
+	s=arc-20240116; t=1723656718; c=relaxed/simple;
+	bh=5KiMiGMO0+fP9EAr2iCqOfLLXM7bfW30N/BRrU6S01U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YpyCwl3n15qxMrDtZHzk+LxFf1Mr70ebrNtx/u6DxRfYIEkMLkxJ4ngHmGVdoi6uuDhnIpuvK8Zq9LwjC4H/KcmIK/gswmEyw8ks/eAWAkIplnoa7Zz8p/6ok2MAo92wCqtjDHAJDladB0dAJYWO6qUmcYXm1IfdLUoxkvIvnv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KQeLuUmG; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2d3b595c18dso465747a91.0;
+        Wed, 14 Aug 2024 10:31:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723656716; x=1724261516; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8kNWX28Qr8ufHC9hLkI8IOVeCXr80mqcgSghAfdwkDc=;
+        b=KQeLuUmGmvIaHMQGkpkFKFAi0elRv/YlaANDZU3YMsl3HW02J+u54p07CFkkYZ5jLy
+         zOOwQfTiWPEOOpdUGLnwwq/CoSfHBwLRqugIN8bCn5UJiiGvM31j0+SM7OOVnxiG6DDt
+         oHSES16SP0Sec4PrvJRgLVvBVOpsyCcOMYEeSQolc4gMYXr7RKQqJdicmOBXA4C2+gIC
+         bCO/6rzo+AwptOyuZ4BKgYNhFM+IKDlZQiHF6AG8YzQaJJ5oaPrxNBzSIhwYpz+WI4zE
+         Ul0kQGbeYUys0nZKPNSnpGR1+qzDjc7DqWHEnqIRZqvPm0nGOYkOCkN9mrlz/67bXKXK
+         E++A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723656716; x=1724261516;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8kNWX28Qr8ufHC9hLkI8IOVeCXr80mqcgSghAfdwkDc=;
+        b=td01xQ9pCGZcr/fnH2KVFGyQdwtpoEMGDXV2R+vAJUZECvMg/DBarIR0m2NiZsvOAj
+         xryuJ9v4+hB4rxFj4BBjBDoheJeHgKQ5YmGeqTzdRD+qz/xT+W78TO9FQWDrcXt9+N0E
+         lIFUwenuNdM6VQ72Np4mVCUUmzluaBWW6IFx8obRnMdKmfbv7KmCCI1/md/zycrGH2Na
+         Ox/1ReNp0QbiP/83S9sK+Tw0t4d2F77CK4M29Oi/UnhKSKHszyzPnPhw1I8eaPlAzTaS
+         G/y/TZdIoFNdmahDoroZS0V7VGqox/RHiFAQp4YNFztwSV7JzzinySKQ0YpW2HUonWF9
+         NRwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVlPQXdtrKpcrRX2SRRKsz3Gl2WZOVfrI0uzejUGD7NLqeoKeLUcFAUcSr/DIsjdVbaHwjSXtA1/g6PUXC5kTQtA2gRi01p
+X-Gm-Message-State: AOJu0YwF8PQ4oLZvW10MHV+pK88H0E+yMki9lolPHixk/VZcIWjkUWR9
+	N9kvlUD3wGczNuFdGclwIxmrxBXgaE8YenPdzrGp4YQt/Sx7vYBu9fgQyjC8nnGyKw==
+X-Google-Smtp-Source: AGHT+IGsNZIeex367jr2X1FkXZW5sn89pJQKVvDpmP1iqY8hnU7o/l1FwJA/avJArTxmyFZ17BAnIA==
+X-Received: by 2002:a17:90a:db89:b0:2c9:90fa:b9f8 with SMTP id 98e67ed59e1d1-2d3c398cee9mr507140a91.10.1723656715507;
+        Wed, 14 Aug 2024 10:31:55 -0700 (PDT)
+Received: from abhash-IdeaPad-L340-15IRH-Gaming.. ([136.233.9.100])
+        by smtp.googlemail.com with ESMTPSA id 98e67ed59e1d1-2d3ac7fed56sm2018706a91.35.2024.08.14.10.31.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Aug 2024 10:31:54 -0700 (PDT)
+From: Abhash Jha <abhashkumarjha123@gmail.com>
+To: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	kuba@kernel.org,
+	shuah@kernel.org,
+	netdev@vger.kernel.org,
+	Abhash Jha <abhashkumarjha123@gmail.com>
+Subject: [PATCH] selftests/net/pmtu.sh: Fix typo in error message
+Date: Wed, 14 Aug 2024 23:01:21 +0530
+Message-ID: <20240814173121.33590-1-abhashkumarjha123@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Tue, 13 Aug 2024 21:13:02 +0000 Mina Almasry wrote:
-> v18 got a thorough review (thanks!), and this iteration addresses the
-> feedback.
-> 
-> Major changes:
-> - Prevent deactivating mp bound queues.
-> - Prevent installing xdp on mp bound netdevs, or installing mps on xdp
->   installed netdevs.
-> - Fix corner cases in netlink API vis-a-vis missing attributes.
-> - Iron out the unreadable netmem driver support story. To be honest, the
->   conversation with Jakub & Pavel got a bit confusing for me. I've
->   implemented an approach in this set that makes sense to me, and
->   AFAICT, addresses the requirements. It may be good as-is, or it
->   may be a conversation starter/continuer. To be honest IMO there
->   are many ways to skin this cat and I don't see an extremely strong
->   reason to go for one approach over another. Here is one approach you
->   may like.
-> - Don't reset niov dma_addr on allocation & free.
-> - Add some tests to the selftest that catches some of the issues around
->   missing netlink attributes or deactivating mp-bound queues.
+The word 'expected' was spelled as 'exepcted'.
+Fixed the typo in this patch.
 
-Something is going awry in two existing test:
+Signed-off-by: Abhash Jha <abhashkumarjha123@gmail.com>
+---
+ tools/testing/selftests/net/pmtu.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-https://netdev.bots.linux.dev/contest.html?branch=net-next-2024-08-14--15-00&pw-n=0&pass=0
-
-Example:
-
-https://netdev-3.bots.linux.dev/vmksft-net-drv/results/727462/2-queues-py/stdout
-
-I'll take a closer look at the code in the evening, but gotta discard
-if from pw already..
+diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
+index cfc849580..62eceb385 100755
+--- a/tools/testing/selftests/net/pmtu.sh
++++ b/tools/testing/selftests/net/pmtu.sh
+@@ -1347,7 +1347,7 @@ test_pmtu_ipvX_over_bridged_vxlanY_or_geneveY_exception() {
+ 		size=$(du -sb $tmpoutfile)
+ 		size=${size%%/tmp/*}
+ 
+-		[ $size -ne 1048576 ] && err "File size $size mismatches exepcted value in locally bridged vxlan test" && return 1
++		[ $size -ne 1048576 ] && err "File size $size mismatches expected value in locally bridged vxlan test" && return 1
+ 	done
+ 
+ 	rm -f "$tmpoutfile"
 -- 
-pw-bot: cr
+2.43.0
+
 
