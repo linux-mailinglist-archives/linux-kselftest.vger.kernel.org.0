@@ -1,55 +1,84 @@
-Return-Path: <linux-kselftest+bounces-15343-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15344-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EE7D9520ED
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 19:18:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6465952124
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 19:31:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 098BC1F24183
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 17:18:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0555F1C20C53
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 17:31:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F29541BBBD1;
-	Wed, 14 Aug 2024 17:18:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B60BE1BC062;
+	Wed, 14 Aug 2024 17:30:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OyOrKVu1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gEwMyUpe"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB87C1BB6B8;
-	Wed, 14 Aug 2024 17:18:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B7942E3E5;
+	Wed, 14 Aug 2024 17:30:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723655889; cv=none; b=IFJy00Lgk5zBfmItNDyUAkHINp9r+s67nJj0dSzAQb+4pa2rLV7Qw7CipacIAMBTZNjq+GNjRDT811aGhAlq61+UZfndOuUOyGC/KOo52Gsev3wLwpEuMZTzFVCeiLSj8uEYG6qqPeG3eoeBuYDmdzHkqeTx1GgUF6OtpD8JpfA=
+	t=1723656652; cv=none; b=bOq9tlF0SaPHrEbFovBAXpDa5DPrJqHEW309zCTWNLpcEk0ST5VZ/yzS0gYmDn2yM/ehlCrVLsSzMH/vAZZRA0gYlS2Nel5e/CoKrPcZPXEvmscDy4+dpYbn64clVnKlbkVVOVNUSJxvWi6gXNZ/DbnMwXwl3LPJEuL2B4xQFZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723655889; c=relaxed/simple;
-	bh=HxlRhzk1Ob/LiT8iJm67CmU6Xj5N9LEAoLVSK1YCj1U=;
+	s=arc-20240116; t=1723656652; c=relaxed/simple;
+	bh=wWHERfWY68t43c/I0nTa2dlB6DGK9M9cJU/cQg1GFRc=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sjg+Z/08QW5No+cFHuPrMMfJ4+MWcDiGHyk6e8Kqyhb218NFzUqNONzJxtVjauL185arK9DPAIdSMiKh+ZnPr05UWDtlSR0ADTd4/UsL6GoglXz+beLYqjXN/nw3QcCfUh8SAsMs2D54ouixGxddEHUMcUkC0uAOV4DyZqj+rBo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OyOrKVu1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 804FDC116B1;
-	Wed, 14 Aug 2024 17:18:09 +0000 (UTC)
+	 MIME-Version:Content-Type; b=UdJBqwy4JGM8EYmCkapVHpVgzjfdOAkGRa3r5ZqJXElOtNV/9IKqZaGZg+apW8x715qpwu55kTmYsosUSytwC869TuMUHmFFdcwLXPDRwCXABk12K0uJYg0/dNe/oivcgGM5offVcS4d3yOqFsvifANjmlCGRnlQoxgH+rlxJ+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gEwMyUpe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C86B2C4AF09;
+	Wed, 14 Aug 2024 17:30:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723655889;
-	bh=HxlRhzk1Ob/LiT8iJm67CmU6Xj5N9LEAoLVSK1YCj1U=;
+	s=k20201202; t=1723656651;
+	bh=wWHERfWY68t43c/I0nTa2dlB6DGK9M9cJU/cQg1GFRc=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=OyOrKVu1Cjc4kTEy4uyKTsK83WCfe+AmUf3bp5ShhcJRurp0LYXOCmushoZQHwvd4
-	 gbD5FHKLYgx6wtqaQOtH3Bl2noO7aDqR/CZBUjCyd+rwWBLvc4ojNtdf+8QmzXl/9Z
-	 PoENmCHBCsJOg8UIC9LeSSwp9Un5yct/70HOMbZK/8Z5YWupiH+bko6EMt4D63bdW6
-	 C6p+0TR+0E9lz1ICAi5dZ24G6+X25C9mXcSca1NMQUo19QW5m9ze/zcM8qgJAuwYl7
-	 FwNmvjsCjwn/SlQbelYL3nXU2bj2G5wT5HWSHaYJTJsACLRcP6M2OmqWMuK7WwF2W7
-	 jrgpXrOUQ0MhQ==
-Date: Wed, 14 Aug 2024 10:18:08 -0700
+	b=gEwMyUpeNPru3Xnvr2ilgC6PztNBLoeEdZ8ljTX9udmARzUvA9tkqTJZfy3yTn6fq
+	 CC9tyjWcRnePf7SmaBwaTEHJyhBH+xxVOIwaS6ReKH9/JKW/+lyEAovr9qNpoMrHMg
+	 7zHdLphV5CaALjf4WmDfwutI2/blIXXAqRWfHcNqCCem8svfdm6I9QIQKeUZA0sS8W
+	 6n2URHv+udD6i037bJJvn5y84H/PIUz8+xYAd3KJplA6M4XmJAmWU4eo8P2dcQaii3
+	 PdA/UOkZN3gLKvNdxbnXqcLXVv7klKRFi8fGIYk3SScvZEX/E1nwb92PRJ1s9dyEg4
+	 1EqU+ww04GwTg==
+Date: Wed, 14 Aug 2024 10:30:48 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Abhash Jha <abhashkumarjha123@gmail.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- shuah@kernel.org
-Subject: Re: [PATCH] selftests/net/pmtu.sh: Fix typo in error message
-Message-ID: <20240814101808.4409c4b7@kernel.org>
-In-Reply-To: <20240814171403.32374-1-abhashkumarjha123@gmail.com>
-References: <20240814171403.32374-1-abhashkumarjha123@gmail.com>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Donald
+ Hunter <donald.hunter@gmail.com>, Jonathan Corbet <corbet@lwn.net>, Richard
+ Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
+ <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+ Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+ <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+ <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
+ Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
+ de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
+ <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, Sumit
+ Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
+ <christian.koenig@amd.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
+ Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ Taehee Yoo <ap420073@gmail.com>, Pavel Begunkov <asml.silence@gmail.com>,
+ David Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
+ <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
+ <pkaligineedi@google.com>
+Subject: Re: [PATCH net-next v19 00/13] Device Memory TCP
+Message-ID: <20240814103048.670378e9@kernel.org>
+In-Reply-To: <20240813211317.3381180-1-almasrymina@google.com>
+References: <20240813211317.3381180-1-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,11 +88,37 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Wed, 14 Aug 2024 22:44:03 +0530 Abhash Jha wrote:
-> The word 'expected' was spelled as 'exepcted'.
-> Fixed the typo in this patch.
+On Tue, 13 Aug 2024 21:13:02 +0000 Mina Almasry wrote:
+> v18 got a thorough review (thanks!), and this iteration addresses the
+> feedback.
 > 
-> Signed-off-by: Abhash Jha <abhashkumarjha123@gmail.com>
+> Major changes:
+> - Prevent deactivating mp bound queues.
+> - Prevent installing xdp on mp bound netdevs, or installing mps on xdp
+>   installed netdevs.
+> - Fix corner cases in netlink API vis-a-vis missing attributes.
+> - Iron out the unreadable netmem driver support story. To be honest, the
+>   conversation with Jakub & Pavel got a bit confusing for me. I've
+>   implemented an approach in this set that makes sense to me, and
+>   AFAICT, addresses the requirements. It may be good as-is, or it
+>   may be a conversation starter/continuer. To be honest IMO there
+>   are many ways to skin this cat and I don't see an extremely strong
+>   reason to go for one approach over another. Here is one approach you
+>   may like.
+> - Don't reset niov dma_addr on allocation & free.
+> - Add some tests to the selftest that catches some of the issues around
+>   missing netlink attributes or deactivating mp-bound queues.
 
-Missing cc: netdev@ please repost
+Something is going awry in two existing test:
+
+https://netdev.bots.linux.dev/contest.html?branch=net-next-2024-08-14--15-00&pw-n=0&pass=0
+
+Example:
+
+https://netdev-3.bots.linux.dev/vmksft-net-drv/results/727462/2-queues-py/stdout
+
+I'll take a closer look at the code in the evening, but gotta discard
+if from pw already..
+-- 
+pw-bot: cr
 
