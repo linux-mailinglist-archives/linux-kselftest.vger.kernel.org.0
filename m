@@ -1,154 +1,102 @@
-Return-Path: <linux-kselftest+bounces-15326-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15327-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D57C951EA1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 17:34:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A073951EE8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 17:45:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48B6328112C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 15:34:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9626A1F23CFA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 15:45:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF0D61B4C3F;
-	Wed, 14 Aug 2024 15:34:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C9EE1B580E;
+	Wed, 14 Aug 2024 15:45:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XKqkeXUc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cq2iOqfg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C3101E529;
-	Wed, 14 Aug 2024 15:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB0E1B29CF;
+	Wed, 14 Aug 2024 15:45:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723649640; cv=none; b=aUloyP/CiH3wK6AskHJI8wNrLG/d3yAS2ZT4DG4HyHnlDl8DB6/oDQPBfFy3cguLqG+mxYOxn4up5E/boIXe226j5osv2y5bousUSRG0UhUtAmix+eJAHWuyH4KXq2sHlrldbjd9+LAaM1v2fArTtGgD/HdH0/9Ny3aqy8OuE50=
+	t=1723650313; cv=none; b=O3cwmyQHyzVhD4/bRGA47Fhx8IFA0+Gl/o/d1sgS2WGPcs1UVftpP+uiMnHSlWM2f5ozKdvRQRZVFrnkBzksM+8FjzBPSUQ/uwMy7STzdGx0a8tVjniEaB2uezK1UXk0FxOL/gf/N/PLaPw7t7mbFqBUJtMQqS2stSb+fDI7otY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723649640; c=relaxed/simple;
-	bh=QLbYuL5iDDVjrekLj6uwxZzS6Qfq6dEj/vjZ3vOcbZg=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=eJcxvC3XF2r0ffkCdH3POM5E5GcRkEvZP1Q+OlNNPDBYhcNnGewb3OFqGq6yT18FASaKbfoNUzoGOBzA/POIQhu3s6FxoCZvOMSOB8BBZksmlifnC77xPcUGT5jLJZREJmh5pTOsA+O7mms7bZYee1RKbuqEVaSMa/K7ejYBYfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XKqkeXUc; arc=none smtp.client-ip=209.85.210.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-70930972e19so1931975a34.3;
-        Wed, 14 Aug 2024 08:33:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723649638; x=1724254438; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=miqNK+B744VEtho+Cz5BtriydmdXkbKnexaiIQFok4E=;
-        b=XKqkeXUcV2xNnZsYuMIUh+RtZhGRKvcio6Hv8eAioXvu5nP/d38e9m1qbWr8V5UbzK
-         SdFSivmY/hTsD1f8Cmj3lpkXuL5kcFVfsLmyLKIYzirSXGoK3MbSweihoxz8cF7rRIjM
-         MUb4Eplu2zTktziZ/hHcPkEFf/O8SpdDfpSTODPxv4Uge6QfHzLKmIxt0dMbXXMgKaC3
-         jncql18YjVPuooN6DxTZOh37s7AV19vv1YLmM8lPkcCMKbvC8Rk24aTDeE1vZZ2+YPRp
-         LOcdqkkslLRBl4HB+3376yzREb9MvSPjc/pLwk+yFefrvsP9Ezb4iNPPsNhRjsD0lJR5
-         Kupg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723649638; x=1724254438;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=miqNK+B744VEtho+Cz5BtriydmdXkbKnexaiIQFok4E=;
-        b=ASFRXUJCqZ1HdqT9nAk9G7eG7YXX2Iaa1xFfKU9tQJOlSllqI0K6TW0Pg0HikSKAYN
-         qxbRf91QajrogcOIcwSxKYyaGSRTGs1m1WS/vrtUNuMqSWFW3k+OxuqXSWWxUwIxPVND
-         C0Mtg59bgl3s6YWc+igz8eaEuYja6u3ztIL3o6h/0hCvRTaL/GZnepjJ64M39wQPR9Dd
-         YEE5l4yW2my89MBG3S6hlql7yfG4brjCcnlcovt35lmiewA4UggAMlBmMYg1vO6b6PfD
-         l51oU+HiXQxmKix5DrH3RvYxOQ1fX+QbCESkxtv7qh2gV8fepFx2TIC9oOoK9gxgd+ar
-         ZLVg==
-X-Forwarded-Encrypted: i=1; AJvYcCXPl5jLkBgf06+1Y6myRxCg8uejYeb7oIdWG4qzjgjAVMjzXVc+FtrypjCRwu2OzHqH6ISceSw0Dpr9y65Wq2XwG5rKEpkaDQeFFQcjCrxoAcvUh+p+BEI28+sLfeoAhQoEehcxeAmBtZpse9H4
-X-Gm-Message-State: AOJu0YyCI3VTqVZkHX3i3do5yjLop6m69fOxZTw9NGxtOP57wR1nFqW8
-	h2znOAvPw4fpRybOpO2Zm0S3glwXWfqhhR6ChaOuMJ0pFs8s63rW
-X-Google-Smtp-Source: AGHT+IEwQqDD1BqP+Zoiab/YVxTNQIEozpAACW41iApb8rmqIU4uPEKI6+p9bS5UeKAf+1oOHFHzqA==
-X-Received: by 2002:a05:6830:d13:b0:70a:92e4:6736 with SMTP id 46e09a7af769-70c9d9d9529mr4164350a34.28.1723649638136;
-        Wed, 14 Aug 2024 08:33:58 -0700 (PDT)
-Received: from ?IPv6:2605:59c8:829:4c00:82ee:73ff:fe41:9a02? ([2605:59c8:829:4c00:82ee:73ff:fe41:9a02])
-        by smtp.googlemail.com with ESMTPSA id 46e09a7af769-70c7b89c042sm2254766a34.78.2024.08.14.08.33.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Aug 2024 08:33:57 -0700 (PDT)
-Message-ID: <bc279009c4c3c901033e23601efcf9ed4da8743d.camel@gmail.com>
-Subject: Re: [PATCH net-next v13 02/14] mm: move the page fragment allocator
- from page_alloc into its own file
-From: Alexander H Duyck <alexander.duyck@gmail.com>
-To: Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
- kuba@kernel.org,  pabeni@redhat.com
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, David Howells
- <dhowells@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, Eric
- Dumazet <edumazet@google.com>, Shuah Khan <shuah@kernel.org>,
- linux-mm@kvack.org,  linux-kselftest@vger.kernel.org
-Date: Wed, 14 Aug 2024 08:33:55 -0700
-In-Reply-To: <20240808123714.462740-3-linyunsheng@huawei.com>
-References: <20240808123714.462740-1-linyunsheng@huawei.com>
-	 <20240808123714.462740-3-linyunsheng@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+	s=arc-20240116; t=1723650313; c=relaxed/simple;
+	bh=eeREinB8Mir7bqqQqG6csHrywof8fVP+bxHSTvDX9tE=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=CJeFlHOtuEoKlh4chEVyIsqGCl32y6AtMXwfIbaO3rAPWkiPntGMghqwK4cj8SmGwNAlearCNlUIIS7MvuaUuAp14pLA3uQUI/XpqF4HVafIhnSFbg7mnsDoVVGvl8jPFl7t9N5uVEUbAPjy5Ig122wnIPBQKo7doUH1I0/MmUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cq2iOqfg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 355A1C116B1;
+	Wed, 14 Aug 2024 15:45:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723650313;
+	bh=eeREinB8Mir7bqqQqG6csHrywof8fVP+bxHSTvDX9tE=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=cq2iOqfgprdMfRGKaVGTdhuLZ5YQSakYCUwrM37igbxZ81mGB5nm/cvOoGMuCgkdb
+	 HminpE0OuUW+NAQIi2Fg5b6+559rHVH3gS+bHEpKmaqc/XDF3fgHCPJt7ax7gCEOxa
+	 /QXLPalndj63SsBb2l23GEMXekE2lRw+MMZ6X3cYAVR/50JF6JO07I2bTaRLwi7CPF
+	 9UKkE+DvG+2WXxjvWJZWeqwh8j6W5ueDgnwIrLHk1OOWTdxmW3fy1MMXk0MGH3ACL4
+	 1SvifdjdreHP9HT17nLzvxNuImU/n6Ct++lKvWsggUUqXlK32PBx12SlWKv25y0Od7
+	 utJt4IS6BUF5Q==
+Date: Thu, 15 Aug 2024 00:45:09 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Shuah Khan <shuah@kernel.org>, Steven Rostedt <rostedt@goodmis.org>,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] selftests/ftrace: Add required dependency for kprobe
+ tests
+Message-Id: <20240815004509.b5252f43379124b4ea9c26f5@kernel.org>
+In-Reply-To: <9016df04-041b-4837-9590-1c5159609826@linuxfoundation.org>
+References: <171823033048.152840.662759412433336839.stgit@devnote2>
+	<20240814095323.c8458e2cb6031c3014a7b7e0@kernel.org>
+	<9016df04-041b-4837-9590-1c5159609826@linuxfoundation.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, 2024-08-08 at 20:37 +0800, Yunsheng Lin wrote:
-> Inspired by [1], move the page fragment allocator from page_alloc
-> into its own c file and header file, as we are about to make more
-> change for it to replace another page_frag implementation in
-> sock.c
->=20
-> As this patchset is going to replace 'struct page_frag' with
-> 'struct page_frag_cache' in sched.h, including page_frag_cache.h
-> in sched.h has a compiler error caused by interdependence between
-> mm_types.h and mm.h for asm-offsets.c, see [2]. So avoid the compiler
-> error by moving 'struct page_frag_cache' to mm_types_task.h as
-> suggested by Alexander, see [3].
->=20
-> 1. https://lore.kernel.org/all/20230411160902.4134381-3-dhowells@redhat.c=
-om/
-> 2. https://lore.kernel.org/all/15623dac-9358-4597-b3ee-3694a5956920@gmail=
-.com/
-> 3. https://lore.kernel.org/all/CAKgT0UdH1yD=3DLSCXFJ=3DYM_aiA4OomD-2wXykO=
-42bizaWMt_HOA@mail.gmail.com/
-> CC: David Howells <dhowells@redhat.com>
-> CC: Alexander Duyck <alexander.duyck@gmail.com>
-> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-> ---
->  include/linux/gfp.h                           |  22 ---
->  include/linux/mm_types.h                      |  18 ---
->  include/linux/mm_types_task.h                 |  18 +++
->  include/linux/page_frag_cache.h               |  31 ++++
->  include/linux/skbuff.h                        |   1 +
->  mm/Makefile                                   |   1 +
->  mm/page_alloc.c                               | 136 ----------------
->  mm/page_frag_cache.c                          | 145 ++++++++++++++++++
->  .../selftests/mm/page_frag/page_frag_test.c   |   2 +-
->  9 files changed, 197 insertions(+), 177 deletions(-)
->  create mode 100644 include/linux/page_frag_cache.h
->  create mode 100644 mm/page_frag_cache.c
->=20
->=20
+On Wed, 14 Aug 2024 05:43:29 -0600
+Shuah Khan <skhan@linuxfoundation.org> wrote:
 
-...
+> On 8/13/24 18:53, Masami Hiramatsu (Google) wrote:
+> > Hi Shuah,
+> > 
+> > Can you pick this? I confirmed this can be applied on v6.11-rc3.
+> > 
+> > 
+> > 
+> > On Thu, 13 Jun 2024 07:12:10 +0900
+> > "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+> > 
+> >> From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> >>
+> >> kprobe_args_{char,string}.tc are using available_filter_functions file
+> >> which is provided by function tracer. Thus if function tracer is disabled,
+> >> these tests are failed on recent kernels because tracefs_create_dir is
+> >> not raised events by adding a dynamic event.
+> >> Add available_filter_functions to requires line.
+> >>
+> >> Fixes: 7c1130ea5cae ("test: ftrace: Fix kprobe test for eventfs")
+> >> Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Applied to linux-kselftest next for Linux 6.12-rc1
 
-> diff --git a/include/linux/page_frag_cache.h b/include/linux/page_frag_ca=
-che.h
-> new file mode 100644
-> index 000000000000..a758cb65a9b3
-> --- /dev/null
-> +++ b/include/linux/page_frag_cache.h
-> @@ -0,0 +1,31 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#ifndef _LINUX_PAGE_FRAG_CACHE_H
-> +#define _LINUX_PAGE_FRAG_CACHE_H
-> +
-> +#include <linux/log2.h>
-> +#include <linux/types.h>
-> +#include <linux/mm_types_task.h>
-> +
+Thanks!
 
-Minor nit. These should usually be in alphabetical order. So
-mm_types_task.h should be between log2.h and types.h.
+> 
+> thanks,
+> -- Shuah
 
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
