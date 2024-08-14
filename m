@@ -1,59 +1,59 @@
-Return-Path: <linux-kselftest+bounces-15335-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15332-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98AFF951FFD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 18:29:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B84A951FA3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 18:18:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04705B2E3F0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 16:25:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 89E4D1C21A82
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 16:18:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 768761B9B40;
-	Wed, 14 Aug 2024 16:20:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EED51B9B43;
+	Wed, 14 Aug 2024 16:18:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="sQ5edDfk"
+	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="QQkhUmtw"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 392A41B32A2;
-	Wed, 14 Aug 2024 16:20:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 076F81B9B26
+	for <linux-kselftest@vger.kernel.org>; Wed, 14 Aug 2024 16:17:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723652456; cv=none; b=ZZ/oFFtOtNfKCv8q/hk4OYQMB4hdwB84krTbi5FTlrLwskark5TWQ5FLdTa/VWk/A5CZINAALU/uNXEE9dQtPChG+WzmJOW2j9AXOWKyi/eWbGhOGGUt1mnLGiUXagmVGFrIpefWqKOv3IGl2bmbtvBYgrHqPYjNWK5Qzl3ga/Q=
+	t=1723652283; cv=none; b=l5VT0YmSJchdhvvL34YXy+OpCA8M5T2FJP5L2htCciT5XkJLdoQ0gRe8jcI02hdoXqzjNKz149x+Mv3ewJOKJxjU6++kXWpDDt4mVUXmvNG/A3ox8ofGfU2ldd7eRrlMuwRWhtmNsNbT+WVxyoJOD9xzxufAEKVEN1aYFknEBZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723652456; c=relaxed/simple;
-	bh=w6DukgVdh/SeaYiuJZwiSsb19olegSRrDqb9Lls4kO0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AM6iB/QAt6fJJEAywv2lzfLB4F4cWFXCPN2IEaFjpfJld3oum15y1j4/bhPPTBLPWfLjpe0R/lh97jI+DrFf/F2ER2amIok4v6Ze/6F2rXf0MdaLKz8b1HE02RHJvI4zvN6x+7361DjTFXulc+2J3i1+7RaiwmOY2aQpJ6cnGHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=sQ5edDfk; arc=none smtp.client-ip=185.226.149.37
+	s=arc-20240116; t=1723652283; c=relaxed/simple;
+	bh=NQTpemzt4Tj8++a5VIsyfyK7+ZLyBcJfu2xffJVhs0k=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=qwdInt5/w98Sp1vwS968nmQASh0hXmwfVK7h7Ucc2OpVifwH+HrlZnzp7y2an5J3XMIDC3EW2UghfirG2uho9MlTYbxZFsSSEwy6e/CGFF0dXGBaa8zQGPdtWsV7oKih+NxYWSwrqhSJ6Ncc1EmA2YqduUQTbv4KaRhYbYsug+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=QQkhUmtw; arc=none smtp.client-ip=185.226.149.37
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
+Received: from mailtransmit03.runbox ([10.9.9.163] helo=aibo.runbox.com)
 	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
 	(Exim 4.93)
 	(envelope-from <mhal@rbox.co>)
-	id 1seGeX-00GwGz-Jl; Wed, 14 Aug 2024 18:15:13 +0200
+	id 1seGh1-00GwYx-35; Wed, 14 Aug 2024 18:17:47 +0200
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-	References:Cc:To:Subject:MIME-Version:Date:Message-ID;
-	bh=8gEuZoqquS008o2flgsV7w+43AvF3jk+PJRlBs+g2p0=; b=sQ5edDfkRzc9YUM4Nk/REh0Inu
-	f9DlCRgI9C1WcPcuDVa3dOe+fflSCNMCq4Y7cBkeFwBKas6iQCWoBUKkHBV0twXBtYw1a8C3UHYUW
-	uSGqZt80FwF3nFxwMq0F9VaQ4qBJ+SxcTQ6ax1+FHFwp5eTi/rq/j23cx1CZG7z4rv3qFhrh0b5zT
-	S/2zMG6l5YIzOqUXJMlY9IbRiLYBHtCLFY5VMK3Sj9wwd3gPCbC8jtbl3LcpoeGRWlu0Nmxtuk00P
-	ogGYsU8isI2SSBEfsU5PHrczKZbt79pqBDPaF602HapFg9iHTeUTUWxZGq8xlXs6hNa5VzbkmFbRr
-	EmNnS9fA==;
+	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
+	Cc:To:From:Subject:MIME-Version:Date:Message-ID;
+	bh=eO5sD2wD20qYLIyQAYTr+NiDMBMypw6HCWvaYXpaa6s=; b=QQkhUmtwnl8ckO8bW0pQNcbx2m
+	gyEKnUqLeYNWPm3KCygcbh+QFQGqL3H7Qkt8c3EDXk6xjjU1fHzKyBs6QltpBiu1n0adkfj5S2QKQ
+	ygHDNDPKGq1v+KVKZbK9XaWKjKThS/fUVmsyax5sKkXl9ZVhw1s+NgapuTE49iTX8LgVNbCNs0oF4
+	6W9mZxjSumKrdmPDh6TZdOYVI8RmPjT3kljfg2kTOV4fwM8UetI7Yo8E9/CLQE6OUK9muPDOw14fD
+	OLvaqseKMRpDgi6O71HoD1lhuxIOu4+tNoFm34s8f1JPOXioFsceOiPBi3b+NFLoASfjcmp0AWWwN
+	hzeDIF7Q==;
 Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
+	by mailtransmit03.runbox with esmtp (Exim 4.86_2)
 	(envelope-from <mhal@rbox.co>)
-	id 1seGeR-0003LT-GH; Wed, 14 Aug 2024 18:15:07 +0200
+	id 1seGh0-0005Xd-9h; Wed, 14 Aug 2024 18:17:46 +0200
 Received: by submission03.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.93)
-	id 1seGeH-00EOaa-Nw; Wed, 14 Aug 2024 18:14:57 +0200
-Message-ID: <42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co>
-Date: Wed, 14 Aug 2024 18:14:56 +0200
+	id 1seGgw-00EOyD-7r; Wed, 14 Aug 2024 18:17:42 +0200
+Message-ID: <55559365-8dea-4458-a6f3-3b0cff9f051f@rbox.co>
+Date: Wed, 14 Aug 2024 18:17:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,8 +61,9 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related
- fixes
+Subject: [PATCH 1/3] selftests/bpf: Support AF_UNIX SOCK_DGRAM socket pair
+ creation
+From: Michal Luczaj <mhal@rbox.co>
 To: Jakub Sitnicki <jakub@cloudflare.com>
 Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
  <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
@@ -78,35 +79,92 @@ References: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
  <87y159yi5m.fsf@cloudflare.com>
  <249a7dc3-34e2-4579-aae7-8b38b145e4bb@rbox.co>
  <87ttfxy28s.fsf@cloudflare.com>
+ <42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co>
 Content-Language: pl-PL, en-GB
-From: Michal Luczaj <mhal@rbox.co>
-In-Reply-To: <87ttfxy28s.fsf@cloudflare.com>
+In-Reply-To: <42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/6/24 19:45, Jakub Sitnicki wrote:
-> On Tue, Aug 06, 2024 at 07:18 PM +02, Michal Luczaj wrote:
->> Great, thanks for the review. With this completed, I guess we can unwind
->> the (mail) stack to [1]. Is that ingress-to-local et al. something you
->> wanted to take care of yourself or can I give it a try?
->> [1] https://lore.kernel.org/netdev/87msmqn9ws.fsf@cloudflare.com/
-> 
-> I haven't stated any work on. You're welcome to tackle that.
-> 
-> All I have is a toy test that I've used to generate the redirect matrix.
-> Perhaps it can serve as inspiration:
-> 
-> https://github.com/jsitnicki/sockmap-redir-matrix
+Handle AF_UNIX in init_addr_loopback(). For pair creation, bind() the peer
+socket to make SOCK_DGRAM connect() happy.
 
-All right, please let me know if this is more or less what you meant and
-I'll post the whole series for a review (+patch to purge sockmap_listen of
-redir tests, fix misnomers). Mostly I've just copypasted your code
-(mangling it terribly along the way), so I feel silly claiming the
-authorship. Should I assign you as an author?
+Signed-off-by: Michal Luczaj <mhal@rbox.co>
+---
+ .../bpf/prog_tests/sockmap_helpers.h          | 29 +++++++++++++++----
+ 1 file changed, 24 insertions(+), 5 deletions(-)
 
-Note that the patches are based on [2], which has not reached bpf-next
-(patchwork says: "Needs ACK").
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h b/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
+index 38e35c72bdaa..c50efa834a11 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_helpers.h
+@@ -1,6 +1,7 @@
+ #ifndef __SOCKMAP_HELPERS__
+ #define __SOCKMAP_HELPERS__
+ 
++#include <sys/un.h>
+ #include <linux/vm_sockets.h>
+ 
+ /* include/linux/net.h */
+@@ -283,6 +284,15 @@ static inline void init_addr_loopback6(struct sockaddr_storage *ss,
+ 	*len = sizeof(*addr6);
+ }
+ 
++static inline void init_addr_loopback_unix(struct sockaddr_storage *ss,
++					   socklen_t *len)
++{
++	struct sockaddr_un *addr = memset(ss, 0, sizeof(*ss));
++
++	addr->sun_family = AF_UNIX;
++	*len = sizeof(sa_family_t);
++}
++
+ static inline void init_addr_loopback_vsock(struct sockaddr_storage *ss,
+ 					    socklen_t *len)
+ {
+@@ -304,6 +314,9 @@ static inline void init_addr_loopback(int family, struct sockaddr_storage *ss,
+ 	case AF_INET6:
+ 		init_addr_loopback6(ss, len);
+ 		return;
++	case AF_UNIX:
++		init_addr_loopback_unix(ss, len);
++		return;
+ 	case AF_VSOCK:
+ 		init_addr_loopback_vsock(ss, len);
+ 		return;
+@@ -390,21 +403,27 @@ static inline int create_pair(int family, int sotype, int *p0, int *p1)
+ {
+ 	__close_fd int s, c = -1, p = -1;
+ 	struct sockaddr_storage addr;
+-	socklen_t len = sizeof(addr);
++	socklen_t len;
+ 	int err;
+ 
+ 	s = socket_loopback(family, sotype);
+ 	if (s < 0)
+ 		return s;
+ 
+-	err = xgetsockname(s, sockaddr(&addr), &len);
+-	if (err)
+-		return err;
+-
+ 	c = xsocket(family, sotype, 0);
+ 	if (c < 0)
+ 		return c;
+ 
++	init_addr_loopback(family, &addr, &len);
++	err = xbind(c, sockaddr(&addr), len);
++	if (err)
++		return err;
++
++	len = sizeof(addr);
++	err = xgetsockname(s, sockaddr(&addr), &len);
++	if (err)
++		return err;
++
+ 	err = connect(c, sockaddr(&addr), len);
+ 	if (err) {
+ 		if (errno != EINPROGRESS) {
+-- 
+2.46.0
 
-[2] [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related fixes
-    https://lore.kernel.org/bpf/20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co/
 
