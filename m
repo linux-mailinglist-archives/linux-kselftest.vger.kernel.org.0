@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-15298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15299-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A98F9515EE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 09:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 014AF9515F1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 09:58:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E89291F21FA9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 07:58:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B2BC1F21235
+	for <lists+linux-kselftest@lfdr.de>; Wed, 14 Aug 2024 07:58:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFAD013D28A;
-	Wed, 14 Aug 2024 07:58:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B7C113CA8D;
+	Wed, 14 Aug 2024 07:58:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YkezNfoP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SCtj5pom"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D23086126;
-	Wed, 14 Aug 2024 07:58:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7BE86126;
+	Wed, 14 Aug 2024 07:58:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723622302; cv=none; b=glVzhzz0SWQ1zwrS1Zq8byzaZvrCe9IQ2P9zqAHLxT8kl0l5/XNMfFXwsiTlwI46XUFL/t0Vs68MVZjJl992x6OoVwe9kWxnZFdEwl+8EP558GkTw8ZrsT0Ve9NxK/FDYWOS8Snd81CaCdTRMzrrEmjAXU26QCGb1FsGt8Fj8Tc=
+	t=1723622308; cv=none; b=ghXC+iiPrZHjazcVxf/374A9Km4vIjzfAhyZxPbSguX7cQfUtPVkfVRg9Mts293hjKFAVbr16qVM8XBF0Zgr2ww9fnskPKghBTd0bzi7u/J33h16SOb6uPl8J+g50kTQbxO4c5NkOmpaXSwshB/jUcTM7ySSssNrlhUGRTndy4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723622302; c=relaxed/simple;
-	bh=5ehB49R2pGsW4AXFpwHjINbiSJM6SBCKjy7zrbMO+9U=;
+	s=arc-20240116; t=1723622308; c=relaxed/simple;
+	bh=XA4FuhAbYIR72eTUkVqKk9ZGeMdoU6XigImPQRHsckU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qYrFuQncu3OybnXXug0K1i1QIjnvm4i2n6dain68AutQZKCmVg4/GqYlG6QCWiX6tMLK8QbIxd/gWv1SZTyi5UkLZi49TvYKxidnwAo82ngyF54V8KMrBZF9efAO+qnLBFEL0Krs6FuyQBJ9NdO6tB4xCw6FXt3r/jCGnDJE4Zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YkezNfoP; arc=none smtp.client-ip=209.85.214.177
+	 MIME-Version; b=f4oQEefFsJpDDHmLs0gOq914WLRpjuLSjbBkPBizctzr3GClAQe5dWXjrmJYVEWOTsWGNbz8XfBLNjr7S8oUYG1mf4vczV6+nKwklgM7cLf/uU5JjJwvPHjX2Mx0/Og5Ifh1EcTBHBfeLosUbmB6WcIdcvHcrXG+ajo4xfbhK4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SCtj5pom; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-1fc569440e1so58280115ad.3;
-        Wed, 14 Aug 2024 00:58:21 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1fed72d23a7so49438695ad.1;
+        Wed, 14 Aug 2024 00:58:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723622300; x=1724227100; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1723622306; x=1724227106; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gI1uFNMAgefINTV6709quHoxTKHlUabYhuIVTkxBxpU=;
-        b=YkezNfoPJNcl9+SmCI8VSF1ciaOYFQxY5/AtQ5r7pXJZH6xe279onrrfo5fuTp5r7P
-         D+5QcPd7/o0KqocH9j/q8rFAcyYO2iqzvFlXmYsr+mU+/K2eH1Q/tx4bcI+vNgEZ+tth
-         LeSdxxaQm4amh5YrnBtUnJ9f5R4zepHgH6bRzstmXPktGzC6DpHUROByeW+UAET2EkCo
-         LPKZMaCvtcq50/EH8OL1VTjyzmhlFil/8vbHbsbM8GdMeUXYvUQ/V5FRZ+9Ws7225jjW
-         GdLbzi3UFhCNOFmnP0miC2+tKJMa84I9mjia5P23NW9Zscx3bbsth8cC7VlAIffJq/ZI
-         wKKA==
+        bh=aTAuy4aMmf6dNIOMUBBz92urtgYt3g8K39lJ/9I+Ys8=;
+        b=SCtj5pomK3REVEHbAOPDSCxbhNRrd9UmIIq6iptE8cIja+wg9tPSw9jBn38L0hNxcv
+         yZTik1NCGb74BGT2pur5TgTQJCDnsFDHOqF3R+K4K1ogixOSmYtNLSlj4gacnHSpB7/G
+         wzBEDdde/UEMw16usxW8Pc/7GQMFFmzEtnSXYKwJ5wSiCpH62ePB8pRCwwhZxPA5jjND
+         oJA7YLvwgC3zGSIHUImEVAz9ojtXikbUnhwgRa2oKNLzud0OT9RG9Y3YAK3J85iPYomJ
+         ou2mhg6/EVy1dF/gZ1WugTQnVFFP0vEGF3LQQd0DbCUOuIyMfZSO3wNfn8mUgAbYxJq6
+         xerw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723622300; x=1724227100;
+        d=1e100.net; s=20230601; t=1723622306; x=1724227106;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gI1uFNMAgefINTV6709quHoxTKHlUabYhuIVTkxBxpU=;
-        b=NaPWkdlQdkJgC/5zrOrlwTIZGvSd+4m5e4zoNQkQdr7fmUbztQp7wVApKFNgWWyPs9
-         NF1P6OVRTGgXkDG9bTBdssCcsj/sfa0UpE8YZzuAH3emQS7j5SjBEteSKGifqRHF/9nb
-         UuRMJaU/8afyUbRNPMqFU+OCAxFrSXl6zLa8aFsjBX9qnIv1F8DLMSBZd6MYMeHkxXKF
-         u0ruYcQNuiWdYgXIhWnfowBeKpwPewZR905SFnv65TSKtsy5uNkBB24WaFnSNss6sFUR
-         g0qi8KPhp1AVwk678Iwupn9MyA1do9vSFtVxm2ygUbFKeZ+1b/20NO7fAw0CiOX1G0DL
-         7QSA==
-X-Forwarded-Encrypted: i=1; AJvYcCVdiyIh9QheOQ7P35PjJiVLlXgEWyc2XQ53LcHmhuaIUcRS7TiGGz86uFzjEsj6GBFz/3xv4BmzEufmfihLlvIsMq6tEnwK0RILEuqyehapjtzsHoIRQRlPGFUKTSzAsZn49www
-X-Gm-Message-State: AOJu0YypVGydh62P6CrrO5FZ2thynyGgWXGBVc5dcUM1aYd9Y7g3NtOL
-	E/om7d7UYLuxRyoLQKmqlCHv7ffTOJs/RpIZfuebPE7hxgz4JFHG8EISCQDZnkGQIw==
-X-Google-Smtp-Source: AGHT+IGw+NwV2FkUO2uCTJf3MtKEd2xGpjn6tdukKp/g/y/PVMdmC/j1yrAfkIVKEpt19GCSHxVmRQ==
-X-Received: by 2002:a17:903:360d:b0:1fd:5e91:2b13 with SMTP id d9443c01a7336-201d638d811mr25618965ad.1.1723622300363;
-        Wed, 14 Aug 2024 00:58:20 -0700 (PDT)
+        bh=aTAuy4aMmf6dNIOMUBBz92urtgYt3g8K39lJ/9I+Ys8=;
+        b=dsyvCxO1PDuUX+adtiuKWSxWuDSqaG6qdfealCfrUGw1NG8EtnhrTvVER6Ks7vvlKh
+         5llQLV2DQcAcwE/5Z+7s0wxrRsdxXByE4suWxKSRnwA6AWHc2rQmkAGcPU/BwikxSiLM
+         n2oFyOrHTJpAsYRIUrcB+BM5mS5nwXZtwRxOY3y4APxsXjl40/6d9CjLYC7xhpCzeIMC
+         GwwTyYZR9cIPzf2BNovLoVg7AVz7bb/NpS6gotC/Z9458p8mSq7xe0/mN8a/sGPgcI2U
+         vnX0a8DZXa5HX09a9j97QN1n2LyDANggq28QQkXqfr/M7WtiHJSYjhHSlu7lR6c9ZeVN
+         cLtA==
+X-Forwarded-Encrypted: i=1; AJvYcCUHrrIee5ni6Byrffm7VIiJfzC55StZaGwPXibHmBUK4MID04oQkeVconH546PAnI8RLk/SPBqL1yDcDwQ3c45C@vger.kernel.org, AJvYcCXi7FOWeiTPD/i48v5iZ1s3+Fj8OP89gYXZ8wLx8QQXISBD0/Hrtqc+j3lQkIcChTQYLA8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxE+diLyQipUdmAVt/uPA7A38s7MD/pCXz3acECtdt2WN1bF3MG
+	li/ENG9SFsXvytwPYpZd38iaP8MUTmZlW6ksVwaq7nBt5OazuvlkJ7sWbuiMOAOxcQ==
+X-Google-Smtp-Source: AGHT+IEEqCGDP+e5jNYfjRLigIHq/wRzyFGv0oor8MDcG4YJpbEvlZx4bFoO9OKcgn1YhMx6wu3F7Q==
+X-Received: by 2002:a17:902:ec89:b0:1ff:5049:7353 with SMTP id d9443c01a7336-201d641e7b1mr24774595ad.19.1723622305756;
+        Wed, 14 Aug 2024 00:58:25 -0700 (PDT)
 Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201cd1ba02bsm24475865ad.229.2024.08.14.00.58.16
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201cd1ba02bsm24475865ad.229.2024.08.14.00.58.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Aug 2024 00:58:20 -0700 (PDT)
+        Wed, 14 Aug 2024 00:58:25 -0700 (PDT)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -82,10 +82,11 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Ignat Korchagin <ignat@cloudflare.com>,
 	linux-kselftest@vger.kernel.org,
 	bpf@vger.kernel.org,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net 1/2] selftests: udpgro: report error when receive failed
-Date: Wed, 14 Aug 2024 15:57:57 +0800
-Message-ID: <20240814075758.163065-2-liuhangbin@gmail.com>
+	Hangbin Liu <liuhangbin@gmail.com>,
+	Yi Chen <yiche@redhat.com>
+Subject: [PATCH net 2/2] selftests: udpgro: no need to load xdp for gro
+Date: Wed, 14 Aug 2024 15:57:58 +0800
+Message-ID: <20240814075758.163065-3-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.45.0
 In-Reply-To: <20240814075758.163065-1-liuhangbin@gmail.com>
 References: <20240814075758.163065-1-liuhangbin@gmail.com>
@@ -97,114 +98,78 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently, we only check the latest senders's exit code. If the receiver
-report failed, it is not recoreded. Fix it by checking the exit code
-of all the involved processes.
+After commit d7db7775ea2e ("net: veth: do not manipulate GRO when using
+XDP"), there is no need to load XDP program to enable GRO. On the other
+hand, the current test is failed due to loading the XDP program. e.g.
 
-Before:
-  bad GRO lookup                          ok
-  multiple GRO socks                      ./udpgso_bench_rx: recv: bad packet len, got 1452, expected 14520
+ # selftests: net: udpgro.sh
+ # ipv4
+ #  no GRO                                  ok
+ #  no GRO chk cmsg                         ok
+ #  GRO                                     ./udpgso_bench_rx: recv: bad packet len, got 1472, expected 14720
+ #
+ # failed
 
- ./udpgso_bench_rx: recv: bad packet len, got 1452, expected 14520
+ [...]
 
- failed
- $ echo $?
- 0
+ #  bad GRO lookup                          ok
+ #  multiple GRO socks                      ./udpgso_bench_rx: recv: bad packet len, got 1452, expected 14520
+ #
+ # ./udpgso_bench_rx: recv: bad packet len, got 1452, expected 14520
+ #
+ # failed
+ ok 1 selftests: net: udpgro.sh
 
-After:
-  bad GRO lookup                          ok
-  multiple GRO socks                      ./udpgso_bench_rx: recv: bad packet len, got 1452, expected 14520
+After fix, all the test passed.
 
- ./udpgso_bench_rx: recv: bad packet len, got 1452, expected 14520
+ # ./udpgro.sh
+ ipv4
+  no GRO                                  ok
+  [...]
+  multiple GRO socks                      ok
 
- failed
- $ echo $?
- 1
-
-Fixes: 3327a9c46352 ("selftests: add functionals test for UDP GRO")
-Suggested-by: Paolo Abeni <pabeni@redhat.com>
+Fixes: d7db7775ea2e ("net: veth: do not manipulate GRO when using XDP")
+Reported-by: Yi Chen <yiche@redhat.com>
+Closes: https://issues.redhat.com/browse/RHEL-53858
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- tools/testing/selftests/net/udpgro.sh | 41 ++++++++++++++++-----------
- 1 file changed, 24 insertions(+), 17 deletions(-)
+ tools/testing/selftests/net/udpgro.sh | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
 diff --git a/tools/testing/selftests/net/udpgro.sh b/tools/testing/selftests/net/udpgro.sh
-index 11a1ebda564f..7e0164247b83 100755
+index 7e0164247b83..180b337c8345 100755
 --- a/tools/testing/selftests/net/udpgro.sh
 +++ b/tools/testing/selftests/net/udpgro.sh
-@@ -49,14 +49,15 @@ run_one() {
+@@ -7,8 +7,6 @@ source net_helper.sh
  
- 	cfg_veth
+ readonly PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
  
--	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -C 1000 -R 10 ${rx_args} && \
--		echo "ok" || \
--		echo "failed" &
-+	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -C 1000 -R 10 ${rx_args} &
-+	local PID1=$!
+-BPF_FILE="xdp_dummy.bpf.o"
+-
+ # set global exit status, but never reset nonzero one.
+ check_err()
+ {
+@@ -38,7 +36,7 @@ cfg_veth() {
+ 	ip -netns "${PEER_NS}" addr add dev veth1 192.168.1.1/24
+ 	ip -netns "${PEER_NS}" addr add dev veth1 2001:db8::1/64 nodad
+ 	ip -netns "${PEER_NS}" link set dev veth1 up
+-	ip -n "${PEER_NS}" link set veth1 xdp object ${BPF_FILE} section xdp
++	ip netns exec "${PEER_NS}" ethtool -K veth1 gro on
+ }
  
- 	wait_local_port_listen ${PEER_NS} 8000 udp
- 	./udpgso_bench_tx ${tx_args}
--	ret=$?
--	wait $(jobs -p)
-+	check_err $?
-+	wait ${PID1}
-+	check_err $?
-+	[ "$ret" -eq 0 ] && echo "ok" || echo "failed"
+ run_one() {
+@@ -203,11 +201,6 @@ run_all() {
  	return $ret
  }
  
-@@ -93,16 +94,17 @@ run_one_nat() {
- 	# ... so that GRO will match the UDP_GRO enabled socket, but packets
- 	# will land on the 'plain' one
- 	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -G ${family} -b ${addr1} -n 0 &
--	pid=$!
--	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -C 1000 -R 10 ${family} -b ${addr2%/*} ${rx_args} && \
--		echo "ok" || \
--		echo "failed"&
-+	local PID1=$!
-+	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -C 1000 -R 10 ${family} -b ${addr2%/*} ${rx_args} &
-+	local PID2=$!
- 
- 	wait_local_port_listen "${PEER_NS}" 8000 udp
- 	./udpgso_bench_tx ${tx_args}
--	ret=$?
--	kill -INT $pid
--	wait $(jobs -p)
-+	check_err $?
-+	kill -INT ${PID1}
-+	wait ${PID2}
-+	check_err $?
-+	[ "$ret" -eq 0 ] && echo "ok" || echo "failed"
- 	return $ret
- }
- 
-@@ -115,16 +117,21 @@ run_one_2sock() {
- 	cfg_veth
- 
- 	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -C 1000 -R 10 ${rx_args} -p 12345 &
--	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -C 2000 -R 10 ${rx_args} && \
--		echo "ok" || \
--		echo "failed" &
-+	local PID1=$!
-+	ip netns exec "${PEER_NS}" ./udpgso_bench_rx -C 2000 -R 10 ${rx_args} &
-+	local PID2=$!
- 
- 	wait_local_port_listen "${PEER_NS}" 12345 udp
- 	./udpgso_bench_tx ${tx_args} -p 12345
-+	check_err $?
- 	wait_local_port_listen "${PEER_NS}" 8000 udp
- 	./udpgso_bench_tx ${tx_args}
--	ret=$?
--	wait $(jobs -p)
-+	check_err $?
-+	wait ${PID1}
-+	check_err $?
-+	wait ${PID2}
-+	check_err $?
-+	[ "$ret" -eq 0 ] && echo "ok" || echo "failed"
- 	return $ret
- }
- 
+-if [ ! -f ${BPF_FILE} ]; then
+-	echo "Missing ${BPF_FILE}. Run 'make' first"
+-	exit -1
+-fi
+-
+ if [[ $# -eq 0 ]]; then
+ 	run_all
+ elif [[ $1 == "__subprocess" ]]; then
 -- 
 2.45.0
 
