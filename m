@@ -1,89 +1,93 @@
-Return-Path: <linux-kselftest+bounces-15424-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15425-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0242E95379E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 17:50:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD4299537F2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 18:10:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F8891C245CE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 15:50:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36A14282A2F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 16:10:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F39691AD9FB;
-	Thu, 15 Aug 2024 15:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EQiuTurO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AEBB1B1512;
+	Thu, 15 Aug 2024 16:10:05 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C3115E88;
-	Thu, 15 Aug 2024 15:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D69A419E7EF
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2024 16:10:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723737014; cv=none; b=M/yC4GfqvozApulbcE0ponq66iczJAvJPgtfZbervSAz6rvGKFC+tsioOMgS96DGqhOJbPs5lbJrgKSr4h0nXBN9/G9bBAkWaB/WhKbJmiuFkt2kHTUhH2GKjEAMnTteXoPiCDDJxpPEscjTjSQQpMtLhL1Ho9D1p0qr8abvv/Q=
+	t=1723738205; cv=none; b=FlATH3DyBjgmtEuv2EaP57yJ0HYToNiBOAmBtEN4ZMDZeH7nu+HvschbMSdjoeNb5rF/Xd8PR4whc0mqsmW+/XxmDUFVE1pJ+pASfF54vdzRApKH1RTr8gfg2qojWNZ50D8nN6ujTIDunmG1vbckovQI3ppO50iyvqlXw6zQUp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723737014; c=relaxed/simple;
-	bh=xN7UdZrI0x2sSwbrhbNFyqv5rQaHms9/rajWM/qikRM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pzLLbtnVWlPLQ/v8Zqfe8V1iiK1T1DWm/WUfaViyAsxIu+LCcFKD0IR6Nh87DI3X8eEUYtha9ume+27pk8VJGtiQIPBt0sIiLGBorqhIsMV+UOImC/SR42uY/EHlwZYzfcgX324kL0ElM/+4j9qRkWdfsI1+9NkhXyKNagtd2hM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EQiuTurO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA46FC32786;
-	Thu, 15 Aug 2024 15:50:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723737014;
-	bh=xN7UdZrI0x2sSwbrhbNFyqv5rQaHms9/rajWM/qikRM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=EQiuTurOYvuoI1KRGYJYqmsfOEuf0rl9jFywmsfiy6GmUh3Fp6fIrwxku7H8EvOMD
-	 CuTieCONOnKJQ0cw0tLPy7X7Vs3qIaeUP3m8Wzz5b1FODZ0VHh457wYgs5w8i1DQ8h
-	 yzPupHAe7fim7a9Gro546sB0IkSdXa0NytmPBgPKwucPAZHXg6rxwQse6fUXgmD6Wo
-	 /4AD9ZjQjMiJo7p0IAMxTdspbn3+F/yGdMtbcs07DjBMosHQx5EljlmO6cpqe+eKON
-	 qhjKBHPMCzeT+aR8MQRZ51JGRkWN7d/sKJmxzq35rOuHU8vg+rHyjJ0sTS269FY46z
-	 fLUNw8zPAyv+A==
-Date: Thu, 15 Aug 2024 08:50:12 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Abhinav Jain <jain.abhinav177@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com,
- javier.carrasco.cruz@gmail.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com,
- shuah@kernel.org, skhan@linuxfoundation.org
-Subject: Re: [PATCH net v6 0/2] Enhance network interface feature testing
-Message-ID: <20240815085012.01edb574@kernel.org>
-In-Reply-To: <20240815110442.1389625-1-jain.abhinav177@gmail.com>
-References: <20240814175748.35889b6d@kernel.org>
-	<20240815110442.1389625-1-jain.abhinav177@gmail.com>
+	s=arc-20240116; t=1723738205; c=relaxed/simple;
+	bh=j2uYupfeKSgh0DfZRYYlMyC99HExdau3jIZqN4BrbAk=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=A1xM8khtX3sP3kwwlB32iDOVZrGMwAaZc96q8Mhl8cDATmc20fArKQKW2ZcNz7rxXs14ja5coams8Q6bJvx5cqZWVWzOldKlq+uGLlO6dYWxRXr4LHtDNIpxewOPo8eMVyuRXVL4QAGg06blBKztJoLOpAO84jXiw2y3zB6NLnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-39d2044b532so6388005ab.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2024 09:10:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723738203; x=1724343003;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+48SOAuLFWa3vOYJchc0yB8E8pO6GvAZqc/FFORHhSw=;
+        b=S1Q1idjhpapQ9w7FLy9t1gKfo0/GCt17IeM8O5DWEjhNg1mD69s9sSIAexA8gUyij/
+         3BthnN4oAwWpXdX5mPM45OIW1wjuFQiH9e0yzgB2AqjqMUBmZo7qwq+9s0NXUv0dOmme
+         ZwIvtecFni98UM8NN6B1DcoO8dFmGGbuYoGnbLqBVh8cVAYaK3JbnTzKUBKmeK18Agof
+         jtC9AIB40i9LYqR3qGNYsAmgZbnd2uSkmBF88k0OW+lTdM0FcTKQVsIWQ0EZNBZpdXRO
+         5ggXmRaJKPlOk7evzzcr2L5GJfmz7kYM+OydySLtQ4oZmRhabySSmDpAFmDnppCLSK82
+         KK0w==
+X-Forwarded-Encrypted: i=1; AJvYcCX7IWebkG8ghuVT/yo3F7GueSYyyzxBhZU3PsC1DCOVbRCcnYHNbQn7X/Hu23JCETcsHgpoWoPKT+3dccSldsS8i72frZjvr2oah1i4HOPr
+X-Gm-Message-State: AOJu0Yw3VHlF90C9qPjz2crUzMoCzGH5mZmm7t8/MeQdrpnVjtepwxiq
+	j3Et7C0lH4jDp9DqczFXdD+K/RvjoxVwghMiJTDbcjE1ueIvpx7NVA/vxX+4h11naKejfkrZyZ1
+	m0YsNFGtUmmlBh0ZJgG864pbXzliuxQLuiBZTIQfzl6iPOlRyNqeALzg=
+X-Google-Smtp-Source: AGHT+IFhijMKxOHvEmejfGCrN0UCTcPcB8Qp17m0Xsh3eQixZLpUkNfc3bISLAfaoqkI5L5Rer4110AXeccsAco0NPqCdduTR/JH
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Received: by 2002:a05:6e02:164c:b0:397:95c7:6f72 with SMTP id
+ e9e14a558f8ab-39d26d95de3mr190845ab.6.1723738203044; Thu, 15 Aug 2024
+ 09:10:03 -0700 (PDT)
+Date: Thu, 15 Aug 2024 09:10:03 -0700
+In-Reply-To: <0000000000006923bb06178ce04a@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004754de061fbb1356@google.com>
+Subject: Re: [syzbot] [mm?] WARNING in hpage_collapse_scan_pmd (2)
+From: syzbot <syzbot+5ea2845f44caa77f5543@syzkaller.appspotmail.com>
+To: akpm@linux-foundation.org, axboe@kernel.dk, borntraeger@linux.ibm.com, 
+	david@redhat.com, frankja@linux.ibm.com, imbrenda@linux.ibm.com, 
+	io-uring@vger.kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, pbonzini@redhat.com, 
+	peterx@redhat.com, shuah@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 15 Aug 2024 16:34:42 +0530 Abhinav Jain wrote:
-> > > One more:
-> > >
-> > > tools/testing/selftests/net/netdevice.sh: echo "SKIP: $netdev: set IP address"
-> > >
-> > > I think the SKIP -> XFAIL conversion should be a separate patch (for
-> > > total of 3 patches in the series).  
-> >
-> > P.S. and please change the subject to [PATCH net-next], it's a net-next
-> > change, not a net fix.  
-> 
-> I have sent v7 now with net-next instead of net:
-> https://lore.kernel.org/all/20240815105924.1389290-1-jain.abhinav177@gmail.com
-> 
-> For set IP address part, I have added logic to XFAIL if veth pair was created 
-> and to SKIP if that's not the case in third patch of the series as directed above.
-> 
-> Right now, there is no logic to set IP address in the script for normal interfaces
-> either and it is a TODO as well. I will focus on it next after this one is applied.
+syzbot suspects this issue was fixed by commit:
 
-Minor note, please keep your guidance on frequency of reposting in mind:
-https://www.kernel.org/doc/html/next/process/maintainer-netdev.html
--- 
-pv-bot: 24h
+commit c88033efe9a391e72ba6b5df4b01d6e628f4e734
+Author: Peter Xu <peterx@redhat.com>
+Date:   Mon Apr 22 13:33:11 2024 +0000
+
+    mm/userfaultfd: reset ptes when close() for wr-protected ones
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12f2396b980000
+start commit:   e67572cd2204 Linux 6.9-rc6
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3310e643b6ef5d69
+dashboard link: https://syzkaller.appspot.com/bug?extid=5ea2845f44caa77f5543
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10874a40980000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: mm/userfaultfd: reset ptes when close() for wr-protected ones
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
