@@ -1,53 +1,53 @@
-Return-Path: <linux-kselftest+bounces-15456-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15460-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37A23953CAB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 23:33:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F4E3953CAF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 23:33:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C15B1C24496
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 21:33:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2D0F1C24104
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 21:33:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 187D2153BF0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76377154BE9;
 	Thu, 15 Aug 2024 21:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nlZFwsno"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X1nw0ja4"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB6D314F12F;
-	Thu, 15 Aug 2024 21:32:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4946C1547D2;
+	Thu, 15 Aug 2024 21:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723757570; cv=none; b=oAjB1fSxnn8KG40Yd2bmP4SLJSkEcgRqIHRu5rynk5CoER69PFFqbam5NAq0h4jWHkNUBtbq9odp+LUjwySLN2m3WwI0cJ0d6nqOw/Q5KTYl0+MHoiRVs9OVmN+9z4+Z5RAVq1uSQ1tbg3gASX7mSXm9BrXPmXQTwpWYGDg7+Ss=
+	t=1723757570; cv=none; b=O9Hn+r6N5QJa5IAe8RR10ct/mMHydvTyfdjq/WU1+i/AwcWlZr6uTCF9EbQdndsuXUz4GY0Z70PQ46zx8sIWSRQf9Got9nAuPsOK5mt/okZWBcIqhRVNDoRyY3BErAteouo2c4GRuhduJPPLYokRZHMOdvm8Mzh0RFP5/0iwdgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1723757570; c=relaxed/simple;
-	bh=qaIxzhJ+auD33h9udz/QNyEoZ851JZn2dE3kSu2mnnY=;
+	bh=cXcR0zvXW7/nnmOm/6+n3P/mk7iJt/w5bvYw8TBix4E=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DxrpvyLUWbAzzSxooeT+QIiJZ2AxzJ6Ki+ApuQobLFArgbVlTyFE2kD0sOUJD+gM2x6YCCBJkWL/FuYh6sl1rdZ304jZmqfH6BE8Ty0e/hj83K8uBxgdeigiqOY0nrf0eEmCEcT3TnHpurg6W8kt2KcGCeeL3dCys72AXD06PMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nlZFwsno; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BD923C4AF1A;
+	 In-Reply-To:To:Cc; b=sJIQtnyQb4ZpW4OBy/SKrX642o7n8rdx0jV7IoYtqtakadIHPU2rXeBdoDQ5uroBF7KtQwoN7O++cE+8GwqwNIwXc/EvWSrIgXL+KHn7ld7oRacCPNJDDuz+xXLrsb8lXXMFjRnjSD97wM7QBeh1ktnK7beISqq0O4dl16UBw2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X1nw0ja4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DB233C4AF1C;
 	Thu, 15 Aug 2024 21:32:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1723757569;
-	bh=qaIxzhJ+auD33h9udz/QNyEoZ851JZn2dE3kSu2mnnY=;
+	bh=cXcR0zvXW7/nnmOm/6+n3P/mk7iJt/w5bvYw8TBix4E=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=nlZFwsnoPvVD89ruV+4WNhD5yEdX6Yfn4XxCnLnvmql9X21xBaQJ6BR4tJs/pLOvw
-	 9jQ0yZohU2SF7cenxHT8GmIcXz93kGFa984l99KdKZVlSHfYxzn8dsRMNOUO7Ew8k3
-	 /c1GyBoE0IUYhQ7Rx9EzSlxXyMFTytXSDaXScxjIg0rtTLzljAihey6O34tQg+dddC
-	 MDlosv4JQpBt6SIJMvhnEMoSgz2DgHCpcKh7ShClGYXs83SkHPXKxN6OJSnqLL6TNr
-	 xXEZRp44e/hk9wFB0HqawdJU8Z4RtDC+DdkVGtSddZxPs1OxYQlk+/pBzzmql7aQ2F
-	 FURW9oOWdQMpQ==
+	b=X1nw0ja4++gIYkoK7JKbIKzvoGXbxrB/rW7jnF4vab5jCbZu3lr5u+3XMqBBDREPE
+	 uOY7NcgfBss3rK+nFuErMFX/Ur1WHKQV5jSH8k6vb/SI+mJDj7MgJLfTbV0FfgTowb
+	 YJiHG+u8BQf6Mc9yY9XPXx5ChzS8jZLZLIMdBFiCVjfJmBpvBTxe0qxjGq7FQNL7Fe
+	 acPtSP39lvuWcs+GhZGR7j1aETVuA4Kt57VNVYnY13ibjxjsKou3XdxwddJSObqKiC
+	 jVBQOkIDmAz36i+l2i6SfzaHYa2r8Ma4xcngBwFAPNeCiJL1COqh1lg1muo4gTgVbs
+	 rHtel4r4VULIA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B0560C531DD;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CFF33C531DE;
 	Thu, 15 Aug 2024 21:32:49 +0000 (UTC)
 From: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>
-Date: Thu, 15 Aug 2024 22:32:31 +0100
-Subject: [PATCH net-next v3 6/8] selftests/tcp_ao: Fix printing format for
- uint64_t
+Date: Thu, 15 Aug 2024 22:32:32 +0100
+Subject: [PATCH net-next v3 7/8] selftests/net: Synchronize client/server
+ before counters checks
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240815-tcp-ao-selftests-upd-6-12-v3-6-7bd2e22bb81c@gmail.com>
+Message-Id: <20240815-tcp-ao-selftests-upd-6-12-v3-7-7bd2e22bb81c@gmail.com>
 References: <20240815-tcp-ao-selftests-upd-6-12-v3-0-7bd2e22bb81c@gmail.com>
 In-Reply-To: <20240815-tcp-ao-selftests-upd-6-12-v3-0-7bd2e22bb81c@gmail.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -66,11 +66,11 @@ Cc: Mohammad Nassiri <mnassiri@ciena.com>, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Dmitry Safonov <0x7f454c46@gmail.com>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1723757567; l=8808;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1723757567; l=7675;
  i=0x7f454c46@gmail.com; s=20240410; h=from:subject:message-id;
- bh=YPEKLzEz54yx6GuwPZWnAYt7STgja9OwIZZWpccDw5M=;
- b=ElNHsCt4HVwbb8NzBNDDu0qU9dUO/XkO0yRzgdoFtCUjST86MtvOeUIBVE3xtTMEp918QFnEq
- ApBJPHuYtL3DWo9mI/uPeVOCgI/EsdomDiwmr4G1GWHGmVF49O01Yr7
+ bh=ankNPOlIRhBq+DJVzPHQSd6nakZUp4Z55CCoLLWqbTY=;
+ b=LhRYrvlCvonKDFRVVisih+fNW8SCIQQxMnTLuFc5rUHjD1j7t+v1qT17clsc18Lse3LBRuutV
+ gDFP5OtqxvnAfhVmG1ZSyD1X6bhZxpkhQTTvkpOg+nmPq8Gux/KDyfb
 X-Developer-Key: i=0x7f454c46@gmail.com; a=ed25519;
  pk=cFSWovqtkx0HrT5O9jFCEC/Cef4DY8a2FPeqP4THeZQ=
 X-Endpoint-Received: by B4 Relay for 0x7f454c46@gmail.com/20240410 with
@@ -78,192 +78,174 @@ X-Endpoint-Received: by B4 Relay for 0x7f454c46@gmail.com/20240410 with
 X-Original-From: Dmitry Safonov <0x7f454c46@gmail.com>
 Reply-To: 0x7f454c46@gmail.com
 
-From: Mohammad Nassiri <mnassiri@ciena.com>
+From: Dmitry Safonov <0x7f454c46@gmail.com>
 
-It's not safe to use '%zu' specifier for printing uint64_t on 32-bit
-systems. For uint64_t, we should use the 'PRIu64' macro from
-the inttypes.h library. This ensures that the uint64_t is printed
-correctly from the selftests regardless of the system architecture.
+On tests that are expecting failure the timeout value is
+TEST_RETRANSMIT_SEC == 1 second. Which is big enough for most of devices
+under tests. But on a particularly slow machine/VM, 1 second might be
+not enough for another thread to be scheduled and attempt to connect().
+It is not a problem for tests that expect connect() to succeed as
+the timeout value for them (TEST_TIMEOUT_SEC) is intentionally bigger.
 
-Signed-off-by: Mohammad Nassiri <mnassiri@ciena.com>
-[Added missing spaces in fail/ok messages and uint64_t cast in
- setsockopt-closed, as otherwise it was giving warnings on 64bit.
- And carried it to netdev ml]
+One obvious way to solve this would be to increase TEST_RETRANSMIT_SEC.
+But as all tests would increase the timeouts, that's going to sum up.
+
+But here is less obvious way that keeps timeouts for expected connect()
+failures low: just synchronize the two threads, which will assure that
+before counter checks the other thread got a chance to run and timeout
+on connect(). The expected increase of the related counter for listen()
+socket will yet test the expected failure.
+
+Never happens on my machine, but I suppose the majority of netdev's
+connect-deny-* flakes [1] are caused by this.
+
+Fixes:
+> # selftests: net/tcp_ao: connect-deny_ipv6
+> # 1..21
+> # # 462[lib/setup.c:243] rand seed 1720905426
+> # TAP version 13
+> # ok 1 Non-AO server + AO client
+> # not ok 2 Non-AO server + AO client: TCPAOKeyNotFound counter did not increase: 0 <= 0
+> # ok 3 AO server + Non-AO client
+> # ok 4 AO server + Non-AO client: counter TCPAORequired increased 0 => 1
+...
+
+[1]: https://netdev-3.bots.linux.dev/vmksft-tcp-ao/results/681741/6-connect-deny-ipv6/stdout
 Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
 ---
- tools/testing/selftests/net/tcp_ao/connect-deny.c      |  4 ++--
- tools/testing/selftests/net/tcp_ao/connect.c           |  4 ++--
- tools/testing/selftests/net/tcp_ao/restore.c           |  8 ++++----
- tools/testing/selftests/net/tcp_ao/self-connect.c      |  4 ++--
- tools/testing/selftests/net/tcp_ao/seq-ext.c           | 12 ++++++------
- tools/testing/selftests/net/tcp_ao/setsockopt-closed.c |  4 ++--
- tools/testing/selftests/net/tcp_ao/unsigned-md5.c      |  4 ++--
- 7 files changed, 20 insertions(+), 20 deletions(-)
+ tools/testing/selftests/net/tcp_ao/connect-deny.c | 3 +++
+ tools/testing/selftests/net/tcp_ao/restore.c      | 6 ++++--
+ tools/testing/selftests/net/tcp_ao/seq-ext.c      | 6 ++++--
+ tools/testing/selftests/net/tcp_ao/unsigned-md5.c | 3 +++
+ 4 files changed, 14 insertions(+), 4 deletions(-)
 
 diff --git a/tools/testing/selftests/net/tcp_ao/connect-deny.c b/tools/testing/selftests/net/tcp_ao/connect-deny.c
-index 185a2f6e5ff3..5691f3d00603 100644
+index 5691f3d00603..166ad4549ef2 100644
 --- a/tools/testing/selftests/net/tcp_ao/connect-deny.c
 +++ b/tools/testing/selftests/net/tcp_ao/connect-deny.c
-@@ -84,10 +84,10 @@ static void try_accept(const char *tst_name, unsigned int port, const char *pwd,
- 	after_cnt = netstat_get_one(cnt_name, NULL);
- 
- 	if (after_cnt <= before_cnt) {
--		test_fail("%s: %s counter did not increase: %zu <= %zu",
-+		test_fail("%s: %s counter did not increase: %" PRIu64 " <= %" PRIu64,
- 				tst_name, cnt_name, after_cnt, before_cnt);
- 	} else {
--		test_ok("%s: counter %s increased %zu => %zu",
-+		test_ok("%s: counter %s increased %" PRIu64  " => %" PRIu64,
- 			tst_name, cnt_name, before_cnt, after_cnt);
+@@ -71,10 +71,12 @@ static void try_accept(const char *tst_name, unsigned int port, const char *pwd,
+ 		}
  	}
  
-diff --git a/tools/testing/selftests/net/tcp_ao/connect.c b/tools/testing/selftests/net/tcp_ao/connect.c
-index 81653b47f303..9eecc4a1072e 100644
---- a/tools/testing/selftests/net/tcp_ao/connect.c
-+++ b/tools/testing/selftests/net/tcp_ao/connect.c
-@@ -67,14 +67,14 @@ static void *client_fn(void *arg)
- 	netstat_free(ns_after);
++	synchronize_threads(); /* before counter checks */
+ 	if (pwd && test_get_tcp_ao_counters(lsk, &ao_cnt2))
+ 		test_error("test_get_tcp_ao_counters()");
  
- 	if (nr_packets > (after_aogood - before_aogood)) {
--		test_fail("TCPAOGood counter mismatch: %zu > (%zu - %zu)",
-+		test_fail("TCPAOGood counter mismatch: %zu > (%" PRIu64 " - %" PRIu64 ")",
- 				nr_packets, after_aogood, before_aogood);
- 		return NULL;
- 	}
- 	if (test_tcp_ao_counters_cmp("connect", &ao1, &ao2, TEST_CNT_GOOD))
- 		return NULL;
+ 	close(lsk);
++
+ 	if (pwd)
+ 		test_tcp_ao_counters_cmp(tst_name, &ao_cnt1, &ao_cnt2, cnt_expected);
  
--	test_ok("connect TCPAOGood %" PRIu64 "/%" PRIu64 "/%" PRIu64 " => %" PRIu64 "/%" PRIu64 "/%" PRIu64 ", sent %" PRIu64,
-+	test_ok("connect TCPAOGood %" PRIu64 "/%" PRIu64 "/%" PRIu64 " => %" PRIu64 "/%" PRIu64 "/%" PRIu64 ", sent %zu",
- 			before_aogood, ao1.ao_info_pkt_good,
- 			ao1.key_cnts[0].pkt_good,
- 			after_aogood, ao2.ao_info_pkt_good,
+@@ -180,6 +182,7 @@ static void try_connect(const char *tst_name, unsigned int port,
+ 	timeout = fault(TIMEOUT) ? TEST_RETRANSMIT_SEC : TEST_TIMEOUT_SEC;
+ 	ret = _test_connect_socket(sk, this_ip_dest, port, timeout);
+ 
++	synchronize_threads(); /* before counter checks */
+ 	if (ret < 0) {
+ 		if (fault(KEYREJECT) && ret == -EKEYREJECTED) {
+ 			test_ok("%s: connect() was prevented", tst_name);
 diff --git a/tools/testing/selftests/net/tcp_ao/restore.c b/tools/testing/selftests/net/tcp_ao/restore.c
-index 8fdc808df325..7b91d7fde2bc 100644
+index 7b91d7fde2bc..f6ea2190f43d 100644
 --- a/tools/testing/selftests/net/tcp_ao/restore.c
 +++ b/tools/testing/selftests/net/tcp_ao/restore.c
-@@ -71,10 +71,10 @@ static void try_server_run(const char *tst_name, unsigned int port,
- 	test_tcp_ao_counters_cmp(tst_name, &ao1, &ao2, cnt_expected);
- 
- 	if (after_cnt <= before_cnt) {
--		test_fail("%s: %s counter did not increase: %zu <= %zu",
-+		test_fail("%s: %s counter did not increase: %" PRIu64 " <= %" PRIu64,
- 				tst_name, cnt_name, after_cnt, before_cnt);
- 	} else {
--		test_ok("%s: counter %s increased %zu => %zu",
-+		test_ok("%s: counter %s increased %" PRIu64 " => %" PRIu64,
- 			tst_name, cnt_name, before_cnt, after_cnt);
+@@ -64,6 +64,7 @@ static void try_server_run(const char *tst_name, unsigned int port,
+ 		else
+ 			test_ok("%s: server alive", tst_name);
  	}
- 
-@@ -183,10 +183,10 @@ static void test_sk_restore(const char *tst_name, unsigned int server_port,
- 	test_tcp_ao_counters_cmp(tst_name, &ao1, &ao2, cnt_expected);
- 
- 	if (after_cnt <= before_cnt) {
--		test_fail("%s: %s counter did not increase: %zu <= %zu",
-+		test_fail("%s: %s counter did not increase: %" PRIu64 " <= %" PRIu64,
- 				tst_name, cnt_name, after_cnt, before_cnt);
- 	} else {
--		test_ok("%s: counter %s increased %zu => %zu",
-+		test_ok("%s: counter %s increased %" PRIu64 " => %" PRIu64,
- 			tst_name, cnt_name, before_cnt, after_cnt);
- 	}
- 	synchronize_threads(); /* 3: verified => closed */
-diff --git a/tools/testing/selftests/net/tcp_ao/self-connect.c b/tools/testing/selftests/net/tcp_ao/self-connect.c
-index a5698b0a3718..e56931d38e06 100644
---- a/tools/testing/selftests/net/tcp_ao/self-connect.c
-+++ b/tools/testing/selftests/net/tcp_ao/self-connect.c
-@@ -87,7 +87,7 @@ static void tcp_self_connect(const char *tst, unsigned int port,
- 	netstat_free(ns_after);
- 
- 	if (after_aogood <= before_aogood) {
--		test_fail("%s: TCPAOGood counter mismatch: %zu <= %zu",
-+		test_fail("%s: TCPAOGood counter mismatch: %" PRIu64 " <= %" PRIu64,
- 			  tst, after_aogood, before_aogood);
- 		close(sk);
- 		return;
-@@ -148,7 +148,7 @@ static void tcp_self_connect(const char *tst, unsigned int port,
- 	netstat_free(ns_after);
++	synchronize_threads(); /* 3: counters checks */
+ 	if (test_get_tcp_ao_counters(sk, &ao2))
+ 		test_error("test_get_tcp_ao_counters()");
+ 	after_cnt = netstat_get_one(cnt_name, NULL);
+@@ -82,7 +83,7 @@ static void try_server_run(const char *tst_name, unsigned int port,
+ 	 * Before close() as that will send FIN and move the peer in TCP_CLOSE
+ 	 * and that will prevent reading AO counters from the peer's socket.
+ 	 */
+-	synchronize_threads(); /* 3: verified => closed */
++	synchronize_threads(); /* 4: verified => closed */
+ out:
  	close(sk);
- 	if (after_aogood <= before_aogood) {
--		test_fail("%s: TCPAOGood counter mismatch: %zu <= %zu",
-+		test_fail("%s: TCPAOGood counter mismatch: %" PRIu64 " <= %" PRIu64,
- 			  tst, after_aogood, before_aogood);
- 		return;
+ }
+@@ -176,6 +177,7 @@ static void test_sk_restore(const char *tst_name, unsigned int server_port,
+ 		else
+ 			test_ok("%s: post-migrate connection is alive", tst_name);
  	}
++	synchronize_threads(); /* 3: counters checks */
+ 	if (test_get_tcp_ao_counters(sk, &ao2))
+ 		test_error("test_get_tcp_ao_counters()");
+ 	after_cnt = netstat_get_one(cnt_name, NULL);
+@@ -189,7 +191,7 @@ static void test_sk_restore(const char *tst_name, unsigned int server_port,
+ 		test_ok("%s: counter %s increased %" PRIu64 " => %" PRIu64,
+ 			tst_name, cnt_name, before_cnt, after_cnt);
+ 	}
+-	synchronize_threads(); /* 3: verified => closed */
++	synchronize_threads(); /* 4: verified => closed */
+ 	close(sk);
+ }
+ 
 diff --git a/tools/testing/selftests/net/tcp_ao/seq-ext.c b/tools/testing/selftests/net/tcp_ao/seq-ext.c
-index ad4e77d6823e..9c7dde7fd776 100644
+index 9c7dde7fd776..885866cc193c 100644
 --- a/tools/testing/selftests/net/tcp_ao/seq-ext.c
 +++ b/tools/testing/selftests/net/tcp_ao/seq-ext.c
-@@ -134,15 +134,15 @@ static void *server_fn(void *arg)
- 	test_tcp_ao_counters_cmp(NULL, &ao1, &ao2, TEST_CNT_GOOD);
+@@ -116,7 +116,7 @@ static void *server_fn(void *arg)
+ 	sk = test_sk_restore(&img, &ao_img, &saddr, this_ip_dest,
+ 			     client_new_port, &ao1);
  
- 	if (after_good <= before_good) {
--		test_fail("TCPAOGood counter did not increase: %zu <= %zu",
-+		test_fail("TCPAOGood counter did not increase: %" PRIu64 " <= %" PRIu64,
- 			  after_good, before_good);
- 	} else {
--		test_ok("TCPAOGood counter increased %zu => %zu",
-+		test_ok("TCPAOGood counter increased %" PRIu64 " => %" PRIu64,
- 			before_good, after_good);
+-	synchronize_threads(); /* 5: verify counters during SEQ-number rollover */
++	synchronize_threads(); /* 5: verify the connection during SEQ-number rollover */
+ 	bytes = test_server_run(sk, quota, TEST_TIMEOUT_SEC);
+ 	if (bytes != quota) {
+ 		if (bytes > 0)
+@@ -127,6 +127,7 @@ static void *server_fn(void *arg)
+ 		test_ok("server alive");
  	}
- 	after_bad = netstat_get_one("TCPAOBad", NULL);
- 	if (after_bad)
--		test_fail("TCPAOBad counter is non-zero: %zu", after_bad);
-+		test_fail("TCPAOBad counter is non-zero: %" PRIu64, after_bad);
- 	else
- 		test_ok("TCPAOBad counter didn't increase");
- 	test_enable_repair(sk);
-@@ -219,15 +219,15 @@ static void *client_fn(void *arg)
- 	test_tcp_ao_counters_cmp(NULL, &ao1, &ao2, TEST_CNT_GOOD);
  
- 	if (after_good <= before_good) {
--		test_fail("TCPAOGood counter did not increase: %zu <= %zu",
-+		test_fail("TCPAOGood counter did not increase: %" PRIu64 " <= %" PRIu64,
- 			  after_good, before_good);
- 	} else {
--		test_ok("TCPAOGood counter increased %zu => %zu",
-+		test_ok("TCPAOGood counter increased %" PRIu64 " => %" PRIu64,
- 			before_good, after_good);
- 	}
- 	after_bad = netstat_get_one("TCPAOBad", NULL);
- 	if (after_bad)
--		test_fail("TCPAOBad counter is non-zero: %zu", after_bad);
-+		test_fail("TCPAOBad counter is non-zero: %" PRIu64, after_bad);
- 	else
- 		test_ok("TCPAOBad counter didn't increase");
++	synchronize_threads(); /* 6: verify counters after SEQ-number rollover */
+ 	if (test_get_tcp_ao_counters(sk, &ao2))
+ 		test_error("test_get_tcp_ao_counters()");
+ 	after_good = netstat_get_one("TCPAOGood", NULL);
+@@ -206,12 +207,13 @@ static void *client_fn(void *arg)
+ 	sk = test_sk_restore(&img, &ao_img, &saddr, this_ip_dest,
+ 			     test_server_port + 1, &ao1);
  
-diff --git a/tools/testing/selftests/net/tcp_ao/setsockopt-closed.c b/tools/testing/selftests/net/tcp_ao/setsockopt-closed.c
-index 517930f9721b..5eee826c37aa 100644
---- a/tools/testing/selftests/net/tcp_ao/setsockopt-closed.c
-+++ b/tools/testing/selftests/net/tcp_ao/setsockopt-closed.c
-@@ -30,8 +30,8 @@ static void test_vefify_ao_info(int sk, struct tcp_ao_info_opt *info,
- #define __cmp_ao(member)							\
- do {										\
- 	if (info->member != tmp.member) {					\
--		test_fail("%s: getsockopt(): " __stringify(member) " %zu != %zu",	\
--			  tst, (size_t)info->member, (size_t)tmp.member);	\
-+		test_fail("%s: getsockopt(): " __stringify(member) " %" PRIu64 " != %" PRIu64,	\
-+			  tst, (uint64_t)info->member, (uint64_t)tmp.member);	\
- 		return;								\
- 	}									\
- } while(0)
+-	synchronize_threads(); /* 5: verify counters during SEQ-number rollover */
++	synchronize_threads(); /* 5: verify the connection during SEQ-number rollover */
+ 	if (test_client_verify(sk, msg_len, nr_packets, TEST_TIMEOUT_SEC))
+ 		test_fail("post-migrate verify failed");
+ 	else
+ 		test_ok("post-migrate connection alive");
+ 
++	synchronize_threads(); /* 5: verify counters after SEQ-number rollover */
+ 	if (test_get_tcp_ao_counters(sk, &ao2))
+ 		test_error("test_get_tcp_ao_counters()");
+ 	after_good = netstat_get_one("TCPAOGood", NULL);
 diff --git a/tools/testing/selftests/net/tcp_ao/unsigned-md5.c b/tools/testing/selftests/net/tcp_ao/unsigned-md5.c
-index 6b59a652159f..ec2848036341 100644
+index ec2848036341..02346b58efbd 100644
 --- a/tools/testing/selftests/net/tcp_ao/unsigned-md5.c
 +++ b/tools/testing/selftests/net/tcp_ao/unsigned-md5.c
-@@ -100,10 +100,10 @@ static void try_accept(const char *tst_name, unsigned int port,
- 	after_cnt = netstat_get_one(cnt_name, NULL);
+@@ -70,6 +70,7 @@ static void try_accept(const char *tst_name, unsigned int port,
  
- 	if (after_cnt <= before_cnt) {
--		test_fail("%s: %s counter did not increase: %zu <= %zu",
-+		test_fail("%s: %s counter did not increase: %" PRIu64 " <= %" PRIu64,
- 				tst_name, cnt_name, after_cnt, before_cnt);
- 	} else {
--		test_ok("%s: counter %s increased %zu => %zu",
-+		test_ok("%s: counter %s increased %" PRIu64 " => %" PRIu64,
- 			tst_name, cnt_name, before_cnt, after_cnt);
- 	}
- 	if (ao_addr)
+ 	timeout = fault(TIMEOUT) ? TEST_RETRANSMIT_SEC : TEST_TIMEOUT_SEC;
+ 	err = test_wait_fd(lsk, timeout, 0);
++	synchronize_threads(); /* connect()/accept() timeouts */
+ 	if (err == -ETIMEDOUT) {
+ 		if (!fault(TIMEOUT))
+ 			test_fail("timed out for accept()");
+@@ -283,6 +284,7 @@ static void try_connect(const char *tst_name, unsigned int port,
+ 	timeout = fault(TIMEOUT) ? TEST_RETRANSMIT_SEC : TEST_TIMEOUT_SEC;
+ 	ret = _test_connect_socket(sk, this_ip_dest, port, timeout);
+ 
++	synchronize_threads(); /* connect()/accept() timeouts */
+ 	if (ret < 0) {
+ 		if (fault(KEYREJECT) && ret == -EKEYREJECTED)
+ 			test_ok("%s: connect() was prevented", tst_name);
+@@ -451,6 +453,7 @@ static void try_to_add(const char *tst_name, unsigned int port,
+ 	timeout = fault(TIMEOUT) ? TEST_RETRANSMIT_SEC : TEST_TIMEOUT_SEC;
+ 	ret = _test_connect_socket(sk, this_ip_dest, port, timeout);
+ 
++	synchronize_threads(); /* connect()/accept() timeouts */
+ 	if (ret <= 0) {
+ 		test_error("%s: connect() returned %d", tst_name, ret);
+ 		goto out;
 
 -- 
 2.42.2
