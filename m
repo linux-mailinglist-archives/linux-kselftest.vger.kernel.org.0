@@ -1,166 +1,187 @@
-Return-Path: <linux-kselftest+bounces-15374-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15375-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0986E95277D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 03:24:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BDF29527D0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 04:07:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E1E71C2171F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 01:24:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD04B2838B0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 02:07:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE27936D;
-	Thu, 15 Aug 2024 01:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C091C5CB8;
+	Thu, 15 Aug 2024 02:07:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l+ad4dot"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jVK8ms/r"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E273F64A
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2024 01:23:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F7D63B9
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2024 02:07:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723685040; cv=none; b=nxM5witp8HacWUDf7pj6fDZP9c/PzzjPLQO7pFVncpzwMtuKZPiivT9VuoBbJDS1GgZwz+K3e6flyfj3rfgcbcXL/SY18+VXhLKMjF5DzsszQ/xGqYBiiq63eDQhaZrzOtSUjbj4ZTYX6sA4cdTHN0XvGqsUfX40LRqm75XQEPM=
+	t=1723687638; cv=none; b=RLz6NuLzEuktfrSkktcH+fY6UrvtJbgYX0wMgt2Lvnb7eK8b6Rby2RHUMOIs5wqwylP+qXo0UsWS1KOXNVxo6bC5OlPZffDtQ+2HHvETb3KJ8FNiBDzRjU2BdR+PolgFzk4XCQXB2pM/7+DclFNj+X6qDR+jpDrl8Oow91rpSBg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723685040; c=relaxed/simple;
-	bh=IPanApsJyaaxjvVuTuWizOqptJ7DXErfoFO3SGXCop0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=k3cHIBpoa7qOD7ybEgMRH4Rm+etSdLY1CghHhuD2CXO7YXPd+yyTiPkZyORBLrGG7wjSAhWJFiEdqM6DkKg5wvQb3evSJJCrscMNLnDUzCIJalN95AClfJMyyXRvqyAArhamStCkPWMkB9zSyKwiVbhDfJHGJhzVSfMQFkVMywU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l+ad4dot; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-52efbb55d24so721939e87.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 14 Aug 2024 18:23:58 -0700 (PDT)
+	s=arc-20240116; t=1723687638; c=relaxed/simple;
+	bh=dIZzHXiKMw27T75+DwnZyDKbGiZ/QhDiyGNMnFwk7tc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BIt27gHxBvPs6SzIZxALfJNnSM/dh4S9rfnTO7qf0ygnZRFKWsPybIc9CXDGH8S4YjTZwnEZCreS9prABqmX9ZR5a36QMRZPzDDKzbQnbGwRXWR383lhHAHTfhVHF6KtuPBYzkQHdGxHFHDO3RaSkUZ0F6SI1awu9gaP2IItRNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jVK8ms/r; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-690404fd27eso5530047b3.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 14 Aug 2024 19:07:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723685037; x=1724289837; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hQp22hCpTnstTtw8wIhx12A0v1Bwi4IEODinYcz0rtQ=;
-        b=l+ad4dotl4owJTOhjdMSYifWNQVKlIRuh7owDtRHtMwuMh5B+ImRLmBA3b8hRhtZzR
-         tfGjz7OHFOsxF0klpHorRNvSai/J+1KFJ+r2gZAIVAbK/tmZvZ4AgzqZOKj0dEA6kFtL
-         FpOHWpUUPZGp2ZUh+vw7cNhjXtXwPBDQ9wk1DIEXGS/xEwN5jnzO5Pektgc4jL+4hIdl
-         mZX1s2wYmH7jDdCXvPZJUapj9izE4XQQdZcPbDgjeEIBPy5rgkaAS4XucNdweaBCpSZS
-         JZ7Fth1njJ2j3kil7VvofbU71bYwmzPmvYPE5GWrl75C4F+sHLJB+cAYUG1+9xali91z
-         DK0A==
+        d=gmail.com; s=20230601; t=1723687636; x=1724292436; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=q2/ASuLUtGxDS0GSssOdh4ZdX64NP+jCqG7TJlf5fYQ=;
+        b=jVK8ms/rwhN3efzOwGwNKGpjlyJkm0w+JAzsequPcp4cRYT6XE0oewyDHfyeKjs7SV
+         REXMi0ORosFjjzvEYDnVhLLaofAObaK3UqdOVWIN2C3O3cAiPXPCMPuIvk4NfJbxRtvB
+         JHViQPEzJAkkfMqUmk5/HQXL3XnxTGdUZVgMuTfn0SfZqbBn1jzUCQs6kDi2hyLZ9JB8
+         kJpxrTg9qZcqN3f+uem24OKz3+NXhGVUgjmh3EZNwU8/3EvC9BaKZxyxmHmPfa8hG2Zh
+         2xtsl4in3bG84LmsQqpexPhFF9ifJhEBUmd1PC0V+tVRVHsJJTQP2ZoacW3dbEbb4Ans
+         R3TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723685037; x=1724289837;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hQp22hCpTnstTtw8wIhx12A0v1Bwi4IEODinYcz0rtQ=;
-        b=GYAEjdleSkudyWsShmwxuzvqwopzxDojy2+vp+HIR0YGCBD8omYY4VTd0GDFfiUJXx
-         ITr+U3JnoVWvvhiZflS1XOzv+p14YMMfxPuDAikqwIqjfouKGecXZuIy5wWZ1/2bV0QK
-         qr3A4WZSfJzGDFtO8f8b7F5J9RlUSG9NMSJ450Fz0xlY6eVyk4vYCUohpmV1dLVVrjV8
-         DCWLTRCs0K6p4NqBMAFi035EfxiVDA15kR7//lRbBV3zrFq7VbszJn3fvw0sluNIXupA
-         Di6YidqZMpGt4hhesWTROO5o4DQWmufM6+Tm9fCv/fOAlqjoRQ8+ykOmAT0yGNjsvB3F
-         1ddQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXyP+F66xNMoipiWSepGt5Mz9KZiCfEupAj+26IxvTF5lgC5bVlpxN+e0wgiFVo0tnSdV/ZWFYHr57u/2RONMMICU3OF/qvHYE6TqSEH4oG
-X-Gm-Message-State: AOJu0YzSVtWZYgikqAmVpFYTCJ4cimr4EvASziukyK4uNKW1pZU8Fy9X
-	ejnCNHanvLCWkMuwFrFVbCeIU1acbgbUASZvbPEsni6JSzBuDyzjuLcQ7HtOPW2l6SIEJBqS69d
-	qv/6gnOrX0t0B335Sj5s1xCE8uAzrUclSLisK
-X-Google-Smtp-Source: AGHT+IFrmbv+IGINyaiTjjFMEcT1EM7N8NhQ+gfP0HDbTjV9qfqTdAooQ6NiqoWk3LCU+4dwnx1K8uEXRcbmhM9BWxg=
-X-Received: by 2002:ac2:5695:0:b0:532:fb9e:a175 with SMTP id
- 2adb3069b0e04-532fb9ea617mr2873611e87.6.1723685036624; Wed, 14 Aug 2024
- 18:23:56 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1723687636; x=1724292436;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=q2/ASuLUtGxDS0GSssOdh4ZdX64NP+jCqG7TJlf5fYQ=;
+        b=iTKQdPe4pjWldotbjh3dCcgNcQtspnw3IBxl48LpRl9EnDGYo8Ss+GcZR4WfO4nRh1
+         +b6Ev+rMUjButg01LYSR5LTwMe47Ylb6A/h2RJSFXQzeLry+RYUPJ+fZXRwmd7nHQATJ
+         oUGIl/EPX8l3w8BNPTKIKzdPr4r1M3n5HUun6HjwnvDLr53opXliO8jNgd0nMyaN6u1/
+         AM/iK8icJXiJgpe90clxJKIkKTNAwQ4D8bSfct7esMqC+pgQJlJNuLQBJH1NTkpnavI9
+         28O86aXZqxHxI5tAo5UUFDQtNN6zCZu8+itxdpbMGI+cdK9RYaQYjj1QYRwhNpHIjzzS
+         7yIQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU8/rcgRrTL9otGbmxVUv8UeNcU9TIniic1CYOPMtNgfNrUCkMjtP1SxlZhIUiXBISx1a902G5UOdLTpDzb4ujz7aF9a1A4cICBSup5ZVqO
+X-Gm-Message-State: AOJu0YyId5bmeJ9EzQzzKV/XtpCh7aFBN442Dok3Y5V7C7pMMwvGTqhl
+	vmjZQCySEhRtewIyi4fqfTvdnJIgiBq2FjtmWKqCLyOARwgWr1tW
+X-Google-Smtp-Source: AGHT+IFc8pS8AFMDIoNr3RFZTXNr37gKkVG+aNLf25NfQwUsMxlcO+HSVbpsO7aNLmQnnGjIfAgIwA==
+X-Received: by 2002:a05:690c:398:b0:63b:d711:e722 with SMTP id 00721157ae682-6ac954ac75bmr50353787b3.1.1723687635999;
+        Wed, 14 Aug 2024 19:07:15 -0700 (PDT)
+Received: from x13.lan (2603-9001-2ff0-a230-0000-0000-0000-1896.inf6.spectrum.com. [2603:9001:2ff0:a230::1896])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6af9d8273fesm1059417b3.116.2024.08.14.19.07.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 Aug 2024 19:07:15 -0700 (PDT)
+From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+To: brendan.higgins@linux.dev,
+	davidgow@google.com,
+	rmoar@google.com
+Cc: Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	skhan@linuxfoundation.org,
+	linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH] lib/math: Add int_pow test suite
+Date: Wed, 14 Aug 2024 22:07:09 -0400
+Message-ID: <20240815020711.110640-1-luis.hernandez093@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240718173423.1574395-1-maskray@google.com> <a97e6b4232394e837666adbaf7e657900cb7b1a8.camel@xry111.site>
-In-Reply-To: <a97e6b4232394e837666adbaf7e657900cb7b1a8.camel@xry111.site>
-From: Fangrui Song <maskray@google.com>
-Date: Wed, 14 Aug 2024 18:23:43 -0700
-Message-ID: <CAFP8O3LcEZD2L6KFw-Qh5jGivtifFUzqTM=JceWKU4nJrBaBZg@mail.gmail.com>
-Subject: Re: [PATCH] arm64/vdso: Remove --hash-style=sysv
-To: Xi Ruoyao <xry111@xry111.site>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Aug 14, 2024 at 12:56=E2=80=AFPM Xi Ruoyao <xry111@xry111.site> wro=
-te:
->
-> On Thu, 2024-07-18 at 10:34 -0700, Fangrui Song wrote:
-> > glibc added support for .gnu.hash in 2006 and .hash has been obsoleted
-> > for more than one decade in many Linux distributions.  Using
-> > --hash-style=3Dsysv might imply unaddressed issues and confuse readers.
-> >
-> > Just drop the option and rely on the linker default, which is likely
-> > "both", or "gnu" when the distribution really wants to eliminate sysv
-> > hash overhead.
-> >
-> > Similar to commit 6b7e26547fad ("x86/vdso: Emit a GNU hash").
-> >
-> > Signed-off-by: Fangrui Song <maskray@google.com>
->
-> Hi Fangrui,
->
-> If I read tools/testing/selftests/vDSO/parse_vdso.c correctly, it does
-> know DT_GNU_HASH as at now.  Thus after this change the vDSO selftests
-> are skipped with "Couldn't find __vdso_gettimeofday" etc if the distro
-> enables --hash-style=3Dgnu by default.
->
-> So it seems we need to add DT_GNU_HASH support for parse_vdso.c to keep
-> test coverage.
+Adds test suite for integer based power function.
 
-Hi Xi,
+Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+---
+ lib/math/Makefile       |  1 +
+ lib/math/test_int_pow.c | 70 +++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 71 insertions(+)
+ create mode 100644 lib/math/test_int_pow.c
 
-Perhaps the selftests file needs DT_GNU_HASH support like
-https://github.com/abseil/abseil-cpp/commit/1278ee9bd9bd4916181521fac96d6fa=
-1100e38e6
+diff --git a/lib/math/Makefile b/lib/math/Makefile
+index 91fcdb0c9efe..ba564bf4fb00 100644
+--- a/lib/math/Makefile
++++ b/lib/math/Makefile
+@@ -6,4 +6,5 @@ obj-$(CONFIG_PRIME_NUMBERS)	+= prime_numbers.o
+ obj-$(CONFIG_RATIONAL)		+= rational.o
+ 
+ obj-$(CONFIG_TEST_DIV64)	+= test_div64.o
++obj-$(CONFIG_TEST_INT_POW)	+= test_int_pow.o
+ obj-$(CONFIG_RATIONAL_KUNIT_TEST) += rational-test.o
+diff --git a/lib/math/test_int_pow.c b/lib/math/test_int_pow.c
+new file mode 100644
+index 000000000000..ecabe71d01cc
+--- /dev/null
++++ b/lib/math/test_int_pow.c
+@@ -0,0 +1,70 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <kunit/test.h>
++#include <kunit/static_stub.h>
++
++#include <linux/math.h>
++
++
++static void test_pow_0(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, 1, int_pow(64, 0));
++}
++
++static void test_pow_1(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, 64, int_pow(64, 1));
++}
++
++static void test_base_0(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, 0, int_pow(0, 5));
++}
++
++static void test_base_1(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, 1, int_pow(1, 100));
++	KUNIT_EXPECT_EQ(test, 1, int_pow(1, 0));
++}
++
++static void test_base_0_pow_0(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, 1, int_pow(0, 0));
++}
++
++static void test_base_2_pow_2(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, 4, int_pow(2, 2));
++}
++
++static void test_max_base(struct kunit *test)
++{
++	KUNIT_EXPECT_EQ(test, U64_MAX, int_pow(U64_MAX, 1));
++}
++
++static void test_large_result(struct kunit *test)
++{
++	UNIT_EXPECT_EQ(test, 1152921504606846976, int_pow(2, 60));
++}
++
++static struct kunit_case math_int_pow_test_cases[] = {
++	KUNIT_CASE(test_pow_0),
++	KUNIT_CASE(test_pow_1),
++	KUNIT_CASE(test_base_0),
++	KUNIT_CASE(test_base_1),
++	KUNIT_CASE(test_base_0_pow_0),
++	KUNIT_CASE(test_base_2_pow_2),
++	KUNIT_CASE(test_max_base),
++	KUNIT_CASE(test_large_result),
++	{}
++};
++
++static struct kunit_suite int_pow_test_suite = {
++	.name = "lib-math-int_pow",
++	.test_cases = math_int_pow_test_cases,
++};
++
++kunit_test_suites(&int_pow_test_suite);
++
++MODULE_DESCRIPTION("math.int_pow KUnit test suite");
++MODULE_LICENSE("GPL v2");
+-- 
+2.46.0
 
-
-> > ---
-> >  arch/arm64/kernel/vdso/Makefile   | 2 +-
-> >  arch/arm64/kernel/vdso32/Makefile | 2 +-
-> >  2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/M=
-akefile
-> > index d63930c82839..d11da6461278 100644
-> > --- a/arch/arm64/kernel/vdso/Makefile
-> > +++ b/arch/arm64/kernel/vdso/Makefile
-> > @@ -21,7 +21,7 @@ btildflags-$(CONFIG_ARM64_BTI_KERNEL) +=3D -z force-b=
-ti
-> >  # potential future proofing if we end up with internal calls to the ex=
-ported
-> >  # routines, as x86 does (see 6f121e548f83 ("x86, vdso: Reimplement vds=
-o.so
-> >  # preparation in build-time C")).
-> > -ldflags-y :=3D -shared -soname=3Dlinux-vdso.so.1 --hash-style=3Dsysv  =
-     \
-> > +ldflags-y :=3D -shared -soname=3Dlinux-vdso.so.1 \
-> >            -Bsymbolic --build-id=3Dsha1 -n $(btildflags-y)
-> >
-> >  ifdef CONFIG_LD_ORPHAN_WARN
-> > diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso=
-32/Makefile
-> > index cc4508c604b2..25a2cb6317f3 100644
-> > --- a/arch/arm64/kernel/vdso32/Makefile
-> > +++ b/arch/arm64/kernel/vdso32/Makefile
-> > @@ -98,7 +98,7 @@ VDSO_AFLAGS +=3D -D__ASSEMBLY__
-> >  # From arm vDSO Makefile
-> >  VDSO_LDFLAGS +=3D -Bsymbolic --no-undefined -soname=3Dlinux-vdso.so.1
-> >  VDSO_LDFLAGS +=3D -z max-page-size=3D4096 -z common-page-size=3D4096
-> > -VDSO_LDFLAGS +=3D -shared --hash-style=3Dsysv --build-id=3Dsha1
-> > +VDSO_LDFLAGS +=3D -shared --build-id=3Dsha1
-> >  VDSO_LDFLAGS +=3D --orphan-handling=3D$(CONFIG_LD_ORPHAN_WARN_LEVEL)
-> >
-> >
->
-> --
-> Xi Ruoyao <xry111@xry111.site>
-> School of Aerospace Science and Technology, Xidian University
-
-
-
---=20
-=E5=AE=8B=E6=96=B9=E7=9D=BF
 
