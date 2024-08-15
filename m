@@ -1,79 +1,85 @@
-Return-Path: <linux-kselftest+bounces-15384-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15385-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DB05952A03
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 09:35:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF2E9952A34
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 09:56:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FAE71C21296
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 07:35:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B27C283A0F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 07:56:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AF6717AE11;
-	Thu, 15 Aug 2024 07:35:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9899817B51C;
+	Thu, 15 Aug 2024 07:56:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C0pHQfrH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X5fhLhXE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 038F017ADE3;
-	Thu, 15 Aug 2024 07:35:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15712176AC1;
+	Thu, 15 Aug 2024 07:56:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723707353; cv=none; b=g2zau1NrpgjNWZ78UlQvJFAQCb/7g/NHTtqVFzbusRQbQ/MjrXB70blH47XofTSudn5PDOjBQJpRZz7IVBKlesGtdBzEYehHGlNULl3hEB4U4Gc9MKRUAEjuaCrCGAiUzTtwan1mk6f/w8TLZEX0XaUCfIpGmngF8q4AfGz6DrQ=
+	t=1723708605; cv=none; b=c1X0B+RGycaWQ2/rfa2e63AO5pCpMGCEeiM9aDYgkDUuD8b2I4M6msW7mgV+hiCySDeijzFyT2NAI+uYYvGEQL50dllz7qki2YYp616VNSVepc2VyZvhom2opNBzNqZ1maPtwd8A9Cj3SLaNRF5WlUK0C+1g6f7iON2DVJyknvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723707353; c=relaxed/simple;
-	bh=/ClYCRhRXoARnrFGFZjHo8wcQMVacH8aXVCfxJFOCPA=;
+	s=arc-20240116; t=1723708605; c=relaxed/simple;
+	bh=yPqL/Vl4cHrWI9TeW3BIpMOg30zZQUvOVQSCoFP9JQk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LHT+bMuSRZCyd3a/5bHpRUX11DprvUskuRfrU/+y43/vkgAZJ9P0QHapjYh6dmNwH8kRElR3QGkopirws1aeieTnZOoIp6q4X7majEWCWyrqeF+ryfOW7Hqr/lYCCUs9evNZ2YORnsPv9VtKxiGjJElb6GazVVnT48QrSbmcbUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C0pHQfrH; arc=none smtp.client-ip=209.85.214.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dz3JoAMXs3c7g1x1kPTHo5FKkxujXl5YwJXQUQzkUUSJQjD21t2dPpUIlD42oXqLTxQ9ABwoP4lFl7zN7cgw4nCDW/adMaVqHyJApiaBnROjFnKMDI6EoDhanf9gn2zZK35Jf6ECyyZHob3suw5RCklhox3FuZOzA5tu2eY65uM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X5fhLhXE; arc=none smtp.client-ip=209.85.216.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-201ee6b084bso5812605ad.2;
-        Thu, 15 Aug 2024 00:35:51 -0700 (PDT)
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2d394313aceso459534a91.3;
+        Thu, 15 Aug 2024 00:56:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723707351; x=1724312151; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1723708603; x=1724313403; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mVdDh2W/DflIXN0zSp6BYnyUoARG2HTuRmiCmWARiGo=;
-        b=C0pHQfrHng3jNyXSH9Qa/A/91ErkMPEafg8GaE0dgb1VRnL3rYv27wShsamqHVRSIV
-         N62RSjNvHX9EImAD6vvMBTSeTv7TSpm4pmaJkklg44T9VzWi/pJ3TCNffi426YIS6cw5
-         5jL9dPpbtXxxlfjSE2wSd62uyW729NvxvMYRJOx+NEtTpGpwcqPTQpOzcvIbkn9JPr+F
-         n1XeVW5HE/3sJ5nf13ogp4os7xCyj8xODwnVcZ8oULqOJolvikcuE3/+GyyBU2K7Hv/W
-         x2C6II0BiwbAw/1CMco+nTlqRhhx5hVawivUT6GCfEcWqeiF6EXOnXZlBDSWpj65To26
-         aWKA==
+        bh=PZFumA3T0nWrA0tHEOuHISEhmHpu/mfJFFX0epjyzEQ=;
+        b=X5fhLhXEHeQ4AQ6+wYuCAuHbi0cJecqX8c1mAlSpzvSHfleHY10QQ2aexnqcP6Yis4
+         Y3IOvNEIDzYXuuJ+eIznof46KHJE/eRc+P+xA9313+fgXN1WPl1r9R/kfVoKdfcGtAvy
+         2omLqjF7Lb45946ssX8QSuU7x2vEvxvyoYdFeTHCDOhio3COh76mOaSKVXI2YknVAMl0
+         kimtSTh92AYMOjy0sDKoD8T9pRPVIulkALz65r8sgrWhtqbeXjQlNgtStBEfG9VdUyyS
+         8ZeC7nlSGjHmw7QGU3OEtGsq7A90KvALwmOW1Vogz1hfhSTbrobO5eXeda5GftZ1xPmE
+         6KBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723707351; x=1724312151;
+        d=1e100.net; s=20230601; t=1723708603; x=1724313403;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mVdDh2W/DflIXN0zSp6BYnyUoARG2HTuRmiCmWARiGo=;
-        b=fNx6bTGCeTeoWL2OJpF+1ohKHPK/nEbVGVAqy38eDQx6uCWqUiNpLhyKls9UNGUbCw
-         4Kis7ZEdfSWHpP6zXBkhaz0/1QAxoGh1KXpF34PeO+qY/GRqwQ/rGj0SJgLvU+3ZzoMc
-         nRSNOU7gtFVmzBXyzGNhpaDH5p7yziTR7WZchHYZDBZPTi0Gx4uvyJ08brlCulgJqsGN
-         QKl+RXSDw9ZjGvLhDk2VNZ3qZvcWCa2TDZQtqtlhtM0Vzc6bCzY9R4np7KeTsuMU3tPn
-         OpXPDRnMxYFZZhUQdb5ynYbUQKimp5laAN0/xyfCkshD0+4l8lPLOBhB23f+beafLsAZ
-         NEFw==
-X-Forwarded-Encrypted: i=1; AJvYcCWDx9fWeVnvBx+lYcka2yPdFouOko8QSYJ23K9eA4L8DJJPgT4LqkJrntv/PThDtMYayRun+hWJzVWyThuEYqbSlmD4CJObN4Bf6It44NpMg6EHNnifkWyQUZPrx+MolqU2oRC+
-X-Gm-Message-State: AOJu0YztHMPxFJ06fBgD7r+V047YWmo3bkgy+p0D2qNuD7RxxtRWQQyV
-	LZG7hcz5d4wT2MeV6uANgdSStREU+Q2maOuG3Zjy32isMFvY/GsV
-X-Google-Smtp-Source: AGHT+IEB1o4GZqA/yBACJA/I3OSxcH2OQMPFJY4wQdT0+6qsaym/npdQtE3ve32iDnp6RbuB/9ROqQ==
-X-Received: by 2002:a17:902:d2cf:b0:1f9:fb48:7cf9 with SMTP id d9443c01a7336-201d64d0255mr64396895ad.63.1723707351109;
-        Thu, 15 Aug 2024 00:35:51 -0700 (PDT)
+        bh=PZFumA3T0nWrA0tHEOuHISEhmHpu/mfJFFX0epjyzEQ=;
+        b=CDSQvbjLMi8C5K6vkC5HERYb2XQZwL4JwT0VyOTdrR9LqysyVWoNKHJbWLKTFDSS2v
+         4jKPoN7193JkjT/wjDEwyenYiZ9o7551TA/SKSubmFSDH2lvYTCfB6ZHAnDmt5laNbud
+         0X8e4JJErsLcv4bXTQINpGHtWzL1CnfSUMJ/UbGAASbWCzXydmoU90Vz+2AKOQxvo0Ax
+         jV0U2GefhfOhLDiOi3zx4kNWQxpQ3NecKME0xcPQ+kmSVgFbkFfUoUx3QHcdpMZywOM7
+         WpQ7ubP21+1nxJKhTpu2cbJsiRE4RETcH0w6uFGlcK4EgX/YpxKeS4Qmx0E7NAv1nT1n
+         NKlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVc8dr6sBb1s97IgozKeJzYdONzy8TBjZUd0au+stV76oeJBSbgt8/c7ia4kuq/ugn9nwaI3O67xbPs5V43BCiaQmWEPNjhoRVpjjDNslch0cYp3GUdDmOdZJ/k3NtMUa+FuXZUvXLvJFYGsEI3vBcEqoHki1ZfzKX0+ZUEwLujU8tTjWpg
+X-Gm-Message-State: AOJu0YzhQvS7Fv6wQsNd8vmQp4zHaEy6kz1PQh5KitPzPv3VVsevABnL
+	inCaSOgL7vf3GcOb0LNUaIMeOhl1k1T5p0uEQ/WhREDFprf0KaN8
+X-Google-Smtp-Source: AGHT+IHw5O4ewI8x/a7lIqXV5CCZGZvBZpZYtjA5gSFdMNgXbg4m+Arv2m97kgNb3kAhU/r+cv8yeA==
+X-Received: by 2002:a17:90b:4b01:b0:2ca:8b71:21f4 with SMTP id 98e67ed59e1d1-2d3aaa999b0mr6168882a91.18.1723708603176;
+        Thu, 15 Aug 2024 00:56:43 -0700 (PDT)
 Received: from Laptop-X1 ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201f031979asm6025415ad.81.2024.08.15.00.35.48
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d3ac7dcf8csm2980435a91.17.2024.08.15.00.56.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Aug 2024 00:35:50 -0700 (PDT)
-Date: Thu, 15 Aug 2024 15:35:45 +0800
+        Thu, 15 Aug 2024 00:56:42 -0700 (PDT)
+Date: Thu, 15 Aug 2024 15:56:36 +0800
 From: Hangbin Liu <liuhangbin@gmail.com>
-To: Abhash Jha <abhashkumarjha123@gmail.com>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kuba@kernel.org, shuah@kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] selftests/net/pmtu.sh: Fix typo in error message
-Message-ID: <Zr2v0Q-wJr_LTAzs@Laptop-X1>
-References: <20240814173121.33590-1-abhashkumarjha123@gmail.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, David Wei <dw@davidwei.uk>,
+	Willem de Bruijn <willemb@google.com>,
+	Petr Machata <petrm@nvidia.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next v2] net: netconsole: selftests: Create a new
+ netconsole selftest
+Message-ID: <Zr20tNtSUdW_JG8T@Laptop-X1>
+References: <20240813183825.837091-1-leitao@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,39 +88,113 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240814173121.33590-1-abhashkumarjha123@gmail.com>
+In-Reply-To: <20240813183825.837091-1-leitao@debian.org>
 
-Hi Abhash,
-
-You need add target repo for the patch. e.g. [PATCH net] selftests...
-
-On Wed, Aug 14, 2024 at 11:01:21PM +0530, Abhash Jha wrote:
-> The word 'expected' was spelled as 'exepcted'.
-> Fixed the typo in this patch.
+On Tue, Aug 13, 2024 at 11:38:16AM -0700, Breno Leitao wrote:
+> Adds a selftest that creates two virtual interfaces, assigns one to a
+> new namespace, and assigns IP addresses to both.
 > 
-
-Here you need to add the fixes tag. e.g.
-Fixes: 136a1b434bbb ("selftests: net: test vxlan pmtu exceptions with tcp")
-
-> Signed-off-by: Abhash Jha <abhashkumarjha123@gmail.com>
+> It listens on the destination interface using socat and configures a
+> dynamic target on netconsole, pointing to the destination IP address.
+> 
+> The test then checks if the message was received properly on the
+> destination interface.
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 > ---
->  tools/testing/selftests/net/pmtu.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Changelog:
 > 
-> diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
-> index cfc849580..62eceb385 100755
-> --- a/tools/testing/selftests/net/pmtu.sh
-> +++ b/tools/testing/selftests/net/pmtu.sh
-> @@ -1347,7 +1347,7 @@ test_pmtu_ipvX_over_bridged_vxlanY_or_geneveY_exception() {
->  		size=$(du -sb $tmpoutfile)
->  		size=${size%%/tmp/*}
->  
-> -		[ $size -ne 1048576 ] && err "File size $size mismatches exepcted value in locally bridged vxlan test" && return 1
-> +		[ $size -ne 1048576 ] && err "File size $size mismatches expected value in locally bridged vxlan test" && return 1
->  	done
->  
->  	rm -f "$tmpoutfile"
-> -- 
-> 2.43.0
+> v2:
+>  * Change the location of the path (Jakub)
+>  * Move from veth to netdevsim
+>  * Other small changes in dependency checks and cleanup
 > 
+> v1:
+>  * https://lore.kernel.org/all/ZqyUHN770pjSofTC@gmail.com/
+> 
+>  MAINTAINERS                                   |   1 +
+>  tools/testing/selftests/drivers/net/Makefile  |   1 +
+>  .../selftests/drivers/net/netcons_basic.sh    | 223 ++++++++++++++++++
+>  3 files changed, 225 insertions(+)
+>  create mode 100755 tools/testing/selftests/drivers/net/netcons_basic.sh
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index a9dace908305..ded45f1dff7e 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -15770,6 +15770,7 @@ M:	Breno Leitao <leitao@debian.org>
+>  S:	Maintained
+>  F:	Documentation/networking/netconsole.rst
+>  F:	drivers/net/netconsole.c
+> +F:	tools/testing/selftests/drivers/net/netcons_basic.sh
+>  
+>  NETDEVSIM
+>  M:	Jakub Kicinski <kuba@kernel.org>
+> diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+> index e54f382bcb02..928530b26abc 100644
+> --- a/tools/testing/selftests/drivers/net/Makefile
+> +++ b/tools/testing/selftests/drivers/net/Makefile
+> @@ -3,6 +3,7 @@
+>  TEST_INCLUDES := $(wildcard lib/py/*.py)
+>  
+>  TEST_PROGS := \
+> +	netcons_basic.sh \
+>  	ping.py \
+>  	queues.py \
+>  	stats.py \
+> diff --git a/tools/testing/selftests/drivers/net/netcons_basic.sh b/tools/testing/selftests/drivers/net/netcons_basic.sh
+> new file mode 100755
+> index 000000000000..e0e58fc7e89f
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/netcons_basic.sh
+> @@ -0,0 +1,223 @@
+> +#!/usr/bin/env bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +# This test creates two netdevsim virtual interfaces, assigns one of them (the
+> +# "destination interface") to a new namespace, and assigns IP addresses to both
+> +# interfaces.
+> +#
+> +# It listens on the destination interface using socat and configures a dynamic
+> +# target on netconsole, pointing to the destination IP address.
+> +#
+> +# Finally, it checks whether the message was received properly on the
+> +# destination interface.  Note that this test may pollute the kernel log buffer
+> +# (dmesg) and relies on dynamic configuration and namespaces being configured.
+> +#
+> +# Author: Breno Leitao <leitao@debian.org>
+> +
+> +set -euo pipefail
+> +
+> +SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
+> +
+> +# Simple script to test dynamic targets in netconsole
+> +SRCIF="" # to be populated later
+> +SRCIP=192.168.1.1
+> +DSTIF="" # to be populated later
+> +DSTIP=192.168.1.2
+> +
+> +PORT="6666"
+> +MSG="netconsole selftest"
+> +TARGET=$(mktemp -u netcons_XXXXX)
+> +NETCONS_CONFIGFS="/sys/kernel/config/netconsole"
+> +NETCONS_PATH="${NETCONS_CONFIGFS}"/"${TARGET}"
+> +# This will have some tmp values appended to it in set_network()
+> +NAMESPACE="netconsns_dst"
+> +
+> +# IDs for netdevsim
+> +NSIM_DEV_1_ID=$((256 + RANDOM % 256))
+> +NSIM_DEV_2_ID=$((512 + RANDOM % 256))
+> +
+> +# Used to create and delete namespaces
+> +source "${SCRIPTDIR}"/../../net/lib.sh
+
+If you want to source net/lib.sh, you need to add it to Makefile. e.g.
+
+TEST_INCLUDES := ../../../net/lib.sh
+
+See example in tools/testing/selftests/drivers/net/bonding/Makefile
+
+Thanks
+Hangbin
 
