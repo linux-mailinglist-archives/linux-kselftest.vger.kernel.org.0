@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-15368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15369-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 314589526AA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 02:13:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73B839526B0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 02:14:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 75F12B22C11
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 00:13:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE4A51F22B1E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 00:14:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931D853362;
-	Thu, 15 Aug 2024 00:10:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 508486BFC7;
+	Thu, 15 Aug 2024 00:10:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="PlY6gL9L"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="iYbLRZPZ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011030.outbound.protection.outlook.com [52.101.70.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D81847A66;
-	Thu, 15 Aug 2024 00:09:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A6754277;
+	Thu, 15 Aug 2024 00:10:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.30
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723680600; cv=fail; b=EJdR/bqQ0YPLGnGABCeAHtHrkaiB1koPOL9B3Lxo8PpQes+9Tk+nWiJwYpmyyYFAmZQX0E6wJEe1aqVIzX77dyllwaoIP+Cf1+EmQkcYe8DF5d/RwMaR47sawM4kVQdKmvy00M5kkqELWkvNAWjftkXSTn2d0anhXnnHe7w0Ipc=
+	t=1723680603; cv=fail; b=RaePTJnsfSLlrfuwU3esFCtJhSmwowFF/FivkdmjFK/KMsuUc/dqyEFA/6D0opa8GNA2ky7t6S4Q7l4W9fLb8GKyEy1qa3NnsJITMElIoG5Qbb6DT9KuN+gh8cjWJvCTNarw2qIf6jsjZ7jXnGwiLT0cIrFOI/ANp3A24CK7WiE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723680600; c=relaxed/simple;
-	bh=gFF/32PFqq7ox3Pfmb1RYJpRHUxx1+OLIwbaEMzl+Zo=;
+	s=arc-20240116; t=1723680603; c=relaxed/simple;
+	bh=VobV8zxIK4haQTU0UvzzwpFsZE7igu0yd2m4AF/1yd4=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OWqCEgCRtDxEZiIBe1qTJI+zXZjJWK0xR/YiePovIyCe4uFR4UCUAdVmLAjdFEAVfWBYrCsMIoKa41JHKHRFko/zvyKSFEHtSFVbyWEYTrz5yN7Ll2Kq7A8hQ6PFjkw6UhV5vQlGNcw1W4GU9tY2itPV91QJp0MIKj6AFDag4+s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=PlY6gL9L; arc=fail smtp.client-ip=52.101.70.30
+	 Content-Type:MIME-Version; b=qcc2wMTsCL+qiIZD0reylOurPLJF182Ugsltk7VmNzuZIVJihfcIL5HobBuW1iCKvMXF/ambXxDneoZmyuEzdB2bpHJIIDOr8dtPaNcWv082ICrNv4fyMxbO9m1xexMrf9buZjHqQpm9h3CLM21fZGpynoTWT4h+EJ+RNwmHkoU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=iYbLRZPZ; arc=fail smtp.client-ip=52.101.70.30
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QNVx9ka1QypNb1oBVoXe10GzCcxsgkiPar/fL6NYeDN7GN4FJc9bHfIPxRJ1TyKvS+3lA8C/NXyGFjR9X3e1qmUo+WCfW9kNYw0JlAIO+noYaPoLyVDDP8a9hbbh/Ko2GZx30KAdPI1+xU9Zvy4Irj0FApDBysSG7+6SXZrCK43+sKDWCcoZAn+9YnKZGWScxSAHiPx6A1pFPLlfaQ4ypFHAnpAKGkopO0vn4GCh9aCXjlm4lJMj/93EYixRFVCVU8JDr+WGQvkvul3Zu2UrGDzTOjAixaEbt6nOujpbyWHbej5TJuHNPgH6YJMast6nuo1yQoBrK0qo5Uxc1uJAIA==
+ b=JfMMk05CrZ9UbkTYkzlFLnRKI/Vd3Qi4D122EpCFEnAkOAPU73KfJuCrRuHSKELBJwEmQsMmjDIlEf/D5kISsDMsuGvGxCpm+YPix335g/sM7BpvWvenCbvnk1oqseUyRWw0Omj2D1LMJve1xED/0xjI/HrnSOFjHBppw/PFfPdb/IqKNnZjNS+H7ECTo1NTlZgX2m6keAt+Tvh3mtSETCeIgW9WhJoXmUR8FsuZiwTCn8tW4L4OgH6yWOcjMh78C5X0EE9TiWwGJwYnHTeWS3l6tkfaN8INkl9pKVOS8/qjFBOPZsIwPtJDlJibojCeZmWoG1a+zy1fy5DKykbnOA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pCcgThH71i8kjAzpmGAIeoNjeTwQBNzNOh84iWzZGSA=;
- b=AKr5aTZ08ENdz0vnHCf45EP1mGjLnCQaWEdIBfqy94doYMLoOWdLK+UgrR7aT17Amir1Fh0kwSty232doYdUIHISM/Oc/MruJyG+U5Fpeb/yQH4EgaH30yRhD/eRkT8nB5ZOgaAOCA1SquL+6gGYin3941keiNaiM9mexWmL3Ck1a2wNTqItyU6otT4rhVmxXEmaQ6WmkEQRokMAlUxydI+4D7mYFhOL7iHpql/KKiFSk/3YJWsJQ86JQaYazp9Gm7pgOIZEtQJJH0SxrvkF61eRZYwfoaOFosplh11zrbP8DKGAgLnbWE48r8jirhx1a5eokfimnm92ILrsUQUwEg==
+ bh=/5q0zdh32mXUKBWKmZI9rz1YkceYSFMMd3l/VmSLWRo=;
+ b=l4q9mEZYfxv+Z1ahH/uo06NWJsYUX1IgNWz19isIe6ok19M+YOmcLK0bwA/JjJ3zXahj4YEBQ7y58yCtoYoGe9cmjmPz6Q9/+6tLDZq/Ga7O2qrocqvb3OWnaDfvpgo2D2i5j7xTyrO0dSMzBHvKCqWaMn8ceq8zemes0OlR8pkPDsJEDE/ZiLKl9EMOPY8RSo5i+gCBRj6LiA/2I+AtcQG1tVBSQdDf5P/gNNOfvKGlmall+7LQ4/9/98Gyko7Oqm3ohkVG9Mbr0JlVzvuY2+db8owqTCsZvFLeoiOZ62HJN30kiO8RzgQC054Lo9t6kCKqWzclcYStQ6kUsgT5vA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pCcgThH71i8kjAzpmGAIeoNjeTwQBNzNOh84iWzZGSA=;
- b=PlY6gL9LK3GeAqEuv9w9JbChaVqYn6MYnZT5tkugFTn7qyvBg6W/T/+8VfA5Cp9kyBaVhGbo3Yz1VVHiikqhwjRJCK0M/xzWzbYyQThiGP9lr9InSJq8Cuzq4Ic8syKFVkVYY0IlmfDD+TCr6rllKKMXUIIDkDBbpNGKZYigOrV2he/TWoAa3K76FS/V3eM4DnibGRyWLLtWRj4No/CPlSqZ8lJUL5mx+mmFKVqJ4qH9oLekfeLMciNeG6HSCjePFgKhaANqDA65MaaEnCsjazIdh4dGwYk7JaCTdSN/fI2IpRrctUlnxz+sBMi7hx+5AfhlB2La8wZEY0aHd4BHqw==
+ bh=/5q0zdh32mXUKBWKmZI9rz1YkceYSFMMd3l/VmSLWRo=;
+ b=iYbLRZPZ5SccNCV54eTg9U81HP/oYvF7r9PNM/rba3J8HJSKeNF0O+LkXtQX/SU/C7x0WSPbLgk7miBB3zPgtYGVHCpQD0w18RerKZuz848G+eAIM4FJym7nI/oC+ZWRxusXmMPDV3/h5dgh3dGczWDZ+Lg+zVFOnU44tpSgLWGlayWY1TjqR3rZ8ba0BNYavluw2bR57pn+kYyXw0j7iiY01ZRTEobs8ogvleFc5yFLV18GtivGIZcYuQ21YK6c94/WouGOdNVvR6hGlQNCJgz9Z1wa9kedFYsyCtMMMCozLJEJpEb5N+DGtZmjUtLCpwOqv0GZ5HIbV2dSco2z7w==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM8PR04MB7779.eurprd04.prod.outlook.com (2603:10a6:20b:24b::14)
  by VI2PR04MB10285.eurprd04.prod.outlook.com (2603:10a6:800:21e::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.18; Thu, 15 Aug
- 2024 00:09:52 +0000
+ 2024 00:09:54 +0000
 Received: from AM8PR04MB7779.eurprd04.prod.outlook.com
  ([fe80::7417:d17f:8d97:44d2]) by AM8PR04MB7779.eurprd04.prod.outlook.com
  ([fe80::7417:d17f:8d97:44d2%4]) with mapi id 15.20.7875.016; Thu, 15 Aug 2024
- 00:09:52 +0000
+ 00:09:54 +0000
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -77,9 +77,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Ido Schimmel <idosch@nvidia.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net 13/14] net: dsa: felix: fix VLAN tag loss on CPU reception with ocelot-8021q
-Date: Thu, 15 Aug 2024 03:07:06 +0300
-Message-Id: <20240815000707.2006121-14-vladimir.oltean@nxp.com>
+Subject: [PATCH net 14/14] net: mscc: ocelot: treat 802.1ad tagged traffic as 802.1Q-untagged
+Date: Thu, 15 Aug 2024 03:07:07 +0300
+Message-Id: <20240815000707.2006121-15-vladimir.oltean@nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240815000707.2006121-1-vladimir.oltean@nxp.com>
 References: <20240815000707.2006121-1-vladimir.oltean@nxp.com>
@@ -96,333 +96,389 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM8PR04MB7779:EE_|VI2PR04MB10285:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0a7d7ed3-60e4-4eb9-b375-08dcbcbe95e4
+X-MS-Office365-Filtering-Correlation-Id: bc0aa76b-9d45-40fe-deec-08dcbcbe9726
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|1800799024|376014|52116014|7416014|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?p3YpmzZlvGM/oWcpZnfxkOXsBEU7lf8tCFyY11zs9o9GFZ/LXEFfoiD+uQfA?=
- =?us-ascii?Q?cswnZgX16TZzR9lEZyr09nxhE5yarvs/fBMk2YpWEGH/dJRFLHz0Ejs+nPmL?=
- =?us-ascii?Q?xFM5/2PInzwJ1HtvnhN90I8+DPguB/V+ugZ8C2GRx2y9YIh/4OGgsXAucIe0?=
- =?us-ascii?Q?o0w5rDJTpwnKpE5LKeK4kgni/W9PJejwA0KoZ3pj1LEwtDjvJzYRw9Mcfk6m?=
- =?us-ascii?Q?wefz5mtr1bxAicX3Ub6uyXmJQJgXBMVWb+YIrJAZ4wmrItskMuZMitqoP9PL?=
- =?us-ascii?Q?NRleNQPQp/RxT9IlXoV3xXGMdVDTN6OfytM7HXYhW1b0LKIWNXWn0Z+7T0c0?=
- =?us-ascii?Q?RGWMNQ8t+147P9L2ywgtP2uof/Q3JtIvEEaWuv50wWsNnwC15MkJUBDGKORO?=
- =?us-ascii?Q?m98OrQx7hPrRVgXKJtVohKYnbL6uj1nCHFOfWi421EiLUWlgFdpZPaT3jKCo?=
- =?us-ascii?Q?wG0fnnIdkAmtNLbvJN2xtydY/nfyRCKImELXeGCm5ertmFM8itCBGaEyO0fa?=
- =?us-ascii?Q?EqMWjZvwJg+cxJAe3FgtYiz0xdhu2s9OO8Df7WtqUKFmXt4l5P73uQi21Y/p?=
- =?us-ascii?Q?wCBqJSgV5WFhzYrelA9ke3ovV8GZLm+k6CtdeIh2F1Q0JYKaGGMxmV13145B?=
- =?us-ascii?Q?dyt6e19aVYq41hQuRsv8KnJ8tIJPCJMvXjbuaEtP1ZgFyynFfi/sgyUIuBCI?=
- =?us-ascii?Q?ADoKuakvFEpaDJYjZOoMtpl755mBWFcIfFBZg43kHzJDm6L3L4paSf4pn+wh?=
- =?us-ascii?Q?0mbd+duhzNxIaRPPSCqX/bqkZzXEvFR9qk7H/c4R2eGHoUoh+P60P4DHfFsX?=
- =?us-ascii?Q?+f81VxJGQR/SAyQI9iLi41tiwLiX3WwULreQ2n5DYijnkuYWkDYLqDS0RkDy?=
- =?us-ascii?Q?yNnkRNM+9j0QdyaXE/g1rIdGddAiDfZuEp0hsYlN/0kmh7/LGiJJlfnA+2ZQ?=
- =?us-ascii?Q?RpenVUZICMk8/asmKa2vKMMtyoXPfKNNdbrrdHiL8ZytX6gVuNEbpmPqqKYN?=
- =?us-ascii?Q?h+uicM3vcsYoDbg8ueLJg2HZ2M4vlf7Vy8grB9JC31pwQf3liF7/txHjM1Np?=
- =?us-ascii?Q?WoQpgb9WybJQJeYSDxv5W4E1yl0guRpdyvciT+59kuuUYJK/bHu8XFV9E+GW?=
- =?us-ascii?Q?dvUDasRh3O3ACkklkKvrfnUyUwTFT75c0/3RFc1AX0grwx1XJFswGruCu6Lp?=
- =?us-ascii?Q?Rnj0jGIP9ZEhdkJSjvhq17uJrjsixd4lI+w7PZQyRwzSDrySnhV36ngiuUj9?=
- =?us-ascii?Q?dA4AswCOKp72lUlkSEKrNGo8ge1Hy0feRlafahmUwcgW0SQd3zXLQ8m9BHgx?=
- =?us-ascii?Q?9m+CojULLtPclh4FDBMVrX/lR5BGYZuz8fvY1aWujAYW27KCYxxa66cgNxvM?=
- =?us-ascii?Q?8ivjNqZWfWUT9Uo0VFACYLxI6cq4JJ+SOqgMOz2BGbwDRlQMDg=3D=3D?=
+	=?us-ascii?Q?0mZc0oDh2ePfEMUNX3kVAhgne6A/V+16xmOKdJ9a2runsmoJacD1pUA8zPgl?=
+ =?us-ascii?Q?bPxUil+5qST/N8XzdVOMPU49HFaGZ/b9RLLxSXpdcSirjg5kMsIdvwZlJVoj?=
+ =?us-ascii?Q?Ga/z1KfbhALpqhcrTv0LnbE2Q6F381xnsiwCHXz3YXzT/jUKrjB4BNxuCAMY?=
+ =?us-ascii?Q?2oNav8wtRMS4im6w7yd+bf38fx6lAiE+CmH4iUnd9reNytDFP47mECJhHFTc?=
+ =?us-ascii?Q?XGr+3G3DW0Crxb9knGulsZ+hqU0do5laNQCfpCKzO9h7DsY1yB/p66ZhkWMX?=
+ =?us-ascii?Q?DppZ0QC3c1vIMLjuynWuP4+TvapA9saj5tTO6+lZ+cI15S2fOT4F/lDpMK2N?=
+ =?us-ascii?Q?pZTYcu9YEcfVrehXVfyyev10EUaVLxFSXCQCkgp3m3jm+CBPTqEMUJWwTjNS?=
+ =?us-ascii?Q?j84A2xlIEN80NwAt0mLFG4BkBMmq3gVUQJVCKziY2t4Jsk4rsKYyfMfB3hbd?=
+ =?us-ascii?Q?A2i3JOT6IzA8Z90MrL70j1lVYmcNfukMt2hhLakCpUNh46M7WnMyGcg63q/z?=
+ =?us-ascii?Q?gQsh+giKCVGX/JK2WG+6heDJJF41iIjvtTHkgFWW9YolskBg1ejSLx0rUkuU?=
+ =?us-ascii?Q?DYK+aEV7Gr4wumQGuBSJCPHzG1Ai4rVNlb0bnUjT15kW3KDueNAJzqAHmlU1?=
+ =?us-ascii?Q?seeAwqHerRtuMIBC0ztUEiibCOtgv0z1VJl5gXHckcLLePiLwI/gGDqBrhir?=
+ =?us-ascii?Q?sJIVlZ1PbEyGyFJhm4hUEV9JATSaQlXb1/TmCvEotZfuV2mhauLIoADNiGCb?=
+ =?us-ascii?Q?dxX9Z6ksNizW+T1LSybtt+v4KBUZFlPVeOxg8zPV1SYEiDQJmMxBA2SVmuk3?=
+ =?us-ascii?Q?XlfXZ2hJrnfsKZXqpgiCqQ3MhH0yivbWxBtg2q4f6PAb8zX3+cJVHRewakqo?=
+ =?us-ascii?Q?o2acnYIXL1y77fk552nW6Yuw6Nm2BJ8Bz+HC3LpXg5jA5odIYYM1GgmcOXAA?=
+ =?us-ascii?Q?xtEnKA9ubfQfLAYNUOrkYZLM2qQTDwDDQ4q5Rv40SoNDDa5otQdvuSA452MG?=
+ =?us-ascii?Q?cABuUaQ8VudCTmcZX7Jd2hidj5oC/57EgyM9tCZeM/6ZYlGkGYAyW8ifFSB/?=
+ =?us-ascii?Q?Avi0aSjfmsu0AhrRKY4c1fcogS7TKKyIyRsbfY864eu35dSda8EkvFQgZf+h?=
+ =?us-ascii?Q?aCdSkfedumPa8hUebuh1fjiiksLB1CLBlNJef4N5v6abgTIFth+rXSn29azR?=
+ =?us-ascii?Q?3ORmX4jSm0mHh462li72U+rh9JnuCDs87EGyH86BVRmRZiBzHjz+rdk9/lYK?=
+ =?us-ascii?Q?Ek0V4Cnh7oe37VU4Y+1CaSZnxWSSuVcOtHIQUb+XHxJgSHWV7711PKak9784?=
+ =?us-ascii?Q?xDueazk97jdbwHCjtU96yOOAHsFzLAym2D03YCMCbKveX8OFrLexAcwKLiPZ?=
+ =?us-ascii?Q?ZnePKRhDt9tmfKoiKK6xq3UvQIEzUOyXovHjFyoxUXTWxmemhQ=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7779.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(52116014)(7416014)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?s/qyxBMe1JeV83JgXti8yQb40b6nPGJ/Rimmr8uDk3aT5HgZNdKcQJST5tzd?=
- =?us-ascii?Q?V98BPPQ70vl2nhlsbYf6K7RP9Y75hgkxgCg+AQe+NG22W/0hXb/XDJCiQq3v?=
- =?us-ascii?Q?3f8SYV762GBJPB7Fr7c5w2beKT1uu6oI0ew3NmK6ZNdLVLmmBX7Hn39c5hS5?=
- =?us-ascii?Q?wlJuq5KcuBEDmKk8Xl3O6ky3DKUg45YG7z1bUW1MGz/21ULj0Z2KWsXapSuF?=
- =?us-ascii?Q?JdDexkquohOuB3nPnegJLdQLwlZGn57NQYCiLFWP9yhz9z/oPZU3JudYL7Dr?=
- =?us-ascii?Q?IQ2i7HHrlbKY0zcPJxI4V+sdvXqJMMeuNtpgIKCHhtEKXNouRkSOMPxcCN3c?=
- =?us-ascii?Q?Fw2ePIVwiTbmQl/63UoQupHjX05/YupLjHeUlZQ3T10NQvrZ5qA5BApR+Urp?=
- =?us-ascii?Q?ZlW4fPnBz8Bh8hqmEGIXwdZyC68F9zoPGEScvEWKyomofg/XoDxoz09zbxjr?=
- =?us-ascii?Q?RPRCkqGeAICNE4kNsa/9kA6W4z+SwnEyBSU+kU03H7XRj7V5PTAhZUs0jqgK?=
- =?us-ascii?Q?V6pIroYCy17ibTxFDibXapv4w7SCfTcGMqpdgq/fH35M02fprhL6Rni3H2Nf?=
- =?us-ascii?Q?0Pa8SUq8TNHKzOieNUOItLjL+HPz88nXNMNveOp/mVCylFuaECkSXht1zvEB?=
- =?us-ascii?Q?uANvOu0QQxyJ8pxMF7R+Vj8AiZ0tnSfFRctkLhVOxfV+bSPmEsR5iIFXmneo?=
- =?us-ascii?Q?6Oxehate2awAWATYTGAtX1QEkppaqa2+0Yy7RSAd14rEQ2o45iAn7muYbKmz?=
- =?us-ascii?Q?KVvV6KK1vodomYFA4ORHavLwSKTM08lXesQ30P3ybelsMIla9jJOHtTYbDZL?=
- =?us-ascii?Q?pSn2XL9aGxRzD/j0LHTU9+wgLjbO8Bqp3aHUIE8lhF8yRtMYv/4lodeGnU2A?=
- =?us-ascii?Q?4pYLDLpAdCS5cTPVoUEyoJBy6SyM+yuj4jaD0dvAUG9PyZG9NH5ocd7VXP+y?=
- =?us-ascii?Q?Tv476COl5jJgqC9G+wm6WZ+NjkHXXT8oOl51ykTuve95MRNkAojfLwt3P3sM?=
- =?us-ascii?Q?m4b6fOsPu4ceG0buiUsdeJ9ipXgLCDdyyi25zjZoNZxDeZcNo2wh8jsiw23w?=
- =?us-ascii?Q?5mnXu5kuYwv+CuZMFZeCBa3NeTLIAyYGFQ3x1AVLMbKQF6LOhaSjlf/aEr9s?=
- =?us-ascii?Q?OXygn73kbPkvrRNx9nJF7h4yTJ/q0/JIdhPoQAv9wsBxDdARuhpma3kDhDvI?=
- =?us-ascii?Q?NE29z6xaSt0NAqdnzHESbP2Ob49057fG+FE2b0u6InCIy/kMYQoFXYkZlas+?=
- =?us-ascii?Q?/MjfYxRuG47LSjz1wZoxOdU6pUC3lkhUkSaT2epcDY1dRR7VQ2VWnjJwjeVk?=
- =?us-ascii?Q?o1sT96X2rIwVZM2E/qhb0A01506JMDGOYFkmd5lrJV2DKhswEwTSdJirXad9?=
- =?us-ascii?Q?n0za+ZVyI9A6ypfe5jO70MJBfZBOSO7sUXtNTzkModtiI1rz7GqFyNhzTmKs?=
- =?us-ascii?Q?6Zdg5RTGxrtCiyTJWnJXLUP3AQExpF9GHdLYmfL5m9ZVzk5ZKkEWfamBNj9g?=
- =?us-ascii?Q?66KHkgTqy9cR3hDplrKz8zBHtxo90xItlXBMJtIwhZ18ugboZtn56rdRTa3k?=
- =?us-ascii?Q?esHzTG0nA0txj2Vzgqsz5CGN/xbXqcRwMkxbf8W2auDn4xGdm6LrqO0WUXlO?=
- =?us-ascii?Q?mA=3D=3D?=
+	=?us-ascii?Q?LdYXle9AHj6RQGaWG3zKaiEfnsykRWIkxuFATDuE7Exm1QQczv9HICwe6tYF?=
+ =?us-ascii?Q?sQ1fdaqAD9y/aJxt52/nz7QKrPoG7r9+OBlqD9wGEHf5+XGVjHyvbVt9Afgw?=
+ =?us-ascii?Q?xQ5KGbIzi+LhLSQd9xVm6kONt62FPGRzYOsZ9H96dgm4GZ87f+aIN24hDBrb?=
+ =?us-ascii?Q?8TYVoxOKmg4bfQRkEasq5NEkTSYaBRwMSK+qaPFRemJdagEysU2j7jm97ile?=
+ =?us-ascii?Q?wTRvxWTaCCKWDewfLPYlxGDnm2x0EtkpdmtvgUxtqRif2w1RJByKoXcV8bkR?=
+ =?us-ascii?Q?2WkgETY0a9QV6IAdPbu1uyl98h/P971K6gPw/hNZSpDbe75OuBYM1XBIS+Ye?=
+ =?us-ascii?Q?3VR2tNdLCHd3MziZSbIkN73n9YBhGTxmaG+5DVqyucerte2iHs1InGKxNYH1?=
+ =?us-ascii?Q?m8Dg0CPImBXORMbyr5947xEOvVMkjmzx3X5WGhoKfChs42Ors00W0RUlwYw4?=
+ =?us-ascii?Q?d+b+ICXybpqXBq5pwTg2rtAWlWQDIUKA5RqOTRT/nQH5oNs/xXG8fhhecziD?=
+ =?us-ascii?Q?eMlCFIJ07aemYTza/Kh5wO4rAVJUHpH6K94xG1xx4xWP1PDAs0PnaBAUmmmm?=
+ =?us-ascii?Q?uSAoqkVHrMQbX4lBVPa0T2sYdZlExixQQKyaFze1mOr3GXjzW6ZM9yZT07+l?=
+ =?us-ascii?Q?uJBseYEiflRj9lS3j/sv0h4zDaCQ6tg0+dl9fbZ/zSaf0MkDvm4l2Imn+O6R?=
+ =?us-ascii?Q?5zeJCq7a6BdhsVKc6pA88Ho6jzlndtt7di25heoIbqsZ+nwGztQuJC23Mhe4?=
+ =?us-ascii?Q?LhXXYN2KkpR1kN78wbAE/ofDb0VMAfJUPq5eI1jBcLkoy+PdosMd9tj6C9ry?=
+ =?us-ascii?Q?VHYOUgybn6CnsHEu6Gfv0POtet+Wp36jFGhMLeWXyrjbNqgZXWeX/pEr0RKD?=
+ =?us-ascii?Q?aDz/e3o6y6pqSh+fk2lUfUbw7eLvJ5/2/2XF0JMJaDT8Mar88jL003IID7eI?=
+ =?us-ascii?Q?9j3Zx9ha5UmR57wFA0m69CSS7GELNm2CP9Vp4H3aGGpod41QFFLME0KhxPXM?=
+ =?us-ascii?Q?hWboGMcpdgQVjF+VKese7yBwty7vv8EUn8Mk7JSF7dBoZcRePplROB/dsIAw?=
+ =?us-ascii?Q?N3nbEDFMZiXRqzqUX5tvhvpxj3IiFw2Doq0tCH4ORlEheVfIiWcA4edkJSzO?=
+ =?us-ascii?Q?sDHlJkTButZKA29arI1KUI9uD47ukbxQUdJofCxQfYiEfuGE0I5nzEzUhyxk?=
+ =?us-ascii?Q?UIb0p/cXL9sesL0LVz51FyJ8hOl9jYcptYTzJz+jLL35RRWz9QEVKUCTWB0G?=
+ =?us-ascii?Q?q4XczlQiq/N2PLMe7vp6P2XfJUYZpr+sooVD5DKT4WoOICq5Nr6tPZiUCztS?=
+ =?us-ascii?Q?D+15Qek6pw6TmzTGJEI+wpbFM85kY3WGRAnnfCOxqrFW7mszRVsI2UsTtzgW?=
+ =?us-ascii?Q?Gx8iIf8lra1dZghh8CVSkgoWJRiUyWXS5J3GqXSYGX98JSlwQ8BYGTG1n95y?=
+ =?us-ascii?Q?/YqVVF8nhMBY0DLEZ2SXiQQN6rYoqBu6Z0xFBwe4J5vBg/cQjm4ItOhtbS8b?=
+ =?us-ascii?Q?XCkM05qTLqwkviDgzLCw+81q6n5CcsZlDxRwb2SjdRDCiZMyELZojv+n8+yX?=
+ =?us-ascii?Q?WbmZwm6W28QempnUjZcZ3/xUFt5IKqJTwrA9yziWEua2aEWu7qmDR679cQT7?=
+ =?us-ascii?Q?kA=3D=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0a7d7ed3-60e4-4eb9-b375-08dcbcbe95e4
+X-MS-Exchange-CrossTenant-Network-Message-Id: bc0aa76b-9d45-40fe-deec-08dcbcbe9726
 X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7779.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2024 00:09:52.5819
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2024 00:09:54.6735
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QwgGa2mNQ+JZo8zTLmXV2UgNYOm5DRDBfJmYD84R5Ce93BJf64St0ZTj8c9ikmINwZRZHmRZqaRbJyZ2StpRuw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: ou02J6Kyp+e0j9M5ZY1n4UBjkyXrFYaVpaGaKXZXXHJdqqBHpGxoI9mNCguguXCOWiIBe6WWEI22GVxx5/06Vg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI2PR04MB10285
 
-There is a major design bug with ocelot-8021q, which is that it expects
-more of the hardware than the hardware can actually do. The short
-summary of the issue is that when a port is under a VLAN-aware bridge
-and we use this tagging protocol, VLAN upper interfaces of this port do
-not see RX traffic.
+I was revisiting the topic of 802.1ad treatment in the Ocelot switch [0]
+and realized that not only is its basic VLAN classification pipeline
+improper for offloading vlan_protocol 802.1ad bridges, but also improper
+for offloading regular 802.1Q bridges already.
 
-We use VCAP ES0 (egress rewriter) rules towards the tag_8021q CPU port
-to encapsulate packets with an outer tag, later stripped by software,
-that depends on the source user port. We do this so that packets can be
-identified in ocelot_rcv(). To be precise, we create rules with
-push_outer_tag = OCELOT_ES0_TAG and push_inner_tag = 0.
+Namely, 802.1ad-tagged traffic should be treated as VLAN-untagged by
+bridged ports, but this switch treats it as if it was 802.1Q-tagged with
+the same VID as in the 802.1ad header. This is markedly different to
+what the Linux bridge expects; see the "other_tpid()" function in
+tools/testing/selftests/net/forwarding/bridge_vlan_aware.sh.
 
-With this configuration, we expect the switch to keep the inner tag
-configuration as found in the packet (if it was untagged on user port
-ingress, keep it untagged, otherwise preserve the VLAN tag unmodified
-as the inner tag towards the tag_8021q CPU port). But this is not what
-happens.
+An idea came to me that the VCAP IS1 TCAM is more powerful than I'm
+giving it credit for, and that it actually overwrites the classified VID
+before the VLAN Table lookup takes place. In other words, it can be
+used even to save a packet from being dropped on ingress due to VLAN
+membership.
 
-Instead, table "Tagging Combinations" from the user manual suggests
-that when the ES0 action is "PUSH_OUTER_TAG=1 and PUSH_INNER_TAG=0",
-there will be "no inner tag". Experimentation further clarifies what
-this means.
+Add a sophisticated TCAM rule hardcoded into the driver to force the
+switch to behave like a Linux bridge with vlan_filtering 1 vlan_protocol
+802.1Q.
 
-It appears that this "inner tag" which is not pushed into the packet on
-its egress towards the CPU is none other than the classified VLAN.
+Regarding the lifetime of the filter: eventually the bridge will
+disappear, and vlan_filtering on the port will be restored to 0 for
+standalone mode. Then the filter will be deleted.
 
-When the ingress user port is standalone or under a VLAN-unaware bridge,
-the classified VLAN is a discardable quantity: it is a fixed value - the
-result of ocelot_vlan_unaware_pvid()'s configuration, and actually
-independent of the VID from any 802.1Q header that may be in the frame.
-It is actually preferable to discard the "inner tag" in this case.
+[0]: https://lore.kernel.org/netdev/20201009122947.nvhye4hvcha3tljh@skbuf/
 
-The problem is when the ingress port is under a VLAN-aware bridge.
-Then, the classified VLAN is taken from the frame's 802.1Q header, with
-a fallback on the bridge port's PVID. It would be very good to not
-discard the "inner tag" here, because if we do, we break communication
-with any 8021q VLAN uppers that the port might have. These have a
-processing path outside the bridge.
-
-There seems to be nothing else we can do except to change the
-configuration for VCAP ES0 rules, to actually push the inner VLAN into
-the frame. There are 2 options for that, first is to push a fixed value
-specified in the rule, and second is to push a fixed value, plus
-(aka arithmetic +) the classified VLAN. We choose the second option,
-and we select that fixed value as 0. Thus, what is pushed in the inner
-tag is just the classified VLAN.
-
-From there, we need to perform software untagging, in the receive path,
-of stuff that was untagged on the wire.
-
-Fixes: 7c83a7c539ab ("net: dsa: add a second tagger for Ocelot switches based on tag_8021q")
+Fixes: 7142529f1688 ("net: mscc: ocelot: add VLAN filtering")
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
- drivers/net/dsa/ocelot/felix.c | 115 +++++++++++++++++++++++++++++++--
- 1 file changed, 109 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/mscc/ocelot.c      | 188 ++++++++++++++++++++++--
+ drivers/net/ethernet/mscc/ocelot_vcap.c |   1 +
+ include/soc/mscc/ocelot_vcap.h          |   2 +
+ 3 files changed, 180 insertions(+), 11 deletions(-)
 
-diff --git a/drivers/net/dsa/ocelot/felix.c b/drivers/net/dsa/ocelot/felix.c
-index 8d31ff18c5c7..4a705f7333f4 100644
---- a/drivers/net/dsa/ocelot/felix.c
-+++ b/drivers/net/dsa/ocelot/felix.c
-@@ -61,11 +61,46 @@ static int felix_cpu_port_for_conduit(struct dsa_switch *ds,
- 	return cpu_dp->index;
+diff --git a/drivers/net/ethernet/mscc/ocelot.c b/drivers/net/ethernet/mscc/ocelot.c
+index f4e027a6fe95..3d72aa7b1305 100644
+--- a/drivers/net/ethernet/mscc/ocelot.c
++++ b/drivers/net/ethernet/mscc/ocelot.c
+@@ -453,9 +453,158 @@ static u16 ocelot_vlan_unaware_pvid(struct ocelot *ocelot,
+ 	return VLAN_N_VID - bridge_num - 1;
  }
  
 +/**
-+ * felix_update_tag_8021q_rx_rule - Update VCAP ES0 tag_8021q rule after
-+ *				    vlan_filtering change
-+ * @outer_tagging_rule: Pointer to VCAP filter on which the update is performed
-+ * @vlan_filtering: Current bridge VLAN filtering setting
++ * ocelot_update_vlan_reclassify_rule() - Make switch aware only to bridge VLAN TPID
 + *
-+ * Source port identification for tag_8021q is done using VCAP ES0 rules on the
-+ * CPU port(s). The ES0 tag B (inner tag from the packet) can be configured as
-+ * either:
-+ * - push_inner_tag=0: the inner tag is never pushed into the frame
-+ *		       (and we lose info about the classified VLAN). This is
-+ *		       good when the classified VLAN is a discardable quantity
-+ *		       for the software RX path: it is either set to
-+ *		       OCELOT_STANDALONE_PVID, or to
-+ *		       ocelot_vlan_unaware_pvid(bridge).
-+ * - push_inner_tag=1: the inner tag is always pushed. This is good when the
-+ *		       classified VLAN is not a discardable quantity (the port
-+ *		       is under a VLAN-aware bridge, and software needs to
-+ *		       continue processing the packet in the same VLAN as the
-+ *		       hardware).
-+ * The point is that what is good for a VLAN-unaware port is not good for a
-+ * VLAN-aware port, and vice versa. Thus, the RX tagging rules must be kept in
-+ * sync with the VLAN filtering state of the port.
++ * @ocelot: Switch private data structure
++ * @port: Index of ingress port
++ *
++ * IEEE 802.1Q-2018 clauses "5.5 C-VLAN component conformance" and "5.6 S-VLAN
++ * component conformance" suggest that a C-VLAN component should only recognize
++ * and filter on C-Tags, and an S-VLAN component should only recognize and
++ * process based on C-Tags.
++ *
++ * In Linux, as per commit 1a0b20b25732 ("Merge branch 'bridge-next'"), C-VLAN
++ * components are largely represented by a bridge with vlan_protocol 802.1Q,
++ * and S-VLAN components by a bridge with vlan_protocol 802.1ad.
++ *
++ * Currently the driver only offloads vlan_protocol 802.1Q, but the hardware
++ * design is non-conformant, because the switch assigns each frame to a VLAN
++ * based on an entirely different question, as detailed in figure "Basic VLAN
++ * Classification Flow" from its manual and reproduced below.
++ *
++ * Set TAG_TYPE, PCP, DEI, VID to port-default values in VLAN_CFG register
++ * if VLAN_AWARE_ENA[port] and frame has outer tag then:
++ *   if VLAN_INNER_TAG_ENA[port] and frame has inner tag then:
++ *     TAG_TYPE = (Frame.InnerTPID <> 0x8100)
++ *     Set PCP, DEI, VID to values from inner VLAN header
++ *   else:
++ *     TAG_TYPE = (Frame.OuterTPID <> 0x8100)
++ *     Set PCP, DEI, VID to values from outer VLAN header
++ *   if VID == 0 then:
++ *     VID = VLAN_CFG.VLAN_VID
++ *
++ * Summarized, the switch will recognize both 802.1Q and 802.1ad TPIDs as VLAN
++ * "with equal rights", and just set the TAG_TYPE bit to 0 (if 802.1Q) or to 1
++ * (if 802.1ad). It will classify based on whichever of the tags is "outer", no
++ * matter what TPID that may have (or "inner", if VLAN_INNER_TAG_ENA[port]).
++ *
++ * In the VLAN Table, the TAG_TYPE information is not accessible - just the
++ * classified VID is - so it is as if each VLAN Table entry is for 2 VLANs:
++ * C-VLAN X, and S-VLAN X.
++ *
++ * Whereas the Linux bridge behavior is to only filter on frames with a TPID
++ * equal to the vlan_protocol, and treat everything else as VLAN-untagged.
++ *
++ * Consider an ingress packet tagged with 802.1ad VID=3 and 802.1Q VID=5,
++ * received on a bridge vlan_filtering=1 vlan_protocol=802.1Q port. This frame
++ * should be treated as 802.1Q-untagged, and classified to the PVID of that
++ * bridge port. Not to VID=3, and not to VID=5.
++ *
++ * The VCAP IS1 TCAM has everything we need to overwrite the choices made in
++ * the basic VLAN classification pipeline: it can match on TAG_TYPE in the key,
++ * and it can modify the classified VID in the action. Thus, for each port
++ * under a vlan_filtering bridge, we can insert a rule in VCAP IS1 lookup 0 to
++ * match on 802.1ad tagged frames and modify their classified VID to the 802.1Q
++ * PVID of the port. This effectively makes it appear to the outside world as
++ * if those packets were processed as VLAN-untagged.
++ *
++ * The rule needs to be updated each time the bridge PVID changes, and needs
++ * to be deleted if the bridge PVID is deleted, or if the port becomes
++ * VLAN-unaware.
 + */
-+static void
-+felix_update_tag_8021q_rx_rule(struct ocelot_vcap_filter *outer_tagging_rule,
-+			       bool vlan_filtering)
++static int ocelot_update_vlan_reclassify_rule(struct ocelot *ocelot, int port)
 +{
-+	if (vlan_filtering)
-+		outer_tagging_rule->action.push_inner_tag = OCELOT_ES0_TAG;
-+	else
-+		outer_tagging_rule->action.push_inner_tag = OCELOT_NO_ES0_TAG;
-+}
++	unsigned long cookie = OCELOT_VCAP_IS1_VLAN_RECLASSIFY(ocelot, port);
++	struct ocelot_vcap_block *block_vcap_is1 = &ocelot->block[VCAP_IS1];
++	struct ocelot_port *ocelot_port = ocelot->ports[port];
++	const struct ocelot_bridge_vlan *pvid_vlan;
++	struct ocelot_vcap_filter *filter;
++	int err, val, pcp, dei;
++	bool vid_replace_ena;
++	u16 vid;
 +
- /* Set up VCAP ES0 rules for pushing a tag_8021q VLAN towards the CPU such that
-  * the tagger can perform RX source port identification.
-  */
- static int felix_tag_8021q_vlan_add_rx(struct dsa_switch *ds, int port,
--				       int upstream, u16 vid)
-+				       int upstream, u16 vid,
-+				       bool vlan_filtering)
- {
- 	struct ocelot_vcap_filter *outer_tagging_rule;
- 	struct ocelot *ocelot = ds->priv;
-@@ -96,6 +131,14 @@ static int felix_tag_8021q_vlan_add_rx(struct dsa_switch *ds, int port,
- 	outer_tagging_rule->action.tag_a_tpid_sel = OCELOT_TAG_TPID_SEL_8021AD;
- 	outer_tagging_rule->action.tag_a_vid_sel = 1;
- 	outer_tagging_rule->action.vid_a_val = vid;
-+	felix_update_tag_8021q_rx_rule(outer_tagging_rule, vlan_filtering);
-+	outer_tagging_rule->action.tag_b_tpid_sel = OCELOT_TAG_TPID_SEL_8021Q;
-+	/* Leave TAG_B_VID_SEL at 0 (Classified VID + VID_B_VAL). Since we also
-+	 * leave VID_B_VAL at 0, this makes ES0 tag B (the inner tag) equal to
-+	 * the classified VID, which we need to see in the DSA tagger's receive
-+	 * path. Note: the inner tag is only visible in the packet when pushed
-+	 * (push_inner_tag == OCELOT_ES0_TAG).
-+	 */
- 
- 	err = ocelot_vcap_filter_add(ocelot, outer_tagging_rule, NULL);
- 	if (err)
-@@ -227,6 +270,7 @@ static int felix_tag_8021q_vlan_del_tx(struct dsa_switch *ds, int port, u16 vid)
- static int felix_tag_8021q_vlan_add(struct dsa_switch *ds, int port, u16 vid,
- 				    u16 flags)
- {
-+	struct dsa_port *dp = dsa_to_port(ds, port);
- 	struct dsa_port *cpu_dp;
- 	int err;
- 
-@@ -234,11 +278,12 @@ static int felix_tag_8021q_vlan_add(struct dsa_switch *ds, int port, u16 vid,
- 	 * membership, which we aren't. So we don't need to add any VCAP filter
- 	 * for the CPU port.
- 	 */
--	if (!dsa_is_user_port(ds, port))
-+	if (!dsa_port_is_user(dp))
- 		return 0;
- 
- 	dsa_switch_for_each_cpu_port(cpu_dp, ds) {
--		err = felix_tag_8021q_vlan_add_rx(ds, port, cpu_dp->index, vid);
-+		err = felix_tag_8021q_vlan_add_rx(ds, port, cpu_dp->index, vid,
-+						  dsa_port_is_vlan_filtering(dp));
- 		if (err)
- 			return err;
- 	}
-@@ -258,10 +303,11 @@ static int felix_tag_8021q_vlan_add(struct dsa_switch *ds, int port, u16 vid,
- 
- static int felix_tag_8021q_vlan_del(struct dsa_switch *ds, int port, u16 vid)
- {
-+	struct dsa_port *dp = dsa_to_port(ds, port);
- 	struct dsa_port *cpu_dp;
- 	int err;
- 
--	if (!dsa_is_user_port(ds, port))
-+	if (!dsa_port_is_user(dp))
- 		return 0;
- 
- 	dsa_switch_for_each_cpu_port(cpu_dp, ds) {
-@@ -278,11 +324,41 @@ static int felix_tag_8021q_vlan_del(struct dsa_switch *ds, int port, u16 vid)
- 
- del_tx_failed:
- 	dsa_switch_for_each_cpu_port(cpu_dp, ds)
--		felix_tag_8021q_vlan_add_rx(ds, port, cpu_dp->index, vid);
-+		felix_tag_8021q_vlan_add_rx(ds, port, cpu_dp->index, vid,
-+					    dsa_port_is_vlan_filtering(dp));
- 
- 	return err;
- }
- 
-+static int felix_update_tag_8021q_rx_rules(struct dsa_switch *ds, int port,
-+					   bool vlan_filtering)
-+{
-+	struct ocelot_vcap_filter *outer_tagging_rule;
-+	struct ocelot_vcap_block *block_vcap_es0;
-+	struct ocelot *ocelot = ds->priv;
-+	struct dsa_port *cpu_dp;
-+	unsigned long cookie;
-+	int err;
++	pvid_vlan = ocelot_port->pvid_vlan;
++	vid_replace_ena = ocelot_port->vlan_aware && pvid_vlan;
 +
-+	block_vcap_es0 = &ocelot->block[VCAP_ES0];
++	filter = ocelot_vcap_block_find_filter_by_id(block_vcap_is1, cookie,
++						     false);
++	if (!vid_replace_ena) {
++		/* If the reclassification filter doesn't need to exist, delete
++		 * it if it was previously installed, and exit doing nothing
++		 * otherwise.
++		 */
++		if (filter)
++			return ocelot_vcap_filter_del(ocelot, filter);
 +
-+	dsa_switch_for_each_cpu_port(cpu_dp, ds) {
-+		cookie = OCELOT_VCAP_ES0_TAG_8021Q_RXVLAN(ocelot, port,
-+							  cpu_dp->index);
-+
-+		outer_tagging_rule = ocelot_vcap_block_find_filter_by_id(block_vcap_es0,
-+									 cookie, false);
-+
-+		felix_update_tag_8021q_rx_rule(outer_tagging_rule, vlan_filtering);
-+
-+		err = ocelot_vcap_filter_replace(ocelot, outer_tagging_rule);
-+		if (err)
-+			return err;
++		return 0;
 +	}
 +
-+	return 0;
++	/* The reclassification rule must apply. See if it already exists
++	 * or if it must be created.
++	 */
++
++	/* Treating as VLAN-untagged means using as classified VID equal to
++	 * the bridge PVID, and PCP/DEI set to the port default QoS values.
++	 */
++	vid = pvid_vlan->vid;
++	val = ocelot_read_gix(ocelot, ANA_PORT_QOS_CFG, port);
++	pcp = ANA_PORT_QOS_CFG_QOS_DEFAULT_VAL_X(val);
++	dei = !!(val & ANA_PORT_QOS_CFG_DP_DEFAULT_VAL);
++
++	if (filter) {
++		bool changed = false;
++
++		/* Filter exists, just update it */
++		if (filter->action.vid != vid) {
++			filter->action.vid = vid;
++			changed = true;
++		}
++		if (filter->action.pcp != pcp) {
++			filter->action.pcp = pcp;
++			changed = true;
++		}
++		if (filter->action.dei != dei) {
++			filter->action.dei = dei;
++			changed = true;
++		}
++
++		if (!changed)
++			return 0;
++
++		return ocelot_vcap_filter_replace(ocelot, filter);
++	}
++
++	/* Filter doesn't exist, create it */
++	filter = kzalloc(sizeof(*filter), GFP_KERNEL);
++	if (!filter)
++		return -ENOMEM;
++
++	filter->key_type = OCELOT_VCAP_KEY_ANY;
++	filter->ingress_port_mask = BIT(port);
++	filter->vlan.tpid = OCELOT_VCAP_BIT_1;
++	filter->prio = 1;
++	filter->id.cookie = cookie;
++	filter->id.tc_offload = false;
++	filter->block_id = VCAP_IS1;
++	filter->type = OCELOT_VCAP_FILTER_OFFLOAD;
++	filter->lookup = 0;
++	filter->action.vid_replace_ena = true;
++	filter->action.pcp_dei_ena = true;
++	filter->action.vid = vid;
++	filter->action.pcp = pcp;
++	filter->action.dei = dei;
++
++	err = ocelot_vcap_filter_add(ocelot, filter, NULL);
++	if (err)
++		kfree(filter);
++
++	return err;
 +}
 +
- static int felix_trap_get_cpu_port(struct dsa_switch *ds,
- 				   const struct ocelot_vcap_filter *trap)
+ /* Default vlan to clasify for untagged frames (may be zero) */
+-static void ocelot_port_set_pvid(struct ocelot *ocelot, int port,
+-				 const struct ocelot_bridge_vlan *pvid_vlan)
++static int ocelot_port_set_pvid(struct ocelot *ocelot, int port,
++				const struct ocelot_bridge_vlan *pvid_vlan)
  {
-@@ -532,6 +608,16 @@ static int felix_tag_8021q_setup(struct dsa_switch *ds)
- 	ocelot_drain_cpu_queue(ocelot, 0);
- 	ocelot_unlock_xtr_grp_bh(ocelot, 0);
- 
-+	/* Problem: when using push_inner_tag=1 for ES0 tag B, we lose info
-+	 * about whether the received packets were VLAN-tagged on the wire,
-+	 * since they are always tagged on egress towards the CPU port.
+ 	struct ocelot_port *ocelot_port = ocelot->ports[port];
+ 	u16 pvid = ocelot_vlan_unaware_pvid(ocelot, ocelot_port->bridge);
+@@ -475,15 +624,23 @@ static void ocelot_port_set_pvid(struct ocelot *ocelot, int port,
+ 	 * happens automatically), but also 802.1p traffic which gets
+ 	 * classified to VLAN 0, but that is always in our RX filter, so it
+ 	 * would get accepted were it not for this setting.
 +	 *
-+	 * Since using push_inner_tag=1 is unavoidable for VLAN-aware bridges,
-+	 * we must work around the fallout by untagging in software to make
-+	 * untagged reception work more or less as expected.
-+	 */
-+	ds->untag_vlan_aware_bridge_pvid = true;
++	 * Also, we only support the bridge 802.1Q VLAN protocol, so
++	 * 802.1ad-tagged frames (carrying S-Tags) should be considered
++	 * 802.1Q-untagged, and also dropped.
+ 	 */
+ 	if (!pvid_vlan && ocelot_port->vlan_aware)
+ 		val = ANA_PORT_DROP_CFG_DROP_PRIO_S_TAGGED_ENA |
+-		      ANA_PORT_DROP_CFG_DROP_PRIO_C_TAGGED_ENA;
++		      ANA_PORT_DROP_CFG_DROP_PRIO_C_TAGGED_ENA |
++		      ANA_PORT_DROP_CFG_DROP_S_TAGGED_ENA;
+ 
+ 	ocelot_rmw_gix(ocelot, val,
+ 		       ANA_PORT_DROP_CFG_DROP_PRIO_S_TAGGED_ENA |
+-		       ANA_PORT_DROP_CFG_DROP_PRIO_C_TAGGED_ENA,
++		       ANA_PORT_DROP_CFG_DROP_PRIO_C_TAGGED_ENA |
++		       ANA_PORT_DROP_CFG_DROP_S_TAGGED_ENA,
+ 		       ANA_PORT_DROP_CFG, port);
 +
- 	return 0;
++	return ocelot_update_vlan_reclassify_rule(ocelot, port);
  }
  
-@@ -556,6 +642,8 @@ static void felix_tag_8021q_teardown(struct dsa_switch *ds)
- 		ocelot_port_teardown_dsa_8021q_cpu(ocelot, dp->index);
+ static struct ocelot_bridge_vlan *ocelot_bridge_vlan_find(struct ocelot *ocelot,
+@@ -631,7 +788,10 @@ int ocelot_port_vlan_filtering(struct ocelot *ocelot, int port,
+ 		       ANA_PORT_VLAN_CFG_VLAN_POP_CNT_M,
+ 		       ANA_PORT_VLAN_CFG, port);
  
- 	dsa_tag_8021q_unregister(ds);
-+
-+	ds->untag_vlan_aware_bridge_pvid = false;
- }
- 
- static unsigned long felix_tag_8021q_get_host_fwd_mask(struct dsa_switch *ds)
-@@ -1010,8 +1098,23 @@ static int felix_vlan_filtering(struct dsa_switch *ds, int port, bool enabled,
- 				struct netlink_ext_ack *extack)
- {
- 	struct ocelot *ocelot = ds->priv;
-+	bool using_tag_8021q;
-+	struct felix *felix;
-+	int err;
- 
--	return ocelot_port_vlan_filtering(ocelot, port, enabled, extack);
-+	err = ocelot_port_vlan_filtering(ocelot, port, enabled, extack);
+-	ocelot_port_set_pvid(ocelot, port, ocelot_port->pvid_vlan);
++	err = ocelot_port_set_pvid(ocelot, port, ocelot_port->pvid_vlan);
 +	if (err)
 +		return err;
 +
-+	felix = ocelot_to_felix(ocelot);
-+	using_tag_8021q = felix->tag_proto == DSA_TAG_PROTO_OCELOT_8021Q;
-+	if (using_tag_8021q) {
-+		err = felix_update_tag_8021q_rx_rules(ds, port, enabled);
+ 	ocelot_port_manage_port_tag(ocelot, port);
+ 
+ 	return 0;
+@@ -684,9 +844,12 @@ int ocelot_vlan_add(struct ocelot *ocelot, int port, u16 vid, bool pvid,
+ 		return err;
+ 
+ 	/* Default ingress vlan classification */
+-	if (pvid)
+-		ocelot_port_set_pvid(ocelot, port,
+-				     ocelot_bridge_vlan_find(ocelot, vid));
++	if (pvid) {
++		err = ocelot_port_set_pvid(ocelot, port,
++					   ocelot_bridge_vlan_find(ocelot, vid));
 +		if (err)
 +			return err;
 +	}
-+
-+	return 0;
- }
  
- static int felix_vlan_add(struct dsa_switch *ds, int port,
+ 	/* Untagged egress vlan clasification */
+ 	ocelot_port_manage_port_tag(ocelot, port);
+@@ -712,8 +875,11 @@ int ocelot_vlan_del(struct ocelot *ocelot, int port, u16 vid)
+ 		return err;
+ 
+ 	/* Ingress */
+-	if (del_pvid)
+-		ocelot_port_set_pvid(ocelot, port, NULL);
++	if (del_pvid) {
++		err = ocelot_port_set_pvid(ocelot, port, NULL);
++		if (err)
++			return err;
++	}
+ 
+ 	/* Egress */
+ 	ocelot_port_manage_port_tag(ocelot, port);
+@@ -2607,7 +2773,7 @@ int ocelot_port_set_default_prio(struct ocelot *ocelot, int port, u8 prio)
+ 		       ANA_PORT_QOS_CFG,
+ 		       port);
+ 
+-	return 0;
++	return ocelot_update_vlan_reclassify_rule(ocelot, port);
+ }
+ EXPORT_SYMBOL_GPL(ocelot_port_set_default_prio);
+ 
+diff --git a/drivers/net/ethernet/mscc/ocelot_vcap.c b/drivers/net/ethernet/mscc/ocelot_vcap.c
+index 73cdec5ca6a3..5734b86aed5b 100644
+--- a/drivers/net/ethernet/mscc/ocelot_vcap.c
++++ b/drivers/net/ethernet/mscc/ocelot_vcap.c
+@@ -695,6 +695,7 @@ static void is1_entry_set(struct ocelot *ocelot, int ix,
+ 	vcap_key_bit_set(vcap, &data, VCAP_IS1_HK_L2_MC, filter->dmac_mc);
+ 	vcap_key_bit_set(vcap, &data, VCAP_IS1_HK_L2_BC, filter->dmac_bc);
+ 	vcap_key_bit_set(vcap, &data, VCAP_IS1_HK_VLAN_TAGGED, tag->tagged);
++	vcap_key_bit_set(vcap, &data, VCAP_IS1_HK_TPID, tag->tpid);
+ 	vcap_key_set(vcap, &data, VCAP_IS1_HK_VID,
+ 		     tag->vid.value, tag->vid.mask);
+ 	vcap_key_set(vcap, &data, VCAP_IS1_HK_PCP,
+diff --git a/include/soc/mscc/ocelot_vcap.h b/include/soc/mscc/ocelot_vcap.h
+index c601a4598b0d..eb19668a06db 100644
+--- a/include/soc/mscc/ocelot_vcap.h
++++ b/include/soc/mscc/ocelot_vcap.h
+@@ -13,6 +13,7 @@
+  */
+ #define OCELOT_VCAP_ES0_TAG_8021Q_RXVLAN(ocelot, port, upstream) ((upstream) << 16 | (port))
+ #define OCELOT_VCAP_IS1_TAG_8021Q_TXVLAN(ocelot, port)		(port)
++#define OCELOT_VCAP_IS1_VLAN_RECLASSIFY(ocelot, port)		((ocelot)->num_phys_ports + (port))
+ #define OCELOT_VCAP_IS2_TAG_8021Q_TXVLAN(ocelot, port)		(port)
+ #define OCELOT_VCAP_IS2_MRP_REDIRECT(ocelot, port)		((ocelot)->num_phys_ports + (port))
+ #define OCELOT_VCAP_IS2_MRP_TRAP(ocelot)			((ocelot)->num_phys_ports * 2)
+@@ -499,6 +500,7 @@ struct ocelot_vcap_key_vlan {
+ 	struct ocelot_vcap_u8  pcp;    /* PCP (3 bit) */
+ 	enum ocelot_vcap_bit dei;    /* DEI */
+ 	enum ocelot_vcap_bit tagged; /* Tagged/untagged frame */
++	enum ocelot_vcap_bit tpid;
+ };
+ 
+ struct ocelot_vcap_key_etype {
 -- 
 2.34.1
 
