@@ -1,113 +1,150 @@
-Return-Path: <linux-kselftest+bounces-15417-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15419-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 314DB953769
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 17:37:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80B36953786
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 17:45:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAB9B282F47
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 15:37:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13797B21B83
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 15:45:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 631751ABEC4;
-	Thu, 15 Aug 2024 15:37:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 599D915E88;
+	Thu, 15 Aug 2024 15:45:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ObQkE2vw"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="T3mOzxN4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B03E19DF92;
-	Thu, 15 Aug 2024 15:37:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD8981A4F3B;
+	Thu, 15 Aug 2024 15:45:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723736241; cv=none; b=K6Yz0yItqhWL2tFl2/5rLJ9QWOBa/9k3DT16zlwcrygaQvhe0DC8Y9gN+8C/LkylzHnT+7QIU/BGfjrwujjo+9vtn0UA7NrwVGxZVz5lEUbUtDQy2eAIesppvvU3OasguW4OSL3XS4/3UIje2jZSeSdgWWbfzUVFtzgLa5HQ+Dk=
+	t=1723736751; cv=none; b=hT6dEbm+QONo2QECDRykI3R3vuMjv22LxXZ/VFoLcRvpGtA1jmSFizO9NMZP28RCZzrHN2I2ugtUGmexdkfMOmI+iBQpbbnzTdl16oBTjTmgJDzqU4S1w47VbnW3nGDOGD3WF4Vt/0TMSHTNh4qcN50gPQlSi1z7M9DQ4KF4Jpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723736241; c=relaxed/simple;
-	bh=l0HOjb5v7Td6b7+4wjyPWOza7JPXStwNXiC9vrsrtXw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=oOD23L9bfyqOGkCzDgPj95N5Y6FYOf5ZeVcLMuvdlpqRP8qeM6Zfyj27o2Q0ttWwFFCm5x0ZZWhufvocqOqqBAbRbb20DU4VULSAoHAZ9zavzaj0QEF1Y6qJkFnZeWteTX01oNOQW3z0c26YloAApxjphTY1jlIxhNLao6eF9VA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ObQkE2vw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6A22C32786;
-	Thu, 15 Aug 2024 15:37:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723736239;
-	bh=l0HOjb5v7Td6b7+4wjyPWOza7JPXStwNXiC9vrsrtXw=;
-	h=From:Date:Subject:To:Cc:From;
-	b=ObQkE2vwR7Xy8BPJb9RtXIvKjISUxYIsCF9f3z9NId4DpxIhFLcgZFky8srnHKbQ+
-	 GIAiU/bWKeG+tqdjJ0ULMvndN8czTr6gkv+2y+TYMaeQABVTowfc30IGsj2cfKH8jg
-	 F5+X5Q1Muq/lE69meP7+tLnQu8pk4tmCflmg6pZcu4UUJhNYpuMm+Xt7eTdGQGm3rb
-	 +e2Qeoabzu+HHBwyCW+jYlNpOJTWZq3I/xN36LmUnSAwhVU4nGZeLI9xrhOdZwb9xt
-	 wlfJ5XU5D4y5e1Y+NyAM/5TRpeJnOV4fahrM2sxmpiz2TpdHkV1PoNSJcEETHONKHk
-	 tcM9K/Rh1L6XA==
-From: Simon Horman <horms@kernel.org>
-Date: Thu, 15 Aug 2024 16:37:13 +0100
-Subject: [PATCH net] tc-testing: don't access non-existent variable on
- exception
+	s=arc-20240116; t=1723736751; c=relaxed/simple;
+	bh=c6FMcZ9Ro1bNyGdFqF+qhqczyAwQU8FuOvu8/tuyQc4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VLL+WX+bUpjSCVlyyhFelsDfFZaQbvJ/sk2QmzCYNhKkFf+5AR0qi7d6ISCqS9hGBnCW3r9FGll7DTu/D0at30WDzQc3f7sUSTNJf1gBt7KqScSjeobvBHhodrmy4f33jTXjCyHrgjPzSFMJTp+IkspHTa6+D94StlvzXfe+wng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=T3mOzxN4; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47FApERC011906;
+	Thu, 15 Aug 2024 15:45:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
+	:to:cc:subject:date:message-id:content-transfer-encoding
+	:mime-version; s=pp1; bh=4xMYHboKlORg0xp/54DTE5qzUoPwtIBM67yaG+E
+	cZns=; b=T3mOzxN4/xCToatHfcR01zb8CJDF3rID6dkxqnEWJezfpYDDa6+pgB+
+	QQwahNqdsnGLkFBZGmbe4OVaQeVPDAeaovoPjdBlyd6yxYISNNd2/qedizCPmtts
+	pzn8lKbBT7pwhpmm6mxjLrtS8yMYVdYpGSRc+4wZ22EV3PYxZrfsPpk57bBbWDto
+	rVJpo6wm7yheUWfk3dk0N0jMwS/sLekxF9rHO0IDeeL+Ckf9aMbtKyrLuycpkQsr
+	EEXu8a79G2jrZLfy+K04UUjUIOAlL++Z0kIAN0SZpXhfYZtqG6ZxOsCKZSiSfRbt
+	T8RXqlmzvLNnekS63N8rnRjyBhx+xTQ==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4111d6cd1s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 Aug 2024 15:45:40 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 47FFjd3Y005421;
+	Thu, 15 Aug 2024 15:45:39 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4111d6cd1p-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 Aug 2024 15:45:39 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 47FCXbeM011523;
+	Thu, 15 Aug 2024 15:45:38 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 40xjhufm7e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 15 Aug 2024 15:45:38 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 47FFjXR957475518
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 15 Aug 2024 15:45:35 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 42CBD2004B;
+	Thu, 15 Aug 2024 15:45:33 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A352220040;
+	Thu, 15 Aug 2024 15:45:32 +0000 (GMT)
+Received: from darkmoore.ibmuc.com (unknown [9.171.32.201])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu, 15 Aug 2024 15:45:32 +0000 (GMT)
+From: Christoph Schlameuss <schlameuss@linux.ibm.com>
+To: kvm@vger.kernel.org
+Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nina Schoetterl-Glausch <nsg@linux.ibm.com>, schlameuss@linux.ibm.com
+Subject: [PATCH 0/3] selftests: kvm: s390: Add ucontrol memory selftests
+Date: Thu, 15 Aug 2024 17:45:26 +0200
+Message-ID: <20240815154529.628087-1-schlameuss@linux.ibm.com>
+X-Mailer: git-send-email 2.46.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: mbhvlfLvbijOgEPLbOqkCAOt_u8MgiWM
+X-Proofpoint-ORIG-GUID: 2dztltn4Be-GLIimnPyvb2ie2XxEA_Ed
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240815-tdc-test-ordinal-v1-1-0255c122a427@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAKggvmYC/x3MTQqAIBBA4avIrBuwwejnKtHCcqqB0FCJILp70
- vJbvPdA4iicYFAPRL4kSfAFdaVg2a3fGMUVA2ky2pDG7BbMnDKG6MTbA83cm75tOmqpgZKdkVe
- 5/+UInjNM7/sBKZCUtmcAAAA=
-To: Jamal Hadi Salim <jhs@mojatatu.com>, 
- Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>, 
- Shuah Khan <shuah@kernel.org>, Lucas Bates <lucasb@mojatatu.com>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc: 
-X-Mailer: b4 0.14.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-15_08,2024-08-15_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=770 phishscore=0
+ spamscore=0 malwarescore=0 priorityscore=1501 impostorscore=0 adultscore=0
+ bulkscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0 clxscore=1015
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
+ definitions=main-2408150113
 
-Since commit 255c1c7279ab ("tc-testing: Allow test cases to be skipped")
-the variable test_ordinal doesn't exist in call_pre_case().
-So it should not be accessed when an exception occurs.
+This patch series adds a some not yet picked selftests to the kvm s390x
+selftest suite.
 
-This resolves the following splat:
+The additional test cases are covering:
+* Assert KVM_EXIT_S390_UCONTROL exit on not mapped memory access
+* Assert functionality of storage keys in ucontrol VM
+* Assert that memory region operations are rejected for ucontrol VMs
 
-  ...
-  During handling of the above exception, another exception occurred:
+Running the test cases requires sys_admin capabilities to start the
+ucontrol VM.
+This can be achieved by running as root or with a command like:
 
-  Traceback (most recent call last):
-    File ".../tdc.py", line 1028, in <module>
-      main()
-    File ".../tdc.py", line 1022, in main
-      set_operation_mode(pm, parser, args, remaining)
-    File ".../tdc.py", line 966, in set_operation_mode
-      catresults = test_runner_serial(pm, args, alltests)
-    File ".../tdc.py", line 642, in test_runner_serial
-      (index, tsr) = test_runner(pm, args, alltests)
-    File ".../tdc.py", line 536, in test_runner
-      res = run_one_test(pm, args, index, tidx)
-    File ".../tdc.py", line 419, in run_one_test
-      pm.call_pre_case(tidx)
-    File ".../tdc.py", line 146, in call_pre_case
-      print('test_ordinal is {}'.format(test_ordinal))
-  NameError: name 'test_ordinal' is not defined
+sudo setpriv --reuid nobody --inh-caps -all,+sys_admin \
+  --ambient-caps -all,+sys_admin --bounding-set -all,+sys_admin \
+  ./ucontrol_test
 
-Fixes: 255c1c7279ab ("tc-testing: Allow test cases to be skipped")
-Signed-off-by: Simon Horman <horms@kernel.org>
 ---
- tools/testing/selftests/tc-testing/tdc.py | 1 -
- 1 file changed, 1 deletion(-)
 
-diff --git a/tools/testing/selftests/tc-testing/tdc.py b/tools/testing/selftests/tc-testing/tdc.py
-index ee349187636f..4f255cec0c22 100755
---- a/tools/testing/selftests/tc-testing/tdc.py
-+++ b/tools/testing/selftests/tc-testing/tdc.py
-@@ -143,7 +143,6 @@ class PluginMgr:
-             except Exception as ee:
-                 print('exception {} in call to pre_case for {} plugin'.
-                       format(ee, pgn_inst.__class__))
--                print('test_ordinal is {}'.format(test_ordinal))
-                 print('testid is {}'.format(caseinfo['id']))
-                 raise
- 
+The patches in this series have been part of the previous patch series.
+The test cases added here do depend on the fixture added in the earlier patches.
+From v5 PATCH 7-9 the segment and page table generation has been removed and DAT
+has been disabled. Since DAT is not necessary to validate the KVM code.
+
+Previeous series:
+https://lore.kernel.org/kvm/20240807154512.316936-1-schlameuss@linux.ibm.com/
+
+Also see:
+https://lore.kernel.org/kvm/d97f4dec-31c3-45c0-ac33-90e665eb6e99@linux.ibm.com/
+
+Christoph Schlameuss (3):
+  selftests: kvm: s390: Add uc_map_unmap VM test case
+  selftests: kvm: s390: Add uc_skey VM test case
+  selftests: kvm: s390: Verify reject memory region operations for
+    ucontrol VMs
+
+ .../selftests/kvm/s390x/ucontrol_test.c       | 218 +++++++++++++++++-
+ 1 file changed, 217 insertions(+), 1 deletion(-)
+
+-- 
+2.46.0
 
 
