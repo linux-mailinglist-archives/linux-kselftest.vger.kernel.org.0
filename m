@@ -1,183 +1,388 @@
-Return-Path: <linux-kselftest+bounces-15392-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15393-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 025B5952C42
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 12:34:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B38E952C58
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 12:36:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D994A2860E6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 10:34:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A96601F22508
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 10:36:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDCE81C68AC;
-	Thu, 15 Aug 2024 09:39:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="az+CRVpb"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C481AD9D6;
+	Thu, 15 Aug 2024 09:52:16 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011013.outbound.protection.outlook.com [52.101.70.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AABAE17A5A4;
-	Thu, 15 Aug 2024 09:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.13
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723714743; cv=fail; b=EVUOxhRvB2zgBASogMDS9YV+HBR6znzmpAw4Nyl0v0I6XhsTheXeBdokc/fqx1VicbAd+MebyG6shHf4iAftdj9DKc28WnJ28Awax2wS6Ur3oY3dpMAIZ/J4mh2UXCR2YnjEf2lJpv19g5B1wsSXGRCPhZEZb+vGnOjpGNXK8GU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723714743; c=relaxed/simple;
-	bh=bRYH6QMokHnFCEZPDJVOmrf8P9U+yBuT7xHhceoN2gE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=owld+hk2Mk/a/pbHqzmg63PYO+9drVt/K3Op2vLa3fhIiBkbl9X3NxQmKzj61qoHupR/er8tX+bB9d4b8OozKqhR2G6uhc/psUfClIfy93KBMtLjYH25iGF9h4hEmLZxF4nZT+WIoWC0EpdP2HBWlGFox5HPs4YAm8sMNm5fFYE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=az+CRVpb; arc=fail smtp.client-ip=52.101.70.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=p+0PPp9i+UWAp9nULB86DIj9ftaMH5Q+x4H8+NRIg35YnaVUCV55CYBX5r5somb7hUhrPo2wtuuJA1FSpT81zI4H5c0upuJrx/KppevschP0blscSKgInBTSXSGeOfru/fMKZU90UdPn2uht+iAG7LEQIBZ3KWfuhWsp9wTnzMz18j3l6/Yr13DWAJXAXUMaiXUgicq7qKXcf7OX+stY9zmJt6O2MGYelmerDaEdeGtxDdUcWwVW22sNRkfkfBAuEPWmalRGG5AmlrD9gPFDcEFF2/yK7KhcrqITiHCt5DO2lE+GIRBgMmLg34eKF5g5rgJ+8/EfmRcMV9YfN3shdQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xqOLX3Qj4kcAzUpgiGaQuWsXCsmGJCeDKDubjgl+YT8=;
- b=ufbY3jeDTFj8RJdaeAnKuyXLx1RguVG2O9f4C6G2LdKUMwfbbSMwsgroFQYmrFht7RUK7ztpVaXICxEIOOqpTYyJyzprwyRYiv+H2myhaGEH3c/+XKm1C3TIJ1jAvDd8L4aivoU/Yob8dFoeRybFdryFLNA2QaHrA0/NbdNt+MRbwVomVKgGIkBo1NU8fRFMXdkNpXNvZBUNI8fbj8bgSHCIFIpRIeSjVo8QsCNHdTmoMhR48hEwnx4N2bB69NiFSZHhJcVv1pOU8Ft1VfgjIsqkjuW+8+7AFcf8zfHWg9Oc6Nfd15KE/pGnOa3VFVHrsPZumrDKm/9RWXpdRn4AEA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xqOLX3Qj4kcAzUpgiGaQuWsXCsmGJCeDKDubjgl+YT8=;
- b=az+CRVpb1kZc7UexBs/WJ6r5GXgYbpbqKiY05oKx8krZypvNfjsvqBQSng/gJhJX+kbYJ7rnNxBwb8aRTjwCdPGzvjEbhN7mLoBf08KCdjXdWcK9nf/wviM44oZ2b3ogKVD8hgo+QLxNruZal6Q2Dr6BHtQFBXDyfVKI0gi9GM6m511bWOqUw3D2v6PYrR1htUSDZBU9k8730iYudszwr1ywnuPXMvxIACeRORCSBTUXvyucGGQu7G0K2zmOemUApx6KicBftp0mvLtyMckhJjqC1Ecpx/pxs7n9Wq1CV1sVrVl8VZv8EQDajHr5C+rnvIjPAP9utISE0yNZYyew2A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM8PR04MB7779.eurprd04.prod.outlook.com (2603:10a6:20b:24b::14)
- by AS8PR04MB9094.eurprd04.prod.outlook.com (2603:10a6:20b:445::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.18; Thu, 15 Aug
- 2024 09:38:58 +0000
-Received: from AM8PR04MB7779.eurprd04.prod.outlook.com
- ([fe80::7417:d17f:8d97:44d2]) by AM8PR04MB7779.eurprd04.prod.outlook.com
- ([fe80::7417:d17f:8d97:44d2%4]) with mapi id 15.20.7875.016; Thu, 15 Aug 2024
- 09:38:58 +0000
-Date: Thu, 15 Aug 2024 12:38:55 +0300
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
-To: Ido Schimmel <idosch@nvidia.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Claudiu Manoil <claudiu.manoil@nxp.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Antoine Tenart <atenart@kernel.org>, UNGLinuxDriver@microchip.com,
-	Hongbo Wang <hongbo.wang@nxp.com>,
-	Xiaoliang Yang <xiaoliang.yang_1@nxp.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Colin Foster <colin.foster@in-advantage.com>,
-	Horatiu Vultur <horatiu.vultur@microchip.com>,
-	Hangbin Liu <liuhangbin@gmail.com>, Petr Machata <petrm@nvidia.com>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 08/14] selftests: net: bridge_vlan_aware: test that
- other TPIDs are seen as untagged
-Message-ID: <20240815093855.zvosiich6jyxggag@skbuf>
-References: <20240815000707.2006121-1-vladimir.oltean@nxp.com>
- <20240815000707.2006121-9-vladimir.oltean@nxp.com>
- <Zr3GK3NeZGGt2lpx@shredder.mtl.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zr3GK3NeZGGt2lpx@shredder.mtl.com>
-X-ClientProxiedBy: VI1PR07CA0311.eurprd07.prod.outlook.com
- (2603:10a6:800:130::39) To AM8PR04MB7779.eurprd04.prod.outlook.com
- (2603:10a6:20b:24b::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E002417BEAA;
+	Thu, 15 Aug 2024 09:52:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723715536; cv=none; b=SlGyiDdrMB71gJFLSrlnfKF4mUprYrTPDfmnk5TQFqz8wVgEM/bh097fq1BOthUxaa4OgW4PlFEPebhaiLqlyxce0OLn/NIQiBF/swkHgtql4s+AYBfg3D1eG6jnu8GKhAXU5Ha7xjxWw/2bdZGQhiGqwDzRFdGYkP8Q49gVpus=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723715536; c=relaxed/simple;
+	bh=QWWp3oN/6l4uweB3ou70Kb3cCnsXs6mWdhtriOJv7pQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tz4QHes4PWPGmev7Q1qM2rxK8ZqYT2/lYg/VfsS+JL7mhgvYu+clmilmsaKcLxcP0OQOwIUFVaVkj/76Q7vrjJaSm50UTvKgI2Papw0vNtSaMq0U8Eo5wYTv+KAeodelJ74jt5wqy5uCx98ZS4m7YFN1DhN6F4hC+J/a4T4sExY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a8385f38fcdso34706866b.3;
+        Thu, 15 Aug 2024 02:52:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723715532; x=1724320332;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9PitIhZbqrZEQzU7Nc194kKQRWIEgsiNBZXgM9lF+/I=;
+        b=RGWGEfRnNGp5qfAvDmllKBCo+9GIznhMKZxQl6UIfe7zBj3BH9gD6sqIZXsQu12pDp
+         Kce4PATQEFPuTBOa+rbwSFBpEMcyEcAXSJZnhfJTX1O2HgVXYdzlR4xDgU5IOkj9kcwS
+         kIb3IDs4DweVUn57mC/sCVEaaC1nKGfcAHYjvyjK9xPhoY8yMTvUsui+TUxePKtncMMk
+         JS9KSnXcCbD/b+ta6a/QS7mXsjbIheo/3C36Z7aa1HpI/qHmoSxQgurqf47ReO3zvgBh
+         S+THxsL40OQuilEueP7z5dAa5vSwMyHzEjYW+4FI7RHjkP3y28u+iI4WhkBxyQAWmfCs
+         xWSg==
+X-Forwarded-Encrypted: i=1; AJvYcCUPOxX+7GoqN+JK91tAaA9KxFYL7QfhCSarbB2C64hhFdg+AFoehvZdH9Gsp1UHsrv8iDcHWNmXe5pr0jI=@vger.kernel.org, AJvYcCXIO91rHiULPsumk55KlZ43N22ZCIXIwm2mPAoakGQpihe+Bk+TunBqOYehbgAZaRoNmz9sfcvlOrMNspQf+Ck/@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxq3leLnf9uy7r+YVaG/B26sulmUWmJFZ8W8EQU6X5CM70B+Ftf
+	su068lpXTpGsoy6LNjM7WaPdUIJ6e7/IGYFTGgFBJv0mxtw1nmBj
+X-Google-Smtp-Source: AGHT+IH8T31IKypooK/8K40dVjwxcmrvxjfY0Ynspjos4ZlKxQkKf0K8vMiiCylGFWecd3PO4rz7vQ==
+X-Received: by 2002:a17:907:84b:b0:a7c:f6f5:390e with SMTP id a640c23a62f3a-a8367048c43mr424124966b.58.1723715531812;
+        Thu, 15 Aug 2024 02:52:11 -0700 (PDT)
+Received: from localhost (fwdproxy-lla-008.fbsv.net. [2a03:2880:30ff:8::face:b00c])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83838c6a42sm75038366b.44.2024.08.15.02.52.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Aug 2024 02:52:11 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	liuhangbin@gmail.com,
+	petrm@nvidia.com,
+	matttbe@kernel.org,
+	Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org,
+	David Wei <dw@davidwei.uk>,
+	Willem de Bruijn <willemb@google.com>,
+	linux-kernel@vger.kernel.org (open list),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH net-next v3] net: netconsole: selftests: Create a new netconsole selftest
+Date: Thu, 15 Aug 2024 02:51:44 -0700
+Message-ID: <20240815095157.3064722-1-leitao@debian.org>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM8PR04MB7779:EE_|AS8PR04MB9094:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6938865f-f5aa-45c8-0bf2-08dcbd0e1658
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?fa6xGGw+U/1FtP8x+r2oG9zVngmXH9wpzKo2mgLy8jzwCjgdzCIzanN+MH8B?=
- =?us-ascii?Q?eBaDortdykEQoM+hxYHiCt4JMvWBOFcvDlapzpvu3R3RF2GqIbBR94vp8xWU?=
- =?us-ascii?Q?zTH67HMWTTXFTlh0Oc+XLx0vLzQEHF5mim60gpOTrsV6k/JS0Sdc20CtffDb?=
- =?us-ascii?Q?VpZP0m0lBRDT16Kb0AGdTDCbhGYVe/JvOpBYZBzkhzakZpr6QwVuIcwFO1TA?=
- =?us-ascii?Q?J6cUyUB2VsKsQlS4r6Ek/AIk3zadciQrreEfrffBBeeR66fFvmLu/2EF8iSc?=
- =?us-ascii?Q?ZukaORDQsLFWmERl2isRpN3P2vy1JdUMw7Flxg2SNQ02Zas+88yyZ2SdaL07?=
- =?us-ascii?Q?Dxx3AIkS2O5n1YlpCrhFQbpN2jy/Dh34L3BlA6MGNGefxJCtfQ2c4ofHDSLo?=
- =?us-ascii?Q?0DILDgOCL1bh7T1LWD9gAv9ZkVJxb/ZaXWwPDkNgKCm2DlXChPy5GQencmnf?=
- =?us-ascii?Q?af5kFYK+MTge6eUwcClh+kW8w+LVmCnsM4fjshoHRtXvXDeTqharjfS54vfn?=
- =?us-ascii?Q?Bmqmdx6bYD5bgHxD1ZTDGZd/6xqLQpqjNso2Re6/Ap4C+bwSSjkNMKp9jw/L?=
- =?us-ascii?Q?WSMoJP2bDFIGFUP5ydERX+iCk8MccRd10qywGXhNf5+57QkyXJiZsbf86oVo?=
- =?us-ascii?Q?fc3T+yAJblQwQKYMwZuHiBywL3qZqfAJGPqh/T390Z7uQCpwaoHEW7wlfuXC?=
- =?us-ascii?Q?6DmZnStQoq9wT78zjLfpxrC9Ir2COV6MFeL9+A7V1w7Sm6K5Yqu5zKyEerqE?=
- =?us-ascii?Q?lhL4K+PNFsIcPo8knto3Sf8PkUBveNHUMC6/hEW0V7RzbDCR4XiQbnOPCc7n?=
- =?us-ascii?Q?5h7WMJdmm4aqwH6tag1wqvJKPuMlO4Vb6NsjOt9OjTq90feH07lC2g5jdR0M?=
- =?us-ascii?Q?uG/O8ViAa4507SnezTkXjF81Bvdy9sBPTQSkuu6mSbWVcwLmG+69aieYHF3c?=
- =?us-ascii?Q?S85nWs+EUdtDRiH7kpdWsOq4cg5+POuytTIdazEGRqj5H9AydZwhsE/PaP03?=
- =?us-ascii?Q?LFiQ166UyG4fFTcwylhpaRhH2l1xBYFFA0f98FXgLq4/jasys4DWJ1ltefPN?=
- =?us-ascii?Q?lp6/OCVAnPMATbZwfmDaV+BeD3DT6odQl+0JCCeTasM1RAZ3v9fb1cYjPfbG?=
- =?us-ascii?Q?7No6Op8kCVbEp8KU/IFaYMNNP7u/hBp3oQxhGhkjBEJMCAcVEU8FB9/uRUVR?=
- =?us-ascii?Q?ANW4fCqlDbD4WLov6Wik7odvTKYFnZtt6gaLxHzylywIMx2Heez0j6Ehdn9W?=
- =?us-ascii?Q?8O/7f/laO88fhe4szr9ckhIL6stkoZ7PmkVnNH277PoLU1lZpPk13NB3QyWK?=
- =?us-ascii?Q?j7gkqWc4eO9DFXItd3Zlq9iIAebH0IPtJvuLXi3C9jK38w=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7779.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?DFScjWPSIrHxh2qycR8PSgQxcxnGeryWMcqZaLVtp4NspQKLoTqxdOMBLYLh?=
- =?us-ascii?Q?BNFgC7JyDPAFQnXPRUXqnnDb8YlrQxZ7onMtbOoBU/gC/VYhE9YJRZuNSKEq?=
- =?us-ascii?Q?4fH2M6SxGOwiYJRAMmeHu9Voo88q6EGsa5O98Pz6nhBerwwrhUyuFXQ8vMW7?=
- =?us-ascii?Q?MzQwYWPlSRCLsMf25qA/K18lFFNNB1wH3gYM7s/WKhcFqsXEwTcba1NNVW1p?=
- =?us-ascii?Q?rwhUEMKDGbiSykQmudY+ZSJiO+f/a3sZNJzv7ucxqZKlhfG8hBqk4QUiMpIY?=
- =?us-ascii?Q?SnQ2iaYfsniC+EapiyMEo/Na6i7kxSKLSRDfE0nNWnRochtj9tc+TZL9ILLi?=
- =?us-ascii?Q?Nfb6XktHOjnq84tS2ejqjhDgF8ZRNqa4MCLAlp1BC9ddpHezWnW979akiQWT?=
- =?us-ascii?Q?9fXiA2RHyCzjvl/dFduRbEVzGuEcoOuYrldaCdSMLqVi4VI/YKwZfpLi6Adk?=
- =?us-ascii?Q?WvRFekboH4+7sJgMiJv0eAy3vH3t24MEFPNjzPSSM7BncLQzCYPEayjHMtNo?=
- =?us-ascii?Q?AVSmW6ENShmjn37rrv5SrZff6WR+sG7+Tc9SBQ2w2Czroxj6r8ggIEbcH04n?=
- =?us-ascii?Q?iG76uv9W5G8GcDVttlQ+H2pmGuL4NCYlNbD2Qsm3IdnxLahBB+mfkWzemoCV?=
- =?us-ascii?Q?LayRsXo6ZPaZnt3j8bCl2XAOVQB3X1aI5c0JMIVtENGpsRSd9eRNN7hJrchc?=
- =?us-ascii?Q?ckERLDR/0HlGvqxBBE5C9qKjvy5+CSk+IgsKg5amL+gz/qxPlLZmi96XRIAk?=
- =?us-ascii?Q?AsQnOiSKeJAAYZjx69Lp9aKZKSW8hMYap9SaEwtSHk/XxBdJuGJLpj8dJPPN?=
- =?us-ascii?Q?voNLC3gDcKhBzf+JwW20xVWP5gXlxDo7Q5xCpK0kL89liaiogNRhJXwQ+Bc/?=
- =?us-ascii?Q?6+Pilns2BdHg1tYYiMUfexKv/Jby13AS5JtvYl07up93Dj4YPNXMNG7fV0qU?=
- =?us-ascii?Q?XL0biw7fnUT/wzsdCYUWfTOj05zOt6nH/Vg0gkBXQn4n/mfW6RhduHveGD9P?=
- =?us-ascii?Q?2VCX+28KJSNDRjP2zfH6eP9rPhM3eq2L2lrwi8jSsMjkrbQ0JBUtZssgnLMZ?=
- =?us-ascii?Q?tCsEQLkMDis54pPBak2wRM/K8qjRIrI/fUv5XlrJapjmue0KDUqMJtmZg6pE?=
- =?us-ascii?Q?Us5wgxUGS0IwVmdBB1Ol5mfzoAQNa/TqTQcA+/R9D1tpQYrOAFeBIKhE6+uY?=
- =?us-ascii?Q?ialeIKINub6lJyxAWtODtnIB+BZBDfhglgHhZhqbwn+ZrGQM52L9WMbZiUwD?=
- =?us-ascii?Q?s0+PkTwkvHvHmAxe0U+HiVRTJ39rJe1y6DpejNdeD14c4CRWUzdJwqpVsTEX?=
- =?us-ascii?Q?Ln/6WXNIf0i8eZdR+lHu/o1sq8cY7FpD6y2Sy8f2HI8AgipHU+Q4el0ObCvG?=
- =?us-ascii?Q?M5VURoIkSgtKxkIid4cuhs3jRu35Xs7XBrCl/VlvAvt8OnVbpjqyLhTomXtI?=
- =?us-ascii?Q?Q5ppHrsRIRvcLvwBBcjjflkglL51iKAJ/qixbh5UszBK1vIUD+GYz7d+T1F2?=
- =?us-ascii?Q?LC2rbHzHuY6BJQLx+61xzZX8pomycZFdA0+FIvuaJpJVEfNqVKKPMhSpdYl4?=
- =?us-ascii?Q?4DQJf9eFxNbVD7Yj5A2u8MPQyVeCOzVDfz/ih5qLVI4hLxyzw1JwRt7/VAK/?=
- =?us-ascii?Q?yw=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6938865f-f5aa-45c8-0bf2-08dcbd0e1658
-X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7779.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2024 09:38:58.2882
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: th17GsL/69/ghrreehzfywYH2p0Hz+7ztL9WHfHWHn49RBvH319K4nrkVUi0TSq9Vy4T8IlDYT9aQprODTJZXA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB9094
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 15, 2024 at 12:11:07PM +0300, Ido Schimmel wrote:
-> Thanks for the test. Passes with mlxsw as well.
+Adds a selftest that creates two virtual interfaces, assigns one to a
+new namespace, and assigns IP addresses to both.
 
-Thanks for testing.
+It listens on the destination interface using socat and configures a
+dynamic target on netconsole, pointing to the destination IP address.
 
-> > +	ethtool -K $h2 rx-vlan-filter off rx-vlan-stag-filter off
-> 
-> Any reason not to undo it at the end of the test like other settings?
+The test then checks if the message was received properly on the
+destination interface.
 
-A combination of laziness to add even more logic to save/restore the
-ethtool features (should probably live in lib.sh), plus a persistent
-question of "who cares anyway". The default values are driver defined
-anyway, so it's likely that anyone who cares will control these features
-prior to starting their application. Plus, turning off RX VLAN filtering
-offload should not technically leave anything broken behind.
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Changelog:
+
+v3:
+ * Defined CONFIGs in config file (Jakub)
+ * Identention fixes (Petr Machata)
+ * Use setup_ns in a better way (Matthieu Baerts)
+ * Add dependencies in TEST_INCLUDES (Hangbin Liu)
+
+v2:
+ * Change the location of the path (Jakub)
+ * Move from veth to netdevsim
+ * Other small changes in dependency checks and cleanup
+ * https://lore.kernel.org/all/20240813183825.837091-1-leitao@debian.org/
+
+v1:
+ * https://lore.kernel.org/all/ZqyUHN770pjSofTC@gmail.com/
+
+ MAINTAINERS                                   |   1 +
+ tools/testing/selftests/drivers/net/Makefile  |   4 +-
+ tools/testing/selftests/drivers/net/config    |   2 +
+ .../selftests/drivers/net/netcons_basic.sh    | 226 ++++++++++++++++++
+ 4 files changed, 232 insertions(+), 1 deletion(-)
+ create mode 100755 tools/testing/selftests/drivers/net/netcons_basic.sh
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7b291c3a9aa4..9f0be36939f9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -15772,6 +15772,7 @@ M:	Breno Leitao <leitao@debian.org>
+ S:	Maintained
+ F:	Documentation/networking/netconsole.rst
+ F:	drivers/net/netconsole.c
++F:	tools/testing/selftests/drivers/net/netcons_basic.sh
+ 
+ NETDEVSIM
+ M:	Jakub Kicinski <kuba@kernel.org>
+diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
+index e54f382bcb02..8bee2e94049b 100644
+--- a/tools/testing/selftests/drivers/net/Makefile
++++ b/tools/testing/selftests/drivers/net/Makefile
+@@ -1,8 +1,10 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-TEST_INCLUDES := $(wildcard lib/py/*.py)
++TEST_INCLUDES := $(wildcard lib/py/*.py) \
++		 ../../net/lib.sh \
+ 
+ TEST_PROGS := \
++	netcons_basic.sh \
+ 	ping.py \
+ 	queues.py \
+ 	stats.py \
+diff --git a/tools/testing/selftests/drivers/net/config b/tools/testing/selftests/drivers/net/config
+index f6a58ce8a230..8f46112263f0 100644
+--- a/tools/testing/selftests/drivers/net/config
++++ b/tools/testing/selftests/drivers/net/config
+@@ -1,2 +1,4 @@
+ CONFIG_IPV6=y
+ CONFIG_NETDEVSIM=m
++CONFIG_NETCONSOLE=m
++CONFIG_NETCONSOLE_DYNAMIC=y
+diff --git a/tools/testing/selftests/drivers/net/netcons_basic.sh b/tools/testing/selftests/drivers/net/netcons_basic.sh
+new file mode 100755
+index 000000000000..929f27a0fd9c
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/netcons_basic.sh
+@@ -0,0 +1,226 @@
++#!/usr/bin/env bash
++# SPDX-License-Identifier: GPL-2.0
++
++# This test creates two netdevsim virtual interfaces, assigns one of them (the
++# "destination interface") to a new namespace, and assigns IP addresses to both
++# interfaces.
++#
++# It listens on the destination interface using socat and configures a dynamic
++# target on netconsole, pointing to the destination IP address.
++#
++# Finally, it checks whether the message was received properly on the
++# destination interface.  Note that this test may pollute the kernel log buffer
++# (dmesg) and relies on dynamic configuration and namespaces being configured.
++#
++# Author: Breno Leitao <leitao@debian.org>
++
++set -euo pipefail
++
++SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
++
++# Simple script to test dynamic targets in netconsole
++SRCIF="" # to be populated later
++SRCIP=192.168.1.1
++DSTIF="" # to be populated later
++DSTIP=192.168.1.2
++
++PORT="6666"
++MSG="netconsole selftest"
++TARGET=$(mktemp -u netcons_XXXXX)
++NETCONS_CONFIGFS="/sys/kernel/config/netconsole"
++NETCONS_PATH="${NETCONS_CONFIGFS}"/"${TARGET}"
++# This will have some tmp values appended to it in set_network()
++NAMESPACE="netconsns_dst"
++
++# IDs for netdevsim
++NSIM_DEV_1_ID=$((256 + RANDOM % 256))
++NSIM_DEV_2_ID=$((512 + RANDOM % 256))
++
++# Used to create and delete namespaces
++source "${SCRIPTDIR}"/../../net/lib.sh
++
++# Create netdevsim interfaces
++create_ifaces() {
++	local NSIM_DEV_SYS_NEW=/sys/bus/netdevsim/new_device
++
++	echo "$NSIM_DEV_2_ID" > "$NSIM_DEV_SYS_NEW"
++	echo "$NSIM_DEV_1_ID" > "$NSIM_DEV_SYS_NEW"
++	udevadm settle || true
++
++	local NSIM1=/sys/bus/netdevsim/devices/netdevsim"$NSIM_DEV_1_ID"
++	local NSIM2=/sys/bus/netdevsim/devices/netdevsim"$NSIM_DEV_2_ID"
++
++	# These are global variables
++	SRCIF=$(find "$NSIM1"/net -maxdepth 1 -type d ! \
++		-path "$NSIM1"/net -exec basename {} \;)
++	DSTIF=$(find "$NSIM2"/net -maxdepth 1 -type d ! \
++		-path "$NSIM2"/net -exec basename {} \;)
++}
++
++link_ifaces() {
++	local NSIM_DEV_SYS_LINK="/sys/bus/netdevsim/link_device"
++	local SRCIF_IFIDX=$(cat /sys/class/net/"$SRCIF"/ifindex)
++	local DSTIF_IFIDX=$(cat /sys/class/net/"$DSTIF"/ifindex)
++
++	exec {NAMESPACE_FD}</var/run/netns/"${NAMESPACE}"
++	exec {INITNS_FD}</proc/self/ns/net
++
++	# Bind the dst interface to namespace
++	ip link set "${DSTIF}" netns "${NAMESPACE}"
++
++	# Linking one device to the other one (on the other namespace}
++	echo "${INITNS_FD}:$SRCIF_IFIDX $NAMESPACE_FD:$DSTIF_IFIDX" \
++		> $NSIM_DEV_SYS_LINK
++	if [ $? -ne 0 ]; then
++		echo "linking netdevsim1 with netdevsim2 should succeed"
++		cleanup
++		exit ${ksft_skip}
++	fi
++}
++
++function configure_ip() {
++	# Configure the IPs for both interfaces
++	ip netns exec "${NAMESPACE}" ip addr add "${DSTIP}"/24 dev "${DSTIF}"
++	ip netns exec "${NAMESPACE}" ip link set "${DSTIF}" up
++
++	ip addr add "${SRCIP}"/24 dev "${SRCIF}"
++	ip link set "${SRCIF}" up
++}
++
++function set_network() {
++	# This is coming from lib.sh
++	setup_ns NAMESPACE
++
++	# Create both interfaces, and assign the destination to a different
++	# namespace
++	create_ifaces
++
++	# Link both interfaces back to back
++	link_ifaces
++
++	configure_ip
++}
++
++function create_dynamic_target() {
++	DSTMAC=$(ip netns exec "${NAMESPACE}" \
++		 ip link show "${DSTIF}" | awk '/ether/ {print $2}')
++
++	# Create a dynamic target
++	mkdir "${NETCONS_PATH}"
++
++	echo "${DSTIP}" > "${NETCONS_PATH}"/remote_ip
++	echo "${SRCIP}" > "${NETCONS_PATH}"/local_ip
++	echo "${DSTMAC}" > "${NETCONS_PATH}"/remote_mac
++	echo "${SRCIF}" > "${NETCONS_PATH}"/dev_name
++
++	echo 1 > "${NETCONS_PATH}"/enabled
++}
++
++function cleanup() {
++	local NSIM_DEV_SYS_DEL="/sys/bus/netdevsim/del_device"
++
++	# delete netconsole dynamic reconfiguration
++	echo 0 > "${NETCONS_PATH}"/enabled
++	# Remove the configfs entry
++	rmdir "${NETCONS_PATH}"
++
++	# Delete netdevsim devices
++	echo "$NSIM_DEV_2_ID" > "$NSIM_DEV_SYS_DEL"
++	echo "$NSIM_DEV_1_ID" > "$NSIM_DEV_SYS_DEL"
++
++	# this is coming from lib.sh
++	cleanup_all_ns
++}
++
++function listen_port_and_save_to() {
++	local OUTPUT=${1}
++	# Just wait for 2 seconds
++	timeout 2 ip netns exec "${NAMESPACE}" \
++		socat UDP-LISTEN:"${PORT}",fork "${OUTPUT}"
++}
++
++function validate_result() {
++	local TMPFILENAME="$1"
++
++	# Check if the file exists
++	if [ ! -f "$TMPFILENAME" ]; then
++		echo "FAIL: File was not generated." >&2
++		return ${ksft_fail}
++	fi
++
++	if ! grep -q "${MSG}" "${TMPFILENAME}"; then
++		echo "FAIL: ${MSG} not found in ${TMPFILENAME}" >&2
++		cat "${TMPFILENAME}" >&2
++	return ${ksft_fail}
++	fi
++
++	# Delete the file once it is validated, otherwise keep it
++	# for debugging purposes
++	rm "${TMPFILENAME}"
++	return ${ksft_pass}
++}
++
++function check_for_dependencies() {
++	if [ "$(id -u)" -ne 0 ]; then
++		echo "This script must be run as root" >&2
++		exit "${ksft_skip}"
++	fi
++
++	if ! which socat > /dev/null ; then
++		echo "SKIP: socat(1) is not available" >&2
++		exit "${ksft_skip}"
++	fi
++
++	if ! which ip > /dev/null ; then
++		echo "SKIP: ip(1) is not available" >&2
++		exit "${ksft_skip}"
++	fi
++
++	if ! which udevadm > /dev/null ; then
++		echo "SKIP: udevadm(1) is not available" >&2
++		exit "${ksft_skip}"
++	fi
++
++	if [ ! -d "${NETCONS_CONFIGFS}" ]; then
++		echo "SKIP: directory ${NETCONS_CONFIGFS} does not exist. Check if NETCONSOLE_DYNAMIC is enabled" >&2
++		exit "${ksft_skip}"
++	fi
++
++	if ip link show "${DSTIF}" 2> /dev/null; then
++		echo "SKIP: interface ${DSTIF} exists in the system. Not overwriting it." >&2
++		exit "${ksft_skip}"
++	fi
++}
++
++# ========== #
++# Start here #
++# ========== #
++modprobe netdevsim || true
++modprobe netconsole || true
++
++# The content of kmsg will be save to the following file
++OUTPUT_FILE="/tmp/${TARGET}"
++
++# Check for basic system dependency and exit if not found
++check_for_dependencies
++# Remove the namespace, interfaces and netconsole target on exit
++trap cleanup EXIT
++# Create one namespace and two interfaces
++set_network
++# Create a dynamic target for netconsole
++create_dynamic_target
++# Listed for netconsole port inside the namespace and destination interface
++listen_port_and_save_to "${OUTPUT_FILE}" &
++
++# Wait for socat to start and listen to the port.
++sleep 1
++# Send the message
++echo "${MSG}: ${TARGET}" > /dev/kmsg
++# Wait until socat saves the file to disk
++sleep 1
++
++# Make sure the message was received in the dst part
++validate_result "${OUTPUT_FILE}"
++ret=$?
++
++exit ${ret}
+-- 
+2.43.5
+
 
