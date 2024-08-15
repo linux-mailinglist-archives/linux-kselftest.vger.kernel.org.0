@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-15399-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15400-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74C25952D1E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 13:00:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F2F2952D20
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 13:00:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5219281EAB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 11:00:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C24C1C235E4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 11:00:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EF9E7DA89;
-	Thu, 15 Aug 2024 10:59:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FEFE1AC8AD;
+	Thu, 15 Aug 2024 11:00:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A4D7asOH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XtawL3H6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C42411AC89A;
-	Thu, 15 Aug 2024 10:59:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE641AC89A;
+	Thu, 15 Aug 2024 10:59:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723719590; cv=none; b=PWf/4/iV13v7mWzphfv0ltzPkmkSyKIRwB+zI29WmHW7quSZBykNDIetHrr8MbDNo6r284KBqpRSdg5ufTWKULWHGmjXVlx61mvP/ywMcwpV1+20sLr3TGrc3RM6aMlY8nSPi//00y4xPL9EFTlYgqGUu0o4OrXq0PWcz1tSdjM=
+	t=1723719600; cv=none; b=jnLlyAJhlwjuoATYc/IE0onB7N/nZSKymet4HuUlvkfWorTwUMfDwb/vKcE/QU0L/W8cgE92j2fmiJdNtozJw926TpmKSw1vYan1iNnkihEbxY4XN/2tIJywh1OSiujs1AJoXVjDsTW5JFudpKZ/huIMYoIbCsFaoxT5jJzoQ5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723719590; c=relaxed/simple;
-	bh=jtalaf4i0vBrVvnWmgxU3qfha27p3Pcpv6SHl8PIUGQ=;
+	s=arc-20240116; t=1723719600; c=relaxed/simple;
+	bh=/WcUu2p5Lk7hWXywCIwNFHFP+xdINS3kR+wr3vCrjIw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XwADcKJEZDBv3aWLM/l2GMPxlW5TYGvTTcf4yCkA+oNSTqKeIdPyYpzhUkGF6NmNHFK1BKLDaGP6Yr8XcbrVixs0jUC9NzVK6nMw8G/iiWbNI9Q9+OmKVpPHAXRIwVsWUOsZtGnDQxXZt9iAJVOXZie0fuemAEoxIEHOykMLAVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A4D7asOH; arc=none smtp.client-ip=209.85.167.169
+	 MIME-Version; b=KgfJS1sItYK+u+SURBDeVl4QKJMOjHUuRFDXX53A04dAw4X/zaziYm3xd69wQJ4UykHaw7A84lNioaGzr9z7xDcemkdgu1e/urhCGEeNhtRrPedChyITKk2jBixzLDv/ec2gxdiCUpObaOSb5F4c6D/M5vXWa7hg0kG8sDRS8rA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XtawL3H6; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3db23a60850so489392b6e.0;
-        Thu, 15 Aug 2024 03:59:48 -0700 (PDT)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-710ffaf921fso498501b3a.1;
+        Thu, 15 Aug 2024 03:59:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723719588; x=1724324388; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1723719597; x=1724324397; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SEXn+6uaDaibQ3LCSAfL1ofGJtzehJXz9fPnsXVCy5U=;
-        b=A4D7asOHupG09QwqOxU1ZeHs1qZIRXhpRkuX9h6kc9tEnULQP8Q/BrX8XkHIQdsh+4
-         DwyaAnaUCefoRFseOW1YimszjfSZUc5FtjAuaKQhoLWr/dwvTfKX/5tVeDW6y7fEV2di
-         PVEuFIBGzT0vbYN51ein09qqww99SYz1IoT4tDujBLgSATy4UwdN9+89MYyYmAlr7TV4
-         sQG7X7MD04y1Hjok36NbmHg6HtSphQmD6HURMeLMDB092GB6vYlp2zFEMXevsz5mmbRd
-         5pqg2X5/cIKmI71MJcINbIS3jEg4jST8wVhoD607w9u+w6pW9r57ZqFnifsqWWb8Ib3W
-         LMDg==
+        bh=R491SSux1DQSWKVz1maSbeuZHf+MaOkhtq9L4FMhxUY=;
+        b=XtawL3H6ZEDF+9Z8lz1YbuhfLeFbQnPO+U1jiEeeAwt6c2p1A4DNu3Um4G3AEwnUrL
+         RwQsqb9cg00iVnyVk8WKi9kwtJAI+sa4n4pLBrto9Xp7Uxz2omlpcAUFIXlyB+K90ayv
+         JjlHoQu48IxFfK3g+rsK5puAXYowbo8JsSNZbmWtaupCP8eTaM736dj4zItWiMTI7XFf
+         g1bnfY0tYeobYD4q3pLUlNVPGPNBe9rCtoN849t4JLtW6GE00UOKIUSfUnADalXA92EA
+         vfdopZ55sAeGDdw05KNfm7wwmPo+wHC9i88vQ9pRPDvwSq7AWX519cHabxLwK5JnXfKF
+         1vmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723719588; x=1724324388;
+        d=1e100.net; s=20230601; t=1723719597; x=1724324397;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SEXn+6uaDaibQ3LCSAfL1ofGJtzehJXz9fPnsXVCy5U=;
-        b=g88TYH6nPCoTkYXlXGSdaM/DpGRLw7//Tuxbi188fBMjIqsqsRimRdF3feF2Uce9q3
-         ki9Nn4Tfr8DcizBr2TrUnJZUzoF76BSrqRV9HLmHJxkqjmA7W/FGgRUDdlbXPOm8h2JS
-         boUONRjJjHOkKbVaXuq8Cmt5ARIbkiaoCsHg2tktBMqrOqMzedLEOHEWz1m5WBURcgQO
-         GwRfZafLakoGkuOIF7cstuxm1s4bBIUAiLag4CpHvy7sgMh2E1wf91A9RTeDgd3S6j+i
-         0eSt1Nrlmj7KpUwgquBGMUtmkholnxEkPnnVgkRInEVwqxpbPnou9W8hUfNtskb9k3ax
-         rZnw==
-X-Forwarded-Encrypted: i=1; AJvYcCVlpH3IiBo8ZxLr/4imI7Y02qhE0nRlK68+YRQij1shig2CpRMORvUuJibEY/V7jx7FSTlls0+PYGiFXhHOuque55R/BSH4w4qPLGLO0CJJ2eeA48PBz2bF3DNClJvvRjjne58Ri+Fs3IgUF6bfW2j5D9oLqK4KqWjHGY8BsPMMp/Kwt+3W
-X-Gm-Message-State: AOJu0YzkuebxA68C0kC+cQC85RviUUWBMeBycBrYGxJI3dL9vxu1V80y
-	U7W1IBe1cE7JXtvxURFD4qKpc5Rg8ybBndPeNxIBcGb9MhLNSvbj
-X-Google-Smtp-Source: AGHT+IHsRd4NalhaB6IlCGdqhEueKN+5uOe1kSJDF/52TbNUgbDCpKuWdsm1SucgNabrpAQXIY1HoQ==
-X-Received: by 2002:a05:6870:b6a0:b0:25e:14f0:62b1 with SMTP id 586e51a60fabf-26fe5a63926mr7083078fac.13.1723719587691;
-        Thu, 15 Aug 2024 03:59:47 -0700 (PDT)
+        bh=R491SSux1DQSWKVz1maSbeuZHf+MaOkhtq9L4FMhxUY=;
+        b=PQrzMrLMvxhs0jJ17E8DH3rEqmRRokyeF3cBTYby2NC8UXkxJ+U9LkAvlr7mLUv54J
+         1WitNBDYX4107LUrl2VX0s0O3NB2Ahln2bxe6svnyVHSWR9nACaHmvJFR6x8PjSn5jr8
+         OjfLcRaDq7flnHXvgczdvrMjp24YttPoqGwZdNW0xSmFHtnxiNvPAik9o0ZdGyvUtrP0
+         6SvoqZZmMNAKkdRvgwFcJHwre8WcQeqyplsiImfyjAnumckqZFdwOBQIpm1yD6qR4LiQ
+         YsLVOr/mrabbilejjYgBqW14NWV+FunReiGQoY0riVEe9jX62R2udyjUZjUb56enb2xS
+         yv7w==
+X-Forwarded-Encrypted: i=1; AJvYcCUO7Q21Yg2d7oTbWmif+Flt2MGGC9FPH/vmQqyP8+hg6sWXq5Z0PccYw9ya6tLaQEl0daoGz0fjLNrCVUNuKOammoIBsl7G8oaVEJYAp/OcqoAXwl/T2NsLdQJlG2R+OxkD+dt35lu0rznyJNksb6HiiDNs8gYeteUkBClbFYDbXQpNwNuz
+X-Gm-Message-State: AOJu0Yz0tEeiVWWthnh9RF7HlvaoCMCUMHRS2hzgYwejUvD64H/IJMzM
+	KP7ARzMZCd2DzhFpMv07ZXf09irOqotT73hHozawzLz4BURTxZc2
+X-Google-Smtp-Source: AGHT+IETL78m7ZeFry37MvMQPHrFPUt9B9nhglzozLw6jieNURmmJlYaUSBLeFyUmEfLsTy9tRJC9w==
+X-Received: by 2002:a05:6a20:dd92:b0:1c6:b0cc:c510 with SMTP id adf61e73a8af0-1c8f859e84fmr4263287637.9.1723719596662;
+        Thu, 15 Aug 2024 03:59:56 -0700 (PDT)
 Received: from dev0.. ([2405:201:6803:30b3:f070:7306:329d:c8ca])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7127ae6c76fsm829915b3a.94.2024.08.15.03.59.43
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7127ae6c76fsm829915b3a.94.2024.08.15.03.59.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Aug 2024 03:59:47 -0700 (PDT)
+        Thu, 15 Aug 2024 03:59:56 -0700 (PDT)
 From: Abhinav Jain <jain.abhinav177@gmail.com>
 To: davem@davemloft.net,
 	edumazet@google.com,
@@ -79,9 +79,9 @@ To: davem@davemloft.net,
 Cc: skhan@linuxfoundation.org,
 	javier.carrasco.cruz@gmail.com,
 	Abhinav Jain <jain.abhinav177@gmail.com>
-Subject: [PATCH v7 net-next 2/3] selftests: net: Add on/off checks for non-fixed features of interface
-Date: Thu, 15 Aug 2024 16:29:23 +0530
-Message-Id: <20240815105924.1389290-3-jain.abhinav177@gmail.com>
+Subject: [PATCH v7 net-next 3/3] selftests: net: Use XFAIL for operations not supported by the driver
+Date: Thu, 15 Aug 2024 16:29:24 +0530
+Message-Id: <20240815105924.1389290-4-jain.abhinav177@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240815105924.1389290-1-jain.abhinav177@gmail.com>
 References: <20240815105924.1389290-1-jain.abhinav177@gmail.com>
@@ -93,62 +93,40 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Implement on/off testing for all non-fixed features via while loop.
-Save the initial state so that it can be restored after on/off checks.
+Check if veth pair was created and if yes, xfail on setting IP address.
+Use XFAIL instead of SKIP for unsupported ethtool APIs.
 
 Signed-off-by: Abhinav Jain <jain.abhinav177@gmail.com>
 ---
- tools/testing/selftests/net/netdevice.sh | 37 +++++++++++++++++++++++-
- 1 file changed, 36 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/netdevice.sh | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/net/netdevice.sh b/tools/testing/selftests/net/netdevice.sh
-index 0c32950fdd17..50f7b9d1163d 100755
+index 50f7b9d1163d..15d702adb0ea 100755
 --- a/tools/testing/selftests/net/netdevice.sh
 +++ b/tools/testing/selftests/net/netdevice.sh
-@@ -124,7 +124,42 @@ kci_netdev_ethtool()
- 		return 1
+@@ -68,7 +68,11 @@ kci_net_setup()
  	fi
- 	echo "PASS: $netdev: ethtool list features"
--	#TODO for each non fixed features, try to turn them on/off
-+
-+	while read -r FEATURE VALUE FIXED; do
-+		[ "$FEATURE" != "Features" ] || continue # Skip "Features"
-+		[ "$FIXED" != "[fixed]" ] || continue # Skip fixed features
-+		feature="${FEATURE%:*}"
-+
-+		initial_state=$(ethtool -k "$netdev" | grep "$feature:" \
-+			| awk '{print $2}')
-+		ethtool --offload "$netdev" "$feature" off
-+		if [ $? -eq 0 ]; then
-+			echo "PASS: $netdev: Turned off feature: $feature"
-+		else
-+			echo "FAIL: $netdev: Failed to turn off feature:" \
-+				"$feature"
-+		fi
-+
-+		ethtool --offload "$netdev" "$feature" on
-+		if [ $? -eq 0 ]; then
-+			echo "PASS: $netdev: Turned on feature: $feature"
-+		else
-+			echo "FAIL: $netdev: Failed to turn on feature:" \
-+				"$feature"
-+		fi
-+
-+		#restore the feature to its initial state
-+		ethtool --offload "$netdev" "$feature" "$initial_state"
-+		if [ $? -eq 0 ]; then
-+			echo "PASS: $netdev: Restore feature $feature" \
-+				"to initial state $initial_state"
-+		else
-+			echo "FAIL: $netdev: Failed to restore feature" \
-+				"$feature to default $initial_state"
-+		fi
-+
-+	done < "$TMP_ETHTOOL_FEATURES"
-+
- 	rm "$TMP_ETHTOOL_FEATURES"
  
- 	kci_netdev_ethtool_test 74 'dump' "ethtool -d $netdev"
+ 	# TODO what ipaddr to set ? DHCP ?
+-	echo "SKIP: $netdev: set IP address"
++	if [ "$veth_created" ]; then
++		echo "XFAIL: $netdev: set IP address"
++	else
++		echo "SKIP: $netdev: set IP address"
++	fi
+ 	return $ksft_skip
+ }
+ 
+@@ -86,7 +90,7 @@ kci_netdev_ethtool_test()
+ 	ret=$?
+ 	if [ $ret -ne 0 ];then
+ 		if [ $ret -eq "$1" ];then
+-			echo "SKIP: $netdev: ethtool $2 not supported"
++			echo "XFAIL: $netdev: ethtool $2 not supported"
+ 			return $ksft_skip
+ 		else
+ 			echo "FAIL: $netdev: ethtool $2"
 -- 
 2.34.1
 
