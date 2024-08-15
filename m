@@ -1,268 +1,250 @@
-Return-Path: <linux-kselftest+bounces-15447-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15448-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10266953B4E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 22:15:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C8E6953B5F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 22:19:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A86D82853F0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 20:15:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F17F1C211A1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 20:19:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAFDD1459F9;
-	Thu, 15 Aug 2024 20:15:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 950C11494A3;
+	Thu, 15 Aug 2024 20:19:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="KnmoZ1rT";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="fg/B1iKP"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fljmg4MK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6C05103F;
-	Thu, 15 Aug 2024 20:15:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723752918; cv=fail; b=uudysHPzjxZXBOAnkdgcMNxl6Y4xv8u/BmGAblCgB3is01dLhCeaEuk8/3NL76qjAO49XWm/oLTa6tpkd4sYlX9pEK78z6KSzHZTPVFvWvetadTCLzgvV+bC1Q6RIj2T/vtOO/38riLaH+FSw++6/Rpi5LvYjpG9DlA3dW0cidc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723752918; c=relaxed/simple;
-	bh=X0u0JYiqONpOTtxOW66jTfAS19iIj8ycyQKYSFMEuHc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Se4qaJMEOJOJLTIjn9I90CjUHHAXQ+VJxsGrnqdfUgQnqB2vWjSmGRlIUEfm5kMUvxwB/Honec+LENOOoARJtkWteHorXCcuxaX7dNYR3015Ks+0NNkhb2+gm5El/OvT5CzIOM2IwMxzhjyX2h2Qaq9XxfXUgct+7INbtYITbNM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=KnmoZ1rT; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=fg/B1iKP; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47FJtXSM019126;
-	Thu, 15 Aug 2024 20:14:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	date:from:to:cc:subject:message-id:references:content-type
-	:content-transfer-encoding:in-reply-to:mime-version; s=
-	corp-2023-11-20; bh=z8ifncITrzoevKcu4z4/R90bH7XzCrjf2vy9FoqF+w0=; b=
-	KnmoZ1rTwiKB+2Tuv65ox+lapswUg7DE8A2XA1Vys7pMpgWaWqv25nZZvDn9jf6K
-	eyoOKR/MsgXav55rFIDpcIhbYwvmxJO19FVF2za5/jNM/Wm7nSvVvyS8kYU6KWot
-	o+HH01d/EcoVtgGNdNzR2AsKERufkhgY1N6l/5br8L3WRbT4RZE0RqZxQThewY23
-	Le29jBauf5CYx7A8rwfQdeEjSmMHARgQA1x+ic1U8eVEIUp+A2FEatAEWcTdts3k
-	BAtBF0dmTrbE859sTcwxCbE9Z3unyRt8peR5WLpM9+N8I1Xf34VRW0bhDOvFR9WP
-	H6hdzy6dy4qU2YK6Lo6Jow==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 40wy4bkdwc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Aug 2024 20:14:39 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 47FJ1nnJ003805;
-	Thu, 15 Aug 2024 20:14:38 GMT
-Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2174.outbound.protection.outlook.com [104.47.57.174])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 40wxncjx8v-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 15 Aug 2024 20:14:38 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AUAhQ+rrcb0HlMe6bbKy4QIJWgb/PE/+TY+8bNlLyug+VWTRFkBXbsWB1KaJgY5UpeRAhcWd+SzzKsssvNPqQlOLW/+zbRAwlf+Jsb1P8z9Od+b5rES5MhM+P5DBoo0R7FIQkG2ByWCS1wapgViRPQaHwya/tbTuZ3eRr5ZHvwM6g6hH50pdHy7nA1AAW8wgpgrrYMeh8enNgZtLX7TDIUPRDgIC4szqkgUS8cC2j6QsffF/6I/meUURrEzDxV4zFpTiTT3uCy7xD+5w6+CUBgHYe9tXm9ZelvCLEj2XVzIAMQsfxprd1BqRErsGmjuVqRbtNxfuMvzxURHwLTMQZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=z8ifncITrzoevKcu4z4/R90bH7XzCrjf2vy9FoqF+w0=;
- b=KJsWi7I9YPU0ai7vhBvknqvkvEiWGKK/9cDsrevzuhEnWcDbdwjkOirUEUBer2lIQ5rfJ31grui2GjX3AkD3SlWAqIWrNrHB7gu8QHmr2PCDGw7I4WJ4DTj46y0+JoYuDA9h03VxvfZ2m014czGoVSqQytqORmw8/Ya/NnStKyVKH4zBEKLawMsenljJiOwMc0ReUkbDFLtYqJFgP+aBQtXoFaHDaTt4OvcG0ohE3zLtoJwtRtYQ52VpoH/onTthHXAH1brxIu7ShjYnVQta/N9UnEwO3Kqi8MzjtuMqvEJ3ayv3a5+v1vNv+wEdtoetnLvsVTvpc7U/Gj4zx7Znvg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9B4146A65
+	for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2024 20:19:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723753160; cv=none; b=T0aTivLMPMa4AFyJNYmNhep61gOzW/oow5dmRUOINrps/1xPnevokspvfVfNqPFdGkq+OX/cVKDtjUu7RDS/PUMg12ctEFZRNNoHWCPXQnAkhbPPOUwuqKtm8DigyTB+LLuau/ftf9/NzPRXHAjHb9i1U18qXgDjpsZkhNoQ8t8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723753160; c=relaxed/simple;
+	bh=LVwFwpTl2ZOzkDsY/bNhjLNrjb1udDhhawkriq9D7Gs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bCUsrDVbPxO1aN5IK79XZa7ovK60x69Hw6qF4htO5cLTZoLjTIqPcSbqG11dWN9wKo7DQ3O3AWzpuumMktgeAwxYxm4f6xWCtPAW81CwhCpXg45JUNs0dgFOBohyyrIjxXpH4WoBbCQZ6GxY0Szpdaarsi4kf+hqCBa4vlHcF3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=fljmg4MK; arc=none smtp.client-ip=209.85.160.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-2701c010388so133042fac.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2024 13:19:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=z8ifncITrzoevKcu4z4/R90bH7XzCrjf2vy9FoqF+w0=;
- b=fg/B1iKP0shtofzacH6DAn7z7V/ln221xiyRmZ38ptr9++fKhl8Lex611O5vV+xah9SBGT5cAofECFLjmezQL6OI+jSGXoHZvH/mNN2+Sd7Zm8Bj8yVd2n2Yj+rJ8P/1FGH/mffKJuVT1QIcM7m9aErf4xAGP0NdHSwbkOiP4qE=
-Received: from DS0PR10MB7933.namprd10.prod.outlook.com (2603:10b6:8:1b8::15)
- by MW4PR10MB6582.namprd10.prod.outlook.com (2603:10b6:303:229::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.15; Thu, 15 Aug
- 2024 20:14:35 +0000
-Received: from DS0PR10MB7933.namprd10.prod.outlook.com
- ([fe80::2561:85b0:ae8f:9490]) by DS0PR10MB7933.namprd10.prod.outlook.com
- ([fe80::2561:85b0:ae8f:9490%3]) with mapi id 15.20.7875.016; Thu, 15 Aug 2024
- 20:14:35 +0000
-Date: Thu, 15 Aug 2024 16:14:33 -0400
-From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-To: Jeff Xu <jeffxu@google.com>
-Cc: Jeff Xu <jeffxu@chromium.org>, akpm@linux-foundation.org,
-        willy@infradead.org, torvalds@linux-foundation.org,
-        pedro.falcato@gmail.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-hardening@vger.kernel.org, lorenzo.stoakes@oracle.com,
-        mpe@ellerman.id.au, oliver.sang@intel.com, vbabka@suse.cz,
-        keescook@chromium.org
-Subject: Re: [PATCH v1 0/2] mremap refactor: check src address for vma
- boundaries first.
-Message-ID: <nu4c2nh5jsm6ldb2xvyw5ilgvekalq5lsfrxjw6xsx7txrwygt@r63xfvdt7cjk>
-Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Jeff Xu <jeffxu@google.com>, Jeff Xu <jeffxu@chromium.org>, akpm@linux-foundation.org, 
-	willy@infradead.org, torvalds@linux-foundation.org, pedro.falcato@gmail.com, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-hardening@vger.kernel.org, lorenzo.stoakes@oracle.com, mpe@ellerman.id.au, 
-	oliver.sang@intel.com, vbabka@suse.cz, keescook@chromium.org
-References: <20240814071424.2655666-1-jeffxu@chromium.org>
- <slrsrycj73xrph5o2poicpt4cogpqw36bbwi5iqykvyce4pve3@suldmmv2mmo5>
- <CABi2SkV2LcrkYOGzkGm80eYw-mhPNN=Q=P3aKGm0j8_gAwXjog@mail.gmail.com>
- <mlwues5aus4uie52zi2yi6nwlaopm2zpe4qtrnki7254qlggwl@cqd42ekhrxez>
- <CABi2SkVrk-MyMGVDzRZi++7tzCu6k92Vz4hyaVHY2nbYDxd97g@mail.gmail.com>
- <szuouie2gbpaj6gynixelasgeo5fxtn5fd3vbmebzve2x3auum@2q4cjchfajvh>
- <CALmYWFv+cy4mL85e4fLCC6fbt4FxB1ONSnVaBcezN84bCbEr5A@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CALmYWFv+cy4mL85e4fLCC6fbt4FxB1ONSnVaBcezN84bCbEr5A@mail.gmail.com>
-User-Agent: NeoMutt/20240425
-X-ClientProxiedBy: YT3PR01CA0027.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:86::13) To DS0PR10MB7933.namprd10.prod.outlook.com
- (2603:10b6:8:1b8::15)
+        d=chromium.org; s=google; t=1723753158; x=1724357958; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rwwh+m11coKDQ807HOXz5WqEZXo+puG96j+/w4ULqco=;
+        b=fljmg4MKz9ekjMaeJHDXfxN2ifBJSJ8m8lzSfLOXDY9MB1TSg9iGhFMV5riPpU+E+C
+         cOtLDVx974CuLNpiXCMej5hv03VUGkybJbFe76tKMEQbAhvmyIFWAbC5ka5sL9UkKiaC
+         z3uYaHXfqkTv6xhgrjA9sos/HvvTw49yzPd4g=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723753158; x=1724357958;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rwwh+m11coKDQ807HOXz5WqEZXo+puG96j+/w4ULqco=;
+        b=kaGgVVuTTAlU6r8kwjaU04/q4e4KAxJjcr2xl1JJ4fRvIb8/DsvmIP+wqqhS0XV7cM
+         FfpHRK7yQxv3UY1o1jgRoywANLD+bC9HyA88j0ZEzVOgbB6jVvzmLh9H4T4DWVYJV3cd
+         MYhLaQj40tmotu6Qu+5wEzMwB1s7sRnkVemw3JN457Gzt/IGRnkLyWskK4SgpqQY3Yxa
+         frbIka1IQVqo+XvE2X1ZaLJQWMEj7/d0vg1GwbQdPl5uD9IhHGScrGrn9Ts0tY+qwKJI
+         P+o6M224NcXJXUyW3VVnzmUhchbBuNs+sqOK/9Xtne9gU3PVruTT+lCWzh7r3IRJ438s
+         jAjw==
+X-Forwarded-Encrypted: i=1; AJvYcCXqJPbzh3YdLMYthIfHFlCQF7vGYxv0BltNYlKdsaPb8XQ0I5S+PLTbIZ7gqUD2xg5n3hEQVEUrEOx4JAFyUZ6DwivCCvdZhVld6LEr39gg
+X-Gm-Message-State: AOJu0YxysSzc755MKrnuhwjiBrTbGkSYDTlJTQKzMezul0asoQvH5Uiu
+	jsCzezrV7Ff+TZR0cEx9enVSkXwCK9pM0+qltm8ol1lGU/FJiTGvMLtR0oUAUpS056O6/XoXvgA
+	ANE0o5r19His5m/+HaA2mJvl/MhUGpTPvwGkh
+X-Google-Smtp-Source: AGHT+IFNZUYqv7nnkMo6SmetQnUTNabfc8VVktvAcev4smjCTJVffFUd4p8V3E9vbbtG9gJR0VoqONU46YFGJfKLqrw=
+X-Received: by 2002:a05:6871:521f:b0:268:9f88:18ef with SMTP id
+ 586e51a60fabf-2701c380d75mr819022fac.13.1723753157780; Thu, 15 Aug 2024
+ 13:19:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB7933:EE_|MW4PR10MB6582:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0bf1c175-6168-472b-d210-08dcbd66e1cc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cm9MNitMcnpBcE9kNk9nSEl5YzlMajgyYThLZDBoQlhHWVJXaFZMaW9ReC9s?=
- =?utf-8?B?aUZ2SVRoQmlPVFd4aktGUWN2Q0NmMmZmb2duMGhKcWZ1TkZnOEdoY25kUjZo?=
- =?utf-8?B?NThZVmcyZU0zNXQzeFViZll0NFU1VnkzM2t4Wnlka1kwaC9uWHNid2FndHZ2?=
- =?utf-8?B?OTRHa0FVWitFM1BEeTd1ZGZQU0ZZcVRZY011cTUxODZrbFZSbVJSNGdUZm1O?=
- =?utf-8?B?Ly9DdjBkWjdwaGZBbkorYkxmb05FU1pTK2JUdW1GeHVTR290NEg5a3JsVC9B?=
- =?utf-8?B?R1hhVmRQWnI2KzcxeHhlRWJzaHlYSmVleUFlYXFObDE1VUovWWtCcnB3UGdL?=
- =?utf-8?B?N0NwT25CY285QlB6cWhpTForODJ6NjRDeFpRNlYxeWJkS0lFRGo5VGV6VnR5?=
- =?utf-8?B?QmJ5eGkwc00wWmpJVFlyazBaQU9zZkxpQkdMbVU4cHEyb1ltRkt4M0NEZUxC?=
- =?utf-8?B?dXRob0N4NjlBaXU3aWVtK0NVZldWSEprNFRZY3RoU01UQjNyTEdyaTArVjJW?=
- =?utf-8?B?QTBheUYxMnlJM2F6TmZmYUorUHdNdHltNUtWVWhZbmdQTlRKMk42R0p4ajUw?=
- =?utf-8?B?ZEhzcUh3dXVxVnpXTlc3aVdFL21RNERJRVZ3TmduNGlqb0d6eUdnT1Njb2F4?=
- =?utf-8?B?TU9kNDJyd3hySER3NHdxU1dody8xalBydlFTSHFDRzgwT1dIS0dXU0hacjIz?=
- =?utf-8?B?ZGpxVnUxbUUvU2FobGR4dFJIcStKR2dhSGRXbUQxNmF5MTVWOXFYWk8zY1Vh?=
- =?utf-8?B?ZGU0c2FWTWJDL0loSWZHNkY0UHZIS0ROVmpqdzlEMklxeGRzbzJaRDFHaEE1?=
- =?utf-8?B?SWdQdVE4dDRhbGllV2RwWTdzU29rU2Z0dm1OUzVQVzFvdlNvTGVvaUdJZVBQ?=
- =?utf-8?B?VDlEbklQa3RnenZYdVBORkMvU0FncW81TWxjSk9vMDZlQWwvNldrM0I2MXdV?=
- =?utf-8?B?aVVMVG1XZVJ1c0RhQkFCNUhoK3drRDlIUnNkSGZZMEF4TVZUUFFBS2tYbGJM?=
- =?utf-8?B?d0ZKMWNmVXJvQTZldWZOS0dxcVk0eHlNMGZTWUhTNUJNSytFUW12ayt5WS9w?=
- =?utf-8?B?eG43MVdEODVQM21Qa25HMTBWb3hUL0xpa3dvMjE2eUprblcxVnRVWUE1bmRz?=
- =?utf-8?B?Ti9DQTRBM0NlbXV6Q2l6WFdNYmxTV1N4MUhYSkJJVC9IZ0gxdGZBaUdqZ1Nj?=
- =?utf-8?B?K29YSzN1SXNDbnU2YWZ2R1hnZmJpRS9mN3BEUldDTjdmNURlZ2hVbzJsQUIy?=
- =?utf-8?B?Y2c5SGRIN2VaT0s3QjhScWh5WW9JNFd0VTJ3NG50aEd6YmdGMktUUHo4dGJj?=
- =?utf-8?B?VDUwaFBCdHBDbE5LdlJuWTU2aFlGQ3hDdFQ3VlMyemdHNXV6aytXR1dGN1Nq?=
- =?utf-8?B?S0t1Q0cvbnlDMTd5RDdqSmpIK3c5Q085aDFKWk16Y3RMSGpzU25TRWpmd3VW?=
- =?utf-8?B?NGI5RXkvLzZpSlFFNDB2dWRIc1lWcU1vMmQ1aldrN2JGc24ybTFNbWlVZWkv?=
- =?utf-8?B?cEtYNFcrRkl6NDU5YWxxdHdiQlB4Ukk0UmRsa1BMR1U5cU9ibVdsTk5pMWZk?=
- =?utf-8?B?b2dnVE1najFjOVhNaGFTN1hxVU54aVlaY1E4TGNDTzVQTk1kMFhoWi9RaTVy?=
- =?utf-8?B?Q0ZMQkxPaUlEQTc1dkRIdTk0S1J1Q08rZW41VWFvNWZ5em16bTZzVk1oeU0x?=
- =?utf-8?B?SUN5ZXVweVNFUjZJRXJ3dExDdElDOWdZTmsrbHBmV3Q0M0tJczBPUFdTUTh5?=
- =?utf-8?Q?A46E2RlxKyyUR6ewa4bgZv58AeWSO7fZC0fCLE8?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB7933.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZXRtbkEzOHJNcEdncWkwQ3NaLzhSMTVsU2Z0SWhzc0hXVUVQaTIxRi90S2pC?=
- =?utf-8?B?eFFGWGQxWTNzZFM3QVpteXlqcGJoeTdiYTBYeGU3d0FrQmVLaWdDYWgxMHY5?=
- =?utf-8?B?MXBWWUg4a2duN05OWU1kbGRkbEI1QWx2QkE1WjZOeGhZZDFZdVozZ1Mvejdl?=
- =?utf-8?B?OFAyQVZxdHh0MlYyYVdieXNobnVlbmZzdExPVDl3ZUhaYm8yRk5FcDJTa3BG?=
- =?utf-8?B?Rjdpa3JmVlhRbEw5RzMxNWFydzVKVDhlYVNUbkp0dGpwRU9SOUhJMXhNQXor?=
- =?utf-8?B?YUMrV1lxSVZ0OHRHNjI5WThtOFFCelNEZWNGV3lyb284eFFNZ2FtNGd4VDhU?=
- =?utf-8?B?T0ZNSktKRzE1clNDK3NvYTNDbUVSWUJEd3Qxb0lTZ2NmR0x3TjNmRjJ4SnJZ?=
- =?utf-8?B?ZGU5VEZEUzJncEd1NTI0WkQ3ajliL0IvQU5senpnQklDb3krNDcyWGhsbk84?=
- =?utf-8?B?WnVaZFRXdFYvd2VvMjB6QzI2Nk9waTVRaEEzdW9YRnIwelBWaHFlZTFjNTBG?=
- =?utf-8?B?YVd6UmFDMk4vWlhid0liSGdBeWJGS1k4UE52b1NhTDV5UFR4T09ObXpyTTJB?=
- =?utf-8?B?YUZ5R0phSmlueElZeWpGc0dFVnZ1c2k2MVd3ZjdKSmRJaWs0b283ajdURW5Q?=
- =?utf-8?B?WnpiS2Q5UTdZL00rQ3YrSE5TMnJSV0F2QXd5WElMNHFwZ01kUyt5ckhZU3lB?=
- =?utf-8?B?dDRkYTBWZUdMdmRNQXNRc1g0eXhkL21VTkdCMjhUeGRMclJ2aGc4SFZ0U08y?=
- =?utf-8?B?L0NMaXdqMDdZVysvT2dWLzNGcW04SWF3cEN6V0JDNHFkZnljbkVESk9JbWQr?=
- =?utf-8?B?SVFKUWthb3BJNDZiWlNVcFl0TWc4U1duV29iTTJ6TFUrcHJmWU9hRmdRRHgv?=
- =?utf-8?B?c2pqY1ZVZEZxYzFXck5WNTVHTXgxM2crUW5OQXNFNVhBa3VxNHVRdUloYzhN?=
- =?utf-8?B?eGxmVjlhbTdaYU9WUjQ0L0c5b2ZUWHI1KzZkRUgxSjhBNTduYnVnVFlTUmJ3?=
- =?utf-8?B?Q3kwYUR5b1JKdkVQbkpuY3dQbGxyM1BzbC9NcFFEUnBKNnJrc2RORE9VYTRH?=
- =?utf-8?B?UWsycXFWNUZNZUY1V3h3bXZBUENhZ0tmUHh2UFN3aEtvdHRjSVlKY2dkYzg3?=
- =?utf-8?B?SGJ5aGg3MDdBOFAyMElvQ05uaHM1c2xFcC9MS3oxQXFNcERrZTk5NjFRdnNr?=
- =?utf-8?B?SFZXNmV2elFkMDZpNmtGRldFcDVJaG9tVTNlWXZmSGFzalFxdmNlVThTSEQ2?=
- =?utf-8?B?anU5QXZLZkxLVWxrdHBzVmRla1h1K2VTSDJFUTdRQ3dkVE9ubUVmMFUrcDNP?=
- =?utf-8?B?SXdqdVAweTBkd0FOaldFOUYzR1p3b2FnOUh4dVVGRUZmNytHV0tuZ3NBS0xa?=
- =?utf-8?B?aWo5akl5MUlIS1BMUGs5RndrUGZqeVRiUEVPcDRFOWVRT0F2dk83NHdGYSt5?=
- =?utf-8?B?YnNOTlU5SHRGWUtoWURxMkQzbnNHM1dFSG1Wd25PcWRERXYwTHhEdk96TThv?=
- =?utf-8?B?b1p4L0trQTJsUXhiQ3N6YWNXL0t0cVZjR0tOckQxNU92SGJacHZxM21UZjJj?=
- =?utf-8?B?a21UNG9nWmJ6OHlvbzFhNHFPeXpHemliRXBxNTc5aWEwRHA1MFliRUhiTjll?=
- =?utf-8?B?czR6dm56MkFvd0NUbmMzWXhHK3lUSWRXcEZ2QVErOHF5c2k1UlZJWFhlVXR6?=
- =?utf-8?B?Rk5JR05nWjVPTjdyS0toa0VjT21UTm1SZ0ExbVlETElXTlh3ZUYzMm9YUmZG?=
- =?utf-8?B?VVFZZU11RmN4YkRNQW1nYTExSGpNQ1VQVnZ2bmZsQlpjUFFhOTM5UVh1Tkl4?=
- =?utf-8?B?SkY5Z000M1hFdGRqOUhISDFoUDlFSFp0N2F2R2dJKzM5bTNydEV1eW1ZMkZC?=
- =?utf-8?B?eTJ3MXpxeGYwR2xQNytGMWE0a1padHBZLzUyekx4Y2ZyWW1qT3FuR1RvUnNN?=
- =?utf-8?B?aFptdm9GSnphS1VJZFRvaE82U2lHcW1MYXp1T21SVFJjSWIrSmdYUEdJdlhj?=
- =?utf-8?B?bGVBTlFRajVJYUdEREkwTElCcnlab25iK2NpdmRLb2ZBTXRkdU1mWjV6NXNU?=
- =?utf-8?B?N3M0VmY3UXBxWEhsZ2V6eXBZMWlTYUVKYnBmcGRkODJWdUVtSGRKaWFUcktP?=
- =?utf-8?Q?jRVs5G05jkys7e/DnptQYfDaG?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	KeULTjz1nRwABxLHJsmqh2ZitOuQ6c+kjD9ZJu3Z4L2LxMy2fdMxf7dDJhGdxt1sW3l8LbFj/0DSMGJlEjW6k8lBvGuk26lZgF2P6sVIK+DK1FSx0UEL7STSLArDcHxxTZXMP4VUEgiaF5flYBfh0BQ9SkRQNktwt8wtKj/JviPw74k3zbRSLsTEn34vrbgNCeIWKWDg7omrywlp+dl3vBuIp4bto34iCCz+8GOYjr3rIEg4M2x7ziSoYgfG0Vo5lzUmaJOc1S2JIPWtx5f4LZLEr4dKNVwuU+FTmQWeiZ+QKw3UZ1AEMdQdi6afKF7Xx6zI7qZGYE5m6grde2f77AM8CVOUtQGBDPDR8wGKjPzXZsE9T51gRab6cLzCfxdEIXXqo/EAKOcmXBfDQb69IcH8s67eMQ5eKmpJ/wWFajRnO34dpzZJ8vytBkmuRYzAwURz53lFRX7xOVmvKhVEfr52AfGrdKht4rKDbpVCcKT6fHcclUR1vwTSIiZz79fzyKOcAj74QaodFK8w+HTeZO6/ggXij/vogcbiPjYU2bSdhrxkYuIZwE6MKlQb2RKacLKg7VApW4KhrSYKOMqH2krplX91PAGF8g4NbjirTgY=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0bf1c175-6168-472b-d210-08dcbd66e1cc
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB7933.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2024 20:14:35.4073
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AFKt+jJaVC0+b1GB7cNWn85LlV0QqJbsyBnekM1XK0kPDn9mBqy1d6LnGTd7r6K1PJ3I7t9lvr+b4yahIzeilg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6582
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-15_12,2024-08-15_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 mlxscore=0 adultscore=0
- suspectscore=0 mlxlogscore=999 phishscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
- definitions=main-2408150147
-X-Proofpoint-GUID: zH-mkAAeGInbfsBs9PSviYiJQPCMUfUo
-X-Proofpoint-ORIG-GUID: zH-mkAAeGInbfsBs9PSviYiJQPCMUfUo
+References: <20240814071424.2655666-1-jeffxu@chromium.org> <CABi2SkX+3JrDk6b59vgvjb8XAkC7_p3-cSkFHOotra1Yh6dv1Q@mail.gmail.com>
+In-Reply-To: <CABi2SkX+3JrDk6b59vgvjb8XAkC7_p3-cSkFHOotra1Yh6dv1Q@mail.gmail.com>
+From: Jeff Xu <jeffxu@chromium.org>
+Date: Thu, 15 Aug 2024 13:19:06 -0700
+Message-ID: <CABi2SkXtZLojx3AQU4C=41NtBPGjVB2+fv_KWziOqyXRQ8P7Bg@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] mremap refactor: check src address for vma
+ boundaries first.
+To: akpm@linux-foundation.org, willy@infradead.org, 
+	torvalds@linux-foundation.org, Liam.Howlett@oracle.com, 
+	pedro.falcato@gmail.com
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-hardening@vger.kernel.org, jeffxu@google.com, 
+	lorenzo.stoakes@oracle.com, mpe@ellerman.id.au, oliver.sang@intel.com, 
+	vbabka@suse.cz, keescook@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-* Jeff Xu <jeffxu@google.com> [240815 13:23]:
-> On Thu, Aug 15, 2024 at 9:50=E2=80=AFAM Liam R. Howlett <Liam.Howlett@ora=
-cle.com> wrote:
+Hi Oliver,
+
+On Thu, Aug 15, 2024 at 11:16=E2=80=AFAM Jeff Xu <jeffxu@chromium.org> wrot=
+e:
+>
+> On Wed, Aug 14, 2024 at 12:14=E2=80=AFAM <jeffxu@chromium.org> wrote:
 > >
-> > * Jeff Xu <jeffxu@chromium.org> [240814 23:46]:
-> > > On Wed, Aug 14, 2024 at 12:55=E2=80=AFPM Liam R. Howlett
-> > > <Liam.Howlett@oracle.com> wrote:
-> > > > The majority of the comments to V2 are mine, you only told us that
-> > > > splitting a sealed vma is wrong (after I asked you directly to answ=
-er)
-> > > > and then you made a comment about testing of the patch set. Besides=
- the
-> > > > direct responses to me, your comment was "wait for me to test".
-> > > >
-> > > Please share this link for  " Besides the direct responses to me, you=
-r
-> > > comment was "wait for me to test".
-> > > Or  pop up that email by responding to it, to remind me.  Thanks.
+> > From: Jeff Xu <jeffxu@chromium.org>
 > >
-> > [1].
->=20
-> That is responding to Andrew, to indicate V2 patch has dependency on
-> arch_munmap in PPC. And I will review/test the code, I will respond to
-> Andrew directly.
->=20
-> PS Your statement above is entirely false, and out of context.
->=20
-> " You only told us that splitting a sealed vma is wrong (after I asked
-> you directly to answer) and then you made a comment about testing of
-> the patch set. Besides the direct responses to me, your comment was
-> "wait for me to test".
+> > mremap doesn't allow relocate, expand, shrink across VMA boundaries,
+> > refactor the code to check src address range before doing anything on
+> > the destination, i.e. destination won't be unmapped, if src address
+> > failed the boundaries check.
+> >
+> > This also allows us to remove can_modify_mm from mremap.c, since
+> > the src address must be single VMA, can_modify_vma is used.
+> >
+> > It is likely this will improve the performance on mremap, previously
+> > the code does sealing check using can_modify_mm for the src address ran=
+ge,
+> > and the new code removed the loop (used by can_modify_mm).
+> >
+> > In order to verify this patch doesn't regress on mremap, I added tests =
+in
+> > mseal_test, the test patch can be applied before mremap refactor patch =
+or
+> > checkin independently.
+> >
+> > Also this patch doesn't change mseal's existing schematic: if sealing f=
+ail,
+> > user can expect the src/dst address isn't updated. So this patch can be
+> > applied regardless if we decided to go with current out-of-loop approac=
+h
+> > or in-loop approach currently in discussion.
+> >
+> > Regarding the perf test report by stress-ng [1] title:
+> > 8be7258aad: stress-ng.pagemove.page_remaps_per_sec -4.4% regression
+> >
+> > The test is using below for testing:
+> > stress-ng --timeout 60 --times --verify --metrics --no-rand-seed --page=
+move 64
+> >
+> > I can't repro this using ChromeOS, the pagemove test shows large value
+> > of stddev and stderr, and can't reasonably refect the performance impac=
+t.
+> >
+> > For example: I write a c program [2] to run the above pagemove test 10 =
+times
+> > and calculate the stddev, stderr, for 3 commits:
+> >
+> > 1> before mseal feature is added:
+> > Ops/sec:
+> >   Mean     : 3564.40
+> >   Std Dev  : 2737.35 (76.80% of Mean)
+> >   Std Err  : 865.63 (24.29% of Mean)
+> >
+> > 2> after mseal feature is added:
+> > Ops/sec:
+> >   Mean     : 2703.84
+> >   Std Dev  : 2085.13 (77.12% of Mean)
+> >   Std Err  : 659.38 (24.39% of Mean)
+> >
+> > 3> after current patch (mremap refactor)
+> > Ops/sec:
+> >   Mean     : 3603.67
+> >   Std Dev  : 2422.22 (67.22% of Mean)
+> >   Std Err  : 765.97 (21.26% of Mean)
+> >
+> > The result shows 21%-24% stderr, this means whatever perf improvment/im=
+pact
+> > there might be won't be measured correctly by this test.
+> >
+> > This test machine has 32G memory,  Intel(R) Celeron(R) 7305, 5 CPU.
+> > And I reboot the machine before each test, and take the first 10 runs w=
+ith
+> > run_stress_ng 10
+> >
+> > (I will run longer duration to see if test still shows large stdDev,Std=
+Err)
+> >
+> I took more samples (100 run ), the stddev/stderr is smaller, however
+> still not at a range that can reasonably measure the perf improvement
+> here.
+>
+> The tests were taken using the same machine as (10 times run above)
+> and exact the same steps: i.e. change to certain kernel commit, reboot
+> test device, take the first test result.
+>
+> 1> Before mseal feature is added:
+> Statistics:
+> Ops/sec:
+>   Mean     : 1733.26
+>   Std Dev  : 842.13 (48.59% of Mean)
+>   Std Err  : 84.21 (4.86% of Mean)
+>
+> 2> After mseal feature is added
+> Statistics:
+> Ops/sec:
+>   Mean     : 1701.53
+>   Std Dev  : 1017.29 (59.79% of Mean)
+>   Std Err  : 101.73 (5.98% of Mean)
+>
+> 3> After mremap refactor (this patch)
+> Statistics:
+> Ops/sec:
+>   Mean     : 1097.04
+>   Std Dev  : 860.67 (78.45% of Mean)
+>   Std Err  : 86.07 (7.85% of Mean)
+>
+> Summary: even when the stderr is down to 4%-%8 percentage range, the
+> stddev is still too big.
+>
+> Hence, there are other unknown, random variables that impact this test.
+>
+I could not repro the 4% degradation with my test machine
+(Chromebook), this can be entirely due to the specific test and this
+test machine.
 
-[1] has your "wait for me to test" to hold up a patch set, [2] has you
-answering my direct question to you and making the untested comment to
-someone else.
+Do you think it is possible to do a few more tests ? This time I like
+to have a larger sample size (100 run)
 
-So, entirely true.
+stress-ng --timeout 60 --times --verify --metrics --no-rand-seed --pagemove=
+ 64
 
-Liam
+Please run the test for each commit following the exact steps, e.g.
+reboot the machine, run the test, get the first 100 results for
+sample. Please don't select or drop any unstable report because then
+the data will be biased. If possible, please includes stddiv and
+stderr for the data (or raw data if not possible, and I will do
+post-processing)
 
-[1]. https://lore.kernel.org/all/CALmYWFs0v07z5vheDt1h3hD+3--yr6Va0ZuQeaATo=
-+-8MuRJ-g@mail.gmail.com/
-[2]. https://lore.kernel.org/all/CALmYWFvURJBgyFw7x5qrL4CqoZjy92NeFAS750XaL=
-xO7o7Cv9A@mail.gmail.com/
+for 3 commits:
+-> this patch.
+-> after mseal feature
+-> before mseal feature
+
+Thank you for your time and assistance in helping me on understanding
+this issue.
+
+Best regards,
+-Jeff
+
+> -Jeff
+>
+> > [1] https://lore.kernel.org/lkml/202408041602.caa0372-oliver.sang@intel=
+.com/
+> > [2] https://github.com/peaktocreek/mmperf/blob/main/run_stress_ng.c
+> >
+> >
+> > Jeff Xu (2):
+> >   mseal:selftest mremap across VMA boundaries.
+> >   mseal: refactor mremap to remove can_modify_mm
+> >
+> >  mm/internal.h                           |  24 ++
+> >  mm/mremap.c                             |  77 +++----
+> >  mm/mseal.c                              |  17 --
+> >  tools/testing/selftests/mm/mseal_test.c | 293 +++++++++++++++++++++++-
+> >  4 files changed, 353 insertions(+), 58 deletions(-)
+> >
+> > --
+> > 2.46.0.76.ge559c4bf1a-goog
+> >
 
