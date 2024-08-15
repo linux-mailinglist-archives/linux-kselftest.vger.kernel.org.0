@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-15367-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BAF09526A5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 02:13:29 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 314589526AA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 02:13:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 819E71C21D43
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 00:13:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 75F12B22C11
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 00:13:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC18247796;
-	Thu, 15 Aug 2024 00:09:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931D853362;
+	Thu, 15 Aug 2024 00:10:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Rt8yhkpq"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="PlY6gL9L"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011030.outbound.protection.outlook.com [52.101.70.30])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7620C3FB1B;
-	Thu, 15 Aug 2024 00:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D81847A66;
+	Thu, 15 Aug 2024 00:09:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.30
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723680597; cv=fail; b=KV11+0O/RN8Ubg0XFijq8IVdlreleMRLnzzJUrQIK9XfkDCBYTuMQxqDRQyWdgTsQyCGkr9kQ9Ah/aPFsHQjGyHyIalJtI7nMUQKuGEmGm47Ol56/NDVT2pq2XTrzQOgGLkTBabh+QTGHZZr0isRrPYWD1rGYHfYOZVOCk1nGFc=
+	t=1723680600; cv=fail; b=EJdR/bqQ0YPLGnGABCeAHtHrkaiB1koPOL9B3Lxo8PpQes+9Tk+nWiJwYpmyyYFAmZQX0E6wJEe1aqVIzX77dyllwaoIP+Cf1+EmQkcYe8DF5d/RwMaR47sawM4kVQdKmvy00M5kkqELWkvNAWjftkXSTn2d0anhXnnHe7w0Ipc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723680597; c=relaxed/simple;
-	bh=4iDMZpNjH9wd+SJ08fKUkSY9a7FVu8ZyWrWdaAT4xgs=;
+	s=arc-20240116; t=1723680600; c=relaxed/simple;
+	bh=gFF/32PFqq7ox3Pfmb1RYJpRHUxx1+OLIwbaEMzl+Zo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DUOTTgBidhw30cu19oUIQcc0M2CIxbIBTR0rNjouZ/DZZrLQ6H0P2PwzhHcDnqlBTonR1qlsG/YWMOkwbMM+Xxd7JImb6KbzXsMeeFc0dpUibXqE5LE4TTaNk0SRX+gsJGzkEbEc2YInNVnohBHMfP/P8oiX0v6OQBYJpaAQ820=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Rt8yhkpq; arc=fail smtp.client-ip=52.101.70.30
+	 Content-Type:MIME-Version; b=OWqCEgCRtDxEZiIBe1qTJI+zXZjJWK0xR/YiePovIyCe4uFR4UCUAdVmLAjdFEAVfWBYrCsMIoKa41JHKHRFko/zvyKSFEHtSFVbyWEYTrz5yN7Ll2Kq7A8hQ6PFjkw6UhV5vQlGNcw1W4GU9tY2itPV91QJp0MIKj6AFDag4+s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=PlY6gL9L; arc=fail smtp.client-ip=52.101.70.30
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fccRzltrrhqsIR7m/I+wWMv0wNZUHoSuFHV5pyiz/athnJu4RTzebU+G0rF1ps+mQGrlgl4HrE4p8gQoLAc8hTs/q0xf9Te+VUiU7D92Ra9hJ5vsOEatlRGvHK/Vgnz0xZqCiHtzZKuOsYfZKxvf5kdu54vc5NCCMOoECtzoESpIWtAgq58+5gNjnW+MYtCFABs6teSFdq8VxKOxljajgwwdkaEkETggDDgbfrUujbY/bnGbcURAHrxfqhl61BUFTFll3P5D0aqwAEbUe32Y79ZaatG/gh/3BE5KN/7lIQtsle8I7yabLOWUrPmoAt9YdgM19UlJ9AqeTtC5deeAxQ==
+ b=QNVx9ka1QypNb1oBVoXe10GzCcxsgkiPar/fL6NYeDN7GN4FJc9bHfIPxRJ1TyKvS+3lA8C/NXyGFjR9X3e1qmUo+WCfW9kNYw0JlAIO+noYaPoLyVDDP8a9hbbh/Ko2GZx30KAdPI1+xU9Zvy4Irj0FApDBysSG7+6SXZrCK43+sKDWCcoZAn+9YnKZGWScxSAHiPx6A1pFPLlfaQ4ypFHAnpAKGkopO0vn4GCh9aCXjlm4lJMj/93EYixRFVCVU8JDr+WGQvkvul3Zu2UrGDzTOjAixaEbt6nOujpbyWHbej5TJuHNPgH6YJMast6nuo1yQoBrK0qo5Uxc1uJAIA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EgsffPOM8rXOTns59/RY1lYK6l81MKC6Z8yN/i/CIhs=;
- b=Kk2y9pcz89y6g4DAJrbV+9xoV11Fx8FNE6imRt+vj3Z6nMBKcvTsSe9DhR6QfRoytekBttR/UObtf4FrVU5/3GbCc/xWix5iYCIG21qewvx8ZaXlqYmOveh0cHWWTEZ8TNgnZe+iZzSkArX39rLMCqYDzBpGNf/TT93XN7oDzGC9wNeQNFekkPwukaI3lK8cvDDI3X7/lZTXh+mrkQ/B03reKfwgyJsvAHzA0+M5uCVH4uN3WL26d3vHWB6gKHWGWMNSpinMkcJTtAUTuHxzB5L5cxsO3dg+3j96JI06pI5yrI5TyTMQGDa+NUCze3EReh9QRLrHUUPBJG8zVUibFg==
+ bh=pCcgThH71i8kjAzpmGAIeoNjeTwQBNzNOh84iWzZGSA=;
+ b=AKr5aTZ08ENdz0vnHCf45EP1mGjLnCQaWEdIBfqy94doYMLoOWdLK+UgrR7aT17Amir1Fh0kwSty232doYdUIHISM/Oc/MruJyG+U5Fpeb/yQH4EgaH30yRhD/eRkT8nB5ZOgaAOCA1SquL+6gGYin3941keiNaiM9mexWmL3Ck1a2wNTqItyU6otT4rhVmxXEmaQ6WmkEQRokMAlUxydI+4D7mYFhOL7iHpql/KKiFSk/3YJWsJQ86JQaYazp9Gm7pgOIZEtQJJH0SxrvkF61eRZYwfoaOFosplh11zrbP8DKGAgLnbWE48r8jirhx1a5eokfimnm92ILrsUQUwEg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EgsffPOM8rXOTns59/RY1lYK6l81MKC6Z8yN/i/CIhs=;
- b=Rt8yhkpqXHVjBIdTPxZILxcmoU+sLK79u393WDg7PLA+T9gWKqy+6ugN1e1me4u7w6VxQGJXqrTeDpOZ+jTGWoT6vuub5TWuK51qLn3Klk69CL+foZzg/8gRP3MiNVRfAlXTPRkfup4HCG0iZNHsPYysY/wyLTPglRRO2U6rvSioDkOJJM9iYWUIVHlUb7vnKrjd28h0aLCJhyn5xeogxR8z09yclfN/fVURcP7uL1ZPbz712AHgti8Z/OOYbm/f9CZS6mlnhLWJkdLlT1+ERxB0p6C6zgPA6WKvSSq/yMvh+FC6Fw2Q70045fcZSY2fb/4NSzCS9Hmz90dH5uDucg==
+ bh=pCcgThH71i8kjAzpmGAIeoNjeTwQBNzNOh84iWzZGSA=;
+ b=PlY6gL9LK3GeAqEuv9w9JbChaVqYn6MYnZT5tkugFTn7qyvBg6W/T/+8VfA5Cp9kyBaVhGbo3Yz1VVHiikqhwjRJCK0M/xzWzbYyQThiGP9lr9InSJq8Cuzq4Ic8syKFVkVYY0IlmfDD+TCr6rllKKMXUIIDkDBbpNGKZYigOrV2he/TWoAa3K76FS/V3eM4DnibGRyWLLtWRj4No/CPlSqZ8lJUL5mx+mmFKVqJ4qH9oLekfeLMciNeG6HSCjePFgKhaANqDA65MaaEnCsjazIdh4dGwYk7JaCTdSN/fI2IpRrctUlnxz+sBMi7hx+5AfhlB2La8wZEY0aHd4BHqw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM8PR04MB7779.eurprd04.prod.outlook.com (2603:10a6:20b:24b::14)
  by VI2PR04MB10285.eurprd04.prod.outlook.com (2603:10a6:800:21e::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.18; Thu, 15 Aug
- 2024 00:09:50 +0000
+ 2024 00:09:52 +0000
 Received: from AM8PR04MB7779.eurprd04.prod.outlook.com
  ([fe80::7417:d17f:8d97:44d2]) by AM8PR04MB7779.eurprd04.prod.outlook.com
  ([fe80::7417:d17f:8d97:44d2%4]) with mapi id 15.20.7875.016; Thu, 15 Aug 2024
- 00:09:50 +0000
+ 00:09:52 +0000
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -77,9 +77,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Ido Schimmel <idosch@nvidia.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH net 12/14] net: dsa: provide a software untagging function on RX for VLAN-aware bridges
-Date: Thu, 15 Aug 2024 03:07:05 +0300
-Message-Id: <20240815000707.2006121-13-vladimir.oltean@nxp.com>
+Subject: [PATCH net 13/14] net: dsa: felix: fix VLAN tag loss on CPU reception with ocelot-8021q
+Date: Thu, 15 Aug 2024 03:07:06 +0300
+Message-Id: <20240815000707.2006121-14-vladimir.oltean@nxp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240815000707.2006121-1-vladimir.oltean@nxp.com>
 References: <20240815000707.2006121-1-vladimir.oltean@nxp.com>
@@ -96,328 +96,333 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM8PR04MB7779:EE_|VI2PR04MB10285:EE_
-X-MS-Office365-Filtering-Correlation-Id: 305d7dff-3276-4137-97ca-08dcbcbe949f
+X-MS-Office365-Filtering-Correlation-Id: 0a7d7ed3-60e4-4eb9-b375-08dcbcbe95e4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|1800799024|376014|52116014|7416014|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?sF4Entb4T4NOTw3yLvkRlYIvxWtxc2demQ7bFqMtmpHot85WpB0KhwQRVMIa?=
- =?us-ascii?Q?G/9rnclsFQHR69A3SCCrTOEPbIcmv+SP05Hoc8n5MrW5OrXcM7tA/TlezJpp?=
- =?us-ascii?Q?U6teoX+yqig0ML3VW0zAuEe8CCEkiFHj5nYnIr7NpPjxe5g/3yx/Zt18+/l+?=
- =?us-ascii?Q?/RtQQi5gbmpE5Q4uYYSsnWUidI9rxdgeab54amj55Lbsh+s2Zs8T22mcfXPh?=
- =?us-ascii?Q?s2YsUNnPc4E/VJ1H2KelnNk1rSyA2g1UEFqiCiBaKb3ENNKzHVM29oYeu+v7?=
- =?us-ascii?Q?Sj6+pPIhFxd8cH6yLp6wdlvvZaxzuxSsFbtRQg56AmsZ1pxcSM1WoKAgKmBe?=
- =?us-ascii?Q?RwC8WmFdMvX7LgUoI7gMVy1cw7LwElTH20fBLBjbmJijzprZlHJLpNfi5UiC?=
- =?us-ascii?Q?KNNjNcqzeTyxTZpKheznuj5tGIrD4K6PIuv5iRhUiS/ufGpPPbSRH0tfCqUU?=
- =?us-ascii?Q?WkLKsw3KbHrgIFalZgL8BdrI03nBXvNO9GSJEw/Me8yzPTYuDBT+Dd+oIlao?=
- =?us-ascii?Q?Gdtr5shqfl4CWH0XSaeBLo3A6ER9hZTtiHEzNDavlPaJdKxprKRMecGj9qmp?=
- =?us-ascii?Q?sLpeD6k/6sO2L7LGzVXmigjeG0Nnot0rK+o8qLhQxwd2ltSIe/XC7qk1h2gp?=
- =?us-ascii?Q?vtYzQ3adHtsfFFhX52LYYy4QLdqLgRqJ9uf0JBXri5x/hbfxFos/nwaCFjmD?=
- =?us-ascii?Q?SSMOORqvWxrW8LmGutvCFItOwZoAn+mj2qyiZ5MKqa+bzQOxnJWnXTQ3vALc?=
- =?us-ascii?Q?CWQ3KL68Fs4wUzH7rcbxxE7IwR+jIFJZADZAvd2jPBpsJlZdRaYX5qJGmVTr?=
- =?us-ascii?Q?Zf3aNuJox3SGYIy9Rqfml6HOOoladO2KNAb5nZFPuPk7rHayzpGQo/Gg1iEe?=
- =?us-ascii?Q?nKg22a1R/hn3wTgpUphOwT1DZwIt5hE9jiJF0xpHkPY3ESaz8S5F/eNW8PM8?=
- =?us-ascii?Q?GLWSdaWVJZB80tvVVXVjiJFu+hVz1N1sdjJcnJ3yG92L/DZpFD5qz/TcJc0U?=
- =?us-ascii?Q?Xa/zs8QBvR3/ZSFWZ5xXedGgu+H6ik7rrqDbZ6nw41Q1tfLJP4m7DWroRtHR?=
- =?us-ascii?Q?ZsaJL+jqB4eusuEsq4kypGtc2d32MeHjjHZa8Wp4nuECSjBvgoybYHcCnNMD?=
- =?us-ascii?Q?SBAhxGWalGFKUvTN23WjhbpbvbYsEsVRGFwAgkjTwLztfvTLdRT+Oq07FlFE?=
- =?us-ascii?Q?d6f4tVx+aOJOLjmU2QLie0Wig4tvyVM4RrWhLYkE619XExH51Y7zNe5l5Ick?=
- =?us-ascii?Q?hYg/Z20h1EbkAzQ1Fj0KdLXx68CWchHlbdR7K38T6Y5iF1G7VC6yCauovrRk?=
- =?us-ascii?Q?wfKW48WLuriq4uXmHRLh1AHnqO+YEnTqMZ2fsvDgD4GEE/iUDA1ZaciXzKil?=
- =?us-ascii?Q?86ATuI3BXgABIGJFBD0crVFuKXunYRGWcS9Xhy/r6DUAw8g50Q=3D=3D?=
+	=?us-ascii?Q?p3YpmzZlvGM/oWcpZnfxkOXsBEU7lf8tCFyY11zs9o9GFZ/LXEFfoiD+uQfA?=
+ =?us-ascii?Q?cswnZgX16TZzR9lEZyr09nxhE5yarvs/fBMk2YpWEGH/dJRFLHz0Ejs+nPmL?=
+ =?us-ascii?Q?xFM5/2PInzwJ1HtvnhN90I8+DPguB/V+ugZ8C2GRx2y9YIh/4OGgsXAucIe0?=
+ =?us-ascii?Q?o0w5rDJTpwnKpE5LKeK4kgni/W9PJejwA0KoZ3pj1LEwtDjvJzYRw9Mcfk6m?=
+ =?us-ascii?Q?wefz5mtr1bxAicX3Ub6uyXmJQJgXBMVWb+YIrJAZ4wmrItskMuZMitqoP9PL?=
+ =?us-ascii?Q?NRleNQPQp/RxT9IlXoV3xXGMdVDTN6OfytM7HXYhW1b0LKIWNXWn0Z+7T0c0?=
+ =?us-ascii?Q?RGWMNQ8t+147P9L2ywgtP2uof/Q3JtIvEEaWuv50wWsNnwC15MkJUBDGKORO?=
+ =?us-ascii?Q?m98OrQx7hPrRVgXKJtVohKYnbL6uj1nCHFOfWi421EiLUWlgFdpZPaT3jKCo?=
+ =?us-ascii?Q?wG0fnnIdkAmtNLbvJN2xtydY/nfyRCKImELXeGCm5ertmFM8itCBGaEyO0fa?=
+ =?us-ascii?Q?EqMWjZvwJg+cxJAe3FgtYiz0xdhu2s9OO8Df7WtqUKFmXt4l5P73uQi21Y/p?=
+ =?us-ascii?Q?wCBqJSgV5WFhzYrelA9ke3ovV8GZLm+k6CtdeIh2F1Q0JYKaGGMxmV13145B?=
+ =?us-ascii?Q?dyt6e19aVYq41hQuRsv8KnJ8tIJPCJMvXjbuaEtP1ZgFyynFfi/sgyUIuBCI?=
+ =?us-ascii?Q?ADoKuakvFEpaDJYjZOoMtpl755mBWFcIfFBZg43kHzJDm6L3L4paSf4pn+wh?=
+ =?us-ascii?Q?0mbd+duhzNxIaRPPSCqX/bqkZzXEvFR9qk7H/c4R2eGHoUoh+P60P4DHfFsX?=
+ =?us-ascii?Q?+f81VxJGQR/SAyQI9iLi41tiwLiX3WwULreQ2n5DYijnkuYWkDYLqDS0RkDy?=
+ =?us-ascii?Q?yNnkRNM+9j0QdyaXE/g1rIdGddAiDfZuEp0hsYlN/0kmh7/LGiJJlfnA+2ZQ?=
+ =?us-ascii?Q?RpenVUZICMk8/asmKa2vKMMtyoXPfKNNdbrrdHiL8ZytX6gVuNEbpmPqqKYN?=
+ =?us-ascii?Q?h+uicM3vcsYoDbg8ueLJg2HZ2M4vlf7Vy8grB9JC31pwQf3liF7/txHjM1Np?=
+ =?us-ascii?Q?WoQpgb9WybJQJeYSDxv5W4E1yl0guRpdyvciT+59kuuUYJK/bHu8XFV9E+GW?=
+ =?us-ascii?Q?dvUDasRh3O3ACkklkKvrfnUyUwTFT75c0/3RFc1AX0grwx1XJFswGruCu6Lp?=
+ =?us-ascii?Q?Rnj0jGIP9ZEhdkJSjvhq17uJrjsixd4lI+w7PZQyRwzSDrySnhV36ngiuUj9?=
+ =?us-ascii?Q?dA4AswCOKp72lUlkSEKrNGo8ge1Hy0feRlafahmUwcgW0SQd3zXLQ8m9BHgx?=
+ =?us-ascii?Q?9m+CojULLtPclh4FDBMVrX/lR5BGYZuz8fvY1aWujAYW27KCYxxa66cgNxvM?=
+ =?us-ascii?Q?8ivjNqZWfWUT9Uo0VFACYLxI6cq4JJ+SOqgMOz2BGbwDRlQMDg=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM8PR04MB7779.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(52116014)(7416014)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?1dy3zrDBLQATXZYiR+xoaVp3/dfXi/M94IwEU8eQynF5jKGyRRjUjAApzyuQ?=
- =?us-ascii?Q?0Ma/82X8cS/lwr0WvthnMwOsf4yAdBfDaFqhdy0BdmzNzhqiUhMRXEbOm7HM?=
- =?us-ascii?Q?M9FO2dszAaRSlE4RvmpGJ9k/CT4HQB/3k5wjqMW70HUdnGXP4qManI8dIwJl?=
- =?us-ascii?Q?CbWY17gG2odF3SMCz78n3qsc1GYtiKGBaka0k02tYbtbgOidYEr93o/JcMXt?=
- =?us-ascii?Q?7++uZhWTv4mX4KsMMID7MupMCX1RmqMWKSaLJ4gBAMDztX0nLt/jWCTpBRUX?=
- =?us-ascii?Q?TYw58QXFfWA8YX24cUdd6YIictr2NSndqHMkAvbUcqY5uVeEN3tHUFETCCdz?=
- =?us-ascii?Q?12WGxPCSdbny/w0Be72K24BmLf9oCtdW38TgOOqCVki0nTHY5fF9J9AKyV/I?=
- =?us-ascii?Q?EPZJhsMDCheDaahpcxxxDhZLjMghlqVHLp3Wj4bAPO/8qSlYpRYXiywEkKCl?=
- =?us-ascii?Q?p3UyamxSxhPJJqiKo0DpKcxN6jZ5j4YLjjcHh124kog3qBjHLvF4Hf8AF1vF?=
- =?us-ascii?Q?inMw1HCZv+ro3uoSp28W87rVdoYdZ1Nvt8W0i+eaPJeQm8vWxW3zF0YEOOwR?=
- =?us-ascii?Q?qnMz7D5SY7TOj/ZO8KCK+EYwZ4Zv8JMRQ5XPCFyuL9vjdgnA7d7eRRwy6HzM?=
- =?us-ascii?Q?PMI98Rh2S86WfoWI0Ix6UBo8qisPiLWyIkV+72GOa+tLTuVeg1kBIqzHaRlG?=
- =?us-ascii?Q?pE4oLkxoywaH0ftGKWMcWkRqzVcplcjY44HPvoxampby6WgCdq7Ns4sBfnwK?=
- =?us-ascii?Q?YAR9/lz61vP66YRIzqDQXIltoBYTmhFmSHnEMlFrFGvYo+Dea1Rr+tVAsLJW?=
- =?us-ascii?Q?cw75C1CfDsn5Q94YlqpA9ZnQzvSHcRTQpLXEtS7zj2g6RF4UL07zUwc/zx+Y?=
- =?us-ascii?Q?ky8fNip2f8uIn37PIi4LZHlX5gbGR+LawPjX06OjJxc9W+o9+4zuBhS9aIKh?=
- =?us-ascii?Q?jpw6RbaaecXWp8Q2ff/vZHRpp2Yy/Q71DRLbQLdw2x9jd9ZqKeQtpftOxHH4?=
- =?us-ascii?Q?7VRYeQEAzMvJlT8USdMB9jYiW5IBCBCyFXP6VSX1YAx52MWBzwxDbAEMZ7YD?=
- =?us-ascii?Q?QnZ4CMIGt1ihfSqG887c7yGuca037BpeKnZTfv2ryvIzumbm07o6iBjLUjn9?=
- =?us-ascii?Q?664MfnXnATBQ2EuGMUDRcPLgd8vEOQzYLNkFGqQx89Q0LtFeGjszsa9+dneC?=
- =?us-ascii?Q?XOE+1jMwdcDcBtoiwFwIHEz+frAdSbg6Nc96nSfrOFQYLs32TvjuJ0vXJg4Q?=
- =?us-ascii?Q?itWTFfR1+2tZ5QHJ6ZvOfpn4Db/ic6B1HE5o3f3Cx17/yqa4RXDp5zUisYlJ?=
- =?us-ascii?Q?hV5AsMXXXf3lel9srpguYB3gX91gObJ2JjJRX8I2lMX3cB7wB+MypsVs7qq2?=
- =?us-ascii?Q?D/KVaUEt8mDH1dNTVfR8sKqGjjMikJBh3h/01VwKOMxX5FSmeJrLsJxdLmdQ?=
- =?us-ascii?Q?rO5lfIxJ6AgZnWHhEXctDnMerx3evXtg9Tw4oiu7bLsSuaSp2mIzcSlCQPa9?=
- =?us-ascii?Q?FtSHUsW3Z3WvPexlq2U5Bp24eWP5blcc1cgOeaiktIA53E24PDqYR5o9+Ujn?=
- =?us-ascii?Q?txIQoiMZcOcyud7zVMhgvBq1K7GW5Qh04N12GLPYArqsN4m9sRYBBcz3hQA0?=
- =?us-ascii?Q?8g=3D=3D?=
+	=?us-ascii?Q?s/qyxBMe1JeV83JgXti8yQb40b6nPGJ/Rimmr8uDk3aT5HgZNdKcQJST5tzd?=
+ =?us-ascii?Q?V98BPPQ70vl2nhlsbYf6K7RP9Y75hgkxgCg+AQe+NG22W/0hXb/XDJCiQq3v?=
+ =?us-ascii?Q?3f8SYV762GBJPB7Fr7c5w2beKT1uu6oI0ew3NmK6ZNdLVLmmBX7Hn39c5hS5?=
+ =?us-ascii?Q?wlJuq5KcuBEDmKk8Xl3O6ky3DKUg45YG7z1bUW1MGz/21ULj0Z2KWsXapSuF?=
+ =?us-ascii?Q?JdDexkquohOuB3nPnegJLdQLwlZGn57NQYCiLFWP9yhz9z/oPZU3JudYL7Dr?=
+ =?us-ascii?Q?IQ2i7HHrlbKY0zcPJxI4V+sdvXqJMMeuNtpgIKCHhtEKXNouRkSOMPxcCN3c?=
+ =?us-ascii?Q?Fw2ePIVwiTbmQl/63UoQupHjX05/YupLjHeUlZQ3T10NQvrZ5qA5BApR+Urp?=
+ =?us-ascii?Q?ZlW4fPnBz8Bh8hqmEGIXwdZyC68F9zoPGEScvEWKyomofg/XoDxoz09zbxjr?=
+ =?us-ascii?Q?RPRCkqGeAICNE4kNsa/9kA6W4z+SwnEyBSU+kU03H7XRj7V5PTAhZUs0jqgK?=
+ =?us-ascii?Q?V6pIroYCy17ibTxFDibXapv4w7SCfTcGMqpdgq/fH35M02fprhL6Rni3H2Nf?=
+ =?us-ascii?Q?0Pa8SUq8TNHKzOieNUOItLjL+HPz88nXNMNveOp/mVCylFuaECkSXht1zvEB?=
+ =?us-ascii?Q?uANvOu0QQxyJ8pxMF7R+Vj8AiZ0tnSfFRctkLhVOxfV+bSPmEsR5iIFXmneo?=
+ =?us-ascii?Q?6Oxehate2awAWATYTGAtX1QEkppaqa2+0Yy7RSAd14rEQ2o45iAn7muYbKmz?=
+ =?us-ascii?Q?KVvV6KK1vodomYFA4ORHavLwSKTM08lXesQ30P3ybelsMIla9jJOHtTYbDZL?=
+ =?us-ascii?Q?pSn2XL9aGxRzD/j0LHTU9+wgLjbO8Bqp3aHUIE8lhF8yRtMYv/4lodeGnU2A?=
+ =?us-ascii?Q?4pYLDLpAdCS5cTPVoUEyoJBy6SyM+yuj4jaD0dvAUG9PyZG9NH5ocd7VXP+y?=
+ =?us-ascii?Q?Tv476COl5jJgqC9G+wm6WZ+NjkHXXT8oOl51ykTuve95MRNkAojfLwt3P3sM?=
+ =?us-ascii?Q?m4b6fOsPu4ceG0buiUsdeJ9ipXgLCDdyyi25zjZoNZxDeZcNo2wh8jsiw23w?=
+ =?us-ascii?Q?5mnXu5kuYwv+CuZMFZeCBa3NeTLIAyYGFQ3x1AVLMbKQF6LOhaSjlf/aEr9s?=
+ =?us-ascii?Q?OXygn73kbPkvrRNx9nJF7h4yTJ/q0/JIdhPoQAv9wsBxDdARuhpma3kDhDvI?=
+ =?us-ascii?Q?NE29z6xaSt0NAqdnzHESbP2Ob49057fG+FE2b0u6InCIy/kMYQoFXYkZlas+?=
+ =?us-ascii?Q?/MjfYxRuG47LSjz1wZoxOdU6pUC3lkhUkSaT2epcDY1dRR7VQ2VWnjJwjeVk?=
+ =?us-ascii?Q?o1sT96X2rIwVZM2E/qhb0A01506JMDGOYFkmd5lrJV2DKhswEwTSdJirXad9?=
+ =?us-ascii?Q?n0za+ZVyI9A6ypfe5jO70MJBfZBOSO7sUXtNTzkModtiI1rz7GqFyNhzTmKs?=
+ =?us-ascii?Q?6Zdg5RTGxrtCiyTJWnJXLUP3AQExpF9GHdLYmfL5m9ZVzk5ZKkEWfamBNj9g?=
+ =?us-ascii?Q?66KHkgTqy9cR3hDplrKz8zBHtxo90xItlXBMJtIwhZ18ugboZtn56rdRTa3k?=
+ =?us-ascii?Q?esHzTG0nA0txj2Vzgqsz5CGN/xbXqcRwMkxbf8W2auDn4xGdm6LrqO0WUXlO?=
+ =?us-ascii?Q?mA=3D=3D?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 305d7dff-3276-4137-97ca-08dcbcbe949f
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a7d7ed3-60e4-4eb9-b375-08dcbcbe95e4
 X-MS-Exchange-CrossTenant-AuthSource: AM8PR04MB7779.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2024 00:09:50.4591
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2024 00:09:52.5819
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qU7q2IRN0av3scSwUL4XZn4L0QxrF+yNSBAMxj/StJU7fOT4ctnk5lsFi9lQYTpX6WE/uoRfJ6Bdl3+B0oioAw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: QwgGa2mNQ+JZo8zTLmXV2UgNYOm5DRDBfJmYD84R5Ce93BJf64St0ZTj8c9ikmINwZRZHmRZqaRbJyZ2StpRuw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI2PR04MB10285
 
-Through code analysis, I realized that the ds->untag_bridge_pvid logic
-is contradictory - see the newly added FIXME above the kernel-doc for
-dsa_software_untag_vlan_unaware_bridge().
+There is a major design bug with ocelot-8021q, which is that it expects
+more of the hardware than the hardware can actually do. The short
+summary of the issue is that when a port is under a VLAN-aware bridge
+and we use this tagging protocol, VLAN upper interfaces of this port do
+not see RX traffic.
 
-Moreover, for the Felix driver, I need something very similar, but which
-is actually _not_ contradictory: untag the bridge PVID on RX, but for
-VLAN-aware bridges. The existing logic does it for VLAN-unaware bridges.
+We use VCAP ES0 (egress rewriter) rules towards the tag_8021q CPU port
+to encapsulate packets with an outer tag, later stripped by software,
+that depends on the source user port. We do this so that packets can be
+identified in ocelot_rcv(). To be precise, we create rules with
+push_outer_tag = OCELOT_ES0_TAG and push_inner_tag = 0.
 
-Since I don't want to change the functionality of drivers which were
-supposedly properly tested with the ds->untag_bridge_pvid flag, I have
-introduced a new one: ds->untag_vlan_aware_bridge_pvid, and I have
-refactored the DSA reception code into a common path for both flags.
+With this configuration, we expect the switch to keep the inner tag
+configuration as found in the packet (if it was untagged on user port
+ingress, keep it untagged, otherwise preserve the VLAN tag unmodified
+as the inner tag towards the tag_8021q CPU port). But this is not what
+happens.
 
-TODO: both flags should be unified under a single ds->software_vlan_untag,
-which users of both current flags should set. This is not something that
-can be carried out right away. It needs very careful examination of all
-drivers which make use of this functionality, since some of them
-actually get this wrong in the first place.
+Instead, table "Tagging Combinations" from the user manual suggests
+that when the ES0 action is "PUSH_OUTER_TAG=1 and PUSH_INNER_TAG=0",
+there will be "no inner tag". Experimentation further clarifies what
+this means.
 
-For example, commit 9130c2d30c17 ("net: dsa: microchip: ksz8795: Use
-software untagging on CPU port") uses this in a driver which has
-ds->configure_vlan_while_not_filtering = true. The latter mechanism has
-been known for many years to be broken by design:
-https://lore.kernel.org/netdev/CABumfLzJmXDN_W-8Z=p9KyKUVi_HhS7o_poBkeKHS2BkAiyYpw@mail.gmail.com/
-and we have the situation of 2 bugs canceling each other. There is no
-private VLAN, and the port follows the PVID of the VLAN-unaware bridge.
-So, it's kinda ok for that driver to use the ds->untag_bridge_pvid
-mechanism, in a broken way.
+It appears that this "inner tag" which is not pushed into the packet on
+its egress towards the CPU is none other than the classified VLAN.
 
+When the ingress user port is standalone or under a VLAN-unaware bridge,
+the classified VLAN is a discardable quantity: it is a fixed value - the
+result of ocelot_vlan_unaware_pvid()'s configuration, and actually
+independent of the VID from any 802.1Q header that may be in the frame.
+It is actually preferable to discard the "inner tag" in this case.
+
+The problem is when the ingress port is under a VLAN-aware bridge.
+Then, the classified VLAN is taken from the frame's 802.1Q header, with
+a fallback on the bridge port's PVID. It would be very good to not
+discard the "inner tag" here, because if we do, we break communication
+with any 8021q VLAN uppers that the port might have. These have a
+processing path outside the bridge.
+
+There seems to be nothing else we can do except to change the
+configuration for VCAP ES0 rules, to actually push the inner VLAN into
+the frame. There are 2 options for that, first is to push a fixed value
+specified in the rule, and second is to push a fixed value, plus
+(aka arithmetic +) the classified VLAN. We choose the second option,
+and we select that fixed value as 0. Thus, what is pushed in the inner
+tag is just the classified VLAN.
+
+From there, we need to perform software untagging, in the receive path,
+of stuff that was untagged on the wire.
+
+Fixes: 7c83a7c539ab ("net: dsa: add a second tagger for Ocelot switches based on tag_8021q")
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
- include/net/dsa.h |  16 +++---
- net/dsa/tag.c     |   5 +-
- net/dsa/tag.h     | 135 +++++++++++++++++++++++++++++++++++-----------
- 3 files changed, 118 insertions(+), 38 deletions(-)
+ drivers/net/dsa/ocelot/felix.c | 115 +++++++++++++++++++++++++++++++--
+ 1 file changed, 109 insertions(+), 6 deletions(-)
 
-diff --git a/include/net/dsa.h b/include/net/dsa.h
-index b06f97ae3da1..d7a6c2930277 100644
---- a/include/net/dsa.h
-+++ b/include/net/dsa.h
-@@ -403,14 +403,18 @@ struct dsa_switch {
- 	 */
- 	u32			configure_vlan_while_not_filtering:1;
- 
--	/* If the switch driver always programs the CPU port as egress tagged
--	 * despite the VLAN configuration indicating otherwise, then setting
--	 * @untag_bridge_pvid will force the DSA receive path to pop the
--	 * bridge's default_pvid VLAN tagged frames to offer a consistent
--	 * behavior between a vlan_filtering=0 and vlan_filtering=1 bridge
--	 * device.
-+	/* Pop the default_pvid of VLAN-unaware bridge ports from tagged frames.
-+	 * DEPRECATED: Do NOT set this field in new drivers. Instead look at
-+	 * the dsa_software_vlan_untag() comments.
- 	 */
- 	u32			untag_bridge_pvid:1;
-+	/* Pop the default_pvid of VLAN-aware bridge ports from tagged frames.
-+	 * Useful if the switch cannot preserve the VLAN tag as seen on the
-+	 * wire for user port ingress, and chooses to send all frames as
-+	 * VLAN-tagged to the CPU, including those which were originally
-+	 * untagged.
-+	 */
-+	u32			untag_vlan_aware_bridge_pvid:1;
- 
- 	/* Let DSA manage the FDB entries towards the
- 	 * CPU, based on the software bridge database.
-diff --git a/net/dsa/tag.c b/net/dsa/tag.c
-index 6e402d49afd3..79ad105902d9 100644
---- a/net/dsa/tag.c
-+++ b/net/dsa/tag.c
-@@ -105,8 +105,9 @@ static int dsa_switch_rcv(struct sk_buff *skb, struct net_device *dev,
- 
- 	p = netdev_priv(skb->dev);
- 
--	if (unlikely(cpu_dp->ds->untag_bridge_pvid)) {
--		nskb = dsa_untag_bridge_pvid(skb);
-+	if (unlikely(cpu_dp->ds->untag_bridge_pvid ||
-+		     cpu_dp->ds->untag_vlan_aware_bridge_pvid)) {
-+		nskb = dsa_software_vlan_untag(skb);
- 		if (!nskb) {
- 			kfree_skb(skb);
- 			return 0;
-diff --git a/net/dsa/tag.h b/net/dsa/tag.h
-index f6b9c73718df..d5707870906b 100644
---- a/net/dsa/tag.h
-+++ b/net/dsa/tag.h
-@@ -44,46 +44,81 @@ static inline struct net_device *dsa_conduit_find_user(struct net_device *dev,
- 	return NULL;
+diff --git a/drivers/net/dsa/ocelot/felix.c b/drivers/net/dsa/ocelot/felix.c
+index 8d31ff18c5c7..4a705f7333f4 100644
+--- a/drivers/net/dsa/ocelot/felix.c
++++ b/drivers/net/dsa/ocelot/felix.c
+@@ -61,11 +61,46 @@ static int felix_cpu_port_for_conduit(struct dsa_switch *ds,
+ 	return cpu_dp->index;
  }
  
--/* If under a bridge with vlan_filtering=0, make sure to send pvid-tagged
-- * frames as untagged, since the bridge will not untag them.
 +/**
-+ * dsa_software_untag_vlan_aware_bridge: Software untagging for VLAN-aware bridge
-+ * @skb: Pointer to received socket buffer (packet)
-+ * @br: Pointer to bridge upper interface of ingress port
-+ * @vid: Parsed VID from packet
++ * felix_update_tag_8021q_rx_rule - Update VCAP ES0 tag_8021q rule after
++ *				    vlan_filtering change
++ * @outer_tagging_rule: Pointer to VCAP filter on which the update is performed
++ * @vlan_filtering: Current bridge VLAN filtering setting
 + *
-+ * The bridge can process tagged packets. Software like STP/PTP may not. The
-+ * bridge can also process untagged packets, to the same effect as if they were
-+ * tagged with the PVID of the ingress port. So packets tagged with the PVID of
-+ * the bridge port must be software-untagged, to support both use cases.
++ * Source port identification for tag_8021q is done using VCAP ES0 rules on the
++ * CPU port(s). The ES0 tag B (inner tag from the packet) can be configured as
++ * either:
++ * - push_inner_tag=0: the inner tag is never pushed into the frame
++ *		       (and we lose info about the classified VLAN). This is
++ *		       good when the classified VLAN is a discardable quantity
++ *		       for the software RX path: it is either set to
++ *		       OCELOT_STANDALONE_PVID, or to
++ *		       ocelot_vlan_unaware_pvid(bridge).
++ * - push_inner_tag=1: the inner tag is always pushed. This is good when the
++ *		       classified VLAN is not a discardable quantity (the port
++ *		       is under a VLAN-aware bridge, and software needs to
++ *		       continue processing the packet in the same VLAN as the
++ *		       hardware).
++ * The point is that what is good for a VLAN-unaware port is not good for a
++ * VLAN-aware port, and vice versa. Thus, the RX tagging rules must be kept in
++ * sync with the VLAN filtering state of the port.
++ */
++static void
++felix_update_tag_8021q_rx_rule(struct ocelot_vcap_filter *outer_tagging_rule,
++			       bool vlan_filtering)
++{
++	if (vlan_filtering)
++		outer_tagging_rule->action.push_inner_tag = OCELOT_ES0_TAG;
++	else
++		outer_tagging_rule->action.push_inner_tag = OCELOT_NO_ES0_TAG;
++}
++
+ /* Set up VCAP ES0 rules for pushing a tag_8021q VLAN towards the CPU such that
+  * the tagger can perform RX source port identification.
   */
--static inline struct sk_buff *dsa_untag_bridge_pvid(struct sk_buff *skb)
-+static inline void dsa_software_untag_vlan_aware_bridge(struct sk_buff *skb,
-+							struct net_device *br,
-+							u16 vid)
+ static int felix_tag_8021q_vlan_add_rx(struct dsa_switch *ds, int port,
+-				       int upstream, u16 vid)
++				       int upstream, u16 vid,
++				       bool vlan_filtering)
  {
--	struct dsa_port *dp = dsa_user_to_port(skb->dev);
--	struct net_device *br = dsa_port_bridge_dev_get(dp);
--	struct net_device *dev = skb->dev;
--	struct net_device *upper_dev;
--	u16 vid, pvid, proto;
-+	u16 pvid, proto;
+ 	struct ocelot_vcap_filter *outer_tagging_rule;
+ 	struct ocelot *ocelot = ds->priv;
+@@ -96,6 +131,14 @@ static int felix_tag_8021q_vlan_add_rx(struct dsa_switch *ds, int port,
+ 	outer_tagging_rule->action.tag_a_tpid_sel = OCELOT_TAG_TPID_SEL_8021AD;
+ 	outer_tagging_rule->action.tag_a_vid_sel = 1;
+ 	outer_tagging_rule->action.vid_a_val = vid;
++	felix_update_tag_8021q_rx_rule(outer_tagging_rule, vlan_filtering);
++	outer_tagging_rule->action.tag_b_tpid_sel = OCELOT_TAG_TPID_SEL_8021Q;
++	/* Leave TAG_B_VID_SEL at 0 (Classified VID + VID_B_VAL). Since we also
++	 * leave VID_B_VAL at 0, this makes ES0 tag B (the inner tag) equal to
++	 * the classified VID, which we need to see in the DSA tagger's receive
++	 * path. Note: the inner tag is only visible in the packet when pushed
++	 * (push_inner_tag == OCELOT_ES0_TAG).
++	 */
+ 
+ 	err = ocelot_vcap_filter_add(ocelot, outer_tagging_rule, NULL);
+ 	if (err)
+@@ -227,6 +270,7 @@ static int felix_tag_8021q_vlan_del_tx(struct dsa_switch *ds, int port, u16 vid)
+ static int felix_tag_8021q_vlan_add(struct dsa_switch *ds, int port, u16 vid,
+ 				    u16 flags)
+ {
++	struct dsa_port *dp = dsa_to_port(ds, port);
+ 	struct dsa_port *cpu_dp;
  	int err;
  
--	if (!br || br_vlan_enabled(br))
--		return skb;
--
- 	err = br_vlan_get_proto(br, &proto);
- 	if (err)
--		return skb;
-+		return;
+@@ -234,11 +278,12 @@ static int felix_tag_8021q_vlan_add(struct dsa_switch *ds, int port, u16 vid,
+ 	 * membership, which we aren't. So we don't need to add any VCAP filter
+ 	 * for the CPU port.
+ 	 */
+-	if (!dsa_is_user_port(ds, port))
++	if (!dsa_port_is_user(dp))
+ 		return 0;
  
--	/* Move VLAN tag from data to hwaccel */
--	if (!skb_vlan_tag_present(skb) && skb->protocol == htons(proto)) {
--		skb = skb_vlan_untag(skb);
--		if (!skb)
--			return NULL;
--	}
-+	err = br_vlan_get_pvid_rcu(skb->dev, &pvid);
-+	if (err)
-+		return;
+ 	dsa_switch_for_each_cpu_port(cpu_dp, ds) {
+-		err = felix_tag_8021q_vlan_add_rx(ds, port, cpu_dp->index, vid);
++		err = felix_tag_8021q_vlan_add_rx(ds, port, cpu_dp->index, vid,
++						  dsa_port_is_vlan_filtering(dp));
+ 		if (err)
+ 			return err;
+ 	}
+@@ -258,10 +303,11 @@ static int felix_tag_8021q_vlan_add(struct dsa_switch *ds, int port, u16 vid,
  
--	if (!skb_vlan_tag_present(skb))
--		return skb;
-+	if (vid == pvid && skb->vlan_proto == htons(proto))
-+		__vlan_hwaccel_clear_tag(skb);
-+}
+ static int felix_tag_8021q_vlan_del(struct dsa_switch *ds, int port, u16 vid)
+ {
++	struct dsa_port *dp = dsa_to_port(ds, port);
+ 	struct dsa_port *cpu_dp;
+ 	int err;
  
--	vid = skb_vlan_tag_get_id(skb);
-+/**
-+ * dsa_software_untag_vlan_unaware_bridge: Software untagging for VLAN-unaware bridge
-+ * @skb: Pointer to received socket buffer (packet)
-+ * @br: Pointer to bridge upper interface of ingress port
-+ * @vid: Parsed VID from packet
-+ *
-+ * The bridge ignores all VLAN tags. Software like STP/PTP may not (it may run
-+ * on the plain port, or on a VLAN upper interface). Maybe packets are coming
-+ * to software as tagged with a driver-defined VID which is NOT equal to the
-+ * PVID of the bridge port (since the bridge is VLAN-unaware, its configuration
-+ * should NOT be committed to hardware). DSA needs a method for this private
-+ * VID to be communicated by software to it, and if packets are tagged with it,
-+ * software-untag them. Note: the private VID may be different per bridge, to
-+ * support the FDB isolation use case.
-+ *
-+ * FIXME: this is currently implemented based on the broken assumption that
-+ * the "private VID" used by the driver in VLAN-unaware mode is equal to the
-+ * bridge PVID. It should not be, except for a coincidence; the bridge PVID is
-+ * irrelevant to the data path in the VLAN-unaware mode. Thus, the VID that
-+ * this function removes is wrong.
-+ *
-+ * All users of ds->untag_bridge_pvid should fix their drivers, if necessary,
-+ * to make the two independent. Only then, if there still remains a need to
-+ * strip the private VID from packets, then a new ds->ops->get_private_vid()
-+ * API shall be introduced to communicate to DSA what this VID is, which needs
-+ * to be stripped here.
-+ */
-+static inline void dsa_software_untag_vlan_unaware_bridge(struct sk_buff *skb,
-+							  struct net_device *br,
-+							  u16 vid)
+-	if (!dsa_is_user_port(ds, port))
++	if (!dsa_port_is_user(dp))
+ 		return 0;
+ 
+ 	dsa_switch_for_each_cpu_port(cpu_dp, ds) {
+@@ -278,11 +324,41 @@ static int felix_tag_8021q_vlan_del(struct dsa_switch *ds, int port, u16 vid)
+ 
+ del_tx_failed:
+ 	dsa_switch_for_each_cpu_port(cpu_dp, ds)
+-		felix_tag_8021q_vlan_add_rx(ds, port, cpu_dp->index, vid);
++		felix_tag_8021q_vlan_add_rx(ds, port, cpu_dp->index, vid,
++					    dsa_port_is_vlan_filtering(dp));
+ 
+ 	return err;
+ }
+ 
++static int felix_update_tag_8021q_rx_rules(struct dsa_switch *ds, int port,
++					   bool vlan_filtering)
 +{
-+	struct net_device *upper_dev;
-+	u16 pvid, proto;
++	struct ocelot_vcap_filter *outer_tagging_rule;
++	struct ocelot_vcap_block *block_vcap_es0;
++	struct ocelot *ocelot = ds->priv;
++	struct dsa_port *cpu_dp;
++	unsigned long cookie;
++	int err;
++
++	block_vcap_es0 = &ocelot->block[VCAP_ES0];
++
++	dsa_switch_for_each_cpu_port(cpu_dp, ds) {
++		cookie = OCELOT_VCAP_ES0_TAG_8021Q_RXVLAN(ocelot, port,
++							  cpu_dp->index);
++
++		outer_tagging_rule = ocelot_vcap_block_find_filter_by_id(block_vcap_es0,
++									 cookie, false);
++
++		felix_update_tag_8021q_rx_rule(outer_tagging_rule, vlan_filtering);
++
++		err = ocelot_vcap_filter_replace(ocelot, outer_tagging_rule);
++		if (err)
++			return err;
++	}
++
++	return 0;
++}
++
+ static int felix_trap_get_cpu_port(struct dsa_switch *ds,
+ 				   const struct ocelot_vcap_filter *trap)
+ {
+@@ -532,6 +608,16 @@ static int felix_tag_8021q_setup(struct dsa_switch *ds)
+ 	ocelot_drain_cpu_queue(ocelot, 0);
+ 	ocelot_unlock_xtr_grp_bh(ocelot, 0);
+ 
++	/* Problem: when using push_inner_tag=1 for ES0 tag B, we lose info
++	 * about whether the received packets were VLAN-tagged on the wire,
++	 * since they are always tagged on egress towards the CPU port.
++	 *
++	 * Since using push_inner_tag=1 is unavoidable for VLAN-aware bridges,
++	 * we must work around the fallout by untagging in software to make
++	 * untagged reception work more or less as expected.
++	 */
++	ds->untag_vlan_aware_bridge_pvid = true;
++
+ 	return 0;
+ }
+ 
+@@ -556,6 +642,8 @@ static void felix_tag_8021q_teardown(struct dsa_switch *ds)
+ 		ocelot_port_teardown_dsa_8021q_cpu(ocelot, dp->index);
+ 
+ 	dsa_tag_8021q_unregister(ds);
++
++	ds->untag_vlan_aware_bridge_pvid = false;
+ }
+ 
+ static unsigned long felix_tag_8021q_get_host_fwd_mask(struct dsa_switch *ds)
+@@ -1010,8 +1098,23 @@ static int felix_vlan_filtering(struct dsa_switch *ds, int port, bool enabled,
+ 				struct netlink_ext_ack *extack)
+ {
+ 	struct ocelot *ocelot = ds->priv;
++	bool using_tag_8021q;
++	struct felix *felix;
 +	int err;
  
--	/* We already run under an RCU read-side critical section since
--	 * we are called from netif_receive_skb_list_internal().
--	 */
--	err = br_vlan_get_pvid_rcu(dev, &pvid);
-+	err = br_vlan_get_proto(br, &proto);
- 	if (err)
--		return skb;
-+		return;
- 
--	if (vid != pvid)
--		return skb;
-+	err = br_vlan_get_pvid_rcu(skb->dev, &pvid);
+-	return ocelot_port_vlan_filtering(ocelot, port, enabled, extack);
++	err = ocelot_port_vlan_filtering(ocelot, port, enabled, extack);
 +	if (err)
-+		return;
++		return err;
 +
-+	if (vid != pvid || skb->vlan_proto != htons(proto))
-+		return;
- 
- 	/* The sad part about attempting to untag from DSA is that we
- 	 * don't know, unless we check, if the skb will end up in
-@@ -95,10 +130,50 @@ static inline struct sk_buff *dsa_untag_bridge_pvid(struct sk_buff *skb)
- 	 * definitely keep the tag, to make sure it keeps working.
- 	 */
- 	upper_dev = __vlan_find_dev_deep_rcu(br, htons(proto), vid);
--	if (upper_dev)
-+	if (!upper_dev)
-+		__vlan_hwaccel_clear_tag(skb);
-+}
-+
-+/**
-+ * dsa_software_vlan_untag: Software VLAN untagging in DSA receive path
-+ * @skb: Pointer to socket buffer (packet)
-+ *
-+ * Receive path method for switches which cannot avoid tagging all packets
-+ * towards the CPU port. Called when ds->untag_bridge_pvid (legacy) or
-+ * ds->untag_vlan_aware_bridge_pvid is set to true.
-+ *
-+ * As a side effect of this method, any VLAN tag from the skb head is moved
-+ * to hwaccel.
-+ */
-+static inline struct sk_buff *dsa_software_vlan_untag(struct sk_buff *skb)
-+{
-+	struct dsa_port *dp = dsa_user_to_port(skb->dev);
-+	struct net_device *br = dsa_port_bridge_dev_get(dp);
-+	u16 vid;
-+
-+	/* software untagging for standalone ports not yet necessary */
-+	if (!br)
- 		return skb;
- 
--	__vlan_hwaccel_clear_tag(skb);
-+	/* Move VLAN tag from data to hwaccel */
-+	if (!skb_vlan_tag_present(skb)) {
-+		skb = skb_vlan_untag(skb);
-+		if (!skb)
-+			return NULL;
++	felix = ocelot_to_felix(ocelot);
++	using_tag_8021q = felix->tag_proto == DSA_TAG_PROTO_OCELOT_8021Q;
++	if (using_tag_8021q) {
++		err = felix_update_tag_8021q_rx_rules(ds, port, enabled);
++		if (err)
++			return err;
 +	}
 +
-+	if (!skb_vlan_tag_present(skb))
-+		return skb;
-+
-+	vid = skb_vlan_tag_get_id(skb);
-+
-+	if (br_vlan_enabled(br)) {
-+		if (dp->ds->untag_vlan_aware_bridge_pvid)
-+			dsa_software_untag_vlan_aware_bridge(skb, br, vid);
-+	} else {
-+		if (dp->ds->untag_bridge_pvid)
-+			dsa_software_untag_vlan_unaware_bridge(skb, br, vid);
-+	}
- 
- 	return skb;
++	return 0;
  }
+ 
+ static int felix_vlan_add(struct dsa_switch *ds, int port,
 -- 
 2.34.1
 
