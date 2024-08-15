@@ -1,213 +1,145 @@
-Return-Path: <linux-kselftest+bounces-15440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15441-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A58A9539C9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 20:17:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 59FA09539D6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 20:19:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D37E1C23612
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 18:17:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 898DD1C23326
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 18:19:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B852657CB6;
-	Thu, 15 Aug 2024 18:17:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EA9758AC4;
+	Thu, 15 Aug 2024 18:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Uu2QJBR7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jmAPusW9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f42.google.com (mail-oa1-f42.google.com [209.85.160.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D281537147
-	for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2024 18:17:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2DEF481C4;
+	Thu, 15 Aug 2024 18:19:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723745828; cv=none; b=FjXT8tI+ZGa8LYRAVqOzWnZtHDmXv7mFYv8XqyomUyarFqM56TfUi2IucvCOb8OskzgdkspYxE+3fY903c0Z02M4SNSQ9y3usc76gQl/R6zY33laT1dNZ7RHZtlKLUN6RiJlZcha9lZE9P7JPV4hN6Z8j5xtbL/brKAkWJyMwIM=
+	t=1723745974; cv=none; b=kfpb7c10tXyPMkfSqvs4mocrlwaiqfEts36Zdftn4HPfCA2U+g3JuYb3YQRrkWyy6lu3lq+YeJ8HvIYVGDDDt07niEh6pp1mEzMgNF5qjpPJ3T5pHNzY3rLA3sOeSWUcENGFrfjf0oOK6xmS9DNybS78D3LtxeIawrzkFz22KmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723745828; c=relaxed/simple;
-	bh=QM7w3vndpXDCo19LqYkFiF0aa1J4O7C5aYAOahTEwUk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JUF3sYq4TT9jqRC7MfndWywi9wzAGeREjfWxKIuuFr/g6Ur9ZBLKbZMs8NRkFemA1SjX+gA6T+CQ6FaqVXQNiBUPQd3uMghcBME8c6zEq9eDwS1siKFQq/YH5ylj7FxKJsZiVrL8aapb1ZwcewB2JV4bF1zE8O0X7ogw79pftDM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Uu2QJBR7; arc=none smtp.client-ip=209.85.160.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-260f1664fdfso778892fac.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 15 Aug 2024 11:17:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1723745825; x=1724350625; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WulVhf/lbrXtVuEvrtHRPg80DRz2GQqwnIZEq09+IRc=;
-        b=Uu2QJBR7mBFV2dMvwzQUyb2ZH5PKKfCUxzwsHq8wRKBkHYB4jowOY+uqVwBK730z78
-         E/R0U0zWodhmVKnYVFJu2YXUuyMye1K0GMhAIWrMhsfW4J9kTUSizfL5Nhq/41WFC3QI
-         bjnQTVvLxHEu/SnEMsWDcGfR1aCELW1wfLY8w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723745825; x=1724350625;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WulVhf/lbrXtVuEvrtHRPg80DRz2GQqwnIZEq09+IRc=;
-        b=KkhFEogiB8zzeYmjHzPhYDRkQtdoxpNE5D3zZN8mkujUgXjvP2GbsKXb1UuhRO95xo
-         DV5ZyI2arPuJ+YuFVgrmarF/3nqrJ/zUHvgN3icwIA7bGDL8+IU6w3Cmxez4RXqba8S7
-         Fqd/gosDAExYd0NZEuy5afJnaWfjSwmW/p7bNuFyA5C0cF3Dc3MBd8RMC3GcSwI8XKez
-         GpGp87eezd0SvTVDk+hfZ/DBibJjjTfhOx6RB30/FacWBS+6WSFtJ7l+cl0u+OJu5ZUK
-         kUG04ayNJeCNKQZF8WLlXZxrCHUT34NNwqC56/Us0WYqAOCCAwu814ko2vgkvzo9lli2
-         Klew==
-X-Forwarded-Encrypted: i=1; AJvYcCXRKHsUZzJuUcrkW2FluxYEeA1EjREPRKrR3tB7thkYKKAN6wDKTGps6AKfvTlj5QaqvjdrgOtyUaNNMD0jpoB94xBJd2REKUEYci/iuglV
-X-Gm-Message-State: AOJu0Yyx47q1VL+KA0vASoE+H3fKvnWfQPkfbckICvXXIs3q1pyFAgzy
-	ZbViMYTeOcam+ll12ze2hF90FxAxsbCiFaKsQ4Jo3ziE7l3+LMmhCQ5BS0KVfO/oPO3bpx4smsU
-	lDLc3x50EZhy8fyYtfo64lKYsuK7rIB83PVBp
-X-Google-Smtp-Source: AGHT+IFBzd2labGfip0TWIus/Lddyszo/RVNbmgY3SlorSK9faJ6vZdtzGx4sbNKmzII4n+Xp0V1AtaK3L5PzzXifXs=
-X-Received: by 2002:a05:687c:2bea:b0:270:1cee:ab9 with SMTP id
- 586e51a60fabf-2701cee16d2mr297534fac.16.1723745824775; Thu, 15 Aug 2024
- 11:17:04 -0700 (PDT)
+	s=arc-20240116; t=1723745974; c=relaxed/simple;
+	bh=gvOHdCK9aUdR7DPVLDdBmQ4rCqBdWg1NiIKC9n0vn/s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=na5yoBDuTp9Xk4YocxzqnEyvyg236iZd4McF7x8d1wVI4N+IfgKQVVmRMUsrtJuVfq1T3updEVyZDF7fuintRexxbYKECmfb/puUBG20Rh+C6hcbsVOic3QeAAC7U9ZfZzaJ11hnZMJtj7S4DgriVZaTxOcodAL8GIpcNZ2JNVs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jmAPusW9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BDE0C32786;
+	Thu, 15 Aug 2024 18:19:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723745973;
+	bh=gvOHdCK9aUdR7DPVLDdBmQ4rCqBdWg1NiIKC9n0vn/s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jmAPusW9RWevvrm7Hg88q9xewbIsd/N/8xTtQyDPWPc982vMFTh7r29JlLa6aHf0o
+	 8io0uPtO83IiC/fkk0GKoQNNWuDUbOcvZAodgohYE/SjWTMQpUBTSbad1t64GFmGyS
+	 iVChoroyACoTlO+/w+ZVPqDVFAt/hYnGedb6MWnURMr/r772xCwXH9niKnJdXYUqJX
+	 ljF+fG3keMrMEmAZlQBZgeB5qVBYqMTd2O22DXiRYL9ul8f7b5FVTiy0/sBLHu0Gpw
+	 9wAE4WmxHy9lFZGd0S9lYGKcP1IFTR4cDZzHAlueePqA4AxAzNcZtdqHVh8a0mF8BL
+	 9fI1RwFnauAuw==
+Date: Thu, 15 Aug 2024 19:19:24 +0100
+From: Mark Brown <broonie@kernel.org>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc: "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+	"ross.burton@arm.com" <ross.burton@arm.com>,
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"corbet@lwn.net" <corbet@lwn.net>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+	"kees@kernel.org" <kees@kernel.org>,
+	"oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+	"palmer@dabbelt.com" <palmer@dabbelt.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"arnd@arndb.de" <arnd@arndb.de>, "maz@kernel.org" <maz@kernel.org>,
+	"oleg@redhat.com" <oleg@redhat.com>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"thiago.bauermann@linaro.org" <thiago.bauermann@linaro.org>,
+	"james.morse@arm.com" <james.morse@arm.com>,
+	"ebiederm@xmission.com" <ebiederm@xmission.com>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"will@kernel.org" <will@kernel.org>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+	"ardb@kernel.org" <ardb@kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-mm@kvack.org" <linux-mm@kvack.org>,
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v10 12/40] mm: Define VM_SHADOW_STACK for arm64 when we
+ support GCS
+Message-ID: <9949a344-be8e-40ed-b483-02ff95175072@sirena.org.uk>
+References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
+ <20240801-arm64-gcs-v10-12-699e2bd2190b@kernel.org>
+ <34f7a5378447b1a8d5a9561594b37cfeaa6bd2b1.camel@intel.com>
+ <3a7d9b69-e9df-4271-a3f0-8e8683c2654f@sirena.org.uk>
+ <68ec09da-fb4a-4d59-9c8c-6fae4c48ea68@sirena.org.uk>
+ <e6c8618a1585006dde44c17192a3bb7ae8ec5c0b.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240814071424.2655666-1-jeffxu@chromium.org>
-In-Reply-To: <20240814071424.2655666-1-jeffxu@chromium.org>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Thu, 15 Aug 2024 11:16:52 -0700
-Message-ID: <CABi2SkX+3JrDk6b59vgvjb8XAkC7_p3-cSkFHOotra1Yh6dv1Q@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] mremap refactor: check src address for vma
- boundaries first.
-To: akpm@linux-foundation.org, willy@infradead.org, 
-	torvalds@linux-foundation.org, Liam.Howlett@oracle.com, 
-	pedro.falcato@gmail.com
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-hardening@vger.kernel.org, jeffxu@google.com, 
-	lorenzo.stoakes@oracle.com, mpe@ellerman.id.au, oliver.sang@intel.com, 
-	vbabka@suse.cz, keescook@chromium.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="U12vN05f82sjc1Kd"
+Content-Disposition: inline
+In-Reply-To: <e6c8618a1585006dde44c17192a3bb7ae8ec5c0b.camel@intel.com>
+X-Cookie: -- Owen Meredith
+
+
+--U12vN05f82sjc1Kd
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 14, 2024 at 12:14=E2=80=AFAM <jeffxu@chromium.org> wrote:
->
-> From: Jeff Xu <jeffxu@chromium.org>
->
-> mremap doesn't allow relocate, expand, shrink across VMA boundaries,
-> refactor the code to check src address range before doing anything on
-> the destination, i.e. destination won't be unmapped, if src address
-> failed the boundaries check.
->
-> This also allows us to remove can_modify_mm from mremap.c, since
-> the src address must be single VMA, can_modify_vma is used.
->
-> It is likely this will improve the performance on mremap, previously
-> the code does sealing check using can_modify_mm for the src address range=
-,
-> and the new code removed the loop (used by can_modify_mm).
->
-> In order to verify this patch doesn't regress on mremap, I added tests in
-> mseal_test, the test patch can be applied before mremap refactor patch or
-> checkin independently.
->
-> Also this patch doesn't change mseal's existing schematic: if sealing fai=
-l,
-> user can expect the src/dst address isn't updated. So this patch can be
-> applied regardless if we decided to go with current out-of-loop approach
-> or in-loop approach currently in discussion.
->
-> Regarding the perf test report by stress-ng [1] title:
-> 8be7258aad: stress-ng.pagemove.page_remaps_per_sec -4.4% regression
->
-> The test is using below for testing:
-> stress-ng --timeout 60 --times --verify --metrics --no-rand-seed --pagemo=
-ve 64
->
-> I can't repro this using ChromeOS, the pagemove test shows large value
-> of stddev and stderr, and can't reasonably refect the performance impact.
->
-> For example: I write a c program [2] to run the above pagemove test 10 ti=
-mes
-> and calculate the stddev, stderr, for 3 commits:
->
-> 1> before mseal feature is added:
-> Ops/sec:
->   Mean     : 3564.40
->   Std Dev  : 2737.35 (76.80% of Mean)
->   Std Err  : 865.63 (24.29% of Mean)
->
-> 2> after mseal feature is added:
-> Ops/sec:
->   Mean     : 2703.84
->   Std Dev  : 2085.13 (77.12% of Mean)
->   Std Err  : 659.38 (24.39% of Mean)
->
-> 3> after current patch (mremap refactor)
-> Ops/sec:
->   Mean     : 3603.67
->   Std Dev  : 2422.22 (67.22% of Mean)
->   Std Err  : 765.97 (21.26% of Mean)
->
-> The result shows 21%-24% stderr, this means whatever perf improvment/impa=
-ct
-> there might be won't be measured correctly by this test.
->
-> This test machine has 32G memory,  Intel(R) Celeron(R) 7305, 5 CPU.
-> And I reboot the machine before each test, and take the first 10 runs wit=
-h
-> run_stress_ng 10
->
-> (I will run longer duration to see if test still shows large stdDev,StdEr=
-r)
->
-I took more samples (100 run ), the stddev/stderr is smaller, however
-still not at a range that can reasonably measure the perf improvement
-here.
+On Thu, Aug 15, 2024 at 05:53:19PM +0000, Edgecombe, Rick P wrote:
+> On Thu, 2024-08-15 at 17:39 +0100, Mark Brown wrote:
 
-The tests were taken using the same machine as (10 times run above)
-and exact the same steps: i.e. change to certain kernel commit, reboot
-test device, take the first test result.
+> > > Oh, thanks for the heads up - I'd missed that.
 
-1> Before mseal feature is added:
-Statistics:
-Ops/sec:
-  Mean     : 1733.26
-  Std Dev  : 842.13 (48.59% of Mean)
-  Std Err  : 84.21 (4.86% of Mean)
+> > Looking at this I think it makes sense to do as was done for x86 and
+> > split this out into a separate series (part of why I'd missed it),
+> > updating the generic implementation to do this by default.=A0 That'll
+> > touch a bunch of architectures and the series is already quite big,
+> > it's not really an ABI impact.
 
-2> After mseal feature is added
-Statistics:
-Ops/sec:
-  Mean     : 1701.53
-  Std Dev  : 1017.29 (59.79% of Mean)
-  Std Err  : 101.73 (5.98% of Mean)
+> The series is already upstream. You just need to add an arm version of th=
+at
+> linked patch. But up to you.
 
-3> After mremap refactor (this patch)
-Statistics:
-Ops/sec:
-  Mean     : 1097.04
-  Std Dev  : 860.67 (78.45% of Mean)
-  Std Err  : 86.07 (7.85% of Mean)
+Your series modified the existing x86 custom arch_get_unmapped_area*()
+functions, arm64 uses the generic implementation of those so I'd have to
+either add custom implementations (which I can't imagine would be met
+with great enthusiasm) or update the generic ones.  A generic
+implementation seems reasonable and it looks like RISC-V would also end
+up using it so while it's a bit invasive it does seem more sensible to
+do the change there.
 
-Summary: even when the stderr is down to 4%-%8 percentage range, the
-stddev is still too big.
+--U12vN05f82sjc1Kd
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Hence, there are other unknown, random variables that impact this test.
+-----BEGIN PGP SIGNATURE-----
 
--Jeff
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAma+RqsACgkQJNaLcl1U
+h9C2ogf/ZUz9M5cZLraiijYr3jTrEMdCaa6D0jRDGoL0IP3BclPhluw29VOQVf4x
+aJ10O4eGMRHl32XL0oWXQlmSmjiHfXTvVmeAnPrKkq6Sx8BDI7tOW1f4b64Iyouq
+aGNPYw1YjXPdazXxXLbaQVZZOrq5BE2dbXw6ocHaombvt/oG6sAGc4F4KFXwb6+A
+OR+jpoND8CbzSxh4EO89eoixTKgqvVZTLfQ3zZBdyjrrk1jyp6Q/63wMC325Bmam
+FebFR/NFJlNNAGpnhBbZhme21z1oZ+1h9K6G37zJUsXqqkOnH56fbsfKJ3wGW37B
+VjXIsdlILKUDIICvYmo5rxepKRyUqQ==
+=DIrs
+-----END PGP SIGNATURE-----
 
-> [1] https://lore.kernel.org/lkml/202408041602.caa0372-oliver.sang@intel.c=
-om/
-> [2] https://github.com/peaktocreek/mmperf/blob/main/run_stress_ng.c
->
->
-> Jeff Xu (2):
->   mseal:selftest mremap across VMA boundaries.
->   mseal: refactor mremap to remove can_modify_mm
->
->  mm/internal.h                           |  24 ++
->  mm/mremap.c                             |  77 +++----
->  mm/mseal.c                              |  17 --
->  tools/testing/selftests/mm/mseal_test.c | 293 +++++++++++++++++++++++-
->  4 files changed, 353 insertions(+), 58 deletions(-)
->
-> --
-> 2.46.0.76.ge559c4bf1a-goog
->
+--U12vN05f82sjc1Kd--
 
