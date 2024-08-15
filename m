@@ -1,321 +1,196 @@
-Return-Path: <linux-kselftest+bounces-15451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15452-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCC6B953C3B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 22:57:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A280953CA3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 23:32:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1FBB6B218F7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 20:57:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B44E3282E3F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 21:32:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 925D314A60E;
-	Thu, 15 Aug 2024 20:57:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4AE014EC51;
+	Thu, 15 Aug 2024 21:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RKA0HAjR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qq/oxXOW"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5767838DC7;
-	Thu, 15 Aug 2024 20:57:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8FAA1537A4;
+	Thu, 15 Aug 2024 21:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723755434; cv=none; b=KvDwKwSHfeRL1EM51Xs/rUtzA83pptjQ4S65vQHjNM/tgY6wIl9dPdzWRdPZhhVKRboQP4Gy6FA3Tttj101eKN5VlJIJWQNOJKcYeHXDSs0Tu2ZR7HMcznTpy8ve2q/f3bmPehZR5oZ+mWeXlK/Sa+7auRuAyOrJNunKjdSrPaM=
+	t=1723757569; cv=none; b=jH7VdJJFFoqWNbEAR5yd60y5nVyASoSMzeMi1eY3U9aiUIq3HxR5D5sgS/aefID0wptdAn+pL022Hh3uNtz39FB8T1YgIUd4fSgXlR4iiQCDW7GnXek3Trza30jKzRwMnRGgfalj88vKIwkijljZJ/XirjcyoYRZO6otKv1ADgA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723755434; c=relaxed/simple;
-	bh=CxitJOj2UwXlQodEuBRLka5dunS/7Sxix03eKG+L21o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hHytUloZD7pcjf+cESwiiPJwHoBAY5Fm1c4h8X/uZBEluAUu+hh4o9lPHGPMVtBLmLatQL5X69vP8pG3NPVje3Hb0sUit390Z9c0IR4TjVjeYsAD+kO+TlA9palfMatA9KBKUBVsRhKLSiv7W2FYwCuCfMVm4aBS64e/LfsVneQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RKA0HAjR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 075CCC32786;
-	Thu, 15 Aug 2024 20:57:06 +0000 (UTC)
+	s=arc-20240116; t=1723757569; c=relaxed/simple;
+	bh=//WNbzYpYU+e2ln5VDiF2W/YrA6HlyMjUvhsSCGFMs8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=aabSMyRjZt6twH0e8Nnp/xIcvFlyKH7oDuowj0k+lleUJyhX9mLTcYV9EvzHF8rK2TjwkDIgi2CcT9LvrAyJ2fclTmTQL8U3SDxXm/H2DkbqkHOY2tcYHFsToTiLXAYu9quFM3BC+qwvtMhVPR5kQQnXDpIg93/bv6TZTy8Fkyw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qq/oxXOW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3113FC32786;
+	Thu, 15 Aug 2024 21:32:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723755433;
-	bh=CxitJOj2UwXlQodEuBRLka5dunS/7Sxix03eKG+L21o=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RKA0HAjRh3hX4HjnFxTF2jUx1BraLgD2kxzb4l1WxIWIq2l0ix1SAVfnBC9oHr2r0
-	 OySC4WXcD4+t9pSxbN6Fez9YAkdgy4uLTN6qTcIZtPWI4Au9eGnfAt2H8enBABdzU2
-	 fSouvgGSLnq1N529JZp77gtn3e0Sigc7KlX5xWSO5ElCB8BdxRBm2/fxUvtLX4jBpl
-	 JINZtYgoITjl/hzYCdzhO1XFxz24Y0PHzj8wnnwFrIpWj9piZ1cpVub9ar0lBVZKY1
-	 C9fQ0GMEZ3rlzeHFxDfwKdGu0CjmbgqDSr6w5r2blSuy33cDjxHZmYQ50XTpipgwZ2
-	 miMcXGxH9xBsg==
-Message-ID: <d9adb89e-6764-45d2-97b7-892b37c2b71c@kernel.org>
-Date: Thu, 15 Aug 2024 22:57:05 +0200
+	s=k20201202; t=1723757569;
+	bh=//WNbzYpYU+e2ln5VDiF2W/YrA6HlyMjUvhsSCGFMs8=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=qq/oxXOWavPT3+hbtA09RHmrQOnG36JcVAKYJ2j4qibGGPS9V2o/1iidMpnQXOxAR
+	 TKX/u12boEdb9PFovcU7zdF9YucEmdL4TXAH9uNFKeh3XnEpfJR9V1I8WlGMkVVzWS
+	 PAlsN+OpYqkpIBLTKmlNRmgMT4kbjJlop/G7Clb39lVT1E40AXztSi2xmVa2MZHlU1
+	 YCqaxpWf5QKzhFFs2ijhKdtDbY6y69DVkcV7R8k3p8niX5pqy+4DhphAT5aTa7F1pY
+	 XRONg58/Ip2Rolt59N7e1q8CDRmC8iEgAGz0VCr5DT+joDv3knuE1oL1ffED7ebfaz
+	 LAfzP3zG9pVxA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 14A8CC3DA7F;
+	Thu, 15 Aug 2024 21:32:49 +0000 (UTC)
+From: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>
+Subject: [PATCH net-next v3 0/8] net/selftests: TCP-AO selftests updates
+Date: Thu, 15 Aug 2024 22:32:25 +0100
+Message-Id: <20240815-tcp-ao-selftests-upd-6-12-v3-0-7bd2e22bb81c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: Add mptcp subflow subtest
-Content-Language: en-GB
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
- Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Daniel Xu <dxu@dxuuu.xyz>,
- Manu Bretelle <chantra@meta.com>
-References: <20240805-upstream-bpf-next-20240506-mptcp-subflow-test-v4-0-2b4ca6994993@kernel.org>
- <20240805-upstream-bpf-next-20240506-mptcp-subflow-test-v4-2-2b4ca6994993@kernel.org>
- <2136317a-3e95-4993-b2fc-1f3b2c28dbdc@linux.dev>
- <8a2ff1bd-52dc-421d-87b7-fc2f56e81da2@kernel.org>
- <716cbd56-4a44-4451-a6f3-5bacef3e0729@linux.dev>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <716cbd56-4a44-4451-a6f3-5bacef3e0729@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOlzvmYC/43OywrCMBAF0F8pWTuaR5+u/A9xkSYTG6hJSWJRp
+ P9uLIiuxOVwuefOg0QMFiPZFw8ScLbRepcPsSmIGqQ7I1idb8IpL2kjKCQ1gfQQcTQJY4pwnTT
+ UwDiUWmAlZFMaYUjuTwGNva32kThM4PCWyCknvYwIfZBODS/7ne0u0rpXc7Ax+XBfn5rZ2v9jf
+ 2ZAwRhd9oZVuhbt4ZzBcav8ZV2d+UdqKf8l8SyJhqquE1XLavYtLcvyBAKYSpk2AQAA
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: Mohammad Nassiri <mnassiri@ciena.com>, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Dmitry Safonov <0x7f454c46@gmail.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1723757567; l=5573;
+ i=0x7f454c46@gmail.com; s=20240410; h=from:subject:message-id;
+ bh=//WNbzYpYU+e2ln5VDiF2W/YrA6HlyMjUvhsSCGFMs8=;
+ b=WcN86bjnC908xnl0YKemHzlj5UiSYYu3NmhGQoaipWYAM06enzSuWaHj7dwzlo3yK+1m5bI+G
+ IELW8xMHJTHA1YB4sM/6cczcm/xz5bqZq5h9abfycp/0vQUnZN376St
+X-Developer-Key: i=0x7f454c46@gmail.com; a=ed25519;
+ pk=cFSWovqtkx0HrT5O9jFCEC/Cef4DY8a2FPeqP4THeZQ=
+X-Endpoint-Received: by B4 Relay for 0x7f454c46@gmail.com/20240410 with
+ auth_id=152
+X-Original-From: Dmitry Safonov <0x7f454c46@gmail.com>
+Reply-To: 0x7f454c46@gmail.com
 
-Hi Martin,
+First 3 patches are more-or-less cleanups/preparations.
 
-Thank you for your reply!
+Patches 4/5 are fixes for netns file descriptors leaks/open.
 
-On 15/08/2024 00:37, Martin KaFai Lau wrote:
-> On 8/14/24 3:04 AM, Matthieu Baerts wrote:
->> Hi Martin,
->>
->> Thank you for your reply!
->>
->> On 14/08/2024 03:12, Martin KaFai Lau wrote:
->>> On 8/5/24 2:52 AM, Matthieu Baerts (NGI0) wrote:
->>>> +static int endpoint_init(char *flags)
->>>> +{
->>>> +    SYS(fail, "ip -net %s link add veth1 type veth peer name veth2",
->>>> NS_TEST);
->>>> +    SYS(fail, "ip -net %s addr add %s/24 dev veth1", NS_TEST, ADDR_1);
->>>> +    SYS(fail, "ip -net %s link set dev veth1 up", NS_TEST);
->>>> +    SYS(fail, "ip -net %s addr add %s/24 dev veth2", NS_TEST, ADDR_2);
->>>> +    SYS(fail, "ip -net %s link set dev veth2 up", NS_TEST);
->>>> +    if (SYS_NOFAIL("ip -net %s mptcp endpoint add %s %s", NS_TEST,
->>>> ADDR_2, flags)) {
->>>> +        printf("'ip mptcp' not supported, skip this test.\n");
->>>> +        test__skip();
->>>
->>> It is always a skip now in bpf CI:
->>>
->>> #171/3   mptcp/subflow:SKIP
->>>
->>> This test is a useful addition for the bpf CI selftest.
->>>
->>> It can't catch regression if it is always a skip in bpf CI though.
->>
->> Indeed, for the moment, this test is skipped in bpf CI.
->>
->> The MPTCP CI checks the MPTCP BPF selftests that are on top of net and
->> net-next at least once a day. It is always running with the last stable
->> version of iproute2, so this test is not skipped:
->>
->>     #169/3   mptcp/subflow:OK
->>
->> https://github.com/multipath-tcp/mptcp_net-next/actions/
->> runs/10384566794/job/28751869426#step:7:11080
->>
->>> iproute2 needs to be updated (cc: Daniel Xu and Manu, the outdated
->>> iproute2 is something that came up multiple times).
->>>
->>> Not sure when the iproute2 can be updated. In the mean time, your v3 is
->>> pretty close to getting pm_nl_ctl compiled. Is there other blocker on
->>> this?
->>
->> I will try to find some time to check the modifications I suggested in
->> the v3, but I don't know how long it will take to have them ready, as
->> they might require some adaptations of the CI side as well, I need to
->> check. On the other hand, I understood adding a duplicated version of
->> the mptcp.h UAPI header is not an option either.
->>
->> So not to block this (already old) series, I thought it would help to
->> first focus on this version using 'ip mptcp', while I'm looking at the
->> selftests modifications. If these modifications are successful, I can
->> always resend the patch 2/3 from the v3 later, and using 'pm_nl_ctl'
->> instead of 'ip mptcp', to be able to work with IPRoute2 5.5.
->>
->> Do you think that could work like that?
-> 
-> If there is CI started covering it, staying with the 'ip mptcp' is fine.
-> 
-> The bpf CI has to start testing it asap also. The iproute2 package will
-> need to be updated on the bpf CI side. I think this has to be done
-> regardless.
-> 
-> It will be useful to avoid the uapi header dup on its own. The last one
-> you have seems pretty close.
+Patch 6 was sent to me/contributed off-list by Mohammad, who wants 32-bit
+kernels to run TCP-AO.
 
-Thank you. Yes I will try to find time to look at that.
+Patch 7 is a workaround/fix for slow VMs. Albeit, I can't reproduce
+the issue, but I hope it will fix netdev flakes for connect-deny-*
+tests.
 
->>>> +        goto fail;
->>>> +    }
->>>> +
->>>> +    return 0;
->>>> +fail:
->>>> +    return -1;
->>>> +}
->>>> +
->>>> +static int _ss_search(char *src, char *dst, char *port, char *keyword)
->>>> +{
->>>> +    return SYS_NOFAIL("ip netns exec %s ss -enita src %s dst %s %s %d
->>>> | grep -q '%s'",
->>>> +              NS_TEST, src, dst, port, PORT_1, keyword);
->>>> +}
->>>> +
->>>> +static int ss_search(char *src, char *keyword)
->>>> +{
->>>> +    return _ss_search(src, ADDR_1, "dport", keyword);
->>>> +}
->>>> +
->>>> +static void run_subflow(char *new)
->>>> +{
->>>> +    int server_fd, client_fd, err;
->>>> +    char cc[TCP_CA_NAME_MAX];
->>>> +    socklen_t len = sizeof(cc);
->>>> +
->>>> +    server_fd = start_mptcp_server(AF_INET, ADDR_1, PORT_1, 0);
->>>> +    if (!ASSERT_GE(server_fd, 0, "start_mptcp_server"))
->>>> +        return;
->>>> +
->>>> +    client_fd = connect_to_fd(server_fd, 0);
->>>> +    if (!ASSERT_GE(client_fd, 0, "connect to fd"))
->>>> +        goto fail;
->>>> +
->>>> +    err = getsockopt(server_fd, SOL_TCP, TCP_CONGESTION, cc, &len);
->>>> +    if (!ASSERT_OK(err, "getsockopt(srv_fd, TCP_CONGESTION)"))
->>>> +        goto fail;
->>>> +
->>>> +    send_byte(client_fd);
->>>> +
->>>> +    ASSERT_OK(ss_search(ADDR_1, "fwmark:0x1"), "ss_search
->>>> fwmark:0x1");
->>>> +    ASSERT_OK(ss_search(ADDR_2, "fwmark:0x2"), "ss_search
->>>> fwmark:0x2");
->>>> +    ASSERT_OK(ss_search(ADDR_1, new), "ss_search new cc");
->>>> +    ASSERT_OK(ss_search(ADDR_2, cc), "ss_search default cc");
->>>
->>> Is there a getsockopt way instead of ss + grep?
->>
->> No there isn't: from the userspace, the app communicates with the MPTCP
->> socket, which can have multiple paths (subflows, a TCP socket). To keep
->> the compatibility with TCP, [gs]etsockopt() will look at/modify the
->> whole MPTCP connection. For example, in some cases, a setsockopt() will
->> propagate the option to all the subflows. Depending on the option, the
->> modification might only apply to the first subflow, or to the
->> user-facing socket.
->>
->> For advanced users who want to have different options set to the
->> different subflows of an MPTCP connection, they can use BPF: that's what
->> is being validated here. In other words, doing a 'getsockopt()' from the
->> userspace program here will not show all the different marks and TCP CC
->> that can be set per subflow with BPF. We can see that in the test: a
->> getsockopt() is done on the MPTCP socket to retrieve the default TCP CC
->> ('cc' which is certainly 'cubic'), but we expect to find another one
->> ('new' which is 'reno'), set by the BPF program from patch 1/2. I guess
->> we could use bpf to do a getsockopt() per subflow, but that's seems a
->> bit cheated to have the BPF test program setting something and checking
->> if it is set. Here, it is an external way. Because it is done from a
-> 
-> I think the result is valid by having a bpf prog to inspect the value of
-> a sock. Inspecting socket is an existing use case. There are many
-> existing bpf tests covering this inspection use case to ensure the
-> result is legit. A separate cgroup/getsockopt program should help here
-> (more on this below).
+And the biggest change is adding TCP-AO tracepoints to selftests.
+I think it's a good addition by the following reasons:
+- The related tracepoints are now tested;
+- It allows tcp-ao selftests to raise expectations on the kernel
+  behavior - up from the syscalls exit statuses + net counters.
+- Provides tracepoints usage samples.
 
-I didn't consider a separate program. Indeed, should work.
+As tracepoints are not a stable ABI, any kernel changes done to them
+will be reflected to the selftests, which also will allow users
+to see how to change their code. It's quite better than parsing dmesg
+(what BGP was doing pre-tracepoints, ugh).
 
->> dedicated netns, it sounds OK to do that, no?
-> 
-> Thanks for the explanation. I was hoping there is a way to get to the
-> underlying subflow fd. It seems impossible.
-> 
-> In the netns does help here. It is not only about the ss iterating a lot
-> of connections or not. My preference is not depending on external tool/
-> shell-ing if possible, e.g. to avoid the package update discussion like
-> the iproute2 here. The uapi from the testing kernel is always up-to-
-> date. ss is another binary but arguably in the same iproute2 package.
-> There is now another extra "grep" and pipe here. We had been bitten by
-> different shell behaviors and some arch has different shells ...etc.
+Somewhat arguably, the code parses trace_pipe, rather than uses
+libtraceevent (which any sane user should do). The reason behind that is
+the same as for rt-netlink macros instead of libmnl: I'm trying
+to minimize the library dependencies of the selftests. And the
+performance of formatting text in kernel and parsing it again in a test
+is not critical.
 
-OK, I thought it was fine to use 'ss | grep' because it is used in other
-BPF selftests: test_tc_tunnel.sh & test_xdp_features.sh.
+Current output sample:
+> ok 73 Trace events matched expectations: 13 tcp_hash_md5_required[2] tcp_hash_md5_unexpected[4] tcp_hash_ao_required[3] tcp_ao_key_not_found[4]
 
-> I think it is ok to take this set as is if you (and Gelang?) are ok to
-> followup a "cgroup/getsockopt" way to inspect the subflow as the very
-> next patch to the mptcp selftest. It seems inspecting subflow will be a
-> common test going forward for mptcp, so it will be beneficial to have a
-> "cgroup/getsockopt" way to inspect the subflow directly.
-> 
-> Take a look at a recent example [0]. The mptcp test is under a cgroup
-> already and has the cgroup setup. An extra "cgroup/getsockopt" prog
-> should be enough. That prog can walk the msk->conn_list and use
-> bpf_rdonly_cast (or the bpf_core_cast macro in libbpf) to cast a pointer
-> to tcp_sock for readonly. It will allow to inspect all the fields in a
-> tcp_sock.
+Previously, tracepoints selftests were part of kernel tcp tracepoints
+submission [1], but since then the code was quite changed:
+- Now generic tracing setup is in lib/ftrace.c, separate from
+  lib/ftrace-tcp.c which utilizes TCP trace points. This separation
+  allows future selftests to trace non-TCP events, i.e. to find out
+  an skb's drop reason, which was useful in the creation of TCP-CLOSE
+  stress-test (not in this patch set, but used in attempt to reproduce
+  the issue from [2]).
+- Another change is that in the previous submission the trace events
+  where used only to detect unexpected TCP-AO/TCP-MD5 events. In this
+  version the selftests will fail if an expected trace event didn't
+  appear.
+  Let's see how reliable this is on the netdev bot - it obviously passes
+  on my testing, but potentially may require a temporary XFAIL patch
+  if it misbehaves on a slow VM.
 
-It looks interesting to be able to inspect all the fields in a tcp_sock!
-I will check with Geliang what can be done.
+[1] https://lore.kernel.org/lkml/20240224-tcp-ao-tracepoints-v1-0-15f31b7f30a7@arista.com/
+[2] https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git/commit/?id=33700a0c9b56
 
-> Something needs to a fix in patch 2(replied separately), so a re-spin is
-> needed.
+Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
+---
+Changes in v3:
+- Corrected the selftests printing of tcp header flags, parsed from
+  trace points
+- Fixed an issue with VRF kconfig checks (and tests)
+- Made check for unexpected trace events XFAIL, yet looking into the
+  reason behind the fail
+- Link to v2: https://lore.kernel.org/r/20240802-tcp-ao-selftests-upd-6-12-v2-0-370c99358161@gmail.com
 
-Thank you. Will do in the next version!
+Changes in v2:
+- Fixed two issues with parsing TCP-AO events: the socket state and TCP
+  segment flags. Hopefully, won't fail on netdev.
+- Reword patch 1 & 2 messages to be more informative and at some degree
+  formal (Paolo)
+- Since commit e33a02ed6a4f ("selftests: Add printf attribute to
+  kselftest prints") it's possible to use __printf instead of "raw" gcc
+  attribute - switch using that, as checkpatch suggests.
+- Link to v1: https://lore.kernel.org/r/20240730-tcp-ao-selftests-upd-6-12-v1-0-ffd4bf15d638@gmail.com
 
-> pw-bot: cr
-> 
-> [0]: https://lore.kernel.org/all/20240808150558.1035626-3-
-> alan.maguire@oracle.com/
+---
+Dmitry Safonov (7):
+      selftests/net: Clean-up double assignment
+      selftests/net: Provide test_snprintf() helper
+      selftests/net: Be consistent in kconfig checks
+      selftests/net: Open /proc/thread-self in open_netns()
+      selftests/net: Don't forget to close nsfd after switch_save_ns()
+      selftests/net: Synchronize client/server before counters checks
+      selftests/net: Add trace events matching to tcp_ao
 
-Cheers,
-Matt
+Mohammad Nassiri (1):
+      selftests/tcp_ao: Fix printing format for uint64_t
+
+ tools/testing/selftests/net/tcp_ao/Makefile        |   3 +-
+ tools/testing/selftests/net/tcp_ao/bench-lookups.c |   2 +-
+ tools/testing/selftests/net/tcp_ao/config          |   1 +
+ tools/testing/selftests/net/tcp_ao/connect-deny.c  |  25 +-
+ tools/testing/selftests/net/tcp_ao/connect.c       |   6 +-
+ tools/testing/selftests/net/tcp_ao/icmps-discard.c |   2 +-
+ .../testing/selftests/net/tcp_ao/key-management.c  |  18 +-
+ tools/testing/selftests/net/tcp_ao/lib/aolib.h     | 176 ++++++-
+ .../testing/selftests/net/tcp_ao/lib/ftrace-tcp.c  | 549 +++++++++++++++++++++
+ tools/testing/selftests/net/tcp_ao/lib/ftrace.c    | 466 +++++++++++++++++
+ tools/testing/selftests/net/tcp_ao/lib/kconfig.c   |  31 +-
+ tools/testing/selftests/net/tcp_ao/lib/setup.c     |  17 +-
+ tools/testing/selftests/net/tcp_ao/lib/sock.c      |   1 -
+ tools/testing/selftests/net/tcp_ao/lib/utils.c     |  26 +
+ tools/testing/selftests/net/tcp_ao/restore.c       |  30 +-
+ tools/testing/selftests/net/tcp_ao/rst.c           |   2 +-
+ tools/testing/selftests/net/tcp_ao/self-connect.c  |  19 +-
+ tools/testing/selftests/net/tcp_ao/seq-ext.c       |  28 +-
+ .../selftests/net/tcp_ao/setsockopt-closed.c       |   6 +-
+ tools/testing/selftests/net/tcp_ao/unsigned-md5.c  |  35 +-
+ 20 files changed, 1376 insertions(+), 67 deletions(-)
+---
+base-commit: a9c60712d71ff07197b2982899b9db28ed548ded
+change-id: 20240730-tcp-ao-selftests-upd-6-12-4d3e53a74f3f
+
+Best regards,
 -- 
-Sponsored by the NGI0 Core fund.
+Dmitry Safonov <0x7f454c46@gmail.com>
+
 
 
