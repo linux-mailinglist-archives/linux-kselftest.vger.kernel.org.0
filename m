@@ -1,74 +1,142 @@
-Return-Path: <linux-kselftest+bounces-15405-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15406-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE7CD952FE6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 15:37:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2559E952FF9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 15:38:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F147D1C24C1D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 13:37:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFD491F2149E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 13:38:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29A4F1A00CF;
-	Thu, 15 Aug 2024 13:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IPEqGsa4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEAC31A00D6;
+	Thu, 15 Aug 2024 13:37:35 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F298B19FA92;
-	Thu, 15 Aug 2024 13:37:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF8EE1A00D2;
+	Thu, 15 Aug 2024 13:37:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723729026; cv=none; b=gFo1JSPFMG8eDC+0NxrSm7LpJywvudXR775k2x/3VJfyqOaR9gRcwFoROOtcp7YAml/Xk51nlSsYNiP2ZCMMGBD2rMOP8B8oOsZ/EuqQA9cyM2oaMv78+opk56t/MvvSi7jaISGSqBHD2mgp3rYzUjvGvMH9i81+/XW9FpGWWYg=
+	t=1723729055; cv=none; b=WIAKeMf5AjRB1cViM7d6HGmVUNLhNvxwJlKHczo7TxLX5yx+2qBnHpmOo7/EHDmeenUmNOX9cEcPCrWIBS03K7cnVmyTW6kCVEk+SHVgcypPTlfAcdhl0HBy72GcRwdjoojInHhmsYQjmqXS+//9ZncF+xbjm3HOBTD2FWDrccM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723729026; c=relaxed/simple;
-	bh=C0REqQ8bYvLooFvtBXI3ykCRV2HA3TZfc6hkK4WOSSY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JImw0bC1d8h5Eiz306Dqo0sdbRS1mA7UIJ5741Rl/cT911+VB7xHmqYQO+vAhj8GRP73F3Hhs039UO+ENr0wpVFIeQowzFz5SG+zqyuB5WQ+f8EpwECCsAoU2BlkHHAS5UJt/6bpDRP2e1P91DP0mmLXBlpFvucp9d3sIY1Hfhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IPEqGsa4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BBC1C32786;
-	Thu, 15 Aug 2024 13:37:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723729025;
-	bh=C0REqQ8bYvLooFvtBXI3ykCRV2HA3TZfc6hkK4WOSSY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=IPEqGsa4HiknOQDc9sMqE8vB54t15nDwA6eIwtVJ+APpbDFH/EJGjrA1h9tNAsgKS
-	 oCKObwOnHcDlqwezKfcDs4WXgi8P4X1xQvkao9VMnigQRF7BOA2+qQv+ck9k+nsZfx
-	 4eXbKHvrHeaURZDB1nCECv85WV9M/wTk+GS+Q6nKCCfXS03PAbFycPDKG3oWlTdOo5
-	 JeWIhuaApO/OsK/fRRg7b1JqYlsF3kDJgpe6rkrd0wEj44dcE7qX6U/iJ+D+vttCiZ
-	 iYg7Rhtu6bt4rP5na8qflLqE1JT9lJ0P3ZxGzHjyiIAT6u/Ff+E2JuWPAejWA9OJAN
-	 A6Zr0+voFjV0Q==
-Date: Thu, 15 Aug 2024 06:37:04 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- liuhangbin@gmail.com, petrm@nvidia.com, matttbe@kernel.org, Shuah Khan
- <shuah@kernel.org>, netdev@vger.kernel.org, David Wei <dw@davidwei.uk>,
- Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org (open
- list), linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST
- FRAMEWORK)
-Subject: Re: [PATCH net-next v3] net: netconsole: selftests: Create a new
- netconsole selftest
-Message-ID: <20240815063704.0d83c8f8@kernel.org>
-In-Reply-To: <20240815095157.3064722-1-leitao@debian.org>
-References: <20240815095157.3064722-1-leitao@debian.org>
+	s=arc-20240116; t=1723729055; c=relaxed/simple;
+	bh=S55pv2tvhOplbIrUC4DKqA+mD14R5cLIsvDmthqKVzA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L6s4WctyvMiO2fCofrup8ORU8b4kLe+uPPOLUZRz1N99GVUhJa6eJQV/bTKHii9Tvl9VZvHwuLcoBApH24C5WE6OZhUY5vGMiv2SPRjouoZJ+VvQvrZTgKYebNlB3h5CgS4pE5dk56uWLrwj0B7HzYnKEs1TwLf/9njGwLJGChM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D46EC14BF;
+	Thu, 15 Aug 2024 06:37:58 -0700 (PDT)
+Received: from e133380.arm.com (e133380.arm.com [10.1.197.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3AA023F6A8;
+	Thu, 15 Aug 2024 06:37:28 -0700 (PDT)
+Date: Thu, 15 Aug 2024 14:37:22 +0100
+From: Dave Martin <Dave.Martin@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v10 23/40] arm64/signal: Set up and restore the GCS
+ context for signal handlers
+Message-ID: <Zr4EkmtUKop9o9wu@e133380.arm.com>
+References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
+ <20240801-arm64-gcs-v10-23-699e2bd2190b@kernel.org>
+ <ZrzEfg5LqdAzgJ6+@e133380.arm.com>
+ <08932f6d-01ef-40e8-97d2-08f0d2016191@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <08932f6d-01ef-40e8-97d2-08f0d2016191@sirena.org.uk>
 
-On Thu, 15 Aug 2024 02:51:44 -0700 Breno Leitao wrote:
-> +CONFIG_NETCONSOLE=m
-> +CONFIG_NETCONSOLE_DYNAMIC=y
+On Wed, Aug 14, 2024 at 05:00:23PM +0100, Mark Brown wrote:
+> On Wed, Aug 14, 2024 at 03:51:42PM +0100, Dave Martin wrote:
+> > On Thu, Aug 01, 2024 at 01:06:50PM +0100, Mark Brown wrote:
+> 
+> > > +	put_user_gcs((unsigned long)sigtramp, gcspr_el0 - 2, &ret);
+> > > +	put_user_gcs(GCS_SIGNAL_CAP(gcspr_el0 - 1), gcspr_el0 - 1, &ret);
+> > > +	if (ret != 0)
+> > > +		return ret;
+> 
+> > What happens if we went wrong here, or if the signal we are delivering
+> > was caused by a GCS overrun or bad GCSPR_EL0 in the first place?
+> 
+> > It feels like a program has no way to rescue itself from excessive
+> > recursion in some thread.  Is there something equivalent to
+> > sigaltstack()?
+> 
+> > Or is the shadow stack always supposed to be big enough to cope with
+> > recursion that exhausts the main stack and alternate signal stack (and
+> > if so, how is this ensured)?
+> 
+> There's no sigaltstack() for GCS, this is also the ABI with the existing
+> shadow stack on x86 and should be addressed in a cross architecture
+> fashion.  There have been some discussions about providing a shadow alt
+> stack but they've generally been circular and inconclusive, there were a
+> bunch of tradeoffs for corner cases and nobody had a clear sense as to
+> what a good solution should be.  It was a bit unclear that actively
+> doing anything was worthwhile.  The issues were IIRC around unwinders
+> and disjoint shadow stacks, compatibility with non-shadow stacks and
+> behaviour when we overflow the shadow stack.  I think there were also
+> some applications trying to be very clever with alt stacks that needed
+> to be interacted with and complicated everything but I could be
+> misremembering there.
+> 
+> Practically speaking since we're only storing return addresses the
+> default GCS should be extremely large so it's unlikely to come up
+> without first encountering and handling issues on the normal stack.
+> Users allocating their own shadow stacks should be careful.  This isn't
+> really satisfying but is probably fine in practice, there's certainly
+> not been any pressure yet from the existing x86 deployments (though at
+> present nobody can explicitly select their own shadow stack size,
+> perhaps it'll become more of an issue when the clone3() stuff is in).
 
-It's missing dependencies, configfs but maybe more.
-Please test the build as described here:
-https://github.com/linux-netdev/nipa/wiki/How-to-run-netdev-selftests-CI-style#how-to-build
+Ack, if this is a known limitation then I guess it makes sense just to
+follow other arches.
+
+I see that we default the shadow stack size to half the main stack size,
+which should indeed count as "huge".  I guess this makes shadow stack
+overrun unlikely at least (at least, not before the main stack
+overruns).
+
+
+Hopping to an alternate (main) stack while continuing to push on the
+same shadow stack doesn't sound broken in principle.
+
+Is there a test for taking and returning from a signal on an alternate
+(main) stack, when a shadow stack is in use?  Sounds like something
+that would be good to check if not.
+
+Cheers
+---Dave
 
