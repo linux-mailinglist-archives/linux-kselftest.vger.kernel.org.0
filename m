@@ -1,90 +1,90 @@
-Return-Path: <linux-kselftest+bounces-15400-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15401-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F2F2952D20
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 13:00:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F152952D3B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 13:10:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C24C1C235E4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 11:00:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95DA4B22080
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 11:04:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FEFE1AC8AD;
-	Thu, 15 Aug 2024 11:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CF6F1AC89F;
+	Thu, 15 Aug 2024 11:04:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XtawL3H6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FNIlMLFX"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE641AC89A;
-	Thu, 15 Aug 2024 10:59:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37521AC892;
+	Thu, 15 Aug 2024 11:04:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723719600; cv=none; b=jnLlyAJhlwjuoATYc/IE0onB7N/nZSKymet4HuUlvkfWorTwUMfDwb/vKcE/QU0L/W8cgE92j2fmiJdNtozJw926TpmKSw1vYan1iNnkihEbxY4XN/2tIJywh1OSiujs1AJoXVjDsTW5JFudpKZ/huIMYoIbCsFaoxT5jJzoQ5U=
+	t=1723719892; cv=none; b=QBRxvy1kphFFzFxrTarEBjLhqK2Yx+yoqS0+QCkeWVot/gSlwtwKbd4Xo2VC8vEoITcXvIgsM/ymvSt7hWzVM1bXInSrg4r7LBOoFiJ77ZD2ZpFBUs5xlvgFZ+2pHg1VfL3C2GsazjoNOiZZ84xIY7NurDoGE6TLYMZphx3SsPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723719600; c=relaxed/simple;
-	bh=/WcUu2p5Lk7hWXywCIwNFHFP+xdINS3kR+wr3vCrjIw=;
+	s=arc-20240116; t=1723719892; c=relaxed/simple;
+	bh=4nvrFDnN4EPoSXCLaFR7WKT17RVQVoqlBFtSjb8NQQQ=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=KgfJS1sItYK+u+SURBDeVl4QKJMOjHUuRFDXX53A04dAw4X/zaziYm3xd69wQJ4UykHaw7A84lNioaGzr9z7xDcemkdgu1e/urhCGEeNhtRrPedChyITKk2jBixzLDv/ec2gxdiCUpObaOSb5F4c6D/M5vXWa7hg0kG8sDRS8rA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XtawL3H6; arc=none smtp.client-ip=209.85.210.175
+	 MIME-Version; b=USF6mUG6INFSB8Ab79onxEoTKgcP9py3b8BqWk7qW2GGF07C9vZMnOFQJzsXkvadKYH340YiLBFc8VEudkqa3Bfa9xWzxVErnvLIaqJFTwPG3d+QpnLm6oTC2fT4Ac4ha04V/kn3PJWK/fMOZ+y5IjrKz6K3iBH/o3mZAJPvxoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FNIlMLFX; arc=none smtp.client-ip=209.85.210.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-710ffaf921fso498501b3a.1;
-        Thu, 15 Aug 2024 03:59:57 -0700 (PDT)
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-70eaf5874ddso622224b3a.3;
+        Thu, 15 Aug 2024 04:04:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723719597; x=1724324397; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1723719891; x=1724324691; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=R491SSux1DQSWKVz1maSbeuZHf+MaOkhtq9L4FMhxUY=;
-        b=XtawL3H6ZEDF+9Z8lz1YbuhfLeFbQnPO+U1jiEeeAwt6c2p1A4DNu3Um4G3AEwnUrL
-         RwQsqb9cg00iVnyVk8WKi9kwtJAI+sa4n4pLBrto9Xp7Uxz2omlpcAUFIXlyB+K90ayv
-         JjlHoQu48IxFfK3g+rsK5puAXYowbo8JsSNZbmWtaupCP8eTaM736dj4zItWiMTI7XFf
-         g1bnfY0tYeobYD4q3pLUlNVPGPNBe9rCtoN849t4JLtW6GE00UOKIUSfUnADalXA92EA
-         vfdopZ55sAeGDdw05KNfm7wwmPo+wHC9i88vQ9pRPDvwSq7AWX519cHabxLwK5JnXfKF
-         1vmA==
+        bh=MO8YWOqY0SzIOTQqdA2QCR7JDaNp1DiScS6bAzhozDE=;
+        b=FNIlMLFXOAyuP0btu7/u4WuMGt1AQ2XHcf92Aw0kVp1XLJnp+5RTO/u+XXbFFZLtW1
+         SybNwzo1NDiTeRBruiVYd3p3KTx2SeIkOPxO91nMzO/J/eZBieQzcfazVclNjaaXWDMG
+         7G2yfRYCB/1elo25xhVeLqlS/7EN4FKSR9tkGhBfcKRdTjV5N2tgVGD9OJ2vd4UWq/uY
+         Tq8srBNH1RrBwq/yuxjQbx3/qWtJez77R3ydqQhG/Fi8psS//4aCINuOuGoE+U0wcpKb
+         Ks7KoyN4yLtFZTFBKV0NNnrvGU1fP+Jhx522rmxLnOuAADQD6lizoeJxiY2t8a6f2Kbu
+         sLVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723719597; x=1724324397;
+        d=1e100.net; s=20230601; t=1723719891; x=1724324691;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=R491SSux1DQSWKVz1maSbeuZHf+MaOkhtq9L4FMhxUY=;
-        b=PQrzMrLMvxhs0jJ17E8DH3rEqmRRokyeF3cBTYby2NC8UXkxJ+U9LkAvlr7mLUv54J
-         1WitNBDYX4107LUrl2VX0s0O3NB2Ahln2bxe6svnyVHSWR9nACaHmvJFR6x8PjSn5jr8
-         OjfLcRaDq7flnHXvgczdvrMjp24YttPoqGwZdNW0xSmFHtnxiNvPAik9o0ZdGyvUtrP0
-         6SvoqZZmMNAKkdRvgwFcJHwre8WcQeqyplsiImfyjAnumckqZFdwOBQIpm1yD6qR4LiQ
-         YsLVOr/mrabbilejjYgBqW14NWV+FunReiGQoY0riVEe9jX62R2udyjUZjUb56enb2xS
-         yv7w==
-X-Forwarded-Encrypted: i=1; AJvYcCUO7Q21Yg2d7oTbWmif+Flt2MGGC9FPH/vmQqyP8+hg6sWXq5Z0PccYw9ya6tLaQEl0daoGz0fjLNrCVUNuKOammoIBsl7G8oaVEJYAp/OcqoAXwl/T2NsLdQJlG2R+OxkD+dt35lu0rznyJNksb6HiiDNs8gYeteUkBClbFYDbXQpNwNuz
-X-Gm-Message-State: AOJu0Yz0tEeiVWWthnh9RF7HlvaoCMCUMHRS2hzgYwejUvD64H/IJMzM
-	KP7ARzMZCd2DzhFpMv07ZXf09irOqotT73hHozawzLz4BURTxZc2
-X-Google-Smtp-Source: AGHT+IETL78m7ZeFry37MvMQPHrFPUt9B9nhglzozLw6jieNURmmJlYaUSBLeFyUmEfLsTy9tRJC9w==
-X-Received: by 2002:a05:6a20:dd92:b0:1c6:b0cc:c510 with SMTP id adf61e73a8af0-1c8f859e84fmr4263287637.9.1723719596662;
-        Thu, 15 Aug 2024 03:59:56 -0700 (PDT)
+        bh=MO8YWOqY0SzIOTQqdA2QCR7JDaNp1DiScS6bAzhozDE=;
+        b=rBeuM65hRRhRF5WPugk8XmWdM76rq6QEX2LprUqQeen1miSUuygYz10nzoI8eGmlyv
+         uDo81ZHUXPm6zjWzTDE6Xtwqv5ZFlZD628nV7m5lSeR3G8qvIRbXOcFMixXSAr5JUv2d
+         XHBmId1UR4p8OsetyDw6lNBWrTV5jcKeFX58IuctfIkDRIwpCwSGfXyYfrmsoqOHk3RH
+         k9g/YEqOE5IhGMzCLHnC4yAth1zdVSm79t80gtEWA+irMuhRDReuiYzWR1SegqIpfviY
+         +5zhQKbjRCtjBbXWcLUo6ZFGEem0xyrcT/5KjudkQmi8jsyTMuompaV8FaAkJ+txOfLn
+         fzpg==
+X-Forwarded-Encrypted: i=1; AJvYcCUzk6cQ8RPKnLO8xoMKkKLM3rQTu16fmTa4VG/4sqBNLpValZ1af0G6qYP/EydOUheU1bT5IiA7bYWoEknIF1pJ@vger.kernel.org, AJvYcCWkmr0z/q8Ey3W3Zxvxjnyo7LkdMTtBb5V74YEw/79e6+D41KtsLpML+BeTblCfZBlbAAdN/9yi@vger.kernel.org, AJvYcCWx1VvlA4plKYYcqyJRkyWXNv/GtDJk7P4mV6eCkiYHeoQPOJf/PHkmwLxcHaZ4XXZHqkwv96vBWkjFBL0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2b7AX0BjC7x3rUtKao+gwyzIpECdltOW0rvE7j5DYaxrb30RM
+	p7EHb/3HQ8eATRrPrTJC0AcGMGYnIygPvHT82/dFU9u+XKcSysncFmvrEA==
+X-Google-Smtp-Source: AGHT+IGiI28eQW4aNoADjB2yJ7jMZYp79VlkylTg4Ld4J1kWlBZBteUIluYpWSPSrpsghDldwqQwTg==
+X-Received: by 2002:a05:6a00:4656:b0:70d:11d9:8a3c with SMTP id d2e1a72fcca58-712673d7e72mr7330479b3a.26.1723719890769;
+        Thu, 15 Aug 2024 04:04:50 -0700 (PDT)
 Received: from dev0.. ([2405:201:6803:30b3:f070:7306:329d:c8ca])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7127ae6c76fsm829915b3a.94.2024.08.15.03.59.52
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7127add7c89sm812678b3a.5.2024.08.15.04.04.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 15 Aug 2024 03:59:56 -0700 (PDT)
+        Thu, 15 Aug 2024 04:04:49 -0700 (PDT)
 From: Abhinav Jain <jain.abhinav177@gmail.com>
-To: davem@davemloft.net,
+To: kuba@kernel.org
+Cc: davem@davemloft.net,
 	edumazet@google.com,
-	kuba@kernel.org,
+	jain.abhinav177@gmail.com,
+	javier.carrasco.cruz@gmail.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
 	pabeni@redhat.com,
 	shuah@kernel.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: skhan@linuxfoundation.org,
-	javier.carrasco.cruz@gmail.com,
-	Abhinav Jain <jain.abhinav177@gmail.com>
-Subject: [PATCH v7 net-next 3/3] selftests: net: Use XFAIL for operations not supported by the driver
-Date: Thu, 15 Aug 2024 16:29:24 +0530
-Message-Id: <20240815105924.1389290-4-jain.abhinav177@gmail.com>
+	skhan@linuxfoundation.org
+Subject: Re: [PATCH net v6 0/2] Enhance network interface feature testing
+Date: Thu, 15 Aug 2024 16:34:42 +0530
+Message-Id: <20240815110442.1389625-1-jain.abhinav177@gmail.com>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240815105924.1389290-1-jain.abhinav177@gmail.com>
-References: <20240815105924.1389290-1-jain.abhinav177@gmail.com>
+In-Reply-To: <20240814175748.35889b6d@kernel.org>
+References: <20240814175748.35889b6d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -93,41 +93,31 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Check if veth pair was created and if yes, xfail on setting IP address.
-Use XFAIL instead of SKIP for unsupported ethtool APIs.
+On Wed, 14 Aug 2024 17:57:48 -0700, Jakub Kicinski wrote:
 
-Signed-off-by: Abhinav Jain <jain.abhinav177@gmail.com>
----
- tools/testing/selftests/net/netdevice.sh | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+> On Wed, 14 Aug 2024 17:56:51 -0700 Jakub Kicinski wrote:
+> > On Wed, 14 Aug 2024 19:15:15 +0000 Abhinav Jain wrote:
+> > > Changes in v6:
+> > > Use XFAIL for ethtool operations that are unsupported instead of SKIP.  
+> >
+> > One more:
+> >
+> > tools/testing/selftests/net/netdevice.sh: echo "SKIP: $netdev: set IP address"
+> >
+> > I think the SKIP -> XFAIL conversion should be a separate patch (for
+> > total of 3 patches in the series).
+>
+> P.S. and please change the subject to [PATCH net-next], it's a net-next
+> change, not a net fix.
 
-diff --git a/tools/testing/selftests/net/netdevice.sh b/tools/testing/selftests/net/netdevice.sh
-index 50f7b9d1163d..15d702adb0ea 100755
---- a/tools/testing/selftests/net/netdevice.sh
-+++ b/tools/testing/selftests/net/netdevice.sh
-@@ -68,7 +68,11 @@ kci_net_setup()
- 	fi
- 
- 	# TODO what ipaddr to set ? DHCP ?
--	echo "SKIP: $netdev: set IP address"
-+	if [ "$veth_created" ]; then
-+		echo "XFAIL: $netdev: set IP address"
-+	else
-+		echo "SKIP: $netdev: set IP address"
-+	fi
- 	return $ksft_skip
- }
- 
-@@ -86,7 +90,7 @@ kci_netdev_ethtool_test()
- 	ret=$?
- 	if [ $ret -ne 0 ];then
- 		if [ $ret -eq "$1" ];then
--			echo "SKIP: $netdev: ethtool $2 not supported"
-+			echo "XFAIL: $netdev: ethtool $2 not supported"
- 			return $ksft_skip
- 		else
- 			echo "FAIL: $netdev: ethtool $2"
--- 
-2.34.1
+I have sent v7 now with net-next instead of net:
+https://lore.kernel.org/all/20240815105924.1389290-1-jain.abhinav177@gmail.com
 
+For set IP address part, I have added logic to XFAIL if veth pair was created 
+and to SKIP if that's not the case in third patch of the series as directed above.
+
+Right now, there is no logic to set IP address in the script for normal interfaces
+either and it is a TODO as well. I will focus on it next after this one is applied.
+
+Thank you for all the help Jakub.
 
