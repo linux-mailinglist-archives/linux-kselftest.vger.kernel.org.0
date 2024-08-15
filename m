@@ -1,203 +1,113 @@
-Return-Path: <linux-kselftest+bounces-15416-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15417-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2747B95374E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 17:33:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 314DB953769
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 17:37:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA982282E2B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 15:33:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CAB9B282F47
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 15:37:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F1CC1AAE07;
-	Thu, 15 Aug 2024 15:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 631751ABEC4;
+	Thu, 15 Aug 2024 15:37:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ObQkE2vw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47ACF17623F;
-	Thu, 15 Aug 2024 15:33:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B03E19DF92;
+	Thu, 15 Aug 2024 15:37:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723736017; cv=none; b=CC6IhH/uXeSfJ3R3cpZ9i/fbrBM2vQIiy3qJTA3dhudH5o4+p9qGBaMvXuAu8hGb917Uj7CyORmo6TuZRNXXjjKUCQ4BN8ZaasfXhnhHh5Cd4RZJMFF/3exc3OvPBjDFMbqMDiQxcAsFUf7ZYVhyFAx3oLJm20cYuviDqboM4GY=
+	t=1723736241; cv=none; b=K6Yz0yItqhWL2tFl2/5rLJ9QWOBa/9k3DT16zlwcrygaQvhe0DC8Y9gN+8C/LkylzHnT+7QIU/BGfjrwujjo+9vtn0UA7NrwVGxZVz5lEUbUtDQy2eAIesppvvU3OasguW4OSL3XS4/3UIje2jZSeSdgWWbfzUVFtzgLa5HQ+Dk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723736017; c=relaxed/simple;
-	bh=yuBSzO1VMf0OSwzUaS3tqSOGDhyIctJOS0rFSUhwvrk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ticij96BHpNDWmIHJ7YNqQqMG7YqWfP6BzqRLV1mYj/JantIm4b5V5AV1Yo+ByeuguaI8brt98+VpA064NPyLe8WTQZu437SeISREB0b9T3ohJ/wQlekmBu8xId7Tx7Ij2XsRLg4S4/mmQZrWCMuptwAmIEq25cbYKRR8vKNUhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7948614BF;
-	Thu, 15 Aug 2024 08:34:00 -0700 (PDT)
-Received: from e133380.arm.com (e133380.arm.com [10.1.197.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 555713F58B;
-	Thu, 15 Aug 2024 08:33:28 -0700 (PDT)
-Date: Thu, 15 Aug 2024 16:33:25 +0100
-From: Dave Martin <Dave.Martin@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	Ross Burton <ross.burton@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v10 24/40] arm64/signal: Expose GCS state in signal frames
-Message-ID: <Zr4fxZ8wf+Wcey4E@e133380.arm.com>
-References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
- <20240801-arm64-gcs-v10-24-699e2bd2190b@kernel.org>
- <ZrzIv3FWNgJizDc2@e133380.arm.com>
- <7433e3d2-996a-45a0-b917-666a340ad109@sirena.org.uk>
- <Zr4KMaBv4JXx8uBz@e133380.arm.com>
- <efe1d936-011d-49e3-a0ff-8f6276e4d782@sirena.org.uk>
+	s=arc-20240116; t=1723736241; c=relaxed/simple;
+	bh=l0HOjb5v7Td6b7+4wjyPWOza7JPXStwNXiC9vrsrtXw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=oOD23L9bfyqOGkCzDgPj95N5Y6FYOf5ZeVcLMuvdlpqRP8qeM6Zfyj27o2Q0ttWwFFCm5x0ZZWhufvocqOqqBAbRbb20DU4VULSAoHAZ9zavzaj0QEF1Y6qJkFnZeWteTX01oNOQW3z0c26YloAApxjphTY1jlIxhNLao6eF9VA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ObQkE2vw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6A22C32786;
+	Thu, 15 Aug 2024 15:37:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723736239;
+	bh=l0HOjb5v7Td6b7+4wjyPWOza7JPXStwNXiC9vrsrtXw=;
+	h=From:Date:Subject:To:Cc:From;
+	b=ObQkE2vwR7Xy8BPJb9RtXIvKjISUxYIsCF9f3z9NId4DpxIhFLcgZFky8srnHKbQ+
+	 GIAiU/bWKeG+tqdjJ0ULMvndN8czTr6gkv+2y+TYMaeQABVTowfc30IGsj2cfKH8jg
+	 F5+X5Q1Muq/lE69meP7+tLnQu8pk4tmCflmg6pZcu4UUJhNYpuMm+Xt7eTdGQGm3rb
+	 +e2Qeoabzu+HHBwyCW+jYlNpOJTWZq3I/xN36LmUnSAwhVU4nGZeLI9xrhOdZwb9xt
+	 wlfJ5XU5D4y5e1Y+NyAM/5TRpeJnOV4fahrM2sxmpiz2TpdHkV1PoNSJcEETHONKHk
+	 tcM9K/Rh1L6XA==
+From: Simon Horman <horms@kernel.org>
+Date: Thu, 15 Aug 2024 16:37:13 +0100
+Subject: [PATCH net] tc-testing: don't access non-existent variable on
+ exception
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <efe1d936-011d-49e3-a0ff-8f6276e4d782@sirena.org.uk>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240815-tdc-test-ordinal-v1-1-0255c122a427@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAKggvmYC/x3MTQqAIBBA4avIrBuwwejnKtHCcqqB0FCJILp70
+ vJbvPdA4iicYFAPRL4kSfAFdaVg2a3fGMUVA2ky2pDG7BbMnDKG6MTbA83cm75tOmqpgZKdkVe
+ 5/+UInjNM7/sBKZCUtmcAAAA=
+To: Jamal Hadi Salim <jhs@mojatatu.com>, 
+ Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>, 
+ Shuah Khan <shuah@kernel.org>, Lucas Bates <lucasb@mojatatu.com>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: 
+X-Mailer: b4 0.14.0
 
-On Thu, Aug 15, 2024 at 04:05:32PM +0100, Mark Brown wrote:
-> On Thu, Aug 15, 2024 at 03:01:21PM +0100, Dave Martin wrote:
-> 
-> > My thought was that if libc knows about shadow stacks, it is probably
-> > going to be built to use them too and so would enable shadow stack
-> > during startup to protect its own code.
-> 
-> > (Technically those would be independent decisions, but it seems a good
-> > idea to use a hardening feature if you know about and it is present.)
-> 
-> > If so, shadow stacks might always get turned on before the main program
-> > gets a look-in.
-> 
-> > Or is that not the expectation?
-> 
-> The expectation (at least for arm64) is that the main program will only
-> have shadow stacks if everything says it can support them.  If the
-> dynamic linker turns them on during startup prior to parsing the main
-> executables this means that it should turn them off before actually
-> starting the executable, taking care to consider any locking of features.
+Since commit 255c1c7279ab ("tc-testing: Allow test cases to be skipped")
+the variable test_ordinal doesn't exist in call_pre_case().
+So it should not be accessed when an exception occurs.
 
-Hmm, so we really do get a clear "enable shadow stack" call to the
-kernel, which we can reasonaly expect won't happen for ancient software?
+This resolves the following splat:
 
-If so, I think dumping the GCS state in the sigframe could be made
-conditional on that without problems (?)
+  ...
+  During handling of the above exception, another exception occurred:
 
-(We could always make it unconditional later if it turn out that that
-approach breaks something.)
+  Traceback (most recent call last):
+    File ".../tdc.py", line 1028, in <module>
+      main()
+    File ".../tdc.py", line 1022, in main
+      set_operation_mode(pm, parser, args, remaining)
+    File ".../tdc.py", line 966, in set_operation_mode
+      catresults = test_runner_serial(pm, args, alltests)
+    File ".../tdc.py", line 642, in test_runner_serial
+      (index, tsr) = test_runner(pm, args, alltests)
+    File ".../tdc.py", line 536, in test_runner
+      res = run_one_test(pm, args, index, tidx)
+    File ".../tdc.py", line 419, in run_one_test
+      pm.call_pre_case(tidx)
+    File ".../tdc.py", line 146, in call_pre_case
+      print('test_ordinal is {}'.format(test_ordinal))
+  NameError: name 'test_ordinal' is not defined
 
-> 
-> > > > Is there any scenario where it is legitimate for the signal handler to
-> > > > change the shadow stack mode or to return with an altered GCSPR_EL0?
-> 
-> > > If userspace can rewrite the stack pointer on return (eg, to return to a
-> > > different context as part of userspace threading) then it will need to
-> 
-> > Do we know if code that actually does that?  IIUC, trying to do this is
-> > totally broken on most arches nowadays; making it work requires a
-> > reentrant C library and/or logic to defer signals around critical
-> > sections in userspace.
-> 
-> > "Real" threading makes this pretty pointless for the most part.
-> 
-> > Related question: does shadow stack work with ucontext-based coroutines?
-> > Per-context stacks need to be allocated by the program for that.
-> 
-> Yes, ucontext based coroutines are the sort of thing I meant when I was
-> talking about returning to a different context?  
+Fixes: 255c1c7279ab ("tc-testing: Allow test cases to be skipped")
+Signed-off-by: Simon Horman <horms@kernel.org>
+---
+ tools/testing/selftests/tc-testing/tdc.py | 1 -
+ 1 file changed, 1 deletion(-)
 
-Ah, right.  Doing this asynchronously on the back of a signal (instead
-of doing a sigreturn) is the bad thing.  setcontext() officially
-doesn't work for this any more, and doing it by hacking or rebuilding
-the sigframe is extremely hairy and probably a terrible idea for the
-reasons I gave.
+diff --git a/tools/testing/selftests/tc-testing/tdc.py b/tools/testing/selftests/tc-testing/tdc.py
+index ee349187636f..4f255cec0c22 100755
+--- a/tools/testing/selftests/tc-testing/tdc.py
++++ b/tools/testing/selftests/tc-testing/tdc.py
+@@ -143,7 +143,6 @@ class PluginMgr:
+             except Exception as ee:
+                 print('exception {} in call to pre_case for {} plugin'.
+                       format(ee, pgn_inst.__class__))
+-                print('test_ordinal is {}'.format(test_ordinal))
+                 print('testid is {}'.format(caseinfo['id']))
+                 raise
+ 
 
-> > > be able to also update GCSPR_EL0 to something consistent otherwise
-> > > attempting to return from the interrupted context isn't going to go
-> > > well.  Changing the mode is a bit more exotic, as it is in general.
-> > > It's as much to provide information to the signal handler as anything
-> > > else.
-
-Note, the way sigcontext (a.k.a. mcontext).__reserved[] is used by
-glibc for the ucontext API is inspired by the way the kernel uses it,
-but not guaranteed to be compatible.  For the ucontext API glibc
-doesn't try to store/restore asynchronous contexts (which is why
-setcontext() from a signal handler is totally broken), so there is no
-need to store SVE/SME state and hence lots of free space, so this
-probably is supportable with shadow stacks -- if there's a way to
-allocate them.  This series would be unaffected either way.
-
-(IIRC, the contents of mcontext.__reserved[] is totally incompatible
-with what the kernel puts in there, and doesn't have the same record
-structure.)
-
-> 
-> > I'm not sure that we should always put information in the signal frame
-> > that the signal handler can't obtain directly.
-> 
-> > I guess it's harmless to include this, though.
-> 
-> If we don't include it then if different ucontexts have different GCS
-> features enabled we run into trouble on context switch.
-
-As outlined above, nowadays you can only use setcontext() on a context
-obtained from getcontext().  Using setcontext() on a context obtained
-from a sigframe works by accident or not at all, but in any case
-coroutines always switch synchronously and don't rely on doing this.
-
-(See where setcontext deals with the FPSIMD regs:
-https://sourceware.org/git/?p=glibc.git;a=blob;f=sysdeps/unix/sysv/linux/aarch64/setcontext.S;h=ba659438c564dc3bbbb8d6039030e2c492649534;hb=HEAD )
-
-So, overall I think making ucontext coroutines with with GCS is purely
-a libc matter that is "interesting" here, but we don't need to worry
-about.
-
-> > > > Is the guarded stack considered necessary (or at least beneficial) for
-> > > > backtracing, or is the regular stack sufficient?
-> 
-> > > It's potentially beneficial, being less vulnerable to corruption and
-> > > simpler to parse if all you're interested in is return addresses.
-> > > Profiling in particular was mentioned, grabbing a linear block of memory
-> > > will hopefully be less overhead than chasing down the stack.  The
-> > > regular stack should generally be sufficient though.
-> 
-> > I guess we can't really argue that the shadow stack pointer is
-> > redundant here though.  The whole point of shadow stacks is to make
-> > things more robust...
-> 
-> > Just kicking the tyres on the question of whether we need it here, but
-> > I guess it's hard to make a good case for saying "no".
-> 
-> Indeed.  The general model here is that we don't break userspace that
-> relies on parses the normal stack (so the GCS is never *necessary*) but
-> clearly you want to have it.
-
-Agreed, but perhaps not in programs that haven't enabled shadow stack?
-
-Cheers
----Dave
 
