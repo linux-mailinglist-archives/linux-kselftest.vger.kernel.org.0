@@ -1,308 +1,167 @@
-Return-Path: <linux-kselftest+bounces-15396-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15397-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C82E952D08
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 12:57:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1454952D17
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 12:59:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED0BAB236CD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 10:55:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30A961C23458
+	for <lists+linux-kselftest@lfdr.de>; Thu, 15 Aug 2024 10:59:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 364311BCA08;
-	Thu, 15 Aug 2024 10:47:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9AB21AC891;
+	Thu, 15 Aug 2024 10:59:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lD4WUaEa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e37ggKjr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 027981BC9FA;
-	Thu, 15 Aug 2024 10:47:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C2251AC885;
+	Thu, 15 Aug 2024 10:59:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723718848; cv=none; b=QFavy86qzkgGNQfgW/Iz3D2/xfDhDAp0p1IGiVAyq43+ipxXnP5FsyKpiWKkDQ6gn3n6vHDk2A2qdRXFvmRbGGQ/ZtmkIWRqSepmERYemrWBYbsPqxidQiAjHzhrBdFkLmXgxBXgrMjkCMHU4Ca7k3T4qO74Y2lxgRZ1rM6rVOo=
+	t=1723719577; cv=none; b=pLnjYd+886FlwTqaVfxJv/F1G56YBwmxX2rJBj+/9ydzf71NZyJW/iNucSls3HGZjRmPZThthcrXSQUhYL7KxO+QJ2FkN0Ic14ROenEw3/XJVFwFwsAhQJb3DYbGHWYOiuKO1Pisa5w8x24iGow7SvBSo7YyIPk5hB0bxZ0yWYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723718848; c=relaxed/simple;
-	bh=SyUtfx9pndMgeXZmYY2NIaXgUM3Zbg6Fhj7I0i2AHR0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=K82HDkGaLlPWig6ki8t2N4+whEKJImvYhT/49a5NvOKd3W5sXAf764DlDsF274ylM2lOjwtm//uN8uQgA6+z0tS/y8FhyqCf5up1rJJHm7p23EQbWrMLWyFrqUbMlRdfto+FDuPkvXsd80nZqUwoUvXd580zj8i5ThwigP0ewQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lD4WUaEa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E065C32786;
-	Thu, 15 Aug 2024 10:47:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723718847;
-	bh=SyUtfx9pndMgeXZmYY2NIaXgUM3Zbg6Fhj7I0i2AHR0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lD4WUaEabRGgDzakUvnjXTt5NgxW2xLoSDXncAE4R2dVHTG/snMpaLvsP8jmbiB+0
-	 faSmE42q2VXOeyV/naxUH260N56kWZLom1x2lIf2VGM8XfxZCdoft+xt4sAvSQ0PxM
-	 C0FV8+1Q4LqfM/qkQz1/HP+L+BbMnQtGVOX1YH9JSHOTls7SxNycKztWVUl3urvlNA
-	 DYTc2TgE7N+z9z5/m61qpD7S3qU86R2IJqi8vZcITqmn2mLjjkSfjNdATvk+MIPgkV
-	 HZmzX+9pvAiiMuAVn/6Uhvt0NDSCIyzmh/YezwR2oo7/bkbgzMu6mqy4sYH9XnmR5O
-	 C1YyYEBeQ83og==
-Message-ID: <127af9ef-2d69-4765-a8f0-0dece3b6dd1d@kernel.org>
-Date: Thu, 15 Aug 2024 12:47:22 +0200
+	s=arc-20240116; t=1723719577; c=relaxed/simple;
+	bh=kGK5MK0Ncm5BsPliSkW52dbOqbLJtaSRSnBLaBwRSvQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=p+U6Y0bBW1uUp2veiPzZm1qINrZF739DnAITPPbQnvUU0tl0nO6zFy4nj+kTXJT/AaR55pjf6EVauP7K6G482VLKyw5r1mFh3dNhEmXKI1E84eI6ri0CpvMeuAgucZt8tmXViodO43STbKokZKFF85tWa2N3xXY4jdHnuz+hxEA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e37ggKjr; arc=none smtp.client-ip=209.85.161.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5d8060662a1so481958eaf.2;
+        Thu, 15 Aug 2024 03:59:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723719575; x=1724324375; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=T2gYBlopv26SnjKVkCkpqHG9JrB7DcQ7BheR1nwthfU=;
+        b=e37ggKjrmzJmNiiNj5oNZQeb9WmSDBKgzTSsY9P1x3glqPCuwbN8bK5UT6KFKUTIgj
+         JVqAvNRb5jjuF8Sve7wqOT15ubsWWSyZYL+GKtp7fb+CLlkeAjFPDHmR+dH4OEgvexFu
+         57+oD7eVe+zasppQKKOfP7XGOYfZPqdSw9g6RR0HVtCmdSXN4O8SMTAitURlaGsDKGtU
+         jMzW+Wxlp/uLXMp7x5tu1pbgEMEfnz27yQB1fRJYxvr8l58Jmoo8ilfqkXB9IBLtPZNM
+         qi6aNCtE1mz1vqHV0U/FeYk9jUsqL0XIgfrPAPLDwocHuMMQs1UAPz6VQ9LLT6deDlo6
+         mtrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723719575; x=1724324375;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T2gYBlopv26SnjKVkCkpqHG9JrB7DcQ7BheR1nwthfU=;
+        b=A0c2dkJr6tTob+K1dpr3FdtEz0n6qF6hs5LP71enSdFDF6ykYdieoV52WoWtMH+GSS
+         YPx1Q4vvEizJfLGISa8T1DXGbRMuwYneVSla51mSVcGmRVDYMap7nPtTmkgyLPMXb8re
+         6Lua0pF85f6fYzbajisnpjBMQmlTihfcbCzItFZgx+0N9biOovbJo+vt6qz7Ho22AHOk
+         mp+D8HyuafOp4Xg5if8C85cvBNmsss4XPw8ldysiD+ROxMDyT9eEBLh5cW7h3n5caesA
+         Uf6UCRU1WVLL5vqXqOBr8PZJCAmN9a9b1/gS8pzu8XjfQoVNkrDL6pMNNGoyiF2ghbZf
+         uVXA==
+X-Forwarded-Encrypted: i=1; AJvYcCWBWYodfSY/c5ABi1wVEmmlvfVVKZ9CvhFaY3ZDrvlBgzaOqHi015A4UpA1VJ8tIxPxRa2Zw6jyh5da6r1+NrYW@vger.kernel.org, AJvYcCWuJYPAFdpvGzu014KMH3OR8ccfdwkurD//i4Z8Eh1xG1l1LqYL2SBi7yxRw98EfNGYRKoH41HY@vger.kernel.org, AJvYcCXA+Ozv4izNin48pL+guuVGqY2DT5r3JMpg+P76qSWeoxR3xUE6b93VCoOW/TeuTIIz5WrYNAsYHWSqG0Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjppqhmqXEJzw4BN0CaQG9nIRtA1dyqH32xzIC1EJQxIDhPdof
+	U+TgozsKOgKvkVcEXKfYVAFOE5YvAl/TFSan936h94JSqmQ89iHxHBsducxk
+X-Google-Smtp-Source: AGHT+IEYmmBlJlhHJ98IDOAH9ngK/JFXn2aR2ujYNasQpsZ1E67vf5pcJQm/CI+wVYIf7gS39+OZgg==
+X-Received: by 2002:a05:6870:959f:b0:25e:1659:5eec with SMTP id 586e51a60fabf-26fe5cdafedmr5716486fac.51.1723719574965;
+        Thu, 15 Aug 2024 03:59:34 -0700 (PDT)
+Received: from dev0.. ([2405:201:6803:30b3:f070:7306:329d:c8ca])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7127ae6c76fsm829915b3a.94.2024.08.15.03.59.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 15 Aug 2024 03:59:34 -0700 (PDT)
+From: Abhinav Jain <jain.abhinav177@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: skhan@linuxfoundation.org,
+	javier.carrasco.cruz@gmail.com,
+	Abhinav Jain <jain.abhinav177@gmail.com>
+Subject: [PATCH v7 net-next 0/3] Enhance network interface feature testing
+Date: Thu, 15 Aug 2024 16:29:21 +0530
+Message-Id: <20240815105924.1389290-1-jain.abhinav177@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next v3] net: netconsole: selftests: Create a new
- netconsole selftest
-To: Breno Leitao <leitao@debian.org>, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- liuhangbin@gmail.com, petrm@nvidia.com, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, David Wei <dw@davidwei.uk>,
- Willem de Bruijn <willemb@google.com>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <20240815095157.3064722-1-leitao@debian.org>
-Content-Language: en-GB
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20240815095157.3064722-1-leitao@debian.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Breno,
+This small series includes fixes for creation of veth pairs for
+networkless kernels & adds tests for turning the different network
+interface features on and off in selftests/net/netdevice.sh script.
 
-On 15/08/2024 11:51, Breno Leitao wrote:
-> Adds a selftest that creates two virtual interfaces, assigns one to a
-> new namespace, and assigns IP addresses to both.
-> 
-> It listens on the destination interface using socat and configures a
-> dynamic target on netconsole, pointing to the destination IP address.
-> 
-> The test then checks if the message was received properly on the
-> destination interface.
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
-> Changelog:
-> 
-> v3:
->  * Defined CONFIGs in config file (Jakub)
->  * Identention fixes (Petr Machata)
->  * Use setup_ns in a better way (Matthieu Baerts)
->  * Add dependencies in TEST_INCLUDES (Hangbin Liu)
+Changes in v7:
+Create a third patch in the series to do SKIP -> XFAIL replacement.
+Add logic to incorporate XFAIL on setting IP address for veth pair.
 
-Thank you for the v3!
+Changes in v6:
+https://lore.kernel.org/all/20240814191517.50466-1-jain.abhinav177@gmail.com
 
-I only looked here at how 'setup_ns' was used, (and a few other
-Bash-related stuff), but not at the test itself.
+Use XFAIL for ethtool operations that are unsupported instead of SKIP.
 
-I have a few comments, but I don't consider them as blocking if you
-prefer to continue with the current version.
+Changes in v5:
+https://lore.kernel.org/all/20240808122452.25683-1-jain.abhinav177@gmail.com
 
-(...)
+Rectify the syntax for ip add link.
+Fix the veth_created condition check.
 
-> diff --git a/tools/testing/selftests/drivers/net/netcons_basic.sh b/tools/testing/selftests/drivers/net/netcons_basic.sh
-> new file mode 100755
-> index 000000000000..929f27a0fd9c
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/net/netcons_basic.sh
-> @@ -0,0 +1,226 @@
+Changes in v4:
+https://lore.kernel.org/all/20240807175717.7775-1-jain.abhinav177@gmail.com
 
-(...)
+Move veth creation/removal to the main shell script.
+Tested using vng on a networkless kernel and the script works, sample
+output below the changes.
 
-> +# This will have some tmp values appended to it in set_network()
-> +NAMESPACE="netconsns_dst"
+Changes in v3:
+https://lore.kernel.org/all/20240614113240.41550-1-jain.abhinav177@gmail.com
 
-nit: the comment is no longer correct: if this variable is set before
-being used with setup_ns, the netns will not have a unique name, but it
-will use the one defined here. Maybe not what you want?
+Add a check for netdev, create veth pair for testing.
+Restore feature to its initial state.
 
-See this code from lib.sh where "ns_name" is "NAMESPACE":
+Changes in v2:
+https://lore.kernel.org/all/20240609132124.51683-1-jain.abhinav177@gmail.com
 
-  # Some test may setup/remove same netns multi times
-  if [ -z "${!ns_name}" ]; then
-          eval "${ns_name}=${ns_name,,}-$(mktemp -u XXXXXX)"
-  else
-          cleanup_ns "${!ns_name}"
-  fi
+Remove tail usage; use read to parse the features from temp file.
 
-So it will not set a new value, but it will try to clean any netns with
-this "netconsns_dst" name. I guess that's fine, but maybe you prefer to
-do like the others and simply define "NAMESPACE" to an empty string?
+v1:
+https://lore.kernel.org/all/20240606212714.27472-1-jain.abhinav177@gmail.com
 
-(...)
+```
+# selftests: net: netdevice.sh
+# No valid network device found, creating veth pair
+# PASS: veth0: set interface up
+# PASS: veth0: set MAC address
+# XFAIL: veth0: set IP address
+# PASS: veth0: ethtool list features
+# PASS: veth0: Turned off feature: rx-checksumming
+# PASS: veth0: Turned on feature: rx-checksumming
+# PASS: veth0: Restore feature rx-checksumming to initial state on
+# Actual changes:
+# tx-checksum-ip-generic: off
+# tx-tcp-segmentation: off [not requested]
 
-> +link_ifaces() {
-> +	local NSIM_DEV_SYS_LINK="/sys/bus/netdevsim/link_device"
-> +	local SRCIF_IFIDX=$(cat /sys/class/net/"$SRCIF"/ifindex)
-> +	local DSTIF_IFIDX=$(cat /sys/class/net/"$DSTIF"/ifindex)
-> +
-> +	exec {NAMESPACE_FD}</var/run/netns/"${NAMESPACE}"
-> +	exec {INITNS_FD}</proc/self/ns/net
-> +
-> +	# Bind the dst interface to namespace
-> +	ip link set "${DSTIF}" netns "${NAMESPACE}"
-> +
-> +	# Linking one device to the other one (on the other namespace}
-> +	echo "${INITNS_FD}:$SRCIF_IFIDX $NAMESPACE_FD:$DSTIF_IFIDX" \
-> +		> $NSIM_DEV_SYS_LINK
-> +	if [ $? -ne 0 ]; then
 
-Because of the 'set -e' defined above, I guess the script will stop just
-before in case of error, no? Maybe better with:
+# PASS: veth0: Turned off feature: rx-udp-gro-forwarding
+# PASS: veth0: Turned on feature: rx-udp-gro-forwarding
+# PASS: veth0: Restore feature rx-udp-gro-forwarding to initial state off
+# Cannot get register dump: Operation not supported
+# XFAIL: veth0: ethtool dump not supported
+# PASS: veth0: ethtool stats
+# PASS: veth0: stop interface
+```
 
-  if ! echo "(...)" > $NSIM_DEV_SYS_LINK; then
+Abhinav Jain (3):
+  selftests: net: Create veth pair for testing in networkless kernel
+  selftests: net: Add on/off checks for non-fixed features of interface
+  selftests: net: Use XFAIL for operations not supported by the driver
 
-(note that shellcheck should help to spot such issues I think)
+ tools/testing/selftests/net/netdevice.sh | 61 ++++++++++++++++++++++--
+ 1 file changed, 58 insertions(+), 3 deletions(-)
 
-> +		echo "linking netdevsim1 with netdevsim2 should succeed"
-> +		cleanup
-> +		exit ${ksft_skip}
-> +	fi
-> +}
-
-(...)
-
-> +function listen_port_and_save_to() {
-> +	local OUTPUT=${1}
-> +	# Just wait for 2 seconds
-> +	timeout 2 ip netns exec "${NAMESPACE}" \
-> +		socat UDP-LISTEN:"${PORT}",fork "${OUTPUT}"
-> +}
-> +
-> +function validate_result() {
-> +	local TMPFILENAME="$1"
-> +
-> +	# Check if the file exists
-> +	if [ ! -f "$TMPFILENAME" ]; then
-> +		echo "FAIL: File was not generated." >&2
-> +		return ${ksft_fail}
-> +	fi
-> +
-> +	if ! grep -q "${MSG}" "${TMPFILENAME}"; then
-> +		echo "FAIL: ${MSG} not found in ${TMPFILENAME}" >&2
-> +		cat "${TMPFILENAME}" >&2
-> +	return ${ksft_fail}
-
-nit: a tab is missing here.
-
-> +	fi
-> +
-> +	# Delete the file once it is validated, otherwise keep it
-> +	# for debugging purposes
-> +	rm "${TMPFILENAME}"
-> +	return ${ksft_pass}
-> +}
-
-(...)
-
-> +# ========== #
-> +# Start here #
-> +# ========== #
-> +modprobe netdevsim || true
-> +modprobe netconsole || true
-
-If errors can be expected, maybe clearer to mute stderr, not to confuse
-the people reading the logs?
-
-Same above with 'udevadm settle || true'.
-
-> +
-> +# The content of kmsg will be save to the following file
-> +OUTPUT_FILE="/tmp/${TARGET}"
-> +
-> +# Check for basic system dependency and exit if not found
-> +check_for_dependencies
-> +# Remove the namespace, interfaces and netconsole target on exit
-> +trap cleanup EXIT
-> +# Create one namespace and two interfaces
-> +set_network
-> +# Create a dynamic target for netconsole
-> +create_dynamic_target
-> +# Listed for netconsole port inside the namespace and destination interface
-> +listen_port_and_save_to "${OUTPUT_FILE}" &
-> +
-> +# Wait for socat to start and listen to the port.
-> +sleep 1
-
-I guess that's fine as it is, but it is often better to avoid a sleep
-with a "random" value: CI can be very slow, e.g. when running without
-KVM and/or with a debug kernel config. Here, wait_local_port_listen()
-from net_helper.sh could probably be used. The script will then probably
-wait less than 1 second.
-
-> +# Send the message
-> +echo "${MSG}: ${TARGET}" > /dev/kmsg
-> +# Wait until socat saves the file to disk
-> +sleep 1
-
-For here, I'm not sure, but 'busywait()' could be used, waiting for the
-OUTPUT_FILE to have a non 0 size?
-
-If you do that, you can maybe increase the timeout you used above, to
-support very slow environments.
-
-But if you prefer, I guess you can also leave things like they are and
-see if CIs are complaining (but these errors might not be easy to debug).
-
-> +
-> +# Make sure the message was received in the dst part
-> +validate_result "${OUTPUT_FILE}"
-> +ret=$?
-
-Here as well, because of 'set -e', this line is probably useless.
-
-  validate_result "${OUTPUT_FILE}" || ret=$?
-
-(or exit directly from validate_result() )
-
-> +
-> +exit ${ret}
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
+--
+2.34.1
 
 
