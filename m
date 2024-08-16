@@ -1,133 +1,125 @@
-Return-Path: <linux-kselftest+bounces-15486-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15487-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E6299544B0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 10:44:58 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52566954531
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 11:10:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8EE121C20EA3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 08:44:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02CAB286C77
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 09:10:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D72B13A25F;
-	Fri, 16 Aug 2024 08:44:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B063C13D516;
+	Fri, 16 Aug 2024 09:10:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AaiFDElG"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A63F1DFFC;
-	Fri, 16 Aug 2024 08:44:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82BB313C801;
+	Fri, 16 Aug 2024 09:10:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723797894; cv=none; b=VmRbHFi8F/7bRLfxdAOdiBpTXR8ErboTHCRaaf49NaWsDW8Bzyjzw+SA1G1IiDlmYc2rtg1SxECWSHSM6TNzp6bk16U3wROp6lznB07O3+Dlm2eW5WGoOts5aJQMLL5GW5Y2CQLm4l+UcgajtVgDal7rxO8w2hG8+L+o7Lv3ytA=
+	t=1723799433; cv=none; b=LewovBDfjnyjeS68Gpa4mtrEaC3/3kq0PhCVSTYK8qZ3GGBsGoBs/AztP1LbdFCakQ2QlaCV0PO5fhi1wlzO2RoF3C1qW035suDTM9+2TuwLrsJUVwf1D79c0dav3RaFVse7hg1KmmraV+GlpWwPBrvtkyRl1cNmNVQQ/pxKJbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723797894; c=relaxed/simple;
-	bh=BRboGjlwfrQPVVn2+h18CtHj+ByyxIEMBAs2xzz/N3Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XwnorFS4oJE/Svhxm7Qz2zrP0oqvIY0rr0ZDqDrf1/3WczHMX0XuXeUlMYDA+3tIoECiSGuk6B0RlPhSJyhTrJQl0+EN1ZDHfjTV8aDSf1dVSRe0I0n409kVAAi5XLTth/L9UpYOO55XPhyYPUhpdYNKu9CTfnEHHSGtwNcQ3A4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C85C32782;
-	Fri, 16 Aug 2024 08:44:48 +0000 (UTC)
-Date: Fri, 16 Aug 2024 09:44:46 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-	"broonie@kernel.org" <broonie@kernel.org>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"mgorman@suse.de" <mgorman@suse.de>,
-	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"vschneid@redhat.com" <vschneid@redhat.com>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"bsegall@google.com" <bsegall@google.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-	"jannh@google.com" <jannh@google.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"kees@kernel.org" <kees@kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-	"will@kernel.org" <will@kernel.org>
-Subject: Re: [PATCH RFT v8 4/9] fork: Add shadow stack support to clone3()
-Message-ID: <Zr8RfoHZYRWem1K9@arm.com>
-References: <20240808-clone3-shadow-stack-v8-0-0acf37caf14c@kernel.org>
- <20240808-clone3-shadow-stack-v8-4-0acf37caf14c@kernel.org>
- <f3a2a564094d05beac2dc5ab657cbc009c465667.camel@intel.com>
+	s=arc-20240116; t=1723799433; c=relaxed/simple;
+	bh=S9r9yGxVBVVt8iz8VZ6BiPMcB2RBNjLI7DiZjXXCPnM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=bdG+jvkrF7X4mred0YKfl+dOaqlaEpO796/S0DMAuErhsNOKxDlTrlaLI7J0YGJpXp3jGCyUTE6ahfPoAjwQ4nZeqB1AKhsgY8X71SGwzoohhSzUqxxCzZn0f4SYon5IQFYWjtvenq13QF7VtmL9NkJISazjpT3iydqubcpfcvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AaiFDElG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0593AC4AF0E;
+	Fri, 16 Aug 2024 09:10:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723799433;
+	bh=S9r9yGxVBVVt8iz8VZ6BiPMcB2RBNjLI7DiZjXXCPnM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=AaiFDElGcQlADY2h4llu8sBTpqefXgK+iL4Au8i8jzAi7VXApVT/OCSs+U5Ed6R4/
+	 EF8e9hQa5VysVYQXNdIK7FdMgak7LT6I41P6rC/s/mjdlxNndtc8G9Dzmt8U1ecu6e
+	 hn6NNbonoDUFWHkR28/hzNBMcS4zLEm83xpWcn8BPh1eMs4vx9ONdC3wQ7OsgwpDgC
+	 y8b44M2W9uRrm6VerRZyS5QsBn5H05WrhWG9XBrXsbVRn1aQU35FVWx55Faz6KjWRI
+	 rHgXDoIczxOBL+L3fB1Xqo7fJLEY+UKHeb0En/K6Pg5qrgDOcZN1H7emsCAx10hMzB
+	 Mr2H6Kd3kTQ5g==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70FB538231F8;
+	Fri, 16 Aug 2024 09:10:33 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f3a2a564094d05beac2dc5ab657cbc009c465667.camel@intel.com>
+Subject: Re: [PATCH net 00/14] VLAN fixes for Ocelot driver
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172379943226.3458201.417541764470956886.git-patchwork-notify@kernel.org>
+Date: Fri, 16 Aug 2024 09:10:32 +0000
+References: <20240815000707.2006121-1-vladimir.oltean@nxp.com>
+In-Reply-To: <20240815000707.2006121-1-vladimir.oltean@nxp.com>
+To: Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, claudiu.manoil@nxp.com,
+ alexandre.belloni@bootlin.com, atenart@kernel.org,
+ UNGLinuxDriver@microchip.com, hongbo.wang@nxp.com, xiaoliang.yang_1@nxp.com,
+ andrew@lunn.ch, f.fainelli@gmail.com, colin.foster@in-advantage.com,
+ horatiu.vultur@microchip.com, liuhangbin@gmail.com, petrm@nvidia.com,
+ idosch@nvidia.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-On Thu, Aug 15, 2024 at 12:18:23AM +0000, Edgecombe, Rick P wrote:
-> On Thu, 2024-08-08 at 09:15 +0100, Mark Brown wrote:
-> > +int arch_shstk_post_fork(struct task_struct *t, struct kernel_clone_args
-> > *args)
-[...]
-> > +       /* This should really be an atomic cmpxchg.  It is not. */
-> > +       if (access_remote_vm(mm, addr, &val, sizeof(val),
-> > +                            FOLL_FORCE) != sizeof(val))
-> > +               goto out;
-> > +
-> > +       if (val != expected)
-> > +               goto out;
-> > +       val = 0;
+Hello:
+
+This series was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu, 15 Aug 2024 03:06:53 +0300 you wrote:
+> This is a collection of patches I've gathered over the past several
+> months.
 > 
-> After a token is consumed normally, it doesn't set it to zero. Instead it sets
-> it to a "previous-ssp token". I don't think we actually want to do that here
-> though because it involves the old SSP, which doesn't really apply in this case.
-> I don't see any problem with zero, but was there any special thinking behind it?
-
-BTW, since it's the parent setting up the shadow stack in its own
-address space before forking, I think at least the read can avoid
-access_remote_vm() and we could do it earlier, even before the new
-process is created.
-
-> > +       if (access_remote_vm(mm, addr, &val, sizeof(val),
-> > +                            FOLL_FORCE | FOLL_WRITE) != sizeof(val))
-> > +               goto out;
+> Patches 1-6/14 are supporting patches for selftests.
 > 
-> The GUPs still seem a bit unfortunate for a couple reasons:
->  - We could do a CMPXCHG version and are just not (I see ARM has identical code
-> in gcs_consume_token()). It's not the only race like this though FWIW.
->  - I *think* this is the only unprivileged FOLL_FORCE that can write to the
-> current process in the kernel. As is, it could be used on normal RO mappings, at
-> least in a limited way. Maybe another point for the VMA check. We'd want to
-> check that it is normal shadow stack?
->  - Lingering doubts about the wisdom of doing GUPs during task creation.
+> Patch 9/14 fixes PTP TX from a VLAN upper of a VLAN-aware bridge port
+> when using the "ocelot-8021q" tagging protocol. Patch 7/14 is its
+> supporting selftest.
+> 
+> [...]
 
-I don't like the access_remote_vm() either. In the common (practically
-only) case with CLONE_VM, the mm is actually current->mm, so no need for
-a GUP.
+Here is the summary with links:
+  - [net,01/14] selftests: net: local_termination: refactor macvlan creation/deletion
+    https://git.kernel.org/netdev/net/c/8d019b15ddd5
+  - [net,02/14] selftests: net: local_termination: parameterize sending interface
+    https://git.kernel.org/netdev/net/c/4261fa35185c
+  - [net,03/14] selftests: net: local_termination: parameterize test name
+    https://git.kernel.org/netdev/net/c/df7cf5cc551c
+  - [net,04/14] selftests: net: local_termination: add one more test for VLAN-aware bridges
+    https://git.kernel.org/netdev/net/c/5b8e74182ed3
+  - [net,05/14] selftests: net: local_termination: introduce new tests which capture VLAN behavior
+    https://git.kernel.org/netdev/net/c/5fea8bb00974
+  - [net,06/14] selftests: net: local_termination: don't use xfail_on_veth()
+    https://git.kernel.org/netdev/net/c/9aa3749ca4a8
+  - [net,07/14] selftests: net: local_termination: add PTP frames to the mix
+    https://git.kernel.org/netdev/net/c/237979504264
+  - [net,08/14] selftests: net: bridge_vlan_aware: test that other TPIDs are seen as untagged
+    https://git.kernel.org/netdev/net/c/e29b82ef2761
+  - [net,09/14] net: mscc: ocelot: use ocelot_xmit_get_vlan_info() also for FDMA and register injection
+    https://git.kernel.org/netdev/net/c/67c3ca2c5cfe
+  - [net,10/14] net: mscc: ocelot: fix QoS class for injected packets with "ocelot-8021q"
+    https://git.kernel.org/netdev/net/c/e1b9e80236c5
+  - [net,11/14] net: mscc: ocelot: serialize access to the injection/extraction groups
+    https://git.kernel.org/netdev/net/c/c5e12ac3beb0
+  - [net,12/14] net: dsa: provide a software untagging function on RX for VLAN-aware bridges
+    https://git.kernel.org/netdev/net/c/93e4649efa96
+  - [net,13/14] net: dsa: felix: fix VLAN tag loss on CPU reception with ocelot-8021q
+    https://git.kernel.org/netdev/net/c/f1288fd7293b
+  - [net,14/14] net: mscc: ocelot: treat 802.1ad tagged traffic as 802.1Q-untagged
+    https://git.kernel.org/netdev/net/c/36dd1141be70
 
-We could, in theory, consume this token in the parent before the child
-mm is created. The downside is that if a parent forks multiple
-processes using the same shadow stack, it will have to set the token
-each time. I'd be fine with this, that's really only for the mostly
-theoretical case where one doesn't use CLONE_VM and still want a
-separate stack and shadow stack.
-
-> I don't think they are show stoppers, but the VMA check would be nice to have in
-> the first upstream support.
-
-Good point.
-
+You are awesome, thank you!
 -- 
-Catalin
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
