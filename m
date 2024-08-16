@@ -1,132 +1,135 @@
-Return-Path: <linux-kselftest+bounces-15489-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15490-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D63439546F5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 12:52:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CBA495478A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 13:10:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F41D28346A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 10:52:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C6BEB24A2A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 11:10:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2556198A32;
-	Fri, 16 Aug 2024 10:52:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mJEYDkMn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D679219E7E8;
+	Fri, 16 Aug 2024 11:09:09 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D1C198A08;
-	Fri, 16 Aug 2024 10:52:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3C5198A2A;
+	Fri, 16 Aug 2024 11:09:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723805525; cv=none; b=GluNMFwO4aCa3kdX3LxLdb3YtxhNy3T9ckMCAzuwjs3irGy1P/EWVWH/JFQiZCn5kY6Z/DpClECiSCyRjhYTizgz6wKbUt5tdTpruem41IBHk76UxoUjh4S3Ja2rGoiKxTJ2n6KSGWe3UH2/s9QI5oVtGTHtm24eTlZkLsECp50=
+	t=1723806549; cv=none; b=jpWFsIxNp1EVeBZVfnmVtTbyhwtN16PYvkyCXzFHN4wFN0m+Xjxkl8V+z+fiUVx95EWoWp0CMBpZc0MQyj3zQKrGeqqux1KtN9/rwA5QcM7gMYMcm1H9C+3Rd0IJVK9xBz08z0+RletBLcnkcv6ZwqnlcA5haMXqcrxu+f04Kt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723805525; c=relaxed/simple;
-	bh=sfpft34+Q7KpSTmp1/eLWQvAOdHVfxQX2RrOjfaV45k=;
+	s=arc-20240116; t=1723806549; c=relaxed/simple;
+	bh=FbLmrmMC1NtCf5/c0O+HnpWKmt75tXsuzNE9sTnkVfc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YZUr0BxxLG5uDHW4bw8c0vdduprW/H4YkSEkKtvurdhwNb3SjIvS+Mnhx7dpPHOxN9aKbRVdjUHZ/XfGv1YLbk4bABAfa+qd+T/e4O3QcDj6hWfClNYsw5iRMUN1x+DCu27q9i9RqhKCxAlrmpv/2NHb6608tE4zx06HAG9OwV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mJEYDkMn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F32C32782;
-	Fri, 16 Aug 2024 10:51:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723805525;
-	bh=sfpft34+Q7KpSTmp1/eLWQvAOdHVfxQX2RrOjfaV45k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mJEYDkMn6TmebfPerm4lk8VIradWKYkDFTfBkB3nBlBrG0s2NxeCKW4Uru7OP+lJO
-	 S60xtYkMNFVa4RAHS5ex196JjVqVtVU+YGpNBO0aWkd7QEKEJLcUsVHQovN2hQcj5S
-	 Qy2pAnjUl59oh9a47he0OEsvr6RHugCPTd4YgYYNKsiQgk5frJsVgayxKexR2wQUEZ
-	 1S5NFaHNXMEBtgun4D8CFftUN3DxO+OO/gMiBQ+Hl/dmX3XmJUP073d6AMMFSDAoLP
-	 3tti3ZDhfgMpleaEHZSOJl58kral88OJV9PfsSJba4DWgEaO/7gHe/tTvWjDaD1B7h
-	 1s68AyoGy6djQ==
-Date: Fri, 16 Aug 2024 11:51:57 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-	"dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"mgorman@suse.de" <mgorman@suse.de>,
-	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"vschneid@redhat.com" <vschneid@redhat.com>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"bsegall@google.com" <bsegall@google.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-	"jannh@google.com" <jannh@google.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"kees@kernel.org" <kees@kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-	"will@kernel.org" <will@kernel.org>
-Subject: Re: [PATCH RFT v8 4/9] fork: Add shadow stack support to clone3()
-Message-ID: <c644d64b-f7d0-47de-b5ba-ae2ac1b46e1b@sirena.org.uk>
-References: <20240808-clone3-shadow-stack-v8-0-0acf37caf14c@kernel.org>
- <20240808-clone3-shadow-stack-v8-4-0acf37caf14c@kernel.org>
- <f3a2a564094d05beac2dc5ab657cbc009c465667.camel@intel.com>
- <Zr8RfoHZYRWem1K9@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZoOhM5itibErt6YVB5mv66wk0jZn/E0DSI89NG3XZ/zYb+i8xSUqgO9aMFkqobwcbYc6gz4l5vCHCSa3N2cKi5VaQ0x3Gr9rFi5C0RwazeeUVvv6sltIlYkRQDLTxP7qwQm7VrI4qiQqUg+8r9hXfWsGrRzdOmcIiYphhGK2gns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB36CC32782;
+	Fri, 16 Aug 2024 11:09:03 +0000 (UTC)
+Date: Fri, 16 Aug 2024 12:09:01 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v10 05/40] arm64/gcs: Document the ABI for Guarded
+ Control Stacks
+Message-ID: <Zr8zTTrJ6M0SCvCV@arm.com>
+References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
+ <20240801-arm64-gcs-v10-5-699e2bd2190b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="i+AGODBgwk+YiNog"
-Content-Disposition: inline
-In-Reply-To: <Zr8RfoHZYRWem1K9@arm.com>
-X-Cookie: A Smith & Wesson beats four aces.
-
-
---i+AGODBgwk+YiNog
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20240801-arm64-gcs-v10-5-699e2bd2190b@kernel.org>
 
-On Fri, Aug 16, 2024 at 09:44:46AM +0100, Catalin Marinas wrote:
+On Thu, Aug 01, 2024 at 01:06:32PM +0100, Mark Brown wrote:
+> +1.  General
+> +-----------
+[...]
+> +* EL0 GCS entries with bit 63 set are reserved for use, one such use is defined
 
-> We could, in theory, consume this token in the parent before the child
-> mm is created. The downside is that if a parent forks multiple
-> processes using the same shadow stack, it will have to set the token
-> each time. I'd be fine with this, that's really only for the mostly
-> theoretical case where one doesn't use CLONE_VM and still want a
-> separate stack and shadow stack.
+Maybe "reserved for specific uses". The proposed sentenced feels like
+it's missing something.
 
-I originally implemented things that way but people did complain about
-the !CLONE_VM case, which does TBH seem reasonable.  Note that the
-parent won't as standard be able to set the token again - since the
-shadow stack is not writable to userspace by default it'd instead need
-to allocate a whole new shadow stack for each child.
+> +  below for signals and should be ignored when parsing the stack if not
+> +  understood.
+[...]
+> +3.  Allocation of Guarded Control Stacks
+> +----------------------------------------
+> +
+> +* When GCS is enabled for a thread a new Guarded Control Stack will be
+> +  allocated for it of size RLIMIT_STACK or 2 gigabytes, whichever is
+> +  smaller.
+> +
+> +* When a new thread is created by a thread which has GCS enabled then a
+> +  new Guarded Control Stack will be allocated for the new thread with
+> +  half the size of the standard stack.
 
-I change back to parsing the token in the parent but I don't want to end
-up in a cycle of bouncing between the two implementations depending on
-who's reviewed the most recent version.
+Is the half size still the case? It also seems a bit inconsistent to
+have RLIMIT_STACK when GCS is enabled and half the stack size when a new
+thread is created.
 
---i+AGODBgwk+YiNog
-Content-Type: application/pgp-signature; name="signature.asc"
+[...]
+> +* When a thread is freed the Guarded Control Stack initially allocated for
+> +  that thread will be freed.  Note carefully that if the stack has been
+> +  switched this may not be the stack currently in use by the thread.
 
------BEGIN PGP SIGNATURE-----
+Is this true for shadow stacks explicitly allocated by the user with
+map_shadow_stack()?
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAma/L0wACgkQJNaLcl1U
-h9BKkQf/Tb1CjJ0TFb/grSaBzz9tUOVm5wq48R7CEnmXCbox1sbTUCqom9wLNkPk
-04SjExLevPi/NB9b2P70iBfZzfEiqmrbZEUZZHb7PSLK5xF1QJ6gDlx2wmjXMQP+
-C275u0W6zVCNLpnxBYAxNKWWq+X0eIoch+hzpEk3yHzjUQEFqYjkAJsLhS/qU5dZ
-vRF1DDm1mcxTdV5m4gkMkOgkSDw97s330FFYhL8iSzP05/oQGp5NGX2S9IwJz6OK
-01FwbU/7olCBDK/ZbvUil6Gv42+Z14WLQUTPyEk9a2xzhaJkDjIMo1NFfqIxhbZ0
-hVUF+d4yVftBABef8rjNaQpAClsqiw==
-=JqPA
------END PGP SIGNATURE-----
+> +4.  Signal handling
+> +--------------------
+> +
+> +* A new signal frame record gcs_context encodes the current GCS mode and
+> +  pointer for the interrupted context on signal delivery.  This will always
+> +  be present on systems that support GCS.
+> +
+> +* The record contains a flag field which reports the current GCS configuration
+> +  for the interrupted context as PR_GET_SHADOW_STACK_STATUS would.
+> +
+> +* The signal handler is run with the same GCS configuration as the interrupted
+> +  context.
+> +
+> +* When GCS is enabled for the interrupted thread a signal handling specific
+> +  GCS cap token will be written to the GCS, this is an architectural GCS cap
+> +  token with bit 63 set and the token type (bits 0..11) all clear.  The
+> +  GCSPR_EL0 reported in the signal frame will point to this cap token.
+> +
+> +* The signal handler will use the same GCS as the interrupted context.
 
---i+AGODBgwk+YiNog--
+I assume this is true even with sigaltstack. Not easy to have
+alternative shadow stack without additional ABI.
+
+-- 
+Catalin
 
