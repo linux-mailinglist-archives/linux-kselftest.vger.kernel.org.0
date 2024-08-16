@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-15561-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AC91955163
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 21:25:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 651D7955166
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 21:25:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6041D1C22BA9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 19:25:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C1D26B23E8F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 19:25:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F6F21C4609;
-	Fri, 16 Aug 2024 19:24:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 651061C4635;
+	Fri, 16 Aug 2024 19:24:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="gKBBUkt2"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="nXiU418R"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2071.outbound.protection.outlook.com [40.107.243.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603251C3F32;
-	Fri, 16 Aug 2024 19:24:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDCA01C3F32;
+	Fri, 16 Aug 2024 19:24:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.71
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723836263; cv=fail; b=WNsDefOi8gScQG9+Lx7eI4iPDuZAXp+Gqk/emb66KBa57Nxqm1OjJbztVkFyOYuolyN091jZyKpizSkVRQgKZjUJeqF6bV6vJtldnab9laXFOyLZ/Q5tH6kgx67EdCuTk17pJF2xG0GhSY/nth/bLmZRH+jY7yejjByS6Cy4OZI=
+	t=1723836276; cv=fail; b=ZbxxpHLCUssHkx67pa2nj4GtunqhyT1Vh1Y4Uznq8UFWRSMzVhjvx37CBxb+iJqnHqa7lXsX1vm2E03vayrhRA512vLil1ZX/Itn4a8TN2mBVBkNyOYq6JJ7FvXzlgaXM2tFYyJGMEpieVW7B3R8xKVQbfe4pmDKXc30S86ob1g=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723836263; c=relaxed/simple;
-	bh=3eq4PzKo9bfvQPwtj/TEUl8ygIhzHPr4BecB7o+jH80=;
+	s=arc-20240116; t=1723836276; c=relaxed/simple;
+	bh=ey6nI2l3D4+9GfClCS9p2cOk+n8CYkiWZD8oJZUQru8=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=dXDmryOZIoK4O7JK7ZZOmNCCHjFGek88keR3qIxGhwYkD79BXKzE91Y/Ir99ARxmndYHgmgj7njwEa8Iw5QwkJ3rARv3cqJKchTJSYzQPikJOLHXeOz70qzf2TMqT2Ko6j3AMeNVpFFaGRW2cL/9fVnxCB3NAOTghbZw5/XPckc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=gKBBUkt2; arc=fail smtp.client-ip=40.107.236.40
+	 MIME-Version:Content-Type; b=cGL9UAZkyrjOTK2hjopQ2+40bdlh9yEAclGoURhSn8UiuNSNdbnpQnWfigS77ZfIwWa4nyfqgbCeAKRwCEOpjPbVssWrisL00Y9/a8MzZ8kLGhxwxkB8duPcKz32wXlUjfjqqLqSOF++WyK+hM1D5y00KqKw38dMehdB2sXjWdg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=nXiU418R; arc=fail smtp.client-ip=40.107.243.71
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YAyuCPXSqkhu5MprohREJsd06cmCmaLsbR86gL7z5xqPBarQJjHPajZHU2BvNwps4e0uBcUa+Xf6eezU2yISK1XblUYf4jU69yRrvLqPoolu0cfypK+D9zA4XC2Kxxo8KrmQe+Ul+6iOJwDO5nupSlaWp5KXbl/3tOoEBRIYbrSn3IYbzkIByyibkvpDcOIP2/DtwzTBFlndYNVjPvybdAZll+DbGNrg7UmkdM85qlhOqWoj/s/3fFeIEyL1X35J5v2MKfLhRw94u7POME6XRjowyPkNz7VJoL4wHSm9bw8b3IgGpQTYuEJPfoX2lE1XtO32CW4lWO8v5qGqbk/Dew==
+ b=CZoJjlE2R3tX9s3DkF1b4BcwwnTtiN/wXGAMMavjTEq9E9eI82F9ASKr4MumJGIi/BZybEJXy5v578HIhOLK/Et4GWVXf3zDHpmss5AJ9CjssVKewJXjkWqAigV2neqTd8xG3qBgRFhH66TqBsNa+ifrLInXlBGZPhOL4W1fSS8gXWNaq4SF9oYk0gwpIWRn08nfCqYHo7DJA+ZE0Qjq1D2uD76vJRYsxZiv3/3d9Es0rOuobtNmc/jTvZbVcSVuj4hXReWeKiAuSbgtJSz8MXtJxgv4tNLYH4Q3lH/EPlWJEdg8p8cESn0/wPvzZeY5nVzXcSnv/eqogbyXd8Omgw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EA66KCYDdQe8DKKCgR0HxvBakgkpa82FaCXVGuVZnfE=;
- b=ME8HdJa6vHrDeoYtVT8bhtUGVPjG/V+sP92S9H7OGBxBDiOqyebXDlZfPt82Sesf4/iFKJ5jn9hgHkGb0K87Bg1riC7M8YojMuV7UKgudG9ZcovdtqY5XpGoG5Iw4jYjUNMvo+Ddx+e7EifyhyY+kSbjG/vP+YSe8RzYyMHppMQj+Kt9O3udxPFlA7bISuwYdaUvkGU8viGO9NgpRHfu+wHfIKOvNMOZa7QDvyEfi8YpUFQ//pJJO+R1J+xAm6LwBjJOlWMvcTOGm2dN0nCLJmyQQYbBkfrSXq3gDnhfsdTHX2MgKMe+J8y3Uui2JtQNG54OVmypP8uWY5nV5ddrGQ==
+ bh=LwjcYrvsvWYVwD4AlWGt3YT9WCWEQ+3QVrWeNkt3rRo=;
+ b=s0uf0ytAIoLqLhpiBhcvpdn1N1Bw8+L22MtdzHagmGJLUeqSe+Ys2fGsLMIw6TlK0PVHKM7PJqR8jzSjHh5sSCjDR3oPRu1/KdkT0RVIAoJxlWJL/lwEs+SPfiNvVPtJV7owhT8kfJcYRfTrWPrU/q0SHZzXGiaU8rP055lmuhZKneLbc9ShE8DrYBZ8uLypcJOsLpF4mSj5FCaxkUfaxPaNs/DryS9wHQtlEnYeI8GMV/ja0n7uJjsVT0cEfPOdB+meFC5RKvrs3tJUIRV6XVGZcxm4hzC/iI5gQ+q24lALYF54AIFjiUbBraYYxNV+ij/Sv+LeDL+b7c4Ea9rOOg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EA66KCYDdQe8DKKCgR0HxvBakgkpa82FaCXVGuVZnfE=;
- b=gKBBUkt221yCHKfZM4l/jyS/BRFwtxU2xXZZj784Q+uF1Ll/ulRR/Epi7iIeiERwKEQtEF1HZp7uXhwhZi30YfAC99kA79n0Rza2LEVHjTkiZyVz6tBFMkZLHvghKPQFO+BBBLeQlhy+t/d4Rh7VXUUoc9s1KNXvnT+a5hZVt9U=
-Received: from SJ0PR05CA0176.namprd05.prod.outlook.com (2603:10b6:a03:339::31)
- by DM6PR12MB4171.namprd12.prod.outlook.com (2603:10b6:5:21f::18) with
+ bh=LwjcYrvsvWYVwD4AlWGt3YT9WCWEQ+3QVrWeNkt3rRo=;
+ b=nXiU418Rk0gqf+AoJTK/Lio28BjHoDKZc/EavUYTC+b9iWxHIZNRg78lqVBm5i2ZETmV9YMlkelCyAn6+ngPOEf/t4TGYMOnP0RIsDJ86K/xooM0EDlFrWySVoUceWYkNnkoKv+cKDt9xqV4JDeEjZoVfMOyL6mq7qTiLu6iQVU=
+Received: from SJ0PR13CA0136.namprd13.prod.outlook.com (2603:10b6:a03:2c6::21)
+ by IA0PR12MB7750.namprd12.prod.outlook.com (2603:10b6:208:431::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.19; Fri, 16 Aug
- 2024 19:24:16 +0000
-Received: from SJ1PEPF00001CE9.namprd03.prod.outlook.com
- (2603:10b6:a03:339:cafe::7d) by SJ0PR05CA0176.outlook.office365.com
- (2603:10b6:a03:339::31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.17 via Frontend
- Transport; Fri, 16 Aug 2024 19:24:16 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.20; Fri, 16 Aug
+ 2024 19:24:28 +0000
+Received: from SJ1PEPF00001CEA.namprd03.prod.outlook.com
+ (2603:10b6:a03:2c6:cafe::61) by SJ0PR13CA0136.outlook.office365.com
+ (2603:10b6:a03:2c6::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.9 via Frontend
+ Transport; Fri, 16 Aug 2024 19:24:27 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -63,21 +63,21 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SJ1PEPF00001CE9.mail.protection.outlook.com (10.167.242.25) with Microsoft
+ SJ1PEPF00001CEA.mail.protection.outlook.com (10.167.242.26) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7828.19 via Frontend Transport; Fri, 16 Aug 2024 19:24:16 +0000
+ 15.20.7828.19 via Frontend Transport; Fri, 16 Aug 2024 19:24:27 +0000
 Received: from AUSPRSAMPAT.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 16 Aug
- 2024 14:24:15 -0500
+ 2024 14:24:25 -0500
 From: "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>
 To: <kvm@vger.kernel.org>
 CC: <seanjc@google.com>, <pbonzini@redhat.com>, <pgonda@google.com>,
 	<thomas.lendacky@amd.com>, <michael.roth@amd.com>, <shuah@kernel.org>,
 	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 5/9] KVM: selftests: SNP IOCTL test
-Date: Fri, 16 Aug 2024 14:23:06 -0500
-Message-ID: <20240816192310.117456-6-pratikrajesh.sampat@amd.com>
+Subject: [PATCH v2 6/9] KVM: selftests: SEV-SNP test for KVM_SEV_INIT2
+Date: Fri, 16 Aug 2024 14:23:07 -0500
+Message-ID: <20240816192310.117456-7-pratikrajesh.sampat@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240816192310.117456-1-pratikrajesh.sampat@amd.com>
 References: <20240816192310.117456-1-pratikrajesh.sampat@amd.com>
@@ -93,241 +93,109 @@ X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CE9:EE_|DM6PR12MB4171:EE_
-X-MS-Office365-Filtering-Correlation-Id: d2e6f349-0d50-4fc9-11b4-08dcbe2904c8
+X-MS-TrafficTypeDiagnostic: SJ1PEPF00001CEA:EE_|IA0PR12MB7750:EE_
+X-MS-Office365-Filtering-Correlation-Id: 163ada2e-b03e-40e9-e198-08dcbe290b53
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700013;
+	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?xcU06uP83/q3vTJ6/z2gmUe4y/JwQouWIwv3qIwzYOG2GmnrGbzxpYTApLje?=
- =?us-ascii?Q?nvaEwqmNBirtzMpMv1lO8CvJKh7cR24RxdkHaHlx6Et/Si3y7S/72osiaOHP?=
- =?us-ascii?Q?1Z5RhVGeeApgVx9sN1QIae4deaY7DsnKWcyp24wl2VAKPSt39cUjwI3Hz1Y5?=
- =?us-ascii?Q?AlyMVT0mCJ1Ajxu+M7WP69RIRnnqI4W4wtCG98kDZPVs/cggIZA+eRoEZ75A?=
- =?us-ascii?Q?Y4aFrWJI2A9ugh59DXncu4c7quPDfAMszLiKTqr4Q8tgAuQ47dwNVQ+pINC/?=
- =?us-ascii?Q?nYqliiK73XxToUG5TzQvBRXTkLkpPvvu4IY0YIfbv9vNy8AH9DhuvzepmOiE?=
- =?us-ascii?Q?X5IW0TRPtBV3QGNvklVf/nRTJWW0ZvmS/X9yItpJfYxCfaAT/3Ztta+Cq6xs?=
- =?us-ascii?Q?6ZnhJWeN+RALgg6tuLaTzb8kLZACUTDnv6zCvo5TVI3qovzm5XZdLvAA4OM+?=
- =?us-ascii?Q?vBnS4kUTo68j9OzXpMc79GZ5u3CDoGp3e1moVSfB4oUQLlgiL0MkigP5ssOO?=
- =?us-ascii?Q?1u1HTQsWfYKnUyZ9pU95A9hPE8hg4fukeLz0s1oHt5vhTvMmFU4SdvzvxSR3?=
- =?us-ascii?Q?VBQ3R+Rbo6N5rt/fu9gLxEmFVzt+3/WbeML7jPN/TdKyLTBFWBKDDfhMsgfn?=
- =?us-ascii?Q?kK41HEIGCuVA7pvYHrm4WlOjps2ZhfGzFzbQMQjwOEL4swFd8YwklAzPaOy9?=
- =?us-ascii?Q?cLfoT4NSPyPnHnnggN2M+/maeSSvMFV9cMeaVHWY13BmY4TCaUQEmRIPE3ow?=
- =?us-ascii?Q?hRazCoBmOkYCz7+mfKBYsLTg0tBD+P5bEdIhLLPrLzyZ274onvnk3mY1tc1c?=
- =?us-ascii?Q?+l6qflib4ortM0nS2uKaCUAcfiemgifHw5FDQgoUwZ4AHH5gj7c5AcGYRZ6z?=
- =?us-ascii?Q?qet+sJIz9xCnB6G1PSf3G+xV4lpF13SbvfgtwQ2xmh6pfxBNTF4cu84VionZ?=
- =?us-ascii?Q?R/h1QyqhXxwWLAg+Pakgxla67UUWPyQeSDFpa5ggdfFVSiVSs1lv+NhRGod1?=
- =?us-ascii?Q?XYXeJ7o1daBuXwo769lVAx+qjt/h8BtV3lMBf7Q9C+QAL0d0jMh6OsRFgiP7?=
- =?us-ascii?Q?9Rt9Gb5MDrXnUfc4o2Jj96P60jnwq3qTgF0LAcR7zHwYlFGheBrfkM0EvlVV?=
- =?us-ascii?Q?ahjoJ4KkswMegQzcIvdH7ZYd4DPAz/Jr0juX5U0P/72p9SScMjXb9qjlTg0E?=
- =?us-ascii?Q?fdkDAz4Gr3QZCM4fG8hs7yqsCKeGjw6nxyG/xXeMOg/so08gRlezZAY9wnz+?=
- =?us-ascii?Q?TrSwvC9nxWkvf2RpETTOdPFncML3gPO5ewRfnXGTEqe6TiYdlJo09FS8MHnF?=
- =?us-ascii?Q?YHjtJ51hJiComEGhTKQ7BxpfHukesVFDd7DQMjUdF4TjuXmTmLD8klxUZAYG?=
- =?us-ascii?Q?4jrwSgXXcaH2TwKYu96mszYs5SVlC6pbUQfuhrhaPemUTITvczKTMp9IJ4wE?=
- =?us-ascii?Q?9g0jtTxkps7dPPKfmEgbhRkNeXxGnuD4?=
+	=?us-ascii?Q?MGbhRBcxh1ZsjU6tnCkeuo2qKK5Zt2htPF2jcO/jqwF+G1dovveH5GsmnKxU?=
+ =?us-ascii?Q?obvvk32CeQnePFaBFDXYIdWvfh7fmrGy2XOhO12YtKU/vSyFkhVrulaT5nPU?=
+ =?us-ascii?Q?SIOqiCZaUM62T7DC7/qWH4JQ8/qDNlLwd/icaOANMC6WL1QxyogvNi6p6i3O?=
+ =?us-ascii?Q?nQOx3182Ug4u5leMT9HUfi5FrAS1lDjbY0TdpySYAyLGywnw1/aHEUjexSB7?=
+ =?us-ascii?Q?WnGW7AAi4LFRRAU33CjiQftJwM13nnE+pZMtFx7Nrg/UtS71+caVlBOQkLzg?=
+ =?us-ascii?Q?C38b8ZL6aGB9vnzvKIhqjShi9T3b0Z7LFa7pE/bTAMUPLVddK+LQFwZXk7TY?=
+ =?us-ascii?Q?kFfDjftYjONNNzqY1J3il250x3iG9NOInvgtPMQtngKSHsMrg7CkqVTbMdsc?=
+ =?us-ascii?Q?BoKUrHwv+BjkRrBzV4t9DU4lxXbG7r812+J33CHsJqvOo9DYLkSV7S8XdFpC?=
+ =?us-ascii?Q?k0VqQFEzyMFd2chnXmUa9BfJreaJREopC5ufRBE8uSKUdAqOY2bDj07b10m8?=
+ =?us-ascii?Q?a7gy0Xq1b+eTa8rbPtqroRMIMcuypBRuiFgd3fNEs1+c5llDPDlVeEptxaK0?=
+ =?us-ascii?Q?R9j7CSL2YLgHMh/KVUio2OfXHsoNG5qdHPP9wNBOdK2cpXJUuB5JyND2C+90?=
+ =?us-ascii?Q?tqW7SS4RiQW0sQgo+JJuhllfXcCDkqsyiH20Y7p1Al4x4Y52zoLeEqGHAsB8?=
+ =?us-ascii?Q?8G+PZqXKN3L/US5GPfDl52RzE9EsWoR6kOYDmmrXMJte8uh4VsODbTSYOcqS?=
+ =?us-ascii?Q?UjU+ebP/idp+WVkAfHJYuQsCo1dhAIYblJcSN3kjrfNDwLDN1sVIGIDv3y7+?=
+ =?us-ascii?Q?rjOLNxSE6/IqkCGvrKF1qUSyUqoqv9h2uacpoOXi9ezAWZs5Xl9LuD//9i+K?=
+ =?us-ascii?Q?KQb3k5EqCPMH+NeFYk8RJeSDUi8N4HfpmILL5PVKCgEJpFqy83r7jUmtMqL6?=
+ =?us-ascii?Q?zgG4XG1+b+HIC704L5PqAMf4AtlSgqlCXtTAZwCBfoGXnAlpnNIg29B4zPOj?=
+ =?us-ascii?Q?hpbWw7yA/bnIJhioAq7Chu8/+MrB3kuWKsSpEXS/O+ijxvo1cbwesyuE7Q/o?=
+ =?us-ascii?Q?Ez6LnrQLaovMJk6RH8qACq2UtkS/p14xIwARw8rQ2my4wkRw/3O84eFkL2wc?=
+ =?us-ascii?Q?5IQ64IXZry67gafP+LCKeBiPLd7P1XWTml/Q2uo+vtUx6GtiGxK7CUSrXYRc?=
+ =?us-ascii?Q?vqau4caw7aTSkAQ4ovmDNQ6z/4lpYvv8SI3YbCwo/vdIgqASLogoixjq54d7?=
+ =?us-ascii?Q?1cGYbBicDYcLUD1gjAVYnQXsEiS0GsCjd+9iki/6FXjgoFXqZHHgyf6SWn3X?=
+ =?us-ascii?Q?Qzs0CUSVgrW8DnSl/snmu7pixNbF4v7C9XYDXV7SXI5EplVbqldSY/ZwQdzt?=
+ =?us-ascii?Q?WON9IvO5bXV5M6u1zX+F4HhS6tOFOlYKVjMwUStORxRtuB2ln3OamfAsC2Hj?=
+ =?us-ascii?Q?9Aw+e6Tfty8CIWajD8XUOD7NgHHbaanK?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(376014);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2024 19:24:16.1518
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2024 19:24:27.1344
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d2e6f349-0d50-4fc9-11b4-08dcbe2904c8
+X-MS-Exchange-CrossTenant-Network-Message-Id: 163ada2e-b03e-40e9-e198-08dcbe290b53
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00001CE9.namprd03.prod.outlook.com
+	SJ1PEPF00001CEA.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4171
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7750
 
-Introduce testing of SNP ioctl calls. Tests attributes such as flags,
-page types, and policies in various combinations along the SNP launch
-path.
+Add SEV-SNP VM type to exercise the KVM_SEV_INIT2 call.
+
+Also ensure that SNP case is skipped for scenarios where CPUID supports
+it but KVM does not so that a failure is not reported for such cases.
 
 Signed-off-by: Pratik R. Sampat <pratikrajesh.sampat@amd.com>
 ---
- .../testing/selftests/kvm/include/kvm_util.h  |  11 ++
- .../selftests/kvm/x86_64/sev_smoke_test.c     | 140 +++++++++++++++++-
- 2 files changed, 150 insertions(+), 1 deletion(-)
+ .../testing/selftests/kvm/x86_64/sev_init2_tests.c  | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index 63c2aaae51f3..144730efbffa 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -888,6 +888,17 @@ static inline struct kvm_vm *vm_create(uint32_t nr_runnable_vcpus)
- 	return __vm_create(VM_SHAPE_DEFAULT, nr_runnable_vcpus, 0);
- }
+diff --git a/tools/testing/selftests/kvm/x86_64/sev_init2_tests.c b/tools/testing/selftests/kvm/x86_64/sev_init2_tests.c
+index 3fb967f40c6a..3f8fb2cc3431 100644
+--- a/tools/testing/selftests/kvm/x86_64/sev_init2_tests.c
++++ b/tools/testing/selftests/kvm/x86_64/sev_init2_tests.c
+@@ -28,6 +28,7 @@
+ int kvm_fd;
+ u64 supported_vmsa_features;
+ bool have_sev_es;
++bool have_snp;
  
-+static inline struct kvm_vm *vm_create_type(unsigned long type,
-+					    uint32_t nr_runnable_vcpus)
-+{
-+	const struct vm_shape shape = {
-+		.mode = VM_MODE_DEFAULT,
-+		.type = type,
-+	};
-+
-+	return __vm_create(shape, nr_runnable_vcpus, 0);
-+}
-+
- struct kvm_vm *__vm_create_with_vcpus(struct vm_shape shape, uint32_t nr_vcpus,
- 				      uint64_t extra_mem_pages,
- 				      void *guest_code, struct kvm_vcpu *vcpus[]);
-diff --git a/tools/testing/selftests/kvm/x86_64/sev_smoke_test.c b/tools/testing/selftests/kvm/x86_64/sev_smoke_test.c
-index cca2e0467f3d..3901a0cf44ee 100644
---- a/tools/testing/selftests/kvm/x86_64/sev_smoke_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/sev_smoke_test.c
-@@ -225,13 +225,151 @@ static void test_sev_launch(void *guest_code, uint32_t type, uint64_t policy)
- 	kvm_vm_free(vm);
- }
- 
-+static int __test_snp_launch_start(uint32_t type, uint64_t policy,
-+				   uint8_t flags, bool assert)
-+{
-+	struct kvm_vm *vm;
-+	int ret = 0;
-+
-+	vm = vm_create_type(type, 1);
-+	ret = __snp_vm_launch_start(vm, policy, flags);
-+	if (assert)
-+		TEST_ASSERT_VM_VCPU_IOCTL(!ret, KVM_SEV_SNP_LAUNCH_START, ret, vm);
-+	kvm_vm_free(vm);
-+
-+	return ret;
-+}
-+
-+static void test_snp_launch_start(uint32_t type, uint64_t policy)
-+{
-+	uint8_t i;
-+	int ret;
-+
-+	/* Flags must be zero for success */
-+	__test_snp_launch_start(type, policy, 0, true);
-+
-+	for (i = 1; i < 8; i++) {
-+		ret = __test_snp_launch_start(type, policy, BIT(i), false);
-+		TEST_ASSERT(ret && errno == EINVAL,
-+			    "KVM_SEV_SNP_LAUNCH_START should fail, invalid flag\n"
-+			    "(type:%d policy:0x%lx, flag:0x%lx)",
-+			    type, policy, BIT(i));
-+	}
-+
-+	ret = __test_snp_launch_start(type, SNP_POLICY_SMT, 0, false);
-+	TEST_ASSERT(ret && errno == EINVAL,
-+		    "KVM_SEV_SNP_LAUNCH_START should fail, SNP_POLICY_RSVD_MBO policy bit not set\n"
-+		    "(type:%d policy:0x%llx, flags:0x0)",
-+		    type, SNP_POLICY_SMT);
-+
-+	ret = __test_snp_launch_start(type, SNP_POLICY_RSVD_MBO, 0, false);
-+	if (unlikely(!is_smt_active())) {
-+		TEST_ASSERT(!ret,
-+			    "KVM_SEV_SNP_LAUNCH_START should succeed, SNP_POLICY_SMT not required on non-SMT systems\n"
-+			    "(type:%d policy:0x%llx, flags:0x0)",
-+			    type, SNP_POLICY_RSVD_MBO);
-+	} else {
-+		TEST_ASSERT(ret && errno == EINVAL,
-+			    "KVM_SEV_SNP_LAUNCH_START should fail, SNP_POLICY_SMT is not set on a SMT system\n"
-+			    "(type:%d policy:0x%llx, flags:0x0)",
-+			    type, SNP_POLICY_RSVD_MBO);
-+	}
-+
-+	ret = __test_snp_launch_start(type, SNP_POLICY |
-+				      SNP_FW_VER_MAJOR(UINT8_MAX) |
-+				      SNP_FW_VER_MINOR(UINT8_MAX), 0, false);
-+	TEST_ASSERT(ret && errno == EIO,
-+		    "KVM_SEV_SNP_LAUNCH_START should fail, invalid version\n"
-+		    "expected:%d.%d got:%d.%d (type:%d policy:0x%llx, flags:0x0)",
-+		    SNP_FW_REQ_VER_MAJOR, SNP_FW_REQ_VER_MINOR,
-+		    UINT8_MAX, UINT8_MAX, type,
-+		    SNP_POLICY | SNP_FW_VER_MAJOR(UINT8_MAX) | SNP_FW_VER_MINOR(UINT8_MAX));
-+}
-+
-+static void test_snp_launch_update(uint32_t type, uint64_t policy)
-+{
-+	struct kvm_vm *vm;
-+	int ret;
-+
-+	for (int pgtype = 0; pgtype <= KVM_SEV_SNP_PAGE_TYPE_CPUID + 1; pgtype++) {
-+		vm = vm_create_type(type, 1);
-+		snp_vm_launch_start(vm, policy);
-+		ret = __snp_vm_launch_update(vm, pgtype);
-+
-+		switch (pgtype) {
-+		case KVM_SEV_SNP_PAGE_TYPE_NORMAL:
-+		case KVM_SEV_SNP_PAGE_TYPE_ZERO:
-+		case KVM_SEV_SNP_PAGE_TYPE_UNMEASURED:
-+		case KVM_SEV_SNP_PAGE_TYPE_SECRETS:
-+			TEST_ASSERT(!ret,
-+				    "KVM_SEV_SNP_LAUNCH_UPDATE should succeed, invalid Page type %d",
-+				    pgtype);
-+			break;
-+		case KVM_SEV_SNP_PAGE_TYPE_CPUID:
-+			/*
-+			 * Expect failure if performed on random pages of
-+			 * guest memory rather than properly formatted CPUID Page
-+			 */
-+			TEST_ASSERT(ret && errno == EIO,
-+				    "KVM_SEV_SNP_LAUNCH_UPDATE should fail,\n"
-+				    "CPUID page type only valid for CPUID pages");
-+			break;
-+		default:
-+			TEST_ASSERT(ret && errno == EINVAL,
-+				    "KVM_SEV_SNP_LAUNCH_UPDATE should fail, invalid Page type");
-+		}
-+
-+		kvm_vm_free(vm);
-+	}
-+}
-+
-+void test_snp_launch_finish(uint32_t type, uint64_t policy)
-+{
-+	struct kvm_vm *vm;
-+	int ret;
-+
-+	vm = vm_create_type(type, 1);
-+	snp_vm_launch_start(vm, policy);
-+	snp_vm_launch_update(vm);
-+	/* Flags must be zero for success */
-+	snp_vm_launch_finish(vm);
-+	kvm_vm_free(vm);
-+
-+	for (int i = 1; i < 16; i++) {
-+		vm = vm_create_type(type, 1);
-+		snp_vm_launch_start(vm, policy);
-+		snp_vm_launch_update(vm);
-+		ret = __snp_vm_launch_finish(vm, BIT(i));
-+		TEST_ASSERT(ret && errno == EINVAL,
-+			    "KVM_SEV_SNP_LAUNCH_FINISH should fail, invalid flag\n"
-+			    "(type:%d policy:0x%lx, flag:0x%lx)",
-+			    type, policy, BIT(i));
-+		kvm_vm_free(vm);
-+	}
-+}
-+
-+static void test_snp_ioctl(void *guest_code, uint32_t type, uint64_t policy)
-+{
-+	test_snp_launch_start(type, policy);
-+	test_snp_launch_update(type, policy);
-+	test_snp_launch_finish(type, policy);
-+}
-+
-+static void test_sev_ioctl(void *guest_code, uint32_t type, uint64_t policy)
-+{
-+	test_sev_launch(guest_code, type, policy);
-+}
-+
- static void test_sev(void *guest_code, uint32_t type, uint64_t policy)
+ static int __sev_ioctl(int vm_fd, int cmd_id, void *data)
  {
- 	struct kvm_vcpu *vcpu;
- 	struct kvm_vm *vm;
- 	struct ucall uc;
+@@ -83,6 +84,9 @@ void test_vm_types(void)
+ 	if (have_sev_es)
+ 		test_init2(KVM_X86_SEV_ES_VM, &(struct kvm_sev_init){});
  
--	test_sev_launch(guest_code, type, policy);
-+	if (type == KVM_X86_SNP_VM)
-+		test_snp_ioctl(guest_code, type, policy);
-+	else
-+		test_sev_ioctl(guest_code, type, policy);
++	if (have_snp)
++		test_init2(KVM_X86_SNP_VM, &(struct kvm_sev_init){});
++
+ 	test_init2_invalid(0, &(struct kvm_sev_init){},
+ 			   "VM type is KVM_X86_DEFAULT_VM");
+ 	if (kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM))
+@@ -138,15 +142,24 @@ int main(int argc, char *argv[])
+ 		    "sev-es: KVM_CAP_VM_TYPES (%x) does not match cpuid (checking %x)",
+ 		    kvm_check_cap(KVM_CAP_VM_TYPES), 1 << KVM_X86_SEV_ES_VM);
  
- 	vm = vm_sev_create_with_one_vcpu(type, guest_code, &vcpu);
++	have_snp = kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SNP_VM);
++	TEST_ASSERT(!have_snp || kvm_cpu_has(X86_FEATURE_SNP),
++		    "sev-snp: KVM_CAP_VM_TYPES (%x) indicates SNP support (bit %d), but CPUID does not",
++		    kvm_check_cap(KVM_CAP_VM_TYPES), KVM_X86_SNP_VM);
++
+ 	test_vm_types();
  
+ 	test_flags(KVM_X86_SEV_VM);
+ 	if (have_sev_es)
+ 		test_flags(KVM_X86_SEV_ES_VM);
++	if (have_snp)
++		test_flags(KVM_X86_SNP_VM);
+ 
+ 	test_features(KVM_X86_SEV_VM, 0);
+ 	if (have_sev_es)
+ 		test_features(KVM_X86_SEV_ES_VM, supported_vmsa_features);
++	if (have_snp)
++		test_features(KVM_X86_SNP_VM, supported_vmsa_features);
+ 
+ 	return 0;
+ }
 -- 
 2.34.1
 
