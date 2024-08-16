@@ -1,210 +1,142 @@
-Return-Path: <linux-kselftest+bounces-15554-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15555-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0AA3955098
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 20:12:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97F7095512C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 21:03:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E57E1F22A91
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 18:12:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C0151F22F15
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 19:03:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FE1A1C2302;
-	Fri, 16 Aug 2024 18:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4547D1C0DE1;
+	Fri, 16 Aug 2024 19:03:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CsX2078Y"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="eExozbHz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D101F1BB698;
-	Fri, 16 Aug 2024 18:12:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CD25145A17
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2024 19:03:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723831931; cv=none; b=Wwly6uFb8LharQb3BGFukRQpMlEywkslaqiZC9IVQGfeu3aubvgRu8Kotq3S80iNBfJJiBdAAwo4XGPq2w3cxAJ0kRxi2M0SpFJlig/4Uku/S4X7baULv7wiaaUteBV1o1aEw/e/f4QlqISCE1ivMNc6blWm0HquFE2aJSYGA6k=
+	t=1723835032; cv=none; b=MXvv9piclsKQPO3NqskZbkkwd8XwISF5FW9R4YmgaqJVEQ+j/FU2qzeA35qCxfrMyQ3U5VWfMaM3cKXI28jLrrW21odbuDZPmv3j/VJhZIBaj7eHTlUEt+suXlNWXf2L8FKk+7ONFlxlQsqb1MYczHPnwCH8Ezp5xaeiSLRZWE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723831931; c=relaxed/simple;
-	bh=mupVOxGtRgyXrHi0m4zC6bQx0ZXLDP9VTuKBPwP+2iM=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=dX1S0fu/lOp/sE+SkiA/bUJLymUZwGFcSJPq60C6nU41V3qLi03LXl1kcOX+NFAmJ6cpakMYRnMHyP+9y+uDJzqHQsNp0qzxrch3s8N7Xn+Di8O+PculwBYLiJZv/OC4OSX+ctISIYALbsOe/r9mw6R6DMdtweDEVjbhJGLHfnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CsX2078Y; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-201f2b7fe0dso16244695ad.1;
-        Fri, 16 Aug 2024 11:12:09 -0700 (PDT)
+	s=arc-20240116; t=1723835032; c=relaxed/simple;
+	bh=Mc4T9iIXjOcQFUOiud3CnyHPyMK9EQB6qvuWeFQkTig=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=odV4FVFaZzbf91Wjjm++FsP+WRv+8UnLPvfVmRYynl3Z3j1HU6A/2+0Xll7b2I91znG+lIcE1sQ3dFqcQyRKaqKBcKbD1gTIaPqFGnZr9fhefDwTgTEy7QoRBN6bMnjYjZNKCpPUYid8+KewVfpD1YN+1DiwER/JMT8UJ4QLOwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=eExozbHz; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-58ef19aa69dso2307542a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2024 12:03:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723831929; x=1724436729; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=U5l/0VSy6fqZaacoTqYSq61RAXhnTHweezwv61jbJ0Y=;
-        b=CsX2078YS2pSP2F8oR2T+zHM2p9W4aqkWoga6SvhZE06CmleWM5N8JqnxZejMxq8Ik
-         Ock5wJOgO34RkhjrvtE0uB5qDkX4BRTImo7Ch/v46hUnlyqGiv93Q6MPI77LXlOCmzmu
-         CBQS4nHQFankF0xg63vZbb+nSPA5vSuTX5wQrB/fYSvW7cr7HnnApxlRQsXnoaPpmIgo
-         VprEMUuhxBpSDqJI4780yc4ZGXsDcpjFkmS6ZC27SmYa1FZZvoV5CDuDqV3kkFCKyNvn
-         heLFoOOmqscROU/t3SiiVjl5ufvMxDWIq6JX5UkjNvpivZiqhyQQqpir/Si+i8htvJsv
-         I9ag==
+        d=cloudflare.com; s=google09082023; t=1723835029; x=1724439829; darn=vger.kernel.org;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=BrBxZgECaC7/1MG5XVHMQd0NOSd+rm2Uh6YDq8DhIA8=;
+        b=eExozbHzfoIDwtFw3j6aQjiB4h/wU0i4MBQCXDtWSsky7eFOtV4032DzXhnrgzVNCg
+         8P43bjgTxKj+SOcLKXRzHVlYkyQTdY5luJs/nkFc+L/evg5VmOra1/auX6BlizUKyKZE
+         EgzyGCX18VOMDx1yV0GOYPctAHc4eG8DyRiJbnV7Jbr42VvDTME4ynTIQYKs93FAr0AG
+         Yll0tLK9NObr0inJYMK368Ie5TpnHB09q6009n+PXjIeBkNliPRtvBkECKgHvYurV2ZM
+         KRE031Ym15fZlUVKBZbj6DFtURTYVEF371ONMMiFNVtAXJvMSCBmesBTnrFjXrCivOnW
+         AxoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723831929; x=1724436729;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U5l/0VSy6fqZaacoTqYSq61RAXhnTHweezwv61jbJ0Y=;
-        b=sdvR8WnZ9g//GXkTjwsN5fjh7Ysss/oA5XQP2CjcMeIhFT1TLraHRVYR2LgUnOGkLA
-         bUEGfb9QfQcT0NU9vpvJwH1Ran0o+mD/B7We8BkKj5SG53Zd6q2ONKxEmmkuHfCeLGE4
-         bIwCuZzAiL2SSwZan6SOHFqzqWXmUGIetmAfobXw00l46MbHflFcOu7Z9Zrk9uKZxFY6
-         yQMHEqCORBeVC33Og4Dsz25rq//NEtKio48cXwiDHxohn5GYkYDbeQsi5+U/Tl0VGhke
-         hxp55IaSVRqAUBAEE0TI1DfASnApCokoihkyOOoRAHIZ9NDk2ixgHuET1eacqfyHc3YY
-         yl0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV7FHMuYLW/IWWa95KN996pHXJWyZj4tmO8/z90xbmUcGuyYwH/iAi28l2Dxrlow7Zse50iChO6oBfvKtOhLGd8KC2YzVotM0uS4Un5effcmpPxAV67bVBLiVmZmOQ7BjuX+n1Yl2IZD21QXL6f
-X-Gm-Message-State: AOJu0Yytyu64x0O2aIl+ZXeV5/Jw7yvzwCOrCjASn79cNm1QvP6H80bO
-	RXoHIZ8lhgv4eWD1Tyk5sTsicyjy+g/aH2+yt7az1seQGkjbX1LF
-X-Google-Smtp-Source: AGHT+IE9C/aLOhdS0C3ly72nc2bgoyh9bdEhmy1vCLr8xsbc57OwrGBuSeS6GRQihj7C/li24A4YOg==
-X-Received: by 2002:a17:902:cec1:b0:201:ef87:9535 with SMTP id d9443c01a7336-20203e4c9c5mr46728515ad.3.1723831928894;
-        Fri, 16 Aug 2024 11:12:08 -0700 (PDT)
-Received: from localhost ([27.6.216.27])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201f037599asm28293515ad.149.2024.08.16.11.12.07
+        d=1e100.net; s=20230601; t=1723835029; x=1724439829;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BrBxZgECaC7/1MG5XVHMQd0NOSd+rm2Uh6YDq8DhIA8=;
+        b=GzlHSqw4ICOnIcoOHFFO2Io4R8F2KKd/16rdRxK7o7mFDRK2PpbQYOF9ueYBn6gotX
+         kg84qyOBDz1Rq9RLm12QWkCU45URxhO3vviOxmK37QDNHkOCHt9jl5ePg6O5Zmyv9Qvz
+         iw2/JzxSjrm6X2BgselJukq95haqae5S00JfHbrVaRlvkrKmI9csQ95EhkhtwWLHiso7
+         9AMA7DjuSWZ4hnlp3o8HH/w4YgTMNqwxSXw+KPtpnKWYlMjvm4zPKSHlLOrz4jUnNecs
+         bH3nja3uOJrsojAt4wyWN+gKaYX2R696x5cPaq7EJ+hjGGTvVDY0BgjKjEBjgsYRyoGA
+         NSDg==
+X-Forwarded-Encrypted: i=1; AJvYcCWDHrJm4fOGT6ZSMR3bqGKdWbJKif8At4tIEdFSkb/M/ms/FCvhfKhfelU+dxxC8Ptk9jDIYJHZXg66CZFBy/eDO3AHZLnY/W4g77HMoDki
+X-Gm-Message-State: AOJu0YzPDv4utbfy0mdT68mPyxdpYIsqqAxYD+OxmxCq/TbZvejo2N9E
+	k1qzDsd6P+JpXqLsml3sFHd/ncZBPj9tMGICRluEweF+CSFOARItOK/pmmTy4EQ=
+X-Google-Smtp-Source: AGHT+IGl5+6tEP5wmb8EU87stkIU+j/Z2sdmdIPv5B1ko18jC6BAETYUa9tR1wBvVnp8+UoFJbraUg==
+X-Received: by 2002:a17:907:c7dc:b0:a6f:8265:8f2 with SMTP id a640c23a62f3a-a8392955fcemr321176066b.37.1723835028599;
+        Fri, 16 Aug 2024 12:03:48 -0700 (PDT)
+Received: from cloudflare.com ([2a09:bac5:5063:2432::39b:29])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83838cfd5esm293566766b.78.2024.08.16.12.03.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Aug 2024 11:12:08 -0700 (PDT)
-Date: Fri, 16 Aug 2024 23:38:51 +0530
-From: Aryabhatta Dey <aryabhattadey35@gmail.com>
-To: akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] selftests/mm: compaction_test: Move often used filepaths
- to strings
-Message-ID: <5kedpmxee2wvblijsxmmyk5l6aufuwkjkiovnsyh7n7iuz7cok@7lfnhaobpzd7>
+        Fri, 16 Aug 2024 12:03:47 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Michal Luczaj <mhal@rbox.co>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,  Mykola Lysenko <mykolal@fb.com>,
+  Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
+ <daniel@iogearbox.net>, Song Liu <song@kernel.org>,  Yonghong Song
+ <yonghong.song@linux.dev>,  John Fastabend <john.fastabend@gmail.com>,  KP
+ Singh <kpsingh@kernel.org>,  Stanislav Fomichev <sdf@fomichev.me>,  Hao
+ Luo <haoluo@google.com>,  Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
+ <shuah@kernel.org>,  bpf@vger.kernel.org,
+  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related
+ fixes
+In-Reply-To: <42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co> (Michal Luczaj's
+	message of "Wed, 14 Aug 2024 18:14:56 +0200")
+References: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
+	<87y159yi5m.fsf@cloudflare.com>
+	<249a7dc3-34e2-4579-aae7-8b38b145e4bb@rbox.co>
+	<87ttfxy28s.fsf@cloudflare.com>
+	<42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co>
+User-Agent: mu4e 1.12.4; emacs 29.1
+Date: Fri, 16 Aug 2024 21:03:46 +0200
+Message-ID: <871q2o5lyl.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
 
-Add defines for the file path names to avoid duplicate strings
-in print messages and make it easier to maintain.
+On Wed, Aug 14, 2024 at 06:14 PM +02, Michal Luczaj wrote:
+> On 8/6/24 19:45, Jakub Sitnicki wrote:
+>> On Tue, Aug 06, 2024 at 07:18 PM +02, Michal Luczaj wrote:
+>>> Great, thanks for the review. With this completed, I guess we can unwind
+>>> the (mail) stack to [1]. Is that ingress-to-local et al. something you
+>>> wanted to take care of yourself or can I give it a try?
+>>> [1] https://lore.kernel.org/netdev/87msmqn9ws.fsf@cloudflare.com/
+>> 
+>> I haven't stated any work on. You're welcome to tackle that.
+>> 
+>> All I have is a toy test that I've used to generate the redirect matrix.
+>> Perhaps it can serve as inspiration:
+>> 
+>> https://github.com/jsitnicki/sockmap-redir-matrix
+>
+> All right, please let me know if this is more or less what you meant and
+> I'll post the whole series for a review (+patch to purge sockmap_listen of
+> redir tests, fix misnomers). Mostly I've just copypasted your code
+> (mangling it terribly along the way), so I feel silly claiming the
+> authorship. Should I assign you as an author?
 
-Signed-off-by: Aryabhatta Dey <aryabhattadey35@gmail.com>
----
- tools/testing/selftests/mm/compaction_test.c | 46 ++++++++++----------
- 1 file changed, 24 insertions(+), 22 deletions(-)
+Don't worry about it. I appreciate the help.
 
-diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
-index e140558e6f53..8f46431a9182 100644
---- a/tools/testing/selftests/mm/compaction_test.c
-+++ b/tools/testing/selftests/mm/compaction_test.c
-@@ -21,6 +21,9 @@
- #define MAP_SIZE_MB	100
- #define MAP_SIZE	(MAP_SIZE_MB * 1024 * 1024)
- 
-+#define COMPACT_UNEVICTABLE_ALLOWED_FILE_PATH "/proc/sys/vm/compact_unevictable_allowed"
-+#define NR_HUGEPAGES_FILE_NAME_PATH "/proc/sys/vm/nr_hugepages"
-+
- struct map_list {
- 	void *map;
- 	struct map_list *next;
-@@ -59,17 +62,16 @@ int prereq(void)
- 	char allowed;
- 	int fd;
- 
--	fd = open("/proc/sys/vm/compact_unevictable_allowed",
--		  O_RDONLY | O_NONBLOCK);
-+	fd = open(COMPACT_UNEVICTABLE_ALLOWED_FILE_PATH, O_RDONLY | O_NONBLOCK);
- 	if (fd < 0) {
--		ksft_print_msg("Failed to open /proc/sys/vm/compact_unevictable_allowed: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to open %s: %s\n",
-+			       COMPACT_UNEVICTABLE_ALLOWED_FILE_PATH, strerror(errno));
- 		return -1;
- 	}
- 
- 	if (read(fd, &allowed, sizeof(char)) != sizeof(char)) {
--		ksft_print_msg("Failed to read from /proc/sys/vm/compact_unevictable_allowed: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to read from %s: %s\n",
-+			       COMPACT_UNEVICTABLE_ALLOWED_FILE_PATH, strerror(errno));
- 		close(fd);
- 		return -1;
- 	}
-@@ -97,10 +99,10 @@ int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
- 	   in to play */
- 	mem_free = mem_free * 0.8;
- 
--	fd = open("/proc/sys/vm/nr_hugepages", O_RDWR | O_NONBLOCK);
-+	fd = open(NR_HUGEPAGES_FILE_NAME_PATH, O_RDWR | O_NONBLOCK);
- 	if (fd < 0) {
--		ksft_print_msg("Failed to open /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to open %s: %s\n",
-+			       NR_HUGEPAGES_FILE_NAME_PATH, strerror(errno));
- 		ret = -1;
- 		goto out;
- 	}
-@@ -108,16 +110,16 @@ int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
- 	/* Request a large number of huge pages. The Kernel will allocate
- 	   as much as it can */
- 	if (write(fd, "100000", (6*sizeof(char))) != (6*sizeof(char))) {
--		ksft_print_msg("Failed to write 100000 to /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to write 100000 to %s: %s\n",
-+			       NR_HUGEPAGES_FILE_NAME_PATH, strerror(errno));
- 		goto close_fd;
- 	}
- 
- 	lseek(fd, 0, SEEK_SET);
- 
- 	if (read(fd, nr_hugepages, sizeof(nr_hugepages)) <= 0) {
--		ksft_print_msg("Failed to re-read from /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to re-read from %s: %s\n",
-+			       NR_HUGEPAGES_FILE_NAME_PATH, strerror(errno));
- 		goto close_fd;
- 	}
- 
-@@ -134,8 +136,8 @@ int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
- 
- 	if (write(fd, init_nr_hugepages, strlen(init_nr_hugepages))
- 	    != strlen(init_nr_hugepages)) {
--		ksft_print_msg("Failed to write value to /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to write value to %s: %s\n",
-+			       NR_HUGEPAGES_FILE_NAME_PATH, strerror(errno));
- 		goto close_fd;
- 	}
- 
-@@ -162,15 +164,15 @@ int set_zero_hugepages(unsigned long *initial_nr_hugepages)
- 	int fd, ret = -1;
- 	char nr_hugepages[20] = {0};
- 
--	fd = open("/proc/sys/vm/nr_hugepages", O_RDWR | O_NONBLOCK);
-+	fd = open(NR_HUGEPAGES_FILE_NAME_PATH, O_RDWR | O_NONBLOCK);
- 	if (fd < 0) {
--		ksft_print_msg("Failed to open /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to open %s: %s\n",
-+			       NR_HUGEPAGES_FILE_NAME_PATH, strerror(errno));
- 		goto out;
- 	}
- 	if (read(fd, nr_hugepages, sizeof(nr_hugepages)) <= 0) {
--		ksft_print_msg("Failed to read from /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to read from %s: %s\n",
-+			       NR_HUGEPAGES_FILE_NAME_PATH, strerror(errno));
- 		goto close_fd;
- 	}
- 
-@@ -178,8 +180,8 @@ int set_zero_hugepages(unsigned long *initial_nr_hugepages)
- 
- 	/* Start with the initial condition of 0 huge pages */
- 	if (write(fd, "0", sizeof(char)) != sizeof(char)) {
--		ksft_print_msg("Failed to write 0 to /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to write 0 to %s: %s\n",
-+			       NR_HUGEPAGES_FILE_NAME_PATH, strerror(errno));
- 		goto close_fd;
- 	}
- 
--- 
-2.46.0
+I will take a look at the redirect tests this weekend.
 
+> Note that the patches are based on [2], which has not reached bpf-next
+> (patchwork says: "Needs ACK").
+>
+> [2] [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related fixes
+>     https://lore.kernel.org/bpf/20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co/
+
+Might have slipped throught the cracks...
+
+
+Andrii, Martin,
+
+The patch set still applies cleanly to bpf-next.
+
+Would you be able to a look at this series? Anything we need to do?
+
+Thanks,
+(the other) Jakub
 
