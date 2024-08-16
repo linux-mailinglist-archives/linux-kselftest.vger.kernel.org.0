@@ -1,157 +1,156 @@
-Return-Path: <linux-kselftest+bounces-15514-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15515-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8478954D2D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 16:56:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76B2E954D36
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 16:57:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 07AE71C21897
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 14:56:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 15AA7B223D2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 14:57:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53EB41BE23D;
-	Fri, 16 Aug 2024 14:50:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A748A1C37AE;
+	Fri, 16 Aug 2024 14:52:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BeF+YsDn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 762FF1BE227;
-	Fri, 16 Aug 2024 14:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67CF91BE25A;
+	Fri, 16 Aug 2024 14:52:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723819837; cv=none; b=rdVNOzw9N7wqPUbH7vGge8egCjQiZmNTxTgIbq3X02JrR4tXgi7vLrO2t/jgY9yEOCdzgUJKfn9EZVfW3HUwS3h2f31H0RhFJ9nhWz0d6/btNFK88SYUHFRZZxxCnVrSYXbPKdU8YvFr22+GqmYKLX9qf4K0wPeuD57baf3RLDY=
+	t=1723819924; cv=none; b=taLGIpD/2cO1KUpixPmRyb5f0h3nWdRsSGNRVgjbbKYq/7DlmKw3YWq/UdlrcVKPwkvq3ku255zt91IsRNy7walpHfrbC6y9KFeyXAYs16GTIY/j/UcHM9tH/C873WtUXn3jBHZeu5kYectEz95jX34AjvL2WtM2MWvgcuujzOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723819837; c=relaxed/simple;
-	bh=eBoT9mHnDEYNWbfyadzLnfSTUlg88qznghVjHEnGjoE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f5XVmK/j/ilidChMiOj/lkombIh2tE5a0/BGbez4+Qj66vmN8FzUZc5vPcMOQgXpT8wLVGx4+ZYRuOqYiXoYqnf/3khzSZe6oBPvvad3oNPdcvjQouDRY5KltA6SztGt6FjWMqCzrTnXED5uDaA1x1/ruORM1CCjfizxwm6fOFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5b9d48d1456so80681a12.1;
-        Fri, 16 Aug 2024 07:50:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723819834; x=1724424634;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gUA2d/1y4mfr6AuFj1uEEZ1GzNQmbmFC00Tg3yKPBf8=;
-        b=MRsrR2NDdwC1X+Vr5Y14/jWlQolaIEvsMcBrpkoFAZLajRJpEr5pPk5NlrZqjMx54V
-         W8j7/eaClvNUe7aB/CRQys2gQBfZ2oa70wQE4G9JtMaU25TtQ0lO6XDsZ7oqd8yodcyg
-         diLRWyEWbp2IHmdD+zH4RDcgzegFR8Dv33O7JNqzrYT6FTqak8asHWZt9ojEU9fiO4zW
-         e7nr94PB+EoVgemiXL39Yr39oOPwia4PNOWsJYXWuTpBZ/dZm3YcZRJMP3nRoIKw+1Wk
-         E1hVQzbPy5N9z6wyI2NW+MGzeV/051An95Fn6CUp5CVTorml2p2IvQ79wzqbn+6uD6ir
-         27qA==
-X-Forwarded-Encrypted: i=1; AJvYcCUav4TDpsncZnXfyMsJY9zRohbj8ooJie4jUFH7LYwzBE5FW+JRxmLZWSibvJKVZ2ybLzRnIvnfEREAj3eWgWIVFY1qpZxVzMEjWDohgpYJ4attoYrFTBilPNUQBBRSbiB5JEnXzVJAvmmpf5cEy4Gp8/VdKL5vexgjs+zej0WWFuXX1vjq
-X-Gm-Message-State: AOJu0YzVANvsvoR1Ud/OrQOJr0yQdUGZ7J5dps6f26TPX5z1aHgP/hBh
-	jXule+kv3b+dWbz/UiqjrT5YzPBF7xaBxbJSot7D7XXhUKpuP45A
-X-Google-Smtp-Source: AGHT+IEUwBIAA9oSte3H/Y6Jvhdn0QDDlhtFHetUMF8KZGSE/oW7YXVYlZHU6dV5KdpoT2Yxr37+uw==
-X-Received: by 2002:a05:6402:4006:b0:5be:d595:5413 with SMTP id 4fb4d7f45d1cf-5bed59556f1mr1609784a12.3.1723819833180;
-        Fri, 16 Aug 2024 07:50:33 -0700 (PDT)
-Received: from gmail.com (fwdproxy-lla-006.fbsv.net. [2a03:2880:30ff:6::face:b00c])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5bebc081cf5sm2320189a12.90.2024.08.16.07.50.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Aug 2024 07:50:32 -0700 (PDT)
-Date: Fri, 16 Aug 2024 07:50:30 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, liuhangbin@gmail.com, petrm@nvidia.com,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	Willem de Bruijn <willemb@google.com>, David Wei <dw@davidwei.uk>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next v4] net: netconsole: selftests: Create a new
- netconsole selftest
-Message-ID: <Zr9nNnAsqpmPnQOx@gmail.com>
-References: <20240816132450.346744-1-leitao@debian.org>
- <cd9473bb-36d5-4b62-8523-f9112dc176f2@kernel.org>
+	s=arc-20240116; t=1723819924; c=relaxed/simple;
+	bh=aCsAMYNwuNLSPVHVux3H7Fr1gU8Y/2OHAz58FNdjFh4=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LTlocXFzinosb+wsNAbQEewIxmWveFZGEfrGiJj015JQukUWz7Hxaj8g/+i/g4h+RM2tL4YL/cMVNHpTlBibq+7PkoYAsC4DftVlfMksVcxBUJHHZm03vqd4Q3tLI2Bjw+3P7EiIERsRd5JjSEIYncRjR5zpKLqdkc0on8fjVlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BeF+YsDn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D69DBC32782;
+	Fri, 16 Aug 2024 14:52:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723819923;
+	bh=aCsAMYNwuNLSPVHVux3H7Fr1gU8Y/2OHAz58FNdjFh4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=BeF+YsDnIob191w0ZGxINOu0jYhGxn63hEvhpdwFa5jW6Ni9L1j5zNVOpziP8Me0j
+	 VdJs4rtfVWtbONAJ2r0/x3uS1uJZc2XPYoBcdPMqJrUCV+x88lcdwCaKqSzjILyxCl
+	 pPqLCIIfO0T4TVHG0cB1VAhMSqMnUKLz0cQF1rYeVUgRmF3ySFmVl5HH9P3APi/JdA
+	 OGvydVVsY9YgrNN5+mf6fbDIFAeE2+9CGNMViKsCCCrgA8yjKVqwuBgIuodAtGnMB+
+	 bJ1HDN0++jB7l7MXDZDd5l+5rR7YSeKr9kXUadrtaZSXP/sile1fdjzQVOwoK02sNK
+	 pOQwo0zbUdYjg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1seyJ7-004JCN-Lr;
+	Fri, 16 Aug 2024 15:52:01 +0100
+Date: Fri, 16 Aug 2024 15:52:00 +0100
+Message-ID: <86frr4zfjj.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	joey.gouly@arm.com
+Subject: Re: [PATCH v10 14/40] KVM: arm64: Manage GCS access and registers for guests
+In-Reply-To: <8c1e8fb6-0152-42f7-ab6d-93f6fe70b4aa@sirena.org.uk>
+References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
+	<20240801-arm64-gcs-v10-14-699e2bd2190b@kernel.org>
+	<86h6bkzh8o.wl-maz@kernel.org>
+	<8c1e8fb6-0152-42f7-ab6d-93f6fe70b4aa@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cd9473bb-36d5-4b62-8523-f9112dc176f2@kernel.org>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, corbet@lwn.net, akpm@linux-foundation.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, arnd@arndb.de, oleg@redhat.com, ebiederm@xmission.com, shuah@kernel.org, rick.p.edgecombe@intel.com, debug@rivosinc.com, ardb@kernel.org, Szabolcs.Nagy@arm.com, kees@kernel.org, hjl.tools@gmail.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, fweimer@redhat.com, brauner@kernel.org, thiago.bauermann@linaro.org, ross.burton@arm.com, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, joey.gouly@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Fri, Aug 16, 2024 at 04:02:51PM +0200, Matthieu Baerts wrote:
-> Hi Breno,
+On Fri, 16 Aug 2024 15:40:33 +0100,
+Mark Brown <broonie@kernel.org> wrote:
 > 
-> On 16/08/2024 15:24, Breno Leitao wrote:
-> > Adds a selftest that creates two virtual interfaces, assigns one to a
-> > new namespace, and assigns IP addresses to both.
-> > 
-> > It listens on the destination interface using socat and configures a
-> > dynamic target on netconsole, pointing to the destination IP address.
-> > 
-> > The test then checks if the message was received properly on the
-> > destination interface.
-> > 
-> > Signed-off-by: Breno Leitao <leitao@debian.org>
-> > ---
-> > Changelog:
-> > 
-> > v4:
-> >  * Avoid sleeping in waiting for sockets and files (Matthieu Baerts)
-> >  * Some other improvements (Matthieu Baerts)
-> >  * Add configfs as a dependency (Jakub)
+> [1  <text/plain; us-ascii (7bit)>]
+> On Fri, Aug 16, 2024 at 03:15:19PM +0100, Marc Zyngier wrote:
+> > Mark Brown <broonie@kernel.org> wrote:
 > 
-> Thank you for the new version!
+> > > +	{ SYS_DESC(SYS_GCSCR_EL1), NULL, reset_val, GCSCR_EL1, 0 },
+> > > +	{ SYS_DESC(SYS_GCSPR_EL1), NULL, reset_unknown, GCSPR_EL1 },
+> > > +	{ SYS_DESC(SYS_GCSCRE0_EL1), NULL, reset_val, GCSCRE0_EL1, 0 },
 > 
-> It looks good to me, but again, my review mainly focused on the
-> Bash-related stuff, not on the netconsole test itself.
+> > Global visibility for these registers? Why should we expose them to
+> > userspace if the feature is neither present nor configured?
 > 
-> I just have one question below, but not blocking.
+> ...
 > 
-> (...)
+> > > +	if (!kvm_has_feat(kvm, ID_AA64PFR1_EL1, GCS, IMP))
+> > > +		kvm->arch.fgu[HFGxTR_GROUP] |= (HFGxTR_EL2_nGCS_EL0 |
+> > > +						HFGxTR_EL2_nGCS_EL1);
 > 
-> > diff --git a/tools/testing/selftests/drivers/net/netcons_basic.sh b/tools/testing/selftests/drivers/net/netcons_basic.sh
-> > new file mode 100755
-> > index 000000000000..5c3686af1fe8
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/drivers/net/netcons_basic.sh
-> > @@ -0,0 +1,249 @@
+> > How can this work if you don't handle ID_AA64PFR_EL1 being written to?
+> > You are exposing GCS to all guests without giving the VMM an
+> > opportunity to turn it off. This breaks A->B->A migration, which is
+> > not acceptable.
 > 
-> (...)
+> This was done based on your positive review of the POE series which
+> follows the same pattern:
 > 
-> > +check_file_size() {
-> > +	local file="$1"
-> > +
-> > +	if [[ ! -f "$file" ]]; then
-> > +		# File might not exist yet
-> > +		return 1
-> > +	fi
-> > +
-> > +	# Get file size
-> > +	local size=$(stat -c %s "$file" 2>/dev/null)
-> > +	# Check if stat command succeeded
-> > +	if [[ $? -ne 0 ]]; then
-> > +		return 1
-> > +	fi
-> > +
-> > +	# Check if size is greater than zero
-> > +	if [[ "$size" -gt 0 ]]; then
-> > +		return 0  # file size > 0
-> > +	else
-> > +		return 1  # file size == 0
-> > +	fi
-> > +}
+>    https://lore.kernel.org/linux-arm-kernel/20240503130147.1154804-8-joey.gouly@arm.com/
+>    https://lore.kernel.org/linux-arm-kernel/864jagmxn7.wl-maz@kernel.org/
 > 
-> (...)
+> in which you didn't note any concerns about the handling for the
+> sysregs.
 > 
-> > +# Wait until socat saves the file to disk
-> > +busywait "${BUSYWAIT_TIMEOUT}" check_file_size "${OUTPUT_FILE}"
-> 
-> It looks like your 'check_file_size' helper is a reimplementation of
-> 'test -s <FILE>', no? Can you not simply use:
+> If your decisions have changed then you'll need to withdraw your review
+> there, I'd figured that given the current incompleteness of the
+> writability conversions and there being a bunch of existing registers
+> exposed unconditionally you'd decided to defer until some more general
+> cleanup of the situation.
 
-Why would you like to do it in one line when you can write a 15-lines
-function that does exactly the same!? :-P
+Thanks for pointing out that I missed this crucial detail in the POE
+series. I'll immediately go and point that out.
 
-I will send a v5 with `test -x`, I will just wait for more reviews.
+	M.
 
-Thanks!
+-- 
+Without deviation from the norm, progress is not possible.
 
