@@ -1,81 +1,80 @@
-Return-Path: <linux-kselftest+bounces-15569-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15570-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C3979551C2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 22:14:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 786919551CA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 22:21:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EA77286BE9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 20:14:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 058041F230D8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 20:21:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8064E1C4624;
-	Fri, 16 Aug 2024 20:14:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B68821C3F30;
+	Fri, 16 Aug 2024 20:21:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BdANXMol"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CJwC2KM/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFD2E1C2316
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2024 20:14:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29905137747
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2024 20:21:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723839279; cv=none; b=nUIe4Uk0nAtXS5xqr41KKuFKbpXqM2JbVStGBXKL8sKdYHTF6uV0IgfczjNnfbWpRbESVd06w8DQ1FF2X3wLZ3viK5tCWQKqlFdmRX033jsHi1XZ6TYWHpiC/8SMMoExxS06ECHigvif2/6BzeDHqYJBgh6hzplP+O2uxoRy6Hg=
+	t=1723839681; cv=none; b=Z6egyKYHg1FDtSYc5YuEBJjUckXSZpmHM5J/ydsegpbjP9G67aCh+M5JME55deickSp1+bXAekhY2zaWYwLAJW0hpior+Tgh5g44YMh7fO4IVvjOYornjBPteDxHkfQJfF1qQ/ZeyrDqy2z0oSUkYCJXZWwc95PbmC1Tcn9UqLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723839279; c=relaxed/simple;
-	bh=GeAnRofml4TZ+kvvmlgfZ55lOxNPhJUBy4V8C/B/ZqI=;
+	s=arc-20240116; t=1723839681; c=relaxed/simple;
+	bh=RoxnupCzUJOlpAhtqFKUUXI5xaHaw4zPnWSvdo8kXEA=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=gfhQeKd6TStwiF4l7NNfLXlDd7TdtYctbYroAKO5c6pomJxo9sNB0Gn2AT3JB47S4FxAMvUsYf/B3kj1bJ2yRdCmTqV15FEeAwGKyazhevcnJpSyVwNIYPb4GmMjv90tlyBQeQZknQzxpBWKFlYJLe2adR/maBGcMvAD7uw6vSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BdANXMol; arc=none smtp.client-ip=209.85.128.201
+	 To:Cc:Content-Type; b=TBMpX0RFFi6JuW6zNQG0Jct/Y28tmHlYQq6H+MIKSQwf2fQFKXYq5PTZBARC2ZDENDCGtXj8KxFMsudALN+xDWDlz4ziBYk7dklYj54I+ziC6nO83DpKnEOPK/+CeJShclbjyIKTi/7+HZjKNl85Kc8h+jQJXnIdSMoTh+YwSCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CJwC2KM/; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6643016423fso47753377b3.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2024 13:14:37 -0700 (PDT)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2d3e42ef85eso1231779a91.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2024 13:21:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723839277; x=1724444077; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1723839679; x=1724444479; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=b+XtCDie/e/YZHW8+kNYaqurEPTj7Ow0w++u4stXh78=;
-        b=BdANXMole8Ga1RZYe63zJhtHbK+0JWX/u0ioYHRnH3w2KOe3Ds4Bt5b/SJiMPp7MAI
-         xB8ZDO55khvDWxG2u3zkvGe1A5hVECREXxy+aopefjogC87Jv1Fm36PWiPQzdFno/KM5
-         Z8717FKq0Y/O4jsVmhXmCKfsOvl5Xf151BEK9mbfVMCAc2aVvE43Yye2x+/SMSPgjgWI
-         0hg7fShTGgQqAWRP71BOdPemQRiFtWZq4BMw6G6FP6Ft9FLYqzoz009wzmijcyR0TRwg
-         dwRRGp3K/htfItDXvEqYK9qQ8krZVPBiqdIA3WaK487fCiTJHeWbwNiXpPARcHg93Jk/
-         QU3Q==
+        bh=Ml/zrxgslqXooti6qi/7d+TVeFAnkInp/7O9MVydVgA=;
+        b=CJwC2KM/pqChuCXAri5t/b2G00a9DsJ8SGfE0U09MCDdblJg28GVrPt2dtjdhuN89g
+         /lGSP6MtcMuk1vxKg830TfQQozSiYe+SxDznB7qudGJMD99e1CZOzvjxjlEn+yiM3PN4
+         Uv6HzkiuT1huIyZCXYtzgrwKJqpHWw51CRCjuFLorTsSJw7/7RGh76qiuTLnztkfzAGC
+         b2LOLkchshuAsjwdcuH29BHODhhPxqvh7wN1OzZpEHd3X6VzKiiWwlMvb9VCKaWYFajz
+         NWRbLFCjKj3pPo7QZ1FGOFcLWGjTsKu2WhwD+KyGh7VzdLj3mVmMx5linoGaSflW/CNy
+         FuCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723839277; x=1724444077;
+        d=1e100.net; s=20230601; t=1723839679; x=1724444479;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b+XtCDie/e/YZHW8+kNYaqurEPTj7Ow0w++u4stXh78=;
-        b=doJ5JWuSQ+wyyd8HR+J9T3JQKDNNVpNm8ymsMYBl9LQCAv9PHQixyhW29oQRpf9rpP
-         +KA7PeQPUtuqkTunN8Azfu0Ss/7YTw74v6H/rF+wS52V3xi8rkQDD+pfh1LCfaAa3V8y
-         A+Lk7fb0XVHJtmSzoNnn7Or+TtXQzspB5KYWMRdMEmoGJq6OvRYNMhV3HPlmvcQINz/5
-         Fum/6xtxhzDO3+fPNyhSkEBKtf8MJ5OLgLcjaA24+IwenAy22sI9LAom4+CAKDmeksQu
-         lzFlrs2UCC94cUxxu9uTIYflnLBJGAOupfhEcd8MoLYt2ISDRwtNhcz5s2oNa5YjgcjF
-         +27w==
-X-Forwarded-Encrypted: i=1; AJvYcCUXwDOnS529YJNTftZW5Bmh3y896a2rSOm4gQj3UpI+feNpyvy/4QDuvfHTiQmts3fQTIQVeufRXQF29LhxvkmG6fqtQECtNnefM9FDxMmg
-X-Gm-Message-State: AOJu0YwtRg4x+ps7DHOrnFh58YaQwjQ3PlOMPJ1BTpyqE4luShOA6vCW
-	dTYDS3qeNT/TS/FDI6LL+XYeLZMrszL0QTyNSXptn03A6Bl9Cwcxe0BZfBEnad25/FS91sKCi8f
-	Zeg==
-X-Google-Smtp-Source: AGHT+IEn0xrjMnM4QulWbssX4RrAsftMvx75CGPCnBBwK21YPQG+1/RpR21AOZL1IqoJlRRK/J08+9MhePw=
+        bh=Ml/zrxgslqXooti6qi/7d+TVeFAnkInp/7O9MVydVgA=;
+        b=K5oOG3j1ECBhW/CqaIoRxU2HXXGbfIducSp/aA424+L61zBxOUtN6zBQapNnpXhCz4
+         smf5tT0gLODpliNttUsYiSFWMLL3zZ7ExS/eV24jTqN4gO1p2ekFwjEBXaQajUKfLm+7
+         KSyCcUTY6+KjtickVhgknYqPAC5TgrxoB3h4Pw5EToylamjY/NsFU3MjxpdKIDfa0tZU
+         4iiWHV9/eaaI1xPoLenUUfIvsVPiio/c+oKi2f4RcedeMaN9VQUSdevyuEPaTv9EOQjV
+         hFbKsAgyH3eXkKFtkXOw+GXc7geSvT3u2nQZfstyYMRgtUs+RBMBvSIgqW9uWvQkAx6H
+         XPpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUbWt7g6fuy3ub0+EF/6byDw2uK40sxSYY2KWaTRngqpe3pHP6GILuPHj7U2O99c6gnYz/2CTy4deBf21gLcvTnSZjTs6lv/OW9CwsQVpMJ
+X-Gm-Message-State: AOJu0YydUTrU0fPUxy6M+hq6ElD6uShSODT5j8/c8/o+j8wChs3MYtvW
+	JKNao09zecldAhC700WMbNi3Q6STBiulsr92zIvns1/KUNZSwcE0L23CGs5VIJ35yIJtVGg6hKw
+	Itw==
+X-Google-Smtp-Source: AGHT+IFE7Hb7GuPDt7biLsqGWREW3/8zJ3I3cOi53aNTPw9eNpkaFNskEMqAJ4gAR3ybyxYczKq7LZE55/o=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:6902:2193:b0:e13:c454:166d with SMTP id
- 3f1490d57ef6-e13c45417d9mr15526276.11.1723839276827; Fri, 16 Aug 2024
- 13:14:36 -0700 (PDT)
-Date: Fri, 16 Aug 2024 13:14:35 -0700
-In-Reply-To: <20240709175145.9986-4-manali.shukla@amd.com>
+ (user=seanjc job=sendgmr) by 2002:a17:90a:ad98:b0:2d3:b7c7:d682 with SMTP id
+ 98e67ed59e1d1-2d3dffdb498mr9761a91.3.1723839679171; Fri, 16 Aug 2024 13:21:19
+ -0700 (PDT)
+Date: Fri, 16 Aug 2024 13:21:17 -0700
+In-Reply-To: <20240709175145.9986-5-manali.shukla@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20240709175145.9986-1-manali.shukla@amd.com> <20240709175145.9986-4-manali.shukla@amd.com>
-Message-ID: <Zr-zKxHiaFbnKvw_@google.com>
-Subject: Re: [RFC PATCH v1 3/4] KVM: x86: nSVM: Implement support for nested
- Bus Lock Threshold
+References: <20240709175145.9986-1-manali.shukla@amd.com> <20240709175145.9986-5-manali.shukla@amd.com>
+Message-ID: <Zr-0vX9rZDY2qSwl@google.com>
+Subject: Re: [RFC PATCH v1 4/4] KVM: selftests: Add bus lock exit test
 From: Sean Christopherson <seanjc@google.com>
 To: Manali Shukla <manali.shukla@amd.com>
 Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, 
@@ -84,25 +83,110 @@ Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
 Content-Type: text/plain; charset="us-ascii"
 
 On Tue, Jul 09, 2024, Manali Shukla wrote:
-> @@ -758,6 +759,16 @@ static void nested_vmcb02_prepare_control(struct vcpu_svm *svm,
->  		}
->  	}
->  
+> From: Nikunj A Dadhania <nikunj@amd.com>
+> 
+> Malicious guests can cause bus locks to degrade the performance of
+> a system.  The Bus Lock Threshold feature is beneficial for
+> hypervisors aiming to restrict the ability of the guests to perform
+> excessive bus locks and slow down the system for all the tenants.
+> 
+> Add a test case to verify the Bus Lock Threshold feature for SVM.
+> 
+> [Manali:
+>   - The KVM_CAP_X86_BUS_LOCK_EXIT capability is not enabled while
+>     vcpus are created, changed the VM and vCPU creation logic to
+>     resolve the mentioned issue.
+>   - Added nested guest test case for bus lock exit.
+>   - massage commit message.
+>   - misc cleanups. ]
+
+Again, 99% of the changelog is boilerplate that does nothing to help me
+understand what the test actually does.
+
+> 
+> Signed-off-by: Nikunj A Dadhania <nikunj@amd.com>
+> Co-developed-by: Manali Shukla <manali.shukla@amd.com>
+> Signed-off-by: Manali Shukla <manali.shukla@amd.com>
+> ---
+>  tools/testing/selftests/kvm/Makefile          |   1 +
+>  .../selftests/kvm/x86_64/svm_buslock_test.c   | 114 ++++++++++++++++++
+>  2 files changed, 115 insertions(+)
+>  create mode 100644 tools/testing/selftests/kvm/x86_64/svm_buslock_test.c
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index ce8ff8e8ce3a..711ec195e386 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -94,6 +94,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/smaller_maxphyaddr_emulation_test
+>  TEST_GEN_PROGS_x86_64 += x86_64/smm_test
+>  TEST_GEN_PROGS_x86_64 += x86_64/state_test
+>  TEST_GEN_PROGS_x86_64 += x86_64/vmx_preemption_timer_test
+> +TEST_GEN_PROGS_x86_64 += x86_64/svm_buslock_test
+>  TEST_GEN_PROGS_x86_64 += x86_64/svm_vmcall_test
+>  TEST_GEN_PROGS_x86_64 += x86_64/svm_int_ctl_test
+>  TEST_GEN_PROGS_x86_64 += x86_64/svm_nested_shutdown_test
+> diff --git a/tools/testing/selftests/kvm/x86_64/svm_buslock_test.c b/tools/testing/selftests/kvm/x86_64/svm_buslock_test.c
+> new file mode 100644
+> index 000000000000..dcb595999046
+> --- /dev/null
+> +++ b/tools/testing/selftests/kvm/x86_64/svm_buslock_test.c
+
+I would *very* strongly prefer to have a bus lock test that is comment to VMX
+and SVM.  For L1, there's no unique behavior.  And for L2, assuming we don't
+support nested bus lock enabling, the only vendor specific bits are launching
+L2.
+
+I.e. writing this so it works on both VMX and SVM should be quite straightforward.
+
+> @@ -0,0 +1,114 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * svm_buslock_test
+> + *
+> + * Copyright (C) 2024 Advanced Micro Devices, Inc.
+> + *
+> + * SVM testing: Buslock exit
+
+Keep the Copyright, ditch everything else.
+
+> + */
+> +
+> +#include "test_util.h"
+> +#include "kvm_util.h"
+> +#include "processor.h"
+> +#include "svm_util.h"
+> +
+> +#define NO_ITERATIONS 100
+
+Heh, NR_ITERATIONS.
+
+> +#define __cacheline_aligned __aligned(128)
+
+Eh, I would just split a page, that's about as future proof as we can get in
+terms of cache line sizes.
+
+> +
+> +struct buslock_test {
+> +	unsigned char pad[126];
+> +	atomic_long_t val;
+> +} __packed;
+> +
+> +struct buslock_test test __cacheline_aligned;
+> +
+> +static __always_inline void buslock_atomic_add(int i, atomic_long_t *v)
+> +{
+> +	asm volatile(LOCK_PREFIX "addl %1,%0"
+> +		     : "+m" (v->counter)
+> +		     : "ir" (i) : "memory");
+> +}
+> +
+> +static void buslock_add(void)
+> +{
 > +	/*
-> +	 * If guest intercepts BUSLOCK, use guest's bus_lock_counter value,
-> +	 * otherwise use host bus_lock_counter value.
-> +	 */
-> +	if (guest_can_use(vcpu, X86_FEATURE_BUS_LOCK_THRESHOLD) &&
-> +	    vmcb12_is_intercept(&svm->nested.ctl, INTERCEPT_BUSLOCK))
-> +		vmcb02->control.bus_lock_counter = svm->nested.ctl.bus_lock_counter;
-> +	else
-> +		vmcb02->control.bus_lock_counter = vmcb01->control.bus_lock_counter;
+> +	 * Increment a cache unaligned variable atomically.
+> +	 * This should generate a bus lock exit.
 
-Copying vmcb01's count to/from vmcb02 belongs in the core enabling patch.  From
-KVM's perspective, the counter is associated with a vCPU, not a VMCB, and so the
-count should keep running across nested transitions.
-
-As written, taking only the core enabling patch will mean that L2 runs with the
-wrong count.  Amusingly, because '0' means "always exit", L2 would run in a *more*
-restrictive environment due to the VMCB being zero-allocated.
+So... this test doesn't actually verify that a bus lock exit occurs.  The userspace
+side will eat an exit if one occurs, but there's literally not a single TEST_ASSERT()
+in here.
 
