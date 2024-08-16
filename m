@@ -1,82 +1,82 @@
-Return-Path: <linux-kselftest+bounces-15511-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15512-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A336954C5C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 16:29:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F67B954C71
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 16:37:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52DE61C20F17
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 14:29:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 38B202846BB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 14:37:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 846281BCA0A;
-	Fri, 16 Aug 2024 14:29:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E7071BD001;
+	Fri, 16 Aug 2024 14:36:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="A5Bxb5A+"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="G2P6p96W"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F00781A3BC0;
-	Fri, 16 Aug 2024 14:29:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63101BC9E8;
+	Fri, 16 Aug 2024 14:36:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723818579; cv=none; b=ADisc803pKIQlo0c62EoJTcz37BeHoX59dI1ztVUEGSmp8zTiW+MgtzU5WkYHicxTQbcmgiV6c/L+AZJFZBMHD+v7Vu52sF2EWk26yc81NBEOerRbxmmo1Cz2gyEkxH8CV/PKe95PvqPuvwoXG9Hu/LEW5DPlAOaLwWjkApkGcQ=
+	t=1723819017; cv=none; b=E5a4bh743wmKMS9QeEhMFJ/BPpQOWx0nr8Rn5BUDQUp5QM51zOWoYDbc9ejLagcDtPucjjFawO/QPmFZdZXvayV5C/ayMn+4YZIYO4sFjT2bC7L9diNCxDvsDXFumtYthdONCKSpMhNeA0Zbr5+BQ4KJJLkTk+DhoEU4eKH7Vyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723818579; c=relaxed/simple;
-	bh=JhmXKWhjdrG84FRgxq2myvwpgTSU4uVmrcF1oKCERZk=;
+	s=arc-20240116; t=1723819017; c=relaxed/simple;
+	bh=3F8zxPAUsjjErUXMfvSu48CtN04NxOKKrZjNmjSAwFI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NB5x0ZBtNyVaK/lR5ISZpwgI9JLwkh7h7WTy9MM3k6vqnWXPknuee+I7zxY9/a13+3dxiH3M98UQzfVKl5WQ5Mz1yEmh8Ey+UMPG9ZOrvOwpz8XZwxq3MWP+O+2bMWFd83jvnxOn/cr6bvCVz8Ryur9GP9+4thLqvYIDhNB6Umg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=A5Bxb5A+; arc=none smtp.client-ip=148.163.158.5
+	 In-Reply-To:Content-Type; b=aY5+mwU7urAdd4O4whgx2AREoVjwOCMXiymlGvyNy4tk8iVF3uGi2FldXRzGpruxr5vvX7tMBoOJ/Tb/0IbFsSj5QQZI8tv78/B4VPycmzB3LhpNpcGBPfadXhBDY3OX5b8LjuVAJamsQIkrfKBLK9ICTir85EfVknIhKi/eMkk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=G2P6p96W; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47G2KT4u004516;
-	Fri, 16 Aug 2024 14:29:31 GMT
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47G2KT5a004516;
+	Fri, 16 Aug 2024 14:36:51 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
 	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=4
-	1hGsqTLvTIxU5BwIt+HASBMihq4OvuVWvFAGoo55no=; b=A5Bxb5A+pvpo4SnGr
-	/lknI9sDyAsrvuUwjE5fKf877tpK5wvADhJ6e5oMiNxee/fHFIrnvvrf7K2HA4xH
-	DEXVS+BljVJ5fIsa/0AN+n/BQ+fdZ+zMBUcPTi/ftalDe40fz0a6T/ynD4i7wiBq
-	y2RnYLdEbpMbR9PBUxvarF7MjpNKb+PlnIdWle5XjQCvsIokZXjnX0B3aYUepbEy
-	vhOI4VUxuoehSAuI3PwDsf6aC5LEFjCe2Ftf5lIMzVeAWd9VWukC0RoykrbxXhR1
-	RK0eZgQYtEyNJJqZT1lLwGL6GurBO+dd6erkLFjjj29LldRu2eMWKrsZok1gPL8h
-	G+F8A==
+	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=q
+	9dfOttQu1POiySJSMNVFbqeUEZDFywNMflRrsX6WdI=; b=G2P6p96WrXd2ZwiaH
+	4bs98lsdZ1dx3/hkhBds/+qUuVQfqeymZgtMXUR8elyLmgghR22VloNaakmJihqO
+	teSqmWJai4nC3rR5nzHSL924uVYGXP/bY8KrXncwzlKL+W0gNHDITvr4PmZD2Wd5
+	6ITvCngwn75xC7uANyJ9kBsnjS5TgF+sgCJumqaUSIJS36B8OjZzHTh89wy5bjE1
+	p1yqjMPM4graHnNJv+EqEYmEgVZnPWl+n3ZQy4j3nkR3kxuQWVYRF2MBMjPbVur1
+	fBvZ24qL+r0yPEFxvpl4JLKJY2i1WlxPwi2ICVgd/L64oYYiuo87cLflUN1E/Wuz
+	nfxaA==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4111d6rt4k-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4111d6ru53-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Aug 2024 14:29:31 +0000 (GMT)
+	Fri, 16 Aug 2024 14:36:50 +0000 (GMT)
 Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 47GETUM7013825;
-	Fri, 16 Aug 2024 14:29:30 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4111d6rt4b-1
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 47GEaokh028515;
+	Fri, 16 Aug 2024 14:36:50 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4111d6ru51-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Aug 2024 14:29:30 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 47GAbOta016357;
-	Fri, 16 Aug 2024 14:29:30 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 40xkhq41vs-1
+	Fri, 16 Aug 2024 14:36:50 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 47GEPWek011541;
+	Fri, 16 Aug 2024 14:36:49 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 40xjhum8pk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 16 Aug 2024 14:29:29 +0000
+	Fri, 16 Aug 2024 14:36:49 +0000
 Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 47GETOHu34865844
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 47GEahrq43057492
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 16 Aug 2024 14:29:26 GMT
+	Fri, 16 Aug 2024 14:36:46 GMT
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2017320043;
-	Fri, 16 Aug 2024 14:29:24 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id D218E2004B;
+	Fri, 16 Aug 2024 14:36:43 +0000 (GMT)
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7437520040;
-	Fri, 16 Aug 2024 14:29:23 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 59CC420040;
+	Fri, 16 Aug 2024 14:36:43 +0000 (GMT)
 Received: from [9.171.56.137] (unknown [9.171.56.137])
 	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 16 Aug 2024 14:29:23 +0000 (GMT)
-Message-ID: <4c049b39-af28-488c-9e19-f22691b43585@linux.ibm.com>
-Date: Fri, 16 Aug 2024 16:29:23 +0200
+	Fri, 16 Aug 2024 14:36:43 +0000 (GMT)
+Message-ID: <7f930ac3-a7af-47c7-8455-8c96d11754b5@linux.ibm.com>
+Date: Fri, 16 Aug 2024 16:36:43 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,7 +84,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] selftests: kvm: s390: Add uc_map_unmap VM test case
+Subject: Re: [PATCH 2/3] selftests: kvm: s390: Add uc_skey VM test case
 To: Christoph Schlameuss <schlameuss@linux.ibm.com>, kvm@vger.kernel.org
 Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
@@ -93,7 +93,7 @@ Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
         David Hildenbrand <david@redhat.com>,
         Nina Schoetterl-Glausch <nsg@linux.ibm.com>
 References: <20240815154529.628087-1-schlameuss@linux.ibm.com>
- <20240815154529.628087-2-schlameuss@linux.ibm.com>
+ <20240815154529.628087-3-schlameuss@linux.ibm.com>
 Content-Language: en-US
 From: Janosch Frank <frankja@linux.ibm.com>
 Autocrypt: addr=frankja@linux.ibm.com; keydata=
@@ -138,130 +138,101 @@ Autocrypt: addr=frankja@linux.ibm.com; keydata=
  DchCqFm5adiSP5+OT4NjkKUeGpBe/aRyQSle/RropTgCi85pje/juYEn2P9UAgkfBJrOHvQ9
  Z+2Sva8FRd61NJLkCJ4LFumRn9wQlX2icFbi8UDV3do0hXJRRYTWCxrHscMhkrFWLhYiPF4i
  phX7UNdOWBQ90qpHyAxHmDazdo27gEjfvsgYMdveKknEOTEb5phwxWgg7BcIDoJf9UMC
-In-Reply-To: <20240815154529.628087-2-schlameuss@linux.ibm.com>
+In-Reply-To: <20240815154529.628087-3-schlameuss@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: v9ITlVF5l6TX4Ebd1GjeD4zifVV-SmOs
-X-Proofpoint-GUID: fBwpW9bNRD-ZYOaybVo28IMOcNAbNlfp
+X-Proofpoint-ORIG-GUID: TRSeQMKpOOsNMjxKyXPtxkDCL5zP_ksc
+X-Proofpoint-GUID: jMo53Lennb24zf5zLPpvE_EwTT4EENmA
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-16_05,2024-08-16_01,2024-05-17_01
+ definitions=2024-08-16_08,2024-08-16_01,2024-05-17_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
  lowpriorityscore=0 clxscore=1015 spamscore=0 impostorscore=0
- priorityscore=1501 suspectscore=0 malwarescore=0 mlxlogscore=737
+ priorityscore=1501 suspectscore=0 malwarescore=0 mlxlogscore=999
  phishscore=0 mlxscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2407110000 definitions=main-2408160102
+ scancount=1 engine=8.19.0-2407110000 definitions=main-2408160106
 
 On 8/15/24 5:45 PM, Christoph Schlameuss wrote:
-> Add a test case verifying basic running and interaction of ucontrol VMs.
-> Fill the segment and page tables for allocated memory and map memory on
-> first access.
-> 
-> * uc_map_unmap
->    Store and load data to mapped and unmapped memory and use pic segment
->    translation handling to map memory on access.
+> Add a test case manipulating s390 storage keys from within the ucontrol
+> VM.
 > 
 > Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
 > ---
->   .../selftests/kvm/s390x/ucontrol_test.c       | 120 +++++++++++++++++-
->   1 file changed, 119 insertions(+), 1 deletion(-)
+>   .../selftests/kvm/s390x/ucontrol_test.c       | 76 +++++++++++++++++++
+>   1 file changed, 76 insertions(+)
 > 
-
-> +static void uc_handle_exit_ucontrol(FIXTURE_DATA(uc_kvm) * self)
-> +{
-> +	struct kvm_run *run = self->run;
-> +
-> +	TEST_ASSERT_EQ(KVM_EXIT_S390_UCONTROL, run->exit_reason);
-> +	switch (run->s390_ucontrol.pgm_code) {
-> +	case PGM_SEGMENT_TRANSLATION:
-> +		pr_info("ucontrol pic segment translation 0x%llx\n",
-> +			run->s390_ucontrol.trans_exc_code);
-> +		/* map / make additional memory available */
-> +		struct kvm_s390_ucas_mapping map2 = {
-> +			.user_addr = (u64)gpa2hva(self, run->s390_ucontrol.trans_exc_code),
-> +			.vcpu_addr = run->s390_ucontrol.trans_exc_code,
-> +			.length = VM_MEM_EXT_SIZE,
-> +		};
-> +		pr_info("ucas map %p %p 0x%llx\n",
-> +			(void *)map2.user_addr, (void *)map2.vcpu_addr, map2.length);
-> +		TEST_ASSERT_EQ(0, ioctl(self->vcpu_fd, KVM_S390_UCAS_MAP, &map2));
-> +		break;
-
-Why is this necessary if you fix up the mapping in the test?
-
-[...]
-
+> diff --git a/tools/testing/selftests/kvm/s390x/ucontrol_test.c b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+> index 41306bb52f29..5f8815a80544 100644
+> --- a/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+> +++ b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+> @@ -79,6 +79,32 @@ asm("test_mem_asm:\n"
+>   	"	j	0b\n"
+>   );
 >   
-> +TEST_F(uc_kvm, uc_map_unmap)
+> +/* Test program manipulating storage keys */
+> +extern char test_skey_asm[];
+> +asm("test_skey_asm:\n"
+> +	"xgr	%r0, %r0\n"
+> +
+> +	"0:\n"
+> +	"	ahi	%r0,1\n"
+> +	"	st	%r1,0(%r5,%r6)\n"
+> +
+> +	"	iske	%r1,%r6\n"
+> +	"	ahi	%r0,1\n"
+> +	"	diag	0,0,0x44\n"
+> +
+> +	"	sske	%r1,%r6\n"
+
+Might want to add a xgr here so you're sure that you're not reading your 
+own values if iske fails.
+
+> +	"	iske	%r1,%r6\n"
+> +	"	ahi	%r0,1\n"
+> +	"	diag	0,0,0x44\n"
+> +
+> +	"	rrbe	%r1,%r6\n"
+> +	"	iske	%r1,%r6\n"
+> +	"	ahi	%r0,1\n"
+> +	"	diag	0,0,0x44\n"
+> +
+> +	"	j	0b\n"
+> +);
+> +
+>   FIXTURE(uc_kvm)
+>   {
+>   	struct kvm_s390_sie_block *sie_block;
+> @@ -345,6 +371,56 @@ static void uc_assert_diag44(FIXTURE_DATA(uc_kvm) * self)
+>   	TEST_ASSERT_EQ(0x440000, sie_block->ipb);
+>   }
+>   
+> +TEST_F(uc_kvm, uc_skey)
 > +{
+> +	u64 test_vaddr = self->base_gpa + VM_MEM_SIZE - (SZ_1M / 2);
 > +	struct kvm_sync_regs *sync_regs = &self->run->s.regs;
 > +	struct kvm_run *run = self->run;
-> +	int rc;
+> +	u8 skeyvalue = 0x34;
 > +
-> +	/* copy test_mem_asm to code_hva / code_gpa */
+> +	/* copy test_skey_asm to code_hva / code_gpa */
 > +	TH_LOG("copy code %p to vm mapped memory %p / %p",
-> +	       &test_mem_asm, (void *)self->code_hva, (void *)self->code_gpa);
-> +	memcpy((void *)self->code_hva, &test_mem_asm, PAGE_SIZE);
+> +	       &test_skey_asm, (void *)self->code_hva, (void *)self->code_gpa);
+> +	memcpy((void *)self->code_hva, &test_skey_asm, PAGE_SIZE);
 > +
-> +	/* DAT disabled + 64 bit mode */
-> +	run->psw_mask = 0x0000000180000000ULL;
-> +	run->psw_addr = self->code_gpa;
-> +
-> +	/* set register content for test_mem_asm to access not mapped memory*/
-> +	sync_regs->gprs[1] = 0x55;
+> +	/* set register content for test_skey_asm to access not mapped memory */
+> +	sync_regs->gprs[1] = skeyvalue;
 > +	sync_regs->gprs[5] = self->base_gpa;
-> +	sync_regs->gprs[6] = VM_MEM_SIZE;
+> +	sync_regs->gprs[6] = test_vaddr;
 > +	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
 > +
-> +	/* run and expect to fail witch ucontrol pic segment translation */
+> +	self->sie_block->ictl |= ICTL_OPEREXC | ICTL_PINT;
+> +	self->sie_block->cpuflags &= ~CPUSTAT_KSS;
 
-s/witch/with/
+So you don't want KVM to initialize skeys?
+Or am I missing a ucontrol skey interaction?
 
-> +	ASSERT_EQ(0, uc_run_once(self));
-> +	ASSERT_EQ(1, sync_regs->gprs[0]);
-> +	ASSERT_EQ(KVM_EXIT_S390_UCONTROL, run->exit_reason);
-> +
-> +	ASSERT_EQ(PGM_SEGMENT_TRANSLATION, run->s390_ucontrol.pgm_code);
-> +	ASSERT_EQ(self->base_gpa + VM_MEM_SIZE, run->s390_ucontrol.trans_exc_code);
-> +	/* map / make additional memory available */
-> +	struct kvm_s390_ucas_mapping map2 = {
-> +		.user_addr = (u64)gpa2hva(self, self->base_gpa + VM_MEM_SIZE),
-> +		.vcpu_addr = self->base_gpa + VM_MEM_SIZE,
-> +		.length = VM_MEM_EXT_SIZE,
-> +	};
-> +	TH_LOG("ucas map %p %p 0x%llx",
-> +	       (void *)map2.user_addr, (void *)map2.vcpu_addr, map2.length);
-> +	rc = ioctl(self->vcpu_fd, KVM_S390_UCAS_MAP, &map2);
-> +	ASSERT_EQ(0, rc)
-> +		TH_LOG("ucas map result %d not expected, %s", rc, strerror(errno));
-> +	ASSERT_EQ(0, uc_run_once(self));
-> +	ASSERT_EQ(false, uc_handle_exit(self));
-> +	uc_assert_diag44(self);
-> +
-> +	/* assert registers and memory are in expected state */
-> +	ASSERT_EQ(2, sync_regs->gprs[0]);
-> +	ASSERT_EQ(0x55, sync_regs->gprs[1]);
-> +	ASSERT_EQ(0x55, *(u32 *)gpa2hva(self, self->base_gpa + VM_MEM_SIZE));
-> +
-> +	/* unmap and run loop again */
-> +	TH_LOG("ucas unmap %p %p 0x%llx",
-> +	       (void *)map2.user_addr, (void *)map2.vcpu_addr, map2.length);
-> +	rc = ioctl(self->vcpu_fd, KVM_S390_UCAS_UNMAP, &map2);
-> +	ASSERT_EQ(0, rc)
-> +		TH_LOG("ucas map result %d not expected, %s", rc, strerror(errno));
-
-s/map/unmap/
+What about the ICTLs if KSS is not available on the machine?
 
 
-> +	ASSERT_EQ(0, uc_run_once(self));
-> +	ASSERT_EQ(3, sync_regs->gprs[0]);
-> +	ASSERT_EQ(KVM_EXIT_S390_UCONTROL, run->exit_reason);
-> +	ASSERT_EQ(true, uc_handle_exit(self));
-> +}
-> +
->   TEST_F(uc_kvm, uc_gprs)
->   {
->   	struct kvm_sync_regs *sync_regs = &self->run->s.regs;
 
 
