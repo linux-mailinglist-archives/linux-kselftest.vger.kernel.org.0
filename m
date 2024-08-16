@@ -1,210 +1,143 @@
-Return-Path: <linux-kselftest+bounces-15550-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15551-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65C3E954FF4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 19:24:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AEC0B955058
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 19:57:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B3CD1C20823
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 17:24:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D80101C215D7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 17:57:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9FEC1C0DE8;
-	Fri, 16 Aug 2024 17:24:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD8A51C3F0F;
+	Fri, 16 Aug 2024 17:56:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QAlZrUEJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fqOG/I5t"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF492BB0D;
-	Fri, 16 Aug 2024 17:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 704081C3F01;
+	Fri, 16 Aug 2024 17:56:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723829061; cv=none; b=QQK9Vln2FBBsMdgkjyZ/uvxvpldzFgdbPqphR9VUD/0Gc6JQ9RTdd1XgLYJsYPURoCoCSpB1LFBytyTvxCfPf6yeTVxE6953a/lP7z0Wz4IeiejV2t/7woYxjquUaYGl5BsmNJXgwXXmIv5NQnk+5naAoO90ruT73yi5KFee5+w=
+	t=1723830967; cv=none; b=ic3MZ7BhoLOrVqEp4TLmDsO3/MpujG42u0/1DXclS+wa9//5kM4AJWnxTci98E3bzKfbyDlkvFuxftI46ghx4wqQhS7zxi/Mavk+6R84qG6I2DObi8D+K01zIxXKmBZi++PRIokB6jOyeljp2Zi/AJLlQEHHsAiL7G1DFaR1O5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723829061; c=relaxed/simple;
-	bh=gfs8VaCiqUCC8u5QXEZrwy0/UJQHHtDJhlCueki9qRw=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=k4Vn44qT6qYJ9zUxhiIXebkLc228OrU/B7bdyaDRDP6YaRjhv9doVIE0NUf/Wr4ETJkq5ANvVaeAKzNOpEHdfNjeY29caNC7YPzCGkWUUA4qOl3upYyYHiY/YVZx/5LbSLe26B742sKRKZUVdFwS82nxoqhhXTBuUboTb77FjoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QAlZrUEJ; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-201f7fb09f6so14838605ad.2;
-        Fri, 16 Aug 2024 10:24:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723829059; x=1724433859; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N/dmrRqqXj2v9b4YTwmz0D6SlhuRLFNEyjT4EiFc8HE=;
-        b=QAlZrUEJIKF5IuV8uYbXtTCoVUmJ9w3sooxwM5VzDE9ak/SEuar+dWKxo1yvK4f3Wc
-         YMoRs7en5+dT8asEBrUMR1O9UC1moUeIFbcX0yjwjMqh+1MEKYnvcCJ1u69QfrR3nof9
-         pcNOENdfOY489LoTOnYOXHu2sY4/sK+pi1uVhHPnQdwEe1E52KxyWEAEVtxrmY+iAo1k
-         EScmc9eXEFu1OinHqc8SmkO9Hgm0T6uXTLPlaxwjHzcMTEkGFx3oYCNpeVpdor9FnpJH
-         1TX7vuFKq/jjTZRi0//1iaXLtzJNBeZ7G4K27HhEd6vKFq7GimnleE5wnso2u/vQqYSo
-         UNGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723829059; x=1724433859;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N/dmrRqqXj2v9b4YTwmz0D6SlhuRLFNEyjT4EiFc8HE=;
-        b=g9VdInS+TB6liQqEN9e8mDHfvviEUqzW28IIfzU2DSam5q9duYn1e0dObmzf6Vhcyj
-         jxPBHjoA9Q54Ca5bdRStJx5vq3DdsN8Gobm8oPV/SPhCxHAI3l6Z9I7f6Sp03tIrHQkP
-         +wFBHuV31cJphniXjMQfczfETYkBVwyraoNriUfBoWE5lG6X0ps+UV6hD4UK6eMcKvDr
-         FDAbj9egtJxKfcQXXrjddJroiBPiiIKx2S499sSGo6JMc8T08cOVDZYD8omwJJ5vSlzU
-         ELSaqMgZN3c8kwN0c2upnSyy0snwaP5Op+T4KWBYsyVk+Ls0UmsA4la8TRe+Ogy0Os0B
-         ljkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUCGODQWBdeGgkdqN9IRUvWPsxoYhodya8oZUnz+rYP9286yeRpfiEe3TRucZ9Ow22qLv3LS3ip4N1i79OGsLL795VzoAFwTCsg0qvdJMR+kcjipxSBuLdXV24UV1koHzQCAhxgsESHODHCXdT8
-X-Gm-Message-State: AOJu0YzvjvXVCZ0YdysKqCssnWG8yYB2nRQtcc+tb6H1RTBvNGU2MPbh
-	tZXze763lbLMtjv3tMh/dHapZAa9Ie4t0/RidAshIEZ5i+9uQAs00C05spkl
-X-Google-Smtp-Source: AGHT+IGuHnGEDCRtfNvw9KKo4hDVg4qVJqRvhyCt1ml1QtQrt/cBiuDQmT43rzSeWvqOmG2vgLyyKQ==
-X-Received: by 2002:a17:902:d50f:b0:1fd:a503:88f0 with SMTP id d9443c01a7336-20203eefb29mr44980425ad.34.1723829059518;
-        Fri, 16 Aug 2024 10:24:19 -0700 (PDT)
-Received: from localhost ([27.6.216.27])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201f02fa2d5sm27913985ad.49.2024.08.16.10.24.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Aug 2024 10:24:19 -0700 (PDT)
-Date: Fri, 16 Aug 2024 22:51:02 +0530
-From: Aryabhatta Dey <aryabhattadey35@gmail.com>
-To: akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH] selftests/mm: compaction_test: Move often used filepaths
- to strings
-Message-ID: <al5jalqx6ng4w2qyf7nctxpm7u6cdjrazcixcemzi5mbvyluoo@rc5e7gqrwby7>
+	s=arc-20240116; t=1723830967; c=relaxed/simple;
+	bh=T7fGNCI/lVtt8Y86TqJ8a7wmFGxW1GrY9DfL8mSR4As=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=AEmAzm7imXJYha1LAp/m0PZVEseqbboELjpdJMvPGyefjlzHHyUOS8i5Ds17lQvo1MZxslcnCzz9MOma/qBp1jspDKOT3wfnm+Sh1zCBZzRyN7VTK528N8dkDiC15uFS7b0NnrT1JPGGDk2jLOPHsgVhNU5vhWC+sggnrvFB8hk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fqOG/I5t; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 855C0C32782;
+	Fri, 16 Aug 2024 17:56:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723830967;
+	bh=T7fGNCI/lVtt8Y86TqJ8a7wmFGxW1GrY9DfL8mSR4As=;
+	h=From:Subject:Date:To:Cc:From;
+	b=fqOG/I5tKtL2VN3zigfLeHzMfmB+YsGDMdY6osAQou7T7s4sfcAvODDw63DFJRfNy
+	 uOUsVi3JrGxPS2mXYo1hAqekFn7GIin097HO81/b8BaGfF+TtTnrRYRchS7M66NzKD
+	 G/viHMMYSinxlvZ6ULzszDAiXFqA6+R/TJypv4t9Bi3AXkoaQF0WPdVo4vwo9tnhPq
+	 30Dn0a6jd4puNE4Ym4dsPWEfApwyfnHzDCSSl7e+HNfJ3cgQsMOiwx00eT5MQLtAe6
+	 ULDzJuBTrMD2hoqEZ1S0CF72zSOpH2B7LVCN1RqwTlIwNmXLnTNHF3oKrBlcSIToZo
+	 7Sn/XVG0/mnoA==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH bpf-next 0/2] selftests: bpf: avoid duplicated UAPI headers
+Date: Fri, 16 Aug 2024 19:55:51 +0200
+Message-Id: <20240816-ups-bpf-next-selftests-use-khdr-v1-0-1e19f3d5b17a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKeSv2YC/zWNwQqDMBAFf0X23AVNbdn2V4oHqy91aUlDNhZB/
+ PcGweMcZmYlQ1IY3auVEn5q+g0FmlNFw9SHF1jHwuRq19bSXHmOxs/oOWDJbPj4DMvGs4Hf05j
+ Yib+dL4NIKz2VSkzwuuyHBx0iddv2BxYtTCR7AAAA
+To: mptcp@lists.linux.dev, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2680; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=T7fGNCI/lVtt8Y86TqJ8a7wmFGxW1GrY9DfL8mSR4As=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmv5KyBwk97AcdUek4K5rgC+Mv+BzPsjTpteG0B
+ 3hNQXXqd6SJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZr+SsgAKCRD2t4JPQmmg
+ c0DnEAC1gAqIZja8rQgdsgP4wSyeet8NvGJoV4YkZLU6Xq2YTAcSlquPo5cGYPsvwqU1QPuQiEe
+ 2XDEkLEos0PGa3J2r2KHuLfTFq2lIad8VEAX118UrJ1Xs+9Mok/jeYfuh5/SI1FCdjgBxCgj7Sj
+ EE0QmlK3q07Vr1rOTNTG4Cr0FB0GL89cAfJwzUuRTrSYetK5Or4FMEs60jjoyHYmNEib5Yn1rSx
+ cxKgyesNB+JBc1/WdT6n2QzEKA01MrnofeTyBCCUuk5Dh5faGDNIy5hbnYfgyFhuBA/G1pVgZkY
+ hBxGj9Dkct8V+YiuTr64uCYItjB7HWwy5pv0TkDmjafY7h1bu5Io8EkC1bTgF56c++RHAAE+jT1
+ 7dxIuvn0ARMcrCPgvWkOQ3hJkcdrcYQjDmmw1JRO5L0/j+W/qz3cOVabD80RCulQvBgDZ7MNSCF
+ 7sD4ufj03O/Mc4jGtUbrctyoIuePvm+Smewo31qpILB7DaOjoNSL7ORqxYh9Mo0s9vbMUCezadq
+ tyQFb0L8xh9YiT3zsvw3m6O/4fb94bclw/Tr5LPcmymf74XtMFlMOpXofVG73NDITtIYf1KOsGX
+ OyP084A+g3Q125v6VKtIj5pgZaaoTcixlqAbcZq6Pr3evoP9lesea7dyjZBjLAxJBbhCA0EljTr
+ IXc6XkFOdFOGDrg==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Add defines for file path names to avoid duplicate strings
-in print messages and make it easier to maintain.
+If a BPF selftest program requires (recent) UAPI headers [1], it is
+currently needed to duplicate these header files into tools/include/uapi.
+That's not a good solution, because it is a duplication that needs to be
+kept up-to-date, while the required files are only a few directories
+away.
 
-Signed-off-by: Aryabhatta Dey <aryabhattadey35@gmail.com>
+A solution to avoid these duplicated files is to use the KHDR_INCLUDES
+from the kselftest infrastructure. That is what is being done in the
+first patch.
+
+The second patch removes 'if_xdp.h', which is no longer needed, and was
+causing a warning when building the libbpf required by the BPF
+selftests. There could be more duplicated UAPI header files that could
+be removed, but I didn't spend too much time checking which ones are not
+used by anything else from the 'tools' directory.
+
+Hopefully, these modifications should not cause any issues on the
+different CIs, because it is using the recommended method for the kernel
+selftests. If this causes issues on the CIs side, it should be easy to
+fix by overriding the KHDR_INCLUDES variable, and it might be better to
+do that, because it likely means the CI is not following the recommended
+way to execute the kernel selftests. See patch 1/2 for more details
+about that.
+
+Link: https://lore.kernel.org/all/08f925cd-e267-4a6b-84b1-792515c4e199@kernel.org/T/#u [1]
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/mm/compaction_test.c | 46 ++++++++++----------
- 1 file changed, 24 insertions(+), 22 deletions(-)
+Matthieu Baerts (NGI0) (2):
+      selftests: bpf: use KHDR_INCLUDES for the UAPI headers
+      selftests: bpf: remove duplicated UAPI if_xdp headers
 
-diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
-index e140558e6f53..541ac0373258 100644
---- a/tools/testing/selftests/mm/compaction_test.c
-+++ b/tools/testing/selftests/mm/compaction_test.c
-@@ -21,6 +21,9 @@
- #define MAP_SIZE_MB	100
- #define MAP_SIZE	(MAP_SIZE_MB * 1024 * 1024)
- 
-+#define COMPACT_UNEVICTABLE_ALLOWED "/proc/sys/vm/compact_unevictable_allowed"
-+#define NR_HUGEPAGES "/proc/sys/vm/nr_hugepages"
-+
- struct map_list {
- 	void *map;
- 	struct map_list *next;
-@@ -59,17 +62,16 @@ int prereq(void)
- 	char allowed;
- 	int fd;
- 
--	fd = open("/proc/sys/vm/compact_unevictable_allowed",
--		  O_RDONLY | O_NONBLOCK);
-+	fd = open(COMPACT_UNEVICTABLE_ALLOWED, O_RDONLY | O_NONBLOCK);
- 	if (fd < 0) {
--		ksft_print_msg("Failed to open /proc/sys/vm/compact_unevictable_allowed: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to open %s: %s\n",
-+			       COMPACT_UNEVICTABLE_ALLOWED, strerror(errno));
- 		return -1;
- 	}
- 
- 	if (read(fd, &allowed, sizeof(char)) != sizeof(char)) {
--		ksft_print_msg("Failed to read from /proc/sys/vm/compact_unevictable_allowed: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to read from %s: %s\n",
-+			       COMPACT_UNEVICTABLE_ALLOWED, strerror(errno));
- 		close(fd);
- 		return -1;
- 	}
-@@ -97,10 +99,10 @@ int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
- 	   in to play */
- 	mem_free = mem_free * 0.8;
- 
--	fd = open("/proc/sys/vm/nr_hugepages", O_RDWR | O_NONBLOCK);
-+	fd = open(NR_HUGEPAGES, O_RDWR | O_NONBLOCK);
- 	if (fd < 0) {
--		ksft_print_msg("Failed to open /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to open %s: %s\n",
-+			       NR_HUGEPAGES, strerror(errno));
- 		ret = -1;
- 		goto out;
- 	}
-@@ -108,16 +110,16 @@ int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
- 	/* Request a large number of huge pages. The Kernel will allocate
- 	   as much as it can */
- 	if (write(fd, "100000", (6*sizeof(char))) != (6*sizeof(char))) {
--		ksft_print_msg("Failed to write 100000 to /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to write 100000 to %s: %s\n",
-+			       NR_HUGEPAGES, strerror(errno));
- 		goto close_fd;
- 	}
- 
- 	lseek(fd, 0, SEEK_SET);
- 
- 	if (read(fd, nr_hugepages, sizeof(nr_hugepages)) <= 0) {
--		ksft_print_msg("Failed to re-read from /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to re-read from %s: %s\n",
-+			       NR_HUGEPAGES, strerror(errno));
- 		goto close_fd;
- 	}
- 
-@@ -134,8 +136,8 @@ int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
- 
- 	if (write(fd, init_nr_hugepages, strlen(init_nr_hugepages))
- 	    != strlen(init_nr_hugepages)) {
--		ksft_print_msg("Failed to write value to /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to write value to %s: %s\n",
-+			       NR_HUGEPAGES, strerror(errno));
- 		goto close_fd;
- 	}
- 
-@@ -162,15 +164,15 @@ int set_zero_hugepages(unsigned long *initial_nr_hugepages)
- 	int fd, ret = -1;
- 	char nr_hugepages[20] = {0};
- 
--	fd = open("/proc/sys/vm/nr_hugepages", O_RDWR | O_NONBLOCK);
-+	fd = open(NR_HUGEPAGES, O_RDWR | O_NONBLOCK);
- 	if (fd < 0) {
--		ksft_print_msg("Failed to open /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to open %s: %s\n",
-+			       NR_HUGEPAGES, strerror(errno));
- 		goto out;
- 	}
- 	if (read(fd, nr_hugepages, sizeof(nr_hugepages)) <= 0) {
--		ksft_print_msg("Failed to read from /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to read from %s: %s\n",
-+			       NR_HUGEPAGES, strerror(errno));
- 		goto close_fd;
- 	}
- 
-@@ -178,8 +180,8 @@ int set_zero_hugepages(unsigned long *initial_nr_hugepages)
- 
- 	/* Start with the initial condition of 0 huge pages */
- 	if (write(fd, "0", sizeof(char)) != sizeof(char)) {
--		ksft_print_msg("Failed to write 0 to /proc/sys/vm/nr_hugepages: %s\n",
--			       strerror(errno));
-+		ksft_print_msg("Failed to write 0 to %s: %s\n",
-+			       NR_HUGEPAGES, strerror(errno));
- 		goto close_fd;
- 	}
- 
+ tools/include/uapi/linux/if_xdp.h                  | 173 ---------------------
+ tools/lib/bpf/Makefile                             |   3 -
+ tools/testing/selftests/bpf/Makefile               |   2 +-
+ .../selftests/bpf/prog_tests/assign_reuse.c        |   2 +-
+ tools/testing/selftests/bpf/prog_tests/tc_links.c  |   4 +-
+ tools/testing/selftests/bpf/prog_tests/tc_netkit.c |   2 +-
+ tools/testing/selftests/bpf/prog_tests/tc_opts.c   |   2 +-
+ .../selftests/bpf/prog_tests/user_ringbuf.c        |   2 +-
+ .../testing/selftests/bpf/prog_tests/xdp_bonding.c |   2 +-
+ .../selftests/bpf/prog_tests/xdp_cpumap_attach.c   |   2 +-
+ .../selftests/bpf/prog_tests/xdp_devmap_attach.c   |   2 +-
+ .../selftests/bpf/prog_tests/xdp_do_redirect.c     |   2 +-
+ tools/testing/selftests/bpf/prog_tests/xdp_link.c  |   2 +-
+ tools/testing/selftests/bpf/xdp_features.c         |   4 +-
+ 14 files changed, 14 insertions(+), 190 deletions(-)
+---
+base-commit: fdf1c728fac541891ef1aa773bfd42728626769c
+change-id: 20240816-ups-bpf-next-selftests-use-khdr-28f935c8848a
+
+Best regards,
 -- 
-2.46.0
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
 
