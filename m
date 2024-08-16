@@ -1,233 +1,116 @@
-Return-Path: <linux-kselftest+bounces-15499-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15500-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1353395489E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 14:21:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30F48954AA5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 15:01:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9FA6284CDA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 12:21:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 649FA1C20E85
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 13:01:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E5E31B373E;
-	Fri, 16 Aug 2024 12:21:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vepJIgQv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCBBF13AA2B;
+	Fri, 16 Aug 2024 13:01:21 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F36F1AD9E2
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2024 12:20:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186FF1E4AF;
+	Fri, 16 Aug 2024 13:01:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723810861; cv=none; b=dPA4qIYxECNj5MIxjYXZOwavn8G6hGBZANiA/iSVYftrbL6Cch3LY5/K+z0VGJuYgA2YAnJosvVjlg3fqbdm2In5nWYDA4vDFzwgGZMoMUnHVwH3m3/AfM8+a8f6I0rpFJPrf7fiaVaslnVR/MUIOBCe4/5+sVvcsNRdk76An5Q=
+	t=1723813281; cv=none; b=Oxqyh24kHy2YdIdVjYrMeb7JgcRQna0NAGVRJvEQCB2AUQnlU8Qp59Np1/+6eosnVMIu9aJAKLpmlFPFVHIzJbttuSxyrZhUkVsexKMNNzQ34ptYSfaICN7u+P+9cLW7i4oa8JtndbpaRvKJ4v754IIZfYbY57JLRayayfmD/KQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723810861; c=relaxed/simple;
-	bh=uDHRwF0otXkj+agrQEA0lwHEUq1GTb5X3dySo2OqWmA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=evI28vOPRYQvoqjKU/735H3SNKoqbi0yJhWEvbxvQLKxImyHlfa8sDQVG6FqB3yRRlru9yrDOZjaI7leW/6QmQLyEdbodwacWY1FBtl2PhUyaQ0v6nY5zGwRg2iapu7H9953B361BVAMno8sVm7E74oV2O3Plnws2amMu1SARs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vepJIgQv; arc=none smtp.client-ip=209.85.219.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6bd777e6623so10217086d6.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2024 05:20:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723810857; x=1724415657; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=60gFb7YBVOLPqGwy/Oc6xhCaH/QA9b9t6B6yBp4eA0s=;
-        b=vepJIgQvm2wUGg7wPKHnb+cadQKMpOzbWijLOw8Y601NGnc5kVVQQPvwKuFuHmO9dT
-         MJgiqk3ifseVfRq/1H89bggOm/n7pq2Mm8dmsp81hGSa5WPe8joH83P6y+SfpVSL5VCH
-         lZLxAXq0w4X5pjPxczK8MnzECXq4GfetXQZQfQsE1q5cckXfkWtkW5TRvbSxcOYtVr4U
-         /ROBZ3uaTofnbmaov+YziEU4mN5Jx1qhndecyk+dDXswFTYJQF2zRTdUbbakad1/rIsM
-         DwzU5Muj2HTFtxM1/A66Nbfr3az4ejPZ29MAKl9DO+8SgPw7kWqtxMFRF8n5JpvPCqFk
-         yYhw==
+	s=arc-20240116; t=1723813281; c=relaxed/simple;
+	bh=KzD0Xyve9PLemVNDupoBAN/jquzgMv3HHLv5g4tIK3g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qOCM/AFqEhE48QMxzCTJ7vwVkTMCO6scm3zfsrLs0czWqbmusoK45CTPe6jvqa9eLn4W0Enxl8N6HBa7qrBpNcwlT3ivf+5n0XSf19xQkfdHUSb1kskqPfSRqyTFCSobI5gO94F1S/3JUR/hEEVbwyHbSeKiHUnd4M3pJAMbTlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5bed83489c3so312476a12.3;
+        Fri, 16 Aug 2024 06:01:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723810857; x=1724415657;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=60gFb7YBVOLPqGwy/Oc6xhCaH/QA9b9t6B6yBp4eA0s=;
-        b=WBVdWpPvvkhQls4rFTX9hnbEwIuNuKdz9Q54Gm1SoFSiPjUq1fDWAUEQXTWSLV90Z/
-         TgFhOKnRploK4V+Ozjab1Y4M/P89dkuXSJmrZGxVRVoeujVffIDcjLvqrg7Xu1LRgLlz
-         dgYvUjfq+4txqxNrUN1C8XHnVJyay9CyX73WJNOgtLheTjOjyGAIouQIhHg7ckLeFth/
-         fCiNr27moWIEiSBnTOfAVUeiFCwUFfL++kglc7KARQcgrz12QZnklgNNlUcqZag0EREB
-         CXSlpxrxG9TRKxMgCJ6MARdVcFhh7m5ezxnFgJQEr0PG6g6RsyXMLNv9DZG4M//SFJVv
-         dB6A==
-X-Forwarded-Encrypted: i=1; AJvYcCUuBvAyHwNzoRRYaNPU14aHtJsSgLRJl1kqqgNyuFPmizCqkyZ8uJuMbW0wy7hx6eZXgO2g71xm0RYZ3SFND3R6/2mvNGdCSMgJXv8ZJPTm
-X-Gm-Message-State: AOJu0YxtAfDM2YS1/QSJhXoYRpoUS+6/KXbUyIqfjPs6N+zIEILi0VPx
-	sGj7sXIvTfW9PWSvLpF+eO0cKzkoewDf7GgdH7cfAOuleYqcyH4nxDJmNFgkKox1LW+loeYtsX7
-	qCbTYuZ/2nYv1Iy3lZSwrumAy8vERoLxnhpxk
-X-Google-Smtp-Source: AGHT+IGZmdSIKsIbNLMCWhDr7siS0fg53Dzm3mUEgRlOmZUGtYHuIW2VVl49SrIQcFwsu42Q03aJr/PwI9drpzidh7Q=
-X-Received: by 2002:a05:6214:5713:b0:6bf:7c34:e419 with SMTP id
- 6a1803df08f44-6bf7cdcb101mr38991616d6.5.1723810857192; Fri, 16 Aug 2024
- 05:20:57 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1723813278; x=1724418078;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zOFUzcGmD8YZyWPgeFeyXF3QqukovaEuw7rQe+seNtE=;
+        b=PhYbB1SzH8k4ItJpD3ldh0w0gXm3HQSfMHV70S/aBbD58dtjXcDI0DvGy3GPTrcecu
+         spt2UztxlLAdRldmpCd6ZnQCFw6/5OU+B0JFGbN9IZN4b3FIDBkuo9c+6cLkhC+VvHWZ
+         /ia6HsFag09uXr4NzuQKL7r6YHn6VFcgJxp0I8tIQ/Uj3PjyHPmUAfz70ggXlKZpQEKT
+         AwxWM2SbCozg3ZWhqCZL2L7Y1YpmCdYmEYDgbS04I4kwxVvHYmg0YM+EpGZ/7bh62zAp
+         srkdphLAIQFktcc38Wrcram3j7JwpalHpswOmQ4l4j6DFVgXB8hF+9c378iO9RZsIV7F
+         51EQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX3oQ1l0CZmA3sTQPDvSgbCC5XZzQ5jkGBYcoggxnWF4qJUjnkjral8AQTrxvsM1JyZsu4sNPXtFJYI/Mg9IqCue+1aU2V3xa9hDDzEP185BJN+r9RHensTWv0wfUrwDKvcjSbYpFe+p7OnhOAdUryA3M0TkWquC607Rqb4HLZFl8CRWFAJ
+X-Gm-Message-State: AOJu0Yw53l1abgbb+53eqkMMU0kxy3uiNwm3gLfXSESRCqejeG4Y9YQs
+	O8ic6tXmCHssNWCtL+bCOEDUwEBLJQsec2ZxqTfoA+5kRwuu+7q/OYA4yw==
+X-Google-Smtp-Source: AGHT+IHuoeH0ZWe/Z6RbRI9LL8Uli60fHi1dpmDJOw0kZsaqeysUAbcLLEwXh238QnGUoxHNkfaOSQ==
+X-Received: by 2002:a05:6402:35d3:b0:5be:ae21:33a7 with SMTP id 4fb4d7f45d1cf-5beca4d9f19mr1914013a12.8.1723813277512;
+        Fri, 16 Aug 2024 06:01:17 -0700 (PDT)
+Received: from gmail.com (fwdproxy-lla-007.fbsv.net. [2a03:2880:30ff:7::face:b00c])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5bebbde3849sm2189934a12.21.2024.08.16.06.01.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Aug 2024 06:01:16 -0700 (PDT)
+Date: Fri, 16 Aug 2024 06:01:14 -0700
+From: Breno Leitao <leitao@debian.org>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, liuhangbin@gmail.com, petrm@nvidia.com,
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+	David Wei <dw@davidwei.uk>, Willem de Bruijn <willemb@google.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH net-next v3] net: netconsole: selftests: Create a new
+ netconsole selftest
+Message-ID: <Zr9Nmgggn3nlUVnV@gmail.com>
+References: <20240815095157.3064722-1-leitao@debian.org>
+ <127af9ef-2d69-4765-a8f0-0dece3b6dd1d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240813211317.3381180-7-almasrymina@google.com>
- <de7daf80-a2e4-4451-b666-2a67ccc3649e@gmail.com> <CAHS8izPMC+XhXKbJOQ3ymizyKuARSOv_cO_xO+q1EG4zoy6Gig@mail.gmail.com>
- <31640ff4-25a6-4115-85e6-82092ce57393@gmail.com> <20240815182245.2b5e3f44@kernel.org>
-In-Reply-To: <20240815182245.2b5e3f44@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 16 Aug 2024 08:20:44 -0400
-Message-ID: <CAHS8izO9LDM9rLVnJPgp6QXb4YLW5+3ziGOHTqScy-SKOLejYA@mail.gmail.com>
-Subject: Re: [PATCH net-next v19 06/13] memory-provider: dmabuf devmem memory provider
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Pavel Begunkov <asml.silence@gmail.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>, David Wei <dw@davidwei.uk>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin <linyunsheng@huawei.com>, 
-	Shailend Chand <shailend@google.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <127af9ef-2d69-4765-a8f0-0dece3b6dd1d@kernel.org>
 
-On Thu, Aug 15, 2024 at 9:22=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wr=
-ote:
->
-> On Wed, 14 Aug 2024 17:32:53 +0100 Pavel Begunkov wrote:
-> > > This is where I get a bit confused. Jakub did mention that it is
-> > > desirable for core to verify that the driver did the right thing,
-> > > instead of trusting that a driver did the right thing without
-> > > verifying. Relying on a flag from the driver opens the door for the
-> > > driver to say "I support this" but actually not create the mp
-> > > page_pool. In my mind the explicit check is superior to getting
-> > > feedback from the driver.
-> >
-> > You can apply the same argument to anything, but not like
-> > after each for example ->ndo_start_xmit we dig into the
-> > interface's pending queue to make sure it was actually queued.
-> >
-> > And even if you check that there is a page pool, the driver
-> > can just create an empty pool that it'll never use. There
-> > are always ways to make it wrong.
-> >
-> > Yes, there is a difference, and I'm not against it as a
-> > WARN_ON_ONCE after failing it in a more explicit way.
-> >
-> > Jakub might have a different opinion on how it should look
-> > like, and we can clarify on that, but I do believe it's a
-> > confusing interface that can be easily made better.
->
-> My queue API RFC patches had configuration arguments, not sure if this
-> is the right version but you'll get the idea:
-> https://github.com/kuba-moo/linux/blob/qcfg/include/net/netdev_cfg.h#L43-=
-L50
-> This way we can _tell_ the driver what the config should be. That part
-> got lost somewhere along the way, because perhaps in its embryonic form
-> it doesn't make sense.
->
-> We can bring it back, add HDS with threshold of 0, to it, and a bit for
-> non-readable memory. On top of that "capability bits" in struct
-> netdev_queue_mgmt_ops to mark that the driver pays attention to particula=
-r
-> fields of the config.
->
-> Not sure if it should block the series, but that'd be the way I'd do it
-> (for now?)
->
+Hello Matthieu,
 
-I'm not sure I want to go into a rabbit hole of adding configuration
-via the queue API, blocking this series . We had discussed this months
-back and figured that it's a significant undertaking on its own. I'm
-not sure GVE has HDS threshold capability for example, and I'm also
-not sure how to coexist header split negotiability via the queue API
-when an ethtool API exists alongside it. I think this is worthy of
-separating in its own follow up series.
+On Thu, Aug 15, 2024 at 12:47:22PM +0200, Matthieu Baerts wrote:
+> On 15/08/2024 11:51, Breno Leitao wrote:
+> > Adds a selftest that creates two virtual interfaces, assigns one to a
+> > new namespace, and assigns IP addresses to both.
+> > 
+> > It listens on the destination interface using socat and configures a
+> > dynamic target on netconsole, pointing to the destination IP address.
+> > 
+> > The test then checks if the message was received properly on the
+> > destination interface.
+> > 
+> > Signed-off-by: Breno Leitao <leitao@debian.org>
+> > ---
+> > Changelog:
+> > 
+> > v3:
+> >  * Defined CONFIGs in config file (Jakub)
+> >  * Identention fixes (Petr Machata)
+> >  * Use setup_ns in a better way (Matthieu Baerts)
+> >  * Add dependencies in TEST_INCLUDES (Hangbin Liu)
+> 
+> Thank you for the v3!
+> 
+> I only looked here at how 'setup_ns' was used, (and a few other
+> Bash-related stuff), but not at the test itself.
+> 
+> I have a few comments, but I don't consider them as blocking if you
+> prefer to continue with the current version.
 
-For now detecting that the driver was able to create the page_pool
-with the correct memory provider in core should be sufficient. Also
-asking the driver to set a
-netdev_rx_queue->unreadable_netmem_supported flag should also be
-sufficient. I've implemented both locally and they work well.
+Thanks. I've adjusted all the suggestions you gave me, let me send a v4
+and we can continue from there.
 
-> I'd keep the current check with a WARN_ON_ONCE(), tho.
-> Given the absence of tests driver developers can use.
-> Especially those who _aren't_ supporting the feature.
->
-
-Yes what I have locally is the driver setting
-netdev_rx_queue->unreadable_netmem_supported when header split is
-turned on, and additionally a WARN_ON_ONCE around the check in core. I
-was about to send that when I read your email. I'm hoping we don't
-have to go through the scope creep of adding configuration via the
-queue API, which I think is a very significant undertaking.
-
-> > > and cons to each approach; I don't see a showstopping reason to go
-> > > with one over the other.
-> > >
-> > >> And page_pool_check_memory_provider() is not that straightforward,
-> > >> it doesn't walk through pools of a queue.
-> > >
-> > > Right, we don't save the pp of a queue, only a netdev. The outer loop
-> > > checks all the pps of the netdev to find one with the correct binding=
-,
-> > > and the inner loop checks that this binding is attached to the correc=
-t
-> > > queue.
-> >
-> > That's the thing, I doubt about the second part.
-> >
-> > net_devmem_bind_dmabuf_to_queue() {
-> >       err =3D xa_alloc(&binding->bound_rxqs, &xa_idx, rxq);
-> >       if (err)
-> >               return err;
-> >
-> >       netdev_rx_queue_restart();
-> >
-> >       // page_pool_check_memory_provider
-> >       ...
-> >       xa_for_each(&binding->bound_rxqs, xa_idx, binding_rxq) {
-> >               if (rxq =3D=3D binding_rxq)
-> >                       return success;
-> > }
-> >
-> > Can't b4 the patches for some reason, but that's the highlight
-> > from the patchset, correct me if I'm wrong. That xa_for_each
-> > check is always true because you put the queue in there right
-> > before it, and I don't that anyone could've erased it.
-> >
-> > The problem here is that it seems the ->bound_rxqs state doesn't
-> > depend on what page pools were actually created and with what mp.
->
-> FWIW I don't understand the point of walking the xa either.
-> Just check the queue number of the pp you found matches,
-> page pool params are saved in the page pool. No?
->
-
-Yes, I changed this check to check pool->p.queue, and it works fine.
-
---=20
-Thanks,
-Mina
+Thanks for the in-depth review.
+--breno
 
