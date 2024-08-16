@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-15551-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15552-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEC0B955058
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 19:57:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7913195505D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 19:57:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D80101C215D7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 17:57:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F009C1F2481D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 17:57:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD8A51C3F0F;
-	Fri, 16 Aug 2024 17:56:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B36711C4632;
+	Fri, 16 Aug 2024 17:56:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fqOG/I5t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W7ZPytUm"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 704081C3F01;
-	Fri, 16 Aug 2024 17:56:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E1631C3F32;
+	Fri, 16 Aug 2024 17:56:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723830967; cv=none; b=ic3MZ7BhoLOrVqEp4TLmDsO3/MpujG42u0/1DXclS+wa9//5kM4AJWnxTci98E3bzKfbyDlkvFuxftI46ghx4wqQhS7zxi/Mavk+6R84qG6I2DObi8D+K01zIxXKmBZi++PRIokB6jOyeljp2Zi/AJLlQEHHsAiL7G1DFaR1O5U=
+	t=1723830972; cv=none; b=En0b+R8KBmyfgksAE+g+dFJf+hbexnx6PWAqWbHAH7cGf4WzojjzJPMHApgq+XAUsF+65u+VFpIhsVwPteFV4h9yd66BRh+hWlW1f26UguoFzHCWGpIA4dukj7TmDGB2ApSvWH9/r6jm8D4xWE7GTgQT/pujr3GJqsq2Z/nESpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723830967; c=relaxed/simple;
-	bh=T7fGNCI/lVtt8Y86TqJ8a7wmFGxW1GrY9DfL8mSR4As=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=AEmAzm7imXJYha1LAp/m0PZVEseqbboELjpdJMvPGyefjlzHHyUOS8i5Ds17lQvo1MZxslcnCzz9MOma/qBp1jspDKOT3wfnm+Sh1zCBZzRyN7VTK528N8dkDiC15uFS7b0NnrT1JPGGDk2jLOPHsgVhNU5vhWC+sggnrvFB8hk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fqOG/I5t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 855C0C32782;
-	Fri, 16 Aug 2024 17:56:02 +0000 (UTC)
+	s=arc-20240116; t=1723830972; c=relaxed/simple;
+	bh=RoFVR6yT4mNH3ObeqFb9/cnsR2z5ewXxy5Jl49It58M=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=DpC+we7JK7UOcaAPneAIY4uoCJ9rHzEzwdYwU6Ca4MvGPMzc0xDjkUlfK6tp9smf+qAvH1anJ15GKlJV4mVpI5XmKRyer9VmOWFtP61hQ0pTJ8gCjuq8By4NBxqaNW03XcC3zdZhT3QKpbJ1sk727rZRNzU+a3P867ReLpU7uko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W7ZPytUm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 813A8C4AF0F;
+	Fri, 16 Aug 2024 17:56:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723830967;
-	bh=T7fGNCI/lVtt8Y86TqJ8a7wmFGxW1GrY9DfL8mSR4As=;
-	h=From:Subject:Date:To:Cc:From;
-	b=fqOG/I5tKtL2VN3zigfLeHzMfmB+YsGDMdY6osAQou7T7s4sfcAvODDw63DFJRfNy
-	 uOUsVi3JrGxPS2mXYo1hAqekFn7GIin097HO81/b8BaGfF+TtTnrRYRchS7M66NzKD
-	 G/viHMMYSinxlvZ6ULzszDAiXFqA6+R/TJypv4t9Bi3AXkoaQF0WPdVo4vwo9tnhPq
-	 30Dn0a6jd4puNE4Ym4dsPWEfApwyfnHzDCSSl7e+HNfJ3cgQsMOiwx00eT5MQLtAe6
-	 ULDzJuBTrMD2hoqEZ1S0CF72zSOpH2B7LVCN1RqwTlIwNmXLnTNHF3oKrBlcSIToZo
-	 7Sn/XVG0/mnoA==
+	s=k20201202; t=1723830972;
+	bh=RoFVR6yT4mNH3ObeqFb9/cnsR2z5ewXxy5Jl49It58M=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=W7ZPytUmP3jDEptkTeaqmKxNQJnCRJIoMu8N5O3BMKkt1tJpNBDuuapCMAowQjQUZ
+	 SN4HyfNQE544DYHqVuqmRTeJFMNgSB0CgbuiGvSWGYdALmgTOWg6I/+foF9cWpXtUX
+	 YNVXR5UhTEnTB+V92vSFUD5wBGk2PNldgJVJzpLeo/ox7MJJuzNVidOsgch7NyJGO0
+	 uqmpq/2fm/T1kb4ORHBIBzy9/Yr+lVbvkhMBcDFLqpeEIqHTsIpYndATVdkNeqQtrq
+	 x74YirrpaGgHD7RFWH0BY+0Eo2mNErEjttwvDvxK8u/RdCnA3D6erBP9O0YMQsbhZH
+	 UNz/jv0y0UUQA==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH bpf-next 0/2] selftests: bpf: avoid duplicated UAPI headers
-Date: Fri, 16 Aug 2024 19:55:51 +0200
-Message-Id: <20240816-ups-bpf-next-selftests-use-khdr-v1-0-1e19f3d5b17a@kernel.org>
+Date: Fri, 16 Aug 2024 19:55:52 +0200
+Subject: [PATCH bpf-next 1/2] selftests: bpf: use KHDR_INCLUDES for the
+ UAPI headers
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,9 +53,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAKeSv2YC/zWNwQqDMBAFf0X23AVNbdn2V4oHqy91aUlDNhZB/
- PcGweMcZmYlQ1IY3auVEn5q+g0FmlNFw9SHF1jHwuRq19bSXHmOxs/oOWDJbPj4DMvGs4Hf05j
- Yib+dL4NIKz2VSkzwuuyHBx0iddv2BxYtTCR7AAAA
+Message-Id: <20240816-ups-bpf-next-selftests-use-khdr-v1-1-1e19f3d5b17a@kernel.org>
+References: <20240816-ups-bpf-next-selftests-use-khdr-v1-0-1e19f3d5b17a@kernel.org>
+In-Reply-To: <20240816-ups-bpf-next-selftests-use-khdr-v1-0-1e19f3d5b17a@kernel.org>
 To: mptcp@lists.linux.dev, Andrii Nakryiko <andrii@kernel.org>, 
  Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
  Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
@@ -69,75 +70,215 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2680; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=T7fGNCI/lVtt8Y86TqJ8a7wmFGxW1GrY9DfL8mSR4As=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmv5KyBwk97AcdUek4K5rgC+Mv+BzPsjTpteG0B
- 3hNQXXqd6SJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZr+SsgAKCRD2t4JPQmmg
- c0DnEAC1gAqIZja8rQgdsgP4wSyeet8NvGJoV4YkZLU6Xq2YTAcSlquPo5cGYPsvwqU1QPuQiEe
- 2XDEkLEos0PGa3J2r2KHuLfTFq2lIad8VEAX118UrJ1Xs+9Mok/jeYfuh5/SI1FCdjgBxCgj7Sj
- EE0QmlK3q07Vr1rOTNTG4Cr0FB0GL89cAfJwzUuRTrSYetK5Or4FMEs60jjoyHYmNEib5Yn1rSx
- cxKgyesNB+JBc1/WdT6n2QzEKA01MrnofeTyBCCUuk5Dh5faGDNIy5hbnYfgyFhuBA/G1pVgZkY
- hBxGj9Dkct8V+YiuTr64uCYItjB7HWwy5pv0TkDmjafY7h1bu5Io8EkC1bTgF56c++RHAAE+jT1
- 7dxIuvn0ARMcrCPgvWkOQ3hJkcdrcYQjDmmw1JRO5L0/j+W/qz3cOVabD80RCulQvBgDZ7MNSCF
- 7sD4ufj03O/Mc4jGtUbrctyoIuePvm+Smewo31qpILB7DaOjoNSL7ORqxYh9Mo0s9vbMUCezadq
- tyQFb0L8xh9YiT3zsvw3m6O/4fb94bclw/Tr5LPcmymf74XtMFlMOpXofVG73NDITtIYf1KOsGX
- OyP084A+g3Q125v6VKtIj5pgZaaoTcixlqAbcZq6Pr3evoP9lesea7dyjZBjLAxJBbhCA0EljTr
- IXc6XkFOdFOGDrg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8160; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=RoFVR6yT4mNH3ObeqFb9/cnsR2z5ewXxy5Jl49It58M=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmv5KyVrlqMX2LUx/4FY3pb5V2qCzSomZi8IBY0
+ wiDWNoAcdOJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZr+SsgAKCRD2t4JPQmmg
+ c0R7EACYD5d2GOAfk5hnKib0EsuAB3d50dmam5U4kLLqsYWcRspu+2t+z4roDSCxPEvhnsvL8Nm
+ pZ3kQIb5BMZ36fzmJ2Ojq04t2QXz1zO2kL3n2qEIbiOEsxA8hg9/NBJY1FLc5hq0XYDGXIqCrvS
+ AxAxGzG//jrUfO5Q4PQ3O5v7k6ivoxterTVwqi79lN1R7DNr3HuDse39bsvNQlzFTWkc23L/wtf
+ VJi0FqOObawHyNTsxorOMuBKGl/AkKLARSsSi6vnt3RJG00DM58NL5aidjXT9J4L0mQOePPAJ7T
+ k2W8tN2tzujZt+vqLEbxmR6ztD0h9XdehMIVb0Z11tqeDVMOWx+gL60X6cmGop8VFjYhxQ1NE7S
+ 09FivtaVNd8xU703IN650fbrppPBKyH2QJKQrfmuO+EVnlIkZdSQqSibWz2V3hqLxjKMN/LuLBj
+ ed7V4tMYNa6fxYCIjc8p5vTfz8Lu7jfYqlqE9memnHGcJ/sOtDzOUI+CSvE3qXQC4Bv09CQB0zq
+ 6uzgWLyMnn6bYhNNI6GWR9P+uYsFP47O6jBGPuFP7Q/3WxoTGw+erOBJGPktrkKhEcbu7o+Q4wd
+ njH32AuRp+5aePiMUu27u8ddIHpF7CFzOEtzl4fajuEf4fwOk3YhUg2WM2JZubSta8lIh/r7u1x
+ ULixg4bqtreqoeQ==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-If a BPF selftest program requires (recent) UAPI headers [1], it is
-currently needed to duplicate these header files into tools/include/uapi.
-That's not a good solution, because it is a duplication that needs to be
-kept up-to-date, while the required files are only a few directories
-away.
+Instead of duplicating UAPI header files in 'tools/include/uapi', the
+BPF selftests can also look at the header files inside the kernel
+source.
 
-A solution to avoid these duplicated files is to use the KHDR_INCLUDES
-from the kselftest infrastructure. That is what is being done in the
-first patch.
+To do that, the kernel selftests infrastructure provides the
+'KHDR_INCLUDES' variable. This is what is being used in most selftests,
+because it is what is recommended in the documentation [1]. If the
+selftests are not executed from the kernel sources, it is possible to
+override the variable, e.g.
 
-The second patch removes 'if_xdp.h', which is no longer needed, and was
-causing a warning when building the libbpf required by the BPF
-selftests. There could be more duplicated UAPI header files that could
-be removed, but I didn't spend too much time checking which ones are not
-used by anything else from the 'tools' directory.
+  make KHDR_INCLUDES="-I${HDR_DIR}/include" -C "${KSFT_DIR}"
 
-Hopefully, these modifications should not cause any issues on the
-different CIs, because it is using the recommended method for the kernel
-selftests. If this causes issues on the CIs side, it should be easy to
-fix by overriding the KHDR_INCLUDES variable, and it might be better to
-do that, because it likely means the CI is not following the recommended
-way to execute the kernel selftests. See patch 1/2 for more details
-about that.
+... where ${HDR_DIR} has been generated by this command:
 
-Link: https://lore.kernel.org/all/08f925cd-e267-4a6b-84b1-792515c4e199@kernel.org/T/#u [1]
+  make headers_install INSTALL_HDR_PATH="${HDR_DIR}"
+
+Thanks to 'KHDR_INCLUDES', it is no longer needed to duplicate header
+files for userspace test programs, and these programs can include UAPI
+header files without the 'uapi' prefix.
+
+Note that it is still required to use 'tools/include/uapi' -- APIDIR,
+which corresponds to TOOLS_INCLUDES from lib.mk -- for the BPF programs,
+not to conflict with what is already defined in vmlinux.h.
+
+Link: https://docs.kernel.org/dev-tools/kselftest.html#contributing-new-tests-details [1]
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Matthieu Baerts (NGI0) (2):
-      selftests: bpf: use KHDR_INCLUDES for the UAPI headers
-      selftests: bpf: remove duplicated UAPI if_xdp headers
+ tools/testing/selftests/bpf/Makefile                       | 2 +-
+ tools/testing/selftests/bpf/prog_tests/assign_reuse.c      | 2 +-
+ tools/testing/selftests/bpf/prog_tests/tc_links.c          | 4 ++--
+ tools/testing/selftests/bpf/prog_tests/tc_netkit.c         | 2 +-
+ tools/testing/selftests/bpf/prog_tests/tc_opts.c           | 2 +-
+ tools/testing/selftests/bpf/prog_tests/user_ringbuf.c      | 2 +-
+ tools/testing/selftests/bpf/prog_tests/xdp_bonding.c       | 2 +-
+ tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c | 2 +-
+ tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c | 2 +-
+ tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c   | 2 +-
+ tools/testing/selftests/bpf/prog_tests/xdp_link.c          | 2 +-
+ tools/testing/selftests/bpf/xdp_features.c                 | 4 ++--
+ 12 files changed, 14 insertions(+), 14 deletions(-)
 
- tools/include/uapi/linux/if_xdp.h                  | 173 ---------------------
- tools/lib/bpf/Makefile                             |   3 -
- tools/testing/selftests/bpf/Makefile               |   2 +-
- .../selftests/bpf/prog_tests/assign_reuse.c        |   2 +-
- tools/testing/selftests/bpf/prog_tests/tc_links.c  |   4 +-
- tools/testing/selftests/bpf/prog_tests/tc_netkit.c |   2 +-
- tools/testing/selftests/bpf/prog_tests/tc_opts.c   |   2 +-
- .../selftests/bpf/prog_tests/user_ringbuf.c        |   2 +-
- .../testing/selftests/bpf/prog_tests/xdp_bonding.c |   2 +-
- .../selftests/bpf/prog_tests/xdp_cpumap_attach.c   |   2 +-
- .../selftests/bpf/prog_tests/xdp_devmap_attach.c   |   2 +-
- .../selftests/bpf/prog_tests/xdp_do_redirect.c     |   2 +-
- tools/testing/selftests/bpf/prog_tests/xdp_link.c  |   2 +-
- tools/testing/selftests/bpf/xdp_features.c         |   4 +-
- 14 files changed, 14 insertions(+), 190 deletions(-)
----
-base-commit: fdf1c728fac541891ef1aa773bfd42728626769c
-change-id: 20240816-ups-bpf-next-selftests-use-khdr-28f935c8848a
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 4eceb491a8ae..6a7aeae7e206 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -37,7 +37,7 @@ CFLAGS += -g $(OPT_FLAGS) -rdynamic					\
+ 	  -Wall -Werror -fno-omit-frame-pointer				\
+ 	  $(GENFLAGS) $(SAN_CFLAGS) $(LIBELF_CFLAGS)			\
+ 	  -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)		\
+-	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)
++	  -I$(TOOLSINCDIR) $(KHDR_INCLUDES) -I$(OUTPUT)
+ LDFLAGS += $(SAN_LDFLAGS)
+ LDLIBS += $(LIBELF_LIBS) -lz -lrt -lpthread
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/assign_reuse.c b/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
+index 989ee4d9785b..3d06bf5a1ba4 100644
+--- a/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
++++ b/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2023 Isovalent */
+-#include <uapi/linux/if_link.h>
++#include <linux/if_link.h>
+ #include <test_progs.h>
+ 
+ #include <netinet/tcp.h>
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_links.c b/tools/testing/selftests/bpf/prog_tests/tc_links.c
+index 1af9ec1149aa..532e162185c3 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_links.c
++++ b/tools/testing/selftests/bpf/prog_tests/tc_links.c
+@@ -1,7 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2023 Isovalent */
+-#include <uapi/linux/if_link.h>
+-#include <uapi/linux/pkt_sched.h>
++#include <linux/if_link.h>
++#include <linux/pkt_sched.h>
+ #include <net/if.h>
+ #include <test_progs.h>
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_netkit.c b/tools/testing/selftests/bpf/prog_tests/tc_netkit.c
+index b9135720024c..1c8b8f03e873 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_netkit.c
++++ b/tools/testing/selftests/bpf/prog_tests/tc_netkit.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2023 Isovalent */
+-#include <uapi/linux/if_link.h>
++#include <linux/if_link.h>
+ #include <net/if.h>
+ #include <test_progs.h>
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/tc_opts.c b/tools/testing/selftests/bpf/prog_tests/tc_opts.c
+index 196abf223465..14aee536c519 100644
+--- a/tools/testing/selftests/bpf/prog_tests/tc_opts.c
++++ b/tools/testing/selftests/bpf/prog_tests/tc_opts.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2023 Isovalent */
+-#include <uapi/linux/if_link.h>
++#include <linux/if_link.h>
+ #include <net/if.h>
+ #include <test_progs.h>
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
+index dfff6feac12c..a37dda1b3cd2 100644
+--- a/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
++++ b/tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
+@@ -12,7 +12,7 @@
+ #include <sys/syscall.h>
+ #include <sys/sysinfo.h>
+ #include <test_progs.h>
+-#include <uapi/linux/bpf.h>
++#include <linux/bpf.h>
+ #include <unistd.h>
+ 
+ #include "user_ringbuf_fail.skel.h"
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
+index 6d8b54124cb3..ee9bd8606d14 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_bonding.c
+@@ -18,7 +18,7 @@
+ #include <linux/if_bonding.h>
+ #include <linux/limits.h>
+ #include <linux/udp.h>
+-#include <uapi/linux/netdev.h>
++#include <linux/netdev.h>
+ 
+ #include "xdp_dummy.skel.h"
+ #include "xdp_redirect_multi_kern.skel.h"
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
+index 481626a875d1..e63a193e29e8 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#include <uapi/linux/bpf.h>
++#include <linux/bpf.h>
+ #include <linux/if_link.h>
+ #include <test_progs.h>
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+index ce6812558287..b916fa945b15 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+@@ -1,5 +1,5 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#include <uapi/linux/bpf.h>
++#include <linux/bpf.h>
+ #include <linux/if_link.h>
+ #include <test_progs.h>
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+index bad0ea167be7..c40a25837233 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c
+@@ -9,7 +9,7 @@
+ #include <linux/in6.h>
+ #include <linux/udp.h>
+ #include <bpf/bpf_endian.h>
+-#include <uapi/linux/netdev.h>
++#include <linux/netdev.h>
+ #include "test_xdp_do_redirect.skel.h"
+ 
+ struct udp_packet {
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_link.c b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
+index e7e9f3c22edf..ab92c395a7c7 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_link.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_link.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright (c) 2020 Facebook */
+-#include <uapi/linux/if_link.h>
++#include <linux/if_link.h>
+ #include <test_progs.h>
+ #include "test_xdp_link.skel.h"
+ 
+diff --git a/tools/testing/selftests/bpf/xdp_features.c b/tools/testing/selftests/bpf/xdp_features.c
+index 595c79141cf3..99b54674d94e 100644
+--- a/tools/testing/selftests/bpf/xdp_features.c
++++ b/tools/testing/selftests/bpf/xdp_features.c
+@@ -1,6 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0
+-#include <uapi/linux/bpf.h>
+-#include <uapi/linux/netdev.h>
++#include <linux/bpf.h>
++#include <linux/netdev.h>
+ #include <linux/if_link.h>
+ #include <signal.h>
+ #include <argp.h>
 
-Best regards,
 -- 
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+2.45.2
 
 
