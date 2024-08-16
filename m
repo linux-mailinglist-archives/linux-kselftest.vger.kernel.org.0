@@ -1,166 +1,113 @@
-Return-Path: <linux-kselftest+bounces-15547-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15548-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E861B954F90
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 19:09:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADF1B954FAC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 19:12:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4CEE4B20D28
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 17:08:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 636121F22ACF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 17:12:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E1FA1C0DF2;
-	Fri, 16 Aug 2024 17:08:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 570401BF33D;
+	Fri, 16 Aug 2024 17:12:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R4VDPmqe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sm08pVfo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A261BF33D
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2024 17:08:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32522558A5
+	for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2024 17:12:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723828132; cv=none; b=JW3vwwMJQ9sAwwkpPBsI8sE9LDXiEXrkIot1EtLesL4JkT4pCFB33/5cjnfI2xmesqB7dSkmB40Ut1rKBsmrBEc9tfQOdK3KMPNOP2rqYFn9YSGo7OUbFkSxYrqzcNtz6fQgx3QSjUJOPL2T6AD+qDeARJgqp36cVRFhoETJzeo=
+	t=1723828339; cv=none; b=fVW2fm4FNu2SY9zncSIyucsyDRl6FrOksbvReTxs2FphdZFJpsSuwCFPyYEFOXD+KCRRhma8jVeIVz8MFo0ZCHU2rQZvT/qUYqVMAycVPY3zSquGPkRSmdlUfjdYXgRvHcUFdw9FLfdMa+z2b8u31IpefS715KmXpFTO1qPI428=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723828132; c=relaxed/simple;
-	bh=n/Tr/WmPHlvI68zrU+eeiglLIedVxZY63IbqtDBKrio=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Enx55kAkBW8dGMRFa3rhr8ncCM7BFQZfedKKFnidSBQ6Y0znIijgy+iVJ/j34pdydrzRAoSnKIH57XjixyxewV/Q3vLno39Uv8LzE9Aewyhpgra36oS65NdWzaQdIxcCB0FrofIP1/MobalDT0jX3HyK/d/AV81qtBt7iiaY+OQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=R4VDPmqe; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5bebb241fddso241a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2024 10:08:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1723828129; x=1724432929; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uErb4GlpeJI3Tx9w9GTv9h0fP96iz7mSRe0kxWFAxc0=;
-        b=R4VDPmqen+195TGwb1EaZEDtzqpPk9gbyvwfn3SxMyoz1HWQVKUGWnIubipygxbVF9
-         VeotB88o8RToHH2WvVUEO5DxLyu18Swzk7UEoMR9rdoPApnWFL/LJmneAvJ+3lmE9GmI
-         B9B2261ZjQNhXqPU2JCgtukRsDBZJmoGrez/a6XHhW0G1BJ8qhrnFjqMQpAQrIQjeeXF
-         ocfMX2CKGWhs7Iblwhz6LVUdkkI2KMF5xuAaW8OP+wqTMBoqTAWL4TKRqcZMduLgzbGn
-         ltHsW5rZjwVJ7wcnUZ6BT7fE0PuwphHg4vUNG9Vd5jBYYgm3qwC5SEmi7GQ8qVUeqoBj
-         1x9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723828129; x=1724432929;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uErb4GlpeJI3Tx9w9GTv9h0fP96iz7mSRe0kxWFAxc0=;
-        b=D9qFPta8G5rBUcXXjEEAY5H2aGj+eWR9KHAVcOxKz8LBF2f2laWoyLvTJo8tanZOXN
-         QIXshhPZNXIdhuQTwBaiP9Vi323g9uOwdwWPqfkS9850s7+Kg2h7xeEAgJHHVeFJ2EAB
-         FUHeWKuPQDQb5S/MaEZ2zWDH9N/DJgmtwaMbvJnU0UxRDoX71LCfIR8A3Fek4MzSF/a7
-         IqB5oX4sL0HrAOwbrfQ14wJZ4TrNO4wmzZC82v7U5z4zHKMWjV24jBjMNsm+lexoOhj8
-         nd4ckPmw5rl2znaGLxGyXRBc+GqGJhK9i44xedhvawKt9ODCUKgvaWP0H7vYQP/h8OSH
-         QcdA==
-X-Forwarded-Encrypted: i=1; AJvYcCVuYQnvEGCtJRBAGmSefLQEjszuvjh5irPUw/qBEhDdK5xm0ZBf8Kqmqw93F5OIqsrJoyw/KwAVLYilD7mKBgM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxztsS9TqpOMWn2SqZNj8NafDXVBxjeQUXug3SuiMSSIEM3oiNl
-	rrbvr9BVcLXwDAdAr9naNHUZ6TEh5PEZjNBzzTHMegcXHaMWNDANoDHDrPz+4qt/4GhMHrHNl66
-	oB7bW0YJ9ZmnkDTugX+HxCwyqiJWw1uT2FbqH
-X-Google-Smtp-Source: AGHT+IFUsyddLhNJtQHS2CaSxunJXwGdMRztQxxVD3Cn4TtPHqXAGVxmlebqOy2QOfvAhJDtKSj/mHBWVCfjywlV1Ow=
-X-Received: by 2002:a05:6402:2687:b0:57d:436b:68d6 with SMTP id
- 4fb4d7f45d1cf-5becd6c4e09mr124079a12.7.1723828128189; Fri, 16 Aug 2024
- 10:08:48 -0700 (PDT)
+	s=arc-20240116; t=1723828339; c=relaxed/simple;
+	bh=ad0fB7IUBvhF2W9AX0bap4K1snotd7N34LZQvP74vGg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o/b6hxImjLWm1XKPUJYzpUxmz54F/Fc+Hgzvc/osLebxYZjeXI02ZqdTsdKKXyLfYYiM2d0UM4qKTrWzaj6SPkGefVRjoqynhcMxWSt+M4n3jSYpvepNJYNznaGYvjZW5XwgU0K3P7xsFNDRxTKPul0vZNXYaW9tx9rBnw/29R4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sm08pVfo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D68D2C4AF0E;
+	Fri, 16 Aug 2024 17:12:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1723828338;
+	bh=ad0fB7IUBvhF2W9AX0bap4K1snotd7N34LZQvP74vGg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=sm08pVfoExik2qygiItyNcXTpAEOjrIHJ3OWrhEl9o5QuezjpD8AyyWMRMcRHZuRp
+	 dRa9/hZRoXpkKWxMAESwTKLJIHiyJzMsN174EbGXkxOfQrFv3NcDt0LfMz2oViRhpX
+	 7MlzZD8NQLARk4C8Iv7uyd2BFvo0SjGUuN/ClgnwAWR+9Ow3N7rKc8ukY/NaQkf9zI
+	 B/Zt460rUkFcf8b+AqvyZeN40abNM3a4v2aLB7hY9YLJiUpT5vo9Qd1iEfvT9slMng
+	 RIC+T5NajKFmbUdoJl3sERpFQ8BsDGxoePrzH15AaHBo/sOK1Zcosl8cNEiUTWfOGC
+	 v5ZSEAIoMG3Ew==
+Date: Fri, 16 Aug 2024 18:12:13 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Andre Przywara <andre.przywara@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Amit Daniel Kachhap <amit.kachhap@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 7/8] kselftest/arm64: mte: fix printf type warnings about
+ pointers
+Message-ID: <5630828b-4ff9-4326-937b-162162934875@sirena.org.uk>
+References: <20240816153251.2833702-1-andre.przywara@arm.com>
+ <20240816153251.2833702-8-andre.przywara@arm.com>
+ <f7d77597-cba6-42ee-9b50-ac4b7984aff8@sirena.org.uk>
+ <20240816175908.5f4721eb@donnerap.manchester.arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240808-clone3-shadow-stack-v8-0-0acf37caf14c@kernel.org>
- <20240808-clone3-shadow-stack-v8-4-0acf37caf14c@kernel.org> <f3a2a564094d05beac2dc5ab657cbc009c465667.camel@intel.com>
-In-Reply-To: <f3a2a564094d05beac2dc5ab657cbc009c465667.camel@intel.com>
-From: Jann Horn <jannh@google.com>
-Date: Fri, 16 Aug 2024 19:08:09 +0200
-Message-ID: <CAG48ez2z5bRdKNddG+kEGz9A_m=66r38OHjyg6CapFTcjT9aRg@mail.gmail.com>
-Subject: Re: [PATCH RFT v8 4/9] fork: Add shadow stack support to clone3()
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>, "broonie@kernel.org" <broonie@kernel.org>, 
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>, "brauner@kernel.org" <brauner@kernel.org>, 
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "debug@rivosinc.com" <debug@rivosinc.com>, 
-	"mgorman@suse.de" <mgorman@suse.de>, "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>, 
-	"fweimer@redhat.com" <fweimer@redhat.com>, "mingo@redhat.com" <mingo@redhat.com>, 
-	"rostedt@goodmis.org" <rostedt@goodmis.org>, "hjl.tools@gmail.com" <hjl.tools@gmail.com>, 
-	"tglx@linutronix.de" <tglx@linutronix.de>, "vschneid@redhat.com" <vschneid@redhat.com>, 
-	"shuah@kernel.org" <shuah@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, 
-	"peterz@infradead.org" <peterz@infradead.org>, "bp@alien8.de" <bp@alien8.de>, 
-	"bsegall@google.com" <bsegall@google.com>, "x86@kernel.org" <x86@kernel.org>, 
-	"juri.lelli@redhat.com" <juri.lelli@redhat.com>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "kees@kernel.org" <kees@kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>, 
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>, "will@kernel.org" <will@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6EsIT99GvxrpIgwt"
+Content-Disposition: inline
+In-Reply-To: <20240816175908.5f4721eb@donnerap.manchester.arm.com>
+X-Cookie: A Smith & Wesson beats four aces.
+
+
+--6EsIT99GvxrpIgwt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 15, 2024 at 2:18=E2=80=AFAM Edgecombe, Rick P
-<rick.p.edgecombe@intel.com> wrote:
-> On Thu, 2024-08-08 at 09:15 +0100, Mark Brown wrote:
-> > +       if (access_remote_vm(mm, addr, &val, sizeof(val),
-> > +                            FOLL_FORCE | FOLL_WRITE) !=3D sizeof(val))
-> > +               goto out;
->
-> The GUPs still seem a bit unfortunate for a couple reasons:
->  - We could do a CMPXCHG version and are just not (I see ARM has identica=
-l code
-> in gcs_consume_token()). It's not the only race like this though FWIW.
->  - I *think* this is the only unprivileged FOLL_FORCE that can write to t=
-he
-> current process in the kernel. As is, it could be used on normal RO mappi=
-ngs, at
-> least in a limited way. Maybe another point for the VMA check. We'd want =
-to
-> check that it is normal shadow stack?
+On Fri, Aug 16, 2024 at 05:59:08PM +0100, Andre Przywara wrote:
+> Mark Brown <broonie@kernel.org> wrote:
+> > On Fri, Aug 16, 2024 at 04:32:50PM +0100, Andre Przywara wrote:
 
-Yeah, having a FOLL_FORCE write in clone3 would be a weakness for
-userspace CFI and probably make it possible to violate mseal()
-restrictions that are supposed to enforce that address space regions
-are read-only.
+> > > Fixes: e9b60476bea0 ("kselftest/arm64: Add utilities and a test to va=
+lidate mte memory") =20
 
->  - Lingering doubts about the wisdom of doing GUPs during task creation.
->
-> I don't think they are show stoppers, but the VMA check would be nice to =
-have in
-> the first upstream support.
-[...]
-> > +static void shstk_post_fork(struct task_struct *p,
-> > +                           struct kernel_clone_args *args)
-> > +{
-> > +       if (!IS_ENABLED(CONFIG_ARCH_HAS_USER_SHADOW_STACK))
-> > +               return;
-> > +
-> > +       if (!args->shadow_stack)
-> > +               return;
-> > +
-> > +       if (arch_shstk_post_fork(p, args) !=3D 0)
-> > +               force_sig_fault_to_task(SIGSEGV, SEGV_CPERR, NULL, p);
-> > +}
-> > +
->
-> Hmm, is this forcing the signal on the new task, which is set up on a use=
-r
-> provided shadow stack that failed the token check? It would handle the si=
-gnal
-> with an arbitrary SSP then I think. We should probably fail the clone cal=
-l in
-> the parent instead, which can be done by doing the work in copy_process()=
-. Do
-> you see a problem with doing it at the end of copy_process()? I don't kno=
-w if
-> there could be ordering constraints.
+> > This is another one where calling it a fix seems like it's pushing it,
+> > it's a modernisation rather than a correctness thing.
 
-FWIW I think we have things like force_fatal_sig() and
-force_exit_sig() to send signals that userspace can't catch with
-signal handlers - if you have to do the copying after the new task has
-been set up, something along those lines might be the right way to
-kill the child.
+> Well, I get compiler warnings, so I thought "fix" would be adequate. But
+> in general this confusion between pointers and integers sounds not good,
+> and not using %p looks like a genuine bug to me (though it's admittedly
+> working fine (TM) for now).
 
-Though, did anyone in the thread yet suggest that you could do this
-before the child process has fully materialized but after the child MM
-has been set up? Somewhere in copy_process() between copy_mm() and the
-"/* No more failure paths after this point. */" comment?
+Those compiler warnings are a relatively new thing - they won't have
+been triggered when the code was written, and practically speaking on
+arm64 it's more of a C language correctness thing than a meaningful
+change.
+
+--6EsIT99GvxrpIgwt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAma/iGwACgkQJNaLcl1U
+h9CL0Qf8CdYriSVRUPcjIsFV7DrpxzjvWR4B7uFbkn1gsyoTtSivZLYlVdQpV2LE
+UFC1vVJLMBRHQvE8u3gzSuIhiwmq7YSVu5Nom5F9H5MBMJ0siWgCzzFDQywzdAax
+9PGO9iAQ0eyxiDvNO2BQZsf8s9brJtqZSllz83JYGtOMT6yTzKqjrjSMeB5TBxP6
+8bN0ARFGW0hTkpyLNXbjWPnRp6pXp6EVI1sZIdOCbIkwpHJoFw0Rqn+PUJgLQKgp
+3YcMc0F4vW/7bTRUtnvmv/UGlY7BhOXYEThRS0XOcfP8zQC+/cQQ39sectFqs/eg
+D65rpVXouxjr4zB+eY/Rp9CbRNuUEw==
+=XBGa
+-----END PGP SIGNATURE-----
+
+--6EsIT99GvxrpIgwt--
 
