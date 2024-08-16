@@ -1,301 +1,210 @@
-Return-Path: <linux-kselftest+bounces-15553-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15554-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 477D2955062
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 19:57:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0AA3955098
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 20:12:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C17EC1F21D71
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 17:57:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E57E1F22A91
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 18:12:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4AED1C7B66;
-	Fri, 16 Aug 2024 17:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FE1A1C2302;
+	Fri, 16 Aug 2024 18:12:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TW7ZmdZ7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CsX2078Y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71DFC1C68BC;
-	Fri, 16 Aug 2024 17:56:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D101F1BB698;
+	Fri, 16 Aug 2024 18:12:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723830977; cv=none; b=f7cqhT/EPO/O8X+unFi+MUS3eR9wfZzLGqnAJIu+jWRk34d9JTvbV7zUIB0Pl3rVTwefI4AmrlUzqiecJuFLOntplstSM0DsCJ5SktOxUS/FipV08twM/FnW16i5ZQp1/1L2xdlEVs6Verh5RV+ZmJpL2oW8+fmsxcEKJQac2cs=
+	t=1723831931; cv=none; b=Wwly6uFb8LharQb3BGFukRQpMlEywkslaqiZC9IVQGfeu3aubvgRu8Kotq3S80iNBfJJiBdAAwo4XGPq2w3cxAJ0kRxi2M0SpFJlig/4Uku/S4X7baULv7wiaaUteBV1o1aEw/e/f4QlqISCE1ivMNc6blWm0HquFE2aJSYGA6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723830977; c=relaxed/simple;
-	bh=1nTnm/+BPLU9cVwWoXDMCuedVYe8mzXtHdP/ivu98UA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Jl7sBSW3FEtdquinvqXY6MqGZsU4i3D4omv52TYkX5jf19mn1BI/f4hsqoti+/coryCxPLNRoypoW9dPgtpuqXh0elWCVftieTBoJyzFqDKtQsQ4YrU7GxANVj54zJHNix1ssIld/RdD+/VwE4Hbj8ueAEnbyW9KXenhCnbiCP0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TW7ZmdZ7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7494AC32782;
-	Fri, 16 Aug 2024 17:56:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723830977;
-	bh=1nTnm/+BPLU9cVwWoXDMCuedVYe8mzXtHdP/ivu98UA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=TW7ZmdZ74Qv2yYxlLEFJVTNsrLAcml2w+pZUFPw9eJhk+1el7+H1Vb6u4cPW/ZRb0
-	 N+w3mYxSDp6r9E0PPGNCp9Wa4XpiZLmdsR6isWgtdWX+VjIXM/9T8CYF+fZubUGElQ
-	 GJ8T8I5b4CjWNUbjSKOKy6K0SyrlxQSjzula6RIfuLvS95RfMVyb1wuXQzVEcOWxRd
-	 bkxAdXsG/FnP/shnE06DgmNvT3kg31NpRkc7A3yzZu4DmB2DPDYmCcPoAdmQgT0ZP9
-	 hA0cMexKlETeTsEPFfbZc5SkLPAOhzj2+ZCVwtlhvoF6oGXY6ZAHV+HN6px+tI8E2R
-	 G8c+yzYhqLNjA==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Fri, 16 Aug 2024 19:55:53 +0200
-Subject: [PATCH bpf-next 2/2] selftests: bpf: remove duplicated UAPI if_xdp
- headers
+	s=arc-20240116; t=1723831931; c=relaxed/simple;
+	bh=mupVOxGtRgyXrHi0m4zC6bQx0ZXLDP9VTuKBPwP+2iM=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dX1S0fu/lOp/sE+SkiA/bUJLymUZwGFcSJPq60C6nU41V3qLi03LXl1kcOX+NFAmJ6cpakMYRnMHyP+9y+uDJzqHQsNp0qzxrch3s8N7Xn+Di8O+PculwBYLiJZv/OC4OSX+ctISIYALbsOe/r9mw6R6DMdtweDEVjbhJGLHfnY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CsX2078Y; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-201f2b7fe0dso16244695ad.1;
+        Fri, 16 Aug 2024 11:12:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723831929; x=1724436729; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=U5l/0VSy6fqZaacoTqYSq61RAXhnTHweezwv61jbJ0Y=;
+        b=CsX2078YS2pSP2F8oR2T+zHM2p9W4aqkWoga6SvhZE06CmleWM5N8JqnxZejMxq8Ik
+         Ock5wJOgO34RkhjrvtE0uB5qDkX4BRTImo7Ch/v46hUnlyqGiv93Q6MPI77LXlOCmzmu
+         CBQS4nHQFankF0xg63vZbb+nSPA5vSuTX5wQrB/fYSvW7cr7HnnApxlRQsXnoaPpmIgo
+         VprEMUuhxBpSDqJI4780yc4ZGXsDcpjFkmS6ZC27SmYa1FZZvoV5CDuDqV3kkFCKyNvn
+         heLFoOOmqscROU/t3SiiVjl5ufvMxDWIq6JX5UkjNvpivZiqhyQQqpir/Si+i8htvJsv
+         I9ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723831929; x=1724436729;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U5l/0VSy6fqZaacoTqYSq61RAXhnTHweezwv61jbJ0Y=;
+        b=sdvR8WnZ9g//GXkTjwsN5fjh7Ysss/oA5XQP2CjcMeIhFT1TLraHRVYR2LgUnOGkLA
+         bUEGfb9QfQcT0NU9vpvJwH1Ran0o+mD/B7We8BkKj5SG53Zd6q2ONKxEmmkuHfCeLGE4
+         bIwCuZzAiL2SSwZan6SOHFqzqWXmUGIetmAfobXw00l46MbHflFcOu7Z9Zrk9uKZxFY6
+         yQMHEqCORBeVC33Og4Dsz25rq//NEtKio48cXwiDHxohn5GYkYDbeQsi5+U/Tl0VGhke
+         hxp55IaSVRqAUBAEE0TI1DfASnApCokoihkyOOoRAHIZ9NDk2ixgHuET1eacqfyHc3YY
+         yl0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV7FHMuYLW/IWWa95KN996pHXJWyZj4tmO8/z90xbmUcGuyYwH/iAi28l2Dxrlow7Zse50iChO6oBfvKtOhLGd8KC2YzVotM0uS4Un5effcmpPxAV67bVBLiVmZmOQ7BjuX+n1Yl2IZD21QXL6f
+X-Gm-Message-State: AOJu0Yytyu64x0O2aIl+ZXeV5/Jw7yvzwCOrCjASn79cNm1QvP6H80bO
+	RXoHIZ8lhgv4eWD1Tyk5sTsicyjy+g/aH2+yt7az1seQGkjbX1LF
+X-Google-Smtp-Source: AGHT+IE9C/aLOhdS0C3ly72nc2bgoyh9bdEhmy1vCLr8xsbc57OwrGBuSeS6GRQihj7C/li24A4YOg==
+X-Received: by 2002:a17:902:cec1:b0:201:ef87:9535 with SMTP id d9443c01a7336-20203e4c9c5mr46728515ad.3.1723831928894;
+        Fri, 16 Aug 2024 11:12:08 -0700 (PDT)
+Received: from localhost ([27.6.216.27])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201f037599asm28293515ad.149.2024.08.16.11.12.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Aug 2024 11:12:08 -0700 (PDT)
+Date: Fri, 16 Aug 2024 23:38:51 +0530
+From: Aryabhatta Dey <aryabhattadey35@gmail.com>
+To: akpm@linux-foundation.org, shuah@kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] selftests/mm: compaction_test: Move often used filepaths
+ to strings
+Message-ID: <5kedpmxee2wvblijsxmmyk5l6aufuwkjkiovnsyh7n7iuz7cok@7lfnhaobpzd7>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240816-ups-bpf-next-selftests-use-khdr-v1-2-1e19f3d5b17a@kernel.org>
-References: <20240816-ups-bpf-next-selftests-use-khdr-v1-0-1e19f3d5b17a@kernel.org>
-In-Reply-To: <20240816-ups-bpf-next-selftests-use-khdr-v1-0-1e19f3d5b17a@kernel.org>
-To: mptcp@lists.linux.dev, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Jesper Dangaard Brouer <hawk@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7279; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=1nTnm/+BPLU9cVwWoXDMCuedVYe8mzXtHdP/ivu98UA=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmv5KyWvPWfAKfgQov1oKBL4O5YXVEuXa/x49q/
- lX0K61rFOWJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZr+SsgAKCRD2t4JPQmmg
- c36TEAC8lekkD1MbsUYRYRgb/DHI0sb8IMEjaj0UMlLgXQD3ku2Hpklqu9VujgxDK+iEJ6JAJQ6
- aambDfVSOvG+C1lad1qbPGb+wK4U48+h5HN5QrjOtYRy0M80eiB0Hl0oj1Em7NTZqmUDa7Fj0d2
- z4RNYIVPqYQcpOQDZtADHqnYQCsDQGADl1RVudLs7cbw974Y6DUD/D1eBvwuxH0BfffnYM5wefE
- 1Bp1bdhSi6xRXryz5ra5rLKcwmoQPbuF3JG6YQe4tiaqf+ZmiZ9AnQMZoaz+mMA3ApslkaDoi0r
- s57Qcx0/zmx4hxRkIqhycNJ7Th2LXIqGgpO5JwLGJ7ez8dvyDf1Sk0hXR7j9XTfx250XP4zuX/o
- DnE7L7+CSd+p7QNpUnJbtOk+5qrJdYQjSmcRxQgPNqLra1thmTDkf+fvxslnpcpxarTtJITIOrE
- 8PNfMPt6hHgf/DAxcz2mdeDrHOkTGr9nv+II4YXJqEKB1bULB63/nnk35xaCO0fgo/PLIG9AB+X
- hvj8x4CkEBkoY1hBvP6wfUvrT9lJj4mNcoLDGsJOVFZYpe11w6uA/kl0LxrhGCmnHLokkOdkPOv
- DK3bDHl1kil5gj0nyUxoGkrG90m+wzvMd1EmhtbbBvXtRxnkOwf+sAOuFF241DFNwe3wcM8OfOr
- 1W+NdxOu8TByfKA==
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks to the previous commit, this file is no longer needed, because
-the BPF selftests will take the UAPI headers from the kernel source.
+Add defines for the file path names to avoid duplicate strings
+in print messages and make it easier to maintain.
 
-Note that this file was an old copy of the UAPI one, which was causing a
-warning at compilation time:
-
-  Warning: Kernel ABI header at 'tools/include/uapi/linux/if_xdp.h' differs from latest version at 'include/uapi/linux/if_xdp.h'
-
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Signed-off-by: Aryabhatta Dey <aryabhattadey35@gmail.com>
 ---
- tools/include/uapi/linux/if_xdp.h | 173 --------------------------------------
- tools/lib/bpf/Makefile            |   3 -
- 2 files changed, 176 deletions(-)
+ tools/testing/selftests/mm/compaction_test.c | 46 ++++++++++----------
+ 1 file changed, 24 insertions(+), 22 deletions(-)
 
-diff --git a/tools/include/uapi/linux/if_xdp.h b/tools/include/uapi/linux/if_xdp.h
-deleted file mode 100644
-index 2f082b01ff22..000000000000
---- a/tools/include/uapi/linux/if_xdp.h
-+++ /dev/null
-@@ -1,173 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--/*
-- * if_xdp: XDP socket user-space interface
-- * Copyright(c) 2018 Intel Corporation.
-- *
-- * Author(s): Björn Töpel <bjorn.topel@intel.com>
-- *	      Magnus Karlsson <magnus.karlsson@intel.com>
-- */
--
--#ifndef _LINUX_IF_XDP_H
--#define _LINUX_IF_XDP_H
--
--#include <linux/types.h>
--
--/* Options for the sxdp_flags field */
--#define XDP_SHARED_UMEM	(1 << 0)
--#define XDP_COPY	(1 << 1) /* Force copy-mode */
--#define XDP_ZEROCOPY	(1 << 2) /* Force zero-copy mode */
--/* If this option is set, the driver might go sleep and in that case
-- * the XDP_RING_NEED_WAKEUP flag in the fill and/or Tx rings will be
-- * set. If it is set, the application need to explicitly wake up the
-- * driver with a poll() (Rx and Tx) or sendto() (Tx only). If you are
-- * running the driver and the application on the same core, you should
-- * use this option so that the kernel will yield to the user space
-- * application.
-- */
--#define XDP_USE_NEED_WAKEUP (1 << 3)
--/* By setting this option, userspace application indicates that it can
-- * handle multiple descriptors per packet thus enabling AF_XDP to split
-- * multi-buffer XDP frames into multiple Rx descriptors. Without this set
-- * such frames will be dropped.
-- */
--#define XDP_USE_SG	(1 << 4)
--
--/* Flags for xsk_umem_config flags */
--#define XDP_UMEM_UNALIGNED_CHUNK_FLAG	(1 << 0)
--
--/* Force checksum calculation in software. Can be used for testing or
-- * working around potential HW issues. This option causes performance
-- * degradation and only works in XDP_COPY mode.
-- */
--#define XDP_UMEM_TX_SW_CSUM		(1 << 1)
--
--/* Request to reserve tx_metadata_len bytes of per-chunk metadata.
-- */
--#define XDP_UMEM_TX_METADATA_LEN	(1 << 2)
--
--struct sockaddr_xdp {
--	__u16 sxdp_family;
--	__u16 sxdp_flags;
--	__u32 sxdp_ifindex;
--	__u32 sxdp_queue_id;
--	__u32 sxdp_shared_umem_fd;
--};
--
--/* XDP_RING flags */
--#define XDP_RING_NEED_WAKEUP (1 << 0)
--
--struct xdp_ring_offset {
--	__u64 producer;
--	__u64 consumer;
--	__u64 desc;
--	__u64 flags;
--};
--
--struct xdp_mmap_offsets {
--	struct xdp_ring_offset rx;
--	struct xdp_ring_offset tx;
--	struct xdp_ring_offset fr; /* Fill */
--	struct xdp_ring_offset cr; /* Completion */
--};
--
--/* XDP socket options */
--#define XDP_MMAP_OFFSETS		1
--#define XDP_RX_RING			2
--#define XDP_TX_RING			3
--#define XDP_UMEM_REG			4
--#define XDP_UMEM_FILL_RING		5
--#define XDP_UMEM_COMPLETION_RING	6
--#define XDP_STATISTICS			7
--#define XDP_OPTIONS			8
--
--struct xdp_umem_reg {
--	__u64 addr; /* Start of packet data area */
--	__u64 len; /* Length of packet data area */
--	__u32 chunk_size;
--	__u32 headroom;
--	__u32 flags;
--	__u32 tx_metadata_len;
--};
--
--struct xdp_statistics {
--	__u64 rx_dropped; /* Dropped for other reasons */
--	__u64 rx_invalid_descs; /* Dropped due to invalid descriptor */
--	__u64 tx_invalid_descs; /* Dropped due to invalid descriptor */
--	__u64 rx_ring_full; /* Dropped due to rx ring being full */
--	__u64 rx_fill_ring_empty_descs; /* Failed to retrieve item from fill ring */
--	__u64 tx_ring_empty_descs; /* Failed to retrieve item from tx ring */
--};
--
--struct xdp_options {
--	__u32 flags;
--};
--
--/* Flags for the flags field of struct xdp_options */
--#define XDP_OPTIONS_ZEROCOPY (1 << 0)
--
--/* Pgoff for mmaping the rings */
--#define XDP_PGOFF_RX_RING			  0
--#define XDP_PGOFF_TX_RING		 0x80000000
--#define XDP_UMEM_PGOFF_FILL_RING	0x100000000ULL
--#define XDP_UMEM_PGOFF_COMPLETION_RING	0x180000000ULL
--
--/* Masks for unaligned chunks mode */
--#define XSK_UNALIGNED_BUF_OFFSET_SHIFT 48
--#define XSK_UNALIGNED_BUF_ADDR_MASK \
--	((1ULL << XSK_UNALIGNED_BUF_OFFSET_SHIFT) - 1)
--
--/* Request transmit timestamp. Upon completion, put it into tx_timestamp
-- * field of union xsk_tx_metadata.
-- */
--#define XDP_TXMD_FLAGS_TIMESTAMP		(1 << 0)
--
--/* Request transmit checksum offload. Checksum start position and offset
-- * are communicated via csum_start and csum_offset fields of union
-- * xsk_tx_metadata.
-- */
--#define XDP_TXMD_FLAGS_CHECKSUM			(1 << 1)
--
--/* AF_XDP offloads request. 'request' union member is consumed by the driver
-- * when the packet is being transmitted. 'completion' union member is
-- * filled by the driver when the transmit completion arrives.
-- */
--struct xsk_tx_metadata {
--	__u64 flags;
--
--	union {
--		struct {
--			/* XDP_TXMD_FLAGS_CHECKSUM */
--
--			/* Offset from desc->addr where checksumming should start. */
--			__u16 csum_start;
--			/* Offset from csum_start where checksum should be stored. */
--			__u16 csum_offset;
--		} request;
--
--		struct {
--			/* XDP_TXMD_FLAGS_TIMESTAMP */
--			__u64 tx_timestamp;
--		} completion;
--	};
--};
--
--/* Rx/Tx descriptor */
--struct xdp_desc {
--	__u64 addr;
--	__u32 len;
--	__u32 options;
--};
--
--/* UMEM descriptor is __u64 */
--
--/* Flag indicating that the packet continues with the buffer pointed out by the
-- * next frame in the ring. The end of the packet is signalled by setting this
-- * bit to zero. For single buffer packets, every descriptor has 'options' set
-- * to 0 and this maintains backward compatibility.
-- */
--#define XDP_PKT_CONTD (1 << 0)
--
--/* TX packet carries valid metadata. */
--#define XDP_TX_METADATA (1 << 1)
--
--#endif /* _LINUX_IF_XDP_H */
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index 2cf892774346..977dba26ba87 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -148,9 +148,6 @@ $(BPF_IN_SHARED): force $(BPF_GENERATED)
- 	@(test -f ../../include/uapi/linux/bpf_common.h -a -f ../../../include/uapi/linux/bpf_common.h && ( \
- 	(diff -B ../../include/uapi/linux/bpf_common.h ../../../include/uapi/linux/bpf_common.h >/dev/null) || \
- 	echo "Warning: Kernel ABI header at 'tools/include/uapi/linux/bpf_common.h' differs from latest version at 'include/uapi/linux/bpf_common.h'" >&2 )) || true
--	@(test -f ../../include/uapi/linux/if_xdp.h -a -f ../../../include/uapi/linux/if_xdp.h && ( \
--	(diff -B ../../include/uapi/linux/if_xdp.h ../../../include/uapi/linux/if_xdp.h >/dev/null) || \
--	echo "Warning: Kernel ABI header at 'tools/include/uapi/linux/if_xdp.h' differs from latest version at 'include/uapi/linux/if_xdp.h'" >&2 )) || true
- 	$(Q)$(MAKE) $(build)=libbpf OUTPUT=$(SHARED_OBJDIR) CFLAGS="$(CFLAGS) $(SHLIB_FLAGS)"
+diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
+index e140558e6f53..8f46431a9182 100644
+--- a/tools/testing/selftests/mm/compaction_test.c
++++ b/tools/testing/selftests/mm/compaction_test.c
+@@ -21,6 +21,9 @@
+ #define MAP_SIZE_MB	100
+ #define MAP_SIZE	(MAP_SIZE_MB * 1024 * 1024)
  
- $(BPF_IN_STATIC): force $(BPF_GENERATED)
-
++#define COMPACT_UNEVICTABLE_ALLOWED_FILE_PATH "/proc/sys/vm/compact_unevictable_allowed"
++#define NR_HUGEPAGES_FILE_NAME_PATH "/proc/sys/vm/nr_hugepages"
++
+ struct map_list {
+ 	void *map;
+ 	struct map_list *next;
+@@ -59,17 +62,16 @@ int prereq(void)
+ 	char allowed;
+ 	int fd;
+ 
+-	fd = open("/proc/sys/vm/compact_unevictable_allowed",
+-		  O_RDONLY | O_NONBLOCK);
++	fd = open(COMPACT_UNEVICTABLE_ALLOWED_FILE_PATH, O_RDONLY | O_NONBLOCK);
+ 	if (fd < 0) {
+-		ksft_print_msg("Failed to open /proc/sys/vm/compact_unevictable_allowed: %s\n",
+-			       strerror(errno));
++		ksft_print_msg("Failed to open %s: %s\n",
++			       COMPACT_UNEVICTABLE_ALLOWED_FILE_PATH, strerror(errno));
+ 		return -1;
+ 	}
+ 
+ 	if (read(fd, &allowed, sizeof(char)) != sizeof(char)) {
+-		ksft_print_msg("Failed to read from /proc/sys/vm/compact_unevictable_allowed: %s\n",
+-			       strerror(errno));
++		ksft_print_msg("Failed to read from %s: %s\n",
++			       COMPACT_UNEVICTABLE_ALLOWED_FILE_PATH, strerror(errno));
+ 		close(fd);
+ 		return -1;
+ 	}
+@@ -97,10 +99,10 @@ int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
+ 	   in to play */
+ 	mem_free = mem_free * 0.8;
+ 
+-	fd = open("/proc/sys/vm/nr_hugepages", O_RDWR | O_NONBLOCK);
++	fd = open(NR_HUGEPAGES_FILE_NAME_PATH, O_RDWR | O_NONBLOCK);
+ 	if (fd < 0) {
+-		ksft_print_msg("Failed to open /proc/sys/vm/nr_hugepages: %s\n",
+-			       strerror(errno));
++		ksft_print_msg("Failed to open %s: %s\n",
++			       NR_HUGEPAGES_FILE_NAME_PATH, strerror(errno));
+ 		ret = -1;
+ 		goto out;
+ 	}
+@@ -108,16 +110,16 @@ int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
+ 	/* Request a large number of huge pages. The Kernel will allocate
+ 	   as much as it can */
+ 	if (write(fd, "100000", (6*sizeof(char))) != (6*sizeof(char))) {
+-		ksft_print_msg("Failed to write 100000 to /proc/sys/vm/nr_hugepages: %s\n",
+-			       strerror(errno));
++		ksft_print_msg("Failed to write 100000 to %s: %s\n",
++			       NR_HUGEPAGES_FILE_NAME_PATH, strerror(errno));
+ 		goto close_fd;
+ 	}
+ 
+ 	lseek(fd, 0, SEEK_SET);
+ 
+ 	if (read(fd, nr_hugepages, sizeof(nr_hugepages)) <= 0) {
+-		ksft_print_msg("Failed to re-read from /proc/sys/vm/nr_hugepages: %s\n",
+-			       strerror(errno));
++		ksft_print_msg("Failed to re-read from %s: %s\n",
++			       NR_HUGEPAGES_FILE_NAME_PATH, strerror(errno));
+ 		goto close_fd;
+ 	}
+ 
+@@ -134,8 +136,8 @@ int check_compaction(unsigned long mem_free, unsigned long hugepage_size,
+ 
+ 	if (write(fd, init_nr_hugepages, strlen(init_nr_hugepages))
+ 	    != strlen(init_nr_hugepages)) {
+-		ksft_print_msg("Failed to write value to /proc/sys/vm/nr_hugepages: %s\n",
+-			       strerror(errno));
++		ksft_print_msg("Failed to write value to %s: %s\n",
++			       NR_HUGEPAGES_FILE_NAME_PATH, strerror(errno));
+ 		goto close_fd;
+ 	}
+ 
+@@ -162,15 +164,15 @@ int set_zero_hugepages(unsigned long *initial_nr_hugepages)
+ 	int fd, ret = -1;
+ 	char nr_hugepages[20] = {0};
+ 
+-	fd = open("/proc/sys/vm/nr_hugepages", O_RDWR | O_NONBLOCK);
++	fd = open(NR_HUGEPAGES_FILE_NAME_PATH, O_RDWR | O_NONBLOCK);
+ 	if (fd < 0) {
+-		ksft_print_msg("Failed to open /proc/sys/vm/nr_hugepages: %s\n",
+-			       strerror(errno));
++		ksft_print_msg("Failed to open %s: %s\n",
++			       NR_HUGEPAGES_FILE_NAME_PATH, strerror(errno));
+ 		goto out;
+ 	}
+ 	if (read(fd, nr_hugepages, sizeof(nr_hugepages)) <= 0) {
+-		ksft_print_msg("Failed to read from /proc/sys/vm/nr_hugepages: %s\n",
+-			       strerror(errno));
++		ksft_print_msg("Failed to read from %s: %s\n",
++			       NR_HUGEPAGES_FILE_NAME_PATH, strerror(errno));
+ 		goto close_fd;
+ 	}
+ 
+@@ -178,8 +180,8 @@ int set_zero_hugepages(unsigned long *initial_nr_hugepages)
+ 
+ 	/* Start with the initial condition of 0 huge pages */
+ 	if (write(fd, "0", sizeof(char)) != sizeof(char)) {
+-		ksft_print_msg("Failed to write 0 to /proc/sys/vm/nr_hugepages: %s\n",
+-			       strerror(errno));
++		ksft_print_msg("Failed to write 0 to %s: %s\n",
++			       NR_HUGEPAGES_FILE_NAME_PATH, strerror(errno));
+ 		goto close_fd;
+ 	}
+ 
 -- 
-2.45.2
+2.46.0
 
 
