@@ -1,142 +1,202 @@
-Return-Path: <linux-kselftest+bounces-15555-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15556-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97F7095512C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 21:03:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B850955154
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 21:23:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C0151F22F15
-	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 19:03:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7101E1C22754
+	for <lists+linux-kselftest@lfdr.de>; Fri, 16 Aug 2024 19:23:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4547D1C0DE1;
-	Fri, 16 Aug 2024 19:03:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C8D1C37B5;
+	Fri, 16 Aug 2024 19:23:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="eExozbHz"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Rbo3W742"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2083.outbound.protection.outlook.com [40.107.94.83])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CD25145A17
-	for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2024 19:03:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723835032; cv=none; b=MXvv9piclsKQPO3NqskZbkkwd8XwISF5FW9R4YmgaqJVEQ+j/FU2qzeA35qCxfrMyQ3U5VWfMaM3cKXI28jLrrW21odbuDZPmv3j/VJhZIBaj7eHTlUEt+suXlNWXf2L8FKk+7ONFlxlQsqb1MYczHPnwCH8Ezp5xaeiSLRZWE0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723835032; c=relaxed/simple;
-	bh=Mc4T9iIXjOcQFUOiud3CnyHPyMK9EQB6qvuWeFQkTig=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=odV4FVFaZzbf91Wjjm++FsP+WRv+8UnLPvfVmRYynl3Z3j1HU6A/2+0Xll7b2I91znG+lIcE1sQ3dFqcQyRKaqKBcKbD1gTIaPqFGnZr9fhefDwTgTEy7QoRBN6bMnjYjZNKCpPUYid8+KewVfpD1YN+1DiwER/JMT8UJ4QLOwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=eExozbHz; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-58ef19aa69dso2307542a12.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 16 Aug 2024 12:03:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1723835029; x=1724439829; darn=vger.kernel.org;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BrBxZgECaC7/1MG5XVHMQd0NOSd+rm2Uh6YDq8DhIA8=;
-        b=eExozbHzfoIDwtFw3j6aQjiB4h/wU0i4MBQCXDtWSsky7eFOtV4032DzXhnrgzVNCg
-         8P43bjgTxKj+SOcLKXRzHVlYkyQTdY5luJs/nkFc+L/evg5VmOra1/auX6BlizUKyKZE
-         EgzyGCX18VOMDx1yV0GOYPctAHc4eG8DyRiJbnV7Jbr42VvDTME4ynTIQYKs93FAr0AG
-         Yll0tLK9NObr0inJYMK368Ie5TpnHB09q6009n+PXjIeBkNliPRtvBkECKgHvYurV2ZM
-         KRE031Ym15fZlUVKBZbj6DFtURTYVEF371ONMMiFNVtAXJvMSCBmesBTnrFjXrCivOnW
-         AxoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723835029; x=1724439829;
-        h=mime-version:message-id:date:user-agent:references:in-reply-to
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BrBxZgECaC7/1MG5XVHMQd0NOSd+rm2Uh6YDq8DhIA8=;
-        b=GzlHSqw4ICOnIcoOHFFO2Io4R8F2KKd/16rdRxK7o7mFDRK2PpbQYOF9ueYBn6gotX
-         kg84qyOBDz1Rq9RLm12QWkCU45URxhO3vviOxmK37QDNHkOCHt9jl5ePg6O5Zmyv9Qvz
-         iw2/JzxSjrm6X2BgselJukq95haqae5S00JfHbrVaRlvkrKmI9csQ95EhkhtwWLHiso7
-         9AMA7DjuSWZ4hnlp3o8HH/w4YgTMNqwxSXw+KPtpnKWYlMjvm4zPKSHlLOrz4jUnNecs
-         bH3nja3uOJrsojAt4wyWN+gKaYX2R696x5cPaq7EJ+hjGGTvVDY0BgjKjEBjgsYRyoGA
-         NSDg==
-X-Forwarded-Encrypted: i=1; AJvYcCWDHrJm4fOGT6ZSMR3bqGKdWbJKif8At4tIEdFSkb/M/ms/FCvhfKhfelU+dxxC8Ptk9jDIYJHZXg66CZFBy/eDO3AHZLnY/W4g77HMoDki
-X-Gm-Message-State: AOJu0YzPDv4utbfy0mdT68mPyxdpYIsqqAxYD+OxmxCq/TbZvejo2N9E
-	k1qzDsd6P+JpXqLsml3sFHd/ncZBPj9tMGICRluEweF+CSFOARItOK/pmmTy4EQ=
-X-Google-Smtp-Source: AGHT+IGl5+6tEP5wmb8EU87stkIU+j/Z2sdmdIPv5B1ko18jC6BAETYUa9tR1wBvVnp8+UoFJbraUg==
-X-Received: by 2002:a17:907:c7dc:b0:a6f:8265:8f2 with SMTP id a640c23a62f3a-a8392955fcemr321176066b.37.1723835028599;
-        Fri, 16 Aug 2024 12:03:48 -0700 (PDT)
-Received: from cloudflare.com ([2a09:bac5:5063:2432::39b:29])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a83838cfd5esm293566766b.78.2024.08.16.12.03.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Aug 2024 12:03:47 -0700 (PDT)
-From: Jakub Sitnicki <jakub@cloudflare.com>
-To: Michal Luczaj <mhal@rbox.co>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>,  Mykola Lysenko <mykolal@fb.com>,
-  Alexei Starovoitov <ast@kernel.org>,  Daniel Borkmann
- <daniel@iogearbox.net>, Song Liu <song@kernel.org>,  Yonghong Song
- <yonghong.song@linux.dev>,  John Fastabend <john.fastabend@gmail.com>,  KP
- Singh <kpsingh@kernel.org>,  Stanislav Fomichev <sdf@fomichev.me>,  Hao
- Luo <haoluo@google.com>,  Jiri Olsa <jolsa@kernel.org>,  Shuah Khan
- <shuah@kernel.org>,  bpf@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related
- fixes
-In-Reply-To: <42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co> (Michal Luczaj's
-	message of "Wed, 14 Aug 2024 18:14:56 +0200")
-References: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
-	<87y159yi5m.fsf@cloudflare.com>
-	<249a7dc3-34e2-4579-aae7-8b38b145e4bb@rbox.co>
-	<87ttfxy28s.fsf@cloudflare.com>
-	<42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co>
-User-Agent: mu4e 1.12.4; emacs 29.1
-Date: Fri, 16 Aug 2024 21:03:46 +0200
-Message-ID: <871q2o5lyl.fsf@cloudflare.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1BE478C7D;
+	Fri, 16 Aug 2024 19:23:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.83
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1723836202; cv=fail; b=KiV/oXRv+xshvT9As/MT5cAuBKXAedgtDcYEmQ734gOio5THivzICTLwwf/nNnW2n//Dhq7VxW6SeQcY0lzuJ7sypk2EONe/KMTqo4YCd+f5cQrdyTSyb2LJAjo4PmHoqq2uaj+2A4yw7kz9T+tRyntDgsrFElBbGb0wJXZ1G8M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1723836202; c=relaxed/simple;
+	bh=QGQ2QevigeBrqDBEERDk/Wf4Vj0dD47XacxABGvk040=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uFvTXs4f4FA2ajsxT2InmX5mV2dK6V5bdvUrgBlIkRDjp+DseIoKOlDkzKBUCW2y4JCo7Z6MPzWYyDhhxosoSFxQV6iJYu52S/hn10uI6ajvabiXZpjeczdYc7P5d9FIGmJ52AoA4oMY4BiUkwI9wbk9+4LBpC+x2UosqjkibB8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Rbo3W742; arc=fail smtp.client-ip=40.107.94.83
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rWjEX24NfhGfABS/uXSpSNpQtwGbYMrczZ+jGyipm8mUg8dMKxUcGOWP78aqcgFQyK7tW9c6vpcEEBgd8goi5hIYO2TNVZnAyXJ6ear0z4lMJ4AKN7uCnC3vf2sCRIARFfl6bDjOLMoimpD1MS7xWE8IWUaz9+8PZXYkMEb8v93Cjlkr5PIZM6/KpwuQR5KAV4g1YRa+hvw17xSkcOp6zkUmW6eWc4SkU7QEkuLB9nAgStvmCrhwi+ST4MRJjwUq8tdtnf8pAbMmbYj3bX4DDOUXsUHkGOK/IsUp6jI/fha2Wjf0JQc3fC3bBjdyqQWE5DEzhgXSW07qYaCXPSDo3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1W0ZdZLy7CeQMQMnOQI5vL1wozV3zpFs/D34nfPtrGU=;
+ b=w2bHWfGxgWaF7RM1qev60VskRV3HEBJc2DCyFtGLBrUhxT9MO0pvd5nejs0Cf9YvjUiIqs+Wlp90+LCZ0FHujX/S9nM/5RBOqA/qW1T3rlQaBiB9IrbZhr9d9z5iBOlDLIIP+UVKHsUQ+ub2cioxilYmwBduBRhg5mhuDC6ccq9XudTjOKnIzqrMznYi+qFdvrGkaaAbzPaz9TD6XWzMiruAwa7W5ZMBmk/KOo2U2Urif2D2v04k4pwYba8LWu9L8O7+nUKceM65qHAdyTHb+HERDOTnC1207gPzQcmGhBvhBjo1/lN9ibQ7KAKqpL1zct/oeQ0Pbcf+sx0Nj0Qyxw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1W0ZdZLy7CeQMQMnOQI5vL1wozV3zpFs/D34nfPtrGU=;
+ b=Rbo3W742ZtODSyEFYDdRPNbQgCi/X6uhQiNVko2ir5dJp2f59es5FzuGjSOjNrMotLBayRTy/D8zum5f8lfJubgBP/ehEvIvnrSDebmU2J0ukmB9p986ZVkb4HnOg70XIcnVJ50AsL9tY40kZvVhyE4/C7ZfzhIBvdbkhqc3NFA=
+Received: from PH7P220CA0036.NAMP220.PROD.OUTLOOK.COM (2603:10b6:510:32b::35)
+ by PH0PR12MB7837.namprd12.prod.outlook.com (2603:10b6:510:282::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7849.22; Fri, 16 Aug
+ 2024 19:23:17 +0000
+Received: from CY4PEPF0000EDD6.namprd03.prod.outlook.com
+ (2603:10b6:510:32b:cafe::dd) by PH7P220CA0036.outlook.office365.com
+ (2603:10b6:510:32b::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7784.28 via Frontend
+ Transport; Fri, 16 Aug 2024 19:22:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000EDD6.mail.protection.outlook.com (10.167.241.202) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7828.19 via Frontend Transport; Fri, 16 Aug 2024 19:23:16 +0000
+Received: from AUSPRSAMPAT.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 16 Aug
+ 2024 14:23:15 -0500
+From: "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>
+To: <kvm@vger.kernel.org>
+CC: <seanjc@google.com>, <pbonzini@redhat.com>, <pgonda@google.com>,
+	<thomas.lendacky@amd.com>, <michael.roth@amd.com>, <shuah@kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 0/9] SEV Kernel Selftests
+Date: Fri, 16 Aug 2024 14:23:01 -0500
+Message-ID: <20240816192310.117456-1-pratikrajesh.sampat@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD6:EE_|PH0PR12MB7837:EE_
+X-MS-Office365-Filtering-Correlation-Id: 11dc15aa-dd62-4fdc-0096-08dcbe28e167
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|376014|82310400026|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?N1q7oPR4DcVm5fjpudQcJPBW1mZpuNnj4x3Sj2YF/Zir0Ww0OvXoqixxD3uE?=
+ =?us-ascii?Q?fgDRILlByXJX5tibVmEj/xFhAU29Xb6BXq6mdDoGHDG8vTSN2Mn2WDg1P5lT?=
+ =?us-ascii?Q?If64hQH278HoBGv4OtdzoKfCLr5Q/3pCMuK7mksqhhg2D9UiKUvVJe4QHjUm?=
+ =?us-ascii?Q?7wCJxg1A8xbot2BMJ58ft1KVGwxxI88w10B2zLWNr1WFtblekQrjz2mlwjnv?=
+ =?us-ascii?Q?CZRJcELWHKlBOwgOPsNIDWMFBgj0/rl7IoXcGaudZTIDz6mpnrpVSedUOGws?=
+ =?us-ascii?Q?egltEzeSFiCO7XHsW3KQQSycCzvuRHGipJ+YfH8EMLOPl0uHxGR5fxgBQsUk?=
+ =?us-ascii?Q?0lvnSHYpSuRht8918qHKd4q5DuVX6bq9VHemcspESzhgTBbOKSNsrRhXg3XO?=
+ =?us-ascii?Q?EX1C29OavDZtiS9QfdBkHq2MwU3WhjG2z9vKbAXZLN+6hdGRA6vLuPCBXoTW?=
+ =?us-ascii?Q?ueLsOIqWsxDsqmRDJgNdUgBEslU0UssT4yzO73OGvo4LVlfXKVXQEdTNKcdu?=
+ =?us-ascii?Q?fdqjukGXrVGPLL97a/7NsHiu5Yn3ZGnrt2lyIKx6er/FJZuflWtEzpKK0oPr?=
+ =?us-ascii?Q?Xb9u3M8mMvyyz9MSAGopnv78nY4Z/jLBJGFuTQXqrI6ha6aYEoWzMLNRKmIl?=
+ =?us-ascii?Q?x7NnrBIyuw98SvHZD2UlQPHft6SDRvLDYcU+4fdGbRn3jgGlk1C7DP7bG/ZZ?=
+ =?us-ascii?Q?H5F4DUpfs6xvGutMGVc5z2R9VVsUCXJqAJ/nJqB6jO79rWku3mRtwia0ydBW?=
+ =?us-ascii?Q?oKGOtja3iZO6wxs+SW39nKvUnYJxeoSF/kfpMbjUGU1utk3I8jz4OBBKq1gj?=
+ =?us-ascii?Q?3bWTix99vXz5IzxgRMRh0FXPaiB7ExfndO/0u31TqrQ4AMC1BjZlFMeBmvVc?=
+ =?us-ascii?Q?AxPB8tK6uZGsccdtQkakSuN9rS9LJPYjxeVy5LZ1Tc78R0211+RxML+GZ299?=
+ =?us-ascii?Q?/dNdONnvYqO2DF/pWKIkqm16cvym1rwkm0tGzOw6DcG2vzzm1WheccfiWqay?=
+ =?us-ascii?Q?KOq+qRCLSP9DUgJPm8hFP99Hq4uDnhFtA3ORJly7FzJ7OAsdu0MxTAP70y8G?=
+ =?us-ascii?Q?nzKq6YuTXm5cV6txh9oS/ncE4ffF4hKlh2enlDbYZAMrwiDOT5+mt5oi4Mxc?=
+ =?us-ascii?Q?YNrfW3LTinuucbYPWLnVBUK6ccnv87VJCY7DcTAYiZbpjgy1vqE1UYF9xBtD?=
+ =?us-ascii?Q?k2vYOEO1HKD0k4YJc3/RrmcOun4vYWbziCCi0Cl5ftecwrVOXDZ8Hx30g82F?=
+ =?us-ascii?Q?VgfOoVoMLJCrvJJds5HSB6sdn7jmNGygcW5zBrCWqs68C2F7YM+5X0JUTAyl?=
+ =?us-ascii?Q?1so/E6l8S/tBM4zz5aRkrd/N9Gvx4394McOqenJWfcEFxlO66xaO1oI4slZp?=
+ =?us-ascii?Q?miMeMoEs0nVmark9RYE8j7Jgly9SadEO+JOYty76G7QO2jCDwNlKuLKUYvfT?=
+ =?us-ascii?Q?7g/XNF7aWNxFh3X+tKf7cF83hbKpKONl4sMnBcSIEQLUWJzfTSc06A=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2024 19:23:16.8111
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11dc15aa-dd62-4fdc-0096-08dcbe28e167
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EDD6.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7837
 
-On Wed, Aug 14, 2024 at 06:14 PM +02, Michal Luczaj wrote:
-> On 8/6/24 19:45, Jakub Sitnicki wrote:
->> On Tue, Aug 06, 2024 at 07:18 PM +02, Michal Luczaj wrote:
->>> Great, thanks for the review. With this completed, I guess we can unwind
->>> the (mail) stack to [1]. Is that ingress-to-local et al. something you
->>> wanted to take care of yourself or can I give it a try?
->>> [1] https://lore.kernel.org/netdev/87msmqn9ws.fsf@cloudflare.com/
->> 
->> I haven't stated any work on. You're welcome to tackle that.
->> 
->> All I have is a toy test that I've used to generate the redirect matrix.
->> Perhaps it can serve as inspiration:
->> 
->> https://github.com/jsitnicki/sockmap-redir-matrix
->
-> All right, please let me know if this is more or less what you meant and
-> I'll post the whole series for a review (+patch to purge sockmap_listen of
-> redir tests, fix misnomers). Mostly I've just copypasted your code
-> (mangling it terribly along the way), so I feel silly claiming the
-> authorship. Should I assign you as an author?
+This series primarily introduces SEV-SNP test for the kernel selftest
+framework. It tests boot, ioctl, pre fault, and fallocate in various
+combinations to exercise both positive and negative launch flow paths.
 
-Don't worry about it. I appreciate the help.
+Patch 1 - Adds a wrapper for the ioctl calls that decouple ioctl and
+asserts which enables the use of negative test cases. No functional
+change intended.
+Patch 2 - Extend the sev smoke tests to use the SNP specific ioctl
+calls and sets up memory to boot a SNP guest VM
+Patch 3 - Adds SNP to shutdown testing
+Patch 4, 5 - Tests the ioctl path for SEV, SEV-ES and SNP
+Patch 6 - Adds support for SNP in KVM_SEV_INIT2 tests
+Patch 7,8,9 - Enable Prefault tests for SEV, SEV-ES and SNP
 
-I will take a look at the redirect tests this weekend.
+The patchset is rebased on top of kvm/queue and and over the
+"KVM: selftests: Add SEV-ES shutdown test" patch.
+https://lore.kernel.org/kvm/20240709182936.146487-1-pgonda@google.com/
 
-> Note that the patches are based on [2], which has not reached bpf-next
-> (patchwork says: "Needs ACK").
->
-> [2] [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related fixes
->     https://lore.kernel.org/bpf/20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co/
+v2:
+1. Add SMT parsing check to populate SNP policy flags
+2. Extend Peter Gonda's shutdown test to include SNP
+3. Introduce new tests for prefault which include exercising prefault,
+   fallocate, hole-punch in various combinations.
+4. Decouple ioctl patch reworked to introduce private variants of the
+   the functions that call into the ioctl. Also reordered the patch for
+   it to arrive first so that new APIs are not written right after
+   their introduction.
+5. General cleanups - adding comments, avoiding local booleans, better
+   error message. Suggestions incorporated from Peter, Tom, and Sean.
 
-Might have slipped throught the cracks...
+RFC:
+https://lore.kernel.org/kvm/20240710220540.188239-1-pratikrajesh.sampat@amd.com/
 
+Michael Roth (2):
+  KVM: selftests: Add interface to manually flag protected/encrypted
+    ranges
+  KVM: selftests: Add a CoCo-specific test for KVM_PRE_FAULT_MEMORY
 
-Andrii, Martin,
+Pratik R. Sampat (7):
+  KVM: selftests: Decouple SEV ioctls from asserts
+  KVM: selftests: Add a basic SNP smoke test
+  KVM: selftests: Add SNP to shutdown testing
+  KVM: selftests: SEV IOCTL test
+  KVM: selftests: SNP IOCTL test
+  KVM: selftests: SEV-SNP test for KVM_SEV_INIT2
+  KVM: selftests: Interleave fallocate for KVM_PRE_FAULT_MEMORY
 
-The patch set still applies cleanly to bpf-next.
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../testing/selftests/kvm/include/kvm_util.h  |  13 +
+ .../selftests/kvm/include/x86_64/processor.h  |   1 +
+ .../selftests/kvm/include/x86_64/sev.h        |  76 +++-
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  53 ++-
+ .../selftests/kvm/lib/x86_64/processor.c      |   6 +-
+ tools/testing/selftests/kvm/lib/x86_64/sev.c  | 190 +++++++-
+ .../kvm/x86_64/coco_pre_fault_memory_test.c   | 421 ++++++++++++++++++
+ .../selftests/kvm/x86_64/sev_init2_tests.c    |  13 +
+ .../selftests/kvm/x86_64/sev_smoke_test.c     | 298 ++++++++++++-
+ 10 files changed, 1024 insertions(+), 48 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/coco_pre_fault_memory_test.c
 
-Would you be able to a look at this series? Anything we need to do?
+-- 
+2.34.1
 
-Thanks,
-(the other) Jakub
 
