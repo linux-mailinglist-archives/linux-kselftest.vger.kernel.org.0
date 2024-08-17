@@ -1,76 +1,76 @@
-Return-Path: <linux-kselftest+bounces-15575-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15576-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46108955421
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Aug 2024 02:19:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12EC3955423
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Aug 2024 02:19:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03276284BAA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Aug 2024 00:19:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 373651C21B28
+	for <lists+linux-kselftest@lfdr.de>; Sat, 17 Aug 2024 00:19:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21CCB256E;
-	Sat, 17 Aug 2024 00:18:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B90579CF;
+	Sat, 17 Aug 2024 00:18:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TWb2gbtv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UvVLBj4G"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E12B66C;
-	Sat, 17 Aug 2024 00:18:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 379E24C96;
+	Sat, 17 Aug 2024 00:18:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723853932; cv=none; b=bPoPUc1Ec0bo9bE8Ih8bsBd0VHMG6tmvfCUxSI5Nb+38RlJXEdQQyxeH4UvkeCuED3LHu4fA2hJIby99J61ec4X52nV1lfUomwCxoJLrOw7qFl+BVgoNswdJLojKeVXrDS3c83wHISIix6DC07V1KyurmPdO+2+hMNKgZRYw7VU=
+	t=1723853933; cv=none; b=BGYeZcx5fpn9S47EEfRS9Rxt0HmRElkVHelC5yhgc0yrsbTPjv4Px6ZofqIEnP5Dd3OiwHYBCpCaR4san4PiG5GDSASxvvqVkQz9qvEgyQ0dZvNyuqlt6UmOSwBVZAiEzIBbTj39FtVHdihA3Zjah1+cOadj4t/ewn97WVfrIL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723853932; c=relaxed/simple;
-	bh=ZqblwcZQYik6vrCA28VHOhZDiHbXGTOLSFUeNURbjQc=;
+	s=arc-20240116; t=1723853933; c=relaxed/simple;
+	bh=5nC1RhLpgrxNbZe4uoGMsvaSLGktLHd7rzFicJCaFbw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Tl78/ZYxcsNFw/kegtBl00NLSJ34WzHtgRbvZ7pHBNC7jXYyh/6fvZt58sEmMRXpf3iJ3cEFD2+AE8U0mqP4zpOxxvEad2xjwcSIU+I1w2yd3/OkLwfQXeuMxEZJh6KCRyEJirBTm5uKtL0L12x65JYqTnhETGcdyWTz/oaSdWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TWb2gbtv; arc=none smtp.client-ip=209.85.128.47
+	 In-Reply-To:To:Cc; b=nMM6P/mUGe97CnzeBJ+fCvCekSBHXv4OYcrJeWNnhG6gPziInEKaYkoVfVNy52+y/MTzxLLibXOeQBMOfzWpyQKCWD5Yc6YG9Qfhrh+gHf2RWhr+LpiPJw8bSjiM0AxaS61obxkgH8qO2bImUU9AK0EKarAmgh5zdejjaxI+t+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UvVLBj4G; arc=none smtp.client-ip=209.85.221.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-42808071810so18184245e9.1;
-        Fri, 16 Aug 2024 17:18:50 -0700 (PDT)
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-37186c2278bso1402506f8f.1;
+        Fri, 16 Aug 2024 17:18:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1723853924; x=1724458724; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1723853925; x=1724458725; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=bAmgLDl1px7jqd76Q1p746SydraVXJ6Ud6jad/RgDJQ=;
-        b=TWb2gbtvgRnlI02gklOwJjG7OL/w/Tme78YgisZFIdjpoEuljPnWoteDYgb6ltn0LO
-         tSlLekgtjQ74ZrePrD1AMzC+BVx2sxLLdFvA/SM7IdSjagN1ZvfyVl3vFXPkjHxzIqGo
-         dLPBA8tFyEgX0PrClKqtGv6HR2zlDMHbvd2dLSqA8b441SxFb6Qehjq8yMZYJzL/KT+o
-         AISV2nolOSufKsE5DVCsrSBFRDT7EudIByrZIUCNEEy6anLktE49s4MnGeJ49NE1RuG7
-         kGjvjjXBaooFKUJCft94WAlGU9pileay37TTxO5Z5mkf3XlX/OliQPvyGfEZ5FQQbqx+
-         ft5A==
+        bh=LrPcZ5dxXI2S7kFYpXooZU8/pyUJQvH2vRgq9oEXpMQ=;
+        b=UvVLBj4GBnyqEd9SRT1MQ6z7uJ2P0a8QDZ786E+GA+8l1lhCKekuOLEv9PiJVuK03q
+         91JTL1vzzOXjeIkpnTJrzTN5V2+5/k5BmRT5jDZJG+HhNR3tDBYx0op8ZK9X7aMcsgsX
+         w2/z8PVtmmViJYh2Kyb8J1Kz7BGROTrHWS5eRTz5FNPsCz7dmNNqPk3325Wlj4DvFzBQ
+         RWdZ5fgug70him1dhTbgVoeMlPCD0t3PqVK2mO543uJcg0UFWHB+2v8qIZDGB62AkPLI
+         1aHe4dqEs6GXOx2ZPTOPsiTDHVTMf/lNVwagoE112gB6bRhVvr8ozcXBoqQfdDeJv7n4
+         ZdDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1723853924; x=1724458724;
+        d=1e100.net; s=20230601; t=1723853925; x=1724458725;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bAmgLDl1px7jqd76Q1p746SydraVXJ6Ud6jad/RgDJQ=;
-        b=ILZqVmL35bYsBYLv6gdat+RKvn6NlLokQsVy6oqobvvHWw1rhlttdu6v9U3isWpA7j
-         uE3YvoU/4fB7FFkpvCF5GaWBrB19jzcaN/qiNtUsTGCItsnH/YHoFZQz1TbWMqEPdFRt
-         dWYs1i8W1/uRJRD5tDsjzIEaIs5eU+7wKrsDI/VNRH1DQnaVmiL8GYYZEFM7dkF6iSFx
-         zSKmPLibvwPhakP3SwvnEvA/CC+zfi0vCmJNWtI4SgpSCuAHBmvk5Zrn/mu/KEhFZOmW
-         vAPPq4Yf8chpIZdqqMS9TRpM+QIY6+/2SNCbH4F9Xt942oEVwYjUwIbUujfouJmZVy3R
-         LpCA==
-X-Forwarded-Encrypted: i=1; AJvYcCXkEVJvzaSokYfG5ugYCAaZHw0PzuQ0E2viIvISUAD7k2Obwb8/W0zGnQ4B2a/GNVYIxkPZkTHQ9yd6485mT8geRRJw+Hwik6wzyJOLjIMNtR+l+el33kLGmOxcB+lE4l1dbCtn9ejP+XeRTpA1
-X-Gm-Message-State: AOJu0YwAO42Jgh6Vg0l8JJod+2C7dlBAXU/O84vpOfZO7ElYNE57cA77
-	OS2NqwJuOMdsexRruR0sHlHPPcYfg/NAcjIGt9pw+/5zIUtTw0kZAk6Iuyjt
-X-Google-Smtp-Source: AGHT+IGM0TLfyEre+jfwvYu3EzVkhOnPhcS/imjEho/f+Tms2EZbTyomcs1S5bb2scgoXXDqQlsfmg==
-X-Received: by 2002:a05:600c:4fc8:b0:426:593c:9361 with SMTP id 5b1f17b1804b1-429ed7d1f39mr29141995e9.26.1723853923095;
-        Fri, 16 Aug 2024 17:18:43 -0700 (PDT)
+        bh=LrPcZ5dxXI2S7kFYpXooZU8/pyUJQvH2vRgq9oEXpMQ=;
+        b=IU3w6rVd2qT8DVLkHNao2GlsY0pFLJOYt/+WzrgnnIAg1kJZdIcBCXjLFYHJbFff1+
+         P8eWdo2ebPpFvhgXsrUFhj8ZTIDErDJYbYTnEvWqhu3xiXj1/lumnlJRa17J3xdVvW7c
+         bhbdpH0rBXWLjTnOSsoEdvZEuIYimFg5GjXIRRinX6nLK/6ikRE/CrUqUA8446emZvDl
+         OAGYpyq1E1+qHba6gg96cIm1TSQz6trDdSCy3nj69clmeN5oCaDZOfjWjHsx3D8xcUxr
+         KVbRwLfTM8X+5wSQIWMDevP1XDIhoMMcbMyLBe9lvyz6XXOQEZValiLhBp5HTds7uTfl
+         0Z8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU1cV/OGEmRRe0m7dduLozK/4nMwlu2e7agp74u/oVttnklS2pZaZT9m3voe8AAdTNxyFMHyeeVfPWSGWuQCdYr8cgSSkU1y3zKJaxBLnhITSoZB6C7CtsC7NA0pFbSLm8myzaFAcwvgtjkRuhB
+X-Gm-Message-State: AOJu0YwHhPnw7rw1WSS2CWTejPFQrCmiOZ//TIOdmMsVh0Uc2O6+tqzh
+	Simk24exRdvFt0cSr4jIrpGWVS1a7rAbNmkzSnbunWdqVg1qkFF2/ER16Jop
+X-Google-Smtp-Source: AGHT+IHob2iXeWVcLHrIvT5oHF+c90MvHS34UpZmw02JaWHR+F0oJhRdWeWAe0XuH/19P/AChePKAQ==
+X-Received: by 2002:a05:6000:2a8:b0:368:377a:e8bb with SMTP id ffacd0b85a97d-37186dda493mr7610866f8f.28.1723853924555;
+        Fri, 16 Aug 2024 17:18:44 -0700 (PDT)
 Received: from [192.168.1.91] ([2001:818:e92f:6400:96b:aa92:afc0:2d3d])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429d781047asm104842055e9.0.2024.08.16.17.18.40
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429d781047asm104842055e9.0.2024.08.16.17.18.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Aug 2024 17:18:42 -0700 (PDT)
+        Fri, 16 Aug 2024 17:18:44 -0700 (PDT)
 From: Pedro Falcato <pedro.falcato@gmail.com>
-Date: Sat, 17 Aug 2024 01:18:31 +0100
-Subject: [PATCH v3 4/7] mm/mremap: Replace can_modify_mm with
- can_modify_vma
+Date: Sat, 17 Aug 2024 01:18:32 +0100
+Subject: [PATCH v3 5/7] mseal: Replace can_modify_mm_madv with a vma
+ variant
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,7 +79,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240817-mseal-depessimize-v3-4-d8d2e037df30@gmail.com>
+Message-Id: <20240817-mseal-depessimize-v3-5-d8d2e037df30@gmail.com>
 References: <20240817-mseal-depessimize-v3-0-d8d2e037df30@gmail.com>
 In-Reply-To: <20240817-mseal-depessimize-v3-0-d8d2e037df30@gmail.com>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -92,72 +92,137 @@ Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  Kees Cook <kees@kernel.org>, Pedro Falcato <pedro.falcato@gmail.com>
 X-Mailer: b4 0.14.1
 
-Delegate all can_modify checks to the proper places. Unmap checks are
-done in do_unmap (et al). The source VMA check is done purposefully
-before unmapping, to keep the original mseal semantics.
+Replace can_modify_mm_madv() with a single vma variant, and associated
+checks in madvise.
+
+While we're at it, also invert the order of checks in:
+ if (unlikely(is_ro_anon(vma) && !can_modify_vma(vma))
+
+Checking if we can modify the vma itself (through vm_flags) is
+certainly cheaper than is_ro_anon() due to arch_vma_access_permitted()
+looking at e.g pkeys registers (with extra branches) in some
+architectures.
+
+This patch allows for partial madvise success when finding a sealed VMA,
+which historically has been allowed in Linux.
 
 Signed-off-by: Pedro Falcato <pedro.falcato@gmail.com>
 ---
- mm/mremap.c | 32 ++++++--------------------------
- 1 file changed, 6 insertions(+), 26 deletions(-)
+ mm/internal.h |  2 --
+ mm/madvise.c  | 13 +++----------
+ mm/mseal.c    | 17 ++++-------------
+ mm/vma.h      |  7 +++++++
+ 4 files changed, 14 insertions(+), 25 deletions(-)
 
-diff --git a/mm/mremap.c b/mm/mremap.c
-index e7ae140fc640..24712f8dbb6b 100644
---- a/mm/mremap.c
-+++ b/mm/mremap.c
-@@ -902,19 +902,6 @@ static unsigned long mremap_to(unsigned long addr, unsigned long old_len,
- 	if ((mm->map_count + 2) >= sysctl_max_map_count - 3)
- 		return -ENOMEM;
+diff --git a/mm/internal.h b/mm/internal.h
+index ca422aede342..1db320650539 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -1363,8 +1363,6 @@ static inline int can_do_mseal(unsigned long flags)
  
--	/*
--	 * In mremap_to().
--	 * Move a VMA to another location, check if src addr is sealed.
--	 *
--	 * Place can_modify_mm here because mremap_to()
--	 * does its own checking for address range, and we only
--	 * check the sealing after passing those checks.
--	 *
--	 * can_modify_mm assumes we have acquired the lock on MM.
--	 */
--	if (unlikely(!can_modify_mm(mm, addr, addr + old_len)))
--		return -EPERM;
--
- 	if (flags & MREMAP_FIXED) {
- 		/*
- 		 * In mremap_to().
-@@ -1052,6 +1039,12 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
- 		goto out;
- 	}
+ bool can_modify_mm(struct mm_struct *mm, unsigned long start,
+ 		unsigned long end);
+-bool can_modify_mm_madv(struct mm_struct *mm, unsigned long start,
+-		unsigned long end, int behavior);
+ #else
+ static inline int can_do_mseal(unsigned long flags)
+ {
+diff --git a/mm/madvise.c b/mm/madvise.c
+index 89089d84f8df..4e64770be16c 100644
+--- a/mm/madvise.c
++++ b/mm/madvise.c
+@@ -1031,6 +1031,9 @@ static int madvise_vma_behavior(struct vm_area_struct *vma,
+ 	struct anon_vma_name *anon_name;
+ 	unsigned long new_flags = vma->vm_flags;
  
-+	/* Don't allow remapping vmas when they have already been sealed */
-+	if (!can_modify_vma(vma)) {
-+		ret = -EPERM;
-+		goto out;
-+	}
++	if (unlikely(!can_modify_vma_madv(vma, behavior)))
++		return -EPERM;
 +
- 	if (is_vm_hugetlb_page(vma)) {
- 		struct hstate *h __maybe_unused = hstate_vma(vma);
- 
-@@ -1079,19 +1072,6 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
- 		goto out;
- 	}
+ 	switch (behavior) {
+ 	case MADV_REMOVE:
+ 		return madvise_remove(vma, prev, start, end);
+@@ -1448,15 +1451,6 @@ int do_madvise(struct mm_struct *mm, unsigned long start, size_t len_in, int beh
+ 	start = untagged_addr_remote(mm, start);
+ 	end = start + len;
  
 -	/*
--	 * Below is shrink/expand case (not mremap_to())
--	 * Check if src address is sealed, if so, reject.
--	 * In other words, prevent shrinking or expanding a sealed VMA.
--	 *
--	 * Place can_modify_mm here so we can keep the logic related to
--	 * shrink/expand together.
+-	 * Check if the address range is sealed for do_madvise().
+-	 * can_modify_mm_madv assumes we have acquired the lock on MM.
 -	 */
--	if (unlikely(!can_modify_mm(mm, addr, addr + old_len))) {
--		ret = -EPERM;
+-	if (unlikely(!can_modify_mm_madv(mm, start, end, behavior))) {
+-		error = -EPERM;
 -		goto out;
 -	}
 -
- 	/*
- 	 * Always allow a shrinking remap: that just unmaps
- 	 * the unnecessary pages..
+ 	blk_start_plug(&plug);
+ 	switch (behavior) {
+ 	case MADV_POPULATE_READ:
+@@ -1470,7 +1464,6 @@ int do_madvise(struct mm_struct *mm, unsigned long start, size_t len_in, int beh
+ 	}
+ 	blk_finish_plug(&plug);
+ 
+-out:
+ 	if (write)
+ 		mmap_write_unlock(mm);
+ 	else
+diff --git a/mm/mseal.c b/mm/mseal.c
+index 2170e2139ca0..fdd1666344fa 100644
+--- a/mm/mseal.c
++++ b/mm/mseal.c
+@@ -75,24 +75,15 @@ bool can_modify_mm(struct mm_struct *mm, unsigned long start, unsigned long end)
+ }
+ 
+ /*
+- * Check if the vmas of a memory range are allowed to be modified by madvise.
+- * the memory ranger can have a gap (unallocated memory).
+- * return true, if it is allowed.
++ * Check if a vma is allowed to be modified by madvise.
+  */
+-bool can_modify_mm_madv(struct mm_struct *mm, unsigned long start, unsigned long end,
+-		int behavior)
++bool can_modify_vma_madv(struct vm_area_struct *vma, int behavior)
+ {
+-	struct vm_area_struct *vma;
+-
+-	VMA_ITERATOR(vmi, mm, start);
+-
+ 	if (!is_madv_discard(behavior))
+ 		return true;
+ 
+-	/* going through each vma to check. */
+-	for_each_vma_range(vmi, vma, end)
+-		if (unlikely(is_ro_anon(vma) && !can_modify_vma(vma)))
+-			return false;
++	if (unlikely(!can_modify_vma(vma) && is_ro_anon(vma)))
++		return false;
+ 
+ 	/* Allow by default. */
+ 	return true;
+diff --git a/mm/vma.h b/mm/vma.h
+index e979015cc7fc..da31d0f62157 100644
+--- a/mm/vma.h
++++ b/mm/vma.h
+@@ -380,6 +380,8 @@ static inline bool can_modify_vma(struct vm_area_struct *vma)
+ 	return true;
+ }
+ 
++bool can_modify_vma_madv(struct vm_area_struct *vma, int behavior);
++
+ #else
+ 
+ static inline bool can_modify_vma(struct vm_area_struct *vma)
+@@ -387,6 +389,11 @@ static inline bool can_modify_vma(struct vm_area_struct *vma)
+ 	return true;
+ }
+ 
++static inline bool can_modify_vma_madv(struct vm_area_struct *vma, int behavior)
++{
++	return true;
++}
++
+ #endif
+ 
+ #endif	/* __MM_VMA_H */
 
 -- 
 2.46.0
