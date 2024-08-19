@@ -1,124 +1,234 @@
-Return-Path: <linux-kselftest+bounces-15698-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15699-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BF31957478
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 21:32:14 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17AC19574A7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 21:42:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 877961C23ADF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 19:32:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A6301F2193D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 19:42:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA662156861;
-	Mon, 19 Aug 2024 19:32:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DDBD1DC465;
+	Mon, 19 Aug 2024 19:42:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="n9MRhPyV"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aVSIkUgo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2050.outbound.protection.outlook.com [40.107.100.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1218143AB3
-	for <linux-kselftest@vger.kernel.org>; Mon, 19 Aug 2024 19:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724095929; cv=none; b=UAkPFWFPsNol5IAlBoxjUUR3qjlDUMzYpIL/RHhYsBORtJy8okeQccO42zmJ1+0JwowDdjqdaGvg88N8J9UDksKo39wlgHbZVGX7u4TMxg6gDLPfVwZ+xf8edaeQANgcU4YZfe/fzwDI0O+OzxYEDN6qA7jtzTZe9f+OFz5dYak=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724095929; c=relaxed/simple;
-	bh=IBAIrayjaY18zkCGKENrwSI+bJswIFyqRGdQ10te1bc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=quCL74sPCx0J1fa2aAFWW5RcZ7XWGLPqyfZjpsK1halB598VdgtRkr/YiyMw/Bb4QS+OerR1VXeQ4l6BbCNlRaVW0tiHZDN7NGf/0WvwCnH+NuVxItnphbP4ZXocpIPyRyH1CTrA2WWJ0vrBgXBKOSFGg82hVO+1PmsR9TC0ie4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=n9MRhPyV; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-37198a6da58so2551030f8f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 19 Aug 2024 12:32:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724095926; x=1724700726; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5iiMQkHuMqh6MeejOMXk5KhRCfXbI7rErK/gftektqc=;
-        b=n9MRhPyVEcR0yNNTDntX9tte9sLTfM3bpUnP2BdldC8QDyMEdhmpfWbo99v1+LjU6b
-         U1DYrtVykoYfiF8UOSH/C4MWt423oSkur3m/CZGQ9RR6/PQAh3D+M5HL4xpJssFWuSUX
-         G7Af006JIvQ947PgacsYEl86XeDiqSIA8MKqUc+sPc1krnaajd/voR9w7xCDefKnq+8u
-         Ryezbw1/NV5mpW4hAWVA+pyo4lz0GQ6oeGD0AjQo3A0f8j1J/9QfhlT0pYkNKjlwOl1z
-         Iu1ohhyRi45by0Y2aJln0Ag/78VDkxs2tFARZ5wyx1j0arbkLjHO3DY/4QlfMv0Z/4jz
-         B1lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724095926; x=1724700726;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5iiMQkHuMqh6MeejOMXk5KhRCfXbI7rErK/gftektqc=;
-        b=kG00WEVwH8jW6aJcoLvFLyukMK/1DbjNThfmFhS9y9YJ6veUS7L1eQACchKMTSLcc4
-         z/U7rwFTl3UEMcv2UfHn+qvNw1niI0rUQf2LzIpVoT5bU3N0M4XK++1mSplpI7avGYsb
-         sihpLbeHdwdaonIf8iQcqPi4S9gl9ZTos27M7mSUaW+AiUXpg5JcPaMexdzLSNEG6nVt
-         v9nG7qXaNfeQsCLrX441IlyUVGjC08ZNqXEYiO2bhp3GoUbCohrAqNwsYcUvVCaUeOcr
-         gGYtnn4LFJ8Qfw7LB9YBYtAHmcocpLyhI7fW/qmWGL87IAoPR3cOU4d5/iB3neSPcJHE
-         IljA==
-X-Forwarded-Encrypted: i=1; AJvYcCWZxcWwbznUu0SmJjLgug+HQ/r4QC7aHMPHp++RVErz0SoCIKaaf19Y47cabOILnrknAGM2Wb/0f2QOru44PMA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywjx9gl+tfajQox9vq+5cM61ZwQXqPlpvfMah11NTznALn7NVjy
-	J7frR0t28DLEuUDRfs4VYhLpsLHDP8pwPHJ0u9SAdHx936KP1uEmOQMYER/68+Y=
-X-Google-Smtp-Source: AGHT+IH/2vjG/GUMc9QoF6wDq7bU/JjnmIsBM8wYayWWOvJ0VGi5nf8rUXn3/4LsR/hkXcGyc0ZWkw==
-X-Received: by 2002:a05:6000:185:b0:368:e634:1520 with SMTP id ffacd0b85a97d-371946c2fe0mr8845522f8f.59.1724095926195;
-        Mon, 19 Aug 2024 12:32:06 -0700 (PDT)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3718985a6ddsm11233965f8f.58.2024.08.19.12.32.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 Aug 2024 12:32:05 -0700 (PDT)
-Date: Mon, 19 Aug 2024 22:32:01 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [bug report] selftest: bpf: Test bpf_sk_assign_tcp_reqsk().
-Message-ID: <54f8f67c-e47f-4da7-9172-d17b5f656587@stanley.mountain>
-References: <20240819190705.23030-1-kuniyu@amazon.com>
- <20240819191413.23841-1-kuniyu@amazon.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8CEF14A0A4;
+	Mon, 19 Aug 2024 19:42:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.100.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724096541; cv=fail; b=bS8X2eXYwxqMLvEBhtn6k9h08Nd6dWa61KDAolyYJ/Ha6iqvFCF8eOVxA4wSon6m0eXYDeJbmU7Qm+1Kdp7+5FU0RgxzVhjQKJHhv5P3xi62v5DxK/m8AVnfuhDZNPe7ZnD3RCsJ+FtmGpIyQUP364M1VRXnpFuTWeQoA+BVP88=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724096541; c=relaxed/simple;
+	bh=rUOHA/0IxBgW8y3ZNr6PV0nFBKceQOO2kqUs+KdXssY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=dYuSt8yQsxDScfd6/uyTZQDooCA/SU56iVN5K+2MBoZvjbRC+vednpxxTKDsvHKZa0sQPxsl21U/uitHdcbVBKWt3LepZbo3naAi7UssY9sjD1LaBAtSouWOHcYym9YYECm9Sj0+ZS7eCXti3GRtkzkXKmO8AHzAfahhs6EKkuk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aVSIkUgo; arc=fail smtp.client-ip=40.107.100.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=aHIVkCwY9F+sKUQtc4+fh7irkB2mmNFuYhMONsBhg/ljTlY20nnYht8FN7rH9ixFhr4LVHbG3UwWka11IxwMAUQj89oTzJlafOoRn14ebd0ul5lExpJfKRkyeYKjM8eaBGIp7utBriHf9bvrtxqGDzEAP4UVEE0lvy4I9KzYAZ9JnzxW7tmy+6VprDN38iya7Xdh2/hJxKBD1Yel3oCYTHVJSzYOc2NfDco+Xr0u6EPMUw2hD9pFm/Hmm0DK2wL/3MOOoQePUEEWCxiniJku/o2nAcZSPLVSGNteUvVp1UZftUHPrQMfZ8J50qRGPNw+DalJYtusQchy+LRfaZ7R6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iVAEuV0Iupcs3iGtRwSvUMpGe7R6df4qBripJQmUZPQ=;
+ b=ToeGaJHKu3B3kdvO1USQ8ARtjDqQpn2rZpRZTLw9F1HrIe3Q2Jmo8Y5MsMTiqHrgm/G9mLnqBzL3RidYWCkZkDkP0crwHK96RBuQxRsYtcYAd6Nl4KwjEM9M+Ra3cvdFOQkYKxf32x601hJEfB3a1P2BzDO0bW/24XoSDbWXaB3BGseslslVheEi+3+24G9fxVaB9gcqXThvYqireU3ZoVy3qJYAHkOmiVipGoaYSW0O+4oSpaTeFe5PpFNQVPRXDw4a6Tbs0lreGuQZUUL3RAmnEQuy+iyd2RKpettD/n8yPtRG8CE1USEFvr4qHCWQa7M7gLWCZq/ggDDrVvzu9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=collabora.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iVAEuV0Iupcs3iGtRwSvUMpGe7R6df4qBripJQmUZPQ=;
+ b=aVSIkUgo3DU9tER6HZgnaE/u1omlH6k6RyJ4tjfxGWinrmtbBlieJ1q8yVzqCUD9hE/IIaBhYTUAiSIEssW+rVTnjOd1Gqs5YY8MHUoNdPSKBCWxR4IQg/1iJm+VsZEOvhT93vj03kMl4QJXqN25FXd1HONWbVXqi8yWAtO/rYclT2OOseea4APs1pmxHhq8HTEwm23rKBU3AbN3mYXtMfU1Mg9EpqybWhn81pRayIwZPATkdOAXnIOACOWuKV6xiq4XbK2D30X0nG0uAW1T9VWtsrNucydxDiuShrhmplk0c0y98RgI5MavVcfEAe4N3O5NHo0YSycFZ9wDJhrZAQ==
+Received: from SA1P222CA0015.NAMP222.PROD.OUTLOOK.COM (2603:10b6:806:22c::33)
+ by DS7PR12MB6191.namprd12.prod.outlook.com (2603:10b6:8:98::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.21; Mon, 19 Aug
+ 2024 19:42:12 +0000
+Received: from SA2PEPF000015CC.namprd03.prod.outlook.com
+ (2603:10b6:806:22c:cafe::2f) by SA1P222CA0015.outlook.office365.com
+ (2603:10b6:806:22c::33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.21 via Frontend
+ Transport; Mon, 19 Aug 2024 19:42:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ SA2PEPF000015CC.mail.protection.outlook.com (10.167.241.202) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7897.11 via Frontend Transport; Mon, 19 Aug 2024 19:42:11 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 19 Aug
+ 2024 12:41:57 -0700
+Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 19 Aug
+ 2024 12:41:56 -0700
+Message-ID: <0c6ff7bb-8a22-403d-b015-aa20c907df8f@nvidia.com>
+Date: Mon, 19 Aug 2024 12:41:55 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240819191413.23841-1-kuniyu@amazon.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] selftests/exec: Build both static and non-static
+ load_address tests
+To: Muhammad Usama Anjum <Usama.Anjum@collabora.com>, Kees Cook
+	<keescook@chromium.org>
+CC: "H . J . Lu" <hjl.tools@gmail.com>, Chris Kennelly <ckennelly@google.com>,
+	Eric Biederman <ebiederm@xmission.com>, Shuah Khan <shuah@kernel.org>,
+	Fangrui Song <maskray@google.com>, Andrew Morton <akpm@linux-foundation.org>,
+	Yang Yingliang <yangyingliang@huawei.com>, <linux-mm@kvack.org>,
+	<linux-kselftest@vger.kernel.org>, Mike Rapoport <rppt@kernel.org>, "Rui
+ Salvaterra" <rsalvaterra@gmail.com>, Victor Stinner <vstinner@redhat.com>,
+	"Jan Palus" <jpalus@fastmail.com>, Al Viro <viro@zeniv.linux.org.uk>,
+	"Christian Brauner" <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	<linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+	<linux-hardening@vger.kernel.org>
+References: <20240508172848.work.131-kees@kernel.org>
+ <20240508173149.677910-1-keescook@chromium.org>
+ <1f6a2905-395d-4f81-9ee0-57c541fb2486@nvidia.com>
+ <202405082312.D922795@keescook>
+ <a1e8ab86-64e1-4cf1-bd2f-145b4c173e6d@collabora.com>
+ <c2ed3020-f0c7-4077-aa63-648f7cd6bc75@collabora.com>
+Content-Language: en-US
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <c2ed3020-f0c7-4077-aa63-648f7cd6bc75@collabora.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF000015CC:EE_|DS7PR12MB6191:EE_
+X-MS-Office365-Filtering-Correlation-Id: 509024cb-ef74-496b-0587-08dcc0870523
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|82310400026|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?NHFFQ0tORkdxT2NRdW15bUNkYWw2WlVjSmlzTFFNYzVKTldScDFwTXorYURh?=
+ =?utf-8?B?aldWZGRNbFdDbGMvT3cxeDBsdWt0UEYxOU1XRXdETnhjSk9wNEVLU0IxcTU0?=
+ =?utf-8?B?QmVSMmY2bFl0dlVMQ2tDeDdnalpNQ0xqa1R0cjZoRm5nR25qTTVvRHRJNno2?=
+ =?utf-8?B?V0xPL2ZHdjdSK3dpUlNYd0I3Lzd2SStpQk9aQWgzc2crU0NQMVo4ZThHUkpr?=
+ =?utf-8?B?UTBZUVlkTFExSkQ3MDU0eDBqMjFWRkhyMmRPVmJUTUhLS0F0ZVVSZENPOVFt?=
+ =?utf-8?B?R1NDZnk5V1d4UTV4UUJhM2xxQ2J0T0JtUWJwWXJIbHlwTmxEak05cXNScVRu?=
+ =?utf-8?B?azJaUzJnRHBGUnIreFNRN1gxbzhWVjBlUmZMMG52aHpLc2svckprZS9qbzhx?=
+ =?utf-8?B?d3ZOVzcwUExNNXZNYWRjNHNTeGdOcVRoMlNHREtBc3VMZDlEU1dIcjc0WThM?=
+ =?utf-8?B?RWVxUUJnZVpnZmRxVnZObk1ySUl5Y3l1TTZoTXJHUUw1TkVmcEdzMUFwR0kx?=
+ =?utf-8?B?bTY4SzI0ZlVTekJ4dHVCeUlaUEQ5Y3N3R2Z3QlptZFNoc3NtUGJDWEVHeG5m?=
+ =?utf-8?B?TUhySzltanM1cTdFWDNkclpoZ1FMVG94blFneTl2alpxN3dnWlpBd1dzdUVP?=
+ =?utf-8?B?YjAyZUVQdDc2dGNQU1JSYjN6dEZDWkwxRlJXU0RrS2NnaXRzRVhncXZTa25x?=
+ =?utf-8?B?bVViSjUrdGFsUlk4R1pnakQyMXFGUGhMck5ZNGYrRENYcFBxeFVXTjMvZVhr?=
+ =?utf-8?B?R0x6dzIyb2dPMFZ0VTVjdm1pOVM2ZEd0Q2NqOTFEcVA5dU45bDVhOGFRYjhs?=
+ =?utf-8?B?VFBBRFJ0UGF2d2ViN0o2VXpLQjN3M016T05KdC9wWUtqbXlJQ2V1NmRBRzV4?=
+ =?utf-8?B?TDd0MmhscVh5bWMzODVvYlJHSGhUVUE0eWh1QXpnL0FRVTFqSjVXQ2l6L2dU?=
+ =?utf-8?B?cjlhZ3VnK0RrdWZQSHJIU2M5U3l6M2E0K0ExZFRlcXBWQ1JkTnpTZUh2OFhT?=
+ =?utf-8?B?ajFrVVcxWVUyUGhGbWdhREh6NWIwVXIveGJHQm05dkNML2lpd0czVVVhYUVt?=
+ =?utf-8?B?czJRZWlZSTUrL2hva1VJK3VVZis1dVp1UDhMWlk0OGZZczJPWHBiUFBRRXp3?=
+ =?utf-8?B?M1o0bUpsL1Z2UmVxU1M1c0NQY241a3BpL3RpekRuc2Rud3B4NlJnOXNvOENB?=
+ =?utf-8?B?TVhkajNkOTZqM0xsL3JDNnF2NUZ3b2QwclEwZU45M0JhRGhnMndnVVRlTGpE?=
+ =?utf-8?B?U3pJdEpPWldqU0NJSlBKbDdZSXd4R1VWcUErR082OUVwdHJCYTFtb0FJK3Fw?=
+ =?utf-8?B?WXNsK1djQUVLT3hob2RJc0VnWFdtRXU3TFNudC9vSXpnYXNXL0E0Nkw3RE5h?=
+ =?utf-8?B?emhhYWIyWTVTVFo4dzZZbE16OGpBR0hGb0M4MEt4eTJyQTBhVG12ekxrcG9Y?=
+ =?utf-8?B?M1U5Y1FXUHpBTXpSRzRBWmo2WHc1ZU5scFdVeXgwcnhIdVNtTlN4c0MvRXBs?=
+ =?utf-8?B?cTBYZlA1c2lIei9VT1VLaUYzeXNQYU5WWEZjUmE2WnljSU9lTVhHOVY4djh1?=
+ =?utf-8?B?SmJ6YUd4SE5SbGswTllJR3FYRHUrUVU0b3VRWVNrY3d6Q1QxS01na3JXcnls?=
+ =?utf-8?B?elFOcHRjYThtRUZhZDBxb1JQU1VaY0N2QWlTVHJ3UzIzOGduMDhUeXArbWxL?=
+ =?utf-8?B?cjZETUxnZW9WVXFzNEJzWkdManhCTzdEMm5JV1czMGJNcTVEK3dzMkxhV3ZG?=
+ =?utf-8?B?Ui9qT3NCM05OcUVQUWVmUFZNSlV1bktQVkh6Q0ZHVEhXTW1lQXJGZ21Cd0hl?=
+ =?utf-8?B?REJab0hEc29Tbk1yU080Z2xsYVZBWE5SUitzMjVBbUxoUEFKblY3U2lXek1t?=
+ =?utf-8?B?MmQyQVA3LzZrQkpWSWhvcndNSkhMOHhBM3hBRjd4S1FiSG5FZWMxSkZZb2hy?=
+ =?utf-8?Q?rmwiO/EO4wOd/ahgYrQ9eglQHw5mfcpi?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(82310400026)(376014)(7416014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2024 19:42:11.7504
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 509024cb-ef74-496b-0587-08dcc0870523
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF000015CC.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6191
 
-On Mon, Aug 19, 2024 at 12:14:13PM -0700, Kuniyuki Iwashima wrote:
-> From: Kuniyuki Iwashima <kuniyu@amazon.com>
-> Date: Mon, 19 Aug 2024 12:07:04 -0700
-> > > >     488         mssind = (cookie & (3 << 6)) >> 6;
-> > > >     489         if (ctx->ipv4) {
-> > > >     490                 if (mssind > ARRAY_SIZE(msstab4))
-> > > >                                    ^
-> > > > Should be >= instead of >.
-> > > > 
-> > > >     491                         goto err;
-> > > >     492 
-> > > > --> 493                 ctx->attrs.mss = msstab4[mssind];
-> > > >     494         } else {
-> > > >     495                 if (mssind > ARRAY_SIZE(msstab6))
-> > >                                      ^
-> > > 
-> > > Here too, I guess.
-> > 
-> > Thanks for reporting.
-> > 
-> > Will fix it.
-> > 
-> > But I'm curious why BPF verifier couldn't catch it.
+On 8/18/24 8:55 PM, Muhammad Usama Anjum wrote:
+> On 8/7/24 3:22 PM, Muhammad Usama Anjum wrote:
+>> On 5/9/24 11:16 AM, Kees Cook wrote:
+>>> On Wed, May 08, 2024 at 07:54:13PM -0700, John Hubbard wrote:
+>>>> Didn't we learn recently, though, that -static-pie is gcc 8.1+, while the
+>>>> kernel's minimum gcc version is 5?
+>>>
+>>> Yes, that's true. If we encounter anyone trying to build the selftests
+>>> with <8.1 I think we'll have to add a compiler version test in the
+>>> Makefile to exclude the static pie tests.
+>>>
+>>> There's also the potential issue with arm64 builds that caused the
+>>> original attempt at -static. We'll likely need an exclusion there too.
+>>>
+>> I'm not getting failures for arm64 instead for arm. I'm trying to find
+>> this "rcrt1.o" file. Does anybody have any idea if this error can be
+>> resolved by missing file or is it something arm-linux-gnueabihf
+>> toolchain doesn't support?
+> Do you have any idea?
+
+Yes, I took a closer look just now:
+
 > 
-> Ok, this off-by-one report is false-positive as the test has
+>>
+>> make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
+>> arm-linux-gnueabihf-gcc -Wall -Wno-nonnull -D_GNU_SOURCE=
+>> -Wl,-z,max-page-size=0x1000 \
+>>          -fPIE -static-pie load_address.c -o
+>> /home/usama/repos/kernel/linux_mainline/tools/testing/selftests/exec/load_address.static.0x1000
+>> /usr/lib/gcc-cross/arm-linux-gnueabihf/12/../../../../arm-linux-gnueabihf/bin/ld:
+>> cannot find rcrt1.o: No such file or directory
+>> collect2: error: ld returned 1 exit status
+>> make: *** [Makefile:39:
+>> /home/usama/repos/kernel/linux_mainline/tools/testing/selftests/exec/load_address.static.0x1000]
+>> Error 1
 > 
->   mssind = (cookie & (3 << 6)) >> 6;
-> 
-> and the following (mssind > ARRAY_SIZE()) is just to make verifier happy.
 
-In this case, I was testing code that Smatch couldn't parse completely.
+This appears to be because that particular cross compiler setup
+(the libc part of the installation) fails to include rcrt1.o. I was
+able to reproduce this on Ubuntu 23.04, using their standard arm
+cross compilation packages for gcc and libc.
 
-But also I have a different check for "> ARRAY_SIZE()" which deliberately
-ignores the value of mssind since I was missing "false positive" bugs like this.
+Also, -static-pie is what is causing the linker to look for rcrt1.o.
+If you change the invocation from "-static-pie" to "-static -pie",
+then linking succeeds.
 
-regards,
-dan carpenter
+Putting all of this together, I think we were are seeing is that
+even though "-static-pie" was added to gcc 8.1+, and even though
+the cross-compiler installation here shows gcc 12.3.0, the libc
+support for that feature is lagging. In other words, the cross
+installation of libc is effectively at something earlier than
+gcc 8.1's needs.
+
+So I think this means that we need to fix up the distros'packages,
+and meanwhile, fall back to something like "-static-pie" for
+selftests.
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
+  
+
+
 
