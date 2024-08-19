@@ -1,191 +1,193 @@
-Return-Path: <linux-kselftest+bounces-15662-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15663-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 947D3956FD8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 18:10:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4961395705C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 18:33:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54600B29727
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 16:07:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB1841F23F18
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 16:33:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0323817AE00;
-	Mon, 19 Aug 2024 16:04:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9430B175D20;
+	Mon, 19 Aug 2024 16:33:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="A6aWgw3C"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mQ+tIkjT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16DA8287D;
-	Mon, 19 Aug 2024 16:04:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F954F5FB
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Aug 2024 16:33:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724083456; cv=none; b=Gfgcu3o0GxyPHxh+CowD+Dx8wziJjjoK2zPlhQvMW0LNJG4jddZtIdkvFnfzE9ls8aJ1PpO3AGJPYz9XWfs4KW+7jB007VdP5xNleUliUyOamjyH4T0d4xfXjR/oTA1hxiyOUkRIUF0RMlwsyqY7mkNabDrthVQOF5ps9CjGGBU=
+	t=1724085201; cv=none; b=LIrY3sL/52JWPhbeYvwhoqxygQpDrRaydDcUe5xd5cowPYFkIPXcQCbpyPzPskooWwON1mcivO7HjH1wtJu3MMikXfjVad+Y09iroEcBl1irPKRYGc47fe8Ounu5pZOe06P3sVBQk7q57PaDnjN0FyXBM4UdbYyjqIwtziSd4/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724083456; c=relaxed/simple;
-	bh=vDXIl4RRqksl9TF+V8PT5XaM00nkF5KB2fS3seT/cLw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bcf145GkrvHChYwAtcpSdzVmp8kuKfoDfHpn62izoh2dN6WxiY353IYb+kGIqlPkFLOVekqWk123XSjM5hOwzSsZZpX5Lx2USbIPBTkl//XQaEV0iUVNAlD/hNVp31+1esW0gRAsdlWa7G9lP9cAcv7AQGWKT4xOJ45fIzqO3ao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=A6aWgw3C; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47J7lU1x004974;
-	Mon, 19 Aug 2024 16:04:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date
-	:from:to:cc:subject:message-id:references:mime-version
-	:content-type:in-reply-to; s=pp1; bh=54Be2dpmjo9mL0wr244ka69/wSU
-	0fU9DoCogHKtHckM=; b=A6aWgw3CTImKMCmjrzxMk7vyRW2qUN1We4H6sk1OuGC
-	k7f+EvyCkg05ekTgRQmYHr4eXxfQPgHqIZJHqufZRh4Xafwi/yx33QLoeT03W99R
-	D9Yuaoi4IDmY360vxi/I2j7uJxDJDc92ocT8oqmWsq8RmXDeT0/UKxaFm2XwLwG6
-	oiypsocQV4XUjhrnRdxBlupmHk3Sx0txLtxhQvNytxQeIAZaaq2Te0MrvigYd549
-	p2d7uMTF6gMiat3OD7rbl5aOo25eH8c0kKxGUtYzqBFotJPV7OxK8zoHeS48mdVB
-	cUokkhuUlYC3yoW3pbGiWLhse07Se5tLvhvPCgMrnzA==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4141y1j07m-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Aug 2024 16:04:11 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 47JG2kE8015393;
-	Mon, 19 Aug 2024 16:04:11 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4141y1j07f-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Aug 2024 16:04:10 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 47JCvgFe019123;
-	Mon, 19 Aug 2024 16:04:09 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 41376ppubh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 19 Aug 2024 16:04:09 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 47JG43EM19071386
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 19 Aug 2024 16:04:06 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D0CB72004D;
-	Mon, 19 Aug 2024 16:04:03 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 52E2020043;
-	Mon, 19 Aug 2024 16:04:03 +0000 (GMT)
-Received: from darkmoore (unknown [9.171.95.91])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Mon, 19 Aug 2024 16:04:03 +0000 (GMT)
-Date: Mon, 19 Aug 2024 18:04:01 +0200
-From: Christoph Schlameuss <schlameuss@linux.ibm.com>
-To: Hariharan Mari <hari55@linux.ibm.com>, linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, shuah@kernel.org,
-        frankja@linux.ibm.com, borntraeger@linux.ibm.com,
-        imbrenda@linux.ibm.com, david@redhat.com, pbonzini@redhat.com
-Subject: Re: [PATCH v1 5/5] KVM: s390: selftests: Add regression tests for
- PLO subfunctions
-Message-ID: <ZsNs8aIXM71NCG4h@darkmoore>
-References: <20240819140040.1087552-1-hari55@linux.ibm.com>
- <20240819140040.1087552-6-hari55@linux.ibm.com>
+	s=arc-20240116; t=1724085201; c=relaxed/simple;
+	bh=5w/ixzaqd2fEJi7mnvChP6vlKzaed3No1gqLFeWVQUw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=HGQreHv3s56gx3I+/Enwn3qdjZCVK7hrXs5ZfNMSYIq6XuAABRqIqRxcarL2V4ZKNQnEK+a4nDwXJGel8QVs/2qZEECwgEN4xdnuI3SYd19ifiQLpjVUpl1+ytbwlEt90Vug/DdWkM4GULUmL50wLdvAJyAPWr4YkJ+ZmoZM3YY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mQ+tIkjT; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2d3c008e146so4961882a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Aug 2024 09:33:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1724085199; x=1724689999; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4p2SIjYuIlCaoRIolQv5TgyKbOPsqVSXeOcL6uydFc0=;
+        b=mQ+tIkjTtwGGfbr0G9zsuHBk1n3lByfH+WIZ05TG4Vqtrq4B/Hn2lUxlEnwG09+Qct
+         7wkR0K8C/AOotu4EIM3uABjHk/i7HqC3KoU/FuvxYX17hEGhZT/OS1VrlcsRgrDv+Vo0
+         DyNDthl2QDRlIHu0LLk/IswUGecYnZAF4FXXYjhkslEiWqe5/vwBPNOoA3AKkMDbAvPo
+         YixS2nsiShfC/FveD436Q0ua39C2oOOEnhJckCc3kCgOAQeD16z5rclscyWfvifJo/bR
+         hiKEyVKXPYAKsGCJfP6xD70Phnr2QKAFq+O5FJGVhvMD5SU5YAZmyedV2uF8xvp7cMow
+         hLeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724085199; x=1724689999;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4p2SIjYuIlCaoRIolQv5TgyKbOPsqVSXeOcL6uydFc0=;
+        b=MexPlVtGI8BixjD+Nso2tK6kPPeQFsc2q1s0G7DDHheQFjMWyn/zr9IX+Tf/eaGMCf
+         u4cwh1T36cWzN7JpUd8kdS/1zepncH3PKsOUxRn3GRqBHRgldrMbieKoyfxocPneQUo7
+         ctPbvUBVgpCXrrPeFD41D0DIqLJGvNyRS4kYHuMI3okEFkmXzP8qBw3JUHboOluN8CaA
+         JpfaBlUzkZUXEGCKgJLReyN4H5CDjpiBFiWW0bFPmP2j2J4HBRbds+ctwc2rhjFI8S+e
+         54Pn8Yg9A07SYiSDzEKqZ7QwGOUd+mV9aycY3EcxIKn2I/ZgGcDgQuo+vlUw5GUuamEN
+         WwYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXjKrW9Ubg39RcPb4s4fXuwDGHjOZFtzPCGSkC1OAk2Sl6j0upCbhHnAIEW3z7AxLmXazdQlIULxLFC/TgpZ1AnnLdFweZPeg+rNRTVPnPe
+X-Gm-Message-State: AOJu0YwTdcByARW2w93h3adOCJCA+nkIiuqhrt+iyXxy+TuKR3zO0JAi
+	1mq4E3GQhc3aXv6h9zAKdPBgGsoLbbO3vbldJ5zmx5MEB1MckfEV9D9KMaCj71nPX2/A7ONOVSo
+	fPg==
+X-Google-Smtp-Source: AGHT+IHXXUvDjnIGWgNHi6tPM6TODiIIkBZkAGdWWZ2nPO179CxiELhSLItCjUB3DxMPDqXY1QGYzaRxHYg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90b:1043:b0:2cd:1e0d:a4c7 with SMTP id
+ 98e67ed59e1d1-2d3dfc1e9b8mr52362a91.1.1724085199152; Mon, 19 Aug 2024
+ 09:33:19 -0700 (PDT)
+Date: Mon, 19 Aug 2024 09:33:17 -0700
+In-Reply-To: <20240819093030.2864163-1-usama.anjum@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240819140040.1087552-6-hari55@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: ubtjICqUtKbAucfSvVCBuALIUaOVAKLr
-X-Proofpoint-ORIG-GUID: -IznyxETvVyQV2-kCoIuZjbFi1H_ausN
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-19_13,2024-08-19_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- suspectscore=0 spamscore=0 mlxlogscore=999 bulkscore=0 impostorscore=0
- malwarescore=0 lowpriorityscore=0 phishscore=0 clxscore=1011
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408190107
+Mime-Version: 1.0
+References: <20240819093030.2864163-1-usama.anjum@collabora.com>
+Message-ID: <ZsNzzajqBkmuu5Xm@google.com>
+Subject: Re: [PATCH v2] selftests: kvm: fix mkdir error when building for
+ unsupported arch
+From: Sean Christopherson <seanjc@google.com>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, kernel@collabora.com, 
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
+	Anup Patel <anup@brainfault.org>
+Content-Type: text/plain; charset="us-ascii"
 
-On Mon Aug 19, 2024 at 3:54 PM CEST, Hariharan Mari wrote:
-> Extend the existing regression test framework for s390x CPU subfunctions
-> to include tests for the Perform Locked Operation (PLO) subfunction
-> functions.
->
-> PLO was introduced in the very first 64-bit machine generation.
-> Hence it is assumed PLO is always installed in the Z Arch.
-> The test procedure follows the established pattern.
->
-> Suggested-by: Janosch Frank <frankja@linux.ibm.com>
-> Signed-off-by: Hariharan Mari <hari55@linux.ibm.com>
-> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
++KVM arch maintainers
+
+On Mon, Aug 19, 2024, Muhammad Usama Anjum wrote:
+> The tests are built on per architecture basis. When unsupported
+> architecture is specified, it has no tests and TEST_GEN_PROGS is empty.
+> The lib.mk has support for not building anything for such case. But KVM
+> makefile doesn't handle such case correctly. It doesn't check if
+> TEST_GEN_PROGS is empty or not and try to create directory by mkdir.
+> Hence mkdir generates the error.
+> 
+> mkdir: missing operand
+> Try 'mkdir --help' for more information.
+> 
+> This can be easily fixed by checking if TEST_GEN_PROGS isn't empty
+> before calling mkdir.
+> 
+> Cc: Paolo Bonzini <pbonzini@redhat.com>
+> Cc: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 > ---
->  .../kvm/s390x/cpumodel_subfuncs_test.c        | 36 ++++++++++++++++++-
->  1 file changed, 35 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/kvm/s390x/cpumodel_subfuncs_test.c b/tools/testing/selftests/kvm/s390x/cpumodel_subfuncs_test.c
-> index 901c99fe79d9..255984a52365 100644
-> --- a/tools/testing/selftests/kvm/s390x/cpumodel_subfuncs_test.c
-> +++ b/tools/testing/selftests/kvm/s390x/cpumodel_subfuncs_test.c
-> @@ -20,6 +20,8 @@
+> Changes since v1:
+> - Instead of ignoring error, check TEST_GEN_PROGS's validity first
+> ---
+>  tools/testing/selftests/kvm/Makefile | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index 48d32c5aa3eb7..9f8ed82ff1d65 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -317,7 +317,9 @@ $(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S $(GEN_HDRS)
+>  $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
+>  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -ffreestanding $< -o $@
 >  
->  #include "kvm_util.h"
->  
-> +#define U8_MAX  ((u8)~0U)
-> +
->  /**
->   * Query available CPU subfunctions
->   */
-> @@ -37,6 +39,33 @@ static void get_cpu_machine_subfuntions(struct kvm_vm *vm,
->  	TEST_ASSERT(!r, "Get cpu subfunctions failed r=%d errno=%d", r, errno);
->  }
->  
-> +static inline int plo_test_bit(unsigned char nr)
-> +{
-> +	unsigned long function = (unsigned long)nr | 0x100;
-> +	int cc;
-> +
-> +	asm volatile("	lgr	0,%[function]\n"
-> +			/* Parameter registers are ignored for "test bit" */
-> +			"	plo	0,0,0,0(0)\n"
-> +			"	ipm	%0\n"
-> +			"	srl	%0,28\n"
-> +			: "=d" (cc)
-> +			: [function] "d" (function)
-> +			: "cc", "0");
-> +	return cc == 0;
-> +}
-> +
-> +/*
-> + * Testing Perform Locked Operation (PLO) CPU subfunction's ASM block
-> + */
-> +static void test_plo_asm_block(u8 (*query)[32])
-> +{
-> +	for (int i = 0; i <= U8_MAX; ++i) {
-> +		if (plo_test_bit(i))
-> +			(*query)[i >> 3] |= 0x80 >> (i & 7);
-> +	}
-> +}
-> +
->  /*
->   * Testing Crypto Compute Message Authentication Code (KMAC) CPU subfunction's
->   * ASM block
-> @@ -235,8 +264,13 @@ struct testdef {
->  	u8 *subfunc_array;
->  	size_t array_size;
->  	testfunc_t test;
-> -	bool facility_bit;
-> +	int facility_bit;
+> +ifneq ($(strip $(TEST_GEN_PROGS)),)
+>  $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
+> +endif
 
-Why change that to int here?
+This just suppresses an error, it doesn't fix the underlying problem.  E.g. there
+are other weird side effects, such as an above mkdir creating the $(ARCH) directory
+even though it shouldn't exist in the end.
 
->  } testlist[] = {
-> +	/*  PLO was introduced in the very first 64-bit machine generation.
-> +	 *  Hence it is assumed PLO is always installed in Z Arch .
-> +	 */
-> +	{ "PLO", cpu_subfunc.plo, sizeof(cpu_subfunc.plo),
-> +		test_plo_asm_block, 1 },
->  	/* MSA - Facility bit 17 */
->  	{ "KMAC", cpu_subfunc.kmac, sizeof(cpu_subfunc.kmac),
->  		test_kmac_asm_block, 17 },
+It's also very opaque, e.g. without a comment or the context of the changelog,
+I'd have no idea what purpose the above serves.
 
+Rather than bury the effective "is this arch supported" check in the middle of
+the Makefile, what if we wrap the "real" makefile and include it only for
+supported architectures, and provide dummy targets for everything else?
+
+E.g.
+
+---
+# SPDX-License-Identifier: GPL-2.0-only
+top_srcdir = ../../../..
+include $(top_srcdir)/scripts/subarch.include
+ARCH            ?= $(SUBARCH)
+
+ifeq ($(ARCH),$(filter $(ARCH),arm64 s390 riscv x86 x86_64))
+ifeq ($(ARCH),x86)
+        ARCH_DIR := x86_64
+else ifeq ($(ARCH),arm64)
+        ARCH_DIR := aarch64
+else ifeq ($(ARCH),s390)
+        ARCH_DIR := s390x
+else
+        ARCH_DIR := $(ARCH)
+endif
+
+include Makefile.kvm
+else
+all:
+clean:
+endif
+---
+
+And other KVM maintainers, the big question is: if we do the above, would now be
+a decent time to bite the bullet and switch to the kernel's canonical arch paths,
+i.e. arm64, s390, and x86?  I feel like if we're ever going to get away from
+using aarch64, x86_64, and s390x, this is as about a good of an opportunity as
+we're going to get.
+
+The annoying x86_64=>x86 alias still needs to be handled to avoid breaking explicit
+ARCH=x86_64 builds (which apparently are allowed, *sigh*), but we can ditch ARCH_DIR
+and the KVM selftests dirs match tools' include paths.
+
+---
+# SPDX-License-Identifier: GPL-2.0-only
+top_srcdir = ../../../..
+include $(top_srcdir)/scripts/subarch.include
+ARCH            ?= $(SUBARCH)
+
+ifeq ($(ARCH),$(filter $(ARCH),arm64 s390 riscv x86 x86_64))
+# Top-level selftests allows ARCH=x86_64 :-(
+ifeq ($(ARCH),x86_64)
+	ARCH := x86
+endif
+include Makefile.kvm
+else
+all:
+clean:
+endif
+---
+
+If no one objects or has a better idea, I'll post a series to do the above.
 
