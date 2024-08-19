@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-15708-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15709-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F8F89574CC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 21:47:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47EF79574D1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 21:48:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 16FB1282295
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 19:47:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC673B23C06
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 19:48:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40D1B1E4EFC;
-	Mon, 19 Aug 2024 19:45:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CAC61E4F1B;
+	Mon, 19 Aug 2024 19:45:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ka5ojFE4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q0uqG0m0"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 100F51E4EF4;
-	Mon, 19 Aug 2024 19:45:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1261E4F19;
+	Mon, 19 Aug 2024 19:45:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724096748; cv=none; b=Z53xjJjvpCWVL37sW0IXX9bRSasfPKqvYZbjdvLES+eNa70Kk5tgfJnRDzq4tupbukPcgwa0ASN1x3SxjNtFw9pc4BbGs/QLySFqqZs4mne64fLb+FCco5tLT0sZTXwsLxmOw9wpM8mwTbeZzcNpQe9bZzOfPzAqXpqStTXaAcQ=
+	t=1724096751; cv=none; b=BxsNFTXodo3r2G8hUsQJDcM3d8XE/WYc7u8fQqTE2rnqF/9cVfYO7kNkeaB/epm1a4q9M6G9AkbJSe1fqvXHA+nPGOIDHiNKwZscIh0hlX/dAsXhr4iyiJXvl9Wwa71BSi5paa+k6d7OMeNC/Aw53MiQ8vOAVOGnGFhKHmN38UY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724096748; c=relaxed/simple;
-	bh=BTC1VqrgypC0zR0a/DPftpsfqKtSqKmahpvHDAKQMXg=;
+	s=arc-20240116; t=1724096751; c=relaxed/simple;
+	bh=G/T4Zoev04V5Byavsl//HLV2kTVTfPniskd8/ZHW86Q=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KyQ9zV7KCIqWxTPRqPF5GI6nEmQQnrGF3n785ClXHpMW2vXi8fFyCC317V/1yymvEAsYNW0f2702Lb0bvIwcpHdh+FdDG6fmYtg0lAQvZf70pyBUeJ5xEwUSUmZg4jwKj57JkNt/kHDOKNhtiBX6iXSzeOWGrO5EOA80e4RgkfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ka5ojFE4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FCBCC4AF0E;
-	Mon, 19 Aug 2024 19:45:45 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=qjjb5JbZZtFwk8qI0hCOaOQVBThZPxGgSGlVvSCsKl+NujPiS58ZTiWb2oHJpQt4ik3ieioww3Q5VzaXHB5vpcI4mtKE5BYKuki4s1VXNUfSlVJhXCFBqPgwnAK4AQ7jgz2g6PMyGAc4zGd4nAzPTlNAmFndb0LiH5Euk3/wMos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q0uqG0m0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62B67C4AF12;
+	Mon, 19 Aug 2024 19:45:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724096747;
-	bh=BTC1VqrgypC0zR0a/DPftpsfqKtSqKmahpvHDAKQMXg=;
+	s=k20201202; t=1724096751;
+	bh=G/T4Zoev04V5Byavsl//HLV2kTVTfPniskd8/ZHW86Q=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ka5ojFE474ErJ8kwIBbixpX8geY+tOEnYTHKQpE5vtuzWpabbs07VH98SJkLD1zcM
-	 +3Y2GHAmx1tTPJWH3F2jVN5gDwsr93S1Ph5ClEUrpBcQr04365hvXB8APyiDw5hcz1
-	 QvRnINMeBaTNq17/nRBhbNCx3s/7OGnaOeSu98MjLthNSv8doRXJwySx8OXLVOk/7E
-	 p1f84gOd3sT5eJo7fw4RpV+7ZOd+3a0IuS5ZYJcXO9Gj2OgOgq8t1E5VnI8bgan8Ln
-	 pJo40xQ0mRq+4AkLaq53mHrfFDlXUiUQhuMjffYP8KoksgtaCoqOW3XFpLt3lpxosX
-	 4876k1lwPhJ8Q==
+	b=Q0uqG0m0IUpNhyG929qvup+lc9FVQEs0VSCyCrtEIiXaP7n3Z3Z0lUnfgmjEMk+G5
+	 88OuAprl0PtLPEwIc5WMB2Kuhb4d0/xPNLGEqUOq0dcaDNv2qM5zm33IbMMO0PuzVL
+	 h2220jWC2x+ZEVhDI+inXQ2ap+Rqw9DxlYibO67o/mgLiEPWwdSUxd2JL+9AqGDGzV
+	 VeppmhbkRznZUnOcuQuBgYknVGfp2VxoskPiOoXRnfbNfkz/ltgWsnvn1vNlZT9N6T
+	 8NLsq9iMcNA7emchFSLEaNqdiQeEUhzStlt3u75qA4BPMKfGCe0l5zLbylFU5pMvTC
+	 tH1P9oMTZANKg==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Mon, 19 Aug 2024 21:45:25 +0200
-Subject: [PATCH net 07/14] mptcp: pm: remove mptcp_pm_remove_subflow()
+Date: Mon, 19 Aug 2024 21:45:26 +0200
+Subject: [PATCH net 08/14] mptcp: pm: only mark 'subflow' endp as available
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240819-net-mptcp-pm-reusing-id-v1-7-38035d40de5b@kernel.org>
+Message-Id: <20240819-net-mptcp-pm-reusing-id-v1-8-38035d40de5b@kernel.org>
 References: <20240819-net-mptcp-pm-reusing-id-v1-0-38035d40de5b@kernel.org>
 In-Reply-To: <20240819-net-mptcp-pm-reusing-id-v1-0-38035d40de5b@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -63,138 +63,127 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4749; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=BTC1VqrgypC0zR0a/DPftpsfqKtSqKmahpvHDAKQMXg=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmw6DTcaXMICC6/6mJo75ZmAFgQEYtPhgQL8oxd
- sRt5BZq67OJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZsOg0wAKCRD2t4JPQmmg
- c8OhD/wNmNTAqUfXbPxULsX9+aAdPC7QnqNsXRZBZc0mzpww/ik5tRr1fKvRJ/FD2iNeN81kRbA
- GCYleKQcNjv9faivL9gnJtMdRRSlSc15I7wiapBakzUXwrgoNHi+G3ecBSyH13on0/CznrMJ2fl
- Zgn45vY274IH5948XPxQ8pPrRXbYUgMkvpPivh9Mi161I17djdD64tagedzyDhMeDra3HLj+hfG
- SHYsvfliMI3x6Ah2nsmPRSZ2gGHYoruWDSTlmVuj8erMFfQJXbRA4BjugZYz4KUS5l+nf7rGH8W
- oYGlANkAOkIr8HOFkmUkJYW+wRrzQQ8n7wR0TDxhQO0zf8ri+s7OzFxddU4K2otgH53Fut3Rgx0
- 8v3nl2TWo2mMUEhjmkMCvWpE+BJd5ftuqs1/GxNKdBYCnTnNnIx5DdP6ohAG+eubtcpX/qVKdI0
- 9WRC8oIZFQUxSh3qHqVLS9+tC6KUQrm8AQ7KqHomq2Fb3U1nqWztIyY590fq5dBXkYkQDlGaz+V
- q5TdNvFvX3+XfBAE426KIcehpoHh7JRJBA12nN7Ywf8Sewcay+KWYWVL2j3SMrA+xpoTZ4xeic8
- G9eb0XKGvHai9+jVvvB762hB+yt/buUt97kSouHPlauWY8XepuemWSwNQ5dp6/UCajP3mQGouHk
- /I6tw8UD64R4DXw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4100; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=G/T4Zoev04V5Byavsl//HLV2kTVTfPniskd8/ZHW86Q=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmw6DTkO3PlNozNZFdOi1GAiidS4XawGoebuqLt
+ j9wB2mCnqiJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZsOg0wAKCRD2t4JPQmmg
+ c8F/D/oDlBGFJ2DnRGImot1TksWV42Jc8J25ZO1xBnsr0sK/sQ4F7QpwPIs1yEKplmlAchoeor5
+ D/67BAWq6mFINfaHee1V6AxSzgcYOXK7HmgNCk4SQs9YQF2foJfCpCobAOreZg/B8vmhB5+9oen
+ JZSGdFfMJJpvPzu655m5t6Ws0JucOhGHXxYp5HcI3FcIkI/iA0u6k5A+cv7GFbxlkg16ytC3tMJ
+ 2fbJeIk5s/FM/bbHYIlgU3H+ym6xgZxQwjK8JrTSBdYml0U+npSRaqQ4NWk/OuRcfzng8yAjD68
+ KUyGYURdmIgZ+d0zAx9nNGtUQ8JjhCLxNR6Wc0yyE5CPDtiw3Cu+DZizJS6rNQiRjpTrDbRk+TR
+ 7+x4XZv9B8usjzDvsNAeQGYw1LNMZl0kqZknO44k6kA759popa+YSZezchG7ajbabfc6YuaCXZK
+ xF7UE1ef2q4Iqlrgk3W4am5MTt+7h00JI1zZIva+wVJLgR9g/iMVBtQZjCexhtshHXOXYqPl7kD
+ MEudqCfJ2X0IDMhKzfWf78EwUeHgG8Tj2WF2Nm0qyh/JaBEj0wSlHeQMO5v/fW49vY9uEAn6Ctm
+ qKvcoAA3/e0gQrquSzvmjA0mSco5nu2VKf9sQb03lEKEbdfuL3B2t0c97SSr9lCXTfoxOyMJnBX
+ ogm6aSGiV1smlOA==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-This helper is confusing. It is in pm.c, but it is specific to the
-in-kernel PM and it cannot be used by the userspace one. Also, it simply
-calls one in-kernel specific function with the PM lock, while the
-similar mptcp_pm_remove_addr() helper requires the PM lock.
+Adding the following warning ...
 
-What's left is the pr_debug(), which is not that useful, because a
-similar one is present in the only function called by this helper:
+  WARN_ON_ONCE(msk->pm.local_addr_used == 0)
 
-  mptcp_pm_nl_rm_subflow_received()
+... before decrementing the local_addr_used counter helped to find a bug
+when running the "remove single address" subtest from the mptcp_join.sh
+selftests.
 
-After these modifications, this helper can be marked as 'static', and
-the lock can be taken only once in mptcp_pm_flush_addrs_and_subflows().
+Removing a 'signal' endpoint will trigger the removal of all subflows
+linked to this endpoint via mptcp_pm_nl_rm_addr_or_subflow() with
+rm_type == MPTCP_MIB_RMSUBFLOW. This will decrement the local_addr_used
+counter, which is wrong in this case because this counter is linked to
+'subflow' endpoints, and here it is a 'signal' endpoint that is being
+removed.
 
-Note that it is not a bug fix, but it will help backporting the
-following commits.
+Now, the counter is decremented, only if the ID is being used outside
+of mptcp_pm_nl_rm_addr_or_subflow(), only for 'subflow' endpoints, and
+if the ID is not 0 -- local_addr_used is not taking into account these
+ones. This marking of the ID as being available, and the decrement is
+done no matter if a subflow using this ID is currently available,
+because the subflow could have been closed before.
 
-Fixes: 0ee4261a3681 ("mptcp: implement mptcp_pm_remove_subflow")
+Fixes: 06faa2271034 ("mptcp: remove multi addresses and subflows in PM")
 Cc: stable@vger.kernel.org
 Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- net/mptcp/pm.c         | 10 ----------
- net/mptcp/pm_netlink.c | 16 +++++++---------
- net/mptcp/protocol.h   |  3 ---
- 3 files changed, 7 insertions(+), 22 deletions(-)
+ net/mptcp/pm_netlink.c | 26 +++++++++++++++++---------
+ 1 file changed, 17 insertions(+), 9 deletions(-)
 
-diff --git a/net/mptcp/pm.c b/net/mptcp/pm.c
-index 23bb89c94e90..925123e99889 100644
---- a/net/mptcp/pm.c
-+++ b/net/mptcp/pm.c
-@@ -60,16 +60,6 @@ int mptcp_pm_remove_addr(struct mptcp_sock *msk, const struct mptcp_rm_list *rm_
- 	return 0;
- }
- 
--int mptcp_pm_remove_subflow(struct mptcp_sock *msk, const struct mptcp_rm_list *rm_list)
--{
--	pr_debug("msk=%p, rm_list_nr=%d", msk, rm_list->nr);
--
--	spin_lock_bh(&msk->pm.lock);
--	mptcp_pm_nl_rm_subflow_received(msk, rm_list);
--	spin_unlock_bh(&msk->pm.lock);
--	return 0;
--}
--
- /* path manager event handlers */
- 
- void mptcp_pm_new_connection(struct mptcp_sock *msk, const struct sock *ssk, int server_side)
 diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-index 2c26696b820e..44fc1c5959ac 100644
+index 44fc1c5959ac..4cf7cc851f80 100644
 --- a/net/mptcp/pm_netlink.c
 +++ b/net/mptcp/pm_netlink.c
-@@ -857,8 +857,8 @@ static void mptcp_pm_nl_rm_addr_received(struct mptcp_sock *msk)
- 	mptcp_pm_nl_rm_addr_or_subflow(msk, &msk->pm.rm_list_rx, MPTCP_MIB_RMADDR);
+@@ -833,10 +833,10 @@ static void mptcp_pm_nl_rm_addr_or_subflow(struct mptcp_sock *msk,
+ 			if (rm_type == MPTCP_MIB_RMSUBFLOW)
+ 				__MPTCP_INC_STATS(sock_net(sk), rm_type);
+ 		}
+-		if (rm_type == MPTCP_MIB_RMSUBFLOW)
+-			__set_bit(rm_id ? rm_id : msk->mpc_endpoint_id, msk->pm.id_avail_bitmap);
+-		else if (rm_type == MPTCP_MIB_RMADDR)
++
++		if (rm_type == MPTCP_MIB_RMADDR)
+ 			__MPTCP_INC_STATS(sock_net(sk), rm_type);
++
+ 		if (!removed)
+ 			continue;
+ 
+@@ -846,8 +846,6 @@ static void mptcp_pm_nl_rm_addr_or_subflow(struct mptcp_sock *msk,
+ 		if (rm_type == MPTCP_MIB_RMADDR) {
+ 			msk->pm.add_addr_accepted--;
+ 			WRITE_ONCE(msk->pm.accept_addr, true);
+-		} else if (rm_type == MPTCP_MIB_RMSUBFLOW) {
+-			msk->pm.local_addr_used--;
+ 		}
+ 	}
+ }
+@@ -1441,6 +1439,14 @@ static bool mptcp_pm_remove_anno_addr(struct mptcp_sock *msk,
+ 	return ret;
  }
  
--void mptcp_pm_nl_rm_subflow_received(struct mptcp_sock *msk,
--				     const struct mptcp_rm_list *rm_list)
-+static void mptcp_pm_nl_rm_subflow_received(struct mptcp_sock *msk,
-+					    const struct mptcp_rm_list *rm_list)
++static void __mark_subflow_endp_available(struct mptcp_sock *msk, u8 id)
++{
++	/* If it was marked as used, and not ID 0, decrement local_addr_used */
++	if (!__test_and_set_bit(id ? : msk->mpc_endpoint_id, msk->pm.id_avail_bitmap) &&
++	    id && !WARN_ON_ONCE(msk->pm.local_addr_used == 0))
++		msk->pm.local_addr_used--;
++}
++
+ static int mptcp_nl_remove_subflow_and_signal_addr(struct net *net,
+ 						   const struct mptcp_pm_addr_entry *entry)
  {
- 	mptcp_pm_nl_rm_addr_or_subflow(msk, rm_list, MPTCP_MIB_RMSUBFLOW);
- }
-@@ -1471,7 +1471,9 @@ static int mptcp_nl_remove_subflow_and_signal_addr(struct net *net,
- 					  !(entry->flags & MPTCP_PM_ADDR_FLAG_IMPLICIT));
- 
- 		if (remove_subflow) {
--			mptcp_pm_remove_subflow(msk, &list);
-+			spin_lock_bh(&msk->pm.lock);
-+			mptcp_pm_nl_rm_subflow_received(msk, &list);
-+			spin_unlock_bh(&msk->pm.lock);
- 		} else if (entry->flags & MPTCP_PM_ADDR_FLAG_SUBFLOW) {
- 			/* If the subflow has been used, but now closed */
+@@ -1474,11 +1480,11 @@ static int mptcp_nl_remove_subflow_and_signal_addr(struct net *net,
  			spin_lock_bh(&msk->pm.lock);
-@@ -1617,18 +1619,14 @@ static void mptcp_pm_remove_addrs_and_subflows(struct mptcp_sock *msk,
- 			alist.ids[alist.nr++] = entry->addr.id;
- 	}
+ 			mptcp_pm_nl_rm_subflow_received(msk, &list);
+ 			spin_unlock_bh(&msk->pm.lock);
+-		} else if (entry->flags & MPTCP_PM_ADDR_FLAG_SUBFLOW) {
+-			/* If the subflow has been used, but now closed */
++		}
++
++		if (entry->flags & MPTCP_PM_ADDR_FLAG_SUBFLOW) {
+ 			spin_lock_bh(&msk->pm.lock);
+-			if (!__test_and_set_bit(entry->addr.id, msk->pm.id_avail_bitmap))
+-				msk->pm.local_addr_used--;
++			__mark_subflow_endp_available(msk, list.ids[0]);
+ 			spin_unlock_bh(&msk->pm.lock);
+ 		}
  
-+	spin_lock_bh(&msk->pm.lock);
- 	if (alist.nr) {
--		spin_lock_bh(&msk->pm.lock);
- 		msk->pm.add_addr_signaled -= alist.nr;
- 		mptcp_pm_remove_addr(msk, &alist);
--		spin_unlock_bh(&msk->pm.lock);
- 	}
--
- 	if (slist.nr)
--		mptcp_pm_remove_subflow(msk, &slist);
--
-+		mptcp_pm_nl_rm_subflow_received(msk, &slist);
- 	/* Reset counters: maybe some subflows have been removed before */
--	spin_lock_bh(&msk->pm.lock);
- 	bitmap_fill(msk->pm.id_avail_bitmap, MPTCP_PM_MAX_ADDR_ID + 1);
- 	msk->pm.local_addr_used = 0;
+@@ -1516,6 +1522,7 @@ static int mptcp_nl_remove_id_zero_address(struct net *net,
+ 		spin_lock_bh(&msk->pm.lock);
+ 		mptcp_pm_remove_addr(msk, &list);
+ 		mptcp_pm_nl_rm_subflow_received(msk, &list);
++		__mark_subflow_endp_available(msk, 0);
+ 		spin_unlock_bh(&msk->pm.lock);
+ 		release_sock(sk);
+ 
+@@ -1917,6 +1924,7 @@ static void mptcp_pm_nl_fullmesh(struct mptcp_sock *msk,
+ 
+ 	spin_lock_bh(&msk->pm.lock);
+ 	mptcp_pm_nl_rm_subflow_received(msk, &list);
++	__mark_subflow_endp_available(msk, list.ids[0]);
+ 	mptcp_pm_create_subflow_or_signal_addr(msk);
  	spin_unlock_bh(&msk->pm.lock);
-diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-index 60c6b073d65f..a1c1b0ff1ce1 100644
---- a/net/mptcp/protocol.h
-+++ b/net/mptcp/protocol.h
-@@ -1026,7 +1026,6 @@ int mptcp_pm_announce_addr(struct mptcp_sock *msk,
- 			   const struct mptcp_addr_info *addr,
- 			   bool echo);
- int mptcp_pm_remove_addr(struct mptcp_sock *msk, const struct mptcp_rm_list *rm_list);
--int mptcp_pm_remove_subflow(struct mptcp_sock *msk, const struct mptcp_rm_list *rm_list);
- void mptcp_pm_remove_addrs(struct mptcp_sock *msk, struct list_head *rm_list);
- 
- void mptcp_free_local_addr_list(struct mptcp_sock *msk);
-@@ -1133,8 +1132,6 @@ static inline u8 subflow_get_local_id(const struct mptcp_subflow_context *subflo
- 
- void __init mptcp_pm_nl_init(void);
- void mptcp_pm_nl_work(struct mptcp_sock *msk);
--void mptcp_pm_nl_rm_subflow_received(struct mptcp_sock *msk,
--				     const struct mptcp_rm_list *rm_list);
- unsigned int mptcp_pm_get_add_addr_signal_max(const struct mptcp_sock *msk);
- unsigned int mptcp_pm_get_add_addr_accept_max(const struct mptcp_sock *msk);
- unsigned int mptcp_pm_get_subflows_max(const struct mptcp_sock *msk);
+ }
 
 -- 
 2.45.2
