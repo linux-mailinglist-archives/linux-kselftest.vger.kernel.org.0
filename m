@@ -1,140 +1,138 @@
-Return-Path: <linux-kselftest+bounces-15632-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15633-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6E969567C9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 12:05:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04F42956837
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 12:21:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98C5E1C21770
-	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 10:05:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4C28280E23
+	for <lists+linux-kselftest@lfdr.de>; Mon, 19 Aug 2024 10:21:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75CE115CD61;
-	Mon, 19 Aug 2024 10:05:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6979215FD04;
+	Mon, 19 Aug 2024 10:21:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="QFQNtX6z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bHfO9Qu3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCC7148FE0;
-	Mon, 19 Aug 2024 10:05:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724061937; cv=pass; b=sORd3vXR1cAmt4S7MiowD6cIKtOSAE7NzrXwyX334WTgNcZvkpMQwopSwnVasyX5zCDTjNbJWl56rxmvG6JHHRoKampnACY6U/z2AV9kK0MJsyUVvW5WanV+TDHUVbQOkasCx7+2KWhC6F8HsJL01ykb8bAsPVOLXupBikbLbkc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724061937; c=relaxed/simple;
-	bh=Hh8QfZgSepyCVNdlw8p6+aGPEFGsy6XYRFHLeqgAijE=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=JEVE1Qh32Jt6bvOLcRYE2wd9h7sM/k8EU+iWwLyn+QIoP5yhmrjSymRJ95cgm2SkUJXjXv07SFGVYMcxBMM8Imxe84fZBq12o9pi70x/X2Fn2fp8kdVWGnt+hQHCu6z/JTz0M/U+Z1RGx/7nuSaBjkLhUk4dh97k6T9HBVBj38Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=QFQNtX6z; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Delivered-To: Usama.Anjum@collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1724061921; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=MXOhc7NLEDPDr/iPpz6LDk+OKmaWGNi608mPfY3+G8aMooSY4q1YtJlBkTErvALqkiJB36Evfe3+xm5KMlBjUUTuMEaHw+dfpepIghc9za9DvnI0Bz/4DR0dTATzX5UTsxCgz2VFiQLOJnehAK/RryheLGuF5psEDjud0LbaY3Y=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1724061921; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=clWg1cFDvmBXHk5ECX33rfzkJ2REgKM2jV0tZFYmIeQ=; 
-	b=PUlR2JI/qzO2k81FjM2m5k5QxwrKZ9omUh/3J+0lC+Mwx+1OiPktwnoi1g3JtYdyFWX9oOnQD8nsBzUJAbXP1ISIWPuDsikRTqIadvYWwWh6t5DXjEmxY7eZsymgSCKZh3NSJWTK5fBD3zLLV0hqpKLAguhZThbpmBtLJjRu0Dk=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
-	dmarc=pass header.from=<Usama.Anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724061921;
-	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=clWg1cFDvmBXHk5ECX33rfzkJ2REgKM2jV0tZFYmIeQ=;
-	b=QFQNtX6zd8MeGg+ZTXgH2wzzY9xNeJKd5YubWcapTV7m5lk9rX13WKKixaCfjLPY
-	xVrvQjc0GOdi0gTl0msRIJwR5ePxQKYjV/6x1rlG+eya7C4oUl3s2ItFgMYLiZXHrkI
-	eLBRGE4NmrGShGj6+dhZv88676r6cOD0rW38Oasw=
-Received: by mx.zohomail.com with SMTPS id 1724061920204590.2573152825611;
-	Mon, 19 Aug 2024 03:05:20 -0700 (PDT)
-Message-ID: <1b36ba43-60a4-441c-981f-9b62f366aa95@collabora.com>
-Date: Mon, 19 Aug 2024 15:05:07 +0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12F3015B14C
+	for <linux-kselftest@vger.kernel.org>; Mon, 19 Aug 2024 10:21:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724062903; cv=none; b=pByfrP4jGAtaNat2ImjYTzfGyUMu474Gvx7LcEzFpKvTI3x6PYgNWGOlG+9fJzBK0X6a4Am7qd/iggrBZaO8ENPlU+iNSdlfqbGgGLfs012cJcsMYhebOKHolNjF2TXDAZHmC6WwEEc++mY/WVQn96+w3RcT1bXU25SZ7WRTLeE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724062903; c=relaxed/simple;
+	bh=lMB3ZG3s5QhQax0iPZTRA/YO04UStL4JIwcWP2MwrEo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DQ2RZ/jFD/VIeoSOR94ly99iMIq4D9JpvzE6oBbNwYG/aDW5N3+Hr99DIuzOiTxRZefwc5kFi7zwWt7bFh9UkKM2JYHF2haHmFNrqybMBRWXBgzuwC+SS+oBW9bczCDFouDPgQ/P6+OoIc4Shy0jWIPJTduzOq+LLjyibFGphKs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bHfO9Qu3; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724062902; x=1755598902;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lMB3ZG3s5QhQax0iPZTRA/YO04UStL4JIwcWP2MwrEo=;
+  b=bHfO9Qu3VcsIZk/dHClbZUPvnxB7WOK32ynpuL1pgm4WuFih0o21JRma
+   0y6gf7kDUcAnLAc+3eehMSAzVQGq66x6pYI5teLhevrR8lce8ZBQ5sNfT
+   UtcIV7L4yMLgYlnTFgPV2wx+C0Q3U8+hi0Mn/yRXhdJ5/WdOwugHjb40G
+   7akWx3+CAx6BYBLOcti0mIGIOoqgv/b9k4M3OZdXoj0IsKTOtNmfHyzJE
+   xCz4InRDV0j3nliQX/zpzc8ZDaML0ak74WaMnRwKXZcRzREG1yK3Yu3ki
+   GENGI0SMM/ie85gtg6Rpslo19muABO37I5DC5OPSt34ZeG4gEPz7sjJXc
+   g==;
+X-CSE-ConnectionGUID: mXsEdgH0RA6s6G0Xuj2JTQ==
+X-CSE-MsgGUID: Bq1+yV4rThyS0KQs48KSeA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11168"; a="32921443"
+X-IronPort-AV: E=Sophos;i="6.10,158,1719903600"; 
+   d="scan'208";a="32921443"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2024 03:21:40 -0700
+X-CSE-ConnectionGUID: oYdsRvbgQo+PZKBviBso5Q==
+X-CSE-MsgGUID: +laIDPhiQzGP+M4t0nmrxA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,158,1719903600"; 
+   d="scan'208";a="61101153"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 19 Aug 2024 03:21:37 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sfzW3-0008t2-1B;
+	Mon, 19 Aug 2024 10:21:35 +0000
+Date: Mon, 19 Aug 2024 18:21:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
+	brendan.higgins@linux.dev, davidgow@google.com, rmoar@google.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	skhan@linuxfoundation.org,
+	linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH v2] lib/math: Add int_pow test suite
+Message-ID: <202408191754.tO9UUD0n-lkp@intel.com>
+References: <20240819014115.221135-1-luis.hernandez093@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Usama.Anjum@collabora.com, Andrew Morton <akpm@linux-foundation.org>,
- Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, kernel@collabora.com,
- stable@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: mm: Fix build errors on armhf
-To: Jeff Xu <jeffxu@chromium.org>
-References: <20240809082511.497266-1-usama.anjum@collabora.com>
- <CABi2SkWgPoWJY_CMxDru7FPjtQBgv61PA2VoCumd3T8Xq3fjbg@mail.gmail.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
-In-Reply-To: <CABi2SkWgPoWJY_CMxDru7FPjtQBgv61PA2VoCumd3T8Xq3fjbg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240819014115.221135-1-luis.hernandez093@gmail.com>
 
-On 8/14/24 3:29 AM, Jeff Xu wrote:
-> Hi Muhammad
-> 
-> On Fri, Aug 9, 2024 at 1:25 AM Muhammad Usama Anjum
-> <usama.anjum@collabora.com> wrote:
->>
->> The __NR_mmap isn't found on armhf. The mmap() is commonly available
->> system call and its wrapper is presnet on all architectures. So it
->> should be used directly. It solves problem for armhf and doesn't create
->> problem for architectures as well. Remove sys_mmap() functions as they
->> aren't doing anything else other than calling mmap(). There is no need
->> to set errno = 0 manually as glibc always resets it.
->>
-> The mseal_test should't have dependency on libc, and mmap() is
-> implemented by glibc, right ?
-> 
-> I just fixed a bug to switch mremap() to sys_mremap to address an
-> issue that different glibc version's behavior is slightly different
-> for mremap().
-> 
-> What is the reason that __NR_mmap not available in armhf ? (maybe it
-> is another name ?)  there must be a way to call syscall directly on
-> armhf, can we use that instead ?
+Hi Luis,
 
-It seems __NR_mmap syscall is deprecated for arm. Found this comment in
-arch/arm/include/asm/unistd.h:
-/*
- * The following syscalls are obsolete and no longer available for EABI:
- *  __NR_time
- *  __NR_umount
- *  __NR_stime
- *  __NR_alarm
- *  __NR_utime
- *  __NR_getrlimit
- *  __NR_select
- *  __NR_readdir
- *  __NR_mmap
- *  __NR_socketcall
- *  __NR_syscall
- *  __NR_ipc
- */
+kernel test robot noticed the following build warnings:
 
-The glibc mmap() calls mmap2() these days by adjusting the parameters
-internally. From man mmap:
-C library/kernel differences:
-This  page  describes the interface provided by the glibc mmap() wrapper
-function.  Originally, this function invoked a system call of the same
-name.  Since Linux 2.4, that system call has been superseded  by
-mmap2(2), and nowadays the glibc mmap() wrapper function invokes
-mmap2(2) with a suitably adjusted value for offset.
+[auto build test WARNING on v6.11-rc4]
+[also build test WARNING on linus/master next-20240819]
+[cannot apply to akpm-mm/mm-nonmm-unstable]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I'm not sure if behaviour of glibc mmap() and syscall mmap2() would be
-same, but we should use glibc at most places which accounts for
-different architectures correctly. Maybe the differences were only
-present in case of mremap().
+url:    https://github.com/intel-lab-lkp/linux/commits/Luis-Felipe-Hernandez/lib-math-Add-int_pow-test-suite/20240819-094252
+base:   v6.11-rc4
+patch link:    https://lore.kernel.org/r/20240819014115.221135-1-luis.hernandez093%40gmail.com
+patch subject: [PATCH v2] lib/math: Add int_pow test suite
+config: i386-buildonly-randconfig-004-20240819 (https://download.01.org/0day-ci/archive/20240819/202408191754.tO9UUD0n-lkp@intel.com/config)
+compiler: clang version 18.1.5 (https://github.com/llvm/llvm-project 617a15a9eac96088ae5e9134248d8236e34b91b1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240819/202408191754.tO9UUD0n-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408191754.tO9UUD0n-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> lib/math/tests/int_pow_kunit.c:22:11: warning: integer literal is too large to be represented in a signed integer type, interpreting as unsigned [-Wimplicitly-unsigned-literal]
+      22 |         { 2, 63, 9223372036854775808, "Large result"},
+         |                  ^
+   1 warning generated.
+
+
+vim +22 lib/math/tests/int_pow_kunit.c
+
+    12	
+    13	static const struct test_case_params params[] = {
+    14		{ 64, 0, 1, "Power of zero" },
+    15		{ 64, 1, 64, "Power of one"},
+    16		{ 0, 5, 0, "Base zero" },
+    17		{ 1, 64, 1, "Base one" },
+    18		{ 2, 2, 4, "Two squared"},
+    19		{ 2, 3, 8, "Two cubed"},
+    20		{ 5, 5, 3125, "Five raised to the fith power" },
+    21		{ U64_MAX, 1, U64_MAX, "Max base" },
+  > 22		{ 2, 63, 9223372036854775808, "Large result"},
+    23	};
+    24	
 
 -- 
-BR,
-Muhammad Usama Anjum
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
