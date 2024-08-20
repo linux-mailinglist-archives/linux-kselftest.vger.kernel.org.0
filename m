@@ -1,40 +1,59 @@
-Return-Path: <linux-kselftest+bounces-15768-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15769-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 634CA957F35
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 09:16:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F002B957F8D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 09:27:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C9302817F5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 07:16:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9394283DC9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 07:27:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D64A1BC58;
-	Tue, 20 Aug 2024 07:16:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9896186E2E;
+	Tue, 20 Aug 2024 07:27:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="FXsfGJ90"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B98BE56A;
-	Tue, 20 Aug 2024 07:16:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724138204; cv=none; b=fwNADmG8S1j1koDSB5q21SFXdcK6vuy4zwfHWyhDqJY5IP6ln+GGFAlT1iepzdBShQU9JvoRd2xESW+bc5gnwymRVIwcNxCOMKA/KcrsIZtCfkX+Gu6E0gR05efPNBWxIeeVypMaqmXTBF7vhnYOWE4ZFfPoqLd1BI71Ybm65/w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724138204; c=relaxed/simple;
-	bh=Wy7PeXvS2DkMCINbXnH9uYYNn5l3PC7queX0oiopSBA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gLySipSGB1OsqJAHBXV19BgTezKgzjmyMN+kQONJSnXNjR9zYVAt/PRkUZW4371QTG5KSLSuSlnBVE61+HWerifzpU2qqw9SAosYalKHWUz94dG3ik9/wrPliyKeodeWJK+fEb+tj+Ud2cTUpIrZxTtzKOX7m24q0R/EiTndCZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71C60339;
-	Tue, 20 Aug 2024 00:17:06 -0700 (PDT)
-Received: from [10.163.86.112] (unknown [10.163.86.112])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4EE643F73B;
-	Tue, 20 Aug 2024 00:16:29 -0700 (PDT)
-Message-ID: <c2ca1845-7eec-4119-b7b6-f6694e4a7799@arm.com>
-Date: Tue, 20 Aug 2024 12:46:22 +0530
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8F9132124;
+	Tue, 20 Aug 2024 07:27:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724138825; cv=pass; b=O7w7XL5VeJTIwroCZy56ShIn9hTC5x4GHNhfmYZeBMl/JEHURPenLVDP+AsR2U2UqmyTe/XM7d0zA3hbGIDdx5GqMT6ypuRC0ellLhcqBSe/IyLEct72LTfVg230YPVYMPSqL5F0wnO0UrsWFppA/s5QyVUe+8bc58fojCE1ua4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724138825; c=relaxed/simple;
+	bh=OAb3vC/Zkyg/SdJ1TD//avWUs8En4MbQVlb8+2cI4Ik=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Zb7nHTqanV+ttPYz5118Q9BYyY67CDpTqX+9Qtag6+xPJ3P6vCJEypy63bRR0d0P6R7vo4rd06Oha/nBeMM+wrAd1TRGyCV2v1ohQ12FRaUKUIjMp0Bh7k1nVQp2fe1O8aNygvSBGAAxcTHxOQESduJ5ZEU1jqnVsCtusYwHwVU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=FXsfGJ90; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+Delivered-To: Usama.Anjum@collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1724138796; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=EXzAsN4bP2BCe2iQJANEH2sdLh3DN0xIyP/X76hyuuO1IhRNgdetegrZyYZ8ujk8c0PyyBRKFCnnQ+TBBEIwC1B2iy0rFvfNK3wFgZs/kBqjlbT8v4T+OpSmHZmwqiMMqmM3taEhk824PwIKbw9PhoVaVTXa/4UwU1WfguiYfBg=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1724138796; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=M8D0uEeC8XYss0szLPUlb5Lps9IGtnYOrv/FK6gxMhI=; 
+	b=QuVLpv+XsnQUm+asJhqoBfNbgJmpn29JUQjPW4g8QeAA1q04zjkw3phmU6xX26DKIX3HTmd16yzcyQHMSeDDBS7VmdK476SgW6cGplRtkUqJ84Bz3DFSpLcAny6wtHGHSNdpvOzfDxrZcCHqn4JA81M/1fU/ThxdpMW9uPkr1PE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
+	dmarc=pass header.from=<Usama.Anjum@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724138796;
+	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
+	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=M8D0uEeC8XYss0szLPUlb5Lps9IGtnYOrv/FK6gxMhI=;
+	b=FXsfGJ90DaxKUyBr/7kjy5Vz6cA1IyTmA9Y8dR4dXL0JaUNqf3dGc7HYCcyGwZYC
+	eHbZGA98tPFCgfJUUwGdq/VzamRhzm1ew0bPhrYlBEcRg+AXIjMJ4gYDhfNkGrU0M2z
+	NOR4Qa10gQVAgX+tP2ZhVBHtX9Oj6F8huDjedKbo=
+Received: by mx.zohomail.com with SMTPS id 1724138794399675.3975600570174;
+	Tue, 20 Aug 2024 00:26:34 -0700 (PDT)
+Message-ID: <379673da-9f2f-484a-be04-a62d916fa25e@collabora.com>
+Date: Tue, 20 Aug 2024 12:26:23 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,212 +61,133 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] mm: Retry migration earlier upon refcount mismatch
-To: "Huang, Ying" <ying.huang@intel.com>
-Cc: akpm@linux-foundation.org, shuah@kernel.org, david@redhat.com,
- willy@infradead.org, ryan.roberts@arm.com, anshuman.khandual@arm.com,
- catalin.marinas@arm.com, cl@gentwo.org, vbabka@suse.cz, mhocko@suse.com,
- apopple@nvidia.com, osalvador@suse.de, baolin.wang@linux.alibaba.com,
- dave.hansen@linux.intel.com, will@kernel.org, baohua@kernel.org,
- ioworker0@gmail.com, gshan@redhat.com, mark.rutland@arm.com,
- kirill.shutemov@linux.intel.com, hughd@google.com, aneesh.kumar@kernel.org,
- yang@os.amperecomputing.com, peterx@redhat.com, broonie@kernel.org,
- mgorman@techsingularity.net, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-References: <20240809103129.365029-1-dev.jain@arm.com>
- <20240809103129.365029-2-dev.jain@arm.com>
- <87frrauwwv.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <15dbe4ac-a036-4029-ba08-e12a236f448a@arm.com>
- <87bk1yuuzu.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <95b72817-5444-4ced-998a-1cb90f42bf49@arm.com>
- <8734naurhm.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <9d84e4e8-ac54-4eb1-a113-3f32aea864c9@arm.com>
- <fe76204d-4cef-4f06-a5bc-e016a513f783@arm.com>
- <391d4f4f-e642-4c11-a36b-190874963f8a@arm.com>
- <c40de4d7-e37e-4d2f-bd7a-a2a5497a2419@arm.com>
- <87a5h9hud7.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Cc: Usama.Anjum@collabora.com, Paolo Bonzini <pbonzini@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, kernel@collabora.com, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>, Anup Patel <anup@brainfault.org>
+Subject: Re: [PATCH v2] selftests: kvm: fix mkdir error when building for
+ unsupported arch
+To: Sean Christopherson <seanjc@google.com>
+References: <20240819093030.2864163-1-usama.anjum@collabora.com>
+ <ZsNzzajqBkmuu5Xm@google.com>
 Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <87a5h9hud7.fsf@yhuang6-desk2.ccr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
+In-Reply-To: <ZsNzzajqBkmuu5Xm@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-
-On 8/19/24 12:28, Huang, Ying wrote:
-> Dev Jain <dev.jain@arm.com> writes:
->
->> On 8/13/24 12:52, Dev Jain wrote:
->>> On 8/13/24 10:30, Dev Jain wrote:
->>>> On 8/12/24 17:38, Dev Jain wrote:
->>>>> On 8/12/24 13:01, Huang, Ying wrote:
->>>>>> Dev Jain <dev.jain@arm.com> writes:
->>>>>>
->>>>>>> On 8/12/24 11:45, Huang, Ying wrote:
->>>>>>>> Dev Jain <dev.jain@arm.com> writes:
->>>>>>>>
->>>>>>>>> On 8/12/24 11:04, Huang, Ying wrote:
->>>>>>>>>> Hi, Dev,
->>>>>>>>>>
->>>>>>>>>> Dev Jain <dev.jain@arm.com> writes:
->>>>>>>>>>
->>>>>>>>>>> As already being done in __migrate_folio(), wherein we
->>>>>>>>>>> backoff if the
->>>>>>>>>>> folio refcount is wrong, make this check during the
->>>>>>>>>>> unmapping phase, upon
->>>>>>>>>>> the failure of which, the original state of the PTEs will be
->>>>>>>>>>> restored and
->>>>>>>>>>> the folio lock will be dropped via migrate_folio_undo_src(),
->>>>>>>>>>> any racing
->>>>>>>>>>> thread will make progress and migration will be retried.
->>>>>>>>>>>
->>>>>>>>>>> Signed-off-by: Dev Jain <dev.jain@arm.com>
->>>>>>>>>>> ---
->>>>>>>>>>>      mm/migrate.c | 9 +++++++++
->>>>>>>>>>>      1 file changed, 9 insertions(+)
->>>>>>>>>>>
->>>>>>>>>>> diff --git a/mm/migrate.c b/mm/migrate.c
->>>>>>>>>>> index e7296c0fb5d5..477acf996951 100644
->>>>>>>>>>> --- a/mm/migrate.c
->>>>>>>>>>> +++ b/mm/migrate.c
->>>>>>>>>>> @@ -1250,6 +1250,15 @@ static int
->>>>>>>>>>> migrate_folio_unmap(new_folio_t get_new_folio,
->>>>>>>>>>>          }
->>>>>>>>>>>            if (!folio_mapped(src)) {
->>>>>>>>>>> +        /*
->>>>>>>>>>> +         * Someone may have changed the refcount and maybe
->>>>>>>>>>> sleeping
->>>>>>>>>>> +         * on the folio lock. In case of refcount mismatch,
->>>>>>>>>>> bail out,
->>>>>>>>>>> +         * let the system make progress and retry.
->>>>>>>>>>> +         */
->>>>>>>>>>> +        struct address_space *mapping = folio_mapping(src);
->>>>>>>>>>> +
->>>>>>>>>>> +        if (folio_ref_count(src) !=
->>>>>>>>>>> folio_expected_refs(mapping, src))
->>>>>>>>>>> +            goto out;
->>>>>>>>>>>              __migrate_folio_record(dst, old_page_state,
->>>>>>>>>>> anon_vma);
->>>>>>>>>>>              return MIGRATEPAGE_UNMAP;
->>>>>>>>>>>          }
->>>>>>>>>> Do you have some test results for this?  For example, after
->>>>>>>>>> applying the
->>>>>>>>>> patch, the migration success rate increased XX%, etc.
->>>>>>>>> I'll get back to you on this.
->>>>>>>>>
->>>>>>>>>> My understanding for this issue is that the migration success
->>>>>>>>>> rate can
->>>>>>>>>> increase if we undo all changes before retrying. This is the
->>>>>>>>>> current
->>>>>>>>>> behavior for sync migration, but not for async migration.  If
->>>>>>>>>> so, we can
->>>>>>>>>> use migrate_pages_sync() for async migration too to increase
->>>>>>>>>> success
->>>>>>>>>> rate?  Of course, we need to change the function name and
->>>>>>>>>> comments.
->>>>>>>>> As per my understanding, this is not the current behaviour for sync
->>>>>>>>> migration. After successful unmapping, we fail in
->>>>>>>>> migrate_folio_move()
->>>>>>>>> with -EAGAIN, we do not call undo src+dst (rendering the loop
->>>>>>>>> around
->>>>>>>>> migrate_folio_move() futile), we do not push the failed folio
->>>>>>>>> onto the
->>>>>>>>> ret_folios list, therefore, in _sync(), _batch() is never
->>>>>>>>> tried again.
->>>>>>>> In migrate_pages_sync(), migrate_pages_batch(,MIGRATE_ASYNC) will be
->>>>>>>> called first, if failed, the folio will be restored to the original
->>>>>>>> state (unlocked).  Then migrate_pages_batch(,_SYNC*) is called
->>>>>>>> again.
->>>>>>>> So, we unlock once.  If it's necessary, we can unlock more times via
->>>>>>>> another level of loop.
->>>>>>> Yes, that's my point. We need to undo src+dst and retry.
->>>>>> For sync migration, we undo src+dst and retry now, but only once.  You
->>>>>> have shown that more retrying increases success rate.
->>>>>>
->>>>>>> We will have
->>>>>>> to decide where we want this retrying to be; do we want to change the
->>>>>>> return value, end up in the while loop wrapped around _sync(),
->>>>>>> and retry
->>>>>>> there by adding another level of loop, or do we want to make use
->>>>>>> of the
->>>>>>> existing retry loops, one of which is wrapped around _unmap();
->>>>>>> the latter
->>>>>>> is my approach. The utility I see for the former approach is
->>>>>>> that, in case
->>>>>>> of a large number of page migrations (which should usually be
->>>>>>> the case),
->>>>>>> we are giving more time for the folio to get retried. The latter
->>>>>>> does not
->>>>>>> give much time and discards the folio if it did not succeed
->>>>>>> under 7 times.
->>>>>> Because it's a race, I guess that most folios will be migrated
->>>>>> successfully in the first pass.
->>>>>>
->>>>>> My concerns of your method are that it deal with just one case
->>>>>> specially.  While retrying after undoing all appears more general.
->>>>>
->>>>> Makes sense. Also, please ignore my "change the return value"
->>>>> thing, I got confused between unmap_folios, ret_folios, etc.
->>>>> Now I think I understood what the lists are doing :)
->>>>>
->>>>>> If it's really important to retry after undoing all, we can either
->>>>>> convert two retying loops of migrate_pages_batch() into one loop, or
->>>>>> remove retry loop in migrate_pages_batch() and retry in its caller
->>>>>> instead.
->>>>> And if I implemented this correctly, the following makes the test
->>>>> pass always:
->>>>> https://www.codedump.xyz/diff/Zrn7EdxzNXmXyNXe
->>>>
->>>> Okay, I did mess up with the implementation, leading to a false
->>>> positive. Let me try again :)
->>>
->>> Hopefully this should do the job:
->>> https://www.codedump.xyz/diff/ZrsIV8JSOPYx5V_u
->>>
->>> But the result is worse than the patch proposed; I rarely hit
->>> a 3 digit number of successes of move_pages(). But, on a
->>> base kernel without any changes, when I apply David's
->>> suggestion to change the test, if I choose 7 as the number
->>> of retries (= NR_MAX_MIGRATE_SYNC_RETRY) in the test, I
->>> can touch even 4 digits. I am puzzled.
->>> We can also try merging the for loops of unmap and move...
+On 8/19/24 9:33 PM, Sean Christopherson wrote:
+> +KVM arch maintainers
+> 
+> On Mon, Aug 19, 2024, Muhammad Usama Anjum wrote:
+>> The tests are built on per architecture basis. When unsupported
+>> architecture is specified, it has no tests and TEST_GEN_PROGS is empty.
+>> The lib.mk has support for not building anything for such case. But KVM
+>> makefile doesn't handle such case correctly. It doesn't check if
+>> TEST_GEN_PROGS is empty or not and try to create directory by mkdir.
+>> Hence mkdir generates the error.
 >>
->> If people are okay with this change, I guess I can send it as
->> a v2? I concur with your assessment that my initial approach
->> is solving a specific case; the above approach does give me
->> a slight improvement on arm64 and should be an improvement
->> in general, since it makes sense to defer retrying the failed folio
->> as much as we can.
-> We need to deal with something else before a formal v2,
->
-> - stats need to be fixed, please check result processing for the first
->    loop of migrate_pages_sync().
+>> mkdir: missing operand
+>> Try 'mkdir --help' for more information.
+>>
+>> This can be easily fixed by checking if TEST_GEN_PROGS isn't empty
+>> before calling mkdir.
+>>
+>> Cc: Paolo Bonzini <pbonzini@redhat.com>
+>> Cc: Sean Christopherson <seanjc@google.com>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>> Changes since v1:
+>> - Instead of ignoring error, check TEST_GEN_PROGS's validity first
+>> ---
+>>  tools/testing/selftests/kvm/Makefile | 2 ++
+>>  1 file changed, 2 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+>> index 48d32c5aa3eb7..9f8ed82ff1d65 100644
+>> --- a/tools/testing/selftests/kvm/Makefile
+>> +++ b/tools/testing/selftests/kvm/Makefile
+>> @@ -317,7 +317,9 @@ $(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S $(GEN_HDRS)
+>>  $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
+>>  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -ffreestanding $< -o $@
+>>  
+>> +ifneq ($(strip $(TEST_GEN_PROGS)),)
+>>  $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
+>> +endif
+> This just suppresses an error, it doesn't fix the underlying problem.  E.g. there
+> are other weird side effects, such as an above mkdir creating the $(ARCH) directory
+> even though it shouldn't exist in the end.
+> 
+> It's also very opaque, e.g. without a comment or the context of the changelog,
+> I'd have no idea what purpose the above serves.
+> 
+> Rather than bury the effective "is this arch supported" check in the middle of
+> the Makefile, what if we wrap the "real" makefile and include it only for
+> supported architectures, and provide dummy targets for everything else?
+> 
+> E.g.
+> 
+> ---
+> # SPDX-License-Identifier: GPL-2.0-only
+> top_srcdir = ../../../..
+> include $(top_srcdir)/scripts/subarch.include
+> ARCH            ?= $(SUBARCH)
+> 
+> ifeq ($(ARCH),$(filter $(ARCH),arm64 s390 riscv x86 x86_64))
+> ifeq ($(ARCH),x86)
+>         ARCH_DIR := x86_64
+> else ifeq ($(ARCH),arm64)
+>         ARCH_DIR := aarch64
+> else ifeq ($(ARCH),s390)
+>         ARCH_DIR := s390x
+> else
+>         ARCH_DIR := $(ARCH)
+> endif
+> 
+> include Makefile.kvm
+> else
+> all:
+> clean:
+> endif
+> ---
+> 
+> And other KVM maintainers, the big question is: if we do the above, would now be
+> a decent time to bite the bullet and switch to the kernel's canonical arch paths,
+> i.e. arm64, s390, and x86?  I feel like if we're ever going to get away from
+> using aarch64, x86_64, and s390x, this is as about a good of an opportunity as
+> we're going to get.
+> 
+> The annoying x86_64=>x86 alias still needs to be handled to avoid breaking explicit
+> ARCH=x86_64 builds (which apparently are allowed, *sigh*), but we can ditch ARCH_DIR
+> and the KVM selftests dirs match tools' include paths.
+> 
+> ---
+> # SPDX-License-Identifier: GPL-2.0-only
+> top_srcdir = ../../../..
+> include $(top_srcdir)/scripts/subarch.include
+> ARCH            ?= $(SUBARCH)
+> 
+> ifeq ($(ARCH),$(filter $(ARCH),arm64 s390 riscv x86 x86_64))
+> # Top-level selftests allows ARCH=x86_64 🙁
+> ifeq ($(ARCH),x86_64)
+> 	ARCH := x86
+> endif
+> include Makefile.kvm
+> else
+> all:
+> clean:
+> endif
+> ---
+> 
+> If no one objects or has a better idea, I'll post a series to do the above.
+I didn't had enough knowledge to attempt a better fix. Thank you.
 
-Sorry, can you point out where do they need to be fixed exactly?
-The change I did is inside the while(!list_empty(from)) block,
-and there is no stat computation being done there already.
+-- 
+BR,
+Muhammad Usama Anjum
 
->
-> - Do we need something similar for async migration.
->
-> - Can we add another level of explicit loop for the second loop of
->    migrate_pages_sync()?  That is to improve code readability.  Or, add a
->    function to dot that?
->
-> - Is it good to remove retry loop in migrate_pages_batch()?  And do
->    retry in the caller?
-
-I am personally in favour of leaving the retry loop, and async
-migration, as it is. Since async version is basically minimal-effort
-migration, it won't make sense to "optimize" it, given the code churn
-it would create, including the change we will have to then do in
-"if (mode == MIGRATE_ASYNC) => migrate_pages_batch(ASYNC)" inside
-migrate_pages().
-
-Sorry, what do you mean by "another level of explicit loop"?
-
->
-> --
-> Best Regards,
-> Huang, Ying
 
