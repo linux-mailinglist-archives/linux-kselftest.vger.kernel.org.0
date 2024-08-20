@@ -1,132 +1,98 @@
-Return-Path: <linux-kselftest+bounces-15786-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15787-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEFAF958DAB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 19:56:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90C70958EE7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 21:56:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 19FA4B21CBA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 17:56:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3D9C1C20F8D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 19:56:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4898F1BE225;
-	Tue, 20 Aug 2024 17:56:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 865F415C152;
+	Tue, 20 Aug 2024 19:56:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kMBNHgu8"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="We1KVI2n"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3ADA482FF;
-	Tue, 20 Aug 2024 17:56:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C4B15C13E
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Aug 2024 19:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724176589; cv=none; b=Nivy/DI16SZAsVLWmG54de3w97mvPzrFtv08ur98jrSWtWSx/LCVrDRjRBV/qPu38pPxARoOToRhPM3HUIYIYZyaoASeNatJNTTVkJ+YSPDlQh8haplGbCmxttTv4rVyzNaJpKR0FJkXhcMg9F+YW9ifnYbuuq+P9WOV4YJldC4=
+	t=1724183774; cv=none; b=NrR7+GMJ2Yh2qkvndVUqIC500mqPPwxHXw9z1khkpZMjwE+jEb6sGxifqrzs7kw9/pVF0ObV5/U9aSc9YHDwMrMZ7tsHjbGza4oLP/5CcOopmBFDsyeTzByPxRN0ww35TTkxpCQtpq4SZIgYOlyn7zXn6l1ckyu7ynlJF90TkTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724176589; c=relaxed/simple;
-	bh=gZbF78Vf8hQyyvrqZwyllYGTMkZkFUc2boH3xNoj3xg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ln/rxhNd+M+sHfCmyUsz0fI2pK1TP+GzJW5QhpLIpHOfeQpOrTcF4VhO9TuV+/xDyUZl6maSsI2peLSwtsa2MhAw3K9WS31TQ19qfJfGZKYfdno/GObVwCLVjMmUd7Rt+CX/lE2qzsMxBovMy1NTZf3yCV2c/tvXdroEiuEQ5WM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kMBNHgu8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA60CC4AF63;
-	Tue, 20 Aug 2024 17:56:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724176588;
-	bh=gZbF78Vf8hQyyvrqZwyllYGTMkZkFUc2boH3xNoj3xg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kMBNHgu8QiEUNr6Dj0H9OBOYNtuyoJmzRNKbBHyDLb+AJcBwiuh2LgJrzteoMvVsx
-	 5LXnhtvTMAUrTQWGO8C4/3pUWw0n2Ty4gAoWYmAT+yBC5FbQ2efuWgCCm9W086xLv1
-	 Zz0YOIynNZ511iDRjmQKgI/z2W0DSwrGpMHtyIFX7gsM+jxsuh0nwza7zZ/cUCLkch
-	 5kByC8ltUO3h9EBYmOklMwhN2gyHbUmRzoURFqk+UuCaO0bvG1QT+x0RnLV4jkxDZv
-	 rOQIythKgjlcvs2q9paWHNJINWO8TqkFa8qlRlL1CfSG4cDj+KBmcAFn41ujrmw+M5
-	 1HSxxSLa5whtA==
-Date: Tue, 20 Aug 2024 18:56:19 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	Ross Burton <ross.burton@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v10 19/40] arm64/gcs: Context switch GCS state for EL0
-Message-ID: <3b316422-7f88-4f5d-a691-eb9209ec4ba9@sirena.org.uk>
-References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
- <20240801-arm64-gcs-v10-19-699e2bd2190b@kernel.org>
- <ZsMwhdmE_Ai9BbM9@arm.com>
- <0f6fd3ec-2481-4507-af0e-3cbbb7406b54@sirena.org.uk>
+	s=arc-20240116; t=1724183774; c=relaxed/simple;
+	bh=csrxiVvLG9IgDFpaXoNeGXm5JX+nOI0jfkSkiKKTqgs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rWeVdMgTHysqGqlb5PsYmNJVTQQwp/tmYUKRfcM0CMZOe5XeQVSkQkr8epVNuHQMsA1Cx6/JST4lv8SpSSTIKTa02Us+LyzFcanJetvQgAOgX1cjkxMNQA5uLiU0FLlzKy/rnqh/JstmahO49iIt84ovvtnFT81Tj+BPV4hYheM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=We1KVI2n; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1724183770;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=mRWet40YKp36IkKgF8VcXdQuutTUysbDPs0ilrpzxqI=;
+	b=We1KVI2naKxeH76jmCcG6MUWV6RiNtY69XTMZDS0lPDFuXGneN6I5pnYiHtDQQ+dHKaOQG
+	004QHwKhofyoHtKnml6XI/pQptefbOhJBwtHYGjKN8YKSC2JjmEv/4Qn0U4nXvhuxn1b05
+	vXKwCV1PK34SuvW4bFatYtPfDjxklrc=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-21-73GB9XyDMdChp5zKiQlbGg-1; Tue,
+ 20 Aug 2024 15:56:07 -0400
+X-MC-Unique: 73GB9XyDMdChp5zKiQlbGg-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id D24551955D44;
+	Tue, 20 Aug 2024 19:56:04 +0000 (UTC)
+Received: from llong.com (unknown [10.2.17.12])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 22B8E3001FF1;
+	Tue, 20 Aug 2024 19:56:01 +0000 (UTC)
+From: Waiman Long <longman@redhat.com>
+To: Tejun Heo <tj@kernel.org>,
+	Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Waiman Long <longman@redhat.com>
+Subject: [PATCH-cgroup 0/2] cgroup/cpuset: Account for boot time isolated CPUs
+Date: Tue, 20 Aug 2024 15:55:34 -0400
+Message-ID: <20240820195536.202066-1-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3PN7G0mWO4eG7H9j"
-Content-Disposition: inline
-In-Reply-To: <0f6fd3ec-2481-4507-af0e-3cbbb7406b54@sirena.org.uk>
-X-Cookie: You are false data.
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
+The current cpuset code and test_cpuset_prs.sh test have not fully
+account for the possibility of pre-isolated CPUs added by the "isolcpus"
+boot command line parameter. This patch series modifies them to do the
+right thing whether or not "isolcpus" is present or not.
 
---3PN7G0mWO4eG7H9j
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+The updated test_cpuset_prs.sh was run successfully with or without the
+"isolcpus" option.
 
-On Mon, Aug 19, 2024 at 04:44:52PM +0100, Mark Brown wrote:
-> On Mon, Aug 19, 2024 at 12:46:13PM +0100, Catalin Marinas wrote:
-> > On Thu, Aug 01, 2024 at 01:06:46PM +0100, Mark Brown wrote:
+Waiman Long (2):
+  cgroup/cpuset: Account for boot time isolated CPUs
+  selftest/cgroup: Make test_cpuset_prs.sh deal with pre-isolated CPUs
 
-> > > +	/*
-> > > +	 * Ensure that GCS changes are observable by/from other PEs in
-> > > +	 * case of migration.
-> > > +	 */
-> > > +	if (task_gcs_el0_enabled(current) || task_gcs_el0_enabled(next))
-> > > +		gcsb_dsync();
+ kernel/cgroup/cpuset.c                        | 23 +++++++---
+ .../selftests/cgroup/test_cpuset_prs.sh       | 44 ++++++++++++++-----
+ 2 files changed, 51 insertions(+), 16 deletions(-)
 
-> > Could we do the sysreg writing under this 'if' block? If no app is using
-> > GCS (which would be the case for a while), it looks like unnecessary
-> > sysreg accesses.
+-- 
+2.43.5
 
-> Yes, that should be fine I think.
-
-I forgot when writing the above that we always allow reads from
-GCSPR_EL0 in order to avoid corner cases for unwinders in the case of
-asynchronous disable.  I'd expect that to be cheap to access though.
-
---3PN7G0mWO4eG7H9j
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbE2MIACgkQJNaLcl1U
-h9DGLQf+N5+bf9wgOIIzNX1vkURDnQUEK8nayHI+jFDZJUtCwgCR7dnbVvAybutt
-pxS7u/jQBZvRrPuIk4JAvlPy/uRMzwfk9ooJ/US3OA2OmcbLQX+k4cNNxkx4uJiN
-XP2g8aMT14h2hwKkusxr8dUCwyB55hTlFvHPsLZQ24dqsLp2FMZOXqIjEhjPth/I
-qtq8/NVfk4nBuJ2M9HAMVMTiB9RxjE0dkqvWrD11wiWoD4oxozxMWze93JijR2LZ
-2DkwdCLX0oezojVLBNXak0Qyw5JCKP+y1UDdtsLfN2kKyEljQp9lr5+hTUdEjv+N
-JBdNzCm5oAI+cdBJ0+S4fqr7zDDDLg==
-=Yb1u
------END PGP SIGNATURE-----
-
---3PN7G0mWO4eG7H9j--
 
