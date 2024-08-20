@@ -1,105 +1,148 @@
-Return-Path: <linux-kselftest+bounces-15761-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15762-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4ACB957E76
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 08:41:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7DE0957EB9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 08:56:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E79721C242B5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 06:41:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 650EC2822B0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 06:56:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE7E9172BCE;
-	Tue, 20 Aug 2024 06:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 684376A039;
+	Tue, 20 Aug 2024 06:56:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TMIZeLI6"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="LnmkRkEm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813D816D33C;
-	Tue, 20 Aug 2024 06:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D54118E36D;
+	Tue, 20 Aug 2024 06:56:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724136031; cv=none; b=JYuTJkWFAmZ4bdhgGFZhQLl0HhI9x9M88J9bOS6/Asd8SlskWH/0PqLV7Qc6ZbxjZxR2enkR/mDK3VRxwvabA1MZbRdgUKLJq7AZUdJPHaU9ySgB3oQuc0LtWAuKRSAXczxrVM3p+B3lZBpyh8pKUdB+KSFUOIunubXVqdGsXoM=
+	t=1724137012; cv=none; b=Azk27Dr0vtC3sTd+ycOmZigCA16drrl9SRWvxytMaxLTBlKaUURaqq0/bu9N57zhZVJRXjAZhsVfXWHnhmNOr+7Iokz1zOPt4cKljKjVUxK392OF2sgxJIhOVglmDAjNKLWXhZpm26XYeqRoeTmOVArjxYu1rK8jRHuLNWdfTEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724136031; c=relaxed/simple;
-	bh=DkfoFALPN2xD7HjJ/NjpcJQg9u8DPkmbjme03VAQ95w=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=d6dnPi3z328qKdtSJr0Y5yuUUYmv6zGHvaI0axalvqlsonG6R1YXmQ1usomd3hSMTD41RFVLKaa081xDBAyxmRwma+P2S2sXAzwRX0bBRyM+wGe7PQWwsejhUOVZK8vWiccyUkAx1v8a3SaeaYHFOdiKbye6jiCOvmbjmIQ5T/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TMIZeLI6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C13CC4AF0B;
-	Tue, 20 Aug 2024 06:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724136031;
-	bh=DkfoFALPN2xD7HjJ/NjpcJQg9u8DPkmbjme03VAQ95w=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=TMIZeLI6JZQ/KeiErTvIHzLY9Wk1PEruLYw4rKR4cBI8GpltVhh8xOq9C44ILt3fh
-	 6I9b265VRmgn2b4pF8bjNVRlUx3MgIL+zyWiC+DVWSMdlY5ZY4KwwnRzC2rcvi/UOA
-	 g91zN/T/xLW9+If4ma0poRnk+kDavoSRHzR9tO9cAR4jWXfq3jCJ68KGNFZR6ueXKG
-	 aCqWO4T49/GjMgfYoBFT8OrKNuwmOML5KYv2cqLb4KbTKSi+o5exvg7AZKeGwI9mia
-	 nlCyk6y0KI+Bs7V568AdhtMz2dcYsdi+ZivXo7I85BJTGmhfdvjB7qshV0A4oDjFbF
-	 ytUUSmkC5r6aw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1sgIXZ-005ASL-WC;
-	Tue, 20 Aug 2024 07:40:27 +0100
-Date: Tue, 20 Aug 2024 07:40:24 +0100
-Message-ID: <86wmkby9wn.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Sean Christopherson <seanjc@google.com>, Oliver Upton <oliver.upton@linux.dev>
-Cc: 	Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	kernel@collabora.com,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Anup Patel <anup@brainfault.org>
-Subject: Re: [PATCH v2] selftests: kvm: fix mkdir error when building for unsupported arch
-In-Reply-To: <ZsPEEFvoGYjW3vfx@linux.dev>
-References: <20240819093030.2864163-1-usama.anjum@collabora.com>
-	<ZsNzzajqBkmuu5Xm@google.com>
-	<ZsPEEFvoGYjW3vfx@linux.dev>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1724137012; c=relaxed/simple;
+	bh=3M3tA/PME814H58f6pv/VI7vyGkvowh8Am1aqsXrEn0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gV1quwGfVqjduG19kWPZgB4LnNKSjWDzGe4zqE2w9bF8DwVzQ0GW+uxo7Pl9+eJT7qOXgWsiv4BK4yA7TvVrHV9OKFUFjEPHeoB03QJzuvK9LSY7fl4hf7gHh7T0Ew9ui0qp62bpDCJ/ogP/ocmbg4tT7hWZfXkg0wXNuHyBP8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=LnmkRkEm; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47JIOjDb004449;
+	Tue, 20 Aug 2024 06:56:48 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
+	:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=pp1; bh=1z9W8AnMUXN2iMMpLtRDDwUTUZ
+	2o+3lvMOyZpA1l3EE=; b=LnmkRkEmbL8hNwGhRLcF68fBf0aeChLA6FI/q4RBDJ
+	2wDMEG8Oa7AVoLdFRfHAvG4ToK/PgbP8tgDt7XYU8drtISTzjm+zskwzQclGOAZ9
+	z27/qTZq4cfPs+fu3N62hUQXJnEuk37RIaJyn+hiGT9pX4caYSLChxuqnRTGBQeB
+	yW+Z1RNd1OkMFuNAsOldYsdLpqhpz1WZwDyAvWITJ+zK8VIQQ/7lj+AeC3xpbYlj
+	nmfaLHnCGYkWw8jvgL1CSEir6ewGXgGNts0fvPuVGYulKoR+sOutaRbO8olElVuU
+	rGiuyrmYcPgk9w1b4WAyP3VUIPJ5Xv6pe640II6bFGAg==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4141y1mstd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 20 Aug 2024 06:56:47 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 47K6ul1h028854;
+	Tue, 20 Aug 2024 06:56:47 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4141y1msta-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 20 Aug 2024 06:56:47 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 47K6kcTN019105;
+	Tue, 20 Aug 2024 06:56:45 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 41376psp8e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 20 Aug 2024 06:56:45 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 47K6udOB21561826
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 20 Aug 2024 06:56:41 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B54C320043;
+	Tue, 20 Aug 2024 06:56:39 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8F80620040;
+	Tue, 20 Aug 2024 06:56:39 +0000 (GMT)
+Received: from a46lp38.lnxne.boe (unknown [9.152.108.100])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 20 Aug 2024 06:56:39 +0000 (GMT)
+From: Hariharan Mari <hari55@linux.ibm.com>
+To: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, shuah@kernel.org,
+        frankja@linux.ibm.com, borntraeger@linux.ibm.com,
+        imbrenda@linux.ibm.com, david@redhat.com, pbonzini@redhat.com,
+        schlameuss@linux.ibm.com
+Subject: [PATCH v2 0/5] KVM: s390: selftests: Add regression tests for CPU subfunctions
+Date: Tue, 20 Aug 2024 08:48:32 +0200
+Message-ID: <20240820065623.1140399-1-hari55@linux.ibm.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: seanjc@google.com, oliver.upton@linux.dev, usama.anjum@collabora.com, pbonzini@redhat.com, shuah@kernel.org, kernel@collabora.com, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, borntraeger@linux.ibm.com, frankja@linux.ibm.com, imbrenda@linux.ibm.com, anup@brainfault.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: f8TDK2dfOLkMZ4FImxLDrhJoq8GIbn8p
+X-Proofpoint-ORIG-GUID: ibM6-Cui7YtJO5hFT2x0m1V1d60lavTz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-19_16,2024-08-19_03,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ suspectscore=0 spamscore=0 mlxlogscore=742 bulkscore=0 impostorscore=0
+ malwarescore=0 lowpriorityscore=0 phishscore=0 clxscore=1015
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2407110000 definitions=main-2408200048
 
-On Mon, 19 Aug 2024 23:15:44 +0100,
-Oliver Upton <oliver.upton@linux.dev> wrote:
-> 
-> On Mon, Aug 19, 2024 at 09:33:17AM -0700, Sean Christopherson wrote:
-> > And other KVM maintainers, the big question is: if we do the above, would now be
-> > a decent time to bite the bullet and switch to the kernel's canonical arch paths,
-> > i.e. arm64, s390, and x86?  I feel like if we're ever going to get away from
-> > using aarch64, x86_64, and s390x, this is as about a good of an opportunity as
-> > we're going to get.
-> 
-> I'm pretty much indifferent on the matter, but I won't complain if you
-> send out a change for this.
+This patch series introduces a set of regression tests for various s390x
+CPU subfunctions in KVM. The tests ensure that the KVM implementation accurately
+reflects the behavior of actual CPU instructions for these subfunctions.
 
-Same here. Call it arm64 or aargh64, same difference. Whatever we
-change, some people will moan anyway.
+The series adds tests for a total of 15 instructions across five patches,
+covering a range of operations including sorting, compression, and various
+cryptographic functions. Each patch follows a consistent testing pattern:
 
-	M.
+1. Obtain the KVM_S390_VM_CPU_MACHINE_SUBFUNC attribute for the VM.
+2. Execute the relevant asm instructions.
+3. Compare KVM-reported results with direct instruction execution results.
+
+Testing has been performed on s390x hardware with KVM support. All tests
+pass successfully, verifying the correct implementation of these
+subfunctions in KVM.
+
+---
+v2: 
+* Fix facility_bit type from bool to int
+
+---
+
+Hariharan Mari (5):
+  KVM: s390: selftests: Add regression tests for SORTL and DFLTCC CPU
+    subfunctions
+  KVM: s390: selftests: Add regression tests for PRNO, KDSA and KMA
+    crypto subfunctions
+  KVM: s390: selftests: Add regression tests for KMCTR, KMF, KMO and PCC
+    crypto subfunctions
+  KVM: s390: selftests: Add regression tests for KMAC, KMC, KM, KIMD and
+    KLMD crypto subfunctions
+  KVM: s390: selftests: Add regression tests for PLO subfunctions
+
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/include/s390x/facility.h    |  50 +++
+ .../kvm/s390x/cpumodel_subfuncs_test.c        | 343 ++++++++++++++++++
+ 3 files changed, 394 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/include/s390x/facility.h
+ create mode 100644 tools/testing/selftests/kvm/s390x/cpumodel_subfuncs_test.c
 
 -- 
-Without deviation from the norm, progress is not possible.
+2.45.2
+
 
