@@ -1,89 +1,68 @@
-Return-Path: <linux-kselftest+bounces-15773-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15774-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A36F9588AC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 16:11:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B54D4958A91
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 17:02:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CAC81C22156
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 14:11:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E526D1C21CEF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 15:02:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DE6A195FE5;
-	Tue, 20 Aug 2024 14:08:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kZANOZN3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED0CB192B6B;
+	Tue, 20 Aug 2024 14:59:29 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh8-smtp.messagingengine.com (fhigh8-smtp.messagingengine.com [103.168.172.159])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C847919409C;
-	Tue, 20 Aug 2024 14:08:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1CCD1922FA;
+	Tue, 20 Aug 2024 14:59:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724162921; cv=none; b=sDmz28w8L8w4Fu4Ro1bkJziA+AX1bU2Ka9qVMHmkHzlqz4AYDOsS3AAMyHKTvk6paAzKt6hixNf7w+5vJXr4jFQnnniWdiKz50rYNGzivqRyLVw6N/JmqSMaSYSJYJrcj5PCSJafP9zHm9OTXsIJfc77oDr/EhwqSwtR93yUYwE=
+	t=1724165969; cv=none; b=NGqNE1nvCGxGy0odgj6vNPwPkRroptFAxogfzDH3ttXsJu1psezxxnGaSxDG24QMQl+NacMyAYRR61yA5RHK+Jvk+uVrlhaeIrx7nUQmVC6s2b0lbHS+Yz3d6y+4aSohFI8Tt3NhqOHYcO34LJzvsxkpVT7roJN/3dX2ycknTDg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724162921; c=relaxed/simple;
-	bh=GWNelTh3ZbbX0X7L0QDhwF2X1aKVlbBiANE3TaBt0DY=;
+	s=arc-20240116; t=1724165969; c=relaxed/simple;
+	bh=fFyycMNcHqQKpVsT6qjvKb11en2SqC7MqG20NMYTK+I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ev8xEFoPzX5LCc/OoSrFyZFeNf+jhxsWfQJy4lpgxgJmuMdw1QW1N4v1iwAn1CZWKTbOlF8lgAbdQO440/wc6A37k2B67G37ctgsfpf9fU9PFSQLLQAGC0W7EVHSdTJdbIl4YeckpwI0CX1a71lnsHMpZjhcZJeJXj5Tw+XrojQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=idosch.org; spf=none smtp.mailfrom=idosch.org; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kZANOZN3; arc=none smtp.client-ip=103.168.172.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=idosch.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=idosch.org
-Received: from phl-compute-03.internal (phl-compute-03.nyi.internal [10.202.2.43])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id E6E071151A91;
-	Tue, 20 Aug 2024 10:08:37 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Tue, 20 Aug 2024 10:08:37 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1724162917; x=1724249317; bh=kEfYQeLPTow8jHAH+gKTn8OFS8ak
-	MGlN/WqVFVkSklE=; b=kZANOZN35uNBToTAebxk6RQbQS0cIfsgQP34Fxh/IAz1
-	3wR16yLrj9A1q6A3tXxDJfN7QCVL6zZ+FQTf7TGXBEPRvH1gKcDO/QuzwUgn6tnU
-	MzY+8rw7vKokzr3ixx3CCrZJwko538JREeWzy+eeSSMEhWjjsPGMnKhWRDYevFp0
-	j54jxPFEgSf0scbiQFbhmCts+9a2Ln6fXtZQDQ+lX27X5z31evxPzoeQTxWeFIer
-	QIjmbKsbPAXHRIA2jmbonbuXu97XhjaXBPki+eyteYl70ceEV5nx2ZfOvAvhqVLW
-	CB7Kf+x0FbEfv186xzPEvck3zHusvAf6t+RiRF1RIg==
-X-ME-Sender: <xms:ZaPEZlnpRegO60vWI_C30xt_9zOacKjEnOJLjQ-phVNlxspCHrP-Jg>
-    <xme:ZaPEZg1tbElTBL2n48v4rEoejjQYRxraRETRG6kZ02VmikySZ6DBrCNy77wpG-vKk
-    HXZtPodk89TA4A>
-X-ME-Received: <xmr:ZaPEZrp0gHKgy8wwNTMG5jU1nMQW9mZVB3ZwsMY5gY5dNuH6TbUUmnezwGb_D5J5NLckH2OtYxFmdJmz2KgLG4NtHYL_Og>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudduiedgjeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvve
-    fukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfutghhihhmmhgvlhcu
-    oehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtthgvrhhnpedvudefve
-    ekheeugeeftddvveefgfduieefudeifefgleekheegleegjeejgeeghfenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiughoshgthhesihguoh
-    hstghhrdhorhhgpdhnsggprhgtphhtthhopeejpdhmohguvgepshhmthhpohhuthdprhgt
-    phhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrvhgvmhesug
-    grvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghr
-    nhgvlhdrohhrghdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpd
-    hrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopehshhhu
-    rghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvsh
-    htsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:ZaPEZlk77FWp5qoZqvmJcGJcyjFgYL19YfFv4hMIyquzXH0IUK4C2g>
-    <xmx:ZaPEZj3_NvM95Jf1wj_lQGN6MVAB9fKa7olw_w1p7LaRkt7mpMpfVw>
-    <xmx:ZaPEZksX3qp2-B9JkWYO_41ztt3JbIrWrfd5UwUxbS5TZzoSzWDUxw>
-    <xmx:ZaPEZnXePj-31QgrCTZdbMJREA2iKWIyEBf6u7Ab7JRR4Xp6NzhuNQ>
-    <xmx:ZaPEZtpWVE2qq8E0JzCXz8CZlHmDovGxQBQKF9MMcF0npJszWrI1b__b>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 20 Aug 2024 10:08:36 -0400 (EDT)
-Date: Tue, 20 Aug 2024 17:08:33 +0300
-From: Ido Schimmel <idosch@idosch.org>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v2] selftests: net: add helper for checking if
- nettest is available
-Message-ID: <ZsSjYQV66Sn25iv9@shredder.mtl.com>
-References: <20240820004217.1087392-1-kuba@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=X/u7yPzp5CZ8h8uRhRW1L4rxdv9MVmmnuyGR9cjaSXLtYOIh1AIPabLK0DiGSzK4DumJl8ePal85Zor/2JkLoeeHZyfwrDcEc7HQbAJjwm8xLGMzVSLFWsCkYXsGizqrSTd2vFxiQBLGN5uu6iN9o4ghH9DvQUfQr1KIsWUp8KI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA71FC4AF0F;
+	Tue, 20 Aug 2024 14:59:23 +0000 (UTC)
+Date: Tue, 20 Aug 2024 15:59:21 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v10 13/40] arm64/mm: Map pages for guarded control stack
+Message-ID: <ZsSvSeE303LGtk4b@arm.com>
+References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
+ <20240801-arm64-gcs-v10-13-699e2bd2190b@kernel.org>
+ <ZsMMDNIp6Pkfbg1e@arm.com>
+ <d43f8036-cc06-430c-9e9e-b938037fc64c@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -92,30 +71,56 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240820004217.1087392-1-kuba@kernel.org>
+In-Reply-To: <d43f8036-cc06-430c-9e9e-b938037fc64c@sirena.org.uk>
 
-On Mon, Aug 19, 2024 at 05:42:17PM -0700, Jakub Kicinski wrote:
-> A few tests check if nettest exists in the $PATH before adding
-> $PWD to $PATH and re-checking. They don't discard stderr on
-> the first check (and nettest is built as part of selftests,
-> so it's pretty normal for it to not be available in system $PATH).
-> This leads to output noise:
+On Mon, Aug 19, 2024 at 05:33:24PM +0100, Mark Brown wrote:
+> On Mon, Aug 19, 2024 at 10:10:36AM +0100, Catalin Marinas wrote:
+> > On Thu, Aug 01, 2024 at 01:06:40PM +0100, Mark Brown wrote:
+> > > +	if (system_supports_gcs() && (vm_flags & VM_SHADOW_STACK)) {
+> > > +		/*
+> > > +		 * An executable GCS isn't a good idea, and the mm
+> > > +		 * core can't cope with a shared GCS.
+> > > +		 */
+> > > +		if (vm_flags & (VM_EXEC | VM_ARM64_BTI | VM_SHARED))
+> > > +			return false;
+> > > +	}
 > 
->   which: no nettest in (/home/virtme/tools/fs/bin:/home/virtme/tools/fs/sbin:/home/virtme/tools/fs/usr/bin:/home/virtme/tools/fs/usr/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin)
+> > I wonder whether we should clear VM_MAYEXEC early on during the vma
+> > creation. This way the mprotect() case will be handled in the core code.
+> > At a quick look, do_mmap() seems to always set VM_MAYEXEC but discard it
+> > for non-executable file mmap. Last time I looked (when doing MTE) there
+> > wasn't a way for the arch code to clear specific VM_* flags, only to
+> > validate them. But I think we should just clear VM_MAYEXEC and also
+> > return an error for VM_EXEC in the core do_mmap() if VM_SHADOW_STACK. It
+> > would cover the other architectures doing shadow stacks.
 > 
-> Add a common helper for the check which does silence stderr.
-> 
-> There is another small functional change hiding here, because pmtu.sh
-> and fib_rule_tests.sh used to return from the test case rather than
-> completely exit. Building nettest is not hard, there should be no need
-> to maintain the ability to selectively skip cases in its absence.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Yes, I think adding something generic would make sense here.  That feels
+> like a cleanup which could be split out?
 
-Like Hangbin I am also not sure what "profile=1" is about, but looks
-fine otherwise, so:
+It can be done separately. It doesn't look like x86 has such checks.
+Adding it generically would be a slight ABI tightening but I doubt it
+matters, no sane software would use an executable shadow stack.
 
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+> > Regarding VM_SHARED, how do we even end up with this via the
+> > map_shadow_stack() syscall? I can't see how one can pass MAP_SHARED to
+> > do_mmap() on this path. I'm fine with a VM_WARN_ON() if you want the
+> > check (and there's no way a user can trigger it).
+> 
+> It's just a defenesive programming thing, I'm not aware of any way in
+> which it should be possible to trigger this.
+> 
+> > Is there any arch restriction with setting BTI and GCS? It doesn't make
+> > sense but curious if it matters. We block the exec permission anyway
+> > (unless the BTI pages moved to PIE as well, I don't remember).
+> 
+> As you say BTI should be meaningless for a non-executable page like GCS,
+> I'm not aware of any way in which it matters.  BTI is separate to PIE.
 
-Thanks!
+My thoughts were whether we can get rid of this hunk entirely by
+handling it in the core code. We'd allow BTI if one wants such useless
+combination but clear VM_MAYEXEC in the core code (and ignore VM_SHARED
+since you can't set it anyway).
+
+-- 
+Catalin
 
