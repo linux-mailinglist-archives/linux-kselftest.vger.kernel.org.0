@@ -1,193 +1,182 @@
-Return-Path: <linux-kselftest+bounces-15769-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15770-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F002B957F8D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 09:27:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6DFD958543
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 12:54:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9394283DC9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 07:27:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C30428A944
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 10:54:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9896186E2E;
-	Tue, 20 Aug 2024 07:27:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7249518DF6F;
+	Tue, 20 Aug 2024 10:54:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="FXsfGJ90"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="dZbFFhNO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2071.outbound.protection.outlook.com [40.107.101.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8F9132124;
-	Tue, 20 Aug 2024 07:27:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BB018DF6B;
+	Tue, 20 Aug 2024 10:54:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.71
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724138825; cv=pass; b=O7w7XL5VeJTIwroCZy56ShIn9hTC5x4GHNhfmYZeBMl/JEHURPenLVDP+AsR2U2UqmyTe/XM7d0zA3hbGIDdx5GqMT6ypuRC0ellLhcqBSe/IyLEct72LTfVg230YPVYMPSqL5F0wnO0UrsWFppA/s5QyVUe+8bc58fojCE1ua4=
+	t=1724151275; cv=fail; b=ilpcHfSL4Fw3nOo8SR54rDE9t8sMnzJym+wZ87UpK4az93a/LGlF2tsrMwWN87KFbyIX+lAYSwvAjOc72lbwyujzy5kKE42jf1a3xY7+OmQsSOs3u6nTuASPuApnuTCR/BtO4ivQAV6n5uYPnnJuzG1AIfDmt4nBPwnksQnkzn0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724138825; c=relaxed/simple;
-	bh=OAb3vC/Zkyg/SdJ1TD//avWUs8En4MbQVlb8+2cI4Ik=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=Zb7nHTqanV+ttPYz5118Q9BYyY67CDpTqX+9Qtag6+xPJ3P6vCJEypy63bRR0d0P6R7vo4rd06Oha/nBeMM+wrAd1TRGyCV2v1ohQ12FRaUKUIjMp0Bh7k1nVQp2fe1O8aNygvSBGAAxcTHxOQESduJ5ZEU1jqnVsCtusYwHwVU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=FXsfGJ90; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-Delivered-To: Usama.Anjum@collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1724138796; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=EXzAsN4bP2BCe2iQJANEH2sdLh3DN0xIyP/X76hyuuO1IhRNgdetegrZyYZ8ujk8c0PyyBRKFCnnQ+TBBEIwC1B2iy0rFvfNK3wFgZs/kBqjlbT8v4T+OpSmHZmwqiMMqmM3taEhk824PwIKbw9PhoVaVTXa/4UwU1WfguiYfBg=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1724138796; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=M8D0uEeC8XYss0szLPUlb5Lps9IGtnYOrv/FK6gxMhI=; 
-	b=QuVLpv+XsnQUm+asJhqoBfNbgJmpn29JUQjPW4g8QeAA1q04zjkw3phmU6xX26DKIX3HTmd16yzcyQHMSeDDBS7VmdK476SgW6cGplRtkUqJ84Bz3DFSpLcAny6wtHGHSNdpvOzfDxrZcCHqn4JA81M/1fU/ThxdpMW9uPkr1PE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
-	dmarc=pass header.from=<Usama.Anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1724138796;
-	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=M8D0uEeC8XYss0szLPUlb5Lps9IGtnYOrv/FK6gxMhI=;
-	b=FXsfGJ90DaxKUyBr/7kjy5Vz6cA1IyTmA9Y8dR4dXL0JaUNqf3dGc7HYCcyGwZYC
-	eHbZGA98tPFCgfJUUwGdq/VzamRhzm1ew0bPhrYlBEcRg+AXIjMJ4gYDhfNkGrU0M2z
-	NOR4Qa10gQVAgX+tP2ZhVBHtX9Oj6F8huDjedKbo=
-Received: by mx.zohomail.com with SMTPS id 1724138794399675.3975600570174;
-	Tue, 20 Aug 2024 00:26:34 -0700 (PDT)
-Message-ID: <379673da-9f2f-484a-be04-a62d916fa25e@collabora.com>
-Date: Tue, 20 Aug 2024 12:26:23 +0500
+	s=arc-20240116; t=1724151275; c=relaxed/simple;
+	bh=tVsBbx47IsJIxMlnohvmjsBFyRVcprqx6o8/b7hq9hQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fc61xaqMHYWI8r9/h0ofCOv0G8elyvSVNm+bzPzNLQa/e5G2+oX9AZ9H6xakvrI3GybUFZtfMALpWgI9GF3591LJPdDWO8/w5t8lpguao8N/OXQ1NfqjkYCIHov7iJ1OjvfcYu+QHEn2IJ1SbASZgnc2JKbIKluDGjgVew22zy0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=dZbFFhNO; arc=fail smtp.client-ip=40.107.101.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=svYZwpaQiHp1yef/bogvUicv52tWYhxBLcBqv3Mjb8hm/W7duqsJLY83AtZp5jZw4O6l9zoEUiMZnOrb7MbaxyN1abwlwIsUiV3hqgH1EHIoPIEfVCMVW40fLyg4CFNxKOtOj/j21x0PTXXVy5paJ726hE7XO9IgX3Kbic35h1iWt2iisTifu6ntCuky2VEA5oSR9FMLgU6OepGAnk5fMKT50Szl9SLkQmxNie346i8Zfy/B998mSZ+LuXUQhSB4LPsMaBXWYhbXAFKkIjbJe1uDqbmyxRwPoLqx0+MSxqbCou6o1NKOgL/aln/eElvv6Y/+H4uPLxFoxxogUTK8dg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xJQENSO+GZEfiI18vz5SdUPMOkV/TWlJX7cpkfwyaWs=;
+ b=o/8IPGqBlcjYN6EYDAgv1a1loQOtDptAm4qDFqrSzGlTwF448DwSBkPMP4d1H9yDDAQI51cCccasL/+7zWmd8BppHwX1Pq/MBGAOsKowVA/oBmwk7owzfd/B+yoWDM4rhGMvusNhRXTBYsneh27caaoRXBlFR7yqofEgxnl3N25z8xFi9aAq+DumgGI5wWbhdNaCyRM4s+NViTMXmQ1765RuCFpC7X7wqDLBREFOeqBxDWJWHiNr8lqDVCXMBzaJK8rJk/RpE1kRnKQwBhoobgZHEsG8Zlbdp5cRYaRREVfhdgA5yQwWuJ7fkQx269ePEqqIuETeVYi8+jzFLPslpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=xJQENSO+GZEfiI18vz5SdUPMOkV/TWlJX7cpkfwyaWs=;
+ b=dZbFFhNOBz2cBhHOn68zOvyA47NIbvzlBohhxv0pE1Dy2CqX9xnyp5zBQwsogK/0a1BTGv73zWYC9gbSFcTGKKQMWFjr2lokuSKqxHsFebgi2oUPXPMwOSlqYWdTfYxC2sK9P1FtOCleoI3to0uLXcP3blyUwRLtINL2yIYWkJZWgNCO8/Sbb+4qf3ztiBwyi5kHQKMWLSLbTyGRHlirigJHnOrvZ1CfknvRl++GScotnuyKgIZOI2lhq7ZmYEERqtpGkPKZiNoZ7v1812+VblzshKkfrB9FcvrAEUsRRNd5a87bkynXBVf4ZyXm2/ijGsqt1SqKjicxWRWo0gf0pw==
+Received: from CH2PR10CA0003.namprd10.prod.outlook.com (2603:10b6:610:4c::13)
+ by BL1PR12MB5706.namprd12.prod.outlook.com (2603:10b6:208:385::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.16; Tue, 20 Aug
+ 2024 10:54:30 +0000
+Received: from DS3PEPF0000C37B.namprd04.prod.outlook.com
+ (2603:10b6:610:4c:cafe::20) by CH2PR10CA0003.outlook.office365.com
+ (2603:10b6:610:4c::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.21 via Frontend
+ Transport; Tue, 20 Aug 2024 10:54:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS3PEPF0000C37B.mail.protection.outlook.com (10.167.23.5) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7897.11 via Frontend Transport; Tue, 20 Aug 2024 10:54:29 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 20 Aug
+ 2024 03:54:18 -0700
+Received: from fedora.mtl.com (10.126.231.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 20 Aug
+ 2024 03:54:14 -0700
+From: Petr Machata <petrm@nvidia.com>
+To: Shuah Khan <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<netdev@vger.kernel.org>
+CC: Jakub Kicinski <kuba@kernel.org>, <mlxsw@nvidia.com>, Ido Schimmel
+	<idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>
+Subject: [PATCH net] selftests: mlxsw: ethtool_lanes: Source ethtool lib from correct path
+Date: Tue, 20 Aug 2024 12:53:47 +0200
+Message-ID: <2112faff02e536e1ac14beb4c2be09c9574b90ae.1724150067.git.petrm@nvidia.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Usama.Anjum@collabora.com, Paolo Bonzini <pbonzini@redhat.com>,
- Shuah Khan <shuah@kernel.org>, kernel@collabora.com, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Janosch Frank <frankja@linux.ibm.com>,
- Claudio Imbrenda <imbrenda@linux.ibm.com>, Anup Patel <anup@brainfault.org>
-Subject: Re: [PATCH v2] selftests: kvm: fix mkdir error when building for
- unsupported arch
-To: Sean Christopherson <seanjc@google.com>
-References: <20240819093030.2864163-1-usama.anjum@collabora.com>
- <ZsNzzajqBkmuu5Xm@google.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
-In-Reply-To: <ZsNzzajqBkmuu5Xm@google.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Content-Type: text/plain
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS3PEPF0000C37B:EE_|BL1PR12MB5706:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6aa1d8c3-70c7-47c1-5a54-08dcc10677a0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|82310400026|36860700013|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?KbBxRlGr/pPLi2+a4617vkzPwhnmZOnAR9uuSnfqPXL4HkLRjrqGIEiRrdOd?=
+ =?us-ascii?Q?owUUKfzbe4XXuD33b9WER/70O9c0oP8qRkM97QEQ9z3shqvwopdYaoMSATU5?=
+ =?us-ascii?Q?LKzedetkAqLQTei8yqorSQ+/O8q0sAjh432WdjIjpv8W7t2MVNCAI8uEulVa?=
+ =?us-ascii?Q?xIi6/mX8J+ByZ9wqpH21yJTEWR33SOrN0F8dLsHTavRHCyhtfErrPhZ7fdnP?=
+ =?us-ascii?Q?ViT67B9Qynjf/ea2WVTiXQCyXxFkx0QrcouWrr0cT88zIpbeN9sI8kY3Y7y5?=
+ =?us-ascii?Q?L7x2nJGxnkyfswzDMdjk5WS6yGPOOFqQlRAMokkG3lNayMhVgclGs+2GEOCh?=
+ =?us-ascii?Q?Oib5FKS62EflVDrX7HKu4sNLUkvu5Q2XYQWnPm+/BLlAOa59qLoL4GrSBZFF?=
+ =?us-ascii?Q?PRXcx1kVSy6hEizvikJqxAmlae3/GR1l2pGhbKhS/aje5VlD3JV55L8UjxZc?=
+ =?us-ascii?Q?Lxt++ue0/GOmocDO+m+KAQLYif0T1R4UNi0dOlvEhkZpDryoM2EGQbVKCu7t?=
+ =?us-ascii?Q?YyzbTMVkmyeD8/FAc1EOfZKvrzq4zuUhOw28DXIlFxnx781DEMFUJE3OPtyY?=
+ =?us-ascii?Q?4GuRQx5Fm/jKpm/rfmRMtpaRRXwy3CMZIcIRw4LWOZZmHoLwhKdrDeuvKuvL?=
+ =?us-ascii?Q?OO1EUtB1OrrXt0ywgCp5vrFhxzKDtZ8ivdluJyL5seDQRAueHQAw5BWxTHdq?=
+ =?us-ascii?Q?GX5NFs48qAZFF2WTVckub0SQM8ylFD4dCTy1gI7LtFJS4ZYPX25VwY0SMnZl?=
+ =?us-ascii?Q?WxxiYLPV90ZE598/PPp0iUVPxueGKI4ytWYW6sfOEjYBoYURmq/XRQi7uIXK?=
+ =?us-ascii?Q?0xEIWqTzeqESBiBlEgF5qzI/Kie5ejqLOTGnRPzlyoT49dFYGsmxWso1Pw78?=
+ =?us-ascii?Q?Xqy0GvhS0kzNdDWjW9jPv4kvP4KF7pmQGu41Ir8yyQjK5A37BxdrrcajhMwc?=
+ =?us-ascii?Q?RiyxuDzjME+rwLqfZKM8L0SMolgpPn06MT8Pzr2J+tj/puFwRYmy2hVXk8cD?=
+ =?us-ascii?Q?8tcrHkKFHPv3LQUgq9oqFwe/h37aeefz5L7/V8TtqdQ+xYrWZZkyxfeJXppe?=
+ =?us-ascii?Q?xkMFi3I/U32LMzFuJ+sgYHl+KM8TbJrBxr9PcI6A5jxLm7m2ftVUL/ss8eku?=
+ =?us-ascii?Q?mnlHVg6x7kMxdWPcB/sXw4cQRZgxmLRvJ3Ln+MzLEWEmkE2PbrGJyxWOjWNS?=
+ =?us-ascii?Q?8zGIrl8vxUdLRxVYtXqWvnItSevIVbWaQcbNGy76LIbXpGg8usQG6o1mLrxf?=
+ =?us-ascii?Q?mEbdAQFoPs8r7+S075i32fnIjy4Ug7w71zv8X4qCBUA3lfZD4y8sKw5VRFif?=
+ =?us-ascii?Q?PYBE78wbphj8IbGTUjaVnrEGVgv0EOjx8YOoxZtk3CSYHi5Oc/jqOsGjTQhe?=
+ =?us-ascii?Q?IkVOTcb3KeoVXYn5Gcegwh3wGOZFyeNs5VOkLqQ0m7Ph9zIaFUGKgPNo1t7f?=
+ =?us-ascii?Q?PxBNcfygzH5KQ0uZ9bxMCYXImF4n0IMg?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2024 10:54:29.9167
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6aa1d8c3-70c7-47c1-5a54-08dcc10677a0
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS3PEPF0000C37B.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5706
 
-On 8/19/24 9:33 PM, Sean Christopherson wrote:
-> +KVM arch maintainers
-> 
-> On Mon, Aug 19, 2024, Muhammad Usama Anjum wrote:
->> The tests are built on per architecture basis. When unsupported
->> architecture is specified, it has no tests and TEST_GEN_PROGS is empty.
->> The lib.mk has support for not building anything for such case. But KVM
->> makefile doesn't handle such case correctly. It doesn't check if
->> TEST_GEN_PROGS is empty or not and try to create directory by mkdir.
->> Hence mkdir generates the error.
->>
->> mkdir: missing operand
->> Try 'mkdir --help' for more information.
->>
->> This can be easily fixed by checking if TEST_GEN_PROGS isn't empty
->> before calling mkdir.
->>
->> Cc: Paolo Bonzini <pbonzini@redhat.com>
->> Cc: Sean Christopherson <seanjc@google.com>
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->> Changes since v1:
->> - Instead of ignoring error, check TEST_GEN_PROGS's validity first
->> ---
->>  tools/testing/selftests/kvm/Makefile | 2 ++
->>  1 file changed, 2 insertions(+)
->>
->> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
->> index 48d32c5aa3eb7..9f8ed82ff1d65 100644
->> --- a/tools/testing/selftests/kvm/Makefile
->> +++ b/tools/testing/selftests/kvm/Makefile
->> @@ -317,7 +317,9 @@ $(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S $(GEN_HDRS)
->>  $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
->>  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -ffreestanding $< -o $@
->>  
->> +ifneq ($(strip $(TEST_GEN_PROGS)),)
->>  $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
->> +endif
-> This just suppresses an error, it doesn't fix the underlying problem.  E.g. there
-> are other weird side effects, such as an above mkdir creating the $(ARCH) directory
-> even though it shouldn't exist in the end.
-> 
-> It's also very opaque, e.g. without a comment or the context of the changelog,
-> I'd have no idea what purpose the above serves.
-> 
-> Rather than bury the effective "is this arch supported" check in the middle of
-> the Makefile, what if we wrap the "real" makefile and include it only for
-> supported architectures, and provide dummy targets for everything else?
-> 
-> E.g.
-> 
-> ---
-> # SPDX-License-Identifier: GPL-2.0-only
-> top_srcdir = ../../../..
-> include $(top_srcdir)/scripts/subarch.include
-> ARCH            ?= $(SUBARCH)
-> 
-> ifeq ($(ARCH),$(filter $(ARCH),arm64 s390 riscv x86 x86_64))
-> ifeq ($(ARCH),x86)
->         ARCH_DIR := x86_64
-> else ifeq ($(ARCH),arm64)
->         ARCH_DIR := aarch64
-> else ifeq ($(ARCH),s390)
->         ARCH_DIR := s390x
-> else
->         ARCH_DIR := $(ARCH)
-> endif
-> 
-> include Makefile.kvm
-> else
-> all:
-> clean:
-> endif
-> ---
-> 
-> And other KVM maintainers, the big question is: if we do the above, would now be
-> a decent time to bite the bullet and switch to the kernel's canonical arch paths,
-> i.e. arm64, s390, and x86?  I feel like if we're ever going to get away from
-> using aarch64, x86_64, and s390x, this is as about a good of an opportunity as
-> we're going to get.
-> 
-> The annoying x86_64=>x86 alias still needs to be handled to avoid breaking explicit
-> ARCH=x86_64 builds (which apparently are allowed, *sigh*), but we can ditch ARCH_DIR
-> and the KVM selftests dirs match tools' include paths.
-> 
-> ---
-> # SPDX-License-Identifier: GPL-2.0-only
-> top_srcdir = ../../../..
-> include $(top_srcdir)/scripts/subarch.include
-> ARCH            ?= $(SUBARCH)
-> 
-> ifeq ($(ARCH),$(filter $(ARCH),arm64 s390 riscv x86 x86_64))
-> # Top-level selftests allows ARCH=x86_64 🙁
-> ifeq ($(ARCH),x86_64)
-> 	ARCH := x86
-> endif
-> include Makefile.kvm
-> else
-> all:
-> clean:
-> endif
-> ---
-> 
-> If no one objects or has a better idea, I'll post a series to do the above.
-I didn't had enough knowledge to attempt a better fix. Thank you.
+From: Ido Schimmel <idosch@nvidia.com>
 
+Source the ethtool library from the correct path and avoid the following
+error:
+
+./ethtool_lanes.sh: line 14: ./../../../net/forwarding/ethtool_lib.sh: No such file or directory
+
+Fixes: 40d269c000bd ("selftests: forwarding: Move several selftests")
+Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: Petr Machata <petrm@nvidia.com>
+---
+ tools/testing/selftests/drivers/net/mlxsw/ethtool_lanes.sh | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/ethtool_lanes.sh b/tools/testing/selftests/drivers/net/mlxsw/ethtool_lanes.sh
+index 877cd6df94a1..fe905a7f34b3 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/ethtool_lanes.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/ethtool_lanes.sh
+@@ -2,6 +2,7 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+ lib_dir=$(dirname $0)/../../../net/forwarding
++ethtool_lib_dir=$(dirname $0)/../hw
+ 
+ ALL_TESTS="
+ 	autoneg
+@@ -11,7 +12,7 @@ ALL_TESTS="
+ NUM_NETIFS=2
+ : ${TIMEOUT:=30000} # ms
+ source $lib_dir/lib.sh
+-source $lib_dir/ethtool_lib.sh
++source $ethtool_lib_dir/ethtool_lib.sh
+ 
+ setup_prepare()
+ {
 -- 
-BR,
-Muhammad Usama Anjum
+2.45.0
 
 
