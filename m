@@ -1,125 +1,105 @@
-Return-Path: <linux-kselftest+bounces-15760-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15761-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FEA0957E58
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 08:39:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4ACB957E76
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 08:41:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D093F1C21EA9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 06:39:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E79721C242B5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 06:41:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 717141E6728;
-	Tue, 20 Aug 2024 06:34:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE7E9172BCE;
+	Tue, 20 Aug 2024 06:40:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aMi/vOG0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TMIZeLI6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0AA61E2122;
-	Tue, 20 Aug 2024 06:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813D816D33C;
+	Tue, 20 Aug 2024 06:40:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724135678; cv=none; b=u6gISV62KybrXl+5CchUYgnWDU+PajXWhGl/YxjGpLJr00NX3Kru2BNIdKwkjT/QLtFcg74NEKGywsR1SfhO/LChPkTroT4XT130qRf+FkWgrCpyEAf6SEUSmNQjJBXAhgymmtctPQi9QPXV1QmLxSVFeiaIm+8nAV/RLKL+pq0=
+	t=1724136031; cv=none; b=JYuTJkWFAmZ4bdhgGFZhQLl0HhI9x9M88J9bOS6/Asd8SlskWH/0PqLV7Qc6ZbxjZxR2enkR/mDK3VRxwvabA1MZbRdgUKLJq7AZUdJPHaU9ySgB3oQuc0LtWAuKRSAXczxrVM3p+B3lZBpyh8pKUdB+KSFUOIunubXVqdGsXoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724135678; c=relaxed/simple;
-	bh=Cp3w7kkVxT1uWBiSkJuqzh8y0qcCGvAe5kQ4ewJ5zHg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GfsLQmtZSm7z2jSXHOsjvPS+9Ja6/bTtivGY2/H7+JErL2neFRIufa0J2XFQypVtKU7TkL6fSOAmQ5CSUJogPBoKC1VzRe8dXXn6ydrD7ztVL7UE+Unxqqmn+RuNXqeyXHASE32gWmsBzeaxGpRF49+qjqtDNc5Yp8aPuBoi8K4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aMi/vOG0; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4280bca3960so44799175e9.3;
-        Mon, 19 Aug 2024 23:34:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724135675; x=1724740475; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Cp3w7kkVxT1uWBiSkJuqzh8y0qcCGvAe5kQ4ewJ5zHg=;
-        b=aMi/vOG0w4Ujctyqn9JdNEMZot+mwgry6EY1K+2p3E76SrYdPCfvRbXWP+twFoYWCP
-         H7Ky+JnCrF5RfFHOjm1EbSCEtHKiI69HzcsBFvg0SXR+89uYMe7lbLq6iz7/pYdLjhRB
-         WsO7X5PnHagvB1+l1akD3vOvmRShzp+fBPYzD3WychOBGLyanwPzcmrNgOH7TM8kDR6w
-         1bwvv2KjmsqNsJGHaU2q24RueNNVfj8MRJo2QW3THhJcCOTf80VIC9kfRvxpqps7M35c
-         OvyUMysOlxgl/PPFQoJ+BVOSlx1+iLGZqNvdelAKb+AzEffL1T1oO/z0TDYRuJ8ErW6+
-         QgjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724135675; x=1724740475;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Cp3w7kkVxT1uWBiSkJuqzh8y0qcCGvAe5kQ4ewJ5zHg=;
-        b=gOj9+lfbykWidLGYX3sYOlkFRZ4fWXRmRkyhIs2EhK26fPYjDfFMU5CLa0Ct+XQvp7
-         MkBGK5a0eDOGFe5Fv6jcREucSlyTO2K0YBJesdL1zWEERt3atnb5HXnQ2Y+fxmee7ikb
-         db4zK3MYkhDQiUl2FxR/Raw9krb5SkqeasUeZzljFaNIJ/J6lbFJ6bun/apa9oYRUCS3
-         CN0OeMxopxJ1KAkwZ/NC+GjduiClszT7/DZt1KxU8J00bpoDs6ipzMT0binahYBarF+m
-         QIxHrcV+L1edSDQ+iaM5BxgLp5VC1eBpXfYeFpwN/iEC/1Cb4fEzecCELfg2LYg607hs
-         khSA==
-X-Forwarded-Encrypted: i=1; AJvYcCUHDiIOVPg1g91eSD7OGexSLDOFJvS3zcMkHGHVztWvqoYcTsPxyX1my3iKjmxl5WBd2+3lyDaC/vLhbpfRqIvjbUUT@vger.kernel.org, AJvYcCUJ5Z2+yEWh/CRA8eQvvtD/R+pbemEekHTU2kMxl7R9gxqblUpwiz6n7iESUst86PtpJH01ugJmawwJiRzhsg==@vger.kernel.org, AJvYcCUJC+giXO/G+aMc5k0Zwp6AbUbHVNgnf+1c9N3APxDh6joo/EFoa+UfQQ4QTjidce+QKNSaGcoX6AGS762l@vger.kernel.org, AJvYcCUWftmaz7HN34cJrsabgktD87GlhM4op9c83UGxLEnW0MYn91om7DaW/N/1FuDPrfX+1W2Mept+eQns@vger.kernel.org, AJvYcCUYo3pZyseWL8Rd4St27B6ilQBBF1kwYlj0YzOmBnDRGGHvbaQjel1RUk+dEthY4BlUrVP7uYSE@vger.kernel.org, AJvYcCV0YfjI+lkLrSE9VmW5gSnZBigdVF/gHk+x5/FNQQSoy2EgQIcLDG35lyIO9iM+wRT2Ia0WO+dewGIrjLh5mPSH@vger.kernel.org, AJvYcCVKX6LoBJMKg4DlseA0aT3Pt6nLmqKg70sUPox43oZsc95LTZwj8oeyCEzCBVVtmEU0NZwucOzw7k66lRcM0X9S@vger.kernel.org, AJvYcCWboRS8CSBbE9+epPETx7FSt6DWFSfq4fagxTl/B6WOVvpKjIQibierJ8P89Mno7iJ6Gl11N1dHVBzqXzE=@vger.kernel.org, AJvYcCXjmZW0MVweeOUmZH20WONnv6dIAXZN8tYdgPjaNUl6ws7omwM6pfFfBdITk7cR9oET7v+spaYR@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdYOX985kSnkyz8+Y7BFXhKep7fL18Y/djYC9kVMsaK7Tq1mAn
-	Q048aFSrIh1KR66ZIP2aICBmzQw7WRUTKxon82zJyDnjfH06q97Mnx5VvD7NLXcPUUfc/SO6Iwo
-	coSD0lqwNLwY1WjjHPC0H/BggP2M=
-X-Google-Smtp-Source: AGHT+IF6za5LfGR9PignCMfdAU4RNKydBE/DzDRowSAFw6jEwJKhTPBuMISHwbyJUdIMUQaOdSTMFb1oGckbgA2aLOw=
-X-Received: by 2002:a05:600c:3ba5:b0:426:6667:5c42 with SMTP id
- 5b1f17b1804b1-429ed7856camr83213885e9.4.1724135674405; Mon, 19 Aug 2024
- 23:34:34 -0700 (PDT)
+	s=arc-20240116; t=1724136031; c=relaxed/simple;
+	bh=DkfoFALPN2xD7HjJ/NjpcJQg9u8DPkmbjme03VAQ95w=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=d6dnPi3z328qKdtSJr0Y5yuUUYmv6zGHvaI0axalvqlsonG6R1YXmQ1usomd3hSMTD41RFVLKaa081xDBAyxmRwma+P2S2sXAzwRX0bBRyM+wGe7PQWwsejhUOVZK8vWiccyUkAx1v8a3SaeaYHFOdiKbye6jiCOvmbjmIQ5T/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TMIZeLI6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C13CC4AF0B;
+	Tue, 20 Aug 2024 06:40:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724136031;
+	bh=DkfoFALPN2xD7HjJ/NjpcJQg9u8DPkmbjme03VAQ95w=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=TMIZeLI6JZQ/KeiErTvIHzLY9Wk1PEruLYw4rKR4cBI8GpltVhh8xOq9C44ILt3fh
+	 6I9b265VRmgn2b4pF8bjNVRlUx3MgIL+zyWiC+DVWSMdlY5ZY4KwwnRzC2rcvi/UOA
+	 g91zN/T/xLW9+If4ma0poRnk+kDavoSRHzR9tO9cAR4jWXfq3jCJ68KGNFZR6ueXKG
+	 aCqWO4T49/GjMgfYoBFT8OrKNuwmOML5KYv2cqLb4KbTKSi+o5exvg7AZKeGwI9mia
+	 nlCyk6y0KI+Bs7V568AdhtMz2dcYsdi+ZivXo7I85BJTGmhfdvjB7qshV0A4oDjFbF
+	 ytUUSmkC5r6aw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1sgIXZ-005ASL-WC;
+	Tue, 20 Aug 2024 07:40:27 +0100
+Date: Tue, 20 Aug 2024 07:40:24 +0100
+Message-ID: <86wmkby9wn.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Sean Christopherson <seanjc@google.com>, Oliver Upton <oliver.upton@linux.dev>
+Cc: 	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	kernel@collabora.com,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>,
+	Claudio Imbrenda <imbrenda@linux.ibm.com>,
+	Anup Patel <anup@brainfault.org>
+Subject: Re: [PATCH v2] selftests: kvm: fix mkdir error when building for unsupported arch
+In-Reply-To: <ZsPEEFvoGYjW3vfx@linux.dev>
+References: <20240819093030.2864163-1-usama.anjum@collabora.com>
+	<ZsNzzajqBkmuu5Xm@google.com>
+	<ZsPEEFvoGYjW3vfx@linux.dev>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240820000245.61787-1-technoboy85@gmail.com>
-In-Reply-To: <20240820000245.61787-1-technoboy85@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 20 Aug 2024 08:34:23 +0200
-Message-ID: <CAADnVQKYLu4gW95gK=kbFUCT+vCZtb595vdd5jVNVzcLn7qsiw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: use kfunc hooks instead of program types
-To: Matteo Croce <technoboy85@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, Jonathan Corbet <corbet@lwn.net>, Jiri Kosina <jikos@kernel.org>, 
-	Benjamin Tissoires <bentiss@kernel.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
-	Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>, 
-	Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Matt Bobrowski <mattbobrowski@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	David Ahern <dsahern@kernel.org>, Pablo Neira Ayuso <pablo@netfilter.org>, 
-	Jozsef Kadlecsik <kadlec@netfilter.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Shuah Khan <shuah@kernel.org>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, 
-	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>, Linux-Fsdevel <linux-fsdevel@vger.kernel.org>, 
-	fsverity@lists.linux.dev, 
-	"open list:CONTROL GROUP (CGROUP)" <cgroups@vger.kernel.org>, 
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, netfilter-devel <netfilter-devel@vger.kernel.org>, 
-	coreteam@netfilter.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Matteo Croce <teknoraver@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: seanjc@google.com, oliver.upton@linux.dev, usama.anjum@collabora.com, pbonzini@redhat.com, shuah@kernel.org, kernel@collabora.com, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, borntraeger@linux.ibm.com, frankja@linux.ibm.com, imbrenda@linux.ibm.com, anup@brainfault.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Tue, Aug 20, 2024 at 2:03=E2=80=AFAM Matteo Croce <technoboy85@gmail.com=
-> wrote:
->
-> From: Matteo Croce <teknoraver@meta.com>
->
-> Pass to register_btf_kfunc_id_set() a btf_kfunc_hook directly, instead
-> of a bpf_prog_type.
-> Many program types share the same kfunc hook, so some calls to
-> register_btf_kfunc_id_set() can be removed.
->
-> Tested compiling the kernel with -Werror=3Denum-conversion to catch all
-> the occourrences.
->
-> Signed-off-by: Matteo Croce <teknoraver@meta.com>
+On Mon, 19 Aug 2024 23:15:44 +0100,
+Oliver Upton <oliver.upton@linux.dev> wrote:
+> 
+> On Mon, Aug 19, 2024 at 09:33:17AM -0700, Sean Christopherson wrote:
+> > And other KVM maintainers, the big question is: if we do the above, would now be
+> > a decent time to bite the bullet and switch to the kernel's canonical arch paths,
+> > i.e. arm64, s390, and x86?  I feel like if we're ever going to get away from
+> > using aarch64, x86_64, and s390x, this is as about a good of an opportunity as
+> > we're going to get.
+> 
+> I'm pretty much indifferent on the matter, but I won't complain if you
+> send out a change for this.
 
-I think it's too soon to do this kind of cleanup.
-We need to refactor this logic to accommodate sched-ext
-allow/deny pattern for kfunc per struct-ops hook.
-Let's keep this code as-is for now.
-pw-bot: cr
+Same here. Call it arm64 or aargh64, same difference. Whatever we
+change, some people will moan anyway.
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
 
