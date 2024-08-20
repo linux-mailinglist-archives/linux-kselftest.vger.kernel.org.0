@@ -1,57 +1,82 @@
-Return-Path: <linux-kselftest+bounces-15735-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15736-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A791F957A88
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 02:42:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59553957AB4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 03:04:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF5941C23202
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 00:42:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E3D51C20FCE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 01:04:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 499A579F3;
-	Tue, 20 Aug 2024 00:42:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DF78DDA6;
+	Tue, 20 Aug 2024 01:04:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lPale/26"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ONWD3ra+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D9804C66;
-	Tue, 20 Aug 2024 00:42:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEAEC8E9
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Aug 2024 01:04:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724114541; cv=none; b=rC0eZOiSgFNZk86FNxmXvYQTHlWlFskGG8Yt3hec16hLRtXURPVW0Pmo6iF29ATCD1uloaKyBzYSfkAkVlC4KRopjh5l+XyEzhTo06jMsxtd/o2FeceKtM9M1Y4Df3rIp4FEDJ/KsQL8AbjpNLzEHkFmO7V8FXgf/HgJCeJfZ/s=
+	t=1724115845; cv=none; b=PSGh6XMaFBL1ivN96ze34jaEg5+dVvDl/2wJCLe5NZztvEJfUUEGGXwWuNYYkMl3VT7re3/2GTy5rNZ8sOzIltiWrwF8ABdrhTp794nJtcpW2IrFLrGIe+ngoWUfDUx6CSho/AJUvl1NXpXttEKek+SFGl+TuuM0DcyV4NBJR1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724114541; c=relaxed/simple;
-	bh=uI60EPTqcDOH8DZKni2Q9Q2X21j+zwocMTpdUUh697E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cG4gPRRmuL7dv9+nkHdriyZFHP49doP+FsIZl9Dk1HBKupQWxz1VCwFVlhHr70Zdi56Dcm4evwjPg9vZyeOguAXP73PBBTjAnBgzpec+8NNIvnerCBkQExKJ++WqgfQSS7DkN9fLkV0u6/7d3CJs6hEZJMN3p9DHKIflcqrb9q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lPale/26; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BEC9C32782;
-	Tue, 20 Aug 2024 00:42:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724114540;
-	bh=uI60EPTqcDOH8DZKni2Q9Q2X21j+zwocMTpdUUh697E=;
-	h=From:To:Cc:Subject:Date:From;
-	b=lPale/266zZ5Z5hLN/ElpnlS5kd2hViCO9yePE+XTdx3J6AHuEsF6AFzOFjPjETA5
-	 nPlsJj7Wf10YVUPxAdkMB72osnN+vZWI+JUWH5ZWDPaGGZRZt/zc7Tqqn8TC0yGvy8
-	 x7HMySjzHEED/6goJynzMTi42nAuY2RxnqJo5HdcZKYopljiip5/HH2yiJ/9jZsELC
-	 JijJFvI3FcV1nVretzcwkccG4fz56TIiSWxjBt99Ed2ShyWCu5ExHQClBr4Id/Imw7
-	 geEqKlBJWJ8uikRISNg4yzKGVS7qKDcS17SPrAtz0I+JBh9ZRmRMNeOejOkGG9qvRw
-	 C3vN4TSFWbjOQ==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	Jakub Kicinski <kuba@kernel.org>,
-	shuah@kernel.org,
+	s=arc-20240116; t=1724115845; c=relaxed/simple;
+	bh=IZLXBA7ZZL9JQUfezOi9Myz8vJBxrzmGTbhPuknJdBQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aj/5eo3o9Qs52eRjtCyehxgDwKFN241KHadBmt+vXaAMMPR2Zefv9lGc3batG5VrPU8CKYJ5zNSxH9lkkCKQov05k7l0HyaqrTOfRHpkzdtiMa0YyyuFxOFts+QqR48jdRZ/+sCT+3Kd0Re1q5EN0e1s3kmdl7eonwdd6YCRNGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ONWD3ra+; arc=none smtp.client-ip=209.85.217.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-4929992a5e2so1695191137.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 19 Aug 2024 18:04:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724115842; x=1724720642; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=S9cBkJC0RP1zERiTMVgnYdt05/xaN8L9Ga6Qql299sY=;
+        b=ONWD3ra++v4HFKWPsh8daZURKrLH3HeD6TqyfKNLgpKo7WbWRVTjrEvuRbPrNvTNHa
+         RXjDDrjSZxhWE3uHsYkuCB5O4JHKJ3a6iuA1RHvu5rGc7T4miI64bSnN5G3pz4x3i4yn
+         OM/0uyrNlGLmq8TpIP2RL9IKj5gVowUpQ/t6UkPlvs5T+tUGDgMgEQgeh8w7Uz2aBITS
+         H+jQPJv1nHlTRfjBOYtPAHmswcZPNwQ6o3CcG9Kd+02MBv6iig/olHhLamNm2vXHRRm0
+         5+ph1A9tflUc54wA5rEd1PjUB0DUFQfIUpzW9VbcIpppmjtFZ/ajAfZtrFf/UcxtDqte
+         N0Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724115842; x=1724720642;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S9cBkJC0RP1zERiTMVgnYdt05/xaN8L9Ga6Qql299sY=;
+        b=ict7KdzUPQe9+p4079e/D6zk6Jmhko1fKEMNDHBE04OFNylligIGhS0I/nbU+naMQZ
+         uQNayY9NJlr9FN1bhd8OKNsDStjq0CtzZKeKCl5lwaTc4/YA1kbw7OyiBxzhnwzu3bcx
+         mz7fzH56vzEEECv1ujE2BZyBD9uDjmrLaD7mQs6kEP08J5TGyE86rk2xarCxQp1nS0O8
+         bftO3LAZxAB1XyG5SBjNolsZpbLljlEdyjlR074tCrvKXwJ8hDwXklwwYDyGuif8W+xD
+         aTR5uI3jicSqAapd50aQma7NTWIJN3XRIZiAr4o0MsDvNYA1zUNMXlPuzfylcswonMgI
+         lgoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXzVNF6/tVHBII1QG9vNhmJt2MkScz2Sx1jfj1b4M6EBfA6LYfDrACtNxOvmo1ATZZ/KtxY8rdbg4eH20/6d8E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzV44gU+8cYFsjY7lo47zAjLDXXGmKG3Int3PcOVF3UT/nJlfYH
+	Zv7kLyng4xjH/tmyR0C3kMibqY4ClBUHapUGByRZrHx4xAvVLd7I
+X-Google-Smtp-Source: AGHT+IHmsFq3kmTL7RHWh4Pv3B7eZi49R5V1M7QDJNDVqWUuTMcARCMHA9u1QlKEKlwjTcX3UmcuZQ==
+X-Received: by 2002:a05:6102:85:b0:498:9aff:a193 with SMTP id ada2fe7eead31-4989affa27amr5093189137.24.1724115842236;
+        Mon, 19 Aug 2024 18:04:02 -0700 (PDT)
+Received: from x13.localdomain (syn-142-197-128-048.res.spectrum.com. [142.197.128.48])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-842fb9c6170sm1395040241.27.2024.08.19.18.03.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 19 Aug 2024 18:04:00 -0700 (PDT)
+From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+To: brendan.higgins@linux.dev,
+	davidgow@google.com,
+	rmoar@google.com
+Cc: Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
 	linux-kselftest@vger.kernel.org,
-	Ido Schimmel <idosch@idosch.org>
-Subject: [PATCH net-next v2] selftests: net: add helper for checking if nettest is available
-Date: Mon, 19 Aug 2024 17:42:17 -0700
-Message-ID: <20240820004217.1087392-1-kuba@kernel.org>
+	kunit-dev@googlegroups.com,
+	skhan@linuxfoundation.org,
+	linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH v3] lib/math: Add int_pow test suite
+Date: Mon, 19 Aug 2024 21:03:52 -0400
+Message-ID: <20240820010353.7533-1-luis.hernandez093@gmail.com>
 X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -61,222 +86,127 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-A few tests check if nettest exists in the $PATH before adding
-$PWD to $PATH and re-checking. They don't discard stderr on
-the first check (and nettest is built as part of selftests,
-so it's pretty normal for it to not be available in system $PATH).
-This leads to output noise:
+Adds test suite for integer based power function.
 
-  which: no nettest in (/home/virtme/tools/fs/bin:/home/virtme/tools/fs/sbin:/home/virtme/tools/fs/usr/bin:/home/virtme/tools/fs/usr/sbin:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin)
-
-Add a common helper for the check which does silence stderr.
-
-There is another small functional change hiding here, because pmtu.sh
-and fib_rule_tests.sh used to return from the test case rather than
-completely exit. Building nettest is not hard, there should be no need
-to maintain the ability to selectively skip cases in its absence.
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
 ---
-v2:
- - fold in the changes from Ido
-v1: https://lore.kernel.org/20240817183848.658443-1-kuba@kernel.org
-
-CC: shuah@kernel.org
-CC: linux-kselftest@vger.kernel.org
-CC: Ido Schimmel <idosch@idosch.org>
+Changes in v3:
+- Fix compiler warning: explicitly define constant as unsigned int
+- Add changes in patch revisions
+Changes in v2:
+- Address review feedback
+  - Add kconfig entry
+  - Use correct dir and file convention for KUnit
+  - Fix typo
+  - Remove unused static_stub header
+  - Refactor test suite to use paramerterized test cases
+  - Add close to max allowable value to in large_result test case
+  - Add test case with non-power of two exponent
+  - Fix module license 
 ---
- tools/testing/selftests/net/fcnal-test.sh     |  9 +----
- tools/testing/selftests/net/fib_rule_tests.sh | 37 +------------------
- tools/testing/selftests/net/lib.sh            | 15 ++++++++
- tools/testing/selftests/net/pmtu.sh           |  8 +---
- tools/testing/selftests/net/settings          |  1 +
- .../selftests/net/unicast_extensions.sh       |  9 +----
- .../selftests/net/vrf_route_leaking.sh        |  3 +-
- 7 files changed, 23 insertions(+), 59 deletions(-)
+ lib/Kconfig.debug              |  9 ++++++
+ lib/math/Makefile              |  1 +
+ lib/math/tests/Makefile        |  3 ++
+ lib/math/tests/int_pow_kunit.c | 52 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 65 insertions(+)
+ create mode 100644 lib/math/tests/Makefile
+ create mode 100644 lib/math/tests/int_pow_kunit.c
 
-diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
-index 386ebd829df5..899dbad0104b 100755
---- a/tools/testing/selftests/net/fcnal-test.sh
-+++ b/tools/testing/selftests/net/fcnal-test.sh
-@@ -4304,14 +4304,7 @@ elif [ "$TESTS" = "ipv6" ]; then
- 	TESTS="$TESTS_IPV6"
- fi
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index a30c03a66172..b0bbd30d4cba 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -3051,3 +3051,12 @@ config RUST_KERNEL_DOCTESTS
+ endmenu # "Rust"
  
--# nettest can be run from PATH or from same directory as this selftest
--if ! which nettest >/dev/null; then
--	PATH=$PWD:$PATH
--	if ! which nettest >/dev/null; then
--		echo "'nettest' command not found; skipping tests"
--		exit $ksft_skip
--	fi
--fi
-+check_gen_prog "nettest"
- 
- declare -i nfail=0
- declare -i nsuccess=0
-diff --git a/tools/testing/selftests/net/fib_rule_tests.sh b/tools/testing/selftests/net/fib_rule_tests.sh
-index 89034c5b69dc..53c5c1ad437e 100755
---- a/tools/testing/selftests/net/fib_rule_tests.sh
-+++ b/tools/testing/selftests/net/fib_rule_tests.sh
-@@ -51,31 +51,6 @@ log_test()
- 	fi
- }
- 
--check_nettest()
--{
--	if which nettest > /dev/null 2>&1; then
--		return 0
--	fi
--
--	# Add the selftest directory to PATH if not already done
--	if [ "${SELFTEST_PATH}" = "" ]; then
--		SELFTEST_PATH="$(dirname $0)"
--		PATH="${PATH}:${SELFTEST_PATH}"
--
--		# Now retry with the new path
--		if which nettest > /dev/null 2>&1; then
--			return 0
--		fi
--
--		if [ "${ret}" -eq 0 ]; then
--			ret="${ksft_skip}"
--		fi
--		echo "nettest not found (try 'make -C ${SELFTEST_PATH} nettest')"
--	fi
--
--	return 1
--}
--
- setup()
- {
- 	set -e
-@@ -317,11 +292,6 @@ fib_rule6_connect_test()
- 	echo
- 	echo "IPv6 FIB rule connect tests"
- 
--	if ! check_nettest; then
--		echo "SKIP: Could not run test without nettest tool"
--		return
--	fi
--
- 	setup_peer
- 	$IP -6 rule add dsfield 0x04 table $RTABLE_PEER
- 
-@@ -516,11 +486,6 @@ fib_rule4_connect_test()
- 	echo
- 	echo "IPv4 FIB rule connect tests"
- 
--	if ! check_nettest; then
--		echo "SKIP: Could not run test without nettest tool"
--		return
--	fi
--
- 	setup_peer
- 	$IP -4 rule add dsfield 0x04 table $RTABLE_PEER
- 
-@@ -584,6 +549,8 @@ if [ ! -x "$(command -v ip)" ]; then
- 	exit $ksft_skip
- fi
- 
-+check_gen_prog "nettest"
+ endmenu # Kernel hacking
 +
- # start clean
- cleanup &> /dev/null
- setup
-diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-index 8ee4489238ca..be8707bfb46e 100644
---- a/tools/testing/selftests/net/lib.sh
-+++ b/tools/testing/selftests/net/lib.sh
-@@ -125,6 +125,21 @@ slowwait_for_counter()
- 	slowwait "$timeout" until_counter_is ">= $((base + delta))" "$@"
- }
++config INT_POW_TEST
++       tristate "Integer exponentiation (int_pow) test" if !KUNIT_ALL_TESTS
++       depends on KUNIT
++       default KUNIT_ALL_TESTS
++       help
++         Enable this to test the int_pow maths function KUnit test.
++
++         If unsure, say N
+diff --git a/lib/math/Makefile b/lib/math/Makefile
+index 91fcdb0c9efe..3c1f92a7459d 100644
+--- a/lib/math/Makefile
++++ b/lib/math/Makefile
+@@ -5,5 +5,6 @@ obj-$(CONFIG_CORDIC)		+= cordic.o
+ obj-$(CONFIG_PRIME_NUMBERS)	+= prime_numbers.o
+ obj-$(CONFIG_RATIONAL)		+= rational.o
  
-+# Check for existence of tools which are built as part of selftests
-+# but may also already exist in $PATH
-+check_gen_prog()
++obj-$(CONFIG_INT_POW_TEST)  += tests/int_pow_kunit.o
+ obj-$(CONFIG_TEST_DIV64)	+= test_div64.o
+ obj-$(CONFIG_RATIONAL_KUNIT_TEST) += rational-test.o
+diff --git a/lib/math/tests/Makefile b/lib/math/tests/Makefile
+new file mode 100644
+index 000000000000..6a169123320a
+--- /dev/null
++++ b/lib/math/tests/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++obj-$(CONFIG_INT_POW_TEST) += int_pow_kunit.o
+diff --git a/lib/math/tests/int_pow_kunit.c b/lib/math/tests/int_pow_kunit.c
+new file mode 100644
+index 000000000000..e04dd73dabd1
+--- /dev/null
++++ b/lib/math/tests/int_pow_kunit.c
+@@ -0,0 +1,52 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <kunit/test.h>
++#include <linux/math.h>
++
++struct test_case_params {
++	u64 base;
++	unsigned int exponent;
++	u64 expected_result;
++	const char *name;
++};
++
++static const struct test_case_params params[] = {
++	{ 64, 0, 1, "Power of zero" },
++	{ 64, 1, 64, "Power of one"},
++	{ 0, 5, 0, "Base zero" },
++	{ 1, 64, 1, "Base one" },
++	{ 2, 2, 4, "Two squared"},
++	{ 2, 3, 8, "Two cubed"},
++	{ 5, 5, 3125, "Five raised to the fith power" },
++	{ U64_MAX, 1, U64_MAX, "Max base" },
++	{ 2, 63, 9223372036854775808ULL, "Large result"},
++};
++
++static void get_desc(const struct test_case_params *tc, char *desc)
 +{
-+	local prog_name=$1; shift
-+
-+	if ! which $prog_name >/dev/null 2>/dev/null; then
-+		PATH=$PWD:$PATH
-+		if ! which $prog_name >/dev/null; then
-+			echo "'$prog_name' command not found; skipping tests"
-+			exit $ksft_skip
-+		fi
-+	fi
++	strscpy(desc, tc->name, KUNIT_PARAM_DESC_SIZE);
 +}
 +
- remove_ns_list()
- {
- 	local item=$1
-diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
-index 24a50622406c..569bce8b6383 100755
---- a/tools/testing/selftests/net/pmtu.sh
-+++ b/tools/testing/selftests/net/pmtu.sh
-@@ -681,13 +681,7 @@ setup_xfrm() {
- }
- 
- setup_nettest_xfrm() {
--	if ! which nettest >/dev/null; then
--		PATH=$PWD:$PATH
--		if ! which nettest >/dev/null; then
--			echo "'nettest' command not found; skipping tests"
--			return 1
--		fi
--	fi
-+	check_gen_prog "nettest"
- 
- 	[ ${1} -eq 6 ] && proto="-6" || proto=""
- 	port=${2}
-diff --git a/tools/testing/selftests/net/settings b/tools/testing/selftests/net/settings
-index ed8418e8217a..a38764182822 100644
---- a/tools/testing/selftests/net/settings
-+++ b/tools/testing/selftests/net/settings
-@@ -1 +1,2 @@
- timeout=3600
-+profile=1
-diff --git a/tools/testing/selftests/net/unicast_extensions.sh b/tools/testing/selftests/net/unicast_extensions.sh
-index f52aa5f7da52..3e751234ccfe 100755
---- a/tools/testing/selftests/net/unicast_extensions.sh
-+++ b/tools/testing/selftests/net/unicast_extensions.sh
-@@ -30,14 +30,7 @@
- 
- source lib.sh
- 
--# nettest can be run from PATH or from same directory as this selftest
--if ! which nettest >/dev/null; then
--	PATH=$PWD:$PATH
--	if ! which nettest >/dev/null; then
--		echo "'nettest' command not found; skipping tests"
--		exit $ksft_skip
--	fi
--fi
-+check_gen_prog "nettest"
- 
- result=0
- 
-diff --git a/tools/testing/selftests/net/vrf_route_leaking.sh b/tools/testing/selftests/net/vrf_route_leaking.sh
-index 152171fb1fc8..e9c2f71da207 100755
---- a/tools/testing/selftests/net/vrf_route_leaking.sh
-+++ b/tools/testing/selftests/net/vrf_route_leaking.sh
-@@ -59,7 +59,6 @@
- # while it is forwarded between different vrfs.
- 
- source lib.sh
--PATH=$PWD:$PWD/tools/testing/selftests/net:$PATH
- VERBOSE=0
- PAUSE_ON_FAIL=no
- DEFAULT_TTYPE=sym
-@@ -636,6 +635,8 @@ EOF
- # Some systems don't have a ping6 binary anymore
- command -v ping6 > /dev/null 2>&1 && ping6=$(command -v ping6) || ping6=$(command -v ping)
- 
-+check_gen_prog "nettest"
++KUNIT_ARRAY_PARAM(int_pow, params, get_desc);
 +
- TESTS_IPV4="ipv4_ping_ttl ipv4_traceroute ipv4_ping_frag ipv4_ping_local ipv4_tcp_local
- ipv4_udp_local ipv4_ping_ttl_asym ipv4_traceroute_asym"
- TESTS_IPV6="ipv6_ping_ttl ipv6_traceroute ipv6_ping_local ipv6_tcp_local ipv6_udp_local
++static void int_pow_test(struct kunit *test)
++{
++	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
++
++	KUNIT_EXPECT_EQ(test, tc->expected_result, int_pow(tc->base, tc->exponent));
++}
++
++static struct kunit_case math_int_pow_test_cases[] = {
++	KUNIT_CASE_PARAM(int_pow_test, int_pow_gen_params),
++	{}
++};
++
++static struct kunit_suite int_pow_test_suite = {
++	.name = "math-int_pow",
++	.test_cases = math_int_pow_test_cases,
++};
++
++kunit_test_suites(&int_pow_test_suite);
++
++MODULE_DESCRIPTION("math.int_pow KUnit test suite");
++MODULE_LICENSE("GPL");
 -- 
 2.46.0
 
