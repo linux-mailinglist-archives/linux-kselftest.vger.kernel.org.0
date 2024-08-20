@@ -1,185 +1,253 @@
-Return-Path: <linux-kselftest+bounces-15767-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15768-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 889E2957ECF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 08:58:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 634CA957F35
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 09:16:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA4D2B23C92
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 06:58:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C9302817F5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 07:16:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDC2918C029;
-	Tue, 20 Aug 2024 06:57:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eKMoGsUT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D64A1BC58;
+	Tue, 20 Aug 2024 07:16:44 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA4014A0A8;
-	Tue, 20 Aug 2024 06:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B98BE56A;
+	Tue, 20 Aug 2024 07:16:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724137046; cv=none; b=OlRsPHlK2NnqfZAgK1GU5F9R+8GZYy5GZC9H/rQ2qq+quxbGaFaFKi9SxYo7U0pNUoSEriRbWgXgxdQ/0mpn3h4423EXpiBL/7TMNFNflzTTpOcs+Mpydiy6kSN1orkjAx3uwlge/RURWwfSqRtoGKs1wEiQkW49iT1imGaFtdI=
+	t=1724138204; cv=none; b=fwNADmG8S1j1koDSB5q21SFXdcK6vuy4zwfHWyhDqJY5IP6ln+GGFAlT1iepzdBShQU9JvoRd2xESW+bc5gnwymRVIwcNxCOMKA/KcrsIZtCfkX+Gu6E0gR05efPNBWxIeeVypMaqmXTBF7vhnYOWE4ZFfPoqLd1BI71Ybm65/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724137046; c=relaxed/simple;
-	bh=/3QiCfWzXD0JuQ07E2OaHg1/GNJknXvBDnczYuoIrjY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=E4GanzHtkACH11Eh7K+e3LUSBHBI1gMPYwqdXd2JREKctsqTfWnDrtlVCx3F6nlLSNgYyVtRTzl4ofSAx81qqRGjbNNAecGvz3PndNZgiQVbuQ0nFelOgrDIYNy9v1U665lELuEmE/bEjywqywfd+NUbIvo95n1SKcRS9OD318g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eKMoGsUT; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47JKwsYZ001579;
-	Tue, 20 Aug 2024 06:57:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
-	:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=pp1; bh=HGts0Gt6y5L7e
-	vdYkmU46zedS1a2zP/etggf7yDsHbE=; b=eKMoGsUTID4dRxN5YXeUVolO8b74s
-	89ZMEDkovM62YabXWw3s6kxon4hTuo34Y69Od03TyqsyMFy0ybRYG0tCiG1Xw+KD
-	07/WYH4DF5O+B22Yj+VoUo4z+4mWsIB4BoijaL8AMgzbkeyVH2ixDUsiPHd6fDhi
-	iw9hki1lq67lVonNGek47uRKRZqHq2zhhmT/4dzoL5E81FWaCrlCE43zT1ybB+Zr
-	gaxg9lpSzoPy3wAgde4vgfE7S09GwM02L+RZc4BSYGYARmqM4LbEFnrjLoWV2teD
-	CVqs7lL38udRfv37o2qfVOHMplEoO5qu/sBLTuX1qQzIPvzEDnh3up6bQ==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 412ma04e4e-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Aug 2024 06:57:22 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 47K6vM2m014080;
-	Tue, 20 Aug 2024 06:57:22 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 412ma04e4b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Aug 2024 06:57:22 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 47K5VGPM013089;
-	Tue, 20 Aug 2024 06:57:21 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 41366u1wm6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 20 Aug 2024 06:57:21 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 47K6vF9E47645140
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 20 Aug 2024 06:57:17 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8F3C42005A;
-	Tue, 20 Aug 2024 06:57:15 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 69EE720043;
-	Tue, 20 Aug 2024 06:57:15 +0000 (GMT)
-Received: from a46lp38.lnxne.boe (unknown [9.152.108.100])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 20 Aug 2024 06:57:15 +0000 (GMT)
-From: Hariharan Mari <hari55@linux.ibm.com>
-To: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, shuah@kernel.org,
-        frankja@linux.ibm.com, borntraeger@linux.ibm.com,
-        imbrenda@linux.ibm.com, david@redhat.com, pbonzini@redhat.com,
-        schlameuss@linux.ibm.com
-Subject: [PATCH v2 5/5] KVM: s390: selftests: Add regression tests for PLO subfunctions
-Date: Tue, 20 Aug 2024 08:48:37 +0200
-Message-ID: <20240820065623.1140399-6-hari55@linux.ibm.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240820065623.1140399-1-hari55@linux.ibm.com>
-References: <20240820065623.1140399-1-hari55@linux.ibm.com>
+	s=arc-20240116; t=1724138204; c=relaxed/simple;
+	bh=Wy7PeXvS2DkMCINbXnH9uYYNn5l3PC7queX0oiopSBA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gLySipSGB1OsqJAHBXV19BgTezKgzjmyMN+kQONJSnXNjR9zYVAt/PRkUZW4371QTG5KSLSuSlnBVE61+HWerifzpU2qqw9SAosYalKHWUz94dG3ik9/wrPliyKeodeWJK+fEb+tj+Ud2cTUpIrZxTtzKOX7m24q0R/EiTndCZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 71C60339;
+	Tue, 20 Aug 2024 00:17:06 -0700 (PDT)
+Received: from [10.163.86.112] (unknown [10.163.86.112])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4EE643F73B;
+	Tue, 20 Aug 2024 00:16:29 -0700 (PDT)
+Message-ID: <c2ca1845-7eec-4119-b7b6-f6694e4a7799@arm.com>
+Date: Tue, 20 Aug 2024 12:46:22 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] mm: Retry migration earlier upon refcount mismatch
+To: "Huang, Ying" <ying.huang@intel.com>
+Cc: akpm@linux-foundation.org, shuah@kernel.org, david@redhat.com,
+ willy@infradead.org, ryan.roberts@arm.com, anshuman.khandual@arm.com,
+ catalin.marinas@arm.com, cl@gentwo.org, vbabka@suse.cz, mhocko@suse.com,
+ apopple@nvidia.com, osalvador@suse.de, baolin.wang@linux.alibaba.com,
+ dave.hansen@linux.intel.com, will@kernel.org, baohua@kernel.org,
+ ioworker0@gmail.com, gshan@redhat.com, mark.rutland@arm.com,
+ kirill.shutemov@linux.intel.com, hughd@google.com, aneesh.kumar@kernel.org,
+ yang@os.amperecomputing.com, peterx@redhat.com, broonie@kernel.org,
+ mgorman@techsingularity.net, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+References: <20240809103129.365029-1-dev.jain@arm.com>
+ <20240809103129.365029-2-dev.jain@arm.com>
+ <87frrauwwv.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <15dbe4ac-a036-4029-ba08-e12a236f448a@arm.com>
+ <87bk1yuuzu.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <95b72817-5444-4ced-998a-1cb90f42bf49@arm.com>
+ <8734naurhm.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <9d84e4e8-ac54-4eb1-a113-3f32aea864c9@arm.com>
+ <fe76204d-4cef-4f06-a5bc-e016a513f783@arm.com>
+ <391d4f4f-e642-4c11-a36b-190874963f8a@arm.com>
+ <c40de4d7-e37e-4d2f-bd7a-a2a5497a2419@arm.com>
+ <87a5h9hud7.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Language: en-US
+From: Dev Jain <dev.jain@arm.com>
+In-Reply-To: <87a5h9hud7.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: bX9kmX9Mfc5okd500TIAlUobm1B42jTW
-X-Proofpoint-ORIG-GUID: wwc8znrCMXOxjBPDM8BH-QDkN8ewa4Cz
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-19_16,2024-08-19_03,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 priorityscore=1501
- mlxlogscore=999 lowpriorityscore=0 phishscore=0 spamscore=0 malwarescore=0
- bulkscore=0 adultscore=0 impostorscore=0 suspectscore=0 clxscore=1015
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
- definitions=main-2408200048
 
-Extend the existing regression test framework for s390x CPU subfunctions
-to include tests for the Perform Locked Operation (PLO) subfunction
-functions.
 
-PLO was introduced in the very first 64-bit machine generation.
-Hence it is assumed PLO is always installed in the Z Arch.
-The test procedure follows the established pattern.
+On 8/19/24 12:28, Huang, Ying wrote:
+> Dev Jain <dev.jain@arm.com> writes:
+>
+>> On 8/13/24 12:52, Dev Jain wrote:
+>>> On 8/13/24 10:30, Dev Jain wrote:
+>>>> On 8/12/24 17:38, Dev Jain wrote:
+>>>>> On 8/12/24 13:01, Huang, Ying wrote:
+>>>>>> Dev Jain <dev.jain@arm.com> writes:
+>>>>>>
+>>>>>>> On 8/12/24 11:45, Huang, Ying wrote:
+>>>>>>>> Dev Jain <dev.jain@arm.com> writes:
+>>>>>>>>
+>>>>>>>>> On 8/12/24 11:04, Huang, Ying wrote:
+>>>>>>>>>> Hi, Dev,
+>>>>>>>>>>
+>>>>>>>>>> Dev Jain <dev.jain@arm.com> writes:
+>>>>>>>>>>
+>>>>>>>>>>> As already being done in __migrate_folio(), wherein we
+>>>>>>>>>>> backoff if the
+>>>>>>>>>>> folio refcount is wrong, make this check during the
+>>>>>>>>>>> unmapping phase, upon
+>>>>>>>>>>> the failure of which, the original state of the PTEs will be
+>>>>>>>>>>> restored and
+>>>>>>>>>>> the folio lock will be dropped via migrate_folio_undo_src(),
+>>>>>>>>>>> any racing
+>>>>>>>>>>> thread will make progress and migration will be retried.
+>>>>>>>>>>>
+>>>>>>>>>>> Signed-off-by: Dev Jain <dev.jain@arm.com>
+>>>>>>>>>>> ---
+>>>>>>>>>>>      mm/migrate.c | 9 +++++++++
+>>>>>>>>>>>      1 file changed, 9 insertions(+)
+>>>>>>>>>>>
+>>>>>>>>>>> diff --git a/mm/migrate.c b/mm/migrate.c
+>>>>>>>>>>> index e7296c0fb5d5..477acf996951 100644
+>>>>>>>>>>> --- a/mm/migrate.c
+>>>>>>>>>>> +++ b/mm/migrate.c
+>>>>>>>>>>> @@ -1250,6 +1250,15 @@ static int
+>>>>>>>>>>> migrate_folio_unmap(new_folio_t get_new_folio,
+>>>>>>>>>>>          }
+>>>>>>>>>>>            if (!folio_mapped(src)) {
+>>>>>>>>>>> +        /*
+>>>>>>>>>>> +         * Someone may have changed the refcount and maybe
+>>>>>>>>>>> sleeping
+>>>>>>>>>>> +         * on the folio lock. In case of refcount mismatch,
+>>>>>>>>>>> bail out,
+>>>>>>>>>>> +         * let the system make progress and retry.
+>>>>>>>>>>> +         */
+>>>>>>>>>>> +        struct address_space *mapping = folio_mapping(src);
+>>>>>>>>>>> +
+>>>>>>>>>>> +        if (folio_ref_count(src) !=
+>>>>>>>>>>> folio_expected_refs(mapping, src))
+>>>>>>>>>>> +            goto out;
+>>>>>>>>>>>              __migrate_folio_record(dst, old_page_state,
+>>>>>>>>>>> anon_vma);
+>>>>>>>>>>>              return MIGRATEPAGE_UNMAP;
+>>>>>>>>>>>          }
+>>>>>>>>>> Do you have some test results for this?  For example, after
+>>>>>>>>>> applying the
+>>>>>>>>>> patch, the migration success rate increased XX%, etc.
+>>>>>>>>> I'll get back to you on this.
+>>>>>>>>>
+>>>>>>>>>> My understanding for this issue is that the migration success
+>>>>>>>>>> rate can
+>>>>>>>>>> increase if we undo all changes before retrying. This is the
+>>>>>>>>>> current
+>>>>>>>>>> behavior for sync migration, but not for async migration.  If
+>>>>>>>>>> so, we can
+>>>>>>>>>> use migrate_pages_sync() for async migration too to increase
+>>>>>>>>>> success
+>>>>>>>>>> rate?  Of course, we need to change the function name and
+>>>>>>>>>> comments.
+>>>>>>>>> As per my understanding, this is not the current behaviour for sync
+>>>>>>>>> migration. After successful unmapping, we fail in
+>>>>>>>>> migrate_folio_move()
+>>>>>>>>> with -EAGAIN, we do not call undo src+dst (rendering the loop
+>>>>>>>>> around
+>>>>>>>>> migrate_folio_move() futile), we do not push the failed folio
+>>>>>>>>> onto the
+>>>>>>>>> ret_folios list, therefore, in _sync(), _batch() is never
+>>>>>>>>> tried again.
+>>>>>>>> In migrate_pages_sync(), migrate_pages_batch(,MIGRATE_ASYNC) will be
+>>>>>>>> called first, if failed, the folio will be restored to the original
+>>>>>>>> state (unlocked).  Then migrate_pages_batch(,_SYNC*) is called
+>>>>>>>> again.
+>>>>>>>> So, we unlock once.  If it's necessary, we can unlock more times via
+>>>>>>>> another level of loop.
+>>>>>>> Yes, that's my point. We need to undo src+dst and retry.
+>>>>>> For sync migration, we undo src+dst and retry now, but only once.  You
+>>>>>> have shown that more retrying increases success rate.
+>>>>>>
+>>>>>>> We will have
+>>>>>>> to decide where we want this retrying to be; do we want to change the
+>>>>>>> return value, end up in the while loop wrapped around _sync(),
+>>>>>>> and retry
+>>>>>>> there by adding another level of loop, or do we want to make use
+>>>>>>> of the
+>>>>>>> existing retry loops, one of which is wrapped around _unmap();
+>>>>>>> the latter
+>>>>>>> is my approach. The utility I see for the former approach is
+>>>>>>> that, in case
+>>>>>>> of a large number of page migrations (which should usually be
+>>>>>>> the case),
+>>>>>>> we are giving more time for the folio to get retried. The latter
+>>>>>>> does not
+>>>>>>> give much time and discards the folio if it did not succeed
+>>>>>>> under 7 times.
+>>>>>> Because it's a race, I guess that most folios will be migrated
+>>>>>> successfully in the first pass.
+>>>>>>
+>>>>>> My concerns of your method are that it deal with just one case
+>>>>>> specially.  While retrying after undoing all appears more general.
+>>>>>
+>>>>> Makes sense. Also, please ignore my "change the return value"
+>>>>> thing, I got confused between unmap_folios, ret_folios, etc.
+>>>>> Now I think I understood what the lists are doing :)
+>>>>>
+>>>>>> If it's really important to retry after undoing all, we can either
+>>>>>> convert two retying loops of migrate_pages_batch() into one loop, or
+>>>>>> remove retry loop in migrate_pages_batch() and retry in its caller
+>>>>>> instead.
+>>>>> And if I implemented this correctly, the following makes the test
+>>>>> pass always:
+>>>>> https://www.codedump.xyz/diff/Zrn7EdxzNXmXyNXe
+>>>>
+>>>> Okay, I did mess up with the implementation, leading to a false
+>>>> positive. Let me try again :)
+>>>
+>>> Hopefully this should do the job:
+>>> https://www.codedump.xyz/diff/ZrsIV8JSOPYx5V_u
+>>>
+>>> But the result is worse than the patch proposed; I rarely hit
+>>> a 3 digit number of successes of move_pages(). But, on a
+>>> base kernel without any changes, when I apply David's
+>>> suggestion to change the test, if I choose 7 as the number
+>>> of retries (= NR_MAX_MIGRATE_SYNC_RETRY) in the test, I
+>>> can touch even 4 digits. I am puzzled.
+>>> We can also try merging the for loops of unmap and move...
+>>
+>> If people are okay with this change, I guess I can send it as
+>> a v2? I concur with your assessment that my initial approach
+>> is solving a specific case; the above approach does give me
+>> a slight improvement on arm64 and should be an improvement
+>> in general, since it makes sense to defer retrying the failed folio
+>> as much as we can.
+> We need to deal with something else before a formal v2,
+>
+> - stats need to be fixed, please check result processing for the first
+>    loop of migrate_pages_sync().
 
-Suggested-by: Janosch Frank <frankja@linux.ibm.com>
-Signed-off-by: Hariharan Mari <hari55@linux.ibm.com>
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
----
- .../kvm/s390x/cpumodel_subfuncs_test.c        | 34 +++++++++++++++++++
- 1 file changed, 34 insertions(+)
+Sorry, can you point out where do they need to be fixed exactly?
+The change I did is inside the while(!list_empty(from)) block,
+and there is no stat computation being done there already.
 
-diff --git a/tools/testing/selftests/kvm/s390x/cpumodel_subfuncs_test.c b/tools/testing/selftests/kvm/s390x/cpumodel_subfuncs_test.c
-index c31f445c6f03..255984a52365 100644
---- a/tools/testing/selftests/kvm/s390x/cpumodel_subfuncs_test.c
-+++ b/tools/testing/selftests/kvm/s390x/cpumodel_subfuncs_test.c
-@@ -20,6 +20,8 @@
- 
- #include "kvm_util.h"
- 
-+#define U8_MAX  ((u8)~0U)
-+
- /**
-  * Query available CPU subfunctions
-  */
-@@ -37,6 +39,33 @@ static void get_cpu_machine_subfuntions(struct kvm_vm *vm,
- 	TEST_ASSERT(!r, "Get cpu subfunctions failed r=%d errno=%d", r, errno);
- }
- 
-+static inline int plo_test_bit(unsigned char nr)
-+{
-+	unsigned long function = (unsigned long)nr | 0x100;
-+	int cc;
-+
-+	asm volatile("	lgr	0,%[function]\n"
-+			/* Parameter registers are ignored for "test bit" */
-+			"	plo	0,0,0,0(0)\n"
-+			"	ipm	%0\n"
-+			"	srl	%0,28\n"
-+			: "=d" (cc)
-+			: [function] "d" (function)
-+			: "cc", "0");
-+	return cc == 0;
-+}
-+
-+/*
-+ * Testing Perform Locked Operation (PLO) CPU subfunction's ASM block
-+ */
-+static void test_plo_asm_block(u8 (*query)[32])
-+{
-+	for (int i = 0; i <= U8_MAX; ++i) {
-+		if (plo_test_bit(i))
-+			(*query)[i >> 3] |= 0x80 >> (i & 7);
-+	}
-+}
-+
- /*
-  * Testing Crypto Compute Message Authentication Code (KMAC) CPU subfunction's
-  * ASM block
-@@ -237,6 +266,11 @@ struct testdef {
- 	testfunc_t test;
- 	int facility_bit;
- } testlist[] = {
-+	/*  PLO was introduced in the very first 64-bit machine generation.
-+	 *  Hence it is assumed PLO is always installed in Z Arch .
-+	 */
-+	{ "PLO", cpu_subfunc.plo, sizeof(cpu_subfunc.plo),
-+		test_plo_asm_block, 1 },
- 	/* MSA - Facility bit 17 */
- 	{ "KMAC", cpu_subfunc.kmac, sizeof(cpu_subfunc.kmac),
- 		test_kmac_asm_block, 17 },
--- 
-2.45.2
+>
+> - Do we need something similar for async migration.
+>
+> - Can we add another level of explicit loop for the second loop of
+>    migrate_pages_sync()?  That is to improve code readability.  Or, add a
+>    function to dot that?
+>
+> - Is it good to remove retry loop in migrate_pages_batch()?  And do
+>    retry in the caller?
 
+I am personally in favour of leaving the retry loop, and async
+migration, as it is. Since async version is basically minimal-effort
+migration, it won't make sense to "optimize" it, given the code churn
+it would create, including the change we will have to then do in
+"if (mode == MIGRATE_ASYNC) => migrate_pages_batch(ASYNC)" inside
+migrate_pages().
+
+Sorry, what do you mean by "another level of explicit loop"?
+
+>
+> --
+> Best Regards,
+> Huang, Ying
 
