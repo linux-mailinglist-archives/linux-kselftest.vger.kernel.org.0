@@ -1,182 +1,216 @@
-Return-Path: <linux-kselftest+bounces-15770-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15771-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6DFD958543
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 12:54:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B8D5958778
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 15:01:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C30428A944
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 10:54:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0BA9B2239D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 13:00:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7249518DF6F;
-	Tue, 20 Aug 2024 10:54:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 498AC18CBE8;
+	Tue, 20 Aug 2024 13:00:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="dZbFFhNO"
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="laO+dyCv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2071.outbound.protection.outlook.com [40.107.101.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BB018DF6B;
-	Tue, 20 Aug 2024 10:54:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.101.71
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724151275; cv=fail; b=ilpcHfSL4Fw3nOo8SR54rDE9t8sMnzJym+wZ87UpK4az93a/LGlF2tsrMwWN87KFbyIX+lAYSwvAjOc72lbwyujzy5kKE42jf1a3xY7+OmQsSOs3u6nTuASPuApnuTCR/BtO4ivQAV6n5uYPnnJuzG1AIfDmt4nBPwnksQnkzn0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724151275; c=relaxed/simple;
-	bh=tVsBbx47IsJIxMlnohvmjsBFyRVcprqx6o8/b7hq9hQ=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fc61xaqMHYWI8r9/h0ofCOv0G8elyvSVNm+bzPzNLQa/e5G2+oX9AZ9H6xakvrI3GybUFZtfMALpWgI9GF3591LJPdDWO8/w5t8lpguao8N/OXQ1NfqjkYCIHov7iJ1OjvfcYu+QHEn2IJ1SbASZgnc2JKbIKluDGjgVew22zy0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=dZbFFhNO; arc=fail smtp.client-ip=40.107.101.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=svYZwpaQiHp1yef/bogvUicv52tWYhxBLcBqv3Mjb8hm/W7duqsJLY83AtZp5jZw4O6l9zoEUiMZnOrb7MbaxyN1abwlwIsUiV3hqgH1EHIoPIEfVCMVW40fLyg4CFNxKOtOj/j21x0PTXXVy5paJ726hE7XO9IgX3Kbic35h1iWt2iisTifu6ntCuky2VEA5oSR9FMLgU6OepGAnk5fMKT50Szl9SLkQmxNie346i8Zfy/B998mSZ+LuXUQhSB4LPsMaBXWYhbXAFKkIjbJe1uDqbmyxRwPoLqx0+MSxqbCou6o1NKOgL/aln/eElvv6Y/+H4uPLxFoxxogUTK8dg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xJQENSO+GZEfiI18vz5SdUPMOkV/TWlJX7cpkfwyaWs=;
- b=o/8IPGqBlcjYN6EYDAgv1a1loQOtDptAm4qDFqrSzGlTwF448DwSBkPMP4d1H9yDDAQI51cCccasL/+7zWmd8BppHwX1Pq/MBGAOsKowVA/oBmwk7owzfd/B+yoWDM4rhGMvusNhRXTBYsneh27caaoRXBlFR7yqofEgxnl3N25z8xFi9aAq+DumgGI5wWbhdNaCyRM4s+NViTMXmQ1765RuCFpC7X7wqDLBREFOeqBxDWJWHiNr8lqDVCXMBzaJK8rJk/RpE1kRnKQwBhoobgZHEsG8Zlbdp5cRYaRREVfhdgA5yQwWuJ7fkQx269ePEqqIuETeVYi8+jzFLPslpA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xJQENSO+GZEfiI18vz5SdUPMOkV/TWlJX7cpkfwyaWs=;
- b=dZbFFhNOBz2cBhHOn68zOvyA47NIbvzlBohhxv0pE1Dy2CqX9xnyp5zBQwsogK/0a1BTGv73zWYC9gbSFcTGKKQMWFjr2lokuSKqxHsFebgi2oUPXPMwOSlqYWdTfYxC2sK9P1FtOCleoI3to0uLXcP3blyUwRLtINL2yIYWkJZWgNCO8/Sbb+4qf3ztiBwyi5kHQKMWLSLbTyGRHlirigJHnOrvZ1CfknvRl++GScotnuyKgIZOI2lhq7ZmYEERqtpGkPKZiNoZ7v1812+VblzshKkfrB9FcvrAEUsRRNd5a87bkynXBVf4ZyXm2/ijGsqt1SqKjicxWRWo0gf0pw==
-Received: from CH2PR10CA0003.namprd10.prod.outlook.com (2603:10b6:610:4c::13)
- by BL1PR12MB5706.namprd12.prod.outlook.com (2603:10b6:208:385::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.16; Tue, 20 Aug
- 2024 10:54:30 +0000
-Received: from DS3PEPF0000C37B.namprd04.prod.outlook.com
- (2603:10b6:610:4c:cafe::20) by CH2PR10CA0003.outlook.office365.com
- (2603:10b6:610:4c::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7875.21 via Frontend
- Transport; Tue, 20 Aug 2024 10:54:30 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DS3PEPF0000C37B.mail.protection.outlook.com (10.167.23.5) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7897.11 via Frontend Transport; Tue, 20 Aug 2024 10:54:29 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 20 Aug
- 2024 03:54:18 -0700
-Received: from fedora.mtl.com (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 20 Aug
- 2024 03:54:14 -0700
-From: Petr Machata <petrm@nvidia.com>
-To: Shuah Khan <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<netdev@vger.kernel.org>
-CC: Jakub Kicinski <kuba@kernel.org>, <mlxsw@nvidia.com>, Ido Schimmel
-	<idosch@nvidia.com>, Petr Machata <petrm@nvidia.com>
-Subject: [PATCH net] selftests: mlxsw: ethtool_lanes: Source ethtool lib from correct path
-Date: Tue, 20 Aug 2024 12:53:47 +0200
-Message-ID: <2112faff02e536e1ac14beb4c2be09c9574b90ae.1724150067.git.petrm@nvidia.com>
-X-Mailer: git-send-email 2.45.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3FE15749C
+	for <linux-kselftest@vger.kernel.org>; Tue, 20 Aug 2024 13:00:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724158855; cv=none; b=S9cQkMo4Nm3KcZyUOKoOQ+Kybxtp8bL6AjyBcEG0geB9HAqVkI9zSqezIh9qlSuC+z4G1WXLy+L0rFNxlt4hDwldKIHRmMoT1i0+YgRafaqSWAgHDfVhlJ23ukbeQt0daAjm695dxj0meOr/TFzsPZ2ruUXw4ga3lCW1PywEGvw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724158855; c=relaxed/simple;
+	bh=zhEVvf/8ae7zkCvJwHGZWYWO5HMcGw4uFVnrq5d2+M4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rjdo4q6oWBZH4xUAqBJbbQExvxBUAjZEH0uJc7Os54qjVKg/ICcu63P1MkdUuULS7VEVvoeP+Voh6r/3cmU7FhYIxL9uZiEh+WlbmjXQ4lRNXSKfofoGktjO70u/9HwYlG/dVNEW+Ve48wh2dZJ5SZjpoYBlbi/ud7N5w7lc06M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=laO+dyCv; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-44fdde0c8dcso30120261cf.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 20 Aug 2024 06:00:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1724158852; x=1724763652; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=j52XYJE2ICKQlINPQl+zW5CQKy5fCOrlHtppgGWQcXM=;
+        b=laO+dyCv6CulVMqm4hlnC3CImpsfr6Tf9kaCF1hrQTwCMNCLQtTXPKK2/u3bACv3wb
+         2TFoKq4niLCq0V+0NNO44uZxFafCFhG890T3QOPOF5lQKLHWkcxzix2srJMaU48VsUxm
+         oSxl2WO5FwOV1UInXtjTYTyQTizgNrUO6QfVuviwGxGlMA0xOCr9KagPSTCRjw93c3EM
+         quLM2ijwxfXbt5fT12gaGgCLbQV3Y5LJJPykBOguVbOrMtkJWWthL+KwDcCe8LjsAzgL
+         zpCjrNo38Qo4d2Cy66+fc0frhw6uHBKkMFWxu/BPc2sgVM9skPUf81UH/x4RFDUea6Yb
+         Mq0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724158852; x=1724763652;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j52XYJE2ICKQlINPQl+zW5CQKy5fCOrlHtppgGWQcXM=;
+        b=YnE+Pj05RAJgaRP9so5kdK9+kE8ZRHPJyjqo5UBnnppGVMkEAOWEMdV16xrtsbUqzd
+         TYzYMOsoFhvhgLHteuwFq+yK7rj9MRhhHXmyjMakQ/7X8UEdNKG/LgROYtNgz9KsH5rk
+         eqNAFk1/GVgm5ZY2RUw1CPYAHiodXeG07Q9yeqswE3WspBk3RFZ7ZH8nBQkkAjlkqqYX
+         v3q4Sah7xywdksLg1LYamKnN7tmDLcmgcadqD0HnTAVwGE9QkfXgqJwuRmECo2ZFrFeN
+         q1mCCMxcV8vRdsdMzOm5weEW1TXxQO+o2Pa7rzvK4OMjHSuMbTKiEzwOt1EK75N7Fsv2
+         uoUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUi/IyITAwtr0sFSsH7m4cSK0snClNE6+jJyGjMwl2ubsLiB4vDhZN9LVim9H0AErMTaRlBjphmKmv8a41y2zQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMiOKot7QQlMxPntASApeV2mLRUeiKfJMBzxdcVA6/LN6Dq/6v
+	O/xpEdFoNtzUx90p/0SBS2wmIDYrDrwj5LV6D8/GIRIB8ZZlFBZmstVS8QcNNms=
+X-Google-Smtp-Source: AGHT+IFogz/OKodC6xvuV+JQ0O1UMwu8nhnZCifjPnotmW7jOJBTqcnoRS5m2elNnoCh4kakCFzN+Q==
+X-Received: by 2002:a05:622a:6186:b0:453:6cb2:c8d1 with SMTP id d75a77b69052e-45374310eaemr144853771cf.37.1724158852033;
+        Tue, 20 Aug 2024 06:00:52 -0700 (PDT)
+Received: from PC2K9PVX.TheFacebook.com (ip-185-104-139-70.ptr.icomera.net. [185.104.139.70])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45369fd716csm50159141cf.4.2024.08.20.06.00.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Aug 2024 06:00:51 -0700 (PDT)
+Date: Tue, 20 Aug 2024 09:00:37 -0400
+From: Gregory Price <gourry@gourry.net>
+To: Yuanchu Xie <yuanchu@google.com>
+Cc: David Hildenbrand <david@redhat.com>,
+	"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+	Khalid Aziz <khalid.aziz@oracle.com>,
+	Henry Huang <henry.hj@antgroup.com>, Yu Zhao <yuzhao@google.com>,
+	Dan Williams <dan.j.williams@intel.com>,
+	Gregory Price <gregory.price@memverge.com>,
+	Huang Ying <ying.huang@intel.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Lance Yang <ioworker0@gmail.com>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	Kalesh Singh <kaleshsingh@google.com>, Wei Xu <weixugc@google.com>,
+	David Rientjes <rientjes@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>, Shuah Khan <shuah@kernel.org>,
+	Yosry Ahmed <yosryahmed@google.com>,
+	Matthew Wilcox <willy@infradead.org>,
+	Sudarshan Rajagopalan <quic_sudaraja@quicinc.com>,
+	Kairui Song <kasong@tencent.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Vasily Averin <vasily.averin@linux.dev>,
+	Nhat Pham <nphamcs@gmail.com>, Miaohe Lin <linmiaohe@huawei.com>,
+	Qi Zheng <zhengqi.arch@bytedance.com>,
+	Abel Wu <wuyun.abel@bytedance.com>,
+	"Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+	Kefeng Wang <wangkefeng.wang@huawei.com>,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 0/7] mm: workingset reporting
+Message-ID: <ZsSTdY5hsv05jcj-@PC2K9PVX.TheFacebook.com>
+References: <20240813165619.748102-1-yuanchu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS3PEPF0000C37B:EE_|BL1PR12MB5706:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6aa1d8c3-70c7-47c1-5a54-08dcc10677a0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|82310400026|36860700013|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?KbBxRlGr/pPLi2+a4617vkzPwhnmZOnAR9uuSnfqPXL4HkLRjrqGIEiRrdOd?=
- =?us-ascii?Q?owUUKfzbe4XXuD33b9WER/70O9c0oP8qRkM97QEQ9z3shqvwopdYaoMSATU5?=
- =?us-ascii?Q?LKzedetkAqLQTei8yqorSQ+/O8q0sAjh432WdjIjpv8W7t2MVNCAI8uEulVa?=
- =?us-ascii?Q?xIi6/mX8J+ByZ9wqpH21yJTEWR33SOrN0F8dLsHTavRHCyhtfErrPhZ7fdnP?=
- =?us-ascii?Q?ViT67B9Qynjf/ea2WVTiXQCyXxFkx0QrcouWrr0cT88zIpbeN9sI8kY3Y7y5?=
- =?us-ascii?Q?L7x2nJGxnkyfswzDMdjk5WS6yGPOOFqQlRAMokkG3lNayMhVgclGs+2GEOCh?=
- =?us-ascii?Q?Oib5FKS62EflVDrX7HKu4sNLUkvu5Q2XYQWnPm+/BLlAOa59qLoL4GrSBZFF?=
- =?us-ascii?Q?PRXcx1kVSy6hEizvikJqxAmlae3/GR1l2pGhbKhS/aje5VlD3JV55L8UjxZc?=
- =?us-ascii?Q?Lxt++ue0/GOmocDO+m+KAQLYif0T1R4UNi0dOlvEhkZpDryoM2EGQbVKCu7t?=
- =?us-ascii?Q?YyzbTMVkmyeD8/FAc1EOfZKvrzq4zuUhOw28DXIlFxnx781DEMFUJE3OPtyY?=
- =?us-ascii?Q?4GuRQx5Fm/jKpm/rfmRMtpaRRXwy3CMZIcIRw4LWOZZmHoLwhKdrDeuvKuvL?=
- =?us-ascii?Q?OO1EUtB1OrrXt0ywgCp5vrFhxzKDtZ8ivdluJyL5seDQRAueHQAw5BWxTHdq?=
- =?us-ascii?Q?GX5NFs48qAZFF2WTVckub0SQM8ylFD4dCTy1gI7LtFJS4ZYPX25VwY0SMnZl?=
- =?us-ascii?Q?WxxiYLPV90ZE598/PPp0iUVPxueGKI4ytWYW6sfOEjYBoYURmq/XRQi7uIXK?=
- =?us-ascii?Q?0xEIWqTzeqESBiBlEgF5qzI/Kie5ejqLOTGnRPzlyoT49dFYGsmxWso1Pw78?=
- =?us-ascii?Q?Xqy0GvhS0kzNdDWjW9jPv4kvP4KF7pmQGu41Ir8yyQjK5A37BxdrrcajhMwc?=
- =?us-ascii?Q?RiyxuDzjME+rwLqfZKM8L0SMolgpPn06MT8Pzr2J+tj/puFwRYmy2hVXk8cD?=
- =?us-ascii?Q?8tcrHkKFHPv3LQUgq9oqFwe/h37aeefz5L7/V8TtqdQ+xYrWZZkyxfeJXppe?=
- =?us-ascii?Q?xkMFi3I/U32LMzFuJ+sgYHl+KM8TbJrBxr9PcI6A5jxLm7m2ftVUL/ss8eku?=
- =?us-ascii?Q?mnlHVg6x7kMxdWPcB/sXw4cQRZgxmLRvJ3Ln+MzLEWEmkE2PbrGJyxWOjWNS?=
- =?us-ascii?Q?8zGIrl8vxUdLRxVYtXqWvnItSevIVbWaQcbNGy76LIbXpGg8usQG6o1mLrxf?=
- =?us-ascii?Q?mEbdAQFoPs8r7+S075i32fnIjy4Ug7w71zv8X4qCBUA3lfZD4y8sKw5VRFif?=
- =?us-ascii?Q?PYBE78wbphj8IbGTUjaVnrEGVgv0EOjx8YOoxZtk3CSYHi5Oc/jqOsGjTQhe?=
- =?us-ascii?Q?IkVOTcb3KeoVXYn5Gcegwh3wGOZFyeNs5VOkLqQ0m7Ph9zIaFUGKgPNo1t7f?=
- =?us-ascii?Q?PxBNcfygzH5KQ0uZ9bxMCYXImF4n0IMg?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2024 10:54:29.9167
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6aa1d8c3-70c7-47c1-5a54-08dcc10677a0
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DS3PEPF0000C37B.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5706
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240813165619.748102-1-yuanchu@google.com>
 
-From: Ido Schimmel <idosch@nvidia.com>
+On Tue, Aug 13, 2024 at 09:56:11AM -0700, Yuanchu Xie wrote:
+> This patch series provides workingset reporting of user pages in
+> lruvecs, of which coldness can be tracked by accessed bits and fd
+> references. However, the concept of workingset applies generically to
+> all types of memory, which could be kernel slab caches, discardable
+> userspace caches (databases), or CXL.mem. Therefore, data sources might
+> come from slab shrinkers, device drivers, or the userspace. IMO, the
+> kernel should provide a set of workingset interfaces that should be
+> generic enough to accommodate the various use cases, and be extensible
+> to potential future use cases. The current proposed interfaces are not
+> sufficient in that regard, but I would like to start somewhere, solicit
+> feedback, and iterate.
+>
+... snip ... 
+> Use cases
+> ==========
+> Promotion/Demotion
+> If different mechanisms are used for promition and demotion, workingset
+> information can help connect the two and avoid pages being migrated back
+> and forth.
+> For example, given a promotion hot page threshold defined in reaccess
+> distance of N seconds (promote pages accessed more often than every N
+> seconds). The threshold N should be set so that ~80% (e.g.) of pages on
+> the fast memory node passes the threshold. This calculation can be done
+> with workingset reports.
+> To be directly useful for promotion policies, the workingset report
+> interfaces need to be extended to report hotness and gather hotness
+> information from the devices[1].
+> 
+> [1]
+> https://www.opencompute.org/documents/ocp-cms-hotness-tracking-requirements-white-paper-pdf-1
+> 
+> Sysfs and Cgroup Interfaces
+> ==========
+> The interfaces are detailed in the patches that introduce them. The main
+> idea here is we break down the workingset per-node per-memcg into time
+> intervals (ms), e.g.
+> 
+> 1000 anon=137368 file=24530
+> 20000 anon=34342 file=0
+> 30000 anon=353232 file=333608
+> 40000 anon=407198 file=206052
+> 9223372036854775807 anon=4925624 file=892892
+> 
+> I realize this does not generalize well to hotness information, but I
+> lack the intuition for an abstraction that presents hotness in a useful
+> way. Based on a recent proposal for move_phys_pages[2], it seems like
+> userspace tiering software would like to move specific physical pages,
+> instead of informing the kernel "move x number of hot pages to y
+> device". Please advise.
+> 
+> [2]
+> https://lore.kernel.org/lkml/20240319172609.332900-1-gregory.price@memverge.com/
+> 
 
-Source the ethtool library from the correct path and avoid the following
-error:
+Just as a note on this work, this is really a testing interface.  The
+end-goal is not to merge such an interface that is user-facing like
+move_phys_pages, but instead to have something like a triggered kernel
+task that has a directive of "Promote X pages from Device A".
 
-./ethtool_lanes.sh: line 14: ./../../../net/forwarding/ethtool_lib.sh: No such file or directory
+This work is more of an open collaboration for prototyping such that we
+don't have to plumb it through the kernel from the start and assess the
+usefulness of the hardware hotness collection mechanism.
 
-Fixes: 40d269c000bd ("selftests: forwarding: Move several selftests")
-Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-Signed-off-by: Petr Machata <petrm@nvidia.com>
 ---
- tools/testing/selftests/drivers/net/mlxsw/ethtool_lanes.sh | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/ethtool_lanes.sh b/tools/testing/selftests/drivers/net/mlxsw/ethtool_lanes.sh
-index 877cd6df94a1..fe905a7f34b3 100755
---- a/tools/testing/selftests/drivers/net/mlxsw/ethtool_lanes.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/ethtool_lanes.sh
-@@ -2,6 +2,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- lib_dir=$(dirname $0)/../../../net/forwarding
-+ethtool_lib_dir=$(dirname $0)/../hw
- 
- ALL_TESTS="
- 	autoneg
-@@ -11,7 +12,7 @@ ALL_TESTS="
- NUM_NETIFS=2
- : ${TIMEOUT:=30000} # ms
- source $lib_dir/lib.sh
--source $lib_dir/ethtool_lib.sh
-+source $ethtool_lib_dir/ethtool_lib.sh
- 
- setup_prepare()
- {
--- 
-2.45.0
+More generally on promotion, I have been considering recently a problem
+with promoting unmapped pagecache pages - since they are not subject to
+NUMA hint faults.  I started looking at PG_accessed and PG_workingset as
+a potential mechanism to trigger promotion - but i'm starting to see a
+pattern of competing priorities between reclaim (LRU/MGLRU) logic and
+promotion logic.
 
+Reclaim is triggered largely under memory pressure - which means co-opting
+reclaim logic for promotion is at best logically confusing, and at worst
+likely to introduce regressions.  The LRU/MGLRU logic is written largely
+for reclaim, not promotion.  This makes hacking promotion in after the
+fact rather dubious - the design choices don't match.
+
+One example: if a page moves from inactive->active (or old->young), we
+could treat this as a page "becoming hot" and mark it for promotion, but
+this potentially punishes pages on the "active/younger" lists which are
+themselves hotter.
+
+I'm starting to think separate demotion/reclaim and promotion components
+are warranted. This could take the form of a separate kernel worker that
+occasionally gets scheduled to manage a promotion list, or even the
+addition of a PG_promote flag to decouple reclaim and promotion logic
+completely.  Separating the structures entirely would be good to allow
+both demotion/reclaim and promotion to occur concurrently (although this
+seems problematic under memory pressure).
+
+Would like to know your thoughts here.  If we can decide to segregate
+promotion and demotion logic, it might go a long way to simplify the
+existing interfaces and formalize transactions between the two.
+
+(also if you're going to LPC, might be worth a chat in person)
+
+~Gregory
 
