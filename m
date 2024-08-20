@@ -1,156 +1,131 @@
-Return-Path: <linux-kselftest+bounces-15780-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15781-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15185958C80
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 18:42:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CDB7958CC5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 19:07:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6BB82822E7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 16:42:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0618E1F23867
+	for <lists+linux-kselftest@lfdr.de>; Tue, 20 Aug 2024 17:07:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DBD41B86FC;
-	Tue, 20 Aug 2024 16:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oJt0DoJy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7D0B1BC08B;
+	Tue, 20 Aug 2024 17:07:38 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B9E018C92C;
-	Tue, 20 Aug 2024 16:42:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7301E196D9D;
+	Tue, 20 Aug 2024 17:07:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724172141; cv=none; b=ZRP+7T7adBmoeZfP1CzdyDLbsWGLTRLPMMR6LHvrMJcp2jIFStR9EUaX+nawHz/+I7BcnzK5jNWGZM3uWBGvUB3GCBUh/Iw3MDuAqJV7yu3iWqoq+2CdfJOX3xScoWrQbVZGXhwW0f+u5vPcd3A/BT3yvs1o0uWNAVmGAPiNWdo=
+	t=1724173658; cv=none; b=OcziNq0Y7hwHBYLEhZVzNH751VtIGF1wzGVZ/adDalzlRM1U/q3xaBxuUamXm2QvobiFn9qYvl4iGixevfU09/KwTDjXwmprMNWBLmBDqFaUpNhrq/fX5jUwzpVOaXSQQmGaDx5p68Bk588/7QeCOIRP/f0GxnkxQmHy70PhFBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724172141; c=relaxed/simple;
-	bh=sdAcQwOaXWXKLtRmNTbqfHXhoFfXI/j3eIOc/WaewSA=;
+	s=arc-20240116; t=1724173658; c=relaxed/simple;
+	bh=s2/nlNfABLd/gPvPhiiI1Kam85/3uV84O8KDv9iaquQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k8js26F/pMsbuygwswZOBcfj58vT4e1ysNEPMAYjcz74UWFs9nCRBTxHlSOQAu2cOZp+o7FIz+TJM5UPklWUUSR9PMivfxFpS5GWst1HCqQij4/YG4tCgLVzGiB9nfvNx4qdEuOlWH7Fi4+z3HM32ZCappysKf/vlHN2yNMwXsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oJt0DoJy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBDD9C4AF60;
-	Tue, 20 Aug 2024 16:42:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724172139;
-	bh=sdAcQwOaXWXKLtRmNTbqfHXhoFfXI/j3eIOc/WaewSA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oJt0DoJyvzXw780huXW00DpsfVtjUmG4t0IyBqCD6PLjg4hifTkikh1R6+7NrJBhR
-	 T64DDjPlw+P97zLarW882gu1krW29tGBNvBP/PWPmKUP8RN+fxCg7BkXFBzp9hyKV/
-	 BSrvNn5wmGF4uR8AUjT9xjgqrOQWKtt7hMb+I/6M6psreBJuPOjY6WC2KWueXjL4YE
-	 SrLOpDpx9ZM6bNwbJdQTrCPQxXC+gsEzLhiXHpaY49wVxbs4KQOOfKfr3ApXXJwaf0
-	 sQ9hzGEnPcXHlg6+dFla6w5CBBD32h63XVR1W/2TYDoZTYXAAR0y2IdvL12ITRr7bk
-	 iXthrwpi4hUYw==
-Date: Tue, 20 Aug 2024 17:42:12 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=B/NVZRii2AirrbrchHmeBLqqtPU6H2VoliTJzyKUVPW9IowWoiBB0xtdKFfNHpYLMLJUiLAbJM6UC7Jw5pmYbvyy9VSgLWFcmf1fdkV9QFcHRMxZhmqGUb5a/9Ug1YnGqnAcqGoYu0RaPpjZlzTBLKTw1ngluyYwjXS3WuVxkS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6B55C4AF13;
+	Tue, 20 Aug 2024 17:07:31 +0000 (UTC)
+Date: Tue, 20 Aug 2024 18:07:29 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
 	Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
 	Albert Ou <aou@eecs.berkeley.edu>,
-	Jisheng Zhang <jszhang@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	Guo Ren <guoren@kernel.org>, Evan Green <evan@rivosinc.com>,
-	Andy Chiu <andy.chiu@sifive.com>,
-	Jessica Clarke <jrtc27@jrtc27.com>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Heiko Stuebner <heiko@sntech.de>
-Subject: Re: [PATCH v9 00/13] riscv: Add support for xtheadvector
-Message-ID: <20240820-computer-viewable-eef06bef1bea@spud>
-References: <20240806-xtheadvector-v9-0-62a56d2da5d0@rivosinc.com>
- <20240809-slapping-graph-461287bac506@spud>
- <ZrqsqsCtKwfG4Q5B@ghost>
- <20240813-strode-revival-07b8556a8bfe@spud>
- <ZsPP4GMwPVBfq+fL@ghost>
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v10 19/40] arm64/gcs: Context switch GCS state for EL0
+Message-ID: <ZsTNUYCMKgkrdRiS@arm.com>
+References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
+ <20240801-arm64-gcs-v10-19-699e2bd2190b@kernel.org>
+ <ZsMwhdmE_Ai9BbM9@arm.com>
+ <0f6fd3ec-2481-4507-af0e-3cbbb7406b54@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="t0GCzoRN/+6zEXXN"
-Content-Disposition: inline
-In-Reply-To: <ZsPP4GMwPVBfq+fL@ghost>
-
-
---t0GCzoRN/+6zEXXN
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <0f6fd3ec-2481-4507-af0e-3cbbb7406b54@sirena.org.uk>
 
-On Mon, Aug 19, 2024 at 04:06:08PM -0700, Charlie Jenkins wrote:
-> On Tue, Aug 13, 2024 at 04:55:27PM +0100, Conor Dooley wrote:
-> > On Mon, Aug 12, 2024 at 05:45:30PM -0700, Charlie Jenkins wrote:
-> > > On Fri, Aug 09, 2024 at 11:31:15PM +0100, Conor Dooley wrote:
-> > > > On Tue, Aug 06, 2024 at 05:31:36PM -0700, Charlie Jenkins wrote:
-> > > > > xtheadvector is a custom extension that is based upon riscv vector
-> > > > > version 0.7.1 [1]. All of the vector routines have been modified =
-to
-> > > > > support this alternative vector version based upon whether xthead=
-vector
-> > > > > was determined to be supported at boot.
-> > > > >=20
-> > > > > vlenb is not supported on the existing xtheadvector hardware, so a
-> > > > > devicetree property thead,vlenb is added to provide the vlenb to =
-Linux.
-> > > > >=20
-> > > > > There is a new hwprobe key RISCV_HWPROBE_KEY_VENDOR_EXT_THEAD_0 t=
-hat is
-> > > > > used to request which thead vendor extensions are supported on the
-> > > > > current platform. This allows future vendors to allocate hwprobe =
-keys
-> > > > > for their vendor.
-> > > > >=20
-> > > > > Support for xtheadvector is also added to the vector kselftests.
-> > > >=20
-> > > > So uh, since noone seems to have brought it up, in the light of the=
- issues
-> > > > with thead's vector implementation, (https://ghostwriteattack.com/)=
- do we
-> > > > want to enable it at all?
-> > >=20
-> > > I can make it clear in the kconfig that xtheadvector is succeptible to
-> > > this attack and that it should be enabled with caution. I think we
-> > > should let people that understand the risk to enable it.
-> >=20
-> > I think the clearest way might be "depends on BROKEN"?
->=20
-> Sorry for the delay, I am not sure if BROKEN is the best way of doing
-> this. There is the generic CPU_MITIGATIONS config that I think we should
-> use to handle this at boot time. This would allow generic kernels to be
-> used on the platform, but a kernel config of "mitigations=3Doff" would
-> allow xtheadvector to be enabled. I'll look into this a bit more and
-> send out a patch. Palmer merged a patch into for-next to enable
-> GENERIC_CPU_VULNERABILITIES for riscv so I will add ghostwrite there
-> as well.
+On Mon, Aug 19, 2024 at 04:44:42PM +0100, Mark Brown wrote:
+> On Mon, Aug 19, 2024 at 12:46:13PM +0100, Catalin Marinas wrote:
+> > On Thu, Aug 01, 2024 at 01:06:46PM +0100, Mark Brown wrote:
+> > > +	/*
+> > > +	 * Ensure that GCS changes are observable by/from other PEs in
+> > > +	 * case of migration.
+> > > +	 */
+> > > +	if (task_gcs_el0_enabled(current) || task_gcs_el0_enabled(next))
+> > > +		gcsb_dsync();
+[...]
+> > What's the GCSB DSYNC supposed to do here? The Arm ARM talks about
+> > ordering between GCS memory effects and other memory effects. I haven't
+> > looked at the memory model in detail yet (D11.9.1) but AFAICT it has
+> > nothing to do with the system registers. We'll need this barrier when
+> > ordering is needed between explicit or implicit (e.g. BL) GCS accesses
+> > and the explicit classic memory accesses. Paging comes to mind, so maybe
+> > flush_dcache_page() would need this barrier. ptrace() is another case if
+> > the memory accessed is a GCS page. I can see you added it in other
+> > places, I'll have a look as I go through the rest. But I don't think one
+> > is needed here.
+> 
+> It's not particuarly for the system registers, is there's so that
+> anything else that looks at the task's GCS sees the current state.
 
-Palmer also pointed out to me last week that not all implementations of
-xtheadvector actually have the flaw, so it makes sense to not depend on
-BROKEN. We should figure out exactly which CPUs are and are not
-vulnerable (Guo Ren hopefully will know) and permit enabling it without
-"mitagations=3Doff" on the CPUs that are not vulnerable.
+Ah, so that's the to ensure that any writes on the CPU to the GCS stack
+would be observable if the task appears on a different CPU (together
+with the additional classic ordering/spinlocks used for the run queues).
+Maybe update the comment to say "GCS memory effects" instead of "GCS
+changes". I read the latter as GCS sysreg changes. Something like below
+would make it clearer:
 
-Thanks,
-Conor.
+	/*
+	 * Ensure that GCS memory effects of the 'prev' thread are
+	 * ordered before other memory accesses with release semantics
+	 * (or preceded by a DMB) on the current PE. In addition, any
+	 * memory accesses with acquire semantics (or succeeded by a
+	 * DMB) are ordered before GCS memory effects of the 'next'
+	 * thread. This will ensure that the GCS memory effects are
+	 * visible to other PEs in case of migration.
+	 */
 
---t0GCzoRN/+6zEXXN
-Content-Type: application/pgp-signature; name="signature.asc"
+Feel free to rephrase as you see fit.
 
------BEGIN PGP SIGNATURE-----
+> I'm pretty confident this excessive, the goal was to err on the side
+> of correctness and then relax later.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZsTHZAAKCRB4tDGHoIJi
-0iQaAQCwGmipLGnRD4s+x/LBC6nmlI/0+Dt9WrwL3fRDmnQB0gD/W6WolEvdmFdM
-5PFKmr6VraPXpNU9m8waceXzejLcRgs=
-=gadf
------END PGP SIGNATURE-----
+I think we are missing some. Paging should be ok as we have a pte change
+and TLBI and IIRC the same rules as for standard memory accesses apply.
+ptrace() memory accesses may need something though I'm fine with
+considering this a best effort (we can't guarantee anyway if any
+accesses are on different CPUs). I haven't got to the signal handling
+patch yet.
 
---t0GCzoRN/+6zEXXN--
+-- 
+Catalin
 
