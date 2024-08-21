@@ -1,72 +1,90 @@
-Return-Path: <linux-kselftest+bounces-15850-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15851-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84FCE959BDB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 14:31:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9FA1959C04
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 14:38:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45FA4285424
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 12:31:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1888F1C21978
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 12:38:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C5FE18FDC2;
-	Wed, 21 Aug 2024 12:31:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50B3B19047D;
+	Wed, 21 Aug 2024 12:37:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WSrbf4hA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZhI8r38+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D408916631D
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 12:31:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0EF18E757;
+	Wed, 21 Aug 2024 12:37:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724243486; cv=none; b=UbSihV2eg5FrPftjTyEnWcZAntyjWKJF0eCyTwwNFaskigNqXwwxvklgJMJY2g/LAMNQevwzf8Ms/e9JvTmXVXnpgoUBTi6AhN38Xa2/iErfRbDggLm3Q99vwoFXCSP/4xnwouJiTJpHJ2OrXA5QkphZgWi0MqXdGHe5rFzAink=
+	t=1724243863; cv=none; b=ALXR7ral1kPgJRtR3sH8PIp6pHFKsIyUPRN4vmxdKhMhIJq7kOQLYze4Oes7ToEHHNdIAGVS7/yGGapSl8O3TTrA23DyUeQP3dwVmsYQ4ZKFJibPGlby/VAYqXHd1Crv4vDUb7ZvYPc2BBBmvs5bwc4sCIEQH9AZMnR4lprkAtw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724243486; c=relaxed/simple;
-	bh=ZoUsALWmf9MzmatEp2YvnEjJw8yUdE7sAuAhD31VDW8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VenorO4+NZwkFIGdmRhwvEoBgNhnrZgI6IkcNM8EJRl76wbeFyq6MnBNT/2bcLdr8FEVZLeIydUVNdzDbDSIwS/hB2LpIKiKGSnp3TfK9Ygh/e22fdcihudxo7uU/51nbGYJBP/o7chYpPMc7t6x2O6W5z7Wm+2vonmPnFSWhbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WSrbf4hA; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1724243483;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=uTThmUg5wuoJfO3r03jKUAbEQehuHQdGxd4e0MokVn4=;
-	b=WSrbf4hA888NAnssJS7pMTvpZMNsBusZdA+XHFJb81g6tVNIGGQFVisurpANxmoaLRoEGa
-	89ctaIF2FF3FV0cZg8zK+FGC22aci4Lz/lKqPlSVWVxIdicdFWQdLAikGsKLWaz97YlWyo
-	fubh4ndOShkjxftYNhBFM4CdLEP4+9Q=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-145-TzjHRiQGO-WSsisDXkMm9Q-1; Wed,
- 21 Aug 2024 08:31:22 -0400
-X-MC-Unique: TzjHRiQGO-WSsisDXkMm9Q-1
-Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BF1AA1955BF1;
-	Wed, 21 Aug 2024 12:31:20 +0000 (UTC)
-Received: from t14s.fritz.box (unknown [10.39.194.120])
-	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2C40E19560AA;
-	Wed, 21 Aug 2024 12:31:16 +0000 (UTC)
-From: David Hildenbrand <david@redhat.com>
-To: linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org,
+	s=arc-20240116; t=1724243863; c=relaxed/simple;
+	bh=GfrU0gBKDw10a5XEEcr8vKGwPrwqvFoaujASnF5s00I=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=bBmro38TnyvW/0vQLfIWTmJoQvgxlcOmikB/w3nriy+ZC1bdc8S732J8NMTB1nWDHLfVHuLSzz7kNdYDLk1E4CnJbehlAeZ8HhsA0cG1TLZArHenrrsCTIaKLDb8P1275mOo6IsylWEdn1czEX5U81gM/lu5L6Wm7rhOWUiQSY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZhI8r38+; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-1fc611a0f8cso51620715ad.2;
+        Wed, 21 Aug 2024 05:37:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724243861; x=1724848661; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zpFUqVONNeKr7Nd0t5ps+L99zHRFJjZDaQO2WFhlXX0=;
+        b=ZhI8r38+WJoaoP4WaQ5mAvfXa6xijt+0fbmCfk/Kc09cMWCz3kBFk5X4Yl7HWZ36rg
+         l211TYOG4oRtT3aRIhlQbJls9iexdI1crdaIrIQRFQcvWkovCVjKTEAAW/eDZYGQiFNO
+         ykRAwUjGSUdhcpf5QCeECLeWb+Pcw99d+RWXkyEmjEW+79wZJ0JhLv0FREo8BGDgOD6l
+         BptTroPU7/Xa26qsV/chw0n89FQumaSwY7vhREvTno65AAcGNMiHxWESPmXhPPA4p17S
+         W3Bp5G1smkqTRtKCK+RknRyy12vsh8Mx2XSOeJW17KRnwLVsGIkkVRzAIYs12NGv+b7L
+         ZA2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724243861; x=1724848661;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zpFUqVONNeKr7Nd0t5ps+L99zHRFJjZDaQO2WFhlXX0=;
+        b=wAUFCRoj8iUtwBWIgQ61sov7o1LYjLu2fj6YTjCSLIHlpypUuPBCQ+LEiODS8M3IUI
+         OxGR5WoEkQOsZd5dg+10e6TJU+6wPIymbdgByixO+VqxA84HfutxWCsyIcIQlOzGkwBj
+         i4adOpRmdTIb1Ut6tFokUkwGlcBOlxSR0u8q56G/cJVOYpgoDQVbeGlWCYNfxWdsnpix
+         GUbUlJkoBtpGGtwZYLG4cobFBGIfkX84WcLyeRFewnCg8h9RXoo3Q8RRRTMsZSfZcbfI
+         zsuO/vCNP5RcJJ8iJurvaknzAdrTjMIDxd3cMhjuOOlgRnno3xIsPF+stakDO9WyJlVt
+         xtwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUnFFNdjOgmdPslOh8P7E2mHnYafRZga/5T8HyTUVGhKEWLNAzgNM5HMH2z3EsogGWnoPD4v5iATN/GMTFjSoNb@vger.kernel.org, AJvYcCUvaCUCwXLl/3sp2kua9m3WvUWYePF5EO+7YkzE240UTUZQVHgwuZyThZskTvJcmz/2/kwXGVOTlvxjHhE=@vger.kernel.org, AJvYcCWu1x2Rjtfs63jNen/sLEuhpX7pkxXZlcn0KFQ5hdb2hcvpFB5S/GgWeW5/22zRNeMMGa9BnWSU@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTHHHvbxdU6cmxIfNs8S0cfNYMz89l7TZmSN7y70KzCMi6rWX6
+	0tCPyzF9iJirdXJLK22dHgnf1/lAQaXo4eNaAGRjkYxNyXs1u0WMddQPSg==
+X-Google-Smtp-Source: AGHT+IH5xLZnLZHlEg2smzboI8Xc89ciM7O8fQY1oAJB7HyL9YvKFUoGnz6gZbEHfqVKSIqi6IMXsw==
+X-Received: by 2002:a17:903:228d:b0:1fc:f65:cd8a with SMTP id d9443c01a7336-20367d1394dmr23478295ad.18.1724243860953;
+        Wed, 21 Aug 2024 05:37:40 -0700 (PDT)
+Received: from dev0.. ([2405:201:6803:30b3:2256:a75d:4176:9e6a])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-201ffb8f0d6sm85023195ad.28.2024.08.21.05.37.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Aug 2024 05:37:40 -0700 (PDT)
+From: Abhinav Jain <jain.abhinav177@gmail.com>
+To: kuba@kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	jain.abhinav177@gmail.com,
+	javier.carrasco.cruz@gmail.com,
+	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	David Hildenbrand <david@redhat.com>,
-	Mario Casquero <mcasquer@redhat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Mina Almasry <almasrymina@google.com>
-Subject: [PATCH v1] selftests/mm: fix charge_reserved_hugetlb.sh test
-Date: Wed, 21 Aug 2024 14:31:15 +0200
-Message-ID: <20240821123115.2068812-1-david@redhat.com>
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	skhan@linuxfoundation.org
+Subject: Re: [PATCH v8 net-next 1/3] selftests: net: Create veth pair for testing in networkless kernel
+Date: Wed, 21 Aug 2024 18:07:33 +0530
+Message-Id: <20240821123733.109853-1-jain.abhinav177@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240820165006.4b6c8e44@kernel.org>
+References: <20240820165006.4b6c8e44@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,118 +92,17 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-Currently, running the charge_reserved_hugetlb.sh selftest we can
-sometimes observe something like:
+On Tue, 20 Aug 2024 16:50:06 -0700, Jakub Kicinski wrote:
+> On Mon, 19 Aug 2024 17:42:33 +0530 Abhinav Jain wrote:
+> > +	echo "veth0" > "$TMP_LIST_NETDEV"
+> > +	echo "veth1" >> "$TMP_LIST_NETDEV"
+>
+> Why test both ends? 
+> Aren't we going to do the same exact test twice?
 
-  $ ./charge_reserved_hugetlb.sh -cgroup-v2
-  ...
-  write_result is 0
-  After write:
-  hugetlb_usage=0
-  reserved_usage=10485760
-  killing write_to_hugetlbfs
-  Received 2.
-  Deleting the memory
-  Detach failure: Invalid argument
-  umount: /mnt/huge: target is busy.
+I presumed that we would want to run the interface up/down, setup and ethtool tests on both veth.
+If this is not required, should I submit a v9 removing veth1 from the temp list?
 
-Both cases are issues in the test.
-
-While the unmount error seems to be racy, it will make the test fail:
-	$ ./run_vmtests.sh -t hugetlb
-	...
-	# [FAIL]
-	not ok 10 charge_reserved_hugetlb.sh -cgroup-v2 # exit=32
-
-The issue is that we are not waiting for the write_to_hugetlbfs process
-to quit. So it might still have a hugetlbfs file open, about which
-umount is not happy. Fix that by making "killall" wait for the process
-to quit.
-
-The other error ("Detach failure: Invalid argument") does not seem to
-result in a test error, but is misleading. Turns out write_to_hugetlbfs.c
-unconditionally tries to cleanup using shmdt(), even when we only
-mmap()'ed a hugetlb file. Even worse, shmaddr is never even set for the
-SHM case. Fix that as well.
-
-With this change it seems to work as expected.
-
-Fixes: 29750f71a9b4 ("hugetlb_cgroup: add hugetlb_cgroup reservation tests")
-Reported-by: Mario Casquero <mcasquer@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Muchun Song <muchun.song@linux.dev>
-Cc: Mina Almasry <almasrymina@google.com>
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
- .../selftests/mm/charge_reserved_hugetlb.sh   |  2 +-
- .../testing/selftests/mm/write_to_hugetlbfs.c | 21 +++++++++++--------
- 2 files changed, 13 insertions(+), 10 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
-index d680c00d2853a..67df7b47087f0 100755
---- a/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
-+++ b/tools/testing/selftests/mm/charge_reserved_hugetlb.sh
-@@ -254,7 +254,7 @@ function cleanup_hugetlb_memory() {
-   local cgroup="$1"
-   if [[ "$(pgrep -f write_to_hugetlbfs)" != "" ]]; then
-     echo killing write_to_hugetlbfs
--    killall -2 write_to_hugetlbfs
-+    killall -2 --wait write_to_hugetlbfs
-     wait_for_hugetlb_memory_to_get_depleted $cgroup
-   fi
-   set -e
-diff --git a/tools/testing/selftests/mm/write_to_hugetlbfs.c b/tools/testing/selftests/mm/write_to_hugetlbfs.c
-index 6a2caba19ee1d..1289d311efd70 100644
---- a/tools/testing/selftests/mm/write_to_hugetlbfs.c
-+++ b/tools/testing/selftests/mm/write_to_hugetlbfs.c
-@@ -28,7 +28,7 @@ enum method {
- 
- /* Global variables. */
- static const char *self;
--static char *shmaddr;
-+static int *shmaddr;
- static int shmid;
- 
- /*
-@@ -47,15 +47,17 @@ void sig_handler(int signo)
- {
- 	printf("Received %d.\n", signo);
- 	if (signo == SIGINT) {
--		printf("Deleting the memory\n");
--		if (shmdt((const void *)shmaddr) != 0) {
--			perror("Detach failure");
-+		if (shmaddr) {
-+			printf("Deleting the memory\n");
-+			if (shmdt((const void *)shmaddr) != 0) {
-+				perror("Detach failure");
-+				shmctl(shmid, IPC_RMID, NULL);
-+				exit(4);
-+			}
-+
- 			shmctl(shmid, IPC_RMID, NULL);
--			exit(4);
-+			printf("Done deleting the memory\n");
- 		}
--
--		shmctl(shmid, IPC_RMID, NULL);
--		printf("Done deleting the memory\n");
- 	}
- 	exit(2);
- }
-@@ -211,7 +213,8 @@ int main(int argc, char **argv)
- 			shmctl(shmid, IPC_RMID, NULL);
- 			exit(2);
- 		}
--		printf("shmaddr: %p\n", ptr);
-+		shmaddr = ptr;
-+		printf("shmaddr: %p\n", shmaddr);
- 
- 		break;
- 	default:
--- 
-2.46.0
-
+Also, while sending v9, do I add the Review tag from Simon or it has to be reviewed again?
 
