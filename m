@@ -1,287 +1,137 @@
-Return-Path: <linux-kselftest+bounces-15930-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15931-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFAA795A6F9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 23:47:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65C5895A6FE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 23:50:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFE1E1C21C2C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 21:47:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 985E11C22213
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 21:50:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB9FA16EBF2;
-	Wed, 21 Aug 2024 21:47:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5A4417B4E2;
+	Wed, 21 Aug 2024 21:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LK1VnecK"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ujkZqTHG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F6AD1531C3
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 21:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C032179665
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 21:50:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724276857; cv=none; b=O5LMl0yuDRnDDCWLeNSUdCRsuWfRaS+BcPT8FtRodtd+RkQKaJbLngLe8ZA+1A6hf5q+zglLhBYrul2duNru3MAHqWgXKka0dpI1R63aM+dMPkf7QzTEBa6pVHWTGRknDW+eetn8jIbkjJwzpmiU5HzvwygyWCwM9dsB98MfW+4=
+	t=1724277026; cv=none; b=p0zA5SsovoqIqxcLb9suzsVNoBXMdNkoLXkTigERwVCU1/MZNC1Mx7v5g/2PfShc3iyPAu1QhmpZcnimHSGrPCYrkrJ9QG2a/HcOhA/QE9ZyiZ6D2EDMl7zXCqsuV+8MZk9htLcVVQKsOgbenwY2FbSF4d/lfe1g6RHDbix5j6Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724276857; c=relaxed/simple;
-	bh=znLoTWYvmBhEeLfxmGulwIZ7sX7rAAs/iyyPy0VVyDs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mfdmW6/1tOHEHzKQ57JSb2ad+dm2TUer77BoqHIPGrZwXLJqUjwkUYyccL/HbWRbGIZcUvyabIzUmhgqHPUxw9zpYFXvSCcluoJXQGjIvjTPOcwzAclVcm/i4B/M9OJ9e+V6Mbc/x/wmAhiEhJv+U6T6IYVRZSj71B1ZRNDngaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LK1VnecK; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724276856; x=1755812856;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=znLoTWYvmBhEeLfxmGulwIZ7sX7rAAs/iyyPy0VVyDs=;
-  b=LK1VnecKg/+G8iCY/qu9sGDcVUsKZCOiKN1hpE/Kkgdm6YnNR8YfPkNb
-   t958kjMmiO4QC1U3N40QlZYOgZNSxbyIrCebZHgn8weh1e+WccUF+jyfm
-   O44Q5k1Ur5mvtmGHNsZUbGTAP01hEvVTb1ntltzlMhA/YuZGEakPUBFkS
-   Hz/oIeeRYiIW31UbZ6Km8BsSc34YtNCAPGb93s3TeNL00kn9iOLy3ia0Z
-   Zx2MeWaamVGsAGOVEpNh8Kzu8EkvoBegofS1BicKd4AW/8kdkxyM49iVU
-   0hOWPCriYfR9pP6njTY7rCwVuVcpiZjB7HtCPS+dL1bpHBT5miz/9vO5m
-   w==;
-X-CSE-ConnectionGUID: NHWuMfmoSg23EgMlLRxKzQ==
-X-CSE-MsgGUID: a4wSiIkRTLKO3w/oVQ2GlA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="22190048"
-X-IronPort-AV: E=Sophos;i="6.10,165,1719903600"; 
-   d="scan'208";a="22190048"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 14:47:35 -0700
-X-CSE-ConnectionGUID: y5Gvtbc3TX6UjH5KpRrBmQ==
-X-CSE-MsgGUID: gDlbFRJkRH6UNSTF25Hwxg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,165,1719903600"; 
-   d="scan'208";a="61219573"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmviesa008.fm.intel.com with ESMTP; 21 Aug 2024 14:47:34 -0700
-Received: from [10.246.19.248] (mwajdecz-MOBL.ger.corp.intel.com [10.246.19.248])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 11B67312E9;
-	Wed, 21 Aug 2024 22:47:31 +0100 (IST)
-Message-ID: <ef08991e-5914-4e85-966e-1a2b43cb7728@intel.com>
-Date: Wed, 21 Aug 2024 23:47:31 +0200
+	s=arc-20240116; t=1724277026; c=relaxed/simple;
+	bh=d5Q6gXFBR8sKEC5gdtO9JEEEC1rXqIpPuApXR+YdwVc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eYjsRMOLqsuXQueAlt863jP3ET307UpaYTrFyA2fkKI6Ujdyl30Ovqa7xzqGKG6WM5Tuc4fH4lowCMw9XPZZONb3mEhO6vP8uhQHWcUb/UnfBmqORq6BfoFd1JrUC9FdYkBv3W8w+PLi7CQVC2SlB0aLJbHI6LBkm/5YwyGjJVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ujkZqTHG; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-371b97cfd6fso46031f8f.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 14:50:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1724277022; x=1724881822; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VYl61iRz9Vr4ihVH142T6N4W0V2TmSfU8VgFwSsCDRg=;
+        b=ujkZqTHGNxDiJNNPRkm4VjdMwpQ9G4gvv43r/TwRo5N9hOkFJe1GEPva6T+9dYkBvU
+         BsnvZCGLhjmHy1vmU6zdNcYl9qXBIo2T9FcP5+3qEsIHnkadkuGSlWMXgBT+oNQK8jtj
+         4IYtrTL0AXh9ZQCJlyIujXBvjPi+OgcEhpu4LIwGFgtavCtC1u98Lzi58o5+/Ip0hOrz
+         9338GY2OznVJ7MQNNektuEnkeJvlDzSjpqwJFmZpYZFW7SBZ1pyuvFQaNDt8kvUpH/rg
+         fuDQ1h4dO8P3j7oXCppAZOS06IObHzHHLyiDR28sVtxrN6pD8EulOma6l62PI7HHy1O6
+         d6ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724277022; x=1724881822;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VYl61iRz9Vr4ihVH142T6N4W0V2TmSfU8VgFwSsCDRg=;
+        b=HtfLTLdaFn0MBPh6Nos/D8sdf/jKsAz+o6bQw6hTvUDYGMvlvZFN3+JpEwqmsUGPm8
+         MubFx8D9d64Ek7IewOYUCNXYHK9G9+fZaVrzUI+U2rqMg9FxoGp0psB+iBnSc/1UwK74
+         bXfzTy1bNvPpAaKd+O22zmrCzh6i5A1kTEkcw4l/QsuCkbqwCGinOl+1dPKfum0nfYHv
+         C8QnuMVj3AZaBCOsNEODs5nSQ6XU9QFNCqz7FUVjJoAodf4FEIcpwebYg52jjFZCRQz6
+         hkglMvM1cTBcG3QlUUEvALpfy8H5AlQ5Mnhrgt1XYkp/NrEY05W/1qfBvLo+OHkNQVOg
+         UP4w==
+X-Forwarded-Encrypted: i=1; AJvYcCXw0Z6XubfKP81jtf7izJbK88swWvV23KIlRQUfYTvnVcJEWjorGQ6wHhJ1mAk8OxzS3jSs3NRbFzscq5b0NRk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOZJeR4Half/1M2ROVnaN3bPMhVT/t1heFErKRY7HTcHzF1b01
+	SxVXhojC50OWjjm83vE8YWRwNb71YXWx573kPpaGAB7l7EcCxAVTk92VhFy4k4s=
+X-Google-Smtp-Source: AGHT+IEyN+6VsJZDMyvbLEE6jBtKwTDD/JXsQozPwMB2CXp/10iGXOBdFPW9w+TxCix0HR8241OqVQ==
+X-Received: by 2002:adf:f2c1:0:b0:371:9366:6d90 with SMTP id ffacd0b85a97d-372fd6d5622mr2445363f8f.18.1724277021546;
+        Wed, 21 Aug 2024 14:50:21 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3730821ab1bsm39838f8f.99.2024.08.21.14.50.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Aug 2024 14:50:20 -0700 (PDT)
+Date: Thu, 22 Aug 2024 00:50:16 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Hao Ge <hao.ge@linux.dev>, ast@kernel.org, daniel@iogearbox.net,
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com,
+	song@kernel.org, john.fastabend@gmail.com, kpsingh@kernel.org,
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org,
+	mykolal@fb.com, shuah@kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Hao Ge <gehao@kylinos.cn>
+Subject: Re: [PATCH] selftests/bpf: Fix incorrect parameters in NULL pointer
+ checking
+Message-ID: <58f57d70-a787-4012-8763-cc6eb642ef8a@stanley.mountain>
+References: <20240820023447.29002-1-hao.ge@linux.dev>
+ <02dd26b5-16a0-4732-80e4-c7bf183e965a@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] kunit: Allow function redirection outside of the
- KUnit thread
-To: Rae Moar <rmoar@google.com>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- David Gow <davidgow@google.com>, Daniel Latypov <dlatypov@google.com>,
- Lucas De Marchi <lucas.demarchi@intel.com>
-References: <20240821144305.1958-1-michal.wajdeczko@intel.com>
- <20240821144305.1958-4-michal.wajdeczko@intel.com>
- <CA+GJov5yfiQJhcCKUfSX0+-z1w=gZ-LPMUyq3tcNUrSuKDTgeQ@mail.gmail.com>
-Content-Language: en-US
-From: Michal Wajdeczko <michal.wajdeczko@intel.com>
-In-Reply-To: <CA+GJov5yfiQJhcCKUfSX0+-z1w=gZ-LPMUyq3tcNUrSuKDTgeQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <02dd26b5-16a0-4732-80e4-c7bf183e965a@linux.dev>
 
+On Wed, Aug 21, 2024 at 02:03:17PM -0700, Yonghong Song wrote:
+> 
+> On 8/19/24 7:34 PM, Hao Ge wrote:
+> > From: Hao Ge <gehao@kylinos.cn>
+> > 
+> > Smatch reported the following warning:
+> >      ./tools/testing/selftests/bpf/testing_helpers.c:455 get_xlated_program()
+> >      warn: variable dereferenced before check 'buf' (see line 454)
+> > 
+> > It seems correct,so let's modify it based on it's suggestion.
+> > 
+> > Actually,commit b23ed4d74c4d ("selftests/bpf: Fix invalid pointer
+> > check in get_xlated_program()") fixed an issue in the test_verifier.c
+> > once,but it was reverted this time.
+> > 
+> > Let's solve this issue with the minimal changes possible.
+> > 
+> > Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> > Closes: https://lore.kernel.org/all/1eb3732f-605a-479d-ba64-cd14250cbf91@stanley.mountain/
+> > Fixes: b4b7a4099b8c ("selftests/bpf: Factor out get_xlated_program() helper")
+> > Signed-off-by: Hao Ge <gehao@kylinos.cn>
+> 
+> In the future, please change subject '[PATCH] ...' to '[PATCH bpf-next] ...'
+> so CI can properly test it.
 
+It feels like there should be a technical solution to this.  The CI system is
+something on AWS and it's too expensive to just check every patch that's sent to
+the bpf list?  My understanding is that there are only two bpf trees.
 
-On 21.08.2024 23:32, Rae Moar wrote:
-> On Wed, Aug 21, 2024 at 10:43 AM Michal Wajdeczko
-> <michal.wajdeczko@intel.com> wrote:
->>
-> Hello!
-> 
-> This is looking good and seems to be working well. I just had some
-> questions below.
-> 
-> Thanks!
-> -Rae
-> 
->> Currently, the 'static stub' API only allows function redirection
->> for calls made from the kthread of the current test, which prevents
->> the use of this functionalty when the tested code is also used by
-> 
-> A slight typo here: functionality
-> 
->> other threads, outside of the KUnit test, like from the workqueue.
->>
->> Add another set of macros to allow redirection to the replacement
->> functions, which, unlike the KUNIT_STATIC_STUB_REDIRECT, will
->> affect all calls done during the test execution.
->>
->> Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
->> ---
->> Cc: David Gow <davidgow@google.com>
->> Cc: Daniel Latypov <dlatypov@google.com>
->> Cc: Lucas De Marchi <lucas.demarchi@intel.com>
->> ---
->>  include/kunit/static_stub.h | 80 +++++++++++++++++++++++++++++++++++++
->>  lib/kunit/static_stub.c     | 21 ++++++++++
->>  2 files changed, 101 insertions(+)
->>
->> diff --git a/include/kunit/static_stub.h b/include/kunit/static_stub.h
->> index bf940322dfc0..3dd98c8f3f1f 100644
->> --- a/include/kunit/static_stub.h
->> +++ b/include/kunit/static_stub.h
->> @@ -12,6 +12,7 @@
->>
->>  /* If CONFIG_KUNIT is not enabled, these stubs quietly disappear. */
->>  #define KUNIT_STATIC_STUB_REDIRECT(real_fn_name, args...) do {} while (0)
->> +#define KUNIT_FIXED_STUB_REDIRECT(stub, args...) do {} while (0)
->>
->>  #else
->>
->> @@ -109,5 +110,84 @@ void __kunit_activate_static_stub(struct kunit *test,
->>   */
->>  void kunit_deactivate_static_stub(struct kunit *test, void *real_fn_addr);
->>
->> +/**
->> + * KUNIT_FIXED_STUB_REDIRECT() - Call a fixed function stub if activated.
->> + * @stub: The location of the function stub pointer
->> + * @args: All of the arguments passed to this stub
->> + *
->> + * This is a function prologue which is used to allow calls to the current
->> + * function to be redirected if a KUnit is running. If the stub is NULL or
->> + * the KUnit is not running the function will continue execution as normal.
->> + *
->> + * The function stub pointer must be stored in a place that is accessible both
->> + * from the test code that will activate this stub and from the function where
->> + * we will do the redirection.
->> + *
->> + * Unlike the KUNIT_STATIC_STUB_REDIRECT(), this redirection will work
->> + * even if the caller is not in a KUnit context (like a worker thread).
->> + *
->> + * Example:
->> + *
->> + * .. code-block:: c
->> + *
->> + *     static int (*func_stub)(int n);
->> + *
->> + *     int real_func(int n)
->> + *     {
->> + *             KUNIT_FIXED_STUB_REDIRECT(func_stub, n);
->> + *             return n + 1;
->> + *     }
->> + *
->> + *     int replacement_func(int n)
->> + *     {
->> + *             return n + 100;
->> + *     }
->> + *
->> + *     void example_test(struct kunit *test)
->> + *     {
->> + *             KUNIT_EXPECT_EQ(test, real_func(1), 2);
->> + *             func_stub = replacement_func;
->> + *             KUNIT_EXPECT_EQ(test, real_func(1), 101);
-> 
-> I think we should model activating the stub here in the example to
-> make it a bit clearer.
+	if [ "$FIXES_HASH" == "" ] ; then
+		TREE=next
+	elif git merge-base --is-ancestor $FIXES_HASH origin/master ; then
+		TREE=linus
+	else
+		TREE=next
+	fi
 
-oops, this DOC was taken almost as-is from my Xe series mentioned in the
-cover letter, where I didn't have any "activate_fixed_stub" code yet
+These days the zero day bot people are checking around a thousand git trees.
+They pull emails off the various lists and apply them to the right places.  It's
+a doable thing.
 
-will fix
-
-> 
->> + *     }
->> + */
->> +#define KUNIT_FIXED_STUB_REDIRECT(stub, args...) do {                                  \
->> +       typeof(stub) replacement = (stub);                                              \
->> +       if (kunit_is_running()) {                                                       \
->> +               if (unlikely(replacement)) {                                            \
->> +                       pr_info(KUNIT_SUBTEST_INDENT "# %s: calling stub %ps\n",        \
->> +                               __func__, replacement);                                 \
->> +                       return replacement(args);                                       \
->> +               }                                                                       \
->> +       }                                                                               \
->> +} while (0)
->> +
->> +void __kunit_activate_fixed_stub(struct kunit *test, void *stub_ptr, void *replacement_func);
->> +
->> +/**
->> + * kunit_activate_fixed_stub() - Setup a fixed function stub.
->> + * @test: Test case that wants to activate a fixed function stub
->> + * @stub: The location of the function stub pointer
->> + * @replacement: The replacement function
->> + *
->> + * This helper setups a function stub with the replacement function.
->> + * It will also automatically restore stub to NULL at the test end.
->> + */
->> +#define kunit_activate_fixed_stub(test, stub, replacement) do {                                \
->> +       typecheck_pointer(stub);                                                        \
->> +       typecheck_fn(typeof(stub), replacement);                                        \
->> +       typeof(stub) *stub_ptr = &(stub);                                               \
->> +       __kunit_activate_fixed_stub((test), stub_ptr, (replacement));                   \
->> +} while (0)
->> +
->> +/**
->> + * kunit_deactivate_fixed_stub() - Disable a fixed function stub.
->> + * @test: Test case that wants to deactivate a fixed function stub (unused for now)
->> + * @stub: The location of the function stub pointer
->> + */
->> +#define kunit_deactivate_fixed_stub(test, stub) do {                                   \
->> +       typecheck(struct kunit *, (test));                                              \
->> +       (stub) = NULL;                                                                  \
->> +} while (0)
->> +
->>  #endif
->>  #endif
->> diff --git a/lib/kunit/static_stub.c b/lib/kunit/static_stub.c
->> index 92b2cccd5e76..1b50cf457e89 100644
->> --- a/lib/kunit/static_stub.c
->> +++ b/lib/kunit/static_stub.c
->> @@ -121,3 +121,24 @@ void __kunit_activate_static_stub(struct kunit *test,
->>         }
->>  }
->>  EXPORT_SYMBOL_GPL(__kunit_activate_static_stub);
->> +
->> +static void nullify_stub_ptr(void *data)
->> +{
->> +       void **ptr = data;
->> +
->> +       *ptr = NULL;
->> +}
->> +
->> +/*
->> + * Helper function for kunit_activate_static_stub(). The macro does
->> + * typechecking, so use it instead.
->> + */
->> +void __kunit_activate_fixed_stub(struct kunit *test, void *stub_ptr, void *replacement_func)
->> +{
->> +       void **stub = stub_ptr;
->> +
->> +       KUNIT_ASSERT_NOT_NULL(test, stub_ptr);
-> 
-> Should we check here if the replacement_func is null and if so
-> deactivate the stub similar to the static stubbing?
-
-I had KUNIT_ASSERT_NOT_NULL(test, replacement_func) but decided to drop
-that to also allow using 'activate_stub(NULL)' to deactivate the stub -
-but that was before I introduced a separate 'deactivate_stub()'
-
-will bring that back
-
-> 
->> +       *stub = replacement_func;
-> 
-> I do really appreciate this simplicity. But I wonder if David has any
-> thoughts on the security of direct replacement rather than using the
-> resource API?
-
-note that at redirection point we will not be able to use resource API
-since that could be run in a non-kunit context
-
-> 
->> +       KUNIT_ASSERT_EQ(test, 0, kunit_add_action_or_reset(test, nullify_stub_ptr, stub_ptr));
->> +}
->> +EXPORT_SYMBOL_GPL(__kunit_activate_fixed_stub);
->> --
->> 2.43.0
->>
->> --
->> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
->> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
->> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20240821144305.1958-4-michal.wajdeczko%40intel.com.
+regards,
+dan carpenter
 
