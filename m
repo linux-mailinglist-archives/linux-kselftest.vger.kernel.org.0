@@ -1,210 +1,200 @@
-Return-Path: <linux-kselftest+bounces-15872-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15873-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33BAE95A25C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 18:05:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F0BF95A294
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 18:16:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DED692895F1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 16:05:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E17FB25E41
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 16:16:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B484914D2B2;
-	Wed, 21 Aug 2024 16:04:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A751D14A4EC;
+	Wed, 21 Aug 2024 16:16:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="VW+3BVKy"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XnQtSiRn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0670C14D2AC
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 16:04:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F324013E022
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 16:16:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724256288; cv=none; b=fvuDy7/yl888c2lOuXipWmKgdjDVNVBy48dxH9LhFwhOwCke/AKcgzSZCB7Rp7Nt1el93kM9wFxj1Rx4mubFnMB1POyENXpaFYKElw6Ht9k5+YlO6OASaX92cT4gufe7BbnEtORfG8J09VdNUjdR+In8lNm/h5FVOFcdt0VDC2Y=
+	t=1724256967; cv=none; b=mmtmyMx9nW4llMowovKDV3rGJfFsvjnu4QkYwsDiWP2bSLMnIwWSBbPJh8Cyj+u/mUz0vkTG39gjddDX7/tGOTJC5KnR2wnPPltzoMUxM+oF1xMKgAOLczy0Hr6pmhxtjPaP8wqXJFKozkibsAiKFdVpB41CA1P+DJ3r+mj3Gn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724256288; c=relaxed/simple;
-	bh=AlVWMujZb4KMNj53fGB/JwXcf8Z1PSC7AGNyq62/JsI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dS5+B2fytuzbQoHXGFn7RDkvee6P03+87UhVMNyKBwRHcQ1gLAAM367NzoonVimLm69i+AphlHkrTyq+QNuC+QgsaOaZq1Jt0GsBs7JGGICK95/iQ5tNanvFG780L2JFhRZq6ogmXgcJ5tE2leBQnwwxAiDzx7L5l37W4kuxzNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=VW+3BVKy; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1724256286;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=S01eevrAEs0lxpxuE+gw3u09VxcLdZQUZHokHj/vHXU=;
-	b=VW+3BVKyyvGhkF2Y5TqetyCizUYM0AxXMLRuN4GAM1ezMaUqFTmaPMxwZDTS2sFpgcE3hW
-	5/nu/SmtP+yNKGnvlbkLjMt59G5qrkVC/yPa+TsH8ISPeUVi/Aauj11Fom3+HAJrX88Fu4
-	CHtIsUhHrb7a4HZxqlRtlCYTJsJplic=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-640-cysYmZZ_NEeT1NmVCuGduA-1; Wed, 21 Aug 2024 12:04:44 -0400
-X-MC-Unique: cysYmZZ_NEeT1NmVCuGduA-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-37197b9e1ceso3415308f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 09:04:44 -0700 (PDT)
+	s=arc-20240116; t=1724256967; c=relaxed/simple;
+	bh=3h6jrzsG49oXrzZkPXaS5Zys9GLAADcZ2Y19PT2dgvA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KSe133GFD/gl/wVx4szGxXcWvH05DJLY/8BA7cVv/6F92Lk7ZIuL37eBOwqmHEgdIx4VvfY0Ar2PKdYcXvodQePO2cVJX5o0FhzfRhXjeAcswoP0xFvrGUlBeDpbYAuP4IH0fQQTL4J5oeNliVnQ52ITi62vuhAJPUGNrsJxWPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=XnQtSiRn; arc=none smtp.client-ip=209.85.167.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3db1d48083dso93205b6e.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 09:16:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1724256965; x=1724861765; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ay4N+X8xFligirN80qjTXFQAPlG4tThmp3+jBLmN5qM=;
+        b=XnQtSiRnhHCEk31OoA4BsQ/qI1rGOK5zB7O06C1CZNhEIRAzZOFOgxz1doK4dHfooA
+         VbKutW7s3a3qrp9L2EXsB922p2gqr+gtRfCWC7hhrXGtMl/p9S3QG+0qJEhYVJO7+Smk
+         MsWMHHRxOFK291jcZKI14BGGGDBpswpULLAyw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724256283; x=1724861083;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :content-language:from:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=S01eevrAEs0lxpxuE+gw3u09VxcLdZQUZHokHj/vHXU=;
-        b=Mm38R2S3RQNwIzNg1Y2V/AHAOt6MWyzAa9lxBSBM5198BPGu5/Ma5b0G9QcQ6BaOAU
-         YXLPqAIUq8tdm11pu+Y4hInc7R5DrbCQmLIVpbGmz/8rekMvKdns9ttXQNFrc0z/+QSq
-         XP/aIYlYKXrlzPBVdvx8HsBNwkiZMxgIOAYCVJUALZCeMI6iqmfdYeL3MjHL1kxiOwo1
-         W3OvcNpUdwRIs9FKgIvqX/gRkZyDphNofIEPBr/xcCK7I0Q0/x+0ZaRfyxS/kkaFp5Zm
-         3X+Wx6xPx6catXButzdi3MG5CIuitfsmxPe0lRxtAPd2CE8qlsU6YYQsC+FksJjDQcmT
-         v6Yw==
-X-Forwarded-Encrypted: i=1; AJvYcCW5vTbq06G3sCBb+cQIN8rm5uZwZF9XAjE+TKfhPEyKFSefjIVqjICS8QgQZu/BGhR6sRbioXtGmbGDqdwT9WY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQzqAJxkgJnxrUMqjya5ug2LygJwuiRUzEczeAD1lEmFJa9JMi
-	N19wDjeAyZx1wfUOdvCQscWLuxXzrhHSk+uFbCK3hKecA3Vc3LphPj1FBHKJxafifH55gs5JWn0
-	N1RK+k9LzM1e8e6ScDH0X0+xltgcadQUp7GUMKnGBo6VjfipShIsTOw/OV5sfo0OwNkziofjKaC
-	Ps
-X-Received: by 2002:a05:6000:196b:b0:371:87d4:8f1d with SMTP id ffacd0b85a97d-372fd6da3ebmr1851414f8f.28.1724256283430;
-        Wed, 21 Aug 2024 09:04:43 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEBsdu1qj2IcJaBSV38+AQ+dl1u7gpj99iE4YKjYFE/TwtpOHQNKrY4gGw10COiV5E2nRnbfA==
-X-Received: by 2002:a05:6000:196b:b0:371:87d4:8f1d with SMTP id ffacd0b85a97d-372fd6da3ebmr1851369f8f.28.1724256282485;
-        Wed, 21 Aug 2024 09:04:42 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:4300:16d5:c5b:8388:a734? (p200300cbc705430016d50c5b8388a734.dip0.t-ipconnect.de. [2003:cb:c705:4300:16d5:c5b:8388:a734])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-371898bb588sm16022125f8f.115.2024.08.21.09.04.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Aug 2024 09:04:42 -0700 (PDT)
-Message-ID: <95a7dbfe-d88f-4d8b-898e-87c18e7d5813@redhat.com>
-Date: Wed, 21 Aug 2024 18:04:40 +0200
+        d=1e100.net; s=20230601; t=1724256965; x=1724861765;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ay4N+X8xFligirN80qjTXFQAPlG4tThmp3+jBLmN5qM=;
+        b=qUcHW1V8s7cSq+C9LjrsfzTjJToLlorNL6Yh53WSg5GFNcz9cF7H9izdA4uADjp8ZI
+         hOaOeirACGrHAu/2wR94y0XRnwd64/viPS84hRkIbOxsQOH+9bdJkP9+Tzo8vSi9G6ok
+         jMoNM9bQpYP4chh7G886kzFGzA3xYiiRINLnICD+rB9VBuLjszavFYYnILXac3hXZiuB
+         8+sJeiWuCS/XnyJp1/rA590uiq0Btq09tqK2A/CGVlK2vodGPMn0eZ9tVRkbjY6XTq7k
+         orqBHJecmPckU4/epCF4XDqInXarPtQ7p6u4h4iBtNDND7qvlLJP/uD9wItQ6WDF5R6N
+         9EdQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWJibxa3WmV9XaURtb8h5vghqgBnwS1ZfPT9ZVNrNxMICqDS+xPWgA3xEGvfnvLQfFCHLhRjzndoqKM35mjjpQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzS5pbiz5Hg0elD4aYo+aeOqZro/LGHmSKDAmVmkZNMbKFghC7Z
+	3kzZpDAAcZP2TGZJnphAse6iMYF0aqxj3ZfH/+KW9KMNE6vEpnl98TrDnJMWX2H9EUKLIaqfyER
+	BTQVQC0QQMlMdXobnc6qN/5nw47DDwvBgHSBK
+X-Google-Smtp-Source: AGHT+IECN3jXMHQ89hKP+cbvp8WlOQnMNfhtIo6rfpsvat0UipyYBThpaC5bMpZj5d7hLc/B6tAUMQQDAMA7oJ9ZsQk=
+X-Received: by 2002:a05:6870:65a3:b0:260:edbc:d7fc with SMTP id
+ 586e51a60fabf-2737eef29d7mr1841616fac.4.1724256964997; Wed, 21 Aug 2024
+ 09:16:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] selftests/mm: fix charge_reserved_hugetlb.sh test
-To: Mina Almasry <almasrymina@google.com>
-Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, Mario Casquero <mcasquer@redhat.com>,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Muchun Song <muchun.song@linux.dev>
-References: <20240821123115.2068812-1-david@redhat.com>
- <CAHS8izNyDymXoH94usJTGNHG45HB50m7SSkL6H1C+9pxBEDE+g@mail.gmail.com>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <CAHS8izNyDymXoH94usJTGNHG45HB50m7SSkL6H1C+9pxBEDE+g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20240817-mseal-depessimize-v3-0-d8d2e037df30@gmail.com> <20240817-mseal-depessimize-v3-2-d8d2e037df30@gmail.com>
+In-Reply-To: <20240817-mseal-depessimize-v3-2-d8d2e037df30@gmail.com>
+From: Jeff Xu <jeffxu@chromium.org>
+Date: Wed, 21 Aug 2024 09:15:52 -0700
+Message-ID: <CABi2SkUBH+utreVMTd1qEBSvXTPM7Qc1GiwNKjVa9+EeZK8WWA@mail.gmail.com>
+Subject: Re: [PATCH v3 2/7] mm/munmap: Replace can_modify_mm with can_modify_vma
+To: Pedro Falcato <pedro.falcato@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, oliver.sang@intel.com, 
+	torvalds@linux-foundation.org, Michael Ellerman <mpe@ellerman.id.au>, 
+	Kees Cook <kees@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 21.08.24 17:59, Mina Almasry wrote:
-> On Wed, Aug 21, 2024 at 8:31 AM David Hildenbrand <david@redhat.com> wrote:
->>
->> Currently, running the charge_reserved_hugetlb.sh selftest we can
->> sometimes observe something like:
->>
->>    $ ./charge_reserved_hugetlb.sh -cgroup-v2
->>    ...
->>    write_result is 0
->>    After write:
->>    hugetlb_usage=0
->>    reserved_usage=10485760
->>    killing write_to_hugetlbfs
->>    Received 2.
->>    Deleting the memory
->>    Detach failure: Invalid argument
->>    umount: /mnt/huge: target is busy.
->>
->> Both cases are issues in the test.
->>
->> While the unmount error seems to be racy, it will make the test fail:
->>          $ ./run_vmtests.sh -t hugetlb
->>          ...
->>          # [FAIL]
->>          not ok 10 charge_reserved_hugetlb.sh -cgroup-v2 # exit=32
->>
->> The issue is that we are not waiting for the write_to_hugetlbfs process
->> to quit. So it might still have a hugetlbfs file open, about which
->> umount is not happy. Fix that by making "killall" wait for the process
->> to quit.
->>
->> The other error ("Detach failure: Invalid argument") does not seem to
->> result in a test error, but is misleading. Turns out write_to_hugetlbfs.c
->> unconditionally tries to cleanup using shmdt(), even when we only
->> mmap()'ed a hugetlb file. Even worse, shmaddr is never even set for the
->> SHM case. Fix that as well.
->>
->> With this change it seems to work as expected.
->>
->> Fixes: 29750f71a9b4 ("hugetlb_cgroup: add hugetlb_cgroup reservation tests")
->> Reported-by: Mario Casquero <mcasquer@redhat.com>
->> Cc: Andrew Morton <akpm@linux-foundation.org>
->> Cc: Shuah Khan <shuah@kernel.org>
->> Cc: Muchun Song <muchun.song@linux.dev>
->> Cc: Mina Almasry <almasrymina@google.com>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
-> 
-> Initially I thought it could be nice to split fixes for the 2 issues
-> in separate patches in case one of them ends up needing a revert or
-> something, but probably not worth a respin. Fixes look good to me.
+On Fri, Aug 16, 2024 at 5:18=E2=80=AFPM Pedro Falcato <pedro.falcato@gmail.=
+com> wrote:
+>
+> We were doing an extra mmap tree traversal just to check if the entire
+> range is modifiable. This can be done when we iterate through the VMAs
+> instead.
+>
+> Signed-off-by: Pedro Falcato <pedro.falcato@gmail.com>
+> ---
+>  mm/mmap.c | 11 +----------
+>  mm/vma.c  | 19 ++++++++++++-------
+>  2 files changed, 13 insertions(+), 17 deletions(-)
+>
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 3af256bacef3..30ae4cb5cec9 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -1740,16 +1740,7 @@ int do_vma_munmap(struct vma_iterator *vmi, struct=
+ vm_area_struct *vma,
+>                 unsigned long start, unsigned long end, struct list_head =
+*uf,
+>                 bool unlock)
+>  {
+> -       struct mm_struct *mm =3D vma->vm_mm;
+> -
+> -       /*
+> -        * Check if memory is sealed, prevent unmapping a sealed VMA.
+> -        * can_modify_mm assumes we have acquired the lock on MM.
+> -        */
+> -       if (unlikely(!can_modify_mm(mm, start, end)))
+> -               return -EPERM;
+Another approach to improve perf  is to clone the vmi (since it
+already point to the first vma), and pass the cloned vmi/vma into
+can_modify_mm check, that will remove the cost of re-finding the first
+VMA.
 
-I was debating with myself as well if it should be separated, but 
-decided to go the simple route of a single patch :)
+The can_modify_mm then continues from cloned VMI/vma till the end of
+address range, there will be some perf cost there.  However,  most
+address ranges in the real world are within a single VMA,  in
+practice, the perf cost is the same as checking the single VMA, 99.9%
+case.
 
-> 
-> Reviewed-by: Mina Almasry <almasrymina@google.com>
+This will help preserve the nice sealing feature (if one of the vma is
+sealed, the entire address range is not modified)
 
-Thanks!
-
--- 
-Cheers,
-
-David / dhildenb
-
+> -
+> -       return do_vmi_align_munmap(vmi, vma, mm, start, end, uf, unlock);
+> +       return do_vmi_align_munmap(vmi, vma, vma->vm_mm, start, end, uf, =
+unlock);
+>  }
+>
+>  /*
+> diff --git a/mm/vma.c b/mm/vma.c
+> index 84965f2cd580..5850f7c0949b 100644
+> --- a/mm/vma.c
+> +++ b/mm/vma.c
+> @@ -712,6 +712,12 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct=
+ vm_area_struct *vma,
+>                 if (end < vma->vm_end && mm->map_count >=3D sysctl_max_ma=
+p_count)
+>                         goto map_count_exceeded;
+>
+> +               /* Don't bother splitting the VMA if we can't unmap it an=
+yway */
+> +               if (!can_modify_vma(vma)) {
+> +                       error =3D -EPERM;
+> +                       goto start_split_failed;
+> +               }
+> +
+>                 error =3D __split_vma(vmi, vma, start, 1);
+>                 if (error)
+>                         goto start_split_failed;
+> @@ -723,6 +729,11 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct=
+ vm_area_struct *vma,
+>          */
+>         next =3D vma;
+>         do {
+> +               if (!can_modify_vma(next)) {
+> +                       error =3D -EPERM;
+> +                       goto modify_vma_failed;
+> +               }
+> +
+>                 /* Does it split the end? */
+>                 if (next->vm_end > end) {
+>                         error =3D __split_vma(vmi, next, end, 0);
+> @@ -815,6 +826,7 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct =
+vm_area_struct *vma,
+>         __mt_destroy(&mt_detach);
+>         return 0;
+>
+> +modify_vma_failed:
+>  clear_tree_failed:
+>  userfaultfd_error:
+>  munmap_gather_failed:
+> @@ -860,13 +872,6 @@ int do_vmi_munmap(struct vma_iterator *vmi, struct m=
+m_struct *mm,
+>         if (end =3D=3D start)
+>                 return -EINVAL;
+>
+> -       /*
+> -        * Check if memory is sealed, prevent unmapping a sealed VMA.
+> -        * can_modify_mm assumes we have acquired the lock on MM.
+> -        */
+> -       if (unlikely(!can_modify_mm(mm, start, end)))
+> -               return -EPERM;
+> -
+>         /* Find the first overlapping VMA */
+>         vma =3D vma_find(vmi, end);
+>         if (!vma) {
+>
+> --
+> 2.46.0
+>
 
