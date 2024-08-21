@@ -1,167 +1,173 @@
-Return-Path: <linux-kselftest+bounces-15844-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15845-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0E68959951
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 13:15:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 370039599C8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 13:28:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 15D77B23BEE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 11:15:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8B7D1F2402B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 11:28:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EE5D206960;
-	Wed, 21 Aug 2024 09:50:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7811C192D89;
+	Wed, 21 Aug 2024 10:22:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l0np015e"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="HgIcbsg8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2C8F20694F;
-	Wed, 21 Aug 2024 09:50:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B644436E
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 10:22:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724233845; cv=none; b=K+IfTZJthF0pKhvVrduqjrwia6SOO9R360AzJ2dGqrJ9nhp15zLE0AtAL2rdpE/SVe3cvqcEbgRW0G6oEWrV6YMpR32hbHUrNqr+8xiVaYdmBMi+uYatvCZcM5F0twAakX157r+hCSe+y8xfN00PhWGJ5BvRh+zucbauGXqtmak=
+	t=1724235766; cv=none; b=O3yJyokig1Gs2xepsH9IRwRNkLP7pl2nhiacTbFD4wNo2oLzATqFZx9qXL2FG+nfXAYFr1F9wMVG2DUcjR/RuX/oLbLugtCnjVTj3sePojC0BQrbbZwJoXsT+Fpx6BNrMBDW3gldJyPkgYsxEmLMPL5gHq/y8Gysr2CHw/Elv/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724233845; c=relaxed/simple;
-	bh=eFsnGIW+PO0WR6rNc2irh1+licJRkxwEvB5ztYp2LXY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L8voP9l/jmYGnVkrC2iQ8nL/XQvsCI1gfhX7CBxeMnc6yo8maAwVD36ocycteARrHgsFyQx2CLvD5/AiXOyu85dt4+lTvC+4HlxTH2rojs6LQbnm+mBQO/j/1ad3AxI1Z91EKiujeXEbn24puWy0Di3x/BeErF2G3f/kQJ9UrKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l0np015e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A187C32782;
-	Wed, 21 Aug 2024 09:50:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724233845;
-	bh=eFsnGIW+PO0WR6rNc2irh1+licJRkxwEvB5ztYp2LXY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=l0np015edofUnt66ddA8381EH612viK3OLLsHLPif51YFDVKOVpTrRMhpcA1x2cQ9
-	 BO9s+vgi5Big8YB5VVfL1KTR64Hniepkm3JPrhSjzgIhjZkBCbGpochjPgk1pnQgMa
-	 fsNMfS1hRxuJ4OkvjWGQjTEkxudzLCW7EJT861/ozrZlsdGBKheHxyPHwkiM01Rk2G
-	 hocc44HfCeDCPG3l67xUnJFBGbPNZolL+Qe8XsDsnbmLDor79zVJffrTAG+uHH6KgO
-	 5SVCfCGVi+7km6BUDzoIS3dNcSQUpaRoDUyqzVydOHEzjSRV/e5HewInPYzW/4VNUy
-	 GWGXEKfRzHQZA==
-Message-ID: <1a667d36-d44d-4c34-b8ef-cbc3326622fa@kernel.org>
-Date: Wed, 21 Aug 2024 11:50:40 +0200
+	s=arc-20240116; t=1724235766; c=relaxed/simple;
+	bh=leQryR9DVLQz19iBvuwjMzT15oXyE2vwtvt/S3r0of4=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=H+dUysUu/UaXrij/EeVnqTYgfg/BlMyeZ8iTP6+MMoZQhEyg9mmIl9TH1bOzSzltMpqeCNy5EvA6WEPMQLh9RnrEJD/4hUUH/ltwTowklzzaqR0lIV3bWrIbxdcodJuaJ9JzCtxnvJiD3ENGmYWr2+Boqjk8Yh0iBlfJsUc+eaA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=HgIcbsg8; arc=none smtp.client-ip=209.85.210.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-714262f1bb4so360526b3a.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 03:22:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1724235764; x=1724840564; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=svxc4/WdJyAWI0HJevx5XtzygRqowJlH675kDCaCv3k=;
+        b=HgIcbsg8/Z18o0jA1bWsFQknO5Nh3dprMqeSgjm4iY15ZLgOFZDpmvDYLl4NcPYCen
+         cDcevUhuKy7NvUW4gjSol2MrL6MNy5Atu/78ngZkG336z75bnHjw7stP9vcHyCVybhZU
+         pZ8CGeodFEqt5PXMe7V71A1zAn8CHKcqAyQObYD5tReFbkpyKsaPQBapllC27b6lvxDY
+         SUz3WKpZbbSQJYeYRBR4RGcf8rx+5BAao/6QLXidh+7rJSuOQbwuDzOO3KdA1nfHFEaY
+         cAmLO4vIEiWx/E9QW1gWyurp09JJgsBb5fZa2klPP8+oAuWaeAZB1aIeYEA2B3q7NsYE
+         9rgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724235764; x=1724840564;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=svxc4/WdJyAWI0HJevx5XtzygRqowJlH675kDCaCv3k=;
+        b=JknILbsXR+iYT3ZrPcb+FoT5HbbeW6GAYoLQ2ja54rVwQxpbmG0zLAZmP6+jzDWYyx
+         5I6wbPCk8gSw3vDxEMPE92z5UFIR9zIfJJ62mRcKQRDHkgyHaJ9LLG6sCFlR60yiwDNZ
+         OMNX8TPKBtFM5twpU31+kqAXYW9XhkoqCVyqmHtqo8LRr++int6o2gcKyf+d1wNfVOCA
+         Jzol+WXPcBlpAVgicWV1C8TmwQZNNvZPoTbhwWa0oVP5zvOUt++3ssN10zVBM2CLu9P3
+         MMaP0tvnHNV5BM/YknTtohbv1qiXWYeTpbrJUq99gb0cmyNrL+9L5QJBPWwSR2SeycQf
+         ydGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUBtVR0q2DLLTHWQ+mDBaC+aE9aCjod5eq75NwMkncaUJKvZdyQm9QWQvCsZfmXdUyx8X0KpMaMw6YRC+aTSRM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYHGGOZZ4hQLdAyMBeQ8FyCoEvNeCzFtLKApnZmdT+n1yFktAz
+	X0o9XmfXGrV3iES5x8CvZD9OIhIsvys/tauLORec2zccXBNVHaNWMG/1Lv+opT8=
+X-Google-Smtp-Source: AGHT+IH2NkjSHzlMe+zrwUwfUKwZORbXsQxnnRp1Fvd3pQ+ZlW7ypnLQ6NAAXqdsP0qArhdvaH9Ynw==
+X-Received: by 2002:a05:6a21:1304:b0:1c0:f33e:aaec with SMTP id adf61e73a8af0-1cad83a21a1mr2073003637.49.1724235763866;
+        Wed, 21 Aug 2024 03:22:43 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d5eba2e44bsm1393685a91.13.2024.08.21.03.22.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Aug 2024 03:22:43 -0700 (PDT)
+Message-ID: <66c5bff3.170a0220.13831.3376@mx.google.com>
+Date: Wed, 21 Aug 2024 03:22:43 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next v6] net: netconsole: selftests: Create a new
- netconsole selftest
-Content-Language: en-GB
-To: Breno Leitao <leitao@debian.org>, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, liuhangbin@gmail.com, petrm@nvidia.com,
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
- Willem de Bruijn <willemb@google.com>, David Wei <dw@davidwei.uk>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-References: <20240821080826.3753521-1-leitao@debian.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20240821080826.3753521-1-leitao@debian.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.11-rc1-15-gc049acee3c71c
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next build: 7 builds: 2 failed, 5 passed,
+ 1 warning (v6.11-rc1-15-gc049acee3c71c)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Hi Breno,
+kselftest/next build: 7 builds: 2 failed, 5 passed, 1 warning (v6.11-rc1-15=
+-gc049acee3c71c)
 
-On 21/08/2024 10:08, Breno Leitao wrote:
-> Adds a selftest that creates two virtual interfaces, assigns one to a
-> new namespace, and assigns IP addresses to both.
-> 
-> It listens on the destination interface using socat and configures a
-> dynamic target on netconsole, pointing to the destination IP address.
-> 
-> The test then checks if the message was received properly on the
-> destination interface.
-> 
-> Signed-off-by: Breno Leitao <leitao@debian.org>
-> ---
-> Changelog:
-> 
-> v6:
->  * Check for SRC and DST ip before starting the test (Jakub)
->  * Revert the printk configuration at the end of the test (Jakub)
->  * Fix the modprobe stderr redirection (Jakub)
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v6.11-rc1-15-gc049acee3c71c/
 
-Thank you for the v6! It looks good to me:
+Tree: kselftest
+Branch: next
+Git Describe: v6.11-rc1-15-gc049acee3c71c
+Git Commit: c049acee3c71cfc26c739f82617a84e13e471a45
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
-Acked-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Build Failures Detected:
 
-(...)
+arm64:
+    defconfig+kselftest+arm64-chromebook: (clang-16) FAIL
+    defconfig+kselftest+arm64-chromebook: (gcc-12) FAIL
 
-> diff --git a/tools/testing/selftests/drivers/net/netcons_basic.sh b/tools/testing/selftests/drivers/net/netcons_basic.sh
-> new file mode 100755
-> index 000000000000..b4bfb451ccb6
-> --- /dev/null
-> +++ b/tools/testing/selftests/drivers/net/netcons_basic.sh
-> @@ -0,0 +1,234 @@
+Warnings Detected:
 
-(...)
+arm64:
 
-> +	if ip addr list | grep -E "inet.*(${SRCIP}|${DSTIP})" 2> /dev/null; then
+arm:
 
-Out of curiosity: the DSTIP is only set in the new netns, but I guess
-that will be an issue if it is also set on the host (or elsewhere with
-the same MAC address), hence this check here? (In any case, it sounds
-safer, it can stay)
+i386:
 
-> +		echo "SKIP: IPs already in use. Skippig it" >&2
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
 
-Skippig: is it because netconsole is vegetarian?
 
-(no need for a v7 just for that of course ;) )
+Warnings summary:
 
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
+ !ENDBR: .text+0x14ef94
 
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-12) =E2=80=94 FAIL, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, clang-16) =E2=80=94 FAIL, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
+BR: .text+0x14ef94
+
+---
+For more info write to <info@kernelci.org>
 
