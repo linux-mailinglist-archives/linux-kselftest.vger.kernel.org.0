@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-15914-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15915-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAD2B95A577
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 21:51:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0EE895A57B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 21:51:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E089A1C20BF4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 19:51:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41D2FB219E3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 19:51:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3774A16FF3B;
-	Wed, 21 Aug 2024 19:50:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DBA91741C6;
+	Wed, 21 Aug 2024 19:50:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ISjAzmK9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MoKw2yZ9"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2BD16EB7B;
-	Wed, 21 Aug 2024 19:50:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73EE5172BD5;
+	Wed, 21 Aug 2024 19:50:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724269852; cv=none; b=bDqfx9z5fn2vzssqcKPFuS4K/+s08sj6DRT+5PTUyYPl0mdjWoT4SIbgaqqnQsi+NVTsaiWWW18/PRiCUDwGcrBCuCzaA2p8eujnsDeYFbWh+fn4HwWFbTGsq3QymqkyXDninVpFHL5Y46zubtApk1iRtMYE8lsfGPZnpYRP/1k=
+	t=1724269858; cv=none; b=Ay5a+slU+2mSBpteJVRkX2kHttBDhW6BxMhp7mslEy4SRB+BOQsNS2fSmFrngUByTOWKMG8fUSXjto9FU3lqMgU3NLafR7B6z0jwBjf09dnMhwIsHkRH8pzlSGgZBKaqP/Xw80wZlaOpwN8y8MhRm7LnF3wlgwohJB8FNEhIp0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724269852; c=relaxed/simple;
-	bh=UZhCT1QuN7/aQ/L8FpjnptD+TWvV0XXThOZxLZ0LZiI=;
+	s=arc-20240116; t=1724269858; c=relaxed/simple;
+	bh=j9ob7ZYoLp4hP0MnrgcOUFxUwkxx358xO3rY/g4W29c=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WwOblbARJYpazDF1h8/h5MX3K3xyFLqKXDX5fIb/4xRyqEFD3VmUPTz5ofmU+HMqEcrq/xeeK03E0Ipnop8ZpMeo5ElCUEfnuwo0GgbxwveZWIEKZWyAeiGwMWb/NJXeSfX7ZEwr1D0PmXa1t9OR8JEG/49hgpxiyiKm/0rjHJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ISjAzmK9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C02BC4AF0E;
-	Wed, 21 Aug 2024 19:50:45 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=oAR62htgGZvI0thLZglrjkrc3Dp3GVYSWXf6I4b8q8u4Qg8CReWeqmS1BMUtmaQeuURxHcA/B8NfqQ5/qIwl1qKqbu5vtdIumUrct1JGHH7R/8yxKdYWM3O5aH6MUAcihaoF+OPV62lvzXHQzD3LIwY+24OUk9iBftcMgyOt0to=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MoKw2yZ9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AB3FC4AF14;
+	Wed, 21 Aug 2024 19:50:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724269851;
-	bh=UZhCT1QuN7/aQ/L8FpjnptD+TWvV0XXThOZxLZ0LZiI=;
+	s=k20201202; t=1724269858;
+	bh=j9ob7ZYoLp4hP0MnrgcOUFxUwkxx358xO3rY/g4W29c=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ISjAzmK9JJZEqetkn8+fFz3VcRixB9/BF4wZAhOtCba5aVIjYxzBf+pVGMn6lcrPW
-	 nQC6x7yGMuppfLfQCkjLejpyCW35wdmVtcH6r8vA5XjaNQ8Kbf4uRclT4T3sH6MXHQ
-	 JouJOLLgl90YFJrqZYovbYiwteqsNSvuNcUaPLY0GCm5gcsF0wWUZvApZWRDDJQaSf
-	 P0NxYo1Ft39aPczCMvr7dEeuDieW+TzRbxt6VWizQ/V7mDPOnvC9htx8B8QfAjbuCy
-	 S6Yt7mX4zAyBHNJMprSk/aVd+6U8dS+UAfsVLKjUYNYOkSVIQNbrHe3+wNb6Q78dHH
-	 19IOF8HCBiJMA==
+	b=MoKw2yZ9KV1p5r3J7S1CSQ9O3+nVD91Sy68k+/7/QcHB37D9IhNcXSVRWbKtcDHsX
+	 OxoFtjah3jsvRu8UjbDY03FMKrKNOCwm9X6w/DmGmP+VHI/hVvTTPm0MvfexxVet+T
+	 rUOui2+ERQe7j/kM5ZVXmKy10VCkL/N/7HTPU8DCy1a657SANGkKOCXfvbF+/pWUth
+	 1zOiDf8+U55NXq64FVxMzXK0djXbWiKYJGR6MuAlIKBp65e5C8cKiaLcPm27eIS3M+
+	 Jf4HdIdGVb5QoMyw9ABba4s9znFTwTw1jDFNcUw42h9CEs7Zq6utF9unmw8tfmze6T
+	 S3BLHjKvpF8lQ==
 From: Mark Brown <broonie@kernel.org>
-Date: Wed, 21 Aug 2024 20:49:50 +0100
-Subject: [PATCH RFT v10 4/8] fork: Add shadow stack support to clone3()
+Date: Wed, 21 Aug 2024 20:49:51 +0100
+Subject: [PATCH RFT v10 5/8] selftests/clone3: Remove redundant flushes of
+ output streams
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240821-clone3-shadow-stack-v10-4-06e8797b9445@kernel.org>
+Message-Id: <20240821-clone3-shadow-stack-v10-5-06e8797b9445@kernel.org>
 References: <20240821-clone3-shadow-stack-v10-0-06e8797b9445@kernel.org>
 In-Reply-To: <20240821-clone3-shadow-stack-v10-0-06e8797b9445@kernel.org>
 To: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
@@ -72,503 +73,48 @@ Cc: linux-kernel@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
  Yury Khrustalev <yury.khrustalev@arm.com>, 
  Wilco Dijkstra <wilco.dijkstra@arm.com>, linux-kselftest@vger.kernel.org, 
  linux-api@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
- Kees Cook <kees@kernel.org>
+ Kees Cook <kees@kernel.org>, Kees Cook <kees@kernel.org>, 
+ Shuah Khan <skhan@linuxfoundation.org>
 X-Mailer: b4 0.15-dev-37811
-X-Developer-Signature: v=1; a=openpgp-sha256; l=16222; i=broonie@kernel.org;
- h=from:subject:message-id; bh=UZhCT1QuN7/aQ/L8FpjnptD+TWvV0XXThOZxLZ0LZiI=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmxkT2RbYr3jCtEynjYmQ/KD1KJ/YjQOAqnEgnTpXN
- LV2sPlSJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZsZE9gAKCRAk1otyXVSH0P2HB/
- wNMsROgqqsmZ4yTUNuAl3+UQJzxlsnxSFpyb+Zm0DFjYkpPZYx5ADy9pGiDnRcELvD51x0RdZST6zg
- d1JjEjGvjxDUNXi/x2oh2O+CRhjrEIw707Hdzu9jTGZPl1LJnPGpAyjNnPXDyMzwygrZKfB7w/COd+
- r6Xcu/ov2cyY64vLcR1+mlHUqyT2IYrhzWzpHBLJUN+mdv8+GkL1hNHPXPbChUu0aRkj+7w4yb4f2p
- hQCTyAz11rUQ0Su44wd4wWGyIvn5dQE0nXFHpceWn4RDDVC/GW1nhd0i9IFB2K2wDaYrQBN9YW8rYf
- Ql9ZBbimBxz+wrJiDOSWycSnGEylqR
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1058; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=j9ob7ZYoLp4hP0MnrgcOUFxUwkxx358xO3rY/g4W29c=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmxkT3+D5LXm84pnj9roznmK7UUj20NrCOZrrJXoNZ
+ VIHaj3OJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZsZE9wAKCRAk1otyXVSH0BdzB/
+ 47DHhwUw0m/H9CKUCRzIjZF+ciL+wgACMoWQW/F7u4q5VayUMv7J3qXcrdjTFWQCK6TOpAFAJRWlpr
+ QPkvP1ZaBxDuKB5iPNoTEcAoHrZvpLk8PcjOCbVPuDniEV8JWth6RbgAKZYJ15X2RCyS4gaT+sWuRu
+ 2m5z2kXUmn0t+FcA/oGvaanhYjNVMDaJRlhYyCMh2XesRSYzlCuqv9Qs1Zmelgo1Qf7SUahZpGYhdw
+ j5l4QWFq9LTK7h8tpPJU/8isW1jM/ovcDTLENLg8Wi0xJ8YuemUOofObkJ7zmwB75Viw3QJK9UxfyI
+ V4ZP8h3498/md4jcU363yxLjDmVuLM
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Unlike with the normal stack there is no API for configuring the the shadow
-stack for a new thread, instead the kernel will dynamically allocate a new
-shadow stack with the same size as the normal stack. This appears to be due
-to the shadow stack series having been in development since before the more
-extensible clone3() was added rather than anything more deliberate.
+Since there were widespread issues with output not being flushed the
+kselftest framework was modified to explicitly set the output streams
+unbuffered in commit 58e2847ad2e6 ("selftests: line buffer test
+program's stdout") so there is no need to explicitly flush in the clone3
+tests.
 
-Add parameters to clone3() specifying the location and size of a shadow
-stack for the newly created process.  If no shadow stack is specified
-then the existing implicit allocation behaviour is maintained.
-
-If a stack is specified then it is required to have an architecture
-defined token placed on the stack, this will be consumed by the new
-task.  If the token is not provided then this will be reported as a
-segmentation fault with si_code SEGV_CPERR, as a runtime shadow stack
-protection error would be.  This allows architectures to implement the
-validation of the token in the child process context.
-
-If the architecture does not support shadow stacks the shadow stack
-parameters must be zero, architectures that do support the feature are
-expected to enforce the same requirement on individual systems that lack
-shadow stack support.
-
-Update the existing x86 implementation to pay attention to the newly added
-arguments, in order to maintain compatibility we use the existing behaviour
-if no shadow stack is specified. Minimal validation is done of the supplied
-parameters, detailed enforcement is left to when the thread is executed.
-Since we are now using more fields from the kernel_clone_args we pass that
-into the shadow stack code rather than individual fields.
-
-Portions of the x86 architecture code were written by Rick Edgecombe.
-
+Reviewed-by: Kees Cook <kees@kernel.org>
+Tested-by: Kees Cook <kees@kernel.org>
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/x86/include/asm/shstk.h     |  11 ++--
- arch/x86/kernel/process.c        |   2 +-
- arch/x86/kernel/shstk.c          |  96 ++++++++++++++++++++++++-------
- include/asm-generic/cacheflush.h |  11 ++++
- include/linux/sched/task.h       |  18 ++++++
- include/uapi/linux/sched.h       |  13 ++++-
- kernel/fork.c                    | 121 +++++++++++++++++++++++++++++++++++----
- 7 files changed, 230 insertions(+), 42 deletions(-)
+ tools/testing/selftests/clone3/clone3_selftests.h | 2 --
+ 1 file changed, 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/shstk.h b/arch/x86/include/asm/shstk.h
-index 4cb77e004615..252feeda6999 100644
---- a/arch/x86/include/asm/shstk.h
-+++ b/arch/x86/include/asm/shstk.h
-@@ -6,6 +6,7 @@
- #include <linux/types.h>
+diff --git a/tools/testing/selftests/clone3/clone3_selftests.h b/tools/testing/selftests/clone3/clone3_selftests.h
+index 3d2663fe50ba..39b5dcba663c 100644
+--- a/tools/testing/selftests/clone3/clone3_selftests.h
++++ b/tools/testing/selftests/clone3/clone3_selftests.h
+@@ -35,8 +35,6 @@ struct __clone_args {
  
- struct task_struct;
-+struct kernel_clone_args;
- struct ksignal;
- 
- #ifdef CONFIG_X86_USER_SHADOW_STACK
-@@ -16,8 +17,8 @@ struct thread_shstk {
- 
- long shstk_prctl(struct task_struct *task, int option, unsigned long arg2);
- void reset_thread_features(void);
--unsigned long shstk_alloc_thread_stack(struct task_struct *p, unsigned long clone_flags,
--				       unsigned long stack_size);
-+unsigned long shstk_alloc_thread_stack(struct task_struct *p,
-+				       const struct kernel_clone_args *args);
- void shstk_free(struct task_struct *p);
- int setup_signal_shadow_stack(struct ksignal *ksig);
- int restore_signal_shadow_stack(void);
-@@ -28,8 +29,10 @@ static inline long shstk_prctl(struct task_struct *task, int option,
- 			       unsigned long arg2) { return -EINVAL; }
- static inline void reset_thread_features(void) {}
- static inline unsigned long shstk_alloc_thread_stack(struct task_struct *p,
--						     unsigned long clone_flags,
--						     unsigned long stack_size) { return 0; }
-+						     const struct kernel_clone_args *args)
-+{
-+	return 0;
-+}
- static inline void shstk_free(struct task_struct *p) {}
- static inline int setup_signal_shadow_stack(struct ksignal *ksig) { return 0; }
- static inline int restore_signal_shadow_stack(void) { return 0; }
-diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
-index f63f8fd00a91..59456ab8d93f 100644
---- a/arch/x86/kernel/process.c
-+++ b/arch/x86/kernel/process.c
-@@ -207,7 +207,7 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
- 	 * is disabled, new_ssp will remain 0, and fpu_clone() will know not to
- 	 * update it.
- 	 */
--	new_ssp = shstk_alloc_thread_stack(p, clone_flags, args->stack_size);
-+	new_ssp = shstk_alloc_thread_stack(p, args);
- 	if (IS_ERR_VALUE(new_ssp))
- 		return PTR_ERR((void *)new_ssp);
- 
-diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
-index 059685612362..ccfe562ea5d6 100644
---- a/arch/x86/kernel/shstk.c
-+++ b/arch/x86/kernel/shstk.c
-@@ -191,44 +191,96 @@ void reset_thread_features(void)
- 	current->thread.features_locked = 0;
- }
- 
--unsigned long shstk_alloc_thread_stack(struct task_struct *tsk, unsigned long clone_flags,
--				       unsigned long stack_size)
-+int arch_shstk_validate_clone(struct task_struct *t,
-+			      struct vm_area_struct *vma,
-+			      struct page *page,
-+			      struct kernel_clone_args *args)
-+{
-+	/*
-+	 * SSP is aligned, so reserved bits and mode bit are a zero, just mark
-+	 * the token 64-bit.
-+	 */
-+	void *maddr = kmap_local_page(page);
-+	int offset;
-+	unsigned long addr, ssp;
-+	u64 expected;
-+
-+	if (!features_enabled(ARCH_SHSTK_SHSTK))
-+		return 0;
-+
-+	ssp = args->shadow_stack + args->shadow_stack_size;
-+	addr = ssp - SS_FRAME_SIZE;
-+	expected = ssp | BIT(0);
-+	offset = offset_in_page(addr);
-+
-+	if (!cmpxchg_to_user_page(vma, page, addr, (unsigned long *)(maddr + offset),
-+				  expected, 0))
-+		return -EINVAL;
-+	set_page_dirty_lock(page);
-+
-+	return 0;
-+}
-+
-+unsigned long shstk_alloc_thread_stack(struct task_struct *tsk,
-+				       const struct kernel_clone_args *args)
+ static pid_t sys_clone3(struct __clone_args *args, size_t size)
  {
- 	struct thread_shstk *shstk = &tsk->thread.shstk;
-+	unsigned long clone_flags = args->flags;
- 	unsigned long addr, size;
- 
- 	/*
- 	 * If shadow stack is not enabled on the new thread, skip any
--	 * switch to a new shadow stack.
-+	 * implicit switch to a new shadow stack and reject attempts to
-+	 * explicitly specify one.
- 	 */
--	if (!features_enabled(ARCH_SHSTK_SHSTK))
-+	if (!features_enabled(ARCH_SHSTK_SHSTK)) {
-+		if (args->shadow_stack || args->shadow_stack_size)
-+			return (unsigned long)ERR_PTR(-EINVAL);
-+
- 		return 0;
-+	}
- 
- 	/*
--	 * For CLONE_VFORK the child will share the parents shadow stack.
--	 * Make sure to clear the internal tracking of the thread shadow
--	 * stack so the freeing logic run for child knows to leave it alone.
-+	 * If the user specified a shadow stack then do some basic
-+	 * validation and use it, otherwise fall back to a default
-+	 * shadow stack size if the clone_flags don't indicate an
-+	 * allocation is unneeded.
- 	 */
--	if (clone_flags & CLONE_VFORK) {
-+	if (args->shadow_stack) {
-+		addr = args->shadow_stack;
-+		size = args->shadow_stack_size;
- 		shstk->base = 0;
- 		shstk->size = 0;
--		return 0;
--	}
-+	} else {
-+		/*
-+		 * For CLONE_VFORK the child will share the parents
-+		 * shadow stack.  Make sure to clear the internal
-+		 * tracking of the thread shadow stack so the freeing
-+		 * logic run for child knows to leave it alone.
-+		 */
-+		if (clone_flags & CLONE_VFORK) {
-+			shstk->base = 0;
-+			shstk->size = 0;
-+			return 0;
-+		}
- 
--	/*
--	 * For !CLONE_VM the child will use a copy of the parents shadow
--	 * stack.
--	 */
--	if (!(clone_flags & CLONE_VM))
--		return 0;
-+		/*
-+		 * For !CLONE_VM the child will use a copy of the
-+		 * parents shadow stack.
-+		 */
-+		if (!(clone_flags & CLONE_VM))
-+			return 0;
- 
--	size = adjust_shstk_size(stack_size);
--	addr = alloc_shstk(0, size, 0, false);
--	if (IS_ERR_VALUE(addr))
--		return addr;
-+		size = args->stack_size;
-+		size = adjust_shstk_size(size);
-+		addr = alloc_shstk(0, size, 0, false);
-+		if (IS_ERR_VALUE(addr))
-+			return addr;
- 
--	shstk->base = addr;
--	shstk->size = size;
-+		/* We allocated the shadow stack, we should deallocate it. */
-+		shstk->base = addr;
-+		shstk->size = size;
-+	}
- 
- 	return addr + size;
- }
-diff --git a/include/asm-generic/cacheflush.h b/include/asm-generic/cacheflush.h
-index 7ee8a179d103..96cc0c7a5c90 100644
---- a/include/asm-generic/cacheflush.h
-+++ b/include/asm-generic/cacheflush.h
-@@ -124,4 +124,15 @@ static inline void flush_cache_vunmap(unsigned long start, unsigned long end)
- 	} while (0)
- #endif
- 
-+#ifndef cmpxchg_to_user_page
-+#define cmpxchg_to_user_page(vma, page, vaddr, ptr, old, new)  \
-+({							  \
-+	bool ret;						  \
-+								  \
-+	ret = try_cmpxchg(ptr, &old, new);			  \
-+	flush_icache_user_page(vma, page, vaddr, sizeof(*ptr));	  \
-+	ret;							  \
-+})
-+#endif
-+
- #endif /* _ASM_GENERIC_CACHEFLUSH_H */
-diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-index d362aacf9f89..c818efdd57af 100644
---- a/include/linux/sched/task.h
-+++ b/include/linux/sched/task.h
-@@ -16,6 +16,7 @@ struct task_struct;
- struct rusage;
- union thread_union;
- struct css_set;
-+struct vm_area_struct;
- 
- /* All the bits taken by the old clone syscall. */
- #define CLONE_LEGACY_FLAGS 0xffffffffULL
-@@ -43,6 +44,8 @@ struct kernel_clone_args {
- 	void *fn_arg;
- 	struct cgroup *cgrp;
- 	struct css_set *cset;
-+	unsigned long shadow_stack;
-+	unsigned long shadow_stack_size;
- };
- 
- /*
-@@ -230,4 +233,19 @@ static inline void task_unlock(struct task_struct *p)
- 
- DEFINE_GUARD(task_lock, struct task_struct *, task_lock(_T), task_unlock(_T))
- 
-+#ifdef CONFIG_ARCH_HAS_USER_SHADOW_STACK
-+int arch_shstk_validate_clone(struct task_struct *p,
-+			      struct vm_area_struct *vma,
-+			      struct page *page,
-+			      struct kernel_clone_args *args);
-+#else
-+static inline int arch_shstk_validate_clone(struct task_struct *p,
-+					    struct vm_area_struct *vma,
-+					    struct page *page,
-+					    struct kernel_clone_args *args)
-+{
-+	return 0;
-+}
-+#endif
-+
- #endif /* _LINUX_SCHED_TASK_H */
-diff --git a/include/uapi/linux/sched.h b/include/uapi/linux/sched.h
-index 3bac0a8ceab2..8b7af52548fd 100644
---- a/include/uapi/linux/sched.h
-+++ b/include/uapi/linux/sched.h
-@@ -84,6 +84,10 @@
-  *                kernel's limit of nested PID namespaces.
-  * @cgroup:       If CLONE_INTO_CGROUP is specified set this to
-  *                a file descriptor for the cgroup.
-+ * @shadow_stack: Pointer to the memory allocated for the child
-+ *                shadow stack.
-+ * @shadow_stack_size: Specify the size of the shadow stack for
-+ *                     the child process.
-  *
-  * The structure is versioned by size and thus extensible.
-  * New struct members must go at the end of the struct and
-@@ -101,12 +105,15 @@ struct clone_args {
- 	__aligned_u64 set_tid;
- 	__aligned_u64 set_tid_size;
- 	__aligned_u64 cgroup;
-+	__aligned_u64 shadow_stack;
-+	__aligned_u64 shadow_stack_size;
- };
- #endif
- 
--#define CLONE_ARGS_SIZE_VER0 64 /* sizeof first published struct */
--#define CLONE_ARGS_SIZE_VER1 80 /* sizeof second published struct */
--#define CLONE_ARGS_SIZE_VER2 88 /* sizeof third published struct */
-+#define CLONE_ARGS_SIZE_VER0  64 /* sizeof first published struct */
-+#define CLONE_ARGS_SIZE_VER1  80 /* sizeof second published struct */
-+#define CLONE_ARGS_SIZE_VER2  88 /* sizeof third published struct */
-+#define CLONE_ARGS_SIZE_VER3 104 /* sizeof fourth published struct */
- 
- /*
-  * Scheduling policies
-diff --git a/kernel/fork.c b/kernel/fork.c
-index cc760491f201..a53f2ccd431b 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -128,6 +128,11 @@
-  */
- #define MAX_THREADS FUTEX_TID_MASK
- 
-+/*
-+ * Require that shadow stacks can store at least one element
-+ */
-+#define SHADOW_STACK_SIZE_MIN sizeof(void *)
-+
- /*
-  * Protected counters by write_lock_irq(&tasklist_lock)
-  */
-@@ -2107,6 +2112,57 @@ static void rv_task_fork(struct task_struct *p)
- #define rv_task_fork(p) do {} while (0)
- #endif
- 
-+static int shstk_validate_clone(struct task_struct *p,
-+				struct kernel_clone_args *args)
-+{
-+	struct mm_struct *mm;
-+	struct vm_area_struct *vma;
-+	struct page *page;
-+	unsigned long addr;
-+	int ret;
-+
-+	if (!IS_ENABLED(CONFIG_ARCH_HAS_USER_SHADOW_STACK))
-+		return 0;
-+
-+	if (!args->shadow_stack)
-+		return 0;
-+
-+	mm = get_task_mm(p);
-+	if (!mm)
-+		return -EFAULT;
-+
-+	mmap_read_lock(mm);
-+
-+	/*
-+	 * All current shadow stack architectures have tokens at the
-+	 * top of a downward growing shadow stack.
-+	 */
-+	addr = args->shadow_stack + args->shadow_stack_size - 1;
-+	addr = untagged_addr_remote(mm, addr);
-+
-+	page = get_user_page_vma_remote(mm, addr, FOLL_FORCE | FOLL_WRITE,
-+					&vma);
-+	if (IS_ERR(page)) {
-+		ret = -EFAULT;
-+		goto out;
-+	}
-+
-+	if (!(vma->vm_flags & VM_SHADOW_STACK) ||
-+	    !(vma->vm_flags & VM_WRITE)) {
-+		ret = -EFAULT;
-+		goto out_page;
-+	}
-+
-+	ret = arch_shstk_validate_clone(p, vma, page, args);
-+
-+out_page:
-+	put_page(page);
-+out:
-+	mmap_read_unlock(mm);
-+	mmput(mm);
-+	return ret;
-+}
-+
- /*
-  * This creates a new process as a copy of the old one,
-  * but does not actually start it yet.
-@@ -2381,6 +2437,9 @@ __latent_entropy struct task_struct *copy_process(
- 	if (retval)
- 		goto bad_fork_cleanup_namespaces;
- 	retval = copy_thread(p, args);
-+	if (retval)
-+		goto bad_fork_cleanup_io;
-+	retval = shstk_validate_clone(p, args);
- 	if (retval)
- 		goto bad_fork_cleanup_io;
- 
-@@ -2939,7 +2998,9 @@ noinline static int copy_clone_args_from_user(struct kernel_clone_args *kargs,
- 		     CLONE_ARGS_SIZE_VER1);
- 	BUILD_BUG_ON(offsetofend(struct clone_args, cgroup) !=
- 		     CLONE_ARGS_SIZE_VER2);
--	BUILD_BUG_ON(sizeof(struct clone_args) != CLONE_ARGS_SIZE_VER2);
-+	BUILD_BUG_ON(offsetofend(struct clone_args, shadow_stack_size) !=
-+		     CLONE_ARGS_SIZE_VER3);
-+	BUILD_BUG_ON(sizeof(struct clone_args) != CLONE_ARGS_SIZE_VER3);
- 
- 	if (unlikely(usize > PAGE_SIZE))
- 		return -E2BIG;
-@@ -2972,16 +3033,18 @@ noinline static int copy_clone_args_from_user(struct kernel_clone_args *kargs,
- 		return -EINVAL;
- 
- 	*kargs = (struct kernel_clone_args){
--		.flags		= args.flags,
--		.pidfd		= u64_to_user_ptr(args.pidfd),
--		.child_tid	= u64_to_user_ptr(args.child_tid),
--		.parent_tid	= u64_to_user_ptr(args.parent_tid),
--		.exit_signal	= args.exit_signal,
--		.stack		= args.stack,
--		.stack_size	= args.stack_size,
--		.tls		= args.tls,
--		.set_tid_size	= args.set_tid_size,
--		.cgroup		= args.cgroup,
-+		.flags			= args.flags,
-+		.pidfd			= u64_to_user_ptr(args.pidfd),
-+		.child_tid		= u64_to_user_ptr(args.child_tid),
-+		.parent_tid		= u64_to_user_ptr(args.parent_tid),
-+		.exit_signal		= args.exit_signal,
-+		.stack			= args.stack,
-+		.stack_size		= args.stack_size,
-+		.tls			= args.tls,
-+		.set_tid_size		= args.set_tid_size,
-+		.cgroup			= args.cgroup,
-+		.shadow_stack		= args.shadow_stack,
-+		.shadow_stack_size	= args.shadow_stack_size,
- 	};
- 
- 	if (args.set_tid &&
-@@ -3022,6 +3085,40 @@ static inline bool clone3_stack_valid(struct kernel_clone_args *kargs)
- 	return true;
+-	fflush(stdout);
+-	fflush(stderr);
+ 	return syscall(__NR_clone3, args, size);
  }
  
-+/**
-+ * clone3_shadow_stack_valid - check and prepare shadow stack
-+ * @kargs: kernel clone args
-+ *
-+ * Verify that shadow stacks are only enabled if supported.
-+ */
-+static inline bool clone3_shadow_stack_valid(struct kernel_clone_args *kargs)
-+{
-+	if (kargs->shadow_stack) {
-+		if (!kargs->shadow_stack_size)
-+			return false;
-+
-+		if (kargs->shadow_stack_size < SHADOW_STACK_SIZE_MIN)
-+			return false;
-+
-+		if (kargs->shadow_stack_size > rlimit(RLIMIT_STACK))
-+			return false;
-+
-+		if (!IS_ALIGNED(kargs->shadow_stack, sizeof(void *)))
-+			return false;
-+
-+		if (!IS_ALIGNED(kargs->shadow_stack_size, sizeof(void *)))
-+			return false;
-+
-+		/*
-+		 * The architecture must check support on the specific
-+		 * machine.
-+		 */
-+		return IS_ENABLED(CONFIG_ARCH_HAS_USER_SHADOW_STACK);
-+	} else {
-+		return !kargs->shadow_stack_size;
-+	}
-+}
-+
- static bool clone3_args_valid(struct kernel_clone_args *kargs)
- {
- 	/* Verify that no unknown flags are passed along. */
-@@ -3044,7 +3141,7 @@ static bool clone3_args_valid(struct kernel_clone_args *kargs)
- 	    kargs->exit_signal)
- 		return false;
- 
--	if (!clone3_stack_valid(kargs))
-+	if (!clone3_stack_valid(kargs) || !clone3_shadow_stack_valid(kargs))
- 		return false;
- 
- 	return true;
 
 -- 
 2.39.2
