@@ -1,249 +1,156 @@
-Return-Path: <linux-kselftest+bounces-15932-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15933-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 743EB95A77A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 00:00:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02BDE95A79B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 00:07:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BAEC2814B9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 22:00:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E486E1C229AD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 22:07:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E829414E2E9;
-	Wed, 21 Aug 2024 22:00:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B90601779BD;
+	Wed, 21 Aug 2024 22:07:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ggTsYesS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l0Ai9K+q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C262B9AF
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 22:00:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DBD170A2E;
+	Wed, 21 Aug 2024 22:07:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724277625; cv=none; b=gTrCPfj0kvp9IaezKCl0M97Vw2SSXldGV+SpmUHmX8B346uM+VhLxbCGuv2B/aJ8H4TezY0zYgD6nsjCOGj+rMzauptnaH8Qo/bJZDj5gTeGqKFgQQERfkCAnQcZPwTHiDwviuADb9wBCetdaIp2QrwwdVK8djczURhyEl97ASA=
+	t=1724278062; cv=none; b=AIM1R0k/PJaU/hVnLW9QUQtDqK3bapzui8AiZFzLH7j6+JPR/dmEp73U7rYirXwiUFkvvjd8wdWwtiqNCr4kwc87cL9GstWG1/LTklR9Ufb0P/JuA6vIKaf/zy9ZZUBit0aHyY8peKKo8egCgphrnQbVA0cIAIdvWiNyViB1NaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724277625; c=relaxed/simple;
-	bh=KddeyswZeIDj2bDxqA5z521UXmcCk/dVgRcMZDrH9NA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nqj/8Ql5Hb1RKh7q6M0zmCCc9jw0n1+1Fh+fhc8P8wxCMQ9+9V4r0nmcEoWhjHx4quNjX6D8XNkuOB7oNQMD5iHQmKjUnG1ncRVQzYiMkPRAlNieI4AvlrK7ZIY0FwJaxL0wNC0zKpOGNBRvImXX9nljjTqlpQCkyzi5U5mkATo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ggTsYesS; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724277624; x=1755813624;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=KddeyswZeIDj2bDxqA5z521UXmcCk/dVgRcMZDrH9NA=;
-  b=ggTsYesSrtNPRMBujPoRDZs84jyCrYCk7s46QrFvqCyXNGwkiOMvZnZt
-   sQJdP6+d4dVzlUmndFhCOBiiOfCAI7HvC2CSV/CddlFZuKzRsqEXzJ9Cx
-   dKGPz7N3wVsQ1qg2Qd6tFRe73u4/Kai5SC17vzXzsSGKPl95YYPwxmLW+
-   VWsrahBHp1SQq5t+G2ZiWfOhJcV2Zer9KiDImwZBXrNY3mKihpx4XR0j5
-   PYQ9sfVq/7A76KyhpZw7Y7XAxCbf3MuRUR058mPy/iX6k92b+rVaruU+3
-   vp24ljESvwfNzj84eSgtRYYqBVIyQo1XpW/UnWd20tepNXC+MzhoWXlWT
-   A==;
-X-CSE-ConnectionGUID: AWc+ISb6TH+Qlhl7HrUnKg==
-X-CSE-MsgGUID: cMbEVvVVT12Tch80JfXl4A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="22817743"
-X-IronPort-AV: E=Sophos;i="6.10,165,1719903600"; 
-   d="scan'208";a="22817743"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 15:00:24 -0700
-X-CSE-ConnectionGUID: Yv4VA+NsTWm6dj7HrVmt/A==
-X-CSE-MsgGUID: 23pJ5Q+uSNWWUJDNrb9X+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,165,1719903600"; 
-   d="scan'208";a="61088079"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orviesa010.jf.intel.com with ESMTP; 21 Aug 2024 15:00:21 -0700
-Received: from [10.246.19.248] (mwajdecz-MOBL.ger.corp.intel.com [10.246.19.248])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 3BD2432C80;
-	Wed, 21 Aug 2024 23:00:19 +0100 (IST)
-Message-ID: <94774c66-fa6e-4e07-87c1-baed1c2caae9@intel.com>
-Date: Thu, 22 Aug 2024 00:00:18 +0200
+	s=arc-20240116; t=1724278062; c=relaxed/simple;
+	bh=oKy04C+dcngOFBUyhRcRl2GEyUv5QIXqzGF1zfvynOo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jqX0xZsryeVUTwUFK1wkVgCakWtsU9KVIqtIYg8FCa5Pn7akmLNI1AahSqr7yTLLt3QTV3UMXGQ5WnuyivFSPd403Ai5mI9FBUA/q3v6PzKVcKx3LQluCa6sadbc693vC6BPXw26F3ooqYVjZOkJP8H5c4AdfU9WxVxyKzbVCFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l0Ai9K+q; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-429ec9f2155so827635e9.2;
+        Wed, 21 Aug 2024 15:07:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724278059; x=1724882859; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TNNeTQGZqzDUNm3UJkRrDHxPTwVrMNbOn6wlIJHXkiA=;
+        b=l0Ai9K+q4/WmWj/TJNSCZjqWIwP50S/PKOvOcV2K6l2MGFuHgvWJJkhYwsb2uUD7Pc
+         3JbP6usDN27muMy00DklRxC/QRZ76z/x5mJ9vNV8UwxIOSlwVZ2tROFOJdKRLgBym/8b
+         2fl//LqbKL3fXCDmZmj8FeMUgeJhbWXlXqNmRt9nYCOKI7JQidMCVnWnoVx9c9SRSof9
+         5Yf7Zf4ibLphbr6M7RNBM2pnaps+q/qBij5JZchD7ExaZPrJoMkcoC2lHXjjPnqGVKTP
+         Mv3x0opPevLHmPOOGYFlTdxsxnH//Vo7xmJTso9mo3VgneE+wFHI9Nbbkxq9VI9uRycB
+         k/JQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724278059; x=1724882859;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TNNeTQGZqzDUNm3UJkRrDHxPTwVrMNbOn6wlIJHXkiA=;
+        b=C5MVpk33J2dOi1Il2mGTnNQ+OHTN5I9zQqNcivppIrzrPmbLXJvk8r/4lGyZsAWKhv
+         ioaS5gktucJfSTdrhWQKENASJqXwsuIML5qNWG/tNSuxF2b6BFKTOkmBo5xDncqsjCFW
+         GB91BOoRFjEwRcfrn/lXEV2eM1etAfFTAj9lt3HC5rfXI4fbzQ9E+WpVwF2lwRCxHJnq
+         E0TnCxU4x66MA3TGQm56XCbDtiBGGXrPlTV1QVjyFGP0GCcYjWxuPJL1dlPFVKw4h9eI
+         hK1CH7prayvekGHE/x/WoRdtFEt34gj6eggZalad3ZXxeFmboo20z4WyjaEVDfcX+jHv
+         NViA==
+X-Forwarded-Encrypted: i=1; AJvYcCVISmbgNK175PyySSR6SCvCsw7hS4y2KRSvJQyspdUJb3vXOIxhmuM0//Sa0IoPiAGoWsn2vkZk5j/PzIRM@vger.kernel.org, AJvYcCXA+piV7PuZRd4IEOX5DXkjD8RnCNA+ImSxL6KpQjGtu8TU94S6PPXV7tASeFXF4SxJCA8wi74KaJ5bIeraDd90@vger.kernel.org, AJvYcCXMeUpInEi6unga13PEFaC/BjDh6IOP4XXvvt8mAEuASEjEN88i+hKJkklqpGPkzy8G3Zw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yym0sQl5C9OcsBA6vZUlgdzMjiP7GXEA3OEoibsdY2lywHVD5uL
+	n7vYGmY5qQj1j5nixfR0Xazhz6Q56OXICuX+jpuokhYlLAgBe639NvoQwKV2IybcrXkfb2HmeYg
+	l03+3CbrKpcJ0Sx5pXzEd2t0shYQ=
+X-Google-Smtp-Source: AGHT+IEUWEpPcfSUb0wNVH9crhyXPTop8DvlSYSWpMyhqYlhL6VCVZxNCkPpVQaubr9ZyyCaf0n2QTQG6JOZa0AmSoI=
+X-Received: by 2002:a05:600c:4f50:b0:427:abed:3608 with SMTP id
+ 5b1f17b1804b1-42abf04881fmr25278935e9.5.1724278058840; Wed, 21 Aug 2024
+ 15:07:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] kunit: Add example with alternate function
- redirection method
-To: Rae Moar <rmoar@google.com>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- David Gow <davidgow@google.com>, Daniel Latypov <dlatypov@google.com>,
- Lucas De Marchi <lucas.demarchi@intel.com>
-References: <20240821144305.1958-1-michal.wajdeczko@intel.com>
- <20240821144305.1958-5-michal.wajdeczko@intel.com>
- <CA+GJov7ezEK1qmVJ0xteYxfHMmTp+p2sciBvRc4noLDmV2GDXQ@mail.gmail.com>
-Content-Language: en-US
-From: Michal Wajdeczko <michal.wajdeczko@intel.com>
-In-Reply-To: <CA+GJov7ezEK1qmVJ0xteYxfHMmTp+p2sciBvRc4noLDmV2GDXQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20240820023447.29002-1-hao.ge@linux.dev> <02dd26b5-16a0-4732-80e4-c7bf183e965a@linux.dev>
+ <58f57d70-a787-4012-8763-cc6eb642ef8a@stanley.mountain>
+In-Reply-To: <58f57d70-a787-4012-8763-cc6eb642ef8a@stanley.mountain>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 21 Aug 2024 15:07:27 -0700
+Message-ID: <CAADnVQ+iTrTmbMcjt7fR7uTS=1tFcjv=z2CY6fO-4=kkM4YSMw@mail.gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Fix incorrect parameters in NULL pointer checking
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Yonghong Song <yonghong.song@linux.dev>, Hao Ge <hao.ge@linux.dev>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
+	Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Hao Ge <gehao@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Wed, Aug 21, 2024 at 2:50=E2=80=AFPM Dan Carpenter <dan.carpenter@linaro=
+.org> wrote:
+>
+> On Wed, Aug 21, 2024 at 02:03:17PM -0700, Yonghong Song wrote:
+> >
+> > On 8/19/24 7:34 PM, Hao Ge wrote:
+> > > From: Hao Ge <gehao@kylinos.cn>
+> > >
+> > > Smatch reported the following warning:
+> > >      ./tools/testing/selftests/bpf/testing_helpers.c:455 get_xlated_p=
+rogram()
+> > >      warn: variable dereferenced before check 'buf' (see line 454)
+> > >
+> > > It seems correct,so let's modify it based on it's suggestion.
+> > >
+> > > Actually,commit b23ed4d74c4d ("selftests/bpf: Fix invalid pointer
+> > > check in get_xlated_program()") fixed an issue in the test_verifier.c
+> > > once,but it was reverted this time.
+> > >
+> > > Let's solve this issue with the minimal changes possible.
+> > >
+> > > Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> > > Closes: https://lore.kernel.org/all/1eb3732f-605a-479d-ba64-cd14250cb=
+f91@stanley.mountain/
+> > > Fixes: b4b7a4099b8c ("selftests/bpf: Factor out get_xlated_program() =
+helper")
+> > > Signed-off-by: Hao Ge <gehao@kylinos.cn>
+> >
+> > In the future, please change subject '[PATCH] ...' to '[PATCH bpf-next]=
+ ...'
+> > so CI can properly test it.
+>
+> It feels like there should be a technical solution to this.  The CI syste=
+m is
+> something on AWS and it's too expensive to just check every patch that's =
+sent to
+> the bpf list?  My understanding is that there are only two bpf trees.
+>
+>         if [ "$FIXES_HASH" =3D=3D "" ] ; then
+>                 TREE=3Dnext
+>         elif git merge-base --is-ancestor $FIXES_HASH origin/master ; the=
+n
+>                 TREE=3Dlinus
+>         else
+>                 TREE=3Dnext
+>         fi
+>
+> These days the zero day bot people are checking around a thousand git tre=
+es.
+> They pull emails off the various lists and apply them to the right places=
+.  It's
+> a doable thing.
 
+Dan,
 
-On 21.08.2024 23:22, Rae Moar wrote:
-> On Wed, Aug 21, 2024 at 10:43 AM Michal Wajdeczko
-> <michal.wajdeczko@intel.com> wrote:
->>
->> Add example how to use KUNIT_FIXED_STUB_REDIRECT and compare its
->> usage with the KUNIT_STATIC_STUB_REDIRECT. Also show how the
->> DECLARE_IF_KUNIT macro could be helpful in declaring test data in
->> the non-test data structures.
->>
->> Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
-> 
-> Hello!
-> 
-> I really like this test. It provides a great overview of this patch
-> series. I just have a couple comments below.
-> 
-> Otherwise,
-> Reviewed-by: Rae Moar <rmoar@google.com>
-> 
-> Thanks!
-> -Rae
-> 
->> ---
->> Cc: David Gow <davidgow@google.com>
->> Cc: Daniel Latypov <dlatypov@google.com>
->> Cc: Lucas De Marchi <lucas.demarchi@intel.com>
->> ---
->>  lib/kunit/kunit-example-test.c | 63 ++++++++++++++++++++++++++++++++++
->>  1 file changed, 63 insertions(+)
->>
->> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
->> index 3056d6bc705d..120e08d8899b 100644
->> --- a/lib/kunit/kunit-example-test.c
->> +++ b/lib/kunit/kunit-example-test.c
->> @@ -6,8 +6,10 @@
->>   * Author: Brendan Higgins <brendanhiggins@google.com>
->>   */
->>
->> +#include <linux/workqueue.h>
->>  #include <kunit/test.h>
->>  #include <kunit/static_stub.h>
->> +#include <kunit/visibility.h>
->>
->>  /*
->>   * This is the most fundamental element of KUnit, the test case. A test case
->> @@ -221,6 +223,66 @@ static void example_static_stub_using_fn_ptr_test(struct kunit *test)
->>         KUNIT_EXPECT_EQ(test, add_one(1), 2);
->>  }
->>
->> +/* This could be a location of various fixed stub functions. */
->> +static struct {
->> +       DECLARE_IF_KUNIT(int (*add_two)(int i));
-> 
-> Is the use of DECLARE_IF_KUNIT useful here? KUnit should always be
-> enabled if this file is being compiled/run. Is the idea to show an
-> example here that could be used outside of kunit test files?
-
-yes, the idea was to show that 'stubs' declarations could be placed
-anywhere, without any cost if compiled without KUNIT (I was trying to
-mention that in commit message)
-
-> 
-> Additionally, would it make sense to call this add_two_stub instead to
-> make it clear that this is not a definition of the add_two function?
-> Or is it helpful for people to see this as an example of how to handle
-> multiple stubs: struct of stubs with exact names? Let me know what you
-> think.
-
-the 'add_two' above is just a member name, and IMO we shouldn't repeat
-that this is about 'stub' since the whole struct is for 'stubs'
-
-and yes, the idea was also to show that if applicable, other function
-stubs declarations could be either placed together
-
-> 
->> +} stubs;
->> +
->> +/* This is a function we'll replace with stubs. */
->> +static int add_two(int i)
->> +{
->> +       /* This will trigger the stub if active. */
->> +       KUNIT_STATIC_STUB_REDIRECT(add_two, i);
->> +       KUNIT_FIXED_STUB_REDIRECT(stubs.add_two, i);
->> +
->> +       return i + 2;
->> +}
->> +
->> +struct add_two_async_work {
->> +       struct work_struct work;
->> +       int param;
->> +       int result;
->> +};
->> +
->> +static void add_two_async_func(struct work_struct *work)
->> +{
->> +       struct add_two_async_work *w = container_of(work, typeof(*w), work);
->> +
->> +       w->result = add_two(w->param);
->> +}
->> +
->> +static int add_two_async(int i)
->> +{
->> +       struct add_two_async_work w = { .param = i };
->> +
->> +       INIT_WORK_ONSTACK(&w.work, add_two_async_func);
->> +       schedule_work(&w.work);
->> +       flush_work(&w.work);
->> +       destroy_work_on_stack(&w.work);
->> +
->> +       return w.result;
->> +}
->> +
->> +/*
->> + */
-> 
-> It looks like the method description is missing here.
-> 
-
-ha, I missed to copy commit message here
-
-> 
-> 
-> 
->> +static void example_fixed_stub_test(struct kunit *test)
->> +{
->> +       /* static stub redirection works only for KUnit thread */
->> +       kunit_activate_static_stub(test, add_two, subtract_one);
->> +       KUNIT_EXPECT_EQ(test, add_two(1), subtract_one(1));
->> +       KUNIT_EXPECT_NE_MSG(test, add_two_async(1), subtract_one(1),
->> +                           "stub shouldn't be active outside KUnit thread!");
->> +       kunit_deactivate_static_stub(test, add_two);
->> +       KUNIT_EXPECT_EQ(test, add_two(1), add_two(1));
->> +
->> +       /* fixed stub redirection works for KUnit and other threads */
->> +       kunit_activate_fixed_stub(test, stubs.add_two, subtract_one);
->> +       KUNIT_EXPECT_EQ(test, add_two(1), subtract_one(1));
->> +       KUNIT_EXPECT_EQ(test, add_two_async(1), subtract_one(1));
->> +       kunit_deactivate_fixed_stub(test, stubs.add_two);
->> +       KUNIT_EXPECT_EQ(test, add_two(1), add_two(1));
->> +}
->> +
->>  static const struct example_param {
->>         int value;
->>  } example_params_array[] = {
->> @@ -294,6 +356,7 @@ static struct kunit_case example_test_cases[] = {
->>         KUNIT_CASE(example_all_expect_macros_test),
->>         KUNIT_CASE(example_static_stub_test),
->>         KUNIT_CASE(example_static_stub_using_fn_ptr_test),
->> +       KUNIT_CASE(example_fixed_stub_test),
->>         KUNIT_CASE(example_priv_test),
->>         KUNIT_CASE_PARAM(example_params_test, example_gen_params),
->>         KUNIT_CASE_SLOW(example_slow_test),
->> --
->> 2.43.0
->>
->> --
->> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
->> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
->> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20240821144305.1958-5-michal.wajdeczko%40intel.com.
+Various people pointed out that you need to use the proper subject in
+the patches.
+You clearly knew that rule and yet you ignored it,
+and worse still you keep coming up with these excuses.
+Don't be surprised that people who are supposed to review your patches
+will take a long time to reply or "forget" about them as you "forget"
+about patch submission rules.
 
