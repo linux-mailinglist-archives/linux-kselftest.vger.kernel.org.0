@@ -1,143 +1,115 @@
-Return-Path: <linux-kselftest+bounces-15895-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15896-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89A8795A453
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 20:03:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 647D095A45C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 20:05:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 446C0283453
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 18:03:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 964AA1C22472
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 18:05:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BFC81B2EE2;
-	Wed, 21 Aug 2024 18:03:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hVf6XBs6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4F6C1B2EEE;
+	Wed, 21 Aug 2024 18:05:16 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B1F7D07D;
-	Wed, 21 Aug 2024 18:03:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C45481B2ED6;
+	Wed, 21 Aug 2024 18:05:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724263404; cv=none; b=NXuch/NubouTctiBn2In/PcAgz771ATwMwFmNzTGqjviYfsu+J/dj/qDH4Z8SsbIZmxvdjVcvI4dLIR2nTksRPq0qmzX91jYCNp/lrkBC8R/HVz6C9qxajghllLROa72BtB33KgiM/LjdNOR5QzjcE2Yka7DNCoCUdWCqsPmJhg=
+	t=1724263516; cv=none; b=JoaKLqgo8i1uY7zpY0qp43HOVPVFCLUE8Pcuvz1cEIcUE9CK0BygziLaDMypOzZr2qis88A+xPM8p6CYxAPtZGnLf4QUTW/GPv8DeiSbUO5SUlYc1x7WyN1zFtiS/bUWWX7TYPYyYdAd2KyjSVeOGG7usi/E8K+9rp6zgrTHAPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724263404; c=relaxed/simple;
-	bh=/aRfrKXnSS1N7hftXMF8UQpgchZc2Ul1bFVicgzIero=;
+	s=arc-20240116; t=1724263516; c=relaxed/simple;
+	bh=BL3FxBjXqdUlgS2BCFaDe/fd09UFnxS+0qX9Ww02TCw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JeSFTyWybtepfIkOb135erCIv7limj2W+81DRv9mR3eC9fvykAfnLd0wbuRb24KS9UnS2vdl6gUR3Jyv4qhC37qKqVXAUuAWd0mOZYIlsou2IVHdQWjIStKrog0/EbuiPCz5N4as3qKlziO4FlbiyXA9+LIK/4Woi+anS0jIyoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hVf6XBs6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E75F2C32781;
-	Wed, 21 Aug 2024 18:03:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724263403;
-	bh=/aRfrKXnSS1N7hftXMF8UQpgchZc2Ul1bFVicgzIero=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hVf6XBs6LZ1VwE8MCvsuECUI8wDLGVGOsDoP+OXniIlNf3c8k325LY7GWi5qo07XQ
-	 L5WmJeQ22aV02dE0bx8Uv+TTVGqk392h6XEVMUcuE3/Bquc1IP3YU+Tv4lXSErAX1A
-	 tIPxc5SMCm4nwEyJW3TPX0DkImgCK/ZstcvqRamVSUaFlJI7wlo8DK+zzT1787oA5Q
-	 JymUOdFqBvriwf4scDwIi3uE8VJVvMh86PiQJ2tfnUuD/uI1YznuR8F+kaHBKgHIDU
-	 UKW/QdL/rg3e0M2U1kBKyw20f1xQDKzBhdwPOjgZjNs5tM589OUaEaken7gv5k/X4w
-	 /DkM7l6sKJTGg==
-Date: Wed, 21 Aug 2024 19:03:13 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	Ross Burton <ross.burton@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v10 23/40] arm64/signal: Set up and restore the GCS
- context for signal handlers
-Message-ID: <d5473c27-167f-46c3-9368-487ed4b657cf@sirena.org.uk>
-References: <20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org>
- <20240801-arm64-gcs-v10-23-699e2bd2190b@kernel.org>
- <ZsYj0YYMuX1YRBZT@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OPNVZht/WditcPuVNAUfaG6r5IjAL7LL4rUzfWtgnInvI0A1enDefbobF3BlZAf07jDvj5wZL6DCiM1SrN7b8U9WFbb5eYwc52w1nDh4IsKF1aFPxc8EXfX8zKJ5MxMx5NaiO4ZG/gftldTt1DgG9Ah9ZHQa/vIj0eE3AYF7tRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 335FAC32781;
+	Wed, 21 Aug 2024 18:05:11 +0000 (UTC)
+Date: Wed, 21 Aug 2024 19:05:08 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"mgorman@suse.de" <mgorman@suse.de>,
+	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+	"vschneid@redhat.com" <vschneid@redhat.com>,
+	"kees@kernel.org" <kees@kernel.org>,
+	"will@kernel.org" <will@kernel.org>,
+	"hpa@zytor.com" <hpa@zytor.com>,
+	"jannh@google.com" <jannh@google.com>,
+	"peterz@infradead.org" <peterz@infradead.org>,
+	"yury.khrustalev@arm.com" <yury.khrustalev@arm.com>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"wilco.dijkstra@arm.com" <wilco.dijkstra@arm.com>,
+	"bsegall@google.com" <bsegall@google.com>,
+	"juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+	"x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH RFT v9 4/8] fork: Add shadow stack support to clone3()
+Message-ID: <ZsYsVJZ2iFVyqA3M@arm.com>
+References: <20240819-clone3-shadow-stack-v9-0-962d74f99464@kernel.org>
+ <20240819-clone3-shadow-stack-v9-4-962d74f99464@kernel.org>
+ <dc8328dbaa01ca7443eeb75024752c673904e3a4.camel@intel.com>
+ <cc2e7d86-c890-4cb1-8cad-1cfaa9f53dc8@sirena.org.uk>
+ <82be9ec6e43a018add8d9bbc6ba67feee676f32e.camel@intel.com>
+ <5643761f-cc38-4e41-9ddd-f0a1934f8724@sirena.org.uk>
+ <9f022aa4cd3e2dc82d0c963e9d2bf5c7ddd5b92a.camel@intel.com>
+ <77bc051d-b2c9-4e3a-b956-be8879048e20@sirena.org.uk>
+ <5464b915b52bf3b91ec70201736479a5347838af.camel@intel.com>
+ <158190d9-a4a6-4647-84e8-f4ae036d984b@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="vOVm5CyTt8nbbuUu"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ZsYj0YYMuX1YRBZT@arm.com>
-X-Cookie: You are false data.
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <158190d9-a4a6-4647-84e8-f4ae036d984b@sirena.org.uk>
 
+On Wed, Aug 21, 2024 at 06:23:18PM +0100, Mark Brown wrote:
+> On Wed, Aug 21, 2024 at 03:54:49PM +0000, Edgecombe, Rick P wrote:
+> > On Wed, 2024-08-21 at 13:45 +0100, Mark Brown wrote:
+> > > > Sorry for that. I looked through all the old threads expecting to find
+> > > > discussion, but couldn't find an answer. Is clone3 support a dependency for
+> > > > arm shadow stacks?
+> 
+> > > Catalin didn't want to merge the arm64 support without clone3(), and
+> > > there's code dependencies as a result.  I could unpick it and reverse
+> > > the ordering so long as the arm64 maintainers are OK with that since the
+> > > overlap is in the implementation of copy_thread() and some of the
+> > > dependency patches.
+> 
+> Actually in an off-list discussion today Catalin indicated that he's
+> fine with relaxing that a little so I'm in the process of picking the
+> dependency apart.
 
---vOVm5CyTt8nbbuUu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Just to confirm, I'd rather get the clone3() ABI choices properly
+debated than rushing it. It seems that our libc support does not rely on
+clone3() yet, so let's continue with the arm64 series independently of
+this one (only clone() with default shadow stack allocation). We'll
+follow up with the clone3() support that covers both architectures.
 
-On Wed, Aug 21, 2024 at 06:28:49PM +0100, Catalin Marinas wrote:
-> On Thu, Aug 01, 2024 at 01:06:50PM +0100, Mark Brown wrote:
+Thanks and sorry for the confusion. I did not realise the complications
+of adding clone3() support.
 
-> > +	ret = copy_from_user(&cap, (__user void*)gcspr_el0, sizeof(cap));
-> > +	if (ret)
-> > +		return -EFAULT;
-
-> Can the user change GCSPR_EL0 to a non-shadow-stack region, fake the
-> cap before sigreturn? copy_from_user() cannot check it's a GCS page.
-> Does it actually matter?
-
-We don't take any steps to prevent that since I'm not clear that it
-matters, as soon as userspace tries to use the non-GCS page as a GCS it
-will fault.  Given the abundance of ways in which a signal handler can
-cause a crash it didn't seem worth specific code, the cap token check is
-about protecting an actual GCS.
-
-> > +	/*
-> > +	 * Push a cap and the GCS entry for the trampoline onto the GCS.
-> > +	 */
-> > +	put_user_gcs((unsigned long)sigtramp, gcspr_el0 - 2, &ret);
-> > +	put_user_gcs(GCS_SIGNAL_CAP(gcspr_el0 - 1), gcspr_el0 - 1, &ret);
-> > +	if (ret != 0)
-> > +		return ret;
-
-> Doesn't the second put_user_gcs() override the previous ret?
-
-No, we only set ret on error - if the first one faults it'll set ret
-then the second one will either leave it unchanged or write the same
-error code depending on if it fails.  This idiom is used quite a lot in
-the signal code.
-
---vOVm5CyTt8nbbuUu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbGK+AACgkQJNaLcl1U
-h9DN2ggAhLNXxP2D63m8tGi5TB8JVrMOEHceQoOhWbYArtPnk8DUJUwAVQKy4370
-gWRlpUv3C9Prym8J79cdGllLtJAxGtFL846FtZ4GEzCwI0h42OKyIHIK0ayYDGwT
-7mhlLJAE9x/zLEwqeSMWfUiGAUZs+B5Bcc/qe3gEkuBX9zJ1D4kkt0rUSUB8PR9+
-mb7bq8tnqBOZ2/Ys/rHd7YOVTKnL9fNb3BG6ORxTFjKI/wwea16GhNrhUMcSaGCx
-OjyC6/p6czJQmOMjRXUIRp2W8KD6YyRu8dOKy8imoKaZl7tcxZRwOC2XNWdH+9vC
-sBN7fffBdrQUaKButl4to5BBOZzO0w==
-=oJjq
------END PGP SIGNATURE-----
-
---vOVm5CyTt8nbbuUu--
+-- 
+Catalin
 
