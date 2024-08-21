@@ -1,80 +1,84 @@
-Return-Path: <linux-kselftest+bounces-15873-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15874-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F0BF95A294
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 18:16:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5B9695A2AB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 18:20:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E17FB25E41
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 16:16:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 161CC1C2177D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 16:20:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A751D14A4EC;
-	Wed, 21 Aug 2024 16:16:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 194EF14F9CA;
+	Wed, 21 Aug 2024 16:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XnQtSiRn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QkuPitu4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+Received: from mail-oo1-f48.google.com (mail-oo1-f48.google.com [209.85.161.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F324013E022
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 16:16:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60675139597;
+	Wed, 21 Aug 2024 16:20:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724256967; cv=none; b=mmtmyMx9nW4llMowovKDV3rGJfFsvjnu4QkYwsDiWP2bSLMnIwWSBbPJh8Cyj+u/mUz0vkTG39gjddDX7/tGOTJC5KnR2wnPPltzoMUxM+oF1xMKgAOLczy0Hr6pmhxtjPaP8wqXJFKozkibsAiKFdVpB41CA1P+DJ3r+mj3Gn8=
+	t=1724257219; cv=none; b=clxvVe6MwQjCfCcJrFLc4yeo70lBZUqPWTuwNTS5WgOkCD/7UqgcKuhz6WvEJzyiX8Q7jhW+mDAeI2IY3pu+5FF7JtLqTeukwENLZNky9hJZxuWHYAmFcCmhyizAKeUUolILxnntqNZ1jKc/sTFd3FMJIkh+6+V/s2FidQdZXUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724256967; c=relaxed/simple;
-	bh=3h6jrzsG49oXrzZkPXaS5Zys9GLAADcZ2Y19PT2dgvA=;
+	s=arc-20240116; t=1724257219; c=relaxed/simple;
+	bh=0RN3TRX3yBTaoG3qk4ozEmB+r/7a76UlQuZG8EBldyg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KSe133GFD/gl/wVx4szGxXcWvH05DJLY/8BA7cVv/6F92Lk7ZIuL37eBOwqmHEgdIx4VvfY0Ar2PKdYcXvodQePO2cVJX5o0FhzfRhXjeAcswoP0xFvrGUlBeDpbYAuP4IH0fQQTL4J5oeNliVnQ52ITi62vuhAJPUGNrsJxWPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=XnQtSiRn; arc=none smtp.client-ip=209.85.167.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3db1d48083dso93205b6e.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 09:16:05 -0700 (PDT)
+	 To:Cc:Content-Type; b=SPCcHdvIjoPZZ9TqiQ4zx00b5q0bQE+n5z9rQrFVsXdcdW86JquVMvapf2H3OsqXfR/gP7TW8qmjuw4oZ6S+uHf40n6FefTlG5LnpH2TdtdYNQwsBUFOVdmumq/tPUyfzRT6HrW7RXtkOIc7OI81pGwN+T4C2YKgYTblLH/qAtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QkuPitu4; arc=none smtp.client-ip=209.85.161.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5d5c7f23f22so4181337eaf.0;
+        Wed, 21 Aug 2024 09:20:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1724256965; x=1724861765; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1724257216; x=1724862016; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ay4N+X8xFligirN80qjTXFQAPlG4tThmp3+jBLmN5qM=;
-        b=XnQtSiRnhHCEk31OoA4BsQ/qI1rGOK5zB7O06C1CZNhEIRAzZOFOgxz1doK4dHfooA
-         VbKutW7s3a3qrp9L2EXsB922p2gqr+gtRfCWC7hhrXGtMl/p9S3QG+0qJEhYVJO7+Smk
-         MsWMHHRxOFK291jcZKI14BGGGDBpswpULLAyw=
+        bh=vhsRhHHgA460KmlvgmMOROdQkEYqdVaGy9dpXTwKETQ=;
+        b=QkuPitu4bZ0hE1UXJ8Sx7uT0/cpoWnI9fhRAOF1IZDAumnJ9sGkNqzHzh6khvYzOT8
+         5U/J7LK/EUBhzpBpi+RzGNSlLrzhuOEyAb0KtFuA6iJyeRpOylu0QE0E0R1MFQQic6Qi
+         IDwgG12VXUd5ieAMByjieZlqcnn5to8zuu5vMYKH1AUM7HLBs7M6ZUjau83nwRJmFYY8
+         88X5QscXzTCA7e5xaIHoI2/Xfvdh+fURcarClsT7ROYeB7h5B1CTIuL/3hqP1GDdBwpu
+         I4SlaV+7NHCuVKYlQ6RgR/PwDnpDwo1PvdVo9t7VZA2iFSxsnSRTDkuI5Wz//2J9qt2P
+         FgAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724256965; x=1724861765;
+        d=1e100.net; s=20230601; t=1724257216; x=1724862016;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ay4N+X8xFligirN80qjTXFQAPlG4tThmp3+jBLmN5qM=;
-        b=qUcHW1V8s7cSq+C9LjrsfzTjJToLlorNL6Yh53WSg5GFNcz9cF7H9izdA4uADjp8ZI
-         hOaOeirACGrHAu/2wR94y0XRnwd64/viPS84hRkIbOxsQOH+9bdJkP9+Tzo8vSi9G6ok
-         jMoNM9bQpYP4chh7G886kzFGzA3xYiiRINLnICD+rB9VBuLjszavFYYnILXac3hXZiuB
-         8+sJeiWuCS/XnyJp1/rA590uiq0Btq09tqK2A/CGVlK2vodGPMn0eZ9tVRkbjY6XTq7k
-         orqBHJecmPckU4/epCF4XDqInXarPtQ7p6u4h4iBtNDND7qvlLJP/uD9wItQ6WDF5R6N
-         9EdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWJibxa3WmV9XaURtb8h5vghqgBnwS1ZfPT9ZVNrNxMICqDS+xPWgA3xEGvfnvLQfFCHLhRjzndoqKM35mjjpQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzS5pbiz5Hg0elD4aYo+aeOqZro/LGHmSKDAmVmkZNMbKFghC7Z
-	3kzZpDAAcZP2TGZJnphAse6iMYF0aqxj3ZfH/+KW9KMNE6vEpnl98TrDnJMWX2H9EUKLIaqfyER
-	BTQVQC0QQMlMdXobnc6qN/5nw47DDwvBgHSBK
-X-Google-Smtp-Source: AGHT+IECN3jXMHQ89hKP+cbvp8WlOQnMNfhtIo6rfpsvat0UipyYBThpaC5bMpZj5d7hLc/B6tAUMQQDAMA7oJ9ZsQk=
-X-Received: by 2002:a05:6870:65a3:b0:260:edbc:d7fc with SMTP id
- 586e51a60fabf-2737eef29d7mr1841616fac.4.1724256964997; Wed, 21 Aug 2024
- 09:16:04 -0700 (PDT)
+        bh=vhsRhHHgA460KmlvgmMOROdQkEYqdVaGy9dpXTwKETQ=;
+        b=BOldYwPeDThH6Kz6londHHueFfQuqsJxsx+ITOae/FOb4FMg5tJWTg201QRzBQbbf7
+         PBgMA0bBGAo8hRYpunMcsxh5HJd7jickMIH+LC2DMM9eKYIRRkFGPH/Yh/wKBtOTa6p3
+         3ve5sg5bAPAIIGbBBqsICqkC2aM1Nes4jXHrupHe3Dg/JK+XoMCI2DemqjVcvUUUz93k
+         /nsqeUrm1yOJIeHtTYvBpl1zpzTyVl3aA/FDXhbGC1/gXvbDB2PzfR2vr8GlOWsSG5Ht
+         AGikBJnzdqNrOx4WzXQ7PIarExnVpulPRhOgkwE7VqV+PTL02XhlX/pOI6eDxhTfzn6/
+         7z7g==
+X-Forwarded-Encrypted: i=1; AJvYcCV4EyhPzZVVyP+Fr4V6eiNSwrjGw9zeTxLjauicMzKz/jf4/1f1O/epk0n6Wd6KVBdDQ1iTMEwabG767NY=@vger.kernel.org, AJvYcCVJZQkCevu+ipQXQ3tndSm5pEjRfmwYJEpYdMcByuRAnYFHaAZBlm+ERV3Qer6L0lo0+w5dT7CC3UIlUqRvgujR@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9GfR8TEz1GJAAGOYoTZQMXD1khCDSw14fk14Wiy8TaOxtoioH
+	TJtqSy06Vts1yGOnPFnJy3SAXnTjZgkOgV1x+H2EHIBeNOYr0Xk8tqIbCHYfx9Bwi3Gi4lnXs/l
+	68vyu5ft4GJgd9kQc2iWIcumGfPM=
+X-Google-Smtp-Source: AGHT+IHxLwEOn+yLKvWv3YQVmoIjzuASNvJuOZVGLBWsX/53u/E9LE77DnAjl+3NmlWimETKSzNaaXnlGkRMLdtn3M4=
+X-Received: by 2002:a05:6358:6184:b0:1b1:aca9:9627 with SMTP id
+ e5c5f4694b2df-1b59f969251mr390945155d.7.1724257216157; Wed, 21 Aug 2024
+ 09:20:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240817-mseal-depessimize-v3-0-d8d2e037df30@gmail.com> <20240817-mseal-depessimize-v3-2-d8d2e037df30@gmail.com>
-In-Reply-To: <20240817-mseal-depessimize-v3-2-d8d2e037df30@gmail.com>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Wed, 21 Aug 2024 09:15:52 -0700
-Message-ID: <CABi2SkUBH+utreVMTd1qEBSvXTPM7Qc1GiwNKjVa9+EeZK8WWA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/7] mm/munmap: Replace can_modify_mm with can_modify_vma
-To: Pedro Falcato <pedro.falcato@gmail.com>
+References: <20240817-mseal-depessimize-v3-0-d8d2e037df30@gmail.com>
+ <20240817-mseal-depessimize-v3-7-d8d2e037df30@gmail.com> <CABi2SkWPiGJTv3FEPxD1OJYUAoePab8jG+CSd58UHqEsBeOYbA@mail.gmail.com>
+In-Reply-To: <CABi2SkWPiGJTv3FEPxD1OJYUAoePab8jG+CSd58UHqEsBeOYbA@mail.gmail.com>
+From: Pedro Falcato <pedro.falcato@gmail.com>
+Date: Wed, 21 Aug 2024 17:20:04 +0100
+Message-ID: <CAKbZUD3Siwq4GZdOy-2n_txG2BMQ=m7PypB53sQxeLcBE4xYGA@mail.gmail.com>
+Subject: Re: [PATCH v3 7/7] selftests/mm: add more mseal traversal tests
+To: Jeff Xu <jeffxu@chromium.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
 	Vlastimil Babka <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
 	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
@@ -84,117 +88,153 @@ Cc: Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <Liam.Howlett@o
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 16, 2024 at 5:18=E2=80=AFPM Pedro Falcato <pedro.falcato@gmail.=
-com> wrote:
+On Wed, Aug 21, 2024 at 4:56=E2=80=AFPM Jeff Xu <jeffxu@chromium.org> wrote=
+:
 >
-> We were doing an extra mmap tree traversal just to check if the entire
-> range is modifiable. This can be done when we iterate through the VMAs
-> instead.
+> Hi Pedro
 >
-> Signed-off-by: Pedro Falcato <pedro.falcato@gmail.com>
-> ---
->  mm/mmap.c | 11 +----------
->  mm/vma.c  | 19 ++++++++++++-------
->  2 files changed, 13 insertions(+), 17 deletions(-)
->
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 3af256bacef3..30ae4cb5cec9 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -1740,16 +1740,7 @@ int do_vma_munmap(struct vma_iterator *vmi, struct=
- vm_area_struct *vma,
->                 unsigned long start, unsigned long end, struct list_head =
-*uf,
->                 bool unlock)
->  {
-> -       struct mm_struct *mm =3D vma->vm_mm;
-> -
-> -       /*
-> -        * Check if memory is sealed, prevent unmapping a sealed VMA.
-> -        * can_modify_mm assumes we have acquired the lock on MM.
-> -        */
-> -       if (unlikely(!can_modify_mm(mm, start, end)))
-> -               return -EPERM;
-Another approach to improve perf  is to clone the vmi (since it
-already point to the first vma), and pass the cloned vmi/vma into
-can_modify_mm check, that will remove the cost of re-finding the first
-VMA.
+> On Fri, Aug 16, 2024 at 5:18=E2=80=AFPM Pedro Falcato <pedro.falcato@gmai=
+l.com> wrote:
+> >
+> > Add more mseal traversal tests across VMAs, where we could possibly
+> > screw up sealing checks. These test more across-vma traversal for
+> > mprotect, munmap and madvise. Particularly, we test for the case where =
+a
+> > regular VMA is followed by a sealed VMA.
+> >
+> > Signed-off-by: Pedro Falcato <pedro.falcato@gmail.com>
+> > ---
+> >  tools/testing/selftests/mm/mseal_test.c | 111 ++++++++++++++++++++++++=
++++++++-
+> >  1 file changed, 110 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/se=
+lftests/mm/mseal_test.c
+> > index 259bef4945e9..0d4d40fb0f88 100644
+> > --- a/tools/testing/selftests/mm/mseal_test.c
+> > +++ b/tools/testing/selftests/mm/mseal_test.c
+> > @@ -766,6 +766,42 @@ static void test_seal_mprotect_partial_mprotect(bo=
+ol seal)
+> >         REPORT_TEST_PASS();
+> >  }
+> >
+> > +static void test_seal_mprotect_partial_mprotect_tail(bool seal)
+> > +{
+> > +       void *ptr;
+> > +       unsigned long page_size =3D getpagesize();
+> > +       unsigned long size =3D 2 * page_size;
+> > +       int ret;
+> > +       int prot;
+> > +
+> > +       /*
+> > +        * Check if a partial mseal (that results in two vmas) works co=
+rrectly.
+> > +        * It might mprotect the first, but it'll never touch the secon=
+d (msealed) vma.
+> > +        */
+> > +
+> > +       setup_single_address(size, &ptr);
+> > +       FAIL_TEST_IF_FALSE(ptr !=3D (void *)-1);
+> > +
+> > +       if (seal) {
+> > +               ret =3D sys_mseal(ptr + page_size, size);
+> you are allocating 2 pages , and I assume you are sealing the second
+> page, so the size should be page_size.
+> ret =3D sys_mseal(ptr + page_size, page_size);
 
-The can_modify_mm then continues from cloned VMI/vma till the end of
-address range, there will be some perf cost there.  However,  most
-address ranges in the real world are within a single VMA,  in
-practice, the perf cost is the same as checking the single VMA, 99.9%
-case.
+Yes, good catch, it appears to be harmless but ofc down to straight luck.
+I'll send a fixup for this and the other mistake down there.
 
-This will help preserve the nice sealing feature (if one of the vma is
-sealed, the entire address range is not modified)
+>
+> > +               FAIL_TEST_IF_FALSE(!ret);
+> > +       }
+> > +
+> > +       ret =3D sys_mprotect(ptr, size, PROT_EXEC);
+> > +       if (seal)
+> > +               FAIL_TEST_IF_FALSE(ret < 0);
+> > +       else
+> > +               FAIL_TEST_IF_FALSE(!ret);
+> > +
+> > +       if (seal) {
+> > +               FAIL_TEST_IF_FALSE(get_vma_size(ptr + page_size, &prot)=
+ > 0);
+> > +               FAIL_TEST_IF_FALSE(prot =3D=3D 0x4);
+> To test partial mprotect, the test needs to add the check for the
+> first page to be changed, Also to avoid the merge,  a PROT_NONE page
+> can to be added in front.
 
-> -
-> -       return do_vmi_align_munmap(vmi, vma, mm, start, end, uf, unlock);
-> +       return do_vmi_align_munmap(vmi, vma, vma->vm_mm, start, end, uf, =
-unlock);
->  }
+No, I'm leaving partial mprotect to be undefined. It doesn't make
+sense to constraint ourselves, since POSIX wording is already loose.
+
 >
->  /*
-> diff --git a/mm/vma.c b/mm/vma.c
-> index 84965f2cd580..5850f7c0949b 100644
-> --- a/mm/vma.c
-> +++ b/mm/vma.c
-> @@ -712,6 +712,12 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct=
- vm_area_struct *vma,
->                 if (end < vma->vm_end && mm->map_count >=3D sysctl_max_ma=
-p_count)
->                         goto map_count_exceeded;
+> > +       }
+> > +
+> > +       REPORT_TEST_PASS();
+> > +}
+> > +
+> > +
+> >  static void test_seal_mprotect_two_vma_with_gap(bool seal)
+> >  {
+> >         void *ptr;
+> > @@ -983,6 +1019,41 @@ static void test_seal_munmap_vma_with_gap(bool se=
+al)
+> >         REPORT_TEST_PASS();
+> >  }
+> >
+> > +static void test_seal_munmap_partial_across_vmas(bool seal)
+> > +{
+> > +       void *ptr;
+> > +       unsigned long page_size =3D getpagesize();
+> > +       unsigned long size =3D 2 * page_size;
+> > +       int ret;
+> > +       int prot;
+> > +
+> > +       /*
+> > +        * Check if a partial mseal (that results in two vmas) works co=
+rrectly.
+> > +        * It might unmap the first, but it'll never unmap the second (=
+msealed) vma.
+> > +        */
+> > +
+> > +       setup_single_address(size, &ptr);
+> > +       FAIL_TEST_IF_FALSE(ptr !=3D (void *)-1);
+> > +
+> > +       if (seal) {
+> > +               ret =3D sys_mseal(ptr + page_size, size);
+> ret =3D sys_mseal(ptr + page_size, page_size);
 >
-> +               /* Don't bother splitting the VMA if we can't unmap it an=
-yway */
-> +               if (!can_modify_vma(vma)) {
-> +                       error =3D -EPERM;
-> +                       goto start_split_failed;
-> +               }
-> +
->                 error =3D __split_vma(vmi, vma, start, 1);
->                 if (error)
->                         goto start_split_failed;
-> @@ -723,6 +729,11 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct=
- vm_area_struct *vma,
->          */
->         next =3D vma;
->         do {
-> +               if (!can_modify_vma(next)) {
-> +                       error =3D -EPERM;
-> +                       goto modify_vma_failed;
-> +               }
-> +
->                 /* Does it split the end? */
->                 if (next->vm_end > end) {
->                         error =3D __split_vma(vmi, next, end, 0);
-> @@ -815,6 +826,7 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct =
-vm_area_struct *vma,
->         __mt_destroy(&mt_detach);
->         return 0;
+> > +               FAIL_TEST_IF_FALSE(!ret);
+> > +       }
+> > +
+> > +       ret =3D sys_munmap(ptr, size);
+> > +       if (seal)
+> > +               FAIL_TEST_IF_FALSE(ret < 0);
+> > +       else
+> > +               FAIL_TEST_IF_FALSE(!ret);
+> > +
+> > +       if (seal) {
+> > +               FAIL_TEST_IF_FALSE(get_vma_size(ptr + page_size, &prot)=
+ > 0);
+> > +               FAIL_TEST_IF_FALSE(prot =3D=3D 0x4);
+> To test partial unmap, the test needs to add the check for the first
+> page to be freed, Also to avoid the merge,  a PROT_NONE page needs to
+> be in front.
+
+I'm not testing partial unmap. Partial unmap does not happen. I have
+told you this before.
+
 >
-> +modify_vma_failed:
->  clear_tree_failed:
->  userfaultfd_error:
->  munmap_gather_failed:
-> @@ -860,13 +872,6 @@ int do_vmi_munmap(struct vma_iterator *vmi, struct m=
-m_struct *mm,
->         if (end =3D=3D start)
->                 return -EINVAL;
+> The test_seal_munmap_partial_across_vmas  shows the behavior
+> difference with in-loop approach and out-loop approach. Previously,
+> both VMAs will not be freed, now the first VMA will be freed, and the
+> second VMA (sealed) won't.
 >
-> -       /*
-> -        * Check if memory is sealed, prevent unmapping a sealed VMA.
-> -        * can_modify_mm assumes we have acquired the lock on MM.
-> -        */
-> -       if (unlikely(!can_modify_mm(mm, start, end)))
-> -               return -EPERM;
-> -
->         /* Find the first overlapping VMA */
->         vma =3D vma_find(vmi, end);
->         if (!vma) {
->
-> --
-> 2.46.0
->
+> This brings to the line you previously mentioned: [1] and I quote:
+> "munmap is atomic and always has been. It's required by POSIX."
+
+This is still true, the comment was a copy-and-paste mindslip. Please
+read the email thread. It has been fixed up by Andrew.
+
+--=20
+Pedro
 
