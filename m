@@ -1,147 +1,238 @@
-Return-Path: <linux-kselftest+bounces-15923-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15924-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 496FA95A671
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 23:22:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBCA695A674
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 23:22:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C6D81C2096E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 21:22:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E974B20BD1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 21:22:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3909E172BD0;
-	Wed, 21 Aug 2024 21:22:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57C8617107F;
+	Wed, 21 Aug 2024 21:22:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b41vSEYJ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nf1XYYOn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
+Received: from mail-ua1-f50.google.com (mail-ua1-f50.google.com [209.85.222.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BEBC16EBE7
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 21:22:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B4D16EBE7
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 21:22:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724275334; cv=none; b=FWEZaOmAjGPNo5GwyamgT7OIaXqv/hgy/5NvZmxIkhgyItQcOCZ6wtcZ+3u7NUFz8Qr+i5hRl7GANh/NOXk8KQxGJDYDQV6bHc2A0RhNO2bn7zdoUJB3TPk+8wL9/orS5kZF0cs8aF0Zh7j+2Z96BVk5lGqeoEWeE3xyjrnzDVo=
+	t=1724275354; cv=none; b=GQe6N1u5gldSDDyIkY194BN00Bwb6hyPQjNGNHrBMOzHzCwuW0cUlf33GjOumTTcdd09dm8kjZz5osPpryYZq/DFNOQJwEgaPpFTL1GinR1ytd0Om8OWPeuDnBOseOoTF86lJeeijTJYJLBXToutRsT8X7brfLjKSP3+ooe3msc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724275334; c=relaxed/simple;
-	bh=ntbKdbbBk0i98nyY5K/WmHuG7ItsUWbGHqYEkizX4Cw=;
+	s=arc-20240116; t=1724275354; c=relaxed/simple;
+	bh=qOrJHLqyW+aEZsVe4wOFQSO4DkdJZjedSxbBxPmEAbk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=atuf1rT5KtmJAgcLvm5f26oxqeyNhgflo+FhvdW6kiak2T2bMA0JRRclZW2kLplNV1blckWITcoBvyyx7X8XxLLeeQcjwNsCaG7rHSKmpjKn1VxlMKNrxwnWdbIaMcshlYJ/7GPRRhk4T02YipCXXHKwip3FNafqcNvz8ggFmb0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b41vSEYJ; arc=none smtp.client-ip=209.85.217.48
+	 To:Cc:Content-Type; b=TSijazKVeOg0wCkWo6a2yOo/tAPZ1wwVbZrOq4QN6Hv9ApHX76qm+Y2/OGEMa3LV6IV9jHTcLD67Gy1Osp+1eAnm8rMHKx7KTwotwUL78IxK0pqz7kTZanY5E6bakCPQUV2UxzdzLCetv5xDSmC9ABXtUBSj0bCj6n0+XjmYqzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nf1XYYOn; arc=none smtp.client-ip=209.85.222.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-498c4d5a912so30223137.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 14:22:02 -0700 (PDT)
+Received: by mail-ua1-f50.google.com with SMTP id a1e0cc1a2514c-83446a5601bso66199241.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 14:22:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724275321; x=1724880121; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1724275351; x=1724880151; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7HiUh4b59dwG4o3FaldcFPlV7Fp3WZ6J0gNjT5dOiLE=;
-        b=b41vSEYJd1Jc02SZZCVMbM9l3tZ0ksfT5nmY0ZL1r0scxJxay6XfZjE8jvzawqhFaF
-         EtrbFgxFcC0mCXQIWBCyZ04Un7oCyudMIziUfGB4UTxx3jJf7vOhGGIjAsuE2PuazTRP
-         l84ZMoGKKs/p+Qyu35+PYfblupuBKNPb9R6aXfahLqy79nk16u9MuKRj3ZL8qky332we
-         tcWRHjRPw2TwgnKxOu1Ofy7FeP3gOCzA30A2OfLetQ9AWrnazI/3dUB0xp35m7PLzxkh
-         J0LbMReMjg9Tz6GO+P4yjJR8ixqtuL5M1FFfu8RAY0YntrjNKM36Qtz05eEf9CzVe2n5
-         2HSw==
+        bh=x0q/kMZVcdzK1KHp97DiENa6VuAc9MIKBadziJMvgO4=;
+        b=nf1XYYOnv67q2SX1dueOSrUCki1jPvn4n0D+zAXGzA7TSG4RDDxYp2x5TZwgumUWb9
+         svJHlcwhcsaeqFOXP9xtqQUO8mGSpyWlQCND6fAQfoIETBLRLMI8m0vZk3HgCAvXv4s/
+         1PEYkUaGz1WOSZ9Q1sV/Xpk6ENb+5e24iAVAE97ZAJe+ehBAXOYeUVOBuElg47jo3cKd
+         br+nPUzWuPEuCun0owgchXkEAhKftHUSM5IxCsDpphgUpuKl2p30O5LeT6AwHh5AYp1A
+         NxLvu99q0Sw+ufZ/KK3NSkDZGSl85YJABsv3KXsP+DyZG4/9YOdcPwXHu6FSqMAwkfBJ
+         6ztQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724275321; x=1724880121;
+        d=1e100.net; s=20230601; t=1724275351; x=1724880151;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7HiUh4b59dwG4o3FaldcFPlV7Fp3WZ6J0gNjT5dOiLE=;
-        b=FMcLTn22MCD4XbR+pcJgsRrOonBBtCRQUwDOe5JOTHUVnPFPWfkwN7sNwnCO3FJp87
-         4xvSdRFrL8FQFNpvvgnuZtOEwlTG9j77X+r5J7wy0zi3VtVjosp16k9MtBWm1ryH466V
-         HzNAKO1xhiYqC3h3JiksQFgb8Oz0RwYor7A4ofdN8qqx/MIuv5w8HIbOuDg2eEwbcv21
-         bLCM/BVTgfflmLojSelJxer4WFxv71q1GUuLayI8ucoh9XuEhe0Az2nqOULyk0WiDHZj
-         RXd7Y1/MgTkGz4I4qP9IlP2ePY7cgLz7DYQ4a4QDpP0t0zvtOjIo6KDozAbx5CC/yAlr
-         ixiA==
-X-Gm-Message-State: AOJu0YyoV+MWYRArJ+0YMRFoALCzbVUuP08KpM6JRiUeQ7FCYX1pQdJ8
-	qc7L4Wb8iTB4zdClNbDIIfeLS/ClXyXTctnMLFhNiQjTATKtDWSUdKY/Imff5frFsNhpGHMHLen
-	v3zYXYhFkxfQxNyP4gyG8awttiGT3hSao/lMFAsldKrStmoolbw==
-X-Google-Smtp-Source: AGHT+IECA16iHqmn7np+PZJGODOZrtXA2/mGVr3LhBZycPj5G6SZvoWcXueqC4dtOfzdw0DvOt1hYTxDu73Lu3Yk5Mo=
-X-Received: by 2002:a05:6102:4a07:b0:498:e25c:738f with SMTP id
- ada2fe7eead31-498e25c76f0mr960409137.18.1724275321303; Wed, 21 Aug 2024
- 14:22:01 -0700 (PDT)
+        bh=x0q/kMZVcdzK1KHp97DiENa6VuAc9MIKBadziJMvgO4=;
+        b=TaPSxf1otkoWJNvvV24od0Z6XniCvcLvMQ8InyQuvPLmRC2RTq5i48ZNAnhZPXl3hf
+         vXdcet6pJY+95N7LqA3TtNtwXpyS7xnJrGI/22jHQ9tebVcn+wGUhzNGBu3CRieCi5HT
+         EZx9SB27hDBm0wnaaKnaiQ9VDPh5iD59DsIdx7oFd2mxglG8aeByI9palT9MEU4fEGU9
+         rPJ/K3fBOOsz1tHekYgqwKVUiaUO5bYjykjfmOFc0obqHUxf4CcgcDjY+a9QYYAZvIJp
+         fck4Sv5vltd32aOrkXOBNsvJCYjOORdhdXF3iGLJY1/Mo9MWuHv+0ZuweCQsroQeDkiB
+         HmDQ==
+X-Gm-Message-State: AOJu0YzXDEq5UV3zFoeGk2V94AhrZY1giNiICR3ODJ7KLYpKVuoMarrN
+	2XnUSUEmwtZUz96FyB6fv4him5dRmAQXZeKDjPnnsl0/ZO3HiArWkSZMwLCfEJ+QbVoU5Pyfnz/
+	9UmD+7ZMF9Uzq+AEfhC35l/vrfyb4TM2turDc
+X-Google-Smtp-Source: AGHT+IHOjmP83L0DNA3yV8qyKxzkDneTYYnJ/QhAhQU32d262cXNxFylFRaD60PAdOE4ivAO0P9v6i32MUrqSfFsEfo=
+X-Received: by 2002:a05:6102:c04:b0:493:bf96:99b5 with SMTP id
+ ada2fe7eead31-498d2fcca45mr4219546137.20.1724275351395; Wed, 21 Aug 2024
+ 14:22:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240821144305.1958-1-michal.wajdeczko@intel.com> <20240821144305.1958-3-michal.wajdeczko@intel.com>
-In-Reply-To: <20240821144305.1958-3-michal.wajdeczko@intel.com>
+References: <20240821144305.1958-1-michal.wajdeczko@intel.com> <20240821144305.1958-5-michal.wajdeczko@intel.com>
+In-Reply-To: <20240821144305.1958-5-michal.wajdeczko@intel.com>
 From: Rae Moar <rmoar@google.com>
-Date: Wed, 21 Aug 2024 17:21:49 -0400
-Message-ID: <CA+GJov7-Mab1FTHA9mG16_1EZD2UgaUK276rUcJKenrWc+oAow@mail.gmail.com>
-Subject: Re: [PATCH 2/4] kunit: Add macro to conditionally expose declarations
- to tests
+Date: Wed, 21 Aug 2024 17:22:18 -0400
+Message-ID: <CA+GJov7ezEK1qmVJ0xteYxfHMmTp+p2sciBvRc4noLDmV2GDXQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] kunit: Add example with alternate function
+ redirection method
 To: Michal Wajdeczko <michal.wajdeczko@intel.com>
 Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	David Gow <davidgow@google.com>, Lucas De Marchi <lucas.demarchi@intel.com>
+	David Gow <davidgow@google.com>, Daniel Latypov <dlatypov@google.com>, 
+	Lucas De Marchi <lucas.demarchi@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Wed, Aug 21, 2024 at 10:43=E2=80=AFAM Michal Wajdeczko
 <michal.wajdeczko@intel.com> wrote:
 >
-> The DECLARE_IF_KUNIT macro will introduces identifiers only if
-> CONFIG_KUNIT is enabled. Otherwise if CONFIG_KUNIT is not enabled
-> no identifiers from the param list will be defined.
+> Add example how to use KUNIT_FIXED_STUB_REDIRECT and compare its
+> usage with the KUNIT_STATIC_STUB_REDIRECT. Also show how the
+> DECLARE_IF_KUNIT macro could be helpful in declaring test data in
+> the non-test data structures.
 >
 > Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
 
 Hello!
 
-I like this macro. I think it could definitely be useful in declaring
-static functions for KUnit testing in the header files. So I am happy
-to add it.
+I really like this test. It provides a great overview of this patch
+series. I just have a couple comments below.
 
-We should also add this to the documentation at some point. I've been
-wanting to revamp the visibility.h macros documentation anyways.
-
+Otherwise,
 Reviewed-by: Rae Moar <rmoar@google.com>
 
 Thanks!
-
 -Rae
 
 > ---
-> Cc: Rae Moar <rmoar@google.com>
 > Cc: David Gow <davidgow@google.com>
+> Cc: Daniel Latypov <dlatypov@google.com>
 > Cc: Lucas De Marchi <lucas.demarchi@intel.com>
 > ---
->  include/kunit/visibility.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
+>  lib/kunit/kunit-example-test.c | 63 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 63 insertions(+)
 >
-> diff --git a/include/kunit/visibility.h b/include/kunit/visibility.h
-> index 0dfe35feeec6..1c23773f826c 100644
-> --- a/include/kunit/visibility.h
-> +++ b/include/kunit/visibility.h
-> @@ -11,6 +11,13 @@
->  #define _KUNIT_VISIBILITY_H
+> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-tes=
+t.c
+> index 3056d6bc705d..120e08d8899b 100644
+> --- a/lib/kunit/kunit-example-test.c
+> +++ b/lib/kunit/kunit-example-test.c
+> @@ -6,8 +6,10 @@
+>   * Author: Brendan Higgins <brendanhiggins@google.com>
+>   */
 >
->  #if IS_ENABLED(CONFIG_KUNIT)
-> +    /**
-> +     * DECLARE_IF_KUNIT - A macro that introduces identifiers only if
-> +     * CONFIG_KUNIT is enabled. Otherwise if CONFIG_KUNIT is not enabled
-> +     * no identifiers will be defined.
-> +     * @body: identifiers to be introduced conditionally
-> +     */
-> +    #define DECLARE_IF_KUNIT(body...)  body
->      /**
->       * VISIBLE_IF_KUNIT - A macro that sets symbols to be static if
->       * CONFIG_KUNIT is not enabled. Otherwise if CONFIG_KUNIT is enabled
-> @@ -26,6 +33,7 @@
->      #define EXPORT_SYMBOL_IF_KUNIT(symbol) EXPORT_SYMBOL_NS(symbol, \
->             EXPORTED_FOR_KUNIT_TESTING)
->  #else
-> +    #define DECLARE_IF_KUNIT(body...)
->      #define VISIBLE_IF_KUNIT static
->      #define EXPORT_SYMBOL_IF_KUNIT(symbol)
->  #endif
+> +#include <linux/workqueue.h>
+>  #include <kunit/test.h>
+>  #include <kunit/static_stub.h>
+> +#include <kunit/visibility.h>
+>
+>  /*
+>   * This is the most fundamental element of KUnit, the test case. A test =
+case
+> @@ -221,6 +223,66 @@ static void example_static_stub_using_fn_ptr_test(st=
+ruct kunit *test)
+>         KUNIT_EXPECT_EQ(test, add_one(1), 2);
+>  }
+>
+> +/* This could be a location of various fixed stub functions. */
+> +static struct {
+> +       DECLARE_IF_KUNIT(int (*add_two)(int i));
+
+Is the use of DECLARE_IF_KUNIT useful here? KUnit should always be
+enabled if this file is being compiled/run. Is the idea to show an
+example here that could be used outside of kunit test files?
+
+Additionally, would it make sense to call this add_two_stub instead to
+make it clear that this is not a definition of the add_two function?
+Or is it helpful for people to see this as an example of how to handle
+multiple stubs: struct of stubs with exact names? Let me know what you
+think.
+
+> +} stubs;
+> +
+> +/* This is a function we'll replace with stubs. */
+> +static int add_two(int i)
+> +{
+> +       /* This will trigger the stub if active. */
+> +       KUNIT_STATIC_STUB_REDIRECT(add_two, i);
+> +       KUNIT_FIXED_STUB_REDIRECT(stubs.add_two, i);
+> +
+> +       return i + 2;
+> +}
+> +
+> +struct add_two_async_work {
+> +       struct work_struct work;
+> +       int param;
+> +       int result;
+> +};
+> +
+> +static void add_two_async_func(struct work_struct *work)
+> +{
+> +       struct add_two_async_work *w =3D container_of(work, typeof(*w), w=
+ork);
+> +
+> +       w->result =3D add_two(w->param);
+> +}
+> +
+> +static int add_two_async(int i)
+> +{
+> +       struct add_two_async_work w =3D { .param =3D i };
+> +
+> +       INIT_WORK_ONSTACK(&w.work, add_two_async_func);
+> +       schedule_work(&w.work);
+> +       flush_work(&w.work);
+> +       destroy_work_on_stack(&w.work);
+> +
+> +       return w.result;
+> +}
+> +
+> +/*
+> + */
+
+It looks like the method description is missing here.
+
+
+
+
+> +static void example_fixed_stub_test(struct kunit *test)
+> +{
+> +       /* static stub redirection works only for KUnit thread */
+> +       kunit_activate_static_stub(test, add_two, subtract_one);
+> +       KUNIT_EXPECT_EQ(test, add_two(1), subtract_one(1));
+> +       KUNIT_EXPECT_NE_MSG(test, add_two_async(1), subtract_one(1),
+> +                           "stub shouldn't be active outside KUnit threa=
+d!");
+> +       kunit_deactivate_static_stub(test, add_two);
+> +       KUNIT_EXPECT_EQ(test, add_two(1), add_two(1));
+> +
+> +       /* fixed stub redirection works for KUnit and other threads */
+> +       kunit_activate_fixed_stub(test, stubs.add_two, subtract_one);
+> +       KUNIT_EXPECT_EQ(test, add_two(1), subtract_one(1));
+> +       KUNIT_EXPECT_EQ(test, add_two_async(1), subtract_one(1));
+> +       kunit_deactivate_fixed_stub(test, stubs.add_two);
+> +       KUNIT_EXPECT_EQ(test, add_two(1), add_two(1));
+> +}
+> +
+>  static const struct example_param {
+>         int value;
+>  } example_params_array[] =3D {
+> @@ -294,6 +356,7 @@ static struct kunit_case example_test_cases[] =3D {
+>         KUNIT_CASE(example_all_expect_macros_test),
+>         KUNIT_CASE(example_static_stub_test),
+>         KUNIT_CASE(example_static_stub_using_fn_ptr_test),
+> +       KUNIT_CASE(example_fixed_stub_test),
+>         KUNIT_CASE(example_priv_test),
+>         KUNIT_CASE_PARAM(example_params_test, example_gen_params),
+>         KUNIT_CASE_SLOW(example_slow_test),
 > --
 > 2.43.0
 >
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/kunit-dev/20240821144305.1958-5-michal.wajdeczko%40intel.com.
 
