@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-15908-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15909-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A17095A529
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 21:15:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 453DE95A52A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 21:15:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00807283037
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 19:15:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CF2EB22929
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 19:15:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C87616EBEA;
-	Wed, 21 Aug 2024 19:15:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E01C16EB4C;
+	Wed, 21 Aug 2024 19:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TWXHm9TP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PEkfvQAX"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C5E16EB7B
-	for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 19:15:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7241416EB7A
+	for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 19:15:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724267704; cv=none; b=fMD1SZnwa1PjEt4lRUJ0wujdzJEyda0IgdDi3E1ZEaVvSqYrPPrfqOygN6lNMGdRQPld3XAXQvxzY1rvpr8uOTgthhemo7IoQHr2wfCwDxT5SfYALIjGD8dAGpzoFHpzvzvzHSKziYE0YXMibpQ0KYy/VKh9azoRa52bWns7hQg=
+	t=1724267705; cv=none; b=huTYVRj8Cc8MZsMO7rBoC1gP8uHVjqllzcNYVWUF7eOIHGPMtrmAnRQO9XBU9b7BhbptbjeIYDvTRrb/ab6c4rB7nJcDGO1DSPxyIOr9VMXIaYGC6dzLZxD7fsrTMeGS61RfS7+MwVd1TcV57VgrHNRdu5jCeWbJmMLB9QP8nN4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724267704; c=relaxed/simple;
-	bh=M4PxTCQ6jyBM/K2D7FkO4ym9mO9TBb3cwyXDa0/+pnU=;
+	s=arc-20240116; t=1724267705; c=relaxed/simple;
+	bh=66Xki9LwmC1Vh1VD6+4OfUi24dYAnWUDKf8ddfIYAlE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WcnY+QjZIR3aBBBIZGOmEKyG5kJHtN6nXa55J4vPTDHaBpw6xnGAEQ5Vp5Q54a3oKlPQAAb/NUQkCV3KUZ8NIqbUUYo0CyRRW6XnUja+uKy5d7r59zQ/h0wdgBJ+tx6pskP948UDJlSP34OlUBxnxOT5Tf4w7+N3yQxg9lfh0FY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TWXHm9TP; arc=none smtp.client-ip=198.175.65.18
+	 MIME-Version; b=oRQFzK94EJA4fOtHRMc2oX5TPfh+FU/+IDRcZH5ZAyBtaECnQgPMYT8NYQIKKFIx8YeFqcgx2xNzdSJsAD0JHPCs45ql7oo90W2InP9N0NWuDq/XSx6UVzrn7WrC0HcWqxXaL3cNsJr8fC/h8tjS3uSANEbFVkoZ7oYnXLak1yI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PEkfvQAX; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724267702; x=1755803702;
+  t=1724267704; x=1755803704;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=M4PxTCQ6jyBM/K2D7FkO4ym9mO9TBb3cwyXDa0/+pnU=;
-  b=TWXHm9TPTV542WKKB11wmYVZSChO4Spo6K38OrGkN1mlLrMZhFGcagnZ
-   rbb/NqOV0kQMvv9gcROaCTTYFwihH76aonnBW+xhRbNHv7AOfO3aPLIZw
-   3TAjfUIlP2zLXdhlKhgcrrrcK3y/LleO6hUnKXw5X8cmldhFA/p1A1fGB
-   xv9rzE3AxlDlaKT5odNaoLsckE8AOMnq2kkhHQP0xCRqn6E2TsVU2weKU
-   DOklHyZE8Zp/Se/eH8wzgfksEmdXfRV9ZvDu0GtpHlkyB0HcIsuPZO5HR
-   rq5s2VzFi85UOiNrTFoFa4Ev2Emk0p2Zi2bG6lXpZ7mn17Xv3MOjYVZiI
-   w==;
-X-CSE-ConnectionGUID: IQ8FzJYGSJ6Pwy0tT/KXew==
-X-CSE-MsgGUID: TFM09fejQe+C5UlsFbEpWQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="22802457"
+  bh=66Xki9LwmC1Vh1VD6+4OfUi24dYAnWUDKf8ddfIYAlE=;
+  b=PEkfvQAXFxaiOgTJTb5yNkilHq4ZijJQ0SlYlAswffaZFaw2GqVysryM
+   3nUhgtSMjSxvKJp5vmSsL8I2B1jFN9vjeEtQgQvUhXABkjR5bnOzznlR7
+   KdCJ0ivsDqHUcKw1eHDCXV1VjsNURuhvZohQQN7QcihofBYsUy4eG+Ft3
+   pTuAf+vVXlwivHrDdEaBlqPHucgW3CQwXCOqrsIJRf78+Y5ZQiXn0mCdR
+   2T5lCeOymafYI3IsqlaWG6Z71h3dS2iQGQyJLh2NI7uqnMeJrvei2lbMo
+   IJ+gzuRV+grS864yam2aqupmV6XDzS/fkeZnCO/m7VL3JRHRSEqbeFVId
+   A==;
+X-CSE-ConnectionGUID: z5cBud28S6K69/NltpHUfA==
+X-CSE-MsgGUID: Cu7eMDaBRiiwuYVgKg5uSg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11171"; a="22802464"
 X-IronPort-AV: E=Sophos;i="6.10,164,1719903600"; 
-   d="scan'208";a="22802457"
+   d="scan'208";a="22802464"
 Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 12:15:02 -0700
-X-CSE-ConnectionGUID: F7FDX5CtRTqgWDODDIdHTg==
-X-CSE-MsgGUID: 4DyOkCd2SP6+mCSfBAIb1A==
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 12:15:04 -0700
+X-CSE-ConnectionGUID: VAxZhLA9SY2D4H8t0qugmg==
+X-CSE-MsgGUID: n84231uXSEKtLkRMbKDQxQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,164,1719903600"; 
-   d="scan'208";a="84357300"
+   d="scan'208";a="84357314"
 Received: from mwajdecz-mobl.ger.corp.intel.com ([10.246.19.248])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 12:15:00 -0700
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2024 12:15:02 -0700
 From: Michal Wajdeczko <michal.wajdeczko@intel.com>
 To: linux-kselftest@vger.kernel.org,
 	kunit-dev@googlegroups.com
 Cc: Michal Wajdeczko <michal.wajdeczko@intel.com>,
 	David Gow <davidgow@google.com>,
 	Rae Moar <rmoar@google.com>
-Subject: [PATCH 2/3] kunit: Improve format of the PTR_EQ|NE|NULL assertion
-Date: Wed, 21 Aug 2024 21:14:11 +0200
-Message-Id: <20240821191412.2031-3-michal.wajdeczko@intel.com>
+Subject: [PATCH 3/3] kunit: Improve format of the KUNIT_EXPECT_EQ assertion
+Date: Wed, 21 Aug 2024 21:14:12 +0200
+Message-Id: <20240821191412.2031-4-michal.wajdeczko@intel.com>
 X-Mailer: git-send-email 2.21.0
 In-Reply-To: <20240821191412.2031-1-michal.wajdeczko@intel.com>
 References: <20240821191412.2031-1-michal.wajdeczko@intel.com>
@@ -78,80 +78,77 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Diagnostic message for failed KUNIT_ASSERT|EXPECT_PTR_EQ|NE|NULL
-shows only raw pointer value, like for this example:
+Diagnostic message for failed KUNIT_ASSERT|EXPECT_EQ shows in
+case of integers only raw values, like for this example:
 
-  void *ptr1 = ERR_PTR(-ENOMEM);
-  void *ptr2 = NULL;
-  KUNIT_EXPECT_PTR_EQ(test, ptr1, ptr2);
-  KUNIT_EXPECT_NULL(test, ptr1);
+  bool flag;
+  KUNIT_EXPECT_EQ(test, 0, kstrtobool("dunno", &flag));
 
 we will get:
 
-  [ ] Expected ptr1 == ptr2, but
-  [ ]     ptr1 == fffffffffffffff4
-  [ ]     ptr2 == 0000000000000000
-  [ ] Expected ptr1 == ((void *)0), but
-  [ ]     ptr1 == ffffffffffffffe4
-  [ ]     ((void *)0) == 0000000000000000
+  [ ] Expected 0 == kstrtobool("dunno", &flag), but
+  [ ]     kstrtobool("dunno", &flag) == -22 (0xffffffffffffffea)
 
-but we can improve this by detecting whether pointer was NULL or
-error, and use friendly error pointer format if possible:
+but we can improve it if the value is within MAX_ERRNO range by
+using more friendly error format:
 
-  [ ] Expected ptr1 == ptr2, but
-  [ ]     ptr1 is -ENOMEM
-  [ ]     ptr2 is NULL
-  [ ] Expected ptr1 == ((void *)0), but
-  [ ]     ptr1 is -ENOMEM
-  [ ]     ((void *)0) is NULL
+  [ ] Expected 0 == kstrtobool("dunno", &flag), but
+  [ ]     kstrtobool("dunno", &flag) == -22 (-EINVAL)
 
 Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
 ---
 Cc: David Gow <davidgow@google.com>
 Cc: Rae Moar <rmoar@google.com>
 ---
- lib/kunit/assert.c | 28 ++++++++++++++++++++++------
- 1 file changed, 22 insertions(+), 6 deletions(-)
+ lib/kunit/assert.c | 32 ++++++++++++++++++++++++++------
+ 1 file changed, 26 insertions(+), 6 deletions(-)
 
 diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
-index 6e4333d0c6a0..8da89043b734 100644
+index 8da89043b734..9dec0551d0d0 100644
 --- a/lib/kunit/assert.c
 +++ b/lib/kunit/assert.c
-@@ -155,12 +155,28 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
- 			  binary_assert->text->left_text,
+@@ -128,15 +128,35 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
  			  binary_assert->text->operation,
  			  binary_assert->text->right_text);
--	string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px\n",
--			  binary_assert->text->left_text,
--			  binary_assert->left_value);
--	string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px",
--			  binary_assert->text->right_text,
--			  binary_assert->right_value);
-+	if (!binary_assert->left_value)
-+		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s is NULL\n",
-+				  binary_assert->text->left_text);
-+	else if (IS_ERR(binary_assert->left_value))
+ 	if (!is_literal(binary_assert->text->left_text, binary_assert->left_value))
+-		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)\n",
++		if (IS_ERR_VALUE(binary_assert->left_value))
++			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (%pe)\n",
++					  binary_assert->text->left_text,
++					  binary_assert->left_value,
++					  ERR_PTR(binary_assert->left_value));
++		else
++			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)\n",
++					  binary_assert->text->left_text,
++					  binary_assert->left_value,
++					  binary_assert->left_value);
++	else if (IS_ERR_VALUE(binary_assert->left_value))
 +		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s is %pe\n",
-+				  binary_assert->text->left_text,
-+				  binary_assert->left_value);
-+	else
-+		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px\n",
-+				  binary_assert->text->left_text,
-+				  binary_assert->left_value);
-+	if (!binary_assert->right_value)
-+		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s is NULL\n",
-+				  binary_assert->text->right_text);
-+	else if (IS_ERR(binary_assert->right_value))
-+		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s is %pe\n",
-+				  binary_assert->text->right_text,
-+				  binary_assert->right_value);
-+	else
-+		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px\n",
-+				  binary_assert->text->right_text,
-+				  binary_assert->right_value);
+ 				  binary_assert->text->left_text,
+-				  binary_assert->left_value,
+-				  binary_assert->left_value);
++				  ERR_PTR(binary_assert->left_value));
+ 	if (!is_literal(binary_assert->text->right_text, binary_assert->right_value))
+-		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)",
++		if (IS_ERR_VALUE(binary_assert->right_value))
++			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (%pe)",
++					  binary_assert->text->right_text,
++					  binary_assert->right_value,
++					  ERR_PTR(binary_assert->right_value));
++		else
++			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)",
++					  binary_assert->text->right_text,
++					  binary_assert->right_value,
++					  binary_assert->right_value);
++	else if (IS_ERR_VALUE(binary_assert->right_value))
++		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s is %pe",
+ 				  binary_assert->text->right_text,
+-				  binary_assert->right_value,
+-				  binary_assert->right_value);
++				  ERR_PTR(binary_assert->right_value));
  	kunit_assert_print_msg(message, stream);
  }
- EXPORT_SYMBOL_GPL(kunit_binary_ptr_assert_format);
+ EXPORT_SYMBOL_GPL(kunit_binary_assert_format);
 -- 
 2.43.0
 
