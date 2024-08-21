@@ -1,110 +1,156 @@
-Return-Path: <linux-kselftest+bounces-15887-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15888-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99E5D95A3CA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 19:22:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 860FB95A3D0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 19:23:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28796B21A52
-	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 17:22:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32FED1F21399
+	for <lists+linux-kselftest@lfdr.de>; Wed, 21 Aug 2024 17:23:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FA431B2516;
-	Wed, 21 Aug 2024 17:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C92681B2527;
+	Wed, 21 Aug 2024 17:23:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gwwShDyu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bi3QKZrS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269A71494D1;
-	Wed, 21 Aug 2024 17:21:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99CE71494D1;
+	Wed, 21 Aug 2024 17:23:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724260917; cv=none; b=ScRqABtBmmH90D6QUa73GjQkIFEi2Z7fsax/4TKzofFFs7bDnTEHTPfkLM9MFN9YQffMxZdWtgbk8Ba19cxdb+b8yQ0YILKeIlii7tDL4KxjFQQfPkBqRz+Pl8jbleKZ6lv1xeV107n+7EABE+iI0JS/KQhyqVJ2QJf7eng6nVE=
+	t=1724261007; cv=none; b=nkRorurncDjRZ+yhuybgkW8k7ePCDL6DW4ZahXwaK7C7cP3+zdHpXLGuac1OryKc+OSOlK/ixUatm9siQvAkmqqN8fVASGUEJWiLz/F5tKjw4DrkXdCczJg3qa2y/Vra32t0YlTDR+9moIskVZaiwSQwHdLQj/47r+GRdQeZXE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724260917; c=relaxed/simple;
-	bh=sKPoAYf57+hToI6UbeW+ihZav4oxCix0Plxz/d46A88=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AKV+Q+14zk3BSAchxJPMHumyigOZWQxFJTPJ4GZME1eXrN67A8+Ha3N2gmHK+eIIv1xUSezQ28XXRH6vIl1CGvH1wbceZl2Rv5rpLDSPJBHbh5cr9C6hRKwn9u1dmtHHdOW8jJdXeje0eHdx95+mkzr8tZb/UgLljNlj2w7goFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gwwShDyu; arc=none smtp.client-ip=209.85.160.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-27032e6dbf2so2667824fac.1;
-        Wed, 21 Aug 2024 10:21:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724260915; x=1724865715; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BRHLUFe+LywX38Cr1uTxqwwQ3KNcmiw4BEYPfkJSfA0=;
-        b=gwwShDyuiRKgUEfqYQmSjYzHHSCW0PgQLnj5Ow8wAYodVsRx3aQeqQIj0MCTlDyHCY
-         7TR/N+MUxAOSlUVB+oDFUJY7OxJ/SkdBCYtMOLDWyS3T+q9XIPIQeqECKstkLGokq6xM
-         h407sMmfPo9Uvvc0lqXlHB8RmPoSBIR3Q5s18ew1S2rjGiNHYvXYlRJ0yv884tIw2Dd7
-         qQCMe5SEi4qHVydEr5HfmApIXLULMaschKN3LsE+VfFEI69XLWNyZT3DqDow3T5Ftthx
-         JjrnGwpI2bb20bMxgi1J0pZUZ60FxvTUV64Ke6Yrt+N3v9vNC3Wxn8FIK0w7PICr2H2m
-         DErA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724260915; x=1724865715;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BRHLUFe+LywX38Cr1uTxqwwQ3KNcmiw4BEYPfkJSfA0=;
-        b=VGjeJ8nvabcMZM/RBcuEU42iv8Ozo8g8sNg3fho4E6aQhRGZFBNlv2JPpUm4hYEG5Q
-         9Ehllyh5wW4U5csqigkPmtargxLIJ96lKJyivPlU0zJ/60k7W7tMvfDZDlpsAz32v8bV
-         pfEmPInp+n38EL9h15Cucq/AQeIe8T/xl2Pa+F5+iJDMh5XAMDrMf5Ntpw7EScq+dv0x
-         t++Oh0Q0zLqJTOq90ibStStHKU1ZCZXp/Cm9rFCMOFL3ygf52+FLTIrAsAoQsiKcdD0h
-         yv1/DQnHp9tGtBV+GmoN519xvb0va1lrx8PxPK0IAU3VSJdjD4wFxYkjAFKZ/FqTQRRJ
-         3qMw==
-X-Forwarded-Encrypted: i=1; AJvYcCUSrRD4rFUq7rBKGucQlJvfGM3vyws1BPUZSKpCWU9UIGqQHHOQFjdSUx37nJLyvP0rODJxtKck@vger.kernel.org, AJvYcCUgRKPyXiDPyDP5rzMiY7CauRhBaCRr0Je+7urM5GiDi4jmGSRT7+T50WZfwoMJEbOaI1ys9PVY/pYgR5M=@vger.kernel.org, AJvYcCVxE2bUYhvihxFc1lQzTfMcrqgNFHtA7uHrYVGa6nq0oAOADUHOOU7tOp72c1ZHCmJUr5vK/2MoRLRSWfk9+sRW@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyFyGJxpqS0/nul4pqxY3REh+kzWHFIGq9EFqYmq87vFILpNch
-	cWCNRJBUxhtR6dKpQF06Lq0fclU9rLbdegjZhAGZgUqDYd2Cr1mpP/Ms6g==
-X-Google-Smtp-Source: AGHT+IERO1RjXSPMs8qscc9E/L4klT06zKW3kuVa0lcGArWZ+HlEMKphefnuwaYC8NSC3/ob7hYjmw==
-X-Received: by 2002:a05:6870:3286:b0:260:3ae9:c94 with SMTP id 586e51a60fabf-2738bee13d5mr2707937fac.51.1724260915117;
-        Wed, 21 Aug 2024 10:21:55 -0700 (PDT)
-Received: from dev0.. ([2405:201:6803:30b3:2256:a75d:4176:9e6a])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7127af3d945sm10185388b3a.189.2024.08.21.10.21.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Aug 2024 10:21:54 -0700 (PDT)
-From: Abhinav Jain <jain.abhinav177@gmail.com>
-To: kuba@kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	jain.abhinav177@gmail.com,
-	javier.carrasco.cruz@gmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH v8 net-next 1/3] selftests: net: Create veth pair for testing in networkless kernel
-Date: Wed, 21 Aug 2024 22:51:46 +0530
-Message-Id: <20240821172146.118441-1-jain.abhinav177@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240821090041.53df4147@kernel.org>
-References: <20240821090041.53df4147@kernel.org>
+	s=arc-20240116; t=1724261007; c=relaxed/simple;
+	bh=IphY4+kHIie7jEzz5vW5+DOoafboWztbY8zIGCvr5V4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f+f5p5Ue6hacFSnRBPr4qIC1P9hEaR4Nsl2e0vjHNWqmhl9OAcjr+Wcs3TNhIWl/x7wqPzvzd2ie1zGZ6KxloOyYfPIgO7WU2Hgtp3U/Jxo5Pbl0yNwxozz6W1Q4GCO4ZUsmkPG/04jVFekQXrjqIMJ5G1MSBtYxf3dpOCiT6Y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bi3QKZrS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C88C32781;
+	Wed, 21 Aug 2024 17:23:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724261007;
+	bh=IphY4+kHIie7jEzz5vW5+DOoafboWztbY8zIGCvr5V4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Bi3QKZrSmr2YIEap/NV50J//OgRWwRS/aU7kSMwbQLaMQWqOIvRhnzttqB8TL4jcy
+	 EjsBPTqAXJqBZ5DwEocYdOVLgZ61spLg1t6lwxL/nwMRcxUHERjgb7AC//CCJ6Qxm6
+	 SeF+WV13tLHiFYQf8STSep/LkuwflygctUSwrBMTgoUSE/TwuegoJabXFIkI9ZUYY3
+	 YPzKispDHwpI9pJFVKLrbfC0cxVL4LY5D1Hw26vvWgHeSlm8bVnmiV3NqrR52pOrrK
+	 5cNKKEUcjHVnlXH3ozuwNRC+9lKw2g/NeKO9PWNz1fYs9t2B7mq8jW65eGcLsXFdLJ
+	 zRgYsdMhUCbeQ==
+Date: Wed, 21 Aug 2024 18:23:18 +0100
+From: Mark Brown <broonie@kernel.org>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+	"brauner@kernel.org" <brauner@kernel.org>
+Cc: "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"mgorman@suse.de" <mgorman@suse.de>,
+	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+	"vschneid@redhat.com" <vschneid@redhat.com>,
+	"kees@kernel.org" <kees@kernel.org>,
+	"will@kernel.org" <will@kernel.org>,
+	"hpa@zytor.com" <hpa@zytor.com>,
+	"jannh@google.com" <jannh@google.com>,
+	"peterz@infradead.org" <peterz@infradead.org>,
+	"yury.khrustalev@arm.com" <yury.khrustalev@arm.com>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"wilco.dijkstra@arm.com" <wilco.dijkstra@arm.com>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"bsegall@google.com" <bsegall@google.com>,
+	"juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+	"x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH RFT v9 4/8] fork: Add shadow stack support to clone3()
+Message-ID: <158190d9-a4a6-4647-84e8-f4ae036d984b@sirena.org.uk>
+References: <20240819-clone3-shadow-stack-v9-0-962d74f99464@kernel.org>
+ <20240819-clone3-shadow-stack-v9-4-962d74f99464@kernel.org>
+ <dc8328dbaa01ca7443eeb75024752c673904e3a4.camel@intel.com>
+ <cc2e7d86-c890-4cb1-8cad-1cfaa9f53dc8@sirena.org.uk>
+ <82be9ec6e43a018add8d9bbc6ba67feee676f32e.camel@intel.com>
+ <5643761f-cc38-4e41-9ddd-f0a1934f8724@sirena.org.uk>
+ <9f022aa4cd3e2dc82d0c963e9d2bf5c7ddd5b92a.camel@intel.com>
+ <77bc051d-b2c9-4e3a-b956-be8879048e20@sirena.org.uk>
+ <5464b915b52bf3b91ec70201736479a5347838af.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="IjUWVOJ38MVk6Iyg"
+Content-Disposition: inline
+In-Reply-To: <5464b915b52bf3b91ec70201736479a5347838af.camel@intel.com>
+X-Cookie: You are false data.
 
-On Wed, 21 Aug 2024 09:00:41 -0700, Jakub Kicinski wrote:
->> I presumed that we would want to run the interface up/down, setup and ethtool tests on both veth.
->> If this is not required, should I submit a v9 removing veth1 from the temp list?
->
-> Yes, please.
->
->> Also, while sending v9, do I add the Review tag from Simon or it has to be reviewed again?
-> 
-> Yes, you should add the review tags
 
-Thanks for confirming, I have sent v9 accordingly:
-https://lore.kernel.org/all/20240821171903.118324-1-jain.abhinav177@gmail.com
+--IjUWVOJ38MVk6Iyg
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Please review, thanks again.
+On Wed, Aug 21, 2024 at 03:54:49PM +0000, Edgecombe, Rick P wrote:
+> On Wed, 2024-08-21 at 13:45 +0100, Mark Brown wrote:
+
+> > It's entirely possible it just leaked.=A0 My own attempts to dig through
+> > the archives haven't turned up anything on the subjecti either, it seems
+> > to have been there from the get go and just gone in without comment.
+> > Equally it could just be that people felt that this was a more tasteful
+> > way of specifying stacks, or that some future use was envisioned.
+
+> Ok, well I'm suspicious, but won't object over it. The rest seems settled=
+ from
+> my side. I may try to attract some other x86 attention to that CMPXCHG he=
+lper,
+> but otherwise.
+
+OK, I'll post what I've got (with the current ABI) today, incorporating
+your x86 fixes and the tighter validation and we can see what people
+think.  Perhaps Christian remembers what's going on there?
+
+> > > Sorry for that. I looked through all the old threads expecting to find
+> > > discussion, but couldn't find an answer. Is clone3 support a dependen=
+cy for
+> > > arm
+> > > shadow stacks?
+
+> > Catalin didn't want to merge the arm64 support without clone3(), and
+> > there's code dependencies as a result.=A0 I could unpick it and reverse
+> > the ordering so long as the arm64 maintainers are OK with that since the
+> > overlap is in the implementation of copy_thread() and some of the
+> > dependency patches.
+
+Actually in an off-list discussion today Catalin indicated that he's
+fine with relaxing that a little so I'm in the process of picking the
+dependency apart.
+
+--IjUWVOJ38MVk6Iyg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbGIoUACgkQJNaLcl1U
+h9DFfAf+OzTGKCg7J4IIOd/eFMUWBcVyGpBEBAM2TCfPeCvemloWt7HhJ4xnjyjP
+L3I8Zh+LcMh8NspUGwghleR+i+o12E+g2/VISH8FHUlD2Wzd3JOeIH2IA6eYo1QT
+h1LlZfDAa8RJd0sJW1ToQWNmDGVzPyQxShCd7P56VwCC/NvN4TulMqiX3h8tJgc7
+ExNQ4kuK4iI1c0AUZcMDxkrFFEZ/JlgCevFCEluNCpX3DzP8ng29DHQQdOLdfWne
+bTPX5hqp/ziLiDKyguBNwyTkqcpXquZTf0KSRkNVP78KNBnbtbJm0Qzr4Vjaol+5
+tFLPcB66vbMI6tV0e7yfeWKAX7NlVg==
+=F/Cr
+-----END PGP SIGNATURE-----
+
+--IjUWVOJ38MVk6Iyg--
 
