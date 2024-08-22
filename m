@@ -1,118 +1,108 @@
-Return-Path: <linux-kselftest+bounces-15999-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16000-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F53095ADA6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 08:37:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66DD895ADA7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 08:37:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F996B22DC4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 06:37:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA6151F230A3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 06:37:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B94F13BC02;
-	Thu, 22 Aug 2024 06:37:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CB3113BC3D;
+	Thu, 22 Aug 2024 06:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zi+lRiKV"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BchYpjVn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B4913B2B1
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2024 06:37:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A88F313B5B7
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2024 06:37:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724308639; cv=none; b=JlxQ8e6rKp21GvJPfglUrKvbQgR8j/3tIudrqmDviHqjOrj/cNwdT3Dw0sfTczsNOnszh7YWqZhEWUCZJZAGyRt+7i9MCFf/zzZ4pHaTilEYaNiSdMdEIGwPxHmqDzHcvr5AxcOOV5goSecyGg7zOggF1NVKYpOjpl1ZATOUoGc=
+	t=1724308642; cv=none; b=DSo3JwIdhuViDI2XUERiCJnqnj5t7qUlcnktpee4OGDaLcFriSdyVz29oBWgbyuhh1GzUb4lHBkZqn5peryV9IdGr1Biix4YoX0N/nBGph0M9jBdpj8AJ30x55dRcNbemlr73KpGa6Sd242yWsW2qV+CIx8zSyDS+Fh8bxOCPjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724308639; c=relaxed/simple;
-	bh=5v/gBHD9pxz1KSSIQmGU87+M9B67zWpZk5yfHq+gOqE=;
+	s=arc-20240116; t=1724308642; c=relaxed/simple;
+	bh=USkWhxEYZ7D/MXDfPMML3ec+RI9pvxAbzMaKUhzg68o=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JkaGtrXuYlmzgF1WO6F0FKL0+OZm1l1jPOHAS2g8NRUsGiEJU8IgSSuqY3/eRMKsQwZyX8Qmxs0KBpWx8su1hV1HVZBVTmjzewT4f3YidNw9EtLr5TAgdHDVovaeZOEabPQvdzd+IKSgBD2cIWnBpX3u0pXAa31lHuiHClP+OEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zi+lRiKV; arc=none smtp.client-ip=209.85.219.54
+	 To:Cc:Content-Type; b=kgVnmyUOFx+TwvN4wQeYfC/X5q5BELw1xd9vkaOpQ0+fBfoChZKjDggl9RVIOy5Gh1bI7QkuQ6GBdAF9N0DbbcpOB6GodkM855JAYs6r5J7Gx6+NlF5BJ8TFSKNxnDbwxFRIP1Tc20rVg1eMm5IyGRzfF+EwxOEDzcLKMUxZOSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BchYpjVn; arc=none smtp.client-ip=209.85.219.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6bf6ea1d34aso2182736d6.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 23:37:17 -0700 (PDT)
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6bf7658f4aaso1991596d6.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 23:37:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724308637; x=1724913437; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1724308639; x=1724913439; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=FDfKXZnCA9wdp5ApzzaavwO41/f/IucvNZ5e2FnUAqw=;
-        b=zi+lRiKV61M451oIsiX4O/rhMrO/BudS6ML8x9dOb1OpG31FfHU4WkOhL9dlBoWayk
-         y5F/Kie3P+0360hAtFGbSYJebfmnw7vhNja0rfBJl6Ai6rEb529w+7JTQjJel8Ku42Eh
-         u9npw7olQ5rk5Fw0/VsiIO6HhalbIW/iOK86B58NyDjrnUrVmhIw667JysDp2EMMI7Kd
-         hbMX3nniWj9QpcxjeriyvFailpeWxJeVXy+cRdhmh8VN9xRuwWOvzgMn6l98Xf43ATrc
-         12WK4BPlZ3iOXT04eNgS9lSA9bVwOfzhO656kYsb7krL7j5eiQQpCcIVOWMrG/QQrNuW
-         8WvA==
+        bh=xje2LfKDStpUg7XfnQ12gi6fbBgUpLLeGbcTGCcvlzs=;
+        b=BchYpjVnPojZR4D+iXHjdD8nICI44ZzWyNTXb0ICAbICr5v0WbMjwEqDAtiPsJlJD/
+         YyYvJu4sWdYCmRbUb1ZuqAB+3D1m2wrpmgb9Q/OvgQ2J1VYSs9VAMoepjmqsZNqssa7c
+         doy4P+G2J+wUj0rIbC4DuinKuO4UB44SugmwBuYcSQfQMuZEAVZahcreGjsO8u7goEt8
+         Q8TwQ63bFWqnzWomV0+mYzf6W/Y7OWZIjG75xzWXT0VLaFhhK8laSXMLhtbL+PCI4IbO
+         zUftIZoh0ePXUKNDqsZ1mOjsbgwMfGCEtbt+pITvnXhKZSUL628wdsZrYlcWQtYqttuV
+         EfJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724308637; x=1724913437;
+        d=1e100.net; s=20230601; t=1724308639; x=1724913439;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=FDfKXZnCA9wdp5ApzzaavwO41/f/IucvNZ5e2FnUAqw=;
-        b=U2QqmimHpAbBSfTm5kc0vgO2a4EqaIBgS8P5Md8QeTx1lYP/ArZDtoFrvHk/FakpeR
-         cGtu6nMW7rllt0LZjZI9GEmFSm2UuVR5j9UNgymArdZ5qO8W8zHMPLFWiN2q5FMLV4r8
-         d7gsMUuLLuPaAtBty+VoseIkiH4Ia2jVzmhbU4TRGRELXnR7jKArrSVsVzizbn6bRZO6
-         PbbkCDslwD2Bty+Y1mIiYR18AZe6zNzfjrSHqbE8CL1n3QqOkz+obfxCMY6IL/O0y1hj
-         FCzpCLHH/1IS4Ru7bt6cLqFq6y4z7ju6IqYqAk4Ul6eMMlSMamTfvJdouX24JC7bHsJj
-         KEkg==
-X-Gm-Message-State: AOJu0Yy5EO5xlGQhBRE6PrkrmcTbBA33OW1J1OfWzlMNiba07enxRaa+
-	aPN4pmaMJJBAcl8/B6jKhtHgv9R/6pcWYXTSoItqReCB1AmoS+kudqR6dlYIutUBTk3to1WIqo9
-	zVbeqNLI/5SKRe0F1Ftk4hS2U+iRxNtHp2ydG
-X-Google-Smtp-Source: AGHT+IEjEe4WVoXsDP2NRYtwcXmq97MhCUkRny0ePeDGZ321iKY0WKCi7jnKKO4DH4zDcszZJjHtTOsN4lzzOD+Cqf4=
-X-Received: by 2002:a05:6214:4293:b0:6bf:8bf8:658e with SMTP id
- 6a1803df08f44-6c1567fba8bmr64881786d6.27.1724308636498; Wed, 21 Aug 2024
- 23:37:16 -0700 (PDT)
+        bh=xje2LfKDStpUg7XfnQ12gi6fbBgUpLLeGbcTGCcvlzs=;
+        b=NgGjhg7NxPwcI0pP2EsOxitkAtlhvmd5teNbsr0LsRObg+kxggBNZiPqaMB/Xrdlz4
+         nd0DpfURR0h8iVAyDS+bnmYAiVMrIfW74accmbFh6OiQ4r1TZu1zBiJRV2pHR6OfGHdm
+         piNDfMVQuS/se1BGG6/wWKk5UVgBBUe/25RvTV1Ph7NFWXveoudP4Y4lVO8iwQTWgb9c
+         apxbDWJ2+ETMd5/CNL0q4zOtO4s7B02r5SU/Z3pdLXtYZATBABmtMBG4Enh7qhtR6KMc
+         1YwAYVLeREOFcTplKmrFbt2A9Gv2SwH3HADC/Tc8rnzzreiB1uEpHkSnFJ+cq5TbAVW6
+         lH5g==
+X-Gm-Message-State: AOJu0YwI8QRjdB3zC/lnxCA93XIO/oM4dPPM/agE9bOdU5s1/bVRRVFy
+	CbBZUwpSQN36wlrCdxspmUmhAJd0r3dPH+05p/us02PgSRYZhNnDU/seJGw/RHCaE7jN9FTYSfR
+	lf63lIMm2EEzGxL71ty2T4dfk29IsHBYTX6s56RAPNJO/hRCm5L6k
+X-Google-Smtp-Source: AGHT+IEo7/0lUeWaK/KkipNvCqatmEROADMoZXKnf2ym/MY4xBRHgRsnW3exEIYtRaKPJDHsaYK8tK9Jvhg8YxfU4g0=
+X-Received: by 2002:a05:6214:5f03:b0:6bf:8ccd:a38 with SMTP id
+ 6a1803df08f44-6c155e25acamr53118626d6.57.1724308639361; Wed, 21 Aug 2024
+ 23:37:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240821191412.2031-1-michal.wajdeczko@intel.com> <20240821191412.2031-3-michal.wajdeczko@intel.com>
-In-Reply-To: <20240821191412.2031-3-michal.wajdeczko@intel.com>
+References: <20240821191412.2031-1-michal.wajdeczko@intel.com> <20240821191412.2031-4-michal.wajdeczko@intel.com>
+In-Reply-To: <20240821191412.2031-4-michal.wajdeczko@intel.com>
 From: David Gow <davidgow@google.com>
-Date: Thu, 22 Aug 2024 14:37:05 +0800
-Message-ID: <CABVgOSkcJtx+n_6isH=H6enUj7CUvbpLWjUSe35T0Nh_75D45A@mail.gmail.com>
-Subject: Re: [PATCH 2/3] kunit: Improve format of the PTR_EQ|NE|NULL assertion
+Date: Thu, 22 Aug 2024 14:37:08 +0800
+Message-ID: <CABVgOS=ScU-9YYunz686zVwmrt+yebxB+=z8U-Qm3s-E=QnreQ@mail.gmail.com>
+Subject: Re: [PATCH 3/3] kunit: Improve format of the KUNIT_EXPECT_EQ assertion
 To: Michal Wajdeczko <michal.wajdeczko@intel.com>
 Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
 	Rae Moar <rmoar@google.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000cb4b3d06203fe307"
+	boundary="000000000000f673b306203fe391"
 
---000000000000cb4b3d06203fe307
+--000000000000f673b306203fe391
 Content-Type: text/plain; charset="UTF-8"
 
 On Thu, 22 Aug 2024 at 03:15, Michal Wajdeczko
 <michal.wajdeczko@intel.com> wrote:
 >
-> Diagnostic message for failed KUNIT_ASSERT|EXPECT_PTR_EQ|NE|NULL
-> shows only raw pointer value, like for this example:
+> Diagnostic message for failed KUNIT_ASSERT|EXPECT_EQ shows in
+> case of integers only raw values, like for this example:
 >
->   void *ptr1 = ERR_PTR(-ENOMEM);
->   void *ptr2 = NULL;
->   KUNIT_EXPECT_PTR_EQ(test, ptr1, ptr2);
->   KUNIT_EXPECT_NULL(test, ptr1);
+>   bool flag;
+>   KUNIT_EXPECT_EQ(test, 0, kstrtobool("dunno", &flag));
 >
 > we will get:
 >
->   [ ] Expected ptr1 == ptr2, but
->   [ ]     ptr1 == fffffffffffffff4
->   [ ]     ptr2 == 0000000000000000
->   [ ] Expected ptr1 == ((void *)0), but
->   [ ]     ptr1 == ffffffffffffffe4
->   [ ]     ((void *)0) == 0000000000000000
+>   [ ] Expected 0 == kstrtobool("dunno", &flag), but
+>   [ ]     kstrtobool("dunno", &flag) == -22 (0xffffffffffffffea)
 >
-> but we can improve this by detecting whether pointer was NULL or
-> error, and use friendly error pointer format if possible:
+> but we can improve it if the value is within MAX_ERRNO range by
+> using more friendly error format:
 >
->   [ ] Expected ptr1 == ptr2, but
->   [ ]     ptr1 is -ENOMEM
->   [ ]     ptr2 is NULL
->   [ ] Expected ptr1 == ((void *)0), but
->   [ ]     ptr1 is -ENOMEM
->   [ ]     ((void *)0) is NULL
+>   [ ] Expected 0 == kstrtobool("dunno", &flag), but
+>   [ ]     kstrtobool("dunno", &flag) == -22 (-EINVAL)
 >
 > Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
 > ---
@@ -120,72 +110,73 @@ On Thu, 22 Aug 2024 at 03:15, Michal Wajdeczko
 > Cc: Rae Moar <rmoar@google.com>
 > ---
 
-I have some mixed feelings about this one. Personally, I'd rather this
-continue to use '==' rather than 'is', just for consistency in case
-anyone wants to parse these.
+I wasn't sure about this at first, but looking at it, I think I like
+it, since the numeric value is still given. _Maybe_ it'd be nicer to
+include both the hex and the error name, but I suspect that's just
+going to clutter things up more.
 
-Equally, I'd like to have the actual value printed for error pointers.
-The PTR_NULL assertions are not intended for use with error pointers,
-and the PTR_{EQ,NE} ones may or may not treat high pointers as actual
-addresses, or as errors. (We often need the exact value in debugging
-some of the usercopy tests, which do horrific things like rely on
-pointer wraparound, so have non-error 0xffffffxx pointers around.)
+So,
+Reviewed-by: David Gow <davidgow@google.com>
 
-I'd personally go for, e.g, "ptr1 == fffffffffffffff4 (-ENOMEM)".
-
-Thanks,
+Cheers,
 -- David
 
 
 
-
->  lib/kunit/assert.c | 28 ++++++++++++++++++++++------
->  1 file changed, 22 insertions(+), 6 deletions(-)
+>  lib/kunit/assert.c | 32 ++++++++++++++++++++++++++------
+>  1 file changed, 26 insertions(+), 6 deletions(-)
 >
 > diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
-> index 6e4333d0c6a0..8da89043b734 100644
+> index 8da89043b734..9dec0551d0d0 100644
 > --- a/lib/kunit/assert.c
 > +++ b/lib/kunit/assert.c
-> @@ -155,12 +155,28 @@ void kunit_binary_ptr_assert_format(const struct kunit_assert *assert,
->                           binary_assert->text->left_text,
+> @@ -128,15 +128,35 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
 >                           binary_assert->text->operation,
 >                           binary_assert->text->right_text);
-> -       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px\n",
-> -                         binary_assert->text->left_text,
-> -                         binary_assert->left_value);
-> -       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px",
-> -                         binary_assert->text->right_text,
-> -                         binary_assert->right_value);
-> +       if (!binary_assert->left_value)
-> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s is NULL\n",
-> +                                 binary_assert->text->left_text);
-> +       else if (IS_ERR(binary_assert->left_value))
+>         if (!is_literal(binary_assert->text->left_text, binary_assert->left_value))
+> -               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)\n",
+> +               if (IS_ERR_VALUE(binary_assert->left_value))
+> +                       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (%pe)\n",
+> +                                         binary_assert->text->left_text,
+> +                                         binary_assert->left_value,
+> +                                         ERR_PTR(binary_assert->left_value));
+> +               else
+> +                       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)\n",
+> +                                         binary_assert->text->left_text,
+> +                                         binary_assert->left_value,
+> +                                         binary_assert->left_value);
+> +       else if (IS_ERR_VALUE(binary_assert->left_value))
 > +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s is %pe\n",
-> +                                 binary_assert->text->left_text,
-> +                                 binary_assert->left_value);
-> +       else
-> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px\n",
-> +                                 binary_assert->text->left_text,
-> +                                 binary_assert->left_value);
-> +       if (!binary_assert->right_value)
-> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s is NULL\n",
-> +                                 binary_assert->text->right_text);
-> +       else if (IS_ERR(binary_assert->right_value))
-> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s is %pe\n",
-> +                                 binary_assert->text->right_text,
-> +                                 binary_assert->right_value);
-> +       else
-> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %px\n",
-> +                                 binary_assert->text->right_text,
-> +                                 binary_assert->right_value);
+>                                   binary_assert->text->left_text,
+> -                                 binary_assert->left_value,
+> -                                 binary_assert->left_value);
+> +                                 ERR_PTR(binary_assert->left_value));
+>         if (!is_literal(binary_assert->text->right_text, binary_assert->right_value))
+> -               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)",
+> +               if (IS_ERR_VALUE(binary_assert->right_value))
+> +                       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (%pe)",
+> +                                         binary_assert->text->right_text,
+> +                                         binary_assert->right_value,
+> +                                         ERR_PTR(binary_assert->right_value));
+> +               else
+> +                       string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)",
+> +                                         binary_assert->text->right_text,
+> +                                         binary_assert->right_value,
+> +                                         binary_assert->right_value);
+> +       else if (IS_ERR_VALUE(binary_assert->right_value))
+> +               string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s is %pe",
+>                                   binary_assert->text->right_text,
+> -                                 binary_assert->right_value,
+> -                                 binary_assert->right_value);
+> +                                 ERR_PTR(binary_assert->right_value));
 >         kunit_assert_print_msg(message, stream);
 >  }
->  EXPORT_SYMBOL_GPL(kunit_binary_ptr_assert_format);
+>  EXPORT_SYMBOL_GPL(kunit_binary_assert_format);
 > --
 > 2.43.0
 >
 
---000000000000cb4b3d06203fe307
+--000000000000f673b306203fe391
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -275,14 +266,14 @@ BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
 hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
 AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
-eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQg5lTn+6JQlxyYDWYwziNUVEt0aqIa
-8D5OFVyAZHGgZY8wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQw
-ODIyMDYzNzE3WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgxx7TFDlODuQ6h5lhLNiHXdpYeISi
+Rik+84Yvk0KVFmEwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQw
+ODIyMDYzNzE5WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBADnNTiJoweibptsjXfOeS6H2cWKGN19YsIaMxLN2wbCzCRWA
-Ycjxhfi5NXi3FEP35Xx2IdP+NHcogzOPFyi5LbTUuR+GEY6v0ubjVYmQ1qw9I2lIykwKWwmMTHe0
-FH/BhCqAH8SnKpZ1HGMwviNebl39Qhz6Ip4/jU93cbmEn3OVRaeE3k1MfwiAYvWagnNupCBVVa7T
-fABhBD/qaSLZsFlFzkNLoWq+Wsae/rqvZxetZalQQTU3NZRjqUK0ensKAIZl+HduoeM+mbFSraSY
-sivIClF4QWe3wVh2V2UIvBDtkijv/mDZrtKY39IjTXyezvNDZLJ4tzpHktxIHJy1ZbQ=
---000000000000cb4b3d06203fe307--
+BAIBMA0GCSqGSIb3DQEBAQUABIIBANnjeCnS5ujEmwQuTmEkxkmodqVBSsyD4RwvPSVu1+FRywyI
+6bVJFheMwXFYkenS6RqzPyJaNqQioxnV+OtkDeV1aRnF9Yh5wg3QVJANytuiBvRFsKM4lB1DNOsp
+ZO/Wj74KK+e3B3COdlraVqB5o4t1u9mWuJ6cpUx3nYFXRges51QmGNA/H4uPLUHKqqTqS8IkzHMP
+5iD3wXedPEzZ1DOMUiwf5l+/yMhr+HanBmTmMgJmlcbxTlB9FYonWbLyBtv4il4e5bEmxvbwo/rT
+HLe5c8kDSQarWODryCvNJ0ap5OGrd0rXrJ6drNNO11OuR7/md0yblcFdc01MMxwcYsA=
+--000000000000f673b306203fe391--
 
