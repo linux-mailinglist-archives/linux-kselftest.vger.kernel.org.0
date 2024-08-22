@@ -1,168 +1,120 @@
-Return-Path: <linux-kselftest+bounces-15981-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15982-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33C9A95AA30
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 03:29:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BDCF95AABF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 03:56:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B5D0AB24685
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 01:29:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1E192812DB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 01:56:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BD9F383A9;
-	Thu, 22 Aug 2024 01:24:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4798311712;
+	Thu, 22 Aug 2024 01:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iEBEIs5j"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TH3F0Pma"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6582536B11;
-	Thu, 22 Aug 2024 01:24:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C65412B64;
+	Thu, 22 Aug 2024 01:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724289844; cv=none; b=oFnsEIGeHhiqqqkNeCDRyR0eT2+pQIsPkfCN0xrtfXByWrklNdqT63wLl8eqsCFgLKNm5Wq9EQigg3c6LpXRN49qqS57r3BlX59ti6A6eLtYcoQ14UqoYy63Aa4Smu4U0mP0nMNONb/QOGIxlvo9GdbkeYl9o7pMGy/OaPXerO4=
+	t=1724291773; cv=none; b=Fd9sKwCzQlo0hBHSQxk8ltcw97aEe79A5hIzR/VvrcegEZVAMNKwKslK9VwCtOqGCB67NHmsowh8mg04MZUMAmCr8dFe2crwE/LX9R38xwYKagPl1FwZxYbu0JdjPc8Eh4EtMxBllfV02I6diAmf6Zo5WzTqjj0nTeehGG1grDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724289844; c=relaxed/simple;
-	bh=W5oN69xYg0RDvkVAq7OBhN9me4eHC7ENTR8wdYTObEg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cLM05Qpn12w1dHTyyDzPWnb0P1CrLhNE7OXsbmLfun8ifjyhyVbIKd+4487W+LRZKcIvzEuWL5B6wcczPiveH9hswAmF5PEQCypTOwbgHKlAWmcMQQUPzFb94tYw0CdHxv3e6nFup/fLeHljjbLnUPNgpdNjVZSNeiMU4Kg4V3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iEBEIs5j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B08CC32781;
-	Thu, 22 Aug 2024 01:23:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724289844;
-	bh=W5oN69xYg0RDvkVAq7OBhN9me4eHC7ENTR8wdYTObEg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=iEBEIs5j4ESOyOuAI+C1WdLslac5LfFf4kq+lkNdmDRnyIC5yWmiqWDSMJJspLip0
-	 ml9uTFJFpjA0iZB8kpDqcRdUVrEAN3rgae1b0KWClRy/Dt5K3C0ScTk7Y4SWdSQ+0J
-	 J9ynhy9+9DciCFx1xbPMettqUNcK0C/8oPiqZYnE2aLmN//nbDx9gRXLGbrz6FOC9N
-	 QJZK6dQb2Eneww26LRoFWKUpXmLr8bA0krMzkGL40Umad43ef518YlBAcLdGrQ/xva
-	 UmXJOYn+WGgW0hN/+th9qactP+9HaSOVf/vKYQVY8GyrjynJ7JP8i2m+nC2YGho1yB
-	 C5cIrr/0/qsMQ==
-From: Mark Brown <broonie@kernel.org>
-Date: Thu, 22 Aug 2024 02:15:42 +0100
-Subject: [PATCH v11 39/39] KVM: selftests: arm64: Add GCS registers to
- get-reg-list
+	s=arc-20240116; t=1724291773; c=relaxed/simple;
+	bh=Ki+uuNliTSRz+n/S8TmqqO+GXqDsD0Z1+MPVzlJZDD4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PS6pTz9PrxIJ2WYOy4ewCtF6sSTglOhQf7658vEHGUEkTQ6//li/PHJEF9EA2UI7iPX/qqwN6iTlpBVFkYK+ZaAyhXNM7y4zzab6yYoGk3lZZXKaabXW0RhnQgDNfPsN56DeAn/Wa1duD941RHBVggkSfViiMtJDchQ2d4ZDBfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TH3F0Pma; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4281ca54fd3so1625245e9.2;
+        Wed, 21 Aug 2024 18:56:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724291770; x=1724896570; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EqLZ5AiejzNGykZtRwZ2mwTEdbcNMWwbVMbeONPG0f8=;
+        b=TH3F0PmaPxr3hS3cy/Ceir0tcJ4x5fJ/FBk/rEJPxNVrw1Zj6IiyC5LztTsY8rtO3R
+         J6OgDEDJdTIw1Yboep2Oq2z6BAn/cx9mxqcIU6UisN9fiAglzIMYELtbA6wMvNWa1OdG
+         cpI4nUzjmZpoxzzyQHQ6l+Z8U6bGw6uE3xr0tgpqDBMs1AICO00v4W3MayybIjYAZE/z
+         fEUyIsbvu037Zu3xe960mPAqdgZGRZEimYEzR+aTlb2Vty2AOrl/PATYVj3BL86OTSMR
+         iXuFj1+WPdxAdn5uXlekMAlb+iV7NbJSc4/lJkitQQRssS/lMLXNsrz4DDAtQNKhO8JW
+         78EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724291770; x=1724896570;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EqLZ5AiejzNGykZtRwZ2mwTEdbcNMWwbVMbeONPG0f8=;
+        b=nxogOMLPFOYKWRYasnpgDc7vlio8DTG0HtFt+yPlpt6tMBG1kaIO8Ms4jMudabTRhc
+         hMqguRO7lGLdYSsLQ58hRZENUldN3aGqN02EQdyrqv0HLrwVkmnm/EHgOHOErHIjqjdb
+         KOmj46O5o2vPzR9s/5l60w7/xly2L4B5EqhaBzhrxVysmdMhbgS8FufO04ttF0vQ930C
+         QdYCIrRXGD3Qkt4UQkZUFfaJhOhfDyIFn0iYYifFi3/t890alQ46YvTfu9NWY8ISrICP
+         K2Wq/dSWAa9AHs4FcIrH9Rsx6K/oPuMO4myiogj60VginlVVL+AxX8xAn5Vw8pfuUa+V
+         7QYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWMA9Q8bi6uLCofmJTqoI6QP8Q/ELy5B7+K6sypNHF79oEH0y6mXR8KvMk6ATielfsF7cNnYS5dL1wEyujBl/M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhsLKED6AqFv0dSdWBub868cIHqeEjtP2HA7DQJK1q6H02rx2q
+	9mjkXHPls/PrpYtDK9JOOCnoUMb9FmCmodCG+SvwlTtbIN+wP3Nyfofk+4eVXh9HeuiM+1c+hOL
+	wxhsjwE7RopqjBAbq70pzPXUo7Bo=
+X-Google-Smtp-Source: AGHT+IFWpXNoDjmxs4Yt77ioTJnh981UbqwO+V7BBtqQoCtRfR5Pfe7Fn6trBzm8ym+7ax9E+OP61r3v0dhxLgDlkeE=
+X-Received: by 2002:a5d:525a:0:b0:371:7009:c26f with SMTP id
+ ffacd0b85a97d-372fd8319a9mr2523583f8f.63.1724291769473; Wed, 21 Aug 2024
+ 18:56:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240822-arm64-gcs-v11-39-41b81947ecb5@kernel.org>
-References: <20240822-arm64-gcs-v11-0-41b81947ecb5@kernel.org>
-In-Reply-To: <20240822-arm64-gcs-v11-0-41b81947ecb5@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Andrew Morton <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, 
- Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
- Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, 
- Shuah Khan <shuah@kernel.org>, 
- "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
- Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, 
- Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>
-Cc: "H.J. Lu" <hjl.tools@gmail.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Florian Weimer <fweimer@redhat.com>, Christian Brauner <brauner@kernel.org>, 
- Thiago Jung Bauermann <thiago.bauermann@linaro.org>, 
- Ross Burton <ross.burton@arm.com>, 
- Yury Khrustalev <yury.khrustalev@arm.com>, 
- Wilco Dijkstra <wilco.dijkstra@arm.com>, 
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
- kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
- linux-arch@vger.kernel.org, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-riscv@lists.infradead.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-37811
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2418; i=broonie@kernel.org;
- h=from:subject:message-id; bh=W5oN69xYg0RDvkVAq7OBhN9me4eHC7ENTR8wdYTObEg=;
- b=owGbwMvMwMWocq27KDak/QLjabUkhrRjE52aWuqWJvl43G370Cb14vXG7leGPtlWHj9eFSeamTBo
- X9LqZDRiYWDkYpAVU2RZ+yxjVXq4xNb5j+a/ghnEygQyhYGLUwAu0sP+veD2HY0mXtEA/3Nzfa4Jyf
- PZBDNMzlaYvXxd9UdPmQeKau5R/7pmxk1bVJ80KV7nZ/iJg4lH3l6T79aqUAtX1T7NdHV6wdU22f2z
- DoV6ifrOnBJdf1xGTvvHPIXgYzx+IXyfDnGuTNt9Jn1zzH2fmQqTrCclRJxxLr+9bOLp1XfPyQj6yc
- /iSVB6KvkueNHaLp8L5yP/BqR1nWaqPGK77aHK4sT4ptQ/SlOm5x6/HTXHf7th4Q1tZn217NVH7xju
- 0hSU+cvxlVlNNSErf+uMqFO19qckeCd42zv9/LSrXmn+w9OaR+uVBaI+iD31MpvczNFmEhmVLF5/wT
- fTwpAtSN7+ZuDJ9Z9Es+4WMQIA
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+References: <cover.1724216108.git.tony.ambardar@gmail.com> <62a2ef41629ad5ef7db48d720959527462e1beca.1724216108.git.tony.ambardar@gmail.com>
+In-Reply-To: <62a2ef41629ad5ef7db48d720959527462e1beca.1724216108.git.tony.ambardar@gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 21 Aug 2024 18:55:58 -0700
+Message-ID: <CAADnVQJ2XW0QwSGAaqzEUY4jozF6ML3dxr0mE7hGct0-6hKNnA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v1 5/8] libbpf: Support opening bpf objects of
+ either endianness
+To: Tony Ambardar <tony.ambardar@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Ilya Leoshkevich <iii@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-GCS adds new registers GCSCR_EL1, GCSCRE0_EL1, GCSPR_EL1 and GCSPR_EL0. Add
-these to those validated by get-reg-list.
+On Wed, Aug 21, 2024 at 2:10=E2=80=AFAM Tony Ambardar <tony.ambardar@gmail.=
+com> wrote:
+>
+>
+> +static inline void bpf_insn_bswap(struct bpf_insn *insn)
+> +{
+> +       /* dst_reg & src_reg nibbles */
+> +       __u8 *regs =3D (__u8 *)insn + offsetofend(struct bpf_insn, code);
+> +
+> +       *regs =3D (*regs >> 4) | (*regs << 4);
+> +       insn->off =3D bswap_16(insn->off);
+> +       insn->imm =3D bswap_32(insn->imm);
+> +}
 
-Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/kvm/aarch64/get-reg-list.c | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+This is really great!
+Thank you for working on it.
 
-diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-index 709d7d721760..9785f41e6042 100644
---- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-@@ -29,6 +29,24 @@ static struct feature_id_reg feat_id_regs[] = {
- 		0,
- 		1
- 	},
-+	{
-+		ARM64_SYS_REG(3, 0, 2, 5, 0),	/* GCSCR_EL1 */
-+		ARM64_SYS_REG(3, 0, 0, 4, 1),	/* ID_AA64PFR1_EL1 */
-+		44,
-+		1
-+	},
-+	{
-+		ARM64_SYS_REG(3, 0, 2, 5, 1),	/* GCSPR_EL1 */
-+		ARM64_SYS_REG(3, 0, 0, 4, 1),	/* ID_AA64PFR1_EL1 */
-+		44,
-+		1
-+	},
-+	{
-+		ARM64_SYS_REG(3, 0, 2, 5, 2),	/* GCSCRE0_EL1 */
-+		ARM64_SYS_REG(3, 0, 0, 4, 1),	/* ID_AA64PFR1_EL1 */
-+		44,
-+		1
-+	},
- 	{
- 		ARM64_SYS_REG(3, 0, 10, 2, 2),	/* PIRE0_EL1 */
- 		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
-@@ -40,6 +58,12 @@ static struct feature_id_reg feat_id_regs[] = {
- 		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
- 		4,
- 		1
-+	},
-+	{
-+		ARM64_SYS_REG(3, 3, 2, 5, 1),	/* GCSPR_EL0 */
-+		ARM64_SYS_REG(3, 0, 0, 4, 1),	/* ID_AA64PFR1_EL1 */
-+		44,
-+		1
- 	}
- };
- 
-@@ -460,6 +484,9 @@ static __u64 base_regs[] = {
- 	ARM64_SYS_REG(3, 0, 2, 0, 1),	/* TTBR1_EL1 */
- 	ARM64_SYS_REG(3, 0, 2, 0, 2),	/* TCR_EL1 */
- 	ARM64_SYS_REG(3, 0, 2, 0, 3),	/* TCR2_EL1 */
-+	ARM64_SYS_REG(3, 0, 2, 5, 0),	/* GCSCR_EL1 */
-+	ARM64_SYS_REG(3, 0, 2, 5, 1),	/* GCSPR_EL1 */
-+	ARM64_SYS_REG(3, 0, 2, 5, 2),	/* GCSCRE0_EL1 */
- 	ARM64_SYS_REG(3, 0, 5, 1, 0),	/* AFSR0_EL1 */
- 	ARM64_SYS_REG(3, 0, 5, 1, 1),	/* AFSR1_EL1 */
- 	ARM64_SYS_REG(3, 0, 5, 2, 0),	/* ESR_EL1 */
-@@ -475,6 +502,7 @@ static __u64 base_regs[] = {
- 	ARM64_SYS_REG(3, 0, 13, 0, 4),	/* TPIDR_EL1 */
- 	ARM64_SYS_REG(3, 0, 14, 1, 0),	/* CNTKCTL_EL1 */
- 	ARM64_SYS_REG(3, 2, 0, 0, 0),	/* CSSELR_EL1 */
-+	ARM64_SYS_REG(3, 3, 2, 5, 1),	/* GCSPR_EL0 */
- 	ARM64_SYS_REG(3, 3, 13, 0, 2),	/* TPIDR_EL0 */
- 	ARM64_SYS_REG(3, 3, 13, 0, 3),	/* TPIDRRO_EL0 */
- 	ARM64_SYS_REG(3, 3, 14, 0, 1),	/* CNTPCT_EL0 */
+This idea was brought up a couple times, since folks want to compile
+bpf prog once, embed it into their user space binary,
+and auto adjust to target endianness.
+Cross compilation isn't important to them,
+but the ability to embed a single .o instead of two .o-s is a big win.
 
--- 
-2.39.2
-
+It's great that the above insn, elf and btf adjustments are working.
+Since endianness is encoded in elf what's the point of
+extra btf_ext__endianness libbpf api?
+Aren't elf and btf.ext suppose to be in the same endianness all the time?
 
