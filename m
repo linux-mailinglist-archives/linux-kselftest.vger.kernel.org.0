@@ -1,163 +1,143 @@
-Return-Path: <linux-kselftest+bounces-15993-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15994-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C15DA95AD3B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 08:14:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C5AF95AD3C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 08:14:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C30501C21397
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 06:14:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF3041F22718
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 06:14:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71526132464;
-	Thu, 22 Aug 2024 06:13:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F643136320;
+	Thu, 22 Aug 2024 06:14:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T8YwKCa5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0+xhdLHi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B58249F9
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2024 06:13:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8BE0249F9
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2024 06:14:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724307239; cv=none; b=gJe1N0C0caEd4yIsSepTup5XCzNoZaClxtWGCsG9MQRFXekQV//kEcF3m5YYOWS4Jrijyh3KDmxWuwoMaZOs1l4imoZ9CdC3bd6Q9zmznjEqCG3Bsq1KVbZ31OBGnfEXF7ReYarU9F2FFJfMZzulprdkFFTLtbu4TSPVQ18JSQE=
+	t=1724307250; cv=none; b=rthso/RiAcxqMAI3ctUHicIvS5K1qcr/b4QXR1MN5L1pWllEJffDGeGeW843kniAdKo5aSJKNHG7lP1ngglUSuks/j+8SlkECIRO51IbAbmEB0u4GMyvlt2kcfJOBjJ0ou2vsq3Ld5NqZ5BySI7Gfq/p7bw2pYzaNJfQTXx3/7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724307239; c=relaxed/simple;
-	bh=yUFsgflmhByP0FHs07MLG9QPA2N1F3tzQn0QgjV1Jvw=;
+	s=arc-20240116; t=1724307250; c=relaxed/simple;
+	bh=2AXX61ZDkg1sWq6Cy5ffAUieyOuHx47h2AU1UwBzhTU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E0bBhU0jPwF1T1bdPo60B0VccP4GjsBVQ3GX54nuPp2btNJv/odu3lc1pnb2XfqMYKHlv3l/NF7KdWoJJCSMZiOgSM+hs1M0OdCx/QzBYrtIr09RrPy0MZqxWKf/qwbMu8gVTujVTDtAOrCZWVNcHgHcvdEzuIUWBbuKk6Wlu+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=T8YwKCa5; arc=none smtp.client-ip=209.85.219.49
+	 To:Cc:Content-Type; b=sEveUNSV+w65NZ5EI6Iwh5e45I5LzTpSqTQEYkdwwSl8zaXzeUqehwmiOjE2ssM1yNAPTcNXuO/lS3NkXFN0Xm2jIBHP/fdFMGsAVmt87NfCMpVzobEt6Ra39axdr5QIxwdO8vRVU1qxkhyvgwBehwIMh9FVMyRj2FtdPdFO4YQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0+xhdLHi; arc=none smtp.client-ip=209.85.219.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6bf784346b9so1777126d6.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 23:13:57 -0700 (PDT)
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6bf7ba05f75so11038466d6.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 23:14:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724307236; x=1724912036; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1724307248; x=1724912048; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/j6g+ZxrJIUkslyLTy7dRZxCpkvz9ztOdVCR7Uba65Y=;
-        b=T8YwKCa5N85WIYIVZx7CbuUeK6BUTACHQlInabi/8IlVkp4tMbpGbU8xRzyJ/uwP92
-         cthYTRyG7XY8KzXK2iFxRQ8lPfGYs7iGAVDUud2OtbFFGuWr204VoO7Jt7mPGwjeFyum
-         wYrp0ie6aiYkZygpEYL9j6C0MXk5nhyNCsPNsGL446cE66FG7mmQFnqdY8EI7mWydrNR
-         +4XMEc7CbZhDAF0NLC89BFjo3Ad9SymQubuZNpg+D/wkm330v29bYBj40LcsVjoxFvQZ
-         cdJzjb0LG2GgLYAaq0ypA3/aqcx6AjqWTneJ+wzNtFbXpSRxuxcK5pMtNRGPOR4bShdW
-         A61Q==
+        bh=OtiMyF0lmr1S15eiOt/y2okxsb95NZO1jMS+6+abaE8=;
+        b=0+xhdLHiRR9tU5sYfDHn6veNBtTdFCJwNrdYEqLLEYG9VQmItFU4OQaP00J3r4i0ls
+         dmqsHeQA4RaEv4C1eB5kcNmKpdocz7rWBP3rZ+nIqJ5kJehLeyIXhvqarycq/gTkMil7
+         /Zu2z7syVvdAQgob4N6UsjgtKT93vwxUvmuh2kpWsXrTgmJnxpvqPevLvMyAtqmpkszr
+         xRy3RyZ0cUdRmmOCsO8dqv7hLpxms/qnHADN7Ldu6YQBkHcyJECOxHTD07RSsHUejTwK
+         LKVYyeK4OVFMKMofX3xh3R30ED5LuqA1Bce9Y2QWP9a1oQKiVMC0CIMiL2duMkwPSzut
+         p1Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724307236; x=1724912036;
+        d=1e100.net; s=20230601; t=1724307248; x=1724912048;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/j6g+ZxrJIUkslyLTy7dRZxCpkvz9ztOdVCR7Uba65Y=;
-        b=MepTSfZ0UH/JV3JaOP+7t2ddgASC7Lw4a8ZaRnZqpr4dSSt12QPy9irnT6fRs3rcQ9
-         A8PQx7yNGU28pUbegDpVraQ8r9Bx8EudHynrvhFuChvwEDIzc9jA4mcUupYyIIUqYPca
-         rb+8ftdnM0CNdxb0LltrCVBRs/9NsY1gAStGItVqR62G1LJWf8P82pb1H9hdOGprwyJH
-         solftQrgY7J4XcKPoyI6Af4VbM5sHk1C7CmRzEUJ5srRR07RQfnESDeEqZZkmeHguTNq
-         64/0n4NoLJvg0+8uLb8IzudVvfbZgnSa6e9VfM8Z52FYEsa1fRkBx29OPT1LqXDlltdo
-         mEHw==
-X-Gm-Message-State: AOJu0YyBlm+WrcuHS2RhPlaiR6NLNsfN2c2Xu+vdUlsC3larJPCrOPR5
-	AzTgo/ZoL9NlQWO+9qmqf2KvSr8OB6vAQmB9igvDh3RiHpP8N4DKpghLnVXDQRfbwas8McerwQy
-	GrPGs/XCV94e0rrzTlm8cYaenUXrrP1lohZLs
-X-Google-Smtp-Source: AGHT+IGF3HqJXCY6iB3p/Ie8C1j1xsjfzM+UywWWeJI/Zgw/Xbb4RHmPt/CKJkIIEQjO5nmYVSfPBxVjkpFQOGQe6eE=
-X-Received: by 2002:a05:6214:4301:b0:6bf:786d:45cf with SMTP id
- 6a1803df08f44-6c155d8bf66mr57518676d6.22.1724307236349; Wed, 21 Aug 2024
- 23:13:56 -0700 (PDT)
+        bh=OtiMyF0lmr1S15eiOt/y2okxsb95NZO1jMS+6+abaE8=;
+        b=cauDbhvGZq5M3Lt2GPLgCYL3HVtm9grpt+tX2ZpfiVB3gy1rT/aZWsOIa8qIHT9WJL
+         iUYEz1bbe8XE6VPZmL+O8HovRuIpAini05g6pm30Ik7VEQ3qST7m561sPACpOj6EUllR
+         0SslqyObqlRA0ELQLjSRyVtO87ZMBujObfYqCmQOhjBHDosQSDH26/WoOakZVQWXbjBp
+         iW2P0sGBEQRIvy4DX4ROor77hzM9I0nDNiPrwDA+I/+d82vQ+i2Y7gQfKwqDMFi1O1PM
+         jIEDVgOVDL9ymdxOV/oL2YM+O5BRg/9PkEMnEELI2NTry1+TwPGnuyqWrQTvrD5FtNEo
+         V4rQ==
+X-Gm-Message-State: AOJu0YyqIt+H9320GjNgVLU1raNyuVdZMHSnS7VczNoznVuNv1FhdQm/
+	gg6vR7qpWKaGkq948VGqdLtScxy8uoEh1UnmrtkzD1AzMM11vsdGXaiZplsrWlaPPtNPRLIpFgj
+	63l1/HM2MvoDadKfmCgxgDM8kG0NN89toJbnQKoZEhqGw97djm4sd
+X-Google-Smtp-Source: AGHT+IFkkGxey/7wRIsQi97QJbe7JLatxLfUWJJ0luj8eIblj1/SYiTRy0MPgDWxr6qa2Zk2OVqxF/e8ra95NO4xWXM=
+X-Received: by 2002:a0c:fec9:0:b0:6bb:9aeb:c047 with SMTP id
+ 6a1803df08f44-6c160b5c141mr34781676d6.0.1724307247544; Wed, 21 Aug 2024
+ 23:14:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240821144305.1958-1-michal.wajdeczko@intel.com> <20240821144305.1958-2-michal.wajdeczko@intel.com>
-In-Reply-To: <20240821144305.1958-2-michal.wajdeczko@intel.com>
+References: <20240821144305.1958-1-michal.wajdeczko@intel.com> <20240821144305.1958-3-michal.wajdeczko@intel.com>
+In-Reply-To: <20240821144305.1958-3-michal.wajdeczko@intel.com>
 From: David Gow <davidgow@google.com>
-Date: Thu, 22 Aug 2024 14:13:43 +0800
-Message-ID: <CABVgOS=0zjyjuX-9TZNWOaGbeJXQqvQ3JUb3t-D-J+L=1_t2XA@mail.gmail.com>
-Subject: Re: [PATCH 1/4] kunit: Introduce kunit_is_running()
+Date: Thu, 22 Aug 2024 14:13:55 +0800
+Message-ID: <CABVgOSmW6voZ9jMpZU4rdphyf2W9L-ug0152EdsVn59megKu2Q@mail.gmail.com>
+Subject: Re: [PATCH 2/4] kunit: Add macro to conditionally expose declarations
+ to tests
 To: Michal Wajdeczko <michal.wajdeczko@intel.com>
 Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Daniel Latypov <dlatypov@google.com>, Lucas De Marchi <lucas.demarchi@intel.com>
+	Rae Moar <rmoar@google.com>, Lucas De Marchi <lucas.demarchi@intel.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000058078806203f9085"
+	boundary="0000000000000099f606203f91bf"
 
---00000000000058078806203f9085
+--0000000000000099f606203f91bf
 Content-Type: text/plain; charset="UTF-8"
 
 On Wed, 21 Aug 2024 at 22:43, Michal Wajdeczko
 <michal.wajdeczko@intel.com> wrote:
 >
-> Wrap uses of the static key 'kunit_running' into a helper macro
-> to allow future checks to be placed in the code residing outside
-> of the CONFIG_KUNIT. We will start using this in upcoming patch.
+> The DECLARE_IF_KUNIT macro will introduces identifiers only if
+> CONFIG_KUNIT is enabled. Otherwise if CONFIG_KUNIT is not enabled
+> no identifiers from the param list will be defined.
 >
 > Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
 > ---
-> Cc: Daniel Latypov <dlatypov@google.com>
+> Cc: Rae Moar <rmoar@google.com>
 > Cc: David Gow <davidgow@google.com>
 > Cc: Lucas De Marchi <lucas.demarchi@intel.com>
 > ---
 
-This is a big improvement, thanks!
+I like this, thanks!
 
 Reviewed-by: David Gow <davidgow@google.com>
 
-Cheers,
--- David
 
-
->  include/kunit/test-bug.h | 12 ++++++++++--
->  1 file changed, 10 insertions(+), 2 deletions(-)
+>  include/kunit/visibility.h | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 >
-> diff --git a/include/kunit/test-bug.h b/include/kunit/test-bug.h
-> index 47aa8f21ccce..e8ea3bab7250 100644
-> --- a/include/kunit/test-bug.h
-> +++ b/include/kunit/test-bug.h
-> @@ -25,6 +25,13 @@ extern struct kunit_hooks_table {
->         void *(*get_static_stub_address)(struct kunit *test, void *real_fn_addr);
->  } kunit_hooks;
+> diff --git a/include/kunit/visibility.h b/include/kunit/visibility.h
+> index 0dfe35feeec6..1c23773f826c 100644
+> --- a/include/kunit/visibility.h
+> +++ b/include/kunit/visibility.h
+> @@ -11,6 +11,13 @@
+>  #define _KUNIT_VISIBILITY_H
 >
-> +/**
-> + * kunit_is_running() - True, if KUnit test is currently running.
-> + *
-> + * If CONFIG_KUNIT is not enabled, it will compile down to a false.
-> + */
-> +#define kunit_is_running() static_branch_unlikely(&kunit_running)
-> +
->  /**
->   * kunit_get_current_test() - Return a pointer to the currently running
->   *                           KUnit test.
-> @@ -40,7 +47,7 @@ extern struct kunit_hooks_table {
->   */
->  static inline struct kunit *kunit_get_current_test(void)
->  {
-> -       if (!static_branch_unlikely(&kunit_running))
-> +       if (!kunit_is_running())
->                 return NULL;
->
->         return current->kunit_test;
-> @@ -53,7 +60,7 @@ static inline struct kunit *kunit_get_current_test(void)
->   * If a KUnit test is running in the current task, mark that test as failed.
->   */
->  #define kunit_fail_current_test(fmt, ...) do {                                 \
-> -               if (static_branch_unlikely(&kunit_running)) {                   \
-> +               if (kunit_is_running()) {                                       \
->                         /* Guaranteed to be non-NULL when kunit_running true*/  \
->                         kunit_hooks.fail_current_test(__FILE__, __LINE__,       \
->                                                   fmt, ##__VA_ARGS__);          \
-> @@ -64,6 +71,7 @@ static inline struct kunit *kunit_get_current_test(void)
->
->  static inline struct kunit *kunit_get_current_test(void) { return NULL; }
->
-> +#define kunit_is_running() false
->  #define kunit_fail_current_test(fmt, ...) do {} while (0)
->
+>  #if IS_ENABLED(CONFIG_KUNIT)
+> +    /**
+> +     * DECLARE_IF_KUNIT - A macro that introduces identifiers only if
+> +     * CONFIG_KUNIT is enabled. Otherwise if CONFIG_KUNIT is not enabled
+> +     * no identifiers will be defined.
+> +     * @body: identifiers to be introduced conditionally
+> +     */
+> +    #define DECLARE_IF_KUNIT(body...)  body
+>      /**
+>       * VISIBLE_IF_KUNIT - A macro that sets symbols to be static if
+>       * CONFIG_KUNIT is not enabled. Otherwise if CONFIG_KUNIT is enabled
+> @@ -26,6 +33,7 @@
+>      #define EXPORT_SYMBOL_IF_KUNIT(symbol) EXPORT_SYMBOL_NS(symbol, \
+>             EXPORTED_FOR_KUNIT_TESTING)
+>  #else
+> +    #define DECLARE_IF_KUNIT(body...)
+>      #define VISIBLE_IF_KUNIT static
+>      #define EXPORT_SYMBOL_IF_KUNIT(symbol)
 >  #endif
 > --
 > 2.43.0
 >
 
---00000000000058078806203f9085
+--0000000000000099f606203f91bf
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -247,14 +227,14 @@ BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
 hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
 AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
-eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgz5EAr1J4PpztrbSXbTMFuRmlMdGu
-15SgMZk7mWU/IrAwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQw
-ODIyMDYxMzU2WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQghD+l6Dg3PTurSTKtCsHxQ+rCBZnB
+28uvtfsdPpBlWQgwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQw
+ODIyMDYxNDA4WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBANGrYxJcgQm6J5ju/+BX5b57pHJL4HHGXZf6rShQSbW0R48J
-3w/nNiJULlfSc8ONayXNXEjG+AeU5HWUIpUXAl0M7UIEfvAn+uuRUZywZ3lBlsyAj9lu+IwpjBfX
-8v7LM2UDnLJkbVz08vzqBDuJHp8iF9x93x2/VE2ESoggxtVlV+7q2wSd0/IQjfe5RN4llOSu3ikY
-HGBfmWCP6kqxXnBxuO3h7CEKFO6OoaW9ULH3C6+GUpEdf4DK8ryDokNUfJxVo9l7T3a0OJL5dO9T
-C+5fEl1LIYDxH1CmynAWBVzO32SoNaxDnscEc3t58IFsu49KF6Dq0SMkzG6KlVD+9MI=
---00000000000058078806203f9085--
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAHZz+jEknuw4YFel3C213ctt9VFkKcnCjL2J4MzYAQefsqFI
+68Lf8lXHhkPtKxXcYgXbw0tP3jKV4AYk0W0/bM4iRj+yidZD76UpoNqK7f4TAbpZ7eIQuh4KVPUv
+mKrInYv3HE8a9YYSK1rk4nAlEsjy46mdRftXGZK3JV5SFGvZeIca4Ar7Iz4bCUNfUFGEFdQk00KM
+msAyfgVimmpg+495ALG/qkjjVdOhg4Z8sPOk9F+4Bzd6aNEJuWu+3V4EH713BU7RIqrREzpcew1h
+5Z+bapAMx1esKzkLbSEP+ROgrxyP4ZSBCC0ZiA4EAem5h4OgxcQlYUcKiYpLS58wiR4=
+--0000000000000099f606203f91bf--
 
