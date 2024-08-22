@@ -1,143 +1,345 @@
-Return-Path: <linux-kselftest+bounces-15994-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15995-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C5AF95AD3C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 08:14:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 011E895AD40
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 08:14:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF3041F22718
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 06:14:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB8902845CA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 06:14:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F643136320;
-	Thu, 22 Aug 2024 06:14:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9671386D8;
+	Thu, 22 Aug 2024 06:14:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0+xhdLHi"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eMkQeWjr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8BE0249F9
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2024 06:14:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46BCB13633F
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2024 06:14:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724307250; cv=none; b=rthso/RiAcxqMAI3ctUHicIvS5K1qcr/b4QXR1MN5L1pWllEJffDGeGeW843kniAdKo5aSJKNHG7lP1ngglUSuks/j+8SlkECIRO51IbAbmEB0u4GMyvlt2kcfJOBjJ0ou2vsq3Ld5NqZ5BySI7Gfq/p7bw2pYzaNJfQTXx3/7k=
+	t=1724307255; cv=none; b=GSDyyNvJ5thKTaTKlD02SHTFvMBsl+rWgLOzKBOVt54FlGTZ39am/A7yGZE8WbpPYuviR+GgJ/NlnttVJiJPLQYcdgpzM1hy03mHDGxeKgEBXhfQSSt1CoRk7CbVj7vApKMKE1PS7QDq+j/gUdGTk7jvqBuNv9ot+W/LWSgnhRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724307250; c=relaxed/simple;
-	bh=2AXX61ZDkg1sWq6Cy5ffAUieyOuHx47h2AU1UwBzhTU=;
+	s=arc-20240116; t=1724307255; c=relaxed/simple;
+	bh=MgrAhIa+Jo9fuXVUZ0lJbCXqfmxt+HXHIy/AsLb6Lhc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=sEveUNSV+w65NZ5EI6Iwh5e45I5LzTpSqTQEYkdwwSl8zaXzeUqehwmiOjE2ssM1yNAPTcNXuO/lS3NkXFN0Xm2jIBHP/fdFMGsAVmt87NfCMpVzobEt6Ra39axdr5QIxwdO8vRVU1qxkhyvgwBehwIMh9FVMyRj2FtdPdFO4YQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0+xhdLHi; arc=none smtp.client-ip=209.85.219.48
+	 To:Cc:Content-Type; b=BeT8LHvIfOaDVxMVJpavnuvD0+1RxiIpHC7eVwr/jmzs+ry2ZikHLxq+XL5bxH7YZKrc82tWaablIQQULRC7AY4XWRbns3b6lePw/bTOVpacYD4HvNJb8hUaHD8Q3H+6D/NpXcRgHMN8tJLYEix8uXdDV+1g6nd63SRo8CXhhGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eMkQeWjr; arc=none smtp.client-ip=209.85.219.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6bf7ba05f75so11038466d6.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 23:14:08 -0700 (PDT)
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6bf7ec5c837so2141776d6.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 23:14:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724307248; x=1724912048; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1724307252; x=1724912052; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OtiMyF0lmr1S15eiOt/y2okxsb95NZO1jMS+6+abaE8=;
-        b=0+xhdLHiRR9tU5sYfDHn6veNBtTdFCJwNrdYEqLLEYG9VQmItFU4OQaP00J3r4i0ls
-         dmqsHeQA4RaEv4C1eB5kcNmKpdocz7rWBP3rZ+nIqJ5kJehLeyIXhvqarycq/gTkMil7
-         /Zu2z7syVvdAQgob4N6UsjgtKT93vwxUvmuh2kpWsXrTgmJnxpvqPevLvMyAtqmpkszr
-         xRy3RyZ0cUdRmmOCsO8dqv7hLpxms/qnHADN7Ldu6YQBkHcyJECOxHTD07RSsHUejTwK
-         LKVYyeK4OVFMKMofX3xh3R30ED5LuqA1Bce9Y2QWP9a1oQKiVMC0CIMiL2duMkwPSzut
-         p1Qg==
+        bh=MR2Di4uYWcBb7/JreCRw7sZJX0Tq+F23/wxxP/C/mQQ=;
+        b=eMkQeWjre4R2ZCUZAI6X9Txl97C7WrXFYRTMtL6rHszoiH9oRCC4oGFJ3jS16itC4b
+         Ra0HcgthAXY+QZl6CKUgjW4CCM51U7AUWNbPXNkCFeH62IR/9kjeLznczOuwHTUTxxYt
+         DI2zl9fmGfe+jO1EBjYTWyztXevXCCToEgb5b59VqeRK+dyq5DR167RlfpueQSrOwzy1
+         FDXbozohWi/aFjxqIZSBQD/pXPfkwcPvrGXCBfK7UBaz7rp7CNyJU/U/0Td6nUv7NpKo
+         65C0TDgzLlk+hVLpAfGXf8PYu+9D5ceCWMJ99JLOea8hqIwOe1GIdW3+Q+FmKmORDRQg
+         eAUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724307248; x=1724912048;
+        d=1e100.net; s=20230601; t=1724307252; x=1724912052;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OtiMyF0lmr1S15eiOt/y2okxsb95NZO1jMS+6+abaE8=;
-        b=cauDbhvGZq5M3Lt2GPLgCYL3HVtm9grpt+tX2ZpfiVB3gy1rT/aZWsOIa8qIHT9WJL
-         iUYEz1bbe8XE6VPZmL+O8HovRuIpAini05g6pm30Ik7VEQ3qST7m561sPACpOj6EUllR
-         0SslqyObqlRA0ELQLjSRyVtO87ZMBujObfYqCmQOhjBHDosQSDH26/WoOakZVQWXbjBp
-         iW2P0sGBEQRIvy4DX4ROor77hzM9I0nDNiPrwDA+I/+d82vQ+i2Y7gQfKwqDMFi1O1PM
-         jIEDVgOVDL9ymdxOV/oL2YM+O5BRg/9PkEMnEELI2NTry1+TwPGnuyqWrQTvrD5FtNEo
-         V4rQ==
-X-Gm-Message-State: AOJu0YyqIt+H9320GjNgVLU1raNyuVdZMHSnS7VczNoznVuNv1FhdQm/
-	gg6vR7qpWKaGkq948VGqdLtScxy8uoEh1UnmrtkzD1AzMM11vsdGXaiZplsrWlaPPtNPRLIpFgj
-	63l1/HM2MvoDadKfmCgxgDM8kG0NN89toJbnQKoZEhqGw97djm4sd
-X-Google-Smtp-Source: AGHT+IFkkGxey/7wRIsQi97QJbe7JLatxLfUWJJ0luj8eIblj1/SYiTRy0MPgDWxr6qa2Zk2OVqxF/e8ra95NO4xWXM=
-X-Received: by 2002:a0c:fec9:0:b0:6bb:9aeb:c047 with SMTP id
- 6a1803df08f44-6c160b5c141mr34781676d6.0.1724307247544; Wed, 21 Aug 2024
- 23:14:07 -0700 (PDT)
+        bh=MR2Di4uYWcBb7/JreCRw7sZJX0Tq+F23/wxxP/C/mQQ=;
+        b=vcTqe/ip/cc8KucGSd674n2XRO+mLhfb7qeGCC3ILPZ2jLn8otxsWgxJw4YxNKTbom
+         RwzBRdGYbeNaINArzoK4NTac7UWrbBFxR4F0uGVt7wTv0iaavZU+X1NPMZND8b1V0/Gf
+         qATojo8AURo010INHjNLK+cQKWH2CjrePFjhSCIoI3FyVBn+jDSar+r9rm2ClGmCNXCn
+         oxYHPFeselbQxDgvxCXcsu0sjQzp7mDWv/XGE5F7ShZjff5Wc9PtZP9L5jzYeaVUuMAe
+         f09sqPy96UZPwiMxS5bXNVAcvbuPJEK7AN8Ut77v98yN72QzsgpIr61Y1c8s9TiLC7aq
+         fybA==
+X-Gm-Message-State: AOJu0YwLCN9Wk1qsbnj4zzhrq1mDxnyiAFsYBW/8lJ8D0C9DG7CR3IbY
+	CUIOdzs0qIvAyx0E/i6MERKfFJMwK9oC4+48zpA+7obpHCjB2trwbvL+1i7HNg3OgQ4v+XdPNmS
+	CfB7lsc1UVaiVAIhDv7xPSxIKprHqLqp1jmof
+X-Google-Smtp-Source: AGHT+IGCXmONJ1wHsD9ozbsmPS6eejCwU1mQFbcGqJCl48J4eEaD5XN5lAmLIr90tTZGuKok/YR2zK9xKRseOXcLoZo=
+X-Received: by 2002:a05:6214:5b87:b0:6b0:71c0:cbaa with SMTP id
+ 6a1803df08f44-6c16471ee7cmr10444986d6.33.1724307252032; Wed, 21 Aug 2024
+ 23:14:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240821144305.1958-1-michal.wajdeczko@intel.com> <20240821144305.1958-3-michal.wajdeczko@intel.com>
-In-Reply-To: <20240821144305.1958-3-michal.wajdeczko@intel.com>
+References: <20240821144305.1958-1-michal.wajdeczko@intel.com> <20240821144305.1958-4-michal.wajdeczko@intel.com>
+In-Reply-To: <20240821144305.1958-4-michal.wajdeczko@intel.com>
 From: David Gow <davidgow@google.com>
-Date: Thu, 22 Aug 2024 14:13:55 +0800
-Message-ID: <CABVgOSmW6voZ9jMpZU4rdphyf2W9L-ug0152EdsVn59megKu2Q@mail.gmail.com>
-Subject: Re: [PATCH 2/4] kunit: Add macro to conditionally expose declarations
- to tests
+Date: Thu, 22 Aug 2024 14:14:00 +0800
+Message-ID: <CABVgOSkdCh9qXYRyJ1mMBzj_-e5_p-8HM8C7XtcJyhnmcibq=w@mail.gmail.com>
+Subject: Re: [PATCH 3/4] kunit: Allow function redirection outside of the
+ KUnit thread
 To: Michal Wajdeczko <michal.wajdeczko@intel.com>
 Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Rae Moar <rmoar@google.com>, Lucas De Marchi <lucas.demarchi@intel.com>
+	Daniel Latypov <dlatypov@google.com>, Lucas De Marchi <lucas.demarchi@intel.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000000099f606203f91bf"
+	boundary="00000000000045bfc406203f914e"
 
---0000000000000099f606203f91bf
+--00000000000045bfc406203f914e
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
 On Wed, 21 Aug 2024 at 22:43, Michal Wajdeczko
 <michal.wajdeczko@intel.com> wrote:
 >
-> The DECLARE_IF_KUNIT macro will introduces identifiers only if
-> CONFIG_KUNIT is enabled. Otherwise if CONFIG_KUNIT is not enabled
-> no identifiers from the param list will be defined.
+> Currently, the 'static stub' API only allows function redirection
+> for calls made from the kthread of the current test, which prevents
+> the use of this functionalty when the tested code is also used by
+> other threads, outside of the KUnit test, like from the workqueue.
+>
+> Add another set of macros to allow redirection to the replacement
+> functions, which, unlike the KUNIT_STATIC_STUB_REDIRECT, will
+> affect all calls done during the test execution.
 >
 > Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
 > ---
-> Cc: Rae Moar <rmoar@google.com>
 > Cc: David Gow <davidgow@google.com>
+> Cc: Daniel Latypov <dlatypov@google.com>
 > Cc: Lucas De Marchi <lucas.demarchi@intel.com>
 > ---
 
-I like this, thanks!
+Thanks for sending this in: we really do need a way to use stubs from
+other threads.
 
-Reviewed-by: David Gow <davidgow@google.com>
+In general, I think there are two possible ways of implementing that:
+- Make a version of the stubs which don't need a KUnit context (i.e.,
+this patch), or
+- Have a way of extending the KUnit context to other threads.
 
+Personally, I'd prefer the latter if it were feasible, as it is both
+cleaner from a user point of view (we don't need two variants of the
+same thing), and extends more easily to features beyond stubs.
+However, there are a few downsides:
+- We'd need to find a way of handling the case where the test function
+returns while there's still a background thread happening.
+- In general, KUnit would need to be audited for thread safety for
+those macros (I don't think it's too bad, but worth checking),
+- We'd need a way of passing the KUnit context to the new thread,
+which might be difficult to make pleasant.
+- We'd need to handle cases where a thread is only partly running test
+code, or otherwise doesn't create its threads directly (e.g.,
+workqueues, rcu, etc)
+- What should happen if an assertion fails on another thread =E2=80=94 does
+the failing thread quit, does the original thread quit, both?
 
->  include/kunit/visibility.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
+In short, it's a complicated enough situation that I doubt we'd solve
+all of those problems cleanly or quickly, so this patch is probably
+the better option. Regardless, we need a story for what the thread
+safety of this is -- can you activate/deactivate stubs while the
+stubbed function is being called. (My gut feeling is "this should be
+possible, but is probably ill-advised" is what we should aim for,
+which probably requires making sure the stub update is done
+atomically.
+
+More rambling below, but I think this is probably good once the
+atomic/thread-safety stuff is either sorted out or at least
+documented. As for the name, how about KUNIT_GLOBAL_STUB_REDIRECT()?
+I'm okay with FIXED_STUB if you prefer it, though.
+
+Cheers,
+-- David
+
+>  include/kunit/static_stub.h | 80 +++++++++++++++++++++++++++++++++++++
+>  lib/kunit/static_stub.c     | 21 ++++++++++
+>  2 files changed, 101 insertions(+)
 >
-> diff --git a/include/kunit/visibility.h b/include/kunit/visibility.h
-> index 0dfe35feeec6..1c23773f826c 100644
-> --- a/include/kunit/visibility.h
-> +++ b/include/kunit/visibility.h
-> @@ -11,6 +11,13 @@
->  #define _KUNIT_VISIBILITY_H
+> diff --git a/include/kunit/static_stub.h b/include/kunit/static_stub.h
+> index bf940322dfc0..3dd98c8f3f1f 100644
+> --- a/include/kunit/static_stub.h
+> +++ b/include/kunit/static_stub.h
+> @@ -12,6 +12,7 @@
 >
->  #if IS_ENABLED(CONFIG_KUNIT)
-> +    /**
-> +     * DECLARE_IF_KUNIT - A macro that introduces identifiers only if
-> +     * CONFIG_KUNIT is enabled. Otherwise if CONFIG_KUNIT is not enabled
-> +     * no identifiers will be defined.
-> +     * @body: identifiers to be introduced conditionally
-> +     */
-> +    #define DECLARE_IF_KUNIT(body...)  body
->      /**
->       * VISIBLE_IF_KUNIT - A macro that sets symbols to be static if
->       * CONFIG_KUNIT is not enabled. Otherwise if CONFIG_KUNIT is enabled
-> @@ -26,6 +33,7 @@
->      #define EXPORT_SYMBOL_IF_KUNIT(symbol) EXPORT_SYMBOL_NS(symbol, \
->             EXPORTED_FOR_KUNIT_TESTING)
+>  /* If CONFIG_KUNIT is not enabled, these stubs quietly disappear. */
+>  #define KUNIT_STATIC_STUB_REDIRECT(real_fn_name, args...) do {} while (0=
+)
+> +#define KUNIT_FIXED_STUB_REDIRECT(stub, args...) do {} while (0)
+>
 >  #else
-> +    #define DECLARE_IF_KUNIT(body...)
->      #define VISIBLE_IF_KUNIT static
->      #define EXPORT_SYMBOL_IF_KUNIT(symbol)
+>
+> @@ -109,5 +110,84 @@ void __kunit_activate_static_stub(struct kunit *test=
+,
+>   */
+>  void kunit_deactivate_static_stub(struct kunit *test, void *real_fn_addr=
+);
+>
+> +/**
+> + * KUNIT_FIXED_STUB_REDIRECT() - Call a fixed function stub if activated=
+.
+> + * @stub: The location of the function stub pointer
+> + * @args: All of the arguments passed to this stub
+> + *
+> + * This is a function prologue which is used to allow calls to the curre=
+nt
+> + * function to be redirected if a KUnit is running. If the stub is NULL =
+or
+> + * the KUnit is not running the function will continue execution as norm=
+al.
+> + *
+> + * The function stub pointer must be stored in a place that is accessibl=
+e both
+> + * from the test code that will activate this stub and from the function=
+ where
+> + * we will do the redirection.
+> + *
+> + * Unlike the KUNIT_STATIC_STUB_REDIRECT(), this redirection will work
+> + * even if the caller is not in a KUnit context (like a worker thread).
+> + *
+> + * Example:
+> + *
+> + * .. code-block:: c
+> + *
+> + *     static int (*func_stub)(int n);
+> + *
+> + *     int real_func(int n)
+> + *     {
+> + *             KUNIT_FIXED_STUB_REDIRECT(func_stub, n);
+> + *             return n + 1;
+> + *     }
+> + *
+> + *     int replacement_func(int n)
+> + *     {
+> + *             return n + 100;
+> + *     }
+> + *
+> + *     void example_test(struct kunit *test)
+> + *     {
+> + *             KUNIT_EXPECT_EQ(test, real_func(1), 2);
+> + *             func_stub =3D replacement_func;
+> + *             KUNIT_EXPECT_EQ(test, real_func(1), 101);
+> + *     }
+> + */
+> +#define KUNIT_FIXED_STUB_REDIRECT(stub, args...) do {                   =
+               \
+> +       typeof(stub) replacement =3D (stub);                             =
+                 \
+> +       if (kunit_is_running()) {                                        =
+               \
+> +               if (unlikely(replacement)) {                             =
+               \
+> +                       pr_info(KUNIT_SUBTEST_INDENT "# %s: calling stub =
+%ps\n",        \
+
+I suspect we want to at least make the logging here optional,
+particularly since it doesn't go into the test log.
+
+> +                               __func__, replacement);                  =
+               \
+> +                       return replacement(args);                        =
+               \
+> +               }                                                        =
+               \
+> +       }                                                                =
+               \
+> +} while (0)
+> +
+> +void __kunit_activate_fixed_stub(struct kunit *test, void *stub_ptr, voi=
+d *replacement_func);
+> +
+> +/**
+> + * kunit_activate_fixed_stub() - Setup a fixed function stub.
+> + * @test: Test case that wants to activate a fixed function stub
+> + * @stub: The location of the function stub pointer
+> + * @replacement: The replacement function
+> + *
+> + * This helper setups a function stub with the replacement function.
+> + * It will also automatically restore stub to NULL at the test end.
+> + */
+> +#define kunit_activate_fixed_stub(test, stub, replacement) do {         =
+                       \
+
+Do we want to actually hook this into the struct kunit here? I suspect
+we do, but it does mean that this has to either be called from the
+main thread, or the struct kunit* needs to be passed around.
+
+> +       typecheck_pointer(stub);                                         =
+               \
+> +       typecheck_fn(typeof(stub), replacement);                         =
+               \
+> +       typeof(stub) *stub_ptr =3D &(stub);                              =
+                 \
+> +       __kunit_activate_fixed_stub((test), stub_ptr, (replacement));    =
+               \
+> +} while (0)
+> +
+> +/**
+> + * kunit_deactivate_fixed_stub() - Disable a fixed function stub.
+> + * @test: Test case that wants to deactivate a fixed function stub (unus=
+ed for now)
+> + * @stub: The location of the function stub pointer
+> + */
+> +#define kunit_deactivate_fixed_stub(test, stub) do {                    =
+               \
+> +       typecheck(struct kunit *, (test));                               =
+               \
+> +       (stub) =3D NULL;                                                 =
+                 \
+> +} while (0)
+> +
 >  #endif
+>  #endif
+> diff --git a/lib/kunit/static_stub.c b/lib/kunit/static_stub.c
+> index 92b2cccd5e76..1b50cf457e89 100644
+> --- a/lib/kunit/static_stub.c
+> +++ b/lib/kunit/static_stub.c
+> @@ -121,3 +121,24 @@ void __kunit_activate_static_stub(struct kunit *test=
+,
+>         }
+>  }
+>  EXPORT_SYMBOL_GPL(__kunit_activate_static_stub);
+> +
+> +static void nullify_stub_ptr(void *data)
+> +{
+> +       void **ptr =3D data;
+> +
+> +       *ptr =3D NULL;
+
+As below, does this need to be atomic?
+
+> +}
+> +
+> +/*
+> + * Helper function for kunit_activate_static_stub(). The macro does
+> + * typechecking, so use it instead.
+> + */
+> +void __kunit_activate_fixed_stub(struct kunit *test, void *stub_ptr, voi=
+d *replacement_func)
+> +{
+> +       void **stub =3D stub_ptr;
+> +
+> +       KUNIT_ASSERT_NOT_NULL(test, stub_ptr);
+> +       *stub =3D replacement_func;
+
+Do we need to do something here to make this atomic? At the very
+least, I think we want to READ_ONCE()/WRITE_ONCE() these, but even
+then we could end up with torn writes, I think.
+
+In general, though, what's the rule around activating a stub from a
+different thread to it being called?  I thinki we definitely want to
+allow it, but _maybe_ we can get away with saying that the stub can't
+be activated/deactivated concurrently with being used?
+
+> +       KUNIT_ASSERT_EQ(test, 0, kunit_add_action_or_reset(test, nullify_=
+stub_ptr, stub_ptr));
+
+Again, we probably need to emphasise that any work done on another
+thread needs to be complete before the test ends on the main thread.
+This isn't specific to this feature, though.
+
+> +}
+> +EXPORT_SYMBOL_GPL(__kunit_activate_fixed_stub);
+
 > --
 > 2.43.0
 >
 
---0000000000000099f606203f91bf
+--00000000000045bfc406203f914e
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -227,14 +429,14 @@ BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
 hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
 AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
-eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQghD+l6Dg3PTurSTKtCsHxQ+rCBZnB
-28uvtfsdPpBlWQgwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQw
-ODIyMDYxNDA4WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgUoovgDkims/v1hEy1EeQDnvMZBiD
+sf509Uy0FAgN7fkwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQw
+ODIyMDYxNDEyWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAHZz+jEknuw4YFel3C213ctt9VFkKcnCjL2J4MzYAQefsqFI
-68Lf8lXHhkPtKxXcYgXbw0tP3jKV4AYk0W0/bM4iRj+yidZD76UpoNqK7f4TAbpZ7eIQuh4KVPUv
-mKrInYv3HE8a9YYSK1rk4nAlEsjy46mdRftXGZK3JV5SFGvZeIca4Ar7Iz4bCUNfUFGEFdQk00KM
-msAyfgVimmpg+495ALG/qkjjVdOhg4Z8sPOk9F+4Bzd6aNEJuWu+3V4EH713BU7RIqrREzpcew1h
-5Z+bapAMx1esKzkLbSEP+ROgrxyP4ZSBCC0ZiA4EAem5h4OgxcQlYUcKiYpLS58wiR4=
---0000000000000099f606203f91bf--
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAJ0xP4v6LuBzg3PDzpYoMqIVy4yefe7nNjxjc4wzb6QR7SeU
++3jjcqk5duaXMmJDgBcvIIDXSXmtTxwFkoNkRq+XPnRhXwJpNTdWOyaJP2iWJBmai5w7fSnjlh/L
+hHYbB20qOqYgRwDiIPkxri80/GG9hFzECMEFwdEfJ5U8JfEayHaWkzPn0Z3tVCaCGbIS0obdD4KH
+DitSFvvkq+0PwqvqWEZVaqcDLUWtBZf/S1J/hYh0rkgVhqhbq+8UEGr//hA4VFW74458cvPsy8ir
+X2pclTTLoqXOqnng7Cf96SBJBll4ulk8M7jmRbnzcGNJ03qwhFiNyY5XcMEl8pqIPo4=
+--00000000000045bfc406203f914e--
 
