@@ -1,156 +1,138 @@
-Return-Path: <linux-kselftest+bounces-16061-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16062-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E207295B57A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 14:55:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F46D95B647
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 15:19:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 71B10B2307D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 12:55:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F090F1F26B39
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 13:19:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 070161C945E;
-	Thu, 22 Aug 2024 12:55:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M5qsegb1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B7D1C9EB2;
+	Thu, 22 Aug 2024 13:19:00 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E631C9429
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2024 12:55:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F62E26AC1;
+	Thu, 22 Aug 2024 13:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724331320; cv=none; b=StMXux/RpsO3lZhhykoXzdex0/eP2e/LEkBe+dC7HjmP+e7zeve8F7oylWof7y4S/E/UTxR05ZEkX9jAd+E6p/jwGfhtiUtNWbqewUniGGJfqcmwKVzThscH4eFqfvf5ymaxI8p+ycG77JYttLL45ofNVfhAKe66hUIWxYGkDME=
+	t=1724332740; cv=none; b=rle6Ejl97cYJvwP44HRkXAB2cmNuG6Wmq7E67hItZkuDhtr0w4DyDXsU28OGUcr7oJ+qx13dmhjAa3Ze65mU9TolsaSZH2ACxvOsq1WDtpdPWc1tWJ4OAx++HByEjizqY8/wWg3YhJMVqGlIVeMTokvWBqVUTRbY2NIoWAaN/Kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724331320; c=relaxed/simple;
-	bh=lTby+jgl5c1tPzhv5758TzH19EWXku1duFb478mok9Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=gZRmkqDSATDy1+Mx2CN4z4W58UvfveU8Z7SFGZP9VJxU6LYiIloY4/SzifKxcMK5PYmE8MYTc0atsN5xFSXH4OtEZhHBkwCdPTU05jcYmthpPj3YEVBVF8vtKxGdmzb198bn3PpNQwThBEw3jrUGCz42rNPZXG4jkxK2/2XmIjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M5qsegb1; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724331319; x=1755867319;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lTby+jgl5c1tPzhv5758TzH19EWXku1duFb478mok9Q=;
-  b=M5qsegb1Mkj1TJygSfanQ8KPfc/cjMO+oaj8fmZJBZyFozMeh8dXYojL
-   5NxyvX1SrP4liOUBEoeOsLsdT1zO0suWC7dwfy0PcK2Ei42iTXCzhMuMy
-   Ies+r6rZ33BBjOlpm0wgrNKC24fM24U+vHMds0PiOMb8vy1tv7Nwdy+ap
-   ugY0f/5WnlJV6EvX0IYgU01ANHepBgP+e0/Jc7VBQiJQte5SkmQZiqx8d
-   2Vfis88UyOH+/fTRHxLhuPBoHqU66Rprup4ueZj71DL6bqL1gMTSDwR9I
-   oz06uyPD5dgwih9qA6pzNa4ENPFs7vR1l4Vm/FrVBJfFGsTUDoxQujzEn
-   A==;
-X-CSE-ConnectionGUID: k1vHGiYTTl+n6H/P+gkYjw==
-X-CSE-MsgGUID: nTEjFWoeTyaPeiTob4SskQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11172"; a="40203331"
-X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
-   d="scan'208";a="40203331"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 05:55:19 -0700
-X-CSE-ConnectionGUID: cR+ZeAGYQRO/BJX/tTLNDA==
-X-CSE-MsgGUID: sTCLUtjgS62+l1cpkrKARw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,167,1719903600"; 
-   d="scan'208";a="65634775"
-Received: from mwajdecz-mobl.ger.corp.intel.com ([10.246.19.248])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2024 05:55:18 -0700
-From: Michal Wajdeczko <michal.wajdeczko@intel.com>
-To: linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com
-Cc: Michal Wajdeczko <michal.wajdeczko@intel.com>,
-	David Gow <davidgow@google.com>
-Subject: [PATCH v2 3/3] kunit: Improve format of the KUNIT_EXPECT_EQ assertion
-Date: Thu, 22 Aug 2024 14:54:59 +0200
-Message-Id: <20240822125459.2075-4-michal.wajdeczko@intel.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20240822125459.2075-1-michal.wajdeczko@intel.com>
-References: <20240822125459.2075-1-michal.wajdeczko@intel.com>
+	s=arc-20240116; t=1724332740; c=relaxed/simple;
+	bh=62+kMtC6NlIJHl14fbSPfa6r/YRWOzTjAhv5+RnpJ8c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=B3sgGBWuhtAP3zVaYjmo+v+7Pcj6VZwRxq7WuATOj8r+LNhVJYGMUlmUkk/GrVPtQ/dKUvkdezBjOhwSfX/BQcIS3Nd6QsZMwuQ/qpkIS4ELp3isEN/6OOkcfCzY9ikHKBwKYyfsSkZlquOPLLaaqZw4M6jQJjLWbjmcmcg2S80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4749C32782;
+	Thu, 22 Aug 2024 13:18:58 +0000 (UTC)
+Date: Thu, 22 Aug 2024 09:19:29 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
+ <linux-trace-kernel@vger.kernel.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Mark Rutland <mark.rutland@arm.com>, Shuah Khan <shuah@kernel.org>,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] ftrace/selftest: Test combination of function_graph
+ tracer and function profiler
+Message-ID: <20240822091929.0db8837f@gandalf.local.home>
+In-Reply-To: <3901c521-be69-4824-a571-9182b9af02b6@linuxfoundation.org>
+References: <20240821150903.05c6cf96@gandalf.local.home>
+	<3901c521-be69-4824-a571-9182b9af02b6@linuxfoundation.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Diagnostic message for failed KUNIT_ASSERT|EXPECT_EQ shows in
-case of integers only raw values, like for this example:
+On Wed, 21 Aug 2024 21:54:42 -0600
+Shuah Khan <skhan@linuxfoundation.org> wrote:
 
-  bool flag;
-  KUNIT_EXPECT_EQ(test, -ENODATA, kstrtobool("dunno", &flag));
+> On 8/21/24 13:09, Steven Rostedt wrote:
+> > From: Steven Rostedt <rostedt@goodmis.org>
+> > 
+> > Masami reported a bug when running function graph tracing then the
+> > function profiler. The following commands would cause a kernel crash:
+> > 
+> >    # cd /sys/kernel/tracing/
+> >    # echo function_graph > current_tracer
+> >    # echo 1 > function_profile_enabled
+> > 
+> > In that order. Create a test to test this two to make sure this does not
+> > come back as a regression.
+> > 
+> > Link: https://lore.kernel.org/172398528350.293426.8347220120333730248.stgit@devnote2
+> > 
+> > Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> > ---
+> >   .../ftrace/test.d/ftrace/fgraph-profiler.tc   | 30 +++++++++++++++++++
+> >   1 file changed, 30 insertions(+)
+> >   create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/fgraph-profiler.tc
+> > 
+> > diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-profiler.tc b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-profiler.tc
+> > new file mode 100644
+> > index 000000000000..62d44a1395da
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-profiler.tc
+> > @@ -0,0 +1,30 @@
+> > +#!/bin/sh
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +# description: ftrace - function profiler with function graph tracing
+> > +# requires: function_profile_enabled set_ftrace_filter function_graph:tracer
+> > +
+> > +# The function graph tracer can now be run along side of the function
+> > +# profiler. But there was a bug that caused the combination of the two
+> > +# to crash. It also required the function graph tracer to be started
+> > +# first.
+> > +#
+> > +# This test triggers that bug
+> > +#
+> > +# We need function_graph and profiling to to run this test
+> > +
+> > +fail() { # mesg
+> > +    echo $1
+> > +    exit_fail
+> > +}
+> > +
+> > +echo "Enabling function graph tracer:"
+> > +echo function_graph > current_tracer
+> > +echo "enable profiler"
+> > +
+> > +# Older kernels do not allow function_profile to be enabled with
+> > +# function graph tracer. If the below fails, mark it as unsupported
+> > +echo 1 > function_profile_enabled || exit_unsupported
+> > +
+> > +sleep 1  
+> 
+> Any specific reason for this sleep 1 - can you add a comment on top?
 
-we will get:
+We add sleep 1 in several locations of the ftrace selftests to let the
+tracing run for a bit just to see if it triggers anything. Otherwise the
+clean up can happen before anything gets traced. Although, it's highly
+unlikely in this case, but still.
 
-  [ ] Expected -61 == kstrtobool("dunno", &flag), but
-  [ ]     kstrtobool("dunno", &flag) == -22 (0xffffffffffffffea)
+I could add a comment if you want of just:
 
-but we can improve it if the value is within MAX_ERRNO range by
-using more friendly error format:
+# let it run for a bit
+sleep 1
 
-  [ ] Expected -61 == kstrtobool("dunno", &flag), but
-  [ ]     -61 == 0xffffffffffffffc3 (-ENODATA)
-  [ ]     kstrtobool("dunno", &flag) == -22 (-EINVAL)
 
-Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
-Reviewed-by: David Gow <davidgow@google.com> #v1
----
-v2: keep '==' and raw values (David)
-    use better example (Michal)
----
- lib/kunit/assert.c | 30 ++++++++++++++++++++++++++----
- 1 file changed, 26 insertions(+), 4 deletions(-)
+> > +
+> > +exit 0  
+> 
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> 
+> Let me know if you would like v2 for this to be taken through my tree.
 
-diff --git a/lib/kunit/assert.c b/lib/kunit/assert.c
-index 414474841b61..5f0a2e2f5231 100644
---- a/lib/kunit/assert.c
-+++ b/lib/kunit/assert.c
-@@ -129,15 +129,37 @@ void kunit_binary_assert_format(const struct kunit_assert *assert,
- 			  binary_assert->text->operation,
- 			  binary_assert->text->right_text);
- 	if (!is_literal(binary_assert->text->left_text, binary_assert->left_value))
--		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)\n",
-+		if (IS_ERR_VALUE(binary_assert->left_value))
-+			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (%pe)\n",
-+					  binary_assert->text->left_text,
-+					  binary_assert->left_value,
-+					  ERR_PTR(binary_assert->left_value));
-+		else
-+			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (%#llx)\n",
-+					  binary_assert->text->left_text,
-+					  binary_assert->left_value,
-+					  binary_assert->left_value);
-+	else if (IS_ERR_VALUE(binary_assert->left_value))
-+		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %#llx (%pe)\n",
- 				  binary_assert->text->left_text,
- 				  binary_assert->left_value,
--				  binary_assert->left_value);
-+				  ERR_PTR(binary_assert->left_value));
- 	if (!is_literal(binary_assert->text->right_text, binary_assert->right_value))
--		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (0x%llx)",
-+		if (IS_ERR_VALUE(binary_assert->right_value))
-+			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (%pe)",
-+					  binary_assert->text->right_text,
-+					  binary_assert->right_value,
-+					  ERR_PTR(binary_assert->right_value));
-+		else
-+			string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %lld (%#llx)",
-+					  binary_assert->text->right_text,
-+					  binary_assert->right_value,
-+					  binary_assert->right_value);
-+	else if (IS_ERR_VALUE(binary_assert->right_value))
-+		string_stream_add(stream, KUNIT_SUBSUBTEST_INDENT "%s == %#llx (%pe)",
- 				  binary_assert->text->right_text,
- 				  binary_assert->right_value,
--				  binary_assert->right_value);
-+				  ERR_PTR(binary_assert->right_value));
- 	kunit_assert_print_msg(message, stream);
- }
- EXPORT_SYMBOL_GPL(kunit_binary_assert_format);
--- 
-2.43.0
+I'll make a v2 if you want me to.
 
+-- Steve
 
