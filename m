@@ -1,120 +1,462 @@
-Return-Path: <linux-kselftest+bounces-15982-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15983-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BDCF95AABF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 03:56:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95D1D95AB72
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 04:58:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1E192812DB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 01:56:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A4EE1F242E4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 02:58:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4798311712;
-	Thu, 22 Aug 2024 01:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95829185941;
+	Thu, 22 Aug 2024 02:52:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TH3F0Pma"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="DBCjxn5J"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out203-205-221-205.mail.qq.com (out203-205-221-205.mail.qq.com [203.205.221.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C65412B64;
-	Thu, 22 Aug 2024 01:56:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7111D15B134;
+	Thu, 22 Aug 2024 02:52:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724291773; cv=none; b=Fd9sKwCzQlo0hBHSQxk8ltcw97aEe79A5hIzR/VvrcegEZVAMNKwKslK9VwCtOqGCB67NHmsowh8mg04MZUMAmCr8dFe2crwE/LX9R38xwYKagPl1FwZxYbu0JdjPc8Eh4EtMxBllfV02I6diAmf6Zo5WzTqjj0nTeehGG1grDQ=
+	t=1724295139; cv=none; b=Z2oPsx0XTxdfL1Y8PN63Yjba8z8lqYXp9xcvPclJZUj67wDWVPhkmcIVRuPADgLX01SqUS7uqP9SuG1GSGzyrn18VuYS5q6PjRLGUKzID7UZh5NbQsbw4u5lRuwS5N0vuH0xBuFUhpJdFR47fWD3NekxmW/fo+4TFbmHFYknjEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724291773; c=relaxed/simple;
-	bh=Ki+uuNliTSRz+n/S8TmqqO+GXqDsD0Z1+MPVzlJZDD4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PS6pTz9PrxIJ2WYOy4ewCtF6sSTglOhQf7658vEHGUEkTQ6//li/PHJEF9EA2UI7iPX/qqwN6iTlpBVFkYK+ZaAyhXNM7y4zzab6yYoGk3lZZXKaabXW0RhnQgDNfPsN56DeAn/Wa1duD941RHBVggkSfViiMtJDchQ2d4ZDBfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TH3F0Pma; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4281ca54fd3so1625245e9.2;
-        Wed, 21 Aug 2024 18:56:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724291770; x=1724896570; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EqLZ5AiejzNGykZtRwZ2mwTEdbcNMWwbVMbeONPG0f8=;
-        b=TH3F0PmaPxr3hS3cy/Ceir0tcJ4x5fJ/FBk/rEJPxNVrw1Zj6IiyC5LztTsY8rtO3R
-         J6OgDEDJdTIw1Yboep2Oq2z6BAn/cx9mxqcIU6UisN9fiAglzIMYELtbA6wMvNWa1OdG
-         cpI4nUzjmZpoxzzyQHQ6l+Z8U6bGw6uE3xr0tgpqDBMs1AICO00v4W3MayybIjYAZE/z
-         fEUyIsbvu037Zu3xe960mPAqdgZGRZEimYEzR+aTlb2Vty2AOrl/PATYVj3BL86OTSMR
-         iXuFj1+WPdxAdn5uXlekMAlb+iV7NbJSc4/lJkitQQRssS/lMLXNsrz4DDAtQNKhO8JW
-         78EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724291770; x=1724896570;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EqLZ5AiejzNGykZtRwZ2mwTEdbcNMWwbVMbeONPG0f8=;
-        b=nxogOMLPFOYKWRYasnpgDc7vlio8DTG0HtFt+yPlpt6tMBG1kaIO8Ms4jMudabTRhc
-         hMqguRO7lGLdYSsLQ58hRZENUldN3aGqN02EQdyrqv0HLrwVkmnm/EHgOHOErHIjqjdb
-         KOmj46O5o2vPzR9s/5l60w7/xly2L4B5EqhaBzhrxVysmdMhbgS8FufO04ttF0vQ930C
-         QdYCIrRXGD3Qkt4UQkZUFfaJhOhfDyIFn0iYYifFi3/t890alQ46YvTfu9NWY8ISrICP
-         K2Wq/dSWAa9AHs4FcIrH9Rsx6K/oPuMO4myiogj60VginlVVL+AxX8xAn5Vw8pfuUa+V
-         7QYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWMA9Q8bi6uLCofmJTqoI6QP8Q/ELy5B7+K6sypNHF79oEH0y6mXR8KvMk6ATielfsF7cNnYS5dL1wEyujBl/M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyhsLKED6AqFv0dSdWBub868cIHqeEjtP2HA7DQJK1q6H02rx2q
-	9mjkXHPls/PrpYtDK9JOOCnoUMb9FmCmodCG+SvwlTtbIN+wP3Nyfofk+4eVXh9HeuiM+1c+hOL
-	wxhsjwE7RopqjBAbq70pzPXUo7Bo=
-X-Google-Smtp-Source: AGHT+IFWpXNoDjmxs4Yt77ioTJnh981UbqwO+V7BBtqQoCtRfR5Pfe7Fn6trBzm8ym+7ax9E+OP61r3v0dhxLgDlkeE=
-X-Received: by 2002:a5d:525a:0:b0:371:7009:c26f with SMTP id
- ffacd0b85a97d-372fd8319a9mr2523583f8f.63.1724291769473; Wed, 21 Aug 2024
- 18:56:09 -0700 (PDT)
+	s=arc-20240116; t=1724295139; c=relaxed/simple;
+	bh=9QVy49R6gNHL9cLSRwlvMCQQ2PJFrtE8pdup+rgm8d8=;
+	h=Message-ID:Content-Type:Mime-Version:Subject:From:In-Reply-To:
+	 Date:Cc:References:To; b=XebyVuZRFd0gENv4XntgXOZsv2M1UOrkCrSgDtte6VZ2V6aJhWY3WI1mwnkUopWLRx5p5Qjy6DvCboShuidEcIHk2oyHRw6/39swj0fV+9mLHbU4Y+WkFtXGMoAg7FgjF4IWujRR3Vbx27z7CEY8RYHQdc68vnJzPxY0sogFzFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=none smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=DBCjxn5J; arc=none smtp.client-ip=203.205.221.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cyyself.name
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1724295129; bh=3ag1cOHVmxBybWIBowT1HEBR7lBqQ/qgYWUC/34ng/g=;
+	h=Subject:From:In-Reply-To:Date:Cc:References:To;
+	b=DBCjxn5JB1TsoivhpC1SqDE6uNZTYHuc/mh9hDIMxEpoqqzpZBXcLv+8OSuyhrnRY
+	 AMX6jTqgOJNhGGKEbuWW/8ztIyB8dEpkODSmhbQRQ18+IHpLMQuwH+WRP+WL83LHtU
+	 6LtiUkFxXdVj5v7pjXAmGfIyz4IeSKK2kvrEP70g=
+Received: from smtpclient.apple ([115.238.42.178])
+	by newxmesmtplogicsvrsza29-0.qq.com (NewEsmtp) with SMTP
+	id D05176EE; Thu, 22 Aug 2024 10:52:05 +0800
+X-QQ-mid: xmsmtpt1724295125th7r105br
+Message-ID: <tencent_86551D71707162B243861AC9F8EC0573B409@qq.com>
+X-QQ-XMAILINFO: N5sfBKY/oC4kp5vgaJMJDoOUXI0Ivw7aTJ/jz8M3cADNSpgDh1jLIMXujDK7Ph
+	 RvdaJ28EK8dqVoOm4PlugjQvl6uQATfg+QBjnf0EE5XwSpb5sLioY4kt7bexkWqVU+sY1zKqe59N
+	 tFQdM1R2iY9JhhAWE32IVhxxxUP9N4RSzDx54D0FGk6EF28yM6MdnP3p+vsTx40Atan0UI7onR3E
+	 h5chnTU2SbkwBXHq4+cYfYOOTTeZo1s4gMkxrLMIM5JWgfiW/AtfcCFMNm5FY+AduT5UnufXfRLL
+	 QoLydu4wxNt/EyViOYpPbPWFjFBOHzuABGCj8ZtJX5rgu8+SWE/IQE/jrGgN8k8h2sAL6Ledsm2Q
+	 uAhg3MAyCmT5TO2LmR5GUmWvE6qqjao71bQNbk19gDw7NM2m0Lz15XqhyeOduXf7Hh7Mr/5O+UiV
+	 CWM/qN2y0zl7Wo+fKM92VgSv0dQFiFMZAzsL327SUoec0+NV8r8K5yZejg+se0miY22Rvb8/8ORs
+	 B+i2MRpwM1cqBT3ZF0ckITt3opBEz5rKQi3NOWYkaD3rlv8I6Mxyly8ArMfBI2CaK4hzcEoK2gzy
+	 dCSv7qThPEkX3Oww4DzAik5updoqwLcXakcMgfC+w5zOfTl1/ykxSTRe6GDB5d3VhvDGVW6nc4nI
+	 Q5XD+yHIoA5bcYgzzotjw95PVshh3gA1yv9leGwuWD8jO2a4w9b/6WFc9BOxK1Dw9fH79bHYcdZ0
+	 iiZpp2OCoF73ZK5InR9umkuFw6/vRBC7pl3Hp4hzqLELDPbpdrTmVt/V/iqSWF+g2wBozJS/wLVF
+	 1p7/MSLb8OlKn/rBFWOvSe9WjnM0Fzp5AjhpFdHOxVTzP5jrf9ytMwTgRflgkoU4bcMs7jP4l6hk
+	 qVu/QSrDB6j0vLw32FSgQMxMLyfuhwEtfAablV76ejjsUwyTwuATMwXQduuBKZt7fbIDty9UQaPH
+	 CBNhpwddJLSa801S3ku0nE8gjBxalJ
+X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <cover.1724216108.git.tony.ambardar@gmail.com> <62a2ef41629ad5ef7db48d720959527462e1beca.1724216108.git.tony.ambardar@gmail.com>
-In-Reply-To: <62a2ef41629ad5ef7db48d720959527462e1beca.1724216108.git.tony.ambardar@gmail.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Wed, 21 Aug 2024 18:55:58 -0700
-Message-ID: <CAADnVQJ2XW0QwSGAaqzEUY4jozF6ML3dxr0mE7hGct0-6hKNnA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v1 5/8] libbpf: Support opening bpf objects of
- either endianness
-To: Tony Ambardar <tony.ambardar@gmail.com>
-Cc: bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Ilya Leoshkevich <iii@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51\))
+Subject: Re: [PATCH v3 1/3] riscv: mm: Use hint address in mmap if available
+From: Yangyu Chen <cyy@cyyself.name>
+In-Reply-To: <mhng-7d9e2b27-a53d-4579-b78e-0aec038290fb@palmer-ri-x1c9>
+Date: Thu, 22 Aug 2024 10:51:54 +0800
+Cc: rsworktech@outlook.com,
+ Charlie Jenkins <charlie@rivosinc.com>,
+ Alexandre Ghiti <alexghiti@rivosinc.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>,
+ Albert Ou <aou@eecs.berkeley.edu>,
+ Shuah Khan <shuah@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>,
+ linux-mm@kvack.org,
+ linux-riscv@lists.infradead.org,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ linux-kselftest@vger.kernel.org,
+ linux-doc@vger.kernel.org,
+ linux-api@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
+X-OQ-MSGID: <13A56B67-7705-4823-9613-61CFBE5DBDCA@cyyself.name>
+References: <mhng-7d9e2b27-a53d-4579-b78e-0aec038290fb@palmer-ri-x1c9>
+To: Palmer Dabbelt <palmer@dabbelt.com>
+X-Mailer: Apple Mail (2.3776.700.51)
 
-On Wed, Aug 21, 2024 at 2:10=E2=80=AFAM Tony Ambardar <tony.ambardar@gmail.=
-com> wrote:
->
->
-> +static inline void bpf_insn_bswap(struct bpf_insn *insn)
-> +{
-> +       /* dst_reg & src_reg nibbles */
-> +       __u8 *regs =3D (__u8 *)insn + offsetofend(struct bpf_insn, code);
-> +
-> +       *regs =3D (*regs >> 4) | (*regs << 4);
-> +       insn->off =3D bswap_16(insn->off);
-> +       insn->imm =3D bswap_32(insn->imm);
-> +}
 
-This is really great!
-Thank you for working on it.
 
-This idea was brought up a couple times, since folks want to compile
-bpf prog once, embed it into their user space binary,
-and auto adjust to target endianness.
-Cross compilation isn't important to them,
-but the ability to embed a single .o instead of two .o-s is a big win.
+> On Aug 22, 2024, at 06:17, Palmer Dabbelt <palmer@dabbelt.com> wrote:
+>=20
+> On Mon, 19 Aug 2024 18:58:18 PDT (-0700), rsworktech@outlook.com =
+wrote:
+>> On 2024-08-20 01:00, Charlie Jenkins wrote:
+>>> On Mon, Aug 19, 2024 at 01:55:57PM +0800, Levi Zim wrote:
+>>>> On 2024-03-22 22:06, Palmer Dabbelt wrote:
+>>>>> On Thu, 01 Feb 2024 18:28:06 PST (-0800), Charlie Jenkins wrote:
+>>>>>> On Wed, Jan 31, 2024 at 11:59:43PM +0800, Yangyu Chen wrote:
+>>>>>>> On Wed, 2024-01-31 at 22:41 +0800, Yangyu Chen wrote:
+>>>>>>>> On Tue, 2024-01-30 at 17:07 -0800, Charlie Jenkins wrote:
+>>>>>>>>> On riscv it is guaranteed that the address returned by mmap is =
+less
+>>>>>>>>> than
+>>>>>>>>> the hint address. Allow mmap to return an address all the way =
+up to
+>>>>>>>>> addr, if provided, rather than just up to the lower address =
+space.
+>>>>>>>>>>> This provides a performance benefit as well, allowing
+>>>>>>> mmap to exit
+>>>>>>>>> after
+>>>>>>>>> checking that the address is in range rather than searching =
+for a
+>>>>>>>>> valid
+>>>>>>>>> address.
+>>>>>>>>>>> It is possible to provide an address that uses at most the =
+same
+>>>>>>>>> number
+>>>>>>>>> of bits, however it is significantly more computationally =
+expensive
+>>>>>>>>> to
+>>>>>>>>> provide that number rather than setting the max to be the hint
+>>>>>>>>> address.
+>>>>>>>>> There is the instruction clz/clzw in Zbb that returns the =
+highest
+>>>>>>>>> set
+>>>>>>>>> bit
+>>>>>>>>> which could be used to performantly implement this, but it =
+would
+>>>>>>>>> still
+>>>>>>>>> be slower than the current implementation. At worst case, half =
+of
+>>>>>>>>> the
+>>>>>>>>> address would not be able to be allocated when a hint address =
+is
+>>>>>>>>> provided.
+>>>>>>>>>>> Signed-off-by: Charlie Jenkins<charlie@rivosinc.com>
+>>>>>>>>> ---
+>>>>>>>>>  arch/riscv/include/asm/processor.h | 27 =
++++++++++++---------------
+>>>>>>>>> -
+>>>>>>>>>  1 file changed, 11 insertions(+), 16 deletions(-)
+>>>>>>>>>>> diff --git a/arch/riscv/include/asm/processor.h
+>>>>>>>>> b/arch/riscv/include/asm/processor.h
+>>>>>>>>> index f19f861cda54..8ece7a8f0e18 100644
+>>>>>>>>> --- a/arch/riscv/include/asm/processor.h
+>>>>>>>>> +++ b/arch/riscv/include/asm/processor.h
+>>>>>>>>> @@ -14,22 +14,16 @@
+>>>>>>>>>=20
+>>>>>>>>>  #include <asm/ptrace.h>
+>>>>>>>>>=20
+>>>>>>>>> -#ifdef CONFIG_64BIT
+>>>>>>>>> -#define DEFAULT_MAP_WINDOW    (UL(1) << (MMAP_VA_BITS - 1))
+>>>>>>>>> -#define STACK_TOP_MAX        TASK_SIZE_64
+>>>>>>>>> -
+>>>>>>>>>  #define arch_get_mmap_end(addr, len, flags)            \
+>>>>>>>>>  ({                                \
+>>>>>>>>>      unsigned long
+>>>>>>>>> mmap_end;                    \
+>>>>>>>>>      typeof(addr) _addr =3D (addr);                \
+>>>>>>>>> -    if ((_addr) =3D=3D 0 || (IS_ENABLED(CONFIG_COMPAT) &&
+>>>>>>>>> is_compat_task())) \
+>>>>>>>>> +    if ((_addr) =3D=3D 0 ||                    \
+>>>>>>>>> +        (IS_ENABLED(CONFIG_COMPAT) && is_compat_task()) ||    =
+\
+>>>>>>>>> +        ((_addr + len) > BIT(VA_BITS -
+>>>>>>>>> 1)))            \
+>>>>>>>>>          mmap_end =3D STACK_TOP_MAX;            \
+>>>>>>>>> -    else if ((_addr) >=3D VA_USER_SV57) \
+>>>>>>>>> -        mmap_end =3D STACK_TOP_MAX;            \
+>>>>>>>>> -    else if ((((_addr) >=3D VA_USER_SV48)) && (VA_BITS >=3D
+>>>>>>>>> VA_BITS_SV48)) \
+>>>>>>>>> -        mmap_end =3D VA_USER_SV48;            \
+>>>>>>>>>      else                            \
+>>>>>>>>> -        mmap_end =3D VA_USER_SV39;            \
+>>>>>>>>> +        mmap_end =3D (_addr + len);            \
+>>>>>>>>>      mmap_end;                        \
+>>>>>>>>>  })
+>>>>>>>>>=20
+>>>>>>>>> @@ -39,17 +33,18 @@
+>>>>>>>>>      typeof(addr) _addr =3D (addr);                \
+>>>>>>>>>      typeof(base) _base =3D (base);                \
+>>>>>>>>>      unsigned long rnd_gap =3D DEFAULT_MAP_WINDOW - (_base);   =
+ \
+>>>>>>>>> -    if ((_addr) =3D=3D 0 || (IS_ENABLED(CONFIG_COMPAT) &&
+>>>>>>>>> is_compat_task())) \
+>>>>>>>>> +    if ((_addr) =3D=3D 0 ||                    \
+>>>>>>>>> +        (IS_ENABLED(CONFIG_COMPAT) && is_compat_task()) ||    =
+\
+>>>>>>>>> +        ((_addr + len) > BIT(VA_BITS -
+>>>>>>>>> 1)))            \
+>>>>>>>>>          mmap_base =3D (_base);                \
+>>>>>>>>> -    else if (((_addr) >=3D VA_USER_SV57) && (VA_BITS >=3D
+>>>>>>>>> VA_BITS_SV57)) \
+>>>>>>>>> -        mmap_base =3D VA_USER_SV57 - rnd_gap; \
+>>>>>>>>> -    else if ((((_addr) >=3D VA_USER_SV48)) && (VA_BITS >=3D
+>>>>>>>>> VA_BITS_SV48)) \
+>>>>>>>>> -        mmap_base =3D VA_USER_SV48 - rnd_gap; \
+>>>>>>>>>      else                            \
+>>>>>>>>> -        mmap_base =3D VA_USER_SV39 - rnd_gap; \
+>>>>>>>>> +        mmap_base =3D (_addr + len) - rnd_gap; \
+>>>>>>>>>      mmap_base;                        \
+>>>>>>>>>  })
+>>>>>>>>>=20
+>>>>>>>>> +#ifdef CONFIG_64BIT
+>>>>>>>>> +#define DEFAULT_MAP_WINDOW    (UL(1) << (MMAP_VA_BITS - 1))
+>>>>>>>>> +#define STACK_TOP_MAX        TASK_SIZE_64
+>>>>>>>>>  #else
+>>>>>>>>>  #define DEFAULT_MAP_WINDOW    TASK_SIZE
+>>>>>>>>>  #define STACK_TOP_MAX        TASK_SIZE
+>>>>>>>>>>> I have carefully tested your patch on qemu with sv57. A
+>>>>>>> bug that
+>>>>>>>> needs
+>>>>>>>> to be solved is that mmap with the same hint address without
+>>>>>>>> MAP_FIXED
+>>>>>>>> set will fail the second time.
+>>>>>>>>> Userspace code to reproduce the bug:
+>>>>>>>>> #include <sys/mman.h>
+>>>>>>>> #include <stdio.h>
+>>>>>>>> #include <stdint.h>
+>>>>>>>>> void test(char *addr) {
+>>>>>>>>     char *res =3D mmap(addr, 4096, PROT_READ | PROT_WRITE,
+>>>>>>>> MAP_ANONYMOUS
+>>>>>>>>> MAP_PRIVATE, -1, 0);
+>>>>>>>>     printf("hint %p got %p.\n", addr, res);
+>>>>>>>> }
+>>>>>>>>> int main (void) {
+>>>>>>>>     test(1<<30);
+>>>>>>>>     test(1<<30);
+>>>>>>>>     test(1<<30);
+>>>>>>>>     return 0;
+>>>>>>>> }
+>>>>>>>>> output:
+>>>>>>>>> hint 0x40000000 got 0x40000000.
+>>>>>>>> hint 0x40000000 got 0xffffffffffffffff.
+>>>>>>>> hint 0x40000000 got 0xffffffffffffffff.
+>>>>>>>>> output on x86:
+>>>>>>>>> hint 0x40000000 got 0x40000000.
+>>>>>>>> hint 0x40000000 got 0x7f9171363000.
+>>>>>>>> hint 0x40000000 got 0x7f9171362000.
+>>>>>>>>> It may need to implement a special arch_get_unmapped_area and
+>>>>>>>> arch_get_unmapped_area_topdown function.
+>>>>>>>>=20
+>>>>>>> This is because hint address < rnd_gap. I have tried to let =
+mmap_base =3D
+>>>>>>> min((_addr + len), (base) + TASK_SIZE - DEFAULT_MAP_WINDOW). =
+However it
+>>>>>>> does not work for bottom-up while ulimit -s is unlimited. You =
+said this
+>>>>>>> behavior is expected from patch v2 review. However it brings a =
+new
+>>>>>>> regression even on sv39 systems.
+>>>>>>>=20
+>>>>>>> I still don't know the reason why use addr+len as the =
+upper-bound. I
+>>>>>>> think solution like x86/arm64/powerpc provide two address space =
+switch
+>>>>>>> based on whether hint address above the default map window is =
+enough.
+>>>>>>>=20
+>>>>>> Yep this is expected. It is up to the maintainers to decide.
+>>>>> Sorry I forgot to reply to this, I had a buffer sitting around =
+somewhere
+>>>>> but I must have lost it.
+>>>>>=20
+>>>>> I think Charlie's approach is the right way to go.  Putting my =
+userspace
+>>>>> hat on, I'd much rather have my allocations fail rather than =
+silently
+>>>>> ignore the hint when there's memory pressure.
+>>>>>=20
+>>>>> If there's some real use case that needs these low hints to be =
+silently
+>>>>> ignored under VA pressure then we can try and figure something out =
+that
+>>>>> makes those applications work.
+>>>> I could confirm that this patch has broken chromium's partition =
+allocator on
+>>>> riscv64. The minimal reproduction I use is chromium-mmap.c:
+>>>>=20
+>>>> #include <stdio.h>
+>>>> #include <sys/mman.h>
+>>>>=20
+>>>> int main() {
+>>>>     void* expected =3D (void*)0x400000000;
+>>>>     void* addr =3D mmap(expected, 17179869184, PROT_NONE,
+>>>> MAP_PRIVATE|MAP_ANONYMOUS, -1, 0);
+>>>>     if (addr !=3D expected) {
+>>> It is not valid to assume that the address returned by mmap will be =
+the
+>>> hint address. If the hint address is not available, mmap will return =
+a
+>>> different address.
+>>=20
+>> Oh, sorry I didn't make it clear what is the expected behavior.
+>> The printf here is solely for debugging purpose and I don't mean that
+>> chromium expect it will get the hint address. The expected behavior =
+is
+>> that both the two mmap calls will succeed.
+>>=20
+>>>>         printf("Not expected address: %p !=3D %p\n", addr, =
+expected);
+>>>>     }
+>>>>     expected =3D (void*)0x3fffff000;
+>>>>     addr =3D mmap(expected, 17179873280, PROT_NONE, =
+MAP_PRIVATE|MAP_ANONYMOUS,
+>>>> -1, 0);
+>>>>     if (addr !=3D expected) {
+>>>>         printf("Not expected address: %p !=3D %p\n", addr, =
+expected);
+>>>>     }
+>>>>     return 0;
+>>>> }
+>>>>=20
+>>>> The second mmap fails with ENOMEM. Manually reverting this commit =
+fixes the
+>>>> issue for me. So I think it's clearly a regression and breaks =
+userspace.
+>>>>=20
+>>> The issue here is that overlapping memory is being requested. This
+>>> second mmap will never be able to provide an address at 0x3fffff000 =
+with
+>>> a size of 0x400001000 since mmap just provided an address at =
+0x400000000
+>>> with a size of 0x400000000.
+>>>=20
+>>> Before this patch, this request causes mmap to return a completely
+>>> arbitrary value. There is no reason to use a hint address in this =
+manner
+>>> because the hint can never be respected. Since an arbitrary address =
+is
+>>> desired, a hint of zero should be used.
+>>>=20
+>>> This patch causes the behavior to be more deterministic. Instead of
+>>> providing an arbitrary address, it causes the address to be less =
+than or
+>>> equal to the hint address. This allows for applications to make
+>>> assumptions about the returned address.
+>>=20
+>> About the overlap, of course the partition allocator's request for
+>> overlapped vma seems unreasonable.
+>>=20
+>> But I still don't quite understand why mmap cannot use an address =
+higher
+>> than the hint address.
+>> The hint address, after all, is a hint, not a requirement.
+>>=20
+>> Quoting the man page:
+>>=20
+>>>   If another mapping already exists there, the kernel picks
+>>>        a new address that may or may not depend on the hint.  The
+>>>        address of the new mapping is returned as the result of the =
+call.
+>>=20
+>> So for casual programmers that only reads man page but not =
+architecture
+>> specific kernel documentation, the current behavior of mmap on =
+riscv64
+>> failing on overlapped address ranges are quite surprising IMO.
+>>=20
+>> And quoting the man page again about the errno:
+>>=20
+>>>       ENOMEM No memory is available.
+>>>=20
+>>>       ENOMEM The process's maximum number of mappings would have =
+been
+>>>              exceeded.  This error can also occur for munmap(), when
+>>>              unmapping a region in the middle of an existing =
+mapping,
+>>>              since this results in two smaller mappings on either =
+side
+>>>              of the region being unmapped.
+>>>=20
+>>>       ENOMEM (since Linux 4.7) The process's RLIMIT_DATA limit,
+>>>              described in getrlimit(2), would have been exceeded.
+>>>=20
+>>>       ENOMEM We don't like addr, because it exceeds the virtual =
+address
+>>>              space of the CPU.
+>>>=20
+>>=20
+>> There's no matching description for the ENOMEM returned here.
+>> I would suggest removing "because it exceeds the virtual address
+>> space of the CPU." from the last item if the ENOMEM behavior here
+>> is expected.
+>>=20
+>>> This code is unfortunately relying on the previously mostly =
+undefined
+>>> behavior of the hint address in mmap.
+>>=20
+>> Although I haven't read the code of chromium's partition allocator to
+>> judge whether it should
+>> be improved or fixed for riscv64, I do know that the kernel "don't =
+break
+>> userspace" and "never EVER blame the user programs".
+>=20
+> Ya, sorry for breaking stuff.
+>=20
+> The goal here was to move to the mmap flag behavor similar to what =
+arm64 and x86 have, as that was done in a way that didn't appear to =
+break userspace -- or at least any real userspace programs.  IIRC that =
+first test was pretty broken (it actually depended on the hint address), =
+but sounds like that's not the case.
+>=20
+> I think maybe this is just luck: we didn't chunk the address space up, =
+we're just hinting on every bit, so we're just more likely to hit the =
+exhaustion.  Doesn't really matter, though, as if it's breaking stuff so =
+we've got to deal with it.
+>=20
+> Charlie and I are just talking, and best we can come up with is to =
+move to the behavior where we fall back to larger allocation regions =
+when there's no space in the smaller allocation region. =20
 
-It's great that the above insn, elf and btf adjustments are working.
-Since endianness is encoded in elf what's the point of
-extra btf_ext__endianness libbpf api?
-Aren't elf and btf.ext suppose to be in the same endianness all the time?
+
+For this solution, the only difference from the mmap behavior of
+x86 and aarch64 is that we will first try to allocate some memory
+from an address less or equal to the request address + size. But
+for most cases, I think there is no need to do that, especially for
+those addresses < BIT(47), as most program works fine on x86-64,
+which has 47bit available userspace address space to use. And for
+that program that wants an address < BIT(32), we already have
+MAP_32BIT now.
+
+I think we can just fix like that patch:
+=
+https://lore.kernel.org/lkml/tencent_B2D0435BC011135736262764B511994F4805@=
+qq.com/
+
+> Charlie's going to try and throw together a patch for that, hopefully =
+it'll sort things out.
+>=20
+>>> The goal of this patch is to help
+>>> developers have more consistent mmap behavior, but maybe it is =
+necessary
+>>> to hide this behavior behind an mmap flag.
+>>=20
+>> Thank you for helping to shape a more consistent mmap behavior.
+>> I think this should be fixed ASAP either by allowing the hint address =
+to
+>> be ignored
+>> (as suggested by the Linux man page), or hide this behavior behind an
+>> mmap flag as you said.
+>>=20
+>>> - Charlie
+>>>=20
+>>>> See alsohttps://github.com/riscv-forks/electron/issues/4
+>>>>=20
+>>>>>> - Charlie
+>>>> Sincerely,
+>>>> Levi
+>>>>=20
+>>=20
+>> I accidentally introduced some HTML into this reply so this reply is
+>> resent as plain text.
+>>=20
+>> Sincerely,
+>> Levi
+
+
 
