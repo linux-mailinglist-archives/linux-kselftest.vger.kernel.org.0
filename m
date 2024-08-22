@@ -1,352 +1,121 @@
-Return-Path: <linux-kselftest+bounces-16056-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16057-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9498D95B4CA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 14:15:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B32CD95B503
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 14:29:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9DE71C22FDD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 12:15:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48B82B21D3E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 12:29:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E30B1C9DC8;
-	Thu, 22 Aug 2024 12:14:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EB0A1C9440;
+	Thu, 22 Aug 2024 12:29:32 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CFEF1C9458;
-	Thu, 22 Aug 2024 12:14:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39BD426AF6;
+	Thu, 22 Aug 2024 12:29:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724328881; cv=none; b=tUmB22j2ft1lUj5wiq9P2lL5WkBFD5R5goY4RCubFZzX8DRSJYsUlh7ouF6BshxSJaiqj1go3RLsF2LRfMNYd9Ldf2KlNDa4NQpBVJLp9GIFn7SdwTzxw0fIzISlLkeye2/g+wG8V/0Y45R1cSjMOBk4xkS0DTpGJOLYAtxBOFo=
+	t=1724329772; cv=none; b=Xzv/bUYPmJJFJeGXwSi9p2pboNLskPoeyQmQe9lWfna4zPrkgcVqyMDnTixJUgBifuj20MoYyh+QCNlt/t03d1rRfMQcDJmZKjHgSIhbBARPCSJms608ABRcGXQQ/n/XzM2GlGcSHCwJK3JNRyC72FmWiyubMDOI0m1XmBRrll0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724328881; c=relaxed/simple;
-	bh=seFO9TIQA80Rk3vfTWOTemUdTrJGdSJnXUw8WYFJSEQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=sELX7QrumMUgmqzRBsBe22yE+IPKfGtss4of/KuEgIloHdLuY5eI28/yZRPsSFbc9pZOM6xR4QxakxeeB9GyT0jodn4AxIdd4tmLhBsYAq0Ytgr7+VPYI/+qPcaUKB6vlZn1J8VR1kD+kNnvqF7DzXJK9hXpbL7C0/xPWGGmwO0=
+	s=arc-20240116; t=1724329772; c=relaxed/simple;
+	bh=EoJ3lk278bxGlQ/KtXGaKBdiWkXqtz/1m21xn9zaLAY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lROA5lprudx8G1m1G9cbWj8UU7cRMHgjYAK2/q+96OuOhs4+LhBQ40PNcjeZeGJtCavIGpRrwPs8GrfaUwsnafwS4AvRgfOJ6oRzBDpNa4yIaQn3aXJLdE//kKPxaIfaSRkf83zIKNQikudAR2d4OEqxRPVLwoTxq+WdMXgOiww=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 27393DA7;
-	Thu, 22 Aug 2024 05:15:05 -0700 (PDT)
-Received: from e116581.arm.com (unknown [10.163.87.181])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2637B3F66E;
-	Thu, 22 Aug 2024 05:14:33 -0700 (PDT)
-From: Dev Jain <dev.jain@arm.com>
-To: shuah@kernel.org,
-	oleg@redhat.com
-Cc: mingo@kernel.org,
-	tglx@linutronix.de,
-	mark.rutland@arm.com,
-	ryan.roberts@arm.com,
-	broonie@kernel.org,
-	suzuki.poulose@arm.com,
-	Anshuman.Khandual@arm.com,
-	DeepakKumar.Mishra@arm.com,
-	aneesh.kumar@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Dev Jain <dev.jain@arm.com>
-Subject: [PATCH v6 2/2] selftests: Add a test mangling with uc_sigmask
-Date: Thu, 22 Aug 2024 17:44:15 +0530
-Message-Id: <20240822121415.3589190-3-dev.jain@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240822121415.3589190-1-dev.jain@arm.com>
-References: <20240822121415.3589190-1-dev.jain@arm.com>
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B8239DA7;
+	Thu, 22 Aug 2024 05:29:55 -0700 (PDT)
+Received: from [10.163.87.181] (unknown [10.163.87.181])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BBC113F66E;
+	Thu, 22 Aug 2024 05:29:25 -0700 (PDT)
+Message-ID: <ddbd0cdd-5e13-4904-b6b7-af09dab29586@arm.com>
+Date: Thu, 22 Aug 2024 17:59:21 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests:mm: Fix mmap() error paths to check for
+ MAP_FAILED
+To: Yang Ruibin <11162571@vivo.com>, Andy Whitcroft <apw@canonical.com>,
+ Joe Perches <joe@perches.com>, Dwaipayan Ray <dwaipayanray1@gmail.com>,
+ Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+Cc: opensource.kernel@vivo.com
+References: <20240822120022.2095848-1-11162571@vivo.com>
+Content-Language: en-US
+From: Dev Jain <dev.jain@arm.com>
+In-Reply-To: <20240822120022.2095848-1-11162571@vivo.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The test is motivated by the following observation:
 
-Raise a signal, jump to signal handler. The ucontext_t structure dumped
-by kernel to userspace has a uc_sigmask field having the mask of blocked
-signals. If you run a fresh minimalistic program doing this, this field
-is empty, even if you block some signals while registering the handler
-with sigaction().
+On 8/22/24 17:30, Yang Ruibin wrote:
+> To correctly detect whether mmap is successful, must use if
+> (map_ptr == MAP_FAILED)to avoid incorrectly handling a valid
+> mapping.Fix mmap() error paths to check for MAP_FAILED.
 
-Here is what the man-pages have to say:
 
-sigaction(2): "sa_mask specifies a mask of signals which should be blocked
-(i.e., added to the signal mask of the thread in which the signal handler
-is invoked) during execution of the signal handler. In addition, the
-signal which triggered the handler will be blocked, unless the SA_NODEFER
-flag is used."
+Shouldn't you have written "avoid processing the return value
+from a failed mmap" instead of "avoid incorrectly handling a
+valid mapping", because !addr won't be a valid mapping? Also,
+I guess it would be better to use ksft_exit_fail_perror(), but
+I won't insist.
 
-signal(7): Under "Execution of signal handlers", (1.3) implies:
-
-"The thread's current signal mask is accessible via the ucontext_t
-object that is pointed to by the third argument of the signal handler."
-
-But, (1.4) states:
-
-"Any signals specified in act->sa_mask when registering the handler with
-sigprocmask(2) are added to the thread's signal mask.  The signal being
-delivered is also added to the signal mask, unless SA_NODEFER was
-specified when registering the handler.  These signals are thus blocked
-while the handler executes."
-
-There clearly is no distinction being made in the man pages between
-"Thread's signal mask" and ucontext_t; this logically should imply
-that a signal blocked by populating struct sigaction should be visible
-in ucontext_t.
-
-Here is what the kernel code does (for Aarch64):
-
-do_signal() -> handle_signal() -> sigmask_to_save(), which returns
-&current->blocked, is passed to setup_rt_frame() -> setup_sigframe() ->
-__copy_to_user(). Hence, &current->blocked is copied to ucontext_t
-exposed to userspace. Returning back to handle_signal(),
-signal_setup_done() -> signal_delivered() -> sigorsets() and
-set_current_blocked() are responsible for using information from
-struct ksignal ksig, which was populated through the sigaction()
-system call in kernel/signal.c:
-copy_from_user(&new_sa.sa, act, sizeof(new_sa.sa)),
-to update &current->blocked; hence, the set of blocked signals for the
-current thread is updated AFTER the kernel dumps ucontext_t to
-userspace.
-
-Assuming that the above is indeed the intended behaviour, because it
-semantically makes sense, since the signals blocked using sigaction()
-remain blocked only till the execution of the handler, and not in the
-context present before jumping to the handler (but nothing can be
-confirmed from the man-pages), this patch introduces a test for
-mangling with uc_sigmask.
-
-The test asserts the relation between blocked signal, delivered signal,
-and ucontext. The ucontext is mangled with, by adding a signal mask to
-it; on return from the handler, the thread must block the corresponding
-signal.
-
-In the test description, I have also described signal delivery and blockage,
-for ease of understanding what the test does.
-
-Signed-off-by: Dev Jain <dev.jain@arm.com>
-Reviewed-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/signal/.gitignore     |   1 +
- tools/testing/selftests/signal/Makefile       |   3 +-
- .../selftests/signal/mangle_uc_sigmask.c      | 184 ++++++++++++++++++
- 3 files changed, 187 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/signal/mangle_uc_sigmask.c
-
-diff --git a/tools/testing/selftests/signal/.gitignore b/tools/testing/selftests/signal/.gitignore
-index 50a19a8888ce..3f339865a3b6 100644
---- a/tools/testing/selftests/signal/.gitignore
-+++ b/tools/testing/selftests/signal/.gitignore
-@@ -1,2 +1,3 @@
- # SPDX-License-Identifier: GPL-2.0-only
-+mangle_uc_sigmask
- sas
-diff --git a/tools/testing/selftests/signal/Makefile b/tools/testing/selftests/signal/Makefile
-index 3e96d5d47036..e0bf7058d19c 100644
---- a/tools/testing/selftests/signal/Makefile
-+++ b/tools/testing/selftests/signal/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- CFLAGS = -Wall
--TEST_GEN_PROGS = sas
-+TEST_GEN_PROGS = mangle_uc_sigmask
-+TEST_GEN_PROGS += sas
- 
- include ../lib.mk
- 
-diff --git a/tools/testing/selftests/signal/mangle_uc_sigmask.c b/tools/testing/selftests/signal/mangle_uc_sigmask.c
-new file mode 100644
-index 000000000000..b79ab92178a8
---- /dev/null
-+++ b/tools/testing/selftests/signal/mangle_uc_sigmask.c
-@@ -0,0 +1,184 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (C) 2024 ARM Ltd.
-+ *
-+ * Author: Dev Jain <dev.jain@arm.com>
-+ *
-+ * Test describing a clear distinction between signal states - delivered and
-+ * blocked, and their relation with ucontext.
-+ *
-+ * A process can request blocking of a signal by masking it into its set of
-+ * blocked signals; such a signal, when sent to the process by the kernel,
-+ * will get blocked by the process and it may later unblock it and take an
-+ * action. At that point, the signal will be delivered.
-+ *
-+ * We test the following functionalities of the kernel:
-+ *
-+ * ucontext_t describes the interrupted context of the thread; this implies
-+ * that, in case of registering a handler and catching the corresponding
-+ * signal, that state is before what was jumping into the handler.
-+ *
-+ * The thread's mask of blocked signals can be permanently changed, i.e, not
-+ * just during the execution of the handler, by mangling with uc_sigmask
-+ * from inside the handler.
-+ *
-+ * Assume that we block the set of signals, S1, by sigaction(), and say, the
-+ * signal for which the handler was installed, is S2. When S2 is sent to the
-+ * program, it will be considered "delivered", since we will act on the
-+ * signal and jump to the handler. Any instances of S1 or S2 raised, while the
-+ * program is executing inside the handler, will be blocked; they will be
-+ * delivered immediately upon termination of the handler.
-+ *
-+ * For standard signals (also see real-time signals in the man page), multiple
-+ * blocked instances of the same signal are not queued; such a signal will
-+ * be delivered just once.
-+ */
-+
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <signal.h>
-+#include <ucontext.h>
-+
-+#include "../kselftest.h"
-+
-+void handler_verify_ucontext(int signo, siginfo_t *info, void *uc)
-+{
-+	int ret;
-+
-+	/* Kernel dumps ucontext with USR2 blocked */
-+	ret = sigismember(&(((ucontext_t *)uc)->uc_sigmask), SIGUSR2);
-+	ksft_test_result(ret == 1, "USR2 blocked in ucontext\n");
-+
-+	/*
-+	 * USR2 is blocked; can be delivered neither here, nor after
-+	 * exit from handler
-+	 */
-+	if (raise(SIGUSR2))
-+		ksft_exit_fail_perror("raise");
-+}
-+
-+void handler_segv(int signo, siginfo_t *info, void *uc)
-+{
-+	/*
-+	 * Three cases possible:
-+	 * 1. Program already terminated due to segmentation fault.
-+	 * 2. SEGV was blocked even after returning from handler_usr.
-+	 * 3. SEGV was delivered on returning from handler_usr.
-+	 * The last option must happen.
-+	 */
-+	ksft_test_result_pass("SEGV delivered\n");
-+}
-+
-+static int cnt;
-+
-+void handler_usr(int signo, siginfo_t *info, void *uc)
-+{
-+	int ret;
-+
-+	/*
-+	 * Break out of infinite recursion caused by raise(SIGUSR1) invoked
-+	 * from inside the handler
-+	 */
-+	++cnt;
-+	if (cnt > 1)
-+		return;
-+
-+	/* SEGV blocked during handler execution, delivered on return */
-+	if (raise(SIGSEGV))
-+		ksft_exit_fail_perror("raise");
-+
-+	ksft_print_msg("SEGV bypassed successfully\n");
-+
-+	/*
-+	 * Signal responsible for handler invocation is blocked by default;
-+	 * delivered on return, leading to recursion
-+	 */
-+	if (raise(SIGUSR1))
-+		ksft_exit_fail_perror("raise");
-+
-+	ksft_test_result(cnt == 1,
-+			 "USR1 is blocked, cannot invoke handler right now\n");
-+
-+	/* Raise USR1 again; only one instance must be delivered upon exit */
-+	if (raise(SIGUSR1))
-+		ksft_exit_fail_perror("raise");
-+
-+	/* SEGV has been blocked in sa_mask, but ucontext is empty */
-+	ret = sigismember(&(((ucontext_t *)uc)->uc_sigmask), SIGSEGV);
-+	ksft_test_result(ret == 0, "SEGV not blocked in ucontext\n");
-+
-+	/* USR1 has been blocked, but ucontext is empty */
-+	ret = sigismember(&(((ucontext_t *)uc)->uc_sigmask), SIGUSR1);
-+	ksft_test_result(ret == 0, "USR1 not blocked in ucontext\n");
-+
-+	/*
-+	 * Mangle ucontext; this will be copied back into &current->blocked
-+	 * on return from the handler.
-+	 */
-+	if (sigaddset(&((ucontext_t *)uc)->uc_sigmask, SIGUSR2))
-+		ksft_exit_fail_perror("sigaddset");
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct sigaction act, act2;
-+	sigset_t set, oldset;
-+
-+	ksft_print_header();
-+	ksft_set_plan(7);
-+
-+	act.sa_flags = SA_SIGINFO;
-+	act.sa_sigaction = &handler_usr;
-+
-+	/* Add SEGV to blocked mask */
-+	if (sigemptyset(&act.sa_mask) || sigaddset(&act.sa_mask, SIGSEGV)
-+	    || (sigismember(&act.sa_mask, SIGSEGV) != 1))
-+		ksft_exit_fail_msg("Cannot add SEGV to blocked mask\n");
-+
-+	if (sigaction(SIGUSR1, &act, NULL))
-+		ksft_exit_fail_perror("Cannot install handler");
-+
-+	act2.sa_flags = SA_SIGINFO;
-+	act2.sa_sigaction = &handler_segv;
-+
-+	if (sigaction(SIGSEGV, &act2, NULL))
-+		ksft_exit_fail_perror("Cannot install handler");
-+
-+	/* Invoke handler */
-+	if (raise(SIGUSR1))
-+		ksft_exit_fail_perror("raise");
-+
-+	/* USR1 must not be queued */
-+	ksft_test_result(cnt == 2, "handler invoked only twice\n");
-+
-+	/* Mangled ucontext implies USR2 is blocked for current thread */
-+	if (raise(SIGUSR2))
-+		ksft_exit_fail_perror("raise");
-+
-+	ksft_print_msg("USR2 bypassed successfully\n");
-+
-+	act.sa_sigaction = &handler_verify_ucontext;
-+	if (sigaction(SIGUSR1, &act, NULL))
-+		ksft_exit_fail_perror("Cannot install handler");
-+
-+	if (raise(SIGUSR1))
-+		ksft_exit_fail_perror("raise");
-+
-+	/*
-+	 * Raising USR2 in handler_verify_ucontext is redundant since it
-+	 * is blocked
-+	 */
-+	ksft_print_msg("USR2 still blocked on return from handler\n");
-+
-+	/* Confirm USR2 blockage by sigprocmask() too */
-+	if (sigemptyset(&set))
-+		ksft_exit_fail_perror("sigemptyset");
-+
-+	if (sigprocmask(SIG_BLOCK, &set, &oldset))
-+		ksft_exit_fail_perror("sigprocmask");
-+
-+	ksft_test_result(sigismember(&oldset, SIGUSR2) == 1,
-+			 "USR2 present in &current->blocked\n");
-+
-+	ksft_finished();
-+}
--- 
-2.30.2
-
+>
+> Signed-off-by: Yang Ruibin <11162571@vivo.com>
+> ---
+>   tools/testing/selftests/mm/ksm_tests.c     | 2 +-
+>   tools/testing/selftests/mm/madv_populate.c | 2 +-
+>   tools/testing/selftests/mm/soft-dirty.c    | 2 +-
+>   3 files changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/ksm_tests.c b/tools/testing/selftests/mm/ksm_tests.c
+> index b748c4890..dad54840f 100644
+> --- a/tools/testing/selftests/mm/ksm_tests.c
+> +++ b/tools/testing/selftests/mm/ksm_tests.c
+> @@ -201,7 +201,7 @@ static void  *allocate_memory(void *ptr, int prot, int mapping, char data, size_
+>   {
+>   	void *map_ptr = mmap(ptr, map_size, PROT_WRITE, mapping, -1, 0);
+>   
+> -	if (!map_ptr) {
+> +	if (map_ptr == MAP_FAILED) {
+>   		perror("mmap");
+>   		return NULL;
+>   	}
+> diff --git a/tools/testing/selftests/mm/madv_populate.c b/tools/testing/selftests/mm/madv_populate.c
+> index ef7d911da..b89cb83ca 100644
+> --- a/tools/testing/selftests/mm/madv_populate.c
+> +++ b/tools/testing/selftests/mm/madv_populate.c
+> @@ -34,7 +34,7 @@ static void sense_support(void)
+>   
+>   	addr = mmap(0, pagesize, PROT_READ | PROT_WRITE,
+>   		    MAP_ANONYMOUS | MAP_PRIVATE, 0, 0);
+> -	if (!addr)
+> +	if (addr == MAP_FAILED)
+>   		ksft_exit_fail_msg("mmap failed\n");
+>   
+>   	ret = madvise(addr, pagesize, MADV_POPULATE_READ);
+> diff --git a/tools/testing/selftests/mm/soft-dirty.c b/tools/testing/selftests/mm/soft-dirty.c
+> index bdfa5d085..4ccbc053b 100644
+> --- a/tools/testing/selftests/mm/soft-dirty.c
+> +++ b/tools/testing/selftests/mm/soft-dirty.c
+> @@ -134,7 +134,7 @@ static void test_mprotect(int pagemap_fd, int pagesize, bool anon)
+>   	if (anon) {
+>   		map = mmap(NULL, pagesize, PROT_READ|PROT_WRITE,
+>   			   MAP_ANONYMOUS|MAP_PRIVATE, -1, 0);
+> -		if (!map)
+> +		if (map == MAP_FAILED)
+>   			ksft_exit_fail_msg("anon mmap failed\n");
+>   	} else {
+>   		test_fd = open(fname, O_RDWR | O_CREAT, 0664);
 
