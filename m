@@ -1,92 +1,122 @@
-Return-Path: <linux-kselftest+bounces-15940-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15941-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5667595A8DB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 02:30:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A73F95A94B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 03:02:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17AA91C21978
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 00:30:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C69BA1F23346
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 01:02:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C2443D76;
-	Thu, 22 Aug 2024 00:30:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 315686FC7;
+	Thu, 22 Aug 2024 01:02:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="olK/pFrK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qzpPP7Vi"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124A91D12FF;
-	Thu, 22 Aug 2024 00:30:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050E1101F2;
+	Thu, 22 Aug 2024 01:02:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724286628; cv=none; b=TXe/pE2aLhPpkuQzFT3eBsyRQFxOD/il8/sYuKlgoYaxPfYQnORENFzgwoRfDI1qFufS6QcBkOP6mre6vgubSM/h08Z9uIp7T+eSebMLOx/6uxd9BYF4QI8fa6/bDEPQWeKc6kwpvjuYRyvi35qSBom8kAWo1E5JnAZ0Izk0eoQ=
+	t=1724288524; cv=none; b=GETW1RvpTryscy9jfSDbNBU7JVLb1DSjvjwCnm/3K2PBo9FI4AAFjMR2kPZoev7e8kIbWkusXa2ixQRjjBHnpDwvV/WQ8xIkNBXsQ+eSuY3n2hT/uXkhGewxtiT6/fkPML5rCSztI1bY+vdvbKtij4YzI0mwm3QXBuFZ2DNcOiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724286628; c=relaxed/simple;
-	bh=6IEnWiDQI09GinNykqiFABecZ8CA/u434KaY0t3JcbM=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=lVzSfN+iAjnxmZC9pqTYQ4b5Y9+FdNMixsHnbSm75ivLdbtpQQCCNbsQAsuOQxF6owJdwmc2Yt8oab795XscZwPF/9tnmFGsTWdvwj6tsW9vTusDgy/UagTmA8xX3QVQGT8GkCSq4s/sqawGBczyIARgGu49pE5qkcjgpOlpJwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=olK/pFrK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A408EC32781;
-	Thu, 22 Aug 2024 00:30:27 +0000 (UTC)
+	s=arc-20240116; t=1724288524; c=relaxed/simple;
+	bh=fho7yigoNJT7U1KQajZC0LtAUCpxXnxEcxYMwYgaq1g=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ICHFYLlQTy8zhRT03QQQdoHfh8/Z5dB7K5+JJY+4yA+XFTY6L+5kzQcU4BZVzBdf2pb7vDfZY/ldLvJuoIT9yJEzgQUNNdKt8KXfu9YziNOIsjRzysmnHMSF887iho/Of0DtOFX96mT+dbOeRaqwPZdvzS8bTh95QI4uCzTM/jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qzpPP7Vi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19BA9C32781;
+	Thu, 22 Aug 2024 01:02:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724286627;
-	bh=6IEnWiDQI09GinNykqiFABecZ8CA/u434KaY0t3JcbM=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=olK/pFrKr0GxQ9Lqd9bQm6WAZVZa2LwZyhozSjVyl6wlT0hnsp5+9lMDrdlmyT68c
-	 hveUuwgnriq8m1PChgPK+W7ou5QLHi0Rue1KKCEoLgwBym/IXwOk4kxFc+fJ91IWvR
-	 b+aMmkjhBjsQW5B1Bt1XC+YK6rXLET+9OE+890CLkJYQpvgOnUJcjHRMu3K/Ov2vcx
-	 X2abrdKe70H5b7uOh5L3ks+xB543erOtqjcmmti2BHRDn9MadIwLoqIunUJmEYHtR+
-	 VapoAHif+MVQM+PIQu6YQjAH2qKDiUw/wxAL4Zj7pyuj2sYiNFza7mpUqxgNneNUfR
-	 uRbTMfXvlmE5A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70DA33804CAB;
-	Thu, 22 Aug 2024 00:30:28 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1724288523;
+	bh=fho7yigoNJT7U1KQajZC0LtAUCpxXnxEcxYMwYgaq1g=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=qzpPP7VirvMAvrOA8Zj2gUNpG7/QauO+WenfkO+EUuRKRaQITLogtQQ2I46au9rRn
+	 NvgKPQO0tNJzdFEpn5xchwRRr8bS8usX2x60NjLi6Zmu6GxSTQCM3QXoOxcrfIMzZC
+	 47Fo3yW9QVkxyi+sjPvC7k0p5mmmJ7yGnyG/NxS6JOz6S64SoV0akCILHZIESyxK4v
+	 a1s098AdD/bDDPSWu4NuUKa5HtuKr/0QcQbhFEAilbTJuZd8+39Zw0PoGH4Sx+k5YW
+	 rU9tFxtB6LFh3f+z9HtPnSIpwQGyMPkRfVFrfIV3iWZ/kvUi/TZgm2o06Gp6JYkQla
+	 B7xiKdFU088IQ==
+Date: Wed, 21 Aug 2024 18:02:02 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: David Hunter <david.hunter.linux@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ shuah@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, javier.carrasco.cruz@gmail.com
+Subject: Re: [PATCH 1/1] Improve missing mods error message and make shell
+ script executable
+Message-ID: <20240821180202.6da48f29@kernel.org>
+In-Reply-To: <20240820202116.6124-1-david.hunter.linux@gmail.com>
+References: <20240820202116.6124-1-david.hunter.linux@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] selftests: mlxsw: ethtool_lanes: Source ethtool lib from
- correct path
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <172428662726.1870122.3233953050001811169.git-patchwork-notify@kernel.org>
-Date: Thu, 22 Aug 2024 00:30:27 +0000
-References: <2112faff02e536e1ac14beb4c2be09c9574b90ae.1724150067.git.petrm@nvidia.com>
-In-Reply-To: <2112faff02e536e1ac14beb4c2be09c9574b90ae.1724150067.git.petrm@nvidia.com>
-To: Petr Machata <petrm@nvidia.com>
-Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
- kuba@kernel.org, mlxsw@nvidia.com, idosch@nvidia.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Tue, 20 Aug 2024 16:21:16 -0400 David Hunter wrote:
+> Subject: [PATCH 1/1] Improve missing mods error message and make shell script executable
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Would be good to add a prefix to the subject:
 
-On Tue, 20 Aug 2024 12:53:47 +0200 you wrote:
-> From: Ido Schimmel <idosch@nvidia.com>
+selftests: net:
+
+> Make the test executable. Currently, tests in this shell script are not
+> executable, so the scipt file is skipped entirely.
+
+Could you clarify how it gets skipped? We use make [...] run_tests
+in our CI and it does seem to run.
+
+> Also, 
+
+If you say "also" there's a good chance the commit should be split into
+two..
+
+> the error message descirbing the required modules is inaccurate.
+> Currently, only  "SKIP: Need act_mirred module" is shown. As a result,
+> users might only that module; however, three modules are actually
+> required and if any of them are missing, the build will fail with the
+> same message.
 > 
-> Source the ethtool library from the correct path and avoid the following
-> error:
+> Fix the error message to show any/all modules needed for the script file
+> upon failure.
 > 
-> ./ethtool_lanes.sh: line 14: ./../../../net/forwarding/ethtool_lib.sh: No such file or directory
+> Signed-off-by: David Hunter <david.hunter.linux@gmail.com>
+> ---
+>  .../testing/selftests/net/test_ingress_egress_chaining.sh | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+>  mode change 100644 => 100755 tools/testing/selftests/net/test_ingress_egress_chaining.sh
 > 
-> [...]
+> diff --git a/tools/testing/selftests/net/test_ingress_egress_chaining.sh b/tools/testing/selftests/net/test_ingress_egress_chaining.sh
+> old mode 100644
+> new mode 100755
+> index 08adff6bb3b6..b1a3d68e0ec2
+> --- a/tools/testing/selftests/net/test_ingress_egress_chaining.sh
+> +++ b/tools/testing/selftests/net/test_ingress_egress_chaining.sh
+> @@ -13,8 +13,14 @@ if [ "$(id -u)" -ne 0 ];then
+>  fi
+>  
+>  needed_mods="act_mirred cls_flower sch_ingress"
+> +mods_missing=""
+> +
+> +for mod in $needed_mods; do 
+> +	modinfo $mod &>/dev/null || mods_missing="$mods_missing$mod "
+> +done
+> +
+>  for mod in $needed_mods; do
 
-Here is the summary with links:
-  - [net] selftests: mlxsw: ethtool_lanes: Source ethtool lib from correct path
-    https://git.kernel.org/netdev/net/c/f8669d7b5f5d
+Do you have to loop again? Maybe just check if mods_missing is empty?
 
-You are awesome, thank you!
+> -	modinfo $mod &>/dev/null || { echo "SKIP: Need act_mirred module"; exit $ksft_skip; }
+> +	modinfo $mod &>/dev/null || { echo "SKIP: modules needed: $mods_missing"; exit $ksft_skip; }
+>  done
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+pw-bot: cr
 
