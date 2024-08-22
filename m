@@ -1,151 +1,146 @@
-Return-Path: <linux-kselftest+bounces-16116-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16117-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4AF395BD17
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 19:25:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91FC895BD4D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 19:31:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7B1BF1F23C57
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 17:25:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51063287FBA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 17:31:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94F1E1CEACC;
-	Thu, 22 Aug 2024 17:25:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B58691CC89B;
+	Thu, 22 Aug 2024 17:30:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dP9k/wU2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ikqtAQwt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 081FD1CE716
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2024 17:25:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A2DA1D12E4;
+	Thu, 22 Aug 2024 17:30:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724347506; cv=none; b=BP04+ePLV+juvlexacm8qX4a+mGqTQaCDKkmf43dkuzCahk6iRxXfrm/QQhh4RydawTryQKg8mux2aJ+aUmpzQ6e3HDKlZLOMMBGDUnUuJDrm5XNX3O1cCwEcCyt4CaCNyZWOpv+ZvCwTYV/7KpaqKmT/ioy9uwqZFbuVFWsFFI=
+	t=1724347859; cv=none; b=EN4vgeKd9UBvupeYtuj48maAkCelVdXmx5QJJNoqD6Rrad3KUuQo0OmPW6W5eUQ9FR2SfCYzpha6qxYxvuKofBcHjjXaAl1iPfcVjr3A/Al52rSgmICLjR8pBOXrCQe67hrrXBiLc8PMLcWQQPDbvDNKTA8+X+7L1kP+BfofmuU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724347506; c=relaxed/simple;
-	bh=96nSAerh6X2V4FpypOy6E5j6+AHv5vX7RJ+JzdUuYZI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aqVGSSn6ZuMeV+r/2BE+BAley6HJSwH1VLC/SzxyIxB6MCF0PNzN7qjrpwrigw9/eKMFBy/G66thWqZvMEpZ1BDSbMCA3AxjgD1pKPxjqkOdSc2TkGszE1L5ync6qB2hYM7xHDFV11xnzYZCXtfdSR6/5vUmBKCRYpcosL7Rxp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dP9k/wU2; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1724347504;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=d3xzI8Z49dbNRaboDk3FVrW8VSVdcJeyT4KaTegTimQ=;
-	b=dP9k/wU2nXJk6KZpJv9Cjpo6K6NFO7gUgp6PgxVXaMhxgrDYIaBE2f6pC8u+98HfhnI2IS
-	AYEzWykm5skDm8GMs0l7vBzYT1dRy/mqmyMSJgpRMrNEuhMsLYXvOQvfInPb+pXZigEKJd
-	jV2Y7QOsl68cRGDfrq+vl6hqdqs2Ke0=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-616-CrDEju2ONveKrzbPad-zzQ-1; Thu, 22 Aug 2024 13:25:02 -0400
-X-MC-Unique: CrDEju2ONveKrzbPad-zzQ-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7a20ce27a6fso137308485a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2024 10:25:02 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724347502; x=1724952302;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d3xzI8Z49dbNRaboDk3FVrW8VSVdcJeyT4KaTegTimQ=;
-        b=ngDSFpo3Y8lI+4/BALsgLcI1RjuE7AaC2MKEsVtqXZnQ0WU8bZ1THsxhRqdkvEJuLm
-         I4Iefa/d10eH1RUF365Rsms+exB18Xq38Re3ynd5/GdYwB36E8c1TjVQy6RulYri6RpY
-         5kx5mQ0AlKV10JmKBmRLqjD7XKalbl8Indcj4aAgGXoejdtfKytIUzag0q1ce8GPvABR
-         F7nS5zizuo26za+xKIrYoEg+IB+aorNQlR/G+nFsPv16qIyoLVvgsFRApDw9lEwl9WJl
-         yiBPfh57SRS2y2z03EWSRAJUMqZaSnmkEIt7rUWud0h+MtdQJwr8RfzBmO1OZww0r+Ve
-         kkMA==
-X-Forwarded-Encrypted: i=1; AJvYcCViO8o620DhCJieogANHIvLLzW6M2vFNqp4b6qy6ZlXh74j+07kVdFxs6nvWQ4a9U60P8a60CCsAArWSlbXAO8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1Xloc1Juglm9ZTaCWTE+5iK9BkOtiuEIaZVnOc0vlEBunYrph
-	OivL+JFTvYI+PvFxOdGt5yeoK32MoUe+jSCvPEA/9bR8qCuL/ljMvETHUpCSh5ojTsdAC6BO49Q
-	uU7KY0mjh1xUlcwQo3b6sa2UKr8VB2eae7xwZXB8rhcEh+ZMyF/CM9YZ4O+lw397uPw==
-X-Received: by 2002:a05:620a:1a1d:b0:79d:5f82:a404 with SMTP id af79cd13be357-7a680b223famr316027085a.64.1724347501881;
-        Thu, 22 Aug 2024 10:25:01 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFiVZLnwMjRH6QJCF0rkI5pAHMrm7yzrb/gyVCV7b3SHnoFL/3+AI7zTBVhdN8BbXo7qHzyWQ==
-X-Received: by 2002:a05:620a:1a1d:b0:79d:5f82:a404 with SMTP id af79cd13be357-7a680b223famr316024085a.64.1724347501514;
-        Thu, 22 Aug 2024 10:25:01 -0700 (PDT)
-Received: from [192.168.1.9] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a67f347b15sm91442485a.44.2024.08.22.10.25.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 Aug 2024 10:25:00 -0700 (PDT)
-Message-ID: <182e7c5a-b8cc-6ac1-7edf-81c092be72f5@redhat.com>
-Date: Thu, 22 Aug 2024 13:24:59 -0400
+	s=arc-20240116; t=1724347859; c=relaxed/simple;
+	bh=NEmbbg8L2Bfrsg3LdNNpLmYp7+z/wYUOhdnFgomJAhI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gybwa6OqavMFZ0iZ7crZJrRWkBs9xfd0n3tvXGTmJNp2z4d0g+D++906PbqBV+9uy5V9jxUeWAJ9fphWB0iZRQOWo1abM180D9B5H3qybzkcowG8e4F1x5QSntP6ZJ0B1P2nkhYsciW5+S+EcKPOKT263VwJP4JMt9wEWi7xvsw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ikqtAQwt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85044C32782;
+	Thu, 22 Aug 2024 17:30:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724347859;
+	bh=NEmbbg8L2Bfrsg3LdNNpLmYp7+z/wYUOhdnFgomJAhI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ikqtAQwtRrEpLzRohAGA+qNmOG+TVb1qThYeB20Y/Rk8LI7FU0VJET/gHeWL16BXq
+	 QZJfX39NMfafJ1FzVkN4ltE2CZW3ItKeVYt8IycDgCeLLfuh0r2uRLDWZ04/PypHs6
+	 s+MGNZPewB6jtWVhV7hrSdK3dA9ZJDHvvHhPAtsfxbo5lcriqWLIPch63YvNEb7bvj
+	 mKT4+II0xSVQPbirmPqGpXOCJtrJ5BOwbz+S2JpDOkZcFSQI6txfB5pByPQr/Jo0Mu
+	 8SvR/xM9sWHMARckle6xSHr228r6G6hj9zO2NXqWhsK7TG51FQwJDp+RQ7WZOdHsEf
+	 rIBkFTrNQkZOg==
+Date: Thu, 22 Aug 2024 18:30:55 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v11 19/39] arm64/mm: Handle GCS data aborts
+Message-ID: <Zsd1zxJ1n5-_lpbx@finisterre.sirena.org.uk>
+References: <20240822-arm64-gcs-v11-0-41b81947ecb5@kernel.org>
+ <20240822-arm64-gcs-v11-19-41b81947ecb5@kernel.org>
+ <ZsdjbsDrMWgBU9Hj@arm.com>
+ <Zsdq4ymaW0vQffH_@finisterre.sirena.org.uk>
+ <ZsdzKrTbrolW0lHn@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH] selftests/livepatch: wait for atomic replace to occur
-Content-Language: en-US
-To: Ryan Sullivan <rysulliv@redhat.com>, live-patching@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz, pmladek@suse.com,
- shuah@kernel.org
-References: <20240822163439.13092-1-rysulliv@redhat.com>
-From: Joe Lawrence <joe.lawrence@redhat.com>
-In-Reply-To: <20240822163439.13092-1-rysulliv@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="QBL8uS70EYGjHk3p"
+Content-Disposition: inline
+In-Reply-To: <ZsdzKrTbrolW0lHn@arm.com>
+X-Cookie: Your love life will be... interesting.
 
-On 8/22/24 12:34, Ryan Sullivan wrote:
-> Uses 'loop_until' to wait for the atomic replace to unload all previous
-> livepatches, as on some machines with a large number of CPUs there is a
-> sizable delay between the atomic replace ocurring and when sysfs
-> updates accordingly.
-> 
 
-Small nit: flip this around so it describes the problem first, then the
-'loop_util' solution.  Also spell check "occurring" if you keep it 😄
+--QBL8uS70EYGjHk3p
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> Signed-off-by: Ryan Sullivan <rysulliv@redhat.com>
+On Thu, Aug 22, 2024 at 06:19:38PM +0100, Catalin Marinas wrote:
+> On Thu, Aug 22, 2024 at 05:44:19PM +0100, Mark Brown wrote:
+> > On Thu, Aug 22, 2024 at 05:12:30PM +0100, Catalin Marinas wrote:
+> > > On Thu, Aug 22, 2024 at 02:15:22AM +0100, Mark Brown wrote:
+> >=20
+> > > > +static bool is_invalid_gcs_access(struct vm_area_struct *vma, u64 =
+esr)
+> >=20
+> > > > +	} else if (unlikely(vma->vm_flags & VM_SHADOW_STACK)) {
+> > > > +		/* Only GCS operations can write to a GCS page */
+> > > > +		return is_write_abort(esr);
+> > > > +	}
 
-Let's give the CKI credit for finding this:
-Reported-by: CKI Project <cki-project@redhat.com>
+> > Yes, that should check for a data abort.  I think I'd formed the
+> > impression that is_write_abort() included that check somehow.  As you
+> > say it's to avoid spinning trying to resolve a permission fault for a
+> > write (non-GCS reads to a GCS page are valid), I do think we need the=
+=20
+> > is_write_abort() since non-GCS reads are valid so something like:
+> >=20
+> > 	if (!esr_is_data_abort(esr))
+> > 		return false;
+> >=20
+> > 	return is_write_abort(esr);
+>=20
+> We do need the write abort check but not unconditionally, only if to a
+> GCS page (you can have other genuine write aborts).
 
-If anyone is interested, here is the test/log link:
-https://datawarehouse.cki-project.org/kcidb/tests/redhat:1413102084-x86_64-kernel_upt_28
+tThat was to replace the checks in the above case, not the function as a
+whole.
 
-By the way, was it easy to repro on a similar machine as the one
-reported by CKI and then how did it fare with this patch in place?
+--QBL8uS70EYGjHk3p
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> ---
->  tools/testing/selftests/livepatch/test-livepatch.sh | 7 ++-----
->  1 file changed, 2 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
-> index 65c9c058458d..bd13257bfdfe 100755
-> --- a/tools/testing/selftests/livepatch/test-livepatch.sh
-> +++ b/tools/testing/selftests/livepatch/test-livepatch.sh
-> @@ -139,11 +139,8 @@ load_lp $MOD_REPLACE replace=1
->  grep 'live patched' /proc/cmdline > /dev/kmsg
->  grep 'live patched' /proc/meminfo > /dev/kmsg
->  
-> -mods=(/sys/kernel/livepatch/*)
-> -nmods=${#mods[@]}
-> -if [ "$nmods" -ne 1 ]; then
-> -	die "Expecting only one moduled listed, found $nmods"
-> -fi
-> +loop_until 'mods=(/sys/kernel/livepatch/*); nmods=${#mods[@]}; [[ "$nmods" -eq 1 ]]' ||
-> +        die "Expecting only one moduled listed, found $nmods"
->  
->  # These modules were disabled by the atomic replace
->  for mod in $MOD_LIVEPATCH3 $MOD_LIVEPATCH2 $MOD_LIVEPATCH1; do
+-----BEGIN PGP SIGNATURE-----
 
-With commit msg additions above:
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbHdcwACgkQJNaLcl1U
+h9DRZgf/cfCggcnTIkzrBOCGpdBnnvrHenLxqYdUHuYxfAA/f/+OY6Ryiz7GiVVN
+dsEg7gYHWwsk0cTwEgGm++++b84foIZ1WeBZ46XlkFKSK0McT1h01SxvUqi6bu3R
+Mj62HWq2M43bg8tVzjIsNFMIZKxKg/8RJVKFsg0KTx/Y4JLXoJkLtplgh4eCuxh0
+Xg0yYgmx4aE7JOYegrvzRVUuj0F6rT8Io3eU7LbdJ4GpP28wCf6jVymCjyhQOHav
+sWHIP3j85jUutzI9HQAsfUt9BnT6GMnKfu16R9nOAdGgfc/XMzzW7lgzRJhLeroa
+kebp1dN/8F8ek5AKqLqstfOmgDdTzg==
+=+1Rr
+-----END PGP SIGNATURE-----
 
-Acked-by: Joe Lawrence <joe.lawrence@redhat.com>
-
-Thanks,
-
--- 
-Joe
-
+--QBL8uS70EYGjHk3p--
 
