@@ -1,187 +1,198 @@
-Return-Path: <linux-kselftest+bounces-16026-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16027-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0263695B13C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 11:14:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C952895B167
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 11:22:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 45AB4B22B13
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 09:14:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E5A8F1C20AC6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 09:21:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A69F17C7DF;
-	Thu, 22 Aug 2024 09:14:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1802D18308A;
+	Thu, 22 Aug 2024 09:20:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qV1OBTU7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VtAmLXtz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 256E01C6B5;
-	Thu, 22 Aug 2024 09:14:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A17413DDBA;
+	Thu, 22 Aug 2024 09:20:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724318045; cv=none; b=TqdbAezVBoezdtye6TTAGcu+UlkaW3unrxwMutl/NXOP+Ky1BXkgNUvFWqAmJlyeUKqKcdyGVgpE84eU3QkWZwHI2sJX2vwRZ+5N5XYZncYJw50QsLmfzLOKWyn31Siiy37NsiqxN13BN3UzTN1td2YDoSko1OYAK0zwtlUKPTo=
+	t=1724318431; cv=none; b=hoym1kah9MBh7s9ppZdmjTI0M5+eP/jz3y05N5/kYdCZuIiW3nMDKIaZpNwulf1hbHbdcYFPoCpH6ha/9e53ew0ws/JqbynD4sKqhLiU/Dbcbg4iB0eL/HUVJ6WvEpV9X/bVv3UedV0TUIxLLQ5U26a2EvE+0+lLob4KdeBP/8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724318045; c=relaxed/simple;
-	bh=3pePhm2enxScNpWzI2H1OmyMtOOZNL1UYS5tRffuIWs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kgh3RRBmwWJUTY8Kd67ZITjx5jBwVu7vbC2pEwnzDQiClAxCoB9PMDdZhKl/XS3pWS8SbdXImshSXrwljFTPkoivND+nmMDFEuGph0lXJXGyTRSDa17eZDHLYIg3ollYAmhb6hFKNsG4rNdEFybZ3mF8lD3De3hCTfqX8syqWwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qV1OBTU7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07C71C4AF0C;
-	Thu, 22 Aug 2024 09:13:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724318044;
-	bh=3pePhm2enxScNpWzI2H1OmyMtOOZNL1UYS5tRffuIWs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qV1OBTU79pM2Hpfxa6ebghJmrVPv1R3kKngrwaBlLdJXdsuJNcUBjck35GNRjfWdn
-	 h5EeXt8+pIH99N80YPTdafro723rFXxaKkq66Aznh6XC0/xp+2qDEK1W1weN83H5U5
-	 U68lM5a2NRyB+dp5QoV2mLcEVZ1ZHyKNqFxrZP5dLnS/aQb3FvKq3L96hfyqjYM6KC
-	 CtjZZ7uGtH1cYc6GX2W/bp4bEhmbJspEQiVe8ZvVrT0mAuimVlKoWF1NHTnWBfL+Ic
-	 skKTHEGqkjU7wfhi6sqDIsZdL7afBB+rZaYrgfgJRrNK8s/yl+a9x48LAaUl0FYbMN
-	 Pr1JFRb+0cvLA==
-Message-ID: <0201ab87-5f65-4287-bda2-d170a90ae458@kernel.org>
-Date: Thu, 22 Aug 2024 11:13:51 +0200
+	s=arc-20240116; t=1724318431; c=relaxed/simple;
+	bh=wa11E4vC16meyt/HRGlxBpjY6+NDyQ8gzq+Zo4740EM=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rJ0UW93q6q1d6MOd5wquhqPGALSlm0pICbNFFZ/qq8bUVoy5AvxpbBLbDtlpWNEbLD8axi9UW8g83uMNDFkomJNMiIp35KxAqKTAfP4AveIGmSaGRK+/Pz1y0GH8ESgz598GSTQA/tZoB04wQOd6Y2n+B+6u5wIXOFIcLAp7CKw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VtAmLXtz; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2d3c071d276so400828a91.1;
+        Thu, 22 Aug 2024 02:20:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724318429; x=1724923229; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MyKLfBPeA5XoHzpM60pqMjyl1ufI4H7IKPsGxUcKYe0=;
+        b=VtAmLXtzFHOUO4nJShXKtkyP9nYDlyNEX0uuMdbpgtrCPtlCBHoy4cEFE2aECldVAa
+         czMUQQWiugks7yDu8/MJ8Ne1WvageMRJGLUVZyHzqdr9mhWgjlsPEw0s+WVoVo7TQWNs
+         4ZObI38B8pMPCYBnxaMQDNJ4DVghafq0MMUwI87YHKwboYWn2roDpfnyjVKWZohC/Rve
+         cLr3Q4kxu8DmTeK0FiVj3+cE35aUEGZP8humoPb59+vVKPF2YisDMfnddm6M897IWx1c
+         3Iz8B83PAP7gR7XrpGmnc6DfC8cEOyQWygSuWrYOwWXtw+r5FlqEfknSR4vbsEyrHn6s
+         rAkg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724318429; x=1724923229;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MyKLfBPeA5XoHzpM60pqMjyl1ufI4H7IKPsGxUcKYe0=;
+        b=Z2Z6IQkG5qcwncEaLB2zHlHhS6AamQVKOEU4I6ZTe9pQirbBL8ft447rbvwiC6WOiU
+         mx2f5B66Q15ZVcsIa5yVfNorWL0Fl5eHprBzB/IiISyBqwIY4dO3sjL3qXNLAd3y/tLW
+         jqaqWuc5HDwVbsTOGlDtae7xZjn0ttbySHGXUxZe5n3q3Pew23xQl6PLeblKiew93d6J
+         nEZieBRUjCgLQSdBBc/W5oNOKf2jSIKbXw8QjnF3Yi96LUX+Wqw3oZ89mDgiS7DBnXJO
+         ukTUIeYkd9enMeFdGjQy3SCjLU62ea293+QwaEni1NfWeJ/5kMwLjgMRG6SoQSIKWfhG
+         U4QA==
+X-Forwarded-Encrypted: i=1; AJvYcCWfsj2AD1B4X0/E9NBgHSD0O1yVkLfk7wpJ1tIAO0eQmuK+X9TvguloHe34Tt5Ve/x2bxeL5ksCrz9+PGN7Qd4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzprH2aTZ/25+Kq6sKW4nkjc3WuAVpONkX1fKOxaBVmCqUtgIx
+	V8s9u7uqdd0n+3Pbshoy/WmZCsprAXtaoCW2eiMbnBMijeOin0Rh
+X-Google-Smtp-Source: AGHT+IGr3A873mZtkqvDzilnFaS1by2i3RHoxnCkO8ZUQ7LDkHORbnZcmyrgl2NFlt5WFhFXkYu8iQ==
+X-Received: by 2002:a17:90a:17e7:b0:2d3:bd5f:b369 with SMTP id 98e67ed59e1d1-2d6169beceemr1466584a91.1.1724318428751;
+        Thu, 22 Aug 2024 02:20:28 -0700 (PDT)
+Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d61392a1efsm1239298a91.21.2024.08.22.02.20.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 Aug 2024 02:20:28 -0700 (PDT)
+From: Tony Ambardar <tony.ambardar@gmail.com>
+X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
+Date: Thu, 22 Aug 2024 02:20:26 -0700
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: bpf <bpf@vger.kernel.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	Ilya Leoshkevich <iii@linux.ibm.com>
+Subject: Re: [PATCH bpf-next v1 5/8] libbpf: Support opening bpf objects of
+ either endianness
+Message-ID: <ZscC2gam99zILmz6@kodidev-ubuntu>
+References: <cover.1724216108.git.tony.ambardar@gmail.com>
+ <62a2ef41629ad5ef7db48d720959527462e1beca.1724216108.git.tony.ambardar@gmail.com>
+ <CAADnVQJ2XW0QwSGAaqzEUY4jozF6ML3dxr0mE7hGct0-6hKNnA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH bpf-next v4 2/2] selftests/bpf: Add mptcp subflow subtest
-Content-Language: en-GB
-To: Manu Bretelle <chantra@meta.com>, Martin KaFai Lau <martin.lau@linux.dev>
-Cc: "mptcp@lists.linux.dev" <mptcp@lists.linux.dev>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Mykola Lysenko <mykolal@meta.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- "sdf@fomichev.me" <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- Daniel Xu <dxu@dxuuu.xyz>
-References: <20240805-upstream-bpf-next-20240506-mptcp-subflow-test-v4-0-2b4ca6994993@kernel.org>
- <20240805-upstream-bpf-next-20240506-mptcp-subflow-test-v4-2-2b4ca6994993@kernel.org>
- <2136317a-3e95-4993-b2fc-1f3b2c28dbdc@linux.dev>
- <364C4C5B-27A0-4210-84E2-8CA9867E4127@meta.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <364C4C5B-27A0-4210-84E2-8CA9867E4127@meta.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQJ2XW0QwSGAaqzEUY4jozF6ML3dxr0mE7hGct0-6hKNnA@mail.gmail.com>
 
-Hi Manu,
-
-On 21/08/2024 22:32, Manu Bretelle wrote:
+On Wed, Aug 21, 2024 at 06:55:58PM -0700, Alexei Starovoitov wrote:
+> On Wed, Aug 21, 2024 at 2:10 AM Tony Ambardar <tony.ambardar@gmail.com> wrote:
+> >
+> >
+> > +static inline void bpf_insn_bswap(struct bpf_insn *insn)
+> > +{
+> > +       /* dst_reg & src_reg nibbles */
+> > +       __u8 *regs = (__u8 *)insn + offsetofend(struct bpf_insn, code);
+> > +
+> > +       *regs = (*regs >> 4) | (*regs << 4);
+> > +       insn->off = bswap_16(insn->off);
+> > +       insn->imm = bswap_32(insn->imm);
+> > +}
 > 
-> 
->> On Aug 13, 2024, at 6:12 PM, Martin KaFai Lau <martin.lau@linux.dev> wrote:
->>
->>>
->> On 8/5/24 2:52 AM, Matthieu Baerts (NGI0) wrote:
->>> +static int endpoint_init(char *flags)
->>> +{
->>> + SYS(fail, "ip -net %s link add veth1 type veth peer name veth2", NS_TEST);
->>> + SYS(fail, "ip -net %s addr add %s/24 dev veth1", NS_TEST, ADDR_1);
->>> + SYS(fail, "ip -net %s link set dev veth1 up", NS_TEST);
->>> + SYS(fail, "ip -net %s addr add %s/24 dev veth2", NS_TEST, ADDR_2);
->>> + SYS(fail, "ip -net %s link set dev veth2 up", NS_TEST);
->>> + if (SYS_NOFAIL("ip -net %s mptcp endpoint add %s %s", NS_TEST, ADDR_2, flags)) {
->>> + printf("'ip mptcp' not supported, skip this test.\n");
->>> + test__skip();
->>
->> It is always a skip now in bpf CI:
->>
->> #171/3   mptcp/subflow:SKIP
->>
->> This test is a useful addition for the bpf CI selftest.
->>
->> It can't catch regression if it is always a skip in bpf CI though.
->>
->> iproute2 needs to be updated (cc: Daniel Xu and Manu, the outdated iproute2 is something that came up multiple times).
->>
->> Not sure when the iproute2 can be updated. In the mean time, your v3 is pretty close to getting pm_nl_ctl compiled. Is there other blocker on this?
-> 
-> I have updated runners to Ubuntu 24.04 which comes with:
-> root@1fdd5d75581b:/actions-runner# ip --json -V
-> ip utility, iproute2-6.1.0, libbpf 1.3.0
-> root@1fdd5d75581b:/actions-runner# ip mptcp help
-> Usage:  ip mptcp endpoint add ADDRESS [ dev NAME ] [ id ID ]
->                                       [ port NR ] [ FLAG-LIST ]
->         ip mptcp endpoint delete id ID [ ADDRESS ]
->         ip mptcp endpoint change [ id ID ] [ ADDRESS ] [ port NR ] CHANGE-OPT
->         ip mptcp endpoint show [ id ID ]
->         ip mptcp endpoint flush
->         ip mptcp limits set [ subflows NR ] [ add_addr_accepted NR ]
->         ip mptcp limits show
->         ip mptcp monitor
-> FLAG-LIST := [ FLAG-LIST ] FLAG
-> FLAG  := [ signal | subflow | backup | fullmesh ]
-> CHANGE-OPT := [ backup | nobackup | fullmesh | nofullmesh ]
-> 
-> Assuming I don’t need to revert back to old runners due to unrelated issue, you should now have `ip mptcp` available.
+> This is really great!
+> Thank you for working on it.
 
-Great, thank you for this update, that will ease the inclusion of this
-series!
+Happy to help! The endian restrictions were a long-time annoyance for me.
 
-(That's a shame Ubuntu 24.04 didn't come with IPRoute 6.8, same version
-as their default kernel [1]... but that's not blocking us here)
+> 
+> This idea was brought up a couple times, since folks want to compile
+> bpf prog once, embed it into their user space binary,
+> and auto adjust to target endianness.
+> Cross compilation isn't important to them,
+> but the ability to embed a single .o instead of two .o-s is a big win.
 
-[1] https://bugs.launchpad.net/ubuntu/+source/iproute2/+bug/2051672
+Ah, interesting use case. I hadn't really considered that or tested it.
+I suppose .symtab and .rel* have ELF types so OK, .strtab doesn't matter,
+and now we have BTF/BTF.ext converters, so why not? Something like light
+skeleton might be a problem though, because the data blob is
+heterogeneous and would be hard to convert byte-order after writing.
+
+> 
+> It's great that the above insn, elf and btf adjustments are working.
+> Since endianness is encoded in elf what's the point of
+> extra btf_ext__endianness libbpf api?
+> Aren't elf and btf.ext suppose to be in the same endianness all the time?
+
+I implemented BTF.ext following the BTF endianness API example, which
+handles raw BTF, in-memory, and not just ELF object files. With BTF,
+we have API clients like pahole, but only internal usage so far for
+BTF.ext, and no notion of "raw" BTF.ext. I suppose exposing an API
+for btf_ext__endianness isn't strictly needed right now, but I can
+imagine BTF-processing clients using it. What are your thoughts, Andrii?
+
+BTW, I just fixed a bug in my light skeleton code that made test_progs
+'map_ptr' fail, so will be sending out a v2 patch.
+
+Currently, I have only 2 unexpected test failures on s390x:
+
+subtest_userns:PASS:socketpair 0 nsec
+subtest_userns:PASS:fork 0 nsec
+recvfd:PASS:recvmsg 0 nsec
+recvfd:PASS:cmsg_null 0 nsec
+recvfd:PASS:cmsg_len 0 nsec
+recvfd:PASS:cmsg_level 0 nsec
+recvfd:PASS:cmsg_type 0 nsec
+parent:PASS:recv_bpffs_fd 0 nsec
+materialize_bpffs_fd:PASS:fs_cfg_cmds 0 nsec
+materialize_bpffs_fd:PASS:fs_cfg_maps 0 nsec
+materialize_bpffs_fd:PASS:fs_cfg_progs 0 nsec
+materialize_bpffs_fd:PASS:fs_cfg_attachs 0 nsec
+parent:PASS:materialize_bpffs_fd 0 nsec
+sendfd:PASS:sendmsg 0 nsec
+parent:PASS:send_mnt_fd 0 nsec
+recvfd:PASS:recvmsg 0 nsec
+recvfd:PASS:cmsg_null 0 nsec
+recvfd:PASS:cmsg_len 0 nsec
+recvfd:PASS:cmsg_level 0 nsec
+recvfd:PASS:cmsg_type 0 nsec
+parent:PASS:recv_token_fd 0 nsec
+parent:FAIL:waitpid_child unexpected error: 22 (errno 3)
+#402/9   token/obj_priv_implicit_token_envvar:FAIL
+
+and
+
+libbpf: prog 'on_event': BPF program load failed: Bad address
+libbpf: prog 'on_event': -- BEGIN PROG LOAD LOG --
+The sequence of 8193 jumps is too complex.
+verification time 2633000 usec
+stack depth 360
+processed 116096 insns (limit 1000000) max_states_per_insn 1 total_states 5061 peak_states 5061 mark_read 2540
+-- END PROG LOAD LOG --
+libbpf: prog 'on_event': failed to load: -14
+libbpf: failed to load object 'pyperf600.bpf.o'
+scale_test:FAIL:expect_success unexpected error: -14 (errno 14)
+#525     verif_scale_pyperf600:FAIL
+
+
+I'd appreciate any thoughts on troubleshooting these, and will continue
+looking into them.
 
 Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
+Tony
 
