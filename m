@@ -1,158 +1,185 @@
-Return-Path: <linux-kselftest+bounces-15986-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-15987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F177295AC45
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 05:54:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B4BF95ACA0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 06:39:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A95CF1F22892
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 03:54:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36B471F2283A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 04:39:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F8042AF0D;
-	Thu, 22 Aug 2024 03:54:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4612442A9B;
+	Thu, 22 Aug 2024 04:39:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CHpwZIFk"
+	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="R0YXP83E"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A05D8249ED
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2024 03:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 434251CAA6
+	for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2024 04:39:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724298888; cv=none; b=M0ixbCMzg5lUPJbi8BHos+nrhLi+6HUQLLDYi+6TEj+c1Qmm2XsXic8V2mfOS+S3BFnIjqYCFqPxiidRGVPpfKV54r1bid60/mQZy7iT7Xzpjz3C8QGXLmNdBJ+S6/kHNtGn5J3oCY/5bVyrXxi5lpcn+JkAqr6+XpZI201exiQ=
+	t=1724301577; cv=none; b=snokEXg+b7eaA4+Ck2fqLZngpCGfyKh0wmQPQ3/eOI0U5mjwIxjsI+c5bxoYjMJyiRytNKc6tniUngRt1CatIG8PFxqR4E8estkgVxDEeHi/di3AZTneTnTsh5AIeUNrCbYwlVaD85qHSyQOT2bp1STjVkMKSXLWBeleYWzzC9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724298888; c=relaxed/simple;
-	bh=T/F5YWbBsHJ/z0Iuh2yAc4urVrY6y59yzaKigq0sOvw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RtIohYMOxCfCYw8aTO9Zt35D8sBH2Y2/EQCKk/bRylmijMrXHXBRAntHFsHNludDaBaXmJrg/kqXgwbe+jEsPqwDHliTB0x6qxMg0sqw2TYrtuAdlc8kp1gxmmZXjX1L/3KeOjiKsYI/i7/c8SSseDPx/liI1UK+0kKb0VljnFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CHpwZIFk; arc=none smtp.client-ip=209.85.215.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-7bcf8077742so282096a12.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 20:54:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1724298886; x=1724903686; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3+51o8YiuRVZF11J4eUjPb8uV0dcc874YeCBbU5SJ2E=;
-        b=CHpwZIFk7PKPPrusbDFktlICkdUajUnnYEPKiqgT33nxNZbcY6Unn32lxf1eaHfrB7
-         s5XjLAPLVXtdVXq5t5SwKqEfmHD2W59cqNgIl50Hj3IvQxWp7kZ6ip9T5F0QbQnDfaJO
-         VUUapfPMZ+VebD8eHQ1twkw13Eh2t86zUkx9M=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724298886; x=1724903686;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3+51o8YiuRVZF11J4eUjPb8uV0dcc874YeCBbU5SJ2E=;
-        b=CTe7BEfH77b4NlZ3pSyNeLAieDCRwQrn0yjkw8yyWrtF/hLAW3HuyqSHtP9CoMbzW0
-         ZqRrbrmBQkPT68l8LU217SLyHg+7USBypFlXMJ5rbGwcuaI67YIHsFotJ/lkYl8NbiZg
-         WjL/oi5pkvB5xw+VswL8Hen7fuuT4lK7GUEOOfw+/PPTUKveN1j3C7oB7pm/JcfI17H0
-         NHQI1VgiJvdU0D3eMUOFaKl9WInrDc0369IZVUKmZjjOhblxkrq4eS4A2KS+qh2mq20i
-         7hLA0JwzPrN8tABXDzNs9bIEWlo9OVMs9WBhdWLoPW+MvIugNln6lRe/BvBfqchLDziT
-         VVEw==
-X-Forwarded-Encrypted: i=1; AJvYcCX6CLvO2Y+1Ta1gYgr0XFjM7J59l1+OUpecYfNJRPEILTd/R7wbmMtqvl8Dlljc3O8HxNUfQEdLa6J45N9z3dY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxrkkx6P+e6ykwxfV49IjN/DhaT8SfK5/MkvgH3ONhVjkth9/jV
-	Me9CyiTMxckSuD7Ye8f2RWMn1nz6Muy4xSOjl0WBif6UFu7Dj9zMZXY/fgnAcm0=
-X-Google-Smtp-Source: AGHT+IEF5mjPTWIL5LkSLOikrrXvOOmbWUvTcH0b28Ep5CS8oSuo0W0v93DNqIuCxV5/NJGwDW5vvg==
-X-Received: by 2002:a05:6a21:920b:b0:1c6:fbc8:670d with SMTP id adf61e73a8af0-1cada148a32mr5136891637.43.1724298885562;
-        Wed, 21 Aug 2024 20:54:45 -0700 (PDT)
-Received: from [172.20.0.208] ([218.188.70.188])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20385bdc5e0sm3324215ad.271.2024.08.21.20.54.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Aug 2024 20:54:44 -0700 (PDT)
-Message-ID: <3901c521-be69-4824-a571-9182b9af02b6@linuxfoundation.org>
-Date: Wed, 21 Aug 2024 21:54:42 -0600
+	s=arc-20240116; t=1724301577; c=relaxed/simple;
+	bh=si1+5ckOBPzI1ghXUuFTsZOYlXHhTyB/XUwwp/ozvcI=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=e9P2qDvqBDDT+4ooSBTRGhIsbJovrqhmrzTSMb67XdPVjD9ftQNcpazccY6PKgJPkqAIicM6SWTsHVhxeS+WyHCN9zQOrz1CUjwaatgq0M2Rw6tDocN6wpgi/PsKnh1riXmubwOUnJuILOAsYk9Cq1NeUYMPg/8ggk5eCH11Sgo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=R0YXP83E; arc=none smtp.client-ip=62.89.141.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=linux.org.uk; s=zeniv-20220401; h=Sender:Content-Type:MIME-Version:
+	Message-ID:Subject:To:From:Date:Reply-To:Cc:Content-Transfer-Encoding:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=AA4WaTEkNjbjrZGfNu4KV2H8PXXj+NYazaOW4bROYjE=; b=R0YXP83Ems8aowdPQLXqMLRTEr
+	UMg28z+t/0ETQKuqxL8mNjw9KyQLxq2PH3M7MQtRJ1lXWGsTD0qGFi6Ru2FNHNFZwz505w4925L33
+	/VDw2NTIup6D+mbmt8Ot482GSUdW86XLKUn9vKTYVtFfJv6p0J1y+h2Vi1GdkRanZwrXo8H6miWoZ
+	TT7mRW8a7eaVptD34V8BBhIYRrjoJ5VXepW8dYdK+hlU5KwOAlP8ttYWVy+e65oqcRN/bb209hoFp
+	LobdO8fZsri+6bnlBQ+pL5Kbt4K9d32OYtoH+7IrIimaxX+T2/5ZiingxDiA2pDnWNR9+7O+4FcId
+	7X1yDzfg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1sgzbg-00000003z5d-32D3
+	for linux-kselftest@vger.kernel.org;
+	Thu, 22 Aug 2024 04:39:32 +0000
+Date: Thu, 22 Aug 2024 05:39:32 +0100
+From: Al Viro <viro@zeniv.linux.org.uk>
+To: linux-kselftest@vger.kernel.org
+Subject: [PATCH] test coverage for dup_fd() failure handling in unshare_fd()
+Message-ID: <20240822043932.GT504335@ZenIV>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] ftrace/selftest: Test combination of function_graph
- tracer and function profiler
-To: Steven Rostedt <rostedt@goodmis.org>, LKML
- <linux-kernel@vger.kernel.org>,
- Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Mark Rutland <mark.rutland@arm.com>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240821150903.05c6cf96@gandalf.local.home>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240821150903.05c6cf96@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Sender: Al Viro <viro@ftp.linux.org.uk>
 
-On 8/21/24 13:09, Steven Rostedt wrote:
-> From: Steven Rostedt <rostedt@goodmis.org>
-> 
-> Masami reported a bug when running function graph tracing then the
-> function profiler. The following commands would cause a kernel crash:
-> 
->    # cd /sys/kernel/tracing/
->    # echo function_graph > current_tracer
->    # echo 1 > function_profile_enabled
-> 
-> In that order. Create a test to test this two to make sure this does not
-> come back as a regression.
-> 
-> Link: https://lore.kernel.org/172398528350.293426.8347220120333730248.stgit@devnote2
-> 
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->   .../ftrace/test.d/ftrace/fgraph-profiler.tc   | 30 +++++++++++++++++++
->   1 file changed, 30 insertions(+)
->   create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/fgraph-profiler.tc
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-profiler.tc b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-profiler.tc
-> new file mode 100644
-> index 000000000000..62d44a1395da
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-profiler.tc
-> @@ -0,0 +1,30 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +# description: ftrace - function profiler with function graph tracing
-> +# requires: function_profile_enabled set_ftrace_filter function_graph:tracer
-> +
-> +# The function graph tracer can now be run along side of the function
-> +# profiler. But there was a bug that caused the combination of the two
-> +# to crash. It also required the function graph tracer to be started
-> +# first.
-> +#
-> +# This test triggers that bug
-> +#
-> +# We need function_graph and profiling to to run this test
-> +
-> +fail() { # mesg
-> +    echo $1
-> +    exit_fail
-> +}
-> +
-> +echo "Enabling function graph tracer:"
-> +echo function_graph > current_tracer
-> +echo "enable profiler"
-> +
-> +# Older kernels do not allow function_profile to be enabled with
-> +# function graph tracer. If the below fails, mark it as unsupported
-> +echo 1 > function_profile_enabled || exit_unsupported
-> +
-> +sleep 1
+	At some point there'd been a dumb braino during the dup_fd()
+calling conventions change; caught by smatch and immediately fixed.
+The trouble is, there had been no test coverage for the dup_fd() failure
+handling - neither in kselftests nor in LTP.  Fortunately, it can be
+triggered on stock kernel - ENOMEM would require fault injection, but
+EMFILE can be had with sysctl alone (fs.nr_open).
 
-Any specific reason for this sleep 1 - can you add a comment on top?
-> +
-> +exit 0
-
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-
-Let me know if you would like v2 for this to be taken through my tree.
-
-thanks,
--- Shuah
+Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+--- 
+diff --git a/tools/testing/selftests/core/Makefile b/tools/testing/selftests/core/Makefile
+index ce262d097269..8e99f87f5d7c 100644
+--- a/tools/testing/selftests/core/Makefile
++++ b/tools/testing/selftests/core/Makefile
+@@ -1,7 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ CFLAGS += -g $(KHDR_INCLUDES)
+ 
+-TEST_GEN_PROGS := close_range_test
++TEST_GEN_PROGS := close_range_test unshare_test
+ 
+ include ../lib.mk
+ 
+diff --git a/tools/testing/selftests/core/unshare_test.c b/tools/testing/selftests/core/unshare_test.c
+new file mode 100644
+index 000000000000..7fec9dfb1b0e
+--- /dev/null
++++ b/tools/testing/selftests/core/unshare_test.c
+@@ -0,0 +1,94 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <linux/kernel.h>
++#include <limits.h>
++#include <stdbool.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <syscall.h>
++#include <unistd.h>
++#include <sys/resource.h>
++#include <linux/close_range.h>
++
++#include "../kselftest_harness.h"
++#include "../clone3/clone3_selftests.h"
++
++TEST(unshare_EMFILE)
++{
++	pid_t pid;
++	int status;
++	struct __clone_args args = {
++		.flags = CLONE_FILES,
++		.exit_signal = SIGCHLD,
++	};
++	int fd;
++	ssize_t n, n2;
++	static char buf[512], buf2[512];
++	struct rlimit rlimit;
++	int nr_open;
++
++	fd = open("/proc/sys/fs/nr_open", O_RDWR);
++	ASSERT_GE(fd, 0);
++
++	n = read(fd, buf, sizeof(buf));
++	ASSERT_GT(n, 0);
++	ASSERT_EQ(buf[n - 1], '\n');
++
++	ASSERT_EQ(sscanf(buf, "%d", &nr_open), 1);
++
++	ASSERT_EQ(0, getrlimit(RLIMIT_NOFILE, &rlimit));
++
++	/* bump fs.nr_open */
++	n2 = sprintf(buf2, "%d\n", nr_open + 1024);
++	lseek(fd, 0, SEEK_SET);
++	write(fd, buf2, n2);
++
++	/* bump ulimit -n */
++	rlimit.rlim_cur = nr_open + 1024;
++	rlimit.rlim_max = nr_open + 1024;
++	EXPECT_EQ(0, setrlimit(RLIMIT_NOFILE, &rlimit)) {
++		lseek(fd, 0, SEEK_SET);
++		write(fd, buf, n);
++		exit(EXIT_FAILURE);
++	}
++
++	/* get a descriptor past the old fs.nr_open */
++	EXPECT_GE(dup2(2, nr_open + 64), 0) {
++		lseek(fd, 0, SEEK_SET);
++		write(fd, buf, n);
++		exit(EXIT_FAILURE);
++	}
++
++	/* get descriptor table shared */
++	pid = sys_clone3(&args, sizeof(args));
++	EXPECT_GE(pid, 0) {
++		lseek(fd, 0, SEEK_SET);
++		write(fd, buf, n);
++		exit(EXIT_FAILURE);
++	}
++
++	if (pid == 0) {
++		int err;
++
++		/* restore fs.nr_open */
++		lseek(fd, 0, SEEK_SET);
++		write(fd, buf, n);
++		/* ... and now unshare(CLONE_FILES) must fail with EMFILE */
++		err = unshare(CLONE_FILES);
++		EXPECT_EQ(err, -1)
++			exit(EXIT_FAILURE);
++		EXPECT_EQ(errno, EMFILE)
++			exit(EXIT_FAILURE);
++		exit(EXIT_SUCCESS);
++	}
++
++	EXPECT_EQ(waitpid(pid, &status, 0), pid);
++	EXPECT_EQ(true, WIFEXITED(status));
++	EXPECT_EQ(0, WEXITSTATUS(status));
++}
++
++TEST_HARNESS_MAIN
 
