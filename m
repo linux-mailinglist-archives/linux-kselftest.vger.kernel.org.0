@@ -1,107 +1,196 @@
-Return-Path: <linux-kselftest+bounces-16001-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16002-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81FDC95ADF9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 08:49:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C19CF95AE79
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 09:13:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EAD92813F2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 06:49:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1F174B21937
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 07:13:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE4381727;
-	Thu, 22 Aug 2024 06:49:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="L1flswx6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBC44149DFD;
+	Thu, 22 Aug 2024 07:13:33 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D757C61FFC
-	for <linux-kselftest@vger.kernel.org>; Thu, 22 Aug 2024 06:49:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDB7313A3FD;
+	Thu, 22 Aug 2024 07:13:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724309358; cv=none; b=CgfHSI9KhVaW2yMiwgVBd8J+vB1VChby6P+A1Ryge/zAXKkHqvolP/hwitVbhlmHvRU/pyMlY/MKIY988LypPWtPbLrsKDsN8rvUN/e7QWic548dLHHdi1sAkU4OfYjj398t+nUG1rfRr5PUsFw+rSVPJnaBm+zt/HjjwjnZnVo=
+	t=1724310813; cv=none; b=EydwLLp1N0L1u874Kwyfn6vK2dKpPvHJSnj9UA+J5ayjIUEY5hyQt4N0XBn0EiDgPucWdJNLUcMGzBbGlPyu6f3GZ44a0zJWzae+nQ5DVVMwPTqgAl0Nvcbsk8Z+cR/nG2D+Wz5pdb7jXLR6THxsZN0eT6x5+PHjWKWEKG/c5NA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724309358; c=relaxed/simple;
-	bh=bm35xzNfjPNHwPgApXChsxl3mMGjNrYMUtPIE8+4Vc0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=LauLAOnZx3ENnawukzW+mjgyfha9Dap4q/xKehz7XVXdjGy2RWgtnyPVCtp2VmsEfwejLqdPW/AQmKBdRD65RIsCJc0df/ZEJUHaixPOXaNWpzUbqQ5bfibAroOmYrurZ5oeNVQpBufofQgy2B2SNri6zhYczVrN03okk15FjbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=L1flswx6; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-714263cb074so433273b3a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 21 Aug 2024 23:49:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1724309356; x=1724914156; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=mDioYLjnuZOABk4MhI6ybqHWdYh/8eyEkk0WTD9uczo=;
-        b=L1flswx61flErnvEM1LGC+wbF6qUGjOf2MReGPnIoVFLwFUOrfsooL4EgDiQnGOji5
-         Z/9I9Rzh67rmqmcR5aC/gnowsiujp4Mv/2RHfEDK0pOEs41b/c7oxSeGTsgi7Xe/swgH
-         Te5dtfNUvjQoqP/ve4pwEPP9jBN9/rAHDCqMQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724309356; x=1724914156;
-        h=content-transfer-encoding:in-reply-to:from:cc:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mDioYLjnuZOABk4MhI6ybqHWdYh/8eyEkk0WTD9uczo=;
-        b=t2/MS6FtfgJUdmhfGRGxdhAIMVZpkNrBXA0Eo1/xDwYZ++3P7VZbHEvPSxAgj+TqKz
-         sTd3t51UXY8xGvK0f/IJNwt4gEhKVVwRmFmLrlsGsscarD5xCOx3m0PdrTf9rpu8mhF4
-         3fEiRUFJ6vnhV0vtTJZIVemXE0OJKd8T++tzP1jUr0Hs5k0ChEpxpYvE3FEd00Mcx2QC
-         zU8P9DMfQw6yUy201DAt75H7/43aOU86d8Abr2+2I8gppPCIWCbBQdw5FT5WR39k1eq3
-         ZCi36w+C/mlWKH/YEGxOv67qZpx+mrQ2iLUwPZ6EEyZDcWF9zl5h9sJ/FrQWXDyYhQi6
-         V2YA==
-X-Forwarded-Encrypted: i=1; AJvYcCXZvvrPz+xDop0CcGCkIDIpWVoN0rjm2+r5DTY7qoQKCZ4A/gCejNrkaQVASsqEymTeTfAteHJgNSB3yDfbTV4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBZTmTWdfy6XAnsB9DQeFmWpJOwLe71yf5ThlhBM5D9YZ5X3Lr
-	wuA43LsaKaQOVGv9sXbhykdfVz4p2fLq8DMbENwnP5ojf0swILaVD06qCSKBZw3KcU9wvr5SiS9
-	9jrI=
-X-Google-Smtp-Source: AGHT+IFSSmQywai21wWHMSzrIWMLzk8cOf/eB8M4ri4UGRpHPRJ0aIJhqyrLWe/YRibmGCd+QTXXzw==
-X-Received: by 2002:a05:6a00:b95:b0:714:200c:39a3 with SMTP id d2e1a72fcca58-71436489010mr1382740b3a.5.1724309355739;
-        Wed, 21 Aug 2024 23:49:15 -0700 (PDT)
-Received: from [172.20.0.208] ([218.188.70.188])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7143422ec1csm702839b3a.39.2024.08.21.23.49.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 21 Aug 2024 23:49:15 -0700 (PDT)
-Message-ID: <da3e91a8-da04-4c81-af84-405c5b46d345@linuxfoundation.org>
-Date: Thu, 22 Aug 2024 00:49:13 -0600
+	s=arc-20240116; t=1724310813; c=relaxed/simple;
+	bh=LDTg0Yi2fhuFH1uAWm1BFhSE+R7SP2TBN1LukDLSwAc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=npX4RPNDjb1ZABPNc1+T0M5RFCR0cz7jMtEBZ0CmeSLMzppp2F5HweE52bcU20PBVZp+6Km5x0v3yVq0bUkS3BhupJo+zPsGAlVhfg3Ust85IrQVrSOA6YB1D5ff0DqrSb0VJNzjpd6OMLcvKxqALjKefkwy4mduX0WHdCQjjYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4WqDv65R16z9sSK;
+	Thu, 22 Aug 2024 09:13:22 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 0-VRwaKzoNbn; Thu, 22 Aug 2024 09:13:22 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WqDv64Pbrz9sSH;
+	Thu, 22 Aug 2024 09:13:22 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 84A608B77E;
+	Thu, 22 Aug 2024 09:13:22 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id 27TFRoaI4C9O; Thu, 22 Aug 2024 09:13:22 +0200 (CEST)
+Received: from PO20335.idsi0.si.c-s.fr (PO16920.IDSI0.si.c-s.fr [192.168.232.181])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 6C3F08B763;
+	Thu, 22 Aug 2024 09:13:21 +0200 (CEST)
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"Theodore Ts'o" <tytso@mit.edu>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v2 00/17] Wire up getrandom() vDSO implementation on powerpc
+Date: Thu, 22 Aug 2024 09:13:08 +0200
+Message-ID: <cover.1724309198.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] test coverage for dup_fd() failure handling in
- unshare_fd()
-To: Al Viro <viro@zeniv.linux.org.uk>, linux-kselftest@vger.kernel.org
-References: <20240822043932.GT504335@ZenIV>
-Content-Language: en-US
-Cc: Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240822043932.GT504335@ZenIV>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1724310793; l=4901; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=LDTg0Yi2fhuFH1uAWm1BFhSE+R7SP2TBN1LukDLSwAc=; b=dv3IJ6HgpSk062fA80pC3beOaGyDkub2uRhJOU7nq6upvK1O1zJTzR6G/vOqsb7Bf92j66uNp R/+usMEBgmRBPUzWE5rLVkIDoO79FdFlAYqzoQmRCjL2crIMNd9IRbK
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 
-On 8/21/24 22:39, Al Viro wrote:
-> 	At some point there'd been a dumb braino during the dup_fd()
-> calling conventions change; caught by smatch and immediately fixed.
-> The trouble is, there had been no test coverage for the dup_fd() failure
-> handling - neither in kselftests nor in LTP.  Fortunately, it can be
-> triggered on stock kernel - ENOMEM would require fault injection, but
-> EMFILE can be had with sysctl alone (fs.nr_open).
-> 
-> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-> ---
+This series wires up getrandom() vDSO implementation on powerpc.
 
-Applied to linux-kselftest next for Linux 6.12-rc1 after fixing up
-the short log to reflect the right test.
+Tested on PPC32.
 
-Thank you.
+Performance on powerpc 885 (using kernel selftest):
+	~# ./vdso_test_getrandom bench-single
+	   vdso: 2500000 times in 7.897495392 seconds
+	   libc: 2500000 times in 56.091632232 seconds
+	syscall: 2500000 times in 55.704851989 seconds
 
-thanks,
--- Shuah
+Performance on powerpc 8321 (using kernel selftest):
+	~# ./vdso_test_getrandom bench-single
+	   vdso: 2500000 times in 2.017183250 seconds
+	   libc: 2500000 times in 13.088533630 seconds
+	syscall: 2500000 times in 12.952458068 seconds
+
+Only build tested on PPC64. There is a problem with vdso_test_getrandom
+selftest, it doesn't find vDSO symbol __kernel_getrandom. There is the
+same problem with vdso_test_gettimeofday so it is not related to
+getrandom.
+
+On strange things to be clarified, there is the format of the key passed
+to __arch_chacha20_blocks_nostack(). In struct vgetrandom_state it is
+declared as a table of u32, but in reality it seems it is a flat storage
+that needs to be loaded in reversed byte order, so it should either be
+defined as a table of bytes, or as a table of __le32 but not a table of
+u32. But this has no impact and can be clarified later and fixed in a
+follow-up patch.
+
+Changes in v2:
+- Define VM_DROPPABLE for powerpc/32
+- Fixes generic vDSO getrandom headers to enable CONFIG_COMPAT build.
+- Fixed size of generation counter
+- Fixed selftests to work on non x86 architectures
+
+Christophe Leroy (17):
+  asm-generic/unaligned.h: Extract common header for vDSO
+  vdso: Clean header inclusion in getrandom
+  vdso: Add __arch_get_k_vdso_rng_data()
+  vdso: Add missing c-getrandom-y in Makefile
+  vdso: Avoid call to memset() by getrandom
+  vdso: Change getrandom's generation to unsigned long
+  mm: Define VM_DROPPABLE for powerpc/32
+  powerpc: Add little endian variants of LWZX_BE and STWX_BE
+  powerpc/vdso32: Add crtsavres
+  powerpc/vdso: Refactor CFLAGS for CVDSO build
+  powerpc/vdso: Wire up getrandom() vDSO implementation
+  selftests: vdso: Fix powerpc64 vdso_config
+  selftests: vdso: Don't hard-code location of vDSO sources
+  selftests: vdso: Make test_vdso_getrandom look for the right vDSO
+    function
+  selftests: vdso: Fix build of test_vdso_chacha
+  selftests: vdso: Make VDSO function call more generic
+  selftests: vdso: Add support for vdso_test_random for powerpc
+
+ arch/powerpc/Kconfig                          |   1 +
+ arch/powerpc/include/asm/asm-compat.h         |   8 +
+ arch/powerpc/include/asm/mman.h               |   2 +-
+ arch/powerpc/include/asm/vdso/getrandom.h     |  67 ++++
+ arch/powerpc/include/asm/vdso/vsyscall.h      |   6 +
+ arch/powerpc/include/asm/vdso_datapage.h      |   2 +
+ arch/powerpc/kernel/asm-offsets.c             |   1 +
+ arch/powerpc/kernel/vdso/Makefile             |  45 ++-
+ arch/powerpc/kernel/vdso/getrandom.S          |  58 ++++
+ arch/powerpc/kernel/vdso/gettimeofday.S       |  13 -
+ arch/powerpc/kernel/vdso/vdso32.lds.S         |   1 +
+ arch/powerpc/kernel/vdso/vdso64.lds.S         |   1 +
+ arch/powerpc/kernel/vdso/vgetrandom-chacha.S  | 297 ++++++++++++++++++
+ arch/powerpc/kernel/vdso/vgetrandom.c         |  14 +
+ arch/x86/entry/vdso/vma.c                     |   3 +
+ arch/x86/include/asm/pvclock.h                |   1 +
+ arch/x86/include/asm/vdso/vsyscall.h          |  10 +-
+ drivers/char/random.c                         |   5 +-
+ fs/proc/task_mmu.c                            |   4 +-
+ include/asm-generic/unaligned.h               |  11 +-
+ include/linux/mm.h                            |   4 +-
+ include/trace/events/mmflags.h                |   4 +-
+ include/vdso/datapage.h                       |   2 +-
+ include/vdso/getrandom.h                      |   2 +-
+ include/vdso/helpers.h                        |   1 +
+ include/vdso/unaligned.h                      |  15 +
+ lib/vdso/Makefile                             |   1 +
+ lib/vdso/getrandom.c                          |  30 +-
+ tools/arch/powerpc/vdso                       |   1 +
+ tools/arch/x86/vdso                           |   1 +
+ tools/include/linux/linkage.h                 |   4 +
+ tools/testing/selftests/vDSO/Makefile         |  12 +-
+ tools/testing/selftests/vDSO/vdso_call.h      |  52 +++
+ tools/testing/selftests/vDSO/vdso_config.h    |  14 +-
+ .../selftests/vDSO/vdso_test_getrandom.c      |  11 +-
+ 35 files changed, 628 insertions(+), 76 deletions(-)
+ create mode 100644 arch/powerpc/include/asm/vdso/getrandom.h
+ create mode 100644 arch/powerpc/kernel/vdso/getrandom.S
+ create mode 100644 arch/powerpc/kernel/vdso/vgetrandom-chacha.S
+ create mode 100644 arch/powerpc/kernel/vdso/vgetrandom.c
+ create mode 100644 include/vdso/unaligned.h
+ create mode 120000 tools/arch/powerpc/vdso
+ create mode 120000 tools/arch/x86/vdso
+ create mode 100644 tools/testing/selftests/vDSO/vdso_call.h
+
+-- 
+2.44.0
 
 
