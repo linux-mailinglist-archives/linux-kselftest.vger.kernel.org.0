@@ -1,69 +1,62 @@
-Return-Path: <linux-kselftest+bounces-16039-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16040-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 535CD95B290
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 12:04:59 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63DC195B2A7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 12:13:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 847091C21734
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 10:04:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0021CB212D9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 10:13:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35F31181B83;
-	Thu, 22 Aug 2024 10:04:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F57617DE15;
+	Thu, 22 Aug 2024 10:13:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hHhf7VSh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01CD3180A80;
-	Thu, 22 Aug 2024 10:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7323F2033A;
+	Thu, 22 Aug 2024 10:13:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724321075; cv=none; b=RjykkRaJwpNAX18icybiEnOfNAnzkcyWFMxeFPYFjxXTXt8U4C1OfZLeUGtGhpFoO+5ySIhuTJYrXY601W9fUwIJnvVMI2EXLX1bp7L4QSx8cO3UrXqdnNNoHne8vC8yssIYmnpkYRcKxqM39UXRUHeNIK+9yyn0kCb0uuu3dUc=
+	t=1724321624; cv=none; b=LvnpzlPt5/ouUdyeGmZpbbAZDJYqFTnnyGtSFJN5biCMKOtRqO6CalRekWGKe+nBgwktCE1SKdX/Mq+jVlTOzT0HcKXXRewqWVEuBk/2qJsuePNSwLMFr0C3VzagkjJbTsb2u6eFliBv4N1smMMcXKnsoQ0W0d5gVzjfHsZMRhM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724321075; c=relaxed/simple;
-	bh=uRZ+2080/qYSdqovOL+EXXS23WTCIDmPpUP6IN3B7+0=;
+	s=arc-20240116; t=1724321624; c=relaxed/simple;
+	bh=39TFUOz4ywXTFWX0266kN3BSTB/omdkuUEgKdN1k0fk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K65PMLGvkuX26K6+9Mx3v01/1sRyzBVBc3TVx5sM8u63xtcu2xYzXnJLFeu9c2Qjl8DRSFUrR2XryRSQhp2q0Fh7YyWf4iUyoJGTPgfDC22y7S4FRPHtdH0G/eZcDsrCHHV6FCKMKNy1b/8ugCK1t+xc0SmXYo5WNUuCP2dNVjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 855C3C32782;
-	Thu, 22 Aug 2024 10:04:28 +0000 (UTC)
-Date: Thu, 22 Aug 2024 11:04:26 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=NNJ0XT7TxYvPa+AvWaybvkIqsbizwBs5DAwXvZDlIHkomX7aRWUmmSZTb0UMObpummui/WZNa7E+T2PEFLnsRoqZ7ePp+rkuMjnscjPRVI3Knnye59zG3o7Xf7jSsJU47FXZZ+fyMJ1nkHKGKrMo2MOIY2tpzt9UviupK9i11vM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hHhf7VSh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F4032C32782;
+	Thu, 22 Aug 2024 10:13:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724321624;
+	bh=39TFUOz4ywXTFWX0266kN3BSTB/omdkuUEgKdN1k0fk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hHhf7VShqp2gOVCaoGaZcVB7XiO9/saEricNNIbwpb85dW1xnEzB0PAMMTo2kSE9h
+	 ipkg4JY/6zT18K8EJ2bCI+cSMnprrYIPbp3bZZBTBx8Ox0Jk5YZUF15lXnvwiAo2rP
+	 ctLc1Q25CXSF70xS2I2Y3syPaYgf0Pq/DUAw+CpjCK4aDWJqfv73fGhK0pxN/Lh6Z6
+	 pnSMO5BSzj5S4TvhIgVqM8kwzohps1tNdesusd3YeIMNvWjiBDk0VX7QP4abLPeWUV
+	 La7X5AgpgcOTeqB0+sR16dkPsbwUMBoVmMbCXpQwKd3Naz9k7eKKJApRtFuPUfluFU
+	 vfhgwLyWW8D2Q==
+Date: Thu, 22 Aug 2024 11:13:39 +0100
+From: Simon Horman <horms@kernel.org>
+To: Dmitry Safonov <0x7f454c46@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
-	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Florian Weimer <fweimer@redhat.com>,
-	Christian Brauner <brauner@kernel.org>,
-	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
-	Ross Burton <ross.burton@arm.com>,
-	Yury Khrustalev <yury.khrustalev@arm.com>,
-	Wilco Dijkstra <wilco.dijkstra@arm.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v11 06/39] arm64/gcs: Document the ABI for Guarded
- Control Stacks
-Message-ID: <ZscNKgvz2FsUc30Q@arm.com>
-References: <20240822-arm64-gcs-v11-0-41b81947ecb5@kernel.org>
- <20240822-arm64-gcs-v11-6-41b81947ecb5@kernel.org>
+	Mohammad Nassiri <mnassiri@ciena.com>, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v3 2/8] selftests/net: Provide test_snprintf()
+ helper
+Message-ID: <20240822101339.GI2164@kernel.org>
+References: <20240815-tcp-ao-selftests-upd-6-12-v3-0-7bd2e22bb81c@gmail.com>
+ <20240815-tcp-ao-selftests-upd-6-12-v3-2-7bd2e22bb81c@gmail.com>
+ <20240821191004.GF2164@kernel.org>
+ <CAJwJo6Zix_bkE38RmDW6ywojvmzeOuPVtwH+Jqqz6AT=6jmh5A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -72,13 +65,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240822-arm64-gcs-v11-6-41b81947ecb5@kernel.org>
+In-Reply-To: <CAJwJo6Zix_bkE38RmDW6ywojvmzeOuPVtwH+Jqqz6AT=6jmh5A@mail.gmail.com>
 
-On Thu, Aug 22, 2024 at 02:15:09AM +0100, Mark Brown wrote:
-> Add some documentation of the userspace ABI for Guarded Control Stacks.
+On Wed, Aug 21, 2024 at 10:35:10PM +0100, Dmitry Safonov wrote:
+> Hi Simon,
 > 
-> Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
+> On Wed, 21 Aug 2024 at 20:10, Simon Horman <horms@kernel.org> wrote:
+> >
+> > On Thu, Aug 15, 2024 at 10:32:27PM +0100, Dmitry Safonov via B4 Relay wrote:
+> > > From: Dmitry Safonov <0x7f454c46@gmail.com>
+> > >
+> > > Instead of pre-allocating a fixed-sized buffer of TEST_MSG_BUFFER_SIZE
+> > > and printing into it, call vsnprintf() with str = NULL, which will
+> > > return the needed size of the buffer. This hack is documented in
+> > > man 3 vsnprintf.
+> > >
+> > > Essentially, in C++ terms, it re-invents std::stringstream, which is
+> > > going to be used to print different tracing paths and formatted strings.
+> > > Use it straight away in __test_print() - which is thread-safe version of
+> > > printing in selftests.
+> > >
+> > > Signed-off-by: Dmitry Safonov <0x7f454c46@gmail.com>
+> >
+> > Hi Dmitry,
+> >
+> > Some minor nits, as it looks like there will be a v4.
+> 
+> Thanks, both seem reasonable.
+> Did you get them with checkpatch.pl or with your trained eyes? :)
+> 
+> These days I run b4 prep --check and on latest version it just gave a
+> bunch of fmt-strings with columns > 100.
 
-Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Hi Dimitry,
+
+For networking code I usually run:
+
+checkpatch.pl --strict --codespell --min-conf-desc-length=80
+
+Where 80 is, I believe, still in line with preferences for Networking code.
+Although I'm not entirely sure it is applicable to this patch.
+
+As to your question, in this case I think it is the --strict that causes
+checkpatch to flag the issues I raised. Sorry for not mentioning that in my
+previous email.
 
