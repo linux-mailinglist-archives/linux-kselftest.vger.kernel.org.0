@@ -1,49 +1,37 @@
-Return-Path: <linux-kselftest+bounces-16114-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16115-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EABC95BC2E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 18:44:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDFD295BCFA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 19:20:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A6F21F277FF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 16:44:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09C1F1C21B2E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 22 Aug 2024 17:20:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABC9F1CDA3C;
-	Thu, 22 Aug 2024 16:44:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pF/ody/9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 104B91CF283;
+	Thu, 22 Aug 2024 17:19:51 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7261F1CDA26;
-	Thu, 22 Aug 2024 16:44:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C43731CE6F9;
+	Thu, 22 Aug 2024 17:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724345064; cv=none; b=k0RBbmAHZs25X46ac6XS8bJGzpdHsaOpF9AT5pk1RQvSYxWALCPPZP/jqXGPbo6GHYPvpHHMC04qRXCx51+EFib8pnNYct0rNcybbDGHGb5nenwAfjpPd4GteC4eNc2epAPq/TveWx2Sl8o5qtk77xh6wW+BxmxfQqGI9TRwvKk=
+	t=1724347190; cv=none; b=W0qH3MchrLoyy3qjki2hEYSnYhYsYR2xadsAZgcHJRlhStVSLWFQk6AkHqIgL93uSIBptrPbWdwVxkwWBN7UK1FVG8lwTnHDGIFZAUrNzRcxg9n8Rc4esdZ2uOum85KD5CJDhz0Sxgzs0pZhHgz5hygFOVRimWauVHqazo4UWZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724345064; c=relaxed/simple;
-	bh=5nVMn4LkuuoZiKq1lrBVs6QotPTnawufcHvhIzc/8+I=;
+	s=arc-20240116; t=1724347190; c=relaxed/simple;
+	bh=Y9AE9hh59polEoeUWWiPw1U6I0GOY7hTVod5vDQs2Po=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Jq//lLXZVsbPaA3rhQd8AU4OURLS2MTjt3Z6SRTdlKNRQ9XtlvHLAAKM5hncpkKzOdJL6ewIOSQrK77xnmZvba0gCnyjWz1s1c00vkymeBn8OZ8TL8ND9DFLr9XSSYeEzQ9vHDCGBZO29yZnIBkJKQbTDEJJVdWTBvtJnK6Ss3M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pF/ody/9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80409C32782;
-	Thu, 22 Aug 2024 16:44:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724345064;
-	bh=5nVMn4LkuuoZiKq1lrBVs6QotPTnawufcHvhIzc/8+I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pF/ody/9/o+/aOJwArsMCPFpQwT0EV8UZiSyMkWuRkDtaA9zA98X+68GNesul+qdI
-	 j359/Vz+Gg/HlVhmwMmcZDq+MII6ZkB1sdpS+muocrnk+e0OetqMq6OMevkFZ1wlxw
-	 rJjRMNbBUPb0hCeLZmKDpONpxkKiB4/L1XTe4iir3IjqZ+wS5gH/zukRsz1HNYuV/A
-	 L0BeUNIgcvmdLlyd6iSWGzrpfaaUh5HgC27f/N/wW7ML7feQU/1eiGe0y6HbmsDWuP
-	 3Y10FUYq+KJSsnWRAfZrVTfTipSHpXYxMFaMZ/BuKVufWhHKBlEVXQWq6Vosu32jb/
-	 3WGuBDHl/XkYg==
-Date: Thu, 22 Aug 2024 17:44:19 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=B6tJgFWdKxkXaKOfgiIBeCXHtzFbvEhucVpUhgCsHuK42JXfVCieO2slzf24kJkHld3pIjv9ULk8kRFTsDNyQCJOWDpeifSAVvY2fJgwc1WL20r7FwgeM1JDjJ4e5QVIJ1mDOHQy8qTrtTstdBpBOVAbdD9gttrFdAYAabuNDrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82D34C32782;
+	Thu, 22 Aug 2024 17:19:44 +0000 (UTC)
+Date: Thu, 22 Aug 2024 18:19:38 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Mark Brown <broonie@kernel.org>
 Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Marc Zyngier <maz@kernel.org>,
@@ -72,72 +60,53 @@ Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-riscv@lists.infradead.org
 Subject: Re: [PATCH v11 19/39] arm64/mm: Handle GCS data aborts
-Message-ID: <Zsdq4ymaW0vQffH_@finisterre.sirena.org.uk>
+Message-ID: <ZsdzKrTbrolW0lHn@arm.com>
 References: <20240822-arm64-gcs-v11-0-41b81947ecb5@kernel.org>
  <20240822-arm64-gcs-v11-19-41b81947ecb5@kernel.org>
  <ZsdjbsDrMWgBU9Hj@arm.com>
+ <Zsdq4ymaW0vQffH_@finisterre.sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="coW1UanIXdwHEo32"
-Content-Disposition: inline
-In-Reply-To: <ZsdjbsDrMWgBU9Hj@arm.com>
-X-Cookie: Your love life will be... interesting.
-
-
---coW1UanIXdwHEo32
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <Zsdq4ymaW0vQffH_@finisterre.sirena.org.uk>
 
-On Thu, Aug 22, 2024 at 05:12:30PM +0100, Catalin Marinas wrote:
-> On Thu, Aug 22, 2024 at 02:15:22AM +0100, Mark Brown wrote:
+On Thu, Aug 22, 2024 at 05:44:19PM +0100, Mark Brown wrote:
+> On Thu, Aug 22, 2024 at 05:12:30PM +0100, Catalin Marinas wrote:
+> > On Thu, Aug 22, 2024 at 02:15:22AM +0100, Mark Brown wrote:
+> 
+> > > +static bool is_invalid_gcs_access(struct vm_area_struct *vma, u64 esr)
+> 
+> > > +	} else if (unlikely(vma->vm_flags & VM_SHADOW_STACK)) {
+> > > +		/* Only GCS operations can write to a GCS page */
+> > > +		return is_write_abort(esr);
+> > > +	}
+> 
+> > I don't think that's right. The ESR on this path may not even indicate a
+> > data abort and ESR.WnR bit check wouldn't make sense.
+> 
+> > I presume we want to avoid an infinite loop on a (writeable) GCS page
+> > when the user does a normal STR but the CPU raises a permission fault. I
+> > think this function needs to just return false if !esr_is_data_abort().
+> 
+> Yes, that should check for a data abort.  I think I'd formed the
+> impression that is_write_abort() included that check somehow.  As you
+> say it's to avoid spinning trying to resolve a permission fault for a
+> write (non-GCS reads to a GCS page are valid), I do think we need the 
+> is_write_abort() since non-GCS reads are valid so something like:
+> 
+> 	if (!esr_is_data_abort(esr))
+> 		return false;
+> 
+> 	return is_write_abort(esr);
 
-> > +static bool is_invalid_gcs_access(struct vm_area_struct *vma, u64 esr)
+We do need the write abort check but not unconditionally, only if to a
+GCS page (you can have other genuine write aborts).
 
-> > +	} else if (unlikely(vma->vm_flags & VM_SHADOW_STACK)) {
-> > +		/* Only GCS operations can write to a GCS page */
-> > +		return is_write_abort(esr);
-> > +	}
-
-> I don't think that's right. The ESR on this path may not even indicate a
-> data abort and ESR.WnR bit check wouldn't make sense.
-
-> I presume we want to avoid an infinite loop on a (writeable) GCS page
-> when the user does a normal STR but the CPU raises a permission fault. I
-> think this function needs to just return false if !esr_is_data_abort().
-
-Yes, that should check for a data abort.  I think I'd formed the
-impression that is_write_abort() included that check somehow.  As you
-say it's to avoid spinning trying to resolve a permission fault for a
-write (non-GCS reads to a GCS page are valid), I do think we need the=20
-is_write_abort() since non-GCS reads are valid so something like:
-
-	if (!esr_is_data_abort(esr))
-		return false;
-
-	return is_write_abort(esr);
-
-
-
---coW1UanIXdwHEo32
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbHauIACgkQJNaLcl1U
-h9A+Rwf/dhRu5UsqpoCA6/xq9A0Cnab5ynXnvR1EzbaEJwCP9rNRs+GxUHMjS602
-nhOn9hOMoiPZGQf6EXx1EQEKVTrRMdcKY6xmuJMvanSHbsVrmiYd/O9gy1dfNkSM
-TDmxmZ7Xc0G+qStZRZgpooJVDlbVRaCux4cNvKFjYcDX3wVF2Liq1NrHD3xrfelV
-vIRbUgCxo+LVDAkpsO/OOc1EK99EzOcV2xAnCddVDud02JsIW+KsG4/9MvW1YIJP
-NfpjBpbB/8mwaQfrssODC3R5By97ak392CJHPuTEhr6ymNONeJyVtB9c/2UiROsd
-A+w312rp0+u9/cY9Ul958kpl56JVdw==
-=+JCX
------END PGP SIGNATURE-----
-
---coW1UanIXdwHEo32--
+-- 
+Catalin
 
