@@ -1,145 +1,203 @@
-Return-Path: <linux-kselftest+bounces-16133-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16134-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4B7195C64D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 09:12:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22A0995C71E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 10:00:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 918362855DD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 07:12:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 468E71C21727
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 08:00:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C71C13AA27;
-	Fri, 23 Aug 2024 07:12:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AE7C13D8B2;
+	Fri, 23 Aug 2024 07:59:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="icCA3zmo"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rMyCjuBc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-173.mta1.migadu.com (out-173.mta1.migadu.com [95.215.58.173])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63558485
-	for <linux-kselftest@vger.kernel.org>; Fri, 23 Aug 2024 07:12:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BD8D1422CA;
+	Fri, 23 Aug 2024 07:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724397136; cv=none; b=S6OvOQy5EVXr2lzxg3wgcZi8yJZK8Ts1YGrbkpHgF7FlWHPy4YWM+nWQlQtktPfO1T1fivR1ZLbyW5KJtFx+Qib5GqObUAVdisHnGGPe4kzJeunIvy+dU6vPhnh65EvV+/zSMvN1VZTZACjNVFKazpI2doFf+yfilNlDuAbZS1Q=
+	t=1724399986; cv=none; b=ZuH9LM5JrnTX5VvQxffg7DZA9AqR6PtiAgAh/IURUi0ASq4DuK7gZQLkog7H49qG9oYmyv+BIIZ7RK+aq3Cxy88JdlPOkAwUm4Jw3EwxD1SAdCUZqi6p31D/QfVTohu5mR1GHaPAJwNhU98z27y542oHylh6DEYqpldRTEZIm9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724397136; c=relaxed/simple;
-	bh=QjcH1BEuWHmNibEMoZBPcc66J96gyQ7uYowHOvFzxO4=;
+	s=arc-20240116; t=1724399986; c=relaxed/simple;
+	bh=s92nc2dZVcnMMAS1PFOveerqnN1cIrzLxyDmH3T5rHE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OGY3/DsLE8la+ZpMN/2qv553SgjyN9wJzgUGwMtu+XNyCfleoAxJOTklmtT+pWsOqRMuedSKunkQKXda5A80BEvvPNzBO1Xw3xSzqgpEutGGG3+EADZCFprqf9PA9wXvMTzcO0edT1lnCFCwbjGkjjEsaJ+SvFjAysnDMhjmsjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=icCA3zmo; arc=none smtp.client-ip=95.215.58.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <fd2acc68-ca3f-4d83-554b-a2aa89ad7b5c@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1724397132;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=a6n0wnoPAcJF/7kS5yMq3pmT0HLmPp3tJepFRPvQRNc=;
-	b=icCA3zmoXUMtT3rgGRychKf9R9fXaktHv8p6kd+QscAiQZaezEF9LHbn5fnhxJFbrC4tOM
-	QCYjV/O93mu8Fvq0GGb01ThJ9W8AkBzt+UT1HysrbgAvJRWs/3WEAcRp6SCbB6sCjrT44a
-	OMG5ZQ3m2kiISEwhY6U1CFZNdIUSlSc=
-Date: Fri, 23 Aug 2024 15:12:06 +0800
+	 In-Reply-To:Content-Type; b=dzB5lGRPQ8Pzp/YRAanTMjcMBIEc/TAxSPKzDriAp3CKBkgmiOufAAeL7AUxNaDk3uQ0tWaq7ON8IFW20IBONo7tnQkCaX1AgY3blvxTuMY4wr3cy+TKWSSC9l4uWM1kWSu4weVEsU/Iu10Qil99fCiFN6DyPMo/RwggGO+l4MY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=rMyCjuBc; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47N4VljN014081;
+	Fri, 23 Aug 2024 07:59:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=P
+	FcAPI4pPTYFAJKAoa0THVqYeAbmGoXIO3pinmxb5mc=; b=rMyCjuBc1U5d0hFJi
+	bRCM0+mpVZ7NunozX7IMaWbVX9NARjioT8wNxssyYR8unxUZTA3a9qlyUhjHNIII
+	9AzorZ6897PXzj9YPT44twcsWQK/WJR7lCB0ifl5pbcwLS7gcQY8oBHC/zQ6AY0V
+	u7CppsvN4DUbYwz2w7gjLIiHxtAypSpyGo6NU0BImqCW0ilRxRugsHahzH10IU5f
+	VTZHVMwyd35Nz4xcuK8ize7qOXHrK8mFpAnTjqTmEUpZDI3Q8GvXEqKmQ2TU1PUW
+	YVnOtBSY4LMYoTNvel88Bp2jLFJSMeXdk2x/IHQZU2paKcAQmHEGqCTC8yuTLDKB
+	Uf/Dg==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 412mcyu09e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Aug 2024 07:59:38 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 47N7wgG3023119;
+	Fri, 23 Aug 2024 07:59:37 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 412mcyu099-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Aug 2024 07:59:37 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 47N7a2Ne014171;
+	Fri, 23 Aug 2024 07:59:37 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4137pn8rh4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 23 Aug 2024 07:59:36 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 47N7xVmp57344370
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 23 Aug 2024 07:59:33 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id E95402004F;
+	Fri, 23 Aug 2024 07:59:30 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 62E152004B;
+	Fri, 23 Aug 2024 07:59:30 +0000 (GMT)
+Received: from [9.179.27.211] (unknown [9.179.27.211])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 23 Aug 2024 07:59:30 +0000 (GMT)
+Message-ID: <69e416b1-17c7-45cc-b5d3-ab6de0f8e039@linux.ibm.com>
+Date: Fri, 23 Aug 2024 09:59:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH] selftests/bpf: Fix incorrect parameters in NULL pointer
- checking
-To: Dan Carpenter <dan.carpenter@linaro.org>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eddy Z <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- bpf <bpf@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>, Hao Ge <gehao@kylinos.cn>
-References: <20240820023447.29002-1-hao.ge@linux.dev>
- <02dd26b5-16a0-4732-80e4-c7bf183e965a@linux.dev>
- <58f57d70-a787-4012-8763-cc6eb642ef8a@stanley.mountain>
- <CAADnVQ+iTrTmbMcjt7fR7uTS=1tFcjv=z2CY6fO-4=kkM4YSMw@mail.gmail.com>
- <cc10c08a-a9aa-48e1-896f-46b566930271@stanley.mountain>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Hao Ge <hao.ge@linux.dev>
-In-Reply-To: <cc10c08a-a9aa-48e1-896f-46b566930271@stanley.mountain>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] selftests: kvm: s390: Add uc_skey VM test case
+To: Christoph Schlameuss <schlameuss@linux.ibm.com>, kvm@vger.kernel.org
+Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+References: <20240815154529.628087-1-schlameuss@linux.ibm.com>
+ <20240815154529.628087-3-schlameuss@linux.ibm.com>
+ <7f930ac3-a7af-47c7-8455-8c96d11754b5@linux.ibm.com>
+ <ZsNsMMc0Ir1w0BJy@darkmoore>
+Content-Language: en-US
+From: Janosch Frank <frankja@linux.ibm.com>
+Autocrypt: addr=frankja@linux.ibm.com; keydata=
+ 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
+In-Reply-To: <ZsNsMMc0Ir1w0BJy@darkmoore>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: yN6BmfwSIKGZIxcqSL4o7VjQXoWejcCl
+X-Proofpoint-GUID: knTtTTP5IHWkyDWZFkgaiSU-ro5fAy_H
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-23_04,2024-08-22_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 phishscore=0 mlxscore=0 bulkscore=0 malwarescore=0
+ mlxlogscore=665 spamscore=0 lowpriorityscore=0 clxscore=1015
+ suspectscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2407110000 definitions=main-2408230053
 
-Hi Dan and Alexei
-
-
-I apologize for any inconvenience my mistake may have caused to both of you.
-
-
-On 8/22/24 06:31, Dan Carpenter wrote:
-> On Wed, Aug 21, 2024 at 03:07:27PM -0700, Alexei Starovoitov wrote:
->> On Wed, Aug 21, 2024 at 2:50 PM Dan Carpenter <dan.carpenter@linaro.org> wrote:
->>> On Wed, Aug 21, 2024 at 02:03:17PM -0700, Yonghong Song wrote:
->>>> On 8/19/24 7:34 PM, Hao Ge wrote:
->>>>> From: Hao Ge <gehao@kylinos.cn>
->>>>>
->>>>> Smatch reported the following warning:
->>>>>       ./tools/testing/selftests/bpf/testing_helpers.c:455 get_xlated_program()
->>>>>       warn: variable dereferenced before check 'buf' (see line 454)
->>>>>
->>>>> It seems correct,so let's modify it based on it's suggestion.
->>>>>
->>>>> Actually,commit b23ed4d74c4d ("selftests/bpf: Fix invalid pointer
->>>>> check in get_xlated_program()") fixed an issue in the test_verifier.c
->>>>> once,but it was reverted this time.
->>>>>
->>>>> Let's solve this issue with the minimal changes possible.
->>>>>
->>>>> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
->>>>> Closes: https://lore.kernel.org/all/1eb3732f-605a-479d-ba64-cd14250cbf91@stanley.mountain/
->>>>> Fixes: b4b7a4099b8c ("selftests/bpf: Factor out get_xlated_program() helper")
->>>>> Signed-off-by: Hao Ge <gehao@kylinos.cn>
->>>> In the future, please change subject '[PATCH] ...' to '[PATCH bpf-next] ...'
->>>> so CI can properly test it.
->>> It feels like there should be a technical solution to this.  The CI system is
->>> something on AWS and it's too expensive to just check every patch that's sent to
->>> the bpf list?  My understanding is that there are only two bpf trees.
->>>
->>>          if [ "$FIXES_HASH" == "" ] ; then
->>>                  TREE=next
->>>          elif git merge-base --is-ancestor $FIXES_HASH origin/master ; then
->>>                  TREE=linus
->>>          else
->>>                  TREE=next
->>>          fi
->>>
->>> These days the zero day bot people are checking around a thousand git trees.
->>> They pull emails off the various lists and apply them to the right places.  It's
->>> a doable thing.
->> Dan,
+On 8/19/24 6:00 PM, Christoph Schlameuss wrote:
+> On Fri Aug 16, 2024 at 4:36 PM CEST, Janosch Frank wrote:
+>> On 8/15/24 5:45 PM, Christoph Schlameuss wrote:
+[...]
+>>> +TEST_F(uc_kvm, uc_skey)
+>>> +{
+>>> +	u64 test_vaddr = self->base_gpa + VM_MEM_SIZE - (SZ_1M / 2);
+>>> +	struct kvm_sync_regs *sync_regs = &self->run->s.regs;
+>>> +	struct kvm_run *run = self->run;
+>>> +	u8 skeyvalue = 0x34;
+>>> +
+>>> +	/* copy test_skey_asm to code_hva / code_gpa */
+>>> +	TH_LOG("copy code %p to vm mapped memory %p / %p",
+>>> +	       &test_skey_asm, (void *)self->code_hva, (void *)self->code_gpa);
+>>> +	memcpy((void *)self->code_hva, &test_skey_asm, PAGE_SIZE);
+>>> +
+>>> +	/* set register content for test_skey_asm to access not mapped memory */
+>>> +	sync_regs->gprs[1] = skeyvalue;
+>>> +	sync_regs->gprs[5] = self->base_gpa;
+>>> +	sync_regs->gprs[6] = test_vaddr;
+>>> +	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
+>>> +
+>>> +	self->sie_block->ictl |= ICTL_OPEREXC | ICTL_PINT;
+>>> +	self->sie_block->cpuflags &= ~CPUSTAT_KSS;
 >>
->> Various people pointed out that you need to use the proper subject in
->> the patches.
->> You clearly knew that rule and yet you ignored it,
->> and worse still you keep coming up with these excuses.
->> Don't be surprised that people who are supposed to review your patches
->> will take a long time to reply or "forget" about them as you "forget"
->> about patch submission rules.
+>> So you don't want KVM to initialize skeys?
+>> Or am I missing a ucontrol skey interaction?
+>>
+>> What about the ICTLs if KSS is not available on the machine?
+> 
+> This is explicitly disabling KSS, not enabling it.
+> Doing that explicitly might not strictly be necessary but I thought this does
+> provide some clarity about the state.
+> 
 
+The 3 skey ICTLs and KSS are used by KVM to get an intercept on the 
+first skey instruction that the guest issues. KVM uses that intercept to 
+initialize the keys and setup skey handling since it's an edge case 
+because Linux doesn't use skeys.
 
-Perhaps it was referring to me? Regardless, I will reflect on myself and 
-make improvements.
+If KSS is available KVM will not set the skey ICTLs but KSS is a 
+"recent" addition (my guess would be ~z13). So if you want to disable 
+skey intercepts regardless of the machine you need to clear all 4 bits.
 
-
-> You're emailing the wrong person.  This isn't my patch.  I don't send BPF
-> patches.
->
-> regards,
-> dan carpenter
+Are you sure that disabling KSS makes sense and does what you think it does?
 
