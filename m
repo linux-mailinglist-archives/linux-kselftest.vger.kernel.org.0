@@ -1,83 +1,83 @@
-Return-Path: <linux-kselftest+bounces-16179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF42E95D636
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 21:48:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE97F95D63A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 21:48:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 506BD1F23EE1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 19:48:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08689B21049
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 19:48:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92C7119258D;
-	Fri, 23 Aug 2024 19:48:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AAED192595;
+	Fri, 23 Aug 2024 19:48:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RMxasa/h"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q7ItRM21"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE1E718D64F;
-	Fri, 23 Aug 2024 19:48:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFC9113634A;
+	Fri, 23 Aug 2024 19:48:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724442488; cv=none; b=cG6C9TPAnk+c7C/XDTvSmIhjYGx+wilyka6b70xstZS278sI5JixzqnJgenm45T9uZKI6aQ74CxoDxV0z05l4+ua85XJ6zuHBavEOA5WOuD0wuUY01fw+YpYYZ1bV9zdfmQu+vD/mdLVU0wabZOzV/t766wBGFNvUAzEKUxyT+Q=
+	t=1724442495; cv=none; b=u1qIKZcpZzKPjmCVkSOTgQ8H2J2is4MRbYz7bq5ti00m0neNg7veFsv6qqed3EgemX2FtVVvW+C34DjJ9FmYo1nGp3p7fAAQsPs8hmI1O7Av0Ug/4hbjeuhBUC8VlsyIbqUwz693rp8TBS8D4OPSw0Pjy7m3uA4EQq4MAhBwYW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724442488; c=relaxed/simple;
-	bh=dtEpJRyep5Ef/3Ih/AX8vq2n5pHJQ3cPUkLJjQXZZ7g=;
+	s=arc-20240116; t=1724442495; c=relaxed/simple;
+	bh=0Wd6FYm2nAQGFwdHOGxsQxACz5GbzFsHrY7+ivxHsGA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SQPe2x0q1bAc0TdJ/gQ2VfjshP6nHNf01a2Em7pOEpT0sExluygYWayx0FUo7BRZ8iHg4bkh0LuI2EBeuCjyJFI4LfFeF0p90Qf1PN5LoLkxvdcSgwWJow8KRSUAlcIMc1B0dV1xZ/4TflRjaJ65YdGpCUgl7tnEDmA7NN5iln4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RMxasa/h; arc=none smtp.client-ip=209.85.216.52
+	 To:Cc:Content-Type; b=FnwTQDpJa9+j/nnS7Tf28k1vhSI/jiP6yZ5YZjUiCq4pQAcgdaJqaDCHhmVazXEJki9ccdks+Y1qCCepPlshq7bJ416SWwD6t+TM4o4Tq4uZl4Mw7LNmwdSW/dUwOMFCAB9J9PfM0zPH5mRIPO6StzUyK3+6uqFQQUo+cQcMp2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q7ItRM21; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2d3c5f769d6so1664959a91.3;
-        Fri, 23 Aug 2024 12:48:06 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2d3c071d276so1673194a91.1;
+        Fri, 23 Aug 2024 12:48:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724442486; x=1725047286; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1724442493; x=1725047293; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QFrJtqPrv+8vGvYy7f8dRxQ9FPG5ZmHGpJeWDP6tDh4=;
-        b=RMxasa/hb2UjRHDrly1jASkm1QBX4XdI2oewU7b0N/2RS/u2RV778Xuw2ZxQghxdcR
-         yZODnh3AZ4WiFynlMV/bdsiRhDbdGxPnTtAB9hLzSPjKEeBAv3iFiyj4NFTj7zmoU9dw
-         W3Vzq5mONmwivVwK3/82Rvsop8WYzAjkUKPc/91qt3M6idnQ8ylPcckAQPiQdG9wOR0s
-         hVNI/iDBL8VJxIwN3StEU1naRYwGkZFO52zHSYayMYnHkmnXH4KEPAUBVHYgrbOSK2xH
-         QMiY7Z+o6T4ihUYbJ75pAq+PhbTc3jnzUSi7UxpFhFMHDtWi3egqSrJc5mZzZVc1Cwwb
-         FFMQ==
+        bh=0YQeJlBC0iYKzMdYaQnpxI/5kheG6fqdtDkH58UN63g=;
+        b=Q7ItRM21TDI77U2WxvSK9tjoYGDXl3XaOeDAaFtwl+n5NpvTbdPtut2Q4rm30vwX8t
+         kDQ3U2jliNd+Xz19Fp6xQy9/nC+DkK8Bbj4gi0gfcWA266AAdE+Gcg1LWCYF/8SjpmR1
+         AYjhTkP4cWtEFjpqac6JtWqqo9fFHnJ/36dSulBEst8kSSuFyCzpfHz/xnMIYMhXfv12
+         NWdL3J1z8jZSP4++39BSleQeP6S8tVP+WaWgJtkFbK0f3sHCV2wjcOMZqIO7JfzTgsrC
+         QrEB04MTJ40lp211WfzYdZMvbixyQz5tl2vklzOO2A9SUGFXPmDdPa6FIwEm/CSXVQ+M
+         sKdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724442486; x=1725047286;
+        d=1e100.net; s=20230601; t=1724442493; x=1725047293;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QFrJtqPrv+8vGvYy7f8dRxQ9FPG5ZmHGpJeWDP6tDh4=;
-        b=re/WPXWnw+7m+GvX+uu7iXQiybXlTut4JbCWkcfPLKmHzJsH7loPuv/+ADhgdEuds/
-         xqtrXXdbWSWwZmF7B2nyh51u09v1yj0Gssx5QzDsvpD1JihnmlqICX/Lo0qkYtXMtGmq
-         m+ry9gKKSVDNR/yfhq4SigYGeVDt+4UAv3+gyIQ/4ZtDPx0L9hwGyDnXCwkJ4Eh8dJ9n
-         DKS/2eiJqj1RaO+5onx2DfDtF2WQzUmEhygslnLM+jXYeSidNzK4//hcdqPJsHMe9pBZ
-         GTMBs7VY1N7Ku4kSneN9AUtZUkOJgBe8cRvUcoyRJWdzc5sdU4fIs2a2mlfqoPiX/Uxm
-         oPqg==
-X-Forwarded-Encrypted: i=1; AJvYcCW6Pu3TQf1Cpv+PVd0A13Bs2agp/M9k6d5/Ayqy9v7HvRHprUrJAAQUSzwjGyrso62olZV17Vm2LQOeUi/CMiw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwoZI5vpS0USa1SFeOsz7dvJzIvy1KZhUO5amx1AkzLneswlDTU
-	C2xeng29BRVfKkfB+tAcQ0nxGONCKxSS02qnQetre0fsxIAQUW31gmpXGRecBMmhReOPa+tli7Y
-	8HefiRvEfQAjT6pAfGXbbWw3ypj4=
-X-Google-Smtp-Source: AGHT+IEdCMdJtZPUfa7w1bMNPzqYvi1BsEY8fygiRKJmR6p/FsYHXBW0ZlnWHa1UBr2xti135ukqWDgq/1DDEif5O1w=
-X-Received: by 2002:a17:90b:4c0a:b0:2d3:bd5f:b369 with SMTP id
- 98e67ed59e1d1-2d646b912cfmr3662462a91.1.1724442485948; Fri, 23 Aug 2024
- 12:48:05 -0700 (PDT)
+        bh=0YQeJlBC0iYKzMdYaQnpxI/5kheG6fqdtDkH58UN63g=;
+        b=d0hwv8vNPY3mvAESiL3j1wE16Mx4TrYzHp+KEr900aKVdtQCcpgVCHumOxqNZ/r8u5
+         pMK98ysZW+hFs3rNtULiURA6IpFsQI9vMLdLDeJNsg7k+H2384D5OTdG+AWAU0fcNjuB
+         u4xWkNcwwqLtk/ALQEw+5VEdTfMreNp68PrtCf+v0t5Ll4o8ifVjRZ1/hya/Jt3J1agw
+         PodqpI9u6mHVm+gGy+5Hly4YiJW6c4Da/OfI/hLsZHAHp76kaUvcM/7Zw7RBvOZe9/Es
+         JF93nT+8RhBkmce2Gdub1mwzv1i2cHZaX8wzuEGraoUC6ApkO2Ezez9xueQv4KS4lsxw
+         pOQw==
+X-Forwarded-Encrypted: i=1; AJvYcCV+IxsRTmv3eM9mx2R9kIm7SuyOq/b2VP1YMCFAq7svmITt0x33UNLsNUvpFWjMKQBAlTEWusacW+6dcnPYBQk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZ0CTo1O9RcCko1CWNEWgxcI5jzAduGcScRVrT6PvskZasvR77
+	JICG0wbW9kZJuXwT/inFcRzoxpruPPI1F2XSsj1w9t6W+fXEEAPGleRsjYwuNMXnfztTGlN9bHB
+	NHv6sfGRfltFR59HrEpNWUoaGjRo=
+X-Google-Smtp-Source: AGHT+IHocL2X2smqsmOI849Ho3GK7eotrhOUBB0bPR4PM13CggHWtAg6yzGqZGHmW7D+9al4KOHTxWowLcmxD6/LmbQ=
+X-Received: by 2002:a17:90b:438f:b0:2c9:64fb:1c7e with SMTP id
+ 98e67ed59e1d1-2d646bbb1ccmr3632008a91.14.1724442492875; Fri, 23 Aug 2024
+ 12:48:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1724313164.git.tony.ambardar@gmail.com> <0511638ed6191f4434be23ed7fb56001ccb5b687.1724313164.git.tony.ambardar@gmail.com>
-In-Reply-To: <0511638ed6191f4434be23ed7fb56001ccb5b687.1724313164.git.tony.ambardar@gmail.com>
+References: <cover.1724313164.git.tony.ambardar@gmail.com> <94a6100651e3f61166703cf143f6366b15ee0d21.1724313164.git.tony.ambardar@gmail.com>
+In-Reply-To: <94a6100651e3f61166703cf143f6366b15ee0d21.1724313164.git.tony.ambardar@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 23 Aug 2024 12:47:52 -0700
-Message-ID: <CAEf4BzZ8Dh3oFm_EeU3btQ4B+WCkaoxwc7iD3CskthTMX0rh9g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 6/8] libbpf: Support linking bpf objects of
- either endianness
+Date: Fri, 23 Aug 2024 12:47:56 -0700
+Message-ID: <CAEf4BzYixndSzU3ab97-OfDscR2Qe+H5+9HRQKRm90UM8F_o-w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 7/8] libbpf: Support creating light skeleton
+ of either endianness
 To: Tony Ambardar <tony.ambardar@gmail.com>
 Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
@@ -95,268 +95,200 @@ com> wrote:
 >
 > From: Tony Ambardar <tony.ambardar@gmail.com>
 >
-> Allow static linking object files of either endianness, checking that inp=
-ut
-> files have consistent byte-order, and setting output endianness from inpu=
-t.
+> Track target endianness in 'struct bpf_gen' and process in-memory data in
+> native byte-order, but on finalization convert the embedded loader BPF
+> insns to target endianness.
 >
-> Linking requires in-memory processing of programs, relocations, sections,
-> etc. in native endianness, and output conversion to target byte-order. Th=
-is
-> is enabled by built-in ELF translation and recent BTF/BTF.ext endianness
-> functions. Further add local functions for swapping byte-order of section=
-s
-> containing BPF insns.
+> The light skeleton also includes a target-accessed data blob which is
+> heterogeneous and thus difficult to convert to target byte-order on
+> finalization. Add support functions to convert data to target endianness
+> as it is added to the blob.
+>
+> Also add additional debug logging for data blob structure details and
+> skeleton loading.
 >
 > Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
 > ---
->  tools/lib/bpf/linker.c | 106 ++++++++++++++++++++++++++++++++++-------
->  1 file changed, 90 insertions(+), 16 deletions(-)
+>  tools/lib/bpf/bpf_gen_internal.h |   1 +
+>  tools/lib/bpf/gen_loader.c       | 187 +++++++++++++++++++++++--------
+>  tools/lib/bpf/libbpf.c           |   1 +
+>  tools/lib/bpf/skel_internal.h    |   3 +-
+>  4 files changed, 147 insertions(+), 45 deletions(-)
 >
 
-Mostly just stylistic and code organization nits, the change overall looks =
-good.
+[...]
 
-> diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-> index 7489306cd6f7..9bf218db443e 100644
-> --- a/tools/lib/bpf/linker.c
-> +++ b/tools/lib/bpf/linker.c
-> @@ -135,6 +135,7 @@ struct bpf_linker {
->         int fd;
->         Elf *elf;
->         Elf64_Ehdr *elf_hdr;
-> +       bool swapped_endian;
->
->         /* Output sections metadata */
->         struct dst_sec *secs;
-> @@ -324,13 +325,8 @@ static int init_output_elf(struct bpf_linker *linker=
-, const char *file)
->
->         linker->elf_hdr->e_machine =3D EM_BPF;
->         linker->elf_hdr->e_type =3D ET_REL;
-> -#if __BYTE_ORDER__ =3D=3D __ORDER_LITTLE_ENDIAN__
-> -       linker->elf_hdr->e_ident[EI_DATA] =3D ELFDATA2LSB;
-> -#elif __BYTE_ORDER__ =3D=3D __ORDER_BIG_ENDIAN__
-> -       linker->elf_hdr->e_ident[EI_DATA] =3D ELFDATA2MSB;
-> -#else
-> -#error "Unknown __BYTE_ORDER__"
-> -#endif
-> +       /* Set unknown ELF endianness, assign later from input files */
-> +       linker->elf_hdr->e_ident[EI_DATA] =3D ELFDATANONE;
->
->         /* STRTAB */
->         /* initialize strset with an empty string to conform to ELF */
-> @@ -541,19 +537,21 @@ static int linker_load_obj_file(struct bpf_linker *=
-linker, const char *filename,
->                                 const struct bpf_linker_file_opts *opts,
->                                 struct src_obj *obj)
->  {
-> -#if __BYTE_ORDER__ =3D=3D __ORDER_LITTLE_ENDIAN__
-> -       const int host_endianness =3D ELFDATA2LSB;
-> -#elif __BYTE_ORDER__ =3D=3D __ORDER_BIG_ENDIAN__
-> -       const int host_endianness =3D ELFDATA2MSB;
-> -#else
-> -#error "Unknown __BYTE_ORDER__"
-> -#endif
->         int err =3D 0;
->         Elf_Scn *scn;
->         Elf_Data *data;
->         Elf64_Ehdr *ehdr;
->         Elf64_Shdr *shdr;
->         struct src_sec *sec;
-> +       unsigned char obj_byteorder;
-> +       unsigned char *link_byteorder =3D &linker->elf_hdr->e_ident[EI_DA=
-TA];
+> +/*
+> + * Fields of bpf_attr are set to values in native byte-order before bein=
+g
+> + * written to the target-bound data blob, and may need endian conversion=
+.
+> + * This macro allows setting the correct value in situ and is simpler th=
+an
+> + * writing a separate converter for *all fields* of *all records* includ=
+ed
+> + * in union bpf_attr.
+> + */
+> +#define move_tgt_endian(lval, rval) {                          \
+> +       if (!gen->swapped_endian)                               \
+> +               lval =3D (rval);                                  \
 
-nit: not a fan of pointer into e_ident, just read local value of byte
-order, and then assign it directly below (it's only in one of the
-branches, no duplication, really)
+add {}  here and for else branch, please
 
-> +#if __BYTE_ORDER__ =3D=3D __ORDER_LITTLE_ENDIAN__
-> +       const unsigned char host_byteorder =3D ELFDATA2LSB;
-> +#elif __BYTE_ORDER__ =3D=3D __ORDER_BIG_ENDIAN__
-> +       const unsigned char host_byteorder =3D ELFDATA2MSB;
-> +#else
-> +#error "Unknown __BYTE_ORDER__"
-> +#endif
->
->         pr_debug("linker: adding object file '%s'...\n", filename);
->
-> @@ -579,11 +577,25 @@ static int linker_load_obj_file(struct bpf_linker *=
-linker, const char *filename,
->                 pr_warn_elf("failed to get ELF header for %s", filename);
->                 return err;
->         }
-> -       if (ehdr->e_ident[EI_DATA] !=3D host_endianness) {
-> +
-> +       /* Linker output endianness set by first input object */
-> +       obj_byteorder =3D ehdr->e_ident[EI_DATA];
-> +       if (obj_byteorder !=3D ELFDATA2LSB && obj_byteorder !=3D ELFDATA2=
-MSB) {
->                 err =3D -EOPNOTSUPP;
-> -               pr_warn_elf("unsupported byte order of ELF file %s", file=
-name);
-> +               pr_warn("linker: unknown byte order of ELF file %s\n", fi=
-lename);
->                 return err;
->         }
-> +       if (*link_byteorder =3D=3D ELFDATANONE) {
-> +               *link_byteorder =3D obj_byteorder;
+> +       else                                                    \
+> +               switch (sizeof(lval)) {                         \
+> +               case 2:                                         \
+> +                       lval =3D bswap_16(rval);                  \
+> +                       break;                                  \
+> +               case 4:                                         \
+> +                       lval =3D bswap_32(rval);                  \
+> +                       break;                                  \
+> +               case 8:                                         \
+> +                       lval =3D bswap_64(rval);                  \
+> +                       break;                                  \
 
-see above, I'd prefer:
+I'd also go for more compact:
 
-linker->elf_hdr->e_ident[EI_DATA] =3D obj_byteorder;
 
-> +               linker->swapped_endian =3D obj_byteorder !=3D host_byteor=
-der;
-> +               pr_debug("linker: set %s-endian output byte order\n",
-> +                        obj_byteorder =3D=3D ELFDATA2MSB ? "big" : "litt=
-le");
-> +       } else if (*link_byteorder !=3D obj_byteorder) {
-> +               err =3D -EOPNOTSUPP;
-> +               pr_warn("linker: byte order mismatch with ELF file %s\n",=
- filename);
-> +               return err;
+case 2: lval =3D bswap_16(rval); break;
+case 4: lval =3D bswap_32(rval); break;
+
+> +               default:                                        \
+> +                       lval =3D (rval);                          \
+> +                       pr_warn("unsupported bswap size!\n");   \
+
+case 1: is unsupported? It just doesn't need a byte swap, so please
+add it explicitly and avoid unnecessary warnings
+
+> +               }                                               \
 > +       }
 > +
->         if (ehdr->e_type !=3D ET_REL
->             || ehdr->e_machine !=3D EM_BPF
->             || ehdr->e_ident[EI_CLASS] !=3D ELFCLASS64) {
-> @@ -1111,6 +1123,27 @@ static bool sec_content_is_same(struct dst_sec *ds=
-t_sec, struct src_sec *src_sec
->         return true;
+>  void bpf_gen__load_btf(struct bpf_gen *gen, const void *btf_raw_data,
+>                        __u32 btf_raw_size)
+>  {
+
+[...]
+
+>         emit(gen, BPF_LDX_MEM(BPF_B, BPF_REG_9, BPF_REG_8, offsetofend(st=
+ruct bpf_insn, code)));
+>         emit(gen, BPF_ALU32_IMM(BPF_AND, BPF_REG_9, reg_mask));
+>         emit(gen, BPF_STX_MEM(BPF_B, BPF_REG_8, BPF_REG_9, offsetofend(st=
+ruct bpf_insn, code)));
+> @@ -931,11 +971,34 @@ static void cleanup_relos(struct bpf_gen *gen, int =
+insns)
+>         cleanup_core_relo(gen);
 >  }
 >
-> +static bool is_exec_sec(struct dst_sec *sec)
+> +/* Covert func, line, and core relo info records to target endianness,
+
+typo: convert
+
+> + * checking the blob size is consistent with 32-bit fields.
+> + */
+> +static void info_blob_bswap(struct bpf_gen *gen, int info_off, __u32 siz=
+e)
 > +{
-> +       if (!sec || sec->ephemeral)
-> +               return false;
-> +       return (sec->shdr->sh_type =3D=3D SHT_PROGBITS) &&
-> +              (sec->shdr->sh_flags & SHF_EXECINSTR);
-> +}
+> +       __u32 *field =3D gen->data_start + info_off;
+> +       int i, cnt =3D size / sizeof(__u32);
 > +
-> +static int exec_sec_bswap(void *raw_data, int size)
-> +{
-> +       const int insn_cnt =3D size / sizeof(struct bpf_insn);
-> +       struct bpf_insn *insn =3D raw_data;
-> +       int i;
-> +
-> +       if (size % sizeof(struct bpf_insn))
-> +               return -EINVAL;
-> +       for (i =3D 0; i < insn_cnt; i++, insn++)
-> +               bpf_insn_bswap(insn);
-> +       return 0;
-> +}
-> +
->  static int extend_sec(struct bpf_linker *linker, struct dst_sec *dst, st=
-ruct src_sec *src)
->  {
->         void *tmp;
-> @@ -1170,6 +1203,16 @@ static int extend_sec(struct bpf_linker *linker, s=
-truct dst_sec *dst, struct src
->                 memset(dst->raw_data + dst->sec_sz, 0, dst_align_sz - dst=
-->sec_sz);
->                 /* now copy src data at a properly aligned offset */
->                 memcpy(dst->raw_data + dst_align_sz, src->data->d_buf, sr=
-c->shdr->sh_size);
-> +
-> +               /* convert added bpf insns to native byte-order */
-> +               if (linker->swapped_endian && is_exec_sec(dst)) {
-> +                       err =3D exec_sec_bswap(dst->raw_data + dst_align_=
-sz,
-> +                                            src->shdr->sh_size);
+> +       if (size && size % sizeof(__u32)) {
 
-nit: I think exec_sec_bswap() shouldn't ever fail, so given we have
-is_exec_sec() now, let's do the size alignment check early on (and
-regardless of swapped_endian), and then just proceed with byte swap
-that can't fail
+nit: () around mod operation
 
-> +                       if (err) {
-> +                               pr_warn("%s: error changing insns endiann=
-ess\n", __func__);
-> +                               return err;
-> +                       }
-> +               }
->         }
->
->         dst->sec_sz =3D dst_final_sz;
-> @@ -2630,6 +2673,14 @@ int bpf_linker__finalize(struct bpf_linker *linker=
-)
->                 if (!sec->scn)
->                         continue;
->
-> +               /* restore sections with bpf insns to target byte-order *=
-/
-> +               if (linker->swapped_endian && is_exec_sec(sec)) {
-> +                       err =3D exec_sec_bswap(sec->raw_data, sec->sec_sz=
-);
-
-and here we'll know that size is validly aligned anyways, so no checks requ=
-ired
-
-> +                       if (err) {
-> +                               pr_warn("error finalizing insns endiannes=
-s\n");
-> +                               return libbpf_err(err);
-> +                       }
-> +               }
->                 sec->data->d_buf =3D sec->raw_data;
->         }
->
-> @@ -2696,6 +2747,13 @@ static int emit_elf_data_sec(struct bpf_linker *li=
-nker, const char *sec_name,
->         return 0;
->  }
->
-> +static enum btf_endianness
-> +linker_btf_endianness(const struct bpf_linker *linker)
-> +{
-> +       unsigned char byteorder =3D linker->elf_hdr->e_ident[EI_DATA];
-
-empty line between variable declaration and the rest of the code
-
-> +       return byteorder =3D=3D ELFDATA2MSB ? BTF_BIG_ENDIAN : BTF_LITTLE=
-_ENDIAN;
-> +}
-> +
-
-but actually, this whole helper function seems unnecessary, just do
-everything inside finalize_btf, it's a pretty trivial piece of logic
-
->  static int finalize_btf(struct bpf_linker *linker)
->  {
->         LIBBPF_OPTS(btf_dedup_opts, opts);
-> @@ -2742,6 +2800,22 @@ static int finalize_btf(struct bpf_linker *linker)
->                 return err;
->         }
->
-> +       /* Set .BTF and .BTF.ext output byte order */
-> +       err =3D btf__set_endianness(linker->btf,
-> +                                 linker_btf_endianness(linker));
-> +       if (err) {
-> +               pr_warn("failed to set .BTF output endianness: %d\n", err=
-);
-
-nit: you used "linker: " prefix for messages like this, stay consistent?
-
-
-> +               return err;
+> +               pr_warn("info records not using 32-bit fields!\n");
+> +               return;
 > +       }
-> +       if (linker->btf_ext) {
-> +               err =3D btf_ext__set_endianness(linker->btf_ext,
-> +                                             linker_btf_endianness(linke=
-r));
-> +               if (err) {
-> +                       pr_warn("failed to set .BTF.ext output endianness=
-: %d\n", err);
-> +                       return err;
-> +               }
-> +       }
+> +       if (gen->swapped_endian)
+> +               for (i =3D 0; i < cnt; i++, field++)
+> +                       *field =3D bswap_32(*field);
+> +}
 > +
->         /* Emit .BTF section */
->         raw_data =3D btf__raw_data(linker->btf, &raw_sz);
->         if (!raw_data)
-> --
-> 2.34.1
+>  void bpf_gen__prog_load(struct bpf_gen *gen,
+>                         enum bpf_prog_type prog_type, const char *prog_na=
+me,
+>                         const char *license, struct bpf_insn *insns, size=
+_t insn_cnt,
+>                         struct bpf_prog_load_opts *load_attr, int prog_id=
+x)
+>  {
+> +       int func_info_tot_sz =3D load_attr->func_info_cnt *
+> +                              load_attr->func_info_rec_size;
+> +       int line_info_tot_sz =3D load_attr->line_info_cnt *
+> +                              load_attr->line_info_rec_size;
+> +       int core_relo_tot_sz =3D gen->core_relo_cnt *
+> +                              sizeof(struct bpf_core_relo);
+>         int prog_load_attr, license_off, insns_off, func_info, line_info,=
+ core_relos;
+>         int attr_size =3D offsetofend(union bpf_attr, core_relo_rec_size)=
+;
+>         union bpf_attr attr;
+> @@ -947,32 +1010,60 @@ void bpf_gen__prog_load(struct bpf_gen *gen,
+>         license_off =3D add_data(gen, license, strlen(license) + 1);
+>         /* add insns to blob of bytes */
+>         insns_off =3D add_data(gen, insns, insn_cnt * sizeof(struct bpf_i=
+nsn));
+> +       pr_debug("gen: prog_load: license off %d insn off %d\n",
+> +                license_off, insns_off);
 >
+> -       attr.prog_type =3D prog_type;
+> -       attr.expected_attach_type =3D load_attr->expected_attach_type;
+> -       attr.attach_btf_id =3D load_attr->attach_btf_id;
+> -       attr.prog_ifindex =3D load_attr->prog_ifindex;
+> -       attr.kern_version =3D 0;
+> -       attr.insn_cnt =3D (__u32)insn_cnt;
+> -       attr.prog_flags =3D load_attr->prog_flags;
+> -
+> -       attr.func_info_rec_size =3D load_attr->func_info_rec_size;
+> -       attr.func_info_cnt =3D load_attr->func_info_cnt;
+> -       func_info =3D add_data(gen, load_attr->func_info,
+> -                            attr.func_info_cnt * attr.func_info_rec_size=
+);
+> +       /* convert blob insns to target endianness */
+> +       if (gen->swapped_endian) {
+> +               struct bpf_insn *insn =3D gen->data_start + insns_off;
+> +               int i;
+>
+> -       attr.line_info_rec_size =3D load_attr->line_info_rec_size;
+> -       attr.line_info_cnt =3D load_attr->line_info_cnt;
+> -       line_info =3D add_data(gen, load_attr->line_info,
+> -                            attr.line_info_cnt * attr.line_info_rec_size=
+);
+> +               for (i =3D 0; i < insn_cnt; i++, insn++)
+> +                       bpf_insn_bswap(insn);
+> +       }
+>
+> -       attr.core_relo_rec_size =3D sizeof(struct bpf_core_relo);
+> -       attr.core_relo_cnt =3D gen->core_relo_cnt;
+> -       core_relos =3D add_data(gen, gen->core_relos,
+> -                            attr.core_relo_cnt * attr.core_relo_rec_size=
+);
+> +       move_tgt_endian(attr.prog_type, prog_type);
+> +       move_tgt_endian(attr.expected_attach_type, load_attr->expected_at=
+tach_type);
+> +       move_tgt_endian(attr.attach_btf_id, load_attr->attach_btf_id);
+> +       move_tgt_endian(attr.prog_ifindex, load_attr->prog_ifindex);
+> +       attr.kern_version =3D 0;
+> +       move_tgt_endian(attr.insn_cnt, (__u32)insn_cnt);
+> +       move_tgt_endian(attr.prog_flags, load_attr->prog_flags);
+> +
+> +       move_tgt_endian(attr.func_info_rec_size, load_attr->func_info_rec=
+_size);
+> +       move_tgt_endian(attr.func_info_cnt, load_attr->func_info_cnt);
+
+this is quite intrusive, maybe instead of imperative move_tgt_endian()
+macro, develop the one that could be used as
+
+attr.func_info_cnt =3D tgt_endian(load_attr->func_info_cnt);
+
+? I.e., working as an expression, taking into account the need to swap
+and byte size of the argument. Should be doable.
+
+> +       func_info =3D add_data(gen, load_attr->func_info, func_info_tot_s=
+z);
+> +       pr_debug("gen: prog_load: func_info: off %d cnt %d rec size %d\n"=
+,
+> +                func_info, load_attr->func_info_cnt,
+> +                load_attr->func_info_rec_size);
+
+[...]
 
