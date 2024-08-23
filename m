@@ -1,136 +1,125 @@
-Return-Path: <linux-kselftest+bounces-16155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16156-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08DA795D004
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 16:35:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22D8C95D031
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 16:42:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E7441F21403
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 14:35:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4ED9AB2C3FA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 14:36:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68CC6191493;
-	Fri, 23 Aug 2024 14:24:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F139B188A07;
+	Fri, 23 Aug 2024 14:27:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VWd+f4b2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AyXscExh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37F87188937;
-	Fri, 23 Aug 2024 14:24:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 769981885B4;
+	Fri, 23 Aug 2024 14:27:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724423046; cv=none; b=brsPWpRoVCz9EMskndFyFSWjhXXlAyWueD5EwxaekBGNYizWgGfpevBjqWCjs5vjH8a1Cms5fGyDMt6HXgssrJ0r+M0m+ncrmMMFN0ZO2ZbLvxfQKhnN79kgC9Mg7DXYp49O5NwSXpO2LFbXRYdLDLA5oYVh/EKkIxMmu+7aqy0=
+	t=1724423250; cv=none; b=XPFbY30fwh2nqJsHq/UrhSX4zeNhI+okbNV8VxzyqQyKvDDve8i2xbt1YHrDsmT09UqedeV959GeTUmope4b/89w/dnJioQl4WR5a2wd2YPJU8tPMQCl/8GplylaS7WzifMGxL1uSccEEZK/YiQuVuf/sPJZV8HfQbd17L3Qdqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724423046; c=relaxed/simple;
-	bh=SLKDSke/wUGBLMnN3vAtRLfAoCEBzo3yPCvhIy66cMs=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TSx1XSDl6WzM14ShLxg9yTAfcaoiNbqbgFB5mB+QXN8OKxxaU/kqowuwlCe0wx1KlowQz6bsWZp1nQLoePF0FYPJ/uFPotLH1PQ4hCn/6ezMMbaG0UHmDwJdzEHXWCT1GoQV/WN/mRJ8Sb0VCmfDcPHxR52pI5O9YduDjJgcTQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VWd+f4b2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B35ACC32786;
-	Fri, 23 Aug 2024 14:24:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724423045;
-	bh=SLKDSke/wUGBLMnN3vAtRLfAoCEBzo3yPCvhIy66cMs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=VWd+f4b2S+YOt8PKvFw5i15F+pg7C+6aSIQa9MizkvCFuKxRrud1ZrCcdJw/AD8xf
-	 /ciMYGVTP9SSf+vfKrx0qnwjy7dWxFvcVJPSQpWaB/HEu+TDMG96BQBTJQkCPLWquS
-	 5pDyqFoAfYqdYLcl4qlUcydaXnm37OR69LPY+4+DXAp/jUN7D+5lMBrtrArsId1mi4
-	 pW9OA1PmIwTosxByk06YAlOi3xUJADfAVKbLQUwhj5xm/pWHgmCSI5EcY+7t6E50o/
-	 p6JoNnNhp5kL7TURfNRLZsw2sWTD74MEIxhFolJNAITP7r9wHti3u4tjeIEseeXYi8
-	 YypkKASN5KcaA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1shVCt-006ICL-3b;
-	Fri, 23 Aug 2024 15:24:03 +0100
-Date: Fri, 23 Aug 2024 15:24:02 +0100
-Message-ID: <86y14nwc59.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Will Deacon <will@kernel.org>
-Cc: Joey Gouly <joey.gouly@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	nd@arm.com,
-	akpm@linux-foundation.org,
-	aneesh.kumar@kernel.org,
-	aneesh.kumar@linux.ibm.com,
-	anshuman.khandual@arm.com,
-	bp@alien8.de,
-	broonie@kernel.org,
-	catalin.marinas@arm.com,
-	christophe.leroy@csgroup.eu,
-	dave.hansen@linux.intel.com,
-	hpa@zytor.com,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linuxppc-dev@lists.ozlabs.org,
-	mingo@redhat.com,
-	mpe@ellerman.id.au,
-	naveen.n.rao@linux.ibm.com,
-	npiggin@gmail.com,
-	oliver.upton@linux.dev,
-	shuah@kernel.org,
-	skhan@linuxfoundation.org,
-	szabolcs.nagy@arm.com,
-	tglx@linutronix.de,
-	x86@kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 08/30] KVM: arm64: make kvm_at() take an OP_AT_*
-In-Reply-To: <20240823134811.GG32156@willie-the-truck>
-References: <20240822151113.1479789-1-joey.gouly@arm.com>
-	<20240822151113.1479789-9-joey.gouly@arm.com>
-	<20240823134811.GG32156@willie-the-truck>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1724423250; c=relaxed/simple;
+	bh=vrHfFAtyTYU/vEWV4sr7xgTlF9qhuKM0/WKOzmuISPA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KSfA0HgMmzuKZnTEoigP5i5B2n3XjT9sNDtMJG3x7E4TOYc3CninlRtZQZdVJ80m5wKJfbVOr1Xr11JAdqtcwaAeS5XsXQ8HsUxcPDNMosPTpArpgZ07Yzo5dLlbjuC4DD6ffsz81re5KOc5rAOQEB+KmrT/ore5F9HuVNRqLF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AyXscExh; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-714262f1bb4so1708808b3a.3;
+        Fri, 23 Aug 2024 07:27:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724423249; x=1725028049; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KacMsRbnjBEszE7BgUys9UOYH47mgd4u1o+yN5SyyKc=;
+        b=AyXscExhzfWQgSV0vEMKGw31svUVHYguCE6Ax408d5gfFoyVRPr5t4flNpNzfqlFG5
+         3qkeeut142vhNuOBdEaCelYulj/BH0/n498mzTGWxj9cEh1nXcgpUx43F5X2H+uIqkbj
+         xoonqEo8vgZ/2qMo+yVWzGQBgjMCs9+zp8wk9rBc+i0jidbJqdnyvgp5Vr5IGWHpk9py
+         yFGkuQHHfi+fozDbCdVgkgLHNB3czB5udye1AXXPQO8+Hu3kz0hVkcSiavJPDt0qL1Z0
+         jBQOQLTVuUpa4quzfXcU/lpTSg7xV0XKie1mI1X7WQFncVqJtfiTPNH5yHt13scNkguR
+         9isg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724423249; x=1725028049;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KacMsRbnjBEszE7BgUys9UOYH47mgd4u1o+yN5SyyKc=;
+        b=rhbTKeindflSGZYwnMlJ0vMdaW8drISWGalRdh0Fs9+T68i8nVvFuUSXSIBI0VL3tt
+         ganeIF+uUUtxaKFYkFkQU8Xx0ivd8Jl0KK735hiRbyHiBkHsUdbhRd0T7IP7WnV+L0CV
+         yAS55d56ndAQrfOb/gF76FagEkrqUQTxShCsolT6lAVe/6BB4Plhwr6e02bgc1gG/bax
+         ZXWmsf8qmY+lvoZ4I0Wa2geBDs9TJzThF1AztjB5BkKBCiRp3rN9KOVf9gOwe17c3VDl
+         lCciFKA2ZC6+c8j3nlzs2gDW42nwetHXcEJRlfQlOjG0mblx1QQHdw1eOlyLf2Jkx1fX
+         kuJw==
+X-Forwarded-Encrypted: i=1; AJvYcCUCdHa2PePUWZKDuEuyeBxfm2pmSZ4/qynzVn7U1s+RtxKAK+3d5xFh1MayEX+ytrLcC1cgOsf5TEcs83A=@vger.kernel.org, AJvYcCUeUcCSbMqPtCns2o+R1FQgIcq3XJDKhgkdU892ny96xYKEotl//AEKYRQt+VHsBUlTZbTPHm9u@vger.kernel.org, AJvYcCVthmPYpMzhUW9kMXO/1MIwZoTvyZPrtfKMubh2LUbKbZ7WoWbBUxmVVxeTUC2A7PC1ncyK5ZOks3PlZ/RsJsyF@vger.kernel.org
+X-Gm-Message-State: AOJu0YwiROmbn4IEaTwR9knqOCgNlBKsWnu4vXZOfGpKlmBg1+KYAWLE
+	G8Qe880yRFvzjaonr3Ehh29gRJXC7DVFbypHtWZEHhuigys0WvIOwltaRURyr3cjmnZSAro+ys/
+	5ALC6jALaOcvYYYSocHnySu39ITw=
+X-Google-Smtp-Source: AGHT+IHXq68Af02NOud52gJvvYvsRbnAv54cUYzs+7St2Zt30iiL39jJ9aR7NzlzY2ozsTN/507wCWIs2TdibOUTvs0=
+X-Received: by 2002:a05:6a00:10c1:b0:714:1a74:9953 with SMTP id
+ d2e1a72fcca58-71445d5b1acmr2630636b3a.16.1724423248623; Fri, 23 Aug 2024
+ 07:27:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: will@kernel.org, joey.gouly@arm.com, linux-arm-kernel@lists.infradead.org, nd@arm.com, akpm@linux-foundation.org, aneesh.kumar@kernel.org, aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de, broonie@kernel.org, catalin.marinas@arm.com, christophe.leroy@csgroup.eu, dave.hansen@linux.intel.com, hpa@zytor.com, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, mingo@redhat.com, mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com, oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org, szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+References: <20240815-tcp-ao-selftests-upd-6-12-v3-0-7bd2e22bb81c@gmail.com>
+ <20240815-tcp-ao-selftests-upd-6-12-v3-2-7bd2e22bb81c@gmail.com>
+ <20240821191004.GF2164@kernel.org> <CAJwJo6Zix_bkE38RmDW6ywojvmzeOuPVtwH+Jqqz6AT=6jmh5A@mail.gmail.com>
+ <20240822101339.GI2164@kernel.org>
+In-Reply-To: <20240822101339.GI2164@kernel.org>
+From: Dmitry Safonov <0x7f454c46@gmail.com>
+Date: Fri, 23 Aug 2024 15:27:17 +0100
+Message-ID: <CAJwJo6YFqhS6KS2fArzg8ovDbWgysDvwvB8KmO-gJoPdWOBw9w@mail.gmail.com>
+Subject: Re: [PATCH net-next v3 2/8] selftests/net: Provide test_snprintf() helper
+To: Simon Horman <horms@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Mohammad Nassiri <mnassiri@ciena.com>, netdev@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, 23 Aug 2024 14:48:11 +0100,
-Will Deacon <will@kernel.org> wrote:
-> 
-> On Thu, Aug 22, 2024 at 04:10:51PM +0100, Joey Gouly wrote:
-> > To allow using newer instructions that current assemblers don't know about,
-> > replace the `at` instruction with the underlying SYS instruction.
-> > 
-> > Signed-off-by: Joey Gouly <joey.gouly@arm.com>
-> > Cc: Marc Zyngier <maz@kernel.org>
-> > Cc: Oliver Upton <oliver.upton@linux.dev>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Reviewed-by: Marc Zyngier <maz@kernel.org>
-> > ---
-> >  arch/arm64/include/asm/kvm_asm.h       | 3 ++-
-> >  arch/arm64/kvm/hyp/include/hyp/fault.h | 2 +-
-> >  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> Marc -- what would you like to do with this patch? I think the POE series
-> is really close now, so ideally I'd queue the lot on a branch in arm64
-> and you could pull the first ~10 patches into kvmarm if you need 'em.
+On Thu, 22 Aug 2024 at 11:13, Simon Horman <horms@kernel.org> wrote:
 >
-> Would what work for you, or did you have something else in mind (since
-> this one is also included in your series adding nv support for AT).
+> On Wed, Aug 21, 2024 at 10:35:10PM +0100, Dmitry Safonov wrote:
+> > Hi Simon,
+> >
+> > On Wed, 21 Aug 2024 at 20:10, Simon Horman <horms@kernel.org> wrote:
+> > >
+[..]
+> > > Hi Dmitry,
+> > >
+> > > Some minor nits, as it looks like there will be a v4.
+> >
+> > Thanks, both seem reasonable.
+> > Did you get them with checkpatch.pl or with your trained eyes? :)
+> >
+> > These days I run b4 prep --check and on latest version it just gave a
+> > bunch of fmt-strings with columns > 100.
+>
+> Hi Dimitry,
+>
+> For networking code I usually run:
+>
+> checkpatch.pl --strict --codespell --min-conf-desc-length=80
+>
+> Where 80 is, I believe, still in line with preferences for Networking code.
+> Although I'm not entirely sure it is applicable to this patch.
+>
+> As to your question, in this case I think it is the --strict that causes
+> checkpatch to flag the issues I raised. Sorry for not mentioning that in my
+> previous email.
 
-Yup, that works for me. I can take that prefix as the base for the AT
-series and drop my copy of this patch.
+Good, thanks!
+Now I can see/fix them :-)
 
-Thanks,
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+Cheers,
+             Dmitry
 
