@@ -1,183 +1,137 @@
-Return-Path: <linux-kselftest+bounces-16150-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16144-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6723D95CD6A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 15:12:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A78795CD3B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 15:09:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F5F92849BA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 13:12:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD4631C21630
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 13:09:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A41E188A19;
-	Fri, 23 Aug 2024 13:10:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD9981865E1;
+	Fri, 23 Aug 2024 13:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kedIkQi+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I9FT776y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E02F9188905;
-	Fri, 23 Aug 2024 13:10:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6DD38385
+	for <linux-kselftest@vger.kernel.org>; Fri, 23 Aug 2024 13:09:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724418611; cv=none; b=krxQU39q6LDN2CpyvSrUAkOi3/Dj/wf/Ys6awfDlV3zM4OEf28+DaEMJIm7xLdo8UX4VW+tg00GboK2OykldE/Jv3hxx/CttaOE2GLUxqhJ/ISESWe5F/r5uiM7Ktul6w6zO0SV80HnufCuhCt6AP2xuSyqr//UdzfDbdQol06c=
+	t=1724418580; cv=none; b=K04UE8+qFgS2M3SKmnEdFh6tqNeWSmq3y158dOYjDxZ+EJyll23rMojy67ttlKhR1ap6RV+ByUT09K2kH/mc9AA5jiJvHKw/WFXgsLlaUPKsKqmU+IhmAVQ4IEcY3E19yLJXsu0d5PqnlqouicftSx4yeZwbFo7WIDeVzLL1LsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724418611; c=relaxed/simple;
-	bh=wznO/uHzp07GwjLCy/T67HdeBwaNbaL4D0O7BIfErvE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cUEnvFOL19sFocPjIN3sH0t4S2XVWXB0Zo4uqXutw2ndW9BOHUZ9YBxRW/jvYqUymkx3eTNN7M8ar+SpX3gK/ONySSudgH4iZ14ipu/X4lNTp224QhljDqk6aig/YtZGJkgOJSlfxhPwjtWxs2c89vGpoAQCRBwPcis5GDuv6VA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kedIkQi+; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47N8vtdX005375;
-	Fri, 23 Aug 2024 13:10:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
-	:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=pp1; bh=vGA4guXkyUMpC
-	/+TGE5IkXahUomFPrZKZRJG1zd//I0=; b=kedIkQi+aLzcYcDnTmFfp3KBntySC
-	ufuOSQyIUSvf3t5HKt3uZb+6lmqIfjKyFeRgTJMVmxhm+9L+1Xl4k2EMliEqP4LT
-	EmM5tbUqPdyYOPA0Y8EmhkgJkYefrg1ZxjW2lpu+wjOetA6zIlelyhEz/Ck/S9uU
-	Z2AH1lfHSQmlWVE0qGPMkjEr/jyXeR8DOEsUEZO4J+Qz0NMxgp7jGsv+Xx4+S1cT
-	smZYRb80ytSc4twkks4Pa6OawBaqIvbXYWqQ8SExCT+7PkGpIUwFGDuoWsjnrTgu
-	zE/NmTxXmO/xEgyJAmnbv6w9R4Q2hFsWMviuc6kSL1ZCmywppN5Yjoa8g==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 412mb650ff-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 13:10:06 +0000 (GMT)
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 47NDA5Tk016651;
-	Fri, 23 Aug 2024 13:10:06 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 412mb650f7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 13:10:05 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 47ND0T9J017684;
-	Fri, 23 Aug 2024 13:10:04 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4138w3hkyh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 13:10:04 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 47ND9xPx25362926
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 23 Aug 2024 13:10:01 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8357E2004B;
-	Fri, 23 Aug 2024 13:09:59 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3B31420040;
-	Fri, 23 Aug 2024 13:09:59 +0000 (GMT)
-Received: from a46lp38.lnxne.boe (unknown [9.152.108.100])
-	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 23 Aug 2024 13:09:59 +0000 (GMT)
-From: Hariharan Mari <hari55@linux.ibm.com>
-To: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, shuah@kernel.org,
-        frankja@linux.ibm.com, borntraeger@linux.ibm.com,
-        imbrenda@linux.ibm.com, david@redhat.com, pbonzini@redhat.com,
-        schlameuss@linux.ibm.com
-Subject: [PATCH v3 5/5] KVM: s390: selftests: Add regression tests for PLO subfunctions
-Date: Fri, 23 Aug 2024 15:05:08 +0200
-Message-ID: <20240823130947.38323-6-hari55@linux.ibm.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20240823130947.38323-1-hari55@linux.ibm.com>
-References: <20240823130947.38323-1-hari55@linux.ibm.com>
+	s=arc-20240116; t=1724418580; c=relaxed/simple;
+	bh=JNBTXOgszcyTZqBN+AE8XXw6QOCX5pndr/bjjWzAzdk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ch1sCq50sROCl2uG6RxiH39NLEvj5U+sFDV8c7wWSaxa/ZvsEQAHxk3uhfFhcR6GmyeO4LN8ZXTQ70SCBMKK1kLpm5xZj3dwaz8PCXWqYFyNOuB0MNOp8Evt+CT0VYcUMACZy49J11eE9auQ2qgVLPirBvZBTv7ZOmYTUqSldVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=I9FT776y; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1724418577;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=EG8mD28rVtONRsnlimsJAZ/ET7pCMxfQdK8h/Nb699Q=;
+	b=I9FT776yVzjgja7kvw/0zQHIHWe9OjOjUecj2xZQ7cd//HBSb9DuqA6o0pIVJ0OYLPvCJx
+	BMcWozDnLTRGEt5kdDgJi6PL8KkiCDpdka/4DcsTtV28Vm+M/V6aZeBQtNeJlo8CiPecjP
+	9DLJ/mecILgH7SrgNrxgVMMGVkUPOiA=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-115-5iaSknDlOPOsQhXSKJzi6g-1; Fri,
+ 23 Aug 2024 09:09:33 -0400
+X-MC-Unique: 5iaSknDlOPOsQhXSKJzi6g-1
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 3CFF01956048;
+	Fri, 23 Aug 2024 13:09:32 +0000 (UTC)
+Received: from sullivan-work (unknown [10.22.16.46])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 90782300019C;
+	Fri, 23 Aug 2024 13:09:29 +0000 (UTC)
+Date: Fri, 23 Aug 2024 09:09:26 -0400
+From: "Ryan B. Sullivan" <rysulliv@redhat.com>
+To: Petr Mladek <pmladek@suse.com>
+Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+	joe.lawrence@redhat.com, shuah@kernel.org
+Subject: Re: [PATCH] selftests/livepatch: wait for atomic replace to occur
+Message-ID: <ZsiKBlEQS0NsKlGR@sullivan-work>
+References: <20240822173122.14760-1-rysulliv@redhat.com>
+ <Zsh51f3-n842TZHw@pathway.suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: FeLCjR6ocRS4a9W_tisGtJhn8EXGdMZu
-X-Proofpoint-GUID: JVcfZFOhSEqQuL-7LwW7iDrUVRkXKu4K
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-23_10,2024-08-22_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- priorityscore=1501 adultscore=0 bulkscore=0 impostorscore=0 malwarescore=0
- mlxlogscore=999 phishscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
- definitions=main-2408230095
+Content-Type: multipart/mixed; boundary="l0yynbd2qMORgpZl"
+Content-Disposition: inline
+In-Reply-To: <Zsh51f3-n842TZHw@pathway.suse.cz>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-Extend the existing regression test framework for s390x CPU subfunctions
-to include tests for the Perform Locked Operation (PLO) subfunction
-functions.
 
-PLO was introduced in the very first 64-bit machine generation.
-Hence it is assumed PLO is always installed in the Z Arch.
-The test procedure follows the established pattern.
+--l0yynbd2qMORgpZl
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Suggested-by: Janosch Frank <frankja@linux.ibm.com>
-Signed-off-by: Hariharan Mari <hari55@linux.ibm.com>
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+Changes from v2:
+
+Adds:
+	Reported-by: CKI Project <cki-project@redhat.com>
+	Closes: https://datawarehouse.cki-project.org/kcidb/tests/redhat:1413102084-x86_64-kernel_upt_28
+
+--l0yynbd2qMORgpZl
+Content-Type: text/plain; charset=us-ascii
+Content-Description: PATCHv3
+Content-Disposition: attachment;
+	filename="0001-selftests-livepatch-wait-for-atomic-replace-to-occur.patch"
+
+From 9d9bfb21e86a3a79fb92fd22d927329510c6a672 Mon Sep 17 00:00:00 2001
+From: Ryan Sullivan <rysulliv@redhat.com>
+Date: Thu, 22 Aug 2024 12:19:54 -0400
+Subject: [PATCH v3] selftests/livepatch: wait for atomic replace to occur
+
+On some machines with a large number of CPUs there is a sizable delay
+between an atomic replace occurring and when sysfs updates accordingly.
+This fix uses 'loop_until' to wait for the atomic replace to unload all
+previous livepatches.
+
+Reported-by: CKI Project <cki-project@redhat.com>
+Closes: https://datawarehouse.cki-project.org/kcidb/tests/redhat:1413102084-x86_64-kernel_upt_28
+Signed-off-by: Ryan Sullivan <rysulliv@redhat.com>
 ---
- .../kvm/s390x/cpumodel_subfuncs_test.c        | 32 +++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ tools/testing/selftests/livepatch/test-livepatch.sh | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/s390x/cpumodel_subfuncs_test.c b/tools/testing/selftests/kvm/s390x/cpumodel_subfuncs_test.c
-index fe45fb131583..222ba1cc3cac 100644
---- a/tools/testing/selftests/kvm/s390x/cpumodel_subfuncs_test.c
-+++ b/tools/testing/selftests/kvm/s390x/cpumodel_subfuncs_test.c
-@@ -19,6 +19,8 @@
+diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
+index 65c9c058458d..bd13257bfdfe 100755
+--- a/tools/testing/selftests/livepatch/test-livepatch.sh
++++ b/tools/testing/selftests/livepatch/test-livepatch.sh
+@@ -139,11 +139,8 @@ load_lp $MOD_REPLACE replace=1
+ grep 'live patched' /proc/cmdline > /dev/kmsg
+ grep 'live patched' /proc/meminfo > /dev/kmsg
  
- #include "kvm_util.h"
+-mods=(/sys/kernel/livepatch/*)
+-nmods=${#mods[@]}
+-if [ "$nmods" -ne 1 ]; then
+-	die "Expecting only one moduled listed, found $nmods"
+-fi
++loop_until 'mods=(/sys/kernel/livepatch/*); nmods=${#mods[@]}; [[ "$nmods" -eq 1 ]]' ||
++        die "Expecting only one moduled listed, found $nmods"
  
-+#define PLO_FUNCTION_MAX 256
-+
- /* Query available CPU subfunctions */
- struct kvm_s390_vm_cpu_subfunc cpu_subfunc;
- 
-@@ -33,6 +35,31 @@ static void get_cpu_machine_subfuntions(struct kvm_vm *vm,
- 	TEST_ASSERT(!r, "Get cpu subfunctions failed r=%d errno=%d", r, errno);
- }
- 
-+static inline int plo_test_bit(unsigned char nr)
-+{
-+	unsigned long function = nr | 0x100;
-+	int cc;
-+
-+	asm volatile("	lgr	0,%[function]\n"
-+			/* Parameter registers are ignored for "test bit" */
-+			"	plo	0,0,0,0(0)\n"
-+			"	ipm	%0\n"
-+			"	srl	%0,28\n"
-+			: "=d" (cc)
-+			: [function] "d" (function)
-+			: "cc", "0");
-+	return cc == 0;
-+}
-+
-+/* Testing Perform Locked Operation (PLO) CPU subfunction's ASM block */
-+static void test_plo_asm_block(u8 (*query)[32])
-+{
-+	for (int i = 0; i < PLO_FUNCTION_MAX; ++i) {
-+		if (plo_test_bit(i))
-+			(*query)[i >> 3] |= 0x80 >> (i & 7);
-+	}
-+}
-+
- /* Testing Crypto Compute Message Authentication Code (KMAC) CPU subfunction's ASM block */
- static void test_kmac_asm_block(u8 (*query)[16])
- {
-@@ -196,6 +223,11 @@ struct testdef {
- 	testfunc_t test;
- 	int facility_bit;
- } testlist[] = {
-+	/*
-+	 * PLO was introduced in the very first 64-bit machine generation.
-+	 * Hence it is assumed PLO is always installed in Z Arch.
-+	 */
-+	{ "PLO", cpu_subfunc.plo, sizeof(cpu_subfunc.plo), test_plo_asm_block, 1 },
- 	/* MSA - Facility bit 17 */
- 	{ "KMAC", cpu_subfunc.kmac, sizeof(cpu_subfunc.kmac), test_kmac_asm_block, 17 },
- 	{ "KMC", cpu_subfunc.kmc, sizeof(cpu_subfunc.kmc), test_kmc_asm_block, 17 },
+ # These modules were disabled by the atomic replace
+ for mod in $MOD_LIVEPATCH3 $MOD_LIVEPATCH2 $MOD_LIVEPATCH1; do
 -- 
-2.45.2
+2.44.0
+
+
+--l0yynbd2qMORgpZl--
 
 
