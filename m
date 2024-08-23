@@ -1,154 +1,332 @@
-Return-Path: <linux-kselftest+bounces-16158-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16159-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E7F895D056
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 16:47:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC05B95D0F3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 17:06:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE9D0286535
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 14:47:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74AAF2870EC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 15:06:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11515187FFC;
-	Fri, 23 Aug 2024 14:47:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="r49CN/aQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09417188A0F;
+	Fri, 23 Aug 2024 15:06:31 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46CE91865ED;
-	Fri, 23 Aug 2024 14:47:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9A07188A04;
+	Fri, 23 Aug 2024 15:06:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724424463; cv=none; b=DN9TlWcgY10Hgtp1k33nWTmRIPtFTzwqCtyLf5NiW7oZj+phmErPphGsGvB6SBgk1OglHh2Cgwj0kRc6tS5t6aFQbgZT7/tcDteL+QZSBsGD5O82vZXwZK7iz/DyUDZBxucCt0wtJ3uhhOuAT8RQyT/yU+nO57vGY9RGzzmqUB8=
+	t=1724425590; cv=none; b=Ij3TryBbL0C/ew7LQQHS4eGukxf8WbdSQxhbaBSceRqrz46Ew+3hjO/Hklz38YTWIJonBpap9/8PNy9l91RxPlXHghphY61C2BMUHxSrq2Hv5xnQI7oMO6KW/Kpg0ceH3HGnm+AanBF23hzt9Qdiswt7H2B6DGTTDoOdw2EACq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724424463; c=relaxed/simple;
-	bh=QkVDrRG+bwVo2Que5A45k+H96lRpMPjMgglMy/BFh4Q=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Subject:From:Cc:
-	 References:In-Reply-To; b=dqWP07Z56W1vPlJzfr9yKDc8uiExV+qyHX/BOw5Jzneer43VEPZyknwiYu202gp3PmRIWsyEweL40YxNtkeUiVBYGqLC76fzxJliBqmkGG7uzOcXzNg6sF05XDpwquWCvO0ksWW6hXBXyytKWarBIVp7k01CHrKUWdtMMx5iAPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=r49CN/aQ; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47NEdgVV013718;
-	Fri, 23 Aug 2024 14:47:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
-	mime-version:content-transfer-encoding:content-type:date
-	:message-id:to:subject:from:cc:references:in-reply-to; s=pp1;
-	 bh=UHCoi8H9SkJyWN+bg3VEga0aQtVxmmJrvg/q91th08M=; b=r49CN/aQWgqY
-	j2AUdWjl8Ngjr8AZ1IWoV3IxsWoUTlYa6x0Yrp4msTsicTm3fDxuVNKfGiP2pyaN
-	28OgaytO3CI2ocOYtFgGAa9pT5NRvYtOYRiCfBY9SAsbwSQPDqhWtlpH9vtGpPPb
-	X73kqh3BXJ1j+Nk3FCtJckZcAwFiNYcHWkeX5Tb53SSSolMsZFbSplcQQRYy/x95
-	iGIiJeJfLgX4ynn0rrhWequtQZUAHhNSF3K0Czs6Xm+nAYNKNR9RhK58N3L0h/4s
-	1Y8EN1SyaFhG3YWHTMdR+ulR8o/gkPMcsFB+WjT2hdtWRvtPwK91NGvTaH32Y5YI
-	1IHgvG+5Jg==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 416vc6r0yr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 14:47:31 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 47NElVtM028079;
-	Fri, 23 Aug 2024 14:47:31 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 416vc6r0yk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 14:47:31 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 47NB61Wc019044;
-	Fri, 23 Aug 2024 14:47:29 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 41376qaayf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 14:47:29 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 47NElOUZ54591752
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 23 Aug 2024 14:47:26 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 14A7D20043;
-	Fri, 23 Aug 2024 14:47:24 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id DF5B320040;
-	Fri, 23 Aug 2024 14:47:23 +0000 (GMT)
-Received: from darkmoore (unknown [9.171.45.196])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 23 Aug 2024 14:47:23 +0000 (GMT)
+	s=arc-20240116; t=1724425590; c=relaxed/simple;
+	bh=VmqeerRtQJyCaczs7Si/TZfddayAD1mjYNpMtTIjKlY=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Ri271XVYgWewrqgDUpOSr1zO1M+PtzM5laWUY9f5ldptJfhsXnouzVMU6PMJpQZMwD71aMrTdZ4nO/c1fNhNTvXQ/HH4rOzJUX9e/S/vBb6vTOGtFOA+hhPuk4Ns4z7Gh4pPRqJJ57f9vqfZT+/B0GuB7gB5tOJT+bEDsOhGrwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Wr3J824CJzhY9y;
+	Fri, 23 Aug 2024 23:04:24 +0800 (CST)
+Received: from dggpemf200006.china.huawei.com (unknown [7.185.36.61])
+	by mail.maildlp.com (Postfix) with ESMTPS id DC8ED140390;
+	Fri, 23 Aug 2024 23:06:25 +0800 (CST)
+Received: from localhost.localdomain (10.90.30.45) by
+ dggpemf200006.china.huawei.com (7.185.36.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 23 Aug 2024 23:06:25 +0800
+From: Yunsheng Lin <linyunsheng@huawei.com>
+To: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Yunsheng Lin
+	<linyunsheng@huawei.com>, Alexander Duyck <alexander.duyck@gmail.com>, Andrew
+ Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+	<linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>
+Subject: [PATCH net-next v14 01/11] mm: page_frag: add a test module for page_frag
+Date: Fri, 23 Aug 2024 23:00:29 +0800
+Message-ID: <20240823150040.1567062-2-linyunsheng@huawei.com>
+X-Mailer: git-send-email 2.30.0
+In-Reply-To: <20240823150040.1567062-1-linyunsheng@huawei.com>
+References: <20240823150040.1567062-1-linyunsheng@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 23 Aug 2024 16:47:18 +0200
-Message-Id: <D3NDG2T6LAPQ.2NWIY72YYTM3F@linux.ibm.com>
-To: "Hariharan Mari" <hari55@linux.ibm.com>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v3 1/5] KVM: s390: selftests: Add regression tests for
- SORTL and DFLTCC CPU subfunctions
-From: "Christoph Schlameuss" <schlameuss@linux.ibm.com>
-Cc: <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>, <shuah@kernel.org>,
-        <frankja@linux.ibm.com>, <borntraeger@linux.ibm.com>,
-        <imbrenda@linux.ibm.com>, <david@redhat.com>, <pbonzini@redhat.com>
-X-Mailer: aerc 0.17.0
-References: <20240823130947.38323-1-hari55@linux.ibm.com>
- <20240823130947.38323-2-hari55@linux.ibm.com>
-In-Reply-To: <20240823130947.38323-2-hari55@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: joBWqXu38rRWeSJVLAbCt0vd2B5HOrnU
-X-Proofpoint-GUID: feQMs60FA9k7UMgDuvCz7jUoq6a6etmR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-23_10,2024-08-22_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- spamscore=0 bulkscore=0 clxscore=1015 impostorscore=0 malwarescore=0
- mlxlogscore=593 suspectscore=0 priorityscore=1501 lowpriorityscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408230107
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemf200006.china.huawei.com (7.185.36.61)
 
-On Fri Aug 23, 2024 at 3:05 PM CEST, Hariharan Mari wrote:
-> Introduce new regression tests to verify the ASM inline block in the SORT=
-L
-> and DFLTCC CPU subfunctions for the s390x architecture. These tests ensur=
-e
-> that future changes to the ASM code are properly validated.
->
-> The test procedure:
->
-> 1. Create a VM and request the KVM_S390_VM_CPU_MACHINE_SUBFUNC attribute
->    from the KVM_S390_VM_CPU_MODEL group for this VM. This SUBFUNC attribu=
-te
->    contains the results of all CPU subfunction instructions.
-> 2. For each tested subfunction (SORTL and DFLTCC), execute the
->    corresponding ASM instruction and capture the result array.
-> 3. Perform a memory comparison between the results stored in the SUBFUNC
->    attribute (obtained in step 1) and the ASM instruction results (obtain=
-ed
->    in step 2) for each tested subfunction.
->
-> This process ensures that the KVM implementation accurately reflects the
-> behavior of the actual CPU instructions for the tested subfunctions.
->
-> Suggested-by: Janosch Frank <frankja@linux.ibm.com>
-> Signed-off-by: Hariharan Mari <hari55@linux.ibm.com>
-> Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+The testing is done by ensuring that the fragment allocated
+from a frag_frag_cache instance is pushed into a ptr_ring
+instance in a kthread binded to a specified cpu, and a kthread
+binded to a specified cpu will pop the fragment from the
+ptr_ring and free the fragment.
 
-LGTM
+CC: Alexander Duyck <alexander.duyck@gmail.com>
+Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+---
+ tools/testing/selftests/mm/Makefile           |   2 +
+ tools/testing/selftests/mm/page_frag/Makefile |  18 ++
+ .../selftests/mm/page_frag/page_frag_test.c   | 170 ++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh     |   9 +-
+ 4 files changed, 198 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/mm/page_frag/Makefile
+ create mode 100644 tools/testing/selftests/mm/page_frag/page_frag_test.c
 
-Reviewed-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 7b8a5def54a1..a21572e81f1d 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -36,6 +36,8 @@ MAKEFLAGS += --no-builtin-rules
+ CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
+ LDLIBS = -lrt -lpthread -lm
+ 
++TEST_GEN_MODS_DIR := page_frag
++
+ TEST_GEN_FILES = cow
+ TEST_GEN_FILES += compaction_test
+ TEST_GEN_FILES += gup_longterm
+diff --git a/tools/testing/selftests/mm/page_frag/Makefile b/tools/testing/selftests/mm/page_frag/Makefile
+new file mode 100644
+index 000000000000..58dda74d50a3
+--- /dev/null
++++ b/tools/testing/selftests/mm/page_frag/Makefile
+@@ -0,0 +1,18 @@
++PAGE_FRAG_TEST_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
++KDIR ?= $(abspath $(PAGE_FRAG_TEST_DIR)/../../../../..)
++
++ifeq ($(V),1)
++Q =
++else
++Q = @
++endif
++
++MODULES = page_frag_test.ko
++
++obj-m += page_frag_test.o
++
++all:
++	+$(Q)make -C $(KDIR) M=$(PAGE_FRAG_TEST_DIR) modules
++
++clean:
++	+$(Q)make -C $(KDIR) M=$(PAGE_FRAG_TEST_DIR) clean
+diff --git a/tools/testing/selftests/mm/page_frag/page_frag_test.c b/tools/testing/selftests/mm/page_frag/page_frag_test.c
+new file mode 100644
+index 000000000000..0e803db1ad79
+--- /dev/null
++++ b/tools/testing/selftests/mm/page_frag/page_frag_test.c
+@@ -0,0 +1,170 @@
++// SPDX-License-Identifier: GPL-2.0
++
++/*
++ * Test module for page_frag cache
++ *
++ * Copyright: linyunsheng@huawei.com
++ */
++
++#include <linux/mm.h>
++#include <linux/module.h>
++#include <linux/cpumask.h>
++#include <linux/completion.h>
++#include <linux/ptr_ring.h>
++#include <linux/kthread.h>
++
++static struct ptr_ring ptr_ring;
++static int nr_objs = 512;
++static atomic_t nthreads;
++static struct completion wait;
++static struct page_frag_cache test_frag;
++
++static int nr_test = 5120000;
++module_param(nr_test, int, 0);
++MODULE_PARM_DESC(nr_test, "number of iterations to test");
++
++static bool test_align;
++module_param(test_align, bool, 0);
++MODULE_PARM_DESC(test_align, "use align API for testing");
++
++static int test_alloc_len = 2048;
++module_param(test_alloc_len, int, 0);
++MODULE_PARM_DESC(test_alloc_len, "alloc len for testing");
++
++static int test_push_cpu;
++module_param(test_push_cpu, int, 0);
++MODULE_PARM_DESC(test_push_cpu, "test cpu for pushing fragment");
++
++static int test_pop_cpu;
++module_param(test_pop_cpu, int, 0);
++MODULE_PARM_DESC(test_pop_cpu, "test cpu for popping fragment");
++
++static int page_frag_pop_thread(void *arg)
++{
++	struct ptr_ring *ring = arg;
++	int nr = nr_test;
++
++	pr_info("page_frag pop test thread begins on cpu %d\n",
++		smp_processor_id());
++
++	while (nr > 0) {
++		void *obj = __ptr_ring_consume(ring);
++
++		if (obj) {
++			nr--;
++			page_frag_free(obj);
++		} else {
++			cond_resched();
++		}
++	}
++
++	if (atomic_dec_and_test(&nthreads))
++		complete(&wait);
++
++	pr_info("page_frag pop test thread exits on cpu %d\n",
++		smp_processor_id());
++
++	return 0;
++}
++
++static int page_frag_push_thread(void *arg)
++{
++	struct ptr_ring *ring = arg;
++	int nr = nr_test;
++
++	pr_info("page_frag push test thread begins on cpu %d\n",
++		smp_processor_id());
++
++	while (nr > 0) {
++		void *va;
++		int ret;
++
++		if (test_align) {
++			va = page_frag_alloc_align(&test_frag, test_alloc_len,
++						   GFP_KERNEL, SMP_CACHE_BYTES);
++
++			WARN_ONCE((unsigned long)va & (SMP_CACHE_BYTES - 1),
++				  "unaligned va returned\n");
++		} else {
++			va = page_frag_alloc(&test_frag, test_alloc_len, GFP_KERNEL);
++		}
++
++		if (!va)
++			continue;
++
++		ret = __ptr_ring_produce(ring, va);
++		if (ret) {
++			page_frag_free(va);
++			cond_resched();
++		} else {
++			nr--;
++		}
++	}
++
++	pr_info("page_frag push test thread exits on cpu %d\n",
++		smp_processor_id());
++
++	if (atomic_dec_and_test(&nthreads))
++		complete(&wait);
++
++	return 0;
++}
++
++static int __init page_frag_test_init(void)
++{
++	struct task_struct *tsk_push, *tsk_pop;
++	ktime_t start;
++	u64 duration;
++	int ret;
++
++	test_frag.va = NULL;
++	atomic_set(&nthreads, 2);
++	init_completion(&wait);
++
++	if (test_alloc_len > PAGE_SIZE || test_alloc_len <= 0 ||
++	    !cpu_active(test_push_cpu) || !cpu_active(test_pop_cpu))
++		return -EINVAL;
++
++	ret = ptr_ring_init(&ptr_ring, nr_objs, GFP_KERNEL);
++	if (ret)
++		return ret;
++
++	tsk_push = kthread_create_on_cpu(page_frag_push_thread, &ptr_ring,
++					 test_push_cpu, "page_frag_push");
++	if (IS_ERR(tsk_push))
++		return PTR_ERR(tsk_push);
++
++	tsk_pop = kthread_create_on_cpu(page_frag_pop_thread, &ptr_ring,
++					test_pop_cpu, "page_frag_pop");
++	if (IS_ERR(tsk_pop)) {
++		kthread_stop(tsk_push);
++		return PTR_ERR(tsk_pop);
++	}
++
++	start = ktime_get();
++	wake_up_process(tsk_push);
++	wake_up_process(tsk_pop);
++
++	pr_info("waiting for test to complete\n");
++	wait_for_completion(&wait);
++
++	duration = (u64)ktime_us_delta(ktime_get(), start);
++	pr_info("%d of iterations for %s testing took: %lluus\n", nr_test,
++		test_align ? "aligned" : "non-aligned", duration);
++
++	ptr_ring_cleanup(&ptr_ring, NULL);
++	page_frag_cache_drain(&test_frag);
++
++	return -EAGAIN;
++}
++
++static void __exit page_frag_test_exit(void)
++{
++}
++
++module_init(page_frag_test_init);
++module_exit(page_frag_test_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Yunsheng Lin <linyunsheng@huawei.com>");
++MODULE_DESCRIPTION("Test module for page_frag");
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index 03ac4f2e1cce..3636d984b786 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -75,6 +75,8 @@ separated by spaces:
+ 	read-only VMAs
+ - mdwe
+ 	test prctl(PR_SET_MDWE, ...)
++- page_frag
++	test handling of page fragment allocation and freeing
+ 
+ example: ./run_vmtests.sh -t "hmm mmap ksm"
+ EOF
+@@ -231,7 +233,8 @@ run_test() {
+ 		("$@" 2>&1) | tap_prefix
+ 		local ret=${PIPESTATUS[0]}
+ 		count_total=$(( count_total + 1 ))
+-		if [ $ret -eq 0 ]; then
++		# page_frag_test.ko returns 11(EAGAIN) when insmod'ing to avoid rmmod
++		if [ $ret -eq 0 ] | [ $ret -eq 11 -a ${CATEGORY} == "page_frag" ]; then
+ 			count_pass=$(( count_pass + 1 ))
+ 			echo "[PASS]" | tap_prefix
+ 			echo "ok ${count_total} ${test}" | tap_output
+@@ -453,6 +456,10 @@ CATEGORY="mkdirty" run_test ./mkdirty
+ 
+ CATEGORY="mdwe" run_test ./mdwe_test
+ 
++CATEGORY="page_frag" run_test insmod ./page_frag/page_frag_test.ko
++
++CATEGORY="page_frag" run_test insmod ./page_frag/page_frag_test.ko test_alloc_len=12 test_align=1
++
+ echo "SUMMARY: PASS=${count_pass} SKIP=${count_skip} FAIL=${count_fail}" | tap_prefix
+ echo "1..${count_total}" | tap_output
+ 
+-- 
+2.33.0
 
-> ---
->  tools/testing/selftests/kvm/Makefile          |   2 +
->  .../selftests/kvm/include/s390x/facility.h    |  50 +++++++++
->  .../selftests/kvm/lib/s390x/facility.c        |  14 +++
->  .../kvm/s390x/cpumodel_subfuncs_test.c        | 105 ++++++++++++++++++
->  4 files changed, 171 insertions(+)
->  create mode 100644 tools/testing/selftests/kvm/include/s390x/facility.h
->  create mode 100644 tools/testing/selftests/kvm/lib/s390x/facility.c
->  create mode 100644 tools/testing/selftests/kvm/s390x/cpumodel_subfuncs_t=
-est.c
-
-[...]
 
