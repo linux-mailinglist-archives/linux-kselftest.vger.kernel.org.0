@@ -1,234 +1,346 @@
-Return-Path: <linux-kselftest+bounces-16199-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16200-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAC0E95D945
-	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Aug 2024 00:28:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1967895D9CD
+	for <lists+linux-kselftest@lfdr.de>; Sat, 24 Aug 2024 01:44:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6682F28647F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 22:28:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 927A01F21CC0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 23:44:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 934EC1C8FB6;
-	Fri, 23 Aug 2024 22:28:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3921B1C86F0;
+	Fri, 23 Aug 2024 23:44:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eoGt3Lk5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TT1Eyi7l"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F88B191F6B;
-	Fri, 23 Aug 2024 22:28:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811BC152196;
+	Fri, 23 Aug 2024 23:44:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724452135; cv=none; b=koUNy5jQTW93sKvFkjBz1ohC746nA+v3a/zH2xes70BenaDMhbM+oX/A7iGA9quYr1E5mJD3jNbHVdRwh8LQC3MK+LZDCZ33jrjKLPEjnLZrYHxk5QQPw2lqBY5thmQGxfsllkO8XgAroyyGrn6oGOOoPE/Zoordu0h/S/9yea0=
+	t=1724456683; cv=none; b=atrYSl85PRbYGXtd3i5Bgtx1HtLBuI40lzy/Gh2RbRf5VD3GNXZKChFdo3zRXjaeUXvzJ8xzPaZBeC65VXCVQqtJ9euRswmEN6tnjzF3eiHgk3E8dG/TuenEqt4twql6fpt6LgVfjUA0Gsi6Z+vYdlwvryT+mr50WwY0OkaKOk0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724452135; c=relaxed/simple;
-	bh=lhFa9C+TdLA9AgtlhB86iziIxZ2TXHCWtZB1vVjHBhU=;
+	s=arc-20240116; t=1724456683; c=relaxed/simple;
+	bh=yCPfI+kiHgQVq30mEcE1PtkAHzc/7g/v0pZ3Aj/kmSQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MpZ7qluwTEViuy/zzRbplw7W0h1C7jpzxAYFMl2HVtRfjOw8ce8JC3vnw81/brflFY/biecbvtZRHZiaFblY+XTbx09xwmw0Va+XztxIApXlIGhEckFTee1bE6E+Sjgoc02Wto56yzG2Uz1U0M5hG+TnXxhl43OAJWU7C4AzApM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eoGt3Lk5; arc=none smtp.client-ip=209.85.128.50
+	 To:Cc:Content-Type; b=Ia4mNVdXpQhgy71FA+xDOVfvaMM7kp0XB2WYHnqcloU4Ie28t2iMava6xbRQkBdSaE/Ybvaqe8dNTwlRvrCaReN7pt31DIYVTjllhdYjZMPZjpeebzVpF5fiaWHawkpqZKNUt3vW6DqElglCFumKHzHOKubmYY6VuzrT/ctf19Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TT1Eyi7l; arc=none smtp.client-ip=209.85.166.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-429da8b5feaso25471125e9.2;
-        Fri, 23 Aug 2024 15:28:53 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-81fd9251d99so91211439f.0;
+        Fri, 23 Aug 2024 16:44:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724452132; x=1725056932; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1724456680; x=1725061480; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WWtV3/DOt8P4Xpd14+mqShRwy4l1Z4jup7YrAn/As/k=;
-        b=eoGt3Lk5h8fuUauRSQT+ylePqwjJdA+2xEonafeov1/xrb4ndZB6yKzdENgmmqeYcs
-         +vm/Gi3MJ1ppaJMOzN6MwFbdo2r1/oxV0VMQks6DeYPnuU84yiDxYJUqO68/fB8l+A//
-         dTwMypuos5AJFhEqQaL1D0njyJ6nSnDITUg7IPISvH5m8lqSmnxq7HCYOj07aTwnnPdv
-         bP8HYSP+jtOXNQDzzMcbAVaSWFBX/8Bf++rgGhqf1EsYnF1/Fh9d4W42FI5YsdVX9FnC
-         ifG1eUQ/lE2I2sb9NrjXEDu8jDd6g0sUnkKQ134hfB+k1qezDY9ojEzBINHIrKivkAi0
-         9G9Q==
+        bh=KistXHioizcW9FYbSUI1OlFUfi5tftYK70zDq1HxHBE=;
+        b=TT1Eyi7lVdjB4Nu9EGMweLNMLw2sb/8s4nr0ApfpiIDNGhPUnajd7eGtif6bXHPPiP
+         F2tINBMXS5tmOFEiO96gLgU05H45MNfCNCcLk4hHihFlmeP0LeCAsJ7OsnMZvggrfXeF
+         sObQ/QAmACbuTDdKq/OM6U0LvL6NYlriehW4GMBBVLIYahN/1/8ItYGuQpACI83cthb/
+         CarXWdpXna2z4Kc8c1Vw9man55M0p5phoGqglACuD/yZ4ZvdP7F3iFAPVojFuwpO0zpf
+         DKFUJuU1ENpJWOGmTE2I4u7sr5/dkthAYtcudp0+4cGLjebMDrWRmEPB11m46N5CYwL0
+         nniQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724452132; x=1725056932;
+        d=1e100.net; s=20230601; t=1724456680; x=1725061480;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WWtV3/DOt8P4Xpd14+mqShRwy4l1Z4jup7YrAn/As/k=;
-        b=fsoK6IpuVs5gzMm7b5PkTzdHnrMZxZHoxfPJMo3Yt8YSKiDSx+WpuGPYGP4V1yXQqd
-         Od/gtqMMiP8NGeJlt75tAICtWGugkGcabACJxXqA/fT0k+xOXSSpf3EIupz5O1oHw7r1
-         RqnNyi1GBL8f/WGLPewkH36dMPcLK0ic39nzgh9x+wKvKixtiX4yLvI288xOv5zu7jL7
-         mA4ceArKDvAYHsCw6MSHdZ7bir7C1zWhOB1SQ+7yAKjivRZXaSqHDfLkTIatRzKyKfBb
-         nfw5WAepYf0ZgMqA0mFdA/1bsv+KXU6MFwwT+XW0jowpn5JidoTRvc6XY5ihfULFtBMu
-         w/tw==
-X-Forwarded-Encrypted: i=1; AJvYcCVhMvsOMqSjTuFd31iKjUkrCr0xOtVeIbqqlUVbSomQ5WV3vFXCSk+EL2roMAU4JWT0k2uT91NQw0fP6fpE@vger.kernel.org, AJvYcCVj1TAi3gXfhzJGJNvXavmGnPBKnzqxpnJpTkNmCXrQtmTKJYbER7zcP2DUG88OMUee1x9KMP2q@vger.kernel.org, AJvYcCVsdSxxdf1rv5zC2tjQRkNRmVx2BmeZxHaIvdzhHDgZ5bMu/pcVXXECS9GJJ++cURjgtIg=@vger.kernel.org, AJvYcCXkHSMMn5SvPCrV+ovSjnVy0AWWWwTvEWXaphz0kBCRthhdTfHRxMd23OLmmdRWpN8wcot/2nDC4bR5bXhEXzZD@vger.kernel.org
-X-Gm-Message-State: AOJu0YyIPFtcow+VgEnziaHUeNoPzFGIw50r/wzXlBokEepHsQscaEQn
-	EaFL+4JsR3iEpXjlR52o89LVrVSJtsAQ+evAimL/f2eZtRumikCC8SCrh+vdGbsIutJxdEAm4je
-	3cv3T9M6LpiraGMBWB7lgyLX6L+k=
-X-Google-Smtp-Source: AGHT+IHC28T0OxdS5xfWVXMn6jPEmfd/fTwBRe4M2YVY0z1mCKUZOIrmxvOKGo0k/glS1YBPx9wJCuP9gjWxOW50vjk=
-X-Received: by 2002:a5d:58d9:0:b0:368:6564:751b with SMTP id
- ffacd0b85a97d-37311864454mr2589305f8f.32.1724452131607; Fri, 23 Aug 2024
- 15:28:51 -0700 (PDT)
+        bh=KistXHioizcW9FYbSUI1OlFUfi5tftYK70zDq1HxHBE=;
+        b=ZuSqF+CoEOrA9PKCIfNAwvRcbvajL2V4YCsZyZ6+XHTxelc1wHMKCO4WZvpGNKU6jX
+         3UXS6j+q5y8KUiZoiagUpEMwfajdvEYrM5P6B4XPn0qNxdz67KHM+XHG/NvPdFCSV8/Q
+         jB19Cih9nZbhnFW4mvENZGOFsMakcJYr1R8DdQt0p9FPlLczEjSvz2Hcs87JbLjyaFCS
+         ZkqvRZv+QDzdifzHpSnsjU1vv1hRqYQUgxuFzLaXjxnbcb4rf+FY+3Kwu8AlFWbfPMo1
+         k80U20XA5VwG/JObz3NDKF+RcBqOSM1Mf0m88CH5hgedZwTPgOVp/yX+xaMVWzixQwzq
+         48qA==
+X-Forwarded-Encrypted: i=1; AJvYcCUubtoprtCYaxHdjHENMRGDEeHsWGqnOsz3t0gYA2e5LCc7RszBHRMyyaXdtl8hPUJp7GCf+vudoQHrcc/d1Q4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YykJ0jzxDKq9Voss+HIG6YpZcrruwmUWTwLlb0ngWRcvBGC6w2X
+	aUcSD10IniqW3xmwzitxkc8aEkN+y+/aLRLWigX9/8V5Ld3a27btRYhUUk9FSTBl4AAgh6Wo6tB
+	MhWWUQRomcbHJqbu2QSxBKdxlk6RHEva+004=
+X-Google-Smtp-Source: AGHT+IHCScWcM1ds0gB3lNaC69Mano1ry0Gq37G1600EUnNhIVZ7f/NfUYnJapCmBiihOhMOyBGmsZp2IEtZE0PVG+o=
+X-Received: by 2002:a05:6e02:12ee:b0:39d:3c85:9b0 with SMTP id
+ e9e14a558f8ab-39e3c98c707mr43076015ab.15.1724456680471; Fri, 23 Aug 2024
+ 16:44:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240816-ups-bpf-next-selftests-use-khdr-v1-0-1e19f3d5b17a@kernel.org>
- <20240816-ups-bpf-next-selftests-use-khdr-v1-1-1e19f3d5b17a@kernel.org>
- <CAADnVQ+JBq8-6Rhi_LHX470uj2_2xxJAhgdUfg_abUxEDqpdJQ@mail.gmail.com> <6a693ad6-f145-48c1-b3a7-d441d3764e73@kernel.org>
-In-Reply-To: <6a693ad6-f145-48c1-b3a7-d441d3764e73@kernel.org>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Fri, 23 Aug 2024 15:28:40 -0700
-Message-ID: <CAADnVQKnEuQ4XZROLWH47mEZNwnJ9TuyTrauOnuobcLgVMrimw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] selftests: bpf: use KHDR_INCLUDES for the
- UAPI headers
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: MPTCP Upstream <mptcp@lists.linux.dev>, Andrii Nakryiko <andrii@kernel.org>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>
+References: <20240823211902.143210-1-jmaloy@redhat.com> <20240823211902.143210-3-jmaloy@redhat.com>
+In-Reply-To: <20240823211902.143210-3-jmaloy@redhat.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Sat, 24 Aug 2024 07:44:04 +0800
+Message-ID: <CAL+tcoCro6o5ZkhVJdKah9o2p=tPUSu06D0ZzNPPDB2Ns66kMw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests: add selftest for tcp SO_PEEK_OFF support
+To: jmaloy@redhat.com
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	davem@davemloft.net, kuba@kernel.org, passt-dev@passt.top, sbrivio@redhat.com, 
+	lvivier@redhat.com, dgibson@redhat.com, eric.dumazet@gmail.com, 
+	edumazet@google.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Aug 17, 2024 at 7:51=E2=80=AFAM Matthieu Baerts <matttbe@kernel.org=
-> wrote:
+Hello Jon,
+
+On Sat, Aug 24, 2024 at 5:19=E2=80=AFAM <jmaloy@redhat.com> wrote:
 >
-> Hi Alexei,
+> From: Jon Maloy <jmaloy@redhat.com>
 >
-> Thank you for the review.
+> We add a selftest to check that the new feature added in
+> commit 05ea491641d3 ("tcp: add support for SO_PEEK_OFF socket option")
+> works correctly.
 >
-> On 17/08/2024 09:22, Alexei Starovoitov wrote:
-> > On Fri, Aug 16, 2024 at 7:56=E2=80=AFPM Matthieu Baerts (NGI0)
-> > <matttbe@kernel.org> wrote:
-> >>
-> >> Instead of duplicating UAPI header files in 'tools/include/uapi', the
-> >> BPF selftests can also look at the header files inside the kernel
-> >> source.
-> >>
-> >> To do that, the kernel selftests infrastructure provides the
-> >> 'KHDR_INCLUDES' variable. This is what is being used in most selftests=
-,
-> >> because it is what is recommended in the documentation [1]. If the
-> >> selftests are not executed from the kernel sources, it is possible to
-> >> override the variable, e.g.
-> >>
-> >>   make KHDR_INCLUDES=3D"-I${HDR_DIR}/include" -C "${KSFT_DIR}"
-> >>
-> >> ... where ${HDR_DIR} has been generated by this command:
-> >>
-> >>   make headers_install INSTALL_HDR_PATH=3D"${HDR_DIR}"
-> >>
-> >> Thanks to 'KHDR_INCLUDES', it is no longer needed to duplicate header
-> >> files for userspace test programs, and these programs can include UAPI
-> >> header files without the 'uapi' prefix.
-> >>
-> >> Note that it is still required to use 'tools/include/uapi' -- APIDIR,
-> >> which corresponds to TOOLS_INCLUDES from lib.mk -- for the BPF program=
-s,
-> >> not to conflict with what is already defined in vmlinux.h.
-> >>
-> >> Link: https://docs.kernel.org/dev-tools/kselftest.html#contributing-ne=
-w-tests-details [1]
-> >> Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-> >> ---
-> >>  tools/testing/selftests/bpf/Makefile                       | 2 +-
-> >>  tools/testing/selftests/bpf/prog_tests/assign_reuse.c      | 2 +-
-> >>  tools/testing/selftests/bpf/prog_tests/tc_links.c          | 4 ++--
-> >>  tools/testing/selftests/bpf/prog_tests/tc_netkit.c         | 2 +-
-> >>  tools/testing/selftests/bpf/prog_tests/tc_opts.c           | 2 +-
-> >>  tools/testing/selftests/bpf/prog_tests/user_ringbuf.c      | 2 +-
-> >>  tools/testing/selftests/bpf/prog_tests/xdp_bonding.c       | 2 +-
-> >>  tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c | 2 +-
-> >>  tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c | 2 +-
-> >>  tools/testing/selftests/bpf/prog_tests/xdp_do_redirect.c   | 2 +-
-> >>  tools/testing/selftests/bpf/prog_tests/xdp_link.c          | 2 +-
-> >>  tools/testing/selftests/bpf/xdp_features.c                 | 4 ++--
-> >>  12 files changed, 14 insertions(+), 14 deletions(-)
-> >>
-> >> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/self=
-tests/bpf/Makefile
-> >> index 4eceb491a8ae..6a7aeae7e206 100644
-> >> --- a/tools/testing/selftests/bpf/Makefile
-> >> +++ b/tools/testing/selftests/bpf/Makefile
-> >> @@ -37,7 +37,7 @@ CFLAGS +=3D -g $(OPT_FLAGS) -rdynamic               =
-                    \
-> >>           -Wall -Werror -fno-omit-frame-pointer                       =
-  \
-> >>           $(GENFLAGS) $(SAN_CFLAGS) $(LIBELF_CFLAGS)                  =
-  \
-> >>           -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)        =
-  \
-> >> -         -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)
-> >> +         -I$(TOOLSINCDIR) $(KHDR_INCLUDES) -I$(OUTPUT)
-> >>  LDFLAGS +=3D $(SAN_LDFLAGS)
-> >>  LDLIBS +=3D $(LIBELF_LIBS) -lz -lrt -lpthread
-> >>
-> >> diff --git a/tools/testing/selftests/bpf/prog_tests/assign_reuse.c b/t=
-ools/testing/selftests/bpf/prog_tests/assign_reuse.c
-> >> index 989ee4d9785b..3d06bf5a1ba4 100644
-> >> --- a/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
-> >> +++ b/tools/testing/selftests/bpf/prog_tests/assign_reuse.c
-> >> @@ -1,6 +1,6 @@
-> >>  // SPDX-License-Identifier: GPL-2.0
-> >>  /* Copyright (c) 2023 Isovalent */
-> >> -#include <uapi/linux/if_link.h>
-> >> +#include <linux/if_link.h>
-> >
-> > No. This is not an option.
-> > User space shouldn't include kernel headers like this.
-> > Long ago tools/include directory was specifically
-> > created to break such dependency.
-> > Back then it was done for perf.
+> Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
+> Tested-by: Stefano Brivio <sbrivio@redhat.com>
+> Signed-off-by: Jon Maloy <jmaloy@redhat.com>
+
+Thanks for working on this. Sorry that I just noticed I missed your
+previous reply :(
+
+> ---
+>  tools/testing/selftests/net/Makefile          |   1 +
+>  tools/testing/selftests/net/tcp_so_peek_off.c | 181 ++++++++++++++++++
+>  2 files changed, 182 insertions(+)
+>  create mode 100644 tools/testing/selftests/net/tcp_so_peek_off.c
 >
-> I'm sorry, but I think we are not talking about the same thing here:
-> here, I'm only modifying the "normal" userspace programs, not the ones
-> used to generate the BPF objects. Perf is a special case I suppose, it
-> needs to know the kernel internals. It is the same with BPF programs
-> requiring vmlinux.h. But I think "normal" userspace programs in the
-> sefltests can use the UAPI headers, no?
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftes=
+ts/net/Makefile
+> index 8eaffd7a641c..1179e3261bef 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
+> @@ -80,6 +80,7 @@ TEST_PROGS +=3D io_uring_zerocopy_tx.sh
+>  TEST_GEN_FILES +=3D bind_bhash
+>  TEST_GEN_PROGS +=3D sk_bind_sendto_listen
+>  TEST_GEN_PROGS +=3D sk_connect_zero_addr
+> +TEST_GEN_PROGS +=3D tcp_so_peek_off
+>  TEST_PROGS +=3D test_ingress_egress_chaining.sh
+>  TEST_GEN_PROGS +=3D so_incoming_cpu
+>  TEST_PROGS +=3D sctp_vrf.sh
+> diff --git a/tools/testing/selftests/net/tcp_so_peek_off.c b/tools/testin=
+g/selftests/net/tcp_so_peek_off.c
+> new file mode 100644
+> index 000000000000..8379ea02e3d7
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/tcp_so_peek_off.c
+> @@ -0,0 +1,181 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <unistd.h>
+> +#include <errno.h>
+> +#include <sys/types.h>
+> +#include <netinet/in.h>
+> +#include <arpa/inet.h>
+> +#include "../kselftest.h"
+> +
+> +static char *afstr(int af)
+> +{
+> +       return af =3D=3D AF_INET ? "TCP/IPv4" : "TCP/IPv6";
+> +}
+> +
+> +int tcp_peek_offset_probe(sa_family_t af)
+> +{
+> +       int optv =3D 0;
+> +       int ret =3D 0;
+> +       int s;
+> +
+> +       s =3D socket(af, SOCK_STREAM | SOCK_CLOEXEC, IPPROTO_TCP);
+> +       if (s < 0) {
+> +               ksft_perror("Temporary TCP socket creation failed");
+> +       } else {
+> +               if (!setsockopt(s, SOL_SOCKET, SO_PEEK_OFF, &optv, sizeof=
+(int)))
+> +                       ret =3D 1;
+> +               else
+> +                       printf("%s does not support SO_PEEK_OFF\n", afstr=
+(af));
+> +               close(s);
+> +       }
+> +       return ret;
+> +}
+> +
+> +static void tcp_peek_offset_set(int s, int offset)
+> +{
+> +       if (setsockopt(s, SOL_SOCKET, SO_PEEK_OFF, &offset, sizeof(offset=
+)))
+> +               ksft_perror("Failed to set SO_PEEK_OFF value\n");
+> +}
+> +
+> +static int tcp_peek_offset_get(int s)
+> +{
+> +       int offset;
+> +       socklen_t len =3D sizeof(offset);
+> +
+> +       if (getsockopt(s, SOL_SOCKET, SO_PEEK_OFF, &offset, &len))
+> +               ksft_perror("Failed to get SO_PEEK_OFF value\n");
+> +       return offset;
+> +}
+> +
+> +static int tcp_peek_offset_test(sa_family_t af)
+> +{
+> +       union {
+> +               struct sockaddr sa;
+> +               struct sockaddr_in a4;
+> +               struct sockaddr_in6 a6;
+> +       } a;
+> +       int res =3D 0;
+> +       int s[2] =3D {0, 0};
+> +       int recv_sock =3D 0;
+> +       int offset =3D 0;
+> +       ssize_t len;
+> +       char buf;
+> +
+> +       memset(&a, 0, sizeof(a));
+> +       a.sa.sa_family =3D af;
+> +
+> +       s[0] =3D socket(af, SOCK_STREAM, IPPROTO_TCP);
+> +       s[1] =3D socket(af, SOCK_STREAM | SOCK_NONBLOCK, IPPROTO_TCP);
+> +
+> +       if (s[0] < 0 || s[1] < 0) {
+> +               ksft_perror("Temporary probe socket creation failed\n");
+> +               goto out;
 
-Not really. perf is a normal user space that doesn't look into
-kernel internals.
-It's used to rely on a few .h from kernel src tree for convenience,
-since they're not present in what's installed after 'make headers'.
-Hence the tools/include dir was created.
+Nit: I wonder if we can use more proper test statements to avoid such
+hiding failure[1] when closing a invalid file descriptor, even though
+it doesn't harm the test itself?
 
-Using KHDR_INCLUDES is fine, but it's not ok to search replace
-s/uapi\/linux/linux/ everywhere.
-Like the example I quoted above.
-tools/.../if_link.h is much older than include/uapi/linux/if_link.h
-and it's ok.
-We're not planning to update it.
-It's like building selftests on the system with older glibc.
-There is no requirement to have every .h in the tools/ dir
-up-to-date with the latest in include/.
-We're doing it for bpf.h because new selftests typically need
-something from bpf.h that was just added in the previous patch.
+[1]: "EBADF (Bad file descriptor)"
 
-> I understand that I could indeed fix my initial problem by duplicating
-> mptcp.h in tools/include/uapi/linux/, but this doesn't look to be
-> allowed any more by the Netdev maintainers, e.g. recently, 'ethtool.h'
-> has been duplicated there in commit 7effe3fdc049 ("tools: Add ethtool.h
-> header to tooling infra"), but removed quickly after in commit
-> bbe91a9f6889 ("tools: remove redundant ethtool.h from tooling infra").
-> In this case, it was fine to simply drop it, because the linked test
-> doesn't require a recent version. Jakub mentioned [4] that these
-> duplicated headers should be avoided, and the ones generated by 'make
-> headers' should be used instead: what is being suggested here.
+> +       }
+> +       if (bind(s[0], &a.sa, sizeof(a)) < 0) {
+> +               ksft_perror("Temporary probe socket bind() failed\n");
+> +               goto out;
+> +       }
+> +       if (getsockname(s[0], &a.sa, &((socklen_t) { sizeof(a) })) < 0) {
+> +               ksft_perror("Temporary probe socket getsockname() failed\=
+n");
+> +               goto out;
+> +       }
+> +       if (listen(s[0], 0) < 0) {
+> +               ksft_perror("Temporary probe socket listen() failed\n");
+> +               goto out;
+> +       }
+> +       if (connect(s[1], &a.sa, sizeof(a)) >=3D 0 || errno !=3D EINPROGR=
+ESS) {
+> +               ksft_perror("Temporary probe socket connect() failed\n");
+> +               goto out;
+> +       }
+> +       recv_sock =3D accept(s[0], NULL, NULL);
+> +       if (recv_sock <=3D 0) {
+> +               ksft_perror("Temporary probe socket accept() failed\n");
+> +               goto out;
 
-This is a different issue. There are very few .h in tools/ that
-needs a sync.
-bpf.h is one of them. ethtool.h is certainly not.
+Same here.
 
-you need something for mpctp.h. Let's talk about it,
-but switching everything to KHDR_INCLUDES is not ok,
-since there are a bunch of things in play.
-Sometimes selftests are built standalone and with non-glibc-s.
+> +       }
+> +
+> +       /* Some basic tests of getting/setting offset */
+> +       offset =3D tcp_peek_offset_get(recv_sock);
+> +       if (offset !=3D -1) {
+> +               ksft_perror("Initial value of socket offset not -1\n");
+> +               goto out;
+> +       }
+> +       tcp_peek_offset_set(recv_sock, 0);
+> +       offset =3D tcp_peek_offset_get(recv_sock);
+> +       if (offset !=3D 0) {
+> +               ksft_perror("Failed to set socket offset to 0\n");
+> +               goto out;
+> +       }
+> +
+> +       /* Transfer a message */
+> +       if (send(s[1], (char *)("ab"), 2, 0) <=3D 0 || errno !=3D EINPROG=
+RESS) {
+> +               ksft_perror("Temporary probe socket send() failed\n");
+> +               goto out;
+> +       }
+> +       /* Read first byte */
+> +       len =3D recv(recv_sock, &buf, 1, MSG_PEEK);
+> +       if (len !=3D 1 || buf !=3D 'a') {
+> +               ksft_perror("Failed to read first byte of message\n");
+> +               goto out;
+> +       }
+> +       offset =3D tcp_peek_offset_get(recv_sock);
+> +       if (offset !=3D 1) {
+> +               ksft_perror("Offset not forwarded correctly at first byte=
+\n");
+> +               goto out;
+> +       }
+> +       /* Try to read beyond last byte */
+> +       len =3D recv(recv_sock, &buf, 2, MSG_PEEK);
+> +       if (len !=3D 1 || buf !=3D 'b') {
+> +               ksft_perror("Failed to read last byte of message\n");
+> +               goto out;
+> +       }
+> +       offset =3D tcp_peek_offset_get(recv_sock);
+> +       if (offset !=3D 2) {
+> +               ksft_perror("Offset not forwarded correctly at last byte\=
+n");
+> +               goto out;
+> +       }
+> +       /* Flush message */
+> +       len =3D recv(recv_sock, NULL, 2, MSG_TRUNC);
+> +       if (len !=3D 2) {
+> +               ksft_perror("Failed to flush message\n");
+> +               goto out;
+> +       }
+> +       offset =3D tcp_peek_offset_get(recv_sock);
+> +       if (offset !=3D 0) {
+> +               ksft_perror("Offset not reverted correctly after flush\n"=
+);
+> +               goto out;
+> +       }
+> +
+> +       printf("%s with MSG_PEEK_OFF works correctly\n", afstr(af));
+> +       res =3D 1;
+> +out:
+> +       close(recv_sock);
+> +       close(s[1]);
+> +       close(s[0]);
+> +       return res;
+> +}
+> +
+> +int main(void)
+> +{
+> +       int res4, res6;
+> +
+> +       res4 =3D tcp_peek_offset_probe(AF_INET);
+> +       res6 =3D tcp_peek_offset_probe(AF_INET6);
+> +
+> +       if (!res4 && !res6)
+> +               return KSFT_SKIP;
+> +
+> +       if (res4)
+> +               res4 =3D tcp_peek_offset_test(AF_INET);
+> +
+> +       if (res6)
+> +               res6 =3D tcp_peek_offset_test(AF_INET6);
+> +
+> +       if (!res4 || !res6)
 
-Also realize that bpf selftests are not really kselftests.
-We use a few common .mk for convenience. That's about it.
+What if res6 is NULL after checking tcp_peek_offset_probe() while res4
+is always working correctly, then we will get notified with a
+KSFT_FAIL failure instead of KSFT_SKIP.
+
+The thing could happen because you reuse the same return value for v4/v6 mo=
+de.
+
+Thanks,
+Jason
+
+> +               return KSFT_FAIL;
+> +
+> +       return KSFT_PASS;
+> +}
+> +
+> --
+> 2.45.2
+>
+>
 
