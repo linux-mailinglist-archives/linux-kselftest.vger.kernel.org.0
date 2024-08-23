@@ -1,107 +1,170 @@
-Return-Path: <linux-kselftest+bounces-16173-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16175-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2616F95D561
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 20:41:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7458695D5B2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 21:01:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0A641F228EF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 18:41:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A411F1C2298C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 19:01:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63BEF190682;
-	Fri, 23 Aug 2024 18:41:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66C2E193061;
+	Fri, 23 Aug 2024 19:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="LetfqUA8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D58A18DF81;
-	Fri, 23 Aug 2024 18:40:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8602A1922C9;
+	Fri, 23 Aug 2024 19:00:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724438461; cv=none; b=QVKDp/JkZBB8lXbnHgXLPHprM4/JjPRgpKH6yvhGBvHL1LK5WemH4ShTBwPoli5I8YLpWlOGcFk0zif7uSs5nqVAZc2AcY9Bzp2BlRggTT+4zzKFeeszEIuxxBe1EghBc1ykPLxVfcq3fbHRm4hycZo1VqM3IlRPVoWRDly4gTg=
+	t=1724439652; cv=none; b=mgftg2gq4rZ3qDxbcRJBXPbGcgIRU/1btK8j5hKmI9mcgq6F91OHsFImbybpnNAw5jgrrnL4LwXV1Isz4I496KT6o+0Pc2CRseD3p1sf7j0X9oDDExsR9B0D0xO185HldgcmKsej7ejEVMrHhXUiwUZEYmAEx8xVCHygplsL41g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724438461; c=relaxed/simple;
-	bh=ounfh/bXLyxQViCNcAOjTt5R6ApsmH4cEaxiopLxJbg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EDeHDU8HYPGOOvcO0EMaorX2BsdjwDww6f0ogHvtZC4sWK6MBafkOK6ta3oUAZXQzP2TbzZUk7NQw3tH3uk+BrgiEDzAW2g5h/npynKX67mPita0g+lzASD3WPSRBl9+hGoPqaUjUqRV3EuoD1APpjqHfnMXwvxPfn18+2pSDz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E84C5C32786;
-	Fri, 23 Aug 2024 18:40:54 +0000 (UTC)
-Date: Fri, 23 Aug 2024 19:40:52 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Will Deacon <will@kernel.org>
-Cc: Joey Gouly <joey.gouly@arm.com>, linux-arm-kernel@lists.infradead.org,
-	nd@arm.com, akpm@linux-foundation.org, aneesh.kumar@kernel.org,
-	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
-	broonie@kernel.org, christophe.leroy@csgroup.eu,
-	dave.hansen@linux.intel.com, hpa@zytor.com,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
-	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
-	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
-	szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 06/30] arm64: context switch POR_EL0 register
-Message-ID: <ZsjXtE7Kg0LQwNAL@arm.com>
-References: <20240822151113.1479789-1-joey.gouly@arm.com>
- <20240822151113.1479789-7-joey.gouly@arm.com>
- <20240823144531.GH32156@willie-the-truck>
- <Zsi7ovLOfuFdfuuz@arm.com>
- <20240823170835.GA1181@willie-the-truck>
+	s=arc-20240116; t=1724439652; c=relaxed/simple;
+	bh=bs+/EWjAhs966KMUIhRMp9DxjSO6mOM2w5UU/c1zyqw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=nzizOklUZ68ygmhyYNroHirw+eU7h9JoVXEUbWikzN5ENqGGRK8/V7sFNDPma0hcNFEgGICmV3qyHv+K9844pOwewla/7fMq1mItLZB71Jx3OazaxbypJburWtJOXQSgkg0E7DtFMh5yY2znb0BHpT1vh17LcyP96SQN+qhIxJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=LetfqUA8; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1724439622;
+	bh=bs+/EWjAhs966KMUIhRMp9DxjSO6mOM2w5UU/c1zyqw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=LetfqUA8vTxITbVR+/8Naz3XntQhCRMzTU5f+A9/vXZB7ywf+M4371xDZRebGj6Kw
+	 PeoUfKtj/PVsf02ZnkGYqA39WR2uiDlBZLVAHkAaSo/UTlo3ZJ6vSyFothWxukeKcu
+	 grGKotQMMvFm28c5m+zsomYFihXJQB82CI9Gb4eNND0klPVPYFvk7Uey2KboF8i3uG
+	 fR6rw7RBIlPNCZpHhEDTvwu1oP09tAeB/8c8mCKcZ9klRIobLkPiF3vmfWDOpxSbl6
+	 RccVvUBz6dcP4zu4oi29H69u5gSKYSZUy2j0pjJxoxYT8+0V5KvLGIxOo6wtm5R+LR
+	 6PIYOmY+gN7Lw==
+Received: from thinkos.internal.efficios.com (unknown [IPv6:2606:6d00:100:4000:b243:804e:3bbd:91c9])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4Wr8XQ34Cfz1Hhj;
+	Fri, 23 Aug 2024 15:00:22 -0400 (EDT)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>
+Cc: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Ben Segall <bsegall@google.com>,
+	Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	linux-kselftest@vger.kernel.org
+Subject: [RFC PATCH v1 5/6] selftests/rseq: x86: Implement rseq_load_u32_u32
+Date: Fri, 23 Aug 2024 14:59:45 -0400
+Message-Id: <20240823185946.418340-6-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240823185946.418340-1-mathieu.desnoyers@efficios.com>
+References: <20240823185946.418340-1-mathieu.desnoyers@efficios.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240823170835.GA1181@willie-the-truck>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 23, 2024 at 06:08:36PM +0100, Will Deacon wrote:
-> On Fri, Aug 23, 2024 at 05:41:06PM +0100, Catalin Marinas wrote:
-> > On Fri, Aug 23, 2024 at 03:45:32PM +0100, Will Deacon wrote:
-> > > On Thu, Aug 22, 2024 at 04:10:49PM +0100, Joey Gouly wrote:
-> > > > +static void permission_overlay_switch(struct task_struct *next)
-> > > > +{
-> > > > +	if (!system_supports_poe())
-> > > > +		return;
-> > > > +
-> > > > +	current->thread.por_el0 = read_sysreg_s(SYS_POR_EL0);
-> > > > +	if (current->thread.por_el0 != next->thread.por_el0) {
-> > > > +		write_sysreg_s(next->thread.por_el0, SYS_POR_EL0);
-> > > > +		/* ISB required for kernel uaccess routines when chaning POR_EL0 */
-> > > 
-> > > nit: typo "chaning".
-> > > 
-> > > But more substantially, is this just to prevent spurious faults in the
-> > > context of a new thread using a stale value for POR_EL0?
-> > 
-> > Not just prevent faults but enforce the permissions from the new
-> > thread's POR_EL0. The kernel may continue with a uaccess routine from
-> > here, we can't tell.
-> 
-> Hmm, I wondered if that was the case. It's a bit weird though, because:
-> 
->   - There's a window between switch_mm() and switch_to() where you might
->     reasonably expect to be able to execute uaccess routines
+Allow loading a pair of u32 within a rseq critical section. It can be
+used in situations where both rseq_abi()->mm_cid and
+rseq_abi()->node_id need to be sampled atomically with respect to
+preemption, signal delivery and migration.
 
-I don't think we can have any uaccess between these two switches (a
-uaccess could fault, that's a pretty weird state between these two).
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kselftest@vger.kernel.org
+---
+ tools/testing/selftests/rseq/rseq-x86-bits.h | 43 ++++++++++++++++++++
+ tools/testing/selftests/rseq/rseq.h          | 14 +++++++
+ 2 files changed, 57 insertions(+)
 
->   - kthread_use_mm() doesn't/can't look at this at all
-
-No, but a kthread would have it's own, most permissive, POR_EL0.
-
->   - GUP obviously doesn't care
-> 
-> So what do we actually gain by having the uaccess routines honour this?
-
-I guess where it matters is more like not accidentally faulting because
-the previous thread had more restrictive permissions.
-
+diff --git a/tools/testing/selftests/rseq/rseq-x86-bits.h b/tools/testing/selftests/rseq/rseq-x86-bits.h
+index 8a9431eec467..fdf5ef398393 100644
+--- a/tools/testing/selftests/rseq/rseq-x86-bits.h
++++ b/tools/testing/selftests/rseq/rseq-x86-bits.h
+@@ -990,4 +990,47 @@ int RSEQ_TEMPLATE_IDENTIFIER(rseq_cmpeqv_trymemcpy_storev)(intptr_t *v, intptr_t
+ 
+ #endif
+ 
++#if defined(RSEQ_TEMPLATE_CPU_ID_NONE) && defined(RSEQ_TEMPLATE_MO_RELAXED)
++
++#define RSEQ_ARCH_HAS_LOAD_U32_U32
++
++static inline __attribute__((always_inline))
++int RSEQ_TEMPLATE_IDENTIFIER(rseq_load_u32_u32)(uint32_t *dst1, uint32_t *src1,
++		      uint32_t *dst2, uint32_t *src2)
++{
++	RSEQ_INJECT_C(9)
++
++	__asm__ __volatile__ goto (
++		RSEQ_ASM_DEFINE_TABLE(3, 1f, 2f, 4f) /* start, commit, abort */
++		/* Start rseq by storing table entry pointer into rseq_cs. */
++		RSEQ_ASM_STORE_RSEQ_CS(1, 3b, RSEQ_ASM_TP_SEGMENT:RSEQ_CS_OFFSET(%[rseq_offset]))
++		RSEQ_INJECT_ASM(3)
++		"movl %[src1], %%eax\n\t"
++		"movl %%eax, %[dst1]\n\t"
++		"movl %[src2], %%eax\n\t"
++		"movl %%eax, %[dst2]\n\t"
++		"2:\n\t"
++		RSEQ_INJECT_ASM(4)
++		RSEQ_ASM_DEFINE_ABORT(4, "", abort)
++		: /* gcc asm goto does not allow outputs */
++		: [rseq_offset]		"r" (rseq_offset),
++		  /* final store input */
++		  [dst1]		"m" (*dst1),
++		  [src1]		"m" (*src1),
++		  [dst2]		"m" (*dst2),
++		  [src2]		"m" (*src2)
++		: "memory", "cc", "rax"
++		  RSEQ_INJECT_CLOBBER
++		: abort
++	);
++	rseq_after_asm_goto();
++	return 0;
++abort:
++	rseq_after_asm_goto();
++	RSEQ_INJECT_FAILED
++	return -1;
++}
++
++#endif /* defined(RSEQ_TEMPLATE_CPU_ID_NONE) && defined(RSEQ_TEMPLATE_MO_RELAXED) */
++
+ #include "rseq-bits-reset.h"
+diff --git a/tools/testing/selftests/rseq/rseq.h b/tools/testing/selftests/rseq/rseq.h
+index d7364ea4d201..b6095c2a5da6 100644
+--- a/tools/testing/selftests/rseq/rseq.h
++++ b/tools/testing/selftests/rseq/rseq.h
+@@ -381,4 +381,18 @@ int rseq_cmpeqv_trymemcpy_storev(enum rseq_mo rseq_mo, enum rseq_percpu_mode per
+ 	}
+ }
+ 
++#ifdef RSEQ_ARCH_HAS_LOAD_U32_U32
++
++static inline __attribute__((always_inline))
++int rseq_load_u32_u32(enum rseq_mo rseq_mo,
++		      uint32_t *dst1, uint32_t *src1,
++		      uint32_t *dst2, uint32_t *src2)
++{
++	if (rseq_mo != RSEQ_MO_RELAXED)
++		return -1;
++	return rseq_load_u32_u32_relaxed(dst1, src1, dst2, src2);
++}
++
++#endif
++
+ #endif  /* RSEQ_H_ */
 -- 
-Catalin
+2.39.2
+
 
