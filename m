@@ -1,190 +1,155 @@
-Return-Path: <linux-kselftest+bounces-16143-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16145-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B74E895CD1C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 15:03:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B0FC95CD52
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 15:10:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E6E4283F82
-	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 13:03:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DA681C21C8E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 23 Aug 2024 13:10:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEEDF18595B;
-	Fri, 23 Aug 2024 13:03:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06338186E5A;
+	Fri, 23 Aug 2024 13:10:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="OG1zedAI"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="TcHSUsq3"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC75E1448E3;
-	Fri, 23 Aug 2024 13:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BC51865F1;
+	Fri, 23 Aug 2024 13:10:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724418219; cv=none; b=rrXKva/DS1vUBxmA6ZnTa2e3s02140Jpz64uccBDGtUb3oNhUzRlABv7k7FxCZAUuprivO2YHfoycqYjThICXnw5SujSCYmOkvStJiUz+I6pI11G45yVWuAAYz4lK3r0DvD6yg+EPd+32BcVmGD7/78Mm8qZn0RIlU6NqcBqFmE=
+	t=1724418604; cv=none; b=EuIC5S4YtxBEyrMLSVLOEXKJx3dIyl+7cIbe66dzvgfZv+uK68QI2v75RSSHuoZOn8X03+HuEo3QOpUIcblrLLrqFTJcVoLo2aAvJIodNF84Z3FHtjZUksIo3QA3myaujDLNEa7+GH2S/MeeD1rFUZTjm/bo/9d1YVhGusvHwUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724418219; c=relaxed/simple;
-	bh=FJtvPrnrnepURGaxInYmsEE+3DmtM/ijCioKxsX05us=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Cc:To:Subject:
-	 References:In-Reply-To; b=Iysj7wo9ksZqLovRelQ08HKgbC7iLYruMHWfI69hPZyOVGVuwZAKmuQXVLaq7S4mmh6sKl6q+ciYwnJ3uJlDF+Xnk3JwX7HdU81ESZbYYQ9Asl6rt5V0nhlGjEsCeqUxy2P7EnKjmVImnkjoJ6scbIgqjXOmmyuUsBlBd3Aau8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=OG1zedAI; arc=none smtp.client-ip=148.163.156.1
+	s=arc-20240116; t=1724418604; c=relaxed/simple;
+	bh=wb+VuNjiBFvQqo9wiUYegEmAHzTOE4dTmrmGfheD7iU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AXMwK22hiwB3vkgKV2HCl7JJmfKzAzX7hBDUsHeAhZcm9O98BQCchued07KaQoHOtdy6o+9GrV1WRS11NRI/3LOTElm5p2RsiXP65TTyaqXsLVcoHViyXKVo8KeFslE//tEL8PYIDIkEiCO9oeUOi0B/wLvE54NHUEdO7zcHDI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=TcHSUsq3; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47N6jDbs027508;
-	Fri, 23 Aug 2024 13:03:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
-	mime-version:content-transfer-encoding:content-type:date
-	:message-id:from:cc:to:subject:references:in-reply-to; s=pp1;
-	 bh=t5sHaqw+Qm7GG+J7BCxqCavP5aKQbQDGA6C1iK8gS1M=; b=OG1zedAIolbj
-	UHf3Hv1hyKk2vA2WJNVBAEjlrHPPpWL50896C7hemQ3HvalNA3HWjWqdPP2vohv8
-	wzDqCXeelUMfYTR2XALrsBq2unrLCTI9LExH87t4Vi1TL92xHDov5snSgYyYmaBE
-	uSEfiKCPLSnVtR0hDnznBtekaug3c+525uQJ3Fcgwxi5eb/6+M4ERCE8JCLUlZ4W
-	qrHSUTTQrpmi9pE+yCbuwKXpH7o6BVamJD9t+bwc7pbwtjRYhq7cKTF4p/IXE9Y0
-	2WR71qEgq5LOeFjMIJUCMdiakMgPdvCK0NkFSLmy9I1AiH7Ugxtp4xTLKTBdoVkY
-	lvIvdSldyA==
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47NAHUJW005497;
+	Fri, 23 Aug 2024 13:09:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
+	:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=pp1; bh=Vh5aCItZOd5/dSuzijCh6RX8nx
+	+0QnG2r83rtM+0yUI=; b=TcHSUsq3a72B++lznZvxN03J8AHhdThkhadXDghAsd
+	7no/pk/2DLHV9eI0nF0OQwEUmKoFdaVsBHnGWKd2lHNAZG/anEiHCX+HHBGaHCBD
+	8sZOFRxA9xOxbIUFkOS8xMvTvwV0QJA7YCjLtPm1fFsVR8/yMDhsCDw55f4xplIV
+	LrgbUwksMsQ3/EHBF9DA+kZj+3JSJRO29LkRcMNXrQxVqBvM+hiPCbWVadprK7jl
+	h9tcll/og1+7G8b/KacMBY32jwxYHkMmPDVFP6dWjJ4FkN0XX9+WBN0YvirDymUd
+	jWG0qvtra2ecZ52UtKrn4/aqpGRJzcHXcRfYTsmnUyOQ==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4141y25dq2-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 412mb650e4-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 13:03:32 +0000 (GMT)
-Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 47ND3WZV016693;
-	Fri, 23 Aug 2024 13:03:32 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4141y25dpx-1
+	Fri, 23 Aug 2024 13:09:58 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 47ND8kWY013601;
+	Fri, 23 Aug 2024 13:09:57 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 412mb650dy-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 13:03:32 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 47NCAtae029710;
-	Fri, 23 Aug 2024 13:03:31 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4138dmspu8-1
+	Fri, 23 Aug 2024 13:09:57 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 47NBjbBw018968;
+	Fri, 23 Aug 2024 13:09:56 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 41376qa07q-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 23 Aug 2024 13:03:31 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 47ND3PFE55312844
+	Fri, 23 Aug 2024 13:09:56 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 47ND9o5j55968070
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 23 Aug 2024 13:03:27 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C4B992004B;
-	Fri, 23 Aug 2024 13:03:25 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9297D20040;
-	Fri, 23 Aug 2024 13:03:25 +0000 (GMT)
-Received: from darkmoore (unknown [9.171.45.196])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 23 Aug 2024 13:03:25 +0000 (GMT)
+	Fri, 23 Aug 2024 13:09:52 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BB7A12004D;
+	Fri, 23 Aug 2024 13:09:50 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6EB1620040;
+	Fri, 23 Aug 2024 13:09:50 +0000 (GMT)
+Received: from a46lp38.lnxne.boe (unknown [9.152.108.100])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 23 Aug 2024 13:09:50 +0000 (GMT)
+From: Hariharan Mari <hari55@linux.ibm.com>
+To: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, kvm@vger.kernel.org, shuah@kernel.org,
+        frankja@linux.ibm.com, borntraeger@linux.ibm.com,
+        imbrenda@linux.ibm.com, david@redhat.com, pbonzini@redhat.com,
+        schlameuss@linux.ibm.com
+Subject: [PATCH v3 0/5] KVM: s390: selftests: Add regression tests for CPU subfunctions
+Date: Fri, 23 Aug 2024 15:05:03 +0200
+Message-ID: <20240823130947.38323-1-hari55@linux.ibm.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 23 Aug 2024 15:03:20 +0200
-Message-Id: <D3NB8GXIKS75.2AR1GNELFUIBE@linux.ibm.com>
-From: "Christoph Schlameuss" <schlameuss@linux.ibm.com>
-Cc: <linux-s390@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        "Paolo
- Bonzini" <pbonzini@redhat.com>,
-        "Shuah Khan" <shuah@kernel.org>,
-        "Christian
- Borntraeger" <borntraeger@linux.ibm.com>,
-        "Claudio Imbrenda"
- <imbrenda@linux.ibm.com>,
-        "David Hildenbrand" <david@redhat.com>,
-        "Nina
- Schoetterl-Glausch" <nsg@linux.ibm.com>
-To: "Janosch Frank" <frankja@linux.ibm.com>, <kvm@vger.kernel.org>
-Subject: Re: [PATCH 1/3] selftests: kvm: s390: Add uc_map_unmap VM test case
-X-Mailer: aerc 0.17.0
-References: <20240815154529.628087-1-schlameuss@linux.ibm.com>
- <20240815154529.628087-2-schlameuss@linux.ibm.com>
- <4c049b39-af28-488c-9e19-f22691b43585@linux.ibm.com>
- <ZsNs0sN7rWqaviZE@darkmoore>
- <884367dd-fba0-4acd-a614-f657768b662a@linux.ibm.com>
-In-Reply-To: <884367dd-fba0-4acd-a614-f657768b662a@linux.ibm.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: xSbd3g6ktdC65JTg1bz6FI_bVm1lvIcq
-X-Proofpoint-ORIG-GUID: Xg8nTaFVtTxu5p9zZ8rj6cPHeI9KG5e-
+X-Proofpoint-ORIG-GUID: 6qyFEgIB1D85gNWyVmgXaJ_yx2n15r4C
+X-Proofpoint-GUID: liNONXtUo5vNrMQOm5dV8s7jpn3qkwV2
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
  definitions=2024-08-23_10,2024-08-22_01,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- suspectscore=0 spamscore=0 mlxlogscore=721 bulkscore=0 impostorscore=0
- malwarescore=0 lowpriorityscore=0 phishscore=0 clxscore=1015
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2407110000 definitions=main-2408230095
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
+ priorityscore=1501 adultscore=0 bulkscore=0 impostorscore=0 malwarescore=0
+ mlxlogscore=737 phishscore=0 mlxscore=0 lowpriorityscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2407110000
+ definitions=main-2408230095
 
-On Fri Aug 23, 2024 at 10:02 AM CEST, Janosch Frank wrote:
-> On 8/19/24 6:03 PM, Christoph Schlameuss wrote:
-> > On Fri Aug 16, 2024 at 4:29 PM CEST, Janosch Frank wrote:
-> >> On 8/15/24 5:45 PM, Christoph Schlameuss wrote:
-> >>> Add a test case verifying basic running and interaction of ucontrol V=
-Ms.
-> >>> Fill the segment and page tables for allocated memory and map memory =
-on
-> >>> first access.
-> >>>
-> >>> * uc_map_unmap
-> >>>     Store and load data to mapped and unmapped memory and use pic seg=
-ment
-> >>>     translation handling to map memory on access.
-> >>>
-> >>> Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
-> >>> ---
-> >>>    .../selftests/kvm/s390x/ucontrol_test.c       | 120 ++++++++++++++=
-+++-
-> >>>    1 file changed, 119 insertions(+), 1 deletion(-)
-> >>>
-> >>
-> >>> +static void uc_handle_exit_ucontrol(FIXTURE_DATA(uc_kvm) * self)
-> >>> +{
-> >>> +	struct kvm_run *run =3D self->run;
-> >>> +
-> >>> +	TEST_ASSERT_EQ(KVM_EXIT_S390_UCONTROL, run->exit_reason);
-> >>> +	switch (run->s390_ucontrol.pgm_code) {
-> >>> +	case PGM_SEGMENT_TRANSLATION:
-> >>> +		pr_info("ucontrol pic segment translation 0x%llx\n",
-> >>> +			run->s390_ucontrol.trans_exc_code);
-> >>> +		/* map / make additional memory available */
-> >>> +		struct kvm_s390_ucas_mapping map2 =3D {
-> >>> +			.user_addr =3D (u64)gpa2hva(self, run->s390_ucontrol.trans_exc_co=
-de),
-> >>> +			.vcpu_addr =3D run->s390_ucontrol.trans_exc_code,
-> >>> +			.length =3D VM_MEM_EXT_SIZE,
-> >>> +		};
-> >>> +		pr_info("ucas map %p %p 0x%llx\n",
-> >>> +			(void *)map2.user_addr, (void *)map2.vcpu_addr, map2.length);
-> >>> +		TEST_ASSERT_EQ(0, ioctl(self->vcpu_fd, KVM_S390_UCAS_MAP, &map2));
-> >>> +		break;
-> >>
-> >> Why is this necessary if you fix up the mapping in the test?
-> >>
-> >=20
-> > This is also used within the uc_skey test to make sure the remap does
-> > work after the unmap.
->
-> Maybe I'm blind because I'm still recovering but where exactly?
+This patch series introduces a set of regression tests for various s390x
+CPU subfunctions in KVM. The tests ensure that the KVM implementation accurately
+reflects the behavior of actual CPU instructions for these subfunctions.
 
-It is literally used in the last line of the test case. Calling uc_handle_e=
-xit()
-again re-maps previously unmapped memory.
+The series adds tests for a total of 15 instructions across five patches,
+covering a range of operations including sorting, compression, and various
+cryptographic functions. Each patch follows a consistent testing pattern:
 
-I can try to make that a little bit more obvious.
+1. Obtain the KVM_S390_VM_CPU_MACHINE_SUBFUNC attribute for the VM.
+2. Execute the relevant asm instructions.
+3. Compare KVM-reported results with direct instruction execution results.
 
-+	/* unmap and run loop again */
-+	TH_LOG("ucas unmap %p %p 0x%llx",
-+	       (void *)map2.user_addr, (void *)map2.vcpu_addr, map2.length);
-+	rc =3D ioctl(self->vcpu_fd, KVM_S390_UCAS_UNMAP, &map2);
-+	ASSERT_EQ(0, rc)
-+		TH_LOG("ucas map result %d not expected, %s", rc, strerror(errno));
-+	ASSERT_EQ(0, uc_run_once(self));
-+	ASSERT_EQ(3, sync_regs->gprs[0]);
-+	ASSERT_EQ(KVM_EXIT_S390_UCONTROL, run->exit_reason);
-+	ASSERT_EQ(true, uc_handle_exit(self));  // <--- HERE
-+}
+Testing has been performed on s390x hardware with KVM support. All tests
+pass successfully, verifying the correct implementation of these
+subfunctions in KVM.
+
+---
+v2: 
+* Fix facility_bit type from bool to int
+v3:
+* Global variable in the header is moved to facility.c file in selftests/kvm/lib/s390x/
+* Fixed the line length 
+* Fixed single line comments and multiline comments 
+* Renamed the PLO macro
+* Removed the unnecessary type cast where Implicit type promotion applies
+---
+
+Hariharan Mari (5):
+  KVM: s390: selftests: Add regression tests for SORTL and DFLTCC CPU
+    subfunctions
+  KVM: s390: selftests: Add regression tests for PRNO, KDSA and KMA
+    crypto subfunctions
+  KVM: s390: selftests: Add regression tests for KMCTR, KMF, KMO and PCC
+    crypto subfunctions
+  KVM: s390: selftests: Add regression tests for KMAC, KMC, KM, KIMD and
+    KLMD crypto subfunctions
+  KVM: s390: selftests: Add regression tests for PLO subfunctions
+
+ tools/testing/selftests/kvm/Makefile          |   2 +
+ .../selftests/kvm/include/s390x/facility.h    |  50 +++
+ .../selftests/kvm/lib/s390x/facility.c        |  14 +
+ .../kvm/s390x/cpumodel_subfuncs_test.c        | 286 ++++++++++++++++++
+ 4 files changed, 352 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/include/s390x/facility.h
+ create mode 100644 tools/testing/selftests/kvm/lib/s390x/facility.c
+ create mode 100644 tools/testing/selftests/kvm/s390x/cpumodel_subfuncs_test.c
+
+-- 
+2.45.2
 
 
