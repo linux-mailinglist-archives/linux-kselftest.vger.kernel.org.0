@@ -1,136 +1,112 @@
-Return-Path: <linux-kselftest+bounces-16227-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16228-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E87195E485
-	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Aug 2024 19:10:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D558D95E4F6
+	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Aug 2024 21:40:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B8C31C20F59
-	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Aug 2024 17:10:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E53AB2141B
+	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Aug 2024 19:40:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6562043ABD;
-	Sun, 25 Aug 2024 17:10:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CE011448C5;
+	Sun, 25 Aug 2024 19:39:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="yUEyqmHW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="niGc+LSG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE6B2119;
-	Sun, 25 Aug 2024 17:10:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D6B23987D;
+	Sun, 25 Aug 2024 19:39:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724605820; cv=none; b=mgj2ePFCb5kh7sYK75XLa9KLY1W+61NoC+cEcpE2yT067NJhabOYxQlJonOAi9BGO9a0nXwJskIwfKj9itxAb0WoAFbmoZRmvaI2iC79cagWeSfTcOkuSZYFuphfWn9RJDfAO0i2H+hLL8MuHEkJkculKjHdAOWk1PnQCpPBUoE=
+	t=1724614795; cv=none; b=DCJgkklM3DEuw/8n4GI3xIuUPId6eNPl6GVtiAW81rUglm+hLZIYOiT47D4G9J2LhEJhzV2VCn6/dBOnZ1GZG/hJ9j5zqlOf9laJqDprSr9pUjKvSFZdJi0JhebzgiGZwJQDX1GRV/5ywSfR5AGd4wwtKoWgeej1qD+G9Frp0Ho=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724605820; c=relaxed/simple;
-	bh=jtFEa/ih3nx5VfJKrakt5NOrqfo0bR5s0nc5UcJGNZM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KLdAbSJkkwEUQmrCJIPOlzgga/UBTtjV4kyPsvBt2U0mWClYC4Lvrnk+oXx91twWLyHIBAEAHVA7kfv9CfWpEZBOirv8Rzq1DIIZJZcdh2CY6VAr0uOjyfpf7JbNeYWFmZQs+BUD9wDICvrwWCnnI150YaIBHCr4xlVWi6KO7mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=yUEyqmHW; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=8pzwujvC7xvqp9pOTOfvQRMNZqqSXoV1ObOJZ6mWKi0=; b=yUEyqmHWs76BuKeItSQmUqT8tW
-	qvoBDxcVUvlRK+h4RSyQF7MWIAFJbvtnzp/kcRrZbEjzLzL6in0j2gaEkKXPCK23wJzc0tf/YmND0
-	PM/ik34KL3XS9zLdvlluhhfCGYOuBh26ziL4N6hplNIdG+goyjB4B8izxp7UoCGMGbcsqi2jzRckn
-	ZAbE/OfuFscfWtY/2CQZD5Td5NOdnogUnmjdh32RfdymXD08ZklINQB05g/x0na1AAmsPTUxQctQD
-	sADwpsLVYF/C8TCqSUCKsc2k4JQdQ2opCURxB26VOYgmipQTFElsyvUUAKxYNkJN1thswl+aqXMDc
-	6ZH1Huqg==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:42788)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1siGkT-0004gh-2S;
-	Sun, 25 Aug 2024 18:09:53 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1siGkO-0001ff-1e;
-	Sun, 25 Aug 2024 18:09:48 +0100
-Date: Sun, 25 Aug 2024 18:09:48 +0100
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Shaoqin Huang <shahuang@redhat.com>,
-	Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>, Eric Auger <eauger@redhat.com>,
-	Sebastian Ott <sebott@redhat.com>,
-	Cornelia Huck <cohuck@redhat.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	James Morse <james.morse@arm.com>, kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>, Zenghui Yu <yuzenghui@huawei.com>
-Subject: Re: [PATCH v5 0/4] Allow userspace to change ID_AA64PFR1_EL1
-Message-ID: <ZstlXHnSvlfnia/D@shell.armlinux.org.uk>
-References: <20240723072004.1470688-1-shahuang@redhat.com>
- <86ttf8wnwz.wl-maz@kernel.org>
+	s=arc-20240116; t=1724614795; c=relaxed/simple;
+	bh=tJFMf7Ox3/eoUXodySBxnPvVaHnjOizgVNRxMtWdrpM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Iwr2Qn9cfMQ0uCGb5MlsthoY1lm2onVmtl24YAzn5E/sEwcD46o9C15p0MNHxr1LO9VI4gi0M5VAu4v15EPNazdFWPX47B28ycR6ySBGiIqEmvhBe0+/TJCNtSr/T2srWPmdykMe4LnPRceHyUlFSeO77HZQ5JKbAXkxtCyzW30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=niGc+LSG; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-3718c176ed7so2016106f8f.2;
+        Sun, 25 Aug 2024 12:39:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724614792; x=1725219592; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tJFMf7Ox3/eoUXodySBxnPvVaHnjOizgVNRxMtWdrpM=;
+        b=niGc+LSGEIFXnZC4qkAPjJXrA9o3YNZXL2khorLJ5Y6i/mRmw7DczQv+3AGq41l8K6
+         jRLaCAWLjZZiSGYAbddnd9mg1yRDZL2S2JUI+PuZY+z09uW1ekiJLaXvxl/yj0+0vZQI
+         QcohzQ2nwgI3sgvAwF8hF3q3lH0lsAEY5U1yHEOuZR5POlWKyRCssEkwmmMEJudFUgQ7
+         Qwv/8m/ppU7xhCv7YGIz3tYbIqPp5qi9PFv4N5NuFo5DBkGZ4fJIpk6fKxeDg0kVrxU1
+         SbLuLcZWJRtTwtzU2S/Rf8hUsAUgeFYxXdO5+wL9KsziEGjI2PqIse/ci4Q5aelSQCFN
+         2aSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724614792; x=1725219592;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tJFMf7Ox3/eoUXodySBxnPvVaHnjOizgVNRxMtWdrpM=;
+        b=MM6Nwe+B5bPkBVqUfp7T/CfkCqSLKdTAele1Vs6eFrXu7UT5IjXYAkSYn1PLdlFZ5U
+         GoOL1E+kj8sZlQqqTh7mZe0+yoJN0EfM9p0o+rGW9j8Svg2dGmM65UN8gVZWJbHTq8aB
+         UsS7mdeYLKKpcaoSK9VSsiu8i7oiJqlmw+Ef9I1gsOkmnchoyxqIBCPvWE6gxea+YRFG
+         LSdwCMsJXAceRdX8x0yOnnXI4wQ3YPjnzmScz+ni90Hyjkad9weqrCq+KbZwEfB/x9dQ
+         ufEoDhqjT9mYo3C+nihHmQcDRJokUzzCSUcOd/fgZN6FN9rvj4C0WztIuG9epQqInCCm
+         lyQw==
+X-Forwarded-Encrypted: i=1; AJvYcCUKYCIWJpH2HkQqYXgxq+DNz+iR4Sqn5l4bZ1fmQ4HaVYEv3OJKtaE/wEIv/MhFx64HzrtEzh0PvDPwOQLd@vger.kernel.org, AJvYcCV3RAnFCYkvMZ94SJrVCh92J/7i737ITfn6oSbdQ6OQt3qZVAbs/R9icFY0y6npbDMQxnM=@vger.kernel.org, AJvYcCVr+1jJCIqdsrorcM09WT2TZjT0gEmwa5d9Gt5GYL6VOE5P5KgzAHhL19k9mvLMUh1V1iHFjmZP5IACBLUYphnl@vger.kernel.org, AJvYcCXjqx2F80k4HgISXYBDfXcP0EWDOcQDACj5opDxZhqpMt6GHirQWApLaeRJV7k7dUSPki13HlPj@vger.kernel.org
+X-Gm-Message-State: AOJu0YynUYCeXIQIVGQ/2WRF1F60WigRYaeNNecw2Y4mrJp6FYmybhuC
+	Af9ddi28rujhaPi/jN50HQOlBmcBRKoFHfdaoo3RK0zlD4WbbdG54Dq1uf3Prl4UERCfp/9RoR9
+	dCTpB8yDUpkVrwezylroVYVtAOzc=
+X-Google-Smtp-Source: AGHT+IGFbKNA4xLPSpMgdIAMRw0iydK7vN0/OI26qARJK1To1kpg2vBiPumvMtuCJAricMBw6H2GFqQcYHoRXaV2YOI=
+X-Received: by 2002:a05:6000:1006:b0:371:82ec:206e with SMTP id
+ ffacd0b85a97d-37311840ec0mr4673128f8f.5.1724614791663; Sun, 25 Aug 2024
+ 12:39:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86ttf8wnwz.wl-maz@kernel.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+References: <20240816-ups-bpf-next-selftests-use-khdr-v1-0-1e19f3d5b17a@kernel.org>
+ <20240816-ups-bpf-next-selftests-use-khdr-v1-1-1e19f3d5b17a@kernel.org>
+ <CAADnVQ+JBq8-6Rhi_LHX470uj2_2xxJAhgdUfg_abUxEDqpdJQ@mail.gmail.com>
+ <6a693ad6-f145-48c1-b3a7-d441d3764e73@kernel.org> <CAADnVQKnEuQ4XZROLWH47mEZNwnJ9TuyTrauOnuobcLgVMrimw@mail.gmail.com>
+ <41ef2c53-600a-47d6-a35f-674e1e7860f8@kernel.org>
+In-Reply-To: <41ef2c53-600a-47d6-a35f-674e1e7860f8@kernel.org>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Sun, 25 Aug 2024 12:39:40 -0700
+Message-ID: <CAADnVQKoesL+Rmp9eB6mQbU1J0yDWgFioigy6jK6XMsd3S1u=A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/2] selftests: bpf: use KHDR_INCLUDES for the
+ UAPI headers
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: MPTCP Upstream <mptcp@lists.linux.dev>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Aug 25, 2024 at 05:46:36PM +0100, Marc Zyngier wrote:
-> On Tue, 23 Jul 2024 08:19:59 +0100,
-> Shaoqin Huang <shahuang@redhat.com> wrote:
-> > 
-> > Hi guys,
-> > 
-> > This is another try to allow userspace to change ID_AA64PFR1_EL1, and we want to
-> > give userspace the ability to control the visible feature set for a VM, which
-> > could be used by userspace in such a way to transparently migrate VMs.
-> 
-> 
-> I think this looks OK now, thanks for going through the motions and
-> doing the right thing.
-> 
-> What is missing is similar handling for 32bit ID registers, but I'm
-> not sure we keen on going down that road -- machines capable of
-> running those are on their way out. This can be done later anyway,
-> should anyone care.
+On Sat, Aug 24, 2024 at 3:37=E2=80=AFAM Matthieu Baerts <matttbe@kernel.org=
+> wrote:
+>
+> Now that the CI runners have been updated to use Ubuntu 24.04 [1], we
+> can use mptcp.h from the system headers, or do some actions via
+> IPRoute2. So not having KHDR_INCLUDES is no longer blocking us for the
+> moment. I think it might still be useful to add it for future use, and
+> also to use the latest version of the UAPI headers that are not in
+> 'tools/include/uapi', but I don't want to insist if you prefer not to
+> use the latest version.
 
-The Aarch32 ID registers need doing - we've already established that
-fact. Sadly, you decided you wouldn't respond to my patch addressing
-one of the Aarch32 ID registers despite me sending follow-ups to nicely
-ask you about this - you seemed to go utterly silent on it.
-
-The Aarch32 ID registers have changed value between different kernel
-versions, and given that QEMU saves and restores _all_ ID registers,
-changes to these ID registers cause a regression if one attempts to
-migrate VMs between one kernel version and the next. It doesn't even
-have to be between two physical machines. Libvirt supports managed-
-saving on reboot, where it saves an image of a VM at shutdown, and
-restores it at the next reboot. These changes in ID registers render
-effectively data loss in VMs that have been managed-saved - the
-saved state of the VM has to either be destroyed, or the host kernel
-reverted back and _never_ moved forward.
-
-As you don't seem to be keen to address this (by ignoring my emails
-on the topic, and now suggesting in your response above that you're
-not keen to do anything with the Aarch32 ID registers, I guess this
-just means that KVM on Aarch64 is going to forever suck.
-
-I'm sure Oliver will recall my emails on this which you've decided to
-ignore... he was supportive of my efforts to address this.
-
--- 
-*** please note that I probably will only be occasionally responsive
-*** for an unknown period of time due to recent eye surgery making
-*** reading quite difficult.
-
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Let's not fix what is not broken. We'll add KHDR_INCLUDES when
+it's actually necessary.
 
