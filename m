@@ -1,60 +1,58 @@
-Return-Path: <linux-kselftest+bounces-16225-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16226-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C910295E465
-	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Aug 2024 18:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B984895E47D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Aug 2024 19:01:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5AE6FB21029
-	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Aug 2024 16:46:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C3E6B21C6E
+	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Aug 2024 17:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2395D14F9D7;
-	Sun, 25 Aug 2024 16:46:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52080155389;
+	Sun, 25 Aug 2024 17:01:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hWjZdXuR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tA1LnCsp"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B9412B94;
-	Sun, 25 Aug 2024 16:46:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B0BB2E414;
+	Sun, 25 Aug 2024 17:01:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724604400; cv=none; b=nSl6yKVgPCPFkKp8hwVVuwdNGuyURsZo/JSf76Q3zhgpOkmvUSllbScwtPEsEUYNT89dwKIeGxotzAVs9Uj08foXXNNprgDuO7/FDCct/FqKb2x7uINYEydwAzNx5snxMEFZnGVqzvEpFnFHyHCqehTE7/G8CtuDXFMeVpQgZIE=
+	t=1724605310; cv=none; b=ScsynZpWBqntCmZHK+e/cZH1tyZf/3lDbwjbnKNRdRcqV1Z2ZIA4O5SLXSnX8bozPFv9tjwDflS9AwaQKedn8bk8xvK0shtTo3JUiIn9O7ltcv3cMx65vhjkK7JefPBiWPyENQkWT/Gg5sPXl8dmWU9gm66YAGtZkML0j3RR678=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724604400; c=relaxed/simple;
-	bh=ZoCeY/nGvicUbwynsgEk0MCHr1pxhUGttHarltMd2SI=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PlnMOJ3eU3WmFt6hRi6Wy0gD4+YW/iJG4zqR/GAlnrxcqZ4Nue+g6XbUrtHxRZ3vYzPkylLEoE+KKPGzN9LxbHjgZS3sfEEhVI6zXlfdwfW/HVW3/xwrV5WxWrqm54TKALNMZf7hkOZlWiLQw0Ady0rJ2hJE8ql9Um9N5tEt5xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hWjZdXuR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFFF9C32782;
-	Sun, 25 Aug 2024 16:46:39 +0000 (UTC)
+	s=arc-20240116; t=1724605310; c=relaxed/simple;
+	bh=EPolHw/el52PuT0VWE6le7FPzSmuz7JciNHM2H6aH7o=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XQjmBv5HVGg4A4Ab5NxqgQWt0abFHW8Ozs/ppbDuidMslQeUmAXfMG/aA3TFSEHXLSTA2+EimzPGOYCIv2VhvpL99kyV/2EdobpagkXHHLhq/VEJI1iurcnKkD7EvINVDyye2BumdmEm3LWnmHdtF7u9APgPxRixyBbAblzdhdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tA1LnCsp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D431C4AF13;
+	Sun, 25 Aug 2024 17:01:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724604399;
-	bh=ZoCeY/nGvicUbwynsgEk0MCHr1pxhUGttHarltMd2SI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=hWjZdXuRTUyYB1URlqmOJ/zJYqVlPvVMAya7LMyigSuhG2hAdd1DGwLhYeH+2U/S/
-	 Upi5M5VQjSixDrsUeuHA5EKmkUQhqJpI0tVzgNwEO90OnBxPe+65VtWjF3tWmXQGDB
-	 4pt8JtXX9u4392jHkqXvv5jXHBFB0LZ+yPDekmuLoUmKwvnskdy8XQxb2aeyq6rR/+
-	 0/xCsSKjpzkDieAxLxJE1CLtkTHOpW+FVVGBQavEp8cPvICv+6Q3bb/504Iwohvj+g
-	 RtuMRRfJg8g0UERzMqCOdGB7gwU88nL53a21o606rFVfdsvDP/WvrBrtt6hvaTlJbP
-	 9W/uF2g2BKCSw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	s=k20201202; t=1724605309;
+	bh=EPolHw/el52PuT0VWE6le7FPzSmuz7JciNHM2H6aH7o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=tA1LnCspJhNUmNm0eCsLrlCIlOVh9M1wb2SYSad+IVoFDGkuaT1+cVc7l/jTZRN3i
+	 Wvs8KebJYSJnzaAa6GMQUvjtBvofGfNR6wNXLLYBMpBeiFvpf0ny3TcQqq0ChPFzjK
+	 SdjRe9NYBIG6mrRwVfJyCXWj/lTXuH7bJ5WobjKU6olKJRdJaDk4X9SUA7zO4+L9PQ
+	 X4HKbklwQSr/pPIDqbjBfSdghx1+K45uSk0000uRydq5EiXbkkLmGtMjt+TsKC9paX
+	 iv1f8xyN7ofq09/IvfrCawaXfla0Anx59yxEMCv+mDGgmqg5nk5DLpyOtD+wJMFRPP
+	 qispObnZ9BCig==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.95)
 	(envelope-from <maz@kernel.org>)
-	id 1siGNx-006hAo-54;
-	Sun, 25 Aug 2024 17:46:37 +0100
-Date: Sun, 25 Aug 2024 17:46:36 +0100
-Message-ID: <86ttf8wnwz.wl-maz@kernel.org>
+	id 1siGcd-006hIn-9U;
+	Sun, 25 Aug 2024 18:01:47 +0100
 From: Marc Zyngier <maz@kernel.org>
-To: Shaoqin Huang <shahuang@redhat.com>
-Cc: Oliver Upton <oliver.upton@linux.dev>,
+To: Oliver Upton <oliver.upton@linux.dev>,
 	kvmarm@lists.linux.dev,
 	Mark Brown <broonie@kernel.org>,
-	Eric Auger <eauger@redhat.com>,
+	Shaoqin Huang <shahuang@redhat.com>
+Cc: Eric Auger <eauger@redhat.com>,
 	Sebastian Ott <sebott@redhat.com>,
 	Cornelia Huck <cohuck@redhat.com>,
 	Catalin Marinas <catalin.marinas@arm.com>,
@@ -69,69 +67,52 @@ Cc: Oliver Upton <oliver.upton@linux.dev>,
 	Will Deacon <will@kernel.org>,
 	Zenghui Yu <yuzenghui@huawei.com>
 Subject: Re: [PATCH v5 0/4] Allow userspace to change ID_AA64PFR1_EL1
+Date: Sun, 25 Aug 2024 18:01:43 +0100
+Message-Id: <172460529881.3851223.2305395558569783838.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240723072004.1470688-1-shahuang@redhat.com>
 References: <20240723072004.1470688-1-shahuang@redhat.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: shahuang@redhat.com, oliver.upton@linux.dev, kvmarm@lists.linux.dev, broonie@kernel.org, eauger@redhat.com, sebott@redhat.com, cohuck@redhat.com, catalin.marinas@arm.com, james.morse@arm.com, kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org, suzuki.poulose@arm.com, will@kernel.org, yuzenghui@huawei.com
+X-SA-Exim-Rcpt-To: oliver.upton@linux.dev, kvmarm@lists.linux.dev, broonie@kernel.org, shahuang@redhat.com, eauger@redhat.com, sebott@redhat.com, cohuck@redhat.com, catalin.marinas@arm.com, james.morse@arm.com, kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org, suzuki.poulose@arm.com, will@kernel.org, yuzenghui@huawei.com
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Tue, 23 Jul 2024 08:19:59 +0100,
-Shaoqin Huang <shahuang@redhat.com> wrote:
-> 
-> Hi guys,
-> 
+On Tue, 23 Jul 2024 03:19:59 -0400, Shaoqin Huang wrote:
 > This is another try to allow userspace to change ID_AA64PFR1_EL1, and we want to
 > give userspace the ability to control the visible feature set for a VM, which
 > could be used by userspace in such a way to transparently migrate VMs.
-
-
-I think this looks OK now, thanks for going through the motions and
-doing the right thing.
-
-What is missing is similar handling for 32bit ID registers, but I'm
-not sure we keen on going down that road -- machines capable of
-running those are on their way out. This can be done later anyway,
-should anyone care.
-
->
+> 
 > The patch series have four part:
 > 
 > The first patch disable those fields which KVM doesn't know how to handle, so
 > KVM will only expose value 0 of those fields to the guest.
 > 
-> The second patch check the FEAT_SSBS in guest IDREG instead of the cpu
-> capability.
-> 
-> The third patch allow userspace to change ID_AA64PFR1_EL1, it only advertise the
-> fields known to KVM and leave others unadvertise.
-> 
-> The fourth patch adds the kselftest to test if userspace can change the
-> ID_AA64PFR1_EL1.
-> 
-> Besides, I also noticed there is another patch [1] which try to make the
-> ID_AA64PFR1_EL1 writable. This patch [1] is try to enable GCS on baremental, and
-> add GCS support for the guest. What I understand is if we have GCS support on
-> baremental, it will be clear to how to handle them in KVM. And same for other
-> fields like NMI, THE, DF2, MTEX.. At that time, they can be
-> writable.
+> [...]
 
-I expect that Broonie would look into this as part of his series.
+Applied to next, thanks!
 
-Thanks,
+[1/4] KVM: arm64: Disable fields that KVM doesn't know how to handle in ID_AA64PFR1_EL1
+      commit: ffe68b2d19a5a84440fea99a732cfc3b157559eb
+[2/4] KVM: arm64: Use kvm_has_feat() to check if FEAT_SSBS is advertised to the guest
+      commit: e8d164974cfa46fe5ec87869c8a7113641f322d5
+[3/4] KVM: arm64: Allow userspace to change ID_AA64PFR1_EL1
+      commit: 78c4446b5f957fb14737582e503b1b25f66edc45
+[4/4] KVM: selftests: aarch64: Add writable test for ID_AA64PFR1_EL1
+      commit: dc9b5d7e0bd40e68a94013766b27be3dda10c006
+
+Cheers,
 
 	M.
-
 -- 
 Without deviation from the norm, progress is not possible.
+
+
 
