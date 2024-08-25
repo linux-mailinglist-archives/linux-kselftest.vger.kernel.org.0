@@ -1,140 +1,137 @@
-Return-Path: <linux-kselftest+bounces-16224-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16225-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6808E95E418
-	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Aug 2024 17:14:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C910295E465
+	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Aug 2024 18:46:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 960F91C20A6A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Aug 2024 15:14:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5AE6FB21029
+	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Aug 2024 16:46:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25D481547EB;
-	Sun, 25 Aug 2024 15:14:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2395D14F9D7;
+	Sun, 25 Aug 2024 16:46:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZFezltXx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hWjZdXuR"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E928E61FFC;
-	Sun, 25 Aug 2024 15:14:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B9412B94;
+	Sun, 25 Aug 2024 16:46:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724598856; cv=none; b=jphv4ttE5AOYxLFYyfRUf+biSvsEhHCzFRKFvO6suRVqu3UglwPOU/QOoDV1k/eNUJRovSxQ79AJZAdcZsbuxEBBggp2hr4GP/V/ZwYJq9b5K6z578jixmR3JgSHM5qcKKd9zz9vIUxhFiReLjIPE8zKEDx7TsjTx7BrXO0RvJw=
+	t=1724604400; cv=none; b=nSl6yKVgPCPFkKp8hwVVuwdNGuyURsZo/JSf76Q3zhgpOkmvUSllbScwtPEsEUYNT89dwKIeGxotzAVs9Uj08foXXNNprgDuO7/FDCct/FqKb2x7uINYEydwAzNx5snxMEFZnGVqzvEpFnFHyHCqehTE7/G8CtuDXFMeVpQgZIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724598856; c=relaxed/simple;
-	bh=+Ejih42HNI9fRfwQo8o4of4mjbUFyPFvcmlliCErK2s=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=iAp1sXgwMU4p3DKwc1lWeiB3HXE5nMtpg5c803e7LMIflT8uYeApODL0LvvNJUVBQhUvHz9c+VUzgLGvxsUC2hetqjk//lorb8W1nZEsAN6P7lpos1mKR0Dxkm3Pd91MevcTSbYesIFOFIWSlCM1Qt/Xwt9yEqhRXFDrmWiegXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZFezltXx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1138EC32782;
-	Sun, 25 Aug 2024 15:14:12 +0000 (UTC)
+	s=arc-20240116; t=1724604400; c=relaxed/simple;
+	bh=ZoCeY/nGvicUbwynsgEk0MCHr1pxhUGttHarltMd2SI=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=PlnMOJ3eU3WmFt6hRi6Wy0gD4+YW/iJG4zqR/GAlnrxcqZ4Nue+g6XbUrtHxRZ3vYzPkylLEoE+KKPGzN9LxbHjgZS3sfEEhVI6zXlfdwfW/HVW3/xwrV5WxWrqm54TKALNMZf7hkOZlWiLQw0Ady0rJ2hJE8ql9Um9N5tEt5xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hWjZdXuR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFFF9C32782;
+	Sun, 25 Aug 2024 16:46:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724598855;
-	bh=+Ejih42HNI9fRfwQo8o4of4mjbUFyPFvcmlliCErK2s=;
+	s=k20201202; t=1724604399;
+	bh=ZoCeY/nGvicUbwynsgEk0MCHr1pxhUGttHarltMd2SI=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ZFezltXxFeIUp1wg4DUNsV8YHR73bAH6SePViAfmXnvi5/Yrtbg0o+KsA5zDV5g4I
-	 hwfRNkZ+jmSMDjF+BiWddTeNkRwN2v5q5oaJp1lXS4my04DenrbRKhbbVdFgVGG4ZC
-	 imsdS0JuZnl548AEEDdWyIKinDyKmvax1AGrL04C5Ch7sgpoH9ElZfbZKk3SJwDsQi
-	 jfYftMG6iaBe/3xC744s7BYgBP6R6SClJyrwknFcmAXcCh4Fy4QdAgJQ6ngznqLx0Z
-	 Ypr6jciaZp8GZTt4BVhENnCwPFZahFQn8Rj+sxDhUhq9ckzJflOpMzkBO+eaasIdNo
-	 pHqupwcgLGgLw==
-Date: Mon, 26 Aug 2024 00:14:10 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Mark Rutland <mark.rutland@arm.com>, Shuah Khan <shuah@kernel.org>, Shuah
- Khan <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] ftrace/selftest: Test combination of function_graph
- tracer and function profiler
-Message-Id: <20240826001410.76bcc8304e7c3ee188420b5c@kernel.org>
-In-Reply-To: <20240821150903.05c6cf96@gandalf.local.home>
-References: <20240821150903.05c6cf96@gandalf.local.home>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	b=hWjZdXuRTUyYB1URlqmOJ/zJYqVlPvVMAya7LMyigSuhG2hAdd1DGwLhYeH+2U/S/
+	 Upi5M5VQjSixDrsUeuHA5EKmkUQhqJpI0tVzgNwEO90OnBxPe+65VtWjF3tWmXQGDB
+	 4pt8JtXX9u4392jHkqXvv5jXHBFB0LZ+yPDekmuLoUmKwvnskdy8XQxb2aeyq6rR/+
+	 0/xCsSKjpzkDieAxLxJE1CLtkTHOpW+FVVGBQavEp8cPvICv+6Q3bb/504Iwohvj+g
+	 RtuMRRfJg8g0UERzMqCOdGB7gwU88nL53a21o606rFVfdsvDP/WvrBrtt6hvaTlJbP
+	 9W/uF2g2BKCSw==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1siGNx-006hAo-54;
+	Sun, 25 Aug 2024 17:46:37 +0100
+Date: Sun, 25 Aug 2024 17:46:36 +0100
+Message-ID: <86ttf8wnwz.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Shaoqin Huang <shahuang@redhat.com>
+Cc: Oliver Upton <oliver.upton@linux.dev>,
+	kvmarm@lists.linux.dev,
+	Mark Brown <broonie@kernel.org>,
+	Eric Auger <eauger@redhat.com>,
+	Sebastian Ott <sebott@redhat.com>,
+	Cornelia Huck <cohuck@redhat.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	James Morse <james.morse@arm.com>,
+	kvm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Zenghui Yu <yuzenghui@huawei.com>
+Subject: Re: [PATCH v5 0/4] Allow userspace to change ID_AA64PFR1_EL1
+In-Reply-To: <20240723072004.1470688-1-shahuang@redhat.com>
+References: <20240723072004.1470688-1-shahuang@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: shahuang@redhat.com, oliver.upton@linux.dev, kvmarm@lists.linux.dev, broonie@kernel.org, eauger@redhat.com, sebott@redhat.com, cohuck@redhat.com, catalin.marinas@arm.com, james.morse@arm.com, kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org, suzuki.poulose@arm.com, will@kernel.org, yuzenghui@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Wed, 21 Aug 2024 15:09:03 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Tue, 23 Jul 2024 08:19:59 +0100,
+Shaoqin Huang <shahuang@redhat.com> wrote:
+> 
+> Hi guys,
+> 
+> This is another try to allow userspace to change ID_AA64PFR1_EL1, and we want to
+> give userspace the ability to control the visible feature set for a VM, which
+> could be used by userspace in such a way to transparently migrate VMs.
 
-> From: Steven Rostedt <rostedt@goodmis.org>
-> 
-> Masami reported a bug when running function graph tracing then the
-> function profiler. The following commands would cause a kernel crash:
-> 
->   # cd /sys/kernel/tracing/
->   # echo function_graph > current_tracer
->   # echo 1 > function_profile_enabled
-> 
-> In that order. Create a test to test this two to make sure this does not
-> come back as a regression.
-> 
-> Link: https://lore.kernel.org/172398528350.293426.8347220120333730248.stgit@devnote2
 
-This looks good to me, but note that this depends on the above fix, unless
-that, this may crash the kernel. I think the above fix should be merged in
-v6.11-rcX so this may be safe for released kernel.
+I think this looks OK now, thanks for going through the motions and
+doing the right thing.
+
+What is missing is similar handling for 32bit ID registers, but I'm
+not sure we keen on going down that road -- machines capable of
+running those are on their way out. This can be done later anyway,
+should anyone care.
+
+>
+> The patch series have four part:
+> 
+> The first patch disable those fields which KVM doesn't know how to handle, so
+> KVM will only expose value 0 of those fields to the guest.
+> 
+> The second patch check the FEAT_SSBS in guest IDREG instead of the cpu
+> capability.
+> 
+> The third patch allow userspace to change ID_AA64PFR1_EL1, it only advertise the
+> fields known to KVM and leave others unadvertise.
+> 
+> The fourth patch adds the kselftest to test if userspace can change the
+> ID_AA64PFR1_EL1.
+> 
+> Besides, I also noticed there is another patch [1] which try to make the
+> ID_AA64PFR1_EL1 writable. This patch [1] is try to enable GCS on baremental, and
+> add GCS support for the guest. What I understand is if we have GCS support on
+> baremental, it will be clear to how to handle them in KVM. And same for other
+> fields like NMI, THE, DF2, MTEX.. At that time, they can be
+> writable.
+
+I expect that Broonie would look into this as part of his series.
 
 Thanks,
 
-> 
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
->  .../ftrace/test.d/ftrace/fgraph-profiler.tc   | 30 +++++++++++++++++++
->  1 file changed, 30 insertions(+)
->  create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/fgraph-profiler.tc
-> 
-> diff --git a/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-profiler.tc b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-profiler.tc
-> new file mode 100644
-> index 000000000000..62d44a1395da
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/ftrace/fgraph-profiler.tc
-> @@ -0,0 +1,30 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +# description: ftrace - function profiler with function graph tracing
-> +# requires: function_profile_enabled set_ftrace_filter function_graph:tracer
-> +
-> +# The function graph tracer can now be run along side of the function
-> +# profiler. But there was a bug that caused the combination of the two
-> +# to crash. It also required the function graph tracer to be started
-> +# first.
-> +#
-> +# This test triggers that bug
-> +#
-> +# We need function_graph and profiling to to run this test
-> +
-> +fail() { # mesg
-> +    echo $1
-> +    exit_fail
-> +}
-> +
-> +echo "Enabling function graph tracer:"
-> +echo function_graph > current_tracer
-> +echo "enable profiler"
-> +
-> +# Older kernels do not allow function_profile to be enabled with
-> +# function graph tracer. If the below fails, mark it as unsupported
-> +echo 1 > function_profile_enabled || exit_unsupported
-> +
-> +sleep 1
-> +
-> +exit 0
-> -- 
-> 2.43.0
-> 
-
+	M.
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Without deviation from the norm, progress is not possible.
 
