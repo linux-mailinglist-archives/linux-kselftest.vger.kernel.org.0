@@ -1,378 +1,135 @@
-Return-Path: <linux-kselftest+bounces-16347-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16348-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEB0895FCAA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 00:20:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D7A295FCB3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 00:26:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6661E283033
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 22:20:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE0EA283369
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 22:26:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1603F19D07D;
-	Mon, 26 Aug 2024 22:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E071B19D88B;
+	Mon, 26 Aug 2024 22:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RmY7cBFG"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i4Hf1Yp3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EFA19D090
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2024 22:20:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4677F19D075
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2024 22:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724710847; cv=none; b=dUyGoa9zLMLDWjpVzvpIr/muZSs5fydDVYQgHaZs5CJEn8E87ZxpY3URsiygA9Z4ggVnkX6C6SSd0MLtpg8VkIyCCt5rKWQkfD3whgWXf/uM8jtK90nBhp7Q7xLTyf0BMfeh50+TUM2fj+99D4A6XyZspksPUOhJ6318T1hhXGc=
+	t=1724711157; cv=none; b=nx5hoSsJq8zl8TCji3i3Y1/1pzPwpikiPZv/Lr8F1b/Biuf5sYj2iyLVf8bl/sZT1tGafbtP9dMV8BzAtKpwY1lXFV1dBKeVl9huiuJKeV2xFy5JCPR2sYWnhMbTDOOknwJ0Kvsgl+kXwYv2aGIIRo0kWDmpzDNnCfzOq1sT9uU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724710847; c=relaxed/simple;
-	bh=j17FxC2q9JsZ5Sd6M61sTCz1rZvBj8On6+3nC7HiN0M=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=G2wcC6QIxlh2FvhZX7flonwW5lIovk3MFCzS3THx21G4vqjKvFv4qIVI67jmdK5NtX3kLlRh1KOyvKjmPaplMTdPnFMu4Ae33xnuSV88elAAN8LWrrG1Ff6PbjnAIRNoOoToGG4vsc7FdhXGHXUGtUOrefscJrqg60e3k+o+SHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RmY7cBFG; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724710846; x=1756246846;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=j17FxC2q9JsZ5Sd6M61sTCz1rZvBj8On6+3nC7HiN0M=;
-  b=RmY7cBFGUmOLbAQRCbe2USXjEnj9XTtS5UyUg+XSuUojgS/ffB69v71X
-   31ZsJD94kEsQJadSBi/joA6w9f9CtSdDw8q89Ka0fBFgytyTbTx3c1hjV
-   bgB3+Kh5UaW70T8d2W+NXyuXxxn9j1lv8HAtSDkaMQcw88W2GjK1ytb5Z
-   mffyxiTdoZal+xib1DuHQhN1/HVVs69ykKgiFOGj1iwkP0ful+7jhW+sr
-   bDCMa6geCR42s0kf3XRAuWOTMlmlo8bZ1RSaBcEOhxqEuxorcirvIKq8m
-   jnrr4s0/bcyL4KAxvPt7P/qT8LvQlV5W0F0+aq6gBVWT58hDP3htp+xfy
-   g==;
-X-CSE-ConnectionGUID: 5KVEkVjtQs+LGQeTLk/RFA==
-X-CSE-MsgGUID: dXddBe/tTg6bIXf7AVEwAA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="34537414"
-X-IronPort-AV: E=Sophos;i="6.10,178,1719903600"; 
-   d="scan'208";a="34537414"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 15:20:45 -0700
-X-CSE-ConnectionGUID: +0gMUt+tT0eejWL6066L1A==
-X-CSE-MsgGUID: QnwiZ+WBQ/ya18SEtKPudQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,178,1719903600"; 
-   d="scan'208";a="66992274"
-Received: from mwajdecz-mobl.ger.corp.intel.com ([10.246.1.253])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 15:20:44 -0700
-From: Michal Wajdeczko <michal.wajdeczko@intel.com>
-To: linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com
-Cc: Michal Wajdeczko <michal.wajdeczko@intel.com>,
-	Rae Moar <rmoar@google.com>,
-	David Gow <davidgow@google.com>,
-	Lucas De Marchi <lucas.demarchi@intel.com>
-Subject: [PATCH v2 6/6] kunit: Add some selftests for global stub redirection macros
-Date: Tue, 27 Aug 2024 00:20:15 +0200
-Message-Id: <20240826222015.1484-7-michal.wajdeczko@intel.com>
-X-Mailer: git-send-email 2.21.0
-In-Reply-To: <20240826222015.1484-1-michal.wajdeczko@intel.com>
-References: <20240826222015.1484-1-michal.wajdeczko@intel.com>
+	s=arc-20240116; t=1724711157; c=relaxed/simple;
+	bh=+YzYiUddl7WzqiuD3XFxFcsM07ACtx70EA9yzXEAw9g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cBLZiMFjiSiSRamBS0A1ZZhccX6LhIHy9mGt1rGBMvzSw1PnNyU7n1ai50b1aAntdymeHL+3NBHnkZ9Pt4Z6JMKntFtQWnAVKiUOvUB5b60OKWEtVfLYT0WC8iBHdnbSk3v30CzOpRVLQ0gZ3JCjrw//whnaQGu2PoXc+WsMla4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i4Hf1Yp3; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1724711155;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fp/iLwSeDYxo+zs4Eu6WkmBXMKfgOlub9d3k+RLst98=;
+	b=i4Hf1Yp3e72x15Yk8EOTVgDclhQSuA7XcehGHkJRg+j7+TowIw/blGqGKcjrLPK+IBfYYB
+	hmDXva1zZBGvhbfR4pQ9U4Un4HCphLyBqv68yXJoA/q0oe0JyHN1cnXV6ZOsYj1uOhm+Fz
+	uKvtJpnnZltyCltYs757OZlAziI/Pz8=
+Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
+ [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-584-QXg-eUgeOG6E43mEW0998w-1; Mon, 26 Aug 2024 18:25:52 -0400
+X-MC-Unique: QXg-eUgeOG6E43mEW0998w-1
+Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-6bf789d42bcso61239556d6.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2024 15:25:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724711151; x=1725315951;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fp/iLwSeDYxo+zs4Eu6WkmBXMKfgOlub9d3k+RLst98=;
+        b=dD6MJb3NwHsRF6sa0SPEJrhEftt2M3hZf0MBR2IS4jbS0tcvOKeUrmTGQeGPLw8yUX
+         UJZtikjWT7aUi1IsfSoYahii8ed1OLPPp80lK30LFGBK5igRiI6w96T3gyoyYLgNzNWQ
+         3v6XDk1np1Mf5t73oT9nSsNrvzLA3Znj3PmNXrF9bePzUsbY++3mdIPdLjIO12XGz3xU
+         BXNlH+ITHn5bUIDFc43ogqGMszYM+Xj6UNg6v6o3GJsS2ZVyiA3n99cQvqJCGgtgoeEE
+         Vpir39+IrQ0hEGNlcegYfhjojBk6hj0wSOWEhf7O1W1juYMLnjIrG3uvMPOIE4nh+mDW
+         /i+w==
+X-Forwarded-Encrypted: i=1; AJvYcCWtFDulH0VNdIjX2LXRZugT8PXh+xhX1cIYn6PUVsl5Np+T6OBLIBRwviddmVciDJieJGFiN2jecuyuG6Me014=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRunPOlgfTQ3Y863r/96g3VYlu3V11mP6KOTEZ6voV91Lh8jx6
+	+o6QYFuXb9kDoGhgndyAo5Yt+oQzzz11TYWsNOW6iwK9UIq1bZAXLevMESvtZepdFGFO4gSVWe7
+	AB6+3jzeIqaVzedv9OBCd30bqEGRBB9rYTqZ9isby6alZfmJyB+xI7E5sM9HJEKSVnQ==
+X-Received: by 2002:a0c:f209:0:b0:6bf:7c43:c390 with SMTP id 6a1803df08f44-6c16df28accmr165362926d6.48.1724711151586;
+        Mon, 26 Aug 2024 15:25:51 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE6E8/uu5HzgtnUmuh1ISv3bLFbUm6t6E8SWIRIVwEfIumByBeTj9AeGtbyeQ3BXh72tLa8tw==
+X-Received: by 2002:a0c:f209:0:b0:6bf:7c43:c390 with SMTP id 6a1803df08f44-6c16df28accmr165362626d6.48.1724711151090;
+        Mon, 26 Aug 2024 15:25:51 -0700 (PDT)
+Received: from [10.0.0.174] ([24.225.235.209])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c162dcc904sm50182266d6.104.2024.08.26.15.25.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 26 Aug 2024 15:25:50 -0700 (PDT)
+Message-ID: <c9567ddd-cc84-4fbc-bb6d-b719b2cb723c@redhat.com>
+Date: Mon, 26 Aug 2024 18:25:49 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] tcp: add SO_PEEK_OFF socket option tor TCPv6
+To: Jason Xing <kerneljasonxing@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ davem@davemloft.net, kuba@kernel.org, passt-dev@passt.top,
+ sbrivio@redhat.com, lvivier@redhat.com, dgibson@redhat.com,
+ eric.dumazet@gmail.com, edumazet@google.com
+References: <20240823211902.143210-1-jmaloy@redhat.com>
+ <20240823211902.143210-2-jmaloy@redhat.com>
+ <CAL+tcoDgq+MmNz6Eo_61eBJ2fduyxL1j+kbo_9AYtB4o3tJO5w@mail.gmail.com>
+Content-Language: en-US
+From: Jon Maloy <jmaloy@redhat.com>
+In-Reply-To: <CAL+tcoDgq+MmNz6Eo_61eBJ2fduyxL1j+kbo_9AYtB4o3tJO5w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-While we already have few ASSERT() within the implementation,
-it's always better to have dedicated test cases. Add tests for:
- - automatic deactivation of the stubs at the test end
- - blocked deactivation until all active stub calls finish
- - blocked stub change until all active stub calls finish
- - safe abuse (deactivation without activation)
 
-Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
----
-Cc: Rae Moar <rmoar@google.com>
-Cc: David Gow <davidgow@google.com>
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>
----
- lib/kunit/kunit-test.c | 254 ++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 253 insertions(+), 1 deletion(-)
 
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index 37e02be1e710..eb1bb312ad71 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -6,8 +6,10 @@
-  * Author: Brendan Higgins <brendanhiggins@google.com>
-  */
- #include "linux/gfp_types.h"
-+#include <kunit/static_stub.h>
- #include <kunit/test.h>
- #include <kunit/test-bug.h>
-+#include <kunit/visibility.h>
- 
- #include <linux/device.h>
- #include <kunit/device.h>
-@@ -866,10 +868,260 @@ static struct kunit_suite kunit_current_test_suite = {
- 	.test_cases = kunit_current_test_cases,
- };
- 
-+static struct {
-+	/* this stub matches the real function */
-+	KUNIT_DECLARE_GLOBAL_STUB(first_stub, int (*)(int i));
-+	/* this stub matches only return type of the real function */
-+	KUNIT_DECLARE_GLOBAL_STUB(second_stub, int (*)(int bit, int data));
-+	/* this is an example stub that returns void */
-+	KUNIT_DECLARE_GLOBAL_STUB(void_stub, void (*)(void));
-+	/* this is an example how to store additional data for use by stubs */
-+	DECLARE_IF_KUNIT(int data);
-+	DECLARE_IF_KUNIT(int counter);
-+} stubs = {
-+	DECLARE_IF_KUNIT(.data = 3),
-+};
-+
-+static int real_func(int i)
-+{
-+	KUNIT_GLOBAL_STUB_REDIRECT(stubs.first_stub, i);
-+	KUNIT_GLOBAL_STUB_REDIRECT(stubs.second_stub, BIT(i), stubs.data);
-+
-+	return i;
-+}
-+
-+struct real_work {
-+	struct work_struct work;
-+	int param;
-+	int result;
-+};
-+
-+static void real_work_func(struct work_struct *work)
-+{
-+	struct real_work *w = container_of(work, typeof(*w), work);
-+
-+	w->result = real_func(w->param);
-+}
-+
-+static int real_func_async(int i)
-+{
-+	struct real_work w = { .param = i, .result = -EINPROGRESS };
-+
-+	INIT_WORK_ONSTACK(&w.work, real_work_func);
-+	schedule_work(&w.work);
-+	flush_work(&w.work);
-+	destroy_work_on_stack(&w.work);
-+
-+	return w.result;
-+}
-+
-+static int replacement_func(int i)
-+{
-+	return i + 1;
-+}
-+
-+static int other_replacement_func(int i)
-+{
-+	return i + 10;
-+}
-+
-+static int super_replacement_func(int bit, int data)
-+{
-+	return bit * data;
-+}
-+
-+static int slow_replacement_func(int i)
-+{
-+	schedule_timeout_interruptible(HZ / 20);
-+	return replacement_func(i);
-+}
-+
-+static void real_void_func(void)
-+{
-+	KUNIT_GLOBAL_STUB_REDIRECT(stubs.void_stub);
-+	DECLARE_IF_KUNIT(stubs.counter++);
-+}
-+
-+static void replacement_void_func(void)
-+{
-+	stubs.counter--;
-+}
-+
-+static void expect_deactivated(void *data)
-+{
-+	struct kunit *test = kunit_get_current_test();
-+
-+	KUNIT_EXPECT_NULL(test, stubs.first_stub.base.owner);
-+	KUNIT_EXPECT_NULL(test, stubs.first_stub.base.replacement);
-+	KUNIT_EXPECT_NULL(test, stubs.second_stub.base.owner);
-+	KUNIT_EXPECT_NULL(test, stubs.second_stub.base.replacement);
-+	KUNIT_EXPECT_NULL(test, stubs.void_stub.base.owner);
-+	KUNIT_EXPECT_NULL(test, stubs.void_stub.base.replacement);
-+}
-+
-+static void kunit_global_stub_test_deactivate(struct kunit *test)
-+{
-+	/* make sure everything will be deactivated */
-+	KUNIT_ASSERT_EQ(test, 0, kunit_add_action_or_reset(test, expect_deactivated, test));
-+
-+	/* deactivate without activate */
-+	kunit_deactivate_global_stub(test, stubs.first_stub);
-+
-+	/* deactivate twice */
-+	kunit_deactivate_global_stub(test, stubs.first_stub);
-+
-+	/* allow to skip deactivation (will be tested by expect_deactivated action) */
-+	kunit_activate_global_stub(test, stubs.first_stub, replacement_func);
-+}
-+
-+static void kunit_global_stub_test_activate(struct kunit *test)
-+{
-+	int real, replacement, other, super, i = 2;
-+
-+	/* prerequisites */
-+	real_void_func();
-+	KUNIT_ASSERT_EQ(test, stubs.counter, 1);
-+	replacement_void_func();
-+	KUNIT_ASSERT_EQ(test, stubs.counter, 0);
-+
-+	/* prerequisites cont'd */
-+	KUNIT_ASSERT_EQ(test, real_func(i), real = real_func_async(i));
-+	KUNIT_ASSERT_NE(test, real_func(i), replacement = replacement_func(i));
-+	KUNIT_ASSERT_NE(test, real_func(i), other = other_replacement_func(i));
-+	KUNIT_ASSERT_NE(test, real_func(i), super = super_replacement_func(BIT(i), stubs.data));
-+
-+	/* make sure everything will be deactivated */
-+	KUNIT_ASSERT_EQ(test, 0, kunit_add_action_or_reset(test, expect_deactivated, test));
-+
-+	/* allow to activate replacement */
-+	kunit_activate_global_stub(test, stubs.void_stub, replacement_void_func);
-+	real_void_func();
-+	KUNIT_ASSERT_EQ(test, stubs.counter, -1);
-+
-+	/* allow to activate replacement */
-+	kunit_activate_global_stub(test, stubs.first_stub, replacement_func);
-+	KUNIT_EXPECT_EQ(test, real_func(i), replacement);
-+	KUNIT_EXPECT_EQ(test, real_func_async(i), replacement);
-+
-+	/* allow to change replacement */
-+	kunit_activate_global_stub(test, stubs.first_stub, other_replacement_func);
-+	KUNIT_EXPECT_EQ(test, real_func(i), other);
-+	KUNIT_EXPECT_EQ(test, real_func_async(i), other);
-+
-+	/* allow to deactivate replacement */
-+	kunit_deactivate_global_stub(test, stubs.first_stub);
-+	KUNIT_EXPECT_EQ(test, real_func(i), real);
-+	KUNIT_EXPECT_EQ(test, real_func_async(i), real);
-+
-+	/* allow to activate replacement with different arguments */
-+	kunit_activate_global_stub(test, stubs.second_stub, super_replacement_func);
-+	KUNIT_EXPECT_EQ(test, real_func(i), super);
-+	KUNIT_EXPECT_EQ(test, real_func_async(i), super);
-+
-+	/* allow to deactivate twice */
-+	kunit_deactivate_global_stub(test, stubs.second_stub);
-+	kunit_deactivate_global_stub(test, stubs.second_stub);
-+	KUNIT_EXPECT_EQ(test, real_func_async(i), real);
-+	KUNIT_EXPECT_EQ(test, real_func(i), real);
-+}
-+
-+static void flush_real_work(void *data)
-+{
-+	struct real_work *w = data;
-+
-+	flush_work(&w->work);
-+}
-+
-+static void __kunit_global_stub_test_slow(struct kunit *test, bool replace)
-+{
-+	int real, replacement, other, i = replace ? 3 : 5;
-+	struct real_work *w;
-+
-+	/* prerequisites */
-+	KUNIT_ASSERT_EQ(test, real_func(i), real = real_func_async(i));
-+	KUNIT_ASSERT_NE(test, real_func(i), replacement = slow_replacement_func(i));
-+	KUNIT_ASSERT_NE(test, real_func(i), other = other_replacement_func(i));
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, w = kunit_kzalloc(test, sizeof(*w), GFP_KERNEL));
-+	INIT_WORK(&w->work, real_work_func);
-+	KUNIT_ASSERT_EQ(test, 0, kunit_add_action_or_reset(test, flush_real_work, w));
-+	KUNIT_ASSERT_EQ(test, 0, kunit_add_action_or_reset(test, expect_deactivated, test));
-+
-+	/* allow to activate replacement */
-+	kunit_activate_global_stub(test, stubs.first_stub, slow_replacement_func);
-+	KUNIT_EXPECT_EQ(test, real_func_async(i), replacement);
-+
-+	w->param = i;
-+	w->result = 0;
-+	queue_work(system_long_wq, &w->work);
-+
-+	/* wait until work starts */
-+	while (work_pending(&w->work))
-+		schedule_timeout_interruptible(HZ / 100);
-+	KUNIT_EXPECT_NE(test, work_busy(&w->work), 0);
-+
-+	/* wait until work enters the stub */
-+	while (atomic_read(&stubs.first_stub.base.busy) < 2)
-+		schedule_timeout_interruptible(HZ / 100);
-+
-+	/* stub should be still busy(2) at this point */
-+	KUNIT_EXPECT_EQ(test, 2, atomic_read(&stubs.first_stub.base.busy));
-+	KUNIT_EXPECT_EQ(test, w->result, 0);
-+
-+	if (replace) {
-+		/* try replace the stub, it should be just activated(1) */
-+		kunit_activate_global_stub(test, stubs.first_stub, other_replacement_func);
-+		KUNIT_EXPECT_EQ(test, 1, atomic_read(&stubs.first_stub.base.busy));
-+	} else {
-+		/* try to deactivate the stub, it should be disabled(0) */
-+		kunit_deactivate_global_stub(test, stubs.first_stub);
-+		KUNIT_EXPECT_EQ(test, 0, atomic_read(&stubs.first_stub.base.busy));
-+	}
-+
-+	/* and results from the worker should be available */
-+	KUNIT_EXPECT_EQ(test, w->result, replacement);
-+	KUNIT_EXPECT_NE(test, w->result, real);
-+	KUNIT_EXPECT_NE(test, w->result, other);
-+
-+	if (replace)
-+		KUNIT_EXPECT_EQ(test, real_func_async(i), other);
-+	else
-+		KUNIT_EXPECT_EQ(test, real_func_async(i), real);
-+}
-+
-+static void kunit_global_stub_test_slow_deactivate(struct kunit *test)
-+{
-+	__kunit_global_stub_test_slow(test, false);
-+}
-+
-+static void kunit_global_stub_test_slow_replace(struct kunit *test)
-+{
-+	__kunit_global_stub_test_slow(test, true);
-+}
-+
-+static int kunit_global_stub_test_init(struct kunit *test)
-+{
-+	stubs.counter = 0;
-+	return 0;
-+}
-+
-+static struct kunit_case kunit_global_stub_test_cases[] = {
-+	KUNIT_CASE(kunit_global_stub_test_activate),
-+	KUNIT_CASE(kunit_global_stub_test_deactivate),
-+	KUNIT_CASE_SLOW(kunit_global_stub_test_slow_deactivate),
-+	KUNIT_CASE_SLOW(kunit_global_stub_test_slow_replace),
-+	{}
-+};
-+
-+static struct kunit_suite kunit_global_stub_suite = {
-+	.name = "kunit_global_stub",
-+	.init = kunit_global_stub_test_init,
-+	.test_cases = kunit_global_stub_test_cases,
-+};
-+
- kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite,
- 		  &kunit_log_test_suite, &kunit_status_test_suite,
- 		  &kunit_current_test_suite, &kunit_device_test_suite,
--		  &kunit_fault_test_suite);
-+		  &kunit_fault_test_suite, &kunit_global_stub_suite);
- 
- MODULE_DESCRIPTION("KUnit test for core test infrastructure");
- MODULE_LICENSE("GPL v2");
--- 
-2.43.0
+On 2024-08-23 19:51, Jason Xing wrote:
+> On Sat, Aug 24, 2024 at 5:19 AM <jmaloy@redhat.com> wrote:
+>> From: Jon Maloy <jmaloy@redhat.com>
+>>
+>> When we added the SO_PEEK_OFF socket option to TCP we forgot
+>> to add it even for TCP on IPv6.
+> Even though you said "we forgot", I'm not sure if this patch series
+> belongs to net-next material...
+I agree regarding the fix.
+The selftest is new however, and belongs in net-next because of that.
+Since I made it one series I decided for net-next, but I leave it to the 
+discretion of Jakub and the maintainer of the linux-kselftest system to 
+decide where they go.
+
+///jon
+
+>
+>> We do that here.
+>>
+>> Fixes: 05ea491641d3 ("tcp: add support for SO_PEEK_OFF socket option")
+>> Reviewed-by: David Gibson <david@gibson.dropbear.id.au>
+>> Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
+>> Tested-by: Stefano Brivio <sbrivio@redhat.com>
+>> Signed-off-by: Jon Maloy <jmaloy@redhat.com>
+> Reviewed-by: Jason Xing <kerneljasonxing@gmail.com>
+>
+> You seem to forget to carry Eric's Reviewed-by tag, please see the link :)
+> https://lore.kernel.org/all/CANn89iJmdGdAN1OZEfoM2LNVOewkYDuPXObRoNWhGyn93P=8OQ@mail.gmail.com/
+>
+> Thanks,
+> Jason
+>
 
 
