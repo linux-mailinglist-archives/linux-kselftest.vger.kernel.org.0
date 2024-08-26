@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-16306-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16307-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33E5795F5E8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 18:03:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9D0095F5EB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 18:03:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AE0E1C21E3B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 16:03:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 931121F22F31
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 16:03:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA1D5199EA7;
-	Mon, 26 Aug 2024 16:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1719B19AD7E;
+	Mon, 26 Aug 2024 16:00:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MwnIhBW2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Zp98DFo9"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 788C34AEEA;
-	Mon, 26 Aug 2024 16:00:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D586419AD71;
+	Mon, 26 Aug 2024 16:00:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724688006; cv=none; b=IQZFqCCVs8SkY8GmQuu6SUVLEt4yKtiNNRvaHIXbDm3w/kW3lu01JjnR0fk8N04dXGR1+YTojzHcnkDVP4S4sw5r5krxfEzUM5NNJcEeVOdAfZuR7J5cFQycP8pjV0GbpZIY6fXqay4uHyJXkpRneHYxuptaZLsrolM8CmoKZzo=
+	t=1724688010; cv=none; b=B9yPngqdpZi3GS63Qw3HkcsOXdh+RClTFlbm6JFL2TV5oGgu8+eL3DLJ1SHWSxviSXbVPBd19C4STvRWDLJTbM+s8b3XSyPSewSGoPtNBwim4t65YFtrmvDVBFIS5MDX5ruPJqYh+g7HEAVZhPE48q7Lew7lAqB4Pi7Pg4+JJMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724688006; c=relaxed/simple;
-	bh=DRU08/X2Z++25vJpUMrkICDjD03cejj1cIlvXeD6xgM=;
+	s=arc-20240116; t=1724688010; c=relaxed/simple;
+	bh=4r3aaWqCHbkENtzeXOKOApnAu7DESu9H4pZmgshijxE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=P50/rg2ZcA0nw4dVGiyPSIPNCQdXCE9FtejKSPcIdc4DYUSR99IJ0xcJvB9IXFP3u4K3w3RA8stjSeYnpNikn9oVi76NVBT77GFpsU/0mfM2T+Me09B8bNsFWmlM+q69WKGIHufOD0bGoGuKfc6zoKdFU+09DXHu5hn8g/DzaoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MwnIhBW2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB7C7C4DE18;
-	Mon, 26 Aug 2024 16:00:02 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=Sv1FAghWtqEA7L/WLO5Hj7BmlLM/Pf6KJQ2GUoQZz+eabT6dpoDksQUh6INICLIWt1dJEyb7C3UAVjvz0CWwrjxBfZ8gFBvu1qvMyafOizO6+0fHvEIoUVMfHf5R9tfl9/o6pZKpSWZajBFTJUk6Jg0g2vlKRCgoLuPwJV1esgY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Zp98DFo9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A8AFC4DDE5;
+	Mon, 26 Aug 2024 16:00:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724688006;
-	bh=DRU08/X2Z++25vJpUMrkICDjD03cejj1cIlvXeD6xgM=;
+	s=k20201202; t=1724688009;
+	bh=4r3aaWqCHbkENtzeXOKOApnAu7DESu9H4pZmgshijxE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=MwnIhBW2bFmtVsjy3NFHNSBMpcclqoPSHOLfa98HdSuxA+lYbSkrtmh4M4eRCwhUa
-	 plgFVgUMTEQk56Yq/u2XgBlm/9G5oJgSbUyuwnyjNqRyPKtgk0uGYRs1yXwv1Q8JQk
-	 1lLQsMQ6HOirxXJln81CtVxQF3x0UmTxnsyOz8fA4wq3g1gALXHlzY18M/dq/2zbyA
-	 uFuyQPgwfW6f88+TnzwADW/8BcH4FBZliWxZGp1tTRWBo3pZzZGkdzx5wiaTaE3APy
-	 WWQHCTSCJbo+0KGdZnK5PXnvNEILRlOts52faihPn4yj5pJlYqughpuNA7ovmYZ969
-	 5wi6c/hkrMFiQ==
+	b=Zp98DFo9bb35n/3cHSTNeMeGVxnTEHS7EV+o8YKd0ynH3EVHuoXoaBrWia06H7PiU
+	 tb6X4d9xFU5kwy1h1VEVvBVhyhI00lI/X45AG+JmkzUL0LkDquJnQzQsnB4SnaHORc
+	 hjwhcErvhOuSyPOxacaYFYzg2zMal/FfVtawAcRhoLu11a78GkklEI0dATDL6Cn1LH
+	 vP7HFQieeFpmKKT24kpJD6+qjg3wjsIKi3CVnojDUhFiyKY8Freq89bCgiyDGMI+V2
+	 53191dMIc+UfUYMdGL1Jp39JfZ0tTtUdCremoZ07Mywu3yYc3p2eczdObJkrE+utSc
+	 QG5ya4sQzlzpw==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Mon, 26 Aug 2024 17:59:11 +0200
-Subject: [PATCH net 12/15] mptcp: avoid duplicated SUB_CLOSED events
+Date: Mon, 26 Aug 2024 17:59:12 +0200
+Subject: [PATCH net 13/15] selftests: mptcp: join: validate event numbers
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -51,8 +51,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240826-net-mptcp-more-pm-fix-v1-12-8cd6c87d1d6d@kernel.org>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240826-net-mptcp-more-pm-fix-v1-13-8cd6c87d1d6d@kernel.org>
 References: <20240826-net-mptcp-more-pm-fix-v1-0-8cd6c87d1d6d@kernel.org>
 In-Reply-To: <20240826-net-mptcp-more-pm-fix-v1-0-8cd6c87d1d6d@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -62,97 +62,187 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
  Florian Westphal <fw@strlen.de>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org, 
- =?utf-8?q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2774; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=DRU08/X2Z++25vJpUMrkICDjD03cejj1cIlvXeD6xgM=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmzKZWh9sPB3KjkgOA8EIPl5a/iOvwqEnQEC+r6
- TiX/Hv/XLaJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZsymVgAKCRD2t4JPQmmg
- c+qVD/9HWpsg31NqbSZr6SXsn8lecJaLM/PQ/gPwCBvkK6XHfbJ2j4Yu32YYj/1/j+dGlkuUUSS
- hWzbi5ic889C9bZyutB+QkNE7L08KXjZundCfgxj26swU9JyZp3MYHlOuOD9tv/7xJaVyetMd/U
- wQxHV/hT+XVBd69uczxKqLNa+W7alXciZk4fyRk2MOqxGb84U6yRtir2LVgziueA9oGmhwZs9dA
- oAEP7r2VRxKVN78qoPnbeK1S2hF3B4Xq/MutWLEtZP9HVkY6SzlQ2NJZr7j0dLJ7caa2SbxqRtO
- UY+ZlkplRLKnlMol1LTC1WE4hGmgdwLIXKmuUSDuAMCS7NNy3+woy7YBLY2s8KGMpa9QXYljTd+
- qQGTdUxpL6qtvhm2AGpvRWSSZOyU42gN86a1dyVYH5Ubcj7qjdDv2ZpLCaaFRYOXkjpZ5iEudkR
- AuvSWeBdzSNqOvfIMGVWJnZ2v6BImX0cTwMWsLUrU9kRzGub/ykO7uI8EIJ/r9WYTmWAmmHx5D4
- Q0Wg/why59xqV46YO3gDrasZfSBOn4OXwbC6K/p6DjZo1paItRAcYDzod21K7GX/G4V6P/ihya2
- o508x29qr1k16J4OxJjlI2fRp+8u66rQUA4hNGuvT1tomde1jad8GOmJjeaWuItzCVAoZya6Vs8
- FkSVSg7bebjGLCg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5857; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=4r3aaWqCHbkENtzeXOKOApnAu7DESu9H4pZmgshijxE=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmzKZWEtqhIMPy0rlrqQ7EPOKWio83u65FlZukc
+ 56WrFuFz+qJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZsymVgAKCRD2t4JPQmmg
+ c4MgEAC736SD5JYysrCIMSPYLBXA7NMuMP3zCiyIi80m8s9LCf22FI6iFYtf+WLyuOZcsgbEcE/
+ EOSg60ZWGHN64AtLrYOSX/EhiwKPqQhtxbGQd+eIJkwsgfaSLlSNbT0NB0E/CymrBaY5ehZ4Muh
+ qrvqlTkfTpUJMAKQge8sKENSPOvgaoDV2W1rZC3bWww6CHsywX80rmmN1vzomgcRQjt8AsAfZq1
+ q0CHvd6v7zJlTf3MBNXLpDxatE1tZsU6er3Bar3ShbrLfZ+c42VNn6ieJWD7xnOyJxm1lf6lOBd
+ ouddWhaE54GGc8lxu29IV+0hI3HXH9sY9/xrsOOQgBtOWkUp/E8OAkK4DEscDu4kvx6blQWyYg7
+ XSZuhgfQEO9pBhgx0uh8XokwDgaN0SmKK8oXLJ7Yv4Qm6YYYdawvIz5i3QRrWJNeIVa0M90y2bh
+ /l3mCohP+4yAUsKsBtrVbjf5a4YZf7VCba/64xjltWZEIFCa1OyiSSZVhPEIl9F4qYKUF66soR3
+ KPY/fPV1I4ws2aKGOs9BTGtA5zL1AnLE5vfy5FzFoRmKNQLNw0dtw7iE9BE3pprw6WS7wrkjT+7
+ VbDhyWGE+cWdYoHUW/bBsjWIoBN7Hr1VyX+b2+41hwsygEz911RyteNp7wIq7Ul8x2fIyBnKw4n
+ TjELY1vru11kNFg==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-The initial subflow might have already been closed, but still in the
-connection list. When the worker is instructed to close the subflows
-that have been marked as closed, it might then try to close the initial
-subflow again.
+This test extends "delete and re-add" and "delete re-add signal" to
+validate the previous commit: the number of MPTCP events are checked to
+make sure there are no duplicated or unexpected ones.
 
- A consequence of that is that the SUB_CLOSED event can be seen twice:
+A new helper has been introduced to easily check these events. The
+missing events have been added to the lib.
 
-  # ip mptcp endpoint
-  1.1.1.1 id 1 subflow dev eth0
-  2.2.2.2 id 2 subflow dev eth1
-
-  # ip mptcp monitor &
-  [         CREATED] remid=0 locid=0 saddr4=1.1.1.1 daddr4=9.9.9.9
-  [     ESTABLISHED] remid=0 locid=0 saddr4=1.1.1.1 daddr4=9.9.9.9
-  [  SF_ESTABLISHED] remid=0 locid=2 saddr4=2.2.2.2 daddr4=9.9.9.9
-
-  # ip mptcp endpoint delete id 1
-  [       SF_CLOSED] remid=0 locid=0 saddr4=1.1.1.1 daddr4=9.9.9.9
-  [       SF_CLOSED] remid=0 locid=0 saddr4=1.1.1.1 daddr4=9.9.9.9
-
-The first one is coming from mptcp_pm_nl_rm_subflow_received(), and the
-second one from __mptcp_close_subflow().
-
-To avoid doing the post-closed processing twice, the subflow is now
-marked as closed the first time.
-
-Note that it is not enough to check if we are dealing with the first
-subflow and check its sk_state: the subflow might have been reset or
-closed before calling mptcp_close_ssk().
+The 'Fixes' tag here below is the same as the one from the previous
+commit: this patch here is not fixing anything wrong in the selftests,
+but it validates the previous fix for an issue introduced by this commit
+ID.
 
 Fixes: b911c97c7dc7 ("mptcp: add netlink event support")
 Cc: stable@vger.kernel.org
-Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- net/mptcp/protocol.c | 6 ++++++
- net/mptcp/protocol.h | 3 ++-
- 2 files changed, 8 insertions(+), 1 deletion(-)
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 74 ++++++++++++++++++++++++-
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh  |  4 ++
+ 2 files changed, 75 insertions(+), 3 deletions(-)
 
-diff --git a/net/mptcp/protocol.c b/net/mptcp/protocol.c
-index 0d536b183a6c..931172382aa0 100644
---- a/net/mptcp/protocol.c
-+++ b/net/mptcp/protocol.c
-@@ -2508,6 +2508,12 @@ static void __mptcp_close_ssk(struct sock *sk, struct sock *ssk,
- void mptcp_close_ssk(struct sock *sk, struct sock *ssk,
- 		     struct mptcp_subflow_context *subflow)
- {
-+	/* The first subflow can already be closed and still in the list */
-+	if (subflow->close_event_done)
-+		return;
-+
-+	subflow->close_event_done = true;
-+
- 	if (sk->sk_state == TCP_ESTABLISHED)
- 		mptcp_event(MPTCP_EVENT_SUB_CLOSED, mptcp_sk(sk), ssk, GFP_KERNEL);
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+index 7708ac99ccb6..597bf928e8f9 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+@@ -420,12 +420,17 @@ reset_with_fail()
+ 	fi
+ }
  
-diff --git a/net/mptcp/protocol.h b/net/mptcp/protocol.h
-index a1c1b0ff1ce1..7e934ce0e4ff 100644
---- a/net/mptcp/protocol.h
-+++ b/net/mptcp/protocol.h
-@@ -524,7 +524,8 @@ struct mptcp_subflow_context {
- 		stale : 1,	    /* unable to snd/rcv data, do not use for xmit */
- 		valid_csum_seen : 1,        /* at least one csum validated */
- 		is_mptfo : 1,	    /* subflow is doing TFO */
--		__unused : 10;
-+		close_event_done : 1,       /* has done the post-closed part */
-+		__unused : 9;
- 	bool	data_avail;
- 	bool	scheduled;
- 	u32	remote_nonce;
++start_events()
++{
++	mptcp_lib_events "${ns1}" "${evts_ns1}" evts_ns1_pid
++	mptcp_lib_events "${ns2}" "${evts_ns2}" evts_ns2_pid
++}
++
+ reset_with_events()
+ {
+ 	reset "${1}" || return 1
+ 
+-	mptcp_lib_events "${ns1}" "${evts_ns1}" evts_ns1_pid
+-	mptcp_lib_events "${ns2}" "${evts_ns2}" evts_ns2_pid
++	start_events
+ }
+ 
+ reset_with_tcp_filter()
+@@ -3333,6 +3338,36 @@ userspace_pm_chk_get_addr()
+ 	fi
+ }
+ 
++# $1: ns ; $2: event type ; $3: count
++chk_evt_nr()
++{
++	local ns=${1}
++	local evt_name="${2}"
++	local exp="${3}"
++
++	local evts="${evts_ns1}"
++	local evt="${!evt_name}"
++	local count
++
++	evt_name="${evt_name:16}" # without MPTCP_LIB_EVENT_
++	[ "${ns}" == "ns2" ] && evts="${evts_ns2}"
++
++	print_check "event ${ns} ${evt_name} (${exp})"
++
++	if [[ "${evt_name}" = "LISTENER_"* ]] &&
++	   ! mptcp_lib_kallsyms_has "mptcp_event_pm_listener$"; then
++		print_skip "event not supported"
++		return
++	fi
++
++	count=$(grep -cw "type:${evt}" "${evts}")
++	if [ "${count}" != "${exp}" ]; then
++		fail_test "got ${count} events, expected ${exp}"
++	else
++		print_ok
++	fi
++}
++
+ userspace_tests()
+ {
+ 	# userspace pm type prevents add_addr
+@@ -3575,6 +3610,7 @@ endpoint_tests()
+ 
+ 	if reset_with_tcp_filter "delete and re-add" ns2 10.0.3.2 REJECT OUTPUT &&
+ 	   mptcp_lib_kallsyms_has "subflow_rebuild_header$"; then
++		start_events
+ 		pm_nl_set_limits $ns1 0 3
+ 		pm_nl_set_limits $ns2 0 3
+ 		pm_nl_add_endpoint $ns2 10.0.1.2 id 1 dev ns2eth1 flags subflow
+@@ -3626,12 +3662,28 @@ endpoint_tests()
+ 
+ 		mptcp_lib_kill_wait $tests_pid
+ 
++		kill_events_pids
++		chk_evt_nr ns1 MPTCP_LIB_EVENT_LISTENER_CREATED 1
++		chk_evt_nr ns1 MPTCP_LIB_EVENT_CREATED 1
++		chk_evt_nr ns1 MPTCP_LIB_EVENT_ESTABLISHED 1
++		chk_evt_nr ns1 MPTCP_LIB_EVENT_ANNOUNCED 0
++		chk_evt_nr ns1 MPTCP_LIB_EVENT_REMOVED 4
++		chk_evt_nr ns1 MPTCP_LIB_EVENT_SUB_ESTABLISHED 6
++		chk_evt_nr ns1 MPTCP_LIB_EVENT_SUB_CLOSED 4
++
++		chk_evt_nr ns2 MPTCP_LIB_EVENT_CREATED 1
++		chk_evt_nr ns2 MPTCP_LIB_EVENT_ESTABLISHED 1
++		chk_evt_nr ns2 MPTCP_LIB_EVENT_ANNOUNCED 0
++		chk_evt_nr ns2 MPTCP_LIB_EVENT_REMOVED 0
++		chk_evt_nr ns2 MPTCP_LIB_EVENT_SUB_ESTABLISHED 6
++		chk_evt_nr ns2 MPTCP_LIB_EVENT_SUB_CLOSED 5 # one has been closed before estab
++
+ 		chk_join_nr 6 6 6
+ 		chk_rm_nr 4 4
+ 	fi
+ 
+ 	# remove and re-add
+-	if reset "delete re-add signal" &&
++	if reset_with_events "delete re-add signal" &&
+ 	   mptcp_lib_kallsyms_has "subflow_rebuild_header$"; then
+ 		pm_nl_set_limits $ns1 0 3
+ 		pm_nl_set_limits $ns2 3 3
+@@ -3672,6 +3724,22 @@ endpoint_tests()
+ 		chk_mptcp_info subflows 3 subflows 3
+ 		mptcp_lib_kill_wait $tests_pid
+ 
++		kill_events_pids
++		chk_evt_nr ns1 MPTCP_LIB_EVENT_LISTENER_CREATED 1
++		chk_evt_nr ns1 MPTCP_LIB_EVENT_CREATED 1
++		chk_evt_nr ns1 MPTCP_LIB_EVENT_ESTABLISHED 1
++		chk_evt_nr ns1 MPTCP_LIB_EVENT_ANNOUNCED 0
++		chk_evt_nr ns1 MPTCP_LIB_EVENT_REMOVED 0
++		chk_evt_nr ns1 MPTCP_LIB_EVENT_SUB_ESTABLISHED 4
++		chk_evt_nr ns1 MPTCP_LIB_EVENT_SUB_CLOSED 2
++
++		chk_evt_nr ns2 MPTCP_LIB_EVENT_CREATED 1
++		chk_evt_nr ns2 MPTCP_LIB_EVENT_ESTABLISHED 1
++		chk_evt_nr ns2 MPTCP_LIB_EVENT_ANNOUNCED 5
++		chk_evt_nr ns2 MPTCP_LIB_EVENT_REMOVED 3
++		chk_evt_nr ns2 MPTCP_LIB_EVENT_SUB_ESTABLISHED 4
++		chk_evt_nr ns2 MPTCP_LIB_EVENT_SUB_CLOSED 2
++
+ 		chk_join_nr 4 4 4
+ 		chk_add_nr 5 5
+ 		chk_rm_nr 3 2 invert
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_lib.sh b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
+index 438280e68434..4578a331041e 100644
+--- a/tools/testing/selftests/net/mptcp/mptcp_lib.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
+@@ -12,10 +12,14 @@ readonly KSFT_SKIP=4
+ readonly KSFT_TEST="${MPTCP_LIB_KSFT_TEST:-$(basename "${0}" .sh)}"
+ 
+ # These variables are used in some selftests, read-only
++declare -rx MPTCP_LIB_EVENT_CREATED=1           # MPTCP_EVENT_CREATED
++declare -rx MPTCP_LIB_EVENT_ESTABLISHED=2       # MPTCP_EVENT_ESTABLISHED
++declare -rx MPTCP_LIB_EVENT_CLOSED=3            # MPTCP_EVENT_CLOSED
+ declare -rx MPTCP_LIB_EVENT_ANNOUNCED=6         # MPTCP_EVENT_ANNOUNCED
+ declare -rx MPTCP_LIB_EVENT_REMOVED=7           # MPTCP_EVENT_REMOVED
+ declare -rx MPTCP_LIB_EVENT_SUB_ESTABLISHED=10  # MPTCP_EVENT_SUB_ESTABLISHED
+ declare -rx MPTCP_LIB_EVENT_SUB_CLOSED=11       # MPTCP_EVENT_SUB_CLOSED
++declare -rx MPTCP_LIB_EVENT_SUB_PRIORITY=13     # MPTCP_EVENT_SUB_PRIORITY
+ declare -rx MPTCP_LIB_EVENT_LISTENER_CREATED=15 # MPTCP_EVENT_LISTENER_CREATED
+ declare -rx MPTCP_LIB_EVENT_LISTENER_CLOSED=16  # MPTCP_EVENT_LISTENER_CLOSED
+ 
 
 -- 
 2.45.2
