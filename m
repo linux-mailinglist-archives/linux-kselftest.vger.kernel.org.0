@@ -1,216 +1,150 @@
-Return-Path: <linux-kselftest+bounces-16337-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16338-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9B3495FBAA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 23:28:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C022A95FBBE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 23:34:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE9871C224A7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 21:28:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E38921C219BC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 21:34:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FD32199FA7;
-	Mon, 26 Aug 2024 21:28:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8495819AD93;
+	Mon, 26 Aug 2024 21:34:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="miltnS2d"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BupbacOo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 940F11991CE;
-	Mon, 26 Aug 2024 21:28:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59B5019992B;
+	Mon, 26 Aug 2024 21:34:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724707713; cv=none; b=fzv7xhcQwRl60hiKFCRV1imiotKO8b67NaRVtLgOMCfySmJIrW5Q1SF/eDc1V91R3sykn31Bm13C990MT9KWAqODOnwkxLzuhGtUj/GxrJA/cwwiEPquMqC9ct6lkqiKA47K/aHFwqVl2hWVkdx/0BXd4q8ZIRq4ooPmFrswsfU=
+	t=1724708079; cv=none; b=fSqxKXsu7cKZmeLXjqz7W+FWu9tCQaNcz3XSq+RsWQluXgdWKR/rFEvd2oPd1kAfBuooEi6Orhtjb0xYuE3lfH+sgo8H6J0nl8OjjF/SxaOvSHslRoCVq+BjdPaJTNCE34YjUoZ/f67qLm0grPoemT4tovOAKWTJZBR5TE7bfoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724707713; c=relaxed/simple;
-	bh=kUi6ntjn0WHySwihEgxfdvCKIfPs0sO26yHolMYc06E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kX9gfwD+xGKIVPM3rPNi1REm1yy6ZbLSXaghpMjIWYVMPPQIIbwTGgzULNsvEdObx4ekDToe7VmeFv8RoZvtnt9gA/3gRfKXx28fgWFupOHJnaKV+lhaZW6pso3FsfUav23OnJvSmCQVMdTkCZ66Yhb0DDoBs9/9mJ0Ofyxdu9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=miltnS2d; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2d3c5f769d6so3193613a91.3;
-        Mon, 26 Aug 2024 14:28:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724707710; x=1725312510; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fncYWdEHBQK2Q5eJZprp9UA6loU6uh875Su1Zw2gfR4=;
-        b=miltnS2d7zUSTml8sCQxoQnvf8nJ0I8t6qZxGT2RU6X+XvxygNFMfVcG3mOLU1jLAH
-         3Tm4ICxnChQj0NwOiDmv5oCfwBZUOlofNwBOquL869POYrAVT9/ZFQZJrmq8/nG0X1Uj
-         8aXaK9GX8E2TNrhKc4d767cYO/Ztn8kqsL9RQMWX4kWnhk+rBaLQ7Y0CxzxlcdFkALRk
-         MjvWrFItPxcudfnUlhxY+f3Uapq0iRQ/nvtHTlOSO4HoJcF4rq9JsQ7eQOF5MF8Oo0yr
-         JfHQSh6ews+EO04PwOau7Js5roIpwhC/E5RAIkJXAysYp1HGBa4fR+dP1ERDXXHAzRSE
-         SGRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724707710; x=1725312510;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fncYWdEHBQK2Q5eJZprp9UA6loU6uh875Su1Zw2gfR4=;
-        b=iznHuX9cniMRCjRdAwMGxzUXiWfD0cZ0JGCVCSDLs8r5xup55dHN+FWL+UZtciTTdX
-         zI7/H5YgMP0Ex2zGzlwQnpB+n8cTGtSamsRZbb+XJqvpu9q9ZM9UVCSFZadQL4/No4Io
-         qpsQAmtxonSujSrpF5bZmTvi6IpyjbQPQv6IjbOxrjaKY1yGxlM7L03Y95zZQgawzIpf
-         +7RsLk5RobENfdNNnTomj0P3V3Im/o5B/VYaRuKaYY8iYvVNEgxjGglsUmycJOv0dwTj
-         Fpbv2UeLMYcED13g+b3Kt4YIF5oxVPsx7OIb3T73mewhh3dFtMNwE6kyGJALzGPdtrrw
-         Mn+g==
-X-Forwarded-Encrypted: i=1; AJvYcCW4QhFGWmhKLMAztg3k0TE00wjPEYTYtCGWDMR7dbCNTxA8zrXLb1yseMaqfBSisJri7xg+nYXleps9cl/bfJQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyA1+mFDE4rT5hxGHgmx5/78MpXxrZp6LYHUMnPxQbT5m7rZf5a
-	BcNs9W2d88fXWEX2chjVj6FLOdjVqiJiVNePmlou5kziFk0gJe6m6Kah9YMaEnTmEgs3mL90/rF
-	bChc9HQ3XwsieHqPUU3CgExED1PY=
-X-Google-Smtp-Source: AGHT+IGUjf2u/YVBd9FFBxOvr/xQCC8zBVkIDYrRPLPSVVIBV2fGCYKMJWHtYcqRcbu3xYP1XjLPc3sxikoDu/P2frU=
-X-Received: by 2002:a17:90b:4a42:b0:2d8:27d8:4669 with SMTP id
- 98e67ed59e1d1-2d827d849d8mr378740a91.3.1724707709713; Mon, 26 Aug 2024
- 14:28:29 -0700 (PDT)
+	s=arc-20240116; t=1724708079; c=relaxed/simple;
+	bh=f6QVJ7gqPlOJSdYw6NwfRnwjtN71dpr2Yeva23qqdXQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E/a6nafIQwPPn/AQ6kGN+n3jyuZBcIlbkAT5S5Ue7wSk8KrLhDIpqMRtYOEyVxAv/HkCH6tLhT4vbTJqPaJm4z0vv2NJwfkJ+jptXBY18sTMiRKlzodxU8Fg8nrHTiKYJHQk9teKdmcRXcgjGKKySB5if2cFkpdW5BSEY6kLKlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BupbacOo; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724708077; x=1756244077;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f6QVJ7gqPlOJSdYw6NwfRnwjtN71dpr2Yeva23qqdXQ=;
+  b=BupbacOoMmqT3KnKPl/JPcq4K8Brb5EleBhUTGjrfkGTsbNNqj4GHreD
+   hj3iV1Ynrqa2eesLEt49BjRHuKGiAYNIegbw5HjHR+E9cAqL0ihI8ombR
+   Z2UG576G176oSWVlyY+1Tdd9ad16Rvd29JkDhd7lEdobgcc8sCGRod+tj
+   LBPdro3r/y1b7Re+VDvMW8abOZDhLOeoiRI8HIE3++Otr/YzkxDsWvLME
+   gXpcwXjWh72mcydxGvG3C+bz1Dz0o8C/qhRV81lnmnnXLfUxsC3YjHZ6g
+   bzD+5KPv2FDwIDTtdU2PxHS6+JaE6nFI5qum9rbDG8KHG8VLz9Z5uZpHx
+   Q==;
+X-CSE-ConnectionGUID: FqqkaVnbQvqq0cJAkJwvbg==
+X-CSE-MsgGUID: DDdZtAKsRmGoI1w2JYxCxA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="23025216"
+X-IronPort-AV: E=Sophos;i="6.10,178,1719903600"; 
+   d="scan'208";a="23025216"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 14:34:36 -0700
+X-CSE-ConnectionGUID: eZLAVeVBSbC/mqEo8Mbbug==
+X-CSE-MsgGUID: QnvKqTknQ4GeCeBOqGKUpA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,178,1719903600"; 
+   d="scan'208";a="66801034"
+Received: from lkp-server01.sh.intel.com (HELO 9a732dc145d3) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 26 Aug 2024 14:34:30 -0700
+Received: from kbuild by 9a732dc145d3 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1sihM4-000Hcg-1d;
+	Mon, 26 Aug 2024 21:34:28 +0000
+Date: Tue, 27 Aug 2024 05:34:16 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Linux Memory Management List <linux-mm@kvack.org>,
+	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 07/17] mm: Define VM_DROPPABLE for powerpc/32
+Message-ID: <202408270553.2S5d14Ar-lkp@intel.com>
+References: <315e3a268b165b6edad7dcb723b0d8a506a56c4e.1724309198.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1724313164.git.tony.ambardar@gmail.com> <3b65982b50a9ca77a13d7a5a07b8b5d37abc477f.1724313164.git.tony.ambardar@gmail.com>
- <CAEf4Bzbr79SQxfsmhB=5cbNdLRvsLXJT7+s0HvmvHghmyFC0MQ@mail.gmail.com> <ZsxencOVB7USkAWg@kodidev-ubuntu>
-In-Reply-To: <ZsxencOVB7USkAWg@kodidev-ubuntu>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Mon, 26 Aug 2024 14:28:17 -0700
-Message-ID: <CAEf4Bzb90MrFsnc3Q+xkhR-xGtY-2y9iz2O4SStrOzyCipMp4Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 5/8] libbpf: Support opening bpf objects of
- either endianness
-To: Tony Ambardar <tony.ambardar@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Ilya Leoshkevich <iii@linux.ibm.com>, Quentin Monnet <qmo@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <315e3a268b165b6edad7dcb723b0d8a506a56c4e.1724309198.git.christophe.leroy@csgroup.eu>
 
-On Mon, Aug 26, 2024 at 3:53=E2=80=AFAM Tony Ambardar <tony.ambardar@gmail.=
-com> wrote:
->
-> On Fri, Aug 23, 2024 at 12:47:47PM -0700, Andrii Nakryiko wrote:
-> > On Thu, Aug 22, 2024 at 2:25=E2=80=AFAM Tony Ambardar <tony.ambardar@gm=
-ail.com> wrote:
-> > >
-> > > From: Tony Ambardar <tony.ambardar@gmail.com>
-> > >
-> > > Allow bpf_object__open() to access files of either endianness, and co=
-nvert
-> > > included BPF programs to native byte-order in-memory for introspectio=
-n.
-> > >
-> > > Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
-> > > ---
-> > >  tools/lib/bpf/libbpf.c          | 21 +++++++++++++++++++--
-> > >  tools/lib/bpf/libbpf_internal.h | 11 +++++++++++
-> > >  2 files changed, 30 insertions(+), 2 deletions(-)
-> > >
-> >
-> > Instructions are not the only data that would need swapping. We have
-> > user's data sections and stuff like that, which, generally speaking,
-> > isn't that safe to just byteswap.
-> >
-> > I do understand the appeal of being endianness-agnostic, but doesn't
-> > extend all the way to actually loading BPF programs. At least I
-> > wouldn't start there.
->
-> Yes, absolutely. I first planned to move the endianness check from "open"
-> to "load" functions but got waylaid tracing skeleton code into the latter
-> and left it to continue progress. Let me figure out the best place to put
-> a check without breaking things.
->
+Hi Christophe,
 
-checking early during load should work just fine, I don't expect any proble=
-ms
+kernel test robot noticed the following build warnings:
 
-> >
-> > We need to make open phase endianness agnostic, load should just fail
-> > for swapped endianness case. So let's record the fact that we are not
-> > in native endianness, and fail early in load step.
-> >
-> > This will still allow us to generate skeletons and stuff like that, rig=
-ht?
-> >
+[auto build test WARNING on powerpc/next]
+[also build test WARNING on powerpc/fixes shuah-kselftest/next shuah-kselftest/fixes linus/master v6.11-rc5 next-20240826]
+[cannot apply to crng-random/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-[...]
+url:    https://github.com/intel-lab-lkp/linux/commits/Christophe-Leroy/asm-generic-unaligned-h-Extract-common-header-for-vDSO/20240826-103525
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git next
+patch link:    https://lore.kernel.org/r/315e3a268b165b6edad7dcb723b0d8a506a56c4e.1724309198.git.christophe.leroy%40csgroup.eu
+patch subject: [PATCH v2 07/17] mm: Define VM_DROPPABLE for powerpc/32
+config: um-randconfig-r122-20240826 (https://download.01.org/0day-ci/archive/20240827/202408270553.2S5d14Ar-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240827/202408270553.2S5d14Ar-lkp@intel.com/reproduce)
 
-> > >
-> > > +       /* change BPF program insns to native endianness for introspe=
-ction */
-> > > +       if (bpf_object__check_endianness(obj))
-> >
-> > let's rename this to "is_native_endianness()" and return true/false.
-> > "check" makes sense as something that errors out, but now it's purely
-> > a query, so "check" naming is confusing.
-> >
->
-> Right, I mistook this as exported before and left it.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202408270553.2S5d14Ar-lkp@intel.com/
 
-yeah, that double underscore is very misleading and I'd like to get
-rid of it, but my last attempt failed, so we are stuck with that for
-now
+sparse warnings: (new ones prefixed by >>)
+   mm/debug_page_ref.c: note: in included file (through include/trace/events/page_ref.h):
+>> include/trace/events/mmflags.h:168:5: sparse: sparse: undefined preprocessor identifier 'VM_DROPPABLE'
+>> include/trace/events/mmflags.h:168:21: sparse: sparse: undefined preprocessor identifier 'VM_NONE'
+   mm/debug_page_ref.c: note: in included file (through include/trace/events/page_ref.h, include/trace/define_trace.h, include/trace/events/page_ref.h):
+>> include/trace/events/mmflags.h:168:5: sparse: sparse: undefined preprocessor identifier 'VM_DROPPABLE'
+>> include/trace/events/mmflags.h:168:21: sparse: sparse: undefined preprocessor identifier 'VM_NONE'
+   mm/debug_page_ref.c: note: in included file (through include/trace/events/page_ref.h, include/trace/trace_events.h, include/trace/define_trace.h, ...):
+   include/trace/events/mmflags.h:169:10: sparse: sparse: preprocessor token IF_HAVE_VM_DROPPABLE redefined
+   mm/debug_page_ref.c: note: in included file (through include/trace/events/page_ref.h):
+   include/trace/events/mmflags.h:171:10: sparse: this was the original definition
 
->
-> >
-> > BTW, so libelf will transparently byte-swap relocations and stuff like
-> > that to native endianness, is that right?
->
-> Correct. Sections with types like ELF_T_REL (.rel) and ELF_T_SYM (.symtab=
-)
-> get translated automagically. See patch #3 for example.
->
+vim +/VM_DROPPABLE +168 include/trace/events/mmflags.h
 
-ok, thanks for confirming
+   167	
+ > 168	#if VM_DROPPABLE != VM_NONE
+   169	# define IF_HAVE_VM_DROPPABLE(flag, name) {flag, name},
+   170	#else
+   171	# define IF_HAVE_VM_DROPPABLE(flag, name)
+   172	#endif
+   173	
 
-[...]
-
-> > >
-> > > +static inline void bpf_insn_bswap(struct bpf_insn *insn)
-> > > +{
-> > > +       /* dst_reg & src_reg nibbles */
-> > > +       __u8 *regs =3D (__u8 *)insn + offsetofend(struct bpf_insn, co=
-de);
-> > > +
-> > > +       *regs =3D (*regs >> 4) | (*regs << 4);
-> >
-> > hm... we have fields, just do a brain-dead swap instead of all this
-> > mucking with offsetofend(
-> >
-> > __u8 tmp_reg =3D insn->dst_reg;
-> >
-> > insn->dst_reg =3D insn->src_reg;
-> > insn->src_reg =3D tmp_reg;
-> >
-> > ?
->
-> Main reason for this is most compilers recognize the shift/or statement
-> pattern and emit a rotate op as I recall. And the offsetofend() seemed
-> clearest at documenting "the byte after opcode" while not obscuring these
-> are nibble fields. So would prefer to leave it unless you have strong
-> objections or I'm off the mark somehow. Let me know either way? Thanks!
->
-
-I do strongly prefer not having to use offsetofend() and pointer
-manipulations. Whatever tiny performance difference is completely
-irrelevant here. Let's go with a cleaner approach, please.
-
-
-> >
-> >
-> > > +       insn->off =3D bswap_16(insn->off);
-> > > +       insn->imm =3D bswap_32(insn->imm);
-> > > +}
-> > > +
-> > >  /* Unconditionally dup FD, ensuring it doesn't use [0, 2] range.
-> > >   * Original FD is not closed or altered in any other way.
-> > >   * Preserves original FD value, if it's invalid (negative).
-> > > --
-> > > 2.34.1
-> > >
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
