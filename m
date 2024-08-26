@@ -1,164 +1,159 @@
-Return-Path: <linux-kselftest+bounces-16284-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16285-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E01E595F43D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 16:45:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F197D95F472
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 16:54:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1024F1C21E9C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 14:45:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 216CA1C21EAC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 14:54:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EA341940B9;
-	Mon, 26 Aug 2024 14:45:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F402D18D65B;
+	Mon, 26 Aug 2024 14:53:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Bu0W8ZzG"
+	dkim=pass (2048-bit key) header.d=pankajraghav.com header.i=@pankajraghav.com header.b="dzt1yLro"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2084.outbound.protection.outlook.com [40.107.237.84])
+Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E8BF189904;
-	Mon, 26 Aug 2024 14:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.84
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724683505; cv=fail; b=TNbBnabO1N3gGE3Ohbh0jwwxj8SdOazCXIT4i8Por1XCDLiXj/rVl16EKCXBfRgVd7zOQdqVdBkQmNuojvNNIBV97L0bom524waBCgKwzjUJKQRV11z8oNC+F8799rL3ClTiPFGBvBSdVbCSnS/HUDvjReSzcmnuUQjqvxjtWeU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724683505; c=relaxed/simple;
-	bh=0/1gCZTnCcIFICDdw5x67kkYqwWcyfnTaxefJeW8E4M=;
-	h=References:From:To:CC:Subject:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=RFBlGDUbKp1wfZCZ86vJ/G5NkKrLUEUm/OM6v2HWw53cLf1ImMiAvjPkGEFLz7NAx50l0Q5xmETf6tVhc7WeIWW0he7ryjxnbc/a06JhhFUkWBGivmClBjBfEyVo7Vt6/qF+RO1c5WtSbcbaERZOa01R6goElwZY0hcFDVM5Ggc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Bu0W8ZzG; arc=fail smtp.client-ip=40.107.237.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mDGT6cywaIpnI2Dt1aZZ4CiD243oaiZ+n40r39HkY5Q4/FvrMSZV8eE1wUNCQYll41zjtHLAwoF8kUuOf7YoRNYoeW7DQwRIF0wl5IiB/o+fsKYCB9pyj1qXwEOCmRfVN3Yxo7c5il/1tAeJnx7fzJQds/hGQSGfrmFMrT1Lt5nxbHXaPMGrbc4CIEizIF4m5HS5dOK08iQOFtTD3xzbTnc3BqCQqiuLk87ucDxp9cpYtYCGA/g5Sd4v60JlcpnDxKMtotiiC1ky/Vit+0ZKIc0QdvOJ9H+jT8CGm+dZjhB/LH6yG5FNXlx30PXkeI67VTZcSHCQzA3eYqrP+dkMvQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0/1gCZTnCcIFICDdw5x67kkYqwWcyfnTaxefJeW8E4M=;
- b=uuG++CzNBAHD0pcVtbRkAMLBmumvh2G7M3X0L9h6kKjZLYWVMIMg+6IqW1KLIJlqVQkFWq/J3BysB7kyVKShVCLHrLoSUCITMkAuPy7dSwf9O1WPiUPscuub0m4c0fwIEaVvMQJrF6sd6fGj9w1l3M0HMsKVVZnfaefKN+l1EKqQCZrprQmlBxjVaatTA1HKmqCQNL5DhvoiTMO6RIA29Dd9lRo5mqa7b79j0ezQ8DHoLwkGWkpjTKRSMQ4IERMZuE2YwarbgBomh3IqzQN6c/OqsdaBI6faYb8LcP03A+0wvAf+D3SOqHR7UgUJmfOVFk+iGKOf1YrgMOu2RCUjqA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=nxp.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0/1gCZTnCcIFICDdw5x67kkYqwWcyfnTaxefJeW8E4M=;
- b=Bu0W8ZzGDVrQgv4HnUMgHCpJ9wGU3OUtWqap3wy94PR0aya3oi8g/ZjlZejSQoB3hF+NKso304PCHinIrtwBgO7w40e8bNMYGjlOjt7W8O/1AHK2S9OG5um10jePHVjFacd/mgO1prXEddxQudHGExvSDa/oeNsjFWl3yKKHSP/Bi0U/hZajJ/+gnLbUztPH7kVOsG1t6HO0wiR/PHMv58yuPzL/oSMioQnEOZScEuB5iNQC2nGW70KeZ2e3sDC86ZoPuI7j/oKCAYbzNLspUuF1o/jRBVPmO1ho3DsMG22Vzqdczs+C67nL2jRrnKh8GflgL6lyT/W0+dXhcQ/s7w==
-Received: from BN7PR06CA0057.namprd06.prod.outlook.com (2603:10b6:408:34::34)
- by MW6PR12MB8661.namprd12.prod.outlook.com (2603:10b6:303:23f::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.24; Mon, 26 Aug
- 2024 14:45:00 +0000
-Received: from BL02EPF00021F6F.namprd02.prod.outlook.com
- (2603:10b6:408:34:cafe::cd) by BN7PR06CA0057.outlook.office365.com
- (2603:10b6:408:34::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.25 via Frontend
- Transport; Mon, 26 Aug 2024 14:45:00 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL02EPF00021F6F.mail.protection.outlook.com (10.167.249.11) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7918.13 via Frontend Transport; Mon, 26 Aug 2024 14:44:59 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 26 Aug
- 2024 07:44:45 -0700
-Received: from fedora (10.126.231.35) by rnnvmail201.nvidia.com (10.129.68.8)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Mon, 26 Aug
- 2024 07:44:39 -0700
-References: <cover.1724324945.git.petrm@nvidia.com>
- <7dac3bd8f776741a9816efb03c672c4887765ad4.1724324945.git.petrm@nvidia.com>
- <ZsxwHFMY4WMjbDee@shredder.mtl.com>
-User-agent: mu4e 1.8.14; emacs 29.4
-From: Petr Machata <petrm@nvidia.com>
-To: Ido Schimmel <idosch@nvidia.com>
-CC: Petr Machata <petrm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>, Jakub Kicinski
-	<kuba@kernel.org>, Amit Cohen <amcohen@nvidia.com>, Benjamin Poirier
-	<bpoirier@nvidia.com>, Hangbin Liu <liuhangbin@gmail.com>, Vladimir Oltean
-	<vladimir.oltean@nxp.com>, <mlxsw@nvidia.com>
-Subject: Re: [RFC PATCH net-next 5/5] selftests: sch_tbf_core: Use defer for
- stopping traffic
-Date: Mon, 26 Aug 2024 16:31:59 +0200
-In-Reply-To: <ZsxwHFMY4WMjbDee@shredder.mtl.com>
-Message-ID: <87seur8ht8.fsf@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A100D18D626;
+	Mon, 26 Aug 2024 14:53:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724684039; cv=none; b=i7Pfie1aF78kyPtuvzNgMI0o1yG4odAJdu8Hs9gY3wiUQjWXbL5wVSgeCQekU+Gmnv35rDlUKGCB6ozRb5oLW6QLjrYtXj/RoLJY6o+dhei6kVIa8PbTduXP5gjakc2QxEeyRobkByNyj4xTBPvz3TZhFQ++7GP/qM/2UkBkjCY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724684039; c=relaxed/simple;
+	bh=eoPZ1TPOUmuOHotNyP6ujRtIycr/WHEcyRNHgPDR6OQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nf/fprXhbcyJWeTDzo4MbjoCE48cVyBYIxkWomKN6KE+nugLxSZ6wZrD2HRCTcribaUMy8Urq5Yv78Mj8He3vCocWFG/gF0Q2erCtnUb1qBPOY26Gk7B0/nmdBBWjDtKCEb0Xb13WpcNIEBAupn70kHnsbpjw5ztr9LlgWgakeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pankajraghav.com; spf=pass smtp.mailfrom=pankajraghav.com; dkim=pass (2048-bit key) header.d=pankajraghav.com header.i=@pankajraghav.com header.b=dzt1yLro; arc=none smtp.client-ip=80.241.56.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pankajraghav.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pankajraghav.com
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4WstwW6tYFz9sWF;
+	Mon, 26 Aug 2024 16:53:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pankajraghav.com;
+	s=MBO0001; t=1724684028;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=1BUU84NCaopG37WJwAhGnNRn9/jXFpZdy15jON8+/EM=;
+	b=dzt1yLrodmnTfBTi3WoZgGDVg3UBX+THnChaCmDBi02M8ZETbF9uP3m75N7xQXbauyW32X
+	B62UfHa78bSX6JKpHexdH8I6Lno8mEuf2INf4gf4j6reAn/+7MdTEI+7XZCd/3Q0EdtI82
+	aqD+0556kofYsW46UmOxbVJlr7ltztrwpkqGbnXQSy1abMtMOBvqGsqTvfJwA1EL8BpaI7
+	DiSPpnE+L7UvPIbLMtcdPkfK6ef297omVGGNF+pKt9MrPTpa6U3uYOqzIYFY3qb2vwwcj4
+	LsNTJ1v58ts+up3ZncfYD2XO6KaWOXkfncyCkenJf1lTXo8SFrJXRVTqWsNjsA==
+From: "Pankaj Raghav (Samsung)" <kernel@pankajraghav.com>
+To: Shuah Khan <shuah@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	mcgrof@kernel.org,
+	gost.dev@samsung.com,
+	linux-kselftest@vger.kernel.org,
+	kernel@pankajraghav.com,
+	Zi Yan <ziy@nvidia.com>,
+	Pankaj Raghav <p.raghav@samsung.com>
+Subject: [PATCH] selftests/mm: do not try to split below filesystem block size
+Date: Mon, 26 Aug 2024 16:53:44 +0200
+Message-ID: <20240826145344.33665-1-kernel@pankajraghav.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF00021F6F:EE_|MW6PR12MB8661:EE_
-X-MS-Office365-Filtering-Correlation-Id: ba949b0e-d944-431f-4e38-08dcc5dda94b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|82310400026|36860700013;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?uZtpJYNERAc26BVQEV5h+CgRz0fTwgTGTH4WhbR9DTeR1AoUtuO3E7rePUg1?=
- =?us-ascii?Q?cVebZbk//LtY6VIi73WX9UMIP5OMo0Tm45+o8l8XSuWS1wVGtH1+kdM+jW4C?=
- =?us-ascii?Q?vBNOWhj78sHbZvud7sqht8f5ZV2I9f/dcpNGYl3pTk8ZYW4ArMGaWCuufNmC?=
- =?us-ascii?Q?J57Z5CyHfsqCeUgSLlsL1JplT2idzeDjSnR56jaAdHSgmIBAPdBeSgOQamlX?=
- =?us-ascii?Q?c8EpYNWlO0Q9wVQkDYlYVCJXXXERnNRwqiURiMF9yQtl4t7wgHbEdC6R0KKX?=
- =?us-ascii?Q?02ZxTTWox2d3zzoek9AKUTHdkUDEZR5p1EIoW0hq8lSvLKH0X4rxjeo95xRS?=
- =?us-ascii?Q?ZxvaAtlvv++TELtKBkO/gjb8zwG530cBq/hMn+ORkTeZsRULW+n9MHeg0Z+e?=
- =?us-ascii?Q?EoOMCzFptva/oJHeengcrPmDeRilHQuKrOQZdZXhRzEvmLOyriguw0ZOM3T/?=
- =?us-ascii?Q?X9fC0WwHEtZXQA6VSblOXcyTv0vjUzsoj0UHSDh/L8feJPyrel6P9XOqhxhk?=
- =?us-ascii?Q?UDqH7IAm07EcEbv9ozA8q6/XD/YiNCc5i1HZvlryX90GHSAUtT3PChe7/qhi?=
- =?us-ascii?Q?guop+/1Aspu9f2KlkiFsEj9yh+ARUxSp9S3y3Xp1IhKcGtxslqUdaHdzgLCf?=
- =?us-ascii?Q?d87xZf80OtcGsWPtLFyRxRC41rV6o31grLVYkkUmAHavAUS93rk2pZ7eYk8V?=
- =?us-ascii?Q?sgWncdC0ZlL0X2dPPi05RsaycljCnTH7Rd7w9hZRBkdWzVTwb18VKfDlSB5C?=
- =?us-ascii?Q?kB8kwZcqBcLKrOsuYoiTVeoi2KW8A1gvaNBMbnaAbDIXHJWF84xV2NsuGi+g?=
- =?us-ascii?Q?Du2EipdsGu3uJ8Euk60F9bK9xwgqVRFlzc4zcYJx9IvLSEABT9Qp1AM19I8J?=
- =?us-ascii?Q?K6F1aXaKVoTXRd79bsHP0idBqev6MFonhoBEiOHcoFBP62DPFLxfSf6S7Qon?=
- =?us-ascii?Q?2uFhExN0u+Ocgaf1A2sqRGITKjgulugwYAcE5oY8a3BZ5tSWrAV+obW50uvD?=
- =?us-ascii?Q?RYXb5i8IPoRqdRwUyrM2HIU70JHUbngMDqwIFuBRjwuaR3HhRPjxw8cZyikd?=
- =?us-ascii?Q?tw2U7i8LTFYqCt4aAyjQmOL93cJoQB4Nqq6RcwDsvcueWi4+ErBQfPD+KCoV?=
- =?us-ascii?Q?EODFhQMt38u+FOD68ECencToMMug1wUaHLMOeoWuPn+2Dz8bFit0YCmCcjH/?=
- =?us-ascii?Q?ONQM4Q6lL8OJjDolRFaqIlAdZ7TPECXWk/LYWpTIhqVE9/cq9ej44Wu2vEPY?=
- =?us-ascii?Q?f1cqXn3/iwLaCKRs1fsVsgXwiz1uzTgGeLwAf7My6Lot8MZLlK9roc0yYyJP?=
- =?us-ascii?Q?a6xXsJGL/JXZMLYKlk7XlkjTDJtsv1TQ1G1BMeF9xkJyI1inSYJgI+Tgr9CL?=
- =?us-ascii?Q?G6CLDFioS2ADluAt4pX9IJXQXTdNCglbgZ+oebM7j9nFTU/8n7vZngXN2b8Q?=
- =?us-ascii?Q?Vka0F3phLbYkTxOcL3tiXWFXI235pu1T?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(82310400026)(36860700013);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2024 14:44:59.6465
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ba949b0e-d944-431f-4e38-08dcc5dda94b
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF00021F6F.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8661
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 4WstwW6tYFz9sWF
 
+From: Pankaj Raghav <p.raghav@samsung.com>
 
-Ido Schimmel <idosch@nvidia.com> writes:
+There is no point trying to split pagecache thp below the blocksize of
+the filesystem as that is the minimum order that pagecache needs to
+maintain to support blocksizes greater than pagesize [1].
 
-> On Thu, Aug 22, 2024 at 03:49:44PM +0200, Petr Machata wrote:
->> Tests interrupted part-way through leave behind a running mausezahn. Use
->> defer to schedule a traffic stop after traffic is started.
->
-> Any reason not to convert the setup part to the defer mechanism as well?
+Set the lower limit for the splitting order to be the fs blocksize
+order.
 
-No. I wanted to see if it makes sense to have an entire test use the
-defer mechanism, in addition to cleanups specific to individual tests.
-But I wasn't sure what people would think, so just converted the RED
-tests as a sort of a demo.
+As the number of tests will now depend on the minimum splitting order,
+move the file preparation before calling ksft_set_plan().
+
+[1] https://lore.kernel.org/linux-fsdevel/20240822135018.1931258-1-kernel@pankajraghav.com/
+
+Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+---
+ .../selftests/mm/split_huge_page_test.c       | 19 +++++++++++++------
+ 1 file changed, 13 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+index e5e8dafc9d94..187fe9107998 100644
+--- a/tools/testing/selftests/mm/split_huge_page_test.c
++++ b/tools/testing/selftests/mm/split_huge_page_test.c
+@@ -9,11 +9,13 @@
+ #include <stdlib.h>
+ #include <stdarg.h>
+ #include <unistd.h>
++#include <math.h>
+ #include <inttypes.h>
+ #include <string.h>
+ #include <fcntl.h>
+ #include <sys/mman.h>
+ #include <sys/mount.h>
++#include <sys/stat.h>
+ #include <malloc.h>
+ #include <stdbool.h>
+ #include <time.h>
+@@ -404,9 +406,10 @@ void split_thp_in_pagecache_to_order(size_t fd_size, int order, const char *fs_l
+ 
+ int main(int argc, char **argv)
+ {
+-	int i;
++	int i, min_split_order = 0;
+ 	size_t fd_size;
+ 	char *optional_xfs_path = NULL;
++	struct stat filestat;
+ 	char fs_loc_template[] = "/tmp/thp_fs_XXXXXX";
+ 	const char *fs_loc;
+ 	bool created_tmp;
+@@ -421,8 +424,6 @@ int main(int argc, char **argv)
+ 	if (argc > 1)
+ 		optional_xfs_path = argv[1];
+ 
+-	ksft_set_plan(3+9);
+-
+ 	pagesize = getpagesize();
+ 	pageshift = ffs(pagesize) - 1;
+ 	pmd_pagesize = read_pmd_pagesize();
+@@ -431,13 +432,19 @@ int main(int argc, char **argv)
+ 
+ 	fd_size = 2 * pmd_pagesize;
+ 
++	created_tmp = prepare_thp_fs(optional_xfs_path, fs_loc_template,
++			&fs_loc);
++
++	if (!stat(fs_loc, &filestat))
++		min_split_order = log2(filestat.st_blksize) - pageshift;
++
++	ksft_set_plan(3 + 9 - min_split_order);
++
+ 	split_pmd_thp();
+ 	split_pte_mapped_thp();
+ 	split_file_backed_thp();
+ 
+-	created_tmp = prepare_thp_fs(optional_xfs_path, fs_loc_template,
+-			&fs_loc);
+-	for (i = 8; i >= 0; i--)
++	for (i = 8; i >= min_split_order; i--)
+ 		split_thp_in_pagecache_to_order(fd_size, i, fs_loc);
+ 	cleanup_thp_fs(fs_loc, created_tmp);
+ 
+
+base-commit: 5771112c37523a2344b346d7fe613694a2566df9
+-- 
+2.44.1
+
 
