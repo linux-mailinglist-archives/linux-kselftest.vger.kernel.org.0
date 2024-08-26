@@ -1,184 +1,136 @@
-Return-Path: <linux-kselftest+bounces-16277-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16278-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33F6A95F2C8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 15:21:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7374C95F2DB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 15:25:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B7A471F25437
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 13:21:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EECF282AB4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 13:25:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40DF217BEC7;
-	Mon, 26 Aug 2024 13:20:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 582F8185B6D;
+	Mon, 26 Aug 2024 13:24:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="X3eF7vgc"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zp1vNc4D";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="MVBUGdIS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CB23328A0
-	for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2024 13:20:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6CF53373;
+	Mon, 26 Aug 2024 13:24:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724678452; cv=none; b=tBaMgvGevrkl/YeDzuApF2m6Ej9MEEIBBF8N59CaGrtQ/4nlzgDcKyYGj15cgAWUg+a7a/7WEYkBOvRlOf9HvFu+sv8Mq2V59EFiv8XSH5rU+tEsWRcsMiiRM6NPuPWfpTRw77lzsijwzMbUpLWMf6CyxkySiyYIRuGAOiOEd4w=
+	t=1724678697; cv=none; b=XCCOISY7lvPyIk1KomhMq4rpTAzOktnYHzYLVQ44DEZ51U+0HwGtKuqeIY0/JdVsWxubYkJLbs57bM6pkddyANGfTY+F5jpbjw54HPB1bXEzpPWMsMnMUL1Nc3y4mNrPZV1xuTl9PIuFxxTJjmeK8bccLydlWSEjDV8hiDqkF8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724678452; c=relaxed/simple;
-	bh=yDo35u0eByMPHO8M0n5dtlK30SfHuw3kMzMtDu2kQpA=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=hR/8CqBMSBmjoAREkiOj6N+2nSWkU8GbCzYXlwG1e8xbRHZOh3/JiZpNos6X3yPp36JqepTPPo3ub4X5vo6ozHwSyKnMsjBuop8QxClfmxb/XYAZNXDSdQQZn2rgCwJzWgrH8ts9TQh44t9emRuJ/6IRuQ7An3bDcsS580Mfig4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=X3eF7vgc; arc=none smtp.client-ip=209.85.221.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-4fcf4ae95dbso1578571e0c.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2024 06:20:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724678449; x=1725283249; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=eD175XUZ/ITy7ZdWAydNT67+uOxIgoWBm9/vtDXzUTA=;
-        b=X3eF7vgcvRx0xK9T8qpcyEvX3F9Zbm28T3IOMYtJErJUDvHGmqCJ8oK4ssYFZQcXv6
-         EmpZqba5kVaRSTszD/6Z22SGHZjJ/9nu2AnsHZ8KOf4QsMUZJo03dVgGJDNte/SmIWRk
-         O52iZzCi6tlecXsnsWbMKwWHs7mwLo5/5+xyeJU6rJFk+prEWDWObIPTMbTyZdZJeOV4
-         Wgt/t+LPxzXFTZ+Y/x5FcmQUNAwZwDWHcpDKMkRk3jEzO/kzfYJcMGgcPGLiEAH2VyF1
-         BoSAC41U+H7Xay6X3bmD3PEiuDIk/ze4feWqjoNvwHbcK8HpsSv/NXgdnxfW1afhRVBP
-         tSyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724678449; x=1725283249;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eD175XUZ/ITy7ZdWAydNT67+uOxIgoWBm9/vtDXzUTA=;
-        b=YY4N40XWcP5LYWKJLTv9n0/OnT9kYPs1DwHLWySmEIxv6XoXcPUbBJYY+fGnz+qb33
-         wNp35+4JJ/SWMGkJ0IlkrSXtfN4HzlngCzBDwfHkw4YGtLRbepkr1tEP0CLUqnIRhTa0
-         YHsqegyIaOnyyuN7Nlogq3sI9U9kFxboMhd/FN0f04Vgu/XyJN65kLL64JRZXMyXYMUE
-         Q9ygmLtbGrM9eDiv7m+TFK1I52oGKPZ39tJJWXCQ5glnjf3T2hccGTH7O3L/6jqeXEOq
-         SNiuHjwRLHoVHrvJ1zdphrWg5w7SpYfegPVl0xWeLOXL0KzdtR8SoieLCWHVYBaVOX/I
-         STRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWntp5UsQ5AWWwGr4ppRohRAazvl26MkRIuDjurHtlljrddVO+wxrTDA0CD4NdF0upPDfrL7rMoP5f1J0xZhgs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbDAzwLN35bn6byvuKM3K8PCQbdX6l+bjyClABzyYc3yG2jHwD
-	SOcu/edZWT5AQThXwxSLzLX0drqD/4KSX8xevSoXEuRGwK6nMkEUnZaopRPfq+xgDNdJKwZnsVV
-	94XevKD5yJ6llToDl3kqd3Zs7oNXwX8q9OJLs1g==
-X-Google-Smtp-Source: AGHT+IHfLYQXJQalFGVZVOgOn/tn6bOUOwnoI9D+YmaRkON0wOcbu81fZMRkrl/+m2cVQflgktyC19x+8RBVqWzPqMk=
-X-Received: by 2002:a05:6122:3d08:b0:4f5:28e3:5a5a with SMTP id
- 71dfb90a1353d-4fd1a522b94mr12978602e0c.4.1724678449179; Mon, 26 Aug 2024
- 06:20:49 -0700 (PDT)
+	s=arc-20240116; t=1724678697; c=relaxed/simple;
+	bh=Ubjr3hAkVUCRKgP1YwCituDtTL+Aqxbg8Af289I9Ieo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=crHbEJsOJEcsMmPN7P1mgpJZ7tIZjsgcpLwgd6bjQizwC3KhAdNg5vdmbmNuSRfJCwHSDjnL8yZf3SEXiEUo67xRe8eYK54mA7NI1bi/C4hnGym+XiijGYERe88HirZycxP0jSzdW5LXs5pLRMdhRrmY8vaOMMpZus7xlQjOvjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zp1vNc4D; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=MVBUGdIS; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1724678693;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JtERtJKi/CA36m/GEM8qvROm+v91KuIncw1OX4BkHbo=;
+	b=zp1vNc4DuEN5YGFJn0TnAQLg0tqSuVcJT1LF7fJXWGjIq9boLoE67t0jweEecdUb7sF4GH
+	GCQYB9HU/g83IdP8iePIB0ST+nfgjNktYKMIjUz3LlV/WiJcdqrTixPcGf8q5uk9fA4AJk
+	w6fD2O1Yn3O5X0dRndrBmcvUrBU9IQbcMRg2frAPJ2wSc4l2YQ1FFd73rJq1/y6Vj/xxgH
+	0esO02GAS3JjVqcgZix9NqNsLH/qRLm4AhSWJl3hwYmpMbN4YgqIT9Dr7UFLXgC7zxx7qp
+	lBn8E0DLeyhkRVJ4UXNT+sBw3oZUwmdUgkhGWPGAQ6TSpslNcaibuIH3xKyBgw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1724678693;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JtERtJKi/CA36m/GEM8qvROm+v91KuIncw1OX4BkHbo=;
+	b=MVBUGdIS3uO0WmN8EGfXIZc+hb2K87xkQVti0VUBQTGVjM7a9DhmIGZGaQAw3NK+w8pyab
+	59i8js1pWL3G7UAg==
+To: Christophe Leroy <christophe.leroy@csgroup.eu>, "Jason A. Donenfeld"
+ <Jason@zx2c4.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin
+ <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>, Andy Lutomirski
+ <luto@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+ <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>, Arnd
+ Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah Khan
+ <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 02/17] vdso: Clean header inclusion in getrandom
+In-Reply-To: <51adbe91-3c3a-4baa-bb39-29df98a6eea5@csgroup.eu>
+References: <cover.1724309198.git.christophe.leroy@csgroup.eu>
+ <2a081f1fff5e40f496153f8e0162fc7ec5adab2e.1724309198.git.christophe.leroy@csgroup.eu>
+ <Zsw3xMoX2EI5UUs1@zx2c4.com>
+ <7e519ba2-0293-4320-84bf-44f930fc286d@csgroup.eu>
+ <ZsxDssNPbLkcPetJ@zx2c4.com>
+ <51adbe91-3c3a-4baa-bb39-29df98a6eea5@csgroup.eu>
+Date: Mon, 26 Aug 2024 15:24:52 +0200
+Message-ID: <87plpvct7f.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Mon, 26 Aug 2024 18:50:37 +0530
-Message-ID: <CA+G9fYvcBvbabg+m7brKfpGCGZUcK+KHHTFX7hFvW6GmN2XF0g@mail.gmail.com>
-Subject: selftests: core: unshare_test: WARNING: at mm/util.c:671 __kvmalloc_node_noprof
-To: open list <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, LTP List <ltp@lists.linux.it>
-Cc: Shuah Khan <shuah@kernel.org>, David Gow <davidgow@google.com>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Barry Song <baohua@kernel.org>, 
-	Matt Mackall <mpm@selenic.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Dan Carpenter <dan.carpenter@linaro.org>, Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The following kernel warning is noticed on all arch and all devices while
-running selftests: core: unshare_test on Linux next-20240823 and next-20240826.
+On Mon, Aug 26 2024 at 12:45, Christophe Leroy wrote:
+> Le 26/08/2024 =C3=A0 10:58, Jason A. Donenfeld a =C3=A9crit=C2=A0:
+>> On Mon, Aug 26, 2024 at 10:37:49AM +0200, Christophe Leroy wrote:
+>>>
+>>>
+>>> Le 26/08/2024 =C3=A0 10:07, Jason A. Donenfeld a =C3=A9crit=C2=A0:
+>>>> On Thu, Aug 22, 2024 at 09:13:10AM +0200, Christophe Leroy wrote:
+>>>>>=20=20=20=20
+>>>>> +#define _PAGE_SIZE (1UL << CONFIG_PAGE_SHIFT)
+>>>>> +#define _PAGE_MASK (~(_PAGE_SIZE - 1))
+>>>>
+>>>> If PAGE_SIZE isn't defined at this point, why not just call it PAGE_SI=
+ZE
+>>>> instead of _PAGE_SIZE? But if that's the case, why not put the vdso
+>>>> definition of PAGE_SIZE into some vdso header included by this file?
+>>>
+>>> It was working ok on powerpc but on x86 I got:
+>>=20
+>> Seems like there might be some more fiddling to do, then? Or did you
+>> conclude it's impossible?
+>
+> Maybe someone who knows x86 in details could helps but after a first=20
+> look I gave up because it looks very x86 specific, indeed that's=20
+> x86/asm/vdso/gettimeofday.h that pulls several x86/asm/ headers , and=20
+> the same type of issue might arise for any new architecture coming in.
 
-First seen on next-20240823.
-  Good: next-20240822
-  BAD:  next-20240823 and next-20240826
+Of course :)
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> For me it looked cleaner to just do as commit cffaefd15a8f ("vdso: Use=20
+> CONFIG_PAGE_SHIFT in vdso/datapage.h") and not use PAGE_SIZE at all. But=
+=20
+> I didn't want to directly use (1UL << CONFIG_PAGE_SHIFT) and (~(1UL <<=20
+> (CONFIG_PAGE_SHIFT - 1))) in the code directly hence the new macros with=
+=20
+> a leading underscore to avoid any conflict with existing macros.
 
-Crash log:
---------
-# selftests: core: unshare_test
-<4>[   61.084149] ------------[ cut here ]------------
-<4>[ 61.085175] WARNING: CPU: 0 PID: 477 at mm/util.c:671
-__kvmalloc_node_noprof (mm/util.c:671 (discriminator 1))
-<4>[   61.088958] Modules linked in: crct10dif_ce sm3_ce sm3 sha3_ce
-sha512_ce sha512_arm64 drm fuse backlight dm_mod ip_tables x_tables
-<4>[   61.093141] CPU: 0 UID: 0 PID: 477 Comm: unshare_test Not
-tainted 6.11.0-rc5-next-20240826 #1
-<4>[   61.094558] Hardware name: linux,dummy-virt (DT)
-<4>[   61.096763] pstate: 23400009 (nzCv daif +PAN -UAO +TCO +DIT
--SSBS BTYPE=--)
-<4>[ 61.097841] pc : __kvmalloc_node_noprof (mm/util.c:671 (discriminator 1))
-<4>[ 61.099701] lr : __kvmalloc_node_noprof (mm/util.c:661)
-<4>[   61.100448] sp : ffff800080abbce0
-<4>[   61.100819] x29: ffff800080abbcf0 x28: fff0000004549280 x27:
-0000000000000000
-<4>[   61.101744] x26: 0000000000000000 x25: 0000000000000000 x24:
-fff0000003615e40
-<4>[   61.102512] x23: fff0000003615ec0 x22: bfafa45863b285c8 x21:
-0000000200002000
-<4>[   61.103232] x20: 00000000ffffffff x19: 0000000000400cc0 x18:
-0000000000000000
-<4>[   61.104053] x17: 0000000000000000 x16: 0000000000000000 x15:
-0000000000000000
-<4>[   61.104927] x14: 0000000000000000 x13: 0000000000000000 x12:
-0000000000000000
-<4>[   61.105752] x11: 0000000000000000 x10: 0000000000000000 x9 :
-0000000000000000
-<4>[   61.106606] x8 : 0000000000000001 x7 : 0000000000000001 x6 :
-0000000000000005
-<4>[   61.107377] x5 : 0000000000000000 x4 : fff0000004549280 x3 :
-0000000000000000
-<4>[   61.108207] x2 : 0000000000000000 x1 : 000000007fffffff x0 :
-0000000000000000
-<4>[   61.109262] Call trace:
-<4>[ 61.109619] __kvmalloc_node_noprof (mm/util.c:671 (discriminator 1))
-<4>[ 61.110248] alloc_fdtable (fs/file.c:133)
-<4>[ 61.110751] expand_files
-(include/linux/atomic/atomic-arch-fallback.h:457
-include/linux/atomic/atomic-instrumented.h:33 fs/file.c:177
-fs/file.c:238)
-<4>[ 61.111171] ksys_dup3 (fs/file.c:1337)
-<4>[ 61.111596] __arm64_sys_dup3 (fs/file.c:1355)
-<4>[ 61.112006] invoke_syscall (arch/arm64/include/asm/current.h:19
-arch/arm64/kernel/syscall.c:54)
-<4>[ 61.112480] el0_svc_common.constprop.0
-(include/linux/thread_info.h:127 (discriminator 2)
-arch/arm64/kernel/syscall.c:140 (discriminator 2))
-<4>[ 61.112955] do_el0_svc (arch/arm64/kernel/syscall.c:152)
-<4>[ 61.113384] el0_svc (arch/arm64/include/asm/irqflags.h:55
-arch/arm64/include/asm/irqflags.h:76
-arch/arm64/kernel/entry-common.c:165
-arch/arm64/kernel/entry-common.c:178
-arch/arm64/kernel/entry-common.c:713)
-<4>[ 61.113742] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:731)
-<4>[ 61.115181] el0t_64_sync (arch/arm64/kernel/entry.S:598)
-<4>[   61.115709] ---[ end trace 0000000000000000 ]---
+#ifndef PAGE_SIZE
+# define
+#endif
 
+Perhaps?
 
-Crash Log links,
---------
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240826/testrun/24953436/suite/log-parser-test/test/check-kernel-exception-warning-cpu-pid-at-mmutilc-__kvmalloc_node_noprof/log
+Thanks,
 
-Crash failed comparison:
-----------
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20240826/testrun/24953436/suite/log-parser-test/test/check-kernel-exception-warning-cpu-pid-at-mmutilc-__kvmalloc_node_noprof/history/
-
-metadata:
-----
-  git describe: next-20240823 and next-20240826
-  git repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-  git sha: c79c85875f1af04040fe4492ed94ce37ad729c4d
-  kernel config:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2l2pZRzhgRkPgXIKLJCI7vwVd6t/config
-  artifact location:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2l2pZRzhgRkPgXIKLJCI7vwVd6t/
-  build url: https://storage.tuxsuite.com/public/linaro/lkft/builds/2l2pZRzhgRkPgXIKLJCI7vwVd6t/
-  toolchain: clang-18 and gcc-13
-
-Steps to reproduce:
----------
- - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2l2paZVYTloIDBYnua1s12DeIic/reproducer
- - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2l2paZVYTloIDBYnua1s12DeIic/tux_plan
-
-Please let me know if you need more information.
-
---
-Linaro LKFT
-https://lkft.linaro.org
+        tglx
 
