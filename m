@@ -1,121 +1,182 @@
-Return-Path: <linux-kselftest+bounces-16262-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16263-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7902C95EEBD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 12:45:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B4AD95EF06
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 12:55:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35282283B67
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 10:45:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA59C1F2493B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 10:55:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9576114A4E1;
-	Mon, 26 Aug 2024 10:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2651155A43;
+	Mon, 26 Aug 2024 10:51:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jlw6U/pY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 356D013A869;
-	Mon, 26 Aug 2024 10:45:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 345E714A4FB;
+	Mon, 26 Aug 2024 10:51:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724669145; cv=none; b=hWDncWWosqOEAG+D8/TCe3+OFT7qLD6djFYzluR8xnnvzNOmT7vuu3RKsx/Slr8Oez72vim6uiiicDFqzrl5kmlAkbABjUq1/6EZOlW7D12tZ5sibikb8peS2JbJvotBIhFS+OYHdgFgM/2zFpfoS5cX5m1hNuHUtkMHPVc7v5I=
+	t=1724669517; cv=none; b=kJRNeoCUMCetavSbh7Lopb8LdoRHYgFmySRu9q0LvkTebJeyvODARNaHu8SoB/1YSfg0NNuoC71ObQWwmqGgmqAS/tB0xf0IsVhrG+S0iRsb/h6qmZxs7iTJGI+duPLDzDwl3woX/96xh/z5vnIQUaGmhZ1q6Arwy69O3G4Hi/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724669145; c=relaxed/simple;
-	bh=g0USLf+Ak90WITfjotmZss3CJ/mqie6EleQ66n1D8sw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DUtPlkqH7YO+J54ACptvZ542dgNBug5nyxjKFzEjODNlJJYTHKeNQ0ZwFDY4o/19KHScM22GPbdDPrHKVxsqJTcr5MFUMj8LLpfrDrVspGA7CrsbWcsAq9EjGj8JvyoIAcOw/Ldluo18A1uTpCRXdzhStuwtzu7Ps11LgipUSv0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4WsnQF0ZHkz9sRk;
-	Mon, 26 Aug 2024 12:45:41 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 8l3J2mPFqWI2; Mon, 26 Aug 2024 12:45:40 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4WsnQD6mKZz9sPd;
-	Mon, 26 Aug 2024 12:45:40 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id D56398B779;
-	Mon, 26 Aug 2024 12:45:40 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id L__8Kfk3Evvz; Mon, 26 Aug 2024 12:45:40 +0200 (CEST)
-Received: from [172.25.230.108] (unknown [172.25.230.108])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 86F3C8B763;
-	Mon, 26 Aug 2024 12:45:40 +0200 (CEST)
-Message-ID: <51adbe91-3c3a-4baa-bb39-29df98a6eea5@csgroup.eu>
-Date: Mon, 26 Aug 2024 12:45:40 +0200
+	s=arc-20240116; t=1724669517; c=relaxed/simple;
+	bh=JQMuC8qs8TbeFgleINbhU4sKV6wErgSLk1InyBlgYDk=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cxbLYNbDzWdlfCU4VSWOzNYn5JQ3kutht+McM69JPm9/0efZHOIQANl0NOHHJ3b3eQ0lcBmFiDISaDdWTM5dG+AKLOwcBpTw2fhM+RFsqAFxIP8iZAZtr1zp86VOY8yqizJoHJTqm0lihCOLaHUjzJDNBgWHFtuI00m2CIIFJKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jlw6U/pY; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2d46f2816c0so3293172a91.2;
+        Mon, 26 Aug 2024 03:51:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724669515; x=1725274315; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=BEUxhxZg9fw7YEztoE73RzdwB/Yg7hcGcz/eB2SfUP4=;
+        b=Jlw6U/pYObfMAAE9ThUOdtgbkMjbSbVrOLFFGyj7B8j1Vquuu7dwp69lS2WheNwSBD
+         Ku3kr86LfcGdRA/syRXbn+M4hnO60lHWCpJzJtIvWN5bwTdCEvSe2bAHG5TzrZN0GZVj
+         1ObijqChkN1OUII2aj6eS4H2g2z1jA2F+PuLCeLyHyulK8I5gvIlwgMGIFawNIuWjkLF
+         uFIkq1nNbSqD2v0mzoVKBBykGIMLCfyKCN3HXycfiZvGwrAwzUkc+w7yTfmMbC1/WlWr
+         Po/BJxrFp8yvB9rTbtENX8i43xVVCsRMwpewC5aWXMWK3mlsAC9h+EfoTeYP5ojaEVg9
+         3+Fw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724669515; x=1725274315;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BEUxhxZg9fw7YEztoE73RzdwB/Yg7hcGcz/eB2SfUP4=;
+        b=QxnXppzjJBL1uY6JzV5KCYKiIhaNDz9Di3NIJFlu+myAfikt0Zf5JRxu9jebGbIXle
+         zPX6Q8R3PMaILb8D/eJzdmD6y+LcgY4aLk2qt3G7osHsX6X8Vz7hAazO7bEJ+kRATCh9
+         yBidX9pzVqDOouGyg8ICC8xS7m8dybZT6FXGek+FNBpWuk5s8p+WxBXcY6v9JT24LU6Z
+         TrHHkdT+DeUNbwHYxTou5SwpCgajDZbFnhN9WuWkS/Yp0TeRd51+/kNvma283n0sNNy5
+         9jhxgBAAcB5Pscp+kIakgFPcKlakac2LcY49jcMkPRR7I76NTS2e6CyLMv5UCtkCEsFW
+         hizw==
+X-Forwarded-Encrypted: i=1; AJvYcCVpb/ALo0v5Na19dk/HCtMHu9lpHL+688tYgSybOR8FK2pv1MoD1SAt8ksAQ5mwiy9SdnbJR/FnXuUexPaYHyg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUpKlSleohBgUzA+YLClzkoU4hnXfuloJQkJyeAArXU3dBVKgl
+	lA8/8jrAa2JIck7O9sPWpzbbscq4G+R6G6eBlaQOed5jvCDad5Jy85ZLXuzs
+X-Google-Smtp-Source: AGHT+IFDXshyZ+GvqNZebAprSr3qfom1TGxQMTW4HKq4LaKZWz0s2NgDnKzPIIiJHqT5gm2u5zDi+Q==
+X-Received: by 2002:a17:90a:88f:b0:2c9:96fc:ac52 with SMTP id 98e67ed59e1d1-2d646d4da53mr10403412a91.26.1724669515250;
+        Mon, 26 Aug 2024 03:51:55 -0700 (PDT)
+Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d5eb90c72dsm11736457a91.22.2024.08.26.03.51.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Aug 2024 03:51:54 -0700 (PDT)
+From: Tony Ambardar <tony.ambardar@gmail.com>
+X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
+Date: Mon, 26 Aug 2024 03:51:53 -0700
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	Ilya Leoshkevich <iii@linux.ibm.com>,
+	Quentin Monnet <qmo@kernel.org>
+Subject: Re: [PATCH bpf-next v2 1/8] libbpf: Improve log message formatting
+Message-ID: <ZsxeSYScsSHFtub5@kodidev-ubuntu>
+References: <cover.1724313164.git.tony.ambardar@gmail.com>
+ <884c0e57404f3ad15bb658bc55b7d16928069828.1724313164.git.tony.ambardar@gmail.com>
+ <CAEf4BzbaZ8QpcEVQNU4+O-07eS6-BdQP9KXaJQysWt1uZPoXTg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 02/17] vdso: Clean header inclusion in getrandom
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin
- <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>,
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
- Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah Khan
- <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <cover.1724309198.git.christophe.leroy@csgroup.eu>
- <2a081f1fff5e40f496153f8e0162fc7ec5adab2e.1724309198.git.christophe.leroy@csgroup.eu>
- <Zsw3xMoX2EI5UUs1@zx2c4.com>
- <7e519ba2-0293-4320-84bf-44f930fc286d@csgroup.eu>
- <ZsxDssNPbLkcPetJ@zx2c4.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <ZsxDssNPbLkcPetJ@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4BzbaZ8QpcEVQNU4+O-07eS6-BdQP9KXaJQysWt1uZPoXTg@mail.gmail.com>
 
-
-
-Le 26/08/2024 à 10:58, Jason A. Donenfeld a écrit :
-> On Mon, Aug 26, 2024 at 10:37:49AM +0200, Christophe Leroy wrote:
->>
->>
->> Le 26/08/2024 à 10:07, Jason A. Donenfeld a écrit :
->>> On Thu, Aug 22, 2024 at 09:13:10AM +0200, Christophe Leroy wrote:
->>>>    
->>>> +#define _PAGE_SIZE (1UL << CONFIG_PAGE_SHIFT)
->>>> +#define _PAGE_MASK (~(_PAGE_SIZE - 1))
->>>
->>> If PAGE_SIZE isn't defined at this point, why not just call it PAGE_SIZE
->>> instead of _PAGE_SIZE? But if that's the case, why not put the vdso
->>> definition of PAGE_SIZE into some vdso header included by this file?
->>
->> It was working ok on powerpc but on x86 I got:
+On Thu, Aug 22, 2024 at 04:36:13PM -0700, Andrii Nakryiko wrote:
+> On Thu, Aug 22, 2024 at 2:24 AM Tony Ambardar <tony.ambardar@gmail.com> wrote:
+> >
+> > From: Tony Ambardar <tony.ambardar@gmail.com>
+> >
+> > Fix missing newlines and extraneous terminal spaces in messages.
+> >
+> > Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
+> > ---
+> >  tools/lib/bpf/btf.c          | 7 ++++---
+> >  tools/lib/bpf/btf_dump.c     | 2 +-
+> >  tools/lib/bpf/btf_relocate.c | 2 +-
+> >  tools/lib/bpf/libbpf.c       | 4 ++--
+> >  tools/lib/bpf/relo_core.c    | 2 +-
+> >  5 files changed, 9 insertions(+), 8 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+> > index 32c00db3b91b..cf4f7bd7ff5c 100644
+> > --- a/tools/lib/bpf/btf.c
+> > +++ b/tools/lib/bpf/btf.c
+> > @@ -2940,7 +2940,8 @@ static int btf_ext_setup_info(struct btf_ext *btf_ext,
+> >
+> >         /* If no records, return failure now so .BTF.ext won't be used. */
+> >         if (!info_left) {
+> > -               pr_debug("%s section in .BTF.ext has no records", ext_sec->desc);
+> > +               pr_debug("%s section in .BTF.ext has no records\n",
+> > +                        ext_sec->desc);
 > 
-> Seems like there might be some more fiddling to do, then? Or did you
-> conclude it's impossible?
+> if it fits in 100 characters, it stays in a single line, please don't touch that
 
-Maybe someone who knows x86 in details could helps but after a first 
-look I gave up because it looks very x86 specific, indeed that's 
-x86/asm/vdso/gettimeofday.h that pulls several x86/asm/ headers , and 
-the same type of issue might arise for any new architecture coming in.
+OK, will do. Most of these are due to CI and local checkpatch, plus kernel
+docs on style/submission guidelines. It can be hard to decide which
+warnings/errors can be ignored and which apply, so it would be helpful at
+least if the CI flavour of checkpatch aligned with guidance above. Not sure
+what that involves, but sure that others besides me would benefit.
 
-For me it looked cleaner to just do as commit cffaefd15a8f ("vdso: Use 
-CONFIG_PAGE_SHIFT in vdso/datapage.h") and not use PAGE_SIZE at all. But 
-I didn't want to directly use (1UL << CONFIG_PAGE_SHIFT) and (~(1UL << 
-(CONFIG_PAGE_SHIFT - 1))) in the code directly hence the new macros with 
-a leading underscore to avoid any conflict with existing macros.
+> 
+> >                 return -EINVAL;
+> >         }
+> >
+> > @@ -3028,7 +3029,7 @@ static int btf_ext_parse_hdr(__u8 *data, __u32 data_size)
+> >
+> >         if (data_size < offsetofend(struct btf_ext_header, hdr_len) ||
+> >             data_size < hdr->hdr_len) {
+> > -               pr_debug("BTF.ext header not found");
+> > +               pr_debug("BTF.ext header not found\n");
+> >                 return -EINVAL;
+> >         }
+> >
+> > @@ -3290,7 +3291,7 @@ int btf__dedup(struct btf *btf, const struct btf_dedup_opts *opts)
+> >
+> >         d = btf_dedup_new(btf, opts);
+> >         if (IS_ERR(d)) {
+> > -               pr_debug("btf_dedup_new failed: %ld", PTR_ERR(d));
+> > +               pr_debug("btf_dedup_new failed: %ld\n", PTR_ERR(d));
+> >                 return libbpf_err(-EINVAL);
+> >         }
+> >
+> > diff --git a/tools/lib/bpf/btf_dump.c b/tools/lib/bpf/btf_dump.c
+> > index 894860111ddb..25e7c44d9f95 100644
+> > --- a/tools/lib/bpf/btf_dump.c
+> > +++ b/tools/lib/bpf/btf_dump.c
+> > @@ -1304,7 +1304,7 @@ static void btf_dump_emit_type_decl(struct btf_dump *d, __u32 id,
+> >                          * chain, restore stack, emit warning, and try to
+> >                          * proceed nevertheless
+> >                          */
+> > -                       pr_warn("not enough memory for decl stack:%d", err);
+> > +                       pr_warn("not enough memory for decl stack:%d\n", err);
+> 
+> nit: add space after ':' while you are at it?
 
-Christophe
+Right, done. Thanks!
+
+> 
+> >                         d->decl_stack_cnt = stack_start;
+> >                         return;
+> >                 }
+> 
+> [...]
 
