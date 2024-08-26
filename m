@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-16304-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16305-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F080B95F5DE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 18:02:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5734495F5E3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 18:03:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B2801C2074E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 16:02:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00BBC2820CC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 16:03:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31A7A199397;
-	Mon, 26 Aug 2024 16:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECCAF199E95;
+	Mon, 26 Aug 2024 16:00:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NCQv2c+7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P7ih0KqV"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0106D194C93;
-	Mon, 26 Aug 2024 15:59:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF48F199E81;
+	Mon, 26 Aug 2024 16:00:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724688000; cv=none; b=B9Vwyp2nBsWz6pBLPeMitQ4IpltovSewvZ4F0H59nQ8WnFwvXWvaykpwctYgi7lIiexxQNVAsxjF7aCtqDIsu6I/vR9+V4FcaxoFipttVq5zjRCGC/HzQCTWkjnu0XyBQbfBN+878rQkt4blXRXcrCm1fe2vzHxzG7TrxdmSIZk=
+	t=1724688002; cv=none; b=rjwmMiv94yjeCgLqFNIz6D81voy7kXFEItxhCPYPMKGBZnaAAFXGjqn7tVuxvEQ5gXPYiIarXwL0HzZVMv9ML6wKqnC2/5/Z+5jEhmVTdQQtRHJg8tud69+h/Jrktd8GGElw/kvgXFmwBv2R9SCS+JlbBewv5RQURejtaYZtdwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724688000; c=relaxed/simple;
-	bh=uXwOMuW/G6+0zgv9AO6yFx2u+jhvgs/z/nmI3LCIdrI=;
+	s=arc-20240116; t=1724688002; c=relaxed/simple;
+	bh=hUqiD6tize0J9n0G4qdkSCPdVIDOqJXQoFvZCB47rv0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ITgUEHQDsdwgFnL6DnGBHixbu60ANEwylm+LR1kRY1q3nPmWRaGOlpoJxh7BXPBacFo2461IWjWBlfOFFI7BJ4oDFNhxdjjdpoa1xbwMN3qMJphHuYcVMNj9pJ74ECP0rO1exxCox4SDgYgT0iID9oZCUfWx/1lSqouyLCvuHB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NCQv2c+7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18A3EC4DDF5;
-	Mon, 26 Aug 2024 15:59:54 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=RDr7dvpc8xxwgdxBPDvWyZg+YRZ3zfh3nYrmRaySJgzh30qV1N0+Xg7lZR3uojD857TPrJaHfJqhOFhZwg4qhwsguEv7kdI0zHYvBKWZ+tJm17Hjln48U6g2tRY7WRQ2sz4ap3cgKUHGZ9GE0n3RUB0IjLllVPGpA2Z0Jk2NHuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P7ih0KqV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06DD8C4DE14;
+	Mon, 26 Aug 2024 15:59:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724687998;
-	bh=uXwOMuW/G6+0zgv9AO6yFx2u+jhvgs/z/nmI3LCIdrI=;
+	s=k20201202; t=1724688002;
+	bh=hUqiD6tize0J9n0G4qdkSCPdVIDOqJXQoFvZCB47rv0=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=NCQv2c+75NLKvvlJljjrgPhKlzE913e+xVN6CRDrorAjVlZ8A9twCDYPPR/NwXKel
-	 h5zg0ZufxzNQo6OfRkyQCXP4ozypzxeoonWUYp/LEcMIXfYpnj7LGYX3OkryXt5+mm
-	 GS2pJLk/4zpomBglykC3W/FiKE5lbBvXwhOgVil6klcVxucGy0K3oPEB3DbCDo5e4k
-	 JdsasE1II/vsKheEaMR74WYK+qqZ3eoHYrarInupZAq1WHVo+h67B5nuzZu41oD7ae
-	 1QRRECRMJI2pMuUG6EKFg9mMx/rMcLfV5LV5V8/ZoGEAXMK2vOeFPc56aF23PbVSiP
-	 cEWWG5Bqwghpg==
+	b=P7ih0KqVuMDnD9grVpP07IpdZsg6L5VINlSzzt0uvTyFRG09GmQpoOMGZUAFz6aRh
+	 kBiZzNOQFckXtJoUTsjdpM65hgU1ABiud7iFKj5MMYLktLX5npwIGdEarc3ysjTfvb
+	 LSIHmFCIYhq4WRp+1mIebqSQBDpojhHMSQ7uJpgh0WssP7ak7ltNkvkhVIxtrgnOVt
+	 xlx/Ch/PEP0CGp1YelTVuZQlmXf8rldfKcaiiAQ2g3hmRJk4fqYjnjbPRdNMLFPfAj
+	 7Zww7Dm/wI9bg2K5jAbx3xMtcah7klsyY/cezm32ZQ80PV2k3tZoydkLQOly9eS+rM
+	 viDZp/2CItSTA==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Mon, 26 Aug 2024 17:59:09 +0200
-Subject: [PATCH net 10/15] mptcp: pm: fix ID 0 endp usage after multiple
- re-creations
+Date: Mon, 26 Aug 2024 17:59:10 +0200
+Subject: [PATCH net 11/15] selftests: mptcp: join: check re-re-adding ID 0
+ endp
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,8 +52,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240826-net-mptcp-more-pm-fix-v1-10-8cd6c87d1d6d@kernel.org>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240826-net-mptcp-more-pm-fix-v1-11-8cd6c87d1d6d@kernel.org>
 References: <20240826-net-mptcp-more-pm-fix-v1-0-8cd6c87d1d6d@kernel.org>
 In-Reply-To: <20240826-net-mptcp-more-pm-fix-v1-0-8cd6c87d1d6d@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -63,82 +63,85 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
  Florian Westphal <fw@strlen.de>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- =?utf-8?q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>, 
- syzbot+455d38ecd5f655fc45cf@syzkaller.appspotmail.com, 
- stable@vger.kernel.org
+ "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2308; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=uXwOMuW/G6+0zgv9AO6yFx2u+jhvgs/z/nmI3LCIdrI=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmzKZW0d11ZBJN4Z+IvERhVx9LuJbaku85sDvf0
- Wft/3oZzlOJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZsymVgAKCRD2t4JPQmmg
- c7h9EADYErk8pH+Gu/yqt8tfd6Bj/yopVphZBiIurDOCNJcz5JHzSaiisIoyFHNEmbgcWyCtXVL
- JUk6LANUIWRwB4WrVjzsDdTTceCT7+VXyKbtC74yj71lAm/8d8/GE+wN4VLzh50CUHoYYjUJ7cH
- CvkwQVeAj+i0fMzqV+OpATd87TZamPOj7upNBycclNHwz6EPscfx0mzQ7hlSWHUwC3PdCm7rPem
- XPrv5/kZZY4PBOilDXWvBJOrTAs8n0fxWWXFKKJEjfU2l0FzyAdlPv9dbymLSQdThFFgqVJFPOa
- aDIj3n3eUTLzZeSSeI2FJ54eZqfoU+smNN7yC8hOu2R/+fnvu7T9Qo00J1W+hSVgCKuY/g6qPQa
- QkbSSwjbor/KC//PWKzXkOy5ARc1SQSSbWzNTicplcuxOkO7taZAXbaYb/Wy/tpJeWMux5ElOik
- clcLa4JAkwMCc5N2QrfZLh0lBxqmF6213xW3xHPCp87TMtM6t0zt2eLZzHw4UwwmgpXDoOazj2N
- nehfJaSSyQ/BVQdZyKBIETfB2cuIIl9Az0zkYT+IxMjC7kgIYBVo+LSBBx/SvLaEZJU78OyIcAm
- 44Z7AA3M7vj3nhFMyB75m87GWFSlZmYJN4EKfKEDIBgIbhOSgn/ado/Y1WhBorwJA/v7bAtJxay
- XwhVCeqMWAFG6Pg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2251; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=hUqiD6tize0J9n0G4qdkSCPdVIDOqJXQoFvZCB47rv0=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmzKZW+W4mhmxjqvN44yLi5kqvXK+t1f2cckD6A
+ uGyAlNxqNeJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZsymVgAKCRD2t4JPQmmg
+ cymlEACA98B1Z6boTviuPDNQS+CeuDQb04t5NKihwaeoIBJp3Ji2FnyVik4dMHt7ErXIVuSvNij
+ QUrXhQYEuBQAga+iqUN2KZ8PkYTody3pbOGWsv3f9THGqsEvn6eXQfcIa0s/NHkZ9kzV738GFX0
+ 8E9QwJdYzYvWy3jWaseRXm62tFNI/8xHvug6r6o6d0TwP/qweC1YzbFV2veuLINkub8c+ue+BWs
+ b4G+LZYCOD1UBeXXBeMal255XO+GrX6BIJuRBsKR1h39w+wKAhIHkbeOQEGWlPENCl1fATDhdxn
+ hnUjH7xNSN0w+TQtSAzwkaRGDSmjWHab9wtuQdEO6Dmr8vWjvawU8wAtHLylISUt0pwxesSicri
+ r+fFypsC9PnjvKTeQdCnMqlfk4RyhZmjQSLaIgm3chQwX00BjmN2aXzRNK5wXg0n80SdKzNjcNq
+ +GPSYhsbwwndd1S3Z/1yJVNuishO+tMTEuhRRBur7sLEMhW95e89TygJBwnTDfvZQyvFe3Wdd04
+ PvB+wVUjgN+6pRMHMKfGLnvORl31ibGuzbdPFSPKZEBKCXPjq0JkVz3+/ZAlKiU9wawweV4v4W5
+ dMykqw5omYCadZjK6HEOJ6IrIcmr114AHedGRyOszvU3/oYv04y3lappSe0fdztLDYADA4/UTf1
+ oQiTcKQ52Y2Pgvg==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-'local_addr_used' and 'add_addr_accepted' are decremented for addresses
-not related to the initial subflow (ID0), because the source and
-destination addresses of the initial subflows are known from the
-beginning: they don't count as "additional local address being used" or
-"ADD_ADDR being accepted".
+This test extends "delete and re-add" to validate the previous commit:
+when the endpoint linked to the initial subflow (ID 0) is re-added
+multiple times, it was no longer being used, because the internal linked
+counters are not decremented for this special endpoint: it is not an
+additional endpoint.
 
-It is then required not to increment them when the entrypoint used by
-the initial subflow is removed and re-added during a connection. Without
-this modification, this entrypoint cannot be removed and re-added more
-than once.
+Here, the "del/add id 0" steps are done 3 times to unsure this case is
+validated.
 
-Reported-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/512
+The 'Fixes' tag here below is the same as the one from the previous
+commit: this patch here is not fixing anything wrong in the selftests,
+but it validates the previous fix for an issue introduced by this commit
+ID.
+
 Fixes: 3ad14f54bd74 ("mptcp: more accurate MPC endpoint tracking")
-Reported-by: syzbot+455d38ecd5f655fc45cf@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/00000000000049861306209237f4@google.com
 Cc: stable@vger.kernel.org
-Tested-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- net/mptcp/pm_netlink.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/net/mptcp/pm_netlink.c b/net/mptcp/pm_netlink.c
-index 90b7c8b45027..591ae2ffb4dd 100644
---- a/net/mptcp/pm_netlink.c
-+++ b/net/mptcp/pm_netlink.c
-@@ -615,12 +615,13 @@ static void mptcp_pm_create_subflow_or_signal_addr(struct mptcp_sock *msk)
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+index 0ffa6f6b04e2..7708ac99ccb6 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+@@ -3611,20 +3611,23 @@ endpoint_tests()
+ 		chk_subflow_nr "after no reject" 3
+ 		chk_mptcp_info subflows 2 subflows 2
  
- 		fullmesh = !!(local.flags & MPTCP_PM_ADDR_FLAG_FULLMESH);
+-		pm_nl_del_endpoint $ns2 1 10.0.1.2
+-		sleep 0.5
+-		chk_subflow_nr "after delete id 0" 2
+-		chk_mptcp_info subflows 2 subflows 2 # only decr for additional sf
++		local i
++		for i in $(seq 3); do
++			pm_nl_del_endpoint $ns2 1 10.0.1.2
++			sleep 0.5
++			chk_subflow_nr "after delete id 0 ($i)" 2
++			chk_mptcp_info subflows 2 subflows 2 # only decr for additional sf
  
--		msk->pm.local_addr_used++;
- 		__clear_bit(local.addr.id, msk->pm.id_avail_bitmap);
+-		pm_nl_add_endpoint $ns2 10.0.1.2 id 1 dev ns2eth1 flags subflow
+-		wait_mpj $ns2
+-		chk_subflow_nr "after re-add id 0" 3
+-		chk_mptcp_info subflows 3 subflows 3
++			pm_nl_add_endpoint $ns2 10.0.1.2 id 1 dev ns2eth1 flags subflow
++			wait_mpj $ns2
++			chk_subflow_nr "after re-add id 0 ($i)" 3
++			chk_mptcp_info subflows 3 subflows 3
++		done
  
- 		/* Special case for ID0: set the correct ID */
- 		if (local.addr.id == msk->mpc_endpoint_id)
- 			local.addr.id = 0;
-+		else /* local_addr_used is not decr for ID 0 */
-+			msk->pm.local_addr_used++;
+ 		mptcp_lib_kill_wait $tests_pid
  
- 		nr = fill_remote_addresses_vec(msk, &local.addr, fullmesh, addrs);
- 		if (nr == 0)
-@@ -750,7 +751,9 @@ static void mptcp_pm_nl_add_addr_received(struct mptcp_sock *msk)
- 	spin_lock_bh(&msk->pm.lock);
+-		chk_join_nr 4 4 4
+-		chk_rm_nr 2 2
++		chk_join_nr 6 6 6
++		chk_rm_nr 4 4
+ 	fi
  
- 	if (sf_created) {
--		msk->pm.add_addr_accepted++;
-+		/* add_addr_accepted is not decr for ID 0 */
-+		if (remote.id)
-+			msk->pm.add_addr_accepted++;
- 		if (msk->pm.add_addr_accepted >= add_addr_accept_max ||
- 		    msk->pm.subflows >= subflows_max)
- 			WRITE_ONCE(msk->pm.accept_addr, false);
+ 	# remove and re-add
 
 -- 
 2.45.2
