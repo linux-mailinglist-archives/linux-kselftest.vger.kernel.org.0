@@ -1,166 +1,278 @@
-Return-Path: <linux-kselftest+bounces-16229-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16230-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 547F095E4FB
-	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Aug 2024 21:46:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E75995E847
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 08:07:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86B0B1C2092D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 25 Aug 2024 19:46:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 163E7281811
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 06:07:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE24139ACC;
-	Sun, 25 Aug 2024 19:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7736E80BFF;
+	Mon, 26 Aug 2024 06:07:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pGa+UQ2k"
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="fQFdskyc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from xry111.site (xry111.site [89.208.246.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96ECD14A85;
-	Sun, 25 Aug 2024 19:45:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82BAA63D;
+	Mon, 26 Aug 2024 06:07:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724615158; cv=none; b=XvM7Dq/NjGV7jspFeZut9RU5j5ULYZWFqKqpZa3BjDBOD86xzt4ei9OibSpAX/eFi7HQvrx2IJheVM+SFLV1YQJUno+qIAErZkEmdNDPMzpfrrqC7k1GbAyyL94uIU9vg3XHUldP3AAnLlhYSPhjvqwYbXnyHkuPrlsoWpJNdvo=
+	t=1724652462; cv=none; b=dTtosh1RBURCh1eVz6IUUf3EvLJZPk7ZfLLk8ILUjM2pEhh+bBBIwKVJoPQBgNwzwt4xnXW2ceqbEwi2FglAbQY3xHM0QZThHx94EX42T27Wa0+Bf9Iz010f7rSo/l+lV7SLdlkBQknwtmy1+JIXPOdzlebhM3PhmUqk5hroPHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724615158; c=relaxed/simple;
-	bh=L2q5TZieXl7mpgEZoO9ut2SpDIoxARMxSL8SJkrTIzE=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QOuI0xvJDmBRDAvTqS7BWrsrtKK/ki3pVXYehiUtKnQOj+ADVtAVkwM9xxXXsiG+KwxZZal6NRisLGGDfEqtnm9CLOnwpaDOLN7uhl+aIRw3UlZKa078TdYho6Z63hFpZ4prdgLqvLeZFpgVMtn32VrM479giP8DWVVNtgKnAgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pGa+UQ2k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BC61C4AF09;
-	Sun, 25 Aug 2024 19:45:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724615158;
-	bh=L2q5TZieXl7mpgEZoO9ut2SpDIoxARMxSL8SJkrTIzE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=pGa+UQ2kmpdacGgBL5te60J4MMLrx5AwRjnxKdP7y6DPLeQzDG9L+Syxn2UzDcSWW
-	 it1mT0lfNz5fZgjq5kqDnmKpRkvJi5AMc/bFwuPOy5fod+fJVHky5Ub0AaGnNstQdV
-	 mg2uVx1Qazeg2l2ykL3Rr8QYUzrTZG2e9lvdyhRfE/Utu5xtne1BMGY6m7yhQLOdRI
-	 5xunCyiLbYyvChOPfq0z2IStOUwpu60cpBAcpC1Xyxx1P3Zs7QW6JCV6mRrVv5IHXg
-	 DdDQOzqIGRVLVdKL8xj6EKKDfHnnYokDnsIVk1i+BsbUTmLSROX20ov4sydsy+A/lG
-	 xw6ghwiXlzakQ==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1siJBT-006i9u-KS;
-	Sun, 25 Aug 2024 20:45:55 +0100
-Date: Sun, 25 Aug 2024 20:45:55 +0100
-Message-ID: <86seuswfm4.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: Shaoqin Huang <shahuang@redhat.com>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	kvmarm@lists.linux.dev,
-	Mark Brown <broonie@kernel.org>,
-	Eric Auger <eauger@redhat.com>,
-	Sebastian Ott <sebott@redhat.com>,
-	Cornelia Huck <cohuck@redhat.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	James Morse <james.morse@arm.com>,
-	kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Zenghui Yu <yuzenghui@huawei.com>
-Subject: Re: [PATCH v5 0/4] Allow userspace to change ID_AA64PFR1_EL1
-In-Reply-To: <ZstlXHnSvlfnia/D@shell.armlinux.org.uk>
-References: <20240723072004.1470688-1-shahuang@redhat.com>
-	<86ttf8wnwz.wl-maz@kernel.org>
-	<ZstlXHnSvlfnia/D@shell.armlinux.org.uk>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1724652462; c=relaxed/simple;
+	bh=+eROQScU0/a8UGd0Dnf21It+bvVcLGRPthRcv3bwE+8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=QafUgDK9SbicYgwgrQgnkFP95M2cg6BhGtPGQqtJ3O7CP/m+e27i6i3UNCsHccXPXh3nxOxQARutLnKAyRy7NJkVDjPn09i0BzAbm/rP3L9qX4yJ0PcUaDuHxCFumoQx4yftJdjZOkSNsB8R5vY12x8xy6+9qUwTI32sXyQAQgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=fQFdskyc; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+	s=default; t=1724652453;
+	bh=+eROQScU0/a8UGd0Dnf21It+bvVcLGRPthRcv3bwE+8=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=fQFdskycP3pmcrNiqZMVj79JVAwZ6bhA7FfvZBKcsYghTU9tZkDMYcFlmbx2r1sKp
+	 p5mDhaJDWvKlgnuKN7c5rQTWlCEwqpS/oEQmMX7CmcLELYB/ZzPx49aFW26NIA9zNl
+	 5mm9+shFb8RhZ3ELpv6T/9yoQyfEBNwGw+okVB54=
+Received: from [IPv6:240e:358:115d:1f00:dc73:854d:832e:2] (unknown [IPv6:240e:358:115d:1f00:dc73:854d:832e:2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id 6CE6266F26;
+	Mon, 26 Aug 2024 02:07:30 -0400 (EDT)
+Message-ID: <29c04b2f2b35588824447f4c91d3c89ed3ed8895.camel@xry111.site>
+Subject: Re: [PATCH] selftests/vDSO: support DT_GNU_HASH
+From: Xi Ruoyao <xry111@xry111.site>
+To: Fangrui Song <maskray@google.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Date: Mon, 26 Aug 2024 14:07:24 +0800
+In-Reply-To: <20240815032614.2747224-1-maskray@google.com>
+References: <20240815032614.2747224-1-maskray@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: linux@armlinux.org.uk, shahuang@redhat.com, oliver.upton@linux.dev, kvmarm@lists.linux.dev, broonie@kernel.org, eauger@redhat.com, sebott@redhat.com, cohuck@redhat.com, catalin.marinas@arm.com, james.morse@arm.com, kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org, suzuki.poulose@arm.com, will@kernel.org, yuzenghui@huawei.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
 
-On Sun, 25 Aug 2024 18:09:48 +0100,
-"Russell King (Oracle)" <linux@armlinux.org.uk> wrote:
-> 
-> On Sun, Aug 25, 2024 at 05:46:36PM +0100, Marc Zyngier wrote:
-> > On Tue, 23 Jul 2024 08:19:59 +0100,
-> > Shaoqin Huang <shahuang@redhat.com> wrote:
-> > > 
-> > > Hi guys,
-> > > 
-> > > This is another try to allow userspace to change ID_AA64PFR1_EL1, and we want to
-> > > give userspace the ability to control the visible feature set for a VM, which
-> > > could be used by userspace in such a way to transparently migrate VMs.
-> > 
-> > 
-> > I think this looks OK now, thanks for going through the motions and
-> > doing the right thing.
-> > 
-> > What is missing is similar handling for 32bit ID registers, but I'm
-> > not sure we keen on going down that road -- machines capable of
-> > running those are on their way out. This can be done later anyway,
-> > should anyone care.
-> 
-> The Aarch32 ID registers need doing - we've already established that
-> fact. Sadly, you decided you wouldn't respond to my patch addressing
-> one of the Aarch32 ID registers despite me sending follow-ups to nicely
-> ask you about this - you seemed to go utterly silent on it.
+On Wed, 2024-08-14 at 20:26 -0700, Fangrui Song wrote:
+> glibc added support for DT_GNU_HASH in 2006 and DT_HASH has been
+> obsoleted for more than one decade in many Linux distributions.
+>=20
+> Many vDSOs support DT_GNU_HASH. This patch adds selftests support.
+>=20
+> Signed-off-by: Fangrui Song <maskray@google.com>
+> ---
 
-No, Russell. *you* went utterly silent after your May patch. You sent
-an RFC, to which people responded. Given that your last email on the
-subject was almost 4 months ago and that you never brought the subject
-up again, it can't be that big a deal.
+Ping.
 
-To me, an RFC means "I have this idea, and I'm not sure how to do it".
-An RFC is usually only a proof of concept that has no purpose being
-taken at face value. If you want a patch taken seriously, don't send
-it as an RFC. And send it again if nobody replies. It's not that this
-is anything new.
+Some context: I'd change LoongArch vDSO to use the toolchain default
+instead of forcing DT_HASH (note that LoongArch is launched decades
+after all major distros switched to DT_GNU_HASH), but without the
+selftest support we'll lose test coverage.
 
-> The Aarch32 ID registers have changed value between different kernel
-> versions, and given that QEMU saves and restores _all_ ID registers,
-> changes to these ID registers cause a regression if one attempts to
-> migrate VMs between one kernel version and the next. It doesn't even
-> have to be between two physical machines. Libvirt supports managed-
-> saving on reboot, where it saves an image of a VM at shutdown, and
-> restores it at the next reboot. These changes in ID registers render
-> effectively data loss in VMs that have been managed-saved - the
-> saved state of the VM has to either be destroyed, or the host kernel
-> reverted back and _never_ moved forward.
->
-> As you don't seem to be keen to address this (by ignoring my emails
-> on the topic, and now suggesting in your response above that you're
-> not keen to do anything with the Aarch32 ID registers, I guess this
-> just means that KVM on Aarch64 is going to forever suck.
+And now ARM64 has already lost test coverage after commit 48f6430505c0.
 
-I'm fine with that. Nobody is forced to use it, and I don't feel the
-need to put extra effort on things I don't care about any more.
-AArch32 support is one of these things, amongst many others.
+> =C2=A0tools/testing/selftests/vDSO/parse_vdso.c | 105 ++++++++++++++++---=
+--
+> -
+> =C2=A01 file changed, 79 insertions(+), 26 deletions(-)
+>=20
+> diff --git a/tools/testing/selftests/vDSO/parse_vdso.c
+> b/tools/testing/selftests/vDSO/parse_vdso.c
+> index 4ae417372e9e..35cb545da13e 100644
+> --- a/tools/testing/selftests/vDSO/parse_vdso.c
+> +++ b/tools/testing/selftests/vDSO/parse_vdso.c
+> @@ -47,6 +47,7 @@ static struct vdso_info
+> =C2=A0	/* Symbol table */
+> =C2=A0	ELF(Sym) *symtab;
+> =C2=A0	const char *symstrings;
+> +	ELF(Word) *gnu_hash;
+> =C2=A0	ELF(Word) *bucket, *chain;
+> =C2=A0	ELF(Word) nbucket, nchain;
+> =C2=A0
+> @@ -75,6 +76,16 @@ static unsigned long elf_hash(const char *name)
+> =C2=A0	return h;
+> =C2=A0}
+> =C2=A0
+> +static uint32_t gnu_hash(const char *name)
+> +{
+> +	const unsigned char *s =3D (void *)name;
+> +	uint32_t h =3D 5381;
+> +
+> +	for (; *s; s++)
+> +		h +=3D h * 32 + *s;
+> +	return h;
+> +}
+> +
+> =C2=A0void vdso_init_from_sysinfo_ehdr(uintptr_t base)
+> =C2=A0{
+> =C2=A0	size_t i;
+> @@ -117,6 +128,7 @@ void vdso_init_from_sysinfo_ehdr(uintptr_t base)
+> =C2=A0	 */
+> =C2=A0	ELF(Word) *hash =3D 0;
+> =C2=A0	vdso_info.symstrings =3D 0;
+> +	vdso_info.gnu_hash =3D 0;
+> =C2=A0	vdso_info.symtab =3D 0;
+> =C2=A0	vdso_info.versym =3D 0;
+> =C2=A0	vdso_info.verdef =3D 0;
+> @@ -137,6 +149,11 @@ void vdso_init_from_sysinfo_ehdr(uintptr_t base)
+> =C2=A0				((uintptr_t)dyn[i].d_un.d_ptr
+> =C2=A0				 + vdso_info.load_offset);
+> =C2=A0			break;
+> +		case DT_GNU_HASH:
+> +			vdso_info.gnu_hash =3D
+> +				(ELF(Word)
+> *)((uintptr_t)dyn[i].d_un.d_ptr +
+> +					=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 vdso_info.load_offset);
+> +			break;
+> =C2=A0		case DT_VERSYM:
+> =C2=A0			vdso_info.versym =3D (ELF(Versym) *)
+> =C2=A0				((uintptr_t)dyn[i].d_un.d_ptr
+> @@ -149,17 +166,26 @@ void vdso_init_from_sysinfo_ehdr(uintptr_t base)
+> =C2=A0			break;
+> =C2=A0		}
+> =C2=A0	}
+> -	if (!vdso_info.symstrings || !vdso_info.symtab || !hash)
+> +	if (!vdso_info.symstrings || !vdso_info.symtab ||
+> +	=C2=A0=C2=A0=C2=A0 (!hash && !vdso_info.gnu_hash))
+> =C2=A0		return;=C2=A0 /* Failed */
+> =C2=A0
+> =C2=A0	if (!vdso_info.verdef)
+> =C2=A0		vdso_info.versym =3D 0;
+> =C2=A0
+> =C2=A0	/* Parse the hash table header. */
+> -	vdso_info.nbucket =3D hash[0];
+> -	vdso_info.nchain =3D hash[1];
+> -	vdso_info.bucket =3D &hash[2];
+> -	vdso_info.chain =3D &hash[vdso_info.nbucket + 2];
+> +	if (vdso_info.gnu_hash) {
+> +		vdso_info.nbucket =3D vdso_info.gnu_hash[0];
+> +		/* The bucket array is located after the header (4
+> uint32) and the bloom
+> +		=C2=A0=C2=A0 filter (size_t array of gnu_hash[2] elements). */
+> +		vdso_info.bucket =3D vdso_info.gnu_hash + 4 +
+> +				=C2=A0=C2=A0 sizeof(size_t) / 4 *
+> vdso_info.gnu_hash[2];
+> +	} else {
+> +		vdso_info.nbucket =3D hash[0];
+> +		vdso_info.nchain =3D hash[1];
+> +		vdso_info.bucket =3D &hash[2];
+> +		vdso_info.chain =3D &hash[vdso_info.nbucket + 2];
+> +	}
+> =C2=A0
+> =C2=A0	/* That's all we need. */
+> =C2=A0	vdso_info.valid =3D true;
+> @@ -203,6 +229,26 @@ static bool vdso_match_version(ELF(Versym) ver,
+> =C2=A0		&& !strcmp(name, vdso_info.symstrings + aux-
+> >vda_name);
+> =C2=A0}
+> =C2=A0
+> +static bool check_sym(ELF(Sym) *sym, ELF(Word) i, const char *name,
+> +		=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const char *version, unsigned long ver_=
+hash)
+> +{
+> +	/* Check for a defined global or weak function w/ right name.
+> */
+> +	if (ELF64_ST_TYPE(sym->st_info) !=3D STT_FUNC)
+> +		return false;
+> +	if (ELF64_ST_BIND(sym->st_info) !=3D STB_GLOBAL &&
+> +	=C2=A0=C2=A0=C2=A0 ELF64_ST_BIND(sym->st_info) !=3D STB_WEAK)
+> +		return false;
+> +	if (strcmp(name, vdso_info.symstrings + sym->st_name))
+> +		return false;
+> +
+> +	/* Check symbol version. */
+> +	if (vdso_info.versym &&
+> +	=C2=A0=C2=A0=C2=A0 !vdso_match_version(vdso_info.versym[i], version,
+> ver_hash))
+> +		return false;
+> +
+> +	return true;
+> +}
+> +
+> =C2=A0void *vdso_sym(const char *version, const char *name)
+> =C2=A0{
+> =C2=A0	unsigned long ver_hash;
+> @@ -210,29 +256,36 @@ void *vdso_sym(const char *version, const char
+> *name)
+> =C2=A0		return 0;
+> =C2=A0
+> =C2=A0	ver_hash =3D elf_hash(version);
+> -	ELF(Word) chain =3D vdso_info.bucket[elf_hash(name) %
+> vdso_info.nbucket];
+> +	ELF(Word) i;
+> =C2=A0
+> -	for (; chain !=3D STN_UNDEF; chain =3D vdso_info.chain[chain]) {
+> -		ELF(Sym) *sym =3D &vdso_info.symtab[chain];
+> +	if (vdso_info.gnu_hash) {
+> +		uint32_t h1 =3D gnu_hash(name), h2, *hashval;
+> =C2=A0
+> -		/* Check for a defined global or weak function w/
+> right name. */
+> -		if (ELF64_ST_TYPE(sym->st_info) !=3D STT_FUNC)
+> -			continue;
+> -		if (ELF64_ST_BIND(sym->st_info) !=3D STB_GLOBAL &&
+> -		=C2=A0=C2=A0=C2=A0 ELF64_ST_BIND(sym->st_info) !=3D STB_WEAK)
+> -			continue;
+> -		if (sym->st_shndx =3D=3D SHN_UNDEF)
+> -			continue;
+> -		if (strcmp(name, vdso_info.symstrings + sym-
+> >st_name))
+> -			continue;
+> -
+> -		/* Check symbol version. */
+> -		if (vdso_info.versym
+> -		=C2=A0=C2=A0=C2=A0 && !vdso_match_version(vdso_info.versym[chain],
+> -					=C2=A0=C2=A0 version, ver_hash))
+> -			continue;
+> -
+> -		return (void *)(vdso_info.load_offset + sym-
+> >st_value);
+> +		i =3D vdso_info.bucket[h1 % vdso_info.nbucket];
+> +		if (i =3D=3D 0)
+> +			return 0;
+> +		h1 |=3D 1;
+> +		hashval =3D vdso_info.bucket + vdso_info.nbucket +
+> +			=C2=A0 (i - vdso_info.gnu_hash[1]);
+> +		for (;; i++) {
+> +			ELF(Sym) *sym =3D &vdso_info.symtab[i];
+> +			h2 =3D *hashval++;
+> +			if (h1 =3D=3D (h2 | 1) &&
+> +			=C2=A0=C2=A0=C2=A0 check_sym(sym, i, name, version,
+> ver_hash))
+> +				return (void *)(vdso_info.load_offset
+> +
+> +						sym->st_value);
+> +			if (h2 & 1)
+> +				break;
+> +		}
+> +	} else {
+> +		i =3D vdso_info.bucket[elf_hash(name) %
+> vdso_info.nbucket];
+> +		for (; i; i =3D vdso_info.chain[i]) {
+> +			ELF(Sym) *sym =3D &vdso_info.symtab[i];
+> +			if (sym->st_shndx !=3D SHN_UNDEF &&
+> +			=C2=A0=C2=A0=C2=A0 check_sym(sym, i, name, version,
+> ver_hash))
+> +				return (void *)(vdso_info.load_offset
+> +
+> +						sym->st_value);
+> +		}
+> =C2=A0	}
+> =C2=A0
+> =C2=A0	return 0;
 
-If you want the support to improve, I suggest you send patches. And
-send them again if no reply shows up in a timely manner.  Because
-you're probably the last person who gives a damn about the AArch32
-support in KVM. And if not even you can be bothered to fix it, then
-support for AArch32 EL1 should probably be removed altogether (I'm all
-for deleting unused code).
-
-> I'm sure Oliver will recall my emails on this which you've decided to
-> ignore... he was supportive of my efforts to address this.
-
-I'm supportive as well. I'm just not going to fix it for you.
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
 
