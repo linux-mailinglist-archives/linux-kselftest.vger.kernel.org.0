@@ -1,136 +1,113 @@
-Return-Path: <linux-kselftest+bounces-16278-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7374C95F2DB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 15:25:09 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A744095F329
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 15:41:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EECF282AB4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 13:25:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA9FE1C2200C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 26 Aug 2024 13:41:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 582F8185B6D;
-	Mon, 26 Aug 2024 13:24:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CF27185E53;
+	Mon, 26 Aug 2024 13:41:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zp1vNc4D";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="MVBUGdIS"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Eclcii3I"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6CF53373;
-	Mon, 26 Aug 2024 13:24:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85DE614900F
+	for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2024 13:41:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724678697; cv=none; b=XCCOISY7lvPyIk1KomhMq4rpTAzOktnYHzYLVQ44DEZ51U+0HwGtKuqeIY0/JdVsWxubYkJLbs57bM6pkddyANGfTY+F5jpbjw54HPB1bXEzpPWMsMnMUL1Nc3y4mNrPZV1xuTl9PIuFxxTJjmeK8bccLydlWSEjDV8hiDqkF8A=
+	t=1724679704; cv=none; b=e1OaQD30eMwe+MsdJPTWD3fP0a3GcZb9V3MZSMLYvLX/BYHyGJxxSR3mteLHjJoLr+AhUWp3tdrRI7afRBsShhy6Ee6us6qCez40nNLX2o2TsSZwJCwNFSmxWse94C1m1xkMxKZhOSWUvr1a7xl9JUrNi+GOWnxNo5Vz6v/BQs0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724678697; c=relaxed/simple;
-	bh=Ubjr3hAkVUCRKgP1YwCituDtTL+Aqxbg8Af289I9Ieo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=crHbEJsOJEcsMmPN7P1mgpJZ7tIZjsgcpLwgd6bjQizwC3KhAdNg5vdmbmNuSRfJCwHSDjnL8yZf3SEXiEUo67xRe8eYK54mA7NI1bi/C4hnGym+XiijGYERe88HirZycxP0jSzdW5LXs5pLRMdhRrmY8vaOMMpZus7xlQjOvjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zp1vNc4D; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=MVBUGdIS; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1724678693;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JtERtJKi/CA36m/GEM8qvROm+v91KuIncw1OX4BkHbo=;
-	b=zp1vNc4DuEN5YGFJn0TnAQLg0tqSuVcJT1LF7fJXWGjIq9boLoE67t0jweEecdUb7sF4GH
-	GCQYB9HU/g83IdP8iePIB0ST+nfgjNktYKMIjUz3LlV/WiJcdqrTixPcGf8q5uk9fA4AJk
-	w6fD2O1Yn3O5X0dRndrBmcvUrBU9IQbcMRg2frAPJ2wSc4l2YQ1FFd73rJq1/y6Vj/xxgH
-	0esO02GAS3JjVqcgZix9NqNsLH/qRLm4AhSWJl3hwYmpMbN4YgqIT9Dr7UFLXgC7zxx7qp
-	lBn8E0DLeyhkRVJ4UXNT+sBw3oZUwmdUgkhGWPGAQ6TSpslNcaibuIH3xKyBgw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1724678693;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JtERtJKi/CA36m/GEM8qvROm+v91KuIncw1OX4BkHbo=;
-	b=MVBUGdIS3uO0WmN8EGfXIZc+hb2K87xkQVti0VUBQTGVjM7a9DhmIGZGaQAw3NK+w8pyab
-	59i8js1pWL3G7UAg==
-To: Christophe Leroy <christophe.leroy@csgroup.eu>, "Jason A. Donenfeld"
- <Jason@zx2c4.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin
- <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>, Andy Lutomirski
- <luto@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>, Arnd
- Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Shuah Khan
- <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
- linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 02/17] vdso: Clean header inclusion in getrandom
-In-Reply-To: <51adbe91-3c3a-4baa-bb39-29df98a6eea5@csgroup.eu>
-References: <cover.1724309198.git.christophe.leroy@csgroup.eu>
- <2a081f1fff5e40f496153f8e0162fc7ec5adab2e.1724309198.git.christophe.leroy@csgroup.eu>
- <Zsw3xMoX2EI5UUs1@zx2c4.com>
- <7e519ba2-0293-4320-84bf-44f930fc286d@csgroup.eu>
- <ZsxDssNPbLkcPetJ@zx2c4.com>
- <51adbe91-3c3a-4baa-bb39-29df98a6eea5@csgroup.eu>
-Date: Mon, 26 Aug 2024 15:24:52 +0200
-Message-ID: <87plpvct7f.ffs@tglx>
+	s=arc-20240116; t=1724679704; c=relaxed/simple;
+	bh=Q/ItTynzx62/JZ3XoUKXF3vsnl0opiQXKjF1CL/u/z4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pDC1Cfa16N0MRuVKI+J5bfz29Zf1w6uVQy0klf8uY2PVx7fTlIOJafpqxtJAbo2Rayr/r2XT9sVNLRpnFeeW6rj6cpy+ilAEmrk77/YvOZ7yiMM2m0iZkRL8jAj62w65WOUU4hS0do/e/bs8O62VgqWhxSwKV/iZDvOfv447Dek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Eclcii3I; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-a8683dc3b17so270341066b.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 26 Aug 2024 06:41:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1724679701; x=1725284501; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=VS0k8aqmiTANe2tnPqYCFrEU6+kNk3H4jcm6bqcbGpw=;
+        b=Eclcii3IhdzCGRmw14IxbYm3uN1SSwDYyL1vEw12U9hFUEgXeEatU2vlx1in4jEOCK
+         DCXLQDlJfALGufyTnInjvdnl0N4JPqATKPRoXasVVNny4S1JP59G/3ERopzB1OwgD3DS
+         ZMLQNBP4kLJ7e78boSCpGN0CsUpJHuH8dB0cQpSP3ndRqmATgtgGtBETGBSH9Bu10noD
+         h+5guFQ8ZcNM9jkDUctkIH80JoslbTQq4p5VDeHDEa7DJlGcr3s2xpLegs03TkBbVn7s
+         kBZkWpq3GB0YGfa9nndTcrPlNrp0zLaqjhLPJdVQDxrkdZuKm5xudDY05QDy5QfPaHzk
+         alCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724679701; x=1725284501;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VS0k8aqmiTANe2tnPqYCFrEU6+kNk3H4jcm6bqcbGpw=;
+        b=aeHk8M5Lslk6NgF/iKhDaVnaABDKORv6bfEjeohuEL3euATUAWxgizvihOuSzwz5xO
+         0FEZrCQKp+0I3pOFHvddiZU9WEF5yC2Nvidb+BIU2nsV5W5+tpPh9Z6C1XF7WB57Ko1w
+         HuQn4nmtZoaT+iUdkk0h3cAu7iRXqJLg2W3Q/Zhd8w3Li9sQAiYT9lRHVGn/LN1wzW7z
+         GQLTqcVGzK1kQP9XzntCKT2U8m3LteKhMa/i/5iCAhp+Ro2YVhy8o/PFbJGK0kGInOPN
+         y4cWeJ93dq9O6DfjiNNpCOItPt2qcH7Py3GBjvAsn4V6aZthBGfMwIczpBCh58IXnQ4I
+         0sPg==
+X-Forwarded-Encrypted: i=1; AJvYcCXtCQYMkiHPU2gd1NcsmDLrRGqrhsGwUaZTI+Hm0rCszXo9bSaM3t22ot+UyQc7t1pNVe62OetyXOGHH3r1OD8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1VoYX86NvrJAryxtYxc/JrOVO9lpvBvRr0l8mU78NBZDVQ1Dl
+	nKPFUXZE7Cqu6O0gQbu35wuKzDVz2+Gh03eJMZydS2JHLVa7xT71kX+LEffzPLLAK0lqqFKbL3W
+	l
+X-Google-Smtp-Source: AGHT+IH5lH6WnT3G8aIJDp1bTHZX/1kCI67xuDJkYMM6PFurmYWQZLEQyWU4hlcuav9hrRwlBi0WgQ==
+X-Received: by 2002:a05:6402:3489:b0:5be:fe26:dac1 with SMTP id 4fb4d7f45d1cf-5c08915b2d5mr9869196a12.3.1724679700675;
+        Mon, 26 Aug 2024 06:41:40 -0700 (PDT)
+Received: from pathway.suse.cz ([193.86.92.181])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c044ddbf27sm5668996a12.8.2024.08.26.06.41.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 26 Aug 2024 06:41:40 -0700 (PDT)
+Date: Mon, 26 Aug 2024 15:41:38 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: "Ryan B. Sullivan" <rysulliv@redhat.com>
+Cc: live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	jpoimboe@kernel.org, jikos@kernel.org, mbenes@suse.cz,
+	joe.lawrence@redhat.com, shuah@kernel.org
+Subject: Re: [PATCH] selftests/livepatch: wait for atomic replace to occur
+Message-ID: <ZsyGEtrMiGTsJkZF@pathway.suse.cz>
+References: <20240822173122.14760-1-rysulliv@redhat.com>
+ <Zsh51f3-n842TZHw@pathway.suse.cz>
+ <ZsiKBlEQS0NsKlGR@sullivan-work>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZsiKBlEQS0NsKlGR@sullivan-work>
 
-On Mon, Aug 26 2024 at 12:45, Christophe Leroy wrote:
-> Le 26/08/2024 =C3=A0 10:58, Jason A. Donenfeld a =C3=A9crit=C2=A0:
->> On Mon, Aug 26, 2024 at 10:37:49AM +0200, Christophe Leroy wrote:
->>>
->>>
->>> Le 26/08/2024 =C3=A0 10:07, Jason A. Donenfeld a =C3=A9crit=C2=A0:
->>>> On Thu, Aug 22, 2024 at 09:13:10AM +0200, Christophe Leroy wrote:
->>>>>=20=20=20=20
->>>>> +#define _PAGE_SIZE (1UL << CONFIG_PAGE_SHIFT)
->>>>> +#define _PAGE_MASK (~(_PAGE_SIZE - 1))
->>>>
->>>> If PAGE_SIZE isn't defined at this point, why not just call it PAGE_SI=
-ZE
->>>> instead of _PAGE_SIZE? But if that's the case, why not put the vdso
->>>> definition of PAGE_SIZE into some vdso header included by this file?
->>>
->>> It was working ok on powerpc but on x86 I got:
->>=20
->> Seems like there might be some more fiddling to do, then? Or did you
->> conclude it's impossible?
->
-> Maybe someone who knows x86 in details could helps but after a first=20
-> look I gave up because it looks very x86 specific, indeed that's=20
-> x86/asm/vdso/gettimeofday.h that pulls several x86/asm/ headers , and=20
-> the same type of issue might arise for any new architecture coming in.
+Hi,
 
-Of course :)
+JFYI, I have committed the patch into livepatching.git,
+branch for-6.11/selftests-fixup.
 
-> For me it looked cleaner to just do as commit cffaefd15a8f ("vdso: Use=20
-> CONFIG_PAGE_SHIFT in vdso/datapage.h") and not use PAGE_SIZE at all. But=
-=20
-> I didn't want to directly use (1UL << CONFIG_PAGE_SHIFT) and (~(1UL <<=20
-> (CONFIG_PAGE_SHIFT - 1))) in the code directly hence the new macros with=
-=20
-> a leading underscore to avoid any conflict with existing macros.
+Few nits below :-)
 
-#ifndef PAGE_SIZE
-# define
-#endif
+On Fri 2024-08-23 09:09:26, Ryan B. Sullivan wrote:
+> Changes from v2:
+> 
+> Adds:
+> 	Reported-by: CKI Project <cki-project@redhat.com>
+> 	Closes: https://datawarehouse.cki-project.org/kcidb/tests/redhat:1413102084-x86_64-kernel_upt_28
 
-Perhaps?
+The "changelog" should have been added after the "---" line.
 
-Thanks,
+It allows to send the patch as the main part of the mail (no attachment).
+The lines below the "---" gets automatically removed when the "mail"
+gets applied using "git am".
 
-        tglx
+Best Regards,
+Petr
 
