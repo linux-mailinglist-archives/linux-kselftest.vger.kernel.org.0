@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-16377-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16378-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4ED2960437
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 10:20:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B5B896043A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 10:20:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 654911F23770
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 08:20:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C575F2836CC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 08:20:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20938197A66;
-	Tue, 27 Aug 2024 08:19:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 042E6198E92;
+	Tue, 27 Aug 2024 08:19:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kmMzjxOR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fp3sl96t"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E73D919753F;
-	Tue, 27 Aug 2024 08:19:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8784198E71;
+	Tue, 27 Aug 2024 08:19:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724746789; cv=none; b=C0+VO334+YE/pWUZsaZdzNbl2ggFtasB4XRXWRff2P1GHnU5tCaULU22kjbkhC/ZXQ0i40eCvOcUWEU9HWj2C/qNgKv50ty8Y+8I7OmTiu9VREepi/oZD4AfS9EF6LZS+lSNIHvcZO/EdHe0YflF2hnZqcEisCqtfgWTxsKO7ks=
+	t=1724746790; cv=none; b=ieUmrV0PaZv2SWfijogS9nYxFUqTSU3FFrQyBvujQ58jHgJdhIRSF0llwlra2z2Tz7qMeb7DAncSl7AmOg0OMwfJJ/IgKr0dVz23KltLOksHG5quqPht6IIGHQGCD+o8dgdGgf4VCoazCaMmeZoDwdQbo6nVspa8GdGUBKVsZvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724746789; c=relaxed/simple;
-	bh=6h4iXpQdb/9xGXnZ1+NPHenkSASJkmmzHyqR0jmKxfw=;
+	s=arc-20240116; t=1724746790; c=relaxed/simple;
+	bh=v01kH2TqKohHdf3H7z/Zl0IaXehTrE5i0vq7/wDKAgg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=De9kkwciQPBDQm0J3Q1WtF035as841mLO2Mo9ebrIfo2e0x+4HhZdQjLdnKekQegqtnIL9wNbP4k8Sm+JAHV9kxchmR4gwEONLpU5i1UIvhTCEYsESDRIHRHwPZQ7pne9WE07nFe0GXpqQP0m+r14Qw2K+Sj8J/5gvREViBSVWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kmMzjxOR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18E21C5812B;
-	Tue, 27 Aug 2024 08:19:46 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=sYSfGs3wdBro1/QIXaooUPBymP6INjAtvBsqjIn4NJdS7oA2R0xaHr0XUpYKVzI2v3gsqmn7vtTMtdxyfNiVV73zBT/qaWj+Vnv0QzsijG9usdTkp9jGdmf26Jd1cNllM0b0Nk3SELxYWeReQSzYfnevHL14ETtrc77+Jkf9mTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fp3sl96t; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D662BC58120;
+	Tue, 27 Aug 2024 08:19:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724746788;
-	bh=6h4iXpQdb/9xGXnZ1+NPHenkSASJkmmzHyqR0jmKxfw=;
+	s=k20201202; t=1724746790;
+	bh=v01kH2TqKohHdf3H7z/Zl0IaXehTrE5i0vq7/wDKAgg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=kmMzjxORhHYYIwAcdTu7jJN5RRTtCpuPCHunTuwOisCD1BlvjfMqhA9e5/iP0XhRF
-	 97dOnrk3moDkRCpZizP8oBlhUNiIbYpzzR3UYD/g8ixiaPdfLr7Yim+jaj76CCmowR
-	 gjMNMxZkiM/nEyWRM4qrK7SgCJXgsX23RgoBEgYe17QAs22iMiSiCLV57JMeHspofk
-	 /9gXwlty2SVXKEjBsDpqVysPih+b7BlKp6xjYAZn7CNYaRE3ZZr4j1GEmfyFNfBBwX
-	 B2X4zHI4Rtz6g+zDJziE5iNPYITYWrstxBR+qwUrmKfW6hrT1D5W8qHxi0Pdjkz/Sf
-	 JDoD/A+SUQ2Lw==
-From: bentiss@kernel.org
-Date: Tue, 27 Aug 2024 17:19:29 +0900
-Subject: [PATCH v5 1/4] HID: hidraw: add HIDIOCREVOKE ioctl
+	b=Fp3sl96tgJkcNYzfROyvsJ1hDGtK1W7era15cum/plm6oms9gefzthm5ptHPjltTx
+	 0TkPNv8m6ZZ3C4F8pXiBa/9wfCKHL+XPzZtFyWOtMR21OKxyHmJXS663qecJOCCr0u
+	 +Wa6UHHvr3NhwxvEDi9hJIqGDCzFjkCGqYAp2N/FqeyitpROK+H0sJwwcs8pg0ZW/3
+	 xW5Wzr4nJA14LJDw/hFsEVHidSkAKmIhuG9MxDR8LSL/g63XhHyeIgrob1VwiaQOdW
+	 6W352BPmIYkxKiG49CgdyV7FBKtprdvaTFIPnj0mZk8aMxtSMfWRfCTN+s2NuLabzD
+	 aRbw+wL6yCNQQ==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Date: Tue, 27 Aug 2024 17:19:30 +0900
+Subject: [PATCH v5 2/4] selftests/hid: extract the utility part of
+ hid_bpf.c into its own header
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240827-hidraw-revoke-v5-1-d004a7451aea@kernel.org>
+Message-Id: <20240827-hidraw-revoke-v5-2-d004a7451aea@kernel.org>
 References: <20240827-hidraw-revoke-v5-0-d004a7451aea@kernel.org>
 In-Reply-To: <20240827-hidraw-revoke-v5-0-d004a7451aea@kernel.org>
 To: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>, 
@@ -60,198 +61,927 @@ To: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>,
 Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1724746785; l=5993;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1724746785; l=24710;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=ZvWYoKJHBWlvY55mfDuVglJ2CeO6TPIC/MH+FJqiE54=;
- b=5Lguoj1BIsObYCUlhYPs7Fexvtg0dyCreWz9sisQ/g/NFYSAXAUpAsyiWqsBcWreyOBiSY6wg
- juLurGZWdrrD8gI23bs+aIaqEkZm0AkfYwrKXwyu1PZzJEBtoTjekIt
+ bh=v01kH2TqKohHdf3H7z/Zl0IaXehTrE5i0vq7/wDKAgg=;
+ b=69vbyAvootVCGrDaWs1UndqLQhx6Yuoc45s/DhoR1wKUg2BegXXe+d7WouPYk6VKtgOmUMNsV
+ kjsY+0lAdeXD/jlzP3E2BMz7UIS5t6bAj+air1HgyfNtxc+GEG9weir
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-From: Peter Hutterer <peter.hutterer@who-t.net>
+When adding new tests programs, we need the same mechanics to create
+new virtual devices, and read from their matching hidraw node.
 
-There is a need for userspace applications to open HID devices directly.
-Use-cases include configuration of gaming mice or direct access to
-joystick devices. The latter is currently handled by the uaccess tag in
-systemd, other devices include more custom/local configurations or just
-sudo.
+Extract the common part into its own header so we can easily add new
+tests C-files.
 
-A better approach is what we already have for evdev devices: give the
-application a file descriptor and revoke it when it may no longer access
-that device.
-
-This patch is the hidraw equivalent to the EVIOCREVOKE ioctl, see
-commit c7dc65737c9a ("Input: evdev - add EVIOCREVOKE ioctl") for full
-details.
-
-An MR for systemd-logind has been filed here:
-https://github.com/systemd/systemd/pull/33970
-
-Signed-off-by: Peter Hutterer <peter.hutterer@who-t.net>
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
 ---
 
-First version of the patch:
-https://patchwork.kernel.org/project/linux-input/patch/YmEAPZKDisM2HAsG@quokka/
-
-Changes to v1:
-- add the hidraw_is_revoked and hidraw_open_errno weak functions as
-  suggested by Benjamin
-
-Changes to v2:
-- use __bpf_hook_start/end to silence compiler warnings  (see kernel
-  test bot)
-
-Changes to v3 (bentiss):
-- drop the BPF related changes, the API is not clear ATM, and it's wrong
-  in v2, as ERROR_INJECTION should not be used for normal fmodret.
-- drop hidraw_open_errno() new function. The API seems interesting, but
-  nothing is really ready, so let's not add a useless API for nothing.
-
-Changes to v4:
-none
+new in v5
 ---
- drivers/hid/hidraw.c        | 39 +++++++++++++++++++++++++++++++++++----
- include/linux/hidraw.h      |  1 +
- include/uapi/linux/hidraw.h |  1 +
- 3 files changed, 37 insertions(+), 4 deletions(-)
+ tools/testing/selftests/hid/hid_bpf.c    | 437 +------------------------------
+ tools/testing/selftests/hid/hid_common.h | 436 ++++++++++++++++++++++++++++++
+ 2 files changed, 438 insertions(+), 435 deletions(-)
 
-diff --git a/drivers/hid/hidraw.c b/drivers/hid/hidraw.c
-index 716294e40e8a..c887f48756f4 100644
---- a/drivers/hid/hidraw.c
-+++ b/drivers/hid/hidraw.c
-@@ -38,12 +38,20 @@ static const struct class hidraw_class = {
- static struct hidraw *hidraw_table[HIDRAW_MAX_DEVICES];
- static DECLARE_RWSEM(minors_rwsem);
+diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
+index 75b7b4ef6cfa..d10cf6883683 100644
+--- a/tools/testing/selftests/hid/hid_bpf.c
++++ b/tools/testing/selftests/hid/hid_bpf.c
+@@ -1,93 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0
+-/* Copyright (c) 2022 Red Hat */
++/* Copyright (c) 2022-2024 Red Hat */
+ #include "hid.skel.h"
+-
+-#include "../kselftest_harness.h"
+-
++#include "hid_common.h"
+ #include <bpf/bpf.h>
+-#include <fcntl.h>
+-#include <fnmatch.h>
+-#include <dirent.h>
+-#include <poll.h>
+-#include <pthread.h>
+-#include <stdbool.h>
+-#include <linux/hidraw.h>
+-#include <linux/uhid.h>
+-
+-#define SHOW_UHID_DEBUG 0
+-
+-#define min(a, b) \
+-	({ __typeof__(a) _a = (a); \
+-	__typeof__(b) _b = (b); \
+-	_a < _b ? _a : _b; })
+-
+-static unsigned char rdesc[] = {
+-	0x06, 0x00, 0xff,	/* Usage Page (Vendor Defined Page 1) */
+-	0x09, 0x21,		/* Usage (Vendor Usage 0x21) */
+-	0xa1, 0x01,		/* COLLECTION (Application) */
+-	0x09, 0x01,			/* Usage (Vendor Usage 0x01) */
+-	0xa1, 0x00,			/* COLLECTION (Physical) */
+-	0x85, 0x02,				/* REPORT_ID (2) */
+-	0x19, 0x01,				/* USAGE_MINIMUM (1) */
+-	0x29, 0x08,				/* USAGE_MAXIMUM (3) */
+-	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
+-	0x25, 0xff,				/* LOGICAL_MAXIMUM (255) */
+-	0x95, 0x08,				/* REPORT_COUNT (8) */
+-	0x75, 0x08,				/* REPORT_SIZE (8) */
+-	0x81, 0x02,				/* INPUT (Data,Var,Abs) */
+-	0xc0,				/* END_COLLECTION */
+-	0x09, 0x01,			/* Usage (Vendor Usage 0x01) */
+-	0xa1, 0x00,			/* COLLECTION (Physical) */
+-	0x85, 0x01,				/* REPORT_ID (1) */
+-	0x06, 0x00, 0xff,			/* Usage Page (Vendor Defined Page 1) */
+-	0x19, 0x01,				/* USAGE_MINIMUM (1) */
+-	0x29, 0x03,				/* USAGE_MAXIMUM (3) */
+-	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
+-	0x25, 0x01,				/* LOGICAL_MAXIMUM (1) */
+-	0x95, 0x03,				/* REPORT_COUNT (3) */
+-	0x75, 0x01,				/* REPORT_SIZE (1) */
+-	0x81, 0x02,				/* INPUT (Data,Var,Abs) */
+-	0x95, 0x01,				/* REPORT_COUNT (1) */
+-	0x75, 0x05,				/* REPORT_SIZE (5) */
+-	0x81, 0x01,				/* INPUT (Cnst,Var,Abs) */
+-	0x05, 0x01,				/* USAGE_PAGE (Generic Desktop) */
+-	0x09, 0x30,				/* USAGE (X) */
+-	0x09, 0x31,				/* USAGE (Y) */
+-	0x15, 0x81,				/* LOGICAL_MINIMUM (-127) */
+-	0x25, 0x7f,				/* LOGICAL_MAXIMUM (127) */
+-	0x75, 0x10,				/* REPORT_SIZE (16) */
+-	0x95, 0x02,				/* REPORT_COUNT (2) */
+-	0x81, 0x06,				/* INPUT (Data,Var,Rel) */
+-
+-	0x06, 0x00, 0xff,			/* Usage Page (Vendor Defined Page 1) */
+-	0x19, 0x01,				/* USAGE_MINIMUM (1) */
+-	0x29, 0x03,				/* USAGE_MAXIMUM (3) */
+-	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
+-	0x25, 0x01,				/* LOGICAL_MAXIMUM (1) */
+-	0x95, 0x03,				/* REPORT_COUNT (3) */
+-	0x75, 0x01,				/* REPORT_SIZE (1) */
+-	0x91, 0x02,				/* Output (Data,Var,Abs) */
+-	0x95, 0x01,				/* REPORT_COUNT (1) */
+-	0x75, 0x05,				/* REPORT_SIZE (5) */
+-	0x91, 0x01,				/* Output (Cnst,Var,Abs) */
+-
+-	0x06, 0x00, 0xff,			/* Usage Page (Vendor Defined Page 1) */
+-	0x19, 0x06,				/* USAGE_MINIMUM (6) */
+-	0x29, 0x08,				/* USAGE_MAXIMUM (8) */
+-	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
+-	0x25, 0x01,				/* LOGICAL_MAXIMUM (1) */
+-	0x95, 0x03,				/* REPORT_COUNT (3) */
+-	0x75, 0x01,				/* REPORT_SIZE (1) */
+-	0xb1, 0x02,				/* Feature (Data,Var,Abs) */
+-	0x95, 0x01,				/* REPORT_COUNT (1) */
+-	0x75, 0x05,				/* REPORT_SIZE (5) */
+-	0x91, 0x01,				/* Output (Cnst,Var,Abs) */
+-
+-	0xc0,				/* END_COLLECTION */
+-	0xc0,			/* END_COLLECTION */
+-};
+-
+-static __u8 feature_data[] = { 1, 2 };
  
-+static inline bool hidraw_is_revoked(struct hidraw_list *list)
+ struct attach_prog_args {
+ 	int prog_fd;
+@@ -105,354 +20,6 @@ struct hid_hw_request_syscall_args {
+ 	__u8 request_type;
+ };
+ 
+-#define ASSERT_OK(data) ASSERT_FALSE(data)
+-#define ASSERT_OK_PTR(ptr) ASSERT_NE(NULL, ptr)
+-
+-#define UHID_LOG(fmt, ...) do { \
+-	if (SHOW_UHID_DEBUG) \
+-		TH_LOG(fmt, ##__VA_ARGS__); \
+-} while (0)
+-
+-static pthread_mutex_t uhid_started_mtx = PTHREAD_MUTEX_INITIALIZER;
+-static pthread_cond_t uhid_started = PTHREAD_COND_INITIALIZER;
+-
+-static pthread_mutex_t uhid_output_mtx = PTHREAD_MUTEX_INITIALIZER;
+-static pthread_cond_t uhid_output_cond = PTHREAD_COND_INITIALIZER;
+-static unsigned char output_report[10];
+-
+-/* no need to protect uhid_stopped, only one thread accesses it */
+-static bool uhid_stopped;
+-
+-static int uhid_write(struct __test_metadata *_metadata, int fd, const struct uhid_event *ev)
+-{
+-	ssize_t ret;
+-
+-	ret = write(fd, ev, sizeof(*ev));
+-	if (ret < 0) {
+-		TH_LOG("Cannot write to uhid: %m");
+-		return -errno;
+-	} else if (ret != sizeof(*ev)) {
+-		TH_LOG("Wrong size written to uhid: %zd != %zu",
+-			ret, sizeof(ev));
+-		return -EFAULT;
+-	} else {
+-		return 0;
+-	}
+-}
+-
+-static int uhid_create(struct __test_metadata *_metadata, int fd, int rand_nb)
+-{
+-	struct uhid_event ev;
+-	char buf[25];
+-
+-	sprintf(buf, "test-uhid-device-%d", rand_nb);
+-
+-	memset(&ev, 0, sizeof(ev));
+-	ev.type = UHID_CREATE;
+-	strcpy((char *)ev.u.create.name, buf);
+-	ev.u.create.rd_data = rdesc;
+-	ev.u.create.rd_size = sizeof(rdesc);
+-	ev.u.create.bus = BUS_USB;
+-	ev.u.create.vendor = 0x0001;
+-	ev.u.create.product = 0x0a37;
+-	ev.u.create.version = 0;
+-	ev.u.create.country = 0;
+-
+-	sprintf(buf, "%d", rand_nb);
+-	strcpy((char *)ev.u.create.phys, buf);
+-
+-	return uhid_write(_metadata, fd, &ev);
+-}
+-
+-static void uhid_destroy(struct __test_metadata *_metadata, int fd)
+-{
+-	struct uhid_event ev;
+-
+-	memset(&ev, 0, sizeof(ev));
+-	ev.type = UHID_DESTROY;
+-
+-	uhid_write(_metadata, fd, &ev);
+-}
+-
+-static int uhid_event(struct __test_metadata *_metadata, int fd)
+-{
+-	struct uhid_event ev, answer;
+-	ssize_t ret;
+-
+-	memset(&ev, 0, sizeof(ev));
+-	ret = read(fd, &ev, sizeof(ev));
+-	if (ret == 0) {
+-		UHID_LOG("Read HUP on uhid-cdev");
+-		return -EFAULT;
+-	} else if (ret < 0) {
+-		UHID_LOG("Cannot read uhid-cdev: %m");
+-		return -errno;
+-	} else if (ret != sizeof(ev)) {
+-		UHID_LOG("Invalid size read from uhid-dev: %zd != %zu",
+-			ret, sizeof(ev));
+-		return -EFAULT;
+-	}
+-
+-	switch (ev.type) {
+-	case UHID_START:
+-		pthread_mutex_lock(&uhid_started_mtx);
+-		pthread_cond_signal(&uhid_started);
+-		pthread_mutex_unlock(&uhid_started_mtx);
+-
+-		UHID_LOG("UHID_START from uhid-dev");
+-		break;
+-	case UHID_STOP:
+-		uhid_stopped = true;
+-
+-		UHID_LOG("UHID_STOP from uhid-dev");
+-		break;
+-	case UHID_OPEN:
+-		UHID_LOG("UHID_OPEN from uhid-dev");
+-		break;
+-	case UHID_CLOSE:
+-		UHID_LOG("UHID_CLOSE from uhid-dev");
+-		break;
+-	case UHID_OUTPUT:
+-		UHID_LOG("UHID_OUTPUT from uhid-dev");
+-
+-		pthread_mutex_lock(&uhid_output_mtx);
+-		memcpy(output_report,
+-		       ev.u.output.data,
+-		       min(ev.u.output.size, sizeof(output_report)));
+-		pthread_cond_signal(&uhid_output_cond);
+-		pthread_mutex_unlock(&uhid_output_mtx);
+-		break;
+-	case UHID_GET_REPORT:
+-		UHID_LOG("UHID_GET_REPORT from uhid-dev");
+-
+-		answer.type = UHID_GET_REPORT_REPLY;
+-		answer.u.get_report_reply.id = ev.u.get_report.id;
+-		answer.u.get_report_reply.err = ev.u.get_report.rnum == 1 ? 0 : -EIO;
+-		answer.u.get_report_reply.size = sizeof(feature_data);
+-		memcpy(answer.u.get_report_reply.data, feature_data, sizeof(feature_data));
+-
+-		uhid_write(_metadata, fd, &answer);
+-
+-		break;
+-	case UHID_SET_REPORT:
+-		UHID_LOG("UHID_SET_REPORT from uhid-dev");
+-		break;
+-	default:
+-		TH_LOG("Invalid event from uhid-dev: %u", ev.type);
+-	}
+-
+-	return 0;
+-}
+-
+-struct uhid_thread_args {
+-	int fd;
+-	struct __test_metadata *_metadata;
+-};
+-static void *uhid_read_events_thread(void *arg)
+-{
+-	struct uhid_thread_args *args = (struct uhid_thread_args *)arg;
+-	struct __test_metadata *_metadata = args->_metadata;
+-	struct pollfd pfds[1];
+-	int fd = args->fd;
+-	int ret = 0;
+-
+-	pfds[0].fd = fd;
+-	pfds[0].events = POLLIN;
+-
+-	uhid_stopped = false;
+-
+-	while (!uhid_stopped) {
+-		ret = poll(pfds, 1, 100);
+-		if (ret < 0) {
+-			TH_LOG("Cannot poll for fds: %m");
+-			break;
+-		}
+-		if (pfds[0].revents & POLLIN) {
+-			ret = uhid_event(_metadata, fd);
+-			if (ret)
+-				break;
+-		}
+-	}
+-
+-	return (void *)(long)ret;
+-}
+-
+-static int uhid_start_listener(struct __test_metadata *_metadata, pthread_t *tid, int uhid_fd)
+-{
+-	struct uhid_thread_args args = {
+-		.fd = uhid_fd,
+-		._metadata = _metadata,
+-	};
+-	int err;
+-
+-	pthread_mutex_lock(&uhid_started_mtx);
+-	err = pthread_create(tid, NULL, uhid_read_events_thread, (void *)&args);
+-	ASSERT_EQ(0, err) {
+-		TH_LOG("Could not start the uhid thread: %d", err);
+-		pthread_mutex_unlock(&uhid_started_mtx);
+-		close(uhid_fd);
+-		return -EIO;
+-	}
+-	pthread_cond_wait(&uhid_started, &uhid_started_mtx);
+-	pthread_mutex_unlock(&uhid_started_mtx);
+-
+-	return 0;
+-}
+-
+-static int uhid_send_event(struct __test_metadata *_metadata, int fd, __u8 *buf, size_t size)
+-{
+-	struct uhid_event ev;
+-
+-	if (size > sizeof(ev.u.input.data))
+-		return -E2BIG;
+-
+-	memset(&ev, 0, sizeof(ev));
+-	ev.type = UHID_INPUT2;
+-	ev.u.input2.size = size;
+-
+-	memcpy(ev.u.input2.data, buf, size);
+-
+-	return uhid_write(_metadata, fd, &ev);
+-}
+-
+-static int setup_uhid(struct __test_metadata *_metadata, int rand_nb)
+-{
+-	int fd;
+-	const char *path = "/dev/uhid";
+-	int ret;
+-
+-	fd = open(path, O_RDWR | O_CLOEXEC);
+-	ASSERT_GE(fd, 0) TH_LOG("open uhid-cdev failed; %d", fd);
+-
+-	ret = uhid_create(_metadata, fd, rand_nb);
+-	ASSERT_EQ(0, ret) {
+-		TH_LOG("create uhid device failed: %d", ret);
+-		close(fd);
+-	}
+-
+-	return fd;
+-}
+-
+-static bool match_sysfs_device(int dev_id, const char *workdir, struct dirent *dir)
+-{
+-	const char *target = "0003:0001:0A37.*";
+-	char phys[512];
+-	char uevent[1024];
+-	char temp[512];
+-	int fd, nread;
+-	bool found = false;
+-
+-	if (fnmatch(target, dir->d_name, 0))
+-		return false;
+-
+-	/* we found the correct VID/PID, now check for phys */
+-	sprintf(uevent, "%s/%s/uevent", workdir, dir->d_name);
+-
+-	fd = open(uevent, O_RDONLY | O_NONBLOCK);
+-	if (fd < 0)
+-		return false;
+-
+-	sprintf(phys, "PHYS=%d", dev_id);
+-
+-	nread = read(fd, temp, ARRAY_SIZE(temp));
+-	if (nread > 0 && (strstr(temp, phys)) != NULL)
+-		found = true;
+-
+-	close(fd);
+-
+-	return found;
+-}
+-
+-static int get_hid_id(int dev_id)
+-{
+-	const char *workdir = "/sys/devices/virtual/misc/uhid";
+-	const char *str_id;
+-	DIR *d;
+-	struct dirent *dir;
+-	int found = -1, attempts = 3;
+-
+-	/* it would be nice to be able to use nftw, but the no_alu32 target doesn't support it */
+-
+-	while (found < 0 && attempts > 0) {
+-		attempts--;
+-		d = opendir(workdir);
+-		if (d) {
+-			while ((dir = readdir(d)) != NULL) {
+-				if (!match_sysfs_device(dev_id, workdir, dir))
+-					continue;
+-
+-				str_id = dir->d_name + sizeof("0003:0001:0A37.");
+-				found = (int)strtol(str_id, NULL, 16);
+-
+-				break;
+-			}
+-			closedir(d);
+-		}
+-		if (found < 0)
+-			usleep(100000);
+-	}
+-
+-	return found;
+-}
+-
+-static int get_hidraw(int dev_id)
+-{
+-	const char *workdir = "/sys/devices/virtual/misc/uhid";
+-	char sysfs[1024];
+-	DIR *d, *subd;
+-	struct dirent *dir, *subdir;
+-	int i, found = -1;
+-
+-	/* retry 5 times in case the system is loaded */
+-	for (i = 5; i > 0; i--) {
+-		usleep(10);
+-		d = opendir(workdir);
+-
+-		if (!d)
+-			continue;
+-
+-		while ((dir = readdir(d)) != NULL) {
+-			if (!match_sysfs_device(dev_id, workdir, dir))
+-				continue;
+-
+-			sprintf(sysfs, "%s/%s/hidraw", workdir, dir->d_name);
+-
+-			subd = opendir(sysfs);
+-			if (!subd)
+-				continue;
+-
+-			while ((subdir = readdir(subd)) != NULL) {
+-				if (fnmatch("hidraw*", subdir->d_name, 0))
+-					continue;
+-
+-				found = atoi(subdir->d_name + strlen("hidraw"));
+-			}
+-
+-			closedir(subd);
+-
+-			if (found > 0)
+-				break;
+-		}
+-		closedir(d);
+-	}
+-
+-	return found;
+-}
+-
+-static int open_hidraw(int dev_id)
+-{
+-	int hidraw_number;
+-	char hidraw_path[64] = { 0 };
+-
+-	hidraw_number = get_hidraw(dev_id);
+-	if (hidraw_number < 0)
+-		return hidraw_number;
+-
+-	/* open hidraw node to check the other side of the pipe */
+-	sprintf(hidraw_path, "/dev/hidraw%d", hidraw_number);
+-	return open(hidraw_path, O_RDWR | O_NONBLOCK);
+-}
+-
+ FIXTURE(hid_bpf) {
+ 	int dev_id;
+ 	int uhid_fd;
+diff --git a/tools/testing/selftests/hid/hid_common.h b/tools/testing/selftests/hid/hid_common.h
+new file mode 100644
+index 000000000000..f151f151a1ed
+--- /dev/null
++++ b/tools/testing/selftests/hid/hid_common.h
+@@ -0,0 +1,436 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/* Copyright (c) 2022-2024 Red Hat */
++
++#include "../kselftest_harness.h"
++
++#include <fcntl.h>
++#include <fnmatch.h>
++#include <dirent.h>
++#include <poll.h>
++#include <pthread.h>
++#include <stdbool.h>
++#include <linux/hidraw.h>
++#include <linux/uhid.h>
++
++#define SHOW_UHID_DEBUG 0
++
++#define min(a, b) \
++	({ __typeof__(a) _a = (a); \
++	__typeof__(b) _b = (b); \
++	_a < _b ? _a : _b; })
++
++static unsigned char rdesc[] = {
++	0x06, 0x00, 0xff,	/* Usage Page (Vendor Defined Page 1) */
++	0x09, 0x21,		/* Usage (Vendor Usage 0x21) */
++	0xa1, 0x01,		/* COLLECTION (Application) */
++	0x09, 0x01,			/* Usage (Vendor Usage 0x01) */
++	0xa1, 0x00,			/* COLLECTION (Physical) */
++	0x85, 0x02,				/* REPORT_ID (2) */
++	0x19, 0x01,				/* USAGE_MINIMUM (1) */
++	0x29, 0x08,				/* USAGE_MAXIMUM (3) */
++	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
++	0x25, 0xff,				/* LOGICAL_MAXIMUM (255) */
++	0x95, 0x08,				/* REPORT_COUNT (8) */
++	0x75, 0x08,				/* REPORT_SIZE (8) */
++	0x81, 0x02,				/* INPUT (Data,Var,Abs) */
++	0xc0,				/* END_COLLECTION */
++	0x09, 0x01,			/* Usage (Vendor Usage 0x01) */
++	0xa1, 0x00,			/* COLLECTION (Physical) */
++	0x85, 0x01,				/* REPORT_ID (1) */
++	0x06, 0x00, 0xff,			/* Usage Page (Vendor Defined Page 1) */
++	0x19, 0x01,				/* USAGE_MINIMUM (1) */
++	0x29, 0x03,				/* USAGE_MAXIMUM (3) */
++	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
++	0x25, 0x01,				/* LOGICAL_MAXIMUM (1) */
++	0x95, 0x03,				/* REPORT_COUNT (3) */
++	0x75, 0x01,				/* REPORT_SIZE (1) */
++	0x81, 0x02,				/* INPUT (Data,Var,Abs) */
++	0x95, 0x01,				/* REPORT_COUNT (1) */
++	0x75, 0x05,				/* REPORT_SIZE (5) */
++	0x81, 0x01,				/* INPUT (Cnst,Var,Abs) */
++	0x05, 0x01,				/* USAGE_PAGE (Generic Desktop) */
++	0x09, 0x30,				/* USAGE (X) */
++	0x09, 0x31,				/* USAGE (Y) */
++	0x15, 0x81,				/* LOGICAL_MINIMUM (-127) */
++	0x25, 0x7f,				/* LOGICAL_MAXIMUM (127) */
++	0x75, 0x10,				/* REPORT_SIZE (16) */
++	0x95, 0x02,				/* REPORT_COUNT (2) */
++	0x81, 0x06,				/* INPUT (Data,Var,Rel) */
++
++	0x06, 0x00, 0xff,			/* Usage Page (Vendor Defined Page 1) */
++	0x19, 0x01,				/* USAGE_MINIMUM (1) */
++	0x29, 0x03,				/* USAGE_MAXIMUM (3) */
++	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
++	0x25, 0x01,				/* LOGICAL_MAXIMUM (1) */
++	0x95, 0x03,				/* REPORT_COUNT (3) */
++	0x75, 0x01,				/* REPORT_SIZE (1) */
++	0x91, 0x02,				/* Output (Data,Var,Abs) */
++	0x95, 0x01,				/* REPORT_COUNT (1) */
++	0x75, 0x05,				/* REPORT_SIZE (5) */
++	0x91, 0x01,				/* Output (Cnst,Var,Abs) */
++
++	0x06, 0x00, 0xff,			/* Usage Page (Vendor Defined Page 1) */
++	0x19, 0x06,				/* USAGE_MINIMUM (6) */
++	0x29, 0x08,				/* USAGE_MAXIMUM (8) */
++	0x15, 0x00,				/* LOGICAL_MINIMUM (0) */
++	0x25, 0x01,				/* LOGICAL_MAXIMUM (1) */
++	0x95, 0x03,				/* REPORT_COUNT (3) */
++	0x75, 0x01,				/* REPORT_SIZE (1) */
++	0xb1, 0x02,				/* Feature (Data,Var,Abs) */
++	0x95, 0x01,				/* REPORT_COUNT (1) */
++	0x75, 0x05,				/* REPORT_SIZE (5) */
++	0x91, 0x01,				/* Output (Cnst,Var,Abs) */
++
++	0xc0,				/* END_COLLECTION */
++	0xc0,			/* END_COLLECTION */
++};
++
++static __u8 feature_data[] = { 1, 2 };
++
++#define ASSERT_OK(data) ASSERT_FALSE(data)
++#define ASSERT_OK_PTR(ptr) ASSERT_NE(NULL, ptr)
++
++#define UHID_LOG(fmt, ...) do { \
++	if (SHOW_UHID_DEBUG) \
++		TH_LOG(fmt, ##__VA_ARGS__); \
++} while (0)
++
++static pthread_mutex_t uhid_started_mtx = PTHREAD_MUTEX_INITIALIZER;
++static pthread_cond_t uhid_started = PTHREAD_COND_INITIALIZER;
++
++static pthread_mutex_t uhid_output_mtx = PTHREAD_MUTEX_INITIALIZER;
++static pthread_cond_t uhid_output_cond = PTHREAD_COND_INITIALIZER;
++static unsigned char output_report[10];
++
++/* no need to protect uhid_stopped, only one thread accesses it */
++static bool uhid_stopped;
++
++static int uhid_write(struct __test_metadata *_metadata, int fd, const struct uhid_event *ev)
 +{
-+	return list->revoked;
++	ssize_t ret;
++
++	ret = write(fd, ev, sizeof(*ev));
++	if (ret < 0) {
++		TH_LOG("Cannot write to uhid: %m");
++		return -errno;
++	} else if (ret != sizeof(*ev)) {
++		TH_LOG("Wrong size written to uhid: %zd != %zu",
++			ret, sizeof(ev));
++		return -EFAULT;
++	} else {
++		return 0;
++	}
 +}
 +
- static ssize_t hidraw_read(struct file *file, char __user *buffer, size_t count, loff_t *ppos)
- {
- 	struct hidraw_list *list = file->private_data;
- 	int ret = 0, len;
- 	DECLARE_WAITQUEUE(wait, current);
- 
-+	if (hidraw_is_revoked(list))
-+		return -ENODEV;
-+
- 	mutex_lock(&list->read_mutex);
- 
- 	while (ret == 0) {
-@@ -161,9 +169,13 @@ static ssize_t hidraw_send_report(struct file *file, const char __user *buffer,
- 
- static ssize_t hidraw_write(struct file *file, const char __user *buffer, size_t count, loff_t *ppos)
- {
-+	struct hidraw_list *list = file->private_data;
- 	ssize_t ret;
- 	down_read(&minors_rwsem);
--	ret = hidraw_send_report(file, buffer, count, HID_OUTPUT_REPORT);
-+	if (hidraw_is_revoked(list))
-+		ret = -ENODEV;
-+	else
-+		ret = hidraw_send_report(file, buffer, count, HID_OUTPUT_REPORT);
- 	up_read(&minors_rwsem);
- 	return ret;
- }
-@@ -256,7 +268,7 @@ static __poll_t hidraw_poll(struct file *file, poll_table *wait)
- 	poll_wait(file, &list->hidraw->wait, wait);
- 	if (list->head != list->tail)
- 		mask |= EPOLLIN | EPOLLRDNORM;
--	if (!list->hidraw->exist)
-+	if (!list->hidraw->exist || hidraw_is_revoked(list))
- 		mask |= EPOLLERR | EPOLLHUP;
- 	return mask;
- }
-@@ -320,6 +332,9 @@ static int hidraw_fasync(int fd, struct file *file, int on)
- {
- 	struct hidraw_list *list = file->private_data;
- 
-+	if (hidraw_is_revoked(list))
-+		return -ENODEV;
-+
- 	return fasync_helper(fd, file, on, &list->fasync);
- }
- 
-@@ -372,6 +387,13 @@ static int hidraw_release(struct inode * inode, struct file * file)
- 	return 0;
- }
- 
-+static int hidraw_revoke(struct hidraw_list *list)
++static int uhid_create(struct __test_metadata *_metadata, int fd, int rand_nb)
 +{
-+	list->revoked = true;
++	struct uhid_event ev;
++	char buf[25];
++
++	sprintf(buf, "test-uhid-device-%d", rand_nb);
++
++	memset(&ev, 0, sizeof(ev));
++	ev.type = UHID_CREATE;
++	strcpy((char *)ev.u.create.name, buf);
++	ev.u.create.rd_data = rdesc;
++	ev.u.create.rd_size = sizeof(rdesc);
++	ev.u.create.bus = BUS_USB;
++	ev.u.create.vendor = 0x0001;
++	ev.u.create.product = 0x0a37;
++	ev.u.create.version = 0;
++	ev.u.create.country = 0;
++
++	sprintf(buf, "%d", rand_nb);
++	strcpy((char *)ev.u.create.phys, buf);
++
++	return uhid_write(_metadata, fd, &ev);
++}
++
++static void uhid_destroy(struct __test_metadata *_metadata, int fd)
++{
++	struct uhid_event ev;
++
++	memset(&ev, 0, sizeof(ev));
++	ev.type = UHID_DESTROY;
++
++	uhid_write(_metadata, fd, &ev);
++}
++
++static int uhid_event(struct __test_metadata *_metadata, int fd)
++{
++	struct uhid_event ev, answer;
++	ssize_t ret;
++
++	memset(&ev, 0, sizeof(ev));
++	ret = read(fd, &ev, sizeof(ev));
++	if (ret == 0) {
++		UHID_LOG("Read HUP on uhid-cdev");
++		return -EFAULT;
++	} else if (ret < 0) {
++		UHID_LOG("Cannot read uhid-cdev: %m");
++		return -errno;
++	} else if (ret != sizeof(ev)) {
++		UHID_LOG("Invalid size read from uhid-dev: %zd != %zu",
++			ret, sizeof(ev));
++		return -EFAULT;
++	}
++
++	switch (ev.type) {
++	case UHID_START:
++		pthread_mutex_lock(&uhid_started_mtx);
++		pthread_cond_signal(&uhid_started);
++		pthread_mutex_unlock(&uhid_started_mtx);
++
++		UHID_LOG("UHID_START from uhid-dev");
++		break;
++	case UHID_STOP:
++		uhid_stopped = true;
++
++		UHID_LOG("UHID_STOP from uhid-dev");
++		break;
++	case UHID_OPEN:
++		UHID_LOG("UHID_OPEN from uhid-dev");
++		break;
++	case UHID_CLOSE:
++		UHID_LOG("UHID_CLOSE from uhid-dev");
++		break;
++	case UHID_OUTPUT:
++		UHID_LOG("UHID_OUTPUT from uhid-dev");
++
++		pthread_mutex_lock(&uhid_output_mtx);
++		memcpy(output_report,
++		       ev.u.output.data,
++		       min(ev.u.output.size, sizeof(output_report)));
++		pthread_cond_signal(&uhid_output_cond);
++		pthread_mutex_unlock(&uhid_output_mtx);
++		break;
++	case UHID_GET_REPORT:
++		UHID_LOG("UHID_GET_REPORT from uhid-dev");
++
++		answer.type = UHID_GET_REPORT_REPLY;
++		answer.u.get_report_reply.id = ev.u.get_report.id;
++		answer.u.get_report_reply.err = ev.u.get_report.rnum == 1 ? 0 : -EIO;
++		answer.u.get_report_reply.size = sizeof(feature_data);
++		memcpy(answer.u.get_report_reply.data, feature_data, sizeof(feature_data));
++
++		uhid_write(_metadata, fd, &answer);
++
++		break;
++	case UHID_SET_REPORT:
++		UHID_LOG("UHID_SET_REPORT from uhid-dev");
++		break;
++	default:
++		TH_LOG("Invalid event from uhid-dev: %u", ev.type);
++	}
 +
 +	return 0;
 +}
 +
- static long hidraw_ioctl(struct file *file, unsigned int cmd,
- 							unsigned long arg)
- {
-@@ -379,11 +401,12 @@ static long hidraw_ioctl(struct file *file, unsigned int cmd,
- 	unsigned int minor = iminor(inode);
- 	long ret = 0;
- 	struct hidraw *dev;
-+	struct hidraw_list *list = file->private_data;
- 	void __user *user_arg = (void __user*) arg;
- 
- 	down_read(&minors_rwsem);
- 	dev = hidraw_table[minor];
--	if (!dev || !dev->exist) {
-+	if (!dev || !dev->exist || hidraw_is_revoked(list)) {
- 		ret = -ENODEV;
- 		goto out;
- 	}
-@@ -421,6 +444,14 @@ static long hidraw_ioctl(struct file *file, unsigned int cmd,
- 					ret = -EFAULT;
- 				break;
- 			}
-+		case HIDIOCREVOKE:
-+			{
-+				if (user_arg)
-+					ret = -EINVAL;
-+				else
-+					ret = hidraw_revoke(list);
++struct uhid_thread_args {
++	int fd;
++	struct __test_metadata *_metadata;
++};
++static void *uhid_read_events_thread(void *arg)
++{
++	struct uhid_thread_args *args = (struct uhid_thread_args *)arg;
++	struct __test_metadata *_metadata = args->_metadata;
++	struct pollfd pfds[1];
++	int fd = args->fd;
++	int ret = 0;
++
++	pfds[0].fd = fd;
++	pfds[0].events = POLLIN;
++
++	uhid_stopped = false;
++
++	while (!uhid_stopped) {
++		ret = poll(pfds, 1, 100);
++		if (ret < 0) {
++			TH_LOG("Cannot poll for fds: %m");
++			break;
++		}
++		if (pfds[0].revents & POLLIN) {
++			ret = uhid_event(_metadata, fd);
++			if (ret)
++				break;
++		}
++	}
++
++	return (void *)(long)ret;
++}
++
++static int uhid_start_listener(struct __test_metadata *_metadata, pthread_t *tid, int uhid_fd)
++{
++	struct uhid_thread_args args = {
++		.fd = uhid_fd,
++		._metadata = _metadata,
++	};
++	int err;
++
++	pthread_mutex_lock(&uhid_started_mtx);
++	err = pthread_create(tid, NULL, uhid_read_events_thread, (void *)&args);
++	ASSERT_EQ(0, err) {
++		TH_LOG("Could not start the uhid thread: %d", err);
++		pthread_mutex_unlock(&uhid_started_mtx);
++		close(uhid_fd);
++		return -EIO;
++	}
++	pthread_cond_wait(&uhid_started, &uhid_started_mtx);
++	pthread_mutex_unlock(&uhid_started_mtx);
++
++	return 0;
++}
++
++static int uhid_send_event(struct __test_metadata *_metadata, int fd, __u8 *buf, size_t size)
++{
++	struct uhid_event ev;
++
++	if (size > sizeof(ev.u.input.data))
++		return -E2BIG;
++
++	memset(&ev, 0, sizeof(ev));
++	ev.type = UHID_INPUT2;
++	ev.u.input2.size = size;
++
++	memcpy(ev.u.input2.data, buf, size);
++
++	return uhid_write(_metadata, fd, &ev);
++}
++
++static int setup_uhid(struct __test_metadata *_metadata, int rand_nb)
++{
++	int fd;
++	const char *path = "/dev/uhid";
++	int ret;
++
++	fd = open(path, O_RDWR | O_CLOEXEC);
++	ASSERT_GE(fd, 0) TH_LOG("open uhid-cdev failed; %d", fd);
++
++	ret = uhid_create(_metadata, fd, rand_nb);
++	ASSERT_EQ(0, ret) {
++		TH_LOG("create uhid device failed: %d", ret);
++		close(fd);
++	}
++
++	return fd;
++}
++
++static bool match_sysfs_device(int dev_id, const char *workdir, struct dirent *dir)
++{
++	const char *target = "0003:0001:0A37.*";
++	char phys[512];
++	char uevent[1024];
++	char temp[512];
++	int fd, nread;
++	bool found = false;
++
++	if (fnmatch(target, dir->d_name, 0))
++		return false;
++
++	/* we found the correct VID/PID, now check for phys */
++	sprintf(uevent, "%s/%s/uevent", workdir, dir->d_name);
++
++	fd = open(uevent, O_RDONLY | O_NONBLOCK);
++	if (fd < 0)
++		return false;
++
++	sprintf(phys, "PHYS=%d", dev_id);
++
++	nread = read(fd, temp, ARRAY_SIZE(temp));
++	if (nread > 0 && (strstr(temp, phys)) != NULL)
++		found = true;
++
++	close(fd);
++
++	return found;
++}
++
++static int get_hid_id(int dev_id)
++{
++	const char *workdir = "/sys/devices/virtual/misc/uhid";
++	const char *str_id;
++	DIR *d;
++	struct dirent *dir;
++	int found = -1, attempts = 3;
++
++	/* it would be nice to be able to use nftw, but the no_alu32 target doesn't support it */
++
++	while (found < 0 && attempts > 0) {
++		attempts--;
++		d = opendir(workdir);
++		if (d) {
++			while ((dir = readdir(d)) != NULL) {
++				if (!match_sysfs_device(dev_id, workdir, dir))
++					continue;
++
++				str_id = dir->d_name + sizeof("0003:0001:0A37.");
++				found = (int)strtol(str_id, NULL, 16);
++
 +				break;
 +			}
- 		default:
- 			{
- 				struct hid_device *hid = dev->hid;
-@@ -527,7 +558,7 @@ int hidraw_report_event(struct hid_device *hid, u8 *data, int len)
- 	list_for_each_entry(list, &dev->list, node) {
- 		int new_head = (list->head + 1) & (HIDRAW_BUFFER_SIZE - 1);
- 
--		if (new_head == list->tail)
-+		if (hidraw_is_revoked(list) || new_head == list->tail)
- 			continue;
- 
- 		if (!(list->buffer[list->head].value = kmemdup(data, len, GFP_ATOMIC))) {
-diff --git a/include/linux/hidraw.h b/include/linux/hidraw.h
-index cd67f4ca5599..18fd30a288de 100644
---- a/include/linux/hidraw.h
-+++ b/include/linux/hidraw.h
-@@ -32,6 +32,7 @@ struct hidraw_list {
- 	struct hidraw *hidraw;
- 	struct list_head node;
- 	struct mutex read_mutex;
-+	bool revoked;
- };
- 
- #ifdef CONFIG_HIDRAW
-diff --git a/include/uapi/linux/hidraw.h b/include/uapi/linux/hidraw.h
-index 33ebad81720a..d5ee269864e0 100644
---- a/include/uapi/linux/hidraw.h
-+++ b/include/uapi/linux/hidraw.h
-@@ -46,6 +46,7 @@ struct hidraw_devinfo {
- /* The first byte of SOUTPUT and GOUTPUT is the report number */
- #define HIDIOCSOUTPUT(len)    _IOC(_IOC_WRITE|_IOC_READ, 'H', 0x0B, len)
- #define HIDIOCGOUTPUT(len)    _IOC(_IOC_WRITE|_IOC_READ, 'H', 0x0C, len)
-+#define HIDIOCREVOKE	      _IOW('H', 0x0D, int) /* Revoke device access */
- 
- #define HIDRAW_FIRST_MINOR 0
- #define HIDRAW_MAX_DEVICES 64
++			closedir(d);
++		}
++		if (found < 0)
++			usleep(100000);
++	}
++
++	return found;
++}
++
++static int get_hidraw(int dev_id)
++{
++	const char *workdir = "/sys/devices/virtual/misc/uhid";
++	char sysfs[1024];
++	DIR *d, *subd;
++	struct dirent *dir, *subdir;
++	int i, found = -1;
++
++	/* retry 5 times in case the system is loaded */
++	for (i = 5; i > 0; i--) {
++		usleep(10);
++		d = opendir(workdir);
++
++		if (!d)
++			continue;
++
++		while ((dir = readdir(d)) != NULL) {
++			if (!match_sysfs_device(dev_id, workdir, dir))
++				continue;
++
++			sprintf(sysfs, "%s/%s/hidraw", workdir, dir->d_name);
++
++			subd = opendir(sysfs);
++			if (!subd)
++				continue;
++
++			while ((subdir = readdir(subd)) != NULL) {
++				if (fnmatch("hidraw*", subdir->d_name, 0))
++					continue;
++
++				found = atoi(subdir->d_name + strlen("hidraw"));
++			}
++
++			closedir(subd);
++
++			if (found > 0)
++				break;
++		}
++		closedir(d);
++	}
++
++	return found;
++}
++
++static int open_hidraw(int dev_id)
++{
++	int hidraw_number;
++	char hidraw_path[64] = { 0 };
++
++	hidraw_number = get_hidraw(dev_id);
++	if (hidraw_number < 0)
++		return hidraw_number;
++
++	/* open hidraw node to check the other side of the pipe */
++	sprintf(hidraw_path, "/dev/hidraw%d", hidraw_number);
++	return open(hidraw_path, O_RDWR | O_NONBLOCK);
++}
 
 -- 
 2.46.0
