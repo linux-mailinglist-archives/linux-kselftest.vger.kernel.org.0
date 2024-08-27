@@ -1,160 +1,118 @@
-Return-Path: <linux-kselftest+bounces-16417-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16418-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 996B59610C0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 17:12:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC16D961271
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 17:31:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54BFE2820C6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 15:12:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 859651F231F5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 15:31:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3766A1C57A9;
-	Tue, 27 Aug 2024 15:12:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB5A71CC142;
+	Tue, 27 Aug 2024 15:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b="bA3g4SBO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+Received: from xry111.site (xry111.site [89.208.246.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA741BC9E3;
-	Tue, 27 Aug 2024 15:12:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61CB91D1F4E;
+	Tue, 27 Aug 2024 15:28:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.208.246.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724771545; cv=none; b=aLe0An4oAh9joHquYAHOMf39SAfSfkAqGkdeGAUvgqO33cdT9C4nMhj94O8nK07LOwILpWGxfXWUDa4ZQW5Ayrqhp+6QPEUSeE9DdGaQOcasiAHDYZaiKdwIe6AaL7nz9KMThVjW4NcGKnYg7H7jOglzni1dDlnEhXOLhfPz0YA=
+	t=1724772538; cv=none; b=UmrQPLwWfS54Sw/9vOZauGgPYe0Kc6qRbwvFvCQsEy0ZkUpD1zcr8aDVnpfwR7GiDXklj1pCEqZqKLaBkG3nX61KSmiUHxzYH6ePBg9NKklCC9Ul9V5D5CU2XGvJAED4LNOKjxOKpK2pZHCNaI9nTqUSFwjP/SEG4uF6xrkLtqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724771545; c=relaxed/simple;
-	bh=YS1WS6AMQC0AIGR4KIux8obLAvmAK9y0e/V4joi0yis=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d7oVidnlWHOWyuJsREzQRSfjCg6rb7NuRhhJIvfPA/kA83k7nLVI8HgRLOoFFwgabMqxVQRkpongzqsoWVCtK5sY+z+PZLhCGCavBsZNvsfIowyoIl1YNTBpduuwgt+wfrF/gSxpVubRo3db9/Io6hXSazCrnKK8HuKeFrVR+cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4WtWHT4Q90z9sPd;
-	Tue, 27 Aug 2024 17:12:21 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id sLT0wIHpPuNS; Tue, 27 Aug 2024 17:12:21 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4WtWHT3WwTz9rvV;
-	Tue, 27 Aug 2024 17:12:21 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 692058B78B;
-	Tue, 27 Aug 2024 17:12:21 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id J_l_rLP-Y5G0; Tue, 27 Aug 2024 17:12:21 +0200 (CEST)
-Received: from [192.168.233.149] (unknown [192.168.233.149])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id CF8898B77C;
-	Tue, 27 Aug 2024 17:12:20 +0200 (CEST)
-Message-ID: <538e9c85-8050-427d-a513-3194bae67115@csgroup.eu>
-Date: Tue, 27 Aug 2024 17:12:20 +0200
+	s=arc-20240116; t=1724772538; c=relaxed/simple;
+	bh=8omP4rl5BYw+84ZxOQg77pGbA8nGQhV/5is63uik8LM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=OB/9pGUrCNNL9uJ+87PaYATPaahWlDE6pctTuVsFqMydxOscZVORgNX78CmJJckn2gTqEVaptvQJ3zBFj3QST4gTbwAXcDcs616Gj3nM/yHyKVJxotzOV2MGPZ2U7U+o1wp84jmkrzE06UL7g/4o9xh/Ts54KRxj94KMCt03gxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site; spf=pass smtp.mailfrom=xry111.site; dkim=pass (1024-bit key) header.d=xry111.site header.i=@xry111.site header.b=bA3g4SBO; arc=none smtp.client-ip=89.208.246.23
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=xry111.site
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xry111.site
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+	s=default; t=1724772535;
+	bh=8omP4rl5BYw+84ZxOQg77pGbA8nGQhV/5is63uik8LM=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+	b=bA3g4SBOD1ZNZn3yIrQvz65f9taQx/3xq3FMxT41TJeFdKZ84QzcexS8AZ8E9sJwR
+	 kgB38JBPMSzjfQ97WTjKFURHv+rNBt67Tphn7CZnpKr3ZIWBzZ1Ne4Rps4/Mnbklhk
+	 X1R8kRylvziKd2kV1KGhqbRqXrarQik41qgvu+hs=
+Received: from [127.0.0.1] (unknown [IPv6:2001:470:683e::1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+	(Client did not present a certificate)
+	(Authenticated sender: xry111@xry111.site)
+	by xry111.site (Postfix) with ESMTPSA id C4C8166F26;
+	Tue, 27 Aug 2024 11:28:51 -0400 (EDT)
+Message-ID: <d1707f9c173f80588c2917f6289c1394802d6229.camel@xry111.site>
+Subject: Re: [PATCH v4 3/4] selftests/vDSO: Use KHDR_INCLUDES to locate UAPI
+ headers for vdso_test_getrandom
+From: Xi Ruoyao <xry111@xry111.site>
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>, Huacai Chen
+ <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+ "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+ "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>, Jinyang He
+ <hejinyang@loongson.cn>, Tiezhu Yang <yangtiezhu@loongson.cn>, Arnd
+ Bergmann <arnd@arndb.de>, "tglx@linutronix.de" <tglx@linutronix.de>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Date: Tue, 27 Aug 2024 23:28:48 +0800
+In-Reply-To: <Zs3sVv43djP3W2yc@zx2c4.com>
+References: <20240827132018.88854-1-xry111@xry111.site>
+	 <20240827132018.88854-4-xry111@xry111.site> <Zs3blfx1inX_FQLR@zx2c4.com>
+	 <019268d4-c177-49e7-aab3-b8fa431905ca@cs-soprasteria.com>
+	 <Zs3fhiSlXg2aCGa8@zx2c4.com>
+	 <e9a2257f1447ce11e1f22e9a3c64d4b18aa428e1.camel@xry111.site>
+	 <0730ca3a-e158-44ea-bb9e-1a7716b45360@csgroup.eu>
+	 <Zs3qEMQOv5MAipox@zx2c4.com>
+	 <0b540679ec8cfccec75aeb3463810924f6ff71e6.camel@xry111.site>
+	 <Zs3sVv43djP3W2yc@zx2c4.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/4] selftests/vDSO: Use KHDR_INCLUDES to locate UAPI
- headers for vdso_test_getrandom
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Xi Ruoyao <xry111@xry111.site>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>,
- "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
- "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
- Jinyang He <hejinyang@loongson.cn>, Tiezhu Yang <yangtiezhu@loongson.cn>,
- Arnd Bergmann <arnd@arndb.de>, "tglx@linutronix.de" <tglx@linutronix.de>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-References: <20240827132018.88854-1-xry111@xry111.site>
- <20240827132018.88854-4-xry111@xry111.site> <Zs3blfx1inX_FQLR@zx2c4.com>
- <019268d4-c177-49e7-aab3-b8fa431905ca@cs-soprasteria.com>
- <Zs3fhiSlXg2aCGa8@zx2c4.com>
- <e9a2257f1447ce11e1f22e9a3c64d4b18aa428e1.camel@xry111.site>
- <0730ca3a-e158-44ea-bb9e-1a7716b45360@csgroup.eu>
- <Zs3qEMQOv5MAipox@zx2c4.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <Zs3qEMQOv5MAipox@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+On Tue, 2024-08-27 at 17:10 +0200, Jason A. Donenfeld wrote:
+> On Tue, Aug 27, 2024 at 11:05:14PM +0800, Xi Ruoyao wrote:
+> > On Tue, 2024-08-27 at 17:00 +0200, Jason A. Donenfeld wrote:
+> > > The effect of this patch is to replace include/uapi with usr/include,=
+ so
+> > > it will break for you too.
+> > >=20
+> > > What I'm wondering is why yours and mine work like that, while Ruoyao=
+'s
+> > > breaks. He makes a good argument as to why this patch is the "right
+> > > way", even if it breaks our workflow...
+> >=20
+> > Because arch/loongarch/include/uapi/asm/sigcontext.h includes
+> > <linux/posix_types.h>, but the files for x86 and ppc do not.
+> >=20
+> > I cannot see how this inclusion is useful anyway, so maybe I can just
+> > remove the inclusion and paper over the real issue for now?
+>=20
+> The kselftest people might disagree with papering it over and may prefer
+> your patch, but your solution does sound better to me...
 
+Oops the papering over does not really work because the compiler picks
+up the sigcontext.h already installed to /usr/include/asm/sigcontext.h.
+So, if we want to use the "updated" version of sigcontext.h, we still
+have to add KHDR_INCLUDES to pick up
+kernel-tree/usr/include/asm/sigcontext.h instead.
 
-Le 27/08/2024 à 17:00, Jason A. Donenfeld a écrit :
-> On Tue, Aug 27, 2024 at 04:50:59PM +0200, Christophe Leroy wrote:
->>
->>
->> Le 27/08/2024 à 16:41, Xi Ruoyao a écrit :
->>> On Tue, 2024-08-27 at 16:15 +0200, Jason A. Donenfeld wrote:
->>>
->>> /* snip */
->>>
->>>> gcc -std=gnu99 -D_GNU_SOURCE= -isystem /home/zx2c4/Projects/random-linux/tools/testing/selftests/../../../tools/include -isystem /home/zx2c4/Projects/random-linux/tools/testing/selftests/../../../usr/include    vdso_test_getrandom.c parse_vdso.c  -o /home/zx2c4/Projects/random-linux/tools/testing/selftests/vDSO/vdso_test_getrandom
->>>> vdso_test_getrandom.c:43:41: error: field ‘params’ has incomplete type
->>>>      43 |         struct vgetrandom_opaque_params params;
->>>>         |                                         ^~~~~~
->>>>
->>>> $ ls /home/zx2c4/Projects/random-linux/tools/testing/selftests/../../../usr/include
->>>> headers_check.pl  Makefile
->>>>
->>>> Since I don't build in there, this directory is empty.
->>>
->>> In the toplevel Makefile:
->>>
->>> kselftest-%: headers FORCE
->>>       $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
->>>
->>> So running "make kselftest-all" to build the self tests should have
->>> already caused make to build the "headers" target, which puts the
->>> headers into usr/include.
->>>
->>> I don't think it's supported to build self tests w/o invoking the
->>> toplevel Makefile: many other self tests use KHDR_INCLUDES as well, so
->>> generally building with something like "make -C tools/testing/selftests"
->>> just won't work.
->>>
->>
->> My usr/include/ is also empty (only Makefile and headers_check.pl) and
->> building directly in tools/testing/selftests/vDSO works for me.
->>
->> The command is:
->>
->> ppc-linux-gcc -std=gnu99 -D_GNU_SOURCE= -isystem
->> /home/chleroy/linux-powerpc/tools/testing/selftests/../../../tools/include
->> -isystem
->> /home/chleroy/linux-powerpc/tools/testing/selftests/../../../include/uapi
->>      vdso_test_getrandom.c parse_vdso.c  -o
->> /home/chleroy/linux-powerpc/tools/testing/selftests/vDSO/vdso_test_getrandom
->>
->> I believe I get the needed headers through : -isystem
->> /home/chleroy/linux-powerpc/tools/testing/selftests/../../../include/uapi
-> 
-> The effect of this patch is to replace include/uapi with usr/include, so
-> it will break for you too.
-> 
-> What I'm wondering is why yours and mine work like that, while Ruoyao's
-> breaks. He makes a good argument as to why this patch is the "right
-> way", even if it breaks our workflow...
+Or, I can add $(KHDR_INCLUDES) but also keep
+-isystem $(top_srcdir)/include/uapi, so "make -C tools/testing/selftests
+TARGETS=3DvDSO" will still (happens to) work on x86 and ppc (without
+headers in kernel-tree/usr).
 
-Ah yes he is probably right.
+If you agree I'll use this approach in v5.
 
-Then I'll have to first do:
-
-make CROSS_COMPILE=powerpc64-linux- ARCH=powerpc headers
-
-Then everything should be fine.
-
-Christophe
-
-> 
->>
->> Christophe
->>
->> PS: By the way, did you see the -DBULID_VDSO for the chacha test ? Don't
->> know the impact though ....
-> 
-> Yes and https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F20240827145454.3317093-1-Jason%40zx2c4.com%2F&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C627846cc0a0e429e45c508dcc6a90690%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638603676502990226%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C0%7C%7C%7C&sdata=H7PPFv8QGHsb9xh3J%2FzyeFrpvDu2uSKqx4ZwrPNwC2s%3D&reserved=0
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
 
