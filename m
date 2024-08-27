@@ -1,93 +1,116 @@
-Return-Path: <linux-kselftest+bounces-16401-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16402-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 413B6960C70
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 15:43:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FF61960C76
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 15:45:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E5DAB29257
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 13:41:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E24481F21B0F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 13:45:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C22A81C4603;
-	Tue, 27 Aug 2024 13:40:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 200041BB6B7;
+	Tue, 27 Aug 2024 13:45:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="c7lZYjKC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vy1YYrfh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2087.outbound.protection.outlook.com [40.107.255.87])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1091C2DBB;
-	Tue, 27 Aug 2024 13:40:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5643619DF5F
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Aug 2024 13:45:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.20
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724766035; cv=fail; b=fjVXDoL24Qv9mOfVUWlyiEZLFddU0dZItyVZyGdcbezsSW7JudIzjk45SWgxs6Orp8b/oJEP/yEH7x9uxnHM7ZF+AGJGYtCkcPdGfz644y9CIZvuI8bUcLCl04RavLCLNKVKrwaKmtA+LLw6hJOPgr34bY4/wtDeEKWCREJWnxY=
+	t=1724766316; cv=fail; b=hOZH+8waNm47sw4xeEPzSzyAB6SgLmnT3exOKbHbaTnuQW7DHEZdbPU+2I+L6nYWEdBZLl/cb4VJ+YR7+bAQuqjpjWazNnuRWK5FLOumkSkCjozOdzBnH0W4LxXE01D8HsWVfJpjxVtiOSAA9KIKhYOmVLvyVJMfYKVwXtGGVwk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724766035; c=relaxed/simple;
-	bh=EonApa4sGNEO0js95RLioa48C6VTlbIq67fUhOD3Obo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rh4bfXj5mH2tKQHdhR1uG1SKTFk4QCzars3mhMG8nrr7EtPC3chByIU1ha26aaW1YCuN4n/UeU6iekXed2YcXina5IqtmP3HcfZiv4XEfmOPyWdLqQdJIAJmPghB4eJLGIV87PDoe3vDIeZVufqD+3BCgnklTATjs91k3mrRhdA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=c7lZYjKC; arc=fail smtp.client-ip=40.107.255.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+	s=arc-20240116; t=1724766316; c=relaxed/simple;
+	bh=Rd5l7JCFmYKC9/YCO5Ahn2rr3gCKqasxZI7OGYV9DPg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=OMUnLLfac4WlsCa83x/mVDYZLe6jMA0eJ1ApdNFZ/HFWMWi6Gtr7D1DeHRyxKdkWzHVkVNxRad1ZGKYZ4XjT63OyVEa3jDm0rxeFkaA7wB8QAiuC+3K+6fdt3smDOwB/j958klVdpZ2avLdWb30UYKrFYq6FjIzIvF/tASn80tE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vy1YYrfh; arc=fail smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724766314; x=1756302314;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=Rd5l7JCFmYKC9/YCO5Ahn2rr3gCKqasxZI7OGYV9DPg=;
+  b=Vy1YYrfhlpymuoiWZwwNqb3NEFu2aMjpFKAM8R8bkDvNSeXYag/c+Q5o
+   OQ137fBWt7IMIU87leetTGZRnqIg1q80wlsq7neuPYwyjDHe7ccump8Eu
+   +DoygPpEktEKcob6whzXlPWUIhe/Z8u4aM7kJRhaN29ncBXVxyCubdWfQ
+   +VzMVuz/jjA2+nPWSz50lLUZ2UHDdca+STYweyJnfLiiECq7BIGf1Kmow
+   CyRYul61GHOqbbehrrX1Qe7eoqzt++8pbG1Xj4nU3E2a4nozHtH5VBIIJ
+   l83BVyOiQYlIbBHW//UgLjoWrmjODRz+PhcPUuCFG0n+fqpb10Tqwfg68
+   Q==;
+X-CSE-ConnectionGUID: IgGLu03/SYO5LhYffp/v+Q==
+X-CSE-MsgGUID: HaLNww2DTBeVJ+uCVkiW8w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11177"; a="23046167"
+X-IronPort-AV: E=Sophos;i="6.10,180,1719903600"; 
+   d="scan'208";a="23046167"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2024 06:45:13 -0700
+X-CSE-ConnectionGUID: GlxjpfH0Snq+l6Do02BZsQ==
+X-CSE-MsgGUID: 3LULm9C3Qpi6D4CdZh6aNg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,180,1719903600"; 
+   d="scan'208";a="63371833"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orviesa007.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 27 Aug 2024 06:45:13 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Tue, 27 Aug 2024 06:45:12 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Tue, 27 Aug 2024 06:45:11 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Tue, 27 Aug 2024 06:45:11 -0700
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.101)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 27 Aug 2024 06:45:11 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mJc1ECqmL4WA9Sqg9/uGmewWpTAD3RQ3nbwEMUBYp4PnRgeIZdMjz7/XYhjIgpihLtrTEY5lGFjSxOC9pl5LtvmamcL5rkyBOXwWXAFbFTbmASyiXI4yt2QUKdak8+lBck+Yiq9z8Kno0m1zQJ0Ok2Vfs8DGkvGAqsZ4ysxGQgem1cB3P89hjujkVgCcquvzyeGFp/pqCRUcZCjxj4crg9VFULf5EZD6V5m2Blb3rjS18cbBNjRHmgRaZq+mCaQjxuZlNxwxCGtOqIAA6BiUi40J/3Qf9OIKZSUDcVpvTGeMWSDz/xu++ArBhuyq1jWYqqhLJOXrUUKchKYWZKW8lA==
+ b=B0+wKrxf1/4nMtxJvqScLkd6/m3378eJiXLspETmk45e/lb9/YrfLfPQ4PZxhhLabTI+5xpPdPeT/OJMVUdJdviQIsJ4PwfEccgQsjZMHMf9PkT2YSJYmXda2NguWug3i/v654eAloelHhRSvVN5D8CbmqG8Gf+gdtpM+4a7HdacfFXqDiJNg7daXjnbSMDrSmXmmY8cFkSrU9iJZi9uYq0KwCJ5EeqNHf9N10oFMhhOePqII6AAPvtbO3Upl2atyAKOkSZb6db4lbgGlnKuCDOHX1QlBdUmZsEfKwSNqkaI0JmmJrAe3Wmf7RNQSgmH01tKGA3XpbwEGqoe9/uTmA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mb5oHwtqeqmk8i0rRE0WhrUdnOtYaSMsDmqTS3V7ES4=;
- b=AfMSZ4wFmhl1ED7qOB2GRsj+lvQ7ooXa0XpMMFLDHCGWQK0Tcqs+pfeylrvK5y+RQuFY5ye57JQV0oCz9KAh0vTY1i2Sp6vP8hMXXkh6mt/OvS039JeoRzSGpWwelB/7b3tEr8D5seQwsimR1LN1/b/Cg+rATkpYteJH5B38JLY5O+ojb2Y1lW8URleMua4eDhq/btGGI+eQMRkxShBPMNopFBukKnuEpugcjwArjSH/YlmeBC0DRmShwMVeYjhJ3rCe/MMsSAbRn/tNOP77c3wrV8G+GetcUfJ+sIZjKJPfoNIqS/jKLFwHyN/l3cRFCBzZj+Skmj91jx8+4tQNZw==
+ bh=QTobfjpAgnuZ5MwWSMDBUGC0k0fwXBAd1izybAgfdZo=;
+ b=OWpR0yZE7v1HXvrTGvtEHyk36ln7BbZMneo0EqpUX7yfSIcVS00qQyxlhqF1ZTjrFu2qtnCMiEQn6jfF+Y9w/utcXPlTbo3kLiTDL4EQyZGcJhfWz+RO/tDZMPlhqyqsDSr3PDl0CYW3hQs0OfhA/80sIB/bofH0EQOp7THcK+PBtm1OsIRuUxPF0ACLrxIT0BMMp5BRT7SFcWMtg6I/PiT9RNT7RNZ6KidK7ACqID8p2ncCdCcD5kETvRDvLqT/Gk6A1OzdPnt/nqx2snAErKkCC46m5YffIiQKecEFOlH8Phd02Px+VQV3geRVhgw3+eh81b6nDqKt1h0wRKbBCQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mb5oHwtqeqmk8i0rRE0WhrUdnOtYaSMsDmqTS3V7ES4=;
- b=c7lZYjKCXGf3/lyCGT0jM3L93x81j4VpLxvtkyN7J6GQSGZEzSLDT1Qp8uxYW640QWxZ0uZgvbpjr6WYGX6AUbZFmR9/xIDDP5oWTcjGjeej055TgEOprydjs5cN7c4g7U0rN2eba6kuOryn0mEg/5yUeMHx8mfCMLbhTQdvV8PIujgZB1a9Tu0XIcYXFxptC+9YCw8bObprn/SEHhr2MpMO2SSAhuAeibKVd+jhX1nkBfaNeujQSCzE8oFJ7ZGduahZubYKjsdvcEvLtZfJozfZXSkO5hgs9YjCUDuJKq7SmC93JTbDF+O2XMX/rhlDEMVAJORieGBDdMVnRwwfEg==
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from SEYPR06MB5913.apcprd06.prod.outlook.com (2603:1096:101:da::16)
- by OSQPR06MB7153.apcprd06.prod.outlook.com (2603:1096:604:298::13) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
+ by SJ2PR11MB8423.namprd11.prod.outlook.com (2603:10b6:a03:53b::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.24; Tue, 27 Aug
- 2024 13:40:30 +0000
-Received: from SEYPR06MB5913.apcprd06.prod.outlook.com
- ([fe80::f049:a716:8200:c4a1]) by SEYPR06MB5913.apcprd06.prod.outlook.com
- ([fe80::f049:a716:8200:c4a1%4]) with mapi id 15.20.7897.021; Tue, 27 Aug 2024
- 13:40:30 +0000
-From: Lin Yikai <yikai.lin@vivo.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Nick Terrell <terrelln@fb.com>,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: opensource.kernel@vivo.com,
-	yikai.lin@vivo.com
-Subject: [PATCH bpf-next v1 2/2] selftests/bpf: Fix cross-compile issue for some files and a static compile issue for "-lzstd"
-Date: Tue, 27 Aug 2024 21:39:59 +0800
-Message-Id: <20240827133959.1269178-3-yikai.lin@vivo.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240827133959.1269178-1-yikai.lin@vivo.com>
-References: <20240827133959.1269178-1-yikai.lin@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR01CA0141.apcprd01.prod.exchangelabs.com
- (2603:1096:4:8f::21) To SEYPR06MB5913.apcprd06.prod.outlook.com
- (2603:1096:101:da::16)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.25; Tue, 27 Aug
+ 2024 13:45:09 +0000
+Received: from CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44]) by CY5PR11MB6139.namprd11.prod.outlook.com
+ ([fe80::7141:316f:77a0:9c44%7]) with mapi id 15.20.7897.021; Tue, 27 Aug 2024
+ 13:45:09 +0000
+Date: Tue, 27 Aug 2024 08:45:06 -0500
+From: Lucas De Marchi <lucas.demarchi@intel.com>
+To: Michal Wajdeczko <michal.wajdeczko@intel.com>
+CC: <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>, Rae Moar
+	<rmoar@google.com>, David Gow <davidgow@google.com>
+Subject: Re: [PATCH v2 2/6] kunit: Add macro to conditionally expose
+ declarations to tests
+Message-ID: <unqbtufg2lgqdwaazti2jb6f7wkaggcc6kmcpkwxv2ylt4mgnl@bov4zj3uj66w>
+References: <20240826222015.1484-1-michal.wajdeczko@intel.com>
+ <20240826222015.1484-3-michal.wajdeczko@intel.com>
+Content-Type: text/plain; charset="us-ascii"; format=flowed
+Content-Disposition: inline
+In-Reply-To: <20240826222015.1484-3-michal.wajdeczko@intel.com>
+X-ClientProxiedBy: MW4PR03CA0114.namprd03.prod.outlook.com
+ (2603:10b6:303:b7::29) To CY5PR11MB6139.namprd11.prod.outlook.com
+ (2603:10b6:930:29::17)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -95,155 +118,133 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SEYPR06MB5913:EE_|OSQPR06MB7153:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4f006ffe-830f-40cb-200d-08dcc69dd17c
+X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|SJ2PR11MB8423:EE_
+X-MS-Office365-Filtering-Correlation-Id: 660cc590-b9ef-4606-a3f0-08dcc69e772d
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|52116014|921020|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?PUqyOdGJxHy0kGwyy+3SKfjQiTnp+2z7GrXgzXR5hRYrqj2InEnRpXENAhD8?=
- =?us-ascii?Q?hLTcjiMA6t7EAwq7BG6d1i0cG53sAoO3clpOV5yuUBmYV4mYoAODUz2ZfrcN?=
- =?us-ascii?Q?YRosMO8HsImYLJ2H8WtNo0qJYNLKlGX8uRyZcuqo9aR+1+XUuwjyl0xZlYMM?=
- =?us-ascii?Q?l4BsGuoVLhvj2xT2uChdZq76uWLlrWEvQw+EtZyXDoBE6Ekqmc9PIKIOu5w3?=
- =?us-ascii?Q?APogRkIGqJKQHhIkBxgptMg+kmhK1SWJCuctPHqR7pgtjTeG7TXlqrm6tokU?=
- =?us-ascii?Q?o7t0h3FwNX5BRJu44DRvugPlsQW1PgGi/wIS0zRv6Hb9OvF+ckSI8GPRK2vu?=
- =?us-ascii?Q?ceag5iXMrgspweTeMtuYY0r0ytkqMwgUPQobbj3Qyk9Vcy7ImZRyRjdBde2C?=
- =?us-ascii?Q?0TotJ8Y+hDmk/9Dykjna7yvhVf3l2uRZo8DbLmqeF5AgltpqSYhAYga3Jy/j?=
- =?us-ascii?Q?kV5o+8ruWhLeILWm2Y+5JvgNR27o71xLwbMM4Tqb6uSGjobEdVA/Lk3A771G?=
- =?us-ascii?Q?91ZIxI3UBZLd7kAX/BtV/rQ8W1+dCP1tBslrXlOEIY7uhxc55ca38E8cFyLH?=
- =?us-ascii?Q?TlvwA73yWnvHGSiYeaBAIP1YDZmEzUDLUEgVf9EUQFstWI/fOGwoleHprB7z?=
- =?us-ascii?Q?sgLm5x8Xq+rgv9sd6Eb+qtKd3I16gLfR1CQsdEUa6ajmv9Y9TBwXtbxc5YDx?=
- =?us-ascii?Q?5B5uOdrU7rOGafIgLA4yfdM2/BTO3KklmQxJ7w/QW4Q44YXChw+d2mrIU+96?=
- =?us-ascii?Q?kZSceuc2oMdihz5345sYvdK/je7EZB0mv07KQAdFc7Xa/ShalM6cdYqCZe2j?=
- =?us-ascii?Q?zfSktsaBxuQDPzmTgEatq75g16w70PjXkP6VQYN1LTNibGhSkwQZadyqsOIF?=
- =?us-ascii?Q?HjX3ZySy+4CCkmBnWEq6n4JbcMBNVrzk9mrpRWYmgNO9WbCytk+ajfoPSBYN?=
- =?us-ascii?Q?IDvW6JQyxzF2Me3zsf3U1F50UtR7AyKUGVsnwigqFvCD14du18L0a6gmkZzr?=
- =?us-ascii?Q?2SuL8u8SyUottOniLE+xzAtriR4D5rwVmd8FSLTwMynEkDNtFCdhlUZIrqYF?=
- =?us-ascii?Q?PbCXElHrSKmv6uT9mXoRaMP0Qhs5Z9kBvuUw03k66GszVwDpHQxKMdX39JgX?=
- =?us-ascii?Q?xk2mld+aP6KnWeD0A2afCaFfRMSajCQqwvtaSvIK0UrCF0oHjyR0yA6d22mL?=
- =?us-ascii?Q?GAW7pK+TI13xy05Mod7uYK+qKPAlhA023eaBtal+aeubkxL8nh+mXsJvbWPR?=
- =?us-ascii?Q?gfKyO03nilRFYCmrjgSE91LpCMCrBUVH5E2GS0PuFM7EBOu4HwxrwJ6HV0bo?=
- =?us-ascii?Q?GvpK5GLCHGOqkK7jBw29LuniO0HEBx2crVM2RReizdOQoz3sLmfJegQTSc5N?=
- =?us-ascii?Q?DN6ApdLu8qHwhdb6INUko/lYZhO9PVa/6u5QtNOYDpJSFTXW23ewf6GON/4p?=
- =?us-ascii?Q?yzv+oY1hxV0=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEYPR06MB5913.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(52116014)(921020)(38350700014);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?AdXr6fAAdvvtE7ij6b+SfN6xmd/C/KLLxmfr7SpeaNUg3GqRSPPDo/qIpmrF?=
+ =?us-ascii?Q?wTnLDURgubliS4isLNA2PvqkPDGYZXSSpPBCDJ9AFgk2IiqzHD8koxY5ErO7?=
+ =?us-ascii?Q?Jxrzbmky/FEq+NIcgmnlecCjNt9PnrZMsFH8IKALYs7TvwjngW9CXqVseKXq?=
+ =?us-ascii?Q?ZzYYXqGH0PMlun+AWeAdyI+lFxfI1Q58XCvRBErb+QrN1warwb7IzDiDGX9B?=
+ =?us-ascii?Q?dxDqAO+3DPd4Pc1G5dGopaPq1GrRr0DymYFomNdSoNuck9YdP8mrKsom2+x9?=
+ =?us-ascii?Q?W9TxL/PPTMziiNszS2H1SNH5fJTIMpgJqA8Iceir75xVIqpeutAzU3FWPIUL?=
+ =?us-ascii?Q?8rhD8of0lZ90fkQfQA8ycqMGBcommT/g0KI4exYrq6qRvPCUQrLURUbJ4ODW?=
+ =?us-ascii?Q?s8TLDp/ws1R6ABoKDOWpp63w5WfE/muy46XNTHGVmKg5ialZaXpXW+P5RGsE?=
+ =?us-ascii?Q?ZH+I54bov4U4aMk+FO/rr0hXS/tETL3vLZ0RTjsNkMBx5UW2aQLB8LfrLTOL?=
+ =?us-ascii?Q?qzIkjdMLEZ7HUysuR4dYf/His7QQEZ7QbKKhkaydHpV0UYi/yg1qYtBcbule?=
+ =?us-ascii?Q?XDaotEhIWVedXdN/YjiGwXMQOeBC2W64YI6TW/3uNi1apvJIeypluvloiF0o?=
+ =?us-ascii?Q?wJJ+RMi5j6JUg+Z2YP6iqidS24lQGSCnM9IALEBFcQNY5LOzX9xesBjGIYWy?=
+ =?us-ascii?Q?mEGHhBBkF9unFjtgLSjFKpq0yyXvTalSWzgxgl5tSugoYJiFjfrKkhVcuj1o?=
+ =?us-ascii?Q?cd5SKDa0UamOjqSzrTJXAsIj/wq1DhTnqru9m8oO9FMzB0kHGW33laDZYZKl?=
+ =?us-ascii?Q?ESJ6WtaXXUXnzxuMd8PdZXAfUOfW9VRw3NYqBVj4s4gOYWw/LGL0lzNl+2Nr?=
+ =?us-ascii?Q?SpKZAant4eSr4DJ2AUxnksFTBy8gKttdBXXXytCBvjNIJuKTpCOs0WqjLLgw?=
+ =?us-ascii?Q?8pjHIPSf+4OBsGLBQ21b2/NTcXLqAtTlyrLyVQ1fBc0e6twTxVhyrGaG67Li?=
+ =?us-ascii?Q?fEc1sCw7N/NhcD0OKMc/tU/589n4fvYetsuf/bPRzVrmXTU0vnTl2eRCbc90?=
+ =?us-ascii?Q?mKuvrw2deUT4F5wUMDtoR8RwldjAtWPy9zlwhPeIH88HI+Xk+lLVyuLMqJ22?=
+ =?us-ascii?Q?AH4bwGLW0KGBQxOOYt0QN0wB4tgKB+7YIfhLt4GBXSdDndDFdGs9SGm06/tZ?=
+ =?us-ascii?Q?UZiY0j9X161tU9a4lkRxVBkNtPP1DHFVPNOvDWqTzF6bfo+tp86tYBcOfFvJ?=
+ =?us-ascii?Q?W3MyC/373fDEVW3eFfTyrSwCJVlV7pHEiUFh29ukT4Ey4JuiwIWqV9KHXYK5?=
+ =?us-ascii?Q?eKPemA+8NyrLp9bI4PTfR33lre/dqPyS/EkF4lkAQHLCbA=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?tBMMR0+1gIA5QlWCcUR4Qya1QwjZRszzGNq/ggsFk7qC804BdqwgfZkJ6bnz?=
- =?us-ascii?Q?uyqsLqQ5AOHPeb/rpvukHoumL/kLp7sZUqYgv/gO9wpznQYcEND4gRSPoW2J?=
- =?us-ascii?Q?BTmcxxKrTvlF9UzyFIRZxZXeZTjqxtaP5YaSQOn+5qgKVbTttpgh0Fy1Ozb9?=
- =?us-ascii?Q?YlD80QX1rmyengDBQUIXK+l7iRGelVOcrOl98g16+pyLhFDGHm5TlydwskWW?=
- =?us-ascii?Q?vihis95XDPdOdMMPAfhJ027D7CZ2cKDfwMWWgu/PpTlx+AR4LmvHafslsnUl?=
- =?us-ascii?Q?TPNzjuKf+btK1f6Ug7GIOXFSkrrehtMks/xk8VrCSP5/BusREyKwFSeOLUNZ?=
- =?us-ascii?Q?OpUvUN5Z1pDNBNs5kcj/9HQCNyNK0VGWURAJhq8xAlmTruPwprMXSTN/0rdz?=
- =?us-ascii?Q?JybtVAEr+w/WEaJoPwM7wJkv13TjRDvqX+x1zMHmXBNdSZJUxR+wfgHoRTXk?=
- =?us-ascii?Q?ZzKIfqNZOtWFP9tBn4yCnZ/pjYXT1kOGfMUY7VTg0HffsBbanwSkCSfWAoMe?=
- =?us-ascii?Q?faBhisND2Ixf3J/TPiNlwWd0wiIFZTNuxWsRg4aqDB2ooOU2mMfRsDEt52n5?=
- =?us-ascii?Q?rkiuE8/AlU/NoqPV3YoK65pnLJbqp7Z/t8NK5vFQJIaaSx/5epfgVavhklUc?=
- =?us-ascii?Q?+uUO6+L2PE7HPfOK/F3d4wJ4RHv+VFPn1GE/bt8hVq9evdrrSTmWSLZ3BrES?=
- =?us-ascii?Q?i9zLqsyiLNI9C0FMScpkD64vgh+JggEmdNpGPowMnVtztr4ylKSySzUqjfEW?=
- =?us-ascii?Q?vmjyapUCzhoLSvMgRLi5Eu5E2hoYzHbKhTRrZT+b+q97g1knz+XfwAlFpyaJ?=
- =?us-ascii?Q?pIOZY4KVmwSdGCpSJ/Gsp304E+5MFqO8GwuuihugjIAm2PUzYCEKMnG7qvZ/?=
- =?us-ascii?Q?fe3s3opIXMnqh0GYLv7sPWew8OpceIIj7Ssyg3NLtsxcsG34HeGdXkbJkI1L?=
- =?us-ascii?Q?LZykoK+bAOj0YDM3LzloLyBnK4mCk44xU0hAXXBvAgqVn+NML+ZJFTAa0HFC?=
- =?us-ascii?Q?ccpVhy/5iitijS1VfacswM0P4xYNpiyYnhmb67Sx0dciEWXbQP4x0nd/QGLa?=
- =?us-ascii?Q?65aLT/W1YbiDN9QN7rDQ4mdDNW+Fn9pyX4mJTdems5nc9azf0X2NYaYs06KG?=
- =?us-ascii?Q?RRMCEVajKUvD99NGy0VUu5UtvP3JYbWbsHJ23rSpap8uOy7kG3IINLubHNCA?=
- =?us-ascii?Q?S95fc8rKp0mdb/IaAhfAoMWZgUkSZQRwVWwxMauGMr5gTYVOBIgGnQjcuUGh?=
- =?us-ascii?Q?BSjyCE2G6JaQYQUx8vOYuupaeO3JP0SncmfVosDhmSFd/lOUxlndHZU5VUUz?=
- =?us-ascii?Q?QLID5aK80WasW1YL1IPiO1+qBEXk/r6jF1vh8+oku9B3RXc5F9KcSPs1ZNiy?=
- =?us-ascii?Q?BvAPT1HNO+lYqCqnFL+xBx9WtWbAVsTonrVhP9vdeR5DCkk5oq1j97oQ2b7S?=
- =?us-ascii?Q?VhI8wp7zrDNw8C4DIgCAO3gqdEdS3EiqIHhgN6600lnvrCtEQK/ASd5GMyGJ?=
- =?us-ascii?Q?wX1YIIuc/ag7ZrO1UKMgLoDxhVhgPOuOT3IqTy/XBd+24kGqBQgq8FJwjskQ?=
- =?us-ascii?Q?A0AexZTMsyqWliz1ChchbJpFy7aHts4kDw+LJ4o9?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4f006ffe-830f-40cb-200d-08dcc69dd17c
-X-MS-Exchange-CrossTenant-AuthSource: SEYPR06MB5913.apcprd06.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XtSGjLmNIy477/BowTX1khO2C4kAdmjL1VO5w59o1ou85kd3zvvBCzDOssjQ?=
+ =?us-ascii?Q?X4q8+V8xRkzedotaTdQ3eAa28UO+H+8y/YVdktqVamSzrlthlN+r0kgnHsIw?=
+ =?us-ascii?Q?lHYQ7KmAe4KDgN73nUxHFs9iKP6RPjuDwnOeZXiyUFAc1nDnaLCbo0v+gV2X?=
+ =?us-ascii?Q?L0hxuFimGTki8FnX71TdBK3lHbV6M++MerAmYvtt6apwi9iLv5LQ9Icn0a4g?=
+ =?us-ascii?Q?kzeC6u6O+NBXBHiu1rBRaDM9/ZQXu2uzJcNm0snhio0moGO7u1EQzNUXp/vd?=
+ =?us-ascii?Q?wbZ/6vPD2B6Z6UJnFLdALV55wEI61+rP4jclx33xV43XrSAkzOBXvtcJ1qf1?=
+ =?us-ascii?Q?GEA7JA2soiHyKdD5he/c4m5W5TA7+IUwN70zuKZjooL4mjvbh1CA9X8JHk1M?=
+ =?us-ascii?Q?BRmStswhr4sVroQUQQK8j+BoFJpAcNBI24QjgoKqg59Zgteb0y0Z2Lfw5Fn8?=
+ =?us-ascii?Q?8+xdO7RHJ+D1cSjAer+uZsK8WGN/pb9Xj8qXcBhwmhnZvucZjxWsw3Bxi4Vc?=
+ =?us-ascii?Q?SBiN1bKVCVdDVpNd8erHh3sCCAplVIFifUJ4vdCBF+g4/xx7/aMv7l/NEUSL?=
+ =?us-ascii?Q?vu0CLnDMULX6n0OpubrsAqxlxAq8kB8mYPYEtJ4YQkbj9z4XjgheYLjGPPCS?=
+ =?us-ascii?Q?Ub5Ad24Ztg8DR3UaMFYGYWdXhaR7GtiDcwTrUkO/0P4yDJ4lCQFP4FOUugNY?=
+ =?us-ascii?Q?aSO0NDReuj6mzIrYk3VnzywCaC3AjqHV3cm5ABttMFc68YTk3AYI41YqVM+h?=
+ =?us-ascii?Q?LsrwyxU5iAX9n03HyPXgCkUY/27ADrLYEd2szlZ3nsX0ABcGDvzC66+V8wS1?=
+ =?us-ascii?Q?CmtiOAoAi77c06GpM1BfV/A2uWLaau8jxcnGfhvIvgm7kr0DKNfZycr0uXPM?=
+ =?us-ascii?Q?/V3XI0X3EE7QpVW8br5O6uo2Tkrz5rOMs+JiXXYshvaEnW/H+8XY5cdxocee?=
+ =?us-ascii?Q?FGAYL4uSeRggZ7HLiCv5soNyT+/rf3X0yrNVbjVH5VxRixFU8ltgCegEtruu?=
+ =?us-ascii?Q?VmnJ9O2TDf9TsSeuk/xmaJtpm3e2dwVWwZLqdQ1+JUDZW6MrEwb967ZwA2fV?=
+ =?us-ascii?Q?3uksjK/jVpslVB61JNwZmaa7xTaRpusoIP/r/2dL90EdLJPWVKgrtyprXpaR?=
+ =?us-ascii?Q?jKxkuAgmqe1De+IQQqaLfAFaRUXAOUM5K09SldS+FujO6Qgxdt3EXawFBOgo?=
+ =?us-ascii?Q?DcGMj4JjYcPghLyJEInjoEbK5wYeHCj/vqazGqqhQib9T4BApu35ovbLiEG9?=
+ =?us-ascii?Q?rBHGmIYtBYyTO3uAAgcKQIihUhsaDdMFkcRkfECoF5wPYWYQayhdcqmQKre0?=
+ =?us-ascii?Q?4pzVbCycQnDRIplMM6JG6TA+x0Fuv3xxP8vbNEi/Gk2b8GBDmCc5P7BEQDF3?=
+ =?us-ascii?Q?Amabg+NSYGN16tGyYX2X0ISsF6lpZ04bzIe/2GetCOcnb4RSkXW07BsTDsNr?=
+ =?us-ascii?Q?jzCXD6O/kwNUUmWlVAFyhORPmnBv2EnXBFQNHltd+lMV2b6YbyJiLkoSMOyX?=
+ =?us-ascii?Q?mXre59jBhpW1YZjTEWRckHC2d6iJB3f9IekJJVPmR71VEEmXXbF8/i1QeB0f?=
+ =?us-ascii?Q?Sq7Wwlz1LN5zo26+KoY0C/9hfJuK+J4dghxynIJBfoFEmpv/ednXV7/iVWeH?=
+ =?us-ascii?Q?9A=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 660cc590-b9ef-4606-a3f0-08dcc69e772d
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2024 13:40:30.8138
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2024 13:45:08.8967
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ObUW2Yq6G4qcm7l72kIJWjWXgHMkY1dClDlFAI8e15IESfdxtQIuCDgGxjTuwmzwcdtm8WnXjNnWct3JyJfprg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSQPR06MB7153
+X-MS-Exchange-CrossTenant-UserPrincipalName: KxdBJFkLMKQoX43zgEyflTGZ1MDH+YZ52QbigsLffKVdjTVGe2fwiEUblSfbo4sNRJoD/b7AMjAWCfmnj0wgWtoMBnpmUFQ5ZlDhjrEPdYA=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB8423
+X-OriginatorOrg: intel.com
 
-1. Fix cross-compile issue for some files:
-[Issue]
-When cross-compiling bpf selftests for arm64 on x86_64 host, the following error occurs:
-progs/loop2.c:20:7: error: incomplete definition of type 'struct user_pt_regs'
-   20 |                 if (PT_REGS_RC(ctx) & 1)
-      |                     ^~~~~~~~~~~~~~~
+On Tue, Aug 27, 2024 at 12:20:11AM GMT, Michal Wajdeczko wrote:
+>The DECLARE_IF_KUNIT macro will introduces identifiers only if
+>CONFIG_KUNIT is enabled. Otherwise if CONFIG_KUNIT is not enabled
+>no identifiers from the param list will be defined.
+>
+>Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
+>Reviewed-by: Rae Moar <rmoar@google.com>
+>Reviewed-by: David Gow <davidgow@google.com>
+>---
+>Cc: Lucas De Marchi <lucas.demarchi@intel.com>
 
-There are same error in files: loop1.c, loop2.c, loop3.c, loop6.c ???
+up to kunit maintainers, but it doesn't seem the word "DECLARE" is
+entirely correct. What it's doing is expanding arg, and it doesn't
+matter if it's an expression, definition, declaration.
 
-[Reason]
-On arm64, in file bpf_tracing.h, we use userspace's user_pt_regs,
-which is defined in "linux/ptrace.h".
-We include the header file by adding "-idirafter /usr/include" for "CLANG_CFLAGS".
+Looking at patch 3, I think it would be more obvious to the caller if we
+have:
 
-However, during cross-compiling, "linux/ptrace.h" is based on x86_64
-and has no definition of "struct user_pt_regs".
+IF_KUNIT_ELSE_EMPTY()
+IF_KUNIT_ELSE_ZERO()
 
-[Fix]
-Thus, to fix this issue, we include the Linux source tree's header file directory.
+>---
+> include/kunit/visibility.h | 8 ++++++++
+> 1 file changed, 8 insertions(+)
+>
+>diff --git a/include/kunit/visibility.h b/include/kunit/visibility.h
+>index 0dfe35feeec6..1c23773f826c 100644
+>--- a/include/kunit/visibility.h
+>+++ b/include/kunit/visibility.h
+>@@ -11,6 +11,13 @@
+> #define _KUNIT_VISIBILITY_H
+>
+> #if IS_ENABLED(CONFIG_KUNIT)
+>+    /**
+>+     * DECLARE_IF_KUNIT - A macro that introduces identifiers only if
+>+     * CONFIG_KUNIT is enabled. Otherwise if CONFIG_KUNIT is not enabled
+>+     * no identifiers will be defined.
+>+     * @body: identifiers to be introduced conditionally
 
-2. Fix static compile issue for "-lzstd":
-[Issue]
-By running the command "LDLIBS=-static LDFLAGS=--sysroot=/aarch64-linux-gnu/libc ./vmtest.sh -s -- ./test_progs",
-during static cross-compiling, an error occurs:
-/aarch64-linux-gnu/bin/ld: aarch64-linux-gnu/libc/usr/lib/libelf.a(elf_compress.o): in function `__libelf_compress':
-(.text+0xec): undefined reference to `ZSTD_createCCtx'
-/aarch64-linux-gnu/bin/ld: (.text+0xf0): undefined reference to `ZSTD_createCCtx'
-...
+missing an example here with fields inside a struct
 
-[Fix]
-For static compile, add "LDLIBS += -lzstd".
+Lucas De Marchi
 
-Signed-off-by: Lin Yikai <yikai.lin@vivo.com>
----
- tools/testing/selftests/bpf/Makefile | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index ec7d425c4022..5b725bc890d2 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -48,6 +48,10 @@ CFLAGS += -g $(OPT_FLAGS) -rdynamic					\
- LDFLAGS += $(SAN_LDFLAGS)
- LDLIBS += $(LIBELF_LIBS) -lz -lrt -lpthread
- 
-+ifneq (,$(findstring -static,$(LDLIBS)))
-+LDLIBS += -lzstd
-+endif
-+
- LDLIBS += $(shell $(PKG_CONFIG) --libs libpcap 2>/dev/null)
- CFLAGS += $(shell $(PKG_CONFIG) --cflags libpcap 2>/dev/null)
- CFLAGS += $(shell $(PKG_CONFIG) --exists libpcap 2>/dev/null && echo "-DTRAFFIC_MONITOR=1")
-@@ -443,13 +447,19 @@ CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
- endif
- 
- CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
-+CLANG_CFLAGS = $(CLANG_SYS_INCLUDES)
-+
- BPF_CFLAGS = -g -Wall -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)	\
- 	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)			\
- 	     -I$(abspath $(OUTPUT)/../usr/include)			\
- 	     -Wno-compare-distinct-pointer-types
- # TODO: enable me -Wsign-compare
- 
--CLANG_CFLAGS = $(CLANG_SYS_INCLUDES)
-+#"make headers_install" at first
-+ifneq ($(CROSS_COMPILE),)
-+src_uapi_dir := $(srctree)/usr/include
-+BPF_CFLAGS += -I$(src_uapi_dir)
-+endif
- 
- $(OUTPUT)/test_l4lb_noinline.o: BPF_CFLAGS += -fno-inline
- $(OUTPUT)/test_xdp_noinline.o: BPF_CFLAGS += -fno-inline
--- 
-2.34.1
-
+>+     */
+>+    #define DECLARE_IF_KUNIT(body...)	body
+>     /**
+>      * VISIBLE_IF_KUNIT - A macro that sets symbols to be static if
+>      * CONFIG_KUNIT is not enabled. Otherwise if CONFIG_KUNIT is enabled
+>@@ -26,6 +33,7 @@
+>     #define EXPORT_SYMBOL_IF_KUNIT(symbol) EXPORT_SYMBOL_NS(symbol, \
+> 	    EXPORTED_FOR_KUNIT_TESTING)
+> #else
+>+    #define DECLARE_IF_KUNIT(body...)
+>     #define VISIBLE_IF_KUNIT static
+>     #define EXPORT_SYMBOL_IF_KUNIT(symbol)
+> #endif
+>-- 
+>2.43.0
+>
 
