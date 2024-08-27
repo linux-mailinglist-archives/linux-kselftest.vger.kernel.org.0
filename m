@@ -1,134 +1,89 @@
-Return-Path: <linux-kselftest+bounces-16406-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16407-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22280960D57
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 16:15:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA4DA960D63
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 16:17:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2ABA2815AA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 14:15:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EEF86B218B1
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 14:17:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 243EB19E7DF;
-	Tue, 27 Aug 2024 14:15:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8737F1C3F2A;
+	Tue, 27 Aug 2024 14:17:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="n1DK9Q6C"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TK4QCSQE"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8DAB1DFF5;
-	Tue, 27 Aug 2024 14:15:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E62833E8;
+	Tue, 27 Aug 2024 14:17:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724768145; cv=none; b=Wpi4MZFxnKvoza5zSxefFzXPznZoulflxeLsoADr0vE+VDhyHjodiJzbDbFnU6VPX+1nS8ABPluq/5mK0qKwcmwfIYObXc0MVhtmtNWsB6Yd4+MG0zsxE4ctDXZIx0B5Y17RflSqzANvjnegCJltLwpIyHYvlNEbEcG9zi5uSNA=
+	t=1724768225; cv=none; b=jbax1e7Frpvtp807U4Ij88trVlU486qGnQd7E5aw4yijSDvDCUqXdvnr9BCwR3WqTO+j8n8+BioF0ii++h/ln43PFM3yjIGNW7XbjvysukTXuqW7v09qw1Q+9Me0fMwCzMz74Hxls3MtM5JZnaXshxEaNpBNtZ/PYAZv4ZoOO2o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724768145; c=relaxed/simple;
-	bh=AR8PJ+UiqD2KHGBWAy5OqFsKQ0kKsJPhPMa3BPwHMys=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eyoIKfl06pxKUYuw5y92zCzUPmOzDT99FEAbmhFj2nMm5scp3XoTy9575qBNdmI+X5gGy8d4/4z8s6zPsrWY2Ke0aKdelRYCapud5eBr20cgqL04cDk1XAQISVkb3ZkW5gGA2kXC2cKxaqk1q78/cyycmglD3t4ddTYk6Cu9U6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=n1DK9Q6C; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C702C581AB;
-	Tue, 27 Aug 2024 14:15:43 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="n1DK9Q6C"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1724768141;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WJtKwQReDIyAbQzKAN5WLKqtgiU7ReZHpA8bCOUtZqM=;
-	b=n1DK9Q6C45QX0Z4PdSNk6+sAjncf8DQBukQzt2iCkS6aG+AeJLDjEacXLNumsznmMSV/H5
-	BNWYtro2G6sYMoARDrMtPqehth131s95Wexs0j6FtXZOznfhp5MCFBUH0ABYIuelqran9y
-	J9U36q4btY5005ovzCCltuimSeNJAck=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a575f1cc (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Tue, 27 Aug 2024 14:15:40 +0000 (UTC)
-Date: Tue, 27 Aug 2024 16:15:34 +0200
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: LEROY Christophe <christophe.leroy2@cs-soprasteria.com>
-Cc: Xi Ruoyao <xry111@xry111.site>, Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-	Jinyang He <hejinyang@loongson.cn>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>, Arnd Bergmann <arnd@arndb.de>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v4 3/4] selftests/vDSO: Use KHDR_INCLUDES to locate UAPI
- headers for vdso_test_getrandom
-Message-ID: <Zs3fhiSlXg2aCGa8@zx2c4.com>
-References: <20240827132018.88854-1-xry111@xry111.site>
- <20240827132018.88854-4-xry111@xry111.site>
- <Zs3blfx1inX_FQLR@zx2c4.com>
- <019268d4-c177-49e7-aab3-b8fa431905ca@cs-soprasteria.com>
+	s=arc-20240116; t=1724768225; c=relaxed/simple;
+	bh=97PoKtJnQqBKNmAFP5vJX4vqaKaugMDk8RUxSJ3MqhA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OjqUzV1Ohm4ZFvnaK+VOMVGu4B6Bj9IvkA7VsKOwi4znJ4v/fJAAgm4ooIaCndYWhiu+IgeT5wG1dtVkIVd4W/J7SXIsgYUhHdxsfLQhG5Bfn9zkn9fMIxVXX5wp9DadAC5xpaOwk9uVNEG6385OCy4Vx3br4MWyYqUP0aXIygA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TK4QCSQE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EC5AC581AA;
+	Tue, 27 Aug 2024 14:17:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724768224;
+	bh=97PoKtJnQqBKNmAFP5vJX4vqaKaugMDk8RUxSJ3MqhA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=TK4QCSQElL6rxKQhCgfsfbQ87MQWuN/pmpFAa4hH2jPiXcZttzOB4yua2RW1OvOn3
+	 V+GZWhNvCuNky4SyJMRVrEsyRj4V1YG52QFBfhjoButxa9DbJIHUwZyDfRVWcMfRW+
+	 22RYeN+CFGo8RJaQQxkMHrCWEvYMPvzMlDPDX5vmtC65Xk2TeOT3sVXUQxv58uTQ/9
+	 dhiS3rvtTrD3iyUw9U9MsbqiJoPofimMwpX/EN+CuH/q8xMI67RMNynmJ0OKZU71eU
+	 wTLFOJUQEBup6NdvwqC2C83GigAiO1TN9tmk1EU5wB8UU7bGpuS4rAfZ37T4PEepN3
+	 l1TCp/AIeNXWg==
+Date: Tue, 27 Aug 2024 07:17:03 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Petr Machata <petrm@nvidia.com>
+Cc: Przemek Kitszel <przemyslaw.kitszel@intel.com>, Shuah Khan
+ <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <netdev@vger.kernel.org>, Ido Schimmel <idosch@nvidia.com>, Amit Cohen
+ <amcohen@nvidia.com>, Benjamin Poirier <bpoirier@nvidia.com>, Hangbin Liu
+ <liuhangbin@gmail.com>, Vladimir Oltean <vladimir.oltean@nxp.com>,
+ <mlxsw@nvidia.com>
+Subject: Re: [RFC PATCH net-next 1/5] selftests: forwarding: Introduce
+ deferred commands
+Message-ID: <20240827071703.59401ed7@kernel.org>
+In-Reply-To: <87jzg288sd.fsf@nvidia.com>
+References: <cover.1724324945.git.petrm@nvidia.com>
+	<d5f8364b42f277daa9e235d23398e3dce5549e92.1724324945.git.petrm@nvidia.com>
+	<05b9caf6-ecf5-48a2-ab65-509b0d5b5fb0@intel.com>
+	<87o75f8e0l.fsf@nvidia.com>
+	<3312a4a6-97f5-4ae2-9527-c7b1b73da6d2@intel.com>
+	<87jzg288sd.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <019268d4-c177-49e7-aab3-b8fa431905ca@cs-soprasteria.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Aug 27, 2024 at 02:07:59PM +0000, LEROY Christophe wrote:
-> Le 27/08/2024 à 15:58, Jason A. Donenfeld a écrit :
-> > On Tue, Aug 27, 2024 at 09:20:16PM +0800, Xi Ruoyao wrote:
-> >> Building test_vdso_getrandom currently leads to following issue:
-> >>
-> >>      In file included from /home/xry111/git-repos/linux/tools/include/linux/compiler_types.h:36,
-> >>                       from /home/xry111/git-repos/linux/include/uapi/linux/stddef.h:5,
-> >>                       from /home/xry111/git-repos/linux/include/uapi/linux/posix_types.h:5,
-> >>                       from /usr/include/asm/sigcontext.h:12,
-> >>                       from /usr/include/bits/sigcontext.h:30,
-> >>                       from /usr/include/signal.h:301,
-> >>                       from vdso_test_getrandom.c:14:
-> >>      /home/xry111/git-repos/linux/tools/include/linux/compiler-gcc.h:3:2: error: #error "Please don't include <linux/compiler-gcc.h> directly, include <linux/compiler.h> instead."
-> >>          3 | #error "Please don't include <linux/compiler-gcc.h> directly, include <linux/compiler.h> instead."
-> >>            |  ^~~~~
-> >>
-> >> It's because the compiler_types.h inclusion in
-> >> include/uapi/linux/stddef.h is expected to be removed by the
-> >> header_install.sh script, as compiler_types.h shouldn't be used from the
-> >> user space.
-> >   
-> > Hmm. If I run this on my current 6.10-based system, I get:
-> > 
-> > $ make
-> >    CC       vdso_standalone_test_x86
-> >    CC       vdso_test_getrandom
-> > vdso_test_getrandom.c:43:41: error: field ‘params’ has incomplete type
-> >     43 |         struct vgetrandom_opaque_params params;
-> >        |                                         ^~~~~~
-> > 
-> > Because KHDR_INCLUDES is /usr/include instead.
-> > 
-> > Christophe, any suggestions on this one? And any idea why loongarch is
-> > hitting it, but not x86 or ppc?
-> > 
+On Tue, 27 Aug 2024 10:53:53 +0200 Petr Machata wrote:
+> >> I can do it, but it's gonna be more pain in setting up those
+> >> TEST_INCLUDES. People will forget. It will be a nuisance.
+> >> I'm thinking of just moving it to net/lib.sh, from forwarding.  
+> >
+> > what about separate file, but included from net/lib.sh?  
 > 
+> Unfortunately that would be even worse. Then you need to remember to put
+> the file into TEST_INCLUDES despite seemingly not using it.
 > 
-> Can you 'make clean' then provide the output of 'make V=1' ?
- 
-With*out* this patch, the output is:
+> Like ideally we'd have automation for this. But I don't know how to do that
+> without actually parsing the bash files, and that's just asking for
+> trouble. Maybe after the defer stuff we also need a module system :-/
 
-gcc -std=gnu99 -D_GNU_SOURCE= -isystem /home/zx2c4/Projects/random-linux/tools/testing/selftests/../../../tools/include -isystem /home/zx2c4/Projects/random-linux/tools/testing/selftests/../../../include/uapi    vdso_test_getrandom.c parse_vdso.c  -o /home/zx2c4/Projects/random-linux/tools/testing/selftests/vDSO/vdso_test_getrandom
+FWIW we could throw it into net/lib, which has a fake target, see:
 
-*With* this patch, the output is:
-
-gcc -std=gnu99 -D_GNU_SOURCE= -isystem /home/zx2c4/Projects/random-linux/tools/testing/selftests/../../../tools/include -isystem /home/zx2c4/Projects/random-linux/tools/testing/selftests/../../../usr/include    vdso_test_getrandom.c parse_vdso.c  -o /home/zx2c4/Projects/random-linux/tools/testing/selftests/vDSO/vdso_test_getrandom
-vdso_test_getrandom.c:43:41: error: field ‘params’ has incomplete type
-   43 |         struct vgetrandom_opaque_params params;
-      |                                         ^~~~~~
-
-$ ls /home/zx2c4/Projects/random-linux/tools/testing/selftests/../../../usr/include
-headers_check.pl  Makefile
-
-Since I don't build in there, this directory is empty.
-
-Jason
+b86761ff6374 ("selftests: net: add scaffolding for Netlink tests in Python")
 
