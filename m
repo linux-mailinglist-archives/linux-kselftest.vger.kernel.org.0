@@ -1,109 +1,76 @@
-Return-Path: <linux-kselftest+bounces-16363-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16364-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B24EE95FF95
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 05:05:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD71295FFD5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 05:33:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FCEE283154
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 03:05:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 61C4B1F2345B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 03:33:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02138146A63;
-	Tue, 27 Aug 2024 03:03:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F6041B59A;
+	Tue, 27 Aug 2024 03:33:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sMu+YKfg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mVIjOuxV"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC186182B2;
-	Tue, 27 Aug 2024 03:03:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 078CA171AF;
+	Tue, 27 Aug 2024 03:33:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724727832; cv=none; b=LO2mCsjYouRdXsrPLqT7Sqjitq5d9Ho6inisT5HOfWG1FxnIHwTNXgqZQDnqKzcgBmoDBthGPjJTtkXNGbx614GLWT/2JiPf1GsXm04NmMzPiYoHDP7qc1SL40ho4GkBaY/tnfBWB9tP5N5n94p+EyayRiGUaj3HJgsn+E+Y7Do=
+	t=1724729590; cv=none; b=KL9r+e3S+xRSk4XYGm2RxzzolZtRLSymsUYAIIvAQFTv4ipLbIDZWXH6/slBA8IuqEsDXoUOfCFuTnnQZ8Oq5fBVnTbX8NBc3gN0VArcJaRDRDce1qlHQN6IejNJMyyS5lDDI84Bmable45VmHO206Orz1CPadl/g2sjvkJ8MB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724727832; c=relaxed/simple;
-	bh=ZaGVTXIiI8PW6Ml6OfO+1JWaxqCvOdy/W/r1hHy96T4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UydQCs7qmRmFqOZDlZu1kf6KXnSdgU30lpoNoSvMk3DTZQ/wVSSt/ttdfD6iKCdDgAWXDUoiOsPGP0NFkkxet9J/E/65SR9uxJYsBRXEw2tPHCxK7HYVIRnT2iIauTegw+BLYO48eEpkmPb4cW9jmmvAdQANj8nm1O1SNUk64bU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sMu+YKfg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D19B5C8B7A1;
-	Tue, 27 Aug 2024 03:03:51 +0000 (UTC)
+	s=arc-20240116; t=1724729590; c=relaxed/simple;
+	bh=6PzS5Tdk8YQgNBjy4ccnPSGnXknsU27HU1R/5Y8rlWU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XbI4NlCpaaMlQq8bS3THhfHi9+IWDI3kTs9vmssivL0ejD4c9E/vFeRvClJ2sgXQZJ5dbLvb2wFbSE3VXihD4ShJINuWGdIFNWJOePFjpQPF2Sz/KuAYHyqIKU2sswXMIatOeJqWqAcaEiIy7LJ1AGaHBb7uJ6SofxhMVlGfvuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mVIjOuxV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AA0DC8B7A3;
+	Tue, 27 Aug 2024 03:33:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724727832;
-	bh=ZaGVTXIiI8PW6Ml6OfO+1JWaxqCvOdy/W/r1hHy96T4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sMu+YKfg4RqNEUEeEU1xo7yEGptZoWTq6zET4EtB7FTt76Ox0VabnKIEZx4VWJQvK
-	 Hg4mBubK6R/gHCjai+on24wQaH3xRu8CfHOzZVKTxLRUoW+FIMy4lJH8ND2jur9o6F
-	 o6UyON1x+rNlZ9GpowuGLSUWbCkrhIIBBKTnVVPLwmGgxnj3bqA+bjFuCO4vP2PRTY
-	 jyhZMiQHzkKvlEEsJXZ5b8U/7nqGmREL3CLIzxJXLYsOIQjLmwNbR8JSsPuO+1GeKw
-	 vnvF/tBu2RAi3vQjnWlXlIVAxPEwQLXJu04BEngDYwYpnRPMwuUTyz3jVXgge61NWo
-	 CSsXW6sEug/1Q==
-From: SeongJae Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SeongJae Park <sj@kernel.org>,
-	Brendan Higgins <brendanhiggins@google.com>,
-	David Gow <davidgow@google.com>,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 9/9] mm/damon/tests: add .kunitconfig file for DAMON kunit tests
-Date: Mon, 26 Aug 2024 20:03:36 -0700
-Message-Id: <20240827030336.7930-10-sj@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240827030336.7930-1-sj@kernel.org>
-References: <20240827030336.7930-1-sj@kernel.org>
+	s=k20201202; t=1724729589;
+	bh=6PzS5Tdk8YQgNBjy4ccnPSGnXknsU27HU1R/5Y8rlWU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=mVIjOuxVw9qlfJ0a3XOELpEd9UlRzEf6/MNAG1ZLtdNBIjWNxKWPeIolha/JFJeIR
+	 TWrJjZ8/upkMPbudUDOwUR1Vx7AR9QdUo9x0vwyGd9YxKhMn/aZn4v99c6rkTe21T0
+	 xxldGRDpf0G64BvhxWoSzBFXEdOumFsypgmOUJnk82kOhE2HK7vNkWI7vfnZ5+MEdV
+	 pey62m470J8A2naSktnQFiN5iIJ+TT7eFyx6WpQf6Xn/nDjclCxTpVSL1uzsOpW9zX
+	 B7Yla7DPiFT9pGSF+ARUNhmtX9Cu8jqfb/rY4qt2CgPyfi+bSoVtGTKYWUhC3L3cqO
+	 hcxlwV5KSyzeg==
+Date: Mon, 26 Aug 2024 20:33:08 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Cc: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, Geliang
+ Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Florian
+ Westphal <fw@strlen.de>, Shuah Khan <shuah@kernel.org>,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH net 0/4] mptcp: close subflow when receiving TCP+FIN and
+ misc.
+Message-ID: <20240826203308.7cc1bd5c@kernel.org>
+In-Reply-To: <20240826-net-mptcp-close-extra-sf-fin-v1-0-905199fe1172@kernel.org>
+References: <20240826-net-mptcp-close-extra-sf-fin-v1-0-905199fe1172@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-'--kunitconfig' option of 'kunit.py run' supports '.kunitconfig' file
-name convention.  Add the file for DAMON kunit tests for more convenient
-kunit run.
+On Mon, 26 Aug 2024 19:11:17 +0200 Matthieu Baerts (NGI0) wrote:
+> Matthieu Baerts (NGI0) (4):
+>       mptcp: close subflow when receiving TCP+FIN
+>       selftests: mptcp: join: cannot rm sf if closed
+>       mptcp: sched: check both backup in retrans
+>       mptcp: pr_debug: add missing \n at the end
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- mm/damon/tests/.kunitconfig | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
- create mode 100644 mm/damon/tests/.kunitconfig
-
-diff --git a/mm/damon/tests/.kunitconfig b/mm/damon/tests/.kunitconfig
-new file mode 100644
-index 000000000000..a73be044fc9b
---- /dev/null
-+++ b/mm/damon/tests/.kunitconfig
-@@ -0,0 +1,22 @@
-+# for DAMON core
-+CONFIG_KUNIT=y
-+CONFIG_DAMON=y
-+CONFIG_DAMON_KUNIT_TEST=y
-+
-+# for DAMON vaddr ops
-+CONFIG_MMU=y
-+CONFIG_PAGE_IDLE_FLAG=y
-+CONFIG_DAMON_VADDR=y
-+CONFIG_DAMON_VADDR_KUNIT_TEST=y
-+
-+# for DAMON sysfs interface
-+CONFIG_SYSFS=y
-+CONFIG_DAMON_SYSFS=y
-+CONFIG_DAMON_SYSFS_KUNIT_TEST=y
-+
-+# for DAMON debugfs interface
-+CONFIG_DEBUG_FS=y
-+CONFIG_DAMON_PADDR=y
-+CONFIG_DAMON_DBGFS_DEPRECATED=y
-+CONFIG_DAMON_DBGFS=y
-+CONFIG_DAMON_DBGFS_KUNIT_TEST=y
--- 
-2.39.2
-
+Why are you submitting two series to the same tree at once?
+The limit of 15 patches applies, no matter how you post.
 
