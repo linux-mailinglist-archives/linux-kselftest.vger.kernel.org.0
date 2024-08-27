@@ -1,118 +1,115 @@
-Return-Path: <linux-kselftest+bounces-16368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16369-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DDAB960178
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 08:21:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A02E896021F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 08:46:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B5288B21455
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 06:21:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2D3EB21CE6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 06:46:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1272D13DB99;
-	Tue, 27 Aug 2024 06:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C57A757FC;
+	Tue, 27 Aug 2024 06:46:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ng05BjsN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ga+/d4F7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2614DD51C;
-	Tue, 27 Aug 2024 06:21:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A291E10A3E;
+	Tue, 27 Aug 2024 06:46:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.14
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724739701; cv=fail; b=qfIIK543g1FGB/+ewZio1qrUoJ6asF0uWfJA0cC9DxQ9+E7/fjMW7dF0Yl9ATkvObpwoUn5utpeSFY0Fs/bX2FeN/wMHEkGn2RPtwstLfKF84HauVRy1GXQSx2jeTSIUwh9bsLOdsx3JOfmOMLgvVf/xMvY1mnEXt0A6+fPxPBQ=
+	t=1724741168; cv=fail; b=OPBqvfENLW6BvCyr4P0t6LQJwcFy8VRo+PYmqs9EgFKESAZsOR923JCAoH3spsM2PF9uRHG60cwKRBrKv2HlAQ9kU1HA/vjN7C+D7yB4aKdpO9i9FKzDD3tFRpArSEsfjbJ2l9VwuT3377cMJCXc36tFOnJSbtQCZ+peaFXWGZY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724739701; c=relaxed/simple;
-	bh=aX1/OykZTzxD43V3+uCPM0YZeM+4VKHqAzulx9Zna1k=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=E33Z9HHiyFtCbH5pj/H0czK0NCuPg9eJvRv37/yH2TrZ7UV9b3Iw9hs+O1PLslHM+Q4UjicqNJBIOwjvROJtwQS6rXXZEiowt5xbe8TxMAngS6PKsfKg9PAAGN5uOuQoWpPu8UFQ9T4edWDggT2DQC6F+7TW0cprmlO8PTucaZA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ng05BjsN; arc=fail smtp.client-ip=192.198.163.11
+	s=arc-20240116; t=1724741168; c=relaxed/simple;
+	bh=RsTrqO/nD7QIWRbAG2ua22BT7GVYI/r7X9IAJZYcjxs=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=IpU2IBjjRXrweR4g41Ac1X6K+PgXtHLBKFMmN8qvO+MGFjHk6KjI4dyMarsxq/5N2KFF2CXlqsfcZEpZMmWIqgST9oro4ijgiYmU9IQ+EebBHzDDa2AcIhYInSYS4kyKWRdq6QkO6dgSQtB0iQ7tr55ib0/DOVG8TqlZTiCU8Fg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ga+/d4F7; arc=fail smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724739699; x=1756275699;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=aX1/OykZTzxD43V3+uCPM0YZeM+4VKHqAzulx9Zna1k=;
-  b=ng05BjsN8MXiSypk4f78NMOAmvS65VMc2LZ4NP3NcS8u7gELg7crRkHP
-   BlXCpRIpyLS/e20lX7Ku+d5dElQ39pHBaddCKMRTVcM+Jn5js436zr+8n
-   HiE5OZCCK//1gHFHAfB2Nog77KkCF4km7ySO1bB7m3T42MiX8Y8VLuhGY
-   tsO/hj5KJ9PAhE4auR2wC+pZAAobOYWHJ3sGJwZmamEh9JtYZjxloC61u
-   Lx2P1Ndw+6jsg/Zr6nWX0aTgdwP3OFcxY0Zs9QpKiabhq4X+b5PrIcVk4
-   LN98z/x79x5Z6znS8NBi5upbggZ3RUW1NDYfp/Ev4582LUzGYjiB2UvK7
-   w==;
-X-CSE-ConnectionGUID: gZ0QOsSDSM69VLXZ9I9fuA==
-X-CSE-MsgGUID: QdG9xdJjQXO/V9Ni2zucEw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="33821266"
+  t=1724741165; x=1756277165;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=RsTrqO/nD7QIWRbAG2ua22BT7GVYI/r7X9IAJZYcjxs=;
+  b=ga+/d4F7atjE+XLzVM8Ge7ZjE1L4TX44msWwdcpQtCjxuyCd+xtLx1ai
+   /aEbuNCYuuXX43+brBbPS29Zm34H79Qd8EcP8pkiK2Nzp4vlWdJbnZZUW
+   awlXrRP5EnYN0vBIs/aFQcgrz4V1vEyzjZH4c9o81xjykw70AIPVYIMzF
+   icnpoh7BXeNNJQD9nxTp6bsuVZTnXdg22O0ryx5vHc/hgPqVFphxxKYFW
+   KEIZRtGXm+3Cl5GLBYQ79neEtI6O+WoUr1KPTJ3LmKr37qhEPVBWhkAWx
+   nNhr0t34SZzcrZJC5LfirT8ukpzwKVw85Lr9UdJ4TH45jFvgIABBNOgQW
+   g==;
+X-CSE-ConnectionGUID: S3o01FT+QiuPHxwyAtLHPA==
+X-CSE-MsgGUID: 6VIvUZ7XTe6nFSwpdhos4A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11176"; a="26993994"
 X-IronPort-AV: E=Sophos;i="6.10,179,1719903600"; 
-   d="scan'208";a="33821266"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 23:21:38 -0700
-X-CSE-ConnectionGUID: Z2yMzIh+ShGF8zqmKCkoHw==
-X-CSE-MsgGUID: MxjtZBBjSwmjTViN5KR+zQ==
+   d="scan'208";a="26993994"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2024 23:46:04 -0700
+X-CSE-ConnectionGUID: ZXcWecQVQuyWbwIxdHFRzA==
+X-CSE-MsgGUID: MZIVcx9tQb+JotSjtsgp1g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,179,1719903600"; 
-   d="scan'208";a="67098858"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmviesa005.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 26 Aug 2024 23:21:39 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+   d="scan'208";a="63275361"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orviesa007.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 26 Aug 2024 23:46:04 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Mon, 26 Aug 2024 23:21:38 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ 15.1.2507.39; Mon, 26 Aug 2024 23:46:03 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Mon, 26 Aug 2024 23:21:38 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ 15.1.2507.39 via Frontend Transport; Mon, 26 Aug 2024 23:46:03 -0700
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.175)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 26 Aug 2024 23:21:37 -0700
+ 15.1.2507.39; Mon, 26 Aug 2024 23:46:03 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ilVeU5aK1IbwS7VeLVLweFhTenRJGLDHxdTfODv/RXz28OTqN7QwrIzy8N6PwNuvOapGIUSFIpRFtPFGUi/jjl9c47dedUp1ekwIhr9sC3GDBr5QMwEFwcDdtPzyExYcRuyi5ANp9ZTAZGKCksZB/IxM5jtlN0l1jMfxpQ6PQtf4nm0CUEnL48on2L5QIEs+fosjCBgo+ZtQ3DVhbJ9EE+nfC8L62NzduBeiD3fslDYpCZBVhKYRVnlNplY2iwjS2EtgNFFd1o7jH/RajJKUVohMLj1xUDhIDubMSMtK/zdjuBUB12RJwgfQ9n8lmkgFdKg2vh4poXy2kyLm3OYF+A==
+ b=owjn8pnWChojQp69dZvk3g2AqUivLut2YvmvHwpkwMT2ufP1uXfq1l4m0lcustdzjwj5rvS/aJDthSE7saohggGtxRtYLMNWWUdWYOe7emfr3/Kof5RtuJvBmGsuckosQ29MyDtbdvvwLAyrbx3yc75Ez1sjvMLPV8okivjxhUQfrvvG31HzW2w2Wg9WbITEj1OkipuJ4wf2H/vZCnwNM7k6R1hrr59PqOdqQpk2EsBlvNPoXj6rYvKoMzlXmyp1qfAfDKyvhCpe1c2gO7qjME7+Lg1ggc+a7tVMkAcpOEOFIjh1E57B3kcq0DCQwIAB5dqPuJK00WYrPRAtL148Pw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=H0uXYZT6Td2sgVvmc+cDIt7s5nJ0plTslypg1lA7KdA=;
- b=A1dhXBD9R/1X1GDtmZiV1iz4bezobyNlm2A2UH7DyZTTC+Gv4klNhbPtEA5CbXbxWbKsVa1Rr6Q7bG++WT7u1xdIaxJdU+ZNpeCHlUw87NpNouJmBRFQG/zGJ9uJmh15okV/N6F9Q1LQSxkl23ZFVMfvzG+tLVHMZACAMmAP40WVJs+AwBL+Rmb+8XjFkmLo4VgU3z+U6dHybIqK/L6GfgnqSpqr1Ppq20gpJoxPMWzsZsZFqYxApzeRRFYNcp8XZ83UVkNrPFKrMcFqOZk4IGTzmudqT8CpLOS2lN/VYJeSjeGFkfPuD24xH5JUfNz7qvo4HNxIjLnkkPAWxGavwQ==
+ bh=skb+I3PpVWmdgUNxpaaax1Qg51JW7sqR6Bw/J04uohA=;
+ b=RNCemRFso3wp15PTrKiA2EQ4BO10deTxOZH4OLaqbesNoy563gCeWsMswLqI9ki70/3Je7sfsCi4ZwOB3mcD2CEPhxg6z0IzkRjM3rfticbmHJnkJl6FAKscYpwlzmTzu6sg5NY3Oz0tNZSUNZtYS9N2MGzIEc8lfKM/ZohlAyLcqcFKSsiODTOd0VdiGU5tkuvqsw5zIcvxH/dK+SDNOhH/Xqzi5Wtx2zxjftvMyhJv+euFkGMczqgcCM3xoC9LqoXXXGZ4w4tx9ckcu7TUTpHLa/x2M1/A9SIdHZ/7hAPe/la6MNR8Nc2+xej//XsIRh9sgC922xb78u5A0WwrfA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN6PR11MB8102.namprd11.prod.outlook.com (2603:10b6:208:46d::9)
- by IA1PR11MB8197.namprd11.prod.outlook.com (2603:10b6:208:446::22) with
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
+ by CH3PR11MB7273.namprd11.prod.outlook.com (2603:10b6:610:141::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.26; Tue, 27 Aug
- 2024 06:21:35 +0000
-Received: from MN6PR11MB8102.namprd11.prod.outlook.com
- ([fe80::15b2:ee05:2ae7:cfd6]) by MN6PR11MB8102.namprd11.prod.outlook.com
- ([fe80::15b2:ee05:2ae7:cfd6%4]) with mapi id 15.20.7897.021; Tue, 27 Aug 2024
- 06:21:35 +0000
-Message-ID: <3312a4a6-97f5-4ae2-9527-c7b1b73da6d2@intel.com>
-Date: Tue, 27 Aug 2024 08:21:28 +0200
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH net-next 1/5] selftests: forwarding: Introduce
- deferred commands
-To: Petr Machata <petrm@nvidia.com>
-CC: Shuah Khan <shuah@kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<netdev@vger.kernel.org>, Jakub Kicinski <kuba@kernel.org>, Ido Schimmel
-	<idosch@nvidia.com>, Amit Cohen <amcohen@nvidia.com>, Benjamin Poirier
-	<bpoirier@nvidia.com>, Hangbin Liu <liuhangbin@gmail.com>, Vladimir Oltean
-	<vladimir.oltean@nxp.com>, <mlxsw@nvidia.com>
-References: <cover.1724324945.git.petrm@nvidia.com>
- <d5f8364b42f277daa9e235d23398e3dce5549e92.1724324945.git.petrm@nvidia.com>
- <05b9caf6-ecf5-48a2-ab65-509b0d5b5fb0@intel.com> <87o75f8e0l.fsf@nvidia.com>
-From: Przemek Kitszel <przemyslaw.kitszel@intel.com>
-Content-Language: en-US
-In-Reply-To: <87o75f8e0l.fsf@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR09CA0143.eurprd09.prod.outlook.com
- (2603:10a6:803:12c::27) To MN6PR11MB8102.namprd11.prod.outlook.com
- (2603:10b6:208:46d::9)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.25; Tue, 27 Aug
+ 2024 06:46:01 +0000
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::a137:ffd0:97a3:1db4]) by MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::a137:ffd0:97a3:1db4%6]) with mapi id 15.20.7897.021; Tue, 27 Aug 2024
+ 06:46:01 +0000
+Date: Tue, 27 Aug 2024 08:45:44 +0200
+From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+To: Reinette Chatre <reinette.chatre@intel.com>
+CC: <fenghua.yu@intel.com>, <shuah@kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<ilpo.jarvinen@linux.intel.com>, <tony.luck@intel.com>
+Subject: Re: [PATCH v4 1/2] selftests/resctrl: Adjust effective L3 cache size
+ with SNC enabled
+Message-ID: <lzt657mqtw5ga2eaz6ou3bb4q3wxquc52ist34k5dn5rxo54av@3hr55qnyouyz>
+References: <cover.1720774981.git.maciej.wieczor-retman@intel.com>
+ <e5f2fbe4f492d37569c389aebcb91168f98783ba.1720774981.git.maciej.wieczor-retman@intel.com>
+ <a132356d-d129-4cab-9c71-723d40869eda@intel.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a132356d-d129-4cab-9c71-723d40869eda@intel.com>
+X-ClientProxiedBy: DUZPR01CA0001.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:3c3::10) To MN0PR11MB6231.namprd11.prod.outlook.com
+ (2603:10b6:208:3c4::15)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -120,268 +117,269 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN6PR11MB8102:EE_|IA1PR11MB8197:EE_
-X-MS-Office365-Filtering-Correlation-Id: 17d43803-dfba-4804-9601-08dcc660803e
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|CH3PR11MB7273:EE_
+X-MS-Office365-Filtering-Correlation-Id: 24e2e472-90c4-4d52-5d5d-08dcc663ea13
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?djhJbXFqMit1c1FQQmpDSkdldTczb09YRjc5ZXpvNTV1andXYmd1Z21pdmU3?=
- =?utf-8?B?WDZGTmRWZGNKejJMS1VuODhpa0o2QWUyUm1uc0Fwa0FrejB4aE04MTNKUzRs?=
- =?utf-8?B?QjVxNVZacC9BUXBPeVFiaDU3VEpIZ3hnS0J6eExyUHRZSGlDODIyWG5qTXMr?=
- =?utf-8?B?Q2hjTzM2ZWFWZEpSTDVzU2o1b0ZUWGZNSXRYbjkzOENZMXUxcjVHcHRybVRu?=
- =?utf-8?B?Z0E4NCtHcG52Q3lPMVhTa1dIdEc1c1RwVm1LS2tDZjc0RXEyNm1OL0hNWkcx?=
- =?utf-8?B?OWdvQkh6SEhtdU9UdlpaR3hNWEp0Ky9ZQmpmYk80SFZHbEx3Rm00cGJFT1V5?=
- =?utf-8?B?K2c4T2hrNXE5Y292SklWL053QnN0d2Z2WUtFWDFZVUNpUXRGTXpSc0ZEbEhN?=
- =?utf-8?B?eWgxbDJaVEFUVGdxRks4WHJOa3RWM0pyN1hpYi9SNm9Ha3VONHZXd05ITTdo?=
- =?utf-8?B?ZC9lSmtRWjNwZ09acEwyc1dITEJKenMrK2lUaFBnR0hlYWdCWSswdnM2RnVL?=
- =?utf-8?B?eG5IazJPTmZ2aGpFVFpsRU51UjdkWnlqNWVLb2dYVDNMVjlGQmJMdHdRUEU0?=
- =?utf-8?B?RWdjT1cwMGE4Q0lYZlg5LzBXSVg2UVBicEZCSnc4L0FMbHBjaitJRWpCQVB1?=
- =?utf-8?B?OGJBUk9OUkt3YnQrUHNOblE2ZlVLNW00aFlQVlhNSFpHYWlrUW9XSVJIamYw?=
- =?utf-8?B?SVc0UEJCM3FUcU85b2pCaVVDSlNPSi95bDBuRnVveWZ4Uk9DeFNoY0RaaGk0?=
- =?utf-8?B?OCtQZHVxRnVmVU9sZGVtUW1SdTF0RmR1S1ozU2I5b1dYcVRYMFlEcWJTd05V?=
- =?utf-8?B?OW1LaFNsZnJZU1BnVmVLME02eFJzb2RZdy9lYUdoZExNOEJqNitOWmVya0hq?=
- =?utf-8?B?WDk2and3cWkyeU9KNHdtY1dzSWhaQ0QwYVlVUTlKcDJsTXQ1QjhDcnpwam1m?=
- =?utf-8?B?Z0FYY3d4LzR0SzR2VjBua29ZRUp5a09TbVVJbFkveUdTQUJXbmJ3QjNpaXpX?=
- =?utf-8?B?Vng4ZjlyS1QwcWNVSm5EOUpQdUQreklEYXgxOVNXZ1ZwaFViVU9xb2hjdzE3?=
- =?utf-8?B?OVd4RHZmNkdBd25oSi82cXBlcVFPZlNtV0NWR0JrRHQ3WkxWWXNQTnF1YVNH?=
- =?utf-8?B?WDMreFJaclhkM3kyRXh2cCtSd2JpelJISnR0eEhxakYvaFFZUEliUjQvQlc4?=
- =?utf-8?B?M1hKS2tMbWJlbVp3MGlDQjZqcTFhTzJLay9zMGNiQ3NETWppaVYwVVRWdkRJ?=
- =?utf-8?B?R2lodHlVWXhjRXpDaVN4QXNmVDE5MEpzRlVSeVVyc3RtWklFVDhhOVVKUk9n?=
- =?utf-8?B?SlRzcnlxdmhicEVSNTdPdFRZUTRqVzExQU5JQmk4RFpEbk16ZzdsVFo5N0Zi?=
- =?utf-8?B?Q0t4cEp4amJ2Z0grS0JmTytlT3BPaFBFNmk4aHlkM1dpR3ArR2Y4cWdtQUJX?=
- =?utf-8?B?VTYxN3dwL3QwMlJqTlNaTVZpMlNnUnNDcHI4UUdJeW5wYmxwN25oalU4Qndy?=
- =?utf-8?B?bStqNDBzdW92THJ5YkFlK1ZicktjVWloTFhHVmpKbURlSEhwZ3VXQytJZlZH?=
- =?utf-8?B?Ry9semZaVng2emdzOTd0bTM2emlvOVlQcVBET2Myd0ZkWnlHUVBXbWFsQTNP?=
- =?utf-8?B?T0tLNWVCZ05lQmdHbUhoc3FBZlhMUUVqSHNNRnlsc0x0SWo0SXhJWVE4RWcw?=
- =?utf-8?B?enl1VUNVbUNsbkhmMUt0VDBEVkI3QnNVaE9IbENycXJEVXB5bVNUcUZGMzBq?=
- =?utf-8?B?bVZ3VU1ITWxaTEJPOE9La3hXUnFKbmRlRmNORG5CN0hYOWlDVkMwZzhSRTBX?=
- =?utf-8?B?NTNzeTVzT005Nm9MdlZTUT09?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN6PR11MB8102.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info: =?iso-8859-1?Q?J4wpyXxSdnFf3KH66EnqN5Hld25OwDXdcZtghKEVS7kxMpS6S7pUy1/D3B?=
+ =?iso-8859-1?Q?srv61z39dUMfILnRRZ4fy+n3KnFWR15H72u4TkNbExUp+asM/zw7c/kqoU?=
+ =?iso-8859-1?Q?46fqqBq5O0T/NWgNawxv8QoSITPgGeVtLXYyZTn0I6cSCUUGzs/BYnfMhx?=
+ =?iso-8859-1?Q?Yi6fthzHcWPRAirAiqq9/oUmp292WLIFr1SGDakUeevGK6tuHNPsLXr+DV?=
+ =?iso-8859-1?Q?4HP85wfJdrDXtWW7sE3388VwGqkkyTAlNd6qJZlo/ugFLgBKPma8JN96/J?=
+ =?iso-8859-1?Q?w2ubSUHnbK4FLgMuWTGpC2LOZh3sATJrJ7CjiY6DMOij7aUMR0n2Ej8LYO?=
+ =?iso-8859-1?Q?FqqR/CWQcSCcndkRy1HQkTWZAlBrBYcB+1I9UertmbDFhDZIwNYLwObPhM?=
+ =?iso-8859-1?Q?3E0LKaUObK8BDAxtYYSkDFkzO256c0iwGgkTQ+3wgsQJ3m+/ZyR6u/Xnly?=
+ =?iso-8859-1?Q?WK4q+zLqNHWRPXJHGGz2/1R5vfiAhibB8YbbLPFQvvmEAOI2E0R03ebnd9?=
+ =?iso-8859-1?Q?dHqqY/rEpuKOGjVxnSQt3GVu+m7VwnMLJnAYeIF4gwTPMN8jeD7D4FKjn3?=
+ =?iso-8859-1?Q?RqUIATFvHhIIKapr48OdAOFDjf5o80Z9Vt30atmbj2FMETO10S423ttf3u?=
+ =?iso-8859-1?Q?HcynHXgZbkzo75P5Vmd80JJvPvPEZnsucW9FZFzC+XTza/udveL0CkoacU?=
+ =?iso-8859-1?Q?W5Qxcyrpkb3JnrtrbRcgKgO1pR6dQVNZalP94ozJt8OGqI+zDVM3WqRZZQ?=
+ =?iso-8859-1?Q?Q7cfBT5n/vGja/TPvJ/KC9kK8OYN2FyVaaDIW/zKmQJr0FwkPbcJjQEnUZ?=
+ =?iso-8859-1?Q?S+VWicT3URN6xwEgjKc0jhgYaSqeCJu8I0dlx8O6L6VhKbnEe7g7i7Bmvl?=
+ =?iso-8859-1?Q?Fe5bMd/Fa+e0FBkVf5imZj7T0uP7QiYRpjiBTheOC58Jn0OaLVMLo7qm4+?=
+ =?iso-8859-1?Q?BVjwZU03nfSdnN8+5Eml1pCMMOayhGWlhMB9kPNX2C4CsNka8rD4OWqJSw?=
+ =?iso-8859-1?Q?GSG+CBddMzlU6ZduEbn65dCIejikHHMNTmAioUfbmRY5hRYyGKA+h6y5jH?=
+ =?iso-8859-1?Q?c5w0g03Y9uUyG/ZPG1wVKNGRlpZSbo4Ec+dgES5DTqeX69XwOVdxW8K1oj?=
+ =?iso-8859-1?Q?OQlzJM065o9nVnxKgXXjvd94jtTDEIITJOtIbyOgdVLHVM5zaAZU1nC2Vq?=
+ =?iso-8859-1?Q?iASoxc6ahds64yZxzmVEbL52TY3geOsr12yPQu9/yEBCrhfXtU8m+1Pyiy?=
+ =?iso-8859-1?Q?0SSQ15FFdaNgptFZ2wKj0CgrNYWkwH59/fy5d/wUFKIbaMTLTp3kotYMqV?=
+ =?iso-8859-1?Q?DNV9rAu9QK4oBxFVgFouKDAy518Xy9TMU5gLGZEqUQpLBym//ZPEfSR7ns?=
+ =?iso-8859-1?Q?/0BfIHwfmhhn29ycntK0jbPzPFCjkRsQ=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L0NyZGJBVXNCS0FnZyt2Rm5EUkdzU3g3bjIyRG43L0o5V2FaRnFOZXp6WXNi?=
- =?utf-8?B?VzRLZ2VZTWRGcCs4TVFlZ2lEL054ajZoQ3psNFBsMUpndWxLczdWTW5TTytw?=
- =?utf-8?B?V0QwNHZ0L211cCtUM2lVSGlHenFIWHB5N25qRFgzMHc0VGNXZ25QbTA1cTVi?=
- =?utf-8?B?VEVPVEZ3UlYwT29PZmR2THBvVytMaGVyKzZvM2pWZWxZenZ5M2FQZzVUbjM2?=
- =?utf-8?B?YWdNcmZ2Q3hhVUxQSVZZUkJQd2VXUythdzZHQkpHOHRKbSt3ZlJvRVN5S0xJ?=
- =?utf-8?B?djV0STRVTGtXSmRwQVhsRkliY2d5dmduRTlqZWRxbGhzWG9xendkZkZabEVR?=
- =?utf-8?B?bWpjOE9pbm00SDB2QnJIcjZkRWY4MVBpUnIzZ3QxQWxCeEJFby9hQTFmUFFQ?=
- =?utf-8?B?OHJ5OFJiNTFCdS9uZXQxNXVNYUVuK01BN0tnVm5iUURIZDRiQUM4YUlhZzli?=
- =?utf-8?B?d2w2QXN0enhWWEt0cm8yQ3B0TWFsSFR0Y0x5eFhtdUtwMy9uZFczdnN6ck5p?=
- =?utf-8?B?cm8rR0Q3c1Rla3BTTDdvYUdmNk9RL0NnbjRCbkltUllrbGU2eDd6bXJDbkpl?=
- =?utf-8?B?NEQwV3hkb3VRVmlCT1M4RnB5TjB5cEIwaWtjV0M0UXMybklQckpZT3RJejBs?=
- =?utf-8?B?RkRkaUlJM0tVVmdmaXFCb0R2T09nOHVEankrNGxETWwzM1ExMjdsc2JmK1Ji?=
- =?utf-8?B?YU95UlFhdkFQZ1VTODJYZmw4b2JRTGJPWk5nQk9OeUd0aEdmMkN0U3N1S0VI?=
- =?utf-8?B?aTh5WTNIKzdoMm9BWVNLTEI0RWtYYVlMNWZVZWNTTmEvZHpoU1g5RVFBeWJu?=
- =?utf-8?B?Slh3YWkwN1oyTCt6WWFEYmJGdEVoak5VcjFLME5JdVdJaFVHNE8xSG9aVmQy?=
- =?utf-8?B?bjAxdDJWSE8xR0V0bGRTeTBmazhQYmJGZjR6amU3YnphcEs5dHlpVkRWeGtX?=
- =?utf-8?B?SzdmRHZmUUlyZXErUllFbXlyL1NuTzZKSnp1WjdrUjFFSUJIcmltZ1RJclZz?=
- =?utf-8?B?UGtjOThHNSs1dDZLOG05QUc4SEtOYjlvcGVvMU1UUGxaWjZXNFJPRVFCZUNL?=
- =?utf-8?B?b083NWJuc255VWtpVzJiYWoxb1BsREZkRXZ0WWtQdkVuUEVTMGFETjhYNzZw?=
- =?utf-8?B?TE1ZZkpEQ09KdzZ4eHFIZ1NXV0ZjTWd0bVI2NlFmWHNHczRlUWdZVHpCNW55?=
- =?utf-8?B?ZkxDK1ZQekJZNHpXOGRVOWRLY0hYMG5kSkorc2srLzlDUEtMUk40Q1dBU21B?=
- =?utf-8?B?ekNaWkJlbU1mcm1oTjhTQkx1cWpjOGxTTE1uWnlNWEsxK0tQRzdseUFkN1RO?=
- =?utf-8?B?T1M0WWFrWUNmc3NncXBPL0ZIdFVuMzUxLy92Ky8rNUkwVjRUT0g0MG5yNXIr?=
- =?utf-8?B?N3E5RVlhdmI0bHY2VGw4SkxyVi9zY1ViemRXTkJVSEVneEFoTTFLTEZPT1FO?=
- =?utf-8?B?aXVvQTE3b25TNndMdzRRS0pMK0tTaUh5RXpxWENRVVRzV3JkSHNFSVFHK3Rz?=
- =?utf-8?B?Z2luSG1GV2pnYktrQ0xNQnBKektaZXBYN04xcVdpZmdiQ0liVDlTVWx5WVRV?=
- =?utf-8?B?TWxNeXBiWXYwd05Xb3AxNkVCMjZvQ3c2SUh6Mm5OTDVlMG9sdmVuNXB6OXMx?=
- =?utf-8?B?VHdJZVJ3VWJXdlA5QXlEY0FKS0RZeHNUaGlQdmhmK0c1WW9ETFZFa2p0bXVL?=
- =?utf-8?B?NzZnL3UwZGJydmh6V2dkZjdURE5mWGJxMWRuU3BORWx5c0J2dXBGZFB1Y3Yw?=
- =?utf-8?B?Y3kxWllxdlJBS1Z1L2RseEtmRk5vMWRReWxXL3M3NFpvMVV2Qm1VV0lheGRU?=
- =?utf-8?B?bmR4VVpRSmRlU2pxYkpzYWo0SDlIbU9nL2hHQXdkSVZvK1BSVjEyeUJPVnpO?=
- =?utf-8?B?bGtucXBXZ2hnNzR1RU1aay9SZ0RwektBTmI4SUFhK0xXeUFQWG8wVzhjWmRR?=
- =?utf-8?B?cXdzemtqUjB4dWwrc0V2VDNzL05qWFR6T3JYSXdkOXlGbGlma3VsL3ArRUxK?=
- =?utf-8?B?UXBVQkNRcmtJS21zSkNEcjBPN25wMXAvSWpSdmdaeUorZ0hteWR2Qm4yWFFB?=
- =?utf-8?B?TFBWMnk1VDM3ZWlCc2pBYkNHUTV2dG9VQlJOK0dYQnpSbmJSVzNNMnBoR2Vo?=
- =?utf-8?B?OHFSTVQ2bjZhL3N0dGpWVG5TRDRjTGtkaVVrclJ6Rnp6WEtULzU5R2VuRlZz?=
- =?utf-8?B?WXc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 17d43803-dfba-4804-9601-08dcc660803e
-X-MS-Exchange-CrossTenant-AuthSource: MN6PR11MB8102.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?IN4S1j5S/7Fp/eDpYdG4sKiZZoDKLKTK/u6XwZJ0+DhtOG8znBGA3IwcID?=
+ =?iso-8859-1?Q?69gb8tt9r5aRS/bCH5uV712mgdPwI1UsAEF3b/GckAKbXIo0t8NwoEsBfd?=
+ =?iso-8859-1?Q?hyXPFdxWobe/dLi2Ldy6+JKyZ45ZRruNLflQ9iRTaGZ5ILnu/j1wJC4is2?=
+ =?iso-8859-1?Q?Pzh9Rx3hoWsHh/ALRNiAnxpYtno5ja+Jy0UXFDDUlniiJ/kLhS5s7OewpE?=
+ =?iso-8859-1?Q?IP+WjnPxOdwTaC1YchAKw1uxbkBAmA4EDQxEbqSfK/uODcNsWyIMiZ17TZ?=
+ =?iso-8859-1?Q?Q04Bqi6GhSVuforBfoZnok6khVPqq7W6zG3AG8Ff6KYLl4EuePjIb8poYh?=
+ =?iso-8859-1?Q?VAbl6E2MOHynGG9hQBHemCOsL3Brp7YEY6dAbPGbwBBRcFmc56Cl6PCqsa?=
+ =?iso-8859-1?Q?HhwrIlJ4skihXnuO+cNrvj5Eo9YGK20sfZmvO4O8ScmKeATTWUl0o73BP6?=
+ =?iso-8859-1?Q?EcJ59KFEBWTQuF7U67OeKX5OgvvyP1eavRt+uC9LkmAE4XgeNzBScSfQLe?=
+ =?iso-8859-1?Q?P5Sp05I7z5QtlVt8um8XdjS8JVOTmH8QrpYJmwywI1You0dspzG7913DT+?=
+ =?iso-8859-1?Q?27Asg78YnohXcQPw7fu3GcpFTQ16tNfd719VMGg6xjSVKafwTqumAbUPAY?=
+ =?iso-8859-1?Q?4Ar2qjRYg1rAmSzzG/FOmcedaidxU2YDUG/ODvGZQuC3H3GtWnn/Myp/CK?=
+ =?iso-8859-1?Q?S2EfBDZibedDlNBN87wNzghlQRkMbaq3kNZwlQPno/xF7HN0bFPS3eLVUb?=
+ =?iso-8859-1?Q?Rvk1OFc1DUoGF2q2Q9tZxSUZRfssQfyvx+5tzJRww7f0X5vmYtKSAqjfcl?=
+ =?iso-8859-1?Q?17ITQJct70hyK/MiM7MJC2Q7HjcCCcJi+BzW6ow65Qx07YO6BzRNK68Lrm?=
+ =?iso-8859-1?Q?pcdc4UDgAaZLkgWcVKBLl1R/xlDo3gxFOyET6OOTZdamE2ZZXbsmU4jqfJ?=
+ =?iso-8859-1?Q?K979EYH69cMb8myZwwtj+XnzvNigJWs6vj9pmgD03DJrkypCfqLmbirnUe?=
+ =?iso-8859-1?Q?4sb6scyFRUsyxePwyfgV2SjovQQNVIaqi85+v4GkVgVvHWSj696o/Oklvk?=
+ =?iso-8859-1?Q?JeVrtEv6de0/YkdNPgteaDP2oKpk+N3jIuJ53u/3LhivBIv3JGdAbd8sH/?=
+ =?iso-8859-1?Q?U9qIZL51exURpyyqN7PbFcEVlHX9bQ+opyAwMP6qr12Ki7GJ5ouaLZmRFm?=
+ =?iso-8859-1?Q?pFcWVk24ajScGwMSOG8e0biav+sfzd6qURRwo2w1LlJ71vg/RE4O3TjFs9?=
+ =?iso-8859-1?Q?M4GuhRuwnSKflak4IewrhJxgZ4ljKr84+lrcJA4bwb0fRPId5n9UNaXWJQ?=
+ =?iso-8859-1?Q?bm2rBupFw0cMvHLhNPtYAA/xdS4C9VhPu5bDsgTX5wrf8MNQ2br5EAVRGo?=
+ =?iso-8859-1?Q?O6mBlt29xs1L8sxB2o9xxtzMPsmuZ6AhT27MQZpqcRwC9EtnHFnd0twzxt?=
+ =?iso-8859-1?Q?Z10/K71VqIasjmKWyeu3uBKGPVfviGSd+ywA/qJju0HAp7Wcr+Qrk5In6+?=
+ =?iso-8859-1?Q?r+9lEWhg+X2hsi26NXvFYrgZzM7LQSOFN8O4zVdG7ObSbpy8B40zkOvtbw?=
+ =?iso-8859-1?Q?uIQqCqu5TER1mRVLDuBMzRQUtAn6wOGBloOgGrcPGaMpsB3lBldE86/oqn?=
+ =?iso-8859-1?Q?cCozcxNEZ9TF4H63yFpIfaQrsxax1/+/W2xw60hwYrKfb7YKkzh2un15Lb?=
+ =?iso-8859-1?Q?DOOP6o8G4CLo0zxZekU=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 24e2e472-90c4-4d52-5d5d-08dcc663ea13
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2024 06:21:35.2374
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2024 06:46:01.2538
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: E9Wq/f4yiiDaenX6x83S5eeFbAOaLFU5kjwcMxOmo7PrfSbh7KvpA5Q6jMxyiMaOQ5O1C4NM0xt0vHRS5UzKliZvx/AIWww7Z39RUKDsdF8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB8197
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4edDLY9dqxxpVAKrpQRBN5Mv+TXTevpw+AbA0jTkLpakOAvdsh0EMfYcuXoGFSG7OwWp1wBP7BTQBKVAQUEE0ADbnWL1IJa4Pgz38XF8Lpg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB7273
 X-OriginatorOrg: intel.com
 
-On 8/26/24 17:20, Petr Machata wrote:
-> 
-> Przemek Kitszel <przemyslaw.kitszel@intel.com> writes:
-> 
->> On 8/22/24 15:49, Petr Machata wrote:
->>> In commit 8510801a9dbd ("selftests: drv-net: add ability to schedule
->>> cleanup with defer()"), a defer helper was added to Python selftests.
->>> The idea is to keep cleanup commands close to their dirtying counterparts,
->>> thereby making it more transparent what is cleaning up what, making it
->>> harder to miss a cleanup, and make the whole cleanup business exception
->>> safe. All these benefits are applicable to bash as well, exception safety
->>> can be interpreted in terms of safety vs. a SIGINT.
->>> This patch therefore introduces a framework of several helpers that serve
->>> to schedule cleanups in bash selftests:
->>
->> Thank you for working on that, it would be great to have such
->> improvement for bash scripts in general, not limited to kselftests!
->>
->>>    tools/testing/selftests/net/forwarding/lib.sh | 83 +++++++++++++++++++
->>
->> Make it a new file in more generic location, add a comment section with
->> some examples and write down any assumptions there, perhaps defer.sh?
-> 
-> I can do it, but it's gonna be more pain in setting up those
-> TEST_INCLUDES. People will forget. It will be a nuisance.
-> 
-> I'm thinking of just moving it to net/lib.sh, from forwarding.
+Hi, thanks for the review,
 
-what about separate file, but included from net/lib.sh?
+On 2024-08-12 at 16:40:00 -0700, Reinette Chatre wrote:
+>Hi Maciej,
+>
+>On 7/12/24 2:04 AM, Maciej Wieczor-Retman wrote:
+>> Sub-NUMA Cluster divides CPUs sharing an L3 cache into separate NUMA
+>> nodes. Systems may support splitting into either two, three or four
+>> nodes.
+>> 
+>> When SNC mode is enabled the effective amount of L3 cache available
+>> for allocation is divided by the number of nodes per L3.
+>> 
+>> Detect which SNC mode is active by comparing the number of CPUs
+>> that share a cache with CPU0, with the number of CPUs on node0.
+>> 
+>> Signed-off-by: Tony Luck <tony.luck@intel.com>
+>> Co-developed-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+>> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+>
+>Since you are "From:" author there is no need for a "Co-developed-by"
+>for you. Tony does need one. Please check: "When to use Acked-by:, Cc:,
+>and Co-developed-by:" in Documentation/process/submitting-patches.rst
+>(checkpatch.pl also warns about this).
 
-> 
->>> - defer_scope_push(), defer_scope_pop(): Deferred statements can be batched > together in scopes.
->>> When a scope is popped, the deferred commands
->>>     schoduled in that scope are executed in the order opposite to order of
->>>     their scheduling.
->>
->> tldr of this sub-comment at the end
->>
->> such API could be used in two variants:
->>
->> 1)
->> function test_executor1() {
->> 	for t in tests; do
->> 		defer_scope_push()
->> 		exec_test1 $t
->> 		defer_scope_pop()
->> 	done
->> }
->>
->> 2)
->> function test_executor2() {
->> 	for t in tests; do
->> 		exec_test2 $t
->> 	done
->> }
->> function exec_test2() {
->> 	defer_scope_push()
->> 	do_stuff "$@"
->> 	defer_scope_pop()
->> }
->>
->> That fractals down in the same way for "subtests", or some special stuff
->> like "make a zip" sub/task that will be used. And it could be misused as
->> a mix of the two variants.
->> I believe that the 1) is the better way, rationale: you write normal
->> code that does what needs to be done, using defer(), and caller (that
->> knows better) decides whether to sub-scope.
-> 
-> But the caller does not know better. The cleanups can't be done
-> "sometime", but at a predictable place, so that they don't end up
-> interfering with other work. The callee knows where it needs the
-> cleanups to happen. The caller shouldn't have to know.
+Thanks, I changed patch's author at some point and I think I forgot to change
+the tags.
 
-The caller should not have to know what will be cleaned, but knows that
-they are done with callee.
-OTOH, callee has no idea about the "other work".
+>
+>> ---
+>> Changelog v4:
+>> - Make returned value a static local variable so the function only runs
+>>    the logic once. (Reinette)
+>> 
+>> Changelog v3:
+>> - Add comparison between present and online cpus to test if the
+>>    calculated SNC mode is credible. (Reinette)
+>> - Added comment to cache size modification to better explain why it is
+>>    needed there. (Reinette)
+>> - Fix facts in patch message. (Reinette)
+>> - Change snc_ways() to snc_nodes_per_l3_cache(). (Reinette)
+>> 
+>>   tools/testing/selftests/resctrl/resctrl.h   |  4 ++
+>>   tools/testing/selftests/resctrl/resctrlfs.c | 73 +++++++++++++++++++++
+>>   2 files changed, 77 insertions(+)
+>> 
+>> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+>> index 2dda56084588..851b37c9c38a 100644
+>> --- a/tools/testing/selftests/resctrl/resctrl.h
+>> +++ b/tools/testing/selftests/resctrl/resctrl.h
+>> @@ -11,6 +11,7 @@
+>>   #include <signal.h>
+>>   #include <dirent.h>
+>>   #include <stdbool.h>
+>> +#include <ctype.h>
+>>   #include <sys/stat.h>
+>>   #include <sys/ioctl.h>
+>>   #include <sys/mount.h>
+>> @@ -43,6 +44,8 @@
+>>   #define DEFAULT_SPAN		(250 * MB)
+>> +#define MAX_SNC		4
+>> +
+>>   /*
+>>    * user_params:		User supplied parameters
+>>    * @cpu:		CPU number to which the benchmark will be bound to
+>> @@ -120,6 +123,7 @@ extern volatile int *value_sink;
+>>   extern char llc_occup_path[1024];
+>> +int snc_nodes_per_l3_cache(void);
+>>   int get_vendor(void);
+>>   bool check_resctrlfs_support(void);
+>>   int filter_dmesg(void);
+>> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+>> index 250c320349a7..803dd415984c 100644
+>> --- a/tools/testing/selftests/resctrl/resctrlfs.c
+>> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
+>> @@ -156,6 +156,68 @@ int get_domain_id(const char *resource, int cpu_no, int *domain_id)
+>>   	return 0;
+>>   }
+>> +/*
+>> + * Count number of CPUs in a /sys bit map
+>
+>"bit map" -> "bitmap"
 
-> 
->> As this defer is very similar to golang's in intention, I would give
->> yet another analogy from golang's world. It's similar to concurrency, you write normal code that
->> could be parallelized via "go" keyword,
->> instead of writing async code that needs to be awaited for.
-> 
-> Notice how in go, defer also runs at function exit. Similarly with C++
-> destructors, run on scope exit. There's no caller-defined "collection
-> point".
-> 
-> Putting off until "sometime" works for memory. Things like garbage
-> collection, obstacks, autorelease pools, etc. work, because there's
-> plenty of memory and we don't mind keeping stuff around until later. But
-> that doesn't work for the sort of cleanups that selftests typically need
-> to do.
+Will do.
 
-That's true. But I still believe that it's the caller (or better, "glue
-code") responsibility to take care of cleanup schedule.
+>
+>> + */
+>> +static unsigned int count_sys_bitmap_bits(char *name)
+>> +{
+>> +	FILE *fp = fopen(name, "r");
+>> +	int count = 0, c;
+>> +
+>> +	if (!fp)
+>> +		return 0;
+>> +
+>> +	while ((c = fgetc(fp)) != EOF) {
+>> +		if (!isxdigit(c))
+>> +			continue;
+>> +		switch (c) {
+>> +		case 'f':
+>> +			count++;
+>> +		case '7': case 'b': case 'd': case 'e':
+>> +			count++;
+>> +		case '3': case '5': case '6': case '9': case 'a': case 'c':
+>> +			count++;
+>> +		case '1': case '2': case '4': case '8':
+>> +			count++;
+>> +		}
+>> +	}
+>> +	fclose(fp);
+>> +
+>> +	return count;
+>> +}
+>> +
+>> +/*
+>> + * Detect SNC by comparing #CPUs in node0 with #CPUs sharing LLC with CPU0.
+>> + * If some CPUs are offline the numbers may not be exact multiples of each
+>> + * other. Any offline CPUs on node0 will be also gone from shared_cpu_map of
+>> + * CPU0 but offline CPUs from other nodes will only make the cache_cpus value
+>> + * lower. Still try to get the ratio right by preventing the second possibility.
+>
+>This all seems unnecessary since the next patch sets snc_mode to 1 if there
+>are any offline CPUs.
+>Seems more appropriate to move the offline CPU handling to this patch.
 
-> 
->> Going back to the use case variants, there is no much sense to have
->> push() and pop() dispersed by much from each other, thus I would like
->> to introduce an API that just combines the two instead:
->>
->> new_scope exec_test1 $t
->> (name discussion below)
->>
->>> - defer(): Schedules a defer to the most recently pushed scope (or the
->>>     default scope if none was pushed. >
->>> - defer_scopes_cleanup(): Pops any unpopped scopes, including the default
->>>     one. The selftests that use defer should run this in their cleanup
->>>     function. This is important to get cleanups of interrupted scripts.
->>
->> this should be *the* trap(1)
->>
->> with that said, it should be internal to the defer.sh script and it
->> should be obvious that developers must not introduce their own trap
->> (as of now we have ~330 in kselftests, ~270 of which in networking)
-> 
-> Yeah, we have 100+ tests that use their own traps in forwarding alone.
-> That ship has sailed.
-> 
-> I agree that the defer module probably has the "right" to own the exit
-> trap. Any other cleanups can be expressed in terms of defer, and I don't
-> know if there are legitimate uses of exit trap with that taken out. But
-> that's for sometime.
+Okay, I'll move it here.
 
-There could be multiple traps for ERR/EXIT/etc conditions, but for
-simplicity it's best to rely on just EXIT trap.
-So we should convert current scripts one by one to use your new API.
+>
+>> + */
+>> +int snc_nodes_per_l3_cache(void)
+>> +{
+>> +	int node_cpus, cache_cpus, i;
+>> +	static int snc_mode;
+>> +
+>> +	if (!snc_mode) {
+>> +		node_cpus = count_sys_bitmap_bits("/sys/devices/system/node/node0/cpumap");
+>> +		cache_cpus = count_sys_bitmap_bits("/sys/devices/system/cpu/cpu0/cache/index3/shared_cpu_map");
+>> +
+>> +		if (!node_cpus || !cache_cpus) {
+>> +			ksft_print_msg("Could not determine Sub-NUMA Cluster mode.\n");
+>> +			return 1;
+>> +		}
+>> +
+>> +		for (i = 1; i <= MAX_SNC ; i++) {
+>
+>(nit: unnecessary space)
 
-> 
->>>     Consistent use of defers however obviates the need for a separate cleanup
->>>     function -- everything is just taken care of in defers. So this patch
->>>     actually introduces a cleanup() helper in the forwarding lib.sh, which
->>>     calls just pre_cleanup() and defer_scopes_cleanup(). Selftests are
->>>     obviously still free to override the function.
->>> - defer_scoped_fn(): Sometimes a function would like to introduce a new
->>>     defer scope, then run whatever it is that it wants to run, and then pop
->>>     the scope to run the deferred cleanups. The helper defer_scoped_fn() can
->>>     be used to derive from one function its wrapper that pushes a defer scope
->>>     before the function is called, and pops it after it returns.
->>
->> It is basically a helper I would like to see as new_scope() mentioned
->> above, but it takes it upside down - it should really be the caller that
->> sub-scopes.
->>
->> I think that the name of the new_scope() would be better, still concise,
->> but more precise as:
->> subscope_defer(),
->> trapped(), or
->> sub_trap().
+Will fix.
 
-here I mean that "scope" is too broad without the word "trap" or "defer"
-in name
+>
+>> +			if (i * node_cpus >= cache_cpus) {
+>> +				snc_mode = i;
+>> +				break;
+>> +			}
+>
+>This is irrelevant after the subsequent patch but note that there are scenarios
+>where above loop cannot set snc_mode and the function will thus return 0 since
+>snc_mode is not initialized. This is a problem in division done by following hunk.
 
->>
->> I have no idea how to make a sub-trapped, SIGSEGV isolated scope of bash
->> execution that has ability to still edit outer scope variables. Perhaps
->> we could relax the need for edit to have easier implementation? It is
->> "all ok or failure/rollback" mode of operation anyway most of the time.
-> 
-> I'm not sure what you have in mind.
+Oh right, I'll set initial value to 1.
 
-	foo=1
-	function bumpfoo {
-		maybe-crash
-		foo=2
-	}
-	new-defer-scope bumpfoo
-	echo $foo
+>
+>> +		}
+>> +	}
+>> +
+>> +	return snc_mode;
+>> +}
+>> +
+>>   /*
+>>    * get_cache_size - Get cache size for a specified CPU
+>>    * @cpu_no:	CPU number
+>> @@ -211,6 +273,17 @@ int get_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size
+>>   			break;
+>>   	}
+>> +	/*
+>> +	 * The amount of cache represented by each bit in the masks
+>> +	 * in the schemata file is reduced by a factor equal to SNC
+>> +	 * nodes per L3 cache.
+>> +	 * E.g. on a SNC-2 system with a 100MB L3 cache a test that
+>> +	 * allocates memory from its local SNC node (default behavior
+>> +	 * without using libnuma) will only see 50 MB llc_occupancy
+>> +	 * with a fully populated L3 mask in the schemata file.
+>> +	 */
+>> +	if (cache_num == 3)
+>> +		*cache_size /= snc_nodes_per_l3_cache();
+>>   	return 0;
+>>   }
+>
+>Reinette
 
-do you want this to print 2 or 1?
-
-
-> 
->> After the above parts will be discussed out I will look more into the
->> details of the code more deeply.
-> 
-
+-- 
+Kind regards
+Maciej Wieczór-Retman
 
