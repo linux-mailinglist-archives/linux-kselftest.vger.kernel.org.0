@@ -1,83 +1,83 @@
-Return-Path: <linux-kselftest+bounces-16442-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16441-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D84759614FF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 19:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B05C19614FE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 19:05:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0878B1C22EEA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 17:05:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4F9D1C21023
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 17:05:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F323F1D47D8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 818231D47C8;
 	Tue, 27 Aug 2024 17:02:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="bQVswOf+"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="oN7Z8jwu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2052.outbound.protection.outlook.com [40.107.95.52])
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2044.outbound.protection.outlook.com [40.107.212.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4451D0DC4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0451D47B1;
 	Tue, 27 Aug 2024 17:02:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.52
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.212.44
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724778137; cv=fail; b=tcLcJbpDiIskHC+0TIS8hUXKG6jF4MBe1nmskr0wXXG60XTkGv3ieog02ZXBrJclgaG1eICO89K0kLo8uvJ1oroBrSVbhMFGxulQiimuR/Sl5YhFF3mCfa085Wt1iU4DK17OL6eycDcWFcQ9NWDsuIzlae06j4sQwBvFLEQ3T30=
+	t=1724778137; cv=fail; b=AtKX4rdceQ2VKuzYZssQdUfRjUF028QkCviA7qP+MyE+u/xHk+iyo7SN6xLObvnN2F2DybFPBmC7cS/Z7eSWAVJ549GbH6hydCzdHia6qgp/zyRX7oZJrcuylq8UiZoT/Vj7IXUEVGt4mJSYSVxY1MTf1qLe2+IczJ0m5ZpiImw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1724778137; c=relaxed/simple;
-	bh=CED3G04sfM5o6y8e9joEGQhf/0Q3YNCZN8Van4ALw14=;
+	bh=mNbpCl2ZWrPM9bpio3SEMXNhv5zl8VwUOFQ3I2YNNXk=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nLhAflEixi+ZBPgSCPrloRzsmUbMlsjnOTCrDnMyl3LoJj5Gnic0V8Qo49KJHp8WFn01jVEcdpmVv1ISNdobiyXc6pCyf7wM7Zhnil4HQrxu8hRlqNVAEuGSphB7we9u7gthF97Q/LOiA2k02dEC8/ZedA+oGgNsOr2bjrhOl8w=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=bQVswOf+; arc=fail smtp.client-ip=40.107.95.52
+	 MIME-Version:Content-Type; b=gNlYo+/DDKEAVU9cTE3uHQACVoiStMihtStp25ZUHxHIoW35uVgHKqt3U5iBPr3xpiZSkLaDHhByRk9aND/qjT2Pf7rq5T6NBr2igWKnbfkKpD2dJ13zBY767Dtm0+ToJNKY1bzLSYOzMtcnc5fFbT75bkd5uK1lUYJtBrlGqY0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=oN7Z8jwu; arc=fail smtp.client-ip=40.107.212.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=itkn3m+gXFid7g0LyLhrkU8rj32LYCfeSi2z13RnjCPUzKzBREWgNYzYQy2MkIzx0n4GIhTRS+Ujv92eWoDc5i97WSE3phNWL5y2oSuSHU66sywRRp2hNuMGT9rXj9H4MQLIDmriHxMoTeDJyfZwMDdMjxNFiFHH7H2mRGMFgrOeiRrMdc5v8pAxuCdanjR0MKSdBpehQ2PjO20OaCSlIQLzGHDyt1woU8vP4Tg+yp7TV7uLDp1G4P6+Uernw1/GhRI7pPJwybn9gLnUbMJDLHMLzV9XUClhu6zi2A9mhFgy0SQJeS2Q2fbolFeKPrIvexQzLybRYCoB/rdGxNSKYA==
+ b=ZV4clupA/2eTpYVhdmQB62czdQ1Qpgqvlb+YbdQaGUHOCksIHwC75sEtwMckSqSRrXjehjRXhrvRwTb2fIoX4eIi2RK1x60yLhwb7ozTFAOrrGbBoy4MXBTqBSswFZLN0qtiOXgWS5m9P8IWb7VJf4xYm0lg2GEGjftqk6kBib+Ed57kRMOaHgUjfJoaJ5qcCEpUaV7RQDiD6yMKZKLZiOVYZxXpI6p4rsJHxyAgdg6YS85zqhUUXtddLELwKLUHcCucBOCEonpFDksBcXXlVISWxxR/bH7BedpkRFWRJL0QHddgUUeW+svMynQiFkRhwuZF+dizx8Bi8R8ePwNPtA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4LkXVhx7CLy4jkOsRxBVgGp6G0jS0Miqms8A/q0GUFY=;
- b=wF0Oeck0JLfvvVbNyEhXxxZmahGFWI1FCgUoEAlkgt0eokz7VDSiTsE/m3e3oijZrYZHcGMp5YZ/cUEzLOhZuagU98vI4ob+XfxA4RLCeU2n1SHwrAOvFQTscFPZ5mlvyqPPhIUpP7JU3qFQ2l1nY6vCZn/+8dQ4CYHse4ZTqOeyUuHVdC67MLCjbccG2485ZKW7WUdnhjPtoETD2bdyRSAZWGi29c7s8FdAkEl7BBWi1H3KvWV6PY+S4ToM3MSU4UG2OIGmTHXVOsPzGxLzXHl8+h6PIpHwH9hD5XDVdRL3xH2ub2OWxewyUqy9FsD0ftL6NlIQUN0fH7VEeA/2Sw==
+ bh=6/VHoxUiLpU/MD5Q98bigKlmbsdt5Sg5CnOVwz95Lgs=;
+ b=B95IIDby5L9rgMffQbVEMmvTONstm8DSOcG7G6i8+R9068z7uAFbcHYDBDfbAQQ92JdJtXD8+6Z7CHoOvNbNZOA8U0nsMgKq6d2Y8Avzem4gWeFt2oY2YySXB25oGKu0PDVXrV4tdNhPQT7dtn/bNDMQRQjK1Ez6DKEgdOH+in6ohS6MczFJzcpDmwZicu1Vpl/vCAQdlL3RBS36Jet2+nqjNHgx8x1Ny4zHOMJpVTxaoV2h2zLEoUXfvbYDMhR7aZ/WEYMsVrsGBwhdxRu7f3TlaK1Bbsna0wHCf3V77CUDiTOscHBQK5FvM1ukk39snC51yGISvMMcHWZ2SxEq9Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=huawei.com smtp.mailfrom=nvidia.com;
+ 216.228.118.232) smtp.rcpttodomain=huawei.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4LkXVhx7CLy4jkOsRxBVgGp6G0jS0Miqms8A/q0GUFY=;
- b=bQVswOf+fWc7Wog0SCeYzSS23tuoL1g3fH0S+zQjm5fitE6klx5ebw1Ds9HLCGf83Nfzt4XZ+3zSlR+hsVKzMRcxjqDviVyXgLHZM6IVfddY2ezE8NBZzxUKTKMZ1FKR0fcXiGhTNpkxNLBCPQoenG2qukUCV8ND02aEYfYWW0GvNIjlRpRXlKP6ec2VCBcIi211GaIA6a3+/SGn51Qt89xm5yEnDsA3Bv2+L0tL1ioFhvpVYL89pAaJ/6fzJ2E0OyPQPFuuoXeM9HT+uT/UAopnUDygyJbhtvZPx/i1jn/3wvZbfU4/NtNBe1ZD8pi7Uc6GeUZLSyMBWelJ5NqoQA==
-Received: from CYZPR02CA0011.namprd02.prod.outlook.com (2603:10b6:930:a1::9)
- by PH8PR12MB7157.namprd12.prod.outlook.com (2603:10b6:510:22b::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.26; Tue, 27 Aug
- 2024 17:02:06 +0000
-Received: from CY4PEPF0000E9D2.namprd03.prod.outlook.com
- (2603:10b6:930:a1:cafe::41) by CYZPR02CA0011.outlook.office365.com
- (2603:10b6:930:a1::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.26 via Frontend
- Transport; Tue, 27 Aug 2024 17:02:06 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ bh=6/VHoxUiLpU/MD5Q98bigKlmbsdt5Sg5CnOVwz95Lgs=;
+ b=oN7Z8jwuGr3vUCDXZiq/4S87JAaEbtvgujQBnodtGvOTxhl/BPCqvBMlP/iwGcz5kv3oG3VbDeHAxOiD3Vz6xtbGxszlLIPPOBmCc0M9k1anhnhDsml9CJJ+9zeecXBVlaNjOGYWNt9E3ViUJG5N9aOmnP/ZbmnNGi+eabkBGXgSNEfmG7Qo9GTyoQhdNiqp0HwhTV7MZaZhzYhlAIRONCg3R8ebxSIuN7mCSVa8dpFKCx0bgpofnK8omhDW6fppA4TV8/MKJi+80Ahe9pq+sKvTz0qnegs8teuVFks6B6PqSZJtX7/8inEI7vLAa6/zCaEcTjAMfqK909/jCypYPg==
+Received: from SN6PR2101CA0001.namprd21.prod.outlook.com
+ (2603:10b6:805:106::11) by IA1PR12MB7592.namprd12.prod.outlook.com
+ (2603:10b6:208:428::6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.25; Tue, 27 Aug
+ 2024 17:02:10 +0000
+Received: from SN1PEPF000397B4.namprd05.prod.outlook.com
+ (2603:10b6:805:106:cafe::94) by SN6PR2101CA0001.outlook.office365.com
+ (2603:10b6:805:106::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.16 via Frontend
+ Transport; Tue, 27 Aug 2024 17:02:10 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- CY4PEPF0000E9D2.mail.protection.outlook.com (10.167.241.137) with Microsoft
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ SN1PEPF000397B4.mail.protection.outlook.com (10.167.248.58) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7897.11 via Frontend Transport; Tue, 27 Aug 2024 17:02:06 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.7918.13 via Frontend Transport; Tue, 27 Aug 2024 17:02:10 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 27 Aug
- 2024 10:01:54 -0700
+ 2024 10:01:55 -0700
 Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Tue, 27 Aug 2024 10:01:53 -0700
+ 15.2.1544.4; Tue, 27 Aug 2024 10:01:54 -0700
 Received: from Asurada-Nvidia.nvidia.com (10.127.8.13) by mail.nvidia.com
  (10.126.190.180) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Tue, 27 Aug 2024 10:01:52 -0700
+ Transport; Tue, 27 Aug 2024 10:01:54 -0700
 From: Nicolin Chen <nicolinc@nvidia.com>
 To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <will@kernel.org>
 CC: <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
@@ -87,9 +87,9 @@ CC: <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
 	<eric.auger@redhat.com>, <jean-philippe@linaro.org>, <mdf@kernel.org>,
 	<mshavit@google.com>, <shameerali.kolothum.thodi@huawei.com>,
 	<smostafa@google.com>, <yi.l.liu@intel.com>
-Subject: [PATCH v2 18/19] iommu/arm-smmu-v3: Allow ATS for IOMMU_DOMAIN_NESTED
-Date: Tue, 27 Aug 2024 09:59:55 -0700
-Message-ID: <3962bef2ca6ab9bd06a52910f114345ecfe48ba6.1724776335.git.nicolinc@nvidia.com>
+Subject: [PATCH v2 19/19] iommu/arm-smmu-v3: Update comments about ATS and bypass
+Date: Tue, 27 Aug 2024 09:59:56 -0700
+Message-ID: <c5eec29e1825579bbd94fd8d1b61d52493a1cdac.1724776335.git.nicolinc@nvidia.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1724776335.git.nicolinc@nvidia.com>
 References: <cover.1724776335.git.nicolinc@nvidia.com>
@@ -104,125 +104,113 @@ Content-Type: text/plain
 X-NV-OnPremToCloud: ExternallySecured
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D2:EE_|PH8PR12MB7157:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4568eba1-e99d-4799-17b0-08dcc6b9fb20
+X-MS-TrafficTypeDiagnostic: SN1PEPF000397B4:EE_|IA1PR12MB7592:EE_
+X-MS-Office365-Filtering-Correlation-Id: 19ee9509-a54b-435b-46fa-08dcc6b9fd5c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|1800799024|36860700013|376014|7416014;
+	BCL:0;ARA:13230040|36860700013|1800799024|7416014|376014|82310400026;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?/QVep0xOH2U9v6nvWntIZH/Dt1uDOPFBHeysdcipOyLTrWc1jIIpQJ6WZXi9?=
- =?us-ascii?Q?n+NBE4bbYxMUIiQsZwZjcZvy8t7HQwcjEhoP9gqK2Od2QzkK0RmZ1evu2Tps?=
- =?us-ascii?Q?Bqxgw/Z45JHCf3M4OZfEUfGNF81WccNh36tedB6HGs6MXiLlSof+kHLO7HNG?=
- =?us-ascii?Q?LV0Qdlztp85hcafwfXZBNwl7K4EPNCpPZd5vgkLw6uc4r+FfRgjqAurhxFy1?=
- =?us-ascii?Q?dmrpcDLLlL1qHoNVOiJmTHpZT3bfWPOL4JAolUTrScN/ocyqueBDkYuvWnpx?=
- =?us-ascii?Q?CbaP+xDB2klXYby6/1HAlYYbGI9VxwkZAc3JWdyR0IEkoSTBk5Gyay2POwDf?=
- =?us-ascii?Q?TbZaNFxnnqZ/bnkZnsIgzR0fMaIPApaweuN/57IDjU69iMzyQ+NImPOQn0so?=
- =?us-ascii?Q?mtCTWGy+bmXSHaGTqISiWywuxAo97cuOwcg01fPIZMhXfq2Kb8tWPaThIqcd?=
- =?us-ascii?Q?3B7B8jEJdMHd0eCyo7oFDY8h5YMkVoYRB2d6sC3wqpJeBlJgF0L9UwRehMqW?=
- =?us-ascii?Q?tUVBcObiDhHaHwZNGS1lyy7rhTRb+G6kpsCutwFDmAYP6ioitZTrZ/xPDQNE?=
- =?us-ascii?Q?8FBVTBgHCh0WRmL/GrN97zky7f6ZOfbGKc5br32JSme37KCkwZ5LXF27/xJC?=
- =?us-ascii?Q?4orHY8f1yVijrz6X9MLc/EuM+OlXTiikOHC5suBieWG3xPorzVTRX6lTj7qx?=
- =?us-ascii?Q?Gvlt6WU9E+L982bkS3JxdlrEJ9Ss1aAup0nO4Kmm8D/DGXLxUoWnCQqGiU4w?=
- =?us-ascii?Q?F/2LkCgPU2MmZadbYqwfkw21fNpB6xwQepgZCFJcrqoHopF9oL1eY7z36kkl?=
- =?us-ascii?Q?hwtEXrxO0a838DG7kB6m/4MTqw9rYI7G2rD/ZlVPq91eqe+0zvpvJNCmNIGd?=
- =?us-ascii?Q?4EsBNve1x4w+YB32MKt/ZendHdmVosZ31mC+OMjSZRnsdAItl8Y4oemy83Hd?=
- =?us-ascii?Q?WIRFV6Yl7eF+FRARLhnelxWNuBGijZ1Kbrw7rptc7if8kWb23FgBRgvMr3jK?=
- =?us-ascii?Q?ujlgK2u4oqI1OtLy1TX1H3IJ4Jjg66uMOoIZ0k+2YhFe8xy1V1bU42Mq4Ib+?=
- =?us-ascii?Q?hBRimA0F4+W1grkxc7I2I9prySpbM5FujbtARLZloBRkVWRfQky+6ypbAUIJ?=
- =?us-ascii?Q?tP3fJx2HMjstQNEQFJaLDIU0Uxj/68lazJH3QJu9xZykjgbfZcgAua4Kt51W?=
- =?us-ascii?Q?WcLTUqs7xD61yelsUqDrz0LqPNXwiOAv165wByMObQat2Yd8HVmLLzc+97tw?=
- =?us-ascii?Q?KCk0JgmWxgDomD60/WIprSxv/eS+2qpMOwpJIEnGtAzkPiIvpPbirzQJaucF?=
- =?us-ascii?Q?ohk+XC37spJgmPY+uWQRs/5YK5+4ZFAMDJV5dbNQgiTsAO5LSGbRAFzPf+ab?=
- =?us-ascii?Q?K3zoN2RYF9boP/74q3tqWxPZJoRfEpTmSp7zM7ZEpqSohCBFKO7BVyudWcvL?=
- =?us-ascii?Q?iJhy+D4lBHJCODtJMZNEPYZECKjKb1HZ?=
+	=?us-ascii?Q?p6ET5sb+Wgx1w+PSqZmC+liRH/fB0vFOSYzfqhfk4Wo4y5XI0wIpsX3+Tfeo?=
+ =?us-ascii?Q?/G5hywQxCPwNs7mhKDnz/r1NpFGqABxV0mgZsY/7SVukWeHCZgIzsZbCCZha?=
+ =?us-ascii?Q?S6tl9g2joZaxfhQGZ0LxahZH93PLG44q1x17mmSrCitLjei4Y7/cGP7TF0JH?=
+ =?us-ascii?Q?dmpcjH88kE+2F40T4vcUMmuiwZLSdOaJPZdj51dRb71uQd/vd5M8s32r6vXP?=
+ =?us-ascii?Q?IV2cEj1bMhpDGFW2e8BMfRrqQn59QVpShkzxsLyWdCjEO36jhcGy05StEWGR?=
+ =?us-ascii?Q?GBszE6/Lp8TT14s5A42w/kQIVYjdSViLFK86QV6O1eJeiI9Oj7iI0aI+Xd9c?=
+ =?us-ascii?Q?8W9ZMGECigQhnZb2581CpHU6M6Oy2CTFGl4UAPUy5qjWSshrE2wgFVwBoQLQ?=
+ =?us-ascii?Q?skqcOTNKp/2/d9EBuXDY2i/QXBNde4MU/xxoDNXAPlWvh/Z/TAnfbopaU8cB?=
+ =?us-ascii?Q?bOiDIOPdDPL8qggpkzx/WlQh4GamWD2Mq8XEMlJglb4mkBWOWiMihYOGn7x/?=
+ =?us-ascii?Q?c5budxZk+6/wlzzDxLaXte7P/YPE4AXVKuZMQyent1DD1aNJlvZ3VWekMa0v?=
+ =?us-ascii?Q?cDw8nQKPTnUqtijvA8isTFU6zdd7TIR7Z+Wtmp+PhUC1OlaDQAnTy2vBvXzM?=
+ =?us-ascii?Q?gAcgo8O8AhQKXvmhvI9n1+UxpfgXABgTNDk9hMe8sBg1Gs5ilweqN4DHUhCA?=
+ =?us-ascii?Q?52OlhhfudrDRAoXVYA0SWrahpzTQ6tVsplKv3C964KZYIGH9CD4VHeUXjltl?=
+ =?us-ascii?Q?KlQIGZ9YudV18oavTa7ysP9iDfEltZi5wuwmTJCBERid1Q5M1W+sTs1nMRxz?=
+ =?us-ascii?Q?M4a5hFFjNIXUtu1zy0WC1neCY9t606LDcclD1bUlzWW41/WDlAhVDbsCsGuR?=
+ =?us-ascii?Q?tAKj2urM9NWD2mxctMmwLWREPBwum04t05JrGxnSIjDEaazO99dOQqaqDwTR?=
+ =?us-ascii?Q?d7VbUcz1A5IpT5jlDY1EEDnz/l247XCPVUicoOlQbbkpoTnkATzyMffJJ8w4?=
+ =?us-ascii?Q?HIoXo5tk8T29apId6Y9u6tnuIw8lNbdcwgk0Iy/vSCeaRD0Z1KeFe3CnyHh7?=
+ =?us-ascii?Q?XaxczvAxw1CSXATl9d0VOY6nLyK9CALhM1Ky+49HiYvz3RMLYtwFOnk2ts6s?=
+ =?us-ascii?Q?nIJGSEcAMnRsxlho6uRdk8glLyVWVjuMkw8HDItSYCQIDWBh0mtFXRadVYib?=
+ =?us-ascii?Q?L9E/XyAZDdTCXxkwFQt2+x6GQKBgZghIIYXeadtRqo8d0QRFB6O6AV8Ddqyz?=
+ =?us-ascii?Q?YkB0a2It6P19yBqT0Fp2lAUnewDFvDodIHEvO68NYpKviYzhseTv+BHQV15Z?=
+ =?us-ascii?Q?xbMwPk9Sqyom249edNgPX6lXSHYW5NBuggREBHuffFGZ+NTj2M+fZwvrSGyJ?=
+ =?us-ascii?Q?HhrMMO6U/4cp10goo0fbgVibiHY7EumiGjq8Hdczxjpi1uNT5Qg/S79QG8d4?=
+ =?us-ascii?Q?kjLq+Mqzemn1lQUcRdCnCLQaeTz8TI7k?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(1800799024)(36860700013)(376014)(7416014);DIR:OUT;SFP:1101;
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(7416014)(376014)(82310400026);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2024 17:02:06.3264
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2024 17:02:10.0294
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4568eba1-e99d-4799-17b0-08dcc6b9fb20
+X-MS-Exchange-CrossTenant-Network-Message-Id: 19ee9509-a54b-435b-46fa-08dcc6b9fd5c
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000E9D2.namprd03.prod.outlook.com
+	SN1PEPF000397B4.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7157
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7592
 
 From: Jason Gunthorpe <jgg@nvidia.com>
 
-Now, ATC invalidation can be done with the VIOMMU invalidation op. A guest
-owned IOMMU_DOMAIN_NESTED can do an ATS too. Allow it to pass in the EATS
-field via the vSTE words.
+The SMMUv3 spec has a note that BYPASS and ATS don't work together under
+the STE EATS field definition. However there is another section "13.6.4
+Full ATS skipping stage 1" that explains under certain conditions BYPASS
+and ATS do work together if the STE is using S1DSS to select BYPASS and
+the CD table has the possibility for a substream.
+
+When these comments were written the understanding was that all forms of
+BYPASS just didn't work and this was to be a future problem to solve.
+
+It turns out that ATS and IDENTITY will always work just fine:
+
+ - If STE.Config = BYPASS then the PCI ATS is disabled
+
+ - If a PASID domain is attached then S1DSS = BYPASS and ATS will be
+   enabled. This meets the requirements of 13.6.4 to automatically
+   generate 1:1 ATS replies on the RID.
+
+Update the comments to reflect this.
 
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 ---
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 15 ++++++++++++---
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h |  1 +
- 2 files changed, 13 insertions(+), 3 deletions(-)
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index bddbb98da414..6627ab87a697 100644
+index 6627ab87a697..ad43351145d0 100644
 --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
 +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -3237,8 +3237,6 @@ static int arm_smmu_attach_dev_nested(struct iommu_domain *domain,
- 		.master = master,
- 		.old_domain = iommu_get_domain_for_dev(dev),
- 		.ssid = IOMMU_NO_PASID,
--		/* Currently invalidation of ATC is not supported */
--		.disable_ats = true,
- 	};
- 	struct arm_smmu_ste ste;
- 	int ret;
-@@ -3248,6 +3246,15 @@ static int arm_smmu_attach_dev_nested(struct iommu_domain *domain,
- 		return -EINVAL;
- 
- 	mutex_lock(&arm_smmu_asid_lock);
-+	/*
-+	 * The VM has to control the actual ATS state at the PCI device because
-+	 * we forward the invalidations directly from the VM. If the VM doesn't
-+	 * think ATS is on it will not generate ATC flushes and the ATC will
-+	 * become incoherent. Since we can't access the actual virtual PCI ATS
-+	 * config bit here base this off the EATS value in the STE. If the EATS
-+	 * is set then the VM must generate ATC flushes.
-+	 */
-+	state.disable_ats = !nested_domain->enable_ats;
- 	ret = arm_smmu_attach_prepare(&state, domain);
- 	if (ret) {
- 		mutex_unlock(&arm_smmu_asid_lock);
-@@ -3497,8 +3504,9 @@ arm_smmu_domain_alloc_nesting(struct device *dev, u32 flags,
- 	    cfg != STRTAB_STE_0_CFG_S1_TRANS)
- 		return ERR_PTR(-EIO);
- 
-+	/* Only Full ATS or ATS UR is supported */
- 	eats = FIELD_GET(STRTAB_STE_1_EATS, le64_to_cpu(arg.ste[1]));
--	if (eats != STRTAB_STE_1_EATS_ABT)
-+	if (eats != STRTAB_STE_1_EATS_ABT && eats != STRTAB_STE_1_EATS_TRANS)
- 		return ERR_PTR(-EIO);
- 
- 	if (cfg != STRTAB_STE_0_CFG_S1_TRANS)
-@@ -3511,6 +3519,7 @@ arm_smmu_domain_alloc_nesting(struct device *dev, u32 flags,
- 	nested_domain->domain.type = IOMMU_DOMAIN_NESTED;
- 	nested_domain->domain.ops = &arm_smmu_nested_ops;
- 	nested_domain->s2_parent = smmu_parent;
-+	nested_domain->enable_ats = eats == STRTAB_STE_1_EATS_TRANS;
- 	nested_domain->ste[0] = arg.ste[0];
- 	nested_domain->ste[1] = arg.ste[1] & ~cpu_to_le64(STRTAB_STE_1_EATS);
- 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-index e7f6e9194a9e..6930810b85cb 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-@@ -832,6 +832,7 @@ struct arm_smmu_domain {
- struct arm_smmu_nested_domain {
- 	struct iommu_domain domain;
- 	struct arm_smmu_domain *s2_parent;
-+	u8 enable_ats : 1;
- 
- 	__le64 ste[2];
- };
+@@ -2830,9 +2830,14 @@ static int arm_smmu_attach_prepare(struct arm_smmu_attach_state *state,
+ 		 * Translation Requests and Translated transactions are denied
+ 		 * as though ATS is disabled for the stream (STE.EATS == 0b00),
+ 		 * causing F_BAD_ATS_TREQ and F_TRANSL_FORBIDDEN events
+-		 * (IHI0070Ea 5.2 Stream Table Entry). Thus ATS can only be
+-		 * enabled if we have arm_smmu_domain, those always have page
+-		 * tables.
++		 * (IHI0070Ea 5.2 Stream Table Entry).
++		 *
++		 * However, if we have installed a CD table and are using S1DSS
++		 * then ATS will work in S1DSS bypass. See "13.6.4 Full ATS
++		 * skipping stage 1".
++		 *
++		 * Disable ATS if we are going to create a normal 0b100 bypass
++		 * STE.
+ 		 */
+ 		state->ats_enabled = !state->disable_ats &&
+ 				     arm_smmu_ats_supported(master);
+@@ -3157,8 +3162,10 @@ static void arm_smmu_attach_dev_ste(struct iommu_domain *domain,
+ 	if (arm_smmu_ssids_in_use(&master->cd_table)) {
+ 		/*
+ 		 * If a CD table has to be present then we need to run with ATS
+-		 * on even though the RID will fail ATS queries with UR. This is
+-		 * because we have no idea what the PASID's need.
++		 * on because we have to assume a PASID is using ATS. For
++		 * IDENTITY this will setup things so that S1DSS=bypass which
++		 * follows the explanation in "13.6.4 Full ATS skipping stage 1"
++		 * and allows for ATS on the RID to work.
+ 		 */
+ 		state.cd_needs_ats = true;
+ 		arm_smmu_attach_prepare(&state, domain);
 -- 
 2.43.0
 
