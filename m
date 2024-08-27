@@ -1,124 +1,127 @@
-Return-Path: <linux-kselftest+bounces-16386-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16387-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F02119608E5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 13:38:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EE50960909
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 13:41:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 980DA1F23E58
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 11:38:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71B9B1C22F14
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 11:40:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D471819FA8F;
-	Tue, 27 Aug 2024 11:38:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E50871A4F02;
+	Tue, 27 Aug 2024 11:38:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gpf8ddOX"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="FeV1T5uJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A105019DF82;
-	Tue, 27 Aug 2024 11:38:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A1201A4B9F
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Aug 2024 11:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724758692; cv=none; b=oM4eFY4LzYaZo3rV+QQ80B747RGKwi4anxxF3luzC7p34h5ljWIEoAT8dlLJnotQnSa/WEHgWwVGUKsnkyQvt0+p72K4HkRxqdiSpHkRHPxBIgX5Dv6eNBocTpVvQxL9WUnQtfdYGTAUOb4nNhVkPLWd6MXOgCxTbOkfCCJUv7k=
+	t=1724758706; cv=none; b=QpDqKlkUW4qZZK5TFWQF9OT3rh+UfciMcsF1hVAmNh5Oi0qFguvy0IimPj3Jz5HVZ5xU6sNh/96m/Sij4bbjOu3BSCgAZhW1gnuStPE29C3eLcA487Kw09ofsz8vHdglY5IXCOCzReLoesCGg6NOdvKzZe0/Mju7E2nwtIRVvtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724758692; c=relaxed/simple;
-	bh=2+A2bF7Lj9wuQUwEpvgzmZKK3imkhu2KCOi7wnoixak=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uXgsdoAQlp21dyu9f+5tkWlLgTSMZNQFo44ol2/4f603pF7RxVPIB/me551QVnyez/9XLLlXuKN3c+ztjfNbniDqt4/NltYPVRq+FWxw5FLYA7IbdDkqbOHMvBAw3qWRKD+TvssFlu1aiMeUATbLe6+viHBO1eRTzUdVz2Scx7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gpf8ddOX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A82C582AB;
-	Tue, 27 Aug 2024 11:38:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724758692;
-	bh=2+A2bF7Lj9wuQUwEpvgzmZKK3imkhu2KCOi7wnoixak=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Gpf8ddOXDK2vLQMMp3FzmG/a/m/kr0GXzqv0V69de1kGXjsWZZVM5il9nZ3rJgJ/C
-	 HhCk9FpXwrs24xGKZufPQ6AVtvbP5tMYwDBYGmyjXUFSAs0/qqunKiRjR5cHaGfdBj
-	 NELnVGfuXrKZce7YLlJBXHfzEBMziXjXhbc2oCx/U/canba16aHthF+qGabnfRBtoM
-	 BP6yHu6nKpM6xKRbubnCGD2Di4NReNtwAwTcMpZZI8xnW+1KjwLJ14ftgHU2j0y4CR
-	 5qpdVZJYRS0/PkwK6KW2GK7c8ijyUvbxdWydqc2U6Yg0gjukfhNJnDfFkqe+yURXpL
-	 dMagJjNp/hQXA==
-Date: Tue, 27 Aug 2024 12:38:04 +0100
-From: Will Deacon <will@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Joey Gouly <joey.gouly@arm.com>, linux-arm-kernel@lists.infradead.org,
-	nd@arm.com, akpm@linux-foundation.org, aneesh.kumar@kernel.org,
-	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
-	broonie@kernel.org, christophe.leroy@csgroup.eu,
-	dave.hansen@linux.intel.com, hpa@zytor.com,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
-	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
-	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
-	szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 06/30] arm64: context switch POR_EL0 register
-Message-ID: <20240827113803.GB4318@willie-the-truck>
-References: <20240822151113.1479789-1-joey.gouly@arm.com>
- <20240822151113.1479789-7-joey.gouly@arm.com>
- <20240823144531.GH32156@willie-the-truck>
- <Zsi7ovLOfuFdfuuz@arm.com>
- <20240823170835.GA1181@willie-the-truck>
- <ZsjXtE7Kg0LQwNAL@arm.com>
+	s=arc-20240116; t=1724758706; c=relaxed/simple;
+	bh=Npj44TBKlqnhu3zHMPy7+eqaEtI/Ba/zXO+RNqdGj8w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AEOImf6X3OJ3A7OewlF/WSoV4GKJrFU9SlCpSdYrvZDv9Mu0AdzgsTn6VzjA106Ts9ha/oMHfMBr/XOsu0lE1Fsg+JSirUjqWggahJtLC7LtmXAGMZPGtkWXrMndqs7IeU7InLxUSiPEzeyOh/2kjQorfyPyZsQxxYg6M6+X+K8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=FeV1T5uJ; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-71423273c62so3864539b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Aug 2024 04:38:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1724758704; x=1725363504; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TAy/Xjv7dazCWNa6I0ehFJegEbGsU1jmIx9V0tPRpro=;
+        b=FeV1T5uJRH48usV9BLsrMKoJ1ZY8OpbniAy/YZO2DutNzu7DxFPJtJVBYWrDIkCx2N
+         a1aeJoQiWNUDPbPgewPenDFqp5N49LPr0TdXawkQfGro0QTgViv7RLFZ2M5C+WkMTqsU
+         kbVyiAa6qRwels5Wi5NdvjNmrZBKYHeHnFGFY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724758704; x=1725363504;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TAy/Xjv7dazCWNa6I0ehFJegEbGsU1jmIx9V0tPRpro=;
+        b=my2gt4CsBGpwp0qCY+SIA1aBnTo9fCuYZPDqrzaVOG7nuJOdztE9EAFdadf3zQGQ0W
+         REWfWpEAtgQVSfForr+Pv/A+/yuOyQk82eleE6nIuhHJYuA/6J7LyArA0d+6WNaZXthm
+         nYxN9rm/15k6xROnBn289hkad2FH8Pm22YHyAvRbHmsuz6Ko/cYGTQCQa/2nv10f59eZ
+         I3zZRBAa6SG4UpPNwxmsfhMVOA+VC5Ve4+5RZTXkjm6fcNgayghTdzwACTdxtPwJSojY
+         G7B5lmkFvLf622NRsMOZ/g8Ale8kJyjgOSBxZ6HKnfXBuZUPAN22H6nErlQnNzHeLH1n
+         ehLA==
+X-Forwarded-Encrypted: i=1; AJvYcCWV8yMcYdsVEVsvTbUnvKZ8wKdiYIjknGGLNqSOrTbTZ6hI/tSFaAXitjq1cSo+q0bQ6DrUqs22uPJKmqE6dk0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5EBmN6JTLOLfVtZjzkyxHXgmLmjg9lQQp2jGAWVaAftRHJuku
+	Jc6KmnzxLjwZP5waKYhPsA8OkBc6O3Te4s6/todVxZLdzznWoPkYWTBmKmlKhG8=
+X-Google-Smtp-Source: AGHT+IHgbs9Bq+GBA6SDyCLeBOxwxfa3Hl8DfIoeX8tN6KodOJhVa97KS7/E2OhmeptghNq1dqpSVQ==
+X-Received: by 2002:a05:6a00:23c2:b0:70d:2583:7227 with SMTP id d2e1a72fcca58-71445cd599dmr11286300b3a.6.1724758704331;
+        Tue, 27 Aug 2024 04:38:24 -0700 (PDT)
+Received: from [192.168.121.153] ([218.49.71.194])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7cd9ac97fb5sm9115107a12.8.2024.08.27.04.38.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 27 Aug 2024 04:38:23 -0700 (PDT)
+Message-ID: <2b6112b1-ce10-4e14-87d4-04d64972be56@linuxfoundation.org>
+Date: Tue, 27 Aug 2024 05:38:17 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZsjXtE7Kg0LQwNAL@arm.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 1/2] selftests: Rename sigaltstack to generic signal
+To: Dev Jain <dev.jain@arm.com>, shuah@kernel.org, oleg@redhat.com
+Cc: mingo@kernel.org, tglx@linutronix.de, mark.rutland@arm.com,
+ ryan.roberts@arm.com, broonie@kernel.org, suzuki.poulose@arm.com,
+ Anshuman.Khandual@arm.com, DeepakKumar.Mishra@arm.com,
+ aneesh.kumar@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240821061523.2650568-1-dev.jain@arm.com>
+ <20240821061523.2650568-2-dev.jain@arm.com>
+ <1ac911c2-9d9c-4408-8697-1e90b3ae3e8d@linuxfoundation.org>
+ <51617076-3aec-413d-bf42-cf1c359a0c38@arm.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <51617076-3aec-413d-bf42-cf1c359a0c38@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 23, 2024 at 07:40:52PM +0100, Catalin Marinas wrote:
-> On Fri, Aug 23, 2024 at 06:08:36PM +0100, Will Deacon wrote:
-> > On Fri, Aug 23, 2024 at 05:41:06PM +0100, Catalin Marinas wrote:
-> > > On Fri, Aug 23, 2024 at 03:45:32PM +0100, Will Deacon wrote:
-> > > > On Thu, Aug 22, 2024 at 04:10:49PM +0100, Joey Gouly wrote:
-> > > > > +static void permission_overlay_switch(struct task_struct *next)
-> > > > > +{
-> > > > > +	if (!system_supports_poe())
-> > > > > +		return;
-> > > > > +
-> > > > > +	current->thread.por_el0 = read_sysreg_s(SYS_POR_EL0);
-> > > > > +	if (current->thread.por_el0 != next->thread.por_el0) {
-> > > > > +		write_sysreg_s(next->thread.por_el0, SYS_POR_EL0);
-> > > > > +		/* ISB required for kernel uaccess routines when chaning POR_EL0 */
-> > > > 
-> > > > nit: typo "chaning".
-> > > > 
-> > > > But more substantially, is this just to prevent spurious faults in the
-> > > > context of a new thread using a stale value for POR_EL0?
-> > > 
-> > > Not just prevent faults but enforce the permissions from the new
-> > > thread's POR_EL0. The kernel may continue with a uaccess routine from
-> > > here, we can't tell.
-> > 
-> > Hmm, I wondered if that was the case. It's a bit weird though, because:
-> > 
-> >   - There's a window between switch_mm() and switch_to() where you might
-> >     reasonably expect to be able to execute uaccess routines
+On 8/22/24 05:10, Dev Jain wrote:
 > 
-> I don't think we can have any uaccess between these two switches (a
-> uaccess could fault, that's a pretty weird state between these two).
+> On 8/22/24 08:33, Shuah Khan wrote:
+>> On 8/21/24 00:15, Dev Jain wrote:
+>>> Rename sigaltstack to signal, and rename the existing test to
+>>> sigaltstack.c.
+>>
+>> Can you elaborate on the benefits if renaming the test?
+>>
+>> Also you have such a good information in the cover-letter for this
+>> patch - it would be good to include it in the change log for this
+>> one or the new test.
 > 
-> >   - kthread_use_mm() doesn't/can't look at this at all
+> Okay.
 > 
-> No, but a kthread would have it's own, most permissive, POR_EL0.
 > 
-> >   - GUP obviously doesn't care
-> > 
-> > So what do we actually gain by having the uaccess routines honour this?
+>>
+>> The new test itself is good. I don't understand the value of renaming.
+>> I can see the problems due to not being able to fix stables if the
+>> existing test needs fixing. If there are good reasons for renaming,
+>> I am all for it.
 > 
-> I guess where it matters is more like not accidentally faulting because
-> the previous thread had more restrictive permissions.
+> After looking into some git history, now I understand that "sas" actually
+> has some meaning, although I still can't find its full-form :) I thought that
+> sigaltstack would be a better name, but I guess sas is a subset of sigaltstack
+> as part of SA_ONSTACK. So, let us drop the renaming of the test.
+> 
 
-That's what I wondered initially, but won't the fault handler retry in
-that case?
+I assume you will be sending a new v6 patch series without the renaming and just the
+new test?
 
-Will
+thanks,
+-- Shuah
+
 
