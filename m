@@ -1,59 +1,58 @@
-Return-Path: <linux-kselftest+bounces-16467-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16468-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9D069618F7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 23:06:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8730B961904
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 23:10:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 643951F23D22
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 21:06:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B99051C22BA4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 21:10:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D227F1D2F7F;
-	Tue, 27 Aug 2024 21:06:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 901BD1D31A3;
+	Tue, 27 Aug 2024 21:10:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q8tE6zRc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GMyY3g16"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4877158DCC;
-	Tue, 27 Aug 2024 21:06:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62289156661;
+	Tue, 27 Aug 2024 21:10:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724792772; cv=none; b=lHRL0bFzrCycRKpaUbq29le5DNa9K7TicoqaKIDFDDDIAiciJGR1R42g2GLe0Jvf6t0/BmM7Xo/3SSAcMzpBlmL4UqbaVeff99OHOVWkakyfYIkDy7hG27dHbCQ/d5HjNSuey0dboNnteImYHUp9RBSfccTMxhZ9BBqP/cFOQqg=
+	t=1724793043; cv=none; b=VR5dgopsOdVP6H/zsyu/Ch0qXCxgAOTkz32vfziS1mvT9RsPRWulXd0zHSy3mLG+TvUHUdXg/p80DX029AeeZHFT0R9PNkdcWpRgXl0v91n8+1HGR++8XcCqATtoDb3mJZ953M+GYo3UxIy2sjtq7zVGb6AZD0gdAX+VN1W1UZw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724792772; c=relaxed/simple;
-	bh=AITd6I4jN/3/3pEIAqMX/YbozHxwCGR6mJVUUAJ6sk8=;
+	s=arc-20240116; t=1724793043; c=relaxed/simple;
+	bh=Lg4iEMS7bS1Rv0HvbxACs1qOLdsM8mTeV3VcM50LMYA=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=P6UuTnwH6IhEuiF5AduDIT1jvCZlhCSCPgxnTk/2HGvTbEkmOYPMnxGy14r6O7mU95oWCkEzwbXVqa1x/mtt6OEh76CrRmSKiSAKYfDQVsFtHLwQQedONvjnhTeKekkbmxYyhifSYokKdnz9N79mkn1Z9jHThQnCjf/It+mVOjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q8tE6zRc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2C5DC4AF1C;
-	Tue, 27 Aug 2024 21:06:11 +0000 (UTC)
+	 MIME-Version:Content-Type; b=YX0ACTllNNus7VE2PH/REk7jOF3ctc1zTI2KJd0NhXr+wQK0+thLzIaXg7oxyYuK6jfQ61Fwf19t3YTNE7SlTMPQVKzkFDnm2awAhVWYpiPi8oytKL0q2asoht3/QDCeoFwhVPGSUKyaqOuYdW7fsgAoc3nIcskEYsdQeDU9L+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GMyY3g16; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B0D2C4E699;
+	Tue, 27 Aug 2024 21:10:42 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724792772;
-	bh=AITd6I4jN/3/3pEIAqMX/YbozHxwCGR6mJVUUAJ6sk8=;
+	s=k20201202; t=1724793042;
+	bh=Lg4iEMS7bS1Rv0HvbxACs1qOLdsM8mTeV3VcM50LMYA=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=q8tE6zRcSPxmeVeQSgo//XfuIFHhHO0mPr6uAwzDHrtkxHZQw5uIKec2N6psBdtv4
-	 NWANGlt20RJxfczWYmRpazwGnx4b1fuU2zjDBVnu1g8WTeZuXqiA9qlq+yRAqWDYht
-	 v0zOHj4rigtQTCyPklDKiDIoljMIE/5omoFUaR+mVKauP13XY10Bbt23CJ/iS48yP6
-	 fHvddnJGA41wgoi/PnEQbVX94eTORL+D+lSr9+U3e4Kvlw0VtMi9X/QL2gItgCeyi9
-	 TFL6sEC06Eu6Pxm3pGFh9wpOWxS1Z3QCqzo/kqUg67n+9IxaBvn3kSr0vYLSa/5r6j
-	 x4mERP7A+SpwQ==
-Date: Tue, 27 Aug 2024 14:06:10 -0700
+	b=GMyY3g16/EgYsToWiRA36+RaUBS23NlwnBFjtsglIhQhseOaRcjjoRT1Xy1PDfLsQ
+	 ZK3mPnSHpCc4lt+RNPBBU3ObmSIcdUDr9OoaFXdtV2WJnxZAaguRhdttFBlY09FK1L
+	 UguBfEWna9vBMugY8Flp7hk8gZXaBycI09p+r33hIdogMNciIZ9PmI0YSnwjA7MSSf
+	 C4NM6DHc3WUCN9ICrp6bg/KAOURgaEKzS62cvZ8JXsW0DJbI2JSTo1oQqRyaqhvI3p
+	 mtgAwNAS2C0CBguoOROycLl37D718EJHDjZHjV+Zg5jzS1zCS4cI2SybH5Nv7wdNSa
+	 ef3LOWX7WAjFQ==
+Date: Tue, 27 Aug 2024 14:10:41 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: David Hunter <david.hunter.linux@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com,
- javier.carrasco.cruz@gmail.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com,
- shuah@kernel.org
-Subject: Re: [PATCH 1/1 V3] selftests: net: improve missing modules error
- message
-Message-ID: <20240827140610.0ec927df@kernel.org>
-In-Reply-To: <20240827205629.51004-1-david.hunter.linux@gmail.com>
-References: <20240826085010.27ff4377@kernel.org>
-	<20240827205629.51004-1-david.hunter.linux@gmail.com>
+To: Dmitry Safonov via B4 Relay <devnull+0x7f454c46.gmail.com@kernel.org>
+Cc: 0x7f454c46@gmail.com, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+ <shuah@kernel.org>, Mohammad Nassiri <mnassiri@ciena.com>,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v4 0/8] net/selftests: TCP-AO selftests updates
+Message-ID: <20240827141041.0c815dbd@kernel.org>
+In-Reply-To: <20240823-tcp-ao-selftests-upd-6-12-v4-0-05623636fe8c@gmail.com>
+References: <20240823-tcp-ao-selftests-upd-6-12-v4-0-05623636fe8c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,41 +62,24 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Tue, 27 Aug 2024 16:56:29 -0400 David Hunter wrote:
-> The error message describing the required modules is inaccurate.
-> Currently, only  "SKIP: Need act_mirred module" is printed when any of
-> the modules are missing. As a result, users might only include that
-> module; however, three modules are required.
+On Fri, 23 Aug 2024 23:04:50 +0100 Dmitry Safonov via B4 Relay wrote:
+> First 3 patches are more-or-less cleanups/preparations.
 > 
-> Fix the error message to show any/all modules needed for the script file
-> to properly execute.
+> Patches 4/5 are fixes for netns file descriptors leaks/open.
 > 
-> Signed-off-by: David Hunter <david.hunter.linux@gmail.com>
+> Patch 6 was sent to me/contributed off-list by Mohammad, who wants 32-bit
+> kernels to run TCP-AO.
+> 
+> Patch 7 is a workaround/fix for slow VMs. Albeit, I can't reproduce
+> the issue, but I hope it will fix netdev flakes for connect-deny-*
+> tests.
+> 
+> And the biggest change is adding TCP-AO tracepoints to selftests.
+> I think it's a good addition by the following reasons:
+> - The related tracepoints are now tested;
+> - It allows tcp-ao selftests to raise expectations on the kernel
+>   behavior - up from the syscalls exit statuses + net counters.
+> - Provides tracepoints usage samples.
 
-Please don't post patches in reply to:
-
-Quoting documentation:
-
-  Resending after review
-  ~~~~~~~~~~~~~~~~~~~~~~
-  
-  Allow at least 24 hours to pass between postings. This will ensure reviewers
-  from all geographical locations have a chance to chime in. Do not wait
-  too long (weeks) between postings either as it will make it harder for reviewers
-  to recall all the context.
-  
-  Make sure you address all the feedback in your new posting. Do not post a new
-  version of the code if the discussion about the previous version is still
-  ongoing, unless directly instructed by a reviewer.
-  
-  The new version of patches should be posted as a separate thread,
-  not as a reply to the previous posting. Change log should include a link
-  to the previous posting (see :ref:`Changes requested`).
-  
-See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#resending-after-review
-
-Our patch queue is too long right now for me to handle incorrectly
-posted patches, sorry, please repost tomorrow (v4 or v3 REPOST).
--- 
-pw-bot: cr
+Looks like we got no flakes over the weekend, so applying, thanks! :)
 
