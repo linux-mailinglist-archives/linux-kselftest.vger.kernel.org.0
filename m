@@ -1,137 +1,147 @@
-Return-Path: <linux-kselftest+bounces-16457-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16458-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F26719616D9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 20:23:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59FB49617A8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 21:05:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2724288090
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 18:22:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D9521C23367
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 19:05:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1586E1D2795;
-	Tue, 27 Aug 2024 18:22:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2ED791D1730;
+	Tue, 27 Aug 2024 19:04:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="aRXc2LCc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3XyVvOM5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDA61CF291;
-	Tue, 27 Aug 2024 18:22:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFFD132132
+	for <linux-kselftest@vger.kernel.org>; Tue, 27 Aug 2024 19:04:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724782976; cv=none; b=e3vOcLPx+gWocr6ErgmnOagY/ij7E+YfoAbEEJ6vdaJZE1icp74gRQz3EDthOQO2xvCm5q4RMixHQw9rNzzqbfea+YnnQ/KGB8TU8vMBO+a20z8gkKYC67hersVnjj5tsP0CzLsgKQxll0ZCZvJOojdWd27P19WlbK4Uo/upSgY=
+	t=1724785488; cv=none; b=FBPp15P7QP5Kgkqup5YbDG/HrhBBt5N6zt38MeHfFJL9DcuSHHxxToqRG0V8+9nTQXEOdKVbRNFxwfcwGzJUXvM5NlHBbcpQGZiIQIo+effqPMNNRbM61GtsOk+EKVYD8hzC8UzOqBSQCVRo5BH0kdATfpfxEZ92GQ/+twapj0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724782976; c=relaxed/simple;
-	bh=XcCF67VGTMPngNt+jYyzJLf3XPAFCBiDSQn0MARRYNE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YtXu7wtRFJ4Cq8D39agUYy8LTr2T+ImKzwCKDbfv6XlnfNiqmVLytQNDgvmduqKD6KnmPotIF/djR4YwpCi2QPQ3lrmoOtrajdESRFubzfYPW4Jq0rjlj9lUqxpJ0cyL4f+0+FgKoqDZwzGTOxWU9ZQy4OzoWR4YZ7aoX9ot3sA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=aRXc2LCc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2858C4AF09;
-	Tue, 27 Aug 2024 18:22:52 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="aRXc2LCc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1724782970;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6IIlC4dKeX0MR+87wiXBKWBHYPvMuntBVfDv8HHvaKU=;
-	b=aRXc2LCcclXS0jZM2Er3xb+9/MC6tyTrnANQKQqiX8JchcC5Hct3PDriYN6bmQyyvpVrZu
-	SoRTJ7lKlZu8bysVWJFpmMCUsDdL0JJSqO5l7LQ2QGh4MGWrRpFxxzDVBg/4dd6rTXgykh
-	bzknrtr7GCDH1d4bP7p3h1ixzFFzzvI=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 82078a25 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Tue, 27 Aug 2024 18:22:50 +0000 (UTC)
-Date: Tue, 27 Aug 2024 20:22:44 +0200
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Shuah Khan <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 05/17] vdso: Avoid call to memset() by getrandom
-Message-ID: <Zs4ZdAtnm2UEr5cd@zx2c4.com>
-References: <cover.1724309198.git.christophe.leroy@csgroup.eu>
- <5deb67090b214f0e6eae96b7c406546d1a16f89b.1724309198.git.christophe.leroy@csgroup.eu>
- <20240827180819.GB2049@sol.localdomain>
+	s=arc-20240116; t=1724785488; c=relaxed/simple;
+	bh=RG3ZxtDlE3uWd5ZqmvdklkSX8pTaiPAySK1DX+KTRbA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WcedFvkmNytl45z+u3kOGoPnP43tD7KHdyKTM3GLPYwS0GLRR+oD+MBOuv3P97/5x4I1to53N3GFQ35Av/+vGWxWxMosoXx9mivVu86UUbeLxg9BsKVY2GXo2gWRcqM+Qxfy9Z2BiB1Arq0oolMRPndV0LiK/hgmcPTIhecrJpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3XyVvOM5; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-202146e93f6so60080955ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 27 Aug 2024 12:04:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1724785486; x=1725390286; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yTejj9+1ObS0lEjCmOy95/zqthLaCVlILAz3efTdjGA=;
+        b=3XyVvOM5zKgmbTxdM6fk/yiGnCGcgIXINxKzbROPGxn7RElagFLpVbVaeggiMOP6aD
+         6Ns246NMIcK3B8V5fpIbOSm4sBP557ppQjXWFLCV4mZXroGU60T47qkzUhTiayBCadTg
+         FF4Fthca/VDsTDBywhHoN+TrmNCbrenEi5i5pdFCtT0K3lRFLheLXwlG++rCabkF3Hv6
+         LaL9TnTj0v164h8ZaA7ZT37DrIeRkZ9ykFrBx8APHj+6KanGByqX+h/04DSeUm78qCIO
+         gMtc7t/lrTokpa5uuBNlFED7j94tck2P/nlbr4I01H/SdpWmG6SnTxMUq03XdcFLoNjl
+         Z2NQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724785486; x=1725390286;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yTejj9+1ObS0lEjCmOy95/zqthLaCVlILAz3efTdjGA=;
+        b=FyAfbLHj4z2GAlj4F61aBN3IWL6sk8JcTjPab5innpzJeEhhPDUU9Hl2d/venWnEkv
+         uElQxWH3OJRVHQBaeSiPi0+NmDf/4XzKRe4cvgPHn4vCLdakzRf2z272RqAnTf+gQ+26
+         bdyQO+eWUamakPtSdthNMbdSi5KBCXekcA6BgIW2VaQQ2NN75kfA0mkRFQAyzjVHjJp5
+         nEzHc3PjdSrBVy213CL89kV/wviz5K+lds7XmoRiGrrS1c75guLvItrjOqNDAnYHoGLr
+         zIYFAseOZos6zLF00WD0GUsC3lxX5l82arRzCyrcJQsPC2tK2mV2V0XR2GftHV7kpuLG
+         NBgw==
+X-Gm-Message-State: AOJu0YzpsVZsK1EBdfAHukGiKr3YlOHTK9bUCc0s+jj+5nGJHER+GjBe
+	3UoZ5+lDiNv4G2HgULQdKOIncC0LbitxwwympwaP3zcuKUV2xVgtVDV5fSixdV5Ay4/xUZwKecw
+	b6kjZ4ykKupMIxtMYtnQlLAXLAa8U5ii0fv9i
+X-Google-Smtp-Source: AGHT+IGVHZsjk9p8HwDLfcGxFu//tM7i+IWZuyv2l1z8f46p4bWKM8I/qJEUXQXpXlM4OrllN062TVLPbC3JUNWzB+Y=
+X-Received: by 2002:a17:903:11c5:b0:1fd:a0b9:2be7 with SMTP id
+ d9443c01a7336-2039e44f83dmr168107805ad.13.1724785485658; Tue, 27 Aug 2024
+ 12:04:45 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240827180819.GB2049@sol.localdomain>
+References: <20240826222015.1484-1-michal.wajdeczko@intel.com> <20240826222015.1484-4-michal.wajdeczko@intel.com>
+In-Reply-To: <20240826222015.1484-4-michal.wajdeczko@intel.com>
+From: Rae Moar <rmoar@google.com>
+Date: Tue, 27 Aug 2024 12:04:33 -0700
+Message-ID: <CA+GJov4dfR=Cv7uRhPqw3P3XP==rntYWzgCKJ_7O4AcfwD--qw@mail.gmail.com>
+Subject: Re: [PATCH v2 3/6] kunit: Add macro to conditionally expose
+ expressions to tests
+To: Michal Wajdeczko <michal.wajdeczko@intel.com>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	David Gow <davidgow@google.com>, Lucas De Marchi <lucas.demarchi@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 27, 2024 at 11:08:19AM -0700, Eric Biggers wrote:
-> On Thu, Aug 22, 2024 at 09:13:13AM +0200, Christophe Leroy wrote:
-> > With the current implementation, __cvdso_getrandom_data() calls
-> > memset(), which is unexpected in the VDSO.
-> > 
-> > Rewrite opaque data initialisation to avoid memset().
-> > 
-> > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> > ---
-> >  lib/vdso/getrandom.c | 15 ++++++++++-----
-> >  1 file changed, 10 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
-> > index cab153c5f9be..4a56f45141b4 100644
-> > --- a/lib/vdso/getrandom.c
-> > +++ b/lib/vdso/getrandom.c
-> > @@ -4,6 +4,7 @@
-> >   */
-> >  
-> >  #include <linux/minmax.h>
-> > +#include <linux/array_size.h>
-> >  #include <vdso/datapage.h>
-> >  #include <vdso/getrandom.h>
-> >  #include <vdso/unaligned.h>
-> > @@ -74,11 +75,15 @@ __cvdso_getrandom_data(const struct vdso_rng_data *rng_info, void *buffer, size_
-> >  	u32 counter[2] = { 0 };
-> >  
-> >  	if (unlikely(opaque_len == ~0UL && !buffer && !len && !flags)) {
-> > -		*(struct vgetrandom_opaque_params *)opaque_state = (struct vgetrandom_opaque_params) {
-> > -			.size_of_opaque_state = sizeof(*state),
-> > -			.mmap_prot = PROT_READ | PROT_WRITE,
-> > -			.mmap_flags = MAP_DROPPABLE | MAP_ANONYMOUS
-> > -		};
-> > +		struct vgetrandom_opaque_params *params = opaque_state;
-> > +		int i;
-> > +
-> > +		params->size_of_opaque_state = sizeof(*state);
-> > +		params->mmap_prot = PROT_READ | PROT_WRITE;
-> > +		params->mmap_flags = MAP_DROPPABLE | MAP_ANONYMOUS;
-> > +		for (i = 0; i < ARRAY_SIZE(params->reserved); i++)
-> > +			params->reserved[i] = 0;
-> > +
-> >  		return 0;
-> >  	}
-> 
-> Is there a compiler flag that could be used to disable the generation of calls
-> to memset?
+On Mon, Aug 26, 2024 at 3:20=E2=80=AFPM Michal Wajdeczko
+<michal.wajdeczko@intel.com> wrote:
+>
+> The ONLY_IF_KUNIT macro will add expression statement only if the
+> CONFIG_KUNIT is enabled. Otherwise if CONFIG_KUNIT is not enabled
+> it will evaluate always to 0.
+>
+> Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
 
-Apparently not: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90701
+Hello!
 
--ffreestanding disables the most but still can generate calls to memcpy
-and memset, and the bug was closed as "RESOLVED INVALID". Surprising,
-but maybe it's one of those "functions are part of language" things.
+Thanks for the second version of this patch series!
+
+I definitely could see this new macro as being useful but I currently
+don't see an example of its use in the rest of the patch series. How
+do you see this macro as being used or do you have a current use case
+for this macro?
+
+I would be fine adding this macro without being used as long as
+examples on how and why to use it are clearly documented.
+
+Thanks!
+-Rae
+
+> ---
+> Cc: Rae Moar <rmoar@google.com>
+> Cc: David Gow <davidgow@google.com>
+> Cc: Lucas De Marchi <lucas.demarchi@intel.com>
+> ---
+>  include/kunit/visibility.h | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>
+> diff --git a/include/kunit/visibility.h b/include/kunit/visibility.h
+> index 1c23773f826c..69c71eacf368 100644
+> --- a/include/kunit/visibility.h
+> +++ b/include/kunit/visibility.h
+> @@ -18,6 +18,13 @@
+>       * @body: identifiers to be introduced conditionally
+>       */
+>      #define DECLARE_IF_KUNIT(body...)  body
+> +    /**
+> +     * ONLY_IF_KUNIT - A macro that adds expression statement only if
+> +     * CONFIG_KUNIT is enabled. Otherwise if CONFIG_KUNIT is not enabled
+> +     * it will evaluate always to 0.
+> +     * @expr: expression to be introduced conditionally
+> +     */
+> +    #define ONLY_IF_KUNIT(expr...)     expr
+>      /**
+>       * VISIBLE_IF_KUNIT - A macro that sets symbols to be static if
+>       * CONFIG_KUNIT is not enabled. Otherwise if CONFIG_KUNIT is enabled
+> @@ -34,6 +41,7 @@
+>             EXPORTED_FOR_KUNIT_TESTING)
+>  #else
+>      #define DECLARE_IF_KUNIT(body...)
+> +    #define ONLY_IF_KUNIT(expr...) 0
+>      #define VISIBLE_IF_KUNIT static
+>      #define EXPORT_SYMBOL_IF_KUNIT(symbol)
+>  #endif
+> --
+> 2.43.0
+>
 
