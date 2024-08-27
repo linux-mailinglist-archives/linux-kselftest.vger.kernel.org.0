@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-16400-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16401-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4470960C5B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 15:41:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 413B6960C70
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 15:43:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C96431C2305D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 13:41:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E5DAB29257
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 13:41:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFB241C2DB6;
-	Tue, 27 Aug 2024 13:40:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C22A81C4603;
+	Tue, 27 Aug 2024 13:40:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="AyFtduH7"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="c7lZYjKC"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2087.outbound.protection.outlook.com [40.107.255.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA431C0DEC;
-	Tue, 27 Aug 2024 13:40:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1091C2DBB;
+	Tue, 27 Aug 2024 13:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.87
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724766033; cv=fail; b=bkAoKzSsGqiGJNzU5ek17VLDjqN5VTwSf4AktT9aDA7j4FSh5zPYcVzZVFuhblZK68p47oSvqnw2PP/ehRpJ3rB0KJOZX4aSU6CXpM5ipo1CWhBvXjZvSYhLkSfRLHgCcQyWKzLyUqhQA6yP9pz84DrGV824yJY0PI7D0O+V9ag=
+	t=1724766035; cv=fail; b=fjVXDoL24Qv9mOfVUWlyiEZLFddU0dZItyVZyGdcbezsSW7JudIzjk45SWgxs6Orp8b/oJEP/yEH7x9uxnHM7ZF+AGJGYtCkcPdGfz644y9CIZvuI8bUcLCl04RavLCLNKVKrwaKmtA+LLw6hJOPgr34bY4/wtDeEKWCREJWnxY=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724766033; c=relaxed/simple;
-	bh=nXfbON76y8qaKlAOQIBOoPq+3UkB6dbrg4rJdq5SCVE=;
+	s=arc-20240116; t=1724766035; c=relaxed/simple;
+	bh=EonApa4sGNEO0js95RLioa48C6VTlbIq67fUhOD3Obo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=EGDreIda6sG6EMj/rs0Yp64LIDlXbzK5xjOeOeUiRQoNRLh7Uz1U981qtpOTID0pmx182jVuc+geeZVIL3GhERBbZFa4HKFaJoOrBWqVNFYmuRXpOz0K34WfUCvanOyZFefUhfX8AJJaafIEHnn9zI2750HYtGVcbJXPAJaz3Es=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=AyFtduH7; arc=fail smtp.client-ip=40.107.255.87
+	 Content-Type:MIME-Version; b=rh4bfXj5mH2tKQHdhR1uG1SKTFk4QCzars3mhMG8nrr7EtPC3chByIU1ha26aaW1YCuN4n/UeU6iekXed2YcXina5IqtmP3HcfZiv4XEfmOPyWdLqQdJIAJmPghB4eJLGIV87PDoe3vDIeZVufqD+3BCgnklTATjs91k3mrRhdA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=c7lZYjKC; arc=fail smtp.client-ip=40.107.255.87
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=boZBeOZRyiCq1zqnPUlrO333U81wHGakbw1K0cgO4K+5cDrPRPFUOkeaNdktyN45SXGtHKL+3nmNzG1gyfJGL3dP8NUAYpAwC/S1FOIFjhnx0SCjO+VMm96Z9WG34gEx43Zy0PAplPgdbb3DtSE/l9w9vHuJ9XcAYWT2c29MK67eAt9MKmlkkh+4VCvAw36d2NSDsBQLRfj+OVj3GYg1N6V6Z0ADBX2vttW67LUVyoH28Lc+Z0VgFkQ287fJ5BbLk4RZznweuiGR96Ay17fm9oWS5lTGI6Ex+1GnohHPI5fA4A6OlDF4vYJsGsDe3qIzfH5RMzu+Prh2PPNf+BDFRg==
+ b=mJc1ECqmL4WA9Sqg9/uGmewWpTAD3RQ3nbwEMUBYp4PnRgeIZdMjz7/XYhjIgpihLtrTEY5lGFjSxOC9pl5LtvmamcL5rkyBOXwWXAFbFTbmASyiXI4yt2QUKdak8+lBck+Yiq9z8Kno0m1zQJ0Ok2Vfs8DGkvGAqsZ4ysxGQgem1cB3P89hjujkVgCcquvzyeGFp/pqCRUcZCjxj4crg9VFULf5EZD6V5m2Blb3rjS18cbBNjRHmgRaZq+mCaQjxuZlNxwxCGtOqIAA6BiUi40J/3Qf9OIKZSUDcVpvTGeMWSDz/xu++ArBhuyq1jWYqqhLJOXrUUKchKYWZKW8lA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=woPyhG9zeCpJnOQ2526b+B6SPQo5v7tKR8fEUkUxouY=;
- b=FY3Zf4rx6XwxZesQlSrWobuPmEVWsCAL6Fqz2ck6AIyzZgEnmh1tE/pzir6wrl5jGXjPfahG9l8ImBY68RGFSa2QpvncwpErn+lNyXYRQI7GbHQFhrrqhmfRxtcRm+UEGOpPr+orUz2aMfBvcPybD5G7TP/wiz21bBZaCMMOn5HaCYobBh3xm99pigLpwJXYyY1IotpR1q0HFag7Wja55fGxsCD3zcqxVuOwH/h1sBgDTeuMlpQgysPGcKO8sxZRmznNqjmGefQ7ZaW4FNgjc3T1/WNcGJNHILzgIfZQOZ2uj3tRbdL0nKcJY/TKTMNjk0m/XFSgUNsg6fAxMih15w==
+ bh=mb5oHwtqeqmk8i0rRE0WhrUdnOtYaSMsDmqTS3V7ES4=;
+ b=AfMSZ4wFmhl1ED7qOB2GRsj+lvQ7ooXa0XpMMFLDHCGWQK0Tcqs+pfeylrvK5y+RQuFY5ye57JQV0oCz9KAh0vTY1i2Sp6vP8hMXXkh6mt/OvS039JeoRzSGpWwelB/7b3tEr8D5seQwsimR1LN1/b/Cg+rATkpYteJH5B38JLY5O+ojb2Y1lW8URleMua4eDhq/btGGI+eQMRkxShBPMNopFBukKnuEpugcjwArjSH/YlmeBC0DRmShwMVeYjhJ3rCe/MMsSAbRn/tNOP77c3wrV8G+GetcUfJ+sIZjKJPfoNIqS/jKLFwHyN/l3cRFCBzZj+Skmj91jx8+4tQNZw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=woPyhG9zeCpJnOQ2526b+B6SPQo5v7tKR8fEUkUxouY=;
- b=AyFtduH7Cy/Mt44RkstKNplV7LtFeU2LuMhE9NCUWU9kSy1PtVvuijicZrlfUT4SzBH/65NyDb2nZFw5e8jWxmNhcK7o9Kl0cbT46STJ3dgqRRZVAjZbeuSCuBRFY2l74CMtFyUR7ivvqFZoL2yt7p/1LP7UriYm0AICQ9ZL3Zm4tTSwSrpPpEXZSJc8IqpKyeihn/Ejl0ed6NbJ3ExEyZFen00aK5eMpNJcy3Dpa5xdyKXVXHneuLie73hMqVgmXqf3urv3fjv2sb2+mDS24YeFB5dB2eELlM50vaz2sW/3zb7PGDNTPdccWV3nDotMiN1gZJCIT5Q1QvFe37TxYQ==
+ bh=mb5oHwtqeqmk8i0rRE0WhrUdnOtYaSMsDmqTS3V7ES4=;
+ b=c7lZYjKCXGf3/lyCGT0jM3L93x81j4VpLxvtkyN7J6GQSGZEzSLDT1Qp8uxYW640QWxZ0uZgvbpjr6WYGX6AUbZFmR9/xIDDP5oWTcjGjeej055TgEOprydjs5cN7c4g7U0rN2eba6kuOryn0mEg/5yUeMHx8mfCMLbhTQdvV8PIujgZB1a9Tu0XIcYXFxptC+9YCw8bObprn/SEHhr2MpMO2SSAhuAeibKVd+jhX1nkBfaNeujQSCzE8oFJ7ZGduahZubYKjsdvcEvLtZfJozfZXSkO5hgs9YjCUDuJKq7SmC93JTbDF+O2XMX/rhlDEMVAJORieGBDdMVnRwwfEg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from SEYPR06MB5913.apcprd06.prod.outlook.com (2603:1096:101:da::16)
  by OSQPR06MB7153.apcprd06.prod.outlook.com (2603:1096:604:298::13) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.24; Tue, 27 Aug
- 2024 13:40:26 +0000
+ 2024 13:40:30 +0000
 Received: from SEYPR06MB5913.apcprd06.prod.outlook.com
  ([fe80::f049:a716:8200:c4a1]) by SEYPR06MB5913.apcprd06.prod.outlook.com
  ([fe80::f049:a716:8200:c4a1%4]) with mapi id 15.20.7897.021; Tue, 27 Aug 2024
- 13:40:26 +0000
+ 13:40:30 +0000
 From: Lin Yikai <yikai.lin@vivo.com>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -77,9 +77,9 @@ To: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org
 Cc: opensource.kernel@vivo.com,
 	yikai.lin@vivo.com
-Subject: [PATCH bpf-next v1 1/2] selftests/bpf: Update "vmtest.sh" for cross-compile arm64 on x86_64 host.
-Date: Tue, 27 Aug 2024 21:39:58 +0800
-Message-Id: <20240827133959.1269178-2-yikai.lin@vivo.com>
+Subject: [PATCH bpf-next v1 2/2] selftests/bpf: Fix cross-compile issue for some files and a static compile issue for "-lzstd"
+Date: Tue, 27 Aug 2024 21:39:59 +0800
+Message-Id: <20240827133959.1269178-3-yikai.lin@vivo.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240827133959.1269178-1-yikai.lin@vivo.com>
 References: <20240827133959.1269178-1-yikai.lin@vivo.com>
@@ -96,195 +96,153 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SEYPR06MB5913:EE_|OSQPR06MB7153:EE_
-X-MS-Office365-Filtering-Correlation-Id: 75e242fc-9798-41da-98ce-08dcc69dceb5
+X-MS-Office365-Filtering-Correlation-Id: 4f006ffe-830f-40cb-200d-08dcc69dd17c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|52116014|921020|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?lyBmDDofcy3uS94w5/wUM0M12JCYOsXlHHktst7fLH1wnXgu3kAv807Zy2N6?=
- =?us-ascii?Q?YPIiMh0pPFtDcW1PTJ62cNXTCo0nvQsC3Ky64nNp4qOSRidLyF+C14PxLDzG?=
- =?us-ascii?Q?vjy19VAenW6U4BJMcRxQGopxni7DLH8/0gyxzPGoG03PZrf9sEukYwjNfqDO?=
- =?us-ascii?Q?sQ4HRJKfyWr7gjxsDVX4u/NLeiCXUqUdEcl+4XRrGdoZPGtGYR6XKtXhs01Q?=
- =?us-ascii?Q?upnd8+1Guxdmh4lVGdpDxvoZys781E59f7AxORXeG3E6lx4LPL+1FrNkvtKw?=
- =?us-ascii?Q?7HnSE+SlMD2TU4A1DREfRLYYF543E5UY/vN9cLM36EZL2dSxkHRUSrbJMQVQ?=
- =?us-ascii?Q?RGlzHawJSFLle4ulfFkZQ0KA2Rh5dQi0D7ltB1ug77yYKDbgScbfrKvPnrmV?=
- =?us-ascii?Q?wvsO0nWE4Lcu0anCrRAxHMtauFTpvY3HYoP4+CqX2i66MsFIvbOp4QX92+mn?=
- =?us-ascii?Q?hXSM810rVZZl4PS3jcfj65760ar+CmA5bVyq9Oj3BV8+dQYbnHvzqDZrPebP?=
- =?us-ascii?Q?zCIR4vmq2lY8GtsGK2asAQavCLkV2UMAzIs4YSq4ugaqbEFKyDvNZXcvtxTa?=
- =?us-ascii?Q?7HY+PO9jmZaOZRqhfYuavTcI6XyebA3avAGu4qPEPgJN9sQh6Vk8mPh4s17P?=
- =?us-ascii?Q?bJzEvwStSva+oRSHb/wIVwe1aOS3XX4Lm8Tf+pAltukKB4lTEZZT7tnsmKbB?=
- =?us-ascii?Q?bhwwkkcxIaqsHCVcKAjRy00FV6F4hsFEwNDHgysE6e9cMzVbExSdZAMst/Sb?=
- =?us-ascii?Q?zjvwSHsjunHsPZ/dT0Lr3yv/j6BlUJ6F7RMIrr621IRbZtEjE6Qme1BHZ/Zm?=
- =?us-ascii?Q?dRtM90WP3HoSvERD9eUsfOJUPfZPLgj5rbd1T0fnRG9Cr6um6LgwB79vhssV?=
- =?us-ascii?Q?AAeMmgEbVwsW8CQtDX5ycekW/EXsr54Mx6g9ir9kbNSmo0MJn64BgJou6Hqi?=
- =?us-ascii?Q?1Xd7VoGI0fURRc2s20NOhnp9a4VSpezl60yE5r5qL2GUjMIOlJ3yj0uW01Py?=
- =?us-ascii?Q?aY4ULXasdBXwoE9OdtlnnzqBTOUVKK+ZxmTnPtGhP0cbjbxeLxoHsOJrKa0U?=
- =?us-ascii?Q?Ux75uOtO+qS771Nx6++oBBATnBVvklir9qqdlugVsp/0gFqgolooy+/Ks2gp?=
- =?us-ascii?Q?yGrdnFszcH0DxiV784zdbjFHe+60u7mv0V4Kcun1Owx4c6NS77KDUbhxSRQj?=
- =?us-ascii?Q?0cEFGITOWV1+CPi9d5Iipn06QtaYhyo26VtUawZ9mNAlZpePh+GtizBabPss?=
- =?us-ascii?Q?EkIMdToEGwrFDJ40/N6BWCSVDVXXVULioi992STVe+FUc/pC0NrASKI8HwFK?=
- =?us-ascii?Q?VmkQBhnaCx6T7QnAvc1HqM2FNaqXUhE3d8pNoy9WKUCLZlHdhZf0lzS//EDn?=
- =?us-ascii?Q?EVPTl4E1ELAV+x2SBJLlp9FWWk1P?=
+	=?us-ascii?Q?PUqyOdGJxHy0kGwyy+3SKfjQiTnp+2z7GrXgzXR5hRYrqj2InEnRpXENAhD8?=
+ =?us-ascii?Q?hLTcjiMA6t7EAwq7BG6d1i0cG53sAoO3clpOV5yuUBmYV4mYoAODUz2ZfrcN?=
+ =?us-ascii?Q?YRosMO8HsImYLJ2H8WtNo0qJYNLKlGX8uRyZcuqo9aR+1+XUuwjyl0xZlYMM?=
+ =?us-ascii?Q?l4BsGuoVLhvj2xT2uChdZq76uWLlrWEvQw+EtZyXDoBE6Ekqmc9PIKIOu5w3?=
+ =?us-ascii?Q?APogRkIGqJKQHhIkBxgptMg+kmhK1SWJCuctPHqR7pgtjTeG7TXlqrm6tokU?=
+ =?us-ascii?Q?o7t0h3FwNX5BRJu44DRvugPlsQW1PgGi/wIS0zRv6Hb9OvF+ckSI8GPRK2vu?=
+ =?us-ascii?Q?ceag5iXMrgspweTeMtuYY0r0ytkqMwgUPQobbj3Qyk9Vcy7ImZRyRjdBde2C?=
+ =?us-ascii?Q?0TotJ8Y+hDmk/9Dykjna7yvhVf3l2uRZo8DbLmqeF5AgltpqSYhAYga3Jy/j?=
+ =?us-ascii?Q?kV5o+8ruWhLeILWm2Y+5JvgNR27o71xLwbMM4Tqb6uSGjobEdVA/Lk3A771G?=
+ =?us-ascii?Q?91ZIxI3UBZLd7kAX/BtV/rQ8W1+dCP1tBslrXlOEIY7uhxc55ca38E8cFyLH?=
+ =?us-ascii?Q?TlvwA73yWnvHGSiYeaBAIP1YDZmEzUDLUEgVf9EUQFstWI/fOGwoleHprB7z?=
+ =?us-ascii?Q?sgLm5x8Xq+rgv9sd6Eb+qtKd3I16gLfR1CQsdEUa6ajmv9Y9TBwXtbxc5YDx?=
+ =?us-ascii?Q?5B5uOdrU7rOGafIgLA4yfdM2/BTO3KklmQxJ7w/QW4Q44YXChw+d2mrIU+96?=
+ =?us-ascii?Q?kZSceuc2oMdihz5345sYvdK/je7EZB0mv07KQAdFc7Xa/ShalM6cdYqCZe2j?=
+ =?us-ascii?Q?zfSktsaBxuQDPzmTgEatq75g16w70PjXkP6VQYN1LTNibGhSkwQZadyqsOIF?=
+ =?us-ascii?Q?HjX3ZySy+4CCkmBnWEq6n4JbcMBNVrzk9mrpRWYmgNO9WbCytk+ajfoPSBYN?=
+ =?us-ascii?Q?IDvW6JQyxzF2Me3zsf3U1F50UtR7AyKUGVsnwigqFvCD14du18L0a6gmkZzr?=
+ =?us-ascii?Q?2SuL8u8SyUottOniLE+xzAtriR4D5rwVmd8FSLTwMynEkDNtFCdhlUZIrqYF?=
+ =?us-ascii?Q?PbCXElHrSKmv6uT9mXoRaMP0Qhs5Z9kBvuUw03k66GszVwDpHQxKMdX39JgX?=
+ =?us-ascii?Q?xk2mld+aP6KnWeD0A2afCaFfRMSajCQqwvtaSvIK0UrCF0oHjyR0yA6d22mL?=
+ =?us-ascii?Q?GAW7pK+TI13xy05Mod7uYK+qKPAlhA023eaBtal+aeubkxL8nh+mXsJvbWPR?=
+ =?us-ascii?Q?gfKyO03nilRFYCmrjgSE91LpCMCrBUVH5E2GS0PuFM7EBOu4HwxrwJ6HV0bo?=
+ =?us-ascii?Q?GvpK5GLCHGOqkK7jBw29LuniO0HEBx2crVM2RReizdOQoz3sLmfJegQTSc5N?=
+ =?us-ascii?Q?DN6ApdLu8qHwhdb6INUko/lYZhO9PVa/6u5QtNOYDpJSFTXW23ewf6GON/4p?=
+ =?us-ascii?Q?yzv+oY1hxV0=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEYPR06MB5913.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(52116014)(921020)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?utaaIGpUnzyKdQgCmsoOJEaBTHfdMSEdHrmn6VPsNFTt9LW6Rk7dRgsai7xO?=
- =?us-ascii?Q?bYWtN8/ejo3NNCuk1QpWSlBaIunMwGQ16mVxISdjPrmUy6hqX/J0P1D/Athw?=
- =?us-ascii?Q?ZuB8/4Kcy9axBUx0BytogYZpzFfrsYiQcGfgu34CHXO2soFVXRcYQe3sLYi3?=
- =?us-ascii?Q?vpKcrcmPSlL1IPDImztdABc3V25BMY9AIhVeJMi4ap4HZNOxh9cjePbXH7eW?=
- =?us-ascii?Q?CBuzzwWJ5z5DKISQYA12n6wRUnHSf4A5HFz4cd5q+uyJCXPgGO46iqQ/UAg0?=
- =?us-ascii?Q?AHqXoXt8nMn52IIbH/XgWFAQh7EKMr97/OKhatE2vIsb2t6CLmfaw3RKezkB?=
- =?us-ascii?Q?yOGzWsFTDMZ/NMwur/LSXslklgGbtroWBg6VMo18ZM0yrFXiTY+WNpMSH3xy?=
- =?us-ascii?Q?OD6o8X00HrXU82XEnY9vuqqhSeTfW5V+mlGweRwhZmvPcVB1A7mfHqZYgIs+?=
- =?us-ascii?Q?ewQKgIYLXWEREIC05Z5HVfir3G/czFQK6CjTkvH/UCoV3KEbCg0hilW2ZIpR?=
- =?us-ascii?Q?cjiWRowxbK1omwpKDHh6m8MkNbI73kpmodXKdNsJtKlH+giInxdRRZf4IpO/?=
- =?us-ascii?Q?+ctywUA4R1jAKSANgnWIchDMZzkjsS42wF30wG5bpO0njKAxTuUTzsWDnK7e?=
- =?us-ascii?Q?AVsHW+AhQCHQZ8FiKjXZBHZWKf5GLNaFL2IZXmI1LmGGwqTtm5+XoYMFGb/u?=
- =?us-ascii?Q?m1p2EqM4mypZHpz80Ibto+86rAOxbyA5+oBo/n8WFTpa7gffDoJLwqV73S1I?=
- =?us-ascii?Q?kgdFoq0wYpigwdAzjB98R6C7uMvDXVc5ETKTOtVfl3sXKhCGzvNN1UTgYtj7?=
- =?us-ascii?Q?Z6y1Wz76P/p6NH9V3sOo4C1vLK3rp5pxs6dfxsKGUdCdGh1kXSsftUU5Ajhd?=
- =?us-ascii?Q?Zri28P2CpsYoq5omfD7EWxwuc2gw40SS1jPmFvfn0JrOQ9DMbUQoQpONLCsC?=
- =?us-ascii?Q?fq6WF2nyIBIj4LXBAZqBey+MNdDsM3YVBCSwpoFOKLx3oGmmNybZIPtUBfS6?=
- =?us-ascii?Q?4QUQ6xZBp0YbEF52rVYXfbrxEI1Yc6pkxd/UvXe97tP/3aw9HpB/Gb7iyNmV?=
- =?us-ascii?Q?hibDkBSpLq/a0Z7MCV3oSNhqa2hWG5yxQ2H1nGEa4puBzbBSaBc+C83EV7lh?=
- =?us-ascii?Q?piayNcVTXY7w+uPP8vY5f5Vlv64FbGFhEWolVh3xNL+C2f2Y9znOYAORl6E5?=
- =?us-ascii?Q?qiEPinywpA5rhGUEHjKxUIQpQbAx9Hh1nn2db/vmEy7XXWD2Ct3MLlBKBbyw?=
- =?us-ascii?Q?h2exAHrYRL6Uu2IpIXKkgpT2BO3ZqrTJeHB2HGAb7LORP8W5vJ+CzQ4MnXyb?=
- =?us-ascii?Q?jcDuT1W0cd/5PsgYrJgJtGFs/77EZHmIoW/rGxY7ocsR+jzaNd9veOmE2eSh?=
- =?us-ascii?Q?JqmQobiMCWUxpRzz8hbGm0bKosio7YxTRJ075miNGTvCmkTp8cPIQVrIvmZ9?=
- =?us-ascii?Q?47oVusf4RdgYgfXU1EEcsLhWtEl6Vv7EXFy0hZuXZuRp6wPOxVLwby7I0mtR?=
- =?us-ascii?Q?//RQMUZ09fhU0CU4MeZiSNpNKMEFMLkowlN6t+e78psYS3TO4BPKCNjqslqe?=
- =?us-ascii?Q?u7m6rp8BlVxKQbceyKgJZv04AcklycZ9wIoX7CLY?=
+	=?us-ascii?Q?tBMMR0+1gIA5QlWCcUR4Qya1QwjZRszzGNq/ggsFk7qC804BdqwgfZkJ6bnz?=
+ =?us-ascii?Q?uyqsLqQ5AOHPeb/rpvukHoumL/kLp7sZUqYgv/gO9wpznQYcEND4gRSPoW2J?=
+ =?us-ascii?Q?BTmcxxKrTvlF9UzyFIRZxZXeZTjqxtaP5YaSQOn+5qgKVbTttpgh0Fy1Ozb9?=
+ =?us-ascii?Q?YlD80QX1rmyengDBQUIXK+l7iRGelVOcrOl98g16+pyLhFDGHm5TlydwskWW?=
+ =?us-ascii?Q?vihis95XDPdOdMMPAfhJ027D7CZ2cKDfwMWWgu/PpTlx+AR4LmvHafslsnUl?=
+ =?us-ascii?Q?TPNzjuKf+btK1f6Ug7GIOXFSkrrehtMks/xk8VrCSP5/BusREyKwFSeOLUNZ?=
+ =?us-ascii?Q?OpUvUN5Z1pDNBNs5kcj/9HQCNyNK0VGWURAJhq8xAlmTruPwprMXSTN/0rdz?=
+ =?us-ascii?Q?JybtVAEr+w/WEaJoPwM7wJkv13TjRDvqX+x1zMHmXBNdSZJUxR+wfgHoRTXk?=
+ =?us-ascii?Q?ZzKIfqNZOtWFP9tBn4yCnZ/pjYXT1kOGfMUY7VTg0HffsBbanwSkCSfWAoMe?=
+ =?us-ascii?Q?faBhisND2Ixf3J/TPiNlwWd0wiIFZTNuxWsRg4aqDB2ooOU2mMfRsDEt52n5?=
+ =?us-ascii?Q?rkiuE8/AlU/NoqPV3YoK65pnLJbqp7Z/t8NK5vFQJIaaSx/5epfgVavhklUc?=
+ =?us-ascii?Q?+uUO6+L2PE7HPfOK/F3d4wJ4RHv+VFPn1GE/bt8hVq9evdrrSTmWSLZ3BrES?=
+ =?us-ascii?Q?i9zLqsyiLNI9C0FMScpkD64vgh+JggEmdNpGPowMnVtztr4ylKSySzUqjfEW?=
+ =?us-ascii?Q?vmjyapUCzhoLSvMgRLi5Eu5E2hoYzHbKhTRrZT+b+q97g1knz+XfwAlFpyaJ?=
+ =?us-ascii?Q?pIOZY4KVmwSdGCpSJ/Gsp304E+5MFqO8GwuuihugjIAm2PUzYCEKMnG7qvZ/?=
+ =?us-ascii?Q?fe3s3opIXMnqh0GYLv7sPWew8OpceIIj7Ssyg3NLtsxcsG34HeGdXkbJkI1L?=
+ =?us-ascii?Q?LZykoK+bAOj0YDM3LzloLyBnK4mCk44xU0hAXXBvAgqVn+NML+ZJFTAa0HFC?=
+ =?us-ascii?Q?ccpVhy/5iitijS1VfacswM0P4xYNpiyYnhmb67Sx0dciEWXbQP4x0nd/QGLa?=
+ =?us-ascii?Q?65aLT/W1YbiDN9QN7rDQ4mdDNW+Fn9pyX4mJTdems5nc9azf0X2NYaYs06KG?=
+ =?us-ascii?Q?RRMCEVajKUvD99NGy0VUu5UtvP3JYbWbsHJ23rSpap8uOy7kG3IINLubHNCA?=
+ =?us-ascii?Q?S95fc8rKp0mdb/IaAhfAoMWZgUkSZQRwVWwxMauGMr5gTYVOBIgGnQjcuUGh?=
+ =?us-ascii?Q?BSjyCE2G6JaQYQUx8vOYuupaeO3JP0SncmfVosDhmSFd/lOUxlndHZU5VUUz?=
+ =?us-ascii?Q?QLID5aK80WasW1YL1IPiO1+qBEXk/r6jF1vh8+oku9B3RXc5F9KcSPs1ZNiy?=
+ =?us-ascii?Q?BvAPT1HNO+lYqCqnFL+xBx9WtWbAVsTonrVhP9vdeR5DCkk5oq1j97oQ2b7S?=
+ =?us-ascii?Q?VhI8wp7zrDNw8C4DIgCAO3gqdEdS3EiqIHhgN6600lnvrCtEQK/ASd5GMyGJ?=
+ =?us-ascii?Q?wX1YIIuc/ag7ZrO1UKMgLoDxhVhgPOuOT3IqTy/XBd+24kGqBQgq8FJwjskQ?=
+ =?us-ascii?Q?A0AexZTMsyqWliz1ChchbJpFy7aHts4kDw+LJ4o9?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 75e242fc-9798-41da-98ce-08dcc69dceb5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f006ffe-830f-40cb-200d-08dcc69dd17c
 X-MS-Exchange-CrossTenant-AuthSource: SEYPR06MB5913.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2024 13:40:26.1533
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2024 13:40:30.8138
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DgkAcrb6wrx/y+NHYBwC4aTDOq7ejxndjCpGHX5y4MXQGenUbts0bfN7xFbh/luzGNtTU+p6yi549bdibwfOSA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: ObUW2Yq6G4qcm7l72kIJWjWXgHMkY1dClDlFAI8e15IESfdxtQIuCDgGxjTuwmzwcdtm8WnXjNnWct3JyJfprg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSQPR06MB7153
 
-Identify "$CROSS_COMPILE" to enable vm_test for cross-compile situation.
-Additionally, use "-cpu cortex-a57" flag to accommodate the majority of QEMU CPU lists,
-avoiding using "-cpu host," which can cause qemu_system_aarch64 start failure on x86_64 host.
+1. Fix cross-compile issue for some files:
+[Issue]
+When cross-compiling bpf selftests for arm64 on x86_64 host, the following error occurs:
+progs/loop2.c:20:7: error: incomplete definition of type 'struct user_pt_regs'
+   20 |                 if (PT_REGS_RC(ctx) & 1)
+      |                     ^~~~~~~~~~~~~~~
+
+There are same error in files: loop1.c, loop2.c, loop3.c, loop6.c ???
+
+[Reason]
+On arm64, in file bpf_tracing.h, we use userspace's user_pt_regs,
+which is defined in "linux/ptrace.h".
+We include the header file by adding "-idirafter /usr/include" for "CLANG_CFLAGS".
+
+However, during cross-compiling, "linux/ptrace.h" is based on x86_64
+and has no definition of "struct user_pt_regs".
+
+[Fix]
+Thus, to fix this issue, we include the Linux source tree's header file directory.
+
+2. Fix static compile issue for "-lzstd":
+[Issue]
+By running the command "LDLIBS=-static LDFLAGS=--sysroot=/aarch64-linux-gnu/libc ./vmtest.sh -s -- ./test_progs",
+during static cross-compiling, an error occurs:
+/aarch64-linux-gnu/bin/ld: aarch64-linux-gnu/libc/usr/lib/libelf.a(elf_compress.o): in function `__libelf_compress':
+(.text+0xec): undefined reference to `ZSTD_createCCtx'
+/aarch64-linux-gnu/bin/ld: (.text+0xf0): undefined reference to `ZSTD_createCCtx'
+...
+
+[Fix]
+For static compile, add "LDLIBS += -lzstd".
 
 Signed-off-by: Lin Yikai <yikai.lin@vivo.com>
 ---
- tools/testing/selftests/bpf/README.rst | 12 ++++++++-
- tools/testing/selftests/bpf/vmtest.sh  | 37 +++++++++++++++++++++-----
- 2 files changed, 42 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/Makefile | 12 +++++++++++-
+ 1 file changed, 11 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
-index 9b974e425af3..c8e6eb8f299d 100644
---- a/tools/testing/selftests/bpf/README.rst
-+++ b/tools/testing/selftests/bpf/README.rst
-@@ -79,13 +79,23 @@ In case of linker errors when running selftests, try using static linking:
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index ec7d425c4022..5b725bc890d2 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -48,6 +48,10 @@ CFLAGS += -g $(OPT_FLAGS) -rdynamic					\
+ LDFLAGS += $(SAN_LDFLAGS)
+ LDLIBS += $(LIBELF_LIBS) -lz -lrt -lpthread
  
-   $ LDLIBS=-static PKG_CONFIG='pkg-config --static' vmtest.sh
- 
-+If you want to make corss-compile, such as compile arm64 on x86_64, you can try:
++ifneq (,$(findstring -static,$(LDLIBS)))
++LDLIBS += -lzstd
++endif
 +
-+.. code-block:: console
-+
-+  $ make headers_install
-+  $ export PATH=$PATH:{The corss-compile's path}/bin
-+  $ export ARCH=arm64
-+  $ export CROSS_COMPILE=aarch64-linux-gnu-
-+  $ LDLIBS=-static vmtest.sh
-+
- .. note:: Some distros may not support static linking.
+ LDLIBS += $(shell $(PKG_CONFIG) --libs libpcap 2>/dev/null)
+ CFLAGS += $(shell $(PKG_CONFIG) --cflags libpcap 2>/dev/null)
+ CFLAGS += $(shell $(PKG_CONFIG) --exists libpcap 2>/dev/null && echo "-DTRAFFIC_MONITOR=1")
+@@ -443,13 +447,19 @@ CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
+ endif
  
- .. note:: The script uses pahole and clang based on host environment setting.
-           If you want to change pahole and llvm, you can change `PATH` environment
-           variable in the beginning of script.
- 
--.. note:: The script currently only supports x86_64 and s390x architectures.
-+.. note:: The script currently only supports x86_64, s390x and arm64 architectures.
- 
- Additional information about selftest failures are
- documented here.
-diff --git a/tools/testing/selftests/bpf/vmtest.sh b/tools/testing/selftests/bpf/vmtest.sh
-index 65d14f3bbe30..c7461ed496ab 100755
---- a/tools/testing/selftests/bpf/vmtest.sh
-+++ b/tools/testing/selftests/bpf/vmtest.sh
-@@ -4,11 +4,11 @@
- set -u
- set -e
- 
--# This script currently only works for x86_64 and s390x, as
-+# This script currently only works for x86_64, s390x and arm64, as
- # it is based on the VM image used by the BPF CI, which is
- # available only for these architectures.
--ARCH="$(uname -m)"
--case "${ARCH}" in
-+HOST_ARCH="$(uname -m)"
-+case "${HOST_ARCH}" in
- s390x)
- 	QEMU_BINARY=qemu-system-s390x
- 	QEMU_CONSOLE="ttyS1"
-@@ -32,13 +32,38 @@ aarch64)
- 	exit 1
- 	;;
- esac
+ CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
++CLANG_CFLAGS = $(CLANG_SYS_INCLUDES)
 +
-+# process CROSS_COMPILE setting to enable cross-compilation
-+process_cross_compile() {
-+	if [ -z "${CROSS_COMPILE+x}" ]; then
-+		return
-+	fi
-+	case "$1" in
-+		x86_64)
-+			#Cross-compiling for arm64 on an x86_64 host
-+			if [[ $CROSS_COMPILE == *aarch64* ]]; then
-+				VM_ARCH=aarch64
-+				QEMU_CONSOLE="ttyAMA0,115200"
-+				QEMU_BINARY=qemu-system-aarch64
-+				QEMU_FLAGS=(-M virt,gic-version=3 -cpu cortex-a57 -smp 8)
-+				BZIMAGE="arch/arm64/boot/Image"
-+				echo "Setting VM_ARCH from $HOST_ARCH to $VM_ARCH as specified by CROSS_COMPILE"
-+			fi
-+			;;
-+	esac
-+}
-+
-+VM_ARCH=${HOST_ARCH}
-+process_cross_compile "$VM_ARCH"
-+
-+
- DEFAULT_COMMAND="./test_progs"
- MOUNT_DIR="mnt"
- ROOTFS_IMAGE="root.img"
- OUTPUT_DIR="$HOME/.bpf_selftests"
- KCONFIG_REL_PATHS=("tools/testing/selftests/bpf/config"
- 	"tools/testing/selftests/bpf/config.vm"
--	"tools/testing/selftests/bpf/config.${ARCH}")
-+	"tools/testing/selftests/bpf/config.${VM_ARCH}")
- INDEX_URL="https://raw.githubusercontent.com/libbpf/ci/master/INDEX"
- NUM_COMPILE_JOBS="$(nproc)"
- LOG_FILE_BASE="$(date +"bpf_selftests.%Y-%m-%d_%H-%M-%S")"
-@@ -109,7 +134,7 @@ newest_rootfs_version()
- {
- 	{
- 	for file in "${!URLS[@]}"; do
--		if [[ $file =~ ^"${ARCH}"/libbpf-vmtest-rootfs-(.*)\.tar\.zst$ ]]; then
-+		if [[ $file =~ ^"${VM_ARCH}"/libbpf-vmtest-rootfs-(.*)\.tar\.zst$ ]]; then
- 			echo "${BASH_REMATCH[1]}"
- 		fi
- 	done
-@@ -126,7 +151,7 @@ download_rootfs()
- 		exit 1
- 	fi
+ BPF_CFLAGS = -g -Wall -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)	\
+ 	     -I$(INCLUDE_DIR) -I$(CURDIR) -I$(APIDIR)			\
+ 	     -I$(abspath $(OUTPUT)/../usr/include)			\
+ 	     -Wno-compare-distinct-pointer-types
+ # TODO: enable me -Wsign-compare
  
--	download "${ARCH}/libbpf-vmtest-rootfs-$rootfsversion.tar.zst" |
-+	download "${VM_ARCH}/libbpf-vmtest-rootfs-$rootfsversion.tar.zst" |
- 		zstd -d | sudo tar -C "$dir" -x
- }
+-CLANG_CFLAGS = $(CLANG_SYS_INCLUDES)
++#"make headers_install" at first
++ifneq ($(CROSS_COMPILE),)
++src_uapi_dir := $(srctree)/usr/include
++BPF_CFLAGS += -I$(src_uapi_dir)
++endif
  
+ $(OUTPUT)/test_l4lb_noinline.o: BPF_CFLAGS += -fno-inline
+ $(OUTPUT)/test_xdp_noinline.o: BPF_CFLAGS += -fno-inline
 -- 
 2.34.1
 
