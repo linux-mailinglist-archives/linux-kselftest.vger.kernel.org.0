@@ -1,57 +1,59 @@
-Return-Path: <linux-kselftest+bounces-16357-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16358-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D340695FF87
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 05:04:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C780395FF8B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 05:04:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7BEB51F212D7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 03:04:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 060D81C2207A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 03:04:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE2FA1C6B8;
-	Tue, 27 Aug 2024 03:03:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06D6142AB5;
+	Tue, 27 Aug 2024 03:03:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="paC+r9cp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vN3BAgGR"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2C3114A90;
-	Tue, 27 Aug 2024 03:03:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0163A27E;
+	Tue, 27 Aug 2024 03:03:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724727827; cv=none; b=s85y+KXtHK5/mM2qmkkLII+dyqY7XtmSftrBBqY6ZN1Zko80qh8KPA2hySzHIHVv70yR1Lnongj7tTkMjcmCuiTBPGFHE4vEsyzuUvdY9P/wyDDUwzHuiBjq07z32QKxhaOk93m81J56fqglOVpAGaj9S9G264paHtC3Ys5KuZ0=
+	t=1724727828; cv=none; b=hfmhQM0vcAKddt1pqU0ekrr8A9wo8L60xPmD6eaPBR8429fXvCtF6whvUwJeDO3t22moV9vih0AZQvrhBeKpV7xOfU73TApjGv3KgxB83D+ruLm3H0eyi+yU3e4T+lGPcRGfJez89AnUziYqIA9tBnMl593C1nN8HMCMW+NHnBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724727827; c=relaxed/simple;
-	bh=7gL6p1VlDvGym36gs1yc1aMIXOWSsJdQLUDxonxuf5U=;
+	s=arc-20240116; t=1724727828; c=relaxed/simple;
+	bh=UIcEtsuF2oQygozWT/Xm716/UFpvZjJFMlGL0LY1swc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tXeZvrRh9VYBNZf6rYblzhAH4E78z1ww+YvpRug6hPmsNWRnajG7Jqe7/9MBu1daGgeBdJ0ZGntPiAsO9XprQW8hgw4qmPCtz5xK4T/B1QXlJt/OhJGzq/By00ts6/CT8bT2LxZZXBskyzJJFRmOTeKry+NeKSbaK08vrpb4qeE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=paC+r9cp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DD5EC8B7B3;
-	Tue, 27 Aug 2024 03:03:46 +0000 (UTC)
+	 MIME-Version; b=aA0azyFWE4phxBZc+lx0BzcdhTb9ZsGRR89ogveo6rbpk92TvgN26b/oJGwqffLTgKo9boyjW35Z45v1SP3IHqDqpsiNSlkwpWpQCLy71V6LdAf0+shlgrtHBA+n9H1Im6+FesGFn4Mm+DHzo+x/Md/AptjGMmZdrW8SAte1WCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vN3BAgGR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0F6EC8B7BC;
+	Tue, 27 Aug 2024 03:03:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724727827;
-	bh=7gL6p1VlDvGym36gs1yc1aMIXOWSsJdQLUDxonxuf5U=;
+	s=k20201202; t=1724727828;
+	bh=UIcEtsuF2oQygozWT/Xm716/UFpvZjJFMlGL0LY1swc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=paC+r9cpn7IVTlF+jU4zauq/8YM7Lb+Cl4FBTEHaY/U6d6YhjE7SlIJiPF33+guWo
-	 IkT34TNvb/6HejK6sBnPS7aH5vxH3yMB+CqN41Wu4brdSMDzPgAoiWOT2/xNM9mPbJ
-	 w+CYIdEazgEn4gdy8sbnlVwL1c3TpbzEe7R3qDaZmveAlBkgQDFKyrmr4P/RiXwpBj
-	 HYI1HCWiwiUoe9tWaA/RCtr/KsiuD2ZC312bAwYckYDCwJKzfDpc5oY3AmNDTry7oY
-	 kXltfkhImupOC6VkkEiVKE0Bfqf/MGqjBxuiTOIQstBDhk9GoxR8xeqNmtxEJyiCHC
-	 DzoJQZlrHb6aA==
+	b=vN3BAgGR8uk5yCGefcqXr81gTPvEJR9+4CckN/1Z8Dp3mqKnHTsX+gXGeU+15of7x
+	 uVcEBYRigBYq0V2jRjyeXnYCQQdaVPNK7fASrI6H1Pzm2RAKD/hHDyVINmSGDLUoih
+	 WdNhBwHHF/Qkm2YtWPriYj17Wx2uxnwBy0YTbSI2kPpQCUhdTcwfeVfLxSZeP81ACZ
+	 W0wCD9/2S19ssGlhvehiXjNtT4nSE3HDm2REQZUoIBDttpxkv4f3gybyIXACLXucl+
+	 kZXH1ki6pbeCeRA5TCSn7YgZQHHeNUQDRjhGuZX1mAHYic9iM2pVsf0DOKi38sbt+d
+	 yfdb4Yftbbstw==
 From: SeongJae Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SeongJae Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
+	Brendan Higgins <brendanhiggins@google.com>,
+	David Gow <davidgow@google.com>,
 	damon@lists.linux.dev,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/9] selftests/damon: add execute permissions to test scripts
-Date: Mon, 26 Aug 2024 20:03:30 -0700
-Message-Id: <20240827030336.7930-4-sj@kernel.org>
+Subject: [PATCH 4/9] mm/damon/core-test: test only vaddr case on ops registration test
+Date: Mon, 26 Aug 2024 20:03:31 -0700
+Message-Id: <20240827030336.7930-5-sj@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240827030336.7930-1-sj@kernel.org>
 References: <20240827030336.7930-1-sj@kernel.org>
@@ -63,63 +65,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Some test scripts are missing executable permissions.  It causes
-warnings that make the test output unnecessarily verbose.  Add
-executable permissions.
+DAMON ops registration kunit test tests both vaddr and paddr use cases
+in parts of the whole test cases.  Basically testing only one ops use
+case is enough.  Do the test with only vaddr use case.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
-Andrew, please note that this patch is for adding the execution
-permission to the files.  I guess these need a special handling for your
-tooling.
+ mm/damon/core-test.h | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
- tools/testing/selftests/damon/damon_nr_regions.py                 | 0
- tools/testing/selftests/damon/damos_apply_interval.py             | 0
- tools/testing/selftests/damon/damos_quota.py                      | 0
- tools/testing/selftests/damon/damos_quota_goal.py                 | 0
- tools/testing/selftests/damon/damos_tried_regions.py              | 0
- tools/testing/selftests/damon/debugfs_target_ids_pid_leak.sh      | 0
- .../damon/debugfs_target_ids_read_before_terminate_race.sh        | 0
- .../selftests/damon/sysfs_update_schemes_tried_regions_hang.py    | 0
- .../damon/sysfs_update_schemes_tried_regions_wss_estimation.py    | 0
- 9 files changed, 0 insertions(+), 0 deletions(-)
- mode change 100644 => 100755 tools/testing/selftests/damon/damon_nr_regions.py
- mode change 100644 => 100755 tools/testing/selftests/damon/damos_apply_interval.py
- mode change 100644 => 100755 tools/testing/selftests/damon/damos_quota.py
- mode change 100644 => 100755 tools/testing/selftests/damon/damos_quota_goal.py
- mode change 100644 => 100755 tools/testing/selftests/damon/damos_tried_regions.py
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_target_ids_pid_leak.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_target_ids_read_before_terminate_race.sh
- mode change 100644 => 100755 tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py
- mode change 100644 => 100755 tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
-
-diff --git a/tools/testing/selftests/damon/damon_nr_regions.py b/tools/testing/selftests/damon/damon_nr_regions.py
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/damos_apply_interval.py b/tools/testing/selftests/damon/damos_apply_interval.py
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/damos_quota.py b/tools/testing/selftests/damon/damos_quota.py
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/damos_quota_goal.py b/tools/testing/selftests/damon/damos_quota_goal.py
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/damos_tried_regions.py b/tools/testing/selftests/damon/damos_tried_regions.py
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_target_ids_pid_leak.sh b/tools/testing/selftests/damon/debugfs_target_ids_pid_leak.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/debugfs_target_ids_read_before_terminate_race.sh b/tools/testing/selftests/damon/debugfs_target_ids_read_before_terminate_race.sh
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py
-old mode 100644
-new mode 100755
-diff --git a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
-old mode 100644
-new mode 100755
+diff --git a/mm/damon/core-test.h b/mm/damon/core-test.h
+index 0cee634f3544..ef36d586d6ee 100644
+--- a/mm/damon/core-test.h
++++ b/mm/damon/core-test.h
+@@ -246,16 +246,12 @@ static void damon_test_split_regions_of(struct kunit *test)
+ static void damon_test_ops_registration(struct kunit *test)
+ {
+ 	struct damon_ctx *c = damon_new_ctx();
+-	struct damon_operations ops, bak;
++	struct damon_operations ops = {.id = DAMON_OPS_VADDR}, bak;
+ 
+-	/* DAMON_OPS_{V,P}ADDR are registered on subsys_initcall */
++	/* DAMON_OPS_VADDR is registered on subsys_initcall */
+ 	KUNIT_EXPECT_EQ(test, damon_select_ops(c, DAMON_OPS_VADDR), 0);
+-	KUNIT_EXPECT_EQ(test, damon_select_ops(c, DAMON_OPS_PADDR), 0);
+ 
+ 	/* Double-registration is prohibited */
+-	ops.id = DAMON_OPS_VADDR;
+-	KUNIT_EXPECT_EQ(test, damon_register_ops(&ops), -EINVAL);
+-	ops.id = DAMON_OPS_PADDR;
+ 	KUNIT_EXPECT_EQ(test, damon_register_ops(&ops), -EINVAL);
+ 
+ 	/* Unknown ops id cannot be registered */
 -- 
 2.39.2
 
