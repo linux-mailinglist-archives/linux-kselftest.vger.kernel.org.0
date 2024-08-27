@@ -1,61 +1,63 @@
-Return-Path: <linux-kselftest+bounces-16371-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16373-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 319789603F0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 10:06:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F1A9960417
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 10:13:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1BC4281C9F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 08:06:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D02FCB22878
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 08:13:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8CD418BC02;
-	Tue, 27 Aug 2024 08:06:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDDCE18756A;
+	Tue, 27 Aug 2024 08:13:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="oQ7ehSB7"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="DS1XSX/B"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out162-62-58-211.mail.qq.com (out162-62-58-211.mail.qq.com [162.62.58.211])
+Received: from out203-205-221-153.mail.qq.com (out203-205-221-153.mail.qq.com [203.205.221.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA0EC155CA5;
-	Tue, 27 Aug 2024 08:06:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.58.211
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4798B13A25B;
+	Tue, 27 Aug 2024 08:13:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724745985; cv=none; b=eF+snR2GhruAhmeiKSSs49JYdsT/gd7WMoe0vz+P2bdJhpFLOay5ELa0e+qKNzG+UAtUt6aKmjnh2pZDVUlACKzHsQVsooiqB64g1xN8V0T1IwUhkir50fJ/ygYpJ/5Dt60sW0UW8FA1nFkpSHKhzxsZjmBP9LDL2uXT34W45Nw=
+	t=1724746414; cv=none; b=gOTb1QO446PIJrWHE/2pGonjmTlgbjCnQP35eVZnkue/FLd1Bll5pDSIcEvrXD83XFB5ju50+f71dKOaCiTPG6p9j5huPds+3139Wh6N+d8K/koq+YxjgalpF8FYGQdDDiCR9HL32MnsO8VaIqDj+/aEBJjucvVK8dx7eZZKVsE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724745985; c=relaxed/simple;
-	bh=FEAY4G08V4p4v067K373UcpJj352bNUAXuaBr5yG81w=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=ZOjSz+yS9u4gthwRCCgitLd7mMGp/GS55YMKbKyDOPYfk3/qUZq6/1cagq+VIkeaiYNn7+XrC54cfv/hcORCn+N7CJumnJH373DcAFaK3EHH3mbaSaGU7dqqft8c5NMUX8tRDTTirNQHpBozH7dsZJUboaX8X1LyWkCE1p1585w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=none smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=oQ7ehSB7; arc=none smtp.client-ip=162.62.58.211
+	s=arc-20240116; t=1724746414; c=relaxed/simple;
+	bh=brxIHIhoJFw108t/+E6yNWww1AL7fWvuY4Jx+V5yz6k=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=hv5hN3aOT7KaeYjPIlJkoQO8A9Lz3QZbvyBXfjQmWDM9SXU4og1F926AUsB1vKDnqD3Sk2vt8VUnNf62pJDKIhOnmEtOIH42x94d91GKWzpY9FTzHPwLQRbv67+2u34JnZtb9dbyYBhuwlJMKaN98OXErtCcBMgMRKX/imPyhUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=none smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=DS1XSX/B; arc=none smtp.client-ip=203.205.221.153
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cyyself.name
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1724745970; bh=XSuLHbw5Qh9hxUArp6/0gEvP09hyxdfOpiAwFodjpCc=;
-	h=From:To:Cc:Subject:Date;
-	b=oQ7ehSB72m2apvSTEP6N6+hfKWJTFR+oLF1RhzEFB4/hIhp2CuTfuWeNYSZHWPu1o
-	 Cv3XcCfPeYEoYaezQPASOsxlkgu2JcT3hkeqsKFBeXUc2gkLVpSXADXaAo5oagiuSh
-	 e99Ow8+WpfhtJh+nrRrmwLAGlBzCcY8odeHNywi0=
+	t=1724746406; bh=CgMtB9NDiiOVMtrdwmpIxkXfBYM+Acie7PSpkw7YuOM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=DS1XSX/BVNbCRcpOQFqXOlg2JPLDOhgFHSwb6xzAvIdczwnV5pAJRlczOoMOxRVa9
+	 u/imr10u+X99JZFJ34zp8fU3I0oYz5e7XDgrlP7GRRPUVDiYXkjrnGqNOalvcoJ7O+
+	 NGdTBTJ0hLiV14wxq0/NJTKDWBKOExS3x8Bji9yU=
 Received: from cyy-pc.lan ([240e:379:224b:5f00:16b6:fb41:2849:da9d])
-	by newxmesmtplogicsvrsza15-1.qq.com (NewEsmtp) with SMTP
-	id 185800A8; Tue, 27 Aug 2024 16:06:05 +0800
-X-QQ-mid: xmsmtpt1724745965tl0gmx80a
-Message-ID: <tencent_108260B43689E30AAE5D0C7C085AA31ADF06@qq.com>
-X-QQ-XMAILINFO: NMGzQWUSIfvTNMP2jtZxLCG3MqoT45QmcT6F+Y89dIjCFc1STe2F2X+PupYH7R
-	 X9g9TdKjDKBlZoLbJtnnCQE/ILZSPi8T28fZf7+9fobiS/0fS1PiC3NljqHD51Pbch7O550mZqa1
-	 Vgicbu6BX5Xdp+nlVGSd2O8muVOpnGwanTbJxAVrdEqGXBlJWwPe5xCc5FmGJmmdp4o6mq9FQQNN
-	 guY3/pzFRkCLU5nLPOfN7wSyPv1NwPFRl9ynXFoVVdQajBsuVW4DzahykVZDbvWBxo3W1j5BntVP
-	 APVKBL23jrsFGDIyhMCIclUSZVOYDfjuUARCjCOzlyyDwq4NYelg7upPSN8qGS9UrvLZ9vWTvwCd
-	 /whbAhRpgPbdVN3lnEXAQVpJEqT6TN5TXy1M6rKRvSO3cAtlc5WtgfuRansFBR9W9MELYuMwFaO6
-	 8E6Q3Ktkk77MU7RrW1s3ezJNt8eI7ggGOfFtyKujYjd4ETnGyzeP2IGsxmLHIj3bua2zscphfyTA
-	 SAB6rnTEveFgqVHJpogqyp3J8XfUZ2HSnXpQl6w8pC2vHC7W8LvPEi7F7HIPUPxkNwKa6hyaOQbw
-	 Eu6T+4zKII1xuTGreyo8tOSMKB93iOxAdnULz59qac1MpiBWguHRMj6szooD0Fd/e+h9yuo1gWO9
-	 ok8NEBYXr/uGinbd1/xQPxiQK5i+5X4W5GMjph3nk9nPHfBD+Q4MMyRhYMsGcSLY43jl/j78DBjg
-	 mm3CDnU5o+d7MScHX+kq8awoOpqvTyo09YYYfg/npplmdGmbrPVHHNHgqbaF6WrRRmsOK7N/Suz3
-	 +Ki+ebQVllr3qixdnN+K6/fUbhtuSVZVi8RuudzYndctLP7UpqQUJwfqFrKHubbq2n8uO0t4ExAg
-	 DUNhfRHmlMofYCNkOoIHIHljWWFZn9ldMDlEHH1xtR+iLV+/15aeZ24D0PwjsGKQETPVEuczBUfC
-	 s9BdalA3SUEOuLKkNGVv5l2Z1ctJdP3r1CiKUsuANm2XAPN0QDJxP7U1L+T9jWAH2i9gudaE8=
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+	by newxmesmtplogicsvrszc13-0.qq.com (NewEsmtp) with SMTP
+	id 1CBA7234; Tue, 27 Aug 2024 16:07:11 +0800
+X-QQ-mid: xmsmtpt1724746031tezlmmzao
+Message-ID: <tencent_04326B0F3A92E012C75885103756F081080A@qq.com>
+X-QQ-XMAILINFO: OaubouGXmhNzKe8gtNppzHDxLG7c3mFvh6NtIPeJyusxWfaLbmxKeF7Vq1moLz
+	 Yzqmo2u4gO9I8sHODtIT1ur8ndKDpu5N+8CNRUG5Y1gKKXu6xdTBIJwS0DKgbl1uzntqrdlTzPEu
+	 vKmz6N5cbn9ql5cbuk/srU7/19hiZpVtwVng5ThGr6krXsN0tr8MCAXhFkEL2W8B8RI39TMFuCKA
+	 M/ZA+Vj96OdLAvi6+YbDpM5XkWhIt15q+B2F+R3j4Vv5PB0WJdk734Wkyn/xUdCyWHhWirS6I+Pc
+	 UZgDVN4MyherF+Q1bvByOC+tZr8Pisfe2UI8NtdlfP4U/Md1+pl9MddrZ0mbX5Th6SmxzwZo9hfq
+	 VAKCr9OdCpQg8RyjuBDpIAgz4hM0z52aEEsgtIJeDOND7jaZokLljeu8i2zpC/eWnIxakbGwN/08
+	 TakhPOAYZKQ3EKqH+EpyZFegUFyt9KgoF8/AdpqDchrNEBtGs0HNHpTMyFoNCwpHj5wrGNNim+9G
+	 GDH6mdzM7RXFX7riLYSdq2sp5Qmcgb2MdsdStHqwGjgwMMHysDtZ7NOmR2XFv/Zk+ue4IcpafiER
+	 rQFSlyL9lEm1og3ui0JMhUhDa4gcJWhqAnew2VVipfcf/YKa0ZuLZf1ABPq9w1bpu81LZm3rR4xv
+	 2Izlo79ZTWPwYyLBXTQy8MeSfgK4k0mhEQsvutcLVEdveucF4tX+vne8X9umbpSP+0kQ7WEyX0+l
+	 YQrhcGEUCizd49cpdrPZYHyJtHUc4oZpVG//bxqq0SAs9EHe6I1rHQJx/emQjMwSy0tERi6P2txl
+	 yibVxH7WohvEXPc6g04rIteIrrkeaey+2NedUFVkNYPnuRP0MPXPxlip/4YXtn4FNum6E6QJvdr7
+	 rbOC8HF6WxDG9+WPPziNNTaV8t7NxKhpokzooMrjbd3hWvNmFwfhdxAGZqVZhoUGXgM40dHd9j8p
+	 uTv1oKBqoFiiJbbsVjbILgh7kFfLXOS10ssdMaKZYQ2Ixk2OGfKWl2C6UdCkV0IwIMRHX5m7mMoP
+	 f2e1YisQ==
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
 From: Yangyu Chen <cyy@cyyself.name>
 To: linux-riscv@lists.infradead.org
 Cc: Charlie Jenkins <charlie@rivosinc.com>,
@@ -71,10 +73,12 @@ Cc: Charlie Jenkins <charlie@rivosinc.com>,
 	Palmer Dabbelt <palmer@rivosinc.com>,
 	linux-kselftest@vger.kernel.org,
 	Yangyu Chen <cyy@cyyself.name>
-Subject: [PATCH v3 0/3] RISC-V: mm: do not treat hint addr on mmap as the upper bound to search
-Date: Tue, 27 Aug 2024 16:05:15 +0800
-X-OQ-MSGID: <20240827080515.3788410-1-cyy@cyyself.name>
+Subject: [PATCH v3 1/3] riscv: selftests: Remove mmap hint address checks
+Date: Tue, 27 Aug 2024 16:07:05 +0800
+X-OQ-MSGID: <20240827080707.3788836-1-cyy@cyyself.name>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <tencent_108260B43689E30AAE5D0C7C085AA31ADF06@qq.com>
+References: <tencent_108260B43689E30AAE5D0C7C085AA31ADF06@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,68 +87,128 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Previous patch series[1][2] changes a mmap behavior that treats the hint
-address as the upper bound of the mmap address range. The motivation of the
-previous patch series is that some user space software may assume 48-bit
-address space and use higher bits to encode some information, which may
-collide with large virtual address space mmap may return. However, to make
-sv48 by default, we don't need to change the meaning of the hint address on
-mmap as the upper bound of the mmap address range. This behavior breaks
-some user space software like Chromium that gets ENOMEM error when the hint
-address + size is not big enough, as specified in [3].
+From: Charlie Jenkins <charlie@rivosinc.com>
 
-Other ISAs with larger than 48-bit virtual address space like x86, arm64,
-and powerpc do not have this special mmap behavior on hint address. They
-all just make 48-bit / 47-bit virtual address space by default, and if a
-user space software wants to large virtual address space, it only need to
-specify a hint address larger than 48-bit / 47-bit.
+The mmap behavior that restricts the addresses returned by mmap caused
+unexpected behavior, so get rid of the test cases that check that
+behavior.
 
-Thus, this patch series change mmap to use sv48 by default but does not
-treat the hint address as the upper bound of the mmap address range. After
-this patch, the behavior of mmap will align with existing behavior on other
-ISAs with larger than 48-bit virtual address space like x86, arm64, and
-powerpc. The user space software will no longer need to rewrite their code
-to fit with this special mmap behavior only on RISC-V.
-
-Note: Charlie also created another series [4] to completely remove the
-arch_get_mmap_end and arch_get_mmap_base behavior based on the hint address
-and size. However, this will cause programs like Go and Java, which need to
-store information in the higher bits of the pointer, to fail on Sv57
-machines.
-
-Changes in v3:
-- Rebase to newest master
-- Changes some information in cover letter after patchset [2]
-- Use patch [5] to patch selftests
-- Link to v2: https://lore.kernel.org/linux-riscv/tencent_B2D0435BC011135736262764B511994F4805@qq.com/
-
-Changes in v2:
-- correct arch_get_mmap_end and arch_get_mmap_base
-- Add description in documentation about mmap behavior on kernel v6.6-6.7.
-- Improve commit message and cover letter
-- Rebase to newest riscv/for-next branch
-- Link to v1: https://lore.kernel.org/linux-riscv/tencent_F3B3B5AB1C9D704763CA423E1A41F8BE0509@qq.com/
-
-[1] https://lore.kernel.org/linux-riscv/20230809232218.849726-1-charlie@rivosinc.com/
-[2] https://lore.kernel.org/linux-riscv/20240130-use_mmap_hint_address-v3-0-8a655cfa8bcb@rivosinc.com/
-[3] https://lore.kernel.org/linux-riscv/MEYP282MB2312A08FF95D44014AB78411C68D2@MEYP282MB2312.AUSP282.PROD.OUTLOOK.COM/
-[4] https://lore.kernel.org/linux-riscv/20240826-riscv_mmap-v1-0-cd8962afe47f@rivosinc.com/
-[5] https://lore.kernel.org/linux-riscv/20240826-riscv_mmap-v1-2-cd8962afe47f@rivosinc.com/
-
-Charlie Jenkins (1):
-  riscv: selftests: Remove mmap hint address checks
-
-Yangyu Chen (2):
-  RISC-V: mm: not use hint addr as upper bound
-  Documentation: riscv: correct sv57 kernel behavior
-
- Documentation/arch/riscv/vm-layout.rst        | 43 ++++++++----
- arch/riscv/include/asm/processor.h            | 20 ++----
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+Fixes: 73d05262a2ca ("selftests: riscv: Generalize mm selftests")
+Signed-off-by: Yangyu Chen <cyy@cyyself.name>
+---
  .../selftests/riscv/mm/mmap_bottomup.c        |  2 -
  .../testing/selftests/riscv/mm/mmap_default.c |  2 -
  tools/testing/selftests/riscv/mm/mmap_test.h  | 67 -------------------
- 5 files changed, 36 insertions(+), 98 deletions(-)
+ 3 files changed, 71 deletions(-)
 
+diff --git a/tools/testing/selftests/riscv/mm/mmap_bottomup.c b/tools/testing/selftests/riscv/mm/mmap_bottomup.c
+index 7f7d3eb8b9c9..f9ccae50349b 100644
+--- a/tools/testing/selftests/riscv/mm/mmap_bottomup.c
++++ b/tools/testing/selftests/riscv/mm/mmap_bottomup.c
+@@ -7,8 +7,6 @@
+ TEST(infinite_rlimit)
+ {
+ 	EXPECT_EQ(BOTTOM_UP, memory_layout());
+-
+-	TEST_MMAPS;
+ }
+ 
+ TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/riscv/mm/mmap_default.c b/tools/testing/selftests/riscv/mm/mmap_default.c
+index 2ba3ec990006..3f53b6ecc326 100644
+--- a/tools/testing/selftests/riscv/mm/mmap_default.c
++++ b/tools/testing/selftests/riscv/mm/mmap_default.c
+@@ -7,8 +7,6 @@
+ TEST(default_rlimit)
+ {
+ 	EXPECT_EQ(TOP_DOWN, memory_layout());
+-
+-	TEST_MMAPS;
+ }
+ 
+ TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/riscv/mm/mmap_test.h b/tools/testing/selftests/riscv/mm/mmap_test.h
+index 3b29ca3bb3d4..75918d15919f 100644
+--- a/tools/testing/selftests/riscv/mm/mmap_test.h
++++ b/tools/testing/selftests/riscv/mm/mmap_test.h
+@@ -10,76 +10,9 @@
+ #define TOP_DOWN 0
+ #define BOTTOM_UP 1
+ 
+-#if __riscv_xlen == 64
+-uint64_t random_addresses[] = {
+-	0x19764f0d73b3a9f0, 0x016049584cecef59, 0x3580bdd3562f4acd,
+-	0x1164219f20b17da0, 0x07d97fcb40ff2373, 0x76ec528921272ee7,
+-	0x4dd48c38a3de3f70, 0x2e11415055f6997d, 0x14b43334ac476c02,
+-	0x375a60795aff19f6, 0x47f3051725b8ee1a, 0x4e697cf240494a9f,
+-	0x456b59b5c2f9e9d1, 0x101724379d63cb96, 0x7fe9ad31619528c1,
+-	0x2f417247c495c2ea, 0x329a5a5b82943a5e, 0x06d7a9d6adcd3827,
+-	0x327b0b9ee37f62d5, 0x17c7b1851dfd9b76, 0x006ebb6456ec2cd9,
+-	0x00836cd14146a134, 0x00e5c4dcde7126db, 0x004c29feadf75753,
+-	0x00d8b20149ed930c, 0x00d71574c269387a, 0x0006ebe4a82acb7a,
+-	0x0016135df51f471b, 0x00758bdb55455160, 0x00d0bdd949b13b32,
+-	0x00ecea01e7c5f54b, 0x00e37b071b9948b1, 0x0011fdd00ff57ab3,
+-	0x00e407294b52f5ea, 0x00567748c200ed20, 0x000d073084651046,
+-	0x00ac896f4365463c, 0x00eb0d49a0b26216, 0x0066a2564a982a31,
+-	0x002e0d20237784ae, 0x0000554ff8a77a76, 0x00006ce07a54c012,
+-	0x000009570516d799, 0x00000954ca15b84d, 0x0000684f0d453379,
+-	0x00002ae5816302b5, 0x0000042403fb54bf, 0x00004bad7392bf30,
+-	0x00003e73bfa4b5e3, 0x00005442c29978e0, 0x00002803f11286b6,
+-	0x000073875d745fc6, 0x00007cede9cb8240, 0x000027df84cc6a4f,
+-	0x00006d7e0e74242a, 0x00004afd0b836e02, 0x000047d0e837cd82,
+-	0x00003b42405efeda, 0x00001531bafa4c95, 0x00007172cae34ac4,
+-};
+-#else
+-uint32_t random_addresses[] = {
+-	0x8dc302e0, 0x929ab1e0, 0xb47683ba, 0xea519c73, 0xa19f1c90, 0xc49ba213,
+-	0x8f57c625, 0xadfe5137, 0x874d4d95, 0xaa20f09d, 0xcf21ebfc, 0xda7737f1,
+-	0xcedf392a, 0x83026c14, 0xccedca52, 0xc6ccf826, 0xe0cd9415, 0x997472ca,
+-	0xa21a44c1, 0xe82196f5, 0xa23fd66b, 0xc28d5590, 0xd009cdce, 0xcf0be646,
+-	0x8fc8c7ff, 0xe2a85984, 0xa3d3236b, 0x89a0619d, 0xc03db924, 0xb5d4cc1b,
+-	0xb96ee04c, 0xd191da48, 0xb432a000, 0xaa2bebbc, 0xa2fcb289, 0xb0cca89b,
+-	0xb0c18d6a, 0x88f58deb, 0xa4d42d1c, 0xe4d74e86, 0x99902b09, 0x8f786d31,
+-	0xbec5e381, 0x9a727e65, 0xa9a65040, 0xa880d789, 0x8f1b335e, 0xfc821c1e,
+-	0x97e34be4, 0xbbef84ed, 0xf447d197, 0xfd7ceee2, 0xe632348d, 0xee4590f4,
+-	0x958992a5, 0xd57e05d6, 0xfd240970, 0xc5b0dcff, 0xd96da2c2, 0xa7ae041d,
+-};
+-#endif
+-
+-// Only works on 64 bit
+-#if __riscv_xlen == 64
+ #define PROT (PROT_READ | PROT_WRITE)
+ #define FLAGS (MAP_PRIVATE | MAP_ANONYMOUS)
+ 
+-/* mmap must return a value that doesn't use more bits than the hint address. */
+-static inline unsigned long get_max_value(unsigned long input)
+-{
+-	unsigned long max_bit = (1UL << (((sizeof(unsigned long) * 8) - 1 -
+-					  __builtin_clzl(input))));
+-
+-	return max_bit + (max_bit - 1);
+-}
+-
+-#define TEST_MMAPS                                                            \
+-	({                                                                    \
+-		void *mmap_addr;                                              \
+-		for (int i = 0; i < ARRAY_SIZE(random_addresses); i++) {      \
+-			mmap_addr = mmap((void *)random_addresses[i],         \
+-					 5 * sizeof(int), PROT, FLAGS, 0, 0); \
+-			EXPECT_NE(MAP_FAILED, mmap_addr);                     \
+-			EXPECT_GE((void *)get_max_value(random_addresses[i]), \
+-				  mmap_addr);                                 \
+-			mmap_addr = mmap((void *)random_addresses[i],         \
+-					 5 * sizeof(int), PROT, FLAGS, 0, 0); \
+-			EXPECT_NE(MAP_FAILED, mmap_addr);                     \
+-			EXPECT_GE((void *)get_max_value(random_addresses[i]), \
+-				  mmap_addr);                                 \
+-		}                                                             \
+-	})
+-#endif /* __riscv_xlen == 64 */
+-
+ static inline int memory_layout(void)
+ {
+ 	void *value1 = mmap(NULL, sizeof(int), PROT, FLAGS, 0, 0);
 -- 
 2.45.2
 
