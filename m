@@ -1,373 +1,222 @@
-Return-Path: <linux-kselftest+bounces-16453-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16454-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C971F961517
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 19:08:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DA6E9615C4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 19:48:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E0671F23F5F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 17:08:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A09B21F251D7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 17:48:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 806C11D6DC1;
-	Tue, 27 Aug 2024 17:03:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06CFA1CDFA7;
+	Tue, 27 Aug 2024 17:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="h9b4BuvP"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="ExfsgvKr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2060.outbound.protection.outlook.com [40.107.94.60])
+Received: from out203-205-221-231.mail.qq.com (out203-205-221-231.mail.qq.com [203.205.221.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819CC1D67B2;
-	Tue, 27 Aug 2024 17:03:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.60
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724778188; cv=fail; b=CQIe6N8si6GgaVPshIB3K8bVk5GHFwxqJYDjHBHU1TpsyizVRsJuioeNy+Zjc6EEGVLt2jkXHeLGDv6ODpuWANLFlpz8I42xCqYWRCvO9BiQLw9QenR/yzaHVDaTU3VSgEJ2VYn+VKLU2GRhhX4s/BU2nqTU6Rv7qUC72bR/jGM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724778188; c=relaxed/simple;
-	bh=XBWUaalCeamsmPkm3BBzRZl6UeR1IzpwyM36pH2JK0E=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KIOO/YarbJtNDnO50kIAl3MerHQ2K5NpuYaUeItq7iJraiXsYfUQUF2DbA7mXGyjhHU5UczVOJb8pIWuBM8e11E4C5mVk17WYjsWd1YZs4+TwynbmKeQ+eZquacMJZtCyF5iJF2lnZL3eA4glzQWDJdSbBhOfiQ/O9Fhjrr6aGM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=h9b4BuvP; arc=fail smtp.client-ip=40.107.94.60
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=P2YqaXJ1uZiP8vb2WZbVSV9xqU1gUdlW/9wRO5PrrdFGU4G0y6MgNropBkeUS4ppqfIAor2s4uVtaFoUWR5BWYMdh0R2pX6+c4oxeqc1oF0IhW7mEV9lE74BR0icUJvBZCS6uxLquHMi+V999Cj9rd9p/dKWYcHbf1acrHtwEgbPgAzyKR9YzP99vlaKwNkB8AEeLfRfJRTca7vHS4KUPogX4S0TJLabeMawCjrNOIHnHAQJUzQJfWkRRYuovl0clYZFONBM0CY1xn14nn7zJg+EpaWpDBj2Dui/D88ikq0QQ0YLuug3/tfZoLSNb1jKszpANsCc6GozlAwVu3EtAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SwmixdpYdExmjE4reTF8pmlfMGjG5l7D+jesZo8PH8w=;
- b=hfDdk9dO33AkpjeNmSucAwka9CZOtDLo+CZA6HVjw8bk+gs5N2WEjyqrMMZadFuL4KB2CpgXKj7Q6a+amOcf38NlRGz9bWgl5N046A1tC4BateOPiLVajkX7xY3KUBbhuRq9OtSnCLCj2d6ApV9Sk6zvvbrTM1yhwbuVHYGGL82E/rmb/PWrzwTCxt4LVSWmQaTZttprxQmlGobR+VZUIKRh9AXP/8SLv0oLYLtYgCaqMUQkzEHDHT3zfBbMJqEIcmxLhd1nsxI2JLf1XTmvu+l2fe865LZheJKMFOAo5lHWzEEEtvS0VSCn4MYwIZ4sh8fHRRs93mWLgJaGn7U1mw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=huawei.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SwmixdpYdExmjE4reTF8pmlfMGjG5l7D+jesZo8PH8w=;
- b=h9b4BuvPN2EGD220cDA0icw34Xo6UvnyU+UnLPwhgOQeVWMfW+8Gngt+oV0epZHQbCUwY2bjziZBZ6CgnjysufYtJQGBYmNwHwWElo2OohmI4ELUUkBFfZ9/Q5tM2MCXLTA5ZIDl6jF/vJW5PuHOKrc+RNhCAG0ANm+GV7KLBsdMZql/XtJ+KXKJ0e0NI8/EM+DLrHLzDAKd5auWUpqODs5HSEYPwAwynKWHMZYgkIzzUpslLFtgl+5GcFI8ejmuetEDvEItfNnIf5hGD/eSyo8iUzVdhSfA2k9spAuy8RagXN4WHiZksOoMhXE1COsqdtkcZAzQ8nOvR1gO0dXGoA==
-Received: from CY5PR13CA0093.namprd13.prod.outlook.com (2603:10b6:930:a::28)
- by DS0PR12MB7702.namprd12.prod.outlook.com (2603:10b6:8:130::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.24; Tue, 27 Aug
- 2024 17:02:56 +0000
-Received: from CH2PEPF00000140.namprd02.prod.outlook.com
- (2603:10b6:930:a:cafe::56) by CY5PR13CA0093.outlook.office365.com
- (2603:10b6:930:a::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.16 via Frontend
- Transport; Tue, 27 Aug 2024 17:02:55 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CH2PEPF00000140.mail.protection.outlook.com (10.167.244.72) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7918.13 via Frontend Transport; Tue, 27 Aug 2024 17:02:54 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 27 Aug
- 2024 10:02:38 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 27 Aug
- 2024 10:02:38 -0700
-Received: from Asurada-Nvidia.nvidia.com (10.127.8.13) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Tue, 27 Aug 2024 10:02:36 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <will@kernel.org>
-CC: <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
-	<robin.murphy@arm.com>, <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
-	<shuah@kernel.org>, <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<eric.auger@redhat.com>, <jean-philippe@linaro.org>, <mdf@kernel.org>,
-	<mshavit@google.com>, <shameerali.kolothum.thodi@huawei.com>,
-	<smostafa@google.com>, <yi.l.liu@intel.com>
-Subject: [PATCH v1 10/10] iommu/arm-smmu-v3: Report virtual IRQ for device in user space
-Date: Tue, 27 Aug 2024 10:02:12 -0700
-Message-ID: <8b93be1d913f9e227748de2d07e8540ddc2372ab.1724777091.git.nicolinc@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1724777091.git.nicolinc@nvidia.com>
-References: <cover.1724777091.git.nicolinc@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC813126F1E;
+	Tue, 27 Aug 2024 17:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.231
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724780890; cv=none; b=tgFRjKfVZ0YpeBhEDkALBUX5bpG4iwd5elxrhASPs6nLX39KSILCyas8Z6s1nQoZNgkuab0RN79tnM361hL1fH1OYBUHvSgOt7b6kUzbZDS5RT4jodYTwdVK0VYawTPFGTT+8yr5UF3RiqygA2U5bgLUDMg9AoV/MIcdZldYeaI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724780890; c=relaxed/simple;
+	bh=KTbFSM9tHSP+RlcWea9+1q3s56PX4BgmMZgHn8mNEQo=;
+	h=Message-ID:Content-Type:Mime-Version:Subject:From:In-Reply-To:
+	 Date:Cc:References:To; b=SyA+SAri17AGSvAK6kN9hhJZOHOSWvGJW9ZsFBKWatLxEdulULG69TFWQEUFf+Q6UXOkyMehy+n2l+JqvrmvYVbpLPhTGmx1zsLgE53Cmm3l3f5oPYgVrfwm1/+TqCf3NLJJfjdBWA23M+WnanAuOI7OpixRLl0owUGjEoa9xSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name; spf=none smtp.mailfrom=cyyself.name; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=ExfsgvKr; arc=none smtp.client-ip=203.205.221.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cyyself.name
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cyyself.name
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1724780884; bh=Bkd8gFeLSf6g7a8IsJ2hm/2hCok13/+tTgniHLVL1lU=;
+	h=Subject:From:In-Reply-To:Date:Cc:References:To;
+	b=ExfsgvKrjIaXGs2ha3dh2uIpv6csDYSum/0rJ7Xe+++TS0U+QDteYeefBMK2FPRaO
+	 352N3txmwOu7or2e/iBmaGIjzB7vsiNvWpIQ0d1tIckVUQqF45yvm53GLD+O0rhFwN
+	 KlP6zrIwH/DEc7FJL6l5xI5+5Z27XuaSYhL7gL2c=
+Received: from smtpclient.apple ([2408:8207:18a0:bb80:79e5:c8db:9406:ceaa])
+	by newxmesmtplogicsvrsza29-0.qq.com (NewEsmtp) with SMTP
+	id BFB9A4CC; Wed, 28 Aug 2024 01:47:59 +0800
+X-QQ-mid: xmsmtpt1724780879tjalo6r6g
+Message-ID: <tencent_04EADAB08E75B88431FB219C8D757C108208@qq.com>
+X-QQ-XMAILINFO: MLAWG7dqOaka7Nb1xVPHfb7JG1kJ36BetyPhzCvbVVudcp9kJlLa/63mWQq6j+
+	 PyMBi6irRz/tB3D2gbm4frIj4bkIxUA88BqEfbp8++n9BomqVAm3Ok1b1bFESGUqcKQFnuVqzgqu
+	 uf9XC4JO2s8QWQEXs2i5sJIy//O+3xlRpotgqrgQBesW3Mp4z6rBwVRYQXME31bRN7cn0dtIpW8P
+	 zzb0FYkxVhpckNC7MlY56ruTQiX4EpkJDGh9paXNSmrnEtNceHydRXPh4z7Sk4U95VLZHymOS4Hl
+	 HEOiuzSGGBq5e3wl6/vry+qddJx6qQVFQO42+vBm+2S3YQGvGdIN4KGlwNJ2YR+onBKAVlTsciIP
+	 bG99SSqX6gO0gY86ZRGxrOGPXVOpmmRYL4sXrwhCn9UCeCsuHbbgg0Yk1h9xOBk6QcJi7ZUz6Fa4
+	 1oUlnFUldVMc1CMZRrDIpq1OeVJiWOB9OKSpu9kRa2PLbMtIyKKhJ8HkRy5kwpGv+jsP/sCQsjSv
+	 ozrUk/LH7HhS95+RoU66X8Z9EONiOiQzYminWziZ891oQNqJ064ZcsPEOT2iWGKPkRqgbC2Ce/lb
+	 8K68b9TuleTQ4IuxicfoVgj+k7b+mRVrjh6xUMzQxlQm/NogJqEAdsjTTEstlRLq0jXcbvaA86g2
+	 S0Rw6SuK+rI4+KC+YkfMc9x812AzZe5KOey7hlPrxn3Yk/vMAyzghjOly8P4jVn9laXFxDFerCat
+	 Bj0XzKQwGOoRqd25wMMGqIY+LQv/NRd3wqi31XKPdKZsHdJNNoqdsbjGEsA+rgdF16avD3ifx6F/
+	 hgMygs0wZ9eeBQrpm1a0+MwxbE47mRBnzXffGzlwBGAMRRNqsy2kaOOf4C0OqSvBSMyWqc23AT61
+	 5nPMr0uACHb9W98Qz4JzSNB3ZuXIC+VzF06UObRzAwZL9yXsOXVVEo29u9gedObJkqibAy+0ZARC
+	 QWEUQ5cyrGooI5WucgLmLHIgsJTpxdnvrIdpzdwnjTwHi9s2/R/ije9mPz4nECFgtcZndfcgLHNm
+	 HaH4ozseKt4cVlTzZ5oX6IftKSuUqUzmEVM4l2NPli6cHU8lnw
+X-QQ-XMRINFO: NI4Ajvh11aEj8Xl/2s1/T8w=
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF00000140:EE_|DS0PR12MB7702:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7d8924ef-8abe-41cf-fc93-08dcc6ba180c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|36860700013|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?zgqYggyaapJTIVH/PLDs6eYu41EAbuhBXNnyWrOpOopT151OtyUYxzbi9SG5?=
- =?us-ascii?Q?MO6KRhkSQdKh3kv7VLR1ojGmJLP/0NaP8exojuOBWVDmyvSKHaAzwowfMtGt?=
- =?us-ascii?Q?hvJi9YX5GKTd1XorVfui0T/hx5ZPI8jcIF9/2UWuaY107/QjQjKjNexSTS5e?=
- =?us-ascii?Q?MFwHfFyleygomqkxOfRX2MLixgWcUjQSbT2Ibq3Pyu3LJU7ks/ZwhsXTHWXz?=
- =?us-ascii?Q?8putblmoZ/z0xhF/PI8JtBqobtEekBdym/3YZeonX1yX/iIsA9G8jHpgG0JI?=
- =?us-ascii?Q?1rTMzas0T9Ge46TOot2RreFDB/O5dbQ2z6UI6GSeG+ceZrmxeSGJpndgZXC9?=
- =?us-ascii?Q?bpp0hzuDTYQCXIPQ1a89B+4s7/Cuihti2dPET8JLKeM5nMhqewB4MhEFlyL/?=
- =?us-ascii?Q?YQHfy0km1l7oWSc0taE6lxAr9yzle8L505aFzOL4c0WvtyfCICDQpD866ynu?=
- =?us-ascii?Q?Tgi3f8YrODMEgH2Ut25fC9C0upTEKb7r9FfYuyoUOrO8Tswdhfs1zle9jyeo?=
- =?us-ascii?Q?673ddB3BBXRH+Yhg9CRy/RRlwYxEv2qBC6sArxvGXIGDySo4TT42lBIDaF+g?=
- =?us-ascii?Q?0SQzzFDYM1dAbK4C8dfZR2S1E4R3Fo1sEH15WX9Hc+8esLi4gcEirdES0YR5?=
- =?us-ascii?Q?TiDld+uv5apAVkT7lTmlAiwLnsr6MyMHcbPmsyDMSfUMUTN/lDUC8gaMr9//?=
- =?us-ascii?Q?gDOSkxYeN9qi1NPO3f5qQmCYKhM4OsCpY67E+A3FApfN7dDMaZtWoYEYBzjT?=
- =?us-ascii?Q?ELUwTBe4LEntgRnsyfV7Xp2Ksojk4+UJyumNS9QOkYjnOXavzPO+7r4C9RD7?=
- =?us-ascii?Q?Tokg9nn4bvc25kJ6ufudp8/lz9axEP4M4eO5P8l6WRaigCqPADdCOFeyOLzC?=
- =?us-ascii?Q?UY/WZ+iBj6H3yaL4UUDYmW61znvPyyZbKVnPOe9GuQcv+IY1eDDynVFJ7qar?=
- =?us-ascii?Q?k6fUwqKEOzNUnbDN8KMS3/syIAM1OJz0CZldgKtfNaUSZKT1DNM7pK7BgRsp?=
- =?us-ascii?Q?jhXGWRXsKcueIU8on4VbJaJoJnppm6JlFpiJFoG8wDxviswW16OmxTJJHPpL?=
- =?us-ascii?Q?4MXws+i4SlW3+7kFHTb3e3D4goiE00avfCcAHxhkW5cvABnXNHoklZnxAS/w?=
- =?us-ascii?Q?kfwYCk149XG4+uy2JGbhHqIf+/wH30lFAbL3aDx4W0xj/70cTplZqO4viD98?=
- =?us-ascii?Q?bqJCham23ZI9wZZdC5jwbfnGGqtaVNzbDy9eLeNvhFfaoPO/EgsDek9rJVuf?=
- =?us-ascii?Q?4xyA6pokaDn9tLTQ4lTg2MrLh6qIb1z+FeINX/uHpd/zOkVweORSbz8Be3r3?=
- =?us-ascii?Q?eWz5xDIkEACp0UxgcreXLDogNevuFuOItTO/GZqaB4ek9ay44KuA/U/h6B2d?=
- =?us-ascii?Q?FhDOlJJf43oobUf1fsSp4jHr6tws+xRNcsLhYO7wqvzPQ2RpR9lG9jnIhLEF?=
- =?us-ascii?Q?QWVIh5ZyOLJzZaAmg/lJGSyGDHepo7fU?=
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(36860700013)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2024 17:02:54.8238
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7d8924ef-8abe-41cf-fc93-08dcc6ba180c
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF00000140.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7702
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51\))
+Subject: Re: [PATCH v3 0/3] RISC-V: mm: do not treat hint addr on mmap as the
+ upper bound to search
+From: Yangyu Chen <cyy@cyyself.name>
+In-Reply-To: <mhng-a7dcdfb5-0232-4ffb-8a20-13e564904da1@palmer-ri-x1c9a>
+Date: Wed, 28 Aug 2024 01:47:49 +0800
+Cc: linux-riscv@lists.infradead.org,
+ Charlie Jenkins <charlie@rivosinc.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Paul Walmsley <paul.walmsley@sifive.com>,
+ Albert Ou <aou@eecs.berkeley.edu>,
+ Shuah Khan <shuah@kernel.org>,
+ Levi Zim <rsworktech@outlook.com>,
+ Alexandre Ghiti <alexghiti@rivosinc.com>,
+ linux-doc@vger.kernel.org,
+ Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ linux-kselftest@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+X-OQ-MSGID: <05A72DDA-F689-403F-9214-6392AB6B5C29@cyyself.name>
+References: <mhng-a7dcdfb5-0232-4ffb-8a20-13e564904da1@palmer-ri-x1c9a>
+To: Palmer Dabbelt <palmer@rivosinc.com>
+X-Mailer: Apple Mail (2.3776.700.51)
 
-Aside from the IOPF framework, iommufd provides an additional pathway to
-report a hardware event or IRQ, via the VIRQ of VIOMMU infrastructure.
 
-Implement the set/unset_vdev_id viommu ops, to take control of vdev_id's
-lifecycle. Lock it properly so the threaded IRQ handler can read out the
-viommu pointer and the virtual SID, to call iommufd_viommu_report_irq().
 
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
----
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 109 +++++++++++++++-----
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h |   2 +
- include/uapi/linux/iommufd.h                |  14 +++
- 3 files changed, 97 insertions(+), 28 deletions(-)
+> On Aug 28, 2024, at 00:33, Palmer Dabbelt <palmer@rivosinc.com> wrote:
+>=20
+> On Tue, 27 Aug 2024 01:05:15 PDT (-0700), cyy@cyyself.name wrote:
+>> Previous patch series[1][2] changes a mmap behavior that treats the =
+hint
+>> address as the upper bound of the mmap address range. The motivation =
+of the
+>> previous patch series is that some user space software may assume =
+48-bit
+>> address space and use higher bits to encode some information, which =
+may
+>> collide with large virtual address space mmap may return. However, to =
+make
+>> sv48 by default, we don't need to change the meaning of the hint =
+address on
+>> mmap as the upper bound of the mmap address range. This behavior =
+breaks
+>> some user space software like Chromium that gets ENOMEM error when =
+the hint
+>> address + size is not big enough, as specified in [3].
+>>=20
+>> Other ISAs with larger than 48-bit virtual address space like x86, =
+arm64,
+>> and powerpc do not have this special mmap behavior on hint address. =
+They
+>> all just make 48-bit / 47-bit virtual address space by default, and =
+if a
+>> user space software wants to large virtual address space, it only =
+need to
+>> specify a hint address larger than 48-bit / 47-bit.
+>>=20
+>> Thus, this patch series change mmap to use sv48 by default but does =
+not
+>> treat the hint address as the upper bound of the mmap address range. =
+After
+>> this patch, the behavior of mmap will align with existing behavior on =
+other
+>> ISAs with larger than 48-bit virtual address space like x86, arm64, =
+and
+>> powerpc. The user space software will no longer need to rewrite their =
+code
+>> to fit with this special mmap behavior only on RISC-V.
+>=20
+> So it actually looks like we just screwed up the original version of =
+this: the reason we went with the more complicated address splits were =
+than we actually started with a defacto 39-bit page table uABI (ie =
+38-bit user VAs), and moving to even 48-bit page tables (ie, 47-bit user =
+VAs) broke users (here's an ASAN bug, for example: =
+https://github.com/google/android-riscv64/issues/64). =20
+> Unless I'm missing something, though, the code doesn't actually do =
+that.  I remember having that discussion at some point, but I must have =
+forgotten to make sure it worked.  As far as I can tell we've just moved =
+to the 48-bit VAs by default, which breaks the whole point of doing the =
+compatibilty stuff.  Probably a good sign I need to pay more attention =
+to this stuff.
+>=20
 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index ad43351145d0..28daa0b253c6 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -1810,6 +1810,7 @@ static int arm_smmu_handle_evt(struct arm_smmu_device *smmu, u64 *evt)
- {
- 	int ret = 0;
- 	u32 perm = 0;
-+	struct iommu_domain *domain;
- 	struct arm_smmu_master *master;
- 	bool ssid_valid = evt[0] & EVTQ_0_SSV;
- 	u32 sid = FIELD_GET(EVTQ_0_SID, evt[0]);
-@@ -1830,41 +1831,59 @@ static int arm_smmu_handle_evt(struct arm_smmu_device *smmu, u64 *evt)
- 	if (evt[1] & EVTQ_1_S2)
- 		return -EFAULT;
- 
--	if (!(evt[1] & EVTQ_1_STALL))
--		return -EOPNOTSUPP;
--
--	if (evt[1] & EVTQ_1_RnW)
--		perm |= IOMMU_FAULT_PERM_READ;
--	else
--		perm |= IOMMU_FAULT_PERM_WRITE;
--
--	if (evt[1] & EVTQ_1_InD)
--		perm |= IOMMU_FAULT_PERM_EXEC;
--
--	if (evt[1] & EVTQ_1_PnU)
--		perm |= IOMMU_FAULT_PERM_PRIV;
--
--	flt->type = IOMMU_FAULT_PAGE_REQ;
--	flt->prm = (struct iommu_fault_page_request) {
--		.flags = IOMMU_FAULT_PAGE_REQUEST_LAST_PAGE,
--		.grpid = FIELD_GET(EVTQ_1_STAG, evt[1]),
--		.perm = perm,
--		.addr = FIELD_GET(EVTQ_2_ADDR, evt[2]),
--	};
--
--	if (ssid_valid) {
--		flt->prm.flags |= IOMMU_FAULT_PAGE_REQUEST_PASID_VALID;
--		flt->prm.pasid = FIELD_GET(EVTQ_0_SSID, evt[0]);
--	}
--
- 	mutex_lock(&smmu->streams_mutex);
- 	master = arm_smmu_find_master(smmu, sid);
- 	if (!master) {
- 		ret = -EINVAL;
- 		goto out_unlock;
- 	}
-+	domain = iommu_get_domain_for_dev(master->dev);
-+
-+	if (evt[1] & EVTQ_1_STALL) {
-+		if (evt[1] & EVTQ_1_RnW)
-+			perm |= IOMMU_FAULT_PERM_READ;
-+		else
-+			perm |= IOMMU_FAULT_PERM_WRITE;
-+
-+		if (evt[1] & EVTQ_1_InD)
-+			perm |= IOMMU_FAULT_PERM_EXEC;
-+
-+		if (evt[1] & EVTQ_1_PnU)
-+			perm |= IOMMU_FAULT_PERM_PRIV;
-+
-+		flt->type = IOMMU_FAULT_PAGE_REQ;
-+		flt->prm = (struct iommu_fault_page_request) {
-+			.flags = IOMMU_FAULT_PAGE_REQUEST_LAST_PAGE,
-+			.grpid = FIELD_GET(EVTQ_1_STAG, evt[1]),
-+			.perm = perm,
-+			.addr = FIELD_GET(EVTQ_2_ADDR, evt[2]),
-+		};
-+
-+		if (ssid_valid) {
-+			flt->prm.flags |= IOMMU_FAULT_PAGE_REQUEST_PASID_VALID;
-+			flt->prm.pasid = FIELD_GET(EVTQ_0_SSID, evt[0]);
-+		}
-+
-+		iommu_report_device_fault(master->dev, &fault_evt);
-+	} else if (domain && domain->type == IOMMU_DOMAIN_NESTED) {
-+		mutex_lock(&master->lock);
-+		if (master->vdev_id) {
-+			struct iommu_virq_arm_smmuv3 virq_data =
-+				*(struct iommu_virq_arm_smmuv3 *)evt;
- 
--	iommu_report_device_fault(master->dev, &fault_evt);
-+			virq_data.evt[0] &= ~EVTQ_0_SID;
-+			virq_data.evt[0] |=
-+				FIELD_PREP(EVTQ_0_SID, master->vdev_id->id);
-+
-+			iommufd_viommu_report_irq(master->vdev_id->viommu,
-+						  IOMMU_VIRQ_TYPE_ARM_SMMUV3,
-+						  &virq_data, sizeof(virq_data));
-+		}
-+		mutex_unlock(&master->lock);
-+	} else {
-+		/* Unhandled events should be pinned */
-+		ret = -EFAULT;
-+	}
- out_unlock:
- 	mutex_unlock(&smmu->streams_mutex);
- 	return ret;
-@@ -3750,6 +3769,7 @@ static struct iommu_device *arm_smmu_probe_device(struct device *dev)
- 
- 	master->dev = dev;
- 	master->smmu = smmu;
-+	mutex_init(&master->lock);
- 	dev_iommu_priv_set(dev, master);
- 
- 	ret = arm_smmu_insert_master(smmu, master);
-@@ -3802,6 +3822,7 @@ static void arm_smmu_release_device(struct device *dev)
- 	arm_smmu_remove_master(master);
- 	if (arm_smmu_cdtab_allocated(&master->cd_table))
- 		arm_smmu_free_cd_tables(master);
-+	mutex_destroy(&master->lock);
- 	kfree(master);
- }
- 
-@@ -3937,6 +3958,36 @@ static int arm_smmu_def_domain_type(struct device *dev)
- 	return 0;
- }
- 
-+static struct iommufd_vdev_id *
-+arm_smmu_viommu_set_vdev_id(struct iommufd_viommu *viommu, struct device *dev,
-+			    u64 id)
-+{
-+	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
-+	struct iommufd_vdev_id *vdev_id;
-+
-+	vdev_id = kzalloc(sizeof(*vdev_id), GFP_KERNEL);
-+	if (!vdev_id)
-+		return ERR_PTR(-ENOMEM);
-+
-+	mutex_lock(&master->lock);
-+	master->vdev_id = vdev_id;
-+	mutex_unlock(&master->lock);
-+
-+	return vdev_id;
-+}
-+
-+static void arm_smmu_viommu_unset_vdev_id(struct iommufd_vdev_id *vdev_id)
-+{
-+	struct device *dev = iommufd_vdev_id_to_dev(vdev_id);
-+	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
-+
-+	mutex_lock(&master->lock);
-+	master->vdev_id = NULL;
-+	mutex_unlock(&master->lock);
-+
-+	/* IOMMUFD core frees the memory of vdev_id */
-+}
-+
- static int arm_smmu_viommu_cache_invalidate(struct iommufd_viommu *viommu,
- 					    struct iommu_user_data_array *array)
- {
-@@ -3977,6 +4028,8 @@ static struct iommu_ops arm_smmu_ops = {
- 		.iova_to_phys		= arm_smmu_iova_to_phys,
- 		.free			= arm_smmu_domain_free_paging,
- 		.default_viommu_ops = &(const struct iommufd_viommu_ops) {
-+			.set_vdev_id = arm_smmu_viommu_set_vdev_id,
-+			.unset_vdev_id = arm_smmu_viommu_unset_vdev_id,
- 			.cache_invalidate = arm_smmu_viommu_cache_invalidate,
- 		}
- 	}
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-index 6930810b85cb..5d20a67683e6 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-@@ -788,6 +788,8 @@ struct arm_smmu_master {
- 	struct arm_smmu_device		*smmu;
- 	struct device			*dev;
- 	struct arm_smmu_stream		*streams;
-+	struct mutex			lock;
-+	struct iommufd_vdev_id		*vdev_id;
- 	/* Locked by the iommu core using the group mutex */
- 	struct arm_smmu_ctx_desc_cfg	cd_table;
- 	unsigned int			num_streams;
-diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-index f9ec07efed8d..1dc2c0b05af7 100644
---- a/include/uapi/linux/iommufd.h
-+++ b/include/uapi/linux/iommufd.h
-@@ -956,9 +956,23 @@ struct iommu_viommu_unset_vdev_id {
- /**
-  * enum iommu_virq_type - Virtual IRQ Type
-  * @IOMMU_VIRQ_TYPE_NONE: INVALID type
-+ * @IOMMU_VIRQ_TYPE_ARM_SMMUV3: ARM SMMUv3 Virtual Event
-  */
- enum iommu_virq_type {
- 	IOMMU_VIRQ_TYPE_NONE = 0,
-+	IOMMU_VIRQ_TYPE_ARM_SMMUV3 = 1,
-+};
-+
-+/**
-+ * struct iommu_virq_arm_smmuv3 - ARM SMMUv3 Virtual IRQ
-+ *                                (IOMMU_VIRQ_TYPE_ARM_SMMUV3)
-+ * @evt: 256-bit ARM SMMUv3 Event record, little-endian.
-+ *
-+ * StreamID field reports a virtual device ID. To receive a virtual IRQ for a
-+ * device, it must set its virtual device ID via IOMMU_VIOMMU_SET_VDEV_ID.
-+ */
-+struct iommu_virq_arm_smmuv3 {
-+	__aligned_u64 evt[4];
- };
- 
- /**
--- 
-2.43.0
+It seems the issues have been solved in LLVM D139823 [1] and LLVM =
+D152895 [2].
+
+[1] https://reviews.llvm.org/D139823
+[2] https://reviews.llvm.org/D152895
+
+> So I'm not really sure what to do here: we can just copy the arm64 =
+behavior at tell the other users that's just how things work, but then =
+we're just pushing around breakages.  At a certain point all we can =
+really do with this hint stuff is push around problems, though, and at =
+least if we copy arm64 then most of those problems get reported as bugs =
+for us.
+>=20
+>> Note: Charlie also created another series [4] to completely remove =
+the
+>> arch_get_mmap_end and arch_get_mmap_base behavior based on the hint =
+address
+>> and size. However, this will cause programs like Go and Java, which =
+need to
+>> store information in the higher bits of the pointer, to fail on Sv57
+>> machines.
+>>=20
+>> Changes in v3:
+>> - Rebase to newest master
+>> - Changes some information in cover letter after patchset [2]
+>> - Use patch [5] to patch selftests
+>> - Link to v2: =
+https://lore.kernel.org/linux-riscv/tencent_B2D0435BC011135736262764B51199=
+4F4805@qq.com/
+>>=20
+>> Changes in v2:
+>> - correct arch_get_mmap_end and arch_get_mmap_base
+>> - Add description in documentation about mmap behavior on kernel =
+v6.6-6.7.
+>> - Improve commit message and cover letter
+>> - Rebase to newest riscv/for-next branch
+>> - Link to v1: =
+https://lore.kernel.org/linux-riscv/tencent_F3B3B5AB1C9D704763CA423E1A41F8=
+BE0509@qq.com/
+>>=20
+>> [1] =
+https://lore.kernel.org/linux-riscv/20230809232218.849726-1-charlie@rivosi=
+nc.com/
+>> [2] =
+https://lore.kernel.org/linux-riscv/20240130-use_mmap_hint_address-v3-0-8a=
+655cfa8bcb@rivosinc.com/
+>> [3] =
+https://lore.kernel.org/linux-riscv/MEYP282MB2312A08FF95D44014AB78411C68D2=
+@MEYP282MB2312.AUSP282.PROD.OUTLOOK.COM/
+>> [4] =
+https://lore.kernel.org/linux-riscv/20240826-riscv_mmap-v1-0-cd8962afe47f@=
+rivosinc.com/
+>> [5] =
+https://lore.kernel.org/linux-riscv/20240826-riscv_mmap-v1-2-cd8962afe47f@=
+rivosinc.com/
+>>=20
+>> Charlie Jenkins (1):
+>>  riscv: selftests: Remove mmap hint address checks
+>>=20
+>> Yangyu Chen (2):
+>>  RISC-V: mm: not use hint addr as upper bound
+>>  Documentation: riscv: correct sv57 kernel behavior
+>>=20
+>> Documentation/arch/riscv/vm-layout.rst        | 43 ++++++++----
+>> arch/riscv/include/asm/processor.h            | 20 ++----
+>> .../selftests/riscv/mm/mmap_bottomup.c        |  2 -
+>> .../testing/selftests/riscv/mm/mmap_default.c |  2 -
+>> tools/testing/selftests/riscv/mm/mmap_test.h  | 67 =
+-------------------
+>> 5 files changed, 36 insertions(+), 98 deletions(-)
+
 
 
