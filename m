@@ -1,48 +1,48 @@
-Return-Path: <linux-kselftest+bounces-16381-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16382-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8456960449
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 10:22:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2B4B960483
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 10:34:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B71E1F2372D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 08:22:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7DD2028417E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 08:34:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C26D193433;
-	Tue, 27 Aug 2024 08:22:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3192A1940AB;
+	Tue, 27 Aug 2024 08:34:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZZbjEy8v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fO//0bfl"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAF2C1487F4;
-	Tue, 27 Aug 2024 08:22:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAF4D15534E;
+	Tue, 27 Aug 2024 08:34:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724746929; cv=none; b=QGSk6XV+/h+xLmskiEkQS/8i8EMmmUc8Oljx1UocpzaFeYgAQ0w5iU1dt+lKyjvknHFYwfNQkLkxLMOJa4LWlNSlG+uSXaU+ZT/B7n5dufZ6s3Ech/k3qUCiLdKHy1l1HLt4zkAfqvLqdbMI2M10rbfyzeUpky4cEBcU7FRCj7E=
+	t=1724747660; cv=none; b=lZmbD3YsUiBrOKu9qQy7TfE96VYSCSmUTReM7r3Sx61OgcIbFebqtit+DFjnML9OXNYEDYwzbDrcfc5fQHKGqudq6vyDL5iXFBPgZXTeUF3u2hzQ3kvzx++5D/qHhtl7PTSB8h9ZRgUPQgDJdXbqfclpyokyzzskf6Kr1hScc94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724746929; c=relaxed/simple;
-	bh=le44pt6W8v+kknNIOR3bDsF+5jHJup/kHuUmFbjIeV4=;
+	s=arc-20240116; t=1724747660; c=relaxed/simple;
+	bh=/UcYF9dEKvtH76EH2RP2cqv83Hl8qiS2rm8fJth6FKo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Gon5A8myChNdGatj0WR7uIwj0ksyI+Am/ewu9WVtlB2mW2oxw8CGLJNCEiQ/7/tDfatAkQgwMpDs3j+3KwGO9aLDJYc1BgypTkBhO2NwwmPoVG+MzsLNw08PzyFpvEM2WFAOoM3L/zqDqxSm2O5Krhp+9lIQvM9WXYTsrkrmfFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZZbjEy8v; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D566CC58122;
-	Tue, 27 Aug 2024 08:22:04 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=M5qbz6IVyX52AmQ+sCZuuqfXKtfBxmeuM7qmq/6E2vWnoSXkvTDqf21zQo+zVuLbPy8ScQ1mqMT36h30C7ozzPEUkipNaNuJUZF1MSjf2fIy46XqOEensKkAPrYYxMl3Tzs/vfGt3n+TQBb/CWOrtGKEU5reDLisLDQYqqxo9b0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fO//0bfl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43ACAC8B7C5;
+	Tue, 27 Aug 2024 08:34:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724746928;
-	bh=le44pt6W8v+kknNIOR3bDsF+5jHJup/kHuUmFbjIeV4=;
+	s=k20201202; t=1724747659;
+	bh=/UcYF9dEKvtH76EH2RP2cqv83Hl8qiS2rm8fJth6FKo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZZbjEy8vAcKORHbtsVHVq/Ek7nXokvMs5F9n4GRx4E3p5vHCRX2rPztYPefm+AAhI
-	 /TKF1uDiv2aRFX6rubfoa0UMd/vMAoS9qFAeJESuWMjvQSW7dD6ETab57vV0xaczvk
-	 0KI6gVFy8uHFX4cgGyMIQShTNLWrUMM75e+3iHxjwcIilw3Dr/gx+5xpQcZ71pjhPE
-	 jxnUVq1iFwBHCkozSGR4u0oxjIBq7Hb282OlbN2eAONomzZbrCrUNJTeqXrbUApGv3
-	 qz4DQYZpSSV2rzi44EupIGIWTGIuMhJefYuW0q6GIPnfpmfmRMRP4vbe2T8yyEdEWX
-	 o1QY6I7mdVSVg==
-Message-ID: <c832579b-c679-4b28-ab8f-2131ac539c24@kernel.org>
-Date: Tue, 27 Aug 2024 10:22:02 +0200
+	b=fO//0bfl8ScHNcuRaRrAGvzY5NY5oUP/q1p7EUYwUG8SnZ590y4HVrZF+Q99ZEtBl
+	 qwCp1+5S1uT2YgS8mppEyRW8+QzS03NP2ZOJlxigvvLragQ+ebfQgmozK1PJRKm99V
+	 xCGkc5GX9GDjpCpCbztKQx0f1FewhvuKkDE7EzK08i6+62HLR0NbM17gt/HK6QtaS+
+	 0CU4v9gicxhkYye5TOhFlIUbt9H8ZLHXCuPg273qEEARwMNKIrgoij5n5/YLBAe0Wc
+	 WOdJ/qVMSMRFk1rTd/ERN2/H8eHXYAPCa98uxp4KcUrNg7yW4rU9+w0rXscckEUPF3
+	 0FHmj+7mP8CVg==
+Message-ID: <f22b0997-fa22-4716-a8a7-d6d8f6c49b40@kernel.org>
+Date: Tue, 27 Aug 2024 10:34:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,19 +50,18 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net 00/15] mptcp: more fixes for the in-kernel PM
+Subject: Re: [PATCH net 0/4] mptcp: close subflow when receiving TCP+FIN and
+ misc.
 Content-Language: en-GB
 To: Jakub Kicinski <kuba@kernel.org>
 Cc: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
  Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>,
  Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Shuah Khan <shuah@kernel.org>, Florian Westphal <fw@strlen.de>,
+ Florian Westphal <fw@strlen.de>, Shuah Khan <shuah@kernel.org>,
  netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
- =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
- syzbot+455d38ecd5f655fc45cf@syzkaller.appspotmail.com
-References: <20240826-net-mptcp-more-pm-fix-v1-0-8cd6c87d1d6d@kernel.org>
- <20240826192955.3dbb469d@kernel.org>
+ linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+References: <20240826-net-mptcp-close-extra-sf-fin-v1-0-905199fe1172@kernel.org>
+ <20240826203308.7cc1bd5c@kernel.org>
 From: Matthieu Baerts <matttbe@kernel.org>
 Autocrypt: addr=matttbe@kernel.org; keydata=
  xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
@@ -108,44 +107,28 @@ Autocrypt: addr=matttbe@kernel.org; keydata=
  JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
  lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
 Organization: NGI0 Core
-In-Reply-To: <20240826192955.3dbb469d@kernel.org>
+In-Reply-To: <20240826203308.7cc1bd5c@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Jakub,
-
-On 27/08/2024 04:29, Jakub Kicinski wrote:
-> On Mon, 26 Aug 2024 17:58:59 +0200 Matthieu Baerts (NGI0) wrote:
->> Matthieu Baerts (NGI0) (15):
->>       mptcp: pm: reuse ID 0 after delete and re-add
->>       mptcp: pm: fix RM_ADDR ID for the initial subflow
->>       selftests: mptcp: join: check removing ID 0 endpoint
->>       mptcp: pm: send ACK on an active subflow
->>       mptcp: pm: skip connecting to already established sf
->>       mptcp: pm: reset MPC endp ID when re-added
->>       selftests: mptcp: join: check re-adding init endp with != id
->>       selftests: mptcp: join: no extra msg if no counter
->>       mptcp: pm: do not remove already closed subflows
->>       mptcp: pm: fix ID 0 endp usage after multiple re-creations
->>       selftests: mptcp: join: check re-re-adding ID 0 endp
->>       mptcp: avoid duplicated SUB_CLOSED events
->>       selftests: mptcp: join: validate event numbers
->>       mptcp: pm: ADD_ADDR 0 is not a new address
->>       selftests: mptcp: join: check re-re-adding ID 0 signal
+On 27/08/2024 05:33, Jakub Kicinski wrote:
+> On Mon, 26 Aug 2024 19:11:17 +0200 Matthieu Baerts (NGI0) wrote:
+>> Matthieu Baerts (NGI0) (4):
+>>       mptcp: close subflow when receiving TCP+FIN
+>>       selftests: mptcp: join: cannot rm sf if closed
+>>       mptcp: sched: check both backup in retrans
+>>       mptcp: pr_debug: add missing \n at the end
 > 
-> The debug runner is failing mptcp-join-sh fairly consistently with
-> these applied :(
+> Why are you submitting two series to the same tree at once?
+> The limit of 15 patches applies, no matter how you post.
 
-Thank you for this notification!
+Oh sorry, I didn't know about that.
 
-It looks like the patch "selftests: mptcp: join: check re-re-adding ID 0
-endp" is making the "delete and re-add" subtest longer: the connection
-finishes while the validation is still ongoing. I guess I didn't see
-this issue on my side, nor on MPTCP CI, because the Netdev CI is slower
-(SLUB_DEBUG_ON?).
-
-It is easy to fix, but I will wait for the other MPTCP series to be
-applied, before sending a v2.
+Recently, we queued a large amount of patches targetting the -net tree,
+blocking other patches queued for net-next for a few weeks now. Because
+the two series I sent yesterday were not related to each others, I
+thought it was OK to send them in parallel. But I understand the rate
+limit. I will wait to send the next patches.
 
 Cheers,
 Matt
