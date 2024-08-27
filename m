@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-16431-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16434-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89A0F9614E5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 19:03:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 372DE9614EE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 19:03:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 423A428468C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 17:03:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA3172851AE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 17:03:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 835111D2F55;
-	Tue, 27 Aug 2024 17:02:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC3781D362C;
+	Tue, 27 Aug 2024 17:02:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="G1IvgYTG"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="LrFihceh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2041.outbound.protection.outlook.com [40.107.223.41])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2045.outbound.protection.outlook.com [40.107.244.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4F621D27A4;
-	Tue, 27 Aug 2024 17:02:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83051D3194;
+	Tue, 27 Aug 2024 17:02:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.45
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724778122; cv=fail; b=Q0t/UYbVTrnPnpPp4NICGDTytcRDt1tgklp/eIJ/24jW+A9ursSib9QIg39GTSho35iWHD3ABZcPUA9iXoZDy5Os44makhoNBg6JL/2z5L/SnY+3wNoOyIH6SEy6xffExZ8S0IWficR3vIHeHKtctvO+zgRy/hxDrUcKGaE0p3E=
+	t=1724778126; cv=fail; b=CZ6ZWIPwR4yDHh4z47lOTC95UUYRAMFCrOcXLDEIQ9YHNvJqLfCHXDibItHdsVr+Mk0sWbL0bO8DdxMzwC+rvndsOggLc4r7ci4fWC/bHS/K3357aBOMl277vCMg6FtAd4vi9JiOFEtKjSvlOyoOIde4sp6EVQTbQmyYnzFIZkQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724778122; c=relaxed/simple;
-	bh=W7dS2XS29qzgHW42M63oQbyuxzBJ+WSNyId2nL5u7Pc=;
+	s=arc-20240116; t=1724778126; c=relaxed/simple;
+	bh=77Rg+XUUaI4Cyc/+2/ci1D9prOW2G7RCj5IFElQKb9o=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XtVK6DNhTyKnBiSVFx7NFQP1TLOMEfZpRbgCNKkiuQSVnvCECmES3QVlH/v3p1LTmxQi0xbjLO2Q908Sc6X3DDZg8hmsi+NPK164q699NnJmcRJCF5CaaHR0cHJ4eHiXYx90ga1f/5/oz8QTytJiefdmOFNa0SjFVqsqYhtFQJw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=G1IvgYTG; arc=fail smtp.client-ip=40.107.223.41
+	 MIME-Version:Content-Type; b=A3YfvGL9h7Lm66ubnHPzTlhRh+c6ejkD2KPQveQjV2s2vdGS0CF5scXN220BuvEwLtYR1XzIMVsm4xmw54iZMovjErJ8TPLlO1yosFVJGwxKEHMImh8RAGiPO1bu04dkFrrrwLU7ARpddvos7EWV5eRWQly7m2o1MqJ2XF1G5+E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=LrFihceh; arc=fail smtp.client-ip=40.107.244.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bI8Czw4yYx/shx4cNi48bgg8ozYVsDJ6DS7Qqr6bcM4x6gYzqExQdsl18UQ4GDyBH8a1laztF7f1CMwIsKfWJ/9w1xsvpl2HyvUkkddFQuU/JfwdsvSArhQeVMXcs05K2MnjiuaHWcOltRq7ih32Ndl+PWc0bJjNyUG1Qmo9BEmWuzlzUp+EpMaD9BMXZdU+2prSpR3vgdxOWSL4mo++7ULGnNAtggYk9e2O0o2BW9cd5y8RkuoadTRRuUhpxA/qlqlMHRxHrJaiCdFeaw2caoPiq5ADKcj6tOg9Liz+mT37w2pnjPnAOZ74rPamjO3XMwTs+yXFqQQu2pm7yIWyTA==
+ b=E3Jexg4pTjX1leCF1a5u8Rwf1S2Az6naUjKERq63PaqAWWn+YjeuWf1uNNnDkJLDHmQM//ydpJj6M/5eXLc9s4b+XcpRm2WC52C1Nb0ZyjZldXg63A3BS9U8hw1kGDWKU1fC9UfS/+PKPsFbOmcLnERK2MB68sKeTtLMFc4p695HDwLy7bjswDlvE73udbwAC+aeYel56XPILWUyO3iE4TX5Q6k1lKbn2He93JoFgWlTMMcG01j4mxLOFacuMs37jtMhhH6JhxkYnhyLKqL/cZUXPPlffQN9M6w8O7+7/hXWDgEG9/Y5b5Cl4aGJ2LSGu65aoEB52bsv3X2xgLCa9A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MPYOWHi+9nANoYua577/wdgH/ZY9XVaaaAI83InvJGw=;
- b=ESb0UYI8t2gHWnGva3DAWPUvTktOBfByq8yEyhWOHVYxOuK5yYgYnXl68/VEWVWdoufqJiFiJ8XsjK6Lbp3wZnrv6ctPYDblGUbyzUX9jGxXb4bQMK09QIayTOJdHHX7GwBXmjrUq8QhZL8pGsNOfhZwAj6p143ikMwB1QS032HFNk8CbtdT3K0Zd+aiciW1KLny8xUgPAmjf0yHnmrcfg/M6G0ZqOCsm4rbK/D5SqsQQFj1RZBZY6iUHbpC+7yC9hQAUVM9Pnl+Nrzg6RR6WLHiZFSMAfQSEoi6nEeHLBjCOcLz+4orhX1n6iOSiTxEmi1+arfeeAQmYExaOPDFtA==
+ bh=IV/muEQnoo8rlQRVDk2+Mw6tAvwItl8MKO6PgGjBUTE=;
+ b=IKY4Buzgqe1rdJp0QQKjAAQbBYrD2gxjqgc9tIxpb+/A8VcTKOhP70SpGxyPVFDRO+f1Pscla7SSrlCg6RovYMgRVChEUDbgj8pRQ8+mx0MG9BHZ9PAKdi6dsssAvyspnF4svZiDaz+TFFm0hKE220QQS8OiCM4yN3Iy3nCNNiu4M+kFaYasQ45SwbrVsR5lwiagQWDQoBm9H3cynzVykg2+HQFXPVoIbvY4LrE+3J36kn7NtbV599Baqx+rIZ8gftw8r6y3ajRehKPMxBiOJDcpfFI/zU4AUxqmS35S4fyqZQKsYObsOBlP87CANjxvIsz56b6PhHBL4njZh+EhpA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  216.228.118.233) smtp.rcpttodomain=huawei.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
@@ -45,17 +45,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MPYOWHi+9nANoYua577/wdgH/ZY9XVaaaAI83InvJGw=;
- b=G1IvgYTG/3eACR9PMyMNF0NO+hiCl/RoDLAw1lEsBnfqR7/JEeLLeUWOntcAmuVUCnMbusWTJqhKGlhXUyOt60EhAM3N14+BwbYKdha5ckp/y4U66PEEYzh34h1b4kBkSxniKbAmNIJ6vGhYK4Vl+tVTRu+c5BF59Tou1RE/mkn5I6cajHDtiabtCxkAoZf7PinWIJxQKStvu0HXBmWxCzZZ/WLYwCwamkmVV6anBg2NjznWwE5OGp+yJPsrbACb/Ui55hjGEJ8VQvmfqW1T1gUPbZXFZKJm9zwAP/Zar6/lx5O5iTYick1A4YBpYAwLywNWsxXccAL66b0tMqx/Cw==
-Received: from DS7P220CA0010.NAMP220.PROD.OUTLOOK.COM (2603:10b6:8:1ca::8) by
- SA1PR12MB8118.namprd12.prod.outlook.com (2603:10b6:806:333::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7897.26; Tue, 27 Aug 2024 17:01:57 +0000
-Received: from CY4PEPF0000E9D3.namprd03.prod.outlook.com
- (2603:10b6:8:1ca:cafe::bc) by DS7P220CA0010.outlook.office365.com
- (2603:10b6:8:1ca::8) with Microsoft SMTP Server (version=TLS1_2,
+ bh=IV/muEQnoo8rlQRVDk2+Mw6tAvwItl8MKO6PgGjBUTE=;
+ b=LrFihcehP4drJkAXLcUXJr8ZXARPRQLzdMOAUluSkaic2zLZhqMZ1ujwZ5/BNbrajRnwWi6lCvRZHXF/s9TNH42GoyhUDJyBJ0h6S8nmrJaA7agamAu2EqlQ2acirs0+wI0Fhh2Iuq5n7k/QxogMHwtkwpOAbS1N4VZUv8d7fb/H9Gv7qWU3/t65lpWf0muoDMOIHE6UkrontW2DhBaztS2qQqRA6P2Eac5CWcgF+KX+/nbVuyzKcQLoYJLl27N00SnUwD6OZY6fpMZnj4gQyvKoGvftGwPWyybNnHJ6rgC157ONteKGdBJGFFaHbJeq8Ov1vJFnDGOAMLhT8CpGZw==
+Received: from PH7P220CA0104.NAMP220.PROD.OUTLOOK.COM (2603:10b6:510:32d::26)
+ by CY8PR12MB7514.namprd12.prod.outlook.com (2603:10b6:930:92::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.25; Tue, 27 Aug
+ 2024 17:01:58 +0000
+Received: from CY4PEPF0000E9D4.namprd03.prod.outlook.com
+ (2603:10b6:510:32d:cafe::28) by PH7P220CA0104.outlook.office365.com
+ (2603:10b6:510:32d::26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.26 via Frontend
- Transport; Tue, 27 Aug 2024 17:01:56 +0000
+ Transport; Tue, 27 Aug 2024 17:01:57 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
@@ -63,20 +64,20 @@ Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
  216.228.118.233 as permitted sender) receiver=protection.outlook.com;
  client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
 Received: from mail.nvidia.com (216.228.118.233) by
- CY4PEPF0000E9D3.mail.protection.outlook.com (10.167.241.138) with Microsoft
+ CY4PEPF0000E9D4.mail.protection.outlook.com (10.167.241.139) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7897.11 via Frontend Transport; Tue, 27 Aug 2024 17:01:56 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ 15.20.7897.11 via Frontend Transport; Tue, 27 Aug 2024 17:01:57 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
  (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 27 Aug
- 2024 10:01:43 -0700
+ 2024 10:01:44 -0700
 Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Tue, 27 Aug 2024 10:01:42 -0700
+ 15.2.1544.4; Tue, 27 Aug 2024 10:01:44 -0700
 Received: from Asurada-Nvidia.nvidia.com (10.127.8.13) by mail.nvidia.com
  (10.126.190.180) with Microsoft SMTP Server id 15.2.1544.4 via Frontend
- Transport; Tue, 27 Aug 2024 10:01:42 -0700
+ Transport; Tue, 27 Aug 2024 10:01:43 -0700
 From: Nicolin Chen <nicolinc@nvidia.com>
 To: <jgg@nvidia.com>, <kevin.tian@intel.com>, <will@kernel.org>
 CC: <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
@@ -86,9 +87,9 @@ CC: <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
 	<eric.auger@redhat.com>, <jean-philippe@linaro.org>, <mdf@kernel.org>,
 	<mshavit@google.com>, <shameerali.kolothum.thodi@huawei.com>,
 	<smostafa@google.com>, <yi.l.liu@intel.com>
-Subject: [PATCH v2 10/19] iommufd/viommu: Add vdev_id helpers for IOMMU drivers
-Date: Tue, 27 Aug 2024 09:59:47 -0700
-Message-ID: <6ccdfb27c7aa5a5bb7e153165cf90114cae4687c.1724776335.git.nicolinc@nvidia.com>
+Subject: [PATCH v2 11/19] iommu: Add iommu_copy_struct_from_full_user_array helper
+Date: Tue, 27 Aug 2024 09:59:48 -0700
+Message-ID: <8cd72612c5c8a3a03df0c7af9749b76bc16bb3d0.1724776335.git.nicolinc@nvidia.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1724776335.git.nicolinc@nvidia.com>
 References: <cover.1724776335.git.nicolinc@nvidia.com>
@@ -103,155 +104,134 @@ Content-Type: text/plain
 X-NV-OnPremToCloud: ExternallySecured
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D3:EE_|SA1PR12MB8118:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7832d643-22d5-4711-ba37-08dcc6b9f565
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D4:EE_|CY8PR12MB7514:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2756f5b2-8c92-409c-4ab3-08dcc6b9f5d4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|1800799024|7416014|376014|82310400026;
+	BCL:0;ARA:13230040|376014|1800799024|82310400026|7416014|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?dxWj7BjQWkYg5VXNaZO2MzDGuRSMtmPZoBux72VHeUxYB7VWkAqDq0xDgneC?=
- =?us-ascii?Q?uW6EvIp9CvcOZoabEdtghl0AZ77O2BzZsC4Ti+vG1s4ls2F25LO6PktN/iYx?=
- =?us-ascii?Q?N+ZsuiSZKdAn3NKSwtxoESsUtJ065/VwMNxe6PeQxPR2NCXlRMht3qy5geNK?=
- =?us-ascii?Q?02jmvM3jasrTCIg3i6Q0QMn1jFEQOGRXWC4VZK7IP0+kvSyofK/L0v5H27op?=
- =?us-ascii?Q?CEs3tCKyFFn8O4d3jZae+4jk0f4/avJxjeA5uEIQwlzpYWCeXmOFZIYW0Wwh?=
- =?us-ascii?Q?OQp1YLACsplMVQ8bth6pg92aXvvt7DiS3n+FJxjy0PVVqzbBr7A+6vvPJ2uJ?=
- =?us-ascii?Q?OJhEWss2c1AbhjgoUE9DQI3iTX57+2cuchU+fmWQwLNG+uXffSK4DGzYfAMz?=
- =?us-ascii?Q?OuiUANtvtFmUSTbD3I9DR6gGeEYdR8Uqvz91QLYR80jpn0x1S7hszwglHGsO?=
- =?us-ascii?Q?x0lEg65fYJXqUo0DInX29ETnPUbw6VJjrpLXF+7QH0iXgqSFYlOxIHcOoYAK?=
- =?us-ascii?Q?sEP+iH+kIY+Ths4jw9XoOm4OhycPox91A0WsO97s+hzJjAmd1hjQq5c8iBS2?=
- =?us-ascii?Q?WbC2KUa0e+L21l852QSs7Y3vqVDnJYLNi6DtSd+ZWcIApFQaEzBEdAD4ZC5W?=
- =?us-ascii?Q?HMcuMVrHN+Tq2i5/3rO43aq7oohBwKqWo+gGwXUpsBs9ffUzPFzIKSDqVzRU?=
- =?us-ascii?Q?vrS6F011d0a7iK1NpmPjd9DMTNdpgAQbjAnxuVzicXkprbO2eTZ97SgVhwbO?=
- =?us-ascii?Q?O041r6KVclVMvqUMDXW0VJDQhP4Fr0ugi1SXy3MYdGTn4cKnR0YmzbfFR+OE?=
- =?us-ascii?Q?2awk2FPm+LLHhFk9urDdrLV8oOO+Nqv6JtJk+RcJK/RwG6jVy56DzZjYMWi1?=
- =?us-ascii?Q?F3V2pkdVU5eP0Tih2LSwrrV0ve0yHvlzIbdKYjYIelPd+X2NZ1WufkSe/syD?=
- =?us-ascii?Q?95xd2LG+zGrS+93qanYkVJuBEiyIdoozEldkasLjxnOowDZ24Z3hLaLW4+Bd?=
- =?us-ascii?Q?vz5rpKbUoXKDE9z5t1H4iCGK7M7WlXYuaLaLLeoSVjZns3JPV80FaLTjVe5N?=
- =?us-ascii?Q?ZFAJnaCeAzvh9LKmYBfDEp88UvsLV+mq1xMspvQe9UbfFOwdfTYxqZLuWi/k?=
- =?us-ascii?Q?IhhTgfG/ipuBVVeCI16WRg67ipE0YC3pxKPtFOasJl7zAVJzwW8fTm8n5Npt?=
- =?us-ascii?Q?ILGwU42TsPsuAbbLN8eHZ8uiL4KUo9qeQJ8hOfPdChycuv6rlCwjbQdb4KlF?=
- =?us-ascii?Q?5ipd2TbZJLouzh0MjNVCG6z6qdTrDgh363RJtqsQiw3+0fekayybq/nucCyu?=
- =?us-ascii?Q?N3QPyXpSZILG9dEwYDvNny8hClWms0Y3MmSOE4VY/E/EXSLiANr3Oo9ShcUR?=
- =?us-ascii?Q?dpFLBtSCJ+QQGxcAlUyxYPcdufAb+7YI12wDsi0GcUOY4ajEyXgM51BDqz/h?=
- =?us-ascii?Q?Jx0JZ93tdc/IUZtF6prHkP8jlxmDNaiR?=
+	=?us-ascii?Q?NDUYnIxlrFtykjyU+DWPuC2wBn0qpEUNkGIJXKzpRTgYUxK7XHVWQJZGFgNq?=
+ =?us-ascii?Q?sxwTXXd8dTTcUDDS5Drph3w/eoCrzIn1TDakBtGCLfLYGRfQLRueaig1MPKw?=
+ =?us-ascii?Q?QqVV8Pw9dEOtoTP340VmoQ0fsDZXX+JlnwRRcxzaxLsb/G6cSDK3qfLkxyhI?=
+ =?us-ascii?Q?3+ctcQBb6tDDM7rEBa2wi1cUFBdYTjvylHjEt08WnZr7sKg6SZk7+ccz6bV2?=
+ =?us-ascii?Q?tL6JYZTP/eBDKHKWRJwBNrbO8huvoklxotimTpNfjwWC+Lw5qsPq5WF7Ro8o?=
+ =?us-ascii?Q?8qo4vECTvFXVTReOE8ZXPqKb5Ic52QvAgHY5GoO4ipNKgilZktaAuJ4N7fy/?=
+ =?us-ascii?Q?mKYYdKNiD8rtu9HYlzdtXhFlj5TF4S7Ud5GtURrth6rND78X9IiD9A4knvCk?=
+ =?us-ascii?Q?B8yBEuD1mmj5w5Jj8414kTiLHgAsubjZfYXWle4F4dgSe5A8q7PhiAb+vxDU?=
+ =?us-ascii?Q?9mOmATH8W8cz67Eav7qTWNM7xVql4FXhgno/cdcg0Oi64UT3zb8TzZIr0knH?=
+ =?us-ascii?Q?o9CX9DJFeCo4reRs2ilUNznE9v9MRI+KPg31B5eV5fGQuQ44V5Vet5MV3p7N?=
+ =?us-ascii?Q?aBWtQiLD600CiJjGKCInUpwVB+OFXQMQVWiWoVk2NXnQho8bTnJDbyRh3Mkp?=
+ =?us-ascii?Q?vHcFDjyLD05QN1uk3EggVxl4PbwuqmqlbTM8UoHKvYo1IY2/KyWfl1NBgQH3?=
+ =?us-ascii?Q?YRi7nbJTyoCyT0OxnxUiUFjhgztGl98RpymYA9p7skopCFKuTJMyDmBLRepL?=
+ =?us-ascii?Q?Vqv96jOE91hkrGmIG0EIdVZl2iy9ypWTel7muI6qTAb+MOhE7/CFav1iBh1C?=
+ =?us-ascii?Q?Szabo4zXoItMYn4muGnsSt40Pm47BxFTNuCet3WO+XX2pAEeiaJMVUBr96Yw?=
+ =?us-ascii?Q?C5wuak0aGC9s5JMP5kp5ZBNqLBQmbLRrg2hLYYXARAK1gd6UBYM0SHdPEaxP?=
+ =?us-ascii?Q?Kk6f3neAxoiOVAzTCAgjHn9/GfSuVasA+PmJarWIlAWsZ5m/C4fXnike5zuj?=
+ =?us-ascii?Q?eRgOJif0gUyTtPADxFtKD7xCpWcIHcsiefHfqWGoDtmIDKlV3OPia5NxWlrl?=
+ =?us-ascii?Q?o4Olse+z071c3EmTTli4/5zgQWVkiL9DPt88BDaGTwD1lSOasUvLHjY9ELSb?=
+ =?us-ascii?Q?R3L0NXzGWgrL5Rah8jLofhK9whk8zanE6deUThjEwWBkrWJCwKVcp/VYtcgO?=
+ =?us-ascii?Q?919pkjHqhb0va6qvEJDuiGO/Pe2BPgMLfHDuzyOSLPSY9SnVUBRO8KrAJfRN?=
+ =?us-ascii?Q?Zj0Fdv2gWzl7bgXTf4JNxw4Eofgbkj9oxeb8Y4YXOeuF91w0NtqAIyHQDg8Q?=
+ =?us-ascii?Q?xYh1EwAKH2s5knvfMH3P855qWwM7zvf1+Dq6RkF6ZXqn7zj9YWH3uCO1MlLm?=
+ =?us-ascii?Q?jis9F+t6BmjC0QE+kq6ZgSOSW/k1T9bfjVbPjso2GpOnk32sSCCUbooP268X?=
+ =?us-ascii?Q?bX48lOkQuaU+PU3LTn8PS3xcuEoMoEqQ?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(7416014)(376014)(82310400026);DIR:OUT;SFP:1101;
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(1800799024)(82310400026)(7416014)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2024 17:01:56.7008
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2024 17:01:57.4566
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7832d643-22d5-4711-ba37-08dcc6b9f565
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2756f5b2-8c92-409c-4ab3-08dcc6b9f5d4
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000E9D3.namprd03.prod.outlook.com
+	CY4PEPF0000E9D4.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8118
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7514
 
-Driver can call the iommufd_viommu_find_device() to find a device pointer
-using its per-viommu virtual ID. The returned device must be protected by
-the pair of iommufd_viommu_lock/unlock_vdev_id() function.
+From: Jason Gunthorpe <jgg@nvidia.com>
 
-Put these three functions into a new viommu_api file, to build it with the
-IOMMUFD_DRIVER config.
+The iommu_copy_struct_from_user_array helper can be used to copy a single
+entry from a user array which might not be efficient if the array is big.
 
+Add a new iommu_copy_struct_from_full_user_array to copy the entire user
+array at once. Update the existing iommu_copy_struct_from_user_array kdoc
+accordingly.
+
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 ---
- drivers/iommu/iommufd/Makefile     |  2 +-
- drivers/iommu/iommufd/viommu_api.c | 39 ++++++++++++++++++++++++++++++
- include/linux/iommufd.h            | 16 ++++++++++++
- 3 files changed, 56 insertions(+), 1 deletion(-)
- create mode 100644 drivers/iommu/iommufd/viommu_api.c
+ include/linux/iommu.h | 49 ++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 48 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/iommufd/Makefile b/drivers/iommu/iommufd/Makefile
-index df490e836b30..288ef3e895e3 100644
---- a/drivers/iommu/iommufd/Makefile
-+++ b/drivers/iommu/iommufd/Makefile
-@@ -13,4 +13,4 @@ iommufd-y := \
- iommufd-$(CONFIG_IOMMUFD_TEST) += selftest.o
- 
- obj-$(CONFIG_IOMMUFD) += iommufd.o
--obj-$(CONFIG_IOMMUFD_DRIVER) += iova_bitmap.o
-+obj-$(CONFIG_IOMMUFD_DRIVER) += iova_bitmap.o viommu_api.o
-diff --git a/drivers/iommu/iommufd/viommu_api.c b/drivers/iommu/iommufd/viommu_api.c
-new file mode 100644
-index 000000000000..e0ee592ce834
---- /dev/null
-+++ b/drivers/iommu/iommufd/viommu_api.c
-@@ -0,0 +1,39 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* Copyright (c) 2024, NVIDIA CORPORATION & AFFILIATES
-+ */
-+
-+#include "iommufd_private.h"
-+
-+void iommufd_viommu_lock_vdev_id(struct iommufd_viommu *viommu)
-+{
-+	down_read(&viommu->vdev_ids_rwsem);
-+}
-+EXPORT_SYMBOL_NS_GPL(iommufd_viommu_lock_vdev_id, IOMMUFD);
-+
-+void iommufd_viommu_unlock_vdev_id(struct iommufd_viommu *viommu)
-+{
-+	up_read(&viommu->vdev_ids_rwsem);
-+}
-+EXPORT_SYMBOL_NS_GPL(iommufd_viommu_unlock_vdev_id, IOMMUFD);
-+
-+/*
-+ * Find a device attached to an VIOMMU object using a virtual device ID that was
-+ * set via an IOMMUFD_CMD_VIOMMU_SET_VDEV_ID. Callers of this function must call
-+ * iommufd_viommu_lock_vdev_id() prior and iommufd_viommu_unlock_vdev_id() after
+diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+index 8c1034cc3f7e..556b6d6cf2a8 100644
+--- a/include/linux/iommu.h
++++ b/include/linux/iommu.h
+@@ -493,7 +493,9 @@ static inline int __iommu_copy_struct_from_user_array(
+  * @index: Index to the location in the array to copy user data from
+  * @min_last: The last member of the data structure @kdst points in the
+  *            initial version.
+- * Return 0 for success, otherwise -error.
 + *
-+ * Return device or NULL.
++ * Copy a single entry from a user array. Return 0 for success, otherwise
++ * -error.
+  */
+ #define iommu_copy_struct_from_user_array(kdst, user_array, data_type, index, \
+ 					  min_last)                           \
+@@ -501,6 +503,51 @@ static inline int __iommu_copy_struct_from_user_array(
+ 		kdst, user_array, data_type, index, sizeof(*(kdst)),          \
+ 		offsetofend(typeof(*(kdst)), min_last))
+ 
++
++/**
++ * iommu_copy_struct_from_full_user_array - Copy iommu driver specific user
++ *         space data from an iommu_user_data_array
++ * @kdst: Pointer to an iommu driver specific user data that is defined in
++ *        include/uapi/linux/iommufd.h
++ * @kdst_entry_size: sizeof(*kdst)
++ * @user_array: Pointer to a struct iommu_user_data_array for a user space
++ *              array
++ * @data_type: The data type of the @kdst. Must match with @user_array->type
++ *
++ * Copy the entire user array. kdst must have room for kdst_entry_size *
++ * user_array->entry_num bytes. Return 0 for success, otherwise -error.
 + */
-+struct device *iommufd_viommu_find_device(struct iommufd_viommu *viommu, u64 id)
++static inline int
++iommu_copy_struct_from_full_user_array(void *kdst, size_t kdst_entry_size,
++				       struct iommu_user_data_array *user_array,
++				       unsigned int data_type)
 +{
-+	struct iommufd_vdev_id *vdev_id;
++	unsigned int i;
++	int ret;
 +
-+	lockdep_assert_held(&viommu->vdev_ids_rwsem);
++	if (user_array->type != data_type)
++		return -EINVAL;
++	if (!user_array->entry_num)
++		return -EINVAL;
++	if (likely(user_array->entry_len == kdst_entry_size)) {
++		if (copy_from_user(kdst, user_array->uptr,
++				   user_array->entry_num *
++					   user_array->entry_len))
++			return -EFAULT;
++	}
 +
-+	xa_lock(&viommu->vdev_ids);
-+	vdev_id = xa_load(&viommu->vdev_ids, (unsigned long)id);
-+	xa_unlock(&viommu->vdev_ids);
-+	if (!vdev_id || vdev_id->id != id)
-+		return NULL;
-+	return vdev_id->idev->dev;
-+}
-+EXPORT_SYMBOL_NS_GPL(iommufd_viommu_find_device, IOMMUFD);
-diff --git a/include/linux/iommufd.h b/include/linux/iommufd.h
-index 85291b346348..364f151d281d 100644
---- a/include/linux/iommufd.h
-+++ b/include/linux/iommufd.h
-@@ -89,6 +89,9 @@ int iommufd_access_rw(struct iommufd_access *access, unsigned long iova,
- int iommufd_vfio_compat_ioas_get_id(struct iommufd_ctx *ictx, u32 *out_ioas_id);
- int iommufd_vfio_compat_ioas_create(struct iommufd_ctx *ictx);
- int iommufd_vfio_compat_set_no_iommu(struct iommufd_ctx *ictx);
-+void iommufd_viommu_lock_vdev_id(struct iommufd_viommu *viommu);
-+void iommufd_viommu_unlock_vdev_id(struct iommufd_viommu *viommu);
-+struct device *iommufd_viommu_find_device(struct iommufd_viommu *viommu, u64 id);
- #else /* !CONFIG_IOMMUFD */
- static inline struct iommufd_ctx *iommufd_ctx_from_file(struct file *file)
- {
-@@ -129,5 +132,18 @@ static inline int iommufd_vfio_compat_set_no_iommu(struct iommufd_ctx *ictx)
- {
- 	return -EOPNOTSUPP;
- }
-+
-+void iommufd_viommu_lock_vdev_id(struct iommufd_viommu *viommu)
-+{
++	/* Copy item by item */
++	for (i = 0; i != user_array->entry_num; i++) {
++		ret = copy_struct_from_user(
++			kdst + kdst_entry_size * i, kdst_entry_size,
++			user_array->uptr + user_array->entry_len * i,
++			user_array->entry_len);
++		if (ret)
++			return ret;
++	}
++	return 0;
 +}
 +
-+void iommufd_viommu_unlock_vdev_id(struct iommufd_viommu *viommu)
-+{
-+}
-+
-+struct device *iommufd_viommu_find_device(struct iommufd_viommu *viommu, u64 id)
-+{
-+	return NULL;
-+}
- #endif /* CONFIG_IOMMUFD */
- #endif
+ /**
+  * struct iommu_ops - iommu ops and capabilities
+  * @capable: check capability
 -- 
 2.43.0
 
