@@ -1,132 +1,203 @@
-Return-Path: <linux-kselftest+bounces-16411-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16412-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99DD4960EB1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 16:51:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 399F2960EEF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 16:54:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 34D41B25127
-	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 14:51:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D90EB25C1B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 27 Aug 2024 14:53:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F7C01C68A5;
-	Tue, 27 Aug 2024 14:51:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B220F1C6F79;
+	Tue, 27 Aug 2024 14:53:24 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A471C6888;
-	Tue, 27 Aug 2024 14:51:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF0E61C68A7;
+	Tue, 27 Aug 2024 14:53:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724770263; cv=none; b=qkazVSvAYtOCvNFgtAWHhb5i/kUEk7riG+Haba/wBMThbE7YOPiwFj6jGqqqKtPGQ/r0w7Uxd7f64F6RwouASGecW7T2ujBNqBUCi8Otr9/LiptY2lFKH5QBSOqfxPk8JQKK921wWNLz3EYmXd6NoR5uncgQwa1kcSfmC7/F1o4=
+	t=1724770404; cv=none; b=mmk33iBNeZP0Qxb+iPUR6l2xo+ca37MbKMOmrZEtZRG1rv2DnWin0Y9zLWMrLewHXrBjpFuQPacWexEdVbcGCp1vexa2yBtjjjbPfPlhDQxZtZBginF4gozGgVQbjCQyb/g1KTOW9asyU+WFogqJK4QfoBcGw9mZg7XFkpz+KNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724770263; c=relaxed/simple;
-	bh=LMnQZ09B2wmWN2tsj/qFaCW0lMgh4uzjXdseaNcIGJQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oA///HUqswjii/cjNSladYdsVLCyEWZVj0h2n3hx8BEqL0ilmCgu7J9uCZXj+t35NmX3OYQXr9r4kHDXfQSEXnal7tVbO/Zb9tPQJ1TRDr0G8IeO6tQBXJp9k/S/9wqA6bF3DlnYJkWRZlM5dciYP+Ufxf/5DEPg59e9bcqsYgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4WtVpr1YR6z9sPd;
-	Tue, 27 Aug 2024 16:51:00 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hc4Dmp0-Z5yB; Tue, 27 Aug 2024 16:51:00 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4WtVpr0m1vz9rvV;
-	Tue, 27 Aug 2024 16:51:00 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 091BD8B78B;
-	Tue, 27 Aug 2024 16:51:00 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id viCXyMDG0jFf; Tue, 27 Aug 2024 16:50:59 +0200 (CEST)
-Received: from [192.168.233.149] (unknown [192.168.233.149])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 6AD8E8B77C;
-	Tue, 27 Aug 2024 16:50:59 +0200 (CEST)
-Message-ID: <0730ca3a-e158-44ea-bb9e-1a7716b45360@csgroup.eu>
-Date: Tue, 27 Aug 2024 16:50:59 +0200
+	s=arc-20240116; t=1724770404; c=relaxed/simple;
+	bh=0W6/5DXG2DcFRavoh3C8a698EAohZaBZxSG9dYdXaEw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=lVfWCFA7lmTv9lNq/KJ4nIo5LvEfghB8dX4N8TRyN2A/mdHu3JRnmn1+Quaa1hGnjmFLs1f7QU9TECLrXRHPnyVrR17y9QlU0Fy/bviVxIQPXQcAXRC9dU6v317UANXUaCVsgONbU9vLkDFL1DIQ9Plxe8VIk1nFrtYcp3AgumA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a867a564911so667906366b.2;
+        Tue, 27 Aug 2024 07:53:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724770401; x=1725375201;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rvnQoI11cnIhCIanCL/V7Jao+EuSmkBzYYxx+Al41ew=;
+        b=tmzni0oqSEBF0EfwmHu2XqRLgu2gCZ3qfpk2I0/KWQnnQ4nf1Kz3Ucn0sBvGY+Qa85
+         xQjrEDEqTP2AuedsQ6XZw7gBU1SnL2OHRptiaAD9DdzrSBlHLpoelF07PJyRQQs/tU1Z
+         fY8rBaDj6c7mxN2sGKhR+nxw9V1mNnEr58OAUkUJimzWrdQj1OPdOZvO3RHMLH97tsdJ
+         Hgl/aLJ4DjWKllLKs6EiqzlA+xE+jVs2JcpdUYndCmaCeYQvYMTHjWNLlsRBK5jHuY3E
+         BY0R5GxKJfDoeuHQf35wDy9HgOeRUZylyupa8pAVOoI4H8M9pCGpsqO2/GTh8G93KaiL
+         g6Rg==
+X-Forwarded-Encrypted: i=1; AJvYcCUODUU7Ic1T4raeXHFlxoghGnWVFyQechMbg1aVip2PlmPJXZxNGmLbXo4funUn2ZU3mfEAOSHp@vger.kernel.org, AJvYcCUcBXQVXhJ/v7213PvjPYLjDtnFBFCnGkbV5VbyoCFKbn5y969y2TbOfgKX06Na8n9R6xO+Gdkq7l2qh+GZgRLh@vger.kernel.org, AJvYcCWg/301Z5jNZi1C4gYV3vouDzDJ3S/hBv4r6ZSRskN/w0jF0pNt7Bx2OtEGAoaFJyatvwPr8mXuboDYKe8=@vger.kernel.org, AJvYcCXhBbe9l6eKN6+bzLcahkplnGkCn6Y1g76TAj5kUgdvP08P5SPXF528ea31IQFJ34QPjKLk+leyMhYYW9HKKR5m@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcLin+89l3fDKiEeweURFJeWH3E7YTlx91pJfR1A3PZzjMFhyL
+	bDqBmjptTFJ9TP1h3qmTA3xLeQqbtnvZ6OwdfgzaAYX/i72Z3bKX
+X-Google-Smtp-Source: AGHT+IGlqBmdWflkZ270cG0mS6DRoKaULCV1IJosYDlU6qtuKfTGEIQ4voFO+9U2BeQ0FzAXB2bScQ==
+X-Received: by 2002:a17:907:d84b:b0:a7a:a89e:e230 with SMTP id a640c23a62f3a-a86a52c1a8cmr1039309266b.30.1724770400571;
+        Tue, 27 Aug 2024 07:53:20 -0700 (PDT)
+Received: from localhost (fwdproxy-lla-004.fbsv.net. [2a03:2880:30ff:4::face:b00c])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a86e588b60csm117491666b.161.2024.08.27.07.53.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 27 Aug 2024 07:53:19 -0700 (PDT)
+From: Breno Leitao <leitao@debian.org>
+To: fw@strlen.de,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	Pablo Neira Ayuso <pablo@netfilter.org>,
+	Jozsef Kadlecsik <kadlec@netfilter.org>,
+	David Ahern <dsahern@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: rbc@meta.com,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org (open list:NETFILTER),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH nf-next v3 1/2] netfilter: Make IP_NF_IPTABLES_LEGACY selectable
+Date: Tue, 27 Aug 2024 07:52:40 -0700
+Message-ID: <20240827145242.3094777-2-leitao@debian.org>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20240827145242.3094777-1-leitao@debian.org>
+References: <20240827145242.3094777-1-leitao@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 3/4] selftests/vDSO: Use KHDR_INCLUDES to locate UAPI
- headers for vdso_test_getrandom
-To: Xi Ruoyao <xry111@xry111.site>, "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
- "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
- Jinyang He <hejinyang@loongson.cn>, Tiezhu Yang <yangtiezhu@loongson.cn>,
- Arnd Bergmann <arnd@arndb.de>, "tglx@linutronix.de" <tglx@linutronix.de>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-References: <20240827132018.88854-1-xry111@xry111.site>
- <20240827132018.88854-4-xry111@xry111.site> <Zs3blfx1inX_FQLR@zx2c4.com>
- <019268d4-c177-49e7-aab3-b8fa431905ca@cs-soprasteria.com>
- <Zs3fhiSlXg2aCGa8@zx2c4.com>
- <e9a2257f1447ce11e1f22e9a3c64d4b18aa428e1.camel@xry111.site>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <e9a2257f1447ce11e1f22e9a3c64d4b18aa428e1.camel@xry111.site>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+This option makes IP_NF_IPTABLES_LEGACY user selectable, giving
+users the option to configure iptables without enabling any other
+config.
 
+Suggested-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ net/ipv4/netfilter/Kconfig         | 19 +++++++++++--------
+ tools/testing/selftests/net/config |  8 ++++++++
+ 2 files changed, 19 insertions(+), 8 deletions(-)
 
-Le 27/08/2024 à 16:41, Xi Ruoyao a écrit :
-> On Tue, 2024-08-27 at 16:15 +0200, Jason A. Donenfeld wrote:
-> 
-> /* snip */
-> 
->> gcc -std=gnu99 -D_GNU_SOURCE= -isystem /home/zx2c4/Projects/random-linux/tools/testing/selftests/../../../tools/include -isystem /home/zx2c4/Projects/random-linux/tools/testing/selftests/../../../usr/include    vdso_test_getrandom.c parse_vdso.c  -o /home/zx2c4/Projects/random-linux/tools/testing/selftests/vDSO/vdso_test_getrandom
->> vdso_test_getrandom.c:43:41: error: field ‘params’ has incomplete type
->>     43 |         struct vgetrandom_opaque_params params;
->>        |                                         ^~~~~~
->>
->> $ ls /home/zx2c4/Projects/random-linux/tools/testing/selftests/../../../usr/include
->> headers_check.pl  Makefile
->>
->> Since I don't build in there, this directory is empty.
-> 
-> In the toplevel Makefile:
-> 
-> kselftest-%: headers FORCE
->      $(Q)$(MAKE) -C $(srctree)/tools/testing/selftests $*
-> 
-> So running "make kselftest-all" to build the self tests should have
-> already caused make to build the "headers" target, which puts the
-> headers into usr/include.
-> 
-> I don't think it's supported to build self tests w/o invoking the
-> toplevel Makefile: many other self tests use KHDR_INCLUDES as well, so
-> generally building with something like "make -C tools/testing/selftests"
-> just won't work.
-> 
+diff --git a/net/ipv4/netfilter/Kconfig b/net/ipv4/netfilter/Kconfig
+index 1b991b889506..a06c1903183f 100644
+--- a/net/ipv4/netfilter/Kconfig
++++ b/net/ipv4/netfilter/Kconfig
+@@ -12,7 +12,12 @@ config NF_DEFRAG_IPV4
+ 
+ # old sockopt interface and eval loop
+ config IP_NF_IPTABLES_LEGACY
+-	tristate
++	tristate "Legacy IP tables support"
++	default	n
++	select NETFILTER_XTABLES
++	help
++	  iptables is a general, extensible packet identification legacy framework.
++	  This is not needed if you are using iptables over nftables (iptables-nft).
+ 
+ config NF_SOCKET_IPV4
+ 	tristate "IPv4 socket lookup support"
+@@ -177,7 +182,7 @@ config IP_NF_MATCH_TTL
+ config IP_NF_FILTER
+ 	tristate "Packet filtering"
+ 	default m if NETFILTER_ADVANCED=n
+-	select IP_NF_IPTABLES_LEGACY
++	depends on IP_NF_IPTABLES_LEGACY
+ 	help
+ 	  Packet filtering defines a table `filter', which has a series of
+ 	  rules for simple packet filtering at local input, forwarding and
+@@ -217,7 +222,7 @@ config IP_NF_NAT
+ 	default m if NETFILTER_ADVANCED=n
+ 	select NF_NAT
+ 	select NETFILTER_XT_NAT
+-	select IP_NF_IPTABLES_LEGACY
++	depends on IP_NF_IPTABLES_LEGACY
+ 	help
+ 	  This enables the `nat' table in iptables. This allows masquerading,
+ 	  port forwarding and other forms of full Network Address Port
+@@ -258,7 +263,7 @@ endif # IP_NF_NAT
+ config IP_NF_MANGLE
+ 	tristate "Packet mangling"
+ 	default m if NETFILTER_ADVANCED=n
+-	select IP_NF_IPTABLES_LEGACY
++	depends on IP_NF_IPTABLES_LEGACY
+ 	help
+ 	  This option adds a `mangle' table to iptables: see the man page for
+ 	  iptables(8).  This table is used for various packet alterations
+@@ -293,7 +298,7 @@ config IP_NF_TARGET_TTL
+ # raw + specific targets
+ config IP_NF_RAW
+ 	tristate  'raw table support (required for NOTRACK/TRACE)'
+-	select IP_NF_IPTABLES_LEGACY
++	depends on IP_NF_IPTABLES_LEGACY
+ 	help
+ 	  This option adds a `raw' table to iptables. This table is the very
+ 	  first in the netfilter framework and hooks in at the PREROUTING
+@@ -305,9 +310,7 @@ config IP_NF_RAW
+ # security table for MAC policy
+ config IP_NF_SECURITY
+ 	tristate "Security table"
+-	depends on SECURITY
+-	depends on NETFILTER_ADVANCED
+-	select IP_NF_IPTABLES_LEGACY
++	depends on SECURITY && NETFILTER_ADVANCED && IP_NF_IPTABLES_LEGACY
+ 	help
+ 	  This option adds a `security' table to iptables, for use
+ 	  with Mandatory Access Control (MAC) policy.
+diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
+index 5b9baf708950..90e997cfa12e 100644
+--- a/tools/testing/selftests/net/config
++++ b/tools/testing/selftests/net/config
+@@ -28,6 +28,7 @@ CONFIG_NET_FOU=y
+ CONFIG_NET_FOU_IP_TUNNELS=y
+ CONFIG_NETFILTER=y
+ CONFIG_NETFILTER_ADVANCED=y
++CONFIG_NETFILTER_XT_TARGET_HL=m
+ CONFIG_NF_CONNTRACK=m
+ CONFIG_IPV6_MROUTE=y
+ CONFIG_IPV6_SIT=y
+@@ -35,6 +36,11 @@ CONFIG_IP_DCCP=m
+ CONFIG_NF_NAT=m
+ CONFIG_IP6_NF_IPTABLES=m
+ CONFIG_IP_NF_IPTABLES=m
++CONFIG_IP_NF_IPTABLES_LEGACY=m
++CONFIG_IP_NF_FILTER=m
++CONFIG_IP_NF_TARGET_REJECT=m
++CONFIG_IP_NF_TARGET_MASQUERADE=m
++CONFIG_IP_NF_MANGLE=m
+ CONFIG_IP6_NF_NAT=m
+ CONFIG_IP6_NF_RAW=m
+ CONFIG_IP_NF_NAT=m
+@@ -54,6 +60,7 @@ CONFIG_MPTCP=y
+ CONFIG_NF_TABLES=m
+ CONFIG_NF_TABLES_IPV6=y
+ CONFIG_NF_TABLES_IPV4=y
++CONFIG_NF_REJECT_IPV4=y
+ CONFIG_NFT_NAT=m
+ CONFIG_NETFILTER_XT_MATCH_LENGTH=m
+ CONFIG_NET_ACT_CSUM=m
+@@ -106,4 +113,5 @@ CONFIG_CRYPTO_ARIA=y
+ CONFIG_XFRM_INTERFACE=m
+ CONFIG_XFRM_USER=m
+ CONFIG_IP_NF_MATCH_RPFILTER=m
++CONFIG_IP_NF_TARGET_MASQUERADE=m
+ CONFIG_IP6_NF_MATCH_RPFILTER=m
+-- 
+2.43.5
 
-My usr/include/ is also empty (only Makefile and headers_check.pl) and 
-building directly in tools/testing/selftests/vDSO works for me.
-
-The command is:
-
-ppc-linux-gcc -std=gnu99 -D_GNU_SOURCE= -isystem 
-/home/chleroy/linux-powerpc/tools/testing/selftests/../../../tools/include 
--isystem 
-/home/chleroy/linux-powerpc/tools/testing/selftests/../../../include/uapi 
-    vdso_test_getrandom.c parse_vdso.c  -o 
-/home/chleroy/linux-powerpc/tools/testing/selftests/vDSO/vdso_test_getrandom
-
-I believe I get the needed headers through : -isystem 
-/home/chleroy/linux-powerpc/tools/testing/selftests/../../../include/uapi
-
-Christophe
-
-PS: By the way, did you see the -DBULID_VDSO for the chacha test ? Don't 
-know the impact though ....
 
