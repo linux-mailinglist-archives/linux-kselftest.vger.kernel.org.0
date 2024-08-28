@@ -1,98 +1,98 @@
-Return-Path: <linux-kselftest+bounces-16580-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16581-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8DB3963022
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 20:36:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EDD7963027
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 20:38:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 278061C209C7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 18:36:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD3201F21D88
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 18:38:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C401A4B9F;
-	Wed, 28 Aug 2024 18:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B491A7AEE;
+	Wed, 28 Aug 2024 18:38:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QnCOdsV0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BEFF14D71E;
-	Wed, 28 Aug 2024 18:36:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A0CE1A76D8
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2024 18:38:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724870209; cv=none; b=kNXJrDaS3qDsCBpc0mooMl0ib1Lpwz5h5ZaAiA54CwngOgJV8E1s+0jIda0NqSUk3Jfy9nZ546uLxaLAKoDAUAml32qSpdj+ULSuSaMybtJIuPmLLjch0zQemS2uvtwnef9EE+Js1DGkXdmAbPBX6k3zDub8hTtSeyqZSIkK0v4=
+	t=1724870284; cv=none; b=iowIPeHMIgOFChHgMUoWVOauMjFq8DOv4B53l06ZM6t8y+4Z1AotyG5SeUAht1mjSXbgG25TnuCuWN+f1AsBHTu/voG9PojR5PBcYb83SD8m6rT62sDx0AdddW2JCybreXC39NFl2Vonx48HBZUcF2qore/i7+CWs5vCZNEReGw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724870209; c=relaxed/simple;
-	bh=r01mRCvMHL3+6WrE5AohNk9gKxfi7QlgXqqdm3jMlCk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mEiDoCmHTOdNbPCfSRTBMx4LTk+GPXo6vMpmI5BU5dYwYhk7MQkjanhVDlo/Nb29/oGZfv8AMdhdUAcRIA7GKbtns1T5kyKUkeuN7dSVrKPDJJpIGBLb4y2/wS8jWlVJRXb8HE/31pyV1ztiWvGcbwoG3hA3grknJu0y/IPBttQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-71433096e89so6010736b3a.3;
-        Wed, 28 Aug 2024 11:36:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724870207; x=1725475007;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HUBySL71VfjyAkGRea7r3djrcF3K6HNslRPa36gZp+c=;
-        b=dJfBVwQ8+4045q4fuyzRbY2SU/0+JvGmVoZb1AGa1UFSmxdugrOdwJqKBH420anCPy
-         iZXKZsJMMsrgUaB2JSN3zP0pBVyGhO2espiXgVRqXVyHNMlotPgcZrqIGpSFOeTlXAY3
-         DhuX8JZMH8URQUfBtajPYS7kHAkmVYZddwDpD6nySl0vfT3CXRnVIDpyEoafUMwhoghx
-         gswaFDbsFYvaXxzsZk/0GhOMfercWY7Hi6D+JNifakSmSPqdF/6did3EDSV9M+aEnP/U
-         GXzi1Yq/IJq5BVirmGFn11pSMqSDQXfb4AUQ/ua4+pqGoPFyM2VVkmerhPg42vILRMwa
-         ITZg==
-X-Forwarded-Encrypted: i=1; AJvYcCVxVTeaXNa7ex6e97hfPSTBbZIBKyWjdlmuHmHf26lFjIG1XhtOpt6sTobvQP6xPiEo3tyQeJjMiA4LwR7zw9A=@vger.kernel.org, AJvYcCXgEMomAa72oXBSBoiRm/znTJjADGXePsJKfwx7PX44MJW8Ht2SQ9/l37dfGOZJ7evT+J5Kl48F@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywzhk/1uwxknWvGhU5Tdjtsd2kFAlmLs8iRCK8xjeLCAOwnrC78
-	jW3lS53y9vgnL5N1c0/w/KDqy3FwpbdcLDw149Zu75jm6y+XBk8=
-X-Google-Smtp-Source: AGHT+IHv6SuvOzCB1wuZt1VrFvOsvKbTBpj/FLRzO1RCnHQDvpqYaURkrKAr3XQJH96bVoHKu6BEFw==
-X-Received: by 2002:a05:6a20:d70f:b0:1c4:bbb8:4d02 with SMTP id adf61e73a8af0-1cce10c4d57mr193410637.37.1724870206979;
-        Wed, 28 Aug 2024 11:36:46 -0700 (PDT)
-Received: from localhost ([2601:646:9e00:f56e:73b6:7410:eb24:cba4])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-714343388e0sm10465216b3a.195.2024.08.28.11.36.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2024 11:36:46 -0700 (PDT)
-Date: Wed, 28 Aug 2024 11:36:45 -0700
-From: Stanislav Fomichev <sdf@fomichev.me>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
-	pabeni@redhat.com, ncardwell@google.com, shuah@kernel.org,
-	linux-kselftest@vger.kernel.org, fw@strlen.de,
-	Willem de Bruijn <willemb@google.com>
-Subject: Re: [PATCH net-next RFC] selftests/net: integrate packetdrill with
- ksft
-Message-ID: <Zs9uPZyyeJM7VNAF@mini-arch>
-References: <20240827193417.2792223-1-willemdebruijn.kernel@gmail.com>
- <Zs87rhH9e_Lw-icJ@mini-arch>
- <66cf45bbd6a6f_34a7b1294ac@willemb.c.googlers.com.notmuch>
- <Zs9cb1j88Y2glBdJ@mini-arch>
- <20240828112350.7b4ba8d1@kernel.org>
+	s=arc-20240116; t=1724870284; c=relaxed/simple;
+	bh=iGHBiqnU2UH+BOQlSsspdgIqzjrSWwoUANYOqMkeYTc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M04qD/XY9sESQKHhnWK+B9mOnMMU6FxHvL/Qfw93Xip1g/cbU0YoqMQJYhGg3+3uWPQOjs1okxyJKKwp+fY9/doPu8wja3jLvZMIVu7y5xDJHC/WW0/SB63X53D7OcQD/ZblIgF4sB59Eq0UEHQpmfAuK7xPhWja1hdKc3Y2r+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QnCOdsV0; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1724870282;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VG3hNlxTKzDo9TN+veLdg1lBcMc/GXQVTwzLq53GUhY=;
+	b=QnCOdsV0EevOhJxqzJXDYzvhwMagYjes+gqEp7/6ycCDtenU2TLs9PSqmkk3NsXlhlk6qL
+	oz+M72iAtFKh4yQ4Lu+qeAqthaHdPEQ0yl+rjRtn4CpXmrgHclqmuwnhFQCxl1lqpS8vAB
+	H3z0Ild04p0v4sjU7nPfMoDfR7CJgP0=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-379-zMsJo2RhP3KFH3A_ISH_MA-1; Wed,
+ 28 Aug 2024 14:37:58 -0400
+X-MC-Unique: zMsJo2RhP3KFH3A_ISH_MA-1
+Received: from mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.17])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 709A51955D4A;
+	Wed, 28 Aug 2024 18:37:57 +0000 (UTC)
+Received: from jmaloy-thinkpadp16vgen1.rmtcaqc.csb (unknown [10.22.8.17])
+	by mx-prod-int-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1A9CA19560A3;
+	Wed, 28 Aug 2024 18:37:53 +0000 (UTC)
+From: jmaloy@redhat.com
+To: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	davem@davemloft.net
+Cc: kuba@kernel.org,
+	passt-dev@passt.top,
+	jmaloy@redhat.com,
+	sbrivio@redhat.com,
+	lvivier@redhat.com,
+	dgibson@redhat.com,
+	eric.dumazet@gmail.com,
+	edumazet@google.com
+Subject: [net-next, v3 0/2] Adding SO_PEEK_OFF for TCPv6
+Date: Wed, 28 Aug 2024 14:37:50 -0400
+Message-ID: <20240828183752.660267-1-jmaloy@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240828112350.7b4ba8d1@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.17
 
-On 08/28, Jakub Kicinski wrote:
-> On Wed, 28 Aug 2024 10:20:47 -0700 Stanislav Fomichev wrote:
-> > > As Jakub responded.
-> > > 
-> > > Indeed importing the whole application into the kernel sources is what
-> > > stopped me from attempting this before. Florian's nf_conntrack charted
-> > > the path here.  
-> > 
-> > Thanks both. I was expecting to find some build rules :-) But as long
-> > as we have this story sorted out, we're good.
-> 
-> FWIW I lied to you, the "script" for buildings things wasn't committed
-> in the repo, I pushed it now:
-> https://github.com/linux-netdev/nipa/commit/dde0f093774a4a4c85e595b5cf44bd3e4bd434d1
+From: Jon Maloy <jmaloy@redhat.com>
 
-Perfect, thanks!
+Adding SO_PEEK_OFF for TCPv6 and selftest for both TCPv4 and TCPv6
+
+Jon Maloy (2):
+  tcp: add SO_PEEK_OFF socket option tor TCPv6
+  selftests: add selftest for tcp SO_PEEK_OFF support
+
+ net/ipv6/af_inet6.c                           |   1 +
+ tools/testing/selftests/net/Makefile          |   1 +
+ tools/testing/selftests/net/tcp_so_peek_off.c | 183 ++++++++++++++++++
+ 3 files changed, 185 insertions(+)
+ create mode 100644 tools/testing/selftests/net/tcp_so_peek_off.c
+
+-- 
+2.45.2
+
 
