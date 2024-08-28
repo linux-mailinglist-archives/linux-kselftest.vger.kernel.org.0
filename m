@@ -1,150 +1,146 @@
-Return-Path: <linux-kselftest+bounces-16534-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16536-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 024969625F3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 13:23:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D0BA962625
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 13:36:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B45BA284A2E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 11:23:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7D6428220E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 11:36:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68BDD16D307;
-	Wed, 28 Aug 2024 11:23:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4457E16CD2A;
+	Wed, 28 Aug 2024 11:36:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="mEMkloe8";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="MfN8i1Nh";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0iVyuTYF";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="DKNLhB3p"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="pKfSIyCn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96CDB15B54E;
-	Wed, 28 Aug 2024 11:23:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1917E15957D;
+	Wed, 28 Aug 2024 11:36:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724844222; cv=none; b=MLTbXTAKAX1Wan7HFFaipyWuorX3yn0x0TIetB3/jOuuEKQ/ZYHMfylJ2VHbJgOz/bcyQUEj5pmKZ0cmQeLE3h63mtjE+ZfI9I2GyVwa2fZXAN2VLWvBfBUOWJgqfA7uMPtVA2aTFBhEcpJn/3QKz9uS3GsDZM72gEgeklTdd50=
+	t=1724844967; cv=none; b=sRZbs5cFMEv86bARfuuMUsscdbgiMYx7MoFQ7pSuwf8XkwwYEQxwUbXlaPcfJJnYF8zJUhSZB5vlFUvLorPmrgQLSNZedBptWzXvulR0U25GWwL2Zh/FYQ7zwmedMYLw0QLH0HavjsO1DAdlKA2f0zpyfvWthoc3xa6uooQ3aSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724844222; c=relaxed/simple;
-	bh=woMfM9462eOJrwEHB3r89jnJI7ptsCPZp79CgwGCT4I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tUYFnBaPdj0pDWhOKXG8GPBXtKj8rOdf64tRd9oUJzDpWDAIT8FZpjbbNDIGSK/CN5tYejXkuJ17Vb4IlDsDJsCzzHeMVPCJrG363jJDDjRZiC6ntEZmMJxMyAj8hvvQ1fiSdgVhY72fvygWaDsL/bHYS4DUbenglYDPx5c4ZyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=mEMkloe8; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=MfN8i1Nh; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0iVyuTYF; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=DKNLhB3p; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from kitsune.suse.cz (unknown [10.100.12.127])
-	by smtp-out2.suse.de (Postfix) with ESMTP id DDD861FC11;
-	Wed, 28 Aug 2024 11:23:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1724844219; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
+	s=arc-20240116; t=1724844967; c=relaxed/simple;
+	bh=MCX8KbsK5VIxrU/S+71wstTVdHgKSX2vfDlE+H6TXds=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lg137s0TJpqdBi/Bh8TwWZJ7CzC9/hRmO/wYSXBlYiucVugE3loEsymuegLs0y830yEbxYFEdfX1ZpH2V6AT3WO6gqeaECYVYAfw3WeEcinL73oFJpp66rsadP9rTqMstCFjF6BOb6m0Xu3fLooTeBOeyDHJ29YnkKioSfcMl6w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=pKfSIyCn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87737C98ECC;
+	Wed, 28 Aug 2024 11:36:05 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="pKfSIyCn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1724844963;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ZS4TScwxClFiQ42wXyGSbjTyqoV2glgYXGELYPtGsIg=;
-	b=mEMkloe8uBVVT65y8ATG3DiHAAVImkLXI9lDirmuTeKgh2rFDbXKbQPRFjonMoIPKDTOmD
-	v3TnsT8rKiBNZxLlJiyW/bRQFNSAWMrbYgbMYlS8JdV5QHxFTFNk6B0UXz0gygH2M7Q/EE
-	eLVSGdwZrXuyISBg8OcXH87M7K6dBVk=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1724844219;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZS4TScwxClFiQ42wXyGSbjTyqoV2glgYXGELYPtGsIg=;
-	b=MfN8i1NhZKFqEHz2fh+F4GZwU/JhkaoOfEUsGv2WkHjuPsMjQA18HArQFTV63SQyTDa9EE
-	uya6Y0L68/ffM2DA==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1724844218; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZS4TScwxClFiQ42wXyGSbjTyqoV2glgYXGELYPtGsIg=;
-	b=0iVyuTYFlBgdulA+mST/oUVSrgTpEQdFdfa8adNsEQ1qNNGQIExpE4mSBwNXGiiktB9P3s
-	REf5AhuwPFq+jB83IMPiJINNZ6FSbZVxkyk3762SO6csfVUOTjpot6HRXpYOV3twir9hPt
-	2POKkYtjuzvJjk7xL+lcIimRDAgx7AA=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1724844218;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZS4TScwxClFiQ42wXyGSbjTyqoV2glgYXGELYPtGsIg=;
-	b=DKNLhB3pEiloMcO4Z2CGHXoLoLC99guHQ3I6cj7US3kbnqTTrMSZhUZlZ87tXKKDlSELsH
-	Yx1AzSkpjlfrn9AA==
-From: Michal Suchanek <msuchanek@suse.de>
-To: linux-integrity@vger.kernel.org
-Cc: Michal Suchanek <msuchanek@suse.de>,
-	Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 2/2] selftests: tpm2: test_smoke: Run only when TPM2 is avaialable.
-Date: Wed, 28 Aug 2024 13:23:20 +0200
-Message-ID: <1794c9c1d60a34ebae28d3a18b408765e955907b.1724842902.git.msuchanek@suse.de>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <52c629ebbfc8f5218a90fa539f816c8555cb552a.1724842902.git.msuchanek@suse.de>
-References: <52c629ebbfc8f5218a90fa539f816c8555cb552a.1724842902.git.msuchanek@suse.de>
+	bh=0cLAo5gHHcmsu8sLuh4KjlSFYke2JQqCM5R6rEMln4U=;
+	b=pKfSIyCnSkeyDjQPIhtTOMpBEItpbkMJXA92xNABSqzabCNC47+FJQfR2ozwxnhbQy3DKl
+	XMWWZYm4uFKSfGx1P32BjX3PIsAGSEbSQRGYWvZH9oplcykdn85qa33DxdsLHTW6dMrwyd
+	rtsMdo9s4GIyWFqFn1zhRrKGHrYlO68=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 82d6876f (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Wed, 28 Aug 2024 11:36:03 +0000 (UTC)
+Date: Wed, 28 Aug 2024 13:36:03 +0200
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	"linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
+	Jinyang He <hejinyang@loongson.cn>,
+	Tiezhu Yang <yangtiezhu@loongson.cn>, Arnd Bergmann <arnd@arndb.de>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH v4 3/4] selftests/vDSO: Use KHDR_INCLUDES to locate UAPI
+ headers for vdso_test_getrandom
+Message-ID: <Zs8Lo9IM9zO0iwXd@zx2c4.com>
+References: <Zs3blfx1inX_FQLR@zx2c4.com>
+ <019268d4-c177-49e7-aab3-b8fa431905ca@cs-soprasteria.com>
+ <Zs3fhiSlXg2aCGa8@zx2c4.com>
+ <e9a2257f1447ce11e1f22e9a3c64d4b18aa428e1.camel@xry111.site>
+ <0730ca3a-e158-44ea-bb9e-1a7716b45360@csgroup.eu>
+ <Zs3qEMQOv5MAipox@zx2c4.com>
+ <0b540679ec8cfccec75aeb3463810924f6ff71e6.camel@xry111.site>
+ <Zs3sVv43djP3W2yc@zx2c4.com>
+ <d1707f9c173f80588c2917f6289c1394802d6229.camel@xry111.site>
+ <CAHmME9rpVOy7wteac6BS9N++rsEELA98QR-LEjWLD8MjSLoJvA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -6.80
-X-Spamd-Result: default: False [-6.80 / 50.00];
-	REPLY(-4.00)[];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	RCVD_COUNT_ZERO(0.00)[0];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	MIME_TRACE(0.00)[0:+];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[suse.de,gmx.de,kernel.org,ziepe.ca,vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email];
-	FREEMAIL_ENVRCPT(0.00)[gmx.de]
-X-Spam-Flag: NO
-X-Spam-Level: 
+In-Reply-To: <CAHmME9rpVOy7wteac6BS9N++rsEELA98QR-LEjWLD8MjSLoJvA@mail.gmail.com>
 
-Since Linux 5.6 tpm_version_major sysfs file is avaialble which gives
-the TPM version.
+On Tue, Aug 27, 2024 at 05:29:56PM +0200, Jason A. Donenfeld wrote:
+> On Tue, Aug 27, 2024 at 5:29 PM Xi Ruoyao <xry111@xry111.site> wrote:
+> > Or, I can add $(KHDR_INCLUDES) but also keep
+> > -isystem $(top_srcdir)/include/uapi, so "make -C tools/testing/selftests
+> > TARGETS=vDSO" will still (happens to) work on x86 and ppc (without
+> > headers in kernel-tree/usr).
+> 
+> Oh, the porquenolosdos solution. That sounds good to me.
 
-Using this file the test can be skipped on systems with TPM 1.2.
 
-Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+Does the below work for you?
+
+From 0a769491e0193cdf9728a23d02be5e6be975b513 Mon Sep 17 00:00:00 2001
+From: Xi Ruoyao <xry111@xry111.site>
+Date: Wed, 28 Aug 2024 13:29:57 +0200
+Subject: [PATCH] selftests/vDSO: use KHDR_INCLUDES to locate UAPI headers for
+ vdso_test_getrandom
+
+Building test_vdso_getrandom currently leads to following issue:
+
+    In file included from /home/xry111/git-repos/linux/tools/include/linux/compiler_types.h:36,
+                     from /home/xry111/git-repos/linux/include/uapi/linux/stddef.h:5,
+                     from /home/xry111/git-repos/linux/include/uapi/linux/posix_types.h:5,
+                     from /usr/include/asm/sigcontext.h:12,
+                     from /usr/include/bits/sigcontext.h:30,
+                     from /usr/include/signal.h:301,
+                     from vdso_test_getrandom.c:14:
+    /home/xry111/git-repos/linux/tools/include/linux/compiler-gcc.h:3:2: error: #error "Please don't include <linux/compiler-gcc.h> directly, include <linux/compiler.h> instead."
+        3 | #error "Please don't include <linux/compiler-gcc.h> directly, include <linux/compiler.h> instead."
+          |  ^~~~~
+
+It's because the compiler_types.h inclusion in
+include/uapi/linux/stddef.h is expected to be removed by the
+header_install.sh script, as compiler_types.h shouldn't be used from
+user space.
+
+Add KHDR_INCLUDES before the existing include/uapi inclusion so that
+usr/include takes precedence if it's populated.
+
+Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- tools/testing/selftests/tpm2/test_smoke.sh | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/vDSO/Makefile | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/selftests/tpm2/test_smoke.sh
-index 58af963e5b55..e5e3386077d9 100755
---- a/tools/testing/selftests/tpm2/test_smoke.sh
-+++ b/tools/testing/selftests/tpm2/test_smoke.sh
-@@ -5,5 +5,7 @@
- ksft_skip=4
- 
- [ -e /dev/tpm0 ] || exit $ksft_skip
-+read tpm_version < /sys/class/tpm/tpm0/tpm_version_major
-+[ "$tpm_version" == 2 ] || exit $ksft_skip
- 
- python3 -m unittest -v tpm2_tests.SmokeTest
--- 
+diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+index d1452c7d6d4f..13a626ef64f7 100644
+--- a/tools/testing/selftests/vDSO/Makefile
++++ b/tools/testing/selftests/vDSO/Makefile
+@@ -39,6 +39,7 @@ $(OUTPUT)/vdso_test_correctness: LDFLAGS += -ldl
+
+ $(OUTPUT)/vdso_test_getrandom: parse_vdso.c
+ $(OUTPUT)/vdso_test_getrandom: CFLAGS += -isystem $(top_srcdir)/tools/include \
++					 $(KHDR_INCLUDES) \
+                                          -isystem $(top_srcdir)/include/uapi
+
+ $(OUTPUT)/vdso_test_chacha: $(top_srcdir)/tools/arch/$(ARCH)/vdso/vgetrandom-chacha.S
+--
 2.46.0
+
 
 
