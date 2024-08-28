@@ -1,128 +1,105 @@
-Return-Path: <linux-kselftest+bounces-16638-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16639-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B89DD963647
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 01:44:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89CF696367E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 01:54:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2076DB24EA5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 23:44:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3468B1F22CAB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 23:54:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A31FB1AED32;
-	Wed, 28 Aug 2024 23:38:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 146DF1AC89F;
+	Wed, 28 Aug 2024 23:54:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YFWixOpi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lRovZ2ru"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37341AED2B;
-	Wed, 28 Aug 2024 23:38:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44060165EE4;
+	Wed, 28 Aug 2024 23:54:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724888306; cv=none; b=t9/wCx4jQY9jFccUB6KWbJvexA6frHp2jVdBcvU9in5hIMHp9jp+ZuR+YdryZ7+uwzC+WqTzeWP3AIzXkgu1rjEFKoomxa8c6NtScfwV2PWf9yDbmhkTSvCgtyTrble291mG1YwWAWtnHULsZvZgq38p1UiE5jpOf7kZ/s8zQmE=
+	t=1724889290; cv=none; b=KWJxfCGzF0aO6/RxqyH6qOKg66PoXJ+7aQzMgfuzCehosYRGojGlN9TTmovBVQb2jVf9GsHqtb4QMhV/1q8eMMaFmHp4o2ghrfYUPR1Ono0QtHd7BzYyXMJE+zzuNdzqSVklJ4jg/eePI4+Iusj6KiChCPKrOq1xlWZe7Ei2vks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724888306; c=relaxed/simple;
-	bh=KXNRip9T1NpjH/FC1tS186H85OnP7eRtBnItU+WbbKo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JiN4VvuQMsqJ/fNsO4C9Msh0HxP8vasN/pIphCRlSfkoUbE8KebQUUxqLWbh6QsWbQdbIpQ3XC3dwatQhsk/rnnB3EcwP/gW3SSpgwD2yzQIRmcHQaUTcQLiLfzofBkD2HdiKcFApaS6M6GxuC9In+G9U9Y7/PkamxGDJ6dM774=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YFWixOpi; arc=none smtp.client-ip=209.85.128.54
+	s=arc-20240116; t=1724889290; c=relaxed/simple;
+	bh=8VSOcFdfDv6f9/k5iOXaUzEb2pcQtBEwynE7I7i2sxo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ir2F00ph3TNS2/sZ7wkw8PkcEmNdIOLwSB/tL/+7lPvk4zqX0KC5SVRxB+ln3rPwZThF02y0fmFsnpNeJyWj/nNGzJ3nzdl/eDEaA0cS5D0cvOAp14Tl2099blLbRFUBywG1q2Qqp4/gb2mMAKn7fmy+neslbyTJ107re+kzBUE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lRovZ2ru; arc=none smtp.client-ip=209.85.166.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-428141be2ddso349505e9.2;
-        Wed, 28 Aug 2024 16:38:24 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-82a13d1c8f9so5532539f.1;
+        Wed, 28 Aug 2024 16:54:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724888303; x=1725493103; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IB1r80w0tSniiEQsoRZPgz9PdJTE/Shx5Zcwt2Wg6DQ=;
-        b=YFWixOpie6vhAhSVeJcNECxK5KoW+iUyULiXXdw5tnuNgKIC8Nt/t/88D036Ob6FsE
-         DvkaISAyocH2ILgNbhVUpk4NWjdeVik6voz4GDHizHQwRKrjlmHoVv1XJ9guPjtFnHXM
-         HXYJyTbne+lQ33wqR+OYyMpJbk/JQN+jn6EhJFxxnTrWgMLdPlUlu4L493R7rbOwL7li
-         aRPjsp11D1GtnjoemdvMuMGSyXZ0ZhKxjV2y90ks2OfuBZaCQ9RKX0ftoE4SgHCvZfzN
-         Ni6aSOgj/vT/nUUrf+OJ3BFWw6p/KgmQAGlpZxsOLf/hbClqe4MFliRpxvWIYuRPFeTA
-         bp2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724888303; x=1725493103;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1724889286; x=1725494086; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IB1r80w0tSniiEQsoRZPgz9PdJTE/Shx5Zcwt2Wg6DQ=;
-        b=PlHFuU25Vd3drbCSH4CWhZfZ9lZ+oM5JeFgVV4dKcUyOmRiJ/lvbPif9iCEA/0cj/F
-         uFFW1yHZmuOpgMx/VlXrnZ8zd4UVaRxqLwu3JKlF4ua/mVCygPd6O7EM/cBklUOupviM
-         sad0JISP/KGDNnPNw0Z4FzZq2b4GfjgeZ5TosPnfFrmmPhEzZJKloVCgZqBwchHM6b/J
-         pNbNnpJCbl1S6juJi6T2vQR8b1LEj/8rLFVrJR69QRh32q8QPJp0e2pJ6SwBajfk7XeH
-         dmkulU0NYZei+JNmU1APWvB6RiMlxHOVkhl3vTirgLkrZLAVfcdt4wmPjqaRcT7Gvjbb
-         +KSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWPMDbQNQv3Fp/q5Pz3v+p3/vVXOix4RMBUwzzVXLQkQCBa/8UdTpAM2KN98inJSowW7aQm1+XqpNhu56oY4t0=@vger.kernel.org, AJvYcCXrn1H7cBxdkwgVl5PpHT/wGv+XPdtW6ZyhFuC5EFoxWk6Nl1ZFewVx/wrhSROXGm6ZhRTZz7zv5W4KGLrN4Y2g@vger.kernel.org
-X-Gm-Message-State: AOJu0YxXX6g1pJXvfIWiKktUMT3WXuufc74Wgd70HCkCPrmuoeO68m/e
-	PGHtgQiNFCl8umHQVYbs+lL3oA2ykqvs7vQmrj5TDLS5oWslq/NM
-X-Google-Smtp-Source: AGHT+IGE1Tr+5K8rbiq3aX2JG+RGnBONvXmau7cJ8JCt6fwWWs0mojGwXLpROhTgTUD7IBRMv3s2Qg==
-X-Received: by 2002:a05:600c:1389:b0:426:6326:4cec with SMTP id 5b1f17b1804b1-42bb01e6befmr7932745e9.29.1724888302650;
-        Wed, 28 Aug 2024 16:38:22 -0700 (PDT)
-Received: from PC-PEDRO-ARCH ([2001:8a0:7862:ea00:1d36:5f53:3f57:14ad])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42ba639da86sm33548165e9.20.2024.08.28.16.38.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Aug 2024 16:38:22 -0700 (PDT)
-Date: Thu, 29 Aug 2024 00:38:19 +0100
-From: Pedro Falcato <pedro.falcato@gmail.com>
-To: jeffxu@chromium.org
-Cc: akpm@linux-foundation.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-hardening@vger.kernel.org, rientjes@google.com, 
-	keescook@chromium.org, Liam.Howlett@oracle.com, vbabka@suse.cz, 
-	lorenzo.stoakes@oracle.com
-Subject: Re: [PATCH v1 1/2] mseal: fix mmap(FIXED) error code.
-Message-ID: <jxov546uro5lffibw5asff3m25pfnondbp3nrqc3fde322h3on@ypkdkju4xaho>
-References: <20240828225522.684774-1-jeffxu@chromium.org>
+        bh=8VSOcFdfDv6f9/k5iOXaUzEb2pcQtBEwynE7I7i2sxo=;
+        b=lRovZ2ruJM3JvWkg7yE3ahUf9R/B+DiUjqBdeiVvLs+zygF5vR/a3Xo+20RCmyds9e
+         Bi636jK8S9xuypxfZAM18slaD11IYLrBOXCyh/Vl2vxJx2z1pHmfYyM9zv78uRMQY0H3
+         aw0F5uQXRkck6gWSwjdAjlqA535KDLViatTzB7JNU8LIoE9GH+ZKWJuXH/cw0KOQoass
+         sw4S9HGatvQcW5Tj0pltrXUfIXz9Yg4ENyci4AaQR3BbpBrQXQJiJYposJYYnVuoMlWC
+         l0dKN4QZEkUxVhL+IG+VP5toEjQqpmVOtk/8+R8knvfbVs0CkWZ9HH/GzN1GaGn0vAN4
+         NC3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724889286; x=1725494086;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8VSOcFdfDv6f9/k5iOXaUzEb2pcQtBEwynE7I7i2sxo=;
+        b=ok+Lvu94EzRlvwaD/ZQsCgOB+tqAnsJr5tDEifjtNgndJy5abJ5d+imyW+zjhNdyj6
+         ozKOGQ5edTGjwk8DYiCpysju5WUJ1R2vz6Zst3fFhOtl8Xlkq+Vd7aQAvVN0RfJ7K9F0
+         G64DglaVzTZE9ScJyXJyfD7ECjt+naVQ7vGswnE0wK12ASXkeWTk9K+aKYe+pwFEWwTt
+         qMg5Kz1a11laIfF58lLTZU4tT0c++JRIiNq2U4CEd/eKrUXLW8+uVT1J/HAJGbC+2C/r
+         sMo8c7oM4hh1oVCLrQ1YVqP3CvnU4akrL/6CH97UDG0O9X6E8FXfIwmQGqliNrYpYFmF
+         Hxtg==
+X-Forwarded-Encrypted: i=1; AJvYcCWlO7HXeQwwYP7nhvqSrmKcms1t+zJSbUJCRwxfPV/LIEO80Z+Wp18zLhBzmhnpq4D30BcyLoaG+3UB+ksS/3c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzW+GQdNAW3Kw/BZYivyxNxn8IDj6QUdG9WB/J07s8RGAXcq3vu
+	GHRqeBLArVebnq468/Doy+l9KdRO4gNQlJjuOzS9Jl1Pqjn36/gTa5LokYWnzY44KiYt3q0H6N7
+	bcJuq/uiZmITVHOT/99nnjj0S/ig=
+X-Google-Smtp-Source: AGHT+IH0gQ4BAb2ZIkcy7Eklko6P1H0eoe2g9ZfiheeJfyikHZWxBQfymE8TB4mXd6Z/K+aUodo5hl8ZuzWvF5Puj7I=
+X-Received: by 2002:a05:6e02:1a45:b0:395:e85e:f30d with SMTP id
+ e9e14a558f8ab-39f377cb2e2mr16942645ab.2.1724889286272; Wed, 28 Aug 2024
+ 16:54:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240828225522.684774-1-jeffxu@chromium.org>
+References: <20240828183752.660267-1-jmaloy@redhat.com> <20240828183752.660267-2-jmaloy@redhat.com>
+In-Reply-To: <20240828183752.660267-2-jmaloy@redhat.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Thu, 29 Aug 2024 07:54:08 +0800
+Message-ID: <CAL+tcoDHFyARbonRxv=kKiywgbqci=TKeYiCWmQ8R2jAkek-Gg@mail.gmail.com>
+Subject: Re: [net-next, v3 1/2] tcp: add SO_PEEK_OFF socket option tor TCPv6
+To: jmaloy@redhat.com
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	davem@davemloft.net, kuba@kernel.org, passt-dev@passt.top, sbrivio@redhat.com, 
+	lvivier@redhat.com, dgibson@redhat.com, eric.dumazet@gmail.com, 
+	edumazet@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-+CC vma reviewers
-On Wed, Aug 28, 2024 at 10:55:21PM GMT, jeffxu@chromium.org wrote:
-> From: Jeff Xu <jeffxu@chromium.org>
-> 
-> mmap(MAP_FIXED) should return EPERM when memory is sealed.
-> 
-> Fixes: 4205a39e06da ("mm/munmap: replace can_modify_mm with can_modify_vma")
+On Thu, Aug 29, 2024 at 2:38=E2=80=AFAM <jmaloy@redhat.com> wrote:
+>
+> From: Jon Maloy <jmaloy@redhat.com>
+>
+> When doing further testing of the recently added SO_PEEK_OFF feature
+> for TCP I realized I had omitted to add it for TCP/IPv6.
+>
+> I do that here.
+>
+> Fixes: 05ea491641d3 ("tcp: add support for SO_PEEK_OFF socket option")
+> Reviewed-by: Eric Dumazet <edumazet@google.com>
+> Reviewed-by: David Gibson <david@gibson.dropbear.id.au>
+> Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
+> Tested-by: Stefano Brivio <sbrivio@redhat.com>
+> Signed-off-by: Jon Maloy <jmaloy@redhat.com>
 
-Thank you for the patch!
-This Fixes: is wrong, the bug was added during Liam's rebasing of his munmap patch
-set on mine.
-
-> Signed-off-by: Jeff Xu <jeffxu@chromium.org>
-> ---
->  mm/mmap.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/mm/mmap.c b/mm/mmap.c
-> index 80d70ed099cf..0cd0c0ef03c7 100644
-> --- a/mm/mmap.c
-> +++ b/mm/mmap.c
-> @@ -1386,7 +1386,10 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
->  		mt_on_stack(mt_detach);
->  		mas_init(&mas_detach, &mt_detach, /* addr = */ 0);
->  		/* Prepare to unmap any existing mapping in the area */
-> -		if (vms_gather_munmap_vmas(&vms, &mas_detach))
-> +		error = vms_gather_munmap_vmas(&vms, &mas_detach);
-> +		if (error == -EPERM)
-> +			return -EPERM;
-
-Not sure if it makes sense to special case this. We should probably deal with this inside
-vms_gather_munmap_vmas and just pass through the error we get.
-
-Otherwise LGTM. Liam?
-
-(we should also squash this into the offending commit)
-
--- 
-Pedro
+Reviewed-by: Jason Xing <kerneljasonxing@gmail.com>
 
