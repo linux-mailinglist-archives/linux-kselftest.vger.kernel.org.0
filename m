@@ -1,139 +1,149 @@
-Return-Path: <linux-kselftest+bounces-16561-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAB51962D21
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 18:01:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D18C8962D9E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 18:27:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E61611C21318
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 16:01:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84F421F226E6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 16:27:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F27321A254C;
-	Wed, 28 Aug 2024 16:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mrh255zR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F7181A3BAA;
+	Wed, 28 Aug 2024 16:27:35 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBD7D186E26;
-	Wed, 28 Aug 2024 16:01:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCC5444C68;
+	Wed, 28 Aug 2024 16:27:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724860882; cv=none; b=InTGF7hV5hzloSpwP1VgWU2uO8HyoSpsk3NQet2b6lgMrDIlaYkdb0917W0hNgRfhr8XCemaQe/Cwj8CzA2EC1MOLAgd+5YUn5xlRP4QouiMaj2Qpus1c4tMzJFR4W1F6Kmw7oiV4Yf/zrm2kcHPTQ6FI786OTRX3AHfnLR4ceo=
+	t=1724862455; cv=none; b=RmFuMeoWFtgqFBlrYaIyx1mZUFqP8kRwLdnEB5TB+ft4zrrqfg+nfKgOBcyNnBDf7dGzPOffyGQV+EFEkhfcBThbNJyCM0xf79OmMw9jl9exsMjZHoYkxdmB2JEozjTXfPGJ1m+f9TDfeo/L/Sw9wpTSGMXI5J+Ev8hjH2WDXQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724860882; c=relaxed/simple;
-	bh=CAi4Muk4AipUnOLqWPWkEMgQGCtB6VKz3wqG4OS/i9I=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=N2Racu9fTfQaXyj+vpIlFVw+umjHSKmXjsgLsfBqQXEsIxobOWI1RGiU/sfE9gnrTLNb9XpMgDrYJBElBZyUNXbP5u2bMHOaadlpyS94sVE/qzzRx3K1X/zGdaflzuWmssheNV8Gd76vTm62zE7BazuqEj0TiTNxH3B+F14srhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mrh255zR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8391C4CEC6;
-	Wed, 28 Aug 2024 16:01:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724860882;
-	bh=CAi4Muk4AipUnOLqWPWkEMgQGCtB6VKz3wqG4OS/i9I=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=mrh255zRosyRxkzYuCQG47MKbD2Jzw49eXc5QI2Fz/Ze3YDg5g6c6oE0pxeMbgLyT
-	 a2iby+DRzhjLh80CYD5CfCXW8JZHbLJg8VthsaZn+FCtAOD83pV89bCgme6qiFfR0U
-	 jADJ7YKhmXHtkwElLb1p5tBFQSI3t3xR4kZv+pKNRu+r3XTL6+rqNst5xKUwQMDOu/
-	 j8KY5LOgpEiWRkGr9EFz57juijmStRzX6kvA9kGys946fYysoVNiigbO4QDsHl4Qgl
-	 4uylPqaySrOcquyGIsR6VQN/8XTCp+5uayRo80SZerapZPeZYSCDCSO+ZcU3IRa08c
-	 PK+GdALeg1QZw==
-Date: Wed, 28 Aug 2024 09:01:20 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
- davem@davemloft.net, edumazet@google.com, ncardwell@google.com,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, fw@strlen.de, Willem de
- Bruijn <willemb@google.com>, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
- martineau@kernel.org
-Subject: Re: [PATCH net-next RFC] selftests/net: integrate packetdrill with
- ksft
-Message-ID: <20240828090120.71be0b20@kernel.org>
-In-Reply-To: <66cf2e4bd8e89_33815c294b2@willemb.c.googlers.com.notmuch>
-References: <20240827193417.2792223-1-willemdebruijn.kernel@gmail.com>
-	<401f173b-3465-428d-9b90-b87a76a39cc8@redhat.com>
-	<66cf2e4bd8e89_33815c294b2@willemb.c.googlers.com.notmuch>
+	s=arc-20240116; t=1724862455; c=relaxed/simple;
+	bh=J7TamwyLq/TO8kGKKSchuFfy18yYms4GzoxH5TmQHp0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fGaiDOKF0osJn5/k76SQi0QdT+DP3WQKkZW4kxKWPVbWBNrWUYD455LaSe40jtCTQbEqctQeQQsoZF+Iy6PziYHP+aGbvCDuq7BIenk+4ycJmiAPbY808UtwL2uGMGQRjqeWfO6CWwfJwKiW1Dc2Z/FPR3784Z0FXkE6qPBwfF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
+Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
+	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 47SGKT1D008844;
+	Wed, 28 Aug 2024 11:20:29 -0500
+Received: (from segher@localhost)
+	by gate.crashing.org (8.14.1/8.14.1/Submit) id 47SGKPkx008843;
+	Wed, 28 Aug 2024 11:20:25 -0500
+X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
+Date: Wed, 28 Aug 2024 11:20:25 -0500
+From: Segher Boessenkool <segher@kernel.crashing.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, "Theodore Ts'o" <tytso@mit.edu>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        shuah <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
+        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 05/17] vdso: Avoid call to memset() by getrandom
+Message-ID: <20240828162025.GG29862@gate.crashing.org>
+References: <cover.1724309198.git.christophe.leroy@csgroup.eu> <5deb67090b214f0e6eae96b7c406546d1a16f89b.1724309198.git.christophe.leroy@csgroup.eu> <20240827180819.GB2049@sol.localdomain> <20240827225330.GC29862@gate.crashing.org> <Zs8HirKLk-SrwTIu@zx2c4.com> <fc19bf63-d519-46e2-be70-80202c85ff92@app.fastmail.com> <20240828124519.GE29862@gate.crashing.org> <CAMj1kXGmDmxy75eP=rf_fzKmg0g_FeKV43jk2G_gibnKZBtVww@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXGmDmxy75eP=rf_fzKmg0g_FeKV43jk2G_gibnKZBtVww@mail.gmail.com>
+User-Agent: Mutt/1.4.2.3i
 
-On Wed, 28 Aug 2024 10:03:55 -0400 Willem de Bruijn wrote:
-> > > A single script is much
-> > > simpler, optionally with nested KTAP (not supported yet by ksft). But,
-> > > I'm afraid that running time without intermediate output will be very
-> > > long when we integrate all packetdrill scripts.  
-> > 
-> > If I read correctly, this runs the scripts in the given directory 
-> > sequentially (as opposed to the default pktdrill run_all.py behavior 
-> > that uses many concurrent threads).
-> > 
-> > I guess/fear that running all the pktdrill tests in a single batch would 
-> > take quite a long time, which in turn could be not so good for CI 
-> > integration. Currently there are a couple of CI test-cases with runtime   
-> >  > 1h, but that is bad ;)  
+Hi!
+
+On Wed, Aug 28, 2024 at 05:40:23PM +0200, Ard Biesheuvel wrote:
+> On Wed, 28 Aug 2024 at 14:57, Segher Boessenkool
+> <segher@kernel.crashing.org> wrote:
+> >
+> > On Wed, Aug 28, 2024 at 12:24:12PM +0000, Arnd Bergmann wrote:
+> > > On Wed, Aug 28, 2024, at 11:18, Jason A. Donenfeld wrote:
+> > > > On Tue, Aug 27, 2024 at 05:53:30PM -0500, Segher Boessenkool wrote:
+> > > >> On Tue, Aug 27, 2024 at 11:08:19AM -0700, Eric Biggers wrote:
+> > > >> >
+> > > >> > Is there a compiler flag that could be used to disable the generation of calls
+> > > >> > to memset?
+> > > >>
+> > > >> -fno-tree-loop-distribute-patterns .  But, as always, read up on it, see
+> > > >> what it actually does (and how it avoids your problem, and mostly: learn
+> > > >> what the actual problem *was*!)
+> > > >
+> > > > This might help with various loops, but it doesn't help with the matter
+> > > > that this patch fixes, which is struct initialization. I just tried it
+> > > > with the arm64 patch to no avail.
+> > >
+> > > Maybe -ffreestanding can help here? That should cause the vdso to be built
+> > > with the assumption that there is no libc, so it would neither add nor
+> > > remove standard library calls. Not sure if that causes other problems,
+> > > e.g. if the calling conventions are different.
+> >
+> > "GCC requires the freestanding
+> > environment provide 'memcpy', 'memmove', 'memset' and 'memcmp'."
+> >
+> > This is precisely to implement things like struct initialisation.  Maybe
+> > we should have a "-ffreeerstanding" or "-ffreefloating" or think of
+> > something funnier still environment as well, this problem has been there
+> > since the -ffreestanding flag has existed, but the problem is as old as
+> > the night.
+> >
+> > -fno-builtin might help a bit more, but just attack the problem at
+> > its root, like I suggested?
+> >
 > 
-> Very good point, thanks! This is the third packetdrill runner that I'm
-> writing. I should know this by now.. Let me see whether I can use
-> run_all.py rather than reinvent the wheel here.
+> In my experience, this is likely to do the opposite: it causes the
+> compiler to 'forget' the semantics of memcpy() and memset(), so that
+> explicit trivial calls will no longer be elided and replaced with
+> plain loads and stores (as it can no longer guarantee the equivalence)
 
-Do we have to worry about this now? If you're planning to add a runner
-specifically for packetdrill... IDK if we should. We already have a few
-runners, not to mention that run_kselftest.sh itself can run all the
-test cases in parallel in separate network namespaces!
+No, the compiler will never forget those semantics.  But if you tell it
+your function named memset() is not the actual standard memset -- via
+-fno-builtin-memset for example -- the compiler won't optimise things
+involving it quite as much.  You told it so eh?
 
-What I was wondering is whether we can use shebang to direct the .pkt
-files to be "executed" by the python script. Alternatively we can add
-support to specifying "interpreter" for a given test in ksft infra
-(kinda like we can pass cmd line arguments to a test). Completely
-untested but it should give better idea what I mean than a description:
+You can also tell it not to have a __builtin_memset function, but in
+this particular case that won;t quite work, since the compiler does need
+to have that builtin available to do struct and array initialisations
+and the like.
 
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index 74954f6a8f94..429c279e9c6e 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -56,6 +56,7 @@ run_one()
- 	export kselftest_timeout="$kselftest_default_timeout"
- 
- 	# Safe default if tr not available
-+	kselftest_interp_ref="KSELFTEST_INTERP"
- 	kselftest_cmd_args_ref="KSELFTEST_ARGS"
- 
- 	# Optional arguments for this command, possibly defined as an
-@@ -78,6 +79,14 @@ run_one()
- 					$TR_CMD [:lower:] [:upper:])
- 		kselftest_cmd_args_ref="KSELFTEST_${BASENAME_SANITIZED}_ARGS"
- 	fi
-+	# Optional interpreter to run the test case
-+	if [ -n "$TR_CMD" ]; then
-+		SUFFIX_SANITIZED=$(echo "${BASENAME_TEST#*.}" | \
-+				       $TR_CMD -d "[:blank:][:cntrl:]" | \
-+				       $TR_CMD -c "[:alnum:]_" "_" | \
-+				       $TR_CMD [:lower:] [:upper:])
-+		kselftest_interp_ref="KSELFTEST_${SUFFIX_SANITIZED}_INTERP"
-+	fi
- 
- 	# Load per-test-directory kselftest "settings" file.
- 	settings="$BASE_DIR/$DIR/settings"
-@@ -110,8 +119,12 @@ run_one()
- 		if [ -x /usr/bin/stdbuf ]; then
- 			stdbuf="/usr/bin/stdbuf --output=L "
- 		fi
-+		eval kselftest_interp="\$${kselftest_interp_ref:-}"
-+		# Add a space at the end if interpreter is set to work in $cmd
-+		[ -n "$kselftest_interp" ] && \
-+		    kselftest_interp="$kselftest_interp "
- 		eval kselftest_cmd_args="\$${kselftest_cmd_args_ref:-}"
--		cmd="$stdbuf ./$BASENAME_TEST $kselftest_cmd_args"
-+		cmd="$stdbuf ./$kselftest_interp$BASENAME_TEST $kselftest_cmd_args"
- 		if [ ! -x "$TEST" ]; then
- 			echo "# Warning: file $TEST is not executable"
- 
+> > (This isn't a new problem, originally it showed up as "GCC replaces
+> > (part of) my memcpy() implementation by a (recursive) call to memcpy()"
+> > and, well, that doesn't quite work!)
+> >
+> 
+> This needs to be fixed for Clang as well, so throwing GCC specific
+> flags at it will at best be a partial solution.
+
+clang says it is a 100% plug-in replacement for GCC, so they will have
+to accept all GCC flags.  And in many cases they do.  Cases where they
+don't are bugs.
+
+> It is not a complete solution, unfortunately, and I guess there may be
+> other situations (compiler/arch combinations) where this might pop up
+> again.
+
+Why do mem* not work in VDSOs?  Fix that, and all these problems
+disappear, and you do not need workrarounds :-)
+
+
+Segher
 
