@@ -1,142 +1,135 @@
-Return-Path: <linux-kselftest+bounces-16533-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16535-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A92E9625CE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 13:18:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58F719625F7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 13:23:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 950921F21ED5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 11:18:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15B022851C3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 11:23:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39C4116CD2A;
-	Wed, 28 Aug 2024 11:18:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B60A616EB50;
+	Wed, 28 Aug 2024 11:23:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ie1ZgaJb"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="RwwPGxMA";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="OXqnlx5L";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="HDKWTJ7Y";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="0L9heknE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4C024D108;
-	Wed, 28 Aug 2024 11:18:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96C913FEC;
+	Wed, 28 Aug 2024 11:23:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724843921; cv=none; b=Oqgj5/ACQ7Fvv6r7pu3kkW66XXUBu1rjYJJpougXBsixisMN9Tee01pdzgJHwqDV0llaqr4TcBjh+X1nugzuAHbZQddLHJqBSgZciYjW3WAzCrUkMHIJtjRosLTDEqhgf5fr0WTPnCkK29ufnkFSkMnsHLaUQff1hMOTC6zjtP4=
+	t=1724844223; cv=none; b=FqVi053+jC/qqyoMuqinkXm0BxyYdlwVM31+L0Kdso69KXgZxscuzQMcINFfKx5X6a8aBhj2EBaSn4nPIlm0QFjsLNmW0wmAkAe1kV2TcwXH0jtL283t8PioR3RFheAgDqBDAdhIfCp/k2TeIMaV9DzRWuXwOhnbyGWQuclelWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724843921; c=relaxed/simple;
-	bh=K4ffkU1d24Lo6Vpr60xC27K+SzTzNldohctsI0B5LAk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NvqefsuWo035y194PtUONVMgnmYQJAH3ApfPJuBS5KIXz14Q5YZsoz6upH3K6vGG76QAvoit8P4dmU+R/O/3qu94ODB+6KMJUrG0uO6FVhkVadeIN3IGEknS6btoUUPNZkM2Wo3v2vMX63WD6hR0g+K5AqyYvv9BsFvT5CUSL+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=ie1ZgaJb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F77C98EC1;
-	Wed, 28 Aug 2024 11:18:37 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="ie1ZgaJb"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1724843916;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TaIlxacxM0cvax8nGT0Wo3sn3OzyvoPLEHrLd84XeNU=;
-	b=ie1ZgaJbmdO0NFZiWnbQxMHvES+WVoJwzMG9ptpU3Emt2rn3BokeH+49oxcj4dV6dn2A7R
-	OZIoYXalY4Ws4iv74BUjZGRKqr/jYLeyEjR6fhELEgh04xz8/D5eJuiLFmdCA7UTqCRd8K
-	hMYFoVGZZlHMLnB3FsT4kBzzeg3/4HU=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8e8b7172 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Wed, 28 Aug 2024 11:18:35 +0000 (UTC)
-Date: Wed, 28 Aug 2024 13:18:34 +0200
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: Segher Boessenkool <segher@kernel.crashing.org>
-Cc: Eric Biggers <ebiggers@kernel.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Shuah Khan <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 05/17] vdso: Avoid call to memset() by getrandom
-Message-ID: <Zs8HirKLk-SrwTIu@zx2c4.com>
-References: <cover.1724309198.git.christophe.leroy@csgroup.eu>
- <5deb67090b214f0e6eae96b7c406546d1a16f89b.1724309198.git.christophe.leroy@csgroup.eu>
- <20240827180819.GB2049@sol.localdomain>
- <20240827225330.GC29862@gate.crashing.org>
+	s=arc-20240116; t=1724844223; c=relaxed/simple;
+	bh=/nD3GELsv87/jPZ4l6cKmc5fENYaICBxFVhol7UbrYk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=llBIer+/yGfO6sTfZrz0RAt3Ut8ATPRqw0ib9eBOSdPfmXGpT3PG5Hp0wZ0wH/A0UgF2eM7fEv4+Ev8HSiUbKcswedq+f824tEt403iSxn+Alr93zYgJmnTd4TfbY/4Kv/j50OXLV6SRhPMpX+yReohElyC3aZezIxLSKTJ0SII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=RwwPGxMA; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=OXqnlx5L; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=HDKWTJ7Y; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=0L9heknE; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from kitsune.suse.cz (unknown [10.100.12.127])
+	by smtp-out2.suse.de (Postfix) with ESMTP id BD5011FC06;
+	Wed, 28 Aug 2024 11:23:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1724844218; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=VU/9WnGSOzBeM537Y5PLqEr5y1QDTfXTBgK86EBJIUw=;
+	b=RwwPGxMAH39mMgivxKTaMvNBWNQe3H9cHVI98eZnOHjT+gaJiWefN8yfX+7VB0WdyzkK0p
+	mn61T7RT7mrLK5/xZqSrAYkj73NdErJD0vCUkMSSigbcOvo5qQYrJqkg1qsMqxTvjcdVS4
+	nuIzjHSS5LALbWM1aWaAXKWul/IBp+o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1724844218;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=VU/9WnGSOzBeM537Y5PLqEr5y1QDTfXTBgK86EBJIUw=;
+	b=OXqnlx5LDk8CkiliHLD4SodJgRrGZWQC9dPZ4s2soZoOHjdktHFHs+UasERume0KR2UrMo
+	0tTIjUv//vzQdGBQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1724844217; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=VU/9WnGSOzBeM537Y5PLqEr5y1QDTfXTBgK86EBJIUw=;
+	b=HDKWTJ7YQbhe3z2ts88sIa6bK8AHJUtyzbi1b+hmDJ8Uw1yrKwF6DZo0z0IRNCYkwBuG4i
+	PpZGoUQNGS/Bs1NeNiVFiGwEW/jmRaew8WKuMq/Z7t6Hr0sNHloepmidhGGQGAiEijjFb0
+	6vEeduBka2zmN9YXayDNTumFi/nq85M=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1724844217;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+	bh=VU/9WnGSOzBeM537Y5PLqEr5y1QDTfXTBgK86EBJIUw=;
+	b=0L9heknEgjULYlmzLiD6Mc/ql0of11CmvvIzLGCDK6ukncrac7LeF/CoVEGC1lXBdp2t0h
+	5wHFa1aWPZZnwGAA==
+From: Michal Suchanek <msuchanek@suse.de>
+To: linux-integrity@vger.kernel.org
+Cc: Michal Suchanek <msuchanek@suse.de>,
+	Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 1/2] MAINTAINERS: Add selftest files to TPM section
+Date: Wed, 28 Aug 2024 13:23:19 +0200
+Message-ID: <52c629ebbfc8f5218a90fa539f816c8555cb552a.1724842902.git.msuchanek@suse.de>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20240827225330.GC29862@gate.crashing.org>
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FREEMAIL_CC(0.00)[suse.de,gmx.de,kernel.org,ziepe.ca,vger.kernel.org];
+	RCVD_COUNT_ZERO(0.00)[0];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid];
+	FREEMAIL_ENVRCPT(0.00)[gmx.de]
+X-Spam-Score: -2.80
+X-Spam-Flag: NO
 
-On Tue, Aug 27, 2024 at 05:53:30PM -0500, Segher Boessenkool wrote:
-> On Tue, Aug 27, 2024 at 11:08:19AM -0700, Eric Biggers wrote:
-> > On Thu, Aug 22, 2024 at 09:13:13AM +0200, Christophe Leroy wrote:
-> > > With the current implementation, __cvdso_getrandom_data() calls
-> > > memset(), which is unexpected in the VDSO.
-> > > 
-> > > Rewrite opaque data initialisation to avoid memset().
-> > > 
-> > > Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> > > ---
-> > >  lib/vdso/getrandom.c | 15 ++++++++++-----
-> > >  1 file changed, 10 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
-> > > index cab153c5f9be..4a56f45141b4 100644
-> > > --- a/lib/vdso/getrandom.c
-> > > +++ b/lib/vdso/getrandom.c
-> > > @@ -4,6 +4,7 @@
-> > >   */
-> > >  
-> > >  #include <linux/minmax.h>
-> > > +#include <linux/array_size.h>
-> > >  #include <vdso/datapage.h>
-> > >  #include <vdso/getrandom.h>
-> > >  #include <vdso/unaligned.h>
-> > > @@ -74,11 +75,15 @@ __cvdso_getrandom_data(const struct vdso_rng_data *rng_info, void *buffer, size_
-> > >  	u32 counter[2] = { 0 };
-> > >  
-> > >  	if (unlikely(opaque_len == ~0UL && !buffer && !len && !flags)) {
-> > > -		*(struct vgetrandom_opaque_params *)opaque_state = (struct vgetrandom_opaque_params) {
-> > > -			.size_of_opaque_state = sizeof(*state),
-> > > -			.mmap_prot = PROT_READ | PROT_WRITE,
-> > > -			.mmap_flags = MAP_DROPPABLE | MAP_ANONYMOUS
-> > > -		};
-> > > +		struct vgetrandom_opaque_params *params = opaque_state;
-> > > +		int i;
-> > > +
-> > > +		params->size_of_opaque_state = sizeof(*state);
-> > > +		params->mmap_prot = PROT_READ | PROT_WRITE;
-> > > +		params->mmap_flags = MAP_DROPPABLE | MAP_ANONYMOUS;
-> > > +		for (i = 0; i < ARRAY_SIZE(params->reserved); i++)
-> > > +			params->reserved[i] = 0;
-> > > +
-> > >  		return 0;
-> > >  	}
-> > 
-> > Is there a compiler flag that could be used to disable the generation of calls
-> > to memset?
-> 
-> -fno-tree-loop-distribute-patterns .  But, as always, read up on it, see
-> what it actually does (and how it avoids your problem, and mostly: learn
-> what the actual problem *was*!)
+tools/testing/selftests/tpm2/ is TPM-specific test
 
-This might help with various loops, but it doesn't help with the matter
-that this patch fixes, which is struct initialization. I just tried it
-with the arm64 patch to no avail.
+Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 878dcd23b331..c2ee92c7c16c 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -23184,6 +23184,7 @@ Q:	https://patchwork.kernel.org/project/linux-integrity/list/
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git
+ F:	Documentation/devicetree/bindings/tpm/
+ F:	drivers/char/tpm/
++F:	tools/testing/selftests/tpm2/
+ 
+ TPS546D24 DRIVER
+ M:	Duke Du <dukedu83@gmail.com>
+-- 
+2.46.0
+
 
