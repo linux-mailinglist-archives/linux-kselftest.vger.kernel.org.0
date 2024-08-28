@@ -1,176 +1,169 @@
-Return-Path: <linux-kselftest+bounces-16516-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16517-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD5E7961F84
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 08:20:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10171961FDF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 08:35:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BB4A1C238E1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 06:20:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5DF6AB218E2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 06:35:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 884F016B752;
-	Wed, 28 Aug 2024 06:15:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g4XmCGIA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13EC7156669;
+	Wed, 28 Aug 2024 06:34:59 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FE41553B3;
-	Wed, 28 Aug 2024 06:15:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17B9D13210D;
+	Wed, 28 Aug 2024 06:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724825726; cv=none; b=GbmceofggP81zLgazkWGtUiwXP+QtqszWxLekEBg2UeiLqQYFD+7wa4PuWvYTysPPq1z9W17zDNIZ16wutZfDy1rKe/zJzjzIYBp6aeWGebWHfW1xylkOKJ83WDl61S2zuCzNW1zESM6JYkad0x5R7kY4awO8lX/hEdntOoHeUE=
+	t=1724826899; cv=none; b=GxShJE0DlYwNLtwmFodxP4HSxE+3RTibgg2l2NtlFaHuNI7TX76LRk1OLQsxeOuyEQQ/Tq+NBXa7yNzOJQEOe14QXeXrZBkPKxnxHYlnvGS91IS/aL2w/29A7629Lq0zx2G+NWWPiu3vqgzBZntz2azuY8c8FoiFc4rn7swH08E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724825726; c=relaxed/simple;
-	bh=xdzWHXYy5hg4851VghxZtTa4uJdKioKLDBgA8yThRTc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bnQrFlTxidsX7Me3gtQxOYBSUOOwG+blwClU3+VVVgtZWxmF6dTL7XPwt8IllsxLvpUqk7KvVtZ/6Tf6NkPpN4EmESeomCsyCOzw5L7jtxdU9BbODD9FGBuFa+9Aty6dsGBWr902hgmSIiz04Qzjqq9UI+QCCBXzDSWRF2XGV1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g4XmCGIA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5670CC4DDE7;
-	Wed, 28 Aug 2024 06:15:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724825726;
-	bh=xdzWHXYy5hg4851VghxZtTa4uJdKioKLDBgA8yThRTc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=g4XmCGIA8JRCWo2DCUYF3dAOF57sHTLh3PKdvU0uaMbXqQE4clkxNDAvZYnUXRBSC
-	 aHedtX18rLY16Roclo8r1/iflLswXeayKKGGRQ1j9DKvp+b4iPZFxCStUOEQ935jvi
-	 eB3DGYx9EL3EAY7tOFlG3ZH6ckxRNdRvTetM3UeKCYmd33B3LRAeBDqCmFlQjDUkEk
-	 otl1Ttgll38XuZy1j80GfsSbR7sFYq915Bl2jXOZxVK8ElNiNH7cODKkFhq4Tpwvme
-	 TlCRw/xsEpqALHWzLAsZTbR9MQJixW+4gwVEO+cc09rIVNwBDmb0OwnHVsr9AC6ugD
-	 221WWGRddZAIw==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Wed, 28 Aug 2024 08:14:38 +0200
-Subject: [PATCH net v2 15/15] selftests: mptcp: join: check re-re-adding ID
- 0 signal
+	s=arc-20240116; t=1724826899; c=relaxed/simple;
+	bh=aWGAxpMZHWrJ/BUyhvBfXZeExfTSMuVVk0d9vk2wP/M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ADFHgNZFK9yvNiLr7CqHjh65k0u00I7bX5+0MLQ3kgYXkjGu8CNr86RXS3B69R+ECbcEf9yoAn79JzJhvExL70RjRIZbqF6BEnLvBLdKQ5pcpQ+2wNbvGpXUe57S+YDz5Q7fR3bI1Bf5x1Zzyt8FQ+N/2JByum13B1D86c+UCt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4Wtvlv5gSRz9sRs;
+	Wed, 28 Aug 2024 08:34:51 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6jPb3ZkzpTtP; Wed, 28 Aug 2024 08:34:51 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4Wtvlt44Xsz9sRy;
+	Wed, 28 Aug 2024 08:34:50 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 72A688B77E;
+	Wed, 28 Aug 2024 08:34:50 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id vzIG7P3XR8ze; Wed, 28 Aug 2024 08:34:50 +0200 (CEST)
+Received: from [172.25.230.108] (unknown [172.25.230.108])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id C02CD8B764;
+	Wed, 28 Aug 2024 08:34:49 +0200 (CEST)
+Message-ID: <a43c52c6-c1ac-4ef3-b511-08f0459bddad@csgroup.eu>
+Date: Wed, 28 Aug 2024 08:34:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240828-net-mptcp-more-pm-fix-v2-15-7f11b283fff7@kernel.org>
-References: <20240828-net-mptcp-more-pm-fix-v2-0-7f11b283fff7@kernel.org>
-In-Reply-To: <20240828-net-mptcp-more-pm-fix-v2-0-7f11b283fff7@kernel.org>
-To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
- Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- Florian Westphal <fw@strlen.de>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, stable@vger.kernel.org
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3437; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=xdzWHXYy5hg4851VghxZtTa4uJdKioKLDBgA8yThRTc=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBmzsBI9ajw0YtF3NaFy0RSMeA+bxN34HGKoIdcx
- tY/ONk2nC+JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZs7ASAAKCRD2t4JPQmmg
- c/GkEACZ/z1eBGLnvR+vJJgv11yemk4KXWMWMssCkCIB9qwJqbW/dM+X2ffJYAP4ha1OvRlQr3e
- fib3Auiyw7F6Y1Zih31FR6DOQWL+wYl0twVDdEVHJYqwPrn7z3UOzsLwDWWnexl+ygqtBbd8k8X
- TaCPR5N5+udS9w6LfZ5SnmEVGbtUDq7ZoUKPrchSzQPPqoEaaAJA/4u3vPlXvNF0U136By+Tj7Z
- 8vBmZxq0fNn2DwB5x0Ckt4Zz7QLi/NzZQa4Jfdu7vez6NCOMuYXmyeV6cAvtx2/UCGvkqXJAaw2
- D8zZiGtyj71AY4Xfw4zdWVuQ/zHQO70Rj69a9mEoVAR65saNZCD4OVJDDEBT5MNsj2596ka/67M
- 2y5TyRcPzeAE30pA1rPxtbrVa1oBlkILsg0r/efXuQtC/QyxqdDhVcaYLDZnD7E6alqWZBhPxey
- kqbBNAcnkdF1YtuRzk6l1CZRfSf4jTSZ5B99EqEkyPyPLHYG+U+ObB1Ug0xbK7usAhttLMl+gYO
- vAjYbrhX9pyeymmffl1tVzZ4olGfN47IEnH3Bx/BcQn38yXCmKi4eKHGcG9MQkeuk84WbaGbWU/
- TNHWfDQf0mhFHYfDUgpPrrnDD4IKugbN/ZrHHVt26Y8yKfGWlojBayrdN66x7P+/ByO38WbWHBT
- Ai7BpuvWy6fDnjw==
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 07/16] powerpc: mm: Support MAP_BELOW_HINT
+To: Charlie Jenkins <charlie@rivosinc.com>, Arnd Bergmann <arnd@arndb.de>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Muchun Song <muchun.song@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
+ <vbabka@suse.cz>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Russell King <linux@armlinux.org.uk>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+ Helge Deller <deller@gmx.de>, Alexander Gordeev <agordeev@linux.ibm.com>,
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>,
+ Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>, Shuah Khan <shuah@kernel.org>,
+ Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Palmer Dabbelt <palmer@rivosinc.com>, linux-riscv@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+ linux-mm@kvack.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-s390@vger.kernel.org,
+ linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20240827-patches-below_hint_mmap-v1-0-46ff2eb9022d@rivosinc.com>
+ <20240827-patches-below_hint_mmap-v1-7-46ff2eb9022d@rivosinc.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20240827-patches-below_hint_mmap-v1-7-46ff2eb9022d@rivosinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-This test extends "delete re-add signal" to validate the previous
-commit: when the 'signal' endpoint linked to the initial subflow (ID 0)
-is re-added multiple times, it will re-send the ADD_ADDR with id 0. The
-client should still be able to re-create this subflow, even if the
-add_addr_accepted limit has been reached as this special address is not
-considered as a new address.
+Hi Charlie,
 
-The 'Fixes' tag here below is the same as the one from the previous
-commit: this patch here is not fixing anything wrong in the selftests,
-but it validates the previous fix for an issue introduced by this commit
-ID.
+Le 28/08/2024 à 07:49, Charlie Jenkins a écrit :
+> Add support for MAP_BELOW_HINT to arch_get_mmap_base() and
+> arch_get_mmap_end().
+> 
+> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+>   arch/powerpc/include/asm/task_size_64.h | 36 +++++++++++++++++++++++++++------
+>   1 file changed, 30 insertions(+), 6 deletions(-)
+> 
+> diff --git a/arch/powerpc/include/asm/task_size_64.h b/arch/powerpc/include/asm/task_size_64.h
+> index 239b363841aa..a37a5a81365d 100644
+> --- a/arch/powerpc/include/asm/task_size_64.h
+> +++ b/arch/powerpc/include/asm/task_size_64.h
+> @@ -72,12 +72,36 @@
+>   #define STACK_TOP_MAX TASK_SIZE_USER64
+>   #define STACK_TOP (is_32bit_task() ? STACK_TOP_USER32 : STACK_TOP_USER64)
+>   
+> -#define arch_get_mmap_base(addr, len, base, flags) \
+> -	(((addr) > DEFAULT_MAP_WINDOW) ? (base) + TASK_SIZE - DEFAULT_MAP_WINDOW : (base))
+> +#define arch_get_mmap_base(addr, len, base, flags)					\
 
-Fixes: d0876b2284cf ("mptcp: add the incoming RM_ADDR support")
-Cc: stable@vger.kernel.org
-Reviewed-by: Mat Martineau <martineau@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
-v2:
-  - Make the connection longer, to have time to finish all the endpoints
-    manipulations when executed in slow environments. At the end of the
-    operations, the connection is killed, so it doesn't make the test
-    longer. (Jakub)
----
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 32 ++++++++++++++++---------
- 1 file changed, 21 insertions(+), 11 deletions(-)
+This macro looks quite big for a macro, can it be a static inline 
+function instead ? Same for the other macro below.
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index a8ea0fe200fb..a4762c49a878 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -3688,7 +3688,7 @@ endpoint_tests()
- 		# broadcast IP: no packet for this address will be received on ns1
- 		pm_nl_add_endpoint $ns1 224.0.0.1 id 2 flags signal
- 		pm_nl_add_endpoint $ns1 10.0.1.1 id 42 flags signal
--		test_linkfail=4 speed=20 \
-+		test_linkfail=4 speed=5 \
- 			run_tests $ns1 $ns2 10.0.1.1 &
- 		local tests_pid=$!
- 
-@@ -3717,7 +3717,17 @@ endpoint_tests()
- 
- 		pm_nl_add_endpoint $ns1 10.0.1.1 id 99 flags signal
- 		wait_mpj $ns2
--		chk_subflow_nr "after re-add" 3
-+		chk_subflow_nr "after re-add ID 0" 3
-+		chk_mptcp_info subflows 3 subflows 3
-+
-+		pm_nl_del_endpoint $ns1 99 10.0.1.1
-+		sleep 0.5
-+		chk_subflow_nr "after re-delete ID 0" 2
-+		chk_mptcp_info subflows 2 subflows 2
-+
-+		pm_nl_add_endpoint $ns1 10.0.1.1 id 88 flags signal
-+		wait_mpj $ns2
-+		chk_subflow_nr "after re-re-add ID 0" 3
- 		chk_mptcp_info subflows 3 subflows 3
- 		mptcp_lib_kill_wait $tests_pid
- 
-@@ -3727,19 +3737,19 @@ endpoint_tests()
- 		chk_evt_nr ns1 MPTCP_LIB_EVENT_ESTABLISHED 1
- 		chk_evt_nr ns1 MPTCP_LIB_EVENT_ANNOUNCED 0
- 		chk_evt_nr ns1 MPTCP_LIB_EVENT_REMOVED 0
--		chk_evt_nr ns1 MPTCP_LIB_EVENT_SUB_ESTABLISHED 4
--		chk_evt_nr ns1 MPTCP_LIB_EVENT_SUB_CLOSED 2
-+		chk_evt_nr ns1 MPTCP_LIB_EVENT_SUB_ESTABLISHED 5
-+		chk_evt_nr ns1 MPTCP_LIB_EVENT_SUB_CLOSED 3
- 
- 		chk_evt_nr ns2 MPTCP_LIB_EVENT_CREATED 1
- 		chk_evt_nr ns2 MPTCP_LIB_EVENT_ESTABLISHED 1
--		chk_evt_nr ns2 MPTCP_LIB_EVENT_ANNOUNCED 5
--		chk_evt_nr ns2 MPTCP_LIB_EVENT_REMOVED 3
--		chk_evt_nr ns2 MPTCP_LIB_EVENT_SUB_ESTABLISHED 4
--		chk_evt_nr ns2 MPTCP_LIB_EVENT_SUB_CLOSED 2
-+		chk_evt_nr ns2 MPTCP_LIB_EVENT_ANNOUNCED 6
-+		chk_evt_nr ns2 MPTCP_LIB_EVENT_REMOVED 4
-+		chk_evt_nr ns2 MPTCP_LIB_EVENT_SUB_ESTABLISHED 5
-+		chk_evt_nr ns2 MPTCP_LIB_EVENT_SUB_CLOSED 3
- 
--		chk_join_nr 4 4 4
--		chk_add_nr 5 5
--		chk_rm_nr 3 2 invert
-+		chk_join_nr 5 5 5
-+		chk_add_nr 6 6
-+		chk_rm_nr 4 3 invert
- 	fi
- 
- 	# flush and re-add
+> +({											\
+> +	unsigned long mmap_base;							\
+> +	typeof(flags) _flags = (flags);							\
+> +	typeof(addr) _addr = (addr);							\
+> +	typeof(base) _base = (base);							\
+> +	typeof(len) _len = (len);							\
+> +	unsigned long rnd_gap = DEFAULT_MAP_WINDOW - (_base);				\
+> +	if (_flags & MAP_BELOW_HINT && _addr != 0 && ((_addr + _len) > BIT(VA_BITS - 1)))\
+> +		mmap_base = (_addr + _len) - rnd_gap;					\
+> +	else										\
+> +		mmap_end = ((_addr > DEFAULT_MAP_WINDOW) ?				\
+> +				_base + TASK_SIZE - DEFAULT_MAP_WINDOW :		\
+> +				_base);							\
+> +	mmap_end;									\
 
--- 
-2.45.2
+mmap_end doesn't exist, did you mean mmap_base ?
 
+> +})
+>   
+> -#define arch_get_mmap_end(addr, len, flags) \
+> -	(((addr) > DEFAULT_MAP_WINDOW) || \
+> -	 (((flags) & MAP_FIXED) && ((addr) + (len) > DEFAULT_MAP_WINDOW)) ? TASK_SIZE : \
+> -									    DEFAULT_MAP_WINDOW)
+> +#define arch_get_mmap_end(addr, len, flags)							\
+> +({												\
+> +	unsigned long mmap_end;									\
+> +	typeof(flags) _flags = (flags);								\
+> +	typeof(addr) _addr = (addr);								\
+> +	typeof(len) _len = (len);								\
+> +	if (_flags & MAP_BELOW_HINT && _addr != 0 && ((_addr + _len) > BIT(VA_BITS - 1)))	\
+> +		mmap_end = (_addr + _len);							\
+> +	else											\
+> +		mmap_end = (((_addr) > DEFAULT_MAP_WINDOW) ||					\
+> +				(((_flags) & MAP_FIXED) && ((_addr) + (_len) > DEFAULT_MAP_WINDOW))\
+> +				? TASK_SIZE : DEFAULT_MAP_WINDOW)				\
+> +	mmap_end;										\
+> +})
+>   
+>   #endif /* _ASM_POWERPC_TASK_SIZE_64_H */
+> 
 
