@@ -1,114 +1,97 @@
-Return-Path: <linux-kselftest+bounces-16546-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16547-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9385A962802
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 14:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A63CC9628AD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 15:32:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6E081C23F6A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 12:58:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D726F1C21BA8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 13:32:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01DA117BED6;
-	Wed, 28 Aug 2024 12:58:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27284188000;
+	Wed, 28 Aug 2024 13:32:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JixoSt3G"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from gate.crashing.org (gate.crashing.org [63.228.1.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CE42537F5;
-	Wed, 28 Aug 2024 12:58:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.228.1.57
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1431C69C;
+	Wed, 28 Aug 2024 13:32:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724849915; cv=none; b=WuXiHufp/p1NjI8gFvfN/2SeqxtCHJ8QPjBry9fMVH4U5HEB09CjyiEnt0oId0RHirVhnOh8OXcx2ms3ov1fJBoI0dbtpMpWxLjDi8ejJi2p3SfmUSMHEDExAdaMvaswMYYZFDh9K1CJc/lNEjn4RZrwegKYUiRczFGC7SbA9HM=
+	t=1724851956; cv=none; b=RgsSMNmvwkr3i0ylflFLgXREYpsv9AZ3iVDfRcXPxP4ueOkTRqkU9iXQIrHdTNhEo8oZBvGPuv/7GgXhmmdUaCRjuzGc/SPikaPrKS6ywj3zBpMcvREPhH5em5uC8T1PPT6GPmmH0DNdCFcWa84NwK1xFAfaj1NZDkXPVb2YZSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724849915; c=relaxed/simple;
-	bh=Vsy8ov7YycJAvMDRkUjOS6q4lvRBacsBGTW0GdcGV0Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Mime-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MyO+kwK+A+UIiuoUTF3ug6/w+GbdhYLxG5bc0XJjzI23wlPvDhXuHV2LkBMQ+SjhI1N+fzD3XGCt+2KGFmuh31OeOQAuaYrp+H6u/1Si4a9FNaH+yPENLqL6qahJedUtGmF5uqrL1T+5GG80/HzDAO8ewO9a9H8mx8L8Iw0nUa0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org; spf=pass smtp.mailfrom=kernel.crashing.org; arc=none smtp.client-ip=63.228.1.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.crashing.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.crashing.org
-Received: from gate.crashing.org (localhost.localdomain [127.0.0.1])
-	by gate.crashing.org (8.14.1/8.14.1) with ESMTP id 47SCptJf031924;
-	Wed, 28 Aug 2024 07:51:55 -0500
-Received: (from segher@localhost)
-	by gate.crashing.org (8.14.1/8.14.1/Submit) id 47SCpru5031923;
-	Wed, 28 Aug 2024 07:51:53 -0500
-X-Authentication-Warning: gate.crashing.org: segher set sender to segher@kernel.crashing.org using -f
-Date: Wed, 28 Aug 2024 07:51:53 -0500
-From: Segher Boessenkool <segher@kernel.crashing.org>
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Eric Biggers <ebiggers@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, "Theodore Ts'o" <tytso@mit.edu>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        shuah <shuah@kernel.org>, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
-        linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 05/17] vdso: Avoid call to memset() by getrandom
-Message-ID: <20240828125153.GF29862@gate.crashing.org>
-References: <cover.1724309198.git.christophe.leroy@csgroup.eu> <5deb67090b214f0e6eae96b7c406546d1a16f89b.1724309198.git.christophe.leroy@csgroup.eu> <20240827180819.GB2049@sol.localdomain> <20240827225330.GC29862@gate.crashing.org> <Zs8HirKLk-SrwTIu@zx2c4.com> <fc19bf63-d519-46e2-be70-80202c85ff92@app.fastmail.com> <CAHmME9rjH4Ek3e8jmBvRp3wy+mrzJAeYxk5=o+OHjoT5sTOQPg@mail.gmail.com>
+	s=arc-20240116; t=1724851956; c=relaxed/simple;
+	bh=vEmNlQLx6fy4MiE0/ANt5tObQCXRx6fyVaP9jO+FDrI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=iXoIfvG+pPprACCXl7n/12YGoy4973kmyKEYLRdezI0Hkm0iALqXnokCsyXLhqgOTX4APxZQ1iijXmK3W/trWrqrErGTcCR3Q/NYXECHzK7YnfhkFt/NBXF2jdgq5DqI4yCPUzeHxSVlZ+VHAyUEqHgy6tlCsyyOHOPrsGERcDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JixoSt3G; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D69D3C4FF5A;
+	Wed, 28 Aug 2024 13:32:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724851955;
+	bh=vEmNlQLx6fy4MiE0/ANt5tObQCXRx6fyVaP9jO+FDrI=;
+	h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+	b=JixoSt3GrADJQMBSGtidVr7k75oIngOXb2D7UL72pK3xCmRJPkRGkAEvh2E53W24x
+	 KDaQEr4ndTBHrDUStR9sp4hrGdVUua6ERh5m3BTJdRG21pwfCVbbSTdgzTvq/ED4hK
+	 NeTsxKff4qUfjp+mLF9E0mDqF4K8Nw5dDEgTpSfh0xqHIBPLKzb/Y+iwGOWqFrYag3
+	 dQp2/7EJ/1hd7rKbCBKeqnWB/BVej+jHDCvVzXqttEboKtALY1RRRPnAXv1ai3Dedn
+	 9kd5nZOPAd1+9D0CrN8AY5fKhqGqM6TCrFp0sz+3fEfQ7pGu1QE1K1OnHHw7JDsHHU
+	 4S2rJy8u4palg==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHmME9rjH4Ek3e8jmBvRp3wy+mrzJAeYxk5=o+OHjoT5sTOQPg@mail.gmail.com>
-User-Agent: Mutt/1.4.2.3i
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 28 Aug 2024 16:32:31 +0300
+Message-Id: <D3RKZJGWMFY4.3CHBC8OBPQ3SA@kernel.org>
+Cc: "Peter Huewe" <peterhuewe@gmx.de>, "Jason Gunthorpe" <jgg@ziepe.ca>,
+ "Shuah Khan" <shuah@kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 2/2] selftests: tpm2: test_smoke: Run only when TPM2 is
+ avaialable.
+From: "Jarkko Sakkinen" <jarkko@kernel.org>
+To: "Michal Suchanek" <msuchanek@suse.de>, <linux-integrity@vger.kernel.org>
+X-Mailer: aerc 0.18.2
+References: <52c629ebbfc8f5218a90fa539f816c8555cb552a.1724842902.git.msuchanek@suse.de> <1794c9c1d60a34ebae28d3a18b408765e955907b.1724842902.git.msuchanek@suse.de>
+In-Reply-To: <1794c9c1d60a34ebae28d3a18b408765e955907b.1724842902.git.msuchanek@suse.de>
 
-On Wed, Aug 28, 2024 at 02:26:08PM +0200, Jason A. Donenfeld wrote:
-> On Wed, Aug 28, 2024 at 2:24 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> >
-> > On Wed, Aug 28, 2024, at 11:18, Jason A. Donenfeld wrote:
-> > > On Tue, Aug 27, 2024 at 05:53:30PM -0500, Segher Boessenkool wrote:
-> > >> On Tue, Aug 27, 2024 at 11:08:19AM -0700, Eric Biggers wrote:
-> > >> >
-> > >> > Is there a compiler flag that could be used to disable the generation of calls
-> > >> > to memset?
-> > >>
-> > >> -fno-tree-loop-distribute-patterns .  But, as always, read up on it, see
-> > >> what it actually does (and how it avoids your problem, and mostly: learn
-> > >> what the actual problem *was*!)
-> > >
-> > > This might help with various loops, but it doesn't help with the matter
-> > > that this patch fixes, which is struct initialization. I just tried it
-> > > with the arm64 patch to no avail.
-> >
-> > Maybe -ffreestanding can help here? That should cause the vdso to be built
-> > with the assumption that there is no libc, so it would neither add nor
-> > remove standard library calls. Not sure if that causes other problems,
-> > e.g. if the calling conventions are different.
-> 
-> >From https://gcc.gnu.org/bugzilla/show_bug.cgi?id=90701:
-> 
-> | You need -ffreestanding but that is documented to emit memset and
-> memcpy still.
+On Wed Aug 28, 2024 at 2:23 PM EEST, Michal Suchanek wrote:
+> Since Linux 5.6 tpm_version_major sysfs file is avaialble which gives
+> the TPM version.
+>
+> Using this file the test can be skipped on systems with TPM 1.2.
+>
+> Signed-off-by: Michal Suchanek <msuchanek@suse.de>
+> ---
+>  tools/testing/selftests/tpm2/test_smoke.sh | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/testing/selftests/tpm2/test_smoke.sh b/tools/testing/s=
+elftests/tpm2/test_smoke.sh
+> index 58af963e5b55..e5e3386077d9 100755
+> --- a/tools/testing/selftests/tpm2/test_smoke.sh
+> +++ b/tools/testing/selftests/tpm2/test_smoke.sh
+> @@ -5,5 +5,7 @@
+>  ksft_skip=3D4
+> =20
+>  [ -e /dev/tpm0 ] || exit $ksft_skip
+> +read tpm_version < /sys/class/tpm/tpm0/tpm_version_major
+> +[ "$tpm_version" =3D=3D 2 ] || exit $ksft_skip
+> =20
+>  python3 -m unittest -v tpm2_tests.SmokeTest
 
-Yeah.
+Thanks, I tagged and reviewed the patches:
 
-'-nostdlib'
-     Do not use the standard system startup files or libraries when
-     linking.
+https://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git/log/
 
-This won't help a bit, the compiler will still optimise your
-initialisation loop to a memset() call, it just won't link to libgcc.a
-and crt*.o and its ilk (which is not where mem* are implemented in the
-first place!)
+Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
 
-
-Segher
+BR, Jarkko
 
