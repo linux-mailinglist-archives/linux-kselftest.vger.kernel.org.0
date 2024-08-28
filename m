@@ -1,168 +1,128 @@
-Return-Path: <linux-kselftest+bounces-16637-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16638-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E415096362F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 01:41:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B89DD963647
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 01:44:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1A7A28568B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 23:41:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2076DB24EA5
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 23:44:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 837FC1B3756;
-	Wed, 28 Aug 2024 23:33:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A31FB1AED32;
+	Wed, 28 Aug 2024 23:38:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T0sYEOxH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YFWixOpi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 531411B3753;
-	Wed, 28 Aug 2024 23:33:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37341AED2B;
+	Wed, 28 Aug 2024 23:38:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724888001; cv=none; b=eG2L/ILcc0KS/5Vw32krbseolRx0++pmnjhryEySi3a6TMXuEQRStrWScVb7/VC9rIqGUv+MW7ppjfi90hZDsQSVNchhAbvabP0nnv0clj5DxXp3gwhjhVeSqFI6BxXNpJrA/1t7nsTriTOwV8n3oPcaG43HHjGK4ll1DXxTUbk=
+	t=1724888306; cv=none; b=t9/wCx4jQY9jFccUB6KWbJvexA6frHp2jVdBcvU9in5hIMHp9jp+ZuR+YdryZ7+uwzC+WqTzeWP3AIzXkgu1rjEFKoomxa8c6NtScfwV2PWf9yDbmhkTSvCgtyTrble291mG1YwWAWtnHULsZvZgq38p1UiE5jpOf7kZ/s8zQmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724888001; c=relaxed/simple;
-	bh=W5oN69xYg0RDvkVAq7OBhN9me4eHC7ENTR8wdYTObEg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=grovtN906gy/yMAL30ZdhkDqTHYet6AbROAYoxAZIMqFBDxKQK56B4/qop1VYCKHlpeegr3hLtucRM/YPfFysmlnhZExI0x5GtcINxnxXMOIM4oipf8K3ogRz8msZqE6YRQhKNtTmF05/VpcA+CYoGHgvCrH5zNNiOC45OLoc5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T0sYEOxH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4D82C4CEC4;
-	Wed, 28 Aug 2024 23:33:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1724888001;
-	bh=W5oN69xYg0RDvkVAq7OBhN9me4eHC7ENTR8wdYTObEg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=T0sYEOxHjFOttsTVvHr8nAQOQ8BUsl9RMPHqa31RJTgSFSQ3TIGLapA1WgRy3jLo0
-	 JeODpovNuVdL80WVrYGVso4DyrRRO1DhF7kWisH1cqnFSCydDl13yVhb0nu6HT2C9z
-	 pD4UgF4Dwo5Y9nuYKXJogdufMhh4W7BZO62+McXl5vR8L6zMt1WUITjQLRzWcA7u25
-	 SPgM+2tb0JJ+WBn06AztAPJ7FrM5sNRzveVcG0IubW9dGdUc/PlsWeypUq2fHpf0Gp
-	 pQfD/DxG1p/Tg1tfKVfxa1CicV/MXc1Phv0Iyv5PVg3YGY/+kSdolqCbHw0513h6ea
-	 haeI2WZc6MlWg==
-From: Mark Brown <broonie@kernel.org>
-Date: Thu, 29 Aug 2024 00:27:55 +0100
-Subject: [PATCH v12 39/39] KVM: selftests: arm64: Add GCS registers to
- get-reg-list
+	s=arc-20240116; t=1724888306; c=relaxed/simple;
+	bh=KXNRip9T1NpjH/FC1tS186H85OnP7eRtBnItU+WbbKo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JiN4VvuQMsqJ/fNsO4C9Msh0HxP8vasN/pIphCRlSfkoUbE8KebQUUxqLWbh6QsWbQdbIpQ3XC3dwatQhsk/rnnB3EcwP/gW3SSpgwD2yzQIRmcHQaUTcQLiLfzofBkD2HdiKcFApaS6M6GxuC9In+G9U9Y7/PkamxGDJ6dM774=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YFWixOpi; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-428141be2ddso349505e9.2;
+        Wed, 28 Aug 2024 16:38:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1724888303; x=1725493103; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IB1r80w0tSniiEQsoRZPgz9PdJTE/Shx5Zcwt2Wg6DQ=;
+        b=YFWixOpie6vhAhSVeJcNECxK5KoW+iUyULiXXdw5tnuNgKIC8Nt/t/88D036Ob6FsE
+         DvkaISAyocH2ILgNbhVUpk4NWjdeVik6voz4GDHizHQwRKrjlmHoVv1XJ9guPjtFnHXM
+         HXYJyTbne+lQ33wqR+OYyMpJbk/JQN+jn6EhJFxxnTrWgMLdPlUlu4L493R7rbOwL7li
+         aRPjsp11D1GtnjoemdvMuMGSyXZ0ZhKxjV2y90ks2OfuBZaCQ9RKX0ftoE4SgHCvZfzN
+         Ni6aSOgj/vT/nUUrf+OJ3BFWw6p/KgmQAGlpZxsOLf/hbClqe4MFliRpxvWIYuRPFeTA
+         bp2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724888303; x=1725493103;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IB1r80w0tSniiEQsoRZPgz9PdJTE/Shx5Zcwt2Wg6DQ=;
+        b=PlHFuU25Vd3drbCSH4CWhZfZ9lZ+oM5JeFgVV4dKcUyOmRiJ/lvbPif9iCEA/0cj/F
+         uFFW1yHZmuOpgMx/VlXrnZ8zd4UVaRxqLwu3JKlF4ua/mVCygPd6O7EM/cBklUOupviM
+         sad0JISP/KGDNnPNw0Z4FzZq2b4GfjgeZ5TosPnfFrmmPhEzZJKloVCgZqBwchHM6b/J
+         pNbNnpJCbl1S6juJi6T2vQR8b1LEj/8rLFVrJR69QRh32q8QPJp0e2pJ6SwBajfk7XeH
+         dmkulU0NYZei+JNmU1APWvB6RiMlxHOVkhl3vTirgLkrZLAVfcdt4wmPjqaRcT7Gvjbb
+         +KSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWPMDbQNQv3Fp/q5Pz3v+p3/vVXOix4RMBUwzzVXLQkQCBa/8UdTpAM2KN98inJSowW7aQm1+XqpNhu56oY4t0=@vger.kernel.org, AJvYcCXrn1H7cBxdkwgVl5PpHT/wGv+XPdtW6ZyhFuC5EFoxWk6Nl1ZFewVx/wrhSROXGm6ZhRTZz7zv5W4KGLrN4Y2g@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXX6g1pJXvfIWiKktUMT3WXuufc74Wgd70HCkCPrmuoeO68m/e
+	PGHtgQiNFCl8umHQVYbs+lL3oA2ykqvs7vQmrj5TDLS5oWslq/NM
+X-Google-Smtp-Source: AGHT+IGE1Tr+5K8rbiq3aX2JG+RGnBONvXmau7cJ8JCt6fwWWs0mojGwXLpROhTgTUD7IBRMv3s2Qg==
+X-Received: by 2002:a05:600c:1389:b0:426:6326:4cec with SMTP id 5b1f17b1804b1-42bb01e6befmr7932745e9.29.1724888302650;
+        Wed, 28 Aug 2024 16:38:22 -0700 (PDT)
+Received: from PC-PEDRO-ARCH ([2001:8a0:7862:ea00:1d36:5f53:3f57:14ad])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42ba639da86sm33548165e9.20.2024.08.28.16.38.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 28 Aug 2024 16:38:22 -0700 (PDT)
+Date: Thu, 29 Aug 2024 00:38:19 +0100
+From: Pedro Falcato <pedro.falcato@gmail.com>
+To: jeffxu@chromium.org
+Cc: akpm@linux-foundation.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-hardening@vger.kernel.org, rientjes@google.com, 
+	keescook@chromium.org, Liam.Howlett@oracle.com, vbabka@suse.cz, 
+	lorenzo.stoakes@oracle.com
+Subject: Re: [PATCH v1 1/2] mseal: fix mmap(FIXED) error code.
+Message-ID: <jxov546uro5lffibw5asff3m25pfnondbp3nrqc3fde322h3on@ypkdkju4xaho>
+References: <20240828225522.684774-1-jeffxu@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240829-arm64-gcs-v12-39-42fec947436a@kernel.org>
-References: <20240829-arm64-gcs-v12-0-42fec947436a@kernel.org>
-In-Reply-To: <20240829-arm64-gcs-v12-0-42fec947436a@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Andrew Morton <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, 
- Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
- Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, 
- Shuah Khan <shuah@kernel.org>, 
- "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
- Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, 
- Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>
-Cc: "H.J. Lu" <hjl.tools@gmail.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Florian Weimer <fweimer@redhat.com>, Christian Brauner <brauner@kernel.org>, 
- Thiago Jung Bauermann <thiago.bauermann@linaro.org>, 
- Ross Burton <ross.burton@arm.com>, 
- Yury Khrustalev <yury.khrustalev@arm.com>, 
- Wilco Dijkstra <wilco.dijkstra@arm.com>, 
- linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
- kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
- linux-arch@vger.kernel.org, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-riscv@lists.infradead.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-37811
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2418; i=broonie@kernel.org;
- h=from:subject:message-id; bh=W5oN69xYg0RDvkVAq7OBhN9me4eHC7ENTR8wdYTObEg=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBmz7KW23WvfTKbuTefeFx8re+CMzCUi4CC3I85X0Hw
- F+Tp6t6JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZs+ylgAKCRAk1otyXVSH0AynB/
- 4zJS/fNzXaknnr7WJBxyXZVPJNEDNBY8rJlOhiRC7JR4N1wpHshMVJS7B5HyeOhJWMAuD3mR2CrV1d
- r4v28SEGzfR4d+ILf+hgZkeIgrDji+0MV4VUdT+tsjQyzfTjj8tJ3F2CqTPAP3N3Uny4OsuqLSWzBp
- hlN40ZxT2iqDEbKvGfaT1sz62nwxmh3r34dtmQBwKzh0I3Y2nYIK5zGYUsoMINt5Gtov3e79ziMDIT
- AOI9DcGFA7X0dQUOWVXPLJxkZnXLGhBCT60jSVl0d8qabxjn+iAigD30fNz+DZi1Y79Ar5nZoztoG7
- adadSZsjbnTs20zCvlACDXAlp/hVa5
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240828225522.684774-1-jeffxu@chromium.org>
 
-GCS adds new registers GCSCR_EL1, GCSCRE0_EL1, GCSPR_EL1 and GCSPR_EL0. Add
-these to those validated by get-reg-list.
++CC vma reviewers
+On Wed, Aug 28, 2024 at 10:55:21PM GMT, jeffxu@chromium.org wrote:
+> From: Jeff Xu <jeffxu@chromium.org>
+> 
+> mmap(MAP_FIXED) should return EPERM when memory is sealed.
+> 
+> Fixes: 4205a39e06da ("mm/munmap: replace can_modify_mm with can_modify_vma")
 
-Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/kvm/aarch64/get-reg-list.c | 28 ++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+Thank you for the patch!
+This Fixes: is wrong, the bug was added during Liam's rebasing of his munmap patch
+set on mine.
 
-diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-index 709d7d721760..9785f41e6042 100644
---- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-@@ -29,6 +29,24 @@ static struct feature_id_reg feat_id_regs[] = {
- 		0,
- 		1
- 	},
-+	{
-+		ARM64_SYS_REG(3, 0, 2, 5, 0),	/* GCSCR_EL1 */
-+		ARM64_SYS_REG(3, 0, 0, 4, 1),	/* ID_AA64PFR1_EL1 */
-+		44,
-+		1
-+	},
-+	{
-+		ARM64_SYS_REG(3, 0, 2, 5, 1),	/* GCSPR_EL1 */
-+		ARM64_SYS_REG(3, 0, 0, 4, 1),	/* ID_AA64PFR1_EL1 */
-+		44,
-+		1
-+	},
-+	{
-+		ARM64_SYS_REG(3, 0, 2, 5, 2),	/* GCSCRE0_EL1 */
-+		ARM64_SYS_REG(3, 0, 0, 4, 1),	/* ID_AA64PFR1_EL1 */
-+		44,
-+		1
-+	},
- 	{
- 		ARM64_SYS_REG(3, 0, 10, 2, 2),	/* PIRE0_EL1 */
- 		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
-@@ -40,6 +58,12 @@ static struct feature_id_reg feat_id_regs[] = {
- 		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
- 		4,
- 		1
-+	},
-+	{
-+		ARM64_SYS_REG(3, 3, 2, 5, 1),	/* GCSPR_EL0 */
-+		ARM64_SYS_REG(3, 0, 0, 4, 1),	/* ID_AA64PFR1_EL1 */
-+		44,
-+		1
- 	}
- };
- 
-@@ -460,6 +484,9 @@ static __u64 base_regs[] = {
- 	ARM64_SYS_REG(3, 0, 2, 0, 1),	/* TTBR1_EL1 */
- 	ARM64_SYS_REG(3, 0, 2, 0, 2),	/* TCR_EL1 */
- 	ARM64_SYS_REG(3, 0, 2, 0, 3),	/* TCR2_EL1 */
-+	ARM64_SYS_REG(3, 0, 2, 5, 0),	/* GCSCR_EL1 */
-+	ARM64_SYS_REG(3, 0, 2, 5, 1),	/* GCSPR_EL1 */
-+	ARM64_SYS_REG(3, 0, 2, 5, 2),	/* GCSCRE0_EL1 */
- 	ARM64_SYS_REG(3, 0, 5, 1, 0),	/* AFSR0_EL1 */
- 	ARM64_SYS_REG(3, 0, 5, 1, 1),	/* AFSR1_EL1 */
- 	ARM64_SYS_REG(3, 0, 5, 2, 0),	/* ESR_EL1 */
-@@ -475,6 +502,7 @@ static __u64 base_regs[] = {
- 	ARM64_SYS_REG(3, 0, 13, 0, 4),	/* TPIDR_EL1 */
- 	ARM64_SYS_REG(3, 0, 14, 1, 0),	/* CNTKCTL_EL1 */
- 	ARM64_SYS_REG(3, 2, 0, 0, 0),	/* CSSELR_EL1 */
-+	ARM64_SYS_REG(3, 3, 2, 5, 1),	/* GCSPR_EL0 */
- 	ARM64_SYS_REG(3, 3, 13, 0, 2),	/* TPIDR_EL0 */
- 	ARM64_SYS_REG(3, 3, 13, 0, 3),	/* TPIDRRO_EL0 */
- 	ARM64_SYS_REG(3, 3, 14, 0, 1),	/* CNTPCT_EL0 */
+> Signed-off-by: Jeff Xu <jeffxu@chromium.org>
+> ---
+>  mm/mmap.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/mm/mmap.c b/mm/mmap.c
+> index 80d70ed099cf..0cd0c0ef03c7 100644
+> --- a/mm/mmap.c
+> +++ b/mm/mmap.c
+> @@ -1386,7 +1386,10 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
+>  		mt_on_stack(mt_detach);
+>  		mas_init(&mas_detach, &mt_detach, /* addr = */ 0);
+>  		/* Prepare to unmap any existing mapping in the area */
+> -		if (vms_gather_munmap_vmas(&vms, &mas_detach))
+> +		error = vms_gather_munmap_vmas(&vms, &mas_detach);
+> +		if (error == -EPERM)
+> +			return -EPERM;
+
+Not sure if it makes sense to special case this. We should probably deal with this inside
+vms_gather_munmap_vmas and just pass through the error we get.
+
+Otherwise LGTM. Liam?
+
+(we should also squash this into the offending commit)
 
 -- 
-2.39.2
-
+Pedro
 
