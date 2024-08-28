@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-16593-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16594-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 694A29634A3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 00:24:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CA3C9634E9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 00:39:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EB3F286463
-	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 22:24:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F18928368C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 28 Aug 2024 22:39:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 613731AC891;
-	Wed, 28 Aug 2024 22:24:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 455021AD9F4;
+	Wed, 28 Aug 2024 22:39:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H48H5uRx"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RinDndi0"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-io1-f74.google.com (mail-io1-f74.google.com [209.85.166.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA18914A4D4
-	for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2024 22:24:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1EEA165F16
+	for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2024 22:39:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724883868; cv=none; b=WRLCwYw1jSS8hCdd4uDVVSy+C7orlNClAjtIwUmQ5Jl1aRAGpk2Dpc53Ly+L/vkeDuonC3sLpLuPEYQbdm2vQSwUaiSaAUiqj2wgAA/GPiYx6jxr2X0RokAUPLhj42fdUxfj2DEgN/DgolbI7MhCqFjaIgaDcJo3efTJzp8zrkc=
+	t=1724884778; cv=none; b=iOH4dZIQv2DI5QvWeauEWqo8TvNGCCEyWnPcbeX3kLqxPy1QhjDi2N7ETmdsliX8tqPGykWTOMCjThDs/wTZetxUfUd4DyPrR6jDu/eYp+bOo42ela2pw/0CyI9cLTAZ+Jbhl/8rE6oa1MUmlCQxkhGklZbshP9i++EZdeDdQ2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724883868; c=relaxed/simple;
-	bh=/FVBdNtyaC5/bdSNVZaY3QGe9cC/Griq4Pzf7uJBcy8=;
+	s=arc-20240116; t=1724884778; c=relaxed/simple;
+	bh=9uwtz3kcfa067V39AoKxu0Wu3ZsHQ6CrZUBA48vVY6M=;
 	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=fLiO5tZ+TVzSrJSIXqnDZGZaexiCRofQ1Wq4DrEF56N8SA4W7x+Ya9hQ0FEX44H3t3B3MtDZn6zfMgDQBa/aAcEpLq/DZbj2ifNehFPp+NIO+2csxxhg5Pade6kdqmd4Cy0WyQ502woHR+550MW+iFqQfeC+fziwi57WkdBnF3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H48H5uRx; arc=none smtp.client-ip=209.85.166.74
+	 Content-Type; b=CS/28fW4QngCO1W3X6ll/lioKyikbca23dNM31lGZf5YpLcWCuQ9/8kMU1F7dtvpLNatmQEKSjspX3eGgIQoFvbTlucmF2PNrSeeA6mEtfwRkHKaoza2Cj/mzMkOYKs1SimczTwaTzSNGFcHeFrfkEPEn+Z17duFC+L4eNnocnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RinDndi0; arc=none smtp.client-ip=209.85.166.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
-Received: by mail-io1-f74.google.com with SMTP id ca18e2360f4ac-8223aed779aso7470439f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2024 15:24:26 -0700 (PDT)
+Received: by mail-io1-f74.google.com with SMTP id ca18e2360f4ac-81f8293cdb1so7282939f.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 28 Aug 2024 15:39:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724883866; x=1725488666; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1724884775; x=1725489575; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=XHYhCs2O0yksxmyMVfjDVF3TT+HeTKA+kiWxfmzqVoQ=;
-        b=H48H5uRxHrZB2x5tq3W9zLw2vlvJ7aBzqWapTkqRC+sXcxqQgg+ny3/oxORd/U60E9
-         xzGMgK0aM7MynVCc6D8Rf2rmRho482ugpXvUmlxDWKpq9DAm+Z1LvYbDPInLkfjFPpkq
-         qbXswWRUBNmW2Am6MOqFPoKXrbbtmTPqFN0yMZ/CKeR6SaOy+b85Pn/b9w6ODnAulogm
-         Mpx9CZeQkNYDA9JuAwyjk/RV8AVN09ODD9I6HPWo7e6A2ldezjzVh5rP155mETJkrng8
-         UdfY7O5Kh/8yrH3oHeKpGqbvYeMImU1zWijz+ETNqdbMtrg8dyzvkSvoL7ecjBlxuHcF
-         GbDQ==
+        bh=OAsnME+1ttvFS+7fzgI3/tOYVOypFVKT5MTMnTtwz3M=;
+        b=RinDndi0vtvECBi9o19azRqiBWBOGRKAj3+XMWE+vJ7sqJDNw4xy0dYnYgq+ghoQI5
+         t3x1hdsYWscI/8fGXi91sg2o0nOVqBG8/5GY3FfmyeFdKNZjwp7azbZMU60F2tla9WDO
+         +N74sXCVS+tmBj3NBOnDtg0j+bKAW1IZaZGnfAUZOTrq0eNZC3ubut/AnXcimquRLMRD
+         n2ryNPwU0+b3hP4QQ6ZI69FP4HosOTQCwH/N36cM2I/0F0eJY60rKdWWZm+qfBidf1tf
+         Lfq8u3wIISJ1kqfgRd+mhu06cM3/bKr7P43vaJkP4pIve7NvWSgo1DsHfx3Kp83TuDDV
+         tbpw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724883866; x=1725488666;
+        d=1e100.net; s=20230601; t=1724884775; x=1725489575;
         h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XHYhCs2O0yksxmyMVfjDVF3TT+HeTKA+kiWxfmzqVoQ=;
-        b=bYOX56cUQoGO7Rk5QNZaC4lAXnn2AXhllt8KRYTXmwju+Z8uFr2N+enNhVkfsVyEaK
-         p3FLdaTL3f1SV3ooMg2CNy8zbNEN/bXZg1dMy/dhP0cWpI2c+vb3qkdByP8PbRHH1jfs
-         +EwG7nDpBdHOW0SES3q2YBR4TXoTzyLld59hrV5mRohwYXsrVV/7VZG6rwjz/O75zUPf
-         zrsAj3ri5ZWsqxj/n63OdkoCszzDKmcxmRDNT5+BzkojBzh+R32zBZJHbSGbnW/5YvT4
-         La87zDlanoT3L7u4csEI/j+9RSD2XEabhzMcsxUZUeRtET/fjGsCCHmhyIQtunH8W3UG
-         YjbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVPDTNHNSIxP4vg2p3IYVfd7h3Hz5J/7q4QFiw40HMztzcmRyDWn8dmwAgKMrRjk/+JRb5pGLLM8IEQz+tm/gA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEVeXFmZIMpdRGSdbYQwcJ6B8Kc/d1s6Yk35LgFgF0B9A0M9q0
-	hN7xsj7ZRtsWbx9GcB69PwGpkuFTxgFasdlImsMIGTooPiotQ78AQN/TsU5k68kebTyvNrpkqvR
-	Pzp6P11rQZ+/Vlaky8ow0qw==
-X-Google-Smtp-Source: AGHT+IFAhFfXyvt/CVO3KY8mV4BysnqtTjALoNCbyGNLAs/zZGUsWcIBtru/tMbAOpFzv3usnbCpVSZ5gXqQ1gaknw==
+        bh=OAsnME+1ttvFS+7fzgI3/tOYVOypFVKT5MTMnTtwz3M=;
+        b=l/utNWcjpfKox4ERkLPFR2bDqyzAaBWFPOju3LFurFrrBeYnoJ+IjsEL8IbEESQEmg
+         CVMkYb4xrndqD12DrejSKC6YU0AwhwErtKdzFSwD9yil86FCdMnk5tFVlEoZOxukzHny
+         F1h+On0ZpZNs0m3Ib4w87kYd8UJRHGR/yx3ByJeCcUtgzXrDhHBDb6n5m2+2pH+D1i4Q
+         eo2uASDCYaPBe4kAvI31eUb4uidjlf3sXZY/nwlz+ZjWekv6Z/OqOfZNn5LBcme4lDDe
+         DCtl4t90+ODoP0JHwkaoal2WoWxAMf2Z/07ShFpgBUq7fN9HNRNWa1rFR+9kNXDdQNFb
+         jY7A==
+X-Forwarded-Encrypted: i=1; AJvYcCWYc0HxrGvhiYcr65oZ00a+taAHFwuPUyFZf1LU6Ku3yOwU3/qYXlCHqZVxKAxo1TQSVAMcZvK/CvDUGMSQShA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/pkait3fZl5G1GsI/5KI+Qy6cQc8L5qQ/9m6yPmnSlG0MFcgF
+	tPzMPfG1gFzG7gehKR7OEhO27+1o5KDG2XFDC6FehCLIDhuSrWuckdnOJC+gwz2V/9qvMrkiCX6
+	wpQpmsug/RxVYJVvpT+8Mxw==
+X-Google-Smtp-Source: AGHT+IEtsGwfm3FYZRqeDe5owwNzQffvuPu3yibSqfSWXPq2y5mmZ/3/gKcqfVyxJMmNWrvr1iyAEbqEbQ0pnYUIeg==
 X-Received: from coltonlewis-kvm.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:14ce])
- (user=coltonlewis job=sendgmr) by 2002:a05:6638:25c4:b0:4b9:b122:d07d with
- SMTP id 8926c6da1cb9f-4ced00465eemr27266173.4.1724883866023; Wed, 28 Aug 2024
- 15:24:26 -0700 (PDT)
-Date: Wed, 28 Aug 2024 22:24:25 +0000
-In-Reply-To: <Zs0BSCb_Khyxg08x@google.com> (message from Mingwei Zhang on Mon,
- 26 Aug 2024 22:27:20 +0000)
+ (user=coltonlewis job=sendgmr) by 2002:a05:6638:4119:b0:4b7:c9b5:6765 with
+ SMTP id 8926c6da1cb9f-4ced00565f8mr31295173.5.1724884775117; Wed, 28 Aug 2024
+ 15:39:35 -0700 (PDT)
+Date: Wed, 28 Aug 2024 22:39:34 +0000
+In-Reply-To: <Zs0FLglChWqsGa6w@google.com> (message from Mingwei Zhang on Mon,
+ 26 Aug 2024 22:43:58 +0000)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Message-ID: <gsntjzg09tgm.fsf@coltonlewis-kvm.c.googlers.com>
-Subject: Re: [PATCH 2/6] KVM: x86: selftests: Define AMD PMU CPUID leaves
+Message-ID: <gsnth6b49srd.fsf@coltonlewis-kvm.c.googlers.com>
+Subject: Re: [PATCH 3/6] KVM: x86: selftests: Set up AMD VM in pmu_counters_test
 From: Colton Lewis <coltonlewis@google.com>
 To: Mingwei Zhang <mizhang@google.com>
 Cc: kvm@vger.kernel.org, ljr.kernel@gmail.com, jmattson@google.com, 
@@ -83,97 +83,179 @@ Cc: kvm@vger.kernel.org, ljr.kernel@gmail.com, jmattson@google.com,
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
-Hi Mingwei, thanks for reviewing!
+Hi Mingwei
 
 Mingwei Zhang <mizhang@google.com> writes:
 
 > On Tue, Aug 13, 2024, Colton Lewis wrote:
->> This defined the CPUID calls to determine what extensions and
->> properties are available. AMD reference manual names listed below.
+>> Branch in main() depending on if the CPU is Intel or AMD. They are
+>> subject to vastly different requirements because the AMD PMU lacks
+>> many properties defined by the Intel PMU including the entire CPUID
+>> 0xa function where Intel stores all the PMU properties. AMD lacks this
+>> as well as any consistent notion of PMU versions as Intel does. Every
+>> feature is a separate flag and they aren't the same features as Intel.
 
->> * PerfCtrExtCore (six core counters instead of four)
->> * PerfCtrExtNB (four counters for northbridge events)
->> * PerfCtrExtL2I (four counters for L2 cache events)
->> * PerfMonV2 (support for registers to control multiple
->>    counters with a single register write)
->> * LbrAndPmcFreeze (support for freezing last branch recorded stack on
->>    performance counter overflow)
->> * NumPerfCtrCore (number of core counters)
->> * NumPerfCtrNB (number of northbridge counters)
+>> Set up a VM for testing core AMD counters and ensure proper CPUID
+>> features are set.
 
 >> Signed-off-by: Colton Lewis <coltonlewis@google.com>
 >> ---
->>   tools/testing/selftests/kvm/include/x86_64/processor.h | 7 +++++++
->>   1 file changed, 7 insertions(+)
+>>   .../selftests/kvm/x86_64/pmu_counters_test.c  | 80 ++++++++++++++++---
+>>   1 file changed, 68 insertions(+), 12 deletions(-)
 
->> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h  
->> b/tools/testing/selftests/kvm/include/x86_64/processor.h
->> index a0c1440017bb..9d87b5f8974f 100644
->> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
->> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
->> @@ -183,6 +183,9 @@ struct kvm_x86_cpu_feature {
->>   #define	X86_FEATURE_GBPAGES		KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 26)
->>   #define	X86_FEATURE_RDTSCP		KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 27)
->>   #define	X86_FEATURE_LM			KVM_X86_CPU_FEATURE(0x80000001, 0, EDX, 29)
->> +#define	X86_FEATURE_PERF_CTR_EXT_CORE	KVM_X86_CPU_FEATURE(0x80000001,  
->> 0, ECX, 23)
->> +#define	X86_FEATURE_PERF_CTR_EXT_NB	KVM_X86_CPU_FEATURE(0x80000001, 0,  
->> ECX, 24)
->> +#define	X86_FEATURE_PERF_CTR_EXT_L2I	KVM_X86_CPU_FEATURE(0x80000001, 0,  
->> ECX, 28)
+>> diff --git a/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c  
+>> b/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c
+>> index 0e305e43a93b..a11df073331a 100644
+>> --- a/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c
+>> +++ b/tools/testing/selftests/kvm/x86_64/pmu_counters_test.c
+>> @@ -33,7 +33,7 @@
+>>   static uint8_t kvm_pmu_version;
+>>   static bool kvm_has_perf_caps;
 
-> You won't be testing Northbridge counters and L2I counters, so these two
-> could be optional to the patch.
+>> -static struct kvm_vm *pmu_vm_create_with_one_vcpu(struct kvm_vcpu  
+>> **vcpu,
+>> +static struct kvm_vm *intel_pmu_vm_create(struct kvm_vcpu **vcpu,
+>>   						  void *guest_code,
+>>   						  uint8_t pmu_version,
+>>   						  uint64_t perf_capabilities)
+>> @@ -303,7 +303,7 @@ static void test_arch_events(uint8_t pmu_version,  
+>> uint64_t perf_capabilities,
+>>   	if (!pmu_version)
+>>   		return;
 
-That's correct. Since it was a small thing to include I thought it best
-to include and save someone in the future from digging through the
-reference manual again.
+>> -	vm = pmu_vm_create_with_one_vcpu(&vcpu, guest_test_arch_events,
+>> +	vm = intel_pmu_vm_create(&vcpu, guest_test_arch_events,
+>>   					 pmu_version, perf_capabilities);
 
-When you say "optional" is that an endorsement of deleting?
+>>   	vcpu_set_cpuid_property(vcpu, X86_PROPERTY_PMU_EBX_BIT_VECTOR_LENGTH,
+>> @@ -463,7 +463,7 @@ static void test_gp_counters(uint8_t pmu_version,  
+>> uint64_t perf_capabilities,
+>>   	struct kvm_vcpu *vcpu;
+>>   	struct kvm_vm *vm;
 
->>   #define	X86_FEATURE_INVTSC		KVM_X86_CPU_FEATURE(0x80000007, 0, EDX, 8)
->>   #define	X86_FEATURE_RDPRU		KVM_X86_CPU_FEATURE(0x80000008, 0, EBX, 4)
->>   #define	X86_FEATURE_AMD_IBPB		KVM_X86_CPU_FEATURE(0x80000008, 0, EBX,  
->> 12)
->> @@ -195,6 +198,8 @@ struct kvm_x86_cpu_feature {
->>   #define	X86_FEATURE_VGIF		KVM_X86_CPU_FEATURE(0x8000000A, 0, EDX, 16)
->>   #define X86_FEATURE_SEV			KVM_X86_CPU_FEATURE(0x8000001F, 0, EAX, 1)
->>   #define X86_FEATURE_SEV_ES		KVM_X86_CPU_FEATURE(0x8000001F, 0, EAX, 3)
->> +#define	X86_FEATURE_PERF_MON_V2		KVM_X86_CPU_FEATURE(0x80000022, 0,  
->> EAX, 0)
+>> -	vm = pmu_vm_create_with_one_vcpu(&vcpu, guest_test_gp_counters,
+>> +	vm = intel_pmu_vm_create(&vcpu, guest_test_gp_counters,
+>>   					 pmu_version, perf_capabilities);
 
-> Let's use X86_FEATURE_PERFMON_V2 instead.
+>>   	vcpu_set_cpuid_property(vcpu, X86_PROPERTY_PMU_NR_GP_COUNTERS,
+>> @@ -530,7 +530,7 @@ static void test_fixed_counters(uint8_t pmu_version,  
+>> uint64_t perf_capabilities,
+>>   	struct kvm_vcpu *vcpu;
+>>   	struct kvm_vm *vm;
 
-Done
+>> -	vm = pmu_vm_create_with_one_vcpu(&vcpu, guest_test_fixed_counters,
+>> +	vm = intel_pmu_vm_create(&vcpu, guest_test_fixed_counters,
+>>   					 pmu_version, perf_capabilities);
 
->> +#define	X86_FEATURE_PERF_LBR_PMC_FREEZE	KVM_X86_CPU_FEATURE(0x80000022,  
->> 0, EAX, 2)
+>>   	vcpu_set_cpuid_property(vcpu, X86_PROPERTY_PMU_FIXED_COUNTERS_BITMASK,
+>> @@ -627,18 +627,74 @@ static void test_intel_counters(void)
+>>   	}
+>>   }
 
-> You don't use this feature, do you? If not, this can be optional for the
-> patch.
+>> -int main(int argc, char *argv[])
+>> +static uint8_t nr_core_counters(void)
+>>   {
+>> -	TEST_REQUIRE(kvm_is_pmu_enabled());
+>> +	const uint8_t nr_counters =  
+>> kvm_cpu_property(X86_PROPERTY_NUM_PERF_CTR_CORE);
+>> +	const bool core_ext = kvm_cpu_has(X86_FEATURE_PERF_CTR_EXT_CORE);
+>> +	/* The default numbers promised if the property is 0 */
+>> +	const uint8_t amd_nr_core_ext_counters = 6;
+>> +	const uint8_t amd_nr_core_counters = 4;
+>> +
+>> +	if (nr_counters != 0)
+>> +		return nr_counters;
+>> +
+>> +	if (core_ext)
+>> +		return amd_nr_core_ext_counters;
+>> +
+>> +	return amd_nr_core_counters;
+>> +}
+>> +
+>> +static void guest_test_core_counters(void)
+>> +{
+>> +	GUEST_DONE();
+>> +}
 
-Correct again, included for the same reasoning above.
+>> -	TEST_REQUIRE(host_cpu_is_intel);
+>> -	TEST_REQUIRE(kvm_cpu_has_p(X86_PROPERTY_PMU_VERSION));
+>> -	TEST_REQUIRE(kvm_cpu_property(X86_PROPERTY_PMU_VERSION) > 0);
+>> +static void test_core_counters(void)
+>> +{
+>> +	uint8_t nr_counters = nr_core_counters();
+>> +	bool core_ext = kvm_cpu_has(X86_FEATURE_PERF_CTR_EXT_CORE);
+>> +	bool perf_mon_v2 = kvm_cpu_has(X86_FEATURE_PERF_MON_V2);
+>> +	struct kvm_vcpu *vcpu;
+>> +	struct kvm_vm *vm;
 
+>> -	kvm_pmu_version = kvm_cpu_property(X86_PROPERTY_PMU_VERSION);
+>> -	kvm_has_perf_caps = kvm_cpu_has(X86_FEATURE_PDCM);
+>> +	vm = vm_create_with_one_vcpu(&vcpu, guest_test_core_counters);
 
->>   /*
->>    * KVM defined paravirt features.
->> @@ -281,6 +286,8 @@ struct kvm_x86_cpu_property {
->>   #define X86_PROPERTY_GUEST_MAX_PHY_ADDR		 
->> KVM_X86_CPU_PROPERTY(0x80000008, 0, EAX, 16, 23)
->>   #define X86_PROPERTY_SEV_C_BIT			KVM_X86_CPU_PROPERTY(0x8000001F, 0,  
->> EBX, 0, 5)
->>   #define X86_PROPERTY_PHYS_ADDR_REDUCTION	 
->> KVM_X86_CPU_PROPERTY(0x8000001F, 0, EBX, 6, 11)
->> +#define X86_PROPERTY_NUM_PERF_CTR_CORE		 
->> KVM_X86_CPU_PROPERTY(0x80000022, 0, EBX, 0, 3)
->> +#define X86_PROPERTY_NUM_PERF_CTR_NB		KVM_X86_CPU_PROPERTY(0x80000022,  
->> 0, EBX, 10, 15)
+>> -	test_intel_counters();
+>> +	/* This property may not be there in older underlying CPUs,
+>> +	 * but it simplifies the test code for it to be set
+>> +	 * unconditionally.
+>> +	 */
+>> +	vcpu_set_cpuid_property(vcpu, X86_PROPERTY_NUM_PERF_CTR_CORE,  
+>> nr_counters);
+>> +	if (core_ext)
+>> +		vcpu_set_cpuid_feature(vcpu, X86_FEATURE_PERF_CTR_EXT_CORE);
+>> +	if (perf_mon_v2)
+>> +		vcpu_set_cpuid_feature(vcpu, X86_FEATURE_PERF_MON_V2);
 
+> hmm, I think this might not be enough. So, when the baremetal machine
+> supports Perfmon v2, this code is just testing v2. But we should be able
+> to test anything below v2, ie., v1, v1 without core_ext. So, three
+> cases need to be tested here: v1 with 4 counters; v1 with core_ext (6
+> counters); v2.
 
-> ditto.
->>   #define X86_PROPERTY_MAX_CENTAUR_LEAF		KVM_X86_CPU_PROPERTY(0xC0000000,  
->> 0, EAX, 0, 31)
+> If, the machine running this selftest does not support v2 but it does
+> support core extension, then we fall back to test v1 with 4 counters and
+> v1 with 6 counters.
 
+This should cover all cases the way I wrote it. I detect the number of
+counters in nr_core_counters(). That tells me if I am dealing with 4 or
+6 and then I set the cpuid property based on that so I can read that
+number in later code instead of duplicating the logic.
+
+I could always inline nr_core_counters() to make this more obvious since
+it is only called in this function. It was one of the first bits of code
+I wrote working on this series and I assumed I would need to call it a
+bunch before I decided I could just set the cpuid property after calling
+it once.
+
+>> +
+>> +	pr_info("Testing core counters: CoreExt = %u, PerfMonV2 = %u,  
+>> NumCounters = %u\n",
+>> +		core_ext, perf_mon_v2, nr_counters);
+>> +	run_vcpu(vcpu);
+>> +
+>> +	kvm_vm_free(vm);
+>> +}
+>> +
+>> +static void test_amd_counters(void)
+>> +{
+>> +	test_core_counters();
+>> +}
+>> +
+>> +int main(int argc, char *argv[])
+>> +{
+>> +	TEST_REQUIRE(kvm_is_pmu_enabled());
+>> +
+>> +	if (host_cpu_is_intel) {
+>> +		TEST_REQUIRE(kvm_cpu_has_p(X86_PROPERTY_PMU_VERSION));
+>> +		TEST_REQUIRE(kvm_cpu_property(X86_PROPERTY_PMU_VERSION) > 0);
+>> +		kvm_pmu_version = kvm_cpu_property(X86_PROPERTY_PMU_VERSION);
+>> +		kvm_has_perf_caps = kvm_cpu_has(X86_FEATURE_PDCM);
+>> +		test_intel_counters();
+>> +	} else if (host_cpu_is_amd) {
+>> +		/* AMD CPUs don't have the same properties to look at. */
+>> +		test_amd_counters();
+>> +	}
+
+>>   	return 0;
+>>   }
 >> --
 >> 2.46.0.76.ge559c4bf1a-goog
 
