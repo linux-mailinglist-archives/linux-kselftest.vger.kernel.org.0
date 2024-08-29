@@ -1,121 +1,129 @@
-Return-Path: <linux-kselftest+bounces-16735-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16736-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8F8B965217
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 23:35:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48445965236
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 23:44:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94032285D9B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 21:35:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B2FDCB2402F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 21:44:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF9CF1B6527;
-	Thu, 29 Aug 2024 21:34:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87FCE1BA87D;
+	Thu, 29 Aug 2024 21:44:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Z/sBTx3T"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gfsC/wlx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f177.google.com (mail-oi1-f177.google.com [209.85.167.177])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFBB1BAECB
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2024 21:34:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 106E21BA27F
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2024 21:44:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724967294; cv=none; b=LPFz4LhkrQHMlxbbtHcdbZahE1htX8PCMD0sLjxnQAAWo7P05bJcgL2flWWsRiCKYcDcMXQsMZ+6P9L7kvU+GbGpSlpS7Mi/rd1yoGhqE9urnUF6xxLVmI/Q/Nh0NTa+MMbe3ktJSvj69BAj2kQ7ZFXySc7pYaLJE1B4jaz9WK4=
+	t=1724967845; cv=none; b=tX+Kwq4vwmD4HZGnYVAv8O4MSAmKdrxglFAWWiyOEGbAyHE3QFhWP/N5g8qakrl1GB4PgPl5IvlGRg9PRGHFADf2se80qNx4Q2d9cFrjNgHJ2br7Sj7XjCFTB7fXXssfjv/Jg7T1WBZlJZxdzXBf37bcvNUHc7jXwUoXAXiCFcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724967294; c=relaxed/simple;
-	bh=bJxYo/loYzTMctQyY3/qVqz2BwxaM68ocLwyaWudvJU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rKQayp6kaGdv9J+hiLhQ++YgPHFPCCQfLRKUvYawnGRh1LVTcfRfh5ZtRlrBPoAXGEyf/n/Flo1VMmbxZ7unPZVq4dnhmcmtchlKNiuyCGO3I5ab9eiqt2U1Daukr7HRAE9pTqZtt1aTRbZw/ZdxvsIluwbYDEfAKluoNpX2dps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Z/sBTx3T; arc=none smtp.client-ip=209.85.167.177
+	s=arc-20240116; t=1724967845; c=relaxed/simple;
+	bh=eHI+f1Eqovx5OQwndHYsw55wZ2XeQdOu0E/2/hhAMrk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FXGDWi0yArU+hOBcu7WdegQgPZC5Qqz9F38Y6Kr+rXhM9OLmQufUKNT6yGf7BlE7G0AXE722PquZGsdlj8VUBcUazS2gy6YYJhNF1970QrcuKfLPrTBsDfSf8agqEc0uDooLr0OANn4UnBwcWImT+dOcNuiN0OOHCAhM33rnjAI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=gfsC/wlx; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3db3763e924so83063b6e.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2024 14:34:53 -0700 (PDT)
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2d3cc6170eeso182941a91.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2024 14:44:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1724967292; x=1725572092; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0JtBxizp2xk+cb6j8tpy+Jh/K4VTYG9aTNZKmyMd4xs=;
-        b=Z/sBTx3TF5UZc2P84DpALWNZ9Igzg3JvSIV9b8E/PkUK6Hi9scUHdoNZQ9FzjzIiS4
-         3M1bv944aw/sO6YWarRdJq80NYpvXzuiFCatSdC30GQnmsJcp4K9XlBs0MGmgSkSVo7B
-         rV5mm8TFWdN+KlD4pQ1umHgeK+lneQleTcYlo=
+        d=chromium.org; s=google; t=1724967842; x=1725572642; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IK5nX6Fz7aZSj3TONXgJWUNXXUeXSM9VDMyRB+JVgZA=;
+        b=gfsC/wlxKr5iTDLhfzCIHcbSHCHv195llFGSCvkAkx1aNgUZcAGC/O/kw8dtMJW6iJ
+         VSGADQrtFQYtgD7Ybt3oRSCsPuPxtZ0rRHAyRSVb5Nhjz6aCNfgpc+bMfYP9BWuk4Azz
+         IYPiBTfDf+7Awn7m2u11n51DE3l7SEeYWyXhs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724967292; x=1725572092;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0JtBxizp2xk+cb6j8tpy+Jh/K4VTYG9aTNZKmyMd4xs=;
-        b=YHGqFwxqje78F4padJI4+xIn8yLORqd9zzaU8og4AebobQtre7Aa9HmqSmAMuJrLyT
-         2a3j7kNBblHS962TtEQOmB4fBksxDEL+Apj6ObYirZjcpnPa0HmyrWmUA/UgHYvHCbGa
-         MmiQcW97g/xQILodbErHaO94fLPC+wipY4E9p0Mv/auDSwfN8K8Y/5PXhkorzkTrPKm1
-         HadZ9Mx6Qrj2IkDpPQu5lSoFsQCCGpIzzgqxDC2mn4mvizhxva8OBfywl1EuNaxnyx+A
-         rkLSnm+swMXNzTeMpDpqo8eIH5TTVnpV7G4OCHfhfWgBzOcUTxSbg4vNjND5TzSrADYh
-         hHGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV/UB7SYwdgfCoRJc6vuSTptFbkOdU9hkXzbb0+i/d2P/MBHBAktzvpOLm7Vu6jknQ3rpgonqx2n4XM+xa3kfE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZZhY0CpNDW8gQXOo2PY91nclqhHPTUNRMx5IuHeFnQroFOkOB
-	YXKvu0XqCNaNYm6Tjq3iVnKrXZUeO9x9LcHY2C2P6ZgdrcwU0wakPUp2LSfA5b+JCCJHa+J4S+e
-	b+DFVR9X3O9vXWRbV9xV2cfHF9w22VlTevVd1
-X-Google-Smtp-Source: AGHT+IF8S+GO7dEufmTmvxbO4vM2RK3AOgSOXWQtC8IWIc2+VslrOR7pjLdfmxtOCWGYxQmolXhTV6/tS12h6+WLD3s=
-X-Received: by 2002:a05:6870:c186:b0:268:99df:437c with SMTP id
- 586e51a60fabf-2779008e247mr2378244fac.2.1724967292019; Thu, 29 Aug 2024
- 14:34:52 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724967842; x=1725572642;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IK5nX6Fz7aZSj3TONXgJWUNXXUeXSM9VDMyRB+JVgZA=;
+        b=K1II74G7fqkhBVlv0PrJKXEwxilC4PeupRqJg35swSZIz72qAKDhIeHuFfXEerX1+k
+         ob2XMl9DuSIpbsAb/i2axBdzWlNiK6//+ZHyMpPOITAumYHi2rwa660VOHzyl7cZt99s
+         TmcHSb2z+pjCYdbnWa6hgAbC254JxC0SszBIPrkgp7lA1/zqrbuDfSn1Zf9NgvLEFkiW
+         lb3re2EU04T0uZEG87pUmyAh3bSvpjxg/5l3vLrvHsvpeUpunV2vBKsjoD85HRfJqm4c
+         YVPys9LIhmmFjYWHZSK3/+4QYVqX9c7FieJgAdepju4QQFa+9HD5mlMVHjRTmh1SC3hr
+         XCfw==
+X-Gm-Message-State: AOJu0YxDpKFr5KUgFjOffA9UYvTAaaPdP9obqsXHJadD4HfOTQWgabfk
+	o4rXkR4fvT2mM4pKGXiKG2AzXiFJzO68l24h0QZTpBPgnYyPO7uxpTi4UKfAzg==
+X-Google-Smtp-Source: AGHT+IGFvjpKVKwU+AAy50ZE59B8TjM2zpkvqC2OVhuQeRtuultPa+ORe7Ydhsh/c2eWukZ+bzk+sg==
+X-Received: by 2002:a05:6a20:6a27:b0:1c4:dba6:9eff with SMTP id adf61e73a8af0-1ccee3a8b83mr193225637.1.1724967842061;
+        Thu, 29 Aug 2024 14:44:02 -0700 (PDT)
+Received: from localhost (150.12.83.34.bc.googleusercontent.com. [34.83.12.150])
+        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-715e55a94casm1592892b3a.70.2024.08.29.14.44.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Aug 2024 14:44:01 -0700 (PDT)
+From: jeffxu@chromium.org
+To: akpm@linux-foundation.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	pedro.falcato@gmail.com,
+	willy@infradead.org,
+	lorenzo.stoakes@oracle.com,
+	broonie@kernel.org,
+	vbabka@suse.cz,
+	Liam.Howlett@oracle.com,
+	rientjes@google.com,
+	keescook@chromium.org,
+	Jeff Xu <jeffxu@chromium.org>
+Subject: [PATCH v2 0/4] Increase mseal test coverage
+Date: Thu, 29 Aug 2024 21:43:48 +0000
+Message-ID: <20240829214352.963001-1-jeffxu@chromium.org>
+X-Mailer: git-send-email 2.46.0.469.g59c65b2a67-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240828225522.684774-1-jeffxu@chromium.org> <20240828225522.684774-2-jeffxu@chromium.org>
- <CABi2SkW9qEOx1FAcWeBLx_EA8LT2V_U6OS1GmEP433oA6t35pw@mail.gmail.com>
- <097a3458-0126-48e3-ba0d-d7dc7b9069d2@lucifer.local> <CABi2SkVe6Y4xypBw0n8QbqKJgsfy9YRNJWvBZ3bjTa=-Z5Zn2g@mail.gmail.com>
- <5a312d38-4591-47b1-9a6c-4a7242dbe20d@lucifer.local> <CABi2SkXDVgiUeC1StbfggvtiYG_kDxQJsZPpDw-NDPNv6-dwmg@mail.gmail.com>
- <ZtDS3AP9Ejt31EbU@casper.infradead.org>
-In-Reply-To: <ZtDS3AP9Ejt31EbU@casper.infradead.org>
+Content-Transfer-Encoding: 8bit
+
 From: Jeff Xu <jeffxu@chromium.org>
-Date: Thu, 29 Aug 2024 14:34:40 -0700
-Message-ID: <CABi2SkUfKO6ptg8qwWgYMEfmJ2wGpff4kAV25yNPQDFOivVQkg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] selftests/mm: mseal_test add more tests
-To: Matthew Wilcox <willy@infradead.org>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, akpm@linux-foundation.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-hardening@vger.kernel.org, pedro.falcato@gmail.com, rientjes@google.com, 
-	keescook@chromium.org, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Vlastimil Babka <vbabka@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Matthew
+This series increase the test coverage of mseal_test by:
 
-On Thu, Aug 29, 2024 at 12:58=E2=80=AFPM Matthew Wilcox <willy@infradead.or=
-g> wrote:
-> > > > > Can you send this as a separate patch, preferably as an RFC so we=
- can
-> > > > > ensure that we all agree on how mseal() should behave?
-> > > > >
-> > It is not an RFC because it doesn't change any semanic to mseal. The
-> > updated test will pass on linux main as well as 6.10. The increased
-> > coverage will help to prevent future regression, i.e. during
-> > refactoring.
->
-> You seem to not understand that there is disagreement on the semantics
-> of mseal().  I mean, ther's been a lot of arguing about that over the
-> last week.  There's understanable reluctance to accept a large pile of
-> tests saying "this just ensures that mseal behaves the way I think it
-> should", when there is substantial disagreement that the way you think
-> it should behave is in fact the way it should behave.  Be prepared to
-> argue for each semantic that you think it should have.
->
-If this is about in-loop discussion, this patch also passes the latest
-mm-unstable branch which has in-loop change (pending Liam's fix on
-mmap). The increased test coverage also helps to ensure the in-loop
-change's correctness on sealing.
+Add check for vma_size, prot, and error code for existing tests.
+Add more testcases for madvise, munmap, mmap and mremap to cover
+sealing in different scenarios.
 
-I'm not aware there are other semantic changes on mseal, we can
-continue this discussion on V2 patch, if necessary.
+The increase test coverage hopefully help to prevent future regression.
+It doesn't change any existing mm api's semantics, i.e. it will pass on
+linux main and 6.10 branch.
 
-Thanks
--Jeff
+Note: in order to pass this test in mm-unstable, mm-unstable must have
+Liam's fix on mmap [1]
+
+[1] https://lore.kernel.org/linux-kselftest/vyllxuh5xbqmaoyl2mselebij5ox7cseekjcvl5gmzoxxwd2he@hxi4mpjanxzt/#t
+
+History:
+V2:
+- remove the mmap fix (Liam R. Howlett will fix it separately)
+- Add cover letter (Lorenzo Stoakes)
+- split the testcase for ease of review (Mark Brown)
+
+V1:
+- https://lore.kernel.org/linux-kselftest/20240828225522.684774-1-jeffxu@chromium.org/
+
+Jeff Xu (4):
+  selftests/mm: mseal_test, add vma size check
+  selftests/mm: mseal_test add sealed madvise type
+  selftests/mm: mseal_test add more tests for mmap
+  selftests/mm: mseal_test add more tests for mremap
+
+ tools/testing/selftests/mm/mseal_test.c | 829 ++++++++++++++++++++++--
+ 1 file changed, 762 insertions(+), 67 deletions(-)
+
+-- 
+2.46.0.469.g59c65b2a67-goog
+
 
