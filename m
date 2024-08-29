@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-16745-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16746-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98B4D96532F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 00:54:58 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61B73965331
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 00:55:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 038FE2822BB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 22:54:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 07DFDB24B25
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 22:55:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF62E1BE84E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B54F41BE853;
 	Thu, 29 Aug 2024 22:52:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g1kndo4B"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LM9c1eoN"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2965C1BE22B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3E491BE242;
 	Thu, 29 Aug 2024 22:52:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724971964; cv=none; b=UYp8U3VlWpG1N746q/P301H5F+y8nw+IuJeyifiY0/X3ZberroOE4P2UN2JgUYxQwRjH9fH1WL9WJbdIpcWAFfIQ+Y0nwC0PK085Xyyv/XuG+0fi0o2LLhIt/EG7vDFL+UJYoeVmTl1QD7P8Mw/t5aartGhW1wSVF+FWbVAT/WI=
+	t=1724971964; cv=none; b=c+vOr7tC4471Ck6j4eOTE3SSvLOqTBTWh1oY12Pf446jFwC7kUT4XthQtuap3/CgNuF7bOq7TOqP55fgfq3pBJhUIPRFefWAf2HxztpbA9HNU54mJvtwblqMsLc9EOWZYT8FLUDKqSpiVCRQ2gmjns6QEIw1oWsfUxh/QENROF4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1724971964; c=relaxed/simple;
-	bh=idF4CTKFsmnnUxvbJlS1PZZ3Ktwhc6P2TlPzn2oeFTA=;
+	bh=Pk/7UL5060saBr2FSXLTHwKgFHKGTMQhLToZZ8b+6FQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T0gMIm+lpPAgbSfM+cRXx3aIloBqpdqTnOhh99NmeCSAVJwXYf5eGZQk6k2nwidi93i+m2KoCi1j1aBjUR8biqlcYhPBEbuJlbZhlJySVNxKm3XgboXNJHOxPQA8ptCRCVl4tz5Da43goA/usdCGpd93FA7bKgQcEALUrfW+fek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g1kndo4B; arc=none smtp.client-ip=192.198.163.12
+	 MIME-Version; b=HtPd8UsYICBz3PfEmL1Uhx1W3De8cqQUoBIANkBQeWPGFX4u0toGSPzfFJRPVBJ7de2c5SXybPABN6jaelrGXaVi6Lqq4IDjOaBTERPq5ecEbgnVQZqmjwHW2NxzIAEVztuJQsu3CrlTiAEkKtUCFHG/eWqkZKnlIv/DjF5EYbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LM9c1eoN; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1724971962; x=1756507962;
+  t=1724971963; x=1756507963;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=idF4CTKFsmnnUxvbJlS1PZZ3Ktwhc6P2TlPzn2oeFTA=;
-  b=g1kndo4BDTdCekQ6Dg1nhdtJ+1322BrhwAWCueCnY2MOSFsSp/+ncZkh
-   3rtCil33+yP0hKjaNw+vNy1GjE4xWJndHzCYoYk99iF6g7LtEXdYz47jQ
-   HhnmoNXxGDxsGJy6b1tPdkmH5jTO4S1VB0DDwXAQHSsP2geqP7jVGfOQ1
-   umKC7sKVZXIgWYmC1qoW5yH7FbYD+qkpoobdA9AWG56ttDEThfmrL5vDH
-   sYHM7duSj/oN+wkUaIIxfwF5oZ1/4OaohAHUGDh0tiIE8M2Wwb5Zs3KW/
-   AArL/S8aHjlOYsyNgNFgDruR97I1gjjZqBYdFZtHx3U4qRQ1Aj4gwOYNd
+  bh=Pk/7UL5060saBr2FSXLTHwKgFHKGTMQhLToZZ8b+6FQ=;
+  b=LM9c1eoNcMAKroJJdKNvgS/FNqsCdEf4LfeMfK3F9dK4B6TizsvhNqYn
+   Xmc57r2XFx4Dxa2YhN46SVl45ED9FHm7saQP5A80F74AuhU09kGbu2Pxf
+   HRIPN7G4zR12ydw1wqjAqlkgYBqfz4oQbHNPI+RB3e9GYFYxdkJXuBA/E
+   V3V1MQzMgFi9422wlKLDF/TUwapz/WWFV0XadBhS3HHuunF9MYnbzdxkp
+   mBIYs/gHwd/bsRVsiz6Y+PPW8u2sohP1KjLkmyjH3BcJFFpOdwNsWtCI2
+   /M6OXlhvu2jnacQIkKORAijJp53ovpdT93/KbCTzCbwPQPoqJMsM+ilGx
    Q==;
-X-CSE-ConnectionGUID: dr2ht3/OSKKsLof7QhJVCw==
-X-CSE-MsgGUID: VGhaikf9T8uE5Ehxecjgbg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="27479168"
+X-CSE-ConnectionGUID: 3i6e+gC4S/KVIygEFltd4g==
+X-CSE-MsgGUID: HAWwvBrdROeJUHJfx4MONw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="27479172"
 X-IronPort-AV: E=Sophos;i="6.10,186,1719903600"; 
-   d="scan'208";a="27479168"
+   d="scan'208";a="27479172"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 15:52:40 -0700
-X-CSE-ConnectionGUID: cnOQrdNmTaW584l+E2YsLw==
-X-CSE-MsgGUID: WvIqZecIRTSjorz+rLtmaQ==
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 15:52:41 -0700
+X-CSE-ConnectionGUID: TziuriAlR9uvrAzC7mI39g==
+X-CSE-MsgGUID: /KpWHAr1Q7GJI3FEZl25pw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,186,1719903600"; 
-   d="scan'208";a="63415144"
+   d="scan'208";a="63415149"
 Received: from rchatre-mobl4.amr.corp.intel.com (HELO rchatre-mobl4.intel.com) ([10.125.111.220])
   by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 15:52:40 -0700
 From: Reinette Chatre <reinette.chatre@intel.com>
@@ -69,9 +69,9 @@ Cc: maciej.wieczor-retman@intel.com,
 	reinette.chatre@intel.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 4/6] selftests/resctrl: Use cache size to determine "fill_buf" buffer size
-Date: Thu, 29 Aug 2024 15:52:30 -0700
-Message-ID: <d357189fe0695b2140fc03efde75edc6fa0c88c6.1724970211.git.reinette.chatre@intel.com>
+Subject: [PATCH 5/6] selftests/resctrl: Do not compare performance counters and resctrl at low bandwidth
+Date: Thu, 29 Aug 2024 15:52:31 -0700
+Message-ID: <9bbefa3b9a62319698907d10e8b78f1b999c311b.1724970211.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <cover.1724970211.git.reinette.chatre@intel.com>
 References: <cover.1724970211.git.reinette.chatre@intel.com>
@@ -83,72 +83,72 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-By default the MBM and MBA tests use the "fill_buf" benchmark to
-read from a buffer with the goal to measure the memory bandwidth
-generated by this buffer access.
+The MBA test incrementally throttles memory bandwidth, each time
+followed by a comparison between the memory bandwidth observed
+by the performance counters and resctrl respectively.
 
-Care should be taken when sizing the buffer used by the "fill_buf"
-benchmark. If the buffer is small enough to fit in the cache then
-it cannot be expected that the benchmark will generate much memory
-bandwidth. For example, on a system with 320MB L3 cache the existing
-hardcoded default of 250MB is insufficient.
+While a comparison between performance counters and resctrl is
+generally appropriate, they do not have an identical view of
+memory bandwidth. For example RAS features or memory performance
+features that generate memory traffic may drive accesses that are
+counted differently by performance counters and MBM respectively,
+for instance generating "overhead" traffic which is not counted
+against any specific RMID. As a ratio, this different view of memory
+bandwidth becomes more apparent at low memory bandwidths.
 
-Use the measured cache size to determine a buffer size that can be
-expected to trigger memory access while keeping the existing default
-as minimum that has been appropriate for testing so far.
+It is not practical to enable/disable the various features that
+may generate memory bandwidth to give performance counters and
+resctrl an identical view. Instead, do not compare performance
+counters and resctrl view of memory bandwidth when the memory
+bandwidth is low.
+
+Bandwidth throttling behaves differently across platforms
+so it is not appropriate to drop measurement data simply based
+on the throttling level. Instead, use a threshold of 750MiB
+that has been observed to support adequate comparison between
+performance counters and resctrl.
 
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
- tools/testing/selftests/resctrl/mba_test.c | 8 +++++++-
- tools/testing/selftests/resctrl/mbm_test.c | 8 +++++++-
- 2 files changed, 14 insertions(+), 2 deletions(-)
+ tools/testing/selftests/resctrl/mba_test.c | 7 +++++++
+ tools/testing/selftests/resctrl/resctrl.h  | 6 ++++++
+ 2 files changed, 13 insertions(+)
 
 diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 8ad433495f61..cad473b81a64 100644
+index cad473b81a64..204b9ac4b108 100644
 --- a/tools/testing/selftests/resctrl/mba_test.c
 +++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -170,11 +170,17 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
- 		.setup		= mba_setup,
- 		.measure	= mba_measure,
- 	};
-+	unsigned long cache_total_size = 0;
- 	int ret;
+@@ -96,6 +96,13 @@ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
  
- 	remove(RESULT_FILE_NAME);
- 
--	param.fill_buf.buf_size = DEFAULT_SPAN;
-+	ret = get_cache_size(uparams->cpu, "L3", &cache_total_size);
-+	if (ret)
-+		return ret;
+ 		avg_bw_imc = sum_bw_imc / (NUM_OF_RUNS - 1);
+ 		avg_bw_resc = sum_bw_resc / (NUM_OF_RUNS - 1);
++		if (avg_bw_imc < THROTTLE_THRESHOLD || avg_bw_resc < THROTTLE_THRESHOLD) {
++			ksft_print_msg("Bandwidth below threshold (%d MiB).  Dropping results from MBA schemata %u.\n",
++					THROTTLE_THRESHOLD,
++					ALLOCATION_MAX - ALLOCATION_STEP * allocation);
++			break;
++		}
 +
-+	param.fill_buf.buf_size = cache_total_size > DEFAULT_SPAN ?
-+				  cache_total_size * 2 : DEFAULT_SPAN;
- 	param.fill_buf.memflush = 1;
- 	param.fill_buf.operation = 0;
- 	param.fill_buf.once = false;
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index b6883f274c74..734bfa4f42b3 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -138,11 +138,17 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
- 		.setup		= mbm_setup,
- 		.measure	= mbm_measure,
- 	};
-+	unsigned long cache_total_size = 0;
- 	int ret;
+ 		avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
+ 		avg_diff_per = (int)(avg_diff * 100);
  
- 	remove(RESULT_FILE_NAME);
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 0e5456165a6a..e65c5fb76b17 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -43,6 +43,12 @@
  
--	param.fill_buf.buf_size = DEFAULT_SPAN;
-+	ret = get_cache_size(uparams->cpu, "L3", &cache_total_size);
-+	if (ret)
-+		return ret;
+ #define DEFAULT_SPAN		(250 * MB)
+ 
++/*
++ * Memory bandwidth (in MiB) below which the bandwidth comparisons
++ * between iMC and resctrl are considered unreliable.
++ */
++#define THROTTLE_THRESHOLD	750
 +
-+	param.fill_buf.buf_size = cache_total_size > DEFAULT_SPAN ?
-+				  cache_total_size * 2 : DEFAULT_SPAN;
- 	param.fill_buf.memflush = 1;
- 	param.fill_buf.operation = 0;
- 	param.fill_buf.once = false;
+ /*
+  * user_params:		User supplied parameters
+  * @cpu:		CPU number to which the benchmark will be bound to
 -- 
 2.46.0
 
