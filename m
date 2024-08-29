@@ -1,99 +1,339 @@
-Return-Path: <linux-kselftest+bounces-16658-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16659-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D159963BEA
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 08:49:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F547963C5E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 09:14:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90A661C214CF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 06:49:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 879A31F219BD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 07:14:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 252B6158550;
-	Thu, 29 Aug 2024 06:48:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AA3F1714CB;
+	Thu, 29 Aug 2024 07:14:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Rq61SCrW"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="PIIEhp54"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9CE1145FE5;
-	Thu, 29 Aug 2024 06:48:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70CBD16C873
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2024 07:14:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724914123; cv=none; b=WH5UVLaFSr+EU21gslUT3Am0WXVBGZkEUkSE3wEH6rge1WgOwaMN3+OX9eI1zsn0AbZGL/gM+TaXZ72RcLBhMQYrbjU8OLXZFsw5qjk9Nzw63g5Zpj1EMvX1T2FOZ2sAMo+XGjuTeqBKpboE/hes+5Hhl2cdLRHbMoauglg+MTg=
+	t=1724915673; cv=none; b=EDkqCuwiwaYCodMejkK+2xt6xCRouXc85GSPBtYlvEFoU4r8ktypTBQBo0acCO1/fLQ2PXmVXapK93IhdaJa/ynqVubrtIkSWrbFuV2vq0VIK+/1fI0lc3LzqvsWHeJhrZQzKLYH7U1p1ndBVn65wZn5i0jjyl84rnnsFyO2pmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724914123; c=relaxed/simple;
-	bh=EgqJyZaRG9NMw27jnmExCjXo1H5/Db5bvqr2e3nDIsg=;
+	s=arc-20240116; t=1724915673; c=relaxed/simple;
+	bh=mNPIeGFfgjC58ulUTJ+p+Pb5VTFBXszyjEecP5hXE0g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JOo7aSrsw+Wdvj9y+tEUO2rEJmsIODDE7WlmtrObB25pqURvypbyGqwKcQau5Ig61TAiGWLJP92b+EJTcjRXG80D7vG/zBK+ltuZhBBMflYghT3V7f6lFgiijdc0JML3Hoxf7we1jQb3uoWBBggZ5QxoQ7YbfdfEX7QRanes9So=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Rq61SCrW; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 7C50340E016A;
-	Thu, 29 Aug 2024 06:48:31 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id in12HXV0g9gh; Thu, 29 Aug 2024 06:48:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1724914107; bh=gSxyyZmhTPGc9Pg281VWv96h3GTVKEh6JFkqSk1iXGU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Rq61SCrWnZwbY1z+sUOlpppcjXJfNlrrcSzOh5cc9L/Bens8nUCvmeYyS+8BjGY2Q
-	 xvlRobIUhpGHGtnYZ6X5NDWO3Alp4/Ztzd4lY8Rx7QluN77sFRDKAiZB4N0VgbvtT0
-	 Bvga3RkztroKlwact/aBQEWWDRPt/JlXISq4DpFTvH470R0iqIiCGtBw1qGfyxXC4a
-	 72EIh1WK/DTDWLWsXyfngdPh1kooV8I8cLbWqpQTuVdHkS7EKVOnEw4bm/dZyUa/5J
-	 Pv0Aht8RPGKi683Aki+cEAOzmUGEuUnsweUunNv7Vj5tTXERsdBVtGpybzC+Jq1ecy
-	 9+Wx16Wc3e91IjAvNbTjwWdNoF3G8JQz7rPyLQ2rRzct+xzPruh8VsnKCEAZMyaDIo
-	 ZRGU6eDYoHvFlUFSSueD9mM6PZd2bR0dC+XBWEaXGcnF1KBEZbEHlUC2wO5O6ONBHe
-	 qQ1pBiJk2GPjcGNaIzbJ/ES19lR+yeI0vKYP8Z3Wi98LHzommZUYbkQQFQ+cIZqpa5
-	 ovHQDxsXJPiY8yfWVlcoD9VCkNJjdRIAe9f7G4UTxhAQ2EjtEApND6A9zcv9ZUqfio
-	 DNT9IeuLrJP04Yb283f+Lyyt+4l6Ria/ojc2KpZpHv8n7khXvDEK27xVc/rQg/3yg0
-	 jlh0OUvC2oIYX7bTfbAiM7j0=
-Received: from zn.tnic (p5de8ee85.dip0.t-ipconnect.de [93.232.238.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0573440E01C5;
-	Thu, 29 Aug 2024 06:48:16 +0000 (UTC)
-Date: Thu, 29 Aug 2024 08:48:11 +0200
-From: Borislav Petkov <bp@alien8.de>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Manali Shukla <manali.shukla@amd.com>, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-	shuah@kernel.org, nikunj@amd.com, thomas.lendacky@amd.com,
-	vkuznets@redhat.com, babu.moger@amd.com
-Subject: Re: [RFC PATCH v1 1/4] x86/cpufeatures: Add CPUID feature bit for
- the Bus Lock Threshold
-Message-ID: <20240829064811.GAZtAZqzWkmF79VOs7@fat_crate.local>
-References: <20240709175145.9986-1-manali.shukla@amd.com>
- <20240709175145.9986-2-manali.shukla@amd.com>
- <Zr-qkJirOC_GM9o6@google.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tWFJrNVpnONdLX2nFL13gdc6eShgWmuX8gtIhCNNbvwY5J6wRlB7nDAXo6BNgcf1W3w5nTbzryEJ4eBguJDRhZX0Myn+gFgG8QAdOzeripoQe11vdvwYpkPN/C3QxEHHLabVOW/SfiGS37Vr9Q9LZ3yWjHjfM3UHFMh9xbhw/Mk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=PIIEhp54; arc=none smtp.client-ip=209.85.210.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7142e002aceso299404b3a.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2024 00:14:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1724915668; x=1725520468; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=59qS8d6E7jAm/hvEeiY72pf/LRpSv6Q2qjD/8hJgS38=;
+        b=PIIEhp54GOUcEbiVG3smr8WA1ZLj8nAAx5k3WfnPUD++LVzbh72TtgNZcQqA4Loc69
+         SfxWVNo8xkoGeVS3KZsCBKyJ2HN+N+B9N3tFN/48xOhqVeDVHX/S/1hCPBb2gol/BP8J
+         hdzWRj3w25NqzOwmdHVXrDu8ncd9378ljlADKQRHSxz9v9cv6+fdtr6Kbo+mzYoXkNsv
+         3HDohwlD3A3RWzUyLLsEVoJt10ASz2Dn+1GZvl7GWagfRXsztJXa/8zKZL3MmKhws1e1
+         AhDILhheeUphBmdl/ETIszbSXtndhDvM2zL9L6igHZOVUdCnhWWLRPxOcFwaz0A7HXyH
+         1r7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1724915668; x=1725520468;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=59qS8d6E7jAm/hvEeiY72pf/LRpSv6Q2qjD/8hJgS38=;
+        b=MCfvIT8cLpahZO81I71SGRucKVuQsr4ADzgNhW3vpKrrE6HdGfuq/xha57yzJvOeLR
+         1W7SmKAZO9ry4NlVcI5lbo5U8D8Ap4MNebm+8IO5aV3yBLgO6xYU61L7ECmyt1f81b8Q
+         v1nJ023vlKr7C0lpTql0Mm7GsM+ALwVGZb8l1YFTn7L+JWAoNPFnThohg3O+RjEgqFhU
+         fXvhgh1pz4F9XUiG/7TV1Qw4Tplx7SXye6OJHwQd3QN5EzMAZgNqEw3mZIQT5X+533qZ
+         nhoUJ2EsBxF6ZSAMx5PpL0ivIPjhoUhH/aUcQIbVVdhbv5pI3ETv5xGbcROaRp8XvU3m
+         MJug==
+X-Forwarded-Encrypted: i=1; AJvYcCVmjKSEmY8TDrreABLekRFYPW1ntKom9pUlVKP+u1B2JAlCCYyfcmkWQqmvfh5VwLMeJDGnxYPSDQOIuwXm6Jg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzO3zI5QHHWYT7IcI3VTApHEWfV5oh3FrjX+517axbw2XL6bKcP
+	RAgSMBfr2BoQjsQGWt1ryTWq3Zpx4WLxHknQTj++Bnkqxywr+i4aqycFaij/OCc=
+X-Google-Smtp-Source: AGHT+IFxhM4cuDGdAmG+3DSZ8PIKqAZRC1xEgxgW4g8JXtjfrvLb83nabdJs3AxBg2ozZcKKdgajyA==
+X-Received: by 2002:a05:6a20:e196:b0:1c4:c1cd:a29d with SMTP id adf61e73a8af0-1cce101c8fdmr2021570637.28.1724915668227;
+        Thu, 29 Aug 2024 00:14:28 -0700 (PDT)
+Received: from ghost (c-67-164-127-253.hsd1.ca.comcast.net. [67.164.127.253])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-715e56d9716sm545002b3a.174.2024.08.29.00.14.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Aug 2024 00:14:27 -0700 (PDT)
+Date: Thu, 29 Aug 2024 00:14:22 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Russell King <linux@armlinux.org.uk>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+	linux-mm@kvack.org, loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 00/16] mm: Introduce MAP_BELOW_HINT
+Message-ID: <ZtAfzrOMitPlx96X@ghost>
+References: <20240827-patches-below_hint_mmap-v1-0-46ff2eb9022d@rivosinc.com>
+ <2570b1ea-d2a4-4bcb-9bb3-8d979657c56a@lucifer.local>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Zr-qkJirOC_GM9o6@google.com>
+In-Reply-To: <2570b1ea-d2a4-4bcb-9bb3-8d979657c56a@lucifer.local>
 
-On Fri, Aug 16, 2024 at 12:37:52PM -0700, Sean Christopherson wrote:
-> I would strongly prefer to enumerate this in /proc/cpuinfo, having to manually
-> query CPUID to see if a CPU supports a feature I want to test is beyond annoying.
+On Wed, Aug 28, 2024 at 07:19:36PM +0100, Lorenzo Stoakes wrote:
+> On Tue, Aug 27, 2024 at 10:49:06PM GMT, Charlie Jenkins wrote:
+> > Some applications rely on placing data in free bits addresses allocated
+> > by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
+> > address returned by mmap to be less than the maximum address space,
+> > unless the hint address is greater than this value.
+> >
+> > On arm64 this barrier is at 52 bits and on x86 it is at 56 bits. This
+> > flag allows applications a way to specify exactly how many bits they
+> > want to be left unused by mmap. This eliminates the need for
+> > applications to know the page table hierarchy of the system to be able
+> > to reason which addresses mmap will be allowed to return.
+> >
+> > ---
+> > riscv made this feature of mmap returning addresses less than the hint
+> > address the default behavior. This was in contrast to the implementation
+> > of x86/arm64 that have a single boundary at the 5-level page table
+> > region. However this restriction proved too great -- the reduced
+> > address space when using a hint address was too small.
+> >
+> > A patch for riscv [1] reverts the behavior that broke userspace. This
+> > series serves to make this feature available to all architectures.
+> 
+> I'm a little confused as to the justification for this - you broke RISC V by
+> doing this, and have now reverted it, but now offer the same behaviour that
+> broke RISC V to all other architectures?
+> 
+> I mean this is how this reads, so I might be being ungenerous here :) but would
+> be good to clarify what the value-add is here.
 
-Why?
+Yeah I did not do a good job of explaining this! Having this be the
+default behavior was broken, not that this feature in general was
+broken.
 
-We have tools/arch/x86/kcpuid/kcpuid.c for that.
+> 
+> I also wonder at use of a new MAP_ flag, they're a limited resource and we
+> should only ever add them if we _really_ need to. This seems a bit niche and
+> specific to be making such a big change for including touching a bunch of pretty
+> sensitive arch-specific code.
+>
+> We have the ability to change how mmap() functions through 'personalities'
+> though of course this would impact every mmap() call in the process.
+> 
+> Overall I'm really not hugely convinced by this, it feels like userland
+> could find better ways of doing this (mostly you'd do a PROT_NONE mmap() to
+> reserve a domain and mprotect() it on allocation or mmap() over it).
+> 
+> So I just struggle to see the purpose myself. BUT absolutely I may be
+> missing context/others may have a view on the value of this. So happy to
+> stand corrected.
+> 
+> >
+> > I have only tested on riscv and x86. There is a tremendous amount of
+> 
+> Yeah, OK this is crazy, you can't really submit something as non-RFC that
+> touches every single arch and not test it.
+> 
+> I also feel like we need more justification than 'this is a neat thing that
+> we use in RISC V sometimes' conceptually for such a big change.
 
--- 
-Regards/Gruss,
-    Boris.
+I will send out a new version that does a much better job at explaining!
+This is not something that is done on riscv ever currently. This is
+something that is done on other architectures such as x86 and arm64.
+This flag is to make similar behavior (the ability to force mmap to
+return addresses that have a constrained address space) available to all
+architectures.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+> 
+> Also your test program is currently completely broken afaict (have
+> commented on it directly). I also feel like your test program is a little
+> rudimentary, and should test some edge cases close to the limit etc.
+> 
+> So I think this is a NACK until there is testing across the board and a little
+> more justification.
+> 
+> Feel free to respin, but I think any future revisions should be RFC until
+> we're absolutely sure on testing/justification.
+> 
+> I appreciate your efforts here so sorry to be negative, but just obviously
+> want to make sure this is functional and trades off added complexity for
+> value for the kernel and userland :)
+> 
+
+Totally understand thank you! After reviewing comments I have realized
+that I made this much more complicated than it needs to be. This should
+be able to be done without changing any architecture specific code. That
+will mostly eliminate all of the complexity, but still has the downside
+of consuming a MAP_ flag.
+
+- Charlie
+
+> Thanks!
+> 
+> > duplicated code in mmap so the implementations across architectures I
+> > believe should be mostly consistent. I added this feature to all
+> > architectures that implement either
+> > arch_get_mmap_end()/arch_get_mmap_base() or
+> > arch_get_unmapped_area_topdown()/arch_get_unmapped_area(). I also added
+> > it to the default behavior for arch_get_mmap_end()/arch_get_mmap_base().
+> >
+> > Link: https://lore.kernel.org/lkml/20240826-riscv_mmap-v1-2-cd8962afe47f@rivosinc.com/T/ [1]
+> >
+> > To: Arnd Bergmann <arnd@arndb.de>
+> > To: Paul Walmsley <paul.walmsley@sifive.com>
+> > To: Palmer Dabbelt <palmer@dabbelt.com>
+> > To: Albert Ou <aou@eecs.berkeley.edu>
+> > To: Catalin Marinas <catalin.marinas@arm.com>
+> > To: Will Deacon <will@kernel.org>
+> > To: Michael Ellerman <mpe@ellerman.id.au>
+> > To: Nicholas Piggin <npiggin@gmail.com>
+> > To: Christophe Leroy <christophe.leroy@csgroup.eu>
+> > To: Naveen N Rao <naveen@kernel.org>
+> > To: Muchun Song <muchun.song@linux.dev>
+> > To: Andrew Morton <akpm@linux-foundation.org>
+> > To: Liam R. Howlett <Liam.Howlett@oracle.com>
+> > To: Vlastimil Babka <vbabka@suse.cz>
+> > To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> > To: Thomas Gleixner <tglx@linutronix.de>
+> > To: Ingo Molnar <mingo@redhat.com>
+> > To: Borislav Petkov <bp@alien8.de>
+> > To: Dave Hansen <dave.hansen@linux.intel.com>
+> > To: x86@kernel.org
+> > To: H. Peter Anvin <hpa@zytor.com>
+> > To: Huacai Chen <chenhuacai@kernel.org>
+> > To: WANG Xuerui <kernel@xen0n.name>
+> > To: Russell King <linux@armlinux.org.uk>
+> > To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > To: James E.J. Bottomley <James.Bottomley@HansenPartnership.com>
+> > To: Helge Deller <deller@gmx.de>
+> > To: Alexander Gordeev <agordeev@linux.ibm.com>
+> > To: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+> > To: Heiko Carstens <hca@linux.ibm.com>
+> > To: Vasily Gorbik <gor@linux.ibm.com>
+> > To: Christian Borntraeger <borntraeger@linux.ibm.com>
+> > To: Sven Schnelle <svens@linux.ibm.com>
+> > To: Yoshinori Sato <ysato@users.sourceforge.jp>
+> > To: Rich Felker <dalias@libc.org>
+> > To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> > To: David S. Miller <davem@davemloft.net>
+> > To: Andreas Larsson <andreas@gaisler.com>
+> > To: Shuah Khan <shuah@kernel.org>
+> > To: Alexandre Ghiti <alexghiti@rivosinc.com>
+> > Cc: linux-arch@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Cc: Palmer Dabbelt <palmer@rivosinc.com>
+> > Cc: linux-riscv@lists.infradead.org
+> > Cc: linux-arm-kernel@lists.infradead.org
+> > Cc: linuxppc-dev@lists.ozlabs.org
+> > Cc: linux-mm@kvack.org
+> > Cc: loongarch@lists.linux.dev
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: linux-parisc@vger.kernel.org
+> > Cc: linux-s390@vger.kernel.org
+> > Cc: linux-sh@vger.kernel.org
+> > Cc: sparclinux@vger.kernel.org
+> > Cc: linux-kselftest@vger.kernel.org
+> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> >
+> > ---
+> > Charlie Jenkins (16):
+> >       mm: Add MAP_BELOW_HINT
+> >       riscv: mm: Do not restrict mmap address based on hint
+> >       mm: Add flag and len param to arch_get_mmap_base()
+> >       mm: Add generic MAP_BELOW_HINT
+> >       riscv: mm: Support MAP_BELOW_HINT
+> >       arm64: mm: Support MAP_BELOW_HINT
+> >       powerpc: mm: Support MAP_BELOW_HINT
+> >       x86: mm: Support MAP_BELOW_HINT
+> >       loongarch: mm: Support MAP_BELOW_HINT
+> >       arm: mm: Support MAP_BELOW_HINT
+> >       mips: mm: Support MAP_BELOW_HINT
+> >       parisc: mm: Support MAP_BELOW_HINT
+> >       s390: mm: Support MAP_BELOW_HINT
+> >       sh: mm: Support MAP_BELOW_HINT
+> >       sparc: mm: Support MAP_BELOW_HINT
+> >       selftests/mm: Create MAP_BELOW_HINT test
+> >
+> >  arch/arm/mm/mmap.c                           | 10 ++++++++
+> >  arch/arm64/include/asm/processor.h           | 34 ++++++++++++++++++++++----
+> >  arch/loongarch/mm/mmap.c                     | 11 +++++++++
+> >  arch/mips/mm/mmap.c                          |  9 +++++++
+> >  arch/parisc/include/uapi/asm/mman.h          |  1 +
+> >  arch/parisc/kernel/sys_parisc.c              |  9 +++++++
+> >  arch/powerpc/include/asm/task_size_64.h      | 36 +++++++++++++++++++++++-----
+> >  arch/riscv/include/asm/processor.h           | 32 -------------------------
+> >  arch/s390/mm/mmap.c                          | 10 ++++++++
+> >  arch/sh/mm/mmap.c                            | 10 ++++++++
+> >  arch/sparc/kernel/sys_sparc_64.c             |  8 +++++++
+> >  arch/x86/kernel/sys_x86_64.c                 | 25 ++++++++++++++++---
+> >  fs/hugetlbfs/inode.c                         |  2 +-
+> >  include/linux/sched/mm.h                     | 34 ++++++++++++++++++++++++--
+> >  include/uapi/asm-generic/mman-common.h       |  1 +
+> >  mm/mmap.c                                    |  2 +-
+> >  tools/arch/parisc/include/uapi/asm/mman.h    |  1 +
+> >  tools/include/uapi/asm-generic/mman-common.h |  1 +
+> >  tools/testing/selftests/mm/Makefile          |  1 +
+> >  tools/testing/selftests/mm/map_below_hint.c  | 29 ++++++++++++++++++++++
+> >  20 files changed, 216 insertions(+), 50 deletions(-)
+> > ---
+> > base-commit: 5be63fc19fcaa4c236b307420483578a56986a37
+> > change-id: 20240827-patches-below_hint_mmap-b13d79ae1c55
+> > --
+> > - Charlie
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
 
