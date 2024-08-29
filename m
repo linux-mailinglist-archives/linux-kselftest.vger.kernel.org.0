@@ -1,113 +1,152 @@
-Return-Path: <linux-kselftest+bounces-16722-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16723-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D979965067
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 21:59:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67D8E965076
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 22:06:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C69B91F246F9
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 19:59:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 819AD1C224FF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 20:06:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADAAD1BA29E;
-	Thu, 29 Aug 2024 19:58:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E9B11BA288;
+	Thu, 29 Aug 2024 20:06:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oJiF1HZe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pgh05sZH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F72148FF0;
-	Thu, 29 Aug 2024 19:58:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A44DA1311B5;
+	Thu, 29 Aug 2024 20:06:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724961504; cv=none; b=fsVbu8mryBeVgml7s8BE0ok428CDKkf9IREaeYCIW7vq7hXqvt6fp1XN0U8SoEPLwU7sH8KRxNLj5njd9y13wQaZzCZ9rSSCW5tVq94qeMRzX80dpGcmwX1LBUe2Zxf3kV1E3154E/GqsWA2ygAfh6+QuglmPVjbDPqe/5OFEx0=
+	t=1724961962; cv=none; b=KVop9deUsUViAhlRJNOaVUEaNx8QPe29a8lJ1snTwbpoBjbedx9U35KGVRBh3sErOD0gdQvSO02qpQbY1TD4WqYdwm2G2OJ1RDg/wjR3P0F6Upz41plX9TcHGqFldipzPdyoSNa3QGBZahFcqnmDr1hobWETA9rWzod12XhDKbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724961504; c=relaxed/simple;
-	bh=5ZJO21J7u88izzuci2C208UHwROGrNt3osb4f9ZFkdg=;
+	s=arc-20240116; t=1724961962; c=relaxed/simple;
+	bh=jjY3PbslKhfXvlshQ539eQ+z8Cll4clbilq8gY8N3I0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FC7YeLcOTk+ZfjYB/SyZxCxGuVBiTtqNHCqywpgaehg7tYKXYeOSdOdPMkDHRN8sEZ+3yq4R0I6NCjqUxITy+ldfuM+G6aJbrLuQKhPb9e24R/mlt4iyP6u/81n0zvyTFbxAti0tJSq5G46kLmLfduafu10biFPMbFsJU2zWQ5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oJiF1HZe; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=2y1Q6Z5FNb1Px58aZg62B3qtSMZPeJoICzrTDFXz/eo=; b=oJiF1HZeObZH20BOyCNMGtmWAs
-	IO1Rwzl99g6OHDbdJ+L3srXUg5bjrIgdPietSUfnzQ2pi9I9J8fzFRowOoMltDOrG06t97zKOq5YE
-	6nj3v7fvizoEY0BM7r1ybz3vnWNE/t63bfgy1cG7odCAfP7TfzhfiviOVttKOf93PisNO40zVNoiM
-	3qR41XcAI+LOyA7JHB3xmJOA/RBGb16jotT0XAiGb70IQc6iYQ5TC1JiKxu2tLd/STAagMUCeJF0f
-	UfexAuysX3JVXrtdzM76fq5UWtJ8JV/whXRLHa9hFkqcm6J01WGm0i6Mnn9HISpnJV6UW/Bjp0c8e
-	LjoMQ/VQ==;
-Received: from willy by casper.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1sjlHg-00000002T5Y-3Lzf;
-	Thu, 29 Aug 2024 19:58:20 +0000
-Date: Thu, 29 Aug 2024 20:58:20 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: Jeff Xu <jeffxu@chromium.org>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, akpm@linux-foundation.org,
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-	linux-hardening@vger.kernel.org, pedro.falcato@gmail.com,
-	rientjes@google.com, keescook@chromium.org,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v1 2/2] selftests/mm: mseal_test add more tests
-Message-ID: <ZtDS3AP9Ejt31EbU@casper.infradead.org>
-References: <20240828225522.684774-1-jeffxu@chromium.org>
- <20240828225522.684774-2-jeffxu@chromium.org>
- <CABi2SkW9qEOx1FAcWeBLx_EA8LT2V_U6OS1GmEP433oA6t35pw@mail.gmail.com>
- <097a3458-0126-48e3-ba0d-d7dc7b9069d2@lucifer.local>
- <CABi2SkVe6Y4xypBw0n8QbqKJgsfy9YRNJWvBZ3bjTa=-Z5Zn2g@mail.gmail.com>
- <5a312d38-4591-47b1-9a6c-4a7242dbe20d@lucifer.local>
- <CABi2SkXDVgiUeC1StbfggvtiYG_kDxQJsZPpDw-NDPNv6-dwmg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=di16iONw5wb098h76VpcyGjwdmoQ4t1bF+pbjW7d34orEsTc2dNwT0O1MCZZ4OR9XAg0rBOXv8u82Ab0iCSnuxgRzkjqitmnA8wW5WF7wh16Q9hXTAyk0T5G2KBUOVkvSYuuPmaRKoWIrikqgTAyc4KdmAQTIFrS/1tZHUlgiSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pgh05sZH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E22A9C4CEC1;
+	Thu, 29 Aug 2024 20:05:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724961962;
+	bh=jjY3PbslKhfXvlshQ539eQ+z8Cll4clbilq8gY8N3I0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Pgh05sZHH1ibogv5993BrLByQD2Hc0qfcAv2NJeBS3Mftf84AbXP9FW90wTGti+Tf
+	 ru32QNYkthl3hI0pSdGfQtUdsHeU1uWr6boa5WmBadB/vr4S5eY2mzVWaDVz/GH8Ks
+	 JvpRPHZu38SQAmQmVTfol3Si3hAjwgijOkJkBnM/xm9lUV+WW1lQ07x1jXV6BdovV9
+	 ZQLhh2jTkOWKq8dmJVXCjaUdIP0R1ph0q54o9t2g7Pi9fTt4xeg0jKN26ZYxsETwJC
+	 pkVrvKZrhYyJUI3CTFCDMW/PZRtCtcwBFmOQJTvVO7vMftTj08uaE4xrP321ZNlR4R
+	 cuA4wT2MNl2xw==
+Date: Thu, 29 Aug 2024 21:05:48 +0100
+From: Simon Horman <horms@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+	dri-devel@lists.freedesktop.org,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Andreas Larsson <andreas@gaisler.com>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Steffen Klassert <steffen.klassert@secunet.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	David Ahern <dsahern@kernel.org>,
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
+	Magnus Karlsson <magnus.karlsson@intel.com>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Jonathan Lemon <jonathan.lemon@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Sumit Semwal <sumit.semwal@linaro.org>,
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+	Pavel Begunkov <asml.silence@gmail.com>, David Wei <dw@davidwei.uk>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Yunsheng Lin <linyunsheng@huawei.com>,
+	Shailend Chand <shailend@google.com>,
+	Harshitha Ramamurthy <hramamurthy@google.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Jeroen de Borst <jeroendb@google.com>,
+	Praveen Kaligineedi <pkaligineedi@google.com>,
+	Bagas Sanjaya <bagasdotme@gmail.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Taehee Yoo <ap420073@gmail.com>,
+	Willem de Bruijn <willemb@google.com>,
+	Kaiyuan Zhang <kaiyuanz@google.com>,
+	Daniel Vetter <daniel.vetter@ffwll.ch>
+Subject: Re: [PATCH net-next v23 03/13] netdev: support binding dma-buf to
+ netdevice
+Message-ID: <20240829200548.GX1368797@kernel.org>
+References: <20240829060126.2792671-1-almasrymina@google.com>
+ <20240829060126.2792671-4-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABi2SkXDVgiUeC1StbfggvtiYG_kDxQJsZPpDw-NDPNv6-dwmg@mail.gmail.com>
+In-Reply-To: <20240829060126.2792671-4-almasrymina@google.com>
 
-On Thu, Aug 29, 2024 at 12:54:09PM -0700, Jeff Xu wrote:
-> Hi Lorenzo
-> 
-> On Thu, Aug 29, 2024 at 8:44 AM Lorenzo Stoakes
-> <lorenzo.stoakes@oracle.com> wrote:
-> 
-> > > >
-> > > > Also, this is a really unusual way to send a series - why is this a 2/2 in
-> > > > reply to the 1/2 and no cover letter? Why is this change totally unrelated
-> > > > to the other patch?
-> > > >
-> 1/2 has a fix that 2/2 is depending on. That is the reason they are together.
+On Thu, Aug 29, 2024 at 06:01:16AM +0000, Mina Almasry wrote:
 
-The normal way to send out these patches is as three emails; a 0/2 cover
-letter, 1/2 replying to 0/2 and 2/2 also replying to 0/2.  That's what
-has Lorenzo confused.
+...
 
-> > > > Can you send this as a separate patch, preferably as an RFC so we can
-> > > > ensure that we all agree on how mseal() should behave?
-> > > >
-> It is not an RFC because it doesn't change any semanic to mseal. The
-> updated test will pass on linux main as well as 6.10. The increased
-> coverage will help to prevent future regression, i.e. during
-> refactoring.
+> diff --git a/net/core/netdev-genl-gen.c b/net/core/netdev-genl-gen.c
+> index 6b7fe6035067..8b87801e8d1c 100644
+> --- a/net/core/netdev-genl-gen.c
+> +++ b/net/core/netdev-genl-gen.c
+> @@ -8,6 +8,7 @@
+>  
+>  #include "netdev-genl-gen.h"
+>  
+> +#include <linux/list.h>
+>  #include <uapi/linux/netdev.h>
 
-You seem to not understand that there is disagreement on the semantics
-of mseal().  I mean, ther's been a lot of arguing about that over the
-last week.  There's understanable reluctance to accept a large pile of
-tests saying "this just ensures that mseal behaves the way I think it
-should", when there is substantial disagreement that the way you think
-it should behave is in fact the way it should behave.  Be prepared to
-argue for each semantic that you think it should have.
+Hi Mina,
 
-> I will add a cover letter, split the tests and add more comments to
-> help the review.
+Strangely, when tools/net/ynl/ynl-regen.sh -f runs, it places
+the includes in the opposite order.
 
-Thank you.
+I raise this as it may lead to churn later.
+
+...
+
+> diff --git a/net/core/netdev-genl-gen.h b/net/core/netdev-genl-gen.h
+> index 67c34005750c..01ef29ace149 100644
+> --- a/net/core/netdev-genl-gen.h
+> +++ b/net/core/netdev-genl-gen.h
+> @@ -9,6 +9,7 @@
+>  #include <net/netlink.h>
+>  #include <net/genetlink.h>
+>  
+> +#include <linux/list.h>
+>  #include <uapi/linux/netdev.h>
+
+Ditto.
+
+...
 
