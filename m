@@ -1,283 +1,446 @@
-Return-Path: <linux-kselftest+bounces-16695-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16696-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 462B9964A68
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 17:44:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3420B964AC1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 17:57:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE87B28288D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 15:44:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1114281A76
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 15:57:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A73B1B3740;
-	Thu, 29 Aug 2024 15:44:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 812151B3B17;
+	Thu, 29 Aug 2024 15:57:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="PkjbVBGx";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="CyOh1Jnn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ms3emRJ3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D901B373E;
-	Thu, 29 Aug 2024 15:44:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724946281; cv=fail; b=kea7v0VdAzY99FvU6U59CCYzN9jRMUs6+L6UkiozDFc6oL3g1YddU1QX/k/m4WDBnpf9pkb7LvU+CJD0MtmVvGR5IpNw2mom0UAotSRBE75JZXyeHIP45/NdGDzZ1j602r3xHDvEyDrejwzsOcYbxnNJsYbs3COCgYNafaACE20=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724946281; c=relaxed/simple;
-	bh=rOYQdvMI7O2aapgJjHnrhBqKIYBGpRV1IqYHJp49O5w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Wns/FW6PbbVgOkzs3MfHGUB8fQhNgY65fj1fJNjgUCSW4AXjXsrEP/mSuxNfsG9dFjDZEey0HvHdsm+l/z/4j5EX5jw/IMXHRc/W033ifbQerUcU4pOArI7YLhwlbE+075rXxzBJVPUm/tDh+sB74noIUoJrhG2ldCNQJNQakU0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=PkjbVBGx; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=CyOh1Jnn; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47TDsZtv019023;
-	Thu, 29 Aug 2024 15:44:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	date:from:to:cc:subject:message-id:references:content-type
-	:content-transfer-encoding:in-reply-to:mime-version; s=
-	corp-2023-11-20; bh=rOYQdvMI7O2aapgJjHnrhBqKIYBGpRV1IqYHJp49O5w=; b=
-	PkjbVBGxr8cOIC+T465MKlBvjT/pnsgDMKIV8lAlTfxqrdK7kkAFGrW7s/JbIVoE
-	srkgBLpcI2bS6qtD5IF9fvEHc6sfrRgUKhEtqKsPK+3DQ9kBQ7iUikWUvFQ3bK7f
-	N9GEsV361cGB1+r6G+ttpP5lnMxQvJxVq/fWgmN3ey8YuEWH/hGkv+hMIBsVzlp+
-	hKMFzYX4A7HwcES5SZt0Zq73DtR3aum9yD1EDcMVLkGFlEARvG77v6a0GzCgrNlh
-	YeK54+rs1aKyzen7/XyU3X2rlRnSJiErrB3+84PVn57i9LuFCTUGmaLpiCvVpV+0
-	W2bF1nAsHDQXpFrbEaQ24g==
-Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 419pugvk09-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 29 Aug 2024 15:44:22 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 47TFMdq3036621;
-	Thu, 29 Aug 2024 15:44:21 GMT
-Received: from nam04-bn8-obe.outbound.protection.outlook.com (mail-bn8nam04lp2041.outbound.protection.outlook.com [104.47.74.41])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4189jndjjh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 29 Aug 2024 15:44:21 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=VnLy1dP8ilHMf93hNSwE4pCieWIUqaIuDjCgfBq39M4zLhAHpT2Kjzcft7O1Vt0CFVYh1tl1/1+uqcGcM/5bs6AA3ltaG+AVSzRS8w8TAYJ28hNuSAXdeIEMgl0AHUwYTv8zUyfIlYWDIJ2pOuQo0zOzV87L33GFJNyDWFypTKpeoIul2XH/kaLzjfKs5qpftFZUr42U7+VjzmiWGCWX+MIBHgjUGKSiLuaJiAZYvahSULfV2CPIrd3jWEdQRB79BQSBAl8fYLSuLHgVZEN0nRvDrPo4+hhGCjnF2fdgT9nnvgucpgCz+YBa7u/Kduh8ND3F63Gehlhguo7B7lrrIw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rOYQdvMI7O2aapgJjHnrhBqKIYBGpRV1IqYHJp49O5w=;
- b=sPfcPF1/l3uw4pozgkoXpjfslzBSvOwQ4MozwSToqfaRhda1grmoat+NvumO1YiaLyaERr3ixD1PbKktKvq1XI4lBFmWqMk1s+gS3OCzgj3shse31tWyMWEcsGFQHuxQNyeL4dtC2gUnDrPptIjxd2aubc7Y2oU+0vINCmdO1o34J+muuvfCD04iQVA+Ge3TfiSjH0Drczr1jjO1zSDRc7WSFwj4Kv9hxyMFGUjp3ufv+pzZkrDhOvtkQRP5otxy9JMY7qfxygAepiF6nkSDub9evXoQioQ8a0Nzii3eSox2ee9COmPWvA+ZHAntOyW1JdODDeEnji2WaZjw9ydo5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rOYQdvMI7O2aapgJjHnrhBqKIYBGpRV1IqYHJp49O5w=;
- b=CyOh1JnnNpmwM9xmMzD/Qog7I/bu0/+ZMlY0jGx6F2sA0LVLW2NR7/KBUj0YTNVOaoH//db6THHGzNouWPxa5vAvybFQbqmD9NVx+f9UuLzFljs5rUWaP1j85Zz4YL4qnW/24QF0/wEgyHfRtgRVQQgDwnGs9E1ixsc6ZwTpNS0=
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com (2603:10b6:a03:3d0::5)
- by MW4PR10MB6419.namprd10.prod.outlook.com (2603:10b6:303:20f::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.17; Thu, 29 Aug
- 2024 15:44:19 +0000
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e]) by SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e%5]) with mapi id 15.20.7918.017; Thu, 29 Aug 2024
- 15:44:19 +0000
-Date: Thu, 29 Aug 2024 16:44:15 +0100
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Jeff Xu <jeffxu@chromium.org>
-Cc: akpm@linux-foundation.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org,
-        pedro.falcato@gmail.com, rientjes@google.com, keescook@chromium.org,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: [PATCH v1 2/2] selftests/mm: mseal_test add more tests
-Message-ID: <5a312d38-4591-47b1-9a6c-4a7242dbe20d@lucifer.local>
-References: <20240828225522.684774-1-jeffxu@chromium.org>
- <20240828225522.684774-2-jeffxu@chromium.org>
- <CABi2SkW9qEOx1FAcWeBLx_EA8LT2V_U6OS1GmEP433oA6t35pw@mail.gmail.com>
- <097a3458-0126-48e3-ba0d-d7dc7b9069d2@lucifer.local>
- <CABi2SkVe6Y4xypBw0n8QbqKJgsfy9YRNJWvBZ3bjTa=-Z5Zn2g@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABi2SkVe6Y4xypBw0n8QbqKJgsfy9YRNJWvBZ3bjTa=-Z5Zn2g@mail.gmail.com>
-X-ClientProxiedBy: LO2P265CA0370.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:a3::22) To SJ0PR10MB5613.namprd10.prod.outlook.com
- (2603:10b6:a03:3d0::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 636F81B3B23
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2024 15:56:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1724947021; cv=none; b=FjJo4hLHyiNTPX/Fkj7a4yxZ/rR/iY1IhnAW+Tz3rYfIxwDOKrT7NxojpViwAEn/1cIyxOVxqFpa/5f3mu0QrK+OxYu6vyEcN1In+WtecOOU9RWUxzxaYtIB1ZOmpdV1kWE7oacRNiKnMcJUakDmjrgwTh2vrQhqkbW/Wcx6jsk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1724947021; c=relaxed/simple;
+	bh=ug0PT6KAJ8ZEKoqNYB2FXBhMJvqepKT/4nch1GZZWKw=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=XrSyEKOPYKpFbkHrDi5RXRyiNe7xzyWzoyHlgUihmpj+sHPMR+mli0IeilZXRfCSr3jDt+stVH4rygNgPHvq/3xmqnibjkeHsy4I59uGS5vYz8WweSGl74qX8MYwV5JskE09vUJCKfIyJ22Tsf0VrAzlJ74hfFKDV5XPSrYVQfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ms3emRJ3; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1724947019; x=1756483019;
+  h=message-id:date:mime-version:subject:from:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=ug0PT6KAJ8ZEKoqNYB2FXBhMJvqepKT/4nch1GZZWKw=;
+  b=Ms3emRJ3XGtSitmv4K5Ty7rhhlBrtH5QNUKaqqji+fL+2wKtGPDzglog
+   3f+hWz22ICU0D6hJYj/GP2GFkAz72bU6iLM7LL3vI+VADVtQ2liHa52FC
+   qZSqGSCtigTJ7TJg2HSfkPf9BTTC9wQAmXzmaUIpLaSiVz1u6CMKDwi9Z
+   tB6iLLSpD5NxIArxpmS89fptqo5IC4Z7tfoB9pAs71Sr9cdnm2eL1ODdS
+   x4vIMPYCwF8O/ZXuSrGtsMysxnUWf18Z7FbAUWLBWvHZYJr6LRGAt1Lki
+   x4NtoA5QQE2AuFFIurxXM7sgaRHQ2CavvM9zk7GT6kYzBGIrtyfgfU9jF
+   A==;
+X-CSE-ConnectionGUID: qGjWd9A6TVCE5IyYBbJ7bw==
+X-CSE-MsgGUID: birZYqJgTe2jVlmbiuZR4Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="34215005"
+X-IronPort-AV: E=Sophos;i="6.10,186,1719903600"; 
+   d="scan'208";a="34215005"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Aug 2024 08:56:58 -0700
+X-CSE-ConnectionGUID: mDQgWTPdQqyvYFVecHKHHQ==
+X-CSE-MsgGUID: oybNgkLGTuC8pEyX9gJkRg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,186,1719903600"; 
+   d="scan'208";a="63245586"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by fmviesa006.fm.intel.com with ESMTP; 29 Aug 2024 08:56:56 -0700
+Received: from [10.245.120.199] (unknown [10.245.120.199])
+	by irvmail002.ir.intel.com (Postfix) with ESMTP id A3C8328789;
+	Thu, 29 Aug 2024 16:56:54 +0100 (IST)
+Message-ID: <537213da-b537-4cbf-91f1-15d84e16bd1e@intel.com>
+Date: Thu, 29 Aug 2024 17:56:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|MW4PR10MB6419:EE_
-X-MS-Office365-Filtering-Correlation-Id: de59a755-12e8-419e-e34d-08dcc84171fc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?bGczZHhVMmxZeFpWcHZES3V3ZGZmNjRrV3F3b1hodDlwNElXRGlEc20xZS9h?=
- =?utf-8?B?aGd1WXVPTWtZZ1hzZmgyUThUYXJuMWJyK0xUWE94T20wSDlMaDdiSHA2N2ZP?=
- =?utf-8?B?cmN4REFoNFdaSHVTOUF2TktHSGJDaHp1ckRKa1dENkpjbHhEdERmUUdCVEhn?=
- =?utf-8?B?akZrdS80Z3VnYm8zR2srRGMwZkx4QnBTN08rbWVhTGlZMURXOEg3QnpvTEww?=
- =?utf-8?B?dFpwRWFyVjJrOVh0aHBpT0ZKSitQdFdFYjJrODM0Sis1MmhHWXhxTWFxemdu?=
- =?utf-8?B?WmNIMHRaaGs4VmZPTXFSMWE5aVVJODFFY3NIZCtrZTk3UXhzdWxTNVMxZkZ5?=
- =?utf-8?B?R09IK2tpS09zSWRHVHlPTXFiR1JpTGMxQWV3bmJCdlFvNEZCK3VVRThIenVW?=
- =?utf-8?B?WGIzWW9XTVhJb0dBVWpUdlRIMHhIdmJuKys0Rk1Bdk1sakJ3aFBFMmF6aHpq?=
- =?utf-8?B?S0VnMkkxMnl5T29tUHNjSU9LTGdGcWJUSnB0QzNmSFo1YnBVRVk3ZzNXckpr?=
- =?utf-8?B?TnBzZmdmY2M5SjFiWjhFU3F2UE9LVjVXRnVjcmpCVEFkV0VIWGNmNVFLQ0JT?=
- =?utf-8?B?b2pyOGlsYS9pYkRKWjE4cUlZK1lXMDRVYnd5cndkRkl0cFViemFPTkJrYTMv?=
- =?utf-8?B?L3ZBM0FZQ1AvUWpGd3oxWHBOSWFQVGplWGdIK1JsZmJBNSs1bkNGM3g1SzZr?=
- =?utf-8?B?RVpUMUdFaGN1S1JMdi9YcWR1MkNRcEMwVGhJMU9yVVRLeE5ncG1hQTE1dVIz?=
- =?utf-8?B?NUJ6cFZWMUovQytvU3daWWRsNkpPRHo1b3hFbEFXMnZ2cG4yeENseWtWUG1E?=
- =?utf-8?B?Rkl5bklUd2UwcEpHdUdBZkVhekxVdTQvcktCZGQrMCtHYlpHZVNMK2RoZ0E4?=
- =?utf-8?B?cEV5cmdUMk5TY3FiTTJkbHVvVTRhWnExSTQ1Unk0NVJUdDVpSGxicGhrSHpp?=
- =?utf-8?B?L0JhQ1Y1Q3EwN3Z3VUsvcFlwMElya2R6bE9xaFM2ck03YzFaZXNIa0tXQllj?=
- =?utf-8?B?QjNZWVlSUEI0WDVCQ0llNGVRYjdXVVNOZ01OUmwxeE1YUkdKU2F2eHhTVEdZ?=
- =?utf-8?B?ajNKZzlPZUxYTkUwR0RJZjR4Q29UelRCVy9qQVMvd0tDaVRJU2hUZ1k5QTRa?=
- =?utf-8?B?OFpldXFLRm5WL2w5Y0RYV2c4QUVRQklieWIzWmlrcmszWTBrcmQyTUp4OW84?=
- =?utf-8?B?K3liU0I5bmowcHk3SlBLZFNxSmVBSHJQa3Z6c3pLZEp4RmF1bm5rVDMrOGps?=
- =?utf-8?B?TzN3V0NzNkZuSjc2b0RyU0VpTzhCNWVzNTY1dGJ4MzQ0Z1NFLzE3VnZUL2NH?=
- =?utf-8?B?cWhLckhKcHhNcWlObm9vK2JHWlRPc0x6dkl2Tzk2T0xWUitzdG83TTRrKzB2?=
- =?utf-8?B?S2ZxdEZqWEJaOUlXZXdrajUvZzBYek5SUDFhOFVyZk9SWGdCR2lZUGVSYXpT?=
- =?utf-8?B?a2tiOWJUa1lMOE9mNjh2RHJyRjZQWG0yMU9oY1BDcnRnQzEycm1qd21rWGFV?=
- =?utf-8?B?WTBjdk9pK05NTWhyc3A1REhJSEF2eVlLZEcvYjVDQnkvZ3FTZzBCUHR3aVlp?=
- =?utf-8?B?QkdYMm9Gcmp0WUFZMENaTFd3dWs5WW90cnJUeHVZRW4wNitTdVFMNkZ0Z3dS?=
- =?utf-8?B?b3hob0JORnY0dmZvM3I4UlFBUmcybFBxdUJHUi9UOWtzbjlNSmhTU2JKTzhX?=
- =?utf-8?B?UTVLL2Y2WXBZMTBxSjUzQVVEZXQwRXlSUU1sWDlFRVl1Nm80bGZRdW1JZmtK?=
- =?utf-8?B?VkNPenIxMVJmKzlXdjMwc0ZJMFNMUURoR29FU2UwT1BVWUc1Q2tjZFdCd0Vo?=
- =?utf-8?B?VTJFRXNQY0dzSE1sbnVUZz09?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RjJ4TGMzWWw2ZjMvcnp1YWlpWHlnejJuM3JrMHd0cTFxMEs3Q2dDTW1IU2JD?=
- =?utf-8?B?QWJab0dQK080ejZGZ0d3c0gwNXFWZVJtOE51NE9RRDd0azNwekFqNDQrTTRn?=
- =?utf-8?B?QVU4UWVQa2p1ME4wLzNHeWw5eHpnUTFyY0VWOGk0UmVXejFoQVd2bmVnSTZK?=
- =?utf-8?B?SGQ1SkpBN1JMZ1paWk1URWIxakUrTFY3OFh1ckdyZ09sRHQ5T0xpUFhPdGw4?=
- =?utf-8?B?UkxSR3ZrejNBbXMvbEhWZHJQMU1qbGRMeS91V0FyUzVnYkcxUGpsejQ1MGlP?=
- =?utf-8?B?QlRPMjVUcU13U2VQd3ltMnhOVGZ1N1BUbnFZdEdVSi9pVTRDbkRKUkZUZnB1?=
- =?utf-8?B?RDRaeTdrZFExZEtBS2dCK2hwUU5EMUJxdGdrYWpSNjJXbXVScTZoRXlpeklU?=
- =?utf-8?B?ZkpLdENFTWo2UmwySDlkTnBWTWpZTUlGS1VYV05CbW1CMHZMQ082TXlOYUFL?=
- =?utf-8?B?Kzcxanl3eEpwQlBMWDFBODhKeVovMDk1QzU4dDN4eDgvbVUzdUhPRE9DM2pa?=
- =?utf-8?B?RThFMHN2MFZ6WjE3RmtTbkhUVVFSSHVpSTJ6VGZualRoYnNBUGpuNDREcWVu?=
- =?utf-8?B?TFZmemNlUlAzMFp2LzBQS21NVzBzNEpVUHNqaFJBemR3WWdyUmFHVkZVL29i?=
- =?utf-8?B?dUF3SDAvKzZxTDlRU2ZsSjR3emx5WUtpTUE4TmVCUm9XaDVmNlVkeHBWeGl6?=
- =?utf-8?B?MHNCajFWK0Juc25za1VxTG5taUhkY25RYkt2NW9UYjUxWVV1K094dzA5WDhz?=
- =?utf-8?B?UXNPL3pCN3VteXI0YjNGaWFYbnN4SkZMamFyaEFlcmNGWkpvNmlSYjZFK1VT?=
- =?utf-8?B?emJBa2VtTVJFRjlxS1R4OUtXcW5aTm1QNnFDYktTSjZZZm9OSDIram9qU0Yz?=
- =?utf-8?B?czRubCtaM3hFbkE0UzhwTURoYUxQQVJYekhRV3NuS0ZUdER5UnAxMzNYY29J?=
- =?utf-8?B?amFHMTdzVFBVV3RiNG4yS3lpWjBzUXY1bWZDZjM3TGpwUjQyUkxDVWtZb1RR?=
- =?utf-8?B?SytReEpVWk9tRTFXZXZoZEVrRlRMLzFtd2RQVCtKQlUyeXRQZlk1MjU5d25p?=
- =?utf-8?B?MXJPYXR0SlhkVGZEK2NiR1pReDJ5bVNXaTFGRk1TVnp1aXRta2kySDlBL0lk?=
- =?utf-8?B?TWR4dVo0YzRucmM2L3pIN201QXVqRTJWaU9OUUFETjFQQjdyRjBNekhNYjZQ?=
- =?utf-8?B?Y3pnbFlvU0kyTURTL2dmemNOQVl3b0JJNm5QMkwzcjNYWng3MHJ3QW5RaHE4?=
- =?utf-8?B?S2xvaUcrZDFtMXBnSm5GN2RqVFFhbkFMNjU5dTlONHp2S3RTNlJOQytVM1RW?=
- =?utf-8?B?VHJXd3ZyZDVDM0VBSDM5aHI3aC9QNnRtOWpJWWM3Z1VENXNHQm5pR1dYVXZT?=
- =?utf-8?B?ZmQyT3FrdEtybGJTNUExUUd2Tzd4WWtlbkJVTCtNbGRBSDArc2JIY2cyLzNY?=
- =?utf-8?B?a2hQNm0xOERCak03S2RXTXZBcERIVWROZXB4bTdjSnQ5Ump2K09FT0JNUlZy?=
- =?utf-8?B?Z015NmJTVmhORmEzUUpwdDJKSy9CQVhpaUpTRUxiR3BNU3lpdzBHRGQvdEZG?=
- =?utf-8?B?NGhqN1EyYWZ0bEdXWEJneFpCZTNROUlOeVowWWZaTVpHd0t4ZUxWb3M3VStn?=
- =?utf-8?B?N0hXZ1k0VDdTMTVaZjlzWU1wTytSMlJFd0JFRW5HZkxJc1NJTGVZNldWZ2do?=
- =?utf-8?B?bGFHeWsraVVXOGQzZ0V0MXozRTQ1b2MrMWNNc3hXMitUM1hEb1c2RmdpcWhL?=
- =?utf-8?B?UVVSSGRTR1RKRkZVdkxPMjFldDBydDR1OUpyUlRCclBtNXBOdzl5eCs0Qm5X?=
- =?utf-8?B?NGgrVlpSTlVrUDdJR05KR0VJQVkyYTFFMzdXcGYwb1ZQb2Zha0lrKzRNeHpi?=
- =?utf-8?B?cEhoV24wYUxKOVhNTUhZdElzcUZkd2VIcVZrTWkveitjK1gyRFY4MXE0VVNk?=
- =?utf-8?B?R0VUNllOOU9aNkJyL1hLUE1nb3RsQlhXQ0pEcUJybXE0ZFhoSzF3eDJ4cThQ?=
- =?utf-8?B?WXZzMXdTU1krYm9rUGo0YnFrKy9FZzFleVFvRWxXN2daSTVMOW05MWgzWTZH?=
- =?utf-8?B?RWZpL0ZiVDZwcytnWGwvMGZOSFZpQjZiOUpZZmpOelRUVU5wc1FoZGQyemhJ?=
- =?utf-8?B?RzA3eWgwTXhwRkFYYmtHMWVwOENTcGdPVEprVmZ3eTNoZi9QK3BESitGakNP?=
- =?utf-8?B?Y2c9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	3ffuoWNC7qbNQhJbPI/zUOqdGOZqP8yZ5WCODE02/KYZhkMaK2Qf1RpknU2tRzNwcTkDzWe5Nz/ybG7gzimtfaqMwtYANJyxTHuS/dgeMPFCuAgIZuuF82M8zvtcGTbgXF31dtCFglFeo44v7FBVF8gZjCEA3vMmtqnPL7XGuwls4wbT1kBlCsLssmsfvfQra8Y5S93vHvuT4OM5BASl29VBvoy6iNJAoEzPgkuiSJkOcdUKeCB6NDog41Z2LAD0MurYfTuvYXAFKHO95lsx76zggK+oF+fKwuw89kl5/QdZH3PvzLhodZTlOzTNfFtp1V2IN+71AaOFngRMPdLw99gfWufA7btwt7B9pl7+KOv7jvfLDwsZQ+ZLmtBG4rtBXhfA1q7MZpW4+EvG82qG4fzsOSL0GbUWUkftfb5vY96zi6RTNsiJ7iOdxtisf2sJZ5FR/tETsy3OFdG18l20k3+jC9c9etnZPeXhbYDqdQkfrc4Ce3anQX/GdIsqWZnWXhUWmayeZ1zEGYMwb5M00Iirx6dTO0zI2XouatKKth1hck3AJouxBiLloi/TcDkjszeg/VJWSWED+2d2lsQdAuvp8bamFcPz9b3NhYfZgvs=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: de59a755-12e8-419e-e34d-08dcc84171fc
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB5613.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2024 15:44:19.1387
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9FTpnITIeer798eLCqka4wkmRgXJU7mKC1gM+QICzMESVQonP9V60A+CBp0EVLAgYsUn0txItaalxWwVYNApRo2tgcGsnP6eLMXVjSDIsDk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR10MB6419
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
- definitions=2024-08-29_04,2024-08-29_02,2024-05-17_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 suspectscore=0
- phishscore=0 malwarescore=0 bulkscore=0 mlxlogscore=715 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
- definitions=main-2408290110
-X-Proofpoint-GUID: 5aCy0niCN7035NcpDTI2xridMgYgoRKi
-X-Proofpoint-ORIG-GUID: 5aCy0niCN7035NcpDTI2xridMgYgoRKi
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 4/6] kunit: Allow function redirection outside of the
+ KUnit thread
+From: Michal Wajdeczko <michal.wajdeczko@intel.com>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ Rae Moar <rmoar@google.com>, David Gow <davidgow@google.com>,
+ Daniel Latypov <dlatypov@google.com>
+References: <20240826222015.1484-1-michal.wajdeczko@intel.com>
+ <20240826222015.1484-5-michal.wajdeczko@intel.com>
+ <xhciaodcnfjqe633zly2zkijzbi3ltfozewkyvkanpycclccte@ifoydlvgdnui>
+ <3661b911-b01d-4230-a786-eaaa0e130a35@intel.com>
+Content-Language: en-US
+In-Reply-To: <3661b911-b01d-4230-a786-eaaa0e130a35@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 29, 2024 at 08:30:11AM GMT, Jeff Xu wrote:
-> Hi Lorenzo
->
-> On Thu, Aug 29, 2024 at 8:14 AM Lorenzo Stoakes
-> <lorenzo.stoakes@oracle.com> wrote:
-> >
-> > On Thu, Aug 29, 2024 at 07:45:56AM GMT, Jeff Xu wrote:
-> > > HI Andrew
-> > >
-> > > On Wed, Aug 28, 2024 at 3:55 PM <jeffxu@chromium.org> wrote:
-> > > >
-> > > > From: Jeff Xu <jeffxu@chromium.org>
-> > > >
-> > > > Add more testcases and increase test coverage, e.g. add
-> > > > get_vma_size to check VMA size and prot bits.
-> >
-> > This commit message is ridiculously short for such a massive change, even for
-> > test code.
-> >
-> > > >
-> > >
-> > > Could you please pull the self-test part of this patch series to mm-unstable ?
-> > > It will help to prevent regression.
-> >
-> > No, please don't.
-> >
-> > This needs review.
-> >
-> > These tests establish a precedent as to how mseal should behave, this is
-> > something that needs community review, not to just be taken.
-> >
-> > There's already been a great deal of confusion/contentious discussion
-> > around mseal() and its implementation.
-> >
-> > Pushing in ~800 lines of test code asserting how mseal() should behave
-> > without review isn't helping things.
-> >
-> > Also, this is a really unusual way to send a series - why is this a 2/2 in
-> > reply to the 1/2 and no cover letter? Why is this change totally unrelated
-> > to the other patch?
-> >
-> > Can you send this as a separate patch, preferably as an RFC so we can
-> > ensure that we all agree on how mseal() should behave?
-> >
-> > Sorry to be contentious here, but I think we need to find a more
-> > constructive, collaborative way forward with mseal() and to act with a
-> > little more caution, given the problems that the original series has caused
-> > I'd think this is in the best interests of all.
-> >
-> > Thanks for understanding!
-> >
-> There have been two bugs I found recently on mseal.
-> One during V2 of in-loop change and the other mentioned in 1/2 of this patch.
->
 
-Jeff you've ignored pretty much everything I've said here. This is not
-collaboration. And you keep doing this + causing disharmony among other
-devleopers. It's getting tiresome, and you need to do better.
 
-If you insist on review for this patch as it stands - NACK.
+On 27.08.2024 22:30, Michal Wajdeczko wrote:
+> 
+> 
+> On 27.08.2024 16:46, Lucas De Marchi wrote:
+>> On Tue, Aug 27, 2024 at 12:20:13AM GMT, Michal Wajdeczko wrote:
+>>> Currently, the 'static stub' API only allows function redirection
+>>> for calls made from the kthread of the current test, which prevents
+>>> the use of this functionality when the tested code is also used by
+>>> other threads, outside of the KUnit test, like from the workqueue.
+>>>
+>>> Add another set of macros to allow redirection to the replacement
+>>> functions, which, unlike the KUNIT_STATIC_STUB_REDIRECT, will
+>>> affect all calls done during the test execution.
+>>>
+>>> These new stubs, named 'global', must be declared using dedicated
+>>> KUNIT_DECLARE_GLOBAL_STUB() macro and then can be placed either as
+>>> global static variables or as part of the other structures.
+>>>
+>>> To properly maintain stubs lifecycle, they can be activated only
+>>> from the main KUnit context. Some precaution is taken to avoid
+>>> changing or deactivating replacement functions if one is still
+>>> used by other thread.
+>>>
+>>> Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
+>>> ---
+>>> Cc: Rae Moar <rmoar@google.com>
+>>> Cc: David Gow <davidgow@google.com>
+>>> Cc: Daniel Latypov <dlatypov@google.com>
+>>> Cc: Lucas De Marchi <lucas.demarchi@intel.com>
+>>> ---
+>>> v2: s/FIXED_STUB/GLOBAL_STUB (David, Lucas)
+>>>    make it little more thread safe (Rae, David)
+>>>    wait until stub call finishes before test end (David)
+>>>    wait until stub call finishes before changing stub (David)
+>>>    allow stub deactivation (Rae)
+>>>    prefer kunit log (David)
+>>> ---
+>>> include/kunit/static_stub.h | 158 ++++++++++++++++++++++++++++++++++++
+>>> lib/kunit/static_stub.c     |  49 +++++++++++
+>>> 2 files changed, 207 insertions(+)
+>>>
+>>> diff --git a/include/kunit/static_stub.h b/include/kunit/static_stub.h
+>>> index bf940322dfc0..42a70dcefb56 100644
+>>> --- a/include/kunit/static_stub.h
+>>> +++ b/include/kunit/static_stub.h
+>>> @@ -12,12 +12,15 @@
+>>>
+>>> /* If CONFIG_KUNIT is not enabled, these stubs quietly disappear. */
+>>> #define KUNIT_STATIC_STUB_REDIRECT(real_fn_name, args...) do {} while (0)
+>>> +#define KUNIT_GLOBAL_STUB_REDIRECT(stub_name, args...) do {} while (0)
+>>> +#define KUNIT_DECLARE_GLOBAL_STUB(stub_name, stub_type)
+>>>
+>>> #else
+>>>
+>>> #include <kunit/test.h>
+>>> #include <kunit/test-bug.h>
+>>>
+>>> +#include <linux/cleanup.h> /* for CLASS */
+>>> #include <linux/compiler.h> /* for {un,}likely() */
+>>> #include <linux/sched.h> /* for task_struct */
+>>>
+>>> @@ -109,5 +112,160 @@ void __kunit_activate_static_stub(struct kunit
+>>> *test,
+>>>  */
+>>> void kunit_deactivate_static_stub(struct kunit *test, void
+>>> *real_fn_addr);
+>>>
+>>> +/**
+>>> + * struct kunit_global_stub - Represents a context of global function
+>>> stub.
+>>> + * @replacement: The address of replacement function.
+>>> + * @owner: The KUnit test that owns the stub, valid only when @busy > 0.
+>>> + * @busy: The stub busyness counter incremented on entry to the
+>>> replacement
+>>> + *        function, decremented on exit, used to signal if the stub
+>>> is idle.
+>>> + * @idle: The completion state to indicate when the stub is idle again.
+>>> + *
+>>> + * This structure is for KUnit internal use only.
+>>> + * See KUNIT_DECLARE_GLOBAL_STUB().
+>>> + */
+>>> +struct kunit_global_stub {
+>>> +    void *replacement;
+>>> +    struct kunit *owner;
+>>> +    atomic_t busy;
+>>> +    struct completion idle;
+>>> +};
+>>> +
+>>> +/**
+>>> + * KUNIT_DECLARE_GLOBAL_STUB() - Declare a global function stub.
+>>> + * @stub_name: The name of the stub, must be a valid identifier
+>>> + * @stub_type: The type of the function that this stub will replace
+>>> + *
+>>> + * This macro will declare new identifier of an anonymous type that will
+>>> + * represent global stub function that could be used by KUnit. It can
+>>> be stored
+>>> + * outside of the KUnit code. If the CONFIG_KUNIT is not enabled this
+>>> will
+>>> + * be evaluated to an empty statement.
+>>> + *
+>>> + * The anonymous type introduced by this macro is mostly a wrapper to
+>>> generic
+>>> + * struct kunit_global_stub but with additional dummy member, that is
+>>> never
+>>> + * used directly, but is needed to maintain the type of the stub
+>>> function.
+>>> + */
+>>> +#define KUNIT_DECLARE_GLOBAL_STUB(stub_name, stub_type)                \
+>>> +union {                                        \
+>>> +    struct kunit_global_stub base;                        \
+>>> +    typeof(stub_type) dummy;                        \
+>>> +} stub_name
+>>> +
+>>> +/* Internal struct to define guard class */
+>>> +struct kunit_global_stub_guard {
+>>> +    struct kunit_global_stub *stub;
+>>> +    void *active_replacement;
+>>> +};
+>>> +
+>>> +/* Internal class used to guard stub calls */
+>>> +DEFINE_CLASS(kunit_global_stub_guard,
+>>> +         struct kunit_global_stub_guard,
+>>> +         ({
+>>> +        struct kunit_global_stub *stub = _T.stub;
+>>> +        bool active = !!_T.active_replacement;
+>>
+>> I'd call this `bool active_replacement` as it's not the same thing as
+>> the active below.
+> 
+> IMO 'active_replacement' would be even more confusing as by that name we
+> identify the address and here it's a flag
+> 
+> OTOH the 'active' in both places means more/less the same (in init below
+> it mean stub was 'activated' and in exit here that we used 'activated'
+> replacement function)
+> 
+>>
+>>> +
+>>> +        if (active && !atomic_dec_return(&stub->busy))
+>>> +            complete_all(&stub->idle);
+>>> +         }),
+>>> +         ({
+>>> +        class_kunit_global_stub_guard_t guard;
+>>> +        bool active = !!atomic_inc_not_zero(&stub->busy);
+>>> +
+>>> +        guard.stub = stub;
+>>> +        guard.active_replacement = active ?
+>>> READ_ONCE(stub->replacement) : NULL;
+>>> +
+>>> +        guard;
+>>> +         }),
+>>> +         struct kunit_global_stub *stub)
+>>> +
+>>> +/**
+>>> + * KUNIT_GLOBAL_STUB_REDIRECT() - Call a fixed function stub if
+>>> activated.
+>>> + * @stub: The function stub declared using KUNIT_DECLARE_GLOBAL_STUB()
+>>> + * @args: All of the arguments passed to this stub
+>>> + *
+>>> + * This is a function prologue which is used to allow calls to the
+>>> current
+>>> + * function to be redirected if a KUnit is running. If the KUnit is not
+>>> + * running or stub is not yet activated the function will continue
+>>> execution
+>>> + * as normal.
+>>> + *
+>>> + * The function stub must be declared with
+>>> KUNIT_DECLARE_GLOBAL_STUB() that is
+>>> + * stored in a place that is accessible from both the test code,
+>>> which will
+>>> + * activate this stub using kunit_activate_global_stub(), and from
+>>> the function,
+>>> + * where we will do this redirection using KUNIT_GLOBAL_STUB_REDIRECT().
+>>> + *
+>>> + * Unlike the KUNIT_STATIC_STUB_REDIRECT(), this redirection will work
+>>> + * even if the caller is not in a KUnit context (like a worker thread).
+>>> + *
+>>> + * Example:
+>>> + *
+>>> + * .. code-block:: c
+>>> + *
+>>> + *    KUNIT_DECLARE_GLOBAL_STUB(func_stub, int (*)(int n));
+>>> + *
+>>> + *    int real_func(int n)
+>>> + *    {
+>>> + *        KUNIT_GLOBAL_STUB_REDIRECT(func_stub, n);
+>>> + *        return n + 1;
+>>> + *    }
+>>> + *
+>>> + *    int replacement_func(int n)
+>>> + *    {
+>>> + *        return n + 100;
+>>> + *    }
+>>> + *
+>>> + *    void example_test(struct kunit *test)
+>>> + *    {
+>>> + *        KUNIT_EXPECT_EQ(test, real_func(1), 2);
+>>> + *        kunit_activate_global_stub(test, func_stub, replacement_func);
+>>> + *        KUNIT_EXPECT_EQ(test, real_func(1), 101);
+>>> + *    }
+>>> + */
+>>> +#define KUNIT_GLOBAL_STUB_REDIRECT(stub, args...) do
+>>> {                    \
+>>> +    if (kunit_is_running()) {                            \
+>>> +        typeof(stub) *__stub = &(stub);                        \
+>>> +        CLASS(kunit_global_stub_guard,
+>>> guard)(&__stub->base);            \
+>>> +        typeof(__stub->dummy) replacement =
+>>> guard.active_replacement;        \
+>>> +        if (unlikely(replacement)) {                        \
+>>> +            kunit_info(__stub->base.owner, "%s: redirecting to
+>>> %ps\n",    \
+>>> +                   __func__, replacement);                \
+>>> +            return replacement(args);                    \
+>>> +        }                                    \
+>>> +    }                                        \
+>>> +} while (0)
+>>> +
+>>> +void __kunit_activate_global_stub(struct kunit *test, struct
+>>> kunit_global_stub *stub,
+>>> +                  void *replacement_addr);
+>>> +
+>>> +/**
+>>> + * kunit_activate_global_stub() - Setup a fixed function stub.
+>>
+>> s/fixed/global/ here and every where else below
+> 
+> oops
+> 
+>>
+>>> + * @test: Test case that wants to activate a fixed function stub
+>>> + * @stub: The location of the function stub pointer
+>>> + * @replacement: The replacement function
+>>> + *
+>>> + * This helper setups a function stub with the replacement function.
+>>> + * It will also automatically deactivate the stub at the test end.
+>>> + *
+>>> + * The redirection can be disabled with kunit_deactivate_global_stub().
+>>> + * The stub must be declared using KUNIT_DECLARE_GLOBAL_STUB().
+>>> + */
+>>> +#define kunit_activate_global_stub(test, stub, replacement) do
+>>> {        \
+>>> +    typeof(stub) *__stub = &(stub);                        \
+>>> +    typecheck_fn(typeof(__stub->dummy), (replacement));            \
+>>> +    __kunit_activate_global_stub((test), &__stub->base,
+>>> (replacement));    \
+>>> +} while (0)
+>>> +
+>>> +void __kunit_deactivate_global_stub(struct kunit *test, struct
+>>> kunit_global_stub *stub);
+>>> +
+>>> +/**
+>>> + * kunit_deactivate_global_stub() - Disable a fixed function stub.
+>>> + * @test: Test case that wants to deactivate a fixed function stub
+>>> + * @stub: The location of the function stub pointer
+>>> + *
+>>> + * The stub must be declared using KUNIT_DECLARE_GLOBAL_STUB().
+>>> + */
+>>> +#define kunit_deactivate_global_stub(test, stub) do {                \
+>>> +    typeof(stub) *__stub = &(stub);                        \
+>>> +    __kunit_deactivate_global_stub((test), &__stub->base);            \
+>>> +} while (0)
+>>> +
+>>> #endif
+>>> #endif
+>>> diff --git a/lib/kunit/static_stub.c b/lib/kunit/static_stub.c
+>>> index 92b2cccd5e76..799a7271dc5b 100644
+>>> --- a/lib/kunit/static_stub.c
+>>> +++ b/lib/kunit/static_stub.c
+>>> @@ -121,3 +121,52 @@ void __kunit_activate_static_stub(struct kunit
+>>> *test,
+>>>     }
+>>> }
+>>> EXPORT_SYMBOL_GPL(__kunit_activate_static_stub);
+>>> +
+>>> +static void sanitize_global_stub(void *data)
+>>> +{
+>>> +    struct kunit *test = kunit_get_current_test();
+>>> +    struct kunit_global_stub *stub =  data;
+>>> +
+>>> +    KUNIT_EXPECT_NE(test, 0, atomic_read(&stub->busy));
+>>
+>> shouldn't sanitize_ be unconditional and do nothing in this case?
+> 
+> I just didn't like early return here, but maybe it's more correct
 
-The commit message is ludicriously short, you've not sent the series
-correctly, and you are ignoring feedback.
+hmm, in fact we don't need to check stub->busy prior to calling
+kunit_release_action() since our goal is to detect whether stub was
+activated, but this action will be released/called only if we have added
+this action after the stub activation, so we can just rely on the action
+management code and just keep the EXPECT_NE here as a guard
 
-Resend this with a substantially improved commit message and ideally some
-actual comments in your tests rather than a giant lump of code which
-constitutes 'how Jeff feels mseal() should work'.
-
-Then when people give feedback - listen.
+> 
+>>
+>>> +    KUNIT_EXPECT_PTR_EQ(test, test, READ_ONCE(stub->owner));
+>>> +
+>>> +    reinit_completion(&stub->idle);
+>>> +    if (!atomic_dec_and_test(&stub->busy)) {
+>>> +        kunit_info(test, "waiting for %ps\n", stub->replacement);
+>>> +        KUNIT_EXPECT_EQ(test, 0,
+>>> wait_for_completion_interruptible(&stub->idle));
+>>
+>> what's preventing stub->busy going to 1 again after this?
+> 
+> at the redirection point in kunit_global_stub_guard we have
+> 
+> 	atomic_inc_not_zero(&stub->busy);
+> 
+> and the activation/deactivation can only be done from the main KUnit
+> thread (which is here)
+> 
+>>
+>> Lucas De Marchi
+>>
+>>> +    }
+>>> +
+>>> +    WRITE_ONCE(stub->owner, NULL);
+>>> +    WRITE_ONCE(stub->replacement, NULL);
+>>> +}
+>>> +
+>>> +/*
+>>> + * Helper function for kunit_activate_global_stub(). The macro does
+>>> + * typechecking, so use it instead.
+>>> + */
+>>> +void __kunit_activate_global_stub(struct kunit *test,
+>>> +                  struct kunit_global_stub *stub,
+>>> +                  void *replacement_addr)
+>>> +{
+>>> +    KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stub);
+>>> +    KUNIT_ASSERT_NOT_ERR_OR_NULL(test, replacement_addr);
+>>> +    if (atomic_read(&stub->busy))
+>>> +        kunit_release_action(test, sanitize_global_stub, stub);
+>>> +    else
+>>> +        init_completion(&stub->idle);
+>>> +    WRITE_ONCE(stub->owner, test);
+>>> +    WRITE_ONCE(stub->replacement, replacement_addr);
+>>> +    KUNIT_ASSERT_EQ(test, 1, atomic_inc_return(&stub->busy));
+>>> +    KUNIT_ASSERT_EQ(test, 0, kunit_add_action_or_reset(test,
+>>> sanitize_global_stub, stub));
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(__kunit_activate_global_stub);
+>>> +
+>>> +/*
+>>> + * Helper function for kunit_deactivate_global_stub(). Use it instead.
+>>> + */
+>>> +void __kunit_deactivate_global_stub(struct kunit *test, struct
+>>> kunit_global_stub *stub)
+>>> +{
+>>> +    if (atomic_read(&stub->busy))
+>>> +        kunit_release_action(test, sanitize_global_stub, stub);
+>>> +}
+>>> +EXPORT_SYMBOL_GPL(__kunit_deactivate_global_stub);
+>>> -- 
+>>> 2.43.0
+>>>
 
