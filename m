@@ -1,137 +1,117 @@
-Return-Path: <linux-kselftest+bounces-16716-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16717-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 260F2964E44
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 20:59:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B04B964EC7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 21:26:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D7008280C87
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 18:59:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 11F401F2425D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 19:26:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19DF11B653D;
-	Thu, 29 Aug 2024 18:59:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6412D1BA266;
+	Thu, 29 Aug 2024 19:26:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sqMijjQx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XIa2JUou"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D76F1B0120
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2024 18:58:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31491B9B55;
+	Thu, 29 Aug 2024 19:26:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724957940; cv=none; b=pJu8kg5atx/fxwkycY7wCzz+pBe2XvBGq+bUut4H6pVhgW6h8Ht3WPseN330id+EKod1dy4LN0OXWNOXuZg7D1Wz/eL9/slOJvdSPhXVgfaWUsyGd3APmiqPS5dfq7JpUX0viFNhYfOO0EG5b/lFgX5YGrnlBZoFEn+Zquibl8o=
+	t=1724959600; cv=none; b=lKk4J8pZ1bikvUyerqLkbfI+q8Vdu9DnOS6Z5EsKQFNBOsC8XVCn4sqr4PCHuGfJ3F1tQ1o+ZY36RZyVtnLHx2Bl1hyL079Uqvgh2FFH82uhjHxjPzVj3o56EHFJMqi78SLntwYnbFXO9Q/ItHIs8Vaa+yyRw4xLpyGmXScPous=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724957940; c=relaxed/simple;
-	bh=xsRSgIsQ/tC60sj9NqtRerHdmLXTBvsrxDHWslnhx9I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RoOkFuhn43C2rWhkcXk9MJodiXdR7yKfofHAA6TXdxcPFoPXVYM/zz4wokZ2RPSvV5oMVE5j2biBt9CGp52Fyxh1ZHweabR5Qn21ftYqjHeOOE0BMb8JU+jKp120UnGlZ7Zo/KIjGLgCGbAxE/gJlzbgFyGLCkgGBnwlu0ZeGbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sqMijjQx; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2020e83eca1so10800745ad.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2024 11:58:58 -0700 (PDT)
+	s=arc-20240116; t=1724959600; c=relaxed/simple;
+	bh=/jHu2Ms/ZN+wfcxWWxuyLebk2/G39DLenbNwKxKHBow=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Jb9IV50miHQl2jN0A4mh7w6q40pWqOgSrRn9OircjR3kFx/5+MBmpD00aIV5I1fGFZTuXIoFHX+9LfUlYKTdqk5AkoWuXsXhCFTMd7M4OZUsipYJkLo6xwqZFGeODJt0mxokfxNrCwkm0zMM/fbwio+bJs+OlXRNqiif1GpVxAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XIa2JUou; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6b47ff8a59aso9657727b3.2;
+        Thu, 29 Aug 2024 12:26:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724957938; x=1725562738; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1724959598; x=1725564398; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=89BbrLIf7kQE/AhuaB+9K4RnLfbpD4Si+XduczldDnY=;
-        b=sqMijjQxvdbOpUI/kJti0bDTeZ+eGCm2hy1SA25J2w7IvjcTqekgOr539a/pd84DIp
-         UCbGRA2XUfxSbACmx2YZqTpmV2BKJHiGeyzoc30mxPWYTiCAl/Sh+N9WLSrxXLooff9D
-         5g3yakSPRMBhb6AEE270rpVWJZlQN4/Ci4AMd7nDmVL+oxhroGXjeF7dd7NKgdJeSUw5
-         8SqIF7/hKUUvgZZ6jSg0INTHQq2bUpGrzwMArsl/5unCSTyUIqzKn4eLTYBjWmYQkrmx
-         uEaFIjQB5C0GFFz+l/ALC0meyhNkin/Vbmkdxgp1m5njT+ZF/Pc/HH134eMz+jFsuWA1
-         ZCBQ==
+        bh=/jHu2Ms/ZN+wfcxWWxuyLebk2/G39DLenbNwKxKHBow=;
+        b=XIa2JUoucLnZTwoaivuTSwxD7J4998xwEvYRPFYLPyarnq9mXNnTuZmHDslNjVC+b0
+         FuYlWCOoRqsrg0NI1xvTrQKlTnQUqTFg+AWCMtzz7XKXgv/6F23jIZENL9ALFi8sybjq
+         KaUWHRruy4hrZBIi7Ghx07ql9nHvFjgEhuFE2xhA5fpYKz7BtrRxRv3xevTDbivzilgD
+         SOwkoneJupvwOwkEJehLB4wpJrRfnHAINsHcrAFeSKGnzH1lBLo9rQ7jlonXXQtDjlZY
+         cijYjZFAydrz4Zk8xGc1DONgd8Xo+0HbNuUCEN+UHxwnFcCYCPkbtcHTphpdLZO3DLCP
+         0Kfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724957938; x=1725562738;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1724959598; x=1725564398;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=89BbrLIf7kQE/AhuaB+9K4RnLfbpD4Si+XduczldDnY=;
-        b=Vw+2DItFKz9NHmwtjkErqUmsEpWR/8RMsKx6G5iSzGSaEUe0UB9q+9RZSJhzXXCVmf
-         mlQ9RDPISJQgaeEG2u0pxsTnOXurECMuS5xZ+OP3d9ZbHDoBQAusxjZ0HQ3G+1fI8BEI
-         KeaQYx9EStaBWruQPxCgD8UAdWyfukZ8LGjFjWqw6EPPnHA667CPBjJXDGqNbMK9LA+p
-         stNOqgVypbfpPixB+GJI3P0N1l8V/wHGLuS3EvO1twfByO2x2TQsbkDjh1IPHYOUlT1L
-         kiNtGgEe23T5AhGqGGWDW+NoO83luEYOUHYy+BTj6CklR7zSEJkR5rocJo/w8gHxFc7f
-         OjRQ==
-X-Gm-Message-State: AOJu0YxLEzypZVfSGCb+Du7rma/1jo/W/IJgsbi+Vv1GxoAbhPgPberL
-	3+OTgRTtpA2Z/dvXlNblPTc3n+StfuLnCjHICtWDkWxxlR/YAOtSO/xGOc15Vaxkh8mspS4JSl9
-	2tVLHuhGc6fvySAzIBOpuwMhWPiHoBI+PgRhZ
-X-Google-Smtp-Source: AGHT+IHT71qIoDA/ctBJ3kPlWljcUXnHN4xB684kjhkEoqpNUyivsHQFXXahybFZykdB1qZTQXNh+n4BzIdF6H/yPM4=
-X-Received: by 2002:a17:903:249:b0:1fb:3e8c:95a6 with SMTP id
- d9443c01a7336-2050c421cd9mr46964765ad.40.1724957937506; Thu, 29 Aug 2024
- 11:58:57 -0700 (PDT)
+        bh=/jHu2Ms/ZN+wfcxWWxuyLebk2/G39DLenbNwKxKHBow=;
+        b=iVgOiSrPwwrvIWHe2f6FscFnSfQV3N1/pjdg7UPNQPyFuzSJx5O8trH7vrUSXdJ3dY
+         VF8lFZSNGBvQd6fXHFweLtjvtFtW7+h49m7wPBBIcASnhsmSCvqTcixE5ZT8hIngJv4O
+         xt1vOu5stXdqF7x5587ZpIK99Z31TMgWGSzKIKFJAupm54CYR1t/ME5WnyIJumnu0roE
+         9RegQ6pn7US/vsO89cp9BUfwGqbWpByJSCaAUm1wIe234ia9k9y4c+yFtBmmXWCvMpOq
+         0ejT/Sowu/6PWcS0tl/hyetrojkirHxaYb9bJRyyJm56dr+QKPhjgaYc4KwR1NFKslwN
+         Rx1g==
+X-Forwarded-Encrypted: i=1; AJvYcCUTIni4X482jitFN7HQjXfCfYYXnusP+JugjXWPrc3qglQp7a0qjN2kUNv7jzpSAwKxf9Np19fLjq/7nrdV@vger.kernel.org, AJvYcCW8shL0zDDziBxwmh30R6W3oSRvin+ZZUgVsREGYZPZmWpTnQT9XiykzRd24BmX9/VX8kBvT3InxQKNF7fe+c60@vger.kernel.org, AJvYcCWoQHI3ms4R0U4vSxnk5ymfMUYjPM3ZLKTtAd9BmWnK4EmGOCTIrzUUqq/of9Wh3f0avIVryR8F@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeWZINTMrZjbbsVyzuvYogx4/+VjYoC14CNtYyLlQQMh9o3Tpz
+	V3LL9P0ssvMJ6E/VfdfkqflWl/AkQC4nDznOH4pJVw4l/4wMECM+
+X-Google-Smtp-Source: AGHT+IF3A4Dg3yywX6rdk0fMPUiWmAhLI3O4uROfvDXt55ZidG1tpRj8xppq84PC2/rnONxsihtsgQ==
+X-Received: by 2002:a05:690c:4701:b0:6ae:dab5:a3b5 with SMTP id 00721157ae682-6d276116ec6mr37042947b3.13.1724959597506;
+        Thu, 29 Aug 2024 12:26:37 -0700 (PDT)
+Received: from localhost (fwdproxy-frc-017.fbsv.net. [2a03:2880:21ff:11::face:b00c])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6d2d3ea3080sm3612347b3.44.2024.08.29.12.26.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 29 Aug 2024 12:26:37 -0700 (PDT)
+From: Joshua Hahn <joshua.hahnjy@gmail.com>
+To: tj@kernel.org
+Cc: JoshuaHahnjoshua.hahn6@gmail.com,
+	cgroups@vger.kernel.org,
+	hannes@cmpxchg.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	lizefan.x@bytedance.com,
+	mkoutny@suse.com,
+	shuah@kernel.org
+Subject: Re: [PATCH 1/2] Tracking cgroup-level niced CPU time
+Date: Thu, 29 Aug 2024 12:26:36 -0700
+Message-ID: <20240829192636.1054186-1-joshua.hahnjy@gmail.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <ZszHM_UV24aSWTC8@slm.duckdns.org>
+References: <ZszHM_UV24aSWTC8@slm.duckdns.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240829183150.1616-1-michal.wajdeczko@intel.com>
-In-Reply-To: <20240829183150.1616-1-michal.wajdeczko@intel.com>
-From: Rae Moar <rmoar@google.com>
-Date: Thu, 29 Aug 2024 11:58:45 -0700
-Message-ID: <CA+GJov5POvegznZutxHZuoUhxeHyseECHm4GW5NMR5vqZGWk4g@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Fix kernel-doc for EXPORT_SYMBOL_IF_KUNIT
-To: Michal Wajdeczko <michal.wajdeczko@intel.com>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	David Gow <davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 29, 2024 at 11:32=E2=80=AFAM Michal Wajdeczko
-<michal.wajdeczko@intel.com> wrote:
+Hello, thank you for reviewing the patch.
+
+> > Cgroup-level CPU statistics currently include time spent on
+> > user/system processes, but do not include niced CPU time (despite
+> > already being tracked). This patch exposes niced CPU time to the
+> > userspace, allowing users to get a better understanding of their
+> > hardware limits and can facilitate better load-balancing.
 >
-> While kunit/visibility.h is today not included in any generated
-> kernel documentation, also likely due to the fact that none of the
-> existing comments are correctly recognized as kernel-doc, but once
-> we decide to add this header and fix the tool, there will be:
->
-> ../include/kunit/visibility.h:61: warning: Function parameter or
-> struct member 'symbol' not described in 'EXPORT_SYMBOL_IF_KUNIT'
->
-> Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
+> You aren't talking about the in-kernel scheduler's load balancer, right? If
+> so, can you please update the description? This is a bit too confusing for a
+> commit message for a kernel commit.
 
-Hello!
+Thank you for pointing this out -- I'll edit the commit message to the
+following in a v2:
 
-This looks good to me. Thanks for adding this. We will need to do a
-patch on making this recognized as a kernel-doc at some point.
+Cgroup-level CPU statistics currently include time spent on
+user/system processes, but do not include niced CPU time (despite
+already being tracked). This patch exposes niced CPU time to the
+userspace, allowing users to get a better understanding of their
+hardware limits and can facilitate more informed workload distribution.
 
-Reviewed-by: Rae Moar <rmoar@google.com>
-
-Thanks!
--Rae
-
-> ---
-> Cc: Rae Moar <rmoar@google.com>
-> Cc: David Gow <davidgow@google.com>
-> ---
->  include/kunit/visibility.h | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/include/kunit/visibility.h b/include/kunit/visibility.h
-> index 0dfe35feeec6..efff77b58dd6 100644
-> --- a/include/kunit/visibility.h
-> +++ b/include/kunit/visibility.h
-> @@ -22,6 +22,7 @@
->       * EXPORTED_FOR_KUNIT_TESTING namespace only if CONFIG_KUNIT is
->       * enabled. Must use MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING)
->       * in test file in order to use symbols.
-> +     * @symbol: the symbol identifier to export
->       */
->      #define EXPORT_SYMBOL_IF_KUNIT(symbol) EXPORT_SYMBOL_NS(symbol, \
->             EXPORTED_FOR_KUNIT_TESTING)
-> --
-> 2.43.0
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/kunit-dev/20240829183150.1616-1-michal.wajdeczko%40intel.com.
+Thanks,
+Joshua
 
