@@ -1,80 +1,136 @@
-Return-Path: <linux-kselftest+bounces-16672-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16673-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A126964071
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 11:43:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 878519640A6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 11:55:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D57DC280C8D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 09:43:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE4DFB24E48
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 09:55:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36A7B18C90B;
-	Thu, 29 Aug 2024 09:42:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C9AF1662E8;
+	Thu, 29 Aug 2024 09:54:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ajrf0Tvb"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="h5OhFZLd";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="VHyhVsPu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2084.outbound.protection.outlook.com [40.107.96.84])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B25189F58;
-	Thu, 29 Aug 2024 09:42:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17C6A18DF67
+	for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2024 09:54:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724924524; cv=fail; b=hsnu4ae2ycD4QhczT5HJ70taZuVwfPmKqIelJ/Qj/opvVulXLFK7nHxSnqOaPQagYxLFhFg8LoPAdTpgAvmoK360wMcsnftvjFEOm9Gp2+SrwSB6Eqh6UYthNwEfYkq5G5ciChhmKW58k+LzW1jiXwDm2OBHiFdXjoOAcC0/7dk=
+	t=1724925296; cv=fail; b=QxnPNoYuubiQurlUfjwLGFkKp1koHhB929kDqRaopwDWZ+yoc1TUaW8zH9FZfV5mOtzbgA9tD3H19EDTOibxq+kDQaELy2W/P/UVZvoBucRpQlenB8EOvWr4obz0nk/uKfmJgLFB4h9s10/ykVsVnU0+E7pb/XpqQJ9L7rcQY6M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724924524; c=relaxed/simple;
-	bh=gvCHw/krbwC9gcwtDpY7QnxuR5lRGP5r/4atj9NsBNc=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=DgDKI/Mh7sOG//nU1EHpCx6OAIpSgj2ysozp2jLbyT/K+PSMezZplMHL4uuz5Ny4GcgYrlu4dzCeSQkw8fV8AqaMEIgm+T+nw3nytiRCwWx9cNnX9EOHhmcgg1cR+3A9EB8JoS4s4BxyNNpC7vCVcvpE8zOShy1gQbYDhuqF29c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ajrf0Tvb; arc=fail smtp.client-ip=40.107.96.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	s=arc-20240116; t=1724925296; c=relaxed/simple;
+	bh=srVzhpRAUZ/5Io1hU05nqRwDmBCBB/NVG6S2mqj49KI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=oMsJkcDepVu53mn0Q6EDioh29ddbUVbwE0wzae5cPpqiWUzjekV4ZB3rpOtatU05qwEJytma32TowaqTvv3Gr33oLWh8XKhlNqFE+WmEYiVo6toWmqwYssARsUHhhJ8iRZWz1nMg1W+52J+9P2rm0BSYDRwJiNDPq4UQiI7t/NY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=h5OhFZLd; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=VHyhVsPu; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 47T9gQ9R026061;
+	Thu, 29 Aug 2024 09:54:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	date:from:to:cc:subject:message-id:references:content-type
+	:in-reply-to:mime-version; s=corp-2023-11-20; bh=eSFFryLSvxZIOwd
+	fAhhiZ/tUenNluUoPv3LuzdRVDkk=; b=h5OhFZLdARF+gCQXT3pzmKu4R7vzw8g
+	HaDgm+VgMJQ6Q4t+GI7wqCVdnkcm+ojQhEp0R2XXzyEla6F5OVoDDo02W77Y/4BU
+	jqJIxRUvJrTvJQssekiTKRifM4Lyqu5hh/eIAdz7voOmaNHxUvc3DWiSmv+5R0Xa
+	e9tg5fcEereuEf8U42IyRWktx97BY0U3Qj1pJFD93KZgD0dB64MXJ0jOS/U2uUh0
+	lBNQywEBMXMjLpfyScwG859bBMBjX4aMXyzJF2+MAPRLfiamVlxKYGIjy1mLWD5z
+	iIyU1/K7jcbhw2bgQC/bWtBzRZB9iKW6Z49VAFuaKnG00LihSVCfZeQ==
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41apkb80kp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 29 Aug 2024 09:54:33 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 47T8cjAT034855;
+	Thu, 29 Aug 2024 09:54:33 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
+	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4189svrhe6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 29 Aug 2024 09:54:32 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HuEl9vOKdU8L4WViHHY9tt5u2dl2kEMeT6yZBCtshTrDI13al3am9DKtIg7OBTHS7d/bsdfbJouUKzRPxJB7OMlhJGMV+2T9nahcTLa5FuzDVYs6bTq8PBxj4WcHjCHEt2KmSVZPrFSWxqrg5lT4VZMQ+9PhReMzl8cmxbH808v8lsCPh7ysP7/Z+QnzzIX/16ozG3pt0p+gRWLxdyNpF7tV9wrlnOI64EnBCiy4YnLccBhmySY0LcXGHmRPxyiI5o88CMeLk93W1OHvrz+o/mn42p5eqlF0QRWAj48tn6NzYv1+2psYXQilwVblGfiHO3l4I668aYRUb3sxuq1f+g==
+ b=VbIz264LwWoejAlg/zFN1IP+HUhvz7/EHb54B+b6SG3HYufFDC7oTSInR8gFyuctPwjWownYEsSi2f/pdHzPENcGgsIejpB3bm5JdHnsgc7nr3LMGr9emAOvTZV44ekaKpQiM3/iZBtDcwyfskx9GXB47Zzt3HJV1RKJjuYiR86JbQkmsy/kn+YtuvT3vMnwNr8eLcwgeyE6sPNX7LGduCcWTxI2Fshxin5/wsw5l0M7/toboKlZLMWIaCdsWhBrgst5JmDIijofqTtR7adyvHPztANW+tTunmsgd0BL3Pzia43Lf6IsADKxklKIeD8zRZmSnyS92j/jDFdpMcg/9w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XuQEpSY+Gv94e8Omq5FopJmVD0uG5CZski5NsLcN5hM=;
- b=bauRGQdhtoFXuql8PUpiP0oGQZevcyHQrmCXZwzfZGu5RT5yETlF7sNSK8zrf6bEsvN7f4tgK2GkPuRolGq6IWiQGuH1r0mpZUl0vuMpupQmI2T1z3cSjBreoS85Euj/+3PONZaqEb5wd1Ch0LkfPmMZ5q0k8xkBaUmfPOyXOGhD2/ePM72RuiZQyY8DvNHW//4WA4yZZyPFMdZq7P0lPw8KTOvOJJZIKl4VJrNNJ9Iv9FAu8td++EHW45Sd1B9XpE4EuYFlr8/NLx7qn2n6o07FaIryfXsW8j8xOJ8ne8BoTwlD2kH8sG1Y5L9BIr+0MeNnJ1kjCBo9+seGRoYdZw==
+ bh=eSFFryLSvxZIOwdfAhhiZ/tUenNluUoPv3LuzdRVDkk=;
+ b=Pp4yBvnF0Jfi1pvxU0QgAGJyCuSEF4Au+hAnB+i8cm+ELVVI5f4CzaAjpl6snoZx4WnsnlYKZ/8YPCzP2mpufMZPHwPY7dP9f/P45KGQPLskKpR9xKPdoiuXPJ6Cnl8kp+L9JwnKYvPgsOOoQNy6mZTjDC+plrw2pYuCIVsShUM8lujo9jMw4/ywlF3yEAb9vO5AVzKQq0mGOWtzcU9CGX3FEtlmX4IUYQjdcJNhveJkJ86bmCALI23wi6Na4WjIgafwhV+Ar5Os91yZAjBP2ow5L+UelumeSbkGqiz6iWR9TN5tVWoTCb9rb7uTneoTss4KUWjLaUE6A2O6Lhoaeg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XuQEpSY+Gv94e8Omq5FopJmVD0uG5CZski5NsLcN5hM=;
- b=ajrf0TvbojA0VP53JHnvkGKcEFfNNo28SaSqXaK73ZimI+EZmTS5UpB4J/x/ogVtRSPk6R+uLv0Q+j6UGG0z2Jp+CiOb8p9mvUISzsQTmExPXOUhsVaclR0aS3NrXk8uvL1MKit8uWDTJAUcjwKaUyp3TiEzo2nkLIEQlQ5C+Bk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB6214.namprd12.prod.outlook.com (2603:10b6:8:96::13) by
- DS0PR12MB7945.namprd12.prod.outlook.com (2603:10b6:8:153::19) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7897.28; Thu, 29 Aug 2024 09:42:00 +0000
-Received: from DS7PR12MB6214.namprd12.prod.outlook.com
- ([fe80::17e6:16c7:6bc1:26fb]) by DS7PR12MB6214.namprd12.prod.outlook.com
- ([fe80::17e6:16c7:6bc1:26fb%5]) with mapi id 15.20.7897.021; Thu, 29 Aug 2024
- 09:41:59 +0000
-Message-ID: <340637b1-d2a6-4555-9ea1-4a28b16f9576@amd.com>
-Date: Thu, 29 Aug 2024 15:11:50 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 4/4] KVM: selftests: Add bus lock exit test
-To: Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- pbonzini@redhat.com, shuah@kernel.org, nikunj@amd.com,
- thomas.lendacky@amd.com, vkuznets@redhat.com, bp@alien8.de,
- babu.moger@amd.com, Manali Shukla <manali.shukla@amd.com>
-References: <20240709175145.9986-1-manali.shukla@amd.com>
- <20240709175145.9986-5-manali.shukla@amd.com> <Zr-0vX9rZDY2qSwl@google.com>
- <002c7137-427e-4bd8-ae9e-04aab3995087@amd.com> <ZsyoEz9DMq2hZhV4@google.com>
-Content-Language: en-US
-From: Manali Shukla <manali.shukla@amd.com>
-In-Reply-To: <ZsyoEz9DMq2hZhV4@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: PN2PR01CA0243.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:21a::6) To DS7PR12MB6214.namprd12.prod.outlook.com
- (2603:10b6:8:96::13)
+ bh=eSFFryLSvxZIOwdfAhhiZ/tUenNluUoPv3LuzdRVDkk=;
+ b=VHyhVsPuRcjFzt307tEycO/0TSkxwo2ASUEKmLx66Kg4BUlTtqiFDlgfc7mqiHtHpN0zfyQXY5O5Fze8xLnr4DMThtIYQbzDaUSqg5kpyHPT3QbM3E2PSeLbgH7q4ibj+4SkrSjf5TZn/NHFtaTPkbQEsLoOkH7GeXlAFwOUdqk=
+Received: from SJ0PR10MB5613.namprd10.prod.outlook.com (2603:10b6:a03:3d0::5)
+ by DS7PR10MB7348.namprd10.prod.outlook.com (2603:10b6:8:eb::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.17; Thu, 29 Aug
+ 2024 09:54:29 +0000
+Received: from SJ0PR10MB5613.namprd10.prod.outlook.com
+ ([fe80::4239:cf6f:9caa:940e]) by SJ0PR10MB5613.namprd10.prod.outlook.com
+ ([fe80::4239:cf6f:9caa:940e%5]) with mapi id 15.20.7918.017; Thu, 29 Aug 2024
+ 09:54:29 +0000
+Date: Thu, 29 Aug 2024 10:54:25 +0100
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Naveen N Rao <naveen@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andreas Larsson <andreas@gaisler.com>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Shuah Khan <shuah@kernel.org>,
+        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
+Message-ID: <4e1e9f49-8da4-4832-972b-2024d623a7bb@lucifer.local>
+References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
+ <ab90ff3b-67dc-4195-89a7-54e394da1aa0@lucifer.local>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ab90ff3b-67dc-4195-89a7-54e394da1aa0@lucifer.local>
+X-ClientProxiedBy: LO4P123CA0132.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:193::11) To SJ0PR10MB5613.namprd10.prod.outlook.com
+ (2603:10b6:a03:3d0::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,177 +138,210 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6214:EE_|DS0PR12MB7945:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1193befc-e786-49ad-8974-08dcc80ed41f
+X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|DS7PR10MB7348:EE_
+X-MS-Office365-Filtering-Correlation-Id: 614732e6-3ddc-4de8-8ce5-08dcc8109302
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?REk4bGNDZEdlUUc1dHNLWGE5V3BTOTAwNXRCVzhJWDIyUUVTWVhFRXNmMWJj?=
- =?utf-8?B?OFJnTE1TMk1Pcm5haEh6ek9zZ203R3VUa2FGUU5neDZ5dDRlNk9VM1NvMklL?=
- =?utf-8?B?emxGbDljYlc2cUd4TFBLSkxhZlQ4cDJyV2xvb3VXQU9LcXQzMW83THdVSUg2?=
- =?utf-8?B?akdSNnNCQ1RmeU1Hb2lFcDZWVkNmQzFBTWlIR3dsNHBkKzNqZmtvMk0reWZ4?=
- =?utf-8?B?K3BZeXBhQTZSVlJRMHpGbzJIemh2ZGdKWFFKYnRXVnBCZ05XZ3BlU0dxcnpk?=
- =?utf-8?B?NjArbThWOFZzZDRWM05tZXlCdnA3Y0hvVGdUK1kvcHAxcHBXMVBZTnBXRkwv?=
- =?utf-8?B?clNubW85a0lnMkE4MllmeE1tcUJ0bFUreElDRW9Relp2clRxVDJ1R1RNWEha?=
- =?utf-8?B?cXZQaFVCeFk2QmFhZk1xL0hPckVSOENpV29LRm9zbnNXTkhlZWdvNlU3am91?=
- =?utf-8?B?cEoyNkYzNFJoMmgzUWJnbW9aL3pSWFlLaXhlK2JuZ3hTOGsrQ1A3eGJacGMr?=
- =?utf-8?B?cTA4dlpWNEN5bHZzaWM5UXFiQ1BRVHRoZjJ0LzVNOFNGZFhvdnM1ekJRZXQ5?=
- =?utf-8?B?UFNzVFVjOG9URmZDYkwzczFXMlFkVnBMd0U2K0VkVHp0WUV3RitrSS8vcUhp?=
- =?utf-8?B?c0ZwQTU2ZG1kRVdPa0lpbExSamNUQVpRVjYvaGhHUXNOdjJpMmZuK1hSYTU0?=
- =?utf-8?B?ZUFMV1V5ZE9YMHNDZWZiZm9rMUVoKzBPWWhESXJHczFQRnJIVkFUTmdjY3Fr?=
- =?utf-8?B?MU5LaXkzWTdjTmdOWFQ5THF0WlM4VnNLbjN2Y3BTVHQ1U2hYOHQzMytCRE5G?=
- =?utf-8?B?Mnd5MEp0dXJTcG5YOERWU2d3VUJxK1JncWpKejdETytWcHNSQVhLZmxjbUpl?=
- =?utf-8?B?TE5yQXdUREFCSTNWRENwMHZGN3pxc0c3RzN4KzgvbmF5MUMrS0NNaFZVOXpp?=
- =?utf-8?B?REwzbDdiYzFrbHhiNmd1VkMzbGlRZ0tOSDczaHkvb3V2SnRxWVVLcEJFZzRx?=
- =?utf-8?B?MmpGMTU3U0VYbTBUUDFPbU54QUdmNUZMS1V1TSsrMjUyR2FkTHpiU2JJeFY4?=
- =?utf-8?B?eGlkQ3lrU2ltUUZsQlN0SEQrUFNUdzZjMDFHMFpyREJVL1hyNHZ4RGZoQUlh?=
- =?utf-8?B?Ymk1UXlnZVlGbU1ZVXpUQ2lPNVRBaXVxMHhzQ2NhcHBUUC85MVlBSno3Y21K?=
- =?utf-8?B?VHJvNkxBZk9XM0hOYThBeEg1Zzk0c3g1akVrSStGdW5PN0tCZmFQUHJnUWhs?=
- =?utf-8?B?Z1g3eVAraHdSVmFFbzRVOGFycnptNWRVYUJwa2JtdWM4Zm9XOW5rR21PdzRv?=
- =?utf-8?B?ZWQxVVJKU0dTRlduZVdudkV5YXM5SEgvc2xKMXRhcnRwSElITEtKQlR6L0ly?=
- =?utf-8?B?K01FTFhlU08zRUdGZFhiQzIzbC9ncnRKWEYrdkxXSDd4R2hUeU1ZNXREM0N1?=
- =?utf-8?B?SjZNeGpPcmkvQ09JeVpER0NCeDF3dmFtMVZ6TVRUVEJsUURNVjVsNHBGUUc2?=
- =?utf-8?B?YVhYTDBwdmIrZ0RlM3YrUHNZaTkzTXVXb1hra3NnU0Q0cHpWbGpFeFJiS3ZL?=
- =?utf-8?B?K1dzR0xib0RBamdtcVlETCtrT3Juc0grTTRSekI4cXl0d2RFQWh5QkM0SDF5?=
- =?utf-8?B?aE90ZzY0T055dURtQXVkc2h1bzVCVEtWekttd2NGU09jOTlIWUZPQkRodkVW?=
- =?utf-8?B?QzBqZWVud3ZOT2g5MHhTUTczWkFBVTM2Nzdrb1p5clF0aVF3TU5NUVNlcTFN?=
- =?utf-8?B?SnpRcnpCM3hyNWhhSW9aRjRJdytyY1VlanNtc1JUNG0yNVBKaXUvV0JENVJH?=
- =?utf-8?B?Wm5VWFZESGhQMDFFUnFKUT09?=
+	=?us-ascii?Q?3HMAIuZghDxCJ9p+0C72nUJqTn04TWZ2mfcJGeZ/eR23npr0uVxi3zzcCc42?=
+ =?us-ascii?Q?EbSB3U25Pc6SasfoW8i092ljGDK5lXpusTYLOrUiIR2MmKpMsWI6aKp2M2Pc?=
+ =?us-ascii?Q?4XwzOXRbfULeFeHCT4yBZKylqIDW0mGa5UOvQCb4l1eRf+KFcDS+de4V4FoT?=
+ =?us-ascii?Q?1MwDtnnqoyKys8ASCMBTqpcnCf+Vp5JHHBVLHJwDRT27eL/8mmuRFe25EzVS?=
+ =?us-ascii?Q?3biNBxTYick0qfRBHVowOX12NktG2NCensYH3m6HzD412NX2z3Qro2S2MoAU?=
+ =?us-ascii?Q?U1dHDVCnlWnHUkH4x3O1zl4bn1TPzyhSukOh8abEHRnbj1Sst2btLQ7Yjavb?=
+ =?us-ascii?Q?UCZE+3zOHHLa394xyBPcK2xvdJNRmKsp39qOHgzJviP4q9VCVeVedCtlGSCV?=
+ =?us-ascii?Q?Czx/r9tPgTxVicVxyLHpgymViRuKGSTrP7OHGDSYztU+Q4EjiVDYyJiLnE4B?=
+ =?us-ascii?Q?NohejWed81SNxw3c+Gubk0DIeI6U2gViJu8Erf8/nEhMjXAhlOC2K9uAFSpM?=
+ =?us-ascii?Q?MN9bKoDNvU/w9wOk8xYu95GoMr6jwncIk28H/a3GOJ22ENXDzhQC5XByfg6U?=
+ =?us-ascii?Q?mDymSn62iUcufo1wFph7H7wErrGdDZvBKxkF5c2lhohlAVwvmeChsgx7x9jQ?=
+ =?us-ascii?Q?nf14ywQ6daL5rhfmg6hfbtUWCmjRSQmstHmXp8KnbjopdlsTlWuqPIbfarqq?=
+ =?us-ascii?Q?/Z2/SxH/BcAoE3riEXAV4sMOE40xUKQ/Pby0YRuM5uLFcqcHcevm1cN9iGAF?=
+ =?us-ascii?Q?v9QBmaFuD4JpwSXH1U2CBVlvcAF2PA/albs8JV0NMpRQw2Fo2XbLNBrEzJYy?=
+ =?us-ascii?Q?vlVjWU2laR2X8yxJ2UwbSQ2Hv8SttZ1ppQT1CI33Okz/AXvVqr2adchV+OyH?=
+ =?us-ascii?Q?0YvADtU7wBOi4Eh3MRaTLaPK2yWj6mgrsNSZf3XpTw4O6WBlNLSgVkAx2kU/?=
+ =?us-ascii?Q?6rwnzCrL6Loq6RF+t3IyJyn9yKCdHrd/qsrw+HsIbY5VD/HGlfOeuzgVuS3q?=
+ =?us-ascii?Q?MSmporeJXXDr3qkKKpmOkJbkIDXrI7E4p8oNRKPZy28sattIj6x1HH874Y9n?=
+ =?us-ascii?Q?r0n1GBKX+TU0411IOW3WlpzDnnhNa2U5DRWq6a3P8Pz4oF5i2DucApE47a+b?=
+ =?us-ascii?Q?lqVldU5W6IX74k+miawrpF7NGZIJOnMf9HO7UfByg5gn+h3tfRGTMULil4sL?=
+ =?us-ascii?Q?JaQC+tmcEOJAMxsepl26PvZQdn1YH67mx5TUKkbYT3ysGFqS+YYBXL3NjowD?=
+ =?us-ascii?Q?IZonAuNcggqwISRt1zz9L8np/5kqG+tjE7yTrbXAuleIMVXZNqkKPlip0Z0b?=
+ =?us-ascii?Q?aO5ZB8Y+2q8k3jxewA+wpbA2dlgcEitL9Bm+/RSn+0VPrQ=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6214.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?K2NCMnFZNnlTN0c5dmQyUjRGbGZnR2FjTVZmS2QvQ3krT0xFaXNPNlZ5WVMz?=
- =?utf-8?B?NTVRenNkbk1CUWNCTXBtdmdZc3FlK1d1a2lIM0xLSS8vZjhGUEs5RTR6WSt5?=
- =?utf-8?B?Y1BPa2pLV09DWUVOYlMwU05IU1FaSUQ3YXFqbUcwL3Z6VXpybkF2QUJnT0pF?=
- =?utf-8?B?S2phZmlpemROSzRSa2ZyaWJWaUhVR3RlWnV4UG5IY2l5VzM1bmFKVk9YeWt4?=
- =?utf-8?B?OVZVVUpFTWFteVRCUDFucUFHcDNXcFZFSTAzdTFqbkJjK3RNYXhFKysrZkRl?=
- =?utf-8?B?ZDFIb2pjVGhsckIySlBKYXZ0ZkJMMDhvL3MzWVlNRmZJSDhiUDcwK0dVMzBa?=
- =?utf-8?B?Qm42QUZsRTVxek9jRUFYTHJ1cmE2N0dyMHhtL2lTK2tMOHNwRmdMQ0dBbEJz?=
- =?utf-8?B?RlhMM1VlR0w2Z1FqT2ViSGFmcnJMTzhFSGliTkFTKzBpb2ZrT2RFQjJXVEcr?=
- =?utf-8?B?VHZ0WU1LNTB5dERmampzaDc5TjJnQzFrVUlhbUQ4clVHdGlSdWoxN2Z1NjVR?=
- =?utf-8?B?a2pZdS95Y0U2WEhTSlNESE5jZTR1czEvZnRaMWtvRlNLSUI5SnZPTEZScUNY?=
- =?utf-8?B?UE1BMjlNSWMxSUN2eXQzS0ZpNHVTc0c3V0FHd21uMmZ5MnREZTNEcXp3dTJu?=
- =?utf-8?B?WjVoVjNOZUpYb0g5NEhyb0J4cFk2SnJ2ZHBSa2VmTlYwa0ZYOCtXNG15ZlFr?=
- =?utf-8?B?djhScG05c29OOTlCM1R5OTRUM3BxME5HSjBkSWJpMUhmMkhEMVI3dGFZK1h1?=
- =?utf-8?B?dlVIMFZjaWR5VUQrQTVtb1NqTVdpdWlRcHFNUWhKOTlHTGEvOTBxZG0wYXR3?=
- =?utf-8?B?VFVvMkprd21LUyt4bUNxb0RJWmV2L2NhQVlpYnVoWStsOUtURmRwQWRieXdl?=
- =?utf-8?B?clU5Ymk0T0hXSGE1Qm9Hc2FRY051L1VhUTh4RVY3RWxQWDdQVkh6YytEa1VH?=
- =?utf-8?B?cVp1SFpPUVN3d0V0WjRzbW5VL3JndmpUKzFCVEdEWG5sZ2pVeHNPbmUrZEsy?=
- =?utf-8?B?WjNha1pGVDVkUWdRYnNyNXFoWWxtQ29qRStxa09FeTFuQXZNcTJTc3U3RWFE?=
- =?utf-8?B?SEVuQWlJcGtRV0RpTEtzOWZESkkxYjQ0NXlDdzYxbEhPRUZQcjZOTmgwT0FL?=
- =?utf-8?B?R0tWbWc2aG1OZXR2SXVTWEVrTCtFM2ZXSHd1dXNtUXBZdjFYWStDbFZ2eGlU?=
- =?utf-8?B?d1ZWUDBxQlpacjZWbmtkR2tNOXNDU29udmJLWlRxbFZHYXA3Qmh6K0VQTWpx?=
- =?utf-8?B?bFBuL2lPRkpWaFRicXNCTS9CVXhtNWE0N0QzMy9TTkpDNnVtcGtzSnRoOFdm?=
- =?utf-8?B?dVdkK09RSFdRb2ZyaXBXMzNLY0MycWR2ek9IRjd0d2xqNWU4MkRoOFkxU0lD?=
- =?utf-8?B?dnBkeSt4WUZzYmVDY2pMaUhnMXVwR0xSV093ZkY4ay9MOEV3S08zNXhMbWhW?=
- =?utf-8?B?ZEIzakE5TnRyUklaOW5QS0k0QlB1SkVRc1ovdm1MdDJiaDRjYndYVUgzTzF5?=
- =?utf-8?B?ejJhWUFQZndOU2wvN0NOZlRUbDRjbmo3QWk1aEVyeTlaYmY5Y01CVmd4T1dp?=
- =?utf-8?B?Rk1VQzVKcGZzUE9rN1ZrMVJxREZEZk4zSkxNaWVNU3NDTEpaN0NaanNQdS9C?=
- =?utf-8?B?U0s4M1VEais2cTdrdGc1U1lMYjBURVE3Mm9xTXAwQVgrMXNwN0FaMHJaLzda?=
- =?utf-8?B?Q2M2N2FsZDRSdXM3ME44S2MwMUZpNElsMExjQ0R5YmdIdEpDY3pVejRTd3Fa?=
- =?utf-8?B?emZCVzJUVjRHMU9ZMnlOWFlZUk5OM0YrWEpvdmdXcWNmQ0E3NTBwblZpSHRn?=
- =?utf-8?B?MExEeXlUTWN2aDFIVFA3TVkvSU1zbWRFbXZ0V3Y0dWJwbHpqcW1NV29uMTla?=
- =?utf-8?B?N3FXazYzNzFOUFh0MDZYWDJTNFZMYnVtMmdCcEdKSC9VSzJtZEE4cEJWcmNE?=
- =?utf-8?B?cm5maDlHWHNYdUVDWmFJTFVvamVtR0x4c1ErbE4vMlc0L0RwSC9GMjZMYXpF?=
- =?utf-8?B?N0pHY3hmdHBEOFBsWFNkMFA3RnhNUGRydFZYUU8yNFc3OVY0QzdpUzFIYS8v?=
- =?utf-8?B?cllPNmdBSVZ3WjVoOVk4Y2J4R1BZRUdncUVRMElGdVpqWFA0aG0vSlhDWDFK?=
- =?utf-8?Q?pgDLgyFFa9GoFKeBSehkgX3g8?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1193befc-e786-49ad-8974-08dcc80ed41f
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6214.namprd12.prod.outlook.com
+	=?us-ascii?Q?YCS8brIso8nqkzWNn1eYEy13rW06EajJFaP+bHhxyTqxILpKpQVUXQYW/zdz?=
+ =?us-ascii?Q?3SHJ08kp5TzlZAB2ACljoE86pbbwQq1GSK9CERpAYtPXoNpb0fz92henm/Fr?=
+ =?us-ascii?Q?IOQf4nYm5QhrWmaxtNgptOWLViVEqTBLjYW+BNk7PAaX5beyOmy7CF3tGRgy?=
+ =?us-ascii?Q?jnl15x/oMo+n5g92dkGKuQRHCIrDoO4t8M3F3al/uswq7Qt6b1bMIKmztSsY?=
+ =?us-ascii?Q?1b2Hue8zcVANFRR+gGlsweajugHdfRrCIivBPlxk1M1Co4o1gzKu3rR7jIjp?=
+ =?us-ascii?Q?9XWln7ZrzsAP4XcudeMxEWL3mh+CAn2tTo013Q4MQkJ161hZ6UT9nSdOrLhR?=
+ =?us-ascii?Q?WJD81tPFZPW7hOuFODs3BdVPcHGVO84R4YVxFtysRGb3f3x5h9N+U1lWk1J2?=
+ =?us-ascii?Q?wwvLid1XCJywefKTJ4ogFAjb6wbYoPg0IOpEF2RTgIUeeUvGRfQ0mQga6rB5?=
+ =?us-ascii?Q?sqGt9sWNfK8hH11HD+ByHg3+uow6kEwCmHiw77dtz+/Gra1FIGX/ql1s3YdO?=
+ =?us-ascii?Q?PEDhu/QfiRBKcQk7ET/5nsM2bYuOdw3B2yB+QrUrApLlhID6l8aNHbUgZ+N9?=
+ =?us-ascii?Q?6wwUYDPDQvmwuX+lmrPLsWG4olOIkLcL3BparsuKuEf7z8IEYqutXmcjA7IS?=
+ =?us-ascii?Q?mPDoqtXqORgQtt0NQlJ/JSbXAkUAtYzUVXh/b+TeFlnHQ53/hFruwUf4IByg?=
+ =?us-ascii?Q?b9yvo3+ntoLZ+tgBda0vN2gdZgBQxR9QokjaY4KqWW+O5Y5EJLGONM0VZzqt?=
+ =?us-ascii?Q?AjW+sHRx+XPjVwPtBhih/+b5sPYJ7Ft+lp95rIDBVCrMLMXAhBmRog2Cg4p0?=
+ =?us-ascii?Q?oB3GWVbZHMSEaXa9KuvVnNq/fW4GX7u3jKgiHugs/tkks4bEhmJ1pOvs2xl1?=
+ =?us-ascii?Q?BnqoBPd5Ej/q6TJoKq8utOY0DXu7TSICzHXtzdpL1Se5FkkBuSaPeDRRDIV/?=
+ =?us-ascii?Q?aKenUKW9KMs1SM55Sge1RX4tWKT+LVu4U3gYiIpxzjlMuq3LArWTvPgvxnuQ?=
+ =?us-ascii?Q?DKbzX4MhCcCbCHpdu815QGzdlGpzLSQ11ZkapLUFJJh1d/aNGTHtuDw37n2R?=
+ =?us-ascii?Q?eccn7/B/ALuPMrUXixA32VDuNw604osrOn4xJSIQ5jgBQL/akHNjdEyOfPGf?=
+ =?us-ascii?Q?RZRsiTLJtdSog4WHiUFqTrPEWBMhCc8AklMsDay/gmv5u7WJDt+MZlKBfCue?=
+ =?us-ascii?Q?98tfe8kEemOCk4KRA3YYGjCj7IvExzharLgTtCwyUikBlvoFxaFu7PyL3Lst?=
+ =?us-ascii?Q?aKkpnqrB0s9DdIVVRo0c8oBiTIWzMlgJyN6dddDUXGqmP3FtTpvQMMqVdAVI?=
+ =?us-ascii?Q?1AviZ03wQmdsNUzLfJ4QvbDTuy8HVOcEOeFzyhQ7BB+Oy1fTGeMervC/YlJL?=
+ =?us-ascii?Q?qMPwrXmvobhPhBkPoHZSfDteJh4Fqf3QPpQmoAvA94TetxtxXNuExJIhBPt0?=
+ =?us-ascii?Q?UYvNgJUVtJdlQfw1pkBhCBgq+oVEvTOd1y9LneG/v2wvgMx0ziwpowyQWcH2?=
+ =?us-ascii?Q?yDNNr4bVN8I/2CNn97NknnUeTHQtt/FCRF+JayQGNlr1oxqQR/kSuqeb8b0F?=
+ =?us-ascii?Q?ZQqHApetopeGBrwgmFIIjOJ6+byP/6l4dsWIhfBeRlbznl7PBAa0+lgFF6ST?=
+ =?us-ascii?Q?UQ=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	eqPHPZLSXkBiE5/d00w1heI/SVyAloUH0te3LYa08RMbI9KN9ODEGrefbtRpiXRmCf+UVN7JsornI2PTBpynqcdbmv8JZh0vg+B1GD0VErPd3PjiOoI1DgkKcBS/35uqgmhOgpIrzfoLo8OvcwuIAdzNykpI+4mbiey9wTV1hjNKcRKQw+1vAKibnKWUgknKP4g+LZedyPQzsAktHZmOiZXiv5htJWGNffmAYuzidHrghOE+l5q6PWVuEm+gvtlIJSyC326+82jgOGWkcjWs3Akji9LdcYvasvpKF4MP8LpNDn9Ob7QlKRGXu6+wnIvwdJlKjr9FaiSHSatLr6r3XPJsVmVi9vOvJMK3sV3kOM/9sNdZb89CnQbC//Gz7NHgXNTtVVbE9BSO4YhoiixIFZY5nHManAAIVZQT7Q+R637gjWF8VjTcpXAq469XLtFM92prAGkaAqv6Tu5YUcQO5DiSD4aLFQpv6Ga+NJ5P3Unn4hqluox3ZSVM/Bne2DvW1EGQ2Q7QR8cVkGBiHGSz6H0SVxMCWcOWVuvKT9JJ3gOEyZHPIzrLwNxCR8vaQh00ij4Iwt1g23iHIZLmaBFfAYUn5nOJiyTW9fd9LOAi5FI=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 614732e6-3ddc-4de8-8ce5-08dcc8109302
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB5613.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2024 09:41:59.7007
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2024 09:54:29.3789
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Poh8VA6JSd9APxNOtKarZLD0DyyT5iQ3jnRjC3/X0XskKiP9s0hSaJk8jnbdyVpXTIBS+P0DXrrK+/C92e3Tcg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7945
+X-MS-Exchange-CrossTenant-UserPrincipalName: esU6Xvcy/7BPWwjNDVfXQ01u+yFzOzDH+zY8BdobzuNIAg+7XPI9HsQMR4f0AcO8HIwFi2jd+Qw/PPc8lt0exCv6bAnxIHp5zeZFSSe9ams=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB7348
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.28.16
+ definitions=2024-08-29_02,2024-08-29_01,2024-05-17_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 suspectscore=0
+ mlxlogscore=852 malwarescore=0 bulkscore=0 phishscore=0 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2407110000
+ definitions=main-2408290073
+X-Proofpoint-ORIG-GUID: RKJsK61mZcsx3gS6WSUnCDbIHthBPEFt
+X-Proofpoint-GUID: RKJsK61mZcsx3gS6WSUnCDbIHthBPEFt
 
-Hi Sean,
-
-Thank you for reviewing my patches.
-
-On 8/26/2024 9:36 PM, Sean Christopherson wrote:
-> On Mon, Aug 26, 2024, Manali Shukla wrote:
->>>> +struct buslock_test {
->>>> +	unsigned char pad[126];
->>>> +	atomic_long_t val;
->>>> +} __packed;
->>>> +
->>>> +struct buslock_test test __cacheline_aligned;
->>>> +
->>>> +static __always_inline void buslock_atomic_add(int i, atomic_long_t *v)
->>>> +{
->>>> +	asm volatile(LOCK_PREFIX "addl %1,%0"
->>>> +		     : "+m" (v->counter)
->>>> +		     : "ir" (i) : "memory");
->>>> +}
->>>> +
->>>> +static void buslock_add(void)
->>>> +{
->>>> +	/*
->>>> +	 * Increment a cache unaligned variable atomically.
->>>> +	 * This should generate a bus lock exit.
->>>
->>> So... this test doesn't actually verify that a bus lock exit occurs.  The userspace
->>> side will eat an exit if one occurs, but there's literally not a single TEST_ASSERT()
->>> in here.
->>
->> Agreed, How about doing following?
->>
->> +       for (;;) {
->> +               struct ucall uc;
->> +
->> +               vcpu_run(vcpu);
->> +
->> +               if (run->exit_reason == KVM_EXIT_IO) {
->> +                       switch (get_ucall(vcpu, &uc)) {
->> +                       case UCALL_ABORT:
->> +                               REPORT_GUEST_ASSERT(uc);
->> +                               /* NOT REACHED */
->> +                       case UCALL_SYNC:
->> +                               break;
->> +                       case UCALL_DONE:
->> +                               goto done;
->> +                       default:
->> +                               TEST_FAIL("Unknown ucall 0x%lx.", uc.cmd);
->> +                       }
->> +               }
->> +
->> +               TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_X86_BUS_LOCK);
-> 
-> I doubt this works, the UCALL_SYNC above will fallthrough to this assert.  I
-> assume run->exit_reason needs a continue for UCALL_SYNC.
+On Thu, Aug 29, 2024 at 09:42:22AM GMT, Lorenzo Stoakes wrote:
+> On Thu, Aug 29, 2024 at 12:15:57AM GMT, Charlie Jenkins wrote:
+> > Some applications rely on placing data in free bits addresses allocated
+> > by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
+> > address returned by mmap to be less than the 48-bit address space,
+> > unless the hint address uses more than 47 bits (the 48th bit is reserved
+> > for the kernel address space).
+>
+> I'm still confused as to why, if an mmap flag is desired, and thus programs
+> are having to be heavily modified and controlled to be able to do this, why
+> you can't just do an mmap() with PROT_NONE early, around a hinted address
+> that, sits below the required limit, and then mprotect() or mmap() over it?
+>
+> Your feature is a major adjustment to mmap(), it needs to be pretty
+> significantly justified, especially if taking up a new flag.
+>
+> >
+> > The riscv architecture needs a way to similarly restrict the virtual
+> > address space. On the riscv port of OpenJDK an error is thrown if
+> > attempted to run on the 57-bit address space, called sv57 [1].  golang
+> > has a comment that sv57 support is not complete, but there are some
+> > workarounds to get it to mostly work [2].
+> >
+> > These applications work on x86 because x86 does an implicit 47-bit
+> > restriction of mmap() address that contain a hint address that is less
+> > than 48 bits.
+>
+> You mean x86 _has_ to limit to physically available bits in a canonical
+> format :) this will not be the case for 5-page table levels though...
+>
+> >
+> > Instead of implicitly restricting the address space on riscv (or any
+> > current/future architecture), a flag would allow users to opt-in to this
+> > behavior rather than opt-out as is done on other architectures. This is
+> > desirable because it is a small class of applications that do pointer
+> > masking.
+>
+> I raised this last time and you didn't seem to address it so to be more
+> blunt:
+>
+> I don't understand why this needs to be an mmap() flag. From this it seems
+> the whole process needs allocations to be below a certain limit.
+>
+> That _could_ be achieved through a 'personality' or similar (though a
+> personality is on/off, rather than allowing configuration so maybe
+> something else would be needed).
+>
+> From what you're saying 57-bit is all you really need right? So maybe
+> ADDR_LIMIT_57BIT?
+>
+> I don't see how you're going to actually enforce this in a process either
+> via an mmap flag, as a library might decide not to use it, so you'd need to
+> control the allocator, the thread library implementation, and everything
+> that might allocate.
+>
+> Liam also raised various points about VMA particulars that I'm not sure are
+> addressed either.
+>
+> I just find it hard to believe that everything will fit together.
+>
+> I'd _really_ need to be convinced that this MAP_ flag is justified, and I"m
+> just not.
+>
+> >
+> > This flag will also allow seemless compatibility between all
+> > architectures, so applications like Go and OpenJDK that use bits in a
+> > virtual address can request the exact number of bits they need in a
+> > generic way. The flag can be checked inside of vm_unmapped_area() so
+> > that this flag does not have to be handled individually by each
+> > architecture.
+>
+> I'm still very unconvinced and feel the bar needs to be high for making
+> changes like this that carry maintainership burden.
+>
+> So for me, it's a no really as an overall concept.
+>
+> Happy to be convinced otherwise, however... (I may be missing details or
+> context that provide more justification).
 >
 
-I agree, there should be a continue for UCALL_SYNC in place of break. I will
-correct it in V2. 
+Some more thoughts:
 
-I didn't observe this issue because UCALL_SYNC is invoked, when GUEST_SYNC() is
-called from the guest code. Since GUEST_SYNC() is not present in the guest
-code used in bus lock test case, UCALL_SYNC was never triggered.
- 
->> +               TEST_ASSERT_EQ(run->flags, KVM_RUN_X86_BUS_LOCK);
->> +               run->flags &= ~KVM_RUN_X86_BUS_LOCK;
->
-> No need, KVM should clear the flag if the exit isn't due to a bus lock.
+* If you absolutely must keep allocations below a certain limit, you'd
+  probably need to actually associate this information with the VMA so the
+  memory can't be mremap()'d somewhere invalid (you might not control all
+  code so you can't guarantee this won't happen).
+* Keeping a map limit associated with a VMA would be horrid and keeping
+  VMAs as small as possible is a key aim, so that'd be a no go. VMA flags
+  are in limited supply also.
+* If we did implement a per-process thing, but it were arbitrary, we'd then
+  have to handle all kinds of corner cases forever (this is UAPI, can't
+  break it etc.) with crazy-low values, or determine a minimum that might
+  vary by arch...
+* If we did this we'd absolutely have to implement a check in the brk()
+  implementation, which is a very very sensitive bit of code. And of
+  course, in mmap() and mremap()... and any arch-specific code that might
+  interface with this stuff (these functions are hooked).
+* A fixed address limit would make more sense, but it seems difficult to
+  know what would work for everybody, and again we'd have to deal with edge
+  cases and having a permanent maintenance burden.
+* If you did have a map flag what about merging between VMAs above the
+  limit and below it? To avoid that you'd need to implement some kind of a
+  'VMA flag that has an arbitrary characteristic' or a 'limit' field,
+  adjust all the 'can VMA merge' functions and write extensive testing and
+  none of that is frankly acceptable.
+* We have some 'weird' arches that might have problem with certain virtual
+  address ranges or require arbitrary mappings at a certain address range
+  that a limit might not be able to account for.
 
-Sure I will remove this.
+I'm absolutely opposed to a new MAP_ flag for this, but even if you
+implemented that, it implies a lot of complexity.
 
-> 
->> +               run->exit_reason = 0;
-> 
-> Again, no need, KVM should take care of resetting exit_reason.
+It implies even more complexity if you implement something per-process
+except if it were a fixed limit.
 
-Ack.
+And if you implement a fixed limit, it's hard to see that it'll be
+acceptable to everybody, and I suspect we'd still run into some possible
+weirdness.
 
-> 
->> +       }
->>
-
-- Manali
-
+So again, I'm struggling to see how this concept can be justified in any
+form.
 
