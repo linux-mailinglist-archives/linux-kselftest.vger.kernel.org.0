@@ -1,110 +1,113 @@
-Return-Path: <linux-kselftest+bounces-16703-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16704-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CEAD964CEC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 19:36:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DA1B964D4D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 19:55:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E395285AF1
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 17:36:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 716C91C22E89
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 17:55:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4CBE1B6537;
-	Thu, 29 Aug 2024 17:36:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DEC61B6544;
+	Thu, 29 Aug 2024 17:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p2Pb7Pr9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D21E13A8F0;
-	Thu, 29 Aug 2024 17:36:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AAA41B373E;
+	Thu, 29 Aug 2024 17:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724953005; cv=none; b=NgFI8Ft76b2lf10EW311YRBWW7tQ+ttt76yzVaLmt/Iuv77mblc0kujcp5NhDNgisKgL30vL1oQ5BODsQ+yjn9nzdUq0bW2tBZcOAKrv6dV58iYyDJGhVIESetDxOfoS045/v0d28NkZ9v+qXftgPcrgNCRjWmG5XRw+BJ5vFxA=
+	t=1724954116; cv=none; b=cIjOFwRL9p5jb7nZlJ8NmoEsys3g6QlO4K2rzP4z6BNbcIURAV1BZBA1zezrb8mXCCmiIq9eJm6oSkYchqwKi8RESAzaAG1Fjy/pKYXkFpz2RLIZngvO7xAKSTeJe8kDHZAlmKNXDfO3VTxDZ7y5F+9dtiTeyiN6hayfZU6bpAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724953005; c=relaxed/simple;
-	bh=yCViMBF3htzQW2k40xveDOOEPO0zJOEzLhNmFYttUwg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GEqwkgI40foio9Bm0BjB9rL1DYpG+zNHB2hfRRV1yZU/DnOXUw0EKVgTqQe3bbZsJlTPc7ukqUTmSzz42fE7grhoRueoSLmUSv82/cj66f7FD3qhPShcLkPrtGsvbbbkIEnH3eck62WXm7gXvSf+6bbzp74tXGua/zo8CPmR0m4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4WvpP538xwz9sS8;
-	Thu, 29 Aug 2024 19:36:41 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 71Z_VYkOft16; Thu, 29 Aug 2024 19:36:41 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4WvpP528mSz9sRs;
-	Thu, 29 Aug 2024 19:36:41 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 317CB8B794;
-	Thu, 29 Aug 2024 19:36:41 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id MDymf6ryo8rr; Thu, 29 Aug 2024 19:36:41 +0200 (CEST)
-Received: from [192.168.234.66] (unknown [192.168.234.66])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 3CA178B764;
-	Thu, 29 Aug 2024 19:36:39 +0200 (CEST)
-Message-ID: <e5a36d98-c880-4d33-954a-2a05240ef02f@csgroup.eu>
-Date: Thu, 29 Aug 2024 19:36:38 +0200
+	s=arc-20240116; t=1724954116; c=relaxed/simple;
+	bh=z1cQe5fZ3eIjl/LjO580rRqXvmPg9r6zi9VQ/SQ8gPw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nQSWG1xWqyFrw+KmjQA0BmVrLXO36Zo+/AEJTZrjL93Q7eSJpmV+BEsKSp2lRex7EdZ1nj8wyKO5djCQlUFWz/HUaq+FnR2aHk5Tmzepq81//zUIEI2UctKLk8bQiVONpyxM/XxMIJuUEGHKzf5DA8rgYfl6ODngbCjzdnmvFXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p2Pb7Pr9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6830DC4CEC2;
+	Thu, 29 Aug 2024 17:55:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1724954115;
+	bh=z1cQe5fZ3eIjl/LjO580rRqXvmPg9r6zi9VQ/SQ8gPw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=p2Pb7Pr9Idi3U+1dSAJy5ZGpjTgQK2XuuocvVWY2B529zQ97Vq4V8vzQJwQXOMTcW
+	 gQBJjVRys2e1pQmbBMo9uHpVYFfhiRg2g82986bh9kxyHQZwjtz7pAhW9dY7Z1mDZf
+	 E4G2QpyrU10N9vbMIvp6oxvvHr9+Z7L6OFXjpWynLK0rw0YVWMyogEt3CQr3A7DYm4
+	 dXg5jdhDQWvAQZaxgmmLVH4iJyy2tlrN5uUjSnLqah7tWxtXXcT9tZ3HE3TqXD/BOj
+	 bhRP49xJaAqI6sdcPP3UebPpiOfr7sgNAUUF1R4b0E+6TtsAmsJKBusYZ2JTdZ1aLh
+	 9c8JFmE/294uw==
+Date: Thu, 29 Aug 2024 18:55:07 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Joey Gouly <joey.gouly@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, nd@arm.com,
+	akpm@linux-foundation.org, aneesh.kumar@kernel.org,
+	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
+	catalin.marinas@arm.com, christophe.leroy@csgroup.eu,
+	dave.hansen@linux.intel.com, hpa@zytor.com,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
+	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
+	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
+	szabolcs.nagy@arm.com, tglx@linutronix.de, will@kernel.org,
+	x86@kernel.org, kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 16/30] arm64: handle PKEY/POE faults
+Message-ID: <40600b75-68eb-421a-a122-256bd20afb89@sirena.org.uk>
+References: <20240822151113.1479789-1-joey.gouly@arm.com>
+ <20240822151113.1479789-17-joey.gouly@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 05/17] vdso: Avoid call to memset() by getrandom
-To: Segher Boessenkool <segher@kernel.crashing.org>,
- Ard Biesheuvel <ardb@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, "Jason A . Donenfeld" <Jason@zx2c4.com>,
- Eric Biggers <ebiggers@kernel.org>, Michael Ellerman <mpe@ellerman.id.au>,
- Nicholas Piggin <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>,
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>,
- Andrew Morton <akpm@linux-foundation.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, shuah <shuah@kernel.org>,
- linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <cover.1724309198.git.christophe.leroy@csgroup.eu>
- <5deb67090b214f0e6eae96b7c406546d1a16f89b.1724309198.git.christophe.leroy@csgroup.eu>
- <20240827180819.GB2049@sol.localdomain>
- <20240827225330.GC29862@gate.crashing.org> <Zs8HirKLk-SrwTIu@zx2c4.com>
- <fc19bf63-d519-46e2-be70-80202c85ff92@app.fastmail.com>
- <20240828124519.GE29862@gate.crashing.org>
- <CAMj1kXGmDmxy75eP=rf_fzKmg0g_FeKV43jk2G_gibnKZBtVww@mail.gmail.com>
- <20240828162025.GG29862@gate.crashing.org>
- <CAMj1kXHZPfr2Sz78UrgsdX-2uBp0D1sCnznQnz5ZyMdiJq6rAA@mail.gmail.com>
- <20240828172538.GI29862@gate.crashing.org>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <20240828172538.GI29862@gate.crashing.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="YUq+oyo8aHhnCJ3l"
+Content-Disposition: inline
+In-Reply-To: <20240822151113.1479789-17-joey.gouly@arm.com>
+X-Cookie: Go 'way!  You're bothering me!
 
 
+--YUq+oyo8aHhnCJ3l
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Le 28/08/2024 à 19:25, Segher Boessenkool a écrit :
-> 
->> Not sure about static binaries, though: do those even use the VDSO?
-> 
-> With "static binary" people usually mean "a binary not using any DSOs",
-> I think the VDSO is a DSO, also in this respect?  As always, -static
-> builds are *way* less problematic (and faster and smaller :-) )
-> 
+On Thu, Aug 22, 2024 at 04:10:59PM +0100, Joey Gouly wrote:
 
-AFAIK on powerpc even static binaries use the vDSO, otherwise signals 
-don't work.
+> +static bool fault_from_pkey(unsigned long esr, struct vm_area_struct *vma,
+> +			unsigned int mm_flags)
+> +{
+> +	unsigned long iss2 = ESR_ELx_ISS2(esr);
+> +
+> +	if (!system_supports_poe())
+> +		return false;
+> +
+> +	if (iss2 & ESR_ELx_Overlay)
+> +		return true;
 
-Christophe
+Does this need an is_data_abort() && is_instruction_abort() check?
+Overlay doesn't appear to be defined for all exception types and it
+wasn't clear enough to me that the callers have done this check.
+
+--YUq+oyo8aHhnCJ3l
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbQtfoACgkQJNaLcl1U
+h9DlUgf/dqGRzK2dLE7+N4y+4LBWAGW7tClTB7FD0kyv5R02H8XfYHXRznQNP3xw
+e9h9X7WvrF+tHVvKaRLrgCF1qKwIwIpd/i5py+jWxSVZLIg1Al5vjZp6yGIRTiw5
+Gn7Ts60w/kNQNKizo8sr12ekIA8bn+EYGm7YznCxbsQ0Fo6Wx5ZGpcAsIObQVg/J
+bGFjL4IKMlaC8ZgP80PJW+sa3iAhlAK0RuDj1/BiVDfsLQHlMmD6M3Mpn4MTDB4A
+l60V2J4QW1eLkxWHCaeLE+1vBVHMCYgY4orFoA9WAbVFM0UDnI7EKgS22lGK/kxn
+L2I9TP72B0wTkDL1Ft+34Ka8AV+2Sw==
+=72Y0
+-----END PGP SIGNATURE-----
+
+--YUq+oyo8aHhnCJ3l--
 
