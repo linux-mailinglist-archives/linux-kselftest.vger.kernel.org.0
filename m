@@ -1,116 +1,113 @@
-Return-Path: <linux-kselftest+bounces-16721-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16722-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6531096505C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 21:58:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D979965067
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 21:59:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2236228228A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 19:58:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C69B91F246F9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 29 Aug 2024 19:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C51A21B9B38;
-	Thu, 29 Aug 2024 19:54:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADAAD1BA29E;
+	Thu, 29 Aug 2024 19:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Bk+JaODB"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oJiF1HZe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f44.google.com (mail-oa1-f44.google.com [209.85.160.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43E6D1B81DF
-	for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2024 19:54:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F72148FF0;
+	Thu, 29 Aug 2024 19:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724961263; cv=none; b=ltxAslQSHSKmq7k5LiQBIO9dDsUYQgG2EWpK814Xgp457Eg+MHs9yVCUTvebXHtAAh3FYqBsBOY2o+3JTH8D1ImMnRT0I9vzdef+W5+YMiX8eVEyO0wJYK7CCMhPnfWIBA0KlZ7x7Hh8FGk79PbLji/gtU4zBL7hMnerBQEGUGQ=
+	t=1724961504; cv=none; b=fsVbu8mryBeVgml7s8BE0ok428CDKkf9IREaeYCIW7vq7hXqvt6fp1XN0U8SoEPLwU7sH8KRxNLj5njd9y13wQaZzCZ9rSSCW5tVq94qeMRzX80dpGcmwX1LBUe2Zxf3kV1E3154E/GqsWA2ygAfh6+QuglmPVjbDPqe/5OFEx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724961263; c=relaxed/simple;
-	bh=guVxu9HxEDSLtaNB6zapABbY8BPidXJ8qvB9HSCs1b4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aD7jjjp3r4J3X3VdutU9zJeARIwuJKffMMzv5fcxjgBA3NviaKX6Pq+1zDoInNLCITbi6GowIoQddZkLa2IHeCqzckFee+Ea+9lDgYTKKK1G+/CsGituM91JaBzA+sBJqmzgwuHKsoE1r8CA/V4cqy8aVUQvhtgGfoMkVRrZJV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Bk+JaODB; arc=none smtp.client-ip=209.85.160.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-268e0b13471so73807fac.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2024 12:54:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1724961261; x=1725566061; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=guVxu9HxEDSLtaNB6zapABbY8BPidXJ8qvB9HSCs1b4=;
-        b=Bk+JaODB/0OHRkcroTeTsHNL5sOjGHKhXIqPuyHkj0m8ORBiRd03qZyTS/HiGI0e4x
-         H9Olr/h5SLMWEimLzz8M48h20/QKV4GTA1NkAd0zG4fbLC9fI3nF9UlwzXKttubxzsVQ
-         0I86QweIed+z6C8Yx30z7rr8aYzjre7SOtLSM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724961261; x=1725566061;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=guVxu9HxEDSLtaNB6zapABbY8BPidXJ8qvB9HSCs1b4=;
-        b=bp1tVIZsccZUr+SeuO9kJ3VcCg8rvzMVNO1Qp+bqp5n64vNkhkFVIxlzslkW+XEZYn
-         0dbDZBXayzVhIPqJR1LH5uoueZPjo5bf1ZkRbaj189qPPlpSJnA3e+QUx57eEqUMRnmY
-         WwsgbQg5fpLEdWk6lynKe+RAjlJAl8lcGW8gOCt1MrlSiYFyoxNRCtTfPC4j5ebLAPkS
-         GPs3hjjeWxjGHMb6J+tJlC/SzCTIGr2MHp4Zk2V3foVEDIwr1DYO7go4/8pB2i2MVerc
-         a6En5oMoTPfULlrsfghuhKE/CfJs32pXsD7BTIR0dZI+YKN1U44619gnmlvXIBdOu5iO
-         nTlA==
-X-Forwarded-Encrypted: i=1; AJvYcCVRnycNRUjoSPGb6fwzsTl05xXW9o8pdWwsqqpxtpwnb5prFp3sgAXOF8NRVCnRCcv8oadrXOGN/tLibU+51K4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPYg7H/l6DCL6Ovfm+odoEfcO4lKCzf24G0OkNiBpxex2uBiRR
-	w6o+blprX+Ki96paCCJL3JDFmX7fq4zDvluoq3RTURIWz3JW11QZUTOX+4ih+Ag2glKJdHaYC+a
-	1DIu31FrayChcO0kw+9mf324S0qIMl4ejkSTM
-X-Google-Smtp-Source: AGHT+IHRaSJMxiiEHHnyyPMW+E6Zchvcl2ZBtiZzi3ND4sx5NZsr8zR9UFo54QC6zM0irr40VOAnC+AYh5/ejQvMlDw=
-X-Received: by 2002:a05:6870:fb89:b0:260:ccfd:1eff with SMTP id
- 586e51a60fabf-2779031ccd4mr2354479fac.7.1724961261302; Thu, 29 Aug 2024
- 12:54:21 -0700 (PDT)
+	s=arc-20240116; t=1724961504; c=relaxed/simple;
+	bh=5ZJO21J7u88izzuci2C208UHwROGrNt3osb4f9ZFkdg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FC7YeLcOTk+ZfjYB/SyZxCxGuVBiTtqNHCqywpgaehg7tYKXYeOSdOdPMkDHRN8sEZ+3yq4R0I6NCjqUxITy+ldfuM+G6aJbrLuQKhPb9e24R/mlt4iyP6u/81n0zvyTFbxAti0tJSq5G46kLmLfduafu10biFPMbFsJU2zWQ5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oJiF1HZe; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=2y1Q6Z5FNb1Px58aZg62B3qtSMZPeJoICzrTDFXz/eo=; b=oJiF1HZeObZH20BOyCNMGtmWAs
+	IO1Rwzl99g6OHDbdJ+L3srXUg5bjrIgdPietSUfnzQ2pi9I9J8fzFRowOoMltDOrG06t97zKOq5YE
+	6nj3v7fvizoEY0BM7r1ybz3vnWNE/t63bfgy1cG7odCAfP7TfzhfiviOVttKOf93PisNO40zVNoiM
+	3qR41XcAI+LOyA7JHB3xmJOA/RBGb16jotT0XAiGb70IQc6iYQ5TC1JiKxu2tLd/STAagMUCeJF0f
+	UfexAuysX3JVXrtdzM76fq5UWtJ8JV/whXRLHa9hFkqcm6J01WGm0i6Mnn9HISpnJV6UW/Bjp0c8e
+	LjoMQ/VQ==;
+Received: from willy by casper.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
+	id 1sjlHg-00000002T5Y-3Lzf;
+	Thu, 29 Aug 2024 19:58:20 +0000
+Date: Thu, 29 Aug 2024 20:58:20 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: Jeff Xu <jeffxu@chromium.org>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, akpm@linux-foundation.org,
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+	linux-hardening@vger.kernel.org, pedro.falcato@gmail.com,
+	rientjes@google.com, keescook@chromium.org,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v1 2/2] selftests/mm: mseal_test add more tests
+Message-ID: <ZtDS3AP9Ejt31EbU@casper.infradead.org>
+References: <20240828225522.684774-1-jeffxu@chromium.org>
+ <20240828225522.684774-2-jeffxu@chromium.org>
+ <CABi2SkW9qEOx1FAcWeBLx_EA8LT2V_U6OS1GmEP433oA6t35pw@mail.gmail.com>
+ <097a3458-0126-48e3-ba0d-d7dc7b9069d2@lucifer.local>
+ <CABi2SkVe6Y4xypBw0n8QbqKJgsfy9YRNJWvBZ3bjTa=-Z5Zn2g@mail.gmail.com>
+ <5a312d38-4591-47b1-9a6c-4a7242dbe20d@lucifer.local>
+ <CABi2SkXDVgiUeC1StbfggvtiYG_kDxQJsZPpDw-NDPNv6-dwmg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240828225522.684774-1-jeffxu@chromium.org> <20240828225522.684774-2-jeffxu@chromium.org>
- <CABi2SkW9qEOx1FAcWeBLx_EA8LT2V_U6OS1GmEP433oA6t35pw@mail.gmail.com>
- <097a3458-0126-48e3-ba0d-d7dc7b9069d2@lucifer.local> <CABi2SkVe6Y4xypBw0n8QbqKJgsfy9YRNJWvBZ3bjTa=-Z5Zn2g@mail.gmail.com>
- <5a312d38-4591-47b1-9a6c-4a7242dbe20d@lucifer.local>
-In-Reply-To: <5a312d38-4591-47b1-9a6c-4a7242dbe20d@lucifer.local>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Thu, 29 Aug 2024 12:54:09 -0700
-Message-ID: <CABi2SkXDVgiUeC1StbfggvtiYG_kDxQJsZPpDw-NDPNv6-dwmg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/2] selftests/mm: mseal_test add more tests
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: akpm@linux-foundation.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-hardening@vger.kernel.org, pedro.falcato@gmail.com, 
-	rientjes@google.com, keescook@chromium.org, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABi2SkXDVgiUeC1StbfggvtiYG_kDxQJsZPpDw-NDPNv6-dwmg@mail.gmail.com>
 
-Hi Lorenzo
+On Thu, Aug 29, 2024 at 12:54:09PM -0700, Jeff Xu wrote:
+> Hi Lorenzo
+> 
+> On Thu, Aug 29, 2024 at 8:44 AM Lorenzo Stoakes
+> <lorenzo.stoakes@oracle.com> wrote:
+> 
+> > > >
+> > > > Also, this is a really unusual way to send a series - why is this a 2/2 in
+> > > > reply to the 1/2 and no cover letter? Why is this change totally unrelated
+> > > > to the other patch?
+> > > >
+> 1/2 has a fix that 2/2 is depending on. That is the reason they are together.
 
-On Thu, Aug 29, 2024 at 8:44=E2=80=AFAM Lorenzo Stoakes
-<lorenzo.stoakes@oracle.com> wrote:
+The normal way to send out these patches is as three emails; a 0/2 cover
+letter, 1/2 replying to 0/2 and 2/2 also replying to 0/2.  That's what
+has Lorenzo confused.
 
-> > >
-> > > Also, this is a really unusual way to send a series - why is this a 2=
-/2 in
-> > > reply to the 1/2 and no cover letter? Why is this change totally unre=
-lated
-> > > to the other patch?
-> > >
-1/2 has a fix that 2/2 is depending on. That is the reason they are togethe=
-r.
+> > > > Can you send this as a separate patch, preferably as an RFC so we can
+> > > > ensure that we all agree on how mseal() should behave?
+> > > >
+> It is not an RFC because it doesn't change any semanic to mseal. The
+> updated test will pass on linux main as well as 6.10. The increased
+> coverage will help to prevent future regression, i.e. during
+> refactoring.
 
-> > > Can you send this as a separate patch, preferably as an RFC so we can
-> > > ensure that we all agree on how mseal() should behave?
-> > >
-It is not an RFC because it doesn't change any semanic to mseal. The
-updated test will pass on linux main as well as 6.10. The increased
-coverage will help to prevent future regression, i.e. during
-refactoring.
+You seem to not understand that there is disagreement on the semantics
+of mseal().  I mean, ther's been a lot of arguing about that over the
+last week.  There's understanable reluctance to accept a large pile of
+tests saying "this just ensures that mseal behaves the way I think it
+should", when there is substantial disagreement that the way you think
+it should behave is in fact the way it should behave.  Be prepared to
+argue for each semantic that you think it should have.
 
-I will add a cover letter, split the tests and add more comments to
-help the review.
+> I will add a cover letter, split the tests and add more comments to
+> help the review.
 
-Thanks
--Jeff
+Thank you.
 
