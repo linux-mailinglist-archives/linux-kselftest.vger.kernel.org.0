@@ -1,40 +1,56 @@
-Return-Path: <linux-kselftest+bounces-16834-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16835-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED1179666E3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 18:30:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67DCE96673B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 18:46:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AABC6283248
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 16:30:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 136E21F25A26
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 16:46:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 070B61B81CB;
-	Fri, 30 Aug 2024 16:29:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D86FA1B9B34;
+	Fri, 30 Aug 2024 16:42:59 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F3021B5820;
-	Fri, 30 Aug 2024 16:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E001B9B28;
+	Fri, 30 Aug 2024 16:42:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725035395; cv=none; b=ItEUWy6AOZs/bJp5/vQisMQBwXTSq8gZg0BmmIPJHuCXs/OLvw9e5yektUFdrPsFTaF/WwZum8qPwH4/ALBOeVhoxg6QGHDS/32f5W6mMmbfmkvUzjm2WRMEPx1cMZignvutelwHMsH9mkRNYZYswCF7f0cyg1fnHaPkgU16O2A=
+	t=1725036179; cv=none; b=ugzpoAladcrCDvMWX3OPWdPVci9xMFtnjX/KjtP+1klbvvsaPoNlpLXlBCiT8ETHp4pg98SoVmAdPw41oUts08+vjETVG9QT0JybsNOc3Slj2tuOgZvJdrJn583TBB5DwHl3s3kswg0vER3dd/RFy8md2/JgInDQq52WZSXGR7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725035395; c=relaxed/simple;
-	bh=1Z8hPmy3Wx1wsMWj+S1BDLgBHjtC2Y3UOXjH1vhVow4=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=pzlpp8n/VJKiDuvpLbO6rrxZyp6QGepipCWlXhJu4pG3C29ciazOz/52EL1Id7JZpixR0MN5lqdggEJr621TtOmwikqU2IwMN7hjzqMXjC7/Pg05QcfaPkWhjIPhVqOhikiei63CjYay8r7bYHh1EXIp6gw8IkQH+dZ1hgFCukw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD0FF1063;
-	Fri, 30 Aug 2024 09:30:19 -0700 (PDT)
-Received: from [10.163.89.61] (unknown [10.163.89.61])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0693C3F762;
-	Fri, 30 Aug 2024 09:29:48 -0700 (PDT)
-Message-ID: <806e4be0-4b1f-4818-806f-a844d952d54e@arm.com>
-Date: Fri, 30 Aug 2024 21:59:43 +0530
+	s=arc-20240116; t=1725036179; c=relaxed/simple;
+	bh=TOnGq0IO24mAJLekrXPB1z6LZN6IYMcZ09nnaFQEPw4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RlIJlsvvpwW8IiauzKL7Y1kTdNcTz9spdy/FCFSWuG/hSkt3QL5ShnMB+Pq8vLjPvJPc9LT/7el6zzbGqLsG+WROm4QZtNupozhODKpnYD7aHpzDlaGskhFa/1hSwfv3rDBnZpEj8ubGQs42KkkdTglewX9e7oksZ9bhkSoVR9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4WwP8c465gz9sS8;
+	Fri, 30 Aug 2024 18:42:56 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id 6brwcfcnvqln; Fri, 30 Aug 2024 18:42:56 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WwP8c3CYvz9sS7;
+	Fri, 30 Aug 2024 18:42:56 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 59C838B794;
+	Fri, 30 Aug 2024 18:42:56 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id spbTDoYI002a; Fri, 30 Aug 2024 18:42:56 +0200 (CEST)
+Received: from [192.168.234.133] (unknown [192.168.234.133])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 74A238B764;
+	Fri, 30 Aug 2024 18:42:55 +0200 (CEST)
+Message-ID: <84682299-8cbe-4b66-9c26-17786e73af55@csgroup.eu>
+Date: Fri, 30 Aug 2024 18:42:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,48 +58,52 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/2] selftests: Rename sigaltstack to generic signal
-From: Dev Jain <dev.jain@arm.com>
-To: Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org, oleg@redhat.com
-Cc: mingo@kernel.org, tglx@linutronix.de, mark.rutland@arm.com,
- ryan.roberts@arm.com, broonie@kernel.org, suzuki.poulose@arm.com,
- Anshuman.Khandual@arm.com, DeepakKumar.Mishra@arm.com,
- aneesh.kumar@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240822121415.3589190-1-dev.jain@arm.com>
- <20240822121415.3589190-2-dev.jain@arm.com>
- <714f8eb4-b226-48f6-ab0d-75bdfbf83364@linuxfoundation.org>
- <42d0fa4b-eb67-42fd-a8e1-05d159d0d52f@arm.com>
-Content-Language: en-US
-In-Reply-To: <42d0fa4b-eb67-42fd-a8e1-05d159d0d52f@arm.com>
+Subject: Re: [PATCH v3 4/5] powerpc/vdso: Wire up getrandom() vDSO
+ implementation on PPC32
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org,
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+ Xi Ruoyao <xry111@xry111.site>
+References: <cover.1725031952.git.christophe.leroy@csgroup.eu>
+ <e7e4c6d36cf98229850c333f113bcea909564501.1725031952.git.christophe.leroy@csgroup.eu>
+ <ZtHv9R8b7qwWKR2b@zx2c4.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <ZtHv9R8b7qwWKR2b@zx2c4.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
-On 8/27/24 17:16, Dev Jain wrote:
->
-> On 8/27/24 17:14, Shuah Khan wrote:
->> On 8/22/24 06:14, Dev Jain wrote:
->>> Rename sigaltstack to generic signal directory, to allow adding more
->>> signal tests in the future.
->>
->> Sorry - I think I mentioned I don't like this test renamed. Why are 
->> you sending
->> this rename still included in the patch series?
->
-> I am not renaming the test, just the directory. The directory name
-> is changed to signal, and I have retained the name of the test -
-> sas.c.
 
-Gentle ping: I guess there was a misunderstanding; in v5, I was
-also changing the name of the test, to which you objected, and
-I agreed. But, we need to change the name of the directory since
-the new test has no relation to the current directory name,
-"sigaltstack". The patch description explains that the directory
-should be generically named.
+Le 30/08/2024 à 18:14, Jason A. Donenfeld a écrit :
+> On Fri, Aug 30, 2024 at 05:57:08PM +0200, Christophe Leroy wrote:
+>> + *	r5: 8-byte counter input/output (saved on stack)
+>> + *
+>> + *	r14-r15: counter
+>> + */
+>> +SYM_FUNC_START(__arch_chacha20_blocks_nostack)
+>> +	stwu	r1, -96(r1)
+>> +	stw	r5, 20(r1)
+>> +	stmw	r14, 24(r1)
+>> +	li	r31, 4
+>> +	LWZX_LE	r14, 0, r5
+>> +	LWZX_LE	r15, r31, r5
+> 
+> Why swap endian on the counter?
 
->
->>
->> thanks,
->> -- Shuah
+Unlike the keys, the counter is passed to the function as an u8*, not as 
+a u64*, so I thought it was raw data in little endian order, same as 
+when using Sodium. Is it wrong ?
+
+Christophe
 
