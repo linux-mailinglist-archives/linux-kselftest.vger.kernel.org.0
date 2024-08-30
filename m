@@ -1,116 +1,168 @@
-Return-Path: <linux-kselftest+bounces-16785-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16786-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1935F9660DF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 13:36:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60E849660EC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 13:42:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CABD1287026
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 11:36:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 172102860F4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 11:42:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6416F18EFE6;
-	Fri, 30 Aug 2024 11:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BBF018F2D5;
+	Fri, 30 Aug 2024 11:42:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DMq02goD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 287BD17BB0C;
-	Fri, 30 Aug 2024 11:36:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4877017DFF3;
+	Fri, 30 Aug 2024 11:42:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725017771; cv=none; b=fceOhRRG7BEhXI8vTyoYADP/QRwZxidpSFJ49ukR8muDCV64LC0xsyp7wyBB5Ku6iSw11ZwiWTqXFmj+36Ei1Mx/ScCurtjC5VUOXgH33iUjF1pV7PzxKmDZ3/YEqIt07cbp76WKuk5QfgzKUZGWzPo3iziSFdZ0dcJkLSYup0Q=
+	t=1725018173; cv=none; b=Cwoh29jhkc6XE7cznvonFiyF6aY/4ytjurgI7Xl4GMlrYM1qY3mv8Cm0XDBdDm0JmLu8TxbqKY6J6f5etnBJ7PYxIQkVARjR1FHdHkdHlmb6BUDV/2e/MqXyhPigmeWfomDJwuzlOGfgbnJBmBHL9CrcALQUjlYVPyy+k286Ids=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725017771; c=relaxed/simple;
-	bh=mwzrP0kN4wHkTx/N+Jzro+qORkdsAX0H5dqF0IiPWIE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yy0lbJ+g7r58P9NTgoGwqs3oHNosUN/+11G74Ed49dJEkIX16CWW0zDRQH+A8RTBpDXDE6CGFW0m1CEMD7Rjjyx7Ze00C9y9G/zrQM4bnydEt1H+QPmm8TAlw+dy17H0U93+ERNrXBtowOH/JkHb8rBoeXPGfo2xOORJi1g+HMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B27D0339;
-	Fri, 30 Aug 2024 04:36:34 -0700 (PDT)
-Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2AE603F66E;
-	Fri, 30 Aug 2024 04:36:05 -0700 (PDT)
-Date: Fri, 30 Aug 2024 12:35:56 +0100
-From: Joey Gouly <joey.gouly@arm.com>
-To: Marc Zyngier <maz@kernel.org>
-Cc: Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
-	nd@arm.com, akpm@linux-foundation.org, aneesh.kumar@kernel.org,
-	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
-	broonie@kernel.org, catalin.marinas@arm.com,
-	christophe.leroy@csgroup.eu, dave.hansen@linux.intel.com,
-	hpa@zytor.com, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linuxppc-dev@lists.ozlabs.org, mingo@redhat.com, mpe@ellerman.id.au,
-	naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
-	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
-	szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 08/30] KVM: arm64: make kvm_at() take an OP_AT_*
-Message-ID: <20240830113556.GA2952347@e124191.cambridge.arm.com>
-References: <20240822151113.1479789-1-joey.gouly@arm.com>
- <20240822151113.1479789-9-joey.gouly@arm.com>
- <20240830092527.GB7678@willie-the-truck>
- <86bk1aw8y2.wl-maz@kernel.org>
+	s=arc-20240116; t=1725018173; c=relaxed/simple;
+	bh=WuIYl4IzzUEhJPThW6Rr8DirCEnERH0u/EAC7WXNeco=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=j/iY1TczFGr88vN28H/amSmxjZX6YZ5JAYG6H14NFZzowr1vQujuSIbjYyukl2g+PtIuCALKJoseKSFWA3MhbsbTiCMM48XARA/EIfgk6/nXy8dQOiOx4vgPwAAyoAwcAy3iDOw07T/bo9MzMqB8rAPr6GXLS41THPzpAUpJIUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DMq02goD; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725018171; x=1756554171;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=WuIYl4IzzUEhJPThW6Rr8DirCEnERH0u/EAC7WXNeco=;
+  b=DMq02goD7wMMriwKVU508C1O+b0D6WUcLguKQB5qR9J7o+eDCz2Gnamn
+   asCRB1jdcXiaMbQKVU2N25ooxHXg2pf7tgO2VQSHw/6T/pRD5SsQJt0BF
+   0LXntHLU+DcRW1bB7+xPwoUATy+n7lGnTYr9viI0HZKeMGG8P0EiWcnnr
+   opvHe0bgYU1QzLCR0lNEKLwibwvUPTnIA2V9ws3rfe0mUKPFEXXAQjkfK
+   pDIwKqZzhnyc0/J28HguZh2x+U4ISz6u2M3yluA7sZNOGdF5Bov/HmvPV
+   xk/tN4Sac9iQHOIhzFJJM6keW4x+8oj5vaCvBdIXGWLQbz7ki4jqdELv9
+   g==;
+X-CSE-ConnectionGUID: tL4b+EGdR26j1zq86OIzig==
+X-CSE-MsgGUID: ++kbsh9tRm+vP8leJobRoQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="23537401"
+X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
+   d="scan'208";a="23537401"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 04:42:50 -0700
+X-CSE-ConnectionGUID: ffPijyUzS5Crt6QMwc50GQ==
+X-CSE-MsgGUID: q4x/+lz5RUafWhiGJ3YDBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
+   d="scan'208";a="64061133"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.245.174])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 04:42:47 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 30 Aug 2024 14:42:43 +0300 (EEST)
+To: Reinette Chatre <reinette.chatre@intel.com>
+cc: fenghua.yu@intel.com, shuah@kernel.org, tony.luck@intel.com, 
+    peternewman@google.com, babu.moger@amd.com, 
+    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
+    linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 5/6] selftests/resctrl: Do not compare performance counters
+ and resctrl at low bandwidth
+In-Reply-To: <9bbefa3b9a62319698907d10e8b78f1b999c311b.1724970211.git.reinette.chatre@intel.com>
+Message-ID: <5d063290-9da4-c9ca-e5c5-cb0083d7483f@linux.intel.com>
+References: <cover.1724970211.git.reinette.chatre@intel.com> <9bbefa3b9a62319698907d10e8b78f1b999c311b.1724970211.git.reinette.chatre@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <86bk1aw8y2.wl-maz@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
 
-On Fri, Aug 30, 2024 at 12:23:33PM +0100, Marc Zyngier wrote:
-> On Fri, 30 Aug 2024 10:25:27 +0100,
-> Will Deacon <will@kernel.org> wrote:
-> > 
-> > On Thu, Aug 22, 2024 at 04:10:51PM +0100, Joey Gouly wrote:
-> > > To allow using newer instructions that current assemblers don't know about,
-> > > replace the `at` instruction with the underlying SYS instruction.
-> > > 
-> > > Signed-off-by: Joey Gouly <joey.gouly@arm.com>
-> > > Cc: Marc Zyngier <maz@kernel.org>
-> > > Cc: Oliver Upton <oliver.upton@linux.dev>
-> > > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > > Cc: Will Deacon <will@kernel.org>
-> > > Reviewed-by: Marc Zyngier <maz@kernel.org>
-> > > ---
-> > >  arch/arm64/include/asm/kvm_asm.h       | 3 ++-
-> > >  arch/arm64/kvm/hyp/include/hyp/fault.h | 2 +-
-> > >  2 files changed, 3 insertions(+), 2 deletions(-)
-> > 
-> > Acked-by: Will Deacon <will@kernel.org>
-> > 
-> > > diff --git arch/arm64/include/asm/kvm_asm.h arch/arm64/include/asm/kvm_asm.h
-> > > index 2181a11b9d92..38d7bfa3966a 100644
-> > > --- arch/arm64/include/asm/kvm_asm.h
-> > > +++ arch/arm64/include/asm/kvm_asm.h
-> > 
-> > FWIW (mainly for Marc): you seem to be missing the 'a/' and 'b/'
-> > prefixes here, so my git would't accept the change when I tried to
-> > apply locally for testing.
+On Thu, 29 Aug 2024, Reinette Chatre wrote:
+
+> The MBA test incrementally throttles memory bandwidth, each time
+> followed by a comparison between the memory bandwidth observed
+> by the performance counters and resctrl respectively.
 > 
-> Seems like a spurious '--no-prefix' was added at patch formatting
-> time, That clashes with git-apply's default '-p1', which strips the
-> first component of the path.
+> While a comparison between performance counters and resctrl is
+> generally appropriate, they do not have an identical view of
+> memory bandwidth. For example RAS features or memory performance
+> features that generate memory traffic may drive accesses that are
+> counted differently by performance counters and MBM respectively,
+> for instance generating "overhead" traffic which is not counted
+> against any specific RMID. As a ratio, this different view of memory
+> bandwidth becomes more apparent at low memory bandwidths.
 
-I had --no-prefix in my .git/config for diffs, but I didn't realise that also
-applied to git format-patch, sorry for that. I have removed it now.
+Interesting.
 
-If you want me to resend v5, or something else, let me know.
+I did some time back prototype with a change to MBM test such that instead 
+of using once=false I changed fill_buf to be able to run N passes through 
+the buffer which allowed me to know how many reads were performed by the 
+benchmark. This yielded numerical difference between all those 3 values
+(# of reads, MBM, perf) which also varied from arch to another so it 
+didn't end up making an usable test.
 
+I guess I now have an explanation for at least a part of the differences.
+
+> It is not practical to enable/disable the various features that
+> may generate memory bandwidth to give performance counters and
+> resctrl an identical view. Instead, do not compare performance
+> counters and resctrl view of memory bandwidth when the memory
+> bandwidth is low.
 > 
-> There's probably a way to pass '-p0' to 'git am', but I don't feel
-> like trawling the git documentation by such a temperature...
+> Bandwidth throttling behaves differently across platforms
+> so it is not appropriate to drop measurement data simply based
+> on the throttling level. Instead, use a threshold of 750MiB
+> that has been observed to support adequate comparison between
+> performance counters and resctrl.
 > 
-> 	M.
+> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+> ---
+>  tools/testing/selftests/resctrl/mba_test.c | 7 +++++++
+>  tools/testing/selftests/resctrl/resctrl.h  | 6 ++++++
+>  2 files changed, 13 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+> index cad473b81a64..204b9ac4b108 100644
+> --- a/tools/testing/selftests/resctrl/mba_test.c
+> +++ b/tools/testing/selftests/resctrl/mba_test.c
+> @@ -96,6 +96,13 @@ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
+>  
+>  		avg_bw_imc = sum_bw_imc / (NUM_OF_RUNS - 1);
+>  		avg_bw_resc = sum_bw_resc / (NUM_OF_RUNS - 1);
+> +		if (avg_bw_imc < THROTTLE_THRESHOLD || avg_bw_resc < THROTTLE_THRESHOLD) {
+> +			ksft_print_msg("Bandwidth below threshold (%d MiB).  Dropping results from MBA schemata %u.\n",
+> +					THROTTLE_THRESHOLD,
+> +					ALLOCATION_MAX - ALLOCATION_STEP * allocation);
 
-related to uaccess: Catalin is away, sure when he's back, so I'm hoping we can
-resolve that when he's around.
+The second one too should be %d.
 
-Thanks,
-Joey
+-- 
+ i.
+
+> +			break;
+> +		}
+> +
+>  		avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
+>  		avg_diff_per = (int)(avg_diff * 100);
+>  
+> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+> index 0e5456165a6a..e65c5fb76b17 100644
+> --- a/tools/testing/selftests/resctrl/resctrl.h
+> +++ b/tools/testing/selftests/resctrl/resctrl.h
+> @@ -43,6 +43,12 @@
+>  
+>  #define DEFAULT_SPAN		(250 * MB)
+>  
+> +/*
+> + * Memory bandwidth (in MiB) below which the bandwidth comparisons
+> + * between iMC and resctrl are considered unreliable.
+> + */
+> +#define THROTTLE_THRESHOLD	750
+> +
+>  /*
+>   * user_params:		User supplied parameters
+>   * @cpu:		CPU number to which the benchmark will be bound to
+> 
+
 
