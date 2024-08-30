@@ -1,105 +1,157 @@
-Return-Path: <linux-kselftest+bounces-16755-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16756-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1159B965682
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 06:42:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D5D09656CA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 07:16:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 482321C21F03
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 04:42:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C6BD285AC5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 05:16:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44E0114A603;
-	Fri, 30 Aug 2024 04:42:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NMW8dEAt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8CBA13C672;
+	Fri, 30 Aug 2024 05:16:33 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E433313E3F5
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Aug 2024 04:42:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1505FEEB7;
+	Fri, 30 Aug 2024 05:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724992964; cv=none; b=LkrdLr8cenHgzvz7UlQHl47sbxvbIOxm246TcXpe+PoE9cn2eYp9HZz7EJuXZR7ntWgAwXnuQ3MeEe3mOUve8TBhlPxUkRs0Gy+oSQ0b9sJMQ9zQtypI+h06KY54f4cdo40O56ZJk0Dx96c1zNEaj0XJYoXtfDHqVw/lmjLXMbo=
+	t=1724994993; cv=none; b=tRQGqkxm4cpm6fkf8sSSeaxQOEgECmDJHIkQHJzwTCaSxHS3as9bul59F+ysJjCebJv0/oibAqWJpKCmTQiIXH09bw11ZCQyD+2dybZpbuylTFIRjWfaZ6dOD+mKl/ZZH5qHHWLND9a/vLmLi/xw28m76t1kcy89aWAJGrhu4qY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724992964; c=relaxed/simple;
-	bh=qVZiTEd3P+CV2R2j735WaLbeS9pAFr9F9WZnKfAB2gY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=NA5jY9Yu/xGBQAfPL64wH4vHHwlOB/RhC/jHIlrmgve5XfdwNl/Erz+XNCy0GTTy6Ewv94Pesp2u6dLjX7JhutzdwcWsu4TCpbIhwIELOq0Bpo3oCMw7oceASFA7PD19BmZtv1Gk5EpmqfovJKIeK64w1eDDURVHrCND/LIbDAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NMW8dEAt; arc=none smtp.client-ip=209.85.215.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-7c6b192a39bso1167971a12.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 29 Aug 2024 21:42:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1724992962; x=1725597762; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DuwDmeiQxcz3+jOCRjgsCebKb1su6LiEDyHBdI6Iy3k=;
-        b=NMW8dEAtn0TQYHb0EUZ55Upri64D2i38ahABLdWJNEzKbyu3/TwwSyOEgZ6UpZSbas
-         OmbJhRJMr16QN1wAk9DrBLz71Aqw5iw90WW22bL9klOjH2E2s010GtmLFfK8VbzMdUll
-         T/KDS+etA9akfFmt2glCCP+jyqHfEdRQsnPe1OxoLquADJV/ELcFDaeRjHZWp5ot4tbC
-         VhzY51908dOUCwhRtfbY+UjLFV4I7Nw8chsHO7zOJqs6M3H4TT6mSO11P4XyU0hAczz8
-         5ecHNunTB/gh1uYbx/H1ugfohjQ0fsDQMHL10imJ7VqUC/yfUB4iO4vmeb5BffZQQrUm
-         RYOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724992962; x=1725597762;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DuwDmeiQxcz3+jOCRjgsCebKb1su6LiEDyHBdI6Iy3k=;
-        b=Coansa/6xatB8DJSj9e2weWuMzrvfJAzaAFsjxKy0Mw+JwW3AqZ1jutJrIMmMFa5Kd
-         dvU8dNDY8CcZ0dpiMKIfQKGBPQKPMvSlZ1l4a51Jq6sStXAF6HIHy0st7T8T3WZy/U9n
-         ufhmWOGUh1VNLyvciRE+GpXJCTSd3fXFXhSy2d5qp1f8rBSQxWmvyAc1GkqeX8rZQvpq
-         Sqk1pHO3tda2IwXGEZ5otUn5NcISuNCFnijqLj79oayacKn672AmI7g6OeEGalJUbmm1
-         6JfhELLA0mQhwTDHY58Q24SuR6Q7Zf4X8OKjKgnLwjCcQ/Ryzf99+UbeokAwkFog/l+b
-         bQPg==
-X-Forwarded-Encrypted: i=1; AJvYcCVP1UNN07HOnQeuZCWDDedSc78ml7G3NSyf93dXb5QtpghD4QbQ7l1g5rDvaZx9Rp6LF4GNY7mhpHitKny/Qvw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNGGBKYafPwZxUjH71q3CaZf6BpjHjM5hS8anD5YlJzJSXB/Ns
-	pX8n0bjAx2mnvEIqMTXRCO4/5MMSWc/3ZlSx+P5PZK/xQMZUFoVyKB3eQKyoC3bHufMBlxICR+6
-	WoA==
-X-Google-Smtp-Source: AGHT+IEpfw0PKgJgqNKTHlMpWyrEsh7CSlO1i5Ro+hb2kbU92lKbF7kt84iFY1/jKRx5JiFvuUhbBUgOPDs=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:d70c:0:b0:7cd:8b5f:2567 with SMTP id
- 41be03b00d2f7-7d4c102e561mr1812a12.4.1724992961954; Thu, 29 Aug 2024 21:42:41
- -0700 (PDT)
-Date: Thu, 29 Aug 2024 21:42:40 -0700
-In-Reply-To: <20240829064811.GAZtAZqzWkmF79VOs7@fat_crate.local>
+	s=arc-20240116; t=1724994993; c=relaxed/simple;
+	bh=KijCHr4lbm49o3SgoZp2sxJkChsaExW/zVUnh4L+WmQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uowQbw/QVq7M+1oBcBG+pQFrqPam2mKlQDNG8iXk0W71/Qq4xz3QynXUrr0DwJvrWMspwkhJSXhdAgtkNEx/CEnrKFqx02FQ4LzJsjBurZnlPC4k1Cwt4MNt9maWtWrrS+eCf3TTCUPqa9xm7pCic4Cn96OymPOQ13/yqMbSV2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 270A51063;
+	Thu, 29 Aug 2024 22:16:56 -0700 (PDT)
+Received: from e116581.blr.arm.com (e116581.arm.com [10.162.40.24])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 855F83F66E;
+	Thu, 29 Aug 2024 22:16:19 -0700 (PDT)
+From: Dev Jain <dev.jain@arm.com>
+To: akpm@linux-foundation.org,
+	shuah@kernel.org,
+	david@redhat.com,
+	willy@infradead.org
+Cc: ryan.roberts@arm.com,
+	anshuman.khandual@arm.com,
+	catalin.marinas@arm.com,
+	cl@gentwo.org,
+	vbabka@suse.cz,
+	mhocko@suse.com,
+	apopple@nvidia.com,
+	osalvador@suse.de,
+	baolin.wang@linux.alibaba.com,
+	dave.hansen@linux.intel.com,
+	will@kernel.org,
+	baohua@kernel.org,
+	ioworker0@gmail.com,
+	gshan@redhat.com,
+	mark.rutland@arm.com,
+	kirill.shutemov@linux.intel.com,
+	hughd@google.com,
+	aneesh.kumar@kernel.org,
+	yang@os.amperecomputing.com,
+	peterx@redhat.com,
+	broonie@kernel.org,
+	mgorman@techsingularity.net,
+	ying.huang@intel.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	Dev Jain <dev.jain@arm.com>
+Subject: [PATCH] selftests/mm: Relax test to fail after 100 migration failures
+Date: Fri, 30 Aug 2024 10:46:09 +0530
+Message-Id: <20240830051609.4037834-1-dev.jain@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240709175145.9986-1-manali.shukla@amd.com> <20240709175145.9986-2-manali.shukla@amd.com>
- <Zr-qkJirOC_GM9o6@google.com> <20240829064811.GAZtAZqzWkmF79VOs7@fat_crate.local>
-Message-ID: <ZtFNwOG5oPwNF2bU@google.com>
-Subject: Re: [RFC PATCH v1 1/4] x86/cpufeatures: Add CPUID feature bit for the
- Bus Lock Threshold
-From: Sean Christopherson <seanjc@google.com>
-To: Borislav Petkov <bp@alien8.de>
-Cc: Manali Shukla <manali.shukla@amd.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org, 
-	nikunj@amd.com, thomas.lendacky@amd.com, vkuznets@redhat.com, 
-	babu.moger@amd.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 29, 2024, Borislav Petkov wrote:
-> On Fri, Aug 16, 2024 at 12:37:52PM -0700, Sean Christopherson wrote:
-> > I would strongly prefer to enumerate this in /proc/cpuinfo, having to manually
-> > query CPUID to see if a CPU supports a feature I want to test is beyond annoying.
-> 
-> Why?
-> 
-> We have tools/arch/x86/kcpuid/kcpuid.c for that.
+It was recently observed at [1] that during the folio unmapping stage
+of migration, when the PTEs are cleared, a racing thread faulting on that
+folio may increase the refcount of the folio, sleep on the folio lock
+(the migration path has the lock), and migration ultimately fails
+when asserting the actual refcount against the expected. Thereby,
+the migration selftest fails on shared-anon mappings.
+The above enforces the fact that migration is a best-effort service,
+therefore, it is wrong to fail the test for just a single failure;
+hence, fail the test after 100 consecutive failures (where 100 is
+still a subjective choice). Note that, this has no effect on the
+execution time of the test since that is controlled by a timeout.
 
-Ah, sorry, if the platform+kernel supports the feature, not just raw CPU.  And
-because that utility is not available by default on most targets I care about,
-and having to build and copy over a binary is annoying (though this is a minor
-gripe).
+[1] https://lore.kernel.org/all/20240801081657.1386743-1-dev.jain@arm.com/
 
-That said, what I really want in most cases is to know if _KVM_ supports a
-feature.  I'll think more on this, I have a few vague ideas for getting a pile
-of information out of KVM without needing to add more uABI.
+Signed-off-by: Dev Jain <dev.jain@arm.com>
+Suggested-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: Ryan Roberts <ryan.roberts@arm.com>
+Tested-by: Ryan Roberts <ryan.roberts@arm.com>
+---
+The above patch was part of the following:
+https://lore.kernel.org/all/20240809103129.365029-1-dev.jain@arm.com/
+I decided to send it separately since it should be applied
+nevertheless.
+
+ tools/testing/selftests/mm/migration.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+index 6908569ef406..64bcbb7151cf 100644
+--- a/tools/testing/selftests/mm/migration.c
++++ b/tools/testing/selftests/mm/migration.c
+@@ -15,10 +15,10 @@
+ #include <signal.h>
+ #include <time.h>
+ 
+-#define TWOMEG (2<<20)
+-#define RUNTIME (20)
+-
+-#define ALIGN(x, a) (((x) + (a - 1)) & (~((a) - 1)))
++#define TWOMEG		(2<<20)
++#define RUNTIME		(20)
++#define MAX_RETRIES	100
++#define ALIGN(x, a)	(((x) + (a - 1)) & (~((a) - 1)))
+ 
+ FIXTURE(migration)
+ {
+@@ -65,6 +65,7 @@ int migrate(uint64_t *ptr, int n1, int n2)
+ 	int ret, tmp;
+ 	int status = 0;
+ 	struct timespec ts1, ts2;
++	int failures = 0;
+ 
+ 	if (clock_gettime(CLOCK_MONOTONIC, &ts1))
+ 		return -1;
+@@ -79,13 +80,17 @@ int migrate(uint64_t *ptr, int n1, int n2)
+ 		ret = move_pages(0, 1, (void **) &ptr, &n2, &status,
+ 				MPOL_MF_MOVE_ALL);
+ 		if (ret) {
+-			if (ret > 0)
++			if (ret > 0) {
++				/* Migration is best effort; try again */
++				if (++failures < MAX_RETRIES)
++					continue;
+ 				printf("Didn't migrate %d pages\n", ret);
++			}
+ 			else
+ 				perror("Couldn't migrate pages");
+ 			return -2;
+ 		}
+-
++		failures = 0;
+ 		tmp = n2;
+ 		n2 = n1;
+ 		n1 = tmp;
+-- 
+2.30.2
+
 
