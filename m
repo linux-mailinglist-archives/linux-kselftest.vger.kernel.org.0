@@ -1,134 +1,117 @@
-Return-Path: <linux-kselftest+bounces-16773-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16774-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2C84965DA6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 11:58:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12BB2965DD1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 12:02:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2953F1C22F7E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 09:58:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3813E1C21D16
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 10:02:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF1CC15689B;
-	Fri, 30 Aug 2024 09:58:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F3DA17B50A;
+	Fri, 30 Aug 2024 10:02:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="NNcmrTyt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22D38EEB7;
-	Fri, 30 Aug 2024 09:58:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBB4D17B4E1;
+	Fri, 30 Aug 2024 10:02:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725011888; cv=none; b=FGVjbdrgDiwYDtTJEG8CWXMoD62A/tM2FLi0Fx6MfXVUs00Ap/UtL6lTt1ERw/uVhk5HODnZgFZJIr8R0bvGHwxfymQH7XUvGUTGaPShDB3jyHv9ynCTROVtfgjAMNyEnGR2znSE22E9d0cy4yZHJ5h4ylZlwtys8owp+sk3Eyg=
+	t=1725012129; cv=none; b=c8MuiDqGg6GxWubMNBmR0p3sBOXVY54V2YVCGEFWO9VHBfKykWmj6aFXs0uEgMldEUCiIeXYCwaGCs8towqltrLx6o7u+Wwl6sHbLvlokAxckX57MB5A1mZu3uZgQ0TjvauPe51ltdzn8G1eCxTiCX49neQm/PgwU3SZrD9oIyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725011888; c=relaxed/simple;
-	bh=o3aAKAo/Uo0zC6D4o15oa4oyPdGyHv9/ZZ0sRamhuBk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JOnQRRmMLpj5ZcFyiVMX0mj5kZe1kXjQLYkqBl+rpGt+Xtw7/TaYhGGy9WxbS09HmMaGH7JJz+UlSFUz7txPNY0KnAzHsVAUNeOLxJbqzPBJfLRUM68FbdulKPr0ZEkNvoOv2MoVY/D7JDYaTkaQQdoPmX5wwjJhxnK5kP/oUvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 609BC1063;
-	Fri, 30 Aug 2024 02:58:31 -0700 (PDT)
-Received: from [10.57.86.160] (unknown [10.57.86.160])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 49AC63F762;
-	Fri, 30 Aug 2024 02:58:03 -0700 (PDT)
-Message-ID: <ea224d97-44bb-45d0-b7f1-71e6287d8a8f@arm.com>
-Date: Fri, 30 Aug 2024 10:57:56 +0100
+	s=arc-20240116; t=1725012129; c=relaxed/simple;
+	bh=trhe5zk8M/PcJeerPxnKm741ZNbwuM7VZERvyU7MXrQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=TnDYAFS32d1tbk0OmGjxWhALLWOuqb7kDKwTUgPmno1p5XY6hLRyedJmojaSsu9x1wjXNQs+1QNjd85x4j5uGxxdRSprnvRI65r+Mvur+zXoPhYWcardoBwIQkPI5VY9qGm/O6B/fzIvY9qjHsbv2uhCNz4jYWvuv79fXO235Ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=NNcmrTyt; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1725012123;
+	bh=lPcPtY81gFF3u7n0A2RVPpHqZKSc08Lj9bnrJizsMEQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=NNcmrTytNe5K01YNEaaZ19cRsK3cVkZsPx09KELB11fMi0p0LaIX5DEwSFpG6peNy
+	 ISAellXAO+xLaSRbUK+pojAHnpn4mXhQ6Xi7aXgPNSvfk1Fhhy97z3qo3PUX1Q1jRr
+	 2dNrvbGjMGW1FqKKrMfKdMnOYumxQuAOYNTy0i1fviy9HjXmvUY4p8bDjh83ht9EjH
+	 yYNATupCNzqj23A6fjAnQZotlcbf/AcIWq7SPsN2wMldKWCJpNeeAVJfDGraO9mfkL
+	 nu1POz8pU9cnmrPtuY8NQqHP6jmqW67hqV/EN6svLc1HdzcViESWbiCV6jJzitD/1o
+	 cUcK4jBAfhGPw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4WwDG04LmLz4wnw;
+	Fri, 30 Aug 2024 20:01:59 +1000 (AEST)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: Segher Boessenkool <segher@kernel.crashing.org>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>
+Cc: Ard Biesheuvel <ardb@kernel.org>, Arnd Bergmann <arnd@arndb.de>, "Jason
+ A . Donenfeld" <Jason@zx2c4.com>, Eric Biggers <ebiggers@kernel.org>,
+ Nicholas Piggin <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>,
+ Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
+ <hpa@zytor.com>, Theodore Ts'o <tytso@mit.edu>, Andrew Morton
+ <akpm@linux-foundation.org>, Steven Rostedt <rostedt@goodmis.org>, Masami
+ Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, Vincenzo Frascino
+ <vincenzo.frascino@arm.com>, shuah <shuah@kernel.org>,
+ linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
+ linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 05/17] vdso: Avoid call to memset() by getrandom
+In-Reply-To: <20240829180241.GJ29862@gate.crashing.org>
+References: <20240827180819.GB2049@sol.localdomain>
+ <20240827225330.GC29862@gate.crashing.org> <Zs8HirKLk-SrwTIu@zx2c4.com>
+ <fc19bf63-d519-46e2-be70-80202c85ff92@app.fastmail.com>
+ <20240828124519.GE29862@gate.crashing.org>
+ <CAMj1kXGmDmxy75eP=rf_fzKmg0g_FeKV43jk2G_gibnKZBtVww@mail.gmail.com>
+ <20240828162025.GG29862@gate.crashing.org>
+ <CAMj1kXHZPfr2Sz78UrgsdX-2uBp0D1sCnznQnz5ZyMdiJq6rAA@mail.gmail.com>
+ <20240828172538.GI29862@gate.crashing.org>
+ <e5a36d98-c880-4d33-954a-2a05240ef02f@csgroup.eu>
+ <20240829180241.GJ29862@gate.crashing.org>
+Date: Fri, 30 Aug 2024 20:01:58 +1000
+Message-ID: <87jzfye3c9.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kselftest/arm64: Actually test SME vector length changes
- via sigreturn
-To: Mark Brown <broonie@kernel.org>, Catalin Marinas
- <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Shuah Khan <shuah@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>,
- linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240829-arm64-sme-signal-vl-change-test-v1-1-42d7534cb818@kernel.org>
-Content-Language: en-US
-From: Andre Przywara <andre.przywara@arm.com>
-In-Reply-To: <20240829-arm64-sme-signal-vl-change-test-v1-1-42d7534cb818@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+Segher Boessenkool <segher@kernel.crashing.org> writes:
+> On Thu, Aug 29, 2024 at 07:36:38PM +0200, Christophe Leroy wrote:
+>>=20
+>>=20
+>> Le 28/08/2024 =C3=A0 19:25, Segher Boessenkool a =C3=A9crit=C2=A0:
+>> >
+>> >>Not sure about static binaries, though: do those even use the VDSO?
+>> >
+>> >With "static binary" people usually mean "a binary not using any DSOs",
+>> >I think the VDSO is a DSO, also in this respect?  As always, -static
+>> >builds are *way* less problematic (and faster and smaller :-) )
+>> >
+>>=20
+>> AFAIK on powerpc even static binaries use the vDSO, otherwise signals=20
+>> don't work.
+>
+> How can that work?  Non-dynamic binaries do not use ld.so (that is the
+> definition of a dynamic binary, even).  So they cannot link (at runtime)
+> to any DSO (unless that is done manually?!)
 
-On 29/08/2024 18:20, Mark Brown wrote:
-> The test case for SME vector length changes via sigreturn use a bit too
-> much cut'n'paste and only actually changed the SVE vector length in the
-> test itself. Andre's recent factoring out of the initialisation code caused
-> this to be exposed and the test to start failing. Fix the test to actually
-> cover the thing it's supposed to test.
+At least for signals I don't think the application needs to know
+anything about the VDSO. The kernel sets up the return to the signal
+trampoline (in the VDSO), and as long as userspace returns from its
+signal handler with blr it will land back on the trampoline.
 
-Yes, I came to the same conclusion. The device I tested the original 
-patch on only had one VL, so the whole test was skipped, and I didn't 
-see the problem. Now re-tested on the FVP.
-
-> Fixes: 4963aeb35a9e ("kselftest/arm64: signal: Add SME signal handling tests")
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-Tested-by: Andre Przywara <andre.przywara@arm.com>
-
-Thanks,
-Andre.
-
-> ---
->   .../arm64/signal/testcases/fake_sigreturn_sme_change_vl.c  | 14 +++++++-------
->   1 file changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
-> index cb8c051b5c8f..dfd6a2badf9f 100644
-> --- a/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
-> +++ b/tools/testing/selftests/arm64/signal/testcases/fake_sigreturn_sme_change_vl.c
-> @@ -35,30 +35,30 @@ static int fake_sigreturn_ssve_change_vl(struct tdescr *td,
->   {
->   	size_t resv_sz, offset;
->   	struct _aarch64_ctx *head = GET_SF_RESV_HEAD(sf);
-> -	struct sve_context *sve;
-> +	struct za_context *za;
->   
->   	/* Get a signal context with a SME ZA frame in it */
->   	if (!get_current_context(td, &sf.uc, sizeof(sf.uc)))
->   		return 1;
->   
->   	resv_sz = GET_SF_RESV_SIZE(sf);
-> -	head = get_header(head, SVE_MAGIC, resv_sz, &offset);
-> +	head = get_header(head, ZA_MAGIC, resv_sz, &offset);
->   	if (!head) {
-> -		fprintf(stderr, "No SVE context\n");
-> +		fprintf(stderr, "No ZA context\n");
->   		return 1;
->   	}
->   
-> -	if (head->size != sizeof(struct sve_context)) {
-> +	if (head->size != sizeof(struct za_context)) {
->   		fprintf(stderr, "Register data present, aborting\n");
->   		return 1;
->   	}
->   
-> -	sve = (struct sve_context *)head;
-> +	za = (struct za_context *)head;
->   
->   	/* No changes are supported; init left us at minimum VL so go to max */
->   	fprintf(stderr, "Attempting to change VL from %d to %d\n",
-> -		sve->vl, vls[0]);
-> -	sve->vl = vls[0];
-> +		za->vl, vls[0]);
-> +	za->vl = vls[0];
->   
->   	fake_sigreturn(&sf, sizeof(sf), 0);
->   
-> 
-> ---
-> base-commit: b18bbfc14a38b5234e09c2adcf713e38063a7e6e
-> change-id: 20240829-arm64-sme-signal-vl-change-test-cebe4035856a
-> 
-> Best regards,
+cheers
 
