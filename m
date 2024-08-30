@@ -1,93 +1,116 @@
-Return-Path: <linux-kselftest+bounces-16784-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16785-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B72959660BE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 13:30:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1935F9660DF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 13:36:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74F2028B1A7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 11:30:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CABD1287026
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 11:36:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 720E21922F4;
-	Fri, 30 Aug 2024 11:29:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L/fpZaXl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6416F18EFE6;
+	Fri, 30 Aug 2024 11:36:11 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47273170A01;
-	Fri, 30 Aug 2024 11:29:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 287BD17BB0C;
+	Fri, 30 Aug 2024 11:36:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725017351; cv=none; b=G71X4aWjc0+30u/vpKxoV18FI3RaRQvKxh43BmgCKsEtCFFljTbv4c1uJEOdeMmi23VdDMbXAHCsqjzvriSHmsEi51kF4GrD1Di3mDLSknfTJiP9LKSvWX/lLS6ipr54KxfN0uBYOBa7q1VN73k7qY/RA0Hx7FCRRdJY6JLOyDQ=
+	t=1725017771; cv=none; b=fceOhRRG7BEhXI8vTyoYADP/QRwZxidpSFJ49ukR8muDCV64LC0xsyp7wyBB5Ku6iSw11ZwiWTqXFmj+36Ei1Mx/ScCurtjC5VUOXgH33iUjF1pV7PzxKmDZ3/YEqIt07cbp76WKuk5QfgzKUZGWzPo3iziSFdZ0dcJkLSYup0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725017351; c=relaxed/simple;
-	bh=+0oIB5pGRfMUNAhdXZ+MJJrJHp6SdwfGK04XE55ZJk0=;
+	s=arc-20240116; t=1725017771; c=relaxed/simple;
+	bh=mwzrP0kN4wHkTx/N+Jzro+qORkdsAX0H5dqF0IiPWIE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=skKNfnVy3LN/je7hdk/P/SAP2p7uW3vEeV7wQQeHU3LoY3PeToa3xoYTVAs82GSdcNLWjMxwrdySXIa03DLc3afaymuuEWeXmcFI3VX04HQtDvHP/LKITTtszLRnyxd3+YolGWbvc41AK1xj6OY1x4tEmuoGf1BipinMCTZBbCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L/fpZaXl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9039CC4CEC2;
-	Fri, 30 Aug 2024 11:29:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725017350;
-	bh=+0oIB5pGRfMUNAhdXZ+MJJrJHp6SdwfGK04XE55ZJk0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=L/fpZaXlKr8aI9RA+3656UcCGYs1gP3mf3FBgRA0KAgSJaR/xUG4tt0N8xUCCU5uw
-	 MOIqILLutWg16NqbGPKadXIvG6wB6p0JZc+hydKrie3vjvw0+MTbI/S8jp3dajb5N2
-	 2nK3mVSoBmjhZArBrMhWMcaR0AvwIO6mPncuhsZ3fJ+aORLe5gnLyzOoVvzJ2PxL7o
-	 hArAeVR0fpWhyCs77wk1b2WBhgRWHmSfch9v7PH2HkLinGc8d4hdF1V4xRgKXKyygv
-	 JotmbBBSd5Vmh8t0UO17FGSPKCHv3GyJ3Cxjd51nRyzH1axdmhXiE2xnrU1BPauK7e
-	 G1tUP4cmZksUA==
-Date: Fri, 30 Aug 2024 12:29:05 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Dev Jain <dev.jain@arm.com>
-Cc: shuah@kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, Catalin.Marinas@arm.com,
-	will@kernel.org, ryan.roberts@arm.com, Anshuman.Khandual@arm.com,
-	aneesh.kumar@kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/arm64: Fix build warnings for ptrace
-Message-ID: <5490390f-208f-4dde-94a3-6a2b9481e7af@sirena.org.uk>
-References: <20240830052911.4040970-1-dev.jain@arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yy0lbJ+g7r58P9NTgoGwqs3oHNosUN/+11G74Ed49dJEkIX16CWW0zDRQH+A8RTBpDXDE6CGFW0m1CEMD7Rjjyx7Ze00C9y9G/zrQM4bnydEt1H+QPmm8TAlw+dy17H0U93+ERNrXBtowOH/JkHb8rBoeXPGfo2xOORJi1g+HMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B27D0339;
+	Fri, 30 Aug 2024 04:36:34 -0700 (PDT)
+Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2AE603F66E;
+	Fri, 30 Aug 2024 04:36:05 -0700 (PDT)
+Date: Fri, 30 Aug 2024 12:35:56 +0100
+From: Joey Gouly <joey.gouly@arm.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Will Deacon <will@kernel.org>, linux-arm-kernel@lists.infradead.org,
+	nd@arm.com, akpm@linux-foundation.org, aneesh.kumar@kernel.org,
+	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
+	broonie@kernel.org, catalin.marinas@arm.com,
+	christophe.leroy@csgroup.eu, dave.hansen@linux.intel.com,
+	hpa@zytor.com, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linuxppc-dev@lists.ozlabs.org, mingo@redhat.com, mpe@ellerman.id.au,
+	naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
+	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
+	szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 08/30] KVM: arm64: make kvm_at() take an OP_AT_*
+Message-ID: <20240830113556.GA2952347@e124191.cambridge.arm.com>
+References: <20240822151113.1479789-1-joey.gouly@arm.com>
+ <20240822151113.1479789-9-joey.gouly@arm.com>
+ <20240830092527.GB7678@willie-the-truck>
+ <86bk1aw8y2.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="12Nb1XZkOew6N80K"
-Content-Disposition: inline
-In-Reply-To: <20240830052911.4040970-1-dev.jain@arm.com>
-X-Cookie: for ARTIFICIAL FLAVORING!!
-
-
---12Nb1XZkOew6N80K
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <86bk1aw8y2.wl-maz@kernel.org>
 
-On Fri, Aug 30, 2024 at 10:59:11AM +0530, Dev Jain wrote:
-> A "%s" is missing in ksft_exit_fail_msg(); instead, use the newly
-> introduced ksft_exit_fail_perror().
+On Fri, Aug 30, 2024 at 12:23:33PM +0100, Marc Zyngier wrote:
+> On Fri, 30 Aug 2024 10:25:27 +0100,
+> Will Deacon <will@kernel.org> wrote:
+> > 
+> > On Thu, Aug 22, 2024 at 04:10:51PM +0100, Joey Gouly wrote:
+> > > To allow using newer instructions that current assemblers don't know about,
+> > > replace the `at` instruction with the underlying SYS instruction.
+> > > 
+> > > Signed-off-by: Joey Gouly <joey.gouly@arm.com>
+> > > Cc: Marc Zyngier <maz@kernel.org>
+> > > Cc: Oliver Upton <oliver.upton@linux.dev>
+> > > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > > Cc: Will Deacon <will@kernel.org>
+> > > Reviewed-by: Marc Zyngier <maz@kernel.org>
+> > > ---
+> > >  arch/arm64/include/asm/kvm_asm.h       | 3 ++-
+> > >  arch/arm64/kvm/hyp/include/hyp/fault.h | 2 +-
+> > >  2 files changed, 3 insertions(+), 2 deletions(-)
+> > 
+> > Acked-by: Will Deacon <will@kernel.org>
+> > 
+> > > diff --git arch/arm64/include/asm/kvm_asm.h arch/arm64/include/asm/kvm_asm.h
+> > > index 2181a11b9d92..38d7bfa3966a 100644
+> > > --- arch/arm64/include/asm/kvm_asm.h
+> > > +++ arch/arm64/include/asm/kvm_asm.h
+> > 
+> > FWIW (mainly for Marc): you seem to be missing the 'a/' and 'b/'
+> > prefixes here, so my git would't accept the change when I tried to
+> > apply locally for testing.
+> 
+> Seems like a spurious '--no-prefix' was added at patch formatting
+> time, That clashes with git-apply's default '-p1', which strips the
+> first component of the path.
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+I had --no-prefix in my .git/config for diffs, but I didn't realise that also
+applied to git format-patch, sorry for that. I have removed it now.
 
---12Nb1XZkOew6N80K
-Content-Type: application/pgp-signature; name="signature.asc"
+If you want me to resend v5, or something else, let me know.
 
------BEGIN PGP SIGNATURE-----
+> 
+> There's probably a way to pass '-p0' to 'git am', but I don't feel
+> like trawling the git documentation by such a temperature...
+> 
+> 	M.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmbRrQEACgkQJNaLcl1U
-h9D8hAf9FsqcmGydocsaV8mqD3tYKAOHYeztneMnmSZ7oYeeU0FZ45qRw8MCfqWk
-aLusvWpgqpN+sRU9ksRSWXYfQW5WUrt3iR58/auhTxpn83IDiWJ4fFSbyNhzeLBA
-YyrLtpT9MkRiCn5pWpZMKDM7er7vXLRUNz971mE5iBix//2FmmanHsRBZLy4DSSy
-0wSArEVKzdPLSAm8pNwemm4BzqLW8O5j3iM3hQcqUW0LbhhXR5WvUX9DZ1isKs4a
-fMli0OvKMwki9TbWtpWQpRi0lv4x57nw6DUSi0O7P8jDXJlMIQC6n6g8oXIrvj7m
-l3ZA56LY3P4bK/y7leipiO3j2R+jAw==
-=7PNF
------END PGP SIGNATURE-----
+related to uaccess: Catalin is away, sure when he's back, so I'm hoping we can
+resolve that when he's around.
 
---12Nb1XZkOew6N80K--
+Thanks,
+Joey
 
