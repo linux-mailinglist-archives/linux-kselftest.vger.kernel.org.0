@@ -1,125 +1,135 @@
-Return-Path: <linux-kselftest+bounces-16838-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16839-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EDAC966883
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 19:59:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5555196689C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 20:02:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81F501C23623
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 17:59:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1FC01F24B8E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 18:02:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E5D1BBBDC;
-	Fri, 30 Aug 2024 17:59:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD4C21BC068;
+	Fri, 30 Aug 2024 18:02:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LjZbkURy"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AnHHLPis"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB9D14F135;
-	Fri, 30 Aug 2024 17:59:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19EB51B8EB3
+	for <linux-kselftest@vger.kernel.org>; Fri, 30 Aug 2024 18:02:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725040744; cv=none; b=FXl8AOWC2tBVQuGJFzCqiHPjKK+v6R9lFwSQYu8vanMuoWJmGuB1rEc2V6slSeNgf0JgLrg9XieGO7gjmmlvN/5BQMv/t2Cx87JgOLUilAif38kLu+RCpEu42kSCGEFqQ2tPNru1nzZIizbMgYcsrdsQ+A14CiMBEvxNEtV/AJo=
+	t=1725040964; cv=none; b=Ul8B4HFJEJ8VTAmuvOFRl0TBg4FsV4T8IYw6k9mJT4p809oS9ZyaPaTOvP3HrSHhJA+o0LHesVIH8YUI4bbvfCnBtIL4ZrbA95WvDnJ9K9zcMT0zuKUpu3t5avgu/OjpOSt6rUaG0J3mDeUy/uQf4L4CYi8HFe+dKdYezDiaZLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725040744; c=relaxed/simple;
-	bh=2Jkgq5he2WxrmzFT3bK4fOcS2dH6LFp69dhviYcUaOg=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oc85VY8Gaj6GN+5QSv1jRLB9gu70C2GjLwN0tR4DSzBcz3fpHSnu5Oa8rP1kP6tKR7FwZFpVzZHrm3QBrhN3/BEXEPSixPVZTNH3Ezpkc41oG3M7N+SS3RGiRpS51PhiyDvlOWohlcuHbgxDLmU/TIupsbcdbwohIilKk/OKqqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LjZbkURy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC5CC4CEC2;
-	Fri, 30 Aug 2024 17:59:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725040743;
-	bh=2Jkgq5he2WxrmzFT3bK4fOcS2dH6LFp69dhviYcUaOg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=LjZbkURyQNKOAXItRoOtb5ppDFUPv+/i17eT3Ov4/nCswre0krz2mianWNuHI1r8v
-	 yExKTIdr9UX67PvPwuSPK4U3Wf+NlFoWyTljiZhgcBStuHt1V2pUJopoJyailtq18K
-	 yLPiChNodDGr4fr4tlLmC/K3qIiUjplzLeLAa7oR7VDZMYP+vUGFTZkOKxxb2cDhYD
-	 TBO3c0v91ccwTLdQahN5cxNE1w/rE6kPrNVD6eh0vVP3WbCWknqpNHcP5Tqc1ImrEE
-	 TBJtJvmIu954K/MBIzWorcfi12TV8HA6GQP5d7NasrFNQTufqL94j3/PGxTK3U3gxf
-	 cGCV90knr8wOg==
-Date: Fri, 30 Aug 2024 10:59:01 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: Vadim Fedorenko <vadim.fedorenko@linux.dev>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Jonathan Corbet <corbet@lwn.net>, Richard Henderson
- <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
- Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
- Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
- de Bruijn <willemdebruijn.kernel@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBl?=
- =?UTF-8?B?bA==?= <bjorn@kernel.org>, Magnus Karlsson
- <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
- Sumit Semwal <sumit.semwal@linaro.org>, Christian =?UTF-8?B?S8O2bmln?=
- <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
- Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, Willem de Bruijn <willemb@google.com>,
- Kaiyuan Zhang <kaiyuanz@google.com>, Daniel Vetter <daniel.vetter@ffwll.ch>
-Subject: Re: [PATCH net-next v23 03/13] netdev: support binding dma-buf to
- netdevice
-Message-ID: <20240830105901.27e2e139@kernel.org>
-In-Reply-To: <CAHS8izOy26r0uoWdASgmBCENNS6cDjHpkp+AHhOaKVkZR1LZqQ@mail.gmail.com>
-References: <20240829060126.2792671-1-almasrymina@google.com>
-	<20240829060126.2792671-4-almasrymina@google.com>
-	<20240829140824.555d016c@kernel.org>
-	<e6df00ec-2c52-489e-a510-b69db7e9dbf9@linux.dev>
-	<CAHS8izOy26r0uoWdASgmBCENNS6cDjHpkp+AHhOaKVkZR1LZqQ@mail.gmail.com>
+	s=arc-20240116; t=1725040964; c=relaxed/simple;
+	bh=T3aBJ9fnmYj5an6GZeg3uLH3LGkl+XZDCDWyiQZyo/k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JrK//Vy/XIv2hOSTNaoALftDnnNjv7a/xokhaBW/OX+YZnB7qhT/04Yy6WJ8Oz8vOiJHRxmFDuwrFyLd+Lx0j+N8Z5p+koZ78DzNR8fghRAYPbDRgcYF4H/n4W6AQWLYUDtiIlfRKZfOLSlZdY0IhiI1J0Ai8gwwd94OJUuEkI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=AnHHLPis; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-20543c6f3b5so191655ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Aug 2024 11:02:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1725040962; x=1725645762; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=w7BWq7oVdU2RJCnx+Dm004xyt6dkCplP5f/XTiAPqqc=;
+        b=AnHHLPisqQVt//9IJIJ9+MsSngY4EUwaI5DB71ABvYgKXN4aNizEdQ6rImw6azABbz
+         s+PLk4LK+MrOiI8o39XrQHQhEtM1SppV08pGYrRpALXcaaPZfDNa0wlLbJuqVfYRZl90
+         SLSF5mO6BgLfyIZkNxChrA+TZ7Rgv/56ZCQ30=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725040962; x=1725645762;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w7BWq7oVdU2RJCnx+Dm004xyt6dkCplP5f/XTiAPqqc=;
+        b=mHJUQI5k+yCdjqiqI+5Wr1MnBonw8Jq3zJq+2Wt4rASTyRKJDEWDxDK5M2D8tS+CT7
+         ZcUIKbAFTGZwRWBhdvQH/kAVsuftkM2eLeroS6jkVC9swovPGW8Sz6FFEsMbTKLX4GLN
+         yUAd4iTQvigDDNZtp2R/UyIs2CUBaojx4sSPF6UzQKMmKWRQ0TFvhM0mR39DgOvVcDHS
+         /BrVKtWSR0FPRJ6vLOP2YjgQdm07WeWLrShPNqir25wxAVRLOTg1UCKxQAPpoN4af2Ds
+         n02fPXbAySCis4YdVpYSN5Ruf257hHa9K8gZvNxApIfZy7BCZ7UW2dbj6U/7z6AZn+nu
+         BITQ==
+X-Gm-Message-State: AOJu0YxZAnH4oI2aIG5G8Yow6uYWySBK9TCfr5nCtViKn47SQ2mUfleZ
+	zYsx1TvzUDWDjmyi7NWDvfV/8DDKh0b1424Jl8l2kK67kD736prQU9RxTDLLcw==
+X-Google-Smtp-Source: AGHT+IFfg3nmCpS6l8tCSIgiK8ygtmcd3GUg9HFT26UxW+AIXZxfWCUoJstGo9qdujnZ6B7n8WVNZQ==
+X-Received: by 2002:a17:902:cecd:b0:1fc:5cc8:bb1b with SMTP id d9443c01a7336-2052773ab73mr19021075ad.7.1725040961241;
+        Fri, 30 Aug 2024 11:02:41 -0700 (PDT)
+Received: from localhost (150.12.83.34.bc.googleusercontent.com. [34.83.12.150])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-205155671bdsm29574215ad.302.2024.08.30.11.02.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 30 Aug 2024 11:02:40 -0700 (PDT)
+From: jeffxu@chromium.org
+To: akpm@linux-foundation.org
+Cc: linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-hardening@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	pedro.falcato@gmail.com,
+	willy@infradead.org,
+	lorenzo.stoakes@oracle.com,
+	broonie@kernel.org,
+	vbabka@suse.cz,
+	Liam.Howlett@oracle.com,
+	rientjes@google.com,
+	keescook@chromium.org,
+	Jeff Xu <jeffxu@chromium.org>
+Subject: [PATCH v3 0/5] Increase mseal test coverage
+Date: Fri, 30 Aug 2024 18:02:32 +0000
+Message-ID: <20240830180237.1220027-1-jeffxu@chromium.org>
+X-Mailer: git-send-email 2.46.0.469.g59c65b2a67-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Thu, 29 Aug 2024 22:41:17 -0700 Mina Almasry wrote:
-> Thank you, I think the right fix here is to reacquire rtnl_lock before
-> the `goto err_unbind;`, since err_unbind expects rtnl to be locked at
-> this point.
+From: Jeff Xu <jeffxu@chromium.org>
 
-FWIW it's best to keep the error path a mirror image of the success
-path, so I'd add a new label "err_relock" or something. But..
+This series increase the test coverage of mseal_test by:
 
-> This could introduce a weird edge case where we drop rtnl_lock, then
-> find out genlmsg_reply failed, then reacquire rtnl_lock to do the
-> cleanup. I can't think of anything that would horribly break if we do
-> that, but I may be missing something. In theory we could race with a
-> dmabuf unbind call happening in parallel.
-> 
-> If we can't reacquire rtnl_lock to do the cleanup, I think I need to
-> revert back to doing genlmsg_reply inside of rtnl_lock, and dropping
-> the lock before we return from the function.
+Add check for vma_size, prot, and error code for existing tests.
+Add more testcases for madvise, munmap, mmap and mremap to cover
+sealing in different scenarios.
 
-..indeed, best to keep it atomic. So let's hold rtnl_lock longer.
-genlmsg_reply() shouldn't block, AFAIU.
+The increase test coverage hopefully help to prevent future regression.
+It doesn't change any existing mm api's semantics, i.e. it will pass on
+linux main and 6.10 branch.
 
-BTW CI is quite behind but Yunsheng ignored it and reposted his
-"refactor" which is going to take us another 10 hours back, 
-so whatever, just post v24 when you're ready...
+Note: in order to pass this test in mm-unstable, mm-unstable must have
+Liam's fix on mmap [1]
+
+[1] https://lore.kernel.org/linux-kselftest/vyllxuh5xbqmaoyl2mselebij5ox7cseekjcvl5gmzoxxwd2he@hxi4mpjanxzt/#t
+
+History:
+V3:
+- no-functional change, incooperate feedback from Pedro Falcato
+
+V2:
+- https://lore.kernel.org/linux-kselftest/20240829214352.963001-1-jeffxu@chromium.org/
+- remove the mmap fix (Liam R. Howlett will fix it separately)
+- Add cover letter (Lorenzo Stoakes)
+- split the testcase for ease of review (Mark Brown)
+
+V1:
+- https://lore.kernel.org/linux-kselftest/20240828225522.684774-1-jeffxu@chromium.org/
+
+
+Jeff Xu (5):
+  selftests/mseal_test: Check vma_size, prot, error code.
+  selftests/mseal: add sealed madvise type
+  selftests/mseal: munmap across multiple vma ranges.
+  selftests/mseal: add more tests for mmap
+  selftests/mseal: add more tests for mremap
+
+ tools/testing/selftests/mm/mseal_test.c | 830 ++++++++++++++++++++++--
+ 1 file changed, 763 insertions(+), 67 deletions(-)
+
+-- 
+2.46.0.469.g59c65b2a67-goog
+
 
