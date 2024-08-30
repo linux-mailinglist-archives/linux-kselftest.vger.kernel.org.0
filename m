@@ -1,91 +1,97 @@
-Return-Path: <linux-kselftest+bounces-16831-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16832-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE057966690
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 18:12:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B170E96669F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 18:15:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5ABB01F23283
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 16:12:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6EDE3281B33
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 16:15:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA0761B8EB3;
-	Fri, 30 Aug 2024 16:12:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BEAA1B86F0;
+	Fri, 30 Aug 2024 16:14:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OE6a5UTp"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="X4B3Z3+R"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9460B1B8EA1;
-	Fri, 30 Aug 2024 16:12:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF3111B86E3;
+	Fri, 30 Aug 2024 16:14:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725034348; cv=none; b=pWuqpRn006RyDsMQlMtIbYEIAU4jfQvmUHmMnTqXGPKqNBEakR+11RvFdm7Yqu6Rq3EtYmcXYKxicqtv/n/qZxeL3N0co9xXZ7uQh24LUYkvBhZQ+LtekpkTu9xbgprZOCWxGVehIhoYPfjmD0bvLqV/BKcDH0ULL+tlV4hr48c=
+	t=1725034495; cv=none; b=mcgb+k7bpG49Fu0LiLeWSd43nv9iYlBV+bMqMnqXhLT2bQAzLU+X39Jlficc/gjUeXDd/CBKcHzz6bVK6VPFQ7kp1I/Beyw77wn/YSwQmtUwpxY7gRpaUYU8wWtJZjY+xmrZg1BJ5Cr8dgEqEOAURNSoHD1b64Ghv6UfmqIqQRI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725034348; c=relaxed/simple;
-	bh=4olgMWFnqRfGAJn/hf7MsiFxqfy7g60SbC+PBtuV+5o=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XmPINmoUoOTyuFFxBZw81agdMm5JgxDtmOcZeHKgWKwpESeVZ57I1fZmjqwsE6rzJc+krEC1qTH/PoRdvf5p96vdVDTrdE6MrxKABhbLBcBEM7qJ/bDvGcgWM11Z2poF59+wnDqcxB2SzbM425n2c99UK7KaFJmxaDaIeeBKD7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OE6a5UTp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE75C4CEC5;
-	Fri, 30 Aug 2024 16:12:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725034348;
-	bh=4olgMWFnqRfGAJn/hf7MsiFxqfy7g60SbC+PBtuV+5o=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OE6a5UTpOBfCZY9myh8N9H06FPMjyUTF6rUP/qRbibt+0DssVH2OGW20sKA6nhpCJ
-	 swbRqJdN3agDCvSLCL+mx0lBXrR7rpBUITdTRznmFpIYNlOTUSS0iKIEP+wzV7/au/
-	 f8VjuCYG1iSNh+bYNdqDIOX8Ysmhl3A3bQLqqtAOT237tlPVXWgv/jBEpgyYMjw96F
-	 /mmRCkF2yV0NwEvBq3EtDZKONDJCyNJMya0rURSSlKH1rcmHcpWlJ1x+gYvAtuZLpQ
-	 v+KbPVdqcRkgNakRTJmC3PqaBG9XP+SHrgAqnMsc45DoL3fpWMSguQ341naPAwm2cd
-	 OrSOEgqno9mug==
-From: Will Deacon <will@kernel.org>
-To: shuah@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	Catalin.Marinas@arm.com,
-	Dev Jain <dev.jain@arm.com>
-Cc: catalin.marinas@arm.com,
-	kernel-team@android.com,
-	Will Deacon <will@kernel.org>,
-	broonie@kernel.org,
-	ryan.roberts@arm.com,
-	Anshuman.Khandual@arm.com,
-	aneesh.kumar@kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kselftest/arm64: Fix build warnings for ptrace
-Date: Fri, 30 Aug 2024 17:12:10 +0100
-Message-Id: <172503160799.3257459.1776623794579336427.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20240830052911.4040970-1-dev.jain@arm.com>
-References: <20240830052911.4040970-1-dev.jain@arm.com>
+	s=arc-20240116; t=1725034495; c=relaxed/simple;
+	bh=Sq577XF9X9W/Wv4eIA97DY3A+nUrzqzWnVO86TTyQ58=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rqWwRe0+GN33tYP+foTEO4tr2Jb5QnTKcRmIcDK1NwYQAqvl8PpMN1qx23aFiuIA1/f5fVC7qa1vtWb94KHBrA7qUU7fCEPmcAF7Qsk1j7dI4RSy4C7iV1EcpZ+pWdG8ArT6WRbsV0hHSZv12gvPI7W1XRN+NKr6jWM+D7auPro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=X4B3Z3+R; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 933EBC4CEC2;
+	Fri, 30 Aug 2024 16:14:52 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="X4B3Z3+R"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1725034490;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hP39KjvEhHFzK05596i191mBdhVDUqtp/Tqc+PvtOIk=;
+	b=X4B3Z3+RRpb6hKFMi1l1zo0Djitaj3Er0l8oTk/JJVDXNAhN1AX8yFBysIBe+ckynP2qVO
+	nyIQFAJq9DymFp/Kl5+S0iFSvp3phz7shrdSoqpPTsxO0USvCUxu6X0wOHej+YBpOuYBLG
+	er0UTBm+MFCED3Ceb8+SRsiPuJfgJrg=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7100d0c8 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Fri, 30 Aug 2024 16:14:50 +0000 (UTC)
+Date: Fri, 30 Aug 2024 18:14:45 +0200
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+	Xi Ruoyao <xry111@xry111.site>
+Subject: Re: [PATCH v3 4/5] powerpc/vdso: Wire up getrandom() vDSO
+ implementation on PPC32
+Message-ID: <ZtHv9R8b7qwWKR2b@zx2c4.com>
+References: <cover.1725031952.git.christophe.leroy@csgroup.eu>
+ <e7e4c6d36cf98229850c333f113bcea909564501.1725031952.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e7e4c6d36cf98229850c333f113bcea909564501.1725031952.git.christophe.leroy@csgroup.eu>
 
-On Fri, 30 Aug 2024 10:59:11 +0530, Dev Jain wrote:
-> A "%s" is missing in ksft_exit_fail_msg(); instead, use the newly
-> introduced ksft_exit_fail_perror().
-> 
-> 
+On Fri, Aug 30, 2024 at 05:57:08PM +0200, Christophe Leroy wrote:
+> + *	r5: 8-byte counter input/output (saved on stack)
+> + *
+> + *	r14-r15: counter
+> + */
+> +SYM_FUNC_START(__arch_chacha20_blocks_nostack)
+> +	stwu	r1, -96(r1)
+> +	stw	r5, 20(r1)
+> +	stmw	r14, 24(r1)
+> +	li	r31, 4
+> +	LWZX_LE	r14, 0, r5
+> +	LWZX_LE	r15, r31, r5
 
-Applied to arm64 (for-next/selftests), thanks!
-
-[1/1] kselftest/arm64: Fix build warnings for ptrace
-      https://git.kernel.org/arm64/c/d736d4fc7630
-
-Cheers,
--- 
-Will
-
-https://fixes.arm64.dev
-https://next.arm64.dev
-https://will.arm64.dev
+Why swap endian on the counter?
 
