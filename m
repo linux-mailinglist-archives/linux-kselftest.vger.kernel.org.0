@@ -1,142 +1,165 @@
-Return-Path: <linux-kselftest+bounces-16778-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D951F966084
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 13:23:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC2E39660B5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 13:29:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1776B1C22611
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 11:23:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8329628B249
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 11:29:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36D3118C35A;
-	Fri, 30 Aug 2024 11:23:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8018119993C;
+	Fri, 30 Aug 2024 11:25:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FfV/DDyU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IlV/X3m9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01A7A1D1312;
-	Fri, 30 Aug 2024 11:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C4917ADF8;
+	Fri, 30 Aug 2024 11:25:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725017017; cv=none; b=QQDW/ritHxk+YKlnZZ6iDCvyrMOOX6kBnDHDl/INRh6OkacL611IcOYWjgmxgzu5gRVDKCek7r1zEGGzmVNhLMDa5Tne48e4QkrnA846vpRPdGwFKGWCjugEF4bQ8MgnY5+Hl9VkRYudMfXnelEJidUp3QM67JVf8RbKrPDAliY=
+	t=1725017137; cv=none; b=k3WRlQoLvKAZdKCs0li/6/zLZTpH/dkvWRJjGCAdxoW7Wu4BiVY0N+MRvEVZ7ZLBcwjkbDyt4hTAoER+uCHXo8SkPRmcWKzp5xhsiKL34BiatOpKz6Hv0lpNEH7USzrM08r8hj8hWWN8kPFiIHmSHLdxJ/FHmeRCq+mwXiyabkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725017017; c=relaxed/simple;
-	bh=AGgg9f2fB958U4x1s+dxT22RX9ukSLHU6cLpkIryQgg=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=osVgXKeR321jnhkHbhq7GoRdXunlQCsIrcxawoKYv81LGdF8bsMqUPmx0WlogqjD5jRQLA72psxm8LdLW2ykVx4pIp4cW41e1IK+nV+rJb+d4irIxO7wv3vP94OZYkeddrXz/hjIPoVDVeapo7wsp6XhcJOxL+adWLYJjYzLVFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FfV/DDyU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FE0FC4CEC2;
-	Fri, 30 Aug 2024 11:23:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725017016;
-	bh=AGgg9f2fB958U4x1s+dxT22RX9ukSLHU6cLpkIryQgg=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=FfV/DDyUHB/hVYd02Y6J9oRYH1/FQDQpAGF2WZWZcK1XYRSxlprKai7lONZjR2c7J
-	 /Dex9/hW6AiFpZdIUF9XtPRzMSPhOF1ECWz927kRLIpnqj0wlikp1WkW+DBCmg155L
-	 2Orx5Q48y0RPWknrfRx6q1K23VADyciCgMyVUQmlAT20BudJ/gQd8HQIJXHwGrZlJb
-	 b9qzhlwYnCTjDzmZPNI2NI6zSLm5om4L2755PBZpZaC/Rf0brciIGb01ARqWb8Tpj3
-	 gJ/dbjZhda7+5hLd24VnhzQVls4NVre2rek0cry2IffuYxE7oEd3YP+KJWMSUzJT+V
-	 74eEWcuUjsKNw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1sjzj3-008DQD-JN;
-	Fri, 30 Aug 2024 12:23:33 +0100
-Date: Fri, 30 Aug 2024 12:23:33 +0100
-Message-ID: <86bk1aw8y2.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Will Deacon <will@kernel.org>
-Cc: Joey Gouly <joey.gouly@arm.com>,
-	linux-arm-kernel@lists.infradead.org,
-	nd@arm.com,
-	akpm@linux-foundation.org,
-	aneesh.kumar@kernel.org,
-	aneesh.kumar@linux.ibm.com,
-	anshuman.khandual@arm.com,
-	bp@alien8.de,
-	broonie@kernel.org,
-	catalin.marinas@arm.com,
-	christophe.leroy@csgroup.eu,
-	dave.hansen@linux.intel.com,
-	hpa@zytor.com,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linuxppc-dev@lists.ozlabs.org,
-	mingo@redhat.com,
-	mpe@ellerman.id.au,
-	naveen.n.rao@linux.ibm.com,
-	npiggin@gmail.com,
-	oliver.upton@linux.dev,
-	shuah@kernel.org,
-	skhan@linuxfoundation.org,
-	szabolcs.nagy@arm.com,
-	tglx@linutronix.de,
-	x86@kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 08/30] KVM: arm64: make kvm_at() take an OP_AT_*
-In-Reply-To: <20240830092527.GB7678@willie-the-truck>
-References: <20240822151113.1479789-1-joey.gouly@arm.com>
-	<20240822151113.1479789-9-joey.gouly@arm.com>
-	<20240830092527.GB7678@willie-the-truck>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1725017137; c=relaxed/simple;
+	bh=DpoKNE8VO9z3KhuMFEl5oMMY/HQ8tx2ppppVBEBswnQ=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=C3woPTSkZR47EbUetnQumtglrvGpD7H45F57M/d4IX5HG44JpWt00B+vgYwPLcWn+0G5jIt1HgGxhPs9EhwlH4rgx8VCUNxaqpHR5Uxu3vDxeyNFk0IED8pgk1Q1uhlRdMRTnjteBwC7e6zIfD7W6/qGR6nSwHH1iAm3MaCnB/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IlV/X3m9; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725017136; x=1756553136;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=DpoKNE8VO9z3KhuMFEl5oMMY/HQ8tx2ppppVBEBswnQ=;
+  b=IlV/X3m93kbL8HgKlbrd/RuVW64QbrN9QwzwrbiOndRbZ8/1iAKkuaWQ
+   8JCEBY8JeehFin7Ow2ieFzBbYdr2W7eW6lC4Lz+5P1tYuwq2o5MSvGAfs
+   VN7OWZaR4G48as9CWCBPKAHcQcgy17xgSBUDIQo44/pfk0rBMUY0nTXk8
+   h1Z0OnI2O47rjFDynK79uYQ6Tf6hRd4Q6UC6s6Ikmds8VgGsZ2FO+hymg
+   kVVAWfb3xjLXHmeDk+ERgBus5G+7JZZdkhWQTYvNmP8Beo5u63/VEvPQW
+   fWHg2X5WMSjaXaE+MHOhpXSdA1coyUx7EcMioUrb3WqgQN3bycmnjkxSZ
+   w==;
+X-CSE-ConnectionGUID: VdLI0o7ESNGV0r8KYIPLaw==
+X-CSE-MsgGUID: ka3ES/ZxRbOWBp9zbIkGOQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11179"; a="34320751"
+X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
+   d="scan'208";a="34320751"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 04:25:35 -0700
+X-CSE-ConnectionGUID: dOcyybsVRTSXe3PofZBwKw==
+X-CSE-MsgGUID: w6ByEIrZS4K3O5JhKGYiAw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,188,1719903600"; 
+   d="scan'208";a="64620172"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.245.174])
+  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2024 04:25:30 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 30 Aug 2024 14:25:25 +0300 (EEST)
+To: Reinette Chatre <reinette.chatre@intel.com>
+cc: fenghua.yu@intel.com, shuah@kernel.org, tony.luck@intel.com, 
+    peternewman@google.com, babu.moger@amd.com, 
+    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
+    linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 4/6] selftests/resctrl: Use cache size to determine
+ "fill_buf" buffer size
+In-Reply-To: <d357189fe0695b2140fc03efde75edc6fa0c88c6.1724970211.git.reinette.chatre@intel.com>
+Message-ID: <4434b263-9049-3d44-6b41-a840b39205cd@linux.intel.com>
+References: <cover.1724970211.git.reinette.chatre@intel.com> <d357189fe0695b2140fc03efde75edc6fa0c88c6.1724970211.git.reinette.chatre@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: will@kernel.org, joey.gouly@arm.com, linux-arm-kernel@lists.infradead.org, nd@arm.com, akpm@linux-foundation.org, aneesh.kumar@kernel.org, aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de, broonie@kernel.org, catalin.marinas@arm.com, christophe.leroy@csgroup.eu, dave.hansen@linux.intel.com, hpa@zytor.com, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, mingo@redhat.com, mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com, oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org, szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Fri, 30 Aug 2024 10:25:27 +0100,
-Will Deacon <will@kernel.org> wrote:
-> 
-> On Thu, Aug 22, 2024 at 04:10:51PM +0100, Joey Gouly wrote:
-> > To allow using newer instructions that current assemblers don't know about,
-> > replace the `at` instruction with the underlying SYS instruction.
-> > 
-> > Signed-off-by: Joey Gouly <joey.gouly@arm.com>
-> > Cc: Marc Zyngier <maz@kernel.org>
-> > Cc: Oliver Upton <oliver.upton@linux.dev>
-> > Cc: Catalin Marinas <catalin.marinas@arm.com>
-> > Cc: Will Deacon <will@kernel.org>
-> > Reviewed-by: Marc Zyngier <maz@kernel.org>
-> > ---
-> >  arch/arm64/include/asm/kvm_asm.h       | 3 ++-
-> >  arch/arm64/kvm/hyp/include/hyp/fault.h | 2 +-
-> >  2 files changed, 3 insertions(+), 2 deletions(-)
-> 
-> Acked-by: Will Deacon <will@kernel.org>
-> 
-> > diff --git arch/arm64/include/asm/kvm_asm.h arch/arm64/include/asm/kvm_asm.h
-> > index 2181a11b9d92..38d7bfa3966a 100644
-> > --- arch/arm64/include/asm/kvm_asm.h
-> > +++ arch/arm64/include/asm/kvm_asm.h
-> 
-> FWIW (mainly for Marc): you seem to be missing the 'a/' and 'b/'
-> prefixes here, so my git would't accept the change when I tried to
-> apply locally for testing.
+On Thu, 29 Aug 2024, Reinette Chatre wrote:
 
-Seems like a spurious '--no-prefix' was added at patch formatting
-time, That clashes with git-apply's default '-p1', which strips the
-first component of the path.
+> By default the MBM and MBA tests use the "fill_buf" benchmark to
+> read from a buffer with the goal to measure the memory bandwidth
+> generated by this buffer access.
+> 
+> Care should be taken when sizing the buffer used by the "fill_buf"
+> benchmark. If the buffer is small enough to fit in the cache then
+> it cannot be expected that the benchmark will generate much memory
+> bandwidth. For example, on a system with 320MB L3 cache the existing
+> hardcoded default of 250MB is insufficient.
+> 
+> Use the measured cache size to determine a buffer size that can be
+> expected to trigger memory access while keeping the existing default
+> as minimum that has been appropriate for testing so far.
+> 
+> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+> ---
+>  tools/testing/selftests/resctrl/mba_test.c | 8 +++++++-
+>  tools/testing/selftests/resctrl/mbm_test.c | 8 +++++++-
+>  2 files changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+> index 8ad433495f61..cad473b81a64 100644
+> --- a/tools/testing/selftests/resctrl/mba_test.c
+> +++ b/tools/testing/selftests/resctrl/mba_test.c
+> @@ -170,11 +170,17 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
+>  		.setup		= mba_setup,
+>  		.measure	= mba_measure,
+>  	};
+> +	unsigned long cache_total_size = 0;
+>  	int ret;
+>  
+>  	remove(RESULT_FILE_NAME);
+>  
+> -	param.fill_buf.buf_size = DEFAULT_SPAN;
+> +	ret = get_cache_size(uparams->cpu, "L3", &cache_total_size);
+> +	if (ret)
+> +		return ret;
+> +
+> +	param.fill_buf.buf_size = cache_total_size > DEFAULT_SPAN ?
+> +				  cache_total_size * 2 : DEFAULT_SPAN;
 
-There's probably a way to pass '-p0' to 'git am', but I don't feel
-like trawling the git documentation by such a temperature...
+Should the check leave a bit of safeguard so that the buf_size is at 
+least 2x (or x1.25 or some other factor)?
 
-	M.
+In here buf_size immediate jumps from 1x -> 2x when cache_total_size goes 
+from DEFAULT_SPAN to DEFAULT_SPAN+1 (obviously L3 size won't be odd like 
+that but I think you get my point).
+
+Also, user might want to override this as mentioned in my reply to the 
+previous patch.
 
 -- 
-Without deviation from the norm, progress is not possible.
+ i.
+
+>  	param.fill_buf.memflush = 1;
+>  	param.fill_buf.operation = 0;
+>  	param.fill_buf.once = false;
+> diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+> index b6883f274c74..734bfa4f42b3 100644
+> --- a/tools/testing/selftests/resctrl/mbm_test.c
+> +++ b/tools/testing/selftests/resctrl/mbm_test.c
+> @@ -138,11 +138,17 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
+>  		.setup		= mbm_setup,
+>  		.measure	= mbm_measure,
+>  	};
+> +	unsigned long cache_total_size = 0;
+>  	int ret;
+>  
+>  	remove(RESULT_FILE_NAME);
+>  
+> -	param.fill_buf.buf_size = DEFAULT_SPAN;
+> +	ret = get_cache_size(uparams->cpu, "L3", &cache_total_size);
+> +	if (ret)
+> +		return ret;
+> +
+> +	param.fill_buf.buf_size = cache_total_size > DEFAULT_SPAN ?
+> +				  cache_total_size * 2 : DEFAULT_SPAN;
+>  	param.fill_buf.memflush = 1;
+>  	param.fill_buf.operation = 0;
+>  	param.fill_buf.once = false;
+> 
+
 
