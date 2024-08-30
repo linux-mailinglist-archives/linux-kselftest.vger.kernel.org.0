@@ -1,53 +1,53 @@
-Return-Path: <linux-kselftest+bounces-16789-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16790-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EA7F9661AD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 14:29:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDE689661AF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 14:29:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE091B253E4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 12:29:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 547971F211C0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 12:29:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D32F199FDD;
-	Fri, 30 Aug 2024 12:29:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69AB6199FA4;
+	Fri, 30 Aug 2024 12:29:04 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68624199FA4;
-	Fri, 30 Aug 2024 12:28:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB54319ABB3;
+	Fri, 30 Aug 2024 12:29:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725020940; cv=none; b=kw4EwxKc8ECWGBtw57srqal613bKu/22hJbN8HVGIA7V6AzIorjVME/zwrh2/mmidC8HHF5QCnXcBUzBX6aPWDKdUTNXA02LvGjxHX5TCIX/i3tyFAUCtThrH5QCqq15Fdgr8KcH57etdusVb8FwQz7Fr6avemlgxDPtynodjbY=
+	t=1725020944; cv=none; b=DXz+fcnDNsPa/uTSk1c2rIWlSsChJ17PMPkTz0MdEvLuerCOkif0z9/+Epykq3EwR1KGDFyMg+krucl7B4QfARMZjnWfAJPa9aqwjGSuwK2bx36VjJvAZA34rBrTwQRdSjM0RZzin7agD8f/rF8AbEvyCVzJ5t2rtkGGii1gYuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725020940; c=relaxed/simple;
-	bh=oJ1xcMwdmfR/v7V7BgzIj/WZTewzoHvz/SQaj3yOdaw=;
+	s=arc-20240116; t=1725020944; c=relaxed/simple;
+	bh=39eNMMEoOEr5TEhEryae2qozQ9plEMYQV8tM9uHkz1o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Oe/nEkNVAUmf6N/DbS0tZT8d5YsuYvJ2Z/pAKnwOqJFE6NBpkxm0WyjnOpScDjIFKFnXXBM9vEYUZOyWu5xL/w+vcKya5jknvtNX5OwQPvKZPZYDeykaYrHF45SjrtnWm46crhG/cnistvOk7yKFqE4vAjF7867jCWVATBHFPqI=
+	 MIME-Version; b=road2LrlehOnhycmOVtMoNsfD31MNkeQ/UGuTd3X85r4J/F2QeKAHBZUShXsKgGAr5B7XUsmGw6+KL9FwWS1jdv3m7/bBkNAFib0iGReiyKef/3cXM2NeYNf6+uHdyTh5807wiVHO6ptZu2cwHzRcCAXndRTCH8eaZY7j3GWOxs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4WwHWS32fZz9sSK;
-	Fri, 30 Aug 2024 14:28:52 +0200 (CEST)
+	by localhost (Postfix) with ESMTP id 4WwHWT1SM1z9sSN;
+	Fri, 30 Aug 2024 14:28:53 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
 	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id hqpSmI7yge0W; Fri, 30 Aug 2024 14:28:52 +0200 (CEST)
+	with ESMTP id ydIIWh2sToqu; Fri, 30 Aug 2024 14:28:53 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4WwHWR5DWgz9sS8;
-	Fri, 30 Aug 2024 14:28:51 +0200 (CEST)
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WwHWS26lXz9sSH;
+	Fri, 30 Aug 2024 14:28:52 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id A1C238B764;
-	Fri, 30 Aug 2024 14:28:51 +0200 (CEST)
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 38AB38B799;
+	Fri, 30 Aug 2024 14:28:52 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
 	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id TbYxRHbKDEWk; Fri, 30 Aug 2024 14:28:51 +0200 (CEST)
+	with ESMTP id J276aqGJzHIH; Fri, 30 Aug 2024 14:28:52 +0200 (CEST)
 Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.234.133])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 263AD8B799;
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id A73508B794;
 	Fri, 30 Aug 2024 14:28:51 +0200 (CEST)
 From: Christophe Leroy <christophe.leroy@csgroup.eu>
 To: Shuah Khan <shuah@kernel.org>,
@@ -61,9 +61,9 @@ Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 2/5] selftests: vdso: Fix vdso_config for powerpc
-Date: Fri, 30 Aug 2024 14:28:36 +0200
-Message-ID: <f6b730b24361e4154019ec5fefdb8b9b10afb396.1725020674.git.christophe.leroy@csgroup.eu>
+Subject: [PATCH 3/5] selftests: vdso: Fix vDSO symbols lookup for powerpc64
+Date: Fri, 30 Aug 2024 14:28:37 +0200
+Message-ID: <fc1a0862516b1e11b336d409f2cb8aab10a97337.1725020674.git.christophe.leroy@csgroup.eu>
 X-Mailer: git-send-email 2.44.0
 In-Reply-To: <6c5da802e72befecfa09046c489aa45d934d611f.1725020674.git.christophe.leroy@csgroup.eu>
 References: <6c5da802e72befecfa09046c489aa45d934d611f.1725020674.git.christophe.leroy@csgroup.eu>
@@ -73,47 +73,103 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1725020918; l=1294; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=oJ1xcMwdmfR/v7V7BgzIj/WZTewzoHvz/SQaj3yOdaw=; b=ola5krc4mogdL/CH2op9DISC1pgL83EAmvQG0ipPNvIi4OTmpyR5rqdBXqAi/GUztMEdV3jnO AA4aGWq4LdpCk99ICkbprGAUK68fxmfkBshaZFfPlqnNGAlyTYJjTq4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1725020918; l=4496; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=39eNMMEoOEr5TEhEryae2qozQ9plEMYQV8tM9uHkz1o=; b=bHCtgzOdghRIPUD+W28xrc5q/N85UP8GEt2JZXB3Bbs70cpBfHzGQlx6E3a/7WlhFwIFspT9U vXtvDXA81fCBsOHx6jUmpWoKyS4OvXaJWlelfCyShtPqREuPxnkPLWt
 X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
 Content-Transfer-Encoding: 8bit
 
-Running vdso_test_correctness on powerpc64 gives the following warning:
+On powerpc64, following tests fail locating vDSO functions:
 
-  ~ # ./vdso_test_correctness
-  Warning: failed to find clock_gettime64 in vDSO
+  ~ # ./vdso_test_abi
+  TAP version 13
+  1..16
+  # [vDSO kselftest] VDSO_VERSION: LINUX_2.6.15
+  # Couldn't find __kernel_gettimeofday
+  ok 1 # SKIP __kernel_gettimeofday
+  # clock_id: CLOCK_REALTIME
+  # Couldn't find __kernel_clock_gettime
+  ok 2 # SKIP __kernel_clock_gettime CLOCK_REALTIME
+  # Couldn't find __kernel_clock_getres
+  ok 3 # SKIP __kernel_clock_getres CLOCK_REALTIME
+  ...
+  # Couldn't find __kernel_time
+  ok 16 # SKIP __kernel_time
+  # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:16 error:0
 
-This is because vdso_test_correctness was built with VDSO_32BIT defined.
+  ~ # ./vdso_test_getrandom
+  __kernel_getrandom is missing!
 
-__powerpc__ macro is defined on both powerpc32 and powerpc64 so
-__powerpc64__ needs to be checked first in vdso_config.h
+  ~ # ./vdso_test_gettimeofday
+  Could not find __kernel_gettimeofday
 
-Fixes: 693f5ca08ca0 ("kselftest: Extend vDSO selftest")
+  ~ # ./vdso_test_getcpu
+  Could not find __kernel_getcpu
+
+On powerpc64, as shown below by readelf, vDSO functions symbols have
+type NOTYPE, so also accept that type when looking for symbols.
+
+$ powerpc64-linux-gnu-readelf -a arch/powerpc/kernel/vdso/vdso64.so.dbg
+ELF Header:
+  Magic:   7f 45 4c 46 02 02 01 00 00 00 00 00 00 00 00 00
+  Class:                             ELF64
+  Data:                              2's complement, big endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              DYN (Shared object file)
+  Machine:                           PowerPC64
+  Version:                           0x1
+...
+
+Symbol table '.dynsym' contains 12 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
+     1: 0000000000000524    84 NOTYPE  GLOBAL DEFAULT    8 __[...]@@LINUX_2.6.15
+     2: 00000000000005f0    36 NOTYPE  GLOBAL DEFAULT    8 __[...]@@LINUX_2.6.15
+     3: 0000000000000578    68 NOTYPE  GLOBAL DEFAULT    8 __[...]@@LINUX_2.6.15
+     4: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS LINUX_2.6.15
+     5: 00000000000006c0    48 NOTYPE  GLOBAL DEFAULT    8 __[...]@@LINUX_2.6.15
+     6: 0000000000000614   172 NOTYPE  GLOBAL DEFAULT    8 __[...]@@LINUX_2.6.15
+     7: 00000000000006f0    84 NOTYPE  GLOBAL DEFAULT    8 __[...]@@LINUX_2.6.15
+     8: 000000000000047c    84 NOTYPE  GLOBAL DEFAULT    8 __[...]@@LINUX_2.6.15
+     9: 0000000000000454    12 NOTYPE  GLOBAL DEFAULT    8 __[...]@@LINUX_2.6.15
+    10: 00000000000004d0    84 NOTYPE  GLOBAL DEFAULT    8 __[...]@@LINUX_2.6.15
+    11: 00000000000005bc    52 NOTYPE  GLOBAL DEFAULT    8 __[...]@@LINUX_2.6.15
+
+Symbol table '.symtab' contains 56 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+...
+    45: 0000000000000000     0 OBJECT  GLOBAL DEFAULT  ABS LINUX_2.6.15
+    46: 00000000000006c0    48 NOTYPE  GLOBAL DEFAULT    8 __kernel_getcpu
+    47: 0000000000000524    84 NOTYPE  GLOBAL DEFAULT    8 __kernel_clock_getres
+    48: 00000000000005f0    36 NOTYPE  GLOBAL DEFAULT    8 __kernel_get_tbfreq
+    49: 000000000000047c    84 NOTYPE  GLOBAL DEFAULT    8 __kernel_gettimeofday
+    50: 0000000000000614   172 NOTYPE  GLOBAL DEFAULT    8 __kernel_sync_dicache
+    51: 00000000000006f0    84 NOTYPE  GLOBAL DEFAULT    8 __kernel_getrandom
+    52: 0000000000000454    12 NOTYPE  GLOBAL DEFAULT    8 __kernel_sigtram[...]
+    53: 0000000000000578    68 NOTYPE  GLOBAL DEFAULT    8 __kernel_time
+    54: 00000000000004d0    84 NOTYPE  GLOBAL DEFAULT    8 __kernel_clock_g[...]
+    55: 00000000000005bc    52 NOTYPE  GLOBAL DEFAULT    8 __kernel_get_sys[...]
+
+Fixes: 98eedc3a9dbf ("Document the vDSO and add a reference parser")
 Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 ---
- tools/testing/selftests/vDSO/vdso_config.h | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ tools/testing/selftests/vDSO/parse_vdso.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vDSO/vdso_config.h b/tools/testing/selftests/vDSO/vdso_config.h
-index 7b543e7f04d7..00bfed6e4922 100644
---- a/tools/testing/selftests/vDSO/vdso_config.h
-+++ b/tools/testing/selftests/vDSO/vdso_config.h
-@@ -18,13 +18,13 @@
- #elif defined(__aarch64__)
- #define VDSO_VERSION		3
- #define VDSO_NAMES		0
--#elif defined(__powerpc__)
-+#elif defined(__powerpc64__)
- #define VDSO_VERSION		1
- #define VDSO_NAMES		0
--#define VDSO_32BIT		1
--#elif defined(__powerpc64__)
-+#elif defined(__powerpc__)
- #define VDSO_VERSION		1
- #define VDSO_NAMES		0
-+#define VDSO_32BIT		1
- #elif defined (__s390__)
- #define VDSO_VERSION		2
- #define VDSO_NAMES		0
+diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
+index 4ae417372e9e..d9ccc5acac18 100644
+--- a/tools/testing/selftests/vDSO/parse_vdso.c
++++ b/tools/testing/selftests/vDSO/parse_vdso.c
+@@ -216,7 +216,8 @@ void *vdso_sym(const char *version, const char *name)
+ 		ELF(Sym) *sym = &vdso_info.symtab[chain];
+ 
+ 		/* Check for a defined global or weak function w/ right name. */
+-		if (ELF64_ST_TYPE(sym->st_info) != STT_FUNC)
++		if (ELF64_ST_TYPE(sym->st_info) != STT_FUNC &&
++		    ELF64_ST_TYPE(sym->st_info) != STT_NOTYPE)
+ 			continue;
+ 		if (ELF64_ST_BIND(sym->st_info) != STB_GLOBAL &&
+ 		    ELF64_ST_BIND(sym->st_info) != STB_WEAK)
 -- 
 2.44.0
 
