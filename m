@@ -1,111 +1,114 @@
-Return-Path: <linux-kselftest+bounces-16800-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16801-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FBEB966301
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 15:35:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A92A9663B0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 16:06:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2F541F24A59
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 13:35:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9B64284691
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 14:06:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4F651ACDFD;
-	Fri, 30 Aug 2024 13:35:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D759818FC81;
+	Fri, 30 Aug 2024 14:06:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="E30l85fb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JRsGyQhM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0C7165F05
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Aug 2024 13:35:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACDED1509BF;
+	Fri, 30 Aug 2024 14:06:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725024931; cv=none; b=cAGeUt/sGPq5fUJLFWKP/5JsiC0q6Z9dLNS1R8uPpSaE5+W5Dyv4X8HuOBTxoI56A23e/CPv7Zzh2OaJMhgUqghMJkgvFGcn3KwU0ZQnlKcrxdHNyS/NTYKsnPkuNbZyHXbCra2Aqk4IpT7UXIE1oN+YdyR1CU51QPggmNkzqm8=
+	t=1725026804; cv=none; b=d4cZlHzVyK/j48fs1s2Y5au36yb4q4UXjqvof5gxJmkFMKFGbHHaf9H8jsagjsi14LF9P3Y6m1dicgCQ4Kw6KvUlA/W/4TsqYYUML0HYIL6LWVWtOcgQKqsjxjGVHlXt9CGpLuhOoyKfX4A4rIbzUEWc1z/nSLIHFMd/laQtDK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725024931; c=relaxed/simple;
-	bh=bG2QJU+RysPPNXXbdeo596snXbZUz33HdRuBGNnU1jg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FCVeoRFWOOLXWMhfZeb80JgXNdYF4BbP3FrwOM8/hiuTSbZmWJNiXvQ092etwuqB+HbLW5Aw0ZZL7w/ZNN+bsAKKdzBGavM2zMzNcdAZnI3ySXmGl2/1qpuT4e3LNlVM94NIS7QyorXMVeXPCZnr2S5P0+UlpCtezR6B39gV0O8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=E30l85fb; arc=none smtp.client-ip=209.85.160.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-qt1-f181.google.com with SMTP id d75a77b69052e-44ff7cc5432so12180861cf.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Aug 2024 06:35:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1725024928; x=1725629728; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lHvnH/4zOuzzT8TCzaUdUbOM1uEXUpCOxCXYL3PqkuU=;
-        b=E30l85fbSojXnuXxRtMmnTpEUKNtWrxsvdSUjjbEYSm8o00Dzn0A3IjJQFbsRXUwlm
-         3ogKcjjt8Eqyafsjm0s7aK3FbNAB3FZ79zoSH8pGvw4+DtkoZmSP9/lpcyKQZ4+dn0Tk
-         lA55KuhOno7SkXmHj+L4IrB9EwdVfS8MU2BsY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725024928; x=1725629728;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lHvnH/4zOuzzT8TCzaUdUbOM1uEXUpCOxCXYL3PqkuU=;
-        b=aRGU20dZF0AvmjflcTmyhaGSOPz9+9apkBw5KVEQZSUmS17DBLVBce+TeJXRBNlCWX
-         fTBv7B7p8A9lXYikPuewnzLNbJ8POsCWhGvPA6JVIQcK5Sf9DclBPqlqmjesEYakoN+G
-         hvqam/kb6jMB22SzqvEfcvYAFuR4SKxyq/o0f393nQnNtDFNCgqTo3byxIC6iJ8eLCJh
-         NinBsN4aFC69nz39ipNTObDsa3WPRzsQhjXqeLoOx4VWeK0dmmSVlPq/QJdzN1+C3YQx
-         s6wosYOM137atqMU/sEdEhzq0pYwPj9sZXQj5Yvr1gBn94hIl/4uXUQ/t6f9rxuVel7O
-         TpkA==
-X-Forwarded-Encrypted: i=1; AJvYcCVc+13vFf8EHoSAB+vPjIc2yqLKo6NcteCbnlQJyLZHo7JRL2PdQ/ec0n3DpiPOM/XXFHxLrF37VXfKuQ1HR48=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0jr5/k98pDbrkugiOYqT5yyXvA0VOS2UHEq5RKhl1C3DlalyM
-	1qdlxxA9N7WWkz1dU32yiIkerkKUdfRueJqbFSK+47LxCuklbW/MkGHqPGE5FM0=
-X-Google-Smtp-Source: AGHT+IG8cg3+iwNoBRjX29bHUWGerLYZqb/2lmBI6h5IfvZ9WYS6tunfEvRS+bcOhw4pt4KgG5PXtw==
-X-Received: by 2002:a05:622a:40c8:b0:456:4688:d70b with SMTP id d75a77b69052e-4567f71c204mr79224871cf.61.1725024928201;
-        Fri, 30 Aug 2024 06:35:28 -0700 (PDT)
-Received: from [172.19.248.149] ([205.220.129.17])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45682d66c9dsm13869521cf.76.2024.08.30.06.35.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Aug 2024 06:35:27 -0700 (PDT)
-Message-ID: <af63ebb4-af0c-4b0d-9b58-691be5087868@linuxfoundation.org>
-Date: Fri, 30 Aug 2024 07:34:53 -0600
+	s=arc-20240116; t=1725026804; c=relaxed/simple;
+	bh=abEBYONWeURF/GdWgpitku0C1PUWqrVWKruQgBNNids=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=bSuWaBkuC4+tKc5UIpBXKNg0fXJcnJx0vunxcY9EFU/xfXxMtgJh5Maxg/dnE/UZTCFBpeGR51NUvYAi7wKXAy/oM4eXy1u6dGU4yFi/+OjnkPgTi79ThnOivU1pUI6tOOp3tJN26o5c3GG3jtq8CRbP9L5M/lovMO4gK1FGx4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JRsGyQhM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0035C4CEDB;
+	Fri, 30 Aug 2024 14:06:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725026804;
+	bh=abEBYONWeURF/GdWgpitku0C1PUWqrVWKruQgBNNids=;
+	h=From:Date:Subject:To:Cc:From;
+	b=JRsGyQhMxJ1Eiksxgq3fkcObUdJoTqTG4uppHFgc/flynZp/Ng2i0rJNC1WmYJiQw
+	 lKCXQOJtGBqX9Ydhb14NB7+nUu7M1v8c6D0MNDGF+kuYPTDMxjXfxDEi37XBEoJxnZ
+	 gcDortLTd7bpbZBpYHjZr7cBZcvrm7GZ84i8fMkiRCqnnDDNaNyp1CEVDsjMVCDwjW
+	 Cng+DMxucDyJ4EaY4Tm7j7IPhlqNGFRclc3pekYDYZj6On5Wk+3imu71iSj7AZezOB
+	 ksGXSSY3m6lzktK4XwjEmkE7KGTqq5592DW3v21wPk362CLBIoDICeQcaq6xGJR+rs
+	 peAVqTtOnsrSg==
+From: Mark Brown <broonie@kernel.org>
+Date: Fri, 30 Aug 2024 15:06:35 +0100
+Subject: [PATCH] selftest/vDSO: Fix cross build for the random tests
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] selftests: vdso: Fix vDSO name for powerpc
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>, Shuah Khan <shuah@kernel.org>
-Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>,
- Thomas Gleixner <tglx@linutronix.de>, Andy Lutomirski <luto@mit.edu>,
- "H. Peter Anvin" <hpa@linux.intel.com>, Mark Brown <broonie@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <6c5da802e72befecfa09046c489aa45d934d611f.1725020674.git.christophe.leroy@csgroup.eu>
- <ZtG-DqWo8kBMocVh@zx2c4.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <ZtG-DqWo8kBMocVh@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Message-Id: <20240830-vdso-chacha-build-v1-1-78f93d2a142f@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAOrR0WYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDC2MD3bKU4nxdoBQQ6SaVZuak6FqkGJtbWCalmVmaJisB9RUUpaZlVoD
+ NjI6trQUAxS5RS2MAAAA=
+To: Shuah Khan <shuah@kernel.org>, "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-37811
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1593; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=abEBYONWeURF/GdWgpitku0C1PUWqrVWKruQgBNNids=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBm0dHxCKnbF4HVb7+ZyWJRSFnXLyRXFqig2i34/S1C
+ pJIuiMOJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZtHR8QAKCRAk1otyXVSH0OC7B/
+ 4hi9Hayq1LNVE3MLEl3QmzakeufvKlzwofo9PS4WWX3MsT/R85SiuMrg8u30C78MVNUE4+8BIa8aM9
+ qmJIm3fkB6A50fER9q8sy4GvpLDfK3UB4C/1pVP79JRYPQAdbwu4/qe/K8Do2YI3anYMNDjz7ycNYK
+ SMMVKztczfNb74s6uz0tOecfdYEbi35Vk3jNF9cfZ7L8jpt3JZJycS0qF/1wMvQg6dURk7bqL4K7r7
+ iM7rS8n2zzwvwOSqV5tZGwlozoip+Pic8ZFx5xnkPgXTX5bTdt4FLR5yp8L7brAJBhLc6iNgNJfdJ6
+ wAtT2m8kL/o5OG+zESw3Zw2tCWHPLt
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On 8/30/24 06:41, Jason A. Donenfeld wrote:
-> Hi Shuah,
-> 
-> No 0/5 patch, so replying to the first one.
-> 
-> These are fixes to the vDSO selftests that Christophe is ostensibly
-> providing as a preamble to his work porting vgetrandom to PPC. Do you
-> mind if I take these via my random tree so his PPC vgetrandom code can
-> go on top of it?
-> 
-> Jason
-> 
+Unlike the check for the standalone x86 test the check for building the
+vDSO getrandom and chacaha tests looks at the architecture for the host
+rather than the architecture for the target when deciding if they should
+be built. Since the chacha test includes some assembler code this means
+that cross building with x86 as either the target or host is broken. Use
+a check for ARCH instead.
 
-Yes - here is the Ack to apply to all patches in the series:
+Fixes: 4920a2590e91 ("selftests/vDSO: add tests for vgetrandom")
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+The x86_64 build is still broken for me because nothing installs
+tools/arch/x86_64/vdso/vgetrandom-chacha.S (I beleive it's supposed to
+be copied from ./arch/x86/entry/vdso/vgetrandom-chacha.S but I don't see
+how?) but this at least fixes all the other architectures.
+---
+ tools/testing/selftests/vDSO/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+index e21e78aae24d..7fb59310718c 100644
+--- a/tools/testing/selftests/vDSO/Makefile
++++ b/tools/testing/selftests/vDSO/Makefile
+@@ -10,7 +10,7 @@ ifeq ($(ARCH),$(filter $(ARCH),x86 x86_64))
+ TEST_GEN_PROGS += vdso_standalone_test_x86
+ endif
+ TEST_GEN_PROGS += vdso_test_correctness
+-ifeq ($(uname_M),x86_64)
++ifeq ($(ARCH),$(filter $(ARCH),x86_64))
+ TEST_GEN_PROGS += vdso_test_getrandom
+ TEST_GEN_PROGS += vdso_test_chacha
+ endif
 
-thanks,
--- Shuah
+---
+base-commit: 985bf40edf4343dcb04c33f58b40b4a85c1776d4
+change-id: 20240830-vdso-chacha-build-8d3789bf695c
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
 
