@@ -1,76 +1,75 @@
-Return-Path: <linux-kselftest+bounces-16859-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16860-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F37DB966B76
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 23:46:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7462966B8E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 23:52:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 33E20B224E4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 21:46:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 454EF1F237E1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 21:52:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DDF016FF5F;
-	Fri, 30 Aug 2024 21:46:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F4B8172BAE;
+	Fri, 30 Aug 2024 21:52:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OLiWYAPI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UUiShg4Q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 153D6165EE0;
-	Fri, 30 Aug 2024 21:46:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2326713D60E;
+	Fri, 30 Aug 2024 21:52:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725054380; cv=none; b=pCRwZf4R9Db+D9tTZEEO64ppt8aUAxUDKAZZC69TpAvDlxNN28/1qIobXoOcUhKVJ37MQwcFsNCuPltMHSrR4aJ14NwgNafh1/5cjBW8WcPAnDW3zCJsz9qGjp9qPALepDa72nZsZb8GXdWiVTj6pG2KBM9SRoDhZIwMUmBK3r0=
+	t=1725054758; cv=none; b=DZKB0GlSuBExlLjVKkTjPcS3OEJAg83PpJQECN+4sgpiExvLVy5PpRB8OwxfXUBNTzQ3WBBtW8Sro3CTJz8a6XXmzDkn9CsIwwPnSPxD7u3hApUNgSpSXi+QcirYBIFqFVOdtWf2ThqTk1A0Ka8iaHARGTIjhvtsnCgTNJHHv18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725054380; c=relaxed/simple;
-	bh=2Rvb8tMZHQHsmiijwlk7hSTrlM+BUj56sPl/97f/g74=;
+	s=arc-20240116; t=1725054758; c=relaxed/simple;
+	bh=IkTuCSbVLR1iXF7AXKgQbRDx1TmVCNHiQlgZe2dW0ew=;
 	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=pdO6bYUQ4OY7Io1kcCkCEe/lfgf2cshwhg8/vllSzsFYdYSRogtyRJCMThM5TjaO95saDxBbOlVSlhQk3T+7AFF38aBmPSR6ovkKagMQ1C+TCgUatdWD2cyF3MxrFJgGdHQPnPGdvZy0H2bL2pqQcbktDK6aG1kA1OT6Z7FSzPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OLiWYAPI; arc=none smtp.client-ip=209.85.222.175
+	 Mime-Version:Content-Type; b=jbEUe9MdYjCRLbKKi+8gSuOKt1BeA/zngZj0nep41Zxc/9AQqILFfF/hMoyBl2BIgV54hAmVDC+1JYr8rU9hrR1mxWZ+GA3pI7SFhJnWDGVqFCI3ojwElhQCnrKDrlB2TwHdaD+i5EgYfyzufLa6tBzttrRA7i99ijdKvYr1UA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UUiShg4Q; arc=none smtp.client-ip=209.85.160.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7a7f8b0b7d0so101749485a.2;
-        Fri, 30 Aug 2024 14:46:18 -0700 (PDT)
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-456774a0fe7so12531011cf.0;
+        Fri, 30 Aug 2024 14:52:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725054378; x=1725659178; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1725054756; x=1725659556; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sEXUSEjOgE2zDXVPt774/bdHGXaaOnzgSC3FiU8zMnY=;
-        b=OLiWYAPISE9EgLMdcJbL6NWkThfTcB62i6jBQajZPOcr+tHXSJiN6E+UDA8huNSH4l
-         EK17lie3A3QMOOOABn5yn2xxpPyhi3ulUXsyf2Z8WzsnbFAGcL9HHfWMUpUxMSaU/eWT
-         8yJKmltBWpotnstB/OG8S+Yl8U/dybe3leyKNyAtTEj7dkvdRpBXa1pDWNsFGd49nsDT
-         hARIY0Kk46c6qbXZ+Lk2HTSiXI3Z55INkMF/Ic8x7mwezVc34UDI+lZaBl6xIlYf7DrU
-         pty3SmIUjcEcKuqpw2aiW92fMwM9Y754Flo4HzR8A1dORqzp5ZaP5SzF55V9ewj5f+VL
-         O1MA==
+        bh=CcXD9EKY0OCyfbPqdutna+/Pp1nF39E/CbXST6SgpRk=;
+        b=UUiShg4QtgbwQgx4LUfwboNxtQU7VtKbIdnvSrfsPvRsbj1j5R4is3rxfs3zjzE5e5
+         ZSUSqxpfjkgHjdXQ3xHISS4H4cSXCT1U695+cqzPmdPQhnF1IKA2eYgGgCuruybO+kLp
+         aG45ZZdvoVV+GRu3m39HVHZ+719OGquTSwpn8bTUFEEbIYUGqdyUNYdO9h5Jj5mVPWUX
+         8zjZUBRgXyXPpLumI3VewTwFPBzOtCa/gBlmlUIht4G7oLuBB3OEslEYFSNAgKCl3MlO
+         e5uFZHDyAVNApkW73vvh7un93uum/zbihdmZcv6ueW7bIwIQeqla1pZ05zmKo1Lo1cPc
+         jagw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725054378; x=1725659178;
+        d=1e100.net; s=20230601; t=1725054756; x=1725659556;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=sEXUSEjOgE2zDXVPt774/bdHGXaaOnzgSC3FiU8zMnY=;
-        b=WXfe7WxfnsjKTB4eauF3WHT/uNQ9y3ocYLyFkTsZd3y3CqSfBMo+7pU3cN8niIPxbe
-         u5XmXaoLFpOuoMlRlbw0IoOz6/sC8X91EzozvoLCkUQRze9oOXQfHsv5df+LbrA/3miP
-         1DHSzWTEX9Rx41s7YIijdZ4tmaB0rfn1nSJjHL7E0nfdkhrTb1D76rJeV665CR0LoPBd
-         jXrw2Beug8iCsz3WlfwxLN/uTfXfpkVDuX7da7t/Ot440zr+wZ/aR1KrcfZhEW2TLooq
-         s9nWF4W6gjkn65O5P8VUGzjNEUZ2DXdB2JxN/5io2Ue3u+aDUkdPqAEQ/pKa00vKuigS
-         W7Tg==
-X-Forwarded-Encrypted: i=1; AJvYcCU4wrxqLjAlzfdnvUjIkALK2DY+scYlfeg/J7X0/4Dapl5Ggectp0NB2ZgaX0kga9GI50cCZFLdK/H7GHX0J+k=@vger.kernel.org, AJvYcCXUxJk5AgxmlFbQ52RO2nwcxWxVhD7h/BewP44B7IN28sF6ycAKoExaRSvmpPhupnXrpjjgFOmF@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHl6UevtsFrAtLuf0njjZj+A2kKiVnUk1iWIaBtJn7TmHNSxOf
-	dxGso3LCeUFbTb3kNmhj4Z18WX4Tn0eJtMrblSlmFh9kKQn+j3Sb
-X-Google-Smtp-Source: AGHT+IHDPnnaSnOjSRgFBWB67AatbTFMjTn9iJqQ0ElcAwtTBuHDCG+8pbBKZvbxcbmycupRUYmTXA==
-X-Received: by 2002:a05:620a:4048:b0:79e:f8b7:5c73 with SMTP id af79cd13be357-7a8ac3bc192mr88851685a.55.1725054377712;
-        Fri, 30 Aug 2024 14:46:17 -0700 (PDT)
+        bh=CcXD9EKY0OCyfbPqdutna+/Pp1nF39E/CbXST6SgpRk=;
+        b=B8zad2weOJfjKelYGzKT7XijCzw7ZiPj/EZzDkDMNy+OUqaaDGDdMV8HNQ7nTgACkl
+         F0p8NanN8lItbXisXRqMNkZ/Uv5xRRqnyZf5lRF1hNFPgnSXU2/2C4pLj3dalMAqGgfK
+         MrxiTCD6flLNfnjsKMSw0ZkjNQgKDPnTRBwU/lwB9YapNjKb2AaUyGrnoGIdFD0fi40N
+         TuRZJE6P6jL4GRrS6i5IkeugzwHYb0Pe7bx6H9xfOYf3ZJ2u+Li0XA3PsXdcSNad0jhB
+         AcoYOnKNnM3JCe9M7hRW+6nKS8RHeBlkCwBc55+INIRiiCmMsu6Ptum1OsI2ZS5+RohP
+         PPwA==
+X-Forwarded-Encrypted: i=1; AJvYcCUeKJDQuF7nOW5+FIbdYTmx2/Wb8REhEcq5oNbMWK3qIMHQOB+WfUG/xoVnWcPk2IKUwLNntJH+fFO34cpB4ss=@vger.kernel.org, AJvYcCXWwryOExCKq1FEnGVABkEorVB94h36Jm/d+KxOT//nHKvGz2uyYwb9VfZ+bQGN5sBlf8mAL3oZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YzN06V0aXDvsNvwLKcEuS62qGF9XFuTsrKNgV8T7m91I21KCvpI
+	vvvolZAvlzVXn/ig6csnaFYvx3yXOhNrkDLSVeKv8/JjgEArEVmY
+X-Google-Smtp-Source: AGHT+IFaxoKnTc1ahBV3NjNBc8V4fwKTSlo2bknC7B4mNPLPi5ZHMsJwqwhugLHj+aP0wjGYPWnU+Q==
+X-Received: by 2002:a05:622a:6209:b0:457:79bf:9591 with SMTP id d75a77b69052e-45779bf9678mr4405331cf.62.1725054755803;
+        Fri, 30 Aug 2024 14:52:35 -0700 (PDT)
 Received: from localhost (193.132.150.34.bc.googleusercontent.com. [34.150.132.193])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a806c2b689sm181534685a.53.2024.08.30.14.46.17
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45682d66b6asm17576591cf.65.2024.08.30.14.52.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Aug 2024 14:46:17 -0700 (PDT)
-Date: Fri, 30 Aug 2024 17:46:16 -0400
+        Fri, 30 Aug 2024 14:52:35 -0700 (PDT)
+Date: Fri, 30 Aug 2024 17:52:35 -0400
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
+To: Jakub Kicinski <kuba@kernel.org>, 
  Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 Cc: Paolo Abeni <pabeni@redhat.com>, 
  netdev@vger.kernel.org, 
@@ -83,8 +82,8 @@ Cc: Paolo Abeni <pabeni@redhat.com>,
  Willem de Bruijn <willemb@google.com>, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
  martineau@kernel.org
-Message-ID: <66d23da8e7cb7_3d822329461@willemb.c.googlers.com.notmuch>
-In-Reply-To: <66d213cf6652e_3c8f2d294b8@willemb.c.googlers.com.notmuch>
+Message-ID: <66d23f2349f7_3d8dba29489@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20240830144420.5974dc5b@kernel.org>
 References: <20240827193417.2792223-1-willemdebruijn.kernel@gmail.com>
  <401f173b-3465-428d-9b90-b87a76a39cc8@redhat.com>
  <66cf2e4bd8e89_33815c294b2@willemb.c.googlers.com.notmuch>
@@ -94,6 +93,7 @@ References: <20240827193417.2792223-1-willemdebruijn.kernel@gmail.com>
  <66d1e32558532_3c08a22949e@willemb.c.googlers.com.notmuch>
  <20240830103343.0dd20018@kernel.org>
  <66d213cf6652e_3c8f2d294b8@willemb.c.googlers.com.notmuch>
+ <20240830144420.5974dc5b@kernel.org>
 Subject: Re: [PATCH net-next RFC] selftests/net: integrate packetdrill with
  ksft
 Precedence: bulk
@@ -106,88 +106,39 @@ Content-Type: text/plain;
  charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-Willem de Bruijn wrote:
-> Jakub Kicinski wrote:
-> > On Fri, 30 Aug 2024 11:20:05 -0400 Willem de Bruijn wrote:
-> > > Kselftest install does not preserve directories.
-> > > 
-> > > So all .pkt files are copied into net/packetdrill root. This is messy.
-> > > More fundamentally it breaks the includes in the files (e..g, `source
-> > > ../common/defaults.sh`).
+Jakub Kicinski wrote:
+> On Fri, 30 Aug 2024 14:47:43 -0400 Willem de Bruijn wrote:
+> > > We have directories in net/lib, and it's a target, and it works, no?  
 > > 
-> > Can you show an example of exact commands and what happens?
+> > net/lib is not a TARGET in tools/testing/selftests/Makefile. Its
+> > Makefile only generates dependencies for other targets: TEST_FILES,
+> > TEST_GEN_FILES and TEST_INCLUDES.
 > 
-> Running directly works fine:
+> Oh right, TEST_FILES vs TEST_INCLUDES :(
 > 
->     $ KSELFTEST_PKT_INTERP=packetdrill_ksft.sh
->     $ make -C tools/testing/selftests \
->             TARGETS=net/packetdrill O=/tmp run_tests
+> Looks like only x86 does some weird stuff and prepends $(OUTPUT) to all
+> test names. Otherwise the only TEST_NAME with a / in it is
 > 
->     TAP version 13
->     1..3
->     # timeout set to 45
->     # selftests: net/packetdrill: client.pkt
->     # TAP version 13
->     # 1..2
->     # ok 1 ipv4
->     # ok 2 ipv6
->     # # Totals: pass:2 fail:0 xfail:0 xpass:0 skip:0 error:0
->     ok 1 selftests: net/packetdrill: client.pkt
->     [..etc..]
-> 
-> Installing does not:
-> 
->     $ make -C tools/testing/selftests/ \
->           TARGETS=net/packetdrill \
->           install INSTALL_PATH=$INSTALL_DIR
->     $ cd $INSTALL_DIR
->     $ export KSELFTEST_PKT_INTERP=packetdrill_ksft.sh
->     $ ./run_kselftest.sh -c net/packetdrill
-> 
->     TAP version 13
->     1..3
->     # timeout set to 45
->     # selftests: net/packetdrill: client.pkt
->     # TAP version 13
->     # 1..2
->     # sh: line 1: ../common/defaults.sh: No such file or directory
->     # ./client.pkt: error executing init command: non-zero status 127
->     # not ok 1 ipv4
->     # sh: line 1: ../common/defaults.sh: No such file or directory
->     # ./client.pkt: error executing init command: non-zero status 127
->     # not ok 2 ipv6
->     # # Totals: pass:0 fail:2 xfail:0 xpass:0 skip:0 error:0
->     not ok 1 selftests: net/packetdrill: client.pkt # exit=1
-> 
-> Due to that relative path to defaults.sh inside the scripts.
-> 
-> It is arguably a bit weird that the relative path of the TEST_PROGS
-> differs before and after install.
+> x86_64/nx_huge_pages_test.sh
 
-I guess what's weird is more what I'm trying to do. There has been
-no need so far for progs in subdirectories from the TARGET.
+Oh interesting precedent. Let me take a look.
 
-One option is to just create a bunch of targets with a wildcard.
-Something like below (entirely untested).
-
-TARGETS += net/packetdrill/tcp/$(wildcard *)
-
-> > We have directories in net/lib, and it's a target, and it works, no?
+> But then again maybe we should give up on the idea of using directories?
+> Use some separator like --, I mean:
 > 
-> net/lib is not a TARGET in tools/testing/selftests/Makefile. Its
-> Makefile only generates dependencies for other targets: TEST_FILES,
-> TEST_GEN_FILES and TEST_INCLUDES.
+> mv packetdrill/tcp/inq/client.pkt packetdrill/tcp--inq--client.pkt
 > 
-> This issue with preserving paths until recently also existed for
-> helper files (TEST_FILES). TEST_INCLUDES was added expressly to
-> preserve those paths (commit 2a0683be5b4c).
+> Assuming we're moving forward with the interpreter idea we don't need
+> directories for multi-threading, just for organization. Which perhaps
+> isn't worth the time investment? Given that we'd mostly interact with
+> these tests via UI which will flatten it all back?
 
-Another option is to dive yet deeper into kselftest infra and do the
-same for TEST_PROGS, either TEST_PROGS itself or as a new
-TEST_PROGS_FULLPATH or so.
+That's definitely simpler :)
 
-It needs a change to INSTALL_RULE (maybe just passing -R to rsync),
-to emit_tests to skip basename when writing kselftest-list.txt, and
-probably to run_one() to break up the path and chdir. I'll see if I
-can make this work without too much churn.
+I'd like to keep diffs between packetdrill scripts on github (and
+Google internal, we have more) and selftests to a minimum. This is
+invertible, as is rewriting source statements inside the pkt files.
+But that might be more work and more maintenance in the end.
+
+
 
