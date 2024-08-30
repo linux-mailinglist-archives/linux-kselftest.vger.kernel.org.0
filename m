@@ -1,137 +1,81 @@
-Return-Path: <linux-kselftest+bounces-16794-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16795-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A2429661DF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 14:38:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2452D9661E5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 14:42:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B472A1F247E6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 12:38:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 546A51C210D8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 30 Aug 2024 12:42:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0B419995A;
-	Fri, 30 Aug 2024 12:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77FF1199942;
+	Fri, 30 Aug 2024 12:41:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RZjOuUEn"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Xysu3aPx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BA2C199923
-	for <linux-kselftest@vger.kernel.org>; Fri, 30 Aug 2024 12:38:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F5381898E5;
+	Fri, 30 Aug 2024 12:41:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725021489; cv=none; b=n9QfwZBX6YZr+MV+XCr0KTHJqitni/H81MHCeJb3pNHWskJ6mcxIYaJODzfY9MdgxfXaeVDEXI79rluj7IXauGsTUaGR1b8kpU/qnoy3LMp6DNHA4mVC+EG2JD5ouarz1AZJBsyfDoWTHvelMqdU3qJMualtV3zHN0l5ArBgQyo=
+	t=1725021719; cv=none; b=UNFk29G3Yud1KYrku6IWZAkdEKtkxDmUzH38lho9wpnlilox9DXQnu5bi6yFwFsJp4ygScdXX3KClWsHfy/+p9MZPO7SlmtQIZBfeQkDk+uwVMvFisQ6OW3muADeugaSGiMQaIx1EVDTLVX+SEHWrEslPUr2AYxvS2nKuSHAHgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725021489; c=relaxed/simple;
-	bh=yp196IwksZJ7sYAQ8R1rQrxykhZdy2GROPFhwzXA84o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JY2cLBsUqEpd6i9av05PbfZrWHKfO8soH+Ls7fQLeSRBZPkHHs2++McpO1jb/XIBcnGAZ4X2O9+aTUmEvOsiXDoTIWP1ESfv7FSBRJuWg44WAyErjBt6LKK06pW3l3L8OlTbx2vo37PNYFF+Au2ojeAcW/lfJTP55Sx+asEL52c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RZjOuUEn; arc=none smtp.client-ip=209.85.167.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3df0c4a65baso922030b6e.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 30 Aug 2024 05:38:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1725021487; x=1725626287; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FwOyoOeR+Iv38nsYEcC70HzZBSGU/mDtER78grIPRQU=;
-        b=RZjOuUEnEmShwm4EAKS+HNGi0MlXNhcia4GGc6tCHuyFgT3MYnnLJMoZvKU+keEIwp
-         V2bJVV1B4kA7g5UygDlj8ZueVGf9H4pGMT0J8IpO7z1wQWOaGqOwA7phNmBrxXJ7Arwy
-         ARtb4GdUUqjFyfSvCKOwuXV+c4lPMoqgTc00A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725021487; x=1725626287;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FwOyoOeR+Iv38nsYEcC70HzZBSGU/mDtER78grIPRQU=;
-        b=LPT15U/V5qEX9vel+k5Bs3IqWu4rB9F48M804f9D1xwy9lmIu2iguzQ3sWNFcvayAy
-         lnGf1jZ7na1ZbkIfLvRzq0TY7WPyliZI+yIDn/wZRwwtdoFdmCMS9MEeackZJB9mKnC+
-         Oqrnd8qEEWU20jwnKX8vQFGrnZT5lQQ0lxhipC8/OjlC9Rk9ub6/NZdnX00L0D1ACmCK
-         EIWvhO6GMuk/wHDgh82/0h7wjUmHksBbvWS9QMRyzIzVt6AZHq7wtzQhsqlcu2iyFNZ8
-         XSzhSRv7zUT4RBR5AjeAc9n/zWV0A7j8UO1411bmlA4laZQsVnlIwKEecH+iYQU5UlYs
-         kWSA==
-X-Forwarded-Encrypted: i=1; AJvYcCVTmfSbx306lj8Q+Rb8KSt5dA5wCa0wVUDqyVNwXv1fC2mNlh3J+35+LcENQf0hR4qNLC0esBZ8tDAXOirQjWw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzimeexVNddYaTXgFNuNc6xcOB3kBrn6IWKWHKgARfjDgJzMSdk
-	tf7j5m2UVsRpR8VuHL4bhzfkqFtQ5V+Cfuw13tw5VJLFsnlojMlLEETzVVZnrzTJ88KBsYelavT
-	21nE=
-X-Google-Smtp-Source: AGHT+IHmUNbIOg0Wb3avyaPMvQm8k7ZuTu9Q7gpTHmL+xuVu5Yf68OkEdM9G5jxoJ2Uk7GMUt2sctw==
-X-Received: by 2002:a05:6808:1809:b0:3d9:273b:169d with SMTP id 5614622812f47-3df05e88001mr6525591b6e.44.1725021486920;
-        Fri, 30 Aug 2024 05:38:06 -0700 (PDT)
-Received: from [172.19.248.149] ([205.220.129.17])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45682c82771sm13376791cf.15.2024.08.30.05.37.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 30 Aug 2024 05:38:06 -0700 (PDT)
-Message-ID: <c15802a1-088f-468c-afe7-fedb374bce89@linuxfoundation.org>
-Date: Fri, 30 Aug 2024 06:37:48 -0600
+	s=arc-20240116; t=1725021719; c=relaxed/simple;
+	bh=D5HhCkXQX4yRjdGD7QmOEhonhj42UCq3giLzMl/+iqs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=suRxNgd5qexQUPRK8v4bEtOORzbrDF3tQDg8ycz4GBpNz36/r/1hQXPrKZcjhRaTC8SgqhPFUCo/W3mdWp6GXIdEAF2QdBJZzoHozMM8Z0u9qhWASvPVzkvv+94U8Q7PNRwvRWzWSdHg/JIZWB/FeEoQ/tFb9iw4gTJj+zDpmpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=Xysu3aPx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7567C4CEC6;
+	Fri, 30 Aug 2024 12:41:57 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Xysu3aPx"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1725021716;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=D5HhCkXQX4yRjdGD7QmOEhonhj42UCq3giLzMl/+iqs=;
+	b=Xysu3aPxk9gqaPPw9eJs8PDHznvdVk/jJAzzYZB3aued/dJemICWfJy1ZuRkI/Qutjb9w1
+	u540vDW7pnO7zUNjKq9vsuM9HR1fHcfe/tMLbcfVOWrLoPxcXqasNdgicyI1K5+JJ7ZhfJ
+	JQxtOadin8G1W7lnR5RttpDno2HR+cA=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id b8d780d9 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Fri, 30 Aug 2024 12:41:54 +0000 (UTC)
+Date: Fri, 30 Aug 2024 14:41:50 +0200
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Andy Lutomirski <luto@mit.edu>,
+	"H. Peter Anvin" <hpa@linux.intel.com>,
+	Mark Brown <broonie@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 1/5] selftests: vdso: Fix vDSO name for powerpc
+Message-ID: <ZtG-DqWo8kBMocVh@zx2c4.com>
+References: <6c5da802e72befecfa09046c489aa45d934d611f.1725020674.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: splice: Add splice_read.sh and hint
-To: Rong Tao <rtoax@foxmail.com>, shuah@kernel.org
-Cc: rongtao@cestc.cn, open list <linux-kernel@vger.kernel.org>,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <tencent_3E0DB88452B3022E6754AC5F8546B310BD09@qq.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <tencent_3E0DB88452B3022E6754AC5F8546B310BD09@qq.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6c5da802e72befecfa09046c489aa45d934d611f.1725020674.git.christophe.leroy@csgroup.eu>
 
-On 8/27/24 21:40, Rong Tao wrote:
-> From: Rong Tao <rongtao@cestc.cn>
-> 
-> Add test scripts and prompts.
+Hi Shuah,
 
-Can you give more details on what these scripts and prompts do?
+No 0/5 patch, so replying to the first one.
 
-> 
-> Signed-off-by: Rong Tao <rongtao@cestc.cn>
-> ---
->   tools/testing/selftests/splice/splice_read.c  | 1 +
->   tools/testing/selftests/splice/splice_read.sh | 9 +++++++++
->   2 files changed, 10 insertions(+)
->   create mode 100755 tools/testing/selftests/splice/splice_read.sh
-> 
-> diff --git a/tools/testing/selftests/splice/splice_read.c b/tools/testing/selftests/splice/splice_read.c
-> index 46dae6a25cfb..194b075f6bc0 100644
-> --- a/tools/testing/selftests/splice/splice_read.c
-> +++ b/tools/testing/selftests/splice/splice_read.c
-> @@ -49,6 +49,7 @@ int main(int argc, char *argv[])
->   		      size, SPLICE_F_MOVE);
->   	if (spliced < 0) {
->   		perror("splice");
-> +		fprintf(stderr, "May try: %s /etc/os-release | cat\n", argv[0]);
+These are fixes to the vDSO selftests that Christophe is ostensibly
+providing as a preamble to his work porting vgetrandom to PPC. Do you
+mind if I take these via my random tree so his PPC vgetrandom code can
+go on top of it?
 
-Is this supposed to be usage or help message?
-
->   		return EXIT_FAILURE;
->   	}
->   
-> diff --git a/tools/testing/selftests/splice/splice_read.sh b/tools/testing/selftests/splice/splice_read.sh
-> new file mode 100755
-> index 000000000000..10fd5d738a2d
-> --- /dev/null
-> +++ b/tools/testing/selftests/splice/splice_read.sh
-> @@ -0,0 +1,9 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +set -e
-> +nl=$(./splice_read /etc/os-release | wc -l)
-> +
-> +test "$nl" != 0 && exit 0
-> +
-> +echo "splice_read broken"
-> +exit 1
-
-thanks,
--- Shuah
+Jason
 
