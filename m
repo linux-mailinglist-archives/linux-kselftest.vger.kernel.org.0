@@ -1,126 +1,154 @@
-Return-Path: <linux-kselftest+bounces-16885-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16886-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56C91966F60
-	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Aug 2024 07:21:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B086966F6C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Aug 2024 07:30:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F39211F2358E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Aug 2024 05:21:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC7632846B2
+	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Aug 2024 05:30:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EAAA6BFCA;
-	Sat, 31 Aug 2024 05:21:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C9213AA3E;
+	Sat, 31 Aug 2024 05:30:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="fG+vSqJy"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="f+f0IJjS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out203-205-221-221.mail.qq.com (out203-205-221-221.mail.qq.com [203.205.221.221])
+Received: from out203-205-221-240.mail.qq.com (out203-205-221-240.mail.qq.com [203.205.221.240])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19094339A1;
-	Sat, 31 Aug 2024 05:20:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08D013958C;
+	Sat, 31 Aug 2024 05:30:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.240
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725081660; cv=none; b=iInENjojwf8zuIyi6OarfpvMyhrvleIOmryHvOSDU6IDgW2KQGdt0lpQyv+gb/ziWrvKX1j1eZATiNYfG7zlJt4lzyaeZF7RdhAXt7KcEeU79ez9zIAd+BFf4IgOPKtSoDVrKbsY279z6p4UOc4/wXrLeUvfnE+17b7wDkhVc94=
+	t=1725082228; cv=none; b=ehi0hXEUtwY8A/UcBdJHNb7WzM8xirv5xsxCCPw213giRKcjGxNSQpMKzniZWkW2hZx0TibcCB5B4xj0ixKZPpgHQVFficbn7+PceC6D+D7zqUMeG80TF6JqrqPLhf0BsAceYMjss7u6d9TTK3jwctYRmBUlPwxPmBkJhZQCY2M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725081660; c=relaxed/simple;
-	bh=kdh5MZ5G8BVHDgqG9m+qNc/EQP6z/M14E6kJxvIu4j4=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=k2KH7jPNZ2e9sYR/dybFQiWWoS2JJIXJ3FWOfHBdvkdNBhfV0IrFnTLcBfwGOsWtVzHADnxjEGO4sGsXugc4tOwQKtldXVSgpE/OgQ4H96f1lF2ZOCAcld7qaS66uzpzT8cVlQOm/b3TBcV9k4HXeQvU2kPNsdkA6Q1l5UpgddU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=fG+vSqJy; arc=none smtp.client-ip=203.205.221.221
+	s=arc-20240116; t=1725082228; c=relaxed/simple;
+	bh=46mVeyoOwBQkglTLZlQCjad0Rh1l/vONvzzjbZZ1r5s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n3j3XJlZQlKFPN0N0u+tr4FLAi8oPT1i4/D0PzUNb8Xf4hnx/wlPeuTnTm/mpGbfFYtJfVhO9ZHlfKR+AvjRAQW9Y9SqNMNQAEacwP+/3CtDuhPUjGrAMbGzuwKOnX2I6dKIW9RwjKtyWpc1gYx1y5XvfW9IVZ0yQD6g+R+CzFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=f+f0IJjS; arc=none smtp.client-ip=203.205.221.240
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1725081649;
-	bh=dPCF7zEC8o4YbyuKZZOy/BoxK53N327mCoWJOObDk/E=;
-	h=From:To:Cc:Subject:Date;
-	b=fG+vSqJyYn2NNfgU79RBzde0rne3NjGCa1TgDTLQ1BEmwga5AjOwckeR4N+TvPWSe
-	 zFJ103J5IE4Att9HZ6wTPiJxSsyB811zE0fok6MC+6MczElveC6kCFCPQOsJPlX/ld
-	 TYt3EdKMCc+TKALRTWUMUIaOJlu5gx1ph4CuoPBg=
-Received: from rtoax.. ([120.245.115.147])
-	by newxmesmtplogicsvrszc13-0.qq.com (NewEsmtp) with SMTP
-	id 3A00768F; Sat, 31 Aug 2024 13:14:32 +0800
-X-QQ-mid: xmsmtpt1725081272tm5fidhfo
-Message-ID: <tencent_0AEA8FB622DE1A740841643D5F36ABF8BD0A@qq.com>
-X-QQ-XMAILINFO: Mo29KZ8DTxVy9fyeeq697G/FCZgvHQFzayZ6l9T5hdgFj6qXrl4TL06efq3wIl
-	 BuZm5PYiXdWk5HkvqKVBN3eHIbt6D8rJh/TXV6vivKByzgNAvQ0Td7I3V+5dI9MAGr06WLUs1DmQ
-	 e1OTf0Jdtzr0cgnGkcQly89KzH58MlpE5nAUXLfdB6JNzSkFIxewdE95BNXXRYo+9PnC2PKQyslw
-	 tGLvlLUNL0SihmptRNMxBu+ZKqAqQd5jd/8V2WGEVHfeX8ecaXgcrdxGkarp50Gafqpv/+KiHPvN
-	 rUVaU61r/CelCZJREzgXfAS5N9D2eKn06MZitffmAbDv6AoNwwp0wa9JuEqfbR2Pt7IQJFd9w8hI
-	 0U/BZcTtjf3Blmw2W6zRo+AFsan/LJPk9rWq5lJ+3iSpWAa3eV2xNEvgyn4Vy3F0jCS5IcyMPKUI
-	 bkVW8FAaFLiJIiCvSGZtCNRhDJoLHfF+c+DgxNyblhfEN3xFKiAglmUngOPu1m6jj6m0ipX9bS38
-	 +TN3K/yAyXZTi8EmnNa9QJSM8k/LL1fWnyJcIFB55qXnG4wcfeaVejf+/WidTGOdKnZjGZWHPQJa
-	 EAyOjLM0shNjbHNhK+5TPvCER/0q020asTXPCjIr7ib3I8cR8BQjgDy0j1kMalJrdaWxD9nQk9cf
-	 1wgKWXs4C0vPc8B/3RGtNK1khY0y2YDevEMU3sd4vpuQY2ryatfmUXA1lSEkqJ4fGptOXNGeRTqW
-	 4bvQxVheAXls3W6Edfx5Ko7BdLYfBXJiaXlsSSvCfiI4XB7WAHtywUGIH7hf2FuhtvVZx9q2UzNL
-	 D3OqN2r1wisned3PMkWlqo04gAbxclfHl/5HzG4vE8Elt5ccrY17TJcCkSARvn3t8j1woz+DVNDp
-	 GnmZZWv40ZvOUMvhIth64Uct7lYGrJ9MDYAn/cGcS65McCLzcqP753ud056tTuhZrb2RcZD/uNMA
-	 2zsMosbveqKLK4xT5rGNTGVbuU11Uusashe9Y6kFO8mJlQaeJRnxeo8Mday1nyFU7e1GWRtWbXuR
-	 ZY3ZLoxQ==
-X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
-From: Rong Tao <rtoax@foxmail.com>
-To: shuah@kernel.org
-Cc: rongtao@cestc.cn,
-	Rong Tao <rtoax@foxmail.com>,
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2] selftests: splice: Add usage() to splice_read.c
-Date: Sat, 31 Aug 2024 13:14:28 +0800
-X-OQ-MSGID: <20240831051431.29326-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.46.0
+	s=s201512; t=1725081923;
+	bh=pW6dqj93lXjUeIn/RRkE7E98Q1ehqQRRYqh4xeAkZ4k=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=f+f0IJjSjO/8yS3vlsLqfkqD8AecGDMohtYagzvQ1uepjLWXTsGu+uvoxtkhjQzph
+	 WN9rD9R4ch/Xzdu1DfnX5KxvWdcGpLIjQaZXC9rKk6Jx3HImFpTqGXRQwTyiOCcXhu
+	 RcAvDjRBzX9bsmEV0Q53RebYidhU4OZ34cZVwNHE=
+Received: from [192.168.124.7] ([120.245.115.147])
+	by newxmesmtplogicsvrszb16-1.qq.com (NewEsmtp) with SMTP
+	id 65602CE1; Sat, 31 Aug 2024 13:25:22 +0800
+X-QQ-mid: xmsmtpt1725081922tjhcs5qkd
+Message-ID: <tencent_6184E8B23A2EFF54CC5F2346B7105F0C8209@qq.com>
+X-QQ-XMAILINFO: MB5+LsFw85NotEQEhUzrb7BmAy7+5RohEIZ8hnTJKv5Dy9eLWqdCe/HITxr+Y9
+	 ItjV05s5WL/MMdl8OpIFDq3LbA4fmqr6/Q92v++P6SfI7NFO2JMCQ67XzuyI+YMbZQzL82RCfNIs
+	 59Xk1QSE91ncTgFLO6aVXTm6CV5vE8cUeI1lu77DGBbS0J3YzCwEoUaGLha+6x+cOka3c+Big1Qb
+	 15ob/3qleZ83tslrLHTBAb2+kENRr3UXIv7jK/4B9wgUMGu0oOuZSm/xWnkSLF21xJiA3uQ5RbAI
+	 Pxv0suUGMpKlkofUl6WpnxdvUfudswf2K06y4gNXiG2OLkv98jeBcgIRBC0q/qV6Oa/pwwDMwFVl
+	 REsK6gy+nB9SJVGGLJroKfVq32V7lPGZjPnMCjJKv72inOYQrWB9Fn2j9pW9Kz7fMYfpjgVm8fQD
+	 IjW9KW6bNSTdZVHc1eybn238s1VeJa/cApAphA5q7VmsvjA9Wd1lU8GWGZcsB3KPTOoZahRqJCXi
+	 gdFjwcXifHxMWMvZfXMn4b2rRMOa3jQjlIIbbCnzTj7A2LxH6UxKlIcNZTPot10dKMFYAMcCAE5A
+	 yoHlTaDHugkScWr6mIozJkCKswMrD0pKhgKrR5RSKZACgzNv1VOz07nUmEAX+AIOd0FpozJERP9l
+	 lb7DBzLZy4Zrrz7hfk61T4+x/F/xnxCcMS6jr39fGjYBALzo2ZpqXS2odZCgWhBVipL8cASn1i88
+	 My3F7qiFeezBjxj1d+Hr5nXX9LQEZaFsoVWU9YLz+IDCLwKMYYuKprIeJPXq+D1diW7TeTo6dQod
+	 yr/tIsiByyuI5/J0qREHm7Z/oDT4HLp4QDWQ4SG6C2USvrekr2yqAPzBXCrmFJvpn7kfJNzzOFlS
+	 cgbW/Qv75J8eq/r1mB9EPao5mUqAllgH3GndNl/i0pb+gTcWdukHaIBdHv6VG7thZE1+S/KgIgsy
+	 Ny+WOZwMuXG0yRTPJqImC48LzVF/m+flu0DrJ9xeb8VIbfujp4swkl0Sz02BLianpGch0TbRiPzG
+	 ihnzO2zg==
+X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+X-OQ-MSGID: <6ad6f1bc-75eb-4a52-bf55-783009e1d399@foxmail.com>
+Date: Sat, 31 Aug 2024 13:25:21 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: splice: Add splice_read.sh and hint
+To: Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org
+Cc: rongtao@cestc.cn, open list <linux-kernel@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+References: <tencent_3E0DB88452B3022E6754AC5F8546B310BD09@qq.com>
+ <c15802a1-088f-468c-afe7-fedb374bce89@linuxfoundation.org>
+Content-Language: en-US
+From: Rong Tao <rtoax@foxmail.com>
+In-Reply-To: <c15802a1-088f-468c-afe7-fedb374bce89@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-From: Rong Tao <rongtao@cestc.cn>
 
-Give the programmer more help information to inform the program on how to
-use it.
+On 8/30/24 8:37 PM, Shuah Khan wrote:
+> On 8/27/24 21:40, Rong Tao wrote:
+>> From: Rong Tao <rongtao@cestc.cn>
+>>
+>> Add test scripts and prompts.
+>
+> Can you give more details on what these scripts and prompts do?
+>
+I just push 
+v2(https://lore.kernel.org/lkml/tencent_0AEA8FB622DE1A740841643D5F36ABF8BD0A@qq.com/)
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/testing/selftests/splice/splice_read.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+At the first time, I just want to do the same thing that 
+default_file_splice_read.sh did,
 
-diff --git a/tools/testing/selftests/splice/splice_read.c b/tools/testing/selftests/splice/splice_read.c
-index 46dae6a25cfb..73a8bc146f97 100644
---- a/tools/testing/selftests/splice/splice_read.c
-+++ b/tools/testing/selftests/splice/splice_read.c
-@@ -9,6 +9,12 @@
- #include <sys/types.h>
- #include <sys/stat.h>
- 
-+void usage(const char *prog)
-+{
-+	fprintf(stderr, "Usage: %s INPUT [BYTES]\n", prog);
-+	fprintf(stderr, "       %s /etc/os-release | cat\n", prog);
-+}
-+
- int main(int argc, char *argv[])
- {
- 	int fd;
-@@ -16,7 +22,7 @@ int main(int argc, char *argv[])
- 	ssize_t spliced;
- 
- 	if (argc < 2) {
--		fprintf(stderr, "Usage: %s INPUT [BYTES]\n", argv[0]);
-+		usage(argv[0]);
- 		return EXIT_FAILURE;
- 	}
- 
-@@ -49,6 +55,7 @@ int main(int argc, char *argv[])
- 		      size, SPLICE_F_MOVE);
- 	if (spliced < 0) {
- 		perror("splice");
-+		usage(argv[0]);
- 		return EXIT_FAILURE;
- 	}
- 
--- 
-2.46.0
+and splice_read.sh looks like useless, i just remove splice_read.sh in v2.
+
+>>
+>> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+>> ---
+>>   tools/testing/selftests/splice/splice_read.c  | 1 +
+>>   tools/testing/selftests/splice/splice_read.sh | 9 +++++++++
+>>   2 files changed, 10 insertions(+)
+>>   create mode 100755 tools/testing/selftests/splice/splice_read.sh
+>>
+>> diff --git a/tools/testing/selftests/splice/splice_read.c 
+>> b/tools/testing/selftests/splice/splice_read.c
+>> index 46dae6a25cfb..194b075f6bc0 100644
+>> --- a/tools/testing/selftests/splice/splice_read.c
+>> +++ b/tools/testing/selftests/splice/splice_read.c
+>> @@ -49,6 +49,7 @@ int main(int argc, char *argv[])
+>>                 size, SPLICE_F_MOVE);
+>>       if (spliced < 0) {
+>>           perror("splice");
+>> +        fprintf(stderr, "May try: %s /etc/os-release | cat\n", 
+>> argv[0]);
+>
+> Is this supposed to be usage or help message?
+
+Yes, I just add usage() function to splice_read.c in 
+v2(https://lore.kernel.org/lkml/tencent_0AEA8FB622DE1A740841643D5F36ABF8BD0A@qq.com/)
+
+Please review, thanks.
+
+>
+>>           return EXIT_FAILURE;
+>>       }
+>>   diff --git a/tools/testing/selftests/splice/splice_read.sh 
+>> b/tools/testing/selftests/splice/splice_read.sh
+>> new file mode 100755
+>> index 000000000000..10fd5d738a2d
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/splice/splice_read.sh
+>> @@ -0,0 +1,9 @@
+>> +#!/bin/sh
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +set -e
+>> +nl=$(./splice_read /etc/os-release | wc -l)
+>> +
+>> +test "$nl" != 0 && exit 0
+>> +
+>> +echo "splice_read broken"
+>> +exit 1
+>
+> thanks,
+> -- Shuah
+
+Thank you.
+
+Rong Tao
 
 
