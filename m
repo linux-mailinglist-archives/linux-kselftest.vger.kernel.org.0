@@ -1,201 +1,98 @@
-Return-Path: <linux-kselftest+bounces-16863-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16864-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 113D2966D33
-	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Aug 2024 02:15:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 38B2A966D76
+	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Aug 2024 02:24:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1913B1F23B50
-	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Aug 2024 00:15:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2D901F218BE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Aug 2024 00:24:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 917D5184F;
-	Sat, 31 Aug 2024 00:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28EFB28387;
+	Sat, 31 Aug 2024 00:21:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g/TSZAtg"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="acB0VQAr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pg1-f202.google.com (mail-pg1-f202.google.com [209.85.215.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2142B3D76;
-	Sat, 31 Aug 2024 00:15:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2F223741
+	for <linux-kselftest@vger.kernel.org>; Sat, 31 Aug 2024 00:21:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725063314; cv=none; b=FfY/q8w/UgodSpVInm+1QCVAdRzK3r0L2yMmPr+aw7uWmgNae713vGeLlJRshJfmgEh8H038V7W+zhIjcdRVagCjmMcqtY8JvYpaYXVttaLYovmH1W5GFEQUxbHDv04usdRXpltx9toB59UsAJYjGSnYa8+HEhyHTZCX0dT5ZCs=
+	t=1725063718; cv=none; b=igxNE1+Hsl4Z4nkKwXYp8jqSm0UKJaaZXHHqLRcK3TA14rut/EY8ZmagCenMyh3c0ybPTkQj83dFWx/ta9G3kmXjlcoZ1Kdsu+2qEu8BHXJa/pYFijPyiiTPglGsJhJmONZ1541x+iPUpYvM1muLTRK+pGbE+x0cR3d8MoO32U8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725063314; c=relaxed/simple;
-	bh=yjc76FYIvXTfIbUPJ7xf4o0qbEEiZrXB1gCa+24ER58=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=F9DoTc57G5w31EAYm1E+UgJ92Gw7JgNM+O1qWR4APZbzO8lHy5/FKgMxdjuOB8NbSG5WjR8B0MbmsDJi0HEunJEHaSVezqhQmJvYbxYiiwkRrZbEm0YODrhCYkZXoWeOy/sbsUJt267Uv3103JJED2dJOQ7yelIEv/WJF4hfWUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g/TSZAtg; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-7c3ebba7fbbso1644746a12.1;
-        Fri, 30 Aug 2024 17:15:12 -0700 (PDT)
+	s=arc-20240116; t=1725063718; c=relaxed/simple;
+	bh=uikcsbcYWTizg70A9pXTDrH6Aq2HwfIpluSe5pLzm3U=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=mx8qqhuC3g4zSYUlC3rmreTqApqfFdVR8R69MvPbJfOq7m0dicpAkl8yYsf4JAY4/0ecGbSyFODbWNniudpsqK8YWhDuJmpNsNEU8jLTjchqr8aZr7WjCrRkgBAhsneon1Bz3MVPy4RkE5XnKLcEDvGIHAVfbxFPE+e32LOiac8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=acB0VQAr; arc=none smtp.client-ip=209.85.215.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pg1-f202.google.com with SMTP id 41be03b00d2f7-7c6a9c1a9b8so2294756a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 30 Aug 2024 17:21:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725063312; x=1725668112; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=FycnpSKAAaXJXhpg2kSzDZ0XpUACAhXtzyMQY8mTp1Y=;
-        b=g/TSZAtggX9d2awnx4Z/AmRmbyeRM7l2RGt1aAefR+c1mLKEnNxpd68cXaxFTc1iRv
-         XYk46Tmej3OfLXlaDU4fkOgrh8zG/wRbsYNj7qVSpavXoYIrWF6zGE82yLnMjNxESzWJ
-         4Nppp4p1Os/XHCKZAb7TkZHOF05f1Rlq+pHc9mFkit3W8X4dewfS9IG3XRiNSF+CC0OI
-         EKOerPR5Nu0MiW2/4wCI99yZ5sywtkmi7pwh5jiPR0bZ0hc2NU+wfNTBQWziBLDxShVE
-         n7VPtyME0KwRJWxXcsCoiHujlJB0o9gTFSlJkPF2RIorrO1W7x3+efVDof/KxAp6sMg5
-         oKNA==
+        d=google.com; s=20230601; t=1725063716; x=1725668516; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jQ0cv7Qd+gmdijk0mM0rETDzMYm/E79aKdx8FgcPeVI=;
+        b=acB0VQArEtQmvLBS7CTAru7iGkooPoOoysItT3pQmAbm26BeEO641z74NzMR7itdzG
+         eORY/TwjCzRA+xwJ3Q0l+raVgC5L8dF/S5cbgZO/nV0VoQZr2CWFMJHS0DoedEq+DeH8
+         455Q/RRc6FDoAp8/3aMv2rGj6/TgnTPURkIHVjf2BfUBr3Lh6vvClouJcRzudmsR8JtN
+         sxETvedqzNtx5zX9kvPU1GkPFmHSZSzKo1/0UBd1ybK+3RgpcyFmDbTH9nA8ITyxglPm
+         5NF9BcPxC1IvGHS994eVGQLYgJKDS2GIMkjaqnXmr85noCX4OFaSYKQtlUVkAqzpsemT
+         P8GA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725063312; x=1725668112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FycnpSKAAaXJXhpg2kSzDZ0XpUACAhXtzyMQY8mTp1Y=;
-        b=g/ULJryqxNIaGQT9T0R34f5LX9NZ2uDDDSIhZW7++btWuMyvAhr8KuRshpw6Idk4Q7
-         izLIV4TY27KZA3zFgtedulaP0URBprx8j1RFrrSZ42Y+DEewgAt/SON0VnWbylj8N+ZM
-         Ika+plq5BuSqIpCobgcmN+v4UXk1v9aH7woDow1ZtbNkLjVRLQecbxQI7d6aTfi363I1
-         RSn2DdrpcyOTDZPYI1S9wsPEuVAJVxMzUhAIzZgl2M5HVKg76oufPvdaZajw+A8HDCcJ
-         G4TRPVerY0tukZnTCmkKggk52RwZWhUB1KpU07YbBcT9CwvnUv3ABDRgvF6K2w3L0C87
-         yEqA==
-X-Forwarded-Encrypted: i=1; AJvYcCWj2GarybTYIQgUj5ffPOe9nqnLgcSgr19cRj080GGqvgW91BvGhR2ThAXytOEXcUsfSEU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyME4iu+oKCkwDZj+37aGtM9ZCOdi1gd3Jp03Q97q+25/EP22h1
-	KK6VNtPBVWStvm7FyZiyGOXVG6oSglrLIXg1JTw0hoK2QIjzA95g
-X-Google-Smtp-Source: AGHT+IFPiPOQaY1KHgWPlPh1sGzisOLGf9AAfVfpCEI5qluGsJmS5K6tzpQ/GW13OvscLBEx5MyQkw==
-X-Received: by 2002:a17:90a:8591:b0:2d3:cc31:5fdc with SMTP id 98e67ed59e1d1-2d85617b9d7mr8324144a91.5.1725063312216;
-        Fri, 30 Aug 2024 17:15:12 -0700 (PDT)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d85b39cff8sm4449790a91.37.2024.08.30.17.15.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Aug 2024 17:15:11 -0700 (PDT)
-Message-ID: <d407fa343213b4bc5990de24e0f322add91a874e.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 4/8] libbpf: Support BTF.ext loading and
- output in either endianness
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Tony Ambardar <tony.ambardar@gmail.com>, bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,  Shuah Khan
- <shuah@kernel.org>, Ilya Leoshkevich <iii@linux.ibm.com>, Quentin Monnet
- <qmo@kernel.org>
-Date: Fri, 30 Aug 2024 17:15:06 -0700
-In-Reply-To: <8eaba4b675cba9035121121bba6618c9f8f65610.1724976539.git.tony.ambardar@gmail.com>
-References: <cover.1724976539.git.tony.ambardar@gmail.com>
-	 <8eaba4b675cba9035121121bba6618c9f8f65610.1724976539.git.tony.ambardar@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+        d=1e100.net; s=20230601; t=1725063716; x=1725668516;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jQ0cv7Qd+gmdijk0mM0rETDzMYm/E79aKdx8FgcPeVI=;
+        b=EevYD3C5fiOZpoCFw3vAfqrckZBLay/q3QviZUgmz2efJ0lIjM0jxeumxuVCsHNZAV
+         Nhv8w3NdDcUsJzlARanh1vbZSNl2Utl419IBQHv8j/Wv2y9b7OyNEW060ZoT14KbcXTr
+         6jVrSZM2TjBSzmdklBpRLK3jOMV9DZj1PdEsfB1gCY1Y1J+Q6w3sHL6ewYEP+HwGmTdc
+         srgE87UghHB6fOR8mD430R4czZv7z6nPMrLNAGUZbRGgulrqGw1ysIDOBQ4lqJBBCMCW
+         biBo2DrYjBrxMUHZQd9Q7O9FNgnBQxUhudH/88epT1LCvTOBulKvBKXOGxgZ4ctV8Dji
+         IOCw==
+X-Forwarded-Encrypted: i=1; AJvYcCXxyfKBKWDpvvPqllLeMcFgseYp7zMz9jBWvBSMq+roed5BWcb7IqpAqRoUcG3vhUYyol8THT1Em+p2IQyExss=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIe0CjZBgg/a8V+Cghkk9ow47d37bBKbf4SthjipLgg2FPWNaT
+	pnLIf9RLFabHct9T9/PBs+GeYBw1dVGHMxxsfnrTIzgJSZGq17WOCKGu2geOHqjVwkr6+M5UWsJ
+	hIQ==
+X-Google-Smtp-Source: AGHT+IG1zZXwwzR1gaXHIo5VHk6KMji21CeC5APkFgCfFzhzxXAK9Z+KmZlxoO+VmmEZORM0HuKDi9jjeoo=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:c405:b0:1fa:fc15:c513 with SMTP id
+ d9443c01a7336-20527e7da59mr2460095ad.9.1725063715836; Fri, 30 Aug 2024
+ 17:21:55 -0700 (PDT)
+Date: Fri, 30 Aug 2024 17:20:59 -0700
+In-Reply-To: <20240709182936.146487-1-pgonda@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <20240709182936.146487-1-pgonda@google.com>
+X-Mailer: git-send-email 2.46.0.469.g59c65b2a67-goog
+Message-ID: <172506355899.338644.7289334225291315172.b4-ty@google.com>
+Subject: Re: [PATCH] KVM: selftests: Add SEV-ES shutdown test
+From: Sean Christopherson <seanjc@google.com>
+To: Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, Peter Gonda <pgonda@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Alper Gun <alpergun@google.com>, 
+	Tom Lendacky <thomas.lendacky@amd.com>, Michael Roth <michael.roth@amd.com>, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-On Fri, 2024-08-30 at 00:29 -0700, Tony Ambardar wrote:
+On Tue, 09 Jul 2024 11:29:36 -0700, Peter Gonda wrote:
+> Regression test for ae20eef5 ("KVM: SVM: Update SEV-ES shutdown intercepts
+> with more metadata"). Test confirms userspace is correctly indicated of
+> a guest shutdown not previous behavior of an EINVAL from KVM_RUN.
 
-[...]
+Applied to kvm-x86 selftests, with the IDT clobbering.  Thanks!
 
-> @@ -3050,11 +3127,42 @@ static int btf_ext_parse_hdr(__u8 *data, __u32 da=
-ta_size)
->  		return -ENOTSUP;
->  	}
-> =20
-> -	if (data_size =3D=3D hdr->hdr_len) {
-> +	if (data_size < hdr_len) {
-> +		pr_debug("BTF.ext header not found\n");
-> +		return -EINVAL;
-> +	} else if (data_size =3D=3D hdr_len) {
->  		pr_debug("BTF.ext has no data\n");
->  		return -EINVAL;
->  	}
-> =20
-> +	/* Verify mandatory hdr info details present */
-> +	if (hdr_len < offsetofend(struct btf_ext_header, line_info_len)) {
-> +		pr_warn("BTF.ext header missing func_info, line_info\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Keep hdr native byte-order in memory for introspection */
-> +	if (btf_ext->swapped_endian)
-> +		btf_ext_bswap_hdr(btf_ext, hdr_len);
-> +
-> +	/* Basic info section consistency checks*/
-> +	info_size =3D btf_ext->data_size - hdr_len;
-> +	if (info_size & 0x03) {
-> +		pr_warn("BTF.ext info size not 4-byte multiple\n");
-> +		return -EINVAL;
-> +	}
-> +	info_size -=3D hdr->func_info_len + hdr->line_info_len;
-> +	if (hdr_len >=3D offsetofend(struct btf_ext_header, core_relo_len))
-> +		info_size -=3D hdr->core_relo_len;
+[1/1] KVM: selftests: Add SEV-ES shutdown test
+      https://github.com/kvm-x86/linux/commit/2f6fcfa1f426
 
-nit: Since we are checking this, maybe also check that sections do not over=
-lap?
-     Also, why disallowing gaps between sections?
-
-> +	if (info_size) {
-> +		pr_warn("BTF.ext info size mismatch with header data\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Keep infos native byte-order in memory for introspection */
-> +	if (btf_ext->swapped_endian)
-> +		btf_ext_bswap_info(btf_ext, !btf_ext->swapped_endian);
-> +
->  	return 0;
->  }
-
-[...]
-
-> @@ -3119,15 +3223,71 @@ struct btf_ext *btf_ext__new(const __u8 *data, __=
-u32 size)
->  	return btf_ext;
->  }
-> =20
-> +static void *btf_ext_raw_data(const struct btf_ext *btf_ext_ro, __u32 *s=
-ize,
-> +			      bool swap_endian)
-> +{
-> +	struct btf_ext *btf_ext =3D (struct btf_ext *)btf_ext_ro;
-> +	const __u32 data_sz =3D btf_ext->data_size;
-> +	void *data;
-> +
-> +	data =3D swap_endian ? btf_ext->data_swapped : btf_ext->data;
-> +	if (data) {
-> +		*size =3D data_sz;
-> +		return data;
-> +	}
-> +
-> +	data =3D calloc(1, data_sz);
-> +	if (!data)
-> +		return NULL;
-> +	memcpy(data, btf_ext->data, data_sz);
-> +
-> +	if (swap_endian) {
-> +		btf_ext_bswap_info(btf_ext, true);
-> +		btf_ext_bswap_hdr(btf_ext, btf_ext->hdr->hdr_len);
-> +		btf_ext->data_swapped =3D data;
-> +	}
-
-Nit: I don't like how this function is organized:
-     - if btf_ext->data can't be NULL swap_endian =3D=3D true at this point=
-;
-     - if btf_ext->data can be NULL and swap_endian =3D=3D false
-       pointer to `data` would be lost.
-
-     I assume that btf_ext->data can't be null, basing on the
-     btf_ext__new(), but function body is a bit confusing.
-
-> +
-> +	*size =3D data_sz;
-> +	return data;
-> +}
-> +
-
-[...]
-
+--
+https://github.com/kvm-x86/linux/tree/next
 
