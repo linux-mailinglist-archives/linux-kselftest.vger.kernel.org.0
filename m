@@ -1,132 +1,104 @@
-Return-Path: <linux-kselftest+bounces-16880-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16881-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EA21966E61
-	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Aug 2024 03:16:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96960966E6A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Aug 2024 03:25:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3C941F2193C
-	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Aug 2024 01:16:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C61951C2198E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Aug 2024 01:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF02D6AB8;
-	Sat, 31 Aug 2024 01:16:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F4D320326;
+	Sat, 31 Aug 2024 01:25:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QuBTYWVV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NqZNyOsg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FA5F8468;
-	Sat, 31 Aug 2024 01:16:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCCE43FC2;
+	Sat, 31 Aug 2024 01:25:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725066993; cv=none; b=JnG8RP/lUliRs2izasXzFX0fNdvCzWxPFyWt9VnlkkTNozR4EV/FnyaYsPz1K3yeOebiaRflhLa8wVTr7TuYkuBCgSNhHUYG7XuLEjasoALQ7fCwZeqXfuTWQMR3b657phr2LUoq4reWHZ8NWOziLi8GbHPCUhrE6TmTjCBGkbM=
+	t=1725067502; cv=none; b=d/bxkYcq1BQtLoL42Kv+whdWDKV62gw50NwutvAz7Z0PPlP9zfJyCLbrjVOiMb5TqYLSXfSXXUMlqmoP/qLLlcFPGm9dgw3BsOzb/jGeaVhAs8KACv8/GVPpJMfyyj5ng4e3A93RpC+wUYFrxPCHyGlkEFu+Qekq3eQjC08yUEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725066993; c=relaxed/simple;
-	bh=3QnpIB6FQ9dkiQhdvmP+BQRJiIKZ3dPOpuAAQrUkDDA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AaMMLuogOfWHPTBq5Mgdxw9942OBLBZAmvZGtAL5htj2vohGL4TX8MfiWfu4lLaXEnbe5yiUkxhCmuWsqioOJSSCOcicHWSQo1xAWeoe8gt3PE/Uv95ahzq7KvqzmO84GXWftsLdS/XbQd5ai64qj4P+1izHuXXyeGQtfu8ZKns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QuBTYWVV; arc=none smtp.client-ip=209.85.210.174
+	s=arc-20240116; t=1725067502; c=relaxed/simple;
+	bh=WaQjz7IOjBiEvHs8LC2W3ui5sG24VxmEhanTFTSMvwc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PexBX5Q1bGxRSlVHBdHZmbGF3t/MKQNJiqggPNipn676RwhuNYq21xWyYVcwK0C/i3hSadIbEm3R/gijGYJxxiN4l3RnoI2IFR9oOkD3aY02Ln71SrBvLHeGv2O+dPQmCQZIZbxeOQW0xH1uCDClDuwxKLMAR6oHhuSwS0Qbkn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NqZNyOsg; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-71423273c62so1992164b3a.0;
-        Fri, 30 Aug 2024 18:16:32 -0700 (PDT)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-42bb9d719d4so13698715e9.3;
+        Fri, 30 Aug 2024 18:25:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725066991; x=1725671791; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=FcDnrow6WtB1KbkiZmkX453afSXj+QRtLmHENO5iXR8=;
-        b=QuBTYWVV3lasBTaMnQR7+FNO9OJkbtgMG3hI3qRXSBwM3hrGV8ER5ek8pxl4Y3W0H5
-         k/JSQULyAvtW4HbuIB3mAw5AZzNUzRpvUyBXFKwAslIsiYQTSO/3MriINhwrCfTj2lIn
-         iszcjmIeFM7fDghnJJphFEjwYJW7k2jrwYRhFVyC0WFn95SIneshhKB3xb5Y5K9C0ZrC
-         EMWaI6F01GeCe9Onsix4DDUMwkRyPSk5fVct4EUsL/2P6qKkXYWncnBdmVuzPndRO3xF
-         eXcF9sCt/SoYzwfnkZwrjHsLGarPvQeZj2Y2ICb8ygnqK2rA9LScrOwuhjam34vfYtD7
-         QeQA==
+        d=gmail.com; s=20230601; t=1725067499; x=1725672299; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WaQjz7IOjBiEvHs8LC2W3ui5sG24VxmEhanTFTSMvwc=;
+        b=NqZNyOsgDWbobWP1lRbqOYhimVFLtRmTIbfe19rKaQ7AwNoX6I8/geT4CSLv/N6LQ8
+         KxAU2/byljn32Wrw2Tfp4HC0YRjK7RKLCu2i8b6V7i1xYpF2fKwfkji9Jb52IOjju/xW
+         GCEdbN8prfd3hcM0g1TI8ftzCmS/0zWEZVuWmD7csZCOzGAULXszIxcSv8KpK3hTiomv
+         IupkpgUqfnyoCGa4Wbmm3pj204MZMGN+aOipE2xu1Zyu7vSiHdZ9YiLIZAawZsqK+QfL
+         XhNx51a9/+M78+8KJBlN513Hm5pJ/JMGmhJg7/iQUIcfVgTW1aPyQ+FkO6PSBz/dap7G
+         wAEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725066991; x=1725671791;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FcDnrow6WtB1KbkiZmkX453afSXj+QRtLmHENO5iXR8=;
-        b=CfPv1Y2zQ2JgwZgEaULHaF+kfOL1A5w6zhzkbpv2j+E2trq5KG0jETXRjXBE5culaG
-         5ACMkTYH5xiEwIMuKIVztC0C/tTOxLyDWheoc2Mr3c3nMmexzeUvc9yka/W16+KIA+5y
-         1QKYtoW2wCCXxPSQCV7yUZu4ThycOn0dv02YiKZEpH/kQ3f5xx662JskAiobdy1N7IS+
-         YLiPFUWPuIDbN/4i64WmIPUOp7lpG8MJ55cbkRzYmyWpt5DEmcf4+b1aMVn8cAwbXlMN
-         g/SwtdngkLCJPgBDb0VoRtV8gTFjvyGqnzxs1zJViR9qSGICP37RP6GO0jRbrhSyr8P7
-         ic5w==
-X-Forwarded-Encrypted: i=1; AJvYcCU6AFF3eDtaDJC7wwPG6+oJfDF1Yb2uFAP1pq8zkhGzwv+n6dmddA32WcKLuSxsZKom0XI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwHoI/yP8TEUN1HLEY3LsW+vVRSxSFYVkg5cjhTfhj3F5Z/UsqR
-	UGEqflK9PwYYfOzwMVX3NjF7WA6CYGOjQsXd++h1tGwg2VUC3o7w
-X-Google-Smtp-Source: AGHT+IFx47JajocYARpYviHtPMcOfzi+x+tT2hRRr3oFvC7RCS70iMj1nXGkmQJfg1/HV7smMCKzzg==
-X-Received: by 2002:a05:6a21:9688:b0:1cc:e7a2:2bef with SMTP id adf61e73a8af0-1cece520dc3mr1818021637.30.1725066991500;
-        Fri, 30 Aug 2024 18:16:31 -0700 (PDT)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-205155424dbsm32305055ad.207.2024.08.30.18.16.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 30 Aug 2024 18:16:31 -0700 (PDT)
-Message-ID: <a0f0d8c8d15a9f1b59802037fdcfb39777b05f27.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v4 5/8] libbpf: Support opening bpf objects of
- either endianness
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Tony Ambardar <tony.ambardar@gmail.com>, bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org, Andrii Nakryiko <andrii@kernel.org>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,  Shuah Khan
- <shuah@kernel.org>, Ilya Leoshkevich <iii@linux.ibm.com>, Quentin Monnet
- <qmo@kernel.org>
-Date: Fri, 30 Aug 2024 18:16:25 -0700
-In-Reply-To: <a12e83308e11b15501aa3b9e927bc94139418ce3.1724976539.git.tony.ambardar@gmail.com>
-References: <cover.1724976539.git.tony.ambardar@gmail.com>
-	 <a12e83308e11b15501aa3b9e927bc94139418ce3.1724976539.git.tony.ambardar@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+        d=1e100.net; s=20230601; t=1725067499; x=1725672299;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WaQjz7IOjBiEvHs8LC2W3ui5sG24VxmEhanTFTSMvwc=;
+        b=UFtj/dKAREwemd69QDRM2cGD0UPTODUaYpmxIGF0m/oX47Q0HaoL+tMPUQyikCAhXa
+         SqpXgEvCRHLUKkCt9i7qu/6LvKMOG5CwKFg82G4Gzp8Kxne4yez3wxdfIMH73lioCOEi
+         FZCRLFAeHAUEk6/9NhkjBt+MMqRLcUPMpMn/hvn+CuCqlD7R2ZTWvyU8iDUPXiiEHL75
+         h8NCOfHQ1llMl8x2chhlTCZdMme4lN4uoh8w7krJdZWHUZZW8/hDwO5zldBSbZl/f1YB
+         m+JZzgj+AQtf+VrdEKFuOwLhL09GiVD7+yWTponS4OImeXRnle8L/YDbD+PqaDXxjFeQ
+         ix9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWF7jHl9/uF19IHtge49WP14G5SmnLzIY53jt6OZvg6avz5GRUMX7smy5f8cNDoNtUiCy0=@vger.kernel.org, AJvYcCXk0cDzafOETtzNyhxPuh96oCN2RvW6sqBkqmzgLftbV4/dQ1w7WB5ytGlosROJdq11TYHaKFDN0pGbvx+ApEYj@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJ1DQLkxe3LM9b3nQMYj33WbQWNnXEIp03QmwkbwpLwklgZ6l1
+	fiSvBT0WX4eUPypPZ8ntWmuijz0VWlf3orYfubtgvZWpg/7fOO44hyCMiFfCT3K0yvpDhmHZ/bZ
+	AsyIfC/VPrAmrRJii2zCWcLakgGk=
+X-Google-Smtp-Source: AGHT+IGQGBjeAPh61ErF4x9nVvcFvuT6g1jPWnWTMmXixDXQHdmcIoU4Sg7aRFWJH/E8jWWfzJ2DR605Db89ECdHQ1w=
+X-Received: by 2002:a05:600c:4453:b0:42b:a2fd:3e52 with SMTP id
+ 5b1f17b1804b1-42bb02aa81fmr62369925e9.22.1725067499021; Fri, 30 Aug 2024
+ 18:24:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <cover.1724976539.git.tony.ambardar@gmail.com> <ed17daaceb6fd12a62c7286958239bb34fc3f55b.1724976539.git.tony.ambardar@gmail.com>
+ <CAEf4Bzb++vMkc=Q44QhQ5BXJcnUWahVtBUgQBUwkdVvC1QYKnQ@mail.gmail.com>
+In-Reply-To: <CAEf4Bzb++vMkc=Q44QhQ5BXJcnUWahVtBUgQBUwkdVvC1QYKnQ@mail.gmail.com>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Fri, 30 Aug 2024 18:24:47 -0700
+Message-ID: <CAADnVQLXYL66nCYpRrMmeR0c-ANtUW-6d5SoEE76cjPb3rVBTg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 7/8] libbpf: Support creating light skeleton
+ of either endianness
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Tony Ambardar <tony.ambardar@gmail.com>, Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Ilya Leoshkevich <iii@linux.ibm.com>, Quentin Monnet <qmo@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2024-08-30 at 00:29 -0700, Tony Ambardar wrote:
+On Fri, Aug 30, 2024 at 2:31=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+>
+>
+> for the rest, Alexei, can you please review and give your ack?
 
-[...]
-
-> @@ -940,6 +942,21 @@ bpf_object__add_programs(struct bpf_object *obj, Elf=
-_Data *sec_data,
->  	return 0;
->  }
-> =20
-> +static void bpf_object_bswap_progs(struct bpf_object *obj)
-> +{
-> +	struct bpf_program *prog =3D obj->programs;
-> +	struct bpf_insn *insn;
-> +	int p, i;
-> +
-> +	for (p =3D 0; p < obj->nr_programs; p++, prog++) {
-> +		insn =3D prog->insns;
-> +		for (i =3D 0; i < prog->insns_cnt; i++, insn++)
-> +			bpf_insn_bswap(insn);
-> +		pr_debug("prog '%s': converted %zu insns to native byte order\n",
-> +			 prog->name, prog->insns_cnt);
-
-Nit: pr_debug already printed available programs at this point,
-     maybe move this call outside of both loops?
-
-> +	}
-> +}
-> +
->  static const struct btf_member *
->  find_member_by_offset(const struct btf_type *t, __u32 bit_offset)
->  {
-
-[...]
-
+It looks fine.
+All of the additional pr_debug()s look a bit excessive.
+Will take another look at respin.
 
