@@ -1,248 +1,125 @@
-Return-Path: <linux-kselftest+bounces-16893-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16894-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EB0B9672C3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Aug 2024 19:11:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D091C967407
+	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 02:33:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 888721F220CA
-	for <lists+linux-kselftest@lfdr.de>; Sat, 31 Aug 2024 17:11:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28BB3B21C6C
+	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 00:33:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B67F3EA86;
-	Sat, 31 Aug 2024 17:11:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8785F8469;
+	Sun,  1 Sep 2024 00:33:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bfGesE53"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4425E81E;
-	Sat, 31 Aug 2024 17:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FA4F1D1319;
+	Sun,  1 Sep 2024 00:33:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725124305; cv=none; b=X5McUm2X0LvMxc979PLNYICTWWNirLC5Q4Pz+sxSxeAUt0ZI1nzT6sO8Z3qIZbTYjcCoICeu0PaJoCNoDlSP7v/pTbQKIPVjQ/BkJIdDpjStF4uw4r3hNZLgNgTPruW5JVLpIVLdUzDO5VL/BfeaoYRGFH3iO2pXuMUp+UClZPc=
+	t=1725150815; cv=none; b=V5FTW/P39luEoyx9mIvrK8q3qMVx2o9mdbiOQZwsbRUHyRSPuxovBPnmOmM3ciL112KaeBPYFCJrNBKuhHJeBiwIJHqsIxEqY9t7GReYCkzGWfhKETQaFju47LnVtMxXy4R7HTLiespboVefeAbNCBFqJXY+HVHpuJUt43JhY3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725124305; c=relaxed/simple;
-	bh=GLhGRmiZ6Sgd3urA7ewXSYOuW6rVAhmqUnDPRSDRq7o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=af3iPYgb6UAdQ/Mho/7wqCOU/65xr40I5D71rbdPdd/ob5eF2/Xh4CAmHUPD1n2xOJr0FSViky67MuxaE+N7D1rtLX3OiAhXAQn9fq5oW+7YK19KBm/AEcszD6jgG1JQvhmN4ODRbx7quWqHtj4YGhoYsiAum5wgY1mfG8nO34g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4Wx1lB5tJ7z9sSK;
-	Sat, 31 Aug 2024 19:11:34 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id P11Ppt1QQ7bg; Sat, 31 Aug 2024 19:11:34 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4Wx1lB4fkvz9sSC;
-	Sat, 31 Aug 2024 19:11:34 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 91ABA8B76C;
-	Sat, 31 Aug 2024 19:11:34 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id 6qfx2MPn75E3; Sat, 31 Aug 2024 19:11:34 +0200 (CEST)
-Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.234.150])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 2DE7D8B764;
-	Sat, 31 Aug 2024 19:11:34 +0200 (CEST)
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-To: "Jason A . Donenfeld" <Jason@zx2c4.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-	Xi Ruoyao <xry111@xry111.site>
-Subject: [PATCH] selftests: vDSO: Do not rely on $ARCH for vdso_test_getrandom && vdso_test_chacha
-Date: Sat, 31 Aug 2024 19:11:28 +0200
-Message-ID: <ddf594c81787dba708fc392cb03027470dee64fb.1725124064.git.christophe.leroy@csgroup.eu>
-X-Mailer: git-send-email 2.44.0
+	s=arc-20240116; t=1725150815; c=relaxed/simple;
+	bh=FIFYBB5d/DjVuL/KRdGWSSyy3J0ccWBnOJQj3l4eicU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CA9+dptaq0/PgSXsOoXWlmKU2ALbKiOW2KHLhKluq3ab8gX0UVtKs0LbX0Mq9OEAbFQl+TrckMCZFk9DWYr0NjwDKfusFJsbCTDBAHKS53qPjasgmLCsnq7JT0M2Bp2KQ3C5l4vD1vbk7x8QeoeKG+nj4NlrlZ6+rOm3cYH6WkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bfGesE53; arc=none smtp.client-ip=209.85.166.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-39f49600297so4637615ab.1;
+        Sat, 31 Aug 2024 17:33:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725150813; x=1725755613; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FIFYBB5d/DjVuL/KRdGWSSyy3J0ccWBnOJQj3l4eicU=;
+        b=bfGesE53mk6Nmio2+CSPevZTo+cUdjCkKvvY9siloKi2//y26wM8yKFCdDQaA5ASjc
+         S5mwo92VSdSE9RrlO8M6u+ncap2GJ95RyISj/eEs8coygpkP2eWHbuanUK2Vq34dvGM4
+         5iDrENU2iCsrZZWv3Sesh8Ni5TysBQN7cCTH27q5iiSKcg1WZ1H66IAZ3SXEn9e+lo6e
+         scT57ZJM1PadeSb+Tt/FhxIuFO1E+ufEDI9pwPsU1Iy0yLYRkqram1911duE5osv+TNx
+         6zCC2DxwmiaBDBqZ3DEAVFnrcs17aTAHXKeeMUEgsakB0eBbWoWcbWMrPSOUvZ+Q61hQ
+         FvRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725150813; x=1725755613;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FIFYBB5d/DjVuL/KRdGWSSyy3J0ccWBnOJQj3l4eicU=;
+        b=iwlriChbewBIt03FjflDCjlYVJ84y3vAgpcFkMe7qeTBJJIviMcukF2fUJY9Cx+WJJ
+         GSLFlAnFMTo8C74gQymTqV8nQIQ2DPgPoS/ezZ7Gt5cJS12JCQspMg13FlbQhDyiBhcC
+         VwQgaOvKE7UekNm55veD+HBW8UNwhja3a9NARaFXdrMgJ4RSc4SlwYp3wQUW86zy0hPn
+         ks6WTCwMRzv8DJXDV0w8NE290haUIZhGPpC+EL+p1hRDpEB4UHSnN7XHXo0AwdJERwP7
+         MT5VEt8nyCEmiQ3A6cXSIpygrz2MIvI4XFpA2YyY6KM85/nUioDSD9IqOqtyYvzJPnGh
+         8cbw==
+X-Forwarded-Encrypted: i=1; AJvYcCVQwxvd8OEGy0PNbnH3W+zkSOHzgLou29tZb2UbGD6EVyOErmEIV6li5yZ8FbkpGDan6udYv4EzUtn0BklWOes=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQlzKs1vSRRQ8eWc+al+n3PQ+fv2UcGbQDmXDPBqMT7kVfv1fQ
+	WKkXpiQYk+hTtvCLhPAg8HDBqOICLuW8zxM6C5EU0MltcdeHnHQz6FbCDcvdGU3Cqn/xHY7xQIY
+	2k66ejrqz6Um5rE3skzpHOrTbfpk=
+X-Google-Smtp-Source: AGHT+IGAuVE5H8OI7mCNt6Ix3Wwb302ZPbbpuB6ddxAUy0um/AJ7EiW+n5jRqTbA7bQ1iYSBEZht0P9U307WACvd+xE=
+X-Received: by 2002:a05:6e02:b4e:b0:39d:514b:311a with SMTP id
+ e9e14a558f8ab-39f379e39f5mr101626025ab.27.1725150813050; Sat, 31 Aug 2024
+ 17:33:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1725124288; l=6821; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=GLhGRmiZ6Sgd3urA7ewXSYOuW6rVAhmqUnDPRSDRq7o=; b=CmSvxM/8VumUnTNpAxeF5EJRoIcW6UdJ48CI3XuU8BEvrQd7PfhUEcwjT41v75PSM3qzLmooV dOCBiJBChviBZvSjz+C3E5seOlrgViKHdNtan2l5vK8YNFpHPa+kHXL
-X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
-Content-Transfer-Encoding: 8bit
+References: <20240823211902.143210-1-jmaloy@redhat.com> <20240823211902.143210-3-jmaloy@redhat.com>
+ <CAL+tcoCro6o5ZkhVJdKah9o2p=tPUSu06D0ZzNPPDB2Ns66kMw@mail.gmail.com> <9f4dd14d-fbe3-4c61-b04c-f0e6b8096d7b@redhat.com>
+In-Reply-To: <9f4dd14d-fbe3-4c61-b04c-f0e6b8096d7b@redhat.com>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Sun, 1 Sep 2024 08:32:57 +0800
+Message-ID: <CAL+tcoC-CTaD-_68Nee+CoysJV7zYojqqgU8Y+Nq6RkQRuv=DA@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests: add selftest for tcp SO_PEEK_OFF support
+To: Jon Maloy <jmaloy@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	davem@davemloft.net, kuba@kernel.org, passt-dev@passt.top, sbrivio@redhat.com, 
+	lvivier@redhat.com, dgibson@redhat.com, eric.dumazet@gmail.com, 
+	edumazet@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-$ARCH is not always enough to know whether getrandom vDSO is supported
-or not. For instance on x86 we want it for x86_64 but not i386.
+Hello Jon,
 
-On the other hand, we already have detailed architecture selection in
-vdso_config.h, the only difference is that it cannot be used for
-Makefile. But most selftests are built regardless of whether a
-functionality is supported or not. The return value KSFT_SKIP is there
-for than: it tells the test is skipped because it is not supported.
+On Tue, Aug 27, 2024 at 3:58=E2=80=AFAM Jon Maloy <jmaloy@redhat.com> wrote=
+:
+>
+>
+>
+> On 2024-08-23 19:44, Jason Xing wrote:
+> > Hello Jon,
+> >
+> > On Sat, Aug 24, 2024 at 5:19=E2=80=AFAM <jmaloy@redhat.com> wrote:
+> >> From: Jon Maloy <jmaloy@redhat.com>
+> >>
+> >> We add a selftest to check that the new feature added in
+> >> commit 05ea491641d3 ("tcp: add support for SO_PEEK_OFF socket option")
+> >> works correctly.
+> >>
+> >> Reviewed-by: Stefano Brivio <sbrivio@redhat.com>
+> >> Tested-by: Stefano Brivio <sbrivio@redhat.com>
+> >> Signed-off-by: Jon Maloy <jmaloy@redhat.com>
+> > Thanks for working on this. Sorry that I just noticed I missed your
+> > previous reply :(
+> There is still the ditto UDP selftest to be done ;-)
 
-Make the implementation more flexible by setting a VDSO_GETRANDOM
-macro in vdso_config.h. That macro contains the path to the file that
-defines __arch_chacha20_blocks_nostack(). It avoids the symbolic
-link to vdso directory and will allow architectures to have several
-implementations of __arch_chacha20_blocks_nostack() if needed.
+The reason why I didn't respond at that time is because I was unsure
+if I had enough time to finish it. Now it's time.
 
-Then restore the original behaviour which was dedicated to
-vdso_standalone_test_x86 and build getrandom and chacha tests all
-the time just like other vDSO selftests and return SKIP when the
-functionality to be tested is not implemented.
+After digging into this, there will be a lot of duplicated code if I
+write a new one named like "udp_so_peek_off". I think adjusting your
+tcp_so_peek_off.c to complete the UDP part is just fine. Of course,
+tcp_so_peek_off.c will be renamed :)
 
-This has the advantage of doing architecture specific selection at
-only one place.
+I will post one later to see if it's reasonable...
 
-Also change vdso_test_getrandom to return SKIP instead of FAIL when
-vDSO function is not found, just like vdso_test_getcpu or
-vdso_test_gettimeofday.
-
-Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
----
-Based on latest random tree (0dfed8092247)
-
- tools/arch/x86/vdso                                 |  1 -
- tools/testing/selftests/vDSO/Makefile               | 10 ++++------
- tools/testing/selftests/vDSO/vdso_config.h          |  3 +++
- tools/testing/selftests/vDSO/vdso_test_chacha-asm.S |  7 +++++++
- tools/testing/selftests/vDSO/vdso_test_chacha.c     | 11 +++++++++++
- tools/testing/selftests/vDSO/vdso_test_getrandom.c  |  2 +-
- 6 files changed, 26 insertions(+), 8 deletions(-)
- delete mode 120000 tools/arch/x86/vdso
- create mode 100644 tools/testing/selftests/vDSO/vdso_test_chacha-asm.S
-
-diff --git a/tools/arch/x86/vdso b/tools/arch/x86/vdso
-deleted file mode 120000
-index 7eb962fd3454..000000000000
---- a/tools/arch/x86/vdso
-+++ /dev/null
-@@ -1 +0,0 @@
--../../../arch/x86/entry/vdso/
-\ No newline at end of file
-diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
-index 5ead6b1f0478..cfb7c281b22c 100644
---- a/tools/testing/selftests/vDSO/Makefile
-+++ b/tools/testing/selftests/vDSO/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
--ARCH ?= $(shell uname -m | sed -e s/i.86/x86/)
--SRCARCH := $(subst x86_64,x86,$(ARCH))
-+uname_M := $(shell uname -m 2>/dev/null || echo not)
-+ARCH ?= $(shell echo $(uname_M) | sed -e s/i.86/x86/ -e s/x86_64/x86/)
- 
- TEST_GEN_PROGS := vdso_test_gettimeofday
- TEST_GEN_PROGS += vdso_test_getcpu
-@@ -10,10 +10,8 @@ ifeq ($(ARCH),$(filter $(ARCH),x86 x86_64))
- TEST_GEN_PROGS += vdso_standalone_test_x86
- endif
- TEST_GEN_PROGS += vdso_test_correctness
--ifeq ($(ARCH),$(filter $(ARCH),x86_64))
- TEST_GEN_PROGS += vdso_test_getrandom
- TEST_GEN_PROGS += vdso_test_chacha
--endif
- 
- CFLAGS := -std=gnu99
- 
-@@ -38,8 +36,8 @@ $(OUTPUT)/vdso_test_getrandom: CFLAGS += -isystem $(top_srcdir)/tools/include \
-                                          $(KHDR_INCLUDES) \
-                                          -isystem $(top_srcdir)/include/uapi
- 
--$(OUTPUT)/vdso_test_chacha: $(top_srcdir)/tools/arch/$(SRCARCH)/vdso/vgetrandom-chacha.S
-+$(OUTPUT)/vdso_test_chacha: vdso_test_chacha-asm.S
- $(OUTPUT)/vdso_test_chacha: CFLAGS += -idirafter $(top_srcdir)/tools/include \
--                                      -idirafter $(top_srcdir)/arch/$(SRCARCH)/include \
-+                                      -idirafter $(top_srcdir)/arch/$(ARCH)/include \
-                                       -idirafter $(top_srcdir)/include \
-                                       -D__ASSEMBLY__ -Wa,--noexecstack
-diff --git a/tools/testing/selftests/vDSO/vdso_config.h b/tools/testing/selftests/vDSO/vdso_config.h
-index 740ce8c98d2e..693920471160 100644
---- a/tools/testing/selftests/vDSO/vdso_config.h
-+++ b/tools/testing/selftests/vDSO/vdso_config.h
-@@ -47,6 +47,7 @@
- #elif defined(__x86_64__)
- #define VDSO_VERSION		0
- #define VDSO_NAMES		1
-+#define VDSO_GETRANDOM		"../../../../arch/x86/entry/vdso/vgetrandom-chacha.S"
- #elif defined(__riscv__) || defined(__riscv)
- #define VDSO_VERSION		5
- #define VDSO_NAMES		1
-@@ -58,6 +59,7 @@
- #define VDSO_NAMES		1
- #endif
- 
-+#ifndef __ASSEMBLY__
- static const char *versions[7] = {
- 	"LINUX_2.6",
- 	"LINUX_2.6.15",
-@@ -88,5 +90,6 @@ static const char *names[2][7] = {
- 		"__vdso_getrandom",
- 	},
- };
-+#endif
- 
- #endif /* __VDSO_CONFIG_H__ */
-diff --git a/tools/testing/selftests/vDSO/vdso_test_chacha-asm.S b/tools/testing/selftests/vDSO/vdso_test_chacha-asm.S
-new file mode 100644
-index 000000000000..8e704165f6f2
---- /dev/null
-+++ b/tools/testing/selftests/vDSO/vdso_test_chacha-asm.S
-@@ -0,0 +1,7 @@
-+#include "vdso_config.h"
-+
-+#ifdef VDSO_GETRANDOM
-+
-+#include VDSO_GETRANDOM
-+
-+#endif
-diff --git a/tools/testing/selftests/vDSO/vdso_test_chacha.c b/tools/testing/selftests/vDSO/vdso_test_chacha.c
-index 3a5a08d857cf..9d18d49a82f8 100644
---- a/tools/testing/selftests/vDSO/vdso_test_chacha.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_chacha.c
-@@ -8,6 +8,8 @@
- #include <string.h>
- #include <stdint.h>
- #include <stdbool.h>
-+#include <linux/kconfig.h>
-+#include "vdso_config.h"
- #include "../kselftest.h"
- 
- static uint32_t rol32(uint32_t word, unsigned int shift)
-@@ -57,6 +59,10 @@ typedef uint32_t u32;
- typedef uint64_t u64;
- #include <vdso/getrandom.h>
- 
-+#ifdef VDSO_GETRANDOM
-+#define HAVE_VDSO_GETRANDOM	1
-+#endif
-+
- int main(int argc, char *argv[])
- {
- 	enum { TRIALS = 1000, BLOCKS = 128, BLOCK_SIZE = 64 };
-@@ -68,6 +74,11 @@ int main(int argc, char *argv[])
- 	ksft_print_header();
- 	ksft_set_plan(1);
- 
-+	if (!__is_defined(HAVE_VDSO_GETRANDOM)) {
-+		printf("__arch_chacha20_blocks_nostack() not implemented\n");
-+		return KSFT_SKIP;
-+	}
-+
- 	for (unsigned int trial = 0; trial < TRIALS; ++trial) {
- 		if (getrandom(key, sizeof(key), 0) != sizeof(key)) {
- 			printf("getrandom() failed!\n");
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getrandom.c b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-index 8866b65a4605..47ee94b32617 100644
---- a/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-@@ -115,7 +115,7 @@ static void vgetrandom_init(void)
- 	vgrnd.fn = (__typeof__(vgrnd.fn))vdso_sym(version, name);
- 	if (!vgrnd.fn) {
- 		printf("%s is missing!\n", name);
--		exit(KSFT_FAIL);
-+		exit(KSFT_SKIP);
- 	}
- 	ret = VDSO_CALL(vgrnd.fn, 5, NULL, 0, 0, &vgrnd.params, ~0UL);
- 	if (ret == -ENOSYS) {
--- 
-2.44.0
-
+Thanks,
+Jason
 
