@@ -1,78 +1,80 @@
-Return-Path: <linux-kselftest+bounces-16898-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16899-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76E74967525
-	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 07:59:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2F32967528
+	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 08:00:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2445E1F21DB6
-	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 05:59:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97096282710
+	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 06:00:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AD3638DEE;
-	Sun,  1 Sep 2024 05:59:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3D5F38DCF;
+	Sun,  1 Sep 2024 06:00:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MVu53+wP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fryYDTd6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C89962837D;
-	Sun,  1 Sep 2024 05:59:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 648132F28;
+	Sun,  1 Sep 2024 06:00:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725170386; cv=none; b=blU9mAQ+Fu7QM5dk9XWmLTc+2cVJ1AmPMalA13ay22oO0zWc04p2mmG0n2BKUF8zlgdoG9vAB84XPSA9uDwIJo4yfeSdJBb4PjgCDioTR8Q8vLShHPDRAShJB1kv5Ol81wTyR6oqpIbvImmdQbOF1YEykrcW1XGlaUC7Uq8eeFw=
+	t=1725170443; cv=none; b=VWm4vU7UCeMjPupcKReFkGHcnlR/LcIGByC0wbr360rPPZoV9S+1cbVtBRzCO+27CJQPn8fUSlXVBMFaYe8nxkuruevxWusCF0YkOphZ13J3t6PIt0LlKHUC3+bbMzrP32f5Oo9mIuFwiJ89gUbth72BuudoTL0wM80m84CKaQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725170386; c=relaxed/simple;
-	bh=1HL8oq9/Iv5TIhRROJZvzHICsENqiTBFvvJeZ5eZQDY=;
+	s=arc-20240116; t=1725170443; c=relaxed/simple;
+	bh=xvqgTLcwzZRQuI7zBJiDJHqa+l4GrItvCsv9kkjMP0I=;
 	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rbl0JJ+eRNpb5y5oqew35ju0b4IbRD3MRoqf/nKV3ou0N/5S4lkUsbHZarY/YrOPOy52XZRTH8GKk1AtboBLVQV7rl+9jtxvpjL1JEEmRSKba7jI9A1hQt+J+LxnE2HgKDu6EmLHIGwUn4h7mcIhDJxz8dV4Bk5QeEWFc04zhyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MVu53+wP; arc=none smtp.client-ip=209.85.214.180
+	 Content-Type:Content-Disposition:In-Reply-To; b=IeDms6p/AA/KuYuFBsAeOI8rew0VOAs6x6wmpOIiwrPpe/RxIBUoguy4FHo7T88e6nT2YG6mzOCgMwyVzJm9UY8ck5HlKkO3xuZYsW8aOTSe6z98SP0K+e8CNeMIpkUU52GDe+rM2ev3x5p+2ifZffmYj8KHeQuN3a4Ghx8NEjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fryYDTd6; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-20573eb852aso28455ad.1;
-        Sat, 31 Aug 2024 22:59:44 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2055136b612so6617065ad.0;
+        Sat, 31 Aug 2024 23:00:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725170384; x=1725775184; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=i4k9TEKhO0b0IIIfuNVoqKfthLBS0ZnXhcZUSJp7yI4=;
-        b=MVu53+wPad+YP0pU3TeLfeJGVdIux1ubA3+++Lx6LGkZzLNSZM4jn9RpQOcHLNJ0F8
-         3EPOq64jvMYEP72xDv66e6ZuTFLpawqJ2H3UpqB3y+dvkpaSiE55PlHuSuoZ/WRruPDD
-         hIqBvmhrmfszvzEmOfeMAwcRxsk2MJoMi5osCiyzweYv5V1K5IAMBdjCfV7m0yczGz0d
-         Q+hTbUziiQRlhlQU3UEqvglzbvDdU/S2uMiLOy3ppejLujJt27TQjumFKcdC+EjjeRI3
-         /JLha7+QkKAJq8fwoT/ak6IXx0mCECid+dnVT5WRLPXmEIgRzuoVPfkoYlkm6rqX8WkJ
-         bBLw==
+        d=gmail.com; s=20230601; t=1725170442; x=1725775242; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=hjngQRwZVX7UpZhWaUloWwh66mcbAJVIg6IEZxivsiw=;
+        b=fryYDTd62ym5ngxsfaaROaZDqtHLVlC31B9KWqclb0+Pmorn8b7YzJFGAwWOSeJQn6
+         V2XIc1P3fPYiCthrksFiOxI1pJZdfu8MRbwHrdTBQ/lcovbtTmhns/wpoe9H9OAukBmq
+         /babN9pkBIH1+XK/5/05ekx6paLb0LHJxD/4U/8VnGno1lERv8JjNNWAMAXbVnwsqkjo
+         cjMP6FwlZoD3EB6sIB7/w77r1yy90YluWJ+kjYOYVXJdgp8G/Z3QdLEfG6hg4h8gZIjX
+         WxZfmnF9p/3Y6fAZXVCsqqU4UFcM09QLNoKz7BCm1sAxgHkaZtKH8F2RPzn7FTYPf7mi
+         Bg8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725170384; x=1725775184;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=i4k9TEKhO0b0IIIfuNVoqKfthLBS0ZnXhcZUSJp7yI4=;
-        b=RgH1kHp9YcSSHpuVrXIe37NW9OahQHGVLkogZzSuxoZkbFFbsMpNhjWQ6LnhCxteKI
-         uiru5fFWHW6ZcvnhzaG2fvJnIVZwi5st0gmK0jVrwNGgqphd/QADBgo6H5NwswcjDrC9
-         Xuijn5tPIPmtv1Yym+5dvIbNG1ipa5RLIfGdSwFWHGoGolx+iYQZWgeoZ3FWRx8IFZP0
-         nprq2H4MmOZG3yfEuzAu8BZGStO52I7cqdFG3AjX0dBBm9bU8neXsZTGVWHZ1oI/UE6t
-         25WAckiFYE03uyqNny8rbzDzTI1inx+TfmY1uGHcATB+gCfAUnHZsd9vPX+Vog3vKBEp
-         gpGw==
-X-Forwarded-Encrypted: i=1; AJvYcCUOeR3ngArLr42ODnY7/3QSLXHpCySTQaQWMBRSBv68xD2L0Hd/fGsXeFDz+qCtc0pN8GqOQCs5vGcx9WRTf4s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3toMw4V6X1eKwZzASJT08P1SNcMItj+3Xp/5LDITRQ8U7DxGO
-	z50dZ4P24HACXh6kOVsJwdsSWLqm2U5e66G8wxOkBFqTTsg88s+1
-X-Google-Smtp-Source: AGHT+IFNf+UIFU0iQIREYO5k3Ntnw8h7O0YeiUkF+QnIMAxsk37QqO61im5BYMln5xx4vzWfPC47sw==
-X-Received: by 2002:a17:902:ce83:b0:205:4d27:616e with SMTP id d9443c01a7336-2054d2764a0mr51553845ad.22.1725170383797;
-        Sat, 31 Aug 2024 22:59:43 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725170442; x=1725775242;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hjngQRwZVX7UpZhWaUloWwh66mcbAJVIg6IEZxivsiw=;
+        b=sUj6pirJ/KXv9w6C5y99HkjH249eaGkZv9yWWi3AU1m8MKZdPwa2A9LxPDLxUoOLcW
+         I6XK/+rlA1I8QQGy6Ypr0T2vdPKVcXFshbDnOWdlw5q9tpTLZFT6dU8cdSWLBxV6ngjX
+         cidOEX660wkfkuFS5laEEGfJOoxS2Ji0cOb0WC6y1Pab6FN0U1U0aiEE4sKSb9t/7+WD
+         oH+2cnIA8/CDoxB8g8pWb6aLllxkumitAO/6WEbYxnlU3hItMxHlUkPGpnMp6ZNht1Z0
+         i83T+aFo7HGYxIpIStysRB6+PKmwyxcJqT2knuqKK4SYnoSh1aq4xuldnZzQ3QzlwnoX
+         W0ug==
+X-Forwarded-Encrypted: i=1; AJvYcCUTY2oP/2ESeFs5Y2yqSww0JQtPq+0/OeGgh6VLMQ76Eer8UfIHu5sEUyWE2Aey4cmafGokpTocY9CyZQWOafFC@vger.kernel.org, AJvYcCUdLz+ds1ytSkp6GV9BtY9BLRNPAPmGe5FVz6EoDy3h8uzwYqEcOXqa/2Ke8VCvkIwtFGg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjoTX9HlC7SesxKhMoiBidgaDJXw0fFVJ2/w+QCaycb5Kt3YZh
+	WcIL5Qrd4mx5e4enX3cLtLjRm3gkp/wzsJoTfldenkfCM80tAzOv
+X-Google-Smtp-Source: AGHT+IGI93LT2K4vEzNjOpCQZ2jMUmu5MqiT9hRDKTgtoH2zbhY34LSizfNUdSYiT1ptEru58qsAOQ==
+X-Received: by 2002:a17:903:1cf:b0:203:a279:a144 with SMTP id d9443c01a7336-2054650bf3dmr52444845ad.25.1725170441488;
+        Sat, 31 Aug 2024 23:00:41 -0700 (PDT)
 Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2055553958fsm12066305ad.99.2024.08.31.22.59.42
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-205152b14d1sm48201565ad.27.2024.08.31.23.00.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 31 Aug 2024 22:59:43 -0700 (PDT)
+        Sat, 31 Aug 2024 23:00:41 -0700 (PDT)
 From: Tony Ambardar <tony.ambardar@gmail.com>
 X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
-Date: Sat, 31 Aug 2024 22:59:41 -0700
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+Date: Sat, 31 Aug 2024 23:00:39 -0700
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <ast@kernel.org>, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
 	Andrii Nakryiko <andrii@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
 	Yonghong Song <yonghong.song@linux.dev>,
@@ -82,80 +84,135 @@ Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
 	Ilya Leoshkevich <iii@linux.ibm.com>,
 	Quentin Monnet <qmo@kernel.org>
-Subject: Re: [PATCH bpf-next v4 3/8] libbpf: Fix output .symtab byte-order
- during linking
-Message-ID: <ZtQCzdw9CkU1h5Uf@kodidev-ubuntu>
+Subject: Re: [PATCH bpf-next v4 7/8] libbpf: Support creating light skeleton
+ of either endianness
+Message-ID: <ZtQDB8NICr3khymH@kodidev-ubuntu>
 References: <cover.1724976539.git.tony.ambardar@gmail.com>
- <5672557ebf511ff2231853fa306a36d280313165.1724976539.git.tony.ambardar@gmail.com>
- <1ed968ab238b156c38550cfc3c585ded7d13529f.camel@gmail.com>
+ <ed17daaceb6fd12a62c7286958239bb34fc3f55b.1724976539.git.tony.ambardar@gmail.com>
+ <CAEf4Bzb++vMkc=Q44QhQ5BXJcnUWahVtBUgQBUwkdVvC1QYKnQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <1ed968ab238b156c38550cfc3c585ded7d13529f.camel@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEf4Bzb++vMkc=Q44QhQ5BXJcnUWahVtBUgQBUwkdVvC1QYKnQ@mail.gmail.com>
 
-On Fri, Aug 30, 2024 at 03:15:10PM -0700, Eduard Zingerman wrote:
-> On Fri, 2024-08-30 at 00:29 -0700, Tony Ambardar wrote:
-> > Object linking output data uses the default ELF_T_BYTE type for '.symtab'
-> > section data, which disables any libelf-based translation. Explicitly set
-> > the ELF_T_SYM type for output to restore libelf's byte-order conversion,
-> > noting that input '.symtab' data is already correctly translated.
-> > 
-> > Fixes: faf6ed321cf6 ("libbpf: Add BPF static linker APIs")
+On Fri, Aug 30, 2024 at 02:30:46PM -0700, Andrii Nakryiko wrote:
+> On Fri, Aug 30, 2024 at 12:30 AM Tony Ambardar <tony.ambardar@gmail.com> wrote:
+> >
+> > Track target endianness in 'struct bpf_gen' and process in-memory data in
+> > native byte-order, but on finalization convert the embedded loader BPF
+> > insns to target endianness.
+> >
+> > The light skeleton also includes a target-accessed data blob which is
+> > heterogeneous and thus difficult to convert to target byte-order on
+> > finalization. Add support functions to convert data to target endianness
+> > as it is added to the blob.
+> >
+> > Also add additional debug logging for data blob structure details and
+> > skeleton loading.
+> >
 > > Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
 > > ---
-> >  tools/lib/bpf/linker.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
-> > index 9cd3d4109788..7489306cd6f7 100644
-> > --- a/tools/lib/bpf/linker.c
-> > +++ b/tools/lib/bpf/linker.c
-> > @@ -396,6 +396,8 @@ static int init_output_elf(struct bpf_linker *linker, const char *file)
-> >  		pr_warn_elf("failed to create SYMTAB data");
-> >  		return -EINVAL;
-> >  	}
-> > +	/* Ensure libelf translates byte-order of symbol records */
-> > +	sec->data->d_type = ELF_T_SYM;
+> >  tools/lib/bpf/bpf_gen_internal.h |   1 +
+> >  tools/lib/bpf/gen_loader.c       | 187 +++++++++++++++++++++++--------
+> >  tools/lib/bpf/libbpf.c           |   1 +
+> >  tools/lib/bpf/skel_internal.h    |   3 +-
+> >  4 files changed, 147 insertions(+), 45 deletions(-)
+> >
+> > diff --git a/tools/lib/bpf/bpf_gen_internal.h b/tools/lib/bpf/bpf_gen_internal.h
+> > index fdf44403ff36..6ff963a491d9 100644
+> > --- a/tools/lib/bpf/bpf_gen_internal.h
+> > +++ b/tools/lib/bpf/bpf_gen_internal.h
+> > @@ -34,6 +34,7 @@ struct bpf_gen {
+> >         void *data_cur;
+> >         void *insn_start;
+> >         void *insn_cur;
+> > +       bool swapped_endian;
+> >         ssize_t cleanup_label;
+> >         __u32 nr_progs;
+> >         __u32 nr_maps;
+> > diff --git a/tools/lib/bpf/gen_loader.c b/tools/lib/bpf/gen_loader.c
+> > index cf3323fd47b8..4374399bc3f8 100644
+> > --- a/tools/lib/bpf/gen_loader.c
+> > +++ b/tools/lib/bpf/gen_loader.c
+> > @@ -401,6 +401,15 @@ int bpf_gen__finish(struct bpf_gen *gen, int nr_progs, int nr_maps)
+> >                 opts->insns_sz = gen->insn_cur - gen->insn_start;
+> >                 opts->data = gen->data_start;
+> >                 opts->data_sz = gen->data_cur - gen->data_start;
+> > +
+> > +               /* use target endianness for embedded loader */
+> > +               if (gen->swapped_endian) {
+> > +                       struct bpf_insn *insn = (struct bpf_insn *)opts->insns;
+> > +                       int insn_cnt = opts->insns_sz / sizeof(struct bpf_insn);
+> > +
+> > +                       for (i = 0; i < insn_cnt; i++)
+> > +                               bpf_insn_bswap(insn++);
+> > +               }
+> >         }
+> >         return gen->error;
+> >  }
+> > @@ -414,6 +423,31 @@ void bpf_gen__free(struct bpf_gen *gen)
+> >         free(gen);
+> >  }
+> >
+> > +/*
+> > + * Fields of bpf_attr are set to values in native byte-order before being
+> > + * written to the target-bound data blob, and may need endian conversion.
+> > + * This macro allows providing the correct value in situ more simply than
+> > + * writing a separate converter for *all fields* of *all records* included
+> > + * in union bpf_attr. Note that sizeof(rval) should match the assignment
+> > + * target to avoid runtime problems.
+> > + */
+> > +#define tgt_endian(rval) ({                                    \
+> > +       typeof(rval) _val;                                      \
+> > +       if (!gen->swapped_endian)                               \
 > 
-> I tried grepping through libelf to find out how this affects things,
-> and identified that it is primarily used by elfutils/libelf/gelf_xlatetof.c:gelf_xlatetof(),
-> which is an interface function and we don't seem to use it.
-> It is also used by dwfl_* functions while applying relocations,
-> but we don't use that either.
+> if/else has to have balanced branches w.r.t. {}. Either both should
+> have it or both shouldn't. In this case both should have it.
+> 
+> > +               _val = (rval);                                  \
+> > +       else {                                                  \
+> > +               switch (sizeof(rval)) {                         \
+> > +               case 1: _val = (rval); break;                   \
+> > +               case 2: _val = bswap_16(rval); break;           \
+> > +               case 4: _val = bswap_32(rval); break;           \
+> > +               case 8: _val = bswap_64(rval); break;           \
+> > +               default:_val = (rval);                          \
+> > +                       pr_warn("unsupported bswap size!\n");   \
+> 
+> this is a weird formatting,  but you can also just unconditionally
+> assign _val, and only swap it if gen->swapped_endian
+> 
+> typeof(rval) _val = (rval);
+> 
+> if (gen->swapped_endian) {
+>     switch (...) {
+>         case 1: ...
+>         ...
+>         case 8: ...
+>         default: pr_warn("...");
+>     }
+> }
+> 
+> _val;
+> 
+> 
+> seems simpler and cleaner, imo
 > 
 
-Right, gelf_xlatetof() is exposed for _explicit_ user conversions, but
-libelf still does translations implicitly for known section record types,
-based on the ELF file's byte-order metadata. The idea is that ELF data
-loaded in memory will be native-endianness for accessibility, but output
-in the original endianness at rest/in a file, all transparently.
+Yes, agreed. Will update.
 
-We try to follow the same idea in libbpf when opening and writing .BTF
-and .BTF.ext data (e.g. see the *_raw_data() funcs).
-
-> Could you please elaborate a bit on effects of this change?
+> > +               }                                               \
+> > +       }                                                       \
+> > +       _val;                                                   \
+> > +})
+> > +
 > 
-
-When linking objects of either endianness, libelf can translate the input
-files based on ELF headers (endianness and type ELF_T_SYM) and allows us to
-process .symtab data. When writing out the linked file however, we create a
-new .symtab section in init_output_elf() but leave it as default ELT_T_BYTE
-type, which undergoes no translation and leaves .symtab always in native
-byte-order regardless of target endianness.
-
-See also 61e8aeda9398 ("bpf: Fix libelf endian handling in resolv_btfids")
-and related links for a similar example and explanations. Hope that helps.
-
-Cheers,
-Tony
-
-> >  
-> >  	str_off = strset__add_str(linker->strtab_strs, sec->sec_name);
-> >  	if (str_off < 0)
 > 
+> for the rest, Alexei, can you please review and give your ack?
 
