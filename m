@@ -1,294 +1,349 @@
-Return-Path: <linux-kselftest+bounces-16896-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16897-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C25D96751C
-	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 07:13:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F21D996751F
+	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 07:18:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE0111F2107C
-	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 05:13:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4802282ABF
+	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 05:18:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B58483CF7E;
-	Sun,  1 Sep 2024 05:13:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0EE11F959;
+	Sun,  1 Sep 2024 05:18:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VHz4/Wgo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XK+yI5Py"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94709288C3;
-	Sun,  1 Sep 2024 05:13:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34018748A;
+	Sun,  1 Sep 2024 05:18:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725167617; cv=none; b=Ytk+dE3ew4I0mSsJOwzVwn83kC0u4ga5DvJ3lQ4pA6QFzRVnjGeUmwJ2U1jvEYL8l3LduThkscHrzrpBtORegS8Ae65vjRO7FBsI3w+Yin7/XFDy7+Cr2PmEyWDa2WRio11BTMZL1TmaVIlZLliWllIxJL8ME0ZNgekjmTEV9lU=
+	t=1725167910; cv=none; b=W7qRTkOnvNhkskfhxyoO6wSzgapiXK0Zv7rGWlq5hUGYl1JS08nPrZL0qGPjVZAnd1GAl1HXyV/3SoIVdqxI6z2MtlhJMFg2jlEtvs44+hzPQKSCdbxtGGPZvv0/N3BkHCEtP7Cjj3K+Z0ucJfMICy0OY8L/afWgTf12hAhjXCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725167617; c=relaxed/simple;
-	bh=Svloc/17cgB1tI/t29aHIxSnubb5d8x1d/mrQM1NWe4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oQN19FEJ5mKU8T3tM8SfxCJgQirr6cmgxNmlZLZW7/uzwN1akFpmnQkir6+GDkMOLXMh4qisrtkS510J9pnIwKtzXJYe6zmp1eiNzgW4LBYME83avEyKziXZMXQk/ejbCsqmFG5LBac5z5gIizyrykOcOWkxo31HkW6g/Xla+dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VHz4/Wgo; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725167614; x=1756703614;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Svloc/17cgB1tI/t29aHIxSnubb5d8x1d/mrQM1NWe4=;
-  b=VHz4/WgoSILqVniDyl7zIQxWE2EIEuW+lie09x9Yiv0nvYv8/CgEnbTN
-   pxgP80/NNxUFGiOHDeoVMES09+pWWPBut0XLytXhxXBtxthd3My+4BCB9
-   xuKiZ4gmkf0jz60R6dp+K9s+szQigL9FfhyYmab9AlJCwgRrqle0siG/2
-   oKH3Uzgq9+c4NJHu7Uobv5fhHXKaklClOghS5Y1yr8G9UJ7Cw+FPIkg7u
-   I4C9sWZccnCnXvdnTPdtEIlNn+c/BanzWfg7jxvb1qCG/PbnW4spIa6Rn
-   mw9VFJd7GKRLY+wMPMmU/YfqNJ92M0sn0jgVwLZQXK+9bZFHgROMguSJ1
-   g==;
-X-CSE-ConnectionGUID: Bey2QGHoS0S5Xy+T/glTpQ==
-X-CSE-MsgGUID: NLZY92hDQTGgbswV9JZq6w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11181"; a="26675921"
-X-IronPort-AV: E=Sophos;i="6.10,193,1719903600"; 
-   d="scan'208";a="26675921"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2024 22:13:34 -0700
-X-CSE-ConnectionGUID: G/ipLG5SQTeRjFVDYsOX9Q==
-X-CSE-MsgGUID: /dyauXO0S4qv+Q4gn0j1tw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,193,1719903600"; 
-   d="scan'208";a="95080879"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 31 Aug 2024 22:13:31 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1skcu1-0003QY-1Y;
-	Sun, 01 Sep 2024 05:13:29 +0000
-Date: Sun, 1 Sep 2024 13:13:16 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jordan Rife <jrife@google.com>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
-	wireguard@lists.zx2c4.com
-Cc: oe-kbuild-all@lists.linux.dev, Jordan Rife <jrife@google.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <skhan@linuxfoundation.org>, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next] wireguard: allowedips: Add
- WGALLOWEDIP_F_REMOVE_ME flag
-Message-ID: <202409011256.CWrnquxQ-lkp@intel.com>
-References: <20240830194103.2186774-1-jrife@google.com>
+	s=arc-20240116; t=1725167910; c=relaxed/simple;
+	bh=dNJlNA7FEKx8vGjbKAKwbl0RwTtDBfouxGcA971mtC0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pkSNJeu0ycxCw9s12Er0SuE4cqGJyxCkOQjD6CjF0blYgy3xwvOtazlfzSihQutZL8vBplFj5QtcaFeh+WdUB7ZSOIX89PlcV5Yl+PpnFoi5Gl1STMwLD6AbuCipc2K2qaXEsK1mMBm0ljxG5+EBJuVspDIZl4bxkRcy46ONor8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XK+yI5Py; arc=none smtp.client-ip=209.85.161.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5dc93fa5639so1922148eaf.1;
+        Sat, 31 Aug 2024 22:18:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725167908; x=1725772708; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rezF6iuLnPWFCk07aeciBJ4pDsFKzTvutSVVYnuI9tI=;
+        b=XK+yI5PyQKHRWhjck5zT/cPeL9Ba1mAnsaS3qUUKjfIybwn5LjIWnQu/WTcv0e+M0Y
+         nF+neUhYaq+w8f1GzopxDJym6C0g/EtTp5YAGnpynle20QQGNYhw1y73gwl47x5mwXFj
+         olwOggTFhSLMZZBLO7HQacNmrvNq6BdmKiZGJ83MBxk3yUrclDeVcAgTEu9YSvui1n0+
+         2KNVON4iMjyuJ/0UFToJA794D2jSmX8Rxv3PZ5nK8sLgdm4dka5C2/5UoXlb5f4AUrln
+         RkQQ1Kaje3tZ5j8CfdYHhS99E/wScnHB7myBgAODmv9GPC/Qkrx7k8v+zBX/8eUAIn8u
+         Z5Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725167908; x=1725772708;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rezF6iuLnPWFCk07aeciBJ4pDsFKzTvutSVVYnuI9tI=;
+        b=atlM5s7hW5Gn0YasIh2LcPwCodMdshIGkTrqWrVONoChQ6coLaMTyew2ssa4cpfpLU
+         ojF0u7PE/I5jUvBm66BMVwvvzJKwo5TIqFWAi1urm9rvyBeQzhKaTbpz3Bgfi+4fZKxU
+         ClvEWKrSPswT0AgNnziH5wGRiieZ2DIyxDo7ZkoJxbyzrJI7k4R7EBLRd/VlJYGVdMPY
+         ylkG9q66c0rgvaHEe7vksgCIGcqGaQaGpcIaoOpU9eHOsgGE1N2iBAKe2DqbRs67CMzM
+         hraTWdaZC5thac5cft0kx/CnAgz3VqtwHi0WmxtQ4EJe8iGIlAOaykcojjhDPnqP8kFo
+         WTgA==
+X-Forwarded-Encrypted: i=1; AJvYcCWhNzze+OWb6hSTqHdt8iQ2nLyrCPeFc5SRtugi8V5ieGm3drOU36Fve6A/Y5hQY04e5RyVbfw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSCui/v6bQuyOeN8nkCLKPjffIBRybpEOpuQMwc0iNFr4KsEQo
+	mGK0edsh8hPjMHDrebukGE6eJv532DQHaDDE5P4VL7XY937D9u3w
+X-Google-Smtp-Source: AGHT+IFFxfSz5YdrMSwTF8ZLEw0BoVNNZhU67Du1QaRGdCIjh9Tps4fJ+lSmhU+4f4+6qb28UMj96A==
+X-Received: by 2002:a05:6830:6683:b0:709:3015:fd08 with SMTP id 46e09a7af769-70f72d09868mr4634498a34.31.1725167908154;
+        Sat, 31 Aug 2024 22:18:28 -0700 (PDT)
+Received: from KERNELXING-MC1.tencent.com ([114.253.36.103])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d8d06c92dcsm115497a91.30.2024.08.31.22.18.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 31 Aug 2024 22:18:27 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	jmaloy@redhat.com
+Cc: linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH net-next] selftests: add selftest for UDP SO_PEEK_OFF support
+Date: Sun,  1 Sep 2024 13:18:21 +0800
+Message-Id: <20240901051821.94956-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240830194103.2186774-1-jrife@google.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Jordan,
+From: Jason Xing <kernelxing@tencent.com>
 
-kernel test robot noticed the following build warnings:
+Add the SO_PEEK_OFF selftest for UDP. In this patch, I mainly do
+three things:
+1. rename tcp_so_peek_off.c
+2. adjust for UDP protocol
+3. add selftests into it
 
-[auto build test WARNING on net-next/main]
+Suggested-by: Jon Maloy <jmaloy@redhat.com>
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
+---
+Link: https://lore.kernel.org/all/9f4dd14d-fbe3-4c61-b04c-f0e6b8096d7b@redhat.com/
+---
+ tools/testing/selftests/net/Makefile          |  2 +-
+ .../{tcp_so_peek_off.c => sk_so_peek_off.c}   | 91 +++++++++++--------
+ 2 files changed, 56 insertions(+), 37 deletions(-)
+ rename tools/testing/selftests/net/{tcp_so_peek_off.c => sk_so_peek_off.c} (58%)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jordan-Rife/wireguard-allowedips-Add-WGALLOWEDIP_F_REMOVE_ME-flag/20240831-034712
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20240830194103.2186774-1-jrife%40google.com
-patch subject: [PATCH net-next] wireguard: allowedips: Add WGALLOWEDIP_F_REMOVE_ME flag
-config: i386-randconfig-062-20240901 (https://download.01.org/0day-ci/archive/20240901/202409011256.CWrnquxQ-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240901/202409011256.CWrnquxQ-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409011256.CWrnquxQ-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> drivers/net/wireguard/allowedips.c:257:24: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct list_head *entry @@     got struct list_head [noderef] __rcu * @@
-   drivers/net/wireguard/allowedips.c:257:24: sparse:     expected struct list_head *entry
-   drivers/net/wireguard/allowedips.c:257:24: sparse:     got struct list_head [noderef] __rcu *
->> drivers/net/wireguard/allowedips.c:258:9: sparse: sparse: cast removes address space '__rcu' of expression
-   drivers/net/wireguard/allowedips.c:261:17: sparse: sparse: cast removes address space '__rcu' of expression
-   drivers/net/wireguard/allowedips.c:261:17: sparse: sparse: cast removes address space '__rcu' of expression
-   drivers/net/wireguard/allowedips.c:261:17: sparse: sparse: cast removes address space '__rcu' of expression
-   drivers/net/wireguard/allowedips.c:261:17: sparse: sparse: cast removes address space '__rcu' of expression
-   drivers/net/wireguard/allowedips.c:261:17: sparse: sparse: cast removes address space '__rcu' of expression
-   drivers/net/wireguard/allowedips.c:269:24: sparse: sparse: cast removes address space '__rcu' of expression
-   drivers/net/wireguard/allowedips.c:270:26: sparse: sparse: cast removes address space '__rcu' of expression
->> drivers/net/wireguard/allowedips.c:276:19: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct callback_head *head @@     got struct callback_head [noderef] __rcu * @@
-   drivers/net/wireguard/allowedips.c:276:19: sparse:     expected struct callback_head *head
-   drivers/net/wireguard/allowedips.c:276:19: sparse:     got struct callback_head [noderef] __rcu *
-   drivers/net/wireguard/allowedips.c:294:18: sparse: sparse: incompatible types in comparison expression (different address spaces):
-   drivers/net/wireguard/allowedips.c:294:18: sparse:    struct wg_peer *
-   drivers/net/wireguard/allowedips.c:294:18: sparse:    struct wg_peer [noderef] __rcu *
->> drivers/net/wireguard/allowedips.c:384:25: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct allowedips_node [noderef] __rcu *node @@     got struct allowedips_node *[assigned] node @@
->> drivers/net/wireguard/allowedips.c:258:9: sparse: sparse: dereference of noderef expression
->> drivers/net/wireguard/allowedips.c:258:9: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:259:22: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:259:38: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:261:17: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:261:17: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:261:17: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:261:17: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:261:17: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:261:17: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:261:17: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:261:17: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:261:17: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:264:44: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:265:50: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:268:25: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:269:24: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:269:24: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:270:26: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:270:26: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:271:26: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:274:25: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:274:25: sparse: sparse: dereference of noderef expression
-   drivers/net/wireguard/allowedips.c:274:25: sparse: sparse: dereference of noderef expression
-
-vim +257 drivers/net/wireguard/allowedips.c
-
-   251	
-   252	static void _remove(struct allowedips_node __rcu *node, struct mutex *lock)
-   253	{
-   254		struct allowedips_node *child, **parent_bit, *parent;
-   255		bool free_parent;
-   256	
- > 257		list_del_init(&node->peer_list);
- > 258		RCU_INIT_POINTER(node->peer, NULL);
-   259		if (node->bit[0] && node->bit[1])
-   260			return;
-   261		child = rcu_dereference_protected(node->bit[!rcu_access_pointer(node->bit[0])],
-   262						  lockdep_is_held(lock));
-   263		if (child)
-   264			child->parent_bit_packed = node->parent_bit_packed;
-   265		parent_bit = (struct allowedips_node **)(node->parent_bit_packed & ~3UL);
-   266		*parent_bit = child;
-   267		parent = (void *)parent_bit -
-   268				offsetof(struct allowedips_node, bit[node->parent_bit_packed & 1]);
-   269		free_parent = !rcu_access_pointer(node->bit[0]) &&
-   270				!rcu_access_pointer(node->bit[1]) &&
-   271				(node->parent_bit_packed & 3) <= 1 &&
-   272				!rcu_access_pointer(parent->peer);
-   273		if (free_parent)
-   274			child = rcu_dereference_protected(parent->bit[!(node->parent_bit_packed & 1)],
-   275							  lockdep_is_held(lock));
- > 276		call_rcu(&node->rcu, node_free_rcu);
-   277		if (!free_parent)
-   278			return;
-   279		if (child)
-   280			child->parent_bit_packed = parent->parent_bit_packed;
-   281		*(struct allowedips_node **)(parent->parent_bit_packed & ~3UL) = child;
-   282		call_rcu(&parent->rcu, node_free_rcu);
-   283	}
-   284	
-   285	static int remove(struct allowedips_node __rcu **trie, u8 bits, const u8 *key,
-   286			  u8 cidr, struct wg_peer *peer, struct mutex *lock)
-   287	{
-   288		struct allowedips_node *node;
-   289	
-   290		if (unlikely(cidr > bits || !peer))
-   291			return -EINVAL;
-   292		if (!rcu_access_pointer(*trie) ||
-   293		    !node_placement(*trie, key, cidr, bits, &node, lock) ||
-   294		    peer != node->peer)
-   295			return 0;
-   296	
-   297		_remove(node, lock);
-   298	
-   299		return 0;
-   300	}
-   301	
-   302	void wg_allowedips_init(struct allowedips *table)
-   303	{
-   304		table->root4 = table->root6 = NULL;
-   305		table->seq = 1;
-   306	}
-   307	
-   308	void wg_allowedips_free(struct allowedips *table, struct mutex *lock)
-   309	{
-   310		struct allowedips_node __rcu *old4 = table->root4, *old6 = table->root6;
-   311	
-   312		++table->seq;
-   313		RCU_INIT_POINTER(table->root4, NULL);
-   314		RCU_INIT_POINTER(table->root6, NULL);
-   315		if (rcu_access_pointer(old4)) {
-   316			struct allowedips_node *node = rcu_dereference_protected(old4,
-   317								lockdep_is_held(lock));
-   318	
-   319			root_remove_peer_lists(node);
-   320			call_rcu(&node->rcu, root_free_rcu);
-   321		}
-   322		if (rcu_access_pointer(old6)) {
-   323			struct allowedips_node *node = rcu_dereference_protected(old6,
-   324								lockdep_is_held(lock));
-   325	
-   326			root_remove_peer_lists(node);
-   327			call_rcu(&node->rcu, root_free_rcu);
-   328		}
-   329	}
-   330	
-   331	int wg_allowedips_insert_v4(struct allowedips *table, const struct in_addr *ip,
-   332				    u8 cidr, struct wg_peer *peer, struct mutex *lock)
-   333	{
-   334		/* Aligned so it can be passed to fls */
-   335		u8 key[4] __aligned(__alignof(u32));
-   336	
-   337		++table->seq;
-   338		swap_endian(key, (const u8 *)ip, 32);
-   339		return add(&table->root4, 32, key, cidr, peer, lock);
-   340	}
-   341	
-   342	int wg_allowedips_insert_v6(struct allowedips *table, const struct in6_addr *ip,
-   343				    u8 cidr, struct wg_peer *peer, struct mutex *lock)
-   344	{
-   345		/* Aligned so it can be passed to fls64 */
-   346		u8 key[16] __aligned(__alignof(u64));
-   347	
-   348		++table->seq;
-   349		swap_endian(key, (const u8 *)ip, 128);
-   350		return add(&table->root6, 128, key, cidr, peer, lock);
-   351	}
-   352	
-   353	int wg_allowedips_remove_v4(struct allowedips *table, const struct in_addr *ip,
-   354				    u8 cidr, struct wg_peer *peer, struct mutex *lock)
-   355	{
-   356		/* Aligned so it can be passed to fls */
-   357		u8 key[4] __aligned(__alignof(u32));
-   358	
-   359		++table->seq;
-   360		swap_endian(key, (const u8 *)ip, 32);
-   361		return remove(&table->root4, 32, key, cidr, peer, lock);
-   362	}
-   363	
-   364	int wg_allowedips_remove_v6(struct allowedips *table, const struct in6_addr *ip,
-   365				    u8 cidr, struct wg_peer *peer, struct mutex *lock)
-   366	{
-   367		/* Aligned so it can be passed to fls64 */
-   368		u8 key[16] __aligned(__alignof(u64));
-   369	
-   370		++table->seq;
-   371		swap_endian(key, (const u8 *)ip, 128);
-   372		return remove(&table->root6, 128, key, cidr, peer, lock);
-   373	}
-   374	
-   375	void wg_allowedips_remove_by_peer(struct allowedips *table,
-   376					  struct wg_peer *peer, struct mutex *lock)
-   377	{
-   378		struct allowedips_node *node, *tmp;
-   379	
-   380		if (list_empty(&peer->allowedips_list))
-   381			return;
-   382		++table->seq;
-   383		list_for_each_entry_safe(node, tmp, &peer->allowedips_list, peer_list) {
- > 384			_remove(node, lock);
-   385		}
-   386	}
-   387	
-
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 1179e3261bef..d5029f978aa9 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -80,7 +80,7 @@ TEST_PROGS += io_uring_zerocopy_tx.sh
+ TEST_GEN_FILES += bind_bhash
+ TEST_GEN_PROGS += sk_bind_sendto_listen
+ TEST_GEN_PROGS += sk_connect_zero_addr
+-TEST_GEN_PROGS += tcp_so_peek_off
++TEST_GEN_PROGS += sk_so_peek_off
+ TEST_PROGS += test_ingress_egress_chaining.sh
+ TEST_GEN_PROGS += so_incoming_cpu
+ TEST_PROGS += sctp_vrf.sh
+diff --git a/tools/testing/selftests/net/tcp_so_peek_off.c b/tools/testing/selftests/net/sk_so_peek_off.c
+similarity index 58%
+rename from tools/testing/selftests/net/tcp_so_peek_off.c
+rename to tools/testing/selftests/net/sk_so_peek_off.c
+index df8a39d9d3c3..870a890138c4 100644
+--- a/tools/testing/selftests/net/tcp_so_peek_off.c
++++ b/tools/testing/selftests/net/sk_so_peek_off.c
+@@ -10,37 +10,41 @@
+ #include <arpa/inet.h>
+ #include "../kselftest.h"
+ 
+-static char *afstr(int af)
++static char *afstr(int af, int proto)
+ {
+-	return af == AF_INET ? "TCP/IPv4" : "TCP/IPv6";
++	if (proto == IPPROTO_TCP)
++		return af == AF_INET ? "TCP/IPv4" : "TCP/IPv6";
++	else
++		return af == AF_INET ? "UDP/IPv4" : "UDP/IPv6";
+ }
+ 
+-int tcp_peek_offset_probe(sa_family_t af)
++int sk_peek_offset_probe(sa_family_t af, int proto)
+ {
++	int type = (proto == IPPROTO_TCP ? SOCK_STREAM : SOCK_DGRAM);
+ 	int optv = 0;
+ 	int ret = 0;
+ 	int s;
+ 
+-	s = socket(af, SOCK_STREAM | SOCK_CLOEXEC, IPPROTO_TCP);
++	s = socket(af, type, proto);
+ 	if (s < 0) {
+ 		ksft_perror("Temporary TCP socket creation failed");
+ 	} else {
+ 		if (!setsockopt(s, SOL_SOCKET, SO_PEEK_OFF, &optv, sizeof(int)))
+ 			ret = 1;
+ 		else
+-			printf("%s does not support SO_PEEK_OFF\n", afstr(af));
++			printf("%s does not support SO_PEEK_OFF\n", afstr(af, proto));
+ 		close(s);
+ 	}
+ 	return ret;
+ }
+ 
+-static void tcp_peek_offset_set(int s, int offset)
++static void sk_peek_offset_set(int s, int offset)
+ {
+ 	if (setsockopt(s, SOL_SOCKET, SO_PEEK_OFF, &offset, sizeof(offset)))
+ 		ksft_perror("Failed to set SO_PEEK_OFF value\n");
+ }
+ 
+-static int tcp_peek_offset_get(int s)
++static int sk_peek_offset_get(int s)
+ {
+ 	int offset;
+ 	socklen_t len = sizeof(offset);
+@@ -50,8 +54,9 @@ static int tcp_peek_offset_get(int s)
+ 	return offset;
+ }
+ 
+-static int tcp_peek_offset_test(sa_family_t af)
++static int sk_peek_offset_test(sa_family_t af, int proto)
+ {
++	int type = (proto == IPPROTO_TCP ? SOCK_STREAM : SOCK_DGRAM);
+ 	union {
+ 		struct sockaddr sa;
+ 		struct sockaddr_in a4;
+@@ -62,13 +67,13 @@ static int tcp_peek_offset_test(sa_family_t af)
+ 	int recv_sock = 0;
+ 	int offset = 0;
+ 	ssize_t len;
+-	char buf;
++	char buf[2];
+ 
+ 	memset(&a, 0, sizeof(a));
+ 	a.sa.sa_family = af;
+ 
+-	s[0] = socket(af, SOCK_STREAM, IPPROTO_TCP);
+-	s[1] = socket(af, SOCK_STREAM | SOCK_NONBLOCK, IPPROTO_TCP);
++	s[0] = recv_sock = socket(af, type, proto);
++	s[1] = socket(af, type, proto);
+ 
+ 	if (s[0] < 0 || s[1] < 0) {
+ 		ksft_perror("Temporary socket creation failed\n");
+@@ -82,76 +87,78 @@ static int tcp_peek_offset_test(sa_family_t af)
+ 		ksft_perror("Temporary socket getsockname() failed\n");
+ 		goto out;
+ 	}
+-	if (listen(s[0], 0) < 0) {
++	if (proto == IPPROTO_TCP && listen(s[0], 0) < 0) {
+ 		ksft_perror("Temporary socket listen() failed\n");
+ 		goto out;
+ 	}
+-	if (connect(s[1], &a.sa, sizeof(a)) >= 0 || errno != EINPROGRESS) {
++	if (connect(s[1], &a.sa, sizeof(a))) {
+ 		ksft_perror("Temporary socket connect() failed\n");
+ 		goto out;
+ 	}
+-	recv_sock = accept(s[0], NULL, NULL);
+-	if (recv_sock <= 0) {
+-		ksft_perror("Temporary socket accept() failed\n");
+-		goto out;
++	if (proto == IPPROTO_TCP) {
++		recv_sock = accept(s[0], NULL, NULL);
++		if (recv_sock <= 0) {
++			ksft_perror("Temporary socket accept() failed\n");
++			goto out;
++		}
+ 	}
+ 
+ 	/* Some basic tests of getting/setting offset */
+-	offset = tcp_peek_offset_get(recv_sock);
++	offset = sk_peek_offset_get(recv_sock);
+ 	if (offset != -1) {
+ 		ksft_perror("Initial value of socket offset not -1\n");
+ 		goto out;
+ 	}
+-	tcp_peek_offset_set(recv_sock, 0);
+-	offset = tcp_peek_offset_get(recv_sock);
++	sk_peek_offset_set(recv_sock, 0);
++	offset = sk_peek_offset_get(recv_sock);
+ 	if (offset != 0) {
+ 		ksft_perror("Failed to set socket offset to 0\n");
+ 		goto out;
+ 	}
+ 
+ 	/* Transfer a message */
+-	if (send(s[1], (char *)("ab"), 2, 0) <= 0 || errno != EINPROGRESS) {
++	if (send(s[1], (char *)("ab"), 2, 0) != 2) {
+ 		ksft_perror("Temporary probe socket send() failed\n");
+ 		goto out;
+ 	}
+ 	/* Read first byte */
+-	len = recv(recv_sock, &buf, 1, MSG_PEEK);
+-	if (len != 1 || buf != 'a') {
++	len = recv(recv_sock, buf, 1, MSG_PEEK);
++	if (len != 1 || buf[0] != 'a') {
+ 		ksft_perror("Failed to read first byte of message\n");
+ 		goto out;
+ 	}
+-	offset = tcp_peek_offset_get(recv_sock);
++	offset = sk_peek_offset_get(recv_sock);
+ 	if (offset != 1) {
+ 		ksft_perror("Offset not forwarded correctly at first byte\n");
+ 		goto out;
+ 	}
+ 	/* Try to read beyond last byte */
+-	len = recv(recv_sock, &buf, 2, MSG_PEEK);
+-	if (len != 1 || buf != 'b') {
++	len = recv(recv_sock, buf, 2, MSG_PEEK);
++	if (len != 1 || buf[0] != 'b') {
+ 		ksft_perror("Failed to read last byte of message\n");
+ 		goto out;
+ 	}
+-	offset = tcp_peek_offset_get(recv_sock);
++	offset = sk_peek_offset_get(recv_sock);
+ 	if (offset != 2) {
+ 		ksft_perror("Offset not forwarded correctly at last byte\n");
+ 		goto out;
+ 	}
+ 	/* Flush message */
+-	len = recv(recv_sock, NULL, 2, MSG_TRUNC);
++	len = recv(recv_sock, buf, 2, MSG_TRUNC);
+ 	if (len != 2) {
+ 		ksft_perror("Failed to flush message\n");
+ 		goto out;
+ 	}
+-	offset = tcp_peek_offset_get(recv_sock);
++	offset = sk_peek_offset_get(recv_sock);
+ 	if (offset != 0) {
+ 		ksft_perror("Offset not reverted correctly after flush\n");
+ 		goto out;
+ 	}
+ 
+-	printf("%s with MSG_PEEK_OFF works correctly\n", afstr(af));
++	printf("%s with MSG_PEEK_OFF works correctly\n", afstr(af, proto));
+ 	res = 1;
+ out:
+-	if (recv_sock >= 0)
++	if (proto == IPPROTO_TCP && recv_sock >= 0)
+ 		close(recv_sock);
+ 	if (s[1] >= 0)
+ 		close(s[1]);
+@@ -160,24 +167,36 @@ static int tcp_peek_offset_test(sa_family_t af)
+ 	return res;
+ }
+ 
+-int main(void)
++static int do_test(int proto)
+ {
+ 	int res4, res6;
+ 
+-	res4 = tcp_peek_offset_probe(AF_INET);
+-	res6 = tcp_peek_offset_probe(AF_INET6);
++	res4 = sk_peek_offset_probe(AF_INET, proto);
++	res6 = sk_peek_offset_probe(AF_INET6, proto);
+ 
+ 	if (!res4 && !res6)
+ 		return KSFT_SKIP;
+ 
+ 	if (res4)
+-		res4 = tcp_peek_offset_test(AF_INET);
++		res4 = sk_peek_offset_test(AF_INET, proto);
+ 
+ 	if (res6)
+-		res6 = tcp_peek_offset_test(AF_INET6);
++		res6 = sk_peek_offset_test(AF_INET6, proto);
+ 
+ 	if (!res4 || !res6)
+ 		return KSFT_FAIL;
+ 
+ 	return KSFT_PASS;
+ }
++
++int main(void)
++{
++	int restcp, resudp;
++
++	restcp = do_test(IPPROTO_TCP);
++	resudp = do_test(IPPROTO_UDP);
++	if (restcp == KSFT_FAIL || resudp == KSFT_FAIL)
++		return KSFT_FAIL;
++
++	return KSFT_PASS;
++}
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.37.3
+
 
