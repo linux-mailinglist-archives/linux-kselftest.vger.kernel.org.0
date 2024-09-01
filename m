@@ -1,98 +1,144 @@
-Return-Path: <linux-kselftest+bounces-16913-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16914-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D4D8967BAF
-	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 20:11:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EAF5C967BD1
+	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 20:43:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDC43280DC4
-	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 18:11:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A78C1280B40
+	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 18:43:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11877183CB7;
-	Sun,  1 Sep 2024 18:11:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="eLtfise2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E71045BEF;
+	Sun,  1 Sep 2024 18:43:15 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DABBE26AC1;
-	Sun,  1 Sep 2024 18:11:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33C7917BA6;
+	Sun,  1 Sep 2024 18:43:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725214273; cv=none; b=liBkrgm2CFm5RuME1kBGjsTulHHpGPtCOwwAHV6olD0LVMUpJ8wl78aJQXyP7Oz9E6Drgkzx2D7Jneb3nEmH5Q4MEkJJv2tlGs4YLms/dBOCN/Pj2YlnMpGv/PcpIKxMJPRnNgFhBm53uW63UD3Nyb7WwI+jP1f5Q88lDH4QvsI=
+	t=1725216195; cv=none; b=oIFjknGmvngqSfD5VOKMrghBjPHPp0avkoqdko0GnGvbs0J3mvMWUhnIVLZvu7ln9cvZhRSINWPgPSo43vcNOs/Ayj1odk06CDs9YSOIFkgSFp5aCOlDtV1+J/YP8eZoVTf/DK7smjdJ2fCrF7RToEzvSEGW4jCTSM0AQW0+vHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725214273; c=relaxed/simple;
-	bh=9X6g5Ts9OHDKRyfwQUe0lOf8edLMyW3PxRfHYH1GI0A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LgblE4yiVtuaYGsLPjp0MfoFEjKx3bl85Tto3Egy9vlbJ8qRdDQkC3M2kDxIi5JcRmE9ye6jgdKdKFGz7T7x+b3cCsLvkKsNOmK1Z/rEU52CsnQcLTzQqKDUKlGhSxz574sVpnaQoY/lG6oy1xPQ8wkaEE89gXECYP9IYZNoE/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=eLtfise2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98BFFC4CEC3;
-	Sun,  1 Sep 2024 18:11:11 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="eLtfise2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1725214269;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mospxNQzEQmi1xlnzeu/+oljFVFe5zggEA3f9yO5JcU=;
-	b=eLtfise2dOqooXx5gFA6w1/NpU4xUGopgeSBn9jGRac1l8u8/q+3lHv3SVPcJhs3wIwY1b
-	FF0GrRxD8NbNk9xNTQjx50ZcqAwXBTImtmW1im/vz5cdldvXrXD61E1gAjxnB3TTbJNKF6
-	kb3N8lUKqbQzsVpXcL85xx7XrcEdVIs=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 9082c1bf (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Sun, 1 Sep 2024 18:11:09 +0000 (UTC)
-Date: Sun, 1 Sep 2024 20:11:07 +0200
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: vDSO: Build vDSO tests with O2 optimisation
-Message-ID: <ZtSuO2Bzbo5wL9se@zx2c4.com>
-References: <46efa1f62e1604c98d10a1b6856a2b2aec0cfe9c.1725211324.git.christophe.leroy@csgroup.eu>
+	s=arc-20240116; t=1725216195; c=relaxed/simple;
+	bh=UVSOd/WYdmt9syjO5zHmRNT8dh7mNVs3oIjfiXs0is0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uqxao9csaxiAmiETRlocf4T8QBiO1SVezN4H7a7wwAuKgP4rP3B4rKhZikLWCzOd8Qz8SMARULRYnSK/o1/miMhUT5BiRZvixjYfrhJaTXTHjxYAgc1sFZOi9FpDcPrN88aPvbqgzDR6oatG1rqm7xzL+knFz7PMHEcvNg0Gt9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4WxgkR2wZlz9sSN;
+	Sun,  1 Sep 2024 20:43:11 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id f-QtdpVYL6Kf; Sun,  1 Sep 2024 20:43:11 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WxgkR1q5hz9sSK;
+	Sun,  1 Sep 2024 20:43:11 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 243378B767;
+	Sun,  1 Sep 2024 20:43:11 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id hFIeW2c4y8Oo; Sun,  1 Sep 2024 20:43:11 +0200 (CEST)
+Received: from [192.168.234.154] (unknown [192.168.234.154])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id C33B98B763;
+	Sun,  1 Sep 2024 20:43:10 +0200 (CEST)
+Message-ID: <efca582d-20e9-4871-bcd8-5abcdb0c22f3@csgroup.eu>
+Date: Sun, 1 Sep 2024 20:43:10 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <46efa1f62e1604c98d10a1b6856a2b2aec0cfe9c.1725211324.git.christophe.leroy@csgroup.eu>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: vDSO: Do not rely on $ARCH for
+ vdso_test_getrandom && vdso_test_chacha
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+ Xi Ruoyao <xry111@xry111.site>, broonie@kernel.org
+References: <ddf594c81787dba708fc392cb03027470dee64fb.1725124064.git.christophe.leroy@csgroup.eu>
+ <ZtRqp-uZe5C07qOF@zx2c4.com>
+ <667622ae-dde5-410f-a9f8-4801788af278@csgroup.eu>
+ <ZtSsTkTUCGyxaN_d@zx2c4.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <ZtSsTkTUCGyxaN_d@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sun, Sep 01, 2024 at 07:24:03PM +0200, Christophe Leroy wrote:
-> Without -O2, the generated code for testing chacha function is awful.
-> GCC even implements rol32() as a function instead of just using the
-> rotlwi instruction, that function is 20 instructions long.
-> 
-> 	~# time ./vdso_test_chacha
-> 	TAP version 13
-> 	1..1
-> 	ok 1 chacha: PASS
-> 	real    0m 37.16s
-> 	user    0m 36.89s
-> 	sys     0m 0.26s
-> 
-> Several other selftests directory add -O2, and the kernel is also
-> always built with optimisation active. Do the same for vDSO selftests.
-> 
-> With this patch the time is reduced by approx 15%.
-> 
-> 	~# time ./vdso_test_chacha
-> 	TAP version 13
-> 	1..1
-> 	ok 1 chacha: PASS
-> 	real    0m 32.09s
-> 	user    0m 31.86s
-> 	sys     0m 0.22s
-> 
 
-Seems reasonable. I'll queue it up.
 
-Thanks.
+Le 01/09/2024 à 20:02, Jason A. Donenfeld a écrit :
+> On Sun, Sep 01, 2024 at 08:00:30PM +0200, Christophe Leroy wrote:
+>> Hi Jason,
+>>
+>> Le 01/09/2024 à 15:22, Jason A. Donenfeld a écrit :
+>>> Hi Christophe,
+>>>
+>>> Hmm, I'm not so sure I like this very much. I think it's important for
+>>> these tests to fail when an arch tries to hook up the function to the
+>>> vDSO, but it's still not exported for some reason. This also regresses
+>>> the ARCH=x86_64 vs ARCH=x86 thing, which SRCARCH fixes.
+>>>
+>>> What about, instead, something like below, replacing the other commit?
+>>
+>> I need to look at it in more details and perfom a test, but after first
+>> look I can't figure out how it would work.
+>>
+>> When I build selftests,
+>>
+>> to build 32 bits selftests I do:
+>>
+>> 	make ARCH=powerpc CROSS_COMPILE=ppc-linux-
+>>
+>> to build a 64 bits BE selftests I do:
+>>
+>> 	make ARCH=powerpc CROSS_COMPILE=powerpc64-linux-
+>>
+>> to build a 64 bits LE selftests I do:
+>>
+>> 	make ARCH=powerpc CROSS_COMPILE=powerpc64le-linux-
+>>
+>>
+>> I addition, in case someone does the build on a native platform directly,
+>>
+>> On 32 bits, uname -m returns 'ppc'
+>> On 64 bits, uname -m returns 'ppc64'
+>> On 64 bits little endian, uname -m returns 'ppc64le'
+>>
+>> How would this fit in the logic where IIUC you just remove '_64' from
+>> 'x86_64' to get 'x86'
+> 
+> Huh? That's not what tools/scripts/Makefile.arch does.
 
-Jason
+Hum ... yes sorry I looked at it too quickly and mixed things up with 
+the other patch.
+
+Nevertheless, if I understand well what tools/scripts/Makefile.arch does 
+on an x86_64 for instance:
+
+uname -m returns x86_64
+HOSTARCH = x86 (sed -e s/x86_64/x86)
+ARCH = x86
+SRCARCH = x86
+
+If you build with make ARCH=x86_64,
+SRCARCH = x86
+
+So I still can't see how you can use that to know if it is a x86_64 or not.
+
+I don't see either what could be the result for powerpc.
+
+By the way, in your patch I don't think you can use CONFIG_X86_32, 
+CONFIG symbols are not known when building selftests.
+
+Christophe
 
