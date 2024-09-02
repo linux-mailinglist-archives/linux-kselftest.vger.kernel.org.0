@@ -1,148 +1,156 @@
-Return-Path: <linux-kselftest+bounces-16989-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16990-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 997FF968B9E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 18:09:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 861D8968BB8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 18:15:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B67621C2178C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 16:09:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8FA71C224A3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 16:15:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B6321AB6CD;
-	Mon,  2 Sep 2024 16:08:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D07631A304C;
+	Mon,  2 Sep 2024 16:14:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="cNNUa0S3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WmdtUR/s"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [80.241.56.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D27221A3023;
-	Mon,  2 Sep 2024 16:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C0711A2627;
+	Mon,  2 Sep 2024 16:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725293328; cv=none; b=CNy9z/tA1r3kJcJS6m28Yxm9qQG257u0TJNugY3e1TwF29S7Q8aQ/7A0eJ8omVFpP/GypbbvNVRq2TZlGCYfwXNI1bYF3WRptEv0hG/OQ/2OESBx/jCRENzmqkz9vSEm+FG2IKxVSSYYW4K8i9K9QMwXZhu/X2NmgXtyghsSZOQ=
+	t=1725293699; cv=none; b=CrN/FX25dHSaZG/NOb3ZzDkizLBbfXQ18dnsrGCQjtfYM6fueL5Fwm4AJZSgWI+5C0hHn1MuNDnDZBUnMHPS95wiLcEUomlfPm9KKncJ7xxLT5xl5NBP8ExXaEDSGAIVAaWY4HjntnXUIgzdArls3kaL5AThD05SHKqdNmgVP9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725293328; c=relaxed/simple;
-	bh=udCLYS03vFzY0pDP0VXNCARsSZDvZr7IQUhpJq1Ey+U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=onEpcdftinpaHWC3P4qCUBC+xIZNIgJx8GfFplOR+2F3I6qeYpx1xMCHMPoJw5K/w50qZfeJyR9mKFo24qMRD1p8xLWyq1k0q7dxyDTA4cW7H9GJuWiXhfaZidooy+NXF/xq69mtlkKKWkSknwZ4lJ8Sqv//mhXtPHne9fRlEYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=cNNUa0S3; arc=none smtp.client-ip=80.241.56.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [IPv6:2001:67c:2050:b231:465::1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4WyDFj5pVYz9t1t;
-	Mon,  2 Sep 2024 18:08:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1725293321;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bnehve9VjMnII0s4fDhfCcbW2zyjJe5jdh+Zfgbp8WE=;
-	b=cNNUa0S3Iq182pJH+ahbE5zzdZTntjXR7caJZLh8wQQK2pMWA6nS8n0jBn0sakWP6e24vw
-	kMyOlQqR1AxWzazQMHSjUF9doKKXWRwz+IPz2sGzN7DGBIJeXXfdFWb08AQ258ZuzGVxSu
-	LXj+t+WneeeH68MNhgSIWKr6buPAbu1oOas4jIHbs3z0YfK2pWm7Qq2XTxwRSrSOmJguNE
-	MsJF+6bK8BpckmA6qEi0k+NY/ft5i1QVgD4PPuwH0jflDz5he3FpP1GP9xto7ln1lyc6OH
-	XSKAzWs8jgM0FzNrXYZFk7E1i0JDtXbXUSB+OU3vohpz0STXzPCQx2Oqly+/7g==
-Date: Tue, 3 Sep 2024 02:08:26 +1000
-From: Aleksa Sarai <cyphar@cyphar.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Benjamin Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, shuah <shuah@kernel.org>, 
-	Kees Cook <kees@kernel.org>, Florian Weimer <fweimer@redhat.com>, 
-	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, 
-	linux-kselftest@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH RFC 3/8] openat2: explicitly return -E2BIG for (usize >
- PAGE_SIZE)
-Message-ID: <20240902.160305-cuddly.doc.quaint.provider-RsRaXpw78cll@cyphar.com>
-References: <20240902-extensible-structs-check_fields-v1-0-545e93ede2f2@cyphar.com>
- <20240902-extensible-structs-check_fields-v1-3-545e93ede2f2@cyphar.com>
- <63193b87-7057-4ad0-aef2-fdb5d15138c3@app.fastmail.com>
+	s=arc-20240116; t=1725293699; c=relaxed/simple;
+	bh=2YXvs+4h6EtwgTDIiHH+k7lx3bBCvlfhGPYD9djhnD0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=CP3Ya+3QXzPDouXaFE8gv7k7+pR41um0joK35bEj3gyPAART9X+WRXouhqHWtxYs/WkMrw4a9ypG04MRx3DoR90unyqk7otHRHChS11xz8tqlT81DBQS7KFnDYMubPXcdKAT+yH6Qh7/xJx+QjyMID8Bkv70sqSHoF8yE+WbKPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WmdtUR/s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCE5EC4CEC2;
+	Mon,  2 Sep 2024 16:14:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725293699;
+	bh=2YXvs+4h6EtwgTDIiHH+k7lx3bBCvlfhGPYD9djhnD0=;
+	h=From:Subject:Date:To:Cc:From;
+	b=WmdtUR/sRt9/rVHTFsg3tdydOMs9g8cytn2zASvD9jPODXG+5JOY7usGel9zF2JTi
+	 623n5c12xkpGvF6S2Z/VdrkH+Gd3rEEb3kcO+f85ezNd4wqY7z7GOa/ZL8l8/oYeF+
+	 hPnEtWVizk6kdKLqVaWBbnkWIUV6ne2ec8+gZ5LLh449cYWyHQkhZC0pYeDV9nlh8+
+	 bKv2zCmc/Cb1SpeYpRcNT1LHez628sVPc/4ocYxubo4UW1l/ZIJTxFMsVDWhE7hJxu
+	 rrUgf1Q7uDtrDpzYyvJViuPrDCK1CZsOx822PArRbjtdYJbmiZaTG/4cJQuwMTrpO4
+	 PLJbXWK/IfonQ==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Subject: [PATCH HID 0/7] HID: bpf: add a new hook to control hid-generic
+Date: Tue, 03 Sep 2024 01:14:30 +0900
+Message-Id: <20240903-hid-bpf-hid-generic-v1-0-9511a565b2da@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3itig22h2tekijst"
-Content-Disposition: inline
-In-Reply-To: <63193b87-7057-4ad0-aef2-fdb5d15138c3@app.fastmail.com>
-X-Rspamd-Queue-Id: 4WyDFj5pVYz9t1t
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGbk1WYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDCyNL3YzMFN2kgjQwnZ6aB9SdrGtmaGpumWaaZGppYqoE1FlQlJqWWQE
+ 2NVrJw9NFKba2FgCCMG3zagAAAA==
+To: Jiri Kosina <jikos@kernel.org>, 
+ Peter Hutterer <peter.hutterer@who-t.net>, Vicki Pfau <vi@endrift.com>, 
+ Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-doc@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1725293696; l=4061;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=2YXvs+4h6EtwgTDIiHH+k7lx3bBCvlfhGPYD9djhnD0=;
+ b=m0iCZE1dHV9g7xwZtqTLCsu7pk2cVmrdyeFbjmCJtVCjK/kAT3HuOJA8z1AzYZAj2AajwbxRV
+ 1y3XyKrSD+UAkxR7DdC0smgCXARau1kShwLKgxc77dGNa7NyQnAe3oG
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
+This is a slight change from the fundamentals of HID-BPF.
+In theory, HID-BPF is abstract to the kernel itself, and makes
+only changes at the HID level (through report descriptors or
+events emitted to/from the device).
 
---3itig22h2tekijst
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+However, we have seen a few use cases where HID-BPF might interact with
+the running kernel when the target device is already handled by a
+specific device.
 
-On 2024-09-02, Arnd Bergmann <arnd@arndb.de> wrote:
-> On Mon, Sep 2, 2024, at 07:06, Aleksa Sarai wrote:
-> > While we do currently return -EFAULT in this case, it seems prudent to
-> > follow the behaviour of other syscalls like clone3. It seems quite
-> > unlikely that anyone depends on this error code being EFAULT, but we can
-> > always revert this if it turns out to be an issue.
->=20
-> Right, it's probably a good idea to have a limit there rather than
-> having a busy loop with a user-provided length when the only bound is
-> the available virtual memory.
->=20
-> >  	if (unlikely(usize < OPEN_HOW_SIZE_VER0))
-> >  		return -EINVAL;
-> > +	if (unlikely(usize > PAGE_SIZE))
-> > +		return -E2BIG;
-> >=20
->=20
-> Is PAGE_SIZE significant here? If there is a need to enforce a limit,
-> I would expect this to be the same regardless of kernel configuration,
-> since the structure layout is also independent of the configuration.
+For example, the XP-Pen/Huion/UC-Logic tablets are handled by
+hid-uclogic but this driver is also doing a report descriptor fixup
+without checking if the device has already been fixed by HID-BPF.
 
-PAGE_SIZE is what clone3, perf_event_open, sched_setattr, bpf, etc all
-use. The idea was that PAGE_SIZE is the absolute limit of any reasonable
-extensible structure size because we are never going to have argument
-structures that are larger than a page (I think this was discussed in
-the original copy_struct_from_user() patchset thread in late 2019, but I
-can't find the reference at the moment.)
+In the same way, another recent example[0] was when a cheap foot pedal is
+used and tricks iPhones and Windows machines by presenting itself as a
+known Apple wireless keyboard. The problem is that this fake keyboard is
+not presenting a compatible report descriptor and hid-core merges all
+device nodes together making libinput ignore the keyboard part for
+historical reasons.
 
-I simply forgot to add this when I first submitted openat2, the original
-intention was to just match the other syscalls.
+Last, there has been a long standing request to allow to disable the
+input part of a given gamepad while SDL or Steam opens the device
+through hidraw.
 
-> Where is the current -EFAULT for users passing more than a page?
-> I only see it for reads beyond the VMA, but not e.g. when checking
-> terabytes of zero pages from an anonymous mapping.
+This series aims at tackling both of these problems:
+- first we had a new hook `hid_bpf_driver_probe` which allows the BPF
+  program to decide if the curently probed driver should be used or not
+- then this same hook can also change the ->driver_data of the struct
+  hid_device_id argument, and we teach hid-generic to use that field as
+  the connect mask.
 
-I meant that we in practice return -EFAULT if you pass a really large
-size (because you end up running off the end of mapped memory). There is
-no explicit -EFAULT for large sizes, which is exactly the problem. :P
+Basically, it means that when we insert a BPF program to fix a device,
+we can force hid-generic to handle the device, and thus preventing
+any other kernel driver to tamper with our device. We can also
+selectively decide to export the hidraw or input nodes when using
+hid-generic.
 
->=20
->     Arnd
+In the SDL/Steam use case, this would means that the gaming application
+will load one BPF program per input device it wants to open through
+hidraw, that BPF program reassigns the input device to hid-generic and
+disables hid-input, then it can open the new hidraw node.
+Once that program terminates, the BPF program is removed (either
+automatically because no-one has the fd of the links open, or manually
+by SDL/Steam), and the normal driver rebinds to the HID device,
+restoring full input functionality.
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
+This branch is on top of the for-6.12/hidraw branch of hid.git, mainly
+because that branch saw some selftests/hid changes.
 
---3itig22h2tekijst
-Content-Type: application/pgp-signature; name="signature.asc"
+[0] https://gitlab.freedesktop.org/libinput/libinput/-/issues/1014
 
------BEGIN PGP SIGNATURE-----
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+---
+Benjamin Tissoires (7):
+      selftests/hid: add dependency on hid_common.h
+      selftests/hid: cleanup C tests by adding a common struct uhid_device
+      selftests/hid: allow to parametrize bus/vid/pid/rdesc on the test device
+      HID: bpf: allow BPF programs to force using hid-generic
+      selftests/hid: add test for assigning a given device to hid-generic
+      HID: bpf: Allow to control the connect mask of hid-generic from BPF
+      selftests/hid: add test to disable hid-input
 
-iHUEABYKAB0WIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCZtXi+gAKCRAol/rSt+lE
-b/CVAP4/UIPzUm7VHMdeZy4qfDO8V7V0ojxi/W5gHbAzDDpC9AEA+OOBAKvxJ0NQ
-ghIM9lErOJb+9JyKInzhgYT3v5S9KQ4=
-=pzTi
------END PGP SIGNATURE-----
+ Documentation/hid/hid-bpf.rst                      |   2 +-
+ drivers/hid/bpf/hid_bpf_dispatch.c                 |  31 ++++
+ drivers/hid/bpf/hid_bpf_struct_ops.c               |   4 +
+ drivers/hid/hid-core.c                             |  18 +-
+ drivers/hid/hid-generic.c                          |   5 +-
+ include/linux/hid_bpf.h                            |  40 ++++
+ tools/testing/selftests/hid/Makefile               |   2 +-
+ tools/testing/selftests/hid/hid_bpf.c              | 205 ++++++++++++++++-----
+ tools/testing/selftests/hid/hid_common.h           | 112 +++++++----
+ tools/testing/selftests/hid/hidraw.c               |  36 +---
+ tools/testing/selftests/hid/progs/hid.c            |  31 ++++
+ .../testing/selftests/hid/progs/hid_bpf_helpers.h  |   4 +
+ 12 files changed, 372 insertions(+), 118 deletions(-)
+---
+base-commit: 321f7798cfb8d834ae0ed0d467c8bf46804243f9
+change-id: 20240829-hid-bpf-hid-generic-61579f5b5945
 
---3itig22h2tekijst--
+Best regards,
+-- 
+Benjamin Tissoires <bentiss@kernel.org>
+
 
