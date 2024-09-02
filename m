@@ -1,182 +1,372 @@
-Return-Path: <linux-kselftest+bounces-16987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16988-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E6BD968B81
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 18:03:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AB882968B91
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 18:06:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC7091F2365B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 16:03:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B1DA1F21708
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 16:06:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 548541A3028;
-	Mon,  2 Sep 2024 16:03:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0CC41A3029;
+	Mon,  2 Sep 2024 16:06:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="yT7+80O+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gS6SOaTB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB4E442AB7;
-	Mon,  2 Sep 2024 16:03:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03BA81CB50C;
+	Mon,  2 Sep 2024 16:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725292984; cv=none; b=KFm49FngRPFEsBoT2KfDxyTVno/Cf0f30Foc/MW4esPxTsc5Xf8bjdkoKnuQY28jRXGGISbYYJuMbTWDqxe0N85/iJKjISYohykcgMWXE++DRKfdK2ZAno40HMZvT9YSTQXUg+lmXVEkjoVibb7lVDEmGECXE4Tk8p9RhKyeFGA=
+	t=1725293178; cv=none; b=AjivdQ8wMpl2CPmz09UfLh+cLSxwxZ/rCaZZerKLEQpbKZxLzhv3w1mg2ikdOntm14nfO/GEVR/Dhez6LVmRmd8AEQ9H2c2OrrNqGztJ598KsvvYiFCUrtNo3O/HzaC4sHFV6arMJf7KvEEk74iRoNaV8s/4MMZdteBXr9zdKGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725292984; c=relaxed/simple;
-	bh=0JjunB37iEzXMOdt1r0c+A6zpwOdxB9KTs1TOBOETQE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=esDtetWJjufJwUCAlRVuvdtAxkajUP5+ErsjMt/7kj+Lzbas0k5QutRh0i5DdRhxndPi1uW5j3Y5eSkjOdyzkZ2eXeCu3hT7T3K332aoYBbF+ZYQpZRy56n8YxWBENApsY+aQYbrQG8PbMYl4IKdlsBY55b4v0zfcosjpqgU6D0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=yT7+80O+; arc=none smtp.client-ip=80.241.56.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
-Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4WyD755BNrz9spX;
-	Mon,  2 Sep 2024 18:02:57 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-	t=1725292977;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=y/WAo2wEKoXQ1DpuWFNQF/dhkLU3MgM/L7pMsMzDa3U=;
-	b=yT7+80O+kLvfJIrums1mfAqfnvoGfVHmaHUI+A/suaeyi/wLufx8aoPjR6TGbQJMA6pIFn
-	afRiGRZ8YQUI/ph+gpDduYcnhcUVbDMYti4YUKKPU0FZUFpkZUHZFMZlNONPEsh5QojeLG
-	TkH8TKJ+jyILftA8RMkFHvCz/DMnt7WcDIZ9dQ/uNANWE0ZiWO9fq2JaxSXo+7cWHH6nMz
-	iF22V25OedR07/sWWrqyaKokkeL1FIDzPQ//+onct3j12jk/ANX5Invv8QIz6YIDMZ5Jvh
-	/rOdEQkdo2iTwwZ8fM7yBib0eEieFm3Mz5GKE9Hf0Jyg7f1autSh3UZdhXEbjg==
-Date: Tue, 3 Sep 2024 02:02:39 +1000
-From: Aleksa Sarai <cyphar@cyphar.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Benjamin Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, shuah <shuah@kernel.org>, 
-	Kees Cook <kees@kernel.org>, Florian Weimer <fweimer@redhat.com>, 
-	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 1/8] uaccess: add copy_struct_to_user helper
-Message-ID: <20240902.090015-soviet.bowling.selfish.chin-kvAI3lnuyqH@cyphar.com>
-References: <20240902-extensible-structs-check_fields-v1-0-545e93ede2f2@cyphar.com>
- <20240902-extensible-structs-check_fields-v1-1-545e93ede2f2@cyphar.com>
- <319c0da6-3d9c-4b45-a14c-07c5bbc3afb7@app.fastmail.com>
+	s=arc-20240116; t=1725293178; c=relaxed/simple;
+	bh=K13y1lO/8DhpALWh0nz5mt6WHW+qQOjSXmJvnUReN7A=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JiNoWEc1saWl3Hq4iDd98kOukxfIRjRcZvnD5xuiF+3+mWFEFTAR0EnbW3n5AIVSzhA0wCYxIXj1S5D0rdJ3R5aUPmrA2Tt83WEAVVMGJtzGHB75dBB8kvKXgrcRax5LCHvpivPEyYBmxwIoc0tO3woeT/KYqSHxPDsHiyYSJ44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gS6SOaTB; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7c6b4222fe3so2773583a12.3;
+        Mon, 02 Sep 2024 09:06:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725293176; x=1725897976; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OI2uENxJ9aaY53VJ36Ne/siF10sE+6E3JhEPyeKfFJ0=;
+        b=gS6SOaTBWfbMk3viTZn5fYZqViQaPFhdqhcazY7UL9aeo//F8WNkb9EnC+lc3c9yVM
+         RNspuHsAozJbucx7tIxQDtHmEuayd2sSXdrOb+vBSg932YoTuVu3EsbkgC1jUeUa2w2W
+         Xni0L1GVHEmW4HWN+GHYhMraEqzxWzYoKwgNSSMPw0IWlJt0KXMpNzw1DuLT7O7v4SkW
+         rweUoNvIKw/ApNVTC5GflU3HzAVm3xOuyt2VmGZs6z9ooIToSx0jcPpn6pHoPX3VYfHO
+         UagPe+naOsUhMzd6/4LF6sGmHOLhMyBDsrsea3YiXPbEEKpLK9IUyvdqNzkMqffdF6iF
+         /Z5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725293176; x=1725897976;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OI2uENxJ9aaY53VJ36Ne/siF10sE+6E3JhEPyeKfFJ0=;
+        b=WrcaMGPmPlrQPxwCpDB4xgppY0QCdZfP3fAuHF+G9y/a9SiZgfMp8I/j/rWl21/YSU
+         Nl7BTqjvjsNtJQqdF5hrlgzqlURGIYYwN3a1/3k2aK0sSdD3z0HjQEVtshbeOYM/CWep
+         DhpINuxciMNM+SFhGauiva1fAoUzqJJwvBKj7qFblEW5alJFzJ6XwUMkMK1KNlovn7P8
+         hV/SqV0KpkBx++8soNegtwc4kkZPzsom6v+9q3VL/loi9wzLg9kSfGznasRkytcrJ3Ba
+         f2npdHNPykn9uhaPRjgYnQztap72qYy2ZjI2U5H5qMejCeQZS6804JPfAdw1tZuygFZK
+         QPQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV7vpjfn9PYcB/PrTHXhgYCA3tCnuDIxMuj0YqWrALRYAQXacnc8u2v5Hh0hHYjeyBNCdNiXAY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxE2XL19ROIe8yq0/3VaQxC5dcciUZ+bhe7NxAIBjNr6hvG5BKB
+	vmJsDrpdQ5PQX+YJIVETNwibLKLxc8L3r0AcweqnUAhgg+w+GulPeTlJUMo6
+X-Google-Smtp-Source: AGHT+IGHfZbHnzuquOhDl2V3d/MmVRbrhimcfW7pnu4r/i6mtevwyQEyoZvJtjZtmpufU/zm13jP6g==
+X-Received: by 2002:a17:902:daca:b0:202:54b8:72e5 with SMTP id d9443c01a7336-205444f14d9mr68676855ad.22.1725293176031;
+        Mon, 02 Sep 2024 09:06:16 -0700 (PDT)
+Received: from KERNELXING-MC1.tencent.com ([114.253.36.103])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20549df4909sm37713745ad.240.2024.09.02.09.06.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Sep 2024 09:06:15 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	jmaloy@redhat.com,
+	sdf@fomichev.me,
+	willemdebruijn.kernel@gmail.com
+Cc: linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>,
+	Willem de Bruijn <willemb@google.com>
+Subject: [PATCH net-next v2] selftests: add selftest for UDP SO_PEEK_OFF support
+Date: Tue,  3 Sep 2024 00:06:10 +0800
+Message-Id: <20240902160610.66332-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ftgkfoq5ev7h23w4"
-Content-Disposition: inline
-In-Reply-To: <319c0da6-3d9c-4b45-a14c-07c5bbc3afb7@app.fastmail.com>
+Content-Transfer-Encoding: 8bit
 
+From: Jason Xing <kernelxing@tencent.com>
 
---ftgkfoq5ev7h23w4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Add the SO_PEEK_OFF selftest for UDP. In this patch, I mainly do
+three things:
+1. rename tcp_so_peek_off.c
+2. adjust for UDP protocol
+3. add selftests into it
 
-On 2024-09-02, Arnd Bergmann <arnd@arndb.de> wrote:
-> On Mon, Sep 2, 2024, at 07:06, Aleksa Sarai wrote:
-> > This is based on copy_struct_from_user(), but there is one additional
-> > case to consider when creating a syscall that returns an
-> > extensible-struct to userspace -- how should data in the struct that
-> > cannot fit into the userspace struct be handled (ksize > usize)?
-> >
-> > There are three possibilies:
-> >
-> >  1. The interface is like sched_getattr(2), where new information will
-> >     be silently not provided to userspace. This is probably what most
-> >     interfaces will want to do, as it provides the most possible
-> >     backwards-compatibility.
-> >
-> >  2. The interface is like lsm_list_modules(2), where you want to return
-> >     an error like -EMSGSIZE if not providing information could result in
-> >     the userspace program making a serious mistake (such as one that
-> >     could lead to a security problem) or if you want to provide some
-> >     flag to userspace so they know that they are missing some
-> >     information.
->=20
-> I'm not sure if EMSGSIZE is the best choice here, my feeling is that
-> the kernel should instead try to behave the same way as an older kernel
-> that did not know about the extra fields:
+Suggested-by: Jon Maloy <jmaloy@redhat.com>
+Reviewed-by: Willem de Bruijn <willemb@google.com>
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
+---
+v2
+Link: https://lore.kernel.org/all/20240901051821.94956-1-kerneljasonxing@gmail.com/
+1. update .gitignore (Stanislav)
+2. use connect() < 0 as the test statement (Willem)
 
-I agree this API is not ideal for syscalls because it can lead to
-backward-compatibility issues, but that is how lsm_list_modules(2)
-works. I suspect most syscalls will go with designs (1) or (3).
+v1
+Link: https://lore.kernel.org/all/9f4dd14d-fbe3-4c61-b04c-f0e6b8096d7b@redhat.com/
+---
+ tools/testing/selftests/net/.gitignore        |  1 +
+ tools/testing/selftests/net/Makefile          |  2 +-
+ .../{tcp_so_peek_off.c => sk_so_peek_off.c}   | 91 +++++++++++--------
+ 3 files changed, 57 insertions(+), 37 deletions(-)
+ rename tools/testing/selftests/net/{tcp_so_peek_off.c => sk_so_peek_off.c} (58%)
 
-> - if the structure has always been longer than the provided buffer,
->   -EMSGSIZE should likely have been returned all along. If older
->   kernels just provided a short buffer, changing it now is an ABI
->   change that would only affect intentionally broken callers, and
->   I think keeping the behavior unchanged is more consistent.
->=20
-> - if an extra flag was added along with the larger buffer size,
->   the old kernel would likely have rejected the new flag with -EINVAL,
->   so I think returning the same thing for userspace built against
->   the old kernel headers is more consistent.
->=20
->=20
-> > +static __always_inline __must_check int
-> > +copy_struct_to_user(void __user *dst, size_t usize, const void *src,
-> > +		    size_t ksize, bool *ignored_trailing)
->=20
-> This feels like the kind of function that doesn't need to be inline
-> at all and could be moved to lib/usercopy.c instead. It should clearly
-> stay in the same place as copy_struct_from_user(), but we could move
-> that as well.
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index 666ab7d9390b..923bf098e2eb 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -34,6 +34,7 @@ scm_pidfd
+ scm_rights
+ sk_bind_sendto_listen
+ sk_connect_zero_addr
++sk_so_peek_off
+ socket
+ so_incoming_cpu
+ so_netns_cookie
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 1179e3261bef..d5029f978aa9 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -80,7 +80,7 @@ TEST_PROGS += io_uring_zerocopy_tx.sh
+ TEST_GEN_FILES += bind_bhash
+ TEST_GEN_PROGS += sk_bind_sendto_listen
+ TEST_GEN_PROGS += sk_connect_zero_addr
+-TEST_GEN_PROGS += tcp_so_peek_off
++TEST_GEN_PROGS += sk_so_peek_off
+ TEST_PROGS += test_ingress_egress_chaining.sh
+ TEST_GEN_PROGS += so_incoming_cpu
+ TEST_PROGS += sctp_vrf.sh
+diff --git a/tools/testing/selftests/net/tcp_so_peek_off.c b/tools/testing/selftests/net/sk_so_peek_off.c
+similarity index 58%
+rename from tools/testing/selftests/net/tcp_so_peek_off.c
+rename to tools/testing/selftests/net/sk_so_peek_off.c
+index df8a39d9d3c3..d87dd8d8d491 100644
+--- a/tools/testing/selftests/net/tcp_so_peek_off.c
++++ b/tools/testing/selftests/net/sk_so_peek_off.c
+@@ -10,37 +10,41 @@
+ #include <arpa/inet.h>
+ #include "../kselftest.h"
+ 
+-static char *afstr(int af)
++static char *afstr(int af, int proto)
+ {
+-	return af == AF_INET ? "TCP/IPv4" : "TCP/IPv6";
++	if (proto == IPPROTO_TCP)
++		return af == AF_INET ? "TCP/IPv4" : "TCP/IPv6";
++	else
++		return af == AF_INET ? "UDP/IPv4" : "UDP/IPv6";
+ }
+ 
+-int tcp_peek_offset_probe(sa_family_t af)
++int sk_peek_offset_probe(sa_family_t af, int proto)
+ {
++	int type = (proto == IPPROTO_TCP ? SOCK_STREAM : SOCK_DGRAM);
+ 	int optv = 0;
+ 	int ret = 0;
+ 	int s;
+ 
+-	s = socket(af, SOCK_STREAM | SOCK_CLOEXEC, IPPROTO_TCP);
++	s = socket(af, type, proto);
+ 	if (s < 0) {
+ 		ksft_perror("Temporary TCP socket creation failed");
+ 	} else {
+ 		if (!setsockopt(s, SOL_SOCKET, SO_PEEK_OFF, &optv, sizeof(int)))
+ 			ret = 1;
+ 		else
+-			printf("%s does not support SO_PEEK_OFF\n", afstr(af));
++			printf("%s does not support SO_PEEK_OFF\n", afstr(af, proto));
+ 		close(s);
+ 	}
+ 	return ret;
+ }
+ 
+-static void tcp_peek_offset_set(int s, int offset)
++static void sk_peek_offset_set(int s, int offset)
+ {
+ 	if (setsockopt(s, SOL_SOCKET, SO_PEEK_OFF, &offset, sizeof(offset)))
+ 		ksft_perror("Failed to set SO_PEEK_OFF value\n");
+ }
+ 
+-static int tcp_peek_offset_get(int s)
++static int sk_peek_offset_get(int s)
+ {
+ 	int offset;
+ 	socklen_t len = sizeof(offset);
+@@ -50,8 +54,9 @@ static int tcp_peek_offset_get(int s)
+ 	return offset;
+ }
+ 
+-static int tcp_peek_offset_test(sa_family_t af)
++static int sk_peek_offset_test(sa_family_t af, int proto)
+ {
++	int type = (proto == IPPROTO_TCP ? SOCK_STREAM : SOCK_DGRAM);
+ 	union {
+ 		struct sockaddr sa;
+ 		struct sockaddr_in a4;
+@@ -62,13 +67,13 @@ static int tcp_peek_offset_test(sa_family_t af)
+ 	int recv_sock = 0;
+ 	int offset = 0;
+ 	ssize_t len;
+-	char buf;
++	char buf[2];
+ 
+ 	memset(&a, 0, sizeof(a));
+ 	a.sa.sa_family = af;
+ 
+-	s[0] = socket(af, SOCK_STREAM, IPPROTO_TCP);
+-	s[1] = socket(af, SOCK_STREAM | SOCK_NONBLOCK, IPPROTO_TCP);
++	s[0] = recv_sock = socket(af, type, proto);
++	s[1] = socket(af, type, proto);
+ 
+ 	if (s[0] < 0 || s[1] < 0) {
+ 		ksft_perror("Temporary socket creation failed\n");
+@@ -82,76 +87,78 @@ static int tcp_peek_offset_test(sa_family_t af)
+ 		ksft_perror("Temporary socket getsockname() failed\n");
+ 		goto out;
+ 	}
+-	if (listen(s[0], 0) < 0) {
++	if (proto == IPPROTO_TCP && listen(s[0], 0) < 0) {
+ 		ksft_perror("Temporary socket listen() failed\n");
+ 		goto out;
+ 	}
+-	if (connect(s[1], &a.sa, sizeof(a)) >= 0 || errno != EINPROGRESS) {
++	if (connect(s[1], &a.sa, sizeof(a)) < 0) {
+ 		ksft_perror("Temporary socket connect() failed\n");
+ 		goto out;
+ 	}
+-	recv_sock = accept(s[0], NULL, NULL);
+-	if (recv_sock <= 0) {
+-		ksft_perror("Temporary socket accept() failed\n");
+-		goto out;
++	if (proto == IPPROTO_TCP) {
++		recv_sock = accept(s[0], NULL, NULL);
++		if (recv_sock <= 0) {
++			ksft_perror("Temporary socket accept() failed\n");
++			goto out;
++		}
+ 	}
+ 
+ 	/* Some basic tests of getting/setting offset */
+-	offset = tcp_peek_offset_get(recv_sock);
++	offset = sk_peek_offset_get(recv_sock);
+ 	if (offset != -1) {
+ 		ksft_perror("Initial value of socket offset not -1\n");
+ 		goto out;
+ 	}
+-	tcp_peek_offset_set(recv_sock, 0);
+-	offset = tcp_peek_offset_get(recv_sock);
++	sk_peek_offset_set(recv_sock, 0);
++	offset = sk_peek_offset_get(recv_sock);
+ 	if (offset != 0) {
+ 		ksft_perror("Failed to set socket offset to 0\n");
+ 		goto out;
+ 	}
+ 
+ 	/* Transfer a message */
+-	if (send(s[1], (char *)("ab"), 2, 0) <= 0 || errno != EINPROGRESS) {
++	if (send(s[1], (char *)("ab"), 2, 0) != 2) {
+ 		ksft_perror("Temporary probe socket send() failed\n");
+ 		goto out;
+ 	}
+ 	/* Read first byte */
+-	len = recv(recv_sock, &buf, 1, MSG_PEEK);
+-	if (len != 1 || buf != 'a') {
++	len = recv(recv_sock, buf, 1, MSG_PEEK);
++	if (len != 1 || buf[0] != 'a') {
+ 		ksft_perror("Failed to read first byte of message\n");
+ 		goto out;
+ 	}
+-	offset = tcp_peek_offset_get(recv_sock);
++	offset = sk_peek_offset_get(recv_sock);
+ 	if (offset != 1) {
+ 		ksft_perror("Offset not forwarded correctly at first byte\n");
+ 		goto out;
+ 	}
+ 	/* Try to read beyond last byte */
+-	len = recv(recv_sock, &buf, 2, MSG_PEEK);
+-	if (len != 1 || buf != 'b') {
++	len = recv(recv_sock, buf, 2, MSG_PEEK);
++	if (len != 1 || buf[0] != 'b') {
+ 		ksft_perror("Failed to read last byte of message\n");
+ 		goto out;
+ 	}
+-	offset = tcp_peek_offset_get(recv_sock);
++	offset = sk_peek_offset_get(recv_sock);
+ 	if (offset != 2) {
+ 		ksft_perror("Offset not forwarded correctly at last byte\n");
+ 		goto out;
+ 	}
+ 	/* Flush message */
+-	len = recv(recv_sock, NULL, 2, MSG_TRUNC);
++	len = recv(recv_sock, buf, 2, MSG_TRUNC);
+ 	if (len != 2) {
+ 		ksft_perror("Failed to flush message\n");
+ 		goto out;
+ 	}
+-	offset = tcp_peek_offset_get(recv_sock);
++	offset = sk_peek_offset_get(recv_sock);
+ 	if (offset != 0) {
+ 		ksft_perror("Offset not reverted correctly after flush\n");
+ 		goto out;
+ 	}
+ 
+-	printf("%s with MSG_PEEK_OFF works correctly\n", afstr(af));
++	printf("%s with MSG_PEEK_OFF works correctly\n", afstr(af, proto));
+ 	res = 1;
+ out:
+-	if (recv_sock >= 0)
++	if (proto == IPPROTO_TCP && recv_sock >= 0)
+ 		close(recv_sock);
+ 	if (s[1] >= 0)
+ 		close(s[1]);
+@@ -160,24 +167,36 @@ static int tcp_peek_offset_test(sa_family_t af)
+ 	return res;
+ }
+ 
+-int main(void)
++static int do_test(int proto)
+ {
+ 	int res4, res6;
+ 
+-	res4 = tcp_peek_offset_probe(AF_INET);
+-	res6 = tcp_peek_offset_probe(AF_INET6);
++	res4 = sk_peek_offset_probe(AF_INET, proto);
++	res6 = sk_peek_offset_probe(AF_INET6, proto);
+ 
+ 	if (!res4 && !res6)
+ 		return KSFT_SKIP;
+ 
+ 	if (res4)
+-		res4 = tcp_peek_offset_test(AF_INET);
++		res4 = sk_peek_offset_test(AF_INET, proto);
+ 
+ 	if (res6)
+-		res6 = tcp_peek_offset_test(AF_INET6);
++		res6 = sk_peek_offset_test(AF_INET6, proto);
+ 
+ 	if (!res4 || !res6)
+ 		return KSFT_FAIL;
+ 
+ 	return KSFT_PASS;
+ }
++
++int main(void)
++{
++	int restcp, resudp;
++
++	restcp = do_test(IPPROTO_TCP);
++	resudp = do_test(IPPROTO_UDP);
++	if (restcp == KSFT_FAIL || resudp == KSFT_FAIL)
++		return KSFT_FAIL;
++
++	return KSFT_PASS;
++}
+-- 
+2.37.3
 
-IIRC Kees suggested copy_struct_from_user() be inline when I first
-included it, though I would have to dig through the old threads to find
-the reasoning. __builtin_object_size() was added some time after it was
-merged so that wasn't the original reason.
-
-> > +{
-> > +	size_t size =3D min(ksize, usize);
-> > +	size_t rest =3D max(ksize, usize) - size;
-> > +
-> > +	/* Double check if ksize is larger than a known object size. */
-> > +	if (WARN_ON_ONCE(ksize > __builtin_object_size(src, 1)))
-> > +		return -E2BIG;
->=20
-> I guess the __builtin_object_size() check is the reason for making
-> it __always_inline, but that could be done in a trivial inline
-> wrapper around the extern function.  If ksize is always expected
-> to be a constant for all callers, the check could even become a
-> compile-time check instead of a WARN_ON_ONCE() that feels wrong
-> here: if there is a code path where this can get triggered, there
-> is clearly a kernel bug, but the only way to find out is to have
-> a userspace caller that triggers the code path.
->=20
-> Again, the same code is already in copy_struct_from_user(), so
-> this is not something you are adding but rather something we
-> may want to change for both.
->=20
->       Arnd
-
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
-
---ftgkfoq5ev7h23w4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCZtXhnwAKCRAol/rSt+lE
-b0i1AP4n3zvF3EnvaHU3j7y6pOFoMZsPTUgIjM9al7nMqGnp9gD/YOPgm1jLZUNd
-4zg7QxzxYtCbzS8HNsO28bO+uW/C1A4=
-=93Iu
------END PGP SIGNATURE-----
-
---ftgkfoq5ev7h23w4--
 
