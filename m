@@ -1,155 +1,167 @@
-Return-Path: <linux-kselftest+bounces-16998-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16999-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94FD4968C56
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 18:45:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6435F968C58
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 18:46:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A5311F24E85
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 16:45:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CCD1283C03
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 16:46:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 806F61A304E;
-	Mon,  2 Sep 2024 16:45:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A2D01AB6CB;
+	Mon,  2 Sep 2024 16:46:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="khlsPMpN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z2CFJsCO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022B613C67A;
-	Mon,  2 Sep 2024 16:45:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310A719F13A;
+	Mon,  2 Sep 2024 16:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725295550; cv=none; b=lfklnBM0EWykRvj36GEdFU61Ljyx2t2FXmo9GmCXhlA5xfibvL5sTiVYBKPb/nYons0ylYudGzBu0WXFsEYLVxVqjIpwrNVTRooeNk453479KBOYhSFcU4ww+5j9GN8YHYrXJ1Pd5jFWQ0uqtLcNH8rXo4uxV7YEODCeMqelnCw=
+	t=1725295574; cv=none; b=ndspDVQ21+SYVGHOJa4K0nSD5Mu1SoJ1jp1pwuhcqN09hOQbdAqin9GMO3Ty/3/xF2ZDtIIObAjDzT2DBUnBzYLLCmtTrr+aU4LrL/cba4t4x/+i1D/B/Zt3Ji/Ci3sDokA3LtHGe4LVWYYTiCX3qH0A2yrYAmOaKSAR3IrYdbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725295550; c=relaxed/simple;
-	bh=lxgIHKkLerAKSvoZrvocGCfnbP9s3pOmvvsnq7TdUTI=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=BjgmUqrwLdrWffngVHnzVB68ySKTP2vY10lBgdVV+Ng4X6yBDWoeC50pvNdGzy5u7Ui/XqXJULONCuxIKOvJyVpeDtequM9THDBbhOf3L8Z8E29L00GlJeVo1YUNXzWBEvGnVACJSxtWzKZ8ZsZdhP85sZqtGa7DbgiXB+MWkIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=khlsPMpN; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7a9782651bdso18281185a.1;
-        Mon, 02 Sep 2024 09:45:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725295548; x=1725900348; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=73K8+J42EH8WL1fVikCQ0QCInxeRcbM+5/Vk46MiNwo=;
-        b=khlsPMpNecqJZHGv++Wg/aRA4N7c+VQ/6jj918gqKuKK7e39mAkZoRk2DYMIae44Et
-         SztPuFMitzs5OqonpfyPCZGxZ2Mq6MEX/PnmKeJ1v5X73fzIhCHvb5PIEOxy/vu9xHjT
-         cAlT1bYUc42uX7vGpO32vb3zVTVqIk3+4Y15LewzfqLfjovhnKvXxX/2Mf7eoQIKapu7
-         pY6/G+pH/uGh1OuV5WO3XBfE7kDeDh93bSnbGhpZFWuXVLcxIrP74mK9LN26cpftaVMT
-         TCkqq67OL3hKe0cDutorvpKfigzZgKW45Nm5weqnuIqUGPygp54ep5+ZuPsT5zJAV0Uo
-         xLpg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725295548; x=1725900348;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=73K8+J42EH8WL1fVikCQ0QCInxeRcbM+5/Vk46MiNwo=;
-        b=HMZ8YM277Q/wShThJX21vHZQDH5qMLJV3xFEbtGESHX7qGVCxGrrGPgsLHjZFnoqxI
-         /yQ2KUS63G4adDpCFbXMbwxdeXML/25ewLNCqPWNcgF3aRFnFOC8EOmY1uX6ANt3wgbY
-         vB3Bm3W+OCQIkP+Uh5ytCcSi3Ddq2yTsuRmz+t8TMeIaKuyRdFWI4UpZOyfmCiliIfUG
-         5YjqzkxODOm+ah38WbV+Rwc3kIBKzwKYkf+yLEqR2jklGxaxm71OtkNrNTxlVtn8vvAJ
-         EassOhGpZRFXm/ruyPRm2BqQqIWQbyPQu7MHTuSTJFzZFHP9Z+NGj+V7/+1hyMgkkqix
-         idbw==
-X-Forwarded-Encrypted: i=1; AJvYcCUt/UE3IUXQxhoRzvUJum1Gcy+rXi5AM6wV2YgN/tu8D4QUFFJePob7XQPMWuRkvp+7v/gbsG/8JOM7UQbkm7Q=@vger.kernel.org, AJvYcCWM5zfPmy0l6hrspVHPXqXTehzHh89pzlxD91V/XC84RwN4UsNwrR3PhKurLXGkEFJxqKoF1217@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywbzza4uqPKVZLlazNY7HcTY0saGhJQ+ZrykrbvefJVbJATisiR
-	Q7JJPmwCMNha4S3q1/HuvWgw/3fUQeJD4GQhNIXAA/PtJmCKmyL6
-X-Google-Smtp-Source: AGHT+IE7uraoJdKhSg/1tqCBJVmPBuguCKCI8d0tYQmX8Gaj2MPz9U8nZPuF9yXoCpDCKeBID8p8gg==
-X-Received: by 2002:a05:620a:bc6:b0:795:e9cd:f5b8 with SMTP id af79cd13be357-7a804c7f1cdmr2580436385a.23.1725295547649;
-        Mon, 02 Sep 2024 09:45:47 -0700 (PDT)
-Received: from localhost (193.132.150.34.bc.googleusercontent.com. [34.150.132.193])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a806bf75e4sm433698685a.11.2024.09.02.09.45.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Sep 2024 09:45:47 -0700 (PDT)
-Date: Mon, 02 Sep 2024 12:45:46 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, 
- edumazet@google.com, 
- kuba@kernel.org, 
- pabeni@redhat.com, 
- shuah@kernel.org, 
- jmaloy@redhat.com, 
- linux-kselftest@vger.kernel.org, 
- netdev@vger.kernel.org, 
- Jason Xing <kernelxing@tencent.com>
-Message-ID: <66d5ebbacf29c_67e67294e8@willemb.c.googlers.com.notmuch>
-In-Reply-To: <CAL+tcoDy4XNBTZK3_MwzS1Js0NPg1e46xTtHmpJNckLywJ6NQQ@mail.gmail.com>
-References: <20240901051821.94956-1-kerneljasonxing@gmail.com>
- <66d5d38c1d4b_61388294f0@willemb.c.googlers.com.notmuch>
- <CAL+tcoDy4XNBTZK3_MwzS1Js0NPg1e46xTtHmpJNckLywJ6NQQ@mail.gmail.com>
-Subject: Re: [PATCH net-next] selftests: add selftest for UDP SO_PEEK_OFF
- support
+	s=arc-20240116; t=1725295574; c=relaxed/simple;
+	bh=ZOrR0OdXFU035Sm7viikKM70jBcWIZYBHLfYOgH5DvM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bZO7393mxOV9nmhXEOsmSnHatclPgjIHDqPQQBMLqwfC3a+Ps4/KuVGjrxiFV920gMDJzDbHLCYPkFPaMLn26sCLOvEo9BQo0Euzy8g7AU5wprvFHavH+d0/ySxptcbmml8Gn3ZG6WwrZ8yd7hpSA2jMfF4bGYCwRXb5cYqDVzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z2CFJsCO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 269E3C4CECB;
+	Mon,  2 Sep 2024 16:46:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725295573;
+	bh=ZOrR0OdXFU035Sm7viikKM70jBcWIZYBHLfYOgH5DvM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Z2CFJsCOvWXzFn7cVEUOwB1jXDH+w5wDQabGS6VrcECPtQmJFt473PLjA5Q5zS9uL
+	 LMsGT5pQTVNzeUI3zil0FGOw11r5IR/0Jvk50tnRILiNsIDOYPe9nku9VIe7fc/j7O
+	 5v45olV7UbDdGrkH2c7UEE0ToHjPQRn0D66mWEbzHHnLhEH6TT4tqvQmodBctdVUlQ
+	 uqd4UzoIyA0lFp0DgExhpx5FhcKjjSOhmPoiAu+vem+Fc4CGMVgbBOc9IanlCm+eFe
+	 oGlxL/r3FP6/J1PZua5k916IJ2SfrLk3fHxOx+XOunMw8wrrag4ZP/3ETskv1dlIjd
+	 AYlaE2Ch7n2ww==
+Date: Mon, 2 Sep 2024 09:46:12 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+ davem@davemloft.net, edumazet@google.com, ncardwell@google.com,
+ shuah@kernel.org, linux-kselftest@vger.kernel.org, fw@strlen.de, Willem de
+ Bruijn <willemb@google.com>, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>,
+ martineau@kernel.org
+Subject: Re: [PATCH net-next RFC] selftests/net: integrate packetdrill with
+ ksft
+Message-ID: <20240902094612.6d40a914@kernel.org>
+In-Reply-To: <66d4d97a4cac_3df182941a@willemb.c.googlers.com.notmuch>
+References: <20240827193417.2792223-1-willemdebruijn.kernel@gmail.com>
+	<401f173b-3465-428d-9b90-b87a76a39cc8@redhat.com>
+	<66cf2e4bd8e89_33815c294b2@willemb.c.googlers.com.notmuch>
+	<20240828090120.71be0b20@kernel.org>
+	<66cf7b8d1c480_36509229439@willemb.c.googlers.com.notmuch>
+	<20240828140035.4554142f@kernel.org>
+	<66d1e32558532_3c08a22949e@willemb.c.googlers.com.notmuch>
+	<20240830103343.0dd20018@kernel.org>
+	<66d213cf6652e_3c8f2d294b8@willemb.c.googlers.com.notmuch>
+	<20240830144420.5974dc5b@kernel.org>
+	<66d23f2349f7_3d8dba29489@willemb.c.googlers.com.notmuch>
+	<66d4d97a4cac_3df182941a@willemb.c.googlers.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Jason Xing wrote:
-> On Mon, Sep 2, 2024 at 11:02=E2=80=AFPM Willem de Bruijn
-> <willemdebruijn.kernel@gmail.com> wrote:
-> >
-> > Jason Xing wrote:
-> > > From: Jason Xing <kernelxing@tencent.com>
-> > >
-> > > Add the SO_PEEK_OFF selftest for UDP. In this patch, I mainly do
-> > > three things:
-> > > 1. rename tcp_so_peek_off.c
-> > > 2. adjust for UDP protocol
-> > > 3. add selftests into it
-> > >
-> > > Suggested-by: Jon Maloy <jmaloy@redhat.com>
-> > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> >
-> > A few minor comments. Nothing important.
-> >
-> > Subject to Stan's point about .gitignore:
-> >
-> > Reviewed-by: Willem de Bruijn <willemb@google.com>
-> =
+On Sun, 01 Sep 2024 17:15:38 -0400 Willem de Bruijn wrote:
+> Changing kselftests to preserve directories turns out to be trivial.
+> Patch inline below.
+> 
+> But, existing TARGETS of course then start failing. Because they
+> depend on existing rsync without -R. In (at least) two ways:
+> 
+> amd-pstate fails because its TEST_FILES has includes from other
+> directories and it expects those files to land in the directory
+> with tests.
+> 
+> x86 prefixes all its output with $(OUTPUT) to form absolute paths,
+> which also creates absolute paths in kselftest-list.txt.
+> 
+> These two are examples, not necessarily the one instances of those
+> patterns. So switching to preserving directories for existing targets
+> like TEST_FILES seems intractable.
 
-> Thanks for your review!
-> =
+I wonder how many of the targets actually need this behavior (it's
+intentionally useful to them) vs they grew to depend on it accidentally.
 
-> >
-> > > -int tcp_peek_offset_probe(sa_family_t af)
-> > > +int sk_peek_offset_probe(sa_family_t af, int proto)
-> > >  {
-> > > +     int type =3D (proto =3D=3D IPPROTO_TCP ? SOCK_STREAM : SOCK_D=
-GRAM);
-> > >       int optv =3D 0;
-> > >       int ret =3D 0;
-> > >       int s;
-> > >
-> > > -     s =3D socket(af, SOCK_STREAM | SOCK_CLOEXEC, IPPROTO_TCP);
-> > > +     s =3D socket(af, type, proto);
-> >
-> > Removing the SOCK_CLOEXEC because not relevant to this single thread
-> > process, I suppose?
-> =
+> Plan B is to add a new TEST_PROGS_RECURSE, analogous to how
+> TEST_INCLUDES extended TEST_FILES with optional path preservation.
+> That is not much more complex.
 
-> Yep. We don't need this one.
-> =
+Alternative would be to allow opt-in (diff at the end), I'm personally
+biased against yet another TEST_* group because it's hard enough already
+to make sense of the existing ones. Maybe it's better for the test to
+"declare":
 
-> >
-> > Not important, but no need for proto, can just be 0.
-> =
+PRESERVE_TEST_DIRS
 
-> You're right. I wonder if it is better if we explicitly pass the proto
-> here? I would like not to touch it here.
 
-It's not better or worse. Just not needed. So either way.
- =
+---
+ tools/testing/selftests/lib.mk | 17 +++++++++++++++--
+ 1 file changed, 15 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index d6edcfcb5be8..7be9bd583642 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -51,6 +51,12 @@ else
+ CC := $(CROSS_COMPILE)gcc
+ endif # LLVM
+ 
++ifeq ($(PRESERVE_TEST_DIRS),)
++RSYNC_INSTALL_FLAGS=-a --copy-unsafe-links
++else
++RSYNC_INSTALL_FLAGS=-aR --copy-unsafe-links
++endif
++
+ ifeq (0,$(MAKELEVEL))
+     ifeq ($(OUTPUT),)
+ 	OUTPUT := $(shell pwd)
+@@ -150,12 +156,12 @@ endif
+ 
+ define INSTALL_SINGLE_RULE
+ 	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
+-	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST) $(INSTALL_PATH)/)
++	$(if $(INSTALL_LIST),rsync $(RSYNC_INSTALL_FLAGS) $(INSTALL_LIST) $(INSTALL_PATH)/)
+ endef
+ 
+ define INSTALL_MODS_RULE
+ 	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH)/$(INSTALL_LIST))
+-	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST)/*.ko $(INSTALL_PATH)/$(INSTALL_LIST))
++	$(if $(INSTALL_LIST),rsync $(RSYNC_INSTALL_FLAGS) $(INSTALL_LIST)/*.ko $(INSTALL_PATH)/$(INSTALL_LIST))
+ endef
+ 
+ define INSTALL_RULE
+@@ -179,10 +185,17 @@ else
+ endif
+ 
+ emit_tests:
++ifeq ($(PRESERVE_TEST_DIRS),)
+ 	for TEST in $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS); do \
+ 		BASENAME_TEST=`basename $$TEST`;	\
+ 		echo "$(COLLECTION):$$BASENAME_TEST";	\
+ 	done
++else
++	for TEST in $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS); do \
++		BASENAME_TEST=$$TEST;	\
++		echo "$(COLLECTION):$$TEST";	\
++	done
++endif
+ 
+ # define if isn't already. It is undefined in make O= case.
+ ifeq ($(RM),)
+-- 
+2.46.0
+
 
