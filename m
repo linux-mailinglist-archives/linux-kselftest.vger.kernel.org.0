@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-16999-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17000-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6435F968C58
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 18:46:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F22E968C80
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 18:56:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CCD1283C03
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 16:46:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2056B1F230B5
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 16:56:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A2D01AB6CB;
-	Mon,  2 Sep 2024 16:46:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E999D20FABE;
+	Mon,  2 Sep 2024 16:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z2CFJsCO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h20cIcwH"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 310A719F13A;
-	Mon,  2 Sep 2024 16:46:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01D720FA85;
+	Mon,  2 Sep 2024 16:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725295574; cv=none; b=ndspDVQ21+SYVGHOJa4K0nSD5Mu1SoJ1jp1pwuhcqN09hOQbdAqin9GMO3Ty/3/xF2ZDtIIObAjDzT2DBUnBzYLLCmtTrr+aU4LrL/cba4t4x/+i1D/B/Zt3Ji/Ci3sDokA3LtHGe4LVWYYTiCX3qH0A2yrYAmOaKSAR3IrYdbc=
+	t=1725296173; cv=none; b=uuWsJQTPKtN/vUQg/AY862U0/SE1sPMG/jij43HSSoR89/HjU0YQdE6yqgAq1VWPd45+QXyazGLL8dQx5J8plYyeog1p87qxmquptfi5EwME94/ubgs8uLZmcnUlHwd//+71ZClzVLoUa26ISTmvId0BKjpqzkgUmxS/9b3/qK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725295574; c=relaxed/simple;
-	bh=ZOrR0OdXFU035Sm7viikKM70jBcWIZYBHLfYOgH5DvM=;
+	s=arc-20240116; t=1725296173; c=relaxed/simple;
+	bh=pnKwBKwqgv3BGbuTy3GkYKsZu6a7s/iNDAIAEPiUP/M=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bZO7393mxOV9nmhXEOsmSnHatclPgjIHDqPQQBMLqwfC3a+Ps4/KuVGjrxiFV920gMDJzDbHLCYPkFPaMLn26sCLOvEo9BQo0Euzy8g7AU5wprvFHavH+d0/ySxptcbmml8Gn3ZG6WwrZ8yd7hpSA2jMfF4bGYCwRXb5cYqDVzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z2CFJsCO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 269E3C4CECB;
-	Mon,  2 Sep 2024 16:46:13 +0000 (UTC)
+	 MIME-Version:Content-Type; b=LMNyPAgOdhgAQZiM/4ZeJitYVffz0ZEQIGdrj7m8fdqyRjKKlYmpM1sSqfINiKyBeFXf4zPhVs6I3owoUO2JKnijefdveBJSwm7OIoEE9awRzKVrmj+3tSApDSUG0rzJEe6KWsFQwLIjVYQLokjwyXW0JRGDO9Ry6doafNu+FWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h20cIcwH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC6B8C4CEC7;
+	Mon,  2 Sep 2024 16:56:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725295573;
-	bh=ZOrR0OdXFU035Sm7viikKM70jBcWIZYBHLfYOgH5DvM=;
+	s=k20201202; t=1725296173;
+	bh=pnKwBKwqgv3BGbuTy3GkYKsZu6a7s/iNDAIAEPiUP/M=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Z2CFJsCOvWXzFn7cVEUOwB1jXDH+w5wDQabGS6VrcECPtQmJFt473PLjA5Q5zS9uL
-	 LMsGT5pQTVNzeUI3zil0FGOw11r5IR/0Jvk50tnRILiNsIDOYPe9nku9VIe7fc/j7O
-	 5v45olV7UbDdGrkH2c7UEE0ToHjPQRn0D66mWEbzHHnLhEH6TT4tqvQmodBctdVUlQ
-	 uqd4UzoIyA0lFp0DgExhpx5FhcKjjSOhmPoiAu+vem+Fc4CGMVgbBOc9IanlCm+eFe
-	 oGlxL/r3FP6/J1PZua5k916IJ2SfrLk3fHxOx+XOunMw8wrrag4ZP/3ETskv1dlIjd
-	 AYlaE2Ch7n2ww==
-Date: Mon, 2 Sep 2024 09:46:12 -0700
+	b=h20cIcwH8uDk9uMUmjdDDQjvZ75xGshRR2A1QmCOjLwVV5ssG+PB8IIYKISindjuu
+	 79yHbq6ZPtqqna76Weod6x3iby7q/TNs5y1ZU0JATlcq4vYC3OTz8pgk+UBueG4dcR
+	 hmnk/OzGYYeSKndfj84eNsvVuu5ohPA5nP4IpLR9rjp+1WgtMBddnTxGsmoHvs9RUp
+	 sY/DOxUIHmOoBYcLrINpPG3SVz0NN7FETvUpW37JRbYz8k07f1twMZfveJaQO5Y9Aa
+	 ZnQaRUNbXNn22hzHs2cKHOkOTwQehmgPfFSgb+AxWticeA1OS8YrMVR9cPVvE64XsA
+	 gehjuUvJyUV9A==
+Date: Mon, 2 Sep 2024 09:56:11 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 Cc: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
@@ -51,8 +51,8 @@ Cc: Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
  martineau@kernel.org
 Subject: Re: [PATCH net-next RFC] selftests/net: integrate packetdrill with
  ksft
-Message-ID: <20240902094612.6d40a914@kernel.org>
-In-Reply-To: <66d4d97a4cac_3df182941a@willemb.c.googlers.com.notmuch>
+Message-ID: <20240902095611.3567ba1e@kernel.org>
+In-Reply-To: <20240902094612.6d40a914@kernel.org>
 References: <20240827193417.2792223-1-willemdebruijn.kernel@gmail.com>
 	<401f173b-3465-428d-9b90-b87a76a39cc8@redhat.com>
 	<66cf2e4bd8e89_33815c294b2@willemb.c.googlers.com.notmuch>
@@ -65,6 +65,7 @@ References: <20240827193417.2792223-1-willemdebruijn.kernel@gmail.com>
 	<20240830144420.5974dc5b@kernel.org>
 	<66d23f2349f7_3d8dba29489@willemb.c.googlers.com.notmuch>
 	<66d4d97a4cac_3df182941a@willemb.c.googlers.com.notmuch>
+	<20240902094612.6d40a914@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,94 +75,22 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Sun, 01 Sep 2024 17:15:38 -0400 Willem de Bruijn wrote:
-> Changing kselftests to preserve directories turns out to be trivial.
-> Patch inline below.
-> 
-> But, existing TARGETS of course then start failing. Because they
-> depend on existing rsync without -R. In (at least) two ways:
-> 
-> amd-pstate fails because its TEST_FILES has includes from other
-> directories and it expects those files to land in the directory
-> with tests.
-> 
-> x86 prefixes all its output with $(OUTPUT) to form absolute paths,
-> which also creates absolute paths in kselftest-list.txt.
-> 
-> These two are examples, not necessarily the one instances of those
-> patterns. So switching to preserving directories for existing targets
-> like TEST_FILES seems intractable.
+On Mon, 2 Sep 2024 09:46:12 -0700 Jakub Kicinski wrote:
+> PRESERVE_TEST_DIRS
 
-I wonder how many of the targets actually need this behavior (it's
-intentionally useful to them) vs they grew to depend on it accidentally.
+This was meant to be:
 
-> Plan B is to add a new TEST_PROGS_RECURSE, analogous to how
-> TEST_INCLUDES extended TEST_FILES with optional path preservation.
-> That is not much more complex.
+PRESERVE_TEST_DIRS := 1
 
-Alternative would be to allow opt-in (diff at the end), I'm personally
-biased against yet another TEST_* group because it's hard enough already
-to make sense of the existing ones. Maybe it's better for the test to
-"declare":
+Testing this more, looks like rsync -aR breaks networking tests, too.
+The net/lib target, specifically, is no longer able to copy out 
+the files outside of tools/testing/selftests (the YAML specs which
+live in Documentation/).
 
-PRESERVE_TEST_DIRS
-
-
----
- tools/testing/selftests/lib.mk | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index d6edcfcb5be8..7be9bd583642 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -51,6 +51,12 @@ else
- CC := $(CROSS_COMPILE)gcc
- endif # LLVM
- 
-+ifeq ($(PRESERVE_TEST_DIRS),)
-+RSYNC_INSTALL_FLAGS=-a --copy-unsafe-links
-+else
-+RSYNC_INSTALL_FLAGS=-aR --copy-unsafe-links
-+endif
-+
- ifeq (0,$(MAKELEVEL))
-     ifeq ($(OUTPUT),)
- 	OUTPUT := $(shell pwd)
-@@ -150,12 +156,12 @@ endif
- 
- define INSTALL_SINGLE_RULE
- 	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
--	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST) $(INSTALL_PATH)/)
-+	$(if $(INSTALL_LIST),rsync $(RSYNC_INSTALL_FLAGS) $(INSTALL_LIST) $(INSTALL_PATH)/)
- endef
- 
- define INSTALL_MODS_RULE
- 	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH)/$(INSTALL_LIST))
--	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST)/*.ko $(INSTALL_PATH)/$(INSTALL_LIST))
-+	$(if $(INSTALL_LIST),rsync $(RSYNC_INSTALL_FLAGS) $(INSTALL_LIST)/*.ko $(INSTALL_PATH)/$(INSTALL_LIST))
- endef
- 
- define INSTALL_RULE
-@@ -179,10 +185,17 @@ else
- endif
- 
- emit_tests:
-+ifeq ($(PRESERVE_TEST_DIRS),)
- 	for TEST in $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS); do \
- 		BASENAME_TEST=`basename $$TEST`;	\
- 		echo "$(COLLECTION):$$BASENAME_TEST";	\
- 	done
-+else
-+	for TEST in $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS); do \
-+		BASENAME_TEST=$$TEST;	\
-+		echo "$(COLLECTION):$$TEST";	\
-+	done
-+endif
- 
- # define if isn't already. It is undefined in make O= case.
- ifeq ($(RM),)
--- 
-2.46.0
-
+So unless we can pass some magic flag to rsync to skip leading ../
+we'll be stuck in supporting both behaviors forever. In which case
+maybe TEST_PROGS_RECURSE is indeed better. I was hoping the
+PRESERVE_TEST_DIRS flag can spread and once it reaches all targets
+we can make delete the old behavior. If it can't happen its no better
+than TEST_PROGS_RECURSE... sorry for the noise.
 
