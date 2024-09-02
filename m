@@ -1,199 +1,108 @@
-Return-Path: <linux-kselftest+bounces-16915-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16916-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68461967C49
-	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 23:15:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CD13E967D33
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 03:07:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F58D281AB5
-	for <lists+linux-kselftest@lfdr.de>; Sun,  1 Sep 2024 21:15:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 886F1281892
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 01:07:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 187B4136982;
-	Sun,  1 Sep 2024 21:15:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B775IGcl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57F9DDF71;
+	Mon,  2 Sep 2024 01:07:12 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF9342040;
-	Sun,  1 Sep 2024 21:15:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F4B1388;
+	Mon,  2 Sep 2024 01:07:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725225342; cv=none; b=tQ/ubRLuGd+dpNLSHD+DLdjbLGjldxBN0bJOX2qmsW0IoAsjJe1UxeNdZk5XtugvPLixe0nld1GLMc6a1pjjUhYrG87+gyaEZimeMQYjZ5UJSWZaiGeTtz2+qfIqP/dvLDVy82eP3w0OFZ+uODtykzOc54JK5DBNgeyWRkRpt0s=
+	t=1725239232; cv=none; b=Tnk7J8QFZuV5VsIyfHRxaN9gcur4CTX+C0RNlaXelNJe/x/KeTWIGzp68bYuG+P9yA4ns5uRYPca/f72waGeDbDgUXxhh1svcRXJn0aJXphAJfV1y3qCQ6wZmeR7gx6QLk5BojQ50gD1Jf/sKwntEy8jUgUudLI+WzdtpRqPlj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725225342; c=relaxed/simple;
-	bh=oIawsn4XjXyba9/w3c4J7HPxsOq0x/mN75IJv7Z502k=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=p3lmmyHwwEfbX6ZTgXsHakreZk9JeGUvmVdSTOTfs/qaMBSy8XZCIyvkh73xJOFrSvJ2vwxFbAKcHrbVF2mDCfOZfpPN2S+/iTp5fSDkfr10aKqUx3gnQT59s6tD/fRqVnRk3G2GCsaBs3H4a1hxRci2RpM/U81V7a+6Agtu7Hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B775IGcl; arc=none smtp.client-ip=209.85.210.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1725239232; c=relaxed/simple;
+	bh=fXbjit2TjYQpe7jXfh1oBjIMIzlcrlm1aMC1OOUm+Os=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=foc3t2qIkFO6Wn81LnFhXqIUA3P4nF8Mc40rKogor7+i5LybjM9zvavMLkeV1/JDfdaNbnGIADE3BQHio9tq6Sa6Deyiz/NHsq7QmOjtQHI8Y8yh3MKL/h3m2jh65rofJ0gZYBTj8LrwR4hjZMd16+KTRhZqRoaHZf3/PkiitAY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-70f79f1e1fbso705703a34.1;
-        Sun, 01 Sep 2024 14:15:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725225339; x=1725830139; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W5/a2+9cfrFcbISuYbj8mbeAGRZCXc+y+jEmSoX7Qyg=;
-        b=B775IGclzvlaEgSlpQ/YrA9n0bDrC4N0RXIQt63A1sA+xb/7HwvbOEYFyVYovx924q
-         kLQElBUla/gVCJvOe78L/JPZipUmIPesFaRIR6O9Sxa96S2LFUDeYiwlEj+IO3ggHylB
-         jzffq1vWYbs4CQvXHc1jmnQlbEPlpYDHXevbtDHnnYPmTjpw7rXyEVwte1uGwKoKFcPH
-         k/A8eofTKweWY6TlhyVtN+3HeutWPgSxAO92AHYV46li8jUa9mTsTr6H6fClZ+lYisDR
-         az8RPv0atNBrOtHZE0v3TrVJ4ZZCkxgTT1K5yKWXNoiDtnI1fcuQyCjqSQz4gZu7I9YS
-         7OTQ==
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-204d391f53bso24893505ad.2;
+        Sun, 01 Sep 2024 18:07:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725225339; x=1725830139;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=W5/a2+9cfrFcbISuYbj8mbeAGRZCXc+y+jEmSoX7Qyg=;
-        b=f9664DIzUmqbzvF1Tl/pa9M4g8X3h2tA9F96qKOFMJU7dG+9NwPrnlrCeaRWPYa3+3
-         FxImZHWxdQQfU1knkd1av/3DQGtv+iCoUHrf+2hrZ0Y4e8Gzf7i2DwYj+y5xwWA4QPlx
-         9G0LIRE9RU2A5XgvYCpOa3eFJ+r97Pezaur3WOJ/ALF2IMBPt4QwuZQaAeEZ9VD1ZLww
-         XPHLkFAJCUAnZF8BEGh5eVveEIJQv8Oky5TOTu2aUxUaVL7luaKUPTtlHhG3Ba3Kd+IK
-         xEIZNbrYFiZazzIiQfkiGPN/F+7vgWMn7PnFaNfn4FYqIlxpgOEgWQpaviMd2R4sPSkM
-         n0vQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW88oi8pFioIMrge+8172OX+Xq7QoKIfn8qo3wD9EslAd971ludszmeMHhJRDCv/tgLyOqi8swN@vger.kernel.org, AJvYcCWPGU1eSaSRtiwLlK762tt4AvkmCK3Nx9O48QbnN7q7ykB4ZAUP7M+2RaIvGmkOyzMHtCVVwsMRHJSaaIHkQq0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrLENXPQ3pDQVCaFKQM5IS5O3VpuzX4XqwoSh0GQJpFmBhvrho
-	SbojH6NGbRW211BNt1KWPRuhIpvusa4UcCdBZ4wHxgmg+wQA6BSE
-X-Google-Smtp-Source: AGHT+IEhwVjj8C2yiuOVJL1bxa6JpcbkZN8EYVchnmh7iJLNlBWvGD4c4GKyFzIESXsUTL50uOVTXA==
-X-Received: by 2002:a05:6830:6401:b0:703:6d27:63e0 with SMTP id 46e09a7af769-70f5c466ffemr13633305a34.26.1725225339241;
-        Sun, 01 Sep 2024 14:15:39 -0700 (PDT)
-Received: from localhost (193.132.150.34.bc.googleusercontent.com. [34.150.132.193])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45682d95fa2sm34107741cf.87.2024.09.01.14.15.38
+        d=1e100.net; s=20230601; t=1725239229; x=1725844029;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3u2+qLetnJ68urYAzX26gltE44oP6De8D1CJbEpX6HU=;
+        b=qGYFwWDOGf2rIPG/EVA86OBvp5Yi44Pwb/5uYszN7HwlmG7e+5Kv2xXp2QdRRBmALk
+         7/olXsc+HRPkDLTF8uuzbkUZc493HW2/ReeMvu3PNbfLTZoLm9KRH2sg/UMZDZvxQ2RG
+         /h1RMPM58FxkLWGnUfFmc84w2sfHQ5YWoeIdTPq6DjT2Fbda6D9zp1sCzAEfddICiftM
+         bzgPgx7qoOXZPCeO8ziEIr02lvTS5NOSjQ/fznhottdNN2zokRfYaK81Nzz0MwTvV9dl
+         6u/ZdI7/I5/+H1shTdp9gJwcwDcJK0TuPjWRSQ3g9dotXX1ujH0z48LBOP/wJKlXkdTr
+         7N3g==
+X-Forwarded-Encrypted: i=1; AJvYcCU2lOdoiRPMo9FEsLxoqZ4lnMLzrvMOWAfOAkwSW3/IdNkSH0aG2l+UAX93KJLJA9bHHY3OuEFJmvp7qRm6QXA=@vger.kernel.org, AJvYcCVcOFsWpDu49CVfffZ3MiCyvdh3buEbTU6Qqg8KRo1YvYgMNAmkFDd5xunZsWCpouCAmzBk3zQv@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyy/oB7l7oNbNRn0LdJYWkujuuoSa6ICo7ipZk/X0r+mrwpQz3V
+	CmOzTcN2eJFf2AVyLTAqo+5m3Z9X1aA+ZJD+wiw0Qtv1lyTw+Ng=
+X-Google-Smtp-Source: AGHT+IHusLnqjEq1uBEMU1NLcj20Qq5xBgznO8lmV+K9CvBHSBk0lEyl9jQwi3w50AB4WtshFMQX+g==
+X-Received: by 2002:a17:902:f54f:b0:202:48a6:c882 with SMTP id d9443c01a7336-20547642846mr50292275ad.52.1725239228898;
+        Sun, 01 Sep 2024 18:07:08 -0700 (PDT)
+Received: from localhost ([2601:646:9e00:f56e:73b6:7410:eb24:cba4])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20563b7189csm13386165ad.178.2024.09.01.18.07.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Sep 2024 14:15:38 -0700 (PDT)
-Date: Sun, 01 Sep 2024 17:15:38 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: Paolo Abeni <pabeni@redhat.com>, 
- netdev@vger.kernel.org, 
- davem@davemloft.net, 
- edumazet@google.com, 
- ncardwell@google.com, 
- shuah@kernel.org, 
- linux-kselftest@vger.kernel.org, 
- fw@strlen.de, 
- Willem de Bruijn <willemb@google.com>, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- martineau@kernel.org
-Message-ID: <66d4d97a4cac_3df182941a@willemb.c.googlers.com.notmuch>
-In-Reply-To: <66d23f2349f7_3d8dba29489@willemb.c.googlers.com.notmuch>
-References: <20240827193417.2792223-1-willemdebruijn.kernel@gmail.com>
- <401f173b-3465-428d-9b90-b87a76a39cc8@redhat.com>
- <66cf2e4bd8e89_33815c294b2@willemb.c.googlers.com.notmuch>
- <20240828090120.71be0b20@kernel.org>
- <66cf7b8d1c480_36509229439@willemb.c.googlers.com.notmuch>
- <20240828140035.4554142f@kernel.org>
- <66d1e32558532_3c08a22949e@willemb.c.googlers.com.notmuch>
- <20240830103343.0dd20018@kernel.org>
- <66d213cf6652e_3c8f2d294b8@willemb.c.googlers.com.notmuch>
- <20240830144420.5974dc5b@kernel.org>
- <66d23f2349f7_3d8dba29489@willemb.c.googlers.com.notmuch>
-Subject: Re: [PATCH net-next RFC] selftests/net: integrate packetdrill with
- ksft
+        Sun, 01 Sep 2024 18:07:08 -0700 (PDT)
+Date: Sun, 1 Sep 2024 18:07:07 -0700
+From: Stanislav Fomichev <sdf@fomichev.me>
+To: Jason Xing <kerneljasonxing@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, shuah@kernel.org, jmaloy@redhat.com,
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: Re: [PATCH net-next] selftests: add selftest for UDP SO_PEEK_OFF
+ support
+Message-ID: <ZtUPu4OYHbitqYtn@mini-arch>
+References: <20240901051821.94956-1-kerneljasonxing@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240901051821.94956-1-kerneljasonxing@gmail.com>
 
-Willem de Bruijn wrote:
-> Jakub Kicinski wrote:
-> > On Fri, 30 Aug 2024 14:47:43 -0400 Willem de Bruijn wrote:
-> > > > We have directories in net/lib, and it's a target, and it works, no?  
-> > > 
-> > > net/lib is not a TARGET in tools/testing/selftests/Makefile. Its
-> > > Makefile only generates dependencies for other targets: TEST_FILES,
-> > > TEST_GEN_FILES and TEST_INCLUDES.
-> > 
-> > Oh right, TEST_FILES vs TEST_INCLUDES :(
-> > 
-> > Looks like only x86 does some weird stuff and prepends $(OUTPUT) to all
-> > test names. Otherwise the only TEST_NAME with a / in it is
-> > 
-> > x86_64/nx_huge_pages_test.sh
+On 09/01, Jason Xing wrote:
+> From: Jason Xing <kernelxing@tencent.com>
 > 
-> Oh interesting precedent. Let me take a look.
+> Add the SO_PEEK_OFF selftest for UDP. In this patch, I mainly do
+> three things:
+> 1. rename tcp_so_peek_off.c
+> 2. adjust for UDP protocol
+> 3. add selftests into it
 > 
-> > But then again maybe we should give up on the idea of using directories?
-> > Use some separator like --, I mean:
-> > 
-> > mv packetdrill/tcp/inq/client.pkt packetdrill/tcp--inq--client.pkt
-> > 
-> > Assuming we're moving forward with the interpreter idea we don't need
-> > directories for multi-threading, just for organization. Which perhaps
-> > isn't worth the time investment? Given that we'd mostly interact with
-> > these tests via UI which will flatten it all back?
+> Suggested-by: Jon Maloy <jmaloy@redhat.com>
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> ---
+> Link: https://lore.kernel.org/all/9f4dd14d-fbe3-4c61-b04c-f0e6b8096d7b@redhat.com/
+> ---
+>  tools/testing/selftests/net/Makefile          |  2 +-
+>  .../{tcp_so_peek_off.c => sk_so_peek_off.c}   | 91 +++++++++++--------
+>  2 files changed, 56 insertions(+), 37 deletions(-)
+>  rename tools/testing/selftests/net/{tcp_so_peek_off.c => sk_so_peek_off.c} (58%)
 > 
-> That's definitely simpler :)
-> 
-> I'd like to keep diffs between packetdrill scripts on github (and
-> Google internal, we have more) and selftests to a minimum. This is
-> invertible, as is rewriting source statements inside the pkt files.
-> But that might be more work and more maintenance in the end.
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+> index 1179e3261bef..d5029f978aa9 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
+> @@ -80,7 +80,7 @@ TEST_PROGS += io_uring_zerocopy_tx.sh
+>  TEST_GEN_FILES += bind_bhash
+>  TEST_GEN_PROGS += sk_bind_sendto_listen
+>  TEST_GEN_PROGS += sk_connect_zero_addr
+> -TEST_GEN_PROGS += tcp_so_peek_off
+> +TEST_GEN_PROGS += sk_so_peek_off
 
-Thanks again for the pointer and suggestion.
-
-Changing kselftests to preserve directories turns out to be trivial.
-Patch inline below.
-
-But, existing TARGETS of course then start failing. Because they
-depend on existing rsync without -R. In (at least) two ways:
-
-amd-pstate fails because its TEST_FILES has includes from other
-directories and it expects those files to land in the directory
-with tests.
-
-x86 prefixes all its output with $(OUTPUT) to form absolute paths,
-which also creates absolute paths in kselftest-list.txt.
-
-These two are examples, not necessarily the one instances of those
-patterns. So switching to preserving directories for existing targets
-like TEST_FILES seems intractable.
-
-Plan B is to add a new TEST_PROGS_RECURSE, analogous to how
-TEST_INCLUDES extended TEST_FILES with optional path preservation.
-That is not much more complex.
-
----
-
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -101,7 +112,7 @@ run_one()
-                echo "# timeout set to $kselftest_timeout" >> "$logfile"
-        fi
- 
--       TEST_HDR_MSG="selftests: $DIR: $BASENAME_TEST"
-+       TEST_HDR_MSG="selftests: $DIR: $TEST"
-
-+++ b/tools/testing/selftests/lib.mk
-@@ -150,7 +150,7 @@ clean_mods_dir:
-
- define INSTALL_SINGLE_RULE
-        $(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
--       $(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST) $(INSTALL_PATH)/)
-+       $(if $(INSTALL_LIST),rsync -aR --copy-unsafe-links $(INSTALL_LIST) $(INSTALL_PATH)/)
- endef
-
- define INSTALL_MODS_RULE
-@@ -180,8 +180,7 @@ endif
- 
- emit_tests:
-        for TEST in $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS); do \
--               BASENAME_TEST=`basename $$TEST`;        \
--               echo "$(COLLECTION):$$BASENAME_TEST";   \
-+               echo "$(COLLECTION):$$TEST";    \
-        done
-
-
+Should we also add sk_so_peek_off to gitignore?
 
