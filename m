@@ -1,56 +1,56 @@
-Return-Path: <linux-kselftest+bounces-16978-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16979-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DFD39689AA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 16:17:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96BF29689B8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 16:18:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 613481C22602
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 14:17:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 18B54B230CD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 14:18:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A543B183CDC;
-	Mon,  2 Sep 2024 14:16:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 579B519E98A;
+	Mon,  2 Sep 2024 14:18:35 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E5B19F139;
-	Mon,  2 Sep 2024 14:16:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8646613C9C7;
+	Mon,  2 Sep 2024 14:18:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725286613; cv=none; b=lfuafBwqUVnhflP1Vg1iAGz/Mynh8geV0vjoOrvZxFxoDjB0ycizi8qP1ndXHqXGEUk4SqQ2mt5zjyrEf8a3BjQCPOOAIgdGcODFNARiqorcoTbyMJafryQ1bPnVk3bTbzGzPuWvV80C4tF+TRsOs3cUzBa9rbS+/fs1GYMKyh4=
+	t=1725286715; cv=none; b=p7H+EeqQX3tUjm+rZG5S7UdYyo5GR7nuUis+YMFCafTcx/4U3Cy4laLQ15xlf3h2+HaOLir+/IWBFQrY6AoFw60DAoCMPYvnIG76t1bNog7VaI57AsP4NE0wt6IFImmlRpHNjovcfl79/MOtlzpdLZrSu4t+DaE1rPqqlGrncsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725286613; c=relaxed/simple;
-	bh=fDdlvjnkEKdpqrb9ron6CVSr4nVE9CrITrM5DE48suM=;
+	s=arc-20240116; t=1725286715; c=relaxed/simple;
+	bh=+VuG2M1xa3MWBHUbHXGPrWXef37LtbrfQ9WXZ8TCtCw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FBtnUI4jvpe5uRW1/L0FZBcpiJAL0BWg9YSU6Zcn2LuRKAmKhM1SxM+lcM2mrFlWQJgtK38OXTNwJxoaF9H5NuW5zJFx+diTCa+LfPq0bj1SRY/HAjrI2UrIH/PKaIt0yqyKcdK2WCBABlr1Qrfk583r1EWmGMvMgtS2Fvp5l7I=
+	 In-Reply-To:Content-Type; b=DBTLj2iW+bTnxzQowEUXEVundrgheLVBam6FHhgKywr2uZN9yaFHFyj++RQ0SzSI0+8AjhAEfBze2J/inOWBYpxc4E5smz+pGccKNv0001HOU/fEV+6bg069MBGD5Kapuknaus7P2X5rX8MaIHEsrV8TtC0yhE3mnBKGx1eovWc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4Wy9mf0dPHz9sST;
-	Mon,  2 Sep 2024 16:16:50 +0200 (CEST)
+	by localhost (Postfix) with ESMTP id 4Wy9pb6jQMz9sST;
+	Mon,  2 Sep 2024 16:18:31 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
 	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id 6Tgia6VqhxQ6; Mon,  2 Sep 2024 16:16:49 +0200 (CEST)
+	with ESMTP id dYB5tVBeTlu0; Mon,  2 Sep 2024 16:18:31 +0200 (CEST)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4Wy9md6m7Rz9sSS;
-	Mon,  2 Sep 2024 16:16:49 +0200 (CEST)
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4Wy9pb5jKRz9sSS;
+	Mon,  2 Sep 2024 16:18:31 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id D570A8B76C;
-	Mon,  2 Sep 2024 16:16:49 +0200 (CEST)
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id B4D598B76C;
+	Mon,  2 Sep 2024 16:18:31 +0200 (CEST)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
 	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id 7vewUwjhFmRj; Mon,  2 Sep 2024 16:16:49 +0200 (CEST)
+	with ESMTP id r6wBvH7GjfCs; Mon,  2 Sep 2024 16:18:31 +0200 (CEST)
 Received: from [192.168.234.167] (unknown [192.168.234.167])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id D65958B763;
-	Mon,  2 Sep 2024 16:16:48 +0200 (CEST)
-Message-ID: <c411b0c6-1806-4e4d-8bcf-51f0747fcd19@csgroup.eu>
-Date: Mon, 2 Sep 2024 16:16:48 +0200
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 5B5558B763;
+	Mon,  2 Sep 2024 16:18:31 +0200 (CEST)
+Message-ID: <cae4fb76-224e-4858-a44a-1ebb71c25821@csgroup.eu>
+Date: Mon, 2 Sep 2024 16:18:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,119 +58,92 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 5/5] powerpc/vdso: Wire up getrandom() vDSO
- implementation on PPC64
+Subject: Re: [PATCH] selftests: vDSO: Do not rely on $ARCH for
+ vdso_test_getrandom && vdso_test_chacha
 To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Naveen N Rao <naveen@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org,
+Cc: Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org,
  Adhemerval Zanella <adhemerval.zanella@linaro.org>,
  Xi Ruoyao <xry111@xry111.site>
-References: <cover.1725278148.git.christophe.leroy@csgroup.eu>
- <27de70dcc356e56754a03a2887a97597f5e840a4.1725278148.git.christophe.leroy@csgroup.eu>
- <ZtWyeuCfzZ66fVsg@zx2c4.com>
- <bdf1a515-b3d0-471d-89ee-989ae0d63202@csgroup.eu>
- <ZtXE-AISB4w9U9Yc@zx2c4.com>
+References: <ddf594c81787dba708fc392cb03027470dee64fb.1725124064.git.christophe.leroy@csgroup.eu>
+ <ZtRqp-uZe5C07qOF@zx2c4.com>
+ <fe8ea6a6-71d7-4cfc-b20b-fa0a7f39a4be@csgroup.eu>
+ <ec7bfeb4-30aa-4874-98b7-7877a12cb98f@sirena.org.uk>
+ <ffc5600d-362f-4400-8f8b-a1ea77ca51bf@csgroup.eu>
+ <ZtXEUZC_jRBSAG9k@zx2c4.com>
 Content-Language: fr-FR
 From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <ZtXE-AISB4w9U9Yc@zx2c4.com>
+In-Reply-To: <ZtXEUZC_jRBSAG9k@zx2c4.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
-Le 02/09/2024 à 16:00, Jason A. Donenfeld a écrit :
-> On Mon, Sep 02, 2024 at 03:12:47PM +0200, Christophe Leroy wrote:
+Le 02/09/2024 à 15:57, Jason A. Donenfeld a écrit :
+> On Mon, Sep 02, 2024 at 03:23:47PM +0200, Christophe Leroy wrote:
 >>
 >>
->> Le 02/09/2024 à 14:41, Jason A. Donenfeld a écrit :
->>> On Mon, Sep 02, 2024 at 02:04:42PM +0200, Christophe Leroy wrote:
->>>>    SYM_FUNC_START(__arch_chacha20_blocks_nostack)
->>>>    #ifdef __powerpc64__
->>>> -	blr
->>>> +	std	r5, -216(r1)
->>>> +
->>>> +	std	r14, -144(r1)
->>>> +	std	r15, -136(r1)
->>>> +	std	r16, -128(r1)
->>>> +	std	r17, -120(r1)
->>>> +	std	r18, -112(r1)
->>>> +	std	r19, -104(r1)
->>>> +	std	r20, -96(r1)
->>>> +	std	r21, -88(r1)
->>>> +	std	r22, -80(r1)
->>>> +	std	r23, -72(r1)
->>>> +	std	r24, -64(r1)
->>>> +	std	r25, -56(r1)
->>>> +	std	r26, -48(r1)
->>>> +	std	r27, -40(r1)
->>>> +	std	r28, -32(r1)
->>>> +	std	r29, -24(r1)
->>>> +	std	r30, -16(r1)
->>>> +	std	r31, -8(r1)
->>>>    #else
->>>>    	stwu	r1, -96(r1)
->>>>    	stw	r5, 20(r1)
->>>> +#ifdef __BIG_ENDIAN__
->>>>    	stmw	r14, 24(r1)
->>>> +#else
->>>> +	stw	r14, 24(r1)
->>>> +	stw	r15, 28(r1)
->>>> +	stw	r16, 32(r1)
->>>> +	stw	r17, 36(r1)
->>>> +	stw	r18, 40(r1)
->>>> +	stw	r19, 44(r1)
->>>> +	stw	r20, 48(r1)
->>>> +	stw	r21, 52(r1)
->>>> +	stw	r22, 56(r1)
->>>> +	stw	r23, 60(r1)
->>>> +	stw	r24, 64(r1)
->>>> +	stw	r25, 68(r1)
->>>> +	stw	r26, 72(r1)
->>>> +	stw	r27, 76(r1)
->>>> +	stw	r28, 80(r1)
->>>> +	stw	r29, 84(r1)
->>>> +	stw	r30, 88(r1)
->>>> +	stw	r31, 92(r1)
->>>> +#endif
->>>> +#endif
+>> Le 02/09/2024 à 14:37, Mark Brown a écrit :
+>>> On Mon, Sep 02, 2024 at 02:22:38PM +0200, Christophe Leroy wrote:
 >>>
->>> This confuses me. Why are you adding code to the !__powerpc64__ branch
->>> in this commit? (Also, why does stmw not work on LE?)
+>>>> When vdso_test_getcpu doesn't find the vDSO entry point, it prints an error
+>>>> text and returns KSFT_SKIP
+>>>
+>>>> I thought it would be more correct to have the same behaviour on
+>>>> vdso_test_getrandom instead of trying to build it only when the underlying
+>>>> kernel supports it.
+>>>
+>>> The problem is that the test incorporates assembler code so it simply
+>>> won't build for architectures without explicit porting, the issue isn't
+>>> if the target kernel supports it but rather that the test won't compile
+>>> in the first place.
 >>
->> That's for the VDSO32 ie running 32 bits binaries on a 64 bits kernel.
+>> Yes indeed and that was the purpose of my patch, have a macro in
+>> vdso_config.h to tell where the assembler code is:
 >>
->> "Programming Environments Manual for 32-Bit Implementations of the
->> PowerPC™ Architecture" say: In some implementations operating with
->> little-endian byte order, execution of an lmw or stmw instruction
->> causes the system alignment error handler to be invoked
+>> diff --git a/tools/testing/selftests/vDSO/vdso_config.h
+>> b/tools/testing/selftests/vDSO/vdso_config.h
+>> index 740ce8c98d2e..693920471160 100644
+>> --- a/tools/testing/selftests/vDSO/vdso_config.h
+>> +++ b/tools/testing/selftests/vDSO/vdso_config.h
+>> @@ -47,6 +47,7 @@
+>>    #elif defined(__x86_64__)
+>>    #define VDSO_VERSION		0
+>>    #define VDSO_NAMES		1
+>> +#define VDSO_GETRANDOM	
+>> "../../../../arch/x86/entry/vdso/vgetrandom-chacha.S"
+>>    #elif defined(__riscv__) || defined(__riscv)
+>>    #define VDSO_VERSION		5
+>>    #define VDSO_NAMES		1
 >>
->> And GCC doesn't like it either:
 >>
->> tools/arch/powerpc/vdso/vgetrandom-chacha.S:84: Error: `stmw' invalid
->> when little-endian
+>> And then:
+>>
+>> diff --git a/tools/testing/selftests/vDSO/vdso_test_chacha-asm.S
+>> b/tools/testing/selftests/vDSO/vdso_test_chacha-asm.S
+>> new file mode 100644
+>> index 000000000000..8e704165f6f2
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/vDSO/vdso_test_chacha-asm.S
+>> @@ -0,0 +1,7 @@
+>> +#include "vdso_config.h"
+>> +
+>> +#ifdef VDSO_GETRANDOM
+>> +
+>> +#include VDSO_GETRANDOM
+>> +
+>> +#endif
+>>
+>> I thought it was a lot easier to handle if through necessary #ifdefs in
+>> vdso_config.h that implementing an additional logic in Makefiles.
 > 
-> Does it make sense to do all the 32-bit stuff in the PPC32 commit (and
-> then you can introduce the selftests there without the error you
-> mentioned), and then add the 64-bit stuff in this commit?
+> Yet it still tripped up the test robot, right?
 
-Can do that, but there will still be a problem with chacha selftests if 
-I don't opt-out the entire function content when it is ppc64. It will 
-build properly but if someone runs it on a ppc64 it will likely crash 
-because only the low 32 bits of registers will be saved.
+Yes I need to look at that.
 
-That's the reason why I really prefered the approach where I set 
-something in vdso_config.h so that the assembly is used only for 
-powerpc32 and when building powerpc64 the assembly part is kept out and 
-vdso_test_chacha simply tells it is not supported.
+> 
+> In general I'm not crazy about this approach.
 
-Christophe
+I have the feeling I get things done easier with that approach. But if 
+you feel better playing up with the makefile, I incline.
 
