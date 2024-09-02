@@ -1,280 +1,192 @@
-Return-Path: <linux-kselftest+bounces-16933-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16934-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12F8296818A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 10:19:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76A7896827C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 10:56:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69943B2045D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 08:19:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 032421F22F50
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 08:56:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25FEC181B82;
-	Mon,  2 Sep 2024 08:19:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4462187336;
+	Mon,  2 Sep 2024 08:55:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EEy03NgF"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="WCJxxXNk";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JvYWLP3R"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout4-smtp.messagingengine.com (fout4-smtp.messagingengine.com [103.168.172.147])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDD026AC1;
-	Mon,  2 Sep 2024 08:19:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF148186E39;
+	Mon,  2 Sep 2024 08:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725265190; cv=none; b=h/tlDfkN8j6eBSqR6f3Tpan/my3CKftuUhqst2yDRKW9oz/yAaSScUm/WV2lZiK85q6RJ+uOpET5j2WjUf1/EJqw6TkfI1hfohiQ1Ywpt+36MoDasb6xCtZ3w9d3pMHgKtFL+BIbK05gJDKQYv7EDCyNyCfh7OrksbHvTh3A6zM=
+	t=1725267352; cv=none; b=pTQPjoqBPSHHsAUHhYmKk4J/zExquBout8Wni2md7hjrUvEKtjD50G4JbV5JqZ3evBtQkloV26jWoDF1fDV2GhqTZzUF3/kSEMy8LiKPJD0fsLsU4yAoJvQpVxBXqMlgSt5aoZsKPZx4hfEHnKEkrdKXryyv6sHKicK2fuw11pk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725265190; c=relaxed/simple;
-	bh=NeAXS1q4WKKVX+jak6/Xd3iRMjcWAJKAO/hACLL12U4=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oN/4ksBvvzFd8XA8NHFeHxsfxXx7argPhmBkv0smEyJSr9mv4F5weKKJNTJrEUvGf4eeux4IzCtjQm6N6zAg2Oz5VOPoSUmCr0h5rXuMsWX63M0x2dxEaSxA6XAhgxu247Wtw37d+pOvqWt45IY3Zeqpz3bE3D4bJLqlj823uiw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EEy03NgF; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-204d391f53bso26730355ad.2;
-        Mon, 02 Sep 2024 01:19:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725265188; x=1725869988; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=iXdqClKjYaw+pwVY+vTn/MWfGep4gvPjiMkUkpvnbGo=;
-        b=EEy03NgF3rcxYX/tElwTh7bzmqCeABZKXMrUJt0N3Ylr8qnjwt3A82UwyUR3fpqYMh
-         p+nVjMHmZoJOYmrzmn9xwbb99sa6wxYzc4CmCuxDUJmEgS2tHisLHM0jWY/zX3Wi8c7h
-         CeaBzTMbisYeV4odBnPMuofnfxJGgqudn2VDH53H8ZsEnEumoA9nl1GN2Ynh4RDb6jlx
-         u+wyxArzWupF6ZfU8YGyN6pzjqyqGK47vZqos91+ELI2XjQjFfWL8qqwIo8lLi0292kk
-         VczMCBgJmQhR+IoTbc+hHOtu1TMeY7YY9a9VfSIGhQROTP2tRMkC7OeZz38tzHf6PeZF
-         a/jw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725265188; x=1725869988;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iXdqClKjYaw+pwVY+vTn/MWfGep4gvPjiMkUkpvnbGo=;
-        b=uw8DBWsPhtcaBZ/QbrHTk3b3c0RiN+NqmQNrgj3n14tC6DmGFZaUaQ5qHaTrvOLYiK
-         V+yyRnGqtxjYAJUQ5btMfzDEMmVLT3DGHIwP/PDQxPMs62YaHoVEtzecsVw+tpCMTR4N
-         67N0BIMEs3y0iybsNoDwZOruxuGlsKeFUtii3xZa3OOM5dDaTf7NhG/HGyK/GhzpVExD
-         jtjEt+2uo53nzn+MMUH0A7FXkDpIHSMXSy6DE7hVUFXgDcOFXyPFTH9sj/Errnh1mI5J
-         K/Fqh228SoQTDrmVdtI6RIDR6/pHgV4Uw3NHpxuVrArJbpoA29qp7K4zvjTLYgsem7yX
-         zcrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUJ2Ba7wtIO4F8bhqJSRKok1yRTufdHGL/UADEoBhL9UkDLdb1TaWyyNefUsZMIiAWzSfuUi5MuU5e0k/yW654=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzr318XZE1QoglTdvjh8mG9vMLEevwwtayo0lfqz0o4N8Dq3Ofk
-	NWvk8HSC/5EpF9ZY0QHWXa/9U7I5E2aDOHYWaRInRYKtJOsAZwnxVlAHNA==
-X-Google-Smtp-Source: AGHT+IH/giKb/R4Rf4M0toLyqXvAKJgvttBxaM/aefkGZ6gAGqOdXVEKlCUvijQxj0axVvyBBSOtzA==
-X-Received: by 2002:a17:902:d4c4:b0:205:43d8:710f with SMTP id d9443c01a7336-20547d03668mr56172615ad.58.1725265187552;
-        Mon, 02 Sep 2024 01:19:47 -0700 (PDT)
-Received: from kodidev-ubuntu (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20533ed264asm43500755ad.198.2024.09.02.01.19.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Sep 2024 01:19:46 -0700 (PDT)
-From: Tony Ambardar <tony.ambardar@gmail.com>
-X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
-Date: Mon, 2 Sep 2024 01:19:44 -0700
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	Ilya Leoshkevich <iii@linux.ibm.com>,
-	Quentin Monnet <qmo@kernel.org>
-Subject: Re: [PATCH bpf-next v4 4/8] libbpf: Support BTF.ext loading and
- output in either endianness
-Message-ID: <ZtV1IG1XCPUAIzhl@kodidev-ubuntu>
-References: <cover.1724976539.git.tony.ambardar@gmail.com>
- <8eaba4b675cba9035121121bba6618c9f8f65610.1724976539.git.tony.ambardar@gmail.com>
- <CAEf4BzZu8yGnjsBcw=8sZd9knzgM2F8fUfrSuhfLNEpGM3p3Og@mail.gmail.com>
+	s=arc-20240116; t=1725267352; c=relaxed/simple;
+	bh=BsMRZ2X437PZQO1ciTfhruhMsAj9I0m3fSE6geobgtw=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=CQTMaAgt1tMflCdZalPVSaicf13otefYliWKJXAZfYWxt3CYvsn4//F9/Zx1+c6pamMHGjJE+qK+83oV6eXQJIaSA44Xu9galJOxUpzqCekeUihpUJVJKEN3+Xo4XY3s9CpzZ4NnbaCys87FdSez6xmGp+bmP2SBv9IiPnHTb4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=WCJxxXNk; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JvYWLP3R; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.nyi.internal [10.202.2.44])
+	by mailfout.nyi.internal (Postfix) with ESMTP id CF70A13800A9;
+	Mon,  2 Sep 2024 04:55:49 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-04.internal (MEProxy); Mon, 02 Sep 2024 04:55:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1725267349;
+	 x=1725353749; bh=LF7xpMJNWj3ZriHPHEsj5u5MBL/vfCltp6iqjmEY5XQ=; b=
+	WCJxxXNkjKBvaXKlDicxYmZiCkivs/xh8EF0IZyc54kt0ZOWzilCuljgNCUe/eOE
+	kkJhY/2vZXsrXsbJcexM1UhtwFMjUJillVSUstEuRoMGhjD/Q7cW4CfNHaYBK7ey
+	mB89omYgOo2bly2M0SBRFP4UFE0uI/2Wm5HMutNYWiX9WRZ2wuKZ+rbe7NPAbCK5
+	lQ6XcbLVUIhWhrb3bwEbmm+t9Qdo1r6H3F0jDztY31OrkMCsI8G5J+AX2vijrsrG
+	3M0FPtH9FESOiCRT0MrPqlpPUQj2t6GlKa8e+CJvOUKQvTk+Gb0YdnPrqCFTEb7b
+	/Hs0+5PRNJFRqNRJmBW65Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725267349; x=
+	1725353749; bh=LF7xpMJNWj3ZriHPHEsj5u5MBL/vfCltp6iqjmEY5XQ=; b=J
+	vYWLP3R6cWafAkSZmMItfGBr0wVqo4qGTfJqQGx+hf/riaN/E7OZA5Int4Zg8aib
+	pwabqPE+1bho+JM7SnNcJLIpMw3+Nsw9AT275r/N6BFrsQEDgo9CiIvU9/M4hrEA
+	4nKYz6v+wtdKl47Mw+YpWTVGqVzmjTNNPIdQaMfeOy8z5hnhUYg5NcqfTpoyymj5
+	sKDoFbCmVqh2jKtFda1rXbUZ9lusw4DTz0aSPQ0/rdQdYCVex+zubqvA3IqAC4je
+	0RSqOoNLAnR60Q38OldQ1MiMaHXJMr6MESe2+MFmfw0dPYK81PRKUSW9p9qWto3X
+	iYMqnqN3qs0QmC5VOxCag==
+X-ME-Sender: <xms:lX3VZqv7SM2Rc2Rs4sfSvRwiD-bRCtSRs2UD-JNfsyI79WU3BV3oHw>
+    <xme:lX3VZvflyI2TtHFnqJbdW9b2MliflvvMMJsspU7Ea8ZD7lvThs2KB53iuo7rSU1xg
+    JmQXPVSEVvsqxdCznw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehfedguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
+    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvddv
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopeguihgvthhmrghrrdgvghhgvghmrg
+    hnnhesrghrmhdrtghomhdprhgtphhtthhopehmrghrkhdrrhhuthhlrghnugesrghrmhdr
+    tghomhdprhgtphhtthhopegthihphhgrrhestgihphhhrghrrdgtohhmpdhrtghpthhtoh
+    eprhhoshhtvgguthesghhoohgumhhishdrohhrghdprhgtphhtthhopegsshgvghgrlhhl
+    sehgohhoghhlvgdrtghomhdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrug
+    drohhrghdprhgtphhtthhopegsrhgruhhnvghrsehkvghrnhgvlhdrohhrghdprhgtphht
+    thhopehkvggvsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhheskhgvrh
+    hnvghlrdhorhhg
+X-ME-Proxy: <xmx:lX3VZlwsOgbUBtnEeR80dCbOpc_esF6F_IlwvTxzd-5bKUBxncmo3w>
+    <xmx:lX3VZlP3UtxIBxk0_0nQFl1NhjqmAXOzhMTwAWStfvuryQTP2QZqhg>
+    <xmx:lX3VZq-kT5DyyXyjwFmIeyCUr2Ygwiw3XweX9afDuf3t863YKxGusQ>
+    <xmx:lX3VZtX0GBRv2ZfrJy-b6x5UkxilddUNe9nRwwn6bP6PpTVhxfbONg>
+    <xmx:lX3VZgkDgKbamK4UOILT-fXFQeW3l2De0D4NVfqsOgkPPCRJ2v8ahhwW>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+	id 06AE52220083; Mon,  2 Sep 2024 04:55:48 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzZu8yGnjsBcw=8sZd9knzgM2F8fUfrSuhfLNEpGM3p3Og@mail.gmail.com>
+Date: Mon, 02 Sep 2024 08:55:28 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Aleksa Sarai" <cyphar@cyphar.com>, "Ingo Molnar" <mingo@redhat.com>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Juri Lelli" <juri.lelli@redhat.com>,
+ "Vincent Guittot" <vincent.guittot@linaro.org>,
+ "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
+ "Steven Rostedt" <rostedt@goodmis.org>,
+ "Benjamin Segall" <bsegall@google.com>, "Mel Gorman" <mgorman@suse.de>,
+ "Valentin Schneider" <vschneid@redhat.com>,
+ "Alexander Viro" <viro@zeniv.linux.org.uk>,
+ "Christian Brauner" <brauner@kernel.org>, "Jan Kara" <jack@suse.cz>,
+ shuah <shuah@kernel.org>
+Cc: "Kees Cook" <kees@kernel.org>, "Florian Weimer" <fweimer@redhat.com>,
+ "Mark Rutland" <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+ linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-kselftest@vger.kernel.org
+Message-Id: <319c0da6-3d9c-4b45-a14c-07c5bbc3afb7@app.fastmail.com>
+In-Reply-To: 
+ <20240902-extensible-structs-check_fields-v1-1-545e93ede2f2@cyphar.com>
+References: 
+ <20240902-extensible-structs-check_fields-v1-0-545e93ede2f2@cyphar.com>
+ <20240902-extensible-structs-check_fields-v1-1-545e93ede2f2@cyphar.com>
+Subject: Re: [PATCH RFC 1/8] uaccess: add copy_struct_to_user helper
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 30, 2024 at 02:14:19PM -0700, Andrii Nakryiko wrote:
-> On Fri, Aug 30, 2024 at 12:30 AM Tony Ambardar <tony.ambardar@gmail.com> wrote:
-> >
-> > Support for handling BTF data of either endianness was added in [1], but
-> > did not include BTF.ext data for lack of use cases. Later, support for
-> > static linking [2] provided a use case, but this feature and later ones
-> > were restricted to native-endian usage.
-> >
-> > Add support for BTF.ext handling in either endianness. Convert BTF.ext data
-> > to native endianness when read into memory for further processing, and
-> > support raw data access that restores the original byte-order for output.
-> > Add internal header functions for byte-swapping func, line, and core info
-> > records.
-> >
-> > Add new API functions btf_ext__endianness() and btf_ext__set_endianness()
-> > for query and setting byte-order, as already exist for BTF data.
-> >
-> > [1] 3289959b97ca ("libbpf: Support BTF loading and raw data output in both endianness")
-> > [2] 8fd27bf69b86 ("libbpf: Add BPF static linker BTF and BTF.ext support")
-> >
-> > Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
-> > ---
-> >  tools/lib/bpf/btf.c             | 192 +++++++++++++++++++++++++++++---
-> >  tools/lib/bpf/btf.h             |   3 +
-> >  tools/lib/bpf/libbpf.map        |   2 +
-> >  tools/lib/bpf/libbpf_internal.h |  33 ++++++
-> >  4 files changed, 214 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> > index f5081de86ee0..064cfe126c09 100644
-> > --- a/tools/lib/bpf/btf.c
-> > +++ b/tools/lib/bpf/btf.c
-> > @@ -3022,25 +3022,102 @@ static int btf_ext_setup_core_relos(struct btf_ext *btf_ext)
-> >         return btf_ext_setup_info(btf_ext, &param);
-> >  }
-> >
-> > -static int btf_ext_parse_hdr(__u8 *data, __u32 data_size)
-> > +/* Swap byte-order of BTF.ext header with any endianness */
-> > +static void btf_ext_bswap_hdr(struct btf_ext *btf_ext, __u32 hdr_len)
-> >  {
-> > -       const struct btf_ext_header *hdr = (struct btf_ext_header *)data;
-> > +       struct btf_ext_header *h = btf_ext->hdr;
-> >
-> > -       if (data_size < offsetofend(struct btf_ext_header, hdr_len) ||
-> > -           data_size < hdr->hdr_len) {
-> > -               pr_debug("BTF.ext header not found\n");
-> > +       h->magic = bswap_16(h->magic);
-> > +       h->hdr_len = bswap_32(h->hdr_len);
-> > +       h->func_info_off = bswap_32(h->func_info_off);
-> > +       h->func_info_len = bswap_32(h->func_info_len);
-> > +       h->line_info_off = bswap_32(h->line_info_off);
-> > +       h->line_info_len = bswap_32(h->line_info_len);
-> > +
-> > +       if (hdr_len < offsetofend(struct btf_ext_header, core_relo_len))
-> > +               return;
-> > +
-> > +       h->core_relo_off = bswap_32(h->core_relo_off);
-> > +       h->core_relo_len = bswap_32(h->core_relo_len);
-> > +}
-> > +
-> > +/* Swap byte-order of a generic info subsection */
-> > +static void info_subsec_bswap(const struct btf_ext_header *hdr, bool native,
-> > +                             __u32 off, __u32 len, anon_info_bswap_fn_t bswap)
-> 
-> ok, so I'm not a fan of this bswap callback, tbh. Also, we don't
-> really enforce that each kind of record has exact size we expect
-> (i.e., bpf_line_info_min and bpf_func_info_min shouldn't be "min" for
-> byte-swapped case, it should be exact).
-> 
-> How about this slight modification: split byte swapping of
-> sections/subsection metadata, so we adjust record size, sec_name_off
-> and num_info separately from adjusting each record.
+On Mon, Sep 2, 2024, at 07:06, Aleksa Sarai wrote:
+> This is based on copy_struct_from_user(), but there is one additional
+> case to consider when creating a syscall that returns an
+> extensible-struct to userspace -- how should data in the struct that
+> cannot fit into the userspace struct be handled (ksize > usize)?
+>
+> There are three possibilies:
+>
+>  1. The interface is like sched_getattr(2), where new information will
+>     be silently not provided to userspace. This is probably what most
+>     interfaces will want to do, as it provides the most possible
+>     backwards-compatibility.
+>
+>  2. The interface is like lsm_list_modules(2), where you want to return
+>     an error like -EMSGSIZE if not providing information could result in
+>     the userspace program making a serious mistake (such as one that
+>     could lead to a security problem) or if you want to provide some
+>     flag to userspace so they know that they are missing some
+>     information.
 
-Hmmm, the bulk of code needed is to parse the metadata, with only 2 lines
-used to go through records. Splitting per above would add unnecessary
-duplication it seems, no?
+I'm not sure if EMSGSIZE is the best choice here, my feeling is that
+the kernel should instead try to behave the same way as an older kernel
+that did not know about the extra fields:
 
-> 
-> Once this swapping is done we:
-> 
-> a) validate record size for each section is expected (according to its
-> type, of course)
+- if the structure has always been longer than the provided buffer,
+  -EMSGSIZE should likely have been returned all along. If older
+  kernels just provided a short buffer, changing it now is an ABI
+  change that would only affect intentionally broken callers, and
+  I think keeping the behavior unchanged is more consistent.
 
-This is a good point I overlooked, and needs doing in any case.
+- if an extra flag was added along with the larger buffer size,
+  the old kernel would likely have rejected the new flag with -EINVAL,
+  so I think returning the same thing for userspace built against
+  the old kernel headers is more consistent.
 
-> b) we can then use for_each_btf_ext_sec() and for_each_btf_ext_rec()
-> macro (which assume proper in-memory metadata byte order) and then
-> hard-code swapping of each record fields
 
-How easily can we use these macros? Consider the current call chain:
+> +static __always_inline __must_check int
+> +copy_struct_to_user(void __user *dst, size_t usize, const void *src,
+> +		    size_t ksize, bool *ignored_trailing)
 
-btf_ext__new
-     btf_ext_parse
-          btf_ext_bswap_hdr     (1)
-          btf_ext_bswap_info    (2)
-     btf_ext_setup_func_info
-     btf_ext_setup_line_info
-     btf_ext_setup_core_relos   (3)
-	
-btf_ext__raw_data
-     btf_ext_bswap_info         (4)
-     btf_ext_bswap_hdr
+This feels like the kind of function that doesn't need to be inline
+at all and could be moved to lib/usercopy.c instead. It should clearly
+stay in the same place as copy_struct_from_user(), but we could move
+that as well.
 
-The macros iterate on 'struct btf_ext_info' instances in 'struct btf_ext'
-but these are only set up after (3) it seems and unavailable at (2). I
-suppose they could be used with some sort of kludge but unsure how well
-they'll work.
+> +{
+> +	size_t size = min(ksize, usize);
+> +	size_t rest = max(ksize, usize) - size;
+> +
+> +	/* Double check if ksize is larger than a known object size. */
+> +	if (WARN_ON_ONCE(ksize > __builtin_object_size(src, 1)))
+> +		return -E2BIG;
 
-> 
-> No callbacks.
-> 
-> This has also a benefit of not needing this annoying "bool native"
-> flag when producing raw bytes. We just ensure proper order of
-> operation:
-> 
-> a) swap records
-> b) swap metadata (so just mirrored order from initialization)
+I guess the __builtin_object_size() check is the reason for making
+it __always_inline, but that could be done in a trivial inline
+wrapper around the extern function.  If ksize is always expected
+to be a constant for all callers, the check could even become a
+compile-time check instead of a WARN_ON_ONCE() that feels wrong
+here: if there is a code path where this can get triggered, there
+is clearly a kernel bug, but the only way to find out is to have
+a userspace caller that triggers the code path.
 
-How does that work? If we split up btf_ext_bswap_info(), after (1)
-btf_ext->swapped_endian is set and btf_ext->hdr->magic is swapped, so at
-(2) it's not possible to tell the current info data byte order without
-some hinting.
+Again, the same code is already in copy_struct_from_user(), so
+this is not something you are adding but rather something we
+may want to change for both.
 
-But maybe if we defer setting btf_ext->swapped_endian until after (b) we
-can drop the "bool native" thanks to symmetry breaking. Let me check.
-
-> 
-> WDYT?
-
-Adding a record_size check is definitely needed.
-
-But I have trouble seeing how splitting bswap of info metadata/records
-would yield something simpler and cleaner than the callbacks. What if
-they were passed via a descriptor, as in btf_ext_setup_func_info()? I
-think I need to play around with this a while and see..
-
-It would also help me if you'd elaborate on the drawbacks you see of
-using callbacks, given I see then in other parts of libbpf.
-
-> 
-> pw-bot: cr
-> 
-> > +{
-> > +       __u32 left, i, *rs, rec_size, num_info;
-> > +       struct btf_ext_info_sec *si;
-> > +       void *p;
-> > +
-> > +       if (len == 0)
-> > +               return;
-> > +
-> > +       rs = (void *)hdr + hdr->hdr_len + off;  /* record size */
-> > +       si = (void *)rs + sizeof(__u32);        /* sec info #1 */
-> > +       rec_size = native ? *rs : bswap_32(*rs);
-> > +       *rs = bswap_32(*rs);
-> > +       left = len - sizeof(__u32);
-> > +       while (left > 0) {
-> > +               num_info = native ? si->num_info : bswap_32(si->num_info);
-> > +               si->sec_name_off = bswap_32(si->sec_name_off);
-> > +               si->num_info = bswap_32(si->num_info);
-> > +               left -= offsetof(struct btf_ext_info_sec, data);
-> > +               p = si->data;
-> > +               for (i = 0; i < num_info; i++)  /* list of records */
-> > +                       p += bswap(p);
-> > +               si = p;
-> > +               left -=  rec_size * num_info;
-> 
-> nit: extra space here
-
-Fixed, thanks.
-
-> 
-> > +       }
-> > +}
-> > +
-> 
-> [...]
+      Arnd
 
