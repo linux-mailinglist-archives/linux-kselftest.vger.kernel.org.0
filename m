@@ -1,151 +1,105 @@
-Return-Path: <linux-kselftest+bounces-16935-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16936-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB8339682C0
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 11:10:25 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECC43968352
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 11:34:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93DFF28241F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 09:10:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9709C1F2163A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 09:34:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC18186E58;
-	Mon,  2 Sep 2024 09:10:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 912C01D27A9;
+	Mon,  2 Sep 2024 09:33:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="GvS4fPt+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="iGX83XVz"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="DHAHV/+v"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh8-smtp.messagingengine.com (fhigh8-smtp.messagingengine.com [103.168.172.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD3BC2D7B8;
-	Mon,  2 Sep 2024 09:10:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D32D1D4600;
+	Mon,  2 Sep 2024 09:33:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725268220; cv=none; b=re4K1CO/tAeMTaHVHdxzhd/St42SnX+mgRRWVkIRZ0GngK9XLOhaGQtcW4mMpv1aGDd+GhuD97BQPeNHamcm0P9fK4GoYutAYWrdSLpmdv12nRAThYqofNwOJUUqqiR6VQo9sSakDh6hfl8Hwt0N9niTbYDhUXwgnLhlhSKFA7k=
+	t=1725269591; cv=none; b=TDDTYPNC6m7OCBxIw7bBEf14CazCqn7lZSllUwIREQiABoVIQyM7QOIsRuprqjBAhCmU6L5tzZTk+fod0Y5hLMdOQDO1NbeYdQJGj15ZlgCVEok2BiH2iZwN7BU59r8YqLNK9P0+MkByxvTqLytbsyPN6FTS/ph9Sv6hrRqUmf4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725268220; c=relaxed/simple;
-	bh=6j0Oy77vc3k7Bm97cy+0sWSoGWBccV07dWxxIiN5yTg=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Zqp0Fzo+ZLv20DTDKqr3aqKRm2M049hrznqUNCujMSTzUVBg938+4vbjfThCo3hGIRG6U12XAckqzNmEPom5y597Q+2CQmKclKqxr7Ffi3xC6BrR/lJXooQ7aSBRCuVpMS1s/MGt/rUlg/0KzsIKDN5qKMkdCubrolhYXjBvI4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=GvS4fPt+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=iGX83XVz; arc=none smtp.client-ip=103.168.172.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-04.internal (phl-compute-04.nyi.internal [10.202.2.44])
-	by mailfhigh.nyi.internal (Postfix) with ESMTP id DA62111402A6;
-	Mon,  2 Sep 2024 05:10:17 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-04.internal (MEProxy); Mon, 02 Sep 2024 05:10:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1725268217;
-	 x=1725354617; bh=bzaUZvBR6GY2fVCjdmz9wFgI6HiU4z7HCwf2miDnwYA=; b=
-	GvS4fPt+9jtPThPXCzHUZbVhVte9hekuZsxDuetitVoYOHcXDzlGMvxagUBSBs+Y
-	gWO1ZjbblIjtYEFSzM7Cy6+3L7hgXo2jSMqusFnu1BWonO9x7qPADYCEKnUiJqg8
-	KNNnmP0fgYOin2LxZCw1SkZl2oUV+V/R2Sd493BivMAq6H9fWoXXtGYBojuGgZkr
-	uYIskeOO645P/8et/V11ne5V6yr7YeLuBLTQ3j75wuQDyLmeiCSwexNxN6UXZmiY
-	l9lPBSCFOV3FuLJEC7N1RcdAijZtipDtn9e0lCcVwlBM7asEO+Bh+D2wNUBC1lKE
-	p39I8IBv/2JrfjzHNrLFfA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725268217; x=
-	1725354617; bh=bzaUZvBR6GY2fVCjdmz9wFgI6HiU4z7HCwf2miDnwYA=; b=i
-	GX83XVzAoGLYdZx2vbv5UP4w29BGMp9szfjvexA7zY/zvv+cpwxcXp7HTdXqLgCK
-	a1Sl5CVaCmF6wjx/PS54odSwp6n5VOPgXNcjOHESt20QrGIJygkBGYCoBbnbpc6W
-	pZx2qTIpy5Rzg5rICCypPmIftKnFC4RqDdAa6u9q+ug40IYF5a/lRHQnfE4TKTHg
-	Rmf2v1CxAnNAyXxenNYkpAQkjb8ajh6+SHVY027B4IPDGxM7D/Q1nNKU4Vnh8zgh
-	mnFceguqwrlh3qtBiAcCCwT5DqqgI+s6l29Vym8SH29NrBWxvm7yYIv5MEuS6BdW
-	pjMrWBntCChPZvy7fExgA==
-X-ME-Sender: <xms:-YDVZoJtGIfQ-SaB70EHDJmU1AS_aHtyq9G07YCD9ka7SFfK2G7jUQ>
-    <xme:-YDVZoKIl28I_f7LJnmk0YVmkDyO2srCnsC_PVxPIidohgDF3H5AmAGZGc6xQIXmv
-    FK-qmbi5j7ms_BiG_w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehfedguddvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
-    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvdef
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopeguihgvthhmrghrrdgvghhgvghmrg
-    hnnhesrghrmhdrtghomhdprhgtphhtthhopehmrghrkhdrrhhuthhlrghnugesrghrmhdr
-    tghomhdprhgtphhtthhopegthihphhgrrhestgihphhhrghrrdgtohhmpdhrtghpthhtoh
-    eprhhoshhtvgguthesghhoohgumhhishdrohhrghdprhgtphhtthhopegsshgvghgrlhhl
-    sehgohhoghhlvgdrtghomhdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrug
-    drohhrghdprhgtphhtthhopegsrhgruhhnvghrsehkvghrnhgvlhdrohhrghdprhgtphht
-    thhopehkvggvsheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhheskhgvrh
-    hnvghlrdhorhhg
-X-ME-Proxy: <xmx:-YDVZotDYjNwOLmbepGuzRbve8dpg4PUkv-Z3Z5HZ4thEqpif7IOFw>
-    <xmx:-YDVZlYQjTxLpm4yBsjpAQNUQK56ngTLtrSpT_4M6EI8MfCOstHtAg>
-    <xmx:-YDVZvb8SGQi2U9tYXOv94ItwL-JifN3KKNb6FctzcRFlq2JVp6zow>
-    <xmx:-YDVZhBVB07Hh6OWpB_irfc3Q8tn58t4BJbVaJHchXxoOgq9Jz6ecQ>
-    <xmx:-YDVZsJwLH0OCSZIqhg0QIi80Ml9hJvUQLfbZ2iagsSkpsES3sM5MBEJ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-	id 3C9DA2220083; Mon,  2 Sep 2024 05:10:17 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1725269591; c=relaxed/simple;
+	bh=/ywkmSDiz/LnLATR1K+5lE/O9riJKh5k4UrAo5BJKmI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WXCXrjacnOGTeHt7MipViitrhNyLGW7kZQ8h0T2eRYR9IOgXpJh6JAgi+yccoC3HJIXVSjnk0KWe/0hdV3NB/u/SCBM2g4j+q6sFokG5eiW13d0zxGv4sI5MQkXke/kC8YICS2JDfw1KA+UmchZlWBDuKR9U4UpkyTIhzGuDCfQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=DHAHV/+v; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version:
+	Content-Type; bh=8t/9R11y9WzMjl6WDUd5IoEaVlGq5A+d/FgzVIbj16A=;
+	b=DHAHV/+v5z7FIO/q0BvYLE3HDSPoBDz6goSffGxhnHh3n3QAnx1Nd7AetsBCiE
+	lYCsEr3zQt+WoEWDIoJ2PYg3wjaO24jOY6whGBKGzfxFx02iPsXQbn7hmAy0Oeoj
+	u3/rKGo98P+Uu8XVmJrK9koZTKp5QWfmecM7VguCjwSo0=
+Received: from localhost.localdomain (unknown [120.227.22.125])
+	by gzga-smtp-mta-g3-5 (Coremail) with SMTP id _____wD3_x9AhtVmyBj+Kg--.58067S2;
+	Mon, 02 Sep 2024 17:32:49 +0800 (CST)
+From: Yuan Chen <chenyuan_fl@163.com>
+To: andrii@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/bpf: Fix procmap_query()'s params mismatch and compilation warning
+Date: Mon,  2 Sep 2024 17:32:48 +0800
+Message-ID: <20240902093248.23473-1-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 02 Sep 2024 09:09:55 +0000
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Aleksa Sarai" <cyphar@cyphar.com>, "Ingo Molnar" <mingo@redhat.com>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Juri Lelli" <juri.lelli@redhat.com>,
- "Vincent Guittot" <vincent.guittot@linaro.org>,
- "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Benjamin Segall" <bsegall@google.com>, "Mel Gorman" <mgorman@suse.de>,
- "Valentin Schneider" <vschneid@redhat.com>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>,
- "Christian Brauner" <brauner@kernel.org>, "Jan Kara" <jack@suse.cz>,
- shuah <shuah@kernel.org>
-Cc: "Kees Cook" <kees@kernel.org>, "Florian Weimer" <fweimer@redhat.com>,
- "Mark Rutland" <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
- linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- Linux-Arch <linux-arch@vger.kernel.org>, linux-kselftest@vger.kernel.org,
- stable@vger.kernel.org
-Message-Id: <63193b87-7057-4ad0-aef2-fdb5d15138c3@app.fastmail.com>
-In-Reply-To: 
- <20240902-extensible-structs-check_fields-v1-3-545e93ede2f2@cyphar.com>
-References: 
- <20240902-extensible-structs-check_fields-v1-0-545e93ede2f2@cyphar.com>
- <20240902-extensible-structs-check_fields-v1-3-545e93ede2f2@cyphar.com>
-Subject: Re: [PATCH RFC 3/8] openat2: explicitly return -E2BIG for (usize > PAGE_SIZE)
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3_x9AhtVmyBj+Kg--.58067S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Kr45uF1UWF13Ww4UWryrXrb_yoW8CF48pr
+	4fJ39Fka47KF1UX3W7GF4kXrWFkw4kAryUAw4jqrnIvFn5J3WxJFsakFW5uFWrGr9Yyr1S
+	yayrKF92ka1jvw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jv38nUUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/1tbiNwZOvWXAnCO7gQAAsi
 
-On Mon, Sep 2, 2024, at 07:06, Aleksa Sarai wrote:
-> While we do currently return -EFAULT in this case, it seems prudent to
-> follow the behaviour of other syscalls like clone3. It seems quite
-> unlikely that anyone depends on this error code being EFAULT, but we can
-> always revert this if it turns out to be an issue.
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-Right, it's probably a good idea to have a limit there rather than
-having a busy loop with a user-provided length when the only bound is
-the available virtual memory.
+When the PROCMAP_QUERY is not defined, a compilation error occurs due to the
+mismatch of the procmap_query()'s params, procmap_query() only be called in
+the file where the function is defined, modify the params so they can match.
 
->  	if (unlikely(usize < OPEN_HOW_SIZE_VER0))
->  		return -EINVAL;
-> +	if (unlikely(usize > PAGE_SIZE))
-> +		return -E2BIG;
-> 
+We get a warning when build samples/bpf:
+    trace_helpers.c:252:5: warning: no previous prototype for ‘procmap_query’ [-Wmissing-prototypes]
+      252 | int procmap_query(int fd, const void *addr, __u32 query_flags, size_t *start, size_t *offset, int *flags)
+          |     ^~~~~~~~~~~~~
+As this function is only used in the file, mark it as 'static'.
 
-Is PAGE_SIZE significant here? If there is a need to enforce a limit,
-I would expect this to be the same regardless of kernel configuration,
-since the structure layout is also independent of the configuration.
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+---
+ tools/testing/selftests/bpf/trace_helpers.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Where is the current -EFAULT for users passing more than a page?
-I only see it for reads beyond the VMA, but not e.g. when checking
-terabytes of zero pages from an anonymous mapping.
+diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+index 1bfd881c0e07..2d742fdac6b9 100644
+--- a/tools/testing/selftests/bpf/trace_helpers.c
++++ b/tools/testing/selftests/bpf/trace_helpers.c
+@@ -249,7 +249,7 @@ int kallsyms_find(const char *sym, unsigned long long *addr)
+ #ifdef PROCMAP_QUERY
+ int env_verbosity __weak = 0;
+ 
+-int procmap_query(int fd, const void *addr, __u32 query_flags, size_t *start, size_t *offset, int *flags)
++static int procmap_query(int fd, const void *addr, __u32 query_flags, size_t *start, size_t *offset, int *flags)
+ {
+ 	char path_buf[PATH_MAX], build_id_buf[20];
+ 	struct procmap_query q;
+@@ -293,7 +293,7 @@ int procmap_query(int fd, const void *addr, __u32 query_flags, size_t *start, si
+ 	return 0;
+ }
+ #else
+-int procmap_query(int fd, const void *addr, size_t *start, size_t *offset, int *flags)
++static int procmap_query(int fd, const void *addr, __u32 query_flags, size_t *start, size_t *offset, int *flags)
+ {
+ 	return -EOPNOTSUPP;
+ }
+-- 
+2.46.0
 
-    Arnd
 
