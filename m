@@ -1,80 +1,71 @@
-Return-Path: <linux-kselftest+bounces-16986-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1FD7968B42
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 17:45:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E6BD968B81
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 18:03:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8183BB22C61
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 15:45:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC7091F2365B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 16:03:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1E2E19F123;
-	Mon,  2 Sep 2024 15:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 548541A3028;
+	Mon,  2 Sep 2024 16:03:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="J9jt39xt"
+	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="yT7+80O+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC87819F115
-	for <linux-kselftest@vger.kernel.org>; Mon,  2 Sep 2024 15:45:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB4E442AB7;
+	Mon,  2 Sep 2024 16:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725291945; cv=none; b=JesCZ0LmNzKH62Mh4Yo70jPQXtMHFf/4ghRgymMBgurhuO+fXDrgwR9jM3l7S71QIuq+AJWLRVzt81D0UZhp5BpGRZgdpIm0xyU7euOGm5B3kdkCDywm8YrPIQmIVRdqHhbSCWqwMK902lIYoUY1aJ3MGZ7WFAPKvoaenAchC9o=
+	t=1725292984; cv=none; b=KFm49FngRPFEsBoT2KfDxyTVno/Cf0f30Foc/MW4esPxTsc5Xf8bjdkoKnuQY28jRXGGISbYYJuMbTWDqxe0N85/iJKjISYohykcgMWXE++DRKfdK2ZAno40HMZvT9YSTQXUg+lmXVEkjoVibb7lVDEmGECXE4Tk8p9RhKyeFGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725291945; c=relaxed/simple;
-	bh=WfNDbFKaXEQ+UWHsRcQOC0oApgX22xfzOoTR1bFeDKw=;
+	s=arc-20240116; t=1725292984; c=relaxed/simple;
+	bh=0JjunB37iEzXMOdt1r0c+A6zpwOdxB9KTs1TOBOETQE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u/Rj94cVTNWQkTaKBI9JNjQ6/Hrn+2E9xBt/yrN07oVGh7JRiYs1b9M1PmCdmmB8PRNKswDU9BqNN7wR3yIlb2bv1YZhFz/WkFBaghsIHmJkHnJKu6rDJFGe4i9CNEt8veZ+D9oeBTzIaHzMFk4EaJJiSt1LrroLL9waB0O3PDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=J9jt39xt; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-2f4f24263acso65591481fa.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Sep 2024 08:45:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1725291942; x=1725896742; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VOSvR4tMpfpkU/JecxX/SlQqf0ig96cu+JpUFgP7gSQ=;
-        b=J9jt39xtf8MEVsUOzpdVBEr/VDkIMf9THG+VRdAH8oHSJsdm8zQJKMrekipkli4Uz4
-         tLavPykw4hpSQTl/d4ryHmimPSNY093084mUr2Nv4RnakLxWBOVOMdzmCVuQhIhP07KI
-         WMNuJu7oWF+ZBxDl4XanHClIZlcL6582qOEbT7c+ixUwLV5g870qpPqZXb3EBR0A19HR
-         Di1u5QVgOThUh+7XAMGZhrF8L+eb6BwcVExkGJQ4ADrfV1OSOb+rRNQSCQNj/70BDexF
-         AgygmuGbce+kLONjOcpozneBZcOWSKZ3UUhu+cS7Orpy7zPCRKm71dMhpkOa1h53hHTp
-         ZGng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725291942; x=1725896742;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VOSvR4tMpfpkU/JecxX/SlQqf0ig96cu+JpUFgP7gSQ=;
-        b=ignB/2O7ffOX8ozH64vDNAkfYIWZQ04PszwfXjVuzuhqvbA8LuijRU3R14IELTlqMK
-         kLmDCO+AXHgpOX9LjI5nhzZSVhFtNb/MMUssWVLUp468hPJrbYP13wQfiedSHG7ewJBL
-         XdnS+VXHPMNS7R1XZ7dnCLr5UDLCRyRpqxUeq704MsRp6ZOFFygvK5ksXlcBPOGQfcoF
-         +b8T/93K+l9CBrQjcUE/wU1nMA3mcIQae4FlZ2K7UUbud3uEp//jrDTyfWhk6oIZ9+PE
-         uI/ZfImeLXQorHajh6kMeohPXQ7xbDuCjsbRJ7oKbLNxOyAqHYOwO3CUyrDtF3KLXO9I
-         NklQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVDSDegsFQQ861h/+sL+x7NfvLKrGhc1v0Kyy0BevrlqPGmxg8rPRnhcYh3CMc5BxUSzSP2JYPZfXQHYn+31hE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwIJLLlCn62J/mACf2eUsb9Rl/yEu6GwYsSNVs4XrqUOKli6ekD
-	if6kV2DiXcuFo3E8mpYHdxPC5RFcelz1Hq0kHpFVQ9UQBZHhh2+y1eZ9gC1k1bM=
-X-Google-Smtp-Source: AGHT+IFgi/MueWlxs3WBPqBpaI2dWmWxiH/V1PyeAg+px8C/9CVU5AJ/GqLVc1fypY/h30wt2uBgxg==
-X-Received: by 2002:a05:6512:ea8:b0:535:456e:f56f with SMTP id 2adb3069b0e04-53546bffe51mr10454338e87.58.1725291941544;
-        Mon, 02 Sep 2024 08:45:41 -0700 (PDT)
-Received: from blackdock.suse.cz ([193.86.92.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a89891968f4sm569547566b.106.2024.09.02.08.45.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Sep 2024 08:45:40 -0700 (PDT)
-Date: Mon, 2 Sep 2024 17:45:39 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Joshua Hahn <joshua.hahnjy@gmail.com>
-Cc: tj@kernel.org, cgroups@vger.kernel.org, hannes@cmpxchg.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, lizefan.x@bytedance.com, 
-	shuah@kernel.org
-Subject: Re: [PATCH v2 0/2] Exposing nice CPU usage to userspace
-Message-ID: <mhugflcvgtv2iwyz2i63dkteur3xhnqn5qi37gzwc7mkt4sfn7@32kenf3bnhzf>
-References: <20240830141939.723729-1-joshua.hahnjy@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=esDtetWJjufJwUCAlRVuvdtAxkajUP5+ErsjMt/7kj+Lzbas0k5QutRh0i5DdRhxndPi1uW5j3Y5eSkjOdyzkZ2eXeCu3hT7T3K332aoYBbF+ZYQpZRy56n8YxWBENApsY+aQYbrQG8PbMYl4IKdlsBY55b4v0zfcosjpqgU6D0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=yT7+80O+; arc=none smtp.client-ip=80.241.56.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
+Received: from smtp1.mailbox.org (smtp1.mailbox.org [10.196.197.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4WyD755BNrz9spX;
+	Mon,  2 Sep 2024 18:02:57 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
+	t=1725292977;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=y/WAo2wEKoXQ1DpuWFNQF/dhkLU3MgM/L7pMsMzDa3U=;
+	b=yT7+80O+kLvfJIrums1mfAqfnvoGfVHmaHUI+A/suaeyi/wLufx8aoPjR6TGbQJMA6pIFn
+	afRiGRZ8YQUI/ph+gpDduYcnhcUVbDMYti4YUKKPU0FZUFpkZUHZFMZlNONPEsh5QojeLG
+	TkH8TKJ+jyILftA8RMkFHvCz/DMnt7WcDIZ9dQ/uNANWE0ZiWO9fq2JaxSXo+7cWHH6nMz
+	iF22V25OedR07/sWWrqyaKokkeL1FIDzPQ//+onct3j12jk/ANX5Invv8QIz6YIDMZ5Jvh
+	/rOdEQkdo2iTwwZ8fM7yBib0eEieFm3Mz5GKE9Hf0Jyg7f1autSh3UZdhXEbjg==
+Date: Tue, 3 Sep 2024 02:02:39 +1000
+From: Aleksa Sarai <cyphar@cyphar.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Benjamin Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, shuah <shuah@kernel.org>, 
+	Kees Cook <kees@kernel.org>, Florian Weimer <fweimer@redhat.com>, 
+	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 1/8] uaccess: add copy_struct_to_user helper
+Message-ID: <20240902.090015-soviet.bowling.selfish.chin-kvAI3lnuyqH@cyphar.com>
+References: <20240902-extensible-structs-check_fields-v1-0-545e93ede2f2@cyphar.com>
+ <20240902-extensible-structs-check_fields-v1-1-545e93ede2f2@cyphar.com>
+ <319c0da6-3d9c-4b45-a14c-07c5bbc3afb7@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,75 +73,110 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="pjp4wemvnp3oxeku"
+	protocol="application/pgp-signature"; boundary="ftgkfoq5ev7h23w4"
 Content-Disposition: inline
-In-Reply-To: <20240830141939.723729-1-joshua.hahnjy@gmail.com>
+In-Reply-To: <319c0da6-3d9c-4b45-a14c-07c5bbc3afb7@app.fastmail.com>
 
 
---pjp4wemvnp3oxeku
-Content-Type: text/plain; charset=utf-8
+--ftgkfoq5ev7h23w4
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hello Joshua.
+On 2024-09-02, Arnd Bergmann <arnd@arndb.de> wrote:
+> On Mon, Sep 2, 2024, at 07:06, Aleksa Sarai wrote:
+> > This is based on copy_struct_from_user(), but there is one additional
+> > case to consider when creating a syscall that returns an
+> > extensible-struct to userspace -- how should data in the struct that
+> > cannot fit into the userspace struct be handled (ksize > usize)?
+> >
+> > There are three possibilies:
+> >
+> >  1. The interface is like sched_getattr(2), where new information will
+> >     be silently not provided to userspace. This is probably what most
+> >     interfaces will want to do, as it provides the most possible
+> >     backwards-compatibility.
+> >
+> >  2. The interface is like lsm_list_modules(2), where you want to return
+> >     an error like -EMSGSIZE if not providing information could result in
+> >     the userspace program making a serious mistake (such as one that
+> >     could lead to a security problem) or if you want to provide some
+> >     flag to userspace so they know that they are missing some
+> >     information.
+>=20
+> I'm not sure if EMSGSIZE is the best choice here, my feeling is that
+> the kernel should instead try to behave the same way as an older kernel
+> that did not know about the extra fields:
 
-On Fri, Aug 30, 2024 at 07:19:37AM GMT, Joshua Hahn <joshua.hahnjy@gmail.co=
-m> wrote:
-> Exposing this metric will allow users to accurately probe the niced CPU
-> metric for each workload, and make more informed decisions when
-> directing higher priority tasks.
+I agree this API is not ideal for syscalls because it can lead to
+backward-compatibility issues, but that is how lsm_list_modules(2)
+works. I suspect most syscalls will go with designs (1) or (3).
 
-I'm afraid I can't still appreciate exposing this value:
+> - if the structure has always been longer than the provided buffer,
+>   -EMSGSIZE should likely have been returned all along. If older
+>   kernels just provided a short buffer, changing it now is an ABI
+>   change that would only affect intentionally broken callers, and
+>   I think keeping the behavior unchanged is more consistent.
+>=20
+> - if an extra flag was added along with the larger buffer size,
+>   the old kernel would likely have rejected the new flag with -EINVAL,
+>   so I think returning the same thing for userspace built against
+>   the old kernel headers is more consistent.
+>=20
+>=20
+> > +static __always_inline __must_check int
+> > +copy_struct_to_user(void __user *dst, size_t usize, const void *src,
+> > +		    size_t ksize, bool *ignored_trailing)
+>=20
+> This feels like the kind of function that doesn't need to be inline
+> at all and could be moved to lib/usercopy.c instead. It should clearly
+> stay in the same place as copy_struct_from_user(), but we could move
+> that as well.
 
-- It makes (some) sense only on leave cgroups (where variously nice'd
-  tasks are competing against each other). Not so much on inner node
-  cgroups (where it's a mere sum but sibling cgroups could have different
-  weights, so the absolute times would contribute differently).
+IIRC Kees suggested copy_struct_from_user() be inline when I first
+included it, though I would have to dig through the old threads to find
+the reasoning. __builtin_object_size() was added some time after it was
+merged so that wasn't the original reason.
 
-- When all tasks have nice > 0 (or nice <=3D 0), it loses any information
-  it could have had.
+> > +{
+> > +	size_t size =3D min(ksize, usize);
+> > +	size_t rest =3D max(ksize, usize) - size;
+> > +
+> > +	/* Double check if ksize is larger than a known object size. */
+> > +	if (WARN_ON_ONCE(ksize > __builtin_object_size(src, 1)))
+> > +		return -E2BIG;
+>=20
+> I guess the __builtin_object_size() check is the reason for making
+> it __always_inline, but that could be done in a trivial inline
+> wrapper around the extern function.  If ksize is always expected
+> to be a constant for all callers, the check could even become a
+> compile-time check instead of a WARN_ON_ONCE() that feels wrong
+> here: if there is a code path where this can get triggered, there
+> is clearly a kernel bug, but the only way to find out is to have
+> a userspace caller that triggers the code path.
+>=20
+> Again, the same code is already in copy_struct_from_user(), so
+> this is not something you are adding but rather something we
+> may want to change for both.
+>=20
+>       Arnd
 
-(Thus I don't know whether to commit to exposing that value via cgroups.)
+--=20
+Aleksa Sarai
+Senior Software Engineer (Containers)
+SUSE Linux GmbH
+<https://www.cyphar.com/>
 
-I wonder, wouldn't your use case be equally served by some
-post-processing [1] of /sys/kernel/debug/sched/debug info which is
-already available?
-
-Regards,
-Michal
-
-[1]
-Your metric is supposed to represent
-	=CE=A3_i^tasks =E2=88=AB_t is_nice(i, t) dt
-
-If I try to address the second remark by looking at
-	=CE=A3_i^tasks =E2=88=AB_t nice(i, t) dt
-
-and that resembles (nice=3D0 ~ weight=3D1024)
-	=CE=A3_i^tasks =E2=88=AB_t weight(i, t) dt
-
-swap sum and int
-	=E2=88=AB_t =CE=A3_i^tasks weight(i, t) dt
-
-where
-	=CE=A3_i^tasks weight(i, t)=20
-
-can be taken from
-	/sys/kernel/debug/sched/debug:cfs_rq[0].load_avg
-
-above is only for CPU nr=3D0. So processing would mean sampling that file
-over all CPUs and time.
-
---pjp4wemvnp3oxeku
+--ftgkfoq5ev7h23w4
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYKAB0WIQTd6mfF2PbEZnpdoAkt3Wney77BSQUCZtXdoAAKCRAt3Wney77B
-Se8gAQDRh3DgBLtj3DCNCk75FE2vtjfD+GRH6awHFPeBC2A+IwEAxBg0GoPbsEYV
-jr31hYEW3dftJtxBNrZ5yUFj2uTuXAc=
-=DYNI
+iHUEABYKAB0WIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCZtXhnwAKCRAol/rSt+lE
+b0i1AP4n3zvF3EnvaHU3j7y6pOFoMZsPTUgIjM9al7nMqGnp9gD/YOPgm1jLZUNd
+4zg7QxzxYtCbzS8HNsO28bO+uW/C1A4=
+=93Iu
 -----END PGP SIGNATURE-----
 
---pjp4wemvnp3oxeku--
+--ftgkfoq5ev7h23w4--
 
