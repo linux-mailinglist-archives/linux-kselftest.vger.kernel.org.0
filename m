@@ -1,50 +1,49 @@
-Return-Path: <linux-kselftest+bounces-16996-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16997-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37F04968BDB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 18:16:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3222968BE0
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 18:17:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47BFA1C218A2
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 16:16:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 040D31C21B49
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 16:17:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEBA12139DA;
-	Mon,  2 Sep 2024 16:15:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED54721C175;
+	Mon,  2 Sep 2024 16:15:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tc5rwWph"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X9J9lYBA"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE3CB1AB6CD;
-	Mon,  2 Sep 2024 16:15:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC79D21C16D;
+	Mon,  2 Sep 2024 16:15:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725293716; cv=none; b=t3cVv2Xj3BPsG+3bb0b9yPXfhpKb4lYNF29+bbB9LSTaWf3k1RYrwzYXi9YywHBwxeLSgrqI53C4+h5U4Ju0GsuXF5N+vrlmuE6m2MZ86AB/LdppszyAtnIxI33X8+24H6L2SWS+re1c653xeBRUKVapNNCflLC+K14Fv77JCqY=
+	t=1725293719; cv=none; b=iSX8gJ4ZoIzA1Od9XCSZyQMIqez4vFj4cM0ZYm+thnkCtqb5FvNZNjK78rZHirUpcoujBbI1r2GQ7yZQPcac6Z6pNvGV8Uzn1M4iQCTUX+UzSyuX7ke0cImfAIn+CbSa8PYf6sZu6meWxV1uTG7H89SuT5wcTybgEsAMt/19f1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725293716; c=relaxed/simple;
-	bh=XMF4tyjgQTZmmDwd1PZu42vm+Z1+DNVxea8aQd/u1RQ=;
+	s=arc-20240116; t=1725293719; c=relaxed/simple;
+	bh=xtOdecYiKB5InvoL/YSqFAGZREGEyiVcgfttpziwedM=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rCApBgNrmFtv4Kv4Kva870Wql6ZO01nmvCywab8LbCWrsr2U7RY3dwQlfddnyoA3Of/ObYGDIWYNaJAEeaF7i9J5iUuOrm7Fxu1f05DhdkaGYKgcertxFc1KBWwP468hruo29eW2uirMwwtVo8TqW/sZw2nX9EZTNMqU7OhjJMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tc5rwWph; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7FB8C4CEC4;
-	Mon,  2 Sep 2024 16:15:13 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=HoSaIqk94GMV59VwSEGSnlu0tZNFkjx72hREJVeUw7cH3mlKcc+8GmH0jeUIIJ6282OTukElz79sRfKytz4NJqCzBxMWZJn8HQ+gHORly5wfuFStPaqujza1xHUd802xQZyIRbqtigkf5cXMhCWIQnDNbD0bEZXuoRBzow0LaOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X9J9lYBA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9320FC4CECB;
+	Mon,  2 Sep 2024 16:15:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725293716;
-	bh=XMF4tyjgQTZmmDwd1PZu42vm+Z1+DNVxea8aQd/u1RQ=;
+	s=k20201202; t=1725293718;
+	bh=xtOdecYiKB5InvoL/YSqFAGZREGEyiVcgfttpziwedM=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Tc5rwWphxCyI28z4DRwWHG+TL1iqLOFJggafMwQOoI6j4rhVEqb+NFDH5YE4RGyz2
-	 xhFq+07M8IcFXyAJpBK76PnElq6bDDy7xLsNyiENdXa5AesbQEPjKi0Y9UMZyVSuXt
-	 H+9xoE9plzwMa4cnTbgnt6g/yhx+bic0KQlf2Bey0rZhgchxccYwCwKNsqEJyEYvFP
-	 +G3gEzAFY5+1p4+TFkrrcWTARlvqPViWoWdAit6K7mAMuN7Z+S0rOMX1+SuZWef1/3
-	 vOEWDzLFxAM69ciAXkyvf/F76xQhjyYwHNOnpd9P75RMxpoPMq470hJ1fFi56WUN5T
-	 ReC8++PGgB99g==
+	b=X9J9lYBA64rSQShxUiGuKSRL22BP/KcyYHeJ5LlD2d+U3JbXJX4HphKInc20le8Ct
+	 D5ZMVkcnyKVO+XiEz092j1U/7VIxyKQIduc8SwwcNJWueU3YY4lwvllhMbwd3eAKPf
+	 98Ap58Z5HS05CBvnARK1iGnssmA7ixbC/6zKKDxGt8K1rt64G5YjFegiY1zPNKxmmd
+	 81mHjaRVGHegi9VIOMXOT4VqFQ4z1BvaTpwdyxN5SUdtGlpNKR+b7563Z5tYDnaMOE
+	 l5/W8755n6N1X0sskiFjSlO9ek5mN551rKf+YHlrKRiBMTC2BbUix6PfxksYeigTDb
+	 8luG5fGEGdxHQ==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Tue, 03 Sep 2024 01:14:36 +0900
-Subject: [PATCH HID 6/7] HID: bpf: Allow to control the connect mask of
- hid-generic from BPF
+Date: Tue, 03 Sep 2024 01:14:37 +0900
+Subject: [PATCH HID 7/7] selftests/hid: add test to disable hid-input
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240903-hid-bpf-hid-generic-v1-6-9511a565b2da@kernel.org>
+Message-Id: <20240903-hid-bpf-hid-generic-v1-7-9511a565b2da@kernel.org>
 References: <20240903-hid-bpf-hid-generic-v1-0-9511a565b2da@kernel.org>
 In-Reply-To: <20240903-hid-bpf-hid-generic-v1-0-9511a565b2da@kernel.org>
 To: Jiri Kosina <jikos@kernel.org>, 
@@ -63,111 +62,171 @@ Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
  linux-doc@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1725293696; l=3583;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1725293696; l=5770;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=XMF4tyjgQTZmmDwd1PZu42vm+Z1+DNVxea8aQd/u1RQ=;
- b=WDKNwNUxU5NH071omL+ADXlWlicmd4sE9+4iMgORKVSh4qt/QwemvY3k4tvaY2auD2g952VNF
- B86i6pNs6QEBjqtG7cD+jQMY6aHjyIK0FvynZ7s0ylHXNXSq9q2DnSg
+ bh=xtOdecYiKB5InvoL/YSqFAGZREGEyiVcgfttpziwedM=;
+ b=GE/tgxdBkatX9tmF7AXHOU/jlAbMce5qGP3SxP2mtW5A9+4VoYudbDiOQAuLD+ESHP/ByppSx
+ eeIohiS/C/ADzvR+NR2IhXu7ICiStGPD39RAaNnmcWow5MdY5GSG6eQ
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-We make struct hid_device_id writeable and use the .driver_data field
-of hid-generic as the connect mask.
-
-This way, we can control from a HID-BPF program if a device needs to
-be exported through hidraw and/or hid-input mainly.
-
-This is useful in case we want to have a third party program that directly
-talks to the hidraw node and we don't want regular input events to be
-emitted. This third party program can load a BPF program that instructs
-hid-generic to rebind on the device with hidraw only and then open the
-hidraw node itself.
-
-When the application is closed, the BPF program is unloaded and the normal
-driver takes back the control of the device.
+Add a test for the newly enabled feature to control the connect_mask
+of hid-generic.
 
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
- drivers/hid/bpf/hid_bpf_struct_ops.c |  1 +
- drivers/hid/hid-core.c               | 14 ++++++++------
- drivers/hid/hid-generic.c            |  5 +++--
- 3 files changed, 12 insertions(+), 8 deletions(-)
+ tools/testing/selftests/hid/hid_bpf.c              | 60 +++++++++++++++++++++-
+ tools/testing/selftests/hid/progs/hid.c            |  6 ++-
+ .../testing/selftests/hid/progs/hid_bpf_helpers.h  |  2 +
+ 3 files changed, 65 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/hid/bpf/hid_bpf_struct_ops.c b/drivers/hid/bpf/hid_bpf_struct_ops.c
-index 1e13a22f73a1..bb755edd02f0 100644
---- a/drivers/hid/bpf/hid_bpf_struct_ops.c
-+++ b/drivers/hid/bpf/hid_bpf_struct_ops.c
-@@ -80,6 +80,7 @@ static int hid_bpf_ops_btf_struct_access(struct bpf_verifier_log *log,
- 		WRITE_RANGE(hid_device, name, true),
- 		WRITE_RANGE(hid_device, uniq, true),
- 		WRITE_RANGE(hid_device, phys, true),
-+		WRITE_RANGE(hid_device_id, driver_data, false),
- 		WRITE_RANGE(hid_bpf_driver, force_driver, false),
- 		WRITE_RANGE(hid_bpf_driver, ignore_driver, false),
- 	};
-diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-index 7845f0a789ec..2bd279b23aa4 100644
---- a/drivers/hid/hid-core.c
-+++ b/drivers/hid/hid-core.c
-@@ -2637,15 +2637,17 @@ EXPORT_SYMBOL_GPL(hid_compare_device_paths);
+diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
+index edc061b38528..41cacc30ef8b 100644
+--- a/tools/testing/selftests/hid/hid_bpf.c
++++ b/tools/testing/selftests/hid/hid_bpf.c
+@@ -4,6 +4,38 @@
+ #include "hid_common.h"
+ #include <bpf/bpf.h>
  
- static bool hid_check_device_match(struct hid_device *hdev,
- 				   struct hid_driver *hdrv,
--				   const struct hid_device_id **id)
-+				   struct hid_device_id *id)
- {
-+	const struct hid_device_id *_id = hid_match_device(hdev, hdrv);
- 	int ret;
- 
--	*id = hid_match_device(hdev, hdrv);
--	if (!*id)
-+	if (!_id)
- 		return false;
- 
--	ret = call_hid_bpf_driver_probe(hdev, hdrv, *id);
-+	memcpy(id, _id, sizeof(*id));
++static const __u8 mouse_rdesc[] = {
++	0x05, 0x01,  /* .Usage Page (Generic Desktop)        0  */
++	0x09, 0x02,  /* .Usage (Mouse)                       2  */
++	0xa1, 0x01,  /* .Collection (Application)            4  */
++	0x09, 0x02,  /* ..Usage (Mouse)                      6  */
++	0xa1, 0x02,  /* ..Collection (Logical)               8  */
++	0x09, 0x01,  /* ...Usage (Pointer)                   10 */
++	0xa1, 0x00,  /* ...Collection (Physical)             12 */
++	0x05, 0x09,  /* ....Usage Page (Button)              14 */
++	0x19, 0x01,  /* ....Usage Minimum (1)                16 */
++	0x29, 0x03,  /* ....Usage Maximum (3)                18 */
++	0x15, 0x00,  /* ....Logical Minimum (0)              20 */
++	0x25, 0x01,  /* ....Logical Maximum (1)              22 */
++	0x75, 0x01,  /* ....Report Size (1)                  24 */
++	0x95, 0x03,  /* ....Report Count (3)                 26 */
++	0x81, 0x02,  /* ....Input (Data,Var,Abs)             28 */
++	0x75, 0x05,  /* ....Report Size (5)                  30 */
++	0x95, 0x01,  /* ....Report Count (1)                 32 */
++	0x81, 0x03,  /* ....Input (Cnst,Var,Abs)             34 */
++	0x05, 0x01,  /* ....Usage Page (Generic Desktop)     36 */
++	0x09, 0x30,  /* ....Usage (X)                        38 */
++	0x09, 0x31,  /* ....Usage (Y)                        40 */
++	0x15, 0x81,  /* ....Logical Minimum (-127)           42 */
++	0x25, 0x7f,  /* ....Logical Maximum (127)            44 */
++	0x75, 0x08,  /* ....Report Size (8)                  46 */
++	0x95, 0x02,  /* ....Report Count (2)                 48 */
++	0x81, 0x06,  /* ....Input (Data,Var,Rel)             50 */
++	0xc0,        /* ...End Collection                    52 */
++	0xc0,        /* ..End Collection                     53 */
++	0xc0,        /* .End Collection                      54 */
++};
 +
-+	ret = call_hid_bpf_driver_probe(hdev, hdrv, id);
- 	if (ret)
- 		return ret > 0;
+ struct hid_hw_request_syscall_args {
+ 	__u8 data[10];
+ 	unsigned int hid;
+@@ -59,6 +91,8 @@ struct specific_device {
+ 	__u16 bus;
+ 	__u32 vid;
+ 	__u32 pid;
++	const __u8 *rdesc;
++	const size_t rdesc_size;
+ };
  
-@@ -2662,7 +2664,7 @@ static bool hid_check_device_match(struct hid_device *hdev,
+ FIXTURE_SETUP(hid_bpf)
+@@ -72,11 +106,15 @@ FIXTURE_SETUP(hid_bpf)
+ 		.bus = BUS_BLUETOOTH,
+ 		.vid = 0x05ac,  /* USB_VENDOR_ID_APPLE */
+ 		.pid = 0x022c,  /* USB_DEVICE_ID_APPLE_ALU_WIRELESS_ANSI */
++		.rdesc = mouse_rdesc,
++		.rdesc_size = sizeof(mouse_rdesc),
+ 	}, {
+ 		.test_name = "*",
+ 		.bus = BUS_USB,
+ 		.vid = 0x0001,
+ 		.pid = 0x0a36,
++		.rdesc = rdesc,
++		.rdesc_size = sizeof(rdesc),
+ 	}};
  
- static int __hid_device_probe(struct hid_device *hdev, struct hid_driver *hdrv)
- {
--	const struct hid_device_id *id;
-+	struct hid_device_id id;
- 	int ret;
+ 	for (int i = 0; i < ARRAY_SIZE(devices); i++) {
+@@ -88,7 +126,7 @@ FIXTURE_SETUP(hid_bpf)
+ 	ASSERT_OK_PTR(match);
  
- 	if (!hid_check_device_match(hdev, hdrv, &id))
-@@ -2677,7 +2679,7 @@ static int __hid_device_probe(struct hid_device *hdev, struct hid_driver *hdrv)
- 	hdev->driver = hdrv;
- 
- 	if (hdrv->probe) {
--		ret = hdrv->probe(hdev, id);
-+		ret = hdrv->probe(hdev, &id);
- 	} else { /* default probe */
- 		ret = hid_open_report(hdev);
- 		if (!ret)
-diff --git a/drivers/hid/hid-generic.c b/drivers/hid/hid-generic.c
-index f9db991d3c5a..5cd1f3a79a4b 100644
---- a/drivers/hid/hid-generic.c
-+++ b/drivers/hid/hid-generic.c
-@@ -64,11 +64,12 @@ static int hid_generic_probe(struct hid_device *hdev,
- 	if (ret)
- 		return ret;
- 
--	return hid_hw_start(hdev, HID_CONNECT_DEFAULT);
-+	return hid_hw_start(hdev, id->driver_data);
+ 	err = setup_uhid(_metadata, &self->hid, match->bus, match->vid, match->pid,
+-			 rdesc, sizeof(rdesc));
++			 match->rdesc, match->rdesc_size);
+ 	ASSERT_OK(err);
  }
  
- static const struct hid_device_id hid_table[] = {
--	{ HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY, HID_ANY_ID, HID_ANY_ID) },
-+	{ HID_DEVICE(HID_BUS_ANY, HID_GROUP_ANY, HID_ANY_ID, HID_ANY_ID),
-+		.driver_data = HID_CONNECT_DEFAULT },
- 	{ }
- };
- MODULE_DEVICE_TABLE(hid, hid_table);
+@@ -914,6 +952,24 @@ static bool is_using_driver(struct __test_metadata *_metadata, struct uhid_devic
+ 	return found;
+ }
+ 
++static bool has_hid_input(struct uhid_device *hid)
++{
++	char input[1024];
++	DIR *d;
++
++	sprintf(input, "/sys/bus/hid/devices/%04X:%04X:%04X.%04X/input",
++		hid->bus, hid->vid, hid->pid, hid->hid_id);
++
++	d = opendir(input);
++	if (d) {
++		closedir(d);
++
++		return true;
++	}
++
++	return false;
++}
++
+ /*
+  * Attach hid_driver_probe to the given uhid device,
+  * check that the device is now using hid-generic.
+@@ -927,10 +983,12 @@ TEST_F(hid_bpf, test_hid_driver_probe)
+ 	};
+ 
+ 	ASSERT_TRUE(is_using_driver(_metadata, &self->hid, "apple"));
++	ASSERT_TRUE(has_hid_input(&self->hid)) TH_LOG("input node not found");
+ 
+ 	LOAD_PROGRAMS(progs);
+ 
+ 	ASSERT_TRUE(is_using_driver(_metadata, &self->hid, "hid-generic"));
++	ASSERT_FALSE(has_hid_input(&self->hid)) TH_LOG("input node unexpectly found");
+ }
+ 
+ /*
+diff --git a/tools/testing/selftests/hid/progs/hid.c b/tools/testing/selftests/hid/progs/hid.c
+index 883d09498351..c81d5eb18211 100644
+--- a/tools/testing/selftests/hid/progs/hid.c
++++ b/tools/testing/selftests/hid/progs/hid.c
+@@ -606,10 +606,12 @@ void BPF_PROG(hid_test_driver_probe, struct hid_device *hdev, struct hid_bpf_dri
+ 	static const char hid_generic[] = "hid-generic";
+ 
+ 	bpf_printk("test_driver_probe, %s", hdrv->name);
+-	if (!__builtin_memcmp(hdrv->name, hid_generic, sizeof(hid_generic)))
++	if (!__builtin_memcmp(hdrv->name, hid_generic, sizeof(hid_generic))) {
+ 		hdrv->force_driver = 1;
+-	else
++		id->driver_data &= ~HID_CONNECT_INPUT;
++	} else {
+ 		hdrv->ignore_driver = 1;
++	}
+ }
+ 
+ SEC("?struct_ops.s/hid_rdesc_fixup")
+diff --git a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+index 6b0f870d0727..9447233d7a3d 100644
+--- a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
++++ b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
+@@ -90,6 +90,8 @@ struct hid_bpf_ops {
+ #define BPF_F_BEFORE (1U << 3)
+ #endif
+ 
++#define HID_CONNECT_INPUT (1U << 0)
++
+ /* following are kfuncs exported by HID for HID-BPF */
+ extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
+ 			      unsigned int offset,
 
 -- 
 2.46.0
