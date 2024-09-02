@@ -1,112 +1,173 @@
-Return-Path: <linux-kselftest+bounces-17007-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17008-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FA8D968E1D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 21:08:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25662968E4A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 21:17:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 727AC1C22386
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 19:08:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 983C3283A0B
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 19:17:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5F8A19CC01;
-	Mon,  2 Sep 2024 19:08:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D688B19CC22;
+	Mon,  2 Sep 2024 19:17:41 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2EF11A3A98;
-	Mon,  2 Sep 2024 19:08:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CC321A3A9C;
+	Mon,  2 Sep 2024 19:17:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725304095; cv=none; b=p3vzszjm99V5wnn340YmXygAiQK4QLMWgBOjregPDbujI4YIj6N0Xd+LcvRA3AdJGb9aamsFiIBCpjOR4api/fq1A4mVi2jp1vtjC7Z/aQ3MqpGQkTdFiOmYuon47mz7PwinmAcMmbsvEXI+KZFwD+D/byLeZHqTAxVFb63u6x0=
+	t=1725304661; cv=none; b=ijhVgAPjj7RLbi1J0WmYTezldbFAMbSi3WtMslR05Ayne+JUuwbWr9D9SujwlcmpoMB8e0tc0blyY2RnPmNplOjjdmBmXuMb4UBBTx+pZH67cZx/oJpU6F75XVpwQW8VraPt81ra4JCpphga4gLvw/XfLBwNKpuT07iePGakm04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725304095; c=relaxed/simple;
-	bh=gVEYgyHdEpAGYFOHD7x27yBSQkNSfiEEw/kpvT4OFcQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qfjRwXz2vVNzvxeNAk8D2uB1Jpq9/sV9Sy4qulH+l+M2RkS0kOY4xMmRmP5rR0jH1NL7wWhyRyMUqKKpwfuMpYjVJ9ZfF5LurXu4akO0Sdi4AMw4ccUclKYI4tI7XgRAlxatSHgHkrcBIycYmXKUykR7A7ft4kRVzRwcRWcQPx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FCD8C4CEC2;
-	Mon,  2 Sep 2024 19:08:10 +0000 (UTC)
-Date: Mon, 2 Sep 2024 20:08:08 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Will Deacon <will@kernel.org>
-Cc: Joey Gouly <joey.gouly@arm.com>, linux-arm-kernel@lists.infradead.org,
-	nd@arm.com, akpm@linux-foundation.org, aneesh.kumar@kernel.org,
-	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
-	broonie@kernel.org, christophe.leroy@csgroup.eu,
-	dave.hansen@linux.intel.com, hpa@zytor.com,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
-	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
-	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
-	szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 06/30] arm64: context switch POR_EL0 register
-Message-ID: <ZtYNGBrcE-j35fpw@arm.com>
-References: <20240822151113.1479789-1-joey.gouly@arm.com>
- <20240822151113.1479789-7-joey.gouly@arm.com>
- <20240823144531.GH32156@willie-the-truck>
- <Zsi7ovLOfuFdfuuz@arm.com>
- <20240823170835.GA1181@willie-the-truck>
- <ZsjXtE7Kg0LQwNAL@arm.com>
- <20240827113803.GB4318@willie-the-truck>
+	s=arc-20240116; t=1725304661; c=relaxed/simple;
+	bh=G56Surs4RcPMKqkQ+D4HRpn8ohpC1w0ACTtV2JlOfkQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Qet41TWcslwoVk14q5vRFJOqsVmKXT2qqZgnTpJdyhkWbkPfL27bs7p5ivPJMMiF3/bN1hZW/jpeox0Fw7NeW/Pif6yRbYae2p+U0dCm/kuL2KoldzkNgq4MRkSWjcUcGyGkVKi2752buUts/jPfqP5c5z45ZIcxMKzogbPE5eY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4WyJRZ4rkWz9sSC;
+	Mon,  2 Sep 2024 21:17:30 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id ax3nmbJ-MmBS; Mon,  2 Sep 2024 21:17:30 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WyJRZ3bHMz9sS7;
+	Mon,  2 Sep 2024 21:17:30 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 63ACB8B773;
+	Mon,  2 Sep 2024 21:17:30 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id Gzm3BpU0vDdS; Mon,  2 Sep 2024 21:17:30 +0200 (CEST)
+Received: from PO20335.idsi0.si.c-s.fr (unknown [192.168.234.167])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 655368B76E;
+	Mon,  2 Sep 2024 21:17:29 +0200 (CEST)
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org,
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+	Xi Ruoyao <xry111@xry111.site>
+Subject: [PATCH v5 0/5] Wire up getrandom() vDSO implementation on powerpc
+Date: Mon,  2 Sep 2024 21:17:17 +0200
+Message-ID: <cover.1725304404.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.44.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240827113803.GB4318@willie-the-truck>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1725304637; l=3687; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=G56Surs4RcPMKqkQ+D4HRpn8ohpC1w0ACTtV2JlOfkQ=; b=L7YIZ5u53kP07q3XacSpkIO1Xjr62J1hUfE5txFxRpTNzPgGtylrmGgBb9ZY29iqGucj6655o E5MakVa329fBcczeFP71VjjmQ8YbRTi4BpFAc8ULVyQWxF+LYYG38qW
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 27, 2024 at 12:38:04PM +0100, Will Deacon wrote:
-> On Fri, Aug 23, 2024 at 07:40:52PM +0100, Catalin Marinas wrote:
-> > On Fri, Aug 23, 2024 at 06:08:36PM +0100, Will Deacon wrote:
-> > > On Fri, Aug 23, 2024 at 05:41:06PM +0100, Catalin Marinas wrote:
-> > > > On Fri, Aug 23, 2024 at 03:45:32PM +0100, Will Deacon wrote:
-> > > > > On Thu, Aug 22, 2024 at 04:10:49PM +0100, Joey Gouly wrote:
-> > > > > > +static void permission_overlay_switch(struct task_struct *next)
-> > > > > > +{
-> > > > > > +	if (!system_supports_poe())
-> > > > > > +		return;
-> > > > > > +
-> > > > > > +	current->thread.por_el0 = read_sysreg_s(SYS_POR_EL0);
-> > > > > > +	if (current->thread.por_el0 != next->thread.por_el0) {
-> > > > > > +		write_sysreg_s(next->thread.por_el0, SYS_POR_EL0);
-> > > > > > +		/* ISB required for kernel uaccess routines when chaning POR_EL0 */
-> > > > > 
-> > > > > nit: typo "chaning".
-> > > > > 
-> > > > > But more substantially, is this just to prevent spurious faults in the
-> > > > > context of a new thread using a stale value for POR_EL0?
-> > > > 
-> > > > Not just prevent faults but enforce the permissions from the new
-> > > > thread's POR_EL0. The kernel may continue with a uaccess routine from
-> > > > here, we can't tell.
-[...]
-> > > So what do we actually gain by having the uaccess routines honour this?
-> > 
-> > I guess where it matters is more like not accidentally faulting because
-> > the previous thread had more restrictive permissions.
-> 
-> That's what I wondered initially, but won't the fault handler retry in
-> that case?
+This series wires up getrandom() vDSO implementation on powerpc.
 
-Yes, it will retry and this should be fine (I assume you are only
-talking about the dropping ISB in the context switch).
+Tested on PPC32 on real hardware.
+Tested on PPC64 (both BE and LE) on QEMU:
 
-For the case of running with a more permissive stale POR_EL0, arguably it's
-slightly more predictable for the user but, OTOH, some syscalls like
-readv() could be routed through GUP with no checks. As with MTE, we
-don't guarantee uaccesses honour the user permissions.
+Performance on powerpc 885:
+	~# ./vdso_test_getrandom bench-single
+	   vdso: 25000000 times in 62.938002291 seconds
+	   libc: 25000000 times in 535.581916866 seconds
+	syscall: 25000000 times in 531.525042806 seconds
 
-That said, at some point we should sanitise this path anyway and have a
-single ISB at the end. In the meantime, I'm fine with dropping the ISB
-here.
+Performance on powerpc 8321:
+	~# ./vdso_test_getrandom bench-single
+	   vdso: 25000000 times in 16.899318858 seconds
+	   libc: 25000000 times in 131.050596522 seconds
+	syscall: 25000000 times in 129.794790389 seconds
+
+Performance on QEMU pseries:
+	~ # ./vdso_test_getrandom bench-single
+	   vdso: 25000000 times in 4.977777162 seconds
+	   libc: 25000000 times in 75.516749981 seconds
+	syscall: 25000000 times in 86.842242014 seconds
+
+Changes in v5:
+- The split between last two patches is not anymore PPC32/PPC64 but VDSO32/VDSO64
+- Removed the stub returning ENOSYS
+- Using meaningfull names for registers
+- Restored symbolic link that disappeared in v4
+
+Changes in v4:
+- Rebased on recent random git tree (963233ff0133) (The new tree includes selftests fixes)
+- Read/write counter in native byte order
+- Don't use anymore compat macros to write output
+- Fixed selftests build failure with patch 4 (without patch 5) on little endian on PPC64
+- Implement a __kernel_getrandom() stub returning ENOSYS on ppc64 in patch 4 (without patch 5) to make selftests happy.
+
+Changes in v3:
+- Rebased on recent random git tree (0c7e00e22c21)
+- Fixed build failures reported by robots around VM_DROPPABLE
+- Fixed crash on PPC64 due to clobbered r13 by not using r13 anymore (saving it was not enough for signals).
+- Split final patch in two, first for PPC32, second for PPC64
+- Moved selftest fixes out of this series
+
+Changes in v2:
+- Define VM_DROPPABLE for powerpc/32
+- Fixes generic vDSO getrandom headers to enable CONFIG_COMPAT build.
+- Fixed size of generation counter
+- Fixed selftests to work on non x86 architectures
+
+Christophe Leroy (5):
+  mm: Define VM_DROPPABLE for powerpc/32
+  powerpc/vdso32: Add crtsavres
+  powerpc/vdso: Refactor CFLAGS for CVDSO build
+  powerpc/vdso: Wire up getrandom() vDSO implementation on VDSO32
+  powerpc/vdso: Wire up getrandom() vDSO implementation on VDSO64
+
+ arch/powerpc/Kconfig                         |   1 +
+ arch/powerpc/include/asm/mman.h              |   2 +-
+ arch/powerpc/include/asm/vdso/getrandom.h    |  54 +++
+ arch/powerpc/include/asm/vdso/vsyscall.h     |   6 +
+ arch/powerpc/include/asm/vdso_datapage.h     |   2 +
+ arch/powerpc/kernel/asm-offsets.c            |   1 +
+ arch/powerpc/kernel/vdso/Makefile            |  57 +--
+ arch/powerpc/kernel/vdso/getrandom.S         |  58 +++
+ arch/powerpc/kernel/vdso/gettimeofday.S      |  13 -
+ arch/powerpc/kernel/vdso/vdso32.lds.S        |   1 +
+ arch/powerpc/kernel/vdso/vdso64.lds.S        |   1 +
+ arch/powerpc/kernel/vdso/vgetrandom-chacha.S | 365 +++++++++++++++++++
+ arch/powerpc/kernel/vdso/vgetrandom.c        |  14 +
+ fs/proc/task_mmu.c                           |   4 +-
+ include/linux/mm.h                           |   4 +-
+ include/trace/events/mmflags.h               |   4 +-
+ tools/arch/powerpc/vdso                      |   1 +
+ tools/testing/selftests/vDSO/Makefile        |   2 +-
+ 18 files changed, 547 insertions(+), 43 deletions(-)
+ create mode 100644 arch/powerpc/include/asm/vdso/getrandom.h
+ create mode 100644 arch/powerpc/kernel/vdso/getrandom.S
+ create mode 100644 arch/powerpc/kernel/vdso/vgetrandom-chacha.S
+ create mode 100644 arch/powerpc/kernel/vdso/vgetrandom.c
+ create mode 120000 tools/arch/powerpc/vdso
 
 -- 
-Catalin
+2.44.0
+
 
