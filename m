@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-16943-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-16944-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8415E968526
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 12:48:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D718C968529
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 12:48:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE3EBB26498
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 10:48:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 48B73B20E2C
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Sep 2024 10:48:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0557B1D54C6;
-	Mon,  2 Sep 2024 10:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0ED6C1D54E7;
+	Mon,  2 Sep 2024 10:46:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I3hYHyu9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hpeRns8H"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA7CD17BEB2;
-	Mon,  2 Sep 2024 10:46:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A981D54DC;
+	Mon,  2 Sep 2024 10:46:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725273987; cv=none; b=oXtEZS92tlT5VItepQht1jEhluJ+xo1aHhxEml4yZFVu3RWWpq98GzyCnPxyEJhfTfIjVDbutkKTAHr1NDkrMJr33YrQsH8FEI8HZGGvrNTUOxyDgfu4oX0ZsW4rQtrBLESFPBcwZVR1U7adjtvc5booguqwNydaLj7Rvh15ht8=
+	t=1725273991; cv=none; b=lcFeTEF11oq4h3zVBBdNvfuFJwSeBBth9ZtKLkIctDg9ELB5pIL8lis5R+7s4JwC7cuwmrYIMRqKmUPT6SxzxfptK/CARwta6gQEU9u8HvfcLchmrUXetCcauEFWvVDei1rrT0fCjvHeTk4HzM9CVJOJOZaWOSBPV7w+rGjdqa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725273987; c=relaxed/simple;
-	bh=ZY9zZaWNbVt54txYJGS4lxZ2J2RcmPqPjJsO2UzD9RU=;
+	s=arc-20240116; t=1725273991; c=relaxed/simple;
+	bh=RjQy6bhiC2D+XOt09U0I3DX7UV2GSih6fnqKazD+QAo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bBVNxoo/bxPfFLB2sa/y+UU7xu/AldAiwbpmjq1JWDrt4KV9ZOsipUxFqCy7hJlUSFVhwxItcZKGQ43v9PW7VtgXRqtQalFLPKJd1Q8TNoZ6o1X6qU6YvqF+uwt6JwXb33YtoRdr7f3UUyknhy6UIZE+OXfI0cEDIlJUChVya8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I3hYHyu9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 140FFC4CED4;
-	Mon,  2 Sep 2024 10:46:24 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=e4zqE1sZx4i5IU8qauH+Y+VUuXGr5nViFZAaNj7X8NgpTB44+vUPJNMu5W0e/dHcK8Mrk2obo7AbhxKi9m3Z90g+KzCj0IxvAtsEZJ2yz3KaGxSfg5tPFUPLdqMPU1KQUc+DzMxGxMp1NNW5VYyLM3aZEPuS8hTsXm2t/zRN3nk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hpeRns8H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25837C4CEC6;
+	Mon,  2 Sep 2024 10:46:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725273987;
-	bh=ZY9zZaWNbVt54txYJGS4lxZ2J2RcmPqPjJsO2UzD9RU=;
+	s=k20201202; t=1725273990;
+	bh=RjQy6bhiC2D+XOt09U0I3DX7UV2GSih6fnqKazD+QAo=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=I3hYHyu9Er1eJbWXCCkBK8FnEYP+8Fl+8MTEigUe6jbg88mphYvEEQenHIpaeuORg
-	 t4sWbkunCaSbm7ffdYlmEZrzzBd7z9q0triVAff3/k4Y9xH09vjWprfaWxI05iV3v4
-	 ok9OV5K5tKZ07s+m+EX9x8IQ0kf5l7Lg0x5iz4VTEZ2/nO8NsAa2dshAN50ZEyBxvy
-	 ipOXWMgIPdcazSZcDHz84+FAOPrbzj7e7xqMxEFNOziEG+bfiDtTgEXzWsiTEgQnxB
-	 yJPADlzLpef954F1R+8FrtAwcP9ANYYNeLLvvG/5lAVWF+bXN/tctjmzKYKuLRfS+H
-	 BPxexM00RpgMA==
+	b=hpeRns8H4WF0KWYWbxbTAdeUgx3dOjid6fVb+gIg+/VFreZK7HB7maQp3fuRP0EkQ
+	 qORG9lcT+OxVKDXcNXFWH7GYP/vCn1KQJyabpUiGHnQLYA4FifJbefh2zgH/oZjbRu
+	 l+o+c+F/74zpcdD+oCMbxrDKts/et13o3j75r+araG5AEVEpJmC2qPqnym51BhZdS0
+	 fkqtZMKPx7E/KZ32yD4jkhrFr6SMWagk+Y18nyNyRQ7y67wGHyYw9qilhEZj68RZ49
+	 2SHosFzkdVYC+dwhzwGnaDSB8nWFkaWo1g5nFm5qUZ4agvdPVLZefVLbZXcNHuhdLL
+	 NzhueUvDOqdnA==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Mon, 02 Sep 2024 12:45:57 +0200
-Subject: [PATCH net-next 06/11] selftests: mptcp: join: validate MPJ SYN TX
- MIB counters
+Date: Mon, 02 Sep 2024 12:45:58 +0200
+Subject: [PATCH net-next 07/11] selftests: mptcp: join: more explicit check
+ name
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240902-net-next-mptcp-mib-mpjtx-misc-v1-6-d3e0f3773b90@kernel.org>
+Message-Id: <20240902-net-next-mptcp-mib-mpjtx-misc-v1-7-d3e0f3773b90@kernel.org>
 References: <20240902-net-next-mptcp-mib-mpjtx-misc-v1-0-d3e0f3773b90@kernel.org>
 In-Reply-To: <20240902-net-next-mptcp-mib-mpjtx-misc-v1-0-d3e0f3773b90@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -63,233 +63,306 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6034; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=ZY9zZaWNbVt54txYJGS4lxZ2J2RcmPqPjJsO2UzD9RU=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBm1ZdtZqJfbARCE4TrElYcQ4P9oCW5/KmhCTEDP
- EwHJ0dVkA+JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZtWXbQAKCRD2t4JPQmmg
- c9z+EAC/MNUpYfauS6tpW5dhzLPlvWB9Ms9B0rhFX0wAoHnMoLGh2qA9mYIoIxeODTY5Y5fZpt8
- YY1OA3Je1kUOewTRhjHOPKEcQQJgNC0Vg5G4hF7OYxJqG6pu9A9U9wyiITbg84k3WljDedFxecK
- 4/mUEWoKrwRf9emOHIVB81ntd6Bl8GtFIvjm5Ct8sVtxiQ6QqwIOq2nr+3xSP/uqSejy2LFyydT
- L8uojoo6MBZMTpgN68Yal2fMj8ikSBm2//svH+mZ4LotzDgnUrWRbbYwKW0FXVWFmUayAZG/RkE
- XVkGxTFTivBNhMOeO8NxtIm/B12T81Sb74Lsesv8QohZUbxANGJ7VpMjic5ms2RMy5LR/hqjtDj
- HERWFHINfp3FU59QexmMQuee3ltCOHW4XgZeCLG0gpTfWa6JBN+iBvNDHhGrxidu3R0sQKCNR+5
- IMUP9Pood7LBWCYhyBT6vMU25BD53+ReAj7Jq8YnEGB0qrlJiRzZZfbOOsyD5NJJ5nJSKK7hJb8
- 4lKvXZRyuAB3iRVr3DUn5d3oCtBCkF5XG7cgPdnr/kgQ1e43s9hmS7ALn6by89wnVtIMSnMGAhG
- YeDOBU6AlYT4idviPybxe6TquVx9XJXm4NaA2nJoc9FdB09AIQwbGFJDaO0Rx4XTf1LvliV8WAD
- 8WbhoxqLJ7BsrKQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7942; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=RjQy6bhiC2D+XOt09U0I3DX7UV2GSih6fnqKazD+QAo=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBm1ZdtJnEZofCD0jQr9NLgt1DJzF4Z1hsebBDhg
+ Nx1X6qn4BWJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZtWXbQAKCRD2t4JPQmmg
+ cwDNEACZaqKAVTgUucmVNlmqOXLFfO4kkDGRzBMm2IoSRVR5PB2O2z9H2j2Vi3nSPSr9XLf5qim
+ hTKRhQPgXG5cgLZCuIMmAvDXENl4rrFGRS2Py8TR0qSiR0q0eCm/npB/cHVbQAJ/c3XAZYXQMIN
+ joln6qReoHCrcQuQvC3IuZ8tnLgbCGoLRWBQaEAXCtfndMI2xb0nK/y2HUMX2weEH2bR2oDWIzx
+ LyiCGliLBpc7FUAhWX2hfaQX2jiwBDLD7LYK3icMnCc58zpccEJqtoskBqOsVQBbtNOS8pauzj+
+ E6NTaelCUeH50lxUARIqBQLVjwI4ibgdN2J2vMxyFR5XUULcoyV/d4X5FKEgVxzqDHyNZqeKNHs
+ cUxjr8da7+uFL5iP4B05Tsce+f6+/PgfANzvAJv4vjlFEJRPVLlaOEsTG9IIEzdF3ZkeLSxTUv4
+ M12L3qzkY5iahVRrPaASrZ11vodjU4vSoI5LCWZ/7OuYWS+ghyvHZur77boK3rzMkeA9ZVBB8oX
+ BQL+c0PxYtxJCosjiQDosE+7ewJFgiuy8So4WmGps4H/DiBxNA5pL95VXA9zeweHH9HQQ+1drnd
+ h2BD3VkyTl1w1sd3kHm/LUp3y2Wq5mBGMxzlulnw2fta3l25xfxpuxXA4+tZ3MxmhhVvTnKEPcc
+ hxFFfcwBLIVPl3Q==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-A few new MPJoinSynTx MIB counters have been added in a previous commit.
-They are being validated here in mptcp_join.sh selftest, each time the
-number of received MPJ are checked.
+Before, the check names had to be very short. It is no longer the case
+now that these checks are printed on a dedicated line.
 
-Most of the time, the number of sent SYN+MPJ is the same as the received
-ones. But sometimes, there are more, because there are dropped, or there
-are errors.
-
-While at it, the "no MPC reuse with single endpoint" subtest has been
-modified to force a bind() error.
+Then, it looks better to have more explicit names.
 
 Reviewed-by: Geliang Tang <geliang@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 89 ++++++++++++++++++++++---
- 1 file changed, 78 insertions(+), 11 deletions(-)
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 65 +++++++++++++------------
+ 1 file changed, 33 insertions(+), 32 deletions(-)
 
 diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 63580a5810bf..23f8e2254064 100755
+index 23f8e2254064..7993e0e0029e 100755
 --- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
 +++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -67,6 +67,10 @@ unset join_fail_nr
- unset join_rst_nr
- unset join_infi_nr
- unset join_corrupted_pkts
-+unset join_syn_tx
-+unset join_create_err
-+unset join_bind_err
-+unset join_connect_err
+@@ -865,7 +865,7 @@ chk_cestab_nr()
+ 	local cestab=$2
+ 	local count
  
- # generated using "nfbpf_compile '(ip && (ip[54] & 0xf0) == 0x30) ||
- #				  (ip6 && (ip6[74] & 0xf0) == 0x30)'"
-@@ -1336,6 +1340,54 @@ chk_infi_nr()
+-	print_check "cestab $cestab"
++	print_check "currently established: $cestab"
+ 	count=$(mptcp_lib_get_counter ${ns} "MPTcpExtMPCurrEstab")
+ 	if [ -z "$count" ]; then
+ 		print_skip
+@@ -1141,7 +1141,7 @@ chk_csum_nr()
+ 		csum_ns2=${csum_ns2:1}
  	fi
- }
  
-+chk_join_tx_nr()
-+{
-+	local syn_tx=${join_syn_tx:-0}
-+	local create=${join_create_err:-0}
-+	local bind=${join_bind_err:-0}
-+	local connect=${join_connect_err:-0}
-+	local rc=${KSFT_PASS}
-+	local count
+-	print_check "sum"
++	print_check "checksum server"
+ 	count=$(mptcp_lib_get_counter ${ns1} "MPTcpExtDataCsumErr")
+ 	if [ -n "$count" ] && [ "$count" != "$csum_ns1" ]; then
+ 		extra_msg+=" ns1=$count"
+@@ -1154,7 +1154,8 @@ chk_csum_nr()
+ 	else
+ 		print_ok
+ 	fi
+-	print_check "csum"
 +
-+	count=$(mptcp_lib_get_counter ${ns2} "MPTcpExtMPJoinSynTx")
-+	if [ -z "$count" ]; then
-+		rc=${KSFT_SKIP}
-+	elif [ "$count" != "$syn_tx" ]; then
-+		rc=${KSFT_FAIL}
-+		print_check "syn tx"
-+		fail_test "got $count JOIN[s] syn tx expected $syn_tx"
-+	fi
-+
-+	count=$(mptcp_lib_get_counter ${ns2} "MPTcpExtMPJoinSynTxCreatSkErr")
-+	if [ -z "$count" ]; then
-+		rc=${KSFT_SKIP}
-+	elif [ "$count" != "$create" ]; then
-+		rc=${KSFT_FAIL}
-+		print_check "syn tx create socket error"
-+		fail_test "got $count JOIN[s] syn tx create socket error expected $create"
-+	fi
-+
-+	count=$(mptcp_lib_get_counter ${ns2} "MPTcpExtMPJoinSynTxBindErr")
-+	if [ -z "$count" ]; then
-+		rc=${KSFT_SKIP}
-+	elif [ "$count" != "$bind" ]; then
-+		rc=${KSFT_FAIL}
-+		print_check "syn tx bind error"
-+		fail_test "got $count JOIN[s] syn tx bind error expected $bind"
-+	fi
-+
-+	count=$(mptcp_lib_get_counter ${ns2} "MPTcpExtMPJoinSynTxConnectErr")
-+	if [ -z "$count" ]; then
-+		rc=${KSFT_SKIP}
-+	elif [ "$count" != "$connect" ]; then
-+		rc=${KSFT_FAIL}
-+		print_check "syn tx connect error"
-+		fail_test "got $count JOIN[s] syn tx connect error expected $connect"
-+	fi
-+
-+	print_results "join Tx" ${rc}
-+}
-+
- chk_join_nr()
- {
- 	local syn_nr=$1
-@@ -1390,6 +1442,9 @@ chk_join_nr()
++	print_check "checksum client"
+ 	count=$(mptcp_lib_get_counter ${ns2} "MPTcpExtDataCsumErr")
+ 	if [ -n "$count" ] && [ "$count" != "$csum_ns2" ]; then
+ 		extra_msg+=" ns2=$count"
+@@ -1198,7 +1199,7 @@ chk_fail_nr()
+ 		fail_rx=${fail_rx:1}
+ 	fi
+ 
+-	print_check "ftx"
++	print_check "fail tx"
+ 	count=$(mptcp_lib_get_counter ${ns_tx} "MPTcpExtMPFailTx")
+ 	if [ -n "$count" ] && [ "$count" != "$fail_tx" ]; then
+ 		extra_msg+=",tx=$count"
+@@ -1212,7 +1213,7 @@ chk_fail_nr()
+ 		print_ok
+ 	fi
+ 
+-	print_check "failrx"
++	print_check "fail rx"
+ 	count=$(mptcp_lib_get_counter ${ns_rx} "MPTcpExtMPFailRx")
+ 	if [ -n "$count" ] && [ "$count" != "$fail_rx" ]; then
+ 		extra_msg+=",rx=$count"
+@@ -1245,7 +1246,7 @@ chk_fclose_nr()
+ 		extra_msg="invert"
+ 	fi
+ 
+-	print_check "ctx"
++	print_check "fast close tx"
+ 	count=$(mptcp_lib_get_counter ${ns_tx} "MPTcpExtMPFastcloseTx")
+ 	if [ -z "$count" ]; then
+ 		print_skip
+@@ -1256,7 +1257,7 @@ chk_fclose_nr()
+ 		print_ok
+ 	fi
+ 
+-	print_check "fclzrx"
++	print_check "fast close rx"
+ 	count=$(mptcp_lib_get_counter ${ns_rx} "MPTcpExtMPFastcloseRx")
+ 	if [ -z "$count" ]; then
+ 		print_skip
+@@ -1286,7 +1287,7 @@ chk_rst_nr()
+ 		extra_msg="invert"
+ 	fi
+ 
+-	print_check "rtx"
++	print_check "reset tx"
+ 	count=$(mptcp_lib_get_counter ${ns_tx} "MPTcpExtMPRstTx")
+ 	if [ -z "$count" ]; then
+ 		print_skip
+@@ -1298,7 +1299,7 @@ chk_rst_nr()
+ 		print_ok
+ 	fi
+ 
+-	print_check "rstrx"
++	print_check "reset rx"
+ 	count=$(mptcp_lib_get_counter ${ns_rx} "MPTcpExtMPRstRx")
+ 	if [ -z "$count" ]; then
+ 		print_skip
+@@ -1319,7 +1320,7 @@ chk_infi_nr()
+ 	local infi_rx=$2
+ 	local count
+ 
+-	print_check "itx"
++	print_check "infi tx"
+ 	count=$(mptcp_lib_get_counter ${ns2} "MPTcpExtInfiniteMapTx")
+ 	if [ -z "$count" ]; then
+ 		print_skip
+@@ -1329,7 +1330,7 @@ chk_infi_nr()
+ 		print_ok
+ 	fi
+ 
+-	print_check "infirx"
++	print_check "infi rx"
+ 	count=$(mptcp_lib_get_counter ${ns1} "MPTcpExtInfiniteMapRx")
+ 	if [ -z "$count" ]; then
+ 		print_skip
+@@ -1412,8 +1413,8 @@ chk_join_nr()
+ 		rc=${KSFT_SKIP}
+ 	elif [ "$count" != "$syn_nr" ]; then
+ 		rc=${KSFT_FAIL}
+-		print_check "syn"
+-		fail_test "got $count JOIN[s] syn expected $syn_nr"
++		print_check "syn rx"
++		fail_test "got $count JOIN[s] syn rx expected $syn_nr"
+ 	fi
+ 
+ 	with_cookie=$(ip netns exec $ns2 sysctl -n net.ipv4.tcp_syncookies)
+@@ -1426,8 +1427,8 @@ chk_join_nr()
+ 		# the subflow creation
+ 		if [ "$with_cookie" != 2 ] || [ "$count" -le "$syn_ack_nr" ] || [ "$count" -gt "$syn_nr" ]; then
+ 			rc=${KSFT_FAIL}
+-			print_check "synack"
+-			fail_test "got $count JOIN[s] synack expected $syn_ack_nr"
++			print_check "synack rx"
++			fail_test "got $count JOIN[s] synack rx expected $syn_ack_nr"
+ 		fi
+ 	fi
+ 
+@@ -1436,8 +1437,8 @@ chk_join_nr()
+ 		rc=${KSFT_SKIP}
+ 	elif [ "$count" != "$ack_nr" ]; then
+ 		rc=${KSFT_FAIL}
+-		print_check "ack"
+-		fail_test "got $count JOIN[s] ack expected $ack_nr"
++		print_check "ack rx"
++		fail_test "got $count JOIN[s] ack rx expected $ack_nr"
+ 	fi
  
  	print_results "join Rx" ${rc}
+@@ -1517,7 +1518,7 @@ chk_add_nr()
  
-+	join_syn_tx="${join_syn_tx:-${syn_nr}}" \
-+		chk_join_tx_nr
-+
- 	if $validate_checksum; then
- 		chk_csum_nr $csum_ns1 $csum_ns2
- 		chk_fail_nr $fail_nr $fail_nr
-@@ -1930,9 +1985,11 @@ subflows_error_tests()
- 		pm_nl_set_limits $ns1 0 1
- 		pm_nl_set_limits $ns2 0 1
- 		pm_nl_add_endpoint $ns2 10.0.1.2 flags subflow
-+		pm_nl_add_endpoint $ns2 10.0.12.2 flags subflow
- 		speed=slow \
- 			run_tests $ns1 $ns2 10.0.1.1
--		chk_join_nr 0 0 0
-+		join_bind_err=1 \
-+			chk_join_nr 0 0 0
+ 	timeout=$(ip netns exec ${ns_tx} sysctl -n net.mptcp.add_addr_timeout)
+ 
+-	print_check "add"
++	print_check "add addr rx"
+ 	count=$(mptcp_lib_get_counter ${ns_rx} "MPTcpExtAddAddr")
+ 	if [ -z "$count" ]; then
+ 		print_skip
+@@ -1529,7 +1530,7 @@ chk_add_nr()
+ 		print_ok
  	fi
  
- 	# multiple subflows, with subflow creation error
-@@ -1944,7 +2001,8 @@ subflows_error_tests()
- 		pm_nl_add_endpoint $ns2 10.0.2.2 flags subflow
- 		speed=slow \
- 			run_tests $ns1 $ns2 10.0.1.1
--		chk_join_nr 1 1 1
-+		join_syn_tx=2 \
-+			chk_join_nr 1 1 1
+-	print_check "echo"
++	print_check "add addr echo rx"
+ 	count=$(mptcp_lib_get_counter ${ns_tx} "MPTcpExtEchoAdd")
+ 	if [ -z "$count" ]; then
+ 		print_skip
+@@ -1540,7 +1541,7 @@ chk_add_nr()
  	fi
  
- 	# multiple subflows, with subflow timeout on MPJ
-@@ -1956,7 +2014,8 @@ subflows_error_tests()
- 		pm_nl_add_endpoint $ns2 10.0.2.2 flags subflow
- 		speed=slow \
- 			run_tests $ns1 $ns2 10.0.1.1
--		chk_join_nr 1 1 1
-+		join_syn_tx=2 \
-+			chk_join_nr 1 1 1
+ 	if [ $port_nr -gt 0 ]; then
+-		print_check "pt"
++		print_check "add addr rx with port"
+ 		count=$(mptcp_lib_get_counter ${ns_rx} "MPTcpExtPortAdd")
+ 		if [ -z "$count" ]; then
+ 			print_skip
+@@ -1550,7 +1551,7 @@ chk_add_nr()
+ 			print_ok
+ 		fi
+ 
+-		print_check "syn"
++		print_check "syn rx port"
+ 		count=$(mptcp_lib_get_counter ${ns_tx} "MPTcpExtMPJoinPortSynRx")
+ 		if [ -z "$count" ]; then
+ 			print_skip
+@@ -1561,7 +1562,7 @@ chk_add_nr()
+ 			print_ok
+ 		fi
+ 
+-		print_check "synack"
++		print_check "synack rx port"
+ 		count=$(mptcp_lib_get_counter ${ns_rx} "MPTcpExtMPJoinPortSynAckRx")
+ 		if [ -z "$count" ]; then
+ 			print_skip
+@@ -1572,7 +1573,7 @@ chk_add_nr()
+ 			print_ok
+ 		fi
+ 
+-		print_check "ack"
++		print_check "ack rx port"
+ 		count=$(mptcp_lib_get_counter ${ns_tx} "MPTcpExtMPJoinPortAckRx")
+ 		if [ -z "$count" ]; then
+ 			print_skip
+@@ -1583,7 +1584,7 @@ chk_add_nr()
+ 			print_ok
+ 		fi
+ 
+-		print_check "syn"
++		print_check "syn rx port mismatch"
+ 		count=$(mptcp_lib_get_counter ${ns_tx} "MPTcpExtMismatchPortSynRx")
+ 		if [ -z "$count" ]; then
+ 			print_skip
+@@ -1594,7 +1595,7 @@ chk_add_nr()
+ 			print_ok
+ 		fi
+ 
+-		print_check "ack"
++		print_check "ack rx port mismatch"
+ 		count=$(mptcp_lib_get_counter ${ns_tx} "MPTcpExtMismatchPortAckRx")
+ 		if [ -z "$count" ]; then
+ 			print_skip
+@@ -1618,7 +1619,7 @@ chk_add_tx_nr()
+ 
+ 	timeout=$(ip netns exec $ns1 sysctl -n net.mptcp.add_addr_timeout)
+ 
+-	print_check "add TX"
++	print_check "add addr tx"
+ 	count=$(mptcp_lib_get_counter ${ns1} "MPTcpExtAddAddrTx")
+ 	if [ -z "$count" ]; then
+ 		print_skip
+@@ -1630,7 +1631,7 @@ chk_add_tx_nr()
+ 		print_ok
  	fi
  
- 	# multiple subflows, check that the endpoint corresponding to
-@@ -1977,7 +2036,8 @@ subflows_error_tests()
- 
- 		# additional subflow could be created only if the PM select
- 		# the later endpoint, skipping the already used one
--		chk_join_nr 1 1 1
-+		join_syn_tx=2 \
-+			chk_join_nr 1 1 1
- 	fi
- }
- 
-@@ -2063,7 +2123,8 @@ signal_address_tests()
- 		pm_nl_add_endpoint $ns1 10.0.14.1 flags signal
- 		pm_nl_set_limits $ns2 3 3
- 		run_tests $ns1 $ns2 10.0.1.1
--		chk_join_nr 1 1 1
-+		join_syn_tx=3 \
-+			chk_join_nr 1 1 1
- 		chk_add_nr 3 3
+-	print_check "echo TX"
++	print_check "add addr echo tx"
+ 	count=$(mptcp_lib_get_counter ${ns2} "MPTcpExtEchoAddTx")
+ 	if [ -z "$count" ]; then
+ 		print_skip
+@@ -1668,7 +1669,7 @@ chk_rm_nr()
+ 		extra_msg="invert"
  	fi
  
-@@ -2231,7 +2292,8 @@ add_addr_timeout_tests()
- 		pm_nl_set_limits $ns2 2 2
- 		speed=10 \
- 			run_tests $ns1 $ns2 10.0.1.1
--		chk_join_nr 1 1 1
-+		join_syn_tx=2 \
-+			chk_join_nr 1 1 1
- 		chk_add_nr 8 0
- 	fi
- }
-@@ -2331,7 +2393,8 @@ remove_tests()
- 		pm_nl_set_limits $ns2 2 2
- 		addr_nr_ns1=-3 speed=10 \
- 			run_tests $ns1 $ns2 10.0.1.1
--		chk_join_nr 1 1 1
-+		join_syn_tx=2 join_connect_err=1 \
-+			chk_join_nr 1 1 1
- 		chk_add_nr 3 3
- 		chk_rm_nr 3 1 invert
- 		chk_rst_nr 0 0
-@@ -2396,7 +2459,8 @@ remove_tests()
- 		pm_nl_set_limits $ns2 3 3
- 		addr_nr_ns1=-8 speed=slow \
- 			run_tests $ns1 $ns2 10.0.1.1
--		chk_join_nr 1 1 1
-+		join_syn_tx=3 \
-+			chk_join_nr 1 1 1
- 		chk_add_nr 3 3
- 		chk_rm_nr 3 1 invert
- 		chk_rst_nr 0 0
-@@ -3703,7 +3767,8 @@ endpoint_tests()
- 		chk_evt_nr ns2 MPTCP_LIB_EVENT_SUB_ESTABLISHED 6
- 		chk_evt_nr ns2 MPTCP_LIB_EVENT_SUB_CLOSED 5 # one has been closed before estab
- 
--		chk_join_nr 6 6 6
-+		join_syn_tx=7 \
-+			chk_join_nr 6 6 6
- 		chk_rm_nr 4 4
+-	print_check "rm"
++	print_check "rm addr rx"
+ 	count=$(mptcp_lib_get_counter ${addr_ns} "MPTcpExtRmAddr")
+ 	if [ -z "$count" ]; then
+ 		print_skip
+@@ -1678,7 +1679,7 @@ chk_rm_nr()
+ 		print_ok
  	fi
  
-@@ -3775,7 +3840,8 @@ endpoint_tests()
- 		chk_evt_nr ns2 MPTCP_LIB_EVENT_SUB_ESTABLISHED 5
- 		chk_evt_nr ns2 MPTCP_LIB_EVENT_SUB_CLOSED 3
+-	print_check "rmsf"
++	print_check "rm subflow"
+ 	count=$(mptcp_lib_get_counter ${subflow_ns} "MPTcpExtRmSubflow")
+ 	if [ -z "$count" ]; then
+ 		print_skip
+@@ -1713,7 +1714,7 @@ chk_rm_tx_nr()
+ {
+ 	local rm_addr_tx_nr=$1
  
--		chk_join_nr 5 5 5
-+		join_connect_err=1 \
-+			chk_join_nr 5 5 5
- 		chk_add_nr 6 6
- 		chk_rm_nr 4 3 invert
- 	fi
-@@ -3806,7 +3872,8 @@ endpoint_tests()
- 		wait_mpj $ns2
- 		mptcp_lib_kill_wait $tests_pid
+-	print_check "rm TX"
++	print_check "rm addr tx"
+ 	count=$(mptcp_lib_get_counter ${ns2} "MPTcpExtRmAddrTx")
+ 	if [ -z "$count" ]; then
+ 		print_skip
+@@ -1732,7 +1733,7 @@ chk_prio_nr()
+ 	local mpj_syn_ack=$4
+ 	local count
  
--		chk_join_nr 2 2 2
-+		join_syn_tx=3 join_connect_err=1 \
-+			chk_join_nr 2 2 2
- 		chk_add_nr 2 2
- 		chk_rm_nr 1 0 invert
+-	print_check "ptx"
++	print_check "mp_prio tx"
+ 	count=$(mptcp_lib_get_counter ${ns1} "MPTcpExtMPPrioTx")
+ 	if [ -z "$count" ]; then
+ 		print_skip
+@@ -1742,7 +1743,7 @@ chk_prio_nr()
+ 		print_ok
  	fi
+ 
+-	print_check "prx"
++	print_check "mp_prio rx"
+ 	count=$(mptcp_lib_get_counter ${ns1} "MPTcpExtMPPrioRx")
+ 	if [ -z "$count" ]; then
+ 		print_skip
 
 -- 
 2.45.2
