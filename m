@@ -1,185 +1,118 @@
-Return-Path: <linux-kselftest+bounces-17049-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17050-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3191596A111
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 16:47:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0215496A128
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 16:51:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDFF828B0CA
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 14:47:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A0F5B2628E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 14:51:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD9E1188921;
-	Tue,  3 Sep 2024 14:46:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gDXlRrEA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5C0D154C1D;
+	Tue,  3 Sep 2024 14:51:02 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04CA9153BE4;
-	Tue,  3 Sep 2024 14:46:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BD1B626CB;
+	Tue,  3 Sep 2024 14:51:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725374778; cv=none; b=iLQ95GrfRM+//BHa2CVjFu0NG9Lm5QnYH7KGD7xyjavN6NmHyWSyuWGpVG3acNTJQeCOWr3ezqlRuPnxGWQD4IuXm7yogR1kDCGEKlCOspqINEYpjSPQkjTZIuVgxqSW1OBBwjPCcWO2sQAnvW+pHlsuASOzadmu9DGTo1wKp98=
+	t=1725375062; cv=none; b=A8CbjFv6Ad8O94Ybp/+cvavF6Uau45FbureUH79m/cikB1SC7/jmR5M66xiYj76smpBZau11a1WWDwUEAhcIjOuCe2s0GVvBeTOakkQQKjkmXnwG+Dh4GzYSjDbvdgPUVHk7rpTUzh4VcMLAGoW2a6qC66HzyODFsQIJIsJVK4Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725374778; c=relaxed/simple;
-	bh=LUoij1ccctcrHN5PWV8R3XWhlyhZ6J0cEf6JBISm754=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bxcLtG9rLwXqbl2CULu4BgNtyTHUGk9Qsi/tgTEr7J/kkchdGSD7tYSrX5ZKvn1sIrBl0io4l9fu/rR69d3d2oNxm/yAHv3JLk+M+YPL4V0GP1J8soDrOPxQ6RA02xAI6O7FxhqXdCioyKNyUA888UzBoGaXWzBjwZTY5ZOfXvY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gDXlRrEA; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725374777; x=1756910777;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=LUoij1ccctcrHN5PWV8R3XWhlyhZ6J0cEf6JBISm754=;
-  b=gDXlRrEA5ijHLji+xA1yUsbJxQVLISpHbdlzKZvGv8eRDIUWjdmTgLXG
-   vBW8Cf80MUCuNVsLQW1VVxmfxuYtnp60FYCDsApYQ3Wewi/CLnYTBIXxu
-   n91DIUc3RU4wbakzcBytemf9Ra9EkrF4xXNfm0TYlE8jGTGvx8spQYTLz
-   hDCmy317GY6cjoey7xITCeS+GLWGpc9PwPU5huNEck8Tu8l6lsW0846tE
-   gibixruttQUzv7p++qhoGgnIpKnXGdqiK4NVLn/hLhR8CZIIYvHnByDbx
-   6GupOrbjF8u1+pNSvDdLjyVT2Jduqn5wY5rC6V/9halul997C7x+XCkMI
-   A==;
-X-CSE-ConnectionGUID: 6NTMZWZzRYO00xsmedw0Ew==
-X-CSE-MsgGUID: qE/XUX52QxSp7Tm+f2RNXw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11184"; a="49384137"
-X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
-   d="scan'208";a="49384137"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 07:46:16 -0700
-X-CSE-ConnectionGUID: y569VU89SuOHLxLIURFrQw==
-X-CSE-MsgGUID: t9vgbS2kSwKYi3Of+0CrMA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,199,1719903600"; 
-   d="scan'208";a="64610741"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.244.241])
-  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2024 07:46:13 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	linux-kselftest@vger.kernel.org,
-	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	linux-kernel@vger.kernel.org
-Cc: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-	Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v4 4/4] kselftest: Provide __cpuid_count() stub on non-x86 archs
-Date: Tue,  3 Sep 2024 17:45:28 +0300
-Message-Id: <20240903144528.46811-5-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240903144528.46811-1-ilpo.jarvinen@linux.intel.com>
-References: <20240903144528.46811-1-ilpo.jarvinen@linux.intel.com>
+	s=arc-20240116; t=1725375062; c=relaxed/simple;
+	bh=WKiM4yLeUd/5oolwp0d4pIB/T1dCTydTWDLgQ0XfChA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H0DcnSh+RLqDej7GYavqyqt2BM/wBKgHz7v9qW9t8dAMLD2aoX7voyYx0gAsMwSTEtCUQdrx7sEvqZOdhvGPpc7MI09ILXh2Fh6xjFOxcFcsdwcVo4dWvW7JJBHbZ5zoWtaarDe2HPZpc/XZNc0WazDTtrcwgjewDSPMt4nnYzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 16944FEC;
+	Tue,  3 Sep 2024 07:51:21 -0700 (PDT)
+Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 54B823F66E;
+	Tue,  3 Sep 2024 07:50:51 -0700 (PDT)
+Date: Tue, 3 Sep 2024 15:50:46 +0100
+From: Joey Gouly <joey.gouly@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, nd@arm.com,
+	akpm@linux-foundation.org, aneesh.kumar@kernel.org,
+	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
+	catalin.marinas@arm.com, christophe.leroy@csgroup.eu,
+	dave.hansen@linux.intel.com, hpa@zytor.com,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
+	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
+	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
+	szabolcs.nagy@arm.com, tglx@linutronix.de, will@kernel.org,
+	x86@kernel.org, kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 16/30] arm64: handle PKEY/POE faults
+Message-ID: <20240903144823.GA3669886@e124191.cambridge.arm.com>
+References: <20240822151113.1479789-1-joey.gouly@arm.com>
+ <20240822151113.1479789-17-joey.gouly@arm.com>
+ <40600b75-68eb-421a-a122-256bd20afb89@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <40600b75-68eb-421a-a122-256bd20afb89@sirena.org.uk>
 
-Building resctrl selftest fails on ARM because it uses __cpuid_count()
-that fails the build with error:
+On Thu, Aug 29, 2024 at 06:55:07PM +0100, Mark Brown wrote:
+> On Thu, Aug 22, 2024 at 04:10:59PM +0100, Joey Gouly wrote:
+> 
+> > +static bool fault_from_pkey(unsigned long esr, struct vm_area_struct *vma,
+> > +			unsigned int mm_flags)
+> > +{
+> > +	unsigned long iss2 = ESR_ELx_ISS2(esr);
+> > +
+> > +	if (!system_supports_poe())
+> > +		return false;
+> > +
+> > +	if (iss2 & ESR_ELx_Overlay)
+> > +		return true;
+> 
+> Does this need an is_data_abort() && is_instruction_abort() check?
+> Overlay doesn't appear to be defined for all exception types and it
+> wasn't clear enough to me that the callers have done this check.
 
-  CC       resctrl_tests
-In file included from resctrl.h:24,
-                 from cat_test.c:11:
-In function 'arch_supports_noncont_cat',
-    inlined from 'noncont_cat_run_test' at cat_test.c:323:6:
-../kselftest.h:74:9: error: impossible constraint in 'asm'
-   74 |         __asm__ __volatile__ ("cpuid\n\t"       \
-      |         ^~~~~~~
-cat_test.c:301:17: note: in expansion of macro '__cpuid_count'
-  301 |                 __cpuid_count(0x10, 1, eax, ebx, ecx, edx);
-      |                 ^~~~~~~~~~~~~
-../kselftest.h:74:9: error: impossible constraint in 'asm'
-   74 |         __asm__ __volatile__ ("cpuid\n\t"       \
-      |         ^~~~~~~
-cat_test.c:303:17: note: in expansion of macro '__cpuid_count'
-  303 |                 __cpuid_count(0x10, 2, eax, ebx, ecx, edx);
-      |                 ^~~~~~~~~~~~~
+The only callers are in do_page_fault(), which should only be data or
+instruction aborts. I talked with Catalin and he said it's fine to not check
+again here.
 
-The resctrl selftest would run that code only on Intel CPUs but as is,
-the code cannot be build at all.
+I can add a permissions check though:
 
-Define HAVE_CPUID in lib.mk based on ARCH (x86 or x86_64). If ARCH is
-not set, acquire it using uname -m.
+commit 033270f5a9462e998b4dee11fc91b43ac7929756
+Author: Joey Gouly <joey.gouly@arm.com>
+Date:   Tue Sep 3 15:45:59 2024 +0100
 
-Provide a stub for __cpuid_count() if HAVE_CPUID is not present to
-allow build to succeed. The stub casts its arguments to void to avoid
-causing "unused variable" or "set but not used" warnings.
+    fixup! arm64: handle PKEY/POE faults
 
-Fixes: ae638551ab64 ("selftests/resctrl: Add non-contiguous CBMs CAT test")
-Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Tested-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
-v3:
-- Remove "empty" wording
-- Also cast input parameters to void
-- Initialize ARCH from uname -m if not set (this might allow cleaning
-  up some other makefiles but that is left as future work)
-v2:
-- Removed RFC & added Fixes and Tested-by
-- Fixed the error message's line splits
-- Noted down the reason for void casts in the stub
----
- tools/testing/selftests/kselftest.h | 6 ++++++
- tools/testing/selftests/lib.mk      | 6 ++++++
- 2 files changed, 12 insertions(+)
-
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index b8967b6e29d5..9c4bfbf107f1 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -70,10 +70,16 @@
-  * have __cpuid_count().
-  */
- #ifndef __cpuid_count
-+#ifdef HAVE_CPUID
- #define __cpuid_count(level, count, a, b, c, d)				\
- 	__asm__ __volatile__ ("cpuid\n\t"				\
- 			      : "=a" (a), "=b" (b), "=c" (c), "=d" (d)	\
- 			      : "0" (level), "2" (count))
-+#else
-+#define __cpuid_count(level, count, a, b, c, d)	do {			\
-+	(void)level; (void)count; (void)a; (void)b; (void)c; (void)d;	\
-+} while (0)
-+#endif
- #endif
+diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
+index a68055150950..f651553a8ab8 100644
+--- a/arch/arm64/mm/fault.c
++++ b/arch/arm64/mm/fault.c
+@@ -495,6 +495,9 @@ static bool fault_from_pkey(unsigned long esr, struct vm_area_struct *vma,
+        if (!system_supports_poe())
+                return false;
  
- /* define kselftest exit codes */
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index d6edcfcb5be8..8e3069926153 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -23,6 +23,8 @@ CLANG_TARGET_FLAGS_x86_64       := x86_64-linux-gnu
- 
- # Default to host architecture if ARCH is not explicitly given.
- ifeq ($(ARCH),)
-+ARCH := $(shell uname -m 2>/dev/null || echo not)
-+ARCH := $(shell echo $(ARCH) | sed -e s/i.86/x86/)
- CLANG_TARGET_FLAGS := $(shell $(CLANG) -print-target-triple)
- else
- CLANG_TARGET_FLAGS := $(CLANG_TARGET_FLAGS_$(ARCH))
-@@ -199,6 +201,10 @@ clean: $(if $(TEST_GEN_MODS_DIR),clean_mods_dir)
- # Build with _GNU_SOURCE by default
- CFLAGS += -D_GNU_SOURCE=
- 
-+ifeq ($(ARCH),$(filter $(ARCH),x86 x86_64))
-+CFLAGS += -DHAVE_CPUID=
-+endif
++       if (!esr_fsc_is_permission_fault(esr))
++               return false;
 +
- # Enables to extend CFLAGS and LDFLAGS from command line, e.g.
- # make USERCFLAGS=-Werror USERLDFLAGS=-static
- CFLAGS += $(USERCFLAGS)
--- 
-2.39.2
+        if (iss2 & ESR_ELx_Overlay)
+                return true;
+ 
 
+
+Since the ESR_EL1 documentation says:
+	If a memory access generates a Data Abort for a Permission fault, then this field holds information
+	about the fault.
+
+Thanks,
+Joey
 
