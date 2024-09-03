@@ -1,72 +1,147 @@
-Return-Path: <linux-kselftest+bounces-17054-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17055-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32AD396A417
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 18:19:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F336D96A433
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 18:24:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87B02B244BF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 16:19:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA9CA1F22EF0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 16:24:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2C2718B466;
-	Tue,  3 Sep 2024 16:19:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A73C18BB98;
+	Tue,  3 Sep 2024 16:24:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i/QSrfeq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sg6V9ryn"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96ACE405C9;
-	Tue,  3 Sep 2024 16:19:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05E45189915;
+	Tue,  3 Sep 2024 16:24:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725380368; cv=none; b=EL+VbKgbbUn602G/Rf3t7v64e31uqJ1GDIL0cIDllz2mY12EOCZzJaxqVtWwR0bemfWpBqs6vN/2yWGvUZ8TPEshY5zrfpWpfGfsi44hyUyJRVff7+q1AwpBfW1xfqTgsPa5ftMLnN/6f049h8CmLN5uNe1I4sfP3ZqUo6aUXvI=
+	t=1725380668; cv=none; b=RMOik9t6nvzYmQ5ecYnwkwsl227r+XKEn+0Ju3Ub7N2IFJIdEDaXUbs1PY5HKw9W1IHXnYLeHJauOK5sFNX5YWLQ6JvU2H1cRwwKjB7sYVx/K5JIWpxAomN7MqKYEkvp25EsYo2aIk8AvzcBEc/nwIIk7niRNe26X2143OYGSUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725380368; c=relaxed/simple;
-	bh=WllGggugZ28zZO74W4H1juh4xO9s8coYO5exYjqiISc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jrEjGTTfRoxTKSRYeUXYIH6v+CUQTYUnavzEU57JeVjejCxg1hq8RiBJpzqDzUYrtCYpN+u9rHVUAe3HLiQe23YwW2YyxyGe3Fd79HogDHNpmufiNNaCWwVxSuGS4TJhHXFK9jvjJ9+QAYxTh/qXNCmBPYynIYg6rz9ZUDm23YM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i/QSrfeq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B513C4CEC4;
-	Tue,  3 Sep 2024 16:19:26 +0000 (UTC)
+	s=arc-20240116; t=1725380668; c=relaxed/simple;
+	bh=9iVOVu/9OW9hC1XMij8LOQYkL6JBtfZqflc0EqcwKzo=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Oqn5NFMxffPzhtBIVrX4upX+ZE+41rXbwig8fXFid4L8i6/yKUH4zk70VSA5AKsXWqVxq4Yd3B977G9MAQieBFCEwi+oxmcor4ru4jmduO4jE1TePzasUamUO+eX6qj2ysLO6hx9bKM9WvFtP9XMWR7q+zOstqpPI2NssRADbPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sg6V9ryn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66625C4CEC4;
+	Tue,  3 Sep 2024 16:24:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725380368;
-	bh=WllGggugZ28zZO74W4H1juh4xO9s8coYO5exYjqiISc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=i/QSrfeqwKdbBgXMZOK9ypMoOCPtVu8+IRKiOWYrE8sPS5bwyhqbsBciU0rrON7Ln
-	 MhkEk2a6qJWm9t3vlqNmyJJ93zidWq4Z7Hn27tVIr6nz7lZiiMYHNFnlc1Oad2oABr
-	 BMmIy0oUXSFfS01XfttuAY05tYnXfbqyRX1v+ygkpUgrbj3USOPzonpqhVlESyu7RA
-	 +Wy9EOMh5VmtJIcZ8xoSTqQ0tZ856RvXkQkCIKQiH2emZ1ze/UhNdARmifYiwresfQ
-	 SSR9jRG9fj/kqhLIBfDY+OziOPNiQg5jF9yxwprRQ3Wh1F8NyD1nf+q3CPFU1sfXX8
-	 uQDwj+iJHg9og==
-Date: Tue, 3 Sep 2024 17:19:24 +0100
-From: Simon Horman <horms@kernel.org>
-To: Chen Ni <nichen@iscas.ac.cn>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: net: convert comma to semicolon
-Message-ID: <20240903161924.GD4792@kernel.org>
-References: <20240903074519.781224-1-nichen@iscas.ac.cn>
+	s=k20201202; t=1725380667;
+	bh=9iVOVu/9OW9hC1XMij8LOQYkL6JBtfZqflc0EqcwKzo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=Sg6V9rynIO66aMzDEBdKiQ0PGMnzTSeEnWtbuUwm1PMyXSw6Eb5HLrr+fSzCLg5VS
+	 RpTpcLZdH0/HhnyFmkx7TdZyKyFyZyb2qNdRz3JhkQrXjbDjTft5YAHYZX93CBNlS7
+	 CJlI1eqDSRpSThx4MCtKO9jqYyuli7Keqv5WG70qcjiQ5cCbYfJf5Lv8ERlynMtaid
+	 lzVOPLg/KQ+9XmZQmpdlE39b4X7g4bqYuZVHPFpOgmTf1jNIgR/+ZnL/1E+0kWG8+i
+	 iua2ccNDnbGg78bfE4O5uA36r5FQCvCw5QYJDz5l7ZWpbwBbCiVV9kck1fdcGNeMcK
+	 dTaJAroCrhjDg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1slWKP-009J5x-7F;
+	Tue, 03 Sep 2024 17:24:25 +0100
+Date: Tue, 03 Sep 2024 17:24:24 +0100
+Message-ID: <86r0a0vh6v.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>,	Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>
+Cc:	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v12 15/39] KVM: arm64: Manage GCS access and registers for guests
+In-Reply-To: <20240829-arm64-gcs-v12-15-42fec947436a@kernel.org>
+References: <20240829-arm64-gcs-v12-0-42fec947436a@kernel.org>
+	<20240829-arm64-gcs-v12-15-42fec947436a@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240903074519.781224-1-nichen@iscas.ac.cn>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: catalin.marinas@arm.com, will@kernel.org, broonie@kernel.org, corbet@lwn.net, akpm@linux-foundation.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, arnd@arndb.de, oleg@redhat.com, ebiederm@xmission.com, shuah@kernel.org, rick.p.edgecombe@intel.com, debug@rivosinc.com, ardb@kernel.org, Szabolcs.Nagy@arm.com, kees@kernel.org, hjl.tools@gmail.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, fweimer@redhat.com, brauner@kernel.org, thiago.bauermann@linaro.org, ross.burton@arm.com, yury.khrustalev@arm.com, wilco.dijkstra@arm.com, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Tue, Sep 03, 2024 at 03:45:19PM +0800, Chen Ni wrote:
-> Replace a comma between expression statements by a semicolon.
+On Thu, 29 Aug 2024 00:27:31 +0100,
+Mark Brown <broonie@kernel.org> wrote:
 > 
-> Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+> GCS introduces a number of system registers for EL1 and EL0, on systems
+> with GCS we need to context switch them and expose them to VMMs to allow
+> guests to use GCS.
+> 
+> In order to allow guests to use GCS we also need to configure
+> HCRX_EL2.GCSEn, if this is not set GCS instructions will be noops and
+> CHKFEAT will report GCS as disabled.  Also enable fine grained traps for
+> access to the GCS registers by guests which do not have the feature
+> enabled.
+> 
+> In order to allow userspace to control availability of the feature to
+> guests we enable writability for only ID_AA64PFR1_EL1.GCS, this is a
+> deliberately conservative choice to avoid errors due to oversights.
+> Further fields should be made writable in future.
+> 
+> Reviewed-by: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/include/asm/kvm_host.h          | 12 ++++++++
+>  arch/arm64/include/asm/vncr_mapping.h      |  2 ++
+>  arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h | 49 ++++++++++++++++++++++++------
+>  arch/arm64/kvm/sys_regs.c                  | 27 +++++++++++++++-
+>  4 files changed, 79 insertions(+), 11 deletions(-)
 
-As mentioned at [1] I think it would be nice if the patch description
-was a bit more descriptive.
+FWIW, this patch is going to conflict badly with -next, because of the
+"conservative" approach to dealing with ID_AA64PFR1_EL1 (thankfully,
+the *progressive* approach has been merged).
 
-[1] https://lore.kernel.org/all/20240903152125.GA4792@kernel.org/
+If it gets stuck on a branch together with patch #11 (which seems to
+be the minimum for things to compile), I can take it independently and
+fix it myself. Just let me know.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
 
