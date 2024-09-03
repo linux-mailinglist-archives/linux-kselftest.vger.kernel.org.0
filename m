@@ -1,56 +1,71 @@
-Return-Path: <linux-kselftest+bounces-17057-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17058-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3175696A490
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 18:36:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6987196A49C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 18:38:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5B18288057
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 16:36:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 20DBE1F24BD2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 16:38:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01E7218BC2A;
-	Tue,  3 Sep 2024 16:33:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UX4tknn3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5F3918BBB0;
+	Tue,  3 Sep 2024 16:38:28 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBF0918BC21;
-	Tue,  3 Sep 2024 16:33:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 896121E492;
+	Tue,  3 Sep 2024 16:38:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725381229; cv=none; b=e6ycqXXxIf9RoiraUkYxc92fGjuE5F8z3gAwZUnMdLboTClb0JN5eL0pgvIxDsOBDk8zoaeT+5QJlYx0NJAuK5aJ1vutlCdIfZRXSmN2eB8FOoihl6AxK+In92XfAn8DixjLBRAPfZFu8Zuj1CBrk1z8vUWpOLfl41mEGC66h9c=
+	t=1725381508; cv=none; b=T++WO783FrpPY2vc9wHmTyuQ9vTv7Gg6qYWIK8ebms8lxNym3DKtIVpMI6tBKTx79U5XvzA98yl228oWt7tIUUqtPjYokc3c232Nk+DrfsLoEtcO/xTTJu3duuvM/hvdUOnLQLEhXQYgt7jBBwsAEyiAlr1YtciKr58VSHEKYd4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725381229; c=relaxed/simple;
-	bh=6Yg57+zQA+RKWmFz3J/bXMbmOzlooEBeuFJW8RKYpCs=;
+	s=arc-20240116; t=1725381508; c=relaxed/simple;
+	bh=Ch4EB9z7SxI24U7kqiSf5J+jgI5aAF15vq3HqTETrBM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m8zKTWkOCjbM3vdeWh3et/dD+Jyt+6CLuwcE71wFsWJ5OoJ+6tYmOgIWTonafiUIRTMDWZEGFkh4+abx0Om0lAaUr6qPy8gl3c+/tk+vcXnAKXN/iotdfbn2yY8RQxGo+Zk+UJe1isY34BPZCN1ZnIUjWApipJ7IOC+nT0Gnk8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UX4tknn3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 809BDC4CEC4;
-	Tue,  3 Sep 2024 16:33:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725381229;
-	bh=6Yg57+zQA+RKWmFz3J/bXMbmOzlooEBeuFJW8RKYpCs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UX4tknn3dB/a1xd6T5HNUHWdMy2VHWAQDmQeJsHVDNf5LnlZXpEDciUwHj5UQPVlP
-	 2I1w92GLzS4nbVeCFC4iLlLWcSs7WCBZ+1jkKXhHlfo0/WgPXv+MTUS72S0w3czXFy
-	 21MNpyGzD9VFdzw00Ex8dQGBD1mrnc1FywAC0dTOboxPHSGmxbOpzAtd7OipDHR6aF
-	 8CxUKe5MAyCLeioc2neMf4ZE1B913TXSeH0rDNXK4tJgFVgZcnvgW5UnDzUVjtRCjW
-	 hI9KURcXhSpNSxX8XwYRiplKY99S7x73tMLBpZM73p4XK71brrMCYYj+VLLflczQH+
-	 IMbc4ryW96syg==
-Date: Tue, 3 Sep 2024 17:33:15 +0100
-From: Simon Horman <horms@kernel.org>
-To: Liu Jing <liujing@cmss.chinamobile.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/net: do_setcpu function not need to have a
- return value
-Message-ID: <20240903163315.GE4792@kernel.org>
-References: <20240903095111.7204-1-liujing@cmss.chinamobile.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=icu5rb78oz2n6lVIP1F409yDGst5OIkMCOLc87ztgcnepa51hvYzlLCqrEo3RPqGoXHscQh3OBDu3TQQnb4zrsXgPhJuktx4xM5LIcGxEUX+HheLpIg39gCEn94qGxKpLYvKMfeG4roj3Gq3lh+iUTBuYzMIU5bttOqcr3tkXv8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 697ECC4CEC4;
+	Tue,  3 Sep 2024 16:38:22 +0000 (UTC)
+Date: Tue, 3 Sep 2024 17:38:20 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v12 26/39] arm64/ptrace: Expose GCS via ptrace and core
+ files
+Message-ID: <Ztc7fIneIhCEmesI@arm.com>
+References: <20240829-arm64-gcs-v12-0-42fec947436a@kernel.org>
+ <20240829-arm64-gcs-v12-26-42fec947436a@kernel.org>
+ <ZtYKYMWjApRxFO_-@arm.com>
+ <3f190f54-477e-48dd-8a57-8d61ea20413b@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,17 +74,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240903095111.7204-1-liujing@cmss.chinamobile.com>
+In-Reply-To: <3f190f54-477e-48dd-8a57-8d61ea20413b@sirena.org.uk>
 
-On Tue, Sep 03, 2024 at 05:51:11PM +0800, Liu Jing wrote:
-> in the do_setcpu, this function does not need to have a return value,
-> which is meaningless
+On Mon, Sep 02, 2024 at 07:58:28PM +0100, Mark Brown wrote:
+> On Mon, Sep 02, 2024 at 07:56:32PM +0100, Catalin Marinas wrote:
+> > On Thu, Aug 29, 2024 at 12:27:42AM +0100, Mark Brown wrote:
 > 
-> Signed-off-by: Liu Jing <liujing@cmss.chinamobile.com>
+> > > +static int gcs_get(struct task_struct *target,
+> > > +		   const struct user_regset *regset,
+> > > +		   struct membuf to)
+> 
+> > > +	if (target == current)
+> > > +		gcs_preserve_current_state();
+> 
+> > What's the use-case where target == current and do we need something
+> > similar for gcs_set()?
+> 
+> IIRC core file generation so no.
 
-Thanks,
+Ah, true. Makes sense.
 
-I also see that the caller does not check the return value.
-
-Reviewed-by: Simon Horman <horms@kernel.org>
+-- 
+Catalin
 
