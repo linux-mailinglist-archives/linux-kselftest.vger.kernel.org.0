@@ -1,59 +1,55 @@
-Return-Path: <linux-kselftest+bounces-17053-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17054-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7263B96A2B6
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 17:32:36 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32AD396A417
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 18:19:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2932E28AD4B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 15:32:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87B02B244BF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Sep 2024 16:19:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 383F2189B8F;
-	Tue,  3 Sep 2024 15:29:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2C2718B466;
+	Tue,  3 Sep 2024 16:19:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i/QSrfeq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DA1B189533;
-	Tue,  3 Sep 2024 15:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96ACE405C9;
+	Tue,  3 Sep 2024 16:19:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725377388; cv=none; b=HG7q3bbY1okcabYpnPm+fk3fmG+NPKhmMHU2DlYaj+jjllNYfVBkwq/Gbwwfrj7gY5MHTHXzx3wAUtkzZRcePFr/p/GLlYGrOLMpws6qV09yb8La2PN3nC4c0YYTACZB1OVAyZDYFzr2jbGSxbmAo1No7oq/X1bANuCS7dlBdws=
+	t=1725380368; cv=none; b=EL+VbKgbbUn602G/Rf3t7v64e31uqJ1GDIL0cIDllz2mY12EOCZzJaxqVtWwR0bemfWpBqs6vN/2yWGvUZ8TPEshY5zrfpWpfGfsi44hyUyJRVff7+q1AwpBfW1xfqTgsPa5ftMLnN/6f049h8CmLN5uNe1I4sfP3ZqUo6aUXvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725377388; c=relaxed/simple;
-	bh=0h/zNY8bJ/TNcS1t7SeY1xaa/nugscrq+MyZ7fVrr3s=;
+	s=arc-20240116; t=1725380368; c=relaxed/simple;
+	bh=WllGggugZ28zZO74W4H1juh4xO9s8coYO5exYjqiISc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hHiyMXYi1LNpmRULSE5xTXhABqC5fc3eCSH7qgXvASOUcdUWdqi+p5gCxdpTFuYhrdBfsr1SDVjUnw2jTooOrVleiYbLQbg+h2SLPBaWms/5SrfNXHlMrv5Jwut3b0Vj9FuJ0mU4cVcXxYox9i3jxiZPtYHs3rrb8wL0tIejHGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 46809FEC;
-	Tue,  3 Sep 2024 08:30:12 -0700 (PDT)
-Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 841EB3F66E;
-	Tue,  3 Sep 2024 08:29:42 -0700 (PDT)
-Date: Tue, 3 Sep 2024 16:29:37 +0100
-From: Joey Gouly <joey.gouly@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, nd@arm.com,
-	akpm@linux-foundation.org, aneesh.kumar@kernel.org,
-	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
-	catalin.marinas@arm.com, christophe.leroy@csgroup.eu,
-	dave.hansen@linux.intel.com, hpa@zytor.com,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
-	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
-	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
-	szabolcs.nagy@arm.com, tglx@linutronix.de, will@kernel.org,
-	x86@kernel.org, kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 16/30] arm64: handle PKEY/POE faults
-Message-ID: <20240903152937.GA3768522@e124191.cambridge.arm.com>
-References: <20240822151113.1479789-1-joey.gouly@arm.com>
- <20240822151113.1479789-17-joey.gouly@arm.com>
- <40600b75-68eb-421a-a122-256bd20afb89@sirena.org.uk>
- <20240903144823.GA3669886@e124191.cambridge.arm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jrEjGTTfRoxTKSRYeUXYIH6v+CUQTYUnavzEU57JeVjejCxg1hq8RiBJpzqDzUYrtCYpN+u9rHVUAe3HLiQe23YwW2YyxyGe3Fd79HogDHNpmufiNNaCWwVxSuGS4TJhHXFK9jvjJ9+QAYxTh/qXNCmBPYynIYg6rz9ZUDm23YM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i/QSrfeq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B513C4CEC4;
+	Tue,  3 Sep 2024 16:19:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725380368;
+	bh=WllGggugZ28zZO74W4H1juh4xO9s8coYO5exYjqiISc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=i/QSrfeqwKdbBgXMZOK9ypMoOCPtVu8+IRKiOWYrE8sPS5bwyhqbsBciU0rrON7Ln
+	 MhkEk2a6qJWm9t3vlqNmyJJ93zidWq4Z7Hn27tVIr6nz7lZiiMYHNFnlc1Oad2oABr
+	 BMmIy0oUXSFfS01XfttuAY05tYnXfbqyRX1v+ygkpUgrbj3USOPzonpqhVlESyu7RA
+	 +Wy9EOMh5VmtJIcZ8xoSTqQ0tZ856RvXkQkCIKQiH2emZ1ze/UhNdARmifYiwresfQ
+	 SSR9jRG9fj/kqhLIBfDY+OziOPNiQg5jF9yxwprRQ3Wh1F8NyD1nf+q3CPFU1sfXX8
+	 uQDwj+iJHg9og==
+Date: Tue, 3 Sep 2024 17:19:24 +0100
+From: Simon Horman <horms@kernel.org>
+To: Chen Ni <nichen@iscas.ac.cn>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: net: convert comma to semicolon
+Message-ID: <20240903161924.GD4792@kernel.org>
+References: <20240903074519.781224-1-nichen@iscas.ac.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,82 +58,15 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240903144823.GA3669886@e124191.cambridge.arm.com>
+In-Reply-To: <20240903074519.781224-1-nichen@iscas.ac.cn>
 
-On Tue, Sep 03, 2024 at 03:50:46PM +0100, Joey Gouly wrote:
-> On Thu, Aug 29, 2024 at 06:55:07PM +0100, Mark Brown wrote:
-> > On Thu, Aug 22, 2024 at 04:10:59PM +0100, Joey Gouly wrote:
-> > 
-> > > +static bool fault_from_pkey(unsigned long esr, struct vm_area_struct *vma,
-> > > +			unsigned int mm_flags)
-> > > +{
-> > > +	unsigned long iss2 = ESR_ELx_ISS2(esr);
-> > > +
-> > > +	if (!system_supports_poe())
-> > > +		return false;
-> > > +
-> > > +	if (iss2 & ESR_ELx_Overlay)
-> > > +		return true;
-> > 
-> > Does this need an is_data_abort() && is_instruction_abort() check?
-> > Overlay doesn't appear to be defined for all exception types and it
-> > wasn't clear enough to me that the callers have done this check.
+On Tue, Sep 03, 2024 at 03:45:19PM +0800, Chen Ni wrote:
+> Replace a comma between expression statements by a semicolon.
 > 
-> The only callers are in do_page_fault(), which should only be data or
-> instruction aborts. I talked with Catalin and he said it's fine to not check
-> again here.
-> 
-> I can add a permissions check though:
-> 
-> commit 033270f5a9462e998b4dee11fc91b43ac7929756
-> Author: Joey Gouly <joey.gouly@arm.com>
-> Date:   Tue Sep 3 15:45:59 2024 +0100
-> 
->     fixup! arm64: handle PKEY/POE faults
-> 
-> diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-> index a68055150950..f651553a8ab8 100644
-> --- a/arch/arm64/mm/fault.c
-> +++ b/arch/arm64/mm/fault.c
-> @@ -495,6 +495,9 @@ static bool fault_from_pkey(unsigned long esr, struct vm_area_struct *vma,
->         if (!system_supports_poe())
->                 return false;
->  
-> +       if (!esr_fsc_is_permission_fault(esr))
-> +               return false;
-> +
->         if (iss2 & ESR_ELx_Overlay)
->                 return true;
->  
-> 
-> 
-> Since the ESR_EL1 documentation says:
-> 	If a memory access generates a Data Abort for a Permission fault, then this field holds information
-> 	about the fault.
-> 
+> Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
 
-Sorry, I was a bit too eager with that patch.  The previous patch was bailing
-out before the vma-backed checks could take place.
+As mentioned at [1] I think it would be nice if the patch description
+was a bit more descriptive.
 
-It should be:
-
-commit 7b67b149f2f492e907b27521c95639f4ea208221 (HEAD -> permission_overlay_v6)
-Author: Joey Gouly <joey.gouly@arm.com>
-Date:   Tue Sep 3 15:45:59 2024 +0100
-
-    fixup! arm64: handle PKEY/POE faults
-
-diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-index a68055150950..8b281cf308b3 100644
---- a/arch/arm64/mm/fault.c
-+++ b/arch/arm64/mm/fault.c
-@@ -495,7 +495,7 @@ static bool fault_from_pkey(unsigned long esr, struct vm_area_struct *vma,
-        if (!system_supports_poe())
-                return false;
- 
--       if (iss2 & ESR_ELx_Overlay)
-+       if (esr_fsc_is_permission_fault(esr) && (iss2 & ESR_ELx_Overlay))
-                return true;
- 
-        return !arch_vma_access_permitted(vma,
+[1] https://lore.kernel.org/all/20240903152125.GA4792@kernel.org/
 
