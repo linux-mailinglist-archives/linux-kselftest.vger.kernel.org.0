@@ -1,114 +1,84 @@
-Return-Path: <linux-kselftest+bounces-17977-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18205-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BB24978DD0
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Sep 2024 07:29:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7555E97E63A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 08:55:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE108B26414
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Sep 2024 05:29:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2BA6F1F215B3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 06:55:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7E2781742;
-	Sat, 14 Sep 2024 05:26:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NTmTbFyc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A8B4286A3;
+	Mon, 23 Sep 2024 06:55:49 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99FD3171E76;
-	Sat, 14 Sep 2024 05:26:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from cmccmta2.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D96F628689;
+	Mon, 23 Sep 2024 06:55:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726291566; cv=none; b=Rvv6NGvRrY1X3wvh/Wp1aI/qdmXYinAJHX4LfQGDSerP1PqMKPNRQZtKxNJz6UTJDyMskL4iaMGD0HVZodMitEHa5il29BLzsl8GGEAbz8//iERqVyHT1+ie9THBpDRVfvp3DmDjYqAX21PtFZISw5VfpJNyQeYDxcf9SczR3rY=
+	t=1727074548; cv=none; b=CCHEvTi+pf2qwONztC1SkCapUYjTF0V8eAUgARHHQLZcBAxCrhAzf7VcII4Ul8xim+QNh7GadvH6nTI5Efrf3x9VeSBaFblLtEf3Fp4yogYgBFtz+RaaQG5tladK8mHRrGStsTcuDxyC29lrOpkSMEJVm7bujp9gWLq+EpRmwD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726291566; c=relaxed/simple;
-	bh=SptWBzVXVMO961EGzmJjmAEgdxo1I93o+UdFRaq7ucE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=upYeUFOACZ/x/1x4IsppVElnbdIl3bPEY5Bj9GJScHjM3eZGBz6tJh+bvm7UPg1SKNeBt/Txb69jyssKs0/88S5XY/TNO6tPDHZ4XTzWqXVkxPhvG5iFGwt9khV6AWnqn4m96cBWf1ZXd2PcEbZELSTU+UsVZpEzTOA35f5We1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NTmTbFyc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B04DC4CEC0;
-	Sat, 14 Sep 2024 05:26:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726291566;
-	bh=SptWBzVXVMO961EGzmJjmAEgdxo1I93o+UdFRaq7ucE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NTmTbFycChuNMeGaHfPrZmdAbuR5rxnULYrzBMhnfK/wtKHPS/qqAmyyZeXvpq76l
-	 OZDesFb/Fk8aDRwmHVHmxht5iPzLdXFYWxrDuI0SXIYok06vZ306PCyMjzvvqUDf66
-	 jXxrfS9f5Qa/rZ8RsooguQeIAbcuy3+v6JIAd0Er2ICI71PnPiIit071LMRh3rcLDn
-	 MXJRDmnFZSsT6cpRAjBIGeGwuoxk68peuSdB0Rp8SzX7sBu7hcdv274Uu2I5OPc39R
-	 R0jU03EkR3UXdLvoJ19RrVmRogZ13XJGk+U+hEcDgtZ1Qiwf6MugG7PEgY7htLmJXX
-	 0vCmtwSocQ+sw==
-Date: Sat, 14 Sep 2024 07:26:01 +0200
-From: Benjamin Tissoires <bentiss@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, 
-	Peter Hutterer <peter.hutterer@who-t.net>, Vicki Pfau <vi@endrift.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: (subset) [PATCH HID v2 00/11] HID: bpf: add a new hook to
- control hid-generic
-Message-ID: <7al2grhs6qatjmxk2tft6widqfjwnklfljpppufy4ee62cehcy@peo2shxwyk5b>
-References: <20240910-hid-bpf-hid-generic-v2-0-083dfc189e97@kernel.org>
- <172623473588.1192461.11090201509053454593.b4-ty@kernel.org>
- <etbeblypdylnngwuwjfqkmkduk4iup7uq4c5zkwrssoi6u7jvg@gtf3gpzrloii>
+	s=arc-20240116; t=1727074548; c=relaxed/simple;
+	bh=ZDIRqO6WtG6HsS5yy9N8e+xwUiik5Ry/e6KsvBLs3eU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GYBKYiFOiccHp4JOSZm7q/pJmZD/bnn7wcHILgpgnHBv8JyjfwkILX9LKSP/s9g5U5iSIfEbXb/pWePqmziVmtHQ8+o++N+ME567fsDXxcoqb1EwgZ9rMjl3cwsk0Y4niOYlEVJldTu8JtxFqI8t2tL3XJft+nDaXG9bKnUXMnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app06-12006 (RichMail) with SMTP id 2ee666f11032eb5-46778;
+	Mon, 23 Sep 2024 14:52:35 +0800 (CST)
+X-RM-TRANSID:2ee666f11032eb5-46778
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.101])
+	by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee166f11022dbd-5453d;
+	Mon, 23 Sep 2024 14:52:35 +0800 (CST)
+X-RM-TRANSID:2ee166f11022dbd-5453d
+From: Ba Jing <bajing@cmss.chinamobile.com>
+To: brauner@kernel.org
+Cc: shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Ba Jing <bajing@cmss.chinamobile.com>
+Subject: [PATCH] clone3: clone3_cap_checkpoint_restore: remove unused MAX_PID_NS_LEVEL macro
+Date: Tue,  3 Sep 2024 11:36:28 +0800
+Message-Id: <20240903033628.10306-1-bajing@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <etbeblypdylnngwuwjfqkmkduk4iup7uq4c5zkwrssoi6u7jvg@gtf3gpzrloii>
+Content-Transfer-Encoding: 8bit
 
-On Sep 13 2024, Benjamin Tissoires wrote:
-> On Sep 13 2024, Benjamin Tissoires wrote:
-> > On Tue, 10 Sep 2024 23:43:36 +0900, Benjamin Tissoires wrote:
-> > > This is a slight change from the fundamentals of HID-BPF.
-> > > In theory, HID-BPF is abstract to the kernel itself, and makes
-> > > only changes at the HID level (through report descriptors or
-> > > events emitted to/from the device).
-> > > 
-> > > However, we have seen a few use cases where HID-BPF might interact with
-> > > the running kernel when the target device is already handled by a
-> > > specific device.
-> > > 
-> > > [...]
-> > 
-> > Applied to hid/hid.git (for-6.12/bpf), thanks!
-> > 
-> > [01/11] HID: bpf: move HID-BPF report descriptor fixup earlier
-> >         https://git.kernel.org/hid/hid/c/f10a11b7b599
-> > [02/11] HID: core: save one kmemdup during .probe()
-> >         https://git.kernel.org/hid/hid/c/6941754dbbc7
-> > [03/11] HID: core: remove one more kmemdup on .probe()
-> >         https://git.kernel.org/hid/hid/c/4fe29f36d2a3
-> > [04/11] HID: bpf: allow write access to quirks field in struct hid_device
-> >         https://git.kernel.org/hid/hid/c/b722f588adc6
-> > [05/11] selftests/hid: add dependency on hid_common.h
-> >         https://git.kernel.org/hid/hid/c/3d816765e12e
-> > [06/11] selftests/hid: cleanup C tests by adding a common struct uhid_device
-> >         https://git.kernel.org/hid/hid/c/28023a0f99d1
-> > [07/11] selftests/hid: allow to parametrize bus/vid/pid/rdesc on the test device
-> >         https://git.kernel.org/hid/hid/c/10d3147f9bb1
-> > [08/11] HID: add per device quirk to force bind to hid-generic
-> >         https://git.kernel.org/hid/hid/c/d030f826ea47
-> > [09/11] selftests/hid: add test for assigning a given device to hid-generic
-> >         https://git.kernel.org/hid/hid/c/10929078201f
-> > 
-> 
-> Just for completeness, I've dropped 10/11 and 11/11 when applying the
-> series because even if they are working it's unclear if the use case is
-> rock solid, like the first one is.
-> 
-> The patches are still on the LKML, so if anyone believes they required
-> it, we can alwasy pull them in later.
+The macro MAX_PID_NS_LEVEL is never referenced in the code, so remove it.
 
-And I just dropped them from for-next, I had some KASAN issues in the
-testsuite, meaning that something is off in the memory allocation/free.
+Signed-off-by: Ba Jing <bajing@cmss.chinamobile.com>
+---
+ tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c | 2 --
+ 1 file changed, 2 deletions(-)
 
-Cheers,
-Benjamin
+diff --git a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+index 31b56d625655..3c196fa86c99 100644
+--- a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
++++ b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+@@ -27,8 +27,6 @@
+ #include "../kselftest_harness.h"
+ #include "clone3_selftests.h"
+ 
+-#define MAX_PID_NS_LEVEL 32
+-
+ static void child_exit(int ret)
+ {
+ 	fflush(stdout);
+-- 
+2.33.0
+
+
+
 
