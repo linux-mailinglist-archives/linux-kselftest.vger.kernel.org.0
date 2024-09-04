@@ -1,66 +1,74 @@
-Return-Path: <linux-kselftest+bounces-17160-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17161-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15B2296C586
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 19:36:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D61AD96C5A3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 19:46:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B3FCC1F243AE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 17:36:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 81C221F267B8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 17:46:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CE0B1E1303;
-	Wed,  4 Sep 2024 17:36:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 450CC1E1A1D;
+	Wed,  4 Sep 2024 17:45:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fo/495hH"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="cBNOiJ+A"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-fw-80009.amazon.com (smtp-fw-80009.amazon.com [99.78.197.220])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C1541E00B7;
-	Wed,  4 Sep 2024 17:36:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191031E1A1F;
+	Wed,  4 Sep 2024 17:45:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.220
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725471409; cv=none; b=hBy759VkU6XZRRaYikXrdBZYgR0xhwRzjc+HKlEz3ueh9OBBEVp2VzFX++JsEECcRUluUraLLsu1SM2eVeLBqvkD1CimLme7shhK9DNWlMdBqHXZrnwFpZGf9Ijzn5VPPVe5ss4oSCzpe+RJs2LnYcA+vjohVAqtqP9kPgNMSMI=
+	t=1725471952; cv=none; b=LmqosLGwlo/YS8ceObCkK2Y1VNF59SIeEFnBPIiBN5SJEwxi9sLcEAw8xfBCjUtTMKE6PiLDYSgGRxhxTU6rQVN7N3IXS4X9p3qJ9EUYD4IvZHpzgjz/hFGozah+oYZa2nQrkOdgGt7Fs1RUlS+pwnV0ZYQbpv/5wQzQNJi6sZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725471409; c=relaxed/simple;
-	bh=kWds04I5pjMm3FhcXtiQkfRW8MvMdUPBrd8CIBFbZac=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZW8uC1kd1aNRPjc9IAnBq5Lw5pmi4FcTb5Y82sGCG6E3Qyn/QJ+cxceiZW1DnfdpbmvaQLVIEZRdGCszwpzkh5nR7i12DfWOa58knFVu8fVxWPJi/gwpr4mG6pGVGBf9VMTR0IrwcgkFSv/dx1UqSn8nLYMMaheqGaylN893Nu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fo/495hH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C323C4CEC2;
-	Wed,  4 Sep 2024 17:36:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725471409;
-	bh=kWds04I5pjMm3FhcXtiQkfRW8MvMdUPBrd8CIBFbZac=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fo/495hHWvxt/g2JiEXBugpYAgkiyhgMt6vu9YtlthaxN7JCGZzMwkxO/oy1fD3+m
-	 n8JH1BVmZaO3YILnBkhvOPrxqOooUrbv2LH2LKVyT9RjbhSlN+wXchrveI4XuruP5G
-	 AdKBUjSuFy3t5JNTw9XjU2GU40WuwD90yOaFM9S9jvB+RVWGBWwQ9508kyQA37cDzf
-	 I7NBiBnHLMvCwFqLwVwM7RXfdfrfwDLiZcUi3Mmmz6+2EYIcdxKWeCKZaQGQSTxgwg
-	 DX6MBqVk0KgTG6qNFT4i6da45xWmsWme7Ia3bmWz9nwxm/2t370m5vlsm9TVSUrLVm
-	 3dnipCkWGHiFw==
-From: SeongJae Park <sj@kernel.org>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>
-Cc: SeongJae Park <sj@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	David Hildenbrand <david@redhat.com>,
-	Brendan Higgins <brendanhiggins@google.com>,
-	David Gow <davidgow@google.com>,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/damon/tests/vaddr-kunit: don't use mas_lock for MM_MT_FLAGS-initialized maple tree
-Date: Wed,  4 Sep 2024 10:36:45 -0700
-Message-Id: <20240904173645.1679-1-sj@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <z7xkdvh6hfjxbt5nazkyxnpuztu6c425rucs2trmwqlfu7ywpq@5w3g7wpsyuji>
-References: 
+	s=arc-20240116; t=1725471952; c=relaxed/simple;
+	bh=3ms+jmuZkq1vsb7bH0gsZ6GDHGRGTlXNsNd5RcimIQQ=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=f/abD6tHoIlYMjhTkWXoBj5SBrjs69aspdgDWYQbCeJFlh/mPwQPmkYRzJWue9KujMWJAoJhSPX83uPc/8TxcFi7pq+rDTvzbN9RzWXwRuZauqSTA120rd8ov3FD1RJz5uhq1Sqem89VF0uJMiJbGLCrAjGzk3k0/AZdXhtH7M0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.jp; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=cBNOiJ+A; arc=none smtp.client-ip=99.78.197.220
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.jp
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1725471950; x=1757007950;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=gCznZJcAGWMZfA5ynzwOCCLPb1jqxTZUYJFGAHQI7Mk=;
+  b=cBNOiJ+ALWO7rZJlpRgJQN/UxJbvj960dCU2JfSyPISoHzXMLZfly/KH
+   7+FaCs6wdzcMUh5Rty+PI27N+ezGSUek7gTHqlCsEa7IfJxVx62vadhR4
+   pmXxDv7FFEMidbwjHxMRwEaVXhMsI2sVUlxFcwVfBXKGbEQp9KKIBB4ZU
+   w=;
+X-IronPort-AV: E=Sophos;i="6.10,202,1719878400"; 
+   d="scan'208";a="122216293"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
+  by smtp-border-fw-80009.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2024 17:45:47 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [10.0.7.35:33566]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.63.127:2525] with esmtp (Farcaster)
+ id fde1a5a7-7b36-447f-b1ca-fad1670c5454; Wed, 4 Sep 2024 17:45:47 +0000 (UTC)
+X-Farcaster-Flow-ID: fde1a5a7-7b36-447f-b1ca-fad1670c5454
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Wed, 4 Sep 2024 17:45:46 +0000
+Received: from 88665a182662.ant.amazon.com (10.106.101.38) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35;
+ Wed, 4 Sep 2024 17:45:43 +0000
+From: Kuniyuki Iwashima <kuniyu@amazon.com>
+To: <jamie.bainbridge@gmail.com>
+CC: <davem@davemloft.net>, <edumazet@google.com>, <joannelkoong@gmail.com>,
+	<kuba@kernel.org>, <kuniyu@amazon.com>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<pabeni@redhat.com>, <shuah@kernel.org>
+Subject: Re: [PATCH net] selftests: net: enable bind tests
+Date: Wed, 4 Sep 2024 10:45:33 -0700
+Message-ID: <20240904174533.8070-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <5a009b26cf5fb1ad1512d89c61b37e2fac702323.1725430322.git.jamie.bainbridge@gmail.com>
+References: <5a009b26cf5fb1ad1512d89c61b37e2fac702323.1725430322.git.jamie.bainbridge@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,90 +76,50 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EX19D041UWA002.ant.amazon.com (10.13.139.121) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
 
-On Tue, 3 Sep 2024 22:43:40 -0400 "Liam R. Howlett" <Liam.Howlett@oracle.com> wrote:
-
-> * Guenter Roeck <linux@roeck-us.net> [240903 21:54]:
-> > On 9/3/24 18:18, SeongJae Park wrote:
-> > > On Tue,  3 Sep 2024 17:58:15 -0700 SeongJae Park <sj@kernel.org> wrote:
-> > > 
-> > > > On Tue, 3 Sep 2024 20:48:53 -0400 "Liam R. Howlett" <Liam.Howlett@oracle.com> wrote:
-> > > > 
-> > > > > * SeongJae Park <sj@kernel.org> [240903 20:45]:
-> > > > > > damon_test_three_regions_in_vmas() initializes a maple tree with
-> > > > > > MM_MT_FLAGS.  The flags contains MT_FLAGS_LOCK_EXTERN, which means
-> > > > > > mt_lock of the maple tree will not be used.  And therefore the maple
-> > > > > > tree initialization code skips initialization of the mt_lock.  However,
-> > > > > > __link_vmas(), which adds vmas for test to the maple tree, uses the
-> > > > > > mt_lock.  In other words, the uninitialized spinlock is used.  The
-> > > > > > problem becomes celar when spinlock debugging is turned on, since it
-> > > > > > reports spinlock bad magic bug.  Fix the issue by not using the mt_lock
-> > > > > > as promised.
-> > > > > 
-> > > > > You can't do this, lockdep will tell you this is wrong.
-> > > > 
-> > > > Hmm, but lockdep was silence on my setup?
-> > > > 
-> > > > > We need a lock and to use the lock for writes.
-> > > > 
-> > > > This code is executed by a single-thread test code.  Do we still need the lock?
-> > > > 
-> > > > > 
-> > > > > I'd suggest using different flags so the spinlock is used.
-> > > > 
-> > > > The reporter mentioned simply dropping MT_FLAGS_LOCK_EXTERN from the flags
-> > > > causes suspicious RCU usage message.  May I ask if you have a suggestion of
-> > > > better flags?
-> > > 
-> > > I was actually thinking replacing the mt_init_flags() with mt_init(), which
-> > > same to mt_init_flags() with zero flag, like below.
-> > > 
-> > > ```
-> > > --- a/mm/damon/tests/vaddr-kunit.h
-> > > +++ b/mm/damon/tests/vaddr-kunit.h
-> > > @@ -77,7 +77,7 @@ static void damon_test_three_regions_in_vmas(struct kunit *test)
-> > >                  (struct vm_area_struct) {.vm_start = 307, .vm_end = 330},
-> > >          };
-> > > 
-> > > -       mt_init_flags(&mm.mm_mt, MM_MT_FLAGS);
-> > > +       mt_init(&mm.mm_mt);
-> > >          if (__link_vmas(&mm.mm_mt, vmas, ARRAY_SIZE(vmas)))
-> > >                  kunit_skip(test, "Failed to create VMA tree");
-> > > ```
-> > > 
-> > > And just confirmed it also convinces the reproducer.  But because I'm obviously
-> > > not familiar with maple tree, would like to hear some comments from Liam or
-> > > others first.
+From: Jamie Bainbridge <jamie.bainbridge@gmail.com>
+Date: Wed,  4 Sep 2024 16:12:26 +1000
+> bind_wildcard is compiled but not run, bind_timewait is not compiled.
 > 
-> Again, I'd use the flags "MT_FLAGS_ALLOC_RANGE | MT_FLAGS_USE_RCU"
-> because that gets you the gap tracking that may be necessary for tests
-> in the future - it's closer to the MM_MT_FLAGS, so maybe some mm
-> function you use depends on that.
-
-Thank you for the nice suggestion with the rationales.  Just posted the v2
-following it: https://lore.kernel.org/20240904172931.1284-1-sj@kernel.org
-
+> These two tests complete in a very short time, use the test harness
+> properly, and seem reasonable to enable.
 > 
-> > > 
-> > Same here. That is why I gave up after trying MT_FLAGS_ALLOC_RANGE and
-> > "MT_FLAGS_ALLOC_RANGE | MT_FLAGS_USE_RCU". After all, I really don't know what
-> > I am doing and was just playing around ... and there isn't really a good
-> > explanation why initializing the maple tree with MT_FLAGS_ALLOC_RANGE (but not
-> > MT_FLAGS_USE_RCU) would trigger rcu warnings.
+> The author of the tests confirmed via email that these were
+> intended to be run.
 > 
-> Thanks, I'll add that to my list of things to do.
-
-Thank you.  I agree that's somewhat we can visit separately.
-
-FYI, I was also unable to reproduce rcu warnings with my v2 patch on my setup.
-I will also try to use Guenter's more detailed repro
-(https://lore.kernel.org/78880ac2-f7fe-4dc1-b2cb-25942fb0cacf@roeck-us.net).
-
-
-Thanks,
-SJ
-
+> Enable these two tests.
 > 
-> Regards,
-> Liam
+> Fixes: 13715acf8ab5 ("selftest: Add test for bind() conflicts.")
+> Fixes: 2c042e8e54ef ("tcp: Add selftest for bind() and TIME_WAIT.")
+> Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
+
+Reviewed-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+
+Thanks!
+
+
+> ---
+>  tools/testing/selftests/net/Makefile | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+> index 8eaffd7a641c5d6bb5c63e3015fdd9f32c114550..9d5aa817411b653ac130a1a581d933180a597ce5 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
+> @@ -85,7 +85,8 @@ TEST_GEN_PROGS += so_incoming_cpu
+>  TEST_PROGS += sctp_vrf.sh
+>  TEST_GEN_FILES += sctp_hello
+>  TEST_GEN_FILES += ip_local_port_range
+> -TEST_GEN_FILES += bind_wildcard
+> +TEST_GEN_PROGS += bind_wildcard
+> +TEST_GEN_PROGS += bind_timewait
+>  TEST_PROGS += test_vxlan_mdb.sh
+>  TEST_PROGS += test_bridge_neigh_suppress.sh
+>  TEST_PROGS += test_vxlan_nolocalbypass.sh
+> -- 
+> 2.39.2
+> 
 
