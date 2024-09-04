@@ -1,83 +1,83 @@
-Return-Path: <linux-kselftest+bounces-17170-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17171-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64C7C96C7EB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 21:49:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84C0996C7F2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 21:50:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E90271F22304
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 19:49:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39062285EF8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 19:50:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C70A21E8B6A;
-	Wed,  4 Sep 2024 19:48:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 286381E6321;
+	Wed,  4 Sep 2024 19:50:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CTY9nm9z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ijOUBowa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170C91D221C;
-	Wed,  4 Sep 2024 19:48:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8689A40C03;
+	Wed,  4 Sep 2024 19:50:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725479330; cv=none; b=XhzzlmBtfJn4eV+weXNyf2EoY2IFQ0Ud+3CEzhL3WgPkF4d2Tt1qPITlsrDIZVeIv6Vtn5ynjXNdw2n90U6xH9OMfBuEkrBy4jSkm1zAyQYPxCjpwVOsEj6MztyjpQkz4R811STJvLzv3692NkzGBbRmwWqUZDgiZUvPNbl16Xs=
+	t=1725479440; cv=none; b=jbppiVjOibvUGZNcSGFOEUe2vT011SgssjpOFa7AeyRm2HW0clYtuNU9F+XgphBqES7L4vVOJRLUI3GOhBVmF1DfLCK5Vepz619jo1N6ZrAMtVgRGsd80YK0Fx1v4SI6syswk6ZJD6ivMwzUjP4eLg1LMLRjdrumtSLmmJ5DUNk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725479330; c=relaxed/simple;
-	bh=ISS7fLjWelYGtN/l942vV3Z9mjvyz8ZUmfwlyJyPEIE=;
+	s=arc-20240116; t=1725479440; c=relaxed/simple;
+	bh=bp5UaINubNIG2e2Xwo/So9Cl0VCWLw6WFeZjNl9O3ps=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r76UbnE+RFWVRLTAqENO1PsZzaVgV16KUe5PpMhsFU5G06yVNCHh/SYkYg3HPGKHCS2tQDwGyhRqE5dHjKq05S+eD1zKbvLSFUk0Vs5RBIwzoxRxHImhsM3jERvSwK6+oKxl2rDo1HhCFeGljJpudFz4s1Zn++UYhZQJoxLJD9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CTY9nm9z; arc=none smtp.client-ip=209.85.215.182
+	 To:Cc:Content-Type; b=hbef2SLpwSX4Eyv0K42TAfuwIDKMhBKyAZy2GG/XZQbWfAKKgdnEaD+wQfNB+V15nVKku/Tb+OF2t7aNMuCECBNOn7AGKnOUT/0kLesFoFT3duWMg9oWIQ3t+VQlKrU57Gks0X0dZUnGV8iBnmF3vcd7bPP4NWFOVJ8BhETpF50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ijOUBowa; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7cd8803fe0aso28469a12.0;
-        Wed, 04 Sep 2024 12:48:48 -0700 (PDT)
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2d889207d1aso3715215a91.3;
+        Wed, 04 Sep 2024 12:50:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725479328; x=1726084128; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1725479438; x=1726084238; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GouaHpMYZ0ASzlBSeLpvabeICHF5dVPZY86R0qasrSY=;
-        b=CTY9nm9zOGE84vZLlVdY40Y6nsfswTQtEvsTWG6uIjJEr7ZreZjkxErjFh4lvWsFjR
-         qaARUg/U6WVX522kOABM2rgoYVAocNkS/H5dms79iFUlUExoNNJRNO6hV7RHE4dHmH8o
-         nNq7c5Aitplg6u/HEh/842AJyr1EDrizQSBxvy2OZAU8UhOQPT4iQ/z2n4OfHQdXpCXz
-         hN2rVmi9RfPPHoiNQ/Tf767xoNHAqlfDWjPP6XS9R9B7A9wuJKxUBC+OoORdRliTtYfe
-         R+OYzQNSue92T/2igJ04nH0xireWCmGXp6Rjj9Y0ryT0X4nzrwE6FkRAQVhgU1F2zCO3
-         GfdQ==
+        bh=4XGI3mDxMj5otIzS0t4zz85MLRULpc/dqATU2NnzNB8=;
+        b=ijOUBowaI5pvviumYiPswxEwTDD4HJGFv05mCfBX1rP3qp5pZCE60Z7ywowPuqxH2H
+         3ZxZARdno+lyv9BvUCBQnzsYN+twNwXosuEivZ6sxowxYKvNEK9DMU/RLBxr4nLoUD2B
+         WFoL7CQUnloOZEZBvgwKuNmmFK5fqSRqhvbVAhnoXx7j2GzPUdbLQEoCmgmzsoS1s7++
+         tFJ7y0DwALBCwkCDLWDRq7snolOXUjYsCuTUgMPIOKvjon6v7VGmS04/7A/AbckkkYem
+         zdVKCoy4adhc4yP1hsuFKk8XN9RJ04xkPw7e8TXvF7uBon3q10RSln5GxrXkp5fy/mj7
+         +mgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725479328; x=1726084128;
+        d=1e100.net; s=20230601; t=1725479438; x=1726084238;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GouaHpMYZ0ASzlBSeLpvabeICHF5dVPZY86R0qasrSY=;
-        b=bGMYRbszcAl/zlhOqYTJk3ckEEPHSa/uoL0v3/9sXiUYslGhvW/8dZUX2wqBw7k/J9
-         hGb6pUQArV9jRz9XzVqwxA4HzqQNi/CV/vVhO5dB2poA9SQpZmTDcmGo3Npj9zY5bcpk
-         nG1d/iqOI2ru21hJAvTRlqd6YntPec0x6w2cOoubgZx/8uYIzXSK69CigSlGXg6NDFhs
-         07raFo3k0RmVHg1tGaOrHK8j4XNkwD9Uvi6MVEGo4OTW3k0hoEpg+u5LvlcOZbz61Eya
-         cWY+7WWrYxwiLxIBizDZmYE1vNQI0h2o4PP3zq6sI93B6glU0Vl0j2X411nDIFUZH51G
-         Ww1A==
-X-Forwarded-Encrypted: i=1; AJvYcCVx47Z2nQbfW7xqmNgBptSlaZ0Mu6IrpF9hWuJPciOPmgseE5AbHzyGdU689QzX2MgvPEn4XgJBnwTO1LvpdSo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxrveARN/H8AFT79ZHoEHFv9swRpOlCLHXwO6MAkGGJdajq9bs
-	m+WmGiAOCNxa4jSipGYcNCBsnQGSQ5FAYv8VjawSPMvyZMEJoX2UBRhJS0jVH5nBC1uYfDObJGY
-	rWPwChXL0FPrvxXBKy9d31uV/lq4=
-X-Google-Smtp-Source: AGHT+IGKtCDt79kn5T/Oms8shrUvkcA+6LSdQokdADyYdqJl5ULtqtzzrUtiuiPvyEldhW1/El1hlI/k8nlPhcXKsEk=
-X-Received: by 2002:a17:90a:a406:b0:2d8:b27f:d4c3 with SMTP id
- 98e67ed59e1d1-2d8b27fd601mr14863865a91.17.1725479328164; Wed, 04 Sep 2024
- 12:48:48 -0700 (PDT)
+        bh=4XGI3mDxMj5otIzS0t4zz85MLRULpc/dqATU2NnzNB8=;
+        b=haX9JFkZbuIEAwaac8WuyGo7Ugk999NiQczgg6igMpe0wwCYkrOnDJhtglEZrSVslg
+         L0ouvA3Zy33vcKO/6c4b1SOoIK0kpKaW2+/khfux/ppCJObE4+3qSnL5EpLuQrjyWU8g
+         Q+ObA+FQYdS2ilpwxJmc4/otxMrCDlm5F0xp+vZLscs7qlarIH4TiZAv+c17ouqEFOTY
+         Ztoa4na+mS8t/WuiDloLwn4TyUn4/61kKK1RFVPRIHfYtNoSbGKnroBNShOE4SGyKEQx
+         Jn3RsPiMM/yrKByR8lGT8sD4ruYelgmMAnRYdfyCMzc6ePlZreHW6Zt9kwn66p9XZZXM
+         gakA==
+X-Forwarded-Encrypted: i=1; AJvYcCX7TSOMf2AIp7Vwryg19cfD2z7f3Cbhyo4AQrqAaevzq7yWVteu85tPpb41fwiK6jSwhur1sXSyoebxIHB28Hc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxyJEWz1IAY9jEFm5xH6UzFNHeAzMCHHcpJNtq/4g/T9hWhEyn4
+	ZKtzUp39XvP5loWX5+QEi4F7tNI+nTHnauUdRNUR3v6sPCsux15SYo8ph2+dxDTjBKIzR02b/5D
+	RTHgLl0dHFOnpL/yQACbjeKmPqto=
+X-Google-Smtp-Source: AGHT+IGrsoHW6vlUCjX+mbzYmrJgoECjOv7FQltuOhfjn2jp3tuiaH6pskiFjk3s1g35v5VpwA9pi/DiX1U25LtefsA=
+X-Received: by 2002:a17:90a:1342:b0:2c8:64a:5f77 with SMTP id
+ 98e67ed59e1d1-2d89467eca7mr14363585a91.37.1725479437676; Wed, 04 Sep 2024
+ 12:50:37 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1725347944.git.tony.ambardar@gmail.com> <596b03b8e225de62e6877346fbed19502a205c88.1725347944.git.tony.ambardar@gmail.com>
-In-Reply-To: <596b03b8e225de62e6877346fbed19502a205c88.1725347944.git.tony.ambardar@gmail.com>
+References: <cover.1725347944.git.tony.ambardar@gmail.com> <6f2af9efc5b64d5c4669d48927393b97b0232497.1725347944.git.tony.ambardar@gmail.com>
+In-Reply-To: <6f2af9efc5b64d5c4669d48927393b97b0232497.1725347944.git.tony.ambardar@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 4 Sep 2024 12:48:36 -0700
-Message-ID: <CAEf4Bzbe_p9JXsT2TkyfACzJOaAMC21T_T-rLhmwT9tJ=A2_7w@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 4/8] libbpf: Support BTF.ext loading and
- output in either endianness
+Date: Wed, 4 Sep 2024 12:50:25 -0700
+Message-ID: <CAEf4BzZ=GWRRZU63EsXmaNcE8-mM7XWAg_NmHbXD6tAk9zqukg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 5/8] libbpf: Support opening bpf objects of
+ either endianness
 To: Tony Ambardar <tony.ambardar@gmail.com>
 Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
 	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
@@ -93,221 +93,185 @@ Content-Transfer-Encoding: quoted-printable
 On Tue, Sep 3, 2024 at 12:33=E2=80=AFAM Tony Ambardar <tony.ambardar@gmail.=
 com> wrote:
 >
-> Support for handling BTF data of either endianness was added in [1], but
-> did not include BTF.ext data for lack of use cases. Later, support for
-> static linking [2] provided a use case, but this feature and later ones
-> were restricted to native-endian usage.
->
-> Add support for BTF.ext handling in either endianness. Convert BTF.ext da=
-ta
-> to native endianness when read into memory for further processing, and
-> support raw data access that restores the original byte-order for output.
-> Add internal header functions for byte-swapping func, line, and core info
-> records.
->
-> Add new API functions btf_ext__endianness() and btf_ext__set_endianness()
-> for query and setting byte-order, as already exist for BTF data.
->
-> [1] 3289959b97ca ("libbpf: Support BTF loading and raw data output in bot=
-h endianness")
-> [2] 8fd27bf69b86 ("libbpf: Add BPF static linker BTF and BTF.ext support"=
-)
+> Allow bpf_object__open() to access files of either endianness, and conver=
+t
+> included BPF programs to native byte-order in-memory for introspection.
+> Loading BPF objects of non-native byte-order is still disallowed however.
 >
 > Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
 > ---
->  tools/lib/bpf/btf.c             | 238 +++++++++++++++++++++++++++++---
->  tools/lib/bpf/btf.h             |   3 +
->  tools/lib/bpf/libbpf.map        |   2 +
->  tools/lib/bpf/libbpf_internal.h |  28 ++++
->  4 files changed, 255 insertions(+), 16 deletions(-)
+>  tools/lib/bpf/libbpf.c          | 52 +++++++++++++++++++++++++++------
+>  tools/lib/bpf/libbpf_internal.h | 11 +++++++
+>  2 files changed, 54 insertions(+), 9 deletions(-)
 >
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index 5f094c1f4388..c11dfc81d007 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
-> @@ -3023,25 +3023,140 @@ static int btf_ext_setup_core_relos(struct btf_e=
-xt *btf_ext)
->         return btf_ext_setup_info(btf_ext, &param);
+> diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+> index 0226d3b50709..46f41ea5e74d 100644
+> --- a/tools/lib/bpf/libbpf.c
+> +++ b/tools/lib/bpf/libbpf.c
+> @@ -694,6 +694,8 @@ struct bpf_object {
+>         /* Information when doing ELF related work. Only valid if efile.e=
+lf is not NULL */
+>         struct elf_state efile;
+>
+> +       unsigned char byteorder;
+> +
+>         struct btf *btf;
+>         struct btf_ext *btf_ext;
+>
+> @@ -940,6 +942,21 @@ bpf_object__add_programs(struct bpf_object *obj, Elf=
+_Data *sec_data,
+>         return 0;
 >  }
 >
-> -static int btf_ext_parse_hdr(__u8 *data, __u32 data_size)
-> +/* Swap byte-order of BTF.ext header with any endianness */
-> +static void btf_ext_bswap_hdr(struct btf_ext *btf_ext, __u32 hdr_len)
->  {
-> -       const struct btf_ext_header *hdr =3D (struct btf_ext_header *)dat=
-a;
-> +       struct btf_ext_header *h =3D btf_ext->hdr;
->
-> -       if (data_size < offsetofend(struct btf_ext_header, hdr_len) ||
-> -           data_size < hdr->hdr_len) {
-> -               pr_debug("BTF.ext header not found\n");
-> +       h->magic =3D bswap_16(h->magic);
-> +       h->hdr_len =3D bswap_32(h->hdr_len);
-> +       h->func_info_off =3D bswap_32(h->func_info_off);
-> +       h->func_info_len =3D bswap_32(h->func_info_len);
-> +       h->line_info_off =3D bswap_32(h->line_info_off);
-> +       h->line_info_len =3D bswap_32(h->line_info_len);
+> +static void bpf_object_bswap_progs(struct bpf_object *obj)
+> +{
+> +       struct bpf_program *prog =3D obj->programs;
+> +       struct bpf_insn *insn;
+> +       int p, i;
 > +
-> +       if (hdr_len < offsetofend(struct btf_ext_header, core_relo_len))
-> +               return;
-> +
-> +       h->core_relo_off =3D bswap_32(h->core_relo_off);
-> +       h->core_relo_len =3D bswap_32(h->core_relo_len);
+> +       for (p =3D 0; p < obj->nr_programs; p++, prog++) {
+> +               insn =3D prog->insns;
+> +               for (i =3D 0; i < prog->insns_cnt; i++, insn++)
+> +                       bpf_insn_bswap(insn);
+> +       }
+> +       pr_debug("converted %zu BPF programs to native byte order\n",
+> +                obj->nr_programs);
+
+Does it fit in 100 characters? If yes, it stays on single line. That's
+the rule for all code, don't wrap lines unnecessarily.
+
 > +}
 > +
-> +/* Swap metadata byte-order of generic info subsection */
-> +static int info_subsec_bswap_metadata(const struct btf_ext *btf_ext, str=
-uct btf_ext_info *ext_info)
-> +{
-> +       const bool is_native =3D btf_ext->swapped_endian;
-> +       __u32 left, *rs, rec_size, num_info;
-> +       struct btf_ext_info_sec *si;
-> +
-> +       if (ext_info->len =3D=3D 0)
-> +               return 0;
-> +
-> +       rs =3D ext_info->info - sizeof(__u32);    /* back up to record si=
-ze */
-> +       rec_size =3D is_native ? *rs : bswap_32(*rs);
-> +       if (rec_size !=3D ext_info->rec_size)
->                 return -EINVAL;
-> +       *rs =3D bswap_32(*rs);
-> +
-> +       si =3D ext_info->info;                    /* sec info #1 */
-> +       left =3D ext_info->len;
-> +       while (left > 0) {
-> +               num_info =3D is_native ? si->num_info : bswap_32(si->num_=
-info);
-> +               si->sec_name_off =3D bswap_32(si->sec_name_off);
-> +               si->num_info =3D bswap_32(si->num_info);
-> +               si =3D (void *)si->data + rec_size * num_info;
-> +               left -=3D offsetof(struct btf_ext_info_sec, data) +
-> +                       rec_size * num_info;
+>  static const struct btf_member *
+>  find_member_by_offset(const struct btf_type *t, __u32 bit_offset)
+>  {
+> @@ -1506,6 +1523,7 @@ static void bpf_object__elf_finish(struct bpf_objec=
+t *obj)
+>
+>         elf_end(obj->efile.elf);
+>         obj->efile.elf =3D NULL;
+> +       obj->efile.ehdr =3D NULL;
+>         obj->efile.symbols =3D NULL;
+>         obj->efile.arena_data =3D NULL;
+>
+> @@ -1571,6 +1589,16 @@ static int bpf_object__elf_init(struct bpf_object =
+*obj)
+>                 goto errout;
 >         }
 >
-> +       return 0;
-> +}
+> +       /* Validate ELF object endianness... */
+> +       if (ehdr->e_ident[EI_DATA] !=3D ELFDATA2LSB &&
+> +           ehdr->e_ident[EI_DATA] !=3D ELFDATA2MSB) {
+> +               err =3D -LIBBPF_ERRNO__ENDIAN;
+> +               pr_warn("elf: '%s' has unknown byte order\n", obj->path);
+> +               goto errout;
+> +       }
+> +       /* and save after bpf_object_open() frees ELF data */
+> +       obj->byteorder =3D ehdr->e_ident[EI_DATA];
 > +
-> +/* Swap byte order of info subsection metadata and records in the correc=
-t
-> + * order depending on whether or not data is in native endianness.
-> + */
-> +#define ORDER_INFO_BSWAP(btf_ext, ext_info, info_t, swap_fn)           \
-> +{                                                                      \
-> +       const bool is_native =3D btf_ext->swapped_endian;                =
- \
-> +       struct btf_ext_info_sec *si;                                    \
-> +       int c, err;                                                     \
-> +       info_t *i;                                                      \
-> +       if (is_native)                                                  \
-> +               for_each_btf_ext_sec(ext_info, si)                      \
-> +                       for_each_btf_ext_rec(ext_info, si, c, i)        \
-> +                               swap_fn(i);                             \
-> +       err =3D info_subsec_bswap_metadata(btf_ext, ext_info);           =
- \
-> +       if (err) {                                                      \
-> +               pr_warn(#info_t " record size mismatch!\n");            \
-> +               return err;                                             \
-> +       }                                                               \
-> +       if (!is_native)                                                 \
-> +               for_each_btf_ext_sec(ext_info, si)                      \
-> +                       for_each_btf_ext_rec(ext_info, si, c, i)        \
-> +                               swap_fn(i);                             \
-> +}
+>         if (elf_getshdrstrndx(elf, &obj->efile.shstrndx)) {
+>                 pr_warn("elf: failed to get section names section index f=
+or %s: %s\n",
+>                         obj->path, elf_errmsg(-1));
+> @@ -1599,19 +1627,15 @@ static int bpf_object__elf_init(struct bpf_object=
+ *obj)
+>         return err;
+>  }
+>
+> -static int bpf_object__check_endianness(struct bpf_object *obj)
+> +static bool is_native_endianness(struct bpf_object *obj)
+>  {
+>  #if __BYTE_ORDER__ =3D=3D __ORDER_LITTLE_ENDIAN__
+> -       if (obj->efile.ehdr->e_ident[EI_DATA] =3D=3D ELFDATA2LSB)
+> -               return 0;
+> +       return obj->byteorder =3D=3D ELFDATA2LSB;
+>  #elif __BYTE_ORDER__ =3D=3D __ORDER_BIG_ENDIAN__
+> -       if (obj->efile.ehdr->e_ident[EI_DATA] =3D=3D ELFDATA2MSB)
+> -               return 0;
+> +       return obj->byteorder =3D=3D ELFDATA2MSB;
+>  #else
+>  # error "Unrecognized __BYTE_ORDER__"
+>  #endif
+> -       pr_warn("elf: endianness mismatch in %s.\n", obj->path);
+> -       return -LIBBPF_ERRNO__ENDIAN;
+>  }
+>
+>  static int
+> @@ -3953,6 +3977,10 @@ static int bpf_object__elf_collect(struct bpf_obje=
+ct *obj)
+>                 return -LIBBPF_ERRNO__FORMAT;
+>         }
+>
+> +       /* change BPF program insns to native endianness for introspectio=
+n */
+> +       if (!is_native_endianness(obj))
+> +               bpf_object_bswap_progs(obj);
 > +
-
-Nope-nope-nope, I'm never landing something like this :)
-
-Ok, if there is no clean swapping and setup separation we can come up
-with, let's still do a decent job at trying to keep all this coherent
-and simple.
-
-How about this? btf_ext_bswap_hdr() stays, it seems fine.
-
-btf_ext_setup_func_info(), btf_ext_setup_line_info(), and
-btf_ext_setup_core_relos() all call into generic btf_ext_setup_info,
-right? We teach btf_ext_setup_info() to work with both endianness (but
-not swap data at all). The only two fields that we need to byte-swap
-on the fly are record_size and sinfo->num_info, so it's minimal
-changes to btf_ext_setup_info().
-
-Oh, and while we are at it, if data is in non-native endianness,
-btf_ext_setup_info() should return failure if any of the record sizes
-are not *exactly* matching our expectations. This should be a trivial
-addition as we have never extended those records, I believe.
-
-This will take care of correctness checking regardless of endianness.
-
-Now, forget about for_each_btf_ext_{sec,rec}(), it will be too fragile
-to make them work for inverted endianness. But we know now that the
-data is correct, right? So, fine, let's have a bit of duplication (but
-without any error checking) to go over raw .BTF.ext data and swap all
-the records and all metadata fields. This logic now will be used after
-btf_ext_setup_*() steps, and in btf_ext_raw_data(). For
-btf_ext_raw_data() you'll also btf_ext_bswap_hdr() at the very end,
-right?
-
-How does that sound? Am I missing something big again?
-
-And fine, let's use callbacks for different record types to keep this
-simple. I dislike callbacks, in principle, but sometimes they are the
-simplest way forward, unfortunately (a proper iterator would be
-better, but that's another story and I don't want to get into that
-implementation task just yet).
-
-> +/*
-> + * Swap endianness of the whole info segment in a BTF.ext data section:
-> + *   - requires BTF.ext header data in native byte order
-> + *   - only support info structs from BTF version 1
-> + */
-> +static int btf_ext_bswap_info(struct btf_ext *btf_ext)
+>         /* sort BPF programs by section name and in-section instruction o=
+ffset
+>          * for faster search
+>          */
+> @@ -7992,7 +8020,6 @@ static struct bpf_object *bpf_object_open(const cha=
+r *path, const void *obj_buf,
+>         }
+>
+>         err =3D bpf_object__elf_init(obj);
+> -       err =3D err ? : bpf_object__check_endianness(obj);
+>         err =3D err ? : bpf_object__elf_collect(obj);
+>         err =3D err ? : bpf_object__collect_externs(obj);
+>         err =3D err ? : bpf_object_fixup_btf(obj);
+> @@ -8498,8 +8525,15 @@ static int bpf_object_load(struct bpf_object *obj,=
+ int extra_log_level, const ch
+>                 return libbpf_err(-EINVAL);
+>         }
+>
+> -       if (obj->gen_loader)
+> +       /* Disallow kernel loading programs of non-native endianness but
+> +        * permit cross-endian creation of "light skeleton".
+> +        */
+> +       if (obj->gen_loader) {
+>                 bpf_gen__init(obj->gen_loader, extra_log_level, obj->nr_p=
+rograms, obj->nr_maps);
+> +       } else if (!is_native_endianness(obj)) {
+> +               pr_warn("object '%s': loading non-native endianness is un=
+supported\n", obj->name);
+> +               return libbpf_err(-LIBBPF_ERRNO__ENDIAN);
+> +       }
+>
+>         err =3D bpf_object_prepare_token(obj);
+>         err =3D err ? : bpf_object__probe_loading(obj);
+> diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_inter=
+nal.h
+> index a8531195acd4..eda7a0cc2b8c 100644
+> --- a/tools/lib/bpf/libbpf_internal.h
+> +++ b/tools/lib/bpf/libbpf_internal.h
+> @@ -11,6 +11,7 @@
+>
+>  #include <stdlib.h>
+>  #include <limits.h>
+> +#include <byteswap.h>
+>  #include <errno.h>
+>  #include <linux/err.h>
+>  #include <fcntl.h>
+> @@ -616,6 +617,16 @@ static inline bool is_ldimm64_insn(struct bpf_insn *=
+insn)
+>         return insn->code =3D=3D (BPF_LD | BPF_IMM | BPF_DW);
+>  }
+>
+> +static inline void bpf_insn_bswap(struct bpf_insn *insn)
 > +{
-> +       const struct btf_ext_header *h =3D btf_ext->hdr;
-> +       struct btf_ext_info ext =3D {};
+> +       __u8 tmp_reg =3D insn->dst_reg;
 > +
-> +       /* Swap func_info subsection byte-order */
-> +       ext.info =3D (void *)h + h->hdr_len + h->func_info_off + sizeof(_=
-_u32);
-> +       ext.len =3D h->func_info_len - (h->func_info_len ? sizeof(__u32) =
-: 0);
-> +       ext.rec_size =3D sizeof(struct bpf_func_info);
-> +
-> +       ORDER_INFO_BSWAP(btf_ext, &ext, struct bpf_func_info, bpf_func_in=
-fo_bswap);
-
-You shouldn't have bent over backwards just to use
-for_each_btf_ext_{sec,rec}() macros. Just because I proposed it
-(initially, without actually coding anything) doesn't mean it's the
-best and final solution :)
-
-> +
-> +       /* Swap line_info subsection byte-order */
-> +       ext.info =3D (void *)h + h->hdr_len + h->line_info_off + sizeof(_=
-_u32);
-> +       ext.len =3D h->line_info_len - (h->line_info_len ? sizeof(__u32) =
-: 0);
-> +       ext.rec_size =3D sizeof(struct bpf_line_info);
-> +
-> +       ORDER_INFO_BSWAP(btf_ext, &ext, struct bpf_line_info, bpf_line_in=
-fo_bswap);
-> +
-> +       /* Swap core_relo subsection byte-order (if present) */
-> +       if (h->hdr_len < offsetofend(struct btf_ext_header, core_relo_len=
-))
-> +               return 0;
-> +
-> +       ext.info =3D (void *)h + h->hdr_len + h->core_relo_off + sizeof(_=
-_u32);
-> +       ext.len =3D h->core_relo_len - (h->core_relo_len ? sizeof(__u32) =
-: 0);
-> +       ext.rec_size =3D sizeof(struct bpf_core_relo);
-> +
-> +       ORDER_INFO_BSWAP(btf_ext, &ext, struct bpf_core_relo, bpf_core_re=
-lo_bswap);
-> +
-> +       return 0;
+> +       insn->dst_reg =3D insn->src_reg;
+> +       insn->src_reg =3D tmp_reg;
+> +       insn->off =3D bswap_16(insn->off);
+> +       insn->imm =3D bswap_32(insn->imm);
 > +}
-> +#undef ORDER_INFO_BSWAP
-
-[...]
+> +
+>  /* Unconditionally dup FD, ensuring it doesn't use [0, 2] range.
+>   * Original FD is not closed or altered in any other way.
+>   * Preserves original FD value, if it's invalid (negative).
+> --
+> 2.34.1
+>
 
