@@ -1,146 +1,149 @@
-Return-Path: <linux-kselftest+bounces-17200-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17201-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9301A96CD3E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 05:27:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB9DC96CD9A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 06:11:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1C427B24CD8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 03:27:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AABAF1F27228
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 04:11:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA8E6146A68;
-	Thu,  5 Sep 2024 03:27:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723F014E2E6;
+	Thu,  5 Sep 2024 04:10:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KNX5/usb"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="YRJ7zJbr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 382D313DDDF;
-	Thu,  5 Sep 2024 03:27:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309F114D2B3;
+	Thu,  5 Sep 2024 04:10:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725506832; cv=none; b=tgYFN9tmTBR496t31udZWb5vDX8PHflAdPka9Ixex5bH8KI+Eat82ortlQ2fdn1X8IdnW6BOfGXWMJ8a0hO89KR4sZYDuSjbpt0j7wtIOEQx7qifIhHzKqhLYJUd8vpzk5JdCH94hvf99vsQiQ6XdQEUy+3tZn5LW0aNaoikr4c=
+	t=1725509459; cv=none; b=axbCwiNStifE/jq/Rwh1wEdK3E4BODPPE4y6A3xI2fZnI1DAnMocbUCksHhIzxMZk6+6Z2dkzOJO7eqcxJTJ0PC2X1doZG41GYf1P1v731JjXUudsYLr4m1y3QFWOc7l4vMRleuUIHwbHXllc4SanalbXdR7Y4rjpZOd0ycLWtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725506832; c=relaxed/simple;
-	bh=493Eu9NKzhahlJEPDLTDCyuodJroRApduA2tzcVfPxc=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=Z9b6wHJGVKHMu1DYlbR398FS7DMqKYPDx2Z4DDRnVw7VXh7QrB3fcGrtVUn6RYR03wY2VEtBXTJHdCv4MOcqvsMauIQItQaWoxCDRpajg0nYlKn/zOlrQGXF8SF93ElrHTz0RH7wa8m50mY2TH6b7Q9Tz5vrlZe8GB04KJsotgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KNX5/usb; arc=none smtp.client-ip=209.85.219.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6c34c2a7dc7so1530516d6.3;
-        Wed, 04 Sep 2024 20:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725506830; x=1726111630; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hwuLql25wk1ZI2iRiYl3cYZG1VFWAXiw54D6jDWYUOM=;
-        b=KNX5/usb2vWmqbekOkkxmIgni00NQRIsjM5qf4NCm6sRzB4+bHt1Uc/ccenr74nLy1
-         TLPnmToRbOquztAFKrMzuy7UIsPucYi00OqJQ6nHEyYUpDN362hcrR2YNOdgH+avTCEb
-         wFlrUaxe7EDG4WXJP9n4W5OuD5MC0KkivgnVMx8rsmIz9IeMl7htViP8sfp3IkhcBiPn
-         kIWX/BbihrjEET3FeBagHXGAaAOwvCxLWXJ9onJK2QHFnUiN3dvY5gPDOKgH8yLo7DyH
-         2R6vRT6UlOFT8rItXRq4h7TzgL4Nh6sMx4H1JUNDDmITaUnxvKY2MtbriHvMl6RggGid
-         czPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725506830; x=1726111630;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=hwuLql25wk1ZI2iRiYl3cYZG1VFWAXiw54D6jDWYUOM=;
-        b=eVhXQIhG/3J1HKLw7q79rLWvNfY7jvMWqvqPYu4Rcu1hyV/Y/DACe+2TEm0X5lsaiy
-         oWGyc1yfHINjzUXCVkfMcicAxtimzYvOQUK1HaSF8/66f92O9z4GLE4sSuctEybiDtcI
-         L8nNBuXc2JiwqsbJ3XndEE8xsO6mXJm/1Zg6eXfmb27rx/0lthqKeFcX0Ta0GTWUV7YG
-         6j6ERu513Bk8OAgx77Xv6duEJYtxzb+8blbI0TZQ3dZvhqUXDNdUqK8i3doI6FNtvLtJ
-         TKJX7zCt+jVW+OzIZjozI14cJ3BhNoOw7LOQuXYKHiQL4g2AypxVqKcODrJ40hKHM9ZZ
-         41YA==
-X-Forwarded-Encrypted: i=1; AJvYcCWBA+HXtE7hFj2XAdkuWVpTjoLjUhW5uQSBfwc2Z+DjIO2hk67gyQwp3Ny4XpdlJ1PGGU4j7NbyCnIM6lDXf94=@vger.kernel.org, AJvYcCWX6hD5IZyGHpIMwsnjkpwv4YqwYsscd7EOdunoO44APFAu3sM7/z98oTaZb1InuA06ezemxS3+@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuoyZifoqDn+jBa3d20DotMainMUg8n8p97z6hQfqriD31JsKB
-	M77t9GCos7WMYvzCzUKxS9GbG4WFBa/acUYXaJisXmKwYH/V/Vul
-X-Google-Smtp-Source: AGHT+IHOXLo6uy+QutPCpztdJUarIdNeFBLSve+ANNQtmwXibVO3mRhb+6rQIJT+TTGB3UuT/DHihQ==
-X-Received: by 2002:a05:6214:5a0b:b0:6c1:6b5d:8cd with SMTP id 6a1803df08f44-6c33e6a7d9dmr294770896d6.49.1725506829880;
-        Wed, 04 Sep 2024 20:27:09 -0700 (PDT)
-Received: from localhost (193.132.150.34.bc.googleusercontent.com. [34.150.132.193])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c5201e4152sm4215446d6.32.2024.09.04.20.27.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Sep 2024 20:27:09 -0700 (PDT)
-Date: Wed, 04 Sep 2024 23:27:09 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: Paolo Abeni <pabeni@redhat.com>, 
- netdev@vger.kernel.org, 
- davem@davemloft.net, 
- edumazet@google.com, 
- ncardwell@google.com, 
- shuah@kernel.org, 
- linux-kselftest@vger.kernel.org, 
- fw@strlen.de, 
- Willem de Bruijn <willemb@google.com>, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- martineau@kernel.org
-Message-ID: <66d9250d17916_17661d29484@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20240830144420.5974dc5b@kernel.org>
-References: <20240827193417.2792223-1-willemdebruijn.kernel@gmail.com>
- <401f173b-3465-428d-9b90-b87a76a39cc8@redhat.com>
- <66cf2e4bd8e89_33815c294b2@willemb.c.googlers.com.notmuch>
- <20240828090120.71be0b20@kernel.org>
- <66cf7b8d1c480_36509229439@willemb.c.googlers.com.notmuch>
- <20240828140035.4554142f@kernel.org>
- <66d1e32558532_3c08a22949e@willemb.c.googlers.com.notmuch>
- <20240830103343.0dd20018@kernel.org>
- <66d213cf6652e_3c8f2d294b8@willemb.c.googlers.com.notmuch>
- <20240830144420.5974dc5b@kernel.org>
-Subject: Re: [PATCH net-next RFC] selftests/net: integrate packetdrill with
- ksft
+	s=arc-20240116; t=1725509459; c=relaxed/simple;
+	bh=u2Ch/o77PjLYGsReQcy05n4gCCnOgS0nHgy/Suw9PLg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TIQj6f82HVBaXL/+FPO2d74lSCfk1ATuV+454bixcN3U4Xn3Qd6om9EaF0pLY1pjBHBN1Li1H4k+dDeMiNU47zl31DFjs1qCLPMu5+BiaW/sx3FF1liTaPHJ979jO7jE20zElaVGzIYRI55sHAk9ZNGduKX7gZHYOZrFpF+NjZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=YRJ7zJbr; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=OtwjK
+	TXld+LD+C/gFLMawKusKdxWF5oA5AVNnQP/lMo=; b=YRJ7zJbrOOE4aETAAnDUe
+	FFOwZr0jXMknJ0I/5eY07zf//uwICXm+4i7Mzu6itHVyDLmwEh0O4PWZd6JyaCs3
+	yI3CJogpvjo5F7JmyA6E+5gHLKYfzmJLSFuikd1QciVIsn6iCx4mvaEWOT/IenSI
+	qDDPGfyKpaT0DP/7hXaXbo=
+Received: from localhost.localdomain (unknown [120.227.22.125])
+	by gzga-smtp-mta-g2-5 (Coremail) with SMTP id _____wBXnqEsL9lm2Ud+Fg--.54591S2;
+	Thu, 05 Sep 2024 12:10:21 +0800 (CST)
+From: Yuan Chen <chenyuan_fl@163.com>
+To: andrii@kernel.org
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/bpf: Add valid flag to bpf_cookie selftest's res
+Date: Wed,  4 Sep 2024 19:55:10 +0800
+Message-ID: <20240904115510.67480-1-chenyuan_fl@163.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wBXnqEsL9lm2Ud+Fg--.54591S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxCF13Gr4kKF1ktry8trW8Zwb_yoW5Cr47p3
+	y8X34ayFZ3JF17XF4xGr4UWF4FvF40vFW3ZF4rt3yrZrn7Xr92qr1xKF42qF9xWrWFvw1f
+	Zw4DKFZ8Cw1xZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jq1v3UUUUU=
+X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/1tbiNxJRvWXAnFjYFAAAsk
 
-Jakub Kicinski wrote:
-> On Fri, 30 Aug 2024 14:47:43 -0400 Willem de Bruijn wrote:
-> > > We have directories in net/lib, and it's a target, and it works, no?  
-> > 
-> > net/lib is not a TARGET in tools/testing/selftests/Makefile. Its
-> > Makefile only generates dependencies for other targets: TEST_FILES,
-> > TEST_GEN_FILES and TEST_INCLUDES.
-> 
-> Oh right, TEST_FILES vs TEST_INCLUDES :(
-> 
-> Looks like only x86 does some weird stuff and prepends $(OUTPUT) to all
-> test names. Otherwise the only TEST_NAME with a / in it is
-> 
-> x86_64/nx_huge_pages_test.sh
-> 
-> But then again maybe we should give up on the idea of using directories?
-> Use some separator like --, I mean:
-> 
-> mv packetdrill/tcp/inq/client.pkt packetdrill/tcp--inq--client.pkt
-> 
-> Assuming we're moving forward with the interpreter idea we don't need
-> directories for multi-threading, just for organization. Which perhaps
-> isn't worth the time investment? Given that we'd mostly interact with
-> these tests via UI which will flatten it all back?
+From: Yuan Chen <chenyuan@kylinos.cn>
 
-Okay, went with the simplest approach for v1: indeed just flattening
-the space like this.
+This patch identifies whether a test item is valid by adding a valid flag to res.
 
-Only after implementing TEST_PROGS_RECURSE and PRESERVE_TEST_DIRS.
-Both make kselftest more complex and in subtle ways that could break
-existing tests.
+When we test the bpf_cookies/perf_event sub-test item of test_progs, there is a
+probability failure of the test item. In fact, this is not a problem, because
+the corresponding perf event is not collected. This should not output the test
+failure, and it is more reasonable to output SKIP. Therefore, add a valid
+identifier to res to distinguish whether the test item is valid, and skip the
+test item if it is invalid.
 
-Also simplified the interpreter mechanism. Instead of requiring an
-environment variable, look for a specific executable in the TARGET
-dir. This will make the test just work when someone does a manual run.
+Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
+---
+ .../testing/selftests/bpf/prog_tests/bpf_cookie.c | 15 +++++++++++++++
+ .../testing/selftests/bpf/progs/test_bpf_cookie.c |  2 ++
+ 2 files changed, 17 insertions(+)
 
-All is tentative and up for revision, of course.
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+index 070c52c312e5..e5bf4b385501 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
+@@ -456,6 +456,7 @@ static void pe_subtest(struct test_bpf_cookie *skel)
+ 	if (!ASSERT_GE(pfd, 0, "perf_fd"))
+ 		goto cleanup;
+ 
++	skel->bss->res_valid = false;
+ 	opts.bpf_cookie = 0x100000;
+ 	link = bpf_program__attach_perf_event_opts(skel->progs.handle_pe, pfd, &opts);
+ 	if (!ASSERT_OK_PTR(link, "link1"))
+@@ -463,6 +464,12 @@ static void pe_subtest(struct test_bpf_cookie *skel)
+ 
+ 	burn_cpu(); /* trigger BPF prog */
+ 
++	if (!skel->bss->res_valid) {
++		printf("%s:SKIP:the corresponding perf event was not sampled.\n",
++		        __func__);
++		test__skip();
++		goto cleanup;
++	}
+ 	ASSERT_EQ(skel->bss->pe_res, 0x100000, "pe_res1");
+ 
+ 	/* prevent bpf_link__destroy() closing pfd itself */
+@@ -474,6 +481,7 @@ static void pe_subtest(struct test_bpf_cookie *skel)
+ 	link = NULL;
+ 	kern_sync_rcu();
+ 	skel->bss->pe_res = 0;
++	skel->bss->res_valid = false;
+ 
+ 	opts.bpf_cookie = 0x200000;
+ 	link = bpf_program__attach_perf_event_opts(skel->progs.handle_pe, pfd, &opts);
+@@ -482,6 +490,13 @@ static void pe_subtest(struct test_bpf_cookie *skel)
+ 
+ 	burn_cpu(); /* trigger BPF prog */
+ 
++	if (!skel->bss->res_valid) {
++		printf("%s:SKIP:the corresponding perf event was not sampled.\n",
++		        __func__);
++		test__skip();
++		goto cleanup;
++	}
++
+ 	ASSERT_EQ(skel->bss->pe_res, 0x200000, "pe_res2");
+ 
+ cleanup:
+diff --git a/tools/testing/selftests/bpf/progs/test_bpf_cookie.c b/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
+index c83142b55f47..28d0ae6810d9 100644
+--- a/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
++++ b/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
+@@ -7,6 +7,7 @@
+ #include <errno.h>
+ 
+ int my_tid;
++bool res_valid;
+ 
+ __u64 kprobe_res;
+ __u64 kprobe_multi_res;
+@@ -27,6 +28,7 @@ static void update(void *ctx, __u64 *res)
+ 	if (my_tid != (u32)bpf_get_current_pid_tgid())
+ 		return;
+ 
++	res_valid = true;
+ 	*res |= bpf_get_attach_cookie(ctx);
+ }
+ 
+-- 
+2.46.0
+
 
