@@ -1,136 +1,148 @@
-Return-Path: <linux-kselftest+bounces-17136-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17137-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23BE096C0D4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 16:37:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 517F896C108
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 16:45:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D83EB24969
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 14:36:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 761461C22957
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 14:45:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AF861D9D64;
-	Wed,  4 Sep 2024 14:36:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3229E1DB53C;
+	Wed,  4 Sep 2024 14:44:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H/75FYwt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B116463D;
-	Wed,  4 Sep 2024 14:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC0E863D;
+	Wed,  4 Sep 2024 14:44:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725460580; cv=none; b=muypwSm+brZ9JrwQMIq4YXmcro1U0MQ+ujmTmy9ergt/b2+vdZOCRnyDsfDqwzvQdMGK3sKs4lRcC7ZwQ+NZzvJHQnj+/28lGx7nYEPG0vo066wtQrJKhY40qwf2ZAer7i2OJ6tODlwLNe2HwRoq9GmnotkCeveATH0GvHOg0iY=
+	t=1725461096; cv=none; b=RkJSLyE/8M0xwTB0KOZpunDQl44d1qW6HkHn7AaTFSIV2GxVPxnNiHZIEkMLkRRog+zNvvyhnxruDxq146Ptf2DQYRA3/vu54KaslYHzRWxIC/JUJG399IyGK9QDeuL8CKZa65yCDf7So9uxXkrTJDWk7LlYkpXg8EVKkpvIc2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725460580; c=relaxed/simple;
-	bh=mrcpBZCNCDHUN8s1jct5aPcG3/C9zlzErsh6HAxxzVU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BU8tYwZgM1wUklcuv3/A8c4VzhyITPhDrbfGyCFB6rjXSk2/5T0+SqM91zUFZzrJEIR5yik7+v2B0WuSlygJFNmEsPMmo5iXXvLsIAJpyYaQV14Xv4/k+lyhZye3Rh079MiM3yFr4flWFvtPl5K9qVNv7viXyVY+aBq6JHOkMqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4WzQ685Z1lz9sS7;
-	Wed,  4 Sep 2024 16:36:16 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id j3Oi0qoOC3QN; Wed,  4 Sep 2024 16:36:16 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4WzQ684j7Sz9sRy;
-	Wed,  4 Sep 2024 16:36:16 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 8DE208B77A;
-	Wed,  4 Sep 2024 16:36:16 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id MDg64KpQGgK2; Wed,  4 Sep 2024 16:36:16 +0200 (CEST)
-Received: from [192.168.234.246] (unknown [192.168.234.246])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 9D5618B778;
-	Wed,  4 Sep 2024 16:36:15 +0200 (CEST)
-Message-ID: <070a2aa1-a804-4124-ad89-c43e09dc3ded@csgroup.eu>
-Date: Wed, 4 Sep 2024 16:36:15 +0200
+	s=arc-20240116; t=1725461096; c=relaxed/simple;
+	bh=z7WVz7mlT0hUsjOTSHJBLEGayXMGoulzkKewQZM00bI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=T22UokK0vgC+6HVkb8aqKub5b+cLAqL5n2WzCfxAEsgkbA2YpSdHqZ/RbRJEgXABslY4TbdFAsX81SpyIBFV7W4/3joCqj1Wiy2BHUCTgJz4TiJ8ba1UEm1y+llSvGQLLQLN2TvB9OewAkic1Ro2GoKrx7IDrX3VM+Z4/Hps2AE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H/75FYwt; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-7d4f6d8c1eeso1250605a12.1;
+        Wed, 04 Sep 2024 07:44:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725461094; x=1726065894; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PLWTzbqYMWGYSYnB2rX4ScY+RLCUbwYthWBJh0p++u8=;
+        b=H/75FYwtf8B/B18Cdl5VldmZXu4GT2irvXmXv0+84fo9u95AuEYF1VpAcTxLS2YPm8
+         XdYp3Nvg3CSMqVqL1nOnXJw45JhjG+Y3il9FpEp6JSVfTBuziXgWzlGPsGXS5LSKvI5B
+         onVazH8Sfb1hSc84Z8t3VlFyl6JWjjcC5zOO4Xk9nW4UWBg8VSve+9fgw/Bt+x6mhfhr
+         jM14omkr+ScG/wuUAi2OdnX1XvHtMEZaHwFFGTd91yWufMQtKuPsjKK0VzLY6IqO4W0X
+         bRWnS1HeYWTTPdg72QhL2aN409PUOd+LjIwPZZAMFzsIGMD/gmdbV/ufhjN+0O5Cp8dK
+         1Gcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725461094; x=1726065894;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PLWTzbqYMWGYSYnB2rX4ScY+RLCUbwYthWBJh0p++u8=;
+        b=UFc+aawM8P2zadGAZPOlCl6f8ycxcGgm86KbcfQvqJLVRWB9b6PWnhNmQic5q7fCUQ
+         imr864M12085vukMgQ1j1J1JPsjbK8CbIJCFFJuIvMLF0adgkcb2ntRWMzhNlvHS1Zxg
+         1AY2rJGxdkGwUFNRtCrvKwDnd9dXI+jhu1uIpct+HnMlrqtafDMyJslpxX0VNA135iJN
+         M8nZ2qd4mY2qa8okgSJuTmYi8pbLTbNSF/UD3P+aQOnrQzCc3zovK3DcPmpkRxmP3ZF6
+         Ail3w0KHpFLchCYZtqFgbLxIbkcUUEYrmpnI/vUDHWYSnfsNHvrojEDxlTIwPJZt2KzD
+         Aonw==
+X-Forwarded-Encrypted: i=1; AJvYcCV7T87op5DBfKNo60rgWLBByypGjFVX4L4LnmzJ9N4jm4eXGDMgIHrH1NkJjtES7asnqG1yKSg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YykwQ/g78oi5VEt/NSGa5VgImB8hHI3yTZUTzzvd1pW4WV9HzKq
+	Bq9/S4ZAK6poJUpK3+WHSzZlIhw18x8bxYfZX6seyUiGu3VdA/T5
+X-Google-Smtp-Source: AGHT+IEO3v2XygobALq56TxMHS1kFQHDwrZB+k0atHFByd/N0f9Napb9NmLKrTI/GFAGUzkqeqGk5Q==
+X-Received: by 2002:a17:90a:dc13:b0:2da:936c:e5ad with SMTP id 98e67ed59e1d1-2da936cef76mr2012543a91.33.1725461093825;
+        Wed, 04 Sep 2024 07:44:53 -0700 (PDT)
+Received: from KERNELXING-MC1.tencent.com ([114.253.36.103])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2d8b69a61casm7745950a91.44.2024.09.04.07.44.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Sep 2024 07:44:53 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	willemdebruijn.kernel@gmail.com
+Cc: linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH net-next] selftests: return failure when timestamps can't be parsed
+Date: Wed,  4 Sep 2024 22:44:46 +0800
+Message-Id: <20240904144446.41274-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/5] Wire up getrandom() vDSO implementation on powerpc
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Naveen N Rao <naveen@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
- linux-trace-kernel@vger.kernel.org,
- Adhemerval Zanella <adhemerval.zanella@linaro.org>,
- Xi Ruoyao <xry111@xry111.site>
-References: <cover.1725304404.git.christophe.leroy@csgroup.eu>
- <Zthr1nB_RJ56YD3O@zx2c4.com>
-Content-Language: fr-FR
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <Zthr1nB_RJ56YD3O@zx2c4.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+From: Jason Xing <kernelxing@tencent.com>
 
+When I was trying to modify the tx timestamping feature, I found that
+running "./txtimestamp -4 -C -L 127.0.0.1" didn't reflect the fact
+properly.
 
-Le 04/09/2024 à 16:16, Jason A. Donenfeld a écrit :
-> Hi Christophe, Michael,
-> 
-> On Mon, Sep 02, 2024 at 09:17:17PM +0200, Christophe Leroy wrote:
->> This series wires up getrandom() vDSO implementation on powerpc.
->>
->> Tested on PPC32 on real hardware.
->> Tested on PPC64 (both BE and LE) on QEMU:
->>
->> Performance on powerpc 885:
->> 	~# ./vdso_test_getrandom bench-single
->> 	   vdso: 25000000 times in 62.938002291 seconds
->> 	   libc: 25000000 times in 535.581916866 seconds
->> 	syscall: 25000000 times in 531.525042806 seconds
->>
->> Performance on powerpc 8321:
->> 	~# ./vdso_test_getrandom bench-single
->> 	   vdso: 25000000 times in 16.899318858 seconds
->> 	   libc: 25000000 times in 131.050596522 seconds
->> 	syscall: 25000000 times in 129.794790389 seconds
->>
->> Performance on QEMU pseries:
->> 	~ # ./vdso_test_getrandom bench-single
->> 	   vdso: 25000000 times in 4.977777162 seconds
->> 	   libc: 25000000 times in 75.516749981 seconds
->> 	syscall: 25000000 times in 86.842242014 seconds
-> 
-> Looking good. I have no remaining nits on this patchset; it looks good
-> to me.
-> 
-> A review from Michael would be nice though (in addition to the necessary
-> "Ack" I need to commit this to my tree), because there are a lot of PPC
-> particulars that I don't know enough about to review properly. For
-> example, you use -ffixed-r30 on PPC64. I'm sure there's a good reason
-> for this, but I don't know enough to assess it. And cvdso_call I have no
-> idea what's going on. Etc.
+In this selftest file, we respectively test three tx generation flags.
+With the generation and report flag enabled, we expect that the timestamp
+must be returned to the userspace unless 1) generating the timestamp
+fails, 2) reporting the timestamp fails. So we should test if the
+timestamps can be read and parsed succuessfuly in txtimestamp.c, or
+else there is a bug in the kernel.
 
-You can learn a bit more about cvdso_call in commit ce7d8056e38b 
-("powerpc/vdso: Prepare for switching VDSO to generic C implementation.")
+After adding the check so that running ./txtimestamp will reflect the
+result correctly like this if there is an error in kernel:
+protocol:     TCP
+payload:      10
+server port:  9000
 
-About the fixed-r30, you can learn more in commit a88603f4b92e 
-("powerpc/vdso: Don't use r30 to avoid breaking Go lang")
+family:       INET
+test SND
+    USR: 1725458477 s 667997 us (seq=0, len=0)
+Failed to parse timestamps
+    USR: 1725458477 s 718128 us (seq=0, len=0)
+Failed to parse timestamps
+    USR: 1725458477 s 768273 us (seq=0, len=0)
+Failed to parse timestamps
+    USR: 1725458477 s 818416 us (seq=0, len=0)
+Failed to parse timestamps
+...
 
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
+---
+I'm not sure if I should also check if the cur->tv_sec or cur->tv_nsec
+is zero in __print_timestamp(). Could it be valid when either of
+them is zero?
+---
+ tools/testing/selftests/net/txtimestamp.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> 
-> But anyway, awesome work, and I look forward to the final stretches.
+diff --git a/tools/testing/selftests/net/txtimestamp.c b/tools/testing/selftests/net/txtimestamp.c
+index ec60a16c9307..b69aae840a67 100644
+--- a/tools/testing/selftests/net/txtimestamp.c
++++ b/tools/testing/selftests/net/txtimestamp.c
+@@ -358,6 +358,10 @@ static void __recv_errmsg_cmsg(struct msghdr *msg, int payload_len)
+ 
+ 	if (batch > 1)
+ 		fprintf(stderr, "batched %d timestamps\n", batch);
++	else if (!batch) {
++		fprintf(stderr, "Failed to parse timestamps\n");
++		test_failed = true;
++	}
+ }
+ 
+ static int recv_errmsg(int fd)
+-- 
+2.37.3
 
-Thanks, looking forward to getting this series applied.
-
-Christophe
 
