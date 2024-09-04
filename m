@@ -1,188 +1,150 @@
-Return-Path: <linux-kselftest+bounces-17086-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17088-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1991E96ADBA
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 03:19:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E1A096ADE0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 03:27:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC8BAB24244
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 01:18:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9099E1C210A2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 01:27:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4823BE49;
-	Wed,  4 Sep 2024 01:18:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A59868F47;
+	Wed,  4 Sep 2024 01:27:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a6vaW8G9"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="cIOKu/RA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f54.google.com (mail-oo1-f54.google.com [209.85.161.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B094BA50;
-	Wed,  4 Sep 2024 01:18:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3435879DE
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Sep 2024 01:27:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725412724; cv=none; b=XWFzx+1nDZNwmsqmwWEfAjJHvym8/HyKbv+eYJtjueFI/j8PZON6avNcvtdr+wlpoQY7HwLK6gEIX5RSPGqy8+bS5TaxLinziobKyDXL8jHDg09RMc5ohDXvOxLdrk73LoI3UvRkgI2dcsXqMu/PqX8DYFPBQX4Vl11kpYB79W8=
+	t=1725413244; cv=none; b=Z9zu2vjMVJb7WpfLzLksw9akLln403BRRBX64QWay717f1U5fnkrHWXTPzUSaTFkpFb9dMPlOgN084k0DwUeuyAG9AJQjhyRTQO5Hdo/hW89SXkPqA9OKAdZzjDt+F5fk+zG1X8VyUccM0aApLeeEq5CK0FVesXDWd1ot7pMca0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725412724; c=relaxed/simple;
-	bh=y/3yN1UyvYk8Wq999clT14OsLdRzhWfqeZkW6GvxlHo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XH+QWqH58r02FZJZkhtqARNM1wGYs5i88VtZfSEvX5SIsrqWhOAniS8V+22eCCmX8lo33krEILxNte4lkE8cdzaCZW+7vLqmsNC8gOyVyXjg/Cz6wBmQQtIRdUUU4A98juEA1J9ic9jeYCJ+Krkts93mrL6QyaeJ+ZEbLemkb1E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a6vaW8G9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32F76C4CEC4;
-	Wed,  4 Sep 2024 01:18:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725412724;
-	bh=y/3yN1UyvYk8Wq999clT14OsLdRzhWfqeZkW6GvxlHo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=a6vaW8G9clbLDlTrj5RrieA6o0MP9RhjYpO5XdSMVRsEzfTWOTQCmNXcFNt29K/IE
-	 Ii6ZGn7bfMcRf9/BxwyraAucHwdFQ6+7gAQoraG9nsZ6hYFSgoQZaFsRCknIYjQQ3t
-	 nBvL7hYmdoj2l2F/sOXP89SfG8UwffnmELIKoFrW2Jyt/TMEIj6cPP2xdQJ0dvs5y9
-	 1ljtUwltwh4os+Om2vmyvBo05lsV9t6Cl0lO9NOYBns/dXhyzy7LQTR6dvnqAg7Ys8
-	 cg6xSdBi5FKzEDciSnQDxuvFj+IllEa9oFoFHzDAcr6R3v7CJsDHuZKHuq/IFP6OqZ
-	 B+7265UR+Cssg==
-From: SeongJae Park <sj@kernel.org>
-To: SeongJae Park <sj@kernel.org>
-Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	David Hildenbrand <david@redhat.com>,
-	Brendan Higgins <brendanhiggins@google.com>,
-	David Gow <davidgow@google.com>,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH] mm/damon/tests/vaddr-kunit: don't use mas_lock for MM_MT_FLAGS-initialized maple tree
-Date: Tue,  3 Sep 2024 18:18:40 -0700
-Message-Id: <20240904011840.973-1-sj@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240904005815.1388-1-sj@kernel.org>
-References: 
+	s=arc-20240116; t=1725413244; c=relaxed/simple;
+	bh=rQUeY216BPRHhs5pFUaqFKbxQg9baq3ttTG2zJU6H7k=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=p4wF3uzdrciojYQyt0IvteExSrnB2yR8WVNBTSmC/5rkMwxK7O2Hg6rlv2S+BnjSx8Oj1MyCMW+3FT9XciXKDNvrc2MvDdvYKl00CaixigErNPk/sYQlChwoD5oVOFbYzFNaCMDtyiLi63xkrFteehLG9+cN2oRAW5KnwW+BB0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=cIOKu/RA; arc=none smtp.client-ip=209.85.161.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5dfad5a9c21so208678eaf.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Sep 2024 18:27:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1725413242; x=1726018042; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=kmwIuVkI/KvZY5xaavAUpX9EToaNr1Q1/O6mPs+vs3s=;
+        b=cIOKu/RAsyHk6rlV4jqBj1evNrmQzHn/JMqb1nPh6qgTItLLsMeNcUrynom9TX//Yf
+         gQ8zKI04i2NJdgoa3v5nKV5yyklp1en+u9aB1JNSwYH6AWB8Kqb8kTS9RZAClS7zJRBk
+         NbpAL6P6uNvtZCQXukTpNMm1ZS2UvTnfP3vPal6RyLnxFSPxU8k0tOSiKfpRS6YKLyRP
+         oIgXKdc8DTA3vIg0pp2LY9s2ifZAYL7AfxHFC9BO/iXv3RmPSrWzHlYHT6wKn5MussQ9
+         aRICyUEcCZaUd5HrDAicbpyvR0iPIabBRosRyyv8Z1+neD99ohDrPB695/XQYSN4hSmi
+         omDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725413242; x=1726018042;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kmwIuVkI/KvZY5xaavAUpX9EToaNr1Q1/O6mPs+vs3s=;
+        b=GQjTIhFB+Q0HszjKfLDJOe3c5XpC0eL7Q/R/gSbG491sJ6zIC4nBdZQ+UI9E5coR4a
+         LHJYJeD0oSl5fiKcmE7NJSmkK1bkoDkX0+30IWxDi967w8Q6LORc/Ua+n+FU4PvFBC9s
+         W3AGrUGJ6d5bd4armtwHQY4oNgJHHQkLcRxcXOP8Sq8cpiCG6j92KxuRk0rsRYSvBd4v
+         wBOwX4K7GOqUVLNZ0xQm95SgCNzDStJVhL1gHQdhtWiGbOeKThe8GKLBL4HXF1cUPohm
+         lZRoEh8I0pV6Icm6S60KMtf4az5u0m0n1G/li6Az5Zuvo96W091Sq8x8J6VxJU+ZWnUu
+         a9qA==
+X-Forwarded-Encrypted: i=1; AJvYcCXcUWwi5Ccln93B3nOJiriIRuzwGJwVD2xnXL+6l7x8I/qXry8mws6EGUdJbaxjxyUb6VRemoy9foC1ISBd0+8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxs13bnFXnrBaBJV72lLF47hSf2YgsGDCtWtUUbU5ssEkwUE/EE
+	Tbu+8phwUK2X/iAJCD4/Wl7/88YUs+v8wjswqdm+xUubu2TSQ8lElxTqVS1eytQ=
+X-Google-Smtp-Source: AGHT+IHpz4qumzBmM7wHBcsF+nigLGJ/2yW/xqvLa3hL5PlxXIq19g4sT1kKnnE0LuMDNGUZ/5HOJQ==
+X-Received: by 2002:a05:6359:4597:b0:1ad:d28:976e with SMTP id e5c5f4694b2df-1b603ccacdbmr2103262955d.28.1725413242044;
+        Tue, 03 Sep 2024 18:27:22 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7d4fbd85b0asm514556a12.17.2024.09.03.18.27.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Sep 2024 18:27:21 -0700 (PDT)
+Message-ID: <66d7b779.630a0220.172ac0.2d05@mx.google.com>
+Date: Tue, 03 Sep 2024 18:27:21 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: v6.11-rc1-17-gb4bcdff7e839
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next kselftest-lkdtm: 1 runs,
+ 1 regressions (v6.11-rc1-17-gb4bcdff7e839)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Tue,  3 Sep 2024 17:58:15 -0700 SeongJae Park <sj@kernel.org> wrote:
+kselftest/next kselftest-lkdtm: 1 runs, 1 regressions (v6.11-rc1-17-gb4bcdf=
+f7e839)
 
-> On Tue, 3 Sep 2024 20:48:53 -0400 "Liam R. Howlett" <Liam.Howlett@oracle.com> wrote:
-> 
-> > * SeongJae Park <sj@kernel.org> [240903 20:45]:
-> > > damon_test_three_regions_in_vmas() initializes a maple tree with
-> > > MM_MT_FLAGS.  The flags contains MT_FLAGS_LOCK_EXTERN, which means
-> > > mt_lock of the maple tree will not be used.  And therefore the maple
-> > > tree initialization code skips initialization of the mt_lock.  However,
-> > > __link_vmas(), which adds vmas for test to the maple tree, uses the
-> > > mt_lock.  In other words, the uninitialized spinlock is used.  The
-> > > problem becomes celar when spinlock debugging is turned on, since it
-> > > reports spinlock bad magic bug.  Fix the issue by not using the mt_lock
-> > > as promised.
-> > 
-> > You can't do this, lockdep will tell you this is wrong.
-> 
-> Hmm, but lockdep was silence on my setup?
-> 
-> > We need a lock and to use the lock for writes.
-> 
-> This code is executed by a single-thread test code.  Do we still need the lock?
-> 
-> > 
-> > I'd suggest using different flags so the spinlock is used.
-> 
-> The reporter mentioned simply dropping MT_FLAGS_LOCK_EXTERN from the flags
-> causes suspicious RCU usage message.  May I ask if you have a suggestion of
-> better flags?
+Regressions Summary
+-------------------
 
-I was actually thinking replacing the mt_init_flags() with mt_init(), which
-same to mt_init_flags() with zero flag, like below.
-
-```
---- a/mm/damon/tests/vaddr-kunit.h
-+++ b/mm/damon/tests/vaddr-kunit.h
-@@ -77,7 +77,7 @@ static void damon_test_three_regions_in_vmas(struct kunit *test)
-                (struct vm_area_struct) {.vm_start = 307, .vm_end = 330},
-        };
-
--       mt_init_flags(&mm.mm_mt, MM_MT_FLAGS);
-+       mt_init(&mm.mm_mt);
-        if (__link_vmas(&mm.mm_mt, vmas, ARRAY_SIZE(vmas)))
-                kunit_skip(test, "Failed to create VMA tree");
-```
-
-And just confirmed it also convinces the reproducer.  But because I'm obviously
-not familiar with maple tree, would like to hear some comments from Liam or
-others first.
-
-FYI, I ended up writing v1 to simply remove lock usage based on my humble
-understanding of the documetnation.
-
-    The maple tree uses a spinlock by default, but external locks can be used for
-    tree updates as well.  To use an external lock, the tree must be initialized
-    with the ``MT_FLAGS_LOCK_EXTERN flag``, this is usually done with the
-    MTREE_INIT_EXT() #define, which takes an external lock as an argument.
-
-(from Documentation/core-api/maple_tree.rst)
-
-I was thinking the fact that the test code is executed in single thread is same
-to use of external lock.  I will be happy to learn if I missed something.
+platform                    | arch | lab         | compiler | defconfig    =
+                | regressions
+----------------------------+------+-------------+----------+--------------=
+----------------+------------
+stm32mp157a-dhcor-avenger96 | arm  | lab-broonie | gcc-12   | multi_v7_defc=
+onfig+kselftest | 1          =
 
 
-Thanks,
-SJ
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.1=
+1-rc1-17-gb4bcdff7e839/plan/kselftest-lkdtm/
 
-> 
-> 
-> Thanks,
-> SJ
-> 
-> > 
-> > > 
-> > > Reported-by: Guenter Roeck <linux@roeck-us.net>
-> > > Closes: https://lore.kernel.org/1453b2b2-6119-4082-ad9e-f3c5239bf87e@roeck-us.net
-> > > Fixes: d0cf3dd47f0d ("damon: convert __damon_va_three_regions to use the VMA iterator")
-> > > Signed-off-by: SeongJae Park <sj@kernel.org>
-> > > ---
-> > >  mm/damon/tests/vaddr-kunit.h | 10 +++-------
-> > >  1 file changed, 3 insertions(+), 7 deletions(-)
-> > > 
-> > > diff --git a/mm/damon/tests/vaddr-kunit.h b/mm/damon/tests/vaddr-kunit.h
-> > > index 83626483f82b..c6c7e0e0ab07 100644
-> > > --- a/mm/damon/tests/vaddr-kunit.h
-> > > +++ b/mm/damon/tests/vaddr-kunit.h
-> > > @@ -17,23 +17,19 @@
-> > >  static int __link_vmas(struct maple_tree *mt, struct vm_area_struct *vmas,
-> > >  			ssize_t nr_vmas)
-> > >  {
-> > > -	int i, ret = -ENOMEM;
-> > > +	int i;
-> > >  	MA_STATE(mas, mt, 0, 0);
-> > >  
-> > >  	if (!nr_vmas)
-> > >  		return 0;
-> > >  
-> > > -	mas_lock(&mas);
-> > >  	for (i = 0; i < nr_vmas; i++) {
-> > >  		mas_set_range(&mas, vmas[i].vm_start, vmas[i].vm_end - 1);
-> > >  		if (mas_store_gfp(&mas, &vmas[i], GFP_KERNEL))
-> > > -			goto failed;
-> > > +			return -ENOMEM;
-> > >  	}
-> > >  
-> > > -	ret = 0;
-> > > -failed:
-> > > -	mas_unlock(&mas);
-> > > -	return ret;
-> > > +	return 0;
-> > >  }
-> > >  
-> > >  /*
-> > > -- 
-> > > 2.39.2
-> > >
+  Test:     kselftest-lkdtm
+  Tree:     kselftest
+  Branch:   next
+  Describe: v6.11-rc1-17-gb4bcdff7e839
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      b4bcdff7e839237d89a2aa15b6042b96b0240ac4 =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                    | arch | lab         | compiler | defconfig    =
+                | regressions
+----------------------------+------+-------------+----------+--------------=
+----------------+------------
+stm32mp157a-dhcor-avenger96 | arm  | lab-broonie | gcc-12   | multi_v7_defc=
+onfig+kselftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/66d7b2a624bc264505c8685f
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+kselftest
+  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//kselftest/next/v6.11-rc1-17-gb=
+4bcdff7e839/arm/multi_v7_defconfig+kselftest/gcc-12/lab-broonie/kselftest-l=
+kdtm-stm32mp157a-dhcor-avenger96.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/v6.11-rc1-17-gb=
+4bcdff7e839/arm/multi_v7_defconfig+kselftest/gcc-12/lab-broonie/kselftest-l=
+kdtm-stm32mp157a-dhcor-avenger96.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
+elftest/20240313.0/armhf/initrd.cpio.gz =
+
+
+
+  * kselftest-lkdtm.login: https://kernelci.org/test/case/id/66d7b2a624bc26=
+4505c86860
+        failing since 35 days (last pass: v6.10-rc7-29-gdf09b0bb09ea, first=
+ fail: v6.11-rc1) =
+
+ =20
 
