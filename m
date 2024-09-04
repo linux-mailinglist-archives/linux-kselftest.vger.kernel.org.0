@@ -1,108 +1,99 @@
-Return-Path: <linux-kselftest+bounces-17168-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17169-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7ED6096C7AD
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 21:40:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B468196C7B1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 21:40:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FCAD1C228CD
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 19:40:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E67011C24FBA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 19:40:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4F931E633C;
-	Wed,  4 Sep 2024 19:40:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EBB11E764A;
+	Wed,  4 Sep 2024 19:40:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uigwwhzu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LCl5pwfZ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B3A84A27;
-	Wed,  4 Sep 2024 19:40:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0132B1E7646;
+	Wed,  4 Sep 2024 19:40:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725478827; cv=none; b=GrPcr9Ml3YDPuZs8LXyisgYUqfSdCiDwKbAJLW7bk0Jr7sVmI0KP2ndagGsJ+sNxqqUiCo6aY8oilfkYll433U5FmOy3y7SUB0SiHqxRYyBSrFvKmKAmqNPDGJzrT4KUXffs1Om+MWRu5vNDT1O34edT4c9d41Vv8mF6QU0osnY=
+	t=1725478834; cv=none; b=Gdzgdpwg+63BX6D4IcP+nHW1w+k58qAQ9fnFXKPjGKiF0NhsKFaa0rSkqJFK+dRdFYCMNAwgo7l4JBq3CnjXPoWtJiscpb3Uwfcn3JRJhwlmH3p2PC2dXh2/6ilCjFpWzwAzhGvWrzu99/yHOz2bLWFNR47sXBANPvODtn8FCX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725478827; c=relaxed/simple;
-	bh=SNWThRPwlDfNqRuJUF0l0Cucyp1v3Y0fdsPK5rvXCb8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NCJgchbYN1OEV2E9mNalQN1sqlnivdG/6jOXPWUDgA1CHceH72ZEVqyPQWnkrKA1cs0GQaIZVI4vNDa9iXxCEd4XOhOOQGiZQsLTVjOerUoxHc0ZE2wVMq6drRwqdb+lxc6VMAx8FvLLKN9vVNmvrmFpGvHJByvgcNdH0CNL1Pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uigwwhzu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB6A2C4CEC2;
-	Wed,  4 Sep 2024 19:40:26 +0000 (UTC)
+	s=arc-20240116; t=1725478834; c=relaxed/simple;
+	bh=Nrso63BtrkpzhxYm9yCTdaXOqHsZiYMXDLJdMPnueg0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=sPzdWKlLIuSWFM7xHmD52H+XGkxPrbdqu89ZD7i6Y7leuXGXK+51exj6wFTf7wX4fWbg9XHcEhcKRrAwgdyS+gj+s5kK1HDu5yLw/Z2Z6E3c/s1YKR3rrDg5QPZZrNmneCvSHWOzWnqBIxk5aPVgqU2yBhc61xn6vzniItq9IGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LCl5pwfZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DC5AC4CEC2;
+	Wed,  4 Sep 2024 19:40:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725478827;
-	bh=SNWThRPwlDfNqRuJUF0l0Cucyp1v3Y0fdsPK5rvXCb8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=uigwwhzukT8ghyuZIfZuEvFg0TKDrnJ1D503QzCWBc+wnnqydbeAuCfzaxgcn/5np
-	 kQdMFkniC8RpGC0GMFsyJ2nME55IwBl9jyjxmkqhLjzldenfuuQHlHNoO1sVNWqXKL
-	 Xt06MplJSNzlfViqRt3WoDJLT447IKLdY3zKrEPpRC1lcShRNSzHIZ4SC1afd6hf3S
-	 e8WRHzhCRAgxcUrgpFSesK1ifvsRQWAV9Wxn+gjVHzo1z8+RS3rL6tCe7R7xhmZfiR
-	 UtGZwrWceeqBJPweXpHEWtGq1vff2Pw2CGGHMGYHVDo6EaU71ogahMSGWFrSQGni+q
-	 iVUJG7HdwlYMA==
-Date: Wed, 4 Sep 2024 12:40:25 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Matthieu Baerts <matttbe@kernel.org>
-Cc: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, Geliang
- Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
- <shuah@kernel.org>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next 0/3] selftests: mptcp: add time per subtests in
- TAP output
-Message-ID: <20240904124025.3ec84142@kernel.org>
-In-Reply-To: <559e1458-b593-44c7-92b1-6946c57496c5@kernel.org>
-References: <20240902-net-next-mptcp-ksft-subtest-time-v1-0-f1ed499a11b1@kernel.org>
-	<20240903162217.07c366c9@kernel.org>
-	<559e1458-b593-44c7-92b1-6946c57496c5@kernel.org>
+	s=k20201202; t=1725478833;
+	bh=Nrso63BtrkpzhxYm9yCTdaXOqHsZiYMXDLJdMPnueg0=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=LCl5pwfZO9BsUU6tgjQYDgZWoJSmqjipHFeAQvBoK3t711sTZzGj0obc68XDz9eKi
+	 tFTe43IVJPw71M3ukIQb3y6UGuyzq+Io19IZM7Tqqj5RuqFtFlDHMTpGRdRCqfFWL9
+	 1u0QuCcInb8iiCW85SYM6+qgCjeds9a7kljX5BdQOblsCLpYGZl1eJ1OVfdiaPn9io
+	 oSTBMBO2kFgOblglHFvazKFO1jmMT4nYtjofBqwkUcQ8bm84t1QxI9FU6iwV6zUH0G
+	 VkWxmofINgk66Lnzna/60CdNxpfVnnBqArLSHC/lz3rC17am2dNIqXSYxVlRNox5fv
+	 ivjGLIoXtf2aA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 716293822D30;
+	Wed,  4 Sep 2024 19:40:35 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf,v2,0/2] bpf: fix incorrect name check pass logic in
+ btf_name_valid_section
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172547883425.1145823.3809122034965007407.git-patchwork-notify@kernel.org>
+Date: Wed, 04 Sep 2024 19:40:34 +0000
+References: <20240831054525.364353-1-aha310510@gmail.com>
+In-Reply-To: <20240831054525.364353-1-aha310510@gmail.com>
+To: Jeongjun Park <aha310510@gmail.com>
+Cc: martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
+ sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+ shuah@kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-On Wed, 4 Sep 2024 18:15:09 +0200 Matthieu Baerts wrote:
-> > Best I could come up with is:
-> >=20
-> > diff --git a/contest/remote/vmksft-p.py b/contest/remote/vmksft-p.py
-> > index fe9e87abdb5c..a37245bd5b30 100755
-> > --- a/contest/remote/vmksft-p.py
-> > +++ b/contest/remote/vmksft-p.py
-> > @@ -73,7 +73,7 @@ group3 testV skip
-> >      tests =3D []
-> >      nested_tests =3D False
-> > =20
-> > -    result_re =3D re.compile(r"(not )?ok (\d+)( -)? ([^#]*[^ ])( # )?(=
-[^ ].*)?$")
-> > +    result_re =3D re.compile(r"(not )?ok (\d+)( -)? ([^#]*[^ ])( +# )?=
-([^ ].*)?$") =20
->=20
-> Looks good to me. While at it, we can add a '+' for the spaces after the
-> '#':
->=20
->   ( +# +)
+Hello:
 
-=F0=9F=91=8D=EF=B8=8F
+This series was applied to bpf/bpf.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-> I see you didn't commit the previous modification. I can open a PR if it
-> helps.
+On Sat, 31 Aug 2024 14:45:25 +0900 you wrote:
+> This patch was written to fix an issue where btf_name_valid_section() would
+> not properly check names with certain conditions and would throw an OOB vuln.
+> And selftest was added to verify this patch.
+> 
+> Jeongjun Park (2):
+>   bpf: add check for invalid name in btf_name_valid_section()
+>   selftest/bpf : Add a selftest test case to check for incorrect names
+> 
+> [...]
 
-I was just playing with the regexps in the interpreter. If you could
-send a PR that'd perfect.
+Here is the summary with links:
+  - [bpf,v2,1/2] bpf: add check for invalid name in btf_name_valid_section()
+    https://git.kernel.org/bpf/bpf/c/bb6705c3f93b
+  - [bpf,v2,2/2] selftest/bpf : Add a selftest test case to check for incorrect names
+    https://git.kernel.org/bpf/bpf/c/743070894724
 
-> >      time_re =3D re.compile(r"time=3D(\d+)ms")
-> > =20
-> >      for line in full_run.split('\n'):
-> >=20
-> > Thoughts? =20
->=20
-> In my v2, I will also strip these trailing whitespaces in the selftests,
-> they don't need to be there.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Up to you - it doesn't violate the KTAP format and the visual alignment
-is nice. But it may trip up more regexps..
+
 
