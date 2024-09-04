@@ -1,92 +1,136 @@
-Return-Path: <linux-kselftest+bounces-17135-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17136-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DC7096C048
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 16:25:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23BE096C0D4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 16:37:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCBE71C25131
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 14:25:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D83EB24969
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 14:36:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C476A1DCB25;
-	Wed,  4 Sep 2024 14:23:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJFZeYX1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AF861D9D64;
+	Wed,  4 Sep 2024 14:36:20 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C1271DA635;
-	Wed,  4 Sep 2024 14:23:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B116463D;
+	Wed,  4 Sep 2024 14:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725459794; cv=none; b=rs1wB+S23YDxUC74wksrS998eHbHAnIVQvLpPA0W3Z6IVh8jS5rBAvb1hV4z4P1JHzPXRtiJKQjt5h9YL25Y7Wu+xSZahdznDX39ODIHdnHcbAD9qBY3wqnlr+DzbxpDhG4afNwnD7VASRrJ4AY3n9neEs+a0E1/sbw6UhBqJcU=
+	t=1725460580; cv=none; b=muypwSm+brZ9JrwQMIq4YXmcro1U0MQ+ujmTmy9ergt/b2+vdZOCRnyDsfDqwzvQdMGK3sKs4lRcC7ZwQ+NZzvJHQnj+/28lGx7nYEPG0vo066wtQrJKhY40qwf2ZAer7i2OJ6tODlwLNe2HwRoq9GmnotkCeveATH0GvHOg0iY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725459794; c=relaxed/simple;
-	bh=CvbyeGCxrQiChryKz94sbVDhTQtEiCPezl0dW6mRsnM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QuzvuHaa3eJny7rDAmqs7/hGMr/ihxL14I+yC8SYoDRX91OJbTzEc2MWrLE0nfvdTLcTtBY5h2yatvBoCxVVL/fVJZy6aorHagkRv6VJ5aUidqJy3jrVyCYyhck6Ktr1chtms3+FMdHFKwM2D/sjNt+hf8ezUXPuajr/sr+f7og=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJFZeYX1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20BD5C4CEC2;
-	Wed,  4 Sep 2024 14:23:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725459794;
-	bh=CvbyeGCxrQiChryKz94sbVDhTQtEiCPezl0dW6mRsnM=;
-	h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-	b=WJFZeYX1wffp3wp+R2cnMauFH179h3M1dOs6mJPpTaPirh3V8s4gf6jcr1JkUzy3U
-	 wW8uwvuezQmEUfAYzStLDQysadt5ZwCvqlEI9LV4/PWxYlcKvMX9Zz4RkZrrgKeY2e
-	 fsNjOdOFEsLqpdAdrRL35TLeP1QaEBuDtwqJVGNZP8lwWMLC3pSuj4JEVagKOZJ2A/
-	 t3CftXUxrzvp8/L+EV7lkOmtSZkGsiKZaVYdF0yfTXuLlUkMEkDyfuNDwsNsMqAHOe
-	 SOXrZ8rnrbeB0JxkW8eKeEJsVxP9XuzEJHYb+KqHhAtYGzPXfj2dn4+BTFx7KLvvae
-	 qIoLtQYLj56ng==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-	id BF1B2CE0B6A; Wed,  4 Sep 2024 07:23:13 -0700 (PDT)
-Date: Wed, 4 Sep 2024 07:23:13 -0700
-From: "Paul E. McKenney" <paulmck@kernel.org>
-To: Miklos Szeredi <mszeredi@redhat.com>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>,
-	open list <linux-kernel@vger.kernel.org>, rcu <rcu@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	lkft-triage@lists.linaro.org,
-	Linux Regressions <regressions@lists.linux.dev>,
-	yangyun50@huawei.com, Zhen Lei <thunder.leizhen@huawei.com>,
-	Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: next: rcu_preempt self-detected stall on CPU -
- queued_spin_lock_slowpath
-Message-ID: <ef2fbd11-6f37-4484-93c4-6a84e63c3bce@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <CA+G9fYv=v713xAFCKvkwr_0qyaQWkmfeDC2=bO7KKkui+p+ZeQ@mail.gmail.com>
- <CAOssrKdc4rcjJOqBnhbRa=R5yQY1erh+KuXr_2-nGTQ-qk3vOg@mail.gmail.com>
+	s=arc-20240116; t=1725460580; c=relaxed/simple;
+	bh=mrcpBZCNCDHUN8s1jct5aPcG3/C9zlzErsh6HAxxzVU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BU8tYwZgM1wUklcuv3/A8c4VzhyITPhDrbfGyCFB6rjXSk2/5T0+SqM91zUFZzrJEIR5yik7+v2B0WuSlygJFNmEsPMmo5iXXvLsIAJpyYaQV14Xv4/k+lyhZye3Rh079MiM3yFr4flWFvtPl5K9qVNv7viXyVY+aBq6JHOkMqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4WzQ685Z1lz9sS7;
+	Wed,  4 Sep 2024 16:36:16 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id j3Oi0qoOC3QN; Wed,  4 Sep 2024 16:36:16 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4WzQ684j7Sz9sRy;
+	Wed,  4 Sep 2024 16:36:16 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 8DE208B77A;
+	Wed,  4 Sep 2024 16:36:16 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id MDg64KpQGgK2; Wed,  4 Sep 2024 16:36:16 +0200 (CEST)
+Received: from [192.168.234.246] (unknown [192.168.234.246])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 9D5618B778;
+	Wed,  4 Sep 2024 16:36:15 +0200 (CEST)
+Message-ID: <070a2aa1-a804-4124-ad89-c43e09dc3ded@csgroup.eu>
+Date: Wed, 4 Sep 2024 16:36:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 0/5] Wire up getrandom() vDSO implementation on powerpc
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org,
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+ Xi Ruoyao <xry111@xry111.site>
+References: <cover.1725304404.git.christophe.leroy@csgroup.eu>
+ <Zthr1nB_RJ56YD3O@zx2c4.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <Zthr1nB_RJ56YD3O@zx2c4.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOssrKdc4rcjJOqBnhbRa=R5yQY1erh+KuXr_2-nGTQ-qk3vOg@mail.gmail.com>
 
-On Wed, Sep 04, 2024 at 04:19:39PM +0200, Miklos Szeredi wrote:
-> On Wed, Sep 4, 2024 at 2:06 PM Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
-> >
-> > The following kernel rcu info generated while running the test case
-> > selftests: memfd: run_fuse_test.sh on qemu-arm64 running Linux
-> > next-20240902. The qemu-arm64 did not recover.
-> >
-> > This build was created with kselftest merge configs.
-> >
-> > Anders bisected this to,
-> >   # first bad commit:
-> >     [5fb9c98e9d8ddf2abc645e2dcd9eb6703f77fdab]
-> >     fuse: add support for no forget requests
+
+
+Le 04/09/2024 à 16:16, Jason A. Donenfeld a écrit :
+> Hi Christophe, Michael,
 > 
-> The bad commit was reverted from -next.
+> On Mon, Sep 02, 2024 at 09:17:17PM +0200, Christophe Leroy wrote:
+>> This series wires up getrandom() vDSO implementation on powerpc.
+>>
+>> Tested on PPC32 on real hardware.
+>> Tested on PPC64 (both BE and LE) on QEMU:
+>>
+>> Performance on powerpc 885:
+>> 	~# ./vdso_test_getrandom bench-single
+>> 	   vdso: 25000000 times in 62.938002291 seconds
+>> 	   libc: 25000000 times in 535.581916866 seconds
+>> 	syscall: 25000000 times in 531.525042806 seconds
+>>
+>> Performance on powerpc 8321:
+>> 	~# ./vdso_test_getrandom bench-single
+>> 	   vdso: 25000000 times in 16.899318858 seconds
+>> 	   libc: 25000000 times in 131.050596522 seconds
+>> 	syscall: 25000000 times in 129.794790389 seconds
+>>
+>> Performance on QEMU pseries:
+>> 	~ # ./vdso_test_getrandom bench-single
+>> 	   vdso: 25000000 times in 4.977777162 seconds
+>> 	   libc: 25000000 times in 75.516749981 seconds
+>> 	syscall: 25000000 times in 86.842242014 seconds
+> 
+> Looking good. I have no remaining nits on this patchset; it looks good
+> to me.
+> 
+> A review from Michael would be nice though (in addition to the necessary
+> "Ack" I need to commit this to my tree), because there are a lot of PPC
+> particulars that I don't know enough about to review properly. For
+> example, you use -ffixed-r30 on PPC64. I'm sure there's a good reason
+> for this, but I don't know enough to assess it. And cvdso_call I have no
+> idea what's going on. Etc.
 
-A bit "Thank You!" to everyone involved!
+You can learn a bit more about cvdso_call in commit ce7d8056e38b 
+("powerpc/vdso: Prepare for switching VDSO to generic C implementation.")
 
-							Thanx, Paul
+About the fixed-r30, you can learn more in commit a88603f4b92e 
+("powerpc/vdso: Don't use r30 to avoid breaking Go lang")
+
+
+> 
+> But anyway, awesome work, and I look forward to the final stretches.
+
+Thanks, looking forward to getting this series applied.
+
+Christophe
 
