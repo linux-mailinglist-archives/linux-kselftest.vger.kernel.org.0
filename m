@@ -1,178 +1,252 @@
-Return-Path: <linux-kselftest+bounces-17147-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17148-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E630796C3B0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 18:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 519B996C3B7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 18:16:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E6562822AA
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 16:15:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09B7F2827E7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 16:16:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76F4B1E00BB;
-	Wed,  4 Sep 2024 16:15:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB6E11E0B9D;
+	Wed,  4 Sep 2024 16:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UO5Jo5lJ"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="aRcCklOQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2043.outbound.protection.outlook.com [40.107.223.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BEA1E00A9;
-	Wed,  4 Sep 2024 16:15:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725466514; cv=none; b=rZJli2HBzT05a8GhHKZ1/AfS1gfNKFdfBApRBeFVNpdu7dcPJ9c47vUSIgPNBEqcZDhETbLm6L/U3Bt1BAdY9Mqd6t64VwCTwPVcXjxHJ5lPccB5K2czpoCA8V6/DksGacftpyxwbZX/2y8/3EVaFbZV1Ix8ld43hG7sFNZkNJ8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725466514; c=relaxed/simple;
-	bh=CQbJvgdx+HftYu1CScSMfRU+2H/4ei0sp9Z+jGmkCNg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VpQ65xGBN9A3LD1JcbIv2gJqJz0hLhtl5lbJC7gEN8YJ3mJJfE5AEFst7nfa4DWQv9zjMCZA/Bh7IMMtk21pBInFnf5JaWvpkKMT7dogqGtwzBCoyzXLXgSZRjsE16RPOdojisH3liesM73lVXJwxHRP0RA54gPBj2oDNeShSB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UO5Jo5lJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C4BCC4CEC2;
-	Wed,  4 Sep 2024 16:15:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725466513;
-	bh=CQbJvgdx+HftYu1CScSMfRU+2H/4ei0sp9Z+jGmkCNg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UO5Jo5lJh6lThqSjATwMR1CzlfJTm7KFPfOJYJ1IsMqB0jm8XBr5j0Wfv0AgWQaKp
-	 mvh5/CfiV1Wss2/+eQpCyZma6E5ZZmdgR30EJb2l8hlHZsxAm0LUZUcFrxt+gdROWz
-	 Te1l98LoLmsToNDWJSY9U077ghqZJzSAUwBoUCVKHzh2RVVTh7jRZLXR/Zbjrr7H12
-	 RYSCSwn/ivTTczt6njYa9kKwaiRG/Ld1CG/H7k8PljAQHY7OMpQxEMCr9urU2qS5vb
-	 AuPdK1Lz5P8MaHSZ1oHgnlCI4odq0PokQGJswJTnXfgIVt6jvC2BW40GHZIgEnpti/
-	 Sspv+bc2grKhw==
-Message-ID: <559e1458-b593-44c7-92b1-6946c57496c5@kernel.org>
-Date: Wed, 4 Sep 2024 18:15:09 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FD1E1E0B8F;
+	Wed,  4 Sep 2024 16:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725466529; cv=fail; b=TpbiwoW6cNvvoMMPQNG0U8RTJTpSfPUlVD4ujBvLbFvCSQuxkyzTXa80oF3GVOFsm3cR5O8t+ublncQvDgC8yfG0DcTqE7e6iYsDEnuwJlgC2TQHqbqqKcDRKig4vc0AZs8dCSX2TEzdsKA8t4hZQGGiFRAe/2qzaOXH4SuLv3c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725466529; c=relaxed/simple;
+	bh=e1JXhpM0lezL033jWa0o/O8lbyCLkSveJ1essR2xqTA=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=JEVct0r2Bpkr8eY1E4Whdb813sODwTF075C2YblCeoOduskk3MSSpsiJPKDz8jSbyFPVnLwAITbjyKYopgT17fB7lJ5l0as+qhVw+HT1TKQWqOXyOlqLRT8vo1TUw0In7L49DmJ1jY9ABnFxMg70eImslRN0LD1hLBQUxZjJHWo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=aRcCklOQ; arc=fail smtp.client-ip=40.107.223.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=cNSEKbxgK5vCfH3+UFp47q9KQIiD46SYUs9DBKIpotUBlvp0PKC9AtA8BSAQy3zgAD+P/lUM8s7Xl/NSgiIamQtWyYqcKOzAky5jhBbL7mUpNuHwXfg8FFfFi48LnxEYtuzlzEm7AncDTAMR5jdYeDHjdxBI2cSdPHeZzrTjToOyKv3E0JZu5pjVD2/nMqTjUv8H1Ph1A41J+zL9/zKTiCZWGVr9QLZZbYTmt53CBClmVJS0P5+juRPvhPqHAadODymZ8fA9ZohtMgm5KSwaDCn3HNYtiI///LK6mOh97Zq3hkpkqvgp4mAIp3a+7+tED8z00OFdK/gw74jjo3D0zQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=a9W/LRR4xZOP/3kSFRcg5XRHBhtcNeXdrtkFDlnwb4A=;
+ b=E6jj1pApTHjEEOZUDNlsXrS1NrmUrr8+oI38ww6s8JRi0l7I9V6bFHc6tx1mWxMTzf/2DuzyoHPGk9in26kXMvSCCCj+MboLnqUqsO2vjY8qlD7uzo/z5QLOCoLeXrOlRRmzd/ocl0VkrxSWLowNSlwavby8NBrr2mzkNeF5pbaTvqq2uswtMw7RLwwQdpBcuQvC4V8u7TgX5aB9KYDZTQWVNDUQXkfMPR1rzWxAh7NmQGPUHBRnJ1u0w/Ofz2ENbuGf4Qhj72WVDQ2eIHUYj6UfX2vb4DwX/TSRGrzRIpiL4YnMZDhnGH0IEVPVlql85oDbCelEhQ7h4pFjw0/Pjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=a9W/LRR4xZOP/3kSFRcg5XRHBhtcNeXdrtkFDlnwb4A=;
+ b=aRcCklOQ+zN680A5GQbUg8EF91/bEHacX/xXbkU+4OapECHtccD/3vdAzCD5OGr/w0Ia119RxU/BeQHJGOmmN+yEhmMH2WmdxS1OLLVIaF71UsJynJC/g+A98D28ox2eOILH0UtHwGADpxKnfrUCo6u3vbCD0mxN+Gt/Z01rrHY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH0PR12MB7982.namprd12.prod.outlook.com (2603:10b6:510:28d::5)
+ by IA1PR12MB6185.namprd12.prod.outlook.com (2603:10b6:208:3e7::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.27; Wed, 4 Sep
+ 2024 16:15:25 +0000
+Received: from PH0PR12MB7982.namprd12.prod.outlook.com
+ ([fe80::bfd5:ffcf:f153:636a]) by PH0PR12MB7982.namprd12.prod.outlook.com
+ ([fe80::bfd5:ffcf:f153:636a%3]) with mapi id 15.20.7918.024; Wed, 4 Sep 2024
+ 16:15:25 +0000
+Message-ID: <09a5c481-883d-48f4-81d4-1028f7cd72d7@amd.com>
+Date: Wed, 4 Sep 2024 09:15:22 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 3/3] selftests: lan743x: Add testcase to check
+ throughput of lan743x
+To: Mohan Prasad J <mohan.prasad@microchip.com>, netdev@vger.kernel.org,
+ davem@davemloft.net, kuba@kernel.org
+Cc: shuah@kernel.org, bryan.whitehead@microchip.com,
+ UNGLinuxDriver@microchip.com, edumazet@google.com, pabeni@redhat.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ horms@kernel.org, brett.creeley@amd.com, rosenp@gmail.com
+References: <20240903221549.1215842-1-mohan.prasad@microchip.com>
+ <20240903221549.1215842-4-mohan.prasad@microchip.com>
+Content-Language: en-US
+From: Brett Creeley <bcreeley@amd.com>
+In-Reply-To: <20240903221549.1215842-4-mohan.prasad@microchip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR05CA0196.namprd05.prod.outlook.com
+ (2603:10b6:a03:330::21) To PH0PR12MB7982.namprd12.prod.outlook.com
+ (2603:10b6:510:28d::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next 0/3] selftests: mptcp: add time per subtests in
- TAP output
-Content-Language: en-GB
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
- Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20240902-net-next-mptcp-ksft-subtest-time-v1-0-f1ed499a11b1@kernel.org>
- <20240903162217.07c366c9@kernel.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
- YBNdx5Xl74NLSgx6y/1NiMQGuKeu+2BmtnkiGxBNanfXcnl4L4Lzz+iXBvvbtCbynnnqDDqU
- c7SPFMpMesgpcu1xFt0F6bcxE+0ojRtSCZ5HDElKlHJNYtD1uwY4UYVGWUGCF/+cY1YLmtfb
- WdNb/SFo+Mp0HItfBC12qtDIXYvbfNUGVnA5jXeWMEyYhSNktLnpDL2gBUCsdbkov5VjiOX7
- CRTkX0UgNWRjyFZwThaZADEvAOo12M5uSBk7h07yJ97gqvBtcx45IsJwfUJE4hy8qZqsA62A
- nTRflBvp647IXAiCcwWsEgE5AXKwA3aL6dcpVR17JXJ6nwHHnslVi8WesiqzUI9sbO/hXeXw
- TDSB+YhErbNOxvHqCzZEnGAAFf6ges26fRVyuU119AzO40sjdLV0l6LE7GshddyazWZf0iac
- nEhX9NKxGnuhMu5SXmo2poIQttJuYAvTVUNwQVEx/0yY5xmiuyqvXa+XT7NKJkOZSiAPlNt6
- VffjgOP62S7M9wDShUghN3F7CPOrrRsOHWO/l6I/qJdUMW+MHSFYPfYiFXoLUZyPvNVCYSgs
- 3oQaFhHapq1f345XBtfG3fOYp1K2wTXd4ThFraTLl8PHxCn4ywARAQABzSRNYXR0aGlldSBC
- YWVydHMgPG1hdHR0YmVAa2VybmVsLm9yZz7CwZEEEwEIADsCGwMFCwkIBwIGFQoJCAsCBBYC
- AwECHgECF4AWIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZUDpDAIZAQAKCRD2t4JPQmmgcz33
- EACjROM3nj9FGclR5AlyPUbAq/txEX7E0EFQCDtdLPrjBcLAoaYJIQUV8IDCcPjZMJy2ADp7
- /zSwYba2rE2C9vRgjXZJNt21mySvKnnkPbNQGkNRl3TZAinO1Ddq3fp2c/GmYaW1NWFSfOmw
- MvB5CJaN0UK5l0/drnaA6Hxsu62V5UnpvxWgexqDuo0wfpEeP1PEqMNzyiVPvJ8bJxgM8qoC
- cpXLp1Rq/jq7pbUycY8GeYw2j+FVZJHlhL0w0Zm9CFHThHxRAm1tsIPc+oTorx7haXP+nN0J
- iqBXVAxLK2KxrHtMygim50xk2QpUotWYfZpRRv8dMygEPIB3f1Vi5JMwP4M47NZNdpqVkHrm
- jvcNuLfDgf/vqUvuXs2eA2/BkIHcOuAAbsvreX1WX1rTHmx5ud3OhsWQQRVL2rt+0p1DpROI
- 3Ob8F78W5rKr4HYvjX2Inpy3WahAm7FzUY184OyfPO/2zadKCqg8n01mWA9PXxs84bFEV2mP
- VzC5j6K8U3RNA6cb9bpE5bzXut6T2gxj6j+7TsgMQFhbyH/tZgpDjWvAiPZHb3sV29t8XaOF
- BwzqiI2AEkiWMySiHwCCMsIH9WUH7r7vpwROko89Tk+InpEbiphPjd7qAkyJ+tNIEWd1+MlX
- ZPtOaFLVHhLQ3PLFLkrU3+Yi3tXqpvLE3gO3LM7BTQRV4/npARAA5+u/Sx1n9anIqcgHpA7l
- 5SUCP1e/qF7n5DK8LiM10gYglgY0XHOBi0S7vHppH8hrtpizx+7t5DBdPJgVtR6SilyK0/mp
- 9nWHDhc9rwU3KmHYgFFsnX58eEmZxz2qsIY8juFor5r7kpcM5dRR9aB+HjlOOJJgyDxcJTwM
- 1ey4L/79P72wuXRhMibN14SX6TZzf+/XIOrM6TsULVJEIv1+NdczQbs6pBTpEK/G2apME7vf
- mjTsZU26Ezn+LDMX16lHTmIJi7Hlh7eifCGGM+g/AlDV6aWKFS+sBbwy+YoS0Zc3Yz8zrdbi
- Kzn3kbKd+99//mysSVsHaekQYyVvO0KD2KPKBs1S/ImrBb6XecqxGy/y/3HWHdngGEY2v2IP
- Qox7mAPznyKyXEfG+0rrVseZSEssKmY01IsgwwbmN9ZcqUKYNhjv67WMX7tNwiVbSrGLZoqf
- Xlgw4aAdnIMQyTW8nE6hH/Iwqay4S2str4HZtWwyWLitk7N+e+vxuK5qto4AxtB7VdimvKUs
- x6kQO5F3YWcC3vCXCgPwyV8133+fIR2L81R1L1q3swaEuh95vWj6iskxeNWSTyFAVKYYVskG
- V+OTtB71P1XCnb6AJCW9cKpC25+zxQqD2Zy0dK3u2RuKErajKBa/YWzuSaKAOkneFxG3LJIv
- Hl7iqPF+JDCjB5sAEQEAAcLBXwQYAQIACQUCVeP56QIbDAAKCRD2t4JPQmmgc5VnD/9YgbCr
- HR1FbMbm7td54UrYvZV/i7m3dIQNXK2e+Cbv5PXf19ce3XluaE+wA8D+vnIW5mbAAiojt3Mb
- 6p0WJS3QzbObzHNgAp3zy/L4lXwc6WW5vnpWAzqXFHP8D9PTpqvBALbXqL06smP47JqbyQxj
- Xf7D2rrPeIqbYmVY9da1KzMOVf3gReazYa89zZSdVkMojfWsbq05zwYU+SCWS3NiyF6QghbW
- voxbFwX1i/0xRwJiX9NNbRj1huVKQuS4W7rbWA87TrVQPXUAdkyd7FRYICNW+0gddysIwPoa
- KrLfx3Ba6Rpx0JznbrVOtXlihjl4KV8mtOPjYDY9u+8x412xXnlGl6AC4HLu2F3ECkamY4G6
- UxejX+E6vW6Xe4n7H+rEX5UFgPRdYkS1TA/X3nMen9bouxNsvIJv7C6adZmMHqu/2azX7S7I
- vrxxySzOw9GxjoVTuzWMKWpDGP8n71IFeOot8JuPZtJ8omz+DZel+WCNZMVdVNLPOd5frqOv
- mpz0VhFAlNTjU1Vy0CnuxX3AM51J8dpdNyG0S8rADh6C8AKCDOfUstpq28/6oTaQv7QZdge0
- JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20240903162217.07c366c9@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR12MB7982:EE_|IA1PR12MB6185:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4d9bd41d-e06f-4ffd-1069-08dcccfcc89c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|7416014|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?ZzhreEY0NUpqZEJCcm1xQmg1Wnhjb25rQXJub1hoSE0zTlJ1bWdpdG5ESlUx?=
+ =?utf-8?B?ZThJaGFIU0JiZjdrUWx2Q3l3ZWxEaVlEanJZeFlLdXg4S3VjbXgxbWhUYXRv?=
+ =?utf-8?B?MGVZemFyZFRoS2NXS29mVDFidEpQam9nVVo1aWcxWUhzc0dseHNvSkxyc3gw?=
+ =?utf-8?B?VWVXSXV6MS9YSTRjYmVQUVhZeHVxNk5YZjFJQ2F0T0w4MzIyeVM1bnppVWto?=
+ =?utf-8?B?UXVmdXB2R0ZBRXZpS3Y0Zk5tc09vU1hIRnZEd2dVM2xLUzRsd0tWd3R6cHh3?=
+ =?utf-8?B?dndSWDY2aEltSDQrUFJYM2ZJUGRRT1Q1NW5mVk84ekk3d3cyd0MzdzQ0NXNz?=
+ =?utf-8?B?U2p2UHVWOTZvVUFnRitnOWx0OUdBRXFHdGFsOXpGWnR1V0JjTWdtSEU2Nm15?=
+ =?utf-8?B?SDFSUnhoMlByUndBeDlWaEtTM1M3dVFXd2R0WWZ2M1daTTM5OG52TnY3LzJn?=
+ =?utf-8?B?UlJLL0JtUS9wWGtXRjBvU1cyQkI4UVc2ZVlTem03Nks4eURBVnNIcEZZSzFk?=
+ =?utf-8?B?czkzeWRNSFZlRDlKYTBvOTRESDk2ZERxS2xFcG91Yys2cm5ueWJCbHFEd0VF?=
+ =?utf-8?B?cHBBdERBcFRkSHhyZWpQcExRTWcweWtaU0MwTFdlUlA3dC82SE9RYVRLaXNC?=
+ =?utf-8?B?OTJCNnNHMzlGbW5lTUxGay9pUElhbHZNQ1Z4V3dBWE5BS3M0dlY2K0pCYXRL?=
+ =?utf-8?B?Z294SFVoVnIwak1GdDBrNE5qL096NVQ1TDIzTXZmZkFaVlhLdzhGNmRUYmsx?=
+ =?utf-8?B?RW4yckh3RnY3bnNDSDlEVzNnSFhDOHdWczM1VHhtOUtON0w1anBTdndVVDJN?=
+ =?utf-8?B?NWlNaU9ZR0VUS09KL3Rlc09BWEhackUzMy9EV3hNU1NDZlFmQnRSaVJzTWc0?=
+ =?utf-8?B?VVpEK0ZvTDZPRTI2M1N4YXJFcDVkYVRzelk4UlowUFJiSzZwRnBkcjB2RzE3?=
+ =?utf-8?B?dHhZMFpJRW1RY1NKUWltNnhsWVRZd1pBbmNWQklqOTdZZElGaTNkWm41SklH?=
+ =?utf-8?B?ekQ2YmRML296eU5KM2l2aXJXTGx3Rmw2TE4xZSthaTFSbzRpbjhZSUFWQlFs?=
+ =?utf-8?B?amxKajhXdXFUNFdVZUIzWEo2emp6aGkyZEY3VDRya1NVU21SUkVKNjR4WDZ3?=
+ =?utf-8?B?U0cxZ1ZFM29aMzRWQ3hadXpSeHBMYm43OGFORksxbzhaYU9qWmxBa3VFT2Yv?=
+ =?utf-8?B?YmNzUTdnS0VST3d1QlhraFBXR2hkYlQwVmkvRm9ibVBHbk5GOE1keW9nM0tX?=
+ =?utf-8?B?WWRjU3c2YkNuNmpaTFM3WWwzNW5MMUIrTHREUjJRY1F3eVNGb0NwSlJCNWk5?=
+ =?utf-8?B?OFBCNzRZUnBXcHZzN1dqZ0locWJlOXNDYXMwR0s2T1RRSmp0OFpOUjR3elZK?=
+ =?utf-8?B?WWRGaVJZeTdyZHd6VS9UbWVOQ1VONVV0a24rWEQzQ1lVL3hIQnovVWJreGtZ?=
+ =?utf-8?B?SlplWGg4SDE3aStxRzU1aTJrTDA1RGZVdkZZMmg5Y0NBNGwycVhVRWM3dlQ0?=
+ =?utf-8?B?aGQwNkgxWDZ4Z2g1NHFaeWxXcFh3ejdHM2oyRnRyYVRFTXpiSVg1UDM1VUg4?=
+ =?utf-8?B?dUxpS3puczdFK1RrcWNsOTZjd3ExYUV4SjZuYkFmSnV0cFoyUG4rY292TVh4?=
+ =?utf-8?B?d2xGY29EM2cweEdwazZ4VVNFa3JXVnVSOHluazE4WWpDc290TXMvUWFROVZs?=
+ =?utf-8?B?M2tkNkFkMUgySm1SRzJBRWtqSDVGTnRkRUpkWEF6ZHZrSitsRWtLNTVvalVZ?=
+ =?utf-8?B?Z0ZHMmQvNUhSb1VtY0xBS1Y5dTcwYkpVaDU5UTNFTmlBSDh1ZzREK0xMVGxi?=
+ =?utf-8?B?Zm1KSHlobTd1MXlqR3BZdz09?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR12MB7982.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ZC8xOTIzaGs5NnA5VVlnWVB0TGVnMjlWVVpadi9Pa3VHcWNSNFhQaTV5dWFi?=
+ =?utf-8?B?eElDdmY4SmtycWVIM3hVVnlUZkRiRTN2SzZmUGlaQmtublIvUFRYd1p0MVlh?=
+ =?utf-8?B?N1JQS3V6NmthVHhOS1pCWVZKbkErd2JKYU5nUVU3ME00WXBlMk1kL2hwc0ZK?=
+ =?utf-8?B?YzVXWGhISDA2aE4zNTg2ZFBNdVk5N0RzanNGTzNTUGdHdjdBTkdYa3BPa0to?=
+ =?utf-8?B?bVBrY0dJclNuVHpCOTk1TVRhQmxObEtWRHNqa2NDYTRrWncrL2lBSmpUa2Rl?=
+ =?utf-8?B?NVVaMm44VDkyb2JzNmNWdUF3U0xhN0JvQmxGT2JKU2Q4QjJmMm9za1dwYTRW?=
+ =?utf-8?B?TkhDNWhuZUkzbzZVOEJjWnNOMWYrQmg1NkZkOFJibVFRc0doS05WSHhMTytr?=
+ =?utf-8?B?WElZS3hCZ2FvVUtWUDVtc2FvZ0xaRHF1dVl3VVkrekQvckZMWEthOFh5ODln?=
+ =?utf-8?B?T1BBYS91cExjbjRSUEcxN0dGeGdjUEIxYXRURnBSL1J0NG9ESDJkL3h0MXg2?=
+ =?utf-8?B?dTJadzBaaXNGRDVuSHpkOEdFTHdlZE5DaEQ5dnBiQk9DM0UzY1hWTThidHlp?=
+ =?utf-8?B?cno4MFFiRlZTZEQ1RW9ubEZOSTlGOW9IOW1ObTIrUFdDZVVTRTRrRkVpbTJB?=
+ =?utf-8?B?TjM1RjlwQTNPRUZlZlVRTE9hZG40M25BZ0ljZWQvZzhaL2RyTS9kWFR1ZlhY?=
+ =?utf-8?B?ZWQzcEVCeVoyRExVNlBmYVJaQmNyL1MvK1dRMkFhK3BJYk1CWHVQRk00amUw?=
+ =?utf-8?B?RHlPZlBneCtVQ3lvZTlMTzBEOXp5R1hhbElqT0FneStDZWVVNWJqSER3UW5V?=
+ =?utf-8?B?ZmxTMXlXK1RTK0kvN05MZmVUbi91WnRTa21UR1AxSkRkZFVTWEpKazdHMlB0?=
+ =?utf-8?B?SDNVek40YVVqUGFoMllQVThLOFV1TlFnbnNvR2oySVhXQjlOWjIydUJuOWEz?=
+ =?utf-8?B?WnQwcHNjQjlsS2U3bnN0dG5CL3R0SnV5QVJtdlBBcU9GMys0VWw5Y2FvRld5?=
+ =?utf-8?B?aXZIWXdsdkJCenNmVVk4YkpPalg2Y2ltQjR3Q2xZbStyMnZSTVFyTEpaaHpY?=
+ =?utf-8?B?ZnM1NTZiTHRHcmJXMFBibWpEZ0pRWHBCcVNTb2ZYa0NEdWpKYk1pTFBBdzZN?=
+ =?utf-8?B?cFA5ZWRYTWR1bmZzZUhKamNHZjdmT3pGU3JJdUNsNllHdXpOL1kzS0RZYnVz?=
+ =?utf-8?B?dWRNMW1BVDVkbi9MUUxuMDNUVkNJbmdHYXk1MmZTZXlLZDU2VkQ5cG9CQmZM?=
+ =?utf-8?B?M09ERW41VS9vL1VIK3E2MHQ2aW5GeW9mREtvYTlhcUo0YWZvQVAzblgrS1JV?=
+ =?utf-8?B?STdydXp2Wmp0bi9td0JpZnFIWFYzUTJtTHdpMmxvZ2dJZGxYeTJQZnpNcG8v?=
+ =?utf-8?B?M3puZm9tNnRuNlFKOWlodmVsVmd2MEFGYXVDUFBzaDFVRVZYMUo3NHArWGUx?=
+ =?utf-8?B?TVlWQlJwbWFCUURtWUtOSzk5b1dQNXJkMmRZNHc5ZjZUK2czQkg2RHl3S2pM?=
+ =?utf-8?B?S2NGZTZlajA2aU9BVXhRWEhqKy8zZ2FweER3bnVBQVJGT1AvZ202dFRHRVJ4?=
+ =?utf-8?B?NVUyQ2V1Vis0Tms2ZDhiNlUzWFN1UTlYV24yRFpvbmo4T2lUMUZmcDNOMHVG?=
+ =?utf-8?B?emIvbHZpOVl1RGRFcWVTVTRFallpeXdINmowR3BlZmtrS2ErR0RweHhMV2pF?=
+ =?utf-8?B?WTY1K2lDZmNSQmhyVVZ4a2JQcFdMUDVrVHVDQXkyMFkvNHZUT2JmTHJlRW1S?=
+ =?utf-8?B?WjRxT1dWWisrc3RVbnMrKzBtZFJFOXE1S1BZYjRLQjdlVHBONGNzZGdCYjZr?=
+ =?utf-8?B?akc2TFc5Sk5WUjBkV3JsSlg4eC80TWdKY0NxelZaNGc4U0ZUUVFwVnVJNXNl?=
+ =?utf-8?B?VktpTlNVc2ZpTVRXaE40V1ZEZjJiTTBwMjdIYkxtc2R6b2ZYRUVucjNybzZB?=
+ =?utf-8?B?ZW1xKzhRU3NPMWUrelRacEJleWNES1FFandjTWFUbCtFRXFVeUFVVkZFL3I5?=
+ =?utf-8?B?WjZ4SG5TOXU5UkhDYlFiMXlXcWo5TUhIOFU0dmdBc3E0eDIydE5DbWFRaTEx?=
+ =?utf-8?B?TnJ0RTFNQ0tzWGxjNkVtcG8zR1JsWUVWMXZ4a2FxcTFUKzZOUjlpdU1QRjll?=
+ =?utf-8?Q?/OUmvc+wpJQF6J3pHGLgpIgO7?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4d9bd41d-e06f-4ffd-1069-08dcccfcc89c
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR12MB7982.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Sep 2024 16:15:25.0692
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: mGl0Xryr1h95LvQkd0APXVS0Sr7PRifHIw5S37Cxnyk7Rm93zJp1fEa51u2NrkDaDCs3Dp66SB8Xv5llEHY4VQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6185
 
-Hi Jakub,
 
-On 04/09/2024 01:22, Jakub Kicinski wrote:
-> On Mon, 02 Sep 2024 13:13:03 +0200 Matthieu Baerts (NGI0) wrote:
->> Patches here add 'time=<N>ms' in the diagnostic data of the TAP output,
->> e.g.
->>
->>   ok 1 - pm_netlink: defaults addr list # time=9ms
+
+On 9/3/2024 3:15 PM, Mohan Prasad J wrote:
+> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
 > 
-> Looking closer, this:
 > 
-> # ok 3 - mptcp[...] MPTCP # time=7184ms
-> # ok 4 - mptcp[...] TCP   # time=6458ms
+> Add testcase to check TCP throughput of lan743x network driver.
+> Test uses iperf3 to do performance testing of the driver.
+> TCP data at different speeds is sent, received and verified.
 > 
-> Makes NIPA unhappy. The match results for regexps look like this:
+> Signed-off-by: Mohan Prasad J <mohan.prasad@microchip.com>
+> ---
+>   .../net/hw/microchip/lan743x/lan743x.py       | 33 +++++++++++++++++++
+>   1 file changed, 33 insertions(+)
 > 
-> (None, '4', ' -', 'mptcp[...] MPTCP', ' # ', 'time=6173ms')
-> (None, '4', ' -', 'mptcp[...] TC', None, 'P   # time=6173ms')
+> diff --git a/tools/testing/selftests/drivers/net/hw/microchip/lan743x/lan743x.py b/tools/testing/selftests/drivers/net/hw/microchip/lan743x/lan743x.py
+> index 59f0be2a7..a3dcf7896 100755
+> --- a/tools/testing/selftests/drivers/net/hw/microchip/lan743x/lan743x.py
+> +++ b/tools/testing/selftests/drivers/net/hw/microchip/lan743x/lan743x.py
+> @@ -3,6 +3,7 @@
 > 
-> IOW the first one is neat, second one gepooped. The regex really wants
-> there to be no more than a single space before the #.
-
-Good catch!
-
-> KTAP definition
-> doesn't say that description must not have trailing white space.
-
-Indeed. Same for TAP 13. (TAP 14 is clearer about that and allows
-multiple spaces)
-
-> Best I could come up with is:
+>   import time
+>   import re
+> +import json
+>   from lib.py import ksft_run, ksft_exit, ksft_pr, ksft_eq
+>   from lib.py import KsftFailEx, KsftSkipEx
+>   from lib.py import NetDrvEpEnv
+> @@ -75,6 +76,38 @@ def test_network_speed(cfg) -> None:
+>               time.sleep(5)
+>               verify_speed_and_duplex(cfg.ifname, speed, duplex)
 > 
-> diff --git a/contest/remote/vmksft-p.py b/contest/remote/vmksft-p.py
-> index fe9e87abdb5c..a37245bd5b30 100755
-> --- a/contest/remote/vmksft-p.py
-> +++ b/contest/remote/vmksft-p.py
-> @@ -73,7 +73,7 @@ group3 testV skip
->      tests = []
->      nested_tests = False
->  
-> -    result_re = re.compile(r"(not )?ok (\d+)( -)? ([^#]*[^ ])( # )?([^ ].*)?$")
-> +    result_re = re.compile(r"(not )?ok (\d+)( -)? ([^#]*[^ ])( +# )?([^ ].*)?$")
+> +def test_tcp_throughput(cfg) -> None:
+> +    speeds = ["10", "100", "1000"]
+> +    """Test duration in seconds"""
+> +    test_duration = 5
+> +    target_ip = cfg.remote_addr
+> +
+> +    for speed in speeds:
+> +        set_speed_and_duplex(cfg.ifname, speed, 'full')
+> +        time.sleep(5)
+> +        verify_link_up(cfg.ifname)
+> +        send_command=f"iperf3 -c {target_ip} -t {test_duration} --json"
+> +        receive_command=f"iperf3 -c {target_ip} -t {test_duration} --reverse --json"
+> +        send_result = cmd(send_command)
+> +        receive_result = cmd(receive_command)
+> +        if send_result.ret != 0 or receive_result.ret != 0:
+> +            raise KsftSkipEx("No server is running")
+> +
+> +        send_output = send_result.stdout
+> +        receive_output = receive_result.stdout
+> +
+> +        send_data = json.loads(send_output)
+> +        receive_data = json.loads(receive_output)
+> +        """Convert throughput to Mbps"""
+> +        send_throughput = round(send_data['end']['sum_sent']['bits_per_second'] / 1e6, 2)
+> +        receive_throughput = round(receive_data['end']['sum_received']['bits_per_second'] / 1e6, 2)
+> +
+> +        ksft_pr(f"Send throughput: {send_throughput} Mbps, Receive throughput: {receive_throughput} Mbps")
+> +        """Check whether throughput is not below 0.9 times the set speed"""
+> +        threshold = float(speed) * 0.9
+> +        if send_throughput < threshold or receive_throughput < threshold:
+> +            raise KsftFailEx("Throughput is below threshold")
 
-Looks good to me. While at it, we can add a '+' for the spaces after the
-'#':
+IMO it would be best to do these checks separately so the failure is 
+immediately obvious.
 
-  ( +# +)
+Thanks,
 
-I see you didn't commit the previous modification. I can open a PR if it
-helps.
-
->      time_re = re.compile(r"time=(\d+)ms")
->  
->      for line in full_run.split('\n'):
+Brett
+> +
+>   def main() -> None:
+>       with NetDrvEpEnv(__file__) as cfg:
+>           ksft_run(globs=globals(), case_pfx={"test_"}, args=(cfg,))
+> --
+> 2.43.0
 > 
-> Thoughts?
-
-In my v2, I will also strip these trailing whitespaces in the selftests,
-they don't need to be there.
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
 
