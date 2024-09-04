@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-17139-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17140-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF7CF96C20C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 17:18:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1CB396C26A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 17:30:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AE4C1F21055
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 15:18:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D202D1C22873
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 15:30:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 178CE1DFE1F;
-	Wed,  4 Sep 2024 15:18:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1E1A1DFE2B;
+	Wed,  4 Sep 2024 15:30:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jtu6fplo"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Nsn6UIaJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1B201DFE05
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Sep 2024 15:18:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ECCF1DEFEE
+	for <linux-kselftest@vger.kernel.org>; Wed,  4 Sep 2024 15:30:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725463108; cv=none; b=SCjXoI91pywq/TZqExJippE/57/dQO0ESR54jnIGwN5nn0InlxyxXwNrmnrEBqXEzh1Q2LRI1jqtRv5GIiSxK5lmnFRaMbNTmTsmSAVa27tPMrUSnPN2HDM1kIw3cokGka8Ykd295r8HvCJUwCLe9lGQ2M6cyaYdavWm125g0ls=
+	t=1725463804; cv=none; b=dboSheSSXnvV9Xqx6dleEJzxv59darKN7pslxfy2cINvkTa6E9IAvF9vy05PEVvvX3V6u/lri0yfytsYt3pn4GI5APOIWaqq9RmTgc34odCVOwn7pllCSKnyL3pJbmJbB7St5HugDQGCxhhsKSLhphaf9Hw0uftGUzP/2v8Ev48=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725463108; c=relaxed/simple;
-	bh=sXtLgXQzVV2KYM3glPRuxYC/5hs3yMDkVUdSwXrs2JI=;
+	s=arc-20240116; t=1725463804; c=relaxed/simple;
+	bh=gYYY8FNVkypzbtVX8GFJXnTswLqhKBDH6rOvo639VDY=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cbLEfticMRyMng5Z0IHz9or960fIas4d5Q1L4rgHBC5Eqn55w7/Kqtb/fz2NeGGu0MmF1jRmwmj8xWtQGlizqetan1tNpdKUSyYQ+VkXO1tF/fXP1MUxdxTpKhC3G5BRyOeV6dMm1ky/XoLkxL9ZS2hb3VgkiB68yT6ztUhCklg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jtu6fplo; arc=none smtp.client-ip=209.85.160.172
+	 To:Cc:Content-Type; b=Brv8nw8dPPBXcTGHWyz11y+UbE9x69Be2iNHcqpBqazbUJvPuKYxv4usJuHQw0jAXsx7kf8ZCFW1+HL9pf0MCsIR5LM2vudlV0qimuEs7ud/tJwRT9Ip6PjVu7MOK8OjBH0kfaLw7j5zv+VYQJUTXmzDSvapjEhPOg86nAw1Byg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Nsn6UIaJ; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-457c6389a3aso267221cf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Sep 2024 08:18:25 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-a868b739cd9so822700166b.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Sep 2024 08:30:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1725463105; x=1726067905; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1725463800; x=1726068600; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LD/VB3T6PK6SWkzZ0xkGr8kbW+Sx4WeUFngHFhxmWFU=;
-        b=jtu6fplo1EwDPApGNAcMv77ohhFeLh4VheMMrgCIQr/HxgXOCom31HIY9dHgl+Yags
-         CX4ugkPSHfPKAMLaMnWetadC75u3xU243A39AynmHCr9PuGWtBi472Y7fuMnnaAiqbz0
-         Aqm6Dqk5oEuVB1GxzWQhsDCmBMbelKhmuWkrhJeHLcFEb4hSfHZHRzA3ZZx2uq8BmbsV
-         TQzYXA0O2cc1bI+hAGxAOlSss1ajW07jMykWMPtz92MDS128Mjf2J21DnhKtXaw6FH9s
-         FyqrSgkqBYsc4yZ4XakxSQfhyj1Vafbv/2dtFeYTfR4tE9ki2wCOgkCUkrGU0CT3i7CI
-         4vPA==
+        bh=PLhhMPuctYpfIPSQyulh9sZF48oPEhyg3gJ/+naRY0c=;
+        b=Nsn6UIaJ8cBOere7dXrX7QJzr3PUi5gC8awflmfdEufX9Y4AUoY8PtXSAv2R8wLCOB
+         iSkFtxYqPfwj8WsRPkL3z7su36Pe72k6LXRjv9N/uHE2F9V/ltOs5BanUASmZ1ysBFaT
+         nkwJOYFsUhK6KT1/20UTVJFpAiuc0i2APmhHN39DeGes4vdGWusRrvpZNx04KI746RFI
+         3/rFGxrJA/3S6Y02/GQKxMQCQ6hjVyak8XzQf2ru9bvZbeCkSB7jwU5aMvHsio8XfyDi
+         wiRQ4Dxu7eGf1WD599L2lER/SPQh0Vbr6Ah8LRLMpM6yIuIzQkORktpyoJeDfjnQEUEf
+         ccTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725463105; x=1726067905;
+        d=1e100.net; s=20230601; t=1725463800; x=1726068600;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LD/VB3T6PK6SWkzZ0xkGr8kbW+Sx4WeUFngHFhxmWFU=;
-        b=ImLK+1ir+DY4p+grMwV1nnPt5DLZYv+NdIYVEV2jQWT67eewDAXXFmwDVcUm8iTsNW
-         Tfb1+AfQMba1JFhT9qYzexZw6CenRRWnKdGdqJj7b4tdpQynEHe48E/ow3idkf+iHcTf
-         dyOrjHEh4aFC/uw8AsndY7BUXzCGD5VXv7ATb72fOk0yg0At3Wvt9+LIlZK5Y9RScyZb
-         yJ/47E8Q8y+qmWaS5+XeRMtidsDG4gAKPThfaeNWlPkKglmgJgXdIyX9ypB0X5DhE9Ez
-         D+Bql8WHTm6rO74fWJF8vkNIQy9qVRqz3D+mF0tLt8kjKYnY7JBfeVDl7D6tDPjT2kk9
-         H3/w==
-X-Forwarded-Encrypted: i=1; AJvYcCVPp+uqyT6VRRjWcQPww7xVvJf8OqtXU5lmPCNsh9CuKnawdoM9L7Lf8itHGXga/DJFWkDMig1FRYJXobSLeqU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYwKFET5Qm/6ogJ/LJLKz1uP6fCnHEXoesLADQkqR6Hyjw/zOO
-	IHpytgk1cWjf4FAwHK3+He6zBYzTGtpUr4P4vSz+yglp1fIWd6+kIUVQC9KeMdJ4bPKw4UzaT0o
-	EAoWs3jh1h99rnNLs8zE6bZskXiO6+lXQsUwb
-X-Google-Smtp-Source: AGHT+IFUx/o9LJkME5WyEg785HOWYMcUA5VsWIPNTEqlhEzpir/bmFgy1UHj7/XRd4GdWuFH4iylG23RG+gVAR1iVpU=
-X-Received: by 2002:ac8:7d07:0:b0:456:7cc9:be15 with SMTP id
- d75a77b69052e-457f7b38578mr3074581cf.29.1725463104431; Wed, 04 Sep 2024
- 08:18:24 -0700 (PDT)
+        bh=PLhhMPuctYpfIPSQyulh9sZF48oPEhyg3gJ/+naRY0c=;
+        b=wJuBLmwPXcQ0ev3YWQcg8m1jPoO/hKMMM8nzwU8yfYUxvGmEFKW9dtWIXjuMrOSw8D
+         78CshROBAf7RnBV5JIytuOp8ngxXiA8410X1NRDKs1T6GOsAJBt4paZiMLrHsleFpZ1Z
+         uzYkYVIfg3gyFIor+FcBcLWIBpzKcJrToOxWGOg1+KCMIWqaaZAlJzgTHtKYdO+kApup
+         PROkAuwXLifxL2kjfkh8OzXsDAb7dr512Pb2Td5IWWpngOLd4UcHqZRP28C2P3v1fj25
+         cK1n9X5e+RWQtKZ5UWD7ou1CTWshiZkmDcDr/Wic11SbvfJvrvszK9SEqrck7ENvE68d
+         13KQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXFJ4fOgTlP5TtLPc6TqVkIXwkzKQ2cao8nPcpOVHzzfHMkYl284w1rJhn2KosNbdMYHxR8oP+0lDaCy/C1I0c=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxng0uqH0ykBnZ/aKktubVoaxpWdgXoMRCwsRb+xOY49z0r494U
+	KwOR/jmRCxNWBi+5KxCZPirbls5D0tUwVD/Isr+FDlBuzHp5x80ZBAc5HSY6a29xYY/g/cuUNAk
+	9yYdoaa4TiYigTvh/vHzKviJtvnw3AcAzzsqz
+X-Google-Smtp-Source: AGHT+IFg6rOi18H1toa3LkpzEJnnBMcFXZAacqahmY1gZmTK9rv5lw/xaEow9UneXHrr7DZX8isa3vZhOIIu0S2ULN0=
+X-Received: by 2002:a17:906:8903:b0:a8a:43bd:a9e8 with SMTP id
+ a640c23a62f3a-a8a43bdabe5mr117170866b.65.1725463799009; Wed, 04 Sep 2024
+ 08:29:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,24 +73,25 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20240831004313.3713467-1-almasrymina@google.com>
  <20240831004313.3713467-9-almasrymina@google.com> <20240903144011.3e7135f9@kernel.org>
-In-Reply-To: <20240903144011.3e7135f9@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Wed, 4 Sep 2024 08:18:12 -0700
-Message-ID: <CAHS8izPN8cDVhAzdedr7zb9zmDaiOMqkaDqB07QwVKKEJ62HzQ@mail.gmail.com>
+ <CAHS8izPN8cDVhAzdedr7zb9zmDaiOMqkaDqB07QwVKKEJ62HzQ@mail.gmail.com>
+In-Reply-To: <CAHS8izPN8cDVhAzdedr7zb9zmDaiOMqkaDqB07QwVKKEJ62HzQ@mail.gmail.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Wed, 4 Sep 2024 17:29:44 +0200
+Message-ID: <CANn89i+iXXUjOJCOF1nodjVH4eX8P-B26Kg+Uu-iM2_Hc=5D5g@mail.gmail.com>
 Subject: Re: [PATCH net-next v24 08/13] net: add support for skbs with
  unreadable frags
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
+To: Mina Almasry <almasrymina@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org, 
 	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
 	sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
 	linux-arch@vger.kernel.org, bpf@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org, 
 	dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
-	Matt Turner <mattst88@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"David S. Miller" <davem@davemloft.net>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
 	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
 	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
 	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven Rostedt <rostedt@goodmis.org>, 
@@ -113,40 +114,48 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 3, 2024 at 2:40=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> wro=
-te:
+On Wed, Sep 4, 2024 at 5:18=E2=80=AFPM Mina Almasry <almasrymina@google.com=
+> wrote:
 >
-> On Sat, 31 Aug 2024 00:43:08 +0000 Mina Almasry wrote:
-> >  static inline bool tcp_skb_can_collapse_to(const struct sk_buff *skb)
-> >  {
-> > -     return likely(!TCP_SKB_CB(skb)->eor);
-> > +     return likely(!TCP_SKB_CB(skb)->eor && skb_frags_readable(skb));
+> On Tue, Sep 3, 2024 at 2:40=E2=80=AFPM Jakub Kicinski <kuba@kernel.org> w=
+rote:
+> >
+> > On Sat, 31 Aug 2024 00:43:08 +0000 Mina Almasry wrote:
+> > >  static inline bool tcp_skb_can_collapse_to(const struct sk_buff *skb=
+)
+> > >  {
+> > > -     return likely(!TCP_SKB_CB(skb)->eor);
+> > > +     return likely(!TCP_SKB_CB(skb)->eor && skb_frags_readable(skb))=
+;
+> >
+> > Do you remember why this is here?
 >
-> Do you remember why this is here?
+> Yeah, to be honest, when I first implemented some of these checks I
+> erred on the side of caution, and added checks around anything that
+> looked concerning, some of these unnecessary checks got removed, but
+> looks like this one didn't.
+>
+> > Both for Rx and Tx what should matter
+> > is whether the "readability" matches, right? We can merge two unreadabl=
+e
+> > messages.
+>
+> Yes, you're right, only 'readability matches' should be the criteria
+> here. `tcp_skb_can_collapse` already checks readability is matching
+> correctly, so no issue there. The `tcp_skb_can_collapse_to` check
+> you're commenting on here looks unnecessary. I will remove it and run
+> that through some testing.
+>
+> As an aside, it looks to me like that tcp_skb_can_collapse_to
+> callsites don't seem to be doing any collapsing. Unless I misread the
+> code. It looks like tcp_skb_can_collapse_to is used as an eor check. I
+> can rename the function to tcp_skb_is_eor() or something if that makes
+> sense (in a separate patch). I think the name of the function confused
+> me slightly and made me think I need to do a readability check.
+>
 
-Yeah, to be honest, when I first implemented some of these checks I
-erred on the side of caution, and added checks around anything that
-looked concerning, some of these unnecessary checks got removed, but
-looks like this one didn't.
+Please do not use tcp_skb_is_eor()
 
-> Both for Rx and Tx what should matter
-> is whether the "readability" matches, right? We can merge two unreadable
-> messages.
-
-Yes, you're right, only 'readability matches' should be the criteria
-here. `tcp_skb_can_collapse` already checks readability is matching
-correctly, so no issue there. The `tcp_skb_can_collapse_to` check
-you're commenting on here looks unnecessary. I will remove it and run
-that through some testing.
-
-As an aside, it looks to me like that tcp_skb_can_collapse_to
-callsites don't seem to be doing any collapsing. Unless I misread the
-code. It looks like tcp_skb_can_collapse_to is used as an eor check. I
-can rename the function to tcp_skb_is_eor() or something if that makes
-sense (in a separate patch). I think the name of the function confused
-me slightly and made me think I need to do a readability check.
-
---
-Thanks,
-Mina
+tcp_skb_can_collapse_to() could be renamed to tcp_skb_can_aggregate_to()
+or tcp_skb_can_append_to(), but EOR would not help at all.
 
