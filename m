@@ -1,115 +1,82 @@
-Return-Path: <linux-kselftest+bounces-17100-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCAEB96B02E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 06:52:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A48096B081
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 07:30:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 463A4B20A6B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 04:52:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D86441F250E5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 05:30:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5226823A9;
-	Wed,  4 Sep 2024 04:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96460824BB;
+	Wed,  4 Sep 2024 05:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="tC7qrY3v"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0396433A9;
-	Wed,  4 Sep 2024 04:52:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB66B1EC00B;
+	Wed,  4 Sep 2024 05:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725425553; cv=none; b=u+O2AAXkD9mFEq2lLfCcc0aqXmqhiziw8eMdZsPRBh6LxqKWIr0WqRNwSRSp9jUVy5le4uChXtMMMKzVGn7b/hTkf9u3rMhC0zkcU6c+GRKOX1R46DJusutR8EqqeEsxDtsDcxn1X+5O5Gp0H1diKT/yRw+cDeEPwriWPkh3pFQ=
+	t=1725427829; cv=none; b=O/K9GbtDw0X05qFy2iwia6WgwjMZeL64NkUBr/r0GVwXJUT6R5nuMhsjdKpgwuVNq8KalFE6Re4ozGPs75wB81+tmGchO5lB1Opr08bxD7NSIFtj3OG1LEW+DETwj/qiU0LKv/yTU+13fy8l0T4dzQITh51/8Ta7w7ln4Uuxuxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725425553; c=relaxed/simple;
-	bh=GrzPrCNT7mABBxSbsxg81EhR2Kv/Xk3QPAwQUFHk/tU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=O/xM3oRYHT7zjl6e/hnuC4a4EUl+yz+L8vSwSWAyBg3NbsC6ajLb6aCAzHldfZpvPqTD28a1NjbUhLH9g3dLPzLCC/S2xby5qPZLjaExCJ86n3XH/uaVbUPtssvIdeaw3NU6xoUi4tkpSkQ7vlrKYNx930kUUoqiFOkQr2h5kvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0048CFEC;
-	Tue,  3 Sep 2024 21:52:56 -0700 (PDT)
-Received: from [10.162.43.14] (e116581.arm.com [10.162.43.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BC2243F73F;
-	Tue,  3 Sep 2024 21:52:24 -0700 (PDT)
-Message-ID: <514713eb-235c-40ee-8c25-f1f3e1ca7f7a@arm.com>
-Date: Wed, 4 Sep 2024 10:22:21 +0530
+	s=arc-20240116; t=1725427829; c=relaxed/simple;
+	bh=5tLuH2VDlAzZsIq6hm90Ox7/alE802MSDyZ0YgLbYpw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rN0bBe07k8jD6D8Q+n8n+hbxfhAPUN0ZjLaZl4K1lZiKFOZtmqhhOvKCApKoN/pscoGAlN703NBVkZk2NkyaEeI4EWNVSHosgKGq5YT4FgYqbvwbpH17K200JN5N7cjVMBT8J/LFtn2zn8BNdTGhfGOMSoAl0aGOK+/aDfZZlWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=tC7qrY3v; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=6RTRBhAVgKcFZfMMAYRxw7reG2ZJQUyh/CZkw5Ux0+I=; b=tC7qrY3vJQL7F7RJxEVDsIM7gt
+	2qngwfqnnAMKLl/4mGMyORD1cNgxu02/L4Ryf/s4jtUB9d8Gj8k0E7AhSiBOovwNUiaU9QApjG4qR
+	Fvc10wUYnHgcpGrMm9HIJYIOEaY3Te46vsVZc31V1prC2f8yTVS2b+kU1zZkeFDxspmE=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1sliay-006UmC-CS; Wed, 04 Sep 2024 07:30:20 +0200
+Date: Wed, 4 Sep 2024 07:30:20 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Mohan Prasad J <mohan.prasad@microchip.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+	shuah@kernel.org, bryan.whitehead@microchip.com,
+	UNGLinuxDriver@microchip.com, edumazet@google.com,
+	pabeni@redhat.com, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, horms@kernel.org,
+	brett.creeley@amd.com, rosenp@gmail.com
+Subject: Re: [PATCH net-next 0/3] lan743x: This series of patches are for
+ lan743x driver testing
+Message-ID: <7cbdcb2b-37d8-45b6-8b4e-2ab7e7850a38@lunn.ch>
+References: <20240903221549.1215842-1-mohan.prasad@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/2] selftests: Rename sigaltstack to generic signal
-To: Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org, oleg@redhat.com
-Cc: mingo@kernel.org, tglx@linutronix.de, mark.rutland@arm.com,
- ryan.roberts@arm.com, broonie@kernel.org, suzuki.poulose@arm.com,
- Anshuman.Khandual@arm.com, DeepakKumar.Mishra@arm.com,
- aneesh.kumar@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, sj@kernel.org
-References: <20240822121415.3589190-1-dev.jain@arm.com>
- <20240822121415.3589190-2-dev.jain@arm.com>
- <714f8eb4-b226-48f6-ab0d-75bdfbf83364@linuxfoundation.org>
- <42d0fa4b-eb67-42fd-a8e1-05d159d0d52f@arm.com>
- <806e4be0-4b1f-4818-806f-a844d952d54e@arm.com>
- <fff2b685-a7a5-4260-a293-f2abf55d9ce4@linuxfoundation.org>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <fff2b685-a7a5-4260-a293-f2abf55d9ce4@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240903221549.1215842-1-mohan.prasad@microchip.com>
 
+On Wed, Sep 04, 2024 at 03:45:46AM +0530, Mohan Prasad J wrote:
+> This series of patches are for testing the lan743x network driver.
+> Testing comprises autonegotiation, speed, duplex and throughput checks.
+> Tools such as ethtool, iperf3 are used in the testing process.
+> Performance test is done for TCP streams at different speeds.
 
-On 9/4/24 03:14, Shuah Khan wrote:
-> On 8/30/24 10:29, Dev Jain wrote:
->>
->> On 8/27/24 17:16, Dev Jain wrote:
->>>
->>> On 8/27/24 17:14, Shuah Khan wrote:
->>>> On 8/22/24 06:14, Dev Jain wrote:
->>>>> Rename sigaltstack to generic signal directory, to allow adding more
->>>>> signal tests in the future.
->>>>
->>>> Sorry - I think I mentioned I don't like this test renamed. Why are 
->>>> you sending
->>>> this rename still included in the patch series?
->>>
->>> I am not renaming the test, just the directory. The directory name
->>> is changed to signal, and I have retained the name of the test -
->>> sas.c.
->>
->> Gentle ping: I guess there was a misunderstanding; in v5, I was
->> also changing the name of the test, to which you objected, and
->> I agreed. But, we need to change the name of the directory since
->> the new test has no relation to the current directory name,
->> "sigaltstack". The patch description explains that the directory
->> should be generically named.
->>
->
-> Right. You are no longer changing the test name. You are still
-> changing the directory name. The problem I mentioned stays the
-> same. Any fixes to the existing tests in this directory can no
-> longer auto applied to stables releases.
+What is specific to lan743x? Why won't the autoneg test work for any
+interface which says it supports autoneg? Is duplex somehow special on
+the lan743x?
 
-I understand your point, but commit baa489fabd01 (selftests/vm: rename
-selftests/vm to selftests/mm) is also present. That was a lot bigger change;
-sigaltstack contains just one test currently, whose fixes possibly would 
-have
-to be backported, so I guess it should not be that much of a big problem?
+Where possible, please try to make these tests generic, usable on any
+NIC. Or clearly document why they cannot be generic.
 
->
-> Other than the desire to rename the directory to generic, what
-> other value does this change bring?
-
-Do you have an alternative suggestion as to where I should put my new 
-test then;
-I do not see what is the value of creating another directory to just include
-my test. This will unnecessarily clutter the selftests/ directory with
-directories containing single tests. And, putting this in "sigaltstack" 
-is just
-wrong since this test has no relation with sigaltstack.
-
->
+	Andrew
 
