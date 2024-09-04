@@ -1,150 +1,181 @@
-Return-Path: <linux-kselftest+bounces-17087-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17089-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B13496ADDF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 03:27:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0917596ADE1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 03:28:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E17A31F25F8A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 01:27:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AD491F25DA1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Sep 2024 01:28:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 543148C11;
-	Wed,  4 Sep 2024 01:27:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FAC38F6A;
+	Wed,  4 Sep 2024 01:28:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="m79/X/+V"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dZSLCiLm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C250C33E1
-	for <linux-kselftest@vger.kernel.org>; Wed,  4 Sep 2024 01:27:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0040F3211;
+	Wed,  4 Sep 2024 01:28:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725413244; cv=none; b=vGm8iP678FPX5u8BC77JloqbR2B8TYQKCY6GGOfwx+6Pxq+CqAyWjkIRtl6IG9aChKeZMAtIDr/dubdOfn/flwcgBxiWapKjlsJPlwjytZFSLFefcKGdOJINT3WkNksIJVdwG+4/G26s3yCR/f1bjEZlmqj+7iMHlVMqKHPgwlc=
+	t=1725413309; cv=none; b=nvCPwR440OX/d2QUdfcskPyyNsQEHzHZgtHD8iCrS7ap0F8tGz0afeB/IH/MO706pTDsB4SCZenpFUzuAUJ1UAlyLT0jKzhO3eDsFCWLO6ZGzC8XUpNdFhyk6zEoYn4vBuMTtv6H/+pBw7+g3U9BcqCwLpkxZCX0Kr5iebBFFeg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725413244; c=relaxed/simple;
-	bh=bWj2zKGtnVL5bgfN+5PtmLeh4dqxbPVHqPY5xgDn/nk=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=tHoobEeMPRDZIzZ9ra1NP9uItYtSKifS359r+sGZRyWVcks0GA9k0yEl9Ixkx0z9P9vSa/CNw5uykC+wWwYczxbagB0/AFBy7HtZrZTzRiSyk25QW5obVgiqN7J1+unvQEBsl+OcT64+Orn4fJnOHUGfSHwV9LpryhCixuAIRGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=m79/X/+V; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-70cec4aa1e4so4315704b3a.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Sep 2024 18:27:22 -0700 (PDT)
+	s=arc-20240116; t=1725413309; c=relaxed/simple;
+	bh=869an7QuVDta4KU4pjwwOQa6ZKA85BOLwZnAn+4njPo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uMBPC8BuafffuNlRV/qPpePeNn3HnauBNzsssKA4+7NgfnzWiawzMckzfyh8SOzQWvKfOSvkvf1SEl1/yhLMkxL53QeQ1/M8aypDWUS/3FAx4VeSVupZ5IfW6wie8A5QkV1XaOEawceUH1UgMPVeR31zSpwbwN9SitXrGLXFsks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dZSLCiLm; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-205909af9b5so17530095ad.3;
+        Tue, 03 Sep 2024 18:28:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1725413242; x=1726018042; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=eatfEWeChd1D9Vw0ZVq62O7TT8fLD/DrTQXQ7kQkabs=;
-        b=m79/X/+VjGk1JnUukmwQVSvzFRr1/1PZp+1nnOoIEzXYuw9o/nV7Fo4Xbs55YPiZjN
-         tf12VHq7NAwvEUOBpAtg5Cs/pSEuWypFJn7aL2XswWoN5Et8OxP1QruVPZDcYRFWwMs4
-         eHDrviL7rOls89UPZS7ZT8noNN1nSdvGQhwsFFBe2ktNrvNmax9PO4e1wM1lxrJoSF6T
-         U/oHqYtsEEnmtRyTjrSjAVuxMkL0+R6fBEhHJaUzhE1h5o/JBxR6e1kBIUMcZXCcFoce
-         ynJdUi0ynbT9Js+aq+cQqWG3kxsB+hfryZpjQnPWpz2OfD7Dby1IqceRMaqaKeEchtQ5
-         +Ycw==
+        d=gmail.com; s=20230601; t=1725413307; x=1726018107; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZKcGcLiluE4oplvfFGxfWezTU3/P7wua4OuY0w4lgrQ=;
+        b=dZSLCiLmcUoPIjj5PB6zLjyaa5TQP/hCGJFlRZeMWkWvpzhld3iL2HtOTdNt99Tgze
+         FY5xrLRtL6ZFknUyQOd4vdeM6lpnkY/6F0quwQUuL34r3T5lmHhrr8rDWcMilECbSf3V
+         bl2PwftvreLGKPTqKq6c3zP9udOFyaFhbP2f7k9sbkF23hfcVuoVwZN0sjSz9EsCYOsR
+         vq+dUaNPpAs0guRLert/EsEwhojCZFjZX9VAP+vXMn4Y0WDLYeRPpHefWBfS4Q9DuWVU
+         zeiJAUSytsOG3ZCqRnwlB6dKGCZZcDDeLTLQT3nHD9lb01pRAV9vzdtNpd5UDOByOIe7
+         DScw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725413242; x=1726018042;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eatfEWeChd1D9Vw0ZVq62O7TT8fLD/DrTQXQ7kQkabs=;
-        b=vLNLFFxLgwyBKo/8ajfTwAZX0m93LmuaEctzVHsmS5inmuVurT89JV+cvhj8Cu2VS+
-         m8kmIrOjvLspO3oC+4QPm53nbwAlY72W4Zv/WmmhF8vfKME06uOSMiLu4LZmIJHoSyNB
-         vzOSUR76XEUrryvuOOgbkOQiCZSZ9upc4F7h8Ri7me/s3SExX4HU35QKhotVN5XXz6IU
-         0gYIt5Hsdqx1QfvbezsjyAZSe6T+pPy8WGtWY1ULUtZQUO5FJqVusy+kO8kJbg2QTd6R
-         +y5BVCmbloNw4q5Q++7fLWHL+5UAhRrjoX3+A3I2J+TvXEcTxk/LDsfmoylC0F+nGDMf
-         mUEw==
-X-Forwarded-Encrypted: i=1; AJvYcCU+1jmXYT8pVcIOCcbLG1EX/wBROKF9v7PhXqhzWTDBT+ThDu7PQa+bXoLMB2zaEsB2oyyrqShOvfJaTndH3jM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLcp3xHOQFih2hSMI5qyhetV55JsUn/KwiBsB8F1kqksBAq/dV
-	jsHioPYQRKp4itGZQ6z5aCPNBAbu2IrKQ1VDE6lebQCqYqgvNn73KgKj/50wklI=
-X-Google-Smtp-Source: AGHT+IHFn/If6RQoeSTWgRSMrlo1+JAarcJ+EHjApHgEqN+OGaSKnKR+gzPy0XjqrZ00CAwcVnnVRA==
-X-Received: by 2002:a05:6a00:10d5:b0:710:bd4b:8b96 with SMTP id d2e1a72fcca58-715dfcf24dcmr22831719b3a.28.1725413241907;
-        Tue, 03 Sep 2024 18:27:21 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-717785309e3sm492747b3a.51.2024.09.03.18.27.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Sep 2024 18:27:21 -0700 (PDT)
-Message-ID: <66d7b779.050a0220.28d767.2d41@mx.google.com>
-Date: Tue, 03 Sep 2024 18:27:21 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20230601; t=1725413307; x=1726018107;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZKcGcLiluE4oplvfFGxfWezTU3/P7wua4OuY0w4lgrQ=;
+        b=dRiH1iN4p0TcFjPlp1JD15Pi0CPwMAWFLTr4CQrha+EG25/SLpSjKWTXjAjvqYcWSf
+         PDOS3/WFbBeAOC38mgB1sRgArRZ2hTPsPeKjnOakjza6sB/lOYz6zKJXWqrF4GUAdqHV
+         CToZPJgrJhlIprKjFHHs8bJFPjGd0WXh07gXIgDPonBlLHScjKPB4QkgyrOaZjmYs1LP
+         p40obXJSnWFZ3rjhCkbUtyCGYS8LuWQ7Z//uwPoecvjl4cxoEPelA15P60kXJd+/Klli
+         Y5qzl6NmjYavsvb7DzCIwo10nkN0/T5zzTpVlkBGHDyjPlJCqiN5sW2bwkgC1cBwz7TP
+         1o7A==
+X-Forwarded-Encrypted: i=1; AJvYcCUTsyJM0gfOkkfD+m32yqU0v8kVU64rpKxBEq/4fSlGh+SNETPdAS9CH2BwbsBY/qprBzUt1Cyuf0emztlJP1gu@vger.kernel.org, AJvYcCXs+QtyRwSDOnwcLXs7JYx2eEiY+3+c53B5o1Cc+w2y6b/UoyDz2QRe585bT/I9lhstlcmipwzlQ6fC3sA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtT67SLfNd2WlMX5vOfMWBlLNbEQ9MHOfXVHVyTNWkgY947x5T
+	92LJcOo7JRLb4dt5nm9uQp8TbGjodtJKDUdWusArKEMx1vWhpuy+
+X-Google-Smtp-Source: AGHT+IGkiZVGShX0cNi+6EQ+b3HmkSKFDA5Zw7fxes8vn2v7cYypiVQFXqAdhtgXUN2x/ewlPt0doA==
+X-Received: by 2002:a17:902:e752:b0:1fb:701b:7298 with SMTP id d9443c01a7336-205841ba17emr96382505ad.32.1725413307103;
+        Tue, 03 Sep 2024 18:28:27 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-206ae95a51csm4067425ad.117.2024.09.03.18.28.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 03 Sep 2024 18:28:26 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <c51a7a9e-5d37-4c30-b1e5-c873cfb64cd5@roeck-us.net>
+Date: Tue, 3 Sep 2024 18:28:24 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: v6.11-rc1-17-gb4bcdff7e839
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-Subject: kselftest/next kselftest-seccomp: 2 runs,
- 1 regressions (v6.11-rc1-17-gb4bcdff7e839)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mm/damon/tests/vaddr-kunit: don't use mas_lock for
+ MM_MT_FLAGS-initialized maple tree
+To: SeongJae Park <sj@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+ David Hildenbrand <david@redhat.com>,
+ Brendan Higgins <brendanhiggins@google.com>, David Gow
+ <davidgow@google.com>, damon@lists.linux.dev, linux-mm@kvack.org,
+ kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20240904005815.1388-1-sj@kernel.org>
+Content-Language: en-US
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <20240904005815.1388-1-sj@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-kselftest/next kselftest-seccomp: 2 runs, 1 regressions (v6.11-rc1-17-gb4bc=
-dff7e839)
+On 9/3/24 17:58, SeongJae Park wrote:
+> On Tue, 3 Sep 2024 20:48:53 -0400 "Liam R. Howlett" <Liam.Howlett@oracle.com> wrote:
+> 
+>> * SeongJae Park <sj@kernel.org> [240903 20:45]:
+>>> damon_test_three_regions_in_vmas() initializes a maple tree with
+>>> MM_MT_FLAGS.  The flags contains MT_FLAGS_LOCK_EXTERN, which means
+>>> mt_lock of the maple tree will not be used.  And therefore the maple
+>>> tree initialization code skips initialization of the mt_lock.  However,
+>>> __link_vmas(), which adds vmas for test to the maple tree, uses the
+>>> mt_lock.  In other words, the uninitialized spinlock is used.  The
+>>> problem becomes celar when spinlock debugging is turned on, since it
 
-Regressions Summary
--------------------
+Just in case you need to resend: s/celar/clear/
 
-platform                    | arch | lab         | compiler | defconfig    =
-                | regressions
-----------------------------+------+-------------+----------+--------------=
-----------------+------------
-stm32mp157a-dhcor-avenger96 | arm  | lab-broonie | gcc-12   | multi_v7_defc=
-onfig+kselftest | 1          =
+>>> reports spinlock bad magic bug.  Fix the issue by not using the mt_lock
+>>> as promised.
+>>
+>> You can't do this, lockdep will tell you this is wrong.
+> 
+> Hmm, but lockdep was silence on my setup?
+> 
+>> We need a lock and to use the lock for writes.
+> 
+> This code is executed by a single-thread test code.  Do we still need the lock?
+> 
+>>
+>> I'd suggest using different flags so the spinlock is used.
+> 
+> The reporter mentioned simply dropping MT_FLAGS_LOCK_EXTERN from the flags
+> causes suspicious RCU usage message.  May I ask if you have a suggestion of
+> better flags?
+> 
 
+Correct. I don't see those messages with your patch. From my perspective, this is
 
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/v6.1=
-1-rc1-17-gb4bcdff7e839/plan/kselftest-seccomp/
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   next
-  Describe: v6.11-rc1-17-gb4bcdff7e839
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      b4bcdff7e839237d89a2aa15b6042b96b0240ac4 =
+Thanks,
+Guenter
 
-
-
-Test Regressions
----------------- =
-
-
-
-platform                    | arch | lab         | compiler | defconfig    =
-                | regressions
-----------------------------+------+-------------+----------+--------------=
-----------------+------------
-stm32mp157a-dhcor-avenger96 | arm  | lab-broonie | gcc-12   | multi_v7_defc=
-onfig+kselftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/66d7b13e6922285319c8685f
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: multi_v7_defconfig+kselftest
-  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//kselftest/next/v6.11-rc1-17-gb=
-4bcdff7e839/arm/multi_v7_defconfig+kselftest/gcc-12/lab-broonie/kselftest-s=
-eccomp-stm32mp157a-dhcor-avenger96.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/v6.11-rc1-17-gb=
-4bcdff7e839/arm/multi_v7_defconfig+kselftest/gcc-12/lab-broonie/kselftest-s=
-eccomp-stm32mp157a-dhcor-avenger96.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
-elftest/20240313.0/armhf/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/66d7b13e6922=
-285319c86860
-        failing since 35 days (last pass: v6.10-rc7-29-gdf09b0bb09ea, first=
- fail: v6.11-rc1) =
-
- =20
 
