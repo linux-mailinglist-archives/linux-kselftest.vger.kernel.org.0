@@ -1,191 +1,152 @@
-Return-Path: <linux-kselftest+bounces-17203-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17204-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D88A196CFB0
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 08:48:28 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3BE596D038
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 09:17:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73E71282B8F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 06:48:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 222031C21B35
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 07:17:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F0019258C;
-	Thu,  5 Sep 2024 06:48:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 691A218A6CC;
+	Thu,  5 Sep 2024 07:17:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="Q8crL5EL";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OU81mlQL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ahUbvdJF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from flow4-smtp.messagingengine.com (flow4-smtp.messagingengine.com [103.168.172.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BD21922C7;
-	Thu,  5 Sep 2024 06:48:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E54264C80;
+	Thu,  5 Sep 2024 07:17:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725518896; cv=none; b=q1OsBcaLeQ4kkPvIUuDeIJbw9aBByZXeU6u3RykqSx/ddxPOCMdvYViEmpgtj/OQqKs5P1Ln7A0zYejx8PVBNrMamdU9p7pH+qK6R0/J4RHpwZbI76VEhjpkfKFh9zltL2AU/1bidT9GxIBEzqt5/gk7gULKaWTp/TqQcdpA5QQ=
+	t=1725520675; cv=none; b=T5W2vcf0nGrJHRYDthV9DfPA6haLihD+BhozwNumCn/9HgHBZ3L625y6WTyWTeFUiWZ8eSO8hK3pjyLCT4Q4cOgdKE1Da/zQPMFJHe3dXrDXBI2pI8Ak91MVqq8nF6dIjkLJgX3l2poQU1iqmkvp+7pV5dwPtrqVj6/cXzUSsV0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725518896; c=relaxed/simple;
-	bh=xKGgHTaV5Qj/7OwfJTbkb+FrlLm6jv9l6WZEWAUNA5Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lAtt0A/cUyZoM4Ep5YpYYKv2JlGdV35DxA3oitjM7yiNCmyUgCRrlYZLek+l2V7MydwCCTivc6KZbPwPcqc/6jlyUrFf28jGVGfPh+ceHF0y2PGv/VRAE6vxtqqvPC/VJtmt0OTcHeMPS9qeRXVD7+1vsVlkyxEcFcfp64C1pks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=Q8crL5EL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OU81mlQL; arc=none smtp.client-ip=103.168.172.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailflow.phl.internal (Postfix) with ESMTP id 2A50C200312;
-	Thu,  5 Sep 2024 02:48:13 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-07.internal (MEProxy); Thu, 05 Sep 2024 02:48:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1725518893; x=
-	1725526093; bh=Mf2wLWEzbgEDGO9xDiUM7qVc6lrNS1Frm04RYEBk1sI=; b=Q
-	8crL5ELpizMZj53aZEPPP8KupjNzGuUtN+S5Eql/8fjeevh2FEI8C/KRzBgjisY8
-	ios3Pgjc7SkHZNFrwTBdbN9vLV0hQOPZ0eGAbRLWcSFDhE/k/dFK/6686hm06Qc7
-	j+d1+irVVZvEWixrzNwCK0W0NFAOLfexqwJSuWjLycECHToeCwRE/1nGc1l53s4y
-	bTxHKlADHmHXtzGUzzaiGYjtQhWPUZPI1/USh3xl6u1Sv+0nc2TPrbw6UIkv/TH5
-	o0fe/l4uJKU0W7HYU3dmXPK5TN/niHwvbSVEfHyU6/SyMLvAiqJybTS8Vdvh4PKb
-	H+eYihXIcEOzrl4xD0b/g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1725518893; x=1725526093; bh=Mf2wLWEzbgEDGO9xDiUM7qVc6lrN
-	S1Frm04RYEBk1sI=; b=OU81mlQLPJz3hQL5seRxaoll2jedmTxaU/rc98Aelm4E
-	LAxjKKoyXT3sGMCDk5gVUo9sxMNF10KBdu8zNR469iNU+zb+tCPxEiRvZRViIIGY
-	4fRFF6UlbxvVpD5zNmimnvrmkdHBLjbsEEMeFENIAWyU688aW4sL4S7nK33Ed+/W
-	TyoXbq/qhCQqfRaAUgcJL4Qlr9Fj3Kdw1fErx8TN92mDg+L0IfsQjqkdjZyqKyoX
-	xxZY1zHYiN3d8+EpCTErHeTz8LagFsN6v0fROg/TqD03KtfFlVXL4OQSdmSkjWEs
-	7+FNGRNxSZmK+xVN+gK5oYOL0OpwypHDNQIa583pLA==
-X-ME-Sender: <xms:KVTZZtmPE-thdTnuY_8p_VYbScCFsLPUpHQE1sSDWOUGpPhis5okIQ>
-    <xme:KVTZZo1Rk7zksy2dploGdpr-AyeT9WYUGP1TsK2AxLpGyZ512Gxr45tn13iRPanwo
-    jUygEc69YU63tyiwpI>
-X-ME-Received: <xmr:KVTZZjq_WhH3u82jxZ84wXaPI17hSYcHUbnROaZ7wU0ggfeJ3nMXkfr_MNvXqfbD0Tby-A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudehkedguddugecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdfstddttddv
-    necuhfhrohhmpedfmfhirhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllh
-    esshhhuhhtvghmohhvrdhnrghmvgeqnecuggftrfgrthhtvghrnhepffdvveeuteduhffh
-    ffevlefhteefveevkeelveejudduvedvuddvleetudevhfeknecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhho
-    vhdrnhgrmhgvpdhnsggprhgtphhtthhopeehjedpmhhouggvpehsmhhtphhouhhtpdhrtg
-    hpthhtoheptghhrghrlhhivgesrhhivhhoshhinhgtrdgtohhmpdhrtghpthhtoheprghr
-    nhgusegrrhhnuggsrdguvgdprhgtphhtthhopehrihgthhgrrhgurdhhvghnuggvrhhsoh
-    hnsehlihhnrghrohdrohhrghdprhgtphhtthhopehinhhksehjuhhrrghsshhitgdrphgr
-    rhhkrdhmshhurdhruhdprhgtphhtthhopehmrghtthhsthekkeesghhmrghilhdrtghomh
-    dprhgtphhtthhopehvghhuphhtrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhi
-    nhhugiesrghrmhhlihhnuhigrdhorhhgrdhukhdprhgtphhtthhopehguhhorhgvnheskh
-    gvrhhnvghlrdhorhhgpdhrtghpthhtoheptghhvghnhhhurggtrghisehkvghrnhgvlhdr
-    ohhrgh
-X-ME-Proxy: <xmx:KVTZZtnzzMVFQMQuTZtC752mZiRRbs6t6YcMoPbuWvOsshNuIpN2ZA>
-    <xmx:KVTZZr2NqJHS-K1m6CZXX9gA76bE8gj6MA6NfpzKnkdoePcXVRrFGA>
-    <xmx:KVTZZsvDPoUpWv-9vcqAuPt1ffOgwMCdy7jO9etPU_H5-IK1rvsyPg>
-    <xmx:KVTZZvVQYxvPemikvBptMQf8FFNrgJR1-TyZmjrtc_-NhbXBtGvm-w>
-    <xmx:LVTZZrXmQ5mCcW2zvtjGPHJiDs11N1_ZXK9wQrKvm9JMfjCFohmINZ7A>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 5 Sep 2024 02:47:52 -0400 (EDT)
-Date: Thu, 5 Sep 2024 09:47:47 +0300
-From: "Kirill A. Shutemov" <kirill@shutemov.name>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Arnd Bergmann <arnd@arndb.de>,
- 	Richard Henderson <richard.henderson@linaro.org>,
- Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
- 	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
- 	Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>, 	WANG Xuerui <kernel@xen0n.name>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- 	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, 	Michael Ellerman <mpe@ellerman.id.au>,
- Nicholas Piggin <npiggin@gmail.com>,
- 	Christophe Leroy <christophe.leroy@csgroup.eu>,
- Naveen N Rao <naveen@kernel.org>,
- 	Alexander Gordeev <agordeev@linux.ibm.com>,
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
- 	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- 	Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>,
- 	Yoshinori Sato <ysato@users.sourceforge.jp>,
- Rich Felker <dalias@libc.org>,
- 	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- "David S. Miller" <davem@davemloft.net>,
- 	Andreas Larsson <andreas@gaisler.com>,
- Thomas Gleixner <tglx@linutronix.de>, 	Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
- 	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, 	Andy Lutomirski <luto@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>,
- 	Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>,
- 	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>,
- 	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Shuah Khan <shuah@kernel.org>, linux-arch@vger.kernel.org,
- 	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-snps-arc@lists.infradead.org,
- 	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- loongarch@lists.linux.dev, 	linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- 	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, 	linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC v2 0/4] mm: Introduce MAP_BELOW_HINT
-Message-ID: <yu7um2tcxg2apoz372rmzpkrfgbb42ndvabvrsp4usb2e3bkrf@huaucjsp5vlj>
-References: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
+	s=arc-20240116; t=1725520675; c=relaxed/simple;
+	bh=exOXQY5cCVVtMCLtCJF6QcFkAJgM4RrKpujir2CeO+4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MM0Z1Dd3ph/7TzdOG3yLxQ++Y8MS2hRLJDYOk3ctBNYkMafMHC9bCReU/e4JMcN+GyCBXYaYWE1uCMuZwZHrIsDdDJEtHHIsSybsFZrKGD9xbL0s9IzK3XGaUcuzH6NyD+CqvpfhPydsHs/7HHxwOsyP1/+pFBJs6qOFeC5GhoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ahUbvdJF; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-20551e2f1f8so4559435ad.2;
+        Thu, 05 Sep 2024 00:17:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725520673; x=1726125473; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=S/fHW+vf/xwMj6TqyKbht/Nn75CPTpLR0jY+BqVTD44=;
+        b=ahUbvdJFptgklXPlpfbZ9alnMnRsVjEivGChQ1KnXkg821UvnQsZqQCO7fPAu0SqeA
+         kL0pFP28gkoUbbpddq66D3vTfYsXd4qdZaJndlzER9DRqSvEQl6AvaOVxGqdK9lOUIkW
+         ONSiO7m7Y/yFQZL/UF0ALTpwTaR0n/nfQTro3vWrx0jwQnkNiJvQt8ofZS1IdOMUEUcq
+         +7+RGic6RCBrv8OLyOwP2JBBhfkMm3uim4HRpZa5C4HG20WjC19+p7RdgGFHNNTTbrN3
+         Ay4P4cYV4QbefdQX8Ddur9CmMVp/hrV1ulVnhFhGDhFC4gL92lbyUz9JxSA+LqIFX76T
+         zavA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725520673; x=1726125473;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=S/fHW+vf/xwMj6TqyKbht/Nn75CPTpLR0jY+BqVTD44=;
+        b=QzHgBorm5by9mtMBAO7BF0idPr46U93reDnhEEMdrbMUkvDPVMXFnQC/D9Af5MQpel
+         7IPoE3K6JOolPCQKajV4i7z2jtkJCeI519d/zqe0QWGzXESGFPbkghZPVlcL4WL9NKSl
+         9vCgy8wngtm4mBo8pROZ55eQVMBQkFPKrwS63tw3dVs27NpgiK5xOykySJQw6gHt30Zq
+         4/6R4uRtv5QuI4QCO2z7YV4eM4i/9kVQHb63fIPztPlC687Cu7gVG2objCLrBkrR3fn3
+         CNmiG42a6Wxwjpa85QwIMRzXx0GY5B9kn6rbOrg17eFjGwAr/I+yNThbbaVDL/GSazCN
+         i7Cw==
+X-Forwarded-Encrypted: i=1; AJvYcCURfMtJmpN0mQkX6/mURGoLXSzbMK232PjtzH26Dc0RWgtDbx+Cm/cLo5u6ZLG7MIb5Nedy9tY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsQYUvL5/vCeqMo0RaAKJ/D2LWXrylq5tSHYWw0YYQfjSP6OKZ
+	T4FtgFmAH1qDB++QPe/Qyxx5IRTNEFDHDzD/zz+WLFHhnvK2DglO
+X-Google-Smtp-Source: AGHT+IGfNnyZS7j+hZsQUigYI0BYXAaUTW17GJgmyWbxeh4zX9oRUay4Nx8OEB6Y/6Eoeqh+TU7zhw==
+X-Received: by 2002:a17:902:ecc3:b0:205:6a9b:7e3e with SMTP id d9443c01a7336-20584230d32mr131593395ad.56.1725520672986;
+        Thu, 05 Sep 2024 00:17:52 -0700 (PDT)
+Received: from KERNELXING-MB0.tencent.com ([43.132.141.24])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-206ae913b19sm22929425ad.61.2024.09.05.00.17.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Sep 2024 00:17:52 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	dsahern@kernel.org,
+	willemdebruijn.kernel@gmail.com,
+	shuah@kernel.org,
+	willemb@google.com
+Cc: linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH net-next v4 0/4] net-timestamp: introduce a flag to filter out rx software and hardware report
+Date: Thu,  5 Sep 2024 15:17:33 +0800
+Message-Id: <20240905071738.3725-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 29, 2024 at 12:15:57AM -0700, Charlie Jenkins wrote:
-> Some applications rely on placing data in free bits addresses allocated
-> by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
-> address returned by mmap to be less than the 48-bit address space,
-> unless the hint address uses more than 47 bits (the 48th bit is reserved
-> for the kernel address space).
-> 
-> The riscv architecture needs a way to similarly restrict the virtual
-> address space. On the riscv port of OpenJDK an error is thrown if
-> attempted to run on the 57-bit address space, called sv57 [1].  golang
-> has a comment that sv57 support is not complete, but there are some
-> workarounds to get it to mostly work [2].
-> 
-> These applications work on x86 because x86 does an implicit 47-bit
-> restriction of mmap() address that contain a hint address that is less
-> than 48 bits.
-> 
-> Instead of implicitly restricting the address space on riscv (or any
-> current/future architecture), a flag would allow users to opt-in to this
-> behavior rather than opt-out as is done on other architectures. This is
-> desirable because it is a small class of applications that do pointer
-> masking.
+From: Jason Xing <kernelxing@tencent.com>
 
-This argument looks broken to me.
+When one socket is set SOF_TIMESTAMPING_RX_SOFTWARE which means the
+whole system turns on the netstamp_needed_key button, other sockets
+that only have SOF_TIMESTAMPING_SOFTWARE will be affected and then
+print the rx timestamp information even without setting
+SOF_TIMESTAMPING_RX_SOFTWARE generation flag.
 
-The "small class of applications" is going to be broken unless they got
-patched to use your new mmap() flag. You are asking for bugs.
+How to solve it without breaking users?
+We introduce a new flag named SOF_TIMESTAMPING_OPT_RX_FILTER. Using
+it together with SOF_TIMESTAMPING_SOFTWARE can stop reporting the
+rx software timestamp.
 
-Consider the case when you write, compile and validate a piece of software
-on machine that has <=47bit VA. The binary got shipped to customers.
-Later, customer gets a new shiny machine that supports larger address
-space and your previously working software is broken. Such binaries might
-exist today.
+Similarly, we also filter out the hardware case where one process
+enables the rx hardware generation flag, then another process only
+passing SOF_TIMESTAMPING_RAW_HARDWARE gets the timestamp. So we can set
+both SOF_TIMESTAMPING_RAW_HARDWARE and SOF_TIMESTAMPING_OPT_RX_FILTER
+to stop reporting rx hardware timestamp after this patch applied.
 
-It is bad idea to use >47bit VA by default. Most of software got tested on
-x86 with 47bit VA.
+v4
+Link: https://lore.kernel.org/all/20240830153751.86895-1-kerneljasonxing@gmail.com/
+1. revise the doc and commit message (Willem)
+2. add patch [2/4] to make the doc right (Willem)
+3. add patch [3/4] to cover the hardware use (Willem)
+4. add testcase for hardware use.
+Note: the reason why I split into 4 patches is try to make each commit
+clean, atomic, easy to review.
 
-We can consider more options to opt-in into wider address space like
-personality or prctl() handle. But opt-out is no-go from what I see.
+v3
+Link: https://lore.kernel.org/all/20240828160145.68805-1-kerneljasonxing@gmail.com/
+1. introduce a new flag to avoid application breakage, suggested by
+Willem.
+2. add it into the selftests.
+
+v2
+Link: https://lore.kernel.org/all/20240825152440.93054-1-kerneljasonxing@gmail.com/
+Discussed with Willem
+1. update the documentation accordingly
+2. add more comments in each patch
+3. remove the previous test statements in __sock_recv_timestamp()
+
+Jason Xing (4):
+  net-timestamp: filter out report when setting
+    SOF_TIMESTAMPING_SOFTWARE
+  net-timestamp: correct the use of SOF_TIMESTAMPING_RAW_HARDWARE
+  net-timestamp: extend SOF_TIMESTAMPING_OPT_RX_FILTER for hardware use
+  rxtimestamp.c: add the test for SOF_TIMESTAMPING_OPT_RX_FILTER
+
+ Documentation/networking/timestamping.rst | 18 +++++++++++++++++-
+ include/uapi/linux/net_tstamp.h           |  3 ++-
+ net/core/sock.c                           |  5 +++++
+ net/ethtool/common.c                      |  1 +
+ net/ipv4/tcp.c                            |  7 +++++--
+ net/socket.c                              |  7 +++++--
+ tools/testing/selftests/net/rxtimestamp.c | 11 +++++++++++
+ 7 files changed, 46 insertions(+), 6 deletions(-)
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+2.37.3
+
 
