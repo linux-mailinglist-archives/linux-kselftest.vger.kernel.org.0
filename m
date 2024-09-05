@@ -1,221 +1,179 @@
-Return-Path: <linux-kselftest+bounces-17303-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17304-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 380D196E0F4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 19:16:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB09296E0FE
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 19:20:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9E5028A3CC
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 17:16:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B1921C25378
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 17:20:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85F071A08AB;
-	Thu,  5 Sep 2024 17:16:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EEF81A0AE1;
+	Thu,  5 Sep 2024 17:20:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hCjAgG29"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="KdBXKbbd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2069.outbound.protection.outlook.com [40.107.92.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50BE3522F;
-	Thu,  5 Sep 2024 17:16:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725556588; cv=none; b=O530iULN5Mmd2dTv3J16ORNW/o6H251zA6i0twfTe/x5aOesZByWHikZqSdqbwbJWFbB848w4m/zV+Vx3ff6kOtVS9BnmEDvI9EySEAcIvTYpkDCsLD+3TKkk3/nENu8CZIAChOOD6CtlL7VUf5QdgT2sB3XVlQZOlhIljazxT8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725556588; c=relaxed/simple;
-	bh=H2OP04J4RUYnSKeA1cXeJ7eXawYISo2nhtstKNwQ4Bg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nk2ozxC/4u/plKm6aHnx4CfQXJWHvtqIzNt24YmOGw+prxxA094O3sH+vteV54C6BQXAnp/6ZNKajQ6r/qqA7FLp0kBvXPCCMMWDFtjbCwybqWf6eJvloYJ5AkfJhWW2uj0EtZ08RF9MJjLqvJeQvYthIc/ETZ//pFPJF1/8G+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=hCjAgG29; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0216CC4CEC3;
-	Thu,  5 Sep 2024 17:16:25 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="hCjAgG29"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1725556584;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=U/i7kxMFedYKvorYnbQF73cn+5NdhIM30ISsp20UbHg=;
-	b=hCjAgG292GvjSYLd7cIJbV9+sE37uAJnudlmH79DWrvxKhI1aT+MkTsEmZIqTXhYJC3AjG
-	GKu0T3GOiKFo6Gd/ZQwz0mjJ7G8jNN7vZoXVVqlMX+NTR4p/v66KLBzSg7LZ0ZRymTcpi5
-	z8NptxebJrjClHLK2svu5ZYfVCDOfJ0=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id c27291d3 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Thu, 5 Sep 2024 17:16:24 +0000 (UTC)
-Date: Thu, 5 Sep 2024 19:16:20 +0200
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
-	Xi Ruoyao <xry111@xry111.site>
-Subject: Re: [PATCH v5 4/5] powerpc/vdso: Wire up getrandom() vDSO
- implementation on VDSO32
-Message-ID: <ZtnnZMa_Yi-UwhHT@zx2c4.com>
-References: <cover.1725304404.git.christophe.leroy@csgroup.eu>
- <1f49c2ce009f8b007ab0676fb41187b2d54f28b2.1725304404.git.christophe.leroy@csgroup.eu>
- <ZtnYqZI-nrsNslwy@zx2c4.com>
- <85c02620-e8b2-4c97-9905-685a9a4e556d@csgroup.eu>
- <ZtnkZsHJESAqU-FH@zx2c4.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE171A01B7;
+	Thu,  5 Sep 2024 17:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.69
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725556842; cv=fail; b=ccveIkTnZiMM7LX2x76KWYBE9A/4DrclTwfuHpaCZvLvx6w3ENvBeZ96Gg2jqa80cKoi9NZfp2/5UlKHWlihY40VlX/pUpvM1YFEWDOG2lOr1WB7agGUFA+EkxcCcj6JKGLkbfr2eC0GUGNKCQEmTkDVFGq+8u+H6U7LKzvUYd8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725556842; c=relaxed/simple;
+	bh=Ecijq/UyL4sSB2tRJBRiUrfJ9v1BzRqBN82lBVbyjkI=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f0N5H+zYKyHxbemI01Mwsg9Yk8zMqADhhxecxPl/b0DMiYXQuEVpS2GCk5UtmgYZotLikbV6H4TUJIkwuYZIps7ohTRp1SGNwYBNM5j/PQG7R/8K34OdRVyz8uhAoAdiU/RRP3hfb/eyJEdwAqhXKvodN9A7+rjOZCnfdZlHtMM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=KdBXKbbd; arc=fail smtp.client-ip=40.107.92.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lAj9H7EfXXDVG0AF2nVvp/MvCWTvEpxRtj20frcMqUg1oR0/lqmcIxRk9w6VfakTvMJN7HsoVvfCjgDhsuIhzOmNQBLVSxl2o4OzS+7eYwngSFN9YXPsvQizBKiouSa+UIPxKlt4+15TNclgBWgPRMB+clVCCFLbi/M2gEMEjjW4EiW5kBv0KYo6v1gf3pLiIhEi0XM7idkay2ksvQxw/f2UUaM2stK1lgZUs7PV/HqOh3I08Qp1+1Aw3RF6Hf6kCKQhl8DoJS7hIdZ3t06/wmmlGi1w6Iw7lmHh+PwMBTnMYKpawo8hkpOG3uOBuPlzw/kGtOWCI4moEQM1WJ2L4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=aRIPOC8OmpjFE4uuYOnFOa2mwvl3O9kXj4IjDUJPoy4=;
+ b=CINRG45z2LrV36TOuTpefdvXjOrn6JsKLdXP+hAMM5GkSar+04r9YzC1EGI5SMxoUnjDpEQR4EWrRr8SMdPYDvkmSizjeqnehJm2xioo7t/0JMjeV9hXtEnLqbgNmo+XvhkZMK/oU9FfHHqSHoGgCZ0VKfAMPhx7y+g0x2kUyMgoTeBbRI0J7ScFA1Q7SIiAXj7C1GUY/OYbLBnssh3QkqjQizfKOVn/M7Z8vXFNVTaqQlxiplUFcER/QMRV3M4tQDzis4xUsl+UM+JuielqyJkigH20bVt43zqGOz1ePLE1D/aYVGC7hgKiJZ/v95G5BCSxTJiyTf1EWDHqW1mJrQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=huawei.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=aRIPOC8OmpjFE4uuYOnFOa2mwvl3O9kXj4IjDUJPoy4=;
+ b=KdBXKbbdS8dLttUd2E3U25D5fMdqfe3iMENnL/HwBSXujaR0lwK63NzhD6rjwX/YpT8Ls5U+0zhRWBjSxkl9UAP3dWhnRmOfHytYoDEceZu3fZgU4lEa/sTFkxXYWHfoBd4s3zR8UC6261GlkHdHtyTzInr/w/TyuCQGiw9Q2IGjfkBuAgD+IoEe17r/zkSqt/wTXjqAo/TnHq42lcVEP7TDiZp5eXVfbFm9OdNSCmgeMVm8roBTatENq7OSd0rXmeN6zi4r5ck1zrj03k/hwE5HG5TwwV2pK6+KDYOYcOZ1m7QMTDDN5YWTwgocdaLZFgm2Ifk9HzofuFD3iVGRsw==
+Received: from BLAPR03CA0052.namprd03.prod.outlook.com (2603:10b6:208:32d::27)
+ by SJ1PR12MB6241.namprd12.prod.outlook.com (2603:10b6:a03:458::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.25; Thu, 5 Sep
+ 2024 17:20:35 +0000
+Received: from BN3PEPF0000B069.namprd21.prod.outlook.com
+ (2603:10b6:208:32d:cafe::37) by BLAPR03CA0052.outlook.office365.com
+ (2603:10b6:208:32d::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.27 via Frontend
+ Transport; Thu, 5 Sep 2024 17:20:35 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ BN3PEPF0000B069.mail.protection.outlook.com (10.167.243.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7962.2 via Frontend Transport; Thu, 5 Sep 2024 17:20:33 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 5 Sep 2024
+ 10:20:08 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 5 Sep 2024
+ 10:20:08 -0700
+Received: from nvidia.com (10.127.8.13) by mail.nvidia.com (10.129.68.10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
+ Transport; Thu, 5 Sep 2024 10:19:51 -0700
+Date: Thu, 5 Sep 2024 10:19:44 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: <kevin.tian@intel.com>, <will@kernel.org>, <joro@8bytes.org>,
+	<suravee.suthikulpanit@amd.com>, <robin.murphy@arm.com>,
+	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>, <shuah@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
+	<eric.auger@redhat.com>, <jean-philippe@linaro.org>, <mdf@kernel.org>,
+	<mshavit@google.com>, <shameerali.kolothum.thodi@huawei.com>,
+	<smostafa@google.com>, <yi.l.liu@intel.com>
+Subject: Re: [PATCH v2 03/19] iommu: Pass in a viommu pointer to
+ domain_alloc_user op
+Message-ID: <ZtnoMJPdeb17Uj/e@nvidia.com>
+References: <cover.1724776335.git.nicolinc@nvidia.com>
+ <d6f9be955372adbee1e53621d349acde0c79aad4.1724776335.git.nicolinc@nvidia.com>
+ <20240905155454.GN1358970@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZtnkZsHJESAqU-FH@zx2c4.com>
+In-Reply-To: <20240905155454.GN1358970@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN3PEPF0000B069:EE_|SJ1PR12MB6241:EE_
+X-MS-Office365-Filtering-Correlation-Id: c17f7e31-589f-4ee6-74ee-08dccdcf0cc9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|1800799024|7416014|82310400026|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?CioSm2ZZFMDgLu60RyYEAxK3ARryQjCXDolY6G8hhurh+zTZDFXtyaTHVJfV?=
+ =?us-ascii?Q?VlUhg4BFosD4eEC97G8AdZaEkGjGWpM8tueo+1HjBI472fSIHlS4KLbPmvAc?=
+ =?us-ascii?Q?vjgfvH/NxscUnODXqUSu0iph9a/X4zMcgL/YWxRr4bx7qfjGxs8PdS+vYwcz?=
+ =?us-ascii?Q?M+Cp+LLHaFbDPa4rLb8LGItRPyfIsoVdyTExJ8uHY2ZpM8pHr7s0BNHzXWuQ?=
+ =?us-ascii?Q?pwaXgne/+FTVeMOMh8VsflVQh+jPBzRYhrBvMCLMJyA/YpL7s/JsYwZVF2WV?=
+ =?us-ascii?Q?t/CkfK+016Egv/w3Sn/amg0Xw8M6XhydUnWsFyOqCCpZM1gH96nhw4ZMcfsa?=
+ =?us-ascii?Q?oJEUWPZsXlQx3BO5L2zRxO9//2kTs5YL4p4A5xNffjmz6yHRxosdQadfza8n?=
+ =?us-ascii?Q?kX56um8VsvWtMYNefqe4jqBNybHT1QFDouVgne7NVbHMZnSrYrjykhPhd+Ia?=
+ =?us-ascii?Q?Nwayhh1z9TKnEPYzFWYKkKPPlcjsWe5A7sXdKNGo6kwVIlrSMxAQLKSXkY9a?=
+ =?us-ascii?Q?oV5IJQo857GWbybMOjpSJWbKGnsbFZYyyQH1076XXwUTGejbsXGVKLfAmsr8?=
+ =?us-ascii?Q?UqEJqkZZWNv7BuZ9usbbBc4L6bwCtQE8eDbL4Hu4L5eEVVFqiPB8DlmKH+3K?=
+ =?us-ascii?Q?3HFy9tJo8RDhifuuEJUxJwRhGn6dyFWX84WmHbaLjeOwQXR1pLWUn5WqMlIC?=
+ =?us-ascii?Q?fvGhxY4k0xBjYCA1U27z2lToR+t+G7j/MY4mJ8BJivcBVCZ9LL1Eq3JNxxvQ?=
+ =?us-ascii?Q?UPqRTPzSBeVpPrPJjhT9KKA3F1+Xv7IO89SeiOeA6SZnTQGKi1z5fvfE0/cp?=
+ =?us-ascii?Q?Vfh33qqBuAtbrqUTQTXyKsNl0Ce0mj3LVjPkoiKFabHa8QGVpzoL/YlrrbUI?=
+ =?us-ascii?Q?+SAA6s8nQvRNbyMbXGlAHbkm/FDr8/egPgCYJg8kheAx1F41EdBzcxCuNPPU?=
+ =?us-ascii?Q?yIDagIuhjBd7tARDMCbyOOkH1P4HDKlJKkmFVMTtBMZK5mukRGrd+LdYRDyG?=
+ =?us-ascii?Q?N50HinVQAdb901bt72iLXTwCAO/rvFyL1nylR4FHyOX+sWmtIhJx/M4jhpMg?=
+ =?us-ascii?Q?NRqHp8hzLtI48W/U8o+Eur9hFGqgnz7dckKq/SjQSI+cIR0miSWEUvYiEPbC?=
+ =?us-ascii?Q?PLfP3s5VowX9986ebnhd9GJ6+79tl/SXTvCBJDtMOMvnevmTKxtdFQg4Dvn2?=
+ =?us-ascii?Q?m5AwxZfh3OJokSSL79ir+I9DLqr6v5OJPGcwFsGJhlLGMOigSQTaAhU64ZzK?=
+ =?us-ascii?Q?rUTVKfbys6e+Tcq3BVC/XUBJ6K/oxlPZk5z2sXxuLHoxyUezrnPtyWSvzDV2?=
+ =?us-ascii?Q?IDoeDcqLt5JFANXMMyzK148f0OyDZnxxUaY1HRfsg6gwoiLIzEI8i6Fnh/T4?=
+ =?us-ascii?Q?DtUQZVMzT7UB0/ewkfdrSnhc6v7eDjAfrk8jS5P+uTVB/1Gy5kfaA8eFEkcg?=
+ =?us-ascii?Q?DvT64ZCocmV28stptz8568NWuSLvC/Qc?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(1800799024)(7416014)(82310400026)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2024 17:20:33.4190
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: c17f7e31-589f-4ee6-74ee-08dccdcf0cc9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BN3PEPF0000B069.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6241
 
-On Thu, Sep 05, 2024 at 07:03:34PM +0200, Jason A. Donenfeld wrote:
-> On Thu, Sep 05, 2024 at 06:55:27PM +0200, Christophe Leroy wrote:
+On Thu, Sep 05, 2024 at 12:54:54PM -0300, Jason Gunthorpe wrote:
+> On Tue, Aug 27, 2024 at 09:59:40AM -0700, Nicolin Chen wrote:
+> > With a viommu object wrapping a potentially shareable S2 domain, a nested
+> > domain should be allocated by associating to a viommu instead. Driver can
+> > store this viommu pointer somewhere, so as to later use it calling viommu
+> > helpers for virtual device ID lookup and viommu invalidation.
 > > 
-> > 
-> > Le 05/09/2024 à 18:13, Jason A. Donenfeld a écrit :
-> > >> +/*
-> > >> + * The macro sets two stack frames, one for the caller and one for the callee
-> > >> + * because there are no requirement for the caller to set a stack frame when
-> > >> + * calling VDSO so it may have omitted to set one, especially on PPC64
-> > >> + */
-> > >> +
-> > >> +.macro cvdso_call funct
-> > >> +  .cfi_startproc
-> > >> +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
-> > >> +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
-> > >> +	mflr		r0
-> > >> +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
-> > >> +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
-> > >> +	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-> > >> +  .cfi_rel_offset lr, PPC_MIN_STKFRM + PPC_LR_STKOFF
-> > >> +	get_datapage	r8
-> > >> +	addi		r8, r8, VDSO_RNG_DATA_OFFSET
-> > >> +	bl		CFUNC(DOTSYM(\funct))
-> > >> +	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
-> > >> +	cmpwi		r3, 0
-> > >> +	mtlr		r0
-> > >> +	addi		r1, r1, 2 * PPC_MIN_STKFRM
-> > >> +  .cfi_restore lr
-> > >> +  .cfi_def_cfa_offset 0
-> > >> +	crclr		so
-> > >> +	bgelr+
-> > >> +	crset		so
-> > >> +	neg		r3, r3
-> > >> +	blr
-> > >> +  .cfi_endproc
-> > >> +.endm
-> > > 
-> > > You wrote in an earlier email that this worked with time namespaces, but
-> > > in my testing that doesn't seem to be the case.
-> > 
-> > Did I write that ? I can't remember and neither can I remember testing 
-> > it with time namespaces.
+> > For drivers without a viommu support, keep the parent domain input, which
+> > should be just viommu->hwpt->common.domain otherwise.
 > 
-> It's possible I confused you with someone else? Hum. Anyway...
+> I've been thinking of add an op for nested allocation since every
+> driver immediately jumps to a special function for nested allocation
+> anyhow without sharing any code.
 > 
-> > >  From my test harness [1]:
-> > > 
-> > > Normal single thread
-> > >     vdso: 25000000 times in 12.494133131 seconds
-> > >     libc: 25000000 times in 69.594625188 seconds
-> > > syscall: 25000000 times in 67.349243972 seconds
-> > > Time namespace single thread
-> > >     vdso: 25000000 times in 71.673057436 seconds
-> > >     libc: 25000000 times in 71.712774121 seconds
-> > > syscall: 25000000 times in 66.902318080 seconds
-> > > 
-> > > I'm seeing this on ppc, ppc64, and ppc64le.
-> > 
-> > What is the command to use to test with time namespace ?
-> 
-> Look at the C in the commit I linked.
+> Adding a new parameter that is nested only seems like a good point to
+> try to do that..
 
-The below also seems to work well for testing on x86. I'll clean that up
-and send a patch to the list.
+Yea, it makes sense to have a domain_alloc_nested, for hwpt_nested
+exclusively. Then domain_alloc_user would be for hwpt_paging only.
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getrandom.c b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-index 8866b65a4605..4df80f769aa7 100644
---- a/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-@@ -16,8 +16,11 @@
- #include <sys/mman.h>
- #include <sys/random.h>
- #include <sys/syscall.h>
-+#include <sys/ptrace.h>
-+#include <sys/wait.h>
- #include <sys/types.h>
- #include <linux/random.h>
-+#include <linux/ptrace.h>
-
- #include "../kselftest.h"
- #include "parse_vdso.h"
-@@ -239,9 +242,10 @@ static void fill(void)
- static void kselftest(void)
- {
- 	uint8_t weird_size[1263];
-+	pid_t child;
-
- 	ksft_print_header();
--	ksft_set_plan(1);
-+	ksft_set_plan(2);
-
- 	for (size_t i = 0; i < 1000; ++i) {
- 		ssize_t ret = vgetrandom(weird_size, sizeof(weird_size), 0);
-@@ -250,6 +254,39 @@ static void kselftest(void)
- 	}
-
- 	ksft_test_result_pass("getrandom: PASS\n");
-+
-+	assert(unshare(CLONE_NEWTIME) == 0);
-+	child = fork();
-+	assert(child >= 0);
-+
-+	if (!child) {
-+		vgetrandom_init();
-+		child = getpid();
-+		assert(ptrace(PTRACE_TRACEME, 0, NULL, NULL) == 0);
-+		assert(kill(child, SIGSTOP) == 0);
-+		assert(vgetrandom(weird_size, sizeof(weird_size), 0) == sizeof(weird_size));
-+		_exit(0);
-+	}
-+	for (;;) {
-+		struct ptrace_syscall_info info = { 0 };
-+		int status, ret;
-+		assert(waitpid(child, &status, 0) >= 0);
-+		if (WIFEXITED(status))
-+			break;
-+		assert(WIFSTOPPED(status));
-+		if (WSTOPSIG(status) == SIGSTOP)
-+			assert(ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESYSGOOD) == 0);
-+		else if (WSTOPSIG(status) == SIGTRAP | 0x80) {
-+			assert(ptrace(PTRACE_GET_SYSCALL_INFO, child, sizeof(info), &info) > 0);
-+			if (info.entry.nr == __NR_getrandom &&
-+			    ((void *)info.entry.args[0] == &weird_size && info.entry.args[1] == sizeof(weird_size)))
-+				exit(KSFT_FAIL);
-+		}
-+		assert(ptrace(PTRACE_SYSCALL, child, 0, 0) == 0);
-+	}
-+
-+	ksft_test_result_pass("getrandom timens: PASS\n");
-+
- 	exit(KSFT_PASS);
- }
-
+Thanks
+Nicolin
 
