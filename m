@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-17258-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17271-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DFED96DD56
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 17:08:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A58496DDFC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 17:23:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47C4E286159
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 15:08:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04457284732
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 15:23:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E90F19F110;
-	Thu,  5 Sep 2024 15:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EDC319B595;
+	Thu,  5 Sep 2024 15:23:12 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
+Received: from frasgout13.his.huawei.com (frasgout13.his.huawei.com [14.137.139.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8033D19EEA6;
-	Thu,  5 Sep 2024 15:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 143421DFF5;
+	Thu,  5 Sep 2024 15:23:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725548813; cv=none; b=fHVNQMGGZBEyoXz2MlFJCBhpoeLpYOfu170mxxgkqiQjE+puBWiRoyC8zaT/AECDerr/geFxwtjwJE/JJVyrcYBul5h3eX44fLO6EwGgZp20+o9XYxQ5inPjQJX9QJ/GoxGGt5H6VclgTNpYCrYWgXn5ltEkoL3zF7C/DqbpdA0=
+	t=1725549792; cv=none; b=drymP6lZ3yj0A2+3rF/JsLhyA4wdaJ29oBgQMA+h/ZWADdF5GDI9t69ZB17QBqHMtXH0kZBQdNjUDnaUOiq49TL2wof6UaMxisCEVtLyzsG2ablRSL6pGI01K+BhNE4vC9Wy7X0H/CotWfaCmj2YaSO45z6be+PyRZcz/n3nAkE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725548813; c=relaxed/simple;
-	bh=+FWxbhEgiUhnOqq++AyS0GIUf8o9rWSo10+k/zpDed4=;
+	s=arc-20240116; t=1725549792; c=relaxed/simple;
+	bh=3NYqRiZLPEHMvQmEnE8rSTpccuapjMI+iHNa77P0DAk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=jnIG38dDHzhRLBIHhrd3kXHQuyo4T+Jyojw8FHO8ZVU/PbNCsQFJVZspZXMExJtGbZzSNJ4Oizru5gJvo8TteelMOzHGfe8SUv+zRL7MFqcGWw204/28vBNh+/zgGnVVpFtc+TGdDHL4JGQaib2aiMRp6Hv2Mh9XyDN0LZm9Tyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
+	 MIME-Version; b=WWDs0dGYD2/XGG5RynTqc7yWZgjDTJ4Bo27sHPdoPUUU8F2KR/IGK2ct7LVwOvprPzyVb7x/KgwKhc28SQqXWOrMDf+aaACQ18q9SMMZ4tPQhXUHEqe0euA44GRPpHrGSSVJuUwhf+Y7ldcqn9I9G0nrF/iUd1V23vLfLwfbrIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4X02JY3TXCz9v7Hs;
-	Thu,  5 Sep 2024 22:47:25 +0800 (CST)
+	by frasgout13.his.huawei.com (SkyGuard) with ESMTP id 4X02K25TzGz9v7NT;
+	Thu,  5 Sep 2024 22:47:50 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 894CC140452;
-	Thu,  5 Sep 2024 23:06:47 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 237931408F9;
+	Thu,  5 Sep 2024 23:07:01 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwDXZy_myNlmE0tUAA--.16274S3;
-	Thu, 05 Sep 2024 16:06:45 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwDXZy_myNlmE0tUAA--.16274S4;
+	Thu, 05 Sep 2024 16:07:00 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: zohar@linux.ibm.com,
 	dmitry.kasatkin@gmail.com,
@@ -70,9 +70,9 @@ Cc: linux-integrity@vger.kernel.org,
 	mzerqung@0pointer.de,
 	kgold@linux.ibm.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v5 01/14] lib: Add TLV parser
-Date: Thu,  5 Sep 2024 17:05:30 +0200
-Message-Id: <20240905150543.3766895-2-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v5 02/14] integrity: Introduce the Integrity Digest Cache
+Date: Thu,  5 Sep 2024 17:05:31 +0200
+Message-Id: <20240905150543.3766895-3-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240905150543.3766895-1-roberto.sassu@huaweicloud.com>
 References: <20240905150543.3766895-1-roberto.sassu@huaweicloud.com>
@@ -83,13 +83,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwDXZy_myNlmE0tUAA--.16274S3
-X-Coremail-Antispam: 1UD129KBjvAXoW3CF15WF4fur1kWrWkWr4fuFg_yoW8Gw47Co
-	Za9FWUur45Xr17u3W8ZF48Zr1UXry0gr43Aw13GrW3Wa40kF45Kr45tw43G3y3Jws8KFWU
-	t3sxX343Jw4UKr1kn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+X-CM-TRANSID:LxC2BwDXZy_myNlmE0tUAA--.16274S4
+X-Coremail-Antispam: 1UD129KBjvAXoWfuw4kXF4xXw15Ww13uFykKrg_yoW5Jr18Go
+	Zaya17Jw18WFy3uFs5CF17Aay7WwsYq3yxAr4kXrWUZ3WIvFyUJasrG3WDJFy5Jr18Jr93
+	A34kX3yUJFWUtr93n29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
 	AaLaJ3UjIYCTnIWjp_UUUO57kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
 	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr
-	4l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	yl82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
 	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
 	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AK
 	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
@@ -100,471 +100,692 @@ X-Coremail-Antispam: 1UD129KBjvAXoW3CF15WF4fur1kWrWkWr4fuFg_yoW8Gw47Co
 	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF
 	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
 	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
-	vjxUVDDGUUUUU
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQARBGbZE3MK1wABsX
+	vjxUVBMNUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQARBGbZE3MK1wACsU
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Add a parser of a generic Type-Length-Value (TLV) format:
+Introduce the Integrity Digest Cache, to collect digests from various
+sources (called digest lists), and to store them in kernel memory, in a set
+of hash tables forming a digest cache. Extracted digests can be used as
+reference values for integrity verification of file data or metadata.
 
-+-----------------+------------------+-----------------+
-| data type (u64) | num fields (u64) | total len (u64) | # header
-+--------------+--+---------+--------+---------+-------+
-| field1 (u64) | len1 (u64) | value1 (u8 len1) |
-+--------------+------------+------------------+
-|     ...      |    ...     |        ...       |         # data
-+--------------+------------+------------------+
-| fieldN (u64) | lenN (u64) | valueN (u8 lenN) |
-+--------------+------------+------------------+
+The Integrity Digest Cache aims to be used by IMA and (later) by EVM to
+verify accessed files. It is not an LSM on its own, and requires IMA (when
+the feature is enabled) to reserve additional space in the inode security
+blob and to call digest_cache_do_init() for registering additional LSM
+hooks.
 
-[same as above, repeated N times]
+The additional space in the inode security blob is used for storing the
+digest_cache_security structure, which contains two digest cache pointers:
+dig_owner, set if the digest cache was created from that inode; dig_user,
+set if the digest cache was used for verifying that inode. An inode
+security blob has both pointers set if digests are extracted from that
+inode, and the inode itself is verified with another inode. Check and
+assignment of those pointers are protected respectively with
+dig_owner_mutex and dig_user_mutex.
 
-Each adopter can define its own data types and fields. The TLV parser does
-not need to be aware of those, but lets the adopter obtain the data and
-decide how to continue.
+The only way for a user of the Integrity Digest Cache to obtain a digest
+cache is to call digest_cache_get(). The latter first checks if dig_user in
+the security blob of the passed inode is not NULL and, in that case,
+immediately returns the pointer after incrementing the digest cache
+reference count.
 
-After parsing each TLV header, call the header callback function with the
-callback data provided by the adopter. The latter can return 0, to skip
-processing of the TLV data, 1 to process the TLV data, or a negative value
-to stop processing the TLV data.
+If dig_user is NULL, digest_cache_get() calls digest_cache_new(), which
+determines from which path the digest cache should be retrieved. If the
+default path (defined in the kernel config, or at run-time) is a file,
+digest_cache_new() uses it as the final destination. If the default path is
+a directory, the function attempts to read the security.digest_list xattr
+and, if found, uses its value as last path component. Lastly, if the xattr
+is not found or empty, it uses the directory as final destination. A
+subsequent patch will allow the holders of the returned digest cache to
+iteratively search a digest in each directory entry.
 
-After processing a TLV data entry, call the data callback function also
-with the callback data provided by the adopter. The latter can decide how
-to interpret the TLV data entry depending on the field ID.
+Finally, digest_cache_new() calls digest_cache_create(), which resolves the
+inode from the path, and checks if the dig_owner pointer is set. If it is,
+again, digest_cache_create() immediately returns after incrementing the
+digest cache reference count. If not, it calls digest_cache_alloc_init() to
+create a new digest cache. A subsequent patch will initialize it.
 
-Nesting TLVs is also possible, the data callback function can call
-tlv_parse() to parse the inner structure.
+A holder of a digest cache can release its reference and consequently
+decrement the digest cache reference count by calling digest_cache_put().
+If the reference count becomes zero, digest_cache_put() also calls
+digest_cache_free() to free the memory.
+
+Inodes having either dig_owner and dig_user set are also holders of digest
+caches. Their reference is released when they are evicted from memory, by
+implementing the inode_free_security LSM hook. The inode_alloc_security LSM
+hook, instead, initializes the digest_cache_security structure.
 
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- MAINTAINERS                     |   8 ++
- include/linux/tlv_parser.h      |  48 +++++++
- include/uapi/linux/tlv_parser.h |  62 +++++++++
- lib/Kconfig                     |   3 +
- lib/Makefile                    |   2 +
- lib/tlv_parser.c                | 221 ++++++++++++++++++++++++++++++++
- lib/tlv_parser.h                |  17 +++
- 7 files changed, 361 insertions(+)
- create mode 100644 include/linux/tlv_parser.h
- create mode 100644 include/uapi/linux/tlv_parser.h
- create mode 100644 lib/tlv_parser.c
- create mode 100644 lib/tlv_parser.h
+ include/linux/digest_cache.h               |  30 ++
+ include/uapi/linux/xattr.h                 |   3 +
+ security/integrity/Kconfig                 |   1 +
+ security/integrity/Makefile                |   1 +
+ security/integrity/digest_cache/Kconfig    |  17 +
+ security/integrity/digest_cache/Makefile   |   7 +
+ security/integrity/digest_cache/internal.h |  90 +++++
+ security/integrity/digest_cache/main.c     | 367 +++++++++++++++++++++
+ security/integrity/ima/ima.h               |   1 +
+ security/integrity/ima/ima_main.c          |   8 +-
+ 10 files changed, 524 insertions(+), 1 deletion(-)
+ create mode 100644 include/linux/digest_cache.h
+ create mode 100644 security/integrity/digest_cache/Kconfig
+ create mode 100644 security/integrity/digest_cache/Makefile
+ create mode 100644 security/integrity/digest_cache/internal.h
+ create mode 100644 security/integrity/digest_cache/main.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8766f3e5e87e..ba8d5c137bef 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -23055,6 +23055,14 @@ W:	http://sourceforge.net/projects/tlan/
- F:	Documentation/networking/device_drivers/ethernet/ti/tlan.rst
- F:	drivers/net/ethernet/ti/tlan.*
- 
-+TLV PARSER
-+M:	Roberto Sassu <roberto.sassu@huawei.com>
-+L:	linux-kernel@vger.kernel.org
-+S:	Maintained
-+F:	include/linux/tlv_parser.h
-+F:	include/uapi/linux/tlv_parser.h
-+F:	lib/tlv_parser.*
-+
- TMIO/SDHI MMC DRIVER
- M:	Wolfram Sang <wsa+renesas@sang-engineering.com>
- L:	linux-mmc@vger.kernel.org
-diff --git a/include/linux/tlv_parser.h b/include/linux/tlv_parser.h
+diff --git a/include/linux/digest_cache.h b/include/linux/digest_cache.h
 new file mode 100644
-index 000000000000..6d9a655d9ec9
+index 000000000000..86e6c5a0b896
 --- /dev/null
-+++ b/include/linux/tlv_parser.h
-@@ -0,0 +1,48 @@
++++ b/include/linux/digest_cache.h
+@@ -0,0 +1,30 @@
 +/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
 + *
 + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 + *
-+ * Header file of TLV parser.
++ * Public API of the Integrity Digest Cache.
 + */
 +
-+#ifndef _LINUX_TLV_PARSER_H
-+#define _LINUX_TLV_PARSER_H
++#ifndef _LINUX_DIGEST_CACHE_H
++#define _LINUX_DIGEST_CACHE_H
 +
-+#include <uapi/linux/tlv_parser.h>
++#include <linux/fs.h>
 +
-+/**
-+ * typedef hdr_callback - Callback after parsing TLV header
-+ * @callback_data: Opaque data to supply to the header callback function
-+ * @data_type: TLV data type
-+ * @num_entries: Number of TLV data entries
-+ * @total_len: Total length of TLV data
-+ *
-+ * This callback is invoked after a TLV header is parsed.
-+ *
-+ * Return: 0 to skip processing, 1 to do processing, a negative value on error.
-+ */
-+typedef int (*hdr_callback)(void *callback_data, __u64 data_type,
-+			    __u64 num_entries, __u64 total_len);
++#ifdef CONFIG_INTEGRITY_DIGEST_CACHE
++struct digest_cache *digest_cache_get(struct dentry *dentry);
++void digest_cache_put(struct digest_cache *digest_cache);
 +
-+/**
-+ * typedef data_callback - Callback after parsing TLV data entry
-+ * @callback_data: Opaque data to supply to the data callback function
-+ * @field: TLV field ID
-+ * @field_data: Data of a TLV data field
-+ * @field_len: Length of @field_data
-+ *
-+ * This callback is invoked after a TLV data entry is parsed.
-+ *
-+ * Return: 0 on success, a negative value on error.
-+ */
-+typedef int (*data_callback)(void *callback_data, __u64 field,
-+			     const __u8 *field_data, __u64 field_len);
++#else
++static inline struct digest_cache *digest_cache_get(struct dentry *dentry)
++{
++	return NULL;
++}
 +
-+int tlv_parse(hdr_callback hdr_callback, void *hdr_callback_data,
-+	      data_callback data_callback, void *data_callback_data,
-+	      const __u8 *data, size_t data_len, const char **data_types,
-+	      __u64 num_data_types, const char **fields, __u64 num_fields);
++static inline void digest_cache_put(struct digest_cache *digest_cache)
++{
++}
 +
-+#endif /* _LINUX_TLV_PARSER_H */
-diff --git a/include/uapi/linux/tlv_parser.h b/include/uapi/linux/tlv_parser.h
++#endif /* CONFIG_INTEGRITY_DIGEST_CACHE */
++#endif /* _LINUX_DIGEST_CACHE_H */
+diff --git a/include/uapi/linux/xattr.h b/include/uapi/linux/xattr.h
+index 9463db2dfa9d..8a58cf4bce65 100644
+--- a/include/uapi/linux/xattr.h
++++ b/include/uapi/linux/xattr.h
+@@ -54,6 +54,9 @@
+ #define XATTR_IMA_SUFFIX "ima"
+ #define XATTR_NAME_IMA XATTR_SECURITY_PREFIX XATTR_IMA_SUFFIX
+ 
++#define XATTR_DIGEST_LIST_SUFFIX "digest_list"
++#define XATTR_NAME_DIGEST_LIST XATTR_SECURITY_PREFIX XATTR_DIGEST_LIST_SUFFIX
++
+ #define XATTR_SELINUX_SUFFIX "selinux"
+ #define XATTR_NAME_SELINUX XATTR_SECURITY_PREFIX XATTR_SELINUX_SUFFIX
+ 
+diff --git a/security/integrity/Kconfig b/security/integrity/Kconfig
+index 3c45f4f3455f..55b1311a48fa 100644
+--- a/security/integrity/Kconfig
++++ b/security/integrity/Kconfig
+@@ -132,5 +132,6 @@ config INTEGRITY_AUDIT
+ 
+ source "security/integrity/ima/Kconfig"
+ source "security/integrity/evm/Kconfig"
++source "security/integrity/digest_cache/Kconfig"
+ 
+ endif   # if INTEGRITY
+diff --git a/security/integrity/Makefile b/security/integrity/Makefile
+index 92b63039c654..0fdabfc6c8ae 100644
+--- a/security/integrity/Makefile
++++ b/security/integrity/Makefile
+@@ -21,3 +21,4 @@ integrity-$(CONFIG_LOAD_PPC_KEYS) += platform_certs/efi_parser.o \
+ # The relative order of the 'ima' and 'evm' LSMs depends on the order below.
+ obj-$(CONFIG_IMA)			+= ima/
+ obj-$(CONFIG_EVM)			+= evm/
++obj-$(CONFIG_INTEGRITY_DIGEST_CACHE)	+= digest_cache/
+diff --git a/security/integrity/digest_cache/Kconfig b/security/integrity/digest_cache/Kconfig
 new file mode 100644
-index 000000000000..fbd4fc403ac7
+index 000000000000..5fbec491237b
 --- /dev/null
-+++ b/include/uapi/linux/tlv_parser.h
-@@ -0,0 +1,62 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++++ b/security/integrity/digest_cache/Kconfig
+@@ -0,0 +1,17 @@
++# SPDX-License-Identifier: GPL-2.0
++config INTEGRITY_DIGEST_CACHE
++	bool "Integrity Digest Cache"
++	default n
++	help
++	  This option enables a cache of reference digests (e.g. of file
++	  data or metadata) to be used by IMA and (later) by EVM, to verify
++	  accessed files.
++
++	  Digests can be extracted from RPM headers, or from other sources.
++
++config DIGEST_LIST_DEFAULT_PATH
++	string
++	default "/etc/digest_lists"
++	help
++	  Default path where the Integrity Digest Cache expects to find digest
++	  lists.
+diff --git a/security/integrity/digest_cache/Makefile b/security/integrity/digest_cache/Makefile
+new file mode 100644
+index 000000000000..6a3f7cc6e106
+--- /dev/null
++++ b/security/integrity/digest_cache/Makefile
+@@ -0,0 +1,7 @@
++# SPDX-License-Identifier: GPL-2.0
++#
++# Makefile for building the Integrity Digest Cache.
++
++obj-$(CONFIG_INTEGRITY_DIGEST_CACHE) += digest_cache.o
++
++digest_cache-y := main.o
+diff --git a/security/integrity/digest_cache/internal.h b/security/integrity/digest_cache/internal.h
+new file mode 100644
+index 000000000000..e8a13afaf2fc
+--- /dev/null
++++ b/security/integrity/digest_cache/internal.h
+@@ -0,0 +1,90 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +/*
 + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
 + *
 + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 + *
-+ * Implement the user space interface for the TLV parser.
++ * Internal header of the Integrity Digest Cache.
 + */
 +
-+#ifndef _UAPI_LINUX_TLV_PARSER_H
-+#define _UAPI_LINUX_TLV_PARSER_H
++#ifndef _DIGEST_CACHE_INTERNAL_H
++#define _DIGEST_CACHE_INTERNAL_H
 +
-+#include <linux/types.h>
-+
-+/*
-+ * TLV format:
-+ *
-+ * +-----------------+------------------+-----------------+
-+ * | data type (u64) | num fields (u64) | total len (u64) | # header
-+ * +--------------+--+---------+--------+---------+-------+
-+ * | field1 (u64) | len1 (u64) | value1 (u8 len1) |
-+ * +--------------+------------+------------------+
-+ * |     ...      |    ...     |        ...       |         # data
-+ * +--------------+------------+------------------+
-+ * | fieldN (u64) | lenN (u64) | valueN (u8 lenN) |
-+ * +--------------+------------+------------------+
-+ *
-+ * [same as above, repeated N times]
-+ *
-+ */
++#include <linux/lsm_hooks.h>
++#include <linux/digest_cache.h>
 +
 +/**
-+ * struct tlv_hdr - Header of TLV format
-+ * @data_type: Type of data to parse
-+ * @num_entries: Number of data entries provided
-+ * @_reserved: Reserved for future use (must be equal to zero)
-+ * @total_len: Total length of the data blob, excluding the header
++ * struct digest_cache - Digest cache
++ * @ref_count: Number of references to the digest cache
++ * @path_str: Path of the digest list the digest cache was created from
++ * @flags: Control flags
 + *
-+ * This structure represents the header of the TLV data format.
++ * This structure represents a cache of digests extracted from a digest list.
 + */
-+struct tlv_hdr {
-+	__u64 data_type;
-+	__u64 num_entries;
-+	__u64 _reserved;
-+	__u64 total_len;
-+} __attribute__((packed));
++struct digest_cache {
++	atomic_t ref_count;
++	char *path_str;
++	unsigned long flags;
++};
 +
 +/**
-+ * struct tlv_data_entry - Data entry of TLV format
-+ * @field: Data field identifier
-+ * @length: Data length
-+ * @data: Data
++ * struct digest_cache_security - Digest cache pointers in inode security blob
++ * @dig_owner: Digest cache created from this inode
++ * @dig_owner_mutex: Protects @dig_owner
++ * @dig_user: Digest cache requested for this inode
++ * @dig_user_mutex: Protects @dig_user
 + *
-+ * This structure represents a TLV data entry.
++ * This structure contains references to digest caches, protected by their
++ * respective mutex.
 + */
-+struct tlv_data_entry {
-+	__u64 field;
-+	__u64 length;
-+	__u8 data[];
-+} __attribute__((packed));
++struct digest_cache_security {
++	struct digest_cache *dig_owner;
++	struct mutex dig_owner_mutex;
++	struct digest_cache *dig_user;
++	struct mutex dig_user_mutex;
++};
 +
-+#endif /* _UAPI_LINUX_TLV_PARSER_H */
-diff --git a/lib/Kconfig b/lib/Kconfig
-index b38849af6f13..9141dcfc1704 100644
---- a/lib/Kconfig
-+++ b/lib/Kconfig
-@@ -777,3 +777,6 @@ config POLYNOMIAL
- 
- config FIRMWARE_TABLE
- 	bool
++extern loff_t inode_sec_offset;
++extern char *default_path_str;
 +
-+config TLV_PARSER
-+	bool
-diff --git a/lib/Makefile b/lib/Makefile
-index 322bb127b4dc..c6c3614c4293 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -392,6 +392,8 @@ obj-$(CONFIG_USERCOPY_KUNIT_TEST) += usercopy_kunit.o
- obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
- 
- obj-$(CONFIG_FIRMWARE_TABLE) += fw_table.o
-+obj-$(CONFIG_TLV_PARSER) += tlv_parser.o
-+CFLAGS_tlv_parser.o += -I lib
- 
- # FORTIFY_SOURCE compile-time behavior tests
- TEST_FORTIFY_SRCS = $(wildcard $(src)/test_fortify/*-*.c)
-diff --git a/lib/tlv_parser.c b/lib/tlv_parser.c
++static inline struct digest_cache_security *
++digest_cache_get_security(const struct inode *inode)
++{
++	if (unlikely(!inode->i_security))
++		return NULL;
++
++	return inode->i_security + inode_sec_offset;
++}
++
++static inline struct digest_cache *
++digest_cache_ref(struct digest_cache *digest_cache)
++{
++	int ref_count = atomic_inc_return(&digest_cache->ref_count);
++
++	pr_debug("Ref (+) digest cache %s (ref count: %d)\n",
++		 digest_cache->path_str, ref_count);
++	return digest_cache;
++}
++
++static inline struct digest_cache *
++digest_cache_unref(struct digest_cache *digest_cache)
++{
++	bool ref_is_zero;
++
++	/* Unreliable ref. count, but cannot decrement before print (UAF). */
++	pr_debug("Ref (-) digest cache %s (ref count: %d)\n",
++		 digest_cache->path_str,
++		 atomic_read(&digest_cache->ref_count) - 1);
++
++	ref_is_zero = atomic_dec_and_test(&digest_cache->ref_count);
++	return (ref_is_zero) ? digest_cache : NULL;
++}
++
++/* main.c */
++struct digest_cache *digest_cache_create(struct dentry *dentry,
++					 struct path *digest_list_path,
++					 char *path_str, char *filename);
++int __init digest_cache_do_init(const struct lsm_id *lsm_id,
++				loff_t inode_offset);
++
++#endif /* _DIGEST_CACHE_INTERNAL_H */
+diff --git a/security/integrity/digest_cache/main.c b/security/integrity/digest_cache/main.c
 new file mode 100644
-index 000000000000..5d54844ab8d7
+index 000000000000..60030df04a4d
 --- /dev/null
-+++ b/lib/tlv_parser.c
-@@ -0,0 +1,221 @@
++++ b/security/integrity/digest_cache/main.c
+@@ -0,0 +1,367 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
 + *
 + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 + *
-+ * Implement the TLV parser.
++ * Implement the main code of the Integrity Digest Cache.
 + */
 +
-+#define pr_fmt(fmt) "tlv_parser: "fmt
-+#include <tlv_parser.h>
++#define pr_fmt(fmt) "digest_cache: "fmt
++#include <linux/namei.h>
++#include <linux/xattr.h>
++
++#include "internal.h"
++
++static int digest_cache_enabled __ro_after_init;
++static struct kmem_cache *digest_cache_cache __read_mostly;
++
++loff_t inode_sec_offset;
++
++char *default_path_str = CONFIG_DIGEST_LIST_DEFAULT_PATH;
 +
 +/**
-+ * tlv_parse_hdr - Parse TLV header
-+ * @hdr_callback: Callback function to call after parsing header
-+ * @hdr_callback_data: Opaque data to supply to the header callback function
-+ * @data: Data to parse (updated)
-+ * @data_len: Length of @data (updated)
-+ * @parsed_num_entries: Parsed number of data entries (updated)
-+ * @parsed_total_len: Parsed length of TLV data, excluding the header (updated)
-+ * @data_types: Array of data type strings
-+ * @num_data_types: Number of elements of @data_types
++ * digest_cache_alloc_init - Allocate and initialize a new digest cache
++ * @path_str: Path string of the digest list
++ * @filename: Digest list file name (can be an empty string)
 + *
-+ * Parse the header of the TLV data format, move the data pointer to the TLV
-+ * data part, decrease the data length by the length of the header, and provide
-+ * the number of entries and the total data length extracted from the header.
++ * This function allocates and initializes a new digest cache.
 + *
-+ * Before returning, call the header callback to let the callback supplier
-+ * decide whether or not to process the subsequent TLV data.
-+ *
-+ * Return: 1 to process the data entries, 0 to skip, a negative value on error.
++ * Return: A new digest cache on success, NULL on error.
 + */
-+static int tlv_parse_hdr(hdr_callback hdr_callback, void *hdr_callback_data,
-+			 const __u8 **data, size_t *data_len,
-+			 __u64 *parsed_num_entries, __u64 *parsed_total_len,
-+			 const char **data_types, __u64 num_data_types)
++static struct digest_cache *digest_cache_alloc_init(char *path_str,
++						    char *filename)
 +{
-+	__u64 parsed_data_type;
-+	struct tlv_hdr *hdr;
++	struct digest_cache *digest_cache;
 +
-+	if (*data_len < sizeof(*hdr)) {
-+		pr_debug("Data blob too short, %lu bytes, expected %lu\n",
-+			 *data_len, sizeof(*hdr));
-+		return -EBADMSG;
++	digest_cache = kmem_cache_zalloc(digest_cache_cache, GFP_KERNEL);
++	if (!digest_cache)
++		return digest_cache;
++
++	digest_cache->path_str = kasprintf(GFP_KERNEL, "%s%s%s", path_str,
++					   filename[0] ? "/" : "", filename);
++	if (!digest_cache->path_str) {
++		kmem_cache_free(digest_cache_cache, digest_cache);
++		return NULL;
 +	}
 +
-+	hdr = (struct tlv_hdr *)*data;
++	atomic_set(&digest_cache->ref_count, 1);
++	digest_cache->flags = 0UL;
 +
-+	*data += sizeof(*hdr);
-+	*data_len -= sizeof(*hdr);
++	pr_debug("New digest cache %s (ref count: %d)\n",
++		 digest_cache->path_str, atomic_read(&digest_cache->ref_count));
 +
-+	parsed_data_type = __be64_to_cpu(hdr->data_type);
-+	if (parsed_data_type >= num_data_types) {
-+		pr_debug("Invalid data type %llu, max: %llu\n",
-+			 parsed_data_type, num_data_types - 1);
-+		return -EBADMSG;
-+	}
-+
-+	*parsed_num_entries = __be64_to_cpu(hdr->num_entries);
-+
-+	if (hdr->_reserved != 0) {
-+		pr_debug("_reserved must be zero\n");
-+		return -EBADMSG;
-+	}
-+
-+	*parsed_total_len = __be64_to_cpu(hdr->total_len);
-+	if (*parsed_total_len > *data_len) {
-+		pr_debug("Invalid total length %llu, expected: %lu\n",
-+			 *parsed_total_len, *data_len);
-+		return -EBADMSG;
-+	}
-+
-+	pr_debug("Header: type: %s, num entries: %llu, total len: %lld\n",
-+		 data_types[parsed_data_type], *parsed_num_entries,
-+		 *parsed_total_len);
-+
-+	return hdr_callback(hdr_callback_data, parsed_data_type,
-+			    *parsed_num_entries, *parsed_total_len);
++	return digest_cache;
 +}
 +
 +/**
-+ * tlv_parse_data - Parse TLV data
-+ * @data_callback: Callback function to call to parse the data entries
-+ * @data_callback_data: Opaque data to supply to the data callback function
-+ * @num_entries: Number of data entries to parse
-+ * @data: Data to parse
-+ * @data_len: Length of @data
-+ * @fields: Array of field strings
-+ * @num_fields: Number of elements of @fields
++ * digest_cache_free - Free all memory occupied by the digest cache
++ * @digest_cache: Digest cache
 + *
-+ * Parse the data part of the TLV data format and call the supplied callback
-+ * function for each data entry, passing also the opaque data pointer.
-+ *
-+ * The data callback function decides how to process data depending on the
-+ * field.
-+ *
-+ * Return: 0 on success, a negative value on error.
++ * This function frees the memory occupied by the digest cache.
 + */
-+static int tlv_parse_data(data_callback data_callback, void *data_callback_data,
-+			  __u64 num_entries, const __u8 *data, size_t data_len,
-+			  const char **fields, __u64 num_fields)
++static void digest_cache_free(struct digest_cache *digest_cache)
 +{
-+	const __u8 *data_ptr = data;
-+	struct tlv_data_entry *entry;
-+	__u64 parsed_field, len, i, max_num_entries;
++	pr_debug("Freed digest cache %s\n", digest_cache->path_str);
++	kfree(digest_cache->path_str);
++	kmem_cache_free(digest_cache_cache, digest_cache);
++}
++
++/**
++ * digest_cache_create - Create a digest cache
++ * @dentry: Dentry of the inode for which the digest cache will be used
++ * @digest_list_path: Path structure of the digest list
++ * @path_str: Path string of the digest list
++ * @filename: Digest list file name (can be an empty string)
++ *
++ * This function first locates, from the passed path, the digest list inode
++ * from which the digest cache will be created or retrieved (if it already
++ * exists).
++ *
++ * If dig_owner is NULL in the inode security blob, this function creates a
++ * new digest cache with reference count set to 1 (reference returned), sets
++ * it to dig_owner and consequently increments again the digest cache reference
++ * count.
++ *
++ * Otherwise, it simply increments the reference count of the existing
++ * dig_owner, since that reference is returned to the caller.
++ *
++ * This function locks dig_owner_mutex to protect against concurrent requests
++ * to obtain a digest cache from the same inode.
++ *
++ * Return: A digest cache on success, NULL on error.
++ */
++struct digest_cache *digest_cache_create(struct dentry *dentry,
++					 struct path *digest_list_path,
++					 char *path_str, char *filename)
++{
++	struct path file_path;
++	struct digest_cache *digest_cache = NULL;
++	struct digest_cache_security *dig_sec;
++	struct inode *inode = d_backing_inode(digest_list_path->dentry);
 +	int ret;
 +
-+	max_num_entries = data_len / sizeof(*entry);
-+
-+	/* Possibly lower limit on num_entries loop. */
-+	if (num_entries > max_num_entries)
-+		return -EBADMSG;
-+
-+	for (i = 0; i < num_entries; i++) {
-+		if (data_len < sizeof(*entry))
-+			return -EBADMSG;
-+
-+		entry = (struct tlv_data_entry *)data_ptr;
-+		data_ptr += sizeof(*entry);
-+		data_len -= sizeof(*entry);
-+
-+		parsed_field = __be64_to_cpu(entry->field);
-+		if (parsed_field >= num_fields) {
-+			pr_debug("Invalid field %llu, max: %llu\n",
-+				 parsed_field, num_fields - 1);
-+			return -EBADMSG;
-+		}
-+
-+		len = __be64_to_cpu(entry->length);
-+
-+		if (data_len < len)
-+			return -EBADMSG;
-+
-+		pr_debug("Data: field: %s, len: %llu\n", fields[parsed_field],
-+			 len);
-+
-+		if (!len)
-+			continue;
-+
-+		ret = data_callback(data_callback_data, parsed_field, data_ptr,
-+				    len);
++	if (S_ISDIR(inode->i_mode) && filename[0]) {
++		ret = vfs_path_lookup(digest_list_path->dentry,
++				      digest_list_path->mnt, filename,
++				      LOOKUP_FOLLOW, &file_path);
 +		if (ret < 0) {
-+			pr_debug("Parsing of field %s failed, ret: %d\n",
-+				 fields[parsed_field], ret);
-+			return ret;
++			pr_debug("Cannot find digest list %s/%s\n", path_str,
++				 filename);
++			return NULL;
 +		}
 +
-+		data_ptr += len;
-+		data_len -= len;
++		digest_list_path = &file_path;
++		inode = d_backing_inode(file_path.dentry);
++
++		/* No support for nested directories. */
++		if (!S_ISREG(inode->i_mode)) {
++			pr_debug("%s is not a regular file (no support for nested directories)\n",
++				 file_path.dentry->d_name.name);
++			goto out;
++		}
 +	}
 +
-+	if (data_len) {
-+		pr_debug("Excess data: %lu bytes\n", data_len);
-+		return -EBADMSG;
++	/*
++	 * Cannot request a digest cache for the same inode the digest cache
++	 * is populated from.
++	 */
++	if (d_backing_inode(dentry) == inode) {
++		pr_debug("Cannot request a digest cache for %s and create the digest cache from it\n",
++			 dentry->d_name.name);
++		goto out;
 +	}
 +
++	dig_sec = digest_cache_get_security(inode);
++	if (unlikely(!dig_sec))
++		goto out;
++
++	/* Serialize check and assignment of dig_owner. */
++	mutex_lock(&dig_sec->dig_owner_mutex);
++	if (dig_sec->dig_owner) {
++		/* Increment ref. count for reference returned to the caller. */
++		digest_cache = digest_cache_ref(dig_sec->dig_owner);
++		mutex_unlock(&dig_sec->dig_owner_mutex);
++		goto out;
++	}
++
++	/* Ref. count is already 1 for this reference. */
++	dig_sec->dig_owner = digest_cache_alloc_init(path_str, filename);
++	if (!dig_sec->dig_owner) {
++		mutex_unlock(&dig_sec->dig_owner_mutex);
++		goto out;
++	}
++
++	/* Increment ref. count for reference returned to the caller. */
++	digest_cache = digest_cache_ref(dig_sec->dig_owner);
++	mutex_unlock(&dig_sec->dig_owner_mutex);
++out:
++	if (digest_list_path == &file_path)
++		path_put(&file_path);
++
++	return digest_cache;
++}
++
++/**
++ * digest_cache_new - Retrieve digest list file name and request digest cache
++ * @dentry: Dentry of the inode for which the digest cache will be used
++ *
++ * This function locates the default path. If it is a file, it directly creates
++ * a digest cache from it. Otherwise, it reads the digest list file name from
++ * the security.digest_list xattr and requests the creation of a digest cache
++ * with that file name. If security.digest_list is empty or not found, this
++ * function requests the creation of a digest cache on the parent directory.
++ *
++ * Return: A digest cache on success, NULL on error.
++ */
++static struct digest_cache *digest_cache_new(struct dentry *dentry)
++{
++	char filename[NAME_MAX + 1] = { 0 };
++	struct digest_cache *digest_cache = NULL;
++	struct path default_path;
++	int ret;
++
++	ret = kern_path(default_path_str, 0, &default_path);
++	if (ret < 0) {
++		pr_debug("Cannot find path %s\n", default_path_str);
++		return NULL;
++	}
++
++	/* The default path is a file, no need to get xattr. */
++	if (S_ISREG(d_backing_inode(default_path.dentry)->i_mode)) {
++		pr_debug("Default path %s is a file, not reading %s xattr\n",
++			 default_path_str, XATTR_NAME_DIGEST_LIST);
++		goto create;
++	} else if (!S_ISDIR(d_backing_inode(default_path.dentry)->i_mode)) {
++		pr_debug("Default path %s must be either a file or a directory\n",
++			 default_path_str);
++		goto out;
++	}
++
++	ret = vfs_getxattr(&nop_mnt_idmap, dentry, XATTR_NAME_DIGEST_LIST,
++			   filename, sizeof(filename) - 1);
++	if (ret <= 0) {
++		pr_debug("Digest list file name not found for file %s, using %s\n",
++			 dentry->d_name.name, default_path_str);
++		if (ret && ret != -ENODATA)
++			goto out;
++
++		goto create;
++	}
++
++	if (strchr(filename, '/')) {
++		pr_debug("%s xattr should contain only a file name, got: %s\n",
++			 XATTR_NAME_DIGEST_LIST, filename);
++		goto out;
++	}
++
++	pr_debug("Found %s xattr in %s, default path: %s, digest list: %s\n",
++		 XATTR_NAME_DIGEST_LIST, dentry->d_name.name, default_path_str,
++		 filename);
++create:
++	digest_cache = digest_cache_create(dentry, &default_path,
++					   default_path_str, filename);
++out:
++	path_put(&default_path);
++	return digest_cache;
++}
++
++/**
++ * digest_cache_get - Get a digest cache for a given inode
++ * @dentry: Dentry of the inode for which the digest cache will be used
++ *
++ * This function tries to find a digest cache from the inode security blob of
++ * the passed dentry (dig_user field). If a digest cache was not found, it calls
++ * digest_cache_new() to create a new one. In both cases, it increments the
++ * digest cache reference count before returning the reference to the caller.
++ *
++ * The caller is responsible to call digest_cache_put() to release the digest
++ * cache reference returned.
++ *
++ * This function locks dig_user_mutex to protect against concurrent requests
++ * to obtain a digest cache for the same inode.
++ *
++ * Return: A digest cache on success, NULL otherwise.
++ */
++struct digest_cache *digest_cache_get(struct dentry *dentry)
++{
++	struct digest_cache_security *dig_sec;
++	struct digest_cache *digest_cache = NULL;
++	struct inode *inode = d_backing_inode(dentry);
++
++	if (!digest_cache_enabled)
++		return NULL;
++
++	dig_sec = digest_cache_get_security(inode);
++	if (unlikely(!dig_sec))
++		return NULL;
++
++	/* Serialize accesses to inode for which the digest cache is used. */
++	mutex_lock(&dig_sec->dig_user_mutex);
++	if (!dig_sec->dig_user)
++		/* Consume extra reference from digest_cache_create(). */
++		dig_sec->dig_user = digest_cache_new(dentry);
++
++	if (dig_sec->dig_user)
++		/* Increment ref. count for reference returned to the caller. */
++		digest_cache = digest_cache_ref(dig_sec->dig_user);
++
++	mutex_unlock(&dig_sec->dig_user_mutex);
++
++	return digest_cache;
++}
++EXPORT_SYMBOL_GPL(digest_cache_get);
++
++/**
++ * digest_cache_put - Release a digest cache reference
++ * @digest_cache: Digest cache
++ *
++ * This function decrements the reference count of the digest cache passed as
++ * argument. If the reference count reaches zero, it calls digest_cache_free()
++ * to free the digest cache.
++ */
++void digest_cache_put(struct digest_cache *digest_cache)
++{
++	struct digest_cache *to_free;
++
++	to_free = digest_cache_unref(digest_cache);
++	if (!to_free)
++		return;
++
++	digest_cache_free(to_free);
++}
++EXPORT_SYMBOL_GPL(digest_cache_put);
++
++/**
++ * digest_cache_inode_alloc_security - Initialize inode security blob
++ * @inode: Inode for which the security blob is initialized
++ *
++ * This function initializes the digest_cache_security structure, directly
++ * stored in the inode security blob.
++ *
++ * Return: Zero.
++ */
++static int digest_cache_inode_alloc_security(struct inode *inode)
++{
++	struct digest_cache_security *dig_sec;
++
++	/* The inode security blob is always allocated here. */
++	dig_sec = digest_cache_get_security(inode);
++	mutex_init(&dig_sec->dig_owner_mutex);
++	mutex_init(&dig_sec->dig_user_mutex);
 +	return 0;
 +}
 +
 +/**
-+ * tlv_parse - Parse data in TLV format
-+ * @hdr_callback: Callback function to call after parsing header
-+ * @hdr_callback_data: Opaque data to supply to the header callback function
-+ * @data_callback: Callback function to call to parse the data entries
-+ * @data_callback_data: Opaque data to supply to the data callback function
-+ * @data: Data to parse
-+ * @data_len: Length of @data
-+ * @data_types: Array of data type strings
-+ * @num_data_types: Number of elements of @data_types
-+ * @fields: Array of field strings
-+ * @num_fields: Number of elements of @fields
++ * digest_cache_inode_free_security - Release the digest cache references
++ * @inode: Inode for which the digest cache references are released
 + *
-+ * Parse data in TLV format and call tlv_parse_data() each time tlv_parse_hdr()
-+ * returns 1.
-+ *
-+ * Return: 0 on success, a negative value on error.
++ * Since the inode is being evicted, this function releases the non-needed
++ * references to the digest caches stored in the digest_cache_security
++ * structure.
 + */
-+int tlv_parse(hdr_callback hdr_callback, void *hdr_callback_data,
-+	      data_callback data_callback, void *data_callback_data,
-+	      const __u8 *data, size_t data_len, const char **data_types,
-+	      __u64 num_data_types, const char **fields, __u64 num_fields)
++static void digest_cache_inode_free_security(struct inode *inode)
 +{
-+	__u64 parsed_num_entries, parsed_total_len;
-+	const __u8 *data_ptr = data;
-+	int ret = 0;
++	struct digest_cache_security *dig_sec;
 +
-+	pr_debug("Start parsing data blob, size: %lu\n", data_len);
++	dig_sec = digest_cache_get_security(inode);
++	if (!dig_sec)
++		return;
 +
-+	while (data_len) {
-+		ret = tlv_parse_hdr(hdr_callback, hdr_callback_data, &data_ptr,
-+				    &data_len, &parsed_num_entries,
-+				    &parsed_total_len, data_types,
-+				    num_data_types);
-+		switch (ret) {
-+		case 0:
-+			/*
-+			 * tlv_parse_hdr() already checked that
-+			 * parsed_total_len <= data_len.
-+			 */
-+			data_ptr += parsed_total_len;
-+			data_len -= parsed_total_len;
-+			continue;
-+		case 1:
-+			break;
-+		default:
-+			goto out;
-+		}
-+
-+		ret = tlv_parse_data(data_callback, data_callback_data,
-+				     parsed_num_entries, data_ptr,
-+				     parsed_total_len, fields, num_fields);
-+		if (ret < 0)
-+			goto out;
-+
-+		data_ptr += parsed_total_len;
-+		data_len -= parsed_total_len;
-+	}
-+out:
-+	pr_debug("End of parsing data blob, ret: %d\n", ret);
-+	return ret;
++	mutex_destroy(&dig_sec->dig_owner_mutex);
++	mutex_destroy(&dig_sec->dig_user_mutex);
++	if (dig_sec->dig_owner)
++		digest_cache_put(dig_sec->dig_owner);
++	if (dig_sec->dig_user)
++		digest_cache_put(dig_sec->dig_user);
 +}
-diff --git a/lib/tlv_parser.h b/lib/tlv_parser.h
-new file mode 100644
-index 000000000000..8fa8127bd13e
---- /dev/null
-+++ b/lib/tlv_parser.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
++
++static struct security_hook_list digest_cache_hooks[] __ro_after_init = {
++	LSM_HOOK_INIT(inode_alloc_security, digest_cache_inode_alloc_security),
++	LSM_HOOK_INIT(inode_free_security, digest_cache_inode_free_security),
++};
++
++/**
++ * digest_cache_do_init - Initialize the Integrity Digest Cache
++ * @lsm_id: ID of LSM registering the LSM hooks
++ * @inode_offset: Offset in the inode security blob
 + *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Header file of TLV parser.
++ * Initialize the Integrity Digest Cache, by instantiating a cache for the
++ * digest_cache structure and by registering the LSM hooks as part of the
++ * calling LSM.
 + */
++int __init digest_cache_do_init(const struct lsm_id *lsm_id,
++				loff_t inode_offset)
++{
++	inode_sec_offset = inode_offset;
 +
-+#ifndef _LIB_TLV_PARSER_H
-+#define _LIB_TLV_PARSER_H
++	digest_cache_cache = kmem_cache_create("digest_cache_cache",
++					       sizeof(struct digest_cache),
++					       0, SLAB_PANIC, NULL);
 +
-+#include <linux/kernel.h>
-+#include <linux/err.h>
-+#include <linux/tlv_parser.h>
++	security_add_hooks(digest_cache_hooks, ARRAY_SIZE(digest_cache_hooks),
++			   lsm_id);
 +
-+#endif /* _LIB_TLV_PARSER_H */
++	digest_cache_enabled = 1;
++	return 0;
++}
+diff --git a/security/integrity/ima/ima.h b/security/integrity/ima/ima.h
+index c51e24d24d1e..ad5c95cf22ac 100644
+--- a/security/integrity/ima/ima.h
++++ b/security/integrity/ima/ima.h
+@@ -23,6 +23,7 @@
+ #include <crypto/hash_info.h>
+ 
+ #include "../integrity.h"
++#include "../digest_cache/internal.h"
+ 
+ enum ima_show_type { IMA_SHOW_BINARY, IMA_SHOW_BINARY_NO_FIELD_LEN,
+ 		     IMA_SHOW_BINARY_OLD_STRING_FMT, IMA_SHOW_ASCII };
+diff --git a/security/integrity/ima/ima_main.c b/security/integrity/ima/ima_main.c
+index f04f43af651c..7cbd78ca3be5 100644
+--- a/security/integrity/ima/ima_main.c
++++ b/security/integrity/ima/ima_main.c
+@@ -1206,11 +1206,17 @@ static int __init init_ima_lsm(void)
+ 	ima_iintcache_init();
+ 	security_add_hooks(ima_hooks, ARRAY_SIZE(ima_hooks), &ima_lsmid);
+ 	init_ima_appraise_lsm(&ima_lsmid);
++	if (IS_ENABLED(CONFIG_INTEGRITY_DIGEST_CACHE))
++		digest_cache_do_init(&ima_lsmid, ima_blob_sizes.lbs_inode +
++				     sizeof(struct ima_iint_cache *));
+ 	return 0;
+ }
+ 
+ struct lsm_blob_sizes ima_blob_sizes __ro_after_init = {
+-	.lbs_inode = sizeof(struct ima_iint_cache *),
++	.lbs_inode = sizeof(struct ima_iint_cache *)
++#ifdef CONFIG_INTEGRITY_DIGEST_CACHE
++	 + sizeof(struct digest_cache_security)
++#endif
+ };
+ 
+ DEFINE_LSM(ima) = {
 -- 
 2.34.1
 
