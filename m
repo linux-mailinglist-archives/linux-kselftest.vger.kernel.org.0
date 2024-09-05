@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-17263-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17264-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C16AA96DD72
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 17:10:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC48996DD76
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 17:11:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4601B1F24D79
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 15:10:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AD9D1F2538C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 15:11:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D6941A0AE1;
-	Thu,  5 Sep 2024 15:08:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 721C817C9AE;
+	Thu,  5 Sep 2024 15:08:34 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAC74175A1;
-	Thu,  5 Sep 2024 15:08:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FA2845025;
+	Thu,  5 Sep 2024 15:08:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725548895; cv=none; b=XRzYpOLvEWpQPVQBZQnOwS3ShEV1jkDuVJ87c91ArtC1htRI6upVDGZamPqQ/DC9uoR1RmxTAyQIJU9WeF1TPkl7a8te8h8VEYqavzMlOE6zIN9Wb2OX1g9dowsBdSLco9q/oIozcVQ/mLPrUlvkZ0BSgEVU889/0bSY+SM0cp0=
+	t=1725548914; cv=none; b=gWbTgssJ3wWSPISuO93W1vNfv7Khcc+isBBV2DD9FwvV+AJP2yz/v7aUrXeW6GHuioRfY9wp0vTXWflnX2DRMQ02zoyS7CSSySJteFtQmhxvTa3cLUQYPQKww1ThAEly+D4vjoSPGae6qTyCqTgxQKaNZvyVw9AoImFcWbibaMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725548895; c=relaxed/simple;
-	bh=L46Fnsq26UlBR2LL8mrDYUdoHdRCHGI0sj2yUCZFIx4=;
+	s=arc-20240116; t=1725548914; c=relaxed/simple;
+	bh=nKIFIHoAQaNGNmBbAo1tneOiP5ff7B+juVWkf3TUudM=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Yn5uKHt4nWJt+/U8ceN+9n45DxchfwyR857twdn5xX2P+EmbAG+f4e+64ddjd8sNGEEwm+IdYZhmlInSZQpVW05vnWSIGpmeMCBZPUbs5Xwdjr/zswm2tr2qjdabJH2GthBuhJ9wo78MFILfhrPVgmIkTFzgTUE+De0GVxgpIs8=
+	 MIME-Version; b=eW/HmbWO5EaTVpXgpGTFiG2P3wq7SOJokK/uy2dfPJqsDA+rOxk3Py+wcTkhRloI/kTwbckT3vgy6oxzMZLi3KV4dHtZD5bFjtO9Y1uY0ZHjwq7s83hcmphTtA6GR6WqiVgAOaoC/1NHtzNowBlN4j1I082pQ8nCsyFCd6l4hJE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4X02Cc3XPdz9v7Jg;
-	Thu,  5 Sep 2024 22:43:08 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.51])
+	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4X02D00ttjz9v7JM;
+	Thu,  5 Sep 2024 22:43:28 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id B31411400CA;
-	Thu,  5 Sep 2024 23:08:09 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 3A52114065B;
+	Thu,  5 Sep 2024 23:08:23 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwDXZy_myNlmE0tUAA--.16274S9;
-	Thu, 05 Sep 2024 16:08:09 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwDXZy_myNlmE0tUAA--.16274S10;
+	Thu, 05 Sep 2024 16:08:22 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: zohar@linux.ibm.com,
 	dmitry.kasatkin@gmail.com,
@@ -70,9 +70,9 @@ Cc: linux-integrity@vger.kernel.org,
 	mzerqung@0pointer.de,
 	kgold@linux.ibm.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v5 07/14] digest_cache: Parse tlv digest lists
-Date: Thu,  5 Sep 2024 17:05:36 +0200
-Message-Id: <20240905150543.3766895-8-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v5 08/14] digest_cache: Parse rpm digest lists
+Date: Thu,  5 Sep 2024 17:05:37 +0200
+Message-Id: <20240905150543.3766895-9-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240905150543.3766895-1-roberto.sassu@huaweicloud.com>
 References: <20240905150543.3766895-1-roberto.sassu@huaweicloud.com>
@@ -83,603 +83,323 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwDXZy_myNlmE0tUAA--.16274S9
-X-Coremail-Antispam: 1UD129KBjvAXoW3uF13Cw43uF1DZryfAF4DCFg_yoW8CF1fGo
-	ZIvF4UAw4rtr47uF4kCF17Ar4rG3yFqFyrAw4fGF4DW3WrtFW5ta1qka15Ga95Zw4rt39F
-	yr18J3yFqr4jgrs7n29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUOe7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF
-	0E3s1l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
-	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxV
-	AFwI0_Cr1j6rxdM28EF7xvwVC2z280aVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv6xkF7I0E
-	14v26F4UJVW0owAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I
-	80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
-	c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4
-	kS14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E
-	5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVW8ZV
-	WrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26ryj6F1UMIIF0xvE2Ix0cI8IcVCY
-	1x0267AKxVWxJr0_GcWlIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
-	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Cr1j6rxdYxBIdaVFxhVjvjDU0xZFpf9x
-	07jhXo7UUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgARBGbZE-oKmwACsS
+X-CM-TRANSID:LxC2BwDXZy_myNlmE0tUAA--.16274S10
+X-Coremail-Antispam: 1UD129KBjvJXoW3GryrtF4ktw1DAFWrGFWfZrb_yoWfZw48pa
+	sxGF17tr4rXF1xC3yxAF12yr1ft34qqF47XrW5CrnayFWYyr1UA3W8AryxZry5JrWDZFy7
+	Gr4YgF1jvF4DJaDanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPSb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
+	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
+	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
+	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
+	AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
+	wI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
+	AFwI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
+	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF
+	7I0E14v26F4UJVW0owCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI
+	0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVWxJr0_GcJvcSsGvfC2KfnxnUUI43ZEXa7I
+	U0M5lUUUUUU==
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgARBGbZE-oKmwADsT
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Add digest_list_parse_tlv(), to parse TLV-formatted (Type Length Value)
-digest lists. Their structure is:
+Implement a simple parser of RPM headers, that extracts the digest and the
+algorithm of the packaged files from the RPMTAG_FILEDIGESTS and
+RPMTAG_FILEDIGESTALGO section, and adds them to the digest cache.
 
-[header: DIGEST_LIST_FILE, num fields, total len]
-[field: DIGEST_LIST_ALGO, length, value]
-[field: DIGEST_LIST_ENTRY#1, length, value (below)]
- |- [header: DIGEST_LIST_ENTRY_DATA, num fields, total len]
- |- [DIGEST_LIST_ENTRY_DIGEST#1, length, file digest]
- |- [DIGEST_LIST_ENTRY_PATH#1, length, file path]
-[field: DIGEST_LIST_ENTRY#N, length, value (below)]
- |- [header: DIGEST_LIST_ENTRY_DATA, num fields, total len]
- |- [DIGEST_LIST_ENTRY_DIGEST#N, length, file digest]
- |- [DIGEST_LIST_ENTRY_PATH#N, length, file path]
-
-DIGEST_LIST_ALGO must have a fixed length of sizeof(u64).
-
-The data of the DIGEST_LIST_ENTRY field are itself in TLV format.
-
-Currently defined fields are sufficient for measurement/appraisal of file
-data. More fields will be introduced later for file metadata.
-
-Introduce digest_list_hdr_callback(), to accept TLV data with type
-DIGEST_LIST_FILE, and to get the number of TLV data entries for
-initializing a new digest cache hash table. Introduce
-digest_list_data_callback() to handle the DIGEST_LIST_FILE fields,
-DIGEST_LIST_ALGO and DIGEST_LIST_ENTRY, and the respective field parsers
-parse_digest_list_algo() and parse_digest_list_entry().
-
-Introduce digest_list_entry_hdr_callback() to accept nested TLV data
-(DIGEST_LIST_ENTRY data entry) with type DIGEST_LIST_ENTRY_DATA. Introduce
-digest_list_entry_data_callback(), to handle the DIGEST_LIST_ENTRY_DATA
-fields, DIGEST_LIST_ENTRY_DIGEST and DIGEST_LIST_ENTRY_PATH, and the
-respective field parsers parse_digest_list_entry_digest() and
-parse_digest_list_entry_path().
-
-The TLV parser itself is defined in lib/tlv_parser.c.
-
-Both the TLV parser and the tlv digest list parser have been formally
-verified with Frama-C (https://frama-c.com/).
+The rpm digest list parser has been verified with Frama-C
+(https://frama-c.com/).
 
 The analysis has been done on this file:
 
-https://github.com/robertosassu/rpm-formal/blob/main/validate_tlv.c
+https://github.com/robertosassu/rpm-formal/blob/main/validate_rpm.c
 
 Here is the result of the analysis:
 
 [eva:summary] ====== ANALYSIS SUMMARY ======
 ---------------------------------------------------------------------------
-15 functions analyzed (out of 15): 100% coverage.
-In these functions, 248 statements reached (out of 266): 93% coverage.
+7 functions analyzed (out of 7): 100% coverage.
+In these functions, 227 statements reached (out of 242): 93% coverage.
 ---------------------------------------------------------------------------
-Some errors and warnings have been raised during the analysis:
-  by the Eva analyzer:      0 errors    4 warnings
-  by the Frama-C kernel:    0 errors    0 warnings
+No errors or warnings raised during the analysis.
 ---------------------------------------------------------------------------
 0 alarms generated by the analysis.
 ---------------------------------------------------------------------------
 Evaluation of the logical properties reached by the analysis:
-  Assertions        5 valid     0 unknown     0 invalid      5 total
-  Preconditions    23 valid     0 unknown     0 invalid     23 total
+  Assertions        6 valid     0 unknown     0 invalid      6 total
+  Preconditions    29 valid     0 unknown     0 invalid     29 total
 100% of the logical properties reached have been proven.
 ---------------------------------------------------------------------------
 
-The warnings are:
-
-[eva] validate_tlv.c:359: Warning:
-  this partitioning parameter cannot be evaluated safely on all states
-[eva] validate_tlv.c:387: Warning:
-  this partitioning parameter cannot be evaluated safely on all states
-[eva] validate_tlv.c:443: Warning:
-  this partitioning parameter cannot be evaluated safely on all states
-[eva] validate_tlv.c:451: Warning:
-  this partitioning parameter cannot be evaluated safely on all states
-
 Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
 ---
- include/uapi/linux/tlv_digest_list.h          |  72 ++++
- security/integrity/digest_cache/Kconfig       |   1 +
- security/integrity/digest_cache/Makefile      |   2 +
- .../integrity/digest_cache/parsers/parsers.h  |  13 +
- security/integrity/digest_cache/parsers/tlv.c | 341 ++++++++++++++++++
- security/integrity/digest_cache/populate.c    |   4 +
- 6 files changed, 433 insertions(+)
- create mode 100644 include/uapi/linux/tlv_digest_list.h
- create mode 100644 security/integrity/digest_cache/parsers/parsers.h
- create mode 100644 security/integrity/digest_cache/parsers/tlv.c
+ security/integrity/digest_cache/Makefile      |   1 +
+ .../integrity/digest_cache/parsers/parsers.h  |   2 +
+ security/integrity/digest_cache/parsers/rpm.c | 220 ++++++++++++++++++
+ security/integrity/digest_cache/populate.c    |   2 +
+ 4 files changed, 225 insertions(+)
+ create mode 100644 security/integrity/digest_cache/parsers/rpm.c
 
-diff --git a/include/uapi/linux/tlv_digest_list.h b/include/uapi/linux/tlv_digest_list.h
-new file mode 100644
-index 000000000000..8c97a46901c1
---- /dev/null
-+++ b/include/uapi/linux/tlv_digest_list.h
-@@ -0,0 +1,72 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * Copyright (C) 2017-2024 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Export definitions of the tlv digest list.
-+ */
-+
-+#ifndef _UAPI_LINUX_TLV_DIGEST_LIST_H
-+#define _UAPI_LINUX_TLV_DIGEST_LIST_H
-+
-+#include <linux/types.h>
-+
-+#define FOR_EACH_DIGEST_LIST_TYPE(DIGEST_LIST_TYPE) \
-+	DIGEST_LIST_TYPE(DIGEST_LIST_FILE) \
-+	DIGEST_LIST_TYPE(DIGEST_LIST__LAST)
-+
-+#define FOR_EACH_DIGEST_LIST_FIELD(DIGEST_LIST_FIELD) \
-+	DIGEST_LIST_FIELD(DIGEST_LIST_ALGO) \
-+	DIGEST_LIST_FIELD(DIGEST_LIST_ENTRY) \
-+	DIGEST_LIST_FIELD(DIGEST_LIST_FIELD__LAST)
-+
-+#define FOR_EACH_DIGEST_LIST_ENTRY_TYPE(DIGEST_LIST_ENTRY_TYPE) \
-+	DIGEST_LIST_ENTRY_TYPE(DIGEST_LIST_ENTRY_DATA) \
-+	DIGEST_LIST_ENTRY_TYPE(DIGEST_LIST_ENTRY__LAST)
-+
-+#define FOR_EACH_DIGEST_LIST_ENTRY_FIELD(DIGEST_LIST_ENTRY_FIELD) \
-+	DIGEST_LIST_ENTRY_FIELD(DIGEST_LIST_ENTRY_DIGEST) \
-+	DIGEST_LIST_ENTRY_FIELD(DIGEST_LIST_ENTRY_PATH) \
-+	DIGEST_LIST_ENTRY_FIELD(DIGEST_LIST_ENTRY_FIELD__LAST)
-+
-+#define GENERATE_ENUM(ENUM) ENUM,
-+#define GENERATE_STRING(STRING) #STRING,
-+
-+/**
-+ * enum digest_list_types - Types of digest list
-+ *
-+ * Enumerates the types of digest list to parse.
-+ */
-+enum digest_list_types {
-+	FOR_EACH_DIGEST_LIST_TYPE(GENERATE_ENUM)
-+};
-+
-+/**
-+ * enum digest_list_fields - Digest list fields
-+ *
-+ * Enumerates the digest list fields.
-+ */
-+enum digest_list_fields {
-+	FOR_EACH_DIGEST_LIST_FIELD(GENERATE_ENUM)
-+};
-+
-+/**
-+ * enum digest_list_entry_types - Types of data stored in DIGEST_LIST_ENTRY
-+ *
-+ * Enumerates the types of data stored in DIGEST_LIST_ENTRY (nested TLV data).
-+ */
-+enum digest_list_entry_types {
-+	FOR_EACH_DIGEST_LIST_ENTRY_TYPE(GENERATE_ENUM)
-+};
-+
-+/**
-+ * enum digest_list_entry_fields - DIGEST_LIST_ENTRY fields
-+ *
-+ * Enumerates the DIGEST_LIST_ENTRY fields.
-+ */
-+enum digest_list_entry_fields {
-+	FOR_EACH_DIGEST_LIST_ENTRY_FIELD(GENERATE_ENUM)
-+};
-+
-+#endif /* _UAPI_LINUX_TLV_DIGEST_LIST_H */
-diff --git a/security/integrity/digest_cache/Kconfig b/security/integrity/digest_cache/Kconfig
-index 11097464540a..a1c0d0337d70 100644
---- a/security/integrity/digest_cache/Kconfig
-+++ b/security/integrity/digest_cache/Kconfig
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- config INTEGRITY_DIGEST_CACHE
- 	bool "Integrity Digest Cache"
-+	select TLV_PARSER
- 	default n
- 	help
- 	  This option enables a cache of reference digests (e.g. of file
 diff --git a/security/integrity/digest_cache/Makefile b/security/integrity/digest_cache/Makefile
-index 1b91f9fba51c..5cf75c961e26 100644
+index 5cf75c961e26..681276a4c756 100644
 --- a/security/integrity/digest_cache/Makefile
 +++ b/security/integrity/digest_cache/Makefile
-@@ -5,3 +5,5 @@
- obj-$(CONFIG_INTEGRITY_DIGEST_CACHE) += digest_cache.o
- 
+@@ -7,3 +7,4 @@ obj-$(CONFIG_INTEGRITY_DIGEST_CACHE) += digest_cache.o
  digest_cache-y := main.o secfs.o htable.o populate.o modsig.o
-+
-+digest_cache-y += parsers/tlv.o
+ 
+ digest_cache-y += parsers/tlv.o
++digest_cache-y += parsers/rpm.o
 diff --git a/security/integrity/digest_cache/parsers/parsers.h b/security/integrity/digest_cache/parsers/parsers.h
-new file mode 100644
-index 000000000000..1bbae426ab9f
---- /dev/null
+index 1bbae426ab9f..3f00d29ed92a 100644
+--- a/security/integrity/digest_cache/parsers/parsers.h
 +++ b/security/integrity/digest_cache/parsers/parsers.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
-+ *
-+ * Author: Roberto Sassu <roberto.sassu@huawei.com>
-+ *
-+ * Digest list parsers.
-+ */
-+
-+#include "../internal.h"
-+
-+int digest_list_parse_tlv(struct digest_cache *digest_cache, const u8 *data,
+@@ -11,3 +11,5 @@
+ 
+ int digest_list_parse_tlv(struct digest_cache *digest_cache, const u8 *data,
+ 			  size_t data_len);
++int digest_list_parse_rpm(struct digest_cache *digest_cache, const u8 *data,
 +			  size_t data_len);
-diff --git a/security/integrity/digest_cache/parsers/tlv.c b/security/integrity/digest_cache/parsers/tlv.c
+diff --git a/security/integrity/digest_cache/parsers/rpm.c b/security/integrity/digest_cache/parsers/rpm.c
 new file mode 100644
-index 000000000000..1c8cce92aded
+index 000000000000..6949d12707b8
 --- /dev/null
-+++ b/security/integrity/digest_cache/parsers/tlv.c
-@@ -0,0 +1,341 @@
++++ b/security/integrity/digest_cache/parsers/rpm.c
+@@ -0,0 +1,220 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
 + * Copyright (C) 2017-2024 Huawei Technologies Duesseldorf GmbH
 + *
 + * Author: Roberto Sassu <roberto.sassu@huawei.com>
 + *
-+ * Parse a tlv digest list.
++ * Parse an rpm digest list (RPM package header).
 + */
 +
-+#define pr_fmt(fmt) "digest_cache TLV PARSER: "fmt
-+#include <linux/tlv_parser.h>
-+#include <uapi/linux/tlv_digest_list.h>
++#define pr_fmt(fmt) "digest_cache RPM PARSER: "fmt
++#include <linux/module.h>
 +
 +#include "parsers.h"
 +
-+#define kenter(FMT, ...) \
-+	pr_debug("==> %s(" FMT ")\n", __func__, ##__VA_ARGS__)
-+#define kleave(FMT, ...) \
-+	pr_debug("<== %s()" FMT "\n", __func__, ##__VA_ARGS__)
++#define RPMTAG_FILEDIGESTS 1035
++#define RPMTAG_FILEDIGESTALGO 5011
 +
-+static const char *digest_list_types_str[] = {
-+	FOR_EACH_DIGEST_LIST_TYPE(GENERATE_STRING)
++#define RPM_INT32_TYPE 4
++#define RPM_STRING_ARRAY_TYPE 8
++
++struct rpm_hdr {
++	u32 magic;
++	u32 reserved;
++	u32 tags;
++	u32 datasize;
 +};
 +
-+static const char *digest_list_fields_str[] = {
-+	FOR_EACH_DIGEST_LIST_FIELD(GENERATE_STRING)
++struct rpm_entryinfo {
++	s32 tag;
++	u32 type;
++	s32 offset;
++	u32 count;
 +};
 +
-+static const char *digest_list_entry_types_str[] = {
-+	FOR_EACH_DIGEST_LIST_ENTRY_TYPE(GENERATE_STRING)
++enum pgp_algos {
++	DIGEST_ALGO_MD5		=  1,
++	DIGEST_ALGO_SHA1	=  2,
++	DIGEST_ALGO_RMD160	=  3,
++	/* 4, 5, 6, and 7 are reserved. */
++	DIGEST_ALGO_SHA256	=  8,
++	DIGEST_ALGO_SHA384	=  9,
++	DIGEST_ALGO_SHA512	= 10,
++	DIGEST_ALGO_SHA224	= 11,
 +};
 +
-+static const char *digest_list_entry_fields_str[] = {
-+	FOR_EACH_DIGEST_LIST_ENTRY_FIELD(GENERATE_STRING)
++static const enum hash_algo pgp_algo_mapping[DIGEST_ALGO_SHA224 + 1] = {
++	[DIGEST_ALGO_MD5]	= HASH_ALGO_MD5,
++	[DIGEST_ALGO_SHA1]	= HASH_ALGO_SHA1,
++	[DIGEST_ALGO_RMD160]	= HASH_ALGO_RIPE_MD_160,
++	[4]			= HASH_ALGO__LAST,
++	[5]			= HASH_ALGO__LAST,
++	[6]			= HASH_ALGO__LAST,
++	[7]			= HASH_ALGO__LAST,
++	[DIGEST_ALGO_SHA256]	= HASH_ALGO_SHA256,
++	[DIGEST_ALGO_SHA384]	= HASH_ALGO_SHA384,
++	[DIGEST_ALGO_SHA512]	= HASH_ALGO_SHA512,
++	[DIGEST_ALGO_SHA224]	= HASH_ALGO_SHA224,
 +};
 +
-+struct tlv_callback_data {
-+	struct digest_cache *digest_cache;
-+	u64 parsed_num_entries;
-+	enum hash_algo algo;
-+};
-+
 +/**
-+ * parse_digest_list_entry_digest - Parse DIGEST_LIST_ENTRY_DIGEST field
-+ * @tlv_data: Callback data
-+ * @field: Field identifier
-+ * @field_data: Field data
-+ * @field_data_len: Length of @field_data
-+ *
-+ * This function parses the DIGEST_LIST_ENTRY_DIGEST field (file digest).
-+ *
-+ * Return: Zero on success, a POSIX error code otherwise.
-+ */
-+static int parse_digest_list_entry_digest(struct tlv_callback_data *tlv_data,
-+					  enum digest_list_entry_fields field,
-+					  const u8 *field_data,
-+					  u64 field_data_len)
-+{
-+	int ret;
-+
-+	kenter(",%u,%llu", field, field_data_len);
-+
-+	if (tlv_data->algo == HASH_ALGO__LAST) {
-+		pr_debug("Digest algo not set\n");
-+		ret = -EBADMSG;
-+		goto out;
-+	}
-+
-+	if (field_data_len != hash_digest_size[tlv_data->algo]) {
-+		pr_debug("Unexpected data length %llu, expected %d\n",
-+			 field_data_len, hash_digest_size[tlv_data->algo]);
-+		ret = -EBADMSG;
-+		goto out;
-+	}
-+
-+	ret = digest_cache_htable_add(tlv_data->digest_cache, (u8 *)field_data,
-+				      tlv_data->algo);
-+out:
-+	kleave(" = %d", ret);
-+	return ret;
-+}
-+
-+/**
-+ * parse_digest_list_entry_path - Parse DIGEST_LIST_ENTRY_PATH field
-+ * @tlv_data: Callback data
-+ * @field: Field identifier
-+ * @field_data: Field data
-+ * @field_data_len: Length of @field_data
-+ *
-+ * This function handles the DIGEST_LIST_ENTRY_PATH field (file path). It
-+ * currently does not parse the data.
-+ *
-+ * Return: Zero.
-+ */
-+static int parse_digest_list_entry_path(struct tlv_callback_data *tlv_data,
-+					enum digest_list_entry_fields field,
-+					const u8 *field_data,
-+					u64 field_data_len)
-+{
-+	kenter(",%u,%llu", field, field_data_len);
-+
-+	kleave(" = 0");
-+	return 0;
-+}
-+
-+/**
-+ * digest_list_entry_hdr_callback - DIGEST_LIST_ENTRY header callback
-+ * @callback_data: Callback data
-+ * @data_type: TLV data type
-+ * @num_entries: Number of TLV data entries
-+ * @total_len: Total length of TLV data
-+ *
-+ * This callback ensures that only TLV data with type DIGEST_LIST_ENTRY_DATA
-+ * is processed.
-+ *
-+ * Return: 0 to skip processing the data, 1 to process the data.
-+ */
-+static int digest_list_entry_hdr_callback(void *callback_data, u64 data_type,
-+					  u64 num_entries, u64 total_len)
-+{
-+	if (data_type != DIGEST_LIST_ENTRY_DATA)
-+		return 0;
-+
-+	return 1;
-+}
-+
-+/**
-+ * digest_list_entry_data_callback - DIGEST_LIST_ENTRY data callback
-+ * @callback_data: Callback data
-+ * @field: Field identifier
-+ * @field_data: Field data
-+ * @field_data_len: Length of @field_data
-+ *
-+ * This callback handles the fields of DIGEST_LIST_ENTRY_DATA (nested) data,
-+ * and calls the appropriate parser.
-+ *
-+ * Return: Zero on success, a POSIX error code otherwise.
-+ */
-+static int digest_list_entry_data_callback(void *callback_data, u64 field,
-+					   const u8 *field_data,
-+					   u64 field_data_len)
-+{
-+	struct tlv_callback_data *tlv_data;
-+	int ret;
-+
-+	tlv_data = (struct tlv_callback_data *)callback_data;
-+
-+	switch (field) {
-+	case DIGEST_LIST_ENTRY_DIGEST:
-+		ret = parse_digest_list_entry_digest(tlv_data, field,
-+						     field_data,
-+						     field_data_len);
-+		break;
-+	case DIGEST_LIST_ENTRY_PATH:
-+		ret = parse_digest_list_entry_path(tlv_data, field, field_data,
-+						   field_data_len);
-+		break;
-+	default:
-+		pr_debug("Unhandled field %s\n",
-+			 digest_list_entry_fields_str[field]);
-+		/* Just ignore non-relevant fields. */
-+		ret = 0;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+/**
-+ * parse_digest_list_algo - Parse DIGEST_LIST_ALGO field
-+ * @tlv_data: Callback data
-+ * @field: Field identifier
-+ * @field_data: Field data
-+ * @field_data_len: Length of @field_data
-+ *
-+ * This function parses the DIGEST_LIST_ALGO field (digest algorithm).
-+ *
-+ * Return: Zero on success, a POSIX error code otherwise.
-+ */
-+static int parse_digest_list_algo(struct tlv_callback_data *tlv_data,
-+				  enum digest_list_fields field,
-+				  const u8 *field_data, u64 field_data_len)
-+{
-+	u64 algo;
-+	int ret;
-+
-+	kenter(",%u,%llu", field, field_data_len);
-+
-+	if (field_data_len != sizeof(u64)) {
-+		pr_debug("Unexpected data length %llu, expected %lu\n",
-+			 field_data_len, sizeof(u64));
-+		ret = -EBADMSG;
-+		goto out;
-+	}
-+
-+	algo = __be64_to_cpu(*(u64 *)field_data);
-+
-+	if (algo >= HASH_ALGO__LAST) {
-+		pr_debug("Unexpected digest algo %llu\n", algo);
-+		ret = -EBADMSG;
-+		goto out;
-+	}
-+
-+	ret = digest_cache_htable_init(tlv_data->digest_cache,
-+				       tlv_data->parsed_num_entries, algo);
-+	if (ret < 0)
-+		goto out;
-+
-+	tlv_data->algo = algo;
-+
-+	pr_debug("Digest algo: %s\n", hash_algo_name[algo]);
-+out:
-+	kleave(" = %d", ret);
-+	return ret;
-+}
-+
-+/**
-+ * parse_digest_list_entry - Parse DIGEST_LIST_ENTRY field
-+ * @tlv_data: Callback data
-+ * @field: Field identifier
-+ * @field_data: Field data
-+ * @field_data_len: Length of @field_data
-+ *
-+ * This function parses the DIGEST_LIST_ENTRY field.
-+ *
-+ * Return: Zero on success, a POSIX error code otherwise.
-+ */
-+static int parse_digest_list_entry(struct tlv_callback_data *tlv_data,
-+				   enum digest_list_fields field,
-+				   const u8 *field_data, u64 field_data_len)
-+{
-+	int ret;
-+
-+	kenter(",%u,%llu", field, field_data_len);
-+
-+	ret = tlv_parse(digest_list_entry_hdr_callback, NULL,
-+			digest_list_entry_data_callback, tlv_data, field_data,
-+			field_data_len, digest_list_entry_types_str,
-+			DIGEST_LIST_ENTRY__LAST, digest_list_entry_fields_str,
-+			DIGEST_LIST_ENTRY_FIELD__LAST);
-+
-+	kleave(" = %d", ret);
-+	return ret;
-+}
-+
-+/**
-+ * digest_list_hdr_callback - DIGEST_LIST header callback
-+ * @callback_data: Callback data
-+ * @data_type: TLV data type
-+ * @num_entries: Number of TLV data entries
-+ * @total_len: Total length of TLV data
-+ *
-+ * This callback ensures that only TLV data with type DIGEST_LIST_FILE
-+ * is processed (one block), and stores the total number of TLV data entries
-+ * to later initialize a new digest cache hash table.
-+ *
-+ * Return: 0 to skip processing the data, 1 to process the data, a POSIX error
-+ *	   code otherwise.
-+ */
-+static int digest_list_hdr_callback(void *callback_data, u64 data_type,
-+				    u64 num_entries, u64 total_len)
-+{
-+	struct tlv_callback_data *tlv_data;
-+
-+	tlv_data = (struct tlv_callback_data *)callback_data;
-+
-+	if (data_type != DIGEST_LIST_FILE)
-+		return 0;
-+
-+	/* At the moment we process only one block. */
-+	if (tlv_data->parsed_num_entries)
-+		return -EINVAL;
-+
-+	tlv_data->parsed_num_entries = num_entries;
-+	return 1;
-+}
-+
-+/**
-+ * digest_list_data_callback - DIGEST_LIST data callback
-+ * @callback_data: Callback data
-+ * @field: Field identifier
-+ * @field_data: Field data
-+ * @field_data_len: Length of @field_data
-+ *
-+ * This callback handles the fields of DIGEST_LIST_FILE data, and calls the
-+ * appropriate parser.
-+ *
-+ * Return: Zero on success, a POSIX error code otherwise.
-+ */
-+static int digest_list_data_callback(void *callback_data, u64 field,
-+				     const u8 *field_data, u64 field_data_len)
-+{
-+	struct tlv_callback_data *tlv_data;
-+	int ret;
-+
-+	tlv_data = (struct tlv_callback_data *)callback_data;
-+
-+	switch (field) {
-+	case DIGEST_LIST_ALGO:
-+		ret = parse_digest_list_algo(tlv_data, field, field_data,
-+					     field_data_len);
-+		break;
-+	case DIGEST_LIST_ENTRY:
-+		ret = parse_digest_list_entry(tlv_data, field, field_data,
-+					      field_data_len);
-+		break;
-+	default:
-+		pr_debug("Unhandled field %s\n",
-+			 digest_list_fields_str[field]);
-+		/* Just ignore non-relevant fields. */
-+		ret = 0;
-+		break;
-+	}
-+
-+	return ret;
-+}
-+
-+/**
-+ * digest_list_parse_tlv - Parse a tlv digest list
++ * digest_list_parse_rpm - Parse an rpm digest list
 + * @digest_cache: Digest cache
 + * @data: Data to parse
 + * @data_len: Length of @data
 + *
-+ * This function parses a tlv digest list.
++ * This function parses an rpm digest list.
 + *
 + * Return: Zero on success, a POSIX error code otherwise.
 + */
-+int digest_list_parse_tlv(struct digest_cache *digest_cache, const u8 *data,
++int digest_list_parse_rpm(struct digest_cache *digest_cache, const u8 *data,
 +			  size_t data_len)
 +{
-+	struct tlv_callback_data tlv_data = {
-+		.digest_cache = digest_cache,
-+		.algo = HASH_ALGO__LAST,
-+		.parsed_num_entries = 0,
++	const unsigned char rpm_header_magic[8] = {
++		0x8e, 0xad, 0xe8, 0x01, 0x00, 0x00, 0x00, 0x00
 +	};
++	const struct rpm_hdr *hdr;
++	const struct rpm_entryinfo *entry;
++	u32 tags, max_tags, datasize;
++	u32 digests_count, max_digests_count;
++	u32 digests_offset, algo_offset;
++	u32 digest_len, pkg_pgp_algo, i;
++	bool algo_offset_set = false, digests_offset_set = false;
++	enum hash_algo pkg_kernel_algo = HASH_ALGO_MD5;
++	u8 rpm_digest[SHA512_DIGEST_SIZE];
++	int ret;
 +
-+	return tlv_parse(digest_list_hdr_callback, &tlv_data,
-+			 digest_list_data_callback, &tlv_data, data, data_len,
-+			 digest_list_types_str, DIGEST_LIST__LAST,
-+			 digest_list_fields_str, DIGEST_LIST_FIELD__LAST);
++	if (data_len < sizeof(*hdr)) {
++		pr_debug("Not enough data for RPM header, current %ld, expected: %ld\n",
++			 data_len, sizeof(*hdr));
++		return -EINVAL;
++	}
++
++	if (memcmp(data, rpm_header_magic, sizeof(rpm_header_magic))) {
++		pr_debug("RPM header magic mismatch\n");
++		return -EINVAL;
++	}
++
++	hdr = (const struct rpm_hdr *)data;
++	data += sizeof(*hdr);
++	data_len -= sizeof(*hdr);
++
++	tags = __be32_to_cpu(hdr->tags);
++	max_tags = data_len / sizeof(*entry);
++
++	/* Possibly lower limit on tags loop. */
++	if (tags > max_tags)
++		return -EINVAL;
++
++	datasize = __be32_to_cpu(hdr->datasize);
++	if (datasize != data_len - tags * sizeof(*entry))
++		return -EINVAL;
++
++	pr_debug("Scanning %d RPM header sections\n", tags);
++	for (i = 0; i < tags; i++) {
++		entry = (const struct rpm_entryinfo *)data;
++		data += sizeof(*entry);
++		data_len -= sizeof(*entry);
++
++		switch (__be32_to_cpu(entry->tag)) {
++		case RPMTAG_FILEDIGESTS:
++			if (__be32_to_cpu(entry->type) != RPM_STRING_ARRAY_TYPE)
++				return -EINVAL;
++
++			digests_offset = __be32_to_cpu(entry->offset);
++			digests_count = __be32_to_cpu(entry->count);
++			digests_offset_set = true;
++
++			pr_debug("Found RPMTAG_FILEDIGESTS at offset %u, count: %u\n",
++				 digests_offset, digests_count);
++			break;
++		case RPMTAG_FILEDIGESTALGO:
++			if (__be32_to_cpu(entry->type) != RPM_INT32_TYPE)
++				return -EINVAL;
++
++			algo_offset = __be32_to_cpu(entry->offset);
++			algo_offset_set = true;
++
++			pr_debug("Found RPMTAG_FILEDIGESTALGO at offset %u\n",
++				 algo_offset);
++			break;
++		default:
++			break;
++		}
++	}
++
++	if (!digests_offset_set)
++		return 0;
++
++	if (algo_offset_set) {
++		if (algo_offset >= data_len)
++			return -EINVAL;
++
++		if (data_len - algo_offset < sizeof(u32))
++			return -EINVAL;
++
++		pkg_pgp_algo = *(u32 *)&data[algo_offset];
++		pkg_pgp_algo = __be32_to_cpu(pkg_pgp_algo);
++		if (pkg_pgp_algo > DIGEST_ALGO_SHA224) {
++			pr_debug("Unknown PGP algo %d\n", pkg_pgp_algo);
++			return -EINVAL;
++		}
++
++		pkg_kernel_algo = pgp_algo_mapping[pkg_pgp_algo];
++		if (pkg_kernel_algo >= HASH_ALGO__LAST) {
++			pr_debug("Unknown mapping for PGP algo %d\n",
++				 pkg_pgp_algo);
++			return -EINVAL;
++		}
++
++		pr_debug("Found mapping for PGP algo %d: %s\n", pkg_pgp_algo,
++			 hash_algo_name[pkg_kernel_algo]);
++	}
++
++	digest_len = hash_digest_size[pkg_kernel_algo];
++
++	if (digests_offset > data_len)
++		return -EINVAL;
++
++	/* Worst case, every digest is a \0. */
++	max_digests_count = data_len - digests_offset;
++
++	/* Possibly lower limit on digests_count loop. */
++	if (digests_count > max_digests_count)
++		return -EINVAL;
++
++	ret = digest_cache_htable_init(digest_cache, digests_count,
++				       pkg_kernel_algo);
++	if (ret < 0)
++		return ret;
++
++	for (i = 0; i < digests_count; i++) {
++		if (digests_offset == data_len)
++			return -EINVAL;
++
++		if (!data[digests_offset]) {
++			digests_offset++;
++			continue;
++		}
++
++		if (data_len - digests_offset < digest_len * 2 + 1)
++			return -EINVAL;
++
++		ret = hex2bin(rpm_digest, (const char *)&data[digests_offset],
++			      digest_len);
++		if (ret < 0) {
++			pr_debug("Invalid hex format for digest %s\n",
++				 &data[digests_offset]);
++			return ret;
++		}
++
++		ret = digest_cache_htable_add(digest_cache, rpm_digest,
++					      pkg_kernel_algo);
++		if (ret < 0)
++			return ret;
++
++		digests_offset += digest_len * 2 + 1;
++	}
++
++	return ret;
 +}
 diff --git a/security/integrity/digest_cache/populate.c b/security/integrity/digest_cache/populate.c
-index c68c76971380..c118658f547a 100644
+index c118658f547a..1c68d957bf1d 100644
 --- a/security/integrity/digest_cache/populate.c
 +++ b/security/integrity/digest_cache/populate.c
-@@ -13,6 +13,7 @@
- #include <linux/kernel_read_file.h>
+@@ -64,6 +64,8 @@ static int digest_cache_parse_digest_list(struct digest_cache *digest_cache,
  
- #include "internal.h"
-+#include "parsers/parsers.h"
+ 	if (!strncmp(format, "tlv-", 4))
+ 		ret = digest_list_parse_tlv(digest_cache, data, data_len);
++	else if (!strncmp(format, "rpm-", 4))
++		ret = digest_list_parse_rpm(digest_cache, data, data_len);
  
- /**
-  * digest_cache_parse_digest_list - Parse a digest list
-@@ -61,6 +62,9 @@ static int digest_cache_parse_digest_list(struct digest_cache *digest_cache,
- 	pr_debug("Parsing %s, format: %.*s, size: %ld\n", path_str,
- 		 (int)(next_sep - format), format, data_len);
- 
-+	if (!strncmp(format, "tlv-", 4))
-+		ret = digest_list_parse_tlv(digest_cache, data, data_len);
-+
  	return ret;
  }
- 
 -- 
 2.34.1
 
