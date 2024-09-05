@@ -1,149 +1,154 @@
-Return-Path: <linux-kselftest+bounces-17201-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17202-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB9DC96CD9A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 06:11:03 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0CC696CECD
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 07:56:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AABAF1F27228
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 04:11:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2F131B2552C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 05:56:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723F014E2E6;
-	Thu,  5 Sep 2024 04:10:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="YRJ7zJbr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AC4915884D;
+	Thu,  5 Sep 2024 05:56:14 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 309F114D2B3;
-	Thu,  5 Sep 2024 04:10:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 945F414F11E;
+	Thu,  5 Sep 2024 05:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725509459; cv=none; b=axbCwiNStifE/jq/Rwh1wEdK3E4BODPPE4y6A3xI2fZnI1DAnMocbUCksHhIzxMZk6+6Z2dkzOJO7eqcxJTJ0PC2X1doZG41GYf1P1v731JjXUudsYLr4m1y3QFWOc7l4vMRleuUIHwbHXllc4SanalbXdR7Y4rjpZOd0ycLWtA=
+	t=1725515774; cv=none; b=lF4xh2C+6qgspmLgUmrCr+1gsPMtJiuOoWoHHLGww/ZYhOb1lS8kKIScKGpdvlmj8GpMJfw+GKn8MkPXkEF3FzSj/cs6S5AeH+BZFT2lfXkjnMZy9djNUNoMge5L1fqhH1KM4oePhTVkMry6xXUqACvsBUjY76Uip4ZJwdlvVyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725509459; c=relaxed/simple;
-	bh=u2Ch/o77PjLYGsReQcy05n4gCCnOgS0nHgy/Suw9PLg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TIQj6f82HVBaXL/+FPO2d74lSCfk1ATuV+454bixcN3U4Xn3Qd6om9EaF0pLY1pjBHBN1Li1H4k+dDeMiNU47zl31DFjs1qCLPMu5+BiaW/sx3FF1liTaPHJ979jO7jE20zElaVGzIYRI55sHAk9ZNGduKX7gZHYOZrFpF+NjZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=YRJ7zJbr; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=OtwjK
-	TXld+LD+C/gFLMawKusKdxWF5oA5AVNnQP/lMo=; b=YRJ7zJbrOOE4aETAAnDUe
-	FFOwZr0jXMknJ0I/5eY07zf//uwICXm+4i7Mzu6itHVyDLmwEh0O4PWZd6JyaCs3
-	yI3CJogpvjo5F7JmyA6E+5gHLKYfzmJLSFuikd1QciVIsn6iCx4mvaEWOT/IenSI
-	qDDPGfyKpaT0DP/7hXaXbo=
-Received: from localhost.localdomain (unknown [120.227.22.125])
-	by gzga-smtp-mta-g2-5 (Coremail) with SMTP id _____wBXnqEsL9lm2Ud+Fg--.54591S2;
-	Thu, 05 Sep 2024 12:10:21 +0800 (CST)
-From: Yuan Chen <chenyuan_fl@163.com>
-To: andrii@kernel.org
-Cc: bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/bpf: Add valid flag to bpf_cookie selftest's res
-Date: Wed,  4 Sep 2024 19:55:10 +0800
-Message-ID: <20240904115510.67480-1-chenyuan_fl@163.com>
-X-Mailer: git-send-email 2.46.0
+	s=arc-20240116; t=1725515774; c=relaxed/simple;
+	bh=s573o035Y8vJxz/3lvfL3h7JspJd2/fPU+s90l7e8W8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bn0Z1xLqa7qGUsu8fzmw/j4dBALmTSrEfLwcOgzweM0o0j7UGismpahpENOj3Shk7P08vUqN1ZfsG4EwoVZ4yBhnqbETiF4bQfxPHMyC2vo8PXIxEkP33sM/tkszCLrR3PYzfKht7UOGkvM97iktL0kDbn/0vSGkf+Ui1d6xzJ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E49BFEC;
+	Wed,  4 Sep 2024 22:56:37 -0700 (PDT)
+Received: from [10.162.43.13] (e116581.arm.com [10.162.43.13])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AC93B3F73F;
+	Wed,  4 Sep 2024 22:56:05 -0700 (PDT)
+Message-ID: <0b3af60f-0449-48a1-b228-f26618b9d50a@arm.com>
+Date: Thu, 5 Sep 2024 11:26:02 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wBXnqEsL9lm2Ud+Fg--.54591S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxCF13Gr4kKF1ktry8trW8Zwb_yoW5Cr47p3
-	y8X34ayFZ3JF17XF4xGr4UWF4FvF40vFW3ZF4rt3yrZrn7Xr92qr1xKF42qF9xWrWFvw1f
-	Zw4DKFZ8Cw1xZaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jq1v3UUUUU=
-X-CM-SenderInfo: xfkh05pxdqswro6rljoofrz/1tbiNxJRvWXAnFjYFAAAsk
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 1/2] selftests: Rename sigaltstack to generic signal
+To: Shuah Khan <skhan@linuxfoundation.org>, shuah@kernel.org, oleg@redhat.com
+Cc: mingo@kernel.org, tglx@linutronix.de, mark.rutland@arm.com,
+ ryan.roberts@arm.com, broonie@kernel.org, suzuki.poulose@arm.com,
+ Anshuman.Khandual@arm.com, DeepakKumar.Mishra@arm.com,
+ aneesh.kumar@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, sj@kernel.org
+References: <20240822121415.3589190-1-dev.jain@arm.com>
+ <20240822121415.3589190-2-dev.jain@arm.com>
+ <714f8eb4-b226-48f6-ab0d-75bdfbf83364@linuxfoundation.org>
+ <42d0fa4b-eb67-42fd-a8e1-05d159d0d52f@arm.com>
+ <806e4be0-4b1f-4818-806f-a844d952d54e@arm.com>
+ <fff2b685-a7a5-4260-a293-f2abf55d9ce4@linuxfoundation.org>
+ <514713eb-235c-40ee-8c25-f1f3e1ca7f7a@arm.com>
+ <d5dc1bd9-4473-405f-99fc-192691f41c4f@linuxfoundation.org>
+Content-Language: en-US
+From: Dev Jain <dev.jain@arm.com>
+In-Reply-To: <d5dc1bd9-4473-405f-99fc-192691f41c4f@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Yuan Chen <chenyuan@kylinos.cn>
 
-This patch identifies whether a test item is valid by adding a valid flag to res.
+On 9/4/24 22:35, Shuah Khan wrote:
+> On 9/3/24 22:52, Dev Jain wrote:
+>>
+>> On 9/4/24 03:14, Shuah Khan wrote:
+>>> On 8/30/24 10:29, Dev Jain wrote:
+>>>>
+>>>> On 8/27/24 17:16, Dev Jain wrote:
+>>>>>
+>>>>> On 8/27/24 17:14, Shuah Khan wrote:
+>>>>>> On 8/22/24 06:14, Dev Jain wrote:
+>>>>>>> Rename sigaltstack to generic signal directory, to allow adding 
+>>>>>>> more
+>>>>>>> signal tests in the future.
+>>>>>>
+>>>>>> Sorry - I think I mentioned I don't like this test renamed. Why 
+>>>>>> are you sending
+>>>>>> this rename still included in the patch series?
+>>>>>
+>>>>> I am not renaming the test, just the directory. The directory name
+>>>>> is changed to signal, and I have retained the name of the test -
+>>>>> sas.c.
+>>>>
+>>>> Gentle ping: I guess there was a misunderstanding; in v5, I was
+>>>> also changing the name of the test, to which you objected, and
+>>>> I agreed. But, we need to change the name of the directory since
+>>>> the new test has no relation to the current directory name,
+>>>> "sigaltstack". The patch description explains that the directory
+>>>> should be generically named.
+>>>>
+>>>
+>>> Right. You are no longer changing the test name. You are still
+>>> changing the directory name. The problem I mentioned stays the
+>>> same. Any fixes to the existing tests in this directory can no
+>>> longer auto applied to stables releases.
+>>
+>> I understand your point, but commit baa489fabd01 (selftests/vm: rename
+>> selftests/vm to selftests/mm) is also present. That was a lot bigger 
+>> change;
+>> sigaltstack contains just one test currently, whose fixes possibly 
+>> would have
+>> to be backported, so I guess it should not be that much of a big 
+>> problem?
+>>
+>>>
+>
+> So who does the backports whenevenr something changes? You are adding
+> work where as the automated process would just work without this
+> change. It doesn't matter if there is another test that changed
+> the name.
+>
+>>> Other than the desire to rename the directory to generic, what
+>>> other value does this change bring?
+>>
+>> Do you have an alternative suggestion as to where I should put my new 
+>> test then;
+>> I do not see what is the value of creating another directory to just 
+>> include
+>> my test. This will unnecessarily clutter the selftests/ directory with
+>> directories containing single tests. And, putting this in 
+>> "sigaltstack" is just
+>> wrong since this test has no relation with sigaltstack.
+>>
+>
+> If this new test has no relation to sigaltstack, then why are you 
+> changing
+> and renaming the sigaltstack directory?
 
-When we test the bpf_cookies/perf_event sub-test item of test_progs, there is a
-probability failure of the test item. In fact, this is not a problem, because
-the corresponding perf event is not collected. This should not output the test
-failure, and it is more reasonable to output SKIP. Therefore, add a valid
-identifier to res to distinguish whether the test item is valid, and skip the
-test item if it is invalid.
-
-Signed-off-by: Yuan Chen <chenyuan@kylinos.cn>
----
- .../testing/selftests/bpf/prog_tests/bpf_cookie.c | 15 +++++++++++++++
- .../testing/selftests/bpf/progs/test_bpf_cookie.c |  2 ++
- 2 files changed, 17 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-index 070c52c312e5..e5bf4b385501 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_cookie.c
-@@ -456,6 +456,7 @@ static void pe_subtest(struct test_bpf_cookie *skel)
- 	if (!ASSERT_GE(pfd, 0, "perf_fd"))
- 		goto cleanup;
- 
-+	skel->bss->res_valid = false;
- 	opts.bpf_cookie = 0x100000;
- 	link = bpf_program__attach_perf_event_opts(skel->progs.handle_pe, pfd, &opts);
- 	if (!ASSERT_OK_PTR(link, "link1"))
-@@ -463,6 +464,12 @@ static void pe_subtest(struct test_bpf_cookie *skel)
- 
- 	burn_cpu(); /* trigger BPF prog */
- 
-+	if (!skel->bss->res_valid) {
-+		printf("%s:SKIP:the corresponding perf event was not sampled.\n",
-+		        __func__);
-+		test__skip();
-+		goto cleanup;
-+	}
- 	ASSERT_EQ(skel->bss->pe_res, 0x100000, "pe_res1");
- 
- 	/* prevent bpf_link__destroy() closing pfd itself */
-@@ -474,6 +481,7 @@ static void pe_subtest(struct test_bpf_cookie *skel)
- 	link = NULL;
- 	kern_sync_rcu();
- 	skel->bss->pe_res = 0;
-+	skel->bss->res_valid = false;
- 
- 	opts.bpf_cookie = 0x200000;
- 	link = bpf_program__attach_perf_event_opts(skel->progs.handle_pe, pfd, &opts);
-@@ -482,6 +490,13 @@ static void pe_subtest(struct test_bpf_cookie *skel)
- 
- 	burn_cpu(); /* trigger BPF prog */
- 
-+	if (!skel->bss->res_valid) {
-+		printf("%s:SKIP:the corresponding perf event was not sampled.\n",
-+		        __func__);
-+		test__skip();
-+		goto cleanup;
-+	}
-+
- 	ASSERT_EQ(skel->bss->pe_res, 0x200000, "pe_res2");
- 
- cleanup:
-diff --git a/tools/testing/selftests/bpf/progs/test_bpf_cookie.c b/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
-index c83142b55f47..28d0ae6810d9 100644
---- a/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
-+++ b/tools/testing/selftests/bpf/progs/test_bpf_cookie.c
-@@ -7,6 +7,7 @@
- #include <errno.h>
- 
- int my_tid;
-+bool res_valid;
- 
- __u64 kprobe_res;
- __u64 kprobe_multi_res;
-@@ -27,6 +28,7 @@ static void update(void *ctx, __u64 *res)
- 	if (my_tid != (u32)bpf_get_current_pid_tgid())
- 		return;
- 
-+	res_valid = true;
- 	*res |= bpf_get_attach_cookie(ctx);
- }
- 
--- 
-2.46.0
-
+Because the functionality I am testing is of signals, and signals are a 
+superset
+of sigaltstack. Still, I can think of a compromise, if semantically you 
+want to
+consider the new test as not testing signals, but a specific syscall 
+"sigaction"
+and its interaction with blocking of signals, how about naming the new 
+directory "sigaction"?
+> Adding a new directory is much better
+> than going down a path that is more confusing and adding backport 
+> overhead.
+>
+> Two options:
+> -- Add a new directory or add a note and keep it under sigaltstack
+> -- Do you foresee this new growing?
+>
+> thanks,
+> -- Shuah
+>
+>
 
