@@ -1,50 +1,85 @@
-Return-Path: <linux-kselftest+bounces-17336-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17337-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDEE296E5A9
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 00:11:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFADD96E61F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 01:17:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 886581F240E5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 22:11:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62DA91F22AE7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 23:17:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1280D1B2EE8;
-	Thu,  5 Sep 2024 22:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D871A727D;
+	Thu,  5 Sep 2024 23:17:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FEtlwGH/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Sdyp6tE/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0C019EEC8;
-	Thu,  5 Sep 2024 22:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBB6539A;
+	Thu,  5 Sep 2024 23:16:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725574237; cv=none; b=qG/y6+aCbDFIlodnqBA6zoZ0r0dMgdwaefw4tJaMPrg+yMsN3j3c/BTZdJdz6Wqr2mAr5s8Ody27YpidQhg1jtGmssan6LOuJ9/Mv7y6V+npPY4xxPYRDwKUMB5Mb6wdaBFMeukPEa/EgJeM/OD45xffpWMO5NxneOLLv0xj29M=
+	t=1725578220; cv=none; b=q3MRbdzvm/X389SyyIm4O4Dcnn7VDnVFsoJWbqz8wlYS6e0FUpvdg8GnvIVkr2U3fpLIMUr6TdN3qEpfd1rhi2w9VQ6Y7Z53HWuZfKI06Qt6/vzbAbXSyOkeAoc0APc3/Ai82jmRjPlPPlCy11kdzJYLRsPlSDPi+Q1jV9OGkm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725574237; c=relaxed/simple;
-	bh=p5VMs64NJzqCs9tiHDeAgq9x7XJTzxC7nHOkCZ5q1u8=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=WO1Jt6yPUlB/grux4Y0YmMTgO+/6yqRFxlPOZo2JX0uo3aNOo3y/Q3yIbyGkLYhg6J7NomOy3lnZbu+8zonmxdEc715lUs/dd2tBEpUcnUNlPNlNSXPVf8gRcTWx0XW1CvIBr9FUGkPwLlBAfuaNFxMxnv09JOyUO8nf7jnIBHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FEtlwGH/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B2F3C4CEC7;
-	Thu,  5 Sep 2024 22:10:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725574236;
-	bh=p5VMs64NJzqCs9tiHDeAgq9x7XJTzxC7nHOkCZ5q1u8=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=FEtlwGH/ceZt2U4TtpoTHhrd3h/DFtmxG77DkzG00yCOB/R2dAp2cKIqEASw9iNvx
-	 04N6hLJl/mNxQ2Izkfu+BpMPU2OxzyqhSLXWVN3bzKhmBsUWM3XvlLVQQ49A3N4CDt
-	 oY2s37V55jy2x/X4xJf0JlroPtdWYC+gFQFzLHw5KVv1tJeN9n/eVy7jLZWBUD3JaY
-	 BbhlM5D9GVGz8O5byfUH9inkL6ZlHra9DOp6ZQ61VHRlapp31LqtGAcynVG63pXUnQ
-	 2jJXIhylSnvzBJcQ9TpHmU9k/J0kYFN262ORD4fRi1XUP9nA8/ad2D4VczvV9SDZYt
-	 1rV7GnVmYnj/w==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70E8F3806654;
-	Thu,  5 Sep 2024 22:10:38 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1725578220; c=relaxed/simple;
+	bh=rQugc0RZNrnAOFUZoUEf4sJt7rouH3wxQ8yP+xWGT9E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Dz3q63+GpE7UesHklfpJom+g7+3cj1NZyy4QMlsyaCRw5umPn5dYMDwvgM0ZYOFg/esgUUBKQn7W9Y0apY8jr9xQ1HYTDuNkrvDIyiMdgz/TsJ3jfZA/7SNpCI5UddWaEiy+DiYDdeI2alDkCMKL6i4hxiW6j0zMZ+ovLgV3Nq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Sdyp6tE/; arc=none smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-45680233930so8764831cf.3;
+        Thu, 05 Sep 2024 16:16:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725578218; x=1726183018; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qo8m8li/DItO+PeZ8FBAi9MIkkXQzptGTjicoh08/+4=;
+        b=Sdyp6tE/mCOJ8Qiflqyvb4RKBlQDsB9Ey34fn5oHEokppIhOOwVIYD0h+t3/RP3CVj
+         adxC5xFtGz8aBCp/Nz7DdsIvdsjTHbxlXLlUe+ecp+4QD/xWy+Kyo+0Gp856kPQuD4+Z
+         Gyomyd1LIRrYTl9xCHVxkCGe4JjZJvWOiPIm8WKmTLPZgVQKVyEa0CoUZ013Ndn8EQxy
+         AnZcD9N7rWCgFVAgb4v7BdrpeSaCnurPrrrDQ3YDQc/8dwlBVgyDwCxfRghYfOFO7/G0
+         0Zg4ZrT8F8J7Y+pzIWhrkV/S+CM7sIYZFqtYnzQNNkV2dykTUt0Zg/opTTqR/QL5fzo5
+         dlLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725578218; x=1726183018;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qo8m8li/DItO+PeZ8FBAi9MIkkXQzptGTjicoh08/+4=;
+        b=PmBkZ7Cvx7qkzMg/On8vywr/axv6u1qp4c2WtzFeV+2NvCtdlnqM5wbvR3XrpTnCc/
+         LimFEmlY7jH08R+sswnWrLDhDikexJWsbxzX84WOGro/25Y6FFTxJ191s+bFqO9kNXry
+         VPcFMpZLbFbm/3xqnoPrhqP6Fon/NufPGaluV9OzP3UFdb7LuSOcezUc9OwDJ0Qe8r5t
+         07B1CkoMud3nUUVn4+6j7BlqXO5LYquup4/MkIaxGi3HMaF9LQhjpSq6eRC7V7QGPgRH
+         iOuo2ISV691DUkKCH1sL44187MhDyls16Urm210R/XHl/RptfZ2GZ1NU7pNUEYHSSMfp
+         GyTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWANSUg08+HGKdZ2pLQ0mIIAOqQKlrg9QWQOWVjvrOHcfR/wBXFIh2Yhunc4m9lqakW1zPNfPIEYXGtNW1+kzA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwB3n2K0adaiG82b6uSLGo382dIOUscCknXWwhvQOlzlb4jQzqd
+	3sz0tJIldpHBLHI5sfQhVNI3VH2mGwhZlv0eRBk369ZRYYfi78nkcTO4xg==
+X-Google-Smtp-Source: AGHT+IEZ6jhwkxjx5Rsp4WThikw4c0EQeiU4vYMhG2IsO3ALq0fGBmcdwu9tf65alnXXhE7OHrJNPA==
+X-Received: by 2002:a05:6214:5d0c:b0:6c3:5b3e:d8a4 with SMTP id 6a1803df08f44-6c35b3ed903mr212230926d6.5.1725578217563;
+        Thu, 05 Sep 2024 16:16:57 -0700 (PDT)
+Received: from willemb.c.googlers.com.com (193.132.150.34.bc.googleusercontent.com. [34.150.132.193])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c52041877esm11909666d6.123.2024.09.05.16.16.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Sep 2024 16:16:56 -0700 (PDT)
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	ncardwell@google.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	fw@strlen.de,
+	Willem de Bruijn <willemb@google.com>
+Subject: [PATCH net-next v2 0/2] selftests/net: add packetdrill
+Date: Thu,  5 Sep 2024 19:15:50 -0400
+Message-ID: <20240905231653.2427327-1-willemdebruijn.kernel@gmail.com>
+X-Mailer: git-send-email 2.46.0.469.g59c65b2a67-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,43 +87,42 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] selftests: net: enable bind tests
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <172557423699.1859883.10700910912228977828.git-patchwork-notify@kernel.org>
-Date: Thu, 05 Sep 2024 22:10:36 +0000
-References: <5a009b26cf5fb1ad1512d89c61b37e2fac702323.1725430322.git.jamie.bainbridge@gmail.com>
-In-Reply-To: <5a009b26cf5fb1ad1512d89c61b37e2fac702323.1725430322.git.jamie.bainbridge@gmail.com>
-To: Jamie Bainbridge <jamie.bainbridge@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, shuah@kernel.org, kuniyu@amazon.com,
- joannelkoong@gmail.com, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
 
-Hello:
+From: Willem de Bruijn <willemb@google.com>
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Lay the groundwork to import into kselftests the over 150 packetdrill
+TCP/IP conformance tests on github.com/google/packetdrill.
 
-On Wed,  4 Sep 2024 16:12:26 +1000 you wrote:
-> bind_wildcard is compiled but not run, bind_timewait is not compiled.
-> 
-> These two tests complete in a very short time, use the test harness
-> properly, and seem reasonable to enable.
-> 
-> The author of the tests confirmed via email that these were
-> intended to be run.
-> 
-> [...]
+1/2: add kselftest infra for TEST_PROGS that need an interpreter
 
-Here is the summary with links:
-  - [net] selftests: net: enable bind tests
-    https://git.kernel.org/netdev/net/c/e4af74a53b7a
+2/2: add the specific packetdrill tests
 
-You are awesome, thank you!
+Both can go through net-next, I imagine. But let me know if the
+core infra should go through linux-kselftest.
+
+Willem de Bruijn (2):
+  selftests: support interpreted scripts with ksft_runner.sh
+  selftests/net: integrate packetdrill with ksft
+
+ tools/testing/selftests/Makefile              |  5 +-
+ tools/testing/selftests/kselftest/runner.sh   |  7 ++-
+ .../selftests/net/packetdrill/Makefile        |  9 +++
+ .../testing/selftests/net/packetdrill/config  |  5 ++
+ .../selftests/net/packetdrill/defaults.sh     | 63 +++++++++++++++++++
+ .../selftests/net/packetdrill/ksft_runner.sh  | 41 ++++++++++++
+ .../net/packetdrill/tcp_inq_client.pkt        | 51 +++++++++++++++
+ .../net/packetdrill/tcp_inq_server.pkt        | 51 +++++++++++++++
+ .../tcp_md5_md5-only-on-client-ack.pkt        | 28 +++++++++
+ 9 files changed, 256 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/net/packetdrill/Makefile
+ create mode 100644 tools/testing/selftests/net/packetdrill/config
+ create mode 100755 tools/testing/selftests/net/packetdrill/defaults.sh
+ create mode 100755 tools/testing/selftests/net/packetdrill/ksft_runner.sh
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_inq_client.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_inq_server.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_md5_md5-only-on-client-ack.pkt
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.46.0.469.g59c65b2a67-goog
 
 
