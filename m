@@ -1,139 +1,169 @@
-Return-Path: <linux-kselftest+bounces-17324-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17325-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBCF396E406
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 22:26:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A93196E446
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 22:42:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42D6C1F246DB
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 20:26:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B79191C23CCC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 20:42:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A42D81A2572;
-	Thu,  5 Sep 2024 20:24:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C0FF1A726F;
+	Thu,  5 Sep 2024 20:41:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fxv3xHFf"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Vmhr4xm1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3855B1A2570;
-	Thu,  5 Sep 2024 20:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D024A1A3BB9;
+	Thu,  5 Sep 2024 20:41:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725567886; cv=none; b=dN1Ty88hEyX7C3RdyjVsmhHg52tirdyRrV4mweGe+SlM1vw2SeDG+S2vP2mvjBDzhQ9TpmBah+Y3Ks4AdjGJfNpTU7aRuS88vqeJK1pGDoHc6YLumzRTrpP9Xf/PN5/1REyX4mea2br2WVDG3d3K7kkkM8/Jnsm7Qg1Yno/XNso=
+	t=1725568909; cv=none; b=qCaQkczc8dLk7XAiLFbV90s8/8Xx2M3kKWQc+AFrtnBLDdlumIvQ0YWLllGAul258iuiVQCd5t68Ap4y7FJpCT3/KATXmdTiAEw+9j2S5aaZOwu2uc7rpZLm363shHjbaE8LgeCqCT5vDKp/PSwIyjbEalA8oyS6+X6RvfuALQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725567886; c=relaxed/simple;
-	bh=NGrGPC9AVmfunJ8pKBfuV1Bxb+MuSbLY2pWcUM2wSGA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nYb1aAoJGsjqfP53edR5/oCfaC88KQj0MDnsNuRDp1Cb7HB8pQwhC20fOsOuV5hZj+XpTGwq2O8OWAYc6ebueeANtHKwwtXe4Ph/u+epOUr1WiQ4W4njkBwzheSiDIHIujLgVUTAVQgWqn2HD2bQZevqNGG6/aXFGL+dAUUJDxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fxv3xHFf; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2d8b679d7f2so966339a91.1;
-        Thu, 05 Sep 2024 13:24:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725567884; x=1726172684; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q4pnjKyhCClrvRPv4sgZ/czxqPIQCouh8o4w6WwCf+E=;
-        b=fxv3xHFfGiyiwlVmDhTYvS2LsGCaxh5Em7PKOh3KrlSBLz0NP5PPkys1+0khi7VsOD
-         AAChy03/6kSA5Z6asg4N0bCmN2SVwQ+SA+3/i/gs6A4FjKqH++LkM/odJBmYs4ACjaF2
-         tH3Jw1IF3Mh+sJVVqf5pJrp5I0ARyrqCiJlDm+veu1rLuNwYS/3ZCPMFoSybocKpHxk7
-         UHWCs0yRI92uPYuIkOrLkRMkbNOyLyToJtrewlYTDooJivt4Xh4PJhFf/kQKwRAS+QBf
-         hx5hxGqaVQ1nGoVbR/HvJFB99o3pI1S1PH5tLiGd0D/YLjGXyUplESJQW4nAp7Ks0RRU
-         iIDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725567884; x=1726172684;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q4pnjKyhCClrvRPv4sgZ/czxqPIQCouh8o4w6WwCf+E=;
-        b=nKGN/uhKmR+3a/NHMGv4q2Yh+Lb7WR/xBbqEYd6NMnfUv1kLfg320tYaowirpdHCe7
-         hRu5lWkuN7eyYlBy/372gshbXBNAgV+E86wH41FrxMmVkb159py0QzCYQlMdnPSpHTRE
-         1YHsLDGpXy6rmtgbZ3BHZiPFFxl1veY2IeXCaQiGSqr4/DrVNmdDFTWWqSkuBSkoV+cF
-         RlzDEzmaZkk3z/oC7PlE2JiIhIEds97+HpBnIE4+F0UeKM8lwW0kDtwbalmbSrMl7Md7
-         qa1PvFFalzDVZQABZoLZ//CvzV24zJ91wSMr/B4awvURKjn5RXcey60cuFC4AB7RdFg/
-         7erA==
-X-Forwarded-Encrypted: i=1; AJvYcCWRJ1YRiDfdB11ylBh72oCqEyMP9JaMLnEQYut1xHhJ5eMqyPQVKwJLWP5Pc3LPuFRekSk=@vger.kernel.org, AJvYcCXh7HCk/RxNQmS06LG6gYnAxF/9rJiOJKLoILj2nTtCXSCoII7R+BpH6LdWuhKP3HkVpcUJiDbZ2zKBfpeOyB6s@vger.kernel.org, AJvYcCXov13Ybg6Xa9IbkV9iziSJqKdXuh2j7ivw5KBsTG/KqMKjxnCLqamTe9UPDsgk4Xzf5XT44IeidZoVGvG4@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFpsoxw+gx8jFS7F+B+aWFf2nvQjz/6440FJxW68Xu3tN+x2ud
-	iDWENYOF0mRyBseU+CviVsKmXliKlTyCmb8KYWxrxDawo1NWColWg++xLBzcpXw9zgCfnuYEB3r
-	QO12fRda21Xd7atvg8Xy4xFZcp4k=
-X-Google-Smtp-Source: AGHT+IFaowFZoH0YDD5Pt3eVuHrWmY+KINCZryxJVws2NSDg8A8Teh1D20XPO+Kc8YrkA2CTKXroThwMfgJOetYAr9c=
-X-Received: by 2002:a17:90a:8a15:b0:2d8:99c4:3cd9 with SMTP id
- 98e67ed59e1d1-2dad4de1392mr593624a91.3.1725567884435; Thu, 05 Sep 2024
- 13:24:44 -0700 (PDT)
+	s=arc-20240116; t=1725568909; c=relaxed/simple;
+	bh=1pTKkK+g3LwaTtJ584c38j5d6WNE2g/owBxKg20Z/ps=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NZSKdCkfOWoYR+LV2AP2Al3M++Ij2ln0XHwZ0TTJt7QspiFhWN/1b47S8r06OgXO1X2stTG+oxD8iLDQ2QMdo86EYPupFyrzoY5D4IW9z1qx9v3B95OcD0InISzZLYCtNw+B9HHO/rbRcXqxMhjr4+MHb5DdepuKin62dDbnktk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=Vmhr4xm1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 398A0C4CEC3;
+	Thu,  5 Sep 2024 20:41:46 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="Vmhr4xm1"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1725568904;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IeN0hion7E5T8bnC9bEQSPstkGSkSwCA9M/4YZOxoLs=;
+	b=Vmhr4xm1Wp03ugcdrYba3ciO2c/OQp0oQM3tMCUeyv/y6IZN4vNwmCaOuwFQTFlZjTxzGh
+	vyDmKYOWlgz6gVR/SY11McK85Ld05NIERlGr0h62hGj7fSc/8dsPEgJIDmwgO9QkzhtMl2
+	G9lC+jvPOPB9VCi02VaBflNkREEbT7Y=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 48b42c3c (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Thu, 5 Sep 2024 20:41:44 +0000 (UTC)
+Date: Thu, 5 Sep 2024 22:41:40 +0200
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Naveen N Rao <naveen@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+	llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+	Xi Ruoyao <xry111@xry111.site>
+Subject: Re: [PATCH v5 4/5] powerpc/vdso: Wire up getrandom() vDSO
+ implementation on VDSO32
+Message-ID: <ZtoXhGYflBNR74g0@zx2c4.com>
+References: <cover.1725304404.git.christophe.leroy@csgroup.eu>
+ <1f49c2ce009f8b007ab0676fb41187b2d54f28b2.1725304404.git.christophe.leroy@csgroup.eu>
+ <ZtnYqZI-nrsNslwy@zx2c4.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240828121706.1721287-1-yikai.lin@vivo.com>
-In-Reply-To: <20240828121706.1721287-1-yikai.lin@vivo.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 5 Sep 2024 13:24:31 -0700
-Message-ID: <CAEf4BzbfBQZqy2w4TiTBR9mi4AMQkWKk8Un8Lp21ELQBgsgcvQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 0/2] selftests/bpf: Enable vmtest for
- cross-compile arm64 on x86_64 host, and fix some issues.
-To: Lin Yikai <yikai.lin@vivo.com>
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
-	martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, 
-	shuah@kernel.org, terrelln@fb.com, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	opensource.kernel@vivo.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZtnYqZI-nrsNslwy@zx2c4.com>
 
-On Wed, Aug 28, 2024 at 5:17=E2=80=AFAM Lin Yikai <yikai.lin@vivo.com> wrot=
-e:
->
-> These two patch enable the use of "vmtest.sh" for cross-compile arm64 on =
-x86_64 host.
-> This is essential for utilizing BPF on Android (arm64),
-> as the compilation server is running on Ubuntu (x86).
->
-> Following previous guidance from V1, the two changes are as follow:
->
-> V2:
-> - patch 2:
->    - [1/2] In Makefile, use $(SRCARCH) to get target arch's uapi.
->            Therefore, there is no longer a need to compile "make headers_=
-install".
->    - [2/2] Regard "LDLIBS +=3D -lzstd" as a separate patch for static com=
-pile.
->
-> v1:
->    Link: https://lore.kernel.org/bpf/20240827133959.1269178-1-yikai.lin@v=
-ivo.com/
-> - patch 2:
->    - [1/2] Update "vmtest.sh" for cross-compile arm64 on x86_64 host.
->    - [2/2] Fix cross-compile issue for some files and a static compile is=
-sue for "-lzstd"
->
-> Lin Yikai (2):
->   selftests/bpf: Enable vmtest for cross-compile arm64 on x86_64 host,
->     and fix some related issues.
->   selftests/bpf: fix static cross-compile error for liblstd.a linking.
->
->  tools/testing/selftests/bpf/Makefile   |  8 +++++-
->  tools/testing/selftests/bpf/README.rst | 11 +++++++-
->  tools/testing/selftests/bpf/vmtest.sh  | 37 +++++++++++++++++++++-----
->  3 files changed, 48 insertions(+), 8 deletions(-)
->
-> --
-> 2.34.1
->
->
+On Thu, Sep 05, 2024 at 06:13:29PM +0200, Jason A. Donenfeld wrote:
+> > +/*
+> > + * The macro sets two stack frames, one for the caller and one for the callee
+> > + * because there are no requirement for the caller to set a stack frame when
+> > + * calling VDSO so it may have omitted to set one, especially on PPC64
+> > + */
+> > +
+> > +.macro cvdso_call funct
+> > +  .cfi_startproc
+> > +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
+> > +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
+> > +	mflr		r0
+> > +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
+> > +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
+> > +	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+> > +  .cfi_rel_offset lr, PPC_MIN_STKFRM + PPC_LR_STKOFF
+> > +	get_datapage	r8
+> > +	addi		r8, r8, VDSO_RNG_DATA_OFFSET
+> > +	bl		CFUNC(DOTSYM(\funct))
+> > +	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+> > +	cmpwi		r3, 0
+> > +	mtlr		r0
+> > +	addi		r1, r1, 2 * PPC_MIN_STKFRM
+> > +  .cfi_restore lr
+> > +  .cfi_def_cfa_offset 0
+> > +	crclr		so
+> > +	bgelr+
+> > +	crset		so
+> > +	neg		r3, r3
+> > +	blr
+> > +  .cfi_endproc
+> > +.endm
+> 
+> Can you figure out what's going on and send a fix, which I'll squash
+> into this commit?
 
-Given that [0] series was just applied and it also has some bits that
-address cross-compilation, can you please rebase and re-check what
-sort of changes you still need on top of that?
+This doesn't work, but I wonder if something like it is what we want. I
+need to head out for the day, but here's what I've got. It's all wrong
+but might be of interest.
 
-  [0] https://lore.kernel.org/all/20240905081401.1894789-1-pulehui@huaweicl=
-oud.com/
+diff --git a/arch/powerpc/include/asm/vdso/getrandom.h b/arch/powerpc/include/asm/vdso/getrandom.h
+index 501d6bb14e8a..acb271709d30 100644
+--- a/arch/powerpc/include/asm/vdso/getrandom.h
++++ b/arch/powerpc/include/asm/vdso/getrandom.h
+@@ -47,7 +47,8 @@ static __always_inline struct vdso_rng_data *__arch_get_vdso_rng_data(void)
+ }
+
+ ssize_t __c_kernel_getrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state,
+-			     size_t opaque_len, const struct vdso_rng_data *vd);
++			     size_t opaque_len, const struct vdso_data *vd,
++			     const struct vdso_rng_data *vrd);
+
+ #endif /* !__ASSEMBLY__ */
+
+diff --git a/arch/powerpc/kernel/vdso/getrandom.S b/arch/powerpc/kernel/vdso/getrandom.S
+index a957cd2b2b03..bc49eb87cfd1 100644
+--- a/arch/powerpc/kernel/vdso/getrandom.S
++++ b/arch/powerpc/kernel/vdso/getrandom.S
+@@ -32,7 +32,7 @@
+   .cfi_rel_offset r2, PPC_MIN_STKFRM + STK_GOT
+ #endif
+ 	get_datapage	r8
+-	addi		r8, r8, VDSO_RNG_DATA_OFFSET
++	addi		r9, r8, VDSO_RNG_DATA_OFFSET
+ 	bl		CFUNC(DOTSYM(\funct))
+ 	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+ #ifdef __powerpc64__
+diff --git a/arch/powerpc/kernel/vdso/vgetrandom.c b/arch/powerpc/kernel/vdso/vgetrandom.c
+index 5f855d45fb7b..408c76036868 100644
+--- a/arch/powerpc/kernel/vdso/vgetrandom.c
++++ b/arch/powerpc/kernel/vdso/vgetrandom.c
+@@ -8,7 +8,10 @@
+ #include <linux/types.h>
+
+ ssize_t __c_kernel_getrandom(void *buffer, size_t len, unsigned int flags, void *opaque_state,
+-			     size_t opaque_len, const struct vdso_rng_data *vd)
++			     size_t opaque_len, const struct vdso_data *vd,
++			     const struct vdso_rng_data *vrd)
+ {
+-	return __cvdso_getrandom_data(vd, buffer, len, flags, opaque_state, opaque_len);
++	if (IS_ENABLED(CONFIG_TIME_NS) && vd->clock_mode == VDSO_CLOCKMODE_TIMENS)
++		vrd = (void *)vrd + (1UL << CONFIG_PAGE_SHIFT);
++	return __cvdso_getrandom_data(vrd, buffer, len, flags, opaque_state, opaque_len);
+ }
+
 
