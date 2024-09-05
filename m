@@ -1,180 +1,151 @@
-Return-Path: <linux-kselftest+bounces-17278-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81DC896DEFA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 17:56:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8639796DF07
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 18:00:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C7E0281CC2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 15:56:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A68561C225FC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 16:00:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B537719DF82;
-	Thu,  5 Sep 2024 15:56:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B7CF19DFB4;
+	Thu,  5 Sep 2024 16:00:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="lZ3J/n8p"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hri7NS4y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2076.outbound.protection.outlook.com [40.107.220.76])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47B41195FCE;
-	Thu,  5 Sep 2024 15:56:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.76
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725551779; cv=fail; b=YTzKhdRrlU+1DXPZA8jkBNx529iAHPffCyCmV9Bh6wD6mEP01PPwI826rMVj2ou+5+lTKIyzdqmrBUhPAq0qLfnQyjVEjkrFseML58WbrhiMAjuauaZH67VY24hVbSEhKr6ImKYStQl+bwpA66VYfyI82pBCA9fBSmke3tOBNGo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725551779; c=relaxed/simple;
-	bh=6cnX9Q1CC5ZC0Re3wrNnMLg0JRdplmZ/C4eG5IqjsY0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=sK5uRwTQGvtiCLRu8alnICKe09rXXzFgV9Ez0tDUhu7LVB0Em0UuxkU9pJZGnysYxrH8lQhT8fHqvMg87NMdI2/UW/SAMcPqVJRZWWN7aDHzUnBv/i9kO3ojhKk3bUQy0iq9LwWwD3K7CTE6ahlrddfU0usAPJklhZva9Nw022Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=lZ3J/n8p; arc=fail smtp.client-ip=40.107.220.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=THn9Vay9gvm1J560fDxR3TArzhxRJ/48IpIx8DPpzIQkDkXvW9O9q0xLJSfj1nCkusW1c1NANNDXQDReNIeeTesbeGisS86lb+7zOOZUnBdHhWlqRC3mGY7sHRlQNMqgKivvLWr161GTt0mPImcpU6CHbKZRqr6LJVeb3Ofsf5yiz3JuCNviEXX4BZe8vPNXvL8vA48/8mRVbNgiJ0rgDgQaoTMRkGftZG/e3ru3Gc/Fnb0/aypw+8wDvsTi5R4TnwJoOmkeXI+mNJvvG9czK8fokIm+l1YwfnR050vLYmDr0IgT5GDRAfsKXXSHP606GqrXBiTnKixQivkK6VG7rA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IiN9WLrCI1bavDJHS0M4dPPFQUe5c0vt7Do1iBH2xqs=;
- b=rePVhR9GxSGdmiygPlw/uckODhSx0nfpQEct08tUvU6goCGnDqYfurmV2A9/dDNhOcN8k9bpHXkqmRE7p5JTPk3MdtP7Anx/msAyYMX9V6Wp+GGk1yqSA4ab7BR4hXucPdNKWKrITFr37wz5D+QOFWizTWZs5E+Ik5ehXqNSMxP/SGIvGAyxBFjOdEDw6OgJGp/TJptorE34QiJKp5QDWsDnmXCc432wJOnHxZ9M+CORmr5CEe93BMO+n5/sE1mjOuFteSRB1IdZbY8DTwKWtJ7k9T4Zh1T41tswFD0WI5nIrm0kqad1SeFOfBfXMlB2Z05yCfWYyXULOGvZexKorA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IiN9WLrCI1bavDJHS0M4dPPFQUe5c0vt7Do1iBH2xqs=;
- b=lZ3J/n8pjxF3VvQpnzyrj+o0q5gAonYHYSxuMp6SW89l0I2amKexUMgl8TxX5PnPJvRn8KdfOIHgc8HlIsDw3vlsacLHWvbHcn4fslIDc9QGb8JaQoAYwBHOE92T4ITTwUGJ+3/yBkuvuytJN2jXHCamThSg1jTGnzUohuFO8n/lTVD5tXaZ0gCW4EJUNNeWcm2Wbae/AW155w0zYKA7SVzRoFvBbKjWpIB03MY3oEKr8oR9BEPEA0qdylrheWkb6rpuNyzSUIebegYNp2mwHg7zD8yMaOnvHpqpTBfu6nM1hyMWFHnxMxKEQUbeThQ1g87QrXJMJADFltC6FRSMqw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB7763.namprd12.prod.outlook.com (2603:10b6:610:145::10)
- by SJ2PR12MB7942.namprd12.prod.outlook.com (2603:10b6:a03:4c3::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.25; Thu, 5 Sep
- 2024 15:56:14 +0000
-Received: from CH3PR12MB7763.namprd12.prod.outlook.com
- ([fe80::8b63:dd80:c182:4ce8]) by CH3PR12MB7763.namprd12.prod.outlook.com
- ([fe80::8b63:dd80:c182:4ce8%3]) with mapi id 15.20.7918.024; Thu, 5 Sep 2024
- 15:56:14 +0000
-Date: Thu, 5 Sep 2024 12:56:13 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: kevin.tian@intel.com, will@kernel.org, joro@8bytes.org,
-	suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
-	dwmw2@infradead.org, baolu.lu@linux.intel.com, shuah@kernel.org,
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, eric.auger@redhat.com,
-	jean-philippe@linaro.org, mdf@kernel.org, mshavit@google.com,
-	shameerali.kolothum.thodi@huawei.com, smostafa@google.com,
-	yi.l.liu@intel.com
-Subject: Re: [PATCH v2 04/19] iommufd: Allow pt_id to carry viommu_id for
- IOMMU_HWPT_ALLOC
-Message-ID: <20240905155613.GO1358970@nvidia.com>
-References: <cover.1724776335.git.nicolinc@nvidia.com>
- <2d469a5279ef05820d5993df752d32239878338d.1724776335.git.nicolinc@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2d469a5279ef05820d5993df752d32239878338d.1724776335.git.nicolinc@nvidia.com>
-X-ClientProxiedBy: BL0PR02CA0097.namprd02.prod.outlook.com
- (2603:10b6:208:51::38) To CH3PR12MB7763.namprd12.prod.outlook.com
- (2603:10b6:610:145::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D912317C9B;
+	Thu,  5 Sep 2024 16:00:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725552044; cv=none; b=q+mLHq+6U/FkmZu9x7NR0mPBA8VbivHG6RzvU0b3COm6gvutk99e86hFIZLDqT33Fxq5ZmAgU8o9ib+y59XLEuKlfHI6ydLf4GHCjcnFCgQUJwWqf5eEHI022yu8xSdOtHyjUuHEwifZYoHHMp4V5spnT9hI9ZpV+u1ts00bhRo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725552044; c=relaxed/simple;
+	bh=v8YPTsOBBGnFSuSBn5etaBfl3hjtF6fupdDxTqbWZzg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XaMbyj/Nyh50dxOyb7LgDhhizTFmhjI/q+mlW7Y20+W1LGbK1icUiVDv9voNDcIb5nO0zL6pXQGkJN4BrRtEBCum7zsV5OSN3Sb2vv6bDA9ajCukF5KljFd7coRjhFbDTBBDPPyLv95PL10QDsJ4+2wzYBw7LC82KnSM9lOyGOU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hri7NS4y; arc=none smtp.client-ip=209.85.210.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-717594b4ce7so824223b3a.0;
+        Thu, 05 Sep 2024 09:00:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725552041; x=1726156841; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7vY/7oX7G2QiiXFERpXBLGYNJgBqkc4LH8uPCkR3XQE=;
+        b=hri7NS4yh+6W4lnjjPVGdHqLAEuv/uE7IW0f9c2EDo7n3L3mO+PJZBZskx/j6VjK2J
+         duuogb97yT7WUluRYgbmnUwXMHWD09EL2Nc7NU177a5U9DemaJDvB0osPxfDgFeFYTbt
+         Tyu9fr36b1k1uyVAp054qjGWs7eRDCOk78/tDjFzYuLtolnnUsNc7HE0QvSENOmTfFVK
+         EibCSYbM2iIdIA5wd/VXieorsz8YBj33D4543dOTFLGC0pRj29jAc+x1FTcwUkvPNXFI
+         h0d3AesyB+dRdmOvxKKxC7WF3c374M0/JutImL9qd6EodoDZwFc4C8PkyGtFef6mOMwd
+         AuTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725552041; x=1726156841;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7vY/7oX7G2QiiXFERpXBLGYNJgBqkc4LH8uPCkR3XQE=;
+        b=CE8h5cWLquEe50CRRAUtsd+dQKOJf7QB5lKhjqiiKqsBAHAeAFjfs+giDtiQ2sTZ3O
+         qJtUwzYpPFxCGHyb7e83Au9vdEOj3sM7hMbhYi37lBIDOETASi0+ijZICR59zVahKQ0E
+         U1RfOe2WQ0xX52wxPvKh4ZHtdqwIUZ9pANEDuWeyjdHrrtb+GPzlgmkim3sDdiM7y62y
+         vo88eHgbiVghW7PGmPHh7J8cBFGUzOj7H+0BVIlwCCLxUzsF6uO9yleCiZtc1+nv0xWJ
+         K5X2nVbJ9sgTt1pZ2PQLu8RRzGXhqytSv7YIQ2QhDw6kJSYtnyZM3Yg3tQBX7mT9YYpc
+         bvdw==
+X-Forwarded-Encrypted: i=1; AJvYcCV8ubzGIGb/Wt8R832NyMbr2p+NckejMPHFUJf3e6rDuEGKaavdLw8ASQREPZrRMdIKoebTzuY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzo8+PsQW6ctf5XFRrcQGr61EqjHG/tDSxNU3lntEsLZuUerIhr
+	HY6mwhdoyjrrVyowoaNrWic8NSu/wU1gSujvnyPphldqFY6idTgo
+X-Google-Smtp-Source: AGHT+IEuoMyK2/xj0UlSDgmuFlLtvlAOdsD7DmKCM6/IjvYDVcZ2HL5YwfOPXxovAuZLjZFoGsEfGw==
+X-Received: by 2002:a05:6a20:cf8e:b0:1c4:8650:d6db with SMTP id adf61e73a8af0-1cce10aa93emr26535428637.40.1725552040919;
+        Thu, 05 Sep 2024 09:00:40 -0700 (PDT)
+Received: from KERNELXING-MC1.tencent.com ([114.253.36.103])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7177859a369sm3490521b3a.148.2024.09.05.09.00.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Sep 2024 09:00:40 -0700 (PDT)
+From: Jason Xing <kerneljasonxing@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	willemdebruijn.kernel@gmail.com,
+	willemb@google.com
+Cc: linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH net-next v2] selftests: return failure when timestamps can't be reported
+Date: Fri,  6 Sep 2024 00:00:35 +0800
+Message-Id: <20240905160035.62407-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB7763:EE_|SJ2PR12MB7942:EE_
-X-MS-Office365-Filtering-Correlation-Id: 82f456c5-4422-42b2-901f-08dccdc3452c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|7416014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?hOXwFfFQqFEjdo/UUcyI/BSr0lY/efKylHwSASZIKkMHzPaRsUZVZHrFIpZ5?=
- =?us-ascii?Q?4UElKV87Rk1FhH2FOBtthbi9e4yfm4G89U+b6pJYfnWJ6sI550qzmoO5K1XU?=
- =?us-ascii?Q?Y3zXImIklqNq+ao1/9bo3EgReAwPQ1REPioSPdq+5OL9qLDGwVzJNmUQmlaM?=
- =?us-ascii?Q?a975biGvtZKS2isbCn4wQDrLpK/K4Sg4j7HJawQmhZ4NNKRCyzaDyMEdLhro?=
- =?us-ascii?Q?a+cz03DN4UnWv3PwJUrWonwUAnpCUYyduJKYD0Hfg+gToHvfSItSDs84kO4Y?=
- =?us-ascii?Q?jc+6HAeXrzx5yK9SE8h79TRhN9Sax5Sxo4j9NO7fFyu0sxV3vniQ6R34T8CP?=
- =?us-ascii?Q?GuXsXJNsHgXrOXvdK20mmElXwdhZpRyV8ANIcrPznMOoaQ37BLpVDQQI8R1d?=
- =?us-ascii?Q?meCFpJJg92G+JXNakBTgQElKSWOKSIGfnK0Hxrj/3jlH8mBvAv9+r5p1Crba?=
- =?us-ascii?Q?IVN7UzcisjZ8AcDMpB0BFhn2697ujdAgqnx8pheKJ7yn1qwt9iv1ETmsKB0a?=
- =?us-ascii?Q?f/+gSJcpS3MD/kvdT29k+Y0GkiyUH/eByAexwwjeJdOQez/yFQBm56sSMgIJ?=
- =?us-ascii?Q?g2gjGXmMfH91zqNFADOVRi411oezPf7UMexIQGwWtWPv2SUKvxPiUgPo9RAn?=
- =?us-ascii?Q?JegXFnXpsFaG0W0V4VGAw+Av6VmxMoa7yRV12yttO9CH8SB8OGeDud1ZFo8S?=
- =?us-ascii?Q?CT1jBx2+NvmVTHo3YTNqhqYb8JxwneVINH2dsKwlsDiirevqQQgRKb7cGQsi?=
- =?us-ascii?Q?afEW1gfZNKKjlQ4Bmgl7H8UfjOsp77/7cMoo1p+z3VZM00mV1rkjoIdRs82F?=
- =?us-ascii?Q?asOoV+UMo4YZiAarPlGHgwAeONQTbhXD9CyAjRMmA0GvHKu5hwFw3WeAdx+q?=
- =?us-ascii?Q?zaBondGl7TL7EMDzv8jVgMZip0+DIeC/b9Wu7XtmbaY/BmCRDrqdLzShz3/Q?=
- =?us-ascii?Q?OsfUGxEMGool5R1+CvhfDxVe8JjPE3DQ38qZlrY5cO1kOpW5uqnbbLjf17jM?=
- =?us-ascii?Q?+wIV60cLkCOYTPmoHxBdK9dKZMVOj/0ATr0Ox16ogruywTBo3lAFDIdOUl7b?=
- =?us-ascii?Q?OzC7i0fWOnATUodFRQPDkRZjuT+4JDf+gLdjY77r1t8IbiPXLHS6nUvJh9QV?=
- =?us-ascii?Q?VlHzSZMJgYVDniWFgwULh5JLFwtrkF6td5VedfzHl81rQr4XUwZYvZkhJgtX?=
- =?us-ascii?Q?j8KAqIm/2dw9Nf4zMW9YdYs7glEDQRL7bOuyy0rUpBWsty58mP4ORQfS6yiv?=
- =?us-ascii?Q?eqOEZRa7Hr79dSVy25dc+ZU6jpunyv/ZVexFvhvgD8a49i5pQTsJTJuG4dDs?=
- =?us-ascii?Q?CEIdlV2Szy2O09MeVX9LTe1GVpb9NTsNGnVj15F3NM47Ow=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB7763.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(7416014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Oj2iU2Qq4DRJ/a3rrvpdv7sXbb9O9KIsWTJDC+pK6co183tpW073h8VLXQTj?=
- =?us-ascii?Q?8n1j2wzp4xXRsoOCOk20QLR5f9WZKMCuUbw60Ac+dWo0gqnJ0FKUrlcz92mH?=
- =?us-ascii?Q?r1zs+jmKyFJb3cc0OrUImP5BRx+pmhXuD+5IRl5EUZb3ybF/kMP73IbN6ZXh?=
- =?us-ascii?Q?t7iDf6v43hPsaUyfpUQTgZ3vpRlewlfD7HN0gI7IPf+ZSpv76+eHXJHp6ntp?=
- =?us-ascii?Q?W36edxh9dpQik64XFNOWUcYGwr/JVglxpGcA0LZQc0OdoclPeNAg4vARxaZJ?=
- =?us-ascii?Q?8OfZZ6XPZe3iCrr658uytvnxP60Q5Fch6s+r2oj9y5hbCvuAV1/0H8o5NcSO?=
- =?us-ascii?Q?w21z9q11QhFD4t0qybRhziSvoi40dT47wFNDmbM8WaUvH9EnL30TKh9yyxcN?=
- =?us-ascii?Q?tqwvjciOHdWzh5lnQKUZFi/y6Pozg+uIRh90hKwhZhonv6fBYxlLTFrmLtah?=
- =?us-ascii?Q?wyWS3Y+vo6W9pDQJySp3fSxiK9QvWGikhuyJHVBBq3sB8o7mG0x1wau7EDr3?=
- =?us-ascii?Q?1maBpIZZmobU1IGMbUIo61LR/rC3pX0W7zNzqBca4jIJ5Z/YKURayD2mlVja?=
- =?us-ascii?Q?YZa6OYLtjB5F9fFodttz6U4OuoNUpnM+gIflHkL5tZtZSeF6fJfv0jyF1Q4t?=
- =?us-ascii?Q?e0iqeCMBCM+wF7MTHqPoeRjE0Ixl2TKSXnV0FEoNO67NYz6AnhROxXWU3laC?=
- =?us-ascii?Q?i2Os7+yO1diVuRKUYgKcBhbTt9fvHsb4l7hVsHZS4Kl5B13foq6AF+ujW8WJ?=
- =?us-ascii?Q?NgqD6KzSw3yrhFCneOWXMpKCBOyFRIhAKY68g7i81cglqO0vg4OMt6DKHkQ1?=
- =?us-ascii?Q?nfFVlPvjuBnjYnqWMKdmvR+8M6QsTLLm9CDdlYOkJxRZtHwGkwQY6lyhC9MJ?=
- =?us-ascii?Q?w99Cr1ETCSyP4aN+TE3/ofcE4f8hcnWNAEkITL2UAR4/6TpbXWyb7afixizW?=
- =?us-ascii?Q?qKU4QxkQ+CO8FuCQa5wa2J7+OEs8NDiQ8UPrOO1agfFXdfhrzrQTrW/0iymp?=
- =?us-ascii?Q?OhjtQlx7VtON0YNBTOtDICraYUk9xaLS2cpKo33kjoxlBdRC/iMdybivRSpk?=
- =?us-ascii?Q?ej8hKHwpblE5ydxt5JASOdNk0jUaanotw6cjwW02pKnmZnZ2CABRlC8sjLLX?=
- =?us-ascii?Q?LjZ4wI/7/X4mM/q5dKnysM/6L8vVgOFvEbOXTPIq95PR8O56XgtGZtbbZJcw?=
- =?us-ascii?Q?okUXuL9+lvyPsF3i5PVaOEq9Z2xAAsWbe3chQXT4YQ6YjtXHAk6O853W7LGb?=
- =?us-ascii?Q?fuGcd6LzNfZFJGjR5HTzP+oCEqXlNandaxOhkd/uNrqchrCTQb8wy2JF3e46?=
- =?us-ascii?Q?xDw9dmMpr569sIxRHjjX4KpLTzDm1fpswuVl9Ih0AFjB7t1RRZNzjnlG3qFK?=
- =?us-ascii?Q?QLL5JtsE3gCwXIoj6ixbeA9ExTlIV7hk9KcfTWRUI3v+rt5D5UezVdCrr2bJ?=
- =?us-ascii?Q?5w8308BTxdryS8gYiurTgDYyKXeEsC/6DZLwgs5f02XLl39hSeyXxm66XLek?=
- =?us-ascii?Q?ZcmItvsaHUCn0jw31xtr/Lzuy1CXueCU/E0IjQIA9T6J9jHSdg/xaos/fiFm?=
- =?us-ascii?Q?0cXsvGp3SJ8ucrXHMeIQOucSmm/yoUYUrsRIhSWw?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 82f456c5-4422-42b2-901f-08dccdc3452c
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB7763.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2024 15:56:14.3923
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tbI1Xp8+uTJ6RMGv9h5i0ccLEtkYyTkdgkdb5d38uz56cR9NT4waLqE76otpkuMQ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7942
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 27, 2024 at 09:59:41AM -0700, Nicolin Chen wrote:
-> Now a VIOMMU can wrap a shareable nested parent HWPT. So, it can act like
-> a nested parent HWPT to allocate a nested HWPT.
-> 
-> Support that in the IOMMU_HWPT_ALLOC ioctl handler, and update its kdoc.
-> 
-> Also, associate a viommu to an allocating nested HWPT.
-> 
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
->  drivers/iommu/iommufd/hw_pagetable.c    | 24 ++++++++++++++++++++++--
->  drivers/iommu/iommufd/iommufd_private.h |  1 +
->  include/uapi/linux/iommufd.h            | 12 ++++++------
->  3 files changed, 29 insertions(+), 8 deletions(-)
+From: Jason Xing <kernelxing@tencent.com>
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+When I was trying to modify the tx timestamping feature, I found that
+running "./txtimestamp -4 -C -L 127.0.0.1" didn't reflect the error:
+I succeeded to generate timestamp stored in the skb but later failed
+to report it to the userspace (which means failed to put css into cmsg).
+It can happen when someone writes buggy codes in __sock_recv_timestamp(),
+for example.
 
-Jason
+After adding the check so that running ./txtimestamp will reflect the
+result correctly like this if there is a bug in the reporting phase:
+protocol:     TCP
+payload:      10
+server port:  9000
+
+family:       INET
+test SND
+    USR: 1725458477 s 667997 us (seq=0, len=0)
+Failed to report timestamps
+    USR: 1725458477 s 718128 us (seq=0, len=0)
+Failed to report timestamps
+    USR: 1725458477 s 768273 us (seq=0, len=0)
+Failed to report timestamps
+    USR: 1725458477 s 818416 us (seq=0, len=0)
+Failed to report timestamps
+...
+
+In the future, it will help us detect whether the new coming patch has
+bugs or not.
+
+Signed-off-by: Jason Xing <kernelxing@tencent.com>
+---
+v2
+Link: https://lore.kernel.org/all/20240904144446.41274-1-kerneljasonxing@gmail.com/
+1. mainly change from "parse" to "report", update the commit message.
+---
+ tools/testing/selftests/net/txtimestamp.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/txtimestamp.c b/tools/testing/selftests/net/txtimestamp.c
+index ec60a16c9307..d626f22f9550 100644
+--- a/tools/testing/selftests/net/txtimestamp.c
++++ b/tools/testing/selftests/net/txtimestamp.c
+@@ -356,8 +356,12 @@ static void __recv_errmsg_cmsg(struct msghdr *msg, int payload_len)
+ 		}
+ 	}
+ 
+-	if (batch > 1)
++	if (batch > 1) {
+ 		fprintf(stderr, "batched %d timestamps\n", batch);
++	} else if (!batch) {
++		fprintf(stderr, "Failed to report timestamps\n");
++		test_failed = true;
++	}
+ }
+ 
+ static int recv_errmsg(int fd)
+-- 
+2.37.3
+
 
