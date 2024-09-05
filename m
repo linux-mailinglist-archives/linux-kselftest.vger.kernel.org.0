@@ -1,61 +1,61 @@
-Return-Path: <linux-kselftest+bounces-17215-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17216-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C5AD96D6B2
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 13:05:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D15596D6B7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 13:06:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F44F1F26DFF
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 11:05:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 75464B252AB
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 11:06:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7AF41991CE;
-	Thu,  5 Sep 2024 11:05:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2B72199222;
+	Thu,  5 Sep 2024 11:06:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="SIKg8tjG"
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="gPNWjAKk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2079.outbound.protection.outlook.com [40.107.255.79])
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2053.outbound.protection.outlook.com [40.107.255.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C22C61991B0;
-	Thu,  5 Sep 2024 11:05:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.79
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00E1197A95;
+	Thu,  5 Sep 2024 11:06:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725534347; cv=fail; b=cQgWc0XGyehKSiFq9hIEsESSfAgPCz3XPwNQH7ylT4guHyQOp5UyNRdSlyl51lrdq9FK0z3pPOEPxTjdIh2AsYBQ6EcsuWiqd0NdI7smAlkI2K/9Qt8hjFMITF7VKeA3kB43836AEowog7ZX+XFFLt5tqHZLJS3kMSqqK+tqEVI=
+	t=1725534404; cv=fail; b=rvlgCQ731RaDNSBoR/LCQjmuFitNnw1r2P6iMqC/+zxEF7lA4oWDMzhYEMfTjm45NOXHkQaDbqf5y+8AdVQ/SrU1yDCd+n73y7t7WFZTwAT1QS0dYPqHg4dt6o2Rcs8PKHs3hj/GzT2xsZL2++NPZ3HrEdZRyJNQRpm0eFllgzE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725534347; c=relaxed/simple;
-	bh=UE0hOfGsiJ0HwmUYoGQneBeHFZdsY+xZselb7lCoa5M=;
+	s=arc-20240116; t=1725534404; c=relaxed/simple;
+	bh=HvpZwKwLJzGxWdlIr4bYn3E1/Q12W6UXhnH8S3eFvR8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=N/bvyXLZ3fogmSRg6CErN2YDGP65BX26Pp8rAYDkwr0GJ/ZJR0xPIEhQSQ4VnlwylQ4yKuTut5CeeNsRYED9crc5UDb9pDU4FZhm3H4/1qotzmXckMxdWwCd9y9UqmKBHXW7IRlrLIdPrGJ1RrrF4m3AS7NU1h8yYC3MQidngXU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=SIKg8tjG; arc=fail smtp.client-ip=40.107.255.79
+	 Content-Type:MIME-Version; b=rTriIVZOStjVu7YWsazhmOwBvvKDxAeF9wmejm83M6y0n+Fg777wps4c30Im2xIOhIVkTpIvO55hRH+6NiVoDDWKtg2j7TqEb3PpXBo5XjGB4cbfNF6RVLz9XIRNuUm+ip+lYjWk6geQR8TevdjJGwG6/yUVszkcEXFzdMsp4Ws=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=gPNWjAKk; arc=fail smtp.client-ip=40.107.255.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TuVTTgxyyxluYe1BzQEEHx373b23Yq4k4WcyRhQoBpEi0/Ql/P4E0ulGjnbfYy13S+e/gtdgAItRFCkcYPjGKOjKCI41BwMQR+E1wgtjpk9McQjULUkY+aroqfYN6t6XpNxqtIIj636+I+Kqx8bkSTRG936cUPhzyquh8Wh3LQMbwfhYYSgOHJWPbArBji+jgtWx3Gpuq9lRfXfAAUGxEW4X3Xb6Hd5xJgsSuKrWYJ5KfnYnCsUcT2PBYzrOwPO59/y7W4ViIWqiosQqqbZXlu8bE22+fSotgLcoy8rHcANpOVEEXwWrk+lEIKTJia/d3B40QrtyuoGqBRhJ1dxfHA==
+ b=XETSWqR2Fzj4lkZibpyJYiMmnbAhAEy4zU30a2XMaDI45+sKzcHtxvbkZuLe3yOUO2kbXX4bLxsmqpp0+U4nV08B0PMMH6wSdOqZ4X21rdrA0MjsPQEG8jRv8kSFBvxMXcwsQ5KMgQWC4aknV7kSLJEph9kOPS7oF/S09r2o5L7G4HSKt6ESFH9RHVKEVe2CUVlsGduAOP5zcURFxZD4y4eNN2omHwXGKBoJ5khQT53/M7El5y5hZ/7jJVAbbuucxtOfjpirzFF6Sy8NsHBmQ1YLAHYfHEiucEzRGEX+PQEIqttdN5eoe9YX02FRzrNVmuj9F3f5CPwcrBfXX/Yirg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=tWVBLqv9LI2cNNAZFZTVPo+c8CxN8doYLzH60UehTGA=;
- b=fzid1FpXDHkRIoxdPAk32Jv4azmI3yS/82idSgUjnYN8Nt7laDp3Ug6vRR4l0YnJ2fQmg95saXQwqP5wx66lG1JgPr79JRUg1Qq+jIEL6pOvvTZ6g0nnRP34j8m6/mP5pKoY1qil4ovoovRL8NfX5LyZrJQ/aakIzvbAqhhysk2bAqHlX9igaTAJcKTUs2VMjHMiPyCGu2c80kj+leGLnIjSbW+F/LO7Dfolnq+KctG0K5rpftd8y5lnFTtDm/c0FoHTLN3TGPTo6nwujmlzLpA95+h1AwuyrzDc/bQE4N80jgMn2W49f9pwuhq6BOyBkgtuVT8Ocmjj807FI+Vd5w==
+ bh=PzUbx1KVVm0b3MYO9GzKxITsdXor8K6vEl3Ddou33l8=;
+ b=VQysI3vW3srbVcRHp0a9FYzWAJfc3IxUdguk/f5ou9aY/hhu75PW6SzO8xR8m3SlF0bzGDMNst4q0tzGJWkt4iFLzgZ5h0ob8RjnQdQNzHm1slHqy0u+4o+8ln9uMhdwoR9z7ddWeOwB3oj78IwOfauhYCE5DI9QSGR8+aZ/BkUahXxIETFNhCd1wLjIFQT1eJGYYHot1ZQ19h0jvf1rKeOdiCbrJ9ouYw8qFOWtfY37oF4GyVyGLT/C9UaZtYPBahyOjykc1M+hjW4JhFMWfCecF0FqDGUrr+XgqzuBF2wOLEiJXQ7Sf4jDKi01y8t+eM0iUIgVaaLkASJrYilBag==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=tWVBLqv9LI2cNNAZFZTVPo+c8CxN8doYLzH60UehTGA=;
- b=SIKg8tjGw/0XtxqRHi3t76eKWU9M8E5BQpuLu+QMxElrFjFZefyOMnSoZ3tK6QQWkmkLovk1yBbjCiZ7E2oKCurWagMAadV19UgmFyOIP2Ja9MK0d6MWYQUKRSVtBIh+g/iDijsfXMH/8bYIR0JJF38EQQNL+Umn342XZGmNxmBlsEuB5ytGQuNwQlk/CLansPfbaTpHw18JM+HFVEAyDRcgorMkWgCGTRBM059xKlqqM1oQRjZHTgbVVPDrCV2ZLkjDLHGxhqt4dhd+bUt6d7q/Yi6uDpF0Atn7+7051qaM22utNylDbwSZhee956CQFKBrXum8938XY796tp87Ww==
+ bh=PzUbx1KVVm0b3MYO9GzKxITsdXor8K6vEl3Ddou33l8=;
+ b=gPNWjAKk4MCqDkxU+G0NrdIi4q12lmC8Gy3NrbWwHGadA/03VxHr7GX9dqLAkL74AFAw+GuPx2V90BELIfx/dBmcJ4OgiTWNi9HZFPrJznXRetGpZHQne5rY9uj9dfjnqWf/weW3wvJW/lIgyPb3XmQWn1kTaxpGKymytLym6b883Q7uHF5nYbIqP3RoxDx+nnT83hlY5S4wV+fjfbsPzjpBhhSLf1OlUkjALLzGjhRwFsyhRGCXC079NoM2+4kEmv1IOlnYB08m0KiapQR/5qXrJA8VfdtGzCkuGosdG0arFlQvjdFLu1I0CE+w8lTUYYZWspXMlIivisfiQbzZMQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from KL1PR0601MB4324.apcprd06.prod.outlook.com (2603:1096:820:73::6)
- by SEYPR06MB6033.apcprd06.prod.outlook.com (2603:1096:101:d7::14) with
+ by SEZPR06MB6138.apcprd06.prod.outlook.com (2603:1096:101:eb::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.28; Thu, 5 Sep
- 2024 11:05:39 +0000
+ 2024 11:06:35 +0000
 Received: from KL1PR0601MB4324.apcprd06.prod.outlook.com
  ([fe80::f8ee:b41e:af25:202]) by KL1PR0601MB4324.apcprd06.prod.outlook.com
  ([fe80::f8ee:b41e:af25:202%7]) with mapi id 15.20.7918.024; Thu, 5 Sep 2024
- 11:05:39 +0000
+ 11:06:35 +0000
 From: Lin Yikai <yikai.lin@vivo.com>
 To: bpf@vger.kernel.org
 Cc: opensource.kernel@vivo.com,
@@ -83,9 +83,9 @@ Cc: opensource.kernel@vivo.com,
 	Kui-Feng Lee <thinker.li@gmail.com>,
 	Alan Maguire <alan.maguire@oracle.com>,
 	Yuran Pereira <yuran.pereira@hotmail.com>,
-	Dave Marchevsky <davemarchevsky@fb.com>,
 	Jordan Rome <linux@jordanrome.com>,
 	Chuyi Zhou <zhouchuyi@bytedance.com>,
+	Dave Marchevsky <davemarchevsky@fb.com>,
 	Menglong Dong <menglong8.dong@gmail.com>,
 	Tony Ambardar <tony.ambardar@gmail.com>,
 	Nikolay Aleksandrov <razor@blackwall.org>,
@@ -99,9 +99,9 @@ Cc: opensource.kernel@vivo.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	llvm@lists.linux.dev
-Subject: [PATCH bpf-next v1 2/3] bpftool: fix some typos in bpftool
-Date: Thu,  5 Sep 2024 19:03:06 +0800
-Message-Id: <20240905110354.3274546-2-yikai.lin@vivo.com>
+Subject: [PATCH bpf-next v1 3/3] libbpf: fix some typos in libbpf
+Date: Thu,  5 Sep 2024 19:03:07 +0800
+Message-Id: <20240905110354.3274546-3-yikai.lin@vivo.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240905110354.3274546-1-yikai.lin@vivo.com>
 References: <20240905110354.3274546-1-yikai.lin@vivo.com>
@@ -117,172 +117,224 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: KL1PR0601MB4324:EE_|SEYPR06MB6033:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7c68ff6f-a347-4c93-e849-08dccd9aacd6
+X-MS-TrafficTypeDiagnostic: KL1PR0601MB4324:EE_|SEZPR06MB6138:EE_
+X-MS-Office365-Filtering-Correlation-Id: 83eab1fe-24f4-4aa6-fbec-08dccd9ace67
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|366016|7416014|52116014|38350700014;
+	BCL:0;ARA:13230040|1800799024|366016|7416014|376014|52116014|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?Qno4N0JtNVVoL0NXOW02L25qQlQyNStBbUZIRnNIakF5ZVpEZ3MyVGxQRFJM?=
- =?utf-8?B?aUtZZy8xOFcxQlRaMTJiM2dUUWxIZUtwNXlIVTF5N0lKZlpURitTWUFGMnB2?=
- =?utf-8?B?Q0txRnUwODNrYVM4ZitWNmZicXdTS2VnY0cvekVXbmxTdHp3Nm9lUWpCbWJD?=
- =?utf-8?B?d2NVMkV6V0dzYkVZVEVwbERtVXNETjVhQXErNkIwM2dMckE2eStPVnBJaXAr?=
- =?utf-8?B?eC9jY2k3V21PMnRuWFZzeitWNFYvM0NmNXpZTjQrRWNDQlh1WVV5Y0I1NTk2?=
- =?utf-8?B?ZzVJNlBjVmRuSmYwUUpoVklZajc5VVZjN2htbGczcXlrUWVTUnV4SytCV055?=
- =?utf-8?B?QjJYM1Z3blpRSm12Ymh6T2VJU1dtd1luVXpLYkUyRDU2eHBuSXRwZkFYYXVs?=
- =?utf-8?B?VGVXV3FYcDhBd2lza1RSZXUrdjdjc1JhM1FlVno5YlEyRi9TVkNCclpHSkxp?=
- =?utf-8?B?dHF4aGhDazZoZHVqajRkcVNpajdoWkw0djFnMjlwQ0tMbnJzNi9QUktlQU9Q?=
- =?utf-8?B?Q2lob0ZieDU0cVNaTFZ5aGZZOVp4Y0FZV09mSGQxa1hUdDNKUjZ1SlVwMGpF?=
- =?utf-8?B?QlBtelRmbFMzSGE0SXNENExoV2FzWnVjTkw3MUtCRmQ3NFNQSUdKSFhuREFG?=
- =?utf-8?B?SkdjZ1R5SmQ3R3U3RHlRaGxaMytLajRZWndtRzRidi85c1Ewa2VlbnNNdVND?=
- =?utf-8?B?YmhjOUUzQjRWYm01QktNYVhMcEVTVXlkZzF6NjRVWmZIalhuV0tWREx4WTNF?=
- =?utf-8?B?RDgzRmhpM2t2S0g0Q3BxODdZangwcU9Ib2QyWVg3Y01iSWRYVmtmMENZOUpB?=
- =?utf-8?B?ZmpXblRWc2NTVFkrbWV6Z040UE9NamVkZmNLeVp0Zno0RjhxUTN0c2IyYitJ?=
- =?utf-8?B?Um0xcTNpc3JQUEhuT0U5WDhmaXlBd0tkaVJCZlgzVVRxM1hRdHpTSmVaRU0y?=
- =?utf-8?B?aC9IRk1hWDg5bjBNcVg4ZWw2OXBMVk1IdUtEMXZvTk1oazRZNFBwMkt0d2VE?=
- =?utf-8?B?WEpkNEV5RDhpSHI5OFZrN3ZqWjhxWVZXb1RuVXlGVkF2aHlxcUoxTVRXTTcr?=
- =?utf-8?B?K1h4eWwvcWhielJmUmN4TEl3UmVMajVlbTJud0VRSmdzaVRUaTVuaDZOT3BD?=
- =?utf-8?B?SnlaT0NETUppQkVWQ3Y4K2lOWGNQYUJBZ2N0OUMzY1lJUmZWNnM3RWJRemFo?=
- =?utf-8?B?UmJNaVhSR1BKNzhMZ1NPNHJGNGpvaTk0emJJMVd2YXEwcWtwZnhjbXo5a2Zt?=
- =?utf-8?B?c0E2NlZJSFJkNFczTXp4MTVQWTBpZ2V5em9nSVZjUnRlWnBvRG1PSlYxRFdr?=
- =?utf-8?B?UFFHbXFYbHZQNWNtaVRrem4rK1NNRWpMNnhYV3NvQUZJM3JieXBYUFQxNHh1?=
- =?utf-8?B?U3laNHJUbW5HeWttV2twQlhybEFlK3VwVjZ6cERJRVU2NDN0YnRQTHFWSEkv?=
- =?utf-8?B?bi9LOXk2WXNWVlBmTjNPQ0FibmtVWVhBMmtqQm11OUZaSXF5Nzh2a0JhdTdV?=
- =?utf-8?B?eE1ock1LY2NqbGJGWTRYQ3JuRHJwSDRwNUJnV0Mzbk00UWJ6K043dDkyMkwv?=
- =?utf-8?B?d2c3K1ZXalNKMDEyV0RvZ0ZpTWUvK3FJV1pFQWloeTdOZkN6Sk1MSllRZFVE?=
- =?utf-8?B?TnR6WitnZ0dlVWEzMkdTZlYyUkJIVUhPT3FLSHlGNWY3dkUyaDRIbXNkYmFJ?=
- =?utf-8?B?eGJhK1kzczhxMHhYd1Q5UXQvR01OMkJaUzhDMlViOXhzSU40SVV3K2tYU0x4?=
- =?utf-8?B?T1djQlJzL2EwQitCQzdSQzd5TmZxRWptNDcveHJlT1Z5SlFMdmxjNVhaTXkv?=
- =?utf-8?B?Mk5PdmU5YndEbDVTQmRwTERjNEtpejEyaW82RmpsL241N2pkbGYzZjRSZ0pP?=
- =?utf-8?B?M1ZOa3QvbTJURHdtci9NV3prQWwxYlB6TW5FeWZxdmVRK1E9PQ==?=
+	=?utf-8?B?ZmpkK05JZEhmK0wxUzdKUUZKMWRTaXBNUXNTYnRKWnUzbWoxMWlFNTBoWnJV?=
+ =?utf-8?B?b3ROdjJJbGFNM2U3ZUJpZm83TlRPU0t6V1VEc3dmR0dNa2NKTWptT2IxZnB3?=
+ =?utf-8?B?VVViblBvcm1nZTZKbFFvTGZqVnRSLzRCMjcrNmxlS2dhZUdFRjI1VFc5K3U4?=
+ =?utf-8?B?WGpzZUhoQXB6dkQ0UDNteDZlMGx6UVpGV2pFdGdSdkcxbnF6NjRUbEE1SzNa?=
+ =?utf-8?B?Y2Z0bnVFbkZvQ2szUUp3VmpodlJjVitCUVdmWCtDY084a2xtMlJMYXRpelUv?=
+ =?utf-8?B?bmp3KysyMTlDN0E0T3hYa3h6TW0zeGVwTzdJaWhaT3lNTUdJWUZ4YWRtK1VN?=
+ =?utf-8?B?b1lPSTRYc1hZV0JZNi9RaXhac29YdlBHOUdPa0RSeXMzTzEvam91WnhNWUcy?=
+ =?utf-8?B?c1pDR0tJSEY0RStEbVNrRmVRSDMwaEdlSkdaWXBGc25ReW5yeDYwOVlYc0JT?=
+ =?utf-8?B?VEtJTVJlK0tSYVBIRkRrSzJTOW9CZkZZOEJMRDVhalVlc3RqRURoWDAxY2Vm?=
+ =?utf-8?B?SWw4VGw5dkVocDU3OVpISHpxL1FzcU8ySW9odXU1cVhaN2MvRmd0YU5CUGt0?=
+ =?utf-8?B?U21yR0UzdkpXQjNIVGRGdVkvT05HdHVPbit3L1JxNFhHSGZwalJ1K0dITzZN?=
+ =?utf-8?B?MmhKdEJjMGJuL3JFcS9qME53bURNNklMUktGb01xQTBNRUtIckwrd2tPSXpD?=
+ =?utf-8?B?cmJRbThYT1pqazlmTXVUbi93YmdoOCtpSVhJMzZPM0ZweGxmb3B2TDFCSGhW?=
+ =?utf-8?B?RFpRaUZXOUU2SXlYd1lUbDlkV1dXVXo5UnFBQjJZR1VnTm84blp5ODFzMita?=
+ =?utf-8?B?QUhYdzBZa1k1Wm9XYjJ1UFhYY2ZmcVRRdlVwcU4wVmhCQXp5Zzl0Qm9ZTDIr?=
+ =?utf-8?B?RHdRSC9DWVdGU3VYakwwdm1KZGdGR3lhU28zZHFLdGM1ZkIxWWFSSFFVWUlU?=
+ =?utf-8?B?VGNWdUgzMmY4ZC9lK3Q2aWdkMTlsc3FCSmFDNnNwak92aDJhQXBJekhzMWdj?=
+ =?utf-8?B?ZjA3MDJmYWt5YXpscTNCM0ZFakdnMWhPbTVXTVBMNXFYWUpRUS83Y0JkSXIy?=
+ =?utf-8?B?aFRNV0UzN3B3Y2ZtNTNCUklsT1Z3dUg2VGNEZW84ZFVVczVzem5ZbktiQnBi?=
+ =?utf-8?B?VHZEYTNHWTNWcit4Y2pyZncxdDdXVXdxcWVFMTd3Mk1BL0FDWWtJUVppeGdI?=
+ =?utf-8?B?N1FwNTVlL3JBeE9ZZlBHd09JZWh3Q2VZdGJOdnM0bWt3WUhIcnhvSlJvMHB2?=
+ =?utf-8?B?aXpqck0zK2ltVHd5bUF3cGhJN1EyZm9qb1dIeVJwZGhJTVpjZGU5UDBSQ0tP?=
+ =?utf-8?B?WjFFWW9USHlncEVGdGhIZDNudm11TzFHRWRMdXFwaFJET3FMNW0wdk8zL1ZZ?=
+ =?utf-8?B?R3d5d1B5amVjWkhiaU50b3QyTkVoelFidElUTnRJNFhQTm5MWDJGdzZHSSti?=
+ =?utf-8?B?MDhXemNUS2FYS3VGWFU2dmYwSkRQcGNlOW9hVGV5cFAxeXlVQW1FSEZzWGpY?=
+ =?utf-8?B?OFpHdGFHbTZMT2toWEY5ak5VTDQxd2JPYWxqWTlRZHJrSk51bjZON01FTjUx?=
+ =?utf-8?B?bWwyZk9qQnkxOU5UYTRqdkc4eWt4cDUzT3hjanhPTkx3cTNWZTlkSmhCby9C?=
+ =?utf-8?B?WC8vT3VISjlqTXNnZTJ3TGV4eXBFd25zZS9YVExRT2JMVHhJdnZsWHI0TmhB?=
+ =?utf-8?B?WVBWeTdTUXkwNUIwUktvaDUrN010dGFKNEEvcmpmR0dwVE0xdTh4NzBaK2k3?=
+ =?utf-8?B?UjRaMjRacEg3V3JneHpMcVJ1bnV5MllEZFJ2K3ZCN24za3l4RjVVdnhzTTJX?=
+ =?utf-8?B?WGFoeGRTZ01NQnhueUVFbXByMnpiUDJtQjZlQ1dUYmZsTSsxRXZPSzZqMmti?=
+ =?utf-8?B?Q3J0Rno0WUQ4OU5KVnJoVzlVNTFUeTV3THBzNys5b2lQOHc9PQ==?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR0601MB4324.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(7416014)(52116014)(38350700014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR0601MB4324.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?emRaaDd6dXE5aEJhcnZ1M3hURFRzTm1xU2FrMU5lSytLQUdhd2pBSTRiRnhE?=
- =?utf-8?B?UDBIOG83cXRkOEVKanhmU2c1em9iTUFydWJjS1RaOTcyOTE0ZGUvVTlxUjNF?=
- =?utf-8?B?ODZrU1dNbXF3c2NPS1RTZGVjaEtPK0FQSkErVEdtVjZXT0tDWCs1dVEwY0pl?=
- =?utf-8?B?U0lKSTVISDFuQmROK0dTMEFzb09KcXVGdFVTTWNlRjZDS095cEExbUFKU2Y2?=
- =?utf-8?B?NGZhd0x3T2luM3UzS1NqSWllcXVic0oyU1RIYngwNVJudXFLWjhZeTZuNlBG?=
- =?utf-8?B?N2NIdjJHSlVYSE9iOXhvMk0wWjZCODFCNHdwdXpXa3paQjROWlR2V2tVaGtm?=
- =?utf-8?B?aEpMYVNsbzBHNERxRDdMQ3l1ZHEwSmJIYm9aTzBnZ3pDNnIxMDZYcEpaTnRS?=
- =?utf-8?B?ckFXWmg0WThMajdWZ0NpNGNLNWF6Um05cnNndnM4V3BaamtQYm5DTVpHVHlz?=
- =?utf-8?B?RGNVQU13ZkcxbFNsU1REL21UbmNvU1l2cDlPQm0wVVhYYk5WVk1ndWw1OEkr?=
- =?utf-8?B?dURJU3QxSWxjcnRYaXJMU0toVHVudkI3VFpCSlVoNFZZbi9qR0N1dTJXSSt1?=
- =?utf-8?B?cCs1Uk9EcStmckxtclh6b2ZyQjhMbFVaT21JNlM1cHFkZVVzWEJFVHhMVml6?=
- =?utf-8?B?T3h4NTExOWRRRzFlYWJvT1VFZkZzc1F4c0dKbk55b2x6Z29ZSkc2OXlVczNN?=
- =?utf-8?B?VWcvTTJXWFg2djRLb2FqaW55TCtZb2MwMFBrQ0FEM2JZemUwZjlHNXdMdWpu?=
- =?utf-8?B?SFRvd2lHU2tFenVtWTB6Zjh0dEp1K29XVzZ5dzhrbE9EQ1BiZEJRUUtRREJt?=
- =?utf-8?B?TVFha3dVeFlnSHNXYUZURHZkSzNDUWwrZi9VUkNFYzY5L1JJRmxxeGVlaFQ5?=
- =?utf-8?B?QWx6ZGZ5azdBdlVKUUFVYjNtVlY2cWZiNzNHclZzN2pjbVFXMHNBVzRUd25J?=
- =?utf-8?B?WGdjVEx3NTJyY2xVUXpoREIwbzlYQjB3cmlmMkd0MlloRllwL0EvYkhlUnZy?=
- =?utf-8?B?c1ZocEpNSHRMa0Vwd29qUFduam8yQXFRa2xIMXRITWJ6bFRwZkw4a0F2SUMv?=
- =?utf-8?B?dzhWUC9MV1A4SHVCZ1ZtTmRKRmZsUzBwaUVEb1pMam04a2phZWsxdVFxTmZl?=
- =?utf-8?B?OWdBSDRBL1dSMDlhbDg1Y280b3hNK29pbTV6MTNYV1hVTVZVaXpsOFJ2SGJi?=
- =?utf-8?B?TGd3dkZYSjF0MnlhQitEcHpmUG5sR3J2djN5OE1zNlJaVDdaWWdXUFNROW0w?=
- =?utf-8?B?Nk1oa0k0Z3pNVlZnaTk3YWFyeWdhdzlvRGVpUVN5ZnoyZzZLV0pGWFRMZjg1?=
- =?utf-8?B?QnJramcyMDRYTjhtTkg4NEY3S1RuRzhzZHVqUFk2WXhydGgrdFZDdW9BZ0pE?=
- =?utf-8?B?UU9kVC9oRGM5UGtxWTBKcVJXRHVDVTF5TzRrc1I2bGNSZ05FbmF4OGpNaG1G?=
- =?utf-8?B?ano3NFRxYW1LQVlKMkFLQ2Z3Z2pZaGo0RDBBWkJmd1Y3V2V0YVJERUhzWWFn?=
- =?utf-8?B?eHZUSXdvQ0tBU2FZVmtVcVg2c3Zwb2Fnc1JFNXVwR3lFbWROa3ZUeTZNRFd1?=
- =?utf-8?B?d0pvL3VYNnhhVUtyZ21vNjBQVFk5RExsbjJoWjdydnVSeFBydFV0c1ArZEVX?=
- =?utf-8?B?Zi93REs4UkVEelNsLzRra0MxZDR3VU9HTndtOXhrR2MrTzNsNWViZkN2dGlQ?=
- =?utf-8?B?UnU1NUZjQXgvdDd6R2pkOGpJUC9sQWh2OXVjajRDTnh2WFdncVJ3bnNBVDVV?=
- =?utf-8?B?cStOQjNtQ1hSRm9IL0FSUnJvWk9zRmtSaVBBUnpxSk5yN1dIblVGVHo4RHRC?=
- =?utf-8?B?d2N0WmlkMWVtY0UxRENvN2h5eERJYzVpNDBOY20rcGR4R0R5WURuWkZvOWlo?=
- =?utf-8?B?OVN6c090eFZqUlFrRmRncGh5U1NoR21xK2dBYmZhQ0FsUXhwMXQ5SjRMQlZV?=
- =?utf-8?B?Q3pka3UxYUhEc1RDb0toeHlWb2dzaVlzaFRaOXJNdzJuVFY3Tnh1dHk2SlhI?=
- =?utf-8?B?S3oyNFRaa2lNeHFxaWFPL0NBRHA2NFJuV3RDMUdiWklaeWJ4NWowOVFDN3Ru?=
- =?utf-8?B?ck8zTGV4VkdRTGYyNTZ1ZWRtTkZpWU04U0ZyZU9pSGYxYVhyQi9GR3N1enph?=
- =?utf-8?Q?NXHeRxuCQBFpmshjU4ro8md7X?=
+	=?utf-8?B?eUt4OUtvejJMVktFYlR5ZGE1TjJvUzRNVXN2QkFaYTc1c3dFN0ZUNVdjc2h0?=
+ =?utf-8?B?cG85MnlhdzFQRGh5M0J3UW1CRXhkUXMyR212ek1BcWxsRXVHUzI0Qk5waENV?=
+ =?utf-8?B?N2RiZDUvQmliYnd4WlZxVHo2T3BIUldLd0VjV0hNSVB0NHRDeHdkblRWOTlC?=
+ =?utf-8?B?SWJrZWdMTmNvTzM5ZUlWSlFPaG5lYU16V1YvTjhaSlZQdWJJWWd5U3Z2aFdK?=
+ =?utf-8?B?UVJicWpNNmcxSjJWMmRxemZlb1hhMDk0WTFrUm1wTnNrU0wwYkJGaCtDS1pw?=
+ =?utf-8?B?cEtzRHB0WnAra1lqY0kxUERJejl3U053MzJBVGE0QVo1UG1FWkVXQjVoOXRr?=
+ =?utf-8?B?R1hacW9GNk5UcUY2V0t2d1BJSGo5V25UUXV2RkxYWW40L3VYN3IvUTJyUER6?=
+ =?utf-8?B?czlBb2NSdGgwVWdSdmZMZE1PR2lLTFNqZmwwN3drdkpLbTdXaEkyMUZJdFFt?=
+ =?utf-8?B?RkFPV053Y1ppeHljNlIvdm1LOFZEY251b2ZqM1hjMzhjbzd0NmpSRStubEVF?=
+ =?utf-8?B?MlZzVXZjUldqOEVScmM3TkVybW1yRERVWXNuaGZhaURtaTNocitNZkFxTnp0?=
+ =?utf-8?B?dzM4UTlEOXlHY0pSaVBqUkJqT0tjbVVKdENUOFhMWXZvREx4RzZZRmJtdERR?=
+ =?utf-8?B?S2c3L3daRGcwL3NRSVRBQkIrUE9FaDdKaVZXalVNc3ZQRkxhR1hvME1wbXlZ?=
+ =?utf-8?B?TmlBejA5dzcxNENFdmN6QXhzeFVGSGs0L2YxblB0TURLOUJrMUkwWjdQbGZW?=
+ =?utf-8?B?aXYwOFRhMnFXWU91STMwdTZPMTc4akJMSVo2VDFNY0ZOcDFNWk1hWHVZYVBB?=
+ =?utf-8?B?WE9SbGdlbWRzSFVaWjNiTzZOQjJ4eXI5YTBqMFlTR2UzV25kQUc0elk1MlJZ?=
+ =?utf-8?B?Z2VXcWJDYXBYTmVJVlRQcUp3U1g1dXl4RlpkazZkdVY1SkNLaGpLWEhvK2lO?=
+ =?utf-8?B?TGNtZkt5bVZSdkYxZG05aTJNeVNUajEzdG10b1pXR3Y2dmYvWTA2U0lnZ2ZM?=
+ =?utf-8?B?WUttT1ZqQm8ybU1nOVJDZE9QTmxKUm9DS0hqMkNqeENrWDZscTliVVdDUnVs?=
+ =?utf-8?B?cEYrWTZaMEdzdnVvbmxPblJTSmVsK1ZwS2FLdWJtaXVuSmR2MjVlRTRwS0hi?=
+ =?utf-8?B?aXNJK3VKQ24wZkpZOXNpYWFMSzlvdnNDeUdoU2JybWQ1Q3N3L0RLelZnVTFI?=
+ =?utf-8?B?QzcrZWgrMW82NUtaNVBvckM4bUdvbHIybVV0eUVEWVFzaWNHMWZGRjJjTi85?=
+ =?utf-8?B?MG51OEZUcnNpejBpUHJzTFFUM2RrL3V1dC9iam1IZndxYXlTYit4S3QzU1RI?=
+ =?utf-8?B?T2EyMk1PdktGc2ZNMU5ZUFZ5NWJPNU5SdlVIRzBHaGlIVlJHTjlOYkppZEdE?=
+ =?utf-8?B?K3BVYkR5MnRkT2hjWXBIcXViQVhDVWhpdENNSW5KeEEvUCtSakUrTUxvS1Uy?=
+ =?utf-8?B?cDRqYVBYdnFENVdPMmdHSzlSRTFrUjIzc3Z4bEh1dG14RlNLcm44REozOWRl?=
+ =?utf-8?B?dXI4YldnbVphRHZGL2gxbmxVRmQ5dFY4L0lIdVNzMDNYQ3JOZkswei9rdGRJ?=
+ =?utf-8?B?WGNnMjNDa2VoNXo5RnVZZDl2cmw3aC9GVFdtZFNONUVCdC93azFoTzN1Qnk0?=
+ =?utf-8?B?ZVRtZXcwZzlwVEVUdzlYVjZ3S2JBc2YvMnBENzl1bnpnR1lLZEpLbFRHNFBt?=
+ =?utf-8?B?MjBsaDlUWEllSExnQ3dVL3lIZUUwb0ZoYitJR3R0TjdDTzJGWEI2MnE0R1dI?=
+ =?utf-8?B?ZU9YVmw2TjJGa0REbVdUbDN4U3E3b0RrYWZ2VDNibUxRb29VcFhYaW11N0lB?=
+ =?utf-8?B?amhlQzdtRVQrWFNIWE5XV1oyaitwMXphaDVlMlR6R09QZk90VnRJMEc1dzh1?=
+ =?utf-8?B?RW9XYlMrTk9lM1JOMyt5QmNoVXZCaEdqTHRPeUZ6YURqZy9sQkhucGFKQnZC?=
+ =?utf-8?B?M2dhUVFQYVJnUGdOb2RCYWMvZlZvSEFSa2FsREhiWlhzVDhFQWtWQVNZclB1?=
+ =?utf-8?B?UzVDMlh4M3JoanRPeUdCU0QwWXBZQnhmc1RuOFQ4KzR4TVBoSEsxaUhOa2Vu?=
+ =?utf-8?B?cDVrK3ZHMGw3SndxWFNNSE5uRnFpd09hSlFHSjJmRnBadGdrV2p0S1lSOXhs?=
+ =?utf-8?Q?BZvtvPqZ+5sn0dKXIRqAqwcgR?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7c68ff6f-a347-4c93-e849-08dccd9aacd6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 83eab1fe-24f4-4aa6-fbec-08dccd9ace67
 X-MS-Exchange-CrossTenant-AuthSource: KL1PR0601MB4324.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2024 11:05:39.0077
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2024 11:06:35.3027
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VWV03yr2V/RxYmGt88kd/PVxtapqZi2q09EnSoXEMWPGtzbrurKvxVyQHGLKDMzsMxDF8kXS6e6MgHLsBnM0Kw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB6033
+X-MS-Exchange-CrossTenant-UserPrincipalName: wr+T0H57P++6c1f4OLwWmuFPV4fJ7gjD0gJHMSBY3+3MQj1tBeHeuSdpsVUgD71v2XElz14Pm7Q/Es8TsVWNpg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB6138
 
-Hi, fix some spelling errors in bpftool, the details are as follows:
+Hi, fix some spelling errors in libbpf, the details are as follows:
 
--in file "bpftool-gen.rst"
-	libppf->libbpf
 -in the code comments:
-	ouptut->output
+	termintaing->terminating
+	architecutre->architecture
+	requring->requiring
+	recored->recoded
+	sanitise->sanities
+	allowd->allowed
+	abover->above
+	see bpf_udst_arg()->see bpf_usdt_arg()
 
 Signed-off-by: Lin Yikai <yikai.lin@vivo.com>
 ---
- tools/bpf/bpftool/Documentation/bpftool-gen.rst |  2 +-
- tools/bpf/bpftool/feature.c                     | 10 +++++-----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ tools/lib/bpf/bpf.h         | 4 ++--
+ tools/lib/bpf/bpf_tracing.h | 4 ++--
+ tools/lib/bpf/btf.c         | 2 +-
+ tools/lib/bpf/libbpf.c      | 2 +-
+ tools/lib/bpf/linker.c      | 4 ++--
+ tools/lib/bpf/usdt.bpf.h    | 2 +-
+ 6 files changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/tools/bpf/bpftool/Documentation/bpftool-gen.rst b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-index c768e6d4ae09..1b426e58a7cd 100644
---- a/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-+++ b/tools/bpf/bpftool/Documentation/bpftool-gen.rst
-@@ -104,7 +104,7 @@ bpftool gen skeleton *FILE*
+diff --git a/tools/lib/bpf/bpf.h b/tools/lib/bpf/bpf.h
+index 972e17ec0c09..a4a7b1ad1b63 100644
+--- a/tools/lib/bpf/bpf.h
++++ b/tools/lib/bpf/bpf.h
+@@ -100,7 +100,7 @@ struct bpf_prog_load_opts {
+ 	__u32 log_level;
+ 	__u32 log_size;
+ 	char *log_buf;
+-	/* output: actual total log contents size (including termintaing zero).
++	/* output: actual total log contents size (including terminating zero).
+ 	 * It could be both larger than original log_size (if log was
+ 	 * truncated), or smaller (if log buffer wasn't filled completely).
+ 	 * If kernel doesn't support this feature, log_size is left unchanged.
+@@ -129,7 +129,7 @@ struct bpf_btf_load_opts {
+ 	char *log_buf;
+ 	__u32 log_level;
+ 	__u32 log_size;
+-	/* output: actual total log contents size (including termintaing zero).
++	/* output: actual total log contents size (including terminating zero).
+ 	 * It could be both larger than original log_size (if log was
+ 	 * truncated), or smaller (if log buffer wasn't filled completely).
+ 	 * If kernel doesn't support this feature, log_size is left unchanged.
+diff --git a/tools/lib/bpf/bpf_tracing.h b/tools/lib/bpf/bpf_tracing.h
+index 9314fa95f04e..9e45291e40ee 100644
+--- a/tools/lib/bpf/bpf_tracing.h
++++ b/tools/lib/bpf/bpf_tracing.h
+@@ -473,7 +473,7 @@ struct pt_regs;
+ #endif
+ /*
+  * Similarly, syscall-specific conventions might differ between function call
+- * conventions within each architecutre. All supported architectures pass
++ * conventions within each architecture. All supported architectures pass
+  * either 6 or 7 syscall arguments in registers.
+  *
+  * See syscall(2) manpage for succinct table with information on each arch.
+@@ -651,7 +651,7 @@ struct pt_regs;
+  * BPF_PROG is a convenience wrapper for generic tp_btf/fentry/fexit and
+  * similar kinds of BPF programs, that accept input arguments as a single
+  * pointer to untyped u64 array, where each u64 can actually be a typed
+- * pointer or integer of different size. Instead of requring user to write
++ * pointer or integer of different size. Instead of requiring user to write
+  * manual casts and work with array elements by index, BPF_PROG macro
+  * allows user to declare a list of named and typed input arguments in the
+  * same syntax as for normal C function. All the casting is hidden and
+diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
+index 40aae244e35f..8d51e73d55a8 100644
+--- a/tools/lib/bpf/btf.c
++++ b/tools/lib/bpf/btf.c
+@@ -4192,7 +4192,7 @@ static bool btf_dedup_identical_structs(struct btf_dedup *d, __u32 id1, __u32 id
+  * and canonical graphs are not compatible structurally, whole graphs are
+  * incompatible. If types are structurally equivalent (i.e., all information
+  * except referenced type IDs is exactly the same), a mapping from `canon_id` to
+- * a `cand_id` is recored in hypothetical mapping (`btf_dedup->hypot_map`).
++ * a `cand_id` is recoded in hypothetical mapping (`btf_dedup->hypot_map`).
+  * If a type references other types, then those referenced types are checked
+  * for equivalence recursively.
+  *
+diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
+index d3a542649e6b..27ad3c6ee868 100644
+--- a/tools/lib/bpf/libbpf.c
++++ b/tools/lib/bpf/libbpf.c
+@@ -1848,7 +1848,7 @@ static char *internal_map_name(struct bpf_object *obj, const char *real_name)
+ 	snprintf(map_name, sizeof(map_name), "%.*s%.*s", pfx_len, obj->name,
+ 		 sfx_len, real_name);
  
-     - **example__load**.
-       This function creates maps, loads and verifies BPF programs, initializes
--      global data maps. It corresponds to libppf's **bpf_object__load**\ ()
-+      global data maps. It corresponds to libbpf's **bpf_object__load**\ ()
-       API.
+-	/* sanitise map name to characters allowed by kernel */
++	/* sanities map name to characters allowed by kernel */
+ 	for (p = map_name; *p && p < map_name + sizeof(map_name); p++)
+ 		if (!isalnum(*p) && *p != '_' && *p != '.')
+ 			*p = '_';
+diff --git a/tools/lib/bpf/linker.c b/tools/lib/bpf/linker.c
+index 9cd3d4109788..e0005c6ade88 100644
+--- a/tools/lib/bpf/linker.c
++++ b/tools/lib/bpf/linker.c
+@@ -1413,7 +1413,7 @@ static bool glob_sym_btf_matches(const char *sym_name, bool exact,
+ 		return true;
+ 	case BTF_KIND_PTR:
+ 		/* just validate overall shape of the referenced type, so no
+-		 * contents comparison for struct/union, and allowd fwd vs
++		 * contents comparison for struct/union, and allowed fwd vs
+ 		 * struct/union
+ 		 */
+ 		exact = false;
+@@ -1962,7 +1962,7 @@ static int linker_append_elf_sym(struct bpf_linker *linker, struct src_obj *obj,
  
-     - **example__open_and_load** combines **example__open** and
-diff --git a/tools/bpf/bpftool/feature.c b/tools/bpf/bpftool/feature.c
-index c754a428c8c6..4dbc4fcdf473 100644
---- a/tools/bpf/bpftool/feature.c
-+++ b/tools/bpf/bpftool/feature.c
-@@ -196,7 +196,7 @@ static void probe_unprivileged_disabled(void)
- {
- 	long res;
- 
--	/* No support for C-style ouptut */
-+	/* No support for C-style output */
- 
- 	res = read_procfs("/proc/sys/kernel/unprivileged_bpf_disabled");
- 	if (json_output) {
-@@ -225,7 +225,7 @@ static void probe_jit_enable(void)
- {
- 	long res;
- 
--	/* No support for C-style ouptut */
-+	/* No support for C-style output */
- 
- 	res = read_procfs("/proc/sys/net/core/bpf_jit_enable");
- 	if (json_output) {
-@@ -255,7 +255,7 @@ static void probe_jit_harden(void)
- {
- 	long res;
- 
--	/* No support for C-style ouptut */
-+	/* No support for C-style output */
- 
- 	res = read_procfs("/proc/sys/net/core/bpf_jit_harden");
- 	if (json_output) {
-@@ -285,7 +285,7 @@ static void probe_jit_kallsyms(void)
- {
- 	long res;
- 
--	/* No support for C-style ouptut */
-+	/* No support for C-style output */
- 
- 	res = read_procfs("/proc/sys/net/core/bpf_jit_kallsyms");
- 	if (json_output) {
-@@ -311,7 +311,7 @@ static void probe_jit_limit(void)
- {
- 	long res;
- 
--	/* No support for C-style ouptut */
-+	/* No support for C-style output */
- 
- 	res = read_procfs("/proc/sys/net/core/bpf_jit_limit");
- 	if (json_output) {
+ 		/* If existing symbol is a strong resolved symbol, bail out,
+ 		 * because we lost resolution battle have nothing to
+-		 * contribute. We already checked abover that there is no
++		 * contribute. We already checked above that there is no
+ 		 * strong-strong conflict. We also already tightened binding
+ 		 * and visibility, so nothing else to contribute at that point.
+ 		 */
+diff --git a/tools/lib/bpf/usdt.bpf.h b/tools/lib/bpf/usdt.bpf.h
+index 76359bcdc94a..b811f754939f 100644
+--- a/tools/lib/bpf/usdt.bpf.h
++++ b/tools/lib/bpf/usdt.bpf.h
+@@ -39,7 +39,7 @@ enum __bpf_usdt_arg_type {
+ struct __bpf_usdt_arg_spec {
+ 	/* u64 scalar interpreted depending on arg_type, see below */
+ 	__u64 val_off;
+-	/* arg location case, see bpf_udst_arg() for details */
++	/* arg location case, see bpf_usdt_arg() for details */
+ 	enum __bpf_usdt_arg_type arg_type;
+ 	/* offset of referenced register within struct pt_regs */
+ 	short reg_off;
 -- 
 2.34.1
 
