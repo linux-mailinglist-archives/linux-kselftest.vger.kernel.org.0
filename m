@@ -1,591 +1,263 @@
-Return-Path: <linux-kselftest+bounces-17331-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17332-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A81A596E46F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 22:51:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3975396E4BA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 23:16:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3889B1F234B3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 20:51:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E818B28543A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 21:16:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27B381A4F14;
-	Thu,  5 Sep 2024 20:51:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A95251A76DE;
+	Thu,  5 Sep 2024 21:16:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nftJfdQU"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="kisrC/mL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-oo1-f44.google.com (mail-oo1-f44.google.com [209.85.161.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32B911A4F13
-	for <linux-kselftest@vger.kernel.org>; Thu,  5 Sep 2024 20:51:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269D0188583
+	for <linux-kselftest@vger.kernel.org>; Thu,  5 Sep 2024 21:16:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725569492; cv=none; b=Bg5MDK+sgRx3I8rZY+OFQA5Hwi9kpQgpk8nJtLwx8ubKDOyFs4TOrLg7DwMojV6yAwB5caA7W8z5XG0ElCMh72s2+ZDd6bdmcgUK341p/Fl5f7r4BjbYKEwejfkbQiUHGtPyQ81XjsFpH5BK4PeLYxI/LIVL456ocfoi09sDpMw=
+	t=1725570975; cv=none; b=c47YTNznu0nRhSCkzVjw5MONYvgbmDFJKP3WF5M6Awh87U6UTun3nwMcecTv2B3Y9BXh1pRstnzv1AvfChgA6CPMrFb+GQJxMJmtsMcxBB8PxbESeMcOFdr7818PbTW8KZCLWrchjo3rp7Kbha7ePFrCJkopEdAZG8ueh12xRqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725569492; c=relaxed/simple;
-	bh=aHCKN+uFTlS4Ro2488jVZdgIUGWhcY26L/AKMoZpZWY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Sy/5oqztjamt9TPhEQYq9uwhtC2k/4WXBv0Yi4Nf4k0oQBxJUvqIcaJMsQbPDgoHw4MqOWJwqJGWdurua+xOluD8tFsEYzfygSa4Jop2wdO6tcPKnbif3LXO3UCFBGOiiY00EESM3aM2BTXo7WfgO/Y3t8RJFVf9U9UIEqaQ4ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nftJfdQU; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2068a7c9286so12500255ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 05 Sep 2024 13:51:28 -0700 (PDT)
+	s=arc-20240116; t=1725570975; c=relaxed/simple;
+	bh=8yDjUN3v9pzHbAJkU962KdEeNCXYhTKg/kSM+xczGS8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=seaDX4YB/1amTVErdQqkTGuvyU5b6SkuOXTPd87Xn0Lq2He+RZMa8ep3PLJA/xZSoGYLppleaqpp9+WXslC9eM0KIdSqUaNDz6QH+eVw5hIFN94+k2Mjy+qLJsTHlXmNj8KKOGHA7RiKQDG/9juZKAIbxEtU36XM0H6nRrbPwnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=kisrC/mL; arc=none smtp.client-ip=209.85.161.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-oo1-f44.google.com with SMTP id 006d021491bc7-5df9542f3d8so864683eaf.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 05 Sep 2024 14:16:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1725569488; x=1726174288; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F33YSQnuZYPeljqM4rutMIlrPkVJHZGOX8c/cjeo/LE=;
-        b=nftJfdQU2kv2Vp08m3Y4mA3mJyd54Bve0DyoZY/paa8hkO5mez8ZpsX8dk48BJ2i5f
-         C1aYVLGCOCzaC1qCRLMXhXE40tZVIXtmK5Ugef5tqOKgLd9YY4o07ivF5gzkFgTyuHJI
-         nGrqUyJF/oqZCeh70piyPiJF4wLbrSDE/9fJpj2369fTMR5T48isW+C42M2MBlJBVinP
-         WEjZ1id0betffPdBbHt3xC6bKUoB+sqfQBMi0P6cPrbh3+jI8GUjPg4xE31GQa474Med
-         jojyzJY/S7visp2CpildWQ41YWcHF6NY9jg7T+s7OCMS+6RyfW5Xb5wGkQcDSEzqG0gQ
-         EepQ==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1725570972; x=1726175772; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=h1RxVlhkB8p72E7vZJvb+Ijp4614DvwE9gm+Vso2ack=;
+        b=kisrC/mLw8lCuh+JqTNjjJfT6h8MChHgSDHURlVJv6zqSLvr0wnUh2olY1J7IFPTRZ
+         mYjOuPrTSw8eBSxh0w++i796jR7psU0xiJQkIlAtaZfsyTwx6cKFQjwC6uK9piL1cOor
+         eWyGroGze34kMNcIUf9RDnCN/e0/J+0Slg/ALhMfCnq1Ony4Pr2XSL4Ji8dxHOu/fdgT
+         Y7OOYzJfft1zSejnVHCp/cMltWBNTxsFKg1qaF9jmHV/336hF/d7SWqMnRjpdPKjApQ/
+         mkT9/IpfvN4oVQvjRiEfzWfE6tkk5+iN9JVaGu+IN6d2aEbts4ltBYj4nXrulr5JT/88
+         +IMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725569488; x=1726174288;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F33YSQnuZYPeljqM4rutMIlrPkVJHZGOX8c/cjeo/LE=;
-        b=GZYGWHvqlhAYV+o7jG+ZpdJ2N0ksLXEWDFKUsGteH8jxQTyLwctkeBEL8AqO5/qvlw
-         c1yjPD1l5JLitUOGU0kgOa25X0+ZiSOkkPpUO7tXIkCrynqom9EJSFJfnUEQe7ZY5ehH
-         K1At1AaTUwt0sS+eT+Uqe9+z8grdiy1+8SJ9vDR06lQDo2/vnsLHgYOPsVctQMcOCAMV
-         dBZdF76N9mJia37r+T5bSJRWp0QIax4DjRXwHqBujG94p18N6M6fmRqRSEHhlix9Ba48
-         krSvDkExFCput1J9VIrbgEXvSvJxOCKdRn5LwKpKHDfr7HAsZGphbX93PO5vDosjAM0S
-         qRWA==
-X-Forwarded-Encrypted: i=1; AJvYcCXgTYIDLSE6UzXW4WUXkgIpaUnQYSMYZ7+E9mhdu/vGWzCEbVGmllCbJ8eNOm7A0O8+t3yw9WiRUcrP+R+PLCo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEJQd/Z1axh9q33vcb9ICJVJEndDRxwd8hqnyBTz/1feZNLOQt
-	Q3pp8xRkxcO8DwcYJTJ0DmjsD1iwewGXW8BsmaAcFHI+Hhh7XJBV+boInqOCZw0ubZsUek+yG6n
-	ZunkgYy1W352DTpA+FCstIq6/imGyj0JLrH79
-X-Google-Smtp-Source: AGHT+IEEq/BjGu3FKjTY9wg98+0umF6hB356dS+sjM2gWqEzafBJp1HqFQu8jX8BmmiPdydRKuyOniEcMhJBwoPs7wA=
-X-Received: by 2002:a17:902:e882:b0:205:5eaf:99e7 with SMTP id
- d9443c01a7336-206f05b330cmr3072895ad.38.1725569488031; Thu, 05 Sep 2024
- 13:51:28 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725570972; x=1726175772;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h1RxVlhkB8p72E7vZJvb+Ijp4614DvwE9gm+Vso2ack=;
+        b=SV63HKG9L7y8QnWWddRtzXlKEVyAOmJSpwN02NM0kGsqYiK4UDw813xBD2E02kYQ48
+         EYPrffboJU7R1sWWKMUwGQB+xr+lqRLUQb3k45Fp7pXRUYBRn8ESdc/rrAEDt2dIQV+1
+         ozZOVGgZFjVaFE6xNTz+NvYq3fIQmuul/BjA83osBkiRDy0s5Xcbz3q+X6cK5cxyPwDC
+         QZwNyNuqRyGFmP8D2yUJaQQTEsze5RVuViZtcAa4cdt1m1hX537cHVB55LmsYoqv6EE6
+         +tBsXBTmGa9X+cvMgmk4KxXgXZ387Y+zPM0ZjZPlGVn5b/OYWejVdHXhPobEaG7NGrYd
+         Vixw==
+X-Forwarded-Encrypted: i=1; AJvYcCWY40U0LVBRBqDp1bw2ZEvri0CfzsOqrhVog3kYhfMqETRyVbDoGhWy6rYR3x1rI+iThAGN3FvQ/X+7Djm9Xgo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyU9nvRjmqUQk7PuLKNBqlDD9pe54s2GI9IZOlP+66EF+N1bXdB
+	g+QNAoQDtXJ51/Ve99bX4Xpcq3iXPSdN4rKcuQtX38I/3UPadT/yU8ATDY3GONc=
+X-Google-Smtp-Source: AGHT+IFUGglg1gI40db05Oyw57X6jum9/dYSwirPMN5y+AFduyw81mLgzW8++XC4iGt5jarfSGqHMg==
+X-Received: by 2002:a05:6358:4709:b0:1b8:3498:5ab2 with SMTP id e5c5f4694b2df-1b8386e10e6mr71603755d.18.1725570972065;
+        Thu, 05 Sep 2024 14:16:12 -0700 (PDT)
+Received: from charlie.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7d4fbda7abesm3775746a12.61.2024.09.05.14.16.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Sep 2024 14:16:11 -0700 (PDT)
+From: Charlie Jenkins <charlie@rivosinc.com>
+Subject: [PATCH RFC v3 0/2] mm: Introduce ADDR_LIMIT_47BIT personality flag
+Date: Thu, 05 Sep 2024 14:15:50 -0700
+Message-Id: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240903214027.77533-1-arturacb@gmail.com> <20240903214027.77533-2-arturacb@gmail.com>
-In-Reply-To: <20240903214027.77533-2-arturacb@gmail.com>
-From: Rae Moar <rmoar@google.com>
-Date: Thu, 5 Sep 2024 16:51:15 -0400
-Message-ID: <CA+GJov4cAdvmVCHh4xcSVWKg0e3Drs7GB7jMW0btciwCUEJFgg@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] lib/llist_kunit.c: add KUnit tests for llist
-To: Artur Alves <arturacb@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, n@nfraprado.net, 
-	andrealmeid@riseup.net, vinicius@nukelet.com, 
-	diego.daniel.professional@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIYf2mYC/4XNTQrCMBAF4KtI1kaS6b8rQfAAbkVKmk7NgG1KU
+ qJSendDVyKIyzeP+d7MPDpCz/abmTkM5MkOMSTbDdNGDTfk1MbMQEAqSij4qCZt0PMG7/ZRGxq
+ muu/VyBuZtEWlUOosY/F7dNjRc5Uv7Hw6sms8GvKTda91Lci1+gsHyQVP864DbCoB0B4cBetp0
+ Dtt+5UN8ElVvymIVJ6UCsq2QoXii1qW5Q0BYjuXEQEAAA==
+To: Arnd Bergmann <arnd@arndb.de>, 
+ Richard Henderson <richard.henderson@linaro.org>, 
+ Ivan Kokshaysky <ink@jurassic.park.msu.ru>, 
+ Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>, 
+ Russell King <linux@armlinux.org.uk>, Guo Ren <guoren@kernel.org>, 
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>, 
+ Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ Naveen N Rao <naveen@kernel.org>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, 
+ Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>, 
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, 
+ Peter Zijlstra <peterz@infradead.org>, Muchun Song <muchun.song@linux.dev>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+ Vlastimil Babka <vbabka@suse.cz>, 
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Shuah Khan <shuah@kernel.org>, 
+ Christoph Hellwig <hch@infradead.org>, Michal Hocko <mhocko@suse.com>, 
+ "Kirill A. Shutemov" <kirill@shutemov.name>, 
+ Chris Torek <chris.torek@gmail.com>
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
+ linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
+ sparclinux@vger.kernel.org, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org, linux-abi-devel@lists.sourceforge.net, 
+ Charlie Jenkins <charlie@rivosinc.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5488; i=charlie@rivosinc.com;
+ h=from:subject:message-id; bh=8yDjUN3v9pzHbAJkU962KdEeNCXYhTKg/kSM+xczGS8=;
+ b=owGbwMvMwCHWx5hUnlvL8Y3xtFoSQ9ot+f6nvpcl97tY5XM5HRGwunrS/1hN4Jrc4J63aWdPl
+ kkz5fzoKGVhEONgkBVTZOG51sDceke/7Kho2QSYOaxMIEMYuDgFYCIbvBgZfjQZPtnyo0T8l+3r
+ pTc0r/6LOCzwZu3XBXX7mfYvU6k4cI2R4YF4V0iLZoGQYvmDbN1ZIvanHjMsmvbgwI2pnto/ozc
+ e4gMA
+X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
+ fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
 
-On Tue, Sep 3, 2024 at 5:40=E2=80=AFPM Artur Alves <arturacb@gmail.com> wro=
-te:
->
-> Add KUnit tests for the llist data structure. They test the vast
-> majority of methods and macros defined in include/linux/llist.h.
->
-> These are inspired by the existing tests for the 'list' doubly
-> linked in lib/list-test.c [1]. Each test case (llist_test_x)
-> tests the behaviour of the llist function/macro 'x'.
->
-> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/lib/list-test.c?h=3Dv6.11-rc6
->
-> Signed-off-by: Artur Alves <arturacb@gmail.com>
+Some applications rely on placing data in free bits addresses allocated
+by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
+address returned by mmap to be less than the 48-bit address space,
+unless the hint address uses more than 47 bits (the 48th bit is reserved
+for the kernel address space).
 
-Hello!
+The riscv architecture needs a way to similarly restrict the virtual
+address space. On the riscv port of OpenJDK an error is thrown if
+attempted to run on the 57-bit address space, called sv57 [1].  golang
+has a comment that sv57 support is not complete, but there are some
+workarounds to get it to mostly work [2].
 
-Thanks for creating this new test! It looks really good and is passing
-all the tests.
+These applications work on x86 because x86 does an implicit 47-bit
+restriction of mmap() address that contain a hint address that is less
+than 48 bits.
 
-My main comment is that this patch is causing some checkpatch warnings:
+Instead of implicitly restricting the address space on riscv (or any
+current/future architecture), provide a flag to the personality syscall
+that can be used to ensure an application works in any arbitrary VA
+space. A similar feature has already been implemented by the personality
+syscall in ADDR_LIMIT_32BIT.
 
-  WARNING: Prefer a maximum 75 chars per line (possible unwrapped
-commit description?)
-  #13:
-  [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
-ee/lib/list-test.c?h=3Dv6.11-rc6
+This flag will also allow seemless compatibility between all
+architectures, so applications like Go and OpenJDK that use bits in a
+virtual address can request the exact number of bits they need in a
+generic way. The flag can be checked inside of vm_unmapped_area() so
+that this flag does not have to be handled individually by each
+architecture. 
 
-It's probably fine to ignore this warning as it is a link. But I might
-remove the link because it is not absolutely necessary in this case.
+Link:
+https://github.com/openjdk/jdk/blob/f080b4bb8a75284db1b6037f8c00ef3b1ef1add1/src/hotspot/cpu/riscv/vm_version_riscv.cpp#L79
+[1]
+Link:
+https://github.com/golang/go/blob/9e8ea567c838574a0f14538c0bbbd83c3215aa55/src/runtime/tagptr_64bit.go#L47
+[2]
 
-  WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-  #58:
-  new file mode 100644
+To: Arnd Bergmann <arnd@arndb.de>
+To: Richard Henderson <richard.henderson@linaro.org>
+To: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
+To: Matt Turner <mattst88@gmail.com>
+To: Vineet Gupta <vgupta@kernel.org>
+To: Russell King <linux@armlinux.org.uk>
+To: Guo Ren <guoren@kernel.org>
+To: Huacai Chen <chenhuacai@kernel.org>
+To: WANG Xuerui <kernel@xen0n.name>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: James E.J. Bottomley <James.Bottomley@HansenPartnership.com>
+To: Helge Deller <deller@gmx.de>
+To: Michael Ellerman <mpe@ellerman.id.au>
+To: Nicholas Piggin <npiggin@gmail.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Naveen N Rao <naveen@kernel.org>
+To: Alexander Gordeev <agordeev@linux.ibm.com>
+To: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To: Heiko Carstens <hca@linux.ibm.com>
+To: Vasily Gorbik <gor@linux.ibm.com>
+To: Christian Borntraeger <borntraeger@linux.ibm.com>
+To: Sven Schnelle <svens@linux.ibm.com>
+To: Yoshinori Sato <ysato@users.sourceforge.jp>
+To: Rich Felker <dalias@libc.org>
+To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: David S. Miller <davem@davemloft.net>
+To: Andreas Larsson <andreas@gaisler.com>
+To: Thomas Gleixner <tglx@linutronix.de>
+To: Ingo Molnar <mingo@redhat.com>
+To: Borislav Petkov <bp@alien8.de>
+To: Dave Hansen <dave.hansen@linux.intel.com>
+To: x86@kernel.org
+To: H. Peter Anvin <hpa@zytor.com>
+To: Andy Lutomirski <luto@kernel.org>
+To: Peter Zijlstra <peterz@infradead.org>
+To: Muchun Song <muchun.song@linux.dev>
+To: Andrew Morton <akpm@linux-foundation.org>
+To: Liam R. Howlett <Liam.Howlett@oracle.com>
+To: Vlastimil Babka <vbabka@suse.cz>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: Shuah Khan <shuah@kernel.org>
+To: Christoph Hellwig <hch@infradead.org>
+To: Michal Hocko <mhocko@suse.com>
+To: "Kirill A. Shutemov" <kirill@shutemov.name>
+To: Chris Torek <chris.torek@gmail.com>
+Cc: linux-arch@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-alpha@vger.kernel.org
+Cc: linux-snps-arc@lists.infradead.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-csky@vger.kernel.org
+Cc: loongarch@lists.linux.dev
+Cc: linux-mips@vger.kernel.org
+Cc: linux-parisc@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-sh@vger.kernel.org
+Cc: sparclinux@vger.kernel.org
+Cc: linux-mm@kvack.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-abi-devel@lists.sourceforge.net
+Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
 
-  ERROR: that open brace { should be on the previous line
-  #306: FILE: lib/llist_kunit.c:249:
-  +static void llist_test_for_each_safe(struct kunit *test)
-  +{
+Changes in v2:
+- Added much greater detail to cover letter
+- Removed all code that touched architecture specific code and was able
+  to factor this out into all generic functions, except for flags that
+  needed to be added to vm_unmapped_area_info
+- Made this an RFC since I have only tested it on riscv and x86
+- Link to v1: https://lore.kernel.org/r/20240827-patches-below_hint_mmap-v1-0-46ff2eb9022d@rivosinc.com
 
-  ERROR: that open brace { should be on the previous line
-  #325: FILE: lib/llist_kunit.c:268:
-  +static void llist_test_for_each_entry(struct kunit *test)
-  +{
+Changes in v3:
+- Use a personality flag instead of an mmap flag
+- Link to v2: https://lore.kernel.org/r/20240829-patches-below_hint_mmap-v2-0-638a28d9eae0@rivosinc.com
 
-  ERROR: that open brace { should be on the previous line
-  #346: FILE: lib/llist_kunit.c:289:
-  +static void llist_test_for_each_entry_safe(struct kunit *test)
-  +{
+---
+Charlie Jenkins (2):
+      mm: Add personality flag to limit address to 47 bits
+      selftests/mm: Create ADDR_LIMIT_47BIT test
 
-These checkpatch errors are mistaken since the open brace should be
-where it is. I believe this is getting picked up because of the
-"for_each" in the test name. This was fixed for me by rewriting the
-test names: from "llist_test_for_each_safe" -> to
-"llist_test_safe_for_each", and so on for the other tests with errors.
-Sorry it's a pain to change this but I think it is a better fix than
-changing the checkpatch script.
+ include/uapi/linux/personality.h                   |  1 +
+ mm/mmap.c                                          |  3 ++
+ tools/testing/selftests/mm/.gitignore              |  1 +
+ tools/testing/selftests/mm/Makefile                |  1 +
+ tools/testing/selftests/mm/map_47bit_personality.c | 34 ++++++++++++++++++++++
+ 5 files changed, 40 insertions(+)
+---
+base-commit: 5be63fc19fcaa4c236b307420483578a56986a37
+change-id: 20240827-patches-below_hint_mmap-b13d79ae1c55
+-- 
+- Charlie
 
-> ---
->  lib/Kconfig.debug       |  11 ++
->  lib/tests/Makefile      |   1 +
->  lib/tests/llist_kunit.c | 361 ++++++++++++++++++++++++++++++++++++++++
->  3 files changed, 373 insertions(+)
->  create mode 100644 lib/tests/llist_kunit.c
->
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index a30c03a66172..b2725daccc52 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2813,6 +2813,17 @@ config USERCOPY_KUNIT_TEST
->           on the copy_to/from_user infrastructure, making sure basic
->           user/kernel boundary testing is working.
->
-> +config LLIST_KUNIT_TEST
-> +       tristate "KUnit tests for lib/llist" if !KUNIT_ALL_TESTS
-> +       depends on KUNIT
-> +       default KUNIT_ALL_TESTS
-> +       help
-> +         This option builds the "llist_kunit" test module that
-> +         helps to verify the correctness of the functions and
-> +         macros defined in (<linux/llist.h>).
-
-Also, I think I would prefer if this description was a bit tweaked.
-Saying it builds the "module" is confusing since this test might be
-run built-in instead. So maybe something more similar to :
-
-This builds the llist (lock-less list) KUnit test suite. It tests the
-API and basic functionality of the macros and functions defined in
-<linux/llish.h>.
-
-> +
-> +         If unsure, say N.
-> +
->  config TEST_UDELAY
->         tristate "udelay test driver"
->         help
-> diff --git a/lib/tests/Makefile b/lib/tests/Makefile
-> index c6a14cc8663e..8d7c40a73110 100644
-> --- a/lib/tests/Makefile
-> +++ b/lib/tests/Makefile
-> @@ -34,4 +34,5 @@ CFLAGS_stackinit_kunit.o +=3D $(call cc-disable-warning=
-, switch-unreachable)
->  obj-$(CONFIG_STACKINIT_KUNIT_TEST) +=3D stackinit_kunit.o
->  obj-$(CONFIG_STRING_KUNIT_TEST) +=3D string_kunit.o
->  obj-$(CONFIG_STRING_HELPERS_KUNIT_TEST) +=3D string_helpers_kunit.o
-> +obj-$(CONFIG_LLIST_KUNIT_TEST) +=3D llist_kunit.o
->
-> diff --git a/lib/tests/llist_kunit.c b/lib/tests/llist_kunit.c
-> new file mode 100644
-> index 000000000000..f273c0d175c7
-> --- /dev/null
-> +++ b/lib/tests/llist_kunit.c
-> @@ -0,0 +1,361 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit test for the Kernel lock-less linked-list structure.
-> + *
-> + * Author: Artur Alves <arturacb@gmail.com>
-> + */
-> +
-> +#include <kunit/test.h>
-> +#include <linux/llist.h>
-> +
-> +#define ENTRIES_SIZE 3
-> +
-> +struct llist_test_struct {
-> +       int data;
-> +       struct llist_node node;
-> +};
-> +
-> +static void llist_test_init_llist(struct kunit *test)
-> +{
-> +       /* test if the llist is correctly initialized */
-> +       struct llist_head llist1 =3D LLIST_HEAD_INIT(llist1);
-> +       LLIST_HEAD(llist2);
-> +       struct llist_head llist3, *llist4, *llist5;
-> +
-> +       KUNIT_EXPECT_TRUE(test, llist_empty(&llist1));
-> +
-> +       KUNIT_EXPECT_TRUE(test, llist_empty(&llist2));
-> +
-> +       init_llist_head(&llist3);
-> +       KUNIT_EXPECT_TRUE(test, llist_empty(&llist3));
-> +
-> +       llist4 =3D kzalloc(sizeof(*llist4), GFP_KERNEL | __GFP_NOFAIL);
-> +       init_llist_head(llist4);
-> +       KUNIT_EXPECT_TRUE(test, llist_empty(llist4));
-> +       kfree(llist4);
-> +
-> +       llist5 =3D kmalloc(sizeof(*llist5), GFP_KERNEL | __GFP_NOFAIL);
-> +       memset(llist5, 0xFF, sizeof(*llist5));
-> +       init_llist_head(llist5);
-> +       KUNIT_EXPECT_TRUE(test, llist_empty(llist5));
-> +       kfree(llist5);
-> +}
-> +
-> +static void llist_test_init_llist_node(struct kunit *test)
-> +{
-> +       struct llist_node a;
-> +
-> +       init_llist_node(&a);
-> +
-> +       KUNIT_EXPECT_PTR_EQ(test, a.next, &a);
-> +}
-> +
-> +static void llist_test_llist_entry(struct kunit *test)
-> +{
-> +       struct llist_test_struct test_struct, *aux;
-> +       struct llist_node *llist =3D &test_struct.node;
-> +
-> +       aux =3D llist_entry(llist, struct llist_test_struct, node);
-> +       KUNIT_EXPECT_PTR_EQ(test, &test_struct, aux);
-> +}
-> +
-> +static void llist_test_add(struct kunit *test)
-> +{
-> +       struct llist_node a, b;
-> +       LLIST_HEAD(llist);
-> +
-> +       init_llist_node(&a);
-> +       init_llist_node(&b);
-> +
-> +       /* The first assertion must be true, given that llist is empty */
-> +       KUNIT_EXPECT_TRUE(test, llist_add(&a, &llist));
-> +       KUNIT_EXPECT_FALSE(test, llist_add(&b, &llist));
-> +
-> +       /* Should be [List] -> b -> a */
-> +       KUNIT_EXPECT_PTR_EQ(test, llist.first, &b);
-> +       KUNIT_EXPECT_PTR_EQ(test, b.next, &a);
-> +}
-> +
-> +static void llist_test_add_batch(struct kunit *test)
-> +{
-> +       struct llist_node a, b, c;
-> +       LLIST_HEAD(llist);
-> +       LLIST_HEAD(llist2);
-> +
-> +       init_llist_node(&a);
-> +       init_llist_node(&b);
-> +       init_llist_node(&c);
-> +
-> +       llist_add(&a, &llist2);
-> +       llist_add(&b, &llist2);
-> +       llist_add(&c, &llist2);
-> +
-> +       /* This assertion must be true, given that llist is empty */
-> +       KUNIT_EXPECT_TRUE(test, llist_add_batch(&c, &a, &llist));
-> +
-> +       /* should be [List] -> c -> b -> a */
-> +       KUNIT_EXPECT_PTR_EQ(test, llist.first, &c);
-> +       KUNIT_EXPECT_PTR_EQ(test, c.next, &b);
-> +       KUNIT_EXPECT_PTR_EQ(test, b.next, &a);
-> +}
-> +
-> +static void llist_test_llist_next(struct kunit *test)
-> +{
-> +       struct llist_node a, b;
-> +       LLIST_HEAD(llist);
-> +
-> +       init_llist_node(&a);
-> +       init_llist_node(&b);
-> +
-> +       llist_add(&a, &llist);
-> +       llist_add(&b, &llist);
-> +
-> +       /* should be [List] -> b -> a */
-> +       KUNIT_EXPECT_PTR_EQ(test, llist_next(&b), &a);
-> +       KUNIT_EXPECT_NULL(test, llist_next(&a));
-> +}
-> +
-> +static void llist_test_empty_llist(struct kunit *test)
-> +{
-> +       struct llist_head llist =3D LLIST_HEAD_INIT(llist);
-> +       struct llist_node a;
-> +
-> +       KUNIT_EXPECT_TRUE(test, llist_empty(&llist));
-> +
-> +       llist_add(&a, &llist);
-> +
-> +       KUNIT_EXPECT_FALSE(test, llist_empty(&llist));
-> +}
-> +
-> +static void llist_test_llist_on_list(struct kunit *test)
-> +{
-> +       struct llist_node a, b;
-> +       LLIST_HEAD(llist);
-> +
-> +       init_llist_node(&a);
-> +       init_llist_node(&b);
-> +
-> +       llist_add(&a, &llist);
-> +
-> +       /* should be [List] -> a */
-> +       KUNIT_EXPECT_TRUE(test, llist_on_list(&a));
-> +       KUNIT_EXPECT_FALSE(test, llist_on_list(&b));
-> +}
-> +
-> +static void llist_test_del_first(struct kunit *test)
-> +{
-> +       struct llist_node a, b, *c;
-> +       LLIST_HEAD(llist);
-> +
-> +       llist_add(&a, &llist);
-> +       llist_add(&b, &llist);
-> +
-> +       /* before: [List] -> b -> a */
-> +       c =3D llist_del_first(&llist);
-> +
-> +       /* should be [List] -> a */
-> +       KUNIT_EXPECT_PTR_EQ(test, llist.first, &a);
-> +
-> +       /* del must return a pointer to llist_node b
-> +        * the returned pointer must be marked on list
-> +        */
-> +       KUNIT_EXPECT_PTR_EQ(test, c, &b);
-> +       KUNIT_EXPECT_TRUE(test, llist_on_list(c));
-> +}
-> +
-> +static void llist_test_del_first_init(struct kunit *test)
-> +{
-> +       struct llist_node a, *b;
-> +       LLIST_HEAD(llist);
-> +
-> +       llist_add(&a, &llist);
-> +
-> +       b =3D llist_del_first_init(&llist);
-> +
-> +       /* should be [List] */
-> +       KUNIT_EXPECT_TRUE(test, llist_empty(&llist));
-> +
-> +       /* the returned pointer must be marked out of the list */
-> +       KUNIT_EXPECT_FALSE(test, llist_on_list(b));
-> +}
-> +
-> +static void llist_test_del_first_this(struct kunit *test)
-> +{
-> +       struct llist_node a, b;
-> +       LLIST_HEAD(llist);
-> +
-> +       llist_add(&a, &llist);
-> +       llist_add(&b, &llist);
-> +
-> +       llist_del_first_this(&llist, &a);
-> +
-> +       /* before: [List] -> b -> a */
-> +
-> +       // should remove only if is the first node in the llist
-> +       KUNIT_EXPECT_FALSE(test, llist_del_first_this(&llist, &a));
-> +
-> +       KUNIT_EXPECT_TRUE(test, llist_del_first_this(&llist, &b));
-> +
-> +       /* should be [List] -> a */
-> +       KUNIT_EXPECT_PTR_EQ(test, llist.first, &a);
-> +}
-> +
-> +static void llist_test_del_all(struct kunit *test)
-> +{
-> +       struct llist_node a, b;
-> +       LLIST_HEAD(llist);
-> +       LLIST_HEAD(empty_llist);
-> +
-> +       llist_add(&a, &llist);
-> +       llist_add(&b, &llist);
-> +
-> +       /* deleting from a empty llist should return NULL */
-> +       KUNIT_EXPECT_NULL(test, llist_del_all(&empty_llist));
-> +
-> +       llist_del_all(&llist);
-> +
-> +       KUNIT_EXPECT_TRUE(test, llist_empty(&llist));
-> +}
-> +
-> +static void llist_test_for_each(struct kunit *test)
-> +{
-> +       struct llist_node entries[ENTRIES_SIZE] =3D { 0 };
-> +       struct llist_node *pos, *deleted_nodes;
-> +       LLIST_HEAD(llist);
-> +       int i =3D 0;
-> +
-> +       for (int i =3D ENTRIES_SIZE - 1; i >=3D 0; i--)
-> +               llist_add(&entries[i], &llist);
-> +
-> +       /* before [List] -> entries[0] -> ... -> entries[ENTRIES_SIZE - 1=
-] */
-> +       llist_for_each(pos, llist.first) {
-> +               KUNIT_EXPECT_PTR_EQ(test, pos, &entries[i++]);
-> +       }
-> +
-> +       KUNIT_EXPECT_EQ(test, ENTRIES_SIZE, i);
-> +
-> +       i =3D 0;
-
-This is super nitpicky but I think I would prefer if you set two
-variables to zero at the beginning rather than reusing "i". So: int i
-=3D 0, j =3D 0;
-
-> +
-> +       /* traversing deleted nodes */
-> +       deleted_nodes =3D llist_del_all(&llist);
-> +
-> +       llist_for_each(pos, deleted_nodes) {
-> +               KUNIT_EXPECT_PTR_EQ(test, pos, &entries[i++]);
-> +       }
-> +
-> +       KUNIT_EXPECT_EQ(test, ENTRIES_SIZE, i);
-> +}
-> +
-> +static void llist_test_for_each_safe(struct kunit *test)
-> +{
-> +       struct llist_node entries[ENTRIES_SIZE] =3D { 0 };
-
-I'm not sure if it is necessary to initialize this to be zeros.
-
-> +       struct llist_node *pos, *n;
-> +       LLIST_HEAD(llist);
-> +       int i =3D 0;
-> +
-> +       for (int i =3D ENTRIES_SIZE - 1; i >=3D 0; i--)
-> +               llist_add(&entries[i], &llist);
-> +
-> +       llist_for_each_safe(pos, n, llist.first) {
-> +               KUNIT_EXPECT_PTR_EQ(test, pos, &entries[i++]);
-> +               llist_del_first(&llist);
-> +       }
-> +
-> +       KUNIT_EXPECT_EQ(test, ENTRIES_SIZE, i);
-> +       KUNIT_EXPECT_TRUE(test, llist_empty(&llist));
-> +}
-> +
-> +static void llist_test_for_each_entry(struct kunit *test)
-> +{
-> +       struct llist_test_struct entries[ENTRIES_SIZE], *pos;
-> +       LLIST_HEAD(llist);
-> +       int i =3D 0;
-> +
-> +       for (int i =3D ENTRIES_SIZE - 1; i >=3D 0; --i) {
-> +               entries[i].data =3D i;
-> +               llist_add(&entries[i].node, &llist);
-> +       }
-> +
-> +       i =3D 0;
-> +
-> +       llist_for_each_entry(pos, llist.first, node) {
-> +               KUNIT_EXPECT_EQ(test, pos->data, i);
-> +               i++;
-> +       }
-> +
-> +       KUNIT_EXPECT_EQ(test, ENTRIES_SIZE, i);
-> +}
-> +
-> +static void llist_test_for_each_entry_safe(struct kunit *test)
-> +{
-> +       struct llist_test_struct entries[ENTRIES_SIZE], *pos, *n;
-> +       LLIST_HEAD(llist);
-> +       int i =3D 0;
-> +
-> +       for (int i =3D ENTRIES_SIZE - 1; i >=3D 0; --i) {
-> +               entries[i].data =3D i;
-> +               llist_add(&entries[i].node, &llist);
-> +       }
-> +
-> +       i =3D 0;
-> +
-> +       llist_for_each_entry_safe(pos, n, llist.first, node) {
-> +               KUNIT_EXPECT_EQ(test, pos->data, i++);
-> +               llist_del_first(&llist);
-> +       }
-> +
-> +       KUNIT_EXPECT_EQ(test, ENTRIES_SIZE, i);
-> +       KUNIT_EXPECT_TRUE(test, llist_empty(&llist));
-> +}
-> +
-> +static void llist_test_reverse_order(struct kunit *test)
-> +{
-> +       struct llist_node entries[3], *pos, *reversed_llist;
-
-Rather than using the "3" here I would prefer using the ENTRIES_SIZE.
-
-> +       LLIST_HEAD(llist);
-> +       int i =3D 0;
-> +
-> +       llist_add(&entries[0], &llist);
-> +       llist_add(&entries[1], &llist);
-> +       llist_add(&entries[2], &llist);
-> +
-> +       /* before [List] -> entries[2] -> entries[1] -> entries[0] */
-> +       reversed_llist =3D llist_reverse_order(llist_del_first(&llist));
-> +
-> +       /* should be [List] -> entries[0] -> entries[1] -> entrires[2] */
-
-Small typo in this comment: "entries"
-
-> +       llist_for_each(pos, reversed_llist) {
-> +               KUNIT_EXPECT_PTR_EQ(test, pos, &entries[i++]);
-> +       }
-> +
-> +       KUNIT_EXPECT_EQ(test, 3, i);
-
-Same here with the use of the "3".
-
-> +}
-> +
-> +static struct kunit_case llist_test_cases[] =3D {
-> +       KUNIT_CASE(llist_test_init_llist),
-> +       KUNIT_CASE(llist_test_init_llist_node),
-> +       KUNIT_CASE(llist_test_llist_entry),
-> +       KUNIT_CASE(llist_test_add),
-> +       KUNIT_CASE(llist_test_add_batch),
-> +       KUNIT_CASE(llist_test_llist_next),
-> +       KUNIT_CASE(llist_test_empty_llist),
-> +       KUNIT_CASE(llist_test_llist_on_list),
-> +       KUNIT_CASE(llist_test_del_first),
-> +       KUNIT_CASE(llist_test_del_first_init),
-> +       KUNIT_CASE(llist_test_del_first_this),
-> +       KUNIT_CASE(llist_test_del_all),
-> +       KUNIT_CASE(llist_test_for_each),
-> +       KUNIT_CASE(llist_test_for_each_safe),
-> +       KUNIT_CASE(llist_test_for_each_entry),
-> +       KUNIT_CASE(llist_test_for_each_entry_safe),
-> +       KUNIT_CASE(llist_test_reverse_order),
-> +       {}
-> +};
-> +
-> +static struct kunit_suite llist_test_suite =3D {
-> +       .name =3D "llist",
-> +       .test_cases =3D llist_test_cases,
-> +};
-> +
-> +kunit_test_suite(llist_test_suite);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("KUnit tests for the llist data structure.");
-> --
-> 2.46.0
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/kunit-dev/20240903214027.77533-2-arturacb%40gmail.com.
 
