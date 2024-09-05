@@ -1,42 +1,43 @@
-Return-Path: <linux-kselftest+bounces-17257-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17258-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF40C96DD52
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 17:08:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DFED96DD56
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 17:08:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 021F6B27F4E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 15:08:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47C4E286159
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 15:08:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61F9319E837;
-	Thu,  5 Sep 2024 15:06:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E90F19F110;
+	Thu,  5 Sep 2024 15:06:53 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from frasgout11.his.huawei.com (frasgout11.his.huawei.com [14.137.139.23])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA10919E827;
-	Thu,  5 Sep 2024 15:06:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8033D19EEA6;
+	Thu,  5 Sep 2024 15:06:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.23
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725548810; cv=none; b=ZA1OKE3h5AZ+FLNgyuL4G09ylTNsfqc+/Mj6EWo06e20fUqczD8fVrTokMTpX6QefXo34nolwJWjvjXi803Jtf5d2AQ9cxNlUL8skEIWXQfAnxY0R+xb9XggZVJTMzbbCR1v9lR+mwdquMeqMO4a3vHHG4xeNNzZffZYQy74VFs=
+	t=1725548813; cv=none; b=fHVNQMGGZBEyoXz2MlFJCBhpoeLpYOfu170mxxgkqiQjE+puBWiRoyC8zaT/AECDerr/geFxwtjwJE/JJVyrcYBul5h3eX44fLO6EwGgZp20+o9XYxQ5inPjQJX9QJ/GoxGGt5H6VclgTNpYCrYWgXn5ltEkoL3zF7C/DqbpdA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725548810; c=relaxed/simple;
-	bh=HexUfndJtKlTs4DBTxqhlHBf2aCiiqQ0GWD6DRpuHDA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=O08yMPE3cgFlmFFj0ViBhd0GrUdFFZf/KWSQAJwwoASinrB66yE/6OTZ5QCaQcwfzXFLQjmSD2aQk21vBb6fZcZ9K4BAiIOi4mv0r1tk5s886kEhummjYJqqUAdPHFQccCuqETMReNoeRrEib+9hkIFZG/TAycHzGhhmXny9J4A=
+	s=arc-20240116; t=1725548813; c=relaxed/simple;
+	bh=+FWxbhEgiUhnOqq++AyS0GIUf8o9rWSo10+k/zpDed4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=jnIG38dDHzhRLBIHhrd3kXHQuyo4T+Jyojw8FHO8ZVU/PbNCsQFJVZspZXMExJtGbZzSNJ4Oizru5gJvo8TteelMOzHGfe8SUv+zRL7MFqcGWw204/28vBNh+/zgGnVVpFtc+TGdDHL4JGQaib2aiMRp6Hv2Mh9XyDN0LZm9Tyo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.23
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
 Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4X02JS43mjz9v7Hk;
-	Thu,  5 Sep 2024 22:47:20 +0800 (CST)
+	by frasgout11.his.huawei.com (SkyGuard) with ESMTP id 4X02JY3TXCz9v7Hs;
+	Thu,  5 Sep 2024 22:47:25 +0800 (CST)
 Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id C2E43140516;
-	Thu,  5 Sep 2024 23:06:32 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTP id 894CC140452;
+	Thu,  5 Sep 2024 23:06:47 +0800 (CST)
 Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwDXZy_myNlmE0tUAA--.16274S2;
-	Thu, 05 Sep 2024 16:06:31 +0100 (CET)
+	by APP1 (Coremail) with SMTP id LxC2BwDXZy_myNlmE0tUAA--.16274S3;
+	Thu, 05 Sep 2024 16:06:45 +0100 (CET)
 From: Roberto Sassu <roberto.sassu@huaweicloud.com>
 To: zohar@linux.ibm.com,
 	dmitry.kasatkin@gmail.com,
@@ -69,10 +70,12 @@ Cc: linux-integrity@vger.kernel.org,
 	mzerqung@0pointer.de,
 	kgold@linux.ibm.com,
 	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v5 00/14] integrity: Introduce the Integrity Digest Cache
-Date: Thu,  5 Sep 2024 17:05:29 +0200
-Message-Id: <20240905150543.3766895-1-roberto.sassu@huaweicloud.com>
+Subject: [PATCH v5 01/14] lib: Add TLV parser
+Date: Thu,  5 Sep 2024 17:05:30 +0200
+Message-Id: <20240905150543.3766895-2-roberto.sassu@huaweicloud.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240905150543.3766895-1-roberto.sassu@huaweicloud.com>
+References: <20240905150543.3766895-1-roberto.sassu@huaweicloud.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,333 +83,488 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:LxC2BwDXZy_myNlmE0tUAA--.16274S2
-X-Coremail-Antispam: 1UD129KBjvAXoW3urykCryDtr47uryDWr15Jwb_yoW8Wr4UXo
-	ZYkwsxXw4kKFy3AF4DCFnrAay7W3sYgw1xAr4vvryUZFyfXFyUGa4DCa1DJFy3Zr48Xr97
-	Za48Z3yUXFWDtwn3n29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUYa7kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
-	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28EF7xvwVC0I7IYx2IY6xkF
-	7I0E14v26r4UJVWxJr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7
-	CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAq
-	x4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6x
-	CaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF
-	7I0En4kS14v26rWY6Fy7MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
-	8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
-	xVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI
-	8IcVCY1x0267AKxVW8Jr0_Cr1UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
-	87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4UJVWxJrUvcSsGvfC2KfnxnU
-	UI43ZEXa7IU0uMKtUUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQARBGbZE3MK1wAAsW
+X-CM-TRANSID:LxC2BwDXZy_myNlmE0tUAA--.16274S3
+X-Coremail-Antispam: 1UD129KBjvAXoW3CF15WF4fur1kWrWkWr4fuFg_yoW8Gw47Co
+	Za9FWUur45Xr17u3W8ZF48Zr1UXry0gr43Aw13GrW3Wa40kF45Kr45tw43G3y3Jws8KFWU
+	t3sxX343Jw4UKr1kn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
+	AaLaJ3UjIYCTnIWjp_UUUO57kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
+	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_Jr
+	4l82xGYIkIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26r4j6F4UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
+	xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
+	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2
+	AFwI0_Wrv_ZF1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAq
+	x4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6r
+	W5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF
+	7I0E14v26r4UJVWxJr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14
+	v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJbIYCTnIWIevJa73UjIFyTuY
+	vjxUVDDGUUUUU
+X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQARBGbZE3MK1wABsX
 
 From: Roberto Sassu <roberto.sassu@huawei.com>
 
-Integrity detection and protection has long been a desirable feature, to
-reach a large user base and mitigate the risk of flaws in the software
-and attacks.
+Add a parser of a generic Type-Length-Value (TLV) format:
 
-However, while solutions exist, they struggle to reach a large user base,
-due to requiring higher than desired constraints on performance,
-flexibility and configurability, that only security conscious people are
-willing to accept.
++-----------------+------------------+-----------------+
+| data type (u64) | num fields (u64) | total len (u64) | # header
++--------------+--+---------+--------+---------+-------+
+| field1 (u64) | len1 (u64) | value1 (u8 len1) |
++--------------+------------+------------------+
+|     ...      |    ...     |        ...       |         # data
++--------------+------------+------------------+
+| fieldN (u64) | lenN (u64) | valueN (u8 lenN) |
++--------------+------------+------------------+
 
-For example, IMA measurement requires the target platform to collect
-integrity measurements, and to protect them with the TPM, which introduces
-a noticeable overhead (up to 10x slower in a microbenchmark) on frequently
-used system calls, like the open().
+[same as above, repeated N times]
 
-IMA Appraisal currently requires individual files to be signed and
-verified, and Linux distributions to rebuild all packages to include file
-signatures (this approach has been adopted from Fedora 39+). Like a TPM,
-also signature verification introduces a significant overhead, especially
-if it is used to check the integrity of many files.
+Each adopter can define its own data types and fields. The TLV parser does
+not need to be aware of those, but lets the adopter obtain the data and
+decide how to continue.
 
-This is where the new Integrity Digest Cache comes into play, it offers
-additional support for new and existing integrity solutions, to make
-them faster and easier to deploy.
+After parsing each TLV header, call the header callback function with the
+callback data provided by the adopter. The latter can return 0, to skip
+processing of the TLV data, 1 to process the TLV data, or a negative value
+to stop processing the TLV data.
 
-The Integrity Digest Cache can help IMA to reduce the number of TPM
-operations and to make them happen in a deterministic way. If IMA knows
-that a file comes from a Linux distribution, it can measure files in a
-different way: measure the list of digests coming from the distribution
-(e.g. RPM package headers), and subsequently measure a file if it is not
-found in that list.
+After processing a TLV data entry, call the data callback function also
+with the callback data provided by the adopter. The latter can decide how
+to interpret the TLV data entry depending on the field ID.
 
-The performance improvement comes at the cost of IMA not reporting which
-files from installed packages were accessed, and in which temporal
-sequence. This approach might not be suitable for all use cases.
+Nesting TLVs is also possible, the data callback function can call
+tlv_parse() to parse the inner structure.
 
-The Integrity Digest Cache can also help IMA for appraisal. IMA can simply
-lookup the calculated digest of an accessed file in the list of digests
-extracted from package headers, after verifying the header signature. It is
-sufficient to verify only one signature for all files in the package, as
-opposed to verifying a signature for each file.
-
-The same approach can be followed by other LSMs, such as Integrity Policy
-Enforcement (IPE), and BPF LSM.
-
-The Integrity Digest Cache is not tied to a specific package format. While
-it currently supports a TLV-based and the RPM formats, it can be easily
-extended to support more formats, such as DEBs. Focusing on just extracting
-digests keeps these parsers minimal and reasonably simple (e.g. the RPM
-parser has ~220 LOC). Included parsers have been verified for memory safety
-with the Frama-C static analyzer. The parsers with the Frama-C assertions
-are available here:
-
-https://github.com/robertosassu/rpm-formal/
-
-Integrating the Integrity Digest Cache in IMA brings significant
-performance improvements: up to 67% and 79% for measurement respectively in
-sequential and parallel file reads; up to 65% and 43% for appraisal
-respectively in sequential and parallel file reads.
-
-The performance can be further enhanced by using fsverity digests instead
-of conventional file digests, which would make IMA verify only the portion
-of the file to be read. However, at the moment, fsverity digests are not
-included in RPM packages. In this case, once rpm is extended to include
-them, Linux distributions still have to rebuild their packages.
-
-The Integrity Digest Cache can support both digest types, so that the
-functionality is immediately available without waiting for Linux
-distributions to do the transition.
-
-This patch set only includes the patches necessary to extract digests from
-a TLV-based and RPM data formats, and exposes an API for LSMs to query
-them. A separate patch set will be provided to integrate it in IMA.
-
-This patch set and the follow-up IMA integration can be tested by following
-the instructions at:
-
-https://github.com/linux-integrity/digest-cache-tools
-
-This patch set applies on top of:
-
-https://git.kernel.org/pub/scm/linux/kernel/git/zohar/linux-integrity.git/log/?h=next-integrity
-
-with commit fa8a4ce432e8 ("ima: fix buffer overrun in
-ima_eventdigest_init_common").
-
-Changelog
-
-v4:
-- Rename digest_cache LSM to Integrity Digest Cache (suggested by Paul
-  Moore)
-- Update documentation
-- Remove forward declaration of struct digest_cache in
-  include/linux/digest_cache.h (suggested by Jarkko)
-- Add DIGEST_CACHE_FREE digest cache event for notification
-- Remove digest_cache_found_t typedef and use uintptr_t instead
-- Add header callback in TLV parser and unexport tlv_parse_hdr() and
-  tlv_parse_data()
-- Plug the Integrity Digest Cache into the 'ima' LSM
-- Switch from constructor to zeroing the object cache
-- Remove notifier and detect digest cache changes by comparing pointers
-- Rename digest_cache_dir_create() to digest_cache_dir_add_entries()
-- Introduce digest_cache_dir_create() to create and initialize a directory
-  digest cache
-- Introduce digest_cache_dir_update_dig_user() to update dig_user with a
-  file digest cache on positive digest lookup
-- Use up to date directory digest cache, to take into account possible
-  inode eviction for the old ones
-- Introduce digest_cache_dir_prefetch() to prefetch digest lists
-- Adjust component name in debug messages (suggested by Jarkko)
-- Add FILE_PREFETCH and FILE_READ digest cache flags, remove RESET_USER
-- Reintroduce spin lock for digest cache verification data (needed for the
-  selftests)
-- Get inode and file descriptor security blob offsets from outside (IMA)
-- Avoid user-after-free in digest_cache_unref() by decrementing the ref.
-  count after printing the debug message
-- Check for digest list lookup loops also for the parent directory
-- Put and clear dig_owner directly in digest_cache_reset_clear_owner()
-- Move digest cache initialization code from digest_cache_create() to
-  digest_cache_init()
-- Hold the digest list path until the digest cache is initialized (to avoid
-  premature inode eviction)
-- Avoid race condition on setting DIR_PREFETCH in the directory digest
-  cache
-- Introduce digest_cache_dir_prefetch() and do it between digest cache
-  creation and initialization (to avoid lock inversion)
-- Avoid unnecessary length check in digest_list_parse_rpm()
-- Declare arrays of strings in tlv parser as static
-- Emit reset for parent directory on directory entry modification
-- Rename digest_cache_reset_owner() to digest_cache_reset_clear_owner()
-  and digest_cache_reset_user() to digest_cache_clear_user()
-- Execute digest_cache_file_release() either if FMODE_WRITE or
-  FMODE_CREATED are set in the file descriptor f_mode
-- Determine in digest_cache_verif_set() which gfp flag to use depending on
-  verifier ID
-- Update selftests
-
-v3:
-- Rewrite documentation, and remove the installation instructions since
-  they are now included in the README of digest-cache-tools
-- Add digest cache event notifier
-- Drop digest_cache_was_reset(), and send instead to asynchronous
-  notifications
-- Fix digest_cache LSM Kconfig style issues (suggested by Randy Dunlap)
-- Propagate digest cache reset to directory entries
-- Destroy per directory entry mutex
-- Introduce RESET_USER bit, to clear the dig_user pointer on
-  set/removexattr
-- Replace 'file content' with 'file data' (suggested by Mimi)
-- Introduce per digest cache mutex and replace verif_data_lock spinlock
-- Track changes of security.digest_list xattr
-- Stop tracking file_open and use file_release instead also for file writes
-- Add error messages in digest_cache_create()
-- Load/unload testing kernel module automatically during execution of test
-- Add tests for digest cache event notifier
-- Add test for ftruncate()
-- Remove DIGEST_CACHE_RESET_PREFETCH_BUF command in test and clear the
-  buffer on read instead
-
-v2:
-- Include the TLV parser in this patch set (from user asymmetric keys and
-  signatures)
-- Move from IMA and make an independent LSM
-- Remove IMA-specific stuff from this patch set
-- Add per algorithm hash table
-- Expect all digest lists to be in the same directory and allow changing
-  the default directory
-- Support digest lookup on directories, when there is no
-  security.digest_list xattr
-- Add seq num to digest list file name, to impose ordering on directory
-  iteration
-- Add a new data type DIGEST_LIST_ENTRY_DATA for the nested data in the
-  tlv digest list format
-- Add the concept of verification data attached to digest caches
-- Add the reset mechanism to track changes on digest lists and directory
-  containing the digest lists
-- Add kernel selftests
-
-v1:
-- Add documentation in Documentation/security/integrity-digest-cache.rst
-- Pass the mask of IMA actions to digest_cache_alloc()
-- Add a reference count to the digest cache
-- Remove the path parameter from digest_cache_get(), and rely on the
-  reference count to avoid the digest cache disappearing while being used
-- Rename the dentry_to_check parameter of digest_cache_get() to dentry
-- Rename digest_cache_get() to digest_cache_new() and add
-  digest_cache_get() to set the digest cache in the iint of the inode for
-  which the digest cache was requested
-- Add dig_owner and dig_user to the iint, to distinguish from which inode
-  the digest cache was created from, and which is using it; consequently it
-  makes the digest cache usable to measure/appraise other digest caches
-  (support not yet enabled)
-- Add dig_owner_mutex and dig_user_mutex to serialize accesses to dig_owner
-  and dig_user until they are initialized
-- Enforce strong synchronization and make the contenders wait until
-  dig_owner and dig_user are assigned to the iint the first time
-- Move checking IMA actions on the digest list earlier, and fail if no
-  action were performed (digest cache not usable)
-- Remove digest_cache_put(), not needed anymore with the introduction of
-  the reference count
-- Fail immediately in digest_cache_lookup() if the digest algorithm is
-  not set in the digest cache
-- Use 64 bit mask for IMA actions on the digest list instead of 8 bit
-- Return NULL in the inline version of digest_cache_get()
-- Use list_add_tail() instead of list_add() in the iterator
-- Copy the digest list path to a separate buffer in digest_cache_iter_dir()
-- Use digest list parsers verified with Frama-C
-- Explicitly disable (for now) the possibility in the IMA policy to use the
-  digest cache to measure/appraise other digest lists
-- Replace exit(<value>) with return <value> in manage_digest_lists.c
-
-Roberto Sassu (14):
-  lib: Add TLV parser
-  integrity: Introduce the Integrity Digest Cache
-  digest_cache: Initialize digest caches
-  digest_cache: Add securityfs interface
-  digest_cache: Add hash tables and operations
-  digest_cache: Populate the digest cache from a digest list
-  digest_cache: Parse tlv digest lists
-  digest_cache: Parse rpm digest lists
-  digest_cache: Add management of verification data
-  digest_cache: Add support for directories
-  digest cache: Prefetch digest lists if requested
-  digest_cache: Reset digest cache on file/directory change
-  selftests/digest_cache: Add selftests for the Integrity Digest Cache
-  docs: Add documentation of the Integrity Digest Cache
-
- Documentation/security/digest_cache.rst       | 814 ++++++++++++++++++
- Documentation/security/index.rst              |   1 +
- MAINTAINERS                                   |  10 +
- include/linux/digest_cache.h                  |  58 ++
- include/linux/kernel_read_file.h              |   1 +
- include/linux/tlv_parser.h                    |  48 ++
- include/uapi/linux/tlv_digest_list.h          |  72 ++
- include/uapi/linux/tlv_parser.h               |  62 ++
- include/uapi/linux/xattr.h                    |   6 +
- lib/Kconfig                                   |   3 +
- lib/Makefile                                  |   2 +
- lib/tlv_parser.c                              | 221 +++++
- lib/tlv_parser.h                              |  17 +
- security/integrity/Kconfig                    |   1 +
- security/integrity/Makefile                   |   1 +
- security/integrity/digest_cache/Kconfig       |  33 +
- security/integrity/digest_cache/Makefile      |  11 +
- security/integrity/digest_cache/dir.c         | 397 +++++++++
- security/integrity/digest_cache/htable.c      | 254 ++++++
- security/integrity/digest_cache/internal.h    | 277 ++++++
- security/integrity/digest_cache/main.c        | 559 ++++++++++++
- security/integrity/digest_cache/modsig.c      |  66 ++
- .../integrity/digest_cache/parsers/parsers.h  |  15 +
- security/integrity/digest_cache/parsers/rpm.c | 220 +++++
- security/integrity/digest_cache/parsers/tlv.c | 341 ++++++++
- security/integrity/digest_cache/populate.c    | 157 ++++
- security/integrity/digest_cache/reset.c       | 227 +++++
- security/integrity/digest_cache/secfs.c       | 104 +++
- security/integrity/digest_cache/verif.c       | 131 +++
- security/integrity/ima/ima.h                  |   1 +
- security/integrity/ima/ima_fs.c               |   6 +
- security/integrity/ima/ima_main.c             |  11 +-
- tools/testing/selftests/Makefile              |   1 +
- .../testing/selftests/digest_cache/.gitignore |   3 +
- tools/testing/selftests/digest_cache/Makefile |  24 +
- .../testing/selftests/digest_cache/all_test.c | 749 ++++++++++++++++
- tools/testing/selftests/digest_cache/common.c |  78 ++
- tools/testing/selftests/digest_cache/common.h | 134 +++
- .../selftests/digest_cache/common_user.c      |  47 +
- .../selftests/digest_cache/common_user.h      |  17 +
- tools/testing/selftests/digest_cache/config   |   1 +
- .../selftests/digest_cache/generators.c       | 248 ++++++
- .../selftests/digest_cache/generators.h       |  19 +
- .../selftests/digest_cache/testmod/Makefile   |  16 +
- .../selftests/digest_cache/testmod/kern.c     | 501 +++++++++++
- 45 files changed, 5964 insertions(+), 1 deletion(-)
- create mode 100644 Documentation/security/digest_cache.rst
- create mode 100644 include/linux/digest_cache.h
+Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+---
+ MAINTAINERS                     |   8 ++
+ include/linux/tlv_parser.h      |  48 +++++++
+ include/uapi/linux/tlv_parser.h |  62 +++++++++
+ lib/Kconfig                     |   3 +
+ lib/Makefile                    |   2 +
+ lib/tlv_parser.c                | 221 ++++++++++++++++++++++++++++++++
+ lib/tlv_parser.h                |  17 +++
+ 7 files changed, 361 insertions(+)
  create mode 100644 include/linux/tlv_parser.h
- create mode 100644 include/uapi/linux/tlv_digest_list.h
  create mode 100644 include/uapi/linux/tlv_parser.h
  create mode 100644 lib/tlv_parser.c
  create mode 100644 lib/tlv_parser.h
- create mode 100644 security/integrity/digest_cache/Kconfig
- create mode 100644 security/integrity/digest_cache/Makefile
- create mode 100644 security/integrity/digest_cache/dir.c
- create mode 100644 security/integrity/digest_cache/htable.c
- create mode 100644 security/integrity/digest_cache/internal.h
- create mode 100644 security/integrity/digest_cache/main.c
- create mode 100644 security/integrity/digest_cache/modsig.c
- create mode 100644 security/integrity/digest_cache/parsers/parsers.h
- create mode 100644 security/integrity/digest_cache/parsers/rpm.c
- create mode 100644 security/integrity/digest_cache/parsers/tlv.c
- create mode 100644 security/integrity/digest_cache/populate.c
- create mode 100644 security/integrity/digest_cache/reset.c
- create mode 100644 security/integrity/digest_cache/secfs.c
- create mode 100644 security/integrity/digest_cache/verif.c
- create mode 100644 tools/testing/selftests/digest_cache/.gitignore
- create mode 100644 tools/testing/selftests/digest_cache/Makefile
- create mode 100644 tools/testing/selftests/digest_cache/all_test.c
- create mode 100644 tools/testing/selftests/digest_cache/common.c
- create mode 100644 tools/testing/selftests/digest_cache/common.h
- create mode 100644 tools/testing/selftests/digest_cache/common_user.c
- create mode 100644 tools/testing/selftests/digest_cache/common_user.h
- create mode 100644 tools/testing/selftests/digest_cache/config
- create mode 100644 tools/testing/selftests/digest_cache/generators.c
- create mode 100644 tools/testing/selftests/digest_cache/generators.h
- create mode 100644 tools/testing/selftests/digest_cache/testmod/Makefile
- create mode 100644 tools/testing/selftests/digest_cache/testmod/kern.c
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8766f3e5e87e..ba8d5c137bef 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -23055,6 +23055,14 @@ W:	http://sourceforge.net/projects/tlan/
+ F:	Documentation/networking/device_drivers/ethernet/ti/tlan.rst
+ F:	drivers/net/ethernet/ti/tlan.*
+ 
++TLV PARSER
++M:	Roberto Sassu <roberto.sassu@huawei.com>
++L:	linux-kernel@vger.kernel.org
++S:	Maintained
++F:	include/linux/tlv_parser.h
++F:	include/uapi/linux/tlv_parser.h
++F:	lib/tlv_parser.*
++
+ TMIO/SDHI MMC DRIVER
+ M:	Wolfram Sang <wsa+renesas@sang-engineering.com>
+ L:	linux-mmc@vger.kernel.org
+diff --git a/include/linux/tlv_parser.h b/include/linux/tlv_parser.h
+new file mode 100644
+index 000000000000..6d9a655d9ec9
+--- /dev/null
++++ b/include/linux/tlv_parser.h
+@@ -0,0 +1,48 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
++ *
++ * Author: Roberto Sassu <roberto.sassu@huawei.com>
++ *
++ * Header file of TLV parser.
++ */
++
++#ifndef _LINUX_TLV_PARSER_H
++#define _LINUX_TLV_PARSER_H
++
++#include <uapi/linux/tlv_parser.h>
++
++/**
++ * typedef hdr_callback - Callback after parsing TLV header
++ * @callback_data: Opaque data to supply to the header callback function
++ * @data_type: TLV data type
++ * @num_entries: Number of TLV data entries
++ * @total_len: Total length of TLV data
++ *
++ * This callback is invoked after a TLV header is parsed.
++ *
++ * Return: 0 to skip processing, 1 to do processing, a negative value on error.
++ */
++typedef int (*hdr_callback)(void *callback_data, __u64 data_type,
++			    __u64 num_entries, __u64 total_len);
++
++/**
++ * typedef data_callback - Callback after parsing TLV data entry
++ * @callback_data: Opaque data to supply to the data callback function
++ * @field: TLV field ID
++ * @field_data: Data of a TLV data field
++ * @field_len: Length of @field_data
++ *
++ * This callback is invoked after a TLV data entry is parsed.
++ *
++ * Return: 0 on success, a negative value on error.
++ */
++typedef int (*data_callback)(void *callback_data, __u64 field,
++			     const __u8 *field_data, __u64 field_len);
++
++int tlv_parse(hdr_callback hdr_callback, void *hdr_callback_data,
++	      data_callback data_callback, void *data_callback_data,
++	      const __u8 *data, size_t data_len, const char **data_types,
++	      __u64 num_data_types, const char **fields, __u64 num_fields);
++
++#endif /* _LINUX_TLV_PARSER_H */
+diff --git a/include/uapi/linux/tlv_parser.h b/include/uapi/linux/tlv_parser.h
+new file mode 100644
+index 000000000000..fbd4fc403ac7
+--- /dev/null
++++ b/include/uapi/linux/tlv_parser.h
+@@ -0,0 +1,62 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++/*
++ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
++ *
++ * Author: Roberto Sassu <roberto.sassu@huawei.com>
++ *
++ * Implement the user space interface for the TLV parser.
++ */
++
++#ifndef _UAPI_LINUX_TLV_PARSER_H
++#define _UAPI_LINUX_TLV_PARSER_H
++
++#include <linux/types.h>
++
++/*
++ * TLV format:
++ *
++ * +-----------------+------------------+-----------------+
++ * | data type (u64) | num fields (u64) | total len (u64) | # header
++ * +--------------+--+---------+--------+---------+-------+
++ * | field1 (u64) | len1 (u64) | value1 (u8 len1) |
++ * +--------------+------------+------------------+
++ * |     ...      |    ...     |        ...       |         # data
++ * +--------------+------------+------------------+
++ * | fieldN (u64) | lenN (u64) | valueN (u8 lenN) |
++ * +--------------+------------+------------------+
++ *
++ * [same as above, repeated N times]
++ *
++ */
++
++/**
++ * struct tlv_hdr - Header of TLV format
++ * @data_type: Type of data to parse
++ * @num_entries: Number of data entries provided
++ * @_reserved: Reserved for future use (must be equal to zero)
++ * @total_len: Total length of the data blob, excluding the header
++ *
++ * This structure represents the header of the TLV data format.
++ */
++struct tlv_hdr {
++	__u64 data_type;
++	__u64 num_entries;
++	__u64 _reserved;
++	__u64 total_len;
++} __attribute__((packed));
++
++/**
++ * struct tlv_data_entry - Data entry of TLV format
++ * @field: Data field identifier
++ * @length: Data length
++ * @data: Data
++ *
++ * This structure represents a TLV data entry.
++ */
++struct tlv_data_entry {
++	__u64 field;
++	__u64 length;
++	__u8 data[];
++} __attribute__((packed));
++
++#endif /* _UAPI_LINUX_TLV_PARSER_H */
+diff --git a/lib/Kconfig b/lib/Kconfig
+index b38849af6f13..9141dcfc1704 100644
+--- a/lib/Kconfig
++++ b/lib/Kconfig
+@@ -777,3 +777,6 @@ config POLYNOMIAL
+ 
+ config FIRMWARE_TABLE
+ 	bool
++
++config TLV_PARSER
++	bool
+diff --git a/lib/Makefile b/lib/Makefile
+index 322bb127b4dc..c6c3614c4293 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -392,6 +392,8 @@ obj-$(CONFIG_USERCOPY_KUNIT_TEST) += usercopy_kunit.o
+ obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
+ 
+ obj-$(CONFIG_FIRMWARE_TABLE) += fw_table.o
++obj-$(CONFIG_TLV_PARSER) += tlv_parser.o
++CFLAGS_tlv_parser.o += -I lib
+ 
+ # FORTIFY_SOURCE compile-time behavior tests
+ TEST_FORTIFY_SRCS = $(wildcard $(src)/test_fortify/*-*.c)
+diff --git a/lib/tlv_parser.c b/lib/tlv_parser.c
+new file mode 100644
+index 000000000000..5d54844ab8d7
+--- /dev/null
++++ b/lib/tlv_parser.c
+@@ -0,0 +1,221 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
++ *
++ * Author: Roberto Sassu <roberto.sassu@huawei.com>
++ *
++ * Implement the TLV parser.
++ */
++
++#define pr_fmt(fmt) "tlv_parser: "fmt
++#include <tlv_parser.h>
++
++/**
++ * tlv_parse_hdr - Parse TLV header
++ * @hdr_callback: Callback function to call after parsing header
++ * @hdr_callback_data: Opaque data to supply to the header callback function
++ * @data: Data to parse (updated)
++ * @data_len: Length of @data (updated)
++ * @parsed_num_entries: Parsed number of data entries (updated)
++ * @parsed_total_len: Parsed length of TLV data, excluding the header (updated)
++ * @data_types: Array of data type strings
++ * @num_data_types: Number of elements of @data_types
++ *
++ * Parse the header of the TLV data format, move the data pointer to the TLV
++ * data part, decrease the data length by the length of the header, and provide
++ * the number of entries and the total data length extracted from the header.
++ *
++ * Before returning, call the header callback to let the callback supplier
++ * decide whether or not to process the subsequent TLV data.
++ *
++ * Return: 1 to process the data entries, 0 to skip, a negative value on error.
++ */
++static int tlv_parse_hdr(hdr_callback hdr_callback, void *hdr_callback_data,
++			 const __u8 **data, size_t *data_len,
++			 __u64 *parsed_num_entries, __u64 *parsed_total_len,
++			 const char **data_types, __u64 num_data_types)
++{
++	__u64 parsed_data_type;
++	struct tlv_hdr *hdr;
++
++	if (*data_len < sizeof(*hdr)) {
++		pr_debug("Data blob too short, %lu bytes, expected %lu\n",
++			 *data_len, sizeof(*hdr));
++		return -EBADMSG;
++	}
++
++	hdr = (struct tlv_hdr *)*data;
++
++	*data += sizeof(*hdr);
++	*data_len -= sizeof(*hdr);
++
++	parsed_data_type = __be64_to_cpu(hdr->data_type);
++	if (parsed_data_type >= num_data_types) {
++		pr_debug("Invalid data type %llu, max: %llu\n",
++			 parsed_data_type, num_data_types - 1);
++		return -EBADMSG;
++	}
++
++	*parsed_num_entries = __be64_to_cpu(hdr->num_entries);
++
++	if (hdr->_reserved != 0) {
++		pr_debug("_reserved must be zero\n");
++		return -EBADMSG;
++	}
++
++	*parsed_total_len = __be64_to_cpu(hdr->total_len);
++	if (*parsed_total_len > *data_len) {
++		pr_debug("Invalid total length %llu, expected: %lu\n",
++			 *parsed_total_len, *data_len);
++		return -EBADMSG;
++	}
++
++	pr_debug("Header: type: %s, num entries: %llu, total len: %lld\n",
++		 data_types[parsed_data_type], *parsed_num_entries,
++		 *parsed_total_len);
++
++	return hdr_callback(hdr_callback_data, parsed_data_type,
++			    *parsed_num_entries, *parsed_total_len);
++}
++
++/**
++ * tlv_parse_data - Parse TLV data
++ * @data_callback: Callback function to call to parse the data entries
++ * @data_callback_data: Opaque data to supply to the data callback function
++ * @num_entries: Number of data entries to parse
++ * @data: Data to parse
++ * @data_len: Length of @data
++ * @fields: Array of field strings
++ * @num_fields: Number of elements of @fields
++ *
++ * Parse the data part of the TLV data format and call the supplied callback
++ * function for each data entry, passing also the opaque data pointer.
++ *
++ * The data callback function decides how to process data depending on the
++ * field.
++ *
++ * Return: 0 on success, a negative value on error.
++ */
++static int tlv_parse_data(data_callback data_callback, void *data_callback_data,
++			  __u64 num_entries, const __u8 *data, size_t data_len,
++			  const char **fields, __u64 num_fields)
++{
++	const __u8 *data_ptr = data;
++	struct tlv_data_entry *entry;
++	__u64 parsed_field, len, i, max_num_entries;
++	int ret;
++
++	max_num_entries = data_len / sizeof(*entry);
++
++	/* Possibly lower limit on num_entries loop. */
++	if (num_entries > max_num_entries)
++		return -EBADMSG;
++
++	for (i = 0; i < num_entries; i++) {
++		if (data_len < sizeof(*entry))
++			return -EBADMSG;
++
++		entry = (struct tlv_data_entry *)data_ptr;
++		data_ptr += sizeof(*entry);
++		data_len -= sizeof(*entry);
++
++		parsed_field = __be64_to_cpu(entry->field);
++		if (parsed_field >= num_fields) {
++			pr_debug("Invalid field %llu, max: %llu\n",
++				 parsed_field, num_fields - 1);
++			return -EBADMSG;
++		}
++
++		len = __be64_to_cpu(entry->length);
++
++		if (data_len < len)
++			return -EBADMSG;
++
++		pr_debug("Data: field: %s, len: %llu\n", fields[parsed_field],
++			 len);
++
++		if (!len)
++			continue;
++
++		ret = data_callback(data_callback_data, parsed_field, data_ptr,
++				    len);
++		if (ret < 0) {
++			pr_debug("Parsing of field %s failed, ret: %d\n",
++				 fields[parsed_field], ret);
++			return ret;
++		}
++
++		data_ptr += len;
++		data_len -= len;
++	}
++
++	if (data_len) {
++		pr_debug("Excess data: %lu bytes\n", data_len);
++		return -EBADMSG;
++	}
++
++	return 0;
++}
++
++/**
++ * tlv_parse - Parse data in TLV format
++ * @hdr_callback: Callback function to call after parsing header
++ * @hdr_callback_data: Opaque data to supply to the header callback function
++ * @data_callback: Callback function to call to parse the data entries
++ * @data_callback_data: Opaque data to supply to the data callback function
++ * @data: Data to parse
++ * @data_len: Length of @data
++ * @data_types: Array of data type strings
++ * @num_data_types: Number of elements of @data_types
++ * @fields: Array of field strings
++ * @num_fields: Number of elements of @fields
++ *
++ * Parse data in TLV format and call tlv_parse_data() each time tlv_parse_hdr()
++ * returns 1.
++ *
++ * Return: 0 on success, a negative value on error.
++ */
++int tlv_parse(hdr_callback hdr_callback, void *hdr_callback_data,
++	      data_callback data_callback, void *data_callback_data,
++	      const __u8 *data, size_t data_len, const char **data_types,
++	      __u64 num_data_types, const char **fields, __u64 num_fields)
++{
++	__u64 parsed_num_entries, parsed_total_len;
++	const __u8 *data_ptr = data;
++	int ret = 0;
++
++	pr_debug("Start parsing data blob, size: %lu\n", data_len);
++
++	while (data_len) {
++		ret = tlv_parse_hdr(hdr_callback, hdr_callback_data, &data_ptr,
++				    &data_len, &parsed_num_entries,
++				    &parsed_total_len, data_types,
++				    num_data_types);
++		switch (ret) {
++		case 0:
++			/*
++			 * tlv_parse_hdr() already checked that
++			 * parsed_total_len <= data_len.
++			 */
++			data_ptr += parsed_total_len;
++			data_len -= parsed_total_len;
++			continue;
++		case 1:
++			break;
++		default:
++			goto out;
++		}
++
++		ret = tlv_parse_data(data_callback, data_callback_data,
++				     parsed_num_entries, data_ptr,
++				     parsed_total_len, fields, num_fields);
++		if (ret < 0)
++			goto out;
++
++		data_ptr += parsed_total_len;
++		data_len -= parsed_total_len;
++	}
++out:
++	pr_debug("End of parsing data blob, ret: %d\n", ret);
++	return ret;
++}
+diff --git a/lib/tlv_parser.h b/lib/tlv_parser.h
+new file mode 100644
+index 000000000000..8fa8127bd13e
+--- /dev/null
++++ b/lib/tlv_parser.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
++ *
++ * Author: Roberto Sassu <roberto.sassu@huawei.com>
++ *
++ * Header file of TLV parser.
++ */
++
++#ifndef _LIB_TLV_PARSER_H
++#define _LIB_TLV_PARSER_H
++
++#include <linux/kernel.h>
++#include <linux/err.h>
++#include <linux/tlv_parser.h>
++
++#endif /* _LIB_TLV_PARSER_H */
 -- 
 2.34.1
 
