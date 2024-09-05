@@ -1,210 +1,242 @@
-Return-Path: <linux-kselftest+bounces-17218-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17219-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A93296D76F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 13:45:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C171096D7FA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 14:11:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E6531C22E70
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 11:45:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51A1C1F2467F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 12:11:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5719714F10E;
-	Thu,  5 Sep 2024 11:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 962D619D06B;
+	Thu,  5 Sep 2024 12:10:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ICH7sHrh"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nZg8amQC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB392F44;
-	Thu,  5 Sep 2024 11:45:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF7C919ADBB;
+	Thu,  5 Sep 2024 12:10:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725536732; cv=none; b=B8NhqlqX7Wb3ThNZDrno9jcidOovW1hAFkguAP7JKN2gn5dP5w+VeZw180DWivPioylZHAfCL9VXxLzfDjb5XbHRqOZP+9gFTWKGEeyFDqecSM8NRf3H1YyjRYSx6FsrxUohYHCbqtl0becK5Rh3j15H1ACeR5AzkdZjSdy26lw=
+	t=1725538241; cv=none; b=csLEtWTEyK9MdmzpbymNgEOcSazssfjr488S+Gx1xlMBXHcViwM23p0+QY19/2m6nt4sRIH9KW6rZYUbjXQVj/XWufzbOfJ9pHDuiW9HH/wcGYOrdwL4Lyc1BmxrhVBcsqLg1bwGieaqtQ01sfEd3K8LMSKlBOyUUKgLWeevf3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725536732; c=relaxed/simple;
-	bh=rsuvjsq9yWHaIiio6rzcDd8xhCNMkYPGUiBKzB/0y+g=;
+	s=arc-20240116; t=1725538241; c=relaxed/simple;
+	bh=Y5YauDm1aJKiushd8sUfegx+qyj0cP2ABdG0ky7tors=;
 	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=Nn/NrGOR8b2Mt3rKlYM8sgFpxY9KFNQq0gUHxvcixcVZhEyfrufd8EKoQKLG7XyWZBkXOAfWKOiar4RblPgorBXjQZ9tHqiyvovXyk6Pblg+q8vVOXfOcFeeRY+D/9Gwjjb9AoTxIZ5DU/hhRABtaSROUwhThVyvrGXmQbXMoJs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ICH7sHrh; arc=none smtp.client-ip=198.175.65.16
+	 MIME-Version:Content-Type; b=EHgMspChJFemPvPC5Vlt5+swBHr5YMvkBp+nrNdlwK3ARM0EtJQ3lDcJVuCCP+tZREWBecKchYbqn3ScKvgB6otowphDwF6U65SBUSeC6iFj5TRV43yaNA/Dwf4EZj+jqfWroQxHS6fa+7LJIQ7eq01YGvFkD8K309xzDzQT+Ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nZg8amQC; arc=none smtp.client-ip=192.198.163.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725536731; x=1757072731;
+  t=1725538240; x=1757074240;
   h=from:date:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=rsuvjsq9yWHaIiio6rzcDd8xhCNMkYPGUiBKzB/0y+g=;
-  b=ICH7sHrhJ4sG3Uzy7AulkqjsALFLw64bxujvc7uFPITgIwKla9fFqd+f
-   /QbvGAaZcWXhBcS/DcJBeD/t+WQ3SYEqB5MupJvMt12e8+DHImXjOUba8
-   Q6wvykRpEYyC1QIgWLYNqkOxbQSxZsl0kIB1mP6ssE3VmkW8liyMtiTG4
-   0/9a9scCl75B0L2cgOwBE3n46dc8OCimics0Ipkw2mYG/tXPBrYKXraXA
-   ybl1V+6bHErBR6QCsa31kbXe457Tu7vKrQ8M3IqM0cKcV+xlcfnbsoWER
-   J9A73OIbfidQEJKF4t8SAzGVOaZ/XpRhmXc+9so4A3VkbZdU7634cpMwh
+  bh=Y5YauDm1aJKiushd8sUfegx+qyj0cP2ABdG0ky7tors=;
+  b=nZg8amQCZKY8dIwK3Io2jp0e27MGeyGtx6dHU4Uf+o2v8c5uOFmcQuTi
+   RAowd4/NdSFj6szgqCwItrixXXo6QA7YcINP3kPzLxQiewc/5oH7Wqqrk
+   4TmynOaKYT79A0BXXTgj69yWSQDm1KguoBpmHJ6o63C/GOHAx/AJrDmjm
+   VatzZ3c9cXw3s74c7u5pdWjv9lFuOwF7evly6GJDTHFyxuhnlSBXrNdKq
+   FstNcN5xXFc0Z3Z8v7WM0dDu6y2DyPh6cEIdD4gcIY9hmSrb7d9CJu/9d
+   gdWhattYyRg5TgtyukB32bmcDlkbzaMCWKghZ6NC+SSwD3lwelbGyF4oV
    g==;
-X-CSE-ConnectionGUID: F96GqnQYRtGmDwiSoKKsDg==
-X-CSE-MsgGUID: lE02CT3WSdStvhr9BxgVEQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11185"; a="24363107"
+X-CSE-ConnectionGUID: 0i7Fjds0Rf2TQBAQ/WexAg==
+X-CSE-MsgGUID: kkSgs8h0Q52Tysye46lkQQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11185"; a="27170856"
 X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
-   d="scan'208";a="24363107"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 04:45:30 -0700
-X-CSE-ConnectionGUID: YlqjkjloTr+cUw0WoYUkeg==
-X-CSE-MsgGUID: h/GzFp4bQhetKRN0mThWtw==
+   d="scan'208";a="27170856"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 05:10:37 -0700
+X-CSE-ConnectionGUID: vazeR913SECH+bFbC/1U6g==
+X-CSE-MsgGUID: w5lOfYErRCmRZgi+WkKp1w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
-   d="scan'208";a="66119017"
+   d="scan'208";a="70198858"
 Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.244.31])
-  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 04:45:26 -0700
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 05:10:34 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Thu, 5 Sep 2024 14:45:21 +0300 (EEST)
+Date: Thu, 5 Sep 2024 15:10:29 +0300 (EEST)
 To: Reinette Chatre <reinette.chatre@intel.com>
 cc: fenghua.yu@intel.com, shuah@kernel.org, tony.luck@intel.com, 
     peternewman@google.com, babu.moger@amd.com, 
     =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
     linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/6] selftests/resctrl: Do not compare performance counters
- and resctrl at low bandwidth
-In-Reply-To: <9b2da518-89ce-4f9b-92f2-d317ed892886@intel.com>
-Message-ID: <1903ac13-5c9c-ef8d-78e0-417ac34a971b@linux.intel.com>
-References: <cover.1724970211.git.reinette.chatre@intel.com> <9bbefa3b9a62319698907d10e8b78f1b999c311b.1724970211.git.reinette.chatre@intel.com> <5d063290-9da4-c9ca-e5c5-cb0083d7483f@linux.intel.com> <87e4788c-6407-41a8-b201-e3f05064e5a6@intel.com>
- <238af9fe-0d7b-9bc1-9923-35ef74aad360@linux.intel.com> <9b2da518-89ce-4f9b-92f2-d317ed892886@intel.com>
+Subject: Re: [PATCH 2/6] selftests/resctrl: Ensure measurements skip
+ initialization of default benchmark
+In-Reply-To: <156ad739-3f80-456f-92df-74da9266dca0@intel.com>
+Message-ID: <da06ea9d-5081-b81f-5d2b-28200527f419@linux.intel.com>
+References: <cover.1724970211.git.reinette.chatre@intel.com> <a0fe2be86f3e868a5f908ac4f2c76e71b4d08d4f.1724970211.git.reinette.chatre@intel.com> <3add783b-74cf-23c0-a301-aa203efdd0f6@linux.intel.com> <0ae6d28f-0646-48b2-a4e7-17e2d14f6dd5@intel.com>
+ <85a11091-3c61-2d8b-28d4-2a251f3b8ffe@linux.intel.com> <156ad739-3f80-456f-92df-74da9266dca0@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1594777459-1725536721=:1411"
+Content-Type: multipart/mixed; boundary="8323328-1758549309-1725538229=:1411"
 
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323328-1594777459-1725536721=:1411
+--8323328-1758549309-1725538229=:1411
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: QUOTED-PRINTABLE
 
 On Wed, 4 Sep 2024, Reinette Chatre wrote:
-> On 9/4/24 4:43 AM, Ilpo J=C3=A4rvinen wrote:
+> On 9/4/24 4:57 AM, Ilpo J=C3=A4rvinen wrote:
 > > On Fri, 30 Aug 2024, Reinette Chatre wrote:
-> > > On 8/30/24 4:42 AM, Ilpo J=C3=A4rvinen wrote:
+> > > On 8/30/24 3:56 AM, Ilpo J=C3=A4rvinen wrote:
 > > > > On Thu, 29 Aug 2024, Reinette Chatre wrote:
+
+> > > > > @@ -699,111 +639,80 @@ int resctrl_val(const struct resctrl_test
+> > > > > *test,
+> > > > >    =09=09return ret;
+> > > > >    =09}
+> > > > >    -=09/*
+> > > > > -=09 * If benchmark wasn't successfully started by child, then
+> > > > > child
+> > > > > should
+> > > > > -=09 * kill parent, so save parent's pid
+> > > > > -=09 */
+> > > > >    =09ppid =3D getpid();
+> > > > >    -=09if (pipe(pipefd)) {
+> > > > > -=09=09ksft_perror("Unable to create pipe");
+> > > > > +=09/* Taskset test to specified CPU. */
+> > > > > +=09ret =3D taskset_benchmark(ppid, uparams->cpu, &old_affinity);
 > > > >=20
-> > > > > The MBA test incrementally throttles memory bandwidth, each time
-> > > > > followed by a comparison between the memory bandwidth observed
-> > > > > by the performance counters and resctrl respectively.
-> > > > >=20
-> > > > > While a comparison between performance counters and resctrl is
-> > > > > generally appropriate, they do not have an identical view of
-> > > > > memory bandwidth. For example RAS features or memory performance
-> > > > > features that generate memory traffic may drive accesses that are
-> > > > > counted differently by performance counters and MBM respectively,
-> > > > > for instance generating "overhead" traffic which is not counted
-> > > > > against any specific RMID. As a ratio, this different view of mem=
-ory
-> > > > > bandwidth becomes more apparent at low memory bandwidths.
-> > > >=20
-> > > > Interesting.
-> > > >=20
-> > > > I did some time back prototype with a change to MBM test such that
-> > > > instead
-> > > > of using once=3Dfalse I changed fill_buf to be able to run N passes
-> > > > through
-> > > > the buffer which allowed me to know how many reads were performed b=
-y the
-> > > > benchmark. This yielded numerical difference between all those 3 va=
-lues
-> > > > (# of reads, MBM, perf) which also varied from arch to another so i=
-t
-> > > > didn't end up making an usable test.
-> > > >=20
-> > > > I guess I now have an explanation for at least a part of the
-> > > > differences.
-> > > >=20
-> > > > > It is not practical to enable/disable the various features that
-> > > > > may generate memory bandwidth to give performance counters and
-> > > > > resctrl an identical view. Instead, do not compare performance
-> > > > > counters and resctrl view of memory bandwidth when the memory
-> > > > > bandwidth is low.
-> > > > >=20
-> > > > > Bandwidth throttling behaves differently across platforms
-> > > > > so it is not appropriate to drop measurement data simply based
-> > > > > on the throttling level. Instead, use a threshold of 750MiB
-> > > > > that has been observed to support adequate comparison between
-> > > > > performance counters and resctrl.
-> > > > >=20
-> > > > > Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> > > > > ---
-> > > > >    tools/testing/selftests/resctrl/mba_test.c | 7 +++++++
-> > > > >    tools/testing/selftests/resctrl/resctrl.h  | 6 ++++++
-> > > > >    2 files changed, 13 insertions(+)
-> > > > >=20
-> > > > > diff --git a/tools/testing/selftests/resctrl/mba_test.c
-> > > > > b/tools/testing/selftests/resctrl/mba_test.c
-> > > > > index cad473b81a64..204b9ac4b108 100644
-> > > > > --- a/tools/testing/selftests/resctrl/mba_test.c
-> > > > > +++ b/tools/testing/selftests/resctrl/mba_test.c
-> > > > > @@ -96,6 +96,13 @@ static bool show_mba_info(unsigned long *bw_im=
-c,
-> > > > > unsigned long *bw_resc)
-> > > > >      =09=09avg_bw_imc =3D sum_bw_imc / (NUM_OF_RUNS - 1);
-> > > > >    =09=09avg_bw_resc =3D sum_bw_resc / (NUM_OF_RUNS - 1);
-> > > > > +=09=09if (avg_bw_imc < THROTTLE_THRESHOLD || avg_bw_resc <
-> > > > > THROTTLE_THRESHOLD) {
-> > > > > +=09=09=09ksft_print_msg("Bandwidth below threshold (%d
-> > > > > MiB).
-> > > > > Dropping results from MBA schemata %u.\n",
-> > > > > +=09=09=09=09=09THROTTLE_THRESHOLD,
-> > > > > +=09=09=09=09=09ALLOCATION_MAX -
-> > > > > ALLOCATION_STEP *
-> > > > > allocation);
-> > > >=20
-> > > > The second one too should be %d.
-> > > >=20
+> > > > Previously only CPU affinity for bm_pid was set but now it's set be=
+fore
+> > > > fork(). Quickly checking the Internet, it seems that CPU affinity g=
+ets
+> > > > inherited on fork() so now both processes will have the same affini=
+ty
+> > > > which might make the other process to interfere with the measuremen=
+t.
 > > >=20
-> > > hmmm ... I intended to have it be consistent with the ksft_print_msg(=
-)
-> > > that
-> > > follows. Perhaps allocation can be made unsigned instead?
+> > > Setting the affinity is intended to ensure that the buffer preparatio=
+n
+> > > occurs in the same topology as where the runtime portion will run.
+> > > This preparation is done before the work to be measured starts.
+> > >=20
+> > > This does tie in with the association with the resctrl group and I
+> > > will elaborate more below ...
 > >=20
-> > If you go that way, then it would be good to make the related defines a=
-nd
-> > allocation in mba_setup() unsigned too, although the latter is a bit sc=
-ary
+> > Okay, that's useful to retain but thinking this further, now we're also
+> > going do non-trivial amount of work in between the setup and the test b=
+y
 >=20
-> Sure, will look into that.
->=20
-> > because it does allocation -=3D ALLOCATION_STEP which could underflow i=
-f the
-> > defines are ever changed.
-> >=20
->=20
-> Is this not already covered in the following check:
-> =09if (allocation < ALLOCATION_MIN || allocation > ALLOCATION_MAX)
-> =09=09return END_OF_TESTS;
->=20
-> We are talking about hardcoded constants though.
+> Could you please elaborate how the amount of work during setup can be an
+> issue? I have been focused on the measurements that are done afterwards
+> that do have clear boundaries from what I can tell.
 
-Borderline yes. It is "covered" by the allocation > ALLOCATION_MAX but=20
-it's also very non-intuitive to let the value underflow and then check for=
+Well, you used it as a justification: "Setting the affinity is intended=20
+to ensure that the buffer preparation occurs in the same topology as where=
 =20
-that with the > operator.
+the runtime portion will run." So I assumed you had some expectations about=
+=20
+"preparations" done outside of those "clear boundaries" but now you seem
+to take entirely opposite stance?
 
-You're correct that they're constants so one would need to tweak the=20
-source to end up into this condition in the first place.
+fork() quite heavy operation as it has to copy various things including=20
+the address space which you just made to contain a huge mem blob. :-)
 
-Perhaps I'm being overly pendantic here but I in general don't like=20
-leaving trappy and non-obvious logic like that lying around because one=20
-day one of such will come back biting.
+BTW, perhaps we could use some lighter weighted fork variant in the=20
+resctrl selftests, the processes don't really need to be that separated=20
+to justify using full fork() (and custom benchmarks will do execvp()).
 
-So, if a variable is unsigned and we ever do subtraction (or adding=20
-negative numbers to it), I'd prefer additional check to prevent ever=20
-underflowing it unexpectedly. Or leave them signed.
+> > forking. I guess that doesn't matter for memflush =3D true case but mig=
+ht be
+> > meaningful for the memflush =3D false case that seems to be there to al=
+low
+> > keeping caches hot (I personally haven't thought how to use "caches hot=
+"
+> > test but we do have that capability by the fact that memflush paremeter
+> > exists).
+>=20
+> I believe that memflush =3D true will always be needed/used by the tests
+> relying on memory bandwidth measurement since that reduces cache hits dur=
+ing
+> measurement phase and avoids the additional guessing on how long the work=
+load
+> should be run before reliable/consistent measurements can start.
+>
+> Thinking about the memflush =3D false case I now think that we should use=
+ that
+> for the CMT test. The buffer is allocated and initialized while the task
+> is configured with appropriate allocation limits so there should not be a
+> reason to flush the buffer from the cache. In fact, flushing the cache
+> introduces
+> the requirement to guess the workload's "settle" time (time to allocate t=
+he
+> buffer
+> into the cache again) before its occupancy can be measured. As a quick te=
+st I
+> set memflush =3D false on one system and it brought down the average diff
+> between
+> the cache portion size and the occupancy counts. I'll try it out on a few=
+ more
+> systems to confirm.
+
+Oh great!
+
+I've not really figured out the logic used in the old CMT test because=20
+there was the rewrite for it in the series I started to upstream some of=20
+these improvements from. But I was unable to rebase successfully that=20
+rewrite either because somebody had used a non-publically available tree=20
+as a basis for it so I never did even have time to understand what even=20
+the rewritten test did thanks to the very complex diff.
+
+> > > > Neither behavior, however, seems to result in the intended behavior=
+ as
+> > > > we
+> > > > either get interfering processes (if inherited) or no desired resct=
+rl
+> > > > setup for the benchmark process.
+> > >=20
+> > > There are two processes to consider in the resource group, the parent
+> > > (that
+> > > sets up the buffer and does the measurements) and the child (that run=
+s the
+> > > workload to be measured). Thanks to your commit da50de0a92f3
+> > > ("selftests/resctrl:
+> > > Calculate resctrl FS derived mem bw over sleep(1) only") the parent
+> > > will be sleeping while the child runs its workload and there is no
+> > > other interference I am aware of. The only additional measurements
+> > > that I can see would be the work needed to actually start and stop th=
+e
+> > > measurements and from what I can tell this falls into the noise.
+> > >=20
+> > > Please do keep in mind that the performance counters used, iMC, canno=
+t
+> > > actually
+> > > be bound to a single CPU since it is a per-socket PMU. The measuremen=
+ts
+> > > have
+> > > thus never been as fine grained as the code pretends it to be.
+> >=20
+> > I was thinking if I should note the amount of work is small. Maybe it's
+> > fine to leave that noise there and I'm just overly cautious :-), when I
+> > used to do networking research in the past life, I wanted to eliminate =
+as
+> > much noise sources so I guess it comes from that background.
+>=20
+> The goal of these tests are to verify *resctrl*, these are not intended t=
+o be
+> hardware validation tests. I think it would be better for resctrl if more=
+ time
+> is spent on functional tests of resctrl than these performance tests.
+
+This sounds so easy... (no offence) :-) If only there wouldn't be the=20
+black boxes and we'd have good and fine-grained ways to instrument it,
+it would be so much easier to realize non-statistical means to do=20
+functional tests.
 
 --=20
  i.
 
---8323328-1594777459-1725536721=:1411--
+--8323328-1758549309-1725538229=:1411--
 
