@@ -1,211 +1,176 @@
-Return-Path: <linux-kselftest+bounces-17274-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17275-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 231E496DE7D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 17:38:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15F5396DEAC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 17:44:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A42E5B21894
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 15:38:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 345251C23815
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 15:44:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FE2219D8A2;
-	Thu,  5 Sep 2024 15:38:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1188119DF70;
+	Thu,  5 Sep 2024 15:44:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZL7et96C"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="i9N6iGj0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2041.outbound.protection.outlook.com [40.107.243.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01905D529;
-	Thu,  5 Sep 2024 15:38:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725550707; cv=none; b=cy7nRGaX8emWd9XJ+iBytQ4Nv+VLkjY/SG217PojCvCdXn9Y8sAZRhKG57YMQpIxl9IW5Ko1i9q+wfZB5KDAyTHIpXvezyqyjX8b9G07IT/gKgD5tSx9wKMLvHa/J7lKd/vKCw0wKcb0EbPjP7Z8i5NeRsLqC68GrbS1lg1Iz4A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725550707; c=relaxed/simple;
-	bh=WqFaPHVKKRJUrSjh96WSLvDVpyIouu48maZXtKVDdA8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eQxW//+TdknK4qkMH4FF6Z3NCnFrEwDXHYOHGZG2W5KMRoEEgDwLYXM9zqr2AMldYHGnFH/eJcx/DaV1priaNxFwBdsc5+I4y7EDBE1TmmeDW5l8Vu4fmipdZc4m8n4bgWJAR1nmlsJM1SWwYn8SkyJqxTAik3LOZ+EdsA6AETU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZL7et96C; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725550706; x=1757086706;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=WqFaPHVKKRJUrSjh96WSLvDVpyIouu48maZXtKVDdA8=;
-  b=ZL7et96CyclWcaV/rUWyaKuP6rjiZ4h1X35yswQHZlRHP3wy4C5XCgQ2
-   qagDmoKCyALxG/sh/8X3cutjc0UqYnNQylP+hm86fwZ//a9/Cxdte9XtV
-   m9/ZyvDgkdzBUgv/r+tiDaOBTFfze86wzpzw1/vdURTo6NcStabz3zEZj
-   ACktAIHaB/AXbcmW/4yZcKMHS1l0xHpA8udADXg0oZUWuXcywXJ1ptPK/
-   KR0WTvr1d95s4r8EE/pJkL/Nfo/4cWEsZCnSbdkXrs6rJihbn1IKGvWk1
-   oxHHuts0cTTM809srTnMVWszISKeuxWxFJENrpT4ZAJ5pFZyrS5mX3D8l
-   A==;
-X-CSE-ConnectionGUID: 5/rMy3f1RSaamTkTe02B7A==
-X-CSE-MsgGUID: tjC8H3pbQW+aduLjmxWO7g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="35634032"
-X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="35634032"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 08:38:24 -0700
-X-CSE-ConnectionGUID: u6pWWqheTeempRaYMfBO/g==
-X-CSE-MsgGUID: pKR7g3A+S6q/KP0BCfW6iQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="65652927"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 08:38:09 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1smEWm-00000005Rhy-32CS;
-	Thu, 05 Sep 2024 18:36:08 +0300
-Date: Thu, 5 Sep 2024 18:36:08 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Uros Bizjak <ubizjak@gmail.com>
-Cc: linux-kernel@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Hans Verkuil <hverkuil@xs4all.nl>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Eric Biggers <ebiggers@kernel.org>,
-	"Theodore Y. Ts'o" <tytso@mit.edu>,
-	Jaegeuk Kim <jaegeuk@kernel.org>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Hannes Reinecke <hare@suse.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Jiri Pirko <jiri@resnulli.us>, Petr Mladek <pmladek@suse.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Stephen Hemminger <stephen@networkplumber.org>,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
-	Cong Wang <xiyou.wangcong@gmail.com>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-	linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-fscrypt@vger.kernel.org, linux-scsi@vger.kernel.org,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com
-Subject: Re: [PATCH 00/18] random: Include <linux/percpu.h> and resolve
- circular include dependency
-Message-ID: <ZtnP6CK-Zd8SJAgY@smile.fi.intel.com>
-References: <20240905122020.872466-1-ubizjak@gmail.com>
- <Ztmm00eLBQGtiwRM@smile.fi.intel.com>
- <CAFULd4bzyNGcJqeg7w2ZQ0Xmw-HsBhczf8yPna7mSgG4NmdcWw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82CEB1CFBC;
+	Thu,  5 Sep 2024 15:44:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725551072; cv=fail; b=k0CNP5P1RnasKGVOo1necZvx2ud2lIoPmfN+eNVW9ISVVKiQIWCKHuSI09MYiLvSaLnzNFYpdDUje30gwk9CVJGi+qkz7Bz/C1x0SFTwgJEucNU3LvvjBN556Md9d4tOlsKt3EVK+rzNz3mh60aqHpJUPr99TPJ39gZkomrVlqE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725551072; c=relaxed/simple;
+	bh=S7fFL8zk9UptGbUnyMpGEer/DzCFcqzB2G1iikzIGJU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=FgFUDxA7ai0V+zcO48clx5dxzOMYvG5R+GWbWmApQfJxT1eJNIDu4JZuoBMHwxvNi35f370lH7n79duxE1M6exGpG4h0rgcvt/l8yBL6wpZJq5zhnFDPNOh45vWyGYzEFBFP7J+10Ap2jEJgkRw/MLKTC3WTEZrFmgn3W4jeBTc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=i9N6iGj0; arc=fail smtp.client-ip=40.107.243.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=lawwd/FFd7VTFdjjEpd8GievzQeGUv8oEHUEp/ONrMoipczxXgXA/59LCHsaagv72YpI0sn8xjgpHFhhHBnHoFaF/7+/RA8OP5dl8TY7F0lssPM8OpY7i8Vo5rfauDHgfudICs1aR/kJczjFhAg+psfzmc7rp3HOkhbGxA9XiUn00zB0O9BmWEVAPonc/R9KTEtAmLhLthEFABLA1H4dmrpphQWf+Rtj7Z8167RA4rAqvGG44CEi8oMRcr/cBDFDFWvZM6zOi/sDwdt2DXfxXu/W5ZlTt59kFHAEg7kkHh8wg4FkxBTz1eLK2BgiDyK5Mu0mk9E2DLgl5egCl6qfDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Vf45MmFyGd6nTQfpiZRFvJAydByhVYOq/Pz4lkal5Zo=;
+ b=o3QtksSClTQHhwA51bfJafA8ORftVrQfeuNy3+yeFJ25z9QNEr8Wqzouzdm/FTsoRN8smEjZ/7/QMLwgVxKK6CAx6F0czUzLzoiDPJR+E5Abi1rHEWQBji+KLK79HBDmrkcI32JArh/eo4FbJFRCMrpwOd2B/9m5WqByGpHHc0d6STJfLN9vqDHwrjQVIrkIAucBzJxQaeOmEP36S9nh3BTI5vdVgfNWCDoULTi87k/NZKNR/sGTEYqhy07tD3yp1aBgtQNCoXrmOuRU6ZBEpHS1PHOmgeH4noyLRhT11J8oJsFYE4CXRUMzkdxRlPYiHVnrlST29Q3WurBom5LuaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Vf45MmFyGd6nTQfpiZRFvJAydByhVYOq/Pz4lkal5Zo=;
+ b=i9N6iGj0isKUPrlK1WUPX7KHNaX+nx5m8j2V7qi+KA11bhJMTrkA00GQkE34yKQjKxqUaTvLy1wUejll4uNf91p/GYWbItREK/S8Ed2FhpU+V4cuWy+89JspSSFvNHRfskrYcYOXB3pi+czSR75i+kPmaaPGE3Z3557R7OyVr5A+2uHu2ayB33BiojVwx50U/iQYnOPKPn/IuZPTb3/CgT6UrMFKRsg74Y6meBHXyfx9u2DsHnVV+fzQNjnvKm0Z6wc5aHOAyrxCxdz+bJqJsD1c4OTZUqFnp9/nztR7JkCGm6gJUA0MF4iPSKmkAzPjfB8jQm+0ceyN9HigL8Saeg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB7763.namprd12.prod.outlook.com (2603:10b6:610:145::10)
+ by DS0PR12MB7947.namprd12.prod.outlook.com (2603:10b6:8:150::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.24; Thu, 5 Sep
+ 2024 15:44:27 +0000
+Received: from CH3PR12MB7763.namprd12.prod.outlook.com
+ ([fe80::8b63:dd80:c182:4ce8]) by CH3PR12MB7763.namprd12.prod.outlook.com
+ ([fe80::8b63:dd80:c182:4ce8%3]) with mapi id 15.20.7918.024; Thu, 5 Sep 2024
+ 15:44:27 +0000
+Date: Thu, 5 Sep 2024 12:44:26 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: kevin.tian@intel.com, will@kernel.org, joro@8bytes.org,
+	suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
+	dwmw2@infradead.org, baolu.lu@linux.intel.com, shuah@kernel.org,
+	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, eric.auger@redhat.com,
+	jean-philippe@linaro.org, mdf@kernel.org, mshavit@google.com,
+	shameerali.kolothum.thodi@huawei.com, smostafa@google.com,
+	yi.l.liu@intel.com
+Subject: Re: [PATCH v2 01/19] iommufd: Reorder struct forward declarations
+Message-ID: <20240905154426.GL1358970@nvidia.com>
+References: <cover.1724776335.git.nicolinc@nvidia.com>
+ <c5dd87100f6f01389b838c63237e28c5dd373358.1724776335.git.nicolinc@nvidia.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c5dd87100f6f01389b838c63237e28c5dd373358.1724776335.git.nicolinc@nvidia.com>
+X-ClientProxiedBy: BN9PR03CA0213.namprd03.prod.outlook.com
+ (2603:10b6:408:f8::8) To CH3PR12MB7763.namprd12.prod.outlook.com
+ (2603:10b6:610:145::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFULd4bzyNGcJqeg7w2ZQ0Xmw-HsBhczf8yPna7mSgG4NmdcWw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB7763:EE_|DS0PR12MB7947:EE_
+X-MS-Office365-Filtering-Correlation-Id: 71333d75-cf0c-4082-61e3-08dccdc19fd2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?SOybq9ULj1t2R6ZjOEbu17/8neyNTvwjhhd8dDC3zhIH4HiX6OdbEtplO4Bx?=
+ =?us-ascii?Q?BRd1o9WUz/BS5JBZiysB7HLgcp6juYzfQeI+T8GYLQd1q+ftqdCgRjqc86gb?=
+ =?us-ascii?Q?fuqZkOCsrg2wnlKdgyPWoHHDcGLzGIjJsyrfiRF5guo1VM8D3yK6wm3ayFWn?=
+ =?us-ascii?Q?X2DBgGC59TywKBX3aGhxBRtFtgNe7VHoMVlPoVkC0I80jE1LNuGzAjfKeK7f?=
+ =?us-ascii?Q?j80iu/BRcu+efRGCuk4532TGFDU4gSlVYbPHxjT/jQlUie1faE5bNzlxTfZN?=
+ =?us-ascii?Q?q5h2kXKuilONlsFPhbhZgtatsBdQS/6hrWZjKwfcBqdBleKC/l0RvyWZMm9d?=
+ =?us-ascii?Q?VdkwwNC/Pvv/fjDrAXOrmL3ut1jHSOBGOjGKNT2CiH0do+mIZgKDwpuHfNig?=
+ =?us-ascii?Q?37Tin8WkupqvZYBQQD6dxsEzTYNwiXGwhNQACAaYnddN2KWBznY13f9SdXj+?=
+ =?us-ascii?Q?cJT/4fo74XA84qp88PGUWzMxg53kFbKXb12GreJ1BC2X4RZx3Z7YaX6J6LiM?=
+ =?us-ascii?Q?TIcTUs21mXmiXbCFkf3DHHpG933rINnohIwPConT15p9G0B/LqBXdQbKiZ1n?=
+ =?us-ascii?Q?cIcNorM0NmDU4ENebqz73oKdX24tvGYttqqezGdmhyXJy9vviY1wKhl5zz9s?=
+ =?us-ascii?Q?73NmL8+e8VCShNWBazSVTCWxsIuR9uAAIGRibJselwWMXo2+mHuOBT10sJHr?=
+ =?us-ascii?Q?KKDy0+1tQ0JYVHrCTlEvoprG/TmTmMt6PIWL3qArGGZt2toxAGaiCVXyXLcl?=
+ =?us-ascii?Q?nlNkXmv4/D6ffen1uN68qpNVgNwvJ1wex1OhI3JewhA4/P1QYvlIIWIAEVdS?=
+ =?us-ascii?Q?+DzKwPjNMH0lmW0CNSD17zj0lKyjRm3tcNoYOMrx1fmCXoWjOUl+xMxwxnqq?=
+ =?us-ascii?Q?Ozp8939PTHAln2YfaXqRUzSdD++D28eDfYHasLucdmeXlpA9vFkb41eQLSsf?=
+ =?us-ascii?Q?sWJF07dtbV3BoD24ZPWioajfViWM/EQrGr4wwlb/aZuFKpnRcU1NAeJWixFp?=
+ =?us-ascii?Q?0LmD2mHHo33M1A2gzOx+0gru4P2PHJECHFadwxCfgWUCW/4DsmCpugfd3Lyw?=
+ =?us-ascii?Q?AfJwS6Ei28JaQ18hvaBXAoYS6x3MYJLl74GIdEuEslUwzfg3NV4mGmm/6H6j?=
+ =?us-ascii?Q?snImhWz5IAz+P0uWSjyt/txhzLt4i3VC6EATXhWkE8jgbeBB19WsCwbq3rKe?=
+ =?us-ascii?Q?unAqChUBXgXt7H/6gDlFf4rCitiJTEpdQlep/iueVs1CRh4ge3av8q3ECAAa?=
+ =?us-ascii?Q?LKuLzQUaWnKUPu61YlG6uGMoa8GKPHJO5BpxWpuvdplAiuUxse2nW2vIQKKZ?=
+ =?us-ascii?Q?8avWqY3BBxoaukSm0MWQPWp8NqohpNmcsGEWUb3oG/KoXg=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB7763.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?/pHxcvUjQUup7YEX1wNLEd43/DS/78QZP0v3nj0gpiv9J0bhfdF6vH51aN7P?=
+ =?us-ascii?Q?5cLAK3EfChHhoPr3TuS0XEeFJhSQMuwo2Bh4gPtbwvlithWPiN6sagPiMBZv?=
+ =?us-ascii?Q?6U4E4Yiqk+VqJdrGs5qLd7gNUdKOPyrN5/cQ5f8ePf08rdlgxlkHDz4MoQ1r?=
+ =?us-ascii?Q?V5M6f3Lv+mb8JnXR2uJEGLGHK1BFDSemvQXtZX3Dxuc8WCELb/4YDnsvX+p0?=
+ =?us-ascii?Q?tMW8seyUojjcR3SdLbU9177XU3gvr8CjHGuEs4VRfxVitU9vwHsQajeqhE7Q?=
+ =?us-ascii?Q?OREg2oKh1jyN2RnumIW+LK8QI8VHTp/HDg8wPexHT3Z8zSYCbohuvL1umIFd?=
+ =?us-ascii?Q?qqHx7xlMqGb+WyqDjs5Z9OBLz4X0/YCUszJaEihhZsPgYmGLNYju0L0DfNR5?=
+ =?us-ascii?Q?QGJNn7flsw9T4qBB9nI4p7O4O1dJ6ChzQsMBnD1KHBNe65jjR+c7eIqOZzNO?=
+ =?us-ascii?Q?VTWwWtzxgcRBf0Vbztcwowidy62L6v9hLg7zJVxcZRzF/mzOq/ULtEp7MrAT?=
+ =?us-ascii?Q?74Gv8OiIlA6mQvJFOx+tyw581z+JOGezALLvWu+qjB2/WhH9+X+1F3FzKoWW?=
+ =?us-ascii?Q?dki0V9srbDckqnVeGr0uHsrIaMwpFSHkqDd9SLeMKHyrN6Yvx0k+yJ0GPOOg?=
+ =?us-ascii?Q?dRsfzc/0lkvXNM90SvoS2nkRNhnreGoXq4MOk/yF7caUxYAergCOEqB0+0tZ?=
+ =?us-ascii?Q?2APhNNZOmmS7vYvJqDmyxmgSr0WUTPtIy7aUiptw2hbKlNEDMpf2FRmia8rp?=
+ =?us-ascii?Q?IUF/yPassjtkZ+/L/ZKbI2rJgs+Pt5/LXSqN6BtdSFtem39zoCx1Wl8LsrT1?=
+ =?us-ascii?Q?yFuXLbU2IZKBc7h0awH52PEHSY+TOmxMzgz4E66iGDYHAdFNuv9mDI6mkgGv?=
+ =?us-ascii?Q?9R4b10FFJJkuOC5DB7+AKE4iNLOSoinDdu7ITNM90udANiPJrYHdxTs/Lt0m?=
+ =?us-ascii?Q?QQdNUHqhlT6R8iG9Nb0+ubME64Q/Zi2ye2IjJ2nFGZe/foajmm8muwoS6ceG?=
+ =?us-ascii?Q?BywOWb+2+8SddbKPAdpYudTxdhTKgHs8K+42iIm4+1Tli+yvongOuR2eUyr9?=
+ =?us-ascii?Q?avrFI0LyZUR8eD7im6wnsJmzsrtN8cu713bf73WSi49H4k4OX/xtxFQnEGzJ?=
+ =?us-ascii?Q?6on+qRNk0A4RhUEKcIhuhyDHAGKxOp9luwIOE4ZBV5M5Pb8n2mUhB+Y6M9MG?=
+ =?us-ascii?Q?bv4r1SDlqI5WyHgnNWpZPbNd6q8JJzm/fSa3hvHMSqs50xDYhHDETdWEsMp0?=
+ =?us-ascii?Q?O3vP7ZAR1792ShVVqLwWg1CEa/k3Cbw7FgHfUvvLfSAD1YKz6wF2AEkXagHr?=
+ =?us-ascii?Q?6nYpIrwXHKFxOLZLwr6CpsYSUfjzXWYtwGPX3t25p9XJQSMNzJa2ZU/P+4Za?=
+ =?us-ascii?Q?hbSu9rjQqvytXBvMz0R9thpxP7Iebv5u+ywoVbS/2I/qk5vdTxB0qfnJmiUz?=
+ =?us-ascii?Q?dZ9ItOEeqwJ3FFi0czFnHWUB2YfTiPiRTI2TsolMROP5drOiDCQJMWDqoByg?=
+ =?us-ascii?Q?qcYS4JchcDfqjnh67jjxIcdqyPVO9lT9G4cebtPGcMP0vMzGM5Mpfp+j6cvh?=
+ =?us-ascii?Q?Q3+bMjYdAhwVF0dz1XyxyIwZlMh3/sv1eV62cVyC?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 71333d75-cf0c-4082-61e3-08dccdc19fd2
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB7763.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Sep 2024 15:44:27.4794
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: N2Czk8X+04Rl0EIcd+fWGFnHLdLj9Nwq7spivnleiqftLm+KD5wP1igihgad6q5f
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7947
 
-On Thu, Sep 05, 2024 at 03:03:24PM +0200, Uros Bizjak wrote:
-> On Thu, Sep 5, 2024 at 2:41 PM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > On Thu, Sep 05, 2024 at 02:17:08PM +0200, Uros Bizjak wrote:
-> > > There were several attempts to resolve circular include dependency
-> > > after the addition of percpu.h: 1c9df907da83 ("random: fix circular
-> > > include dependency on arm64 after addition of percpu.h"), c0842fbc1b18
-> > > ("random32: move the pseudo-random 32-bit definitions to prandom.h") and
-> > > finally d9f29deb7fe8 ("prandom: Remove unused include") that completely
-> > > removes inclusion of <linux/percpu.h>.
-> > >
-> > > Due to legacy reasons, <linux/random.h> includes <linux/prandom.h>, but
-> > > with the commit entry remark:
-> > >
-> > > --quote--
-> > > A further cleanup step would be to remove this from <linux/random.h>
-> > > entirely, and make people who use the prandom infrastructure include
-> > > just the new header file.  That's a bit of a churn patch, but grepping
-> > > for "prandom_" and "next_pseudo_random32" "struct rnd_state" should
-> > > catch most users.
-> > >
-> > > But it turns out that that nice cleanup step is fairly painful, because
-> > > a _lot_ of code currently seems to depend on the implicit include of
-> > > <linux/random.h>, which can currently come in a lot of ways, including
-> > > such fairly core headfers as <linux/net.h>.
-> > >
-> > > So the "nice cleanup" part may or may never happen.
-> > > --/quote--
-> > >
-> > > __percpu tag is currently defined in include/linux/compiler_types.h,
-> > > so there is no direct need for the inclusion of <linux/percpu.h>.
-> > > However, in [1] we would like to repurpose __percpu tag as a named
-> > > address space qualifier, where __percpu macro uses defines from
-> > > <linux/percpu.h>.
-> > >
-> > > This patch series is the "nice cleanup" part, and allows us to finally
-> > > include <linux/percpu.h> in prandom.h.
-> > >
-> > > The whole series was tested by compiling the kernel for x86_64 allconfig
-> > > and some popular architectures, namely arm64 defconfig, powerpc defconfig
-> > > and loongarch defconfig.
-> >
-> > Obvious question(s) is(are):
-> > 1) have you seen the Ingo's gigantic patch series towards resolving issues with
-> > the headers?
-> > 2) if not, please look at the preliminary work and take something from there, I
-> > believe there are many useful changes already waiting for a couple of years to
-> > be applied.
-> >
-> > Because I haven't found any references nor mentions of that in the cover letter
-> > here and explanation why it was not taking into consideration.
+On Tue, Aug 27, 2024 at 09:59:38AM -0700, Nicolin Chen wrote:
+> Reorder struct forward declarations to alphabetic order to simplify
+> maintenance, as upcoming patches will add more to the list.
 > 
-> I am aware of the series, but the patch takes only a small bite of it
-> and specifically resolves the inclusion of <linux/prandom.h> from
-> linux/random.h. The series fixes the missing inclusion of
-> <linux/prandom.h> in files that use pseudo-random function and it was
-> not meant to be a general header cleanup. The end goal is to allow us
-> to include <linux/percpu.h> in linux/prandom.h - which uses __percpu
-> tag without the correct include.
+> No functional change intended.
+> 
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>  include/linux/iommufd.h | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-Thank you for elaboration, it's all clear now.
+I picked this one up
 
-> Thus, the patch series is only tangentially connected to Ingo's patch series.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+Thanks,
+Jason
 
