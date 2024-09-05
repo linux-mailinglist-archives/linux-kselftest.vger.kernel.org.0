@@ -1,242 +1,313 @@
-Return-Path: <linux-kselftest+bounces-17219-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17221-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C171096D7FA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 14:11:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 019A096D834
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 14:20:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51A1C1F2467F
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 12:11:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEB8C28BC16
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 12:20:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 962D619D06B;
-	Thu,  5 Sep 2024 12:10:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21E1D19AD8E;
+	Thu,  5 Sep 2024 12:20:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nZg8amQC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jdLWvl0m"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF7C919ADBB;
-	Thu,  5 Sep 2024 12:10:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0C019995A;
+	Thu,  5 Sep 2024 12:20:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725538241; cv=none; b=csLEtWTEyK9MdmzpbymNgEOcSazssfjr488S+Gx1xlMBXHcViwM23p0+QY19/2m6nt4sRIH9KW6rZYUbjXQVj/XWufzbOfJ9pHDuiW9HH/wcGYOrdwL4Lyc1BmxrhVBcsqLg1bwGieaqtQ01sfEd3K8LMSKlBOyUUKgLWeevf3o=
+	t=1725538831; cv=none; b=hHHg11C/xH26xPjEFtAgeiyarM2Aoizu0b/Mon9j7TiGMEN5VO1LwBesjoEyynPGBHhX97ULj4lI/Ypy5MA6HzQOC7hbRViuQLwggK6iR7VJA7isBpaelI6Huq0siKtoRFXsCx4sAoHt1ldtxUH3pXOF53nxNSjxO23jTiZNvHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725538241; c=relaxed/simple;
-	bh=Y5YauDm1aJKiushd8sUfegx+qyj0cP2ABdG0ky7tors=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=EHgMspChJFemPvPC5Vlt5+swBHr5YMvkBp+nrNdlwK3ARM0EtJQ3lDcJVuCCP+tZREWBecKchYbqn3ScKvgB6otowphDwF6U65SBUSeC6iFj5TRV43yaNA/Dwf4EZj+jqfWroQxHS6fa+7LJIQ7eq01YGvFkD8K309xzDzQT+Ug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nZg8amQC; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725538240; x=1757074240;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Y5YauDm1aJKiushd8sUfegx+qyj0cP2ABdG0ky7tors=;
-  b=nZg8amQCZKY8dIwK3Io2jp0e27MGeyGtx6dHU4Uf+o2v8c5uOFmcQuTi
-   RAowd4/NdSFj6szgqCwItrixXXo6QA7YcINP3kPzLxQiewc/5oH7Wqqrk
-   4TmynOaKYT79A0BXXTgj69yWSQDm1KguoBpmHJ6o63C/GOHAx/AJrDmjm
-   VatzZ3c9cXw3s74c7u5pdWjv9lFuOwF7evly6GJDTHFyxuhnlSBXrNdKq
-   FstNcN5xXFc0Z3Z8v7WM0dDu6y2DyPh6cEIdD4gcIY9hmSrb7d9CJu/9d
-   gdWhattYyRg5TgtyukB32bmcDlkbzaMCWKghZ6NC+SSwD3lwelbGyF4oV
-   g==;
-X-CSE-ConnectionGUID: 0i7Fjds0Rf2TQBAQ/WexAg==
-X-CSE-MsgGUID: kkSgs8h0Q52Tysye46lkQQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11185"; a="27170856"
-X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
-   d="scan'208";a="27170856"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 05:10:37 -0700
-X-CSE-ConnectionGUID: vazeR913SECH+bFbC/1U6g==
-X-CSE-MsgGUID: w5lOfYErRCmRZgi+WkKp1w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
-   d="scan'208";a="70198858"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.244.31])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 05:10:34 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Thu, 5 Sep 2024 15:10:29 +0300 (EEST)
-To: Reinette Chatre <reinette.chatre@intel.com>
-cc: fenghua.yu@intel.com, shuah@kernel.org, tony.luck@intel.com, 
-    peternewman@google.com, babu.moger@amd.com, 
-    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
-    linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/6] selftests/resctrl: Ensure measurements skip
- initialization of default benchmark
-In-Reply-To: <156ad739-3f80-456f-92df-74da9266dca0@intel.com>
-Message-ID: <da06ea9d-5081-b81f-5d2b-28200527f419@linux.intel.com>
-References: <cover.1724970211.git.reinette.chatre@intel.com> <a0fe2be86f3e868a5f908ac4f2c76e71b4d08d4f.1724970211.git.reinette.chatre@intel.com> <3add783b-74cf-23c0-a301-aa203efdd0f6@linux.intel.com> <0ae6d28f-0646-48b2-a4e7-17e2d14f6dd5@intel.com>
- <85a11091-3c61-2d8b-28d4-2a251f3b8ffe@linux.intel.com> <156ad739-3f80-456f-92df-74da9266dca0@intel.com>
+	s=arc-20240116; t=1725538831; c=relaxed/simple;
+	bh=k3d5+rFgYAJki2pkwsH+WHyHFP4ovjkew9/QpqQfEss=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=b4NE2GFkbT1mS3TsJ6cQmdJAdUQF/N6A8LP/Ma7HCwqyzQAEhyA7roE2dnsXbfSQY0d382B2dBhHKPv9TTZblf0K7eKXTDT4CK2x8dy6WFD0x+HlJgeoKBxzIv62mdpLyceR16aiyoPGqSap7muBWzWcXTvJ5XCpZkvrddlFMS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jdLWvl0m; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-42c828c8863so5790195e9.3;
+        Thu, 05 Sep 2024 05:20:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1725538827; x=1726143627; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=3/jh7PZokx9IFNSzbVHcZfaNGnzkrP5bD95SXRchUZc=;
+        b=jdLWvl0mvdR9Jvoq0INa17/90TGOp18AC28xjTOr58sKF2qRxZoeS/6d7pGCT2LauO
+         xiviKm0EBUEqljVZPQgwsXlZVTlhJAj4R/AvKAAjniuFpdM6ikuZTIR/xAD5si0DXH6Y
+         3onRPp8jq3F7EtgjmWZ/t551BH/1Z5EmRxO5CFDz5EeVkH5TUXSB85cJ42tjR30PwhP1
+         rOJ8qlmWHIuHygSV9VztWMoSGYUCZgyc/Adq7xrXv2GD08qx5qrv+DKtZn81MXWPL4Qc
+         LaPOORanRclL33CX7VXTt4rqNkFzwB049Rt18CMExzpYF/qQug3FmcYeacZKwmasFmxZ
+         lt5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725538827; x=1726143627;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3/jh7PZokx9IFNSzbVHcZfaNGnzkrP5bD95SXRchUZc=;
+        b=aHrBp3ub+CkcqX5w/FYlI717uUZLNjIf4IlwI9U0H3skyCd5woiZxtFoDDgepe9qj/
+         MwQVfOKdtjDFYUFeag/IW1zCB6PqjRwgoFFYUKe4GbbouKVjNMAuVpOY6ub2TKT0mZT7
+         +yzmI4dij21yWbeyEJn9F0ETWA2e+pQmg/Nk8WH4aWBvxv27ntys252nMsxN68Ool4BH
+         meOa25eGyne/0Jsp3IbZfLPtgwnZCML/kHIWH1KsC+CfCitCdrgF8uoFmGymctkAHKFA
+         4OmdylYj4wODaf3zNXrQvLUaDnhSx00bbssjEbSK2RsNp55zUMz837UHhnO8fAP36O7Y
+         ZPZg==
+X-Forwarded-Encrypted: i=1; AJvYcCU5cZ12ln2I+LnLTK7lh+ne3s+39JqB0UF3FxtCrt36nlbITL+mA8qya3+4AO5tZpXoqENOPbNXCocieA==@vger.kernel.org, AJvYcCUlIV1f0OoL6+UBZ1mmCkJ1HZo2AErjapf/uhzLCEouP6lSiIsYIsLuMpyeurU2A5XnhOGzE+ExOmzVCbA=@vger.kernel.org, AJvYcCUt+vt+mcfltrNIII6v3puh1Inn8TSDKODafb+3p8mZmh26WPykmb6c61139fwHXoJ1bUbjpQbFwJZ352YqpQF1@vger.kernel.org, AJvYcCV+cdUmmy5Q7EZwiUxtKFq4eWjmPJCfDcnPCbaZZXIMFIA9YREUFvGgR0AkeWopbVu11aNlGe7Jd0xiU1CMFw==@vger.kernel.org, AJvYcCXafJUJeimifN0VZYW8TGiCXAY1bjaG6MvGdtPisgvJOvD26BwzybmbJc0q4yHl8umkhuo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjRbmANjN48dlOAD/ThK1XlW0kW/VpM920Pbl5ymlpZQ/oeRQR
+	NR/ETZ2KuVTUVrikWoaJ8Ce6xEa7lCkumTizYjOsCMgfygKLpGVTY55SMJlXmIo=
+X-Google-Smtp-Source: AGHT+IGWPyCho2CwtU7ltqrAmM8Ihsxd2i3XPne6K7qzyDA9oAvQKOeAenEfeGB2Pd/DmOGVTlsXwA==
+X-Received: by 2002:a05:600c:4eca:b0:426:5471:156a with SMTP id 5b1f17b1804b1-42bdc6334cbmr128537975e9.13.1725538826233;
+        Thu, 05 Sep 2024 05:20:26 -0700 (PDT)
+Received: from fedora.iskraemeco.si ([193.77.86.250])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42bb6e27364sm230390515e9.34.2024.09.05.05.20.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Sep 2024 05:20:25 -0700 (PDT)
+From: Uros Bizjak <ubizjak@gmail.com>
+To: linux-kernel@vger.kernel.org
+Cc: Uros Bizjak <ubizjak@gmail.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	David Airlie <airlied@gmail.com>,
+	Daniel Vetter <daniel@ffwll.ch>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	"Theodore Y. Ts'o" <tytso@mit.edu>,
+	Jaegeuk Kim <jaegeuk@kernel.org>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Hannes Reinecke <hare@suse.de>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Stephen Hemminger <stephen@networkplumber.org>,
+	Jamal Hadi Salim <jhs@mojatatu.com>,
+	Cong Wang <xiyou.wangcong@gmail.com>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-media@vger.kernel.org,
+	linux-mtd@lists.infradead.org,
+	linux-fscrypt@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com
+Subject: [PATCH 00/18] random: Include <linux/percpu.h> and resolve circular include dependency
+Date: Thu,  5 Sep 2024 14:17:08 +0200
+Message-ID: <20240905122020.872466-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1758549309-1725538229=:1411"
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+There were several attempts to resolve circular include dependency
+after the addition of percpu.h: 1c9df907da83 ("random: fix circular
+include dependency on arm64 after addition of percpu.h"), c0842fbc1b18
+("random32: move the pseudo-random 32-bit definitions to prandom.h") and
+finally d9f29deb7fe8 ("prandom: Remove unused include") that completely
+removes inclusion of <linux/percpu.h>.
 
---8323328-1758549309-1725538229=:1411
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Due to legacy reasons, <linux/random.h> includes <linux/prandom.h>, but
+with the commit entry remark:
 
-On Wed, 4 Sep 2024, Reinette Chatre wrote:
-> On 9/4/24 4:57 AM, Ilpo J=C3=A4rvinen wrote:
-> > On Fri, 30 Aug 2024, Reinette Chatre wrote:
-> > > On 8/30/24 3:56 AM, Ilpo J=C3=A4rvinen wrote:
-> > > > On Thu, 29 Aug 2024, Reinette Chatre wrote:
+--quote--
+A further cleanup step would be to remove this from <linux/random.h>
+entirely, and make people who use the prandom infrastructure include
+just the new header file.  That's a bit of a churn patch, but grepping
+for "prandom_" and "next_pseudo_random32" "struct rnd_state" should
+catch most users.
 
-> > > > > @@ -699,111 +639,80 @@ int resctrl_val(const struct resctrl_test
-> > > > > *test,
-> > > > >    =09=09return ret;
-> > > > >    =09}
-> > > > >    -=09/*
-> > > > > -=09 * If benchmark wasn't successfully started by child, then
-> > > > > child
-> > > > > should
-> > > > > -=09 * kill parent, so save parent's pid
-> > > > > -=09 */
-> > > > >    =09ppid =3D getpid();
-> > > > >    -=09if (pipe(pipefd)) {
-> > > > > -=09=09ksft_perror("Unable to create pipe");
-> > > > > +=09/* Taskset test to specified CPU. */
-> > > > > +=09ret =3D taskset_benchmark(ppid, uparams->cpu, &old_affinity);
-> > > >=20
-> > > > Previously only CPU affinity for bm_pid was set but now it's set be=
-fore
-> > > > fork(). Quickly checking the Internet, it seems that CPU affinity g=
-ets
-> > > > inherited on fork() so now both processes will have the same affini=
-ty
-> > > > which might make the other process to interfere with the measuremen=
-t.
-> > >=20
-> > > Setting the affinity is intended to ensure that the buffer preparatio=
-n
-> > > occurs in the same topology as where the runtime portion will run.
-> > > This preparation is done before the work to be measured starts.
-> > >=20
-> > > This does tie in with the association with the resctrl group and I
-> > > will elaborate more below ...
-> >=20
-> > Okay, that's useful to retain but thinking this further, now we're also
-> > going do non-trivial amount of work in between the setup and the test b=
-y
->=20
-> Could you please elaborate how the amount of work during setup can be an
-> issue? I have been focused on the measurements that are done afterwards
-> that do have clear boundaries from what I can tell.
+But it turns out that that nice cleanup step is fairly painful, because
+a _lot_ of code currently seems to depend on the implicit include of
+<linux/random.h>, which can currently come in a lot of ways, including
+such fairly core headfers as <linux/net.h>.
 
-Well, you used it as a justification: "Setting the affinity is intended=20
-to ensure that the buffer preparation occurs in the same topology as where=
-=20
-the runtime portion will run." So I assumed you had some expectations about=
-=20
-"preparations" done outside of those "clear boundaries" but now you seem
-to take entirely opposite stance?
+So the "nice cleanup" part may or may never happen.
+--/quote--
 
-fork() quite heavy operation as it has to copy various things including=20
-the address space which you just made to contain a huge mem blob. :-)
+__percpu tag is currently defined in include/linux/compiler_types.h,
+so there is no direct need for the inclusion of <linux/percpu.h>.
+However, in [1] we would like to repurpose __percpu tag as a named
+address space qualifier, where __percpu macro uses defines from
+<linux/percpu.h>.
 
-BTW, perhaps we could use some lighter weighted fork variant in the=20
-resctrl selftests, the processes don't really need to be that separated=20
-to justify using full fork() (and custom benchmarks will do execvp()).
+This patch series is the "nice cleanup" part, and allows us to finally
+include <linux/percpu.h> in prandom.h.
 
-> > forking. I guess that doesn't matter for memflush =3D true case but mig=
-ht be
-> > meaningful for the memflush =3D false case that seems to be there to al=
-low
-> > keeping caches hot (I personally haven't thought how to use "caches hot=
-"
-> > test but we do have that capability by the fact that memflush paremeter
-> > exists).
->=20
-> I believe that memflush =3D true will always be needed/used by the tests
-> relying on memory bandwidth measurement since that reduces cache hits dur=
-ing
-> measurement phase and avoids the additional guessing on how long the work=
-load
-> should be run before reliable/consistent measurements can start.
->
-> Thinking about the memflush =3D false case I now think that we should use=
- that
-> for the CMT test. The buffer is allocated and initialized while the task
-> is configured with appropriate allocation limits so there should not be a
-> reason to flush the buffer from the cache. In fact, flushing the cache
-> introduces
-> the requirement to guess the workload's "settle" time (time to allocate t=
-he
-> buffer
-> into the cache again) before its occupancy can be measured. As a quick te=
-st I
-> set memflush =3D false on one system and it brought down the average diff
-> between
-> the cache portion size and the occupancy counts. I'll try it out on a few=
- more
-> systems to confirm.
+The whole series was tested by compiling the kernel for x86_64 allconfig
+and some popular architectures, namely arm64 defconfig, powerpc defconfig
+and loongarch defconfig.
 
-Oh great!
+[1] https://lore.kernel.org/lkml/20240812115945.484051-4-ubizjak@gmail.com/
 
-I've not really figured out the logic used in the old CMT test because=20
-there was the rewrite for it in the series I started to upstream some of=20
-these improvements from. But I was unable to rebase successfully that=20
-rewrite either because somebody had used a non-publically available tree=20
-as a basis for it so I never did even have time to understand what even=20
-the rewritten test did thanks to the very complex diff.
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: Andy Lutomirski <luto@kernel.org>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Tvrtko Ursulin <tursulin@ursulin.net>
+Cc: David Airlie <airlied@gmail.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc: Maxime Ripard <mripard@kernel.org>
+Cc: Thomas Zimmermann <tzimmermann@suse.de>
+Cc: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Vignesh Raghavendra <vigneshr@ti.com>
+Cc: Eric Biggers <ebiggers@kernel.org>
+Cc: "Theodore Y. Ts'o" <tytso@mit.edu>
+Cc: Jaegeuk Kim <jaegeuk@kernel.org>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Hannes Reinecke <hare@suse.de>
+Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
+Cc: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Alexei Starovoitov <ast@kernel.org>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: John Fastabend <john.fastabend@gmail.com>
+Cc: Andrii Nakryiko <andrii@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>
+Cc: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Song Liu <song@kernel.org>
+Cc: Yonghong Song <yonghong.song@linux.dev>
+Cc: KP Singh <kpsingh@kernel.org>
+Cc: Stanislav Fomichev <sdf@fomichev.me>
+Cc: Hao Luo <haoluo@google.com>
+Cc: Jiri Olsa <jolsa@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>
+Cc: David Gow <davidgow@google.com>
+Cc: Rae Moar <rmoar@google.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Jiri Pirko <jiri@resnulli.us>
+Cc: Petr Mladek <pmladek@suse.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc: Stephen Hemminger <stephen@networkplumber.org>
+Cc: Jamal Hadi Salim <jhs@mojatatu.com>
+Cc: Cong Wang <xiyou.wangcong@gmail.com>
+Cc: Uros Bizjak <ubizjak@gmail.com>
+Cc: Kent Overstreet <kent.overstreet@linux.dev>
+Cc: intel-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-media@vger.kernel.org
+Cc: linux-mtd@lists.infradead.org
+Cc: linux-fscrypt@vger.kernel.org
+Cc: linux-scsi@vger.kernel.org
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: kunit-dev@googlegroups.com
 
-> > > > Neither behavior, however, seems to result in the intended behavior=
- as
-> > > > we
-> > > > either get interfering processes (if inherited) or no desired resct=
-rl
-> > > > setup for the benchmark process.
-> > >=20
-> > > There are two processes to consider in the resource group, the parent
-> > > (that
-> > > sets up the buffer and does the measurements) and the child (that run=
-s the
-> > > workload to be measured). Thanks to your commit da50de0a92f3
-> > > ("selftests/resctrl:
-> > > Calculate resctrl FS derived mem bw over sleep(1) only") the parent
-> > > will be sleeping while the child runs its workload and there is no
-> > > other interference I am aware of. The only additional measurements
-> > > that I can see would be the work needed to actually start and stop th=
-e
-> > > measurements and from what I can tell this falls into the noise.
-> > >=20
-> > > Please do keep in mind that the performance counters used, iMC, canno=
-t
-> > > actually
-> > > be bound to a single CPU since it is a per-socket PMU. The measuremen=
-ts
-> > > have
-> > > thus never been as fine grained as the code pretends it to be.
-> >=20
-> > I was thinking if I should note the amount of work is small. Maybe it's
-> > fine to leave that noise there and I'm just overly cautious :-), when I
-> > used to do networking research in the past life, I wanted to eliminate =
-as
-> > much noise sources so I guess it comes from that background.
->=20
-> The goal of these tests are to verify *resctrl*, these are not intended t=
-o be
-> hardware validation tests. I think it would be better for resctrl if more=
- time
-> is spent on functional tests of resctrl than these performance tests.
+Uros Bizjak (18):
+  x86/kaslr: Include <linux/prandom.h> instead of <linux/random.h>
+  drm/i915/selftests: Include <linux/prandom.h> instead of
+    <linux/random.h>
+  drm/lib: Include <linux/prandom.h> instead of <linux/random.h>
+  media: vivid: Include <linux/prandom.h> in vivid-vid-cap.c
+  mtd: tests: Include <linux/prandom.h> instead of <linux/random.h>
+  fscrypt: Include <linux/prandom.h> instead of <linux/random.h>
+  scsi: libfcoe: Include <linux/prandom.h> instead of <linux/random.h>
+  bpf: Include <linux/prandom.h> instead of <linux/random.h>
+  lib/interval_tree_test.c: Include <linux/prandom.h> instead of
+    <linux/random.h>
+  kunit: string-stream-test: Include <linux/prandom.h> instead of
+    <linux/random.h>
+  random32: Include <linux/prandom.h> instead of <linux/random.h>
+  lib/rbtree-test: Include <linux/prandom.h> instead of <linux/random.h>
+  bpf/tests: Include <linux/prandom.h> instead of <linux/random.h>
+  lib/test_parman: Include <linux/prandom.h> instead of <linux/random.h>
+  lib/test_scanf: Include <linux/prandom.h> instead of <linux/random.h>
+  netem: Include <linux/prandom.h> in sch_netem.c
+  random: Do not include <linux/prandom.h>
+  prandom: Include <linux/percpu.h>
 
-This sounds so easy... (no offence) :-) If only there wouldn't be the=20
-black boxes and we'd have good and fine-grained ways to instrument it,
-it would be so much easier to realize non-statistical means to do=20
-functional tests.
+ arch/x86/mm/kaslr.c                              | 2 +-
+ drivers/gpu/drm/i915/selftests/i915_gem.c        | 2 +-
+ drivers/gpu/drm/i915/selftests/i915_random.h     | 2 +-
+ drivers/gpu/drm/i915/selftests/scatterlist.c     | 2 +-
+ drivers/gpu/drm/lib/drm_random.h                 | 2 +-
+ drivers/media/test-drivers/vivid/vivid-vid-cap.c | 1 +
+ drivers/mtd/tests/oobtest.c                      | 2 +-
+ drivers/mtd/tests/pagetest.c                     | 2 +-
+ drivers/mtd/tests/subpagetest.c                  | 2 +-
+ fs/crypto/keyring.c                              | 2 +-
+ include/linux/prandom.h                          | 1 +
+ include/linux/random.h                           | 7 -------
+ include/scsi/libfcoe.h                           | 2 +-
+ kernel/bpf/core.c                                | 2 +-
+ lib/interval_tree_test.c                         | 2 +-
+ lib/kunit/string-stream-test.c                   | 1 +
+ lib/random32.c                                   | 2 +-
+ lib/rbtree_test.c                                | 2 +-
+ lib/test_bpf.c                                   | 2 +-
+ lib/test_parman.c                                | 2 +-
+ lib/test_scanf.c                                 | 2 +-
+ net/sched/sch_netem.c                            | 1 +
+ 22 files changed, 21 insertions(+), 24 deletions(-)
 
---=20
- i.
+-- 
+2.46.0
 
---8323328-1758549309-1725538229=:1411--
 
