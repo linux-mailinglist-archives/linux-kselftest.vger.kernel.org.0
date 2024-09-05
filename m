@@ -1,120 +1,130 @@
-Return-Path: <linux-kselftest+bounces-17222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17220-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2E9996D855
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 14:23:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9E1A96D829
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 14:18:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A169428C3A4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 12:23:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECF901C22DBB
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Sep 2024 12:18:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D90019F471;
-	Thu,  5 Sep 2024 12:20:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F002119AD8B;
+	Thu,  5 Sep 2024 12:18:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XLE2Cgt5"
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="K9RNtijG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60B0E19E819;
-	Thu,  5 Sep 2024 12:20:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 139D117A5BE;
+	Thu,  5 Sep 2024 12:18:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725538841; cv=none; b=C3iVF9O/vMrSMXdgJ16l8tn45p01zmGU1abC5UwPKYUd+dB0jgo+3hGXhHMYqF0t1EerC86yT/5kT6/G/j3QvAuXTcecoXPHBbjWYfo+Jhx1a83wfYTOFrC4h5SJ6aVexRXgUx+emXvbUnzrEsEDfTZ+8Zo2NQAXgAZ8r7M5IVc=
+	t=1725538731; cv=none; b=Wrk0HzJxtlM1n5JYwU1quUFwaSkedfchBPVaybo439z8p0kwmJhn7oV21VbtxPuMZ9OyKf+/6fIR9g6j9a5ejHVuZGqxv30foXp/TGjSB8JduPx7K5OwGlVKPr565Qb2G73AzlftlzU7FQ2+6bmgC/JcjXtP6vZOM1zrQHeVNX0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725538841; c=relaxed/simple;
-	bh=lTBimKBaGs1ZkBL0WNg4qnL25GeofL7qynlulrl3LB0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aHZs+ye9/eSwD+vLoY1HvSWlQCueRSUxYGvtgur92lW4aXcdcOCYBNWggvT112lNHNWNHYT8QbTLGB6Y9tzKVlIQP7Zrf+9K0h8GarjWsIPzpucrWrvLoapaJXfdlmtbggSrCVKvv+gv1rGJV05rf+MYefpzXKbj36/xRo57wNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XLE2Cgt5; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-42bb7298bdeso7218615e9.1;
-        Thu, 05 Sep 2024 05:20:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725538838; x=1726143638; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MrbcAlTnlmTabJ3YUIAlxnWUZ+5STpJgWmlTb5FWPhs=;
-        b=XLE2Cgt51WzkoQ6SALorCh1ECgly/zbQyyJsql4NhZBafdNmj17ecb2ARBT6z2PgF3
-         UlYrA+Q3YmECIPkxwowDBn+IdaIQSjBC7U1QSIpQ8m/LuCADJts6uLfEeWffsY6n6mnU
-         ijR/UQlT2HHfOwcipVUYjrhADtD7NREmgMsw2Ehuf3tx6GhELptwD2MSWhLxn4+uKYhz
-         JUBiuU/Fx3IVYrVZKy/ygcyk1QZd3IDBxddyt7lWC8dAnNtCvGpJjmvFHGvsBltIP0nG
-         4NRH0kAgy6yGTvoOCZwpLfsf6/T0eb7bwFOg56yD3qxclaD6n/8lkWN8Ry8gfL1TqPWH
-         Hpew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725538838; x=1726143638;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MrbcAlTnlmTabJ3YUIAlxnWUZ+5STpJgWmlTb5FWPhs=;
-        b=KcISPpfMmngTgTMF6UEOlFw+2tT01MQ9N86kYfWNGvsXgohrNoaM/EZEM9Bp3O/UdP
-         pgJnuOuAvqO8EPtAG1Hr6ixe5/wlm3XJKTdpPoWgi6yG89ze6QvP6HBnad6wDNmKttZz
-         LtPrnMzoXnDX5a8ShotN88+RH9ChAl9sbJUmVvijsnTDxC72+henHIqN4j4PkW4Fxm2I
-         ciBeneN9/1pZsjYv5XhAMLf9fKdH7OcAtr+2DWNgHWluq1P+Yct4V3j2o2dyGNW93XVq
-         Anci78N46hxnONqGljq74y6XhE6xzc1NBptn/TNdbLNYnyASkfRkdNeqpT1U1B4zdikn
-         O9+g==
-X-Forwarded-Encrypted: i=1; AJvYcCXXFxPBNwaoHMffGuSQ0MFQlxQDpRzDgr2j4FbpqPmBWM9FF/4tDzZXmYRvtGoVgWQajQrIDSqvdZYwbFitULA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzfByUuoDxy4/4aWCvdV9sErrqSgXoCQQ8bOcZjtM//mWeGRU+
-	QRXTdprp8ns8DbDomBFRZlfiHWjw7nRMzwkMgc144yEl7jdlqTWEX3E5PmD1UIg=
-X-Google-Smtp-Source: AGHT+IH1y62oVq3A7PoH6CYDdpSm5g4nRO5BNyX08uLqwzy6RI+6Cp/eKFKScAI+HQtlogwERfmxew==
-X-Received: by 2002:a05:600c:1c8a:b0:426:59d3:8cae with SMTP id 5b1f17b1804b1-42c9a365902mr20646915e9.13.1725538838425;
-        Thu, 05 Sep 2024 05:20:38 -0700 (PDT)
-Received: from fedora.iskraemeco.si ([193.77.86.250])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42bb6e27364sm230390515e9.34.2024.09.05.05.20.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 05 Sep 2024 05:20:37 -0700 (PDT)
-From: Uros Bizjak <ubizjak@gmail.com>
-To: linux-kernel@vger.kernel.org
-Cc: Uros Bizjak <ubizjak@gmail.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	Rae Moar <rmoar@google.com>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com
-Subject: [PATCH 10/18] kunit: string-stream-test: Include <linux/prandom.h> instead of <linux/random.h>
-Date: Thu,  5 Sep 2024 14:17:18 +0200
-Message-ID: <20240905122020.872466-11-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20240905122020.872466-1-ubizjak@gmail.com>
-References: <20240905122020.872466-1-ubizjak@gmail.com>
+	s=arc-20240116; t=1725538731; c=relaxed/simple;
+	bh=xnxK5to/0ePcX0+Bd3U+Y0/lgElvGf1/1Pp5sQgodpI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=p8Z5Sio7ZOhPks12600tLrbI8T+PSLRJK6tdoZqsgt6zckRx3msHTTs4ATFZVoR5+YO5YfN9TEhLE1UYy5cJPMnj9A5lgfXm0uWPGHVpj874uGp9ed6TCDHPhiiNMSp3alSJWokxYmvNwOqvQYxkYpowzVsRBevT+R17Kzbzr58=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=K9RNtijG; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1725538726;
+	bh=uHtMyZ0mGdGut63ipl9pSNEPhg4gQFAZt25TdNzawnM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=K9RNtijGnQSSSovlUF+85A4m8nKayeSvx/Ob0UZe5MJZyqYtM2pQp+6L4nOcFBaL8
+	 BMvvg2k7bpp41TQpyqsAUXWRf9BykbfFXJDdQCMgNnVRzMXGqdYM3Sm6ZG58e+Zzi8
+	 xqDI/zBSXPr5VH16d77RzHiYS8QQhrpNG+LVTWOYc8PJiopRQ7aKFTBzvlaxwbnjCz
+	 6ss+QYEqmuStkZsohKp2idavtqXQSJWsED2PrAQKG3qsuvIpbAmxC3YKMYwXrruEr9
+	 LEfLpNhWcsB0I1NH6JCVZcsdgJSq7qa1g0AzaMpAXveSikpyikaPbous9gKJoszvTM
+	 yYb9S47fFXRUg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Wzz0y4N1Rz4w2Q;
+	Thu,  5 Sep 2024 22:18:42 +1000 (AEST)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Steven Rostedt
+ <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, Mathieu
+ Desnoyers <mathieu.desnoyers@efficios.com>, Nicholas Piggin
+ <npiggin@gmail.com>, Naveen N Rao <naveen@kernel.org>, Nathan Chancellor
+ <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, Bill
+ Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, Shuah
+ Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org, Adhemerval Zanella
+ <adhemerval.zanella@linaro.org>, Xi Ruoyao <xry111@xry111.site>
+Subject: Re: [PATCH v5 0/5] Wire up getrandom() vDSO implementation on powerpc
+In-Reply-To: <Zthr1nB_RJ56YD3O@zx2c4.com>
+References: <cover.1725304404.git.christophe.leroy@csgroup.eu>
+ <Zthr1nB_RJ56YD3O@zx2c4.com>
+Date: Thu, 05 Sep 2024 22:18:40 +1000
+Message-ID: <87frqe5m5b.fsf@mail.lhotse>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Usage of pseudo-random functions requires inclusion of
-<linux/prandom.h> header instead of <linux/random.h>.
-
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>
-Cc: David Gow <davidgow@google.com>
-Cc: Rae Moar <rmoar@google.com>
-Cc: linux-kselftest@vger.kernel.org
-Cc: kunit-dev@googlegroups.com
----
- lib/kunit/string-stream-test.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
-index 7511442ea98f..7734e33156f9 100644
---- a/lib/kunit/string-stream-test.c
-+++ b/lib/kunit/string-stream-test.c
-@@ -9,6 +9,7 @@
- #include <kunit/static_stub.h>
- #include <kunit/test.h>
- #include <linux/ktime.h>
-+#include <linux/prandom.h>
- #include <linux/slab.h>
- #include <linux/timekeeping.h>
+"Jason A. Donenfeld" <Jason@zx2c4.com> writes:
+> Hi Christophe, Michael,
+>
+> On Mon, Sep 02, 2024 at 09:17:17PM +0200, Christophe Leroy wrote:
+>> This series wires up getrandom() vDSO implementation on powerpc.
+>> 
+>> Tested on PPC32 on real hardware.
+>> Tested on PPC64 (both BE and LE) on QEMU:
+>> 
+>> Performance on powerpc 885:
+>> 	~# ./vdso_test_getrandom bench-single
+>> 	   vdso: 25000000 times in 62.938002291 seconds
+>> 	   libc: 25000000 times in 535.581916866 seconds
+>> 	syscall: 25000000 times in 531.525042806 seconds
+>> 
+>> Performance on powerpc 8321:
+>> 	~# ./vdso_test_getrandom bench-single
+>> 	   vdso: 25000000 times in 16.899318858 seconds
+>> 	   libc: 25000000 times in 131.050596522 seconds
+>> 	syscall: 25000000 times in 129.794790389 seconds
+>> 
+>> Performance on QEMU pseries:
+>> 	~ # ./vdso_test_getrandom bench-single
+>> 	   vdso: 25000000 times in 4.977777162 seconds
+>> 	   libc: 25000000 times in 75.516749981 seconds
+>> 	syscall: 25000000 times in 86.842242014 seconds
+>
+> Looking good. I have no remaining nits on this patchset; it looks good
+> to me.
+>
+> A review from Michael would be nice though (in addition to the necessary
+> "Ack" I need to commit this to my tree), because there are a lot of PPC
+> particulars that I don't know enough about to review properly. For
+> example, you use -ffixed-r30 on PPC64. I'm sure there's a good reason
+> for this, but I don't know enough to assess it. And cvdso_call I have no
+> idea what's going on. Etc.
  
--- 
-2.46.0
+It all looks good to me, and has survived some testing. Let's get it
+merged and get some wider test coverage.
 
+There is an existing comment in the a/p/vdso/Makefile about the
+fixed-r30 thing, tldr is it's a workaround to avoid breaking old
+versions of Go.
+
+For the series:
+
+Acked-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+
+If you can include Maddy's test results from Power9 in the change log
+for patch 5 that'd be nice.
+
+cheers
 
