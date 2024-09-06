@@ -1,65 +1,56 @@
-Return-Path: <linux-kselftest+bounces-17351-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17352-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10ABA96E8B8
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 06:37:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC24596E8C6
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 06:53:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADD891F24ED3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 04:37:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CDF361C237B3
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 04:53:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3846D4594A;
-	Fri,  6 Sep 2024 04:37:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dESkhuwq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA93553376;
+	Fri,  6 Sep 2024 04:53:32 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D08F18B04;
-	Fri,  6 Sep 2024 04:37:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B997745C1C;
+	Fri,  6 Sep 2024 04:53:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725597462; cv=none; b=UzhvP+I4i4tCTDOz2HfwuAGqQ0GWgXIgU7DsUojYXxd3s2geWThOJAxA9ZOkCGKZQmxrZJBJBVFETzRgLxSWTUXItG5jF8d1allKBu517jHhHQIvQaKk86jEvPFufzmiBGRlY4y73lGcdD8YrZnlycpOciaMzAtUP3BnxO2oAmY=
+	t=1725598412; cv=none; b=uWKj7YGh7x/qh88Nvi5/r7zZT3r9LxIAS1qkgv31lYQnuExbfAcuGlkifsFVI+CiBlMggQEymQMWZvNhsg8AGALa5tf2PGuNpTEFxFht86FFuQRraaX4YVmoGlatXoRsLgREco5QqMcmBgXD2EbGRqAjH9ejXsxkJnfMzguvGe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725597462; c=relaxed/simple;
-	bh=/jvEvJRE/jLwZ1UTZPXHXIUGmiEbzhw4zt2ok3NX4b4=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=AoWeRrcEV4Elv3Ca0VlCVt9WUd+b+TtMH8x+pThPmf9mf5+wyZQUio/V7VyhH6bgxQ4Dlg170V1L916qkMOuUBs8pcDGzwmWzjFwurwcjh1aEzY590TtgWT4i3S7qops+M2CtiTSNbCiUnc84aFfEG5efHwYKsqPh0bssjA9KwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dESkhuwq; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725597459; x=1757133459;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/jvEvJRE/jLwZ1UTZPXHXIUGmiEbzhw4zt2ok3NX4b4=;
-  b=dESkhuwqXi3tbZes6l2VNZModHB+SQj72SAuIOSYZWObCzviLHVhh6va
-   vSx4/47JH+F1t7V6BY0Fi65/fRevf1aeEW4sM0N+zdu/au48fOUmcimG0
-   FiWVthHE+ks0Yc+Xw486vWEZBY1irilYVFExRJngr4C0FV1xVxgDJdrwU
-   4bmfnO4ThRuYT+E1rYX2i6QRn6cGUB/r42Q0I9e7RCzd24OgnBx5TZi3W
-   XN3hRhAtVYUMkW4EUBZRQwkJaVWrOQHZ2+TQ966EjYIxXVIp16jFnieMs
-   11sy1Gzl/Z+RzTMUGfubXR6YtoVYe73Eq+jRLzyerc+D/STNuBwT8ldkb
-   Q==;
-X-CSE-ConnectionGUID: pNGKJ/8fTRaUz2QW8HZSpg==
-X-CSE-MsgGUID: PuvjHS+ZSsGYwt56GlJ6nA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="23851821"
-X-IronPort-AV: E=Sophos;i="6.10,206,1719903600"; 
-   d="scan'208";a="23851821"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 21:37:38 -0700
-X-CSE-ConnectionGUID: wAEC3Ex0TdSAeSMujkgODg==
-X-CSE-MsgGUID: ybrDQfa7QdaHju2NeDDhDA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,206,1719903600"; 
-   d="scan'208";a="89097928"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by fmviesa002.fm.intel.com with ESMTP; 05 Sep 2024 21:37:34 -0700
-Message-ID: <456e9b67-aa20-4259-b8e1-9f20d4fa03af@linux.intel.com>
-Date: Fri, 6 Sep 2024 12:33:36 +0800
+	s=arc-20240116; t=1725598412; c=relaxed/simple;
+	bh=A75lYGrLa/x3ArGAifgM6TS5Vw27r6mpHb5G0N+ZIgI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CP0iOHUwkvqdCf406EW8DjgA/qvGnQfgtZtmmi2F41i2Ez5o/JR06OZv/VEfrqepLhTNHRvGFFkt02OAuICoj3fWYLFYREh4tOiKT5NuPlhnzh9aVApvXD5sDjwOkTvjZsyuyq+UdcmmioNjn6JL1NC3kieUjyrXWbjrcWzPztA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4X0P4l4sMRz9sRy;
+	Fri,  6 Sep 2024 06:53:27 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id cGNa5ow0wQLB; Fri,  6 Sep 2024 06:53:27 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4X0P4l3spgz9sRs;
+	Fri,  6 Sep 2024 06:53:27 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 739B98B778;
+	Fri,  6 Sep 2024 06:53:27 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id X35N0C8uKPzN; Fri,  6 Sep 2024 06:53:27 +0200 (CEST)
+Received: from [192.168.235.70] (unknown [192.168.235.70])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 7D03E8B764;
+	Fri,  6 Sep 2024 06:53:26 +0200 (CEST)
+Message-ID: <45f7170d-a209-4079-9384-274b0c413a4b@csgroup.eu>
+Date: Fri, 6 Sep 2024 06:53:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,78 +58,153 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: baolu.lu@linux.intel.com, "Tian, Kevin" <kevin.tian@intel.com>,
- "joro@8bytes.org" <joro@8bytes.org>,
- "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
- "robin.murphy@arm.com" <robin.murphy@arm.com>,
- "eric.auger@redhat.com" <eric.auger@redhat.com>,
- "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
- "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
- "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
- "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
- "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v3 1/7] iommu: Introduce a replace API for device pasid
-To: Yi Liu <yi.l.liu@intel.com>, Jason Gunthorpe <jgg@nvidia.com>,
- Vasant Hegde <vasant.hegde@amd.com>
-References: <20240628090557.50898-1-yi.l.liu@intel.com>
- <20240628090557.50898-2-yi.l.liu@intel.com>
- <BN9PR11MB5276B4AF6321A083C3C2D2648CAC2@BN9PR11MB5276.namprd11.prod.outlook.com>
- <1a825f1b-be9d-4de1-948a-be0cce3175be@intel.com>
- <20240816130202.GB2032816@nvidia.com>
- <7b8f09b1-5e0a-48d8-8585-27e4a69ef75d@intel.com>
-Content-Language: en-US
-From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <7b8f09b1-5e0a-48d8-8585-27e4a69ef75d@intel.com>
+Subject: Re: [PATCH v5 4/5] powerpc/vdso: Wire up getrandom() vDSO
+ implementation on VDSO32
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+ Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
+ <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
+ Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org,
+ llvm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-trace-kernel@vger.kernel.org,
+ Adhemerval Zanella <adhemerval.zanella@linaro.org>,
+ Xi Ruoyao <xry111@xry111.site>
+References: <cover.1725304404.git.christophe.leroy@csgroup.eu>
+ <1f49c2ce009f8b007ab0676fb41187b2d54f28b2.1725304404.git.christophe.leroy@csgroup.eu>
+ <ZtnYqZI-nrsNslwy@zx2c4.com> <ZtoXhGYflBNR74g0@zx2c4.com>
+ <ZtptfOicjZU3k3ZV@zx2c4.com> <Ztp16FkqG0ALlXnh@zx2c4.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <Ztp16FkqG0ALlXnh@zx2c4.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 9/6/24 12:21 PM, Yi Liu wrote:
-> On 2024/8/16 21:02, Jason Gunthorpe wrote:
->> On Fri, Aug 16, 2024 at 05:43:18PM +0800, Yi Liu wrote:
->>> On 2024/7/18 16:27, Tian, Kevin wrote:
->>>>> From: Liu, Yi L <yi.l.liu@intel.com>
->>>>> Sent: Friday, June 28, 2024 5:06 PM
->>>>>
->>>>> @@ -3289,7 +3290,20 @@ static int __iommu_set_group_pasid(struct
->>>>> iommu_domain *domain,
->>>>>
->>>>>            if (device == last_gdev)
->>>>>                break;
->>>>> -        ops->remove_dev_pasid(device->dev, pasid, domain);
->>>>> +        /* If no old domain, undo the succeeded devices/pasid */
->>>>> +        if (!old) {
->>>>> +            ops->remove_dev_pasid(device->dev, pasid, domain);
->>>>> +            continue;
->>>>> +        }
+Hi Jason,
+
+Le 06/09/2024 à 05:24, Jason A. Donenfeld a écrit :
+> On Fri, Sep 06, 2024 at 04:48:28AM +0200, Jason A. Donenfeld wrote:
+>> On Thu, Sep 05, 2024 at 10:41:40PM +0200, Jason A. Donenfeld wrote:
+>>> On Thu, Sep 05, 2024 at 06:13:29PM +0200, Jason A. Donenfeld wrote:
+>>>>> +/*
+>>>>> + * The macro sets two stack frames, one for the caller and one for the callee
+>>>>> + * because there are no requirement for the caller to set a stack frame when
+>>>>> + * calling VDSO so it may have omitted to set one, especially on PPC64
+>>>>> + */
 >>>>> +
->>>>> +        /*
->>>>> +         * Rollback the succeeded devices/pasid to the old domain.
->>>>> +         * And it is a driver bug to fail attaching with a previously
->>>>> +         * good domain.
->>>>> +         */
->>>>> +        if (WARN_ON(old->ops->set_dev_pasid(old, device->dev,
->>>>> +                            pasid, domain)))
->>>>> +            ops->remove_dev_pasid(device->dev, pasid, domain);
+>>>>> +.macro cvdso_call funct
+>>>>> +  .cfi_startproc
+>>>>> +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
+>>>>> +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
+>>>>> +	mflr		r0
+>>>>> +	PPC_STLU	r1, -PPC_MIN_STKFRM(r1)
+>>>>> +  .cfi_adjust_cfa_offset PPC_MIN_STKFRM
+>>>>> +	PPC_STL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+>>>>> +  .cfi_rel_offset lr, PPC_MIN_STKFRM + PPC_LR_STKOFF
+>>>>> +	get_datapage	r8
+>>>>> +	addi		r8, r8, VDSO_RNG_DATA_OFFSET
+>>>>> +	bl		CFUNC(DOTSYM(\funct))
+>>>>> +	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+>>>>> +	cmpwi		r3, 0
+>>>>> +	mtlr		r0
+>>>>> +	addi		r1, r1, 2 * PPC_MIN_STKFRM
+>>>>> +  .cfi_restore lr
+>>>>> +  .cfi_def_cfa_offset 0
+>>>>> +	crclr		so
+>>>>> +	bgelr+
+>>>>> +	crset		so
+>>>>> +	neg		r3, r3
+>>>>> +	blr
+>>>>> +  .cfi_endproc
+>>>>> +.endm
 >>>>
->>>> I wonder whether @remove_dev_pasid() can be replaced by having
->>>> blocking_domain support @set_dev_pasid?
+>>>> Can you figure out what's going on and send a fix, which I'll squash
+>>>> into this commit?
 >>>
->>> how about your thought, @Jason?
+>>> This doesn't work, but I wonder if something like it is what we want. I
+>>> need to head out for the day, but here's what I've got. It's all wrong
+>>> but might be of interest.
 >>
->> I think we talked about doing that once before, I forget why it was
->> not done. Maybe there was an issue?
+>> Oh, I just got one small detail wrong before. The below actually works,
+>> and uses the same strategy as on arm64.
 >>
->> But it seems worth trying.
+>> Let me know if you'd like me to fix up this commit with the below patch,
+>> or if you have another way you'd like to go about it.
 > 
-> Since remove_dev_pasid() does not return a result, so caller does not
-> need to check the result of it. If we want to replace it with the
-> blocked_domain->ops->set_dev_pasid(), shall we enforce that the
-> set_dev_pasid() op of blocked_domain to be always success. Is it?
+> And here's the much shorter version in assembly, which maybe you prefer.
+> Also works, and is a bit less invasive than the other thing.
+> 
+> diff --git a/arch/powerpc/kernel/vdso/getrandom.S b/arch/powerpc/kernel/vdso/getrandom.S
+> index a957cd2b2b03..070daba2d547 100644
+> --- a/arch/powerpc/kernel/vdso/getrandom.S
+> +++ b/arch/powerpc/kernel/vdso/getrandom.S
+> @@ -32,6 +32,14 @@
+>     .cfi_rel_offset r2, PPC_MIN_STKFRM + STK_GOT
+>   #endif
+>   	get_datapage	r8
+> +#ifdef CONFIG_TIME_NS
+> +	lis		r10, 0x7fff
+> +	ori		r10, r10, 0xffff
+> +	lwz		r9, VDSO_DATA_OFFSET + 4(r8)
+> +	cmpw		r9, r10
+> +	bne		+8
+> +	addi		r8, r8, (1 << CONFIG_PAGE_SHIFT)
+> +#endif
+>   	addi		r8, r8, VDSO_RNG_DATA_OFFSET
+>   	bl		CFUNC(DOTSYM(\funct))
+>   	PPC_LL		r0, PPC_MIN_STKFRM + PPC_LR_STKOFF(r1)
+> 
 
-Yes. The semantics of blocking domain is that the iommu driver must
-ensure successful completion.
+Thanks for looking.
 
-Thanks,
-baolu
+I came to more or less the same solutions thnt you with the following 
+that seems to work:
+
+diff --git a/arch/powerpc/kernel/vdso/vgetrandom.c 
+b/arch/powerpc/kernel/vdso/vgetrandom.c
+index 5f855d45fb7b..9705344d39d0 100644
+--- a/arch/powerpc/kernel/vdso/vgetrandom.c
++++ b/arch/powerpc/kernel/vdso/vgetrandom.c
+@@ -4,11 +4,19 @@
+   *
+   * Copyright (C) 2024 Christophe Leroy <christophe.leroy@csgroup.eu>, 
+CS GROUP France
+   */
++#include <linux/container_of.h>
+  #include <linux/time.h>
+  #include <linux/types.h>
+
++#include <asm/vdso_datapage.h>
++
+  ssize_t __c_kernel_getrandom(void *buffer, size_t len, unsigned int 
+flags, void *opaque_state,
+  			     size_t opaque_len, const struct vdso_rng_data *vd)
+  {
++	struct vdso_arch_data *arch_data = container_of(vd, struct 
+vdso_arch_data, rng_data);
++
++	if (IS_ENABLED(CONFIG_TIME_NS) && arch_data->data[0].clock_mode == 
+VDSO_CLOCKMODE_TIMENS)
++		vd = (void *)vd + (1UL << CONFIG_PAGE_SHIFT);
++
+  	return __cvdso_getrandom_data(vd, buffer, len, flags, opaque_state, 
+opaque_len);
+  }
+
+
+However, if we have this problem with __kernel_getrandom, don't we also 
+have it with: ?
+		__kernel_get_syscall_map;
+		__kernel_get_tbfreq;
+		__kernel_sync_dicache;
+
+If they are also affected, then get_page macro is the place to fix.
+
+I will check all of this now and keep you updated before noon (Paris Time).
+
+Christophe
 
