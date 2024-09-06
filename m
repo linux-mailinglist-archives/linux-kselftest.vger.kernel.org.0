@@ -1,134 +1,173 @@
-Return-Path: <linux-kselftest+bounces-17427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53B0796FD0C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 23:08:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A55196FDC1
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2024 00:01:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 102EF284E4A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 21:08:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1E37D1F21C80
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 22:01:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 216D91D7E26;
-	Fri,  6 Sep 2024 21:08:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4909158A00;
+	Fri,  6 Sep 2024 22:01:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="o0x2qbGm"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="tMpc9qY4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF40155741
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Sep 2024 21:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E904F14C5B3
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Sep 2024 22:01:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725656880; cv=none; b=r/JIuQ7PfYoPkyZ6QgPmMRY9hmyeI/qkOhVYMgI9L9r70T/nkHSuhu410Z6WsBb1vxzDY+rNDiqvGAWaHPMi9Mq7zPBY0A77zWAozUGkFNodwfIU/1ixEdyx5fsDuD/Ay1n1lt7DndFYsuh+kj2hvp6cwmzCRzJ4XAHA3hP2o40=
+	t=1725660089; cv=none; b=OIR+cSJdLGrASbG4kdrMS8AVNpyO+OLnBam8rHDTVdSraghvOsbTib2pLLFUwCxht6qNjiHehYzKTPQv4DYOEGNOSw3WfIyW4XiBSg5JIBaT4TpSyrlqw2Gv/3B4PgTooWBcaItzGq+WoJKkvZ70mDN8uNRtgI3FwgQl3ef6iRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725656880; c=relaxed/simple;
-	bh=JJ1smVVv1hpPtnU9o9QoOlpsW1GluwEyiacWgsBBzpY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FJ6MAPFChsD810f83CB5XL2bgcAnEiUBEsUseV+JjI1g5r70hcRXECLum5N1nlaSHVV8QXmrt3rEg3oTKsUcY77O1rZurYlI78FXC1bojB/GaQ7IHdY5TpCnVumY8UYLD13w1mX5wJXCXsmXPbQEsk+EPzJDvPFvjMKuw4jqGjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=o0x2qbGm; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1725656875;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Keefv1899VY9ObcYSkgFK6MVawN7CzaBeJBfIS+JVWY=;
-	b=o0x2qbGmjF7Uq/qzoqjo7KmwV0YF0oQHrSqZyjFFaPILkbOeBqJrryuQj/FXGwKlilxv77
-	0R2J1aVyfMmNksD0rCjLqr95uzzWfaRk7WzY7YKT/PJCzxnq0bEpWLQvFCPFuK4YS3K2KM
-	O8cT5CPthjkxtExe6hPhT2wKRU14CO4=
-From: Sean Anderson <sean.anderson@linux.dev>
-To: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org
-Cc: Willem de Bruijn <willemb@google.com>,
-	linux-kernel@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	Sean Anderson <sean.anderson@linux.dev>
-Subject: [PATCH net] selftests: net: csum: Fix checksums for packets with non-zero padding
-Date: Fri,  6 Sep 2024 17:07:43 -0400
-Message-Id: <20240906210743.627413-1-sean.anderson@linux.dev>
+	s=arc-20240116; t=1725660089; c=relaxed/simple;
+	bh=8P4MN5n6VIBR3ieG3HYR4aH1WGlHkSX+/iWDR4rkt4E=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=dH9pd9BL/9AI90fhUWDYv5bRNldFIm8ZZnf1G5SEqPTqVc6L2sAH6VZ2uCt8VxpYMV65a+QZ+66AZyrJN+B1EAEAOC3V1RuewfMgCvCPw4J9R6fCXSCELgV/sj/HuwTBIRKf/Pgt3pSD3+kPaBMfA9Dz7W+E5+3EB4ylgYHHr6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=tMpc9qY4; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-70cec4aa1e4so1807989b3a.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Sep 2024 15:01:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1725660087; x=1726264887; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=3OHWmCJWbvQmW0fDPN4U9BiUAayDHbDFXMi6ItY/DYQ=;
+        b=tMpc9qY4MbIvvh7JlRqab9kUzQq2tYO4Plf+MwUtAQmbSaI6FmT0ecJIFa0/x3EB6m
+         Pd7gL9LajwNlcoqogGqqydIdLT3NQxRZtGSTIxaVrvDkGOlTXjfSnKQzRml7y8JvlQ50
+         YuC1yfQ9PqYu99WeRldEUSrZAg4W+KT4m/VYbCU4MexVsVppZeALciMGqF1V4c5iAUKY
+         foCVadzyqqgqDrjG353PEmjnaoxzP+BWx0Hn03IixC3rZz0hX3ebPaohQalNzB5QoQXF
+         v7v53vlIrPzVDeyL1cF7QUAdW3nGJouyilXKAkRsF0EWzX5a4eXoRU4c4LnOG4EknnFv
+         V5ZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725660087; x=1726264887;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3OHWmCJWbvQmW0fDPN4U9BiUAayDHbDFXMi6ItY/DYQ=;
+        b=GPzKDqPLunTBvPMNQtpoO1f6tcz5uamOQ2hy81JCwTeUBHSS3nfJvXNJ2ZpF1XW6FF
+         PEm7/CjNukU8WLTtMaOx/A0GE/s3gTU9YvEpAACEjpwZEAs2PXL4K/iK7akBnT/msPft
+         GStuSaLJtKB2WxBehs1E5PfEg6eXDUVPqYhg/90Qnr0lpVMyz/HQIpfwdZQe+R+BnWVS
+         c81fuAD3u1XIToezVOxIAUyeu5ZqWMHq1wWEMsePH4TBSvnemG+PG8x6RksQ7+CanbNk
+         EFdCuVzOp7B550IsWj4tCnOn3qk165qfZbc7AASkIKTMNHvucDfqGoyZKr8x2SpovucO
+         2Bqg==
+X-Forwarded-Encrypted: i=1; AJvYcCUJFEkiotcx5bmgIjOSq++qV0RcJHyRYt5PBg+m2etk8qT4VC6SdZZlGC4Wn9lVb31kz/BHlzoMSBOPiGmlpyg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyK/TUS1JSm6MMdZ1EUj9rk52wmcQl+UWa3RLIipuI39SWvWwxi
+	D7IX12xKD2Dq9T+AjC85ke6gL/zg7JAYeBJsUJRDqF4r272VJ8Lhu7CYUZN7lBg=
+X-Google-Smtp-Source: AGHT+IEK9NZbB7PSouK6SQX0M4Ep0Bh+SF3nA04lu/rupJF/MUNC1v1w3wBXkTl0+9gKlGFlayjoRg==
+X-Received: by 2002:a05:6a21:6802:b0:1c4:23f0:9665 with SMTP id adf61e73a8af0-1cf2a0b7dbfmr780306637.29.1725660086840;
+        Fri, 06 Sep 2024 15:01:26 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7d5a53d959bsm1878708a12.87.2024.09.06.15.01.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Sep 2024 15:01:26 -0700 (PDT)
+Message-ID: <66db7bb6.050a0220.2880c8.ac91@mx.google.com>
+Date: Fri, 06 Sep 2024 15:01:26 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: v6.11-rc1-20-gaf1ec38c6ccc3
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next build: 7 builds: 2 failed, 5 passed,
+ 1 warning (v6.11-rc1-20-gaf1ec38c6ccc3)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-Padding is not included in UDP and TCP checksums. Therefore, reduce the
-length of the checksummed data to include only the data in the IP
-payload. This fixes spurious reported checksum failures like
+kselftest/next build: 7 builds: 2 failed, 5 passed, 1 warning (v6.11-rc1-20=
+-gaf1ec38c6ccc3)
 
-rx: pkt: sport=33000 len=26 csum=0xc850 verify=0xf9fe
-pkt: bad csum
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/v6.11-rc1-20-gaf1ec38c6ccc3/
 
-Technically it is possible for there to be trailing bytes after the UDP
-data but before the Ethernet padding (e.g. if sizeof(ip) + sizeof(udp) +
-udp.len < ip.len). However, we don't generate such packets.
+Tree: kselftest
+Branch: next
+Git Describe: v6.11-rc1-20-gaf1ec38c6ccc3
+Git Commit: af1ec38c6ccc31ec963ac4bcf8f6a7d8f44d210a
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
-Fixes: 91a7de85600d ("selftests/net: add csum offload test")
-Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
+Build Failures Detected:
+
+arm64:
+    defconfig+kselftest+arm64-chromebook: (clang-16) FAIL
+    defconfig+kselftest+arm64-chromebook: (gcc-12) FAIL
+
+Warnings Detected:
+
+arm64:
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
+ !ENDBR: .text+0x14ef94
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-12) =E2=80=94 FAIL, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, clang-16) =E2=80=94 FAIL, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
+BR: .text+0x14ef94
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
 ---
-Found while testing for this very bug in hardware checksum offloads.
-
- tools/testing/selftests/net/lib/csum.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/net/lib/csum.c b/tools/testing/selftests/net/lib/csum.c
-index b9f3fc3c3426..e0a34e5e8dd5 100644
---- a/tools/testing/selftests/net/lib/csum.c
-+++ b/tools/testing/selftests/net/lib/csum.c
-@@ -654,10 +654,16 @@ static int recv_verify_packet_ipv4(void *nh, int len)
- {
- 	struct iphdr *iph = nh;
- 	uint16_t proto = cfg_encap ? IPPROTO_UDP : cfg_proto;
-+	uint16_t ip_len;
- 
- 	if (len < sizeof(*iph) || iph->protocol != proto)
- 		return -1;
- 
-+	ip_len = ntohs(iph->tot_len);
-+	if (ip_len > len || ip_len < sizeof(*iph))
-+		return -1;
-+
-+	len = ip_len;
- 	iph_addr_p = &iph->saddr;
- 	if (proto == IPPROTO_TCP)
- 		return recv_verify_packet_tcp(iph + 1, len - sizeof(*iph));
-@@ -669,16 +675,22 @@ static int recv_verify_packet_ipv6(void *nh, int len)
- {
- 	struct ipv6hdr *ip6h = nh;
- 	uint16_t proto = cfg_encap ? IPPROTO_UDP : cfg_proto;
-+	uint16_t ip_len;
- 
- 	if (len < sizeof(*ip6h) || ip6h->nexthdr != proto)
- 		return -1;
- 
-+	ip_len = ntohs(ip6h->payload_len);
-+	if (ip_len > len - sizeof(*ip6h))
-+		return -1;
-+
-+	len = ip_len;
- 	iph_addr_p = &ip6h->saddr;
- 
- 	if (proto == IPPROTO_TCP)
--		return recv_verify_packet_tcp(ip6h + 1, len - sizeof(*ip6h));
-+		return recv_verify_packet_tcp(ip6h + 1, len);
- 	else
--		return recv_verify_packet_udp(ip6h + 1, len - sizeof(*ip6h));
-+		return recv_verify_packet_udp(ip6h + 1, len);
- }
- 
- /* return whether auxdata includes TP_STATUS_CSUM_VALID */
--- 
-2.35.1.1320.gc452695387.dirty
-
+For more info write to <info@kernelci.org>
 
