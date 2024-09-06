@@ -1,71 +1,70 @@
-Return-Path: <linux-kselftest+bounces-17396-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17397-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2E5696F66A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 16:14:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDFB196F676
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 16:16:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F01BE1C21A12
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 14:14:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AC461F25197
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 14:16:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 219EE1D0DF2;
-	Fri,  6 Sep 2024 14:14:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 655991D27AC;
+	Fri,  6 Sep 2024 14:15:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SklHqHyu"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cMpd6Fes"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B45E51D04A4
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Sep 2024 14:14:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6EA1D279B
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Sep 2024 14:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725632060; cv=none; b=EINGRU3LoUWKNY6uiy9ocWClcf1uZHfA21RQOpBO2ISSBGK/tDSUptBrVCARh6miUR+hqnpSjgP8ADJtS8TOmOfcm7ZX2GRpd49FCvknWWqCjkC8AZJDooDzkney/eWRVJHydNkhKAdt52MhjElXXz9hK6OAn2F2QP3ET42dY5o=
+	t=1725632134; cv=none; b=d3K/sdRPv6NxcMIwfpP6LrLdNF0PV20iaER0aTPtPOfpEtzsaWWNF52HwM5QBRb6TOvFG0WVWS6Sa0AJd8VB5AKcylXC3AJ9yqY32GVvbpJrueLAFV8Oxwy/lc0oOVpkRikBJscfqr03N6IrzBhPfjfqQPRskbtbUJQ1iBmqi+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725632060; c=relaxed/simple;
-	bh=23suZZslrElYAyZQHWDA+IOgBKqdPtOdcjQ8BplQZZU=;
+	s=arc-20240116; t=1725632134; c=relaxed/simple;
+	bh=y5MxjUMhzpEGLcAk+RQ1L1Eah2Fr5EnO8/enSmmZa6g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KTpMGqRiEcaP5qYmGkqo+K7A71TSdWa7poeBlzLmv3CKrdCtkmLpytBbUhFxf9BmvhSiAJadPStmArTMvlrnQ9pHwANhO5gKyEtMYf+F1jNoVALy92QaYgm3x1+3fPv8FXf9+yBVjsCigUveqHj7mFtYfHDd/LnahK0NJC09ogc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SklHqHyu; arc=none smtp.client-ip=209.85.166.51
+	 In-Reply-To:Content-Type; b=cJh1Pa49yBEHnNKKxL3IOzhy/YzlG3x64Se4x/dC4e4dw+P5Wx/yMoSs+7r4k/3gBmzakYP3A+wOV96xFB1UE38o3uBYqww4eg33z7mxKn6lpgjo0BYJHXE+A9thdYcf+S/uB3yICz2cofUeFVEKY7ejlPPUkB8H87GJ2I1OIkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cMpd6Fes; arc=none smtp.client-ip=209.85.166.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-82a8f3e7a10so70640939f.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Sep 2024 07:14:17 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-82a109bc459so102959639f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Sep 2024 07:15:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1725632057; x=1726236857; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1725632130; x=1726236930; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=vViw6BTWp76nUCRilCQyxEbSqwSDETKDM1RYVM6mLFE=;
-        b=SklHqHyuX8n95D8ffRvrALZ/EEl3rH3jYDxgIBT8xlNSO5HRlwGB8oLxtew8pe7DSC
-         q+xqPwbDxoW7K5lsdr/JyOtlfNwyIIAye98J+u45QBLpVRJgI+AjRtqQCOqL8tKQ/zhq
-         71daY/HPbAm2tFWtgfLwQJD0Wb5BylXdyNzaQ=
+        bh=GDDzZwDYU4Gy6OtpP5FWKJoDHuwx4Dvh85vp17WCwo4=;
+        b=cMpd6FesQLw4KQNv5rOhx8z80CKGeF0F42uvuBmhprQOHMJYukT0lks+ZR/hkiMPE0
+         sAjHkDVZnTM1r9pol90a0am6kRqWO398EkBZoqRMLxwRo/ggRenMbYF3FytPYnjbdXHI
+         QXrGJYUHZ/uVD0KJ3WO7nesaC4DIu3Q7IOK1g=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725632057; x=1726236857;
+        d=1e100.net; s=20230601; t=1725632130; x=1726236930;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vViw6BTWp76nUCRilCQyxEbSqwSDETKDM1RYVM6mLFE=;
-        b=DCBdv3ruUo7pja16lDVWOeSDT2yLCmELzhX83toK38EV1E435R25FuOAREDRCDIEOx
-         ALspAg0o+5ys+RxGbCe6WClwtI9K0y9H6lU3Xr8JS0e/F2Vv1IsEsYuL/bGYCox6uXA/
-         D7iRLqrgTu+FthvP+gagZTakCO0C96k0wvDvQvGT6LFqrkMUkDMCoTu6/WRwKbYDEqTH
-         3mxDfnef0WNywEI6GXvpCmoeU101YQ5x5UJcNc5h0LmiiHYhngilDxgeZX4tCs9+lk4G
-         xjxLM+CHGgSSXNgayQ0QXhUOnsrwJMf8kNqdiVbggJFgiI68c5qyEFVtzB3f6dxs1wcb
-         5neA==
-X-Forwarded-Encrypted: i=1; AJvYcCX8SipGKOYA1WUtEgMhhIATNTnb46PYDf/n1Wt+DmGks1K0hUfW6Llqu+TDp10+8tAKFBaWyV4qspn4HqQQQYw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaSD81h58tO9WjIPZ4Zf+VQh14yokaDBPf1Oa3oDUlv4Uw0nsH
-	6TVFZF56mk0mC6JGW8rUlDvsuvST4c1cib0z0Kau9O3gdYQpCUaJQ4psdsoY53g=
-X-Google-Smtp-Source: AGHT+IGlBnlDVHagXUvARTKh4F7dvKYhw6L2wgcgb9XFUgHOWtzaogoxzxw4GnvS6B0z13xrB7sNmw==
-X-Received: by 2002:a05:6602:154f:b0:82a:2385:74a6 with SMTP id ca18e2360f4ac-82a9618c4f3mr341912439f.5.1725632056435;
-        Fri, 06 Sep 2024 07:14:16 -0700 (PDT)
+        bh=GDDzZwDYU4Gy6OtpP5FWKJoDHuwx4Dvh85vp17WCwo4=;
+        b=dSBfPKssVFO3YKM5a+P+6udP+W65l+2A5mxvUVoBAHUfiKoxm2fZGA0BJ5FmZqA4a0
+         J1GxQFSs/CPjyVgrrc3AsY8jpp84Li+zJmCF5TsMnaXbR3c/m3fJh6Ac17+K7e6WQcO+
+         KwRmYmmxJ6fOzTaS7wEYznG39bt23u/1E493fBPnO7imJnlEcL17Ev1G5Sj3ef9BSWM5
+         0MDMD+APAAUlx9cVLE+yDRa/WjYlASUCPtZyJETMJE6CROv9uT1+Wq7MhaxFYJuTbzyw
+         hv61ZmlFwUAL2zKWIyRedF1Q1ufcJbPFmv6+BSr5ODMHyiHJ1BB7AQpeEp/V0rm7ypUD
+         nOVA==
+X-Gm-Message-State: AOJu0YzXZ082GaKdK4/9HfqaOcICzkinQzDCe33zNk2Z3fDfnv0pMAAb
+	Iz0Wn7KgBpRZRHuDP9dYmpzBDwBMz2cNrdljn5wtg0/WyHrNzTCoDMr6qplUMkM=
+X-Google-Smtp-Source: AGHT+IEqK3aHyVvIF5x9SIq59DQgu4GmB9tqUj2d49l/0SkuT/UStk0+VtWJJAOQEjuFzgu/WZZNlw==
+X-Received: by 2002:a05:6e02:525:b0:39e:69bc:a7fe with SMTP id e9e14a558f8ab-39f797b23cdmr65602215ab.10.1725632130496;
+        Fri, 06 Sep 2024 07:15:30 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4d08a22e664sm210986173.67.2024.09.06.07.14.15
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ced2de601csm4129939173.48.2024.09.06.07.15.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Sep 2024 07:14:16 -0700 (PDT)
-Message-ID: <cff1553c-d342-44e3-a685-9b074af87858@linuxfoundation.org>
-Date: Fri, 6 Sep 2024 08:14:14 -0600
+        Fri, 06 Sep 2024 07:15:30 -0700 (PDT)
+Message-ID: <ae32280e-e3a2-418c-a148-c59956b6521c@linuxfoundation.org>
+Date: Fri, 6 Sep 2024 08:15:29 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,22 +74,25 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH] selftests:resctrl: Fix build failure on archs without
  __cpuid_count()
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: shuah@kernel.org, fenghua.yu@intel.com,
- Reinette Chatre <reinette.chatre@intel.com>, usama.anjum@collabora.com,
- linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+To: Muhammad Usama Anjum <Usama.Anjum@collabora.com>, shuah@kernel.org,
+ fenghua.yu@intel.com, reinette.chatre@intel.com,
+ ilpo.jarvinen@linux.intel.com
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  Shuah Khan <skhan@linuxfoundation.org>
 References: <20240905180231.20920-1-skhan@linuxfoundation.org>
- <21267ef6-6fcf-2eed-a3da-2782d1e7013a@linux.intel.com>
+ <ad3d035e-be82-44c4-a850-a33889fcf717@collabora.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <21267ef6-6fcf-2eed-a3da-2782d1e7013a@linux.intel.com>
+In-Reply-To: <ad3d035e-be82-44c4-a850-a33889fcf717@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 9/6/24 04:12, Ilpo Järvinen wrote:
-> On Thu, 5 Sep 2024, Shuah Khan wrote:
+On 9/6/24 01:35, Muhammad Usama Anjum wrote:
+> Hi Shuah,
 > 
+> Thank you for fixing it.
+> 
+> On 9/5/24 11:02 PM, Shuah Khan wrote:
 >> When resctrl is built on architectures without __cpuid_count()
 >> support, build fails. resctrl uses __cpuid_count() defined in
 >> kselftest.h.
@@ -127,31 +129,48 @@ On 9/6/24 04:12, Ilpo Järvinen wrote:
 >> Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 >> Reported-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 >> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> 
-> When the small things from Muhammad and Reinette addressed, this seems
-> okay.
-> 
-> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> 
+> LGTM
+> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
-Will do. Thank you for the review.
+Thank you for the review and finding the problem to begin with.
+Much appreciated.
 
-> Thanks for the solution.
 > 
-> 
-> I'm still left to wonder if the x86 selftest is supposed to clobber
-> CFLAGS? It seems that problem is orthogonal to this cpuid/resctrl problem.
-> I mean this question from the perspective of coherency in the entire
-> kselftest framework, lib.mk seems to want to adjust CFLAGS but those
-> changes will get clobbered in the case of x86 selftest.
-> 
+> ...
+>> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+>> index 742782438ca3..ae3f0fa5390b 100644
+>> --- a/tools/testing/selftests/resctrl/cat_test.c
+>> +++ b/tools/testing/selftests/resctrl/cat_test.c
+>> @@ -290,12 +290,12 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
+>>   
+>>   static bool arch_supports_noncont_cat(const struct resctrl_test *test)
+>>   {
+>> -	unsigned int eax, ebx, ecx, edx;
+>> -
+>>   	/* AMD always supports non-contiguous CBM. */
+>>   	if (get_vendor() == ARCH_AMD)
+>>   		return true;
+>>   
+>> +#if defined(__i386__) || defined(__x86_64__) /* arch */
+>> +	unsigned int eax, ebx, ecx, edx;
+>>   	/* Intel support for non-contiguous CBM needs to be discovered. */
+>>   	if (!strcmp(test->resource, "L3"))
+>>   		__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
+>> @@ -305,6 +305,8 @@ static bool arch_supports_noncont_cat(const struct resctrl_test *test)
+>>   		return false;
+>>   
+>>   	return ((ecx >> 3) & 1);
+>> +#endif /* end arch */
+>> +	return false;
+> nit: empty line before return
 
-This isn't the case x86 clobbering the CFLAGS. This falls into the case
-of x86 customizing the flags for the test and the ones set by the common
-lib.mk might interfere with the flags it needs.
+Will do.
 
-There isn't anything here to fix based on the history of this test and
-lib.mk.
+> 
+>>   }
+>>   
+>>   static int noncont_cat_run_test(const struct resctrl_test *test,
+> 
 
 thanks,
 -- Shuah
