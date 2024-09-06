@@ -1,177 +1,200 @@
-Return-Path: <linux-kselftest+bounces-17423-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17424-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 078AA96FC97
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 22:21:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1EC596FCA1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 22:24:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 316231C221A6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 20:21:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 247BDB26408
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 20:24:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BA5C1D54FE;
-	Fri,  6 Sep 2024 20:21:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FiSGtLwH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08A181D61BE;
+	Fri,  6 Sep 2024 20:24:35 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A234B1D54EE
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Sep 2024 20:21:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1A6713D251;
+	Fri,  6 Sep 2024 20:24:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725654065; cv=none; b=GBkM774+bUYykrSjXWEZ8xNj++HMLHrj+A6BYV3M1Y8pJajFnMtVdH0Gn5vwCosI2u6RAIkw5YEYAO9FamKfmw+EXgo2aEzSO9hdJMVcY2uji5EnONVRoKXza5I/3vUlXK4iuj0Fz/7/5DZohqBam3M3i9BHDVjNOv7nm+q7eSU=
+	t=1725654274; cv=none; b=RUEKfSKyy0Uv8nllFt6FQ5b0OyYn+Q+Tzmd23eNAu+1H3rKgTZCW2STNafJAxeuoFE0v5EWOxoIoUsLZ7cigS3AIvAPe2XWtz7F44LQy+gEQt7fna1csllOAg2ZU3clAUh98l8ZvywOwwj4phr9QlnbSMQI2OiAiBKnWDAOJOtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725654065; c=relaxed/simple;
-	bh=rkcJ4yYWL1RB4xZm1DyitL9XX6jvdjCva7vANo1rBV8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=THeb0zmYCssVJTEf/hl+OfxILdUXpapOZZ1XeBzOnwSk71BKqVDJFLW+GZacB7g3YOKfHwFsCswppFpyiVQ3TEYi85BsfONZH0olS/xJnl3dnmMAR/k+Y1ncSbGQqwztLawEKJqhp3dwusKQDApmPsojgyNjFHGdL+CLJi7sDn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FiSGtLwH; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725654062; x=1757190062;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rkcJ4yYWL1RB4xZm1DyitL9XX6jvdjCva7vANo1rBV8=;
-  b=FiSGtLwHbt/nMKhFvsPPjyTm5TNtSmqHPRxrJT0M6JysHDy0lATk5QTr
-   sAwZxh8LGdAOKC7keJ6UceXDTz5Sn3FonAbl1oGdXibnkJtKn77JcwRoW
-   Lo46y4DimbFdAWG1gf4nCnlWkCI3X1hPyWe898GTY6+A3L8hld3q7lQUR
-   XKV8qS8Gq0XIEGjDbmmjZNJFJ3kTVWg7tGCfNee/REMua0hY8bryRT1Qc
-   gcaUk2ekUpeXNEwML8AOq/ODHHjFv7bKhbOL69+p2jB5yrxp7IS4lVmGu
-   aj4Nd1SnGUzWTuf8ahfxliShcSZdZPQEf28c9rATN7MsBPSjSv0wzC+6U
-   Q==;
-X-CSE-ConnectionGUID: cZzME1UDThqPvh1xXE4Ukg==
-X-CSE-MsgGUID: SEqRmeYhSIK/QbyDtBkFlA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="41936009"
-X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
-   d="scan'208";a="41936009"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 13:21:01 -0700
-X-CSE-ConnectionGUID: rblzNJqLRzGPHxi4Ixs4qg==
-X-CSE-MsgGUID: bv/n5GrgSue1TV+7bZiMAg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
-   d="scan'208";a="66798130"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by orviesa008.jf.intel.com with ESMTP; 06 Sep 2024 13:20:59 -0700
-Received: from [10.246.19.248] (mwajdecz-MOBL.ger.corp.intel.com [10.246.19.248])
-	by irvmail002.ir.intel.com (Postfix) with ESMTP id 1C94B2FC61;
-	Fri,  6 Sep 2024 21:20:58 +0100 (IST)
-Message-ID: <a01fbbcb-abe8-4629-b3b8-19c264166b49@intel.com>
-Date: Fri, 6 Sep 2024 22:20:57 +0200
+	s=arc-20240116; t=1725654274; c=relaxed/simple;
+	bh=jfXwEMIyOFbvNSGK8wfH4x/0ilT6Vwp9K8KNooX7VdU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Isex9E/1gti9jG+/VPgtKOQSX9nd5EBCBolLQoi32cf52ycT26V9midH2pVFbTorINwA1iHWMpjQIu7QZa/BKlZ6GzlndjbLLz9PXnTooIDnKxKCinU6uv+uNSm90ODQRMcxHkUrZhW+eZszKLfOww0Et8ipQfpkuXMKYqfHByY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fomichev.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-6bce380eb96so1672407a12.0;
+        Fri, 06 Sep 2024 13:24:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725654272; x=1726259072;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lSbi6dM4OZPilshyK6QPgYGxC4Yeo1GjN7m6drG40AY=;
+        b=iP8oSVV8BqlgKwvz1T3n2MxFvQgVS82PwGU/mrK25npjgDpvH9aa98a6DdnG6dG6SS
+         GZYLUgnQFeduCgF+bNYxnJGOS0e4Yn9cOr/bfFM7352nejVpm3YogpWq1TPdzO5UCO3G
+         n9xpoWk4ex0PuVTZZ1PlboxtWrQltZ3gLZMmuIiyJEyhtL3YN26kqjO2K+9u8mjgnLPH
+         OCOSRfecRAJl5CtPAoQYB5MjmEktclL5PId9cNG1mfvnBpn2wjoFnjxsqyyEGXrsaShp
+         VYLr2rzPPKBHAgpYqQtRVj1sqY251aAQhn2PVbaMKg2YL3gHyUFuevIWHJHDF9yz+AhN
+         rcPg==
+X-Forwarded-Encrypted: i=1; AJvYcCUqYeZz7tMShV6Gnd9U01fVuttP6b0ntmPDr/JmYbSo8Ie82LUDuPtn3H1X7AI+QLwMFpY=@vger.kernel.org, AJvYcCV32Tq0Eb9TdFNWsiw28xLZ9oPbQsUC26u4/CWvwARY/iKVgBCo9tFUiPN4lRdMT+snnsJN7RH5AnKSHA1+@vger.kernel.org, AJvYcCWO8p7hFN0QsadzzsLgsYZizdJ255eebkZa2iIrhpq+Lk9VsNlZwCXABwl+x/5GiGbidmaSjP2OUI5+VHtHg8mr@vger.kernel.org, AJvYcCWvVsJv3AcQD0sgutmOMYhnGUSerA965Pv4d+VI53suezAm9K+vj/hMv5NXIEfskG+WpDoftgcx@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAiCEqkO1ZWoYYqhiSperuDJhUgM70GhajUuYk0N2SN8qKlD1/
+	VY9wHdlv/6nd1cPzsVO+7mQCHmAYRtixe8/jnedIA2RZ8N3MroM=
+X-Google-Smtp-Source: AGHT+IH2CSru0wQMPbWy2AelMMQpCWm4/s2mJM25XT+w0TpO5N8IBxT6IatEFp0qvbY8weei9UVsQg==
+X-Received: by 2002:a05:6a21:150d:b0:1cf:1218:f87d with SMTP id adf61e73a8af0-1cf1d1b5c06mr4159288637.39.1725654271872;
+        Fri, 06 Sep 2024 13:24:31 -0700 (PDT)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71778520e90sm5229695b3a.36.2024.09.06.13.24.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Sep 2024 13:24:31 -0700 (PDT)
+Date: Fri, 6 Sep 2024 13:24:30 -0700
+From: Stanislav Fomichev <sdf@fomichev.me>
+To: Florian Kauer <florian.kauer@linutronix.de>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Hangbin Liu <liuhangbin@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jesper Dangaard Brouer <brouer@redhat.com>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v2 2/2] bpf: selftests: send packet to devmap
+ redirect XDP
+Message-ID: <Zttk_hTqQ-1wFTtI@mini-arch>
+References: <20240906-devel-koalo-fix-ingress-ifindex-v2-0-4caa12c644b4@linutronix.de>
+ <20240906-devel-koalo-fix-ingress-ifindex-v2-2-4caa12c644b4@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kunit: Fix kernel-doc for EXPORT_SYMBOL_IF_KUNIT
-To: Rae Moar <rmoar@google.com>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- David Gow <davidgow@google.com>
-References: <20240829183150.1616-1-michal.wajdeczko@intel.com>
- <CA+GJov5POvegznZutxHZuoUhxeHyseECHm4GW5NMR5vqZGWk4g@mail.gmail.com>
- <63952c61-d00b-421a-be9d-e7b940325f38@intel.com>
- <CA+GJov4ZR6Cfms-j8v3xVSj10L1_4JptQfYt6tqZGi1s=0cyBQ@mail.gmail.com>
-Content-Language: en-US
-From: Michal Wajdeczko <michal.wajdeczko@intel.com>
-In-Reply-To: <CA+GJov4ZR6Cfms-j8v3xVSj10L1_4JptQfYt6tqZGi1s=0cyBQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20240906-devel-koalo-fix-ingress-ifindex-v2-2-4caa12c644b4@linutronix.de>
 
-Hi Rae,
-
-On 06.09.2024 21:57, Rae Moar wrote:
-> On Thu, Aug 29, 2024 at 4:28 PM Michal Wajdeczko
-> <michal.wajdeczko@intel.com> wrote:
->>
->>
->>
->> On 29.08.2024 20:58, Rae Moar wrote:
->>> On Thu, Aug 29, 2024 at 11:32 AM Michal Wajdeczko
->>> <michal.wajdeczko@intel.com> wrote:
->>>>
->>>> While kunit/visibility.h is today not included in any generated
->>>> kernel documentation, also likely due to the fact that none of the
->>>> existing comments are correctly recognized as kernel-doc, but once
->>>> we decide to add this header and fix the tool, there will be:
->>>>
->>>> ../include/kunit/visibility.h:61: warning: Function parameter or
->>>> struct member 'symbol' not described in 'EXPORT_SYMBOL_IF_KUNIT'
->>>>
->>>> Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
->>>
->>> Hello!
->>>
->>> This looks good to me. Thanks for adding this. We will need to do a
->>> patch on making this recognized as a kernel-doc at some point.
->>
->> here it goes [1]
->>
->> [1]
->> https://lore.kernel.org/linux-doc/20240829202529.1660-1-michal.wajdeczko@intel.com/
+On 09/06, Florian Kauer wrote:
+> The current xdp_devmap_attach test attaches a program
+> that redirects to another program via devmap.
 > 
-> Hi Michal!
+> It is, however, never executed, so do that to catch
+> any bugs that might occur during execution.
 > 
-> Thanks for your fast response to this! It looks like this patch
-> changes the kernel-doc specification, 
-
-I'm not sure it changes anything as in the spec there is just:
-
-"The opening comment mark ``/**`` is used for kernel-doc comments."
-
-without any mention that it has to be at the start of the line.
-
-In fact above patch was able to detect (too) many mistakes in existing
-comments that were either incomplete or false kernel-doc, but once we
-fixed those, there is high chance patch will be accepted.
-
-Michal
-
-> which is a very worthwhile
-> conversation, but in this instance I intended to change the code
-> comments in visibility.h to match the current kernel-doc
-> specification. I am also happy to make those edits in a future patch.
+> Also, execute the same for a veth pair so that we
+> also cover the non-generic path.
 > 
-> Thanks!
-> -Rae
+> Warning: Running this without the bugfix in this series
+> will likely crash your system.
 > 
->>
->>>
->>> Reviewed-by: Rae Moar <rmoar@google.com>
->>>
->>> Thanks!
->>> -Rae
->>>
->>>> ---
->>>> Cc: Rae Moar <rmoar@google.com>
->>>> Cc: David Gow <davidgow@google.com>
->>>> ---
->>>>  include/kunit/visibility.h | 1 +
->>>>  1 file changed, 1 insertion(+)
->>>>
->>>> diff --git a/include/kunit/visibility.h b/include/kunit/visibility.h
->>>> index 0dfe35feeec6..efff77b58dd6 100644
->>>> --- a/include/kunit/visibility.h
->>>> +++ b/include/kunit/visibility.h
->>>> @@ -22,6 +22,7 @@
->>>>       * EXPORTED_FOR_KUNIT_TESTING namespace only if CONFIG_KUNIT is
->>>>       * enabled. Must use MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING)
->>>>       * in test file in order to use symbols.
->>>> +     * @symbol: the symbol identifier to export
->>>>       */
->>>>      #define EXPORT_SYMBOL_IF_KUNIT(symbol) EXPORT_SYMBOL_NS(symbol, \
->>>>             EXPORTED_FOR_KUNIT_TESTING)
->>>> --
->>>> 2.43.0
->>>>
->>>> --
->>>> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
->>>> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
->>>> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20240829183150.1616-1-michal.wajdeczko%40intel.com.
+> Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
+> ---
+>  .../selftests/bpf/prog_tests/xdp_devmap_attach.c   | 114 +++++++++++++++++++--
+>  1 file changed, 108 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+> index ce6812558287..c9034f8ae63b 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+> @@ -1,6 +1,9 @@
+>  // SPDX-License-Identifier: GPL-2.0
+> +#include <arpa/inet.h>
+>  #include <uapi/linux/bpf.h>
+>  #include <linux/if_link.h>
+> +#include <network_helpers.h>
+> +#include <net/if.h>
+>  #include <test_progs.h>
+>  
+>  #include "test_xdp_devmap_helpers.skel.h"
+> @@ -17,7 +20,7 @@ static void test_xdp_with_devmap_helpers(void)
+>  		.ifindex = IFINDEX_LO,
+>  	};
+>  	__u32 len = sizeof(info);
+> -	int err, dm_fd, map_fd;
+> +	int err, dm_fd, dm_fd_redir, map_fd;
+>  	__u32 idx = 0;
+>  
+>  
+> @@ -25,14 +28,11 @@ static void test_xdp_with_devmap_helpers(void)
+>  	if (!ASSERT_OK_PTR(skel, "test_xdp_with_devmap_helpers__open_and_load"))
+>  		return;
+>  
+> -	dm_fd = bpf_program__fd(skel->progs.xdp_redir_prog);
+> -	err = bpf_xdp_attach(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE, NULL);
+> +	dm_fd_redir = bpf_program__fd(skel->progs.xdp_redir_prog);
+> +	err = bpf_xdp_attach(IFINDEX_LO, dm_fd_redir, XDP_FLAGS_SKB_MODE, NULL);
+>  	if (!ASSERT_OK(err, "Generic attach of program with 8-byte devmap"))
+>  		goto out_close;
+>  
+> -	err = bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
+> -	ASSERT_OK(err, "XDP program detach");
+> -
+>  	dm_fd = bpf_program__fd(skel->progs.xdp_dummy_dm);
+>  	map_fd = bpf_map__fd(skel->maps.dm_ports);
+>  	err = bpf_prog_get_info_by_fd(dm_fd, &info, &len);
+> @@ -47,6 +47,23 @@ static void test_xdp_with_devmap_helpers(void)
+>  	ASSERT_OK(err, "Read devmap entry");
+>  	ASSERT_EQ(info.id, val.bpf_prog.id, "Match program id to devmap entry prog_id");
+>  
+> +	/* send a packet to trigger any potential bugs in there */
+> +	char data[10] = {};
+> +	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
+> +			    .data_in = &data,
+> +			    .data_size_in = 10,
+> +			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
+> +			    .repeat = 1,
+> +		);
+> +	err = bpf_prog_test_run_opts(dm_fd_redir, &opts);
+> +	ASSERT_OK(err, "XDP test run");
+> +
+> +	/* wait for the packets to be flushed */
+> +	kern_sync_rcu();
+> +
+> +	err = bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
+> +	ASSERT_OK(err, "XDP program detach");
+> +
+>  	/* can not attach BPF_XDP_DEVMAP program to a device */
+>  	err = bpf_xdp_attach(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE, NULL);
+>  	if (!ASSERT_NEQ(err, 0, "Attach of BPF_XDP_DEVMAP program"))
+> @@ -124,6 +141,88 @@ static void test_xdp_with_devmap_frags_helpers(void)
+>  	test_xdp_with_devmap_frags_helpers__destroy(skel);
+>  }
+>  
+> +static void test_xdp_with_devmap_helpers_veth(void)
+> +{
+> +	struct test_xdp_with_devmap_helpers *skel;
+
+skel needs to be initialized to NULL ....
+
+> +	struct bpf_prog_info info = {};
+> +	struct bpf_devmap_val val = {};
+> +	struct nstoken *nstoken = NULL;
+> +	__u32 len = sizeof(info);
+> +	int err, dm_fd, dm_fd_redir, map_fd, ifindex_dst;
+> +	__u32 idx = 0;
+> +
+> +	SYS(out_close, "ip netns add testns");
+> +	nstoken = open_netns("testns");
+> +	if (!ASSERT_OK_PTR(nstoken, "setns"))
+> +		goto out_close;
+
+... for this goto to not do test_xdp_with_devmap_helpers__destroy(garbage)
+
+pw-bot: cr
 
