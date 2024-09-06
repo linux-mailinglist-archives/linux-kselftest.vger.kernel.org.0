@@ -1,622 +1,293 @@
-Return-Path: <linux-kselftest+bounces-17371-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17373-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B59B96EC7F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 09:48:44 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0944296ED35
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 10:10:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7D6DB257DF
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 07:48:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C12C1F23884
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 08:10:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 907FA13DB9F;
-	Fri,  6 Sep 2024 07:45:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06F3D145A11;
+	Fri,  6 Sep 2024 08:10:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="RUYODZtZ";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="CnBwi2S8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A1D21581F9;
-	Fri,  6 Sep 2024 07:45:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=14.137.139.154
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725608750; cv=none; b=skjlSYjN47wEApzU9Ng+N8N5jTDmMOSWxu1AF7E5UvY0IbLrp9Mh+SWc3xksyZqrrQFoYVeakc2c81HyIYCP0eDwKc1P/p3Ve9OiqMlYBPu9VOLXGhGet81kK6NERA17v5NbJagXG/r5qh6vcM06GAJHpBRgWJxXeusL+GSDKBk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725608750; c=relaxed/simple;
-	bh=fRMKl8BAvC3hwEdq8HFO/eJSktOLaScN1SBMwp9wegA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=q6nni2A8vHRjb6Md3TNdo7i7XiR9J/UgW2zrI/uw6Cc0bLv05wUSipvSFR5dXhHVAqjj8Db3/6x5pCDp0pjE3WRE+Mgy3jg+UfuPIhYvVJpqyzmzL1kxS0ly/ww8SfGcAuVGIkd/nIxYB/LsFa8ishtZFpEECwqzgDXAzSx0tAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com; spf=pass smtp.mailfrom=huaweicloud.com; arc=none smtp.client-ip=14.137.139.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.51])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4X0SLc09SVz9v7Jf;
-	Fri,  6 Sep 2024 15:20:40 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.47])
-	by mail.maildlp.com (Postfix) with ESMTP id 6F8D6140155;
-	Fri,  6 Sep 2024 15:45:42 +0800 (CST)
-Received: from [127.0.0.1] (unknown [10.204.63.22])
-	by APP1 (Coremail) with SMTP id LxC2BwDndy8Us9pmPrpfAA--.21290S2;
-	Fri, 06 Sep 2024 08:45:41 +0100 (CET)
-Message-ID: <f0b4867451dd5fe2ba59e2dad4274314aa0660f9.camel@huaweicloud.com>
-Subject: Re: [PATCH v5 01/14] lib: Add TLV parser
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: Jani Nikula <jani.nikula@linux.intel.com>, zohar@linux.ibm.com, 
-	dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com, corbet@lwn.net, 
-	akpm@linux-foundation.org, paul@paul-moore.com, jmorris@namei.org, 
-	serge@hallyn.com, shuah@kernel.org, mcoquelin.stm32@gmail.com, 
-	alexandre.torgue@foss.st.com
-Cc: linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-security-module@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, wufan@linux.microsoft.com,
- pbrobinson@gmail.com,  zbyszek@in.waw.pl, hch@lst.de, mjg59@srcf.ucam.org,
- pmatilai@redhat.com,  jannh@google.com, dhowells@redhat.com,
- jikos@kernel.org, mkoutny@suse.com,  ppavlu@suse.com, petr.vorel@gmail.com,
- mzerqung@0pointer.de, kgold@linux.ibm.com,  Roberto Sassu
- <roberto.sassu@huawei.com>
-Date: Fri, 06 Sep 2024 09:45:21 +0200
-In-Reply-To: <87ikvaovnf.fsf@intel.com>
-References: <20240905150543.3766895-1-roberto.sassu@huaweicloud.com>
-	 <20240905150543.3766895-2-roberto.sassu@huaweicloud.com>
-	 <87ikvaovnf.fsf@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E32C23C463
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Sep 2024 08:10:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725610216; cv=fail; b=s04DK1psS07ipbEen8RO7RWr2wOmZyehLi4x1qwAlcMHC/PkVH3DAcHIWS8SZzc/KJTWt3o58abrPLDNN+Nsw6wOlAsoxkEisIJojc2G1HdSK2nmDN4Pqjr7e+4CdeR2aIw9FKUJVZCuLOq7GkVsI15l3XRWqMtjg1h6qlkgszw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725610216; c=relaxed/simple;
+	bh=KUQUYROvCQ/clJ5eQ9nJYD0sMyupJGSIFTgAXDvjupg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=bzEwEhqKT4nz5JyYYzdrJS1J0ifcmrBsdNKFaeN09DFYdW0INZNhPbTzZSmfe2fmN0QCUjMyHaYUEOp8YSCby90dqIDyCnXbRXlTtUzmVGKulzXYhnD56JwDNC6j5j0za4Y6sp3kLTxtq2LfedpHPewLwHhl5q8VJFBemlfZNag=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=RUYODZtZ; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=CnBwi2S8; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4863fwkH014322;
+	Fri, 6 Sep 2024 08:09:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	date:from:to:cc:subject:message-id:references:content-type
+	:in-reply-to:mime-version; s=corp-2023-11-20; bh=Cm7G4jufxBoV2AP
+	fjQF1n7UETR0tQ2fV1g4gKiS/ZeM=; b=RUYODZtZ4A97L7ljPKw5z9Vo7/mDqr9
+	kjHseMIMeh5Fo+Wf0IEs8pQ2h/X3baoqNY2ejjPQxa2cNuy5H16VplqcgUxRpiep
+	4PhMlZqaz+IFbW82BrJ/OCNC2hhKlu+BsmiwY4zOQUBTcID1DugVy/uN8dR5b6fo
+	fwtEKcdbG+GIKYZBEuwTMP4WhjdQQXwmDBRkTOsmouoSZOKnGzfwlH9oyw2go4P4
+	cZ9lnM3xm2oUBMxMQNn5tC2G4jIcBZu+bHzxpNRCOkaQBuKYmOF4SbZgNutbucry
+	/A72GX+ULOcjtf9mQwHFW4cu4tUntl3GBtgcTmxIaxc35RMnIdl/uFg==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41fhwk927b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 06 Sep 2024 08:09:35 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4867HiUh000322;
+	Fri, 6 Sep 2024 08:09:35 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2045.outbound.protection.outlook.com [104.47.55.45])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 41fhybp5fp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 06 Sep 2024 08:09:35 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=taUQjuEtcgQjRTUFomXQMv6Pkxi3fk0R3k+wmTrAHABsm63qdvg4friA7fLB+BCszhTwIwa0J9wHW18a80DMQ4Z8bGT0CydpaZngzIXugBuQIvzuRf9rb4NoKnx6C0We9FMqJjmDDUmRhF7tg7/F4UplaEyF8m9x4wnOJFExLx1gSrmlre14xeqGmHN3OOfCVyDxTOkdCw+gjUTvitJNE4k2ox7FAZg2wHJR4Sf31XxJA5pVoLC98BrkQuLj2bzgmYoAvm4DrRhRyeYz3aKPEca6FHTRXqxj+ME3yUS/AZp9sas4DeeiLGTfZSSX4aWix99xNuhcnKnXrIXTPR4E4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Cm7G4jufxBoV2APfjQF1n7UETR0tQ2fV1g4gKiS/ZeM=;
+ b=vf06GWFnrJLDB8AeunCfPsTW/TwSwAboHMsk3kSFGcruaWVq3nxQQVmVC53TVbaxURSSmtm0X32FxfnXKxFsFDh8Hm4qT4YxwSYLkrOePVrXAp9wjflNWVLHxpVDbPbV7+i5qKI8thV4ao6wCIE8U2/dvgkFbc7XP26YV+aDwZEImGcJOfFuNW9rDv5+jFgCljsiy8CmWL9q4d6W7Q1PtBB9I751n0cct38IqT1C6STgMBD8vcLbyvXOhOyWTdpYfPdExEtx1mRAcBmG9COiiv5PMojxC+IxPBay7wZfUyfxS9BgzQntaPjQhwCB9lfR80kjHOMc638qCnEiJHDXkw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Cm7G4jufxBoV2APfjQF1n7UETR0tQ2fV1g4gKiS/ZeM=;
+ b=CnBwi2S8O3pHgFugPuiqeWn9ujVGMk0wnfIf61rhx5c0pgDSAj1L9ctb3ZR6WeS2o5xHmBpaCdfJgSA4gFjctk4kAgenvaLKGJIgT8a4hopsurHIpB3ocVF6ZumaKMsVuyWK5mL3suzGVW9BQiKR47hzYerPamoo61IpASX2ZHc=
+Received: from SJ0PR10MB5613.namprd10.prod.outlook.com (2603:10b6:a03:3d0::5)
+ by DS0PR10MB7432.namprd10.prod.outlook.com (2603:10b6:8:155::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.24; Fri, 6 Sep
+ 2024 08:09:31 +0000
+Received: from SJ0PR10MB5613.namprd10.prod.outlook.com
+ ([fe80::4239:cf6f:9caa:940e]) by SJ0PR10MB5613.namprd10.prod.outlook.com
+ ([fe80::4239:cf6f:9caa:940e%5]) with mapi id 15.20.7939.016; Fri, 6 Sep 2024
+ 08:09:31 +0000
+Date: Fri, 6 Sep 2024 09:02:48 +0100
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Charlie Jenkins <charlie@rivosinc.com>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>, guoren <guoren@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Naveen N Rao <naveen@kernel.org>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Andreas Larsson <andreas@gaisler.com>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, shuah <shuah@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>, Michal Hocko <mhocko@suse.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        Chris Torek <chris.torek@gmail.com>,
+        Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org,
+        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-abi-devel@lists.sourceforge.net
+Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
+ 47 bits
+Message-ID: <af6d9aa1-8b25-4f74-90ec-68791767db7a@lucifer.local>
+References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
+ <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
+ <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
+X-ClientProxiedBy: LO4P265CA0233.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:315::19) To SJ0PR10MB5613.namprd10.prod.outlook.com
+ (2603:10b6:a03:3d0::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-CM-TRANSID:LxC2BwDndy8Us9pmPrpfAA--.21290S2
-X-Coremail-Antispam: 1UD129KBjvAXoW3Kw15KFWDKr43KFyDZFWDArb_yoW8Ar1kJo
-	ZxuFW7Ar45Zr1UC3WUAw48Zr1UArWrWr43Aw43G3y3ua409a1UKr45Kw43W3yfCws8KF4U
-	tasxX343Za1jgrn5n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7v73VFW2AGmfu7bjvjm3
-	AaLaJ3UjIYCTnIWjp_UUUY27kC6x804xWl14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK
-	8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4
-	AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF
-	7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I
-	0E14v26r4j6r4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-	6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-	Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JM4IIrI8v6xkF7I0E8cxan2IY04v7MxkF7I0En4kS
-	14v26r4a6rW5MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I
-	8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWrXVW8
-	Jr1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7
-	CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v2
-	6r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07
-	jxCztUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgASBGbaZXoDDAABs5
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|DS0PR10MB7432:EE_
+X-MS-Office365-Filtering-Correlation-Id: 21ee1331-24b4-489f-af3a-08dcce4b3c8a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?0X5SFefHBI4D+Y1+A3WnzXV6/QM0R7FIe+iRpLVqQQ2BFnrp6/VsEUyZQVcQ?=
+ =?us-ascii?Q?4kRe0JvsjxZoSyzERdumQT2d0eH+qJkMVEo3cN6okPuuvIW3jzSl9P33giEQ?=
+ =?us-ascii?Q?zHZ7OPvrgL6YywO5T36x3tsEksAhCtqACIheH5FujeicvXMn5vlWUNk0T3f0?=
+ =?us-ascii?Q?A8SIZfHtG1B34W0KZ0dfadLT8eb0F46zt+Xsxw7/Cy+4RlBbFY5pM7ghdSMq?=
+ =?us-ascii?Q?W87k4pwweud+UcN5b+JX3c0vH9vyvMXdC5A4DrFnBz7SWs3R05LyEb0TYR8H?=
+ =?us-ascii?Q?pNUiKJm22C90jrEv6jUNK/TgJ6mwPsJC8nbHLo9bXaWKCRj7wcYHpsyQlk5M?=
+ =?us-ascii?Q?eL1f1ZIDCx+Z4xEs0mwM4LGpDOQKi8bmKz5nB4A0z5A153kkwwFkIkPiJ6xn?=
+ =?us-ascii?Q?Xyf+Dtqf1OXqEX7hpsqAYLEvdki975jnET+r0YVu83FfX+fpao9qOMjsd8Kh?=
+ =?us-ascii?Q?MfAL+rr5qEMrzm5eOCeoF5SB+ZNS+RYbcP84M88jHZjhSV6BDEKQC7u/oslV?=
+ =?us-ascii?Q?m0END9zzjZU/XYqRcz1AoCh/+TKZHaYHlRcQT2bbwMpeY1ukrh27+KBKPXLV?=
+ =?us-ascii?Q?5Ctl7ySGZtKKAtOCDjbc0pl78oSP1tQV01W6005hhgb3ftRbUjmc93XByqL3?=
+ =?us-ascii?Q?1D9cKvSNSUBI9bLf9PMdr+V017XDwj7yTdKtSghkamuKKRk4oxUd6VvCY5uq?=
+ =?us-ascii?Q?E3mUf6/qhAfz7plSkOz99iWVUs/ga84bQfoUcKep/ytwddwJuydmPpvhbcZ0?=
+ =?us-ascii?Q?fhB3UHMH8Gob5k17IF//xlNM68hfI4JBkBvKerLX9K3KSistWriMi4i0UyEn?=
+ =?us-ascii?Q?q4kVu0ChFEOVB6qc8Y5fYhJZts7FHb57zyPVaSXbdIED4/ssRC3d+uvsmdvL?=
+ =?us-ascii?Q?AW3/2rSB3weAskRfBtnakqNMN7Gly2Xz3+8L+FlKtBL1LOXQNocXj8YXkNca?=
+ =?us-ascii?Q?HDP8BM2WgiUzlJjv2isUs6ElvRKdWp5liLsty7nwI9i0oDhyI4jI4B1SoGeF?=
+ =?us-ascii?Q?XeUmwLhMoSK/UDesk3z8mv6WcQl1X5QtjQGptB4l2pKZpa9ioV36obDHk3Og?=
+ =?us-ascii?Q?qNwPH8N6mxaVL652Ir2v7OrBVNGELpVhCMfWV6r4uChuIDVcf0uyGmxPNC9/?=
+ =?us-ascii?Q?3O/bZkB+fcHtKuKAy0Ghmu56az92OgUxgZmsb6O4gphdYlRhP/u1B4EjvF8J?=
+ =?us-ascii?Q?Mv0sEAM0TAOqKC+SNPLTFzhtYh38jv/VVE2Egq+BeyCCUXNFjz/jeMHsMTqV?=
+ =?us-ascii?Q?qSOzCDNdfinmVSiBRJwoWeqgeCNocwg2mvYw6VaU8WpdcXkVrYYLWAE/rvI8?=
+ =?us-ascii?Q?QS8HBinh3DIedNc1ae6Ski46qaNvoJcBK2PRd0OkmA4NrA=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?dgyB4a4Y2hlHdKz4DqMf+bSimMo3TSmCu5kPW/k/HBQJYTbR8lDOjo0bSMKF?=
+ =?us-ascii?Q?YKWcJnD8UQ1sLH7MDrosQWaQshwd/mQsjugEw7CyoRuafVRbZR1zxSXEuBmN?=
+ =?us-ascii?Q?gXLCLicVmb6qN8gw7wV5NDFuXf6SYMAos9rrry2RuSY30RY/fAXLGDX43hqw?=
+ =?us-ascii?Q?WnyAVCVFL9MAMpWzC8zN7eSB+IvIFJexGvRzToGv1SV+gpalb+udrHA8J8AV?=
+ =?us-ascii?Q?ZVjqAgSYxTFEpIvCd2CrUNxmN0wkyDHGnRZwUWQexC24ZxDcT0c0xsFh8enU?=
+ =?us-ascii?Q?w3g7wUBtWlhPfQxIScbxtP4eexWEmXTsAD5H3rRyqPAOTR3Gik9I34V99B6w?=
+ =?us-ascii?Q?HqVkO4kiOQTbQqwYZfnjiU2pSqlNp3B80KRkuIZH3gh7650jIuWnvXhQka32?=
+ =?us-ascii?Q?/i/aaTsCxqSUjS+n2rGMKPJ5biRVTW8F4ILO38nzAFPk0/6X0+CTQwRzvrvm?=
+ =?us-ascii?Q?F7Kv4bCkyKmXYF9gb5tKGVqXZ3SF10Crbkc66MGp8bDMLnJNRYPsQUy2OAur?=
+ =?us-ascii?Q?dqFMjzptnGTybGQd5QeyHAbGT5fgIpAG0Y7l/CpQVl99KkQyyhEkeekxFMtN?=
+ =?us-ascii?Q?HGxN1WBVmS5A0OJgCR+Ikm7rfK5E8xqHzRwVThfrpzNfrKrCYQTE3m8iMCcc?=
+ =?us-ascii?Q?28OoTfg9vQqiGPsiDJyhO/IyUwerdnIC6hAPrhL2tnpFKKIEf3ryGyvvWs33?=
+ =?us-ascii?Q?IKZ1ktdWaxr739MGvkHPV+cX6oeR8FyIUGCbcAeInuX4UbOYlS3MPSv3l3hN?=
+ =?us-ascii?Q?8V5dYoCE7kBDeS3bpU410KARNoBR8SG4VAwwpIqJ5LfwUnsp/6V3Azfg+zRZ?=
+ =?us-ascii?Q?81Lln8wyhm4I8h+VywvDP6MLy1eXpqLZXrhqjxmEELu/7F+80GuQfFL3g8tE?=
+ =?us-ascii?Q?1d/pHB3E0hyGvdPKl3YhJ3s6FLw+X949+pUWT2YpLIP3F0BvfzDDRLl2iZLE?=
+ =?us-ascii?Q?DhAKsiCSxTnr0L+b3/23QNqKElZqSHe+q+ko6TMbpBLX97ObfnCXVSqf7hWf?=
+ =?us-ascii?Q?l4Pc13OUR7H7JWrBxneODdI/zZn5AuKm+5HjfYyKYSuc66AE7BiIEzvZYs2A?=
+ =?us-ascii?Q?IJEoh+GA/ycAvsgFaYaAhRl4QTHz4WYCE0txRcSzvl8++BmkhVoOtY5KWW3m?=
+ =?us-ascii?Q?YFzN6QaWustpACNRF/YkI4B/nQPV1cRH8NZmIyfGUKxbVGNY625qZISrulDh?=
+ =?us-ascii?Q?FYJJsVq/x1Di/PmOJlaIMNDUusVFJDaI8S75F50aWcR2XRtAgi7sMb2RLXnS?=
+ =?us-ascii?Q?93Wb+m5m54FOPPSILIQ/AEQmAQ95NgNcqU2h4QihyO1dMFuJXBt13EoKq1Zn?=
+ =?us-ascii?Q?Ob0SymKA7Yir5wF6eqRrF3gkU/3QcazyY3xJ9PLoIUXLAnbtmCI4SNJvGOFB?=
+ =?us-ascii?Q?1F9bvSvO36xk1HikeeeSUeQK+Jg+QmFlu8+WQztQcCwdQS/+AtuHPuAPZQEk?=
+ =?us-ascii?Q?OKG+LFX9Sg2keEwa2x3MW/2OYkgph8xgaphz5gJ1wjDagDuIW/sAj8QnBe6M?=
+ =?us-ascii?Q?8mrW9FgtSc4Ojtg6bzr3C7pd8+KLxcsoP/Wc01QaUjiHKODA+MpyW41Hju/p?=
+ =?us-ascii?Q?uiHVm5X+3iON0Hwh8Gm5WZLz2FS+tOnN2xn0L5r37Mcky1+Pd8lUToB4xDkk?=
+ =?us-ascii?Q?XA=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	ONSmsIOWiYygRYBYWdnY8OqJncPWo4conkmEErOY0eDFVnTeDclN+dzizCoirl+xdEXa8Tn3UVYHEY1PaG0A4fHRMtY9rloTC9W2q44h3+jDa6F5/PkaA25VxMBttfvNj+ikORsEiETpd90bcyTapmpoic2Qg8hMhBlFWdjAVN451HfLoNWphkKkp9odv3QaY8I3mT0XoEwPx6y1ezLT9+W2ec1M0O5IMq6dTCJtMJC31G/5grGFEaLvu5Mp456PWEpIwvNG6iy3WchXkV5J3OwoCv3nvNavI3pRV3MiDavNYRAIDHv5KBn3kAUec+pioDVAugkFpqFwV95dJ3stx8sCEnKswekBSLdDZ9IqY+VPFz9/fT5qY1aEs16fUOIhysxUkFUewNkCjDS95uF4tuN0tTQR0D8hqzJpBgae7HEG2brdKAiZiTN6NGz2eNO9u2WWAcgGWFWv11+t4Y/5w8+3yFIoSA0iHH7Xw1ypFFsvtX9MkgNUhj+iVhs7xbSuFSiJp4QKdowNWe2Ju2pu4T2vv/j+Rz+gmnsmmviXSaezKh5dTdDJos6lytq0XaHxYeXdCh1B2ZUbhsHmAhbtAyA/MGdmfVDguLuhTw0ytNQ=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 21ee1331-24b4-489f-af3a-08dcce4b3c8a
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB5613.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2024 08:09:31.4687
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9s73jYkzerbb6h3CHmq/B7YTV5IN+n1z+O7/A/6tkCvYb6OLlSxdd7W3tuvgRR1pdZ6GcRagfLyNotBXm1wqFGQ8KsAq8c29I+NnRBicS5k=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB7432
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-05_17,2024-09-05_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 adultscore=0
+ mlxlogscore=883 bulkscore=0 phishscore=0 suspectscore=0 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2408220000 definitions=main-2409060057
+X-Proofpoint-GUID: KV1_RuhPdeUB0Ht60VD5Tu2Gchc0IGOg
+X-Proofpoint-ORIG-GUID: KV1_RuhPdeUB0Ht60VD5Tu2Gchc0IGOg
 
-On Thu, 2024-09-05 at 20:30 +0300, Jani Nikula wrote:
-> On Thu, 05 Sep 2024, Roberto Sassu <roberto.sassu@huaweicloud.com> wrote:
-> > From: Roberto Sassu <roberto.sassu@huawei.com>
-> >=20
-> > Add a parser of a generic Type-Length-Value (TLV) format:
-> >=20
-> > +-----------------+------------------+-----------------+
-> > > data type (u64) | num fields (u64) | total len (u64) | # header
-> > +--------------+--+---------+--------+---------+-------+
-> > > field1 (u64) | len1 (u64) | value1 (u8 len1) |
-> > +--------------+------------+------------------+
-> > >     ...      |    ...     |        ...       |         # data
-> > +--------------+------------+------------------+
-> > > fieldN (u64) | lenN (u64) | valueN (u8 lenN) |
-> > +--------------+------------+------------------+
->=20
-> Okay, take this with a grain of salt. I'm actually not interested in
-> your use case, but the generic part here. But hear me out.
->=20
-> Why do you need to have num fields in the header? I'd think the generic
-> TLV would have tag/length/value, where value may contain more TLV, or
-> not, depending on the use case specific tag. The same parser can parse
-> everything recursively, with no special handling for headers. To me,
-> that's the great part about TLV.
+On Fri, Sep 06, 2024 at 07:17:44AM GMT, Arnd Bergmann wrote:
+> On Thu, Sep 5, 2024, at 21:15, Charlie Jenkins wrote:
+> > Create a personality flag ADDR_LIMIT_47BIT to support applications
+> > that wish to transition from running in environments that support at
+> > most 47-bit VAs to environments that support larger VAs. This
+> > personality can be set to cause all allocations to be below the 47-bit
+> > boundary. Using MAP_FIXED with mmap() will bypass this restriction.
+> >
+> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+>
+> I think having an architecture-independent mechanism to limit the size
+> of the 64-bit address space is useful in general, and we've discussed
+> the same thing for arm64 in the past, though we have not actually
+> reached an agreement on the ABI previously.
 
-Hi Jani
+The thread on the original proposals attests to this being rather a fraught
+topic, and I think the weight of opinion was more so in favour of opt-in
+rather than opt-out.
 
-the purpose of the number of entries is that the kernel uses it to
-correctly size the hash table, before adding digests to it.
+>
+> > @@ -22,6 +22,7 @@ enum {
+> >  	WHOLE_SECONDS =		0x2000000,
+> >  	STICKY_TIMEOUTS	=	0x4000000,
+> >  	ADDR_LIMIT_3GB = 	0x8000000,
+> > +	ADDR_LIMIT_47BIT = 	0x10000000,
+> > };
+>
+> I'm a bit worried about having this done specifically in the
+> personality flag bits, as they are rather limited. We obviously
+> don't want to add many more such flags when there could be
+> a way to just set the default limit.
 
-It also allows to group digests together and define attributes for all
-of them (e.g. the hash algorithm).
+Since I'm the one who suggested it, I feel I should offer some kind of
+vague defence here :)
 
-You can also have multiple data blocks in the same file, and the header
-allows to go to the ones of interest.
+We shouldn't let perfect be the enemy of the good. This is a relatively
+straightforward means of achieving the aim (assuming your concern about
+arch_get_mmap_end() below isn't a blocker) which has the least impact on
+existing code.
 
-> Also, making generic TLV have u64 tag and length is huge waste in most
-> use cases. Saving one byte requires 16 bytes of tag and length. You
-> could encode tag and length with UTF-8. Sure, it's wasteful if you need
-> an enormous amount of tags or huge lengths, but it's efficient for most
-> use cases.
+Of course we can end up in absurdities where we start doing
+ADDR_LIMIT_xxBIT... but again - it's simple, shouldn't represent an
+egregious maintenance burden and is entirely opt-in so has things going for
+it.
 
-You are right, it is a huge size. You can introduce new fields, but not
-modify the tag and length size for retrocompatibility.
+>
+> It's also unclear to me how we want this flag to interact with
+> the existing logic in arch_get_mmap_end(), which attempts to
+> limit the default mapping to a 47-bit address space already.
 
-Ok, I see your point for UTF-8. Let's see, I like how simple is the
-parser now.
+How does ADDR_LIMIT_3GB presently interact with that?
 
-Thanks
-
-Roberto
-
-> Anyway, just my thoughts.
->=20
->=20
-> BR,
-> Jani.
->=20
-> >=20
-> > [same as above, repeated N times]
-> >=20
-> > Each adopter can define its own data types and fields. The TLV parser d=
-oes
-> > not need to be aware of those, but lets the adopter obtain the data and
-> > decide how to continue.
-> >=20
-> > After parsing each TLV header, call the header callback function with t=
-he
-> > callback data provided by the adopter. The latter can return 0, to skip
-> > processing of the TLV data, 1 to process the TLV data, or a negative va=
-lue
-> > to stop processing the TLV data.
-> >=20
-> > After processing a TLV data entry, call the data callback function also
-> > with the callback data provided by the adopter. The latter can decide h=
-ow
-> > to interpret the TLV data entry depending on the field ID.
-> >=20
-> > Nesting TLVs is also possible, the data callback function can call
-> > tlv_parse() to parse the inner structure.
-> >=20
-> > Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> > ---
-> >  MAINTAINERS                     |   8 ++
-> >  include/linux/tlv_parser.h      |  48 +++++++
-> >  include/uapi/linux/tlv_parser.h |  62 +++++++++
-> >  lib/Kconfig                     |   3 +
-> >  lib/Makefile                    |   2 +
-> >  lib/tlv_parser.c                | 221 ++++++++++++++++++++++++++++++++
-> >  lib/tlv_parser.h                |  17 +++
-> >  7 files changed, 361 insertions(+)
-> >  create mode 100644 include/linux/tlv_parser.h
-> >  create mode 100644 include/uapi/linux/tlv_parser.h
-> >  create mode 100644 lib/tlv_parser.c
-> >  create mode 100644 lib/tlv_parser.h
-> >=20
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 8766f3e5e87e..ba8d5c137bef 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -23055,6 +23055,14 @@ W:	http://sourceforge.net/projects/tlan/
-> >  F:	Documentation/networking/device_drivers/ethernet/ti/tlan.rst
-> >  F:	drivers/net/ethernet/ti/tlan.*
-> > =20
-> > +TLV PARSER
-> > +M:	Roberto Sassu <roberto.sassu@huawei.com>
-> > +L:	linux-kernel@vger.kernel.org
-> > +S:	Maintained
-> > +F:	include/linux/tlv_parser.h
-> > +F:	include/uapi/linux/tlv_parser.h
-> > +F:	lib/tlv_parser.*
-> > +
-> >  TMIO/SDHI MMC DRIVER
-> >  M:	Wolfram Sang <wsa+renesas@sang-engineering.com>
-> >  L:	linux-mmc@vger.kernel.org
-> > diff --git a/include/linux/tlv_parser.h b/include/linux/tlv_parser.h
-> > new file mode 100644
-> > index 000000000000..6d9a655d9ec9
-> > --- /dev/null
-> > +++ b/include/linux/tlv_parser.h
-> > @@ -0,0 +1,48 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
-> > + *
-> > + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> > + *
-> > + * Header file of TLV parser.
-> > + */
-> > +
-> > +#ifndef _LINUX_TLV_PARSER_H
-> > +#define _LINUX_TLV_PARSER_H
-> > +
-> > +#include <uapi/linux/tlv_parser.h>
-> > +
-> > +/**
-> > + * typedef hdr_callback - Callback after parsing TLV header
-> > + * @callback_data: Opaque data to supply to the header callback functi=
-on
-> > + * @data_type: TLV data type
-> > + * @num_entries: Number of TLV data entries
-> > + * @total_len: Total length of TLV data
-> > + *
-> > + * This callback is invoked after a TLV header is parsed.
-> > + *
-> > + * Return: 0 to skip processing, 1 to do processing, a negative value =
-on error.
-> > + */
-> > +typedef int (*hdr_callback)(void *callback_data, __u64 data_type,
-> > +			    __u64 num_entries, __u64 total_len);
-> > +
-> > +/**
-> > + * typedef data_callback - Callback after parsing TLV data entry
-> > + * @callback_data: Opaque data to supply to the data callback function
-> > + * @field: TLV field ID
-> > + * @field_data: Data of a TLV data field
-> > + * @field_len: Length of @field_data
-> > + *
-> > + * This callback is invoked after a TLV data entry is parsed.
-> > + *
-> > + * Return: 0 on success, a negative value on error.
-> > + */
-> > +typedef int (*data_callback)(void *callback_data, __u64 field,
-> > +			     const __u8 *field_data, __u64 field_len);
-> > +
-> > +int tlv_parse(hdr_callback hdr_callback, void *hdr_callback_data,
-> > +	      data_callback data_callback, void *data_callback_data,
-> > +	      const __u8 *data, size_t data_len, const char **data_types,
-> > +	      __u64 num_data_types, const char **fields, __u64 num_fields);
-> > +
-> > +#endif /* _LINUX_TLV_PARSER_H */
-> > diff --git a/include/uapi/linux/tlv_parser.h b/include/uapi/linux/tlv_p=
-arser.h
-> > new file mode 100644
-> > index 000000000000..fbd4fc403ac7
-> > --- /dev/null
-> > +++ b/include/uapi/linux/tlv_parser.h
-> > @@ -0,0 +1,62 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-> > +/*
-> > + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
-> > + *
-> > + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> > + *
-> > + * Implement the user space interface for the TLV parser.
-> > + */
-> > +
-> > +#ifndef _UAPI_LINUX_TLV_PARSER_H
-> > +#define _UAPI_LINUX_TLV_PARSER_H
-> > +
-> > +#include <linux/types.h>
-> > +
-> > +/*
-> > + * TLV format:
-> > + *
-> > + * +-----------------+------------------+-----------------+
-> > + * | data type (u64) | num fields (u64) | total len (u64) | # header
-> > + * +--------------+--+---------+--------+---------+-------+
-> > + * | field1 (u64) | len1 (u64) | value1 (u8 len1) |
-> > + * +--------------+------------+------------------+
-> > + * |     ...      |    ...     |        ...       |         # data
-> > + * +--------------+------------+------------------+
-> > + * | fieldN (u64) | lenN (u64) | valueN (u8 lenN) |
-> > + * +--------------+------------+------------------+
-> > + *
-> > + * [same as above, repeated N times]
-> > + *
-> > + */
-> > +
-> > +/**
-> > + * struct tlv_hdr - Header of TLV format
-> > + * @data_type: Type of data to parse
-> > + * @num_entries: Number of data entries provided
-> > + * @_reserved: Reserved for future use (must be equal to zero)
-> > + * @total_len: Total length of the data blob, excluding the header
-> > + *
-> > + * This structure represents the header of the TLV data format.
-> > + */
-> > +struct tlv_hdr {
-> > +	__u64 data_type;
-> > +	__u64 num_entries;
-> > +	__u64 _reserved;
-> > +	__u64 total_len;
-> > +} __attribute__((packed));
-> > +
-> > +/**
-> > + * struct tlv_data_entry - Data entry of TLV format
-> > + * @field: Data field identifier
-> > + * @length: Data length
-> > + * @data: Data
-> > + *
-> > + * This structure represents a TLV data entry.
-> > + */
-> > +struct tlv_data_entry {
-> > +	__u64 field;
-> > +	__u64 length;
-> > +	__u8 data[];
-> > +} __attribute__((packed));
-> > +
-> > +#endif /* _UAPI_LINUX_TLV_PARSER_H */
-> > diff --git a/lib/Kconfig b/lib/Kconfig
-> > index b38849af6f13..9141dcfc1704 100644
-> > --- a/lib/Kconfig
-> > +++ b/lib/Kconfig
-> > @@ -777,3 +777,6 @@ config POLYNOMIAL
-> > =20
-> >  config FIRMWARE_TABLE
-> >  	bool
-> > +
-> > +config TLV_PARSER
-> > +	bool
-> > diff --git a/lib/Makefile b/lib/Makefile
-> > index 322bb127b4dc..c6c3614c4293 100644
-> > --- a/lib/Makefile
-> > +++ b/lib/Makefile
-> > @@ -392,6 +392,8 @@ obj-$(CONFIG_USERCOPY_KUNIT_TEST) +=3D usercopy_kun=
-it.o
-> >  obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) +=3D devmem_is_allowed.o
-> > =20
-> >  obj-$(CONFIG_FIRMWARE_TABLE) +=3D fw_table.o
-> > +obj-$(CONFIG_TLV_PARSER) +=3D tlv_parser.o
-> > +CFLAGS_tlv_parser.o +=3D -I lib
-> > =20
-> >  # FORTIFY_SOURCE compile-time behavior tests
-> >  TEST_FORTIFY_SRCS =3D $(wildcard $(src)/test_fortify/*-*.c)
-> > diff --git a/lib/tlv_parser.c b/lib/tlv_parser.c
-> > new file mode 100644
-> > index 000000000000..5d54844ab8d7
-> > --- /dev/null
-> > +++ b/lib/tlv_parser.c
-> > @@ -0,0 +1,221 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
-> > + *
-> > + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> > + *
-> > + * Implement the TLV parser.
-> > + */
-> > +
-> > +#define pr_fmt(fmt) "tlv_parser: "fmt
-> > +#include <tlv_parser.h>
-> > +
-> > +/**
-> > + * tlv_parse_hdr - Parse TLV header
-> > + * @hdr_callback: Callback function to call after parsing header
-> > + * @hdr_callback_data: Opaque data to supply to the header callback fu=
-nction
-> > + * @data: Data to parse (updated)
-> > + * @data_len: Length of @data (updated)
-> > + * @parsed_num_entries: Parsed number of data entries (updated)
-> > + * @parsed_total_len: Parsed length of TLV data, excluding the header =
-(updated)
-> > + * @data_types: Array of data type strings
-> > + * @num_data_types: Number of elements of @data_types
-> > + *
-> > + * Parse the header of the TLV data format, move the data pointer to t=
-he TLV
-> > + * data part, decrease the data length by the length of the header, an=
-d provide
-> > + * the number of entries and the total data length extracted from the =
-header.
-> > + *
-> > + * Before returning, call the header callback to let the callback supp=
-lier
-> > + * decide whether or not to process the subsequent TLV data.
-> > + *
-> > + * Return: 1 to process the data entries, 0 to skip, a negative value =
-on error.
-> > + */
-> > +static int tlv_parse_hdr(hdr_callback hdr_callback, void *hdr_callback=
-_data,
-> > +			 const __u8 **data, size_t *data_len,
-> > +			 __u64 *parsed_num_entries, __u64 *parsed_total_len,
-> > +			 const char **data_types, __u64 num_data_types)
-> > +{
-> > +	__u64 parsed_data_type;
-> > +	struct tlv_hdr *hdr;
-> > +
-> > +	if (*data_len < sizeof(*hdr)) {
-> > +		pr_debug("Data blob too short, %lu bytes, expected %lu\n",
-> > +			 *data_len, sizeof(*hdr));
-> > +		return -EBADMSG;
-> > +	}
-> > +
-> > +	hdr =3D (struct tlv_hdr *)*data;
-> > +
-> > +	*data +=3D sizeof(*hdr);
-> > +	*data_len -=3D sizeof(*hdr);
-> > +
-> > +	parsed_data_type =3D __be64_to_cpu(hdr->data_type);
-> > +	if (parsed_data_type >=3D num_data_types) {
-> > +		pr_debug("Invalid data type %llu, max: %llu\n",
-> > +			 parsed_data_type, num_data_types - 1);
-> > +		return -EBADMSG;
-> > +	}
-> > +
-> > +	*parsed_num_entries =3D __be64_to_cpu(hdr->num_entries);
-> > +
-> > +	if (hdr->_reserved !=3D 0) {
-> > +		pr_debug("_reserved must be zero\n");
-> > +		return -EBADMSG;
-> > +	}
-> > +
-> > +	*parsed_total_len =3D __be64_to_cpu(hdr->total_len);
-> > +	if (*parsed_total_len > *data_len) {
-> > +		pr_debug("Invalid total length %llu, expected: %lu\n",
-> > +			 *parsed_total_len, *data_len);
-> > +		return -EBADMSG;
-> > +	}
-> > +
-> > +	pr_debug("Header: type: %s, num entries: %llu, total len: %lld\n",
-> > +		 data_types[parsed_data_type], *parsed_num_entries,
-> > +		 *parsed_total_len);
-> > +
-> > +	return hdr_callback(hdr_callback_data, parsed_data_type,
-> > +			    *parsed_num_entries, *parsed_total_len);
-> > +}
-> > +
-> > +/**
-> > + * tlv_parse_data - Parse TLV data
-> > + * @data_callback: Callback function to call to parse the data entries
-> > + * @data_callback_data: Opaque data to supply to the data callback fun=
-ction
-> > + * @num_entries: Number of data entries to parse
-> > + * @data: Data to parse
-> > + * @data_len: Length of @data
-> > + * @fields: Array of field strings
-> > + * @num_fields: Number of elements of @fields
-> > + *
-> > + * Parse the data part of the TLV data format and call the supplied ca=
-llback
-> > + * function for each data entry, passing also the opaque data pointer.
-> > + *
-> > + * The data callback function decides how to process data depending on=
- the
-> > + * field.
-> > + *
-> > + * Return: 0 on success, a negative value on error.
-> > + */
-> > +static int tlv_parse_data(data_callback data_callback, void *data_call=
-back_data,
-> > +			  __u64 num_entries, const __u8 *data, size_t data_len,
-> > +			  const char **fields, __u64 num_fields)
-> > +{
-> > +	const __u8 *data_ptr =3D data;
-> > +	struct tlv_data_entry *entry;
-> > +	__u64 parsed_field, len, i, max_num_entries;
-> > +	int ret;
-> > +
-> > +	max_num_entries =3D data_len / sizeof(*entry);
-> > +
-> > +	/* Possibly lower limit on num_entries loop. */
-> > +	if (num_entries > max_num_entries)
-> > +		return -EBADMSG;
-> > +
-> > +	for (i =3D 0; i < num_entries; i++) {
-> > +		if (data_len < sizeof(*entry))
-> > +			return -EBADMSG;
-> > +
-> > +		entry =3D (struct tlv_data_entry *)data_ptr;
-> > +		data_ptr +=3D sizeof(*entry);
-> > +		data_len -=3D sizeof(*entry);
-> > +
-> > +		parsed_field =3D __be64_to_cpu(entry->field);
-> > +		if (parsed_field >=3D num_fields) {
-> > +			pr_debug("Invalid field %llu, max: %llu\n",
-> > +				 parsed_field, num_fields - 1);
-> > +			return -EBADMSG;
-> > +		}
-> > +
-> > +		len =3D __be64_to_cpu(entry->length);
-> > +
-> > +		if (data_len < len)
-> > +			return -EBADMSG;
-> > +
-> > +		pr_debug("Data: field: %s, len: %llu\n", fields[parsed_field],
-> > +			 len);
-> > +
-> > +		if (!len)
-> > +			continue;
-> > +
-> > +		ret =3D data_callback(data_callback_data, parsed_field, data_ptr,
-> > +				    len);
-> > +		if (ret < 0) {
-> > +			pr_debug("Parsing of field %s failed, ret: %d\n",
-> > +				 fields[parsed_field], ret);
-> > +			return ret;
-> > +		}
-> > +
-> > +		data_ptr +=3D len;
-> > +		data_len -=3D len;
-> > +	}
-> > +
-> > +	if (data_len) {
-> > +		pr_debug("Excess data: %lu bytes\n", data_len);
-> > +		return -EBADMSG;
-> > +	}
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +/**
-> > + * tlv_parse - Parse data in TLV format
-> > + * @hdr_callback: Callback function to call after parsing header
-> > + * @hdr_callback_data: Opaque data to supply to the header callback fu=
-nction
-> > + * @data_callback: Callback function to call to parse the data entries
-> > + * @data_callback_data: Opaque data to supply to the data callback fun=
-ction
-> > + * @data: Data to parse
-> > + * @data_len: Length of @data
-> > + * @data_types: Array of data type strings
-> > + * @num_data_types: Number of elements of @data_types
-> > + * @fields: Array of field strings
-> > + * @num_fields: Number of elements of @fields
-> > + *
-> > + * Parse data in TLV format and call tlv_parse_data() each time tlv_pa=
-rse_hdr()
-> > + * returns 1.
-> > + *
-> > + * Return: 0 on success, a negative value on error.
-> > + */
-> > +int tlv_parse(hdr_callback hdr_callback, void *hdr_callback_data,
-> > +	      data_callback data_callback, void *data_callback_data,
-> > +	      const __u8 *data, size_t data_len, const char **data_types,
-> > +	      __u64 num_data_types, const char **fields, __u64 num_fields)
-> > +{
-> > +	__u64 parsed_num_entries, parsed_total_len;
-> > +	const __u8 *data_ptr =3D data;
-> > +	int ret =3D 0;
-> > +
-> > +	pr_debug("Start parsing data blob, size: %lu\n", data_len);
-> > +
-> > +	while (data_len) {
-> > +		ret =3D tlv_parse_hdr(hdr_callback, hdr_callback_data, &data_ptr,
-> > +				    &data_len, &parsed_num_entries,
-> > +				    &parsed_total_len, data_types,
-> > +				    num_data_types);
-> > +		switch (ret) {
-> > +		case 0:
-> > +			/*
-> > +			 * tlv_parse_hdr() already checked that
-> > +			 * parsed_total_len <=3D data_len.
-> > +			 */
-> > +			data_ptr +=3D parsed_total_len;
-> > +			data_len -=3D parsed_total_len;
-> > +			continue;
-> > +		case 1:
-> > +			break;
-> > +		default:
-> > +			goto out;
-> > +		}
-> > +
-> > +		ret =3D tlv_parse_data(data_callback, data_callback_data,
-> > +				     parsed_num_entries, data_ptr,
-> > +				     parsed_total_len, fields, num_fields);
-> > +		if (ret < 0)
-> > +			goto out;
-> > +
-> > +		data_ptr +=3D parsed_total_len;
-> > +		data_len -=3D parsed_total_len;
-> > +	}
-> > +out:
-> > +	pr_debug("End of parsing data blob, ret: %d\n", ret);
-> > +	return ret;
-> > +}
-> > diff --git a/lib/tlv_parser.h b/lib/tlv_parser.h
-> > new file mode 100644
-> > index 000000000000..8fa8127bd13e
-> > --- /dev/null
-> > +++ b/lib/tlv_parser.h
-> > @@ -0,0 +1,17 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Copyright (C) 2023-2024 Huawei Technologies Duesseldorf GmbH
-> > + *
-> > + * Author: Roberto Sassu <roberto.sassu@huawei.com>
-> > + *
-> > + * Header file of TLV parser.
-> > + */
-> > +
-> > +#ifndef _LIB_TLV_PARSER_H
-> > +#define _LIB_TLV_PARSER_H
-> > +
-> > +#include <linux/kernel.h>
-> > +#include <linux/err.h>
-> > +#include <linux/tlv_parser.h>
-> > +
-> > +#endif /* _LIB_TLV_PARSER_H */
->=20
-
+>
+> For some reason, it appears that the arch_get_mmap_end()
+> logic on RISC-V defaults to the maximum address
+> space for the 'addr==0' case which is inconsistentn with
+> the other architectures, so we should probably fix that
+> part first, possibly moving more of that logic into a
+> shared implementation.
+>
+>       Arnd
 
