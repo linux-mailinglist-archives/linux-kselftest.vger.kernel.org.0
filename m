@@ -1,163 +1,183 @@
-Return-Path: <linux-kselftest+bounces-17421-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17422-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1F5C96FC6F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 21:57:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BD0D96FC76
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 21:59:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 698F01F27AE1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 19:57:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A8441C2401F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 19:59:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D6441D7E39;
-	Fri,  6 Sep 2024 19:57:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41D831D54EE;
+	Fri,  6 Sep 2024 19:59:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ye0S05pp"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RIzC9UgD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0938E1CBE8C
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Sep 2024 19:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D751E86F
+	for <linux-kselftest@vger.kernel.org>; Fri,  6 Sep 2024 19:59:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725652658; cv=none; b=EOr3K3Y/PKtBvMTqHxCMxEAWDx5h/i1XKlxO6omlNeIDxGlRLH2sRALyjX5HOBnhvj4ZK3/tETeyFNN/h5w17gmxBFKEqrycDc0KIw9XGYgqOfSFMhVm4XBb+7CcyyjGqJlIsoAme60I6rO6jvDtmaE7kgbi41JldruKEZuXMSY=
+	t=1725652773; cv=none; b=XD9ldz4TQcql/fpscahMoeB9SrMFuCQ5fwna+JB9XWIeB9VkJCp2xB5aklW3GEaJF3Qv8UNjZc4Yzi87kgf/pEO3OYulaSi3ghLyrcUCdbfEhGJrtGBb0FmU8w5k3c+fcGwEdrcKaugqFACaDRkqkkpM9rWtrssw81Eaqfmxuuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725652658; c=relaxed/simple;
-	bh=5jt3ut579SUAV6huLfoT22jkBdXDOCD7fs9D7oNlTsA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s7DPCiFz5GX+rDNIAwutdju4QrP3B/BJhpeXq7msXcdXTuBuZZNyCaqJS7lTPO4nxgZyqLUMeYjAxM3Wqx8VrttJQkYb6Cz1sBsLmolRWJVFMRkqH9WpcYtaAT/eeSrwZF3QeTHvK7fye++dLS9U4msOHINYfAZmZ7VWi0P+wUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ye0S05pp; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-7d4fbe62bf5so1759776a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Sep 2024 12:57:36 -0700 (PDT)
+	s=arc-20240116; t=1725652773; c=relaxed/simple;
+	bh=zSzs9XF+x/1KkoRiNGi5kV1jCEh/iJ2kEJcFjq7VkbM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d96DY6RkL6w0wE2UDRAssM+yABZCE/NFjJ9PIfB9aJZoLTmrcqF59QKgIZUlROHfOMces22+5J3FmWcaiL3G5k6LkeEs5qFgGJl8UXaey6rImQf2mJ/VQngheSNPkmJUEENCll5ZhsuyjeHc5U4fPjVl4XN6quNbpXpcX9E9Mt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RIzC9UgD; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7d666fb3fb9so834677a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Sep 2024 12:59:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1725652656; x=1726257456; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8GoE4RbZ3FX54VqsyfP6GLqg58f68KZb1fc5pIob7R0=;
-        b=Ye0S05ppH6hkt7QV6KT6Wiui1kdEj2orEawsv9n4qVKkHuXCEUMHwrTlgLC8WLuGjH
-         FA303KOGGImO7eNrctnEvTy50DNYUoJO8uQjciQfbOMod0WVchgCo/zWQe+3x7GywZ9V
-         eTel1ecJlgSA+l+/ELF5HnzdEIzP+JiCN7ZlJ/vu+HqBn7xu5RSmnzwRQXUGb7RsKBld
-         PnOuh5ZCjGLRNlr31CPQtuqgDKi1RCNBNHSscP1wDTryp5WfrnIX5Bh+CLJ16fTKQzHQ
-         rtuKf6t8lhBoLohdLpafIkS96yTnvi8VNZGUk3T+lYTDQ5OqhxC9194uQArgmo+3lgJ+
-         ezSg==
+        d=linuxfoundation.org; s=google; t=1725652770; x=1726257570; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yJtGxt1Yxmajuv7Da4bpt3HLYkbYaQ0buhDsfmlEWxo=;
+        b=RIzC9UgDI/i1PlMjn622dB5CP8YpUNn+SXd+rdUQNE1rA9+FPuq9GwTWMApIRDX13X
+         p0e2Y0FptcfSaOi4YxUW28bXscbZUosz4kZXQQvvf4Whmaz5DZLN0AW55dl0rZDTwsY4
+         VIB3DLguzhH9F6Fq/8ZK3AR2qrKPdnaQuO4SE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725652656; x=1726257456;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8GoE4RbZ3FX54VqsyfP6GLqg58f68KZb1fc5pIob7R0=;
-        b=JDZl4T8bOk5rLEK3kngEIlckJI81PvuWdkfKE6QxISfLOarur62C+0GqQiUA4B4REo
-         H05xG4H8v5fYXASTqHItlTmgB72+gaplhi+qu/pIMeu/0bmmef7k9EoW3d2YN3ql9YLM
-         3iurZh1kOJ2YAM8GjwGJL73XyYmZ4qLS6JfPRVa2+wGWLhxknbpT0nPv6LjkC6cNhqPF
-         y96DWtk8ISYcyfgwjyNmIyD05Vs5T7kvE6du3uE2qrZs9uZMiiVe7U5R+fFTsyNgFLKu
-         ZZZNBycfJsdcyYvcMWyEaCxhOvC8Upb5VHiFPa0QLzVEOKgKmztcnJowp65kkq6PaHWj
-         PanA==
-X-Gm-Message-State: AOJu0YwA9vMJXI8VfdYNPC6FTVLilKihUIolPKTQaNsev9nvqFfyFNpx
-	mH53aY+iUP6GpcyJg9feFyDfaI0Cra0ubJqcLzQlnq/GsbQIybtq4FJmWpboWYR4Qq+nA7A/Pb9
-	BOIXPdeqLolcv05vW1PI+oL53XbiWutSBwVLz
-X-Google-Smtp-Source: AGHT+IF63yRUHfE/gc5IqEr6BtvKdXrIxPhosSmQhjUQNG0x0KM2wbpd2Rr5uwWBceFcfoVvK54usKU7Q6DSaw9LZ0o=
-X-Received: by 2002:a05:6a21:710a:b0:1cc:dd3a:ed43 with SMTP id
- adf61e73a8af0-1cf1d0b3ba9mr3866935637.12.1725652655789; Fri, 06 Sep 2024
- 12:57:35 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725652770; x=1726257570;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yJtGxt1Yxmajuv7Da4bpt3HLYkbYaQ0buhDsfmlEWxo=;
+        b=vkn/m3dPwaMoKbmgTbOGWWbXSvQBC3WEYZMNLOtUQg32q605eHGeRdPWSJ6rQejxiB
+         o3teCUHMLgzMBuDhArxUWwMktq3AYO/TlB+r5TC6zBHJzpyeI3M9nwebtm7xeU3wG+Yq
+         ZxRgZvLEVzfGW+4kYeVCPO1tR1EZfEeF5zNZRULfEzvpOoFI/Y/5wU9BvjT+PRPWpEP/
+         6LPR7v9Tzn8aaHbStgY/0JFOWoSs1Z0kdHgrn38alXIHOBo2wem3JvsmGGeQ31lLXDiz
+         CO47yo3HSR4vWsK1Ok1b7V7MDcazQnsQz26J4xlTZsr4LiVwCCCLHENKm67dyqb4PhBY
+         FMkg==
+X-Forwarded-Encrypted: i=1; AJvYcCWwtydUhUyrDgl0Ol1Lea/7YSHpC4nKCMPt/0VamiL8OwfHBX5E87bNkSf5y4bSRubCNndFampDrRBpbFkfgb4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwopiEYpSGl6gu83aVSY2xlcq+uel/hGj9z9SG/8eaIB7+BV5kl
+	xJ8mfCaUo/wUrG5SDW8LYsmuFn64cuE8OnsWdu47cppkarwMI7medrOR/lQkbp4=
+X-Google-Smtp-Source: AGHT+IG/UUgsagncAjg6+2NJnLOtzlWH0jzdVTx3NQ2SWB89VvDiS/cA4xYkFEVW0sjolGl/5jvZNw==
+X-Received: by 2002:a05:6a21:7108:b0:1cf:12aa:4cf7 with SMTP id adf61e73a8af0-1cf1bf7db2emr6031827637.3.1725652770281;
+        Fri, 06 Sep 2024 12:59:30 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-718e3ee88dfsm100978b3a.199.2024.09.06.12.59.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Sep 2024 12:59:29 -0700 (PDT)
+Message-ID: <fcdbd8bc-9986-497e-8de4-86d3e619ca73@linuxfoundation.org>
+Date: Fri, 6 Sep 2024 13:59:28 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240829183150.1616-1-michal.wajdeczko@intel.com>
- <CA+GJov5POvegznZutxHZuoUhxeHyseECHm4GW5NMR5vqZGWk4g@mail.gmail.com> <63952c61-d00b-421a-be9d-e7b940325f38@intel.com>
-In-Reply-To: <63952c61-d00b-421a-be9d-e7b940325f38@intel.com>
-From: Rae Moar <rmoar@google.com>
-Date: Fri, 6 Sep 2024 15:57:23 -0400
-Message-ID: <CA+GJov4ZR6Cfms-j8v3xVSj10L1_4JptQfYt6tqZGi1s=0cyBQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Fix kernel-doc for EXPORT_SYMBOL_IF_KUNIT
-To: Michal Wajdeczko <michal.wajdeczko@intel.com>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	David Gow <davidgow@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 1/2] selftests: Rename sigaltstack to generic signal
+To: Dev Jain <dev.jain@arm.com>, shuah@kernel.org, oleg@redhat.com
+Cc: mingo@kernel.org, tglx@linutronix.de, mark.rutland@arm.com,
+ ryan.roberts@arm.com, broonie@kernel.org, suzuki.poulose@arm.com,
+ Anshuman.Khandual@arm.com, DeepakKumar.Mishra@arm.com,
+ aneesh.kumar@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, sj@kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240822121415.3589190-1-dev.jain@arm.com>
+ <20240822121415.3589190-2-dev.jain@arm.com>
+ <714f8eb4-b226-48f6-ab0d-75bdfbf83364@linuxfoundation.org>
+ <42d0fa4b-eb67-42fd-a8e1-05d159d0d52f@arm.com>
+ <806e4be0-4b1f-4818-806f-a844d952d54e@arm.com>
+ <fff2b685-a7a5-4260-a293-f2abf55d9ce4@linuxfoundation.org>
+ <514713eb-235c-40ee-8c25-f1f3e1ca7f7a@arm.com>
+ <d5dc1bd9-4473-405f-99fc-192691f41c4f@linuxfoundation.org>
+ <0b3af60f-0449-48a1-b228-f26618b9d50a@arm.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <0b3af60f-0449-48a1-b228-f26618b9d50a@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Aug 29, 2024 at 4:28=E2=80=AFPM Michal Wajdeczko
-<michal.wajdeczko@intel.com> wrote:
->
->
->
-> On 29.08.2024 20:58, Rae Moar wrote:
-> > On Thu, Aug 29, 2024 at 11:32=E2=80=AFAM Michal Wajdeczko
-> > <michal.wajdeczko@intel.com> wrote:
-> >>
-> >> While kunit/visibility.h is today not included in any generated
-> >> kernel documentation, also likely due to the fact that none of the
-> >> existing comments are correctly recognized as kernel-doc, but once
-> >> we decide to add this header and fix the tool, there will be:
-> >>
-> >> ../include/kunit/visibility.h:61: warning: Function parameter or
-> >> struct member 'symbol' not described in 'EXPORT_SYMBOL_IF_KUNIT'
-> >>
-> >> Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
-> >
-> > Hello!
-> >
-> > This looks good to me. Thanks for adding this. We will need to do a
-> > patch on making this recognized as a kernel-doc at some point.
->
-> here it goes [1]
->
-> [1]
-> https://lore.kernel.org/linux-doc/20240829202529.1660-1-michal.wajdeczko@=
-intel.com/
+On 9/4/24 23:56, Dev Jain wrote:
+> 
+> On 9/4/24 22:35, Shuah Khan wrote:
+>> On 9/3/24 22:52, Dev Jain wrote:
+>>>
+>>> On 9/4/24 03:14, Shuah Khan wrote:
+>>>> On 8/30/24 10:29, Dev Jain wrote:
+>>>>>
+>>>>> On 8/27/24 17:16, Dev Jain wrote:
+>>>>>>
+>>>>>> On 8/27/24 17:14, Shuah Khan wrote:
+>>>>>>> On 8/22/24 06:14, Dev Jain wrote:
+>>>>>>>> Rename sigaltstack to generic signal directory, to allow adding more
+>>>>>>>> signal tests in the future.
+>>>>>>>
+>>>>>>> Sorry - I think I mentioned I don't like this test renamed. Why are you sending
+>>>>>>> this rename still included in the patch series?
+>>>>>>
+>>>>>> I am not renaming the test, just the directory. The directory name
+>>>>>> is changed to signal, and I have retained the name of the test -
+>>>>>> sas.c.
+>>>>>
+>>>>> Gentle ping: I guess there was a misunderstanding; in v5, I was
+>>>>> also changing the name of the test, to which you objected, and
+>>>>> I agreed. But, we need to change the name of the directory since
+>>>>> the new test has no relation to the current directory name,
+>>>>> "sigaltstack". The patch description explains that the directory
+>>>>> should be generically named.
+>>>>>
+>>>>
+>>>> Right. You are no longer changing the test name. You are still
+>>>> changing the directory name. The problem I mentioned stays the
+>>>> same. Any fixes to the existing tests in this directory can no
+>>>> longer auto applied to stables releases.
+>>>
+>>> I understand your point, but commit baa489fabd01 (selftests/vm: rename
+>>> selftests/vm to selftests/mm) is also present. That was a lot bigger change;
+>>> sigaltstack contains just one test currently, whose fixes possibly would have
+>>> to be backported, so I guess it should not be that much of a big problem?
+>>>
+>>>>
+>>
+>> So who does the backports whenevenr something changes? You are adding
+>> work where as the automated process would just work without this
+>> change. It doesn't matter if there is another test that changed
+>> the name.
+>>
+>>>> Other than the desire to rename the directory to generic, what
+>>>> other value does this change bring?
+>>>
+>>> Do you have an alternative suggestion as to where I should put my new test then;
+>>> I do not see what is the value of creating another directory to just include
+>>> my test. This will unnecessarily clutter the selftests/ directory with
+>>> directories containing single tests. And, putting this in "sigaltstack" is just
+>>> wrong since this test has no relation with sigaltstack.
+>>>
+>>
+>> If this new test has no relation to sigaltstack, then why are you changing
+>> and renaming the sigaltstack directory?
+> 
+> Because the functionality I am testing is of signals, and signals are a superset
+> of sigaltstack. Still, I can think of a compromise, if semantically you want to
+> consider the new test as not testing signals, but a specific syscall "sigaction"
+> and its interaction with blocking of signals, how about naming the new directory "sigaction"?
+>> Adding a new directory is much better
+>> than going down a path that is more confusing and adding backport overhead.
+>>
 
-Hi Michal!
+Okay - they are related except that you view signalstack as a subset
+of signals. I saw Mark's response as well saying sigaction isn't
+a good name for this.
 
-Thanks for your fast response to this! It looks like this patch
-changes the kernel-doc specification, which is a very worthwhile
-conversation, but in this instance I intended to change the code
-comments in visibility.h to match the current kernel-doc
-specification. I am also happy to make those edits in a future patch.
+Rename usually wipe out git history as well based on what have seen
+in the past.
 
-Thanks!
--Rae
+My main concern is backports. Considering sigstack hasn't changed
+2021 (as Mark's email), let's rename it.
 
->
-> >
-> > Reviewed-by: Rae Moar <rmoar@google.com>
-> >
-> > Thanks!
-> > -Rae
-> >
-> >> ---
-> >> Cc: Rae Moar <rmoar@google.com>
-> >> Cc: David Gow <davidgow@google.com>
-> >> ---
-> >>  include/kunit/visibility.h | 1 +
-> >>  1 file changed, 1 insertion(+)
-> >>
-> >> diff --git a/include/kunit/visibility.h b/include/kunit/visibility.h
-> >> index 0dfe35feeec6..efff77b58dd6 100644
-> >> --- a/include/kunit/visibility.h
-> >> +++ b/include/kunit/visibility.h
-> >> @@ -22,6 +22,7 @@
-> >>       * EXPORTED_FOR_KUNIT_TESTING namespace only if CONFIG_KUNIT is
-> >>       * enabled. Must use MODULE_IMPORT_NS(EXPORTED_FOR_KUNIT_TESTING)
-> >>       * in test file in order to use symbols.
-> >> +     * @symbol: the symbol identifier to export
-> >>       */
-> >>      #define EXPORT_SYMBOL_IF_KUNIT(symbol) EXPORT_SYMBOL_NS(symbol, \
-> >>             EXPORTED_FOR_KUNIT_TESTING)
-> >> --
-> >> 2.43.0
-> >>
-> >> --
-> >> You received this message because you are subscribed to the Google Gro=
-ups "KUnit Development" group.
-> >> To unsubscribe from this group and stop receiving emails from it, send=
- an email to kunit-dev+unsubscribe@googlegroups.com.
-> >> To view this discussion on the web visit https://groups.google.com/d/m=
-sgid/kunit-dev/20240829183150.1616-1-michal.wajdeczko%40intel.com.
+I am reluctantly agreeing to the rename as it seems to make sense
+in this case.
+
+thanks,
+-- Shuah
+
 
