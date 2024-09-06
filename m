@@ -1,264 +1,194 @@
-Return-Path: <linux-kselftest+bounces-17356-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17357-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32A3796EA05
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 08:20:19 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBCFE96EAEC
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 08:47:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6735BB2230C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 06:20:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 216ABB215DD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 06:47:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5928313D62B;
-	Fri,  6 Sep 2024 06:20:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC03314B953;
+	Fri,  6 Sep 2024 06:46:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="UVBmSkVr"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="XJsURGsd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2074.outbound.protection.outlook.com [40.107.223.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DB1313D243;
-	Fri,  6 Sep 2024 06:20:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725603611; cv=none; b=oBQvoLBIM4018uWNcduzGAdTkfvWWZLLD4Vl3PkN/B1301Lg2HuOf349JgFo9w99IM+guTim0L6TJz6IfDuuOmCFA8yLs6yxbYWc384lEP6mDf0Sof+0hLi7T4rP9MyvUcuqqYe0XPJd6EV1ZPdeqiTTo/8mjTgibY0d7lJo5yU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725603611; c=relaxed/simple;
-	bh=UKaIpJynoawa1HVOQFmJU5QytarRlsA3CTyROeZKpxE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=piw3P2L6tjt290fl70pNdusbY+zSHnL0kea3t5c8wo9RIDyaL+D0u4zo+trDGJIfG1ityvTK6BoR331Sr37KFn+GYCWuitujUuGK7fuMiB7WqvJS5ZUladmaOF61B39yvQm+VPT1yimJeAlklJRgKdPQMH54a1+qKAlu045tnoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=UVBmSkVr; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=Pf0qJBv2a5VO5pnFKJd+fG12gABSq0Jxz8dYrGBJaUk=; t=1725603607; x=1726208407; 
-	b=UVBmSkVrUe+e4GwlrmpYBFL7XThM4/rH8ArwxC9ONYOQqEA5jNJSidPHlRmV4DrUDnGqZRnzrry
-	dSx9rLqHQ1ffD8unKm5kK9jxsw5Hz92ahMhaJXep42l2lzZxx+zOl9Mt1b8gpaAS/J7ZhH+wNvF7D
-	OrQ/Zi/ZV2uvnF4CqftIcFwctaeXeUzjFUFl3SrObKrLv5nBVIs0dstbmGehjZwrm8I1ja2+n5GMT
-	rddZ9SeJLkERnJmtL7qQzMWUzOzBQCh9FKf44VQyZfXOOKinV19UxK7duwG2K5HxdMf1SGqmaCaSq
-	wT4WHd2qmqtptSZq+Ty5J485YkBjTvVBgH7g==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.98)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1smSJT-00000003bKB-2zIl; Fri, 06 Sep 2024 08:19:19 +0200
-Received: from dynamic-077-191-186-033.77.191.pool.telefonica.de ([77.191.186.33] helo=[192.168.178.20])
-          by inpost2.zedat.fu-berlin.de (Exim 4.98)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1smSJT-00000001qiA-1L1j; Fri, 06 Sep 2024 08:19:19 +0200
-Message-ID: <f8e0faafbb56e8ab748cf14c314497501d375529.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH RFC v3 0/2] mm: Introduce ADDR_LIMIT_47BIT personality
- flag
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Charlie Jenkins <charlie@rivosinc.com>, Arnd Bergmann <arnd@arndb.de>, 
- Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
- <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Vineet Gupta
- <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, Guo Ren
- <guoren@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
- <kernel@xen0n.name>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge
- Deller <deller@gmx.de>,  Michael Ellerman <mpe@ellerman.id.au>, Nicholas
- Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>,
- Naveen N Rao <naveen@kernel.org>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
- <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, Rich
- Felker <dalias@libc.org>, "David S. Miller" <davem@davemloft.net>, Andreas
- Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo
- Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter Zijlstra
- <peterz@infradead.org>, Muchun Song <muchun.song@linux.dev>, Andrew Morton
- <akpm@linux-foundation.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
- Vlastimil Babka <vbabka@suse.cz>, Lorenzo Stoakes
- <lorenzo.stoakes@oracle.com>, Shuah Khan <shuah@kernel.org>, Christoph
- Hellwig <hch@infradead.org>, Michal Hocko <mhocko@suse.com>, "Kirill A.
- Shutemov" <kirill@shutemov.name>, Chris Torek <chris.torek@gmail.com>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org,  linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org,  linux-abi-devel@lists.sourceforge.net
-Date: Fri, 06 Sep 2024 08:19:17 +0200
-In-Reply-To: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
-References: 
-	<20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
-Content-Type: text/plain; charset="UTF-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56EA12EBDB;
+	Fri,  6 Sep 2024 06:45:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.74
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1725605163; cv=fail; b=qQWPN3BrxS58Ehb1HeSVo7i/WFSW1XARosJyhHj7zduDTb7oWjsmknTlUfNB8VjQn+O8qYq2hIXk7X20hipixHqTe1UuYRjL7PrTwxJqA6DTmlrBD55Lc0Rr2EOr2Qq84r1Oq3V8ZMHAY71ZhP/Eah0XUnCXMume0UWM1yxyyLU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1725605163; c=relaxed/simple;
+	bh=1Uj8vrXBY1oC2PavA+smzJ8nQukBU86FTVNHNiJQYdE=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=KW1KLWLHaqht+aieSYLy8lghvF1v6HsTi/q6yvrhE74QnF3/luJ6GLvLxtao6Z+IoLu4dnhdQ4GECYEBQldV8jtNUDmHLxI7TJXnIoVQ7pKctfSp//uqFZQodlPZlSyUJOde3YOOLbL0mGcTq9vQw5BGwaNN7Dz3WJsrskky/jI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=XJsURGsd; arc=fail smtp.client-ip=40.107.223.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=axKcdUQLJ7YNDl/TSXSDaZpOWwYHtdlVyMbCByl1KP4PqjzYvVk0kTwh3ifCrgJb42JfoEqY9oyiRjWaDEffc44ZrmSqpXcIuFdIJxTPY8bYB2gDsqQ3xRHVqu9ezHE1rXEh5cptpom13WmzY5QPxJ5PIE9LmolXi1NaDaJ2Jpot6yxv7P8aCCdVj98QH56N9C58EJgbNFBC9wvDhCgFHxcVcXKjMU6iuJMwshpC3rfkXc/UHSG07kwX4dbOBBeMDlk0zvkTipIfuaPIQGXYouXhEaq9tNsK5Tt+r4MMCC64HXNPUvqvxKBLrMWBoFP/YHKVwoIKGRnjm6jINlTPsA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hU94wP4kJrBEvHKQmbtfo79jPADGDVBZbjsTMDtsCFI=;
+ b=RlQIufxfdEd1WMeaJJ85wA+NwSW49pcn+2G6euFp61vwogW1bcuiUQfZRBgEW2Kzr5Dc9AG/LARANvKCxPGL99w9MyHUnjhZUpywLwmfjyQQ/gE0EqyzGBQ1RMQZCBcn/YLedK2tagglToEATUTHc2hdG/q2xVQeMn+lwm/gLawLmpsB/BqoT+ajgSpRcTpV35/PI7FCeZuOuqOtWZOBPKHRzMBNQDYjN7jmfkEQ6s53bVb7HvU7AqRoGhnjMf3YMepwB5fHosGXXU+uIb+vDXSajzchSrKBqFHTDF2/V37GuFppXYNIrft6rcOVNtJgnT1T0piAPdni82F/zQHrrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microchip.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hU94wP4kJrBEvHKQmbtfo79jPADGDVBZbjsTMDtsCFI=;
+ b=XJsURGsdYCSxwN7Kvs6OEuZeroP2k8zuPg3fXmIGwEVI/fEjTm/wPHw3XSus9MgAnWbyL1LQTQ1W/qRA2yxxz7F/Qw5dYQUnQnenRw22q4Dgb71DsinAjCGeqhWHm/kdEKw6I3cJqsa5LZbvW7vSPee/HQ1CnAn7Mv4K9BQnm1S/g5ptWTegePRX/g7L605swRPeLOsWQOyNnrR2gm1nQ4Ulbz8xZYgekL/OHQ4UCttZcHZVHHSCdfPsfvMOUhXzHQX4tL26MDYQasl5w/gsOInT9EZ0mETceZX6p+a7cuTITLqt/NHlf0X0ePiJgnpbsHXb2ElSeBG/+G7xzYhQ/g==
+Received: from DM6PR11MB4236.namprd11.prod.outlook.com (2603:10b6:5:1d9::20)
+ by SA2PR11MB4780.namprd11.prod.outlook.com (2603:10b6:806:11d::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.27; Fri, 6 Sep
+ 2024 06:45:54 +0000
+Received: from DM6PR11MB4236.namprd11.prod.outlook.com
+ ([fe80::ea6a:8f25:ead5:8dfb]) by DM6PR11MB4236.namprd11.prod.outlook.com
+ ([fe80::ea6a:8f25:ead5:8dfb%5]) with mapi id 15.20.7918.024; Fri, 6 Sep 2024
+ 06:45:53 +0000
+From: <Mohan.Prasad@microchip.com>
+To: <andrew@lunn.ch>
+CC: <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
+	<shuah@kernel.org>, <Bryan.Whitehead@microchip.com>,
+	<UNGLinuxDriver@microchip.com>, <edumazet@google.com>, <pabeni@redhat.com>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<horms@kernel.org>, <brett.creeley@amd.com>, <rosenp@gmail.com>
+Subject: RE: [PATCH net-next 0/3] lan743x: This series of patches are for
+ lan743x driver testing
+Thread-Topic: [PATCH net-next 0/3] lan743x: This series of patches are for
+ lan743x driver testing
+Thread-Index: AQHa/olXajpx37qPH0O72SAJQKbczrJHGf0AgAM4JXA=
+Date: Fri, 6 Sep 2024 06:45:53 +0000
+Message-ID:
+ <DM6PR11MB4236D1B92E9FDF1A4640DA68839E2@DM6PR11MB4236.namprd11.prod.outlook.com>
+References: <20240903221549.1215842-1-mohan.prasad@microchip.com>
+ <7cbdcb2b-37d8-45b6-8b4e-2ab7e7850a38@lunn.ch>
+In-Reply-To: <7cbdcb2b-37d8-45b6-8b4e-2ab7e7850a38@lunn.ch>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM6PR11MB4236:EE_|SA2PR11MB4780:EE_
+x-ms-office365-filtering-correlation-id: 0fe19ba8-bfac-4d28-a24c-08dcce3f8d99
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB4236.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|7416014|366016|1800799024|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?4VqSrHoMorqVdONUZZzcD2/GbN/o5In5SGxxQbBQw5c0MHDtDuQGo5rMO7xc?=
+ =?us-ascii?Q?lGKf5gqOjOcOoVyjJwGnp2RbdWHvfdRMQHb6JbAe3YB/zF1ZFCrL4wDRTXAH?=
+ =?us-ascii?Q?pOx7IC2+S1iZnFCdj16Gp7exRoCMRZnpzRGJFbmy4EgvC/9mhDEqBSyd0Jju?=
+ =?us-ascii?Q?ueqYqaRPYnY2MEe+0DbCQYKuPz1DZY6QStJsseb5dpapVMgZmsmNbFPvnT+b?=
+ =?us-ascii?Q?opApeit/eTwBGIYXv1/VEyXLpTy532RXZRYBUSAkKcRmg2S0PodZi4165M8T?=
+ =?us-ascii?Q?D9LMTKmMED8oLujhJx5NQ0YQv/UELt68Zsegi4hLLXegILAPeUHZlry/n1oN?=
+ =?us-ascii?Q?6f+2zs+mEKElpmA/W9t90X6YX5I8uD7pk5I6lDjmtTjMCgON+mrK6cr3s7ur?=
+ =?us-ascii?Q?+H2/CPMiO9lTQZcMsd4VDnU+YJkv8usbhtNP9Cv9nAQOV5whl06CCk0pk9L6?=
+ =?us-ascii?Q?fDOMuuA3Xxkd7S81zh0marN9T5QTfi8/J8kyPwbKSbAeo0wZKd0IdNg7p4Xl?=
+ =?us-ascii?Q?qPzvyvUbdBSDhpnQoPateM4MkccWg+fQw1MwH8cBE7LqYSIh7YFMF6sYYnga?=
+ =?us-ascii?Q?8jlPiY5dYJfc/tD2cPsQ8oSfAyDmkLBIYeGQ1vI1jWXipN3/0DM5j+yvNt6X?=
+ =?us-ascii?Q?KeA0o69+Ts+BSTmBa9emkHqhcDJsCN6zNCq2PWaA5bp/Nyd3BfA4Y74Oamaz?=
+ =?us-ascii?Q?alVnN71JOQstSmpchiBGPybGeFNprTNMahMKyIdOKIk+/yW4UU2FsWyDxuvu?=
+ =?us-ascii?Q?kcXvFj1Ym1TtrRCXeYAAaLTIh3Gn4ofhUTyO2BMfJtrQqdo2rKA/hAOOHuy/?=
+ =?us-ascii?Q?MhKZIDh2qKDiq4pfTKFt+lWv94xDbdb+e0m2NmC+DEBR2A6Lqbg9BcroliE9?=
+ =?us-ascii?Q?WlJwjbIagAAfT5T2NDxLDIgLL8DaALvRbPRmepcqIisRUWfd4luf6QIs6PWS?=
+ =?us-ascii?Q?zAKkp8ex5NdAUzd7OddRNoOCfgJ1/Vusyv2pvx+saXzmjPLzxrZgjCjhos8q?=
+ =?us-ascii?Q?8sAnlNnPam4sI+tsQ6VJa+4AGDtN5sqQqKyYzazThWs2LYDirSPdKdnACF2f?=
+ =?us-ascii?Q?kqUG4HnO88Zglti4bSqzXjXedzqQDxIyEC1iO5++M58Bt8Fi7hCv7Ko1dt35?=
+ =?us-ascii?Q?Ku6ECg7oSrFVfH6JG1RhSNEO68EAPLIR+fgstxvrKCGQpMwxWDrBP9826kZf?=
+ =?us-ascii?Q?Fq6gQOl1MRbgNiyF/ZfUPbYA7DF+aa2eIe8Px43MKggBbCqNpZHxfLns0S5Y?=
+ =?us-ascii?Q?ZO9xALTXnMTuBMdp3uOt+IFr684pKL0XDL/Wje1xb2EWQdYmz6ILJCNZqIyl?=
+ =?us-ascii?Q?vPPlufpy9nw/+T0tBs7/kbO0/3owYRbqgjemNyslyepeyaugsfzIdr15A25g?=
+ =?us-ascii?Q?WdOx6by/ZvjZLGzeCw6WapUKyRds+9kgtesXOZFzywlWzsnVRQ=3D=3D?=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?DDoS16HUTEHaN7ZREkNaZc3ge91NFc2zp+9aA3pvZ4war+C9+/Uh2K9W7Cn6?=
+ =?us-ascii?Q?gWzzwVTFOgDa/pIgQYADrsNQfV7f1ZZkOqo8g0qxgYvXrpX2neR3PvDFeikp?=
+ =?us-ascii?Q?9nQjb430fvVW85MZw7/V0hJBtztRrgKGysVL7KByTZ+TV1zE2JIt1otBXCo5?=
+ =?us-ascii?Q?fXd6onFn0UmNKMtphLHDq+UNWhUfeO9EeiurAFD9drzruLNnVcLkGbPBlOwU?=
+ =?us-ascii?Q?Rfxo7etnp/kb5gL8VH6XLiDpHmg/Y+U1dPactj9BOD8FiL6b5I3mLNNwCPf7?=
+ =?us-ascii?Q?ZdK1CxCB+TxcjlyNKgGHG1bofj57AnN7DMOMdDAqeo7CAMZdehItKEjcnrrC?=
+ =?us-ascii?Q?7nZr1r/0ojS2qONdgJM0SEKX9MV8MXYVMp30ZzVb3MeKmDQKZmLlqEPPBJIp?=
+ =?us-ascii?Q?MUfUpt3e6EYFdR2Onb9wkeviDKu0/+cpWXjOQH2FYnsCLZNBHGY92FA1nJmF?=
+ =?us-ascii?Q?9KPn1mpPelnRybFFlwqPHjMTTDCGe9xonDSIvyidT1O7t9XqbRH3lj/Ez98o?=
+ =?us-ascii?Q?7FZSl5kUATNRPX9it4K0hxeDeIGrJYSUkvfZzi4pPx8GeI4IRWxhk17IcfH/?=
+ =?us-ascii?Q?j9SH6KvClZRRmFfiOOU6NyggSfgTXTSb17CbRHZkLTPB3aSTga/ORy2BHj6B?=
+ =?us-ascii?Q?q3AIxQWss+25Zpqci/3aQRUI9iqW7nkndYbBlC0C1whLXf1xht0PcnUgeNX2?=
+ =?us-ascii?Q?D10N/tlDEbAe8Vlu0HZGANAFuHSk5D8A+80xG0NYiR0OCPElVrtEEckvItuV?=
+ =?us-ascii?Q?KND1N0YlSesrre/kKnUQ5uFB9wJcyPrjcp1HGeS69GTylMRAYPpds7sgbANv?=
+ =?us-ascii?Q?Rk/1xvmdjG2jp7S225qMObe3N3wOdNdvMTfdvScNCCpt8R4aA49TW3OFNSjD?=
+ =?us-ascii?Q?VVf4Qx6YShT9XasUjgG3OtOHbd7kZfWxiv6PPqrXJa1e0ICejpLtAqKxEpDk?=
+ =?us-ascii?Q?YRz4wIVDgDrIzuDtwJU7e9S0AF/37V3b3Eg0j+d4l/AahXnHappy6KXMYsBk?=
+ =?us-ascii?Q?uKa+arag7JAgR228AiD+f9MRKydAO5lVHjjK4+6cKL2o+DZWA3xbCyIeXl1L?=
+ =?us-ascii?Q?3JPxiX0Ln+3+Z7feKOQZOay1qxjpK2JjfwUaGOmoExRr6m8js/RSEEOoEnRF?=
+ =?us-ascii?Q?Xv2j9OeptOx+Do7eEyDotmmOaZ7SzTq8LkV+Y0GLMX2e0sKaznU+oJGWpwQp?=
+ =?us-ascii?Q?tV6xfcmxNIBJnal0WZc2Lr2R5v7/6Bkm2FwAdq8vEoEIC0VdxbAogGcjPzfr?=
+ =?us-ascii?Q?FxtoqcndrpgQi95KiFm8PnmpPc2oIUGdCZyUktta1H+k+x8X+9PX+qfNm3eJ?=
+ =?us-ascii?Q?pfW19TVqSdNVVzaOe/qBmGEe9gIkmUZq9my0FhZfmBSjNez5o2ShMC46/Xgo?=
+ =?us-ascii?Q?MaA5jZgO45/Ehc708cRWZJx9GxOCgeMYSZfnYR+2OK8Mz3XLm7862yXp4L5c?=
+ =?us-ascii?Q?k1G+0gAP0fryfVpv7rm+srC03dcXLop/DHzxw63sIjzkxqXd/cXfkYH5zjYk?=
+ =?us-ascii?Q?+3+5NBoJClQpA0SWZlUX9MZRrGBIdRBOmT7VEQSc0vZEM30HUhv060x4eq8l?=
+ =?us-ascii?Q?igo7EtwKKP6p5kQcL8Mjy3XjDk4l0cf+o0ID56SZ8dAPJcBZj6BNlHHEtYEq?=
+ =?us-ascii?Q?lA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+X-OriginatorOrg: microchip.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB4236.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0fe19ba8-bfac-4d28-a24c-08dcce3f8d99
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Sep 2024 06:45:53.3077
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: izszdCBcq1h101eCuRchcW9QhQTfq+nrcmTO34L7F3fz7zB/5ol4bqS6GXnNjjtZuOg5yv9gvW8+y4/cRsgzWHsRuYRFzfLJdc8auG1zpzM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4780
 
-Hi Charlie,
+Hello Andrew,
 
-On Thu, 2024-09-05 at 14:15 -0700, Charlie Jenkins wrote:
-> Some applications rely on placing data in free bits addresses allocated
-> by mmap. Various architectures (eg. x86, arm64, powerpc) restrict the
-> address returned by mmap to be less than the 48-bit address space,
-> unless the hint address uses more than 47 bits (the 48th bit is reserved
-> for the kernel address space).
->=20
-> The riscv architecture needs a way to similarly restrict the virtual
-> address space. On the riscv port of OpenJDK an error is thrown if
-> attempted to run on the 57-bit address space, called sv57 [1].  golang
-> has a comment that sv57 support is not complete, but there are some
-> workarounds to get it to mostly work [2].
->=20
-> These applications work on x86 because x86 does an implicit 47-bit
-> restriction of mmap() address that contain a hint address that is less
-> than 48 bits.
->=20
-> Instead of implicitly restricting the address space on riscv (or any
-> current/future architecture), provide a flag to the personality syscall
-> that can be used to ensure an application works in any arbitrary VA
-> space. A similar feature has already been implemented by the personality
-> syscall in ADDR_LIMIT_32BIT.
->=20
-> This flag will also allow seemless compatibility between all
-> architectures, so applications like Go and OpenJDK that use bits in a
-> virtual address can request the exact number of bits they need in a
-> generic way. The flag can be checked inside of vm_unmapped_area() so
-> that this flag does not have to be handled individually by each
-> architecture.=20
->=20
-> Link:
-> https://github.com/openjdk/jdk/blob/f080b4bb8a75284db1b6037f8c00ef3b1ef1a=
-dd1/src/hotspot/cpu/riscv/vm_version_riscv.cpp#L79
-> [1]
-> Link:
-> https://github.com/golang/go/blob/9e8ea567c838574a0f14538c0bbbd83c3215aa5=
-5/src/runtime/tagptr_64bit.go#L47
-> [2]
->=20
-> To: Arnd Bergmann <arnd@arndb.de>
-> To: Richard Henderson <richard.henderson@linaro.org>
-> To: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-> To: Matt Turner <mattst88@gmail.com>
-> To: Vineet Gupta <vgupta@kernel.org>
-> To: Russell King <linux@armlinux.org.uk>
-> To: Guo Ren <guoren@kernel.org>
-> To: Huacai Chen <chenhuacai@kernel.org>
-> To: WANG Xuerui <kernel@xen0n.name>
-> To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> To: James E.J. Bottomley <James.Bottomley@HansenPartnership.com>
-> To: Helge Deller <deller@gmx.de>
-> To: Michael Ellerman <mpe@ellerman.id.au>
-> To: Nicholas Piggin <npiggin@gmail.com>
-> To: Christophe Leroy <christophe.leroy@csgroup.eu>
-> To: Naveen N Rao <naveen@kernel.org>
-> To: Alexander Gordeev <agordeev@linux.ibm.com>
-> To: Gerald Schaefer <gerald.schaefer@linux.ibm.com>
-> To: Heiko Carstens <hca@linux.ibm.com>
-> To: Vasily Gorbik <gor@linux.ibm.com>
-> To: Christian Borntraeger <borntraeger@linux.ibm.com>
-> To: Sven Schnelle <svens@linux.ibm.com>
-> To: Yoshinori Sato <ysato@users.sourceforge.jp>
-> To: Rich Felker <dalias@libc.org>
-> To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-> To: David S. Miller <davem@davemloft.net>
-> To: Andreas Larsson <andreas@gaisler.com>
-> To: Thomas Gleixner <tglx@linutronix.de>
-> To: Ingo Molnar <mingo@redhat.com>
-> To: Borislav Petkov <bp@alien8.de>
-> To: Dave Hansen <dave.hansen@linux.intel.com>
-> To: x86@kernel.org
-> To: H. Peter Anvin <hpa@zytor.com>
-> To: Andy Lutomirski <luto@kernel.org>
-> To: Peter Zijlstra <peterz@infradead.org>
-> To: Muchun Song <muchun.song@linux.dev>
-> To: Andrew Morton <akpm@linux-foundation.org>
-> To: Liam R. Howlett <Liam.Howlett@oracle.com>
-> To: Vlastimil Babka <vbabka@suse.cz>
-> To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> To: Shuah Khan <shuah@kernel.org>
-> To: Christoph Hellwig <hch@infradead.org>
-> To: Michal Hocko <mhocko@suse.com>
-> To: "Kirill A. Shutemov" <kirill@shutemov.name>
-> To: Chris Torek <chris.torek@gmail.com>
-> Cc: linux-arch@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-alpha@vger.kernel.org
-> Cc: linux-snps-arc@lists.infradead.org
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-csky@vger.kernel.org
-> Cc: loongarch@lists.linux.dev
-> Cc: linux-mips@vger.kernel.org
-> Cc: linux-parisc@vger.kernel.org
-> Cc: linuxppc-dev@lists.ozlabs.org
-> Cc: linux-s390@vger.kernel.org
-> Cc: linux-sh@vger.kernel.org
-> Cc: sparclinux@vger.kernel.org
-> Cc: linux-mm@kvack.org
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: linux-abi-devel@lists.sourceforge.net
-> Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
->=20
-> Changes in v2:
-> - Added much greater detail to cover letter
-> - Removed all code that touched architecture specific code and was able
->   to factor this out into all generic functions, except for flags that
->   needed to be added to vm_unmapped_area_info
-> - Made this an RFC since I have only tested it on riscv and x86
-> - Link to v1: https://lore.kernel.org/r/20240827-patches-below_hint_mmap-=
-v1-0-46ff2eb9022d@rivosinc.com
->=20
-> Changes in v3:
-> - Use a personality flag instead of an mmap flag
-> - Link to v2: https://lore.kernel.org/r/20240829-patches-below_hint_mmap-=
-v2-0-638a28d9eae0@rivosinc.com
->=20
-> ---
-> Charlie Jenkins (2):
->       mm: Add personality flag to limit address to 47 bits
->       selftests/mm: Create ADDR_LIMIT_47BIT test
->=20
->  include/uapi/linux/personality.h                   |  1 +
->  mm/mmap.c                                          |  3 ++
->  tools/testing/selftests/mm/.gitignore              |  1 +
->  tools/testing/selftests/mm/Makefile                |  1 +
->  tools/testing/selftests/mm/map_47bit_personality.c | 34 ++++++++++++++++=
-++++++
->  5 files changed, 40 insertions(+)
-> ---
-> base-commit: 5be63fc19fcaa4c236b307420483578a56986a37
-> change-id: 20240827-patches-below_hint_mmap-b13d79ae1c55
+Thank you for your review comments.
 
-Wow, this issue has been plaguing SPARC users for years already as the arch=
-itecture
-uses a 52-bit virtual address space and Javascript engines such as the one =
-in Firefox
-or Webkit have been crashing ever since.
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
+e
+> content is safe
+>=20
+> On Wed, Sep 04, 2024 at 03:45:46AM +0530, Mohan Prasad J wrote:
+> > This series of patches are for testing the lan743x network driver.
+> > Testing comprises autonegotiation, speed, duplex and throughput checks.
+> > Tools such as ethtool, iperf3 are used in the testing process.
+> > Performance test is done for TCP streams at different speeds.
+>=20
+> What is specific to lan743x? Why won't the autoneg test work for any
+> interface which says it supports autoneg? Is duplex somehow special on th=
+e
+> lan743x?
+>=20
+> Where possible, please try to make these tests generic, usable on any NIC=
+. Or
+> clearly document why they cannot be generic.
+>=20
 
-I should definitely give this series a try and see if that fixes Javascript=
- crashes
-on SPARC.
+As suggested, I will change the testcases to generic form and document them=
+ accordingly in the next version.
 
-Thanks a lot for addressing this nasty long-standing problem!
-
-Adrian
-
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+>         Andrew
 
