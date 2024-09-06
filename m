@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-17410-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17411-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C30AF96FB64
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 20:46:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A5C196FB67
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 20:46:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74B1B28B303
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 18:46:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3967B28B79B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 18:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F2AD82499;
-	Fri,  6 Sep 2024 18:46:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38C821D1732;
+	Fri,  6 Sep 2024 18:46:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cuyyIMLX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="u71UqES2"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BBAD1B85D5;
-	Fri,  6 Sep 2024 18:46:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 071051D04A4;
+	Fri,  6 Sep 2024 18:46:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725648383; cv=none; b=ovohUDSNLPtW/LA3klPKEebwZPNle92dTMtVs9P1chYSYZ3ACNKb32ooIBAN7BvdOmMYDRtaGY/iO7S5FBpjQM02efyYtXt8nhA8j8AVNkrRQMTL58sybTRCjZQrEyZykxWmdFNo95/1XPDEOzLi6AyyfBoXuzJJtKMEcZHTIEE=
+	t=1725648386; cv=none; b=beO12lV1FlmjJYoYNjMXbk91DQRlhmsu7HUCJEIM5BckiaZb5w6jyaARpqh/MxdJYbnClvwP3TjYHzZLwLT54pqtWyljzu1EJajYN7lyYr3aQizxHoDuONs6vP8Vj1qJ0zPKCRQb8EHvHKTnI2H5Sxy828Dmi58BMFrGS6w40i4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725648383; c=relaxed/simple;
-	bh=/TWWVM3LOtpuoyPVfgax7PiTjbUDXYPw9cdrQ05JEyY=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=a7japptRUWQqxaKtk8F9f1mEnqltuDtVw0d0X7s1QZV4/HqtYTi3QfejN3tNufDy4YZOgaCQRkKSVSjUnjHFPA4NpGuMf7S53Mbu3S8QPchTXQH/vc431ruZ8X6f7eC3DOtVY4WFKlxwNl9EHSPFM3Za7cEq76xzgmaFn+Vz9rU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cuyyIMLX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 635EBC4CEC4;
-	Fri,  6 Sep 2024 18:46:20 +0000 (UTC)
+	s=arc-20240116; t=1725648386; c=relaxed/simple;
+	bh=exlr1t1z8ANjogMu+0R8MvnEWUoNjycIDoP/fjhm3AQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=VbNd8d2TTNE7snHxFBO2+M62B+1R4gSK6z/OQAPEx16SMHFpvLbLNS3fRX0BRuEfQ0j8Has1btSzn1JH1R++8g8FWBVmDVhaIQCx+DYxs5DW5FTDMxs1n5rsv4fAtJEkZxlH47H/vHgCrQ7lkyjrR477TsruJyrOxZ1/YWc+KwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=u71UqES2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35BCCC4CECB;
+	Fri,  6 Sep 2024 18:46:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725648382;
-	bh=/TWWVM3LOtpuoyPVfgax7PiTjbUDXYPw9cdrQ05JEyY=;
-	h=From:Subject:Date:To:Cc:From;
-	b=cuyyIMLX7RFEfVJPtgOj7gTSphB0xfb0k491wxM61WD+CttTIOEug5J7GazISADiF
-	 ybrTlTa+rrGvqoyJ6OXk7EfVgAVo33MscJNK/pKnmQu2Z9oV/7n6czYslL4AY/6udD
-	 7y6r2qFyKYK8kjZzRPRS726+/NmrG1iX4UdwH4IwiNVKRg8JvE/6M20laT+WU/Nrzu
-	 FPstCU2mQsN7D1I18NGpjgmvpXPGiWheaINCDCFJ22WkAMODylkw/8ycxRj0ZSS+AU
-	 I6KKpadeOrSRo3pvYmOM5LuEP/jt9GX/MQ0c7cA90OWRkmsYgN9CbYcsAHMa5gUuzC
-	 OApuLMsxywAwA==
+	s=k20201202; t=1725648385;
+	bh=exlr1t1z8ANjogMu+0R8MvnEWUoNjycIDoP/fjhm3AQ=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=u71UqES2gVZnPej8AF81tfVCaK9URlnG/3Fc91SIn+/5SnW/zEphKlc6UGUcaEEao
+	 077FcezwFn424Y45usfsWGki16UspBlzA0x6+KVHIq4fN7w3S/mqGPuseRkrDprCtR
+	 EUGzpd746ctko49FGbPF3LegABKWlGdbjZZ6xqnYJV8XwlHLymW3sAPYlGegMUvcGI
+	 BOGAl8Ri+g2wtLeftQgiUsmCN8N05DGJFE/C7DWmE60KcTgZpRJGwLq0Ji8YBep3kL
+	 Q8p70sDcsuU+clvE4mqKGWdU6smj+W8ReyDgyCTe/P3Lysuyals3zeOUA+ZdY9HkgL
+	 7ZCCX9vl/bErA==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net-next v2 0/5] selftests: mptcp: add time per subtests in
- TAP output
-Date: Fri, 06 Sep 2024 20:46:06 +0200
-Message-Id: <20240906-net-next-mptcp-ksft-subtest-time-v2-0-31d5ee4f3bdf@kernel.org>
+Date: Fri, 06 Sep 2024 20:46:07 +0200
+Subject: [PATCH net-next v2 1/5] selftests: mptcp: lib: add time per
+ subtests in TAP output
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,10 +53,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAO5N22YC/42NwQqDMBBEf6XsuVuSmIPpqf9RPGhcNVijZLdiE
- f+9Qei9hzk8hpm3A1MKxHC/7JBoDRzmmMFcL+CHOvaEoc0MRhmrnDIYSXI2wWkRv+DInSC/GyE
- WlDAR1mXhyduiLZ2FfLMk6sJ2Kp7wW0OVmyGwzOlzuld99v9rVo0KO02tda7WutGPkVKk121OP
- VTHcXwB1b2raNsAAAA=
+Message-Id: <20240906-net-next-mptcp-ksft-subtest-time-v2-1-31d5ee4f3bdf@kernel.org>
+References: <20240906-net-next-mptcp-ksft-subtest-time-v2-0-31d5ee4f3bdf@kernel.org>
+In-Reply-To: <20240906-net-next-mptcp-ksft-subtest-time-v2-0-31d5ee4f3bdf@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
  Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
@@ -64,25 +63,24 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
 Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2273; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=/TWWVM3LOtpuoyPVfgax7PiTjbUDXYPw9cdrQ05JEyY=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBm20371FkgbH8kqFjiOCr++/l5SUutuGGl1GnQP
- p3vSMu7p86JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZttN+wAKCRD2t4JPQmmg
- czE3EACSU/6XzXHCzZb2xzTNxspcEnAAetZpcPzJCxKewkpqNMFwEnw0rxSAOmRQSwohUWmShlh
- KSfkMcr0JHEvrDKYmkFHCgs65g92TI/uvYuz1XQN1ys/mKogtcJjn5jLdMhLeWp8n30i77iWDzl
- UpnYWlFNHeefgVPOvELVeq7RvEvG46r4DF9kKB4XyAH571IJ4EHzo68dS2Lqgj7alZ3UHEhS3oW
- UbiVSpttIJ1XsE9bD+HwQFye2MbsuWVJbEwKM6WgAYSyVbIQBt2jc+uOaeqiqKsUg5V5AU9XmdK
- aPh5NmuKRsQjmb62a+ARgbMAyfPLsyq25nzBRS+PQKdriQP4SE6cZHC/PjTpO8qX9G1vSiqdVUl
- +v+aV93NtvKwKCeZb9Q2W+hPR0eLuUCuLNS2qvo8KZphc6sJv+z6qs8A6h93IfDZiz5t7H5Nij2
- yH3jgN6oWJ41flHSZi6Y2hMIORhgiEUupIU0gbfdRYr+bRML+Oz0uWZtp9DsiQLAGgLzFEeD3Lv
- JEgSCX9RlFRT3DlFSNLjiMgH0VENZuze1s3Rnj/ZCkeIuLNmToIc1EDJCPTeTbUIq4Esx3GhOks
- 42hzIilxOBhLjvvoTkRUg9K4KLirHBfIFMlUFl5J7OxEZZzTWSJc++UW1TMkE3yx7vohPP/eoHQ
- fqKe07DzGmD3FvA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2373; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=exlr1t1z8ANjogMu+0R8MvnEWUoNjycIDoP/fjhm3AQ=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBm2037meuM/EqOZ/v7Lm5hMb+yiKG+L/Fcd3kGf
+ OqSB4o/omOJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZttN+wAKCRD2t4JPQmmg
+ c5tSD/0SiCP68FFhvW9bYRz03ZFtiykJJ1+txf5hNGyJPS2HS2Dlr4871msDEvXFIDwT0osgNIW
+ +of5X7P09/e/tq49qiGyTE6D4gSP1oNnIhJC5SNArIEbs0SKnjNu3Dn44dVsk2vI7p+Cm0PK9rK
+ bZ0uJUD/bgrroLpy/QKjQY7RqJtHtfJamHu+ix4+stQNNT37xEQmZgSec6CUx/IN4aFb57nOQGI
+ +77W1AtypZTjRv6Fd41lIL2H+BOAOOj4xAlmNj4thyUakWhf87+T5YisCX025CNLGw9bIfplQFG
+ cP9cvoyrrZlZCB+KIzrwlP8dirbLIkl2JJem0woJ2T1IbH6HPeRmK+67G57LThVu0Ilg2lA+tJA
+ +R7ANx1OnyTVLz0JTX305K4teeCAA8rG5SVSU+U8r/NtyfUX86/UHK4eFrg29ZAxHSKIVNH2a6i
+ CCe+a00lCbEa/hT4/R42Wpaj/qp61GlAw8OPo3KIGcb55Dghq42lzqnGtTtRj5DgoxZpsUqlEkt
+ 7MyyCDGXy6PIIZtfXCb+3YHDco+eWPECam5XotBDZCYYLZ1swNaaQzHpHZvJgxhgu8Dxohe9uax
+ J5X4Zh30qdMhU3845hmxeJNfx8YfKG5G1I17q3BmWP5/AZutdIiXiMZhffQiUWmu0LEeMttbFv1
+ CNevKPmTdyftLsQ==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Patches here add 'time=<N>ms' in the diagnostic data of the TAP output,
-e.g.
+It adds 'time=<N>ms' in the diagnostic data of the TAP output, e.g.
 
   ok 1 - pm_netlink: defaults addr list # time=9ms
 
@@ -90,51 +88,68 @@ This addition is useful to quickly identify which subtests are taking a
 longer time than the others, or more than expected.
 
 Note that there are no specific formats to follow to show this time
-according to the TAP 13, TAP 14 and KTAP specifications, but we follow
-the format being parsed by NIPA [1].
+according to the TAP 13 [1], TAP 14 [2] and KTAP [3] specifications.
+Let's then define this one here.
 
-Patch 1 modifies mptcp_lib.sh to add this support to all MPTCP
-selftests.
-
-Patch 2 removes the now duplicated info in mptcp_connect.sh
-
-Patch 3 slightly improves the precision of the first subtests in all
-MPTCP subtests.
-
-Patches 4 and 5 remove duplicated spaces in TAP output, for the TAP
-parsers that cannot handle them properly.
-
-Link: https://github.com/linux-netdev/nipa/pull/36
+Link: https://testanything.org/tap-version-13-specification.html [1]
+Link: https://testanything.org/tap-version-14-specification.html [2]
+Link: https://docs.kernel.org/dev-tools/ktap.html [3]
+Reviewed-by: Mat Martineau <martineau@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Changes in v2:
-- Typo in the commit message of patch 2 (Jakub)
-- Two additional patches to remove duplicated spaces in TAP output
-- Link to v1: https://lore.kernel.org/r/20240902-net-next-mptcp-ksft-subtest-time-v1-0-f1ed499a11b1@kernel.org
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
----
-Matthieu Baerts (NGI0) (5):
-      selftests: mptcp: lib: add time per subtests in TAP output
-      selftests: mptcp: connect: remote time in TAP output
-      selftests: mptcp: reset the last TS before the first test
-      selftests: mptcp: diag: remove trailing whitespace
-      selftests: mptcp: connect: remove duplicated spaces in TAP output
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_lib.sh b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
+index 4578a331041e..975d4d4c862a 100644
+--- a/tools/testing/selftests/net/mptcp/mptcp_lib.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_lib.sh
+@@ -29,6 +29,7 @@ declare -rx MPTCP_LIB_AF_INET6=10
+ MPTCP_LIB_SUBTESTS=()
+ MPTCP_LIB_SUBTESTS_DUPLICATED=0
+ MPTCP_LIB_SUBTEST_FLAKY=0
++MPTCP_LIB_SUBTESTS_LAST_TS_MS=
+ MPTCP_LIB_TEST_COUNTER=0
+ MPTCP_LIB_TEST_FORMAT="%02u %-50s"
+ MPTCP_LIB_IP_MPTCP=0
+@@ -205,6 +206,11 @@ mptcp_lib_kversion_ge() {
+ 	mptcp_lib_fail_if_expected_feature "kernel version ${1} lower than ${v}"
+ }
+ 
++mptcp_lib_subtests_last_ts_reset() {
++	MPTCP_LIB_SUBTESTS_LAST_TS_MS="$(date +%s%3N)"
++}
++mptcp_lib_subtests_last_ts_reset
++
+ __mptcp_lib_result_check_duplicated() {
+ 	local subtest
+ 
+@@ -219,13 +225,22 @@ __mptcp_lib_result_check_duplicated() {
+ 
+ __mptcp_lib_result_add() {
+ 	local result="${1}"
++	local time="time="
++	local ts_prev_ms
+ 	shift
+ 
+ 	local id=$((${#MPTCP_LIB_SUBTESTS[@]} + 1))
+ 
+ 	__mptcp_lib_result_check_duplicated "${*}"
+ 
+-	MPTCP_LIB_SUBTESTS+=("${result} ${id} - ${KSFT_TEST}: ${*}")
++	# not to add two '#'
++	[[ "${*}" != *"#"* ]] && time="# ${time}"
++
++	ts_prev_ms="${MPTCP_LIB_SUBTESTS_LAST_TS_MS}"
++	mptcp_lib_subtests_last_ts_reset
++	time+="$((MPTCP_LIB_SUBTESTS_LAST_TS_MS - ts_prev_ms))ms"
++
++	MPTCP_LIB_SUBTESTS+=("${result} ${id} - ${KSFT_TEST}: ${*} ${time}")
+ }
+ 
+ # $1: test name
 
- tools/testing/selftests/net/mptcp/diag.sh          |  2 +-
- tools/testing/selftests/net/mptcp/mptcp_connect.sh | 17 ++++++++++-------
- tools/testing/selftests/net/mptcp/mptcp_join.sh    |  3 ++-
- tools/testing/selftests/net/mptcp/mptcp_lib.sh     | 17 ++++++++++++++++-
- tools/testing/selftests/net/mptcp/mptcp_sockopt.sh |  1 +
- tools/testing/selftests/net/mptcp/pm_netlink.sh    |  2 ++
- tools/testing/selftests/net/mptcp/simult_flows.sh  |  1 +
- tools/testing/selftests/net/mptcp/userspace_pm.sh  |  1 +
- 8 files changed, 34 insertions(+), 10 deletions(-)
----
-base-commit: 52fc70a32573707f70d6b1b5c5fe85cc91457393
-change-id: 20240902-net-next-mptcp-ksft-subtest-time-a83cec43d894
-
-Best regards,
 -- 
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+2.45.2
 
 
