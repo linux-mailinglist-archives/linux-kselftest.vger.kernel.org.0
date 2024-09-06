@@ -1,177 +1,135 @@
-Return-Path: <linux-kselftest+bounces-17397-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17398-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDFB196F676
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 16:16:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 029A196F678
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 16:16:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AC461F25197
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 14:16:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA1DD286B9A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 14:16:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 655991D27AC;
-	Fri,  6 Sep 2024 14:15:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CD1F1CF7AD;
+	Fri,  6 Sep 2024 14:16:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cMpd6Fes"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gFqGsySk";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="R2Q+vklh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E6EA1D279B
-	for <linux-kselftest@vger.kernel.org>; Fri,  6 Sep 2024 14:15:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02DD19E7FF;
+	Fri,  6 Sep 2024 14:16:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725632134; cv=none; b=d3K/sdRPv6NxcMIwfpP6LrLdNF0PV20iaER0aTPtPOfpEtzsaWWNF52HwM5QBRb6TOvFG0WVWS6Sa0AJd8VB5AKcylXC3AJ9yqY32GVvbpJrueLAFV8Oxwy/lc0oOVpkRikBJscfqr03N6IrzBhPfjfqQPRskbtbUJQ1iBmqi+8=
+	t=1725632205; cv=none; b=Ayqr7+Mb0ic3wmpOHp1voD/TX5sB8E94gnaIbfXHfQjhl7RdyrAjj+qvKg16du7AGtL707X5+ha2PCJpXZzMXDK0FAsSnQ6FKIyrY8UqGwyk723HBjvYfXiNUOMenUSuLJxNx8BbqVqDXmvoXuiVldaJBvR/Khjt5vPHHLmCaak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725632134; c=relaxed/simple;
-	bh=y5MxjUMhzpEGLcAk+RQ1L1Eah2Fr5EnO8/enSmmZa6g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cJh1Pa49yBEHnNKKxL3IOzhy/YzlG3x64Se4x/dC4e4dw+P5Wx/yMoSs+7r4k/3gBmzakYP3A+wOV96xFB1UE38o3uBYqww4eg33z7mxKn6lpgjo0BYJHXE+A9thdYcf+S/uB3yICz2cofUeFVEKY7ejlPPUkB8H87GJ2I1OIkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cMpd6Fes; arc=none smtp.client-ip=209.85.166.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-82a109bc459so102959639f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 06 Sep 2024 07:15:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1725632130; x=1726236930; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GDDzZwDYU4Gy6OtpP5FWKJoDHuwx4Dvh85vp17WCwo4=;
-        b=cMpd6FesQLw4KQNv5rOhx8z80CKGeF0F42uvuBmhprQOHMJYukT0lks+ZR/hkiMPE0
-         sAjHkDVZnTM1r9pol90a0am6kRqWO398EkBZoqRMLxwRo/ggRenMbYF3FytPYnjbdXHI
-         QXrGJYUHZ/uVD0KJ3WO7nesaC4DIu3Q7IOK1g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725632130; x=1726236930;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GDDzZwDYU4Gy6OtpP5FWKJoDHuwx4Dvh85vp17WCwo4=;
-        b=dSBfPKssVFO3YKM5a+P+6udP+W65l+2A5mxvUVoBAHUfiKoxm2fZGA0BJ5FmZqA4a0
-         J1GxQFSs/CPjyVgrrc3AsY8jpp84Li+zJmCF5TsMnaXbR3c/m3fJh6Ac17+K7e6WQcO+
-         KwRmYmmxJ6fOzTaS7wEYznG39bt23u/1E493fBPnO7imJnlEcL17Ev1G5Sj3ef9BSWM5
-         0MDMD+APAAUlx9cVLE+yDRa/WjYlASUCPtZyJETMJE6CROv9uT1+Wq7MhaxFYJuTbzyw
-         hv61ZmlFwUAL2zKWIyRedF1Q1ufcJbPFmv6+BSr5ODMHyiHJ1BB7AQpeEp/V0rm7ypUD
-         nOVA==
-X-Gm-Message-State: AOJu0YzXZ082GaKdK4/9HfqaOcICzkinQzDCe33zNk2Z3fDfnv0pMAAb
-	Iz0Wn7KgBpRZRHuDP9dYmpzBDwBMz2cNrdljn5wtg0/WyHrNzTCoDMr6qplUMkM=
-X-Google-Smtp-Source: AGHT+IEqK3aHyVvIF5x9SIq59DQgu4GmB9tqUj2d49l/0SkuT/UStk0+VtWJJAOQEjuFzgu/WZZNlw==
-X-Received: by 2002:a05:6e02:525:b0:39e:69bc:a7fe with SMTP id e9e14a558f8ab-39f797b23cdmr65602215ab.10.1725632130496;
-        Fri, 06 Sep 2024 07:15:30 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ced2de601csm4129939173.48.2024.09.06.07.15.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Sep 2024 07:15:30 -0700 (PDT)
-Message-ID: <ae32280e-e3a2-418c-a148-c59956b6521c@linuxfoundation.org>
-Date: Fri, 6 Sep 2024 08:15:29 -0600
+	s=arc-20240116; t=1725632205; c=relaxed/simple;
+	bh=8nwCI7w7G19jZLwfkBD0ekkM2ohaR/RW6frdGyNyCms=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=D/MWVQcnZNLmN6nJYQbKlHpjl9z0TlEFxqeeFaEdMJWcNsCCV8kGgeaSJns0Tk/h2J1VDUX4La+9AochkgD1CA5U4FOkLshk8lN7HzBCCwHJctup/DSbKq6elnH/r6LugoJlbaQoAl/Wg0DQ/v8oZJfw0yO+dECnYcVH/UEW/j0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gFqGsySk; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=R2Q+vklh; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Florian Kauer <florian.kauer@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1725632202;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=UpbKsEr6u87l1eJRzDjfnxvEOGeeHA+R0XZxE7JwcWI=;
+	b=gFqGsySk24RvRugaQDl8OMDeCH6BQAINf0yriBPlMd2A8NOBUkvBRtah4ypU0yBOOTcTSo
+	Xl5zI/5obkJFhjg0ncNuu2fN7hGqrG2pljW0S8/p4q/sg8rfcnLeQE5F5aFqijCE8JVjx6
+	GPvk28/81X85GoKJc+Aq+fsr94RZJ0Pyw/dYML9RciimGQJe2d4WM+Zi+GG9X897X7iibE
+	iBfBlq43OU+FT56Hh6HBylEVyyTGTf99APf4wbqlQibGlKKupkkce7Zo0cYIMetYBHxKXP
+	Kn2o1x3zBMF6cBy/seNp/dMPwIcHKpvgvVKwQY5bNJ3ltyvPR3kpF7SBKcDWew==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1725632202;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=UpbKsEr6u87l1eJRzDjfnxvEOGeeHA+R0XZxE7JwcWI=;
+	b=R2Q+vklhyqttoyUdM5vzk6HwA011IxoU0xI553Cbd5ELYeTyKdJVObL1cfQ9zuQqDoSj2S
+	iByyXviBIyQPuuCA==
+Subject: [PATCH net v2 0/2] bpf: devmap: provide rxq after redirect
+Date: Fri, 06 Sep 2024 16:16:24 +0200
+Message-Id: <20240906-devel-koalo-fix-ingress-ifindex-v2-0-4caa12c644b4@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests:resctrl: Fix build failure on archs without
- __cpuid_count()
-To: Muhammad Usama Anjum <Usama.Anjum@collabora.com>, shuah@kernel.org,
- fenghua.yu@intel.com, reinette.chatre@intel.com,
- ilpo.jarvinen@linux.intel.com
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240905180231.20920-1-skhan@linuxfoundation.org>
- <ad3d035e-be82-44c4-a850-a33889fcf717@collabora.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <ad3d035e-be82-44c4-a850-a33889fcf717@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALgO22YC/42NQQ6CMBBFr0Jm7Zi2oqSuvIdhAcwAE0lrWmwwp
+ He34QQu3/8//+0QOQhHuFc7BE4SxbsC5lTBMHduYhQqDEaZWll1ReLEC758t3gcZUNxU+AYUUZ
+ xxBv21tgL1Y2m/gbl5R24zA7DExyv0JZwlrj68D2sSR/V34KkUSNp0ylq6sHY4bGI+6zBO9nOx
+ NDmnH+l3gKj1wAAAA==
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, 
+ =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>, 
+ David Ahern <dsahern@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>, 
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Jesper Dangaard Brouer <brouer@redhat.com>, 
+ linux-kselftest@vger.kernel.org, 
+ Florian Kauer <florian.kauer@linutronix.de>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=980;
+ i=florian.kauer@linutronix.de; h=from:subject:message-id;
+ bh=8nwCI7w7G19jZLwfkBD0ekkM2ohaR/RW6frdGyNyCms=;
+ b=owEBbQKS/ZANAwAKATKF5IolV+EkAcsmYgBm2w6+IurT5S5lIccHtsN7RdH3Dacfe5fDPFOmx
+ uB6/FY7TkaJAjMEAAEKAB0WIQSG5cmCLvpm5t9g7UUyheSKJVfhJAUCZtsOvgAKCRAyheSKJVfh
+ JACbEADJqtAhCavFErlA0jU/euOVnU5jh6H9vnzwaZteXqoKAtTgeLgSk31X7PRpoiFgqtQIjq/
+ mIXh+KSp0EBULyJ9KgLGQqU93AVrghPYpoQ+7vKcwLTOyauO2OWbvYW81KhekNJGahQ8kMN+dJV
+ WACRLUdj99BcxrsdHNkLgN5GYBxy6i1QvzfYQwXXVFEKGls3Y/orq5iF9VfXUz+7dGsuQv4MNGr
+ 0SuKa1Z2LfThhdzcSqEkfE0Boflpuj2wcSLKnBdP8uC7KjkWrraSkUX3toZWwOl6SCT6rzz7EXX
+ 6nuCnI0eju7hckka0yEpxAmIwMIlZwHq4L2Noxtrb03ZWWCf+vhhu115VMOrdBqpkJx8wWAfyCy
+ JNhQaRYB/zqPrS8juI41p8SBAUu4SkW1AegsqfH7q36NwA1zugJIIIOuJRsGG+dnMImI0A+OW/D
+ ancoRgB8sTBj9gOXjBF2NaTNzkmKZHR0Dy3OtTVYkBR96KDUOmsiVGZc+6yykndRwGWgtl5DpPY
+ 7Plb2abrAuYT4ldGxgtfCrHK8xdOfKekudGswH2P7AUt1JWf8XE1Kp0A5LEziZdhRCWdstiHp7q
+ EfQy8SWd6UtnUJhQATx/a1dGZ27TvbNnhUoNPF/7siuAcyaTu8VcH0wFZfXfaiTdhbCfC4U/MIG
+ Y6zcfz+phavarnw==
+X-Developer-Key: i=florian.kauer@linutronix.de; a=openpgp;
+ fpr=F17D8B54133C2229493E64A0B5976DD65251944E
 
-On 9/6/24 01:35, Muhammad Usama Anjum wrote:
-> Hi Shuah,
-> 
-> Thank you for fixing it.
-> 
-> On 9/5/24 11:02 PM, Shuah Khan wrote:
->> When resctrl is built on architectures without __cpuid_count()
->> support, build fails. resctrl uses __cpuid_count() defined in
->> kselftest.h.
->>
->> Even though the problem is seen while building resctrl on aarch64,
->> this error can be seen on any platform that doesn't support CPUID.
->>
->> CPUID is a x86/x86-64 feature and code paths with CPUID asm commands
->> will fail to build on all other architectures.
->>
->> All others tests call __cpuid_count() do so from x86/x86_64 code paths
->> when _i386__ or __x86_64__ are defined. resctrl is an exception.
->>
->> Fix the problem by defining __cpuid_count() only when __i386__ or
->> __x86_64__ are defined in kselftest.h and changing resctrl to call
->> __cpuid_count() only when __i386__ or __x86_64__ are defined.
->>
->> In file included from resctrl.h:24,
->>                   from cat_test.c:11:
->> In function ‘arch_supports_noncont_cat’,
->>      inlined from ‘noncont_cat_run_test’ at cat_test.c:326:6:
->> ../kselftest.h:74:9: error: impossible constraint in ‘asm’
->>     74 |         __asm__ __volatile__ ("cpuid\n\t"                               \
->>        |         ^~~~~~~
->> cat_test.c:304:17: note: in expansion of macro ‘__cpuid_count’
->>    304 |                 __cpuid_count(0x10, 1, eax, ebx, ecx, edx);
->>        |                 ^~~~~~~~~~~~~
->> ../kselftest.h:74:9: error: impossible constraint in ‘asm’
->>     74 |         __asm__ __volatile__ ("cpuid\n\t"                               \
->>        |         ^~~~~~~
->> cat_test.c:306:17: note: in expansion of macro ‘__cpuid_count’
->>    306 |                 __cpuid_count(0x10, 2, eax, ebx, ecx, edx);
->>
->> Reported-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> Reported-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
->> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> LGTM
-> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+rxq contains a pointer to the device from where
+the redirect happened. Currently, the BPF program
+that was executed after a redirect via BPF_MAP_TYPE_DEVMAP*
+does not have it set.
 
-Thank you for the review and finding the problem to begin with.
-Much appreciated.
+Add bugfix and related selftest.
 
-> 
-> ...
->> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
->> index 742782438ca3..ae3f0fa5390b 100644
->> --- a/tools/testing/selftests/resctrl/cat_test.c
->> +++ b/tools/testing/selftests/resctrl/cat_test.c
->> @@ -290,12 +290,12 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
->>   
->>   static bool arch_supports_noncont_cat(const struct resctrl_test *test)
->>   {
->> -	unsigned int eax, ebx, ecx, edx;
->> -
->>   	/* AMD always supports non-contiguous CBM. */
->>   	if (get_vendor() == ARCH_AMD)
->>   		return true;
->>   
->> +#if defined(__i386__) || defined(__x86_64__) /* arch */
->> +	unsigned int eax, ebx, ecx, edx;
->>   	/* Intel support for non-contiguous CBM needs to be discovered. */
->>   	if (!strcmp(test->resource, "L3"))
->>   		__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
->> @@ -305,6 +305,8 @@ static bool arch_supports_noncont_cat(const struct resctrl_test *test)
->>   		return false;
->>   
->>   	return ((ecx >> 3) & 1);
->> +#endif /* end arch */
->> +	return false;
-> nit: empty line before return
+Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
+---
+Changes in v2:
+- changed fixes tag
+- added selftest
+- Link to v1: https://lore.kernel.org/r/20240905-devel-koalo-fix-ingress-ifindex-v1-1-d12a0d74c29c@linutronix.de
 
-Will do.
+---
+Florian Kauer (2):
+      bpf: devmap: provide rxq after redirect
+      bpf: selftests: send packet to devmap redirect XDP
 
-> 
->>   }
->>   
->>   static int noncont_cat_run_test(const struct resctrl_test *test,
-> 
+ kernel/bpf/devmap.c                                |  11 +-
+ .../selftests/bpf/prog_tests/xdp_devmap_attach.c   | 114 +++++++++++++++++++--
+ 2 files changed, 115 insertions(+), 10 deletions(-)
+---
+base-commit: 8e69c96df771ab469cec278edb47009351de4da6
+change-id: 20240905-devel-koalo-fix-ingress-ifindex-b9293d471db6
 
-thanks,
--- Shuah
+Best regards,
+-- 
+Florian Kauer <florian.kauer@linutronix.de>
+
 
