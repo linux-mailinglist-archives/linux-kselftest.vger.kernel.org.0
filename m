@@ -1,291 +1,232 @@
-Return-Path: <linux-kselftest+bounces-17377-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17378-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 415E096EE76
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 10:45:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E0B396EEE9
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 11:14:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC9F3282AC8
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 08:45:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86E3DB2301C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 09:14:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C457158523;
-	Fri,  6 Sep 2024 08:44:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 299041C86F2;
+	Fri,  6 Sep 2024 09:14:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lcXOh/ZS"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="rhRHoIbK";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="fA+P9AR/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from fhigh4-smtp.messagingengine.com (fhigh4-smtp.messagingengine.com [103.168.172.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE32BE6C;
-	Fri,  6 Sep 2024 08:44:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B881C7B91;
+	Fri,  6 Sep 2024 09:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725612298; cv=none; b=VTZ/6DUjXTEf4E64cAVL2qWYHZzrv0qXZjIilD2XZN5lhgToH9gz3htBZU6aMzUxOtnWcMr0irnnXj6mNyQMoOZrFSXacwWyrsqtHQdpXqEiUtNZfXc7A+oyNFV9ZCCYHXKpo1b/XkINuUd61SBdhDz+cOjvbKwtMAawYHv4PtY=
+	t=1725614074; cv=none; b=uIGaLARVkRp9LRXAO3QTyEtJk1EHJrEZbbewJnZ4lOt1mCELdOiGtu35xdm4urltv+bs6ntUqBUOPnoRQEXuOaxVTvygA4Nqe/bPY1XxLJ1W5gRWGIGJoPB0VDXt5158QrH3JKsHQhxDr71uZ6lYghXlo3C+/K1Nn4cQKO7rbiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725612298; c=relaxed/simple;
-	bh=Do3eogBIraN2nqI3zYsHTW0qBnw6yjfECUNnh11v5/0=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=JbcoNo9GcMxpt3N3P3WGFU4EJSk6a4/lN2iwGbF3IDHYbQVmpCyZNpsxD3oLfribbK0IqXGhc+o2XBy1C2sjeVwb787FNaEetxImX2vEIRsohGcVA3pWW6hxOcM5P6fRjfZpRz15NeMy4q2ujVsuKBVMG+QW/Ho1XRbOHg5pmHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lcXOh/ZS; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725612296; x=1757148296;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Do3eogBIraN2nqI3zYsHTW0qBnw6yjfECUNnh11v5/0=;
-  b=lcXOh/ZSBu3ZdFb9LiDUog464EFSAESWNp7vGE6YEOLD1BhcnsypU9k+
-   22yO9RBV8fj0LIp++QlJ4fHvXfcouyQZN4baiNIrz3Xv5CYpsnbb1vGnt
-   Fhc4VACP3uexPjkZW5Bj/DR7CUOA7Zh/dKubN30vMx9+n6x8BoHnwgBgx
-   j4l+JO5AilsTQzEgJa2YpTkMDSqSNLbg850NHUfNrg07ysIQ8ITTdFHFs
-   xooDadnZhk4ObPGhHz6DLEdPvH8ZkN0l3RjASXfy4nZlF2UxtXwgsoThq
-   tDTz4WK4jo1PY6owg5MkWv/aJh/dSiF4aGLEqZaG/WDDHrkYRgSrAcNpB
-   Q==;
-X-CSE-ConnectionGUID: oNIBhgsLScCu8bH90+wg2w==
-X-CSE-MsgGUID: LG40UaDXSNeJE3FQK6nnLA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="24519453"
-X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="24519453"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 01:44:56 -0700
-X-CSE-ConnectionGUID: e+d0lGLyS9u7XVBU85y1sQ==
-X-CSE-MsgGUID: yNIZMS5RTu6xOXT5V/A+dw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="66126590"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.244.157])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 01:44:52 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 6 Sep 2024 11:44:48 +0300 (EEST)
-To: Reinette Chatre <reinette.chatre@intel.com>
-cc: fenghua.yu@intel.com, shuah@kernel.org, tony.luck@intel.com, 
-    peternewman@google.com, babu.moger@amd.com, 
-    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
-    linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 5/6] selftests/resctrl: Do not compare performance counters
- and resctrl at low bandwidth
-In-Reply-To: <43b71606-be6a-495f-bec7-279bb812d4c8@intel.com>
-Message-ID: <c3aa4289-40aa-c158-8fde-8a35a6002783@linux.intel.com>
-References: <cover.1724970211.git.reinette.chatre@intel.com> <9bbefa3b9a62319698907d10e8b78f1b999c311b.1724970211.git.reinette.chatre@intel.com> <5d063290-9da4-c9ca-e5c5-cb0083d7483f@linux.intel.com> <87e4788c-6407-41a8-b201-e3f05064e5a6@intel.com>
- <238af9fe-0d7b-9bc1-9923-35ef74aad360@linux.intel.com> <9b2da518-89ce-4f9b-92f2-d317ed892886@intel.com> <1903ac13-5c9c-ef8d-78e0-417ac34a971b@linux.intel.com> <43b71606-be6a-495f-bec7-279bb812d4c8@intel.com>
+	s=arc-20240116; t=1725614074; c=relaxed/simple;
+	bh=jPis5Ya78L2vEYZAaqdoWNMrUU8EN6+BbzHRxoHY8SA=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=G1X8ywCs50oTXL0j+BplI88OQuqn7AZoJ4aXoSdf0Wwa7MNysqevxdqv2g9r5TcqEyEf4ba/Sm4si7u0HrckA9TN5SltuY6Rj5A7kHGsaPvN+CzsWAxAVBKfj6LL832xzOhly8jXcqFarOhGbJMGeCmyG6dcqKopPdOokLzPqPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=rhRHoIbK; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=fA+P9AR/; arc=none smtp.client-ip=103.168.172.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 4ECC01140321;
+	Fri,  6 Sep 2024 05:14:30 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Fri, 06 Sep 2024 05:14:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1725614070;
+	 x=1725700470; bh=HqqZZ6TfA9de4ir05q0Y8WhAGkTcX7yt1g8RzTkpSrA=; b=
+	rhRHoIbKtDFSnzHI61Rq75TlHSl9k2SjBeupc1+9yYsfutqj0XTUAhwTe67X0El+
+	3eGOH5bG9m0bTBqrvXQdcHY4lzA4wOmKR4H/b2DP/iKa65Kq29zI7MZENXoo8tYz
+	hd97Qq9TVFeLHqRVUl2+AFbZNUbieaSajw1887Dk8S8dsbgdwYqvZp6I+ybcTZtg
+	2Hr1dDPKUAx83AsT6qLRrh0u13B0090NpxIOGolOJf4zBQJ8/4aIS6L8LMrGGjVM
+	FuJV09+0VORsSsKn8QnAguepsFVA5QWMn/cQ+7JFlARRPyIff1zNrnH1fhI18UJe
+	0+Fn9yfHQsb+oBZSjm+qPg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725614070; x=
+	1725700470; bh=HqqZZ6TfA9de4ir05q0Y8WhAGkTcX7yt1g8RzTkpSrA=; b=f
+	A+P9AR/ByJRZ/Ha0ch+C/+zk4QO0YTdDA4w9ImHouZwYm0oC8dG4gvSqnqJADsHR
+	IzwN43wERLjwd7h26Qpk1lRm4W4vaABPLiU+YP32Rm5bNjyG6PQuvz6iNmFARWC5
+	bx42Pu+scw3k39Mm9BgUFy3vbUt0RZfCYZ4OzHBraXfx/AIOaP7UmQ9S83DI7hkT
+	qSxyIDitipFwMpHUJXNysk7nIjnn7uAAnkXf8Ro+kYKIxxl7TE3UacA885kAgAoW
+	PaFzR3EYKMjxTw3XbqPJUXguJeMatqZw+U7AHzWyZTlwFWUyhqo1ar/TwGkNUTj8
+	7u6rtwz4vtZlBfThrlCUQ==
+X-ME-Sender: <xms:9cfaZh2ZT_FC-WPvVbvQfZPwFcG2XX3UNUoteS3ZhDDrcTUkKOceHw>
+    <xme:9cfaZoFbJtdoaCgcpKAC-2wig1xQVXp36e1Twp42-3X1saXO-8mUtL1NbBhprDGqG
+    tXu70uHJ4Ve9NumwW4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeiuddgudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
+    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddu
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvg
+    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgtshhkhiesvhhgvghr
+    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvg
+    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshht
+    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhiphhsse
+    hvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphgrrhhishgt
+    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshefledtse
+    hvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshhhsehvghgv
+    rhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhprghrtghlihhnuhigsehvghgvrh
+    drkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:9cfaZh4010GtirbxVcGRnaNBTjQfZdSI5EdzzY75hgZscm07DnGRQA>
+    <xmx:9cfaZu2Q_7Web0ZUfzfGGXc6ioi12Vc_YXefRL8S3E8eIArDKsOjDw>
+    <xmx:9cfaZkFnxXbFDlrzlrqEsbREC_9JzKdV_QgUIC_tAZiO_QEQiHEmow>
+    <xmx:9cfaZv_4o_uw5UmkcZkzuIdi_RdkdMqPcOSNDbkedH7SbQOzaqsxzg>
+    <xmx:9sfaZs9LyGysYgm8Zw0BXs-u6pDAEBQm6L7kQOFCapZFQjR1TUzJFQHN>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 84B61222006F; Fri,  6 Sep 2024 05:14:29 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1988363065-1725612288=:1053"
+Date: Fri, 06 Sep 2024 09:14:08 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>
+Cc: "Charlie Jenkins" <charlie@rivosinc.com>,
+ "Richard Henderson" <richard.henderson@linaro.org>,
+ "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
+ "Matt Turner" <mattst88@gmail.com>, "Vineet Gupta" <vgupta@kernel.org>,
+ "Russell King" <linux@armlinux.org.uk>, guoren <guoren@kernel.org>,
+ "Huacai Chen" <chenhuacai@kernel.org>, "WANG Xuerui" <kernel@xen0n.name>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Helge Deller" <deller@gmx.de>, "Michael Ellerman" <mpe@ellerman.id.au>,
+ "Nicholas Piggin" <npiggin@gmail.com>,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Naveen N Rao" <naveen@kernel.org>,
+ "Alexander Gordeev" <agordeev@linux.ibm.com>,
+ "Gerald Schaefer" <gerald.schaefer@linux.ibm.com>,
+ "Heiko Carstens" <hca@linux.ibm.com>,
+ "Vasily Gorbik" <gor@linux.ibm.com>,
+ "Christian Borntraeger" <borntraeger@linux.ibm.com>,
+ "Sven Schnelle" <svens@linux.ibm.com>,
+ "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+ "Rich Felker" <dalias@libc.org>,
+ "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Andreas Larsson" <andreas@gaisler.com>,
+ "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, "Andy Lutomirski" <luto@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Muchun Song" <muchun.song@linux.dev>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ "Vlastimil Babka" <vbabka@suse.cz>, shuah <shuah@kernel.org>,
+ "Christoph Hellwig" <hch@infradead.org>,
+ "Michal Hocko" <mhocko@suse.com>,
+ "Kirill A. Shutemov" <kirill@shutemov.name>,
+ "Chris Torek" <chris.torek@gmail.com>,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org,
+ "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-abi-devel@lists.sourceforge.net
+Message-Id: <7be08ea9-f343-42da-805f-e5f0d61bde26@app.fastmail.com>
+In-Reply-To: <58f39d58-579e-4dd3-8084-baebf86f1ae0@lucifer.local>
+References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
+ <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
+ <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
+ <58f39d58-579e-4dd3-8084-baebf86f1ae0@lucifer.local>
+Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to 47 bits
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323328-1988363065-1725612288=:1053
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-
-On Thu, 5 Sep 2024, Reinette Chatre wrote:
-> On 9/5/24 4:45 AM, Ilpo J=C3=A4rvinen wrote:
-> > On Wed, 4 Sep 2024, Reinette Chatre wrote:
-> > > On 9/4/24 4:43 AM, Ilpo J=C3=A4rvinen wrote:
-> > > > On Fri, 30 Aug 2024, Reinette Chatre wrote:
-> > > > > On 8/30/24 4:42 AM, Ilpo J=C3=A4rvinen wrote:
-> > > > > > On Thu, 29 Aug 2024, Reinette Chatre wrote:
-> > > > > >=20
-> > > > > > > The MBA test incrementally throttles memory bandwidth, each t=
-ime
-> > > > > > > followed by a comparison between the memory bandwidth observe=
-d
-> > > > > > > by the performance counters and resctrl respectively.
-> > > > > > >=20
-> > > > > > > While a comparison between performance counters and resctrl i=
-s
-> > > > > > > generally appropriate, they do not have an identical view of
-> > > > > > > memory bandwidth. For example RAS features or memory performa=
-nce
-> > > > > > > features that generate memory traffic may drive accesses that=
- are
-> > > > > > > counted differently by performance counters and MBM respectiv=
-ely,
-> > > > > > > for instance generating "overhead" traffic which is not count=
-ed
-> > > > > > > against any specific RMID. As a ratio, this different view of
-> > > > > > > memory
-> > > > > > > bandwidth becomes more apparent at low memory bandwidths.
-> > > > > >=20
-> > > > > > Interesting.
-> > > > > >=20
-> > > > > > I did some time back prototype with a change to MBM test such t=
-hat
-> > > > > > instead
-> > > > > > of using once=3Dfalse I changed fill_buf to be able to run N pa=
-sses
-> > > > > > through
-> > > > > > the buffer which allowed me to know how many reads were perform=
-ed by
-> > > > > > the
-> > > > > > benchmark. This yielded numerical difference between all those =
-3
-> > > > > > values
-> > > > > > (# of reads, MBM, perf) which also varied from arch to another =
-so it
-> > > > > > didn't end up making an usable test.
-> > > > > >=20
-> > > > > > I guess I now have an explanation for at least a part of the
-> > > > > > differences.
-> > > > > >=20
-> > > > > > > It is not practical to enable/disable the various features th=
-at
-> > > > > > > may generate memory bandwidth to give performance counters an=
-d
-> > > > > > > resctrl an identical view. Instead, do not compare performanc=
-e
-> > > > > > > counters and resctrl view of memory bandwidth when the memory
-> > > > > > > bandwidth is low.
-> > > > > > >=20
-> > > > > > > Bandwidth throttling behaves differently across platforms
-> > > > > > > so it is not appropriate to drop measurement data simply base=
-d
-> > > > > > > on the throttling level. Instead, use a threshold of 750MiB
-> > > > > > > that has been observed to support adequate comparison between
-> > > > > > > performance counters and resctrl.
-> > > > > > >=20
-> > > > > > > Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-> > > > > > > ---
-> > > > > > >     tools/testing/selftests/resctrl/mba_test.c | 7 +++++++
-> > > > > > >     tools/testing/selftests/resctrl/resctrl.h  | 6 ++++++
-> > > > > > >     2 files changed, 13 insertions(+)
-> > > > > > >=20
-> > > > > > > diff --git a/tools/testing/selftests/resctrl/mba_test.c
-> > > > > > > b/tools/testing/selftests/resctrl/mba_test.c
-> > > > > > > index cad473b81a64..204b9ac4b108 100644
-> > > > > > > --- a/tools/testing/selftests/resctrl/mba_test.c
-> > > > > > > +++ b/tools/testing/selftests/resctrl/mba_test.c
-> > > > > > > @@ -96,6 +96,13 @@ static bool show_mba_info(unsigned long
-> > > > > > > *bw_imc,
-> > > > > > > unsigned long *bw_resc)
-> > > > > > >       =09=09avg_bw_imc =3D sum_bw_imc / (NUM_OF_RUNS - 1);
-> > > > > > >     =09=09avg_bw_resc =3D sum_bw_resc / (NUM_OF_RUNS - 1);
-> > > > > > > +=09=09if (avg_bw_imc < THROTTLE_THRESHOLD || avg_bw_resc <
-> > > > > > > THROTTLE_THRESHOLD) {
-> > > > > > > +=09=09=09ksft_print_msg("Bandwidth below threshold (%d
-> > > > > > > MiB).
-> > > > > > > Dropping results from MBA schemata %u.\n",
-> > > > > > > +=09=09=09=09=09THROTTLE_THRESHOLD,
-> > > > > > > +=09=09=09=09=09ALLOCATION_MAX -
-> > > > > > > ALLOCATION_STEP *
-> > > > > > > allocation);
-> > > > > >=20
-> > > > > > The second one too should be %d.
-> > > > > >=20
-> > > > >=20
-> > > > > hmmm ... I intended to have it be consistent with the ksft_print_=
-msg()
-> > > > > that
-> > > > > follows. Perhaps allocation can be made unsigned instead?
-> > > >=20
-> > > > If you go that way, then it would be good to make the related defin=
-es
-> > > > and
-> > > > allocation in mba_setup() unsigned too, although the latter is a bi=
-t
-> > > > scary
-> > >=20
-> > > Sure, will look into that.
-> > >=20
-> > > > because it does allocation -=3D ALLOCATION_STEP which could underfl=
-ow if
-> > > > the
-> > > > defines are ever changed.
-> > > >=20
-> > >=20
-> > > Is this not already covered in the following check:
-> > > =09if (allocation < ALLOCATION_MIN || allocation > ALLOCATION_MAX)
-> > > =09=09return END_OF_TESTS;
-> > >=20
-> > > We are talking about hardcoded constants though.
-> >=20
-> > Borderline yes. It is "covered" by the allocation > ALLOCATION_MAX but
-> > it's also very non-intuitive to let the value underflow and then check =
-for
-> > that with the > operator.
->=20
-> My understanding is that this is the traditional way of checking overflow
-> (or more accurately wraparound). There are several examples of this patte=
-rn
-> in the kernel and it is also the pattern that I understand Linus referred
-> to as "traditional" in [1]. Even the compiler's intrinsic overflow checke=
-rs
-> do checking in this way (perform the subtraction and then check if it
-> overflowed) [2].
-
-Fair enough. I've never come across that kind of claim before.
-
-> > You're correct that they're constants so one would need to tweak the
-> > source to end up into this condition in the first place.
-> >=20
-> > Perhaps I'm being overly pendantic here but I in general don't like
-> > leaving trappy and non-obvious logic like that lying around because one
-> > day one of such will come back biting.
->=20
-> It is not clear to me what is "trappy" about this. The current checks wil=
-l
-> catch the wraparound if somebody changes ALLOCATION_STEP in your scenario=
-, no?
+On Fri, Sep 6, 2024, at 08:14, Lorenzo Stoakes wrote:
+> On Fri, Sep 06, 2024 at 07:17:44AM GMT, Arnd Bergmann wrote:
+>> On Thu, Sep 5, 2024, at 21:15, Charlie Jenkins wrote:
+>> > Create a personality flag ADDR_LIMIT_47BIT to support applications
+>> > that wish to transition from running in environments that support at
+>> > most 47-bit VAs to environments that support larger VAs. This
+>> > personality can be set to cause all allocations to be below the 47-bit
+>> > boundary. Using MAP_FIXED with mmap() will bypass this restriction.
+>> >
+>> > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+>>
+>> I think having an architecture-independent mechanism to limit the size
+>> of the 64-bit address space is useful in general, and we've discussed
+>> the same thing for arm64 in the past, though we have not actually
+>> reached an agreement on the ABI previously.
 >
-> > So, if a variable is unsigned and we ever do subtraction (or adding
-> > negative numbers to it), I'd prefer additional check to prevent ever
-> > underflowing it unexpectedly. Or leave them signed.
->=20
-> To support checking at the time of subtraction we either need to change t=
-he
-> flow of that function since it cannot exit with failure if that subtracti=
-on
-> fails because of overflow/wraparound, or we need to introduce more state =
-that
-> will be an additional check that the existing
-> "if (allocation < ALLOCATION_MIN || allocation > ALLOCATION_MAX)"
-> would have caught anyway.
->=20
-> In either case, to do this checking at the time of subtraction the ideal =
-way
-> would be to use check_sub_overflow() ... but it again does exactly what
-> you find to be non-intuitive since the implementation in
-> tools/include/linux/overflow.h uses the gcc intrinsics that does subtract=
-ion
-> first and then checks if overflow occurred.
+> The thread on the original proposals attests to this being rather a fraught
+> topic, and I think the weight of opinion was more so in favour of opt-in
+> rather than opt-out.
 
-It's trappy because by glance, that check looks unnecessary since=20
-allocation starts from max and goes downwards. Also worth to note,
-the check is not immediately after the decrement but done on the next=20
-iteration.
+You mean opt-in to using the larger addresses like we do on arm64 and
+powerpc, while "opt-out" means a limit as Charlie suggested?
 
-The risk here is that somebody removes allocation > ALLOCATION_MAX check.
+>> > @@ -22,6 +22,7 @@ enum {
+>> >  	WHOLE_SECONDS =		0x2000000,
+>> >  	STICKY_TIMEOUTS	=	0x4000000,
+>> >  	ADDR_LIMIT_3GB = 	0x8000000,
+>> > +	ADDR_LIMIT_47BIT = 	0x10000000,
+>> > };
+>>
+>> I'm a bit worried about having this done specifically in the
+>> personality flag bits, as they are rather limited. We obviously
+>> don't want to add many more such flags when there could be
+>> a way to just set the default limit.
+>
+> Since I'm the one who suggested it, I feel I should offer some kind of
+> vague defence here :)
+>
+> We shouldn't let perfect be the enemy of the good. This is a relatively
+> straightforward means of achieving the aim (assuming your concern about
+> arch_get_mmap_end() below isn't a blocker) which has the least impact on
+> existing code.
+>
+> Of course we can end up in absurdities where we start doing
+> ADDR_LIMIT_xxBIT... but again - it's simple, shouldn't represent an
+> egregious maintenance burden and is entirely opt-in so has things going for
+> it.
 
-Something called check_sub_overflow() is not subject to a similar risk=20
-regardless of what operations occur inside it.
+I'm more confused now, I think most importantly we should try to
+handle this consistently across all architectures. The proposed
+implementation seems to completely block addresses above BIT(47)
+even for applications that opt in by calling mmap(BIT(47), ...),
+which seems to break the existing applications.
 
-> It is not clear to me what problem you are aiming to solve here. If the
-> major concern is that the current logic is not obvious, perhaps it can
-> be clarified with a comment as below:
->=20
->  =09if (runs_per_allocation++ !=3D 0)
->  =09=09return 0;
->  +=09/*
-> +=09 * Do not attempt allocation outside valid range. Safeguard
-> +=09 * against any potential wraparound caused by subtraction.
-> +=09 */
->  =09if (allocation < ALLOCATION_MIN || allocation > ALLOCATION_MAX)
->  =09=09return END_OF_TESTS;
+If we want this flag for RISC-V and also keep the behavior of
+defaulting to >BIT(47) addresses for mmap(0, ...) how about
+changing arch_get_mmap_end() to return the limit based on
+ADDR_LIMIT_47BIT and then make this default to enabled on
+arm64 and powerpc but disabled on riscv?
 
-That would probably help but then it seems Linus is against such attempts
-and considers this hole in the cheese (i.e., representing something that=20
-is clearly a negative number with a positive number) "traditional".
+>> It's also unclear to me how we want this flag to interact with
+>> the existing logic in arch_get_mmap_end(), which attempts to
+>> limit the default mapping to a 47-bit address space already.
+>
+> How does ADDR_LIMIT_3GB presently interact with that?
 
---=20
- i.
+That is x86 specific and only relevant to compat tasks, limiting
+them to 3 instead of 4 GB. There is also ADDR_LIMIT_32BIT, which
+on arm32 is always set in practice to allow 32-bit addressing 
+as opposed to ARMv2 style 26-bit addressing (IIRC ARMv3 supported
+both 26-bit and 32-bit addressing, while ARMv4 through ARMv7 are
+32-bit only.
 
---8323328-1988363065-1725612288=:1053--
+      Arnd
 
