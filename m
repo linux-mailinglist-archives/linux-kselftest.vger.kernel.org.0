@@ -1,150 +1,182 @@
-Return-Path: <linux-kselftest+bounces-17439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F4A096FF0B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2024 03:45:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A5E496FF1C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2024 04:06:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AEE21F23CA5
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2024 01:45:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CCC08B24018
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2024 02:05:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF01AC8E9;
-	Sat,  7 Sep 2024 01:45:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94C45DDD9;
+	Sat,  7 Sep 2024 02:05:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mjPDFXp6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cdddIEfl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3788825;
-	Sat,  7 Sep 2024 01:45:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D0EA93D;
+	Sat,  7 Sep 2024 02:05:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725673538; cv=none; b=MFtS4BeWslnNdYQ0o/NQKZILSgRljcNSARsHdu7OFbDvb551jJaeLLlM9Bd+u6408RN1JPkL3R8Gxr5zYL7fqlrigB0348iLzzeT0W3rwnpQfzgIsEwIxFIjicw7FLDhzJ7bFTPECWDb/9r1ADnhv1Z5gF6VidchroKNjPYrS4Y=
+	t=1725674752; cv=none; b=ZuBYSE9MkG6TaG/v5kA1JSHVuFfgHBbVGrscSic3wuafAawstAi2XLuUiNgKfQMPKZE0yq/gbiY4Lnhy76Y3IvbVH+gSsSN/iWsbnnyDke9nMYY5clxX8UxCdVFgwf8wdypYBlChINqSQn0GQYgCyduWgjQ4zjJnVcUKnP3hPko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725673538; c=relaxed/simple;
-	bh=F3dlnUNv4zgdn0Rqfq8lOtRN3zyzegNGNCm4TyEBokM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LbN2jl2RiMNM5mrRrjvDRLi7mICmTChpKaA/25Brc3Ubh0pHYd68mUbh8v3pBUI30DQwwCUBcWj1D9gf3yMJa1SOxKa4tuNmrLVlHhf4aZq37QmNBtIMF27rCkaaSAvvBhXv0Z2VFvQuA6ehBcbiMNR+jjMnXYSs+c0p7t+jB2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mjPDFXp6; arc=none smtp.client-ip=209.85.166.177
+	s=arc-20240116; t=1725674752; c=relaxed/simple;
+	bh=rIIJ66Btf0/S4uXzK+bKHvP4AW8rj0OAUyQFtmKPrGQ=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=rPiKpbuAcgh8CP7oqLCUIS1H/snDDpZzqaVutxlV7x0Tkl9xujmuFc2V3/EWpqCqUHvY7vWdXypv7k76eNz5RASAoOues9H4/NLi1ZyXSCFartI2uaawtKnDkfHi96p+mXxIe+0TzYwdMupAeOiN2bACEFBkYk4wrdxyVNYvJkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cdddIEfl; arc=none smtp.client-ip=209.85.160.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-39f4827a07aso9714565ab.1;
-        Fri, 06 Sep 2024 18:45:37 -0700 (PDT)
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-456855afe0fso14381031cf.3;
+        Fri, 06 Sep 2024 19:05:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725673536; x=1726278336; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1725674750; x=1726279550; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=F3dlnUNv4zgdn0Rqfq8lOtRN3zyzegNGNCm4TyEBokM=;
-        b=mjPDFXp6XQHwZjNrV+R29+fZUutPs6hMKz3nyszY9iAmTYIZnSL45YgiJW+PnE2qYV
-         xcuNV0u1oxmVeUZBj8m655PCXtZld/IYwp1sxiIw5nDl5JjRo+QDh/jMogbf33CX6w9W
-         e05I/IQbC+/R4Us4slk2YiBF+i9wBEF+bjI8n1sF41IN1qIZQ/UjX++D7Bl+tVW/IzlR
-         DTV8YBZwBMsADXRyKyLKKNKJhYC4metWdzRJHMxPy1xVCC3Q5lCGTjzPTrWDIPLX8Zme
-         TsASPhSsq/hdvHIc9eT865JoV0rZn1FhitMlbAKwgamOYqBKghjuMui3kirCD0ujvQB/
-         /CGw==
+        bh=yNuRf41PkhMk6rEC1d89BfhoreluVxX6rNBvM1mU4Ls=;
+        b=cdddIEflPBunilMaXnznTTDWRy1ra5uotOkbQqplDylY3b6m7RtD528lz7H61vxuFM
+         Xt6rSUeOsV8kU1GMcZfmZ62NiuaIPvQH4rvTkdDvfTnhU0PULUgguksSOEK9UXkUmlXV
+         R/wm23C5Fcps5UFY9xCbpIW5UZt30i++sNtzNyXXCVnf611NbMwVh2PUv7yzFpdGvUKe
+         xSCfHA8G6JCc8aUdb1rMWo1DaXR2AVrcNs+ogJhqXQQpaJxCmiyr8OVirZDJggfTfdn4
+         ycH6rip1CpueboxxFfqIbRlmUTSLzUX+cV9ESDlH3u109G68TKKo036L62yoPXrMCFxI
+         PSsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725673536; x=1726278336;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F3dlnUNv4zgdn0Rqfq8lOtRN3zyzegNGNCm4TyEBokM=;
-        b=weKiXf1dXiAu72Q8Sz0+Pga9qg5pqQMFbR1eK7s/nOXg6NghTHOWIFCZGPkdimRn0v
-         zoTVWzkOpqc9hz1oVNBfEHncy9cGMKOr90cSIUhfx11bVcWBOwCtf63ktwXsg+MJTSyV
-         dDwsqoO85L/0HVETdqmdYWOHS31WomvZ2mNRCA5whb9++97ccLajjl4ckjrMdbNeBIBS
-         mSQtVq6XF8L6P9EHcL7teU5ZNfYw/PxMiunOnVsgAqcyNjNjBNrySBRtrq3bMNDnAb/M
-         ZInhHA8NwMEOz4TpmHKGto8Si/6q1iGiE3Bl/XVY5YHVSDaEYTKJ9HCJEwSnZZzPDOsZ
-         gO1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX5SeQ/oqh3B5KxICrbN288Mdgi4PHwqzjHcmxe1sxxIeDJDFOhNUFCIXCJH9a2smaBEeXJzdDq1JCEGiNijKI=@vger.kernel.org, AJvYcCXFzxNeNQnulcJ7iXB7Rzey8x25ei4zluFd+Z7T02XoYE8wgIenDQbgkElPGF+dJr8UplHMO+2D@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJ8wbT8HiocnLHO0LMZLmA9zKrHyEGFPrVHYu9/OY6isM7oIyx
-	AkBzmplo26PYl5XkLZbXzw4n92cxxw9JLuM8kOFb6p1qcRlFvQLM3rG2Yq7pwDCE1aUYYGGYe/O
-	2idqmvSIHqGmQ8gZ+a+jilbhbS/HLf9fe
-X-Google-Smtp-Source: AGHT+IG9H30f8yV89g0X1fKNwyyF+ZeP9MVBANiBWV5y5JeJ4a12Tos1vqm/s5uA/pMWQQ/H7yFxEnURaUV9WcaueZI=
-X-Received: by 2002:a05:6e02:180a:b0:3a0:47eb:3650 with SMTP id
- e9e14a558f8ab-3a04f08271fmr58547455ab.11.1725673536384; Fri, 06 Sep 2024
- 18:45:36 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725674750; x=1726279550;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=yNuRf41PkhMk6rEC1d89BfhoreluVxX6rNBvM1mU4Ls=;
+        b=bDdAUo55VxCyXdKSq/V9fUqTKeu3MBZSJr5XWFUtN3grgFmC2z/2Y0sq55hvzcEK0E
+         uzh+opl8JAHkXFLSdm45mreVNb7f/wCSOhYPiSzFImzA26rFqBq0+EOtxB3jRaMLJwHP
+         QDMeg2mPeSX48zgXazhrlum2YYUfzZ/77rHbjd3bJvyHGZbLO8y67hurJP2TPP+k9385
+         g1ypwTrAKEIoO5YzD6YYo/ywR9AP0iOIJEV6m9w0GKdx7AT88Z+8nY6A7prpLA69+Ah7
+         8Xoe2a0T4dc5NiS4sddotbrIQNJh3PGU0wLo5AaSLZSOgvmGPm8/OrcD7jc37o30gu9U
+         /puQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJnJ1+fDbPs/25Cer3Z6LzqN7/quV29brgW+4Hq9Ok4+X/e7l/QJHMI9v1VfjStYiIvBS8Q84m@vger.kernel.org, AJvYcCVrLsh9O+OzBOhX5KMnSHvpmvc+aHmOW3gTJCvy4BrVhCxeXLRCF2zLVCyP4E3jYrFNv5sRBKrEqhQOL+k=@vger.kernel.org, AJvYcCWRyY2Ctwni69IVz7rc1vXaDiYjn7K01RMGFkEXKwiYyF8+91MDcVo/oDeaclRdu+2jqj0u4jsNlPrhJCwfGoLQ@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJN2MZ83JUrWtjfiRLOd1lKL3Ffbrf8TnUiHBeYOVs+QD+XKSx
+	+JC7SqYN0Fm4OrjAnSwNuu2rZm/HufSEZyW/bFIQH7gBLSN2cgLP
+X-Google-Smtp-Source: AGHT+IEThUx4A+kGc9bMpBczdqdcL8d6Wub3sWEOK/0CwwXfKU1W+aGPinin4wUQe/0o5b+y/ucngw==
+X-Received: by 2002:ac8:5803:0:b0:456:811c:4ecd with SMTP id d75a77b69052e-4580c675320mr47866681cf.4.1725674749609;
+        Fri, 06 Sep 2024 19:05:49 -0700 (PDT)
+Received: from localhost (193.132.150.34.bc.googleusercontent.com. [34.150.132.193])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45822e87ec5sm795431cf.37.2024.09.06.19.05.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Sep 2024 19:05:49 -0700 (PDT)
+Date: Fri, 06 Sep 2024 22:05:48 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Sean Anderson <sean.anderson@linux.dev>, 
+ "David S . Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ netdev@vger.kernel.org
+Cc: Willem de Bruijn <willemb@google.com>, 
+ linux-kernel@vger.kernel.org, 
+ Shuah Khan <shuah@kernel.org>, 
+ linux-kselftest@vger.kernel.org, 
+ Sean Anderson <sean.anderson@linux.dev>
+Message-ID: <66dbb4fcbf560_2af86229423@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20240906210743.627413-1-sean.anderson@linux.dev>
+References: <20240906210743.627413-1-sean.anderson@linux.dev>
+Subject: Re: [PATCH net] selftests: net: csum: Fix checksums for packets with
+ non-zero padding
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240906095640.77533-1-kerneljasonxing@gmail.com>
- <20240906095640.77533-2-kerneljasonxing@gmail.com> <66db8f293dbd1_2a33ef294b3@willemb.c.googlers.com.notmuch>
- <CAL+tcoC9NoE3ws3nA-_ANAqD1cWpv9JDzFY11ACryZgg35dQrg@mail.gmail.com>
-In-Reply-To: <CAL+tcoC9NoE3ws3nA-_ANAqD1cWpv9JDzFY11ACryZgg35dQrg@mail.gmail.com>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Sat, 7 Sep 2024 09:45:00 +0800
-Message-ID: <CAL+tcoBHP7pZdWB+b1tj12=8VGSeMwvEezkQAvB3qOf81Uqk5Q@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 1/2] net-timestamp: introduce
- SOF_TIMESTAMPING_OPT_RX_FILTER flag
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, dsahern@kernel.org, shuah@kernel.org, willemb@google.com, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, Sep 7, 2024 at 9:23=E2=80=AFAM Jason Xing <kerneljasonxing@gmail.co=
-m> wrote:
->
-> On Sat, Sep 7, 2024 at 7:24=E2=80=AFAM Willem de Bruijn
-> <willemdebruijn.kernel@gmail.com> wrote:
-> >
-> > Jason Xing wrote:
-> > > From: Jason Xing <kernelxing@tencent.com>
-> > >
-> > > introduce a new flag SOF_TIMESTAMPING_OPT_RX_FILTER in the receive
-> > > path. User can set it with SOF_TIMESTAMPING_SOFTWARE to filter
-> > > out rx software timestamp report, especially after a process turns on
-> > > netstamp_needed_key which can time stamp every incoming skb.
-> > >
-> > > Previously, we found out if an application starts first which turns o=
-n
-> > > netstamp_needed_key, then another one only passing SOF_TIMESTAMPING_S=
-OFTWARE
-> > > could also get rx timestamp. Now we handle this case by introducing t=
-his
-> > > new flag without breaking users.
-> > >
-> > > Quoting Willem to explain why we need the flag:
-> > > "why a process would want to request software timestamp reporting, bu=
-t
-> > > not receive software timestamp generation. The only use I see is when
-> > > the application does request
-> > > SOF_TIMESTAMPING_SOFTWARE | SOF_TIMESTAMPING_TX_SOFTWARE."
-> > >
-> > > Similarly, this new flag could also be used for hardware case where w=
-e
-> > > can set it with SOF_TIMESTAMPING_RAW_HARDWARE, then we won't receive
-> > > hardware receive timestamp.
-> > >
-> > > Another thing about errqueue in this patch I have a few words to say:
-> > > In this case, we need to handle the egress path carefully, or else
-> > > reporting the tx timestamp will fail. Egress path and ingress path wi=
-ll
-> > > finally call sock_recv_timestamp(). We have to distinguish them.
-> > > Errqueue is a good indicator to reflect the flow direction.
-> > >
-> > > Suggested-by: Willem de Bruijn <willemb@google.com>
-> > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> >
-> > High level: where is the harm in receiving unsolicited timestamps?
-> > A process can easily ignore them. I do wonder if the only use case is
-> > an overly strict testcase. Was reminded of this as I tried to write
-> > a more concise paragraph for the documentation.
->
-> You raised a good question.
->
-> I think It's more of a design consideration instead of a bugfix
-> actually. So it is not solving a bug which makes the apps wrong but
-> gives users a hint that we can explicitly and accurately do what we
-> want and we expect.
+Sean Anderson wrote:
+> Padding is not included in UDP and TCP checksums. Therefore, reduce the
+> length of the checksummed data to include only the data in the IP
+> payload. This fixes spurious reported checksum failures like
+> 
+> rx: pkt: sport=33000 len=26 csum=0xc850 verify=0xf9fe
+> pkt: bad csum
 
-One more thing: if I recall correctly, the initial reason I proposed
-is that the rx report flag is not controlled under per socket but
-maybe affected by others. It's against the expectation.
+Are you using this test as receiver for other input?
+
+The packet builder in the test doesn't generate these, does it?
+
+Just trying to understand if this is a bug fix or a new use for
+csum.c as receiver.
+
+> Technically it is possible for there to be trailing bytes after the UDP
+> data but before the Ethernet padding (e.g. if sizeof(ip) + sizeof(udp) +
+> udp.len < ip.len). However, we don't generate such packets.
+
+More likely is that L3 and L4 length fields agree, as both are
+generated at the sender, but that some trailer is attached in the
+network. Such as a timestamp trailer.
+ 
+> Fixes: 91a7de85600d ("selftests/net: add csum offload test")
+> Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
+> ---
+> Found while testing for this very bug in hardware checksum offloads.
+> 
+>  tools/testing/selftests/net/lib/csum.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/net/lib/csum.c b/tools/testing/selftests/net/lib/csum.c
+> index b9f3fc3c3426..e0a34e5e8dd5 100644
+> --- a/tools/testing/selftests/net/lib/csum.c
+> +++ b/tools/testing/selftests/net/lib/csum.c
+> @@ -654,10 +654,16 @@ static int recv_verify_packet_ipv4(void *nh, int len)
+>  {
+>  	struct iphdr *iph = nh;
+>  	uint16_t proto = cfg_encap ? IPPROTO_UDP : cfg_proto;
+> +	uint16_t ip_len;
+>  
+>  	if (len < sizeof(*iph) || iph->protocol != proto)
+>  		return -1;
+>  
+> +	ip_len = ntohs(iph->tot_len);
+> +	if (ip_len > len || ip_len < sizeof(*iph))
+> +		return -1;
+> +
+> +	len = ip_len;
+>  	iph_addr_p = &iph->saddr;
+>  	if (proto == IPPROTO_TCP)
+>  		return recv_verify_packet_tcp(iph + 1, len - sizeof(*iph));
+> @@ -669,16 +675,22 @@ static int recv_verify_packet_ipv6(void *nh, int len)
+>  {
+>  	struct ipv6hdr *ip6h = nh;
+>  	uint16_t proto = cfg_encap ? IPPROTO_UDP : cfg_proto;
+> +	uint16_t ip_len;
+
+nit: payload_len, as it never includes sizeof ipv6hdr
+
+>  	if (len < sizeof(*ip6h) || ip6h->nexthdr != proto)
+>  		return -1;
+>  
+> +	ip_len = ntohs(ip6h->payload_len);
+> +	if (ip_len > len - sizeof(*ip6h))
+> +		return -1;
+> +
+> +	len = ip_len;
+>  	iph_addr_p = &ip6h->saddr;
+>  
+>  	if (proto == IPPROTO_TCP)
+> -		return recv_verify_packet_tcp(ip6h + 1, len - sizeof(*ip6h));
+> +		return recv_verify_packet_tcp(ip6h + 1, len);
+>  	else
+> -		return recv_verify_packet_udp(ip6h + 1, len - sizeof(*ip6h));
+> +		return recv_verify_packet_udp(ip6h + 1, len);
+>  }
+>  
+>  /* return whether auxdata includes TP_STATUS_CSUM_VALID */
+> -- 
+> 2.35.1.1320.gc452695387.dirty
+> 
+
+
 
