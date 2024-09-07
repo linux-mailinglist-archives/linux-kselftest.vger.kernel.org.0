@@ -1,221 +1,289 @@
-Return-Path: <linux-kselftest+bounces-17442-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17443-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAFE996FFBF
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2024 05:14:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F259397005D
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2024 08:50:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AE6F1F262C9
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2024 03:14:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14EB91C2210B
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2024 06:50:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 590DA1CAAC;
-	Sat,  7 Sep 2024 03:12:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4B43145323;
+	Sat,  7 Sep 2024 06:50:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M1PJxPwx"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ij7BxhCC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f171.google.com (mail-il1-f171.google.com [209.85.166.171])
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94FA41B7E9;
-	Sat,  7 Sep 2024 03:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17ED49624
+	for <linux-kselftest@vger.kernel.org>; Sat,  7 Sep 2024 06:50:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725678743; cv=none; b=LhX95PSY6njn3LF3RaRCt5apUJDdi5+FXjZl4kKRaQMyZVmRM3ThyvnITliDK3dsJnts8HyWQ/qvrZ9MxCmRcIsAzDqacYy3oWOa2iGbjHNGdYBJja5ObqVUUfRaOK/rsBlmLbyYW3OE9lOPzcrIzGtr//5A25oSow0j5YFL+PA=
+	t=1725691813; cv=none; b=PPpyy73iKRUEZzsi4J9TxcOAlpMTd/vfHUn617U40V621NcXp6B7dI1+KsV47N47BQYoncQPExESn5meBgoxSWUbym90pVXc/LHaiONup/DOTdOLALNVmTto0GkCgQxGTTmLXtrNinVQ6i/296FA5mm8CBs2EnysfTtDWllx2bA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725678743; c=relaxed/simple;
-	bh=KbmoP0t0DolFc9iPMaiHUQn6qxIGNtai/kwltA855QA=;
+	s=arc-20240116; t=1725691813; c=relaxed/simple;
+	bh=JIWo0t3I574iSmQnXSvvHUNEgCMARhBrY3dzxSQuH6U=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZcJfqMjWuPxkH8NdRs8lFwoyg14YVMdiwOC4Y/uuAULf8ZIQ8btn2c63dk21/j4FrEJ1EAYKEFVHmPz70jqXajLp4WBjV+JtzLXlw/+IS0VIHvzREqdLCfSgaphSU7oTHMsiC6mDcxwtci2hZN6G85c57cUBhWfb3sPv9k7taec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M1PJxPwx; arc=none smtp.client-ip=209.85.166.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-il1-f171.google.com with SMTP id e9e14a558f8ab-39d30564949so9759825ab.2;
-        Fri, 06 Sep 2024 20:12:21 -0700 (PDT)
+	 To:Cc:Content-Type; b=TB1lNJyN9DHJKCEcTMX8b7erOH1ytAdDoQfVg9s1VUJEAq9LpiprvrML/QrfQ7EjPT7FifVF9IX/4Bj1T0RkKMbHbvTmup1w5BmCptoTCdj9Z+S2THDCWkGyklSmf8pWEZ/CXE9HwzHA6mViz8KwyjSrjSiBka5oHGuu0D7LriQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ij7BxhCC; arc=none smtp.client-ip=209.85.219.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6c353f2f954so17587846d6.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Sep 2024 23:50:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725678740; x=1726283540; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KbmoP0t0DolFc9iPMaiHUQn6qxIGNtai/kwltA855QA=;
-        b=M1PJxPwxknqbQ9ujqg5DM9aNCG+W2qZ/uq1JeLhL5irtySJFXU5imcrAGy9fqQwvdY
-         53VetnKi5TLidn26g36oyRuc2S0+9AFvxehqek9aTm5fqU/OOpBl8G7g0o1nlONi4BUC
-         v9PHM0wtWQEFTmBiVCWjxKUx90C3KmIea0LH49gxl6tdvhh2/UPJV85Az1wMVXj2iciY
-         FN5/3ihIUSrGhtmki58ectHlgH8vkOGLBOZNeG0E4Xtyb8RfgSIqQXOZxTRm+JsJqyyf
-         lJGSVSezJSF0N1fzuWXRUbhU0uE6FPzHL5jhwTEhXE71X4pipTH9CvYaHP7uO/FxpTPh
-         2vZA==
+        d=google.com; s=20230601; t=1725691811; x=1726296611; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=e3mM925qNxv0Pf+JM+6tJkzMmYkeYCZ3FsD/bOSe/lE=;
+        b=ij7BxhCCebK9kaWeG/0+1TGK8VrV5CpbLYYYvthx0cEa2/ut08FCIVMhckY+vkiYiH
+         TcNFvyQcIn6BdQsi02Fgl3Yd+8ZfEX6dIxJynkye+yr74asA3+nzvgdwdp81ze/8eANb
+         LeZ939Cu9c3ZrTyGumC0nBIK1lChJszCacYQcrBKiXYYg0xqrqz5BwMoxx1BaBAMtTel
+         0eIoF/kRDWKStjaS3erj8S/kloLDSRr1KltFue4Cz1QStLLbYzpoxYWa3TrJORRO7vSn
+         hAFMWAH8OLM6KFSspnU8Rme/d6XE2+LpVdNegGSpHaWh9mywN+FssKTrmnufQ4cYNBl+
+         h7eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725678740; x=1726283540;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KbmoP0t0DolFc9iPMaiHUQn6qxIGNtai/kwltA855QA=;
-        b=H58ggzYCeRCXZo/U6bKQIYCOEVZGV7pDRMul0Jl0JppiKYR3ZIzPRaUSqCOOqzQK7A
-         rvlpMJV5Vhx2EaL3yxeLQUvkM3IkaeJv0y3UrwjDf1NB6Ya0GI53VXZnaS8+nWY7HXdn
-         Ak+gF83+k3+MHi4Ut+tPokeZnd0sHCz8t+uT/qKpsOBUips4jb+CAV2d4tEToFHNdWcp
-         xUN6G9SLwYf+BAiDZom7J/ALI5rgyjKciTng9XazE+R5IAqt2jPxggSB4F7bSJ6EJiib
-         0AEAqhcD/QKE7FK9MGAFb/qF6xB3jmpQhX9c42FZfuOVyxwy53LT6DDDvnjuAp0VA3+Y
-         OLxw==
-X-Forwarded-Encrypted: i=1; AJvYcCUqYWKX3vS4z1A3dy6nxf7GmRc3zRayZ1m64lYTniSFUTe76Il4kRuA/sngIVjdzQFbRga7VZUWovM4DfwgHmk=@vger.kernel.org, AJvYcCVkumsYBFJZIvP2LMy7z49G+p4wG3vxS5zUOmQyRB6p7Myn/IohdYYAVFZ/V4F/TCDIHZZOTQrW@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0WgH837XM56x32O3+37mttEePMOvfAVcSglUdhb+THf2CrSpp
-	Cre9JuVZwCwkvA7VlqAEI32j3CaVn5ZUIbw2o/MgDm33JhWAHif09O6EFYVMEDDVYgdI9cYCHBt
-	CDxrna6kYVg09C9UzYc76AtC1Atk=
-X-Google-Smtp-Source: AGHT+IESNs0ph6mzZ+5EQVURtGJxGh/vmwZpk07jGVJFojYfOttpMAcamIF9i1r9o0lox+gMuUu7EMiZa7VXPnXMp7o=
-X-Received: by 2002:a92:c24c:0:b0:39f:7acb:b95f with SMTP id
- e9e14a558f8ab-3a0568a3db7mr19547665ab.18.1725678740581; Fri, 06 Sep 2024
- 20:12:20 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725691811; x=1726296611;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e3mM925qNxv0Pf+JM+6tJkzMmYkeYCZ3FsD/bOSe/lE=;
+        b=gSke816lfnB7pqtQeQZ2QsIHwhuiwwlzGRo4br7s1FTRQ9LyluOhAfgsAKeXAbfjqo
+         HQJS1jp45Cg15yvVX7eP7iH0Y51a3DIKFUP02yVxYnxLpmJgZpSaJRQhnEm0onmQ0YVY
+         LO7K6NB1BNuFMyJkECDudOa9Kvuh3QjJu68a4hkE97gs2m9r3F2UN3t+1ErgZOYlXSU9
+         CBeu1m815ZqFG8cZ0XTeOqupEkjeAims28mXX/0SK1hxY64JfQGQIl0AX7WdvOx0P4B4
+         XbRxJFfg+yRFM06OWxL6BWm59QDdvaNR67Ck4Iyq+zOuQJGBU1Pt0JMwKwhDYb8VXKjq
+         Y5Dg==
+X-Forwarded-Encrypted: i=1; AJvYcCVXk0khdVxv4mTVOl023pp5SM8qf+F8tkHxePuZBTSuIws8pwr6YZuLZSO83+4dvEx6CQ6nlWsXr8UHZBFtsQQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyaDG4RR9MCGplyH1lRqDNDkNWRaNTVIhbgsevmoa4//dVPVjg
+	57x9wuk2svhwAmbkpsjcnnV0RK39zVg7bpLB5MvuomzTWoaxoKDN1fwIwkvkht8szFpgtTM4ZvU
+	55lmnNmUyHWGqN93A5RoBGA55VfKzpF4uUBec
+X-Google-Smtp-Source: AGHT+IE+5p1I5J4NATlIOgXPM/KvOXZH1P/WhtcoRor4Pe4Cw+LefNUF2lgjTWAOyt8VAkdi9j5fnQkMwNfme1BkRec=
+X-Received: by 2002:a05:6214:2c0d:b0:6b7:aed3:408f with SMTP id
+ 6a1803df08f44-6c5283faf36mr67219076d6.13.1725691810413; Fri, 06 Sep 2024
+ 23:50:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240906095640.77533-1-kerneljasonxing@gmail.com>
- <20240906095640.77533-2-kerneljasonxing@gmail.com> <66db8f293dbd1_2a33ef294b3@willemb.c.googlers.com.notmuch>
- <CAL+tcoC9NoE3ws3nA-_ANAqD1cWpv9JDzFY11ACryZgg35dQrg@mail.gmail.com> <66dbbbac6a6df_2b0bd0294d3@willemb.c.googlers.com.notmuch>
-In-Reply-To: <66dbbbac6a6df_2b0bd0294d3@willemb.c.googlers.com.notmuch>
-From: Jason Xing <kerneljasonxing@gmail.com>
-Date: Sat, 7 Sep 2024 11:11:44 +0800
-Message-ID: <CAL+tcoC2TajcYLewWrhpF7KL75XyMiW_G0RV+58=fbMEH8rf=g@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 1/2] net-timestamp: introduce
- SOF_TIMESTAMPING_OPT_RX_FILTER flag
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, dsahern@kernel.org, shuah@kernel.org, willemb@google.com, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
-	Jason Xing <kernelxing@tencent.com>
+References: <20240904134152.2141-1-thunder.leizhen@huawei.com> <20240904134152.2141-3-thunder.leizhen@huawei.com>
+In-Reply-To: <20240904134152.2141-3-thunder.leizhen@huawei.com>
+From: David Gow <davidgow@google.com>
+Date: Sat, 7 Sep 2024 14:49:58 +0800
+Message-ID: <CABVgOSm6taiZpoeTz3Rry-ZU3bY-vS7FtCH98-O+pHMn9jcgzQ@mail.gmail.com>
+Subject: Re: [PATCH 2/3] list: test: Add a test for hlist_cut_number()
+To: Zhen Lei <thunder.leizhen@huawei.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="00000000000064c2cf062181ef9b"
+
+--00000000000064c2cf062181ef9b
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Sep 7, 2024 at 10:34=E2=80=AFAM Willem de Bruijn
-<willemdebruijn.kernel@gmail.com> wrote:
+On Wed, 4 Sept 2024 at 21:43, 'Zhen Lei' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
 >
-> Jason Xing wrote:
-> > On Sat, Sep 7, 2024 at 7:24=E2=80=AFAM Willem de Bruijn
-> > <willemdebruijn.kernel@gmail.com> wrote:
-> > >
-> > > Jason Xing wrote:
-> > > > From: Jason Xing <kernelxing@tencent.com>
-> > > >
-> > > > introduce a new flag SOF_TIMESTAMPING_OPT_RX_FILTER in the receive
-> > > > path. User can set it with SOF_TIMESTAMPING_SOFTWARE to filter
-> > > > out rx software timestamp report, especially after a process turns =
-on
-> > > > netstamp_needed_key which can time stamp every incoming skb.
-> > > >
-> > > > Previously, we found out if an application starts first which turns=
- on
-> > > > netstamp_needed_key, then another one only passing SOF_TIMESTAMPING=
-_SOFTWARE
-> > > > could also get rx timestamp. Now we handle this case by introducing=
- this
-> > > > new flag without breaking users.
-> > > >
-> > > > Quoting Willem to explain why we need the flag:
-> > > > "why a process would want to request software timestamp reporting, =
-but
-> > > > not receive software timestamp generation. The only use I see is wh=
-en
-> > > > the application does request
-> > > > SOF_TIMESTAMPING_SOFTWARE | SOF_TIMESTAMPING_TX_SOFTWARE."
-> > > >
-> > > > Similarly, this new flag could also be used for hardware case where=
- we
-> > > > can set it with SOF_TIMESTAMPING_RAW_HARDWARE, then we won't receiv=
-e
-> > > > hardware receive timestamp.
-> > > >
-> > > > Another thing about errqueue in this patch I have a few words to sa=
-y:
-> > > > In this case, we need to handle the egress path carefully, or else
-> > > > reporting the tx timestamp will fail. Egress path and ingress path =
-will
-> > > > finally call sock_recv_timestamp(). We have to distinguish them.
-> > > > Errqueue is a good indicator to reflect the flow direction.
-> > > >
-> > > > Suggested-by: Willem de Bruijn <willemb@google.com>
-> > > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > >
-> > > High level: where is the harm in receiving unsolicited timestamps?
-> > > A process can easily ignore them. I do wonder if the only use case is
-> > > an overly strict testcase. Was reminded of this as I tried to write
-> > > a more concise paragraph for the documentation.
-> >
-> > You raised a good question.
-> >
-> > I think It's more of a design consideration instead of a bugfix
-> > actually. So it is not solving a bug which makes the apps wrong but
-> > gives users a hint that we can explicitly and accurately do what we
-> > want and we expect.
-> >
-> > Let's assume: if we remove all the report flags design, what will
-> > happen? It can work of course. I don't believe that people choose to
-> > enable the generation flag but are not willing to report it. Of
-> > course, It's another thing. I'm just saying.
+> Test cases cover all possible situations:
+> 1. The cut number is invalid: zero or negative
+> 2. Partially cut.
+> 3. Cut all.
+> 4. The cut number is greater than the number of nodes in the old list.
+> 5. The old list is empty.
 >
-> Let's not debate the existing API. Its design predates both of our
-> contributions.
+> Signed-off-by: Zhen Lei <thunder.leizhen@huawei.com>
+> ---
 
-Yep.
+Thanks very much for the detailed test. It's great to see these kept up-to-date!
 
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>  lib/list-test.c | 51 +++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
 >
-> > I wonder if it makes sense to you :) ?
+> diff --git a/lib/list-test.c b/lib/list-test.c
+> index 37cbc33e9fdb380..3c60a6458545452 100644
+> --- a/lib/list-test.c
+> +++ b/lib/list-test.c
+> @@ -1172,6 +1172,56 @@ static void hlist_test_for_each_entry_safe(struct kunit *test)
+>         KUNIT_EXPECT_TRUE(test, hlist_empty(&list));
+>  }
 >
-> I don't see a strong use case. I know we're on v5 while I reopen that
-> point, sorry.
-
-That's all right. No worries.
-
+> +static void hlist_test_cut_number(struct kunit *test)
+> +{
+> +       struct hlist_node a[4], *last;
+> +       HLIST_HEAD(old);
+> +       HLIST_HEAD(new);
+> +       int cnt;
+> +
+> +       hlist_add_head(&a[3], &old);
+> +       hlist_add_head(&a[2], &old);
+> +       hlist_add_head(&a[1], &old);
+> +       hlist_add_head(&a[0], &old);
+> +
+> +       /* The cut number is less than 0 or zero */
+> +       cnt = hlist_cut_number(&new, &old, -1, &last);
+> +       KUNIT_EXPECT_EQ(test, cnt, 0);
+> +       KUNIT_EXPECT_EQ(test, hlist_count_nodes(&old), 4);
+> +       cnt = hlist_cut_number(&new, &old, 0, &last);
+> +       KUNIT_EXPECT_EQ(test, cnt, 0);
+> +       KUNIT_EXPECT_EQ(test, hlist_count_nodes(&old), 4);
+> +
+> +       /* The cut number is less than the number of nodes in the old list. */
+> +       cnt = hlist_cut_number(&new, &old, 2, &last);
+> +       KUNIT_EXPECT_EQ(test, cnt, 2);
+> +       KUNIT_EXPECT_EQ(test, hlist_count_nodes(&old), 2);
+> +       KUNIT_EXPECT_EQ(test, hlist_count_nodes(&new), 2);
+> +       KUNIT_EXPECT_PTR_EQ(test, last, &a[1]);
+> +       hlist_splice_init(&new, last, &old);
+> +
+> +       /* The cut number is equal to the number of nodes in the old list. */
+> +       cnt = hlist_cut_number(&new, &old, 4, &last);
+> +       KUNIT_EXPECT_EQ(test, cnt, 4);
+> +       KUNIT_EXPECT_TRUE(test, hlist_empty(&old));
+> +       KUNIT_EXPECT_EQ(test, hlist_count_nodes(&new), 4);
+> +       KUNIT_EXPECT_PTR_EQ(test, last, &a[3]);
+> +       hlist_splice_init(&new, last, &old);
+> +
+> +       /* The cut number is greater than the number of nodes in the old list. */
+> +       cnt = hlist_cut_number(&new, &old, 5, &last);
+> +       KUNIT_EXPECT_EQ(test, cnt, 4);
+> +       KUNIT_EXPECT_TRUE(test, hlist_empty(&old));
+> +       KUNIT_EXPECT_EQ(test, hlist_count_nodes(&new), 4);
+> +       KUNIT_EXPECT_PTR_EQ(test, last, &a[3]);
+> +
+> +       /* The old list is empty. */
+> +       cnt = hlist_cut_number(&new, &old, 1, &last);
+> +       KUNIT_EXPECT_EQ(test, cnt, 0);
+> +       KUNIT_EXPECT_TRUE(test, hlist_empty(&old));
+> +       KUNIT_EXPECT_TRUE(test, hlist_empty(&new));
+> +}
+> +
 >
-> It seems simpler to me to not read spurious fields that are not
-> requested, rather than to explicitly request them to be set to zero.
+>  static struct kunit_case hlist_test_cases[] = {
+>         KUNIT_CASE(hlist_test_init),
+> @@ -1192,6 +1242,7 @@ static struct kunit_case hlist_test_cases[] = {
+>         KUNIT_CASE(hlist_test_for_each_entry_continue),
+>         KUNIT_CASE(hlist_test_for_each_entry_from),
+>         KUNIT_CASE(hlist_test_for_each_entry_safe),
+> +       KUNIT_CASE(hlist_test_cut_number),
+>         {},
+>  };
 >
-> Adding more flags is not free. An extra option adds mental load for
-> casual users of this alread complex API. This may certainly sound
-> hypocritical coming from me, as I added my fair share. But I hope
-> their functionality outweighs that cost (well.. in at least one case
-> it was an ugly fix for a bad first attempt.. OPT_ID).
-
-I understand what you meant here. But I'm lost...
-
-For some users, they might use the tsflags in apps to test whether
-they need to receive/report the rx timestamp or not, and someday they
-will notice there are unexpected timestamps that come out. As we know,
-it's more of a design consideration about whether the users can
-control it by setsockopt...
-
-In addition to the design itself, above is the only use case I know.
-
+> --
+> 2.34.1
 >
-> I got to this point trying to condense the proposed documentation.
-> We can add this if you feel strongly.
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20240904134152.2141-3-thunder.leizhen%40huawei.com.
 
-If the new flag is not good for future development, we can stop it and
-then _only_ document the special case, which we both agreed about a
-week ago.
+--00000000000064c2cf062181ef9b
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-Personally, I don't want to let it go easily. But It's just me. You
-are the maintainer, so you have to make the decision. I'm totally fine
-with either way. Thanks.
-
-I was only trying to make the feature better. At least, we both have
-tried a lot.
-
->
-> But then my main feedback is that the doc has to be shorter and to
-
-It's truly very long, to be honest. I thought I needed to list the
-possible combination use cases.
-
-> the point. Why would a user user this? No background on how we got
-> here, what they might already do accidentally.
-
-It looks like I should remove those use cases? And then clarify the
-reason is per socket control?
-
-I have no idea if I should continue on this.
-
-Thanks,
-Jason
+MIIUqgYJKoZIhvcNAQcCoIIUmzCCFJcCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
+4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
+mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
+KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
+VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
+ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
+vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
+BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
+OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
+1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
+ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
+BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
+18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
+bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
+AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
+BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
+A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
+MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
+jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
+0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
+jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
+jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
+C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
+NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
+zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
+A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
+hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
+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
+erg7AgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
+/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFKFQnbTpSq0q
+cOYnlrbegXJIIvA6MFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
+BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
+MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
+LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
+bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
+FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBR
+nRJBmUP+IpudtmSQ/R55Sv0qv8TO9zHTlIdsIf2Gc/zeCi0SamUQkFWb01d7Q+20kcpxNzwV6M7y
+hDRk5uuVFvtVxOrmbhflCo0uBpD9vz/symtfJYZLNyvSDi1PIVrwGNpyRrD0W6VQJxzzsBTwsO+S
+XWN3+x70+QDf7+zovW7KF0/y8QYD6PIN7Y9LRUXct0HKhatkHmO3w6MSJatnqSvsjffIwpNecUMo
+h10c6Etz17b7tbGdxdxLw8njN+UnfoFp3v4irrafB6jkArRfsR5TscZUUKej0ihl7mXEKUBmClkP
+ndcbXHFxS6WTkpjvl7Jjja8DdWJSJmdEWUnFjnQnDrqLqvYjeVMS/8IBF57eyT6yEPrMzA+Zd+f5
+hnM7HuBSGvVHv+c/rlHVp0S364DBGXj11obl7nKgL9D59QwC5/kNJ1whoKwsATUSepanzALdOTn3
+BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
+0DhqINx2fw0bwhpfFGADOZDe5DVhI7AIW/kEMHuIgAJ/HPgyn1+tldOPWiFLQbTNNBnfGv9sDPz0
+hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
+AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
+BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
+eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgJR2gj3fLWjigd2Ws8lFgMoOv3sFA
+sJUvXSj94NNj7uwwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQw
+OTA3MDY1MDExWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAAK+W1m87K4GFVUPW1gUqhlWL6Yg3+09BAzCbkELMN94yuqM
+BGhJVt3WPj65KG+XB4nSFAleI0Z44rnyveOqI0KwcLz6CYdBdqFjt5NebTXYKoZEtKFYXq+uXxkh
+z39IyI8s9OKFoSK7pPL9IaJWagZz3M4fEC6q22TDgQ60ucpxuRsMChKJTGN49GY5xsQC5/2zbdVH
+znbEKGKooMicmeCUoiEf2bOmEgr2Pj4drjnsA1hPTrCe5fYsO+S+59NclQ43yyOrR+O25Slk2sMr
+2tWcPCUK4GbK3hg0ZoenEHfMzNzHmV8zHyQ7UNG07Z70knqG/cPJIfMsGzQiO684Sp8=
+--00000000000064c2cf062181ef9b--
 
