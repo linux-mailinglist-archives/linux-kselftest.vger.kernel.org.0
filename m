@@ -1,203 +1,136 @@
-Return-Path: <linux-kselftest+bounces-17433-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17434-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CED2C96FE7B
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2024 01:28:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1974A96FEA3
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2024 02:05:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E846C1C228BB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Sep 2024 23:28:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B93D01F235D0
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Sep 2024 00:05:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAED215B15D;
-	Fri,  6 Sep 2024 23:28:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30E43367;
+	Sat,  7 Sep 2024 00:04:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q6IdksBt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G1Sl8s2T"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A6A315AD83;
-	Fri,  6 Sep 2024 23:28:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FFD1849;
+	Sat,  7 Sep 2024 00:04:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725665292; cv=none; b=jN5AWdelAOodSI689WkjpC5D4gfsH2O5Zi0Z9ePz4COvrqicsWjkK/8mO+dA9MYkpE8FdBWuAF8RLzGUo4S852oH2A/xhYsd4iCv7HIxhRjTeanVlD+Thq7b8K+vPMlqok76OEZAwRuL9NQDU92WnRQjKocFdRBYQNEit/5MKXU=
+	t=1725667498; cv=none; b=uhpwZ5kkrcD+mwCFqs2koiZ6svdeRMTsKQMI/YG5s3L830XLVNUcklnu4HYjKNxe9PYLkq/IkEp+zOnRs66xLklF7tGoqFA/GT1XpVMUb40XxBMZe3zmKr7uVAmwEMyEglnrqVZ9W+HXWgjAzLvrUKxcyA+HSO/3BF/4rrNqR9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725665292; c=relaxed/simple;
-	bh=qU46c5aFmpc7j9gyVhM9h46IdY44emYpEv/jit0N648=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=iZKTePgESvN2wYETguWaFy8jF04YqsxyVU/qA0RzO/wpbu8WJCkp1jowiV8cVrocXuL/scby0NcDOgj2qe6BDTEIKfAIJOkO0w0X+utr/FQm2vdXSCNl666+TuH32OcEpGbIH6u/ri/I6MZFuzsdOUUYmwBEURRUshptWMA6XkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q6IdksBt; arc=none smtp.client-ip=209.85.219.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6c351809a80so14205256d6.1;
-        Fri, 06 Sep 2024 16:28:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725665290; x=1726270090; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jqz8q2FUFpFlbCCDjXG+7PBcJcJE11GfFiHSwwdg/e4=;
-        b=Q6IdksBtWqvHGO9+yNB3bOS/i3/M6fzjqA8eXbvG/1dGJSFsZmvdB4HJFhx6a/wSTi
-         oqHlJiqAN8RgPEg1uVex2CWzIZICW2QEeOI3FtXPxReypFvXHUDsPf9VEbWZCGD6GQEq
-         MUu91wXL9+eg6wmyXvQdfA2+mmNGBdErqNiIKrdtp2zxPznArrGJp8cSoB9I8uHRU9Mm
-         aeIxRaCkdLtF1BdPkzTRBhMgM0VcdcHyXCVOs988C1ESGD9ib1NEL6nhYV8UQhie53Ib
-         yyH+uJRaU5OHkK1PJDDKdia4Au1/OwxE8eOvCbmfkfz0Bf9l834Zf4otyM/T39eUtX1y
-         fzow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725665290; x=1726270090;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=jqz8q2FUFpFlbCCDjXG+7PBcJcJE11GfFiHSwwdg/e4=;
-        b=sWD2WxnRbTHfDIssONSN/iTaNKZIsSUcCHFjEvOuq3a0NZlR1E+hGvk80rBlcM/KTL
-         xAiW3qHb/6jFufUvOeheDe4+zr4thjqR4wFR0F3fKWtgGxHVItMLrbIM7m04NHw01ZZJ
-         5qw5sAKsPZJq8Al5ETcKBkndqK73jlRZdAHFzGtqpyHnzY6x0ECANlmVQQqb6EM6Hf4b
-         XsRoCQfkxi/ACjExgIxfJm/oez3dM56kii2AyPcyD9lo8hFLPXPE8tVqXtvvtq6Mk/YI
-         Jyiyv7Mu9ggBHN4zfgjJYBtwgdQHs2SZFEWzHE2kOgSyq7iJw8csMcHil6iU0UJOZjbC
-         PHdA==
-X-Forwarded-Encrypted: i=1; AJvYcCUtfdbXuM7E7ppzqHCRZoBqLEGW+/DgUR6kSTiYGxseW0LQMJDkVYV6nEeY5W9g4k+qUkD8CSIeuubXDL/I+iE=@vger.kernel.org, AJvYcCV9zJ6kM8LPRJKgEfCEAhczMxFF6MvTUWkIxr2JpT/V8A/e7Cgj2hrV1OmBy1ocLZ+vulOROLSU@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnhhD/k0hsdMDgdOAh3VDF+ouu4Hxl2B5oY5t7nJJJ+FngpDXA
-	x3AKBz28Pq6yPp+ib/BwGOZ2aNKc2JmBrEfN4nzeijg2uADipz/v
-X-Google-Smtp-Source: AGHT+IFdl0YUzpYfOEPf1j/1Kg3b3Nx+r4hut1xW63itkb4dHaYUmlX9+DmYwH7PT6a+b83EfkKg0w==
-X-Received: by 2002:a05:6214:5403:b0:6c5:1614:9c59 with SMTP id 6a1803df08f44-6c52850056emr48007046d6.31.1725665289736;
-        Fri, 06 Sep 2024 16:28:09 -0700 (PDT)
-Received: from localhost (193.132.150.34.bc.googleusercontent.com. [34.150.132.193])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c53474d632sm9846d6.89.2024.09.06.16.28.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Sep 2024 16:28:09 -0700 (PDT)
-Date: Fri, 06 Sep 2024 19:28:08 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Matthieu Baerts <matttbe@kernel.org>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- netdev@vger.kernel.org
-Cc: davem@davemloft.net, 
- kuba@kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- ncardwell@google.com, 
- shuah@kernel.org, 
- linux-kselftest@vger.kernel.org, 
- fw@strlen.de, 
- Willem de Bruijn <willemb@google.com>
-Message-ID: <66db9008e0b4e_2a33ef29428@willemb.c.googlers.com.notmuch>
-In-Reply-To: <ad780c53-9538-4d3f-a02f-1063828fc035@kernel.org>
+	s=arc-20240116; t=1725667498; c=relaxed/simple;
+	bh=N3Qp7GYKSnKVy7AjygjC5ryaFvEImrqncE6zc0RiV+k=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=P/U4eGKUczI6Ip6xM+7ktt8jZ6ePBI30bdniMKPq+cH8rdEdcZtYJj8ZeEdPMml5x1TzRDY0d6t9P4OkLipbtn5b54c7N5yKQuH4gFdWbkD1IIMZeoTHP8xYhUIzg70h7jU95TQ7bsI64WSuvNilw9I4xhA/P9mBjqOfpN6BzaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G1Sl8s2T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 163E7C4CEC4;
+	Sat,  7 Sep 2024 00:04:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725667497;
+	bh=N3Qp7GYKSnKVy7AjygjC5ryaFvEImrqncE6zc0RiV+k=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=G1Sl8s2Tp2lMZrfSIGw7e3IhHdYJ2y1CUFi7BvF/v9uTD2NdXOdKfdlcVDJkUqhZZ
+	 gippSNSBxlxRpIiFXquf19LBB0TizRdE0W3ODH9vRWDgflFpa/MJVno0LWfIqeV/og
+	 JdqRegxss3PgybVq1tyh0ru0VDfAdWOSM4sxd6lvtmwaUg42dCtbaKaiE2HH+AnZBx
+	 4d5MZYq8uoQyx9EFfpB2jhQGGHhnWUsoUrW5UahAVLpntl4paZYTAADfQveFLYl8CI
+	 GSZYoJq7ahzrkMXHFHDTFwAkKchs21kaIW0eqxbt+VFK47rN5T+hPo9VzmLKcxw6NV
+	 cD2lKLYVGGj3A==
+Date: Fri, 6 Sep 2024 17:04:56 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: Matthieu Baerts <matttbe@kernel.org>, netdev@vger.kernel.org,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ ncardwell@google.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ fw@strlen.de, Willem de Bruijn <willemb@google.com>
+Subject: Re: [PATCH net-next v2 2/2] selftests/net: integrate packetdrill
+ with ksft
+Message-ID: <20240906170456.5a113628@kernel.org>
+In-Reply-To: <66db9008e0b4e_2a33ef29428@willemb.c.googlers.com.notmuch>
 References: <20240905231653.2427327-1-willemdebruijn.kernel@gmail.com>
- <20240905231653.2427327-3-willemdebruijn.kernel@gmail.com>
- <f63e7367-c4fb-4cdc-a44c-6accbc309c5a@kernel.org>
- <66db217a558c4_29a385294d3@willemb.c.googlers.com.notmuch>
- <ad780c53-9538-4d3f-a02f-1063828fc035@kernel.org>
-Subject: Re: [PATCH net-next v2 2/2] selftests/net: integrate packetdrill with
- ksft
+	<20240905231653.2427327-3-willemdebruijn.kernel@gmail.com>
+	<f63e7367-c4fb-4cdc-a44c-6accbc309c5a@kernel.org>
+	<66db217a558c4_29a385294d3@willemb.c.googlers.com.notmuch>
+	<ad780c53-9538-4d3f-a02f-1063828fc035@kernel.org>
+	<66db9008e0b4e_2a33ef29428@willemb.c.googlers.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-Matthieu Baerts wrote:
-> On 06/09/2024 17:36, Willem de Bruijn wrote:
-> > Matthieu Baerts wrote:
-> >> Hi Willem,
-> >>
-> >> On 06/09/2024 01:15, Willem de Bruijn wrote:
-> >>> From: Willem de Bruijn <willemb@google.com>
-> >>>
-> >>> Lay the groundwork to import into kselftests the over 150 packetdrill
-> >>> TCP/IP conformance tests on github.com/google/packetdrill.
-> >>>
-> >>> Florian recently added support for packetdrill tests in nf_conntrack,
-> >>> in commit a8a388c2aae49 ("selftests: netfilter: add packetdrill based
-> >>> conntrack tests").
-> >>>
-> >>> This patch takes a slightly different approach. It relies on
-> >>> ksft_runner.sh to run every *.pkt file in the directory.
-> >>
-> >> Thank you for adding this support! I'm looking forward to seeing more
-> >> packetdrill tests being validated by the CI, and I hope that will
-> >> encourage people to add more tests, and increase the code coverage!
+On Fri, 06 Sep 2024 19:28:08 -0400 Willem de Bruijn wrote:
+> > > No, we opted for this design exactly to use existing kselftest infra,
+> > > rather than reimplementing that in our wrapper, as I did in the RFC.  
 > > 
-> > Thanks for taking a look and your feedback.
+> > OK, I understood from the discussions from the RFC that by using the
+> > kselftest infra, the tests would be automatically executed in dedicated
+> > netns, and it could also help running tests in parallel. That sounded
+> > great to me, but that's not the case by default from what I see.  
 > 
-> You are welcome!
+> Perhaps that's something to change in the defaults for run_tests.
 > 
-> >> I have some questions about how the packetdrill should be executed:
-> >> should they be isolated in dedicated netns?
-> > 
-> > Yes. The runner decides that, by passing -n 
+> Since the infra exist, that is preferable over reimplementing it for
+> one particular subset of tests.
 > 
-> But then it means that by default, the tests are not isolated. I think
-> many (most?) selftests are running in a dedicated netns by default, no?
-> 
-> To be honest, that's the first time I hear about:
-> 
->   ./run_kselftest.sh --netns
-> 
-> I don't know if it is common to use it, nor if we can enable this
-> feature when using 'make run_tests'. And I don't know if many CI runs
-> multiple selftests in parallel from the same VM.
-> 
-> >> There are some other comments, but feel free to ignore them if they are
-> >> not relevant, or if they can be fixed later.
-> >>
-> >>> Tested:
-> >>> 	make -C tools/testing/selftests \
-> >>> 	  TARGETS=net/packetdrill \
-> >>> 	  run_tests
-> >>
-> >> Please note that this will not run the packetdrill tests in a dedicated
-> >> netns. I don't think that's a good idea. Especially when sysctl knobs
-> >> are being changed during the tests, and more.
-> >>
-> >>> 	make -C tools/testing/selftests \
-> >>> 	  TARGETS=net/packetdrill \
-> >>> 	  install INSTALL_PATH=$KSFT_INSTALL_PATH
-> >>>
-> >>> 	# in virtme-ng
-> >>> 	./run_kselftest.sh -c net/packetdrill
-> >>> 	./run_kselftest.sh -t net/packetdrill:tcp_inq_client.pkt
-> >>
-> >> I see that ./run_kselftest.sh can be executed with the "-n | --netns"
-> >> option to run each test in a dedicated net namespace, but it doesn't
-> >> seem to work:
-> >>
-> >>> # ./run_kselftest.sh -n -c net/packetdrill
-> >>> [  411.087208] kselftest: Running tests in net/packetdrill
-> >>> TAP version 13
-> >>> 1..3
-> >>> Cannot open network namespace "tcp_inq_client.pkt-TaQ8iN": No such file or directory
-> >>> setting the network namespace "tcp_inq_server.pkt-sW8YCz" failed: Invalid argument
-> >>> Cannot open network namespace "tcp_md5_md5-only-on-client-ack.pkt-YzJal6": No such file or directory
-> > 
-> > Ah, I guess this requires adding CONFIG_NET_NS=y to
-> > tools/testing/selftests/net/packetdrill/config
-> 
-> Good point. But I have CONFIG_NET_NS=y on my side. I didn't investigate
-> more, I was first wondering if other people tried this option.
-> 
-> >> But maybe it would be better to create the netns in ksft_runner.sh?
-> >> Please see below.
-> > 
-> > No, we opted for this design exactly to use existing kselftest infra,
-> > rather than reimplementing that in our wrapper, as I did in the RFC.
-> 
-> OK, I understood from the discussions from the RFC that by using the
-> kselftest infra, the tests would be automatically executed in dedicated
-> netns, and it could also help running tests in parallel. That sounded
-> great to me, but that's not the case by default from what I see.
+> Or if not all kselftests can run in netns (quite likely), this needs
+> to be opt-in. Then a variable defined in the Makefile perhaps. To
+> tell kselftest to enable the feature for this target.
 
-Perhaps that's something to change in the defaults for run_tests.
+Indeed, I was thinking along the same lines.
 
-Since the infra exist, that is preferable over reimplementing it for
-one particular subset of tests.
+We're closing net-next in a week, it'd be great to have the baseline
+ksft interpreter mechanism in place in the next couple of days. 
+The exact implementation of packetdrill/ksft_runner.sh can be changed
+later as needed, and the current one works fine for NIPA.
 
-Or if not all kselftests can run in netns (quite likely), this needs
-to be opt-in. Then a variable defined in the Makefile perhaps. To
-tell kselftest to enable the feature for this target.
 
+Hopefully we can also discuss at LPC/netconf what to do about libraries
+(where setup / cleanup code could live). Looking at MPTCP tests - do
+they work out of tree? I see mptcp_lib.sh does:
+
+. "$(dirname "${0}")/../lib.sh"
+. "$(dirname "${0}")/../net_helper.sh"
+
+but lib/sh and net_helper.sh are not listed in the Makefile. So they
+won't get packaged...
+
+We should make sure we support running the tests with make run_tests
+and in installed mode. 
+
+If we agree that the current situation with support for library code is
+far from ideal, I think we have three(ish) directions to explore:
+
+ 1  build netns handling into runner.sh
+   + already mostly there
+   + simpler tests, no need to worry about netns, it just happens
+   - not all tests need netns (HW-adjacent tests especially)
+   - netns setup is the main thing we need but not the only thing,
+     wait helpers, python code, etc. also need to be handled
+
+ 2a improve library bundling at the ksft level
+   + we already have a net/lib "meta-target", it kinda works
+   + hopefully in a way that lets us Python
+   - no idea how
+
+ 2b put all the code in kselftest/, like ktap_helpers.sh ?
+   + easy to do
+   + helps other subsystems
+   - could cause git conflicts
+   - won't help Python?
+
+ 3  give up on target proliferation; on a quick count we have 15 targets
+    in ksft for various bits of networking, faaar more than anyone else
+   + fewer targets limits the need for libraries, libraries local to
+     the target are trivial to handle
+   - ksft has no other form of "grouping" tests, if we collapse into 
+     a small number of targets it will be hard to run a group of tests
 
