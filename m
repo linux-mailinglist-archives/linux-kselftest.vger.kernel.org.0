@@ -1,285 +1,193 @@
-Return-Path: <linux-kselftest+bounces-17450-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1116B970991
-	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Sep 2024 21:41:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 930F3970A24
+	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Sep 2024 23:36:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EC471C217C0
-	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Sep 2024 19:41:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE4D9B20AE5
+	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Sep 2024 21:36:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC837177991;
-	Sun,  8 Sep 2024 19:41:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 720F41779BA;
+	Sun,  8 Sep 2024 21:35:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lYcLvKKS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RhfWjNRB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f46.google.com (mail-qv1-f46.google.com [209.85.219.46])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A0B2206E;
-	Sun,  8 Sep 2024 19:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E54C145FE5;
+	Sun,  8 Sep 2024 21:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725824496; cv=none; b=SLki9Gdc01attL1+w/PnmnXE9i4bb9HN2nnsZTiWQzGSyLMXVfxVhn4uH5GSxM7P15dy0ujIfZhbzAVqSh3NmTTaUjfaXhCAsBu/5Mdqi/ThsqdjMvUvRE4BnyTsDD8+8N16YG3BEsZvlFsQsq++9QQ7rQAW/2FjgP/pitjJQ/o=
+	t=1725831357; cv=none; b=rTZylki1s4c6HsV0BvSh5K16PXlerjyjSVlc0ekDKqoGD5Oqd6NH/IXto2bhGQMkZCvYbXxXv4VHQcwcLaunLsCvezchcpkVha9O5FWGY8OFNkStnXHha251Zvavy+/9tgGoK133H7uhZ05qrMi58vV6e8xZfXftia0zfUox1Ms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725824496; c=relaxed/simple;
-	bh=xz5tWGZSEJ980kVQmcGgkGRs7fv4OtphlnEBZ6R6gRA=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=TAfw2zA6vgoF81fv4EivMH5P5pAfqH8nQ2HMCgJjah/WXi5+GDaZn2X68ZCIesvxSOr5awgcSdP7+pBA1cYRhSXRfPKuvuw/53PK/g5CxR4gU5C8x68BQv8KzxJK95aEsQH59ZxZuLdicbOOP+HIGR1Z7mePAQmADnQiCrn/fZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lYcLvKKS; arc=none smtp.client-ip=209.85.219.46
+	s=arc-20240116; t=1725831357; c=relaxed/simple;
+	bh=3dCoGsj2JfSBV/BQ2ZN8gTg6XvjszrmLZYr0nuz7h7g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DITefhqRcG5lTLFy1nu4RY/DU9nDf2bVcxRjXfUiZj4Ws4EtwUc4P0E0QNVmVfOT3csRnj3Nu89kueyTehZfsIUWZEenWjERD0RABU2QDPyLVrL0kk6/xd42Hb5DkEWTpHbEiajQ7zZf5mv9/TraPqVXYPcDJ3jSS1+U8igZwXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RhfWjNRB; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f46.google.com with SMTP id 6a1803df08f44-6c359c1a2fdso21586656d6.2;
-        Sun, 08 Sep 2024 12:41:34 -0700 (PDT)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4280ca0791bso32921465e9.1;
+        Sun, 08 Sep 2024 14:35:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725824494; x=1726429294; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xz5tWGZSEJ980kVQmcGgkGRs7fv4OtphlnEBZ6R6gRA=;
-        b=lYcLvKKSxsvQz/bDOZvE8ePI9UnJmME06F34ezZZHty4NySx4sw/0taCUiQss2rMdl
-         pSf4qugCOqd+VWU6w5ri8wR4/NcAZLCZD962YJ5A9ITqRITC3hQB2qESrnMt7gRTTnlw
-         SIZ18HMT/ArB9tar3QbrsnPOeNQOOwOIryEu/JociUfvc5LFzU5f/3EKbKA7cwsHMNtD
-         mafmmDsdWSOkob6v6uhBmuwKt0LnjKqYr56RSIv7VqdjtPdWD5ROQdWjtBPjt7YoUvEW
-         skIbCxtQZ/8Jx2+Trvkd7tDiYnR0qlMgQFI4yNuk2GU/1XbU/uMYTIOPNVLDnYfQ3zok
-         +vsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725824494; x=1726429294;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+        d=gmail.com; s=20230601; t=1725831354; x=1726436154; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=xz5tWGZSEJ980kVQmcGgkGRs7fv4OtphlnEBZ6R6gRA=;
-        b=HHAZkVzwX/zwbJkT+WUNj9Q1CVu9SjV4i6aLOsu6Qzsh5pril/ZSGtMCo2tRKjI964
-         BlsR3BGX9kIQ8oSEuBw+PooyrXrHSc50+fivDKn0VH8Et1zVBn6Ffq9f+Vflg0ngjQIe
-         PFTGCu47Qe19vGv8W2hseiNJOqQ1MiNp34rivDIMDHFYmkZcXU2OzKlMohhDlXWEhMhf
-         WMiTbHlNfJiTLLFkDDs7qKTc8lIITIYKwvPSFgJFVaAAShJ1CQ6Lyb7L2G2Gz8uceSjo
-         CHV4eCKNK3257cARBevfUl6Svs7oCuB/Ucu2foLi7cPqq7zjwJ7xM1m7uWs9YMBy8eKu
-         9jHA==
-X-Forwarded-Encrypted: i=1; AJvYcCW0NTf8cZs7ATcQO1HKCXzX3uXVcKnrz1KyxelkjTuOWgzXaRCwngDjNRxu5283tMCG5JvbaFCt@vger.kernel.org, AJvYcCXG58ItLEW4HceQrrpZKgUDx/6S4AZINfVCG52tTuXay82rlDp9bCa9hZ5HWI8XnMCX3SaBadLQLcTIwLTWw7A=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxne2IIGPsRSwS0rEvwbhJIcgtaJB4KCfsdOb/c/wB/VaqT3pnG
-	p2+8uyYdJ3phc/kq3MOaK5FuQTIE+AYxtFJKp0WNFxjEtzqd5rL5
-X-Google-Smtp-Source: AGHT+IFmR/tPXNm79YOtLkdwhZ9f7b5XEqEXRuZ66d74lDKkcxHzcvxNks7RPUuBVbn7ChS3ZWaG8w==
-X-Received: by 2002:a05:6214:4607:b0:6c3:5926:a070 with SMTP id 6a1803df08f44-6c5284f4c8cmr128625486d6.30.1725824493757;
-        Sun, 08 Sep 2024 12:41:33 -0700 (PDT)
-Received: from localhost (193.132.150.34.bc.googleusercontent.com. [34.150.132.193])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c53474d8d7sm14816366d6.95.2024.09.08.12.41.33
+        bh=ebxD+tZxKc5DCOdCTQdYFhvzT6rv4DDDxFg4BZPdZes=;
+        b=RhfWjNRBhuF8cVnD/DA3+vcwI53mfCkUXkd67JGOVXmAtGWtT3956vLt7gaRto/MK0
+         R1ykfTN7adqr2bbhaloULjRPioLssyGy0gYAowX+Fa05D7ZrclbcIwFpso0Bjy7o92mu
+         e/fVMTKH67KJuexTTPxs3GfHJcloyF6ygCOkusENyJweZaogF3n5lzmedBPywS8jvuGy
+         ncQ9qlmeEWFZ2FaeirXOQrBwml6VzWcGDPdDr1MYEEentySOTKH/W91Tf5AJ+1Ocr84Z
+         j2qVnHnvCpd9W6t+vap6pCeAR9wswhgkd8im5ndEwZEp21DTXrm9EJuXGZ1qxWbxDbJ3
+         kTcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1725831354; x=1726436154;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ebxD+tZxKc5DCOdCTQdYFhvzT6rv4DDDxFg4BZPdZes=;
+        b=aSe1QxFuoekSjAbfZkf3GXkVrXtsr176NbsavRQP2MD1yDRPCDEwXt6pyQ8oLHSRj7
+         CXQOTpdFOsQXZ543z9mCnliHPeA6lEGmNdSEXR77Vvp30QW28UOaSTvqx60ZvAhzyPP2
+         m/DvKSgR2rkk+0wj7fHnR6wCfUC1da8O2gQLfa43TWJgiKWkapoMna0YS6Fpl52M9mlI
+         GHvgRxLhsR4ACUDkgotDAGXOp4gy+5hluaZVUUhimsefqD7ayh9s5wRNDtJS7vESsZ6W
+         EUloEv6vX7VonIE8WF5g617doZvKUaK22UsJZNEKKe4zjoqHPGDDtLhkDLK2HyJiaBqU
+         NqoA==
+X-Forwarded-Encrypted: i=1; AJvYcCX3MfqxDV0DZeyd2lK23N3jH1Pu/VNQR5pqCenU/5sKzgcoXSSrYOH1vVr3Yq1T/7IgGtfQxbjF1DKsGzQi@vger.kernel.org, AJvYcCXZNUAntMlFpDs4OnbGJSaOGGt25ikN/9elzqWlvTWu0mFhOeBuzB8w7XxO1ydAPDdukl8dH3GDg+XKgCqskpY=@vger.kernel.org, AJvYcCXldu7+350jF1vOlXeAoZHYjDew6S/VIIoqJdHLTH5THL7rPGJ7mwmeFV9C0qsuNbwwQel83DUA+ecwCw3sovdp@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJMm0XMtdDnz7OXHtnW5XKQ+vVZX+jhVRGlbHNUBZdQQaxaeAr
+	MBCHcwGrnlRIPC6+8bZS3BNNu5YdNU8euA8bGWpyPjk8XzzG8KJs
+X-Google-Smtp-Source: AGHT+IEpX/kMHwkTt5gQUGai6vWC2fUNaDyAAgimr1BCXN9cj+uj5X3JVt+PwrdiJYnf3s8A5mQQAQ==
+X-Received: by 2002:a05:600c:3483:b0:42c:9999:4fb3 with SMTP id 5b1f17b1804b1-42c9f9d7d6bmr67647945e9.34.1725831352969;
+        Sun, 08 Sep 2024 14:35:52 -0700 (PDT)
+Received: from PC-PEDRO-ARCH ([2001:818:e92f:6400:96b:aa92:afc0:2d3d])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42ca8cebd35sm72122655e9.0.2024.09.08.14.35.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Sep 2024 12:41:33 -0700 (PDT)
-Date: Sun, 08 Sep 2024 15:41:32 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Jason Xing <kerneljasonxing@gmail.com>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, 
- edumazet@google.com, 
- kuba@kernel.org, 
- pabeni@redhat.com, 
- dsahern@kernel.org, 
- shuah@kernel.org, 
- willemb@google.com, 
- linux-kselftest@vger.kernel.org, 
- netdev@vger.kernel.org, 
- Jason Xing <kernelxing@tencent.com>
-Message-ID: <66ddfdece6d32_2fb98729447@willemb.c.googlers.com.notmuch>
-In-Reply-To: <CAL+tcoC2TajcYLewWrhpF7KL75XyMiW_G0RV+58=fbMEH8rf=g@mail.gmail.com>
-References: <20240906095640.77533-1-kerneljasonxing@gmail.com>
- <20240906095640.77533-2-kerneljasonxing@gmail.com>
- <66db8f293dbd1_2a33ef294b3@willemb.c.googlers.com.notmuch>
- <CAL+tcoC9NoE3ws3nA-_ANAqD1cWpv9JDzFY11ACryZgg35dQrg@mail.gmail.com>
- <66dbbbac6a6df_2b0bd0294d3@willemb.c.googlers.com.notmuch>
- <CAL+tcoC2TajcYLewWrhpF7KL75XyMiW_G0RV+58=fbMEH8rf=g@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 1/2] net-timestamp: introduce
- SOF_TIMESTAMPING_OPT_RX_FILTER flag
+        Sun, 08 Sep 2024 14:35:52 -0700 (PDT)
+Date: Sun, 8 Sep 2024 22:35:50 +0100
+From: Pedro Falcato <pedro.falcato@gmail.com>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Jeff Xu <jeffxu@chromium.org>, akpm@linux-foundation.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, linux-hardening@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, willy@infradead.org, broonie@kernel.org, vbabka@suse.cz, 
+	Liam.Howlett@oracle.com, rientjes@google.com, keescook@chromium.org
+Subject: Re: [PATCH v3 4/5] selftests/mseal: add more tests for mmap
+Message-ID: <ihclooyralrg2yugyrkwvw3kay6k7hpdgzczhcxh5dgmakulwb@wpb4kyofz7ot>
+References: <20240830180237.1220027-1-jeffxu@chromium.org>
+ <20240830180237.1220027-5-jeffxu@chromium.org>
+ <e7ea2b84-8d10-40fe-a14f-837bca851ea9@lucifer.local>
+ <fd927106-2fc3-4b96-8014-2c517229bc99@lucifer.local>
+ <CABi2SkUpCf+aOa2sPED8CosG5ccqjFd7ouot8gXi9ECqsHiZhw@mail.gmail.com>
+ <4944ce41-9fe1-4e22-8967-f6bd7eafae3f@lucifer.local>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4944ce41-9fe1-4e22-8967-f6bd7eafae3f@lucifer.local>
 
-Jason Xing wrote:
-> On Sat, Sep 7, 2024 at 10:34=E2=80=AFAM Willem de Bruijn
-> <willemdebruijn.kernel@gmail.com> wrote:
-> >
-> > Jason Xing wrote:
-> > > On Sat, Sep 7, 2024 at 7:24=E2=80=AFAM Willem de Bruijn
-> > > <willemdebruijn.kernel@gmail.com> wrote:
-> > > >
-> > > > Jason Xing wrote:
-> > > > > From: Jason Xing <kernelxing@tencent.com>
-> > > > >
-> > > > > introduce a new flag SOF_TIMESTAMPING_OPT_RX_FILTER in the rece=
-ive
-> > > > > path. User can set it with SOF_TIMESTAMPING_SOFTWARE to filter
-> > > > > out rx software timestamp report, especially after a process tu=
-rns on
-> > > > > netstamp_needed_key which can time stamp every incoming skb.
-> > > > >
-> > > > > Previously, we found out if an application starts first which t=
-urns on
-> > > > > netstamp_needed_key, then another one only passing SOF_TIMESTAM=
-PING_SOFTWARE
-> > > > > could also get rx timestamp. Now we handle this case by introdu=
-cing this
-> > > > > new flag without breaking users.
-> > > > >
-> > > > > Quoting Willem to explain why we need the flag:
-> > > > > "why a process would want to request software timestamp reporti=
-ng, but
-> > > > > not receive software timestamp generation. The only use I see i=
-s when
-> > > > > the application does request
-> > > > > SOF_TIMESTAMPING_SOFTWARE | SOF_TIMESTAMPING_TX_SOFTWARE."
-> > > > >
-> > > > > Similarly, this new flag could also be used for hardware case w=
-here we
-> > > > > can set it with SOF_TIMESTAMPING_RAW_HARDWARE, then we won't re=
-ceive
-> > > > > hardware receive timestamp.
-> > > > >
-> > > > > Another thing about errqueue in this patch I have a few words t=
-o say:
-> > > > > In this case, we need to handle the egress path carefully, or e=
-lse
-> > > > > reporting the tx timestamp will fail. Egress path and ingress p=
-ath will
-> > > > > finally call sock_recv_timestamp(). We have to distinguish them=
-.
-> > > > > Errqueue is a good indicator to reflect the flow direction.
-> > > > >
-> > > > > Suggested-by: Willem de Bruijn <willemb@google.com>
-> > > > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > > >
-> > > > High level: where is the harm in receiving unsolicited timestamps=
-?
-> > > > A process can easily ignore them. I do wonder if the only use cas=
-e is
-> > > > an overly strict testcase. Was reminded of this as I tried to wri=
-te
-> > > > a more concise paragraph for the documentation.
+On Sat, Sep 07, 2024 at 08:27:52PM GMT, Lorenzo Stoakes wrote:
+> On Fri, Aug 30, 2024 at 04:57:26PM GMT, Jeff Xu wrote:
+> > On Fri, Aug 30, 2024 at 12:23 PM Lorenzo Stoakes
+> > <lorenzo.stoakes@oracle.com> wrote:
 > > >
-> > > You raised a good question.
-> > >
-> > > I think It's more of a design consideration instead of a bugfix
-> > > actually. So it is not solving a bug which makes the apps wrong but=
+> > > On Fri, Aug 30, 2024 at 07:43:12PM GMT, Lorenzo Stoakes wrote:
+> > > > On Fri, Aug 30, 2024 at 06:02:36PM GMT, jeffxu@chromium.org wrote:
+> > > > > From: Jeff Xu <jeffxu@chromium.org>
+> > > > >
+> > > > > Add sealing test to cover mmap for
+> > > > > Expand/shrink across sealed vmas (MAP_FIXED)
+> > > > > Reuse the same address in !MAP_FIXED case.
+> 
+> Hi Jeff, I really want to find a constructive way forward, but you've
+> basically ignored more or less everything I've said here.
+> 
+> I could respond again to each of your points here, but - from my point of
+> view - if your response to 'what is this even testing?' is to just repeat
+> in effect the name of the test - we will be stuck in a loop, which will be
+> exited with a NACK. I don't want this.
+> 
+> The majority of these tests, from a VMA/mmap point of view, appear to me to
+> be essentially testing 'does basic mmap functionality work correctly',
+> which isn't testing mseal.
+> 
+> Look - I appreciate your commitment to testing (see my work on mm/vma.c - I
+> care passionately about testing) - but we must make sure we are actually
+> testing what we mean to.
+> 
+> So I suggest as a constructive way forward - firstly, submit a regression
+> test for the change Liam wrapped into his series regarding the -EPERM
+> thing.
+> 
+> This should go in uncontroversially, I will take the time to review it and
+> I don't see why that shouldn't be relatively straight forward. I will drop
+> the concerns about things like test macros etc. for that.
+> 
+> Then after that, I suggest we have a discussion about - at a higher level -
+> what it is you want to test. And then between me, you, Liam and Pedro -
+> ahead of time, list out the tests that we want, with all of us reaching
+> consensus.
 
-> > > gives users a hint that we can explicitly and accurately do what we=
+Hi,
 
-> > > want and we expect.
-> > >
-> > > Let's assume: if we remove all the report flags design, what will
-> > > happen? It can work of course. I don't believe that people choose t=
-o
-> > > enable the generation flag but are not willing to report it. Of
-> > > course, It's another thing. I'm just saying.
-> >
-> > Let's not debate the existing API. Its design predates both of our
-> > contributions.
-> =
+I agree with most of the points. Sitting down here to write unofficial
+guidelines for mseal behavior.
 
-> Yep.
-> =
+mseal should seal regions and mark them immutable, which means their protection
+and contents (ish?) (not _only_ backing mapping, but also contents in general
+(see madvise below)) should not be changed throughout the lifetime of the address space.
 
-> >
-> > > I wonder if it makes sense to you :) ?
-> >
-> > I don't see a strong use case. I know we're on v5 while I reopen that=
+For the general syscall interface, this means:
+1) mprotect and munmap need to be blocked on mseal regions.
+ 1a) munmap _cannot_ tolerate partial failure, per POSIX.
+ 2b) mmap MAP_FIXED counts as an unmap operation and also needs to be blocked and return -EPERM.
 
-> > point, sorry.
-> =
+2) Most madvise calls are allowed, except for destructive operations on
+read-only anonymous _pages_ (MADV_DONTNEED is destructive for anon, but we also don't care
+about blocking these ops if we can do it manually with e.g memset)
+ 2a) The current implementation only blocks discard on anonymous _regions_, which is slightly
+     different. We probably do want to block these on MAP_PRIVATE file mappings, as to block
+     stuff like madvise MADV_DONTNEED on program rodata.
+ 2b) We take into account pkeys when doing the permission checks.
 
-> That's all right. No worries.
-> =
+3) mremap is not allowed as we'd change the "contents" of the old region.
+ 3a) Should mremap expansion be allowed? aka only block moving and shrinking, but allow expansion.
+     We already informally allow expansion if e.g mmapping after it + mseal.
 
-> >
-> > It seems simpler to me to not read spurious fields that are not
-> > requested, rather than to explicitly request them to be set to zero.
-> >
-> > Adding more flags is not free. An extra option adds mental load for
-> > casual users of this alread complex API. This may certainly sound
-> > hypocritical coming from me, as I added my fair share. But I hope
-> > their functionality outweighs that cost (well.. in at least one case
-> > it was an ugly fix for a bad first attempt.. OPT_ID).
-> =
+4) mlock and msync are allowed.
 
-> I understand what you meant here. But I'm lost...
-> =
+5) mseal is blocked.
 
-> For some users, they might use the tsflags in apps to test whether
-> they need to receive/report the rx timestamp or not, and someday they
-> will notice there are unexpected timestamps that come out. As we know,
-> it's more of a design consideration about whether the users can
-> control it by setsockopt...
-> =
+6) Other miscellaneous syscalls (mbind, etc) that do not change contents in any way, are allowed.
+ 6a) This obviously means PTEs can change as long as the contents don't. Swapping is also ok.
 
-> In addition to the design itself, above is the only use case I know.
+7) FOLL_FORCE (kernel-internal speak, more commonly seen as ptrace and /proc/self/mem from userspace)
+   should be disallowed (?)
+ 7a) This currently does not happen, and seems like a large hole? But disallowing this
+     would probably severely break ptrace if the ELF sealing plans come to fruition.
 
-Ok. I'm on the fence, but not a hard no. Evidently you see value, so
-others may too.
+When we say "disallowed", we usually (apart from munmap) allow for partial failure. This
+means getting an -EPERM while part of the call succeeded, if we e.g mprotect a region consisting
+of [NORMAL VMA][SEALED VMA]. We do not want to test for this, because we do not want to paint ourselves
+into a corner - this is strictly "undefined behavior". The msealed regions themselves
+will never be touched in such cases. (we do however want to test munmap operation atomicity, but this is
+also kind of a munmap-related test, and might not really be something we really want in the mseal tests)
 
-A pendantic use case is if the caller expects other cmsg, but not
-these. Then the amount of cmsg space used will depend on a third
-process enabling receive timestamps. Again, can be worked around. But
-admittedly is surprising behavior.
+Kernel-internal wise: The VMA and PTE modifications resulting from the above operations are blocked.
+Sealed VMAs allow splitting and merging; there was contention about the splitting issue, but it truly
+does not make sense to block operations unless they affect a VMA entirely, and that would also force
+VMA merging to be ABI ("vma_merge isn't merging these two regions and now my madvise works/doesn't work :(").
 
-> >
-> > I got to this point trying to condense the proposed documentation.
-> > We can add this if you feel strongly.
-> =
 
-> If the new flag is not good for future development, we can stop it and
-> then _only_ document the special case, which we both agreed about a
-> week ago.
-> =
+Do I have everything right? Am I missing anything? 
 
-> Personally, I don't want to let it go easily. But It's just me. You
-> are the maintainer, so you have to make the decision. I'm totally fine
-> with either way. Thanks.
-> =
-
-> I was only trying to make the feature better. At least, we both have
-> tried a lot.
-> =
-
-> >
-> > But then my main feedback is that the doc has to be shorter and to
-> =
-
-> It's truly very long, to be honest. I thought I needed to list the
-> possible combination use cases.
-> =
-
-> > the point. Why would a user user this? No background on how we got
-> > here, what they might already do accidentally.
-> =
-
-> It looks like I should remove those use cases? And then clarify the
-> reason is per socket control?
-> =
-
-> I have no idea if I should continue on this.
-
-My attempt to document, feel free to revise:
-
-SOF_TIMESTAMPING_OPT_RX_FILTER:
-
-Filter out spurious receive timestamps: report a receive timestamp
-only if the matching timestamp generation flag is enabled.
-
-Receive timestamps are generated early in the ingress path, before a
-packet's destination socket is known. If any socket enables receive
-timestamps, packets for all socket will receive timestamped packets.
-Including those that request timestamp reporting with
-SOF_TIMESTAMPING_SOFTWARE and/or SOF_TIMESTAMPING_RAW_HARDWARE, but
-do not request receive timestamp generation. This can happen when
-requesting transmit timestamps only.
-
-Receiving spurious timestamps is generally benign. A process can
-ignore the unexpected non-zero value. But it makes behavior subtly
-dependent on other sockets. This flag isolates the socket for more
-deterministic behavior.
+-- 
+Pedro
 
