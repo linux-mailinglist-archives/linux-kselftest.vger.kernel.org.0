@@ -1,224 +1,268 @@
-Return-Path: <linux-kselftest+bounces-17453-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17454-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E09A970A8D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 00:49:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3091970A98
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 01:29:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F0071C20AB6
-	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Sep 2024 22:49:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14E06B210F4
+	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Sep 2024 23:29:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 310C714A60D;
-	Sun,  8 Sep 2024 22:49:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B491531E0;
+	Sun,  8 Sep 2024 23:29:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i2ExeHAO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P/M0uMMh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8723E1F942
-	for <linux-kselftest@vger.kernel.org>; Sun,  8 Sep 2024 22:49:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 389DD1474D8;
+	Sun,  8 Sep 2024 23:29:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725835759; cv=none; b=dJUruLhuC3nuRjMgp+XVdAEKQilOnuTo1cmT4LiUK00y+KJMk3zt2Q4DKUTpojEFC2Sqv8aBstvxHHJ8LXZ+iL6p/LpIULE6P5qsLi0CGuQ3Oo/VjZJ8IYo0x79XpGcjAqK8lsDZETPod8eHLnbx/J59lZcs7+E2hnrNqbr8w8k=
+	t=1725838192; cv=none; b=Gqg7nsqSb3iVjuVBByyB4DuKLvxbcTvfQMoZwY+wOAmI+a/9Jfek8J7tn90Ku/RFEkzg2eBesrDjT1RGDvbZVqIt0YyEKE1+l6bvgPFDb2ZW23A9PuX4ARLSDmufOdcVOdIpIy0hgaR6iwpGUbV239KxGbywNJS+yldU+5qIT4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725835759; c=relaxed/simple;
-	bh=XobwUWOh56A2ORGRWy81jc+sC2IYkaIf/WVd7sEd5IU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=plieUy+82MR9OFOOGWRQoUZco+pxnU8xwOko364EnGB6Av1ysWuyj7bT3nO23fJ9k2QwsQ2JZBw6lxfNRMKoBaYqfy9ojGWqXBAP551ZFT3EXZvM/hsiD7UfTo2vVtEFShcC4ril+4QnYAFoY5EPRKj38aA3KwOILhitMbZs60Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i2ExeHAO; arc=none smtp.client-ip=209.85.221.179
+	s=arc-20240116; t=1725838192; c=relaxed/simple;
+	bh=7+WQr77Uv58jDsJdy/r0FvLNgg2SS5QnZf4G8hiahno=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=g/4CjsM7+YDCfddzJttqzV6cglxXWQNQXm6N32+bNpDKJtDbSyIsOQ3JhMnAeMpmfSqlMor8CUC3JDdQ3K24yjOuRJ3Ftumn+bETevL2z9nGo0E8EBO3QJuPGJg9v31I7RjjxIO/Rq4tUifwyb8Aw7XMo5e018nm82JnLz3OnHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P/M0uMMh; arc=none smtp.client-ip=209.85.166.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-501204753c4so1843745e0c.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 08 Sep 2024 15:49:17 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-82aab679b7bso46428439f.0;
+        Sun, 08 Sep 2024 16:29:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725835756; x=1726440556; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=MZG8fE7MnIIWkTK02T0n0emfeqd4RC7NYBpEVwjqHdI=;
-        b=i2ExeHAOu9rLVQdOyjZRJ70bKk6TI5MCkIJl53TZ9Fe+bB1pr+Sa4AJvwHjNYSkkJt
-         VIGZnNPZT6kMDbqeMT3f4VQWDsaXWPi+KWYVl50drJ3kk0rhoKk+rSOjnkUxywSHQQE9
-         RxXQ0FUH25T+e6icS8hwq4kspj/DtKvo8Kso4UhA4EaxmwoLe52ev5b3mtfOzEc/DKdz
-         VWTImDOWEdhVsRvilBHKgeg6nXED/9mr2P1TrXcsqrJG06TQZlENjsZaAIekfrs3ziN5
-         D8+JWyl7/YXtJDGi75qUxteag5rwjjzcygYaWIxahZ1mAmtBq8Ph053UoQ4elp1ikLjY
-         HiAA==
+        d=gmail.com; s=20230601; t=1725838190; x=1726442990; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7+WQr77Uv58jDsJdy/r0FvLNgg2SS5QnZf4G8hiahno=;
+        b=P/M0uMMhrgdv4huffFQg4hgzI4wnSSP84ElukoYhZufmqkkRhhugj2zuxendAGRQTp
+         auiXcRLo8lH6B0dQmArwwzgXg2BvMHUuXybvT06pot5Y4P8sA83PeKds6IK8OhHzoz5n
+         EUuE4Y1l0Fxz84VaOwI8xMPn+O0/Ufs7F9seI3rNd9GzQ/5MKA5beZS1/iekxEAHfvWn
+         zXGRKSEIARHd1t1njL3ZsLaeYqk7kLaxswvVXYwWxFElv8CuU0xwoRkmkupMK6yGx/SW
+         o2IPUZzpvY8qJtZGv8aPkJ1SBKDJQcJWK02dzHf5zAbqHy5Kx0ZJPF2d8Wx65eIg0VZm
+         /btg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725835756; x=1726440556;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MZG8fE7MnIIWkTK02T0n0emfeqd4RC7NYBpEVwjqHdI=;
-        b=Dm+DXP0soB7rl/Gomall17q8wMHDBCxqN/H/RTC53f4HUsls97673Cs6PTxt4uqGLO
-         FiiYyl1TKE15NuYqlj2Qen+0OtNBd9thBz4v8jLGdCPiQzvd3OQArEtEf3F1h+oiEoh+
-         jrEnznJSPtYBirEBrWEDhMpcZRZkuWWLcuImd2J+dPqXJg5yInv8PlrnNzuN/ODojSYC
-         g7egF6AQLdJ9FUVjJQAve0HOP8fc1W1xOquJMTixJQeo4y4G5ti8FOvOh02Ys0G3FLP8
-         4zPzg8xnXZwiWxvyuwWS7r0s8B1FC33p1nBCnYdclJPJMEqVcbqWnQh5XCiSJ+7A+oOj
-         sYPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVbFnB6oHx/Z6UaWrqPUOVa3l8dC0hQME1Q75VURIs2QY9ldDl7jGbEqh4vvpvZlCycR0bm/x9eazNGEixApao=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdNnjCnmtDA5ZfdHi/onvlD+I1JlqGX7cGy5G5R4kwZL1l6y64
-	4wsGMmpOehNXOfRGxAiks03Ekib0aKpRET2I5G+NcQ6joowDx8JD
-X-Google-Smtp-Source: AGHT+IHK1MHSN0mrxVtNABHivQ+TMISsFu0SsBlaZrouldvmIKbkDlpJl51j9FRBYFVQCovYvlMGxA==
-X-Received: by 2002:a05:6122:904:b0:4ef:58c8:4777 with SMTP id 71dfb90a1353d-5019d455718mr6869788e0c.4.1725835756314;
-        Sun, 08 Sep 2024 15:49:16 -0700 (PDT)
-Received: from x13.localdomain (syn-142-197-128-048.res.spectrum.com. [142.197.128.48])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-502c2419fb3sm262914e0c.37.2024.09.08.15.49.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 08 Sep 2024 15:49:15 -0700 (PDT)
-From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
-To: brendan.higgins@linux.dev,
-	davidgow@google.com,
-	rmoar@google.com
-Cc: Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH v4] lib/math: Add int_pow test suite
-Date: Sun,  8 Sep 2024 18:49:00 -0400
-Message-ID: <20240908224901.78595-1-luis.hernandez093@gmail.com>
-X-Mailer: git-send-email 2.46.0
+        d=1e100.net; s=20230601; t=1725838190; x=1726442990;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7+WQr77Uv58jDsJdy/r0FvLNgg2SS5QnZf4G8hiahno=;
+        b=dhPj7Wc7BeB7Z9DeSByQgzPd8Em5v6vJq0lSeNxENE2nUXy+1CvtLty5CWNfu8oFxA
+         DHY6a74QuU9c5lIQCC7kcNoIq6xTpv1WINYH9by5SypOnZB+edSwKEY3jDPPmG2RvJWw
+         ByuV4gC86n0k356YAK8188bjz+5LYfvWNFZGfFTcZitrN94kH2Rw0TCOzM0sRrBLle/h
+         oMKzv8XeJ2nw/X427oq7kD3H+YPguLwGn+aeHW/OZPAT7rueyVjCM3P74GAeQeiKG8gL
+         a6nTNNRUrjESyNorIuea4RGPpNEff2raYPAaUfwFbMWRzY3utGHxH06mWTJs8NqcvWGJ
+         +VhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUjAhuJoVyD2salFWYOuD8X84629JA23i55FH70x2J7HpviIni96GbSUKiMPf+IPsF8Vfc2sZN1cJ4o6wMT3kM=@vger.kernel.org, AJvYcCWhg3yOuD6knNReOeZnoMc9irIiAXEEoRFtC4bLL631pVA1m8owv2XYEOd1qJb8HIG8iC8Ab4G/@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOXVly/OV+huIDTP1CyYjLZfalyy1Ns97hfvAELnjE62CEvdxk
+	lRPY9Fklwk6JY/4L/ftZZj55WYHR550uybD9bS8wmjxFZlmoC9g9lPucMpRcnRDnfJFX9kQc4nt
+	MsfOMQtYawHkmi5QRbUQC8nJj9U0=
+X-Google-Smtp-Source: AGHT+IFyXjwixsa18a3Z5q8iNR7AJrkl8rpWAV9EPyOzUVRitN3+ofwvHwId4tO1j44Kc2EWNcADMZWxwhOC2o4Rzbg=
+X-Received: by 2002:a05:6e02:1feb:b0:39f:51d1:c5fc with SMTP id
+ e9e14a558f8ab-3a05746401dmr50235975ab.11.1725838190262; Sun, 08 Sep 2024
+ 16:29:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240906095640.77533-1-kerneljasonxing@gmail.com>
+ <20240906095640.77533-2-kerneljasonxing@gmail.com> <66db8f293dbd1_2a33ef294b3@willemb.c.googlers.com.notmuch>
+ <CAL+tcoC9NoE3ws3nA-_ANAqD1cWpv9JDzFY11ACryZgg35dQrg@mail.gmail.com>
+ <66dbbbac6a6df_2b0bd0294d3@willemb.c.googlers.com.notmuch>
+ <CAL+tcoC2TajcYLewWrhpF7KL75XyMiW_G0RV+58=fbMEH8rf=g@mail.gmail.com> <66ddfdece6d32_2fb98729447@willemb.c.googlers.com.notmuch>
+In-Reply-To: <66ddfdece6d32_2fb98729447@willemb.c.googlers.com.notmuch>
+From: Jason Xing <kerneljasonxing@gmail.com>
+Date: Mon, 9 Sep 2024 07:29:14 +0800
+Message-ID: <CAL+tcoD4NQSYcdFOpOxXQnfPwjsck5bzZZXzAbOGMKFHvp_d6w@mail.gmail.com>
+Subject: Re: [PATCH net-next v5 1/2] net-timestamp: introduce
+ SOF_TIMESTAMPING_OPT_RX_FILTER flag
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, dsahern@kernel.org, shuah@kernel.org, willemb@google.com, 
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
+	Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Adds test suite for integer based power function.
+Hello Willem,
 
-Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
----
-Changes in v4:
-  - Address checkpatch warning and make kconfig description longer
-  - Use GPL-2.0-only for consistency
-  - Spelling fix fith -> fifth
-Changes in v3:
-  - Fix compiler warning: explicitly define constant as unsigned int
-  - Add changes in patch revisions
-Changes in v2:
-  - Address review feedback
-  - Add kconfig entry
-  - Use correct dir and file convention for KUnit
-  - Fix typo
-  - Remove unused static_stub header
-  - Refactor test suite to use paramerterized test cases
-  - Add close to max allowable value to in large_result test case
-  - Add test case with non-power of two exponent
-  - Fix module license 
----
- lib/Kconfig.debug              |  9 ++++++
- lib/math/Makefile              |  1 +
- lib/math/tests/Makefile        |  3 ++
- lib/math/tests/int_pow_kunit.c | 52 ++++++++++++++++++++++++++++++++++
- 4 files changed, 65 insertions(+)
- create mode 100644 lib/math/tests/Makefile
- create mode 100644 lib/math/tests/int_pow_kunit.c
+On Mon, Sep 9, 2024 at 3:41=E2=80=AFAM Willem de Bruijn
+<willemdebruijn.kernel@gmail.com> wrote:
+>
+> Jason Xing wrote:
+> > On Sat, Sep 7, 2024 at 10:34=E2=80=AFAM Willem de Bruijn
+> > <willemdebruijn.kernel@gmail.com> wrote:
+> > >
+> > > Jason Xing wrote:
+> > > > On Sat, Sep 7, 2024 at 7:24=E2=80=AFAM Willem de Bruijn
+> > > > <willemdebruijn.kernel@gmail.com> wrote:
+> > > > >
+> > > > > Jason Xing wrote:
+> > > > > > From: Jason Xing <kernelxing@tencent.com>
+> > > > > >
+> > > > > > introduce a new flag SOF_TIMESTAMPING_OPT_RX_FILTER in the rece=
+ive
+> > > > > > path. User can set it with SOF_TIMESTAMPING_SOFTWARE to filter
+> > > > > > out rx software timestamp report, especially after a process tu=
+rns on
+> > > > > > netstamp_needed_key which can time stamp every incoming skb.
+> > > > > >
+> > > > > > Previously, we found out if an application starts first which t=
+urns on
+> > > > > > netstamp_needed_key, then another one only passing SOF_TIMESTAM=
+PING_SOFTWARE
+> > > > > > could also get rx timestamp. Now we handle this case by introdu=
+cing this
+> > > > > > new flag without breaking users.
+> > > > > >
+> > > > > > Quoting Willem to explain why we need the flag:
+> > > > > > "why a process would want to request software timestamp reporti=
+ng, but
+> > > > > > not receive software timestamp generation. The only use I see i=
+s when
+> > > > > > the application does request
+> > > > > > SOF_TIMESTAMPING_SOFTWARE | SOF_TIMESTAMPING_TX_SOFTWARE."
+> > > > > >
+> > > > > > Similarly, this new flag could also be used for hardware case w=
+here we
+> > > > > > can set it with SOF_TIMESTAMPING_RAW_HARDWARE, then we won't re=
+ceive
+> > > > > > hardware receive timestamp.
+> > > > > >
+> > > > > > Another thing about errqueue in this patch I have a few words t=
+o say:
+> > > > > > In this case, we need to handle the egress path carefully, or e=
+lse
+> > > > > > reporting the tx timestamp will fail. Egress path and ingress p=
+ath will
+> > > > > > finally call sock_recv_timestamp(). We have to distinguish them=
+.
+> > > > > > Errqueue is a good indicator to reflect the flow direction.
+> > > > > >
+> > > > > > Suggested-by: Willem de Bruijn <willemb@google.com>
+> > > > > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> > > > >
+> > > > > High level: where is the harm in receiving unsolicited timestamps=
+?
+> > > > > A process can easily ignore them. I do wonder if the only use cas=
+e is
+> > > > > an overly strict testcase. Was reminded of this as I tried to wri=
+te
+> > > > > a more concise paragraph for the documentation.
+> > > >
+> > > > You raised a good question.
+> > > >
+> > > > I think It's more of a design consideration instead of a bugfix
+> > > > actually. So it is not solving a bug which makes the apps wrong but
+> > > > gives users a hint that we can explicitly and accurately do what we
+> > > > want and we expect.
+> > > >
+> > > > Let's assume: if we remove all the report flags design, what will
+> > > > happen? It can work of course. I don't believe that people choose t=
+o
+> > > > enable the generation flag but are not willing to report it. Of
+> > > > course, It's another thing. I'm just saying.
+> > >
+> > > Let's not debate the existing API. Its design predates both of our
+> > > contributions.
+> >
+> > Yep.
+> >
+> > >
+> > > > I wonder if it makes sense to you :) ?
+> > >
+> > > I don't see a strong use case. I know we're on v5 while I reopen that
+> > > point, sorry.
+> >
+> > That's all right. No worries.
+> >
+> > >
+> > > It seems simpler to me to not read spurious fields that are not
+> > > requested, rather than to explicitly request them to be set to zero.
+> > >
+> > > Adding more flags is not free. An extra option adds mental load for
+> > > casual users of this alread complex API. This may certainly sound
+> > > hypocritical coming from me, as I added my fair share. But I hope
+> > > their functionality outweighs that cost (well.. in at least one case
+> > > it was an ugly fix for a bad first attempt.. OPT_ID).
+> >
+> > I understand what you meant here. But I'm lost...
+> >
+> > For some users, they might use the tsflags in apps to test whether
+> > they need to receive/report the rx timestamp or not, and someday they
+> > will notice there are unexpected timestamps that come out. As we know,
+> > it's more of a design consideration about whether the users can
+> > control it by setsockopt...
+> >
+> > In addition to the design itself, above is the only use case I know.
+>
+> Ok. I'm on the fence, but not a hard no. Evidently you see value, so
+> others may too.
+>
+> A pendantic use case is if the caller expects other cmsg, but not
+> these. Then the amount of cmsg space used will depend on a third
+> process enabling receive timestamps. Again, can be worked around. But
+> admittedly is surprising behavior.
+>
+> > >
+> > > I got to this point trying to condense the proposed documentation.
+> > > We can add this if you feel strongly.
+> >
+> > If the new flag is not good for future development, we can stop it and
+> > then _only_ document the special case, which we both agreed about a
+> > week ago.
+> >
+> > Personally, I don't want to let it go easily. But It's just me. You
+> > are the maintainer, so you have to make the decision. I'm totally fine
+> > with either way. Thanks.
+> >
+> > I was only trying to make the feature better. At least, we both have
+> > tried a lot.
+> >
+> > >
+> > > But then my main feedback is that the doc has to be shorter and to
+> >
+> > It's truly very long, to be honest. I thought I needed to list the
+> > possible combination use cases.
+> >
+> > > the point. Why would a user user this? No background on how we got
+> > > here, what they might already do accidentally.
+> >
+> > It looks like I should remove those use cases? And then clarify the
+> > reason is per socket control?
+> >
+> > I have no idea if I should continue on this.
+>
+> My attempt to document, feel free to revise:
+>
+> SOF_TIMESTAMPING_OPT_RX_FILTER:
+>
+> Filter out spurious receive timestamps: report a receive timestamp
+> only if the matching timestamp generation flag is enabled.
+>
+> Receive timestamps are generated early in the ingress path, before a
+> packet's destination socket is known. If any socket enables receive
+> timestamps, packets for all socket will receive timestamped packets.
+> Including those that request timestamp reporting with
+> SOF_TIMESTAMPING_SOFTWARE and/or SOF_TIMESTAMPING_RAW_HARDWARE, but
+> do not request receive timestamp generation. This can happen when
+> requesting transmit timestamps only.
+>
+> Receiving spurious timestamps is generally benign. A process can
+> ignore the unexpected non-zero value. But it makes behavior subtly
+> dependent on other sockets. This flag isolates the socket for more
+> deterministic behavior.
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index a30c03a66172..0f98f73d4322 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -3051,3 +3051,12 @@ config RUST_KERNEL_DOCTESTS
- endmenu # "Rust"
- 
- endmenu # Kernel hacking
-+
-+config INT_POW_TEST
-+       tristate "Integer exponentiation (int_pow) test" if !KUNIT_ALL_TESTS
-+       depends on KUNIT
-+       default KUNIT_ALL_TESTS
-+       help
-+         This option enables the KUnit test suite for the int_pow function,
-+         which performs integer exponentiation. The test suite is designed to
-+         verify that the implementation of int_pow correctly computes the power
-+         of a given base raised to a given exponent.
-+
-+         Enabling this option will include tests that check various scenarios
-+         and edge cases to ensure the accuracy and reliability of the exponentiation
-+         function.
-+
-+         If unsure, say N
-diff --git a/lib/math/Makefile b/lib/math/Makefile
-index 91fcdb0c9efe..3c1f92a7459d 100644
---- a/lib/math/Makefile
-+++ b/lib/math/Makefile
-@@ -5,5 +5,6 @@ obj-$(CONFIG_CORDIC)		+= cordic.o
- obj-$(CONFIG_PRIME_NUMBERS)	+= prime_numbers.o
- obj-$(CONFIG_RATIONAL)		+= rational.o
- 
-+obj-$(CONFIG_INT_POW_TEST)  += tests/int_pow_kunit.o
- obj-$(CONFIG_TEST_DIV64)	+= test_div64.o
- obj-$(CONFIG_RATIONAL_KUNIT_TEST) += rational-test.o
-diff --git a/lib/math/tests/Makefile b/lib/math/tests/Makefile
-new file mode 100644
-index 000000000000..6a169123320a
---- /dev/null
-+++ b/lib/math/tests/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+
-+obj-$(CONFIG_INT_POW_TEST) += int_pow_kunit.o
-diff --git a/lib/math/tests/int_pow_kunit.c b/lib/math/tests/int_pow_kunit.c
-new file mode 100644
-index 000000000000..7b6a5ae70eb4
---- /dev/null
-+++ b/lib/math/tests/int_pow_kunit.c
-@@ -0,0 +1,52 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#include <kunit/test.h>
-+#include <linux/math.h>
-+
-+struct test_case_params {
-+	u64 base;
-+	unsigned int exponent;
-+	u64 expected_result;
-+	const char *name;
-+};
-+
-+static const struct test_case_params params[] = {
-+	{ 64, 0, 1, "Power of zero" },
-+	{ 64, 1, 64, "Power of one"},
-+	{ 0, 5, 0, "Base zero" },
-+	{ 1, 64, 1, "Base one" },
-+	{ 2, 2, 4, "Two squared"},
-+	{ 2, 3, 8, "Two cubed"},
-+	{ 5, 5, 3125, "Five raised to the fifth power" },
-+	{ U64_MAX, 1, U64_MAX, "Max base" },
-+	{ 2, 63, 9223372036854775808, "Large result"},
-+};
-+
-+static void get_desc(const struct test_case_params *tc, char *desc)
-+{
-+	strscpy(desc, tc->name, KUNIT_PARAM_DESC_SIZE);
-+}
-+
-+KUNIT_ARRAY_PARAM(int_pow, params, get_desc);
-+
-+static void int_pow_test(struct kunit *test)
-+{
-+	const struct test_case_params *tc = (const struct test_case_params *)test->param_value;
-+
-+	KUNIT_EXPECT_EQ(test, tc->expected_result, int_pow(tc->base, tc->exponent));
-+}
-+
-+static struct kunit_case math_int_pow_test_cases[] = {
-+	KUNIT_CASE_PARAM(int_pow_test, int_pow_gen_params),
-+	{}
-+};
-+
-+static struct kunit_suite int_pow_test_suite = {
-+	.name = "math-int_pow",
-+	.test_cases = math_int_pow_test_cases,
-+};
-+
-+kunit_test_suites(&int_pow_test_suite);
-+
-+MODULE_DESCRIPTION("math.int_pow KUnit test suite");
-+MODULE_LICENSE("GPL");
--- 
-2.46.0
+Willem, thanks so much for your effort!!! I learn a lot these days.
 
+I'm going to completely replace it with your description.
+
+Thanks,
+Jason
 
