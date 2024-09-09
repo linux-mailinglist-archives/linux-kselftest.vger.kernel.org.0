@@ -1,113 +1,113 @@
-Return-Path: <linux-kselftest+bounces-17535-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17536-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00D7D972126
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 19:41:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D03D972137
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 19:42:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FDF5B23DEC
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 17:41:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34EF31C2092D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 17:42:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2637D187FE4;
-	Mon,  9 Sep 2024 17:35:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4466718A947;
+	Mon,  9 Sep 2024 17:38:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JFvTgmAx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q9+JeKmi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78EA917C9B9;
-	Mon,  9 Sep 2024 17:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C26D118A940;
+	Mon,  9 Sep 2024 17:38:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725903332; cv=none; b=e/nMYyyjKSAAhhDb7dj5+hHAtAEYnVjw+Xgbxx88W1ze2SybozBPnoyDQHyzRY9LYSAJbk2c8SXf+pc8hPVpzqVyjMJhhvpJ/bdlGGf45K7H7be2y5DdFjiVmrxssyZm8YFm51AUhyuxNpc3FvRtrAy53mSiPOZ2XrGvUTU4goM=
+	t=1725903507; cv=none; b=Q2VX/MkSLxDgzL9RYK745fwlQUNqdDG2xhktOpbLOB5JO03FQ5f/BAIeg0qvvBzoB5p8QWyznw/+FuZx4f7mal/rDsb4K1jdOigPfq0F807bjKMCez4JsR2+tU16HcKbTDbWeGNNhWuZG2/zKFtTlwLIzohhqlh7Ujo0rWb+HPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725903332; c=relaxed/simple;
-	bh=gvsWziE2jYa8kjg2nfOxDm1DWMv6Qvm8tVYqhtudBH0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Nb44M3Z0eT3p4P5c4TmxEvVBkf/GmRAuxpS8og6ijnt/nIgOhNuhtARDbVdhIAnHtc9MX2sp4GGUS/ZPhJivdR4MIAFbx2TPTfcNgHHS+70wj14EnuVGZn50Ezcuj8guW8XM07fUtNABxOvQGO6DHIlW+fw5g2CAzy1VuQszID8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JFvTgmAx; arc=none smtp.client-ip=209.85.221.54
+	s=arc-20240116; t=1725903507; c=relaxed/simple;
+	bh=fMnYjZ7puk4RyEsIR/egM5RTuWKhQoMKRiFm4XTMEHI=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=qph2huKDpRH7+8DEeQu/Jl7uMYj8blrSV8TffdENGjZazJQWt3Hs6+4N5ZfK3sWiLJbIl6QTxcOYF0esJHRQqon1+mgHovcoQ38EwNMnu1MBj8hsrLDarHl8JI+9r4efCi01+bvZqu57S0nKsCQGbu7iPpbXa3/bz2yKnX0hE/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q9+JeKmi; arc=none smtp.client-ip=209.85.222.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-374c1120a32so2690392f8f.1;
-        Mon, 09 Sep 2024 10:35:30 -0700 (PDT)
+Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7a9a3071c6bso186798985a.0;
+        Mon, 09 Sep 2024 10:38:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725903329; x=1726508129; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1725903504; x=1726508304; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gvsWziE2jYa8kjg2nfOxDm1DWMv6Qvm8tVYqhtudBH0=;
-        b=JFvTgmAxPn3KhMPZUSOxPspLIH30VZaBsplq4fRC1zSCQyc+b/aj+BRzA16/yCLAUA
-         MhUScQ2GB+ObnasIMJlY9Bn0TJHTaf314VfJC+7Y3c3uMYznoYylBvJC//uvOOcjCpBn
-         8pnGaE1qTPrImyKZ9poT4JVaIUO8U3PFxzHjtQZPeb0NR0nu34GHQjDRl0NZkdM7sWvl
-         8z6EEwmLm7gLtrWPxLhzfHIDQefznG2gZjSPJLolWWdJcI5UVLMKWqHqVUhk1rDTb4QV
-         WqByRNHUMSHfgbHSQ+/XP9g9sZqSO3lJkh8GNoGglPVuUg4BfNdk7UZvKjDFVeMhi2/c
-         Z3jQ==
+        bh=wWcguGccUwTR9BOegZpc2dDEqNjenCK0RnfNy3CIhcs=;
+        b=Q9+JeKmiVpHPXOtpq0jSN6SCB6aJkz2iDwliLZU536I64BmDMqT+d2qvNcK8GZ1gNl
+         QfBRu3G66b944VHpH/AS9xUhH5n8CReD8ze6qnExm+BIkbEHbcgx+A45LWIZgb9bF35N
+         5Wo8BwMqTv73g1vUfWF0BIcb+roJkiG30i0CDT+Xl6f0JASZTmf4cfgneE+lv0khgosS
+         LSucPKLqXOG+RHIbsUdyBwhsQs3v86QzlF4KCci36eWVFkzCt/oV/1aGY0TbMHlg4yCV
+         D2fM8LOZWvmPmG2is1NgjeD7pTXDB4VDvrlHm1kI434QQ4lJleHSauX/Xifs16iza0k7
+         flRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725903329; x=1726508129;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gvsWziE2jYa8kjg2nfOxDm1DWMv6Qvm8tVYqhtudBH0=;
-        b=vbpBwHDou1Dvr+Vo5GXkzDMd9xjqZ9QJdI3EgyX4+A8/t/bKCClLqRSLABW2vOGoc2
-         spMSvg7daQZLpo6nFAlq/5IcjR4C+bAG8mTw3Q7BnqLME6pit2kovT1JCxC+a0zbAKzY
-         Gk6wLHht35M+YhbtxQBiZ7VjR6h6IQMQoGUCKT3HIdVIg1my9jPWCWUxqS2rjgkiZBj/
-         K2Q0S5+RRzeFQ3bk2hwQHtCcckZLQY6W0XuuQ3VlYY+Nma2OFCyWmOsZk1Tt2nrj89vi
-         Zve5oY6mgaEbTlT4lOuwEDo3VXVdCmDDjIG0RxM5FFTI24pFivE17vYBpHVpW12zS7AB
-         jLOA==
-X-Forwarded-Encrypted: i=1; AJvYcCUFEadIeUZ9Svl4u9f/w7psTLHwLjjfcJJeGo1dHxpjxDsfTf+ei7Xtg4CtblVLOPN8Tq7hOGucdS2l9F8JzrFZ@vger.kernel.org, AJvYcCWZrPUsGVuSZgOJavoVFQQ0trFB4sFLuXxZkBMbTKz/zHxSKU+4t7EHBNwZh1GvpfgVZ8Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNuCtGny+Us43WZb8oBivmv8h0bnPl5i3VDaF+gY2ndBWHqPRd
-	UkfB4g1uccI3OR3M1FcirUiOr0k5g1FcZGHD7j87MY0vt+63KpPPWVsaWX1b1YP+hOEin3lg5eh
-	qwdjP5K7JVTDzEo1EymSRrdPeHHY=
-X-Google-Smtp-Source: AGHT+IGIK9GpPz8CeYtYiNHR6ARSFwIbuLdpdSRteRlvsX0HElhTofwuHcwRp+y6o2T9OPE4gKqH8bxFmBlhVLkfTnU=
-X-Received: by 2002:a5d:40d0:0:b0:374:b97b:c69 with SMTP id
- ffacd0b85a97d-378896a4166mr7481419f8f.48.1725903328599; Mon, 09 Sep 2024
- 10:35:28 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1725903504; x=1726508304;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wWcguGccUwTR9BOegZpc2dDEqNjenCK0RnfNy3CIhcs=;
+        b=tzyMW8XRLzMRNRVwLNZ3adsz3n6oo1EYAaXcU8ZHlrgUGxT4BSSlwjjDFWr/vm4R+r
+         uyMK7UNJsOv2p92qfNljPeqZaTkoUeiYKoT7V5jAGX4YdynT7SvJrEyBEMEyOx1mR6LP
+         fpnlCjnmxq8OY6AsjWI08SwgBcj+Ur0/DRcr0Zu9z1LRyUeYqdgjLyfProB/+pSrt45L
+         MVvOsy/hcmH0A3hyYSskZ2L9RGTHuqRRbSMd5MSctSILo5wbm/5ia50GWxqwVTATBqUX
+         y/r4WA38rN69zr3DVbSZ60kq9xXgaWe0JiOLyAZTF9u2sHBEoh+nKu5/yO39r8cEYIGm
+         9pqw==
+X-Forwarded-Encrypted: i=1; AJvYcCViiYd/Wd6/dMoWf3NtT1glZSZjO2nQShA+RUJ7vRoO1cS5RCiqwQ104GUBzHK/eKVFd3Wcra3yVGeIophU7GU=@vger.kernel.org, AJvYcCWBlRjMOe+UQrxLT2yJeBv7R7jwWwX6UGDYll4tXvEkihAWHFBkha3swqYLDLUKT9iQ1l4Tt8Lh@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDDDE2B2owr0KAV3EZvVEmk2m+HM10qNSLrqELSnKd9fIU+lNa
+	MPVxFtorKHAk9Rp8D9SPRs6jKmybZjY9d09aRVE6XOR/YwH5zw5r
+X-Google-Smtp-Source: AGHT+IHB+K+FvjbBd74mem+IwvTs/UYXCR/CU1rh4z6I4/uki7FGMzFbiwmMuMjQkkr/kCMBvzPqvA==
+X-Received: by 2002:a05:620a:2946:b0:7a9:ba35:1869 with SMTP id af79cd13be357-7a9ba351bbemr349259085a.51.1725903503683;
+        Mon, 09 Sep 2024 10:38:23 -0700 (PDT)
+Received: from localhost (23.67.48.34.bc.googleusercontent.com. [34.48.67.23])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a9a7945734sm235949785a.5.2024.09.09.10.38.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Sep 2024 10:38:23 -0700 (PDT)
+Date: Mon, 09 Sep 2024 13:38:22 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, 
+ willemdebruijn.kernel@gmail.com
+Cc: Jason Xing <kerneljasonxing@gmail.com>, 
+ davem@davemloft.net, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ shuah@kernel.org, 
+ willemb@google.com, 
+ linux-kselftest@vger.kernel.org, 
+ netdev@vger.kernel.org, 
+ Jason Xing <kernelxing@tencent.com>
+Message-ID: <66df328ee959f_3d03029484@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20240909102309.3da82583@kernel.org>
+References: <20240905160035.62407-1-kerneljasonxing@gmail.com>
+ <20240909102309.3da82583@kernel.org>
+Subject: Re: [PATCH net-next v2] selftests: return failure when timestamps
+ can't be reported
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240909133909.1315460-1-maxim@isovalent.com>
-In-Reply-To: <20240909133909.1315460-1-maxim@isovalent.com>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Mon, 9 Sep 2024 10:35:17 -0700
-Message-ID: <CAADnVQL8QQj7SNtC8fBNPpXVNYYVMnEq3P0bs82C=0G1822=dg@mail.gmail.com>
-Subject: Re: [PATCH bpf] bpf: Fix error message on kfunc arg type mismatch
-To: Maxim Mikityanskiy <maxtram95@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	John Fastabend <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Maxim Mikityanskiy <maxim@isovalent.com>, Alan Maguire <alan.maguire@oracle.com>, 
-	Andrei Matei <andreimatei1@gmail.com>, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Sep 9, 2024 at 6:39=E2=80=AFAM Maxim Mikityanskiy <maxtram95@gmail.=
-com> wrote:
->
-> When "arg#%d expected pointer to ctx, but got %s" error is printed, both
-> template parts actually point to the type of the argument, therefore, it
-> will also say "but got PTR", regardless of what was the actual register
-> type.
->
-> Fix the message to print the register type in the second part of the
-> template, change the existing test to adapt to the new format, and add a
-> new test to test the case when arg is a pointer to context, but reg is a
-> scalar.
->
-> Fixes: 00b85860feb8 ("bpf: Rewrite kfunc argument handling")
+Jakub Kicinski wrote:
+> On Fri,  6 Sep 2024 00:00:35 +0800 Jason Xing wrote:
+> > When I was trying to modify the tx timestamping feature, I found that
+> > running "./txtimestamp -4 -C -L 127.0.0.1" didn't reflect the error:
+> > I succeeded to generate timestamp stored in the skb but later failed
+> > to report it to the userspace (which means failed to put css into cmsg).
+> > It can happen when someone writes buggy codes in __sock_recv_timestamp(),
+> > for example.
+> 
+> Willem, thoughts?
 
-Kumar,
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 
-please review.
-
-This is bpf-next material. fwiw.
+Sorry, lost track of this.
 
