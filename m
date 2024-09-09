@@ -1,136 +1,117 @@
-Return-Path: <linux-kselftest+bounces-17533-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17534-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61BA2972072
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 19:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B50B97210A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 19:39:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D283285144
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 17:26:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26444280DFD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 17:39:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C540178CC8;
-	Mon,  9 Sep 2024 17:26:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC9516EB65;
+	Mon,  9 Sep 2024 17:29:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XQt/TzeU"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MbPmw/Jp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A35D168BD;
-	Mon,  9 Sep 2024 17:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C4C175D3F
+	for <linux-kselftest@vger.kernel.org>; Mon,  9 Sep 2024 17:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725902806; cv=none; b=n5lqane4qnYMZlPHjt3whdxdlaV9LP8tpz4lXo3lwqOKptF9Jd5ZKenT2i36GxJ6gIpE4tdXTYKf3rahtvkKq9FhW/Wh/oc02YfcZ60zCgJAMHtwxe4bltQf0VVnAqGKeP+Fo+CXBxCkZ3WEmjqDIROFosaFLxjP9R0lZl9k1dY=
+	t=1725902945; cv=none; b=FeEBOeBHVNFLF86yuoybkY6l+n0AZ4/F78nPdwJhgW3MJRbFDzpHoajM717pBPts/NHJyV5yHkdaya/pVE1J2+jfoV+w4vHDhcDZX4zYfWnQIa/Hkizf6SHTQPUEuxjxPg+NNjy7udAq0f71SpIpVQSfU7pXWTafjFwkhKorJlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725902806; c=relaxed/simple;
-	bh=ef4pbd28HCelXPtMY1fHPeGbPL21l4s6NsCF5v5Xuos=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=AGFCbQ5k3mF2HpGaNzF943DexWEbsC+Y52CszMELTe86pKICWZh6CEGLuo/yAC7Rh9yzKgn8OaI264M+LOq4bpe9gf1L1ClpECUIbTyh2OD9IkiDew6LUUKaHvJBpgfqd/8WzKCqd6sIdPxojdpYrbYeuU2OYWJAl9tlIUFOkNs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XQt/TzeU; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7a9ad15d11bso189884885a.0;
-        Mon, 09 Sep 2024 10:26:44 -0700 (PDT)
+	s=arc-20240116; t=1725902945; c=relaxed/simple;
+	bh=04f/NG7uG8xJCYrjo8eeFixG+3G6Lz5sLV0VFuL28jA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kBGL9tX6ZoXl8URbwWIauaSwVpevwLOQ8bqYnzI+sAxPOPY8JTbx6xY374DxLO4ae4ghDCv59mxO87dlE0UvdrwMrntzXu00TlFDPf0o8KEVaI3kU6sBDi2NIml1qIk8AW+dmhCIlixiheZ6MrRZ681n4d5AVAbr9pdRekxbzSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MbPmw/Jp; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4581cec6079so20491cf.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Sep 2024 10:29:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725902804; x=1726507604; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1725902943; x=1726507743; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ef4pbd28HCelXPtMY1fHPeGbPL21l4s6NsCF5v5Xuos=;
-        b=XQt/TzeUU6vdCUbQZTvGjwiXvIY5lcyTsHeGOrDvWO+TT9d7wcy67NcPyMUNAvuIAP
-         Dqzffn4UrxKN+7IOqHpAqrtcdyOqDO226r89ZhNVeOsEak9cXXbYQV46SvRc8h2SXJLM
-         YdkT/5JTGBxO8uiOf7JBRkJFdOnhMLRTYIraTAgqxs9i5RkgGe0dzSouC8Nt8PVH1J7E
-         UXhHaaDmHA51CmczUNRZiBy86mEZmPdrcdDi7dYw07edgesYd/3f/f+dNyOy960b4hFJ
-         I0Hv+5WpKEtep2nL2lZHVdpIoBLSHgE7s5uB2xpydAnkbKXELUuJ8WwKpOTf0OgD6LJb
-         1L/A==
+        bh=04f/NG7uG8xJCYrjo8eeFixG+3G6Lz5sLV0VFuL28jA=;
+        b=MbPmw/JpVKUFwXLmfyJ4Nh07KD7KT6CtaXUcyZfs5ZmWjMZdwn984Mv361WxQQK+G9
+         FVWYADMPRfzzvUVquWl1O9Jp3iezSQvgs4jQpiOfBo61Oc2nXRIlPqKnY+8v/U47tmmB
+         OZ/AbNs3ZNkKilj01Qsrzs4skJeSUEINu1wHsJnRrLuJpjVI/yDpQkwDfcIuVe7Xaavs
+         JTfkhJ78CEGL67LbsszismNs1ZFdLmjk9apQpQv/I4raTrUdHCBhBK4K9fHOm9WShpKm
+         MtGxgUP2xAfHFc6tuQ+uz1m628avK8ubDR7Z90EgrzoA/NR8sjVR1cjaicWVQ1wdazpK
+         2Qgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725902804; x=1726507604;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ef4pbd28HCelXPtMY1fHPeGbPL21l4s6NsCF5v5Xuos=;
-        b=jcy2h9ZQXe9YbzP6YSUV6jC013nMAzxnvGp0RqEmbKltMhKAjka1Ion+V7tP4c3tTn
-         KI8gGNNWfWQsex5NdbNO73i+JxrO0Uxj0z47b1P7D1pVXOzPtSTYuYE4K0v1Cn0lpwoe
-         Y1FRCYapBPCj8razCV2uLCiuEL6K9Rnp/t/KZ7xGekmL6xd/yR8ntbMwyn0dDT3HjEVg
-         nmLxe6Sb9OnSK1Ot9lKOxIhVmn1HUgRIwpH9WnHeuwndadLXSLyyC7bfm2jv83B+t3YZ
-         WIQgMBqMjT1qpFI/e4KV/Y2XEgmRjGR7HyXL5gGHLZJpPAANwBN/U2krTkRQothCrG/u
-         m3dg==
-X-Forwarded-Encrypted: i=1; AJvYcCVNrHs5Xr/Rf+AH7MdkbgNa/Io3W6bRCsBAlFrkz+IFedf9kI0PZHHipwYMrBl138Snf8v2zPV9b2ROIBwFOisp@vger.kernel.org, AJvYcCVO4qBcSKGx6RhR+1t+vwFh0JSo5VvBZ4zac3IMaA6oZHYDzSSDdryISfM6SjZ3sP5Mo8Nm980c@vger.kernel.org, AJvYcCXuXic75onX/0pwKoLE83bYCIqkL2iVS7I2WRidDldxtK4mqPiXcbdZIwzznIiPBDQgXvTxgU+f12WjosU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCgussg9b72mwqEYRFLWLDpSh9dR1LXLKBHsYBLyGzVojzeTxa
-	e3WIiuj148YqFjuxKBBCoySpgLuq8FB6NmfQ4n9xot8kP22O9hh5
-X-Google-Smtp-Source: AGHT+IFa5bFSMKWSMgGP1PTshWTcfDXcgkyF4EVbIprH+d15pzkEartDDfUKRu5mt5lyIVhJSK7wBA==
-X-Received: by 2002:a05:620a:1722:b0:7a9:a991:f6d7 with SMTP id af79cd13be357-7a9a992067fmr1382889285a.48.1725902803729;
-        Mon, 09 Sep 2024 10:26:43 -0700 (PDT)
-Received: from localhost (23.67.48.34.bc.googleusercontent.com. [34.48.67.23])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a9a7a1dc91sm235850585a.106.2024.09.09.10.26.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Sep 2024 10:26:43 -0700 (PDT)
-Date: Mon, 09 Sep 2024 13:26:42 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Eric Dumazet <edumazet@google.com>, 
- Sean Anderson <sean.anderson@linux.dev>
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- "David S . Miller" <davem@davemloft.net>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- netdev@vger.kernel.org, 
- Willem de Bruijn <willemb@google.com>, 
- linux-kernel@vger.kernel.org, 
- Shuah Khan <shuah@kernel.org>, 
- linux-kselftest@vger.kernel.org
-Message-ID: <66df2fd2d6595_3bff929459@willemb.c.googlers.com.notmuch>
-In-Reply-To: <CANn89iJaXgR6c+moGB5kX6ATbLX6fMP0mUBQN=SAsZfdz5ywNw@mail.gmail.com>
-References: <20240906210743.627413-1-sean.anderson@linux.dev>
- <66dbb4fcbf560_2af86229423@willemb.c.googlers.com.notmuch>
- <9d5bf385-2ef0-435d-b6f9-1de55533653b@linux.dev>
- <CANn89iJaXgR6c+moGB5kX6ATbLX6fMP0mUBQN=SAsZfdz5ywNw@mail.gmail.com>
-Subject: Re: [PATCH net] selftests: net: csum: Fix checksums for packets with
- non-zero padding
+        d=1e100.net; s=20230601; t=1725902943; x=1726507743;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=04f/NG7uG8xJCYrjo8eeFixG+3G6Lz5sLV0VFuL28jA=;
+        b=JaUIeOFPTWTEHcRgz1nWneQhYU+JYsfmw6xUTHeFW1T0QXPrwXhOqXY3XDA8AbPtM5
+         sW97IhJ4oo162RvyI8HxSEB42/Kmx38AFC5ToZ14YlzdL1McGRwgO0Vp/4BzKuKyW4iH
+         jKXED28WNHsxqtKffdLQ+nVmgzSraAIpWmxM8Tcpl8NmLBW9h2cguE6GZDyt3YhzwfJ4
+         bSrcnhaS1i39sDygWdGV4+a1Pg3GSHS3kUH2dD/YV3bbU/dS3B3FGRMLtD3iO5Ndiv+2
+         LkHQXl2hq3D9OHxBixlZeNJB7wAbWzY71iP7AwcPKl0ChPo3ljgZMkxnuefUqg9KpOi7
+         TGog==
+X-Forwarded-Encrypted: i=1; AJvYcCVVTa2OBRvLdlccLh6F/4m5aJ8C7DZFWZekc8JkJFM7azaHfTxjJqk4GoMEzI05AwIHIaGYloFS++wkX6bug78=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxMkb/Zgb5tVR0nehPNib156HTnuszKjq8oA//Qrfxy3p23nHaw
+	O9pN5S8lLTl6IGUC9K2ZgETKOwysDZ+rYyQ37oI5fvpyICEFJDJtUNSkzTb2s1gss2S9snAJnYl
+	xWtg+VLrBGv/uXCrUgSLxf22dVf8npgOy4zQJ
+X-Google-Smtp-Source: AGHT+IFnxYeNUTaiJzioMhpfJmPbKwXRc8/Ury8YtqFEElFUIOmLINaQJV62PuA8eYbmnaR2d40uOsCUMUEG9M7B2Yc=
+X-Received: by 2002:ac8:5910:0:b0:456:7d9f:2af8 with SMTP id
+ d75a77b69052e-4582147f7a7mr5005451cf.7.1725902942736; Mon, 09 Sep 2024
+ 10:29:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+MIME-Version: 1.0
+References: <20240909091913.987826-1-linyunsheng@huawei.com>
+In-Reply-To: <20240909091913.987826-1-linyunsheng@huawei.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Mon, 9 Sep 2024 10:28:48 -0700
+Message-ID: <CAHS8izNfLYQFgZYkRPJFonq8LH6SnV70B4pfC_cQ5gyz780cZA@mail.gmail.com>
+Subject: Re: [PATCH net-next] page_pool: add a test module for page_pool
+To: Yunsheng Lin <linyunsheng@huawei.com>
+Cc: hawk@kernel.org, ilias.apalodimas@linaro.org, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Eric Dumazet wrote:
-> On Mon, Sep 9, 2024 at 5:02=E2=80=AFPM Sean Anderson <sean.anderson@lin=
-ux.dev> wrote:
-> >
-> > On 9/6/24 22:05, Willem de Bruijn wrote:
-> > > Sean Anderson wrote:
-> > >> Padding is not included in UDP and TCP checksums. Therefore, reduc=
-e the
-> > >> length of the checksummed data to include only the data in the IP
-> > >> payload. This fixes spurious reported checksum failures like
-> > >>
-> > >> rx: pkt: sport=3D33000 len=3D26 csum=3D0xc850 verify=3D0xf9fe
-> > >> pkt: bad csum
-> > >
-> > > Are you using this test as receiver for other input?
-> > >
-> > > The packet builder in the test doesn't generate these, does it?
-> >
-> > It's added by the MAC before transmission.
-> >
-> > This is permitted by the standard, but in this case it actually appea=
-rs
-> > to be due to the MAC using 32-bit reads for the data and not masking =
-off
-> > the end. Not sure whether this is a bug in the driver/device, since
-> > technically we may leak up to 3 bytes of memory.
-> =
+On Mon, Sep 9, 2024 at 2:25=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.com=
+> wrote:
+>
+> The testing is done by ensuring that the page allocated from
+> the page_pool instance is pushed into a ptr_ring instance in
+> a kthread/napi binded to a specified cpu, and a kthread/napi
+> binded to a specified cpu will pop the page from the ptr_ring
+> and free it back to the page_pool.
+>
+> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
 
-> This seems to be a bug in the driver.
-> =
+It seems this test is has a correctness part and a performance part.
+For the performance test, Jesper has out of tree tests for the
+page_pool:
+https://github.com/netoptimizer/prototype-kernel/blob/master/kernel/lib/ben=
+ch_page_pool_simple.c
 
-> A call to skb_put_padto(skb, ETH_ZLEN) should be added.
+I have these rebased on top of net-next and use them to verify devmem
+& memory-provider performance:
+https://github.com/mina/linux/commit/07fd1c04591395d15d83c07298b4d37f6b5615=
+7f
 
-In which case this test detecting it may be nice to have, for lack of
-a more targeted test.
+My preference here (for the performance part) is to upstream the
+out-of-tree tests that Jesper (and probably others) are using, rather
+than adding a new performance test that is not as battle-hardened.
+
+--
+Thanks,
+Mina
 
