@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-17510-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17511-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8266971100
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 10:03:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70609971109
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 10:03:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DD361F22A2A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 08:03:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9AE8C1C21F33
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 08:03:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C74B41B86EE;
-	Mon,  9 Sep 2024 07:57:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFAA41B9B37;
+	Mon,  9 Sep 2024 07:57:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VyYxgvd5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IupBDwyt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02A9C1B81CB;
-	Mon,  9 Sep 2024 07:57:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A1B91B86E0;
+	Mon,  9 Sep 2024 07:57:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725868636; cv=none; b=pZOxfwsBL6EM72yrIM6cDozqD8KvkhGkOhn9fYwPzEHXFxhcNPFjpUFl49acmfi6Hl2ASeBY1N5j7DukHDpVXJGmX4PmeK+/FjftwTOjDBdeCmihdZHXPxbgnpi0Ntk9ob/wkrsmnfUqdQ6lD0r7Fo1SKnLN9Qmr2P4HkNl9kkE=
+	t=1725868637; cv=none; b=jjtA5KIX6+QumdD7R5/fBDVmpXs8GR0+p9KcdGeZbvfMFLUEwNMXYmzN9hSn9FfNuiAcJtzYHsgq+8GWKz+6TcMM1Pk0IsW0+oWi0rpbnN29lhzy5b7DCjspyoVHplDLbSlJjgwvteflFR4vkMVk+GxSVD+brCrhzzOMNeR3Fe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725868636; c=relaxed/simple;
-	bh=8tm+lcdAFkZHPiu0E0ltAWkkidqC3z2DF7qr9c3wbtY=;
+	s=arc-20240116; t=1725868637; c=relaxed/simple;
+	bh=HWWTAYGm0U7wN66xDMQU4gzK4ub4ZAFi3PYLnXmxLWU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YAIA3PCkpz//9uOTG9VEx3DmmRLAG2jKwsqDXF7kdZoNCHTyC5aUFVez55g9Rx1s2jxZGjxXWgYm0xgD5pOIoCqQz9GlHRBdxwt+ep8YgQ6b0i/68UwOKE8JrLqoP22S9zK6+CNX+uyZ+OthfGE+QW2gr6Dwv9HYntzC64ZxxXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VyYxgvd5; arc=none smtp.client-ip=209.85.221.53
+	 MIME-Version; b=ApHy+3sNT5+vzSIGFeEg/q82G7qBAaM9NFGeqmSeG4LvyZfvB1msOoZVgV7t2PvOpzdoYzTuLkCDn/bMHdTZTzJmJ5/K6CDvngZ0XNJxoeHMdBW5t4LARsThhhvpr72MTS7X8mAmplD2Rq1HFwq8W75EzPHWrcs/UC2NRDm2ero=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IupBDwyt; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-371ba7e46easo2647992f8f.0;
-        Mon, 09 Sep 2024 00:57:14 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-42cae4eb026so16826475e9.0;
+        Mon, 09 Sep 2024 00:57:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1725868633; x=1726473433; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1725868635; x=1726473435; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=k/MFlMnrTNocZP8/Uv97NsCue+ROk0MIWVg6GOd8r8g=;
-        b=VyYxgvd54evCEafoNlAuhgUWcHwCr+YMQvF7blHA7eFVTQtgV0y/8364KesUo1RCNp
-         S65Vq8KhizzLSGDNSYhRnL0vH3xzZZlebIRlL+x5dnUBfE8QQrKHB3xYgb9yk+w1wcxW
-         f+m9WSmMOBeQ86toGvhPYDlk3YXuG+BAXglV6hNVkE8IwttBAihnPjQhN3r61gOTr2Hc
-         426n2ukOFI5niZpOA9CZvJHlOyKrAq2zy4BTPREBPFPci6Q008sm2GsTFTbQS1YL5jbp
-         n0A/rt6RP5H9xSqJGGhZ4VPFuty+4LpPtwBGHiyxxsmOk4tqQLGeaQwHQI2VNV0y/ORA
-         gGKQ==
+        bh=BivEb0WMZmwNev7ojy/Ht/ekf32lny20AzsfLsOF+vY=;
+        b=IupBDwytkaNgN0rKlrmRZZBHcIoX84bkEzci8PSgcfMS3yeVl+H3WBnqa1Uyt0ilfs
+         clP6lbCGwXuGqveR+TorgLQw6t6zKOCQg8hhquI/RB2p1w99Py9ucTQWeuvk/OiG7dZ7
+         zXAGcQkl1IdjmgpYuycRyDvgGvl5YSmwXYiYVtwBGoiOUMNPxsqacmW32MiL1ZR4cVXe
+         RoJEbP1o8CX5fxCoRXKRj3Z3qgJ4EaiywulFYaP/rQISZ5lB215FM4sEuK5xlhZBSZzR
+         DucJf4So/gRokkzXc3M4KVtCbiZdE6X9i5g1ydOtde/hJ7ZGw+SCrtNAA9JOh2VSM3na
+         eMaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725868633; x=1726473433;
+        d=1e100.net; s=20230601; t=1725868635; x=1726473435;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=k/MFlMnrTNocZP8/Uv97NsCue+ROk0MIWVg6GOd8r8g=;
-        b=eLi4LDgpJbHeSKWsHmn7U5rCBOzlF2fwyELC4m3HOWeFMfiPKyyiOKLpY23ApoQbGL
-         Pbx4XrgoVOyRXM50+R7CzQSGDj6bIR62brAo8DAGrY+9D+QBMjMmIhyUA2d2pJ2oBjir
-         8phIMBY33efQwaEVEBvzmBRNOB6EwDBIoWgucrcMBArzYQx6ruQzwVXwZlaCT042+/Ti
-         pAkle7otZ2sQQV95FWeeTN1TfPvTsSlbCSWQbpIsUV6OOTxxRtB1PBbj5ZZ0t8W1Ji3e
-         PULUUpvtet9ZdADiaji0NfB656SJiYyMjyoowvq3iPA5uI5Vp46sTsSeQcW0EhNex8Mk
-         EimQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU8ohpZrJtt3xyvFNPPyqOIUG+GWnJJgLGeEHMw+/81BVie35NdmdeBvnSWbyur/tJylCrrii/JzL65P5k=@vger.kernel.org, AJvYcCVEmple8Eo4jWQ0HKilsTuNnCNtmotaEV2kfLcE3JNdJPKS8mb4C653t+d2KRMeqgrJKtjrYYAUrpbIZuPe@vger.kernel.org, AJvYcCVukEOvplq/5RFJvDVI5s8skhNoMlDv26xpgOIcCHRct81Jl4d9FLfcPj6JF8rWD1DBEuqEmg934wtkgw==@vger.kernel.org, AJvYcCWXLfKh/HgMWLqbhSGwVkbTk1QqYBQ9AyP1t4K8N13bnA1789N3nFEecYnNw8/o3Gb1hjSwHoTFMiUvxa+lWZY+@vger.kernel.org, AJvYcCXNiJXVHwXyn34/7qq1ACZO5YCezazgkcWHhN8rXE6LLs7ywDJYav0seLN1s0Xt53U4u/IlQRrhX4cbKSFCXQ==@vger.kernel.org, AJvYcCXYaP+4OTY01SBmART7T+y9FysJJxL+lvNj2F3rYwO7iU905C/K8kl7tROX9t1K0HVEzJg=@vger.kernel.org, AJvYcCXy3EeU54mnzUVC00o/W6PegsLftJ3hY/4hl+9GHRdXr5Ixxg0Zhcyod+3nHXDnleZUXdZT95h9dXpDKJzv@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxsp1JVzFRsIZEDBjHV53qnjIej0uf6OFxsUsXIr685h16ErCVG
-	4aG8087zCvv0ni2iUeT1u2664PiMAfMV1Y2l4CfEBnDBh8a2aK+IojRI6lan2h0=
-X-Google-Smtp-Source: AGHT+IFm2UQfjMo+cDUf0j3lnU/Cm4mT7+HmOHGv2OWxiL1EKdqFzUE8umAkuhmwVoyX5BX+6CelaQ==
-X-Received: by 2002:a5d:6184:0:b0:368:64e:a7dd with SMTP id ffacd0b85a97d-378896a5c88mr6503932f8f.53.1725868633211;
-        Mon, 09 Sep 2024 00:57:13 -0700 (PDT)
+        bh=BivEb0WMZmwNev7ojy/Ht/ekf32lny20AzsfLsOF+vY=;
+        b=QBj9PwMnObQfKW/41It2y98e+FWKKu7xfhT/bAkP9FQS4o4hOwHgmkaem1qZ4VdbLL
+         KbuHCGc5cbufJSub/mNsGOHPUDagk20ZgpiB07DUMk52t10iOqo2c44FHnY8XmsN1EWe
+         5W5DQAJBHaPDJPjdtKhOWB+nHqG7rLvgpu5M9xF2NUyeFkgX/D4wqR0TooF70R2Ehi7I
+         KFVs0QLaC5y8foIDWKitLuOpXRHP5D1auWwb+ZRBmiIhXLm3bDC5irNGdZsqe5r2SOM9
+         zr/bB3prad0Aff4pIJcGrYSjSJTKyRBdVReAGedsC3KFtzorX6FZBIbyYJRA1Y+dL9tm
+         XxIw==
+X-Forwarded-Encrypted: i=1; AJvYcCUWCu+FoaJvD3NxkzqfJ/1dqdIS+5S/OX+vporxaB1R3UX5wwH8tJRx4kSfHJlwLhHSATz29aO/JJhnMNOEGFJ2@vger.kernel.org, AJvYcCV4NiQ9tzCRSHIpYZLmNTfl8JShLrY3WDOjcyj3FFfqV9k3dgGW6GRHLw6AYJAXq9Q3AJ7sGxDj91gH6hT4iQ==@vger.kernel.org, AJvYcCVySCL/m8Wt33djIFbhwodtrqAHxkPnLbSE7NBRu5mZ1xx+mwzTNwsrcXCAWq6aub9XmKcbpRmncNqpUA0v@vger.kernel.org, AJvYcCW+YPxLsNoKyvH79WnewObqptEVzbTx2N0H2gpZVhun6b8TqU5RAVl9fVFOBzny1B7lmd9HuysM2dvnfXz+@vger.kernel.org, AJvYcCX3gS7h5eXfycc/hr3GKYrzrHg2caRwZRS0lm1NxgpIiHPjuG4SxH4cWaYT8BfEv1NyOOInN4C/F6Pfxw==@vger.kernel.org, AJvYcCXU2y7mQ5wEw6i+44d9hZhpZrFT3gFKOtbNtK8nqy17nPnVxPh97tZ5UAPRnlZhvt2NM4RwzTGXrlRMskI=@vger.kernel.org, AJvYcCXgwKH9Q0XOnZWJihv6KNw93ZovJBRHaepgJsf8AjQE4jpZeasK6HBZfV/CR0ECgFwYNTI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyADqnSeohhz3hZOkWi/xJQHR699b1Apmyeg0tUO/fyOCPymKAx
+	ojQkgC48FZlwm3NBghYqOlJambAbW8nHYViNV8N8a38gipGKc1aw
+X-Google-Smtp-Source: AGHT+IGFn7bjhhziiFk7ZlVWXk6e2N6wsS1IlnWqQqC142aEHDE+lRu2u+3J5phDWkNcaysihDjQtA==
+X-Received: by 2002:a5d:4101:0:b0:374:cbdd:480d with SMTP id ffacd0b85a97d-37889654c77mr5657546f8f.36.1725868634534;
+        Mon, 09 Sep 2024 00:57:14 -0700 (PDT)
 Received: from fedora.iskraemeco.si ([193.77.86.250])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37895675b7esm5303001f8f.50.2024.09.09.00.57.12
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37895675b7esm5303001f8f.50.2024.09.09.00.57.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 09 Sep 2024 00:57:12 -0700 (PDT)
+        Mon, 09 Sep 2024 00:57:13 -0700 (PDT)
 From: Uros Bizjak <ubizjak@gmail.com>
 To: x86@kernel.org,
 	linux-crypto@vger.kernel.org,
@@ -81,17 +81,12 @@ To: x86@kernel.org,
 	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org
 Cc: Uros Bizjak <ubizjak@gmail.com>,
-	Stephen Hemminger <stephen@networkplumber.org>,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
-	Cong Wang <xiyou.wangcong@gmail.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH RESEND v2 17/19] netem: Include <linux/prandom.h> in sch_netem.c
-Date: Mon,  9 Sep 2024 09:54:00 +0200
-Message-ID: <20240909075641.258968-18-ubizjak@gmail.com>
+	"Theodore Ts'o" <tytso@mit.edu>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH RESEND v2 18/19] random: Do not include <linux/prandom.h> in <linux/random.h>
+Date: Mon,  9 Sep 2024 09:54:01 +0200
+Message-ID: <20240909075641.258968-19-ubizjak@gmail.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240909075641.258968-1-ubizjak@gmail.com>
 References: <20240909075641.258968-1-ubizjak@gmail.com>
@@ -103,34 +98,40 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Include <linux/prandom.h> header to allow the removal of legacy
-inclusion of <linux/prandom.h> from <linux/random.h>.
+Files that use prandom infrastructure are now converted to
+use <linux/prandom.h> header instead of <linux/random.h>.
+Remove the legacy inclusion of <linux/prandom.h> from
+<linux/random.h>.
+
+This is the "nice cleanup" part, wished in c0842fbc1b18.
 
 Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: Stephen Hemminger <stephen@networkplumber.org>
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>
-Cc: Cong Wang <xiyou.wangcong@gmail.com>
-Cc: Jiri Pirko <jiri@resnulli.us>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
+Fixes: c0842fbc1b18 ("random32: move the pseudo-random 32-bit definitions to prandom.h")
+Cc: "Theodore Ts'o" <tytso@mit.edu>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
 ---
- net/sched/sch_netem.c | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/random.h | 7 -------
+ 1 file changed, 7 deletions(-)
 
-diff --git a/net/sched/sch_netem.c b/net/sched/sch_netem.c
-index 0f8d581438c3..2d919f590772 100644
---- a/net/sched/sch_netem.c
-+++ b/net/sched/sch_netem.c
-@@ -17,6 +17,7 @@
- #include <linux/errno.h>
- #include <linux/skbuff.h>
- #include <linux/vmalloc.h>
-+#include <linux/prandom.h>
- #include <linux/rtnetlink.h>
- #include <linux/reciprocal_div.h>
- #include <linux/rbtree.h>
+diff --git a/include/linux/random.h b/include/linux/random.h
+index b0a940af4fff..333cecfca93f 100644
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -145,13 +145,6 @@ declare_get_random_var_wait(u64, u32)
+ declare_get_random_var_wait(long, unsigned long)
+ #undef declare_get_random_var
+ 
+-/*
+- * This is designed to be standalone for just prandom
+- * users, but for now we include it from <linux/random.h>
+- * for legacy reasons.
+- */
+-#include <linux/prandom.h>
+-
+ #ifdef CONFIG_SMP
+ int random_prepare_cpu(unsigned int cpu);
+ int random_online_cpu(unsigned int cpu);
 -- 
 2.46.0
 
