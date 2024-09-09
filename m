@@ -1,35 +1,35 @@
-Return-Path: <linux-kselftest+bounces-17548-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17549-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 274E99722DE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 21:38:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 529D69722E1
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 21:39:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8D8B281728
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 19:38:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7765C1C22793
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 19:39:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1EC218A924;
-	Mon,  9 Sep 2024 19:38:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4345918A947;
+	Mon,  9 Sep 2024 19:38:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ADR93+QP";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="R7qDc9Bs"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wY2aDLJZ";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="TdVOgTA9"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A5C18A6AB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A5F18A6B1;
 	Mon,  9 Sep 2024 19:38:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725910706; cv=none; b=mH0CV1Y2E/Dcu/vrbCAfQXFrhyzWF4JTKC7nYQtUxPas6TaN16B+ur1nU9W/WvuGTy+6NdMYQPWtI3ehPXAyoDljALubRjomBch0nRVMyAm88ewIxzLS8+aCMQ3KB+0XKD8KhhF9rSquPZ6EnnhBNG7sc1Z7wZ0HFQ/6kTUtIzg=
+	t=1725910707; cv=none; b=QZJT3rp3rWm+3BP8cvNQJM+8WNUUPT+DhMFKVbnR4vskxVn5uMn9J/yz4SakSeNQnKjDwA9Ig596B/xeWBosLnSLc1MmrF3bQGYh5RguyHLZaSPMXK6cPrEY0+QZEZ+cP4yoXyBoE2O4cVcvKbuKdFqUyJiSAw/YKFQC+zggM+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725910706; c=relaxed/simple;
-	bh=v9ASjx4AkQY74pBrfJHdygw7QDJW6F3tTHqu14JlvZQ=;
+	s=arc-20240116; t=1725910707; c=relaxed/simple;
+	bh=FoRzmTfWB/ubWW7w8X6rp310gV8eZN6pBJFbfTCb2zQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=e3ErQQI4qXj7wGLRHKE6uKeyPFNQgc+4qEs9GwOf25lSDdf8Gqy59weRWJ3PIwV8QU/gDANTKI9Gqng8pa/uc/HPoWMxCXrSksGVg/BFUfJSSlluFJpN7YJNZUG8jseXwVDYwkss/HNECcz8FILM9eFiK1s73DQtQxodlpGEx6w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ADR93+QP; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=R7qDc9Bs; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=GsV17wCLeZt+MS9lbg/+6wePfnPjVepX5GRNwbJei/q5wYIkLGGy01KkyHf+Ar/1AEXKUgdMz4Hrrs0Gg8SruTUH0HV/KmMAIHBFuqCtLqNcS7Y2V9qcoUVG9a92Ir6CGCUhTxWvECPlF4XWBPn4+hsaUQj2oS/r/nxC+RiVpn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wY2aDLJZ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=TdVOgTA9; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: Florian Kauer <florian.kauer@linutronix.de>
@@ -39,23 +39,24 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=YCULmNkmiSeT1SnEcJ8wNOTPBOtklSrol+/kqbWcEAw=;
-	b=ADR93+QPcSF3hHDh9PmUhiQOHG1J4LUibCFTg25xfduRwY3AVmQWVH7KQVX06gX7Ys+sdT
-	wmFEk10t6ROzWDjkGEIwvDYJao+/sZJPReRNFv32M0fxSSdIa6tTAs6iSIln1suId8nihK
-	H/uAL0Kd02ELE8Br6a2LzfdKvpcZeeB1S6OleNahGT9f7KOunhnEYcUcHvdB14JXlf1eBo
-	3otDeFoi565WZ/G8VFA7Bzb0/xwnvB3eoZo+YuJVYHRZmY21fmc4iMcwXJd1dwEPubvKaF
-	U+Aq4GZ3Yi/Oy8pbOGhDbAIJs4rM8vxilIFLoNbhlkyWxgc7qRmXRgwmIGbblw==
+	bh=O/rVgzkeLwv0MCr5I/dWSSAStfGVTRozaQ6oIp100Tc=;
+	b=wY2aDLJZFj5w2zwZ8IiLameO7mrJui+No8zIwHU/rUvayDl7KEKa2m1dKHyz7wdGi7QAt+
+	EyPkWGJpvMLUM1sIJV+L2TSjpbz5QGNIPiX+YSU8cHe1MveSl/TqdLG3XZJU7TngtWjqIw
+	rT/DmOAFUDy5RxYMpKv13+ipmkQvDs3xvnTSv0EYla/A9pelp991s2Oej7au3PX9/C6xL7
+	5Io6kMtP4876+28HVdjgRjrzSbY52LTM+HXdOOl0XvP1E4whSj80IdtDqseLBFiRJuDfK6
+	QQJOPuOK2Eg/zywsxCqibzhIPCff/6RAbc2+Awe7JXj0cGsesqNp4chLmpqgLA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1725910703;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=YCULmNkmiSeT1SnEcJ8wNOTPBOtklSrol+/kqbWcEAw=;
-	b=R7qDc9Bs27CtnYdnO0dTF7nZFdgLAUk0JqBq7UIrcrkgRJ4pLcXqXrXt4bIxQ5ukzOBJ3y
-	anQQ4WQaPfXaWkBg==
-Date: Mon, 09 Sep 2024 21:38:05 +0200
-Subject: [PATCH net v3 1/2] bpf: devmap: provide rxq after redirect
+	bh=O/rVgzkeLwv0MCr5I/dWSSAStfGVTRozaQ6oIp100Tc=;
+	b=TdVOgTA9bZZlfbInePeh5Hw2iMzphnIJdnOsVcSk34C9lh6VEjC6DHk8hQ0aQVu0U47jcB
+	J7BFzPSN6oOSYSBQ==
+Date: Mon, 09 Sep 2024 21:38:06 +0200
+Subject: [PATCH net v3 2/2] bpf: selftests: send packet to devmap redirect
+ XDP
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,8 +64,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20240909-devel-koalo-fix-ingress-ifindex-v3-1-66218191ecca@linutronix.de>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240909-devel-koalo-fix-ingress-ifindex-v3-2-66218191ecca@linutronix.de>
 References: <20240909-devel-koalo-fix-ingress-ifindex-v3-0-66218191ecca@linutronix.de>
 In-Reply-To: <20240909-devel-koalo-fix-ingress-ifindex-v3-0-66218191ecca@linutronix.de>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -85,161 +86,202 @@ Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
  linux-kernel@vger.kernel.org, Jesper Dangaard Brouer <brouer@redhat.com>, 
  linux-kselftest@vger.kernel.org, 
  Florian Kauer <florian.kauer@linutronix.de>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6103;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6420;
  i=florian.kauer@linutronix.de; h=from:subject:message-id;
- bh=v9ASjx4AkQY74pBrfJHdygw7QDJW6F3tTHqu14JlvZQ=;
- b=owEBbQKS/ZANAwAKATKF5IolV+EkAcsmYgBm306mNefUYQnVa7f2Usar8b/IIyAZocmAMa/+D
- 94JiHMClwWJAjMEAAEKAB0WIQSG5cmCLvpm5t9g7UUyheSKJVfhJAUCZt9OpgAKCRAyheSKJVfh
- JM2KD/9RlXY+SSlYFARtEZYrrIgWNrJTFEuaTBq5Mr+i0HBuZwgeW/52xzSyL/DAsInfoeBAG/l
- AqdD/Jpu3vBo9Gpd57Ji8zijJ4Kfo6/etPMiIQLwGGdPEtFidW6OLbHnTDOmcKhX9gWubHWTXOR
- go95zxvUajvTrjEfSKvs255gVGdyMt94yYhrfckGEfDgijnxGjqkLBueyi4cV8eWA+kmKeVRDL5
- d31PVdva1SphLSdvLRllFymf9N/xa//TZCWibxUwVYOJP/kmijr/298Sc4W9UeUEPmMGQN2fsx2
- tkAKmgsJOFNZZAmxhK/gQ5iHjGs4exrC96PR8KIV2wok7s1JaYTyUWInNsM0GKXa/xV9C7hDx97
- hRbYz7x9L7rpfsk18inkiCgWGYewO7Ajl391y5UJvKhm0fd4EjEsug9jcQsd2r/azZL6EQtHdLB
- 2J09D4AgnURWIGrHpLEf2sDWnCTt31/LMd11aquLpvh0G1MFHlg7fERcONEGM9VwGBcJB/pP7NO
- JDsczY0oAe7uOM37JMrxG/n9n+Hbm3WTHvigBwqxzcvzljrwG1kdPMwBeiYo5utbaW1QO7HoRMj
- PyrBU7mpZCVp2BLi/DO2xpv5c4lbMuWhIFjcVXT3rgOggq6VLBz6pvwqmRd8BdAbCGTVVNFHmza
- MZ+ZscxeyGE6xfg==
+ bh=FoRzmTfWB/ubWW7w8X6rp310gV8eZN6pBJFbfTCb2zQ=;
+ b=owEBbQKS/ZANAwAKATKF5IolV+EkAcsmYgBm306qL7HJg+td3bzJ95v1kUjOFDR2QM8+Wlg2E
+ +A3dp3Smx2JAjMEAAEKAB0WIQSG5cmCLvpm5t9g7UUyheSKJVfhJAUCZt9OqgAKCRAyheSKJVfh
+ JAuuEADGftuWw7ZzzEhGJwscBiGlQ7yB4Jo/h+tF8obP5sNXyKNdlKUQ/TVmixKh82NaRjmnYh6
+ aiWEuR7wEK7s8SkyXWfhTG/O8wH9aqEwpA2vzi6C7UcztsH7J5GihOpXQJAIHM0VIXQdyAYfFQn
+ G+AaMBTKJEwv54VNPCTls2QmMwUjk9IIi6vMZphB71k1TOJEZ9B3wiENpBHUf+ZfqrZOW3JKVTP
+ 5yjQS8upG1hef1ZVyq6xNGAsEIWY5N7AG04VV2w3SCRuVL+F9J5XXHXuv7XeIZcK+5pyeDIN9Ef
+ tInzVNOVHJFaDhlaEfVEZ49HieEoQZqLH5RFoI0dyaoOCrC3F306Zy6JfE13ByCoRQADuRyXEVr
+ kOsqQ3/M77r8+Hleo1DVeANGdeIStOjqQFodMeveKEhMxDkZsNQC/NrrBHvioQgAjVXeOVpGPgR
+ Agc8Tg8oRC3ny7c3DlzDAFqK2bkT4HCKv+lszo1CY/UXTZREVa37yNm+mHnwGxiPHM8KyVgw73K
+ UYs9gpCc31PsHmh3lAnFvfUDwCieVqdK+Tg31ABuzN+A8Cq7XUYTrtvK03yfST6kzQqX9x0Q9AS
+ 2v28SeSYGttiolwuheB0Jt5tSi2mPkKjeHDKMGhKqxe1xeWEoarpxoOp6z+wRp62fXcH9IO4Uab
+ 4+j2b9IpniGgYwQ==
 X-Developer-Key: i=florian.kauer@linutronix.de; a=openpgp;
  fpr=F17D8B54133C2229493E64A0B5976DD65251944E
 
-rxq contains a pointer to the device from where
-the redirect happened. Currently, the BPF program
-that was executed after a redirect via BPF_MAP_TYPE_DEVMAP*
-does not have it set.
+The current xdp_devmap_attach test attaches a program
+that redirects to another program via devmap.
 
-This is particularly bad since accessing ingress_ifindex, e.g.
+It is, however, never executed, so do that to catch
+any bugs that might occur during execution.
 
-SEC("xdp")
-int prog(struct xdp_md *pkt)
-{
-        return bpf_redirect_map(&dev_redirect_map, 0, 0);
-}
+Also, execute the same for a veth pair so that we
+also cover the non-generic path.
 
-SEC("xdp/devmap")
-int prog_after_redirect(struct xdp_md *pkt)
-{
-        bpf_printk("ifindex %i", pkt->ingress_ifindex);
-        return XDP_PASS;
-}
+Warning: Running this without the bugfix in this series
+will likely crash your system.
 
-depends on access to rxq, so a NULL pointer gets dereferenced:
-
-<1>[  574.475170] BUG: kernel NULL pointer dereference, address: 0000000000000000
-<1>[  574.475188] #PF: supervisor read access in kernel mode
-<1>[  574.475194] #PF: error_code(0x0000) - not-present page
-<6>[  574.475199] PGD 0 P4D 0
-<4>[  574.475207] Oops: Oops: 0000 [#1] PREEMPT SMP NOPTI
-<4>[  574.475217] CPU: 4 UID: 0 PID: 217 Comm: kworker/4:1 Not tainted 6.11.0-rc5-reduced-00859-g780801200300 #23
-<4>[  574.475226] Hardware name: Intel(R) Client Systems NUC13ANHi7/NUC13ANBi7, BIOS ANRPL357.0026.2023.0314.1458 03/14/2023
-<4>[  574.475231] Workqueue: mld mld_ifc_work
-<4>[  574.475247] RIP: 0010:bpf_prog_5e13354d9cf5018a_prog_after_redirect+0x17/0x3c
-<4>[  574.475257] Code: cc cc cc cc cc cc cc 80 00 00 00 cc cc cc cc cc cc cc cc f3 0f 1e fa 0f 1f 44 00 00 66 90 55 48 89 e5 f3 0f 1e fa 48 8b 57 20 <48> 8b 52 00 8b 92 e0 00 00 00 48 bf f8 a6 d5 c4 5d a0 ff ff be 0b
-<4>[  574.475263] RSP: 0018:ffffa62440280c98 EFLAGS: 00010206
-<4>[  574.475269] RAX: ffffa62440280cd8 RBX: 0000000000000001 RCX: 0000000000000000
-<4>[  574.475274] RDX: 0000000000000000 RSI: ffffa62440549048 RDI: ffffa62440280ce0
-<4>[  574.475278] RBP: ffffa62440280c98 R08: 0000000000000002 R09: 0000000000000001
-<4>[  574.475281] R10: ffffa05dc8b98000 R11: ffffa05f577fca40 R12: ffffa05dcab24000
-<4>[  574.475285] R13: ffffa62440280ce0 R14: ffffa62440549048 R15: ffffa62440549000
-<4>[  574.475289] FS:  0000000000000000(0000) GS:ffffa05f4f700000(0000) knlGS:0000000000000000
-<4>[  574.475294] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-<4>[  574.475298] CR2: 0000000000000000 CR3: 000000025522e000 CR4: 0000000000f50ef0
-<4>[  574.475303] PKRU: 55555554
-<4>[  574.475306] Call Trace:
-<4>[  574.475313]  <IRQ>
-<4>[  574.475318]  ? __die+0x23/0x70
-<4>[  574.475329]  ? page_fault_oops+0x180/0x4c0
-<4>[  574.475339]  ? skb_pp_cow_data+0x34c/0x490
-<4>[  574.475346]  ? kmem_cache_free+0x257/0x280
-<4>[  574.475357]  ? exc_page_fault+0x67/0x150
-<4>[  574.475368]  ? asm_exc_page_fault+0x26/0x30
-<4>[  574.475381]  ? bpf_prog_5e13354d9cf5018a_prog_after_redirect+0x17/0x3c
-<4>[  574.475386]  bq_xmit_all+0x158/0x420
-<4>[  574.475397]  __dev_flush+0x30/0x90
-<4>[  574.475407]  veth_poll+0x216/0x250 [veth]
-<4>[  574.475421]  __napi_poll+0x28/0x1c0
-<4>[  574.475430]  net_rx_action+0x32d/0x3a0
-<4>[  574.475441]  handle_softirqs+0xcb/0x2c0
-<4>[  574.475451]  do_softirq+0x40/0x60
-<4>[  574.475458]  </IRQ>
-<4>[  574.475461]  <TASK>
-<4>[  574.475464]  __local_bh_enable_ip+0x66/0x70
-<4>[  574.475471]  __dev_queue_xmit+0x268/0xe40
-<4>[  574.475480]  ? selinux_ip_postroute+0x213/0x420
-<4>[  574.475491]  ? alloc_skb_with_frags+0x4a/0x1d0
-<4>[  574.475502]  ip6_finish_output2+0x2be/0x640
-<4>[  574.475512]  ? nf_hook_slow+0x42/0xf0
-<4>[  574.475521]  ip6_finish_output+0x194/0x300
-<4>[  574.475529]  ? __pfx_ip6_finish_output+0x10/0x10
-<4>[  574.475538]  mld_sendpack+0x17c/0x240
-<4>[  574.475548]  mld_ifc_work+0x192/0x410
-<4>[  574.475557]  process_one_work+0x15d/0x380
-<4>[  574.475566]  worker_thread+0x29d/0x3a0
-<4>[  574.475573]  ? __pfx_worker_thread+0x10/0x10
-<4>[  574.475580]  ? __pfx_worker_thread+0x10/0x10
-<4>[  574.475587]  kthread+0xcd/0x100
-<4>[  574.475597]  ? __pfx_kthread+0x10/0x10
-<4>[  574.475606]  ret_from_fork+0x31/0x50
-<4>[  574.475615]  ? __pfx_kthread+0x10/0x10
-<4>[  574.475623]  ret_from_fork_asm+0x1a/0x30
-<4>[  574.475635]  </TASK>
-<4>[  574.475637] Modules linked in: veth br_netfilter bridge stp llc iwlmvm x86_pkg_temp_thermal iwlwifi efivarfs nvme nvme_core
-<4>[  574.475662] CR2: 0000000000000000
-<4>[  574.475668] ---[ end trace 0000000000000000 ]---
-
-Therefore, provide it to the program by setting rxq properly.
-
-Fixes: cb261b594b41 ("bpf: Run devmap xdp_prog on flush instead of bulk enqueue")
-Reviewed-by: Toke Høiland-Jørgensen <toke@redhat.com>
 Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
 ---
- kernel/bpf/devmap.c | 11 +++++++----
- 1 file changed, 7 insertions(+), 4 deletions(-)
+ .../selftests/bpf/prog_tests/xdp_devmap_attach.c   | 114 +++++++++++++++++++--
+ 1 file changed, 108 insertions(+), 6 deletions(-)
 
-diff --git a/kernel/bpf/devmap.c b/kernel/bpf/devmap.c
-index 9e0e3b0a18e4..7878be18e9d2 100644
---- a/kernel/bpf/devmap.c
-+++ b/kernel/bpf/devmap.c
-@@ -333,9 +333,11 @@ static int dev_map_hash_get_next_key(struct bpf_map *map, void *key,
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+index ce6812558287..3da45f719736 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
+@@ -1,6 +1,9 @@
+ // SPDX-License-Identifier: GPL-2.0
++#include <arpa/inet.h>
+ #include <uapi/linux/bpf.h>
+ #include <linux/if_link.h>
++#include <network_helpers.h>
++#include <net/if.h>
+ #include <test_progs.h>
  
- static int dev_map_bpf_prog_run(struct bpf_prog *xdp_prog,
- 				struct xdp_frame **frames, int n,
--				struct net_device *dev)
-+				struct net_device *tx_dev,
-+				struct net_device *rx_dev)
+ #include "test_xdp_devmap_helpers.skel.h"
+@@ -17,7 +20,7 @@ static void test_xdp_with_devmap_helpers(void)
+ 		.ifindex = IFINDEX_LO,
+ 	};
+ 	__u32 len = sizeof(info);
+-	int err, dm_fd, map_fd;
++	int err, dm_fd, dm_fd_redir, map_fd;
+ 	__u32 idx = 0;
+ 
+ 
+@@ -25,14 +28,11 @@ static void test_xdp_with_devmap_helpers(void)
+ 	if (!ASSERT_OK_PTR(skel, "test_xdp_with_devmap_helpers__open_and_load"))
+ 		return;
+ 
+-	dm_fd = bpf_program__fd(skel->progs.xdp_redir_prog);
+-	err = bpf_xdp_attach(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE, NULL);
++	dm_fd_redir = bpf_program__fd(skel->progs.xdp_redir_prog);
++	err = bpf_xdp_attach(IFINDEX_LO, dm_fd_redir, XDP_FLAGS_SKB_MODE, NULL);
+ 	if (!ASSERT_OK(err, "Generic attach of program with 8-byte devmap"))
+ 		goto out_close;
+ 
+-	err = bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
+-	ASSERT_OK(err, "XDP program detach");
+-
+ 	dm_fd = bpf_program__fd(skel->progs.xdp_dummy_dm);
+ 	map_fd = bpf_map__fd(skel->maps.dm_ports);
+ 	err = bpf_prog_get_info_by_fd(dm_fd, &info, &len);
+@@ -47,6 +47,23 @@ static void test_xdp_with_devmap_helpers(void)
+ 	ASSERT_OK(err, "Read devmap entry");
+ 	ASSERT_EQ(info.id, val.bpf_prog.id, "Match program id to devmap entry prog_id");
+ 
++	/* send a packet to trigger any potential bugs in there */
++	char data[10] = {};
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
++			    .data_in = &data,
++			    .data_size_in = 10,
++			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
++			    .repeat = 1,
++		);
++	err = bpf_prog_test_run_opts(dm_fd_redir, &opts);
++	ASSERT_OK(err, "XDP test run");
++
++	/* wait for the packets to be flushed */
++	kern_sync_rcu();
++
++	err = bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
++	ASSERT_OK(err, "XDP program detach");
++
+ 	/* can not attach BPF_XDP_DEVMAP program to a device */
+ 	err = bpf_xdp_attach(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE, NULL);
+ 	if (!ASSERT_NEQ(err, 0, "Attach of BPF_XDP_DEVMAP program"))
+@@ -124,6 +141,88 @@ static void test_xdp_with_devmap_frags_helpers(void)
+ 	test_xdp_with_devmap_frags_helpers__destroy(skel);
+ }
+ 
++static void test_xdp_with_devmap_helpers_veth(void)
++{
++	struct test_xdp_with_devmap_helpers *skel = NULL;
++	struct bpf_prog_info info = {};
++	struct bpf_devmap_val val = {};
++	struct nstoken *nstoken = NULL;
++	__u32 len = sizeof(info);
++	int err, dm_fd, dm_fd_redir, map_fd, ifindex_dst;
++	__u32 idx = 0;
++
++	SYS(out_close, "ip netns add testns");
++	nstoken = open_netns("testns");
++	if (!ASSERT_OK_PTR(nstoken, "setns"))
++		goto out_close;
++
++	SYS(out_close, "ip link add veth_src type veth peer name veth_dst");
++	SYS(out_close, "ip link set dev veth_src up");
++	SYS(out_close, "ip link set dev veth_dst up");
++
++	val.ifindex = if_nametoindex("veth_src");
++	ifindex_dst = if_nametoindex("veth_dst");
++	if (!ASSERT_NEQ(val.ifindex, 0, "val.ifindex") ||
++	    !ASSERT_NEQ(ifindex_dst, 0, "ifindex_dst"))
++		goto out_close;
++
++	skel = test_xdp_with_devmap_helpers__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "test_xdp_with_devmap_helpers__open_and_load"))
++		return;
++
++	dm_fd_redir = bpf_program__fd(skel->progs.xdp_redir_prog);
++	err = bpf_xdp_attach(val.ifindex, dm_fd_redir, XDP_FLAGS_DRV_MODE, NULL);
++	if (!ASSERT_OK(err, "Attach of program with 8-byte devmap"))
++		goto out_close;
++
++	dm_fd = bpf_program__fd(skel->progs.xdp_dummy_dm);
++	map_fd = bpf_map__fd(skel->maps.dm_ports);
++	err = bpf_prog_get_info_by_fd(dm_fd, &info, &len);
++	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd"))
++		goto out_close;
++
++	val.bpf_prog.fd = dm_fd;
++	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
++	ASSERT_OK(err, "Add program to devmap entry");
++
++	err = bpf_map_lookup_elem(map_fd, &idx, &val);
++	ASSERT_OK(err, "Read devmap entry");
++	ASSERT_EQ(info.id, val.bpf_prog.id, "Match program id to devmap entry prog_id");
++
++	/* attach dummy to other side to enable reception */
++	dm_fd = bpf_program__fd(skel->progs.xdp_dummy_prog);
++	err = bpf_xdp_attach(ifindex_dst, dm_fd, XDP_FLAGS_DRV_MODE, NULL);
++	if (!ASSERT_OK(err, "Attach of dummy XDP"))
++		goto out_close;
++
++	/* send a packet to trigger any potential bugs in there */
++	char data[10] = {};
++	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
++			    .data_in = &data,
++			    .data_size_in = 10,
++			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
++			    .repeat = 1,
++		);
++	err = bpf_prog_test_run_opts(dm_fd_redir, &opts);
++	ASSERT_OK(err, "XDP test run");
++
++	/* wait for the packets to be flushed */
++	kern_sync_rcu();
++
++	err = bpf_xdp_detach(val.ifindex, XDP_FLAGS_DRV_MODE, NULL);
++	ASSERT_OK(err, "XDP program detach");
++
++	err = bpf_xdp_detach(ifindex_dst, XDP_FLAGS_DRV_MODE, NULL);
++	ASSERT_OK(err, "XDP program detach");
++
++out_close:
++	if (nstoken)
++		close_netns(nstoken);
++	SYS_NOFAIL("ip netns del testns");
++
++	test_xdp_with_devmap_helpers__destroy(skel);
++}
++
+ void serial_test_xdp_devmap_attach(void)
  {
--	struct xdp_txq_info txq = { .dev = dev };
-+	struct xdp_txq_info txq = { .dev = tx_dev };
-+	struct xdp_rxq_info rxq = { .dev = rx_dev };
- 	struct xdp_buff xdp;
- 	int i, nframes = 0;
+ 	if (test__start_subtest("DEVMAP with programs in entries"))
+@@ -134,4 +233,7 @@ void serial_test_xdp_devmap_attach(void)
  
-@@ -346,6 +348,7 @@ static int dev_map_bpf_prog_run(struct bpf_prog *xdp_prog,
- 
- 		xdp_convert_frame_to_buff(xdpf, &xdp);
- 		xdp.txq = &txq;
-+		xdp.rxq = &rxq;
- 
- 		act = bpf_prog_run_xdp(xdp_prog, &xdp);
- 		switch (act) {
-@@ -360,7 +363,7 @@ static int dev_map_bpf_prog_run(struct bpf_prog *xdp_prog,
- 			bpf_warn_invalid_xdp_action(NULL, xdp_prog, act);
- 			fallthrough;
- 		case XDP_ABORTED:
--			trace_xdp_exception(dev, xdp_prog, act);
-+			trace_xdp_exception(tx_dev, xdp_prog, act);
- 			fallthrough;
- 		case XDP_DROP:
- 			xdp_return_frame_rx_napi(xdpf);
-@@ -388,7 +391,7 @@ static void bq_xmit_all(struct xdp_dev_bulk_queue *bq, u32 flags)
- 	}
- 
- 	if (bq->xdp_prog) {
--		to_send = dev_map_bpf_prog_run(bq->xdp_prog, bq->q, cnt, dev);
-+		to_send = dev_map_bpf_prog_run(bq->xdp_prog, bq->q, cnt, dev, bq->dev_rx);
- 		if (!to_send)
- 			goto out;
- 	}
+ 	if (test__start_subtest("Verifier check of DEVMAP programs"))
+ 		test_neg_xdp_devmap_helpers();
++
++	if (test__start_subtest("DEVMAP with programs in entries on veth"))
++		test_xdp_with_devmap_helpers_veth();
+ }
 
 -- 
 2.39.2
