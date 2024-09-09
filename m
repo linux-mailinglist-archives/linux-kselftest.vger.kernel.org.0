@@ -1,165 +1,98 @@
-Return-Path: <linux-kselftest+bounces-17552-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17553-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E71B2972461
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 23:18:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22CE2972582
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 01:00:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5018284DFD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 21:18:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBF8028574E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 23:00:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56EF318C913;
-	Mon,  9 Sep 2024 21:18:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F9EF18E04E;
+	Mon,  9 Sep 2024 23:00:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YXSkttQG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CVSO/dy3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E2818C351;
-	Mon,  9 Sep 2024 21:18:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15C8318E03E;
+	Mon,  9 Sep 2024 23:00:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725916690; cv=none; b=XvytmOCWtSciqo4YnMqwcOfwOod5607zLMngv1ox7DKc24ykLHeTRTxW73MiGg6D6/p/ybAErWb29jdHBctox5VqOApv0CD2wW+KwFKLWPN4IRr5KHylpPyLn/f+uHzO0am27ENcOaKe1FV07fS8iZ9s6HYDxXo1bdmZMS4NBCc=
+	t=1725922832; cv=none; b=CEJ5j2w7ij+xmBbWOM8HJbXuIo3Lo1bsv8ODp7V7Ox5U465wnbuq8SG/HpCclC//+5FG9iSJ5I7qklo6qg1CldX6XVeWa0/cNXXCQMGTvyWTgZFOiQeAAatkQUcsA2MYlTiJsP3cpsyB+d4Wk2U4ypVpfxxJi+a7A5yMBBBz25Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725916690; c=relaxed/simple;
-	bh=iZXEicXf2JMTARYTOOY+s6HNBfaRa9aGSN/7vqWjwDA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=p0vT6K3PMjQdURjJlHDWDQLvupyMCl3RuHNn4MeQeKAIYhgSnq8xsxSxh//eOesKo9oE39eRC6zXPkGj8fLayXRlx9eeCBYiZHDuUieVy6GE0GpiGDWdbRyWHCxaG4DMaeVBJVZ4a8TTlG2bpaPcCZiDkY1Rqn7h38LqdkFjCNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YXSkttQG; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id A32DC60005;
-	Mon,  9 Sep 2024 21:18:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1725916685;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=HXH7SELfdOSStCN609S/Bql3tY3XiIjnrc2Xlvt1w2o=;
-	b=YXSkttQGYgp/+sep7xbSgg7rzLebLQOddl9eY/m5cTXsKUu4rcwfY7QwOWlv9wht6umnzL
-	07wrjt531H405o4Lszl5ytE+BwOCYDPh7z3R0nTlJYdBGa4XyvaBw7YNTQDylKV/NJk0/j
-	YXtltBjyIHhmL1oUv2QhTBppfQDIVPqRiTyrh9MNm92wClJQgZtnteNr6ZanoeWCMcfMbO
-	fPif8C/v1sXbg8yhgrGMn7nCIVde5YzssJpn7iVFnrUHuDyFsOeVMV1EqbG/3Cwk2CDTWs
-	xlmnFkmxj1xXwCwYDQ8ED1Rx3rgXiboXc/84zeuybsie0lk3Y9N+zpsfxKxdNw==
-Date: Mon, 9 Sep 2024 23:18:00 +0200
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-To: "Alexis =?UTF-8?B?TG90aG9yw6k=?= (eBPF Foundation)"
- <alexis.lothore@bootlin.com>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
- Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu
- <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John Fastabend
- <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan
- <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>, Jakub Kicinski
- <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, Lorenzo
- Bianconi <lorenzo@kernel.org>, ebpf@linuxfoundation.org, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- netdev@vger.kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: convert test_xdp_features.sh to
- test_progs
-Message-ID: <20240909231800.72b6b328@fedora.home>
-In-Reply-To: <20240909-convert_xdp_tests-v1-1-925be5fbee3c@bootlin.com>
-References: <20240909-convert_xdp_tests-v1-1-925be5fbee3c@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1725922832; c=relaxed/simple;
+	bh=FVU+e0uUbeUPEEjSwOVvbkcKHW7sTPraTqYrzbKWPJY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=GCNlW/TQF+FLD0qEAgvmff8PzfSqKeK3b9kySUjDK+74YDV7IuBVLfyrtCvlY5idFlZ4af/LkDpxH41XWcIKT92yrmTuxLLxs6DIQkCe4a8L2rm3G03E963O4EvYUAarU5f5Gfozeej3oL0afWC4cd00Ch23aoSurtApN8s3s8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CVSO/dy3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 810EEC4CEC5;
+	Mon,  9 Sep 2024 23:00:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725922831;
+	bh=FVU+e0uUbeUPEEjSwOVvbkcKHW7sTPraTqYrzbKWPJY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=CVSO/dy3Z8HTdqeZ6UhpD6jeA21IOUm+ADrcbcUDNwL8SQqarICs1QJTolnMCPSSH
+	 /YNSnvwLH15bOYy8ge7MdEbuD1ROCv2VGNcDgDT9/McMIYUKjldRMEQx/di0toq0zC
+	 T8jugT7TLBx5dSeZOdIhIGruN89/LTNNhqaPW11CMzcOWUv+T0q7TpEJSxSP5fRC+F
+	 jmUZ98BV60SmzLlyH+l+iG9UYcTSfE8HFJJur0E8s69qRaFVNQgkee36+kZlzke1gg
+	 mRY1rU7ul3H3G70t9CBhJoXQ2c4BIIjFTTfQWoPdfebF9FMTyisT1EQdcu6iPkoxni
+	 zIn3hpf1sDUYg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADFCC3806654;
+	Mon,  9 Sep 2024 23:00:33 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: maxime.chevallier@bootlin.com
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf] bpf: Fix error message on kfunc arg type mismatch
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172592283251.3949024.7942929079715382663.git-patchwork-notify@kernel.org>
+Date: Mon, 09 Sep 2024 23:00:32 +0000
+References: <20240909133909.1315460-1-maxim@isovalent.com>
+In-Reply-To: <20240909133909.1315460-1-maxim@isovalent.com>
+To: Maxim Mikityanskiy <maxtram95@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
+ maxim@isovalent.com, alan.maguire@oracle.com, memxor@gmail.com,
+ andreimatei1@gmail.com, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
 
-Hi Alexis,
+Hello:
 
-On Mon, 09 Sep 2024 22:02:07 +0200
-Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bootlin.com> wrote:
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-> test_xdp_features.sh is a shell script allowing to test that xdp features
-> advertised by an interface are indeed delivered. The test works by starti=
-ng
-> two instance of the same program, both attaching specific xdp programs to
-> each side of a veth link, and then make those programs manage packets and
-> collect stats to check whether tested XDP feature is indeed delivered or
-> not. However this test is not integrated in test_progs framework and so c=
-an
-> not run automatically in CI.
->=20
-> Rewrite test_xdp_features to integrate it in test_progs so it can run
-> automatically in CI. The main changes brought by the rewrite are the
-> following:
-> - instead of running to separated processes (each one managing either the
->   tester veth or the DUT vet), run a single process
-> - slightly change testing direction (v0 is the tester in local namespace,
->   v1 is the Device Under Test in remote namespace)
-> - group all tests previously managed by test_xdp_features as subtests (one
->   per tested XDP feature). As a consequence, run only once some steps
->   instead of once per subtest (eg: starting/stopping the udp server). On
->   the contrary, make sure that each subtest properly cleans up its state
->   (ie detach xdp programs, reset test stats, etc)
-> - since there is now a single process, get rid of the "control" tcp chann=
-el
->   used to configure DUT. Configuring the DUT now only consists in switchi=
-ng
->   to DUT network namespace and run the relevant commands
-> - since there is no more control channel, get rid of TLVs, keep only the
->   CMD_ECHO packet type, and set it as a magic
-> - simplify network setup: use only ipv6 instead of both ipv4 and ipv6,
->   force static neighbours instead of waiting for autoconfiguration, do not
->   force gro (fetch xdp features only once xdp programs are loaded instead)
->=20
-> The existing XDP programs are reused, with some minor changes:
-> - tester and dut stats maps are converted to global variables for easier
->   usage
-> - programs do not use TLV struct anymore but the magic replacing the echo
->   command
-> - avoid to accidentally make tests pass: drop packets instead of forwardi=
-ng
->   them to userspace when they do not match the expected payload
->=20
-> Signed-off-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@boot=
-lin.com>
+On Mon,  9 Sep 2024 16:39:09 +0300 you wrote:
+> When "arg#%d expected pointer to ctx, but got %s" error is printed, both
+> template parts actually point to the type of the argument, therefore, it
+> will also say "but got PTR", regardless of what was the actual register
+> type.
+> 
+> Fix the message to print the register type in the second part of the
+> template, change the existing test to adapt to the new format, and add a
+> new test to test the case when arg is a pointer to context, but reg is a
+> scalar.
+> 
+> [...]
 
-I'm far for having reviewed the whole patch, but I do have one comment
-below :)
+Here is the summary with links:
+  - [bpf] bpf: Fix error message on kfunc arg type mismatch
+    https://git.kernel.org/bpf/bpf-next/c/bee109b7b3e5
 
-[...]
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-> +static void *run_dut_echo_thread(void *arg)
-> +{
-> +	struct test_data *t =3D (struct test_data *)arg;
-> +	__u32 magic;
-> +
-> +	while (!t->quit_dut_echo_thread) {
-> +		struct sockaddr_storage addr;
-> +		socklen_t addrlen;
-> +		size_t n;
-> +
-> +		n =3D recvfrom(t->echo_server_sock, &magic, sizeof(magic),
-> +			     MSG_WAITALL, (struct sockaddr *)&addr, &addrlen);
-> +		if (n !=3D sizeof(magic)) {
-> +			usleep(LOOP_DELAY_US);
-> +			continue;
-> +		}
-> +
-> +		if (htonl(magic) !=3D CMD_ECHO)
-> +			continue;
 
-Shouldn't it be ntohl here ? The former code used the ntohs helper for
-that command, and you're sending the magic in send_echo_msg with a
-htonl() so I guess here you might want to convert the value back to
-host endianness.
-
-Thanks,
-
-Maxime
 
