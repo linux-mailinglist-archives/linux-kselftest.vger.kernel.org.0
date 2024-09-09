@@ -1,137 +1,183 @@
-Return-Path: <linux-kselftest+bounces-17517-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17518-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2850797146B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 11:51:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FE209716AB
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 13:23:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3B6D1F23A25
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 09:51:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 449A6B25EE9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Sep 2024 11:23:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E5D71B3F01;
-	Mon,  9 Sep 2024 09:51:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dCMJGnkA"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 005E31B86C4;
+	Mon,  9 Sep 2024 11:21:20 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F08381B251C
-	for <linux-kselftest@vger.kernel.org>; Mon,  9 Sep 2024 09:50:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06FA81B6521;
+	Mon,  9 Sep 2024 11:21:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725875460; cv=none; b=a10pihsYPqX0BK0s08/cAu/Nt77sEcdpfJfy83v0lGJ8/W39mKvREn0HOO/EeJGoJ2aKJmWIPwpj7jwllo7zVJoGIp1HvUwYKBCQkGb2ubZlr94H5XEf9P6F6ARhCqbwPrSpDiQdwezh55FOoAsDD5WUYH/v46OfjpEx5mY563Q=
+	t=1725880879; cv=none; b=WIlk2qmlacjvxjsTBasZjLd38TEjj0MH8WEWoDkInhQ61/L38l/oc/qqM8XbuK4u7ll97VATLNlGb+O7/A+tN8Lrvgj5X+BHRS/HlKFjQuzp41RmetOJCcGkbHJ4Q2cPn62Dwr8i4obv418EASIckD08nAc4qaSKPIRpMjjLR1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725875460; c=relaxed/simple;
-	bh=cpN4c04fp/ArFHGa6SsgZy4awJOaoPGXwyrkhJbDvIg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e/+3Cq2BWklskgQPp0kev8HQWgTKvSbm+CgUIatn2hLT7V+Dw1cigQYGieFBNVsd3o/b6+iNAnC87j7jeCYMhJc8bTrA8III0wrhXvw0i5SlYs/WLQhlDI+7PDSnTR/YwktyUgFCw8R4QvJuAS11IW//TRYre8BBFBSJ/JW2Yl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dCMJGnkA; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725875458; x=1757411458;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cpN4c04fp/ArFHGa6SsgZy4awJOaoPGXwyrkhJbDvIg=;
-  b=dCMJGnkAnDF7ZNBvYW81G8fHgZ6R3jxG+/hZDet+Bf30V4Li4bYgWu43
-   strgMYPmPP9/7O4SpFGI7omb1Ap/AkI1irhsaCLB+c8L2nK6Hvt5lNQ5s
-   likiPHZ27pqXqYb//x+HAXnS+0kiXwsXVYyQLLVY5UOYMdQ1bpOo/VmLn
-   5Ha8rIkX2b0sOfLdjdzgrzt4ctzB8lVOy5rMpMCJ5rCAXCrSWHRib1s9I
-   V4yk5tOHDoxg23v/eh09A6Pv0EwYuCNfO7YeJovr++3RdCe4toUdWX/ok
-   k+bzWx6DK0FImAQF+B5b/Z7KYAXvtv1BNd7mCnfQvQHiXmYat4qMKjvKl
-   Q==;
-X-CSE-ConnectionGUID: WaEvWmc8TFahExrYmA/U+Q==
-X-CSE-MsgGUID: 3OXvsyyqTdyWSc4qNU/BRg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11189"; a="24361718"
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="24361718"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2024 02:50:58 -0700
-X-CSE-ConnectionGUID: PwWFr16YRiyxWamW3eHXtQ==
-X-CSE-MsgGUID: gv9Tf7MVT4CfRlIE0eicUg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,213,1719903600"; 
-   d="scan'208";a="67357831"
-Received: from lkp-server01.sh.intel.com (HELO 9c6b1c7d3b50) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 09 Sep 2024 02:50:56 -0700
-Received: from kbuild by 9c6b1c7d3b50 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1snb2r-000EaU-0x;
-	Mon, 09 Sep 2024 09:50:53 +0000
-Date: Mon, 9 Sep 2024 17:50:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
-	brendan.higgins@linux.dev, davidgow@google.com, rmoar@google.com
-Cc: oe-kbuild-all@lists.linux.dev,
-	Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	skhan@linuxfoundation.org,
-	linux-kernel-mentees@lists.linuxfoundation.org
-Subject: Re: [PATCH v4] lib/math: Add int_pow test suite
-Message-ID: <202409091732.x5CGQKBV-lkp@intel.com>
-References: <20240908224901.78595-1-luis.hernandez093@gmail.com>
+	s=arc-20240116; t=1725880879; c=relaxed/simple;
+	bh=5iq6aZDboxm6ZGBWINtqBy3Uim6XKZaYNeKYLJYVdrw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=T+QWNY54DCqy2zPPoRVSSJkjj/8uwEAgnKXVw2dSQREBsXaWSt9Hw0Ja/hQCu7pfykQLvUYrMxnddHws8bYTwatmDsPArnoyA0m4xW2lxXO4i7QM+l8X8Nxa3GtVk9YDMHLdviWi5ihRH19TvZFqUOCeOIF3Xmyqm2WTVi/ZerU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.44])
+	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4X2PXm2Sy2z1xv0C;
+	Mon,  9 Sep 2024 19:21:12 +0800 (CST)
+Received: from dggpemf200006.china.huawei.com (unknown [7.185.36.61])
+	by mail.maildlp.com (Postfix) with ESMTPS id EE4911400DC;
+	Mon,  9 Sep 2024 19:21:13 +0800 (CST)
+Received: from [10.67.120.129] (10.67.120.129) by
+ dggpemf200006.china.huawei.com (7.185.36.61) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Mon, 9 Sep 2024 19:21:13 +0800
+Message-ID: <42c202e6-8c4c-494f-8c28-17d66ed75880@huawei.com>
+Date: Mon, 9 Sep 2024 19:21:05 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240908224901.78595-1-luis.hernandez093@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v25 00/13] Device Memory TCP
+To: Mina Almasry <almasrymina@google.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-alpha@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+	<linux-parisc@vger.kernel.org>, <sparclinux@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>
+CC: Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Richard
+ Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
+	<ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
+	<James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
+	Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
+	<hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
+ Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
+	<arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert Xu
+	<herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem de
+ Bruijn <willemdebruijn.kernel@gmail.com>, =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?=
+	<bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>, Maciej
+ Fijalkowski <maciej.fijalkowski@intel.com>, Jonathan Lemon
+	<jonathan.lemon@gmail.com>, Shuah Khan <shuah@kernel.org>, Alexei Starovoitov
+	<ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+	<john.fastabend@gmail.com>, Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, Pavel Begunkov
+	<asml.silence@gmail.com>, David Wei <dw@davidwei.uk>, Jason Gunthorpe
+	<jgg@ziepe.ca>, Shailend Chand <shailend@google.com>, Harshitha Ramamurthy
+	<hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, Jeroen de
+ Borst <jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>,
+	Bagas Sanjaya <bagasdotme@gmail.com>, Christoph Hellwig <hch@infradead.org>,
+	Nikolay Aleksandrov <razor@blackwall.org>, Taehee Yoo <ap420073@gmail.com>
+References: <20240909054318.1809580-1-almasrymina@google.com>
+Content-Language: en-US
+From: Yunsheng Lin <linyunsheng@huawei.com>
+In-Reply-To: <20240909054318.1809580-1-almasrymina@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemf200006.china.huawei.com (7.185.36.61)
 
-Hi Luis,
+On 2024/9/9 13:43, Mina Almasry wrote:
 
-kernel test robot noticed the following build warnings:
+> 
+> Perf - page-pool benchmark:
+> ---------------------------
+> 
+> bench_page_pool_simple.ko tests with and without these changes:
+> https://pastebin.com/raw/ncHDwAbn
+> 
+> AFAIK the number that really matters in the perf tests is the
+> 'tasklet_page_pool01_fast_path Per elem'. This one measures at about 8
+> cycles without the changes but there is some 1 cycle noise in some
+> results.
+> 
+> With the patches this regresses to 9 cycles with the changes but there
+> is 1 cycle noise occasionally running this test repeatedly.
+> 
+> Lastly I tried disable the static_branch_unlikely() in
+> netmem_is_net_iov() check. To my surprise disabling the
+> static_branch_unlikely() check reduces the fast path back to 8 cycles,
+> but the 1 cycle noise remains.
 
-[auto build test WARNING on v6.11-rc6]
-[also build test WARNING on linus/master next-20240906]
-[cannot apply to akpm-mm/mm-nonmm-unstable]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Sorry for the late report, as I was adding a testing page_pool ko basing
+on [1] to avoid introducing performance regression when fixing the bug in
+[2].
+I used it to test the performance impact of devmem patchset for page_pool
+too, it seems there might be some noticable performance impact quite stably
+for the below testcases, about 5%~16% performance degradation as below in
+the arm64 system:
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Luis-Felipe-Hernandez/lib-math-Add-int_pow-test-suite/20240909-065058
-base:   v6.11-rc6
-patch link:    https://lore.kernel.org/r/20240908224901.78595-1-luis.hernandez093%40gmail.com
-patch subject: [PATCH v4] lib/math: Add int_pow test suite
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20240909/202409091732.x5CGQKBV-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 14.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20240909/202409091732.x5CGQKBV-lkp@intel.com/reproduce)
+Before the devmem patchset:
+ Performance counter stats for 'insmod ./page_pool_test.ko test_push_cpu=16 test_pop_cpu=16 nr_test=100000000 test_napi=1' (100 runs):
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202409091732.x5CGQKBV-lkp@intel.com/
+         17.167561      task-clock (msec)         #    0.003 CPUs utilized            ( +-  0.40% )
+                 8      context-switches          #    0.474 K/sec                    ( +-  0.65% )
+                 0      cpu-migrations            #    0.001 K/sec                    ( +-100.00% )
+                84      page-faults               #    0.005 M/sec                    ( +-  0.13% )
+          44576552      cycles                    #    2.597 GHz                      ( +-  0.40% )
+          59627412      instructions              #    1.34  insn per cycle           ( +-  0.03% )
+          14370325      branches                  #  837.063 M/sec                    ( +-  0.02% )
+             21902      branch-misses             #    0.15% of all branches          ( +-  0.27% )
 
-All warnings (new ones prefixed by >>):
+       6.818873600 seconds time elapsed                                          ( +-  0.02% )
 
->> lib/math/tests/int_pow_kunit.c:22:18: warning: integer constant is so large that it is unsigned
-      22 |         { 2, 63, 9223372036854775808, "Large result"},
-         |                  ^~~~~~~~~~~~~~~~~~~
+ Performance counter stats for 'insmod ./page_pool_test.ko test_push_cpu=16 test_pop_cpu=16 nr_test=100000000 test_napi=1 test_direct=1' (100 runs):
 
+         17.595423      task-clock (msec)         #    0.004 CPUs utilized            ( +-  0.01% )
+                 8      context-switches          #    0.460 K/sec                    ( +-  0.50% )
+                 0      cpu-migrations            #    0.000 K/sec
+                84      page-faults               #    0.005 M/sec                    ( +-  0.15% )
+          45693020      cycles                    #    2.597 GHz                      ( +-  0.01% )
+          59676212      instructions              #    1.31  insn per cycle           ( +-  0.00% )
+          14385384      branches                  #  817.564 M/sec                    ( +-  0.00% )
+             21786      branch-misses             #    0.15% of all branches          ( +-  0.14% )
 
-vim +22 lib/math/tests/int_pow_kunit.c
+       4.098627802 seconds time elapsed                                          ( +-  0.11% )
 
-    12	
-    13	static const struct test_case_params params[] = {
-    14		{ 64, 0, 1, "Power of zero" },
-    15		{ 64, 1, 64, "Power of one"},
-    16		{ 0, 5, 0, "Base zero" },
-    17		{ 1, 64, 1, "Base one" },
-    18		{ 2, 2, 4, "Two squared"},
-    19		{ 2, 3, 8, "Two cubed"},
-    20		{ 5, 5, 3125, "Five raised to the fifth power" },
-    21		{ U64_MAX, 1, U64_MAX, "Max base" },
-  > 22		{ 2, 63, 9223372036854775808, "Large result"},
-    23	};
-    24	
+After the devmem patchset:
+Performance counter stats for 'insmod ./page_pool_test.ko test_push_cpu=16 test_pop_cpu=16 nr_test=100000000 test_napi=1' (100 runs):
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+         17.047973      task-clock (msec)         #    0.002 CPUs utilized            ( +-  0.39% )
+                 8      context-switches          #    0.488 K/sec                    ( +-  0.82% )
+                 0      cpu-migrations            #    0.001 K/sec                    ( +- 70.35% )
+                84      page-faults               #    0.005 M/sec                    ( +-  0.12% )
+          44269558      cycles                    #    2.597 GHz                      ( +-  0.39% )
+          59594383      instructions              #    1.35  insn per cycle           ( +-  0.02% )
+          14362599      branches                  #  842.481 M/sec                    ( +-  0.02% )
+             21949      branch-misses             #    0.15% of all branches          ( +-  0.25% )
+
+       7.964890303 seconds time elapsed                                          ( +-  0.16% )
+
+ Performance counter stats for 'insmod ./page_pool_test.ko test_push_cpu=16 test_pop_cpu=16 nr_test=100000000 test_napi=1 test_direct=1' (100 runs):
+
+         17.660975      task-clock (msec)         #    0.004 CPUs utilized            ( +-  0.02% )
+                 8      context-switches          #    0.458 K/sec                    ( +-  0.57% )
+                 0      cpu-migrations            #    0.003 K/sec                    ( +- 43.81% )
+                84      page-faults               #    0.005 M/sec                    ( +-  0.17% )
+          45862652      cycles                    #    2.597 GHz                      ( +-  0.02% )
+          59764866      instructions              #    1.30  insn per cycle           ( +-  0.01% )
+          14404323      branches                  #  815.602 M/sec                    ( +-  0.01% )
+             21826      branch-misses             #    0.15% of all branches          ( +-  0.19% )
+
+       4.304644609 seconds time elapsed                                          ( +-  0.75% )
+
+1. https://lore.kernel.org/all/20240906073646.2930809-2-linyunsheng@huawei.com/
+2. https://lore.kernel.org/lkml/8067f204-1380-4d37-8ffd-007fc6f26738@kernel.org/T/
+
+> 
+
 
