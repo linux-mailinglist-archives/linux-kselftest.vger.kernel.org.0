@@ -1,231 +1,169 @@
-Return-Path: <linux-kselftest+bounces-17599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3635973A6F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 16:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6255B973AA7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 16:55:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E72A1F260C4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 14:47:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E614A1F25AA3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 14:55:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A0D21A3A8D;
-	Tue, 10 Sep 2024 14:44:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A174A195FEC;
+	Tue, 10 Sep 2024 14:55:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d1a24Ert"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bt/hZ6KX"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE371A38F9;
-	Tue, 10 Sep 2024 14:44:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B07F189903;
+	Tue, 10 Sep 2024 14:55:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725979454; cv=none; b=qb3lleWqEeSihxYgvx3ocQlOKGEVuwWIO58yDdurvEF1juVeeNoGGGFlNgUIB63DtzKaTduhj+6JweAyK+pX8KIAbiKYT/3N62tAWI5TaFF+Mj5ccp4EH7Iz7fH6NZ8uMV0PW1tsh/VClbduSBk9jEcur+LqOUUb0+yVPdvVawo=
+	t=1725980135; cv=none; b=D62i2AeObanv2yyOKB4awIPTn8io6e5z6G10IWOlq1u5J0QTrpgvtnvD8MlIgsZoepOqcaFGoYguAcYTUTWOqp2sWNMjXwwgu83+dyRr1qaji49LZGbZJvDNF9ZZVO1ucZQvub/ts6Hu/j3H2892a3IJmNl6JZBM5uaQMxkY+tE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725979454; c=relaxed/simple;
-	bh=LmBG5BHGYdWXIOucMdHZKe5DqBhFcqK07cXblfY/l0Y=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rGPjdzdkS3RXHs3L3wc36SQsbeWpb5oY/ptTnwa6NO5ABskypcqMF8oarKUHaW8OfVjDEiQCp8ehWp+ibNY8+XHCHjLPdzV7wJ8VTpwmf34hO8DTvvPtfOPqO9FyixTjFaiwNdLHekxSaqmkw3HkgZwy8RUHs4d1x7MfNU8LqXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d1a24Ert; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34A45C4CECE;
-	Tue, 10 Sep 2024 14:44:12 +0000 (UTC)
+	s=arc-20240116; t=1725980135; c=relaxed/simple;
+	bh=U1H5UjDwEAvnyXdqEJPmbXEa33TZuT0QfjD2PpoqWa8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iKAu+DR86C3Za+wRSaBfO+7m2Q2qGSRV6hfKnGOKxBkJk1wKAb4rA/NT40eU6lt5JeU1Fpyk0E7HMjdvoACXePQd85eb8SjTApTpJOYvEbdRwiFRgjdnE7r7oNxPwRB2TQZS249FG10IbBteEy5C/Mw0MduD87LkH/rTqprKO88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bt/hZ6KX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC009C4CEC3;
+	Tue, 10 Sep 2024 14:55:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725979453;
-	bh=LmBG5BHGYdWXIOucMdHZKe5DqBhFcqK07cXblfY/l0Y=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=d1a24ErtDm70VPJ1/SWrFe5tAMR7WPpUaynaU3xdzRJTFV6sMH/ZMS2vVQVQ5ybcm
-	 XKSbbcnmgj7TU6/AKRlHMD2reEwlnm35yz5Hoo78ogb05GU+YWQZYO4O6pw8uIfkqj
-	 3CpU2eVxPebHErmS4Wr79PocLsi3ugvrBl7mKq0u8U4wzQpc3cclViAhEcypGaydvp
-	 MbI7w+7erasZTqeKKwRJ0Bq1DpUF9QhqtWKa9Bgu5bDki1q6jIsIXa/NHtN+ervRu/
-	 B21zyh92Tlv+1p4aMJiRmo1eNfDuTQkH882m7B8bfE1tcM8jYdc/nCE5q81cwYojM5
-	 klx6jykHzcasg==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Tue, 10 Sep 2024 23:43:47 +0900
-Subject: [PATCH HID v2 11/11] selftests/hid: add test to disable hid-input
+	s=k20201202; t=1725980135;
+	bh=U1H5UjDwEAvnyXdqEJPmbXEa33TZuT0QfjD2PpoqWa8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Bt/hZ6KXwP+aol2aTvTh5LXiCvjSWI5d8SoV/ZC4RRmrXQKPVWfDg6S1Btf8jvgyU
+	 2stb8pYRbkGPKk504CbatNriAAW04RUPBWeFr6ASd6hkhG6iHDtFXFifLTFo4Y0joV
+	 Do06HD2a94IsXFc+Hg4NQ2tZ7DN6kiF82eQf17qpTm1l/tcqusLxT2Fg3oIN1fCrKS
+	 YmlDX7Cfa8eBzKgAkzZxXb/J9/Kx1LPJjteqYlg6sAU6Pwc7Tiib3RkXmNPOcaqkeR
+	 5XhUJFYil6y7Dv7U8F/dZa6IQ5JU4T23BxDbzIzVT4vrvDVr5OQjRLm6GDt72WR2DF
+	 mAAqwj4OglWmg==
+Message-ID: <77443af4-c16e-4bcc-84bd-d808f12b9770@kernel.org>
+Date: Tue, 10 Sep 2024 16:55:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH bpf-next/net v5 3/3] selftests/bpf: Add mptcp subflow
+ subtest
+Content-Language: en-GB
+To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
+ Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20240910-upstream-bpf-next-20240506-mptcp-subflow-test-v5-0-2c664a7da47c@kernel.org>
+ <20240910-upstream-bpf-next-20240506-mptcp-subflow-test-v5-3-2c664a7da47c@kernel.org>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <20240910-upstream-bpf-next-20240506-mptcp-subflow-test-v5-3-2c664a7da47c@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240910-hid-bpf-hid-generic-v2-11-083dfc189e97@kernel.org>
-References: <20240910-hid-bpf-hid-generic-v2-0-083dfc189e97@kernel.org>
-In-Reply-To: <20240910-hid-bpf-hid-generic-v2-0-083dfc189e97@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, 
- Peter Hutterer <peter.hutterer@who-t.net>, Vicki Pfau <vi@endrift.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1725979428; l=5547;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=LmBG5BHGYdWXIOucMdHZKe5DqBhFcqK07cXblfY/l0Y=;
- b=0EYf1JyMDXPcGWcDKNKveACXh9M/f/oJ1DKRuDRxRsjir8szlhhgA+1DLiD8hRQ+kSHCgpOMe
- 56E2fUVaOkdAO24gPrhGHVcCacPQRl0wHVtYn6ZvXktAWdBnt9hJer/
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-Add a test for the newly enabled feature to control the connect_mask
-of hid-generic.
+Hello,
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+On 10/09/2024 16:13, Matthieu Baerts (NGI0) wrote:
+> From: Geliang Tang <tanggeliang@kylinos.cn>
+> 
+> This patch adds a subtest named test_subflow in test_mptcp to load and
+> verify the newly added MPTCP subflow BPF program. To goal is to make
+> sure it is possible to set different socket options per subflows, while
+> the userspace socket interface only lets the application to set the same
+> socket options for the whole MPTCP connection and its multiple subflows.
+> 
+> To check that, a client and a server are started in a dedicated netns,
+> with veth interfaces to simulate multiple paths. They will exchange data
+> to allow the creation of an additional subflow.
 
----
+(...)
 
-changes in v2:
-- amended for the new API
----
- tools/testing/selftests/hid/hid_bpf.c              | 60 +++++++++++++++++++++-
- tools/testing/selftests/hid/progs/hid.c            |  1 +
- .../testing/selftests/hid/progs/hid_bpf_helpers.h  |  1 +
- 3 files changed, 61 insertions(+), 1 deletion(-)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+> index d2ca32fa3b21..c30f032edaca 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
+> @@ -335,10 +339,132 @@ static void test_mptcpify(void)
+>  	close(cgroup_fd);
+>  }
 
-diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
-index edc061b38528..41cacc30ef8b 100644
---- a/tools/testing/selftests/hid/hid_bpf.c
-+++ b/tools/testing/selftests/hid/hid_bpf.c
-@@ -4,6 +4,38 @@
- #include "hid_common.h"
- #include <bpf/bpf.h>
- 
-+static const __u8 mouse_rdesc[] = {
-+	0x05, 0x01,  /* .Usage Page (Generic Desktop)        0  */
-+	0x09, 0x02,  /* .Usage (Mouse)                       2  */
-+	0xa1, 0x01,  /* .Collection (Application)            4  */
-+	0x09, 0x02,  /* ..Usage (Mouse)                      6  */
-+	0xa1, 0x02,  /* ..Collection (Logical)               8  */
-+	0x09, 0x01,  /* ...Usage (Pointer)                   10 */
-+	0xa1, 0x00,  /* ...Collection (Physical)             12 */
-+	0x05, 0x09,  /* ....Usage Page (Button)              14 */
-+	0x19, 0x01,  /* ....Usage Minimum (1)                16 */
-+	0x29, 0x03,  /* ....Usage Maximum (3)                18 */
-+	0x15, 0x00,  /* ....Logical Minimum (0)              20 */
-+	0x25, 0x01,  /* ....Logical Maximum (1)              22 */
-+	0x75, 0x01,  /* ....Report Size (1)                  24 */
-+	0x95, 0x03,  /* ....Report Count (3)                 26 */
-+	0x81, 0x02,  /* ....Input (Data,Var,Abs)             28 */
-+	0x75, 0x05,  /* ....Report Size (5)                  30 */
-+	0x95, 0x01,  /* ....Report Count (1)                 32 */
-+	0x81, 0x03,  /* ....Input (Cnst,Var,Abs)             34 */
-+	0x05, 0x01,  /* ....Usage Page (Generic Desktop)     36 */
-+	0x09, 0x30,  /* ....Usage (X)                        38 */
-+	0x09, 0x31,  /* ....Usage (Y)                        40 */
-+	0x15, 0x81,  /* ....Logical Minimum (-127)           42 */
-+	0x25, 0x7f,  /* ....Logical Maximum (127)            44 */
-+	0x75, 0x08,  /* ....Report Size (8)                  46 */
-+	0x95, 0x02,  /* ....Report Count (2)                 48 */
-+	0x81, 0x06,  /* ....Input (Data,Var,Rel)             50 */
-+	0xc0,        /* ...End Collection                    52 */
-+	0xc0,        /* ..End Collection                     53 */
-+	0xc0,        /* .End Collection                      54 */
-+};
-+
- struct hid_hw_request_syscall_args {
- 	__u8 data[10];
- 	unsigned int hid;
-@@ -59,6 +91,8 @@ struct specific_device {
- 	__u16 bus;
- 	__u32 vid;
- 	__u32 pid;
-+	const __u8 *rdesc;
-+	const size_t rdesc_size;
- };
- 
- FIXTURE_SETUP(hid_bpf)
-@@ -72,11 +106,15 @@ FIXTURE_SETUP(hid_bpf)
- 		.bus = BUS_BLUETOOTH,
- 		.vid = 0x05ac,  /* USB_VENDOR_ID_APPLE */
- 		.pid = 0x022c,  /* USB_DEVICE_ID_APPLE_ALU_WIRELESS_ANSI */
-+		.rdesc = mouse_rdesc,
-+		.rdesc_size = sizeof(mouse_rdesc),
- 	}, {
- 		.test_name = "*",
- 		.bus = BUS_USB,
- 		.vid = 0x0001,
- 		.pid = 0x0a36,
-+		.rdesc = rdesc,
-+		.rdesc_size = sizeof(rdesc),
- 	}};
- 
- 	for (int i = 0; i < ARRAY_SIZE(devices); i++) {
-@@ -88,7 +126,7 @@ FIXTURE_SETUP(hid_bpf)
- 	ASSERT_OK_PTR(match);
- 
- 	err = setup_uhid(_metadata, &self->hid, match->bus, match->vid, match->pid,
--			 rdesc, sizeof(rdesc));
-+			 match->rdesc, match->rdesc_size);
- 	ASSERT_OK(err);
- }
- 
-@@ -914,6 +952,24 @@ static bool is_using_driver(struct __test_metadata *_metadata, struct uhid_devic
- 	return found;
- }
- 
-+static bool has_hid_input(struct uhid_device *hid)
-+{
-+	char input[1024];
-+	DIR *d;
-+
-+	sprintf(input, "/sys/bus/hid/devices/%04X:%04X:%04X.%04X/input",
-+		hid->bus, hid->vid, hid->pid, hid->hid_id);
-+
-+	d = opendir(input);
-+	if (d) {
-+		closedir(d);
-+
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
- /*
-  * Attach hid_driver_probe to the given uhid device,
-  * check that the device is now using hid-generic.
-@@ -927,10 +983,12 @@ TEST_F(hid_bpf, test_hid_driver_probe)
- 	};
- 
- 	ASSERT_TRUE(is_using_driver(_metadata, &self->hid, "apple"));
-+	ASSERT_TRUE(has_hid_input(&self->hid)) TH_LOG("input node not found");
- 
- 	LOAD_PROGRAMS(progs);
- 
- 	ASSERT_TRUE(is_using_driver(_metadata, &self->hid, "hid-generic"));
-+	ASSERT_FALSE(has_hid_input(&self->hid)) TH_LOG("input node unexpectly found");
- }
- 
- /*
-diff --git a/tools/testing/selftests/hid/progs/hid.c b/tools/testing/selftests/hid/progs/hid.c
-index 9b22e9a0e658..7e24bec8ef43 100644
---- a/tools/testing/selftests/hid/progs/hid.c
-+++ b/tools/testing/selftests/hid/progs/hid.c
-@@ -603,6 +603,7 @@ SEC("?struct_ops.s/hid_rdesc_fixup")
- int BPF_PROG(hid_test_driver_probe, struct hid_bpf_ctx *hid_ctx)
- {
- 	hid_ctx->hid->quirks |= HID_QUIRK_IGNORE_SPECIAL_DRIVER;
-+	hid_ctx->hid->quirks |= HID_QUIRK_IGNORE_HIDINPUT;
- 	return 0;
- }
- 
-diff --git a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
-index 1a645684a117..9c3cfd61d992 100644
---- a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
-+++ b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
-@@ -91,6 +91,7 @@ struct hid_bpf_ops {
- #endif
- 
- #define HID_QUIRK_IGNORE_SPECIAL_DRIVER		BIT(22)
-+#define HID_QUIRK_IGNORE_HIDINPUT		BIT(23)
- 
- /* following are kfuncs exported by HID for HID-BPF */
- extern __u8 *hid_bpf_get_data(struct hid_bpf_ctx *ctx,
+(...)
 
+> +static void wait_for_new_subflows(int fd)
+> +{
+> +	socklen_t len;
+> +	u8 subflows;
+> +	int err, i;
+> +
+> +	len = sizeof(subflows);
+> +	/* Wait max 1 sec for new subflows to be created */
+> +	for (i = 0; i < 10; i++) {
+> +		err = getsockopt(fd, SOL_MPTCP, MPTCP_INFO, &subflows, &len);
+> +		if (!err && subflows > 0)
+> +			break;
+> +
+> +		sleep(0.1);
+
+As reported by the CI, we are not in Python, usleep() should be used
+here. I missed that one during my review. I will send a new version with
+the fix tomorrow. Sorry for the noise.
+
+Cheers,
+Matt
 -- 
-2.46.0
+Sponsored by the NGI0 Core fund.
 
 
