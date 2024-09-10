@@ -1,237 +1,353 @@
-Return-Path: <linux-kselftest+bounces-17661-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17662-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D046D974661
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 01:29:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6967097467F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 01:44:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84F56288B47
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 23:29:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFFC91F2684C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 23:44:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED16A1AC8AF;
-	Tue, 10 Sep 2024 23:29:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEDB91AC431;
+	Tue, 10 Sep 2024 23:44:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="ZFCdnhyn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="y4F0F+1o"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3091AC8A8
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 23:29:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E5A1AC8A7
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 23:44:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726010959; cv=none; b=NRYO7kvQaTeN3W1DVdmrTMa/ZHSb8SJvIHI4O6GvsYNNcsnAiLWkDfFIAi7l5MqhOMg7yA6VxJO5draz6+atgd4639uwwY2KzHvrppUJSdx0MFyAbydD2kWTKlZxJ4DVFvGm248LqUD2frNoS3gj94ssNovISxy1CAHwSocU4R4=
+	t=1726011876; cv=none; b=sHH5VI3YObp7eImM7XwxXQv12WbdCZpI4SOA80uUu0vvGubGvK/Fv2X5iNF52n0xVncU/Knn10hN6itTwfEcPDZpmPhsrIisH4ncSCvWh/Dhs9K8TT16KIRg9sDadgaxzLOJMWt1MxG9oHe7YZHcChcEjG9qERlvt+EeaWTdhbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726010959; c=relaxed/simple;
-	bh=EaQYpDu4fd+dR1oVIB+uyEjjvPPcoakUS8tLH3tLHH4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KZ03jrpyHS1Cj34oBI7083X2x7fdiDmhb+Tl8cA97E3zkVLpfb/HI/x+It4WxLYsfoGXSpL3h1DxWwjgRptbgLrXVrPNxoAOvVRwh9T48LyFwpidaNMffVZY2Hedojg0IZSlmtXAOCeYa81m75h+i1nMznBJ2px3IgJru3hZatw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=ZFCdnhyn; arc=none smtp.client-ip=209.85.210.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-7179069d029so4347685b3a.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 16:29:17 -0700 (PDT)
+	s=arc-20240116; t=1726011876; c=relaxed/simple;
+	bh=+EbGtDkpQ2coil/ibgjMlt8jazuwNra5Uh4AebgyUb4=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=lJLS+Y6Tb9AyLUX+bbtboRcWYjkcR+9RAdonhqfUCvdEZu56lc2MtuKw46BuI5UTbyVKaq5/djfbfDeq0eD5RY6pESGSj/MiSU6tC/svtVBCN/4ngeiLnZi4YbHkiC5nkvg/0d4by28opy0AiIapNOM7uNipMY1SAqgNVA+oSRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=y4F0F+1o; arc=none smtp.client-ip=209.85.219.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e035949cc4eso12727629276.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 16:44:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1726010957; x=1726615757; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CYrCbXlvqV0+h/8xybyAavYRRnIQ4hnNCNmZGJwr9QU=;
-        b=ZFCdnhynOTrA0VNAj+06D67XGpi+QeyXqLiL/hiUAXv67amrykjDWYLm3rdZ/DfLF+
-         i2W8eOgzHMQLu6twHwprTjL011qP+c2fEaq1Qk1tOLrspv80Vs5ZrR/st4toqDZ7lQn9
-         h92KVaI72TZSRmNV5pCW70nXO0ahHpFV2Ps0fQONeveAnWo1A0skKjU4ANtN/wh8l3PP
-         uFRBhpgv/rn7MtpbjsJqQhWmDXJLyPRTiluzGA7Fw2ZWv16B+G46U8oim3yGuOUvuclP
-         3SHrZsRdGkTG0F5xgo46lxFvUChIwP8qMrMkutm/1MT0zsdhmjYq8qFA3VHead8ZZEwm
-         e31w==
+        d=google.com; s=20230601; t=1726011873; x=1726616673; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ueaflVniPe+ANzZXO+tSUnwiFzFEa5y6xmq4I85N4RU=;
+        b=y4F0F+1o5wxHTqMmDP83X1BtCLcAFUNLfiBmVZdhW5bd85s05RzF2zf3ZF2O0Hb5PV
+         hlWLFrD90slOfvyPWhD/NyXzCPkIxKm96Ew+S3t8SihsuKI0zc8pRVX5hzRasO04VjTS
+         KI+IduLr7TtJtenWjXe0HyaRlsAwvWUnL/qczgPJNmkiBvZthC+tXaWujZK6u2NLXhdR
+         au6qXv0allS/mv/lnYA7pH0ZoM4NiRZ8GlnwGyQjli8tbnYoalaXaTpdZ7LEqqfhVJPw
+         geQUOlM93xAuqC2jR0wgmBk9mwlUlatYHTiKD+r3SWX0KAwa2H5eG8xM/MsTxc7CRr2m
+         Uh4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726010957; x=1726615757;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CYrCbXlvqV0+h/8xybyAavYRRnIQ4hnNCNmZGJwr9QU=;
-        b=WyBFXgY+DEhVHqJkJXzhsbZfuYaT6qYaw9qEo4XB/68yBFyQsao5oH3cOh/brO/P63
-         BtuZqe7SX8vZGa+VQu+hfPMqbZYeiONcn3H3NTGFvTDkESmnL0NQSAIh6ABs6GBnRXif
-         x6ZQ7NsGsLgsnQAHzEdstp2Psbh7V1E1qo0E11cY3naxv0r/oOLrwJtbb8V18n68P3kF
-         Gq/VKHav0UOPubR9rCI1UX6tr8/8tYENgAZ+DlJgPQJH0THXSZ4nJSejWSWYDMAzn+ep
-         ezAAdpuPpr/e+IZsLvBhQeN9pHYCp7ea71qKeNtAoD2t3JDqFzldcBqyVho0ayLc4roN
-         7QcA==
-X-Forwarded-Encrypted: i=1; AJvYcCXqt57WA4f9mrFVfCc9nR557s45TXAZ7ACftvTAZlnHeIuEdGw9Ja5MT8INK21GwpubENLwNwnEMVfMk6SqmCY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySr34nFar3Lwh72gcRRvZjDJKYJY1ln+mUsaVxdLiYFoN7pQTu
-	Or6HC4RVyEnkptUsHbCIHQpRzXr2E3x6OW+A2F5Vzi6PW4N0fHzxg3vZLiqutzo=
-X-Google-Smtp-Source: AGHT+IFu2ts9QR3o7HId+sTbARvp/Mp4cS7y9d4XxkhhKVfZnTlnktrEfIJSlLrlAVGi3hD8KRDoUg==
-X-Received: by 2002:a05:6a21:3318:b0:1cc:e4a9:9138 with SMTP id adf61e73a8af0-1cf5e10ea44mr2924283637.29.1726010956374;
-        Tue, 10 Sep 2024 16:29:16 -0700 (PDT)
-Received: from ghost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71908fe2641sm1873651b3a.59.2024.09.10.16.29.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Sep 2024 16:29:15 -0700 (PDT)
-Date: Tue, 10 Sep 2024 16:29:10 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>, guoren <guoren@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, shuah <shuah@kernel.org>,
-	Christoph Hellwig <hch@infradead.org>,
-	Michal Hocko <mhocko@suse.com>,
-	"Kirill A. Shutemov" <kirill@shutemov.name>,
-	Chris Torek <chris.torek@gmail.com>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-abi-devel@lists.sourceforge.net
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
- 47 bits
-Message-ID: <ZuDWRq+9b1o864vY@ghost>
-References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
- <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
- <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
- <58f39d58-579e-4dd3-8084-baebf86f1ae0@lucifer.local>
- <7be08ea9-f343-42da-805f-e5f0d61bde26@app.fastmail.com>
- <016c7857-9ea8-4333-96e6-3ae3870f375f@lucifer.local>
- <Zt+DGHZrHFxfq7xo@ghost>
- <89d21669-8daa-4225-b6d2-33d439ebd746@app.fastmail.com>
+        d=1e100.net; s=20230601; t=1726011873; x=1726616673;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ueaflVniPe+ANzZXO+tSUnwiFzFEa5y6xmq4I85N4RU=;
+        b=D4Rsz0rXLhNYN7heAkSdB0dTRVjN0E5S0be1XX+tdB4wpsK8ZEWalC+jZurVqEe5Ov
+         BMeHLG7U/sswcPzwqLU07HQCBsXmPeWp4/GCWeuckRygTq0uqM6a9ton0TGDEgX4TYlC
+         a5Wxkeod6EvD5NE1qNftlEOfsJBN5wgOXS3DIA51hnjxSTCxd9mv5EbbM36HHFkibUmV
+         crmZOLa2HVakPAeprk4xezRrY7hSOqWQWgq4/IVsZz7en7dD6J26/Tv8dh2wh06rLEwN
+         mczfMzL5TjIvQ1+ygJqTcOVXXuJGXPH30X8F/1gkKe36hHFoVIbcDSrkXGedq+FeApTk
+         IBSA==
+X-Forwarded-Encrypted: i=1; AJvYcCX37BjH4TN4Wf4Mr6FTzdbLTgLlqqU0ErqT4b8oG6ZT5n1Y5t4syP5DqpOabLs+Ytm269vK+0k7A8lzvkOMFxc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqQcSx+KkgC1tsnkEWUbw6RfyQYZJUxoBU2PWk2eMbpTTSmClK
+	Bsb4IkZE9Nq3CbEKgd5YgOq14C2LnYPwSvMcN0TQqry97DrbFR2wsOjsyqkb4xyQOCnNrlEjuAW
+	0NjyDIyo2Iv+m2MRz0amEfw==
+X-Google-Smtp-Source: AGHT+IEJhPxC7lkuYeVyOxTdq1kGN0PDw8/GViWp8RN54dQACow5TVDqUv3NC1ekZ6EnQcbV78IKOfhQlFT7fEX0Hw==
+X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
+ (user=ackerleytng job=sendgmr) by 2002:a25:680b:0:b0:e0b:958a:3344 with SMTP
+ id 3f1490d57ef6-e1d34a3abb7mr41731276.10.1726011873598; Tue, 10 Sep 2024
+ 16:44:33 -0700 (PDT)
+Date: Tue, 10 Sep 2024 23:43:31 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <89d21669-8daa-4225-b6d2-33d439ebd746@app.fastmail.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.46.0.598.g6f2099f65c-goog
+Message-ID: <cover.1726009989.git.ackerleytng@google.com>
+Subject: [RFC PATCH 00/39] 1G page support for guest_memfd
+From: Ackerley Tng <ackerleytng@google.com>
+To: tabba@google.com, quic_eberman@quicinc.com, roypat@amazon.co.uk, 
+	jgg@nvidia.com, peterx@redhat.com, david@redhat.com, rientjes@google.com, 
+	fvdl@google.com, jthoughton@google.com, seanjc@google.com, 
+	pbonzini@redhat.com, zhiquan1.li@intel.com, fan.du@intel.com, 
+	jun.miao@intel.com, isaku.yamahata@intel.com, muchun.song@linux.dev, 
+	mike.kravetz@oracle.com
+Cc: erdemaktas@google.com, vannapurve@google.com, ackerleytng@google.com, 
+	qperret@google.com, jhubbard@nvidia.com, willy@infradead.org, 
+	shuah@kernel.org, brauner@kernel.org, bfoster@redhat.com, 
+	kent.overstreet@linux.dev, pvorel@suse.cz, rppt@kernel.org, 
+	richard.weiyang@gmail.com, anup@brainfault.org, haibo1.xu@intel.com, 
+	ajones@ventanamicro.com, vkuznets@redhat.com, maciej.wieczor-retman@intel.com, 
+	pgonda@google.com, oliver.upton@linux.dev, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-fsdevel@kvack.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Sep 10, 2024 at 09:13:33AM +0000, Arnd Bergmann wrote:
-> On Mon, Sep 9, 2024, at 23:22, Charlie Jenkins wrote:
-> > On Fri, Sep 06, 2024 at 10:52:34AM +0100, Lorenzo Stoakes wrote:
-> >> On Fri, Sep 06, 2024 at 09:14:08AM GMT, Arnd Bergmann wrote:
-> >> The intent is to optionally be able to run a process that keeps higher bits
-> >> free for tagging and to be sure no memory mapping in the process will
-> >> clobber these (correct me if I'm wrong Charlie! :)
-> >> 
-> >> So you really wouldn't want this if you are using tagged pointers, you'd
-> >> want to be sure literally nothing touches the higher bits.
-> 
-> My understanding was that the purpose of the existing design
-> is to allow applications to ask for a high address without having
-> to resort to the complexity of MAP_FIXED.
-> 
-> In particular, I'm sure there is precedent for applications that
-> want both tagged pointers (for most mappings) and untagged pointers
-> (for large mappings). With a per-mm_struct or per-task_struct
-> setting you can't do that.
-> 
-> > Various architectures handle the hint address differently, but it
-> > appears that the only case across any architecture where an address
-> > above 47 bits will be returned is if the application had a hint address
-> > with a value greater than 47 bits and was using the MAP_FIXED flag.
-> > MAP_FIXED bypasses all other checks so I was assuming that it would be
-> > logical for MAP_FIXED to bypass this as well. If MAP_FIXED is not set,
-> > then the intent is for no hint address to cause a value greater than 47
-> > bits to be returned.
-> 
-> I don't think the MAP_FIXED case is that interesting here because
-> it has to work in both fixed and non-fixed mappings.
-> 
-> >> This would be more consistent vs. other arches.
-> >
-> > Yes riscv is an outlier here. The reason I am pushing for something like
-> > a flag to restrict the address space rather than setting it to be the
-> > default is it seems like if applications are relying on upper bits to be
-> > free, then they should be explicitly asking the kernel to keep them free
-> > rather than assuming them to be free.
-> 
-> Let's see what the other architectures do and then come up with
-> a way that fixes the pointer tagging case first on those that are
-> broken. We can see if there needs to be an extra flag after that.
-> Here is what I found:
-> 
-> - x86_64 uses DEFAULT_MAP_WINDOW of BIT(47), uses a 57 bit
->   address space when an addr hint is passed.
-> - arm64 uses DEFAULT_MAP_WINDOW of BIT(47) or BIT(48), returns
->   higher 52-bit addresses when either a hint is passed or
->   CONFIG_EXPERT and CONFIG_ARM64_FORCE_52BIT is set (this
->   is a debugging option)
-> - ppc64 uses a DEFAULT_MAP_WINDOW of BIT(47) or BIT(48),
->   returns 52 bit address when an addr hint is passed
-> - riscv uses a DEFAULT_MAP_WINDOW of BIT(47) but only uses
->   it for allocating the stack below, ignoring it for normal
->   mappings
-> - s390 has no DEFAULT_MAP_WINDOW but tried to allocate in
->   the current number of pgtable levels and only upgrades to
->   the next level (31, 42, 53, 64 bits) if a hint is passed or
->   the current level is exhausted.
-> - loongarch64 has no DEFAULT_MAP_WINDOW, and a default VA
->   space of 47 bits (16K pages, 3 levels), but can support
->   a 55 bit space (64K pages, 3 levels).
-> - sparc has no DEFAULT_MAP_WINDOW and up to 52 bit VA space.
->   It may allocate both positive and negative addresses in
->   there. (?)
-> - mips64, parisc64 and alpha have no DEFAULT_MAP_WINDOW and
->   at most 48, 41 or 39 address bits, respectively.
-> 
-> I would suggest these changes:
-> 
-> - make riscv enforce DEFAULT_MAP_WINDOW like x86_64, arm64
->    and ppc64, leave it at 47
-> 
-> - add DEFAULT_MAP_WINDOW on loongarch64 (47/48 bits
->   based on page size), sparc (48 bits) and s390 (unsure if
->   42, 53, 47 or 48 bits)
-> 
-> - leave the rest unchanged.
-> 
->        Arnd
+Hello,
 
-Changing all architectures to have a standardized DEFAULT_MAP_WINDOW
-mostly solves the problem. However, I am concerned that it is fragile
-for applications to rely on a default like this. Having the personality
-bit flag is supposed to provide an intuitive ABI for users that
-guarantees that they will not accidentally request for memory outside of
-the boundary that they specified.
+This patchset is our exploration of how to support 1G pages in guest_memfd, and
+how the pages will be used in Confidential VMs.
 
-Also you bring up that the DEFAULT_MAP_WINDOW would not be able to be
-standardized across architectures, so we still have the problem that
-this default behavior will be different across architectures which I am
-trying to solve.
+The patchset covers:
 
-- Charlie
++ How to get 1G pages
++ Allowing mmap() of guest_memfd to userspace so that both private and shared
+  memory can use the same physical pages
++ Splitting and reconstructing pages to support conversions and mmap()
++ How the VM, userspace and guest_memfd interact to support conversions
++ Selftests to test all the above
+    + Selftests also demonstrate the conversion flow between VM, userspace and
+      guest_memfd.
 
+Why 1G pages in guest memfd?
+
+Bring guest_memfd to performance and memory savings parity with VMs that are
+backed by HugeTLBfs.
+
++ Performance is improved with 1G pages by more TLB hits and faster page walks
+  on TLB misses.
++ Memory savings from 1G pages comes from HugeTLB Vmemmap Optimization (HVO).
+
+Options for 1G page support:
+
+1. HugeTLB
+2. Contiguous Memory Allocator (CMA)
+3. Other suggestions are welcome!
+
+Comparison between options:
+
+1. HugeTLB
+    + Refactor HugeTLB to separate allocator from the rest of HugeTLB
+    + Pro: Graceful transition for VMs backed with HugeTLB to guest_memfd
+        + Near term: Allows co-tenancy of HugeTLB and guest_memfd backed VMs
+    + Pro: Can provide iterative steps toward new future allocator
+        + Unexplored: Managing userspace-visible changes
+            + e.g. HugeTLB's free_hugepages will decrease if HugeTLB is used,
+              but not when future allocator is used
+2. CMA
+    + Port some HugeTLB features to be applied on CMA
+    + Pro: Clean slate
+
+What would refactoring HugeTLB involve?
+
+(Some refactoring was done in this RFC, more can be done.)
+
+1. Broadly involves separating the HugeTLB allocator from the rest of HugeTLB
+    + Brings more modularity to HugeTLB
+    + No functionality change intended
+    + Likely step towards HugeTLB's integration into core-mm
+2. guest_memfd will use just the allocator component of HugeTLB, not including
+   the complex parts of HugeTLB like
+    + Userspace reservations (resv_map)
+    + Shared PMD mappings
+    + Special page walkers
+
+What features would need to be ported to CMA?
+
++ Improved allocation guarantees
+    + Per NUMA node pool of huge pages
+    + Subpools per guest_memfd
++ Memory savings
+    + Something like HugeTLB Vmemmap Optimization
++ Configuration/reporting features
+    + Configuration of number of pages available (and per NUMA node) at and
+      after host boot
+    + Reporting of memory usage/availability statistics at runtime
+
+HugeTLB was picked as the source of 1G pages for this RFC because it allows a
+graceful transition, and retains memory savings from HVO.
+
+To illustrate this, if a host machine uses HugeTLBfs to back VMs, and a
+confidential VM were to be scheduled on that host, some HugeTLBfs pages would
+have to be given up and returned to CMA for guest_memfd pages to be rebuilt from
+that memory. This requires memory to be reserved for HVO to be removed and
+reapplied on the new guest_memfd memory. This not only slows down memory
+allocation but also trims the benefits of HVO. Memory would have to be reserved
+on the host to facilitate these transitions.
+
+Improving how guest_memfd uses the allocator in a future revision of this RFC:
+
+To provide an easier transition away from HugeTLB, guest_memfd's use of HugeTLB
+should be limited to these allocator functions:
+
++ reserve(node, page_size, num_pages) => opaque handle
+    + Used when a guest_memfd inode is created to reserve memory from backend
+      allocator
++ allocate(handle, mempolicy, page_size) => folio
+    + To allocate a folio from guest_memfd's reservation
++ split(handle, folio, target_page_size) => void
+    + To take a huge folio, and split it to smaller folios, restore to filemap
++ reconstruct(handle, first_folio, nr_pages) => void
+    + To take a folio, and reconstruct a huge folio out of nr_pages from the
+      first_folio
++ free(handle, folio) => void
+    + To return folio to guest_memfd's reservation
++ error(handle, folio) => void
+    + To handle memory errors
++ unreserve(handle) => void
+    + To return guest_memfd's reservation to allocator backend
+
+Userspace should only provide a page size when creating a guest_memfd and should
+not have to specify HugeTLB.
+
+Overview of patches:
+
++ Patches 01-12
+    + Many small changes to HugeTLB, mostly to separate HugeTLBfs concepts from
+      HugeTLB, and to expose HugeTLB functions.
++ Patches 13-16
+    + Letting guest_memfd use HugeTLB
+    + Creation of each guest_memfd reserves pages from HugeTLB's global hstate
+      and puts it into the guest_memfd inode's subpool
+    + Each folio allocation takes a page from the guest_memfd inode's subpool
++ Patches 17-21
+    + Selftests for new HugeTLB features in guest_memfd
++ Patches 22-24
+    + More small changes on the HugeTLB side to expose functions needed by
+      guest_memfd
++ Patch 25:
+    + Uses the newly available functions from patches 22-24 to split HugeTLB
+      pages. In this patch, HugeTLB folios are always split to 4K before any
+      usage, private or shared.
++ Patches 26-28
+    + Allow mmap() in guest_memfd and faulting in shared pages
++ Patch 29
+    + Enables conversion between private/shared pages
++ Patch 30
+    + Required to zero folios after conversions to avoid leaking initialized
+      kernel memory
++ Patch 31-38
+    + Add selftests to test mapping pages to userspace, guest/host memory
+      sharing and update conversions tests
+    + Patch 33 illustrates the conversion flow between VM/userspace/guest_memfd
++ Patch 39
+    + Dynamically split and reconstruct HugeTLB pages instead of always
+      splitting before use. All earlier selftests are expected to still pass.
+
+TODOs:
+
++ Add logic to wait for safe_refcount [1]
++ Look into lazy splitting/reconstruction of pages
+    + Currently, when the KVM_SET_MEMORY_ATTRIBUTES is invoked, not only is the
+      mem_attr_array and faultability updated, the pages in the requested range
+      are also split/reconstructed as necessary. We want to look into delaying
+      splitting/reconstruction to fault time.
++ Solve race between folios being faulted in and being truncated
+    + When running private_mem_conversions_test with more than 1 vCPU, a folio
+      getting truncated may get faulted in by another process, causing elevated
+      mapcounts when the folio is freed (VM_BUG_ON_FOLIO).
++ Add intermediate splits (1G should first split to 2M and not split directly to
+  4K)
++ Use guest's lock instead of hugetlb_lock
++ Use multi-index xarray/replace xarray with some other data struct for
+  faultability flag
++ Refactor HugeTLB better, present generic allocator interface
+
+Please let us know your thoughts on:
+
++ HugeTLB as the choice of transitional allocator backend
++ Refactoring HugeTLB to provide generic allocator interface
++ Shared/private conversion flow
+    + Requiring user to request kernel to unmap pages from userspace using
+      madvise(MADV_DONTNEED)
+    + Failing conversion on elevated mapcounts/pincounts/refcounts
++ Process of splitting/reconstructing page
++ Anything else!
+
+[1] https://lore.kernel.org/all/20240829-guest-memfd-lib-v2-0-b9afc1ff3656@quicinc.com/T/
+
+Ackerley Tng (37):
+  mm: hugetlb: Simplify logic in dequeue_hugetlb_folio_vma()
+  mm: hugetlb: Refactor vma_has_reserves() to should_use_hstate_resv()
+  mm: hugetlb: Remove unnecessary check for avoid_reserve
+  mm: mempolicy: Refactor out policy_node_nodemask()
+  mm: hugetlb: Refactor alloc_buddy_hugetlb_folio_with_mpol() to
+    interpret mempolicy instead of vma
+  mm: hugetlb: Refactor dequeue_hugetlb_folio_vma() to use mpol
+  mm: hugetlb: Refactor out hugetlb_alloc_folio
+  mm: truncate: Expose preparation steps for truncate_inode_pages_final
+  mm: hugetlb: Expose hugetlb_subpool_{get,put}_pages()
+  mm: hugetlb: Add option to create new subpool without using surplus
+  mm: hugetlb: Expose hugetlb_acct_memory()
+  mm: hugetlb: Move and expose hugetlb_zero_partial_page()
+  KVM: guest_memfd: Make guest mem use guest mem inodes instead of
+    anonymous inodes
+  KVM: guest_memfd: hugetlb: initialization and cleanup
+  KVM: guest_memfd: hugetlb: allocate and truncate from hugetlb
+  KVM: guest_memfd: Add page alignment check for hugetlb guest_memfd
+  KVM: selftests: Add basic selftests for hugetlb-backed guest_memfd
+  KVM: selftests: Support various types of backing sources for private
+    memory
+  KVM: selftests: Update test for various private memory backing source
+    types
+  KVM: selftests: Add private_mem_conversions_test.sh
+  KVM: selftests: Test that guest_memfd usage is reported via hugetlb
+  mm: hugetlb: Expose vmemmap optimization functions
+  mm: hugetlb: Expose HugeTLB functions for promoting/demoting pages
+  mm: hugetlb: Add functions to add/move/remove from hugetlb lists
+  KVM: guest_memfd: Track faultability within a struct kvm_gmem_private
+  KVM: guest_memfd: Allow mmapping guest_memfd files
+  KVM: guest_memfd: Use vm_type to determine default faultability
+  KVM: Handle conversions in the SET_MEMORY_ATTRIBUTES ioctl
+  KVM: guest_memfd: Handle folio preparation for guest_memfd mmap
+  KVM: selftests: Allow vm_set_memory_attributes to be used without
+    asserting return value of 0
+  KVM: selftests: Test using guest_memfd memory from userspace
+  KVM: selftests: Test guest_memfd memory sharing between guest and host
+  KVM: selftests: Add notes in private_mem_kvm_exits_test for mmap-able
+    guest_memfd
+  KVM: selftests: Test that pinned pages block KVM from setting memory
+    attributes to PRIVATE
+  KVM: selftests: Refactor vm_mem_add to be more flexible
+  KVM: selftests: Add helper to perform madvise by memslots
+  KVM: selftests: Update private_mem_conversions_test for mmap()able
+    guest_memfd
+
+Vishal Annapurve (2):
+  KVM: guest_memfd: Split HugeTLB pages for guest_memfd use
+  KVM: guest_memfd: Dynamically split/reconstruct HugeTLB page
+
+ fs/hugetlbfs/inode.c                          |   35 +-
+ include/linux/hugetlb.h                       |   54 +-
+ include/linux/kvm_host.h                      |    1 +
+ include/linux/mempolicy.h                     |    2 +
+ include/linux/mm.h                            |    1 +
+ include/uapi/linux/kvm.h                      |   26 +
+ include/uapi/linux/magic.h                    |    1 +
+ mm/hugetlb.c                                  |  346 ++--
+ mm/hugetlb_vmemmap.h                          |   11 -
+ mm/mempolicy.c                                |   36 +-
+ mm/truncate.c                                 |   26 +-
+ tools/include/linux/kernel.h                  |    4 +-
+ tools/testing/selftests/kvm/Makefile          |    3 +
+ .../kvm/guest_memfd_hugetlb_reporting_test.c  |  222 +++
+ .../selftests/kvm/guest_memfd_pin_test.c      |  104 ++
+ .../selftests/kvm/guest_memfd_sharing_test.c  |  160 ++
+ .../testing/selftests/kvm/guest_memfd_test.c  |  238 ++-
+ .../testing/selftests/kvm/include/kvm_util.h  |   45 +-
+ .../testing/selftests/kvm/include/test_util.h |   18 +
+ tools/testing/selftests/kvm/lib/kvm_util.c    |  443 +++--
+ tools/testing/selftests/kvm/lib/test_util.c   |   99 ++
+ .../kvm/x86_64/private_mem_conversions_test.c |  158 +-
+ .../x86_64/private_mem_conversions_test.sh    |   91 +
+ .../kvm/x86_64/private_mem_kvm_exits_test.c   |   11 +-
+ virt/kvm/guest_memfd.c                        | 1563 ++++++++++++++++-
+ virt/kvm/kvm_main.c                           |   17 +
+ virt/kvm/kvm_mm.h                             |   16 +
+ 27 files changed, 3288 insertions(+), 443 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/guest_memfd_hugetlb_reporting_test.c
+ create mode 100644 tools/testing/selftests/kvm/guest_memfd_pin_test.c
+ create mode 100644 tools/testing/selftests/kvm/guest_memfd_sharing_test.c
+ create mode 100755 tools/testing/selftests/kvm/x86_64/private_mem_conversions_test.sh
+
+--
+2.46.0.598.g6f2099f65c-goog
 
