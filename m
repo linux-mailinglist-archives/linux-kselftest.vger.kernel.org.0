@@ -1,50 +1,50 @@
-Return-Path: <linux-kselftest+bounces-17583-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17584-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C11B973981
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 16:13:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14127973985
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 16:14:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DCF42281284
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 14:13:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A99E1F26BCF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 14:14:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91769195FE8;
-	Tue, 10 Sep 2024 14:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 667F7198A07;
+	Tue, 10 Sep 2024 14:13:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IgBirhhN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jS2b/pyC"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EBEC188CBB;
-	Tue, 10 Sep 2024 14:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF36188CBB;
+	Tue, 10 Sep 2024 14:13:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725977606; cv=none; b=I4th1KCfX1HRVs5fxZXI6qlOa3A468ELfuBYQDCSgiQrA9OAM/+O3EoSK14KN4VEsiQo3qKCvkXyz1CSb/j1/viEzStNkFw6GYP5/hTogsjcpGWfXQsimjBHcEH0d00YeybCcQ03EENhuL4zh/YkfonzeUzG/SChlQyED4v8eKg=
+	t=1725977611; cv=none; b=Gc65cN+VaFMLTpXVhZBsWjtmoqraJ/FrBYNAEpDqJHavqcUXc+uHUA6T20ZY25SlHnaLfC68RCa+Rdd6OaDv+krOCevlxyUkAC9+wFbyOnwpOkhW6Lpu26nJ6VGUaaXm6Kt+fBBI97fKLDm0ynw4qpmWJLShKWnPT9JZnEoiUQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725977606; c=relaxed/simple;
-	bh=hWl57FHY2fOdoggMMQbYWWGMnt4b33OvRJbD5uuAWPQ=;
+	s=arc-20240116; t=1725977611; c=relaxed/simple;
+	bh=Iv5TZEml/H6t7GaDZCEGZTMq7nkqIaIE/iw0KKiXtKo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GUiXSMUPt8XidyV3mn+ZAdRdRwTbI0s3fPhjgzDhA16monBb3Nb2ccvtxijPwxaeg5lmI7pAQjadW2D2SAh2/HTE99KQfby8hqCWT1muLTNjGy9f26RVXafFkPnBjtVAhXY/KrD/8ctFyMMyts7Ph9ihfaldI4d8oif/Dgjy6uI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IgBirhhN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EDB9C4CED1;
-	Tue, 10 Sep 2024 14:13:21 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=piWq95QVZwdGkHmyUbaiIHgWkTdkxpHeoyKIajrfO/LAjEY7uSAb/g7RO78OMExR4gvjdRYfhVpkANbVbDX3sdCIdS6MaAr2P2lYGEZw3qpLZ+VonC4Ek2L4fP57wUSoez84xyyJA6cqiu7fIXnNpbAbAEE5HrjWNe2vlgyyDgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jS2b/pyC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81C9FC4CED2;
+	Tue, 10 Sep 2024 14:13:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725977606;
-	bh=hWl57FHY2fOdoggMMQbYWWGMnt4b33OvRJbD5uuAWPQ=;
+	s=k20201202; t=1725977611;
+	bh=Iv5TZEml/H6t7GaDZCEGZTMq7nkqIaIE/iw0KKiXtKo=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=IgBirhhNDnr0wa9pmkekuaGVxwMzodpWsGehEC9qffQv+Ps/3zJJlN40itLpzyDLb
-	 p1JTUlbNtPqYCi+I82F6fty5FKOihR0LuBCdcgdNuJFKJYDQguUnN8RzxR3PpSEIGH
-	 JT9VAQuYmDQbxHOLLA8HArKaJ77fIIG2WIq7IUgrZhbXyVBwkhIpKfJ0k8qjY5iXtJ
-	 4tmaVXOtEcMRXuy2ZlAjlRz3NkQHE6is5INMjgLFEGSAxepoHAP7MFaNM1+zf82Bat
-	 lFA8m7lBSHU0ULoK8OvmXHUHHhJGJlqWLv4iHLSAYjy1iNGk10gRRMmkfYAMn/2UOo
-	 zTAVDFKyv7jBA==
+	b=jS2b/pyCzUcgYPyHpg3WdNpOIRrXKr+rtT1OJwtziK8/h68Cg2PQu2NEgF8JNEnY+
+	 ++jhom7vQSGIaLiA6EpIqG7tIT1n6hBD4I475KErWBLV39p10M1Lnfq10rkS70+R4m
+	 q/UDlRVWUItQeAoCzmvbYZghyFeOxHNmqzkVcRlxt3ckvr24wKOIkPMFZGIRtoI6kp
+	 k3EI7UEkGVzpOEGZfvVxEsvw4LGNG5+VmlJ3IHZIRo8S104yIhifqQavKTgoCrzMOn
+	 IbJYOU1daXp7ZTYDx2EpEkf4cgQp+8uBfMoCgseg5/ePqnGOrdTwiHEL9WQQfhi29I
+	 8xD92KaUQ1iuw==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Tue, 10 Sep 2024 16:12:59 +0200
-Subject: [PATCH bpf-next/net v5 1/3] selftests/bpf: Add mptcp subflow
- example
+Date: Tue, 10 Sep 2024 16:13:00 +0200
+Subject: [PATCH bpf-next/net v5 2/3] selftests/bpf: Add getsockopt to
+ inspect mptcp subflow
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240910-upstream-bpf-next-20240506-mptcp-subflow-test-v5-1-2c664a7da47c@kernel.org>
+Message-Id: <20240910-upstream-bpf-next-20240506-mptcp-subflow-test-v5-2-2c664a7da47c@kernel.org>
 References: <20240910-upstream-bpf-next-20240506-mptcp-subflow-test-v5-0-2c664a7da47c@kernel.org>
 In-Reply-To: <20240910-upstream-bpf-next-20240506-mptcp-subflow-test-v5-0-2c664a7da47c@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -68,151 +68,208 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
 Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
  bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Nicolas Rybowski <nicolas.rybowski@tessares.net>, 
- Geliang Tang <geliang@kernel.org>
+ Martin KaFai Lau <martin.lau@kernel.org>, Geliang Tang <geliang@kernel.org>
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4445; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=98MxbfTkgjSKHUOjjCbtRcgcjpjaNf9HbvOObpvAYhI=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBm4FP6OAgCr/76qaOirF0W9fH+xWuZwyjL1P1Di
- kaSlJekI1mJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZuBT+gAKCRD2t4JPQmmg
- c/YyEAC4I+ya+HE9RLuO9qLM8XrXnxmGObKEYeJJdZXW7utQnr784IXI//tGO6gyOXEBUfAcmOa
- bkohR1J7mrIMLfiAG30A4ZV0tQSFWXV3ruHZInBxkKula3Vm3wuRvIoqr2UZufVBBKBuBtEvTrR
- XAmvPRZiML4/zPg45m2P0DfAuHKKEwxd3hLoqTu9ahzYAQEqDsPvVdFCwjAxZTum1060WnhpGzf
- hjEJvK/1xI0iyvkf54OUQc8O2sHfXkSYrU8zNYBx+UhyTj3/c6wdkZevkeFGi02dvJdYQ5J+Km8
- MPar6jDk+Hz1Z56Ggz8gHuDelQQ0BWmm6XJP9zgj6B0zl8DZZqVNjGrMvH2Xflw8XrRXo2a+P5u
- sNZKxK43Y5nw7vQmHzJ5ehcRA5pfbKV84MH9wVddgzUaLYYS0sE9KD5pmjdYRHDpX9J+oZCiLYh
- 03uD0h0PIOiBrX9YO0oVRxC7Dr2IxbSz+N5Vs0C652f8ya23LUfxbYvWzagxdios7bg+i7nEcT4
- +qtu0Utwq2Ns/ccOakO087fUYvOjkdc+foCBbsQR0YBa8/F5BEeXZE9oVO2n9axEFDo5CCQsFfK
- Wf4Vt4862yfZ1u1rmLDf8yOHTyi4T1fjuSr/ihqgbttlj/fwW/j64ZKp/jjB+fjN22a53r7OjhJ
- ZnF1I0cLKPYRi+A==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6005; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=FDhxqzjJz67+rEBh+dkc4FV5Kx80WdtuXY//a+1arxA=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBm4FP6PWb5L7K5OOzY7au9d3x/3Hvk2v60gTqqY
+ Bv9MPDaWBeJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZuBT+gAKCRD2t4JPQmmg
+ czZVD/9qboRpOedgzfsOTqY1wEOI8cgvLCZiKvxXfdhlDVNstUtgNLU7dXTB7J4g+at6SnS1xGz
+ 8m36NXSobVs1bQRhlZX6tyWF6ng8x+LQQWvzOzOq9LMY2P7QCny5aTMdJzjdJX3L5aDVSowGe6/
+ Lrs8BVyqLX62rkiouMLxCSX3RIkxNykQ0h4y1Rne+RS0JYUuKZl2wnzUi0DxK4KuuNqpkSYYD/S
+ OW2rBrvecA85G/yMG2eWlrgGWknze0MlPcbG+WXwmKFBFPIjMdD6PRZ0cWCE6l+97mx6hkjhCfF
+ rBU5ZOqNUxs3CJKO+5J7hp1mmScwMnCsnHnbHK7PGBYksfzjS94pszRX6K1U7AlyZDLTUNhpY4v
+ B4ovQKcr9zAseXa+lFLLh7peTlfFqbCf+kq6qDUCCKJl8wJWOUlJ28miU6j+iXJCe/bohOTDU7e
+ DZk4SbsFS1I4o359JJV3Avz7kj/ziWV/fBdF/M++bxR45auCHDkmAVpl63a/9zCiOKDLN7Ul0Hv
+ ZGswauwSTyJaTG7/UJ1pWe4cMVrNXfjiqs89vG3hdwbQpA17MtV8tkmOUKC3rq8Blw9Hs7iWDod
+ omawYdkU73hAc64BQ2FlCxvagm8pvpRz+Hd8hq533K1zDBekUxqhLIUEP1bdsCHFCGv6DTUrYvn
+ mR2TS+LJkcn9Jrw==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-From: Nicolas Rybowski <nicolas.rybowski@tessares.net>
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-Move Nicolas' patch into bpf selftests directory. This example adds a
-different mark (SO_MARK) on each subflow, and changes the TCP CC only on
-the first subflow.
+This patch adds a "cgroup/getsockopt" way to inspect the subflows of an
+MPTCP socket, and verify the modifications done by the same BPF program
+in the previous commit: a different mark per subflow, and a different
+TCP CC set on the second one. This new hook will be used by the next
+commit to verify the socket options set on each subflow.
 
-From the userspace, an application can do a setsockopt() on an MPTCP
-socket, and typically the same value will be propagated to all subflows
-(paths). If someone wants to have different values per subflow, the
-recommended way is to use BPF. So it is good to add such example here,
-and make sure there is no regressions.
+This extra "cgroup/getsockopt" prog walks the msk->conn_list and use
+bpf_core_cast to cast a pointer for readonly. It allows to inspect all
+the fields of a structure.
 
-This example shows how it is possible to:
+Note that on the kernel side, the MPTCP socket stores a list of subflows
+under 'msk->conn_list'. They can be iterated using the generic 'list'
+helpers. They have been imported here, with a small difference:
+list_for_each_entry() uses 'cond_break' to limit the number of
+iterations, and ease its use. Because only data need to be read here,
+it is enough to use this technique. It is planned to use bpf_iter, when
+BPF programs will be used to modify data from the different subflows.
+mptcp_subflow_tcp_sock() and mptcp_for_each_stubflow() helpers have also
+be imported.
 
-    Identify the parent msk of an MPTCP subflow.
-    Put different sockopt for each subflow of a same MPTCP connection.
-
-Here especially, two different behaviours are implemented:
-
-    A socket mark (SOL_SOCKET SO_MARK) is put on each subflow of a same
-    MPTCP connection. The order of creation of the current subflow defines
-    its mark. The TCP CC algorithm of the very first subflow of an MPTCP
-    connection is set to "reno".
-
-This is just to show it is possible to identify an MPTCP connection, and
-set socket options, from different SOL levels, per subflow. "reno" has
-been picked because it is built-in and usually not set as default one.
-It is easy to verify with 'ss' that these modifications have been
-applied correctly. That's what the next patch is going to do.
-
-Nicolas' code comes from:
-
-    commit 4d120186e4d6 ("bpf:examples: update mptcp_set_mark_kern.c")
-
-from the MPTCP repo https://github.com/multipath-tcp/mptcp_net-next (the
-"scripts" branch), and it has been adapted by Geliang.
-
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/76
-Co-developed-by: Geliang Tang <tanggeliang@kylinos.cn>
+Suggested-by: Martin KaFai Lau <martin.lau@kernel.org>
 Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Signed-off-by: Nicolas Rybowski <nicolas.rybowski@tessares.net>
-Reviewed-by: Mat Martineau <martineau@kernel.org>
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
 Notes:
- - v1 -> v2:
-   - The commit message has been updated: why setting multiple socket
-     options, why reno, the verification is done in a later patch
-     (different author). (Alexei)
- - v2 -> v3:
-   - Only #include "bpf_tracing_net.h", linked to:
-     https://lore.kernel.org/20240509175026.3423614-1-martin.lau@linux.dev
- - v4 -> v5:
-   - Set reno as TCP cc on the second subflow, not to influence the
-     getsockopt() done from the userspace, which will return the one
-     from the first subflow, the default TCP cc then, not the modified
-     one.
+  - v5: new patch, instead of using 'ss' in the following patch
 ---
- tools/testing/selftests/bpf/progs/mptcp_subflow.c | 59 +++++++++++++++++++++++
- 1 file changed, 59 insertions(+)
+ MAINTAINERS                                       |  2 +-
+ tools/testing/selftests/bpf/progs/mptcp_bpf.h     | 42 ++++++++++++++
+ tools/testing/selftests/bpf/progs/mptcp_subflow.c | 69 +++++++++++++++++++++++
+ 3 files changed, 112 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/mptcp_subflow.c b/tools/testing/selftests/bpf/progs/mptcp_subflow.c
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 30a9b9450e11..2674b86209d1 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16058,7 +16058,7 @@ F:	include/net/mptcp.h
+ F:	include/trace/events/mptcp.h
+ F:	include/uapi/linux/mptcp*.h
+ F:	net/mptcp/
+-F:	tools/testing/selftests/bpf/*/*mptcp*.c
++F:	tools/testing/selftests/bpf/*/*mptcp*.[ch]
+ F:	tools/testing/selftests/net/mptcp/
+ 
+ NETWORKING [TCP]
+diff --git a/tools/testing/selftests/bpf/progs/mptcp_bpf.h b/tools/testing/selftests/bpf/progs/mptcp_bpf.h
 new file mode 100644
-index 000000000000..2e28f4a215b5
+index 000000000000..179b74c1205f
 --- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/mptcp_subflow.c
-@@ -0,0 +1,59 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2020, Tessares SA. */
-+/* Copyright (c) 2024, Kylin Software */
++++ b/tools/testing/selftests/bpf/progs/mptcp_bpf.h
+@@ -0,0 +1,42 @@
++/* SPDX-License-Identifier: (LGPL-2.1 OR BSD-2-Clause) */
++#ifndef __MPTCP_BPF_H__
++#define __MPTCP_BPF_H__
 +
-+/* vmlinux.h, bpf_helpers.h and other 'define' */
-+#include "bpf_tracing_net.h"
++#include "bpf_experimental.h"
 +
-+char _license[] SEC("license") = "GPL";
-+
-+char cc[TCP_CA_NAME_MAX] = "reno";
-+
-+/* Associate a subflow counter to each token */
-+struct {
-+	__uint(type, BPF_MAP_TYPE_HASH);
-+	__uint(key_size, sizeof(__u32));
-+	__uint(value_size, sizeof(__u32));
-+	__uint(max_entries, 100);
-+} mptcp_sf SEC(".maps");
-+
-+SEC("sockops")
-+int mptcp_subflow(struct bpf_sock_ops *skops)
++/* list helpers from include/linux/list.h */
++static inline int list_is_head(const struct list_head *list,
++			       const struct list_head *head)
 +{
-+	__u32 init = 1, key, mark, *cnt;
-+	struct mptcp_sock *msk;
-+	struct bpf_sock *sk;
-+	int err;
++	return list == head;
++}
 +
-+	if (skops->op != BPF_SOCK_OPS_TCP_CONNECT_CB)
-+		return 1;
++#define list_entry(ptr, type, member)					\
++	container_of(ptr, type, member)
 +
-+	sk = skops->sk;
-+	if (!sk)
-+		return 1;
++#define list_first_entry(ptr, type, member)				\
++	list_entry((ptr)->next, type, member)
 +
-+	msk = bpf_skc_to_mptcp_sock(sk);
-+	if (!msk)
-+		return 1;
++#define list_next_entry(pos, member)					\
++	list_entry((pos)->member.next, typeof(*(pos)), member)
 +
-+	key = msk->token;
-+	cnt = bpf_map_lookup_elem(&mptcp_sf, &key);
-+	if (cnt) {
-+		/* A new subflow is added to an existing MPTCP connection */
-+		__sync_fetch_and_add(cnt, 1);
-+		mark = *cnt;
-+	} else {
-+		/* A new MPTCP connection is just initiated and this is its primary subflow */
-+		bpf_map_update_elem(&mptcp_sf, &key, &init, BPF_ANY);
-+		mark = init;
++#define list_entry_is_head(pos, head, member)				\
++	list_is_head(&pos->member, (head))
++
++/* small difference: 'cond_break' has been added in the conditions */
++#define list_for_each_entry(pos, head, member)				\
++	for (pos = list_first_entry(head, typeof(*pos), member);	\
++	     cond_break, !list_entry_is_head(pos, head, member);	\
++	     pos = list_next_entry(pos, member))
++
++/* mptcp helpers from protocol.h */
++#define mptcp_for_each_subflow(__msk, __subflow)			\
++	list_for_each_entry(__subflow, &((__msk)->conn_list), node)
++
++static __always_inline struct sock *
++mptcp_subflow_tcp_sock(const struct mptcp_subflow_context *subflow)
++{
++	return subflow->tcp_sock;
++}
++
++#endif
+diff --git a/tools/testing/selftests/bpf/progs/mptcp_subflow.c b/tools/testing/selftests/bpf/progs/mptcp_subflow.c
+index 2e28f4a215b5..70302477e326 100644
+--- a/tools/testing/selftests/bpf/progs/mptcp_subflow.c
++++ b/tools/testing/selftests/bpf/progs/mptcp_subflow.c
+@@ -4,10 +4,12 @@
+ 
+ /* vmlinux.h, bpf_helpers.h and other 'define' */
+ #include "bpf_tracing_net.h"
++#include "mptcp_bpf.h"
+ 
+ char _license[] SEC("license") = "GPL";
+ 
+ char cc[TCP_CA_NAME_MAX] = "reno";
++int pid;
+ 
+ /* Associate a subflow counter to each token */
+ struct {
+@@ -57,3 +59,70 @@ int mptcp_subflow(struct bpf_sock_ops *skops)
+ 
+ 	return 1;
+ }
++
++static int _check_getsockopt_subflow_mark(struct mptcp_sock *msk, struct bpf_sockopt *ctx)
++{
++	struct mptcp_subflow_context *subflow;
++	int i = 0;
++
++	mptcp_for_each_subflow(msk, subflow) {
++		struct sock *ssk;
++
++		ssk = mptcp_subflow_tcp_sock(bpf_core_cast(subflow,
++							   struct mptcp_subflow_context));
++
++		if (ssk->sk_mark != ++i) {
++			ctx->retval = -2;
++			break;
++		}
 +	}
 +
-+	/* Set the mark of the subflow's socket based on appearance order */
-+	err = bpf_setsockopt(skops, SOL_SOCKET, SO_MARK, &mark, sizeof(mark));
-+	if (err < 0)
-+		return 1;
-+	if (mark == 2)
-+		err = bpf_setsockopt(skops, SOL_TCP, TCP_CONGESTION, cc, TCP_CA_NAME_MAX);
++	return 1;
++}
++
++static int _check_getsockopt_subflow_cc(struct mptcp_sock *msk, struct bpf_sockopt *ctx)
++{
++	struct mptcp_subflow_context *subflow;
++
++	mptcp_for_each_subflow(msk, subflow) {
++		struct inet_connection_sock *icsk;
++		struct sock *ssk;
++
++		ssk = mptcp_subflow_tcp_sock(bpf_core_cast(subflow,
++							   struct mptcp_subflow_context));
++		icsk = bpf_core_cast(ssk, struct inet_connection_sock);
++
++		if (ssk->sk_mark == 2 &&
++		    __builtin_memcmp(icsk->icsk_ca_ops->name, cc, TCP_CA_NAME_MAX)) {
++			ctx->retval = -2;
++			break;
++		}
++	}
 +
 +	return 1;
++}
++
++SEC("cgroup/getsockopt")
++int _getsockopt_subflow(struct bpf_sockopt *ctx)
++{
++	struct bpf_sock *sk = ctx->sk;
++	struct mptcp_sock *msk;
++
++	if (bpf_get_current_pid_tgid() >> 32 != pid)
++		return 1;
++
++	if (!sk || sk->protocol != IPPROTO_MPTCP ||
++	    (!(ctx->level == SOL_SOCKET && ctx->optname == SO_MARK) &&
++	     !(ctx->level == SOL_TCP && ctx->optname == TCP_CONGESTION)))
++		return 1;
++
++	msk = bpf_core_cast(sk, struct mptcp_sock);
++	if (msk->pm.subflows != 1) {
++		ctx->retval = -1;
++		return 1;
++	}
++
++	if (ctx->optname == SO_MARK)
++		return _check_getsockopt_subflow_mark(msk, ctx);
++	return _check_getsockopt_subflow_cc(msk, ctx);
 +}
 
 -- 
