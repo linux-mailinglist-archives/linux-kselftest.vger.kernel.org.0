@@ -1,127 +1,110 @@
-Return-Path: <linux-kselftest+bounces-17646-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17647-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDC029742A3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 20:50:18 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A82C974303
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 21:07:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 793A3289B70
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 18:50:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C8E91C2533E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 19:07:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E6F31A706C;
-	Tue, 10 Sep 2024 18:50:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CE9A1A3BCA;
+	Tue, 10 Sep 2024 19:07:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NNjTfkd/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o8VeGU5w"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D123E1A4F3E
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 18:50:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F6A194C77;
+	Tue, 10 Sep 2024 19:07:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725994205; cv=none; b=na9JXueX29I9ZC+rMKm/crR/lHTttsGLyR1cRHcCbYZ+EOeWOYF17lXJ7on+uanfSxK/woJhzjTk4ni4nu3GeLHIU9pDI/ZexFjIBph37+E/BQ74cF9vYOncVVj7Gn9cF13h33tjYsgPYjeawuDJtrV1a7EERYTV+ephQqrbdMQ=
+	t=1725995221; cv=none; b=WUgbSPsSF8xDJyjmlpLwo16m2tb7qlLWRX+WWq81euQb4Mt/gLJ4ymLM07ujeEENnp6L/F6X9hPV7/fckm0bOdkV5GNbyBJbtTcz7K5dz7WVu2LaM6WDTL6CzxW0lugs5o91QabetXAehIrp7e4nndMCFOsccS85A0Lji0hr62g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725994205; c=relaxed/simple;
-	bh=itBQXuelZA75Po5d9GzHrmHgnyq5aLaPbElZSW4ZNp8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oe8kbUS1gV7IGushRrzLVEDFHWYgfwnaCytj562ouQs3S5QzBl/+wgws3pViALZ8l9+ICRrk+tZ4LFlcVE0uaaM6+WW3zC5DghxgY6XZfjgFsKF8UMsodMCWql8WaTWVTqrsB3WF9CwYx+HB1r3ZEkUHvhxWFXOfI4w+apsGoos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NNjTfkd/; arc=none smtp.client-ip=209.85.166.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-39f4ec52c5fso22872835ab.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 11:50:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1725994203; x=1726599003; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2xzLBxLjgDj5rpC/iK1MnqiUkc34ZYC9aNRFEI6xVyM=;
-        b=NNjTfkd/VBvsEsDkvZs4/SFKOlXxY9n/nJwRU4T/Oh1dkJVSiY1dd0wOYZuLBRCjGh
-         shqIRGc+oAy9hftapFPap2qFzqXodqlrjAOBzo03SFegy52EDqPRcpVh5LRjrIal2ex+
-         zQLN+Ipn3WpoREZ4JaDBbzPfuEV7CfP4zqYtA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725994203; x=1726599003;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2xzLBxLjgDj5rpC/iK1MnqiUkc34ZYC9aNRFEI6xVyM=;
-        b=Y4TsWNQ18V2/7hhZ2h7bc1qwBVDZdXeW1xNT1MRlUQGr1bmgumkIag/qx1DhVevbOS
-         N8v/bkmr/qO4i5PD9fH9/r+EBkNPawd+8JH4KQG724fdmw0NhjWoia+PQyfxKmQaNdSe
-         O8WRE3c21ZzJ0qzw+gt6GUsUeopPB7rVBN8EgT0/11tDJbiVy6H3Ir42UGwJ9HS2i1Cn
-         YmViCQuHPJygKLwyY2fW1rUElN/z4I0hbC8WAgl6DHdplEPFXZquj+OdmfpQCj+zQn7/
-         FJNl8lPDKIyZQ57CCX+eX7aOqwaT2dgmQCKGSLhGLFgFlUcsvo+XBNIZw4RdTvVC50sd
-         OHPw==
-X-Forwarded-Encrypted: i=1; AJvYcCUpPM6/Z1jfwuzmA4QZ+Mf14qLtBhuO7LMy3tu8H/J4MbE+97bJdKgaLVAQu+fiNYcG5JTNHzOMuEsrUhSZAbQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywlg3HdQyqkR/W7S0WTWmIkRMCWnwuQMW6UZW8AX/jqVofqF43O
-	N9GkFNgJhEyMjAhn4UOj9hk2ulDmz43dUGnhgRG/orIjIkq4mp/vVAz/xlAKG4A=
-X-Google-Smtp-Source: AGHT+IFDdvfVtJxuoA+NPIZaRMPtLiYE16oR91YzbeNcdA/bJHDFPaffJkkcudyfvCuPdeiV0K22Gg==
-X-Received: by 2002:a05:6e02:b2c:b0:398:36c0:7968 with SMTP id e9e14a558f8ab-3a04f0758camr187994025ab.6.1725994202880;
-        Tue, 10 Sep 2024 11:50:02 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a058fe56dasm21533775ab.52.2024.09.10.11.50.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Sep 2024 11:50:02 -0700 (PDT)
-Message-ID: <bf48db12-1e97-4690-b733-bad6b2363edb@linuxfoundation.org>
-Date: Tue, 10 Sep 2024 12:50:01 -0600
+	s=arc-20240116; t=1725995221; c=relaxed/simple;
+	bh=AEl+XWnBo7uqP/QHSL4Rbk+JcONDvvX5zrFxYRMYfeo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=aTYAls7OsVp1OiRHaI3LkPTTxbhvHoPWOAE82L9vFH16diGvdSxjzEM3lcErz+wIY6QK/fdjTJEi3TpeQz/kx7fOrZcElzzEwijXyzqHC4lep92SLs2OyEmfCpl6upQ+9Ibv0mr8Bio4UVk5PykrbPOoRe1+hwWWPsOQ0eMzcAM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o8VeGU5w; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F61C4CEC3;
+	Tue, 10 Sep 2024 19:06:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725995220;
+	bh=AEl+XWnBo7uqP/QHSL4Rbk+JcONDvvX5zrFxYRMYfeo=;
+	h=From:Subject:Date:To:Cc:From;
+	b=o8VeGU5wxKTFKDHd/Zq79lxv2WqJV+ph2ocHko5wrdxdyrKDoQSPkS5PvawEigqIK
+	 Apqxdez3s7U7IxEgmlajeEspvhXno8wBFH3WDod8XBr5MFBgN/6cWpBtc3RddDcpy0
+	 VhPwNEH19Gpt9lO23s7HbeDANsaQNO08J5Mh44UJcjFIDWuncmNPNgDZviDJRF2TJI
+	 NRGMhnvdkJpq7U3sjF4H22HvsyDlg9H73SQkMj9+GvnpXgj7dJK8msMoEvkCHQxRVK
+	 x3Rl1dzmgYhY8QSAfLSrbSWgpq0I2u2JRtHCRtXZVCPmstjZWnR6jDhQNETIkQ2Dh+
+	 OBqsMSTkSdFvw==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net 0/3] selftests: mptcp: misc. small fixes
+Date: Tue, 10 Sep 2024 21:06:35 +0200
+Message-Id: <20240910-net-selftests-mptcp-fix-install-v1-0-8f124aa9156d@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND 2/2] ring-buffer/selftest: Handle meta-page bigger
- than the system
-To: Steven Rostedt <rostedt@goodmis.org>,
- Vincent Donnefort <vdonnefort@google.com>
-Cc: mhiramat@kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, kernel-team@android.com,
- linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240910162335.2993310-1-vdonnefort@google.com>
- <20240910162335.2993310-3-vdonnefort@google.com>
- <20240910124555.180428eb@gandalf.local.home>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240910124555.180428eb@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIALuY4GYC/x2NQQoCMRAEv7LM2YFsUNj4FfEQY68OxBgygwjL/
+ t3BY9FU10aKIVA6TxsNfETl3Rzmw0TlmdsDLHdniiEeQ5oDNxgr6mpQU351K51X+bI0tVwrx9s
+ SM045pbKQv/QBn/+FC7lM133/AaH2ish2AAAA
+To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=936; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=AEl+XWnBo7uqP/QHSL4Rbk+JcONDvvX5zrFxYRMYfeo=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBm4JjQO/OcS2v+crSTacELJ2iXNcYW5NhoqD9aN
+ UNtPPUlW4qJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZuCY0AAKCRD2t4JPQmmg
+ cxD3EACNvE1PFEfPnkuhoFb/wF6TQtY/EuUxYLg8PzHSGh2wgTfH2Lj27XAx/VdmcdmRE0eoHYj
+ tOLGKFa5PDakgjHOpkOhgJoQnCaa1eF3IDUUbD9xUdt3NiywFyGJjaogymocsMKW7FTZNyFQTlp
+ R7Tfv43nGW/xuS4rQAKKprtqnw8nZsRRQXj54jKdxljbRqGVQyvnodLpmHXiwoBaUirmbPY6iSJ
+ rCXmV/5Q0WBRXZ1NP3P8+7vGYjSzLkewJw0/Ye0kCpZrkbmkb/i0IfddBaflJ9H9zAc2gWupwNd
+ mQgQdJIbLFXJNyCoeLJf+2/M/H7xDxxSqvpJUd6jLNZBWkKw1ULwNzf95b7q2HxZOrJEb7CtEB5
+ TCLIwr8FLe0EgmYPYv0/EY8lhvwD+CUgsQBpn0PJaeMF2gRVwUReAVx+wqWkhYLVYLsWHWXdfhP
+ ZIIY3qWM53y06bBgDLuD6DtptobCoVaxttWwNOyZe9/lf2ZUHWpoJSUaSXaC5VMJ6Qm+oTGHTH5
+ PcC+JcNE9DjEV3mbIUKQK5xrHuaQMEXEHd96u+1geZWFpX427Qx/Jsrg3QrpbClnjzCkx1YBqxA
+ oI5Tb5QmrgInvyutZM9fnw1tThfYnUuQ96RpbH7aH+HKgJwyckHRYV1fgDsdGBIpx9L5mSNFrGE
+ TzjhKUCmzPDvMiQ==
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On 9/10/24 10:45, Steven Rostedt wrote:
-> 
-> Shuah,
-> 
-> Can you take this through your tree?
-> 
-> Acked-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Here are some various fixes for the MPTCP selftests.
 
-Yes I can take it through my tree.
+Patch 1 fixes a recently modified test to continue to work as expected
+on older kernels. This is a fix for a recent fix that can be backported
+up to v5.15.
 
-> 
-> -- Steve
-> 
-> On Tue, 10 Sep 2024 17:23:35 +0100
-> Vincent Donnefort <vdonnefort@google.com> wrote:
-> 
->> Handle the case where the meta-page content is bigger than the system
->> page-size. This prepares the ground for extending features covered by
->> the meta-page.
->>
->> Cc: Shuah Khan <skhan@linuxfoundation.org>
->> Cc: linux-kselftest@vger.kernel.org
->> Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
+Patch 2 and 3 include dependences when exporting or installing the
+tests. Two fixes for v6.11-rc1.
 
-Vincent,
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Matthieu Baerts (NGI0) (3):
+      selftests: mptcp: join: restrict fullmesh endp on 1st sf
+      selftests: mptcp: include lib.sh file
+      selftests: mptcp: include net_helper.sh file
 
-Can you please rebase these on linux-kselftest next branch and
-resend. This patch doesn't apply.
+ tools/testing/selftests/net/mptcp/Makefile      | 2 ++
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 4 +++-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
+---
+base-commit: 48aa361c5db0b380c2b75c24984c0d3e7c1e8c09
+change-id: 20240910-net-selftests-mptcp-fix-install-2b82ae5a99c8
 
-Also please fix the subject to say:
+Best regards,
+-- 
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
 
-selfttests/ring-buffer
-
-thanks,
--- Shuah
 
