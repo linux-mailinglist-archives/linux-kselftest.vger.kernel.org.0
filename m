@@ -1,213 +1,160 @@
-Return-Path: <linux-kselftest+bounces-17656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC083974486
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 23:07:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C128397459D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 00:18:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 370D62824D1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 21:07:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83D3E28BF35
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 22:18:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09CFC1A7AEE;
-	Tue, 10 Sep 2024 21:07:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 666DD1AF4EF;
+	Tue, 10 Sep 2024 22:16:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="NKcEUcgg";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="i5b14eWp"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="Vbkopv/Q";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="tBDF6Uy+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh6-smtp.messagingengine.com (fhigh6-smtp.messagingengine.com [103.168.172.157])
+Received: from fhigh7-smtp.messagingengine.com (fhigh7-smtp.messagingengine.com [103.168.172.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9359A17622D;
-	Tue, 10 Sep 2024 21:07:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E8191AED49;
+	Tue, 10 Sep 2024 22:16:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726002460; cv=none; b=GPLGm/5mH9y+l3GnRWLT5QbmxC//q2lRxYQQBj5r/0NBd5MFHuOVd5zXx0KibcUWYgxLsDtgZNuLBcc9fXKNjQ/m+oluHVep5S/Ou2UqFnW6hOyj0ntShT1xJWelDM3yVxWEOMU7pjNIvrGsXh5QmuG2KXLxq1NNGet9/7PKU5Y=
+	t=1726006614; cv=none; b=LHqUCTiEgw/yX1ZaxmEB5HJPnCTrgKKwbuf0FaSYHSt6tZU/ohVH0cRwH/T76iX+zjP3UZyR1XK4xYNR/7lWSpe6kB+K6+x5CVNsMfmSVAzjuqRMlUC628HSXR9qT4Ry/ZQ72wgWQXR7ktt07R4G+Yi7pPZfbq/aNZihsY1yP6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726002460; c=relaxed/simple;
-	bh=hZFJbd/8+nyhB2YzrMCHW+UhaWzsPRQ/R/aTHVJ7V8U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VG5pp051QzLkxSK04Z3lBSaqjF6sYwv14ZomxMpfmZqOizi0cg7MgRTCEierW9r0bFs1R96f+1NHkFGSrGolWYvkT5hlGiLKXCU3y/qo59zX/sj/Qs/ArAI5/2Et5Wx8LnJw3RDRTavTsTyvgACrF64jLPVG0FOzUYRyIpc5U6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=NKcEUcgg; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=i5b14eWp; arc=none smtp.client-ip=103.168.172.157
+	s=arc-20240116; t=1726006614; c=relaxed/simple;
+	bh=6vSSgVY+sWsTklYYrlr/OHdGD26xT77F0/uVkqmOnyE=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=I733ix2VnRHZT9DNu6i38a4fOaqg3NEmFAr3gSMH6DSBN8IRx/lJRwIkjWgT0bQiXWQAoNAl8Dq6LiXVHiUWhZ4aNncGAVjbj5DYeLJdOBwqpAAIy/0afvBzv0gnMqMoSbGdbTu6m7a+XFG3PdcZRJJJOFF5uEFh23wGGtEEpMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=Vbkopv/Q; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=tBDF6Uy+; arc=none smtp.client-ip=103.168.172.158
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
 Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id A4FB111400B0;
-	Tue, 10 Sep 2024 17:07:29 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Tue, 10 Sep 2024 17:07:29 -0400
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 7CBC31140089;
+	Tue, 10 Sep 2024 18:16:51 -0400 (EDT)
+Received: from phl-imap-08 ([10.202.2.84])
+  by phl-compute-03.internal (MEProxy); Tue, 10 Sep 2024 18:16:51 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1726002449;
-	 x=1726088849; bh=TkNWhENOyhhpEk3zhiKLTed65bX4Z8sXkyAVOU+7z7M=; b=
-	NKcEUcgglDIRxvqaw+Iczadqs8+I9Hr8RnS6nWNmzPg9rvYVyJvdhuHLQvOBZVSa
-	OUiK7/TM451GcVDT7+xnITd170f10XRgFNUpAsSYyBmQ/AokiIhcX/csxhfCqIlj
-	YwY/18IL6FpCYhvJH7evlnM5EgHEYVUB59583Xe7HTpdd6Zy30Y4XIZP64zFDs+u
-	QH6uCQkEtu2pE0OHhoJjk0xOJXCQXL8XtgaXCA8sR2LLeq3neTbvhHsYjw475YR6
-	lbv5sHrmMHhdxCw13RbalFnlOVxFGcUW59NxMrFvPMjXsXkJ365Ahuo+xTCWHL7Y
-	X/cPIhMFDYb68hz9G3hixQ==
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1726006611;
+	 x=1726093011; bh=ZFPbHuL11lgtaJbe7iI1GZ1VpmwkrdzMiyKw6UGwaB8=; b=
+	Vbkopv/QTZM0mu+wp79frcd4guHmuSI2BCr1sJL5CXqMWHjzoolqMoHKFXFj+6Ov
+	7EczDHa8hVq7b0WsueeHkvRNHg00/zi5WSFf2wxYsIKMWZlL2P6GXwLrs7DfB+qF
+	eMKDZXmcpEmdkH/miqS2iSSOddDi8LFIrGNoGNOUojHVOLf/cLOwMsI/zowziQy0
+	6XT/1QbHe4MPK9/47tgVU/MsxrvYL23Il59kmrqcQmpsDSnk54NbNNc6bWrcCDYY
+	sbFEAJUlbyjVGaxRaakqOPeqogTg3ofzi/9V1PYE1Gh5ihUEEgyvgPFvYbWCD3R/
+	h4va/PLw0Vu1zmSu9H7ZNA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726002449; x=
-	1726088849; bh=TkNWhENOyhhpEk3zhiKLTed65bX4Z8sXkyAVOU+7z7M=; b=i
-	5b14eWpEa65rwqAgaaB+QP4x8RyumRPku/tIWSqREl1VzzV8lsc6ifzSz4tJyHCj
-	b3dKIJVzssE1apnfunXwLul8Tz7QCz4aTeE0ARS/5gYG4m2RSiWYmuun6b1BlL68
-	PbgAJsQKccaSY6UQjRKxmGJfywfPiqyRFI2NFh98QkfKRKOghxZV6G8NrgJiVNc6
-	x2dRjhzFSRSAEU9NYS+JkT4+5JHEjRYg2QK4qOYtSUskRB5eiLjikPLZglnsA8kd
-	IHz5SvfC0oOQ31zHp0kgsi5s6aIaDHP339nqn8MpUQmmCY2HTxEpwyKD7xp69fI/
-	bJ2SxxN0Dxftv9ZSCmzsg==
-X-ME-Sender: <xms:EbXgZp-_ryDr225alWc8euev-lVcxOD3DfbM-tOwSOqGWcna9k3BNw>
-    <xme:EbXgZtuMh6HqY_KGjXr6GHtnAa8_8XJnV91HOa7ryavk7PzcXNg0Sq-c1-tWvekUA
-    Aa4WYB3hfGzqoQc0g>
-X-ME-Received: <xmr:EbXgZnATiErcxZUhLQOvWl1gEkyJCB_ZqvkN9JvscrHVx2_ZPK-NP9VZNFRPjVuGL1eBn-d98KRrZxZ6cGBwHMOblyf4OivgpU7JO_0USX3AYw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeiledgudegkecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenfghrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffk
-    fhggtggugfgjsehtkefstddttdejnecuhfhrohhmpeffrghnihgvlhcuighuuceougiguh
-    esugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnheptdfgueeuueekieekgfeiueek
-    ffelteekkeekgeegffevtddvjeeuheeuueelfeetnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihiidpnhgspghr
-    tghpthhtohepvddtpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegrnhgurhhiih
-    drnhgrkhhrhihikhhosehgmhgrihhlrdgtohhmpdhrtghpthhtoheprghlvgigvghirdhs
-    thgrrhhovhhoihhtohhvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepvgguugihiiekje
-    esghhmrghilhdrtghomhdprhgtphhtthhopegrnhgurhhiiheskhgvrhhnvghlrdhorhhg
-    pdhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgsohigrdhnvghtpdhrtghpthhtoh
-    eprghstheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhhuhgrhheskhgvrhhnvghl
-    rdhorhhgpdhrtghpthhtohepjhhohhhnrdhfrghsthgrsggvnhgusehgmhgrihhlrdgtoh
-    hmpdhrtghpthhtohepmhgrrhhtihhnrdhlrghusehlihhnuhigrdguvghv
-X-ME-Proxy: <xmx:EbXgZtdSik0MzBa99ZVHcBI0GfcLKM85xIhL9SFgOf3iUGBFbDdkHQ>
-    <xmx:EbXgZuMzylYPx2koruqokmlGuPpulkqsFVQsb7NGLNzdbUNQLr7IMg>
-    <xmx:EbXgZvml4M6QHVzzKPpNYulXdueXsJ3xAN2xhAQL7T8v_hj17mk4hQ>
-    <xmx:EbXgZovy7Uz-cNdIYDvG-gdsauyJc6oAyY8y36kCsqpzhUCmcZxxtQ>
-    <xmx:EbXgZquqMMOW5pEZmDFCp4KOZnexnESXWYkp9xE3UeADMfX5J1tzOMqj>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726006611; x=
+	1726093011; bh=ZFPbHuL11lgtaJbe7iI1GZ1VpmwkrdzMiyKw6UGwaB8=; b=t
+	BDF6Uy+wb4qbbNJKTnVM9I4pYnt5x1irLc48v25tdb/jtm4MdfOjvWeHokthWMil
+	0ciQiJeZrE82lELMzlFMG20Yo2szJkzmN5uespmb/LBvel6how7pCNON63ImZNyU
+	8fbZhg1xNLPRp8cK9A0UhPoHySXwul1H2Uc2H9kqtRg+kT8SQ06WNJBt5wyAwl6h
+	qvBXFzTruv5OI/bQCKEGOLRMqkcY+4gsd37L1ropoR9J3DBGwEkTxpD41YM1aSbP
+	APkf7+3DCXXq+MQxNpUCwY4GcIBfK++toJUmC9WAk+uul6VHt1dpp3JZrEhg390+
+	jMTp11FPBmDlGZ97NiYug==
+X-ME-Sender: <xms:UsXgZoSGn9JK7g6cmk4PiCl8suGigoNt6nIb04jqB94Y-iHO_mJTLw>
+    <xme:UsXgZlz6bMIcQc58NWT3KaDnuc5zNGcmemAsnXb5PUuk04FlXyuwih3GnLJorxyMr
+    6PeW10jtXWKUWQWyw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejtddgtdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnegfrhhlucfvnfffucdlfeehmdenucfjughrpefoggffhffvvefk
+    jghfufgtgfesthhqredtredtjeenucfhrhhomhepfdffrghnihgvlhcuighufdcuoegugi
+    husegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgleeitefgvefffedufefh
+    ffdtieetgeetgeegheeufeeufeekgfefueffvefhffenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiipdhnsggp
+    rhgtphhtthhopedvtddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepmhihkhholh
+    grlhesfhgsrdgtohhmpdhrtghpthhtohepshgufhesfhhomhhitghhvghvrdhmvgdprhgt
+    phhtthhopegrlhgvgigvihdrshhtrghrohhvohhithhovhesghhmrghilhdrtghomhdprh
+    gtphhtthhopegrnhgurhhiihdrnhgrkhhrhihikhhosehgmhgrihhlrdgtohhmpdhrtghp
+    thhtohepvgguugihiiekjeesghhmrghilhdrtghomhdprhgtphhtthhopehjohhhnhdrfh
+    grshhtrggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopehhrgholhhuohesghho
+    ohhglhgvrdgtohhmpdhrtghpthhtohepuggrnhhivghlsehiohhgvggrrhgsohigrdhnvg
+    htpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:U8XgZl2ZhT0bX_v3p9eEQBzvtCDaiGt48YokqalqoDVPxi6cgT-iPA>
+    <xmx:U8XgZsBGS4YLAoyEI-0n8GJg_UBvro1uZ0kmPKbEJW9TMeHZ2oTtRw>
+    <xmx:U8XgZhhk4cRYOCZu6wdUKcBeEWlZw5azMIn7318G7r-diKF_gJKxng>
+    <xmx:U8XgZorK6-reDYHdQUA7_E7LhYMnDYjordf2uYvWlVJKQAOM7dPQ0w>
+    <xmx:U8XgZm1UGeEAUJRZULkL9hKqQ4-67NLDrfzRo4bDSwR8fyUBuk3TO6tk>
 Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 10 Sep 2024 17:07:26 -0400 (EDT)
-Date: Tue, 10 Sep 2024 15:07:24 -0600
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
-	Eddy Z <eddyz87@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Kernel Team <kernel-team@meta.com>
-Subject: Re: [PATCH bpf-next] bpf: ringbuf: Support consuming
- BPF_MAP_TYPE_RINGBUF from prog
-Message-ID: <vru2zgphyfywjcqikolwotsfun2bgtrnfmwvfls5ra4tznsydr@46w5rq7gqepz>
-References: <18a9ddacc99bb95e9802f8ad1e81214433df496c.1725929645.git.dxu@dxuuu.xyz>
- <CAADnVQKyfZ2-qCvmqG8z919ggdOszEjTs04H=cTGOZTi-zhx7Q@mail.gmail.com>
- <CAEf4Bza5Fiw2rZ5T7=zRwVk1Ct1Mgm7Gpa8w+NJVPZf8keY_9Q@mail.gmail.com>
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id E188018A0065; Tue, 10 Sep 2024 18:16:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Date: Tue, 10 Sep 2024 15:16:30 -0700
+From: "Daniel Xu" <dxu@dxuuu.xyz>
+To: "Andrii Nakryiko" <andrii.nakryiko@gmail.com>
+Cc: "Alexei Starovoitov" <alexei.starovoitov@gmail.com>,
+ "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Andrii Nakryiko" <andrii@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>,
+ "Alexei Starovoitov" <ast@kernel.org>, "Shuah Khan" <shuah@kernel.org>,
+ "John Fastabend" <john.fastabend@gmail.com>,
+ "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
+ "Yonghong Song" <yonghong.song@linux.dev>, "KP Singh" <kpsingh@kernel.org>,
+ "Stanislav Fomichev" <sdf@fomichev.me>, "Hao Luo" <haoluo@google.com>,
+ "Jiri Olsa" <jolsa@kernel.org>, "Mykola Lysenko" <mykolal@fb.com>,
+ LKML <linux-kernel@vger.kernel.org>,
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ "Kernel Team" <kernel-team@meta.com>
+Message-Id: <4ec8e15b-c44b-41d7-b337-32d17306d67b@app.fastmail.com>
+In-Reply-To: 
+ <vru2zgphyfywjcqikolwotsfun2bgtrnfmwvfls5ra4tznsydr@46w5rq7gqepz>
+References: 
+ <18a9ddacc99bb95e9802f8ad1e81214433df496c.1725929645.git.dxu@dxuuu.xyz>
+ <CAADnVQKyfZ2-qCvmqG8z919ggdOszEjTs04H=cTGOZTi-zhx7Q@mail.gmail.com>
+ <CAEf4Bza5Fiw2rZ5T7=zRwVk1Ct1Mgm7Gpa8w+NJVPZf8keY_9Q@mail.gmail.com>
+ <vru2zgphyfywjcqikolwotsfun2bgtrnfmwvfls5ra4tznsydr@46w5rq7gqepz>
+Subject: Re: [PATCH bpf-next] bpf: ringbuf: Support consuming BPF_MAP_TYPE_RINGBUF from
+ prog
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4Bza5Fiw2rZ5T7=zRwVk1Ct1Mgm7Gpa8w+NJVPZf8keY_9Q@mail.gmail.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 10, 2024 at 01:41:41PM GMT, Andrii Nakryiko wrote:
-> On Tue, Sep 10, 2024 at 11:36 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Sep 9, 2024 at 5:55 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
-> > >
-> > > Right now there exists prog produce / userspace consume and userspace
-> > > produce / prog consume support. But it is also useful to have prog
-> > > produce / prog consume.
-> > >
-> > > For example, we want to track the latency overhead of cpumap in
-> > > production. Since we need to store enqueue timestamps somewhere and
-> > > cpumap is MPSC, we need an MPSC data structure to shadow cpumap. BPF
-> > > ringbuf is such a data structure. Rather than reimplement (possibly
-> > > poorly) a custom ringbuffer in BPF, extend the existing interface to
-> > > allow the final quadrant of ringbuf usecases to be filled. Note we
-> > > ignore userspace to userspace use case - there is no need to involve
-> > > kernel for that.
-> > >
-> > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> > > ---
-> > >  kernel/bpf/verifier.c                         |  6 +-
-> > >  tools/testing/selftests/bpf/Makefile          |  3 +-
-> > >  .../selftests/bpf/prog_tests/ringbuf.c        | 50 +++++++++++++++
-> > >  .../bpf/progs/test_ringbuf_bpf_to_bpf.c       | 64 +++++++++++++++++++
-> > >  4 files changed, 120 insertions(+), 3 deletions(-)
-> > >  create mode 100644 tools/testing/selftests/bpf/progs/test_ringbuf_bpf_to_bpf.c
-> > >
-> > > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> > > index 53d0556fbbf3..56bfe559f228 100644
-> > > --- a/kernel/bpf/verifier.c
-> > > +++ b/kernel/bpf/verifier.c
-> > > @@ -9142,7 +9142,8 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
-> > >                     func_id != BPF_FUNC_ringbuf_query &&
-> > >                     func_id != BPF_FUNC_ringbuf_reserve_dynptr &&
-> > >                     func_id != BPF_FUNC_ringbuf_submit_dynptr &&
-> > > -                   func_id != BPF_FUNC_ringbuf_discard_dynptr)
-> > > +                   func_id != BPF_FUNC_ringbuf_discard_dynptr &&
-> > > +                   func_id != BPF_FUNC_user_ringbuf_drain)
-> > >                         goto error;
-> > >                 break;
-> > >         case BPF_MAP_TYPE_USER_RINGBUF:
-> > > @@ -9276,7 +9277,8 @@ static int check_map_func_compatibility(struct bpf_verifier_env *env,
-> > >                         goto error;
-> > >                 break;
-> > >         case BPF_FUNC_user_ringbuf_drain:
-> > > -               if (map->map_type != BPF_MAP_TYPE_USER_RINGBUF)
-> > > +               if (map->map_type != BPF_MAP_TYPE_USER_RINGBUF &&
-> > > +                   map->map_type != BPF_MAP_TYPE_RINGBUF)
-> > >                         goto error;
-> >
-> > I think it should work.
-> >
-> > Andrii,
-> >
-> > do you see any issues with such use?
-> >
-> 
-> Not from a quick glance. Both ringbufs have the same memory layout, so
-> user_ringbuf_drain() should probably work fine for normal BPF ringbuf
-> (and either way bpf_user_ringbuf_drain() has to protect from malicious
-> user space, so its code is pretty unassuming).
-> 
-> We should make it very explicit, though, that the user is responsible
-> for making sure that bpf_user_ringbuf_drain() will not be called
-> simultaneously in two threads, kernel or user space.
 
-I see an atomic_try_cmpxchg() protecting the drain. So it should be
-safe, right? What are they supposed to expect?
 
-> 
-> Also, Daniel, can you please make sure that dynptr we return for each
-> sample is read-only? We shouldn't let consumer BPF program ability to
-> corrupt ringbuf record headers (accidentally or otherwise).
+On Tue, Sep 10, 2024, at 2:07 PM, Daniel Xu wrote:
+> On Tue, Sep 10, 2024 at 01:41:41PM GMT, Andrii Nakryiko wrote:
+>> On Tue, Sep 10, 2024 at 11:36=E2=80=AFAM Alexei Starovoitov
+[...]
+>
+>>=20
+>> Also, Daniel, can you please make sure that dynptr we return for each
+>> sample is read-only? We shouldn't let consumer BPF program ability to
+>> corrupt ringbuf record headers (accidentally or otherwise).
+>
+> Sure.
 
-Sure.
+So the sample is not read-only. But I think prog is prevented from messi=
+ng
+with header regardless.
 
-> 
-> And as a thought exercise. I wonder what would it take to have an
-> open-coded iterator returning these read-only dynptrs for each
-> consumed record? Maybe we already have all the pieces together. So
-> consider looking into that as well.
-> 
-> P.S. And yeah "user_" part in helper name is kind of unfortunate given
-> it will work for both ringbufs. Can/should we add some sort of alias
-> for this helper so it can be used with both bpf_user_ringbuf_drain()
-> and bpf_ringbuf_drain() names?
+__bpf_user_ringbuf_peek() returns sample past the header:
 
-You mean register a new helper that shares the impl? Easy enough, but I
-thought we didn't want to add more uapi helpers.
+        *sample =3D (void *)((uintptr_t)rb->data +
+                           (uintptr_t)((cons_pos + BPF_RINGBUF_HDR_SZ) &=
+ rb->mask));
+
+dynptr is initialized with the above ptr:
+
+        bpf_dynptr_init(&dynptr, sample, BPF_DYNPTR_TYPE_LOCAL, 0, size);
+
+So I don't think there's a way for the prog to access the header thru th=
+e dynptr.
 
 Thanks,
 Daniel
