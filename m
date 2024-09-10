@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-17556-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17557-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7621972601
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 02:00:37 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7F46972605
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 02:00:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B6331F247AD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 00:00:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85824283382
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 00:00:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEA161CD29;
-	Tue, 10 Sep 2024 00:00:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E956245013;
+	Tue, 10 Sep 2024 00:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IY3NFeG9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qoeS3/yh"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BB102901;
-	Tue, 10 Sep 2024 00:00:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75A73CF7E;
+	Tue, 10 Sep 2024 00:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725926432; cv=none; b=X2IgJ8pGjDOC7CpOTOMKH+Esz6m2X8cRzHiBaigG4e6imXbXjYHojl+EkkeRNVjLiObwZPdYa88R/pkNcfKhaj3OO/yuPjv9tomQRqVACseLRs6aCmrR0QpQ4ObxpTvPO4CsTWmYiDXKgTxGGlGWf2/JtjhzxafgcrEVkhvuG4g=
+	t=1725926433; cv=none; b=cYG8iwfSmbS8VYEusPG+J9h5LNmPncTnhQ8juCcRmtktJA2w30RNjepE6FJzcI1UCcylkGVZ9cr6AHXuWar7wWLwdxL4cKVW2rtmwSl+bIXB1nmHW4bXWvGF/p9rcqFnayw4dLcHrBk5TtWItBWlwRx0TtFBTfqsGUf9ewwXvSA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725926432; c=relaxed/simple;
-	bh=OeDMui6wde4DNiHQx1ZGzsr33zGQdn4RQKLNeHaEXEQ=;
+	s=arc-20240116; t=1725926433; c=relaxed/simple;
+	bh=gshxbRjlsuxCQBmbSgS5/MFLrNIDc9GlgrGSqqVJbPU=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=FZnw/6FlWMSBoslQC5wV7140wdvSDPyIpaHIRIr4NWI6Fv40ECZqssvE/vb3/0/mXUA6mmlQVTmft0QTIeu3Yr80ooiWupcOeYDQ2dYg0F/qqOBiYYsEUw1G6qHU6forsJNN1bLQLSIvKYqIFy1+dlCGj0eBVOnBdNOXQ9dqm6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IY3NFeG9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0379FC4CEC5;
-	Tue, 10 Sep 2024 00:00:32 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=mMVCaAkFoRCL0JKRCy39DNk3VCYfiKgxhwrgtbWeyHitU3R7DJLqAPLVKrHpOaixLu6IbJJ/GeU1ifVvyzIPs+UIEM4VilgKAPfinHlF0jKZfLH6vYEUS3XyKG+tViOF+Oa8TiH9UoAfsFXhHc6rnm92Ttw37rliGJiBBgth3To=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qoeS3/yh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C0D0C4CEC6;
+	Tue, 10 Sep 2024 00:00:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725926432;
-	bh=OeDMui6wde4DNiHQx1ZGzsr33zGQdn4RQKLNeHaEXEQ=;
+	s=k20201202; t=1725926433;
+	bh=gshxbRjlsuxCQBmbSgS5/MFLrNIDc9GlgrGSqqVJbPU=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=IY3NFeG9xz405mv2aEhEYQyPPxakeM/7gsNFHQ99CTgAAH7N+RY0jdiPiyy03fRmw
-	 svwdzDTZ7B5rZ3tePPP+Yb6B4RAiG2yWox2YHEej94q0HtXq8ZMgZKFDk0oWyIBmvD
-	 Itso/H3+AaxTEsoQMUnxsUIBAvg2xfJpmDe2ShJRuOE1jUMAS/1iGEJQrb2OsDc5oo
-	 DnRzpMpV0hc9czzyepSBkXvTlSkxqHC2Ec9RlyF8bUixUM4nSHB0bZVIarPQqWpfD9
-	 ygPwd9BuGDnxy44UMzdDbUKiT2ZO00rxn28G41hd80u4ssl6JkTXzwYC4gY13JNayw
-	 qjsBwuUxJBZ8Q==
+	b=qoeS3/yhJsFUM6pJD1jRA9Wj3azkZxWBgQ1/47BMDJ+iHIi3CFFqgyf1R9BR7YNsy
+	 52d50w7RBi6Nm7kiOSOiXM5phaZYEHftfXdvCPNXRpKPfwligEYSHmr835UNegH8lx
+	 3b47FSg9wJW98OZhLDcnxtbkNYCIMy50LiU+PxfaA5QxmrlEhaMgIRapxUpNDhehdC
+	 yIQtR+fVWr+vj1l1e/BKTZYONb020G1ApImYOmNmyNpONTnvxcO6HJAZ6m4UXIOwkm
+	 g0Q/h15KDss5hYIXMEJKfCWpn0d+G4A7a1kZy4HuhQR2vGlcWTMtV0u/8S1+yInNRM
+	 WTJ4R7nmNHtmw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 344183806654;
-	Tue, 10 Sep 2024 00:00:34 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADDF13806654;
+	Tue, 10 Sep 2024 00:00:35 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -52,47 +52,40 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/5] selftests: mptcp: add time per subtests in
- TAP output
+Subject: Re: [PATCH net-next v2] selftests: return failure when timestamps can't
+ be reported
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <172592643303.3961170.9520344470558627600.git-patchwork-notify@kernel.org>
-Date: Tue, 10 Sep 2024 00:00:33 +0000
-References: <20240906-net-next-mptcp-ksft-subtest-time-v2-0-31d5ee4f3bdf@kernel.org>
-In-Reply-To: <20240906-net-next-mptcp-ksft-subtest-time-v2-0-31d5ee4f3bdf@kernel.org>
-To: Matthieu Baerts (NGI0) <matttbe@kernel.org>
-Cc: mptcp@lists.linux.dev, martineau@kernel.org, geliang@kernel.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- shuah@kernel.org, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
+ <172592643426.3961170.381877473938074234.git-patchwork-notify@kernel.org>
+Date: Tue, 10 Sep 2024 00:00:34 +0000
+References: <20240905160035.62407-1-kerneljasonxing@gmail.com>
+In-Reply-To: <20240905160035.62407-1-kerneljasonxing@gmail.com>
+To: Jason Xing <kerneljasonxing@gmail.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, shuah@kernel.org, willemdebruijn.kernel@gmail.com,
+ willemb@google.com, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
+ kernelxing@tencent.com
 
 Hello:
 
-This series was applied to netdev/net-next.git (main)
+This patch was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Fri, 06 Sep 2024 20:46:06 +0200 you wrote:
-> Patches here add 'time=<N>ms' in the diagnostic data of the TAP output,
-> e.g.
+On Fri,  6 Sep 2024 00:00:35 +0800 you wrote:
+> From: Jason Xing <kernelxing@tencent.com>
 > 
->   ok 1 - pm_netlink: defaults addr list # time=9ms
-> 
-> This addition is useful to quickly identify which subtests are taking a
-> longer time than the others, or more than expected.
+> When I was trying to modify the tx timestamping feature, I found that
+> running "./txtimestamp -4 -C -L 127.0.0.1" didn't reflect the error:
+> I succeeded to generate timestamp stored in the skb but later failed
+> to report it to the userspace (which means failed to put css into cmsg).
+> It can happen when someone writes buggy codes in __sock_recv_timestamp(),
+> for example.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,v2,1/5] selftests: mptcp: lib: add time per subtests in TAP output
-    https://git.kernel.org/netdev/net-next/c/f58817c852e9
-  - [net-next,v2,2/5] selftests: mptcp: connect: remote time in TAP output
-    https://git.kernel.org/netdev/net-next/c/1a38cee4bbd0
-  - [net-next,v2,3/5] selftests: mptcp: reset the last TS before the first test
-    https://git.kernel.org/netdev/net-next/c/d4e192728efc
-  - [net-next,v2,4/5] selftests: mptcp: diag: remove trailing whitespace
-    https://git.kernel.org/netdev/net-next/c/a5b6be42aac0
-  - [net-next,v2,5/5] selftests: mptcp: connect: remove duplicated spaces in TAP output
-    https://git.kernel.org/netdev/net-next/c/a92d1db0c989
+  - [net-next,v2] selftests: return failure when timestamps can't be reported
+    https://git.kernel.org/netdev/net-next/c/a7e387375f22
 
 You are awesome, thank you!
 -- 
