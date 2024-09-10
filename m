@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-17647-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17648-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A82C974303
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 21:07:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B5EAA974307
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 21:07:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C8E91C2533E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 19:07:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E880C1C25A6C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 19:07:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CE9A1A3BCA;
-	Tue, 10 Sep 2024 19:07:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49AA71AAE1C;
+	Tue, 10 Sep 2024 19:07:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o8VeGU5w"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h0TJkimY"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08F6A194C77;
-	Tue, 10 Sep 2024 19:07:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 078BD1AAE13;
+	Tue, 10 Sep 2024 19:07:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725995221; cv=none; b=WUgbSPsSF8xDJyjmlpLwo16m2tb7qlLWRX+WWq81euQb4Mt/gLJ4ymLM07ujeEENnp6L/F6X9hPV7/fckm0bOdkV5GNbyBJbtTcz7K5dz7WVu2LaM6WDTL6CzxW0lugs5o91QabetXAehIrp7e4nndMCFOsccS85A0Lji0hr62g=
+	t=1725995224; cv=none; b=W4v0lwwRob1y7XR9Z1ptHsjmoP8Fcl5PIxRzdy/WKt2Jz4ej7JpY1+Yu4c6okmDGOpH5Xrz0bFuWrvQ6qzbf9kiCsvNE/n45XN6eFcbARxKBj3YvQJ6xyVIrDpLYkeA7I06DW7hk2C101KRl6I4rS+RaDSMfRkf6pQJkS/faySU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725995221; c=relaxed/simple;
-	bh=AEl+XWnBo7uqP/QHSL4Rbk+JcONDvvX5zrFxYRMYfeo=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=aTYAls7OsVp1OiRHaI3LkPTTxbhvHoPWOAE82L9vFH16diGvdSxjzEM3lcErz+wIY6QK/fdjTJEi3TpeQz/kx7fOrZcElzzEwijXyzqHC4lep92SLs2OyEmfCpl6upQ+9Ibv0mr8Bio4UVk5PykrbPOoRe1+hwWWPsOQ0eMzcAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o8VeGU5w; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F61C4CEC3;
-	Tue, 10 Sep 2024 19:06:57 +0000 (UTC)
+	s=arc-20240116; t=1725995224; c=relaxed/simple;
+	bh=QgKZMPlAiI7k1oZ5ezpnNYoN7ULwe/z2ApzxqxNf/0k=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=eEbeOuiv9hlLD8e8vkEheLN+kXdxfgqu5h6Fxew9TVJ/ma9KI+E2uTvNJP4UPw381f4e6UulbznxoczctoqTQfquDv8EqOp02M3Ldw6c6rK10bzQU7HSlEF4LfnR97JV1CACRCIkTKFLimNNgkp7gQZ2Z71WMIb/N07P9E5C3nM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h0TJkimY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086ECC4CECE;
+	Tue, 10 Sep 2024 19:07:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725995220;
-	bh=AEl+XWnBo7uqP/QHSL4Rbk+JcONDvvX5zrFxYRMYfeo=;
-	h=From:Subject:Date:To:Cc:From;
-	b=o8VeGU5wxKTFKDHd/Zq79lxv2WqJV+ph2ocHko5wrdxdyrKDoQSPkS5PvawEigqIK
-	 Apqxdez3s7U7IxEgmlajeEspvhXno8wBFH3WDod8XBr5MFBgN/6cWpBtc3RddDcpy0
-	 VhPwNEH19Gpt9lO23s7HbeDANsaQNO08J5Mh44UJcjFIDWuncmNPNgDZviDJRF2TJI
-	 NRGMhnvdkJpq7U3sjF4H22HvsyDlg9H73SQkMj9+GvnpXgj7dJK8msMoEvkCHQxRVK
-	 x3Rl1dzmgYhY8QSAfLSrbSWgpq0I2u2JRtHCRtXZVCPmstjZWnR6jDhQNETIkQ2Dh+
-	 OBqsMSTkSdFvw==
+	s=k20201202; t=1725995223;
+	bh=QgKZMPlAiI7k1oZ5ezpnNYoN7ULwe/z2ApzxqxNf/0k=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=h0TJkimYyhkgI5uiNOOHMNJTpCPU+bFSyY/4StX3MGFxwIbYN/AGKeV/ZzfOYywHs
+	 mXHc2HqWE+dTkfcYWPsS5Dtg+shcmJo9gHglx+AZzeWTHccK+1E0J4omUntiwChAX3
+	 dUsysIHD54Ut2OlIrzcrnqUIPBzG5bAECtb8e6In7/dtDQzLhMUIdhBf1wR/PUosA1
+	 uUb0xQIqJr6cnasoEVBDHRnu7yXaqK103zWV1DxNnW8vt7ZApXso7YSAON02xHL+H/
+	 z4EmJu8pvfoHECMGx9EZtIJuSguMS5cuD2P8PdxyqdTydEF+pvXF/pcnuTHsxkTxe/
+	 gsQ/1jIyo5mnw==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Subject: [PATCH net 0/3] selftests: mptcp: misc. small fixes
-Date: Tue, 10 Sep 2024 21:06:35 +0200
-Message-Id: <20240910-net-selftests-mptcp-fix-install-v1-0-8f124aa9156d@kernel.org>
+Date: Tue, 10 Sep 2024 21:06:36 +0200
+Subject: [PATCH net 1/3] selftests: mptcp: join: restrict fullmesh endp on
+ 1st sf
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,9 +53,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIALuY4GYC/x2NQQoCMRAEv7LM2YFsUNj4FfEQY68OxBgygwjL/
- t3BY9FU10aKIVA6TxsNfETl3Rzmw0TlmdsDLHdniiEeQ5oDNxgr6mpQU351K51X+bI0tVwrx9s
- SM045pbKQv/QBn/+FC7lM133/AaH2ish2AAAA
+Message-Id: <20240910-net-selftests-mptcp-fix-install-v1-1-8f124aa9156d@kernel.org>
+References: <20240910-net-selftests-mptcp-fix-install-v1-0-8f124aa9156d@kernel.org>
+In-Reply-To: <20240910-net-selftests-mptcp-fix-install-v1-0-8f124aa9156d@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
  Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
@@ -63,48 +64,60 @@ Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
  stable@vger.kernel.org
 X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=936; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=AEl+XWnBo7uqP/QHSL4Rbk+JcONDvvX5zrFxYRMYfeo=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBm4JjQO/OcS2v+crSTacELJ2iXNcYW5NhoqD9aN
- UNtPPUlW4qJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZuCY0AAKCRD2t4JPQmmg
- cxD3EACNvE1PFEfPnkuhoFb/wF6TQtY/EuUxYLg8PzHSGh2wgTfH2Lj27XAx/VdmcdmRE0eoHYj
- tOLGKFa5PDakgjHOpkOhgJoQnCaa1eF3IDUUbD9xUdt3NiywFyGJjaogymocsMKW7FTZNyFQTlp
- R7Tfv43nGW/xuS4rQAKKprtqnw8nZsRRQXj54jKdxljbRqGVQyvnodLpmHXiwoBaUirmbPY6iSJ
- rCXmV/5Q0WBRXZ1NP3P8+7vGYjSzLkewJw0/Ye0kCpZrkbmkb/i0IfddBaflJ9H9zAc2gWupwNd
- mQgQdJIbLFXJNyCoeLJf+2/M/H7xDxxSqvpJUd6jLNZBWkKw1ULwNzf95b7q2HxZOrJEb7CtEB5
- TCLIwr8FLe0EgmYPYv0/EY8lhvwD+CUgsQBpn0PJaeMF2gRVwUReAVx+wqWkhYLVYLsWHWXdfhP
- ZIIY3qWM53y06bBgDLuD6DtptobCoVaxttWwNOyZe9/lf2ZUHWpoJSUaSXaC5VMJ6Qm+oTGHTH5
- PcC+JcNE9DjEV3mbIUKQK5xrHuaQMEXEHd96u+1geZWFpX427Qx/Jsrg3QrpbClnjzCkx1YBqxA
- oI5Tb5QmrgInvyutZM9fnw1tThfYnUuQ96RpbH7aH+HKgJwyckHRYV1fgDsdGBIpx9L5mSNFrGE
- TzjhKUCmzPDvMiQ==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1738; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=QgKZMPlAiI7k1oZ5ezpnNYoN7ULwe/z2ApzxqxNf/0k=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBm4JjRuPiBmqQot2XLTpRTMWhZfHmFpzO1y02Wl
+ aCc7IshYiyJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZuCY0QAKCRD2t4JPQmmg
+ c2XQD/0aHs+MCJEqg8v/bc77WNcibzjhtfoMGZ8abK9s/afUxzbz96vhN7cXXEVb/lpIFqr440R
+ b7A9IfNNkqHpfb0lMfVu5dppXr1AGa23sqywOXLNdxsoDzkSe+4DJUODPxcy5774eEYRCHitikX
+ sK36dwZ0/CfJ8I6KBd8Vyv9euSE9hnthfjK6cx97rFdMHMNo6VD5nuTOhs+qYAby3h/YOuADfEt
+ RFrVCJ/Ol8wL9XOk2jPKj/kIQCTKKhsL7J3fR+t3hflJKQR79VZx3NOzVlELSBF2wyHxOyBJB4G
+ zCMsGQfhh38Gy2QzKJCftPAlhnNhkGcK1xzxVN50Y3i12w+u1itCDLMEN9actcL9EQLRgEPjFKr
+ kjh5rEzKlOs6XH+cb0KbA3I/H2rUUqkBs3V36tFnJRjBmmme0FWQ7LO9qmodQyS8An0GpK6c9Gv
+ SDnZs8QrEIhUw27y0K46IGkpidDThJ9aaJ/hoviNLH8RDrb0sOEU410I8F/970BjozcM9P6uaax
+ tPB060csTgsORANAy4VMEHpG+HC5ufvcOWvKrTv1CdPQbPXDhjhU2BDWhTVp4CqT666bQ7GIhky
+ M1ro2FfEsinHSGAz/om5A4uGuu8QxYJZAjGDgLgIpvauzHwr8F3m2SpCNyvstEvioMCf0KTCcKH
+ s9YoPlXmyv4bv2Q==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-Here are some various fixes for the MPTCP selftests.
+A new endpoint using the IP of the initial subflow has been recently
+added to increase the code coverage. But it breaks the test when using
+old kernels not having commit 86e39e04482b ("mptcp: keep track of local
+endpoint still available for each msk"), e.g. on v5.15.
 
-Patch 1 fixes a recently modified test to continue to work as expected
-on older kernels. This is a fix for a recent fix that can be backported
-up to v5.15.
+Similar to commit d4c81bbb8600 ("selftests: mptcp: join: support local
+endpoint being tracked or not"), it is possible to add the new endpoint
+conditionally, by checking if "mptcp_pm_subflow_check_next" is present
+in kallsyms: this is not directly linked to the commit introducing this
+symbol but for the parent one which is linked anyway. So we can know in
+advance what will be the expected behaviour, and add the new endpoint
+only when it makes sense to do so.
 
-Patch 2 and 3 include dependences when exporting or installing the
-tests. Two fixes for v6.11-rc1.
-
+Fixes: 4878f9f8421f ("selftests: mptcp: join: validate fullmesh endp on 1st sf")
+Cc: stable@vger.kernel.org
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
-Matthieu Baerts (NGI0) (3):
-      selftests: mptcp: join: restrict fullmesh endp on 1st sf
-      selftests: mptcp: include lib.sh file
-      selftests: mptcp: include net_helper.sh file
-
- tools/testing/selftests/net/mptcp/Makefile      | 2 ++
  tools/testing/selftests/net/mptcp/mptcp_join.sh | 4 +++-
- 2 files changed, 5 insertions(+), 1 deletion(-)
----
-base-commit: 48aa361c5db0b380c2b75c24984c0d3e7c1e8c09
-change-id: 20240910-net-selftests-mptcp-fix-install-2b82ae5a99c8
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Best regards,
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+index a4762c49a878..cde041c93906 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+@@ -3064,7 +3064,9 @@ fullmesh_tests()
+ 		pm_nl_set_limits $ns1 1 3
+ 		pm_nl_set_limits $ns2 1 3
+ 		pm_nl_add_endpoint $ns1 10.0.2.1 flags signal
+-		pm_nl_add_endpoint $ns2 10.0.1.2 flags subflow,fullmesh
++		if mptcp_lib_kallsyms_has "mptcp_pm_subflow_check_next$"; then
++			pm_nl_add_endpoint $ns2 10.0.1.2 flags subflow,fullmesh
++		fi
+ 		fullmesh=1 speed=slow \
+ 			run_tests $ns1 $ns2 10.0.1.1
+ 		chk_join_nr 3 3 3
+
 -- 
-Matthieu Baerts (NGI0) <matttbe@kernel.org>
+2.45.2
 
 
