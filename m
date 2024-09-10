@@ -1,228 +1,240 @@
-Return-Path: <linux-kselftest+bounces-17572-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17573-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B4BE972B08
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 09:42:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A809972D2B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 11:14:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F2431C24213
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 07:42:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB2BF1F25B26
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 09:14:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED6CA185950;
-	Tue, 10 Sep 2024 07:42:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C1B5188004;
+	Tue, 10 Sep 2024 09:14:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UMvXBmn8"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="qdlXhAh4";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WGSeEqGT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from fout3-smtp.messagingengine.com (fout3-smtp.messagingengine.com [103.168.172.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398901849D9
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 07:42:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4DEA17BED6;
+	Tue, 10 Sep 2024 09:14:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.146
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725954128; cv=none; b=FlyeKtaZPas+YSnM0BUCaplqE6kG59nL1BsL4OngbiVTaEhAHIyOVrcMcJvSX2HaM+6ygruyZN35pCriGfU9FlVeHf5DVSJpfkVNXzjisatBfKAsuNhBrvK8c7pf92JY5FDFumi+ak23jkPHMQt8hlVURNVXmuDKYPhB8mx6+aU=
+	t=1725959664; cv=none; b=H5iCvg06bNtiN664G5jWpCps3b1C7O9gyNKsf3LtqjMuH8kXcK0+qeRUGDPl+Gsn0Fvrdhr3u5tfiA92uoFUEB5Sh5mKePpoBt6SreKNLYjbpsKshNaRNnCIS4sN5VCsM8/GPAno+XAMyr2/ZjcpNJQsjg1bqd/mNdxUgMhug+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725954128; c=relaxed/simple;
-	bh=Qyl+jeM29UcIUIpBkMaXSrvyQbplQx2dePM9hleo3fk=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=QTc7Wywg7/QGMqOIG4cLkyhk5Sqkod28spT3AEiV3wchb5Xh/a0d0E+d/cZZ8U72zJBc+8H0UKr09c4pL27fHdFlqWTjaDlsKXOdn+M3oAPgajshOd5ej4eh6UzwcbztK7qPAFMYgJo2/7Qw4pqqqXGvlTsKpNqQDttFWxPAP4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UMvXBmn8; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1725954126;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vuOGAWKRYAVrkFr1NxQHAvJfBsIuxorao5YMycZLxA4=;
-	b=UMvXBmn8SzRaGIHUSWmfuIZ/1JctGV5jM1YFtz+TV+NGoIjCKpm0dC3YB16fIsbTXrtpof
-	yDQtxIuKDW/DPBLOBy+fypv19pvqL67OYdRiuL+1kfhEuXTDRNRSJhcEmOTO9981iI4Z3E
-	l3yjDnD2RzsWs/bXOkddKy4aXaPiFXE=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-645-c3Z2ywIVPSGc1VWjZwqBRw-1; Tue, 10 Sep 2024 03:42:04 -0400
-X-MC-Unique: c3Z2ywIVPSGc1VWjZwqBRw-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a8a92ab4dd0so22999666b.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 00:42:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1725954123; x=1726558923;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vuOGAWKRYAVrkFr1NxQHAvJfBsIuxorao5YMycZLxA4=;
-        b=L+YMseb1Fqt9Eh68roS3Yt/lttVLLJDLO9ah8n5407QGAQFHE7s5AjD/pVk2iD/ecB
-         s9raYXa32k7day61ZWqU4A68bwuJ4nqne7QnkOHrX5WQvIdyhk1Oc6je5OLa+aC4aQ6O
-         ApUYWX1dnZeMiwLhvAFHbwqztC/bZSXOiRxu9xRkksreQpbStLdocmPE9dCVtLrEOcxe
-         D9XSHeNdlXJhpErfa59e4PtQ/Marwg+wB6FsVFyM5YeCN+gwP2dFv3TbijzLXTi5BNLX
-         rDor34A8dOA8etO4/Zv81Bo4XHDNMko9XRIlScRtEGx6FR6QnQn1tJL8AQ+pkk9Zxq9/
-         CckQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX53Kjy07gkd3Szq6GFS8FOSOJsXsHSlqMVlHte5YHFt+AFt/1pDDD0Cv7KZIoMczvgzXLEsuIXTZZhrOUZH6Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLqyXKutJyZRZljrJFpmWUXeqCRoWftYkBGDMihYKA1Mlq7cXy
-	WQlYO0nzlYvOZl/+fNsmGobjyWD9WpQaOnVVcASMKUEX/HwbxogK1rmsAhUZHndcroQ55AidXMX
-	Nl4GAMQYUXM1fnlrYSZB0tePOVgoTDlRJtbiQFnHPyA7fn/g2Xc0ZImbqNtZVnrCXrw==
-X-Received: by 2002:a17:906:d555:b0:a86:9fbd:5168 with SMTP id a640c23a62f3a-a8a885be012mr934459466b.10.1725954122687;
-        Tue, 10 Sep 2024 00:42:02 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFlH0u6x8kCMDvPcDbginVMnhXO4lApiSQpceWmr1sBGfZmmYznkDhVeEEVWw9Lf1VtTtVaBw==
-X-Received: by 2002:a17:906:d555:b0:a86:9fbd:5168 with SMTP id a640c23a62f3a-a8a885be012mr934451466b.10.1725954121495;
-        Tue, 10 Sep 2024 00:42:01 -0700 (PDT)
-Received: from alrua-x1.borgediget.toke.dk ([2a0c:4d80:42:443::2])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a8d25cf03fcsm438718266b.162.2024.09.10.00.42.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Sep 2024 00:42:01 -0700 (PDT)
-Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
-	id 18BC7152C346; Tue, 10 Sep 2024 09:42:00 +0200 (CEST)
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
-To: Florian Kauer <florian.kauer@linutronix.de>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, "David S.
- Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Jesper
- Dangaard Brouer <hawk@kernel.org>, John Fastabend
- <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
- KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP
- Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
- <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, David Ahern
- <dsahern@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>, Mykola Lysenko
- <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, Jesper Dangaard Brouer <brouer@redhat.com>,
- linux-kselftest@vger.kernel.org, Florian Kauer
- <florian.kauer@linutronix.de>
-Subject: Re: [PATCH net v3 2/2] bpf: selftests: send packet to devmap
- redirect XDP
-In-Reply-To: <20240909-devel-koalo-fix-ingress-ifindex-v3-2-66218191ecca@linutronix.de>
-References: <20240909-devel-koalo-fix-ingress-ifindex-v3-0-66218191ecca@linutronix.de>
- <20240909-devel-koalo-fix-ingress-ifindex-v3-2-66218191ecca@linutronix.de>
-X-Clacks-Overhead: GNU Terry Pratchett
-Date: Tue, 10 Sep 2024 09:41:59 +0200
-Message-ID: <87seu8dkfs.fsf@toke.dk>
+	s=arc-20240116; t=1725959664; c=relaxed/simple;
+	bh=ofDWqCs41OUr2oUiMhBqPf9Yy+vN58jzrJOk+Qtpsvs=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=Yat5CJtDEG39TZw3Gc6wi0+diSduo5U6kIfYfUOzk/bfQndkHWRgb9dPAdIz1ZxbH1rgmJkxUc5NFYHmsyTl9iFXi/vTFHdvt8K+BsUs3sFKGMDdE83xfjEUuHnLg/4Kl81gleZBUBRCLFRlXzIDLLkP0jeRZVNql5xtmEmDkrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=qdlXhAh4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WGSeEqGT; arc=none smtp.client-ip=103.168.172.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfout.phl.internal (Postfix) with ESMTP id AD4951380266;
+	Tue, 10 Sep 2024 05:14:19 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Tue, 10 Sep 2024 05:14:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1725959659;
+	 x=1726046059; bh=0bAs8GYS7XnporkOcRS5T4HRjTKpKe/QReainQI38Rk=; b=
+	qdlXhAh4KhW/Gwzc8zjnCEsVCEToC/jfpbc1LGNeyXjHyxrGkaOEdko1GhLMeXCG
+	0mTSaWDXHNdhgb20rNU4vFIh0eT/cmHVcbimKEx8EUzOj3EPP3ytGQvipRQWMYA4
+	R4fWxdeXmPPKjUj85lLoCW4Ay5K0Oy6eYIqi0eqeOcZkyuTt8OaqAdcZU2VB73fx
+	qsreMHjZ4C58eHheS67EFcWx19H8O8vrPM+ZYx4KIi76fOrAYZVajcAjyhpY0ycl
+	9fK9PCSUnhZdVb8nDCalpuXmZHgJxBA6ekcrrrofvixRCtQFS5jCDgKuDG07tn9/
+	flRHtT3wFN2tH/hrKVrHtQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1725959659; x=
+	1726046059; bh=0bAs8GYS7XnporkOcRS5T4HRjTKpKe/QReainQI38Rk=; b=W
+	GSeEqGTy6UXfqglELD3nzeP1F1cpqL6nv4ukTZozaakPrRqeKjVQjY/rxP35zSuh
+	DP3szT6uUCEWxiNPuIznGDyGANCc1sUDCsh1bTcRCDIGaqLn17ihXR/S1gMys9K+
+	Jqz2F+bIJN5PE4UxyQv6SvzTRRxleY2Yd3vs7GI0WfkJumnpVpcFyMkOnpzYuSHW
+	A7836+XYl9KZBqILr9EX8wghl1AJ6VMmdOiQmXl32CA6uTJlf6F58YePtVWGEVnY
+	u57N/BgbtmOgCQEwuZd77mnK+2KEFj7a3XPQRqvj3IORTpf7UE9m0y6CuAOLEMYg
+	QyKrEE8BZDgerRiexZvyA==
+X-ME-Sender: <xms:6w3gZoyW7bXaYX3kixZKzIkDRpyLdjOgBETNPy-cJTVwRYg4nw3yNg>
+    <xme:6w3gZsT9cGRLVA8efNbqb7vCLfQhDNHPhT_L4064P9CuudspnM2CEHv2JN3Uph7le
+    3CXjBw6i2MMQNKZ7fA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeiledguddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddt
+    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
+    guvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefg
+    gfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepuddu
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehlihhnuhigqdgrrhgthhesvhhgvg
+    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgtshhkhiesvhhgvghr
+    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvg
+    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshht
+    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhiphhsse
+    hvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphgrrhhishgt
+    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshefledtse
+    hvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshhhsehvghgv
+    rhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhprghrtghlihhnuhigsehvghgvrh
+    drkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:6w3gZqV8KihhiFdi7sRhaWKpMZMHrGPpA76KLXrK634lgezoYNTvSA>
+    <xmx:6w3gZmi8EonkLyDOLg_9QXKH1ocXMsJ6ejyEeHiHTgSAWPYddJ6bpg>
+    <xmx:6w3gZqBsY05cbm8jG7BD07qm-UbnkG-KQzHwrMNW01aB-ZvqW-kjww>
+    <xmx:6w3gZnKcUxhMu_f7cpTmrDZK1u2JZ9yB3UB6TCxa0xloKeTdc_iNvQ>
+    <xmx:6w3gZu5m_naip13-t88JgloMOWJCdou_b5AMdlRZZHFgz7xai_GlLMuM>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 02253222006F; Tue, 10 Sep 2024 05:14:18 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Date: Tue, 10 Sep 2024 09:13:33 +0000
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Charlie Jenkins" <charlie@rivosinc.com>,
+ "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>
+Cc: "Richard Henderson" <richard.henderson@linaro.org>,
+ "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
+ "Matt Turner" <mattst88@gmail.com>, "Vineet Gupta" <vgupta@kernel.org>,
+ "Russell King" <linux@armlinux.org.uk>, guoren <guoren@kernel.org>,
+ "Huacai Chen" <chenhuacai@kernel.org>, "WANG Xuerui" <kernel@xen0n.name>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Helge Deller" <deller@gmx.de>, "Michael Ellerman" <mpe@ellerman.id.au>,
+ "Nicholas Piggin" <npiggin@gmail.com>,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Naveen N Rao" <naveen@kernel.org>,
+ "Alexander Gordeev" <agordeev@linux.ibm.com>,
+ "Gerald Schaefer" <gerald.schaefer@linux.ibm.com>,
+ "Heiko Carstens" <hca@linux.ibm.com>,
+ "Vasily Gorbik" <gor@linux.ibm.com>,
+ "Christian Borntraeger" <borntraeger@linux.ibm.com>,
+ "Sven Schnelle" <svens@linux.ibm.com>,
+ "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+ "Rich Felker" <dalias@libc.org>,
+ "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Andreas Larsson" <andreas@gaisler.com>,
+ "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
+ "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, "Andy Lutomirski" <luto@kernel.org>,
+ "Peter Zijlstra" <peterz@infradead.org>,
+ "Muchun Song" <muchun.song@linux.dev>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ "Vlastimil Babka" <vbabka@suse.cz>, shuah <shuah@kernel.org>,
+ "Christoph Hellwig" <hch@infradead.org>,
+ "Michal Hocko" <mhocko@suse.com>,
+ "Kirill A. Shutemov" <kirill@shutemov.name>,
+ "Chris Torek" <chris.torek@gmail.com>,
+ Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org,
+ linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org,
+ "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-abi-devel@lists.sourceforge.net
+Message-Id: <89d21669-8daa-4225-b6d2-33d439ebd746@app.fastmail.com>
+In-Reply-To: <Zt+DGHZrHFxfq7xo@ghost>
+References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
+ <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
+ <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
+ <58f39d58-579e-4dd3-8084-baebf86f1ae0@lucifer.local>
+ <7be08ea9-f343-42da-805f-e5f0d61bde26@app.fastmail.com>
+ <016c7857-9ea8-4333-96e6-3ae3870f375f@lucifer.local> <Zt+DGHZrHFxfq7xo@ghost>
+Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to 47 bits
 Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Florian Kauer <florian.kauer@linutronix.de> writes:
+On Mon, Sep 9, 2024, at 23:22, Charlie Jenkins wrote:
+> On Fri, Sep 06, 2024 at 10:52:34AM +0100, Lorenzo Stoakes wrote:
+>> On Fri, Sep 06, 2024 at 09:14:08AM GMT, Arnd Bergmann wrote:
+>> The intent is to optionally be able to run a process that keeps higher bits
+>> free for tagging and to be sure no memory mapping in the process will
+>> clobber these (correct me if I'm wrong Charlie! :)
+>> 
+>> So you really wouldn't want this if you are using tagged pointers, you'd
+>> want to be sure literally nothing touches the higher bits.
 
-> The current xdp_devmap_attach test attaches a program
-> that redirects to another program via devmap.
->
-> It is, however, never executed, so do that to catch
-> any bugs that might occur during execution.
->
-> Also, execute the same for a veth pair so that we
-> also cover the non-generic path.
->
-> Warning: Running this without the bugfix in this series
-> will likely crash your system.
->
-> Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
-> ---
->  .../selftests/bpf/prog_tests/xdp_devmap_attach.c   | 114 +++++++++++++++++++--
->  1 file changed, 108 insertions(+), 6 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-> index ce6812558287..3da45f719736 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-> @@ -1,6 +1,9 @@
->  // SPDX-License-Identifier: GPL-2.0
-> +#include <arpa/inet.h>
->  #include <uapi/linux/bpf.h>
->  #include <linux/if_link.h>
-> +#include <network_helpers.h>
-> +#include <net/if.h>
->  #include <test_progs.h>
->  
->  #include "test_xdp_devmap_helpers.skel.h"
-> @@ -17,7 +20,7 @@ static void test_xdp_with_devmap_helpers(void)
->  		.ifindex = IFINDEX_LO,
->  	};
->  	__u32 len = sizeof(info);
-> -	int err, dm_fd, map_fd;
-> +	int err, dm_fd, dm_fd_redir, map_fd;
->  	__u32 idx = 0;
->  
->  
-> @@ -25,14 +28,11 @@ static void test_xdp_with_devmap_helpers(void)
->  	if (!ASSERT_OK_PTR(skel, "test_xdp_with_devmap_helpers__open_and_load"))
->  		return;
->  
-> -	dm_fd = bpf_program__fd(skel->progs.xdp_redir_prog);
-> -	err = bpf_xdp_attach(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE, NULL);
-> +	dm_fd_redir = bpf_program__fd(skel->progs.xdp_redir_prog);
-> +	err = bpf_xdp_attach(IFINDEX_LO, dm_fd_redir, XDP_FLAGS_SKB_MODE, NULL);
->  	if (!ASSERT_OK(err, "Generic attach of program with 8-byte devmap"))
->  		goto out_close;
->  
-> -	err = bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
-> -	ASSERT_OK(err, "XDP program detach");
-> -
->  	dm_fd = bpf_program__fd(skel->progs.xdp_dummy_dm);
->  	map_fd = bpf_map__fd(skel->maps.dm_ports);
->  	err = bpf_prog_get_info_by_fd(dm_fd, &info, &len);
-> @@ -47,6 +47,23 @@ static void test_xdp_with_devmap_helpers(void)
->  	ASSERT_OK(err, "Read devmap entry");
->  	ASSERT_EQ(info.id, val.bpf_prog.id, "Match program id to devmap entry prog_id");
->  
-> +	/* send a packet to trigger any potential bugs in there */
-> +	char data[10] = {};
-> +	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-> +			    .data_in = &data,
-> +			    .data_size_in = 10,
-> +			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
-> +			    .repeat = 1,
-> +		);
-> +	err = bpf_prog_test_run_opts(dm_fd_redir, &opts);
-> +	ASSERT_OK(err, "XDP test run");
-> +
-> +	/* wait for the packets to be flushed */
-> +	kern_sync_rcu();
-> +
-> +	err = bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
-> +	ASSERT_OK(err, "XDP program detach");
-> +
->  	/* can not attach BPF_XDP_DEVMAP program to a device */
->  	err = bpf_xdp_attach(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE, NULL);
->  	if (!ASSERT_NEQ(err, 0, "Attach of BPF_XDP_DEVMAP program"))
-> @@ -124,6 +141,88 @@ static void test_xdp_with_devmap_frags_helpers(void)
->  	test_xdp_with_devmap_frags_helpers__destroy(skel);
->  }
->  
-> +static void test_xdp_with_devmap_helpers_veth(void)
-> +{
-> +	struct test_xdp_with_devmap_helpers *skel = NULL;
-> +	struct bpf_prog_info info = {};
-> +	struct bpf_devmap_val val = {};
-> +	struct nstoken *nstoken = NULL;
-> +	__u32 len = sizeof(info);
-> +	int err, dm_fd, dm_fd_redir, map_fd, ifindex_dst;
-> +	__u32 idx = 0;
-> +
-> +	SYS(out_close, "ip netns add testns");
-> +	nstoken = open_netns("testns");
-> +	if (!ASSERT_OK_PTR(nstoken, "setns"))
-> +		goto out_close;
-> +
-> +	SYS(out_close, "ip link add veth_src type veth peer name veth_dst");
-> +	SYS(out_close, "ip link set dev veth_src up");
-> +	SYS(out_close, "ip link set dev veth_dst up");
-> +
-> +	val.ifindex = if_nametoindex("veth_src");
-> +	ifindex_dst = if_nametoindex("veth_dst");
-> +	if (!ASSERT_NEQ(val.ifindex, 0, "val.ifindex") ||
-> +	    !ASSERT_NEQ(ifindex_dst, 0, "ifindex_dst"))
-> +		goto out_close;
-> +
-> +	skel = test_xdp_with_devmap_helpers__open_and_load();
-> +	if (!ASSERT_OK_PTR(skel, "test_xdp_with_devmap_helpers__open_and_load"))
-> +		return;
+My understanding was that the purpose of the existing design
+is to allow applications to ask for a high address without having
+to resort to the complexity of MAP_FIXED.
 
-This should be 'goto out_close'.
+In particular, I'm sure there is precedent for applications that
+want both tagged pointers (for most mappings) and untagged pointers
+(for large mappings). With a per-mm_struct or per-task_struct
+setting you can't do that.
 
--Toke
+> Various architectures handle the hint address differently, but it
+> appears that the only case across any architecture where an address
+> above 47 bits will be returned is if the application had a hint address
+> with a value greater than 47 bits and was using the MAP_FIXED flag.
+> MAP_FIXED bypasses all other checks so I was assuming that it would be
+> logical for MAP_FIXED to bypass this as well. If MAP_FIXED is not set,
+> then the intent is for no hint address to cause a value greater than 47
+> bits to be returned.
 
+I don't think the MAP_FIXED case is that interesting here because
+it has to work in both fixed and non-fixed mappings.
+
+>> This would be more consistent vs. other arches.
+>
+> Yes riscv is an outlier here. The reason I am pushing for something like
+> a flag to restrict the address space rather than setting it to be the
+> default is it seems like if applications are relying on upper bits to be
+> free, then they should be explicitly asking the kernel to keep them free
+> rather than assuming them to be free.
+
+Let's see what the other architectures do and then come up with
+a way that fixes the pointer tagging case first on those that are
+broken. We can see if there needs to be an extra flag after that.
+Here is what I found:
+
+- x86_64 uses DEFAULT_MAP_WINDOW of BIT(47), uses a 57 bit
+  address space when an addr hint is passed.
+- arm64 uses DEFAULT_MAP_WINDOW of BIT(47) or BIT(48), returns
+  higher 52-bit addresses when either a hint is passed or
+  CONFIG_EXPERT and CONFIG_ARM64_FORCE_52BIT is set (this
+  is a debugging option)
+- ppc64 uses a DEFAULT_MAP_WINDOW of BIT(47) or BIT(48),
+  returns 52 bit address when an addr hint is passed
+- riscv uses a DEFAULT_MAP_WINDOW of BIT(47) but only uses
+  it for allocating the stack below, ignoring it for normal
+  mappings
+- s390 has no DEFAULT_MAP_WINDOW but tried to allocate in
+  the current number of pgtable levels and only upgrades to
+  the next level (31, 42, 53, 64 bits) if a hint is passed or
+  the current level is exhausted.
+- loongarch64 has no DEFAULT_MAP_WINDOW, and a default VA
+  space of 47 bits (16K pages, 3 levels), but can support
+  a 55 bit space (64K pages, 3 levels).
+- sparc has no DEFAULT_MAP_WINDOW and up to 52 bit VA space.
+  It may allocate both positive and negative addresses in
+  there. (?)
+- mips64, parisc64 and alpha have no DEFAULT_MAP_WINDOW and
+  at most 48, 41 or 39 address bits, respectively.
+
+I would suggest these changes:
+
+- make riscv enforce DEFAULT_MAP_WINDOW like x86_64, arm64
+   and ppc64, leave it at 47
+
+- add DEFAULT_MAP_WINDOW on loongarch64 (47/48 bits
+  based on page size), sparc (48 bits) and s390 (unsure if
+  42, 53, 47 or 48 bits)
+
+- leave the rest unchanged.
+
+       Arnd
 
