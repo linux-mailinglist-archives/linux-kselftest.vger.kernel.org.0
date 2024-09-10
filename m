@@ -1,111 +1,140 @@
-Return-Path: <linux-kselftest+bounces-17565-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17566-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E3299726EA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 04:05:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F9329727C4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 06:01:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A9521C228AA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 02:05:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98BF728569C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 04:01:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BDD81422CA;
-	Tue, 10 Sep 2024 02:05:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dtXDOkDr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4BC81514DA;
+	Tue, 10 Sep 2024 04:01:04 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DB221804F;
-	Tue, 10 Sep 2024 02:05:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D440C14EC64;
+	Tue, 10 Sep 2024 04:01:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725933939; cv=none; b=eU+jwSTOAX2Bi3xEU+zXvlk1dQAEerx3o9gRJofPtC9LRGjHjlmOOJATLwzi0RGW7FvgVk+OE2A/M4TFlm+fo5fHvFFaernAv8MqlF7MP01wTsv6fF/E9OseDxits+I+P9EGuBtbKNsl/JCabuD1fW/vnNEkJaJ5W3Hrgk/q8kk=
+	t=1725940864; cv=none; b=YIOBW72vWAQEN2F180P2WmWC47S3D8gLHc8fd/rnQRCQN64JC4VcvxGv9paTwPIB2CTKKbRLPqT2z4XGwvdg1zV7kuTXvgSz5onunGc3wvQw9y0Q0Eop4ZMg2ZdpUMeJlh/xuoJjLUGRxmdDCoClXNylfGEaE//fOhpJdfiBxhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725933939; c=relaxed/simple;
-	bh=dYb9IcUg68I7MWLN85WuKlqFZWT/n2b1zWgUXnGNwiA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RMY4A5DRcVRmzvOu/MdCT+IR0ZPNQ8Nff7NJCBZlknITAne361bstHgi1muZt6Sk0PW9ctnVES7I85TPh4fpNaMSTyyKjM9fwBHXUv9quove/GID9isI6GyrW6WJrXd23c/9AhhVIdslRf7r20/BKJtyDtQKPnu5kgAsVrNkiDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dtXDOkDr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6B71C4CEC6;
-	Tue, 10 Sep 2024 02:05:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725933938;
-	bh=dYb9IcUg68I7MWLN85WuKlqFZWT/n2b1zWgUXnGNwiA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=dtXDOkDrpc7TH9tMpJARjQom+m7/Q5mrWmDooMGHgVG2J725H3Zh0S1kGxK0MUNeV
-	 DCUFZld+P55IPiBxXO2iKAeDMYdIp74rQfnzFuKYm0DIXnrguAGoPtmxDH6zvfxtw0
-	 XJwiS1IA2N7WeP7d6Skj1Qm1y5jm979/Cfupfy2KvA1vPwdEQ0J2GNst4f5JHlM37w
-	 ePESO8mp4tj9LDqAcWvJs8XizjEdrs7fl2chB/wDM1OTrSSxGxPFzZdH1/oNMXr78f
-	 Yd0SZCptMXgo3Nq/CtDC1gi1eM7Es1G0/dObRwE1Q8bNgBDwbDNGbUNbFPi1Wp7Zhs
-	 TrTCAN996cwKQ==
-Date: Mon, 9 Sep 2024 19:05:35 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-arch@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org, Donald Hunter <donald.hunter@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet
- <corbet@lwn.net>, Richard Henderson <richard.henderson@linaro.org>, Ivan
- Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>,
- Andreas Larsson <andreas@gaisler.com>, Jesper Dangaard Brouer
- <hawk@kernel.org>, Ilias Apalodimas <ilias.apalodimas@linaro.org>, Steven
- Rostedt <rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnd Bergmann
- <arnd@arndb.de>, Steffen Klassert <steffen.klassert@secunet.com>, Herbert
- Xu <herbert@gondor.apana.org.au>, David Ahern <dsahern@kernel.org>, Willem
- de Bruijn <willemdebruijn.kernel@gmail.com>, "=?UTF-8?B?QmrDtnJuIFTDtnBl?=
- =?UTF-8?B?bA==?=" <bjorn@kernel.org>, Magnus Karlsson
- <magnus.karlsson@intel.com>, Maciej Fijalkowski
- <maciej.fijalkowski@intel.com>, Jonathan Lemon <jonathan.lemon@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Daniel
- Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>,
- Sumit Semwal <sumit.semwal@linaro.org>, "Christian =?UTF-8?B?S8O2bmln?="
- <christian.koenig@amd.com>, Pavel Begunkov <asml.silence@gmail.com>, David
- Wei <dw@davidwei.uk>, Jason Gunthorpe <jgg@ziepe.ca>, Yunsheng Lin
- <linyunsheng@huawei.com>, Shailend Chand <shailend@google.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeel.butt@linux.dev>,
- Jeroen de Borst <jeroendb@google.com>, Praveen Kaligineedi
- <pkaligineedi@google.com>, Bagas Sanjaya <bagasdotme@gmail.com>, Christoph
- Hellwig <hch@infradead.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- Taehee Yoo <ap420073@gmail.com>, Willem de Bruijn <willemb@google.com>,
- Kaiyuan Zhang <kaiyuanz@google.com>
-Subject: Re: [PATCH net-next v25 10/13] net: add SO_DEVMEM_DONTNEED
- setsockopt to release RX frags
-Message-ID: <20240909190535.01611ae1@kernel.org>
-In-Reply-To: <20240909054318.1809580-11-almasrymina@google.com>
-References: <20240909054318.1809580-1-almasrymina@google.com>
-	<20240909054318.1809580-11-almasrymina@google.com>
+	s=arc-20240116; t=1725940864; c=relaxed/simple;
+	bh=z+KSQy+Jyde9Pg4JmjRwplgN8RLOa40KJ91ZBR9RNrk=;
+	h=Subject:To:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=iAqOs8KPJVj4V5mNevuOw+eoh/FeHpCIgUbEp9Cm72mXDBqD0nHwYNvdsIGOmk2+OrbFJyGzcZumkmvsr49dQ40imVNAT9ZZ2lrIAL2YPf24H+l/7IO6CXh8Wkb55Sweoy9ZUuCCmYRttUIujVvAc8b8AAP90TFzf/xKf/s7wDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.105])
+	by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4X2qkG11brz69RR;
+	Tue, 10 Sep 2024 12:00:54 +0800 (CST)
+Received: from dggpemf100006.china.huawei.com (unknown [7.185.36.228])
+	by mail.maildlp.com (Postfix) with ESMTPS id E89C714037E;
+	Tue, 10 Sep 2024 12:00:58 +0800 (CST)
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemf100006.china.huawei.com (7.185.36.228) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Tue, 10 Sep 2024 12:00:58 +0800
+Subject: Re: [PATCH 3/3] debugobjects: Use hlist_cut_number() to optimize
+ performance and improve readability
+To: Thomas Gleixner <tglx@linutronix.de>, Andrew Morton
+	<akpm@linux-foundation.org>, <linux-kernel@vger.kernel.org>, David Gow
+	<davidgow@google.com>, <linux-kselftest@vger.kernel.org>,
+	<kunit-dev@googlegroups.com>
+References: <20240904134152.2141-1-thunder.leizhen@huawei.com>
+ <20240904134152.2141-4-thunder.leizhen@huawei.com> <87jzfkbrgf.ffs@tglx>
+From: "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+Message-ID: <5333927d-3f21-b7cc-8c57-6e21f1b4a3e5@huawei.com>
+Date: Tue, 10 Sep 2024 12:00:57 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <87jzfkbrgf.ffs@tglx>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemf100006.china.huawei.com (7.185.36.228)
 
-On Mon,  9 Sep 2024 05:43:15 +0000 Mina Almasry wrote:
-> --- a/include/uapi/linux/uio.h
-> +++ b/include/uapi/linux/uio.h
-> @@ -33,6 +33,10 @@ struct dmabuf_cmsg {
->  				 */
->  };
->  
-> +struct dmabuf_token {
-> +	__u32 token_start;
-> +	__u32 token_count;
-> +};
->  /*
 
-nit: missing new line
+
+On 2024/9/10 2:41, Thomas Gleixner wrote:
+> On Wed, Sep 04 2024 at 21:41, Zhen Lei wrote:
+> 
+>> Currently, there are multiple instances where several nodes are extracted
+>> from one list and added to another list. One by one extraction, and then
+>> one by one splicing, not only low efficiency, readability is also poor.
+>> The work can be done well with hlist_cut_number() and hlist_splice_init(),
+>> which move the entire sublist at once.
+>>
+>> When the number of nodes expected to be moved is less than or equal to 0,
+>> or the source list is empty, hlist_cut_number() safely returns 0. The
+>> splicing is performed only when the return value of hlist_cut_number() is
+>> greater than 0.
+>>
+>> For two calls to hlist_cut_number() in __free_object(), the result is
+>> obviously positive, the check of the return value is omitted.
+> 
+> Sure but hlist_cut_number() suffers from the same problem as the current
+> code. If is a massive cache line chase as you actually have to walk the
+> list to figure out where to cut it off.
+> 
+> All related functions have this problem and all of this code is very
+> strict about boundaries. Instead of accurately doing the refill, purge
+> etc. we should look into proper batch mode mechanisms. Let me think
+> about it.
+
+It may be helpful to add several arrays to record the first node of each batch
+in each free list. Take 'percpu_pool' as an example:
+
+struct debug_percpu_free {
+	struct hlist_head	free_objs;
+	int			obj_free;
++	int			batch_idx;
++	struct hlist_node	*batch_first[4]; // ODEBUG_POOL_PERCPU_SIZE / ODEBUG_BATCH_SIZE
+};
+
+A new free node is added to the header of the list, and the batch is cut from the tail
+of the list.
+  NodeA<-->...<-->NodeB<-->...<-->NodeC<-->NodeD<--> free_objs
+    |---one batch---|---one batch---|
+                    |               |
+        batch_first[0]  batch_first[1]
+
+__free_object():
+	//add obj into percpu_pool
+	obj_free++;
+	if (obj_free % ODEBUG_BATCH_SIZE == 0) {
+		idx = 0x3 & (batch_idx + (obj_free / ODEBUG_BATCH_SIZE) - 1);
+		//update batch_first[idx]
+	}
+
+	if (obj_free >= ODEBUG_POOL_PERCPU_SIZE) {
+		//move one batch
+		//cut batch at 'batch_idx' into obj_to_free (or obj_pool, if less than debug_objects_pool_min_level)
+		batch_idx++;
+		obj_free -= ODEBUG_BATCH_SIZE
+	}
+
+> 
+> Thanks,
+> 
+>         tglx
+> 
+> 
+> .
+> 
+
+-- 
+Regards,
+  Zhen Lei
 
