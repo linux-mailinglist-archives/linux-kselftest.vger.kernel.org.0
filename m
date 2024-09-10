@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-17696-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17697-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B5299746EB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 01:56:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7564F9746EC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 01:56:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2562F1F23261
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 23:56:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7E8C1C25C22
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Sep 2024 23:56:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09C2B1C2DD8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3217D1C32E1;
 	Tue, 10 Sep 2024 23:45:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lWdp0suZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XCVC0DPY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2410D1C2456
-	for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 23:45:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74F441C2DBE
+	for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 23:45:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726011933; cv=none; b=V/AqT+/RyiaL0En5qaAOeRn5yLBGIsRxQuXi45MpvZoJ248dBD9cMr3keQ+dNISBvemx7c3JmXdbKqt5fT7AqvNGKUM5nqlYrvLKiKc/gt/TxOvO+wqux+ha7ZxANgZcW56znclIqe500orcvNk9e/WzrbrwQWUiwtDDBRlazC0=
+	t=1726011934; cv=none; b=ZRSP+J8etil3SGxvbWCxluD9VOK7TMv3fi+n4O+1efteY+uxFaq+Uo30wtNTa5b644SjSAagl32hh5bSAXmj7CnFGu551GUDKcHPVVcooNg7Ii71dLtLXJbM4fQ7BAs9uonqnrC0qh+5naQZKLKCORrraK2ac15AtdD+2sBwvqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726011933; c=relaxed/simple;
-	bh=G5DVY9O/BmZ1THKu+vEQ50mgiE7dZQUwvb/YLif0DiY=;
+	s=arc-20240116; t=1726011934; c=relaxed/simple;
+	bh=iM0jj8S3VKYKj12HU0Sug/HTfaVLGaHYStfmhvHzgm0=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qwkHtxg5SNMfMJ0p6JmN24NiigS7O2htSoQnRQn5pf1Q2NTWWsvFlXtGZGTVJWl1dgyApBQXHHpi4ikVPK+8k0LHNFvhvKdvnFGj3J91MQpAuiJ4e3HmrSS69pgefQuOYPoBk0LyDFJyMCJtpF9VwlO9Cr4qWeWOiepZ/Bmz678=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lWdp0suZ; arc=none smtp.client-ip=209.85.219.202
+	 To:Cc:Content-Type; b=RGVqNfHDrq5oTwxYbQOUEU9tkNZrC65DDY1fF9SN4UKy9LejBqSD7ZQ507DWG+5fpt3K92wOyX6T5FBYm+EptSJJYItZvYcrEfZNGfMYp+mZ1JmRz8he76SAhUP3n6Ncj8Nc3lJvOHQMZyZ/mkaHPTSDS/PLddb7dGAHyxtDKdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XCVC0DPY; arc=none smtp.client-ip=209.85.210.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
-Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e1ceef1b984so14309240276.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 16:45:30 -0700 (PDT)
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-7179469744dso2087622b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 16:45:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1726011930; x=1726616730; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1726011932; x=1726616732; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=afFoS57EFj7PA7MrTOtXA3rUEPuyIQGDyAEgOLUqk8M=;
-        b=lWdp0suZRpXSRu4Hul5FaDqogquQ6QGqb/ToKA+AJnL6m6UpNs9Nund7+l+sLDOAUF
-         /j+ic7xQUewi9UJr/lrvFLfbRPXWeQpO2mI3KfwUKkUKPSrOV1pCDUPInXk/vg9BcMOU
-         wSDg+c4PkWQ6ZJKcb+lHdjC8JPmNV8WxtjmUwQne/eGzJWJ33kEy+oV8AQLGvdpClFPy
-         k0HwsHPW8qATH4D5C7Ki5oScr0ZwKgpUnSDu/dQTwDqjYxZkahu5g8aIej9M+s2qHvib
-         bZwE0oIOqmUuEv1HjuYTPNwWxURQu8GJo2B71KOxBIH63LDusmi/n1VR0WM2CPTsDzJ2
-         VCWA==
+        bh=AYJem9uK2cy9PiRW4XqF1AVoy187cj8pbxn6tsiytpU=;
+        b=XCVC0DPYnM33AnLjbbAdn960pEa8qXpOSY3DLkgnNQ31m5/hsUia+5fxEifie4GArS
+         Jew+A+/rskLpbRo9txVq4LtmGFcRuYKaFlxgHDtexf/2OGi2syYrAtOQl6oxrFRmcIU0
+         SwGFcqCrzSTEux8Yrf/4ePSnthLl4Hbns4DurCCaPQFjRRMT6JeEdl11rcwL5xYdsee+
+         RP62YB5I2MrCCTFiLq8TaOEfp+JqJlWi24taGtSMjYwr1nI8RF9YvdV5qbVfuOQbBqev
+         IpThbkFsCVWwlTYniRsvBcw53i7Fj+qAF8m8jmd2byDxR9aepbRPaXACEAoONf4nYGpb
+         ATqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726011930; x=1726616730;
+        d=1e100.net; s=20230601; t=1726011932; x=1726616732;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=afFoS57EFj7PA7MrTOtXA3rUEPuyIQGDyAEgOLUqk8M=;
-        b=DwXtbap9Ompri0CogCGcaaD6QLZNDFqXc35VDzFlIPk3b1WTp58ECOLMnMHNqA5LEC
-         xcaSivXwJlo5NhdpXt9CL436sg8N/T5k7VdRLAbZ4pyANl3M9B7gHSufbPKhGBVlJB2e
-         RCiifmF05OqB+1G9012+il8Tqo00woalwfW8Cal3lSt5YOV+a3CwkPeKH/f7kvskD5Na
-         UzAciMQEyHba5UzApwoyyvcz1inKRVwXSzE3uCUdECLc0mHhXNQW2xTLrmT86WXF/n8+
-         jvETDkPfzAMtPfpDVOC9mRQay3GhGOvkvZ4YOrk6Ock0vdqHKTbOQpBjuLgQuEyGL3gP
-         zHAw==
-X-Forwarded-Encrypted: i=1; AJvYcCVoZxUye3ZJlRWX7GC0HFElPik/oLX78YeSL6V2oUVogBIutrMEVbYFPvauyddfb2yXmQWEg/cyIpUUiuln+UY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx0OlxfqOE6gDo5CMXAZba62U4iDbQxCyl7G7jXB5iZD4wtNe4y
-	C1SMZr9g0/ihAhdItuNnG9CJf9IvhByYMDN1PF3Dt+9EY5nmEZFfkfm5GUo0s+ZHx5TtGz2Qsfs
-	Fdk0VF2TqegdRMVz9R5RA3g==
-X-Google-Smtp-Source: AGHT+IFM7zwKBbA2/Jy7tyIWzTxWbF+45RbnY6QrI6xQ5u7bHZg40qPkgO7/Rd+Sibot2kYeLv7TVh8XJXwwFOEoiw==
+        bh=AYJem9uK2cy9PiRW4XqF1AVoy187cj8pbxn6tsiytpU=;
+        b=hYRoZOb+iJD/QteILeJ55r1KTB7NtWGkq6mTBXnX5T2sXeR7R9KLRUYIm6lkMTsW1n
+         +G/AzYkAcwftBJYRtj66TmmD7ODrx0BTXYN6XUIds27PFW0UzYzCyJIWd0rQihP/d+3h
+         6hnAy1GlMDcyki8lpWk7qpNGUxtzJdbGXrrv/tPEpRBTxs0mYX5tjmoTF3EIaZfye045
+         eJCF84RLYUltRITUjQWayQs4Er+7js16fxNq8KT/eRfKJPY2BlSfBWX5OlVasekAPNwx
+         4lGoAgqSGu9ddkoIDtU6W7tmAech3zXRI5C/awj18KrPSwtDtc3+n99AGfwoBCkvTbzB
+         qnIA==
+X-Forwarded-Encrypted: i=1; AJvYcCWZZ3QgGD9UX/iST2FmCatO9czQhBN5Ke4HwEVYCqnyHDImqjM6+V/08HhsLqqLC42pqUd9Xiby+ESfo0nG9jc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzb471KW5dR0mhQe6r7MxGmbh7aEbr2zcnHXtcUF+Sz51rPkljI
+	E7ahZacnTI4wTJxsIlhewLkTYWpotUGpDb60LoNMZOMQQDmVauocKwSvJ12z6HKuKnoEQxAgT56
+	sKwbeIg/0j5eGlLrhgwEHpQ==
+X-Google-Smtp-Source: AGHT+IHaymwmA0a5qHgrrgMyaOagseBsBxvzMqXn3tRr1+SR9wD08VNMmkUJlj2d4F4z5ptyADsmNrcNJBVUlk0nKg==
 X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
- (user=ackerleytng job=sendgmr) by 2002:a25:ef46:0:b0:e1a:8735:8390 with SMTP
- id 3f1490d57ef6-e1d3489c673mr70623276.4.1726011929867; Tue, 10 Sep 2024
- 16:45:29 -0700 (PDT)
-Date: Tue, 10 Sep 2024 23:44:04 +0000
+ (user=ackerleytng job=sendgmr) by 2002:aa7:9390:0:b0:706:3153:978a with SMTP
+ id d2e1a72fcca58-7191722c371mr2134b3a.6.1726011931559; Tue, 10 Sep 2024
+ 16:45:31 -0700 (PDT)
+Date: Tue, 10 Sep 2024 23:44:05 +0000
 In-Reply-To: <cover.1726009989.git.ackerleytng@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,9 +74,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <cover.1726009989.git.ackerleytng@google.com>
 X-Mailer: git-send-email 2.46.0.598.g6f2099f65c-goog
-Message-ID: <19a16094c3e99d83c53931ff5f3147079d03c810.1726009989.git.ackerleytng@google.com>
-Subject: [RFC PATCH 33/39] KVM: selftests: Test guest_memfd memory sharing
- between guest and host
+Message-ID: <0ea30ee1128f7e6d033783034b6bc48dfbabb5db.1726009989.git.ackerleytng@google.com>
+Subject: [RFC PATCH 34/39] KVM: selftests: Add notes in private_mem_kvm_exits_test
+ for mmap-able guest_memfd
 From: Ackerley Tng <ackerleytng@google.com>
 To: tabba@google.com, quic_eberman@quicinc.com, roypat@amazon.co.uk, 
 	jgg@nvidia.com, peterx@redhat.com, david@redhat.com, rientjes@google.com, 
@@ -95,196 +95,43 @@ Cc: erdemaktas@google.com, vannapurve@google.com, ackerleytng@google.com,
 	linux-fsdevel@kvack.org
 Content-Type: text/plain; charset="UTF-8"
 
-Minimal test for guest_memfd to test that when memory is marked shared
-in a VM, the host can read and write to it via an mmap()ed address,
-and the guest can also read and write to it.
+Note in comments why madvise() is not needed before setting memory to
+private.
 
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-
 ---
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/guest_memfd_sharing_test.c  | 160 ++++++++++++++++++
- 2 files changed, 161 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/guest_memfd_sharing_test.c
+ .../selftests/kvm/x86_64/private_mem_kvm_exits_test.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index b3b7e83f39fc..3c1f35456bfc 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -135,6 +135,7 @@ TEST_GEN_PROGS_x86_64 += dirty_log_test
- TEST_GEN_PROGS_x86_64 += dirty_log_perf_test
- TEST_GEN_PROGS_x86_64 += guest_memfd_test
- TEST_GEN_PROGS_x86_64 += guest_memfd_hugetlb_reporting_test
-+TEST_GEN_PROGS_x86_64 += guest_memfd_sharing_test
- TEST_GEN_PROGS_x86_64 += guest_print_test
- TEST_GEN_PROGS_x86_64 += hardware_disable_test
- TEST_GEN_PROGS_x86_64 += kvm_create_max_vcpus
-diff --git a/tools/testing/selftests/kvm/guest_memfd_sharing_test.c b/tools/testing/selftests/kvm/guest_memfd_sharing_test.c
-new file mode 100644
-index 000000000000..fef5a73e5053
---- /dev/null
-+++ b/tools/testing/selftests/kvm/guest_memfd_sharing_test.c
-@@ -0,0 +1,160 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Minimal test for guest_memfd to test that when memory is marked shared in a
-+ * VM, the host can read and write to it via an mmap()ed address, and the guest
-+ * can also read and write to it.
-+ *
-+ * Copyright (c) 2024, Google LLC.
-+ */
-+#include <string.h>
-+#include <sys/mman.h>
-+#include <unistd.h>
-+
-+#include "test_util.h"
-+#include "kvm_util.h"
-+#include "ucall_common.h"
-+
-+#define GUEST_MEMFD_SHARING_TEST_SLOT 10
-+#define GUEST_MEMFD_SHARING_TEST_GPA 0x50000000ULL
-+#define GUEST_MEMFD_SHARING_TEST_GVA 0x90000000ULL
-+#define GUEST_MEMFD_SHARING_TEST_OFFSET 0
-+#define GUEST_MEMFD_SHARING_TEST_GUEST_TO_HOST_VALUE 0x11
-+#define GUEST_MEMFD_SHARING_TEST_HOST_TO_GUEST_VALUE 0x22
-+
-+static void guest_code(int page_size)
-+{
-+	char *mem;
-+	int i;
-+
-+	mem = (char *)GUEST_MEMFD_SHARING_TEST_GVA;
-+
-+	for (i = 0; i < page_size; ++i) {
-+		GUEST_ASSERT_EQ(mem[i], GUEST_MEMFD_SHARING_TEST_HOST_TO_GUEST_VALUE);
-+	}
-+
-+	memset(mem, GUEST_MEMFD_SHARING_TEST_GUEST_TO_HOST_VALUE, page_size);
-+
-+	GUEST_DONE();
-+}
-+
-+int run_test(struct kvm_vcpu *vcpu, void *hva, int page_size)
-+{
-+	struct ucall uc;
-+	uint64_t uc_cmd;
-+
-+	memset(hva, GUEST_MEMFD_SHARING_TEST_HOST_TO_GUEST_VALUE, page_size);
-+	vcpu_args_set(vcpu, 1, page_size);
-+
-+	/* Reset vCPU to guest_code every time run_test is called. */
-+	vcpu_arch_set_entry_point(vcpu, guest_code);
-+
-+	vcpu_run(vcpu);
-+	uc_cmd = get_ucall(vcpu, &uc);
-+
-+	if (uc_cmd == UCALL_ABORT) {
-+		REPORT_GUEST_ASSERT(uc);
-+		return 1;
-+	} else if (uc_cmd == UCALL_DONE) {
-+		char *mem;
-+		int i;
-+
-+		mem = hva;
-+		for (i = 0; i < page_size; ++i)
-+			TEST_ASSERT_EQ(mem[i], GUEST_MEMFD_SHARING_TEST_GUEST_TO_HOST_VALUE);
-+
-+		return 0;
-+	} else {
-+		TEST_FAIL("Unknown ucall 0x%lx.", uc.cmd);
-+		return 1;
-+	}
-+}
-+
-+void *add_memslot(struct kvm_vm *vm, int guest_memfd, size_t page_size,
-+		  bool back_shared_memory_with_guest_memfd)
-+{
-+	void *mem;
-+
-+	if (back_shared_memory_with_guest_memfd) {
-+		mem = mmap(NULL, page_size, PROT_READ | PROT_WRITE, MAP_SHARED,
-+			   guest_memfd, GUEST_MEMFD_SHARING_TEST_OFFSET);
-+	} else {
-+		mem = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
-+			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	}
-+	TEST_ASSERT(mem != MAP_FAILED, "mmap should return valid address");
-+
+diff --git a/tools/testing/selftests/kvm/x86_64/private_mem_kvm_exits_test.c b/tools/testing/selftests/kvm/x86_64/private_mem_kvm_exits_test.c
+index 13e72fcec8dd..f8bcfc897f6a 100644
+--- a/tools/testing/selftests/kvm/x86_64/private_mem_kvm_exits_test.c
++++ b/tools/testing/selftests/kvm/x86_64/private_mem_kvm_exits_test.c
+@@ -62,7 +62,11 @@ static void test_private_access_memslot_deleted(void)
+ 
+ 	virt_map(vm, EXITS_TEST_GVA, EXITS_TEST_GPA, EXITS_TEST_NPAGES);
+ 
+-	/* Request to access page privately */
 +	/*
-+	 * Setting up this memslot with a KVM_X86_SW_PROTECTED_VM marks all
-+	 * offsets in the file as shared.
++	 * Request to access page privately. madvise(MADV_DONTNEED) not required
++	 * since memory was never mmap()-ed from guest_memfd. Anonymous memory
++	 * was used instead for this memslot's userspace_addr.
 +	 */
-+	vm_set_user_memory_region2(vm, GUEST_MEMFD_SHARING_TEST_SLOT,
-+				   KVM_MEM_GUEST_MEMFD,
-+				   GUEST_MEMFD_SHARING_TEST_GPA, page_size, mem,
-+				   guest_memfd, GUEST_MEMFD_SHARING_TEST_OFFSET);
-+
-+	return mem;
-+}
-+
-+void test_sharing(bool back_shared_memory_with_guest_memfd)
-+{
-+	const struct vm_shape shape = {
-+		.mode = VM_MODE_DEFAULT,
-+		.type = KVM_X86_SW_PROTECTED_VM,
-+	};
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	size_t page_size;
-+	int guest_memfd;
-+	void *mem;
-+
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM));
-+
-+	vm = vm_create_shape_with_one_vcpu(shape, &vcpu, &guest_code);
-+
-+	page_size = getpagesize();
-+
-+	guest_memfd = vm_create_guest_memfd(vm, page_size, 0);
-+
-+	mem = add_memslot(vm, guest_memfd, page_size, back_shared_memory_with_guest_memfd);
-+
-+	virt_map(vm, GUEST_MEMFD_SHARING_TEST_GVA, GUEST_MEMFD_SHARING_TEST_GPA, 1);
-+
-+	run_test(vcpu, mem, page_size);
-+
-+	/* Toggle private flag of memory attributes and run the test again. */
-+	if (back_shared_memory_with_guest_memfd) {
-+		/*
-+		 * Use MADV_REMOVE to release the backing guest_memfd memory
-+		 * back to the system before it is used again. Test that this is
-+		 * only necessary when guest_memfd is used to back shared
-+		 * memory.
-+		 */
-+		madvise(mem, page_size, MADV_REMOVE);
-+	}
-+	vm_mem_set_private(vm, GUEST_MEMFD_SHARING_TEST_GPA, page_size);
-+	vm_mem_set_shared(vm, GUEST_MEMFD_SHARING_TEST_GPA, page_size);
-+
-+	run_test(vcpu, mem, page_size);
-+
-+	kvm_vm_free(vm);
-+	munmap(mem, page_size);
-+	close(guest_memfd);
-+}
-+
-+int main(int argc, char *argv[])
-+{
+ 	vm_mem_set_private(vm, EXITS_TEST_GPA, EXITS_TEST_SIZE);
+ 
+ 	pthread_create(&vm_thread, NULL,
+@@ -98,7 +102,10 @@ static void test_private_access_memslot_not_private(void)
+ 
+ 	virt_map(vm, EXITS_TEST_GVA, EXITS_TEST_GPA, EXITS_TEST_NPAGES);
+ 
+-	/* Request to access page privately */
 +	/*
-+	 * Confidence check that when guest_memfd is associated with a memslot
-+	 * but only anonymous memory is used to back shared memory, sharing
-+	 * memory between guest and host works as expected.
++	 * Request to access page privately. madvise(MADV_DONTNEED) not required
++	 * since the affected memslot doesn't use guest_memfd.
 +	 */
-+	test_sharing(false);
-+
-+	/*
-+	 * Memory sharing should work as expected when shared memory is backed
-+	 * with guest_memfd.
-+	 */
-+	test_sharing(true);
-+
-+	return 0;
-+}
+ 	vm_mem_set_private(vm, EXITS_TEST_GPA, EXITS_TEST_SIZE);
+ 
+ 	exit_reason = run_vcpu_get_exit_reason(vcpu);
 -- 
 2.46.0.598.g6f2099f65c-goog
 
