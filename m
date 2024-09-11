@@ -1,218 +1,215 @@
-Return-Path: <linux-kselftest+bounces-17765-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17766-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABE00975B4B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 22:05:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAD74975BAA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 22:22:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFEBC1C22032
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 20:05:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60102B216E1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 20:21:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C8FC1BA888;
-	Wed, 11 Sep 2024 20:05:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CADA1B9B2A;
+	Wed, 11 Sep 2024 20:21:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OFOCcCin"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="BsIM42Ad"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2088.outbound.protection.outlook.com [40.107.94.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 730771AAE36;
-	Wed, 11 Sep 2024 20:05:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726085102; cv=none; b=YWDRqNn5vIgMX3A+E7EMpDBlmup/fV6eSRU38sbOsWmHgXFYYLqSAE1+mP6XurQtbwrbbJibiRR64aY2lBffwpA4ty5bAmxCxjpNuWeLxvXwBcvFk4iKI2IzFn3kT3aFngiRJpcWbPNEEFV3FkusXG1afY7HzATh4wthXBQgWp0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726085102; c=relaxed/simple;
-	bh=+RKzc2227YK8HpzMmoaEbZX2UCXhKfHS9oPbhFn387I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iG0wsLdngnnZkKeXhUmki2PkbQzORGMTrDHJ3/bI/UNCxQtDcX44sTIJXIq99sbSm+S3C8jU/k90i8fV0Ir0HW6Q8HIBz52fRwaIQw2JAQNo/OST/3FP6SvsIyBcrsXjFDEV5rAsmzIFx8Z57DzOlv8aO6JNLBLw5pSCHyxVjlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OFOCcCin; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2d8815ef6d2so170701a91.0;
-        Wed, 11 Sep 2024 13:05:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726085101; x=1726689901; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5HEifgh7lO30ykLB8+EPAKbZ09PSzoXeqqGkShV/NcU=;
-        b=OFOCcCinQ53TCP2+IGaWt7dtlf6RuM66Y3xlSmYV1XsYoQb8Gocr0keUXkScTB72iN
-         m91sCBLOr30ZIhHZjxy31XjcoeZ2cVia2yucxi43yKGuzNPCBI8cUb+NOwoQg2iBpEoA
-         yF/BUKVSbJqsRDjva/Kfbc2V+j3k1mATFJOgbeNST5K3tZUm+XwPZgh15tPXur5MVKYw
-         Hb2kfHE0z6qOodixt7YEJs02jGeUMgVomzo1UgKujUmtGejdxn7QDvIvEimBLn6L1z2j
-         HKz1WExoJVkX8VJPzvOsOCHUSTi1omnN3ut36GcCaK+R94nJaPTfiChfCNI4fj87//bA
-         dbMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726085101; x=1726689901;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5HEifgh7lO30ykLB8+EPAKbZ09PSzoXeqqGkShV/NcU=;
-        b=h5RgZAlXg18ZhQGoJEhQYv8O9hSn6hvNQL6UVdv5odn+QXbs7+3+smcVMunj0ST0Ft
-         oI3T9/jtsbkiOCHG/1+2D4T027Kv8eaQlzTWS9epaH0ARHlB0K5drGTR/ouExAsZqXHt
-         0cGUD3vaTOy1abT7r4U31YL9oBnqFHFWcOBAOnmCYsBTSHEN5yrt+tauRhYacxj8e5JE
-         5yCzNU0rPVcH6QFJ9gRDJ4E/TeEYSEau8oSXPfF4+bMrG0SHOOsGtGQN3NITfJhf+Zlw
-         JLuPvulG1DIc6B1wc0A+8jDXcsLichqg9xViJAcM3e+CF0t9/TRmUhxaLX9ewlchvht+
-         iW3g==
-X-Forwarded-Encrypted: i=1; AJvYcCUTGjazNLEuO71Gkju5I31a/G4FTcUqKAbIEusjOa+2/+/3rloOrgaQxhbd8+wl1SVXS7w=@vger.kernel.org, AJvYcCW03Kg5+lRFO9Vxg4CewurSarZocShNp1sZXCcAKOqpZIhQTLKzC3IIZQkOtdM8Fi3t8zA+VtbGeCvqIpDjXEDK@vger.kernel.org, AJvYcCWoTNbPH7ihtzwWqw2etM/NyNj08Jtokoct6kEOssitg6frZeo4MtlVxS1JSNEXzu2Zqiu3x4tbF7a/qcPh@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1K4WCh+tU494c4BoiaxyZm0QAEagT/hHC18fPGefDOJH1Nxj8
-	Omw6NhTW2hOk2aGdkgKn4BFv1EOcSvLY/r4oP6oBmeIUMnwy+3jKolEeZqQzJbivGMm6EeEErOn
-	1l7Ur9zK5XSIN8EeU/d6hkUcGZT0=
-X-Google-Smtp-Source: AGHT+IFPzQgkNNKK9G8tW9yHM57ahCskoQwHFFH2CQDDGlk2l21Xr2IT2bYKAshUPMIKO0pZJoKIOawv48/bFC/NLRA=
-X-Received: by 2002:a17:90a:1589:b0:2d8:8d34:5b8 with SMTP id
- 98e67ed59e1d1-2db9ffcaac0mr468837a91.10.1726085100564; Wed, 11 Sep 2024
- 13:05:00 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19C7A7E583;
+	Wed, 11 Sep 2024 20:21:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.88
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726086114; cv=fail; b=mbq/S3JNXz2JAAWjGLpMVvjcZeCVvn2jrzJDZKX1/FwZ15eRlKc6DVwKHpxm8BUoZhUkcpzZD/jp56XDmTiz2SxBW9E9ZZWas5yA3wBbfac5d85ViWnMZnf6C+yaqq2svjTBSj44Y/0rJS7tkhQTDyiufXGvqK2+4J7kHOMzdEg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726086114; c=relaxed/simple;
+	bh=gt7p/hzAGhEvB/M87l1La9p1opQQapeuyJVhAzEs/O4=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pLFwxQcntbu/jUcLPWNFPdMB4gb+KR3UCkY6MS/0iqppTNueNQmt/dioi2NhDujQBKdZisPsyDqPGHwCkGairrkFwmamzwHsH8aMIpXeJT/1bQ4RL1MRMmbV62VQL9SVEReHjDelUV0DU3vNR3NT5kfJIXHdRAhn+W7TiIITrEk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=BsIM42Ad; arc=fail smtp.client-ip=40.107.94.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Rike6NhGJEVa2Dulyg8El09OsR+0g4qsnWbxNj8lyOJ8hnzuzrvEo4zuiQd4gTsTjf6xujdBQlYZy2VtjXdRyWHnNcNpSseTBtARLULFaD6J4qVKi43BMkVCG2gs9KEdg/KaWxPIazMLAgOTWRUv8z1Ztv+7O94CEZF51D1b6H1VoSTxM2thNtgWjNDtyP9u416K84GrOGsetgxoKZ7AAVQd9wMx/qjSagqzjgs7hrTqsZaM9f8/1z6wpet+Oc7KEA/YPa2BaVGEDovxoxmoBhEGogSfGPhpfczf2mTGQi2Bi6/FkNtcSx1IK5i92rBrqp4vnLAadpwGN6qzuzzz1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=CarA0ZSskDj8r8nqkYUKiQEQi0qEd3Fjm9kDUbFnTyo=;
+ b=B47qXI8CZxbeTRVWAPYqDER1gIME/TW+U7/5HuT8GxlgFDoNoR/sD8YNPRxels7NDDsfrIGYPrSCaJtWqawde++eshIM2Sq1iPZjbR2kiZiR6oJsQlzPq4xMZPbVjVYb9uKIC5Ui+buJiYp3Wrql//njToN6hDz7PKWpNqty9WI2JPv1YTH2oiWxzt/A/SWlm5ea1JXEuAqYvnsONNb8mEFRmYCcM/9/zYzz9owk8TttpAs4jgQbAi6IDrMoyyCEl//7NnUIvxABwB4kOLXy6XuzxdrnSf3w2d8au+91mVQeSrtdes2skdA2YP9SCVb3UtloXISq/2vvHomPtYjg9Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=CarA0ZSskDj8r8nqkYUKiQEQi0qEd3Fjm9kDUbFnTyo=;
+ b=BsIM42AdoQwNPsIs0dqU1VMaOFk7uAOSlJuE+nZDyAWfL3dmdyvriqWF5ZhIZFrRR6RB/2+eWxILDRhEeGZlkN3mYW4r8SNeM1mIZqZAvVf7oz0vWW283HZO5D0mgMZTAIsydKsKpqaUFmT1jhu/fxxIi9Fu8Nrl1PG7v9xSXAzshRlcQ7s8hj5/CxESsIFPglb973ZERqRNAslsLxwcgc9TwECQ94GqALzAlXyMnQyCiOcw0WXqW0zwTGOYGVSqLe0aC0HY66yCdgYFNa4CVQXVXKKkIk5+sOoRSRbuIK+vL90LbhCmNDkYG0vGoD3k5DNnjBknRzWb9YsNJSWwfA==
+Received: from PH7P223CA0001.NAMP223.PROD.OUTLOOK.COM (2603:10b6:510:338::22)
+ by PH7PR12MB9255.namprd12.prod.outlook.com (2603:10b6:510:30c::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.18; Wed, 11 Sep
+ 2024 20:21:49 +0000
+Received: from CY4PEPF0000EE33.namprd05.prod.outlook.com
+ (2603:10b6:510:338:cafe::55) by PH7P223CA0001.outlook.office365.com
+ (2603:10b6:510:338::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.26 via Frontend
+ Transport; Wed, 11 Sep 2024 20:21:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CY4PEPF0000EE33.mail.protection.outlook.com (10.167.242.39) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7918.13 via Frontend Transport; Wed, 11 Sep 2024 20:21:49 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 11 Sep
+ 2024 13:21:27 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 11 Sep
+ 2024 13:21:27 -0700
+Received: from nvidia.com (10.127.8.9) by mail.nvidia.com (10.129.68.7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
+ Transport; Wed, 11 Sep 2024 13:21:23 -0700
+Date: Wed, 11 Sep 2024 13:21:23 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: "Tian, Kevin" <kevin.tian@intel.com>
+CC: "jgg@nvidia.com" <jgg@nvidia.com>, "will@kernel.org" <will@kernel.org>,
+	"joro@8bytes.org" <joro@8bytes.org>, "suravee.suthikulpanit@amd.com"
+	<suravee.suthikulpanit@amd.com>, "robin.murphy@arm.com"
+	<robin.murphy@arm.com>, "dwmw2@infradead.org" <dwmw2@infradead.org>,
+	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>, "shuah@kernel.org"
+	<shuah@kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "iommu@lists.linux.dev"
+	<iommu@lists.linux.dev>, "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "eric.auger@redhat.com"
+	<eric.auger@redhat.com>, "jean-philippe@linaro.org"
+	<jean-philippe@linaro.org>, "mdf@kernel.org" <mdf@kernel.org>,
+	"mshavit@google.com" <mshavit@google.com>,
+	"shameerali.kolothum.thodi@huawei.com"
+	<shameerali.kolothum.thodi@huawei.com>, "smostafa@google.com"
+	<smostafa@google.com>, "Liu, Yi L" <yi.l.liu@intel.com>
+Subject: Re: [PATCH v2 00/19] iommufd: Add VIOMMU infrastructure (Part-1)
+Message-ID: <ZuH7wwvZWT1FpHWG@nvidia.com>
+References: <cover.1724776335.git.nicolinc@nvidia.com>
+ <BL1PR11MB5271EF54689B9666360A0F188C9B2@BL1PR11MB5271.namprd11.prod.outlook.com>
+ <ZuFB06X7ZTg6ZhWT@nvidia.com>
+ <BN9PR11MB5276554A016C2A54C41C64808C9B2@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZuFJh8t62LKi3FJY@nvidia.com>
+ <BN9PR11MB52768D6E30FF5CFD66B2ABAE8C9B2@BN9PR11MB5276.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <18a9ddacc99bb95e9802f8ad1e81214433df496c.1725929645.git.dxu@dxuuu.xyz>
- <CAADnVQKyfZ2-qCvmqG8z919ggdOszEjTs04H=cTGOZTi-zhx7Q@mail.gmail.com>
- <CAEf4Bza5Fiw2rZ5T7=zRwVk1Ct1Mgm7Gpa8w+NJVPZf8keY_9Q@mail.gmail.com>
- <vru2zgphyfywjcqikolwotsfun2bgtrnfmwvfls5ra4tznsydr@46w5rq7gqepz>
- <4ec8e15b-c44b-41d7-b337-32d17306d67b@app.fastmail.com> <CAEf4BzbHqKD87KTSmFUMokXEaAa70xNs96QqfWBHjFbuE5PL=w@mail.gmail.com>
- <rsdwvah5ov3itchsgkwgleihswoycoal5vjbeql2wbqoz5noiz@myk2atnnjaub>
- <CAEf4BzbKoyja2ErsusUcK8YaS1Rqm0VmBzwsNtQtM1-XHDhD7g@mail.gmail.com> <cz7qwrujjiunv3yydkfamfm5mkis5xdy4vg4odwatchjoaoolk@zzithxrzdxkv>
-In-Reply-To: <cz7qwrujjiunv3yydkfamfm5mkis5xdy4vg4odwatchjoaoolk@zzithxrzdxkv>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 11 Sep 2024 13:04:48 -0700
-Message-ID: <CAEf4BzauDwpWQmttpk6M8_A8MLmRJp52dOw6vTYHQrD=v+AapA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] bpf: ringbuf: Support consuming
- BPF_MAP_TYPE_RINGBUF from prog
-To: Daniel Xu <dxu@dxuuu.xyz>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Alexei Starovoitov <ast@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, LKML <linux-kernel@vger.kernel.org>, 
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB52768D6E30FF5CFD66B2ABAE8C9B2@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE33:EE_|PH7PR12MB9255:EE_
+X-MS-Office365-Filtering-Correlation-Id: 09d3c61e-7eb8-4aa4-ce6f-08dcd29f5dc2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700013|7416014|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?XGn28aORv0QDw18GGNGvhTV+b77jnZ7E8ZbyVQv4o0UgoAWu4A2BxfW4hpnW?=
+ =?us-ascii?Q?WZKQ++CBV49UGIxt/WwcSVZfiyNSO5tdPphBX+B0QECANm7rzcjJIPWAXFPu?=
+ =?us-ascii?Q?gcz5X3SY+3TY10D7igw3KQudCuw938lQov7PNIf7u4hjzPnvE84ALnnlRcPr?=
+ =?us-ascii?Q?fdkqZuUnCIKLuI7FppTHndPvey1PXaJ+XQTmaXQgaeAud1GCGXVrovsOrk+L?=
+ =?us-ascii?Q?96lJEbKrZPHv0Kk0VO2XkYyGbAAHBOv214Qc1LoHtU0CZAKD1xPPaqBuQnIF?=
+ =?us-ascii?Q?dcHJ3I/pKPpV4nrkTZgfTn4KZe/tVM5aSXC1Qbp+M4Awa9VubcetjMTYP6gz?=
+ =?us-ascii?Q?bpOjG3tyZSrtJJnWr0awC4mApuiwoBWTjEc9WpWFYXsEiswecaUpZD2tbIUG?=
+ =?us-ascii?Q?9Uny0oNGL/uf5GdfAqSYwUEqVZegHyPmWaNrBjm4Ha/xsAfL8YfsDch0Mqkg?=
+ =?us-ascii?Q?dOx2Y1t+ujusghJ70RRrt7Dg2zBJAFCthrpus5jgdCUIyv65xeuIMBc6Vw+V?=
+ =?us-ascii?Q?J1cUmfxihZpQj7BgZ0qwqkt17PEjc1VwknAqdNb4hiPiKseWvRWEmlya3zV3?=
+ =?us-ascii?Q?UGpbzo3x4ABvNt2CLHoVYXMegIeTkpP2WSH+xF9az/TnHptc7HsgifUK64dr?=
+ =?us-ascii?Q?Kb4+ZelCYWRvsbUsDwFrrSA8ns/G8wk5G7bLWjsFDwLjgAAhTfoxbVq4aHxF?=
+ =?us-ascii?Q?A+w59fcjE2YVEhQOFwhIyU/TALWH4PCpKZEp1d24QRJELCuX6jIAmnGGQn+x?=
+ =?us-ascii?Q?KIHtyAOvzpzh7e7RuEKKEyn4SukG/nMAhtFVxY7Ga/uetcDCQNrFSzD5XJBW?=
+ =?us-ascii?Q?QRRQskzpCZbBqiluq6u/GaXID+SH59yiY4/v6IiknbRF8T1D1IeQLM9aGiV7?=
+ =?us-ascii?Q?cyPU4lrv9DSXw6Chrv/WNwl0dW+4TFewwLTGx6xBa3tNq0SQ5pOHnFZQCWdv?=
+ =?us-ascii?Q?kJK2Y7v804c8I4A3euTQYZDZhJ0h1brFakcoBv2lVvpuU0JumUQKEcaL6qvO?=
+ =?us-ascii?Q?eb9k3/5rgX9As1NyfleglDi74ay24XOOZhqB90qo7uS/7z4V6uSdxhq5MB4m?=
+ =?us-ascii?Q?8dmCWVFxMvbCMGEvoTzvaxqiSvUBEIWjVnxwGjUuIORy54x3yxEgui/7C4rH?=
+ =?us-ascii?Q?k09HhdKVGraHtzux4cl69LBZCU/yi39kkuuIwkY0CvKm+mmnTTKO55LvKzmF?=
+ =?us-ascii?Q?i1A0BxrHrv3UA/YRQhf1cKUiO6+IhE9QRUB+sFY4KrWunM6nMWopV1N50RaS?=
+ =?us-ascii?Q?68Qkm1Q7tTYcg7OfFxWW5olPHtFgKG40wmMvNaufktosW7tiarK2ZWvG8uN6?=
+ =?us-ascii?Q?EMPUZVdJaig1DjZQrLrXlokttN0EVZNM0YCF4s3rIYlnaTKLC7na60VThNdS?=
+ =?us-ascii?Q?4WoozaFG0y3XRI2ZVXrFHGbinOrqJN81wlATSyvZrKlUBNkleM84EsR9cpKY?=
+ =?us-ascii?Q?JJTcFc/3NNQrJ0Pu14cfPqnru4+P6VhA?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Sep 2024 20:21:49.3354
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 09d3c61e-7eb8-4aa4-ce6f-08dcd29f5dc2
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EE33.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9255
 
-On Tue, Sep 10, 2024 at 8:31=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
->
-> On Tue, Sep 10, 2024 at 05:39:55PM GMT, Andrii Nakryiko wrote:
-> > On Tue, Sep 10, 2024 at 4:44=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote=
-:
-> > >
-> > > On Tue, Sep 10, 2024 at 03:21:04PM GMT, Andrii Nakryiko wrote:
-> > > > On Tue, Sep 10, 2024 at 3:16=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> w=
-rote:
-> > > > >
-> > > > >
-> > > > >
-> > > > > On Tue, Sep 10, 2024, at 2:07 PM, Daniel Xu wrote:
-> > > > > > On Tue, Sep 10, 2024 at 01:41:41PM GMT, Andrii Nakryiko wrote:
-> > > > > >> On Tue, Sep 10, 2024 at 11:36=E2=80=AFAM Alexei Starovoitov
-> > > > > [...]
-> > > > > >
-> > > > > >>
-> > > > > >> Also, Daniel, can you please make sure that dynptr we return f=
-or each
-> > > > > >> sample is read-only? We shouldn't let consumer BPF program abi=
-lity to
-> > > > > >> corrupt ringbuf record headers (accidentally or otherwise).
-> > > > > >
-> > > > > > Sure.
-> > > > >
-> > > > > So the sample is not read-only. But I think prog is prevented fro=
-m messing
-> > > > > with header regardless.
-> > > > >
-> > > > > __bpf_user_ringbuf_peek() returns sample past the header:
-> > > > >
-> > > > >         *sample =3D (void *)((uintptr_t)rb->data +
-> > > > >                            (uintptr_t)((cons_pos + BPF_RINGBUF_HD=
-R_SZ) & rb->mask));
-> > > > >
-> > > > > dynptr is initialized with the above ptr:
-> > > > >
-> > > > >         bpf_dynptr_init(&dynptr, sample, BPF_DYNPTR_TYPE_LOCAL, 0=
-, size);
-> > > > >
-> > > > > So I don't think there's a way for the prog to access the header =
-thru the dynptr.
-> > > > >
-> > > >
-> > > > By "header" I mean 8 bytes that precede each submitted ringbuf reco=
-rd.
-> > > > That header is part of ringbuf data area. Given user space can set
-> > > > consumer_pos to arbitrary value, kernel can return arbitrary part o=
-f
-> > > > ringbuf data area, including that 8 byte header. If that data is
-> > > > writable, it's easy to screw up that header and crash another BPF
-> > > > program that reserves/submits a new record. User space can only rea=
-d
-> > > > data area for BPF ringbuf, and so we rely heavily on a tight contro=
-l
-> > > > of who can write what into those 8 bytes.
-> > >
-> > > Ah, ok. I think I understand.
-> > >
-> > > Given this and your other comments about rb->busy, what about enforci=
-ng
-> > > bpf_user_ringbuf_drain() NAND mmap? I think the use cases here are
-> > > different enough where this makes sense.
+On Wed, Sep 11, 2024 at 08:08:04AM +0000, Tian, Kevin wrote:
+> > From: Nicolin Chen <nicolinc@nvidia.com>
+> > Sent: Wednesday, September 11, 2024 3:41 PM
 > >
-> > You mean disabling user-space mmap()? TBH, I'd like to understand the
-> > use case first before we make such decisions. Maybe what you need is
-> > not really a BPF ringbuf? Can you give us a bit more details on what
-> > you are trying to achieve?
->
-> BPF cpumap, under the hood, has one MPSC ring buffer (ptr_ring) for each
-> entry in the cpumap. When a prog redirects to an entry in the cpumap,
-> the machinery queues up the xdp frame onto the destination CPU ptr_ring.
-> This can occur on any cpu, thus multi-producer. On processing side,
-> there is only the kthread created by the cpumap entry and bound to the
-> specific cpu that is consuming entries. So single consumer.
->
-> Goal is to track the latency overhead added from ptr_ring and the
-> kthread (versus softirq where is less overhead). Ideally we want p50,
-> p90, p95, p99 percentiles.
->
-> To do this, we need to track every single entry enqueue time as well as
-> dequeue time - events that occur in the tail are quite important.
->
-> Since ptr_ring is also a ring buffer, I thought it would be easy,
-> reliable, and fast to just create a "shadow" ring buffer. Every time
-> producer enqueues entries, I'd enqueue the same number of current
-> timestamp onto shadow RB. Same thing on consumer side, except dequeue
-> and calculate timestamp delta.
->
-> I was originally planning on writing my own lockless ring buffer in pure
-> BPF (b/c spinlocks cannot be used w/ tracepoints yet) but was hoping I
-> could avoid that with this patch.
+> > On Wed, Sep 11, 2024 at 07:18:10AM +0000, Tian, Kevin wrote:
+> > > > From: Nicolin Chen <nicolinc@nvidia.com>
+> > > > Sent: Wednesday, September 11, 2024 3:08 PM
+> > > >
+> > > > On Wed, Sep 11, 2024 at 06:12:21AM +0000, Tian, Kevin wrote:
+> > > > > > From: Nicolin Chen <nicolinc@nvidia.com>
+> > > > > > Sent: Wednesday, August 28, 2024 1:00 AM
+> > > > > >
+> > > > > > stage-2 IO pagetable. Each VIOMMU then just need to only allocate its
+> > > > own
+> > > > > > VMID to attach the shared stage-2 IO pagetable to the physical IOMMU:
+> > > > >
+> > > > > this reads like 'VMID' is a virtual ID allocated by vIOMMU. But from the
+> > > > > entire context it actually means the physical 'VMID' allocated on the
+> > > > > associated physical IOMMU, correct?
+> > > >
+> > > > Quoting Jason's narratives, a VMID is a "Security namespace for
+> > > > guest owned ID". The allocation, using SMMU as an example, should
+> > >
+> > > the VMID alone is not a namespace. It's one ID to tag another namespace.
+> > >
+> > > > be a part of vIOMMU instance allocation in the host SMMU driver.
+> > > > Then, this VMID will be used to mark the cache tags. So, it is
+> > > > still a software allocated ID, while HW would use it too.
+> > > >
+> > >
+> > > VMIDs are physical resource belonging to the host SMMU driver.
+> >
+> > Yes. Just the lifecycle of a VMID is controlled by a vIOMMU, i.e.
+> > the guest.
+> >
+> > > but I got your original point that it's each vIOMMU gets an unique VMID
+> > > from the host SMMU driver, not exactly that each vIOMMU maintains
+> > > its own VMID namespace. that'd be a different concept.
+> >
+> > What's a VMID namespace actually? Please educate me :)
+> >
+> 
+> I meant the 16bit VMID pool under each SMMU.
 
-TBH, I'd just do a fixed-sized array and use atomic counters to
-enqueue and consumer position to dequeue. But seems like you might get
-away without any circular buffer, based on Jesper's suggestion.
+I see. Makes sense now.
 
->
-> About disabling user-space mmap: yeah, that's what I was suggesting. I
-> think it'd be a bit odd if you wanted BPF RB to support consumption from
-> both userspace && prog at the same time. And since draining from prog is
-> new functionality (and thus the NAND isn't a regression), you could
-> relax the restriction later without issues.
-
-I probably wouldn't disable mmap-ing from user space and let the user
-handle coordination of consumers, if necessary (we could probably
-expose the "busy" field through the consumer metadata page, if it's
-not yet, to help with that a bit). This is more flexible as it allows
-to alternate who's consuming, if necessary. Consumer side can't
-compromise kernel-side producers (if we prevent writes from the
-consumer side).
-
-Still, all this feels a bit kludgy anyways. There is also unnecessary
-epoll notification, which will be happening by default unless consumer
-explicitly requests to not do notification.
-
-Anyways, if there is a better way for your task, see if that works first.
+Thanks
+Nicolin
 
