@@ -1,289 +1,121 @@
-Return-Path: <linux-kselftest+bounces-17732-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17733-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2E28974CE4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 10:42:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02C95974D7B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 10:53:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 638EC1F28B43
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 08:42:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB6C1288F45
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 08:53:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 697791714C7;
-	Wed, 11 Sep 2024 08:41:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 741BF15E5B8;
+	Wed, 11 Sep 2024 08:50:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0y/KHYd6";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="znAiGBFr"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="hd4zTXZv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 736C81547CF;
-	Wed, 11 Sep 2024 08:41:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 163AD14A60E;
+	Wed, 11 Sep 2024 08:50:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726044109; cv=none; b=hWw0JAHdCq2AosQxx2JKGUoFTrhcH4dYsjKsFyjgQGdl84DbpoaFaIaS5G7+hlxlHHjWg+D1Gv5ayk2tljB/0y52ju5AXY9i5v7eTSHU3zyGOqVAE/OMATsE4BXHJbIM7dLqHGcp/9ftDGNwAK4QZyfFQhmxrY0AjMfjI8+Rm08=
+	t=1726044626; cv=none; b=LLcNAJ5NFICxZsrRL20ryhoi9VGos9XWWyss4ioQ1ZzaUmVHzBI1hYfRKeRZpwXaaIk/pzIZ4LhG8YBMQJ5/y64wVTmWC2XEGurHv9YizA+enS9KyAyQbEg5gJ0otLOIh4VLnbEl7OYSCQzzl3BSRg4gU0LyATo3pF8Bnxsb9OY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726044109; c=relaxed/simple;
-	bh=Tx4/pT8qFSodepQPWKDasNYG6F57zRV9CLJDkS7Vo6s=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=K54PncNiJHK7Pg06ZgS3hnlABTtEAagw2c/iZRQ0Sxgx1MeijC4p4BNoJ7XYiQPpGms9bsyFmEdPNSglVFgAYP8c/17Ez7/Elzlinl3Gxv8EXjqDxm6DqbEo2YXJbe0WjgjEg9nAazF1fevoyUvHi5KwZN4LxIspcGU+eLBvA0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0y/KHYd6; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=znAiGBFr; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Florian Kauer <florian.kauer@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1726044105;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XVxu958V8507cUbid7tMca8UQrmhre2RgIlcswCFXZM=;
-	b=0y/KHYd6eL31QtaCLofVoBHCCNTZjp4GGUt2xkddH8E94D4/HNJH8f87O4v2B1lZngGo6w
-	u0gdl9tjaCRTXRsXYRnIsnBJVsmEvkaf0U/0CIakKS33UI7udBnI9wBKUK/9TBeynqrfrb
-	UGi6koDxFC+Hlj+ADqBNMmVRSTyIZuwlZup5GzAisJIW7vc43Zb99uCw5bKTkSofPb1wH2
-	tgGHD6JxlNADDqEjsu4pZHWLF+tJSKkEzLAi7cgaRr2rJJ7302eJTzcHHaR8qpcvIp3j9V
-	k48nphriOLtklBKMyevpkpaRNcLEWZvv5Ta0UbNuBVcl2aT39JyMggRiQ8UHbA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1726044105;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XVxu958V8507cUbid7tMca8UQrmhre2RgIlcswCFXZM=;
-	b=znAiGBFrvXDxMThShtSpJRsee4RLO0O1d01pXPWZfw6t9uca41sdQrnDIHtaAIOb+08jve
-	XZx7yUGDHW4e78CA==
-Date: Wed, 11 Sep 2024 10:41:19 +0200
-Subject: [PATCH net v4 2/2] bpf: selftests: send packet to devmap redirect
- XDP
+	s=arc-20240116; t=1726044626; c=relaxed/simple;
+	bh=cYK3zsplXixZE4tQdoQ+vO3XwLj4lj+3tojQaOs9ghI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KDWtFXwnDktuZmTIbqvsXVawtfizDupi8ja+Pk2wq56hvEblMH4x0dR106l34cXPqNNmnuYNsQg0XWkGnoJkjdbOYSWKsNHcRtbZdeJU+z5AMraJ+zi0N8kEl0wBYmtzJ4mPHWB7Ws8DS1u/dxv7DIL8iL0B3Iqxik5/Fmd/sak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=hd4zTXZv; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48B8EulX026104;
+	Wed, 11 Sep 2024 08:50:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
+	:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=pp1; bh=c+mglZUFoLpQvuUjGX5VPJdarz
+	CP8EYqnri0Iu0vBVc=; b=hd4zTXZv1Ok9nm3N80hKSSx4zYjaVVNTv/fX18s9Qx
+	MV8pfrTxq8kzA51NBcqBI8nouihWuk1zDIFIl4+M5HgRxW9mUWSdyEg+T89dcaBo
+	hMGpg4gHsdhRu8UOB0SmBUYB0BZpE0pOHmA4QB+qAe9BNGzIGg+r6SHYf4MBfKno
+	IDgsqe/J3Y/66P0lCR1MThErGH4HJar4VrHIDIr5VRTECgce+60u+VayaaaC0Pcz
+	+6UimrqWE1/wHo2PFIsnP2UzoKS4lOBuroCk8U1qiAI5oXQlFxNDL7Legtyl6+AU
+	9Q24UgKqFNpqh7aShtZVlFzArXI7xQKhCxKvTKPYmGQA==
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41gebachgw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Sep 2024 08:50:20 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 48B8Ebpx027308;
+	Wed, 11 Sep 2024 08:50:19 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 41h3v37yv0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Sep 2024 08:50:19 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 48B8oGIQ48955848
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 11 Sep 2024 08:50:16 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4093620043;
+	Wed, 11 Sep 2024 08:50:16 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EE06A20040;
+	Wed, 11 Sep 2024 08:50:15 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 11 Sep 2024 08:50:15 +0000 (GMT)
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Shuah Khan <shuah@kernel.org>, "Jason A . Donenfeld" <Jason@zx2c4.com>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>, Jens Remus <jremus@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: [PATCH 0/2] selftests: vDSO: s390 fixes
+Date: Wed, 11 Sep 2024 10:50:13 +0200
+Message-ID: <20240911085015.3581722-1-hca@linux.ibm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240911-devel-koalo-fix-ingress-ifindex-v4-2-5c643ae10258@linutronix.de>
-References: <20240911-devel-koalo-fix-ingress-ifindex-v4-0-5c643ae10258@linutronix.de>
-In-Reply-To: <20240911-devel-koalo-fix-ingress-ifindex-v4-0-5c643ae10258@linutronix.de>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, 
- =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>, 
- David Ahern <dsahern@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>, 
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Jesper Dangaard Brouer <brouer@redhat.com>, 
- linux-kselftest@vger.kernel.org, 
- Florian Kauer <florian.kauer@linutronix.de>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6428;
- i=florian.kauer@linutronix.de; h=from:subject:message-id;
- bh=Tx4/pT8qFSodepQPWKDasNYG6F57zRV9CLJDkS7Vo6s=;
- b=owEBbQKS/ZANAwAKATKF5IolV+EkAcsmYgBm4VfDjrVIdwzowFeCGWyOJilwgiz3LaBHH9Oe4
- km9RQ3PhV2JAjMEAAEKAB0WIQSG5cmCLvpm5t9g7UUyheSKJVfhJAUCZuFXwwAKCRAyheSKJVfh
- JPdrEADTv/J5QaUU+9btNzGizLZ03zAO5etez+MpKfSj0sXsDLYWQHkjB9ERjVOi0gEYWUrf/dw
- ohISsRRknlyCucP/VVf8yK5VmibGeeiu53b2H406nvPZ8dT8LoqW3rH5AcFFNCM7V5Ed0cEl+jc
- Di0/pwdhUBp9OYfLi4vs1v0ssPBUYIJ9CnZihd52Jo/89fl1ZPFLHljzU2Kq3W9eGE9fjniHq/9
- 5S3IgCNBn2jMk1sbx3McLEYX4f+AigCT3XNhHsdd3mVOrP6TTbV21eOihnC37mthaPFTCwIPsO9
- VrFQ9hHQhNFma400UhGSeJwKUs8QaTS5jiDxRMLw27fTnvaCqDkCOs2R6IBXZKeaoL8UuLXOcZr
- H8UYoF083e9uv2/n1aUFtqEULV0BXTvP3lDVW6gIyKJMHOzORK+pDtmO3pKmuobXrCQnSvzt6uQ
- UP9mqq8Mv06BrmW2fnvln0rlxVytx5SsIfdP7sGaOy1uguYcPtbUUY+3ZmSZaYAKNhO1Xx7sHCB
- WE2nCPAhUO9lymz4wlrtOG2Zp7PW+duXtOEJ+v45UjOODIFWc9JQt3g249ClIR41pv5pHzwsYAi
- ajpZ9DOQMyaaSDL4cdai0vCB4xKuh/LqVlFdD1B/dROHcFbNtAl5/8tAqsX3wqptAlzDW0E6MpG
- JAnhqZP2vbkX6kg==
-X-Developer-Key: i=florian.kauer@linutronix.de; a=openpgp;
- fpr=F17D8B54133C2229493E64A0B5976DD65251944E
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: A26qG9j2RjmpDXHys2TbdKfEPejS4C2z
+X-Proofpoint-GUID: A26qG9j2RjmpDXHys2TbdKfEPejS4C2z
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-10_12,2024-09-09_02,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
+ priorityscore=1501 bulkscore=0 spamscore=0 phishscore=0 lowpriorityscore=0
+ mlxscore=0 mlxlogscore=802 impostorscore=0 clxscore=1011 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2408220000
+ definitions=main-2409110064
 
-The current xdp_devmap_attach test attaches a program
-that redirects to another program via devmap.
+Two s390 fixes to make vdso selftests running on s390.
 
-It is, however, never executed, so do that to catch
-any bugs that might occur during execution.
+Jason, given that you carry already a lot of changes for vdso
+selftests I guess these should be routed via the random tree.
 
-Also, execute the same for a veth pair so that we
-also cover the non-generic path.
+Patches apply on top of current random.git master branch.
 
-Warning: Running this without the bugfix in this series
-will likely crash your system.
+Thanks,
+Heiko
 
-Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
----
- .../selftests/bpf/prog_tests/xdp_devmap_attach.c   | 114 +++++++++++++++++++--
- 1 file changed, 108 insertions(+), 6 deletions(-)
+Heiko Carstens (1):
+  selftests: vDSO: fix vdso_config for s390
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-index ce6812558287..b4f6718cf7eb 100644
---- a/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_devmap_attach.c
-@@ -1,6 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <arpa/inet.h>
- #include <uapi/linux/bpf.h>
- #include <linux/if_link.h>
-+#include <network_helpers.h>
-+#include <net/if.h>
- #include <test_progs.h>
- 
- #include "test_xdp_devmap_helpers.skel.h"
-@@ -17,7 +20,7 @@ static void test_xdp_with_devmap_helpers(void)
- 		.ifindex = IFINDEX_LO,
- 	};
- 	__u32 len = sizeof(info);
--	int err, dm_fd, map_fd;
-+	int err, dm_fd, dm_fd_redir, map_fd;
- 	__u32 idx = 0;
- 
- 
-@@ -25,14 +28,11 @@ static void test_xdp_with_devmap_helpers(void)
- 	if (!ASSERT_OK_PTR(skel, "test_xdp_with_devmap_helpers__open_and_load"))
- 		return;
- 
--	dm_fd = bpf_program__fd(skel->progs.xdp_redir_prog);
--	err = bpf_xdp_attach(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE, NULL);
-+	dm_fd_redir = bpf_program__fd(skel->progs.xdp_redir_prog);
-+	err = bpf_xdp_attach(IFINDEX_LO, dm_fd_redir, XDP_FLAGS_SKB_MODE, NULL);
- 	if (!ASSERT_OK(err, "Generic attach of program with 8-byte devmap"))
- 		goto out_close;
- 
--	err = bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
--	ASSERT_OK(err, "XDP program detach");
--
- 	dm_fd = bpf_program__fd(skel->progs.xdp_dummy_dm);
- 	map_fd = bpf_map__fd(skel->maps.dm_ports);
- 	err = bpf_prog_get_info_by_fd(dm_fd, &info, &len);
-@@ -47,6 +47,23 @@ static void test_xdp_with_devmap_helpers(void)
- 	ASSERT_OK(err, "Read devmap entry");
- 	ASSERT_EQ(info.id, val.bpf_prog.id, "Match program id to devmap entry prog_id");
- 
-+	/* send a packet to trigger any potential bugs in there */
-+	char data[10] = {};
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-+			    .data_in = &data,
-+			    .data_size_in = 10,
-+			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
-+			    .repeat = 1,
-+		);
-+	err = bpf_prog_test_run_opts(dm_fd_redir, &opts);
-+	ASSERT_OK(err, "XDP test run");
-+
-+	/* wait for the packets to be flushed */
-+	kern_sync_rcu();
-+
-+	err = bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
-+	ASSERT_OK(err, "XDP program detach");
-+
- 	/* can not attach BPF_XDP_DEVMAP program to a device */
- 	err = bpf_xdp_attach(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE, NULL);
- 	if (!ASSERT_NEQ(err, 0, "Attach of BPF_XDP_DEVMAP program"))
-@@ -124,6 +141,88 @@ static void test_xdp_with_devmap_frags_helpers(void)
- 	test_xdp_with_devmap_frags_helpers__destroy(skel);
- }
- 
-+static void test_xdp_with_devmap_helpers_veth(void)
-+{
-+	struct test_xdp_with_devmap_helpers *skel = NULL;
-+	struct bpf_prog_info info = {};
-+	struct bpf_devmap_val val = {};
-+	struct nstoken *nstoken = NULL;
-+	__u32 len = sizeof(info);
-+	int err, dm_fd, dm_fd_redir, map_fd, ifindex_dst;
-+	__u32 idx = 0;
-+
-+	SYS(out_close, "ip netns add testns");
-+	nstoken = open_netns("testns");
-+	if (!ASSERT_OK_PTR(nstoken, "setns"))
-+		goto out_close;
-+
-+	SYS(out_close, "ip link add veth_src type veth peer name veth_dst");
-+	SYS(out_close, "ip link set dev veth_src up");
-+	SYS(out_close, "ip link set dev veth_dst up");
-+
-+	val.ifindex = if_nametoindex("veth_src");
-+	ifindex_dst = if_nametoindex("veth_dst");
-+	if (!ASSERT_NEQ(val.ifindex, 0, "val.ifindex") ||
-+	    !ASSERT_NEQ(ifindex_dst, 0, "ifindex_dst"))
-+		goto out_close;
-+
-+	skel = test_xdp_with_devmap_helpers__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_xdp_with_devmap_helpers__open_and_load"))
-+		goto out_close;
-+
-+	dm_fd_redir = bpf_program__fd(skel->progs.xdp_redir_prog);
-+	err = bpf_xdp_attach(val.ifindex, dm_fd_redir, XDP_FLAGS_DRV_MODE, NULL);
-+	if (!ASSERT_OK(err, "Attach of program with 8-byte devmap"))
-+		goto out_close;
-+
-+	dm_fd = bpf_program__fd(skel->progs.xdp_dummy_dm);
-+	map_fd = bpf_map__fd(skel->maps.dm_ports);
-+	err = bpf_prog_get_info_by_fd(dm_fd, &info, &len);
-+	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd"))
-+		goto out_close;
-+
-+	val.bpf_prog.fd = dm_fd;
-+	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
-+	ASSERT_OK(err, "Add program to devmap entry");
-+
-+	err = bpf_map_lookup_elem(map_fd, &idx, &val);
-+	ASSERT_OK(err, "Read devmap entry");
-+	ASSERT_EQ(info.id, val.bpf_prog.id, "Match program id to devmap entry prog_id");
-+
-+	/* attach dummy to other side to enable reception */
-+	dm_fd = bpf_program__fd(skel->progs.xdp_dummy_prog);
-+	err = bpf_xdp_attach(ifindex_dst, dm_fd, XDP_FLAGS_DRV_MODE, NULL);
-+	if (!ASSERT_OK(err, "Attach of dummy XDP"))
-+		goto out_close;
-+
-+	/* send a packet to trigger any potential bugs in there */
-+	char data[10] = {};
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-+			    .data_in = &data,
-+			    .data_size_in = 10,
-+			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
-+			    .repeat = 1,
-+		);
-+	err = bpf_prog_test_run_opts(dm_fd_redir, &opts);
-+	ASSERT_OK(err, "XDP test run");
-+
-+	/* wait for the packets to be flushed */
-+	kern_sync_rcu();
-+
-+	err = bpf_xdp_detach(val.ifindex, XDP_FLAGS_DRV_MODE, NULL);
-+	ASSERT_OK(err, "XDP program detach");
-+
-+	err = bpf_xdp_detach(ifindex_dst, XDP_FLAGS_DRV_MODE, NULL);
-+	ASSERT_OK(err, "XDP program detach");
-+
-+out_close:
-+	if (nstoken)
-+		close_netns(nstoken);
-+	SYS_NOFAIL("ip netns del testns");
-+
-+	test_xdp_with_devmap_helpers__destroy(skel);
-+}
-+
- void serial_test_xdp_devmap_attach(void)
- {
- 	if (test__start_subtest("DEVMAP with programs in entries"))
-@@ -134,4 +233,7 @@ void serial_test_xdp_devmap_attach(void)
- 
- 	if (test__start_subtest("Verifier check of DEVMAP programs"))
- 		test_neg_xdp_devmap_helpers();
-+
-+	if (test__start_subtest("DEVMAP with programs in entries on veth"))
-+		test_xdp_with_devmap_helpers_veth();
- }
+Jens Remus (1):
+  selftests: vDSO: fix ELF hash table entry size for s390x
+
+ tools/testing/selftests/vDSO/parse_vdso.c  | 14 ++++++++++----
+ tools/testing/selftests/vDSO/vdso_config.h |  4 ++--
+ 2 files changed, 12 insertions(+), 6 deletions(-)
 
 -- 
-2.39.2
+2.43.0
 
 
