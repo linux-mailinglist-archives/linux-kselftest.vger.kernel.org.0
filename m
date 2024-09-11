@@ -1,156 +1,142 @@
-Return-Path: <linux-kselftest+bounces-17761-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17762-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0F0F9758AF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 18:47:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C2F59759A2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 19:41:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17CAEB23B06
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 16:47:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00AA528303A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 17:41:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A2E71AED2E;
-	Wed, 11 Sep 2024 16:46:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D0691B3F02;
+	Wed, 11 Sep 2024 17:41:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="SW6kvqpg"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AMV6oX8L"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FE721AB6F0
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Sep 2024 16:46:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B0158AC4
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Sep 2024 17:41:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726073214; cv=none; b=gGuGT5yaXjte0O2c6nRB2rN10SZxpfQbASKQ/Tsz3zurqOVZbRDMl5hRNP3WMSl6aFbQZE7xurWodHFKwN1zWCOMnBGiQ8/9CT7+OS8Rg+evUkSo6BOJUwBRHaiMKoPjeSqZmLs7frvusWythGKXfQBHGqEMK4HpDHHbrFIwBco=
+	t=1726076510; cv=none; b=gmCsab8ohtCa0aA6Bza7tJUajQHKl0PxtaIYUIgdvYYPhzh3ZjeKrCpUpOJvbnheUJAzyqpRG2ycOw1iQLKorJwU+OrCNyhh+6bQFMAIJL+pig9xa+S7TQyfcS7hoJYxQvyjnyEZDisXZsZ6aS500f2XtTAqCQt36cty4CItpuk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726073214; c=relaxed/simple;
-	bh=v5i3tcMXD82m2UtcDzrNr0/SxRvDW7RqJOHOWsWBNvQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qId+saVWjuJypVKuMiz0iWTWrGSSuAlaUP9qZkX8zCSdeBYwicRUFa+nqdmn2VHVpaj2c9LHeGZr7vCcTJ3JVxaXM8L5WuLGaAEo+BpsnzB2cXEoP4hLU9j2tygUVhrIFXPzJ9FdvgeDPUVhqq38DB9AClf2GXZyV678v7FzfVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=SW6kvqpg; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7a99fdf2e1aso2485785a.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Sep 2024 09:46:52 -0700 (PDT)
+	s=arc-20240116; t=1726076510; c=relaxed/simple;
+	bh=4MLw3w+AyWXYKNzizJpKkr3qxd0kHTmFnrxreF7e6rY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=rEUPtt5gOJQK0pAd/D7v2x8hJqsRjgFil22SWCqBy7oU1yUuApQtyuE4oQ1i7eLB75oRBFDfJUGyp4Mp0csNHW+7VzjKw8K08rdgEBhjqQp4fFzagG+4ImHrOtRm+CNmfWVML5dbTg8uIUoNpi5MnuEghBOPs5D6dvEhg2Bc8ZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=AMV6oX8L; arc=none smtp.client-ip=209.85.166.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f48.google.com with SMTP id ca18e2360f4ac-82aa4fd82a4so1837139f.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Sep 2024 10:41:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1726073211; x=1726678011; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eZ0xCLn9RINPzVaUjP7gK7Lrf8o6X9P3y5mlw1qgCZo=;
-        b=SW6kvqpgAqxWEewPAt13NCBTz+cL30Kn3D304RqtXF48hL1GV/OVquO1DwIYP+EMDr
-         +Bn6AYM6HToh9isxoIG0KRltm7hZtDVm9kGUbrdJ1ODK5XOhLEzmxm3/GQeSZFVSNcle
-         aBgVh6UQvLuY9YvLbJgl6BZfiHoMV7IFtys6eogR9nuNmGZay+Qu3wFMOe1cb109lkIK
-         3v/zlU71for9pS+g1PCrqCIlE2r2q0kVF4YjAKS0BwWu+Znk1BWoh2YbE0cXUz1VMpsG
-         x4gcvmmCBG4L8Y6elb3j+xGA0uBSpecDM6ZgA2LAoeFmMuJMQXYF94s0LTzOcTqp9zhP
-         HKeg==
+        d=linuxfoundation.org; s=google; t=1726076507; x=1726681307; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h/Evpj4ztjn5sSYeRX1VYm9ZhgH1mvXmTv8yveHVyJ0=;
+        b=AMV6oX8LNsQvtNikWJawXK3wJpP/MlzsuXg7tFTWfsITaw8aA3lF66KjoJb9NzLfTe
+         3rzCOH6I3HRkOUBjc0VJ4Z5EJKZAgcgCD5ryC+7AqgzdGCLU132JuL2/1PSgaf+yByHi
+         umJIafL2hX6h/ZZhnyzYu4iukhAbOrICJTBU4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726073211; x=1726678011;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eZ0xCLn9RINPzVaUjP7gK7Lrf8o6X9P3y5mlw1qgCZo=;
-        b=g3zV2nWumFL1jcUT1damDyjJrer6zCvRQyKM0Cdsip+icgZ+SRmWkbPIfP5nfz90AT
-         8O1MG1VWU4COWXsXKyRDvLt3UKNECE/oYK+vA2CmBRRKmIBjqb7ue+nyVeA2GncJ3zJw
-         lreIntUncU5d+Xs1FeliIwMmxN+nAEYfxzRSiYmELRZMCLm1yCnAg4peExYHI24bbP1y
-         QQhw8n6JWZwi8qzXwx1Ctw6yIk3+xNQrdCB9jnjJae0jRIfJpQ6/DpjE5XbJf7vO7oAJ
-         xzNbfg/j65nNay2uUiBHaeqoz8qC8VuEKZO8T4y+hU5X4yuZittohuT7EcrhzA02m9G7
-         uLXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVQ/kt3v1a1j3TfEqNMJnNKwVOXLvryxF2tNfIRBtWQ6BFAku5/4l6gHP499dspSjc6Rp5suVrWFzh3wyZF2tM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzUcbqygdBwczEZLTo4indJCbAsFFI90TVR//MpyPsCjgQLHqA
-	hNWF4YcDk+KNnDxS30mP8INgt1sZ3npUm2VbnTRbiEpz2rRK9qxh1bV/lMQzPA8=
-X-Google-Smtp-Source: AGHT+IE8IioPFY0oap5Ik4qWQT8uxzCEi9QNcrxryw8pTyfDkJT+rrffjUq7GmwJA2oBINLwWFrFwg==
-X-Received: by 2002:a05:620a:40d6:b0:7a9:b618:16aa with SMTP id af79cd13be357-7a9e5ee5348mr3005085a.10.1726073211272;
-        Wed, 11 Sep 2024 09:46:51 -0700 (PDT)
-Received: from PC2K9PVX.TheFacebook.com (pool-173-79-56-208.washdc.fios.verizon.net. [173.79.56.208])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7a9a7a04667sm440189185a.75.2024.09.11.09.46.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Sep 2024 09:46:50 -0700 (PDT)
-Date: Wed, 11 Sep 2024 12:46:08 -0400
-From: Gregory Price <gourry@gourry.net>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: tabba@google.com, quic_eberman@quicinc.com, roypat@amazon.co.uk,
-	jgg@nvidia.com, peterx@redhat.com, david@redhat.com,
-	rientjes@google.com, fvdl@google.com, jthoughton@google.com,
-	seanjc@google.com, pbonzini@redhat.com, zhiquan1.li@intel.com,
-	fan.du@intel.com, jun.miao@intel.com, isaku.yamahata@intel.com,
-	muchun.song@linux.dev, mike.kravetz@oracle.com,
-	erdemaktas@google.com, vannapurve@google.com, qperret@google.com,
-	jhubbard@nvidia.com, willy@infradead.org, shuah@kernel.org,
-	brauner@kernel.org, bfoster@redhat.com, kent.overstreet@linux.dev,
-	pvorel@suse.cz, rppt@kernel.org, richard.weiyang@gmail.com,
-	anup@brainfault.org, haibo1.xu@intel.com, ajones@ventanamicro.com,
-	vkuznets@redhat.com, maciej.wieczor-retman@intel.com,
-	pgonda@google.com, oliver.upton@linux.dev,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-fsdevel@kvack.org
-Subject: Re: [RFC PATCH 04/39] mm: mempolicy: Refactor out
- policy_node_nodemask()
-Message-ID: <ZuHJUN4GDw7vU3Vv@PC2K9PVX.TheFacebook.com>
-References: <cover.1726009989.git.ackerleytng@google.com>
- <9831cfcc77e325e48ec3674c3a518bda76e78df5.1726009989.git.ackerleytng@google.com>
+        d=1e100.net; s=20230601; t=1726076507; x=1726681307;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h/Evpj4ztjn5sSYeRX1VYm9ZhgH1mvXmTv8yveHVyJ0=;
+        b=CxaDGr/JHR+Yg/7IJlWNbEDspplqzHNbW7dxzc3U+2wJnb7X0jN9wXcAvrz0njw8JN
+         O1MsaHyZgLgaKMm1RMI1zAJnNDKiwn7drBf3vU/Yi9dSyr3ZEy/A4fIzOk+O6M8vPsJX
+         N3wiClHtjS2I2rjAOnReYJwiwAkXfrYuho9CUxxnllQKa39PjAZhUdqFUvSgOAFIC1BW
+         iM4JHRy0CiPGnHSE+E9hBJwQEqRobVP2f5I05XWfvGD9I99i/PzJYwX6FkFCGJrRuCcV
+         BB/aKW8IG8S86dxk9X3Ak7AHGfm8isccHqRSiVk3OmvQA9pKDmC4ghLQqTZQEjQkCpZW
+         cC0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUN60liUJ7ckZsRZyZM1q8R/I+yxsVQBl9sGRcgE+IjkeZ0+Q8vV5hfHUwCg3hfLfYEDvf4yp5JDic/lwj6ps4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYq40JJamAidY+nNZ989zw1yAvldftiOKf3H9Efsu9ftZgHulT
+	vpklS5awFafVJXTasw0ny4BFGxtflwCVaHMFmr+7wwL6cQccvoLOxQJhR9H826g=
+X-Google-Smtp-Source: AGHT+IGFmDEYu28+n/w2kkrEpd8aFfbcheCsyGwcyD5LEwqOedHuJ+I2YPLNuin7DXlUtBx55jN3Lg==
+X-Received: by 2002:a05:6602:26c7:b0:82d:b5a:b050 with SMTP id ca18e2360f4ac-82d1f985155mr52957039f.15.1726076506789;
+        Wed, 11 Sep 2024 10:41:46 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4d35f8ff048sm98878173.152.2024.09.11.10.41.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Sep 2024 10:41:46 -0700 (PDT)
+Message-ID: <449d19f6-5869-43c6-81d3-7f77d4e4d449@linuxfoundation.org>
+Date: Wed, 11 Sep 2024 11:41:45 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9831cfcc77e325e48ec3674c3a518bda76e78df5.1726009989.git.ackerleytng@google.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: kselftest: Use strerror() on nolibc
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: zhangjiao2 <zhangjiao2@cmss.chinamobile.com>, Willy Tarreau <w@1wt.eu>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ "Paul E. McKenney" <paulmck@kernel.org>, shuah@kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240911044230.5914-1-zhangjiao2@cmss.chinamobile.com>
+ <1c94b9bd-78d1-433a-959e-420a456bd40c@linuxfoundation.org>
+ <16611552-10d8-46d0-8163-460c0cbec2e5@t-8ch.de>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <16611552-10d8-46d0-8163-460c0cbec2e5@t-8ch.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 10, 2024 at 11:43:35PM +0000, Ackerley Tng wrote:
-> This was refactored out of huge_node().
+On 9/11/24 09:44, Thomas Weißschuh wrote:
+> Hi Shuah,
 > 
-> huge_node()'s interpretation of vma for order assumes the
-> hugetlb-specific storage of the hstate information in the
-> inode. policy_node_nodemask() does not assume that, and can be used
-> more generically.
+> On 2024-09-11 09:36:50+0000, Shuah Khan wrote:
+>> On 9/10/24 22:42, zhangjiao2 wrote:
+>>> From: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+>>>
+>>> Nolibc gained an implementation of strerror() recently.
+>>> Use it and drop the ifndef.
+>>>
+>>> Signed-off-by: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+>>> ---
+>>>    tools/testing/selftests/kselftest.h | 8 --------
+>>>    1 file changed, 8 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+>>> index e195ec156859..29fedf609611 100644
+>>> --- a/tools/testing/selftests/kselftest.h
+>>> +++ b/tools/testing/selftests/kselftest.h
+>>> @@ -373,15 +373,7 @@ static inline __noreturn __printf(1, 2) void ksft_exit_fail_msg(const char *msg,
+>>>    static inline __noreturn void ksft_exit_fail_perror(const char *msg)
+>>>    {
+>>> -#ifndef NOLIBC
+>>>    	ksft_exit_fail_msg("%s: %s (%d)\n", msg, strerror(errno), errno);
+>>> -#else
+>>> -	/*
+>>> -	 * nolibc doesn't provide strerror() and it seems
+>>> -	 * inappropriate to add one, just print the errno.
+>>> -	 */
+>>> -	ksft_exit_fail_msg("%s: %d)\n", msg, errno);
+>>> -#endif
+>>>    }
+>>>    static inline __noreturn void ksft_exit_xfail(void)
+>>
+>> Adding nolibc maintainers for review.
+>>
+>> Willy and Thomas, please review.
 > 
-> This refactoring also enforces that nid default to the current node
-> id, which was not previously enforced.
+> Acked-by: Thomas Weißschuh <linux@weissschuh.net>
 > 
-> alloc_pages_mpol_noprof() is the last remaining direct user of
-> policy_nodemask(). All its callers begin with nid being the current
-> node id as well. More refactoring is required for to simplify that.
+> I did the same for another kselftests function when introducing
+> strerror(). This one was apparently missed or didn't exist yet.
 > 
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> 
 
-Reviewed-by: Gregory Price <gourry@gourry.net>
 
-> +/**
-> + * policy_node_nodemask(@mpol, @gfp_flags, @ilx, @nodemask)
-> + * @mpol: the memory policy to interpret. Reference must be taken.
-> + * @gfp_flags: for this request
-> + * @ilx: interleave index, for use only when MPOL_INTERLEAVE or
-> + *       MPOL_WEIGHTED_INTERLEAVE
-> + * @nodemask: (output) pointer to nodemask pointer for 'bind' and 'prefer-many'
-> + *            policy
-> + *
-> + * Returns a nid suitable for a page allocation and a pointer. If the effective
-> + * policy is 'bind' or 'prefer-many', returns a pointer to the mempolicy's
-> + * @nodemask for filtering the zonelist.
+Thank you. Applied to linux-kselftest next for Linux 6.12-rc1.
 
-Technically it's possible for nid to contain MAX_NUMNODES upon return
-if weighted interleave is used and the nodemask is somehow invalid
-(contains no nodes, including the local node). I would expect this to
-be indicative of a larger problem (i.e. should functionally never happen).
+thanks,
+-- Shuah
 
-Now that I'm looking at it, it's possible the weighted interleave path
-should default to returning numa_node_id() if node == MAX_NUMNODES, which
-would not require any changes to this patch.
-
-> + */
-> +int policy_node_nodemask(struct mempolicy *mpol, gfp_t gfp_flags,
-> +			 pgoff_t ilx, nodemask_t **nodemask)
-> +{
-> +	int nid = numa_node_id();
-> +	*nodemask = policy_nodemask(gfp_flags, mpol, ilx, &nid);
-> +	return nid;
-> +}
-> +
->  #ifdef CONFIG_HUGETLBFS
->  /*
->   * huge_node(@vma, @addr, @gfp_flags, @mpol)
 
