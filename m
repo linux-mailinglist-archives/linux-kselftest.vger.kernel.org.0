@@ -1,296 +1,172 @@
-Return-Path: <linux-kselftest+bounces-17751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17752-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 903269756C9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 17:18:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEC2297573A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 17:34:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A1EDEB290D4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 15:17:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F19EE1C22B0D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 15:34:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 115D01AD3E3;
-	Wed, 11 Sep 2024 15:17:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE4601ABED5;
+	Wed, 11 Sep 2024 15:34:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jfXzu1kT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZsFgTeCq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A241AB531;
-	Wed, 11 Sep 2024 15:17:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D11C7E583;
+	Wed, 11 Sep 2024 15:34:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726067821; cv=none; b=VoqZKP0ZXhXOp6ZZMqZ/JQhu7PYh8kcJW1CoaIm8+Wfl3sKiYgCfG8onrITF/RATJK63sfHECFcPyywgTiRlgojEx0WxidNodzWsMmlAcYp7R0sJf/j+kDOgE2rRno1xnBKLyirgp5rCyUCxtCEwNeWaXbsdKCbLbs/iwuZoEoE=
+	t=1726068858; cv=none; b=GKstVOYplBEnLx2B9A9NfE2tfoJmwREgMRCHtCVxmWDRS9Cg+0eY5mwp0kLKWPguMhS2FWy42owQ4K3zVlVh7YwC47zSv04NPK15zcIUDV7YTixNI0xL1G8P94HDa5xgnAiQr6WGoDjV92tEY1g9BbctXN6quaoXt63Lj3V1sjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726067821; c=relaxed/simple;
-	bh=rvyB/8VmwsZWv2v7ySK7UI/1A/6GmFKbw04BuegBh08=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XXMGqmmdhbYplSy5tQFSEkRWsINNsY3Jbb2dBFRipfEOoKCIevvml/TOnTRykRzMcdMqwhEIBCXuCJWgRFSTp+sQxKebYqXnoz5Q1JYCGs+7RFKPpL4T0itiwvsgljXP1tMf2RSujt56yGQ1VLfIxPKJyEk1BPBrmqDhn0CYnu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jfXzu1kT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6385AC4CEC0;
-	Wed, 11 Sep 2024 15:16:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726067820;
-	bh=rvyB/8VmwsZWv2v7ySK7UI/1A/6GmFKbw04BuegBh08=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=jfXzu1kTnOh0ndVtWIz3OPxKqWdxWX87OKoCoF1n04Ulp6P5gdkKIj5REKOvrEgR6
-	 yRdjlU+W5r1KtxE0vNUMqJ5I3GcWO3v3shGUKTPfmCd6lATdiBSLeZnaPXgqaXfUMf
-	 WeZ2FNepwVYiiQeqnqwNgNudpM2qR6DUD8fT6/J0pIVCsZQzVPW779j6VYDDat3Ub+
-	 qj0y1LI+sjtnSWcLyaV6XcJOc/zJpRkHCLKFJL7sjlOMZVUUQkVoMf8T0Ne1zCUBKO
-	 l94Xjg35yUZls65OlDC8zzMrrIdi4BKKaDatxaqjbwLab/Gz+45BdriSs7+/kTBg/j
-	 OSaOhfceOGzFA==
-From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Wed, 11 Sep 2024 17:16:18 +0200
-Subject: [PATCH bpf-next/net v6 3/3] selftests/bpf: Add mptcp subflow
- subtest
+	s=arc-20240116; t=1726068858; c=relaxed/simple;
+	bh=U5gkwqWSbp1sFQyghj837wzL9/RMU5SpmsvBvs4bWic=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nwTRMKJLkazpq/ZrqDr6AHvnRcYqjrZhmM2g+r71nYBZz3c2Hj49pTtqatzxoaD9hufwPiH9FChYM4+1ACEuBgmR6okwceqkttJv/TKlfUv5bkynz4gEhwk6+LC2jzP4dXUgYwZLUhPLpxm29dxF6fe1XHYXNIlfY7NzP6k29EE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZsFgTeCq; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726068856; x=1757604856;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=U5gkwqWSbp1sFQyghj837wzL9/RMU5SpmsvBvs4bWic=;
+  b=ZsFgTeCqGjaQUw6d3w0JQccTH3N40iXuG+XpPVHP2w3buXEAJSW2Qda/
+   3K6kwxwLNJd4YBbYd4aHJ0LPV2KEGV/TNWMrhnNaWM4tuHpdJN9eKnHA1
+   LmOemfsXhi4KfA+70rt2Ta/w+Pb/pBPW8aqvXUv8Scl/GjC2NkZB8DeBj
+   g2nJiTFP/sxWDoXJBWTgwU2qdogcUkZvBM/Dj/C45le/Ea15WCdp3XIqu
+   QJ8Y1K/yF6Q3vQeEzXMvu6/Bf/CbSzMEnVoVMaqbpZoQmvfTskMkqJmwm
+   PXEruGk2/puFLg05Fe0Ig4wDLcNQxmEb28HxiGUQwkqu34efeGVGTBrxd
+   w==;
+X-CSE-ConnectionGUID: HcejB+qQRsG4gLtEswTsbg==
+X-CSE-MsgGUID: thxvZjXBQJGbKyDKy9oKeg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="50292815"
+X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
+   d="scan'208";a="50292815"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 08:34:15 -0700
+X-CSE-ConnectionGUID: xtMlID7QSvGxgDWBJblWeA==
+X-CSE-MsgGUID: yGu1fCIvQ3i5mupTuAQdXw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,220,1719903600"; 
+   d="scan'208";a="67023420"
+Received: from dgramcko-desk.amr.corp.intel.com (HELO [10.124.223.221]) ([10.124.223.221])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2024 08:34:14 -0700
+Message-ID: <6c8ad091-a56b-41ba-b403-2e3c2e578100@intel.com>
+Date: Wed, 11 Sep 2024 08:33:54 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 06/30] arm64: context switch POR_EL0 register
+To: Kevin Brodsky <kevin.brodsky@arm.com>, Joey Gouly <joey.gouly@arm.com>,
+ linux-arm-kernel@lists.infradead.org
+Cc: nd@arm.com, akpm@linux-foundation.org, aneesh.kumar@kernel.org,
+ aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
+ broonie@kernel.org, catalin.marinas@arm.com, christophe.leroy@csgroup.eu,
+ dave.hansen@linux.intel.com, hpa@zytor.com, linux-fsdevel@vger.kernel.org,
+ linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org, maz@kernel.org,
+ mingo@redhat.com, mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com,
+ npiggin@gmail.com, oliver.upton@linux.dev, shuah@kernel.org,
+ skhan@linuxfoundation.org, szabolcs.nagy@arm.com, tglx@linutronix.de,
+ will@kernel.org, x86@kernel.org, kvmarm@lists.linux.dev,
+ linux-kselftest@vger.kernel.org
+References: <20240822151113.1479789-1-joey.gouly@arm.com>
+ <20240822151113.1479789-7-joey.gouly@arm.com>
+ <425b8f8c-b6b5-422a-b5f4-41dd2d1ae3bb@arm.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <425b8f8c-b6b5-422a-b5f4-41dd2d1ae3bb@arm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240911-upstream-bpf-next-20240506-mptcp-subflow-test-v6-3-7872294c466b@kernel.org>
-References: <20240911-upstream-bpf-next-20240506-mptcp-subflow-test-v6-0-7872294c466b@kernel.org>
-In-Reply-To: <20240911-upstream-bpf-next-20240506-mptcp-subflow-test-v6-0-7872294c466b@kernel.org>
-To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
- Geliang Tang <geliang@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Geliang Tang <geliang@kernel.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6367; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=jl0fkReOPsHzDsa1dsyKuB9rta8BrobgXpXnIKQtdD8=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBm4bRYeiAzV9g4F+34V6euaZ0+AU0EvStXMJeI9
- 5KzTNZrs6SJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZuG0WAAKCRD2t4JPQmmg
- c7V2D/9TWXLNLbSixXiR1q79qX535CSD/cj9KCmk8nvWCY2a4ruQ3GawiDg6oNIVQ+MRj2aqZmX
- yW04e/Pb44t+1vTIik4ToE07aSHqTBcAHuPA5oQbbCvy4FfIEZyNMoBKt/L2PPO1BqbedOej7PF
- A0RSdpxGxIiCt5EZxkkZoUgiELIkdfdDPhl1ayvjeicPmhdWzP2sKtrY82pjPcHSEZ8zNVmqH3o
- ww9Lz6Fk8jc/VGutLx9zGQaTALGNi9uFWCS9UCrIHdb9FYvXcf3nGYfu8/At2NEF2HMgRWBEVlt
- n8gLaLJt13mpBOVkB7T9y9NwEKw5NMMGdGd9yx6DjxN8C0QFDvXPMm6ne52D8dQcoHgFGP3o8LX
- mtYjPuXA0NRuSW3M1XdlG7X+Tyu5ljxM5CMvQrPmdE4grqm5xLad9XIT+DpDWX+6nLGxalLAA7l
- TPx21Rer8Q1JmG0xAaz11/ylsTr+/aTHbsy4YKY8iuDG6rxl+jJIoIpdJz4OqfSf3sq3AzaRebd
- 1GnR39zp1fBbu8JhTtJYdO18QCvoLmimjXsXaQqzOAs7C5FCB0dWenTLGjQVsV05P0+hFyd8tGG
- 0ok1uPl51DuAwXMwk9g1iViCO6NL5gBkJJ1W68ERpLTv4Z2ytJH4xDCPo1LtRpcX72uOURjdvyN
- grvPyEeSAXS1DaQ==
-X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
- fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-From: Geliang Tang <tanggeliang@kylinos.cn>
+On 9/11/24 08:01, Kevin Brodsky wrote:
+> On 22/08/2024 17:10, Joey Gouly wrote:
+>> @@ -371,6 +382,9 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+>>  		if (system_supports_tpidr2())
+>>  			p->thread.tpidr2_el0 = read_sysreg_s(SYS_TPIDR2_EL0);
+>>  
+>> +		if (system_supports_poe())
+>> +			p->thread.por_el0 = read_sysreg_s(SYS_POR_EL0);
+> Here we are only reloading POR_EL0's value if the target is a user
+> thread. However, as this series stands, POR_EL0 is also relevant to
+> kthreads, because any uaccess or GUP done from a kthread will also be
+> checked against POR_EL0. This is especially important in cases like the
+> io_uring kthread, which accesses the memory of the user process that
+> spawned it. To prevent such a kthread from inheriting a stale value of
+> POR_EL0, it seems that we should reload POR_EL0's value in all cases
+> (user and kernel thread).
 
-This patch adds a subtest named test_subflow in test_mptcp to load and
-verify the newly added MPTCP subflow BPF program. To goal is to make
-sure it is possible to set different socket options per subflows, while
-the userspace socket interface only lets the application to set the same
-socket options for the whole MPTCP connection and its multiple subflows.
+The problem with this is trying to figure out which POR_EL0 to use.  The
+kthread could have been spawned ages ago and might not have a POR_EL0
+which is very different from the current value of any of the threads in
+the process right now.
 
-To check that, a client and a server are started in a dedicated netns,
-with veth interfaces to simulate multiple paths. They will exchange data
-to allow the creation of an additional subflow.
+There's also no great way for a kthread to reach out and grab an updated
+value.  It's all completely inherently racy.
 
-When the different subflows are being created, the new MPTCP subflow BPF
-program will set some socket options: marks and TCP CC. The validation
-is done by the same program, when the userspace checks the value of the
-modified socket options. On the userspace side, it will see that the
-default values are still being used on the MPTCP connection, while the
-BPF program will see different options set per subflow of the same MPTCP
-connection.
+> Other approaches could also be considered (e.g. resetting POR_EL0 to
+> unrestricted when creating a kthread), see my reply on v4 [1].
 
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/76
-Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
-Reviewed-by: Mat Martineau <martineau@kernel.org>
-Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
----
-Notes:
- - v2 -> v3:
-   - Use './mptcp_pm_nl_ctl' instead of 'ip mptcp', not supported by the
-     BPF CI running IPRoute 5.5.0.
-   - Use SYS_NOFAIL() in _ss_search() instead of calling system()
- - v3 -> v4:
-   - Drop './mptcp_pm_nl_ctl', but skip this new test if 'ip mptcp' is
-     not supported.
- - v4 -> v5:
-   - Note that this new test is no longer skipped on the BPF CI, because
-     'ip mptcp' is now supported after the switch from Ubuntu 20.04 to
-     22.04.
-   - Update the commit message, reflecting the latest version.
-   - The validations are no longer done using 'ss', but using the new
-     BPF program added in the previous patch, to reduce the use of
-     external dependences. (Martin)
- - v5 -> v6:
-   - Use usleep() instead of sleep().
----
- tools/testing/selftests/bpf/prog_tests/mptcp.c | 127 +++++++++++++++++++++++++
- 1 file changed, 127 insertions(+)
+I kinda think this is the only way to go.  It's the only sensible,
+predictable way.  I _think_ it's what x86 will end up doing with PKRU,
+but there's been enough churn there that I'd need to go double check
+what happens in practice.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/mptcp.c b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-index d2ca32fa3b21..c76a0d8c8f93 100644
---- a/tools/testing/selftests/bpf/prog_tests/mptcp.c
-+++ b/tools/testing/selftests/bpf/prog_tests/mptcp.c
-@@ -5,12 +5,17 @@
- #include <linux/const.h>
- #include <netinet/in.h>
- #include <test_progs.h>
-+#include <unistd.h>
- #include "cgroup_helpers.h"
- #include "network_helpers.h"
- #include "mptcp_sock.skel.h"
- #include "mptcpify.skel.h"
-+#include "mptcp_subflow.skel.h"
- 
- #define NS_TEST "mptcp_ns"
-+#define ADDR_1	"10.0.1.1"
-+#define ADDR_2	"10.0.1.2"
-+#define PORT_1	10001
- 
- #ifndef IPPROTO_MPTCP
- #define IPPROTO_MPTCP 262
-@@ -335,10 +340,132 @@ static void test_mptcpify(void)
- 	close(cgroup_fd);
- }
- 
-+static int endpoint_init(char *flags)
-+{
-+	SYS(fail, "ip -net %s link add veth1 type veth peer name veth2", NS_TEST);
-+	SYS(fail, "ip -net %s addr add %s/24 dev veth1", NS_TEST, ADDR_1);
-+	SYS(fail, "ip -net %s link set dev veth1 up", NS_TEST);
-+	SYS(fail, "ip -net %s addr add %s/24 dev veth2", NS_TEST, ADDR_2);
-+	SYS(fail, "ip -net %s link set dev veth2 up", NS_TEST);
-+	if (SYS_NOFAIL("ip -net %s mptcp endpoint add %s %s", NS_TEST, ADDR_2, flags)) {
-+		printf("'ip mptcp' not supported, skip this test.\n");
-+		test__skip();
-+		goto fail;
-+	}
-+
-+	return 0;
-+fail:
-+	return -1;
-+}
-+
-+static void wait_for_new_subflows(int fd)
-+{
-+	socklen_t len;
-+	u8 subflows;
-+	int err, i;
-+
-+	len = sizeof(subflows);
-+	/* Wait max 1 sec for new subflows to be created */
-+	for (i = 0; i < 10; i++) {
-+		err = getsockopt(fd, SOL_MPTCP, MPTCP_INFO, &subflows, &len);
-+		if (!err && subflows > 0)
-+			break;
-+
-+		usleep(100000); /* 0.1s */
-+	}
-+}
-+
-+static void run_subflow(void)
-+{
-+	int server_fd, client_fd, err;
-+	char new[TCP_CA_NAME_MAX];
-+	char cc[TCP_CA_NAME_MAX];
-+	unsigned int mark;
-+	socklen_t len;
-+
-+	server_fd = start_mptcp_server(AF_INET, ADDR_1, PORT_1, 0);
-+	if (!ASSERT_OK_FD(server_fd, "start_mptcp_server"))
-+		return;
-+
-+	client_fd = connect_to_fd(server_fd, 0);
-+	if (!ASSERT_OK_FD(client_fd, "connect_to_fd"))
-+		goto close_server;
-+
-+	send_byte(client_fd);
-+	wait_for_new_subflows(client_fd);
-+
-+	len = sizeof(mark);
-+	err = getsockopt(client_fd, SOL_SOCKET, SO_MARK, &mark, &len);
-+	if (ASSERT_OK(err, "getsockopt(client_fd, SO_MARK)"))
-+		ASSERT_EQ(mark, 0, "mark");
-+
-+	len = sizeof(new);
-+	err = getsockopt(client_fd, SOL_TCP, TCP_CONGESTION, new, &len);
-+	if (ASSERT_OK(err, "getsockopt(client_fd, TCP_CONGESTION)")) {
-+		get_msk_ca_name(cc);
-+		ASSERT_STREQ(new, cc, "cc");
-+	}
-+
-+	close(client_fd);
-+close_server:
-+	close(server_fd);
-+}
-+
-+static void test_subflow(void)
-+{
-+	int cgroup_fd, prog_fd, err;
-+	struct mptcp_subflow *skel;
-+	struct nstoken *nstoken;
-+	struct bpf_link *link;
-+
-+	cgroup_fd = test__join_cgroup("/mptcp_subflow");
-+	if (!ASSERT_OK_FD(cgroup_fd, "join_cgroup: mptcp_subflow"))
-+		return;
-+
-+	skel = mptcp_subflow__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_load: mptcp_subflow"))
-+		goto close_cgroup;
-+
-+	skel->bss->pid = getpid();
-+
-+	err = mptcp_subflow__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach: mptcp_subflow"))
-+		goto skel_destroy;
-+
-+	prog_fd = bpf_program__fd(skel->progs.mptcp_subflow);
-+	err = bpf_prog_attach(prog_fd, cgroup_fd, BPF_CGROUP_SOCK_OPS, 0);
-+	if (!ASSERT_OK(err, "prog_attach"))
-+		goto skel_destroy;
-+
-+	nstoken = create_netns();
-+	if (!ASSERT_OK_PTR(nstoken, "create_netns: mptcp_subflow"))
-+		goto skel_destroy;
-+
-+	if (endpoint_init("subflow") < 0)
-+		goto close_netns;
-+
-+	link = bpf_program__attach_cgroup(skel->progs._getsockopt_subflow,
-+					  cgroup_fd);
-+	if (!ASSERT_OK_PTR(link, "getsockopt prog"))
-+		goto close_netns;
-+
-+	run_subflow();
-+
-+	bpf_link__destroy(link);
-+close_netns:
-+	cleanup_netns(nstoken);
-+skel_destroy:
-+	mptcp_subflow__destroy(skel);
-+close_cgroup:
-+	close(cgroup_fd);
-+}
-+
- void test_mptcp(void)
- {
- 	if (test__start_subtest("base"))
- 		test_base();
- 	if (test__start_subtest("mptcpify"))
- 		test_mptcpify();
-+	if (test__start_subtest("subflow"))
-+		test_subflow();
- }
+Either way, it would be nice to get an io_uring test in here that
+actually spawns kthreads:
 
--- 
-2.45.2
-
+	tools/testing/selftests/mm/protection_keys.c
 
