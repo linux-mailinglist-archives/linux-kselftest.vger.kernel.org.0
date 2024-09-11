@@ -1,136 +1,149 @@
-Return-Path: <linux-kselftest+bounces-17745-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17746-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59CB8975484
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 15:51:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BE3B97551B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 16:18:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD1A21F27565
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 13:51:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC5791C22A2A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 14:18:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4331019E98A;
-	Wed, 11 Sep 2024 13:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2C5A192B96;
+	Wed, 11 Sep 2024 14:18:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="b6rCWOCp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tQx8Y9FY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F20A019C563;
-	Wed, 11 Sep 2024 13:50:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EF857DA79;
+	Wed, 11 Sep 2024 14:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726062613; cv=none; b=uX14mTqLDF79qFU3SK8PlNr8IVfTmHTGbhORtarw0S6rbmxXqipBFb1KDxTFuXwFVFNizbWKrCoy+FEzni8MVfKIN7VtnE+WKHS2XnAgPWmH723dyyNkJI6e2/aNW/2MjWAn6cecadMIqcnprACPYlOdvjMeEDhuz1JLnzHkGzM=
+	t=1726064311; cv=none; b=qy1DIeH7BwmxPAnb3oVEEgv41RPyhiDxV58+pPzi2174F8z4rnoNGxP1eTCiBmp+pikMeQrNKC4QSNs1c7Ltt1KN/lQ662MUm0JjItTBatHkcwzOXtMaLkW8mwzepq0dI+sUfAi+jt42NER06XlZcPrzOR8ui4IcQT0xdh60X/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726062613; c=relaxed/simple;
-	bh=PrFjse7wa9r7BLbYlfJSIri5+7sSsF6OSOZIIGlgpL0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=il02RxYHdtQw38fKeurReB7ft2prSarjmtvpLfPI7cXnUnURCZ6/vONv4YN2QKKtNvXEegjlT+b6IlPCZLIun0GvmnkAsH4EW72o87Coj0cz2W3GlnpIQ+DZWTQSMYh/LKzctbjHwPKxdmktZSLfYa2rgmUctwjdHo68arD9z74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=b6rCWOCp; arc=none smtp.client-ip=150.107.74.76
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-	s=201909; t=1726062608;
-	bh=lpBzbgWttHYkkQ41sscZ0OOoe2UyQs048+I1EnGEnbs=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=b6rCWOCpsR6QTZU68icEH6ah28jcqnXyKEGoUH0ohvJRhp/Mm3QMMNf7cz1PRZVJk
-	 qZnhrbEZQSdtE52b5m7L8yLtR87aHqZ9Y3U05UdXnLFYWT6W/Gva4cteQod4+pDscF
-	 iq9WFey+WYHFyzKGuoKHndEZ0KUL/iVZ82dFsXKNk1jKIZA3FOkaV87mvcYAUlbhmC
-	 QSm0f+2sovoKzmv6FOXBVgqAL9iWpzg6XychwCtrVghD79R/XByY5tXAMuIaTpHV5g
-	 0oMsPLM4pI21UqirAlt8h43LH7OPXzxNCN5RDMbPbQlnnQRUFay141JPyB1XvhsCzO
-	 l8YWjW9+O5+hg==
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mail.ozlabs.org (Postfix) with ESMTPSA id 4X3hlf1JyWz4x8D;
-	Wed, 11 Sep 2024 23:50:06 +1000 (AEST)
-From: Michael Ellerman <mpe@ellerman.id.au>
-To: Arnd Bergmann <arnd@arndb.de>, Charlie Jenkins <charlie@rivosinc.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Richard Henderson <richard.henderson@linaro.org>, Ivan Kokshaysky
- <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, Vineet Gupta
- <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, guoren
- <guoren@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui
- <kernel@xen0n.name>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge
- Deller <deller@gmx.de>, Nicholas Piggin <npiggin@gmail.com>, Christophe
- Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>,
- Alexander Gordeev <agordeev@linux.ibm.com>, Gerald Schaefer
- <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Christian Borntraeger
- <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>,
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker
- <dalias@libc.org>, John Paul Adrian Glaubitz
- <glaubitz@physik.fu-berlin.de>, "David S . Miller" <davem@davemloft.net>,
- Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner
- <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
- <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>, Peter
- Zijlstra <peterz@infradead.org>, Muchun Song <muchun.song@linux.dev>,
- Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett"
- <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, shuah
- <shuah@kernel.org>, Christoph Hellwig <hch@infradead.org>, Michal Hocko
- <mhocko@suse.com>, "Kirill A. Shutemov" <kirill@shutemov.name>, Chris
- Torek <chris.torek@gmail.com>, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-abi-devel@lists.sourceforge.net
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
- 47 bits
-In-Reply-To: <89d21669-8daa-4225-b6d2-33d439ebd746@app.fastmail.com>
-References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
- <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
- <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
- <58f39d58-579e-4dd3-8084-baebf86f1ae0@lucifer.local>
- <7be08ea9-f343-42da-805f-e5f0d61bde26@app.fastmail.com>
- <016c7857-9ea8-4333-96e6-3ae3870f375f@lucifer.local>
- <Zt+DGHZrHFxfq7xo@ghost>
- <89d21669-8daa-4225-b6d2-33d439ebd746@app.fastmail.com>
-Date: Wed, 11 Sep 2024 23:50:05 +1000
-Message-ID: <87zfoeqoz6.fsf@mail.lhotse>
+	s=arc-20240116; t=1726064311; c=relaxed/simple;
+	bh=iXEnj6dkhqKycbpJiOxMa4MmN2ml4Z0wD0WNs5FiKOk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=b5TR88pEglv4wTvj9y38nw4s8j/6sPiFAjmH+pJNkRmi2NUWoY9/PQUnEp7w4te/COv1vqViIyVNVBmz9tCQY4k/rhnZHML1Jc/Wk0Zx4PXgbDDO4vAPWQIZulTCkWSeE93Byu+CM2jjO7OD4Thn0PiS8glah6CIa2n81BvPJmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tQx8Y9FY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 390FAC4CEC0;
+	Wed, 11 Sep 2024 14:18:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726064311;
+	bh=iXEnj6dkhqKycbpJiOxMa4MmN2ml4Z0wD0WNs5FiKOk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tQx8Y9FYq25Qh5IgkLhY6n4hU6sOkdRiC0runQfhoy9P/pbRJv2z6/oOr0YfvH71b
+	 2ovAWT2fQ0hgnllmxNtiJusqD3n7rsODkYluNvwd9CfKZWaw8MfbmIMrWrRxZWL9rr
+	 eIkcj8wEvl90nsFE75qKpjo7I8ehvKVHf+ZnZ7p36p0VoTw5Fk106tPGvYS6raBmKw
+	 AD0Gtd1kJ/vKNt2LsvixpqryV1ooIIK2OgsoLSjPCPRtd4Q7EP+T+QDtxCkTEcJsXV
+	 v1SpGzoQjn1R+oWvzZ/e4KdoXmOxHPVpPeeMuJHy/NPviqxy7Eu4KUkxSIpIKn5Yxw
+	 JfS0SMg7FO07A==
+Date: Wed, 11 Sep 2024 15:18:24 +0100
+From: Simon Horman <horms@kernel.org>
+To: Alexis =?utf-8?Q?Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Maxime Chevallier <maxime.chevallier@bootlin.com>,
+	ebpf@linuxfoundation.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: convert test_xdp_features.sh
+ to test_progs
+Message-ID: <20240911141824.GZ572255@kernel.org>
+References: <20240910-convert_xdp_tests-v2-1-a46367c9d038@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240910-convert_xdp_tests-v2-1-a46367c9d038@bootlin.com>
 
-"Arnd Bergmann" <arnd@arndb.de> writes:
-> On Mon, Sep 9, 2024, at 23:22, Charlie Jenkins wrote:
->> On Fri, Sep 06, 2024 at 10:52:34AM +0100, Lorenzo Stoakes wrote:
->>> On Fri, Sep 06, 2024 at 09:14:08AM GMT, Arnd Bergmann wrote:
->>> The intent is to optionally be able to run a process that keeps higher bits
->>> free for tagging and to be sure no memory mapping in the process will
->>> clobber these (correct me if I'm wrong Charlie! :)
+On Tue, Sep 10, 2024 at 08:10:35PM +0200, Alexis Lothoré (eBPF Foundation) wrote:
+> test_xdp_features.sh is a shell script allowing to test that xdp features
+> advertised by an interface are indeed delivered. The test works by starting
+> two instance of the same program, both attaching specific xdp programs to
+> each side of a veth link, and then make those programs manage packets and
+> collect stats to check whether tested XDP feature is indeed delivered or
+> not. However this test is not integrated in test_progs framework and so can
+> not run automatically in CI.
+> 
+> Rewrite test_xdp_features to integrate it in test_progs so it can run
+> automatically in CI. The main changes brought by the rewrite are the
+> following:
+> - instead of running to separated processes (each one managing either the
+>   tester veth or the DUT vet), run a single process
+> - slightly change testing direction (v0 is the tester in local namespace,
+>   v1 is the Device Under Test in remote namespace)
+> - group all tests previously managed by test_xdp_features as subtests (one
+>   per tested XDP feature). As a consequence, run only once some steps
+>   instead of once per subtest (eg: starting/stopping the udp server). On
+>   the contrary, make sure that each subtest properly cleans up its state
+>   (ie detach xdp programs, reset test stats, etc)
+> - since there is now a single process, get rid of the "control" tcp channel
+>   used to configure DUT. Configuring the DUT now only consists in switching
+>   to DUT network namespace and run the relevant commands
+> - since there is no more control channel, get rid of TLVs, keep only the
+>   CMD_ECHO packet type, and set it as a magic
+> - simplify network setup: use only ipv6 instead of both ipv4 and ipv6,
+>   force static neighbours instead of waiting for autoconfiguration, do not
+>   force gro (fetch xdp features only once xdp programs are loaded instead)
+> 
+> The existing XDP programs are reused, with some minor changes:
+> - tester and dut stats maps are converted to global variables for easier
+>   usage
+> - programs do not use TLV struct anymore but the magic replacing the echo
+>   command
+> - avoid to accidentally make tests pass: drop packets instead of forwarding
+>   them to userspace when they do not match the expected payload
+> - make sure to perform host <-> network endianness conversion on constants
+>   rather than packet parts
+> 
+> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+
 ...
-> Let's see what the other architectures do and then come up with
-> a way that fixes the pointer tagging case first on those that are
-> broken. We can see if there needs to be an extra flag after that.
-> Here is what I found:
->
-> - x86_64 uses DEFAULT_MAP_WINDOW of BIT(47), uses a 57 bit
->   address space when an addr hint is passed.
-> - arm64 uses DEFAULT_MAP_WINDOW of BIT(47) or BIT(48), returns
->   higher 52-bit addresses when either a hint is passed or
->   CONFIG_EXPERT and CONFIG_ARM64_FORCE_52BIT is set (this
->   is a debugging option)
-> - ppc64 uses a DEFAULT_MAP_WINDOW of BIT(47) or BIT(48),
->   returns 52 bit address when an addr hint is passed
-   
-It's 46 or 47 depending on PAGE_SIZE (4K or 64K):
 
-  $ git grep "define DEFAULT_MAP_WINDOW_USER64" arch/powerpc/include/asm/task_size_64.h
-  arch/powerpc/include/asm/task_size_64.h:#define DEFAULT_MAP_WINDOW_USER64        TASK_SIZE_128TB
-  arch/powerpc/include/asm/task_size_64.h:#define DEFAULT_MAP_WINDOW_USER64        TASK_SIZE_64TB
+> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_features.c b/tools/testing/selftests/bpf/prog_tests/xdp_features.c
+> new file mode 100644
+> index 000000000000..bcb36a2d2767
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_features.c
+> @@ -0,0 +1,446 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/**
+> + * Test XDP features
+> + *
+> + * Sets up a veth pair, and for each xdp feature under test:
+> + * - asks the tested interface its xdp capabilities through bpf_xdp_query
+> + * - attach and run some specific programs on both interfaces to check if
+> + *   announced capability is respected
+> + */
 
-cheers
+Hi Alexis,
+
+This is neither a full review nor an issue that needs to block progress.
+But, FWIIW, the comment above is not a Kernel doc, yet starts with '/**'.
+I suggest that it should start with '/*' instead.
+
+...
 
