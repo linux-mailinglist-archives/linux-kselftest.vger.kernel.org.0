@@ -1,120 +1,129 @@
-Return-Path: <linux-kselftest+bounces-17736-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17737-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82B91974D95
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 10:56:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36E23974E7B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 11:28:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 48897282B8A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 08:56:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E1D441F23D26
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 09:28:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 025DC1714C0;
-	Wed, 11 Sep 2024 08:54:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 926B017A596;
+	Wed, 11 Sep 2024 09:28:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GnJrQka7";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="j4S315vw"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QASijEmw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768ED15EFB9;
-	Wed, 11 Sep 2024 08:54:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6439C5D915
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Sep 2024 09:28:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726044885; cv=none; b=t3/5cETZi0cpTsLR+UJrmRwyCnIu/Lee6IJU/+d5S9bNdkzsizPx6yx5rqalCeuO739sr7cxdFKwAJX4miD5m5K2J2npHqh6CZNysZt3rNL/KoHaTArYIbRANhzK5aF4DfPZjlPFlJK3liZgVe0ktnv6qjl/ebmSaJFNP6siLCo=
+	t=1726046885; cv=none; b=lcE1uvwe/Jxd2v9XBAUF4kkJgjnw3KJ/Kpgg9bqEBCjjMlIOCQ+1avjqB+SXwWqrbBwWLON77v/KLKtprqAKdvSI9ryTAG65qJNu1swmJciuvwkkLxV6ZTj0r9jKiVCTpaHci9V/yo5Er6OPYcXlsLXHpp55NgkLcE62/OdkPAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726044885; c=relaxed/simple;
-	bh=Ia5lmZBVLJrbaO6z3AnbdyZ8EauRGs2je4iFnOPryh4=;
-	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Cv/id2FyEAu4Eqj29Qs/ybukB2NyOoVDEww4JdBzVf3L4E28nF/vrOv/qMglWBCYe3Sii6RSjRCXqgb/yZHqcDvn0XV7fhlR+6UNadc86w5DdExxy0HoiVtXsaLa3Cu84W/j+vPJEWyAmAkd8XOm7TvE2gOg2TLbra6TYGzvNDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GnJrQka7; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=j4S315vw; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1726044882;
+	s=arc-20240116; t=1726046885; c=relaxed/simple;
+	bh=daqri6JZZQqA0i5W9IXSOaZAiDltFhNX7cyJZa1EE8c=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ZMoGiFrgRKFc8K6AJw7CUYEUMBYts+BL2sPtuzl0erT9CxgWmHN8+UDuTvX6dZrRy2Ka0iYoTkC7wyQ1fKQ776GzQwBFPDAZ9mSAgHIkwdWZsf8EpOCFt2HzDRkU9ZZjmH3doq8d+uGZ0rxPYKQhrs2Q+KWXvbTlStOXFfe7aa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QASijEmw; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1726046882;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=SIWotiYC5Y4E+rxhEG44q+nipjMbhXVcKsGP/nRiJ24=;
-	b=GnJrQka7HOInLWqWmsZ6qkHZ0W9Rj5dZZExzd3hvgYSTK0fpI6HL+0e8KjAHudy4kDjpxy
-	MxIz+brSXXuagOpfEkXDNNkCPqTiYMqQyMdXfccDcKB9KUouBqPqqXeBfWK2oP4fISlU1D
-	n7AtQv7jfK6LRL3xox/WnFCE+IqlAe5Nr7QiRLB8dInilr6U+fR3EEC0kioII5QUxv/OrA
-	bfM4Y+wwYlukjtl0dI4jtS6L4NSDu8+9hgWnwvEtB8lvYDpdJ/wNRYat1t5TGQGxPyyKTr
-	nfL+jZkLYyW8//Xd3ldFa7ks7tDPyswjuMy4A0qsev4HdZy8NG4iD90mbry+tA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1726044882;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SIWotiYC5Y4E+rxhEG44q+nipjMbhXVcKsGP/nRiJ24=;
-	b=j4S315vwGFT9faWUP5mefHu/YN3jS/hgY1kW7RTFqW5uO+/pVR6eg/jbfC3j3aPFnwNw84
-	ZxIn8qa5KOliF0Cg==
-To: "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>, Andrew Morton
- <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, David Gow
- <davidgow@google.com>, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com
-Subject: Re: [PATCH 3/3] debugobjects: Use hlist_cut_number() to optimize
- performance and improve readability
-In-Reply-To: <85a8aa26-f135-fdde-fadf-c2b38a563805@huawei.com>
-References: <20240904134152.2141-1-thunder.leizhen@huawei.com>
- <20240904134152.2141-4-thunder.leizhen@huawei.com> <87jzfkbrgf.ffs@tglx>
- <5333927d-3f21-b7cc-8c57-6e21f1b4a3e5@huawei.com> <87bk0vbumx.ffs@tglx>
- <85a8aa26-f135-fdde-fadf-c2b38a563805@huawei.com>
-Date: Wed, 11 Sep 2024 10:54:41 +0200
-Message-ID: <878qvya7u6.ffs@tglx>
+	bh=daqri6JZZQqA0i5W9IXSOaZAiDltFhNX7cyJZa1EE8c=;
+	b=QASijEmw1OFfNvisVK/bQRRuKoMakTj5zeCsdZRp7H+UCeP6GUbYWn7a7rniucdaYoyCXi
+	k+9F36I958vEgSZrjfZ38D2eaXk4vChByDV9e+KA9L729Gmb8AHBjlzsFw22Z/Qv+9QNUm
+	RHMeS2kQR0BMpSXEVmu27R2yjx6dxx0=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-638-xM63pN-KPb-5BLG2_qJtjA-1; Wed, 11 Sep 2024 05:28:01 -0400
+X-MC-Unique: xM63pN-KPb-5BLG2_qJtjA-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a8d10954458so351717666b.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Sep 2024 02:28:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726046880; x=1726651680;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=daqri6JZZQqA0i5W9IXSOaZAiDltFhNX7cyJZa1EE8c=;
+        b=Hp5e8eHe1iims7Z/GFEwqwos1PfJ4tHofWWh8N6keYk5D3gpQ7j99k2qj5b3sV5sU6
+         96r9TRKh3JblG+YaQWDcLnGaKzkr+D6sfzMLDQWXb7VPVcBEHvo25Fp0RK+HrKbPBLwz
+         5oNxx8Y5nyvDyadAxTqZLE3cJwwFquih8sbnaB+cxpxEfdS7FmEGohp+3AzLcuH6QCu5
+         aGuCogyR3gTYesmbD1zKocRWiOjMSpc6IKwzhWo3jZqnEx5U0gelirWzBKrRu8c8phSk
+         hQlKQqXlpi25PvEhHEyHTqwS+dgJ85UotF4oIY++x/RBONmt2h1xIpkEa8i9lBFdK4zK
+         PIGA==
+X-Forwarded-Encrypted: i=1; AJvYcCXzJpRfFWBWYRz29caoW6p4SuinrGZtUiy2fXCxVvc0heZrK/58NeeYohN0V5IWv/27SB+kgrCTw1r/263xzD8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxvi4gvYtGbBH+e42HP2IymoUrGzXVTkatakd21C4wcyHM99T4u
+	TGnL82bEG95IBknao9AXaIcKHZovYo/7AL9ods8mLq7t8qXuwujcLfzqRENilk98lYZLrj12hT3
+	gEAa8YOjV7KkKgVICbRS2ARckKcggYp1T3otqaDxoOG94G1tM4Rn2BTlPomDawg/3Zg==
+X-Received: by 2002:a17:907:97ce:b0:a7a:a138:dbc1 with SMTP id a640c23a62f3a-a8ffab186e2mr337838866b.20.1726046879926;
+        Wed, 11 Sep 2024 02:27:59 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGnHzlMw1tu+Z+GQSp2X0RZmYzG1Uff+btBKKc7jIg8BK8u9Kh8sOEAmodgVs3w55sADXPe2w==
+X-Received: by 2002:a17:907:97ce:b0:a7a:a138:dbc1 with SMTP id a640c23a62f3a-a8ffab186e2mr337832966b.20.1726046878759;
+        Wed, 11 Sep 2024 02:27:58 -0700 (PDT)
+Received: from alrua-x1.borgediget.toke.dk ([45.145.92.2])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a901c737f09sm16779066b.30.2024.09.11.02.27.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Sep 2024 02:27:58 -0700 (PDT)
+Received: by alrua-x1.borgediget.toke.dk (Postfix, from userid 1000)
+	id 4C8F6152C4FE; Wed, 11 Sep 2024 11:27:57 +0200 (CEST)
+From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+To: Florian Kauer <florian.kauer@linutronix.de>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, "David S.
+ Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, John Fastabend
+ <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Martin
+ KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP
+ Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, David Ahern
+ <dsahern@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>, Mykola Lysenko
+ <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Jesper Dangaard Brouer <brouer@redhat.com>,
+ linux-kselftest@vger.kernel.org, Florian Kauer
+ <florian.kauer@linutronix.de>
+Subject: Re: [PATCH net v4 2/2] bpf: selftests: send packet to devmap
+ redirect XDP
+In-Reply-To: <20240911-devel-koalo-fix-ingress-ifindex-v4-2-5c643ae10258@linutronix.de>
+References: <20240911-devel-koalo-fix-ingress-ifindex-v4-0-5c643ae10258@linutronix.de>
+ <20240911-devel-koalo-fix-ingress-ifindex-v4-2-5c643ae10258@linutronix.de>
+X-Clacks-Overhead: GNU Terry Pratchett
+Date: Wed, 11 Sep 2024 11:27:57 +0200
+Message-ID: <874j6mee02.fsf@toke.dk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Sep 11 2024 at 15:44, Leizhen wrote:
-> On 2024/9/10 19:44, Thomas Gleixner wrote:
->> That minimizes the pool lock contention and the cache foot print. The
->> global to free pool must have an extra twist to accomodate non-batch
->> sized drops and to handle the all slots are full case, but that's just a
->> trivial detail.
+Florian Kauer <florian.kauer@linutronix.de> writes:
+
+> The current xdp_devmap_attach test attaches a program
+> that redirects to another program via devmap.
 >
-> That's great. I really admire you for completing the refactor in such a
-> short of time.
+> It is, however, never executed, so do that to catch
+> any bugs that might occur during execution.
+>
+> Also, execute the same for a veth pair so that we
+> also cover the non-generic path.
+>
+> Warning: Running this without the bugfix in this series
+> will likely crash your system.
+>
+> Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
 
-The trick is to look at it from the data model and not from the
-code. You need to sit down and think about which data model is required
-to achieve what you want. So the goal was batching, right?
+Reviewed-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@redhat.com>
 
-That made it clear that the global pools need to be stacks of batches
-and never handle single objects because that makes it complex. As a
-consequence the per cpu pool is the one which does single object
-alloc/free and then either gets a full batch from the global pool or
-drops one into it. The rest is just mechanical.
-
-> But I have a few minor comments.
-> 1. When kmem_cache_zalloc() is called to allocate objs for filling,
->    if less than one batch of objs are allocated, all of them can be
->    pushed to the local CPU. That's, call pcpu_free() one by one.
-
-If that's the case then we should actually immediately give them back
-because thats a sign of memory pressure.
-
-> 2. Member tot_cnt of struct global_pool can be deleted. We can get it
->    simply and quickly through (slot_idx * ODEBUG_BATCH_SIZE). Avoid
->    redundant maintenance.
-
-Agreed.
-
-> 3. debug_objects_pool_min_level also needs to be adjusted accordingly,
->    the number of batches of the min level.
-
-Sure. There are certainly more problems with that code. As I said, it's
-untested and way to big to be reviewed. I'll split it up into more
-manageable bits and pieces.
-
-Thanks,
-
-        tglx
 
