@@ -1,251 +1,367 @@
-Return-Path: <linux-kselftest+bounces-17711-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17713-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B2EA974A5D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 08:25:27 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1120974AB4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 08:56:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FC071C21C58
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 06:25:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 317F6B24EDC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 06:56:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A69157DA9C;
-	Wed, 11 Sep 2024 06:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F4213B58C;
+	Wed, 11 Sep 2024 06:56:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D9OLegJd"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AN/ryQoc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D21D182D2;
-	Wed, 11 Sep 2024 06:25:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726035921; cv=fail; b=nNqVtaNEkjCPokugyleDkFsFmbBCtXCNM3PDQzSZDNq+SqzLNKyXZbobs4x08iNGDEgtgVhGgw3WRi5ylngTLc9KokBAU/Mw4sd1lfRE/WTV3TuKMK6NF/qvV2hivfCxg5TbDpl8at9+h5TIZPFCSR04JYgAFtx9+gQqL2X5ItM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726035921; c=relaxed/simple;
-	bh=fWR0wLN8MB50KBMpE3fnm43fpBl8S4QDJ0j6H6zbqdg=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=FSZSPnPblvFNHDbcT60yR50iGOck4TdNIBtp9la+VBOqtJnrwGdtuaR+Bcww+rseyEFSmQPKSCpS6j4lkkLU+0JZuT7USLVmIPwuJQvOEdgw2MbcEHpSIHbS52djhqFWnqZR6tWoaUTF9S//htrIJMXXOLLP3sYNUzbdVJoc2LY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D9OLegJd; arc=fail smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726035920; x=1757571920;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=fWR0wLN8MB50KBMpE3fnm43fpBl8S4QDJ0j6H6zbqdg=;
-  b=D9OLegJdM2Nwt1pB6mKwdM8sfevY8kan7T82Jjh7iKw5CnRHQtCQ2+Pd
-   SIpNzO0qcp5gt2z7Fe7HdmYwLOkzXRzdX5plfeAoofZrBQiQlPUQw4W3x
-   zydzv/f6r2vdnC/bYx/GBDQnkjKwusE2pcAQJ+msADc8pyh24sng7Xykc
-   LR9G90eHVczsyvfkJcmtVUg0oEr90+LpjHbctrkdeNxn/vuC2u2C3c2tc
-   jLiRfEHb4JNmrGMiOZ/pdkQX5Xx3t+4zpDf4NBxkY32ma3F8jcTl7hYen
-   jBnrbk9tLTVQ0Ep9eyGj5gbBonoacJEC8Ev/3gB0yFf1IpYRkgR9gPGCA
-   g==;
-X-CSE-ConnectionGUID: RVO40FrsSv2qVUWXUM1vKg==
-X-CSE-MsgGUID: f0wjbnnmT6+nMXqD83h7cw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11191"; a="28556030"
-X-IronPort-AV: E=Sophos;i="6.10,219,1719903600"; 
-   d="scan'208";a="28556030"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Sep 2024 23:25:19 -0700
-X-CSE-ConnectionGUID: fGqT+tK+Tp6/GTINKjGq+g==
-X-CSE-MsgGUID: eLeWgye5RWKOUYcnsSTOXw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,219,1719903600"; 
-   d="scan'208";a="67107237"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orviesa010.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 10 Sep 2024 23:25:19 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 10 Sep 2024 23:25:19 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 10 Sep 2024 23:25:18 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Tue, 10 Sep 2024 23:25:18 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 10 Sep 2024 23:25:18 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tpkeH9MRAJQ+TDNWKKDTZqfsgY/9cS0880WU2EmOGrRLFKgk8DlN6zH4pT4PsnXpNNfXVPneAd1azGkvVQqBE1BPcToPhM3/mFDg6JnrpT2GySx5XUl/ufUXPeWnSdQo1gtKD77KL9GEYnNLVBRFj3wsdyJX6JXRvade/u6ZlfLYed1HzGB3KEZk12vg8tnFLsIwI9DnPKf3m/4F/a8wTdwvv49X9WiyZg+2O4X1REf9srRbZWhAA/MWyuOjP+F9J5ytPWrzPwal3ILB0czROySUkLiCw1Z0tHRGsZpAMrrSMnP3WDOTKB2x3usN4QawzpMSYfpsYVsvdhlXWZwKYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D866SP+rBFjxa0PI3txqLKupf37CC2xet5jnG3b8jGM=;
- b=Xy3FXItWrBWlbtah4WFJ26BmFZxA2Yx5PKHFJOUzu3gGIB5bABhhZpyy8TfbAopgLyacX+9g0V55ToAJXnksWne2sHbyHSS/8mroreD2W53d26hCyEEXRnzRPg0IoRE4zVvKmnC5kR8uhjGMh7zVSn47AvxKMEE5s2pzUD5Ph0pqJ07UDZm8fl2hAlGGszNgT1NfwwFrW/OuJW5NpFED5si6CM45qb9BqcXFJgC7etpp8fiJpYoY24gXDnVdWqftnsI8Pr+U6G0PqbwytTacm/HwwVz+BzCjeMCnA2tKPinh8TvzCnQ0JaUu2Ep+CxsDoV0pgKxHFfZA0QQUSsfv3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5271.namprd11.prod.outlook.com (2603:10b6:208:31a::21)
- by CY5PR11MB6366.namprd11.prod.outlook.com (2603:10b6:930:3a::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7918.33; Wed, 11 Sep
- 2024 06:25:16 +0000
-Received: from BL1PR11MB5271.namprd11.prod.outlook.com
- ([fe80::5616:a124:479a:5f2a]) by BL1PR11MB5271.namprd11.prod.outlook.com
- ([fe80::5616:a124:479a:5f2a%2]) with mapi id 15.20.7939.022; Wed, 11 Sep 2024
- 06:25:16 +0000
-From: "Tian, Kevin" <kevin.tian@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>, Nicolin Chen <nicolinc@nvidia.com>
-CC: "will@kernel.org" <will@kernel.org>, "joro@8bytes.org" <joro@8bytes.org>,
-	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-	"robin.murphy@arm.com" <robin.murphy@arm.com>, "dwmw2@infradead.org"
-	<dwmw2@infradead.org>, "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-	"shuah@kernel.org" <shuah@kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "iommu@lists.linux.dev"
-	<iommu@lists.linux.dev>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "eric.auger@redhat.com"
-	<eric.auger@redhat.com>, "jean-philippe@linaro.org"
-	<jean-philippe@linaro.org>, "mdf@kernel.org" <mdf@kernel.org>,
-	"mshavit@google.com" <mshavit@google.com>,
-	"shameerali.kolothum.thodi@huawei.com"
-	<shameerali.kolothum.thodi@huawei.com>, "smostafa@google.com"
-	<smostafa@google.com>, "Liu, Yi L" <yi.l.liu@intel.com>
-Subject: RE: [PATCH v2 17/19] iommu/arm-smmu-v3: Add
- arm_smmu_viommu_cache_invalidate
-Thread-Topic: [PATCH v2 17/19] iommu/arm-smmu-v3: Add
- arm_smmu_viommu_cache_invalidate
-Thread-Index: AQHa+KLw6F1nSDclIE+ushKsvSKoLbJJbdGAgAAb/YCAAAXcAIAIpC/Q
-Date: Wed, 11 Sep 2024 06:25:16 +0000
-Message-ID: <BL1PR11MB52712F4AAF7D1388A080A49E8C9B2@BL1PR11MB5271.namprd11.prod.outlook.com>
-References: <cover.1724776335.git.nicolinc@nvidia.com>
- <4b61aba3bc6c1cce628d9db44d5b18ea567a8be1.1724776335.git.nicolinc@nvidia.com>
- <20240905162039.GT1358970@nvidia.com> <Ztnx0c4BpGt6umrM@nvidia.com>
- <20240905182148.GA1358970@nvidia.com>
-In-Reply-To: <20240905182148.GA1358970@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5271:EE_|CY5PR11MB6366:EE_
-x-ms-office365-filtering-correlation-id: d531f5c5-6a12-42a0-f82e-08dcd22a807f
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014|38070700018;
-x-microsoft-antispam-message-info: =?us-ascii?Q?3Q1PNzswB7S1tS+uYmEIrgY1eM8OUt9QA/4y8I/eR4gJr/8/RAVRLJ63sS4Z?=
- =?us-ascii?Q?WH9fIB010y5LUYAxlA+FvNrXzGVL2NP68ErlCmgGOac964H1vQv11zizODpa?=
- =?us-ascii?Q?ICkzsPKXLhbKoNtpwkTr5fuBAWkaClW2Cxk0gkSMrksNEFCxU5osjbYPsnps?=
- =?us-ascii?Q?mpG3Whs3E7ET5Z3Rx2NrEZruQec8sY0lpN+EenU5EYTSPu6MBM0heu+AUMni?=
- =?us-ascii?Q?Qp9Mepdh+0dzDM58XHXI2UCnN8uvrXI6/dzEfWCos8Up/Lo3xcwPUY7DcYWw?=
- =?us-ascii?Q?zs38ADthSY7VTlUI4tabV5+OtPE/cqmMNLJomRkkgBMdoAQgoVCnaX1zMhIz?=
- =?us-ascii?Q?gkd7I2PhuzdQLxJRC+42pPlEoeixK+Jg19GnzjZfz34Mo65Y04m8BqOwnokf?=
- =?us-ascii?Q?3zj4uQHCjMXdA5m4vQiHBWDYJ0PoNxT5pbbthoZPY7tZIvdJZ+U9f7usGQWb?=
- =?us-ascii?Q?YFWDTItH4/IAn1Pz4HOOEHf0kPMBtNu3lNgZu8RMYbCY7H0XasbrBEPBIzkm?=
- =?us-ascii?Q?EIo/VIMSy3ooL2R5byyxghZZ2E/aDFyO8khhFkTrHmKbwMVzQr1dnL1yc9gL?=
- =?us-ascii?Q?lofadVjae0ad8LLijx4iciGXcIhkX90BRIwldyPpoGuy9id4P7TjUdP3O8MX?=
- =?us-ascii?Q?Emfnu7dpERS5ghszOV+WNxs9DqMTSVxkxakarqhITvyYCmyGu9RE1QnmsEJM?=
- =?us-ascii?Q?WbCv1gHDWL4YgE/mX+/lINPHxfmAJ4jI1rGgOok3RqWTY+UKTDkP04lQUIKg?=
- =?us-ascii?Q?tG6mQ/xoVDtMSwzaGp/1mPdF5TLdPKH6I+ayrJQ5gwfdEi9EjgGBrcz0o0S8?=
- =?us-ascii?Q?CIjqu2IjMKLKtCOmxeVnkaGR/Mc6WDksKTrZVnZwQQM5BRjdLgdzr0ajc96c?=
- =?us-ascii?Q?b876IQWuohmBA44FDkbeUuXeFEV9odeH86xrj0YEedg5Bh6LY5LnvKtinzCx?=
- =?us-ascii?Q?vXHeabv/L/NgcKMqucdFObc4cJLvJc0UveyplgLFoT3Nu6iwG/y7rbBBJ3u7?=
- =?us-ascii?Q?CPNaF18aShITeefe8t4f3k7sd59QaPgeq1VUh4zu/AnBWwz/cdssx0m74yx2?=
- =?us-ascii?Q?Yq53oE9ghnv6/rEUQe3d4nsQeR7mbd/acPEb+XdozPMSLJUfli75z7lgtfPC?=
- =?us-ascii?Q?COxtIiuzR7n2SVZZnwRWHqhTeSCxzzbALriC2N6g1m5aWZbd0J69nunnhid7?=
- =?us-ascii?Q?HWS8q4w1lLmHwhxjtOhVhRmVaXMalsyPfH7i0i2r7+CKVWbnKpLiaUhaAan6?=
- =?us-ascii?Q?CIH/bAvKmglv2+MGB1KCK2zaSp7vEclcaO0CAvAyuL3T7/b318ZudQuNMUA4?=
- =?us-ascii?Q?fYQldAvpp5g2v+LSevwYfpf25zmCqUA0GULdDfhRb0BRnyvjncH4CiOuphNM?=
- =?us-ascii?Q?GobOGExRFtvcHQaU+M7j9zwra3l3yOtk6qeORaD5pVNTMMUe9g=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5271.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?iUmOTBEsr8AUF6aQ72UI1KD0PLMjlP6qiihgus6RstqcA5d8um6johmCN9cH?=
- =?us-ascii?Q?1GP3CldvOVwpi3UJG8j/XEkfaBUpLM2QKZTe0d1tp90kw6m4Tr5D7BEW11KH?=
- =?us-ascii?Q?a1Xa9OpfsbDYa033NO0+kwa8F9UDXDwfX5GI/yjc0OcLqNUr12MFlGwXnCAm?=
- =?us-ascii?Q?W/Ng7Agg8DTAdEf2u4gO4wAopx1BT4p93WqESMMFH03KfhGYoOLxIGC027ed?=
- =?us-ascii?Q?YazFUvcF3uer65G7Gm6N6MxgKKK4j+xoGqOKqYUdhpAIYxcBGKd5dsHrqYSU?=
- =?us-ascii?Q?DR9sXSpZdMsrfcnU2R0PMEB7tje7bL1abULvY9guCJrlUjpFy4wJEnLJEbPP?=
- =?us-ascii?Q?rmukwd3vzkRYXdpUm67cm41/GEvA99Ovanvoz+KrEeD7VZsISolUI5KrhjzT?=
- =?us-ascii?Q?PVkhW3Rv4ZMIQxP7+mKaXrN1lIWpIRBXCiB+hkgc9cCs6lC5jJ1L3I2gFkeK?=
- =?us-ascii?Q?lM3qKSFa06XDyUUtusMol4m35v8HAhnmqwom5cvFo0vVovuwaJYdJGZTaHCW?=
- =?us-ascii?Q?AJddYcJaw7q6xi4m3zdWlNX8Lhf/QxyWcaikiclloawuqRanpGPUBn012AiE?=
- =?us-ascii?Q?rbTQhprr8KJ8IB4EGsyi4Fdz5fN/XIcgUUwmrhknQF02Qgu1rnRvNWXyI+5l?=
- =?us-ascii?Q?XZyq6hIWTOlibDkUNdqP1xROn+bGxqoj8vfi9qX38xwXZERRbmgY5T9UG5E8?=
- =?us-ascii?Q?2EkK7tyWxQaN7UYVC+2xQb330R3i85DjEsM1WX09Ostdh5vbAWhLy+AGFPtP?=
- =?us-ascii?Q?WEQFVBM6tKHhc+N75dXrwM/ONN1iz3i+FSneaznNIIGTDhS6tU+meVu1TOsF?=
- =?us-ascii?Q?/+ao7z3nRDGIlg3J91xklTPyZ8rGOl1hj/jM3BuhTQtww6kaBT8OOYac8ArD?=
- =?us-ascii?Q?RMCJ1vNwxuGgt3h5aM5VIipVTMd79WqIhY9sobrOBeVG/MYLc+dnDZYn13jA?=
- =?us-ascii?Q?FhiNDHK31IYNlv6argl+pjK6OS6D5lbGN9l3NI5vVDx89qV2p94EceZhPq+t?=
- =?us-ascii?Q?ylxRslL1qIWWQ9Rb/3YRo+TbegzUtGY0C1ZxxzqS87DDcz+iZU/XM03ny8/B?=
- =?us-ascii?Q?9k6nCAOWtW5DSue2yMmMCoaBsETI2B87pZ/5xD2zoh/scrP9KEmiR3a70/lg?=
- =?us-ascii?Q?+fUuFlcDikvzjLeO+vS1mhzBxB97p14FnRsm73Mu/YnXSJ9QDv3Z51WThd+A?=
- =?us-ascii?Q?KONP8rm5uAf6jKFL8AT8Ubp/OHxEKrNREFXoqz6gofZEHEOhEXkWet60wcTt?=
- =?us-ascii?Q?O5KrGYaVqEHuQc+uFYVQWLeM41AAPiQl8CofMKvo0b7n7i3eugmd/LzHjamq?=
- =?us-ascii?Q?dJfon8Fhni8sFLk0fbrt6yhN5GmTpXT5r+HfeH8K1hXpjrTDpFv4jYynj7BT?=
- =?us-ascii?Q?p5L4Fc+zSUDj2XRZ12iYunj/9S7bBW6zGk7ZeXalVNKyqgBD1uvOS345ymDn?=
- =?us-ascii?Q?Mc7ZI703JFpf47ZnJbgH8mzPP8kiuk6RecaY4IqzEitdzbYTre4q7BlwtkIx?=
- =?us-ascii?Q?jn0o03ssiisi54J+y3lqRzN1vWXbBCVtNzcrkvXJBJyNPvT/+J3ZGZ3T/pKj?=
- =?us-ascii?Q?AQrVVWRubcRH/66ySx+McS2wvSWFoFkDQpD9XFLf?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC75112C484
+	for <linux-kselftest@vger.kernel.org>; Wed, 11 Sep 2024 06:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726037795; cv=none; b=Mu1OfJ5yLWSYdhDgus+dgJ30O6Mdz7BUU6d9s22t2o9k+4n7nA92MRVP+erVCi8Uju5+UGSTyWsTW1Vn8cBh43cnotMuiibNKgxhIRaSUtAY/UE50uF6s2r6YwW2r1TYWz1jHi0iu7WuKVpYIFKKScnx6BLYA3K7JqrAN1o0Rds=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726037795; c=relaxed/simple;
+	bh=S/codWSFiZMhnOnoWjGa1OpUf7W3ix2sgsp6ciOX+iI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hIHDgU9+Exu+fgbsE2UegOI8bxLXohi0WpJTrBIOfKCVjo8iPRqLgUQCHOpyRZITwQEUAIEnICl5/tf9wJICmf2JGpqv+TbT9BAuVFbSKwbRX+v6ia/Nn8O72J8siICHtDY2ggBlssULnvTDYuTOuUNSSiVR0C5t0cYezIamlDQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AN/ryQoc; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-42cba6cdf32so22384555e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 23:56:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1726037791; x=1726642591; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2W/6yqc36Yx5JYfTAvZPPQFKX/7iJh9OIgOV9O+ITC4=;
+        b=AN/ryQocA8TWIsAJdE78w4wqqt1GNiHJ+sU9agzvk75wcwN0LGYP97E5LVzrkLlffU
+         4C7P2xa5RzrjoXkE5BTlJufenXLic/qramLvdelhM10hn76KwbPHlWaJSVa+CjjO9O6l
+         wP0miWnkFYks8hPTStA1MXRnVrBgsvVvZrSAiONlvihoW5P3X2PAHWofZVwVX579QCVV
+         F1fnBXZAOqPpYjMsis2q/ntcY1Ihf2khkLQHyp0HBFmZw8tlsi2gniYfIk9NkT0wW6UF
+         +jfQ/pz03SOrkAj6SuuIYA/7Hgfe9eg5Pt59T9CI7o0WGZYhL9kPEx4XHfYaOqB9R79F
+         iZ+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726037791; x=1726642591;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2W/6yqc36Yx5JYfTAvZPPQFKX/7iJh9OIgOV9O+ITC4=;
+        b=qFbl/8cCn1bfYcbeiHpC8JaUMYuXMO5nvApXDEzAUUUFpP3qvl+hjmUT7KAumsUfAL
+         3CJeJcSUspWR3djpYXbOgxBhNxcpW6VukbdOl/eVOfUs+cAuEN8emnBJp8wVqdcgGLJd
+         gwcJoP4p3r7AXP1SS/j01/FH3UHGJ9mQY4Oag0eDrj7sN2DdXlHB0cdRgvYuq3rLdEZ2
+         Vl6WBAQZZTzGcwKf5xCAOYXFrotPR/kyrYh+3UkDEcNfzX8/27JM3EDS/VmanREC86XT
+         6kSNHrxjkILy8RP596SZT6KhxSJMRU0dW3b4G77cTEKnxI5lJN83IctGz71bVHq03xtY
+         jnNg==
+X-Forwarded-Encrypted: i=1; AJvYcCXGXIBb0uIg7iNK5FVsbSR22QfNI/ADZUxMO5P/bb//h5ujGmjZNMqqACjqcmbNP1hDmEX5yS71JmZG+YfDIgQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyj+piWvNoFPVU+tbqymIk6/N1FJysq03y1ndM+YJj018Y3vCVM
+	ORm0fi0b3tWzPxTaiTJKbQdkUdNXcymYFJ/EsJLs8ZZ6Rc1alNdKILyl00hOu2s=
+X-Google-Smtp-Source: AGHT+IGV6renJvHaBCc1TWVIVsopoWasW9VIRFmjUsSDpFXThDJPoqGDaKj88scjdQNxgZQvl7GeCg==
+X-Received: by 2002:adf:e3c9:0:b0:368:74c0:6721 with SMTP id ffacd0b85a97d-37889674a48mr9587261f8f.38.1726037790728;
+        Tue, 10 Sep 2024 23:56:30 -0700 (PDT)
+Received: from localhost (109-81-83-158.rct.o2.cz. [109.81.83.158])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42caeb21a68sm132660525e9.8.2024.09.10.23.56.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 10 Sep 2024 23:56:30 -0700 (PDT)
+Date: Wed, 11 Sep 2024 08:56:29 +0200
+From: Michal Hocko <mhocko@suse.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: tabba@google.com, quic_eberman@quicinc.com, roypat@amazon.co.uk,
+	jgg@nvidia.com, peterx@redhat.com, david@redhat.com,
+	rientjes@google.com, fvdl@google.com, jthoughton@google.com,
+	seanjc@google.com, pbonzini@redhat.com, zhiquan1.li@intel.com,
+	fan.du@intel.com, jun.miao@intel.com, isaku.yamahata@intel.com,
+	muchun.song@linux.dev, mike.kravetz@oracle.com,
+	erdemaktas@google.com, vannapurve@google.com, qperret@google.com,
+	jhubbard@nvidia.com, willy@infradead.org, shuah@kernel.org,
+	brauner@kernel.org, bfoster@redhat.com, kent.overstreet@linux.dev,
+	pvorel@suse.cz, rppt@kernel.org, richard.weiyang@gmail.com,
+	anup@brainfault.org, haibo1.xu@intel.com, ajones@ventanamicro.com,
+	vkuznets@redhat.com, maciej.wieczor-retman@intel.com,
+	pgonda@google.com, oliver.upton@linux.dev,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-fsdevel@kvack.org, Oscar Salvador <OSalvador@suse.com>
+Subject: Re: [RFC PATCH 00/39] 1G page support for guest_memfd
+Message-ID: <ZuE_Haaz8M6ENprE@tiehlicka>
+References: <cover.1726009989.git.ackerleytng@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5271.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d531f5c5-6a12-42a0-f82e-08dcd22a807f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Sep 2024 06:25:16.5913
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VxWdRwzXvp99Z6ODu2kpZTrHeGblOYLtRimHakPHJS4B6wIwuCWqT+BdbVNV4VNHgAhU4EuRrZoF90WVc/FzKg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6366
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1726009989.git.ackerleytng@google.com>
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Friday, September 6, 2024 2:22 AM
->=20
-> On Thu, Sep 05, 2024 at 11:00:49AM -0700, Nicolin Chen wrote:
-> > On Thu, Sep 05, 2024 at 01:20:39PM -0300, Jason Gunthorpe wrote:
-> > > On Tue, Aug 27, 2024 at 09:59:54AM -0700, Nicolin Chen wrote:
-> > >
-> > > > +static int arm_smmu_viommu_cache_invalidate(struct
-> iommufd_viommu *viommu,
-> > > > +					    struct iommu_user_data_array
-> *array)
-> > > > +{
-> > > > +	struct iommu_domain *domain =3D
-> iommufd_viommu_to_parent_domain(viommu);
-> > > > +
-> > > > +	return __arm_smmu_cache_invalidate_user(
-> > > > +			to_smmu_domain(domain), viommu, array);
-> > >
-> > > I'd like to have the viommu struct directly hold the VMID. The nested
-> > > parent should be sharable between multiple viommus, it doesn't make
-> > > any sense that it would hold the vmid.
-> > >
-> > > This is struggling because it is trying too hard to not have the
-> > > driver allocate the viommu, and I think we should just go ahead and d=
-o
-> > > that. Store the vmid, today copied from the nesting parent in the vmi=
-d
-> > > private struct. No need for iommufd_viommu_to_parent_domain(), just
-> > > rework the APIs to pass the vmid down not a domain.
-> >
-> > OK. When I designed all this stuff, we still haven't made mind
-> > about sharing the s2 domain, i.e. moving the VMID, which might
-> > need a couple of more patches to achieve.
->=20
-> Yes, many more patches, and don't try to do it now.. But we can copy
-> the vmid from the s2 and place it in the viommu struct during
-> allocation time.
->=20
+Cc Oscar for awareness
 
-does it assume that a viommu object cannot span multiple physical
-IOMMUs so there is only one vmid per viommu?
+On Tue 10-09-24 23:43:31, Ackerley Tng wrote:
+> Hello,
+> 
+> This patchset is our exploration of how to support 1G pages in guest_memfd, and
+> how the pages will be used in Confidential VMs.
+> 
+> The patchset covers:
+> 
+> + How to get 1G pages
+> + Allowing mmap() of guest_memfd to userspace so that both private and shared
+>   memory can use the same physical pages
+> + Splitting and reconstructing pages to support conversions and mmap()
+> + How the VM, userspace and guest_memfd interact to support conversions
+> + Selftests to test all the above
+>     + Selftests also demonstrate the conversion flow between VM, userspace and
+>       guest_memfd.
+> 
+> Why 1G pages in guest memfd?
+> 
+> Bring guest_memfd to performance and memory savings parity with VMs that are
+> backed by HugeTLBfs.
+> 
+> + Performance is improved with 1G pages by more TLB hits and faster page walks
+>   on TLB misses.
+> + Memory savings from 1G pages comes from HugeTLB Vmemmap Optimization (HVO).
+> 
+> Options for 1G page support:
+> 
+> 1. HugeTLB
+> 2. Contiguous Memory Allocator (CMA)
+> 3. Other suggestions are welcome!
+> 
+> Comparison between options:
+> 
+> 1. HugeTLB
+>     + Refactor HugeTLB to separate allocator from the rest of HugeTLB
+>     + Pro: Graceful transition for VMs backed with HugeTLB to guest_memfd
+>         + Near term: Allows co-tenancy of HugeTLB and guest_memfd backed VMs
+>     + Pro: Can provide iterative steps toward new future allocator
+>         + Unexplored: Managing userspace-visible changes
+>             + e.g. HugeTLB's free_hugepages will decrease if HugeTLB is used,
+>               but not when future allocator is used
+> 2. CMA
+>     + Port some HugeTLB features to be applied on CMA
+>     + Pro: Clean slate
+> 
+> What would refactoring HugeTLB involve?
+> 
+> (Some refactoring was done in this RFC, more can be done.)
+> 
+> 1. Broadly involves separating the HugeTLB allocator from the rest of HugeTLB
+>     + Brings more modularity to HugeTLB
+>     + No functionality change intended
+>     + Likely step towards HugeTLB's integration into core-mm
+> 2. guest_memfd will use just the allocator component of HugeTLB, not including
+>    the complex parts of HugeTLB like
+>     + Userspace reservations (resv_map)
+>     + Shared PMD mappings
+>     + Special page walkers
+> 
+> What features would need to be ported to CMA?
+> 
+> + Improved allocation guarantees
+>     + Per NUMA node pool of huge pages
+>     + Subpools per guest_memfd
+> + Memory savings
+>     + Something like HugeTLB Vmemmap Optimization
+> + Configuration/reporting features
+>     + Configuration of number of pages available (and per NUMA node) at and
+>       after host boot
+>     + Reporting of memory usage/availability statistics at runtime
+> 
+> HugeTLB was picked as the source of 1G pages for this RFC because it allows a
+> graceful transition, and retains memory savings from HVO.
+> 
+> To illustrate this, if a host machine uses HugeTLBfs to back VMs, and a
+> confidential VM were to be scheduled on that host, some HugeTLBfs pages would
+> have to be given up and returned to CMA for guest_memfd pages to be rebuilt from
+> that memory. This requires memory to be reserved for HVO to be removed and
+> reapplied on the new guest_memfd memory. This not only slows down memory
+> allocation but also trims the benefits of HVO. Memory would have to be reserved
+> on the host to facilitate these transitions.
+> 
+> Improving how guest_memfd uses the allocator in a future revision of this RFC:
+> 
+> To provide an easier transition away from HugeTLB, guest_memfd's use of HugeTLB
+> should be limited to these allocator functions:
+> 
+> + reserve(node, page_size, num_pages) => opaque handle
+>     + Used when a guest_memfd inode is created to reserve memory from backend
+>       allocator
+> + allocate(handle, mempolicy, page_size) => folio
+>     + To allocate a folio from guest_memfd's reservation
+> + split(handle, folio, target_page_size) => void
+>     + To take a huge folio, and split it to smaller folios, restore to filemap
+> + reconstruct(handle, first_folio, nr_pages) => void
+>     + To take a folio, and reconstruct a huge folio out of nr_pages from the
+>       first_folio
+> + free(handle, folio) => void
+>     + To return folio to guest_memfd's reservation
+> + error(handle, folio) => void
+>     + To handle memory errors
+> + unreserve(handle) => void
+>     + To return guest_memfd's reservation to allocator backend
+> 
+> Userspace should only provide a page size when creating a guest_memfd and should
+> not have to specify HugeTLB.
+> 
+> Overview of patches:
+> 
+> + Patches 01-12
+>     + Many small changes to HugeTLB, mostly to separate HugeTLBfs concepts from
+>       HugeTLB, and to expose HugeTLB functions.
+> + Patches 13-16
+>     + Letting guest_memfd use HugeTLB
+>     + Creation of each guest_memfd reserves pages from HugeTLB's global hstate
+>       and puts it into the guest_memfd inode's subpool
+>     + Each folio allocation takes a page from the guest_memfd inode's subpool
+> + Patches 17-21
+>     + Selftests for new HugeTLB features in guest_memfd
+> + Patches 22-24
+>     + More small changes on the HugeTLB side to expose functions needed by
+>       guest_memfd
+> + Patch 25:
+>     + Uses the newly available functions from patches 22-24 to split HugeTLB
+>       pages. In this patch, HugeTLB folios are always split to 4K before any
+>       usage, private or shared.
+> + Patches 26-28
+>     + Allow mmap() in guest_memfd and faulting in shared pages
+> + Patch 29
+>     + Enables conversion between private/shared pages
+> + Patch 30
+>     + Required to zero folios after conversions to avoid leaking initialized
+>       kernel memory
+> + Patch 31-38
+>     + Add selftests to test mapping pages to userspace, guest/host memory
+>       sharing and update conversions tests
+>     + Patch 33 illustrates the conversion flow between VM/userspace/guest_memfd
+> + Patch 39
+>     + Dynamically split and reconstruct HugeTLB pages instead of always
+>       splitting before use. All earlier selftests are expected to still pass.
+> 
+> TODOs:
+> 
+> + Add logic to wait for safe_refcount [1]
+> + Look into lazy splitting/reconstruction of pages
+>     + Currently, when the KVM_SET_MEMORY_ATTRIBUTES is invoked, not only is the
+>       mem_attr_array and faultability updated, the pages in the requested range
+>       are also split/reconstructed as necessary. We want to look into delaying
+>       splitting/reconstruction to fault time.
+> + Solve race between folios being faulted in and being truncated
+>     + When running private_mem_conversions_test with more than 1 vCPU, a folio
+>       getting truncated may get faulted in by another process, causing elevated
+>       mapcounts when the folio is freed (VM_BUG_ON_FOLIO).
+> + Add intermediate splits (1G should first split to 2M and not split directly to
+>   4K)
+> + Use guest's lock instead of hugetlb_lock
+> + Use multi-index xarray/replace xarray with some other data struct for
+>   faultability flag
+> + Refactor HugeTLB better, present generic allocator interface
+> 
+> Please let us know your thoughts on:
+> 
+> + HugeTLB as the choice of transitional allocator backend
+> + Refactoring HugeTLB to provide generic allocator interface
+> + Shared/private conversion flow
+>     + Requiring user to request kernel to unmap pages from userspace using
+>       madvise(MADV_DONTNEED)
+>     + Failing conversion on elevated mapcounts/pincounts/refcounts
+> + Process of splitting/reconstructing page
+> + Anything else!
+> 
+> [1] https://lore.kernel.org/all/20240829-guest-memfd-lib-v2-0-b9afc1ff3656@quicinc.com/T/
+> 
+> Ackerley Tng (37):
+>   mm: hugetlb: Simplify logic in dequeue_hugetlb_folio_vma()
+>   mm: hugetlb: Refactor vma_has_reserves() to should_use_hstate_resv()
+>   mm: hugetlb: Remove unnecessary check for avoid_reserve
+>   mm: mempolicy: Refactor out policy_node_nodemask()
+>   mm: hugetlb: Refactor alloc_buddy_hugetlb_folio_with_mpol() to
+>     interpret mempolicy instead of vma
+>   mm: hugetlb: Refactor dequeue_hugetlb_folio_vma() to use mpol
+>   mm: hugetlb: Refactor out hugetlb_alloc_folio
+>   mm: truncate: Expose preparation steps for truncate_inode_pages_final
+>   mm: hugetlb: Expose hugetlb_subpool_{get,put}_pages()
+>   mm: hugetlb: Add option to create new subpool without using surplus
+>   mm: hugetlb: Expose hugetlb_acct_memory()
+>   mm: hugetlb: Move and expose hugetlb_zero_partial_page()
+>   KVM: guest_memfd: Make guest mem use guest mem inodes instead of
+>     anonymous inodes
+>   KVM: guest_memfd: hugetlb: initialization and cleanup
+>   KVM: guest_memfd: hugetlb: allocate and truncate from hugetlb
+>   KVM: guest_memfd: Add page alignment check for hugetlb guest_memfd
+>   KVM: selftests: Add basic selftests for hugetlb-backed guest_memfd
+>   KVM: selftests: Support various types of backing sources for private
+>     memory
+>   KVM: selftests: Update test for various private memory backing source
+>     types
+>   KVM: selftests: Add private_mem_conversions_test.sh
+>   KVM: selftests: Test that guest_memfd usage is reported via hugetlb
+>   mm: hugetlb: Expose vmemmap optimization functions
+>   mm: hugetlb: Expose HugeTLB functions for promoting/demoting pages
+>   mm: hugetlb: Add functions to add/move/remove from hugetlb lists
+>   KVM: guest_memfd: Track faultability within a struct kvm_gmem_private
+>   KVM: guest_memfd: Allow mmapping guest_memfd files
+>   KVM: guest_memfd: Use vm_type to determine default faultability
+>   KVM: Handle conversions in the SET_MEMORY_ATTRIBUTES ioctl
+>   KVM: guest_memfd: Handle folio preparation for guest_memfd mmap
+>   KVM: selftests: Allow vm_set_memory_attributes to be used without
+>     asserting return value of 0
+>   KVM: selftests: Test using guest_memfd memory from userspace
+>   KVM: selftests: Test guest_memfd memory sharing between guest and host
+>   KVM: selftests: Add notes in private_mem_kvm_exits_test for mmap-able
+>     guest_memfd
+>   KVM: selftests: Test that pinned pages block KVM from setting memory
+>     attributes to PRIVATE
+>   KVM: selftests: Refactor vm_mem_add to be more flexible
+>   KVM: selftests: Add helper to perform madvise by memslots
+>   KVM: selftests: Update private_mem_conversions_test for mmap()able
+>     guest_memfd
+> 
+> Vishal Annapurve (2):
+>   KVM: guest_memfd: Split HugeTLB pages for guest_memfd use
+>   KVM: guest_memfd: Dynamically split/reconstruct HugeTLB page
+> 
+>  fs/hugetlbfs/inode.c                          |   35 +-
+>  include/linux/hugetlb.h                       |   54 +-
+>  include/linux/kvm_host.h                      |    1 +
+>  include/linux/mempolicy.h                     |    2 +
+>  include/linux/mm.h                            |    1 +
+>  include/uapi/linux/kvm.h                      |   26 +
+>  include/uapi/linux/magic.h                    |    1 +
+>  mm/hugetlb.c                                  |  346 ++--
+>  mm/hugetlb_vmemmap.h                          |   11 -
+>  mm/mempolicy.c                                |   36 +-
+>  mm/truncate.c                                 |   26 +-
+>  tools/include/linux/kernel.h                  |    4 +-
+>  tools/testing/selftests/kvm/Makefile          |    3 +
+>  .../kvm/guest_memfd_hugetlb_reporting_test.c  |  222 +++
+>  .../selftests/kvm/guest_memfd_pin_test.c      |  104 ++
+>  .../selftests/kvm/guest_memfd_sharing_test.c  |  160 ++
+>  .../testing/selftests/kvm/guest_memfd_test.c  |  238 ++-
+>  .../testing/selftests/kvm/include/kvm_util.h  |   45 +-
+>  .../testing/selftests/kvm/include/test_util.h |   18 +
+>  tools/testing/selftests/kvm/lib/kvm_util.c    |  443 +++--
+>  tools/testing/selftests/kvm/lib/test_util.c   |   99 ++
+>  .../kvm/x86_64/private_mem_conversions_test.c |  158 +-
+>  .../x86_64/private_mem_conversions_test.sh    |   91 +
+>  .../kvm/x86_64/private_mem_kvm_exits_test.c   |   11 +-
+>  virt/kvm/guest_memfd.c                        | 1563 ++++++++++++++++-
+>  virt/kvm/kvm_main.c                           |   17 +
+>  virt/kvm/kvm_mm.h                             |   16 +
+>  27 files changed, 3288 insertions(+), 443 deletions(-)
+>  create mode 100644 tools/testing/selftests/kvm/guest_memfd_hugetlb_reporting_test.c
+>  create mode 100644 tools/testing/selftests/kvm/guest_memfd_pin_test.c
+>  create mode 100644 tools/testing/selftests/kvm/guest_memfd_sharing_test.c
+>  create mode 100755 tools/testing/selftests/kvm/x86_64/private_mem_conversions_test.sh
+> 
+> --
+> 2.46.0.598.g6f2099f65c-goog
+
+-- 
+Michal Hocko
+SUSE Labs
 
