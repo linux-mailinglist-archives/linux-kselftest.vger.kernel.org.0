@@ -1,127 +1,106 @@
-Return-Path: <linux-kselftest+bounces-17753-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17754-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 018AF975745
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 17:37:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9127797576A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 17:44:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF7242866BB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 15:37:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DE85282BC8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 15:44:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0D261AC43E;
-	Wed, 11 Sep 2024 15:36:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 504A11AAE01;
+	Wed, 11 Sep 2024 15:44:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hBlc+Jna"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="X4fD2COp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B3C619CC24
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Sep 2024 15:36:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 643A31E498;
+	Wed, 11 Sep 2024 15:44:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726069014; cv=none; b=c6AqeNfHueuiIZo6vks2plB5xI4Fuv9n/ok+i7g42VNfjnH6Om/fgI5B4Si2Yls1ovzC5QkPLxk7cAS93HZuflMeGqfyM+jFqbI2ihdIQzpez47RKNJTY4nDwi9xD2VZ2vuT/wGul2h8PVo99YxDqbT5P4BqReanmh0tN5rOL+4=
+	t=1726069492; cv=none; b=YKWYoSxq7t0wrOtUMN3jby4DpwpVEAfeV9dZ3BMm/F90dMY1sC8TII5FtEzF+MXLhiLlj0Gkw6KpmnezD3zjh6j26zgYaG7FYc/QcGxXEyc4Ql1BlbWwGfn2XZLDc5lkAri/QA7i21yzOCOUvGj7EGQ8v9IN4jAc7/u9GtSsVTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726069014; c=relaxed/simple;
-	bh=duZkB7OzdY1maYjWMUPDSDRbJnGB6Fkgvje/y+f4FiU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=STe8aegU64r8tC2fjXhJBW4aJok6YlgkpqeK3GfvQOheON4yaDa7afHG0F1HaaCNfJFMBAkfYsxTqQPZp/xlTbmGEeHcsYwxDGR6hOXflhygY4VULdBOP54vsQ7265hk7lLyThk4xTqXloWSIL++F7wpZvP6LjGJVFH5yNEYLbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hBlc+Jna; arc=none smtp.client-ip=209.85.166.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-82cdadeeb2eso209945539f.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Sep 2024 08:36:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1726069011; x=1726673811; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZY8yVd07ExmC4dURcq6jHvr6f1VcZLSY5czQn/oqNDg=;
-        b=hBlc+JnaN1NvOUtl4Mv9cHcbuZ6fJxdsvzFZ1PjJ6Jsm2VuPXhurIgxS9mrgoqDmHW
-         +QW/cfQnfgpeCbuEiqwUkzyWwtNHxebJd19WK+Fp50saUXQxDWpgqLzYm0834mYZTbv0
-         MA8B0Th1MZh0p5XSsiW10KNSfAWcYBddjc2kw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726069011; x=1726673811;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZY8yVd07ExmC4dURcq6jHvr6f1VcZLSY5czQn/oqNDg=;
-        b=KkOqGXP0mEmEYU9owIc2InQL+huHL3eqUUjGsajxtE4hqdC++7VWQVblnmuwTekQ/t
-         1OZKpOLUM9RI653pIncIK71DCzm2jdVDwcnQdfKrsVN4cAc98w3e02KIgL0swewJ4eEr
-         OlHElwMhcQaQk7tdYajiT7Eo6SnC7yePAe9rbzjIJ2rV7iLT5jXwMquq378uDSLXqKoS
-         mv71O+J3sd086kBj67df8L53SVbK/5z/Y5FGhd4kPt9Gmjinuf1tkoh/p31OEl1KtKPO
-         nzVYiOJWynNm3kwxwJ226/pa10k9ADLRzj1nByCSNpmyVgToqqar9hKlyn/wPKWCD7t/
-         gv9w==
-X-Gm-Message-State: AOJu0YzjOORbAFtCeEhAFohZC7AiHTaNynI98FOWiZQm+dF0IvnQAxns
-	J6LIFkjMDd1GLq5hKYV75/63Hs8y8jZBkc8vSOZWNssCALq5PpnP7Osm14hk/dM=
-X-Google-Smtp-Source: AGHT+IEA/TLwU/NYK0EOdgysz1P/i6GoXgtnxzEST4j5/9WBWQtBHCsSSruqekT2vigCfgBHXhbw/Q==
-X-Received: by 2002:a05:6e02:1d87:b0:3a0:436a:5f99 with SMTP id e9e14a558f8ab-3a0576adea7mr124159755ab.21.1726069011103;
-        Wed, 11 Sep 2024 08:36:51 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4d35f433e66sm44449173.34.2024.09.11.08.36.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 11 Sep 2024 08:36:50 -0700 (PDT)
-Message-ID: <1c94b9bd-78d1-433a-959e-420a456bd40c@linuxfoundation.org>
-Date: Wed, 11 Sep 2024 09:36:50 -0600
+	s=arc-20240116; t=1726069492; c=relaxed/simple;
+	bh=i9g1MHZOIqU5gpjiHW+mieXpOR1PWzNUM+FJdayIZeg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S2VLea1DdiGen3isF6cYhn11qYl/hRrtYRH+WlUSNOrCtKXf0hCgcVhKK8xYfzhQlAjB7mahW9p7r/S1tPYFPsRzDF85ARhKp7okxYx/JokyqK7G+OZJAo+M/khH/rYTNPyQY4cDDxW0NNdPBm7yR4VIgmq125O+qxtkdfOix9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=X4fD2COp; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1726069481;
+	bh=i9g1MHZOIqU5gpjiHW+mieXpOR1PWzNUM+FJdayIZeg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=X4fD2COpLqpKjGUyxSMROYBtMJI1pM+p82/yvxw9usiDmi/oF+yDFLKZ0C6W2ddgr
+	 PDa0VVgW24UmTEP4owCHJEGCA+SbhlA8JuYOdR43dIrW20A4P6fdY22zvhW2+IXOOy
+	 MvYTuijqBRVtRd8vGYYT6w0HjlflKiZMhwAIF4Fk=
+Date: Wed, 11 Sep 2024 17:44:40 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: zhangjiao2 <zhangjiao2@cmss.chinamobile.com>, Willy Tarreau <w@1wt.eu>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	"Paul E. McKenney" <paulmck@kernel.org>, shuah@kernel.org
+Subject: Re: [PATCH] selftests: kselftest: Use strerror() on nolibc
+Message-ID: <16611552-10d8-46d0-8163-460c0cbec2e5@t-8ch.de>
+References: <20240911044230.5914-1-zhangjiao2@cmss.chinamobile.com>
+ <1c94b9bd-78d1-433a-959e-420a456bd40c@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: kselftest: Use strerror() on nolibc
-To: zhangjiao2 <zhangjiao2@cmss.chinamobile.com>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Willy Tarreau <w@1wt.eu>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- "Paul E. McKenney" <paulmck@kernel.org>, shuah@kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240911044230.5914-1-zhangjiao2@cmss.chinamobile.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240911044230.5914-1-zhangjiao2@cmss.chinamobile.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1c94b9bd-78d1-433a-959e-420a456bd40c@linuxfoundation.org>
 
-On 9/10/24 22:42, zhangjiao2 wrote:
-> From: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+Hi Shuah,
+
+On 2024-09-11 09:36:50+0000, Shuah Khan wrote:
+> On 9/10/24 22:42, zhangjiao2 wrote:
+> > From: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+> > 
+> > Nolibc gained an implementation of strerror() recently.
+> > Use it and drop the ifndef.
+> > 
+> > Signed-off-by: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+> > ---
+> >   tools/testing/selftests/kselftest.h | 8 --------
+> >   1 file changed, 8 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+> > index e195ec156859..29fedf609611 100644
+> > --- a/tools/testing/selftests/kselftest.h
+> > +++ b/tools/testing/selftests/kselftest.h
+> > @@ -373,15 +373,7 @@ static inline __noreturn __printf(1, 2) void ksft_exit_fail_msg(const char *msg,
+> >   static inline __noreturn void ksft_exit_fail_perror(const char *msg)
+> >   {
+> > -#ifndef NOLIBC
+> >   	ksft_exit_fail_msg("%s: %s (%d)\n", msg, strerror(errno), errno);
+> > -#else
+> > -	/*
+> > -	 * nolibc doesn't provide strerror() and it seems
+> > -	 * inappropriate to add one, just print the errno.
+> > -	 */
+> > -	ksft_exit_fail_msg("%s: %d)\n", msg, errno);
+> > -#endif
+> >   }
+> >   static inline __noreturn void ksft_exit_xfail(void)
 > 
-> Nolibc gained an implementation of strerror() recently.
-> Use it and drop the ifndef.
+> Adding nolibc maintainers for review.
 > 
-> Signed-off-by: zhang jiao <zhangjiao2@cmss.chinamobile.com>
-> ---
->   tools/testing/selftests/kselftest.h | 8 --------
->   1 file changed, 8 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-> index e195ec156859..29fedf609611 100644
-> --- a/tools/testing/selftests/kselftest.h
-> +++ b/tools/testing/selftests/kselftest.h
-> @@ -373,15 +373,7 @@ static inline __noreturn __printf(1, 2) void ksft_exit_fail_msg(const char *msg,
->   
->   static inline __noreturn void ksft_exit_fail_perror(const char *msg)
->   {
-> -#ifndef NOLIBC
->   	ksft_exit_fail_msg("%s: %s (%d)\n", msg, strerror(errno), errno);
-> -#else
-> -	/*
-> -	 * nolibc doesn't provide strerror() and it seems
-> -	 * inappropriate to add one, just print the errno.
-> -	 */
-> -	ksft_exit_fail_msg("%s: %d)\n", msg, errno);
-> -#endif
->   }
->   
->   static inline __noreturn void ksft_exit_xfail(void)
+> Willy and Thomas, please review.
 
-Adding nolibc maintainers for review.
+Acked-by: Thomas Weißschuh <linux@weissschuh.net>
 
-Willy and Thomas, please review.
+I did the same for another kselftests function when introducing
+strerror(). This one was apparently missed or didn't exist yet.
 
-thanks,
--- Shuah
+
+Thomas
 
