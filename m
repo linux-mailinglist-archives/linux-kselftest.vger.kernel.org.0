@@ -1,134 +1,118 @@
-Return-Path: <linux-kselftest+bounces-17705-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17706-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FF2197477E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 02:45:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD3969748A7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 05:31:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 846DD1C2531E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 00:45:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E52CCB24334
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Sep 2024 03:31:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E415414A91;
-	Wed, 11 Sep 2024 00:45:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2751937708;
+	Wed, 11 Sep 2024 03:31:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="HRG7/y+a"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="CTnssbu3";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="E//nWLKo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh2-smtp.messagingengine.com (fhigh2-smtp.messagingengine.com [103.168.172.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A76125DB
-	for <linux-kselftest@vger.kernel.org>; Wed, 11 Sep 2024 00:45:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B3E225D7;
+	Wed, 11 Sep 2024 03:31:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726015515; cv=none; b=B4rSeBuFQuKQAH1SezPDwjUz8Mr1HSKi28n3gcBT8CPyV9gbFN0/U7j+tuR9k04uJv9xddp8rOlAVD7pMziVvJZWw+5hOt4mMW0rN1G0alrWY1G0wvRxgrvVYPl/4a88Q1z3rgpqgclPeGuvPtU8CvHc/BJSOIrcGBp+KQybHFQ=
+	t=1726025511; cv=none; b=JldarTqvi+WYfLf3fjvORP4s819YtWe+dNJNcbki0C6eMqZF9i6DkkcWlBmRATB/QDhlBr/h0l2fSjikeX6SlxBGE9TW7sP3uWapKZDhH1jhtCOFqRMinnQ5Y1Qqm8u9N/IJIMGkyfDdIN2mxcU2CHub4hlMXzgbGU4KyFkD6gM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726015515; c=relaxed/simple;
-	bh=8uhBmyPDd+dw+VI5uhVYY1EG3bpNisgmno6ZxW+y4TE=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NT2tc5pUK4Ds7068Xi5ti4R1151PTvyMgjecOmgVIDCFPEZOwu9fMKzJvG/ctcOflaU92cdCirSCDSQVsRtkJ3xpuadHrC23f5F18Fi1d76q8+eqYhugB23McNwl0UxhafmdSlWPuEaE7W1FuFR/qsfl12pI4DCFgoSkJORKpvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=HRG7/y+a; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2068acc8a4fso58807635ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 10 Sep 2024 17:45:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1726015513; x=1726620313; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N9UqXwHRW6ngdlKfPJV8zADUN4nB1bOhg7HrFQqhnhI=;
-        b=HRG7/y+aX1MXBuj4PxCAfrJQARzvotcj/icoF4vbUzZN0X3VaPtSQAhpGkfukLxuJf
-         OGWcaVOFerPLWqviXmrUTxPFQvhRFuM1MCcd0S8EMK9H0Du6nuh5Mpuxa2xLksqKZCHL
-         EwEdRZB6gFHzy3tNDLeWGmXTQW874dnEa1W4JPqaD3gYXhMsBlhk2nZlD/75wrLIOKXK
-         qQKs2husBROsrfAkb15B2yWo/Q+BbAWJG7P2I6cv7jy7N2tKWqKUREjM9xt+/3PTTxGU
-         7jBrbdNwyu+VbnJO6Dj5QYrcg9xWRPBfKKBvT+V12UGZyUTXl3lt9IhOO7aUqicV3OLH
-         gqCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726015513; x=1726620313;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N9UqXwHRW6ngdlKfPJV8zADUN4nB1bOhg7HrFQqhnhI=;
-        b=CyOulfwwPaAsKOGuhAY1lDuprvQYqfLg6AAeX2F81CUz20y49hDGZOrILzjSyDAALM
-         bMgx7fhEDBWX7nzZi1pZWn7grwFBjDZ/JKqE1HDy0Hd0bvmHBkwrhsXfPx7AyOCrXrhs
-         rS7LDYR21EiC6lNfrApBRGvIWpm0YJtWksGCbhp9GAJUOg/nkgmwuL8cWeHUURw3yxJL
-         V6GWMNcAEAZLrUG513d7eTdSZtns+q818KTBK9adbC7SkTtGznuGvI19OxYkW4PhTbJH
-         uoIaJxFIvIbTPn2X2Rwt66lY0HNQ8uN0s6R4iLHM0QKQ0R8q1zSUM9DUyHLD53KjLB56
-         qFcQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVUHVwri8XHkJUkfqIoMrpD0Ik/G/8SDrX1K9IQBtfI2jtvaXPWj8yk+NSKbRGiX8x2CvXbtqykeUzqfCgaB60=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjsahadafhulcD9J1A93lH9wu6cHbwOfIZMnzPMe7o6YJBA1Jz
-	o9mFnIvpu9O7y6lGHaAjdHiX7Fvb0IeRWJMt+RkGyfI0BlVRCqRnMCdNa5d0BOA=
-X-Google-Smtp-Source: AGHT+IFSjrtRoDoL7sPwVRBWFNV85MfE4DpNXnElb7X54mGXN2iqCTI2uhxpyL/CAIcKh7QAswSthg==
-X-Received: by 2002:a17:902:d2ce:b0:205:5427:2231 with SMTP id d9443c01a7336-2074c6a338fmr45444085ad.47.1726015512680;
-        Tue, 10 Sep 2024 17:45:12 -0700 (PDT)
-Received: from ghost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20710eef1f2sm53832165ad.145.2024.09.10.17.45.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Sep 2024 17:45:11 -0700 (PDT)
-Date: Tue, 10 Sep 2024 17:45:07 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>, guoren <guoren@kernel.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	shuah <shuah@kernel.org>, Christoph Hellwig <hch@infradead.org>,
-	Michal Hocko <mhocko@suse.com>,
-	"Kirill A. Shutemov" <kirill@shutemov.name>,
-	Chris Torek <chris.torek@gmail.com>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-abi-devel@lists.sourceforge.net
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
- 47 bits
-Message-ID: <ZuDoExckq21fePoe@ghost>
-References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
- <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
- <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
- <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
- <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
- <Ztrq8PBLJ3QuFJz7@arm.com>
- <oshwto46wbbgneiayj63umllyozm3c4267rvpszqzaopwnt2l7@6mxl5vydtons>
+	s=arc-20240116; t=1726025511; c=relaxed/simple;
+	bh=fh2mQQHN0+JyXsYmenNkWGkkjGx3ocELSgZ/ZIqwhUY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=We89M14djEJdth07Zh2LWKq2yEW9PDowJoyaPuxn4Ri1yU0BuY04H9+2TweXsnpjymGcVUuo2ksNF5sjJawvErS4DlDdhF+D6mM40OdPzT4xNNx7NgMPcrqKoJ2T/fwPGQTNb3283auoMbBEZoHoskwBozuDxWvnph6yazJ23Ws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=CTnssbu3; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=E//nWLKo; arc=none smtp.client-ip=103.168.172.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 1BB4511400BB;
+	Tue, 10 Sep 2024 23:31:47 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Tue, 10 Sep 2024 23:31:47 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1726025507;
+	 x=1726111907; bh=dvDVMkbr7rfR+VCNGEE7NMGR6SEz2dyK7e21kWURShA=; b=
+	CTnssbu3B6AtV3bXj661ntr/y/rpB6O/OZ45GMLskMx4TyAEliyU8GSs14vITv4W
+	TrH8fzyrI4mvjdE13BEq0qI0wfiodvMqDofQzAlbifl9tSzWyQFWuZnpWVhSodos
+	my5TLcq6QTJaO5KjwzBKLb1G8w7KMvczjMgFjk7EJsNIKAuQTVKdsgW+kkgxGB6S
+	UqUAT0tp8uTfbxekCz98Uo7d6b41LMgwMQaiIGx1EyH8TCQ8vlJ3zMka8Fmqj322
+	cl3+owVuIwTT2WKAZ9oN8h16PnzRCcO5Hy/leziW0fUgkJdLnlSXj4wDCeSKRNdP
+	K/9bZ/ua6/aw05zKP89EIQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726025507; x=
+	1726111907; bh=dvDVMkbr7rfR+VCNGEE7NMGR6SEz2dyK7e21kWURShA=; b=E
+	//nWLKoadYIePtJ3R+0d8frhqggwmLTDQNZAWUveLZc7cvfea1Mlv8+qiLF2i/5A
+	Q96SnL2EOuMq4So4VZyoF2A0geWZ0nkSTX9BwAwJbu7B281npUMILl6KHwLMwCWv
+	LQdXIP4YdyyXaKvDj9SIUS/IhHJvY3c2llVe4xX3C6go9Y7KkdFAlOw/bS1yyY+/
+	ZVbvcVnH6XZcGfwJQfrQOxt8oMzeZxqHvNEUv735NIscPpHaTlmJdlQP8vUIrghC
+	2HHlNtX7tiT5Pra2fhEgwzvMIoaKnNXeYXh2sXj6jLRtQYOz/fZZ4lQNNtZZDgBN
+	o/ocqKwGGwbOYJmb0okTQ==
+X-ME-Sender: <xms:Ig_hZgc-UibDzIpSgn1os821_tjPU_6mtuPws7Z3S33H5keeFQ1yNg>
+    <xme:Ig_hZiPPKL3gSzA_gy5XtCVqBysTLlaRZPOckL2wKNOU1s49HB5MRBYPL1-W5UkEI
+    0ehz6voKQ6AaPxGOw>
+X-ME-Received: <xmr:Ig_hZhj8HXoIG3s1CG7eEdDT_WgN_3ifMlELoT6y3obuMu7W5v7mf8zn3vMAeKnrnccq03F4tUVCo5aKK8uJbDoTXMaTrHOMTv1tJlHd1V2cLg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejtddgjedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnegfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvvefukfhf
+    gggtugfgjgestheksfdttddtjeenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihuse
+    gugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpedtgfeuueeukeeikefgieeukeff
+    leetkeekkeeggeffvedtvdejueehueeuleefteenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiiipdhnsggprhgt
+    phhtthhopedvtddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheprghnughrihhird
+    hnrghkrhihihhkohesghhmrghilhdrtghomhdprhgtphhtthhopegrlhgvgigvihdrshht
+    rghrohhvohhithhovhesghhmrghilhdrtghomhdprhgtphhtthhopegvugguhiiikeejse
+    hgmhgrihhlrdgtohhmpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrghdp
+    rhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhope
+    grshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdr
+    ohhrghdprhgtphhtthhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomh
+    dprhgtphhtthhopehmrghrthhinhdrlhgruheslhhinhhugidruggvvh
+X-ME-Proxy: <xmx:Ig_hZl9SRWqJlxlQUmUvRc9-qKX-cHiiTlyT7g_3S90qiOE53EhD6g>
+    <xmx:Ig_hZsswXRUWAiEu-0LeBecg-chMObhr5fITv0QDA2dcNs3JaPbwJg>
+    <xmx:Ig_hZsHEjlg0Et9_0xlHeRwDC0zg8UBO_lacLrbyzWyLv16sz9bf9Q>
+    <xmx:Ig_hZrO9GCydkYdnqRAAtx4KSUAmLq6uG5z4ZQSe-YhFn8a3_9Zt1w>
+    <xmx:Iw_hZtMMXVUBcRodGF11Hrlx4FwGUkDjkkqX_TKsNzhLxHq-m46M2PUq>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 10 Sep 2024 23:31:44 -0400 (EDT)
+Date: Tue, 10 Sep 2024 21:31:43 -0600
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Alexei Starovoitov <ast@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, LKML <linux-kernel@vger.kernel.org>, 
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Kernel Team <kernel-team@meta.com>
+Subject: Re: [PATCH bpf-next] bpf: ringbuf: Support consuming
+ BPF_MAP_TYPE_RINGBUF from prog
+Message-ID: <cz7qwrujjiunv3yydkfamfm5mkis5xdy4vg4odwatchjoaoolk@zzithxrzdxkv>
+References: <18a9ddacc99bb95e9802f8ad1e81214433df496c.1725929645.git.dxu@dxuuu.xyz>
+ <CAADnVQKyfZ2-qCvmqG8z919ggdOszEjTs04H=cTGOZTi-zhx7Q@mail.gmail.com>
+ <CAEf4Bza5Fiw2rZ5T7=zRwVk1Ct1Mgm7Gpa8w+NJVPZf8keY_9Q@mail.gmail.com>
+ <vru2zgphyfywjcqikolwotsfun2bgtrnfmwvfls5ra4tznsydr@46w5rq7gqepz>
+ <4ec8e15b-c44b-41d7-b337-32d17306d67b@app.fastmail.com>
+ <CAEf4BzbHqKD87KTSmFUMokXEaAa70xNs96QqfWBHjFbuE5PL=w@mail.gmail.com>
+ <rsdwvah5ov3itchsgkwgleihswoycoal5vjbeql2wbqoz5noiz@myk2atnnjaub>
+ <CAEf4BzbKoyja2ErsusUcK8YaS1Rqm0VmBzwsNtQtM1-XHDhD7g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -138,81 +122,90 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <oshwto46wbbgneiayj63umllyozm3c4267rvpszqzaopwnt2l7@6mxl5vydtons>
+In-Reply-To: <CAEf4BzbKoyja2ErsusUcK8YaS1Rqm0VmBzwsNtQtM1-XHDhD7g@mail.gmail.com>
 
-On Tue, Sep 10, 2024 at 03:08:14PM -0400, Liam R. Howlett wrote:
-> * Catalin Marinas <catalin.marinas@arm.com> [240906 07:44]:
-> > On Fri, Sep 06, 2024 at 09:55:42AM +0000, Arnd Bergmann wrote:
-> > > On Fri, Sep 6, 2024, at 09:14, Guo Ren wrote:
-> > > > On Fri, Sep 6, 2024 at 3:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > >> It's also unclear to me how we want this flag to interact with
-> > > >> the existing logic in arch_get_mmap_end(), which attempts to
-> > > >> limit the default mapping to a 47-bit address space already.
+On Tue, Sep 10, 2024 at 05:39:55PM GMT, Andrii Nakryiko wrote:
+> On Tue, Sep 10, 2024 at 4:44 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
+> >
+> > On Tue, Sep 10, 2024 at 03:21:04PM GMT, Andrii Nakryiko wrote:
+> > > On Tue, Sep 10, 2024 at 3:16 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
 > > > >
-> > > > To optimize RISC-V progress, I recommend:
 > > > >
-> > > > Step 1: Approve the patch.
-> > > > Step 2: Update Go and OpenJDK's RISC-V backend to utilize it.
-> > > > Step 3: Wait approximately several iterations for Go & OpenJDK
-> > > > Step 4: Remove the 47-bit constraint in arch_get_mmap_end()
-> > > 
-> > > I really want to first see a plausible explanation about why
-> > > RISC-V can't just implement this using a 47-bit DEFAULT_MAP_WINDOW
-> > > like all the other major architectures (x86, arm64, powerpc64),
-> > 
-> > FWIW arm64 actually limits DEFAULT_MAP_WINDOW to 48-bit in the default
-> > configuration. We end up with a 47-bit with 16K pages but for a
-> > different reason that has to do with LPA2 support (I doubt we need this
-> > for the user mapping but we need to untangle some of the macros there;
-> > that's for a separate discussion).
-> > 
-> > That said, we haven't encountered any user space problems with a 48-bit
-> > DEFAULT_MAP_WINDOW. So I also think RISC-V should follow a similar
-> > approach (47 or 48 bit default limit). Better to have some ABI
-> > consistency between architectures. One can still ask for addresses above
-> > this default limit via mmap().
+> > > >
+> > > > On Tue, Sep 10, 2024, at 2:07 PM, Daniel Xu wrote:
+> > > > > On Tue, Sep 10, 2024 at 01:41:41PM GMT, Andrii Nakryiko wrote:
+> > > > >> On Tue, Sep 10, 2024 at 11:36 AM Alexei Starovoitov
+> > > > [...]
+> > > > >
+> > > > >>
+> > > > >> Also, Daniel, can you please make sure that dynptr we return for each
+> > > > >> sample is read-only? We shouldn't let consumer BPF program ability to
+> > > > >> corrupt ringbuf record headers (accidentally or otherwise).
+> > > > >
+> > > > > Sure.
+> > > >
+> > > > So the sample is not read-only. But I think prog is prevented from messing
+> > > > with header regardless.
+> > > >
+> > > > __bpf_user_ringbuf_peek() returns sample past the header:
+> > > >
+> > > >         *sample = (void *)((uintptr_t)rb->data +
+> > > >                            (uintptr_t)((cons_pos + BPF_RINGBUF_HDR_SZ) & rb->mask));
+> > > >
+> > > > dynptr is initialized with the above ptr:
+> > > >
+> > > >         bpf_dynptr_init(&dynptr, sample, BPF_DYNPTR_TYPE_LOCAL, 0, size);
+> > > >
+> > > > So I don't think there's a way for the prog to access the header thru the dynptr.
+> > > >
+> > >
+> > > By "header" I mean 8 bytes that precede each submitted ringbuf record.
+> > > That header is part of ringbuf data area. Given user space can set
+> > > consumer_pos to arbitrary value, kernel can return arbitrary part of
+> > > ringbuf data area, including that 8 byte header. If that data is
+> > > writable, it's easy to screw up that header and crash another BPF
+> > > program that reserves/submits a new record. User space can only read
+> > > data area for BPF ringbuf, and so we rely heavily on a tight control
+> > > of who can write what into those 8 bytes.
+> >
+> > Ah, ok. I think I understand.
+> >
+> > Given this and your other comments about rb->busy, what about enforcing
+> > bpf_user_ringbuf_drain() NAND mmap? I think the use cases here are
+> > different enough where this makes sense.
 > 
-> I think that is best as well.
-> 
-> Can we please just do what x86 and arm64 does?
-> 
-> Thanks,
-> Liam
+> You mean disabling user-space mmap()? TBH, I'd like to understand the
+> use case first before we make such decisions. Maybe what you need is
+> not really a BPF ringbuf? Can you give us a bit more details on what
+> you are trying to achieve?
 
-I responded to Arnd in the other thread, but I am still not convinced
-that the solution that x86 and arm64 have selected is the best solution.
-The solution of defaulting to 47 bits does allow applications the
-ability to get addresses that are below 47 bits. However, due to
-differences across architectures it doesn't seem possible to have all
-architectures default to the same value. Additionally, this flag will be
-able to help users avoid potential bugs where a hint address is passed
-that causes upper bits of a VA to be used.
+BPF cpumap, under the hood, has one MPSC ring buffer (ptr_ring) for each
+entry in the cpumap. When a prog redirects to an entry in the cpumap,
+the machinery queues up the xdp frame onto the destination CPU ptr_ring.
+This can occur on any cpu, thus multi-producer. On processing side,
+there is only the kthread created by the cpumap entry and bound to the
+specific cpu that is consuming entries. So single consumer.
 
-The other issue I have with this is that if there is not a hint address
-specified to be greater than 47 bits on x86, then mmap() may return an
-address that is greater than 47-bits. The documentation in
-Documentation/arch/x86/x86_64/5level-paging.rst says:
+Goal is to track the latency overhead added from ptr_ring and the
+kthread (versus softirq where is less overhead). Ideally we want p50,
+p90, p95, p99 percentiles.
 
-"If hint address set above 47-bit, but MAP_FIXED is not specified, we try
-to look for unmapped area by specified address. If it's already
-occupied, we look for unmapped area in *full* address space, rather than
-from 47-bit window."
+To do this, we need to track every single entry enqueue time as well as
+dequeue time - events that occur in the tail are quite important.
 
-arm64 on the other hand defines this as only being able to opt-into the
-52-bit VA space with the hint address, and my understanding is that
-mmap() will not fall back to the 52-bit address space. Please correct me
-if I am wrong. From Documentation/arch/arm64/memory.rst:
+Since ptr_ring is also a ring buffer, I thought it would be easy,
+reliable, and fast to just create a "shadow" ring buffer. Every time
+producer enqueues entries, I'd enqueue the same number of current
+timestamp onto shadow RB. Same thing on consumer side, except dequeue
+and calculate timestamp delta.
 
-"To maintain compatibility with software that relies on the ARMv8.0
-VA space maximum size of 48-bits, the kernel will, by default,
-return virtual addresses to userspace from a 48-bit range.
+I was originally planning on writing my own lockless ring buffer in pure
+BPF (b/c spinlocks cannot be used w/ tracepoints yet) but was hoping I
+could avoid that with this patch.
 
-"Software can "opt-in" to receiving VAs from a 52-bit space by
-specifying an mmap hint parameter that is larger than 48-bit."
-
-This is an inconsistency I am trying to solve with this personality
-flag.
-
-- Charlie
-
+About disabling user-space mmap: yeah, that's what I was suggesting. I
+think it'd be a bit odd if you wanted BPF RB to support consumption from
+both userspace && prog at the same time. And since draining from prog is
+new functionality (and thus the NAND isn't a regression), you could
+relax the restriction later without issues.
 
