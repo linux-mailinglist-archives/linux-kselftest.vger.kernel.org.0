@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-17820-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17821-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A6D49769F6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 15:05:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C42DB9769F7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 15:05:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA5FCB22E61
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 13:05:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5EA9DB23648
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 13:05:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56A841A7AD6;
-	Thu, 12 Sep 2024 13:04:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3397D1AAE06;
+	Thu, 12 Sep 2024 13:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gPBQACcF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hSMZZD9G"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A48B91A724B
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 13:04:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D461A7260
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 13:04:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726146278; cv=none; b=mcOJtqE9kekTh19RCt1S68orsUYKqFq8NfnmrG8R2wMNVxwzU7nkek3reKHZgNFUdMMV7uDbyCAnq4q3k4+1YyHUDflxQmpD32bCc/8DCJd1lnkERw8FnhKAS/AZwYIToAuXMh+76n+wvX6FVCiyqhtD4nLu5zIRujvRKfhSxYA=
+	t=1726146279; cv=none; b=O/bOS8Wsadv/st73PV4fqN0nveKeZWemgB7SmNK+p/aJndM6hNukRVVPsCUIq71gfyrmy2QKGYCH24OTczEUKr7Q4bCKM7ecaAJkUwvvuvXvd8i7QMMDtHDg2TCpR/hHwxqqXrtnVwS1LFj6oWlNfWRhNAxhT0PxuEa6S2obcKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726146278; c=relaxed/simple;
-	bh=sGbcPWSBpcVNAtNQfx5+HpsfgiOp1WmGAWMS4UxxrBs=;
+	s=arc-20240116; t=1726146279; c=relaxed/simple;
+	bh=yUnDh/XVxNNztWNMVHOs6+vmvy06PcZACc3G0r/NzUE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=WLO2zxRfpXzoM3t0qI5CGSGJE63yxwbLVMyMn19FYdnkJgfg0YTgBnz5DPx6NB54kh7fom4ljK1DBxls385pNGClTnL61WwXqfrdS4M+fAB/+dqMNl8PQ3k7o0VKuskIncJaO7X38Ilw766HkLalUtW+00Y3dSNoDp1npyBKf+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gPBQACcF; arc=none smtp.client-ip=192.198.163.10
+	 MIME-Version; b=k4rvMStsgNjmDRO1SThPfiaNp9Bq5sUot4i7cbRrYRHe644k4//Vy7vz8yHqSqVIFodxyJHdftsPg3sfVxEIwbJYShmKLr88Zz7Mcmbs/c30kothEvGzpfOb6ir6r1JdGdtdAjN5gZnWhmqYZjlJBwdJWbvUK45S899CmM82Amk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hSMZZD9G; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726146276; x=1757682276;
+  t=1726146277; x=1757682277;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=sGbcPWSBpcVNAtNQfx5+HpsfgiOp1WmGAWMS4UxxrBs=;
-  b=gPBQACcF4tbWgjG6VSl5DBNwVTXu8TOC/Wt1aoK83gOzJZ5tzu/tP5bu
-   0sCEKkTR0npnEXCzvb7dBo9+kEvjeF4Us57OVeBKd03NQx2lLg8OjIbh8
-   sm7BVxui4Bg+HK/oQvujEethlCf5qugxaDqophEf4n3oXGZb+58dR/pfG
-   mruKxwRs3ACVA0bMoLSOTHxbNZuCP7uw7p9la9o+AfbSsFyRjaT4PIj6w
-   H6Cpj+dAz5UisD1PeAhkHtDN+EQncuwzRD/QOXcefGV1dazrLrXlomMzA
-   9/g/lZpCIqbb/4MskOe8C0oGbVvsgP42e8pMNNEZIVO24CVEE2/Bcptwh
-   A==;
-X-CSE-ConnectionGUID: aKxqFBVoQRilAWTgy3/b0Q==
-X-CSE-MsgGUID: UUjc9+RcSLWjoBm25Sdj0g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="36380551"
+  bh=yUnDh/XVxNNztWNMVHOs6+vmvy06PcZACc3G0r/NzUE=;
+  b=hSMZZD9G3Svszo0zceZmsEZ4He4jpBjMZbVwWRWvB44jyaq1cTFcqVIJ
+   cV9uG81yaN//aVcm4Kvfc2OhHoqQDitfaGjyD+13xQXx1N66nLlURZkBp
+   YdgmD19wJ6M6Uwtxo9POUlGMhRVHBajcwYONDYKl9gD056MgwIpKNl2MR
+   UdFKWPh2B0TxdpCs0LQ/spmP5R8NiYtTV+sQxDQ/c2h0SjT6rMAWIGlal
+   aDnAYHXAphZn3vNQEgrXM8YUO0oDjajnM3XxP9sYCV0qmgjF6u+qmk7Tq
+   +NB0Ap76XFPjDZvoSI8VwNW05+jYSb62CvSy0zKjjiebkPb1PR9YEst4k
+   w==;
+X-CSE-ConnectionGUID: JFkwxf4ZT7OPKVRQ+YiwOw==
+X-CSE-MsgGUID: kCKltdCwQTaAkooqbZ+b3g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="36380561"
 X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="36380551"
+   d="scan'208";a="36380561"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 06:04:35 -0700
-X-CSE-ConnectionGUID: 0T/EvMCDRzKFehWr548uGQ==
-X-CSE-MsgGUID: h2k0upPBQ0KEKdgih+iBaA==
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 06:04:36 -0700
+X-CSE-ConnectionGUID: qCedCvb+Q0aIuejJ+PRLtA==
+X-CSE-MsgGUID: /KlSP8I1TCWoP9TOjFhB2w==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="72509941"
+   d="scan'208";a="72509960"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orviesa005.jf.intel.com with ESMTP; 12 Sep 2024 06:04:34 -0700
+  by orviesa005.jf.intel.com with ESMTP; 12 Sep 2024 06:04:36 -0700
 From: Yi Liu <yi.l.liu@intel.com>
 To: joro@8bytes.org,
 	jgg@nvidia.com,
@@ -72,9 +72,9 @@ Cc: alex.williamson@redhat.com,
 	zhenzhong.duan@intel.com,
 	linux-kselftest@vger.kernel.org,
 	vasant.hegde@amd.com
-Subject: [PATCH v2 4/6] iommu/vt-d: Add set_dev_pasid callback for nested domain
-Date: Thu, 12 Sep 2024 06:04:25 -0700
-Message-Id: <20240912130427.10119-5-yi.l.liu@intel.com>
+Subject: [PATCH v2 5/6] iommu/arm-smmu-v3: Make smmuv3 set_dev_pasid() op support replace
+Date: Thu, 12 Sep 2024 06:04:26 -0700
+Message-Id: <20240912130427.10119-6-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240912130427.10119-1-yi.l.liu@intel.com>
 References: <20240912130427.10119-1-yi.l.liu@intel.com>
@@ -86,100 +86,85 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Lu Baolu <baolu.lu@linux.intel.com>
+From: Jason Gunthorpe <jgg@nvidia.com>
 
-Extend intel_iommu_set_dev_pasid() to set a nested type domain to a PASID
-of a device.
+set_dev_pasid() op is going to be enhanced to support domain replacement
+of a pasid. This prepares for this op definition.
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Co-developed-by: Yi Liu <yi.l.liu@intel.com>
+Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/intel/iommu.c  | 22 +++++++++++++++++-----
- drivers/iommu/intel/iommu.h  |  3 +++
- drivers/iommu/intel/nested.c |  1 +
- 3 files changed, 21 insertions(+), 5 deletions(-)
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 2 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c     | 8 +++++---
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h     | 2 +-
+ 3 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 6f5a8e549f3f..749ee7741ec4 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -284,6 +284,11 @@ static int __init intel_iommu_setup(char *str)
- }
- __setup("intel_iommu=", intel_iommu_setup);
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+index 645da7b69bed..1d3e71569775 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
+@@ -349,7 +349,7 @@ static int arm_smmu_sva_set_dev_pasid(struct iommu_domain *domain,
+ 	 * get reassigned
+ 	 */
+ 	arm_smmu_make_sva_cd(&target, master, domain->mm, smmu_domain->cd.asid);
+-	ret = arm_smmu_set_pasid(master, smmu_domain, id, &target);
++	ret = arm_smmu_set_pasid(master, smmu_domain, id, &target, old);
  
-+static int domain_type_is_nested(struct dmar_domain *domain)
-+{
-+	return domain->domain.type == IOMMU_DOMAIN_NESTED;
-+}
-+
- static int domain_pfn_supported(struct dmar_domain *domain, unsigned long pfn)
+ 	mmput(domain->mm);
+ 	return ret;
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+index ed2b106e02dd..f7a73b854151 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
+@@ -2824,7 +2824,8 @@ static int arm_smmu_attach_dev(struct iommu_domain *domain, struct device *dev)
+ }
+ 
+ static int arm_smmu_s1_set_dev_pasid(struct iommu_domain *domain,
+-				      struct device *dev, ioasid_t id)
++				     struct device *dev, ioasid_t id,
++				     struct iommu_domain *old)
  {
- 	int addr_width = agaw_to_width(domain->agaw) - VTD_PAGE_SHIFT;
-@@ -4299,7 +4304,12 @@ domain_prepare_dev_pasid(struct iommu_domain *domain,
- 	unsigned long flags;
+ 	struct arm_smmu_domain *smmu_domain = to_smmu_domain(domain);
+ 	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
+@@ -2850,7 +2851,7 @@ static int arm_smmu_s1_set_dev_pasid(struct iommu_domain *domain,
+ 	 */
+ 	arm_smmu_make_s1_cd(&target_cd, master, smmu_domain);
+ 	return arm_smmu_set_pasid(master, to_smmu_domain(domain), id,
+-				  &target_cd);
++				  &target_cd, old);
+ }
+ 
+ static void arm_smmu_update_ste(struct arm_smmu_master *master,
+@@ -2880,7 +2881,7 @@ static void arm_smmu_update_ste(struct arm_smmu_master *master,
+ 
+ int arm_smmu_set_pasid(struct arm_smmu_master *master,
+ 		       struct arm_smmu_domain *smmu_domain, ioasid_t pasid,
+-		       struct arm_smmu_cd *cd)
++		       struct arm_smmu_cd *cd, struct iommu_domain *old)
+ {
+ 	struct iommu_domain *sid_domain = iommu_get_domain_for_dev(master->dev);
+ 	struct arm_smmu_attach_state state = {
+@@ -2890,6 +2891,7 @@ int arm_smmu_set_pasid(struct arm_smmu_master *master,
+ 		 * already attached, no need to set old_domain.
+ 		 */
+ 		.ssid = pasid,
++		.old_domain = old,
+ 	};
+ 	struct arm_smmu_cd *cdptr;
  	int ret;
+diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+index 14bca41a981b..a942f5d40051 100644
+--- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
++++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
+@@ -806,7 +806,7 @@ void arm_smmu_write_cd_entry(struct arm_smmu_master *master, int ssid,
  
--	ret = prepare_domain_attach_device(domain, dev);
-+	/* Nested type domain should prepare its parent domain */
-+	if (domain_type_is_nested(dmar_domain))
-+		ret = prepare_domain_attach_device(
-+				&dmar_domain->s2_domain->domain, dev);
-+	else
-+		ret = prepare_domain_attach_device(domain, dev);
- 	if (ret)
- 		return ERR_PTR(ret);
+ int arm_smmu_set_pasid(struct arm_smmu_master *master,
+ 		       struct arm_smmu_domain *smmu_domain, ioasid_t pasid,
+-		       struct arm_smmu_cd *cd);
++		       struct arm_smmu_cd *cd, struct iommu_domain *old);
  
-@@ -4329,9 +4339,9 @@ domain_prepare_dev_pasid(struct iommu_domain *domain,
- 	return ERR_PTR(ret);
- }
- 
--static int intel_iommu_set_dev_pasid(struct iommu_domain *domain,
--				     struct device *dev, ioasid_t pasid,
--				     struct iommu_domain *old)
-+int intel_iommu_set_dev_pasid(struct iommu_domain *domain,
-+			      struct device *dev, ioasid_t pasid,
-+			      struct iommu_domain *old)
- {
- 	struct device_domain_info *info = dev_iommu_priv_get(dev);
- 	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
-@@ -4356,7 +4366,9 @@ static int intel_iommu_set_dev_pasid(struct iommu_domain *domain,
- 	intel_pasid_tear_down_entry(iommu, dev, pasid,
- 				    INTEL_PASID_TEARDOWN_DRAIN_PRQ);
- 
--	if (dmar_domain->use_first_level)
-+	if (domain_type_is_nested(dmar_domain))
-+		ret = intel_pasid_setup_nested(iommu, dev, pasid, dmar_domain);
-+	else if (dmar_domain->use_first_level)
- 		ret = domain_setup_first_level(iommu, dmar_domain,
- 					       dev, pasid);
- 	else
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index b3b295e60626..36cf59bfe4ea 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -1109,6 +1109,9 @@ void device_block_translation(struct device *dev);
- int prepare_domain_attach_device(struct iommu_domain *domain,
- 				 struct device *dev);
- void domain_update_iommu_cap(struct dmar_domain *domain);
-+int intel_iommu_set_dev_pasid(struct iommu_domain *domain,
-+			      struct device *dev, ioasid_t pasid,
-+			      struct iommu_domain *old);
- 
- int dmar_ir_support(void);
- 
-diff --git a/drivers/iommu/intel/nested.c b/drivers/iommu/intel/nested.c
-index 36a91b1b52be..c5a94c00b396 100644
---- a/drivers/iommu/intel/nested.c
-+++ b/drivers/iommu/intel/nested.c
-@@ -131,6 +131,7 @@ static int intel_nested_cache_invalidate_user(struct iommu_domain *domain,
- 
- static const struct iommu_domain_ops intel_nested_domain_ops = {
- 	.attach_dev		= intel_nested_attach_dev,
-+	.set_dev_pasid		= intel_iommu_set_dev_pasid,
- 	.free			= intel_nested_domain_free,
- 	.cache_invalidate_user	= intel_nested_cache_invalidate_user,
- };
+ void arm_smmu_tlb_inv_asid(struct arm_smmu_device *smmu, u16 asid);
+ void arm_smmu_tlb_inv_range_asid(unsigned long iova, size_t size, int asid,
 -- 
 2.34.1
 
