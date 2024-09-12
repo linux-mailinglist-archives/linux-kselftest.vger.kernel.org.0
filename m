@@ -1,97 +1,89 @@
-Return-Path: <linux-kselftest+bounces-17846-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17847-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E855C976D5F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 17:15:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 041B6976DAF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 17:23:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A490328D8E7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 15:15:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AB43A1F28E6B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 15:23:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 747AA1BBBC5;
-	Thu, 12 Sep 2024 15:12:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58C4A1AD24B;
+	Thu, 12 Sep 2024 15:23:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="pH2EMlrZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P+9HFMWk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED3341A76DD;
-	Thu, 12 Sep 2024 15:11:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303D5A5F;
+	Thu, 12 Sep 2024 15:23:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726153920; cv=none; b=cCm+dTNnx4ppiMSdF8w3mcXiRX9gXsqeMXkqum68WeJrmqccojdCdNOJvUJ5h9qBNRzjiuBlGvVxchwAVZBU9mLxWUzZeH7qAlviRD4Eutr5wkegS660RSbjyTIrg9gnRu93pPVfOyiDHjUWLYOHTEr4t3XPAGh+kMbtmnMaMSc=
+	t=1726154589; cv=none; b=E8+qnqEZkTVjAxvOG7+dYrnNrGOF0bhlBC1kDTwC7QMaG5pT+l6DXhlo9AHJMAi1ERxfpGBhBX39RgkSb1DkBaICU5bG8TpO8yckjgZxXMvRl3DDgdJhAvl4UdfmhUElmxPTNCIG+JnMBibG8KfQHE7pu5rTNZKeCAPUD4+t0R4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726153920; c=relaxed/simple;
-	bh=1Ym2TiSFpCbr7yzAwcoae9FlyIRlAgmNsZjX/ftiwwg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=urU2WCjLBK/6FaRqNoXcj9i/Ww75TD7nBZKiihN5Rso7RE040iKr/Mcbf2UQvBqQH0HmthUvurJho7T//zqK05J9Go0ZNkEbszVIDtIZkglSJPdzoqFEf8ubVm2IVxOX8iHenCCJY3MkrCnugVIp7NkaBZDQe+Dr1GWC+E7kL7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=pH2EMlrZ; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=Wrf2IKIDJ3QmIkiR5xrTzhK5a/UwRFJJ/GjVhXV7nYQ=; b=pH2EMlrZufLHxhtK7lHoCqrwKw
-	eZ/QqHoncMgv58W9iD26wg19w1IYX3pwkKtscQ/jRCQWvdzoFjXNY+l2P6qZMFuOpqIqZ1/VwoQvx
-	UzBexzgeqYx1HIxaQVvR428qv7X4t55JLE78vTIDoyWk2zfDQ31tZuRtbH6/Tk6cTru7jkDvccfDX
-	dVXReOXGomtTVn76htD1HWWpaHJwbaWEdDUfB55cx3VTnOAzC707T3oZc5LZhgJHDV+Tm/tjLnf/F
-	X0GASBP/2EiOvHd6gRLeMrXbh3A0K6gzUCr6Eyri9+ifQvwQZsMc7wEgILkk7AoTAXByFPHNhzgju
-	Mhd1LTOw==;
-Received: from willy by casper.infradead.org with local (Exim 4.98 #2 (Red Hat Linux))
-	id 1solU3-000000091Bd-3OIX;
-	Thu, 12 Sep 2024 15:11:47 +0000
-Date: Thu, 12 Sep 2024 16:11:47 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: Yi Liu <yi.l.liu@intel.com>
-Cc: joro@8bytes.org, jgg@nvidia.com, kevin.tian@intel.com,
-	baolu.lu@linux.intel.com, alex.williamson@redhat.com,
-	eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
-	chao.p.peng@linux.intel.com, iommu@lists.linux.dev,
-	zhenzhong.duan@intel.com, linux-kselftest@vger.kernel.org,
-	vasant.hegde@amd.com
-Subject: Re: [PATCH v3 1/4] ida: Add ida_find_first_range()
-Message-ID: <ZuMEsybAnOi_uSfY@casper.infradead.org>
-References: <20240912131729.14951-1-yi.l.liu@intel.com>
- <20240912131729.14951-2-yi.l.liu@intel.com>
+	s=arc-20240116; t=1726154589; c=relaxed/simple;
+	bh=T0AliTqjWVI7nePlIXW52YXenMw2yEMOQRhgyzxECEQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=r6jQVPHwyeYMQE+0jgVlbJbS0ctL3W+ZFcmGF1PxmNqAPQiFVLyn1FG4zki8PnbhElPVxLpJujc0ljKPxPv+morL7PyTA6A4LwKKKYiCcPwQfb7n4qHUCWnLvhQpA16uhgQ3aeUhxxd9uiUZksMw+92YxOpu8Q2zl8bXhP8MiEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P+9HFMWk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 72E34C4CEC3;
+	Thu, 12 Sep 2024 15:23:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726154588;
+	bh=T0AliTqjWVI7nePlIXW52YXenMw2yEMOQRhgyzxECEQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=P+9HFMWkFJ8NiBllFIfBh2SxPwiqN+FP8B72hyx2DrnUx6hwbbGh3vbIxeizFc3EI
+	 4E38ldH8ZCRonz/pKgOT9iOIEO5gj6wfN/0qebLwWKk4y2xMKl7cMOHkaAYaqMMp5M
+	 0F0eh+PTD5cLB75dCrQMNXxRrRW7gJEF1A38PFP/XDYJMZt2OnSBQlfSOqpzUAga6H
+	 sW55le4uwUzIlzDge3w4a9FpUXwQzKgaQ554tV0sOfaJW5+txX0O8TPD9pGl0fRtqv
+	 pJSRqgLUqb72SllEZpBA/4X3WNlPzgRYZygxeN1upUEmiT/qkq2Ygv0QjGp5d4/GBw
+	 YfDrPpYlwwEDQ==
+Date: Thu, 12 Sep 2024 08:23:07 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Anders Roxell <anders.roxell@linaro.org>
+Cc: shuah@kernel.org, willemb@google.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: Makefile: add missing 'net/lib' to targets
+Message-ID: <20240912082307.556db015@kernel.org>
+In-Reply-To: <20240912063119.1277322-1-anders.roxell@linaro.org>
+References: <20240912063119.1277322-1-anders.roxell@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240912131729.14951-2-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 12, 2024 at 06:17:26AM -0700, Yi Liu wrote:
-> There is no helpers for user to check if a given ID is allocated or not,
-> neither a helper to loop all the allocated IDs in an IDA and do something
-> for cleanup. With the two needs, a helper to get the lowest allocated ID
-> of a range and two variants based on it.
-> 
-> Caller can check if a given ID is allocated or not by:
-> 
-> 	bool ida_exists(struct ida *ida, unsigned int id)
-> 
-> Caller can iterate all allocated IDs by:
-> 
-> 	int id;
-> 	while ((id = ida_find_first(&pasid_ida)) > 0) {
-> 		//anything to do with the allocated ID
-> 		ida_free(pasid_ida, pasid);
-> 	}
-> 
-> Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+On Thu, 12 Sep 2024 08:31:18 +0200 Anders Roxell wrote:
+> Fixes: 1d0dc857b5d8 ("selftests: drv-net: add checksum tests")
+> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 > ---
->  include/linux/idr.h | 11 ++++++++
->  lib/idr.c           | 67 +++++++++++++++++++++++++++++++++++++++++++++
->  2 files changed, 78 insertions(+)
+>  tools/testing/selftests/Makefile | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 3b7df5477317..fc3681270afe 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -64,6 +64,7 @@ TARGETS += net
+>  TARGETS += net/af_unix
+>  TARGETS += net/forwarding
+>  TARGETS += net/hsr
+> +TARGETS += net/lib
+>  TARGETS += net/mptcp
+>  TARGETS += net/netfilter
+>  TARGETS += net/openvswitch
 
-No test cases for the test suite?  ;-(
+Please make sure you always include a commit message. Among other
+things writing one would force you to understand the code, and
+in this case understand that this target is intentionally left out.
+Look around the Makefile for references to net/lib, you'll figure 
+it out.
+
+The patch is incorrect.
 
