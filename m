@@ -1,34 +1,34 @@
-Return-Path: <linux-kselftest+bounces-17819-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17820-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEF759769F4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 15:05:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A6D49769F6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 15:05:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D8A91F21FFC
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EA5FCB22E61
 	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 13:05:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F21511A76C3;
-	Thu, 12 Sep 2024 13:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56A841A7AD6;
+	Thu, 12 Sep 2024 13:04:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ApvJcn3i"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gPBQACcF"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 255E71A3040
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A48B91A724B
 	for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 13:04:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726146277; cv=none; b=EjXCv0CKBHJ04/TpeDJXIfIF+uTTrUuPvEHNVx9ZF+hCSvV1dZsuvy+iKkmJP8YE6uE1eOrUGgfXVoC0KSOGiD2Nte3CX10KZSc0VpFu78tNyOsRpV4+gWEQXTEIxwKhtnVvvC+SUFYvKV1rnBI94uAN+MoVCEIPPFSpHJCrfaE=
+	t=1726146278; cv=none; b=mcOJtqE9kekTh19RCt1S68orsUYKqFq8NfnmrG8R2wMNVxwzU7nkek3reKHZgNFUdMMV7uDbyCAnq4q3k4+1YyHUDflxQmpD32bCc/8DCJd1lnkERw8FnhKAS/AZwYIToAuXMh+76n+wvX6FVCiyqhtD4nLu5zIRujvRKfhSxYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726146277; c=relaxed/simple;
-	bh=7Mou63F6Si0LBgDAYfUJIlqLAYZyr2Fjly0h3zS3O/0=;
+	s=arc-20240116; t=1726146278; c=relaxed/simple;
+	bh=sGbcPWSBpcVNAtNQfx5+HpsfgiOp1WmGAWMS4UxxrBs=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=uXsyoEn2hyT9JB+VuJM2XTvUb571Eg1qoUKdGgjc/h0yzAZSLhdOWHqwQEBJ6ix5j7Zv/DCwzDZaN0X0JXV2ac4YK+zG5vVamizetLmY9Qn95MA+Xuz+surL9yLf+zicrv11Nzngre9udqeRi/PFXP7oWHKdtcTQoURz2i/w2cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ApvJcn3i; arc=none smtp.client-ip=192.198.163.10
+	 MIME-Version; b=WLO2zxRfpXzoM3t0qI5CGSGJE63yxwbLVMyMn19FYdnkJgfg0YTgBnz5DPx6NB54kh7fom4ljK1DBxls385pNGClTnL61WwXqfrdS4M+fAB/+dqMNl8PQ3k7o0VKuskIncJaO7X38Ilw766HkLalUtW+00Y3dSNoDp1npyBKf+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gPBQACcF; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -36,26 +36,26 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1726146276; x=1757682276;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7Mou63F6Si0LBgDAYfUJIlqLAYZyr2Fjly0h3zS3O/0=;
-  b=ApvJcn3i+Sx+qKWQPT6J9i1t8bkaxBvp7An3olKeIq9dzxPAodGHK2pU
-   mi8g1UQhTz08svyVnzySXZIWhchXejAIsFN2b/9/ez1W+ecDbTjMUHcmn
-   Os4WBfBwXTmH57EAY0kH4a8FWgB2gE8+P2MU5KTmgTdpkr0ngUJRoCNNY
-   SMC28IMWWHJ8p/P89ecfLjHGt1UEabXtvN4yTCK+6YrqslEQoBGidfsvr
-   tSEqcFUKHtZe/WPhQjmZvtyH+8ZonqjcGMoSmzgnfUlpogS4zYEW4In9C
-   9tmc7LX6Po+BBC1uymdmONgykGt9f+2yF9ok8OMkJH55dnEMTQNovlfqJ
-   g==;
-X-CSE-ConnectionGUID: K9D34U2fQkes30Tb2tS4Hg==
-X-CSE-MsgGUID: i/OpkFJZRk+NXgLfAjVAMw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="36380542"
+  bh=sGbcPWSBpcVNAtNQfx5+HpsfgiOp1WmGAWMS4UxxrBs=;
+  b=gPBQACcF4tbWgjG6VSl5DBNwVTXu8TOC/Wt1aoK83gOzJZ5tzu/tP5bu
+   0sCEKkTR0npnEXCzvb7dBo9+kEvjeF4Us57OVeBKd03NQx2lLg8OjIbh8
+   sm7BVxui4Bg+HK/oQvujEethlCf5qugxaDqophEf4n3oXGZb+58dR/pfG
+   mruKxwRs3ACVA0bMoLSOTHxbNZuCP7uw7p9la9o+AfbSsFyRjaT4PIj6w
+   H6Cpj+dAz5UisD1PeAhkHtDN+EQncuwzRD/QOXcefGV1dazrLrXlomMzA
+   9/g/lZpCIqbb/4MskOe8C0oGbVvsgP42e8pMNNEZIVO24CVEE2/Bcptwh
+   A==;
+X-CSE-ConnectionGUID: aKxqFBVoQRilAWTgy3/b0Q==
+X-CSE-MsgGUID: UUjc9+RcSLWjoBm25Sdj0g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="36380551"
 X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="36380542"
+   d="scan'208";a="36380551"
 Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 06:04:34 -0700
-X-CSE-ConnectionGUID: DgeXWjRESTGSgIThZMByGA==
-X-CSE-MsgGUID: OuXIn9GITSi37F24G3eRqA==
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 06:04:35 -0700
+X-CSE-ConnectionGUID: 0T/EvMCDRzKFehWr548uGQ==
+X-CSE-MsgGUID: h2k0upPBQ0KEKdgih+iBaA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="72509934"
+   d="scan'208";a="72509941"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
   by orviesa005.jf.intel.com with ESMTP; 12 Sep 2024 06:04:34 -0700
 From: Yi Liu <yi.l.liu@intel.com>
@@ -72,9 +72,9 @@ Cc: alex.williamson@redhat.com,
 	zhenzhong.duan@intel.com,
 	linux-kselftest@vger.kernel.org,
 	vasant.hegde@amd.com
-Subject: [PATCH v2 3/6] iommu/vt-d: Make intel_iommu_set_dev_pasid() to handle domain replacement
-Date: Thu, 12 Sep 2024 06:04:24 -0700
-Message-Id: <20240912130427.10119-4-yi.l.liu@intel.com>
+Subject: [PATCH v2 4/6] iommu/vt-d: Add set_dev_pasid callback for nested domain
+Date: Thu, 12 Sep 2024 06:04:25 -0700
+Message-Id: <20240912130427.10119-5-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240912130427.10119-1-yi.l.liu@intel.com>
 References: <20240912130427.10119-1-yi.l.liu@intel.com>
@@ -86,174 +86,100 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-set_dev_pasid op is going to support domain replacement and keep the old
-hardware config if it fails. Make the Intel iommu driver be prepared for
-it.
+From: Lu Baolu <baolu.lu@linux.intel.com>
 
+Extend intel_iommu_set_dev_pasid() to set a nested type domain to a PASID
+of a device.
+
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Co-developed-by: Yi Liu <yi.l.liu@intel.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/intel/iommu.c | 98 ++++++++++++++++++++++++-------------
- 1 file changed, 65 insertions(+), 33 deletions(-)
+ drivers/iommu/intel/iommu.c  | 22 +++++++++++++++++-----
+ drivers/iommu/intel/iommu.h  |  3 +++
+ drivers/iommu/intel/nested.c |  1 +
+ 3 files changed, 21 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 80b587de226d..6f5a8e549f3f 100644
+index 6f5a8e549f3f..749ee7741ec4 100644
 --- a/drivers/iommu/intel/iommu.c
 +++ b/drivers/iommu/intel/iommu.c
-@@ -4248,8 +4248,8 @@ static int intel_iommu_iotlb_sync_map(struct iommu_domain *domain,
- 	return 0;
+@@ -284,6 +284,11 @@ static int __init intel_iommu_setup(char *str)
  }
+ __setup("intel_iommu=", intel_iommu_setup);
  
--static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid,
--					 struct iommu_domain *domain)
-+static void domain_remove_dev_pasid(struct iommu_domain *domain,
-+				    struct device *dev, ioasid_t pasid)
- {
- 	struct device_domain_info *info = dev_iommu_priv_get(dev);
- 	struct dev_pasid_info *curr, *dev_pasid = NULL;
-@@ -4257,11 +4257,6 @@ static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid,
- 	struct dmar_domain *dmar_domain;
- 	unsigned long flags;
- 
--	if (domain->type == IOMMU_DOMAIN_IDENTITY) {
--		intel_pasid_tear_down_entry(iommu, dev, pasid, 0);
--		return;
--	}
--
- 	dmar_domain = to_dmar_domain(domain);
- 	spin_lock_irqsave(&dmar_domain->lock, flags);
- 	list_for_each_entry(curr, &dmar_domain->dev_pasids, link_domain) {
-@@ -4278,13 +4273,24 @@ static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid,
- 	domain_detach_iommu(dmar_domain, iommu);
- 	intel_iommu_debugfs_remove_dev_pasid(dev_pasid);
- 	kfree(dev_pasid);
++static int domain_type_is_nested(struct dmar_domain *domain)
++{
++	return domain->domain.type == IOMMU_DOMAIN_NESTED;
 +}
 +
-+static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t pasid,
-+					 struct iommu_domain *domain)
-+{
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
-+	struct intel_iommu *iommu = info->iommu;
-+
- 	intel_pasid_tear_down_entry(iommu, dev, pasid,
- 				    INTEL_PASID_TEARDOWN_DRAIN_PRQ);
-+	if (domain->type == IOMMU_DOMAIN_IDENTITY)
-+		return;
-+	domain_remove_dev_pasid(domain, dev, pasid);
+ static int domain_pfn_supported(struct dmar_domain *domain, unsigned long pfn)
+ {
+ 	int addr_width = agaw_to_width(domain->agaw) - VTD_PAGE_SHIFT;
+@@ -4299,7 +4304,12 @@ domain_prepare_dev_pasid(struct iommu_domain *domain,
+ 	unsigned long flags;
+ 	int ret;
+ 
+-	ret = prepare_domain_attach_device(domain, dev);
++	/* Nested type domain should prepare its parent domain */
++	if (domain_type_is_nested(dmar_domain))
++		ret = prepare_domain_attach_device(
++				&dmar_domain->s2_domain->domain, dev);
++	else
++		ret = prepare_domain_attach_device(domain, dev);
+ 	if (ret)
+ 		return ERR_PTR(ret);
+ 
+@@ -4329,9 +4339,9 @@ domain_prepare_dev_pasid(struct iommu_domain *domain,
+ 	return ERR_PTR(ret);
  }
  
 -static int intel_iommu_set_dev_pasid(struct iommu_domain *domain,
 -				     struct device *dev, ioasid_t pasid,
 -				     struct iommu_domain *old)
-+static struct dev_pasid_info *
-+domain_prepare_dev_pasid(struct iommu_domain *domain,
-+			 struct device *dev, ioasid_t pasid)
++int intel_iommu_set_dev_pasid(struct iommu_domain *domain,
++			      struct device *dev, ioasid_t pasid,
++			      struct iommu_domain *old)
  {
  	struct device_domain_info *info = dev_iommu_priv_get(dev);
  	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
-@@ -4293,22 +4299,13 @@ static int intel_iommu_set_dev_pasid(struct iommu_domain *domain,
- 	unsigned long flags;
- 	int ret;
+@@ -4356,7 +4366,9 @@ static int intel_iommu_set_dev_pasid(struct iommu_domain *domain,
+ 	intel_pasid_tear_down_entry(iommu, dev, pasid,
+ 				    INTEL_PASID_TEARDOWN_DRAIN_PRQ);
  
--	if (!pasid_supported(iommu) || dev_is_real_dma_subdevice(dev))
--		return -EOPNOTSUPP;
--
--	if (domain->dirty_ops)
--		return -EINVAL;
--
--	if (context_copied(iommu, info->bus, info->devfn))
--		return -EBUSY;
--
- 	ret = prepare_domain_attach_device(domain, dev);
- 	if (ret)
--		return ret;
-+		return ERR_PTR(ret);
- 
- 	dev_pasid = kzalloc(sizeof(*dev_pasid), GFP_KERNEL);
- 	if (!dev_pasid)
--		return -ENOMEM;
-+		return ERR_PTR(-ENOMEM);
- 
- 	ret = domain_attach_iommu(dmar_domain, iommu);
- 	if (ret)
-@@ -4318,6 +4315,47 @@ static int intel_iommu_set_dev_pasid(struct iommu_domain *domain,
- 	if (ret)
- 		goto out_detach_iommu;
- 
-+	dev_pasid->dev = dev;
-+	dev_pasid->pasid = pasid;
-+	spin_lock_irqsave(&dmar_domain->lock, flags);
-+	list_add(&dev_pasid->link_domain, &dmar_domain->dev_pasids);
-+	spin_unlock_irqrestore(&dmar_domain->lock, flags);
-+
-+	return dev_pasid;
-+out_detach_iommu:
-+	domain_detach_iommu(dmar_domain, iommu);
-+out_free:
-+	kfree(dev_pasid);
-+	return ERR_PTR(ret);
-+}
-+
-+static int intel_iommu_set_dev_pasid(struct iommu_domain *domain,
-+				     struct device *dev, ioasid_t pasid,
-+				     struct iommu_domain *old)
-+{
-+	struct device_domain_info *info = dev_iommu_priv_get(dev);
-+	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
-+	struct intel_iommu *iommu = info->iommu;
-+	struct dev_pasid_info *dev_pasid;
-+	int ret;
-+
-+	if (!pasid_supported(iommu) || dev_is_real_dma_subdevice(dev))
-+		return -EOPNOTSUPP;
-+
-+	if (domain->dirty_ops)
-+		return -EINVAL;
-+
-+	if (context_copied(iommu, info->bus, info->devfn))
-+		return -EBUSY;
-+
-+	dev_pasid = domain_prepare_dev_pasid(domain, dev, pasid);
-+	if (IS_ERR(dev_pasid))
-+		return PTR_ERR(dev_pasid);
-+
-+	/* Clear the old configuration if it already exists */
-+	intel_pasid_tear_down_entry(iommu, dev, pasid,
-+				    INTEL_PASID_TEARDOWN_DRAIN_PRQ);
-+
- 	if (dmar_domain->use_first_level)
+-	if (dmar_domain->use_first_level)
++	if (domain_type_is_nested(dmar_domain))
++		ret = intel_pasid_setup_nested(iommu, dev, pasid, dmar_domain);
++	else if (dmar_domain->use_first_level)
  		ret = domain_setup_first_level(iommu, dmar_domain,
  					       dev, pasid);
-@@ -4325,24 +4363,18 @@ static int intel_iommu_set_dev_pasid(struct iommu_domain *domain,
- 		ret = intel_pasid_setup_second_level(iommu, dmar_domain,
- 						     dev, pasid);
- 	if (ret)
--		goto out_unassign_tag;
-+		goto out_undo_dev_pasid;
+ 	else
+diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+index b3b295e60626..36cf59bfe4ea 100644
+--- a/drivers/iommu/intel/iommu.h
++++ b/drivers/iommu/intel/iommu.h
+@@ -1109,6 +1109,9 @@ void device_block_translation(struct device *dev);
+ int prepare_domain_attach_device(struct iommu_domain *domain,
+ 				 struct device *dev);
+ void domain_update_iommu_cap(struct dmar_domain *domain);
++int intel_iommu_set_dev_pasid(struct iommu_domain *domain,
++			      struct device *dev, ioasid_t pasid,
++			      struct iommu_domain *old);
  
--	dev_pasid->dev = dev;
--	dev_pasid->pasid = pasid;
--	spin_lock_irqsave(&dmar_domain->lock, flags);
--	list_add(&dev_pasid->link_domain, &dmar_domain->dev_pasids);
--	spin_unlock_irqrestore(&dmar_domain->lock, flags);
-+	if (old)
-+		domain_remove_dev_pasid(old, dev, pasid);
+ int dmar_ir_support(void);
  
- 	if (domain->type & __IOMMU_DOMAIN_PAGING)
- 		intel_iommu_debugfs_create_dev_pasid(dev_pasid);
+diff --git a/drivers/iommu/intel/nested.c b/drivers/iommu/intel/nested.c
+index 36a91b1b52be..c5a94c00b396 100644
+--- a/drivers/iommu/intel/nested.c
++++ b/drivers/iommu/intel/nested.c
+@@ -131,6 +131,7 @@ static int intel_nested_cache_invalidate_user(struct iommu_domain *domain,
  
- 	return 0;
--out_unassign_tag:
--	cache_tag_unassign_domain(dmar_domain, dev, pasid);
--out_detach_iommu:
--	domain_detach_iommu(dmar_domain, iommu);
--out_free:
--	kfree(dev_pasid);
-+
-+out_undo_dev_pasid:
-+	domain_remove_dev_pasid(domain, dev, pasid);
- 	return ret;
- }
- 
+ static const struct iommu_domain_ops intel_nested_domain_ops = {
+ 	.attach_dev		= intel_nested_attach_dev,
++	.set_dev_pasid		= intel_iommu_set_dev_pasid,
+ 	.free			= intel_nested_domain_free,
+ 	.cache_invalidate_user	= intel_nested_cache_invalidate_user,
+ };
 -- 
 2.34.1
 
