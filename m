@@ -1,34 +1,34 @@
-Return-Path: <linux-kselftest+bounces-17858-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17859-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36F14977002
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 20:05:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D7B3977004
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 20:05:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0A831F254A5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 18:05:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 397BE282087
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 18:05:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A0901C1722;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B97D41C173E;
 	Thu, 12 Sep 2024 18:04:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HRXAAln6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FXTzZJbR"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DD9E1BFDFF;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5A321BFE12;
 	Thu, 12 Sep 2024 18:04:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726164298; cv=none; b=Y2GWLgUP64/mT2Fh+B+SMEQBa9Y44InYAZpPyE6aCpYpd4inOCzAtxNCWnckR/jTBFcaGeuZJXPzX3bYZSGS+SLOe2K9QCaZP+VmwTcMZT3ipUjYJ90qGgvr0+jtEO2xYo7PzrAjZElDj9Ye9AaYRgoiFOoJaE20EHEs6CRiGys=
+	t=1726164298; cv=none; b=Rfpi1iapXL43SOyyKOwIfpEuUFu6urCsJmgjl5JinEkNuI/xYwvw+tq9JhTMvfj9l2EhiGtTDwnKO8hd6bgl6a1+YF8hek7jiRxBe2mYwcvoaZHpoG+h3UYA6+/HjMYdn3dAgnZXHqv1S6Eg7rn77wEVmHj6GveXRpBAzwm0XL4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1726164298; c=relaxed/simple;
-	bh=uaLNw3+ytN+CB1MwOPqpnul7cEtlDlmWNYdX1kzswVg=;
+	bh=5P5W0kYgnMSBtMvsT2SGgLIHyLZ89ci/M47K44qbq2o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=puJc9QlLY0tbQkJy+gwksg0vBjcanSMl1tjulmKPwYxpb1wVMA4fd6GbMtFQ/VlHVVChFCHMn0VmdShs2P1HkwYhZX7GuIwjU2Nw90vueEHZgpaButhxITCRZWMnAbvhCot4iSw+iVdoOWI4eie9y4JHF040cyM7f2MAww4O/7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HRXAAln6; arc=none smtp.client-ip=198.175.65.21
+	 MIME-Version:Content-Type; b=CgGFdjC2UOk8NJGBW4KQeiFZTH+dAE8OH4TtU+CGMMjEZwbsrptmERWRmVGXntaXOUoPlRbVGON1ywD6PHwx88XIjVylZt7BFcij3dDpifSZP8R3lOq4bCNDCZP2M9MKCMmbRGiWf+VnMsoKZXmQSTUiBpN+SkJnvq+i2rtHOtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FXTzZJbR; arc=none smtp.client-ip=198.175.65.21
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -36,26 +36,26 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1726164297; x=1757700297;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=uaLNw3+ytN+CB1MwOPqpnul7cEtlDlmWNYdX1kzswVg=;
-  b=HRXAAln6r0MFEcuL20b0pEkaO8TENzRyWNOXbqupAM+Hbbgb3z0FeaHg
-   /LjDU0Q8GVrNJ9GbBPx4BzK8zaSj0FkIejpOLT0yGYMEoDKq55hX9Qrfo
-   gCvlMlCJKVsMtoELDox5AGUSJ/RSuLN6Ne5fJ2PgmkP4uWxcM+EO4mYx3
-   jXFsXoyNRw42gwZ+hrDxkz72HC12/aVWzGLUkzgMeVZtKhksXMAXhIZf/
-   CfFtufsUXQMhNUboR/SSQtsjHj4JWnYB1LHQOo5KiBGBmAPt65CdK3jRR
-   NMk6Y7j5lsE8moLEXEWOl6V+vD4UAdmL7dwzvaCPr56/JFYLUR91RGEjS
+  bh=5P5W0kYgnMSBtMvsT2SGgLIHyLZ89ci/M47K44qbq2o=;
+  b=FXTzZJbR7fCXJAsg1ySEMSUx5V97gfpeq5+0T3dMtqLmYO4EkvvMRXX7
+   ymDADyA/Lh3NiWG6yHAYZ51/Fx3ZvRtPjZOCmYRngZbHbQk4hcWAycMfi
+   qCJUN9ozmuLdNS2otVmh+vI8LSCxx3USU0zF20z2tqnHdI11NhNGw2Pzk
+   42uRsKFKHD6k3KXY7DgP3P+tgu9vMD0zyUzSXx5su0OArbzm9VZQ0OkJR
+   jJpuxPUXYoa2YIhymMh4YuttN4P0k9wnnd4oIV5HWCQMwYOX5nzZiKe9o
+   gFo2U1JXujwnz9+OzU517xoeBtBrKYZ+S3YjM9Qh+KfL6Ni+OFNvqnrQi
    w==;
-X-CSE-ConnectionGUID: i9YA/Y32Tj+BtA/h98CvgQ==
-X-CSE-MsgGUID: qtb7WJ18SJCA/v7VvMMJWg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="24976593"
+X-CSE-ConnectionGUID: l7W/plX1RhufYDb6j2B8nw==
+X-CSE-MsgGUID: NBRtwcMKTSO1L5Tv2t41BQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="24976597"
 X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="24976593"
+   d="scan'208";a="24976597"
 Received: from orviesa009.jf.intel.com ([10.64.159.149])
   by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 11:04:53 -0700
-X-CSE-ConnectionGUID: fMHFH9m7QLaVIK7X+n8i4w==
-X-CSE-MsgGUID: GBeizUvsTCChkp/pmCUMVA==
+X-CSE-ConnectionGUID: 1g+CQN7tTpS5Iv+jnHDJLw==
+X-CSE-MsgGUID: Xmcr/F0OSWal21qmqkUqEg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="67724612"
+   d="scan'208";a="67724615"
 Received: from b04f130c85c0.jf.intel.com (HELO rchatre-desk1.jf.intel.com) ([10.165.154.99])
   by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 11:04:52 -0700
 From: Reinette Chatre <reinette.chatre@intel.com>
@@ -69,9 +69,9 @@ Cc: maciej.wieczor-retman@intel.com,
 	reinette.chatre@intel.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH V2 05/13] selftests/resctrl: Make wraparound handling obvious
-Date: Thu, 12 Sep 2024 11:13:54 -0700
-Message-ID: <f9d91e9a3403caed08a7830aa57f777207133edf.1726164080.git.reinette.chatre@intel.com>
+Subject: [PATCH V2 06/13] selftests/resctrl: Remove "once" parameter required to be false
+Date: Thu, 12 Sep 2024 11:13:55 -0700
+Message-ID: <1f5ad02dc424bfc3cca705ed9a322df8f35f2ff4.1726164080.git.reinette.chatre@intel.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <cover.1726164080.git.reinette.chatre@intel.com>
 References: <cover.1726164080.git.reinette.chatre@intel.com>
@@ -84,85 +84,123 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Within mba_setup() the programmed bandwidth delay value starts
-at the maximum (100, or rather ALLOCATION_MAX) and progresses
-towards ALLOCATION_MIN by decrementing with ALLOCATION_STEP.
+The CMT, MBM, and MBA tests rely on a benchmark that runs while
+the test makes changes to needed configuration (for example memory
+bandwidth allocation) and takes needed measurements. By default
+the "fill_buf" benchmark is used and by default (via its
+"once = false" setting) "fill_buf" is configured to run until
+terminated after the test completes.
 
-The programmed bandwidth delay should never be negative, so
-representing it with an unsigned int is most appropriate. This
-may introduce confusion because of the "allocation > ALLOCATION_MAX"
-check used to check wraparound of the subtraction.
+An unintended consequence of enabling the user to override the
+benchmark also enables the user to change parameters to the
+"fill_buf" benchmark. This enables the user to set "fill_buf" to
+only cycle through the buffer once (by setting "once = true")
+and thus breaking the CMT, MBA, and MBM tests that expect
+workload/interference to be reflected by their measurements.
 
-Modify the mba_setup() flow to start at the minimum, ALLOCATION_MIN,
-and incrementally, with ALLOCATION_STEP steps, adjust the
-bandwidth delay value. This avoids wraparound while making the purpose
-of "allocation > ALLOCATION_MAX" clear and eliminates the
-need for the "allocation < ALLOCATION_MIN" check.
+Prevent user space from changing the "once" parameter and ensure
+that it is always false for the CMT, MBA, and MBM tests.
 
-Reported-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Closes: https://lore.kernel.org/lkml/1903ac13-5c9c-ef8d-78e0-417ac34a971b@linux.intel.com/
+Suggested-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
 Changes since V1:
 - New patch
-- Add Ilpo's Reviewed-by tag.
 ---
- tools/testing/selftests/resctrl/mba_test.c | 12 +++++++-----
- 1 file changed, 7 insertions(+), 5 deletions(-)
+ tools/testing/selftests/resctrl/fill_buf.c      |  7 ++++---
+ tools/testing/selftests/resctrl/resctrl.h       |  2 +-
+ tools/testing/selftests/resctrl/resctrl_tests.c |  8 +++++++-
+ tools/testing/selftests/resctrl/resctrl_val.c   | 11 +----------
+ 4 files changed, 13 insertions(+), 15 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index ab8496a4925b..da40a8ed4413 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -39,7 +39,8 @@ static int mba_setup(const struct resctrl_test *test,
- 		     const struct user_params *uparams,
- 		     struct resctrl_val_param *p)
+diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
+index 34e5df721430..854f0108d8e6 100644
+--- a/tools/testing/selftests/resctrl/fill_buf.c
++++ b/tools/testing/selftests/resctrl/fill_buf.c
+@@ -151,7 +151,7 @@ unsigned char *alloc_buffer(size_t buf_size, int memflush)
+ 	return buf;
+ }
+ 
+-int run_fill_buf(size_t buf_size, int memflush, int op, bool once)
++int run_fill_buf(size_t buf_size, int memflush, int op)
  {
--	static int runs_per_allocation, allocation = 100;
-+	static unsigned int allocation = ALLOCATION_MIN;
-+	static int runs_per_allocation;
- 	char allocation_str[64];
- 	int ret;
+ 	unsigned char *buf;
  
-@@ -50,7 +51,7 @@ static int mba_setup(const struct resctrl_test *test,
- 	if (runs_per_allocation++ != 0)
- 		return 0;
+@@ -160,9 +160,10 @@ int run_fill_buf(size_t buf_size, int memflush, int op, bool once)
+ 		return -1;
  
--	if (allocation < ALLOCATION_MIN || allocation > ALLOCATION_MAX)
-+	if (allocation > ALLOCATION_MAX)
- 		return END_OF_TESTS;
- 
- 	sprintf(allocation_str, "%d", allocation);
-@@ -59,7 +60,7 @@ static int mba_setup(const struct resctrl_test *test,
- 	if (ret < 0)
- 		return ret;
- 
--	allocation -= ALLOCATION_STEP;
-+	allocation += ALLOCATION_STEP;
+ 	if (op == 0)
+-		fill_cache_read(buf, buf_size, once);
++		fill_cache_read(buf, buf_size, false);
+ 	else
+-		fill_cache_write(buf, buf_size, once);
++		fill_cache_write(buf, buf_size, false);
++
+ 	free(buf);
  
  	return 0;
- }
-@@ -72,8 +73,9 @@ static int mba_measure(const struct user_params *uparams,
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 2dda56084588..51f5f4b25e06 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -142,7 +142,7 @@ int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
+ unsigned char *alloc_buffer(size_t buf_size, int memflush);
+ void mem_flush(unsigned char *buf, size_t buf_size);
+ void fill_cache_read(unsigned char *buf, size_t buf_size, bool once);
+-int run_fill_buf(size_t buf_size, int memflush, int op, bool once);
++int run_fill_buf(size_t buf_size, int memflush, int op);
+ int initialize_mem_bw_imc(void);
+ int measure_mem_bw(const struct user_params *uparams,
+ 		   struct resctrl_val_param *param, pid_t bm_pid,
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index ecbb7605a981..bee4123a5a9b 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -266,7 +266,13 @@ int main(int argc, char **argv)
+ 		uparams.benchmark_cmd[1] = span_str;
+ 		uparams.benchmark_cmd[2] = "1";
+ 		uparams.benchmark_cmd[3] = "0";
+-		uparams.benchmark_cmd[4] = "false";
++		/*
++		 * Fourth parameter was previously used to indicate
++		 * how long "fill_buf" should run for, with "false"
++		 * ("fill_buf" will keep running until terminated)
++		 * the only option that works.
++		 */
++		uparams.benchmark_cmd[4] = NULL;
+ 		uparams.benchmark_cmd[5] = NULL;
+ 	}
  
- static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- {
--	int allocation, runs;
-+	unsigned int allocation;
- 	bool ret = false;
-+	int runs;
+diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+index e88d5ca30517..5331354aaf64 100644
+--- a/tools/testing/selftests/resctrl/resctrl_val.c
++++ b/tools/testing/selftests/resctrl/resctrl_val.c
+@@ -625,7 +625,6 @@ static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
+ 	int operation, ret, memflush;
+ 	char **benchmark_cmd;
+ 	size_t span;
+-	bool once;
+ 	FILE *fp;
  
- 	ksft_print_msg("Results are displayed in (MB)\n");
- 	/* Memory bandwidth from 100% down to 10% */
-@@ -103,7 +105,7 @@ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- 			       avg_diff_per > MAX_DIFF_PERCENT ?
- 			       "Fail:" : "Pass:",
- 			       MAX_DIFF_PERCENT,
--			       ALLOCATION_MAX - ALLOCATION_STEP * allocation);
-+			       ALLOCATION_MIN + ALLOCATION_STEP * allocation);
+ 	benchmark_cmd = info->si_ptr;
+@@ -645,16 +644,8 @@ static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
+ 		span = strtoul(benchmark_cmd[1], NULL, 10);
+ 		memflush =  atoi(benchmark_cmd[2]);
+ 		operation = atoi(benchmark_cmd[3]);
+-		if (!strcmp(benchmark_cmd[4], "true")) {
+-			once = true;
+-		} else if (!strcmp(benchmark_cmd[4], "false")) {
+-			once = false;
+-		} else {
+-			ksft_print_msg("Invalid once parameter\n");
+-			parent_exit(ppid);
+-		}
  
- 		ksft_print_msg("avg_diff_per: %d%%\n", avg_diff_per);
- 		ksft_print_msg("avg_bw_imc: %lu\n", avg_bw_imc);
+-		if (run_fill_buf(span, memflush, operation, once))
++		if (run_fill_buf(span, memflush, operation))
+ 			fprintf(stderr, "Error in running fill buffer\n");
+ 	} else {
+ 		/* Execute specified benchmark */
 -- 
 2.46.0
 
