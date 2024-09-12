@@ -1,189 +1,168 @@
-Return-Path: <linux-kselftest+bounces-17866-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17867-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FCFC977013
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 20:06:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4222397728E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 22:05:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 653DD1C23565
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 18:06:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 027E4283363
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 20:05:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E57851C242C;
-	Thu, 12 Sep 2024 18:05:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDA541C0DEE;
+	Thu, 12 Sep 2024 20:05:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kex5wIKq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YmQIWbI9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26E0A1C2316;
-	Thu, 12 Sep 2024 18:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799D41BFDE3
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 20:05:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726164303; cv=none; b=i086ZSC+5QCXFjIVFijObktgbVybrQtOPX4G4bVb4XHrMyOyRwakOPDwgA7N7Cc0AJKGWhGYfpYZHfST3wUCaSyB+x/scPhzXT7lQGeFJnfbjcScpbl5ubTMryr3+Tp/Jh5WZXHewqTKmjdl9+WF9F40WjASxn7qxmneHnllJSs=
+	t=1726171547; cv=none; b=YzmbFd1FALcc6t081Sc2Ut/6fZhSFml2bSD9rRG/axStKydR6u0NVjVwFuUORgjo3GashMq5cH0924qnDvRqd2q+4v8Jg0D93NH4Ce3qHLsAipsbVjfndkDQf4UodfRl2piO7W3QztXcOYKYwV6yrp8wCQcnBhEBonff3VuwdYo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726164303; c=relaxed/simple;
-	bh=pbqZYofb0zkkc2gFzf8QZp4Qb+rrD67VxwAkjEJJVR8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gFFWphXdI8Lz7NZ6FawB2iQHFCGNCQ9XyO0oETvN44eN/9B9RcRYUfD6KsgQqzMbk6KD9jBRJeWEeGBPmSChXp5d6Sr/PtExOKiqtPk2gtxWUh4X0K0MSsxgDZr0eIl/mm+2ylVdKeJjJf88ditITwR9y2wXJRxqs05lLbUIfPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kex5wIKq; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726164302; x=1757700302;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=pbqZYofb0zkkc2gFzf8QZp4Qb+rrD67VxwAkjEJJVR8=;
-  b=kex5wIKqH8I2I67ZQ03lgqU/NdBLLtjll7MBR6QltFPUKsd+S5k6kNqb
-   +3m+N5U9Cbr+7Enjo955XUkgCzo+Peb6klrdvyT0UfYdbewdX/CeTKbQQ
-   hWbLrD5VqC0G5veEjl8aGDWOKuldXllsiBF7v1kI7LpKvJABjQEYQ0ykN
-   31sJhEiyDkyT8RsD4hmjRWDKbGbv+0oRwn9wdSm5wFq4+7BOW6SziC59Z
-   xwN+ex64ieTqv0zGaG7S1nlErWlIvKVhHrZ3rR/FgiDjMys/EqHHVXhox
-   n8f2quwvdAZ5kJGs8ao0PflGXrljHkkofTr5qWjart+Yn9tlervzLLhy5
-   w==;
-X-CSE-ConnectionGUID: nOi91rqLQh+PyVO1pX945g==
-X-CSE-MsgGUID: kAPBNEjdSNGBTv6Mh5FywA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="24976626"
-X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="24976626"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 11:04:53 -0700
-X-CSE-ConnectionGUID: tsar5sZRS16LPxP14sMcbw==
-X-CSE-MsgGUID: L2U9Pq1LTxOlf7ovkkDLKg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="67724636"
-Received: from b04f130c85c0.jf.intel.com (HELO rchatre-desk1.jf.intel.com) ([10.165.154.99])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 11:04:53 -0700
-From: Reinette Chatre <reinette.chatre@intel.com>
-To: fenghua.yu@intel.com,
-	shuah@kernel.org,
-	tony.luck@intel.com,
-	peternewman@google.com,
-	babu.moger@amd.com,
-	ilpo.jarvinen@linux.intel.com
-Cc: maciej.wieczor-retman@intel.com,
-	reinette.chatre@intel.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH V2 13/13] selftests/resctrl: Keep results from first test run
-Date: Thu, 12 Sep 2024 11:14:02 -0700
-Message-ID: <46200b49e874c69a05538b813852af0e1eeeea4c.1726164080.git.reinette.chatre@intel.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <cover.1726164080.git.reinette.chatre@intel.com>
-References: <cover.1726164080.git.reinette.chatre@intel.com>
+	s=arc-20240116; t=1726171547; c=relaxed/simple;
+	bh=zgVFGLKcvsfnGJiJdgrGdKWJuix6jbiZzKyiHN3clf0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=qPJsQ0oFYzQlJs5KnjQTBmZQftawv8TRkbe3xV2UhJbT5Z7fFJAt1TysMXFSOEMKpznyPhcTL3klsM8/8xZm6RAFmV5GFfuC6WgjLL3yZYtZadhOKdN4wl9kQfxgawbmNztwHqUrm95AfzXCPSpA+lmC1FQw/8zjdjXPgmUKq6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YmQIWbI9; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2d889fc26e7so1565628a91.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 13:05:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1726171546; x=1726776346; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fnnjrlSetIbQ77vTIX4XItRIWsi2rxf02mpUNlAPpck=;
+        b=YmQIWbI97wgABO+GqgWJ7XMiY9/CGbBe/9xIwKUz27Ea6y3uyU5WGZlx+R+S1FotXo
+         Aei2SflW7WkconSAOn+f9KjSR/8l8Pl4Ix8LWEoIp7TeR04rIVB8LY7QjGw9LP5pd6am
+         WJFyI5oYK/VBYjMezQOnrrzjVmTiifU3dYXP+3rdRGqHiUd5aD1wXAIg+K3FDawnf4+i
+         SACvAFPY40QrscIryoTNhFEVzWLKL/eMJabpv3q4lf90OMCDnYmHrEC8jAVYsrzY52w5
+         jFwkf23lV710yKESQQ8syXYNPPqRnv2QObGatwqqxls1xnsztm+Fw7LwEviIXdGd0gJO
+         6r/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726171546; x=1726776346;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=fnnjrlSetIbQ77vTIX4XItRIWsi2rxf02mpUNlAPpck=;
+        b=Fs8dk5rj+FWya0rqyGpNKKiHkfnUihDQAWVaCJaWLtNHaOlJitUESb9tFDqgKpwSRD
+         sbqBttCggFgOWxFpvlEhyCA0KLtu6h88ObenloByhEo0GlkeJGC8BGrWDrQyuWQ6OskI
+         xc+h2eqBT+6xKY2L2OmPNUOhQX++8UFFu+b1nfLlEkoM2SY0Xd27xTZugfckMjt1G+yo
+         XgpIgwRWd31FQkB4aUtyRShgxQCgOtsq4igdxbIGsnBQ+cuzfQDgJ6G7kRlVf6wlE/7L
+         kXr9cj8ako4qT2JEgY1z/O9dT4XIR/eGL5wM2fi+bozewcBsebnXIGnHCem5v9WM5yjn
+         Cwhw==
+X-Forwarded-Encrypted: i=1; AJvYcCXZSvAhXzjbbKEGjfRB2MPW3//1Ax+lvf7buCKsZFPPdPXKwoKbUiaLRDNnxn5Nv3Evhg+e/NTrs/BBD46mzmk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCCt9mPmhFk8/IKTvbHs6tQXUcQr5yeIBoymkRbAU4j6s6fQMC
+	a438aU58G1RfWTdabgAp5z6n4Flr+97a9IDk81ET8mDbUeiI+PBU1EJvs9LM+iOvkwJaKHLorbF
+	ayg==
+X-Google-Smtp-Source: AGHT+IGMbV565ZUceOdGGm+YNdFHzG/XNLZao6v/FtV6YMEzbuF+laauyv9Oc3FC1PC6/WerO4BWUeVoybg=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:90a:d791:b0:2d8:7c76:45d7 with SMTP id
+ 98e67ed59e1d1-2dba0061767mr25737a91.4.1726171545428; Thu, 12 Sep 2024
+ 13:05:45 -0700 (PDT)
+Date: Thu, 12 Sep 2024 13:05:43 -0700
+In-Reply-To: <feefa9d1-f266-414f-bb7b-b770ef0d8ec6@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20240207172646.3981-1-xin3.li@intel.com> <20240207172646.3981-8-xin3.li@intel.com>
+ <ZiJzFsoHR41Sd8lE@chao-email> <ZmoT0jaX_3Ww3Uzu@google.com> <feefa9d1-f266-414f-bb7b-b770ef0d8ec6@zytor.com>
+Message-ID: <ZuNJlzXntREQVb3n@google.com>
+Subject: Re: [PATCH v2 07/25] KVM: VMX: Set intercept for FRED MSRs
+From: Sean Christopherson <seanjc@google.com>
+To: Xin Li <xin@zytor.com>
+Cc: Chao Gao <chao.gao@intel.com>, Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net, 
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, shuah@kernel.org, 
+	vkuznets@redhat.com, peterz@infradead.org, ravi.v.shankar@intel.com
+Content-Type: text/plain; charset="us-ascii"
 
-The resctrl selftests drop the results from every first test run
-to avoid (per comment) "inaccurate due to monitoring setup transition
-phase" data. Previously inaccurate data resulted from workloads needing
-some time to "settle" and also the measurements themselves to
-account for earlier measurements to measure across needed timeframe.
+On Thu, Sep 05, 2024, Xin Li wrote:
+> On 6/12/2024 2:32 PM, Sean Christopherson wrote:
+> > On Fri, Apr 19, 2024, Chao Gao wrote:
+> > > On Wed, Feb 07, 2024 at 09:26:27AM -0800, Xin Li wrote:
+> > > > Add FRED MSRs to the valid passthrough MSR list and set FRED MSRs intercept
+> > > > based on FRED enumeration.
+> > 
+> > This needs a *much* more verbose explanation.  It's pretty darn obvious _what_
+> > KVM is doing, but it's not at all clear _why_ KVM is passing through FRED MSRs.
+> > E.g. why is FRED_SSP0 not included in the set of passthrough MSRs?
+> > 
+> > > > static void vmx_vcpu_config_fred_after_set_cpuid(struct kvm_vcpu *vcpu)
+> > > > {
+> > > > 	struct vcpu_vmx *vmx = to_vmx(vcpu);
+> > > > +	bool fred_enumerated;
+> > > > 
+> > > > 	kvm_governed_feature_check_and_set(vcpu, X86_FEATURE_FRED);
+> > > > +	fred_enumerated = guest_can_use(vcpu, X86_FEATURE_FRED);
+> > > > 
+> > > > -	if (guest_can_use(vcpu, X86_FEATURE_FRED)) {
+> > > > +	if (fred_enumerated) {
+> > > > 		vm_entry_controls_setbit(vmx, VM_ENTRY_LOAD_IA32_FRED);
+> > > > 		secondary_vm_exit_controls_setbit(vmx,
+> > > > 						  SECONDARY_VM_EXIT_SAVE_IA32_FRED |
+> > > > @@ -7788,6 +7793,16 @@ static void vmx_vcpu_config_fred_after_set_cpuid(struct kvm_vcpu *vcpu)
+> > > > 						    SECONDARY_VM_EXIT_SAVE_IA32_FRED |
+> > > > 						    SECONDARY_VM_EXIT_LOAD_IA32_FRED);
+> > > > 	}
+> > > > +
+> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP0, MSR_TYPE_RW, !fred_enumerated);
+> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP1, MSR_TYPE_RW, !fred_enumerated);
+> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP2, MSR_TYPE_RW, !fred_enumerated);
+> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP3, MSR_TYPE_RW, !fred_enumerated);
+> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_STKLVLS, MSR_TYPE_RW, !fred_enumerated);
+> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_SSP1, MSR_TYPE_RW, !fred_enumerated);
+> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_SSP2, MSR_TYPE_RW, !fred_enumerated);
+> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_SSP3, MSR_TYPE_RW, !fred_enumerated);
+> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_CONFIG, MSR_TYPE_RW, !fred_enumerated);
+> > > 
+> > > Use a for-loop here? e.g.,
+> > > 	for (i = MSR_IA32_FRED_RSP0; i <= MSR_IA32_FRED_CONFIG; i++)
+> > 
+> > Hmm, I'd prefer to keep the open coded version.  It's not pretty, but I don't
+> > expect this to have much, if any, maintenance cost.  And using a loop makes it
+> > harder to both understand _exactly_ what's happening, and to search for relevant
+> > code.  E.g. it's quite difficult to see that FRED_SSP0 is still intercepted (see
+> > my comment regarding the changelog).
+> 
+> 
+> I owe you an explanation; I have been thinking about figuring out a way
+> to include FRED SSP0 in the FRED KVM patch set...
+> 
+> MSR_IA32_FRED_SSP0 is an alias of the CET MSR_IA32_PL0_SSP and likely to
+> be used in the same way as FRED RSP0, i.e., host FRED SSP0 _should_ be
+> restored in arch_exit_to_user_mode_prepare().  However as of today Linux
+> has no plan to utilize kernel shadow stack thus no one cares host FRED
+> SSP0 (no?).  But lets say anyway it is host's responsibility to manage
+> host FRED SSP0, then KVM only needs to take care of guest FRED SSP0
+> (just like how KVM should handle guest FRED RSP0) even before the
+> supervisor shadow stack feature is advertised to guest.
 
-commit da50de0a92f3 ("selftests/resctrl: Calculate resctrl FS derived mem
-bw over sleep(1) only")
+Heh, I'm not sure what your question is, or if there even is a question.  KVM
+needs to context switch FRED SSP0 if FRED is exposed to the guest, but presumably
+that will be done through XSAVE state?  If that's the long term plan, I would
+prefer to focus on merging CET virtualization first, and then land FRED virtualization
+on top so that KVM doesn't have to carry intermediate code to deal with the aliased
+MSR.
 
-ensured that measurements accurately measure just the time frame of
-interest. The default "fill_buf" benchmark since separated the buffer
-prepare phase from the benchmark run phase reducing the need for the
-tests themselves to accommodate the benchmark's "settle" time.
+Ugh, but what happens if a CPU (or the host kernel) supports FRED but not CET SS?
+Or is that effectively an illegal combination?
 
-With these enhancements there are no remaining portions needing
-to "settle" and the first test run can contribute to measurements.
+> Another question is should KVM handle userspace request to set/get FRED
+> SSP0?  IMO, it should be part of CET state management.
 
-Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
----
-Changes since V1:
-- Remove comment about needing results from first run removed.
-- Fix existing incorrect spacing while changing line.
----
- tools/testing/selftests/resctrl/cmt_test.c |  5 ++---
- tools/testing/selftests/resctrl/mba_test.c | 10 +++-------
- tools/testing/selftests/resctrl/mbm_test.c | 10 +++-------
- 3 files changed, 8 insertions(+), 17 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index a7effe76b419..d4b85d144985 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -99,14 +99,13 @@ static int check_results(struct resctrl_val_param *param, size_t span, int no_of
- 		}
- 
- 		/* Field 3 is llc occ resc value */
--		if (runs > 0)
--			sum_llc_occu_resc += strtoul(token_array[3], NULL, 0);
-+		sum_llc_occu_resc += strtoul(token_array[3], NULL, 0);
- 		runs++;
- 	}
- 	fclose(fp);
- 
- 	return show_results_info(sum_llc_occu_resc, no_of_bits, span,
--				 MAX_DIFF, MAX_DIFF_PERCENT, runs - 1, true);
-+				 MAX_DIFF, MAX_DIFF_PERCENT, runs, true);
- }
- 
- static void cmt_test_cleanup(void)
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index 5c6063d0a77c..89c2446b9f80 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -86,18 +86,14 @@ static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
- 		int avg_diff_per;
- 		float avg_diff;
- 
--		/*
--		 * The first run is discarded due to inaccurate value from
--		 * phase transition.
--		 */
--		for (runs = NUM_OF_RUNS * allocation + 1;
-+		for (runs = NUM_OF_RUNS * allocation;
- 		     runs < NUM_OF_RUNS * allocation + NUM_OF_RUNS ; runs++) {
- 			sum_bw_imc += bw_imc[runs];
- 			sum_bw_resc += bw_resc[runs];
- 		}
- 
--		avg_bw_imc = sum_bw_imc / (NUM_OF_RUNS - 1);
--		avg_bw_resc = sum_bw_resc / (NUM_OF_RUNS - 1);
-+		avg_bw_imc = sum_bw_imc / NUM_OF_RUNS;
-+		avg_bw_resc = sum_bw_resc / NUM_OF_RUNS;
- 		if (avg_bw_imc < THROTTLE_THRESHOLD || avg_bw_resc < THROTTLE_THRESHOLD) {
- 			ksft_print_msg("Bandwidth below threshold (%d MiB). Dropping results from MBA schemata %u.\n",
- 				       THROTTLE_THRESHOLD,
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 7635ee6b9339..8c818e292dce 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -22,17 +22,13 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw_resc, size_t span)
- 	int runs, ret, avg_diff_per;
- 	float avg_diff = 0;
- 
--	/*
--	 * Discard the first value which is inaccurate due to monitoring setup
--	 * transition phase.
--	 */
--	for (runs = 1; runs < NUM_OF_RUNS ; runs++) {
-+	for (runs = 0; runs < NUM_OF_RUNS; runs++) {
- 		sum_bw_imc += bw_imc[runs];
- 		sum_bw_resc += bw_resc[runs];
- 	}
- 
--	avg_bw_imc = sum_bw_imc / 4;
--	avg_bw_resc = sum_bw_resc / 4;
-+	avg_bw_imc = sum_bw_imc / NUM_OF_RUNS;
-+	avg_bw_resc = sum_bw_resc / NUM_OF_RUNS;
- 	avg_diff = (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
- 	avg_diff_per = (int)(avg_diff * 100);
- 
--- 
-2.46.0
-
+Yes, KVM needs to allow userspace to get/set FRED SSP0.  In general, KVM needs to
+allow reads/writes to MSRs even if they can be saved/restored through some other
+means.  In most cases, including this one, it's a moot point, because KVM needs
+to have the necessary code anyways, e.g. if KVM encounters a RDMSR/WRMSR while
+emulating.
 
