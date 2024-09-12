@@ -1,168 +1,125 @@
-Return-Path: <linux-kselftest+bounces-17867-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17868-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4222397728E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 22:05:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F1119772A2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 22:17:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 027E4283363
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 20:05:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 70C7C1C23AF0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 20:17:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDA541C0DEE;
-	Thu, 12 Sep 2024 20:05:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9BF81BFDF6;
+	Thu, 12 Sep 2024 20:17:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YmQIWbI9"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="WULTLVTq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 799D41BFDE3
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 20:05:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 724701BE860;
+	Thu, 12 Sep 2024 20:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726171547; cv=none; b=YzmbFd1FALcc6t081Sc2Ut/6fZhSFml2bSD9rRG/axStKydR6u0NVjVwFuUORgjo3GashMq5cH0924qnDvRqd2q+4v8Jg0D93NH4Ce3qHLsAipsbVjfndkDQf4UodfRl2piO7W3QztXcOYKYwV6yrp8wCQcnBhEBonff3VuwdYo=
+	t=1726172240; cv=none; b=Wbs4BmeTpyVBIFp3D8OJfrg4teQ4uY8c44/v4ZMxC12hdYjx6qCAHCpZLlTOSSMZ7xiv8X0ITya0G8LpPlOBm4QGHD5vkswwIVyH3BuPOhb4Uy3Q8ZAHfsXGrca0QyK0T0kH2V6iGZnkDqMbRv71L4qqN1xmbTx0Xt/C2/LfXVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726171547; c=relaxed/simple;
-	bh=zgVFGLKcvsfnGJiJdgrGdKWJuix6jbiZzKyiHN3clf0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qPJsQ0oFYzQlJs5KnjQTBmZQftawv8TRkbe3xV2UhJbT5Z7fFJAt1TysMXFSOEMKpznyPhcTL3klsM8/8xZm6RAFmV5GFfuC6WgjLL3yZYtZadhOKdN4wl9kQfxgawbmNztwHqUrm95AfzXCPSpA+lmC1FQw/8zjdjXPgmUKq6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YmQIWbI9; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2d889fc26e7so1565628a91.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 13:05:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1726171546; x=1726776346; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fnnjrlSetIbQ77vTIX4XItRIWsi2rxf02mpUNlAPpck=;
-        b=YmQIWbI97wgABO+GqgWJ7XMiY9/CGbBe/9xIwKUz27Ea6y3uyU5WGZlx+R+S1FotXo
-         Aei2SflW7WkconSAOn+f9KjSR/8l8Pl4Ix8LWEoIp7TeR04rIVB8LY7QjGw9LP5pd6am
-         WJFyI5oYK/VBYjMezQOnrrzjVmTiifU3dYXP+3rdRGqHiUd5aD1wXAIg+K3FDawnf4+i
-         SACvAFPY40QrscIryoTNhFEVzWLKL/eMJabpv3q4lf90OMCDnYmHrEC8jAVYsrzY52w5
-         jFwkf23lV710yKESQQ8syXYNPPqRnv2QObGatwqqxls1xnsztm+Fw7LwEviIXdGd0gJO
-         6r/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726171546; x=1726776346;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fnnjrlSetIbQ77vTIX4XItRIWsi2rxf02mpUNlAPpck=;
-        b=Fs8dk5rj+FWya0rqyGpNKKiHkfnUihDQAWVaCJaWLtNHaOlJitUESb9tFDqgKpwSRD
-         sbqBttCggFgOWxFpvlEhyCA0KLtu6h88ObenloByhEo0GlkeJGC8BGrWDrQyuWQ6OskI
-         xc+h2eqBT+6xKY2L2OmPNUOhQX++8UFFu+b1nfLlEkoM2SY0Xd27xTZugfckMjt1G+yo
-         XgpIgwRWd31FQkB4aUtyRShgxQCgOtsq4igdxbIGsnBQ+cuzfQDgJ6G7kRlVf6wlE/7L
-         kXr9cj8ako4qT2JEgY1z/O9dT4XIR/eGL5wM2fi+bozewcBsebnXIGnHCem5v9WM5yjn
-         Cwhw==
-X-Forwarded-Encrypted: i=1; AJvYcCXZSvAhXzjbbKEGjfRB2MPW3//1Ax+lvf7buCKsZFPPdPXKwoKbUiaLRDNnxn5Nv3Evhg+e/NTrs/BBD46mzmk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCCt9mPmhFk8/IKTvbHs6tQXUcQr5yeIBoymkRbAU4j6s6fQMC
-	a438aU58G1RfWTdabgAp5z6n4Flr+97a9IDk81ET8mDbUeiI+PBU1EJvs9LM+iOvkwJaKHLorbF
-	ayg==
-X-Google-Smtp-Source: AGHT+IGMbV565ZUceOdGGm+YNdFHzG/XNLZao6v/FtV6YMEzbuF+laauyv9Oc3FC1PC6/WerO4BWUeVoybg=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:d791:b0:2d8:7c76:45d7 with SMTP id
- 98e67ed59e1d1-2dba0061767mr25737a91.4.1726171545428; Thu, 12 Sep 2024
- 13:05:45 -0700 (PDT)
-Date: Thu, 12 Sep 2024 13:05:43 -0700
-In-Reply-To: <feefa9d1-f266-414f-bb7b-b770ef0d8ec6@zytor.com>
+	s=arc-20240116; t=1726172240; c=relaxed/simple;
+	bh=8a+l0yLQWur4LKXx0doeTxIU/vtMw8YiiyuXqMHBOm8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=laDS/M1DBoa02t3/aIzsmBy/Jt62e3TeNcSPNyPCUEUKqZFwjDPU7wHPUCtZl/ta3WyOoyxGG42cbJBVc6aaBaGeqZ9GAbabbhMrKxy5pyNeofZ0Lxb32W+03qw/SGD3WAVCa72QS20TxS2/0l60LWjlC1Q7CpZUattGLGur76s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=WULTLVTq; arc=none smtp.client-ip=217.70.183.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 882071C0006;
+	Thu, 12 Sep 2024 20:17:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1726172235;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=7FHWP2eO7j89fwZAZ2ZAC37i/e8x92BhFYNL0dz2678=;
+	b=WULTLVTq388DEtesiWaluvko106Vc8fjvhyDgcRAkDTUIiVTQUDeS7cQsYUzzRQgRINdNH
+	aP/VJwKcLnrdxdT5kcepfLfN6O77qjqXgcNWQZApBtwB4PTxD6wA0/mEUVHs5s0VwBfIL+
+	E/UFoGRbRqYBZYTCe1INUtZULUN1aQcvpnIi2nRABJLc/u8p8zAF3OrHOC/zI1V4vTMMM8
+	YyUtV7IRT55KKuowZHylQ9bNrlL5jR3aCXWDyLn9W3ZZc77a785ZD1tVmRGd8pFvFbXjrW
+	j6XWVYAg5bHMbNwzMseRWtT/hDbC79IQ60SA5lPxk+wgpzU12RdIUcfdzNZHqg==
+Message-ID: <fb7db9a9-5b9a-4b77-8dc6-f30b839bec27@bootlin.com>
+Date: Thu, 12 Sep 2024 22:17:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240207172646.3981-1-xin3.li@intel.com> <20240207172646.3981-8-xin3.li@intel.com>
- <ZiJzFsoHR41Sd8lE@chao-email> <ZmoT0jaX_3Ww3Uzu@google.com> <feefa9d1-f266-414f-bb7b-b770ef0d8ec6@zytor.com>
-Message-ID: <ZuNJlzXntREQVb3n@google.com>
-Subject: Re: [PATCH v2 07/25] KVM: VMX: Set intercept for FRED MSRs
-From: Sean Christopherson <seanjc@google.com>
-To: Xin Li <xin@zytor.com>
-Cc: Chao Gao <chao.gao@intel.com>, Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net, 
-	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
-	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, shuah@kernel.org, 
-	vkuznets@redhat.com, peterz@infradead.org, ravi.v.shankar@intel.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: convert test_xdp_features.sh
+ to test_progs
+To: Simon Horman <horms@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman
+ <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Jakub Kicinski <kuba@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>,
+ Lorenzo Bianconi <lorenzo@kernel.org>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>, ebpf@linuxfoundation.org,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+References: <20240910-convert_xdp_tests-v2-1-a46367c9d038@bootlin.com>
+ <20240911141824.GZ572255@kernel.org>
+From: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+Content-Language: en-US
+In-Reply-To: <20240911141824.GZ572255@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-On Thu, Sep 05, 2024, Xin Li wrote:
-> On 6/12/2024 2:32 PM, Sean Christopherson wrote:
-> > On Fri, Apr 19, 2024, Chao Gao wrote:
-> > > On Wed, Feb 07, 2024 at 09:26:27AM -0800, Xin Li wrote:
-> > > > Add FRED MSRs to the valid passthrough MSR list and set FRED MSRs intercept
-> > > > based on FRED enumeration.
-> > 
-> > This needs a *much* more verbose explanation.  It's pretty darn obvious _what_
-> > KVM is doing, but it's not at all clear _why_ KVM is passing through FRED MSRs.
-> > E.g. why is FRED_SSP0 not included in the set of passthrough MSRs?
-> > 
-> > > > static void vmx_vcpu_config_fred_after_set_cpuid(struct kvm_vcpu *vcpu)
-> > > > {
-> > > > 	struct vcpu_vmx *vmx = to_vmx(vcpu);
-> > > > +	bool fred_enumerated;
-> > > > 
-> > > > 	kvm_governed_feature_check_and_set(vcpu, X86_FEATURE_FRED);
-> > > > +	fred_enumerated = guest_can_use(vcpu, X86_FEATURE_FRED);
-> > > > 
-> > > > -	if (guest_can_use(vcpu, X86_FEATURE_FRED)) {
-> > > > +	if (fred_enumerated) {
-> > > > 		vm_entry_controls_setbit(vmx, VM_ENTRY_LOAD_IA32_FRED);
-> > > > 		secondary_vm_exit_controls_setbit(vmx,
-> > > > 						  SECONDARY_VM_EXIT_SAVE_IA32_FRED |
-> > > > @@ -7788,6 +7793,16 @@ static void vmx_vcpu_config_fred_after_set_cpuid(struct kvm_vcpu *vcpu)
-> > > > 						    SECONDARY_VM_EXIT_SAVE_IA32_FRED |
-> > > > 						    SECONDARY_VM_EXIT_LOAD_IA32_FRED);
-> > > > 	}
-> > > > +
-> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP0, MSR_TYPE_RW, !fred_enumerated);
-> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP1, MSR_TYPE_RW, !fred_enumerated);
-> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP2, MSR_TYPE_RW, !fred_enumerated);
-> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_RSP3, MSR_TYPE_RW, !fred_enumerated);
-> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_STKLVLS, MSR_TYPE_RW, !fred_enumerated);
-> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_SSP1, MSR_TYPE_RW, !fred_enumerated);
-> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_SSP2, MSR_TYPE_RW, !fred_enumerated);
-> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_SSP3, MSR_TYPE_RW, !fred_enumerated);
-> > > > +	vmx_set_intercept_for_msr(vcpu, MSR_IA32_FRED_CONFIG, MSR_TYPE_RW, !fred_enumerated);
-> > > 
-> > > Use a for-loop here? e.g.,
-> > > 	for (i = MSR_IA32_FRED_RSP0; i <= MSR_IA32_FRED_CONFIG; i++)
-> > 
-> > Hmm, I'd prefer to keep the open coded version.  It's not pretty, but I don't
-> > expect this to have much, if any, maintenance cost.  And using a loop makes it
-> > harder to both understand _exactly_ what's happening, and to search for relevant
-> > code.  E.g. it's quite difficult to see that FRED_SSP0 is still intercepted (see
-> > my comment regarding the changelog).
+Hi Simon,
+
+On 9/11/24 16:18, Simon Horman wrote:
+
+[...]
+
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_features.c b/tools/testing/selftests/bpf/prog_tests/xdp_features.c
+>> new file mode 100644
+>> index 000000000000..bcb36a2d2767
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_features.c
+>> @@ -0,0 +1,446 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +
+>> +/**
+>> + * Test XDP features
+>> + *
+>> + * Sets up a veth pair, and for each xdp feature under test:
+>> + * - asks the tested interface its xdp capabilities through bpf_xdp_query
+>> + * - attach and run some specific programs on both interfaces to check if
+>> + *   announced capability is respected
+>> + */
 > 
+> Hi Alexis,
 > 
-> I owe you an explanation; I have been thinking about figuring out a way
-> to include FRED SSP0 in the FRED KVM patch set...
-> 
-> MSR_IA32_FRED_SSP0 is an alias of the CET MSR_IA32_PL0_SSP and likely to
-> be used in the same way as FRED RSP0, i.e., host FRED SSP0 _should_ be
-> restored in arch_exit_to_user_mode_prepare().  However as of today Linux
-> has no plan to utilize kernel shadow stack thus no one cares host FRED
-> SSP0 (no?).  But lets say anyway it is host's responsibility to manage
-> host FRED SSP0, then KVM only needs to take care of guest FRED SSP0
-> (just like how KVM should handle guest FRED RSP0) even before the
-> supervisor shadow stack feature is advertised to guest.
+> This is neither a full review nor an issue that needs to block progress.
+> But, FWIIW, the comment above is not a Kernel doc, yet starts with '/**'.
+> I suggest that it should start with '/*' instead.
 
-Heh, I'm not sure what your question is, or if there even is a question.  KVM
-needs to context switch FRED SSP0 if FRED is exposed to the guest, but presumably
-that will be done through XSAVE state?  If that's the long term plan, I would
-prefer to focus on merging CET virtualization first, and then land FRED virtualization
-on top so that KVM doesn't have to carry intermediate code to deal with the aliased
-MSR.
+ACK. I'll wait for more comments on the series, and add the fix to the
+corresponding revision, if any.
 
-Ugh, but what happens if a CPU (or the host kernel) supports FRED but not CET SS?
-Or is that effectively an illegal combination?
+Thanks,
 
-> Another question is should KVM handle userspace request to set/get FRED
-> SSP0?  IMO, it should be part of CET state management.
+Alexis
 
-Yes, KVM needs to allow userspace to get/set FRED SSP0.  In general, KVM needs to
-allow reads/writes to MSRs even if they can be saved/restored through some other
-means.  In most cases, including this one, it's a moot point, because KVM needs
-to have the necessary code anyways, e.g. if KVM encounters a RDMSR/WRMSR while
-emulating.
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
