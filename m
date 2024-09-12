@@ -1,187 +1,158 @@
-Return-Path: <linux-kselftest+bounces-17870-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17871-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D865977373
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 23:16:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DDDFA9773AE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 23:36:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1E641C20FFC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 21:16:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C0041C2032A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 21:36:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54A221C1756;
-	Thu, 12 Sep 2024 21:16:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 740DC1BE851;
+	Thu, 12 Sep 2024 21:36:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="PYfzeJNk"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tsGkpoP3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-vs1-f44.google.com (mail-vs1-f44.google.com [209.85.217.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BAF548E0
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 21:16:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6C572C80
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 21:36:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726175767; cv=none; b=uSV5oC2eoVdoXHX9sHO4iZ9Ngarfx+JRRXKuai2JTtnZ0pJDaE/gsx7GBrZ8U+nJo+xmWe7TG3Td6jepgjD7VAfqDXye4fI2ONasHIqMncn8fKG896p6mkiO+DnGH65OVX/4PgzvGQJJCqaQOc54vDjb0sUjYoQeFQsXtky/Vpo=
+	t=1726177003; cv=none; b=Lt9dM6cfD4t8806ZhHG8KvBKNdjJA9T9AAEyKbRnkkCb7N0lzVOSXZyMv5aJYqFvqxCFbXMz2O4GsaSNO/gT9hcsJ/rbwnB2MqflcFhqh5s7t7oljbT5ebY6agsSaLfpYCBQKwoHpFLZQ7g0iFv1EmcYRnpnh/s4C0iQhltoWxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726175767; c=relaxed/simple;
-	bh=uwUB51q/k9MKoVysVsXfFJYRoIhfFeIxpLFv0mHnq0w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LVFls/00SKtm4MDG5X+oG76SCktduEKO3zpkG3eVUrYvp6b+Lp1SQUdR4L28IMhGXsZYjZJKr6jspJj85iSlMjEnrbQwAZ9wTOsCj66hRip6/lb521Jz495d9MRyGnBo2maz870xXOrBVTX17B1swxoi26ichM/zAbBwEMVFtFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=PYfzeJNk; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2057c6c57b5so8546205ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 14:16:05 -0700 (PDT)
+	s=arc-20240116; t=1726177003; c=relaxed/simple;
+	bh=pDqhAgtaGUIk/5wz/QDpvGvuqyiDlqtUCUYvT654FxE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WlNhtmiDwSSdG7s8FfWOnZcT5gM8TWcSaqICfOoQJqihfwhsRbJuEu5ZMwlE0jnkLz5atlLi7f7F7y3RcFjLqYP2BW99e7yBqkHNCY+J+ZVczvuN+q47KxdcvFKi/IMF/PN5I/8GRVWt2lzv7pYnbftYUdhb/Tuez7bF5blxp+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tsGkpoP3; arc=none smtp.client-ip=209.85.217.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-vs1-f44.google.com with SMTP id ada2fe7eead31-49bcaee2754so439013137.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 14:36:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1726175765; x=1726780565; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GAySjmj1C8RnCc99v/BjFAJ8TYbwKWl+6IomlsR+BoI=;
-        b=PYfzeJNkeYlagfTcD9k+8Dg1WLO+flkY3zQSaW+8PGOlzq/wp2a9it2QCIq2aqKzVs
-         w3vqRJ0ajqaVp2ZNbJp9l5rPY1pq8906LOkUWIGMqk5t+R/VSUAw5UdtxRCPmKmSR+qL
-         loW/2SYBtC040oB0A+FZAlR8KlagCM9FMTogwVcqi5kwWMOAY56LWKMgZdK0jvy07aIJ
-         BU4pzvCv+gp4Mj45Av2KxiJX5V6gvDGPrJqNMV2L7xqgRwfnDhDkDtEU7BbSLmjS5Kir
-         hHS89hng8L0DZmLgw1EITQUXJFGFrhk8eHWuuCNgiy9yeBDUUGtgg6tHc77RSVgkjMxk
-         A/4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726175765; x=1726780565;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1726177001; x=1726781801; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GAySjmj1C8RnCc99v/BjFAJ8TYbwKWl+6IomlsR+BoI=;
-        b=HM63FzUmwXnv2oMUbvNAzt5WPouaXLESCMbVzsJQXM6zWHWsAJxPQyd95MktAbQJRS
-         f4sSNE36elBnTnTaMn+G5fSO0xb3I6txu2uoREU4k3VJ/k2pgV4z6Iloogoyrymk8OZ+
-         wFOLz9SYGmY+inGHYzdZFdicb7rhuLnMD3MCIEPSixwF6Ygs8bPYNiheoFawWwuEB0QD
-         kNiMmYFsMKGl8c/rKLoXNiNEqn6eRm5S6d94MhrWYO+L0AFmtrAny00X/I8agMYti4LA
-         RMzpTCZCOH+ZV7JnysXhgksPS5vzRviFN0+GGgmJBVq/wSTg9Vq4uYv7ixWtTEYopb35
-         6jgg==
-X-Forwarded-Encrypted: i=1; AJvYcCXYKU7KNxuy6nm18yICqg0Y4uJ82Tad8R0IZ35Y3P/mEk6HIXJ+zw+NDP0EpaJ9uenRF9kXudMyPm9HcXYs2DM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjiUwlSr5MmgT52ymlA2jtBFNeF8nPENgTK3BR7TbWJlgMyLH2
-	mEa7uZN1pSxsg6WZxHIPJ5J29hYRNlAD39occ9uaWROQ0dGpG1eHWj6cDDkSbys=
-X-Google-Smtp-Source: AGHT+IHUzjdPrj87uHlM3yWrW/J5uo4qx0FxZorL/y/ZhI47SL1dDJtb3OuvF/ucYmZPS3S517PhSQ==
-X-Received: by 2002:a17:903:41c9:b0:1fd:6033:f94e with SMTP id d9443c01a7336-2076e61ddabmr75358475ad.27.1726175764569;
-        Thu, 12 Sep 2024 14:16:04 -0700 (PDT)
-Received: from ghost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2076af47662sm18233275ad.93.2024.09.12.14.16.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Sep 2024 14:16:03 -0700 (PDT)
-Date: Thu, 12 Sep 2024 14:15:59 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Arnd Bergmann <arnd@arndb.de>, guoren <guoren@kernel.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	shuah <shuah@kernel.org>, Christoph Hellwig <hch@infradead.org>,
-	Michal Hocko <mhocko@suse.com>,
-	"Kirill A. Shutemov" <kirill@shutemov.name>,
-	Chris Torek <chris.torek@gmail.com>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-abi-devel@lists.sourceforge.net
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
- 47 bits
-Message-ID: <ZuNaD+zAXiAulc0n@ghost>
-References: <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
- <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
- <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
- <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
- <Ztrq8PBLJ3QuFJz7@arm.com>
- <oshwto46wbbgneiayj63umllyozm3c4267rvpszqzaopwnt2l7@6mxl5vydtons>
- <ZuDoExckq21fePoe@ghost>
- <ZuHfp0_tAQhaymdy@arm.com>
- <ZuKHpFB+uWuJe2xm@ghost>
- <ZuLIPZId9aHcAY2j@arm.com>
+        bh=aV/uSQHel3G7NaBIuUYTK9WPHlxT4nG6GtUVNt1aiiw=;
+        b=tsGkpoP3WeGnT1Y3yRFPSNgHhYDFWlGngGv3H9MtrjvxtA+cpAFWULYs/5lrwoToJY
+         V+STe8ps1yP2aGj/9Ahlc2Y7n9NzHFUs1E6lzO8Ysx7tjmnc0x7OWd/8mSzfsRqkQLr2
+         7krdm+MLVn1t3V72OcTlHqIM/wPleNjSsX0wRyMLKO9qlVr3OtcIyB5mv9FFb6JAgC3U
+         YAVKoZDyV05qHit1vtrJ+MMxO8ZrhqhLZ74RthkeuG4+k8kPhpPcnRfmgmSG2NOh/O/q
+         d+33zAde4EgIZyPvsekkwwtfqfpX/fqkdzpzZnPVMQCn3DZGZ53WAkUC22us0Ta7jil0
+         x9LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726177001; x=1726781801;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aV/uSQHel3G7NaBIuUYTK9WPHlxT4nG6GtUVNt1aiiw=;
+        b=dCBOF70iMr6eJBgz50SPW3F9RAmqOiswP9kEJuw3uu39TZp9nTgo9R/nDra4bsIGBo
+         DwAAatE0c6gC8S4ZnjiUV/N7ZBl9R5UGKhSKRhZgSIRBO3tv9YEa/s03rpkw5JkkTTqp
+         MSDT9hsO6kWIGlvK6OkwOHG98UJHZVTuPU8o/WhOCmXxFLvT1kUfwCkkiOgfltChUylY
+         9+gGUhv6uwa1trHr+3xrIP8e4hydwSG2fS5ZNZG5UdiQ94NFheCM9y2opvWRdKqeY086
+         dGIDXPL5izeTE30DxuD3a0o2lrI72QrDgYzLm33J0QUdE2D5CnVBFhJXryLwUp92ELg0
+         2Mug==
+X-Forwarded-Encrypted: i=1; AJvYcCXkWQF5O1bomq0ugNbgdFXQJjTAwATWMvPR3aOWHSyd0SWIkS1cyG8uFmdd3Es2i00uSoMGkqtW2h/3uS7BQ1Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3crizNnIdv4ozdZBnq4wL0obtyNryfAEVAgcpmkn1fV1y+7tX
+	rqOIU0LLRlu4/GvZVoRLDdOE0nJerc9NvlM1dse+FZT3WF9L8tCRQNrAQSQ4uo3uIR/pk7txu+i
+	p9tqSkftYgPT2osBLnsDORDKGGFa/jIg0jfow
+X-Google-Smtp-Source: AGHT+IH05pjtSDhnhSat0T4TMcHpVIIy9ELPbIRaoAr2cIE1oDrkYRJOYxE3o0MeBcNuyMPFcCB85eDpRsk4NuzwEyU=
+X-Received: by 2002:a05:6102:511e:b0:49b:be3b:8812 with SMTP id
+ ada2fe7eead31-49d4157c4eemr4055765137.24.1726177000369; Thu, 12 Sep 2024
+ 14:36:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZuLIPZId9aHcAY2j@arm.com>
+References: <20240516-kunit-compile-commands-v1-1-05fc32b79312@google.com>
+In-Reply-To: <20240516-kunit-compile-commands-v1-1-05fc32b79312@google.com>
+From: Justin Stitt <justinstitt@google.com>
+Date: Thu, 12 Sep 2024 14:36:28 -0700
+Message-ID: <CAFhGd8pLAa7vkVUtcdhvdk+oq=dOSGQWCOf0oZK7pszaLdsKNA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: tool: Build compile_commands.json
+To: Brendan Jackman <jackmanb@google.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, Nathan Chancellor <nathan@kernel.org>, 
+	Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling <morbo@google.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 12, 2024 at 11:53:49AM +0100, Catalin Marinas wrote:
-> On Wed, Sep 11, 2024 at 11:18:12PM -0700, Charlie Jenkins wrote:
-> > Opting-in to the higher address space is reasonable. However, it is not
-> > my preference, because the purpose of this flag is to ensure that
-> > allocations do not exceed 47-bits, so it is a clearer ABI to have the
-> > applications that want this guarantee to be the ones setting the flag,
-> > rather than the applications that want the higher bits setting the flag.
-> 
-> Yes, this would be ideal. Unfortunately those applications don't know
-> they need to set a flag in order to work.
+On Thu, May 16, 2024 at 12:38=E2=80=AFPM Brendan Jackman <jackmanb@google.c=
+om> wrote:
+>
+> compile_commands.json is used by clangd[1] to provide code navigation
+> and completion functionality to editors. See [2] for an example
+> configuration that includes this functionality for VSCode.
+>
+> It can currently be built manually when using kunit.py, by running:
+>
+>   ./scripts/clang-tools/gen_compile_commands.py -d .kunit
+>
+> With this change however, it's built automatically so you don't need to
+> manually keep it up to date.
 
-It's not a regression, the applications never worked (on platforms that
-do not have this default). The 47-bit default would allow applications
-that didn't work to start working at the cost of a non-ideal ABI. That
-doesn't seem like a reasonable tradeoff to me.  If applications want to
-run on new hardware that has different requirements, shouldn't they be
-required to update rather than expect the kernel will solve their
-problems for them?
+This is great!
 
-> 
-> A slightly better option is to leave the default 47-bit at the kernel
-> ABI level and have the libc/dynamic loader issue the prctl(). You can
-> control the default with environment variables if needed.
+>
+> Unlike the manual approach, having make build the compile_commands.json
+> means that it appears in the build output tree instead of at the root of
+> the source tree, so you'll need to add --compile-commands-dir=3D to your
+> clangd args for it to be found.
 
-Having glibc set the 47-bit requirement could make it slightly easier
-for applications since they would only have to set the environment
-variable. After the kernel interface is approved I can look into
-supporting that.
+This is annoying for some. For my setup, the discovery of
+compile_commands.json depends on where I open my editor from. So this
+isn't really an issue as I can *choose* what compile_commands to use.
+I think some folks may wish the compile_commands.json was also dumped
+in the top-level directory so clangd can discover it easier.
 
-- Charlie
+>
+> [1] https://clangd.llvm.org/
+> [2] https://github.com/FlorentRevest/linux-kernel-vscode
+>
+> Signed-off-by: Brendan Jackman <jackmanb@google.com>
+> ---
+>  tools/testing/kunit/kunit_kernel.py | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/kunit/kunit_kernel.py b/tools/testing/kunit/ku=
+nit_kernel.py
+> index 7254c110ff23..61931c4926fd 100644
+> --- a/tools/testing/kunit/kunit_kernel.py
+> +++ b/tools/testing/kunit/kunit_kernel.py
+> @@ -72,7 +72,8 @@ class LinuxSourceTreeOperations:
+>                         raise ConfigError(e.output.decode())
+>
+>         def make(self, jobs: int, build_dir: str, make_options: Optional[=
+List[str]]) -> None:
+> -               command =3D ['make', 'ARCH=3D' + self._linux_arch, 'O=3D'=
+ + build_dir, '--jobs=3D' + str(jobs)]
+> +               command =3D ['make', 'all', 'compile_commands.json', 'ARC=
+H=3D' + self._linux_arch,
+> +                          'O=3D' + build_dir, '--jobs=3D' + str(jobs)]
+>                 if make_options:
+>                         command.extend(make_options)
+>                 if self._cross_compile:
+>
+> ---
+> base-commit: 3c999d1ae3c75991902a1a7dad0cb62c2a3008b4
+> change-id: 20240516-kunit-compile-commands-d994074fc2be
+>
+> Best regards,
+> --
+> Brendan Jackman <jackmanb@google.com>
+>
 
-> 
-> We do something similar in glibc for arm64 MTE. When MTE is enabled, the
-> top byte of an allocated pointer contains the tag that must not be
-> corrupted. We left the decision to the C library via the
-> glibc.mem.tagging tunable (Android has something similar via the app
-> manifest). An app can change the default if it wants but if you run with
-> old glibc or no environment variable to say otherwise, the default would
-> be safe. Distros can set the environment to be the maximum range by
-> default if they know the apps included have been upgraded and tested.
-> 
-> -- 
-> Catalin
+Reviewed-by: Justin Stitt <justinstitt@google.com>
+
+Thanks
+Justin
 
