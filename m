@@ -1,149 +1,139 @@
-Return-Path: <linux-kselftest+bounces-17814-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17815-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFB779768BC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 14:10:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1538976984
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 14:49:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87AE5282912
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 12:10:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E1B3B25D02
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 12:49:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21C2719F40D;
-	Thu, 12 Sep 2024 12:10:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S8/kXq8e"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695391A7AF1;
+	Thu, 12 Sep 2024 12:48:48 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2B72C6BB;
-	Thu, 12 Sep 2024 12:10:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F10A21A76A2;
+	Thu, 12 Sep 2024 12:48:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726143007; cv=none; b=ZxLBqJAUjbmVM69XqDKJqK7c4Vm6hbs9GCYQt5krxS+ksrur5Wyboyij/KDmvnEQ1Aou9J3CabKlR/K2u+DLIhqna9GCkIDRNYF+OR2fgrHTdjnyqAAJFE2OZ9a7zaobV9RVzQ48941XPFOVxVXqZgXkCKqXQI0nIZ7EV2vyvnI=
+	t=1726145328; cv=none; b=nF6Zy8XxQasXtQ6f95h1YMxaat8NPI67Jo7z2qBNgtlp73oxHA/rwX0Ou7PyT5icZWRkZj55FHhCZR3sTlZVFu1zqzIZiSWIP6iIhuvpHCYVShO0b83DiRD5BGVNPRfRhzqzg4Z8CusDGyCJWVCVvcKzTQlK5P0ArPZNA140dxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726143007; c=relaxed/simple;
-	bh=lVvZUUG+zyn/ZfXGNBItiXEKNsLuGv5HEwMfC6/HDw0=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=WyK3cMYUJYSxBFAVnB4vrQeud/YPoPKhOzao9JjGlX08PaTp0cuSyfUPgnToogSv3HDn7pkw5sxqIxUzUuQwgXvU5db2bq6ta9/DU9kD5BKpEmea6Z4dXAWUomaoQYEr2daMd8Hb4Tu5myZqJ3Ki7r/KZWY4Xe/r5rcwNUHfelo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S8/kXq8e; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6c159150ff4so6757076d6.2;
-        Thu, 12 Sep 2024 05:10:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726143004; x=1726747804; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=msixuc5DjYAhtMCMiouAiME28Ctun/SSEXrHmmI1f7Y=;
-        b=S8/kXq8eYjOURLVnUWEjqvDgx2PleXQgjeSQNWkyD5AGqgGFljzRn35LUXcH9j3iV/
-         W1IYLkhsnP1v9SMTd+B55YVGbqhcbQ2XB1DwAYlWCIvkJHCYg8I7LYEDznW+CZnJqcGD
-         HvT6Y4J/4v9iodARjDqmrobR0ngvgkF8bsp484+y50VAagdylnuGpPUGvlfFSSfrLL1W
-         WOBEXALTYdb7Uu5ZAO3HCu4fxoicXuFxunmISGuo3PqBeMou+fkxPxwd9yjx2ya5lVGG
-         4wVr38gL54456Hey6MjzuwdEIPpkRViEIPne5eFnqTCDzqi3cFLbSs9tOFE4rOFy7uuh
-         xZeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726143004; x=1726747804;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=msixuc5DjYAhtMCMiouAiME28Ctun/SSEXrHmmI1f7Y=;
-        b=TDAx20zkRjx8Pm570d9OHE1WCuH6kPc3hOmBg+b0qeFCq5iwdOAi4p7gTBKMOKnELr
-         NDhCNnIHFtPExrktRtTyQFzz5fnYdDAAqe6owxb3xdcsbuxguQsF1sVigCnYoQ8Iscxh
-         rzkBqTUobesqrJ7UEFc81E9uEbE77zvquiUkY2qMLScEipOsfWokHYUXaLiYsiZpGMl1
-         6YKMeDMjLPZXAFyGOuQUDxWy6Ngqv0be9Q7E4kebVJhHm0f6c95jkc4OzYwzQMZOQFrd
-         NQNG3Xf7+oy5cHgkxCoWTGlkv2iukmv5kaZ5XeWFaXjLoNzAPrj0fxAATSGpWldO0re+
-         xRbw==
-X-Forwarded-Encrypted: i=1; AJvYcCWHOTY2g1I/ocCZ/7wcQ25MXPyBeS6FaCAvW7hiQIIzQU3zDHFuzPaZqMY/LdXXUCd87zuAsrzm@vger.kernel.org, AJvYcCXYp1YOlG7uGAw3gtEeL+4GNu56s7shoN7WeUVUeOjblo0px4PfcJiDBoiEGt5T54seEmynDn+2efBX7ms1+Oo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxeH+RultqOuCXkhjbgb6jVPM5UtGDOH2Xzkz69INaK6DYZUjaY
-	V3/QZ9E0uWweZj8it99L92mJlzQZCdMl6ZO1QW+uC3cS6kI7+MPz
-X-Google-Smtp-Source: AGHT+IExa2ElXKLKc/w9WjBtRYBCBXPtGboQdVxdbXGPlYF7+fDNkNgtONBgfbsBwqo9oUDLBpeM3Q==
-X-Received: by 2002:a05:6214:3c85:b0:6c5:5326:18a5 with SMTP id 6a1803df08f44-6c57352ac57mr42674486d6.28.1726143004063;
-        Thu, 12 Sep 2024 05:10:04 -0700 (PDT)
-Received: from localhost (23.67.48.34.bc.googleusercontent.com. [34.48.67.23])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c534787340sm53159836d6.143.2024.09.12.05.10.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Sep 2024 05:10:03 -0700 (PDT)
-Date: Thu, 12 Sep 2024 08:10:03 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Matthieu Baerts <matttbe@kernel.org>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- netdev@vger.kernel.org
-Cc: davem@davemloft.net, 
- kuba@kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- ncardwell@google.com, 
- shuah@kernel.org, 
- linux-kselftest@vger.kernel.org, 
- Willem de Bruijn <willemb@google.com>
-Message-ID: <66e2da1b440cc_14a89129431@willemb.c.googlers.com.notmuch>
-In-Reply-To: <ed54ad21-4a5b-4bbb-8f16-22fbfe1bd738@kernel.org>
-References: <20240912005317.1253001-1-willemdebruijn.kernel@gmail.com>
- <ed54ad21-4a5b-4bbb-8f16-22fbfe1bd738@kernel.org>
-Subject: Re: [PATCH net-next v2 0/3] selftests/net: packetdrill: netns and two
- imports
+	s=arc-20240116; t=1726145328; c=relaxed/simple;
+	bh=ezYLZ8vIxDCWrOwX5EVRLTgb8HhNEOjMRXeEd6Jpe4Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tgo809xo8WukGHCbOUNKGP8DuNbaQwL0xDfESk2rHwRKn+10Q+8EOCD3U2DOd84k/CRiZccX3KAlU1DuncyLhoEo9LQu54KUju/EcZUdAf4K2LkH9LLaLzMYVQruTgD7VBXt2Hs56k4i2aKUFcbu4ildasYd57J2FxatEiowmIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96090DA7;
+	Thu, 12 Sep 2024 05:49:14 -0700 (PDT)
+Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 04ED03F73B;
+	Thu, 12 Sep 2024 05:48:40 -0700 (PDT)
+Date: Thu, 12 Sep 2024 13:48:35 +0100
+From: Joey Gouly <joey.gouly@arm.com>
+To: Will Deacon <will@kernel.org>
+Cc: Dave Hansen <dave.hansen@intel.com>,
+	Kevin Brodsky <kevin.brodsky@arm.com>,
+	linux-arm-kernel@lists.infradead.org, nd@arm.com,
+	akpm@linux-foundation.org, aneesh.kumar@kernel.org,
+	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
+	broonie@kernel.org, catalin.marinas@arm.com,
+	christophe.leroy@csgroup.eu, dave.hansen@linux.intel.com,
+	hpa@zytor.com, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
+	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
+	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
+	szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 06/30] arm64: context switch POR_EL0 register
+Message-ID: <20240912124835.GA1220495@e124191.cambridge.arm.com>
+References: <20240822151113.1479789-1-joey.gouly@arm.com>
+ <20240822151113.1479789-7-joey.gouly@arm.com>
+ <425b8f8c-b6b5-422a-b5f4-41dd2d1ae3bb@arm.com>
+ <6c8ad091-a56b-41ba-b403-2e3c2e578100@intel.com>
+ <20240912105017.GA22788@willie-the-truck>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240912105017.GA22788@willie-the-truck>
 
-Matthieu Baerts wrote:
-> Hi Willem,
+On Thu, Sep 12, 2024 at 11:50:18AM +0100, Will Deacon wrote:
+> Hi Dave,
 > 
-> On 12/09/2024 02:52, Willem de Bruijn wrote:
-> > From: Willem de Bruijn <willemb@google.com>
+> On Wed, Sep 11, 2024 at 08:33:54AM -0700, Dave Hansen wrote:
+> > On 9/11/24 08:01, Kevin Brodsky wrote:
+> > > On 22/08/2024 17:10, Joey Gouly wrote:
+> > >> @@ -371,6 +382,9 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+> > >>  		if (system_supports_tpidr2())
+> > >>  			p->thread.tpidr2_el0 = read_sysreg_s(SYS_TPIDR2_EL0);
+> > >>  
+> > >> +		if (system_supports_poe())
+> > >> +			p->thread.por_el0 = read_sysreg_s(SYS_POR_EL0);
+> > > Here we are only reloading POR_EL0's value if the target is a user
+> > > thread. However, as this series stands, POR_EL0 is also relevant to
+> > > kthreads, because any uaccess or GUP done from a kthread will also be
+> > > checked against POR_EL0. This is especially important in cases like the
+> > > io_uring kthread, which accesses the memory of the user process that
+> > > spawned it. To prevent such a kthread from inheriting a stale value of
+> > > POR_EL0, it seems that we should reload POR_EL0's value in all cases
+> > > (user and kernel thread).
 > > 
-> > 1/3: run in nets, as discussed, and add missing CONFIGs
-> > 2/3: import tcp/zerocopy
-> > 3/3: import tcp/slow_start
+> > The problem with this is trying to figure out which POR_EL0 to use.  The
+> > kthread could have been spawned ages ago and might not have a POR_EL0
+> > which is very different from the current value of any of the threads in
+> > the process right now.
+> > 
+> > There's also no great way for a kthread to reach out and grab an updated
+> > value.  It's all completely inherently racy.
+> > 
+> > > Other approaches could also be considered (e.g. resetting POR_EL0 to
+> > > unrestricted when creating a kthread), see my reply on v4 [1].
+> > 
+> > I kinda think this is the only way to go.  It's the only sensible,
+> > predictable way.  I _think_ it's what x86 will end up doing with PKRU,
+> > but there's been enough churn there that I'd need to go double check
+> > what happens in practice.
 > 
-> Thank you for the v2. This new version looks good to me:
+> I agree.
 > 
-> Acked-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+> > Either way, it would be nice to get an io_uring test in here that
+> > actually spawns kthreads:
+> > 
+> > 	tools/testing/selftests/mm/protection_keys.c
 > 
+> It would be good to update Documentation/core-api/protection-keys.rst
+> as well, since the example with read() raises more questions than it
+> answers!
 > 
-> I didn't pay too much attention to the new tests, because they look
-> good, heavily tested I suppose, and I guess the goal is not to diverge
-> from the original ones for the moment. Still, please note that the CI
-> reported some timing issues with tcp_zerocopy_closed.pkt when using a
-> debug kernel config, e.g.
-> 
-> > tcp_zerocopy_closed.pkt:22: timing error: expected system call return at 0.100596 sec but happened at 0.109564 sec; tolerance 0.004000 sec
-> 
-> https://netdev.bots.linux.dev/contest.html?executor=vmksft-packetdrill-dbg&test=tcp-zerocopy-closed-pkt
+> Kevin, Joey -- I've got this series queued in arm64 as-is, so perhaps
+> you could send some patches on top so we can iron this out in time for
+> 6.12? I'll also be at LPC next week if you're about.
 
-Thanks Matthieu. I did not run the dbg variant often enough to observe
-that. Note to self to run more times before I submit.
+I found the code in arch/x86 that does this, I must have missed this previously.
 
-It seems to fail 2/10 times on the dbg spinner. I don't have an
-explanation for the failure yet. The line itself has no expected delay
+arch/x86/kernel/process.c: int copy_thread()                                                                                                                   
 
-# script packet:  0.113203 S 0:0(0) <mss 1460,sackOK,TS val 0 ecr 0,nop,wscale 8>
-# actual packet:  0.107191 S 0:0(0) win 65535 <mss 1460,sackOK,TS val 0 ecr 0,nop,wscale 8>
+        /* Kernel thread ? */                                                                                                                                                                  
+        if (unlikely(p->flags & PF_KTHREAD)) {                                                                                                                                                 
+                p->thread.pkru = pkru_get_init_value();                                                                                                                                        
+                memset(childregs, 0, sizeof(struct pt_regs));                                                                                                                                  
+                kthread_frame_init(frame, args->fn, args->fn_arg);                                                                                                                             
+                return 0;                                                                                                                                                                      
+        }
 
-   +0.1 recvmsg(4, {msg_name(...)=...,
-                    msg_iov(1)=[{...,0}],
-                    msg_flags=MSG_ERRQUEUE,
-                    msg_control=[]}, MSG_ERRQUEUE) = -1 EAGAIN (Resource temporarily unavailable)
+I can send a similar patch for arm64.  I have no idea how to write io_uring
+code, so looking for examples I can work with to get a test written. Might just
+send the arm64 fix first, if that's fine?
 
-   +0...0 connect(4, ..., ...) = 0
-
-   +0 > S 0:0(0) <mss 1460,sackOK,TS val 0 ecr 0,nop,wscale 8>
-
-I guess the expectation includes the +0.1 delay before calling recvmsg, and that
-timer fired a bit early.
-
-I previously shared a draft patch to adjust --tolerance_usecs in dbg runs.
-May have to send that after all.
-
-https://lore.kernel.org/netdev/66da5b8b27259_27bb41294c@willemb.c.googlers.com.notmuch/
+Thanks,
+Joey
 
