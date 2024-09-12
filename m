@@ -1,68 +1,68 @@
-Return-Path: <linux-kselftest+bounces-17798-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17799-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5491597610D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 08:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 380A4976114
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 08:14:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 789811C22167
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 06:10:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C2211C22C73
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 06:13:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 051A1188CA7;
-	Thu, 12 Sep 2024 06:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AEFF13CFB7;
+	Thu, 12 Sep 2024 06:13:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=who-t.net header.i=@who-t.net header.b="M3SyxtvX";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="eCbvp2pT"
+	dkim=pass (2048-bit key) header.d=who-t.net header.i=@who-t.net header.b="j8+LAdJ/";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UmIliIJr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh3-smtp.messagingengine.com (fhigh3-smtp.messagingengine.com [103.168.172.154])
+Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B20D65028C;
-	Thu, 12 Sep 2024 06:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A136189F2A;
+	Thu, 12 Sep 2024 06:13:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726121453; cv=none; b=RwLGA75/ayWwaiKSs3z5fIEc3YB1MfrjyGQZMyIrZ4sX+OHB1qY0S/QEZh8LIkGJJhZa4bZS7o397S4dx7UY4jJQkMwWQ1qnqo8Ug6//5ztZsD+MOjH2s+5wmlbzjgDTDLCyuYH0DWUWU+91wRDRnLh75M0sgqOubVM0Dmxv8EE=
+	t=1726121627; cv=none; b=TIDfz1stG1okIjY//MUuKKEAh74rP5HoRKl12MngCL/TyS9bVhtwV0tLU+l8kC4NXlOustKg4jdc0I5zN3JGVaX+adGqvmPe6c6HrGn72NOKMjyHwR6a9pO71ZjiUOu6CBl/faZuXowpskXtDNEGg2gApmz3pjzu0snzhV2VtQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726121453; c=relaxed/simple;
-	bh=kbYJiF6jPrl6B4HZ/oc1OWhI1LwpJSqM8A5kS4JT1OQ=;
+	s=arc-20240116; t=1726121627; c=relaxed/simple;
+	bh=BoQDVRthtqE+Gqlz8Lz2NTTlPMmQIBRBNASIepQ2WFo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mXWYnf3DdDaeWE55QscD571S781a2m8EdO01zZVVi0aDMg2rEoZOWJ0PNgNwKmzcsKxkg5JCN5IkrG2gVFxDWPoUOaQXqMjZD4AOxTQUNI//hX4klY90DO18re/QAvrkWnkhrVEndOU+u6QJZQtbdxaP4KFXTpea0p4yb2f7JYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=who-t.net; spf=pass smtp.mailfrom=who-t.net; dkim=pass (2048-bit key) header.d=who-t.net header.i=@who-t.net header.b=M3SyxtvX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=eCbvp2pT; arc=none smtp.client-ip=103.168.172.154
+	 Content-Type:Content-Disposition:In-Reply-To; b=DFwQpSQg8Bu28IJ8y1TNLhTJktIxS4KyRwHiqpIusexjk2CBVFI48yVmRYz+HgHRwUpv+i+ulj2iVBd2COyp37/dRcDvSpCXlkhbiOtrTXXzb5h96SnlKP250P5LjGY8Z4n/9/3A5itWibl9BaZ1zh6C1SqIBfBTH0Ikl6GkSQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=who-t.net; spf=pass smtp.mailfrom=who-t.net; dkim=pass (2048-bit key) header.d=who-t.net header.i=@who-t.net header.b=j8+LAdJ/; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UmIliIJr; arc=none smtp.client-ip=103.168.172.150
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=who-t.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=who-t.net
-Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id ACE6011402E9;
-	Thu, 12 Sep 2024 02:10:50 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Thu, 12 Sep 2024 02:10:50 -0400
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailfout.phl.internal (Postfix) with ESMTP id A604F13800E0;
+	Thu, 12 Sep 2024 02:13:44 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Thu, 12 Sep 2024 02:13:44 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=who-t.net; h=cc
 	:cc:content-type:content-type:date:date:from:from:in-reply-to
 	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1726121450; x=1726207850; bh=0nD5pzeuAh
-	1E4W3B+9CT7q3mBAtGFaHeDO2wy99F/Uw=; b=M3SyxtvXezTRUbdjysmrUibFNQ
-	U+6MU0yO9Tt3m4nNsJyGwhyVQBkK8aArTVndILYmtdTpvg9gtehafTyfn2uVsR22
-	ouVtq45pl3FUrjL/KTkZkwGWjB24G7z04s2R0HtQnAy8BMZD8+loVWXCLMHUj8nS
-	oCDOZafyAv36YOE/fJ2CmzQah/wLWqllFdZjJLuKCEDYR/XIGLkr2XlrdJ8b8BDs
-	K902mnj9G+/7MDiQlFV3XxP1QeVJ7r1Qy6C+7UH+wwMg5mF4kBWIMNCL3Bq4yDmm
-	KIXZsAIZjkZtXsTG84fxQEdhfsq1bYk5QEnCZhPWgCTwOKZVQJ8HKLhLhPhQ==
+	:subject:to:to; s=fm3; t=1726121624; x=1726208024; bh=isC2Kp1hIU
+	WEayfUMBsVtTA7t2dFaQ1PBjNe7RjZtw8=; b=j8+LAdJ/WBluH5v7RLVgv7AQz1
+	mswF4YRFa1Ysw9rbOyWunN/53aEf4jpuBL8FmJh93Dk4nk1zpFKVawyiQo3j4dPD
+	dZGG7QuZOg3JFTj5mWpfA2R2p1YJAqkvMDaHevCk1KQRb2YC6d9L76g2Gtv249Yq
+	hJ95mXzgj6Wp4yTeocWvrS7ctQFij0ttoqcuzl1QdRjilnsk65GybnmmPKj0TKcr
+	4yEBKrXkhERldOecOZp/Z3cFjYDmDkEvYsa/DILQ2jOe+Ilx6YqhnElpnCoUPwOz
+	pn0dut1sxwOalxqVgh9OZ85E8VPL+KI9BpdA8xKJ00gwLgy2X3zMfBuomIng==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1726121450; x=1726207850; bh=0nD5pzeuAh1E4W3B+9CT7q3mBAtG
-	FaHeDO2wy99F/Uw=; b=eCbvp2pTL7js4B+RQCjhdkoQnKMg0jtKzsCq6+JqgmCG
-	7muJONbLBWUddbrempeowLJnp6e6Xra1/Y9el2Rt5BM8Kd6PT7zHuAMDVW+a0Kkk
-	6VyaPTvvX+S/nh+BdKKa6AQ7EKvGmLWh7RZwiIDz8xegby8rNNXOj6soki8BmerS
-	Hyfw99z/zyD80FG3D13/iTRGhd0wJuhXAmuvAHv6qW3u3W7o37jADeGDVczd1BQN
-	cF+JsCU2O3gfTMYqEjIiSAcWB0qEuGjwtEzSVApmU6I9/ONl+WxIllAd4e0snBZB
-	DGZ4jVX9OE57D8oTI94KGAsITSvGO25Truori7u6XQ==
-X-ME-Sender: <xms:6oXiZrOZy4YJdENlltVsYw_I03uxmAuERHE6N4jAz3grPMkMQsovHw>
-    <xme:6oXiZl9fwYMYIAoCiu4GSLExnEVufQquWBfBkOQVVLD1vFbLB7caqHnlwmP0UNNKF
-    o2O0339e2KuSCU6iu0>
-X-ME-Received: <xmr:6oXiZqRN-RkCIkxfy5BX2If_8vmHgpvyB0GZzVaFGoCeN91hhP2j8JS0wYiKYCdldb1mHl1AbkhhlzV7GaHeaQ1KJhnGla95O6ze>
+	fm1; t=1726121624; x=1726208024; bh=isC2Kp1hIUWEayfUMBsVtTA7t2dF
+	aQ1PBjNe7RjZtw8=; b=UmIliIJrLL4BJhNgVUzndBtRDUkjlQQo200RPvaTyATe
+	aQdR0ENWVZXJcjn0WPAxNObdagJE/csVn2LL9nB5O7iOS2/8IY///XDvNHYD+fuP
+	/Hi45pJ2MAOXU82LGQG/qr2OP5xBauZ3DygOWARHdlmYBOUQOxoKYXjEOZTHhROp
+	84Skad/2L8YZx6NOuYNsww+GJoR/pvkEzgymSyYm/wo2yKpjyevWAsGdTfMulbBe
+	HnTbtYrnQN32eQHAcSmAMOyfpEQd0XniUluqaxVGn8LoAgBnukAQ/udSu4ZIEKWT
+	qIUjkh88y3eHW5RmL8txkV+XV1OLIu0P90ZnjUIoFA==
+X-ME-Sender: <xms:mIbiZu6tAquVzh7oZ6gw5wXUF_3PCIotOOLCFI49MNQ9QAAbjeXNbw>
+    <xme:mIbiZn7-xTswAPZ44NJkaRnY0bgsKxEtErh4Sck-G2jDgzUI6N4thlF739ECdJPfU
+    sQTYPiI5Glpwak0FqM>
+X-ME-Received: <xmr:mIbiZtfnei3U-eLNH0m7UrT9BnbiCwu8_0-NqkQ0xerpqQEJBpOoFRuMzT7Q5fKxW6AwKS5qZt3iUxGYkfNq-2scKM2EY1L2SGJo>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejvddguddthecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
@@ -79,25 +79,26 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejvddguddthecutefuodetgg
     hugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthho
     pehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtth
     hopegsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:6oXiZvvS-hopthftEolupZnJnvsCG2oQyqgJq30vwi9fZACIkfGHZQ>
-    <xmx:6oXiZjcbATwrFNazBNJF6QBxUT_CGBD1MV-QxaSBmcOJIVH00LSZRw>
-    <xmx:6oXiZr2chtTF4G8CapEahqzkQhC3WHC_GRnUb5jD0Z3xKMO1GXIzfw>
-    <xmx:6oXiZv8b_ERmFRShM02qaIuzwXx-d8_XF9azZDJmUMJbNoDjZ3VlBw>
-    <xmx:6oXiZizn5nC7tc7TLWmsuE8jipH5iss_r1IPHJ6Efs4SN2QUY8B0q_DI>
+X-ME-Proxy: <xmx:mIbiZrJMtzqMuIXIwG0yKxOZ6xidZx075Z1IEhPNX6ND7vufzLmgUQ>
+    <xmx:mIbiZiJYT_tLTFUQcgNpA4R4SUPkY_4lbzPDBSlcdF9s6uwU3zoi2w>
+    <xmx:mIbiZsyuNYY74NjyhlHVVrYTXHD3IEHywLMRxvTuQxSZpkGHguFRDA>
+    <xmx:mIbiZmJGlN5iJNY8d4HsXHBfdlfweyMNDhE5PdM2Eqa8vxUumJ_aXQ>
+    <xmx:mIbiZh90H2d8cipr2GmQ0DnDr1uL9zPSSaHbrDp0ebLqWobcYJhcS-up>
 Feedback-ID: i7ce144cd:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 12 Sep 2024 02:10:47 -0400 (EDT)
-Date: Thu, 12 Sep 2024 16:10:29 +1000
+ 12 Sep 2024 02:13:41 -0400 (EDT)
+Date: Thu, 12 Sep 2024 16:13:25 +1000
 From: Peter Hutterer <peter.hutterer@who-t.net>
 To: Benjamin Tissoires <bentiss@kernel.org>
 Cc: Jiri Kosina <jikos@kernel.org>, Vicki Pfau <vi@endrift.com>,
 	Shuah Khan <shuah@kernel.org>, linux-input@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
 	bpf@vger.kernel.org
-Subject: Re: [PATCH HID v2 02/11] HID: core: save one kmemdup during .probe()
-Message-ID: <20240912061029.GA559032@quokka>
+Subject: Re: [PATCH HID v2 08/11] HID: add per device quirk to force bind to
+ hid-generic
+Message-ID: <20240912061325.GA558003@quokka>
 References: <20240910-hid-bpf-hid-generic-v2-0-083dfc189e97@kernel.org>
- <20240910-hid-bpf-hid-generic-v2-2-083dfc189e97@kernel.org>
+ <20240910-hid-bpf-hid-generic-v2-8-083dfc189e97@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -106,66 +107,89 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20240910-hid-bpf-hid-generic-v2-2-083dfc189e97@kernel.org>
+In-Reply-To: <20240910-hid-bpf-hid-generic-v2-8-083dfc189e97@kernel.org>
 
-On Tue, Sep 10, 2024 at 11:43:38PM +0900, Benjamin Tissoires wrote:
-> Turns out the first kmemdup is only required for the .report_fixup()
-> driver callback. There is no need to do two kmemdup() in a raw in case
-
-typo: "in a row"?
-
-Cheers,
-  Peter
-
-> .report_fixup() is not present.
+On Tue, Sep 10, 2024 at 11:43:44PM +0900, Benjamin Tissoires wrote:
+> We already have the possibility to force not binding to hid-generic and
+> rely on a dedicated driver, but we couldn't do the other way around.
+> 
+> This is useful for BPF programs where we are fixing the report descriptor
+> and the events, but want to avoid a specialized driver to come after BPF
+> which would unwind everything that is done there.
 > 
 > Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 > 
 > ---
 > 
-> new in v2
+> changes in v2:
+> - rely on hdev->quirks for that instead of a new struct for hid_driver
+
+I like this one a lot more than the previous approach, series is 
+
+Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+
+although for 01 and 06 this should be taken with a grain of salt :)
+
+Cheers,
+  Peter
+
 > ---
->  drivers/hid/hid-core.c | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
+>  drivers/hid/hid-core.c    | 5 +++--
+>  drivers/hid/hid-generic.c | 3 +++
+>  include/linux/hid.h       | 2 ++
+>  3 files changed, 8 insertions(+), 2 deletions(-)
 > 
 > diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> index a5f5415571cb..172746a082f9 100644
+> index 37e52759a931..bf63e2819baf 100644
 > --- a/drivers/hid/hid-core.c
 > +++ b/drivers/hid/hid-core.c
-> @@ -1206,7 +1206,7 @@ int hid_open_report(struct hid_device *device)
->  	struct hid_item item;
->  	unsigned int size;
->  	const __u8 *start;
-> -	__u8 *buf;
-> +	__u8 *buf = NULL;
->  	const __u8 *end;
->  	const __u8 *next;
->  	int ret;
-> @@ -1227,14 +1227,18 @@ int hid_open_report(struct hid_device *device)
->  	if (WARN_ON(!start))
->  		return -ENODEV;
+> @@ -2665,9 +2665,10 @@ static bool hid_check_device_match(struct hid_device *hdev,
+>  	/*
+>  	 * hid-generic implements .match(), so we must be dealing with a
+>  	 * different HID driver here, and can simply check if
+> -	 * hid_ignore_special_drivers is set or not.
+> +	 * hid_ignore_special_drivers or HID_QUIRK_IGNORE_SPECIAL_DRIVER
+> +	 * are set or not.
+>  	 */
+> -	return !hid_ignore_special_drivers;
+> +	return !hid_ignore_special_drivers && !(hdev->quirks & HID_QUIRK_IGNORE_SPECIAL_DRIVER);
+>  }
 >  
-> -	buf = kmemdup(start, size, GFP_KERNEL);
-> -	if (buf == NULL)
-> -		return -ENOMEM;
-> +	if (device->driver->report_fixup) {
-> +		/*
-> +		 * device->driver->report_fixup() needs to work
-> +		 * on a copy of our report descriptor so it can
-> +		 * change it.
-> +		 */
-> +		buf = kmemdup(start, size, GFP_KERNEL);
-> +		if (buf == NULL)
-> +			return -ENOMEM;
+>  static int __hid_device_probe(struct hid_device *hdev, struct hid_driver *hdrv)
+> diff --git a/drivers/hid/hid-generic.c b/drivers/hid/hid-generic.c
+> index f9db991d3c5a..88882c1bfffe 100644
+> --- a/drivers/hid/hid-generic.c
+> +++ b/drivers/hid/hid-generic.c
+> @@ -40,6 +40,9 @@ static bool hid_generic_match(struct hid_device *hdev,
+>  	if (ignore_special_driver)
+>  		return true;
 >  
-> -	if (device->driver->report_fixup)
->  		start = device->driver->report_fixup(device, buf, &size);
-> -	else
-> -		start = buf;
-> +	}
+> +	if (hdev->quirks & HID_QUIRK_IGNORE_SPECIAL_DRIVER)
+> +		return true;
+> +
+>  	if (hdev->quirks & HID_QUIRK_HAVE_SPECIAL_DRIVER)
+>  		return false;
 >  
->  	start = kmemdup(start, size, GFP_KERNEL);
->  	kfree(buf);
+> diff --git a/include/linux/hid.h b/include/linux/hid.h
+> index d41fa18f1e03..b3a9586363c9 100644
+> --- a/include/linux/hid.h
+> +++ b/include/linux/hid.h
+> @@ -359,6 +359,7 @@ struct hid_item {
+>   * | @HID_QUIRK_NO_OUTPUT_REPORTS_ON_INTR_EP:
+>   * | @HID_QUIRK_HAVE_SPECIAL_DRIVER:
+>   * | @HID_QUIRK_INCREMENT_USAGE_ON_DUPLICATE:
+> + * | @HID_QUIRK_IGNORE_SPECIAL_DRIVER
+>   * | @HID_QUIRK_FULLSPEED_INTERVAL:
+>   * | @HID_QUIRK_NO_INIT_REPORTS:
+>   * | @HID_QUIRK_NO_IGNORE:
+> @@ -384,6 +385,7 @@ struct hid_item {
+>  #define HID_QUIRK_HAVE_SPECIAL_DRIVER		BIT(19)
+>  #define HID_QUIRK_INCREMENT_USAGE_ON_DUPLICATE	BIT(20)
+>  #define HID_QUIRK_NOINVERT			BIT(21)
+> +#define HID_QUIRK_IGNORE_SPECIAL_DRIVER		BIT(22)
+>  #define HID_QUIRK_FULLSPEED_INTERVAL		BIT(28)
+>  #define HID_QUIRK_NO_INIT_REPORTS		BIT(29)
+>  #define HID_QUIRK_NO_IGNORE			BIT(30)
 > 
 > -- 
 > 2.46.0
