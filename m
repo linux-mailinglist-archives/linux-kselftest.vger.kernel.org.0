@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-17851-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17852-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D9AB976EFC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 18:45:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3DE5976F83
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 19:28:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E528B1F250EB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 16:45:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99B9C1F2428E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 17:28:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94E7D1B373C;
-	Thu, 12 Sep 2024 16:44:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 671051BF7EA;
+	Thu, 12 Sep 2024 17:28:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WcELXjxV"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="e5aDD70e"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA8F1448ED
-	for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 16:44:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E0F21BE86D
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 17:28:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726159494; cv=none; b=srAdaVgkDRZdQk4PfsP3vISxSQRPmECSDAY3r0uVzr0XKfu1l8Alc1qKtHWpq0zPpSkW42T9EynZxUNMkzb9kv4XGW5w2wJVFLKaj8REEc9m82WLA1Momn/x8AIe8pFLsmlbC9ZATcciBRLOND9zYF+jSIGtrAqyW1ZrXN/rojw=
+	t=1726162114; cv=none; b=bRulGaZCqwaGpvS15vWe5tGVWs1OliWuQljsQUGK7OsZfXYqUY/ajevWZrogbh1jDQMvhLcTWdp6GB3FUUUpghHd/2E1Z6hSUt1EWP0bjyPs9dX9Qj6tHlrphz+4nftwvHQc//6FVYQ0jdPSE9HjoAjb/OgnkwKaCiLkgsNIvjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726159494; c=relaxed/simple;
-	bh=OywBXN/615TU+QFB6O6G9HCLhy16wQtwKSU6yMEnB18=;
+	s=arc-20240116; t=1726162114; c=relaxed/simple;
+	bh=ZTp6DLZUohZE4ziOp5AQg/Ka4jQALIcTMbEk9b5B9VE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GTpz7D6+qnkqnaBNDgHh2kMd7xovWRRa8rt2URsUoM9Z6SIacN+rfTnM521d6OYgqJ3xhmDZ3BFTia+LCPLsV2TbYYu9Y4H+QUTaV9KitlxHjf+AhCPgW20Wqo+VQBTaT8tLgdQznEH37SCeS16fS+0dJMyWdgy/GvK+veIl+x0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WcELXjxV; arc=none smtp.client-ip=209.85.166.54
+	 In-Reply-To:Content-Type; b=OqU5h5mN0mReCJ1jJ2acfU9L8BXJe7WAnD8uRAasWqdLByM2GIdFleF0Z8bDrt2Y880qeTd/+d0DeIE2bGhBorM9e+D3SvyjRKZARqaKKh0dLnoPxeGkSNbc9qWzY48TR+C4EAu6p6L5Q8/4HKB+nOxTMStbZw1PtTnc5KpaM0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=e5aDD70e; arc=none smtp.client-ip=209.85.166.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-82a151a65b8so57632839f.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 09:44:51 -0700 (PDT)
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-3a0220c2c6bso5499405ab.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 10:28:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1726159491; x=1726764291; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1726162112; x=1726766912; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Wo3x8YHvYS65DE5Sfp4lGYzOUb4Y2BKazjbznKZokSo=;
-        b=WcELXjxVrwb8T2Iw9jTeHUCBLYw6qGpdri6se9qShhXzlnULgU33+r1iWPAL8Ybj7M
-         u8I+Y5Yz2Je//745ByUSDddFvDHqaKF7zuxBzd0wPPQ3t7A9v7vExGKMgtEcrPkrakHn
-         3rbFKKpOvFoA0PM7DHZbGp5bDjUglhHr+hKZA=
+        bh=ojQdylEuR/edm6P0t3l0EQbjxi/mFjIvSyby4tAxelQ=;
+        b=e5aDD70ez4t5hO3hAMV2FHo9sCHjuEDnYo47hwKPm/uX3i/AM5sGOCZVE5zesl1fMZ
+         /Uu/hDyzUr5e1Jh8tPA74+kqZgF8AQGATNMIjD5enPjLmTlI/mRgvq81PGjCTDD3nePk
+         VImZndYHH9oqvR9AvjtWcAqKG0CQjJSgmU8vY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726159491; x=1726764291;
+        d=1e100.net; s=20230601; t=1726162112; x=1726766912;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Wo3x8YHvYS65DE5Sfp4lGYzOUb4Y2BKazjbznKZokSo=;
-        b=C3k+tTv4Qv9Jm6z9lDYqKO+NNywOCsvCBCu2l4rAgQmGAH9X3G1oFnRR1xE+VAmFja
-         dbf+PS+4ABr4LApBeCLbZUrnDsPgVsEXPKTpnLwANAXv1Ap5fUCPNtg2J9wrPH6GAqTP
-         8YtnXBu/CmnVsW+6BWdZBc3YMdsr3SbNgO/yUSFcQaWQIuf8rAMQY/tLYLe6wMSRqAk7
-         7Dqk7p41x+MdZUyeF5KIqcy5qgHvBycY3O0V79aRhdmJZJxlQdSIEXLaQZNBGcYcxso+
-         5ucMiETbbP4a42PwUveIt0fvIizNVFgpaWQ6X8lNepKQASIgFbo29SRP+YED17WwQYcq
-         cn7A==
-X-Forwarded-Encrypted: i=1; AJvYcCXFL8294s3R2WS/xHAtW3Cg34VN/pq3bt6QGVKX6mzhRIm1opxlHlGAPPDGSZqU9UTS60Fd2Q/UR+u0VZZZP/E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeSi+Cj7YCVdUs5xxGGTjwgXdkKndMthdDs7af0+BF3xLwj5rm
-	ssDLZMppW1FcMAThpRpMGmOKN61WsvK9zm/6+/Aj0ooQAZp7vwa9pu4Ds9yi7DNd6H6093sMnTk
-	X
-X-Google-Smtp-Source: AGHT+IG8WxtLjeMTnLkX9JNP/f0ES/0H83E8EkQxcj3L6ZPvuQbDvcor09kJInQjlGBaiqWRZJJqkg==
-X-Received: by 2002:a05:6602:15d2:b0:82d:1ba1:da5b with SMTP id ca18e2360f4ac-82d1f971466mr317736539f.13.1726159491009;
-        Thu, 12 Sep 2024 09:44:51 -0700 (PDT)
+        bh=ojQdylEuR/edm6P0t3l0EQbjxi/mFjIvSyby4tAxelQ=;
+        b=GTFwEwOePTADqa1LUpTIw4XE4YmXWs345s99J+ZYJWUss8/qJV2nTJSPnhfhX7V6j3
+         tCymGt1LcHtoA2TCwWN671H238w/Ho4ER+DuQIzJhIuRABpZZ01pGs3RUfFvPMZJJD3U
+         4dSlvhjkbyeTmJvsCctCMuXmatYnGRR5v5SLvDqsW1vibcyd/JV1Oo3cu51L7tQMGnw9
+         mLS2V7Sm4gvazpVavoE3v8QhOru0fkCbSw6ORdjmpJaxz9hHnkX5zD+O9mCemePAzK73
+         SCC7ZtZsDU1aZ82XUl67ijE0HU91NxuTCnE3CMGuZh+o2BV5BD6KRfI4fTJccDXAdMs3
+         O8jw==
+X-Forwarded-Encrypted: i=1; AJvYcCW+MyX97UY0pIJxTZtkiZLszQb8Dm1czYK/nHQha+oc83DOJRZ7kqjcbktgH5b8CJtrZKINyDkWt7ayldrgJi8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxXzDQNPOEzL1A9U57OrVekl6qL8PaliY6SSVgfEXryyd9UBi2
+	IYZYrIfSvqFlg8SOXht2bWTywmsLOWoPJFS+TtcLmgA9nEj1Jue6WgGI41weAAcjKm5hZ+h3gM8
+	o
+X-Google-Smtp-Source: AGHT+IEyBc3XdFgDxw7hY6Gd9nsgNpNQtOKxJT4r9NCaxxvWyYvBogxI7FkBep7jhm5pjtRdduYOtg==
+X-Received: by 2002:a05:6e02:164f:b0:39b:330b:bb25 with SMTP id e9e14a558f8ab-3a0848f7e52mr36208285ab.12.1726162111590;
+        Thu, 12 Sep 2024 10:28:31 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4d35f56ddedsm689762173.62.2024.09.12.09.44.49
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a065816d89sm22413055ab.79.2024.09.12.10.28.30
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 12 Sep 2024 09:44:50 -0700 (PDT)
-Message-ID: <3a55faea-5570-4a27-8625-c3f0a276907c@linuxfoundation.org>
-Date: Thu, 12 Sep 2024 10:44:49 -0600
+        Thu, 12 Sep 2024 10:28:31 -0700 (PDT)
+Message-ID: <35f21581-71f3-4234-9b03-dd3e3bda664f@linuxfoundation.org>
+Date: Thu, 12 Sep 2024 11:28:30 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,55 +74,67 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: Makefile: add missing 'net/lib' to targets
-To: Jakub Kicinski <kuba@kernel.org>, Anders Roxell <anders.roxell@linaro.org>
-Cc: shuah@kernel.org, willemb@google.com, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240912063119.1277322-1-anders.roxell@linaro.org>
- <20240912082307.556db015@kernel.org>
+Subject: Re: [PATCH 2/2] kselftests: mm: Fail the test if userfaultfd syscall
+ isn't found
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: kernel@collabora.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240912103151.1520254-1-usama.anjum@collabora.com>
+ <20240912103151.1520254-2-usama.anjum@collabora.com>
+ <3b700650-159d-45ad-91a3-59fca3019766@linuxfoundation.org>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240912082307.556db015@kernel.org>
+In-Reply-To: <3b700650-159d-45ad-91a3-59fca3019766@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 9/12/24 09:23, Jakub Kicinski wrote:
-> On Thu, 12 Sep 2024 08:31:18 +0200 Anders Roxell wrote:
->> Fixes: 1d0dc857b5d8 ("selftests: drv-net: add checksum tests")
->> Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
->> ---
->>   tools/testing/selftests/Makefile | 1 +
->>   1 file changed, 1 insertion(+)
+On 9/12/24 10:10, Shuah Khan wrote:
+> On 9/12/24 04:31, Muhammad Usama Anjum wrote:
+>> The userfaultfd is enabled in the config fragment of mm selftest suite.
+>> It must always be present. If it isn't present, we should throw error
+>> and not just skip. This would have helped us catch the test breakage.
+> 
+> Please elaborate on this to help understand the what breakage was
+> missed.
+> 
+> Also this commit log doesn't look right to me. syscall() could
+> fail for any reason. Do you mean to see skip is incorrect in this
+> error leg? Please see comments below.
+> 
+>> Adding this now to catch the future breakages.
 >>
->> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
->> index 3b7df5477317..fc3681270afe 100644
->> --- a/tools/testing/selftests/Makefile
->> +++ b/tools/testing/selftests/Makefile
->> @@ -64,6 +64,7 @@ TARGETS += net
->>   TARGETS += net/af_unix
->>   TARGETS += net/forwarding
->>   TARGETS += net/hsr
->> +TARGETS += net/lib
->>   TARGETS += net/mptcp
->>   TARGETS += net/netfilter
->>   TARGETS += net/openvswitch
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>>   tools/testing/selftests/mm/pagemap_ioctl.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
+>> index bcc73b4e805c6..d83dda8edf62c 100644
+>> --- a/tools/testing/selftests/mm/pagemap_ioctl.c
+>> +++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+>> @@ -95,7 +95,7 @@ int init_uffd(void)
+>>       uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
+>>       if (uffd == -1)
+>> -        return uffd;
+>> +        ksft_exit_fail_perror("Userfaultfd syscall failed");
 > 
-> Please make sure you always include a commit message. Among other
-> things writing one would force you to understand the code, and
-> in this case understand that this target is intentionally left out.
-> Look around the Makefile for references to net/lib, you'll figure
-> it out.
-> 
+> This looks wrong to me - Is missing config the only reason this syscall
+> would fail?
 
-+1 - thank you for outlining the benefits of writing a change log
-which includes the details.
+It should still skip if __NR_userfaultfd isn't supported on a release
+or an architecture.
 
-This patch is missing the changelog completely - change log is
-an important part of sending a patch.
+The real problem seems to be in main():
 
-> The patch is incorrect.
+if (init_uffd())
+                 ksft_exit_pass();
+
+
+Why is this ksft_exit_pass()? Looks like further investigation is
+necessary to understand the problem and fix.
 
 thanks,
 -- Shuah
-
 
