@@ -1,197 +1,230 @@
-Return-Path: <linux-kselftest+bounces-17799-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17800-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 380A4976114
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 08:14:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4692097614A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 08:19:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C2211C22C73
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 06:13:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0853C2852B1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 06:19:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AEFF13CFB7;
-	Thu, 12 Sep 2024 06:13:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9F2D18BBB0;
+	Thu, 12 Sep 2024 06:18:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=who-t.net header.i=@who-t.net header.b="j8+LAdJ/";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UmIliIJr"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="IBwzBVm+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout7-smtp.messagingengine.com (fout7-smtp.messagingengine.com [103.168.172.150])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f48.google.com (mail-oa1-f48.google.com [209.85.160.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A136189F2A;
-	Thu, 12 Sep 2024 06:13:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F6F418BB9E
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 06:18:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726121627; cv=none; b=TIDfz1stG1okIjY//MUuKKEAh74rP5HoRKl12MngCL/TyS9bVhtwV0tLU+l8kC4NXlOustKg4jdc0I5zN3JGVaX+adGqvmPe6c6HrGn72NOKMjyHwR6a9pO71ZjiUOu6CBl/faZuXowpskXtDNEGg2gApmz3pjzu0snzhV2VtQM=
+	t=1726121901; cv=none; b=n7y8pj8MgYH3EnGLQjne3xSfzJASUsfFT2XMj1wz9tWCBNlHeWlRZFf/Mhh4roiRazki6F1UUrbT46vRlYKqejEUTKtbeWo2JpwW3ZJWtrLnCF0A0jxQVM/BT1zD+FS9qXUeklMeVfuUKeyJ2on5gGDYjJKwNDAyeZHnCgZ/aBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726121627; c=relaxed/simple;
-	bh=BoQDVRthtqE+Gqlz8Lz2NTTlPMmQIBRBNASIepQ2WFo=;
+	s=arc-20240116; t=1726121901; c=relaxed/simple;
+	bh=JXQ5stJy2yGFyhQM8tYpvYIBlea3Ge+wa2GDoDqdiSo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DFwQpSQg8Bu28IJ8y1TNLhTJktIxS4KyRwHiqpIusexjk2CBVFI48yVmRYz+HgHRwUpv+i+ulj2iVBd2COyp37/dRcDvSpCXlkhbiOtrTXXzb5h96SnlKP250P5LjGY8Z4n/9/3A5itWibl9BaZ1zh6C1SqIBfBTH0Ikl6GkSQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=who-t.net; spf=pass smtp.mailfrom=who-t.net; dkim=pass (2048-bit key) header.d=who-t.net header.i=@who-t.net header.b=j8+LAdJ/; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UmIliIJr; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=who-t.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=who-t.net
-Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
-	by mailfout.phl.internal (Postfix) with ESMTP id A604F13800E0;
-	Thu, 12 Sep 2024 02:13:44 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Thu, 12 Sep 2024 02:13:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=who-t.net; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1726121624; x=1726208024; bh=isC2Kp1hIU
-	WEayfUMBsVtTA7t2dFaQ1PBjNe7RjZtw8=; b=j8+LAdJ/WBluH5v7RLVgv7AQz1
-	mswF4YRFa1Ysw9rbOyWunN/53aEf4jpuBL8FmJh93Dk4nk1zpFKVawyiQo3j4dPD
-	dZGG7QuZOg3JFTj5mWpfA2R2p1YJAqkvMDaHevCk1KQRb2YC6d9L76g2Gtv249Yq
-	hJ95mXzgj6Wp4yTeocWvrS7ctQFij0ttoqcuzl1QdRjilnsk65GybnmmPKj0TKcr
-	4yEBKrXkhERldOecOZp/Z3cFjYDmDkEvYsa/DILQ2jOe+Ilx6YqhnElpnCoUPwOz
-	pn0dut1sxwOalxqVgh9OZ85E8VPL+KI9BpdA8xKJ00gwLgy2X3zMfBuomIng==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm1; t=1726121624; x=1726208024; bh=isC2Kp1hIUWEayfUMBsVtTA7t2dF
-	aQ1PBjNe7RjZtw8=; b=UmIliIJrLL4BJhNgVUzndBtRDUkjlQQo200RPvaTyATe
-	aQdR0ENWVZXJcjn0WPAxNObdagJE/csVn2LL9nB5O7iOS2/8IY///XDvNHYD+fuP
-	/Hi45pJ2MAOXU82LGQG/qr2OP5xBauZ3DygOWARHdlmYBOUQOxoKYXjEOZTHhROp
-	84Skad/2L8YZx6NOuYNsww+GJoR/pvkEzgymSyYm/wo2yKpjyevWAsGdTfMulbBe
-	HnTbtYrnQN32eQHAcSmAMOyfpEQd0XniUluqaxVGn8LoAgBnukAQ/udSu4ZIEKWT
-	qIUjkh88y3eHW5RmL8txkV+XV1OLIu0P90ZnjUIoFA==
-X-ME-Sender: <xms:mIbiZu6tAquVzh7oZ6gw5wXUF_3PCIotOOLCFI49MNQ9QAAbjeXNbw>
-    <xme:mIbiZn7-xTswAPZ44NJkaRnY0bgsKxEtErh4Sck-G2jDgzUI6N4thlF739ECdJPfU
-    sQTYPiI5Glpwak0FqM>
-X-ME-Received: <xmr:mIbiZtfnei3U-eLNH0m7UrT9BnbiCwu8_0-NqkQ0xerpqQEJBpOoFRuMzT7Q5fKxW6AwKS5qZt3iUxGYkfNq-2scKM2EY1L2SGJo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudejvddguddthecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddv
-    necuhfhrohhmpefrvghtvghrucfjuhhtthgvrhgvrhcuoehpvghtvghrrdhhuhhtthgvrh
-    gvrhesfihhohdqthdrnhgvtheqnecuggftrfgrthhtvghrnhepkedvkeegheefjefgvddu
-    fffhveehjeffvefgiefgkefhudeifedugfetudfgtefgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepphgvthgvrhdrhhhuthhtvghrvghrseif
-    hhhoqdhtrdhnvghtpdhnsggprhgtphhtthhopeekpdhmohguvgepshhmthhpohhuthdprh
-    gtphhtthhopegsvghnthhishhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjihhk
-    ohhssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehvihesvghnughrihhfthdrtghomh
-    dprhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhn
-    uhigqdhinhhpuhhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinh
-    hugidqkhhsvghlfhhtvghsthesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthho
-    pehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtth
-    hopegsphhfsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:mIbiZrJMtzqMuIXIwG0yKxOZ6xidZx075Z1IEhPNX6ND7vufzLmgUQ>
-    <xmx:mIbiZiJYT_tLTFUQcgNpA4R4SUPkY_4lbzPDBSlcdF9s6uwU3zoi2w>
-    <xmx:mIbiZsyuNYY74NjyhlHVVrYTXHD3IEHywLMRxvTuQxSZpkGHguFRDA>
-    <xmx:mIbiZmJGlN5iJNY8d4HsXHBfdlfweyMNDhE5PdM2Eqa8vxUumJ_aXQ>
-    <xmx:mIbiZh90H2d8cipr2GmQ0DnDr1uL9zPSSaHbrDp0ebLqWobcYJhcS-up>
-Feedback-ID: i7ce144cd:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 12 Sep 2024 02:13:41 -0400 (EDT)
-Date: Thu, 12 Sep 2024 16:13:25 +1000
-From: Peter Hutterer <peter.hutterer@who-t.net>
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Jiri Kosina <jikos@kernel.org>, Vicki Pfau <vi@endrift.com>,
-	Shuah Khan <shuah@kernel.org>, linux-input@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [PATCH HID v2 08/11] HID: add per device quirk to force bind to
- hid-generic
-Message-ID: <20240912061325.GA558003@quokka>
-References: <20240910-hid-bpf-hid-generic-v2-0-083dfc189e97@kernel.org>
- <20240910-hid-bpf-hid-generic-v2-8-083dfc189e97@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=fYp/8l7r5WLkUMxll2bzyBqsudiwufZ8Rvee4MUZ5gSA7FnAHDCnj1tlFLgUGhWB77de6itOeVy9piX3uqj9t4uJG2DzTFqAgcD2zs3QsIE60F78iWFxD0SIKdy3JAZgybkJ1YV2OSFCVOPsJeFgLLAoqTuEBVC2Wumy313jVww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=IBwzBVm+; arc=none smtp.client-ip=209.85.160.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-27b88b8a24aso291802fac.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Sep 2024 23:18:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1726121898; x=1726726698; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=MAcwRzdYBVGpQvvsotib//4T0Ptv25mGEFNsz8/kzr4=;
+        b=IBwzBVm+Dy9DemXiT+1joiWwNQ4MpJ6HiprnZBhfp+qlwYCm1SZOS8UFwa0Ob/wPCW
+         vdT0GLddrfPUul+3HWiREsrr1BVDND1R7IS3vT802MVi0qC8GIU4yHQ7GO4xm81KEdx9
+         TjHA9HiBsqv3ofAFpygNDj+gVBPINMdydaIlxa7xXengpnJtRkikrnl6a/Eeb/ABae/w
+         ks3IT3BnNHYp4r19IbvLouGn3n1x1WKFgjdl3Thz3Yk4xPuVmDxPGtMs1TmPEX/TLFcE
+         VGAPF+76PBRlColfrY2Ua355B6uk/L1vuIEzKCB0wC54ruMA9wW79peGN+bPCNqw8pEJ
+         omLA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726121898; x=1726726698;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MAcwRzdYBVGpQvvsotib//4T0Ptv25mGEFNsz8/kzr4=;
+        b=Vi7Y7TXXHT/zTpd7E5cZ7OjIkRBnay0Kqj/0OJ97Q+maQCcnVcXi1xqnKCsucJ4SFd
+         LlIP/LPDZh1VTnZgpeRPeOr4M7llO4V+//Kr1dHMT+HykCNkzQGa/Pjhkz5VnLb/hSCy
+         JVi6Jsx3Ikr/t7IgY2Vr/G2UB4SAV3/N+f8d1mo8Or6VAqfxgttw6dODHkmQKCexiava
+         /ol28rngmoovRu2oQL6TvLNLT5i8aWo27SmcmT5Zu1w1l3gG+4wmVA+DLhpEuIeR8P2L
+         Hx4zOCEvThDX2fWSyR8kio8TrnSE+Qk3SHutcbD9V6VD426FT45e77OS4YIpIpXIohDc
+         XyRw==
+X-Forwarded-Encrypted: i=1; AJvYcCUMUxiVP2VJ5E/6AoUeWmVu85GlSpcxSuyn33rJrAbDB0BgwKfP90+uELIcSgD3ckXmelnd2dOVdtvr5zGr1fA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCdP/UIHbIUE2eKMyjx7yxOTyzbXW119BOxKtmyUNSl9xPa5zj
+	JXXXo6PfWRIPXa3LhIcw8ZKUfNDFAWwhAsxqNj6eLqh+0MQfSnJpZuD1WXl/RmY=
+X-Google-Smtp-Source: AGHT+IH1u/BITj52DSA2KLJ5czFa7HaODYxdqRl9mmjp1F3evKXCtYQOfdJUyouLtu9doLCVCxJHIA==
+X-Received: by 2002:a05:6870:910f:b0:277:eb68:2878 with SMTP id 586e51a60fabf-27c3f6a6e6emr1295326fac.44.1726121898162;
+        Wed, 11 Sep 2024 23:18:18 -0700 (PDT)
+Received: from ghost ([2601:647:6700:64d0:7acc:9910:2c1d:4e65])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7190f888a78sm3692711b3a.140.2024.09.11.23.18.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Sep 2024 23:18:17 -0700 (PDT)
+Date: Wed, 11 Sep 2024 23:18:12 -0700
+From: Charlie Jenkins <charlie@rivosinc.com>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Arnd Bergmann <arnd@arndb.de>, guoren <guoren@kernel.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S . Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	shuah <shuah@kernel.org>, Christoph Hellwig <hch@infradead.org>,
+	Michal Hocko <mhocko@suse.com>,
+	"Kirill A. Shutemov" <kirill@shutemov.name>,
+	Chris Torek <chris.torek@gmail.com>,
+	Linux-Arch <linux-arch@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-abi-devel@lists.sourceforge.net
+Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
+ 47 bits
+Message-ID: <ZuKHpFB+uWuJe2xm@ghost>
+References: <20240905-patches-below_hint_mmap-v3-0-3cd5564efbbb@rivosinc.com>
+ <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
+ <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
+ <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
+ <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
+ <Ztrq8PBLJ3QuFJz7@arm.com>
+ <oshwto46wbbgneiayj63umllyozm3c4267rvpszqzaopwnt2l7@6mxl5vydtons>
+ <ZuDoExckq21fePoe@ghost>
+ <ZuHfp0_tAQhaymdy@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20240910-hid-bpf-hid-generic-v2-8-083dfc189e97@kernel.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZuHfp0_tAQhaymdy@arm.com>
 
-On Tue, Sep 10, 2024 at 11:43:44PM +0900, Benjamin Tissoires wrote:
-> We already have the possibility to force not binding to hid-generic and
-> rely on a dedicated driver, but we couldn't do the other way around.
+On Wed, Sep 11, 2024 at 07:21:27PM +0100, Catalin Marinas wrote:
+> On Tue, Sep 10, 2024 at 05:45:07PM -0700, Charlie Jenkins wrote:
+> > On Tue, Sep 10, 2024 at 03:08:14PM -0400, Liam R. Howlett wrote:
+> > > * Catalin Marinas <catalin.marinas@arm.com> [240906 07:44]:
+> > > > On Fri, Sep 06, 2024 at 09:55:42AM +0000, Arnd Bergmann wrote:
+> > > > > On Fri, Sep 6, 2024, at 09:14, Guo Ren wrote:
+> > > > > > On Fri, Sep 6, 2024 at 3:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
+> > > > > >> It's also unclear to me how we want this flag to interact with
+> > > > > >> the existing logic in arch_get_mmap_end(), which attempts to
+> > > > > >> limit the default mapping to a 47-bit address space already.
+> > > > > >
+> > > > > > To optimize RISC-V progress, I recommend:
+> > > > > >
+> > > > > > Step 1: Approve the patch.
+> > > > > > Step 2: Update Go and OpenJDK's RISC-V backend to utilize it.
+> > > > > > Step 3: Wait approximately several iterations for Go & OpenJDK
+> > > > > > Step 4: Remove the 47-bit constraint in arch_get_mmap_end()
 > 
-> This is useful for BPF programs where we are fixing the report descriptor
-> and the events, but want to avoid a specialized driver to come after BPF
-> which would unwind everything that is done there.
+> Point 4 is an ABI change. What guarantees that there isn't still
+> software out there that relies on the old behaviour?
+
+Yeah I don't think it would be desirable to remove the 47 bit
+constraint in architectures that already have it.
+
 > 
-> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+> > > > > I really want to first see a plausible explanation about why
+> > > > > RISC-V can't just implement this using a 47-bit DEFAULT_MAP_WINDOW
+> > > > > like all the other major architectures (x86, arm64, powerpc64),
+> > > > 
+> > > > FWIW arm64 actually limits DEFAULT_MAP_WINDOW to 48-bit in the default
+> > > > configuration. We end up with a 47-bit with 16K pages but for a
+> > > > different reason that has to do with LPA2 support (I doubt we need this
+> > > > for the user mapping but we need to untangle some of the macros there;
+> > > > that's for a separate discussion).
+> > > > 
+> > > > That said, we haven't encountered any user space problems with a 48-bit
+> > > > DEFAULT_MAP_WINDOW. So I also think RISC-V should follow a similar
+> > > > approach (47 or 48 bit default limit). Better to have some ABI
+> > > > consistency between architectures. One can still ask for addresses above
+> > > > this default limit via mmap().
+> > > 
+> > > I think that is best as well.
+> > > 
+> > > Can we please just do what x86 and arm64 does?
+> > 
+> > I responded to Arnd in the other thread, but I am still not convinced
+> > that the solution that x86 and arm64 have selected is the best solution.
+> > The solution of defaulting to 47 bits does allow applications the
+> > ability to get addresses that are below 47 bits. However, due to
+> > differences across architectures it doesn't seem possible to have all
+> > architectures default to the same value. Additionally, this flag will be
+> > able to help users avoid potential bugs where a hint address is passed
+> > that causes upper bits of a VA to be used.
 > 
-> ---
-> 
-> changes in v2:
-> - rely on hdev->quirks for that instead of a new struct for hid_driver
+> The reason we added this limit on arm64 is that we noticed programs
+> using the top 8 bits of a 64-bit pointer for additional information.
+> IIRC, it wasn't even openJDK but some JavaScript JIT. We could have
+> taught those programs of a new flag but since we couldn't tell how many
+> are out there, it was the safest to default to a smaller limit and opt
+> in to the higher one. Such opt-in is via mmap() but if you prefer a
+> prctl() flag, that's fine by me as well (though I think this should be
+> opt-in to higher addresses rather than opt-out of the higher addresses).
 
-I like this one a lot more than the previous approach, series is 
+The mmap() flag was used in previous versions but was decided against
+because this feature is more useful if it is process-wide. A
+personality() flag was chosen instead of a prctl() flag because there
+existed other flags in personality() that were similar. I am tempted to
+use prctl() however because then we could have an additional arg to
+select the exact number of bits that should be reserved (rather than
+being fixed at 47 bits).
 
-Reviewed-by: Peter Hutterer <peter.hutterer@who-t.net>
+Opting-in to the higher address space is reasonable. However, it is not
+my preference, because the purpose of this flag is to ensure that
+allocations do not exceed 47-bits, so it is a clearer ABI to have the
+applications that want this guarantee to be the ones setting the flag,
+rather than the applications that want the higher bits setting the flag.
 
-although for 01 and 06 this should be taken with a grain of salt :)
+- Charlie
 
-Cheers,
-  Peter
-
-> ---
->  drivers/hid/hid-core.c    | 5 +++--
->  drivers/hid/hid-generic.c | 3 +++
->  include/linux/hid.h       | 2 ++
->  3 files changed, 8 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> index 37e52759a931..bf63e2819baf 100644
-> --- a/drivers/hid/hid-core.c
-> +++ b/drivers/hid/hid-core.c
-> @@ -2665,9 +2665,10 @@ static bool hid_check_device_match(struct hid_device *hdev,
->  	/*
->  	 * hid-generic implements .match(), so we must be dealing with a
->  	 * different HID driver here, and can simply check if
-> -	 * hid_ignore_special_drivers is set or not.
-> +	 * hid_ignore_special_drivers or HID_QUIRK_IGNORE_SPECIAL_DRIVER
-> +	 * are set or not.
->  	 */
-> -	return !hid_ignore_special_drivers;
-> +	return !hid_ignore_special_drivers && !(hdev->quirks & HID_QUIRK_IGNORE_SPECIAL_DRIVER);
->  }
->  
->  static int __hid_device_probe(struct hid_device *hdev, struct hid_driver *hdrv)
-> diff --git a/drivers/hid/hid-generic.c b/drivers/hid/hid-generic.c
-> index f9db991d3c5a..88882c1bfffe 100644
-> --- a/drivers/hid/hid-generic.c
-> +++ b/drivers/hid/hid-generic.c
-> @@ -40,6 +40,9 @@ static bool hid_generic_match(struct hid_device *hdev,
->  	if (ignore_special_driver)
->  		return true;
->  
-> +	if (hdev->quirks & HID_QUIRK_IGNORE_SPECIAL_DRIVER)
-> +		return true;
-> +
->  	if (hdev->quirks & HID_QUIRK_HAVE_SPECIAL_DRIVER)
->  		return false;
->  
-> diff --git a/include/linux/hid.h b/include/linux/hid.h
-> index d41fa18f1e03..b3a9586363c9 100644
-> --- a/include/linux/hid.h
-> +++ b/include/linux/hid.h
-> @@ -359,6 +359,7 @@ struct hid_item {
->   * | @HID_QUIRK_NO_OUTPUT_REPORTS_ON_INTR_EP:
->   * | @HID_QUIRK_HAVE_SPECIAL_DRIVER:
->   * | @HID_QUIRK_INCREMENT_USAGE_ON_DUPLICATE:
-> + * | @HID_QUIRK_IGNORE_SPECIAL_DRIVER
->   * | @HID_QUIRK_FULLSPEED_INTERVAL:
->   * | @HID_QUIRK_NO_INIT_REPORTS:
->   * | @HID_QUIRK_NO_IGNORE:
-> @@ -384,6 +385,7 @@ struct hid_item {
->  #define HID_QUIRK_HAVE_SPECIAL_DRIVER		BIT(19)
->  #define HID_QUIRK_INCREMENT_USAGE_ON_DUPLICATE	BIT(20)
->  #define HID_QUIRK_NOINVERT			BIT(21)
-> +#define HID_QUIRK_IGNORE_SPECIAL_DRIVER		BIT(22)
->  #define HID_QUIRK_FULLSPEED_INTERVAL		BIT(28)
->  #define HID_QUIRK_NO_INIT_REPORTS		BIT(29)
->  #define HID_QUIRK_NO_IGNORE			BIT(30)
 > 
 > -- 
-> 2.46.0
-> 
+> Catalin
+
+
+
 
