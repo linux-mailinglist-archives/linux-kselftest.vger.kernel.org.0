@@ -1,103 +1,130 @@
-Return-Path: <linux-kselftest+bounces-17809-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17810-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF2FD9766B7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 12:32:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 764209766F2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 12:50:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 263141C23374
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 10:32:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CCB2285C15
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 10:50:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3EA719F12D;
-	Thu, 12 Sep 2024 10:32:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A89A19FA65;
+	Thu, 12 Sep 2024 10:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="angwLnBs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JTtjO0Cf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117DB18E043;
-	Thu, 12 Sep 2024 10:32:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726137146; cv=pass; b=DNfuSh2+9+knlgCFmtt/aPeDrk+/TiKihLwmnWspq8PGczt3UDVozWpFiwFBcYio+Y5uPi38NVildybdDhuXEiQzLWseoR9yIbqZp9Rcz6vXrriB17xcA75I6QXUQHRbn+69sRkqSdRNdrJ9Xs/KdxMM+PjsYSThn6PHpJ3DR7E=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726137146; c=relaxed/simple;
-	bh=vmqX2w/Cu707ZQWEALXLDG9u1fWpIVh3jY/q5HFldtI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qTa++LNSYvomZD/mTMsKA11sDAVS8YRDYAVNjTX4kMJbC1eL0nGZjpYDL0A/8qIJeipQJGi+nGK80YfmMzhCZolDP0+nwQW2L0GrUWM46mxYa6yCJplkVcygM7S6CyFKUzMT5CiyQom4UDTMJRZy8tF34ShI+XcJISl2EWvZiQg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=angwLnBs; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1726137134; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=EZpA+P+Y2FEA4EpO8s45jGgMGI4VOo7iBqY8qWtMuotw+SYcl6ESteJnKy1KWkp0nvCiNKfrhIhbunjPOTkpXKqi8TbeVXn8SrpI6T+b7kbpLoeeQSVUoyDMSROHZeNgyjl2M8Ex24+lJ/0ResBHif7z3ERwJCFun9P/V3cCad0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1726137134; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=KSpDKK1DAsive3QibtWD5FNSGNv2v0elbqHMj3W+HfM=; 
-	b=A3qq24RhL4lPUXtV1TX+K2SkSODWeE2zeIN7ewTJYAHYpwOsmQbGQWqTnw4LE3TSN9xq2oZSFufHdn948wN7zNHS0U4MPHjUGbHFHL1vHk1ANPcENAAAJqc4btcRLPnn9omhZuKlox9IQoq7paZEHzm4/bBvfZ3SAy/s9HZmKqI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
-	dmarc=pass header.from=<usama.anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1726137134;
-	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=KSpDKK1DAsive3QibtWD5FNSGNv2v0elbqHMj3W+HfM=;
-	b=angwLnBslkPYWhbz4ZUN12nwu+j2uWW0ycMuHhwIzEU9HmKVRYvDymVZ32IXNtBi
-	9D45h0c5kjywyTzvO+w38dJCG4n10k38U50MmyfdvcfNUzwieeyQBZShfAXdLoNzjV+
-	p8KteobJ9o1T1Z9wM/8aF5uigeXN8J4+HRp94frg=
-Received: by mx.zohomail.com with SMTPS id 172613713313932.761884341043356;
-	Thu, 12 Sep 2024 03:32:13 -0700 (PDT)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	kernel@collabora.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] kselftests: mm: Fail the test if userfaultfd syscall isn't found
-Date: Thu, 12 Sep 2024 15:31:51 +0500
-Message-Id: <20240912103151.1520254-2-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240912103151.1520254-1-usama.anjum@collabora.com>
-References: <20240912103151.1520254-1-usama.anjum@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CCB6149E03;
+	Thu, 12 Sep 2024 10:50:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726138227; cv=none; b=aDzamoUhqs/cPDPfZWzdLnhKyo9IHiPLwMZSzvrcoqWgEdB7u6r+p7kgXiyNQXc9gQk8XAjHqz/0lE/XtQYmAq/lLZobNflWd/aLPPxqDYb4eEI5uZ/r6zGvYygoq2Ic3Mfe5nCdGTXbZrzrbL5uiVkqP6nuCvgnz4hAZn/F/z8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726138227; c=relaxed/simple;
+	bh=qZoGoOh6X8sZEkgedzpNuHuqZxsxfBCZB2KTDdNYKss=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fC7oUUQLO0yN6rabuuGVqgwkBeQ+yI5kcua1lvSeUMznzXu6HN5m1xBn5QtO6K0E80lYzWY1uI3IIlSVu+KIOYNtHW/GSJfwfe6zchwXUkdla4YI2xzRFOsZioMMDIiuyBHuCVwZrMZxgiTqJ4R36xcybvBLECPll07JPcZ+xHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JTtjO0Cf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91F63C4CEC3;
+	Thu, 12 Sep 2024 10:50:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726138226;
+	bh=qZoGoOh6X8sZEkgedzpNuHuqZxsxfBCZB2KTDdNYKss=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JTtjO0Cfd7tkU1BMgFiga+fsrzZ9RZLla49qSZtD6IB+wb//kcv1pcCBoGV6o4I4m
+	 G1wXKo0/D/uODveW0Dj266lXbV6cEBbn8DzNEx7nGus4bUNZK5XKZHYZE/cxZmjguq
+	 h9sjj8h+uq8aq6VA2If3DNsj8fEoZ/PZYgilsV1hwIpsBp5q7mQ597FhFm9pCzPsmV
+	 WhFLRH7P9gQzrwbFzg4HfakU6ZdPiILkcPais1me+xmBZfigLQXauBvJZx0GqSMgHK
+	 M80cWMxsBzCWfU/+AfeLZt9ASKvx0eEt/Pjpfh74bKbs6F0WFUlIRAy7BMaYsMh8C/
+	 HJW6qTM5+QJSg==
+Date: Thu, 12 Sep 2024 11:50:18 +0100
+From: Will Deacon <will@kernel.org>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Kevin Brodsky <kevin.brodsky@arm.com>, Joey Gouly <joey.gouly@arm.com>,
+	linux-arm-kernel@lists.infradead.org, nd@arm.com,
+	akpm@linux-foundation.org, aneesh.kumar@kernel.org,
+	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
+	broonie@kernel.org, catalin.marinas@arm.com,
+	christophe.leroy@csgroup.eu, dave.hansen@linux.intel.com,
+	hpa@zytor.com, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
+	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
+	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
+	szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 06/30] arm64: context switch POR_EL0 register
+Message-ID: <20240912105017.GA22788@willie-the-truck>
+References: <20240822151113.1479789-1-joey.gouly@arm.com>
+ <20240822151113.1479789-7-joey.gouly@arm.com>
+ <425b8f8c-b6b5-422a-b5f4-41dd2d1ae3bb@arm.com>
+ <6c8ad091-a56b-41ba-b403-2e3c2e578100@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c8ad091-a56b-41ba-b403-2e3c2e578100@intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-The userfaultfd is enabled in the config fragment of mm selftest suite.
-It must always be present. If it isn't present, we should throw error
-and not just skip. This would have helped us catch the test breakage.
-Adding this now to catch the future breakages.
+Hi Dave,
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/mm/pagemap_ioctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Wed, Sep 11, 2024 at 08:33:54AM -0700, Dave Hansen wrote:
+> On 9/11/24 08:01, Kevin Brodsky wrote:
+> > On 22/08/2024 17:10, Joey Gouly wrote:
+> >> @@ -371,6 +382,9 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+> >>  		if (system_supports_tpidr2())
+> >>  			p->thread.tpidr2_el0 = read_sysreg_s(SYS_TPIDR2_EL0);
+> >>  
+> >> +		if (system_supports_poe())
+> >> +			p->thread.por_el0 = read_sysreg_s(SYS_POR_EL0);
+> > Here we are only reloading POR_EL0's value if the target is a user
+> > thread. However, as this series stands, POR_EL0 is also relevant to
+> > kthreads, because any uaccess or GUP done from a kthread will also be
+> > checked against POR_EL0. This is especially important in cases like the
+> > io_uring kthread, which accesses the memory of the user process that
+> > spawned it. To prevent such a kthread from inheriting a stale value of
+> > POR_EL0, it seems that we should reload POR_EL0's value in all cases
+> > (user and kernel thread).
+> 
+> The problem with this is trying to figure out which POR_EL0 to use.  The
+> kthread could have been spawned ages ago and might not have a POR_EL0
+> which is very different from the current value of any of the threads in
+> the process right now.
+> 
+> There's also no great way for a kthread to reach out and grab an updated
+> value.  It's all completely inherently racy.
+> 
+> > Other approaches could also be considered (e.g. resetting POR_EL0 to
+> > unrestricted when creating a kthread), see my reply on v4 [1].
+> 
+> I kinda think this is the only way to go.  It's the only sensible,
+> predictable way.  I _think_ it's what x86 will end up doing with PKRU,
+> but there's been enough churn there that I'd need to go double check
+> what happens in practice.
 
-diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-index bcc73b4e805c6..d83dda8edf62c 100644
---- a/tools/testing/selftests/mm/pagemap_ioctl.c
-+++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-@@ -95,7 +95,7 @@ int init_uffd(void)
- 
- 	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
- 	if (uffd == -1)
--		return uffd;
-+		ksft_exit_fail_perror("Userfaultfd syscall failed");
- 
- 	uffdio_api.api = UFFD_API;
- 	uffdio_api.features = UFFD_FEATURE_WP_UNPOPULATED | UFFD_FEATURE_WP_ASYNC |
--- 
-2.39.2
+I agree.
 
+> Either way, it would be nice to get an io_uring test in here that
+> actually spawns kthreads:
+> 
+> 	tools/testing/selftests/mm/protection_keys.c
+
+It would be good to update Documentation/core-api/protection-keys.rst
+as well, since the example with read() raises more questions than it
+answers!
+
+Kevin, Joey -- I've got this series queued in arm64 as-is, so perhaps
+you could send some patches on top so we can iron this out in time for
+6.12? I'll also be at LPC next week if you're about.
+
+Cheers,
+
+Will
 
