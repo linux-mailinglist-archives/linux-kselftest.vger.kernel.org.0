@@ -1,51 +1,69 @@
-Return-Path: <linux-kselftest+bounces-17807-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17808-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70DE6976637
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 12:00:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DE9B9766B6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 12:32:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A2B551C22185
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 10:00:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D64B1F23204
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 10:32:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5228018BB9E;
-	Thu, 12 Sep 2024 10:00:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91F6019E999;
+	Thu, 12 Sep 2024 10:32:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="e2TRZQr/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C6D2629D;
-	Thu, 12 Sep 2024 10:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726135243; cv=none; b=tG+nWKSa22bDYs3cWZ7GgRYO7qy94pyp7ECsE2ciBBjythoOblRpb/6gMIvrsDgCik2DmUlxOfXgmwOpv4nuSU7zgK6OePafvkFsJ/heq0p4orpSvn3+gF/2NCz5dS6Gitnv8SxR5bGAbm4SuqdGyhqE2rwkGeZGu5iXp1yW1Gg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726135243; c=relaxed/simple;
-	bh=OBD+dXqvWPqGp3jSNKUGmkOTrW32RsVIk9iVAbGrjkY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FsRgawkr6GVD3wfYCeX34XwjZr+pssqgtj6rj0RI2GeGq43QCogkv0qml4/VZrxBoVHfRPRYLHrtN9t4PiLHS1JJcqnFpdW4J/F2TmhRlCstq0JXwROcWEoW2rMxSHZ97pXpSVxamKArtWMCIhQ2+nSR9YynThBw2DCs6cVaoEU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from ubt.. (unknown [210.73.53.31])
-	by APP-03 (Coremail) with SMTP id rQCowABXho61u+Jmfr4GAw--.13301S2;
-	Thu, 12 Sep 2024 18:00:22 +0800 (CST)
-From: Chunyan Zhang <zhangchunyan@iscas.ac.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB9B913CFA1;
+	Thu, 12 Sep 2024 10:32:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726137146; cv=pass; b=o4YNT3bFcCuRkaRXc9BLuMnAXvCXwBMurztWMx5QUbTchF1UQAQsLCeZxd5KoU/i9C5piF9iiwpbMx0mPxVO3qSpwz9+S33s4V16ufms3BLUCQAx4bdjZHeRaHW60KYS8UvHJzi9L8ZAIblEBGADvOBtFmTeUnE/14K2fFDN1TQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726137146; c=relaxed/simple;
+	bh=wrOvMTsKo89JuQDDhytUyy/Pidvq/U+YW5uDl12sLss=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=RCuQDoUUweHZn8U40CzOGBdNauRb4wBprbKktkcfrb6DN4UYdSbxjeX9EFzh2gt79l1OSFEp/4tcgdUp8I+hT4XScSiT8Bzg/VHBRgOErX3RHwjI4avfv/2MSIQ0Jo1et06xgLTZnP8BZ+NaC0z2Dpc6UzXugnEMvbjfooAoo2E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=e2TRZQr/; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1726137130; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=RlYm7u7SMBhk0LuIugtq4SXm4HYtJXpT8yia0yEFmQxY25tRaMjkzcKqUm30r3PF7RODsaPYJHN7zkDZBZ7O5BFJ5hblHpgygcJ8fWum7wDW58r7KuPPaZgSYwcNg6E3+r2EFB2zP8P1M/NZXUuZM+EhLWe9tdCvvu+K/zlGpf0=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1726137130; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=sX6XdYPdKt8M/QjL3pAJvuYwS/g9NNTL3XgnNJSx6Kg=; 
+	b=WAoWF42/TJkBpaFtD/hi24fuTN9JChZuUVSLi0Mces/C1Kd9matqhJgqI14ki7UA6kjDq73oMgYMjoJgRZrcipSeKYu0AxA7T6azlkYKr7M/uKujOSqypxxbaFUmecOjJOkjC9IytO22E5/X8Rcy6z5jg70cAPrlFpPyX+zcmYc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
+	dmarc=pass header.from=<usama.anjum@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1726137130;
+	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+	bh=sX6XdYPdKt8M/QjL3pAJvuYwS/g9NNTL3XgnNJSx6Kg=;
+	b=e2TRZQr/DcGBbq0jnbHVUpAfvS4OpabrehWmRqLZIoiyjMWiUDwONDvPj8lk8XqR
+	YlOMbaGTlngtFj8HDOS1GYawLSwvaJjLIQ0JzakweOIcbaeAcHcoKiUzrBGj6ErD28q
+	VQB9/bEE4FB8xM3Z1zPn9kufsXu6kZUcFot5IUxM=
+Received: by mx.zohomail.com with SMTPS id 1726137128941470.6763680002151;
+	Thu, 12 Sep 2024 03:32:08 -0700 (PDT)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Alexandre Ghiti <alex@ghiti.fr>
-Cc: linux-mm@kvack.org,
+	John Hubbard <jhubbard@nvidia.com>,
+	David Hildenbrand <david@redhat.com>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	kernel@collabora.com,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	Chunyan Zhang <zhang.lyra@gmail.com>
-Subject: [PATCH] selftest/mm: Do not use hint for riscv mmap
-Date: Thu, 12 Sep 2024 18:00:18 +0800
-Message-Id: <20240912100018.736447-1-zhangchunyan@iscas.ac.cn>
-X-Mailer: git-send-email 2.34.1
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] kselftests: mm: Fix wrong __NR_userfaultfd value
+Date: Thu, 12 Sep 2024 15:31:50 +0500
+Message-Id: <20240912103151.1520254-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,63 +71,33 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:rQCowABXho61u+Jmfr4GAw--.13301S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7Cr1DCry3XFWkZF1xAFWDArb_yoW8Jw47pr
-	97Gwn0kF1FqFnrJa1UXr17urWvkF1vqay0yr1Uu34S9r15Xr97uws7C3y7tFsxKFWrXrs3
-	A3W0vw13uF4UX3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUvlb7Iv0xC_Cr1lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
-	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
-	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xII
-	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
-	8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
-	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVW8JVWxJw
-	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkI
-	wI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr
-	0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
-	17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
-	C0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
-	6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvj
-	DU0xZFpf9x07j5Z2-UUUUU=
-X-CM-SenderInfo: x2kd0wxfkx051dq6x2xfdvhtffof0/1tbiBwsSB2bif7X3hgAAsm
+X-ZohoMailClient: External
 
-When the virtual address range selftest is run on RISC-V platforms,
-it is observed that using the hint address when calling mmap cannot
-get the address in the range of that validate_addr() checks, also
-that will cause '/proc/self/maps' have gaps larger than MAP_CHUNK_SIZE.
+The value of __NR_userfaultfd was changed to 282 when
+asm-generic/unistd.h was included. It makes the test to fail every time
+as the correct number of this syscall on x86_64 is 323. Fix the header
+to asm/unistd.h.
 
-Signed-off-by: Chunyan Zhang <zhangchunyan@iscas.ac.cn>
+Fixes: a5c6bc590094 ("selftests/mm: remove local __NR_* definitions")
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/mm/virtual_address_range.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+ tools/testing/selftests/mm/pagemap_ioctl.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/mm/virtual_address_range.c b/tools/testing/selftests/mm/virtual_address_range.c
-index 4e4c1e311247..25f3eb304999 100644
---- a/tools/testing/selftests/mm/virtual_address_range.c
-+++ b/tools/testing/selftests/mm/virtual_address_range.c
-@@ -64,6 +64,14 @@
- #define NR_CHUNKS_HIGH  NR_CHUNKS_384TB
- #endif
- 
-+#if defined(__riscv) && (__riscv_xlen == 64)
-+static char *hind_addr(void)
-+{
-+	return NULL;
-+}
-+
-+static void validate_addr(char *ptr, int high_addr) { }
-+#else
- static char *hind_addr(void)
- {
- 	int bits = HIGH_ADDR_SHIFT + rand() % (63 - HIGH_ADDR_SHIFT);
-@@ -81,6 +89,7 @@ static void validate_addr(char *ptr, int high_addr)
- 	if (addr > HIGH_ADDR_MARK)
- 		ksft_exit_fail_msg("Bad address %lx\n", addr);
- }
-+#endif
- 
- static int validate_lower_address_hint(void)
- {
+diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
+index fc90af2a97b80..bcc73b4e805c6 100644
+--- a/tools/testing/selftests/mm/pagemap_ioctl.c
++++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+@@ -15,7 +15,7 @@
+ #include <sys/ioctl.h>
+ #include <sys/stat.h>
+ #include <math.h>
+-#include <asm-generic/unistd.h>
++#include <asm/unistd.h>
+ #include <pthread.h>
+ #include <sys/resource.h>
+ #include <assert.h>
 -- 
-2.34.1
+2.39.2
 
 
