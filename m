@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-17775-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17776-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C00BF975E34
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88E19975E33
 	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 02:53:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2E452B21A6F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 00:53:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEEBD1C218CF
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 00:53:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B4AF288BD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C687A2A1D3;
 	Thu, 12 Sep 2024 00:53:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cKtPR/Ou"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HGTACdOn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83BA1AACA;
-	Thu, 12 Sep 2024 00:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82CA21D6AA;
+	Thu, 12 Sep 2024 00:53:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726102407; cv=none; b=ki46IKGtTP6XI0RUmtq0u5S89/K0HoPFQtL83Xr4xFaHxXWPe/bWc5G+rl04hO/mwT4+OLP8mKCjDAzR7I41IAmtfY0sNj2Va+J3fgi1o64HNSuR2/MDU/P0cMg6x6h2jCkLG9hbIMZ3UO87v3YO/4ZE0YBz8NAcRkAH5B2qsTU=
+	t=1726102407; cv=none; b=cn47ipz0RJJIOgEda48LtZGw1JxiApYk7I61hiH3LpzNVcDZdS43iqaO7gdT17We1j018PF4Cl5nz5XoX5RLA6ztYRx4OvAdBZcS5i+FLr7wBItY20Hxz9+p2zGn6o9Rq1TJeuNLz/T+s2ERgntzooOYba/n2x4BiNk3vxjbG3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1726102407; c=relaxed/simple;
-	bh=ooHki0IUKKvHEaRT1TIAKAYpg28fyT1CIPvlaBkLEVY=;
+	bh=34z2oY1F5kmcVI47ji1cJmQ7WM2rDfCLbYj1QLpBdFo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KbwgEkkjVo36VR4YT/J+WxF0tAzhV5ur7/85CYbjwBMCqJK2gnpygzHLy9RImfdpqD3d/9FftWGBtRDV59j6lhUahT+4Yg6VgGbdJsXVToiQ7cleYNh/iYKjkvVW9KknaKxYCuECmhX9PNjRI1JyXQiU7aDoOBDu/pDsQWaizv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cKtPR/Ou; arc=none smtp.client-ip=209.85.219.52
+	 MIME-Version; b=YC91LmfLttN7uwuRRRBo37k7NBV5oyO1X+MakRRIYgqCHKY7sI+Gd2mmJC+G2KdMx/w8QLmplI5KkcRfakd5b+Vsa+O/EoWlXgBtrFXtWUjjhp3Mt28DknUM99lNUntBX+913ohQqnQ1/NhdBjeZror1awOW4PlL/d4GcS2GLOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HGTACdOn; arc=none smtp.client-ip=209.85.219.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6c352bcb569so2167746d6.0;
-        Wed, 11 Sep 2024 17:53:24 -0700 (PDT)
+Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6c524b4a3aeso3137216d6.3;
+        Wed, 11 Sep 2024 17:53:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20230601; t=1726102404; x=1726707204; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4XLf5VnFEIa1b0e9lTeEgOR/HvKl48cnek9xVf5UAMo=;
-        b=cKtPR/OuvUVNkjth7Eb/GRa2bNObFTQhV9FRd1Mi9NDN2g5oErnORYUQHB7faCpFXL
-         hCQ/77mglMXxhXYTTU7MldLnIlIHfikRwG0YqtCRybYnQcr5VovK65yjnlORqVfpiW9R
-         G0aSt2IQjcd/FqprT/gn4k/7u/mkP1LkiqcISCbsgLV2+ckLm1Z8+m7Y5qV7UigLI5e7
-         XbMtvERukGsTFbUfZnzIJU+G0c1yBOdvPDmSHWAZrs/gouUHjqcVaQyu98MUbu4qUo5y
-         fdBavPE2GuWZPdGIGhyKHonPQzB4Iu9aAMnFjR3X1qTNFBctrLtsYHZb6ImrW2WHAHRU
-         n8YA==
+        bh=SzpKA1PBiXbAbhZXcTqtrI+nSOEZ60qWH4YBFezmWf8=;
+        b=HGTACdOnZfpsi2QQ+GWp6OxyFY4kACbzWWmSvWm55PX7x6mrBdBp1FKUZ6ockD4Q5B
+         JaeawL6WGlLAxqUwI0H/Jl2gPKfcTsQ8sr3zlOUyet0uE9nGictw1plcY9Ak+rQAwwol
+         wLe+X5q+JVuXlZYoyaRfdDxeA3krRYrCmXMLOl6zNcOs+/jlz+1lHaLN+g9s5gvLlP8/
+         bJc/abgdrgVQ/oxhnPRr376hXUrjQLfEvW7/sHqCu1T5gchkJnFgPwNgCjcCJSPZvD1g
+         gYM/Bhyh6OHkfg11SG7eym8PizgieB/DTR/Njr8fzzptU0mFVK1n0Vg30ujLiwE1f3na
+         j5OA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1726102404; x=1726707204;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4XLf5VnFEIa1b0e9lTeEgOR/HvKl48cnek9xVf5UAMo=;
-        b=OFwbWz/+PU9PHsiO8xUdxHrt5EY4iBdr2NBIYhJTevbhk2g+tLCB1KY/azFPhXkSXy
-         z+xCNsvRvc5tcHvOA3Zd0L6gVVQKJCFY5Oxvi4jP0Fa5kRlqe0d9bvKR7kIkYAQxhvKg
-         2p8JEVDpQeycPuUUCKuodunc0w6P5PoSL8p0OS0EI2j3nVJ5mH/OdMpYyiWIL6dC5Zwi
-         o7qdM4L2JZbZhdBxYg3GFxfTZCdBBkJF1phm9zLVWB66PBXsAcJRiFX6KY54GrQF03P5
-         3W+lKCrbeRzJ0/wKNDP5WtYrPKXCKtKhKPSzTepU8YoSzwgjA6vY7HHBjEEQUX6q+SfC
-         nBMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVCqPr38Humq8yL4UIbgT3TvJXmxsEqccoALdFUJL3ZvkqWvl3vw99v0xsy1JoP+qJT8M2na510TbzzqOqc7w4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhDqonQkK8ZJIedaMLli1Hsb1jtls4AIt3GF7kYY8anV94mJY/
-	IeUKFcteYAScHqPdPaDWvAZw369WXjI1HLk97kwcGorbf3dUiNqyycBZLA==
-X-Google-Smtp-Source: AGHT+IHkB/rYTz7LqednuaNgUsokaUEAhzWPWYmtj/gVk43Al2TEfHuaukmotxQzejklLS363jjItg==
-X-Received: by 2002:a05:6214:4186:b0:6c5:71cc:1a2e with SMTP id 6a1803df08f44-6c573583d2fmr19609216d6.28.1726102403451;
-        Wed, 11 Sep 2024 17:53:23 -0700 (PDT)
+        bh=SzpKA1PBiXbAbhZXcTqtrI+nSOEZ60qWH4YBFezmWf8=;
+        b=mAZtjCdoB3UJt1bu5xz3vIEvYcvs/6nO8ZzLWi0+iQo2xVxw4fjhmVD2QfIfss9+ta
+         EbRMlG5ClKo1Px8bQ/bkR/M5blQdCiFdhvLsCrCPx3EFYWPwKm2lzkI01nZOUYW3SPKc
+         8W1QUFcROabbkp84zyRflijbie/JsLHpJdiBKpHIKQbxAROgOMF4siJIXvWZI0lZPkAw
+         vRhKcVkzyeoC0c9s7Kauli5G5nnQUlbHPy4+mieazuv5RMW4WkuTjDunDM7lDBi3c9dR
+         Xh2ewR1IArTNSkCullbsiCTLvYLeiMXggOK88v0Cki3eIkZD4qmQr8osyjLFOu1bhw+Q
+         NRxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXne5Rd+d9idJqqNXeO/G59rn32F2rSXq4/QABfdNnYiWmXv8PHm4aRIukWU5RqbhJTc3Ue0sSPgAP/4DGfDsM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxl9Qjr5ToIkPaYJ2MQ8u8XVPMvEAxy3K9UNVlnKNK/Uaki+497
+	bkysxKOUkorz/74xL3224sw4oD8JgvAtWGgSeHbFJZxNF9PubUBLGBwhVA==
+X-Google-Smtp-Source: AGHT+IFYJ+tgceX/pTaApUkyoddgKa0EdZ4E+46dHN+WpnixODr78tcgOdo7z2O2dK+0e6GLnUJ8QQ==
+X-Received: by 2002:a05:6214:5541:b0:6c5:20c2:f35a with SMTP id 6a1803df08f44-6c573584190mr22231476d6.48.1726102404267;
+        Wed, 11 Sep 2024 17:53:24 -0700 (PDT)
 Received: from willemb.c.googlers.com.com (23.67.48.34.bc.googleusercontent.com. [34.48.67.23])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c53433b69dsm47947656d6.53.2024.09.11.17.53.22
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c53433b69dsm47947656d6.53.2024.09.11.17.53.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Sep 2024 17:53:22 -0700 (PDT)
+        Wed, 11 Sep 2024 17:53:23 -0700 (PDT)
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -78,9 +78,9 @@ Cc: davem@davemloft.net,
 	linux-kselftest@vger.kernel.org,
 	matttbe@kernel.org,
 	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH net-next v2 2/3] selftests/net: packetdrill: import tcp/zerocopy
-Date: Wed, 11 Sep 2024 20:52:41 -0400
-Message-ID: <20240912005317.1253001-3-willemdebruijn.kernel@gmail.com>
+Subject: [PATCH net-next v2 3/3] selftests/net: packetdrill: import tcp/slow_start
+Date: Wed, 11 Sep 2024 20:52:42 -0400
+Message-ID: <20240912005317.1253001-4-willemdebruijn.kernel@gmail.com>
 X-Mailer: git-send-email 2.46.0.598.g6f2099f65c-goog
 In-Reply-To: <20240912005317.1253001-1-willemdebruijn.kernel@gmail.com>
 References: <20240912005317.1253001-1-willemdebruijn.kernel@gmail.com>
@@ -94,811 +94,544 @@ Content-Transfer-Encoding: 8bit
 
 From: Willem de Bruijn <willemb@google.com>
 
-Same as initial tests, import verbatim from
-github.com/google/packetdrill, aside from:
+Same import process as previous tests.
 
-- update `source ./defaults.sh` path to adjust for flat dir
-- add SPDX headers
-- remove author statements if any
-- drop blank lines at EOF (new)
+Also add CONFIG_NET_SCH_FQ to config, as one test uses that.
 
-Also import set_sysctls.py, which many scripts depend on to set
-sysctls and then restore them later. This is no longer strictly needed
-for namespacified sysctl. But not all sysctls are namespacified, and
-doesn't hurt if they are.
+Same test process as previous tests. Both with and without debug mode.
+Recording the steps once:
 
+make mrproper
+vng --build \
+        --config tools/testing/selftests/net/packetdrill/config \
+        --config kernel/configs/debug.config
+vng -v --run . --user root --cpus 4 -- \
+	make -C tools/testing/selftests TARGETS=net/packetdrill run_tests
+
+Link: https://github.com/linux-netdev/nipa/wiki/How-to-run-netdev-selftests-CI-style#how-to-build
 Signed-off-by: Willem de Bruijn <willemb@google.com>
-
 ---
+ .../testing/selftests/net/packetdrill/config  |  1 +
+ ...tcp_slow_start_slow-start-ack-per-1pkt.pkt | 56 +++++++++++++++++
+ ...tart_slow-start-ack-per-2pkt-send-5pkt.pkt | 33 ++++++++++
+ ...tart_slow-start-ack-per-2pkt-send-6pkt.pkt | 34 ++++++++++
+ ...tcp_slow_start_slow-start-ack-per-2pkt.pkt | 42 +++++++++++++
+ ...tcp_slow_start_slow-start-ack-per-4pkt.pkt | 35 +++++++++++
+ .../tcp_slow_start_slow-start-after-idle.pkt  | 39 ++++++++++++
+ ...slow_start_slow-start-after-win-update.pkt | 50 +++++++++++++++
+ ...t_slow-start-app-limited-9-packets-out.pkt | 38 +++++++++++
+ .../tcp_slow_start_slow-start-app-limited.pkt | 36 +++++++++++
+ ..._slow_start_slow-start-fq-ack-per-2pkt.pkt | 63 +++++++++++++++++++
+ 11 files changed, 427 insertions(+)
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-1pkt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-5pkt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-6pkt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-4pkt.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-idle.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-win-update.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited-9-packets-out.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited.pkt
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-fq-ack-per-2pkt.pkt
 
-changes v1->v2:
-  - add set_sysctls.py to TEST_INCLUDES
-  - drop blank lines at EOF
----
- .../selftests/net/packetdrill/Makefile        |   1 +
- .../selftests/net/packetdrill/set_sysctls.py  |  38 ++++++
- .../net/packetdrill/tcp_zerocopy_basic.pkt    |  55 ++++++++
- .../net/packetdrill/tcp_zerocopy_batch.pkt    |  41 ++++++
- .../net/packetdrill/tcp_zerocopy_client.pkt   |  30 +++++
- .../net/packetdrill/tcp_zerocopy_closed.pkt   |  44 +++++++
- .../packetdrill/tcp_zerocopy_epoll_edge.pkt   |  61 +++++++++
- .../tcp_zerocopy_epoll_exclusive.pkt          |  63 ++++++++++
- .../tcp_zerocopy_epoll_oneshot.pkt            |  66 ++++++++++
- .../tcp_zerocopy_fastopen-client.pkt          |  56 +++++++++
- .../tcp_zerocopy_fastopen-server.pkt          |  44 +++++++
- .../net/packetdrill/tcp_zerocopy_maxfrags.pkt | 118 ++++++++++++++++++
- .../net/packetdrill/tcp_zerocopy_small.pkt    |  57 +++++++++
- 13 files changed, 674 insertions(+)
- create mode 100755 tools/testing/selftests/net/packetdrill/set_sysctls.py
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_zerocopy_basic.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_zerocopy_batch.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_zerocopy_client.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_zerocopy_closed.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_zerocopy_epoll_edge.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_zerocopy_epoll_exclusive.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_zerocopy_epoll_oneshot.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_zerocopy_fastopen-client.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_zerocopy_fastopen-server.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_zerocopy_maxfrags.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_zerocopy_small.pkt
-
-diff --git a/tools/testing/selftests/net/packetdrill/Makefile b/tools/testing/selftests/net/packetdrill/Makefile
-index 870f7258dc8d7..31cfb666ba8b3 100644
---- a/tools/testing/selftests/net/packetdrill/Makefile
-+++ b/tools/testing/selftests/net/packetdrill/Makefile
-@@ -2,6 +2,7 @@
- 
- TEST_INCLUDES := ksft_runner.sh \
- 		 defaults.sh \
-+		 set_sysctls.py \
- 		 ../../kselftest/ktap_helpers.sh
- 
- TEST_PROGS := $(wildcard *.pkt)
-diff --git a/tools/testing/selftests/net/packetdrill/set_sysctls.py b/tools/testing/selftests/net/packetdrill/set_sysctls.py
-new file mode 100755
-index 0000000000000..5ddf456ae973a
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/set_sysctls.py
-@@ -0,0 +1,38 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
-+
-+"""Sets sysctl values and writes a file that restores them.
-+
-+The arguments are of the form "<proc-file>=<val>" separated by spaces.
-+The program first reads the current value of the proc-file and creates
-+a shell script named "/tmp/sysctl_restore_${PACKETDRILL_PID}.sh" which
-+restores the values when executed. It then sets the new values.
-+
-+PACKETDRILL_PID is set by packetdrill to the pid of itself, so a .pkt
-+file could restore sysctls by running `/tmp/sysctl_restore_${PPID}.sh`
-+at the end.
-+"""
-+
-+import os
-+import subprocess
-+import sys
-+
-+filename = '/tmp/sysctl_restore_%s.sh' % os.environ['PACKETDRILL_PID']
-+
-+# Open file for restoring sysctl values
-+restore_file = open(filename, 'w')
-+print('#!/bin/bash', file=restore_file)
-+
-+for a in sys.argv[1:]:
-+  sysctl = a.split('=')
-+  # sysctl[0] contains the proc-file name, sysctl[1] the new value
-+
-+  # read current value and add restore command to file
-+  cur_val = subprocess.check_output(['cat', sysctl[0]], universal_newlines=True)
-+  print('echo "%s" > %s' % (cur_val.strip(), sysctl[0]), file=restore_file)
-+
-+  # set new value
-+  cmd = 'echo "%s" > %s' % (sysctl[1], sysctl[0])
-+  os.system(cmd)
-+
-+os.system('chmod u+x %s' % filename)
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_zerocopy_basic.pkt b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_basic.pkt
+diff --git a/tools/testing/selftests/net/packetdrill/config b/tools/testing/selftests/net/packetdrill/config
+index a7877819081f5..0237ed98f3c0d 100644
+--- a/tools/testing/selftests/net/packetdrill/config
++++ b/tools/testing/selftests/net/packetdrill/config
+@@ -3,6 +3,7 @@ CONFIG_HZ_1000=y
+ CONFIG_HZ=1000
+ CONFIG_NET_NS=y
+ CONFIG_NET_SCH_FIFO=y
++CONFIG_NET_SCH_FQ=y
+ CONFIG_PROC_SYSCTL=y
+ CONFIG_SYN_COOKIES=y
+ CONFIG_TCP_CONG_CUBIC=y
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-1pkt.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-1pkt.pkt
 new file mode 100644
-index 0000000000000..a82c8899d36bf
+index 0000000000000..795c476d222d9
 --- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_basic.pkt
-@@ -0,0 +1,55 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// basic zerocopy test:
-+//
-+// send a packet with MSG_ZEROCOPY and receive the notification ID
-+// repeat and verify IDs are consecutive
-+
-+`./defaults.sh`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 setsockopt(3, SOL_SOCKET, SO_ZEROCOPY, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+   +0 < . 1:1(0) ack 1 win 257
-+
-+   +0 accept(3, ..., ...) = 4
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = 4000
-+   +0 > P. 1:4001(4000) ack 1
-+   +0 < . 1:1(0) ack 4001 win 257
-+
-+   +0 recvmsg(4, {msg_name(...)=...,
-+                  msg_iov(1)=[{...,0}],
-+                  msg_flags=MSG_ERRQUEUE,
-+                  msg_control=[
-+                        {cmsg_level=CMSG_LEVEL_IP,
-+                         cmsg_type=CMSG_TYPE_RECVERR,
-+                         cmsg_data={ee_errno=0,
-+                                    ee_origin=SO_EE_ORIGIN_ZEROCOPY,
-+                                    ee_type=0,
-+                                    ee_code=SO_EE_CODE_ZEROCOPY_COPIED,
-+                                    ee_info=0,
-+                                    ee_data=0}}
-+                   ]}, MSG_ERRQUEUE) = 0
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = 4000
-+   +0 > P. 4001:8001(4000) ack 1
-+   +0 < . 1:1(0) ack 8001 win 257
-+
-+   +0 recvmsg(4, {msg_name(...)=...,
-+                  msg_iov(1)=[{...,0}],
-+                  msg_flags=MSG_ERRQUEUE,
-+                  msg_control=[
-+                        {cmsg_level=CMSG_LEVEL_IP,
-+                         cmsg_type=CMSG_TYPE_RECVERR,
-+                         cmsg_data={ee_errno=0,
-+                                    ee_origin=SO_EE_ORIGIN_ZEROCOPY,
-+                                    ee_type=0,
-+                                    ee_code=SO_EE_CODE_ZEROCOPY_COPIED,
-+                                    ee_info=1,
-+                                    ee_data=1}}
-+                   ]}, MSG_ERRQUEUE) = 0
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_zerocopy_batch.pkt b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_batch.pkt
-new file mode 100644
-index 0000000000000..c01915e7f4a15
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_batch.pkt
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// batch zerocopy test:
-+//
-+// send multiple packets, then read one range of all notifications.
-+
-+`./defaults.sh`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 setsockopt(3, SOL_SOCKET, SO_ZEROCOPY, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+   +0 < . 1:1(0) ack 1 win 257
-+
-+   +0 accept(3, ..., ...) = 4
-+   +0 setsockopt(4, SOL_SOCKET, SO_MARK, [666], 4) = 0
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = 4000
-+   +0 > P. 1:4001(4000) ack 1
-+   +0 < . 1:1(0) ack 4001 win 257
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = 4000
-+   +0 > P. 4001:8001(4000) ack 1
-+   +0 < . 1:1(0) ack 8001 win 257
-+
-+   +0 recvmsg(4, {msg_name(...)=...,
-+                  msg_iov(1)=[{...,0}],
-+                  msg_flags=MSG_ERRQUEUE,
-+                  msg_control=[
-+                        {cmsg_level=CMSG_LEVEL_IP,
-+                         cmsg_type=CMSG_TYPE_RECVERR,
-+                         cmsg_data={ee_errno=0,
-+                                    ee_origin=SO_EE_ORIGIN_ZEROCOPY,
-+                                    ee_type=0,
-+                                    ee_code=SO_EE_CODE_ZEROCOPY_COPIED,
-+                                    ee_info=0,
-+                                    ee_data=1}}
-+                  ]}, MSG_ERRQUEUE) = 0
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_zerocopy_client.pkt b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_client.pkt
-new file mode 100644
-index 0000000000000..6509882932e91
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_client.pkt
-@@ -0,0 +1,30 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Minimal client-side zerocopy test
-+
-+`./defaults.sh`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 4
-+   +0 setsockopt(4, SOL_SOCKET, SO_ZEROCOPY, [1], 4) = 0
-+   +0...0 connect(4, ..., ...) = 0
-+
-+   +0 > S 0:0(0) <mss 1460,sackOK,TS val 0 ecr 0,nop,wscale 8>
-+   +0 < S. 0:0(0) ack 1 win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > . 1:1(0) ack 1
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = 4000
-+   +0 > P. 1:4001(4000) ack 1
-+   +0 < . 1:1(0) ack 4001 win 257
-+
-+   +0 recvmsg(4, {msg_name(...)=...,
-+                  msg_iov(1)=[{...,0}],
-+                  msg_flags=MSG_ERRQUEUE,
-+                  msg_control=[
-+                        {cmsg_level=CMSG_LEVEL_IP,
-+                         cmsg_type=CMSG_TYPE_RECVERR,
-+                         cmsg_data={ee_errno=0,
-+                                    ee_origin=SO_EE_ORIGIN_ZEROCOPY,
-+                                    ee_type=0,
-+                                    ee_code=SO_EE_CODE_ZEROCOPY_COPIED,
-+                                    ee_info=0,
-+                                    ee_data=0}}
-+                   ]}, MSG_ERRQUEUE) = 0
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_zerocopy_closed.pkt b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_closed.pkt
-new file mode 100644
-index 0000000000000..2cd78755cb2ac
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_closed.pkt
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// send with MSG_ZEROCOPY on a non-established socket
-+//
-+// verify that a send in state TCP_CLOSE correctly aborts the zerocopy
-+// operation, specifically it does not increment the zerocopy counter.
-+//
-+// First send on a closed socket and wait for (absent) notification.
-+// Then connect and send and verify that notification nr. is zero.
-+
-+`./defaults.sh`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 4
-+   +0 setsockopt(4, SOL_SOCKET, SO_ZEROCOPY, [1], 4) = 0
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = -1 EPIPE (Broken pipe)
-+
-+   +0.1 recvmsg(4, {msg_name(...)=...,
-+                    msg_iov(1)=[{...,0}],
-+                    msg_flags=MSG_ERRQUEUE,
-+                    msg_control=[]}, MSG_ERRQUEUE) = -1 EAGAIN (Resource temporarily unavailable)
-+
-+   +0...0 connect(4, ..., ...) = 0
-+
-+   +0 > S 0:0(0) <mss 1460,sackOK,TS val 0 ecr 0,nop,wscale 8>
-+   +0 < S. 0:0(0) ack 1 win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > . 1:1(0) ack 1
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = 4000
-+   +0 > P. 1:4001(4000) ack 1
-+   +0 < . 1:1(0) ack 4001 win 257
-+
-+   +0 recvmsg(4, {msg_name(...)=...,
-+                  msg_iov(1)=[{...,0}],
-+                  msg_flags=MSG_ERRQUEUE,
-+                  msg_control=[
-+                        {cmsg_level=CMSG_LEVEL_IP,
-+                         cmsg_type=CMSG_TYPE_RECVERR,
-+                         cmsg_data={ee_errno=0,
-+                                    ee_origin=SO_EE_ORIGIN_ZEROCOPY,
-+                                    ee_type=0,
-+                                    ee_code=SO_EE_CODE_ZEROCOPY_COPIED,
-+                                    ee_info=0,
-+                                    ee_data=0}}
-+                   ]}, MSG_ERRQUEUE) = 0
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_zerocopy_epoll_edge.pkt b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_epoll_edge.pkt
-new file mode 100644
-index 0000000000000..7671c20e01cf6
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_epoll_edge.pkt
-@@ -0,0 +1,61 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// epoll zerocopy test:
-+//
-+// EPOLLERR is known to be not edge-triggered unlike EPOLLIN and EPOLLOUT but
-+// it is not level-triggered either.
-+//
-+// fire two sends with MSG_ZEROCOPY and receive the acks. confirm that EPOLLERR
-+// is correctly fired only once, when EPOLLET is set. send another packet with
-+// MSG_ZEROCOPY. confirm that EPOLLERR is correctly fired again only once.
-+`./defaults.sh`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 setsockopt(3, SOL_SOCKET, SO_ZEROCOPY, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+   +0 < . 1:1(0) ack 1 win 257
-+
-+   +0 accept(3, ..., ...) = 4
-+
-+   +0 fcntl(4, F_SETFL, O_RDWR|O_NONBLOCK) = 0
-+   +0 epoll_create(1) = 5
-+   +0 epoll_ctl(5, EPOLL_CTL_ADD, 4, {events=EPOLLOUT|EPOLLET, fd=4}) = 0
-+   +0 epoll_wait(5, {events=EPOLLOUT, fd=4}, 1, 0) = 1
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = 4000
-+   +0 > P. 1:4001(4000) ack 1
-+   +0 < . 1:1(0) ack 4001 win 257
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = 4000
-+   +0 > P. 4001:8001(4000) ack 1
-+   +0 < . 1:1(0) ack 8001 win 257
-+
-+// receive only one EPOLLERR for the two sends above.
-+   +0 epoll_wait(5, {events=EPOLLERR|EPOLLOUT, fd=4}, 1, 0) = 1
-+   +0 epoll_wait(5, {events=0, ptr=0}, 1, 0) = 0
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = 4000
-+   +0 > P. 8001:12001(4000) ack 1
-+   +0 < . 1:1(0) ack 12001 win 257
-+
-+// receive only one EPOLLERR for the third send above.
-+   +0 epoll_wait(5, {events=EPOLLERR|EPOLLOUT, fd=4}, 1, 0) = 1
-+   +0 epoll_wait(5, {events=0, ptr=0}, 1, 0) = 0
-+
-+   +0 recvmsg(4, {msg_name(...)=...,
-+                  msg_iov(1)=[{...,0}],
-+                  msg_flags=MSG_ERRQUEUE,
-+                  msg_control=[
-+                        {cmsg_level=CMSG_LEVEL_IP,
-+                         cmsg_type=CMSG_TYPE_RECVERR,
-+                         cmsg_data={ee_errno=0,
-+                                    ee_origin=SO_EE_ORIGIN_ZEROCOPY,
-+                                    ee_type=0,
-+                                    ee_code=SO_EE_CODE_ZEROCOPY_COPIED,
-+                                    ee_info=0,
-+                                    ee_data=2}}
-+                   ]}, MSG_ERRQUEUE) = 0
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_zerocopy_epoll_exclusive.pkt b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_epoll_exclusive.pkt
-new file mode 100644
-index 0000000000000..fadc480fdb7fe
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_epoll_exclusive.pkt
-@@ -0,0 +1,63 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// epoll zerocopy test:
-+//
-+// EPOLLERR is known to be not edge-triggered unlike EPOLLIN and EPOLLOUT but
-+// it is not level-triggered either. this tests verify that the same behavior is
-+// maintained when we have EPOLLEXCLUSIVE.
-+//
-+// fire two sends with MSG_ZEROCOPY and receive the acks. confirm that EPOLLERR
-+// is correctly fired only once, when EPOLLET is set. send another packet with
-+// MSG_ZEROCOPY. confirm that EPOLLERR is correctly fired again only once.
-+`./defaults.sh`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 setsockopt(3, SOL_SOCKET, SO_ZEROCOPY, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+   +0 < . 1:1(0) ack 1 win 257
-+
-+   +0 accept(3, ..., ...) = 4
-+
-+   +0 fcntl(4, F_SETFL, O_RDWR|O_NONBLOCK) = 0
-+   +0 epoll_create(1) = 5
-+   +0 epoll_ctl(5, EPOLL_CTL_ADD, 4,
-+		{events=EPOLLOUT|EPOLLET|EPOLLEXCLUSIVE, fd=4}) = 0
-+   +0 epoll_wait(5, {events=EPOLLOUT, fd=4}, 1, 0) = 1
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = 4000
-+   +0 > P. 1:4001(4000) ack 1
-+   +0 < . 1:1(0) ack 4001 win 257
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = 4000
-+   +0 > P. 4001:8001(4000) ack 1
-+   +0 < . 1:1(0) ack 8001 win 257
-+
-+// receive only one EPOLLERR for the two sends above.
-+   +0 epoll_wait(5, {events=EPOLLERR|EPOLLOUT, fd=4}, 1, 0) = 1
-+   +0 epoll_wait(5, {events=0, ptr=0}, 1, 0) = 0
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = 4000
-+   +0 > P. 8001:12001(4000) ack 1
-+   +0 < . 1:1(0) ack 12001 win 257
-+
-+// receive only one EPOLLERR for the third send above.
-+   +0 epoll_wait(5, {events=EPOLLERR|EPOLLOUT, fd=4}, 1, 0) = 1
-+   +0 epoll_wait(5, {events=0, ptr=0}, 1, 0) = 0
-+
-+   +0 recvmsg(4, {msg_name(...)=...,
-+                  msg_iov(1)=[{...,0}],
-+                  msg_flags=MSG_ERRQUEUE,
-+                  msg_control=[
-+                        {cmsg_level=CMSG_LEVEL_IP,
-+                         cmsg_type=CMSG_TYPE_RECVERR,
-+                         cmsg_data={ee_errno=0,
-+                                    ee_origin=SO_EE_ORIGIN_ZEROCOPY,
-+                                    ee_type=0,
-+                                    ee_code=SO_EE_CODE_ZEROCOPY_COPIED,
-+                                    ee_info=0,
-+                                    ee_data=2}}
-+                   ]}, MSG_ERRQUEUE) = 0
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_zerocopy_epoll_oneshot.pkt b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_epoll_oneshot.pkt
-new file mode 100644
-index 0000000000000..5bfa0d1d2f4a3
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_epoll_oneshot.pkt
-@@ -0,0 +1,66 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// epoll zerocopy test:
-+//
-+// This is a test to confirm that EPOLLERR is only fired once for an FD when
-+// EPOLLONESHOT is set.
-+//
-+// fire two sends with MSG_ZEROCOPY and receive the acks. confirm that EPOLLERR
-+// is correctly fired only once, when EPOLLONESHOT is set. send another packet
-+// with MSG_ZEROCOPY. confirm that EPOLLERR is not fired. Rearm the FD and
-+// confirm that EPOLLERR is correctly set.
-+`./defaults.sh`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 setsockopt(3, SOL_SOCKET, SO_ZEROCOPY, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+   +0 < . 1:1(0) ack 1 win 257
-+
-+   +0 accept(3, ..., ...) = 4
-+
-+   +0 fcntl(4, F_SETFL, O_RDWR|O_NONBLOCK) = 0
-+   +0 epoll_create(1) = 5
-+   +0 epoll_ctl(5, EPOLL_CTL_ADD, 4,
-+		{events=EPOLLOUT|EPOLLET|EPOLLONESHOT, fd=4}) = 0
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = 4000
-+   +0 > P. 1:4001(4000) ack 1
-+   +0 < . 1:1(0) ack 4001 win 257
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = 4000
-+   +0 > P. 4001:8001(4000) ack 1
-+   +0 < . 1:1(0) ack 8001 win 257
-+
-+// receive only one EPOLLERR for the two sends above.
-+   +0 epoll_wait(5, {events=EPOLLERR|EPOLLOUT, fd=4}, 1, 0) = 1
-+   +0 epoll_wait(5, {events=0, ptr=0}, 1, 0) = 0
-+
-+   +0 send(4, ..., 4000, MSG_ZEROCOPY) = 4000
-+   +0 > P. 8001:12001(4000) ack 1
-+   +0 < . 1:1(0) ack 12001 win 257
-+
-+// receive no EPOLLERR for the third send above.
-+   +0 epoll_wait(5, {events=0, ptr=0}, 1, 0) = 0
-+
-+// rearm the FD and verify the EPOLLERR is fired again.
-+   +0 epoll_ctl(5, EPOLL_CTL_MOD, 4, {events=EPOLLOUT|EPOLLONESHOT, fd=4}) = 0
-+   +0 epoll_wait(5, {events=EPOLLERR|EPOLLOUT, fd=4}, 1, 0) = 1
-+   +0 epoll_wait(5, {events=0, ptr=0}, 1, 0) = 0
-+
-+   +0 recvmsg(4, {msg_name(...)=...,
-+                  msg_iov(1)=[{...,0}],
-+                  msg_flags=MSG_ERRQUEUE,
-+                  msg_control=[
-+                        {cmsg_level=CMSG_LEVEL_IP,
-+                         cmsg_type=CMSG_TYPE_RECVERR,
-+                         cmsg_data={ee_errno=0,
-+                                    ee_origin=SO_EE_ORIGIN_ZEROCOPY,
-+                                    ee_type=0,
-+                                    ee_code=SO_EE_CODE_ZEROCOPY_COPIED,
-+                                    ee_info=0,
-+                                    ee_data=2}}
-+                   ]}, MSG_ERRQUEUE) = 0
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_zerocopy_fastopen-client.pkt b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_fastopen-client.pkt
-new file mode 100644
-index 0000000000000..4a73bbf469610
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_fastopen-client.pkt
++++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-1pkt.pkt
 @@ -0,0 +1,56 @@
 +// SPDX-License-Identifier: GPL-2.0
-+// Fastopen client zerocopy test:
-+//
-+// send data with MSG_FASTOPEN | MSG_ZEROCOPY and verify that the
-+// kernel returns the notification ID.
-+//
-+// Fastopen requires a stored cookie. Create two sockets. The first
-+// one will have no data in the initial send. On return 0 the
-+// zerocopy notification counter is not incremented. Verify this too.
++// Test of slow start when not application-limited, so that
++// the cwnd continues to grow.
++// In this variant, the receiver ACKs every packet.
 +
++// Set up config. To keep things simple, disable the
++// mechanism that defers sending in order to send bigger TSO packets.
++`./defaults.sh
++sysctl -q net.ipv4.tcp_tso_win_divisor=100`
++
++    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
++
++  +.1 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
++   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
++  +.1 < . 1:1(0) ack 1 win 257
++   +0 accept(3, ..., ...) = 4
++   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
++
++   +0 write(4, ..., 30000) = 30000
++   +0 > P. 1:10001(10000) ack 1
++   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
++
+++.105 < . 1:1(0) ack 1001 win 257
++   +0 > P. 10001:12001(2000) ack 1
++
++   +0 < . 1:1(0) ack 2001 win 257
++   +0 > P. 12001:14001(2000) ack 1
++
+++.005 < . 1:1(0) ack 3001 win 257
++   +0 > P. 14001:16001(2000) ack 1
++
++   +0 < . 1:1(0) ack 4001 win 257
++   +0 > P. 16001:18001(2000) ack 1
++
+++.005 < . 1:1(0) ack 5001 win 257
++   +0 > P. 18001:20001(2000) ack 1
++
++   +0 < . 1:1(0) ack 6001 win 257
++   +0 > P. 20001:22001(2000) ack 1
++
+++.005 < . 1:1(0) ack 7001 win 257
++   +0 > P. 22001:24001(2000) ack 1
++
++   +0 < . 1:1(0) ack 8001 win 257
++   +0 > P. 24001:26001(2000) ack 1
++
+++.005 < . 1:1(0) ack 9001 win 257
++   +0 > P. 26001:28001(2000) ack 1
++
++   +0 < . 1:1(0) ack 10001 win 257
++   +0 > P. 28001:30001(2000) ack 1
++
++   +0 %{ assert tcpi_snd_cwnd == 20, tcpi_snd_cwnd }%
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-5pkt.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-5pkt.pkt
+new file mode 100644
+index 0000000000000..9212ae1fd0f2f
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-5pkt.pkt
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0
++// Test of slow start when an outstanding flight of packets is
++// less than the current cwnd, and not big enough to bump up cwnd.
++//
++// In this variant, the receiver ACKs every other packet,
++// approximating standard delayed ACKs.
++
++// Set up config.
 +`./defaults.sh`
 +
-+// Send a FastOpen request, no cookie yet so no data in SYN
 +    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 fcntl(3, F_SETFL, O_RDWR|O_NONBLOCK) = 0
-+   +0 setsockopt(3, SOL_SOCKET, SO_ZEROCOPY, [1], 4) = 0
-+   +0 sendto(3, ..., 500, MSG_FASTOPEN|MSG_ZEROCOPY, ..., ...) = -1 EINPROGRESS (Operation now in progress)
-+   +0 > S 0:0(0) <mss 1460,sackOK,TS val 1000 ecr 0,nop,wscale 8,FO,nop,nop>
-+ +.01 < S. 123:123(0) ack 1 win 14600 <mss 940,TS val 2000 ecr 1000,sackOK,nop,wscale 6, FO abcd1234,nop,nop>
-+   +0 > . 1:1(0) ack 1 <nop,nop,TS val 1001 ecr 2000>
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
 +
-+// Read from error queue: no zerocopy notification
-+   +1 recvmsg(3, {msg_name(...)=...,
-+                    msg_iov(1)=[{...,0}],
-+                    msg_flags=MSG_ERRQUEUE,
-+                    msg_control=[]}, MSG_ERRQUEUE) = -1 EAGAIN (Resource temporarily unavailable)
++   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
++   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
++   +0 < . 1:1(0) ack 1 win 257
++   +0 accept(3, ..., ...) = 4
 +
-+ +.01 close(3) = 0
-+   +0 > F. 1:1(0) ack 1 <nop,nop,TS val 1002 ecr 2000>
-+ +.01 < F. 1:1(0) ack 2 win 92 <nop,nop,TS val 2001 ecr 1002>
-+   +0 > .  2:2(0) ack 2 <nop,nop,TS val 1003 ecr 2001>
++// Only send 5 packets.
++   +0 write(4, ..., 5000) = 5000
++   +0 > P. 1:5001(5000) ack 1
++   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
 +
-+// Send another Fastopen request, now SYN will have data
-+ +.07 `sysctl -q net.ipv4.tcp_timestamps=0`
-+  +.1 socket(..., SOCK_STREAM, IPPROTO_TCP) = 5
-+   +0 fcntl(5, F_SETFL, O_RDWR|O_NONBLOCK) = 0
-+   +0 setsockopt(5, SOL_SOCKET, SO_ZEROCOPY, [1], 4) = 0
-+   +0 sendto(5, ..., 500, MSG_FASTOPEN|MSG_ZEROCOPY, ..., ...) = 500
-+   +0 > S 0:500(500) <mss 1460,nop,nop,sackOK,nop,wscale 8,FO abcd1234,nop,nop>
-+ +.05 < S. 5678:5678(0) ack 501 win 14600 <mss 1460,nop,nop,sackOK,nop,wscale 6>
-+   +0 > . 501:501(0) ack 1
++   +0 < . 1:1(0) ack 2001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 10, 'cwnd=%d' % tcpi_snd_cwnd }%
 +
-+// Read from error queue: now has first zerocopy notification
-+   +0.5 recvmsg(5, {msg_name(...)=...,
-+                    msg_iov(1)=[{...,0}],
-+                    msg_flags=MSG_ERRQUEUE,
-+                    msg_control=[
-+                        {cmsg_level=CMSG_LEVEL_IP,
-+                         cmsg_type=CMSG_TYPE_RECVERR,
-+                         cmsg_data={ee_errno=0,
-+                                    ee_origin=SO_EE_ORIGIN_ZEROCOPY,
-+                                    ee_type=0,
-+                                    ee_code=SO_EE_CODE_ZEROCOPY_COPIED,
-+                                    ee_info=0,
-+                                    ee_data=0}}
-+                   ]}, MSG_ERRQUEUE) = 0
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_zerocopy_fastopen-server.pkt b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_fastopen-server.pkt
++   +0 < . 1:1(0) ack 4001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 10, 'cwnd=%d' % tcpi_snd_cwnd }%
++
++   +0 < . 1:1(0) ack 5001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 10, 'cwnd=%d' % tcpi_snd_cwnd }%
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-6pkt.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-6pkt.pkt
 new file mode 100644
-index 0000000000000..36086c5877ce7
+index 0000000000000..416c901ddf518
 --- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_fastopen-server.pkt
-@@ -0,0 +1,44 @@
++++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-6pkt.pkt
+@@ -0,0 +1,34 @@
 +// SPDX-License-Identifier: GPL-2.0
-+// Fastopen server zerocopy test:
++// Test of slow start when an outstanding flight of packets is
++// less than the current cwnd, but still big enough that in slow
++// start we want to increase our cwnd a little.
 +//
-+// send data with MSG_FASTOPEN | MSG_ZEROCOPY and verify that the
-+// kernel returns the notification ID.
++// In this variant, the receiver ACKs every other packet,
++// approximating standard delayed ACKs.
++
++// Set up config.
++`./defaults.sh`
++
++    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
++
++   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
++   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
++   +0 < . 1:1(0) ack 1 win 257
++   +0 accept(3, ..., ...) = 4
++
++// Only send 6 packets.
++   +0 write(4, ..., 6000) = 6000
++   +0 > P. 1:6001(6000) ack 1
++   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
++
++   +0 < . 1:1(0) ack 2001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 12, 'cwnd=%d' % tcpi_snd_cwnd }%
++
++   +0 < . 1:1(0) ack 4001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 12, 'cwnd=%d' % tcpi_snd_cwnd }%
++
++   +0 < . 1:1(0) ack 6001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 12, 'cwnd=%d' % tcpi_snd_cwnd }%
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt.pkt
+new file mode 100644
+index 0000000000000..a894b7d4559c1
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt.pkt
+@@ -0,0 +1,42 @@
++// SPDX-License-Identifier: GPL-2.0
++// Test of slow start when not application-limited, so that
++// the cwnd continues to grow.
++// In this variant, the receiver ACKs every other packet,
++// approximating standard delayed ACKs.
++
++// Set up config. To keep things simple, disable the
++// mechanism that defers sending in order to send bigger TSO packets.
++`./defaults.sh
++sysctl -q net.ipv4.tcp_tso_win_divisor=100`
++
++    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
++
++  +.1 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
++   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
++  +.1 < . 1:1(0) ack 1 win 257
++   +0 accept(3, ..., ...) = 4
++   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
++
++   +0 write(4, ..., 30000) = 30000
++   +0 > P. 1:10001(10000) ack 1
++   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
++
+++.105 < . 1:1(0) ack 2001 win 257
++   +0 > P. 10001:14001(4000) ack 1
++
+++.005 < . 1:1(0) ack 4001 win 257
++   +0 > P. 14001:18001(4000) ack 1
++
+++.005 < . 1:1(0) ack 6001 win 257
++   +0 > P. 18001:22001(4000) ack 1
++
+++.005 < . 1:1(0) ack 8001 win 257
++   +0 > P. 22001:26001(4000) ack 1
++
+++.005 < . 1:1(0) ack 10001 win 257
++   +0 > P. 26001:30001(4000) ack 1
++
++   +0 %{ assert tcpi_snd_cwnd == 20, tcpi_snd_cwnd }%
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-4pkt.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-4pkt.pkt
+new file mode 100644
+index 0000000000000..065fae9e9abd7
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-4pkt.pkt
+@@ -0,0 +1,35 @@
++// SPDX-License-Identifier: GPL-2.0
++// Test of slow start when not application-limited, so that
++// the cwnd continues to grow.
++// In this variant, the receiver sends one ACK per 4 packets.
++
++// Set up config. To keep things simple, disable the
++// mechanism that defers sending in order to send bigger TSO packets.
++`./defaults.sh
++sysctl -q net.ipv4.tcp_tso_win_divisor=100`
++
++    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
++
++  +.1 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
++   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
++  +.1 < . 1:1(0) ack 1 win 257
++   +0 accept(3, ..., ...) = 4
++   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
++
++   +0 write(4, ..., 30000) = 30000
++   +0 > P. 1:10001(10000) ack 1
++   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
++
++ +.11 < . 1:1(0) ack 4001 win 257
++   +0 > P. 10001:18001(8000) ack 1
++
++ +.01 < . 1:1(0) ack 8001 win 257
++   +0 > P. 18001:26001(8000) ack 1
++
+++.005 < . 1:1(0) ack 10001 win 257
++   +0 > P. 26001:30001(4000) ack 1
++
++   +0 %{ assert tcpi_snd_cwnd == 20, tcpi_snd_cwnd }%
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-idle.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-idle.pkt
+new file mode 100644
+index 0000000000000..11b213be11384
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-idle.pkt
+@@ -0,0 +1,39 @@
++// SPDX-License-Identifier: GPL-2.0
++// Test of slow start after idle
++// This test expects tso size to be at least initial cwnd * mss
 +
 +`./defaults.sh
-+ ./set_sysctls.py /proc/sys/net/ipv4/tcp_fastopen=0x207`
++./set_sysctls.py /proc/sys/net/ipv4/tcp_slow_start_after_idle=1 \
++		 /proc/sys/net/ipv4/tcp_min_tso_segs=10`
 +
-+// Set up a TFO server listening socket.
 +    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+  +.1 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
 +   +0 bind(3, ..., ...) = 0
 +   +0 listen(3, 1) = 0
-+   +0 setsockopt(3, SOL_TCP, TCP_FASTOPEN, [2], 4) = 0
-+   +0 setsockopt(3, SOL_SOCKET, SO_ZEROCOPY, [1], 4) = 0
 +
-+// Client sends a SYN with data.
-+  +.1 < S 0:1000(1000) win 32792 <mss 1460,sackOK,nop,nop>
-+   +0 > S. 0:0(0) ack 1001 <mss 1460,nop,nop,sackOK>
++   +0 < S 0:0(0) win 65535 <mss 1000,sackOK,nop,nop,nop,wscale 7>
++   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
++  +.1 < . 1:1(0) ack 1 win 511
++   +0 accept(3, ..., ...) = 4
++   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
 +
-+// Server accepts and replies with data.
-++.005 accept(3, ..., ...) = 4
-+   +0 read(4, ..., 1024) = 1000
-+   +0 sendto(4, ..., 1000, MSG_ZEROCOPY, ..., ...) = 1000
-+   +0 > P. 1:1001(1000) ack 1001
-+ +.05 < . 1001:1001(0) ack 1001 win 32792
++   +0 write(4, ..., 26000) = 26000
++   +0 > P. 1:5001(5000) ack 1
++   +0 > P. 5001:10001(5000) ack 1
++   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
 +
-+// Read from error queue: now has first zerocopy notification
-+  +0.1 recvmsg(4, {msg_name(...)=...,
-+                  msg_iov(1)=[{...,0}],
-+                  msg_flags=MSG_ERRQUEUE,
-+                  msg_control=[
-+                      {cmsg_level=CMSG_LEVEL_IP,
-+                       cmsg_type=CMSG_TYPE_RECVERR,
-+                       cmsg_data={ee_errno=0,
-+                                  ee_origin=SO_EE_ORIGIN_ZEROCOPY,
-+                                  ee_type=0,
-+                                  ee_code=SO_EE_CODE_ZEROCOPY_COPIED,
-+                                  ee_info=0,
-+                                  ee_data=0}}
-+                  ]}, MSG_ERRQUEUE) = 0
++  +.1 < . 1:1(0) ack 10001 win 511
++   +0 %{ assert tcpi_snd_cwnd == 20, tcpi_snd_cwnd }%
++   +0 > P. 10001:20001(10000) ack 1
++   +0 > P. 20001:26001(6000) ack 1
 +
++  +.1 < . 1:1(0) ack 26001 win 511
++   +0 %{ assert tcpi_snd_cwnd == 36, tcpi_snd_cwnd }%
++
++   +2 write(4, ..., 20000) = 20000
++// If slow start after idle works properly, we should send 5 MSS here (cwnd/2)
++   +0 > P. 26001:31001(5000) ack 1
++   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
++
++// Reset sysctls
 +`/tmp/sysctl_restore_${PPID}.sh`
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_zerocopy_maxfrags.pkt b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_maxfrags.pkt
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-win-update.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-win-update.pkt
 new file mode 100644
-index 0000000000000..672f817faca0d
+index 0000000000000..577ed8c8852cd
 --- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_maxfrags.pkt
-@@ -0,0 +1,118 @@
++++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-win-update.pkt
+@@ -0,0 +1,50 @@
 +// SPDX-License-Identifier: GPL-2.0
-+// tcp_MAX_SKB_FRAGS test
-+//
-+// Verify that sending an iovec of tcp_MAX_SKB_FRAGS + 1 elements will
-+// 1) fit in a single packet without zerocopy
-+// 2) spill over into a second packet with zerocopy,
-+//    because each iovec element becomes a frag
-+// 3) the PSH bit is set on an skb when it runs out of fragments
++// Test of slow start after window update
++// This test expects tso size to be at least initial cwnd * mss
 +
++`./defaults.sh
++./set_sysctls.py /proc/sys/net/ipv4/tcp_slow_start_after_idle=1 \
++		 /proc/sys/net/ipv4/tcp_min_tso_segs=10`
++
++    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
++
++   +0 < S 0:0(0) win 65535 <mss 1000,sackOK,nop,nop,nop,wscale 7>
++   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
++  +.1 < . 1:1(0) ack 1 win 511
++   +0 accept(3, ..., ...) = 4
++   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
++
++   +0 write(4, ..., 26000) = 26000
++   +0 > P. 1:5001(5000) ack 1
++   +0 > P. 5001:10001(5000) ack 1
++   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
++
++  +.1 < . 1:1(0) ack 10001 win 511
++   +0 %{ assert tcpi_snd_cwnd == 20, tcpi_snd_cwnd }%
++   +0 > P. 10001:20001(10000) ack 1
++   +0 > P. 20001:26001(6000) ack 1
++
++  +.1 < . 1:1(0) ack 26001 win 0
++   +0 %{ assert tcpi_snd_cwnd == 36, tcpi_snd_cwnd }%
++
++   +0 write(4, ..., 20000) = 20000
++// 1st win0 probe
+++.3~+.310 > . 26000:26000(0) ack 1
++   +0 %{ assert tcpi_snd_cwnd == 36, tcpi_snd_cwnd }%
++
++// 2nd win0 probe
+++.6~+.620 > . 26000:26000(0) ack 1
++   +0 %{ assert tcpi_snd_cwnd == 36, tcpi_snd_cwnd }%
++
++// 3rd win0 probe
+++1.2~+1.240 > . 26000:26000(0) ack 1
++   +0 %{ assert tcpi_snd_cwnd == 36, tcpi_snd_cwnd }%
++
++  +.9 < . 1:1(0) ack 26001 win 511
++   +0 > P. 26001:31001(5000) ack 1
++
++// Reset sysctls
++`/tmp/sysctl_restore_${PPID}.sh`
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited-9-packets-out.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited-9-packets-out.pkt
+new file mode 100644
+index 0000000000000..869f32c35a2ab
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited-9-packets-out.pkt
+@@ -0,0 +1,38 @@
++// SPDX-License-Identifier: GPL-2.0
++// Test of slow start when application-limited: in this case,
++// with IW10, if we don't fully use our cwnd but instead
++// send just 9 packets, then cwnd should grow to twice that
++// value, or 18 packets.
++
++// Set up config.
 +`./defaults.sh`
 +
 +    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
 +   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 setsockopt(3, SOL_SOCKET, SO_ZEROCOPY, [1], 4) = 0
-+
-+   // Each pinned zerocopy page is fully accounted to skb->truesize.
-+   // This test generates a worst case packet with each frag storing
-+   // one byte, but increasing truesize with a page (64KB on PPC).
-+   +0 setsockopt(3, SOL_SOCKET, SO_SNDBUF, [2000000], 4) = 0
-+
 +   +0 bind(3, ..., ...) = 0
 +   +0 listen(3, 1) = 0
 +
-+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
++  +.1 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
 +   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+   +0 < . 1:1(0) ack 1 win 257
-+
++  +.1 < . 1:1(0) ack 1 win 257
 +   +0 accept(3, ..., ...) = 4
++   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
 +
-+   // send an iov of 18 elements: just becomes a linear skb
-+   +0 sendmsg(4, {msg_name(...)=...,
-+		  msg_iov(18)=[{..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}],
-+		  msg_flags=0}, 0) = 18
++   +0 write(4, ..., 9000) = 9000
++   +0 > P. 1:9001(9000) ack 1
++   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
 +
-+   +0 > P. 1:19(18) ack 1
-+   +0 < . 1:1(0) ack 19 win 257
+++.105 < . 1:1(0) ack 2001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 12, tcpi_snd_cwnd }%
 +
-+   // send a zerocopy iov of 18 elements:
-+   +1 sendmsg(4, {msg_name(...)=...,
-+		  msg_iov(18)=[{..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}],
-+		  msg_flags=0}, MSG_ZEROCOPY) = 18
+++.005 < . 1:1(0) ack 4001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 14, tcpi_snd_cwnd }%
 +
-+   // verify that it is split in one skb of 17 frags + 1 of 1 frag
-+   // verify that both have the PSH bit set
-+   +0 > P. 19:36(17) ack 1
-+   +0 < . 1:1(0) ack 36 win 257
+++.005 < . 1:1(0) ack 6001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 16, tcpi_snd_cwnd }%
 +
-+   +0 > P. 36:37(1) ack 1
-+   +0 < . 1:1(0) ack 37 win 257
+++.005 < . 1:1(0) ack 8001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 18, tcpi_snd_cwnd }%
 +
-+   +1 recvmsg(4, {msg_name(...)=...,
-+                  msg_iov(1)=[{...,0}],
-+                  msg_flags=MSG_ERRQUEUE,
-+                  msg_control=[
-+                        {cmsg_level=CMSG_LEVEL_IP,
-+                         cmsg_type=CMSG_TYPE_RECVERR,
-+                         cmsg_data={ee_errno=0,
-+                                    ee_origin=SO_EE_ORIGIN_ZEROCOPY,
-+                                    ee_type=0,
-+                                    ee_code=SO_EE_CODE_ZEROCOPY_COPIED,
-+                                    ee_info=0,
-+                                    ee_data=0}}
-+                   ]}, MSG_ERRQUEUE) = 0
-+
-+   // send a zerocopy iov of 64 elements:
-+   +0 sendmsg(4, {msg_name(...)=...,
-+                  msg_iov(64)=[{..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1},
-+			       {..., 1}, {..., 1}, {..., 1}, {..., 1}],
-+                  msg_flags=0}, MSG_ZEROCOPY) = 64
-+
-+   // verify that it is split in skbs with 17 frags
-+   +0 > P. 37:54(17) ack 1
-+   +0 < . 1:1(0) ack 54 win 257
-+
-+   +0 > P. 54:71(17) ack 1
-+   +0 < . 1:1(0) ack 71 win 257
-+
-+   +0 > P. 71:88(17) ack 1
-+   +0 < . 1:1(0) ack 88 win 257
-+
-+   +0 > P. 88:101(13) ack 1
-+   +0 < . 1:1(0) ack 101 win 257
-+
-+   +1 recvmsg(4, {msg_name(...)=...,
-+                  msg_iov(1)=[{...,0}],
-+                  msg_flags=MSG_ERRQUEUE,
-+                  msg_control=[
-+                        {cmsg_level=CMSG_LEVEL_IP,
-+                         cmsg_type=CMSG_TYPE_RECVERR,
-+                         cmsg_data={ee_errno=0,
-+                                    ee_origin=SO_EE_ORIGIN_ZEROCOPY,
-+                                    ee_type=0,
-+                                    ee_code=SO_EE_CODE_ZEROCOPY_COPIED,
-+                                    ee_info=1,
-+                                    ee_data=1}}
-+                   ]}, MSG_ERRQUEUE) = 0
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_zerocopy_small.pkt b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_small.pkt
+++.005 < . 1:1(0) ack 9001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 18, tcpi_snd_cwnd }%
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited.pkt
 new file mode 100644
-index 0000000000000..a9a1ac0aea4f4
+index 0000000000000..0f77b7955db6e
 --- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_zerocopy_small.pkt
-@@ -0,0 +1,57 @@
++++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited.pkt
+@@ -0,0 +1,36 @@
 +// SPDX-License-Identifier: GPL-2.0
-+// small packet zerocopy test:
-+//
-+// verify that SO_EE_CODE_ZEROCOPY_COPIED is set on zerocopy
-+// packets of all sizes, including the smallest payload, 1B.
++// Test of slow start when application-limited: in this case,
++// with IW10, if we send exactly 10 packets then cwnd should grow to 20.
 +
++// Set up config.
 +`./defaults.sh`
 +
 +    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
 +   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 setsockopt(3, SOL_SOCKET, SO_ZEROCOPY, [1], 4) = 0
 +   +0 bind(3, ..., ...) = 0
 +   +0 listen(3, 1) = 0
 +
-+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
++  +.1 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
 +   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+   +0 < . 1:1(0) ack 1 win 257
-+
++  +.1 < . 1:1(0) ack 1 win 257
 +   +0 accept(3, ..., ...) = 4
++   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
 +
-+   // send 1B
-+   +0 send(4, ..., 1, MSG_ZEROCOPY) = 1
-+   +0 > P. 1:2(1) ack 1
-+   +0 < . 1:1(0) ack 2 win 257
++   +0 write(4, ..., 10000) = 10000
++   +0 > P. 1:10001(10000) ack 1
++   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
 +
-+   +1 recvmsg(4, {msg_name(...)=...,
-+                  msg_iov(1)=[{...,0}],
-+                  msg_flags=MSG_ERRQUEUE,
-+                  msg_control=[
-+                        {cmsg_level=CMSG_LEVEL_IP,
-+                         cmsg_type=CMSG_TYPE_RECVERR,
-+                         cmsg_data={ee_errno=0,
-+                                    ee_origin=SO_EE_ORIGIN_ZEROCOPY,
-+                                    ee_type=0,
-+                                    ee_code=SO_EE_CODE_ZEROCOPY_COPIED,
-+                                    ee_info=0,
-+                                    ee_data=0}}
-+                   ]}, MSG_ERRQUEUE) = 0
+++.105 < . 1:1(0) ack 2001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 12, tcpi_snd_cwnd }%
 +
-+   // send 1B again
-+   +0 send(4, ..., 1, MSG_ZEROCOPY) = 1
-+   +0 > P. 2:3(1) ack 1
-+   +0 < . 1:1(0) ack 3 win 257
+++.005 < . 1:1(0) ack 4001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 14, tcpi_snd_cwnd }%
 +
-+   +1 recvmsg(4, {msg_name(...)=...,
-+                  msg_iov(1)=[{...,0}],
-+                  msg_flags=MSG_ERRQUEUE,
-+                  msg_control=[
-+                        {cmsg_level=CMSG_LEVEL_IP,
-+                         cmsg_type=CMSG_TYPE_RECVERR,
-+                         cmsg_data={ee_errno=0,
-+                                    ee_origin=SO_EE_ORIGIN_ZEROCOPY,
-+                                    ee_type=0,
-+                                    ee_code=SO_EE_CODE_ZEROCOPY_COPIED,
-+                                    ee_info=1,
-+                                    ee_data=1}}
-+                   ]}, MSG_ERRQUEUE) = 0
+++.005 < . 1:1(0) ack 6001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 16, tcpi_snd_cwnd }%
++
+++.005 < . 1:1(0) ack 8001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 18, tcpi_snd_cwnd }%
++
+++.005 < . 1:1(0) ack 10001 win 257
++   +0 %{ assert tcpi_snd_cwnd == 20, tcpi_snd_cwnd }%
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-fq-ack-per-2pkt.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-fq-ack-per-2pkt.pkt
+new file mode 100644
+index 0000000000000..7e9c83d617c25
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-fq-ack-per-2pkt.pkt
+@@ -0,0 +1,63 @@
++// SPDX-License-Identifier: GPL-2.0
++// Test of slow start when not application-limited, so that
++// the cwnd continues to grow, even if TSQ triggers.
++// In this variant, the receiver ACKs every other packet,
++// approximating standard delayed ACKs.
++
++// Note we use FQ/pacing to check if TCP Small Queues is not hurting
++
++`./defaults.sh
++tc qdisc replace dev tun0 root fq
++sysctl -q net/ipv4/tcp_pacing_ss_ratio=200
++sysctl -e -q net.ipv4.tcp_min_tso_segs=2`
++
++    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
++
++  +.1 < S 0:0(0) win 32792 <mss 1460,sackOK,nop,nop,nop,wscale 7>
++   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
++  +.1 < . 1:1(0) ack 1 win 500
++   +0 accept(3, ..., ...) = 4
++   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
++
++   +0 write(4, ..., 40000) = 40000
++// This might change if we cook the initial packet with 10 MSS.
++   +0 > P. 1:2921(2920) ack 1
++   +0 > P. 2921:5841(2920) ack 1
++   +0 > P. 5841:8761(2920) ack 1
++   +0 > P. 8761:11681(2920) ack 1
++   +0 > P. 11681:14601(2920) ack 1
++   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
++
+++.105 < . 1:1(0) ack 2921 win 500
++   +0 %{ assert tcpi_snd_cwnd == 12, tcpi_snd_cwnd }%
++
++// Note: after this commit : "net_sched: sch_fq: account for schedule/timers drifts"
++// FQ notices that this packet missed the 'time to send next packet' computed
++// when prior packet (11681:14601(2920)) was sent.
++// So FQ will allow following packet to be sent a bit earlier (quantum/2)
++// (FQ commit allows an application/cwnd limited flow to get at most quantum/2 extra credit)
++   +0 > P. 14601:17521(2920) ack 1
++
+++.003 < . 1:1(0) ack 5841 win 500
++   +0 %{ assert tcpi_snd_cwnd == 14, tcpi_snd_cwnd }%
++
+++.001 > P. 17521:20441(2920) ack 1
++
+++.001 < . 1:1(0) ack 8761 win 500
++   +0 %{ assert tcpi_snd_cwnd == 16, tcpi_snd_cwnd }%
++
++// remaining packets are delivered at a constant rate.
+++.007 > P. 20441:23361(2920) ack 1
++
+++.002 < . 1:1(0) ack 11681 win 500
++   +0 %{ assert tcpi_snd_cwnd == 18, tcpi_snd_cwnd }%
+++.001 < . 1:1(0) ack 14601 win 500
++
+++.004 > P. 23361:26281(2920) ack 1
++
+++.007 > P. 26281:29201(2920) ack 1
++
++   +0 %{ assert tcpi_snd_cwnd == 20, 'cwnd=%d' % tcpi_snd_cwnd }%
 -- 
 2.46.0.598.g6f2099f65c-goog
 
