@@ -1,62 +1,63 @@
-Return-Path: <linux-kselftest+bounces-17839-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17840-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35AE2976A4A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 15:17:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B93E976A4E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 15:18:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B69E3B21288
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 13:17:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FCB5285379
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 13:18:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F04D1A3020;
-	Thu, 12 Sep 2024 13:17:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CD0C1AD26F;
+	Thu, 12 Sep 2024 13:17:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X4xfHfDS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Yp5eWzb6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5163185B60;
-	Thu, 12 Sep 2024 13:17:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17291AD254;
+	Thu, 12 Sep 2024 13:17:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726147055; cv=none; b=La7yNFJcZ8bw81WM1qDt6EH1uCzT9l3rdW/TOcWR+EE5qSz/pt17N/VEBq6oQQ1Wscs6yQ1kl9oBvEucZVfh6m93+cOSGi5ngVyYO3IUaYMcIFQUlzTewOqOehCttQRv7IEQGy/Bc6hhMf8sQZ38sywWrRmW8t3sC/yxBQsfO8g=
+	t=1726147058; cv=none; b=Hp7DpKifPw4Mo0Mh62EjEgu+UnVy/BCunbf66kYTZkjmKoGo7OjgN2nJrGZEWciUHu8l8Uy6g+gel5QpvmYadZaOghGg45P7LfBh62jFxM9aNYpWpvCNkcDizzm6KxJGnml/T5x17Q50kyGnzL3QUvY+c/4TY11/2rZEwjVqINI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726147055; c=relaxed/simple;
-	bh=tTnRmX+6RHq0ncXVXSOVD+Hvk28tzNe+cSrBE1j1oiE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Jm/ZlFNRf5329aGZjIOO6GGQhgUedn2WIDR0SxNFL8P83ac3gBpvmipnTjtHohwDznTfvSEG++0wJk3m2lYF9nh7gOhe+1uUOuctW14cvrOokLV75AzLgM5OA1JiievK33M56ZoEGds4ruSogiHQJEz0WmT49wd6Dc7MC6ghDc0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X4xfHfDS; arc=none smtp.client-ip=192.198.163.16
+	s=arc-20240116; t=1726147058; c=relaxed/simple;
+	bh=xiJujwLBntP9KRvpgzQiLeGTCAt53O0ftrZZ+WURJ+w=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=re0XP0aupZJOn5cMjVX4vPIgyADO4ZpDdUWu6U9BIXshnPWpw3PCK3lTLJc7NUyrO2+gFkz60GWc/v+sfgxbvTz3vxZKGGScAbtSSU5ol+bhSGw49XVlOpgbVrPSEh5H7I26LJRtzTeEAMvxg9HRVXlc2kTuDOZvXLp83kw2stY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Yp5eWzb6; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726147053; x=1757683053;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tTnRmX+6RHq0ncXVXSOVD+Hvk28tzNe+cSrBE1j1oiE=;
-  b=X4xfHfDSiOA9SKzpe5PwWeD+MKK+zvgN31ld/o6rIUGXGuJFq93X1Hye
-   gnH1FDA2OWcq1Q57O9Tu2Z+H85T92th8wE8RzWcE8GifxnPftE4L0j20R
-   HhUqIxLxIGeOmkLXEqdtIrh20eVf3y+FSEvyJNGTYefUINGgTcM0hGoFZ
-   zEnpki2TGPp9E2ecjzSxx3Qje/zCDXAl5r8Qv24Tfl5vjnTQf5pCvjM6Q
-   mvhLTkJLTo7IPkhatjCMfatwsaDrpMf40M13uT6FTvhaXpMUPwilsj4Nn
-   DkguEBO6BHGMzPa7prg2iNbaPl0xbPGiIF2oSTJB69fFYl093ptwfhRuH
-   g==;
-X-CSE-ConnectionGUID: UM1rIib6T6KbxBrhe8k+Kw==
-X-CSE-MsgGUID: MEX1/3EnTRixeDeogW8x2Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="13493302"
+  t=1726147056; x=1757683056;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=xiJujwLBntP9KRvpgzQiLeGTCAt53O0ftrZZ+WURJ+w=;
+  b=Yp5eWzb6t+w4JjMQFYTx2UryiXZ65r3KFPstMDETHB02BEDUd8w98JS0
+   o4JUjicOCQbnv1vHKMGHLwpo0lZc4FArU7DaSVuAwHtNNELSh9+6PRY31
+   g6A8GMLa9+7oyi0WXVEGKfJBAUSEpSns+2KnPXBaFDRzHgWPfk9DIvnfV
+   6jg4MJhySt0187Ue/N18xemQQbMVXvJwiJxYoL7taPg902icduEGRhWug
+   XWe7imyV9z3ama1ReNtVa9eV3HPBg3hubyK23tRuTrNezbUsQJHPXVS3m
+   kJg6WsHWcuV/ekqx7O+9QdjusAsCGyShzBsTojXk/+5Db7s7OCIKFPIzw
+   w==;
+X-CSE-ConnectionGUID: C5bIbJ5NTlS3/HP+yZydwg==
+X-CSE-MsgGUID: 1pSpAdtIRu+VN+n8bmTwdQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="13493307"
 X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="13493302"
+   d="scan'208";a="13493307"
 Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 06:17:31 -0700
-X-CSE-ConnectionGUID: 493sDDapRD+SfvZ18Fh2JQ==
-X-CSE-MsgGUID: XdQ+CjVyRTOZhEpXBfC5ng==
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 06:17:32 -0700
+X-CSE-ConnectionGUID: TYg44gLbTWaIrOMZ1t0xPQ==
+X-CSE-MsgGUID: UBSUep3/R0ifG0bPr1dwNg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
-   d="scan'208";a="72692532"
+   d="scan'208";a="72692535"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orviesa004.jf.intel.com with ESMTP; 12 Sep 2024 06:17:31 -0700
+  by orviesa004.jf.intel.com with ESMTP; 12 Sep 2024 06:17:32 -0700
 From: Yi Liu <yi.l.liu@intel.com>
 To: joro@8bytes.org,
 	jgg@nvidia.com,
@@ -71,11 +72,14 @@ Cc: alex.williamson@redhat.com,
 	iommu@lists.linux.dev,
 	zhenzhong.duan@intel.com,
 	linux-kselftest@vger.kernel.org,
-	vasant.hegde@amd.com
-Subject: [PATCH v3 0/4] vfio-pci support pasid attach/detach
-Date: Thu, 12 Sep 2024 06:17:25 -0700
-Message-Id: <20240912131729.14951-1-yi.l.liu@intel.com>
+	vasant.hegde@amd.com,
+	Matthew Wilcox <willy@infradead.org>
+Subject: [PATCH v3 1/4] ida: Add ida_find_first_range()
+Date: Thu, 12 Sep 2024 06:17:26 -0700
+Message-Id: <20240912131729.14951-2-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20240912131729.14951-1-yi.l.liu@intel.com>
+References: <20240912131729.14951-1-yi.l.liu@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,76 +88,136 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This adds the pasid attach/detach uAPIs for userspace to attach/detach
-a PASID of a device to/from a given ioas/hwpt. Only vfio-pci driver is
-enabled in this series. After this series, PASID-capable devices bound
-with vfio-pci can report PASID capability to userspace and VM to enable
-PASID usages like Shared Virtual Addressing (SVA).
+There is no helpers for user to check if a given ID is allocated or not,
+neither a helper to loop all the allocated IDs in an IDA and do something
+for cleanup. With the two needs, a helper to get the lowest allocated ID
+of a range and two variants based on it.
 
-Based on the discussion about reporting the vPASID to VM [1], it's agreed
-that we will let the userspace VMM to synthesize the vPASID capability.
-The VMM needs to figure out a hole to put the vPASID cap. This includes
-the hidden bits handling for some devices. While, it's up to the userspace,
-it's not the focus of this series.
+Caller can check if a given ID is allocated or not by:
 
-This series first adds the helpers for pasid attach in vfio core and then
-adds the device cdev ioctls for pasid attach/detach. In the end of this
-series, the IOMMU_GET_HW_INFO ioctl is extended to report the PCI PASID
-capability to the userspace. Userspace should check this before using any
-PASID related uAPIs provided by VFIO, which is the agreement in [2]. This
-series depends on the iommufd pasid attach/detach series [3].
+	bool ida_exists(struct ida *ida, unsigned int id)
 
-The completed code can be found at [4], tested with a hacky Qemu branch [5].
+Caller can iterate all allocated IDs by:
 
-[1] https://lore.kernel.org/kvm/BN9PR11MB5276318969A212AD0649C7BE8CBE2@BN9PR11MB5276.namprd11.prod.outlook.com/
-[2] https://lore.kernel.org/kvm/4f2daf50-a5ad-4599-ab59-bcfc008688d8@intel.com/
-[3] https://lore.kernel.org/linux-iommu/20240912131255.13305-1-yi.l.liu@intel.com/
-[4] https://github.com/yiliu1765/iommufd/tree/iommufd_pasid
-[5] https://github.com/yiliu1765/qemu/tree/wip/zhenzhong/iommufd_nesting_rfcv2-test-pasid
+	int id;
+	while ((id = ida_find_first(&pasid_ida)) > 0) {
+		//anything to do with the allocated ID
+		ida_free(pasid_ida, pasid);
+	}
 
-Change log:
+Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
+Suggested-by: Jason Gunthorpe <jgg@nvidia.com>
+Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+---
+ include/linux/idr.h | 11 ++++++++
+ lib/idr.c           | 67 +++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 78 insertions(+)
 
-v3:
- - Misc enhancement on patch 01 of v2 (Alex, Jason)
- - Add Jason's r-b to patch 03 of v2
- - Drop the logic that report PASID via VFIO_DEVICE_FEATURE ioctl
- - Extend IOMMU_GET_HW_INFO to report PASID support (Kevin, Jason, Alex)
-
-v2: https://lore.kernel.org/kvm/20240412082121.33382-1-yi.l.liu@intel.com/
- - Use IDA to track if PASID is attached or not in VFIO. (Jason)
- - Fix the issue of calling pasid_at[de]tach_ioas callback unconditionally (Alex)
- - Fix the wrong data copy in vfio_df_ioctl_pasid_detach_pt() (Zhenzhong)
- - Minor tweaks in comments (Kevin)
-
-v1: https://lore.kernel.org/kvm/20231127063909.129153-1-yi.l.liu@intel.com/
- - Report PASID capability via VFIO_DEVICE_FEATURE (Alex)
-
-rfc: https://lore.kernel.org/linux-iommu/20230926093121.18676-1-yi.l.liu@intel.com/
-
-Regards,
-	Yi Liu
-
-Yi Liu (4):
-  ida: Add ida_find_first_range()
-  vfio-iommufd: Support pasid [at|de]tach for physical VFIO devices
-  vfio: Add VFIO_DEVICE_PASID_[AT|DE]TACH_IOMMUFD_PT
-  iommufd: Extend IOMMU_GET_HW_INFO to report PASID capability
-
- drivers/iommu/iommufd/device.c | 27 +++++++++++++-
- drivers/pci/ats.c              | 32 ++++++++++++++++
- drivers/vfio/device_cdev.c     | 51 ++++++++++++++++++++++++++
- drivers/vfio/iommufd.c         | 50 +++++++++++++++++++++++++
- drivers/vfio/pci/vfio_pci.c    |  2 +
- drivers/vfio/vfio.h            |  4 ++
- drivers/vfio/vfio_main.c       |  8 ++++
- include/linux/idr.h            | 11 ++++++
- include/linux/pci-ats.h        |  3 ++
- include/linux/vfio.h           | 11 ++++++
- include/uapi/linux/iommufd.h   | 14 ++++++-
- include/uapi/linux/vfio.h      | 55 ++++++++++++++++++++++++++++
- lib/idr.c                      | 67 ++++++++++++++++++++++++++++++++++
- 13 files changed, 333 insertions(+), 2 deletions(-)
-
+diff --git a/include/linux/idr.h b/include/linux/idr.h
+index da5f5fa4a3a6..718f9b1b91af 100644
+--- a/include/linux/idr.h
++++ b/include/linux/idr.h
+@@ -257,6 +257,7 @@ struct ida {
+ int ida_alloc_range(struct ida *, unsigned int min, unsigned int max, gfp_t);
+ void ida_free(struct ida *, unsigned int id);
+ void ida_destroy(struct ida *ida);
++int ida_find_first_range(struct ida *ida, unsigned int min, unsigned int max);
+ 
+ /**
+  * ida_alloc() - Allocate an unused ID.
+@@ -328,4 +329,14 @@ static inline bool ida_is_empty(const struct ida *ida)
+ {
+ 	return xa_empty(&ida->xa);
+ }
++
++static inline bool ida_exists(struct ida *ida, unsigned int id)
++{
++	return ida_find_first_range(ida, id, id) == id;
++}
++
++static inline int ida_find_first(struct ida *ida)
++{
++	return ida_find_first_range(ida, 0, ~0);
++}
+ #endif /* __IDR_H__ */
+diff --git a/lib/idr.c b/lib/idr.c
+index da36054c3ca0..6644d3d1af02 100644
+--- a/lib/idr.c
++++ b/lib/idr.c
+@@ -476,6 +476,73 @@ int ida_alloc_range(struct ida *ida, unsigned int min, unsigned int max,
+ }
+ EXPORT_SYMBOL(ida_alloc_range);
+ 
++/**
++ * ida_find_first_range - Get the lowest used ID.
++ * @ida: IDA handle.
++ * @min: Lowest ID to get.
++ * @max: Highest ID to get.
++ *
++ * Get the lowest used ID between @min and @max, inclusive.  The returned
++ * ID will not exceed %INT_MAX, even if @max is larger.
++ *
++ * Context: Any context. Takes and releases the xa_lock.
++ * Return: The lowest used ID, or errno if no used ID is found.
++ */
++int ida_find_first_range(struct ida *ida, unsigned int min, unsigned int max)
++{
++	unsigned long index = min / IDA_BITMAP_BITS;
++	unsigned int offset = min % IDA_BITMAP_BITS;
++	unsigned long *addr, size, bit;
++	unsigned long flags;
++	void *entry;
++	int ret;
++
++	if ((int)min < 0)
++		return -EINVAL;
++	if ((int)max < 0)
++		max = INT_MAX;
++
++	xa_lock_irqsave(&ida->xa, flags);
++
++	entry = xa_find(&ida->xa, &index, max / IDA_BITMAP_BITS, XA_PRESENT);
++	if (!entry) {
++		ret = -ENOENT;
++		goto err_unlock;
++	}
++
++	if (index > min / IDA_BITMAP_BITS)
++		offset = 0;
++	if (index * IDA_BITMAP_BITS + offset > max) {
++		ret = -ENOENT;
++		goto err_unlock;
++	}
++
++	if (xa_is_value(entry)) {
++		unsigned long tmp = xa_to_value(entry);
++
++		addr = &tmp;
++		size = BITS_PER_XA_VALUE;
++	} else {
++		addr = ((struct ida_bitmap *)entry)->bitmap;
++		size = IDA_BITMAP_BITS;
++	}
++
++	bit = find_next_bit(addr, size, offset);
++
++	xa_unlock_irqrestore(&ida->xa, flags);
++
++	if (bit == size ||
++	    index * IDA_BITMAP_BITS + bit > max)
++		return -ENOENT;
++
++	return index * IDA_BITMAP_BITS + bit;
++
++err_unlock:
++	xa_unlock_irqrestore(&ida->xa, flags);
++	return ret;
++}
++EXPORT_SYMBOL(ida_find_first_range);
++
+ /**
+  * ida_free() - Release an allocated ID.
+  * @ida: IDA handle.
 -- 
 2.34.1
 
