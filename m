@@ -1,638 +1,212 @@
-Return-Path: <linux-kselftest+bounces-17776-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17777-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88E19975E33
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 02:53:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 280C8975F96
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 05:17:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEEBD1C218CF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 00:53:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE86C286A57
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 03:17:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C687A2A1D3;
-	Thu, 12 Sep 2024 00:53:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3AE378B4E;
+	Thu, 12 Sep 2024 03:17:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HGTACdOn"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="mS38T+Ss"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2087.outbound.protection.outlook.com [40.107.236.87])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82CA21D6AA;
-	Thu, 12 Sep 2024 00:53:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726102407; cv=none; b=cn47ipz0RJJIOgEda48LtZGw1JxiApYk7I61hiH3LpzNVcDZdS43iqaO7gdT17We1j018PF4Cl5nz5XoX5RLA6ztYRx4OvAdBZcS5i+FLr7wBItY20Hxz9+p2zGn6o9Rq1TJeuNLz/T+s2ERgntzooOYba/n2x4BiNk3vxjbG3E=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726102407; c=relaxed/simple;
-	bh=34z2oY1F5kmcVI47ji1cJmQ7WM2rDfCLbYj1QLpBdFo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YC91LmfLttN7uwuRRRBo37k7NBV5oyO1X+MakRRIYgqCHKY7sI+Gd2mmJC+G2KdMx/w8QLmplI5KkcRfakd5b+Vsa+O/EoWlXgBtrFXtWUjjhp3Mt28DknUM99lNUntBX+913ohQqnQ1/NhdBjeZror1awOW4PlL/d4GcS2GLOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HGTACdOn; arc=none smtp.client-ip=209.85.219.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6c524b4a3aeso3137216d6.3;
-        Wed, 11 Sep 2024 17:53:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726102404; x=1726707204; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SzpKA1PBiXbAbhZXcTqtrI+nSOEZ60qWH4YBFezmWf8=;
-        b=HGTACdOnZfpsi2QQ+GWp6OxyFY4kACbzWWmSvWm55PX7x6mrBdBp1FKUZ6ockD4Q5B
-         JaeawL6WGlLAxqUwI0H/Jl2gPKfcTsQ8sr3zlOUyet0uE9nGictw1plcY9Ak+rQAwwol
-         wLe+X5q+JVuXlZYoyaRfdDxeA3krRYrCmXMLOl6zNcOs+/jlz+1lHaLN+g9s5gvLlP8/
-         bJc/abgdrgVQ/oxhnPRr376hXUrjQLfEvW7/sHqCu1T5gchkJnFgPwNgCjcCJSPZvD1g
-         gYM/Bhyh6OHkfg11SG7eym8PizgieB/DTR/Njr8fzzptU0mFVK1n0Vg30ujLiwE1f3na
-         j5OA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726102404; x=1726707204;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SzpKA1PBiXbAbhZXcTqtrI+nSOEZ60qWH4YBFezmWf8=;
-        b=mAZtjCdoB3UJt1bu5xz3vIEvYcvs/6nO8ZzLWi0+iQo2xVxw4fjhmVD2QfIfss9+ta
-         EbRMlG5ClKo1Px8bQ/bkR/M5blQdCiFdhvLsCrCPx3EFYWPwKm2lzkI01nZOUYW3SPKc
-         8W1QUFcROabbkp84zyRflijbie/JsLHpJdiBKpHIKQbxAROgOMF4siJIXvWZI0lZPkAw
-         vRhKcVkzyeoC0c9s7Kauli5G5nnQUlbHPy4+mieazuv5RMW4WkuTjDunDM7lDBi3c9dR
-         Xh2ewR1IArTNSkCullbsiCTLvYLeiMXggOK88v0Cki3eIkZD4qmQr8osyjLFOu1bhw+Q
-         NRxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXne5Rd+d9idJqqNXeO/G59rn32F2rSXq4/QABfdNnYiWmXv8PHm4aRIukWU5RqbhJTc3Ue0sSPgAP/4DGfDsM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxl9Qjr5ToIkPaYJ2MQ8u8XVPMvEAxy3K9UNVlnKNK/Uaki+497
-	bkysxKOUkorz/74xL3224sw4oD8JgvAtWGgSeHbFJZxNF9PubUBLGBwhVA==
-X-Google-Smtp-Source: AGHT+IFYJ+tgceX/pTaApUkyoddgKa0EdZ4E+46dHN+WpnixODr78tcgOdo7z2O2dK+0e6GLnUJ8QQ==
-X-Received: by 2002:a05:6214:5541:b0:6c5:20c2:f35a with SMTP id 6a1803df08f44-6c573584190mr22231476d6.48.1726102404267;
-        Wed, 11 Sep 2024 17:53:24 -0700 (PDT)
-Received: from willemb.c.googlers.com.com (23.67.48.34.bc.googleusercontent.com. [34.48.67.23])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c53433b69dsm47947656d6.53.2024.09.11.17.53.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 11 Sep 2024 17:53:23 -0700 (PDT)
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: netdev@vger.kernel.org
-Cc: davem@davemloft.net,
-	kuba@kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	ncardwell@google.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	matttbe@kernel.org,
-	Willem de Bruijn <willemb@google.com>
-Subject: [PATCH net-next v2 3/3] selftests/net: packetdrill: import tcp/slow_start
-Date: Wed, 11 Sep 2024 20:52:42 -0400
-Message-ID: <20240912005317.1253001-4-willemdebruijn.kernel@gmail.com>
-X-Mailer: git-send-email 2.46.0.598.g6f2099f65c-goog
-In-Reply-To: <20240912005317.1253001-1-willemdebruijn.kernel@gmail.com>
-References: <20240912005317.1253001-1-willemdebruijn.kernel@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0CA22301;
+	Thu, 12 Sep 2024 03:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.87
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726111049; cv=fail; b=G872d+XhG3ZwQMQe0vNE+eWzg6vQzh9UavjoYep5cgxCFg2YhxPGykmJXpQwHwHTd0WxKac2BPkte8YxNU/NTcnKQ8CMTxUdU/z06gg/xDp7qI0rMRp7GO0UM2mK+PWmPWzYru3y0cD07s7cY3q8vU+JIuyEk5zheHpasEOwkc0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726111049; c=relaxed/simple;
+	bh=WSiUxnPR4Y4uxJEHTWkOXyeztGDanW6zyameJB3dCgw=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FYdjZiwYHz/BEbaYfi9ApkHpNAuVzZ/ZhY8Aoi99rZnUwYPDTFvnXO16Zgv4T0JiZBKXL7eo4gx2C643aYxV7i3hXiCV57+cns03R7w22OGqdC4GSdqIAw+LAmP6usW9GldygIGupFzObLfGo3HW9BEfgxczZ3CTVFHmKKZXuKg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=mS38T+Ss; arc=fail smtp.client-ip=40.107.236.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=yuYQMWo4a5iDiofYr3Ia0vczzapjkLk9Par1KQB8Eov9VJAaFEXUJ9wHMydqibprn5U4lzDcfOVHSx9jXos9/vOg9BR9FlxEeSMH3z+7cnqDLH/am1LHCfz59H73NoYS5pIYeuPhqfnj5BS1Pl63kwP4dCpOXTH9Vaa0ohO1jSPsKMiSNW5tW65ozy+RdNVOhUNgcYegfgQWHwvCsj45NVzFlGqKqm3IEJejM3LLE44r0FXHukGEJ240qtsVxDdwTYQLSDWenJ0BxuhnC9yo3IEnNA+zWsCK9FKFg3Jv/zPe+bOJw5NWGL8OZjIQSgwHdyZGJ++1pz8I0q8/DuM5Bg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=WsPK6c1cScuODmkwIY/Zynm411B3bgdzpkeku6Smyxc=;
+ b=jnFQlhrHbHTlS3LliBuP+yb3/Jgr19y/eD4dZ5QwrMUTeEABO/GgdCp8SaosEO/XmD5vnm/9mH+C73iGveUf6sv872MrsJ5jwI14Z4aD7tpGvHyyD/fMnVS6BPs5yGuidCMQgOLmLcEJ4HHckFkDSoBhgzAMMk0tQjgTZVdm7+LTH9KfvkUaaqtLHkP7JKPcI8rFaKz4WUCXgjPySTt5lhe+XFOueGgm0WTFSRtDO39TCCy0+Qygw+dYyvhGLd+qXTl5MrIYicDPe96BayCn62m4Lnx3Gb78/eQSr9RO0T/YiDHCUrz5ozI+9MZ1dZ0fqG83Io79EZuPXnuXb93CWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.232) smtp.rcpttodomain=huawei.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=WsPK6c1cScuODmkwIY/Zynm411B3bgdzpkeku6Smyxc=;
+ b=mS38T+SsvEg1RkbYredIAt4aU1YfB1Dhojyq4qLGNcTbjy4k2H4KB5VT9LEJ1owYOteqNdg6euNZrA9W89ZmIi8331YWMgyovLHHKGfQQBRfjrOTOQAov6rKDyayp5S9Xhx60V2XVe0hdUPtrBAo05DkPAjFJksRoCOBO0iWmLmRg6PBmWTXK9H7ZaiFAUQgjW0b8X/m7r91nLn0xjVviU3rEtrtyaXHCdh6th2Af46M1TwXmAMSwqez/R/WMH0h/0dmRlhEIfMJedrw+lRYznZf00s6Ok2DrU/EJpBvMdPYofQeXwnahL3GMAtnEFd5ugQGUfgS4Rx2xxBlyOgVRA==
+Received: from DS7PR03CA0112.namprd03.prod.outlook.com (2603:10b6:5:3b7::27)
+ by SJ2PR12MB9192.namprd12.prod.outlook.com (2603:10b6:a03:55d::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.22; Thu, 12 Sep
+ 2024 03:17:23 +0000
+Received: from DS3PEPF0000C37C.namprd04.prod.outlook.com
+ (2603:10b6:5:3b7:cafe::82) by DS7PR03CA0112.outlook.office365.com
+ (2603:10b6:5:3b7::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.24 via Frontend
+ Transport; Thu, 12 Sep 2024 03:17:23 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.232) by
+ DS3PEPF0000C37C.mail.protection.outlook.com (10.167.23.6) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7918.13 via Frontend Transport; Thu, 12 Sep 2024 03:17:22 +0000
+Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
+ (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 11 Sep
+ 2024 20:17:22 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Wed, 11 Sep 2024 20:17:22 -0700
+Received: from nvidia.com (10.127.8.11) by mail.nvidia.com (10.126.190.181)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
+ Transport; Wed, 11 Sep 2024 20:17:18 -0700
+Date: Wed, 11 Sep 2024 20:17:16 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: <kevin.tian@intel.com>, <will@kernel.org>, <joro@8bytes.org>,
+	<suravee.suthikulpanit@amd.com>, <robin.murphy@arm.com>,
+	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>, <shuah@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
+	<eric.auger@redhat.com>, <jean-philippe@linaro.org>, <mdf@kernel.org>,
+	<mshavit@google.com>, <shameerali.kolothum.thodi@huawei.com>,
+	<smostafa@google.com>, <yi.l.liu@intel.com>
+Subject: Re: [PATCH v2 10/19] iommufd/viommu: Add vdev_id helpers for IOMMU
+ drivers
+Message-ID: <ZuJdPHRbMeYFATT7@nvidia.com>
+References: <cover.1724776335.git.nicolinc@nvidia.com>
+ <6ccdfb27c7aa5a5bb7e153165cf90114cae4687c.1724776335.git.nicolinc@nvidia.com>
+ <20240905161415.GS1358970@nvidia.com>
+ <ZtnwG/Kmaf+fZFAv@nvidia.com>
+ <20240911231103.GR58321@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20240911231103.GR58321@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS3PEPF0000C37C:EE_|SJ2PR12MB9192:EE_
+X-MS-Office365-Filtering-Correlation-Id: 01dea2eb-bef7-4308-2738-08dcd2d96b40
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|36860700013|82310400026|376014|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?igB32czTBOX4U+g7HxBlzUj053VHSjbOQcyG2cVeNiseH0W3/pSmS3rsZgxN?=
+ =?us-ascii?Q?WFwVS+LJUuIOXVQoZrFf4sDLZeGPdPzPCEFBwtkENciAJL+YqoZINVRe0EiP?=
+ =?us-ascii?Q?BIu7MDn27sjJ5G7Lr5+ZGxtyWJOdvZmU/PnvRZ13HNcKVYuzphWEWCl5PFHz?=
+ =?us-ascii?Q?opnIytWtTVJA08+OWdu2dZAku7JTnha7LcOpJ1Au7ukW13dbkqmZ4EUAmZ1D?=
+ =?us-ascii?Q?znLWLPCwt71c/ZAYFIPKuExXJGnkk993IfraRErxbwJJ4SFD+s8bI8h/lS+o?=
+ =?us-ascii?Q?oHI8LHO87T/etfRM3sDOhi1p3d/trABYr5esTQ+yfmQ6I39Su9OIUp3Yv0Pt?=
+ =?us-ascii?Q?AZxO6yEol9A69pTKkMjHhSV06PVavy2sAn5kxsVmTVtyForDYzX3sjKLoce+?=
+ =?us-ascii?Q?iY5uaz8ZLH42E4PyhuyuustyDQ18Pf8btpq7I0E/qQuY1IhowY2sOMp32m3a?=
+ =?us-ascii?Q?6o/LSd6lTCX94bLfUEX4iA2vqtksIZQRNrvyyWgcOPdpV/wagQ/yFersBXef?=
+ =?us-ascii?Q?sYPJh6Aq+TM4Jlq1gqhkLMbyjMiJLKhOlEfWsTpUcjAWdDKS1OnJNwawBx74?=
+ =?us-ascii?Q?IobwTgevaTAwIJ1Mb+5gVyKBQ5wNA46FXR7xGJLBFRekqNlmVE++pc7bHdqb?=
+ =?us-ascii?Q?YMBEpimrR15bde+YK5EY4ogyjwQWWrfGUf66WSHS6bbLTmiSjMafaUpkqkfK?=
+ =?us-ascii?Q?PxA5AVMLx2nb/3swm0rQBOos9Nvetm2YpdTcQ7nsIm6SzzeDLPp7m44XY0Wd?=
+ =?us-ascii?Q?U71iqBOOlgiON/oIk+sTybQJl3D+WK9r3kPYrny/MpuCOwa5nAtFoThKs6kk?=
+ =?us-ascii?Q?IIhFz59KueUmjHwjezz0ZJGIHJYR7PkPauqIAQ7WWKEQrmr0pWak5TKtmRIa?=
+ =?us-ascii?Q?OFERfyDPEArIUvZHB0GJkchGSKYSGPVZibcd20RvynjxLUKWnN/LPVpGhn2T?=
+ =?us-ascii?Q?B+3Nn0ggHeIQjUEiSnROC1dLMFkp8F5PAvShYXmlzfobLrojB/fq7ko69+5+?=
+ =?us-ascii?Q?CB2NBd4oHeq5L0te1LA+YdHsVyBaHFgi/h3JqtGKHkje0nDuQg/Dpan0izjl?=
+ =?us-ascii?Q?dwTgykIbEOkVaD52GdJSnCL9TqLKSZqijgaJ7zj3nud1ClmDWftHHi77fzOW?=
+ =?us-ascii?Q?GzamAC/wLRxmwe/KsimHHHUO/ADkg4WM5bltgq9CqpAfqhMRW/RZ5ySRDs2L?=
+ =?us-ascii?Q?K+I5lKoz31lGNpgme/WrW3BaEg4R3ApExDEq3YfaRDfNGEPKsOUC3g1QCn1P?=
+ =?us-ascii?Q?Pcyo9D/H7rqzt/s7MvpwcepVZxkztag0Kmr4AGnUiAmYzEx2QrCweva98x27?=
+ =?us-ascii?Q?ENF6NYx8PgEcF5MXKWfMTZyIxDHVXggjtiIOfOXJzVTiZ2chKjauSJuczMBT?=
+ =?us-ascii?Q?b2dbemLtUXBwuE9SzaeEmLVSyOMihIBwAoJVYfvtuYsznfIOooFFqdcrp5Ad?=
+ =?us-ascii?Q?FRNbw1pido0Six9AkzShld2wTxmhcPsi?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(36860700013)(82310400026)(376014)(7416014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2024 03:17:22.7932
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01dea2eb-bef7-4308-2738-08dcd2d96b40
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS3PEPF0000C37C.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9192
 
-From: Willem de Bruijn <willemb@google.com>
+On Wed, Sep 11, 2024 at 08:11:03PM -0300, Jason Gunthorpe wrote:
+> On Thu, Sep 05, 2024 at 10:53:31AM -0700, Nicolin Chen wrote:
+> > On Thu, Sep 05, 2024 at 01:14:15PM -0300, Jason Gunthorpe wrote:
+> > > On Tue, Aug 27, 2024 at 09:59:47AM -0700, Nicolin Chen wrote:
+> > > > Driver can call the iommufd_viommu_find_device() to find a device pointer
+> > > > using its per-viommu virtual ID. The returned device must be protected by
+> > > > the pair of iommufd_viommu_lock/unlock_vdev_id() function.
+> > > > 
+> > > > Put these three functions into a new viommu_api file, to build it with the
+> > > > IOMMUFD_DRIVER config.
+> > > > 
+> > > > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> > > > ---
+> > > >  drivers/iommu/iommufd/Makefile     |  2 +-
+> > > >  drivers/iommu/iommufd/viommu_api.c | 39 ++++++++++++++++++++++++++++++
+> > > >  include/linux/iommufd.h            | 16 ++++++++++++
+> > > >  3 files changed, 56 insertions(+), 1 deletion(-)
+> > > >  create mode 100644 drivers/iommu/iommufd/viommu_api.c
+> > > 
+> > > I still think this is better to just share the struct content with the
+> > > driver, eventually we want to do this anyhow as the driver will
+> > > want to use container_of() techniques to reach its private data.
+> > 
+> > In my mind, exposing everything to the driver is something that
+> > we have to (for driver-managed structures) v.s. we want to...
+> > Even in that case, a driver actually only need to know the size
+> > of the core structure, without touching what's inside(?).
+> > 
+> > I am a bit worried that drivers would abuse the content in the
+> > core-level structure.. Providing a set of API would encourage
+> > them to keep the core structure intact, hopefully..
+> 
+> This is always a tension in the kernel. If the core apis can be nice
+> and tidy then it is a reasonable direction
+> 
+> But here I think we've cross some threshold where the APIs are
+> complex, want to be inlined and really we just want to expose data not
+> APIs to drivers.
 
-Same import process as previous tests.
+OK. I'll think of a rework. And might need another justification
+for a DEFAULT type of vIOMMU object to fit in.
 
-Also add CONFIG_NET_SCH_FQ to config, as one test uses that.
+> > > No need for this lock, xa_load is rcu safe against concurrent writer
+> > 
+> > I see iommufd's device.c and main.c grab xa_lock before xa_load?
+> 
+> That is not to protect the xa_load, it is to protect the lifetime of
+> pointer it returns
 
-Same test process as previous tests. Both with and without debug mode.
-Recording the steps once:
+I see. I'd drop it.
 
-make mrproper
-vng --build \
-        --config tools/testing/selftests/net/packetdrill/config \
-        --config kernel/configs/debug.config
-vng -v --run . --user root --cpus 4 -- \
-	make -C tools/testing/selftests TARGETS=net/packetdrill run_tests
-
-Link: https://github.com/linux-netdev/nipa/wiki/How-to-run-netdev-selftests-CI-style#how-to-build
-Signed-off-by: Willem de Bruijn <willemb@google.com>
----
- .../testing/selftests/net/packetdrill/config  |  1 +
- ...tcp_slow_start_slow-start-ack-per-1pkt.pkt | 56 +++++++++++++++++
- ...tart_slow-start-ack-per-2pkt-send-5pkt.pkt | 33 ++++++++++
- ...tart_slow-start-ack-per-2pkt-send-6pkt.pkt | 34 ++++++++++
- ...tcp_slow_start_slow-start-ack-per-2pkt.pkt | 42 +++++++++++++
- ...tcp_slow_start_slow-start-ack-per-4pkt.pkt | 35 +++++++++++
- .../tcp_slow_start_slow-start-after-idle.pkt  | 39 ++++++++++++
- ...slow_start_slow-start-after-win-update.pkt | 50 +++++++++++++++
- ...t_slow-start-app-limited-9-packets-out.pkt | 38 +++++++++++
- .../tcp_slow_start_slow-start-app-limited.pkt | 36 +++++++++++
- ..._slow_start_slow-start-fq-ack-per-2pkt.pkt | 63 +++++++++++++++++++
- 11 files changed, 427 insertions(+)
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-1pkt.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-5pkt.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-6pkt.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-4pkt.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-idle.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-win-update.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited-9-packets-out.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-fq-ack-per-2pkt.pkt
-
-diff --git a/tools/testing/selftests/net/packetdrill/config b/tools/testing/selftests/net/packetdrill/config
-index a7877819081f5..0237ed98f3c0d 100644
---- a/tools/testing/selftests/net/packetdrill/config
-+++ b/tools/testing/selftests/net/packetdrill/config
-@@ -3,6 +3,7 @@ CONFIG_HZ_1000=y
- CONFIG_HZ=1000
- CONFIG_NET_NS=y
- CONFIG_NET_SCH_FIFO=y
-+CONFIG_NET_SCH_FQ=y
- CONFIG_PROC_SYSCTL=y
- CONFIG_SYN_COOKIES=y
- CONFIG_TCP_CONG_CUBIC=y
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-1pkt.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-1pkt.pkt
-new file mode 100644
-index 0000000000000..795c476d222d9
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-1pkt.pkt
-@@ -0,0 +1,56 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test of slow start when not application-limited, so that
-+// the cwnd continues to grow.
-+// In this variant, the receiver ACKs every packet.
-+
-+// Set up config. To keep things simple, disable the
-+// mechanism that defers sending in order to send bigger TSO packets.
-+`./defaults.sh
-+sysctl -q net.ipv4.tcp_tso_win_divisor=100`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+  +.1 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+  +.1 < . 1:1(0) ack 1 win 257
-+   +0 accept(3, ..., ...) = 4
-+   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
-+
-+   +0 write(4, ..., 30000) = 30000
-+   +0 > P. 1:10001(10000) ack 1
-+   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
-+
-++.105 < . 1:1(0) ack 1001 win 257
-+   +0 > P. 10001:12001(2000) ack 1
-+
-+   +0 < . 1:1(0) ack 2001 win 257
-+   +0 > P. 12001:14001(2000) ack 1
-+
-++.005 < . 1:1(0) ack 3001 win 257
-+   +0 > P. 14001:16001(2000) ack 1
-+
-+   +0 < . 1:1(0) ack 4001 win 257
-+   +0 > P. 16001:18001(2000) ack 1
-+
-++.005 < . 1:1(0) ack 5001 win 257
-+   +0 > P. 18001:20001(2000) ack 1
-+
-+   +0 < . 1:1(0) ack 6001 win 257
-+   +0 > P. 20001:22001(2000) ack 1
-+
-++.005 < . 1:1(0) ack 7001 win 257
-+   +0 > P. 22001:24001(2000) ack 1
-+
-+   +0 < . 1:1(0) ack 8001 win 257
-+   +0 > P. 24001:26001(2000) ack 1
-+
-++.005 < . 1:1(0) ack 9001 win 257
-+   +0 > P. 26001:28001(2000) ack 1
-+
-+   +0 < . 1:1(0) ack 10001 win 257
-+   +0 > P. 28001:30001(2000) ack 1
-+
-+   +0 %{ assert tcpi_snd_cwnd == 20, tcpi_snd_cwnd }%
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-5pkt.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-5pkt.pkt
-new file mode 100644
-index 0000000000000..9212ae1fd0f2f
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-5pkt.pkt
-@@ -0,0 +1,33 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test of slow start when an outstanding flight of packets is
-+// less than the current cwnd, and not big enough to bump up cwnd.
-+//
-+// In this variant, the receiver ACKs every other packet,
-+// approximating standard delayed ACKs.
-+
-+// Set up config.
-+`./defaults.sh`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+   +0 < . 1:1(0) ack 1 win 257
-+   +0 accept(3, ..., ...) = 4
-+
-+// Only send 5 packets.
-+   +0 write(4, ..., 5000) = 5000
-+   +0 > P. 1:5001(5000) ack 1
-+   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
-+
-+   +0 < . 1:1(0) ack 2001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 10, 'cwnd=%d' % tcpi_snd_cwnd }%
-+
-+   +0 < . 1:1(0) ack 4001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 10, 'cwnd=%d' % tcpi_snd_cwnd }%
-+
-+   +0 < . 1:1(0) ack 5001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 10, 'cwnd=%d' % tcpi_snd_cwnd }%
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-6pkt.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-6pkt.pkt
-new file mode 100644
-index 0000000000000..416c901ddf518
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt-send-6pkt.pkt
-@@ -0,0 +1,34 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test of slow start when an outstanding flight of packets is
-+// less than the current cwnd, but still big enough that in slow
-+// start we want to increase our cwnd a little.
-+//
-+// In this variant, the receiver ACKs every other packet,
-+// approximating standard delayed ACKs.
-+
-+// Set up config.
-+`./defaults.sh`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+   +0 < . 1:1(0) ack 1 win 257
-+   +0 accept(3, ..., ...) = 4
-+
-+// Only send 6 packets.
-+   +0 write(4, ..., 6000) = 6000
-+   +0 > P. 1:6001(6000) ack 1
-+   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
-+
-+   +0 < . 1:1(0) ack 2001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 12, 'cwnd=%d' % tcpi_snd_cwnd }%
-+
-+   +0 < . 1:1(0) ack 4001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 12, 'cwnd=%d' % tcpi_snd_cwnd }%
-+
-+   +0 < . 1:1(0) ack 6001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 12, 'cwnd=%d' % tcpi_snd_cwnd }%
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt.pkt
-new file mode 100644
-index 0000000000000..a894b7d4559c1
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-2pkt.pkt
-@@ -0,0 +1,42 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test of slow start when not application-limited, so that
-+// the cwnd continues to grow.
-+// In this variant, the receiver ACKs every other packet,
-+// approximating standard delayed ACKs.
-+
-+// Set up config. To keep things simple, disable the
-+// mechanism that defers sending in order to send bigger TSO packets.
-+`./defaults.sh
-+sysctl -q net.ipv4.tcp_tso_win_divisor=100`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+  +.1 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+  +.1 < . 1:1(0) ack 1 win 257
-+   +0 accept(3, ..., ...) = 4
-+   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
-+
-+   +0 write(4, ..., 30000) = 30000
-+   +0 > P. 1:10001(10000) ack 1
-+   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
-+
-++.105 < . 1:1(0) ack 2001 win 257
-+   +0 > P. 10001:14001(4000) ack 1
-+
-++.005 < . 1:1(0) ack 4001 win 257
-+   +0 > P. 14001:18001(4000) ack 1
-+
-++.005 < . 1:1(0) ack 6001 win 257
-+   +0 > P. 18001:22001(4000) ack 1
-+
-++.005 < . 1:1(0) ack 8001 win 257
-+   +0 > P. 22001:26001(4000) ack 1
-+
-++.005 < . 1:1(0) ack 10001 win 257
-+   +0 > P. 26001:30001(4000) ack 1
-+
-+   +0 %{ assert tcpi_snd_cwnd == 20, tcpi_snd_cwnd }%
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-4pkt.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-4pkt.pkt
-new file mode 100644
-index 0000000000000..065fae9e9abd7
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-ack-per-4pkt.pkt
-@@ -0,0 +1,35 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test of slow start when not application-limited, so that
-+// the cwnd continues to grow.
-+// In this variant, the receiver sends one ACK per 4 packets.
-+
-+// Set up config. To keep things simple, disable the
-+// mechanism that defers sending in order to send bigger TSO packets.
-+`./defaults.sh
-+sysctl -q net.ipv4.tcp_tso_win_divisor=100`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+  +.1 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+  +.1 < . 1:1(0) ack 1 win 257
-+   +0 accept(3, ..., ...) = 4
-+   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
-+
-+   +0 write(4, ..., 30000) = 30000
-+   +0 > P. 1:10001(10000) ack 1
-+   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
-+
-+ +.11 < . 1:1(0) ack 4001 win 257
-+   +0 > P. 10001:18001(8000) ack 1
-+
-+ +.01 < . 1:1(0) ack 8001 win 257
-+   +0 > P. 18001:26001(8000) ack 1
-+
-++.005 < . 1:1(0) ack 10001 win 257
-+   +0 > P. 26001:30001(4000) ack 1
-+
-+   +0 %{ assert tcpi_snd_cwnd == 20, tcpi_snd_cwnd }%
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-idle.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-idle.pkt
-new file mode 100644
-index 0000000000000..11b213be11384
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-idle.pkt
-@@ -0,0 +1,39 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test of slow start after idle
-+// This test expects tso size to be at least initial cwnd * mss
-+
-+`./defaults.sh
-+./set_sysctls.py /proc/sys/net/ipv4/tcp_slow_start_after_idle=1 \
-+		 /proc/sys/net/ipv4/tcp_min_tso_segs=10`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 65535 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+  +.1 < . 1:1(0) ack 1 win 511
-+   +0 accept(3, ..., ...) = 4
-+   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
-+
-+   +0 write(4, ..., 26000) = 26000
-+   +0 > P. 1:5001(5000) ack 1
-+   +0 > P. 5001:10001(5000) ack 1
-+   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
-+
-+  +.1 < . 1:1(0) ack 10001 win 511
-+   +0 %{ assert tcpi_snd_cwnd == 20, tcpi_snd_cwnd }%
-+   +0 > P. 10001:20001(10000) ack 1
-+   +0 > P. 20001:26001(6000) ack 1
-+
-+  +.1 < . 1:1(0) ack 26001 win 511
-+   +0 %{ assert tcpi_snd_cwnd == 36, tcpi_snd_cwnd }%
-+
-+   +2 write(4, ..., 20000) = 20000
-+// If slow start after idle works properly, we should send 5 MSS here (cwnd/2)
-+   +0 > P. 26001:31001(5000) ack 1
-+   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
-+
-+// Reset sysctls
-+`/tmp/sysctl_restore_${PPID}.sh`
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-win-update.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-win-update.pkt
-new file mode 100644
-index 0000000000000..577ed8c8852cd
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-after-win-update.pkt
-@@ -0,0 +1,50 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test of slow start after window update
-+// This test expects tso size to be at least initial cwnd * mss
-+
-+`./defaults.sh
-+./set_sysctls.py /proc/sys/net/ipv4/tcp_slow_start_after_idle=1 \
-+		 /proc/sys/net/ipv4/tcp_min_tso_segs=10`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 65535 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+  +.1 < . 1:1(0) ack 1 win 511
-+   +0 accept(3, ..., ...) = 4
-+   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
-+
-+   +0 write(4, ..., 26000) = 26000
-+   +0 > P. 1:5001(5000) ack 1
-+   +0 > P. 5001:10001(5000) ack 1
-+   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
-+
-+  +.1 < . 1:1(0) ack 10001 win 511
-+   +0 %{ assert tcpi_snd_cwnd == 20, tcpi_snd_cwnd }%
-+   +0 > P. 10001:20001(10000) ack 1
-+   +0 > P. 20001:26001(6000) ack 1
-+
-+  +.1 < . 1:1(0) ack 26001 win 0
-+   +0 %{ assert tcpi_snd_cwnd == 36, tcpi_snd_cwnd }%
-+
-+   +0 write(4, ..., 20000) = 20000
-+// 1st win0 probe
-++.3~+.310 > . 26000:26000(0) ack 1
-+   +0 %{ assert tcpi_snd_cwnd == 36, tcpi_snd_cwnd }%
-+
-+// 2nd win0 probe
-++.6~+.620 > . 26000:26000(0) ack 1
-+   +0 %{ assert tcpi_snd_cwnd == 36, tcpi_snd_cwnd }%
-+
-+// 3rd win0 probe
-++1.2~+1.240 > . 26000:26000(0) ack 1
-+   +0 %{ assert tcpi_snd_cwnd == 36, tcpi_snd_cwnd }%
-+
-+  +.9 < . 1:1(0) ack 26001 win 511
-+   +0 > P. 26001:31001(5000) ack 1
-+
-+// Reset sysctls
-+`/tmp/sysctl_restore_${PPID}.sh`
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited-9-packets-out.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited-9-packets-out.pkt
-new file mode 100644
-index 0000000000000..869f32c35a2ab
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited-9-packets-out.pkt
-@@ -0,0 +1,38 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test of slow start when application-limited: in this case,
-+// with IW10, if we don't fully use our cwnd but instead
-+// send just 9 packets, then cwnd should grow to twice that
-+// value, or 18 packets.
-+
-+// Set up config.
-+`./defaults.sh`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+  +.1 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+  +.1 < . 1:1(0) ack 1 win 257
-+   +0 accept(3, ..., ...) = 4
-+   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
-+
-+   +0 write(4, ..., 9000) = 9000
-+   +0 > P. 1:9001(9000) ack 1
-+   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
-+
-++.105 < . 1:1(0) ack 2001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 12, tcpi_snd_cwnd }%
-+
-++.005 < . 1:1(0) ack 4001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 14, tcpi_snd_cwnd }%
-+
-++.005 < . 1:1(0) ack 6001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 16, tcpi_snd_cwnd }%
-+
-++.005 < . 1:1(0) ack 8001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 18, tcpi_snd_cwnd }%
-+
-++.005 < . 1:1(0) ack 9001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 18, tcpi_snd_cwnd }%
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited.pkt
-new file mode 100644
-index 0000000000000..0f77b7955db6e
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-app-limited.pkt
-@@ -0,0 +1,36 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test of slow start when application-limited: in this case,
-+// with IW10, if we send exactly 10 packets then cwnd should grow to 20.
-+
-+// Set up config.
-+`./defaults.sh`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+  +.1 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+  +.1 < . 1:1(0) ack 1 win 257
-+   +0 accept(3, ..., ...) = 4
-+   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
-+
-+   +0 write(4, ..., 10000) = 10000
-+   +0 > P. 1:10001(10000) ack 1
-+   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
-+
-++.105 < . 1:1(0) ack 2001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 12, tcpi_snd_cwnd }%
-+
-++.005 < . 1:1(0) ack 4001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 14, tcpi_snd_cwnd }%
-+
-++.005 < . 1:1(0) ack 6001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 16, tcpi_snd_cwnd }%
-+
-++.005 < . 1:1(0) ack 8001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 18, tcpi_snd_cwnd }%
-+
-++.005 < . 1:1(0) ack 10001 win 257
-+   +0 %{ assert tcpi_snd_cwnd == 20, tcpi_snd_cwnd }%
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-fq-ack-per-2pkt.pkt b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-fq-ack-per-2pkt.pkt
-new file mode 100644
-index 0000000000000..7e9c83d617c25
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_slow_start_slow-start-fq-ack-per-2pkt.pkt
-@@ -0,0 +1,63 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Test of slow start when not application-limited, so that
-+// the cwnd continues to grow, even if TSQ triggers.
-+// In this variant, the receiver ACKs every other packet,
-+// approximating standard delayed ACKs.
-+
-+// Note we use FQ/pacing to check if TCP Small Queues is not hurting
-+
-+`./defaults.sh
-+tc qdisc replace dev tun0 root fq
-+sysctl -q net/ipv4/tcp_pacing_ss_ratio=200
-+sysctl -e -q net.ipv4.tcp_min_tso_segs=2`
-+
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+  +.1 < S 0:0(0) win 32792 <mss 1460,sackOK,nop,nop,nop,wscale 7>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+  +.1 < . 1:1(0) ack 1 win 500
-+   +0 accept(3, ..., ...) = 4
-+   +0 setsockopt(4, SOL_SOCKET, SO_SNDBUF, [200000], 4) = 0
-+
-+   +0 write(4, ..., 40000) = 40000
-+// This might change if we cook the initial packet with 10 MSS.
-+   +0 > P. 1:2921(2920) ack 1
-+   +0 > P. 2921:5841(2920) ack 1
-+   +0 > P. 5841:8761(2920) ack 1
-+   +0 > P. 8761:11681(2920) ack 1
-+   +0 > P. 11681:14601(2920) ack 1
-+   +0 %{ assert tcpi_snd_cwnd == 10, tcpi_snd_cwnd }%
-+
-++.105 < . 1:1(0) ack 2921 win 500
-+   +0 %{ assert tcpi_snd_cwnd == 12, tcpi_snd_cwnd }%
-+
-+// Note: after this commit : "net_sched: sch_fq: account for schedule/timers drifts"
-+// FQ notices that this packet missed the 'time to send next packet' computed
-+// when prior packet (11681:14601(2920)) was sent.
-+// So FQ will allow following packet to be sent a bit earlier (quantum/2)
-+// (FQ commit allows an application/cwnd limited flow to get at most quantum/2 extra credit)
-+   +0 > P. 14601:17521(2920) ack 1
-+
-++.003 < . 1:1(0) ack 5841 win 500
-+   +0 %{ assert tcpi_snd_cwnd == 14, tcpi_snd_cwnd }%
-+
-++.001 > P. 17521:20441(2920) ack 1
-+
-++.001 < . 1:1(0) ack 8761 win 500
-+   +0 %{ assert tcpi_snd_cwnd == 16, tcpi_snd_cwnd }%
-+
-+// remaining packets are delivered at a constant rate.
-++.007 > P. 20441:23361(2920) ack 1
-+
-++.002 < . 1:1(0) ack 11681 win 500
-+   +0 %{ assert tcpi_snd_cwnd == 18, tcpi_snd_cwnd }%
-++.001 < . 1:1(0) ack 14601 win 500
-+
-++.004 > P. 23361:26281(2920) ack 1
-+
-++.007 > P. 26281:29201(2920) ack 1
-+
-+   +0 %{ assert tcpi_snd_cwnd == 20, 'cwnd=%d' % tcpi_snd_cwnd }%
--- 
-2.46.0.598.g6f2099f65c-goog
-
+Thanks
+Nicolin
 
