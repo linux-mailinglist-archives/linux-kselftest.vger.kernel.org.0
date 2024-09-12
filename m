@@ -1,139 +1,146 @@
-Return-Path: <linux-kselftest+bounces-17815-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17816-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1538976984
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 14:49:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66FF99769F3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 15:05:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E1B3B25D02
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 12:49:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8142B2610B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Sep 2024 13:05:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695391A7AF1;
-	Thu, 12 Sep 2024 12:48:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F0F71A7061;
+	Thu, 12 Sep 2024 13:04:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lcOULRWD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F10A21A76A2;
-	Thu, 12 Sep 2024 12:48:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3BDB1A2631
+	for <linux-kselftest@vger.kernel.org>; Thu, 12 Sep 2024 13:04:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726145328; cv=none; b=nF6Zy8XxQasXtQ6f95h1YMxaat8NPI67Jo7z2qBNgtlp73oxHA/rwX0Ou7PyT5icZWRkZj55FHhCZR3sTlZVFu1zqzIZiSWIP6iIhuvpHCYVShO0b83DiRD5BGVNPRfRhzqzg4Z8CusDGyCJWVCVvcKzTQlK5P0ArPZNA140dxE=
+	t=1726146276; cv=none; b=D6PlNhsglQbxnuSIKyHHC8fU64EAA8fFWXn48hjT36I40Qzi2Ow7WoeVovHkDby5rHPKapE5qwtZrTykTjUIFfg+oQVN7i4lV/KPUYl93o/uXfdSGAkxeI5jFEtq7bR5Dj9vz99neOajMkSG+X6/5Ss/syovAFymERTIrnB97WI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726145328; c=relaxed/simple;
-	bh=ezYLZ8vIxDCWrOwX5EVRLTgb8HhNEOjMRXeEd6Jpe4Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tgo809xo8WukGHCbOUNKGP8DuNbaQwL0xDfESk2rHwRKn+10Q+8EOCD3U2DOd84k/CRiZccX3KAlU1DuncyLhoEo9LQu54KUju/EcZUdAf4K2LkH9LLaLzMYVQruTgD7VBXt2Hs56k4i2aKUFcbu4ildasYd57J2FxatEiowmIE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 96090DA7;
-	Thu, 12 Sep 2024 05:49:14 -0700 (PDT)
-Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 04ED03F73B;
-	Thu, 12 Sep 2024 05:48:40 -0700 (PDT)
-Date: Thu, 12 Sep 2024 13:48:35 +0100
-From: Joey Gouly <joey.gouly@arm.com>
-To: Will Deacon <will@kernel.org>
-Cc: Dave Hansen <dave.hansen@intel.com>,
-	Kevin Brodsky <kevin.brodsky@arm.com>,
-	linux-arm-kernel@lists.infradead.org, nd@arm.com,
-	akpm@linux-foundation.org, aneesh.kumar@kernel.org,
-	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
-	broonie@kernel.org, catalin.marinas@arm.com,
-	christophe.leroy@csgroup.eu, dave.hansen@linux.intel.com,
-	hpa@zytor.com, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
-	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
-	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
-	szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 06/30] arm64: context switch POR_EL0 register
-Message-ID: <20240912124835.GA1220495@e124191.cambridge.arm.com>
-References: <20240822151113.1479789-1-joey.gouly@arm.com>
- <20240822151113.1479789-7-joey.gouly@arm.com>
- <425b8f8c-b6b5-422a-b5f4-41dd2d1ae3bb@arm.com>
- <6c8ad091-a56b-41ba-b403-2e3c2e578100@intel.com>
- <20240912105017.GA22788@willie-the-truck>
+	s=arc-20240116; t=1726146276; c=relaxed/simple;
+	bh=XyNHvyNEye0jcSAzV3V+fEuJzblC0RvSU4nG6g4cpY0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ec88wCxAhMywE25a/JWXcQVPcUoMTGwIyRC7Il2FxC3by2PeSUMgnWDGwQoYQJgBg8PPp++MkrmJ0+4nzX1Lp5j1aRC1l9h26oy0Y6VmJDPdxbTFrTpMYJVf5pF8O4AzCyyigcffmItL+K+epwGnWZUVY3D52H+R/WPHKYQ/hyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lcOULRWD; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726146273; x=1757682273;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XyNHvyNEye0jcSAzV3V+fEuJzblC0RvSU4nG6g4cpY0=;
+  b=lcOULRWD+/mkRIf7k4WpZKUYghNWgK4KUkJP7CUsKT6Lmiy1KyD2D28O
+   zP3USEYxc6fzgxOExjusUuL9dx1O+53o+9aTC7jhAvDB26wR+VSxTL3xa
+   rXTSw8AKZcvMY/UJhgm/HzX1Tz2HikVxgO1jMNXlqahRp74l/k5VchNbm
+   /cb7cehjgeHyWA/htZ5VrCp/I4Eyr5ogUbbvdyHBzuaoHhEjbRO+uYwS8
+   Vsd+YAK6yyJr2Iwpk/2APHI/KPIuFPIbu3kovGuEllavecrlJFIH+6PSg
+   4OZNtYwhNkdaYAiJObd1OoMmrMNmX84xoyRYDz90g/jJFb6l8L1WSmf2t
+   g==;
+X-CSE-ConnectionGUID: gMs5IFAdQeCrrYCbNcGF6A==
+X-CSE-MsgGUID: 2cPl8homRa+wVj+XMzxSHQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11192"; a="36380514"
+X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
+   d="scan'208";a="36380514"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 06:04:32 -0700
+X-CSE-ConnectionGUID: SWjfLq4JRIWOtYaaYs5rwQ==
+X-CSE-MsgGUID: QOefvboDRO2u9VLPjThPsg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,223,1719903600"; 
+   d="scan'208";a="72509901"
+Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
+  by orviesa005.jf.intel.com with ESMTP; 12 Sep 2024 06:04:32 -0700
+From: Yi Liu <yi.l.liu@intel.com>
+To: joro@8bytes.org,
+	jgg@nvidia.com,
+	kevin.tian@intel.com,
+	baolu.lu@linux.intel.com
+Cc: alex.williamson@redhat.com,
+	eric.auger@redhat.com,
+	nicolinc@nvidia.com,
+	chao.p.peng@linux.intel.com,
+	yi.l.liu@intel.com,
+	iommu@lists.linux.dev,
+	zhenzhong.duan@intel.com,
+	linux-kselftest@vger.kernel.org,
+	vasant.hegde@amd.com
+Subject: [PATCH v2 0/6] Make set_dev_pasid op supporting domain replacement
+Date: Thu, 12 Sep 2024 06:04:21 -0700
+Message-Id: <20240912130427.10119-1-yi.l.liu@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240912105017.GA22788@willie-the-truck>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 12, 2024 at 11:50:18AM +0100, Will Deacon wrote:
-> Hi Dave,
-> 
-> On Wed, Sep 11, 2024 at 08:33:54AM -0700, Dave Hansen wrote:
-> > On 9/11/24 08:01, Kevin Brodsky wrote:
-> > > On 22/08/2024 17:10, Joey Gouly wrote:
-> > >> @@ -371,6 +382,9 @@ int copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
-> > >>  		if (system_supports_tpidr2())
-> > >>  			p->thread.tpidr2_el0 = read_sysreg_s(SYS_TPIDR2_EL0);
-> > >>  
-> > >> +		if (system_supports_poe())
-> > >> +			p->thread.por_el0 = read_sysreg_s(SYS_POR_EL0);
-> > > Here we are only reloading POR_EL0's value if the target is a user
-> > > thread. However, as this series stands, POR_EL0 is also relevant to
-> > > kthreads, because any uaccess or GUP done from a kthread will also be
-> > > checked against POR_EL0. This is especially important in cases like the
-> > > io_uring kthread, which accesses the memory of the user process that
-> > > spawned it. To prevent such a kthread from inheriting a stale value of
-> > > POR_EL0, it seems that we should reload POR_EL0's value in all cases
-> > > (user and kernel thread).
-> > 
-> > The problem with this is trying to figure out which POR_EL0 to use.  The
-> > kthread could have been spawned ages ago and might not have a POR_EL0
-> > which is very different from the current value of any of the threads in
-> > the process right now.
-> > 
-> > There's also no great way for a kthread to reach out and grab an updated
-> > value.  It's all completely inherently racy.
-> > 
-> > > Other approaches could also be considered (e.g. resetting POR_EL0 to
-> > > unrestricted when creating a kthread), see my reply on v4 [1].
-> > 
-> > I kinda think this is the only way to go.  It's the only sensible,
-> > predictable way.  I _think_ it's what x86 will end up doing with PKRU,
-> > but there's been enough churn there that I'd need to go double check
-> > what happens in practice.
-> 
-> I agree.
-> 
-> > Either way, it would be nice to get an io_uring test in here that
-> > actually spawns kthreads:
-> > 
-> > 	tools/testing/selftests/mm/protection_keys.c
-> 
-> It would be good to update Documentation/core-api/protection-keys.rst
-> as well, since the example with read() raises more questions than it
-> answers!
-> 
-> Kevin, Joey -- I've got this series queued in arm64 as-is, so perhaps
-> you could send some patches on top so we can iron this out in time for
-> 6.12? I'll also be at LPC next week if you're about.
+This splits the preparation works of the iommu and the Intel iommu driver
+out from the iommufd pasid attach/replace series. [1]
 
-I found the code in arch/x86 that does this, I must have missed this previously.
+To support domain replacement, the definition of the set_dev_pasid op
+needs to be enhanced. Meanwhile, the existing set_dev_pasid callbacks
+should be extended as well to suit the new definition.
 
-arch/x86/kernel/process.c: int copy_thread()                                                                                                                   
+This series first prepares the Intel iommu set_dev_pasid op for the new
+definition, adds the missing set_dev_pasid support for nested domain, makes
+ARM SMMUv3 set_dev_pasid op to suit the new definition, and in the end
+enhances the definition of set_dev_pasid op. The AMD set_dev_pasid callback
+is extended to fail if the caller tries to do domain replacement to meet the
+new definition of set_dev_pasid op. AMD iommu driver would support it later
+per Vasant [2].
 
-        /* Kernel thread ? */                                                                                                                                                                  
-        if (unlikely(p->flags & PF_KTHREAD)) {                                                                                                                                                 
-                p->thread.pkru = pkru_get_init_value();                                                                                                                                        
-                memset(childregs, 0, sizeof(struct pt_regs));                                                                                                                                  
-                kthread_frame_init(frame, args->fn, args->fn_arg);                                                                                                                             
-                return 0;                                                                                                                                                                      
-        }
+[1] https://lore.kernel.org/linux-iommu/20240412081516.31168-1-yi.l.liu@intel.com/
+[2] https://lore.kernel.org/linux-iommu/fa9c4fc3-9365-465e-8926-b4d2d6361b9c@amd.com/
 
-I can send a similar patch for arm64.  I have no idea how to write io_uring
-code, so looking for examples I can work with to get a test written. Might just
-send the arm64 fix first, if that's fine?
+v2:
+ - Make ARM SMMUv3 set_dev_pasid op support domain replacement (Jason)
+ - Drop patch 03 of v1 (Kevin)
+ - Multiple tweaks in VT-d driver (Kevin)
 
-Thanks,
-Joey
+v1: https://lore.kernel.org/linux-iommu/20240628085538.47049-1-yi.l.liu@intel.com/
+
+Regards,
+	Yi Liu
+
+Jason Gunthorpe (1):
+  iommu/arm-smmu-v3: Make smmuv3 set_dev_pasid() op support replace
+
+Lu Baolu (1):
+  iommu/vt-d: Add set_dev_pasid callback for nested domain
+
+Yi Liu (4):
+  iommu: Pass old domain to set_dev_pasid op
+  iommu/vt-d: Move intel_drain_pasid_prq() into
+    intel_pasid_tear_down_entry()
+  iommu/vt-d: Make intel_iommu_set_dev_pasid() to handle domain
+    replacement
+  iommu: Make set_dev_pasid op support domain replacement
+
+ drivers/iommu/amd/amd_iommu.h                 |   3 +-
+ drivers/iommu/amd/pasid.c                     |   6 +-
+ .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   |   5 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   |   8 +-
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   |   2 +-
+ drivers/iommu/intel/iommu.c                   | 122 ++++++++++++------
+ drivers/iommu/intel/iommu.h                   |   3 +
+ drivers/iommu/intel/nested.c                  |   1 +
+ drivers/iommu/intel/pasid.c                   |  13 +-
+ drivers/iommu/intel/pasid.h                   |   8 +-
+ drivers/iommu/intel/svm.c                     |   6 +-
+ drivers/iommu/iommu.c                         |   3 +-
+ include/linux/iommu.h                         |   5 +-
+ 13 files changed, 129 insertions(+), 56 deletions(-)
+
+-- 
+2.34.1
+
 
