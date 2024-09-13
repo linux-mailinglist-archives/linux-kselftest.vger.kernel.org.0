@@ -1,279 +1,357 @@
-Return-Path: <linux-kselftest+bounces-17960-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17961-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06381978A64
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 23:04:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9942978AA6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 23:34:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 246AF1C228DB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 21:04:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A03E1C22E6E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 21:34:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67F7E1527A7;
-	Fri, 13 Sep 2024 21:04:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BC7017838B;
+	Fri, 13 Sep 2024 21:33:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="mGJQhVia"
+	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="RyV3k2wF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from LO0P265CU003.outbound.protection.outlook.com (mail-uksouthazon11022113.outbound.protection.outlook.com [52.101.96.113])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE0A1537DA
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Sep 2024 21:04:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726261455; cv=none; b=OmCpOv4rw2I+Uywk2XbyU/tin5jCJtdeswsZ8MlEbcWpwCsC4+QasVoiOg/mSDs1mZbfW/hQMERul5FI7GREP4xT+MnejeK22MpHdowBqqXn4nRE7M1n0AbVNSyC8ciw7hhxglil5+lzNZQcw1enjsYi5nhCELt2L0nl6dldFUk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726261455; c=relaxed/simple;
-	bh=UTbmMbiOdPh2p8MAam907C+8IKVqjc0gQ8Sb2U1VqF0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Mn2n54pDHm9ObPSS8yE5RYCRhYhoCOe1DLBMSo9/jn+BcJVoXfXrrLPas5TD/SgQZEl7UVedKEwZx5at4y4nqeS6BxDhnRd+adPgdYgZK/xfIAgjPjW6LN2kyqpA33SzmMZ7OsZJsdeYJNKUcoryh9tu9T9OQ5swKhzi/aK8e78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=mGJQhVia; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2059112f0a7so13127845ad.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Sep 2024 14:04:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1726261452; x=1726866252; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pGN098PfFZ1p39RZKtno/bb1iGOxyKkQDSILC8HyAbs=;
-        b=mGJQhViaeBP8boO4Z3ZlrGQg2Ou1nzmYaw9yb7rukospMvx2utfJB3ZJC/iHXR1zY5
-         OHHUQ7APm78lvjgaMAUf8nqLxbwPfkCE6Z5e7ZNILJdFYZ+iil46N6YJi7qrukHgrCj/
-         52MTbKyKy529xeaqzrRTzLPQwJPpgli/uI+0fNxnWN+NS2DfW/BXySToSEAivdhd/b1E
-         0bhUlMQ9VwSyt4VT3AbPh30kaAP0/NOhpzlX6MgqnmsEjeE/PQpON963yaauaSMSSEog
-         9Z7w+mZFQjHElQBLBsbH+wO7gdp/BUvodGBjrviEku9NhDQC1RpY/imscbGB4lWvqiQI
-         Jydg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726261452; x=1726866252;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pGN098PfFZ1p39RZKtno/bb1iGOxyKkQDSILC8HyAbs=;
-        b=Yb/CoiMWERGsKQ3hNSUV911+7GshJKfxiawVGG19CCw3WbPKEGo9RLplyw2jFkJ1mn
-         LtrVZZ3LACei94zdOw5v6T9Ur2SsZkgRjM936MYWiWDZ+LQavme1gptHL1lij0R03qO8
-         NLestFM1lfwZJ1a9l8ER9Kd1Uyj1yjGRx2/3LGAODOQc0+0JBK/NEBVWUoqRSnR4nhnm
-         put3nDy49PqQErCkAf8QBuPJ6ey9AY9V1xwMxhW9+Y/qAA94T4p91X4yRGrFRKKXvOO1
-         U8i4d+1EAPsxzs2DqZyx4JEFg2YG7ntek/G6dlhaH5L4gNOFwgLsfiNLX7LFEZjMk6N4
-         yKZw==
-X-Forwarded-Encrypted: i=1; AJvYcCUIVfaaRxwOBlVf4QZPPlB73RY4g1Xn82H/C0rYfQ1vfgKEZaxBIJKdn7y4O+4xUgJgrmC/PMAgjQA0kWyFonE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfSu9mnv6w3HQx8K6bnPEmjAAwfzr3OZ/Z2UQwmjPredhSZrBk
-	zJxYVyY8nhohu7kgH6tsTxeUDgLCF7lbL3iMhkoIGtzuuY8ltBhWspYUmuv1p3M=
-X-Google-Smtp-Source: AGHT+IHQy68+7/4em5wfAX0phJQ7a7VsNC8xlp5lvUp2N1zpKPOlth6aUECbhTSHxYBYBN7icOc/wA==
-X-Received: by 2002:a17:902:f54f:b0:207:457f:b8a6 with SMTP id d9443c01a7336-2078262ccc1mr54571405ad.12.1726261452005;
-        Fri, 13 Sep 2024 14:04:12 -0700 (PDT)
-Received: from ghost ([50.145.13.30])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-207945da8c9sm608475ad.17.2024.09.13.14.04.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Sep 2024 14:04:11 -0700 (PDT)
-Date: Fri, 13 Sep 2024 14:04:06 -0700
-From: Charlie Jenkins <charlie@rivosinc.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Arnd Bergmann <arnd@arndb.de>, guoren <guoren@kernel.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vlastimil Babka <vbabka@suse.cz>, shuah <shuah@kernel.org>,
-	Christoph Hellwig <hch@infradead.org>,
-	Michal Hocko <mhocko@suse.com>,
-	"Kirill A. Shutemov" <kirill@shutemov.name>,
-	Chris Torek <chris.torek@gmail.com>,
-	Linux-Arch <linux-arch@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-mm@kvack.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 337BC17623A;
+	Fri, 13 Sep 2024 21:33:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.96.113
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726263215; cv=fail; b=iahyMK7Zo22i1difjeWTdJBnic9U9p3NwtmDqHJIpeCpB2TXvj5Jtu7YXkqGCMVjUzGPRzgj5NqgoRcxb3rvCVBf/z3HoNxp0r97U8Bx5I4r/YAIGhQb4rmA0x9ezUYajE4lfyLoGRisV3t4/VCVFe0Om3sXgRTC08+3Pn9UoHw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726263215; c=relaxed/simple;
+	bh=jRja1tg0WQbBh8Ke468nb6Tcj/huW0D0Wp37eQd4+R0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=amqsyzLsM3sexkQJwrK1xkieoJmdKthdQR6+htH/yJDI0cHDRrG2O+IZaeHjsbjSAFxrvmG2ST7btLFy8LKyMpEzmenndqDbUtQZ/mz75KsU+S7A+8DtHFtSyPMSCGqbDC6bzE4v/dMGPbStW6VOQb7sMbnwy99M+Qb7iexcFeg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=RyV3k2wF; arc=fail smtp.client-ip=52.101.96.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=garyguo.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=XOJJUVD56sZ5QKF+3DmNWg0zoi/DK569+HWeGDOd52PrbTx3bNR0gOrZHPl3PXrK5jfSHUp0A81E+NcTIA6lA5eX6MSmv3VdZQqEWm8UslF4CgXFAYSU65TJlB0wZEm4mmNZA7vO6Av2fxn1yK//icBbge8m1bLvLURR3y/WmTK6Ps1EwU3fXDQnALZTySDNZGJD75b3KV6pRnffrSp5tBG2PKRBy5AaLnNcKse9vWgIOugSrhf0bNKkkg6sHDuUK4FJItYmkNBut7Em4eRxdDFL87krxUecb5VY2b3R12v6ovdQ8lzJp7b+2yUlwntkfPz+MHd8qNVI7zLOkNYbGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=x+OH1U9UEu0Hwq936OTNYAZRT7ekSwZvaqmh4X/uJd0=;
+ b=lsKBU8SZm3gZjOBo4oY0ETyucEgeEw/WBfAUQTs8dQZCUIIpXO6q4lDOjmEoDIkPqVzn7rDmoMh3IaLH9L0kVVM26d9UYTFer8zRSbeoujnVuaqqU+9OvN/dWaPlZ67CN/CDMPh1QEOvXrhE7HwJuAMYULf/cpM5mUH6AFSKAJEM5w7TuDHqQVMXFM+Ulf/S1HCtfrGi2m8exobIgIExuhm33YW1V/6I2PueWycx1SyJh0AnGvZa+PfUowmiKZassND1JWyaPY6w3YUpqK1vVymfrD8e1pLfvKWvFCvkqUXzli1c4akOtoVj7ZezxYrjl35uGQuWud7tzlOdWUHhzQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
+ dkim=pass header.d=garyguo.net; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=x+OH1U9UEu0Hwq936OTNYAZRT7ekSwZvaqmh4X/uJd0=;
+ b=RyV3k2wFNrmmfgqfihnDvhrqlwt3mEkJpdi97zufgh6n7MBZqmoGkt4q0cTNKEJn6edp3iWhLWOUr9AawUdNRnB68aLwIZkCkhLugqgXFWvW+xRreYmusQ8VT3FhVmMwK8GSPrbXdQxacE3EJcexl793bvK20qbg9zTqjlai9zw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=garyguo.net;
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
+ by LO2P265MB3594.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:1a3::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.20; Fri, 13 Sep
+ 2024 21:33:30 +0000
+Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1818:a2bf:38a7:a1e7]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::1818:a2bf:38a7:a1e7%4]) with mapi id 15.20.7962.018; Fri, 13 Sep 2024
+ 21:33:30 +0000
+From: Gary Guo <gary@garyguo.net>
+To: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Martin Rodriguez Reboredo <yakoyoku@gmail.com>,
+	Michael Vetter <jubalh@iodoru.org>,
+	Finn Behrens <me@kloenk.dev>,
+	Valentin Obst <kernel@valentinobst.de>,
+	Danilo Krummrich <dakr@redhat.com>,
+	Yutaro Ohno <yutaro.ono.418@gmail.com>
+Cc: Wedson Almeida Filho <walmeida@microsoft.com>,
+	Asahi Lina <lina@asahilina.net>,
 	linux-kselftest@vger.kernel.org,
-	linux-abi-devel@lists.sourceforge.net
-Subject: Re: [PATCH RFC v3 1/2] mm: Add personality flag to limit address to
- 47 bits
-Message-ID: <ZuSoxh5U3Kj1XgGq@ghost>
-References: <20240905-patches-below_hint_mmap-v3-1-3cd5564efbbb@rivosinc.com>
- <9fc4746b-8e9d-4a75-b966-e0906187e6b7@app.fastmail.com>
- <CAJF2gTTVX9CFM3oRZZP3hGExwVwA_=n1Lrq_0DQKWA+-ZbOekg@mail.gmail.com>
- <f23b18c6-1856-4b59-9ba3-59809b425c81@app.fastmail.com>
- <Ztrq8PBLJ3QuFJz7@arm.com>
- <oshwto46wbbgneiayj63umllyozm3c4267rvpszqzaopwnt2l7@6mxl5vydtons>
- <ZuDoExckq21fePoe@ghost>
- <ZuHfp0_tAQhaymdy@arm.com>
- <ZuKHpFB+uWuJe2xm@ghost>
- <d873a994-4efa-4d3a-bdae-5d9a3eff29f2@lucifer.local>
+	kunit-dev@googlegroups.com,
+	rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 5/5] rust: cleanup unnecessary casts
+Date: Fri, 13 Sep 2024 22:29:25 +0100
+Message-ID: <20240913213041.395655-6-gary@garyguo.net>
+X-Mailer: git-send-email 2.44.1
+In-Reply-To: <20240913213041.395655-1-gary@garyguo.net>
+References: <20240913213041.395655-1-gary@garyguo.net>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: LO2P265CA0136.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:9f::28) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:253::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d873a994-4efa-4d3a-bdae-5d9a3eff29f2@lucifer.local>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|LO2P265MB3594:EE_
+X-MS-Office365-Filtering-Correlation-Id: 87375238-b07c-4ab0-f61c-08dcd43bb648
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?/dMeFbXzBtgTm2ey7t9Oi9Vmjoi9Abm7bHyxcEX4639KEoNaA5PwuUi+1hI/?=
+ =?us-ascii?Q?iq9Ywv/zwD3ZKf5fSTiUEnvGj07TMemRRdsd4bDQ/Uf8WY+yRZjglLNygzPl?=
+ =?us-ascii?Q?ww8PQGiP3ciMBVSViaHDHk+VpJTKBeVnxEoE8Dxjnqavt8GVtes7xSiiFcIz?=
+ =?us-ascii?Q?Vv++nX3lfBVPhk6BLq+mZytlI7LxDiib2IIck9QZUyPKSW+e5RpFuQKtPGJh?=
+ =?us-ascii?Q?SDdJGEHsvAFHPjOYbUSb0kzIa3rA00iXclQ5fJAj5/QTgQVJwRTbnNajB0ah?=
+ =?us-ascii?Q?KYCrmTrih5yVtCf+XIS/n2C6NUHlMDCIhvEWWAmdy/qOHV5V7eZe15PwixCO?=
+ =?us-ascii?Q?qVINpLy70CVBNiYLv4dqJYBMnplWOmrUsTzb9r3C8RoaRnMUBpsCK9021r1l?=
+ =?us-ascii?Q?VaX5PjaE/ESck3JjHeyXbe0TpxKTrifNys6W95412ZXuK/ulsuRP/yYy5sBR?=
+ =?us-ascii?Q?kQUlvKDleCjYk36sS4/yn+5QTY7lq0cRmv7IpPpvTj+UDRGTk5CFyyxbC5Os?=
+ =?us-ascii?Q?2T61ClxCTHRbXf2ufVepRBWo3l9vx8NmR93PIZ65RMTyejN48do60XLsFFre?=
+ =?us-ascii?Q?YHCldPsMkIeXkvmMHAmPlZz+t2LkOsAyj9LdMbCaGjXykquYtUNM6XeInZ3g?=
+ =?us-ascii?Q?pWdiP0QqBvAVWTllbIoaYfMX45dBFSidfTsoPxzSp3oiPek6/Vh7HvPxatLh?=
+ =?us-ascii?Q?4JFX9p7meqXtiVPHjrNf2ZivjAfW8g3E3FN+iMkBsyuLG1eN+PPID5BzH5hM?=
+ =?us-ascii?Q?DmtXMJSzm4KWTuURZ+VJ4aUrDGzEZ0hTNF3NczVsO/MUqVJI1aEtHNeerZzu?=
+ =?us-ascii?Q?5pCyYI/FItsZdZew/kFjsP/GoexZ3W4jA7wcZ2kaN/p2nNjJlJqKZS1svddC?=
+ =?us-ascii?Q?5lIN4Rld4+oa52GKVkCiiNlocI4aiHHeSbcF88WdHhu/TxIbPoE7otYMwW4D?=
+ =?us-ascii?Q?AFfHQTECyvIi80JyiCU0lIcKxc3+Iqs1f0ElDx3q5OLWnhoMtUnUUk8htKS9?=
+ =?us-ascii?Q?mZLztDkGZaM0OgqPwmP+KE20sFLKLrciYVOOaF6wFMSFY5iws3sJbnbn6gk9?=
+ =?us-ascii?Q?ik98OlhALoeMMJZJEEsqANTFrtQBINtYs5RYoCk8uIgk5zJXrQiuBHvWXJUh?=
+ =?us-ascii?Q?7cRmX+yiVKzSA8UE/9S2O0SMuxj/QU19brSQq3QMRLYbEok1o2O7hvxACE7u?=
+ =?us-ascii?Q?JXUjBeXyV3v632Ibje2qYbHdf7TFJ4QKGPHuZ/5pZ9Vk3Rj3PW0n7oIkh3yD?=
+ =?us-ascii?Q?C/o27lfSni+POfAO8DtYTdVFS4Q+ngvEWKWHsBMjXNPXO3/JCjesVIKODotM?=
+ =?us-ascii?Q?8KLD1BTH/BmuUi13aSF9+piz2WpzUL6Jklqz8NGsks6dDpj1fyL7iAafOkaB?=
+ =?us-ascii?Q?BBhiOhf9SIr2e9bJtoqWZy+MXpPK?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(921020);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?dGGiYl5zcZYNW97sOspUKoxmVMQWV3wQlEN7F86Or6x8ihvpyHW9Sxs79Qr2?=
+ =?us-ascii?Q?iyoh9hVzzfu+/d9NkyaDnJ6wNGYou+ssDax9SaTrMcOLnEMqlczeVX1JZjaT?=
+ =?us-ascii?Q?9vBpdYcQNteVJ+zOTr9BdO8QVoQ5LD/TbpUpTMJNeGwCw4RNia2BQ60JTqO7?=
+ =?us-ascii?Q?3bo1p1HIUdismD8Tw7h4MQyguLiWiYW3OkC7zxZeQeMJMK/IXKFMyR4CGzMy?=
+ =?us-ascii?Q?ERoYB8obtKkIZtlpqe9dKmGqIAolHSkZr3wRTqfKxLuK4Gweu+0yxspsD83h?=
+ =?us-ascii?Q?rmH/BX3j8cOTGE6fld/O24b/FX/9ChE9lA/Vs2AST1UPrc40HInl4suTN97q?=
+ =?us-ascii?Q?1gChlx7I99Vp8GOB3g06ChOnTm6fPZN2VVyFJY+zi3lvZU91OtXSvH/nowNp?=
+ =?us-ascii?Q?aG8C4azRKqx4FE06pNYJIhDuraJmNW7E6h1/w4JgmOsP0s8lMxROMjNxC+lF?=
+ =?us-ascii?Q?IW+dIj6FYN0JIdQRDMVIvvu6AWcNE2wWsWTQK8xAe0EHIPcFfGGijdBMKy/Z?=
+ =?us-ascii?Q?n5w4Eswa/q2kgZSrCkQHFvaunv669gvCpTUXwapyB+S7oQwJ+xQCM+J8mxLU?=
+ =?us-ascii?Q?MC9q6Uh4jn3aepJygaT3f2KL2UpculEUx2RRZLgzzVBUca1J9rsLr6zPrtHg?=
+ =?us-ascii?Q?jWGUSOAIq6v5nm6ylZGCw8s9J2GSHHLFaVCv2e7P4dF+OqtEBoy1hHbFiq62?=
+ =?us-ascii?Q?GbNISEOWzfIPtvWv8C0XqzVtScOCJW1iwbbB3kv011BRO1CjwZUYwjSabX8t?=
+ =?us-ascii?Q?ONRnUgq4zvYS3dXL7WgJJljan8DMTCLHQb2c6Etz5bOLPBZFmqJrb0Qj1K13?=
+ =?us-ascii?Q?5Hh16U3X9aYpBKOZszegaPKfcTVWX0FqtaJYeiPQSjHwZBvZpsN4Cg7R3nbV?=
+ =?us-ascii?Q?ljP3Cvgv6naBW50utAY2BAlvpaDFP9xzkaCd0O40O4zn3nZblm6oo0FxxH1L?=
+ =?us-ascii?Q?L89PwQZNzysV9vv3d85HWOMLZ4uX+9/R65vfBX++8td9VWav5ibegUx3PzUT?=
+ =?us-ascii?Q?BaiQAg38Luit6aOwCCk+JTR35MKOv4S8nyvRC740k6N6A6aPMzDn+xjgN8Ta?=
+ =?us-ascii?Q?9glxl1fXhtxk+gEAnP7mgXupxWq1Wux2MxiSo2XvcEdI8lxM+8UWSZepJXX6?=
+ =?us-ascii?Q?hu5L+D7y/07ibyDlIzFlMZyHGQQcb+rrkFaPJgLa+P3EtuvZtNHlOW5qi5OH?=
+ =?us-ascii?Q?J23HZXZoABnhVA4ekf4iNZHuaSjd+x9GkYEbRoII7Vl0pI7dxGqElJsAb76q?=
+ =?us-ascii?Q?gZ/7OvTHSOg5P/2MqIQLdsoOCMVi9SC2rr90LY6O8O2cZx1u42E/bx8bx7a2?=
+ =?us-ascii?Q?/uOQYkRG9jbguDe02H3mB1j5RLH4LQGw861W6TGY6KIoI/OEyWcF+F49Sfwy?=
+ =?us-ascii?Q?qT01bgA7xLnul+e3TUX4yp3K5C0FcAe12hLmxsG/S+gVAMonJ6n7p/PoqF0/?=
+ =?us-ascii?Q?FGfz/QAlb3VF9KmtafBM5Z0MnLeUvWM084gOqS/uazIS+sUVsqqAcY2lek4W?=
+ =?us-ascii?Q?QAg8uBFqNAxLxSk1kvO4JoNKU1OmKcBYVq6eQKQAcOpaXwLKRxbbPok2KNUm?=
+ =?us-ascii?Q?zG/irynmF/7s9yV1j1L85TYIUXsGje/DHqfidU2Vohlxc0FkQubTkoJ2xAGj?=
+ =?us-ascii?Q?rg=3D=3D?=
+X-OriginatorOrg: garyguo.net
+X-MS-Exchange-CrossTenant-Network-Message-Id: 87375238-b07c-4ab0-f61c-08dcd43bb648
+X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2024 21:33:30.7449
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QaY37UXZv6RIOoymrZC121d39xcDBTtO2IgFE+T3un8GdOeyCQIT7HUcqd34A/mSuXVS205bFofws/h+uGVWPA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO2P265MB3594
 
-On Fri, Sep 13, 2024 at 08:41:34AM +0100, Lorenzo Stoakes wrote:
-> On Wed, Sep 11, 2024 at 11:18:12PM GMT, Charlie Jenkins wrote:
-> > On Wed, Sep 11, 2024 at 07:21:27PM +0100, Catalin Marinas wrote:
-> > > On Tue, Sep 10, 2024 at 05:45:07PM -0700, Charlie Jenkins wrote:
-> > > > On Tue, Sep 10, 2024 at 03:08:14PM -0400, Liam R. Howlett wrote:
-> > > > > * Catalin Marinas <catalin.marinas@arm.com> [240906 07:44]:
-> > > > > > On Fri, Sep 06, 2024 at 09:55:42AM +0000, Arnd Bergmann wrote:
-> > > > > > > On Fri, Sep 6, 2024, at 09:14, Guo Ren wrote:
-> > > > > > > > On Fri, Sep 6, 2024 at 3:18 PM Arnd Bergmann <arnd@arndb.de> wrote:
-> > > > > > > >> It's also unclear to me how we want this flag to interact with
-> > > > > > > >> the existing logic in arch_get_mmap_end(), which attempts to
-> > > > > > > >> limit the default mapping to a 47-bit address space already.
-> > > > > > > >
-> > > > > > > > To optimize RISC-V progress, I recommend:
-> > > > > > > >
-> > > > > > > > Step 1: Approve the patch.
-> > > > > > > > Step 2: Update Go and OpenJDK's RISC-V backend to utilize it.
-> > > > > > > > Step 3: Wait approximately several iterations for Go & OpenJDK
-> > > > > > > > Step 4: Remove the 47-bit constraint in arch_get_mmap_end()
-> > >
-> > > Point 4 is an ABI change. What guarantees that there isn't still
-> > > software out there that relies on the old behaviour?
-> >
-> > Yeah I don't think it would be desirable to remove the 47 bit
-> > constraint in architectures that already have it.
-> >
-> > >
-> > > > > > > I really want to first see a plausible explanation about why
-> > > > > > > RISC-V can't just implement this using a 47-bit DEFAULT_MAP_WINDOW
-> > > > > > > like all the other major architectures (x86, arm64, powerpc64),
-> > > > > >
-> > > > > > FWIW arm64 actually limits DEFAULT_MAP_WINDOW to 48-bit in the default
-> > > > > > configuration. We end up with a 47-bit with 16K pages but for a
-> > > > > > different reason that has to do with LPA2 support (I doubt we need this
-> > > > > > for the user mapping but we need to untangle some of the macros there;
-> > > > > > that's for a separate discussion).
-> > > > > >
-> > > > > > That said, we haven't encountered any user space problems with a 48-bit
-> > > > > > DEFAULT_MAP_WINDOW. So I also think RISC-V should follow a similar
-> > > > > > approach (47 or 48 bit default limit). Better to have some ABI
-> > > > > > consistency between architectures. One can still ask for addresses above
-> > > > > > this default limit via mmap().
-> > > > >
-> > > > > I think that is best as well.
-> > > > >
-> > > > > Can we please just do what x86 and arm64 does?
-> > > >
-> > > > I responded to Arnd in the other thread, but I am still not convinced
-> > > > that the solution that x86 and arm64 have selected is the best solution.
-> > > > The solution of defaulting to 47 bits does allow applications the
-> > > > ability to get addresses that are below 47 bits. However, due to
-> > > > differences across architectures it doesn't seem possible to have all
-> > > > architectures default to the same value. Additionally, this flag will be
-> > > > able to help users avoid potential bugs where a hint address is passed
-> > > > that causes upper bits of a VA to be used.
-> > >
-> > > The reason we added this limit on arm64 is that we noticed programs
-> > > using the top 8 bits of a 64-bit pointer for additional information.
-> > > IIRC, it wasn't even openJDK but some JavaScript JIT. We could have
-> > > taught those programs of a new flag but since we couldn't tell how many
-> > > are out there, it was the safest to default to a smaller limit and opt
-> > > in to the higher one. Such opt-in is via mmap() but if you prefer a
-> > > prctl() flag, that's fine by me as well (though I think this should be
-> > > opt-in to higher addresses rather than opt-out of the higher addresses).
-> >
-> > The mmap() flag was used in previous versions but was decided against
-> > because this feature is more useful if it is process-wide. A
-> > personality() flag was chosen instead of a prctl() flag because there
-> > existed other flags in personality() that were similar. I am tempted to
-> > use prctl() however because then we could have an additional arg to
-> > select the exact number of bits that should be reserved (rather than
-> > being fixed at 47 bits).
-> 
-> I am very much not in favour of a prctl(), it would require us to add state
-> limiting the address space and the timing of it becomes critical. Then we
-> have the same issue we do with the other proposals as to - what happens if
-> this is too low?
-> 
-> What is 'too low' varies by architecture, and for 32-bit architectures
-> could get quite... problematic.
-> 
-> And again, wha is the RoI here - we introducing maintenance burden and edge
-> cases vs. the x86 solution in order to... accommodate things that need more
-> than 128 TiB of address space? A problem that does not appear to exist in
-> reality?
-> 
-> I suggested the personality approach as the least impactful compromise way
-> of this series working, but I think after what Arnd has said (and please
-> forgive me if I've missed further discussion have been dipping in and out
-> of this!) - adapting risc v to the approach we take elsewhere seems the
-> most sensible solution to me.
->
-> This remains something we can revisit in future if this turns out to be
-> egregious.
->
+With `long` mapped to `isize`, `size_t`/`__kernel_size_t` mapped to
+usize and `char` mapped to `u8`, many of the existing casts are no
+longer necessary.
 
-I appreciate Arnd's comments, but I do not think that making 47-bit the
-default is the best solution for riscv. On riscv, support for 48-bit
-address spaces was merged in 5.17 and support for 57-bit address spaces
-was merged in 5.18 without changing the default addresses provided by
-mmap(). It could be argued that this was a mistake, however since at the
-time there didn't exist hardware with larger address spaces it wasn't an
-issue. The applications that existed at the time that relied on the
-smaller address spaces have not been able to move to larger address
-spaces. Making a 47-bit user-space address space default solves the
-problem, but that is not arch agnostic, and can't be since of the
-varying differences in page table sizes across architectures, which is
-the other part of the problem I am trying to solve.
+Signed-off-by: Gary Guo <gary@garyguo.net>
+---
+ rust/kernel/kunit.rs   | 10 ++--------
+ rust/kernel/print.rs   |  4 ++--
+ rust/kernel/str.rs     |  6 +++---
+ rust/kernel/uaccess.rs | 27 +++++++--------------------
+ 4 files changed, 14 insertions(+), 33 deletions(-)
 
-> >
-> > Opting-in to the higher address space is reasonable. However, it is not
-> > my preference, because the purpose of this flag is to ensure that
-> > allocations do not exceed 47-bits, so it is a clearer ABI to have the
-> > applications that want this guarantee to be the ones setting the flag,
-> > rather than the applications that want the higher bits setting the flag.
-> 
-> Perfect is the enemy of the good :) and an idealised solution may not end
-> up being something everybody can agree on.
+diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+index 0ba77276ae7ef..766aeb1c6aea8 100644
+--- a/rust/kernel/kunit.rs
++++ b/rust/kernel/kunit.rs
+@@ -17,10 +17,7 @@ pub fn err(args: fmt::Arguments<'_>) {
+     // are passing.
+     #[cfg(CONFIG_PRINTK)]
+     unsafe {
+-        bindings::_printk(
+-            b"\x013%pA\0".as_ptr() as _,
+-            &args as *const _ as *const c_void,
+-        );
++        bindings::_printk(b"\x013%pA\0".as_ptr(), &args as *const _ as *const c_void);
+     }
+ }
+ 
+@@ -33,10 +30,7 @@ pub fn info(args: fmt::Arguments<'_>) {
+     // are passing.
+     #[cfg(CONFIG_PRINTK)]
+     unsafe {
+-        bindings::_printk(
+-            b"\x016%pA\0".as_ptr() as _,
+-            &args as *const _ as *const c_void,
+-        );
++        bindings::_printk(b"\x016%pA\0".as_ptr(), &args as *const _ as *const c_void);
+     }
+ }
+ 
+diff --git a/rust/kernel/print.rs b/rust/kernel/print.rs
+index 508b0221256c9..90ae4f2568910 100644
+--- a/rust/kernel/print.rs
++++ b/rust/kernel/print.rs
+@@ -104,7 +104,7 @@ pub unsafe fn call_printk(
+     #[cfg(CONFIG_PRINTK)]
+     unsafe {
+         bindings::_printk(
+-            format_string.as_ptr() as _,
++            format_string.as_ptr(),
+             module_name.as_ptr(),
+             &args as *const _ as *const c_void,
+         );
+@@ -125,7 +125,7 @@ pub fn call_printk_cont(args: fmt::Arguments<'_>) {
+     #[cfg(CONFIG_PRINTK)]
+     unsafe {
+         bindings::_printk(
+-            format_strings::CONT.as_ptr() as _,
++            format_strings::CONT.as_ptr(),
+             &args as *const _ as *const c_void,
+         );
+     }
+diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+index 3980d37bd4b29..2d30bca079e37 100644
+--- a/rust/kernel/str.rs
++++ b/rust/kernel/str.rs
+@@ -190,7 +190,7 @@ pub unsafe fn from_char_ptr<'a>(ptr: *const crate::ffi::c_char) -> &'a Self {
+         // to a `NUL`-terminated C string.
+         let len = unsafe { bindings::strlen(ptr) } + 1;
+         // SAFETY: Lifetime guaranteed by the safety precondition.
+-        let bytes = unsafe { core::slice::from_raw_parts(ptr as _, len as _) };
++        let bytes = unsafe { core::slice::from_raw_parts(ptr as _, len) };
+         // SAFETY: As `len` is returned by `strlen`, `bytes` does not contain interior `NUL`.
+         // As we have added 1 to `len`, the last byte is known to be `NUL`.
+         unsafe { Self::from_bytes_with_nul_unchecked(bytes) }
+@@ -249,7 +249,7 @@ pub unsafe fn from_bytes_with_nul_unchecked_mut(bytes: &mut [u8]) -> &mut CStr {
+     /// Returns a C pointer to the string.
+     #[inline]
+     pub const fn as_char_ptr(&self) -> *const crate::ffi::c_char {
+-        self.0.as_ptr() as _
++        self.0.as_ptr()
+     }
+ 
+     /// Convert the string to a byte slice without the trailing `NUL` byte.
+@@ -817,7 +817,7 @@ pub fn try_from_fmt(args: fmt::Arguments<'_>) -> Result<Self, Error> {
+         // SAFETY: The buffer is valid for read because `f.bytes_written()` is bounded by `size`
+         // (which the minimum buffer size) and is non-zero (we wrote at least the `NUL` terminator)
+         // so `f.bytes_written() - 1` doesn't underflow.
+-        let ptr = unsafe { bindings::memchr(buf.as_ptr().cast(), 0, (f.bytes_written() - 1) as _) };
++        let ptr = unsafe { bindings::memchr(buf.as_ptr().cast(), 0, f.bytes_written() - 1) };
+         if !ptr.is_null() {
+             return Err(EINVAL);
+         }
+diff --git a/rust/kernel/uaccess.rs b/rust/kernel/uaccess.rs
+index c746a1f1bb5ad..eb72fbcf152a1 100644
+--- a/rust/kernel/uaccess.rs
++++ b/rust/kernel/uaccess.rs
+@@ -8,7 +8,7 @@
+     alloc::Flags,
+     bindings,
+     error::Result,
+-    ffi::{c_ulong, c_void},
++    ffi::c_void,
+     prelude::*,
+     types::{AsBytes, FromBytes},
+ };
+@@ -227,13 +227,9 @@ pub fn read_raw(&mut self, out: &mut [MaybeUninit<u8>]) -> Result {
+         if len > self.length {
+             return Err(EFAULT);
+         }
+-        let Ok(len_ulong) = c_ulong::try_from(len) else {
+-            return Err(EFAULT);
+-        };
+-        // SAFETY: `out_ptr` points into a mutable slice of length `len_ulong`, so we may write
++        // SAFETY: `out_ptr` points into a mutable slice of length `len`, so we may write
+         // that many bytes to it.
+-        let res =
+-            unsafe { bindings::copy_from_user(out_ptr, self.ptr as *const c_void, len_ulong) };
++        let res = unsafe { bindings::copy_from_user(out_ptr, self.ptr as *const c_void, len) };
+         if res != 0 {
+             return Err(EFAULT);
+         }
+@@ -262,9 +258,6 @@ pub fn read<T: FromBytes>(&mut self) -> Result<T> {
+         if len > self.length {
+             return Err(EFAULT);
+         }
+-        let Ok(len_ulong) = c_ulong::try_from(len) else {
+-            return Err(EFAULT);
+-        };
+         let mut out: MaybeUninit<T> = MaybeUninit::uninit();
+         // SAFETY: The local variable `out` is valid for writing `size_of::<T>()` bytes.
+         //
+@@ -275,7 +268,7 @@ pub fn read<T: FromBytes>(&mut self) -> Result<T> {
+             bindings::_copy_from_user(
+                 out.as_mut_ptr().cast::<c_void>(),
+                 self.ptr as *const c_void,
+-                len_ulong,
++                len,
+             )
+         };
+         if res != 0 {
+@@ -338,12 +331,9 @@ pub fn write_slice(&mut self, data: &[u8]) -> Result {
+         if len > self.length {
+             return Err(EFAULT);
+         }
+-        let Ok(len_ulong) = c_ulong::try_from(len) else {
+-            return Err(EFAULT);
+-        };
+-        // SAFETY: `data_ptr` points into an immutable slice of length `len_ulong`, so we may read
++        // SAFETY: `data_ptr` points into an immutable slice of length `len`, so we may read
+         // that many bytes from it.
+-        let res = unsafe { bindings::copy_to_user(self.ptr as *mut c_void, data_ptr, len_ulong) };
++        let res = unsafe { bindings::copy_to_user(self.ptr as *mut c_void, data_ptr, len) };
+         if res != 0 {
+             return Err(EFAULT);
+         }
+@@ -362,9 +352,6 @@ pub fn write<T: AsBytes>(&mut self, value: &T) -> Result {
+         if len > self.length {
+             return Err(EFAULT);
+         }
+-        let Ok(len_ulong) = c_ulong::try_from(len) else {
+-            return Err(EFAULT);
+-        };
+         // SAFETY: The reference points to a value of type `T`, so it is valid for reading
+         // `size_of::<T>()` bytes.
+         //
+@@ -375,7 +362,7 @@ pub fn write<T: AsBytes>(&mut self, value: &T) -> Result {
+             bindings::_copy_to_user(
+                 self.ptr as *mut c_void,
+                 (value as *const T).cast::<c_void>(),
+-                len_ulong,
++                len,
+             )
+         };
+         if res != 0 {
+-- 
+2.44.1
 
-Yes you are totally right! Although this is not my ideal solution, it
-sufficiently accomplishes the goal so I think it is reasonable to
-implement this as a personality flag.
-
-> 
-> >
-> > - Charlie
-> >
-> > >
-> > > --
-> > > Catalin
-> >
-> >
-> >
 
