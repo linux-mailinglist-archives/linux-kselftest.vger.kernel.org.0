@@ -1,263 +1,103 @@
-Return-Path: <linux-kselftest+bounces-17945-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17946-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5951597809C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 14:58:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65C38978154
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 15:39:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C311EB2204C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 12:58:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A02A21C22159
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 13:39:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23FD51DA61A;
-	Fri, 13 Sep 2024 12:58:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E3751D935A;
+	Fri, 13 Sep 2024 13:38:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Clelwtnv";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="oZbfwViO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Bs/fFwqb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9BB1D86DC;
-	Fri, 13 Sep 2024 12:58:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C231D6C7A;
+	Fri, 13 Sep 2024 13:38:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726232299; cv=none; b=tp7aLww1C6PIUoaBXpalsgOiWK8+T0jJe6TSFWK6abbVvUDNZdSdiNJY0POaoKx1vnuUuj7mg3VKPADfyZn/i0n37HL22Q0zOSGbFXtWedYqvSR8yxfUXeA2uupWCjj2i/3gPG2m5Ykkp87WwVuPHZJfQSfW051INA61e0Ta+TA=
+	t=1726234738; cv=none; b=MUZYsl3k4gBNfwOwaEKJ2TjoRyQSyAPaeby9/WPi9m5fqCvzBr0Ceiy+ZN1FsunKGslofnB/8BVaK9sVutMfZ2njcmEEaOnVZLN6r/jacwma8XhAkUzIkIw6RAVoUaTC1Ngp8tgFNpl1Nq5ouH/j+zrxQ3c/9W/NDuAdrdSD+e4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726232299; c=relaxed/simple;
-	bh=4vwtGD4yzne4fd3wxIdYe6RVC3k3AdOvPhNhb+z0Um4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gC6SW/uZXZzqlizl1/NUdh012nEcQWZVvO1R8uAqe2ZRIXCpeAj14d33+IfecxO5p2YUH8aftDlmYvoxllHKO2rxon0Zxne5m7gsvhKOqIc3wWw5B5gjXz2n3Te61ifaeGUfgZRxl3ePo5DszyzSaFqlxtImmnPTz2xxH6Zp0iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Clelwtnv; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=oZbfwViO; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id DB7611F45E;
-	Fri, 13 Sep 2024 12:58:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1726232295; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=CK4taS9W1NPKU5v043D+Q3ycAtQ+7mI2j9dJHmLqz08=;
-	b=ClelwtnvLErTY/LtIKhFq/i9qu67ovt/vt4Vmis7rCVm156TIuk5mVSQFr2z8Mkou3qZDy
-	e3WcRe9uHyc8lFR8B3DnE0j1JlxXQe/nHkYYgv40ZW6I/VL4DYjdALW/HshfyejtmxmGAd
-	xZvqHqoboLDiqhSSjmyZaRPZRNWXZu0=
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1726232294; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=CK4taS9W1NPKU5v043D+Q3ycAtQ+7mI2j9dJHmLqz08=;
-	b=oZbfwViOzqA0ihYi5LJFGl0qnBBiXzWMfoqsXk303DpTRqJTAaAGhUHcKHs3LUMxwit7WG
-	Qf4J5RzRf4eo74dnp6I4WefPSuFx8+kcUXjKwR6RKwioUj5ON3n/mcjLefdl9TWYbF7nnH
-	DPjYq4NKIV1LCw46iOCLSQLxQR1l0ok=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id A2A2F13999;
-	Fri, 13 Sep 2024 12:58:14 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id L0aIJOY25Ga2GQAAD6G6ig
-	(envelope-from <mvetter@suse.com>); Fri, 13 Sep 2024 12:58:14 +0000
-From: Michael Vetter <mvetter@suse.com>
-To: linux-kselftest@vger.kernel.org,
-	live-patching@vger.kernel.org
-Cc: Michael Vetter <mvetter@suse.com>
-Subject: [PATCH] selftests: livepatch: test livepatching a kprobed function
-Date: Fri, 13 Sep 2024 14:58:11 +0200
-Message-ID: <20240913125811.116410-1-mvetter@suse.com>
-X-Mailer: git-send-email 2.46.0
+	s=arc-20240116; t=1726234738; c=relaxed/simple;
+	bh=/KYBSsDBCUsu+s6eKQzz/C+xxOtD1VUVkICShhczuto=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=PdhHl2bzhdJb5TXUPM/PmIqt76ySRJBp0k4DU0L89zGzqJf5b/QM8eN8od9d/NuQiU6nJC4dNwzgarXfzYzxT1NbIzZn+W5CEhXJ0Bq6rIms5Mg7T9Ys/qfMLj1aXKL8ZJA0zs6csFEDCKBWgfk40IGrs2yaV6BzaVXjunM4Ff8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Bs/fFwqb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34808C4CEC0;
+	Fri, 13 Sep 2024 13:38:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726234738;
+	bh=/KYBSsDBCUsu+s6eKQzz/C+xxOtD1VUVkICShhczuto=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=Bs/fFwqbdW6dlxBnItsXK36LvRQXPXcToYHuJUWFx6tvZ+ExVwLy+TlJyf+jFxlf0
+	 68TsjIdQub/qzqSm6R/Ym1o0APmC8da4YOjZOgiFrHMPvaoAFDTNyXnf2dpdDFRnQJ
+	 md/lYpfK1c1N0fV3phv+O+kGwE02CYfXL2IBShc7hbPsmaA/TWfbExj5Ji4GOyxRGh
+	 LQLWGUfT/Xz/oZYLO81dyF2eBXZsz8gqdtK9usPTcPGRUDDQcpoAW0qEMUedfirquF
+	 7i83vW4pBF0H8OiPYo6E8W8fQfM7wKjMzuqLAU61rjuq2g+Tv2tkrQMWYBgAkeHijU
+	 +I64sUZR7hjsQ==
+From: Benjamin Tissoires <bentiss@kernel.org>
+To: Jiri Kosina <jikos@kernel.org>, 
+ Peter Hutterer <peter.hutterer@who-t.net>, Vicki Pfau <vi@endrift.com>, 
+ Shuah Khan <shuah@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+In-Reply-To: <20240910-hid-bpf-hid-generic-v2-0-083dfc189e97@kernel.org>
+References: <20240910-hid-bpf-hid-generic-v2-0-083dfc189e97@kernel.org>
+Subject: Re: (subset) [PATCH HID v2 00/11] HID: bpf: add a new hook to
+ control hid-generic
+Message-Id: <172623473588.1192461.11090201509053454593.b4-ty@kernel.org>
+Date: Fri, 13 Sep 2024 15:38:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -2.80
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCPT_COUNT_THREE(0.00)[3];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.1
 
-The test proves that a function that is being kprobed and uses a
-post_handler cannot be livepatched.
+On Tue, 10 Sep 2024 23:43:36 +0900, Benjamin Tissoires wrote:
+> This is a slight change from the fundamentals of HID-BPF.
+> In theory, HID-BPF is abstract to the kernel itself, and makes
+> only changes at the HID level (through report descriptors or
+> events emitted to/from the device).
+> 
+> However, we have seen a few use cases where HID-BPF might interact with
+> the running kernel when the target device is already handled by a
+> specific device.
+> 
+> [...]
 
-Only one ftrace_ops with FTRACE_OPS_FL_IPMODIFY set may be registered
-to any given function at a time.
+Applied to hid/hid.git (for-6.12/bpf), thanks!
 
-Signed-off-by: Michael Vetter <mvetter@suse.com>
----
- tools/testing/selftests/livepatch/Makefile    |  3 +-
- .../selftests/livepatch/test-kprobe.sh        | 62 +++++++++++++++++++
- .../selftests/livepatch/test_modules/Makefile |  3 +-
- .../livepatch/test_modules/test_klp_kprobe.c  | 38 ++++++++++++
- 4 files changed, 104 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/livepatch/test-kprobe.sh
- create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_kprobe.c
+[01/11] HID: bpf: move HID-BPF report descriptor fixup earlier
+        https://git.kernel.org/hid/hid/c/f10a11b7b599
+[02/11] HID: core: save one kmemdup during .probe()
+        https://git.kernel.org/hid/hid/c/6941754dbbc7
+[03/11] HID: core: remove one more kmemdup on .probe()
+        https://git.kernel.org/hid/hid/c/4fe29f36d2a3
+[04/11] HID: bpf: allow write access to quirks field in struct hid_device
+        https://git.kernel.org/hid/hid/c/b722f588adc6
+[05/11] selftests/hid: add dependency on hid_common.h
+        https://git.kernel.org/hid/hid/c/3d816765e12e
+[06/11] selftests/hid: cleanup C tests by adding a common struct uhid_device
+        https://git.kernel.org/hid/hid/c/28023a0f99d1
+[07/11] selftests/hid: allow to parametrize bus/vid/pid/rdesc on the test device
+        https://git.kernel.org/hid/hid/c/10d3147f9bb1
+[08/11] HID: add per device quirk to force bind to hid-generic
+        https://git.kernel.org/hid/hid/c/d030f826ea47
+[09/11] selftests/hid: add test for assigning a given device to hid-generic
+        https://git.kernel.org/hid/hid/c/10929078201f
 
-diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
-index 35418a4790be..a080eb54a215 100644
---- a/tools/testing/selftests/livepatch/Makefile
-+++ b/tools/testing/selftests/livepatch/Makefile
-@@ -10,7 +10,8 @@ TEST_PROGS := \
- 	test-state.sh \
- 	test-ftrace.sh \
- 	test-sysfs.sh \
--	test-syscall.sh
-+	test-syscall.sh \
-+	test-kprobe.sh
- 
- TEST_FILES := settings
- 
-diff --git a/tools/testing/selftests/livepatch/test-kprobe.sh b/tools/testing/selftests/livepatch/test-kprobe.sh
-new file mode 100755
-index 000000000000..0c62c6b81e18
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test-kprobe.sh
-@@ -0,0 +1,62 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2024 SUSE
-+# Author: Michael Vetter <mvetter@suse.com>
-+
-+. $(dirname $0)/functions.sh
-+
-+MOD_LIVEPATCH=test_klp_livepatch
-+MOD_KPROBE=test_klp_kprobe
-+
-+setup_config
-+
-+# Kprobe a function and verify that we can't livepatch that same function
-+# when it uses a post_handler since only one IPMODIFY maybe be registered
-+# to any given function at a time.
-+
-+start_test "livepatch interaction with kprobed function with post_handler"
-+
-+echo 1 > /sys/kernel/debug/kprobes/enabled
-+
-+load_mod $MOD_KPROBE has_post_handler=true
-+load_failing_mod $MOD_LIVEPATCH
-+unload_mod $MOD_KPROBE
-+
-+check_result "% insmod test_modules/test_klp_kprobe.ko has_post_handler=true
-+% insmod test_modules/$MOD_LIVEPATCH.ko
-+livepatch: enabling patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': initializing patching transition
-+livepatch: failed to register ftrace handler for function 'cmdline_proc_show' (-16)
-+livepatch: failed to patch object 'vmlinux'
-+livepatch: failed to enable patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': canceling patching transition, going to unpatch
-+livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': unpatching complete
-+insmod: ERROR: could not insert module test_modules/$MOD_LIVEPATCH.ko: Device or resource busy
-+% rmmod test_klp_kprobe"
-+
-+start_test "livepatch interaction with kprobed function without post_handler"
-+
-+load_mod $MOD_KPROBE has_post_handler=false
-+load_lp $MOD_LIVEPATCH
-+
-+unload_mod $MOD_KPROBE
-+disable_lp $MOD_LIVEPATCH
-+unload_lp $MOD_LIVEPATCH
-+
-+check_result "% insmod test_modules/test_klp_kprobe.ko has_post_handler=false
-+% insmod test_modules/$MOD_LIVEPATCH.ko
-+livepatch: enabling patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': initializing patching transition
-+livepatch: '$MOD_LIVEPATCH': starting patching transition
-+livepatch: '$MOD_LIVEPATCH': completing patching transition
-+livepatch: '$MOD_LIVEPATCH': patching complete
-+% rmmod test_klp_kprobe
-+% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-+livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-+livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': unpatching complete
-+% rmmod $MOD_LIVEPATCH"
-+
-+exit 0
-diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
-index e6e638c4bcba..4981d270f128 100644
---- a/tools/testing/selftests/livepatch/test_modules/Makefile
-+++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-@@ -11,7 +11,8 @@ obj-m += test_klp_atomic_replace.o \
- 	test_klp_state2.o \
- 	test_klp_state3.o \
- 	test_klp_shadow_vars.o \
--	test_klp_syscall.o
-+	test_klp_syscall.o \
-+	test_klp_kprobe.o
- 
- # Ensure that KDIR exists, otherwise skip the compilation
- modules:
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_kprobe.c b/tools/testing/selftests/livepatch/test_modules/test_klp_kprobe.c
-new file mode 100644
-index 000000000000..49b579ea1054
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_kprobe.c
-@@ -0,0 +1,38 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (C) 2024 Marcos Paulo de Souza <mpdesouza@suse.com>
-+// Copyright (C) 2024 Michael Vetter <mvetter@suse.com>
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/kprobes.h>
-+
-+static bool has_post_handler = true;
-+module_param(has_post_handler, bool, 0444);
-+
-+static void __kprobes post_handler(struct kprobe *p, struct pt_regs *regs,
-+				unsigned long flags)
-+{
-+}
-+
-+static struct kprobe kp = {
-+	.symbol_name = "cmdline_proc_show",
-+};
-+
-+static int __init kprobe_init(void)
-+{
-+	if (has_post_handler)
-+		kp.post_handler = post_handler;
-+
-+	return register_kprobe(&kp);
-+}
-+
-+static void __exit kprobe_exit(void)
-+{
-+	unregister_kprobe(&kp);
-+}
-+
-+module_init(kprobe_init)
-+module_exit(kprobe_exit)
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Michael Vetter <mvetter@suse.com>");
-+MODULE_DESCRIPTION("Livepatch test: livepatch kprobed function");
+Cheers,
 -- 
-2.46.0
+Benjamin Tissoires <bentiss@kernel.org>
 
 
