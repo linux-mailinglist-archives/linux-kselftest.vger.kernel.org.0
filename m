@@ -1,204 +1,158 @@
-Return-Path: <linux-kselftest+bounces-17953-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17954-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D2CB978525
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 17:51:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5648978624
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 18:48:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 554B41C2295C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 15:51:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5565C1F25A0E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 16:48:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F12BB6A8D2;
-	Fri, 13 Sep 2024 15:51:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3066B8C11;
+	Fri, 13 Sep 2024 16:48:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZSnZEqbf"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="e/pUwrOV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A2B2EB02;
-	Fri, 13 Sep 2024 15:51:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB6AA2F24;
+	Fri, 13 Sep 2024 16:48:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726242672; cv=none; b=ZD8tsaWok+Mv3iWiGuyMiFOujPLElB0tXbVXl9V5MkUsvQQ0WkQgk4ZkLRR3Dre7GrT+4qEi2+d+AsPPEczmoHXSZhyjJ1PM8AJO0gpfYkPc3fdqrFnl5RUgYd0QDPmaDBFbAaGDgo/bOPsf7GeEYwgHAqX9apSKa6qlsP5xeZo=
+	t=1726246101; cv=none; b=Jr7f/5kzPFycABj2sLqfWTPitgmK07w+aQWC9cZmGubyGUGqtCN6hSWAiLCNCbPsK/4tYFzdrm9bl1aP/BkttQmd5ANSKEerOxrlB5Wv5XxhcVckMx3tgudgT5uQbe+t/n3GfIsfWrr9aopLdv0uap9cUf4Fw1DaeCq5jPO3WDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726242672; c=relaxed/simple;
-	bh=ecz4eJEVPDt26YmFuv0POtj0jecJSvSuFAGuu1dxlPs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lw/QD0HiBcoYfZJs8/hWFb/fMcMVUebqHRkw1vYVg7T3txSRQImy89sAWAOYimQRe6S7pG9azp6458Jua/GtiyVMwaWaZKWScnR4kmQidW1vhR5XfJMoAJAzkJShqTjvV3WHhC+oEZucjKfkM3adABg7GoX77CYcYAweIgCm2bQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZSnZEqbf; arc=none smtp.client-ip=209.85.160.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-277cfd3f07aso1038165fac.3;
-        Fri, 13 Sep 2024 08:51:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726242670; x=1726847470; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ehs9yLbkVlOBEgkAu8IxC2ecxN3bEC7UNanNZJEoFLs=;
-        b=ZSnZEqbfrsKroStwuSqiYqz5TPdo8h9torfCDIwj+Z1sfF9ZjJAYvGLa/Yq+LfYw5n
-         9YoTLFa1FrjXGfbznkXST5UoHom9ykmhXDn0NQ8ZG6lQUdkchiY7hf6GRmXnzTD1/3Cs
-         knjqpWRuM8wxrAIBHwkyQcsWjAls9reT6hDtU/mO+wpt/+VYsePJZPwO3oLbxSvHeUSl
-         RahBPIcH5x4Zq30P4x6CKErjVpW7hn/b0qTgxWAWrRo/hxdGfPqy2FfjbohMMZHQ9Bdr
-         mHw/inct6gmUqMljmmoUh5WM4ghh9Fj87ZZ9I64Ix85GAYU43ijdYyPXTOfDr8YuHC/X
-         Lk4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726242670; x=1726847470;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ehs9yLbkVlOBEgkAu8IxC2ecxN3bEC7UNanNZJEoFLs=;
-        b=TyYhK24END3FFGMCIRvfDBTkIuG4YyINv7xv6vUIwEFTQGEUxrjdpowog1vmSfE22P
-         H2gxTug/ITPggqygH477AgtAUCPdcDf+BOzVmd05w5AMf2d3eljGgXWOjQEMA4p5zKVx
-         4xb6dA7h2/muSAFDArIJiQOTUvpi0oYjaOOJWL1chahQpSvWCehR7JrIkB8nta+R1i73
-         496MJdux/VyRxEzYAGwb6cTctktSLcc7yhstiShMhCpr88CSxD9NkfQ0m48Fv+v7hJn5
-         7UIihCoMJ3kAVcH76oGAz73zUbd17E2UgAvgI6pctojmamzadou82NlO8l5uoW57kuGs
-         4Fkg==
-X-Forwarded-Encrypted: i=1; AJvYcCUTwpmJB64/HCIJ+1xNP5wjZc5UM4I7+AlBqu/+jZa6E8GB+zDmGKfwx9H3lo1/Cx10BpGGeUJGF5oq@vger.kernel.org, AJvYcCUcLPCEi1BOFK1LIqn0KF+YyFR2dOT5kbX0WcBVba1PKldkht8W1GuSEfUzmkBfeP7gLpOTIku+PbN+tqtt@vger.kernel.org, AJvYcCUfv3VH0N7KiarGtYPITjZnWZBiRLpnQ2n3ZrxlyRW5//c09gbWyJSKfwbv79uN7lhwFRjv7h1pkjlTRg==@vger.kernel.org, AJvYcCV5DtwEPDWFMtAwPKSmz804u6jXcwBCrpWI6hz4NkU2y7UYEGF0olO4eTYyhTus9ONCVNB6+wFSHIce@vger.kernel.org, AJvYcCW571Lk7l6h9rfhktMmfOBonDcaqacZfAz9s3Tle3/qCZ4sYOVhAtwbUgKgqwzLfpXdMzp5tDXmp+6p/4nEJufq@vger.kernel.org, AJvYcCXDJDCPxGmrJwvLd19BQxIWQb03CKpQ5jz/twNmol8+rTTYx6L9+VxtQU0LySLjQwTzHLmx9NxzTUmGwdLStQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwK/w07WkEaNhHiAYtURq8sJWDbUYY18b06ocnwUgRMcnfwpTWl
-	cnQ3qJCFSc5/QAw86FNK/2cfUFyfiA3Azw88g9vLTTfrMkGtLBuH
-X-Google-Smtp-Source: AGHT+IGwspwIdcxizms74BUEV11s0x25xQw3otEtykkXT6P5qLAwtjFU5Aef8TBprXa84EXBrlG8AA==
-X-Received: by 2002:a05:6870:df92:b0:27c:475c:ab2c with SMTP id 586e51a60fabf-27c475cad93mr3175704fac.43.1726242670341;
-        Fri, 13 Sep 2024 08:51:10 -0700 (PDT)
-Received: from ?IPV6:2603:8080:7400:36da:dff5:4180:2562:4c1e? ([2603:8080:7400:36da:dff5:4180:2562:4c1e])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-27ba40b0bb0sm3632948fac.41.2024.09.13.08.51.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 13 Sep 2024 08:51:09 -0700 (PDT)
-Message-ID: <5cc36aa7-e064-42b3-b52e-fb471d99d338@gmail.com>
-Date: Fri, 13 Sep 2024 10:51:04 -0500
+	s=arc-20240116; t=1726246101; c=relaxed/simple;
+	bh=ZwF8ETPKvqKaK+P8O736nlAA5Nyj44s/IlN4CwhVTno=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fc+mhf1z5obo31OfmYGI6fWxWV5BDmsWwUm1Notg8Qc7l2G8flvN+Ad09LSvVPK1Z/MggiA9oeH1fMus6iFs8/uRMas1GahtGUAVBqlZE1+U1qKIGLiYUkBMTomI4JWW7pf2nHNjL+Mwhs1H7vn0ZSgm42CsoeeNxniPh/dQwA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=e/pUwrOV; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48DGBYOY014574;
+	Fri, 13 Sep 2024 16:48:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date
+	:from:to:cc:subject:message-id:in-reply-to:references
+	:mime-version:content-type:content-transfer-encoding; s=pp1; bh=
+	T+zoDRxA2zWjojSloQf96YaxC6A15cv21sTavDzKElU=; b=e/pUwrOV9crL6RXv
+	Hiatneam46SMQ5sPVq5mEpMi/LHpqh2yk8JpBmB5blo29MUb8TSzkt5XYg9pyNZJ
+	j2aw8+CdfqNm2IDv7GMqUdVUJ5+VcOPBvq2/sB3odUQWwsCj6p436TKoTILyqEF0
+	vMmOZkuGIBytodcG093eNDt/kTBcfSXG6n6FnBEYN65NA4CBy7H5WbFM2KyFJmsG
+	FxMfNUuQ7f5kOmI9BQZnGNtght5U87Xw8VNp5NCmNhYU/G0xbCRVhDLxG0qiVmtk
+	ONSKAgYS5DVmEe/d6BMKVuMQGZZ8AobkiZEH1/2Ce2IpDCjRS0zD8aoAiF2gojfn
+	6wFl4A==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41geg0340n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Sep 2024 16:48:09 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 48DGm8Xt025207;
+	Fri, 13 Sep 2024 16:48:08 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41geg0340j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Sep 2024 16:48:08 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 48DFepDv013465;
+	Fri, 13 Sep 2024 16:48:08 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 41h3cmq7d9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 13 Sep 2024 16:48:08 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 48DGm4YM29819486
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 13 Sep 2024 16:48:04 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B354220043;
+	Fri, 13 Sep 2024 16:48:04 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6B6A220040;
+	Fri, 13 Sep 2024 16:48:04 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.152.224.66])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 13 Sep 2024 16:48:04 +0000 (GMT)
+Date: Fri, 13 Sep 2024 18:48:02 +0200
+From: Claudio Imbrenda <imbrenda@linux.ibm.com>
+To: Christoph Schlameuss <schlameuss@linux.ibm.com>
+Cc: kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah
+ Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        David Hildenbrand
+ <david@redhat.com>,
+        Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+Subject: Re: [PATCH v3 1/3] selftests: kvm: s390: Add uc_map_unmap VM test
+ case
+Message-ID: <20240913184802.3365e253@p-imbrenda>
+In-Reply-To: <20240913115248.211071-2-schlameuss@linux.ibm.com>
+References: <20240913115248.211071-1-schlameuss@linux.ibm.com>
+	<20240913115248.211071-2-schlameuss@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 01/30] mm: Introduce ARCH_HAS_USER_SHADOW_STACK
-To: Deepak Gupta <debug@rivosinc.com>, paul.walmsley@sifive.com,
- palmer@sifive.com, conor@kernel.org, linux-doc@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- linux-mm@kvack.org, linux-arch@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: corbet@lwn.net, palmer@dabbelt.com, aou@eecs.berkeley.edu,
- robh@kernel.org, krzk+dt@kernel.org, oleg@redhat.com, tglx@linutronix.de,
- mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
- hpa@zytor.com, peterz@infradead.org, akpm@linux-foundation.org,
- arnd@arndb.de, ebiederm@xmission.com, kees@kernel.org,
- Liam.Howlett@oracle.com, vbabka@suse.cz, lorenzo.stoakes@oracle.com,
- shuah@kernel.org, brauner@kernel.org, samuel.holland@sifive.com,
- andy.chiu@sifive.com, jerry.shih@sifive.com, greentime.hu@sifive.com,
- charlie@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com,
- xiao.w.wang@intel.com, ajones@ventanamicro.com, anup@brainfault.org,
- mchitale@ventanamicro.com, atishp@rivosinc.com, sameo@rivosinc.com,
- bjorn@rivosinc.com, alexghiti@rivosinc.com, david@redhat.com,
- libang.li@antgroup.com, jszhang@kernel.org, leobras@redhat.com,
- guoren@kernel.org, samitolvanen@google.com, songshuaishuai@tinylab.org,
- costa.shul@redhat.com, bhe@redhat.com, zong.li@sifive.com,
- puranjay@kernel.org, namcaov@gmail.com, antonb@tenstorrent.com,
- sorear@fastmail.com, quic_bjorande@quicinc.com, ancientmodern4@gmail.com,
- ben.dooks@codethink.co.uk, quic_zhonhan@quicinc.com,
- cuiyunhui@bytedance.com, yang.lee@linux.alibaba.com, ke.zhao@shingroup.cn,
- sunilvl@ventanamicro.com, tanzhasanwork@gmail.com, schwab@suse.de,
- dawei.li@shingroup.cn, rppt@kernel.org, willy@infradead.org,
- usama.anjum@collabora.com, osalvador@suse.de, ryan.roberts@arm.com,
- andrii@kernel.org, alx@kernel.org, catalin.marinas@arm.com,
- broonie@kernel.org, revest@chromium.org, bgray@linux.ibm.com, deller@gmx.de,
- zev@bewilderbeest.net, Rick Edgecombe <rick.p.edgecombe@intel.com>
-References: <20240912231650.3740732-1-debug@rivosinc.com>
- <20240912231650.3740732-2-debug@rivosinc.com>
-Content-Language: en-US
-From: Carlos Bilbao <carlos.bilbao.osdev@gmail.com>
-In-Reply-To: <20240912231650.3740732-2-debug@rivosinc.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: XaA7VJMyPzolCF2jJdZdGcJpDoT-1evt
+X-Proofpoint-ORIG-GUID: 4Kh--M2BIEzrNmKnxgiNoIb8Dyv_e8vW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-13_11,2024-09-13_02,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
+ lowpriorityscore=0 suspectscore=0 mlxlogscore=942 priorityscore=1501
+ adultscore=0 clxscore=1015 spamscore=0 bulkscore=0 phishscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409130117
 
-On 9/12/24 18:16, Deepak Gupta wrote:
+On Fri, 13 Sep 2024 13:52:46 +0200
+Christoph Schlameuss <schlameuss@linux.ibm.com> wrote:
 
-> From: Mark Brown <broonie@kernel.org>
->
-> Since multiple architectures have support for shadow stacks and we need to
-> select support for this feature in several places in the generic code
-> provide a generic config option that the architectures can select.
->
-> Suggested-by: David Hildenbrand <david@redhat.com>
-> Acked-by: David Hildenbrand <david@redhat.com>
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> Reviewed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Reviewed-by: Deepak Gupta <debug@rivosinc.com>
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> Add a test case verifying basic running and interaction of ucontrol VMs.
+> Fill the segment and page tables for allocated memory and map memory on
+> first access.
+> 
+> * uc_map_unmap
+>   Store and load data to mapped and unmapped memory and use pic segment
+>   translation handling to map memory on access.
+> 
+> Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
 > ---
->  arch/x86/Kconfig   | 1 +
->  fs/proc/task_mmu.c | 2 +-
->  include/linux/mm.h | 2 +-
->  mm/Kconfig         | 6 ++++++
->  4 files changed, 9 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 007bab9f2a0e..320e1f411163 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -1957,6 +1957,7 @@ config X86_USER_SHADOW_STACK
->  	depends on AS_WRUSS
->  	depends on X86_64
->  	select ARCH_USES_HIGH_VMA_FLAGS
-> +	select ARCH_HAS_USER_SHADOW_STACK
->  	select X86_CET
->  	help
->  	  Shadow stack protection is a hardware feature that detects function
-> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-> index 5f171ad7b436..0ea49725f524 100644
-> --- a/fs/proc/task_mmu.c
-> +++ b/fs/proc/task_mmu.c
-> @@ -984,7 +984,7 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
->  #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
->  		[ilog2(VM_UFFD_MINOR)]	= "ui",
->  #endif /* CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
-> -#ifdef CONFIG_X86_USER_SHADOW_STACK
-> +#ifdef CONFIG_ARCH_HAS_USER_SHADOW_STACK
->  		[ilog2(VM_SHADOW_STACK)] = "ss",
->  #endif
->  #ifdef CONFIG_64BIT
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 147073601716..e39796ea17db 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -346,7 +346,7 @@ extern unsigned int kobjsize(const void *objp);
->  #endif
->  #endif /* CONFIG_ARCH_HAS_PKEYS */
+>  .../selftests/kvm/s390x/ucontrol_test.c       | 145 +++++++++++++++++-
+>  1 file changed, 144 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/s390x/ucontrol_test.c b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+> index 030c59010fe1..084cea02c2fa 100644
+> --- a/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+> +++ b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+
+[...]
+
+>base_gpa + self->code_gpa;
+> @@ -222,6 +244,60 @@ TEST(uc_cap_hpage)
+>  	close(kvm_fd);
+>  }
 >  
-> -#ifdef CONFIG_X86_USER_SHADOW_STACK
-> +#ifdef CONFIG_ARCH_HAS_USER_SHADOW_STACK
->  /*
->   * VM_SHADOW_STACK should not be set with VM_SHARED because of lack of
->   * support core mm.
-> diff --git a/mm/Kconfig b/mm/Kconfig
-> index b72e7d040f78..3167be663bca 100644
-> --- a/mm/Kconfig
-> +++ b/mm/Kconfig
-> @@ -1263,6 +1263,12 @@ config IOMMU_MM_DATA
->  config EXECMEM
->  	bool
->  
-> +config ARCH_HAS_USER_SHADOW_STACK
-> +	bool
-> +	help
-> +	  The architecture has hardware support for userspace shadow call
-> +          stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
+> +/* calculate host virtual addr from guest physical addr */
+> +static void *gpa2hva(FIXTURE_DATA(uc_kvm) * self, u64 gpa)
+
+why the space? I would have expected *self
+
+> +{
+> +	return (void *)(self->base_hva - self->base_gpa + gpa);
+> +}
 > +
->  source "mm/damon/Kconfig"
+> +/* map / make additional memory available */
 
-
-Reviewed-by: Carlos Bilbao <carlos.bilbao.osdev@gmail.com>
-
-
->  
->  endmenu
-
-
-Thanks, Carlos
-
+[...]
 
