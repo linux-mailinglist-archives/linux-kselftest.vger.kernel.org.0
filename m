@@ -1,102 +1,104 @@
-Return-Path: <linux-kselftest+bounces-17910-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17914-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55F179776D1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 04:20:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AA909776E5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 04:29:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25C29286148
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 02:20:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D81B02860A4
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 02:28:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B32391D2F72;
-	Fri, 13 Sep 2024 02:20:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9F951D2F79;
+	Fri, 13 Sep 2024 02:28:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fxu8W08U"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="gSRq6AAb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A156F4EE;
-	Fri, 13 Sep 2024 02:20:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C474784D2C
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Sep 2024 02:28:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726194031; cv=none; b=tuoh9mzsttVG8JhmsZsY4f3ODjDdgNPtmP88+Cn7XKTyEFKNQttQJ/6yb6hSYrmXuEM2Wpz64/OwvrN7hfJp1y8hPhEWTrIJ8Nh+7KGKVBdIr5VElIEYfrJj4CkCLnQsPooX6GK5cJTUyvCdTirVt96mcnrer5tSAIky/A2zBfE=
+	t=1726194536; cv=none; b=VSCVOkm4eKKwkEYsVNxfDTwNW+pGmtvG4HUFAFtoBphTeott6zjFh1fAQI4JoVtl7u60lod0GD/m95tpzvcXQ6T0TCtlCfSFXZR9uod6pOmKjN50ibfbGeiLjuVTJiPq7P3qbRAo62ku41b4VvwcuzIKiza+jS9HzBRZGotTZac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726194031; c=relaxed/simple;
-	bh=JlnepEJWwGFEskCoWC5TUURVrEs+7zlkqc/cWzfaVwo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=hXYjE9QvSURWIAQQCI5WUutPg8OliMnkPT1H7hycHHH68K/6zt/cxdvCmdwuXCnwOvlSqx5vEx+3AguOS+GufOFeNymEya/3fUahaFfISBpa78qlpZ7A5LOwfXzSTXjSsbaErUpyiz2LzqhE6SualuKmIkR7zx4hjdll1CH8d0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fxu8W08U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F299AC4CECC;
-	Fri, 13 Sep 2024 02:20:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726194031;
-	bh=JlnepEJWwGFEskCoWC5TUURVrEs+7zlkqc/cWzfaVwo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=fxu8W08Umlpj9XC8d51CwWl+834y2N5Kd0TNuHb0DtTrcQ7o00kVIoyiS1P4qZI9Q
-	 J9rtfqpVl07wz1fZMnm+Fhp4loB6yG0zQ+XAVq3IgNhz8Mqi+DwxQnXJJvUwWHj0KU
-	 pAnrcBRtQzYwFaDl50D+bVcZPH67lS0ECRQMmwaZIcGUDEEe22iJ11qL75I6NCMV+K
-	 MN7aYvYXNx/Vgs7C/yhQf34cJgs4OaPPq/vv98aScTksjUQxA8PvdP30sGfds4fU4V
-	 rcVmuJLHBobZ+u2WkVtH024MP7DPq+Rx540zCOMJm3mStc8oIKVuAmWodRc1hyXtE2
-	 FFy+aPk501xfA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70BB63806644;
-	Fri, 13 Sep 2024 02:20:33 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1726194536; c=relaxed/simple;
+	bh=463ORfxaX+sWNPRR/Gn3Pqa1C7jNBzklmbOaLg/0UZQ=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=QsfnEoZEv4LA1lh4GWJCiZLHRpDoL/AZxEl0bAyzXTwdHerIP7bUOcT2yGTnH2Rh4jDs6/HkpoIH43Kh+ARgQCKXBCdzI5MlPfoZl13v277Br6tDWhsBouMVMUdW0+Bj2IykL1wyEc7IL4+C1V18YDE+yWPBOiJBpKzkvUFSo1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=gSRq6AAb; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726194535; x=1757730535;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=463ORfxaX+sWNPRR/Gn3Pqa1C7jNBzklmbOaLg/0UZQ=;
+  b=gSRq6AAbZ3/ifbKVnEDQblvhSquzywVFR1VEGXLaD+i9ClUZN1u1ttgl
+   T5TwppCyJ0D16NKb40hSqqf2ysaxVyojJYpE1JhqYoFoBXKls4Jr1U4an
+   FXTdPJG2KR7INMKptGg9uhop9UfQXpKY7uwcy4egMDm+VGs833GQNaXmc
+   dzffl5oOsNnT+dhlZd162uHZAMZssuP7AkTJyVVbqKsoIenIEyOXEKHl7
+   Dle9poJjmuaICmEl9RtA/Q+Fw7+tnagYzPEoLhoWTICVkdIslNN2yiUdj
+   yxZ/ScsHbNp4S030cuvne+fjOgwQtftFF4HzGliWcZsb/OfCszb73e22t
+   w==;
+X-CSE-ConnectionGUID: 6viQBTIkTcm8EluCHTP6BQ==
+X-CSE-MsgGUID: 3HnbHvy3StSPBjR9IBy6uQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="35751368"
+X-IronPort-AV: E=Sophos;i="6.10,224,1719903600"; 
+   d="scan'208";a="35751368"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 19:28:54 -0700
+X-CSE-ConnectionGUID: 3l18HQVdR9KpjbKRQn9i/g==
+X-CSE-MsgGUID: u8FsCK3VQbyx6jZzmiOScw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,224,1719903600"; 
+   d="scan'208";a="68154052"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by fmviesa010.fm.intel.com with ESMTP; 12 Sep 2024 19:28:51 -0700
+Message-ID: <71452c12-7339-4122-a7a3-64dd32ddba3b@linux.intel.com>
+Date: Fri, 13 Sep 2024 10:24:45 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/3] selftests/net: packetdrill: netns and two
- imports
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <172619403204.1789147.11951223471330268970.git-patchwork-notify@kernel.org>
-Date: Fri, 13 Sep 2024 02:20:32 +0000
-References: <20240912005317.1253001-1-willemdebruijn.kernel@gmail.com>
-In-Reply-To: <20240912005317.1253001-1-willemdebruijn.kernel@gmail.com>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- edumazet@google.com, pabeni@redhat.com, ncardwell@google.com,
- shuah@kernel.org, linux-kselftest@vger.kernel.org, matttbe@kernel.org,
- willemb@google.com
+User-Agent: Mozilla Thunderbird
+Cc: baolu.lu@linux.intel.com, alex.williamson@redhat.com,
+ eric.auger@redhat.com, nicolinc@nvidia.com, chao.p.peng@linux.intel.com,
+ iommu@lists.linux.dev, zhenzhong.duan@intel.com,
+ linux-kselftest@vger.kernel.org, vasant.hegde@amd.com
+Subject: Re: [PATCH 3/3] iommu: Add a wrapper for remove_dev_pasid
+To: Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org, jgg@nvidia.com,
+ kevin.tian@intel.com
+References: <20240912130653.11028-1-yi.l.liu@intel.com>
+ <20240912130653.11028-4-yi.l.liu@intel.com>
+Content-Language: en-US
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20240912130653.11028-4-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Wed, 11 Sep 2024 20:52:39 -0400 you wrote:
-> From: Willem de Bruijn <willemb@google.com>
+On 9/12/24 9:06 PM, Yi Liu wrote:
+> The iommu drivers are on the way to drop the remove_dev_pasid op by
+> extending the blocked_domain to support PASID. However, this cannot be
+> done in one shot. So far, the Intel iommu and the ARM SMMUv3 driver have
+> supported it, while the AMD iommu driver has not yet. During this
+> transition, the IOMMU core needs to support both ways to destroy the
+> attachment of device/PASID and domain.
 > 
-> 1/3: run in nets, as discussed, and add missing CONFIGs
-> 2/3: import tcp/zerocopy
-> 3/3: import tcp/slow_start
-> 
-> Willem de Bruijn (3):
->   selftests/net: packetdrill: run in netns and expand config
->   selftests/net: packetdrill: import tcp/zerocopy
->   selftests/net: packetdrill: import tcp/slow_start
-> 
-> [...]
+> Signed-off-by: Yi Liu<yi.l.liu@intel.com>
+> ---
+>   drivers/iommu/iommu.c | 30 ++++++++++++++++++++++++------
+>   1 file changed, 24 insertions(+), 6 deletions(-)
 
-Here is the summary with links:
-  - [net-next,v2,1/3] selftests/net: packetdrill: run in netns and expand config
-    https://git.kernel.org/netdev/net-next/c/cded7e0479c9
-  - [net-next,v2,2/3] selftests/net: packetdrill: import tcp/zerocopy
-    https://git.kernel.org/netdev/net-next/c/1e42f73fd3c2
-  - [net-next,v2,3/3] selftests/net: packetdrill: import tcp/slow_start
-    https://git.kernel.org/netdev/net-next/c/e874be276ee4
+This patch should be moved before the change in drivers. After all
+drivers convert to use set blocking domain to pasid, the
+remove_dev_pasid could be removed as the last step.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+baolu
 
