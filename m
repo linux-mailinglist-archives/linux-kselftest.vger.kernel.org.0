@@ -1,65 +1,65 @@
-Return-Path: <linux-kselftest+bounces-17905-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17906-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5ECE97767D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 03:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AC4D9776A8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 03:56:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 193E51C24241
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 01:47:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C83A1C24263
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Sep 2024 01:56:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9579C4A07;
-	Fri, 13 Sep 2024 01:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 498537441A;
+	Fri, 13 Sep 2024 01:56:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lSjBs+Tk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SeSOHrhy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13CD74A21
-	for <linux-kselftest@vger.kernel.org>; Fri, 13 Sep 2024 01:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC1766F2F9
+	for <linux-kselftest@vger.kernel.org>; Fri, 13 Sep 2024 01:56:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726192018; cv=none; b=IOKjQddpZZZZHgUgu88LG32k+5Y2RBZltSND/JhzfAvvLl+bmfWeVP/BxtrKHAS1ghc/9vWWBpiSuFlAyuDWTP7jNhGVYpuaQe/YoLAw8tMfRboVyl7C+CjPOBRWysDe2yeGlVKbuok1n2I8+Zz/ozJ1fsTFDKT13/ypHVRVdUw=
+	t=1726192580; cv=none; b=h6qs4X2ZVNPyWb7NvN7gwXZ9lG0BOzX2gMh3hfUhBgjMlsiLbqZdP/adByA+qsX0LG87qjzLeAWeeIyoBA3mctdr6QB6kOQMJNrbtBiPmwGI1JABmBkhpDsYJmuTC6bAd2+eYUqHpMqt1a1PRQtqETKOLB5L2iULnjIkoChuc8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726192018; c=relaxed/simple;
-	bh=6OfhCmkHFtT3tqlm7qzTod2pz5JLojTDLlUiKwepWAY=;
+	s=arc-20240116; t=1726192580; c=relaxed/simple;
+	bh=tSf1MQou0r6lgoHQyGlAZ2uB9RrvMtH+zzCK9JPkimA=;
 	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=gRST9rI8PcnjqejFmpfmbzTN07DRJmHyWPH9iLqYXaSaYO8PFFa4xJlAJB0Ybjx/eAbnOsvqbNtlJ3+pBrqQF2wHy3yeEryDMDZOy9h8UJ1TZRZTUyGz7VmhUpFQrN/a/5j2f2GYEZBsROHJ6eE+Xk4SvFjslygYmbxwsDhNLwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lSjBs+Tk; arc=none smtp.client-ip=192.198.163.9
+	 In-Reply-To:Content-Type; b=gpTKZHFf3SHVH9SEcU6cweX8hDjo7KTS/MpC4o8b3TlnKT6SMohZQzxS7Qy0E2rDWsAwH/zqBJMFeUKgh9kyJ111H2A2ffeEGvskfEMoZPtblABX7ga/DeyiDGe5Y8I9UHoBeo3BqBTxJYJu5hqcGZb9lWHM+WzwandFionA6LM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SeSOHrhy; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1726192016; x=1757728016;
+  t=1726192579; x=1757728579;
   h=message-id:date:mime-version:cc:subject:to:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=6OfhCmkHFtT3tqlm7qzTod2pz5JLojTDLlUiKwepWAY=;
-  b=lSjBs+TkNxO6eRHqradarMtnUOcW+eu/RMUViXawkpvHeShiOoUzblPe
-   KV3Wr3RHcEr862YzDvfWbSaXNYZUrgD/wUaQ9mf8/slPDncoCqwDqjqEl
-   EEuYPVcJyznN6ZMKQwYydEXyaL9NjUu+ojMZK2sbXXDdiV2YIxOptMoqA
-   LEFfvrBgjIf9rDQhvwG7X5PukxZtLPK/Q5cDPDyZIt4hCQPLZsUuu7TTl
-   kZ+pI+U8ja2OzWKK9f2DTXWukPxJLoKQpkJSKTlTgvvLuy+3ySbzuE4sT
-   zhtG9ekHhWig5o13vC7nQzXJr+Y0OQMe7NmcGP1DEmEtAXMNcIiVQ419V
-   w==;
-X-CSE-ConnectionGUID: Y4MFfBbKS0252uulMIV9Lw==
-X-CSE-MsgGUID: LzA7QaEsTv64RKeiwbig4w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="35748670"
+  bh=tSf1MQou0r6lgoHQyGlAZ2uB9RrvMtH+zzCK9JPkimA=;
+  b=SeSOHrhyLX6dCCYm693+guwgxo5MSsNPy89fhQ89IGZuH2okKDzaUZKN
+   QFSRCX/DFH94ajfB6Qm7w2SakMuefF7xxspjHlTWKpkOAifdPphL0CTvJ
+   zo8W71GddhGwc86YSt0ep8S8f5OQuZtxOzgAZUypnSwB6hpJy6UdfYtu8
+   wsMLywT81+/jGfqatWsTgqFl1CdV5RNdoidRcwEarPxLXCYuEg2R1nTtp
+   +e87cf2E/W0mfzDaoMB66PNSAJuOJMGJNpDKOLH6Ii73jia8b/S13snCn
+   HWPoA28imRK2YsxQ1WDbQqfJ/rQhRBtLCYbUuf0PD4SrZx2pEIf9vjpi2
+   g==;
+X-CSE-ConnectionGUID: cjK0jnjeQamXchgC6XN6zw==
+X-CSE-MsgGUID: WDbrNc1SQp+fplLYSZaeNA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11193"; a="50496032"
 X-IronPort-AV: E=Sophos;i="6.10,224,1719903600"; 
-   d="scan'208";a="35748670"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 18:46:55 -0700
-X-CSE-ConnectionGUID: 8wI9FEvuT8mmPXeyHeDxFw==
-X-CSE-MsgGUID: ivS5xelyTSeoKWKOEjHM8Q==
+   d="scan'208";a="50496032"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2024 18:56:18 -0700
+X-CSE-ConnectionGUID: yfPn0s/fTsWcVWR0yCzzIg==
+X-CSE-MsgGUID: hRft0uaPQU2ZY2uoWV1SPw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.10,224,1719903600"; 
-   d="scan'208";a="105370471"
+   d="scan'208";a="98593348"
 Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by orviesa001.jf.intel.com with ESMTP; 12 Sep 2024 18:46:52 -0700
-Message-ID: <08e6739e-762f-4552-adbe-52259747c813@linux.intel.com>
-Date: Fri, 13 Sep 2024 09:42:46 +0800
+  by orviesa002.jf.intel.com with ESMTP; 12 Sep 2024 18:56:15 -0700
+Message-ID: <5df26703-012a-4c06-af59-0ccc193d250f@linux.intel.com>
+Date: Fri, 13 Sep 2024 09:52:09 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,52 +71,41 @@ Cc: baolu.lu@linux.intel.com, alex.williamson@redhat.com,
  eric.auger@redhat.com, nicolinc@nvidia.com, chao.p.peng@linux.intel.com,
  iommu@lists.linux.dev, zhenzhong.duan@intel.com,
  linux-kselftest@vger.kernel.org, vasant.hegde@amd.com
-Subject: Re: [PATCH v2 3/6] iommu/vt-d: Make intel_iommu_set_dev_pasid() to
- handle domain replacement
+Subject: Re: [PATCH v2 4/6] iommu/vt-d: Add set_dev_pasid callback for nested
+ domain
 To: Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org, jgg@nvidia.com,
  kevin.tian@intel.com
 References: <20240912130427.10119-1-yi.l.liu@intel.com>
- <20240912130427.10119-4-yi.l.liu@intel.com>
+ <20240912130427.10119-5-yi.l.liu@intel.com>
 Content-Language: en-US
 From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20240912130427.10119-4-yi.l.liu@intel.com>
+In-Reply-To: <20240912130427.10119-5-yi.l.liu@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 9/12/24 9:04 PM, Yi Liu wrote:
-> @@ -4325,24 +4363,18 @@ static int intel_iommu_set_dev_pasid(struct iommu_domain *domain,
->   		ret = intel_pasid_setup_second_level(iommu, dmar_domain,
->   						     dev, pasid);
+> @@ -4299,7 +4304,12 @@ domain_prepare_dev_pasid(struct iommu_domain *domain,
+>   	unsigned long flags;
+>   	int ret;
+>   
+> -	ret = prepare_domain_attach_device(domain, dev);
+> +	/* Nested type domain should prepare its parent domain */
+> +	if (domain_type_is_nested(dmar_domain))
+> +		ret = prepare_domain_attach_device(
+> +				&dmar_domain->s2_domain->domain, dev);
+> +	else
+> +		ret = prepare_domain_attach_device(domain, dev);
 >   	if (ret)
-> -		goto out_unassign_tag;
-> +		goto out_undo_dev_pasid;
+>   		return ERR_PTR(ret);
 >   
-> -	dev_pasid->dev = dev;
-> -	dev_pasid->pasid = pasid;
-> -	spin_lock_irqsave(&dmar_domain->lock, flags);
-> -	list_add(&dev_pasid->link_domain, &dmar_domain->dev_pasids);
-> -	spin_unlock_irqrestore(&dmar_domain->lock, flags);
-> +	if (old)
-> +		domain_remove_dev_pasid(old, dev, pasid);
->   
->   	if (domain->type & __IOMMU_DOMAIN_PAGING)
->   		intel_iommu_debugfs_create_dev_pasid(dev_pasid);
->   
->   	return 0;
-> -out_unassign_tag:
-> -	cache_tag_unassign_domain(dmar_domain, dev, pasid);
-> -out_detach_iommu:
-> -	domain_detach_iommu(dmar_domain, iommu);
-> -out_free:
-> -	kfree(dev_pasid);
-> +
-> +out_undo_dev_pasid:
-> +	domain_remove_dev_pasid(domain, dev, pasid);
->   	return ret;
->   }
 
-Do you need to re-install the old domain to the pasid entry in the
-failure path?
+'prepare' is a bit confusing in this context. It actually means checking
+whether a domain is compatible with the hardware capabilities of RID or
+PASID. Or not?
+
+I know this confusion comes from the naming of
+prepare_domain_attach_device(). Hence, do you mind renaming this helper
+in a small patch?
 
 Thanks,
 baolu
