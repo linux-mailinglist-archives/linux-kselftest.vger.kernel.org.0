@@ -1,159 +1,99 @@
-Return-Path: <linux-kselftest+bounces-17987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17988-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F5F4979100
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Sep 2024 15:34:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D7CF979114
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Sep 2024 15:38:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 206AC1F22BCB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Sep 2024 13:34:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB75D282A9F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Sep 2024 13:38:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 367111CF5E0;
-	Sat, 14 Sep 2024 13:34:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6526A1CF7B7;
+	Sat, 14 Sep 2024 13:38:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V9t/S0Yf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IC6EZITf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BCD315E86
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Sep 2024 13:34:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 352FE1CEE87;
+	Sat, 14 Sep 2024 13:38:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726320891; cv=none; b=QJMKwxpakjC6HwUylzxI3dZ+jYnZKzIv69Ux30H5hU0jKWltRI/RL3U0Yasnuwstdbhnefu8G64Av9DyfLjNbutNOxlA9pFj1SWEe1BmACxyjx+dyFx2X+WI/sjE/RNqLZmRMQwgzh3X1yJ4bNThAGh9z5PHzRlG1ergnacIsmY=
+	t=1726321111; cv=none; b=QqIyl7R1AN9g8MuAlrY4tAyfTMyDgYzosxOj8V5AYtlWvdiVPrUc3drNsWFizXBizu7Sq/YsIXXqohW6io+Zs5Ytz7DDxTAxxMEzziL1/uNvHwKFo+vWbZoojlfF2q0GOt9gZicfC4hPBLP0YDjXNm2ez17Y8WiFZT1lFnQwMgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726320891; c=relaxed/simple;
-	bh=dHM/9nGeV0kB5TjHKKHKGDZ6zh5A8DGqa4bFzJrKT/U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NWNNBLzE0m9F1RJgtU2xr+y86OwTV9LyOGt2GTJM056sNfm5BD1macDYG809+gNxvznjYj9q4iiHo736CrzU1pD52wbeZXy1KDiEoTiINyFQduXElE/V1QGF9bLr5PmNVNDAMBFEw9y6fC+3rYf3CvkqbncRmiS9aU8J+oaZdsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=V9t/S0Yf; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-42cae4ead5bso11745e9.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Sep 2024 06:34:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1726320888; x=1726925688; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dHM/9nGeV0kB5TjHKKHKGDZ6zh5A8DGqa4bFzJrKT/U=;
-        b=V9t/S0YfvqGt18n1LGGsMgqgKHI5SlP4OdMcEzXgOFMe1ICK4kLgk5lR4+VqXze3Oi
-         Ns6rU3WQmZhEmBqKYMlNQorw8BrBwesnjBWTJGU1denCkuYgF+0s2pZVNtv0WjC87LIw
-         MANdkrNi1ADdjYZdd3BM75uuinL1jfbae4jx6E0UalYwNfII0A0FGKlWutl1QX8O2OVR
-         p5+hq3m6KnFQtxWXulZnr8vZ2uRKiYsyFeh1ICHj9oStUOwSJB7ehbPMccrNt7VZpImT
-         cCX7bYX/VITDInLxtfA+D8y58Tl1yn56z7+KfM7SeqrN0aDRUgrgkIjuIzbA45rwnxha
-         I/Eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726320888; x=1726925688;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dHM/9nGeV0kB5TjHKKHKGDZ6zh5A8DGqa4bFzJrKT/U=;
-        b=XJ0R98LnWg8EqN0r07ps8aGgZfU6X64aaTs4joiJNyJE8RwptNqC4MydoEdjgSVVVy
-         8k9uaF0bcXEBJgMPKD3GaRXJ/nVMD/fm6s0348pLag5q9O7DzhqVrfk7SxkNhwjprV5y
-         /sY5SfQ5AwE2vm8hKLEbaWNf/6/X89q5RSl7aHhvKvlmfZ8RY8GwAXTeojYIJB+/+Ryh
-         0pxwsmqPKZpvafhKKEQ7dXyV49XGGuXwqLrWJxMn3JzrBIG+tptyzuNtalbTbMGkVcM0
-         kHP7PWpDqltXFnn5MPrTEOekh0MFng55QCshnjmYTyadeLX8MjxekWA1xJko+M1GNDro
-         rpnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVliQLzvBqPsdg+sr+025eDVSuMugGqmga4rdk5b5PfSe7ldC4u53t/sdMXWafGjeexO01SinL/h8MHLVxzCBM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1+QxAM6zg8rRwhJjbR393g950a8Bk8rnp4jW/TuyQkMu05dZa
-	NiLkx+Po4H1yiV/NlYQ1/0JFz2dTzY5TBMW/QTqC9IwPn3L11AiIbrqdtdOVEVOzosodarpcUTL
-	Ko1hSwsZbTX0yzVA9KTiuw2fXEycLAOFM/LHa
-X-Google-Smtp-Source: AGHT+IEU9079HmdtThcsiN8JY3iJ1eHKyBPsG+CZSLZMAH2usfwIpF0g9bdh4YwDboVE3ql8z1EaPMYZFS9J2snJ4E8=
-X-Received: by 2002:a05:600c:1da5:b0:42b:a8fc:3937 with SMTP id
- 5b1f17b1804b1-42cdcd1ec3amr514975e9.4.1726320887370; Sat, 14 Sep 2024
- 06:34:47 -0700 (PDT)
+	s=arc-20240116; t=1726321111; c=relaxed/simple;
+	bh=1YymAszQUKrYqEpjx3Mib9yXvMotNA+i9P6+wOex2ng=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=W5yRG6y2o5T/NPlVrP3skDM2NhJsWPB+oXPP5ds8LSR8fxNgiAWWZCA+pOrWLyB2//Xm4NeKrVfZILW2o0Btv6jfa6CQLJARYDA/YmK0KDakO0xas4Rn+FyE11i7orSDDvP0/DIVfOrvqUVvj0h3Or1xHIeOEy96UaQ0QA5giTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IC6EZITf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85EB2C4CEC4;
+	Sat, 14 Sep 2024 13:38:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726321110;
+	bh=1YymAszQUKrYqEpjx3Mib9yXvMotNA+i9P6+wOex2ng=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=IC6EZITfk2pk4O1EGsN+gEZZchhozK2IKu3caZ+ZtZ6z7wQrOz9eHWxeXvO8HHnq3
+	 yc8/spNygEbEkbPRef+A0lxXUgyJ0cdQckL8iNpJqbDwi0Q3JuCZzReM1ZY5aDTHBx
+	 e7aIogQlWFpXgruml/qaaBY7o9Zi7z7ON8WgL/sS4gyZh4ikjI1NEUwnzlr8iW8w6r
+	 tJVyClwjUtEd7xH2s+L6yn4DWw0KfgEKt0uu0GQwmpdPyJpaNd4qnRgF3jcTmqOtsD
+	 LPh+qEwH4Q/gwqC/QlAsqEn0n3k8ZrISgnxtCBGScG0R6k8elxAjGp3YMEWe42myQ6
+	 pV6xR3RjjD9aA==
+Date: Sat, 14 Sep 2024 06:38:28 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, "Alexis =?UTF-8?B?TG90aG9y?=
+ =?UTF-8?B?w6k=?= (eBPF Foundation)" <alexis.lothore@bootlin.com>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John
+ Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri
+ Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan
+ <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, Maxime Chevallier
+ <maxime.chevallier@bootlin.com>, ebpf@linuxfoundation.org, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ netdev@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: convert test_xdp_features.sh
+ to test_progs
+Message-ID: <20240914063828.7bd73c5e@kernel.org>
+In-Reply-To: <ZuVWmxoqXFI3qvVI@lore-desk>
+References: <20240910-convert_xdp_tests-v2-1-a46367c9d038@bootlin.com>
+	<64df8d41-6cfb-45a9-8337-5cc04daedb60@linux.dev>
+	<ZuVWmxoqXFI3qvVI@lore-desk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1726009989.git.ackerleytng@google.com> <MN0PR11MB61813367958D393369C0AD8399662@MN0PR11MB6181.namprd11.prod.outlook.com>
-In-Reply-To: <MN0PR11MB61813367958D393369C0AD8399662@MN0PR11MB6181.namprd11.prod.outlook.com>
-From: Vishal Annapurve <vannapurve@google.com>
-Date: Sat, 14 Sep 2024 06:34:36 -0700
-Message-ID: <CAGtprH-GczOb64XrLpdW4ObRG7Gsv8tHWNhiW7=2dE=OAF7-Rw@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/39] 1G page support for guest_memfd
-To: "Du, Fan" <fan.du@intel.com>
-Cc: Ackerley Tng <ackerleytng@google.com>, "tabba@google.com" <tabba@google.com>, 
-	"quic_eberman@quicinc.com" <quic_eberman@quicinc.com>, "roypat@amazon.co.uk" <roypat@amazon.co.uk>, 
-	"jgg@nvidia.com" <jgg@nvidia.com>, "peterx@redhat.com" <peterx@redhat.com>, 
-	"david@redhat.com" <david@redhat.com>, "rientjes@google.com" <rientjes@google.com>, 
-	"fvdl@google.com" <fvdl@google.com>, "jthoughton@google.com" <jthoughton@google.com>, 
-	"seanjc@google.com" <seanjc@google.com>, "pbonzini@redhat.com" <pbonzini@redhat.com>, 
-	"Li, Zhiquan1" <zhiquan1.li@intel.com>, "Miao, Jun" <jun.miao@intel.com>, 
-	"Yamahata, Isaku" <isaku.yamahata@intel.com>, "muchun.song@linux.dev" <muchun.song@linux.dev>, 
-	"mike.kravetz@oracle.com" <mike.kravetz@oracle.com>, "Aktas, Erdem" <erdemaktas@google.com>, 
-	"qperret@google.com" <qperret@google.com>, "jhubbard@nvidia.com" <jhubbard@nvidia.com>, 
-	"willy@infradead.org" <willy@infradead.org>, "shuah@kernel.org" <shuah@kernel.org>, 
-	"brauner@kernel.org" <brauner@kernel.org>, "bfoster@redhat.com" <bfoster@redhat.com>, 
-	"kent.overstreet@linux.dev" <kent.overstreet@linux.dev>, "pvorel@suse.cz" <pvorel@suse.cz>, 
-	"rppt@kernel.org" <rppt@kernel.org>, "richard.weiyang@gmail.com" <richard.weiyang@gmail.com>, 
-	"anup@brainfault.org" <anup@brainfault.org>, "Xu, Haibo1" <haibo1.xu@intel.com>, 
-	"ajones@ventanamicro.com" <ajones@ventanamicro.com>, "vkuznets@redhat.com" <vkuznets@redhat.com>, 
-	"Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>, "pgonda@google.com" <pgonda@google.com>, 
-	"oliver.upton@linux.dev" <oliver.upton@linux.dev>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "linux-mm@kvack.org" <linux-mm@kvack.org>, 
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
-	"linux-fsdevel@kvack.org" <linux-fsdevel@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 13, 2024 at 6:08=E2=80=AFPM Du, Fan <fan.du@intel.com> wrote:
->
-> ...
-> >
-> > Hello,
-> >
-> > This patchset is our exploration of how to support 1G pages in guest_me=
-mfd,
-> > and
-> > how the pages will be used in Confidential VMs.
-> >
-> > The patchset covers:
-> >
-> > + How to get 1G pages
-> > + Allowing mmap() of guest_memfd to userspace so that both private and
-> > shared
->
-> Hi Ackerley
->
-> Thanks for posting new version :)
->
-> W.r.t above description and below patch snippet from Patch 26-29,
-> Does this new design aim to backup shared and private GPA with a single
-> Hugetlb spool which equal VM instance total memory?
+On Sat, 14 Sep 2024 11:25:47 +0200 Lorenzo Bianconi wrote:
+> On Sep 13, Martin KaFai Lau wrote:
+> > test a physical network device that supports a certain XDP features.
+> > 
+> > iiuc, test_xdp_features.sh only uses the veth and veth will also be the only
+> > device tested after moving to prog_tests/xdp_features.c? It is a reasonable
+> > addition to test_progs for an end-to-end xdp test by using veth. However,
+> > test_progs will not be able to test the physical network device.
+> > 
+> > Lorenzo, is the xdp_features.c still used for device testing?
+> 
+> correct, xdp_features.c is intended to test the real xdp features supported by
+> the NIC under test (DUT), not just the advertised ones (iirc that was a
+> requisite to add xdp kernel feature support). For this reason we need two
+> separated processes running on the tester device and on the DUT (they are
+> usually two different devices). test_xdp_features.sh was just a simple test
+> script used to develop xdp_features.c.
+> What about extending xdp_features.c to integrate it in the CI?
 
-Yes.
->
-> By my understanding, before this new changes, shared memfd and gmem fd
-> has dedicate hugetlb pool, that's two copy/reservation of hugetlb spool.
-
-Selftests attached to this series use single gmem fd to back guest memory.
-
->
-> Does Qemu require new changes as well? I'd like to have a test of this se=
-ries
-> if you can share Qemu branch?
->
-
-We are going to discuss this RFC series and related issues at LPC.
-Once the next steps are finalized, the plan will be to send out an
-improved version. You can use/modify the selftests that are part of
-this series to test this feature with software protected VMs for now.
-
-Qemu will require changes for this feature on top of already floated
-gmem integration series [1] that adds software protected VM support to
-Qemu. If you are interested in testing this feature with TDX VMs then
-it needs multiple series to set up the right test environment
-(including [2]). We haven't considered posting Qemu patches and it
-will be a while before we can get to it.
-
-[1] https://patchew.org/QEMU/20230914035117.3285885-1-xiaoyao.li@intel.com/
-[2] https://patchwork.kernel.org/project/kvm/cover/20231115071519.2864957-1=
--xiaoyao.li@intel.com/
+No preference but just to raise awareness - drivers/net's NetDrvEpEnv
+class provides the setup for running tests with an endpoint.
+XDP tests intended for HW would fit there pretty well.
 
