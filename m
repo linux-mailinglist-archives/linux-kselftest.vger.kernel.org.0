@@ -1,215 +1,281 @@
-Return-Path: <linux-kselftest+bounces-17984-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-17985-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99CBD979005
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Sep 2024 12:33:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B45FC979095
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Sep 2024 13:40:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCD471C2232E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Sep 2024 10:33:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7624B2842E3
+	for <lists+linux-kselftest@lfdr.de>; Sat, 14 Sep 2024 11:40:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C34C21CF29B;
-	Sat, 14 Sep 2024 10:32:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43BBC1CF5DB;
+	Sat, 14 Sep 2024 11:40:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="YRkBn9Ss"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F7LOwWqh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41B1F1CEADF
-	for <linux-kselftest@vger.kernel.org>; Sat, 14 Sep 2024 10:32:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0C81CEE91
+	for <linux-kselftest@vger.kernel.org>; Sat, 14 Sep 2024 11:40:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726309978; cv=none; b=Oklw+OJW5I7OIPurwE7EAyXQ7yPOdGddQ/PS+HIK7Nf4dD8MXxGHtumCwVNl3YMxwNB0xEiFImge1LA9RhZsJMgh9KYM7s6j6whqTfaRCK5yUNDuwPSbwSKm13zCo79WtVughoLfn/1EIimTLXt82/pmlV8EBq/bOTOV0mMF8ME=
+	t=1726314042; cv=none; b=Mnenja/qRopg5bzOXcq8cLu3yzG3ZxHJ2VS+e8xgNm05jmp+58ujdDAlcXaXtUX71u8cuC/N7+tVkgjbV1aQCDCmuWHRkJ1R8gsfvX6P6WcLhd/Yr7gPToy3LE+nDwkZ+gBKh/3DpADbeKFULgKWmVCkP+X79DVG4B4iDEFpBVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726309978; c=relaxed/simple;
-	bh=m6tganteey5Zg+ZqOOxN3LGGrsmpJmws608jYsU4v9Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Fev0wg+8eAwtSLKpH+KIRJtjrSblYYDqBsj6ZZV/j0m+n0PITR+Evuqi/w/vo0cxFQnF7WoRUvi6KfPXDJ1JeBiueM4pLmFhSALmrT3Z3yzpT+Zm2avAOH4RSzEBUg/KC5fGOfraBFKVkZOCdVHtmOP5W6g4npCerWJXRbaHrSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=YRkBn9Ss; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-7191ee537cbso2178390b3a.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Sep 2024 03:32:56 -0700 (PDT)
+	s=arc-20240116; t=1726314042; c=relaxed/simple;
+	bh=OliFemtXeDZo4vD+OP4k39Ufhz7CchYl6D9v8NP18dI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AePZMYdfIW/o16uBKD/w1kP2n++cSyUYuAdSdN+cZC+oVkMqgf9d5VG05AHxRDKsMPc9XUSWCUgqCD4MTGBc56sTPQ2BClq+UFwHD3Eh2M+IqUwm5y6kfIGB50lj3DIwijyloBufTE9dy4c2n1dm/TIGtAvIbBG0OKsrQVhyXlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F7LOwWqh; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a7a81bd549eso347474366b.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 14 Sep 2024 04:40:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1726309976; x=1726914776; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1726314037; x=1726918837; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2wKJ6T8lzrG3Rgs6AhFQqgnkeWhWEchyLf0I6JJ+l9w=;
-        b=YRkBn9Ssnea4wzVsgFxbSa6SpUnr31dRWq86B8ztJytn/Zben3too/SnZLkaWpjD55
-         KPvjtuZ1xSRSVhEliXtzzLgYfMUz0CQRsrDBwxScQ3lqCCzkUDMhLQnAaWf3UwKp8y5a
-         IhZaQ2pKutl0fdD0cYKS/UyZ46OiWRafrp26utdmDy5CvsVBoCRm6i2i3n9WHf/jkzCp
-         /QkoJ7ZrRRe30lN03gEEC/zXO0pIsPcJWrbAlzbpy57kJEXpKF+dHDWRlLUzlZRULGms
-         qMzKnYfDSx0W2RvOpHMVlKrh96pvhHIwKK4Q1ux0OzFT6IOV/N2LXGVSxy9zG1zKZsDG
-         U4Cg==
+        bh=JTkLG8de2K3rf81s1PsLPTq2s3oVCmWApdSccSo/4uo=;
+        b=F7LOwWqhYia0T2AXIEDf3RLBUeKbrbkTHLqxsBtkvPEvvqnqcWY5lQMQAouWXv3mLg
+         b6m9WOvtHOt3GL0w68t+CjVTLaPdcoPOamJcRe4hjz7VFrespc2ZpkE2EfztwZ7rAUtN
+         P9H+Yfp7EbnSb9GxkajoXV9FGtfMv7SyvTkQz7yr6FzKCcnWeJVc53mU0IEg5h2VKutb
+         nQD7aphoM8qyQ+4MqJ7Zae+1riWyzJcNk/b6ItIsvUuQ5iaTiUDUd9/r20xbTUu1/Mod
+         eChUB8mCCO4FBVOJJ5q3Rnn2NDv9suv+XEDGgTJX5Q5CRo+nCRpXuD+8acr7Nw8EIQWe
+         8U8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726309976; x=1726914776;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1726314037; x=1726918837;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2wKJ6T8lzrG3Rgs6AhFQqgnkeWhWEchyLf0I6JJ+l9w=;
-        b=lRE9TN4KUFMD1GNZy4gelabZmMQlJLCbDgsEaY7dh/kuhFUqQLmodCfmIpOrVcritH
-         leO+YskUvqIZbuZx18MWK6H+3U3U3sGNkbc8F7tZgdPhefqRavqeg7crvhvdQQ84ii/F
-         P5lAonCoqVudPEVumx20moQgl2lp1b5044EMp1V7i8LWUd7ErimGwTTYti4vElFGfH5H
-         EQGmrAKzntrrrCAZl9rr90VbWYDm4m8ro7wm1H2VwkevraldtxuITEASutc+IeM7rOI3
-         Sy+w0QUo2qDTj/96JQibsYpyHREL5Yy9/yllRXsfTP6pxRiMNsLMvcZ97iERfh6CkvcI
-         wq2g==
-X-Forwarded-Encrypted: i=1; AJvYcCVO2fkWnwJx7F5ndw67IksE6FCQ3rrrOLsF0z5bW0ps9oEYq2wVyXu6yNKV6S/SeFWa6IxAURX4Z0/r3ZRxQrc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlxK+JtFt+HuFIUxbOVzYXb7jTnXLkid/lQc5L8Bzlb8wv1fT9
-	tcGpF+ZnAw/CHcs4DoqBnAhJkCnevz5x8MdiGSA++1kNus6PB+ujLpVaqQd5hKg=
-X-Google-Smtp-Source: AGHT+IF8FZ62F3t14kxbTqWQfHm1EgOf2TO1sWKDgesgw76UlXpQC6XKw5Ig4N3rdi4YJTYevfZbNg==
-X-Received: by 2002:a05:6a00:812:b0:70d:1b48:e362 with SMTP id d2e1a72fcca58-719262065e5mr13240001b3a.26.1726309976169;
-        Sat, 14 Sep 2024 03:32:56 -0700 (PDT)
-Received: from C02F52LSML85.bytedance.net ([203.208.167.149])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71944ab50cbsm788332b3a.53.2024.09.14.03.32.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 14 Sep 2024 03:32:55 -0700 (PDT)
-From: Feng zhou <zhoufeng.zf@bytedance.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	mykolal@fb.com,
-	shuah@kernel.org,
-	alan.maguire@oracle.com
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	yangzhenze@bytedance.com,
-	wangdongdong.6@bytedance.com,
-	zhoufeng.zf@bytedance.com
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Setget_sockopt add a test for tcp over ipv4 via ipv6
-Date: Sat, 14 Sep 2024 18:32:26 +0800
-Message-Id: <20240914103226.71109-3-zhoufeng.zf@bytedance.com>
-X-Mailer: git-send-email 2.39.3 (Apple Git-146)
-In-Reply-To: <20240914103226.71109-1-zhoufeng.zf@bytedance.com>
-References: <20240914103226.71109-1-zhoufeng.zf@bytedance.com>
+        bh=JTkLG8de2K3rf81s1PsLPTq2s3oVCmWApdSccSo/4uo=;
+        b=RJ2PklbwSJdVVYnIBLWYurB8bYPlbAwQXUWY68nhWuqFf9+2t7zS3CS/MnLKA9OFL7
+         SJKoyRvg+Sk//cm5xNcBO5xgAK2TU2H0gh1lDg2Shlu9QvokB3ihDIWqNN0QTvrAIeGO
+         wSJNFPl6u0d3qfi+KDw+ku3lWe7qmcO8ob5EBcpJBbO36xHzThSiicsM7+yVW2fDN8GB
+         KJiRjXNr8ACPD7tASfg4WLpWplRQAbvLpvaixZMiOZ21XP4v2rHkmddKtNs8htIxBAth
+         d1U7kFftYtmUxnmvbkE6YAuWT9YQyRhh8zWDn2vBYzXplCtKK/yA2C6pXQ924kVkGFFF
+         hvYg==
+X-Forwarded-Encrypted: i=1; AJvYcCWzjfE03gApuJ4OqHVQzdDez7q1dDuJ3w7BTDinYywSwSMI+X3bWsPeuK53x1ybkfxkK2KrZmOV9asidT30fMo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzT3d0VZVzhR/ep3VSdg3yO+a+AKtR1HnDFHSYvrJ60hXJjQzCk
+	03QMh0fa3dkham41w8RL1nADKw/GwXpvxTst6ttbSSntp4pcXM4z+TXUCQM3w6Gy3sErEbiYhBG
+	TCS/Fp+FdjT711kxX4MVLsWkvWFx470AZXVTW
+X-Google-Smtp-Source: AGHT+IEmBCh34zGD/eul+h3Hcgm77RBe6Yt2fL6Odd5ZSfFbD0sGnwkBimqh7AkIF2q/23UUh1yBQmO8u3Q9uAivp60=
+X-Received: by 2002:a17:907:d590:b0:a8d:470e:1793 with SMTP id
+ a640c23a62f3a-a902950525emr882387166b.21.1726314036614; Sat, 14 Sep 2024
+ 04:40:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240913-reverse-sk-lookup-v1-0-e721ea003d4c@cloudflare.com> <20240913-reverse-sk-lookup-v1-2-e721ea003d4c@cloudflare.com>
+In-Reply-To: <20240913-reverse-sk-lookup-v1-2-e721ea003d4c@cloudflare.com>
+From: Eric Dumazet <edumazet@google.com>
+Date: Sat, 14 Sep 2024 13:40:25 +0200
+Message-ID: <CANn89iLE8zgX2U5+3YmBoPgsDAV8xGOcfZcd7Pzd_4MSFs64BA@mail.gmail.com>
+Subject: Re: [RFC PATCH 2/3] ipv6: Run a reverse sk_lookup on sendmsg.
+To: Tiago Lam <tiagolam@cloudflare.com>
+Cc: "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>, 
+	kernel-team@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Feng Zhou <zhoufeng.zf@bytedance.com>
+On Fri, Sep 13, 2024 at 11:39=E2=80=AFAM Tiago Lam <tiagolam@cloudflare.com=
+> wrote:
+>
+> This follows the same rationale provided for the ipv4 counterpart, where
+> it now runs a reverse socket lookup when source addresses and/or ports
+> are changed, on sendmsg, to check whether egress traffic should be
+> allowed to go through or not.
+>
+> As with ipv4, the ipv6 sendmsg path is also extended here to support the
+> IPV6_ORIGDSTADDR ancilliary message to be able to specify a source
+> address/port.
+>
+> Suggested-by: Jakub Sitnicki <jakub@cloudflare.com>
+> Signed-off-by: Tiago Lam <tiagolam@cloudflare.com>
+> ---
+>  net/ipv6/datagram.c | 76 +++++++++++++++++++++++++++++++++++++++++++++++=
+++++++
+>  net/ipv6/udp.c      |  8 ++++--
+>  2 files changed, 82 insertions(+), 2 deletions(-)
+>
+> diff --git a/net/ipv6/datagram.c b/net/ipv6/datagram.c
+> index fff78496803d..4214dda1c320 100644
+> --- a/net/ipv6/datagram.c
+> +++ b/net/ipv6/datagram.c
+> @@ -756,6 +756,27 @@ void ip6_datagram_recv_ctl(struct sock *sk, struct m=
+sghdr *msg,
+>  }
+>  EXPORT_SYMBOL_GPL(ip6_datagram_recv_ctl);
+>
+> +static inline bool reverse_sk_lookup(struct flowi6 *fl6, struct sock *sk=
+,
+> +                                    struct in6_addr *saddr, __be16 sport=
+)
+> +{
+> +       if (static_branch_unlikely(&bpf_sk_lookup_enabled) &&
+> +           (saddr && sport) &&
+> +           (ipv6_addr_cmp(&sk->sk_v6_rcv_saddr, saddr) || inet_sk(sk)->i=
+net_sport !=3D sport)) {
+> +               struct sock *sk_egress;
+> +
+> +               bpf_sk_lookup_run_v6(sock_net(sk), IPPROTO_UDP, &fl6->dad=
+dr, fl6->fl6_dport,
+> +                                    saddr, ntohs(sport), 0, &sk_egress);
+> +               if (!IS_ERR_OR_NULL(sk_egress) &&
+> +                   atomic64_read(&sk_egress->sk_cookie) =3D=3D atomic64_=
+read(&sk->sk_cookie))
 
-This patch adds a test for TCP over IPv4 via INET6 API.
+I do not understand this.
 
-Signed-off-by: Feng Zhou <zhoufeng.zf@bytedance.com>
----
- .../selftests/bpf/prog_tests/setget_sockopt.c | 33 +++++++++++++++++++
- .../selftests/bpf/progs/setget_sockopt.c      | 13 ++++++--
- 2 files changed, 43 insertions(+), 3 deletions(-)
+1) sk_cookie is not always initialized. It is done on demand, when/if
+__sock_gen_cookie() was called.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/setget_sockopt.c b/tools/testing/selftests/bpf/prog_tests/setget_sockopt.c
-index 7d4a9b3d3722..3cad92128e60 100644
---- a/tools/testing/selftests/bpf/prog_tests/setget_sockopt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/setget_sockopt.c
-@@ -15,8 +15,11 @@
- 
- #define CG_NAME "/setget-sockopt-test"
- 
-+#define INT_PORT	8008
-+
- static const char addr4_str[] = "127.0.0.1";
- static const char addr6_str[] = "::1";
-+static const char addr6_any_str[] = "::";
- static struct setget_sockopt *skel;
- static int cg_fd;
- 
-@@ -67,6 +70,35 @@ static void test_tcp(int family)
- 	ASSERT_EQ(bss->nr_binddev, 2, "nr_bind");
- }
- 
-+static void test_tcp_over_ipv4_via_ipv6(void)
-+{
-+	struct setget_sockopt__bss *bss = skel->bss;
-+	int sfd, cfd;
-+
-+	memset(bss, 0, sizeof(*bss));
-+	skel->bss->test_tcp_over_ipv4_via_ipv6 = 1;
-+
-+	sfd = start_server(AF_INET6, SOCK_STREAM,
-+			   addr6_any_str, INT_PORT, 0);
-+	if (!ASSERT_GE(sfd, 0, "start_server"))
-+		return;
-+
-+	cfd = connect_to_addr_str(AF_INET, SOCK_STREAM, addr4_str, INT_PORT, NULL);
-+	if (!ASSERT_GE(cfd, 0, "connect_to_addr_str")) {
-+		close(sfd);
-+		return;
-+	}
-+	close(sfd);
-+	close(cfd);
-+
-+	ASSERT_EQ(bss->nr_listen, 1, "nr_listen");
-+	ASSERT_EQ(bss->nr_connect, 1, "nr_connect");
-+	ASSERT_EQ(bss->nr_active, 1, "nr_active");
-+	ASSERT_EQ(bss->nr_passive, 1, "nr_passive");
-+	ASSERT_EQ(bss->nr_socket_post_create, 2, "nr_socket_post_create");
-+	ASSERT_EQ(bss->nr_binddev, 2, "nr_bind");
-+}
-+
- static void test_udp(int family)
- {
- 	struct setget_sockopt__bss *bss = skel->bss;
-@@ -191,6 +223,7 @@ void test_setget_sockopt(void)
- 	test_udp(AF_INET);
- 	test_ktls(AF_INET6);
- 	test_ktls(AF_INET);
-+	test_tcp_over_ipv4_via_ipv6();
- 
- done:
- 	setget_sockopt__destroy(skel);
-diff --git a/tools/testing/selftests/bpf/progs/setget_sockopt.c b/tools/testing/selftests/bpf/progs/setget_sockopt.c
-index 60518aed1ffc..ff834d94dd23 100644
---- a/tools/testing/selftests/bpf/progs/setget_sockopt.c
-+++ b/tools/testing/selftests/bpf/progs/setget_sockopt.c
-@@ -20,6 +20,7 @@ int nr_connect;
- int nr_binddev;
- int nr_socket_post_create;
- int nr_fin_wait1;
-+int test_tcp_over_ipv4_via_ipv6;
- 
- struct sockopt_test {
- 	int opt;
-@@ -262,9 +263,15 @@ static int bpf_test_sockopt(void *ctx, struct sock *sk)
- 		if (n != ARRAY_SIZE(sol_ip_tests))
- 			return -1;
- 	} else {
--		n = bpf_loop(ARRAY_SIZE(sol_ipv6_tests), bpf_test_ipv6_sockopt, &lc, 0);
--		if (n != ARRAY_SIZE(sol_ipv6_tests))
--			return -1;
-+		if (test_tcp_over_ipv4_via_ipv6) {
-+			n = bpf_loop(ARRAY_SIZE(sol_ip_tests), bpf_test_ip_sockopt, &lc, 0);
-+			if (n != ARRAY_SIZE(sol_ip_tests))
-+				return -1;
-+		} else {
-+			n = bpf_loop(ARRAY_SIZE(sol_ipv6_tests), bpf_test_ipv6_sockopt, &lc, 0);
-+			if (n != ARRAY_SIZE(sol_ipv6_tests))
-+				return -1;
-+		}
- 	}
- 
- 	return 0;
--- 
-2.30.2
+2) if sk1 and sk2 share the same sk_cookie, then sk1 =3D=3D sk2 ???
 
+So why not simply testing sk_egress =3D=3D sk ?
+
+> +                       return true;
+> +
+> +               net_info_ratelimited("No reverse socket lookup match for =
+local addr %pI6:%d remote addr %pI6:%d\n",
+> +                                    &saddr, ntohs(sport), &fl6->daddr, n=
+tohs(fl6->fl6_dport));
+> +       }
+> +
+> +       return false;
+> +}
+> +
+>  int ip6_datagram_send_ctl(struct net *net, struct sock *sk,
+>                           struct msghdr *msg, struct flowi6 *fl6,
+>                           struct ipcm6_cookie *ipc6)
+> @@ -844,7 +865,62 @@ int ip6_datagram_send_ctl(struct net *net, struct so=
+ck *sk,
+>
+>                         break;
+>                     }
+> +               case IPV6_ORIGDSTADDR:
+> +                       {
+> +                       struct sockaddr_in6 *sockaddr_in;
+> +                       struct net_device *dev =3D NULL;
+> +
+> +                       if (cmsg->cmsg_len < CMSG_LEN(sizeof(struct socka=
+ddr_in6))) {
+> +                               err =3D -EINVAL;
+> +                               goto exit_f;
+> +                       }
+> +
+> +                       sockaddr_in =3D (struct sockaddr_in6 *)CMSG_DATA(=
+cmsg);
+> +
+> +                       addr_type =3D __ipv6_addr_type(&sockaddr_in->sin6=
+_addr);
+> +
+> +                       if (addr_type & IPV6_ADDR_LINKLOCAL)
+> +                               return -EINVAL;
+> +
+> +                       /* If we're egressing with a different source add=
+ress and/or port, we
+> +                        * perform a reverse socket lookup.  The rational=
+e behind this is that we
+> +                        * can allow return UDP traffic that has ingresse=
+d through sk_lookup to
+> +                        * also egress correctly. In case the reverse loo=
+kup fails, we
+> +                        * continue with the normal path.
+> +                        *
+> +                        * The lookup is performed if either source addre=
+ss and/or port changed, and
+> +                        * neither is "0".
+> +                        */
+> +                       if (reverse_sk_lookup(fl6, sk, &sockaddr_in->sin6=
+_addr,
+> +                                             sockaddr_in->sin6_port)) {
+> +                               /* Override the source port and address t=
+o use with the one we
+> +                                * got in cmsg and bail early.
+> +                                */
+> +                               fl6->saddr =3D sockaddr_in->sin6_addr;
+> +                               fl6->fl6_sport =3D sockaddr_in->sin6_port=
+;
+> +                               break;
+> +                       }
+>
+> +                       if (addr_type !=3D IPV6_ADDR_ANY) {
+> +                               int strict =3D __ipv6_addr_src_scope(addr=
+_type) <=3D IPV6_ADDR_SCOPE_LINKLOCAL;
+> +
+> +                               if (!ipv6_can_nonlocal_bind(net, inet_sk(=
+sk)) &&
+> +                                   !ipv6_chk_addr_and_flags(net,
+> +                                                            &sockaddr_in=
+->sin6_addr,
+> +                                                            dev, !strict=
+, 0,
+> +                                                            IFA_F_TENTAT=
+IVE) &&
+> +                                   !ipv6_chk_acast_addr_src(net, dev,
+> +                                                            &sockaddr_in=
+->sin6_addr))
+> +                                       err =3D -EINVAL;
+> +                               else
+> +                                       fl6->saddr =3D sockaddr_in->sin6_=
+addr;
+> +                       }
+> +
+> +                       if (err)
+> +                               goto exit_f;
+> +
+> +                       break;
+> +                       }
+>                 case IPV6_FLOWINFO:
+>                         if (cmsg->cmsg_len < CMSG_LEN(4)) {
+>                                 err =3D -EINVAL;
+> diff --git a/net/ipv6/udp.c b/net/ipv6/udp.c
+> index 6602a2e9cdb5..6121cbb71ad3 100644
+> --- a/net/ipv6/udp.c
+> +++ b/net/ipv6/udp.c
+> @@ -1476,6 +1476,12 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *=
+msg, size_t len)
+>
+>         fl6->flowi6_uid =3D sk->sk_uid;
+>
+> +       /* We use fl6's daddr and fl6_sport in the reverse sk_lookup done
+> +        * within ip6_datagram_send_ctl() now.
+> +        */
+> +       fl6->daddr =3D *daddr;
+> +       fl6->fl6_sport =3D inet->inet_sport;
+> +
+>         if (msg->msg_controllen) {
+>                 opt =3D &opt_space;
+>                 memset(opt, 0, sizeof(struct ipv6_txoptions));
+> @@ -1511,10 +1517,8 @@ int udpv6_sendmsg(struct sock *sk, struct msghdr *=
+msg, size_t len)
+>
+>         fl6->flowi6_proto =3D sk->sk_protocol;
+>         fl6->flowi6_mark =3D ipc6.sockc.mark;
+> -       fl6->daddr =3D *daddr;
+>         if (ipv6_addr_any(&fl6->saddr) && !ipv6_addr_any(&np->saddr))
+>                 fl6->saddr =3D np->saddr;
+> -       fl6->fl6_sport =3D inet->inet_sport;
+>
+>         if (cgroup_bpf_enabled(CGROUP_UDP6_SENDMSG) && !connected) {
+>                 err =3D BPF_CGROUP_RUN_PROG_UDP6_SENDMSG_LOCK(sk,
+>
+> --
+> 2.34.1
+>
 
