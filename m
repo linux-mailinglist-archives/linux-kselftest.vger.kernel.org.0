@@ -1,264 +1,154 @@
-Return-Path: <linux-kselftest+bounces-18004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18005-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D8CB9794DF
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Sep 2024 08:50:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7672B97950A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Sep 2024 09:36:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEBF41F2256E
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Sep 2024 06:50:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A322F1C217E3
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Sep 2024 07:36:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63D771BDCF;
-	Sun, 15 Sep 2024 06:50:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 675CE1BDCF;
+	Sun, 15 Sep 2024 07:36:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nKBNXj5V"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nUDjP21j"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72316748D
-	for <linux-kselftest@vger.kernel.org>; Sun, 15 Sep 2024 06:50:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFF2E18B04
+	for <linux-kselftest@vger.kernel.org>; Sun, 15 Sep 2024 07:36:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726383009; cv=none; b=l75ngFK/k8XexBts9DHpkUnBWXFh3Ggoq4f+7F6v+Nor9YNMe3ItejaGI+8I4XixCwRkqS+gPxjE4b1NBJszU00lKNbFrnVSAoltWX+wZaClR7bUT1thrA6Es1cR+9XWg1sL91I9YQgihVCtxZbdSHC9N4PwM0NyO5HN6YueRkc=
+	t=1726385813; cv=none; b=cVr0VnrklzR6j0caZPJQ+aPopZjzVJl2h/oDKT6kSNObgK7GMaB3sKuNFL+QwOpjqpqgqLCuVxq1db/S0punjqDA+QApPdhjcFogLrWBWL8eKOom6RiubJSU58XDaCIROQoJtzwANCtJM1XC+mG9Emt+P0NNertv2PQU2IoG9MY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726383009; c=relaxed/simple;
-	bh=vGwBqpQMeRzVz91v5wOwtZwL/8l7EfilXwAoFxOp7rY=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=KaJsFZuqZkACXOcEbF6xVGGnq7nkLkNcXncp09scRKOuaDMBiojtUvAexgj/TKNEavcTo2r03rLfMu5q6h+PNJpFs0JAvFD39TpA0fMz3zLARpSLjifYmdubHnHR02G62tO41qWzaOfFyUBmXCJLbSYgoJBSTUA65dCciyJUJ5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--maskray.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nKBNXj5V; arc=none smtp.client-ip=209.85.219.201
+	s=arc-20240116; t=1726385813; c=relaxed/simple;
+	bh=1B7cgcS5/f/1M4cHtrtnC2A25aX2vnJFtlpIot20TV0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QOp4Gimb3Ux3A/NqVwYCqwJrvDpsjICUhIq2KC0F6awGyalmLtm0Nvlz0l5qOTaSevbBzHr6B4helZG/NswFyvKnlne+Bz5lMJkW+shGaV6Ithp1tpE0stHHiaNTlGwiJ0GGIVrbAizRjOUYmqC1nWZ/DXf5zvWees1JENr7TH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nUDjP21j; arc=none smtp.client-ip=209.85.219.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--maskray.bounces.google.com
-Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-e1ab008280aso7643850276.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Sep 2024 23:50:06 -0700 (PDT)
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e05f25fb96eso1957703276.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Sep 2024 00:36:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1726383005; x=1726987805; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=RZPfXwekQwda6LwC500fM8ZDrlyOnYAVczBGHGxiFOA=;
-        b=nKBNXj5VtnQwLAnGdPehG15insdWcib96WBk05cFT7bi80QculG+wA6o9+vni3Ap2T
-         ohlyJ36yq9SXyC0iQcXBUnaN41stCuIz/fF8BzuHv5jskCj1rvYSPZkwzXf1lxED7MOJ
-         upEG6KPkPxc/pIH9dyYX9PIalv+yKFH5TFZp+vwSYh74w/5s96Oaor0Tccl6wPQV0SU4
-         cU3/trBD/TY7uSw6rCX1AenmtW71bCiqo3TJ4cQ5zdn6B2p/pxt1zYsb9FsRqm+Gd9sZ
-         7MJ7yxbnKXzwuTAMuK4R02qtj2wQsIChYLV+I5wUXoWVCkGBK/wUn/OAzoy8QcOJsAMt
-         T7xA==
+        d=google.com; s=20230601; t=1726385811; x=1726990611; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JGaXjVCO3i8LoFwZh2F36ZtmZZi6E6Y8Wmdl+xj83WE=;
+        b=nUDjP21jT8L1iuAHKj8n8h0nLafmEm9iAx9M8f73iHXM8DoqeIICiX09TdorHGExpz
+         x7CK+Q8r20sOHCG0yQSELcK6ZswmnrPS4KMWg3QCSIiaZbTzT8mfylIOLgQSodfERbcm
+         H0hAm03Zo9y8u8IQ5UEChkGLnYbt4uNCoOPCzvi65qg+HcoERXskTN4sPD4CqvWqjF97
+         09wo85w9WXfmwK5hM38pfmlGUVhrn5WXAxT+Uw16Fb9jKIsCuSILyhY3bmddx0jCTSZJ
+         Z+qahvpTepUOYUsDoFLMyv2iZSEIdRhFotLF7evG7gJmv6WvYTP0M6tBwBMuZO8021Kl
+         rB7Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726383005; x=1726987805;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RZPfXwekQwda6LwC500fM8ZDrlyOnYAVczBGHGxiFOA=;
-        b=f/nG909kHZPAAGXBXfJl86ECXCOBZurb568sYySnHmNk7ubTXLB1wj20VuBj/z/JeK
-         rwsfvdNl18hpa7suanU5z+8UwDxMPaZSUARhvheMJQ9t7B6CSr3T1Dc6wkN8tIuDBgqN
-         QhryWSg736jRngMxKxq9v5l4jZWI50Cxl1VVDWZeib9h6/zloOHfs+qaEXvxg6yQZzy9
-         /XN7e0Q/fbXdT1kx9xbwkFfyevuJCPiVm0DM+fFuS+8D4XIVIAO7sW5YDdEj1ohZ++eI
-         VjojuSkwJfrKOb1sER4VlKCmodlvdGQlDzdDfbOvdcXbyEzYDV/jPh3FZiFLA9D00w0v
-         uVMw==
-X-Forwarded-Encrypted: i=1; AJvYcCWK1vhS86+hOASv6i+LL5te/1YLn06IWDOLJkTDxA0i7rk8WuVuST4vM8GlsCZrTcCNx+WGSex+r1IpsZ+m9Hg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUVi4FjMtInhaAtj+WiKQfDyadnY/TdcqeQSjHfQsU+A2ZB7CH
-	tJnZA50TsMTHPlbvxICw7Fs7CfC7dPU6L4lcv8W9KuvxdGT96ZmyHuAD8dTuoCrvtOQjKap+0+V
-	rgigFvQ==
-X-Google-Smtp-Source: AGHT+IFy5saDk0q8GAnbGModaSuNEzwhm+wgHSr3ejmbNiEzEhzJDCLMP5dJytwyQ+fF3+cw2S/Ey80NwCSX
-X-Received: from maskray.svl.corp.google.com ([2620:15c:2d3:205:824b:94ca:e715:74ff])
- (user=maskray job=sendgmr) by 2002:a5b:18c:0:b0:e16:50d2:3d39 with SMTP id
- 3f1490d57ef6-e1d9dc530a4mr18080276.9.1726383005309; Sat, 14 Sep 2024 23:50:05
- -0700 (PDT)
-Date: Sat, 14 Sep 2024 23:49:44 -0700
+        d=1e100.net; s=20230601; t=1726385811; x=1726990611;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JGaXjVCO3i8LoFwZh2F36ZtmZZi6E6Y8Wmdl+xj83WE=;
+        b=EpzjN9ivoB3QrrJzcoh3VIkGgXZXQSKQs56jaa94icRqbn/MOy/3YAlNmYFqP6hTK1
+         nzMW0wjSIZzPzWVr9qlX0pELcKSb6TBwRGP+WAq8cPoua0jQFDFlF5XB7T19KVw2CPj5
+         t8rbmvua9iC2GQKd5tv9/jwM0esyYZ9tuVHm+3pxHwFedpm9C0Fo2vufJ8tgmJARjACg
+         0uhGdaUNXB9TNfooMKPbjzoNJT6nIG1E5kfqgntA1GpVKogf2Xd3qv5xyndby2uo+VMs
+         s5TrN2Rjq27v3VOdH6K3HcIjdjeOEELJVOZq1xJEnI0k0MX8KP8SM+zPp12yIlnqyAaD
+         KW0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUzhXuNAcPuJzEN0118MXjbJ4p7XCVt8HPkUtW06tzxPBS5yZvDnEGD2PAC/yC3igSnpT4DOEav4ieX+5JeB54=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyilTYa9Gv/MsoOAqDMCTa0kFpaW9U2ffhXluFfTbRZy9g4jhFb
+	v59rgsJ99nwhYVSUmralb85ANo8YfAHzIBaJX0Zp9rPw1FWQHLbvNiB9sTzpRiyUcHJZuuLbMqz
+	hZkPFh+iOGraEZuapwvx2uYDRsuaHTc6scWrw
+X-Google-Smtp-Source: AGHT+IF9PmCLN/iHV4dVxFIKo2VkVmtmfRnstkhRi0tZSr57mN/5hf8sesIuPCR24W/CcD0STcSXtH1sap8TUOTYdDw=
+X-Received: by 2002:a05:690c:6609:b0:6b3:f01c:9a57 with SMTP id
+ 00721157ae682-6dbcc579a4cmr67747047b3.35.1726385810099; Sun, 15 Sep 2024
+ 00:36:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <20240915064944.2044066-1-maskray@google.com>
-Subject: [PATCH v2] selftests/vDSO: support DT_GNU_HASH
-From: Fangrui Song <maskray@google.com>
-To: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, Xi Ruoyao <xry111@xry111.site>, 
-	Fangrui Song <maskray@google.com>
+MIME-Version: 1.0
+References: <20240912063119.1277322-1-anders.roxell@linaro.org>
+ <20240912082307.556db015@kernel.org> <CADYN=9+OTGJtN-z_ffQx9C+UA=a_9rpF7bGtnunFJoq0BWL3vQ@mail.gmail.com>
+In-Reply-To: <CADYN=9+OTGJtN-z_ffQx9C+UA=a_9rpF7bGtnunFJoq0BWL3vQ@mail.gmail.com>
+From: Willem de Bruijn <willemb@google.com>
+Date: Sun, 15 Sep 2024 09:36:10 +0200
+Message-ID: <CA+FuTSc15f=+zC_p3seVShGMW164Mi+_a-XiSONzx7A83tEPqw@mail.gmail.com>
+Subject: Re: [PATCH] selftests: Makefile: add missing 'net/lib' to targets
+To: Anders Roxell <anders.roxell@linaro.org>
+Cc: Jakub Kicinski <kuba@kernel.org>, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-glibc added support for DT_GNU_HASH in 2006 and DT_HASH has been
-obsoleted for more than one decade in many Linux distributions.
+On Sun, Sep 15, 2024 at 8:45=E2=80=AFAM Anders Roxell <anders.roxell@linaro=
+.org> wrote:
+>
+> On Thu, 12 Sept 2024 at 17:23, Jakub Kicinski <kuba@kernel.org> wrote:
+> >
+> > On Thu, 12 Sep 2024 08:31:18 +0200 Anders Roxell wrote:
+> > > Fixes: 1d0dc857b5d8 ("selftests: drv-net: add checksum tests")
+> > > Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
+> > > ---
+> > >  tools/testing/selftests/Makefile | 1 +
+> > >  1 file changed, 1 insertion(+)
+> > >
+> > > diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftes=
+ts/Makefile
+> > > index 3b7df5477317..fc3681270afe 100644
+> > > --- a/tools/testing/selftests/Makefile
+> > > +++ b/tools/testing/selftests/Makefile
+> > > @@ -64,6 +64,7 @@ TARGETS +=3D net
+> > >  TARGETS +=3D net/af_unix
+> > >  TARGETS +=3D net/forwarding
+> > >  TARGETS +=3D net/hsr
+> > > +TARGETS +=3D net/lib
+> > >  TARGETS +=3D net/mptcp
+> > >  TARGETS +=3D net/netfilter
+> > >  TARGETS +=3D net/openvswitch
+> >
+> > Please make sure you always include a commit message. Among other
+> > things writing one would force you to understand the code, and
+> > in this case understand that this target is intentionally left out.
+> > Look around the Makefile for references to net/lib, you'll figure
+> > it out.
+> >
+> > The patch is incorrect.
+>
+> You=E2=80=99re right, the patch is incorrect, I could have explained bett=
+er.
+> I=E2=80=99m seeing an issue with an out-of-tree cross compilation build o=
+f
+> kselftest and can=E2=80=99t figure out what=E2=80=99s wrong.
+>
+> make --keep-going --jobs=3D32 O=3D/tmp/build
+> INSTALL_PATH=3D/tmp/build/kselftest_install \
+>      ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- \
+>      CROSS_COMPILE_COMPAT=3Darm-linux-gnueabihf- kselftest-install
+>
+> [...]
+> make[4]: Entering directory
+> '/home/anders/src/kernel/linux/tools/testing/selftests/net/lib'
+>   CC       csum
+> /usr/lib/gcc-cross/aarch64-linux-gnu/13/../../../../aarch64-linux-gnu/bin=
+/ld:
+> cannot open output file /tmp/build/kselftest/net/lib/csum: No such
+> file or directory
+> collect2: error: ld returned 1 exit status
+> [...]
+>
+> Any thoughts on what might be causing this?
 
-Many vDSOs support DT_GNU_HASH. This patch adds selftests support.
+I wonder if this is due to the O=3D argument.
 
-Signed-off-by: Fangrui Song <maskray@google.com>
-Tested-by: Xi Ruoyao <xry111@xry111.site>
---
-Changes from v1:
-* fix style of a multi-line comment. ignore false positive suggestions from checkpath.pl: `ELF(Word) *`
----
- tools/testing/selftests/vDSO/parse_vdso.c | 105 ++++++++++++++++------
- 1 file changed, 79 insertions(+), 26 deletions(-)
+Last week I noticed that some TARGETs explicitly have support for
+this, like x86. Added in 2016 in commit a8ba798bc8ec6 ("selftests:
+enable O and KBUILD_OUTPUT"). But by now this support is hardly
+universal. amd-pstate does not have this infra, for instance.
 
-diff --git a/tools/testing/selftests/vDSO/parse_vdso.c b/tools/testing/selftests/vDSO/parse_vdso.c
-index 4ae417372e9e..dbc946dee4b1 100644
---- a/tools/testing/selftests/vDSO/parse_vdso.c
-+++ b/tools/testing/selftests/vDSO/parse_vdso.c
-@@ -47,6 +47,7 @@ static struct vdso_info
- 	/* Symbol table */
- 	ELF(Sym) *symtab;
- 	const char *symstrings;
-+	ELF(Word) *gnu_hash;
- 	ELF(Word) *bucket, *chain;
- 	ELF(Word) nbucket, nchain;
- 
-@@ -75,6 +76,16 @@ static unsigned long elf_hash(const char *name)
- 	return h;
- }
- 
-+static uint32_t gnu_hash(const char *name)
-+{
-+	const unsigned char *s = (void *)name;
-+	uint32_t h = 5381;
-+
-+	for (; *s; s++)
-+		h += h * 32 + *s;
-+	return h;
-+}
-+
- void vdso_init_from_sysinfo_ehdr(uintptr_t base)
- {
- 	size_t i;
-@@ -117,6 +128,7 @@ void vdso_init_from_sysinfo_ehdr(uintptr_t base)
- 	 */
- 	ELF(Word) *hash = 0;
- 	vdso_info.symstrings = 0;
-+	vdso_info.gnu_hash = 0;
- 	vdso_info.symtab = 0;
- 	vdso_info.versym = 0;
- 	vdso_info.verdef = 0;
-@@ -137,6 +149,11 @@ void vdso_init_from_sysinfo_ehdr(uintptr_t base)
- 				((uintptr_t)dyn[i].d_un.d_ptr
- 				 + vdso_info.load_offset);
- 			break;
-+		case DT_GNU_HASH:
-+			vdso_info.gnu_hash =
-+				(ELF(Word) *)((uintptr_t)dyn[i].d_un.d_ptr +
-+					      vdso_info.load_offset);
-+			break;
- 		case DT_VERSYM:
- 			vdso_info.versym = (ELF(Versym) *)
- 				((uintptr_t)dyn[i].d_un.d_ptr
-@@ -149,17 +166,26 @@ void vdso_init_from_sysinfo_ehdr(uintptr_t base)
- 			break;
- 		}
- 	}
--	if (!vdso_info.symstrings || !vdso_info.symtab || !hash)
-+	if (!vdso_info.symstrings || !vdso_info.symtab ||
-+	    (!hash && !vdso_info.gnu_hash))
- 		return;  /* Failed */
- 
- 	if (!vdso_info.verdef)
- 		vdso_info.versym = 0;
- 
- 	/* Parse the hash table header. */
--	vdso_info.nbucket = hash[0];
--	vdso_info.nchain = hash[1];
--	vdso_info.bucket = &hash[2];
--	vdso_info.chain = &hash[vdso_info.nbucket + 2];
-+	if (vdso_info.gnu_hash) {
-+		vdso_info.nbucket = vdso_info.gnu_hash[0];
-+		/* The bucket array is located after the header (4 uint32) and the bloom
-+		 * filter (size_t array of gnu_hash[2] elements). */
-+		vdso_info.bucket = vdso_info.gnu_hash + 4 +
-+				   sizeof(size_t) / 4 * vdso_info.gnu_hash[2];
-+	} else {
-+		vdso_info.nbucket = hash[0];
-+		vdso_info.nchain = hash[1];
-+		vdso_info.bucket = &hash[2];
-+		vdso_info.chain = &hash[vdso_info.nbucket + 2];
-+	}
- 
- 	/* That's all we need. */
- 	vdso_info.valid = true;
-@@ -203,6 +229,26 @@ static bool vdso_match_version(ELF(Versym) ver,
- 		&& !strcmp(name, vdso_info.symstrings + aux->vda_name);
- }
- 
-+static bool check_sym(ELF(Sym) *sym, ELF(Word) i, const char *name,
-+		      const char *version, unsigned long ver_hash)
-+{
-+	/* Check for a defined global or weak function w/ right name. */
-+	if (ELF64_ST_TYPE(sym->st_info) != STT_FUNC)
-+		return false;
-+	if (ELF64_ST_BIND(sym->st_info) != STB_GLOBAL &&
-+	    ELF64_ST_BIND(sym->st_info) != STB_WEAK)
-+		return false;
-+	if (strcmp(name, vdso_info.symstrings + sym->st_name))
-+		return false;
-+
-+	/* Check symbol version. */
-+	if (vdso_info.versym &&
-+	    !vdso_match_version(vdso_info.versym[i], version, ver_hash))
-+		return false;
-+
-+	return true;
-+}
-+
- void *vdso_sym(const char *version, const char *name)
- {
- 	unsigned long ver_hash;
-@@ -210,29 +256,36 @@ void *vdso_sym(const char *version, const char *name)
- 		return 0;
- 
- 	ver_hash = elf_hash(version);
--	ELF(Word) chain = vdso_info.bucket[elf_hash(name) % vdso_info.nbucket];
-+	ELF(Word) i;
- 
--	for (; chain != STN_UNDEF; chain = vdso_info.chain[chain]) {
--		ELF(Sym) *sym = &vdso_info.symtab[chain];
-+	if (vdso_info.gnu_hash) {
-+		uint32_t h1 = gnu_hash(name), h2, *hashval;
- 
--		/* Check for a defined global or weak function w/ right name. */
--		if (ELF64_ST_TYPE(sym->st_info) != STT_FUNC)
--			continue;
--		if (ELF64_ST_BIND(sym->st_info) != STB_GLOBAL &&
--		    ELF64_ST_BIND(sym->st_info) != STB_WEAK)
--			continue;
--		if (sym->st_shndx == SHN_UNDEF)
--			continue;
--		if (strcmp(name, vdso_info.symstrings + sym->st_name))
--			continue;
--
--		/* Check symbol version. */
--		if (vdso_info.versym
--		    && !vdso_match_version(vdso_info.versym[chain],
--					   version, ver_hash))
--			continue;
--
--		return (void *)(vdso_info.load_offset + sym->st_value);
-+		i = vdso_info.bucket[h1 % vdso_info.nbucket];
-+		if (i == 0)
-+			return 0;
-+		h1 |= 1;
-+		hashval = vdso_info.bucket + vdso_info.nbucket +
-+			  (i - vdso_info.gnu_hash[1]);
-+		for (;; i++) {
-+			ELF(Sym) *sym = &vdso_info.symtab[i];
-+			h2 = *hashval++;
-+			if (h1 == (h2 | 1) &&
-+			    check_sym(sym, i, name, version, ver_hash))
-+				return (void *)(vdso_info.load_offset +
-+						sym->st_value);
-+			if (h2 & 1)
-+				break;
-+		}
-+	} else {
-+		i = vdso_info.bucket[elf_hash(name) % vdso_info.nbucket];
-+		for (; i; i = vdso_info.chain[i]) {
-+			ELF(Sym) *sym = &vdso_info.symtab[i];
-+			if (sym->st_shndx != SHN_UNDEF &&
-+			    check_sym(sym, i, name, version, ver_hash))
-+				return (void *)(vdso_info.load_offset +
-+						sym->st_value);
-+		}
- 	}
- 
- 	return 0;
--- 
-2.46.0.662.g92d0881bb0-goog
-
+Though if the only breakage is in net/lib, then that does not explain it fu=
+lly.
 
