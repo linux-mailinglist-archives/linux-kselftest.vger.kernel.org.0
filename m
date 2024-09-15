@@ -1,154 +1,136 @@
-Return-Path: <linux-kselftest+bounces-18000-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18001-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54AA897942E
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Sep 2024 03:22:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4748979455
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Sep 2024 04:11:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89413B2467B
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Sep 2024 01:22:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50AED1F2139D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Sep 2024 02:11:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D26D179BC;
-	Sun, 15 Sep 2024 01:20:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD3241C32;
+	Sun, 15 Sep 2024 02:11:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="fLOCq/fP"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="ZSxLVEQG";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bRrscKeM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh5-smtp.messagingengine.com (fhigh5-smtp.messagingengine.com [103.168.172.156])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2034CA6B
-	for <linux-kselftest@vger.kernel.org>; Sun, 15 Sep 2024 01:20:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A40E710E0;
+	Sun, 15 Sep 2024 02:11:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726363255; cv=none; b=A6Mvf5ERNSxwKNwXBBw2UfuAByzeIvjg7QkCPspJxNSs+AQE6l/CVfsLfV1xr7QPzwIbHwQsR0W6EHGVeXjXbcAvXfAr+UWyGCSns9Dq4/Kj6FLg6zDfLMaOSUTTW0+ksvIV5zkApvE7c00NYdLC0Rkfcvwa5W+HsFFcNuWiyUo=
+	t=1726366288; cv=none; b=Uhjc39RebHXYXWqerckl5KT1Q29OyJJzSBv2s7weeKrWqv+S7H4n/0v7saDsul4ieQgxUwixm7mvqnWWeva8G/+WyV6cwOhQ1riA3l6libmTdKsCuqJp7T/pGsokWBrKGsz99rrZmY6Iouy4C/puhszG8D6YN6psIi0pa63Ptvk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726363255; c=relaxed/simple;
-	bh=2fqPz17MRcLXtYYBT9jcWjUzidfYf/z7eYbmCSZjWTI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To; b=H1TmSQQV8vglxTQABNt//gR7WYaVgBt/qhU/0nLQvtOlBS/4rSQtI4ToXOL+hM3ku5Mh9HE5EKFwIbL1TETVm8Mg252tNc9Y42Wwk+jgr7wZ3iomVvxGj/d1So4hSc8DWuuN65Ne3x+/m1GbPISI3TGLkFGiywtzjYL43ofIjFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=none smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=fLOCq/fP; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=daynix.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-7193010d386so1864289b3a.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 14 Sep 2024 18:20:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1726363253; x=1726968053; darn=vger.kernel.org;
-        h=to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ldxygdAUBk4mdAzGg1OPlp5HlR7yVW+p2ali8303Ccc=;
-        b=fLOCq/fPdeg29GlI0YJw8IKiK/6VYhKglyV9dSYMXnEOf0R8BWfQtAHE/Y3M+uUT5r
-         m1bP4JS5f7M+fkYIPPznGAImbjUYLlmZ7FialJGo+XMrWb7iaD9fBv9X1wt+WDgxRqJI
-         WLhTu+Lyp8q5E8dsSCw7bSB1UiVzbB8LT0SZse0PLI5OglkdVY3Kquzvtd5Y9DYRXQ5J
-         3sGOlDCOHWrDREtmVuwDJXLFbdc+qku4XJU2rQplPaBQd+EvYiIausrPCLmFib629wHW
-         sbw+gdIGDm6W3xdEW0xDDTEsu2PrHTRM+TTI0+tn0zT1gBfcCemoeTfAXxy3TR49PlED
-         BhoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726363253; x=1726968053;
-        h=to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ldxygdAUBk4mdAzGg1OPlp5HlR7yVW+p2ali8303Ccc=;
-        b=jMlAk7aPZ+MtRVoIgU9bl2Q6vHI+fxVx2vt/LavRBDdPYYFtieWlpRxqK19lF8B4yl
-         mnJY2Ij4RKfa4GoH7/iLVk8pqbUyPRtRrarzEmfj5EYCuFiVy36ym6POu6WS/WQxqgls
-         dMHS3wwoX63lP6wJ3LmR9USF1S4x+v3ehqIKBtPzrMgu1qzuTYls1RNMN8ZLLNu8m/gZ
-         h824NjkrJP1GNm46tETegGc8kcnBEydJ4tiR4gGId9bgOnZxtS44cXkltTs16TwOAdVV
-         oRDcJp/vu50HdQe/I25ol0lFaGozFkGPd4Dlzg0fiqswdaxB3mzKXv96thHpEjbubqam
-         VESw==
-X-Forwarded-Encrypted: i=1; AJvYcCU0txOFdKw7r5pPeDRzuFja2gYNHUEo5302Ifgqpiury2MzMBnFejPBCN2q2u8D9OoBFuxCas7jMxn6Cubtxb0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXWb7DTlpuJv1kSwnAyToILrdBLf0jluw2WEWg1qrtzS58r3kO
-	ZJVHufrBvCzOXKXntcrPEwL45MwMnNl0qqP7bTGSP+gfDWgo02ZdLLv+8Q1IV6o=
-X-Google-Smtp-Source: AGHT+IE0yowzjkvInt+ft5+xweE+VUrTmnfVWN9Wxm7pcrS1764om0EdmXZEOykQ9o1zzDGEix2zCw==
-X-Received: by 2002:a05:6a20:c996:b0:1c6:a680:ef3d with SMTP id adf61e73a8af0-1d112db5de9mr11518495637.28.1726363253133;
-        Sat, 14 Sep 2024 18:20:53 -0700 (PDT)
-Received: from localhost ([210.160.217.68])
-        by smtp.gmail.com with UTF8SMTPSA id 41be03b00d2f7-7db4991cfd2sm1787114a12.48.2024.09.14.18.20.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 14 Sep 2024 18:20:52 -0700 (PDT)
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-Date: Sun, 15 Sep 2024 10:17:48 +0900
-Subject: [PATCH RFC v3 9/9] vhost/net: Support VIRTIO_NET_F_HASH_REPORT
+	s=arc-20240116; t=1726366288; c=relaxed/simple;
+	bh=ONOOvc7H8puUY7BFSVYSGAUeQBINEpTL1Lo1rB2QMQQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DW03nsvqwVt6HITftzpQCWdr4wafxjcCABNWTjYYRdEoZtsb04qQdv7Et33G3iqxFg/sZXxbGm2f+L66d7eZ7xG8d4tu94TTN9EhCNDqdqP+GlI+IwHz8boweuYEV3mXekh/LsDyVDFrBrUdG4vIIs9mGs7q18Bq5q+WV03nPBo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=ZSxLVEQG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bRrscKeM; arc=none smtp.client-ip=103.168.172.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 9E69511401A0;
+	Sat, 14 Sep 2024 22:11:25 -0400 (EDT)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-11.internal (MEProxy); Sat, 14 Sep 2024 22:11:25 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=fm3; t=1726366285; x=1726452685; bh=vH1L6GVdqbgklROtASIhg
+	ZjcgZUvBW19IlqBQp/sQHU=; b=ZSxLVEQGSHhOehoordsoHKNBDc33Y24eWRAr/
+	6mjvwWnOf2aC2OJH3l8jJH9QnXqhXb7+M99ooqXhk6LEN6NfNF2cl2IRIvkUfAIF
+	rrLP9kw+V5kbBbZtz+DZCyNqcFW/LOKYs/e9wcYRIr5EgJg0QHKZzRxvCclComGw
+	is7Mje0s91U+rYUr5xJOb2Qu2mrETym1l6TuJKeA8w/zpiEJWoP7wIsP+GJRP5DL
+	g+QD2pHWrjdxbGNXmHs3YN7XzheABxnnlk/6oPr/NShXbyp7TyVsCr8QX6iAQ9iO
+	5UUjjmlzQJdRPyjeGYwykeVB6wvoj/3CPRkXaz/hhvjeRYYeA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1726366285; x=1726452685; bh=vH1L6GVdqbgklROtASIhgZjcgZUv
+	BW19IlqBQp/sQHU=; b=bRrscKeMASPGwemLb3oRhR3glwepBxgJjsgPpHQ1xl/z
+	KicRhGodhMHYN4q/nfaU772ke6sHYaGAhc/SVm7q4O6eNte+lka/8aDczdgzDekK
+	79DIKkZzNexIMZkyQJS/x9XsRFW3ic7ZKkYnXGwP8Y+Aucprc0BJCrrOAd7m93rg
+	kPah3fmHC/iTnlXJUQHPB8Z3qXRp8VwXyc0nMC2xVU8Y3TaZ42KwkO5lUfqOU3qf
+	x9M+EvOn7OVKbhW7U73eGa6I6RC4sOIf1AKnW1wfJS9SNy7bNECLcXcN4N+sVlOy
+	jIAsFjbzRNjQqik0Yk9OgTQizLuMbCI97pY6YM8Mdw==
+X-ME-Sender: <xms:TULmZt19tIVrlDovXt1bSMDPfHvw9kbhBMe8a88cJgj9aVupGdpTKQ>
+    <xme:TULmZkFBoAxN6XvHnPiMLnDVdn0eKLyv4Z_Af6JbjKut24Bz_ePAtbx8tSPN9c3bl
+    bqsF2YdaP-AWPFR9g>
+X-ME-Received: <xmr:TULmZt6GKNgVAa1MEmgne28RyQ1GILDm1JxTZZzd3nIKdfMv0eab5xwjafjmURhhocCEcPnQBh-um1CXhC2Li9dtmOX6HmdM9o03OSRfaDXscXtR9RcN>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudekuddgheejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlje
+    dtmdenucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeffrghn
+    ihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepvd
+    eggfetgfelhefhueefkeduvdfguedvhfegleejudduffffgfetueduieeikeejnecuvehl
+    uhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguh
+    huuhdrgiihiidpnhgspghrtghpthhtohepiedpmhhouggvpehsmhhtphhouhhtpdhrtghp
+    thhtohepsghpfhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuh
+    igqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhn
+    uhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
+    eprghstheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrihhisehkvghrnhgv
+    lhdrohhrghdprhgtphhtthhopehkvghrnhgvlhdqthgvrghmsehmvghtrgdrtghomh
+X-ME-Proxy: <xmx:TULmZq1M-I_0VwVuxg2RzdA7U-2bMQP1tbrKNPEC2VZvj8mBZNsaYw>
+    <xmx:TULmZgHYW1O9gryDRPO6Rd6SIIYFW2TOqNd6gB8VIoNEmceBlRuMMQ>
+    <xmx:TULmZr96_oGKgPoHjpVFoIlMSfYNAzBIQtmRFYIp0QEdwnHKuU4Ejg>
+    <xmx:TULmZtluUzihLJoU1gpkv3xacZWYd6urXJflpdyKEzQcVuDW0j05lA>
+    <xmx:TULmZl4UYe-DMFzHbTE8VCQ6t_44Q-XdaI-w_34_7i0gpWrMUxoTxH2d>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 14 Sep 2024 22:11:23 -0400 (EDT)
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ast@kernel.org,
+	andrii@kernel.org
+Cc: kernel-team@meta.com
+Subject: [PATCH bpf-next 0/2] Support eliding map lookup nullness
+Date: Sat, 14 Sep 2024 20:11:10 -0600
+Message-ID: <cover.1726366145.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240915-rss-v3-9-c630015db082@daynix.com>
-References: <20240915-rss-v3-0-c630015db082@daynix.com>
-In-Reply-To: <20240915-rss-v3-0-c630015db082@daynix.com>
-To: Jonathan Corbet <corbet@lwn.net>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- Jason Wang <jasowang@redhat.com>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, 
- Xuan Zhuo <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>, 
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, kvm@vger.kernel.org, 
- virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
- Yuri Benditovich <yuri.benditovich@daynix.com>, 
- Andrew Melnychenko <andrew@daynix.com>, 
- Akihiko Odaki <akihiko.odaki@daynix.com>
-X-Mailer: b4 0.14-dev-fd6e3
+Content-Transfer-Encoding: 8bit
 
-VIRTIO_NET_F_HASH_REPORT allows to report hash values calculated on the
-host. When VHOST_NET_F_VIRTIO_NET_HDR is employed, it will report no
-hash values (i.e., the hash_report member is always set to
-VIRTIO_NET_HASH_REPORT_NONE). Otherwise, the values reported by the
-underlying socket will be reported.
+This patch allows progs to elide a null check on statically known map
+lookup keys. In other words, if the verifier can statically prove that
+the lookup will be in-bounds, allow the prog to drop the null check.
 
-VIRTIO_NET_F_HASH_REPORT requires VIRTIO_F_VERSION_1.
+This is useful for two reasons:
 
-Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
----
- drivers/vhost/net.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+1. Large numbers of nullness checks (especially when they cannot fail)
+   unnecessarily pushes prog towards BPF_COMPLEXITY_LIMIT_JMP_SEQ.
+2. It forms a tighter contract between programmer and verifier.
 
-diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-index f16279351db5..ec1167a782ec 100644
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -73,6 +73,7 @@ enum {
- 	VHOST_NET_FEATURES = VHOST_FEATURES |
- 			 (1ULL << VHOST_NET_F_VIRTIO_NET_HDR) |
- 			 (1ULL << VIRTIO_NET_F_MRG_RXBUF) |
-+			 (1ULL << VIRTIO_NET_F_HASH_REPORT) |
- 			 (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
- 			 (1ULL << VIRTIO_F_RING_RESET)
- };
-@@ -1604,10 +1605,13 @@ static int vhost_net_set_features(struct vhost_net *n, u64 features)
- 	size_t vhost_hlen, sock_hlen, hdr_len;
- 	int i;
- 
--	hdr_len = (features & ((1ULL << VIRTIO_NET_F_MRG_RXBUF) |
--			       (1ULL << VIRTIO_F_VERSION_1))) ?
--			sizeof(struct virtio_net_hdr_mrg_rxbuf) :
--			sizeof(struct virtio_net_hdr);
-+	if (features & (1ULL << VIRTIO_NET_F_HASH_REPORT))
-+		hdr_len = sizeof(struct virtio_net_hdr_v1_hash);
-+	else if (features & ((1ULL << VIRTIO_NET_F_MRG_RXBUF) |
-+			     (1ULL << VIRTIO_F_VERSION_1)))
-+		hdr_len = sizeof(struct virtio_net_hdr_mrg_rxbuf);
-+	else
-+		hdr_len = sizeof(struct virtio_net_hdr);
- 	if (features & (1 << VHOST_NET_F_VIRTIO_NET_HDR)) {
- 		/* vhost provides vnet_hdr */
- 		vhost_hlen = hdr_len;
-@@ -1688,6 +1692,10 @@ static long vhost_net_ioctl(struct file *f, unsigned int ioctl,
- 			return -EFAULT;
- 		if (features & ~VHOST_NET_FEATURES)
- 			return -EOPNOTSUPP;
-+		if ((features & ((1ULL << VIRTIO_F_VERSION_1) |
-+				 (1ULL << VIRTIO_NET_F_HASH_REPORT))) ==
-+		    (1ULL << VIRTIO_NET_F_HASH_REPORT))
-+			return -EINVAL;
- 		return vhost_net_set_features(n, features);
- 	case VHOST_GET_BACKEND_FEATURES:
- 		features = VHOST_NET_BACKEND_FEATURES;
+For (1), bpftrace is starting to make heavier use of percpu scratch
+maps. As a result, for user scripts with large number of unrolled loops,
+we are starting to hit jump complexity verification errors.  These
+percpu lookups cannot fail anyways, as we only use static key values.
+Eliding nullness probably results in less work for verifier as well.
+
+For (2), percpu scratch maps are often used as a larger stack, as the
+currrent stack is limited to 512 bytes. In these situations, it is
+desirable for the programmer to express: "this lookup should never fail,
+and if it does, it means I messed up the code". By omitting the null
+check, the programmer can "ask" the verifier to double check the logic.
+
+Daniel Xu (2):
+  bpf: verifier: Support eliding map lookup nullness
+  bpf: selftests: verifier: Add nullness elision tests
+
+ kernel/bpf/verifier.c                         |  56 +++++++
+ .../bpf/progs/verifier_array_access.c         | 143 ++++++++++++++++++
+ 2 files changed, 199 insertions(+)
 
 -- 
 2.46.0
