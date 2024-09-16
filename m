@@ -1,283 +1,154 @@
-Return-Path: <linux-kselftest+bounces-18040-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18041-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17B9D97A5D9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2024 18:19:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F158297A637
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2024 18:49:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C7901C20B45
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2024 16:19:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0CD6282000
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2024 16:49:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99A6C156F55;
-	Mon, 16 Sep 2024 16:19:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B939615B97E;
+	Mon, 16 Sep 2024 16:49:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EPl7aPcM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MEDwuiOx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16694158553
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Sep 2024 16:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3466D15B57A;
+	Mon, 16 Sep 2024 16:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726503590; cv=none; b=m3ivhyk0+Ev9GO48E0SZqvEaeMMA0HOCD3wwBpQJOaX/dd/8DCXhRSLNBcf8ZteFv+fCB3obovYjaPahbv2e9GV0UGWDupC3ncfrh/+vLPIQRDdAmrw3T8S6jQSWAjDz5SqLAJLEJf16OyI8DaNAferm4m3Tuf77ciD7agtbIm0=
+	t=1726505342; cv=none; b=t2+ZioTohmISfteqG5V9l80PKgGm93KGHBO77bN7NBSQICGHjSYrsD0kcWC3F7CrR34XXzwbeBcanSH4Z3HtwJsk2E+8FKZgLzZG1Mylv8IlwDD3OAXVEQ2nJrXN680PquUTdXBDxVLxKODYkyRJcV2XpScgsceDPmxbGeRa/IA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726503590; c=relaxed/simple;
-	bh=YvyNTLs4uMCK8KC6w9yv9ZBgOsXtl/+tB8wPhJZ/3n4=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=F7EIfoi/p/GzxVhOdaObxwnvtyqFB5bkAFYo8xaB1qET7S2dy7y02NlfU80pjyFTXP/MqkjbvsVrMeUZ5uxYoB63sZCvDM89Yx1rVYGW585lYd12BBbiYlhv+pa+TrrkpB0ZQjiDLX+3cgSoCDyeQFeLpcFMvwkUfTgsLWvK59k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EPl7aPcM; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5356aa9a0afso4628906e87.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Sep 2024 09:19:47 -0700 (PDT)
+	s=arc-20240116; t=1726505342; c=relaxed/simple;
+	bh=iCifxO/L2Lc+9fPqxiadaaVsvhT7cN1M0jmxrRgVrYQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tgQxtotNKxN8FmdXb6LsyGnNMJjlVzsBdaIUiK35isyd9X5Fz8RlbuYg7qGw3ql9e7V/+5X0ETsuR5hn52Wz0wlRml7pZJJDNRYAOz7rPJSlg7il7Otki99bRr1efM5dWM/A014LYdcFNf+b6ILKXCyeiXuv5SGGkklI+y+WnyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MEDwuiOx; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20551e2f1f8so38457165ad.2;
+        Mon, 16 Sep 2024 09:49:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1726503586; x=1727108386; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TeHUY0PZItimrlsbwgBi3IPxzckdC8el2yYzdkC9Wig=;
-        b=EPl7aPcMGmnl2kmTmaiGbd3SBpjftoIoZ91oK4zMjV7uvG1hblQSd0D6znV21h5QhC
-         sQKB2/t9froL4yZTCd/eA9mnneeJtt5WOrhXi2Ev0tqGMBuX7+mZBdjVQN9r/uCP/MVQ
-         dlpypcMQIxzUjGjMnfzEwkaZ1OdX7DHkNwrDIh/kYQqd2Gfy//x9reYCQYRMihe/t2r+
-         tXVlVP9YQ3lvAUvw2QT/sW634GMh/bpXqKz3n07zR3ESbrDSc6zaH75FwvsI1pfjPKke
-         j7u8CrrOYMaUnDS8w1eiMjVJTk2i4BTnE4lxqf6XikDIQKdKfiE9llKf2vwuJ4ap+FZ2
-         cVRg==
+        d=gmail.com; s=20230601; t=1726505340; x=1727110140; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M3njoMW9W06+zFFMF2oAAYOkQ8sptf+PvpVp1o1UipE=;
+        b=MEDwuiOxBQITR5HLbKRxo4RsVshpJO0xMVlMdF3/A01DVZFGybxECyw+1CidbvQTgy
+         OMLthaycMigY/jjaVTiuSJRCrVebjzfHBaWl+i9jc1tEoUbZf8TUpKcsObgbQsuoFx2e
+         Lo9ki6Vd/Td0b6LJiLhCd6ljfmLRIFuxK5cw2dWj/gO6HjurIgx4+HpPyLSQront+Y3H
+         ARalGKUAPT7YEydTBA0eKz7wW5ESfKfmjU9rMtPyxx3HSkCHR3Mcs548htOuMMENNz3v
+         jFE4myRtymfQ1K2uEKLxe0dn/i7KpjM0T4EaQsuCwsxcBxMzrFRiJvNiyllxMoLPfIl2
+         gJ+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726503586; x=1727108386;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=TeHUY0PZItimrlsbwgBi3IPxzckdC8el2yYzdkC9Wig=;
-        b=g3curxdKjxsx4Yb+LVPNRmuItWwLsAdIA1BnOyy4BfaT18AHqwIQh94BCoZwLLDUkr
-         h/0xZfeEkKFtnElBnA0dZ0qFqLiSADqMIbxWEGGCXJSLO/60Dg1AZLL7eQTdnni0TISO
-         tqK62JLvPiq0tTrCv5clSaCjeAiOJuEdZvWHjIHJ8BTJZl1QddZURRxs/SfeS7tMzCH5
-         kwzvH3aeGKf8/Pz5HMHeuLjJ1A7pDcoByHtWVt7C4OKkf6/fVQy9leh7xZ+CbtirG9hB
-         73W7Bp7FxsjSQMuC5RnrAPG5lcHYH9JAlVwLyEg5JY5E/SHPC0t2+F44XS9Aq6Yke4dD
-         +7ug==
-X-Forwarded-Encrypted: i=1; AJvYcCVvNZq/6YMNaMpqevF6KviLGTLNMWtL5iPJ+r570nH7TPzXyBVizZNKKXOuswH+BP9jbOnBeehoXFlcM282koE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzk5vciytUEokBq6g1Qkb4oRP5eE7ulRhNJPvAj2T4b8I4NMF3c
-	q1ZM3zQ+KMmIX5Z3iDxzM3Uiiy+UsgNJ4TFCr/g/e2Qv8BZcSBPaUBveprDruJg=
-X-Google-Smtp-Source: AGHT+IH3a/tPPLSwoh0fht/6T3CHsO4QwSNvSbAcBQ9lu1ytAwT4uikLUdhzqRchn4HhnE3qeSuZiw==
-X-Received: by 2002:a05:6512:3e06:b0:533:45c9:67fe with SMTP id 2adb3069b0e04-5367ff24c0bmr6614808e87.48.1726503585921;
-        Mon, 16 Sep 2024 09:19:45 -0700 (PDT)
-Received: from [192.168.3.3] (77.39.160.45.gramnet.com.br. [45.160.39.77])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a90612e67f3sm334742166b.185.2024.09.16.09.19.43
+        d=1e100.net; s=20230601; t=1726505340; x=1727110140;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M3njoMW9W06+zFFMF2oAAYOkQ8sptf+PvpVp1o1UipE=;
+        b=ay8svN6HeH5aKOMIUYJjWUBhYQ9wZsPKd/sl/yP8h/WNVz7IibIxFkF2VZvVufas6l
+         wgShVCnKgrDJ5eV4vKv1ufDEueeBCGZRzuPYpYvq9Y70Fn5HMMNL9+4rks5RjJWD38LK
+         sf4zkYvf8UQXriOCtW2X70Ju1zvOgfHIpr+jQ55xoQ+IdkPx4G9z7cL0TLWKGfdIu6De
+         uG5DNU7YDdtnJHFkrqtNnGa8R/GFdQouF44G3k+B9B66yJ5PrQ06fHYevbtDh6fhPWWc
+         a31kZnN6edej+V5O16oWUmlCSEOYEOW8xWp9j0Nb2D5os7sLBgXJyx8nQAfRITuZiym6
+         JSMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUET34wmyij9U5z9UPGBnkGY/Axj2AAm8eHD2Dn33xeWhUce4LGlJoz7RqzCoDV2Mfbj4nVTCyb@vger.kernel.org, AJvYcCW9zty1ycqNIZ47aFDn9bDaGyY+qCgn59cB8g7SpGVT9yiJWCynh+v6i3fshUmuKltkYJlzjwYwIs5JNHYzLXo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6rKn3frNMcfSzhs03NWKz5AmjKhxQ2PEx8dDj21UZc/TpfFui
+	e4mAw4mlMcOlR1IquqEezVcw4ku/31xT78jQLf2aLfz6HbsCx4A=
+X-Google-Smtp-Source: AGHT+IFtiIOWZ4mcKegzsvUdmQHpMCTsHsx3Oh70Mq637y2edVbZ80fvqYNEV9zCsyBD/BTRud5Vlg==
+X-Received: by 2002:a17:902:e54e:b0:1fd:791d:1437 with SMTP id d9443c01a7336-20781b476efmr186169645ad.6.1726505340292;
+        Mon, 16 Sep 2024 09:49:00 -0700 (PDT)
+Received: from localhost ([2601:646:9e00:f56e:123b:cea3:439a:b3e3])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-207946d64f5sm38109875ad.132.2024.09.16.09.48.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Sep 2024 09:19:45 -0700 (PDT)
-Message-ID: <9b1074fb1c9512e804d4484e12bc0d229865d02b.camel@suse.com>
-Subject: Re: [PATCH] selftests: livepatch: test livepatching a kprobed
- function
-From: mpdesouza@suse.com
-To: Michael Vetter <mvetter@suse.com>, linux-kselftest@vger.kernel.org, 
-	live-patching@vger.kernel.org
-Date: Mon, 16 Sep 2024 13:19:40 -0300
-In-Reply-To: <20240913125811.116410-1-mvetter@suse.com>
-References: <20240913125811.116410-1-mvetter@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (by Flathub.org) 
+        Mon, 16 Sep 2024 09:48:59 -0700 (PDT)
+Date: Mon, 16 Sep 2024 09:48:59 -0700
+From: Stanislav Fomichev <stfomichev@gmail.com>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: Matthieu Baerts <matttbe@kernel.org>, netdev@vger.kernel.org,
+	davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
+	pabeni@redhat.com, ncardwell@google.com, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Willem de Bruijn <willemb@google.com>
+Subject: Re: [PATCH net-next v2 0/3] selftests/net: packetdrill: netns and
+ two imports
+Message-ID: <Zuhhe4-MQHd3EkfN@mini-arch>
+References: <20240912005317.1253001-1-willemdebruijn.kernel@gmail.com>
+ <ed54ad21-4a5b-4bbb-8f16-22fbfe1bd738@kernel.org>
+ <66e2da1b440cc_14a89129431@willemb.c.googlers.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <66e2da1b440cc_14a89129431@willemb.c.googlers.com.notmuch>
 
-On Fri, 2024-09-13 at 14:58 +0200, Michael Vetter wrote:
-> The test proves that a function that is being kprobed and uses a
-> post_handler cannot be livepatched.
->=20
-> Only one ftrace_ops with FTRACE_OPS_FL_IPMODIFY set may be registered
-> to any given function at a time.
+On 09/12, Willem de Bruijn wrote:
+> Matthieu Baerts wrote:
+> > Hi Willem,
+> > 
+> > On 12/09/2024 02:52, Willem de Bruijn wrote:
+> > > From: Willem de Bruijn <willemb@google.com>
+> > > 
+> > > 1/3: run in nets, as discussed, and add missing CONFIGs
+> > > 2/3: import tcp/zerocopy
+> > > 3/3: import tcp/slow_start
+> > 
+> > Thank you for the v2. This new version looks good to me:
+> > 
+> > Acked-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+> > 
+> > 
+> > I didn't pay too much attention to the new tests, because they look
+> > good, heavily tested I suppose, and I guess the goal is not to diverge
+> > from the original ones for the moment. Still, please note that the CI
+> > reported some timing issues with tcp_zerocopy_closed.pkt when using a
+> > debug kernel config, e.g.
+> > 
+> > > tcp_zerocopy_closed.pkt:22: timing error: expected system call return at 0.100596 sec but happened at 0.109564 sec; tolerance 0.004000 sec
+> > 
+> > https://netdev.bots.linux.dev/contest.html?executor=vmksft-packetdrill-dbg&test=tcp-zerocopy-closed-pkt
+> 
+> Thanks Matthieu. I did not run the dbg variant often enough to observe
+> that. Note to self to run more times before I submit.
+> 
+> It seems to fail 2/10 times on the dbg spinner. I don't have an
+> explanation for the failure yet. The line itself has no expected delay
+> 
+> # script packet:  0.113203 S 0:0(0) <mss 1460,sackOK,TS val 0 ecr 0,nop,wscale 8>
+> # actual packet:  0.107191 S 0:0(0) win 65535 <mss 1460,sackOK,TS val 0 ecr 0,nop,wscale 8>
+> 
+>    +0.1 recvmsg(4, {msg_name(...)=...,
+>                     msg_iov(1)=[{...,0}],
+>                     msg_flags=MSG_ERRQUEUE,
+>                     msg_control=[]}, MSG_ERRQUEUE) = -1 EAGAIN (Resource temporarily unavailable)
+> 
+>    +0...0 connect(4, ..., ...) = 0
+> 
+>    +0 > S 0:0(0) <mss 1460,sackOK,TS val 0 ecr 0,nop,wscale 8>
+> 
+> I guess the expectation includes the +0.1 delay before calling recvmsg, and that
+> timer fired a bit early.
+> 
+> I previously shared a draft patch to adjust --tolerance_usecs in dbg runs.
+> May have to send that after all.
+> 
+> https://lore.kernel.org/netdev/66da5b8b27259_27bb41294c@willemb.c.googlers.com.notmuch/
 
-First of all, thanks a lot for sending the patch!
+Not sure you've seen, but tcp_slow_start_slow-start-after-win-update.pkt
+also just popped up on the dashboard for dbg:
 
->=20
-> Signed-off-by: Michael Vetter <mvetter@suse.com>
-> ---
-> =C2=A0tools/testing/selftests/livepatch/Makefile=C2=A0=C2=A0=C2=A0 |=C2=
-=A0 3 +-
-> =C2=A0.../selftests/livepatch/test-kprobe.sh=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 | 62
-> +++++++++++++++++++
-> =C2=A0.../selftests/livepatch/test_modules/Makefile |=C2=A0 3 +-
-> =C2=A0.../livepatch/test_modules/test_klp_kprobe.c=C2=A0 | 38 +++++++++++=
-+
-> =C2=A04 files changed, 104 insertions(+), 2 deletions(-)
-> =C2=A0create mode 100755 tools/testing/selftests/livepatch/test-kprobe.sh
-> =C2=A0create mode 100644
-> tools/testing/selftests/livepatch/test_modules/test_klp_kprobe.c
->=20
-> diff --git a/tools/testing/selftests/livepatch/Makefile
-> b/tools/testing/selftests/livepatch/Makefile
-> index 35418a4790be..a080eb54a215 100644
-> --- a/tools/testing/selftests/livepatch/Makefile
-> +++ b/tools/testing/selftests/livepatch/Makefile
-> @@ -10,7 +10,8 @@ TEST_PROGS :=3D \
-> =C2=A0	test-state.sh \
-> =C2=A0	test-ftrace.sh \
-> =C2=A0	test-sysfs.sh \
-> -	test-syscall.sh
-> +	test-syscall.sh \
-> +	test-kprobe.sh
-> =C2=A0
-> =C2=A0TEST_FILES :=3D settings
-> =C2=A0
-> diff --git a/tools/testing/selftests/livepatch/test-kprobe.sh
-> b/tools/testing/selftests/livepatch/test-kprobe.sh
-> new file mode 100755
-> index 000000000000..0c62c6b81e18
-> --- /dev/null
-> +++ b/tools/testing/selftests/livepatch/test-kprobe.sh
-> @@ -0,0 +1,62 @@
-> +#!/bin/bash
-> +# SPDX-License-Identifier: GPL-2.0
-> +# Copyright (C) 2024 SUSE
-> +# Author: Michael Vetter <mvetter@suse.com>
-> +
-> +. $(dirname $0)/functions.sh
-> +
-> +MOD_LIVEPATCH=3Dtest_klp_livepatch
-> +MOD_KPROBE=3Dtest_klp_kprobe
-> +
-> +setup_config
-> +
-> +# Kprobe a function and verify that we can't livepatch that same
-> function
-> +# when it uses a post_handler since only one IPMODIFY maybe be
-> registered
-> +# to any given function at a time.
-> +
-> +start_test "livepatch interaction with kprobed function with
-> post_handler"
-> +
-> +echo 1 > /sys/kernel/debug/kprobes/enabled
+# tcp_slow_start_slow-start-after-win-update.pkt:39: error handling packet: timing error: expected outbound packet in relative time range +0.600000~+0.620000
 
-I believe that in order to keep the system in the same as it was before
-running the tests we might want to save the current kprobe enabled
-state, enable it (what you are doing) and then restoring to the initial
-state.
+https://netdev-3.bots.linux.dev/vmksft-packetdrill-dbg/results/774981/1-tcp-slow-start-slow-start-after-win-update-pkt/stdout
 
-Everything else is fine, thank you so much!
-
-With this fixed,
-
-Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-
-> +
-> +load_mod $MOD_KPROBE has_post_handler=3Dtrue
-> +load_failing_mod $MOD_LIVEPATCH
-> +unload_mod $MOD_KPROBE
-> +
-> +check_result "% insmod test_modules/test_klp_kprobe.ko
-> has_post_handler=3Dtrue
-> +% insmod test_modules/$MOD_LIVEPATCH.ko
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +livepatch: failed to register ftrace handler for function
-> 'cmdline_proc_show' (-16)
-> +livepatch: failed to patch object 'vmlinux'
-> +livepatch: failed to enable patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': canceling patching transition, going to
-> unpatch
-> +livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': unpatching complete
-> +insmod: ERROR: could not insert module
-> test_modules/$MOD_LIVEPATCH.ko: Device or resource busy
-> +% rmmod test_klp_kprobe"
-> +
-> +start_test "livepatch interaction with kprobed function without
-> post_handler"
-> +
-> +load_mod $MOD_KPROBE has_post_handler=3Dfalse
-> +load_lp $MOD_LIVEPATCH
-> +
-> +unload_mod $MOD_KPROBE
-> +disable_lp $MOD_LIVEPATCH
-> +unload_lp $MOD_LIVEPATCH
-> +
-> +check_result "% insmod test_modules/test_klp_kprobe.ko
-> has_post_handler=3Dfalse
-> +% insmod test_modules/$MOD_LIVEPATCH.ko
-> +livepatch: enabling patch '$MOD_LIVEPATCH'
-> +livepatch: '$MOD_LIVEPATCH': initializing patching transition
-> +livepatch: '$MOD_LIVEPATCH': starting patching transition
-> +livepatch: '$MOD_LIVEPATCH': completing patching transition
-> +livepatch: '$MOD_LIVEPATCH': patching complete
-> +% rmmod test_klp_kprobe
-> +% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-> +livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-> +livepatch: '$MOD_LIVEPATCH': unpatching complete
-> +% rmmod $MOD_LIVEPATCH"
-> +
-> +exit 0
-> diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile
-> b/tools/testing/selftests/livepatch/test_modules/Makefile
-> index e6e638c4bcba..4981d270f128 100644
-> --- a/tools/testing/selftests/livepatch/test_modules/Makefile
-> +++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-> @@ -11,7 +11,8 @@ obj-m +=3D test_klp_atomic_replace.o \
-> =C2=A0	test_klp_state2.o \
-> =C2=A0	test_klp_state3.o \
-> =C2=A0	test_klp_shadow_vars.o \
-> -	test_klp_syscall.o
-> +	test_klp_syscall.o \
-> +	test_klp_kprobe.o
-> =C2=A0
-> =C2=A0# Ensure that KDIR exists, otherwise skip the compilation
-> =C2=A0modules:
-> diff --git
-> a/tools/testing/selftests/livepatch/test_modules/test_klp_kprobe.c
-> b/tools/testing/selftests/livepatch/test_modules/test_klp_kprobe.c
-> new file mode 100644
-> index 000000000000..49b579ea1054
-> --- /dev/null
-> +++
-> b/tools/testing/selftests/livepatch/test_modules/test_klp_kprobe.c
-> @@ -0,0 +1,38 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +// Copyright (C) 2024 Marcos Paulo de Souza <mpdesouza@suse.com>
-> +// Copyright (C) 2024 Michael Vetter <mvetter@suse.com>
-> +
-> +#include <linux/kernel.h>
-> +#include <linux/module.h>
-> +#include <linux/kprobes.h>
-> +
-> +static bool has_post_handler =3D true;
-> +module_param(has_post_handler, bool, 0444);
-> +
-> +static void __kprobes post_handler(struct kprobe *p, struct pt_regs
-> *regs,
-> +				unsigned long flags)
-> +{
-> +}
-> +
-> +static struct kprobe kp =3D {
-> +	.symbol_name =3D "cmdline_proc_show",
-> +};
-> +
-> +static int __init kprobe_init(void)
-> +{
-> +	if (has_post_handler)
-> +		kp.post_handler =3D post_handler;
-> +
-> +	return register_kprobe(&kp);
-> +}
-> +
-> +static void __exit kprobe_exit(void)
-> +{
-> +	unregister_kprobe(&kp);
-> +}
-> +
-> +module_init(kprobe_init)
-> +module_exit(kprobe_exit)
-> +MODULE_LICENSE("GPL");
-> +MODULE_AUTHOR("Michael Vetter <mvetter@suse.com>");
-> +MODULE_DESCRIPTION("Livepatch test: livepatch kprobed function");
-
+Do we want to follow up with that '--tolerance_usecs=10000' you've
+mentioned above?
 
