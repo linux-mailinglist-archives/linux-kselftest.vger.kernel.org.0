@@ -1,115 +1,115 @@
-Return-Path: <linux-kselftest+bounces-18012-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18013-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C051E979A22
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2024 05:45:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68CF0979A25
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2024 05:46:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA6201C2234D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2024 03:45:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E71F91F22A83
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2024 03:46:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6CF920B28;
-	Mon, 16 Sep 2024 03:45:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15B542D032;
+	Mon, 16 Sep 2024 03:45:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="lZeUk8a4";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="mpeiYKsC"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="AoQqC1oq";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="qNx8ORoS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh5-smtp.messagingengine.com (fhigh5-smtp.messagingengine.com [103.168.172.156])
+Received: from fout8-smtp.messagingengine.com (fout8-smtp.messagingengine.com [103.168.172.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C99831CA85;
-	Mon, 16 Sep 2024 03:45:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFFA1210E9;
+	Mon, 16 Sep 2024 03:45:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726458338; cv=none; b=JiXugWwLiXcw7eJWj83P5+otbNyWgBiMiLuL28gcujY8LuZ8zNp0F+74QPqnoAmdwiaG1VbU0IX2IxqYcw6tRKnF80dNRDykI8OzYzPosAkSA8zPUM7GMZXVAKIQR3E5UfmP1nZMss2ILc1lUftMNhzMPlWefB2MyM/L1WWa2p0=
+	t=1726458341; cv=none; b=Pmgv4VtRHl2+5ZywugKmeW+YM/XtF9mkYS+/smHkCAihKva1feKiLJT1vrpPbAQF37wsX/0JCIAMMCNexHmVTpr8pFOZXnl7xYu1Yv/i8qk801YIT1Ljk4Y0nmhQlqLERQwzvSTEkk1dC2pd4d7KQsE3/AOoRzxh/jR0urZ/iuA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726458338; c=relaxed/simple;
-	bh=sz1qCSdDv5YlmO/PXn+JqvkLz1UwT+ctLwLAUoLb9Ms=;
+	s=arc-20240116; t=1726458341; c=relaxed/simple;
+	bh=vXDJQCJessgWs7j3OPnNSJrwOAmsKCw/ugcv6ZQnd0o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QOFCaCN5KaE7qyckWsXqaA79Mwqetle5PgYqc9mF5Af1Jba6O+3CSAf1oE/8xT/bgWnWhzzQE2V3TjEk24cw/ZUucQwJSITpCMjalgvWeZDPLMjvz2MdRllPPI5GPR5we59qT1bU+uaJwUzy81Arh689eq7p0mdqLrUrzeupBv4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=lZeUk8a4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=mpeiYKsC; arc=none smtp.client-ip=103.168.172.156
+	 MIME-Version; b=mwJFH2Wrc09p33P5GZYEzXtB1j3bMrcM+82YDPS/BeYeqACuL18gmHs4+D6zctdPFPZ3Ny5c7Aw1azctxjJiYvfK0Up/67bZwP64cSRqBOg/KRoLZcak4/gTMoWtpRiv9cC/zNOCK8TyAeKLZFCuE2WCjdukchGnTdz/mZJcoGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=AoQqC1oq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=qNx8ORoS; arc=none smtp.client-ip=103.168.172.151
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
 Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id D2B1E11401F0;
-	Sun, 15 Sep 2024 23:45:35 -0400 (EDT)
+	by mailfout.phl.internal (Postfix) with ESMTP id 0DE671380278;
+	Sun, 15 Sep 2024 23:45:38 -0400 (EDT)
 Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-05.internal (MEProxy); Sun, 15 Sep 2024 23:45:35 -0400
+  by phl-compute-05.internal (MEProxy); Sun, 15 Sep 2024 23:45:38 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1726458335; x=
-	1726544735; bh=yU8nhOJGYzc0DOMMI0G8l5B/bSrnAhtVorqxp2H7Y/4=; b=l
-	ZeUk8a41P0/IKeHBIK0c9oyik0OARATWUK5+cUz9x0e7SDMmFUoJJKXl3XiwtLb7
-	ePyX2ehKLqi+KJVCPLSP1tFLuYCLSfmYctnbEQw0cPykoLIuaFCsM+Bq/L/6uAiq
-	vDM3YgufZCcxZkutWojJgSsGjIIbri37B4CTs+bzlHj0v12o67SahFrLeUF3fK8W
-	uRbb8CgzWy1OBI83JDZcilY1BPZq8BSN56bJYL+BlE/Up6vulzQdmaqLhHzary1W
-	xZg/IIqFo5OD3B3pznM9lCbbo0At/DUuMKPTtP0bszelPMYZlzBKf6OSxm44/S+p
-	RHX9vz5ix/TjiHkWaPp9g==
+	:reply-to:subject:subject:to:to; s=fm3; t=1726458338; x=
+	1726544738; bh=/yzZ56O5FRFhQ5SJTT8R9rL6t8SgRbGwbbj/xdpptdo=; b=A
+	oQqC1oqIVcFAJoho5kwzwRPkiOuDMo5ZMPLxPIK80ndstLb1Llz6OjR5Svn26FdK
+	lNymAkRlAx3dl2UnLDUyrmjHdwDC4Mc3Xb2thxc5SFMBua6qJg2sVBfX5ZYxOXco
+	48cTlZ54uhI+vv7+5fq5d4qcD2W22wGJ5AyqcFQcY0jggZGZdAfiOc3pfeEOZYOl
+	ij36MvLB1NJh983WxykFhG46YNmp3Rl21MeuU6shFNCMOV5UHQbh3R7mnufIOPpF
+	ywI7WnUlKJgGSCsCOXahRe2233ljsp5bCzTeItI9QMZ+n1IIMpP4eyeOJMXNA/CZ
+	lgce0OjoJhE4X6BannGfw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726458335; x=
-	1726544735; bh=yU8nhOJGYzc0DOMMI0G8l5B/bSrnAhtVorqxp2H7Y/4=; b=m
-	peiYKsCbY+LkHAeZ0PScLX9oawnWpDpMwD8hZG4D9jKyzFk2JhZq6/S2eLT+DZa/
-	6mJKxHwq/LFPbf2RwfT/8DsTiGvF9mY1erGg6jGVmis+SctPH1muVVfh7cLeGdiw
-	JO+yyrYMpT+LcvoAP6um3X2yrefydHYHVk5CNUhlG1mAAoAOC1DSmAoAbdP4WMci
-	N+wlAQ1s3p+Cbn8PaoxrxMPnnQtj/+496gWqBj3Ibyib3gYto11Ri6ZNBYIvXw/b
-	1JIn5wbiDbNH+uDiDM7CTaqK/RcMigkd+eZgUBvQDznXLE7yEaWtWiV1M8YwmUxF
-	smPcTj/dPGHQrxuPJuxlA==
-X-ME-Sender: <xms:3qnnZrlsnIQlz58eqOM1yw8VuweVnjTVZGpeAeABl38DDb6D1LPXhw>
-    <xme:3qnnZu2cyvACR0FoqBovgUZxL9w5vAYfS_9dhjD1GrTQoLlzRtEDqTgIElrawFAXe
-    KyPlVY5ojt4NMQIGA>
-X-ME-Received: <xmr:3qnnZhoXHrfcK3Hg3oW7MxzdOqU2pUfoRg0ZZkvwbonAOWKyMAMRevK1IJPCSXPfKafgoriFU_Iw6Zgl02I5yMOYgAuu-df7nvz8BJGebEPhJfrJyOXC>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1726458338; x=
+	1726544738; bh=/yzZ56O5FRFhQ5SJTT8R9rL6t8SgRbGwbbj/xdpptdo=; b=q
+	Nx8ORoSH+u4JNcYmK2gNqhxfM+apqKSwdWPk+q2uc8P5wJtojx8MHQiiXX+igXT5
+	D3UiaUT4BXoyE94tS/tbxDwIMwmzdWt0JYHqi1Ogc1oz6VRMQQtFnfjs2atNFAzo
+	HRtA4utufQNtBYubZwdUFziannL24N5pDFssWzLSIw+XQGNzWoCn9/NgtsWplI8b
+	mlJRP8CczJTqMjITkUSvfoBozFAaCZ/nw/nE8rquC8jc7MLK3/1Tbbp7DunWEOmX
+	InuwJUeFQzEg6gh3/adqWLCvHGcpKVILaBaVIZbZ3Esi2dSszJphyLXqMq46kRkE
+	KD0IBsRgMB25EcyckVzDQ==
+X-ME-Sender: <xms:4annZnoP9BsAI02uIOlvbmm_XJd_a6vu6YQvG6QZHFsIyC2mFE-6mQ>
+    <xme:4annZhpPQIXU2H7MhW2rFQ5pULyKqay7RWOPgYHWqULiIb8Md3yTpqirId35GOiZ0
+    MSGw7c4hZrCBGtcRQ>
+X-ME-Received: <xmr:4annZkNiy_K8ydqHZvaZ6454wkjVu_y9EJLUQL4SloNFJmUWWjA1glUyZzVKG8mL7d23JuNjEC63wRX4ZQd5NpBncMYkKVgeEeXhMOFNFMLl8528x5Wu>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudekgedgjeeiucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
     rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlje
     dtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeff
     rghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnh
     epgfefgfegjefhudeikedvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesug
+    vehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesug
     iguhhuuhdrgiihiidpnhgspghrtghpthhtohepudekpdhmohguvgepshhmthhpohhuthdp
     rhgtphhtthhopegurghnihgvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhope
     gvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhhuhgrhheskhgvrhhn
     vghlrdhorhhgpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrghdprhgtph
-    htthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjohhhnhdrfhgrshht
-    rggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopehmrghrthhinhdrlhgruheslh
-    hinhhugidruggvvhdprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhgpdhrtghp
-    thhtohephihonhhghhhonhhgrdhsohhngheslhhinhhugidruggvvh
-X-ME-Proxy: <xmx:3qnnZjmebB1M1D17XdZU3b7wZIIoPKxSr1Lz5g7_SVJh7n_s28N7ZA>
-    <xmx:3qnnZp1YNqTQWXBKBvnn6NFExjZ_UI6k5899CAchhFXHKUn0JdGRgg>
-    <xmx:3qnnZitlYxY-u67XptGJ8emK9CF-Jb8kmUvzoGlFw8tTTBCfGPyKJA>
-    <xmx:3qnnZtVGeNVjjmCn-6MHZuyhiMFIkRJ6u6RCxMCC3FXacqzeCDF5Nw>
-    <xmx:36nnZgt4XLYTZ8osH7Rx68ON7TM-qtuRtreMJDN5tagsVJDn6YsEIb1s>
+    htthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmrghrthhinhdrlhgr
+    uheslhhinhhugidruggvvhdprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhgpd
+    hrtghpthhtohephihonhhghhhonhhgrdhsohhngheslhhinhhugidruggvvhdprhgtphht
+    thhopehjohhhnhdrfhgrshhtrggsvghnugesghhmrghilhdrtghomh
+X-ME-Proxy: <xmx:4annZq50iA_nAADFiVGuCXElNYkrS_XJR62c6UO-CKyK_qSok4aGbQ>
+    <xmx:4annZm7GmeaNuYqrDVSCQiQof5HNOu54Eh6koR9DAZmguyoHFs4taw>
+    <xmx:4annZijtDiqxUHwWcEscyIl8cGT0tzo3TJqvjBGWRPLO-oO8kl97ww>
+    <xmx:4annZo576hRc5QfUgHT4QGNh7pqTxWvChK7TO5QDIDUCcHojGjwp7w>
+    <xmx:4qnnZjwNd_5eEIRChqiP0DqGhjkl_fHfcsh8nAGpJ1cPUQlWSDq2-Lmt>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 15 Sep 2024 23:45:32 -0400 (EDT)
+ 15 Sep 2024 23:45:35 -0400 (EDT)
 From: Daniel Xu <dxu@dxuuu.xyz>
 To: daniel@iogearbox.net,
 	eddyz87@gmail.com,
 	shuah@kernel.org,
 	andrii@kernel.org,
 	ast@kernel.org
-Cc: john.fastabend@gmail.com,
-	martin.lau@linux.dev,
+Cc: martin.lau@linux.dev,
 	song@kernel.org,
 	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
 	kpsingh@kernel.org,
 	sdf@fomichev.me,
 	haoluo@google.com,
 	jolsa@kernel.org,
 	mykolal@fb.com,
 	bpf@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
 	kernel-team@meta.com
-Subject: [PATCH bpf-next v2 1/2] bpf: verifier: Support eliding map lookup nullness
-Date: Sun, 15 Sep 2024 21:45:19 -0600
-Message-ID: <3b54139f8d4877e0487daebdd799c3878ee27ed0.1726458273.git.dxu@dxuuu.xyz>
+Subject: [PATCH bpf-next v2 2/2] bpf: selftests: verifier: Add nullness elision tests
+Date: Sun, 15 Sep 2024 21:45:20 -0600
+Message-ID: <1d8e11853a04ad6a6fdb2ba726090666d5bc6473.1726458273.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <cover.1726458273.git.dxu@dxuuu.xyz>
 References: <cover.1726458273.git.dxu@dxuuu.xyz>
@@ -121,235 +121,198 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This commit allows progs to elide a null check on statically known map
-lookup keys. In other words, if the verifier can statically prove that
-the lookup will be in-bounds, allow the prog to drop the null check.
-
-This is useful for two reasons:
-
-1. Large numbers of nullness checks (especially when they cannot fail)
-   unnecessarily pushes prog towards BPF_COMPLEXITY_LIMIT_JMP_SEQ.
-2. It forms a tighter contract between programmer and verifier.
-
-For (1), bpftrace is starting to make heavier use of percpu scratch
-maps. As a result, for user scripts with large number of unrolled loops,
-we are starting to hit jump complexity verification errors.  These
-percpu lookups cannot fail anyways, as we only use static key values.
-Eliding nullness probably results in less work for verifier as well.
-
-For (2), percpu scratch maps are often used as a larger stack, as the
-currrent stack is limited to 512 bytes. In these situations, it is
-desirable for the programmer to express: "this lookup should never fail,
-and if it does, it means I messed up the code". By omitting the null
-check, the programmer can "ask" the verifier to double check the logic.
+Test that nullness elision works for common use cases. For example, we
+want to check that both full and subreg stack slots are recognized. As
+well as when there's both const and non-const values of R2 leading up to
+a lookup. And obviously some bound checks.
 
 Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 ---
- kernel/bpf/verifier.c                         | 64 ++++++++++++++++++-
- tools/testing/selftests/bpf/progs/iters.c     | 14 ++--
- .../selftests/bpf/progs/map_kptr_fail.c       |  2 +-
- .../selftests/bpf/progs/verifier_map_in_map.c |  2 +-
- .../testing/selftests/bpf/verifier/map_kptr.c |  2 +-
- 5 files changed, 73 insertions(+), 11 deletions(-)
+ .../bpf/progs/verifier_array_access.c         | 166 ++++++++++++++++++
+ 1 file changed, 166 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 7df5c29293a4..e0c9c53ce9c0 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -282,6 +282,7 @@ struct bpf_call_arg_meta {
- 	u32 ret_btf_id;
- 	u32 subprogno;
- 	struct btf_field *kptr_field;
-+	long const_map_key;
- };
+diff --git a/tools/testing/selftests/bpf/progs/verifier_array_access.c b/tools/testing/selftests/bpf/progs/verifier_array_access.c
+index 95d7ecc12963..2e74504ddbb5 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_array_access.c
++++ b/tools/testing/selftests/bpf/progs/verifier_array_access.c
+@@ -28,6 +28,20 @@ struct {
+ 	__uint(map_flags, BPF_F_WRONLY_PROG);
+ } map_array_wo SEC(".maps");
  
- struct bpf_kfunc_call_arg_meta {
-@@ -10414,6 +10415,51 @@ static void update_loop_inline_state(struct bpf_verifier_env *env, u32 subprogno
- 				 state->callback_subprogno == subprogno);
- }
- 
-+/* Returns whether or not the given map type can potentially elide
-+ * lookup return value nullness check. This is possible if the key
-+ * is statically known.
-+ */
-+static bool can_elide_value_nullness(enum bpf_map_type type)
-+{
-+	switch (type) {
-+	case BPF_MAP_TYPE_ARRAY:
-+	case BPF_MAP_TYPE_PERCPU_ARRAY:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
++struct {
++	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
++	__uint(max_entries, 2);
++	__type(key, int);
++	__type(value, struct test_val);
++} map_array_pcpu SEC(".maps");
 +
-+/* Returns constant key value if possible, else -1 */
-+static long get_constant_map_key(struct bpf_verifier_env *env,
-+				 struct bpf_reg_state *key)
-+{
-+	struct bpf_func_state *state = func(env, key);
-+	struct bpf_reg_state *reg;
-+	int stack_off;
-+	int slot;
-+	int spi;
++struct {
++	__uint(type, BPF_MAP_TYPE_ARRAY);
++	__uint(max_entries, 2);
++	__type(key, int);
++	__type(value, struct test_val);
++} map_array SEC(".maps");
 +
-+	if (key->type != PTR_TO_STACK)
-+		return -1;
-+	if (!tnum_is_const(key->var_off))
-+		return -1;
-+
-+	stack_off = key->off + key->var_off.value;
-+	slot = -stack_off - 1;
-+	if (slot >= state->allocated_stack)
-+		/* Stack uninitialized */
-+		return -1;
-+
-+	spi = slot / BPF_REG_SIZE;
-+	reg = &state->stack[spi].spilled_ptr;
-+	if (!tnum_is_const(reg->var_off))
-+		/* Stack value not statically known */
-+		return -1;
-+
-+	return reg->var_off.value;
-+}
-+
- static int get_helper_proto(struct bpf_verifier_env *env, int func_id,
- 			    const struct bpf_func_proto **ptr)
- {
-@@ -10511,6 +10557,15 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 			env->insn_aux_data[insn_idx].storage_get_func_atomic = true;
- 	}
- 
-+	/* Logically we are trying to check on key register state before
-+	 * the helper is called, so process here. Otherwise argument processing
-+	 * may clobber the spilled key values.
-+	 */
-+	regs = cur_regs(env);
-+	if (func_id == BPF_FUNC_map_lookup_elem)
-+		meta.const_map_key = get_constant_map_key(env, &regs[BPF_REG_2]);
-+
-+
- 	meta.func_id = func_id;
- 	/* check args */
- 	for (i = 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
-@@ -10771,10 +10826,17 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
- 				"kernel subsystem misconfigured verifier\n");
- 			return -EINVAL;
- 		}
-+
-+		if (func_id == BPF_FUNC_map_lookup_elem &&
-+		    can_elide_value_nullness(meta.map_ptr->map_type) &&
-+		    meta.const_map_key >= 0 &&
-+		    meta.const_map_key < meta.map_ptr->max_entries)
-+			ret_flag &= ~PTR_MAYBE_NULL;
-+
- 		regs[BPF_REG_0].map_ptr = meta.map_ptr;
- 		regs[BPF_REG_0].map_uid = meta.map_uid;
- 		regs[BPF_REG_0].type = PTR_TO_MAP_VALUE | ret_flag;
--		if (!type_may_be_null(ret_type) &&
-+		if (!type_may_be_null(regs[BPF_REG_0].type) &&
- 		    btf_record_has_field(meta.map_ptr->record, BPF_SPIN_LOCK)) {
- 			regs[BPF_REG_0].id = ++env->id_gen;
- 		}
-diff --git a/tools/testing/selftests/bpf/progs/iters.c b/tools/testing/selftests/bpf/progs/iters.c
-index ef70b88bccb2..24e6cd946396 100644
---- a/tools/testing/selftests/bpf/progs/iters.c
-+++ b/tools/testing/selftests/bpf/progs/iters.c
-@@ -524,11 +524,11 @@ int iter_subprog_iters(const void *ctx)
- }
- 
  struct {
--	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(type, BPF_MAP_TYPE_HASH);
- 	__type(key, int);
- 	__type(value, int);
- 	__uint(max_entries, 1000);
--} arr_map SEC(".maps");
-+} hash_map SEC(".maps");
- 
- SEC("?raw_tp")
- __failure __msg("invalid mem access 'scalar'")
-@@ -539,7 +539,7 @@ int iter_err_too_permissive1(const void *ctx)
- 
- 	MY_PID_GUARD();
- 
--	map_val = bpf_map_lookup_elem(&arr_map, &key);
-+	map_val = bpf_map_lookup_elem(&hash_map, &key);
- 	if (!map_val)
- 		return 0;
- 
-@@ -561,12 +561,12 @@ int iter_err_too_permissive2(const void *ctx)
- 
- 	MY_PID_GUARD();
- 
--	map_val = bpf_map_lookup_elem(&arr_map, &key);
-+	map_val = bpf_map_lookup_elem(&hash_map, &key);
- 	if (!map_val)
- 		return 0;
- 
- 	bpf_repeat(1000000) {
--		map_val = bpf_map_lookup_elem(&arr_map, &key);
-+		map_val = bpf_map_lookup_elem(&hash_map, &key);
- 	}
- 
- 	*map_val = 123;
-@@ -585,7 +585,7 @@ int iter_err_too_permissive3(const void *ctx)
- 	MY_PID_GUARD();
- 
- 	bpf_repeat(1000000) {
--		map_val = bpf_map_lookup_elem(&arr_map, &key);
-+		map_val = bpf_map_lookup_elem(&hash_map, &key);
- 		found = true;
- 	}
- 
-@@ -606,7 +606,7 @@ int iter_tricky_but_fine(const void *ctx)
- 	MY_PID_GUARD();
- 
- 	bpf_repeat(1000000) {
--		map_val = bpf_map_lookup_elem(&arr_map, &key);
-+		map_val = bpf_map_lookup_elem(&hash_map, &key);
- 		if (map_val) {
- 			found = true;
- 			break;
-diff --git a/tools/testing/selftests/bpf/progs/map_kptr_fail.c b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
-index 450bb373b179..c4a81d1c1354 100644
---- a/tools/testing/selftests/bpf/progs/map_kptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/map_kptr_fail.c
-@@ -345,7 +345,7 @@ int reject_indirect_global_func_access(struct __sk_buff *ctx)
+ 	__uint(type, BPF_MAP_TYPE_HASH);
+ 	__uint(max_entries, 1);
+@@ -526,4 +540,156 @@ l0_%=:	exit;						\
+ 	: __clobber_all);
  }
  
- SEC("?tc")
--__failure __msg("Unreleased reference id=5 alloc_insn=")
-+__failure __msg("Unreleased reference id=4 alloc_insn=")
- int kptr_xchg_ref_state(struct __sk_buff *ctx)
- {
- 	struct prog_test_ref_kfunc *p;
-diff --git a/tools/testing/selftests/bpf/progs/verifier_map_in_map.c b/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
-index 4eaab1468eb7..7d088ba99ea5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_map_in_map.c
-@@ -47,7 +47,7 @@ l0_%=:	r0 = 0;						\
- 
- SEC("xdp")
- __description("map in map state pruning")
--__success __msg("processed 26 insns")
-+__success __msg("processed 15 insns")
- __log_level(2) __retval(0) __flag(BPF_F_TEST_STATE_FREQ)
- __naked void map_in_map_state_pruning(void)
- {
-diff --git a/tools/testing/selftests/bpf/verifier/map_kptr.c b/tools/testing/selftests/bpf/verifier/map_kptr.c
-index f420c0312aa0..4b39f8472f9b 100644
---- a/tools/testing/selftests/bpf/verifier/map_kptr.c
-+++ b/tools/testing/selftests/bpf/verifier/map_kptr.c
-@@ -373,7 +373,7 @@
- 	.prog_type = BPF_PROG_TYPE_SCHED_CLS,
- 	.fixup_map_kptr = { 1 },
- 	.result = REJECT,
--	.errstr = "Unreleased reference id=5 alloc_insn=20",
-+	.errstr = "Unreleased reference id=4 alloc_insn=20",
- 	.fixup_kfunc_btf_id = {
- 		{ "bpf_kfunc_call_test_acquire", 15 },
- 	}
++SEC("socket")
++__description("valid map access into an array using constant without nullness")
++__success __retval(4)
++__naked void an_array_with_a_constant_no_nullness(void)
++{
++	asm volatile ("					\
++	r1 = 1;						\
++	*(u64*)(r10 - 8) = r1;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map_array] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	r1 = %[test_val_foo];				\
++	*(u64*)(r0 + 0) = r1;				\
++	r0 = *(u64*)(r0 + 0);				\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_array),
++	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("valid multiple map access into an array using constant without nullness")
++__success __retval(8)
++__naked void multiple_array_with_a_constant_no_nullness(void)
++{
++	asm volatile ("					\
++	r1 = 1;						\
++	*(u64*)(r10 - 8) = r1;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map_array] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	r6 = %[test_val_foo];				\
++	*(u64*)(r0 + 0) = r6;				\
++	r7 = *(u64*)(r0 + 0);				\
++	r1 = 0;						\
++	*(u64*)(r10 - 16) = r1;				\
++	r2 = r10;					\
++	r2 += -16;					\
++	r1 = %[map_array] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	*(u64*)(r0 + 0) = r6;				\
++	r1 = *(u64*)(r0 + 0);				\
++	r7 += r1;					\
++	r0 = r7;					\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_array),
++	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("valid map access into an array using 32-bit constant without nullness")
++__success __retval(4)
++__naked void an_array_with_a_32bit_constant_no_nullness(void)
++{
++	asm volatile ("					\
++	r1 = 1;						\
++	*(u32*)(r10 - 4) = r1;				\
++	r2 = r10;					\
++	r2 += -4;					\
++	r1 = %[map_array] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	r1 = %[test_val_foo];				\
++	*(u64*)(r0 + 0) = r1;				\
++	r0 = *(u64*)(r0 + 0);				\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_array),
++	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("valid map access into a pcpu array using constant without nullness")
++__success __retval(4)
++__naked void a_pcpu_array_with_a_constant_no_nullness(void)
++{
++	asm volatile ("					\
++	r1 = 1;						\
++	*(u64*)(r10 - 8) = r1;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map_array_pcpu] ll;			\
++	call %[bpf_map_lookup_elem];			\
++	r1 = %[test_val_foo];				\
++	*(u64*)(r0 + 0) = r1;				\
++	r0 = *(u64*)(r0 + 0);				\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_array_pcpu),
++	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("invalid map access into an array using constant without nullness")
++__failure __msg("R0 invalid mem access 'map_value_or_null'")
++__naked void an_array_with_a_constant_no_nullness_out_of_bounds(void)
++{
++	asm volatile ("					\
++	r1 = 3;						\
++	*(u64*)(r10 - 8) = r1;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	r1 = %[map_array] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	r1 = %[test_val_foo];				\
++	*(u64*)(r0 + 0) = r1;				\
++	r0 = *(u64*)(r0 + 0);				\
++	exit;						\
++"	:
++	: __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_array),
++	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
++	: __clobber_all);
++}
++
++SEC("socket")
++__description("invalid elided lookup using const and non-const key")
++__failure __msg("R0 invalid mem access 'map_value_or_null'")
++__naked void mixed_const_and_non_const_key_lookup(void)
++{
++	asm volatile ("					\
++	call %[bpf_get_prandom_u32];			\
++	if r0 > 42 goto l1_%=;				\
++	*(u64*)(r10 - 8) = r0;				\
++	r2 = r10;					\
++	r2 += -8;					\
++	goto l0_%=;					\
++l1_%=:	r1 = 1;						\
++	*(u64*)(r10 - 8) = r1;				\
++	r2 = r10;					\
++	r2 += -8;					\
++l0_%=:	r1 = %[map_array] ll;				\
++	call %[bpf_map_lookup_elem];			\
++	r0 = *(u64*)(r0 + 0);				\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32),
++	  __imm(bpf_map_lookup_elem),
++	  __imm_addr(map_array)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.46.0
 
