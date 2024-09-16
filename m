@@ -1,161 +1,172 @@
-Return-Path: <linux-kselftest+bounces-18015-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18016-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61F68979AA5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2024 07:11:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9997979B1C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2024 08:25:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17D4A1F215BD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2024 05:11:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E659B22CC6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2024 06:25:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B0E31F61C;
-	Mon, 16 Sep 2024 05:11:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2065B3B298;
+	Mon, 16 Sep 2024 06:25:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="F+27Yvno"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="MKQYjCSA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8296FDC;
-	Mon, 16 Sep 2024 05:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726463506; cv=pass; b=lCSXcSdYJUQRxt1IOYaSWt87nK379nATnxyCDnb0SGAPY/E9T588+R21v93nYg5foQitcGgSJz0neH6szuLPUvUJfVn3q1Vt1NpgZpjMWWIAg41lgTOUWf2h/YecvvJIFlEEsYZu+pA6NyKx163HDAkSppdIzx3sd6/xc6Qb4RA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726463506; c=relaxed/simple;
-	bh=JXtRfIu5OcEA9kgFjsMrRK/elxa5CFF6iRmJv8pi3I4=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=CKxz/Zr+n4ObikMiJ0yaQ/zH+4YmR8N361nNLABGzrGnEA2PA6aJSaIsfGOzlIT6Y4swJ9Rqw1IyLlTEsv+5dQcp2o+qNgF0DxYk5KL4DP9tElaZJAbgbj3tEArgQP3m+hUiya7+oU5QtbzwuGuTz4gY7eNg3vdbBZxvhQBpQ4Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=F+27Yvno; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1726463488; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=kwggkEmqLX6Mfr7HygJA+b/VB1IVl/+GGxQ6NewS4pNwJQfJJPZHSJC1Brpegyu6EotB1FwseDlPIm+6ZJsL279Qtrvqvd6qFxPKmlpjN2LOwCXnKwKhn15hBOmXN1jEtm1vxmcVE3QHUZLR3NpXEsoHB54XeImjGvaS0PDey1Q=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1726463488; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=fiQmj+mg8bdz3LaM2MFQ1wsitBjBxISWyvNuEMIjyb8=; 
-	b=DEVN37ppZUptSjjd62+W82sZ1aykTgPENQNnsMnM7OT6S2HczvX7va+vYlprR+Vtn1dcLI7N9PkPrUWmAtoOrT224DIaM2xdabXrp5SJZrC5NnZIc3XRikECzy5hCu49oRk7TGzH3+ZmRzn/5oGFbOKoQYV8XCzRpiBdPBuUsc4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
-	dmarc=pass header.from=<Usama.Anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1726463488;
-	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=fiQmj+mg8bdz3LaM2MFQ1wsitBjBxISWyvNuEMIjyb8=;
-	b=F+27YvnoFfhS8+LKAGj8b2uDd3XSSkH3ITGIZxWb20cWNcUlRRSUQmxE/HeJaaSv
-	G11BOFu2zhhjSsuKo726Hv9Ch1doS4cZMUdXNcWXJetVAhRdP+5VoOn1k8thcBR1pCR
-	eRDRMVeCRp1jqiBvczy4z4xX0QTtyMG3Hnbjz0K0=
-Received: by mx.zohomail.com with SMTPS id 1726463487032102.77484826415719;
-	Sun, 15 Sep 2024 22:11:27 -0700 (PDT)
-Message-ID: <406c2919-a546-40e4-89af-baa910c22740@collabora.com>
-Date: Mon, 16 Sep 2024 10:11:18 +0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5DD82A1B2;
+	Mon, 16 Sep 2024 06:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726467930; cv=none; b=t0f8kpaSjyNiZ/cJ+WbWDeTFtxa+H8SB2C2uVAMOjQBDS/TSBkZBqZEv5d+7tLTtuh/7QmQtmUMe/JPMxWuysjc/QOq5PDXMP2XxoB9Pba2ckysCbE9Ie91UK4yrWq9SW82cIHO3PSMWjzq5DVV4Wwr4O5JPAReJrRR1P/y8dB8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726467930; c=relaxed/simple;
+	bh=YTZjex9Qnkcyzmzrh8Ejka9ejOBEL/+lauPKDU8+Meo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:Subject:From:
+	 References:In-Reply-To; b=sCjASyH7/VHDd6kPs015oZhZ9OPkFd81dV91GZbW1yetcW+VN/qfVsw1MVD+zNZDLveW305JBRV2tsISKxjz2Ck0u0RTIfmtDd9eSidT40jEMVy4cH7j0jcLmd72y9UZPvB3yON2iafY6h6fggr1AxF/URraAHdj3eAKW3Pw9p8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=MKQYjCSA; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48FKw65k008611;
+	Mon, 16 Sep 2024 06:25:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	mime-version:content-transfer-encoding:content-type:date
+	:message-id:cc:to:subject:from:references:in-reply-to; s=pp1;
+	 bh=1lhaETP3eSv6kgJaVmJjY+/leCWRQv0KEgpQ5KTz4ro=; b=MKQYjCSAQ2p0
+	K8Yfb9dIdxf969C+PZxINI4k9kqR6taBlvUwYzUkLw0q6Qhov8iel/J/h7vb51XD
+	tm0CFYWw03sJzAiEJk8zm+3l/iEbgOqOGiwR8ps5jCc0/ALAhg9gv9ygbMz3SsAW
+	WicV72dFL9u1gH+IQ9UcKpQlaGiDXqn18PawBMFMkD6vVqJHpq2tjkbWmkTbmF5W
+	5jr7eM4f9g4ng8TagkvOMlOqXCY1Sriaw52ELx7nVvNPjs89myFPYNCp1RWhyc9I
+	nSY07nxDD6o3TFe2gsYq6y9G9KmV9VCzw2rIWUhZX36sWmwQnbTx+/hzCGc+EmlX
+	ZwrKLE8wLQ==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41n3vd81pd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Sep 2024 06:25:22 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 48G6O9FF023258;
+	Mon, 16 Sep 2024 06:25:21 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41n3vd81p6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Sep 2024 06:25:20 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 48G6MiDY024627;
+	Mon, 16 Sep 2024 06:25:19 GMT
+Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 41nq1mn9h0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Sep 2024 06:25:19 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 48G6PG5326608358
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 16 Sep 2024 06:25:16 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 3F7ED2004D;
+	Mon, 16 Sep 2024 06:25:16 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1551E20049;
+	Mon, 16 Sep 2024 06:25:16 +0000 (GMT)
+Received: from darkmoore (unknown [9.171.19.143])
+	by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Mon, 16 Sep 2024 06:25:16 +0000 (GMT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Usama.Anjum@collabora.com, Andrew Morton <akpm@linux-foundation.org>,
- Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, kernel@collabora.com,
- stable@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: mm: Fix build errors on armhf
-To: Jeff Xu <jeffxu@chromium.org>
-References: <20240809082511.497266-1-usama.anjum@collabora.com>
- <CABi2SkWgPoWJY_CMxDru7FPjtQBgv61PA2VoCumd3T8Xq3fjbg@mail.gmail.com>
- <1b36ba43-60a4-441c-981f-9b62f366aa95@collabora.com>
- <CABi2SkWk8igT=HCTcawv72uxrf2rhzj1A23k4EixCxcDKhSNxw@mail.gmail.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
-In-Reply-To: <CABi2SkWk8igT=HCTcawv72uxrf2rhzj1A23k4EixCxcDKhSNxw@mail.gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Date: Mon, 16 Sep 2024 08:25:10 +0200
+Message-Id: <D47HSOYSEVRV.2VQTKG7RCRAV6@linux.ibm.com>
+Cc: <kvm@vger.kernel.org>, <linux-s390@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        "Paolo Bonzini" <pbonzini@redhat.com>, "Shuah Khan" <shuah@kernel.org>,
+        "Christian Borntraeger"
+ <borntraeger@linux.ibm.com>,
+        "Janosch Frank" <frankja@linux.ibm.com>,
+        "David Hildenbrand" <david@redhat.com>,
+        "Nina Schoetterl-Glausch"
+ <nsg@linux.ibm.com>
+To: "Claudio Imbrenda" <imbrenda@linux.ibm.com>
+Subject: Re: [PATCH v3 1/3] selftests: kvm: s390: Add uc_map_unmap VM test
+ case
+From: "Christoph Schlameuss" <schlameuss@linux.ibm.com>
+X-Mailer: aerc 0.18.2
+References: <20240913115248.211071-1-schlameuss@linux.ibm.com>
+ <20240913115248.211071-2-schlameuss@linux.ibm.com>
+ <20240913184802.3365e253@p-imbrenda>
+In-Reply-To: <20240913184802.3365e253@p-imbrenda>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: rVfsPCijQkAO2cAW7xOhKjFtfl7coot2
+X-Proofpoint-GUID: CaIZ3Ezy-sOZu_F4_A74UdLICNjVYEtX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-16_03,2024-09-13_02,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ lowpriorityscore=0 suspectscore=0 bulkscore=0 clxscore=1015 mlxscore=0
+ malwarescore=0 mlxlogscore=796 priorityscore=1501 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409160039
 
-On 9/14/24 3:33 AM, Jeff Xu wrote:
-> On Mon, Aug 19, 2024 at 3:05 AM Muhammad Usama Anjum
-> <Usama.Anjum@collabora.com> wrote:
->>
->> On 8/14/24 3:29 AM, Jeff Xu wrote:
->>> Hi Muhammad
->>>
->>> On Fri, Aug 9, 2024 at 1:25 AM Muhammad Usama Anjum
->>> <usama.anjum@collabora.com> wrote:
->>>>
->>>> The __NR_mmap isn't found on armhf. The mmap() is commonly available
-> 
-> What is armhf ?
-> is that arm64 ? I was able to build arm64 correctly.
-It is arm architecture. Use following toolchain with it:
-make ARCH=arm CROSS_COMPILE=arm-linux-gnueabihf-
+On Fri Sep 13, 2024 at 6:48 PM CEST, Claudio Imbrenda wrote:
+> On Fri, 13 Sep 2024 13:52:46 +0200
+> Christoph Schlameuss <schlameuss@linux.ibm.com> wrote:
+>
+> > Add a test case verifying basic running and interaction of ucontrol VMs=
+.
+> > Fill the segment and page tables for allocated memory and map memory on
+> > first access.
+> >=20
+> > * uc_map_unmap
+> >   Store and load data to mapped and unmapped memory and use pic segment
+> >   translation handling to map memory on access.
+> >=20
+> > Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
+> > ---
+> >  .../selftests/kvm/s390x/ucontrol_test.c       | 145 +++++++++++++++++-
+> >  1 file changed, 144 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/tools/testing/selftests/kvm/s390x/ucontrol_test.c b/tools/=
+testing/selftests/kvm/s390x/ucontrol_test.c
+> > index 030c59010fe1..084cea02c2fa 100644
+> > --- a/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+> > +++ b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+>
+> [...]
+>
+> >base_gpa + self->code_gpa;
+> > @@ -222,6 +244,60 @@ TEST(uc_cap_hpage)
+> >  	close(kvm_fd);
+> >  }
+> > =20
+> > +/* calculate host virtual addr from guest physical addr */
+> > +static void *gpa2hva(FIXTURE_DATA(uc_kvm) * self, u64 gpa)
+>
+> why the space? I would have expected *self
+>
 
-Please test your patches on it.
+That is how checkpatch.pl --strict prefers it.
 
-> 
-> -Jeff
-> 
->>>> system call and its wrapper is presnet on all architectures. So it
->>>> should be used directly. It solves problem for armhf and doesn't create
->>>> problem for architectures as well. Remove sys_mmap() functions as they
->>>> aren't doing anything else other than calling mmap(). There is no need
->>>> to set errno = 0 manually as glibc always resets it.
->>>>
->>> The mseal_test should't have dependency on libc, and mmap() is
->>> implemented by glibc, right ?
->>>
->>> I just fixed a bug to switch mremap() to sys_mremap to address an
->>> issue that different glibc version's behavior is slightly different
->>> for mremap().
->>>
->>> What is the reason that __NR_mmap not available in armhf ? (maybe it
->>> is another name ?)  there must be a way to call syscall directly on
->>> armhf, can we use that instead ?
->>
->> It seems __NR_mmap syscall is deprecated for arm. Found this comment in
->> arch/arm/include/asm/unistd.h:
->> /*
->>  * The following syscalls are obsolete and no longer available for EABI:
->>  *  __NR_time
->>  *  __NR_umount
->>  *  __NR_stime
->>  *  __NR_alarm
->>  *  __NR_utime
->>  *  __NR_getrlimit
->>  *  __NR_select
->>  *  __NR_readdir
->>  *  __NR_mmap
->>  *  __NR_socketcall
->>  *  __NR_syscall
->>  *  __NR_ipc
->>  */
->>
->> The glibc mmap() calls mmap2() these days by adjusting the parameters
->> internally. From man mmap:
->> C library/kernel differences:
->> This  page  describes the interface provided by the glibc mmap() wrapper
->> function.  Originally, this function invoked a system call of the same
->> name.  Since Linux 2.4, that system call has been superseded  by
->> mmap2(2), and nowadays the glibc mmap() wrapper function invokes
->> mmap2(2) with a suitably adjusted value for offset.
->>
->> I'm not sure if behaviour of glibc mmap() and syscall mmap2() would be
->> same, but we should use glibc at most places which accounts for
->> different architectures correctly. Maybe the differences were only
->> present in case of mremap().
->>
->> --
->> BR,
->> Muhammad Usama Anjum
->>
+Output from checkpatch without the space:
 
--- 
-BR,
-Muhammad Usama Anjum
+CHECK: spaces preferred around that '*' (ctx:WxV)
+#19: FILE: tools/testing/selftests/kvm/s390x/ucontrol_test.c:278:
++static void *gpa2hva(FIXTURE_DATA(uc_kvm) *self, u64 gpa)
+                                           ^
+
+> > +{
+> > +	return (void *)(self->base_hva - self->base_gpa + gpa);
+> > +}
+> > +
+> > +/* map / make additional memory available */
+>
+> [...]
 
 
