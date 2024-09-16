@@ -1,426 +1,607 @@
-Return-Path: <linux-kselftest+bounces-18054-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18055-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 390BF97A906
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 00:03:40 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B38C97A9AD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 01:38:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E54152878D2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2024 22:03:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 719DA1F28BE6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Sep 2024 23:38:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB50F15C131;
-	Mon, 16 Sep 2024 22:03:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB42014A4D6;
+	Mon, 16 Sep 2024 23:37:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="w9C2ZB52"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="K7Q07nbV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9541C12C54B
-	for <linux-kselftest@vger.kernel.org>; Mon, 16 Sep 2024 22:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39811A95E
+	for <linux-kselftest@vger.kernel.org>; Mon, 16 Sep 2024 23:37:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726524215; cv=none; b=jW9GBCL5zdyDzCNQd/bf5kyp650OY/BR37NzxVL+G5vhrfon4o6g9pSaveu7Lqum1836frPJ/t4dCMLybN7xrtUqsxZJCURckK83SKe2dm0wUaGE6XRHQlK01EV0+CimD7XZ2ZrS0Fht8E3mL7JL5cU5YyoOI2V2ZZCYGOR/LOs=
+	t=1726529878; cv=none; b=deXCjVIHSv7EDPYgkPYN3nqmoJlcJnPqw/3IPYpHNF62w8skLQVQf6Slxh92tUE91CjYQ8IEFU1PXRAc3DvPtWVeQd0Bj3n6IziRYkhN3LiOPhQ8sraZ26dlxet25GeVX+8+j63hoaQ4CRkQfexez1FP/vnyVihtdUsyRyon9nY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726524215; c=relaxed/simple;
-	bh=kjhFXladyiDs27A4ResA1OjbgxPYYj/n7bZ7wGi/wmU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VUtQlGXKOzBaUAx72cbksqnV/Fe0KseutOuaY5snsKiX/P9kYLaO+7ZgEAc3IYVdZc6TOVaJAQZsoMjepU/8Qzp2Kcjv9pQ4I34mFTNY89ElvwDXGP+yIZU71otTK5dDPZI22kD0p4uDPMwjnFoVRX0KqxzxHooel6cd1ruhXU4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=w9C2ZB52; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2d88edf1340so2588870a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Sep 2024 15:03:33 -0700 (PDT)
+	s=arc-20240116; t=1726529878; c=relaxed/simple;
+	bh=vKM14NS53qdKSjYPuatOYv4/qZyVvylw3UNzy4Oujzw=;
+	h=Content-Type:Message-ID:Date:MIME-Version:To:Cc:From:Subject; b=Ci79lkBwzjl2FxeLGW2ZGTdv4+OtHgeYl6HR0GflxDPeq58TIyrf3RvgUrtolzjibgm6aYeCpkTzLtQWn5FRZfFj+4cyJbTDVLvoZxOfUnMnHYLGkelS4bAfCzpd0W/GNBLzkVJauOuIjsVjtWE8RVC8xdNeY3cY/CwKiWvyAME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=K7Q07nbV; arc=none smtp.client-ip=209.85.167.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3e0379a8d96so1265536b6e.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Sep 2024 16:37:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1726524213; x=1727129013; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZO9PxSwlYyQlXrvkw2PjYDn48fRdnQMilddbfvJBeLw=;
-        b=w9C2ZB52XdDRP83BoXynV4L8/uv1z+Tn8f6jbOJWjmRsk722EjuqNwds1fdxVKRcBp
-         XAN2Vtjvc0xjYTqJRnzOfc0aE9WxmHu1P+shRl6pzbVh69KNh7iaI39ldKKGqmwS9FjD
-         QXMaunPqwGdNsBfv5qPMbyc4nr4ad15eMOixoOLdKTVH0qCGW/LO3mOsOjCLKqBTp2y0
-         QH00R/KGU11he85xZjKQn9tm7R8vDQ/m+XPXVgJ5Q5C6PeR1L9c6Bb611fH7eXvGjUfV
-         /xUQzqzHds6igWvZtno0YaxXAkECaAz+kmWKGigxnZYNBUCe+lq5r6OOFJhcyg8+50jV
-         RtQw==
+        d=linuxfoundation.org; s=google; t=1726529875; x=1727134675; darn=vger.kernel.org;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=zPp6OQny1rx7BQo+++xKFz4dAhaMidLo1koisNlZjh8=;
+        b=K7Q07nbVnahc5bpaarIhXEfsQhfJXjJwlEag8O+OFXCacXOXZKdaC0p7FW/QeFRmYc
+         h0Z20TF7zIhOfrjrDE6nOAN+p7nrJUGH5umHfttBY5ItFpQ1f9vzSDLqfI/apTmyazrL
+         24QFHabqzG7KkPv3HI0sFlRsXJbPxVRrnfmzQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726524213; x=1727129013;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZO9PxSwlYyQlXrvkw2PjYDn48fRdnQMilddbfvJBeLw=;
-        b=hB2UlSYNZaX17So1m2UTXoy3aivzR74dygftga9jucXa6heLKM4Ti0V1dyDuCDnQmx
-         FFGVQl2dxrbIsgnyCy3Z9h9nfIXA7NqlMDYbnVX2HG2Q5OJlJZusdR2Y1Jmzo0znYo+y
-         wQ4CqOxdhsa6MtzeZ+aZbU5d9zijFN/0QezVWubIWiqcGYf8y2wNLW38i7uJGnbWTAJm
-         LQMdXahzgsYcLA56UKqUXXUKGK9nxlB+SI0p66vndbAysVbV7DMYAAWY0R/NC9AlmU8S
-         AOSGdos8cBjNgiynsYU4neZrnUHNdr1HOw8BPknMs3Y1AyDcAeo+UzZW8m+vGhu9bOT6
-         U0hQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX7I5Qqre//YZTscWJsWaKEKGDGPmi1vsQoSP8d8KJf0hQU6+2D6Oaf3Vpg5niMCpbE/h3UTe5LKlbi0MopemY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNP0aKK0OT7hGoVKVd0aa5j84XLhlCNRdTvcgEFxZzIiLfNWFy
-	5XBPvZvfw6OyEV0KZXXZVkxmBnWDT75iCgr7MhMQk2Nn6zlncM30Y/wdOHrksEc=
-X-Google-Smtp-Source: AGHT+IGoDA/bQQBndILmfbT4eQwAlyQILrk4PkZwhzXDwUMZSQrNHHgUTUc14xQ9X8R+uIHxpEeqtw==
-X-Received: by 2002:a17:90a:ad8e:b0:2d8:c17b:5018 with SMTP id 98e67ed59e1d1-2dbb9dee8b8mr16781399a91.11.1726524212171;
-        Mon, 16 Sep 2024 15:03:32 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2dbb9d5c99fsm7934311a91.44.2024.09.16.15.03.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Sep 2024 15:03:31 -0700 (PDT)
-Date: Mon, 16 Sep 2024 15:03:26 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Andy Chiu <andybnac@gmail.com>
-Cc: paul.walmsley@sifive.com, palmer@sifive.com, conor@kernel.org,
-	linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	quic_zhonhan@quicinc.com, zong.li@sifive.com, zev@bewilderbeest.net,
-	david@redhat.com, peterz@infradead.org, catalin.marinas@arm.com,
-	broonie@kernel.org, dave.hansen@linux.intel.com,
-	atishp@rivosinc.com, bjorn@rivosinc.com, namcaov@gmail.com,
-	usama.anjum@collabora.com, guoren@kernel.org, alx@kernel.org,
-	jszhang@kernel.org, hpa@zytor.com, puranjay@kernel.org,
-	shuah@kernel.org, sorear@fastmail.com, costa.shul@redhat.com,
-	robh@kernel.org, antonb@tenstorrent.com, quic_bjorande@quicinc.com,
-	lorenzo.stoakes@oracle.com, corbet@lwn.net, dawei.li@shingroup.cn,
-	anup@brainfault.org, deller@gmx.de, x86@kernel.org,
-	andrii@kernel.org, willy@infradead.org, kees@kernel.org,
-	mingo@redhat.com, libang.li@antgroup.com, samitolvanen@google.com,
-	greentime.hu@sifive.com, osalvador@suse.de, ajones@ventanamicro.com,
-	revest@chromium.org, ancientmodern4@gmail.com,
-	aou@eecs.berkeley.edu, jerry.shih@sifive.com,
-	alexghiti@rivosinc.com, arnd@arndb.de, yang.lee@linux.alibaba.com,
-	charlie@rivosinc.com, bgray@linux.ibm.com, Liam.Howlett@oracle.com,
-	leobras@redhat.com, songshuaishuai@tinylab.org,
-	xiao.w.wang@intel.com, bp@alien8.de, cuiyunhui@bytedance.com,
-	mchitale@ventanamicro.com, cleger@rivosinc.com, tglx@linutronix.de,
-	krzk+dt@kernel.org, vbabka@suse.cz, brauner@kernel.org,
-	bhe@redhat.com, ke.zhao@shingroup.cn, oleg@redhat.com,
-	samuel.holland@sifive.com, ben.dooks@codethink.co.uk,
-	evan@rivosinc.com, palmer@dabbelt.com, ebiederm@xmission.com,
-	andy.chiu@sifive.com, schwab@suse.de, akpm@linux-foundation.org,
-	sameo@rivosinc.com, tanzhasanwork@gmail.com, rppt@kernel.org,
-	ryan.roberts@arm.com
-Subject: Re: [PATCH v4 23/30] riscv signal: save and restore of shadow stack
- for signal
-Message-ID: <ZuirLvsl6gukn/SG@debug.ba.rivosinc.com>
-References: <20240912231650.3740732-1-debug@rivosinc.com>
- <20240912231650.3740732-24-debug@rivosinc.com>
- <CAFTtA3ONu7CUNHwQf47ePMh9uvAi-uCV8B0YJAuFX+s0thC41Q@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1726529875; x=1727134675;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zPp6OQny1rx7BQo+++xKFz4dAhaMidLo1koisNlZjh8=;
+        b=BfH7RU5IpNn5jwjwQO2VbKamIVLipDv4nx1iAHO1ac7THyf+FiW9A7V5189f2WWot4
+         Tk3RI4MWxjjIt4Nasvx+bfeLvlgUB3RkTPyfBG763Z7E4vyL6SuCQCLD4H3u1i2hAlf7
+         L5JpGW4sojznkg44BcpgJ40TxoblGUYOSJK2Lna4tEgSG5DmY1hrsnJkwd+IXWlQe5cF
+         xiYzR+s7eyFME6yoptoAJl6LuvHPrnQ2S56ZNeKWX0Z39QN2nD0jPXmchMim2ry/KdOO
+         OXOYe9GKSW8EeXzAAZv21/SVcBF5kdgnfSuWY/i1dLgzmOEMz2vdzlyseUHAyl0/8Z6X
+         hMww==
+X-Forwarded-Encrypted: i=1; AJvYcCXFZKPuLCm3ekYAALBenndDSg14lcEzVex0SE1g9ZxHDPoXUyXlgYiJv/MKmdzIW2FqakcnjIoIX7l3y9rL8qA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0OHLyCzndYsx7uCjWumC99yK5SnZ/J6VIbMAVBa3Ddf0f81qF
+	/zMTQk/l1lNqq3qIdvPysOsjYVMSloqByEWExROsI/3v/9cYi5ZQKR2Fi05R3Mo=
+X-Google-Smtp-Source: AGHT+IFebcxXxdMA2Qjkp6jpPGOud159FZmkMZEqgsN31k8Mu4NhDUBxMgUrjska8NcyuZM2T2oq7g==
+X-Received: by 2002:a05:6808:11c3:b0:3e0:486e:366f with SMTP id 5614622812f47-3e07a0ec9ddmr8201577b6e.5.1726529875015;
+        Mon, 16 Sep 2024 16:37:55 -0700 (PDT)
+Received: from [172.20.0.160] ([50.202.43.9])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3e166f8b524sm1196442b6e.43.2024.09.16.16.37.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Sep 2024 16:37:54 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------ZQ3Vjn9X99yKUfzxIDogQqJT"
+Message-ID: <b225fb53-c56a-4d96-8f70-39d013194ab1@linuxfoundation.org>
+Date: Mon, 16 Sep 2024 17:37:52 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Willy Tarreau <w@1wt.eu>, "Paul E. McKenney" <paulmck@kernel.org>,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+From: Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] nolibc for 6.12-rc1
+
+This is a multi-part message in MIME format.
+--------------ZQ3Vjn9X99yKUfzxIDogQqJT
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFTtA3ONu7CUNHwQf47ePMh9uvAi-uCV8B0YJAuFX+s0thC41Q@mail.gmail.com>
 
-On Fri, Sep 13, 2024 at 09:25:57PM +0200, Andy Chiu wrote:
->Hi Deepak,
->
->Deepak Gupta <debug@rivosinc.com> 於 2024年9月13日 週五 上午1:20寫道：
->>
->> Save shadow stack pointer in sigcontext structure while delivering signal.
->> Restore shadow stack pointer from sigcontext on sigreturn.
->>
->> As part of save operation, kernel uses `ssamoswap` to save snapshot of
->> current shadow stack on shadow stack itself (can be called as a save
->> token). During restore on sigreturn, kernel retrieves token from top of
->> shadow stack and validates it. This allows that user mode can't arbitrary
->> pivot to any shadow stack address without having a token and thus provide
->> strong security assurance between signaly delivery and sigreturn window.
->>
->> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
->> Suggested-by: Andy Chiu <andy.chiu@sifive.com>
->> ---
->>  arch/riscv/include/asm/usercfi.h | 19 ++++++++++
->>  arch/riscv/kernel/signal.c       | 62 +++++++++++++++++++++++++++++++-
->>  arch/riscv/kernel/usercfi.c      | 57 +++++++++++++++++++++++++++++
->>  3 files changed, 137 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/riscv/include/asm/usercfi.h b/arch/riscv/include/asm/usercfi.h
->> index 20a9102cce51..d5050a5df26c 100644
->> --- a/arch/riscv/include/asm/usercfi.h
->> +++ b/arch/riscv/include/asm/usercfi.h
->> @@ -8,6 +8,7 @@
->>  #ifndef __ASSEMBLY__
->>  #include <linux/types.h>
->>  #include <linux/prctl.h>
->> +#include <linux/errno.h>
->>
->>  struct task_struct;
->>  struct kernel_clone_args;
->> @@ -35,6 +36,9 @@ bool is_shstk_locked(struct task_struct *task);
->>  bool is_shstk_allocated(struct task_struct *task);
->>  void set_shstk_lock(struct task_struct *task);
->>  void set_shstk_status(struct task_struct *task, bool enable);
->> +unsigned long get_active_shstk(struct task_struct *task);
->> +int restore_user_shstk(struct task_struct *tsk, unsigned long shstk_ptr);
->> +int save_user_shstk(struct task_struct *tsk, unsigned long *saved_shstk_ptr);
->>  bool is_indir_lp_enabled(struct task_struct *task);
->>  bool is_indir_lp_locked(struct task_struct *task);
->>  void set_indir_lp_status(struct task_struct *task, bool enable);
->> @@ -96,6 +100,21 @@ static inline void set_shstk_status(struct task_struct *task, bool enable)
->>
->>  }
->>
->> +static inline int restore_user_shstk(struct task_struct *tsk, unsigned long shstk_ptr)
->> +{
->> +       return -EINVAL;
->> +}
->> +
->> +static inline int save_user_shstk(struct task_struct *tsk, unsigned long *saved_shstk_ptr)
->> +{
->> +       return -EINVAL;
->> +}
->> +
->> +static inline unsigned long get_active_shstk(struct task_struct *task)
->> +{
->> +       return 0;
->> +}
->> +
->>  static inline bool is_indir_lp_enabled(struct task_struct *task)
->>  {
->>         return false;
->> diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
->> index dcd282419456..7d5c1825650f 100644
->> --- a/arch/riscv/kernel/signal.c
->> +++ b/arch/riscv/kernel/signal.c
->> @@ -22,6 +22,7 @@
->>  #include <asm/vector.h>
->>  #include <asm/csr.h>
->>  #include <asm/cacheflush.h>
->> +#include <asm/usercfi.h>
->>
->>  unsigned long signal_minsigstksz __ro_after_init;
->>
->> @@ -153,6 +154,16 @@ static long restore_sigcontext(struct pt_regs *regs,
->>         void __user *sc_ext_ptr = &sc->sc_extdesc.hdr;
->>         __u32 rsvd;
->>         long err;
->> +       unsigned long ss_ptr = 0;
->> +       struct __sc_riscv_cfi_state __user *sc_cfi = NULL;
->> +
->> +       sc_cfi = (struct __sc_riscv_cfi_state *)
->> +                ((unsigned long) sc_ext_ptr + sizeof(struct __riscv_ctx_hdr));
->> +
->> +       if (has_vector() && riscv_v_vstate_query(regs))
->> +               sc_cfi = (struct __sc_riscv_cfi_state *)
->> +                        ((unsigned long) sc_cfi + riscv_v_sc_size);
->> +
->>         /* sc_regs is structured the same as the start of pt_regs */
->>         err = __copy_from_user(regs, &sc->sc_regs, sizeof(sc->sc_regs));
->>         if (unlikely(err))
->> @@ -172,6 +183,24 @@ static long restore_sigcontext(struct pt_regs *regs,
->>         if (unlikely(rsvd))
->>                 return -EINVAL;
->>
->> +       /*
->> +        * Restore shadow stack as a form of token stored on shadow stack itself as a safe
->> +        * way to restore.
->> +        * A token on shadow gives following properties
->> +        *      - Safe save and restore for shadow stack switching. Any save of shadow stack
->> +        *        must have had saved a token on shadow stack. Similarly any restore of shadow
->> +        *        stack must check the token before restore. Since writing to shadow stack with
->> +        *        address of shadow stack itself is not easily allowed. A restore without a save
->> +        *        is quite difficult for an attacker to perform.
->> +        *      - A natural break. A token in shadow stack provides a natural break in shadow stack
->> +        *        So a single linear range can be bucketed into different shadow stack segments.
->> +        *        sspopchk will detect the condition and fault to kernel as sw check exception.
->> +        */
->> +       if (is_shstk_enabled(current)) {
->> +               err |= __copy_from_user(&ss_ptr, &sc_cfi->ss_ptr, sizeof(unsigned long));
->> +               err |= restore_user_shstk(current, ss_ptr);
->> +       }
->> +
->>         while (!err) {
->>                 __u32 magic, size;
->>                 struct __riscv_ctx_hdr __user *head = sc_ext_ptr;
->> @@ -215,6 +244,10 @@ static size_t get_rt_frame_size(bool cal_all)
->>                 if (cal_all || riscv_v_vstate_query(task_pt_regs(current)))
->>                         total_context_size += riscv_v_sc_size;
->>         }
->> +
->> +       if (is_shstk_enabled(current))
->> +               total_context_size += sizeof(struct __sc_riscv_cfi_state);
->> +
->>         /*
->>          * Preserved a __riscv_ctx_hdr for END signal context header if an
->>          * extension uses __riscv_extra_ext_header
->> @@ -276,18 +309,40 @@ static long setup_sigcontext(struct rt_sigframe __user *frame,
->>  {
->>         struct sigcontext __user *sc = &frame->uc.uc_mcontext;
->>         struct __riscv_ctx_hdr __user *sc_ext_ptr = &sc->sc_extdesc.hdr;
->> +       unsigned long ss_ptr = 0;
->> +       struct __sc_riscv_cfi_state __user *sc_cfi = NULL;
->>         long err;
->>
->> +       sc_cfi = (struct __sc_riscv_cfi_state *) (sc_ext_ptr + 1);
->> +
->
->Is it intended that cfi sigcontext does not follow the sigcontext rule
->setup by Vector? It seems like there is no extension header (struct
->__riscv_ctx_hdr) defined for cfi sigcontext here. If the sigcontext is
->directly appended to the signal stack, the user may not be able to
->recognize the meaning without defining a new ABI.
+Hi Linus,
 
-Hmm... I didn't realize that struct `struct __riscv_ctx_hdr` is strongly
-tied to vector state. I was under the impression that any new extended
-state addition would require this header to be present.
+Please pull the following nolibc update for Linux 6.12-rc1.
 
-cfi sigcontenxt doesn't need any ABI between user and kernel here. We need
-this space so that kernel can save a pointer to shadow stack token on signal
-delivery. Once sigreturn happens, kernel will use the same pointer, verify
-the token saved on shadow stack and restore shadow stack for user mode.
-At no point in this scheme, user mode is required to perform any action.
+This nolibc update for Linux 6.12-rc1 consists of:
 
-All that is needed is that user mode doesn't accidenly trample at this offset.
+Highlights
+----------
 
-Since I was under the impression that `struct __riscv_ctx_hdr` is there for
-context extension and must be present for any state beyond `sc_regs`, I assumed
-that I must make space for this header (even if vector state is not present).
+* Clang support (including LTO)
 
->
->BTW, I have sent a patch[1] that refactor setup_sigcontext so it'd be
->easier for future extensions to expand on the signal stack.
+Other Changes
+-------------
 
-I can adopt to this, although its orthogonal to what we are discussing here.
+* stdbool.h support
+* argc/argv/envp arguments for constructors
+* Small #include ordering fix
 
->
->>         /* sc_regs is structured the same as the start of pt_regs */
->>         err = __copy_to_user(&sc->sc_regs, regs, sizeof(sc->sc_regs));
->>         /* Save the floating-point state. */
->>         if (has_fpu())
->>                 err |= save_fp_state(regs, &sc->sc_fpregs);
->>         /* Save the vector state. */
->> -       if (has_vector() && riscv_v_vstate_query(regs))
->> +       if (has_vector() && riscv_v_vstate_query(regs)) {
->>                 err |= save_v_state(regs, (void __user **)&sc_ext_ptr);
->> +               sc_cfi = (struct __sc_riscv_cfi_state *) ((unsigned long) sc_cfi + riscv_v_sc_size);
->> +       }
->>         /* Write zero to fp-reserved space and check it on restore_sigcontext */
->>         err |= __put_user(0, &sc->sc_extdesc.reserved);
->> +       /*
->> +        * Save a pointer to shadow stack itself on shadow stack as a form of token.
->> +        * A token on shadow gives following properties
->> +        *      - Safe save and restore for shadow stack switching. Any save of shadow stack
->> +        *        must have had saved a token on shadow stack. Similarly any restore of shadow
->> +        *        stack must check the token before restore. Since writing to shadow stack with
->> +        *        address of shadow stack itself is not easily allowed. A restore without a save
->> +        *        is quite difficult for an attacker to perform.
->> +        *      - A natural break. A token in shadow stack provides a natural break in shadow stack
->> +        *        So a single linear range can be bucketed into different shadow stack segments. Any
->> +        *        sspopchk will detect the condition and fault to kernel as sw check exception.
->> +        */
->> +       if (is_shstk_enabled(current)) {
->> +               err |= save_user_shstk(current, &ss_ptr);
->> +               err |= __put_user(ss_ptr, &sc_cfi->ss_ptr);
->> +       }
->>         /* And put END __riscv_ctx_hdr at the end. */
->>         err |= __put_user(END_MAGIC, &sc_ext_ptr->magic);
->>         err |= __put_user(END_HDR_SIZE, &sc_ext_ptr->size);
->> @@ -345,6 +400,11 @@ static int setup_rt_frame(struct ksignal *ksig, sigset_t *set,
->>  #ifdef CONFIG_MMU
->>         regs->ra = (unsigned long)VDSO_SYMBOL(
->>                 current->mm->context.vdso, rt_sigreturn);
->> +
->> +       /* if bcfi is enabled x1 (ra) and x5 (t0) must match. not sure if we need this? */
->> +       if (is_shstk_enabled(current))
->> +               regs->t0 = regs->ra;
->> +
->>  #else
->>         /*
->>          * For the nommu case we don't have a VDSO.  Instead we push two
->> diff --git a/arch/riscv/kernel/usercfi.c b/arch/riscv/kernel/usercfi.c
->> index 8da509afdbe9..40c32258b6ec 100644
->> --- a/arch/riscv/kernel/usercfi.c
->> +++ b/arch/riscv/kernel/usercfi.c
->> @@ -52,6 +52,11 @@ void set_active_shstk(struct task_struct *task, unsigned long shstk_addr)
->>         task->thread_info.user_cfi_state.user_shdw_stk = shstk_addr;
->>  }
->>
->> +unsigned long get_active_shstk(struct task_struct *task)
->> +{
->> +       return task->thread_info.user_cfi_state.user_shdw_stk;
->> +}
->> +
->>  void set_shstk_status(struct task_struct *task, bool enable)
->>  {
->>         task->thread_info.user_cfi_state.ubcfi_en = enable ? 1 : 0;
->> @@ -164,6 +169,58 @@ static int create_rstor_token(unsigned long ssp, unsigned long *token_addr)
->>         return 0;
->>  }
->>
->> +/*
->> + * Save user shadow stack pointer on shadow stack itself and return pointer to saved location
->> + * returns -EFAULT if operation was unsuccessful
->> + */
->> +int save_user_shstk(struct task_struct *tsk, unsigned long *saved_shstk_ptr)
->> +{
->> +       unsigned long ss_ptr = 0;
->> +       unsigned long token_loc = 0;
->> +       int ret = 0;
->> +
->> +       if (saved_shstk_ptr == NULL)
->> +               return -EINVAL;
->> +
->> +       ss_ptr = get_active_shstk(tsk);
->> +       ret = create_rstor_token(ss_ptr, &token_loc);
->> +
->> +       if (!ret) {
->> +               *saved_shstk_ptr = token_loc;
->> +               set_active_shstk(tsk, token_loc);
->> +       }
->> +
->> +       return ret;
->> +}
->> +
->> +/*
->> + * Restores user shadow stack pointer from token on shadow stack for task `tsk`
->> + * returns -EFAULT if operation was unsuccessful
->> + */
->> +int restore_user_shstk(struct task_struct *tsk, unsigned long shstk_ptr)
->> +{
->> +       unsigned long token = 0;
->> +
->> +       token = amo_user_shstk((unsigned long __user *)shstk_ptr, 0);
->> +
->> +       if (token == -1)
->> +               return -EFAULT;
->> +
->> +       /* invalid token, return EINVAL */
->> +       if ((token - shstk_ptr) != SHSTK_ENTRY_SIZE) {
->> +               pr_info_ratelimited(
->> +                               "%s[%d]: bad restore token in %s: pc=%p sp=%p, token=%p, shstk_ptr=%p\n",
->> +                               tsk->comm, task_pid_nr(tsk), __func__,
->> +                               (void *)(task_pt_regs(tsk)->epc), (void *)(task_pt_regs(tsk)->sp),
->> +                               (void *)token, (void *)shstk_ptr);
->> +               return -EINVAL;
->> +       }
->> +
->> +       /* all checks passed, set active shstk and return success */
->> +       set_active_shstk(tsk, token);
->> +       return 0;
->> +}
->> +
->>  static unsigned long allocate_shadow_stack(unsigned long addr, unsigned long size,
->>                                 unsigned long token_offset,
->>                                 bool set_tok)
->> --
->> 2.45.0
->>
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
->
->- [1]: https://lore.kernel.org/all/20240628-dev-signal-refactor-v1-1-0c391b260261@sifive.com/
->
->Thanks,
->Andy
+Test Results:
+
+Passed:
+tools/testing/selftests/nolibc/run-tests.sh
+tools/testing/selftests/nolibc/run-tests.sh -m user
+
+diff is attached.
+
+thanks,
+-- Shuah
+
+
+----------------------------------------------------------------
+The following changes since commit 8400291e289ee6b2bf9779ff1c83a291501f017b:
+
+   Linux 6.11-rc1 (2024-07-28 14:19:55 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux_kselftest-nolibc-6.12-rc1
+
+for you to fetch changes up to 248f6b935bbd8f7bc211cce2b6fd76be4c449848:
+
+   Merge tag 'nolibc-20240824-for-6.12-1' of https://git.kernel.org/pub/scm/linux/kernel/git/nolibc/linux-nolibc into nolibc (2024-08-27 06:43:34 -0600)
+
+----------------------------------------------------------------
+linux_kselftest-nolibc-6.12-rc1
+
+This nolibc update for Linux 6.12-rc1 consists of:
+
+Highlights
+----------
+
+* Clang support (including LTO)
+
+Other Changes
+-------------
+
+* stdbool.h support
+* argc/argv/envp arguments for constructors
+* Small #include ordering fix
+
+----------------------------------------------------------------
+Shuah Khan (1):
+       Merge tag 'nolibc-20240824-for-6.12-1' of https://git.kernel.org/pub/scm/linux/kernel/git/nolibc/linux-nolibc into nolibc
+
+Thomas Weißschuh (21):
+       tools/nolibc: include arch.h from string.h
+       tools/nolibc: add stdbool.h header
+       tools/nolibc: pass argc, argv and envp to constructors
+       tools/nolibc: arm: use clang-compatible asm syntax
+       tools/nolibc: mips: load current function to $t9
+       tools/nolibc: powerpc: limit stack-protector workaround to GCC
+       tools/nolibc: compiler: introduce __nolibc_has_attribute()
+       tools/nolibc: move entrypoint specifics to compiler.h
+       tools/nolibc: compiler: use attribute((naked)) if available
+       selftests/nolibc: report failure if no testcase passed
+       selftests/nolibc: avoid passing NULL to printf("%s")
+       selftests/nolibc: determine $(srctree) first
+       selftests/nolibc: add support for LLVM= parameter
+       selftests/nolibc: add cc-option compatible with clang cross builds
+       selftests/nolibc: run-tests.sh: avoid overwriting CFLAGS_EXTRA
+       selftests/nolibc: don't use libgcc when building with clang
+       selftests/nolibc: use correct clang target for s390/systemz
+       selftests/nolibc: run-tests.sh: allow building through LLVM
+       tools/nolibc: crt: mark _start_c() as used
+       tools/nolibc: stackprotector: mark implicitly used symbols as used
+       tools/nolibc: x86_64: use local label in memcpy/memmove
+
+  tools/include/nolibc/Makefile                |  1 +
+  tools/include/nolibc/arch-aarch64.h          |  4 +--
+  tools/include/nolibc/arch-arm.h              |  8 +++---
+  tools/include/nolibc/arch-i386.h             |  4 +--
+  tools/include/nolibc/arch-loongarch.h        |  4 +--
+  tools/include/nolibc/arch-mips.h             |  8 ++++--
+  tools/include/nolibc/arch-powerpc.h          |  6 ++--
+  tools/include/nolibc/arch-riscv.h            |  4 +--
+  tools/include/nolibc/arch-s390.h             |  4 +--
+  tools/include/nolibc/arch-x86_64.h           |  8 +++---
+  tools/include/nolibc/compiler.h              | 24 +++++++++++-----
+  tools/include/nolibc/crt.h                   | 25 +++++++++--------
+  tools/include/nolibc/nolibc.h                |  3 +-
+  tools/include/nolibc/stackprotector.h        |  4 +--
+  tools/include/nolibc/stdbool.h               | 16 +++++++++++
+  tools/include/nolibc/string.h                |  1 +
+  tools/testing/selftests/nolibc/Makefile      | 41 +++++++++++++++++++---------
+  tools/testing/selftests/nolibc/nolibc-test.c |  9 +++---
+  tools/testing/selftests/nolibc/run-tests.sh  | 16 ++++++++---
+  19 files changed, 123 insertions(+), 67 deletions(-)
+  create mode 100644 tools/include/nolibc/stdbool.h
+
+----------------------------------------------------------------
+--------------ZQ3Vjn9X99yKUfzxIDogQqJT
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux_kselftest-nolibc-6.12-rc1.diff"
+Content-Disposition: attachment;
+ filename="linux_kselftest-nolibc-6.12-rc1.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL2luY2x1ZGUvbm9saWJjL01ha2VmaWxlIGIvdG9vbHMvaW5j
+bHVkZS9ub2xpYmMvTWFrZWZpbGUKaW5kZXggZTY5YzI2YWJlMWVhLi5hMWY1NWZiMjRiYjMg
+MTAwNjQ0Ci0tLSBhL3Rvb2xzL2luY2x1ZGUvbm9saWJjL01ha2VmaWxlCisrKyBiL3Rvb2xz
+L2luY2x1ZGUvbm9saWJjL01ha2VmaWxlCkBAIC0zNSw2ICszNSw3IEBAIGFsbF9maWxlcyA6
+PSBcCiAJCXN0YWNrcHJvdGVjdG9yLmggXAogCQlzdGQuaCBcCiAJCXN0ZGFyZy5oIFwKKwkJ
+c3RkYm9vbC5oIFwKIAkJc3RkaW50LmggXAogCQlzdGRsaWIuaCBcCiAJCXN0cmluZy5oIFwK
+ZGlmZiAtLWdpdCBhL3Rvb2xzL2luY2x1ZGUvbm9saWJjL2FyY2gtYWFyY2g2NC5oIGIvdG9v
+bHMvaW5jbHVkZS9ub2xpYmMvYXJjaC1hYXJjaDY0LmgKaW5kZXggYjIzYWMxZjA0MDM1Li4w
+NmZkZWY3YjI5MWEgMTAwNjQ0Ci0tLSBhL3Rvb2xzL2luY2x1ZGUvbm9saWJjL2FyY2gtYWFy
+Y2g2NC5oCisrKyBiL3Rvb2xzL2luY2x1ZGUvbm9saWJjL2FyY2gtYWFyY2g2NC5oCkBAIC0x
+NDIsMTMgKzE0MiwxMyBAQAogfSkKIAogLyogc3RhcnR1cCBjb2RlICovCi12b2lkIF9fYXR0
+cmlidXRlX18oKHdlYWssIG5vcmV0dXJuLCBvcHRpbWl6ZSgiT3MiLCAib21pdC1mcmFtZS1w
+b2ludGVyIikpKSBfX25vX3N0YWNrX3Byb3RlY3RvciBfc3RhcnQodm9pZCkKK3ZvaWQgX19h
+dHRyaWJ1dGVfXygod2Vhaywgbm9yZXR1cm4pKSBfX25vbGliY19lbnRyeXBvaW50IF9fbm9f
+c3RhY2tfcHJvdGVjdG9yIF9zdGFydCh2b2lkKQogewogCV9fYXNtX18gdm9sYXRpbGUgKAog
+CQkibW92IHgwLCBzcFxuIiAgICAgICAgICAvKiBzYXZlIHN0YWNrIHBvaW50ZXIgdG8geDAs
+IGFzIGFyZzEgb2YgX3N0YXJ0X2MgKi8KIAkJImFuZCBzcCwgeDAsIC0xNlxuIiAgICAgLyog
+c3AgbXVzdCBiZSAxNi1ieXRlIGFsaWduZWQgaW4gdGhlIGNhbGxlZSAgICAgICovCiAJCSJi
+bCAgX3N0YXJ0X2NcbiIgICAgICAgIC8qIHRyYW5zZmVyIHRvIGMgcnVudGltZSAgICAgICAg
+ICAgICAgICAgICAgICAgICAqLwogCSk7Ci0JX19idWlsdGluX3VucmVhY2hhYmxlKCk7CisJ
+X19ub2xpYmNfZW50cnlwb2ludF9lcGlsb2d1ZSgpOwogfQogI2VuZGlmIC8qIF9OT0xJQkNf
+QVJDSF9BQVJDSDY0X0ggKi8KZGlmZiAtLWdpdCBhL3Rvb2xzL2luY2x1ZGUvbm9saWJjL2Fy
+Y2gtYXJtLmggYi90b29scy9pbmNsdWRlL25vbGliYy9hcmNoLWFybS5oCmluZGV4IGNhZTRh
+ZmE3YzFjNy4uNjE4MGZmOTlhYjQzIDEwMDY0NAotLS0gYS90b29scy9pbmNsdWRlL25vbGli
+Yy9hcmNoLWFybS5oCisrKyBiL3Rvb2xzL2luY2x1ZGUvbm9saWJjL2FyY2gtYXJtLmgKQEAg
+LTE4NSwxNSArMTg1LDE1IEBACiB9KQogCiAvKiBzdGFydHVwIGNvZGUgKi8KLXZvaWQgX19h
+dHRyaWJ1dGVfXygod2Vhaywgbm9yZXR1cm4sIG9wdGltaXplKCJPcyIsICJvbWl0LWZyYW1l
+LXBvaW50ZXIiKSkpIF9fbm9fc3RhY2tfcHJvdGVjdG9yIF9zdGFydCh2b2lkKQordm9pZCBf
+X2F0dHJpYnV0ZV9fKCh3ZWFrLCBub3JldHVybikpIF9fbm9saWJjX2VudHJ5cG9pbnQgX19u
+b19zdGFja19wcm90ZWN0b3IgX3N0YXJ0KHZvaWQpCiB7CiAJX19hc21fXyB2b2xhdGlsZSAo
+Ci0JCSJtb3YgJXIwLCBzcFxuIiAgICAgICAgIC8qIHNhdmUgc3RhY2sgcG9pbnRlciB0byAl
+cjAsIGFzIGFyZzEgb2YgX3N0YXJ0X2MgKi8KLQkJImFuZCBpcCwgJXIwLCAjLThcbiIgICAg
+Lyogc3AgbXVzdCBiZSA4LWJ5dGUgYWxpZ25lZCBpbiB0aGUgY2FsbGVlICAgICAgICAqLwor
+CQkibW92IHIwLCBzcFxuIiAgICAgICAgICAvKiBzYXZlIHN0YWNrIHBvaW50ZXIgdG8gJXIw
+LCBhcyBhcmcxIG9mIF9zdGFydF9jICovCisJCSJhbmQgaXAsIHIwLCAjLThcbiIgICAgIC8q
+IHNwIG11c3QgYmUgOC1ieXRlIGFsaWduZWQgaW4gdGhlIGNhbGxlZSAgICAgICAgKi8KIAkJ
+Im1vdiBzcCwgaXBcbiIKIAkJImJsICBfc3RhcnRfY1xuIiAgICAgICAgLyogdHJhbnNmZXIg
+dG8gYyBydW50aW1lICAgICAgICAgICAgICAgICAgICAgICAgICAqLwogCSk7Ci0JX19idWls
+dGluX3VucmVhY2hhYmxlKCk7CisJX19ub2xpYmNfZW50cnlwb2ludF9lcGlsb2d1ZSgpOwog
+fQogCiAjZW5kaWYgLyogX05PTElCQ19BUkNIX0FSTV9IICovCmRpZmYgLS1naXQgYS90b29s
+cy9pbmNsdWRlL25vbGliYy9hcmNoLWkzODYuaCBiL3Rvb2xzL2luY2x1ZGUvbm9saWJjL2Fy
+Y2gtaTM4Ni5oCmluZGV4IDI4YzI2YTAwYTc2Mi4uZmY1YWZjMzViYmQ4IDEwMDY0NAotLS0g
+YS90b29scy9pbmNsdWRlL25vbGliYy9hcmNoLWkzODYuaAorKysgYi90b29scy9pbmNsdWRl
+L25vbGliYy9hcmNoLWkzODYuaApAQCAtMTYyLDcgKzE2Miw3IEBACiAgKiAyKSBUaGUgZGVl
+cGVzdCBzdGFjayBmcmFtZSBzaG91bGQgYmUgc2V0IHRvIHplcm8KICAqCiAgKi8KLXZvaWQg
+X19hdHRyaWJ1dGVfXygod2Vhaywgbm9yZXR1cm4sIG9wdGltaXplKCJPcyIsICJvbWl0LWZy
+YW1lLXBvaW50ZXIiKSkpIF9fbm9fc3RhY2tfcHJvdGVjdG9yIF9zdGFydCh2b2lkKQordm9p
+ZCBfX2F0dHJpYnV0ZV9fKCh3ZWFrLCBub3JldHVybikpIF9fbm9saWJjX2VudHJ5cG9pbnQg
+X19ub19zdGFja19wcm90ZWN0b3IgX3N0YXJ0KHZvaWQpCiB7CiAJX19hc21fXyB2b2xhdGls
+ZSAoCiAJCSJ4b3IgICVlYnAsICVlYnBcbiIgICAgICAgLyogemVybyB0aGUgc3RhY2sgZnJh
+bWUgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICovCkBAIC0xNzQsNyArMTc0LDcg
+QEAgdm9pZCBfX2F0dHJpYnV0ZV9fKCh3ZWFrLCBub3JldHVybiwgb3B0aW1pemUoIk9zIiwg
+Im9taXQtZnJhbWUtcG9pbnRlciIpKSkgX19ub18KIAkJImNhbGwgX3N0YXJ0X2NcbiIgICAg
+ICAgICAvKiB0cmFuc2ZlciB0byBjIHJ1bnRpbWUgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgKi8KIAkJImhsdFxuIiAgICAgICAgICAgICAgICAgICAvKiBlbnN1cmUgaXQgZG9l
+cyBub3QgcmV0dXJuICAgICAgICAgICAgICAgICAgICAgICAgICAgKi8KIAkpOwotCV9fYnVp
+bHRpbl91bnJlYWNoYWJsZSgpOworCV9fbm9saWJjX2VudHJ5cG9pbnRfZXBpbG9ndWUoKTsK
+IH0KIAogI2VuZGlmIC8qIF9OT0xJQkNfQVJDSF9JMzg2X0ggKi8KZGlmZiAtLWdpdCBhL3Rv
+b2xzL2luY2x1ZGUvbm9saWJjL2FyY2gtbG9vbmdhcmNoLmggYi90b29scy9pbmNsdWRlL25v
+bGliYy9hcmNoLWxvb25nYXJjaC5oCmluZGV4IDNmOGVmOGY4NmMwZi4uZmI1MTk1NDU5NTll
+IDEwMDY0NAotLS0gYS90b29scy9pbmNsdWRlL25vbGliYy9hcmNoLWxvb25nYXJjaC5oCisr
+KyBiL3Rvb2xzL2luY2x1ZGUvbm9saWJjL2FyY2gtbG9vbmdhcmNoLmgKQEAgLTE0OSwxNCAr
+MTQ5LDE0IEBACiAjZW5kaWYKIAogLyogc3RhcnR1cCBjb2RlICovCi12b2lkIF9fYXR0cmli
+dXRlX18oKHdlYWssIG5vcmV0dXJuLCBvcHRpbWl6ZSgiT3MiLCAib21pdC1mcmFtZS1wb2lu
+dGVyIikpKSBfX25vX3N0YWNrX3Byb3RlY3RvciBfc3RhcnQodm9pZCkKK3ZvaWQgX19hdHRy
+aWJ1dGVfXygod2Vhaywgbm9yZXR1cm4pKSBfX25vbGliY19lbnRyeXBvaW50IF9fbm9fc3Rh
+Y2tfcHJvdGVjdG9yIF9zdGFydCh2b2lkKQogewogCV9fYXNtX18gdm9sYXRpbGUgKAogCQki
+bW92ZSAgICAgICAgICAkYTAsICRzcFxuIiAgICAgICAgIC8qIHNhdmUgc3RhY2sgcG9pbnRl
+ciB0byAkYTAsIGFzIGFyZzEgb2YgX3N0YXJ0X2MgKi8KIAkJTE9OR19CU1RSSU5TICIgJHNw
+LCAkemVybywgMywgMFxuIiAvKiAkc3AgbXVzdCBiZSAxNi1ieXRlIGFsaWduZWQgICAgICAg
+ICAgICAgICAgICAgICovCiAJCSJibCAgICAgICAgICAgIF9zdGFydF9jXG4iICAgICAgICAg
+LyogdHJhbnNmZXIgdG8gYyBydW50aW1lICAgICAgICAgICAgICAgICAgICAgICAgICAqLwog
+CSk7Ci0JX19idWlsdGluX3VucmVhY2hhYmxlKCk7CisJX19ub2xpYmNfZW50cnlwb2ludF9l
+cGlsb2d1ZSgpOwogfQogCiAjZW5kaWYgLyogX05PTElCQ19BUkNIX0xPT05HQVJDSF9IICov
+CmRpZmYgLS1naXQgYS90b29scy9pbmNsdWRlL25vbGliYy9hcmNoLW1pcHMuaCBiL3Rvb2xz
+L2luY2x1ZGUvbm9saWJjL2FyY2gtbWlwcy5oCmluZGV4IDYyY2M1MGVmMzI4OC4uMTc5MWE4
+Y2U1OGRhIDEwMDY0NAotLS0gYS90b29scy9pbmNsdWRlL25vbGliYy9hcmNoLW1pcHMuaAor
+KysgYi90b29scy9pbmNsdWRlL25vbGliYy9hcmNoLW1pcHMuaApAQCAtMTc5LDcgKzE3OSw3
+IEBACiB9KQogCiAvKiBzdGFydHVwIGNvZGUsIG5vdGUgdGhhdCBpdCdzIGNhbGxlZCBfX3N0
+YXJ0IG9uIE1JUFMgKi8KLXZvaWQgX19hdHRyaWJ1dGVfXygod2Vhaywgbm9yZXR1cm4sIG9w
+dGltaXplKCJPcyIsICJvbWl0LWZyYW1lLXBvaW50ZXIiKSkpIF9fbm9fc3RhY2tfcHJvdGVj
+dG9yIF9fc3RhcnQodm9pZCkKK3ZvaWQgX19hdHRyaWJ1dGVfXygod2Vhaywgbm9yZXR1cm4p
+KSBfX25vbGliY19lbnRyeXBvaW50IF9fbm9fc3RhY2tfcHJvdGVjdG9yIF9fc3RhcnQodm9p
+ZCkKIHsKIAlfX2FzbV9fIHZvbGF0aWxlICgKIAkJIi5zZXQgcHVzaFxuIgpAQCAtMTk0LDEx
+ICsxOTQsMTMgQEAgdm9pZCBfX2F0dHJpYnV0ZV9fKCh3ZWFrLCBub3JldHVybiwgb3B0aW1p
+emUoIk9zIiwgIm9taXQtZnJhbWUtcG9pbnRlciIpKSkgX19ub18KIAkJImxpICAgICR0MCwg
+LThcbiIKIAkJImFuZCAgICRzcCwgJHNwLCAkdDBcbiIgIC8qICRzcCBtdXN0IGJlIDgtYnl0
+ZSBhbGlnbmVkICAgICAgICAgICAgICAgICAgICAgKi8KIAkJImFkZGl1ICRzcCwgJHNwLCAt
+MTZcbiIgIC8qIHRoZSBjYWxsZWUgZXhwZWN0cyB0byBzYXZlIGEwLi5hMyB0aGVyZSAgICAg
+ICAgKi8KLQkJImphbCAgIF9zdGFydF9jXG4iICAgICAgIC8qIHRyYW5zZmVyIHRvIGMgcnVu
+dGltZSAgICAgICAgICAgICAgICAgICAgICAgICAgKi8KKwkJImx1aSAkdDksICVoaShfc3Rh
+cnRfYylcbiIgLyogQUJJIHJlcXVpcmVzIGN1cnJlbnQgZnVuY3Rpb24gYWRkcmVzcyBpbiAk
+dDkgKi8KKwkJIm9yaSAkdDksICVsbyhfc3RhcnRfYylcbiIKKwkJImphbHIgJHQ5XG4iICAg
+ICAgICAgICAgIC8qIHRyYW5zZmVyIHRvIGMgcnVudGltZSAgICAgICAgICAgICAgICAgICAg
+ICAgICAgKi8KIAkJIiBub3BcbiIgICAgICAgICAgICAgICAgIC8qIGRlbGF5ZWQgc2xvdCAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgKi8KIAkJIi5zZXQgcG9wXG4iCiAJ
+KTsKLQlfX2J1aWx0aW5fdW5yZWFjaGFibGUoKTsKKwlfX25vbGliY19lbnRyeXBvaW50X2Vw
+aWxvZ3VlKCk7CiB9CiAKICNlbmRpZiAvKiBfTk9MSUJDX0FSQ0hfTUlQU19IICovCmRpZmYg
+LS1naXQgYS90b29scy9pbmNsdWRlL25vbGliYy9hcmNoLXBvd2VycGMuaCBiL3Rvb2xzL2lu
+Y2x1ZGUvbm9saWJjL2FyY2gtcG93ZXJwYy5oCmluZGV4IGFjMjEyZTYxODViMi4uZWUyZmRi
+OGQ2MDFkIDEwMDY0NAotLS0gYS90b29scy9pbmNsdWRlL25vbGliYy9hcmNoLXBvd2VycGMu
+aAorKysgYi90b29scy9pbmNsdWRlL25vbGliYy9hcmNoLXBvd2VycGMuaApAQCAtMTcyLDcg
+KzE3Miw3IEBACiAJX3JldDsgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgXAogfSkKIAotI2lmbmRlZiBfX3Bvd2VycGM2
+NF9fCisjaWYgIWRlZmluZWQoX19wb3dlcnBjNjRfXykgJiYgIWRlZmluZWQoX19jbGFuZ19f
+KQogLyogRklYTUU6IEZvciAzMi1iaXQgUG93ZXJQQywgd2l0aCBuZXdlciBnY2MgY29tcGls
+ZXJzIChlLmcuIGdjYyAxMy4xLjApLAogICogIm9taXQtZnJhbWUtcG9pbnRlciIgZmFpbHMg
+d2l0aCBfX2F0dHJpYnV0ZV9fKChub19zdGFja19wcm90ZWN0b3IpKSBidXQKICAqIHdvcmtz
+IHdpdGggX19hdHRyaWJ1dGVfXygoX19vcHRpbWl6ZV9fKCItZm5vLXN0YWNrLXByb3RlY3Rv
+ciIpKSkKQEAgLTE4NCw3ICsxODQsNyBAQAogI2VuZGlmIC8qICFfX3Bvd2VycGM2NF9fICov
+CiAKIC8qIHN0YXJ0dXAgY29kZSAqLwotdm9pZCBfX2F0dHJpYnV0ZV9fKCh3ZWFrLCBub3Jl
+dHVybiwgb3B0aW1pemUoIk9zIiwgIm9taXQtZnJhbWUtcG9pbnRlciIpKSkgX19ub19zdGFj
+a19wcm90ZWN0b3IgX3N0YXJ0KHZvaWQpCit2b2lkIF9fYXR0cmlidXRlX18oKHdlYWssIG5v
+cmV0dXJuKSkgX19ub2xpYmNfZW50cnlwb2ludCBfX25vX3N0YWNrX3Byb3RlY3RvciBfc3Rh
+cnQodm9pZCkKIHsKICNpZmRlZiBfX3Bvd2VycGM2NF9fCiAjaWYgX0NBTExfRUxGID09IDIK
+QEAgLTIxNSw3ICsyMTUsNyBAQCB2b2lkIF9fYXR0cmlidXRlX18oKHdlYWssIG5vcmV0dXJu
+LCBvcHRpbWl6ZSgiT3MiLCAib21pdC1mcmFtZS1wb2ludGVyIikpKSBfX25vXwogCQkiYmwg
+ICAgIF9zdGFydF9jXG4iICAgICAvKiB0cmFuc2ZlciB0byBjIHJ1bnRpbWUgICAgICAgICAg
+ICAgICAgICAgICAgICAgKi8KIAkpOwogI2VuZGlmCi0JX19idWlsdGluX3VucmVhY2hhYmxl
+KCk7CisJX19ub2xpYmNfZW50cnlwb2ludF9lcGlsb2d1ZSgpOwogfQogCiAjZW5kaWYgLyog
+X05PTElCQ19BUkNIX1BPV0VSUENfSCAqLwpkaWZmIC0tZ2l0IGEvdG9vbHMvaW5jbHVkZS9u
+b2xpYmMvYXJjaC1yaXNjdi5oIGIvdG9vbHMvaW5jbHVkZS9ub2xpYmMvYXJjaC1yaXNjdi5o
+CmluZGV4IDE5MjdjNjQzYzczOS4uODgyN2JmOTM2MjEyIDEwMDY0NAotLS0gYS90b29scy9p
+bmNsdWRlL25vbGliYy9hcmNoLXJpc2N2LmgKKysrIGIvdG9vbHMvaW5jbHVkZS9ub2xpYmMv
+YXJjaC1yaXNjdi5oCkBAIC0xNDAsNyArMTQwLDcgQEAKIH0pCiAKIC8qIHN0YXJ0dXAgY29k
+ZSAqLwotdm9pZCBfX2F0dHJpYnV0ZV9fKCh3ZWFrLCBub3JldHVybiwgb3B0aW1pemUoIk9z
+IiwgIm9taXQtZnJhbWUtcG9pbnRlciIpKSkgX19ub19zdGFja19wcm90ZWN0b3IgX3N0YXJ0
+KHZvaWQpCit2b2lkIF9fYXR0cmlidXRlX18oKHdlYWssIG5vcmV0dXJuKSkgX19ub2xpYmNf
+ZW50cnlwb2ludCBfX25vX3N0YWNrX3Byb3RlY3RvciBfc3RhcnQodm9pZCkKIHsKIAlfX2Fz
+bV9fIHZvbGF0aWxlICgKIAkJIi5vcHRpb24gcHVzaFxuIgpAQCAtMTUxLDcgKzE1MSw3IEBA
+IHZvaWQgX19hdHRyaWJ1dGVfXygod2Vhaywgbm9yZXR1cm4sIG9wdGltaXplKCJPcyIsICJv
+bWl0LWZyYW1lLXBvaW50ZXIiKSkpIF9fbm9fCiAJCSJhbmRpIHNwLCBhMCwgLTE2XG4iICAg
+ICAgLyogc3AgbXVzdCBiZSAxNi1ieXRlIGFsaWduZWQgICAgICAgICAgICAgICAgICAgICov
+CiAJCSJjYWxsIF9zdGFydF9jXG4iICAgICAgICAgLyogdHJhbnNmZXIgdG8gYyBydW50aW1l
+ICAgICAgICAgICAgICAgICAgICAgICAgICovCiAJKTsKLQlfX2J1aWx0aW5fdW5yZWFjaGFi
+bGUoKTsKKwlfX25vbGliY19lbnRyeXBvaW50X2VwaWxvZ3VlKCk7CiB9CiAKICNlbmRpZiAv
+KiBfTk9MSUJDX0FSQ0hfUklTQ1ZfSCAqLwpkaWZmIC0tZ2l0IGEvdG9vbHMvaW5jbHVkZS9u
+b2xpYmMvYXJjaC1zMzkwLmggYi90b29scy9pbmNsdWRlL25vbGliYy9hcmNoLXMzOTAuaApp
+bmRleCA1ZDYwZmQ0M2Y4ODMuLjJlYzEzZDhiOWEyZCAxMDA2NDQKLS0tIGEvdG9vbHMvaW5j
+bHVkZS9ub2xpYmMvYXJjaC1zMzkwLmgKKysrIGIvdG9vbHMvaW5jbHVkZS9ub2xpYmMvYXJj
+aC1zMzkwLmgKQEAgLTEzOSw3ICsxMzksNyBAQAogfSkKIAogLyogc3RhcnR1cCBjb2RlICov
+Ci12b2lkIF9fYXR0cmlidXRlX18oKHdlYWssIG5vcmV0dXJuLCBvcHRpbWl6ZSgiT3MiLCAi
+b21pdC1mcmFtZS1wb2ludGVyIikpKSBfX25vX3N0YWNrX3Byb3RlY3RvciBfc3RhcnQodm9p
+ZCkKK3ZvaWQgX19hdHRyaWJ1dGVfXygod2Vhaywgbm9yZXR1cm4pKSBfX25vbGliY19lbnRy
+eXBvaW50IF9fbm9fc3RhY2tfcHJvdGVjdG9yIF9zdGFydCh2b2lkKQogewogCV9fYXNtX18g
+dm9sYXRpbGUgKAogCQkibGdyCSVyMiwgJXIxNVxuIiAgICAgICAgICAvKiBzYXZlIHN0YWNr
+IHBvaW50ZXIgdG8gJXIyLCBhcyBhcmcxIG9mIF9zdGFydF9jICovCkBAIC0xNDcsNyArMTQ3
+LDcgQEAgdm9pZCBfX2F0dHJpYnV0ZV9fKCh3ZWFrLCBub3JldHVybiwgb3B0aW1pemUoIk9z
+IiwgIm9taXQtZnJhbWUtcG9pbnRlciIpKSkgX19ub18KIAkJInhjCTAoOCwlcjE1KSwgMCgl
+cjE1KVxuIiAvKiBjbGVhciBiYWNrY2hhaW4gICAgICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICovCiAJCSJicmFzbAklcjE0LCBfc3RhcnRfY1xuIiAgICAgLyogdHJhbnNmZXIgdG8g
+YyBydW50aW1lICAgICAgICAgICAgICAgICAgICAgICAgICAqLwogCSk7Ci0JX19idWlsdGlu
+X3VucmVhY2hhYmxlKCk7CisJX19ub2xpYmNfZW50cnlwb2ludF9lcGlsb2d1ZSgpOwogfQog
+CiBzdHJ1Y3QgczM5MF9tbWFwX2FyZ19zdHJ1Y3QgewpkaWZmIC0tZ2l0IGEvdG9vbHMvaW5j
+bHVkZS9ub2xpYmMvYXJjaC14ODZfNjQuaCBiL3Rvb2xzL2luY2x1ZGUvbm9saWJjL2FyY2gt
+eDg2XzY0LmgKaW5kZXggNjg2MDlmNDIxOTM0Li4xZTQwNjIwYTJiMzMgMTAwNjQ0Ci0tLSBh
+L3Rvb2xzL2luY2x1ZGUvbm9saWJjL2FyY2gteDg2XzY0LmgKKysrIGIvdG9vbHMvaW5jbHVk
+ZS9ub2xpYmMvYXJjaC14ODZfNjQuaApAQCAtMTYxLDcgKzE2MSw3IEBACiAgKiAyKSBUaGUg
+ZGVlcGVzdCBzdGFjayBmcmFtZSBzaG91bGQgYmUgemVybyAodGhlICVyYnApLgogICoKICAq
+Lwotdm9pZCBfX2F0dHJpYnV0ZV9fKCh3ZWFrLCBub3JldHVybiwgb3B0aW1pemUoIk9zIiwg
+Im9taXQtZnJhbWUtcG9pbnRlciIpKSkgX19ub19zdGFja19wcm90ZWN0b3IgX3N0YXJ0KHZv
+aWQpCit2b2lkIF9fYXR0cmlidXRlX18oKHdlYWssIG5vcmV0dXJuKSkgX19ub2xpYmNfZW50
+cnlwb2ludCBfX25vX3N0YWNrX3Byb3RlY3RvciBfc3RhcnQodm9pZCkKIHsKIAlfX2FzbV9f
+IHZvbGF0aWxlICgKIAkJInhvciAgJWVicCwgJWVicFxuIiAgICAgICAvKiB6ZXJvIHRoZSBz
+dGFjayBmcmFtZSAgICAgICAgICAgICAgICAgICAgICAgICAgICAqLwpAQCAtMTcwLDcgKzE3
+MCw3IEBAIHZvaWQgX19hdHRyaWJ1dGVfXygod2Vhaywgbm9yZXR1cm4sIG9wdGltaXplKCJP
+cyIsICJvbWl0LWZyYW1lLXBvaW50ZXIiKSkpIF9fbm9fCiAJCSJjYWxsIF9zdGFydF9jXG4i
+ICAgICAgICAgLyogdHJhbnNmZXIgdG8gYyBydW50aW1lICAgICAgICAgICAgICAgICAgICAg
+ICAgICAgKi8KIAkJImhsdFxuIiAgICAgICAgICAgICAgICAgICAvKiBlbnN1cmUgaXQgZG9l
+cyBub3QgcmV0dXJuICAgICAgICAgICAgICAgICAgICAgICAqLwogCSk7Ci0JX19idWlsdGlu
+X3VucmVhY2hhYmxlKCk7CisJX19ub2xpYmNfZW50cnlwb2ludF9lcGlsb2d1ZSgpOwogfQog
+CiAjZGVmaW5lIE5PTElCQ19BUkNIX0hBU19NRU1NT1ZFCkBAIC0xOTMsMTAgKzE5MywxMCBA
+QCBfX2FzbV9fICgKIAkibW92cSAlcmRpLCAlcmR4XG5cdCIKIAkic3VicSAlcnNpLCAlcmR4
+XG5cdCIKIAkiY21wcSAlcmN4LCAlcmR4XG5cdCIKLQkiamIgICAuTGJhY2t3YXJkX2NvcHlc
+blx0IgorCSJqYiAgIDFmXG5cdCIKIAkicmVwIG1vdnNiXG5cdCIKIAkicmV0cVxuIgotIi5M
+YmFja3dhcmRfY29weToiCisiMToiIC8qIGJhY2t3YXJkIGNvcHkgKi8KIAkibGVhcSAtMSgl
+cmRpLCAlcmN4LCAxKSwgJXJkaVxuXHQiCiAJImxlYXEgLTEoJXJzaSwgJXJjeCwgMSksICVy
+c2lcblx0IgogCSJzdGRcblx0IgpkaWZmIC0tZ2l0IGEvdG9vbHMvaW5jbHVkZS9ub2xpYmMv
+Y29tcGlsZXIuaCBiL3Rvb2xzL2luY2x1ZGUvbm9saWJjL2NvbXBpbGVyLmgKaW5kZXggYmVk
+ZGMzNjY1ZDY5Li45YmM2YTcwNmEzMzIgMTAwNjQ0Ci0tLSBhL3Rvb2xzL2luY2x1ZGUvbm9s
+aWJjL2NvbXBpbGVyLmgKKysrIGIvdG9vbHMvaW5jbHVkZS9ub2xpYmMvY29tcGlsZXIuaApA
+QCAtNiwyMCArNiwzMCBAQAogI2lmbmRlZiBfTk9MSUJDX0NPTVBJTEVSX0gKICNkZWZpbmUg
+X05PTElCQ19DT01QSUxFUl9ICiAKKyNpZiBkZWZpbmVkKF9faGFzX2F0dHJpYnV0ZSkKKyMg
+IGRlZmluZSBfX25vbGliY19oYXNfYXR0cmlidXRlKGF0dHIpIF9faGFzX2F0dHJpYnV0ZShh
+dHRyKQorI2Vsc2UKKyMgIGRlZmluZSBfX25vbGliY19oYXNfYXR0cmlidXRlKGF0dHIpIDAK
+KyNlbmRpZgorCisjaWYgX19ub2xpYmNfaGFzX2F0dHJpYnV0ZShuYWtlZCkKKyMgIGRlZmlu
+ZSBfX25vbGliY19lbnRyeXBvaW50IF9fYXR0cmlidXRlX18oKG5ha2VkKSkKKyMgIGRlZmlu
+ZSBfX25vbGliY19lbnRyeXBvaW50X2VwaWxvZ3VlKCkKKyNlbHNlCisjICBkZWZpbmUgX19u
+b2xpYmNfZW50cnlwb2ludCBfX2F0dHJpYnV0ZV9fKChvcHRpbWl6ZSgiT3MiLCAib21pdC1m
+cmFtZS1wb2ludGVyIikpKQorIyAgZGVmaW5lIF9fbm9saWJjX2VudHJ5cG9pbnRfZXBpbG9n
+dWUoKSBfX2J1aWx0aW5fdW5yZWFjaGFibGUoKQorI2VuZGlmIC8qIF9fbm9saWJjX2hhc19h
+dHRyaWJ1dGUobmFrZWQpICovCisKICNpZiBkZWZpbmVkKF9fU1NQX18pIHx8IGRlZmluZWQo
+X19TU1BfU1RST05HX18pIHx8IGRlZmluZWQoX19TU1BfQUxMX18pIHx8IGRlZmluZWQoX19T
+U1BfRVhQTElDSVRfXykKIAogI2RlZmluZSBfTk9MSUJDX1NUQUNLUFJPVEVDVE9SCiAKICNl
+bmRpZiAvKiBkZWZpbmVkKF9fU1NQX18pIC4uLiAqLwogCi0jaWYgZGVmaW5lZChfX2hhc19h
+dHRyaWJ1dGUpCi0jICBpZiBfX2hhc19hdHRyaWJ1dGUobm9fc3RhY2tfcHJvdGVjdG9yKQot
+IyAgICBkZWZpbmUgX19ub19zdGFja19wcm90ZWN0b3IgX19hdHRyaWJ1dGVfXygobm9fc3Rh
+Y2tfcHJvdGVjdG9yKSkKLSMgIGVsc2UKLSMgICAgZGVmaW5lIF9fbm9fc3RhY2tfcHJvdGVj
+dG9yIF9fYXR0cmlidXRlX18oKF9fb3B0aW1pemVfXygiLWZuby1zdGFjay1wcm90ZWN0b3Ii
+KSkpCi0jICBlbmRpZgorI2lmIF9fbm9saWJjX2hhc19hdHRyaWJ1dGUobm9fc3RhY2tfcHJv
+dGVjdG9yKQorIyAgZGVmaW5lIF9fbm9fc3RhY2tfcHJvdGVjdG9yIF9fYXR0cmlidXRlX18o
+KG5vX3N0YWNrX3Byb3RlY3RvcikpCiAjZWxzZQogIyAgZGVmaW5lIF9fbm9fc3RhY2tfcHJv
+dGVjdG9yIF9fYXR0cmlidXRlX18oKF9fb3B0aW1pemVfXygiLWZuby1zdGFjay1wcm90ZWN0
+b3IiKSkpCi0jZW5kaWYgLyogZGVmaW5lZChfX2hhc19hdHRyaWJ1dGUpICovCisjZW5kaWYg
+LyogX19ub2xpYmNfaGFzX2F0dHJpYnV0ZShub19zdGFja19wcm90ZWN0b3IpICovCiAKICNl
+bmRpZiAvKiBfTk9MSUJDX0NPTVBJTEVSX0ggKi8KZGlmZiAtLWdpdCBhL3Rvb2xzL2luY2x1
+ZGUvbm9saWJjL2NydC5oIGIvdG9vbHMvaW5jbHVkZS9ub2xpYmMvY3J0LmgKaW5kZXggNDNi
+NTUxNDY4YzJhLi5iYmNkNWZkMDk4MDYgMTAwNjQ0Ci0tLSBhL3Rvb2xzL2luY2x1ZGUvbm9s
+aWJjL2NydC5oCisrKyBiL3Rvb2xzL2luY2x1ZGUvbm9saWJjL2NydC5oCkBAIC0xMywyMyAr
+MTMsMjQgQEAgY29uc3QgdW5zaWduZWQgbG9uZyAqX2F1eHYgX19hdHRyaWJ1dGVfXygod2Vh
+aykpOwogc3RhdGljIHZvaWQgX19zdGFja19jaGtfaW5pdCh2b2lkKTsKIHN0YXRpYyB2b2lk
+IGV4aXQoaW50KTsKIAotZXh0ZXJuIHZvaWQgKCpjb25zdCBfX3ByZWluaXRfYXJyYXlfc3Rh
+cnRbXSkodm9pZCkgX19hdHRyaWJ1dGVfXygod2VhaykpOwotZXh0ZXJuIHZvaWQgKCpjb25z
+dCBfX3ByZWluaXRfYXJyYXlfZW5kW10pKHZvaWQpIF9fYXR0cmlidXRlX18oKHdlYWspKTsK
+K2V4dGVybiB2b2lkICgqY29uc3QgX19wcmVpbml0X2FycmF5X3N0YXJ0W10pKGludCwgY2hh
+ciAqKiwgY2hhcioqKSBfX2F0dHJpYnV0ZV9fKCh3ZWFrKSk7CitleHRlcm4gdm9pZCAoKmNv
+bnN0IF9fcHJlaW5pdF9hcnJheV9lbmRbXSkoaW50LCBjaGFyICoqLCBjaGFyKiopIF9fYXR0
+cmlidXRlX18oKHdlYWspKTsKIAotZXh0ZXJuIHZvaWQgKCpjb25zdCBfX2luaXRfYXJyYXlf
+c3RhcnRbXSkodm9pZCkgX19hdHRyaWJ1dGVfXygod2VhaykpOwotZXh0ZXJuIHZvaWQgKCpj
+b25zdCBfX2luaXRfYXJyYXlfZW5kW10pKHZvaWQpIF9fYXR0cmlidXRlX18oKHdlYWspKTsK
+K2V4dGVybiB2b2lkICgqY29uc3QgX19pbml0X2FycmF5X3N0YXJ0W10pKGludCwgY2hhciAq
+KiwgY2hhcioqKSBfX2F0dHJpYnV0ZV9fKCh3ZWFrKSk7CitleHRlcm4gdm9pZCAoKmNvbnN0
+IF9faW5pdF9hcnJheV9lbmRbXSkoaW50LCBjaGFyICoqLCBjaGFyKiopIF9fYXR0cmlidXRl
+X18oKHdlYWspKTsKIAogZXh0ZXJuIHZvaWQgKCpjb25zdCBfX2ZpbmlfYXJyYXlfc3RhcnRb
+XSkodm9pZCkgX19hdHRyaWJ1dGVfXygod2VhaykpOwogZXh0ZXJuIHZvaWQgKCpjb25zdCBf
+X2ZpbmlfYXJyYXlfZW5kW10pKHZvaWQpIF9fYXR0cmlidXRlX18oKHdlYWspKTsKIAotX19h
+dHRyaWJ1dGVfXygod2VhaykpCitfX2F0dHJpYnV0ZV9fKCh3ZWFrLHVzZWQpKQogdm9pZCBf
+c3RhcnRfYyhsb25nICpzcCkKIHsKIAlsb25nIGFyZ2M7CiAJY2hhciAqKmFyZ3Y7CiAJY2hh
+ciAqKmVudnA7CiAJaW50IGV4aXRjb2RlOwotCXZvaWQgKCogY29uc3QgKmZ1bmMpKHZvaWQp
+OworCXZvaWQgKCogY29uc3QgKmN0b3JfZnVuYykoaW50LCBjaGFyICoqLCBjaGFyICoqKTsK
+Kwl2b2lkICgqIGNvbnN0ICpkdG9yX2Z1bmMpKHZvaWQpOwogCWNvbnN0IHVuc2lnbmVkIGxv
+bmcgKmF1eHY7CiAJLyogc2lsZW5jZSBwb3RlbnRpYWwgd2FybmluZzogY29uZmxpY3Rpbmcg
+dHlwZXMgZm9yICdtYWluJyAqLwogCWludCBfbm9saWJjX21haW4oaW50LCBjaGFyICoqLCBj
+aGFyICoqKSBfX2FzbV9fICgibWFpbiIpOwpAQCAtNjYsMTYgKzY3LDE2IEBAIHZvaWQgX3N0
+YXJ0X2MobG9uZyAqc3ApCiAJCTsKIAlfYXV4diA9IGF1eHY7CiAKLQlmb3IgKGZ1bmMgPSBf
+X3ByZWluaXRfYXJyYXlfc3RhcnQ7IGZ1bmMgPCBfX3ByZWluaXRfYXJyYXlfZW5kOyBmdW5j
+KyspCi0JCSgqZnVuYykoKTsKLQlmb3IgKGZ1bmMgPSBfX2luaXRfYXJyYXlfc3RhcnQ7IGZ1
+bmMgPCBfX2luaXRfYXJyYXlfZW5kOyBmdW5jKyspCi0JCSgqZnVuYykoKTsKKwlmb3IgKGN0
+b3JfZnVuYyA9IF9fcHJlaW5pdF9hcnJheV9zdGFydDsgY3Rvcl9mdW5jIDwgX19wcmVpbml0
+X2FycmF5X2VuZDsgY3Rvcl9mdW5jKyspCisJCSgqY3Rvcl9mdW5jKShhcmdjLCBhcmd2LCBl
+bnZwKTsKKwlmb3IgKGN0b3JfZnVuYyA9IF9faW5pdF9hcnJheV9zdGFydDsgY3Rvcl9mdW5j
+IDwgX19pbml0X2FycmF5X2VuZDsgY3Rvcl9mdW5jKyspCisJCSgqY3Rvcl9mdW5jKShhcmdj
+LCBhcmd2LCBlbnZwKTsKIAogCS8qIGdvIHRvIGFwcGxpY2F0aW9uICovCiAJZXhpdGNvZGUg
+PSBfbm9saWJjX21haW4oYXJnYywgYXJndiwgZW52cCk7CiAKLQlmb3IgKGZ1bmMgPSBfX2Zp
+bmlfYXJyYXlfZW5kOyBmdW5jID4gX19maW5pX2FycmF5X3N0YXJ0OykKLQkJKCotLWZ1bmMp
+KCk7CisJZm9yIChkdG9yX2Z1bmMgPSBfX2ZpbmlfYXJyYXlfZW5kOyBkdG9yX2Z1bmMgPiBf
+X2ZpbmlfYXJyYXlfc3RhcnQ7KQorCQkoKi0tZHRvcl9mdW5jKSgpOwogCiAJZXhpdChleGl0
+Y29kZSk7CiB9CmRpZmYgLS1naXQgYS90b29scy9pbmNsdWRlL25vbGliYy9ub2xpYmMuaCBi
+L3Rvb2xzL2luY2x1ZGUvbm9saWJjL25vbGliYy5oCmluZGV4IDk4OWU3MDcyNjNhNC4uOTI0
+MzZiMWU0NDQxIDEwMDY0NAotLS0gYS90b29scy9pbmNsdWRlL25vbGliYy9ub2xpYmMuaAor
+KysgYi90b29scy9pbmNsdWRlL25vbGliYy9ub2xpYmMuaApAQCAtNzQsNyArNzQsOCBAQAog
+ICogICAgICAgICAgICAtSS4uL25vbGliYyAtbyBoZWxsbyBoZWxsby5jIC1sZ2NjCiAgKgog
+ICogVGhlIGF2YWlsYWJsZSBzdGFuZGFyZCAoYnV0IGxpbWl0ZWQpIGluY2x1ZGUgZmlsZXMg
+YXJlOgotICogICBjdHlwZS5oLCBlcnJuby5oLCBzaWduYWwuaCwgc3RkYXJnLmgsIHN0ZGlv
+LmgsIHN0ZGxpYi5oLCBzdHJpbmcuaCwgdGltZS5oCisgKiAgIGN0eXBlLmgsIGVycm5vLmgs
+IHNpZ25hbC5oLCBzdGRhcmcuaCwgc3RkYm9vbC5oIHN0ZGlvLmgsIHN0ZGxpYi5oLAorICog
+ICBzdHJpbmcuaCwgdGltZS5oCiAgKgogICogSW4gYWRkaXRpb24sIHRoZSBmb2xsb3dpbmcg
+b25lcyBhcmUgZXhwZWN0ZWQgdG8gYmUgcHJvdmlkZWQgYnkgdGhlIGNvbXBpbGVyOgogICog
+ICBmbG9hdC5oLCBzdGRkZWYuaApkaWZmIC0tZ2l0IGEvdG9vbHMvaW5jbHVkZS9ub2xpYmMv
+c3RhY2twcm90ZWN0b3IuaCBiL3Rvb2xzL2luY2x1ZGUvbm9saWJjL3N0YWNrcHJvdGVjdG9y
+LmgKaW5kZXggMTNmMWQwZTYwMzg3Li4xZDBkNTI1OWVjNDEgMTAwNjQ0Ci0tLSBhL3Rvb2xz
+L2luY2x1ZGUvbm9saWJjL3N0YWNrcHJvdGVjdG9yLmgKKysrIGIvdG9vbHMvaW5jbHVkZS9u
+b2xpYmMvc3RhY2twcm90ZWN0b3IuaApAQCAtMTgsNyArMTgsNyBAQAogICogdHJpZ2dlcmlu
+ZyBzdGFjayBwcm90ZWN0b3IgZXJyb3JzIHRoZW1zZWx2ZXMKICAqLwogCi1fX2F0dHJpYnV0
+ZV9fKCh3ZWFrLG5vcmV0dXJuLHNlY3Rpb24oIi50ZXh0Lm5vbGliY19zdGFja19jaGsiKSkp
+CitfX2F0dHJpYnV0ZV9fKCh3ZWFrLHVzZWQsbm9yZXR1cm4sc2VjdGlvbigiLnRleHQubm9s
+aWJjX3N0YWNrX2NoayIpKSkKIHZvaWQgX19zdGFja19jaGtfZmFpbCh2b2lkKQogewogCXBp
+ZF90IHBpZDsKQEAgLTM0LDcgKzM0LDcgQEAgdm9pZCBfX3N0YWNrX2Noa19mYWlsX2xvY2Fs
+KHZvaWQpCiAJX19zdGFja19jaGtfZmFpbCgpOwogfQogCi1fX2F0dHJpYnV0ZV9fKCh3ZWFr
+LHNlY3Rpb24oIi5kYXRhLm5vbGliY19zdGFja19jaGsiKSkpCitfX2F0dHJpYnV0ZV9fKCh3
+ZWFrLHVzZWQsc2VjdGlvbigiLmRhdGEubm9saWJjX3N0YWNrX2NoayIpKSkKIHVpbnRwdHJf
+dCBfX3N0YWNrX2Noa19ndWFyZDsKIAogc3RhdGljIF9fbm9fc3RhY2tfcHJvdGVjdG9yIHZv
+aWQgX19zdGFja19jaGtfaW5pdCh2b2lkKQpkaWZmIC0tZ2l0IGEvdG9vbHMvaW5jbHVkZS9u
+b2xpYmMvc3RkYm9vbC5oIGIvdG9vbHMvaW5jbHVkZS9ub2xpYmMvc3RkYm9vbC5oCm5ldyBm
+aWxlIG1vZGUgMTAwNjQ0CmluZGV4IDAwMDAwMDAwMDAwMC4uNjBmZWVjZTIyZjE3Ci0tLSAv
+ZGV2L251bGwKKysrIGIvdG9vbHMvaW5jbHVkZS9ub2xpYmMvc3RkYm9vbC5oCkBAIC0wLDAg
+KzEsMTYgQEAKKy8qIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBMR1BMLTIuMSBPUiBNSVQg
+Ki8KKy8qCisgKiBCb29sZWFuIHR5cGVzIHN1cHBvcnQgZm9yIE5PTElCQworICogQ29weXJp
+Z2h0IChDKSAyMDI0IFRob21hcyBXZWnDn3NjaHVoIDxsaW51eEB3ZWlzc3NjaHVoLm5ldD4K
+KyAqLworCisjaWZuZGVmIF9OT0xJQkNfU1REQk9PTF9ICisjZGVmaW5lIF9OT0xJQkNfU1RE
+Qk9PTF9ICisKKyNkZWZpbmUgYm9vbCBfQm9vbAorI2RlZmluZSB0cnVlIDEKKyNkZWZpbmUg
+ZmFsc2UgMAorCisjZGVmaW5lIF9fYm9vbF90cnVlX2ZhbHNlX2FyZV9kZWZpbmVkIDEKKwor
+I2VuZGlmIC8qIF9OT0xJQkNfU1REQk9PTF9IICovCmRpZmYgLS1naXQgYS90b29scy9pbmNs
+dWRlL25vbGliYy9zdHJpbmcuaCBiL3Rvb2xzL2luY2x1ZGUvbm9saWJjL3N0cmluZy5oCmlu
+ZGV4IGY5YWIyODQyMWU2ZC4uOWVjOWMyNGYzOGMwIDEwMDY0NAotLS0gYS90b29scy9pbmNs
+dWRlL25vbGliYy9zdHJpbmcuaAorKysgYi90b29scy9pbmNsdWRlL25vbGliYy9zdHJpbmcu
+aApAQCAtNyw2ICs3LDcgQEAKICNpZm5kZWYgX05PTElCQ19TVFJJTkdfSAogI2RlZmluZSBf
+Tk9MSUJDX1NUUklOR19ICiAKKyNpbmNsdWRlICJhcmNoLmgiCiAjaW5jbHVkZSAic3RkLmgi
+CiAKIHN0YXRpYyB2b2lkICptYWxsb2Moc2l6ZV90IGxlbik7CmRpZmYgLS1naXQgYS90b29s
+cy90ZXN0aW5nL3NlbGZ0ZXN0cy9ub2xpYmMvTWFrZWZpbGUgYi90b29scy90ZXN0aW5nL3Nl
+bGZ0ZXN0cy9ub2xpYmMvTWFrZWZpbGUKaW5kZXggM2ZiYWJhYjQ2OTU4Li44ZGU5OGVhN2Fm
+ODAgMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL25vbGliYy9NYWtlZmls
+ZQorKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9ub2xpYmMvTWFrZWZpbGUKQEAgLTEs
+MTkgKzEsMjEgQEAKICMgU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6IEdQTC0yLjAKICMgTWFr
+ZWZpbGUgZm9yIG5vbGliYyB0ZXN0cwotaW5jbHVkZSAuLi8uLi8uLi9zY3JpcHRzL01ha2Vm
+aWxlLmluY2x1ZGUKLWluY2x1ZGUgLi4vLi4vLi4vc2NyaXB0cy91dGlsaXRpZXMubWFrCi0j
+IFdlIG5lZWQgdGhpcyBmb3IgdGhlICJjYy1vcHRpb24iIG1hY3JvLgotaW5jbHVkZSAuLi8u
+Li8uLi9idWlsZC9CdWlsZC5pbmNsdWRlCisjIHdlJ3JlIGluICIuLi4vdG9vbHMvdGVzdGlu
+Zy9zZWxmdGVzdHMvbm9saWJjIgoraWZlcSAoJChzcmN0cmVlKSwpCitzcmN0cmVlIDo9ICQo
+cGF0c3Vic3QgJS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy8sJSwkKGRpciAkKENVUkRJUikp
+KQorZW5kaWYKKworaW5jbHVkZSAkKHNyY3RyZWUpL3Rvb2xzL3NjcmlwdHMvdXRpbGl0aWVz
+Lm1haworIyBXZSBuZWVkIHRoaXMgZm9yIHRoZSAiX19jYy1vcHRpb24iIG1hY3JvLgoraW5j
+bHVkZSAkKHNyY3RyZWUpL3NjcmlwdHMvTWFrZWZpbGUuY29tcGlsZXIKIAogaWZuZXEgKCQo
+TyksKQogaWZuZXEgKCQoY2FsbCBpcy1hYnNvbHV0ZSwkKE8pKSx5KQogJChlcnJvciBPbmx5
+IGFic29sdXRlIE89IHBhcmFtZXRlcnMgYXJlIHN1cHBvcnRlZCkKIGVuZGlmCi1lbmRpZgot
+Ci0jIHdlJ3JlIGluICIuLi4vdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbm9saWJjIgotaWZl
+cSAoJChzcmN0cmVlKSwpCi1zcmN0cmVlIDo9ICQocGF0c3Vic3QgJS90b29scy90ZXN0aW5n
+L3NlbGZ0ZXN0cy8sJSwkKGRpciAkKENVUkRJUikpKQorb2JqdHJlZSA6PSAkKE8pCitlbHNl
+CitvYmp0cmVlID89ICQoc3JjdHJlZSkKIGVuZGlmCiAKIGlmZXEgKCQoQVJDSCksKQpAQCAt
+MjEsNyArMjMsNyBAQCBpbmNsdWRlICQoc3JjdHJlZSkvc2NyaXB0cy9zdWJhcmNoLmluY2x1
+ZGUKIEFSQ0ggPSAkKFNVQkFSQ0gpCiBlbmRpZgogCi1vYmp0cmVlID89ICQoc3JjdHJlZSkK
+K2NjLW9wdGlvbiA9ICQoY2FsbCBfX2NjLW9wdGlvbiwgJChDQyksJChDTEFOR19DUk9TU19G
+TEFHUyksJCgxKSwkKDIpKQogCiAjIFhBUkNIIGV4dGVuZHMgdGhlIGtlcm5lbCdzIEFSQ0gg
+d2l0aCBhIGZldyB2YXJpYW50cyBvZiB0aGUgc2FtZQogIyBhcmNoaXRlY3R1cmUgdGhhdCBv
+bmx5IGRpZmZlciBieSB0aGUgY29uZmlndXJhdGlvbiwgdGhlIHRvb2xjaGFpbgpAQCAtMTU1
+LDkgKzE1NywyMiBAQCBDRkxBR1MgID89IC1PcyAtZm5vLWlkZW50IC1mbm8tYXN5bmNocm9u
+b3VzLXVud2luZC10YWJsZXMgLXN0ZD1jODkgLVcgLVdhbGwgLVdleAogCQkkKENGTEFHU18k
+KFhBUkNIKSkgJChDRkxBR1NfU1RBQ0tQUk9URUNUT1IpICQoQ0ZMQUdTX0VYVFJBKQogTERG
+TEFHUyA6PQogCitMSUJHQ0MgOj0gLWxnY2MKKworaWZuZXEgKCQoTExWTSksKQorIyBOb3Qg
+bmVlZGVkIGZvciBjbGFuZworTElCR0NDIDo9CitlbmRpZgorCisjIE1vZGlmeSBDRkxBR1Mg
+YmFzZWQgb24gTExWTT0KK2luY2x1ZGUgJChzcmN0cmVlKS90b29scy9zY3JpcHRzL01ha2Vm
+aWxlLmluY2x1ZGUKKworIyBHQ0MgdXNlcyAiczM5MCIsIGNsYW5nICJzeXN0ZW16IgorQ0xB
+TkdfQ1JPU1NfRkxBR1MgOj0gJChzdWJzdCAtLXRhcmdldD1zMzkwLWxpbnV4LC0tdGFyZ2V0
+PXN5c3RlbXotbGludXgsJChDTEFOR19DUk9TU19GTEFHUykpCisKIFJFUE9SVCAgPz0gYXdr
+ICcvXFtPS1xdW1xyXSokJC97cCsrfSAvXFtGQUlMXF1bXHJdKiQkL3tpZiAoIWYpIHByaW50
+ZigiXG4iKTsgZisrOyBwcmludDt9IC9cW1NLSVBQRURcXVtccl0qJCQve3MrK30gXAogCQlF
+TkR7IHByaW50ZigiXG4lM2QgdGVzdChzKTogJTNkIHBhc3NlZCwgJTNkIHNraXBwZWQsICUz
+ZCBmYWlsZWQgPT4gc3RhdHVzOiAiLCBwK3MrZiwgcCwgcywgZik7IFwKLQkJaWYgKGYpIHBy
+aW50ZigiZmFpbHVyZVxuIik7IGVsc2UgaWYgKHMpIHByaW50Zigid2FybmluZ1xuIik7IGVs
+c2UgcHJpbnRmKCJzdWNjZXNzXG4iKTs7IFwKKwkJaWYgKGYgfHwgIXApIHByaW50ZigiZmFp
+bHVyZVxuIik7IGVsc2UgaWYgKHMpIHByaW50Zigid2FybmluZ1xuIik7IGVsc2UgcHJpbnRm
+KCJzdWNjZXNzXG4iKTs7IFwKIAkJcHJpbnRmKCJcblNlZSBhbGwgcmVzdWx0cyBpbiAlc1xu
+IiwgQVJHVlsxXSk7IH0nCiAKIGhlbHA6CkBAIC0yMDQsMTEgKzIxOSwxMSBAQCBzeXNyb290
+LyQoQVJDSCkvaW5jbHVkZToKIGlmbmVxICgkKE5PTElCQ19TWVNST09UKSwwKQogbm9saWJj
+LXRlc3Q6IG5vbGliYy10ZXN0LmMgbm9saWJjLXRlc3QtbGlua2FnZS5jIHN5c3Jvb3QvJChB
+UkNIKS9pbmNsdWRlCiAJJChRVUlFVF9DQykkKENDKSAkKENGTEFHUykgJChMREZMQUdTKSAt
+byAkQCBcCi0JICAtbm9zdGRsaWIgLW5vc3RkaW5jIC1zdGF0aWMgLUlzeXNyb290LyQoQVJD
+SCkvaW5jbHVkZSBub2xpYmMtdGVzdC5jIG5vbGliYy10ZXN0LWxpbmthZ2UuYyAtbGdjYwor
+CSAgLW5vc3RkbGliIC1ub3N0ZGluYyAtc3RhdGljIC1Jc3lzcm9vdC8kKEFSQ0gpL2luY2x1
+ZGUgbm9saWJjLXRlc3QuYyBub2xpYmMtdGVzdC1saW5rYWdlLmMgJChMSUJHQ0MpCiBlbHNl
+CiBub2xpYmMtdGVzdDogbm9saWJjLXRlc3QuYyBub2xpYmMtdGVzdC1saW5rYWdlLmMKIAkk
+KFFVSUVUX0NDKSQoQ0MpICQoQ0ZMQUdTKSAkKExERkxBR1MpIC1vICRAIFwKLQkgIC1ub3N0
+ZGxpYiAtc3RhdGljIC1pbmNsdWRlICQoc3JjdHJlZSkvdG9vbHMvaW5jbHVkZS9ub2xpYmMv
+bm9saWJjLmggbm9saWJjLXRlc3QuYyBub2xpYmMtdGVzdC1saW5rYWdlLmMgLWxnY2MKKwkg
+IC1ub3N0ZGxpYiAtc3RhdGljIC1pbmNsdWRlICQoc3JjdHJlZSkvdG9vbHMvaW5jbHVkZS9u
+b2xpYmMvbm9saWJjLmggbm9saWJjLXRlc3QuYyBub2xpYmMtdGVzdC1saW5rYWdlLmMgJChM
+SUJHQ0MpCiBlbmRpZgogCiBsaWJjLXRlc3Q6IG5vbGliYy10ZXN0LmMgbm9saWJjLXRlc3Qt
+bGlua2FnZS5jCmRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9ub2xpYmMv
+bm9saWJjLXRlc3QuYyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL25vbGliYy9ub2xpYmMt
+dGVzdC5jCmluZGV4IDA5M2QwNTEyZjRjNS4uNmZiYTcwMjVjNWUzIDEwMDY0NAotLS0gYS90
+b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9ub2xpYmMvbm9saWJjLXRlc3QuYworKysgYi90b29s
+cy90ZXN0aW5nL3NlbGZ0ZXN0cy9ub2xpYmMvbm9saWJjLXRlc3QuYwpAQCAtNTQyLDcgKzU0
+Miw3IEBAIGludCBleHBlY3Rfc3RyenIoY29uc3QgY2hhciAqZXhwciwgaW50IGxsZW4pCiB7
+CiAJaW50IHJldCA9IDA7CiAKLQlsbGVuICs9IHByaW50ZigiID0gPCVzPiAiLCBleHByKTsK
+KwlsbGVuICs9IHByaW50ZigiID0gPCVzPiAiLCBleHByID8gZXhwciA6ICIobnVsbCkiKTsK
+IAlpZiAoZXhwcikgewogCQlyZXQgPSAxOwogCQlyZXN1bHQobGxlbiwgRkFJTCk7CkBAIC01
+NjEsNyArNTYxLDcgQEAgaW50IGV4cGVjdF9zdHJueihjb25zdCBjaGFyICpleHByLCBpbnQg
+bGxlbikKIHsKIAlpbnQgcmV0ID0gMDsKIAotCWxsZW4gKz0gcHJpbnRmKCIgPSA8JXM+ICIs
+IGV4cHIpOworCWxsZW4gKz0gcHJpbnRmKCIgPSA8JXM+ICIsIGV4cHIgPyBleHByIDogIihu
+dWxsKSIpOwogCWlmICghZXhwcikgewogCQlyZXQgPSAxOwogCQlyZXN1bHQobGxlbiwgRkFJ
+TCk7CkBAIC02ODYsOSArNjg2LDEwIEBAIHN0YXRpYyB2b2lkIGNvbnN0cnVjdG9yMSh2b2lk
+KQogfQogCiBfX2F0dHJpYnV0ZV9fKChjb25zdHJ1Y3RvcikpCi1zdGF0aWMgdm9pZCBjb25z
+dHJ1Y3RvcjIodm9pZCkKK3N0YXRpYyB2b2lkIGNvbnN0cnVjdG9yMihpbnQgYXJnYywgY2hh
+ciAqKmFyZ3YsIGNoYXIgKiplbnZwKQogewotCWNvbnN0cnVjdG9yX3Rlc3RfdmFsdWUgKj0g
+MjsKKwlpZiAoYXJnYyAmJiBhcmd2ICYmIGVudnApCisJCWNvbnN0cnVjdG9yX3Rlc3RfdmFs
+dWUgKj0gMjsKIH0KIAogaW50IHJ1bl9zdGFydHVwKGludCBtaW4sIGludCBtYXgpCmRpZmYg
+LS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9ub2xpYmMvcnVuLXRlc3RzLnNoIGIv
+dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbm9saWJjL3J1bi10ZXN0cy5zaAppbmRleCAwNDQ2
+ZTYzMjZhNDAuLmU3ZWNkYTRhZTc5NiAxMDA3NTUKLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxm
+dGVzdHMvbm9saWJjL3J1bi10ZXN0cy5zaAorKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
+cy9ub2xpYmMvcnVuLXRlc3RzLnNoCkBAIC0xNSwxMCArMTUsMTEgQEAgZG93bmxvYWRfbG9j
+YXRpb249IiR7Y2FjaGVfZGlyfS9jcm9zc3Rvb2xzLyIKIGJ1aWxkX2xvY2F0aW9uPSIkKHJl
+YWxwYXRoICIke2NhY2hlX2Rpcn0iL25vbGliYy10ZXN0cy8pIgogcGVyZm9ybV9kb3dubG9h
+ZD0wCiB0ZXN0X21vZGU9c3lzdGVtCi1DRkxBR1NfRVhUUkE9Ii1XZXJyb3IiCit3ZXJyb3I9
+MQorbGx2bT0KIGFyY2hzPSJpMzg2IHg4Nl82NCBhcm02NCBhcm0gbWlwczMybGUgbWlwczMy
+YmUgcHBjIHBwYzY0IHBwYzY0bGUgcmlzY3YgczM5MCBsb29uZ2FyY2giCiAKLVRFTVA9JChn
+ZXRvcHQgLW8gJ2o6ZDpjOmI6YTptOnBlaCcgLW4gIiQwIiAtLSAiJEAiKQorVEVNUD0kKGdl
+dG9wdCAtbyAnajpkOmM6YjphOm06cGVsaCcgLW4gIiQwIiAtLSAiJEAiKQogCiBldmFsIHNl
+dCAtLSAiJFRFTVAiCiB1bnNldCBURU1QCkBAIC00Miw2ICs0Myw3IEBAIE9wdGlvbnM6CiAg
+LWIgW0RJUl0gICAgICAgQnVpbGQgbG9jYXRpb24gKGRlZmF1bHQ6ICR7YnVpbGRfbG9jYXRp
+b259KQogIC1tIFtNT0RFXSAgICAgIFRlc3QgbW9kZSB1c2VyL3N5c3RlbSAoZGVmYXVsdDog
+JHt0ZXN0X21vZGV9KQogIC1lICAgICAgICAgICAgIERpc2FibGUgLVdlcnJvcgorIC1sICAg
+ICAgICAgICAgIEJ1aWxkIHdpdGggTExWTS9jbGFuZwogRU9GCiB9CiAKQEAgLTY5LDcgKzcx
+LDEwIEBAIHdoaWxlIHRydWU7IGRvCiAJCQl0ZXN0X21vZGU9IiQyIgogCQkJc2hpZnQgMjsg
+Y29udGludWUgOzsKIAkJJy1lJykKLQkJCUNGTEFHU19FWFRSQT0iIgorCQkJd2Vycm9yPTAK
+KwkJCXNoaWZ0OyBjb250aW51ZSA7OworCQknLWwnKQorCQkJbGx2bT0xCiAJCQlzaGlmdDsg
+Y29udGludWUgOzsKIAkJJy1oJykKIAkJCXByaW50X3VzYWdlCkBAIC0xNDAsNyArMTQ1LDEw
+IEBAIHRlc3RfYXJjaCgpIHsKIAljdF9hYmk9JChjcm9zc3Rvb2xfYWJpICIkMSIpCiAJY3Jv
+c3NfY29tcGlsZT0kKHJlYWxwYXRoICIke2Rvd25sb2FkX2xvY2F0aW9ufWdjYy0ke2Nyb3Nz
+dG9vbF92ZXJzaW9ufS1ub2xpYmMvJHtjdF9hcmNofS0ke2N0X2FiaX0vYmluLyR7Y3RfYXJj
+aH0tJHtjdF9hYml9LSIpCiAJYnVpbGRfZGlyPSIke2J1aWxkX2xvY2F0aW9ufS8ke2FyY2h9
+IgotCU1BS0U9KG1ha2UgLWoiJHtucHJvY30iIFhBUkNIPSIke2FyY2h9IiBDUk9TU19DT01Q
+SUxFPSIke2Nyb3NzX2NvbXBpbGV9IiBPPSIke2J1aWxkX2Rpcn0iKQorCWlmIFsgIiR3ZXJy
+b3IiIC1uZSAwIF07IHRoZW4KKwkJQ0ZMQUdTX0VYVFJBPSIkQ0ZMQUdTX0VYVFJBIC1XZXJy
+b3IiCisJZmkKKwlNQUtFPShtYWtlIC1qIiR7bnByb2N9IiBYQVJDSD0iJHthcmNofSIgQ1JP
+U1NfQ09NUElMRT0iJHtjcm9zc19jb21waWxlfSIgTExWTT0iJHtsbHZtfSIgTz0iJHtidWls
+ZF9kaXJ9IikKIAogCW1rZGlyIC1wICIkYnVpbGRfZGlyIgogCWlmIFsgIiR0ZXN0X21vZGUi
+ID0gInN5c3RlbSIgXSAmJiBbICEgLWYgIiR7YnVpbGRfZGlyfS8uY29uZmlnIiBdOyB0aGVu
+Cg==
+
+--------------ZQ3Vjn9X99yKUfzxIDogQqJT--
 
