@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-18070-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18071-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDECB97ADF4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 11:33:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A2DA97ADF7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 11:33:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58EC71F24534
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 09:33:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F7FA1C2234F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 09:33:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29F33160783;
-	Tue, 17 Sep 2024 09:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12E19161B43;
+	Tue, 17 Sep 2024 09:33:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="quDrHUcW"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="h36VYsmr"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DFD215A876;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09BAC15D5B3;
 	Tue, 17 Sep 2024 09:33:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726565602; cv=none; b=Xi8AHrPTgRuIdvKR8Ws49isOTObNf0m2+BrFH9FSQ3gD90zGWptsQZCP+Z3WJtBDXfdqXJu4tk6I4eVWRr/4ubBt/GdWVCc+Zvg8OTxRzGaFkIPxmh1mDRR9mVpfb39DezNXEBD1aOy0XB1u9Fz8OhOFdUZu8ejOOf8eQnpm43U=
+	t=1726565603; cv=none; b=q3YOBUh76TtbD9CyRKNYGCaut/qOv+8DwXAiSH0iQ1wMPqJ2kxCuDC0yJTcGbLQiIC2/wr4pPmKaJUnvKVno4sUzu2T+dCzHUuU/6tIfXFv1fhMuv8lFnE/Ak074ITgsTiFV1wwoMHNcCjD7Yu/z5zXM7VyWfl8fkbdA7JLetf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726565602; c=relaxed/simple;
-	bh=xKBsIof4E7wOEeiJl0o4Yk5WPvDZIHOhRWJAelVvQSE=;
+	s=arc-20240116; t=1726565603; c=relaxed/simple;
+	bh=RwqSI2k9wTT/4iWlQrznLe744Nspq0k/xcGDeW2uO3c=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=S+TesFAnJ2MKr8UjFZ+g83gVeqUZ1HHAyMjMp7UblilaYd3U8pnYdSztlywrpknlrn+/FgSZuEF2B8XQA7852pmVmJ1nOHVfOt48D5Y/W7oaM9Y1v3D3KRuz1RvO4o9op9jVx5EyeqC83WrrlPUjylalL832Vt/cZzBiXfm8H9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=quDrHUcW; arc=none smtp.client-ip=68.232.154.123
+	 MIME-Version:Content-Type; b=lNxbG4RcSjWJ5hzq/RaRjbbCKAVGOUDDG5K8KvYZgliYfNRJYxbGuUSO5DCxcQ8rxSL8HOgasUKvpTL1y0hH6v96dHXVR035Djk4USNCRkVQJgbzaWrE5pXFVnbR+shmL0orXLzHKnlN9IBD9WUPdJWMAymSYCmybT8F9AsZKw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=h36VYsmr; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1726565600; x=1758101600;
+  t=1726565601; x=1758101601;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=xKBsIof4E7wOEeiJl0o4Yk5WPvDZIHOhRWJAelVvQSE=;
-  b=quDrHUcWd9PkgZsSv1qBS9KoQiTW+Ir3wcKTm1rxOUCHH8rwkSHDqEZE
-   maV7mPNmccmyVCyOBpouqGhyKOXee1Cdo5OCHCj/TwpIwbmeLYKNA3Vjx
-   56ki7P66kt8vgoe6awPDbNthEl3LLS5ITEQuMeuaRz8KtzSaESpPy7TGk
-   OyCqR51E3PtVKBU4s0YDjEKXFEMJcIMIDer+Epx8bju4vsO40NWnbthbX
-   VdprHFa1LdSgpOg+1Wz4zfqEbL2lf1pi5POBMfE10x3zEcjshYDOjjsmA
-   Ylu5kBkn29N5B8vEAw6KB6VfJ0l1BoVPrRtXDOUiYOkov22G6HJCoGZr/
-   A==;
+  bh=RwqSI2k9wTT/4iWlQrznLe744Nspq0k/xcGDeW2uO3c=;
+  b=h36VYsmr5OPThboVhbwCheqkCLR+h9XijmPf1xFfnVfjDk6HrgtOQwKh
+   pT3dEuK8fcqEB7i/+bMYY2UCMmUSsJre8wY9V0qYQO6v4zKe+dTBcQaeB
+   G9yNM9pMPTyA5KYtTPT7hh2cNASeke3fRujWVupnAuvyDoAIEXt26CAGc
+   vzBclzhxeYLTKdD/Rm+hN+sPghirVuaPa3PjfKoVxYH0QbsE2hYnd0DJ/
+   6uKZRdyN9cAc/2llphVd8wPOU9zn8jtJYoAX9SQe2Zqd0pUNaiNgdAnWE
+   9NjRb/yoVSEa3PpSfzBxyE0/9OTKBM6xkVmtCoyAg5+BTolqmQUIhiUai
+   g==;
 X-CSE-ConnectionGUID: 6j7NM/cARrCart7pGaXQPQ==
-X-CSE-MsgGUID: vxRNJkEsSQqZIXY2FA4zOA==
+X-CSE-MsgGUID: Bcqn/ohrQu24bLe0N+OjUQ==
 X-IronPort-AV: E=Sophos;i="6.10,235,1719903600"; 
-   d="scan'208";a="31767004"
+   d="scan'208";a="31767005"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa4.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 17 Sep 2024 02:33:16 -0700
 Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
  chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 17 Sep 2024 02:32:44 -0700
+ 15.1.2507.35; Tue, 17 Sep 2024 02:32:51 -0700
 Received: from nisar-OptiPlex-9020.microchip.com (10.10.85.11) by
  chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Tue, 17 Sep 2024 02:32:40 -0700
+ 15.1.2507.35 via Frontend Transport; Tue, 17 Sep 2024 02:32:46 -0700
 From: Mohan Prasad J <mohan.prasad@microchip.com>
 To: <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
 	<andrew@lunn.ch>
@@ -66,9 +66,9 @@ CC: <edumazet@google.com>, <pabeni@redhat.com>, <shuah@kernel.org>,
 	<linux-kselftest@vger.kernel.org>, <horms@kernel.org>,
 	<brett.creeley@amd.com>, <rosenp@gmail.com>, <UNGLinuxDriver@microchip.com>,
 	<willemb@google.com>
-Subject: [PATCH net-next v2 1/3] selftests: nic_basic_tests: Add selftest file for basic tests of NIC
-Date: Tue, 17 Sep 2024 08:04:07 +0530
-Message-ID: <20240917023525.2571082-2-mohan.prasad@microchip.com>
+Subject: [PATCH net-next v2 2/3] selftests: nic_basic_tests: Add selftest case for speed and duplex state checks
+Date: Tue, 17 Sep 2024 08:04:08 +0530
+Message-ID: <20240917023525.2571082-3-mohan.prasad@microchip.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240917023525.2571082-1-mohan.prasad@microchip.com>
 References: <20240917023525.2571082-1-mohan.prasad@microchip.com>
@@ -78,184 +78,90 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Add selftest file to test basic features of a NIC driver.
-Tests for link modes, auto-negotiation are placed.
-Selftest makes use of ksft modules and ethtool.
-Add selftest file in the Makefile.
+Add selftest case for testing the speed and duplex state of
+local NIC driver and the partner based on the supported
+link modes obtained from the ethtool. Speed and duplex states
+are varied and verified using ethtool.
 
 Signed-off-by: Mohan Prasad J <mohan.prasad@microchip.com>
 ---
- .../testing/selftests/drivers/net/hw/Makefile |   1 +
- .../drivers/net/hw/nic_basic_tests.py         | 145 ++++++++++++++++++
- 2 files changed, 146 insertions(+)
- create mode 100644 tools/testing/selftests/drivers/net/hw/nic_basic_tests.py
+ .../drivers/net/hw/nic_basic_tests.py         | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index c9f2f48fc..9f105227c 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -10,6 +10,7 @@ TEST_PROGS = \
- 	hw_stats_l3.sh \
- 	hw_stats_l3_gre.sh \
- 	loopback.sh \
-+	nic_basic_tests.py \
- 	pp_alloc_fail.py \
- 	rss_ctx.py \
- 	#
 diff --git a/tools/testing/selftests/drivers/net/hw/nic_basic_tests.py b/tools/testing/selftests/drivers/net/hw/nic_basic_tests.py
-new file mode 100644
-index 000000000..27f780032
---- /dev/null
+index 27f780032..ff46f2406 100644
+--- a/tools/testing/selftests/drivers/net/hw/nic_basic_tests.py
 +++ b/tools/testing/selftests/drivers/net/hw/nic_basic_tests.py
-@@ -0,0 +1,145 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
+@@ -42,6 +42,14 @@ from lib.py import ethtool
+ """Global variables"""
+ common_link_modes = []
+ 
++def check_autonegotiation(ifname: str) -> None:
++    autoneg = get_ethtool_content(ifname, "Supports auto-negotiation:")
++    partner_autoneg = get_ethtool_content(ifname, "Link partner advertised auto-negotiation:")
 +
-+#Introduction:
-+#This file has basic tests for generic NIC drivers.
-+#The test comprises of auto-negotiation, speed and duplex checks.
-+#Also has tests to check the throughput
-+#
-+#Setup:
-+#Connect the DUT PC with NIC card to partner pc back via ethernet medium of your choice(RJ45, T1)
-+#
-+#        DUT PC                                              Partner PC
-+#┌───────────────────────┐                         ┌──────────────────────────┐
-+#│                       │                         │                          │
-+#│                       │                         │                          │
-+#│           ┌───────────┐                         │                          │
-+#│           │DUT NIC    │         Eth             │                          │
-+#│           │Interface ─┼─────────────────────────┼─    any eth Interface    │
-+#│           └───────────┘                         │                          │
-+#│                       │                         │                          │
-+#│                       │                         │                          │
-+#└───────────────────────┘                         └──────────────────────────┘
-+#
-+#Configurations:
-+# Change the below configuration based on your hw needs.
-+# """Default values"""
-+sleep_time = 5 #time taken to wait for transitions to happen, in seconds.
-+test_duration = 5  #performance test duration for the throughput check, in seconds.
-+throughput_threshold = 0.8 #percentage of throughput required to pass the throughput
++    """Check if auto-neg supported by local and partner NIC"""
++    if autoneg[0] != "Yes" or partner_autoneg[0] != "Yes":
++        raise KsftSkipEx(f"Interface {ifname} or partner does not support auto-negotiation")
 +
-+import time
-+import os
-+import re
-+import configparser
-+import json
-+from lib.py import ksft_run, ksft_exit, ksft_pr, ksft_eq
-+from lib.py import KsftFailEx, KsftSkipEx
-+from lib.py import NetDrvEpEnv
-+from lib.py import cmd
-+from lib.py import ethtool
+ def get_ethtool_content(ifname: str, field: str):
+     capture = False
+     content = []
+@@ -112,6 +120,25 @@ def verify_autonegotiation(ifname: str, expected_state: str) -> None:
+ 
+     ksft_eq(actual_state, expected_state)
+ 
++def set_speed_and_duplex(ifname: str, speed: str, duplex: str) -> None:
++    """Set the speed and duplex state for the interface"""
++    process = ethtool(f"--change {ifname} speed {speed} duplex {duplex} autoneg on")
 +
-+"""Global variables"""
-+common_link_modes = []
-+
-+def get_ethtool_content(ifname: str, field: str):
-+    capture = False
-+    content = []
-+
-+    """Get the ethtool content for the interface"""
-+    process = ethtool(f"{ifname}")
 +    if process.ret != 0:
-+        raise KsftSkipEx(f"Error while getting the ethtool content for interface {ifname}")
-+    lines = process.stdout.splitlines()
++        raise KsftFailEx(f"Not able to set speed and duplex parameters for {ifname}")
++    ksft_pr(f"Speed: {speed} Mbps, Duplex: {duplex} set for Interface: {ifname}")
 +
-+    """Retrieve the content of the field"""
-+    for line in lines:
-+        if field in line:
-+            capture = True
-+            data = line.split(":")[1].strip()
-+            content.extend(data.split())
-+            continue
-+
-+        if capture:
-+            if ":" in line:
-+                break;
-+            if line.strip():
-+                content.extend(line.strip().split())
-+    if capture == False:
-+        raise KsftSkipEx(f"Field \"{field}\" not found in ethtool output")
-+    return content
-+
-+def get_speed_duplex(content):
-+    speed = []
-+    duplex = []
-+    """Check the link modes"""
-+    for data in content:
-+        parts = data.split('/')
-+        speed_value = re.match(r'\d+', parts[0])
-+        if speed_value:
-+            speed.append(speed_value.group())
-+        else:
-+            raise KsftSkipEx(f"No speed value found for interface {ifname}")
-+        duplex.append(parts[1].lower())
-+    return speed, duplex
-+
-+def verify_link_up(ifname: str) -> None:
-+    """Verify whether the link is up"""
-+    with open(f"/sys/class/net/{ifname}/operstate", "r") as fp:
-+        link_state = fp.read().strip()
-+
-+    if link_state == "down":
-+        raise KsftSkipEx(f"Link state of interface {ifname} is DOWN")
-+
-+def set_autonegotiation_state(ifname: str, state: str) -> None:
-+    content = get_ethtool_content(ifname, "Supported link modes:")
-+    speeds, duplex_modes = get_speed_duplex(content)
-+    speed = speeds[0]
-+    duplex = duplex_modes[0]
-+    if not speed or not duplex:
-+        KsftSkipEx("No speed or duplex modes found")
-+    """Set the autonegotiation state for the interface"""
-+    process = ethtool(f"-s {ifname} speed {speed} duplex {duplex} autoneg {state}")
-+    if process.ret != 0:
-+        raise KsftFailEx(f"Not able to set autoneg parameter for {ifname}")
-+    ksft_pr(f"Autoneg set as {state} for {ifname}")
-+
-+def verify_autonegotiation(ifname: str, expected_state: str) -> None:
++def verify_speed_and_duplex(ifname: str, expected_speed: str, expected_duplex: str) -> None:
 +    verify_link_up(ifname)
-+    """Verifying the autonegotiation state"""
-+    output = get_ethtool_content(ifname, "Auto-negotiation:")
-+    actual_state = output[0]
++    """Verifying the speed and duplex state for the interface"""
++    with open(f"/sys/class/net/{ifname}/speed", "r") as fp:
++        actual_speed = fp.read().strip()
++    with open(f"/sys/class/net/{ifname}/duplex", "r") as fp:
++        actual_duplex = fp.read().strip()
 +
-+    ksft_eq(actual_state, expected_state)
++    ksft_eq(actual_speed, expected_speed)
++    ksft_eq(actual_duplex, expected_duplex)
 +
-+def test_link_modes(cfg) -> None:
-+    global common_link_modes
-+    link_modes = get_ethtool_content(cfg.ifname, "Supported link modes:")
-+    partner_link_modes = get_ethtool_content(cfg.ifname, "Link partner advertised link modes:")
+ def test_link_modes(cfg) -> None:
+     global common_link_modes
+     link_modes = get_ethtool_content(cfg.ifname, "Supported link modes:")
+@@ -136,6 +163,25 @@ def test_autonegotiation(cfg) -> None:
+     else:
+         raise KsftSkipEx(f"Auto-Negotiation is not supported for interface {cfg.ifname}")
+ 
++def test_network_speed(cfg) -> None:
++    check_autonegotiation(cfg.ifname)
++    if not common_link_modes:
++        KsftSkipEx("No common link modes exist")
++    speeds, duplex_modes = get_speed_duplex(common_link_modes)
 +
-+    if link_modes and partner_link_modes:
-+        for idx1 in range(len(link_modes)):
-+            for idx2 in range(len(partner_link_modes)):
-+                if link_modes[idx1] == partner_link_modes[idx2]:
-+                    common_link_modes.append(link_modes[idx1])
-+                    break
-+    else:
-+        raise KsftFailEx("No link modes available")
-+
-+def test_autonegotiation(cfg) -> None:
-+    autoneg = get_ethtool_content(cfg.ifname, "Supports auto-negotiation:")
-+    if autoneg[0] == "Yes":
-+        for state in ["off", "on"]:
-+            set_autonegotiation_state(cfg.ifname, state)
++    if speeds and duplex_modes and len(speeds) == len(duplex_modes):
++        for idx in range(len(speeds)):
++            speed = speeds[idx]
++            duplex = duplex_modes[idx]
++            set_speed_and_duplex(cfg.ifname, speed, duplex)
 +            time.sleep(sleep_time)
-+            verify_autonegotiation(cfg.ifname, state)
++            verify_speed_and_duplex(cfg.ifname, speed, duplex)
 +    else:
-+        raise KsftSkipEx(f"Auto-Negotiation is not supported for interface {cfg.ifname}")
++        if not speeds or not duplex_modes:
++            KsftSkipEx(f"No supported speeds or duplex modes found for interface {cfg.ifname}")
++        else:
++            KsftSkipEx("Mismatch in the number of speeds and duplex modes")
 +
-+def main() -> None:
-+    with NetDrvEpEnv(__file__) as cfg:
-+        ksft_run(globs=globals(), case_pfx={"test_"}, args=(cfg,))
-+    ksft_exit()
-+
-+if __name__ == "__main__":
-+    main()
+ def main() -> None:
+     with NetDrvEpEnv(__file__) as cfg:
+         ksft_run(globs=globals(), case_pfx={"test_"}, args=(cfg,))
 -- 
 2.43.0
 
