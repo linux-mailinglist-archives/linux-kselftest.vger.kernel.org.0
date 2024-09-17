@@ -1,79 +1,79 @@
-Return-Path: <linux-kselftest+bounces-18064-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18065-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EE7597AB93
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 08:45:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D096B97AB95
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 08:45:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E672D2841D0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 06:45:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 539EE1F29B25
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 06:45:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CF2A76036;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72DED1384BF;
 	Tue, 17 Sep 2024 06:45:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="SfDG5XE+"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="YcGf/o6d"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A132F142E77;
-	Tue, 17 Sep 2024 06:45:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0DE8148FFC;
+	Tue, 17 Sep 2024 06:45:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726555519; cv=none; b=I73W2C8eprl16p2TZSuXDF0z+GLIdhk64VOQ83sYYAsdroTHwIh+aO5WH0aMm6WPsV1kM3Oed6oqmWLjZxbD62RcnJRDxD9bRdMJ67NNJrDqTCWL2mPWIsB+mHHdDHDKH9Z+UquVPEQx+H4YmEr/gbXmgo5s64csdsFhn4hsjwQ=
+	t=1726555520; cv=none; b=i8XIjD6d/JgEwgkAMPapbK0pSwkKUtJ2qnxklRd63ARSNeWKItb9Vh9ZuPA2G3BkAodd5XVTvDmMZPaFcsIEVPAnMOXYPKA3jNYBawGdtM2zO75pAnlHKZ3aX9+SzMD/jhLJQ05CbMUqhkMmDZyHIB9McDhdC+jiFEZ6C1yBRYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726555519; c=relaxed/simple;
-	bh=Uf7jXzbduitpo0T6UVlkgRgUuDl46QgjGLtkKX6O+Mc=;
+	s=arc-20240116; t=1726555520; c=relaxed/simple;
+	bh=tFYyepEjwjKyfiG7IC9pzS8g80HaXgIrWSs5Nxzhf4U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=VYW/Gddpn1ZVI3LAEEsWNGuq3Xj7IMkOcWWBWSOqnBZ0LtS8EGhAwbdjEaplKNoCHwO4qBPNuC2pCb73IvI/SPqa/sZnEJ+kkwC5zroTjAfnAgHyC7JCMDDLt9mqCsR0wpaXBjuXYT0GpuSGlhEZrPdygLavA7VPBu7KiFJawg4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=SfDG5XE+; arc=none smtp.client-ip=148.163.158.5
+	 MIME-Version; b=iDnCf3w5DfvnMN/m1QemIYTSKl/lSVOv2coWEFignPl5xuSydadxBPZa42JmmIKUoRcpU+OEWx+6a7YjKKEM7/idI2D2NU+gA/ZQXwTAGDmT4PKQ0Kh1hKgOenKSrNlr/3YY8mB09MTXuVqbTjVixHjArushPambgJv/u5OClrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=YcGf/o6d; arc=none smtp.client-ip=148.163.156.1
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48GIUxm6006180;
-	Tue, 17 Sep 2024 06:45:12 GMT
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48GIVTPl008074;
+	Tue, 17 Sep 2024 06:45:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from
 	:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding; s=pp1; bh=CN6DIQyX7Tu+m
-	swrqWysP6ZFy4EmZOk2TAIheBN1Rro=; b=SfDG5XE+1Q/uO3h85b71EFDKlpj5S
-	OQgk3qEBuRPnOCiWsDGg7opzAB2zga6c5zAQFK8T+dYfli4MgdpsnqCFi1OC6o+K
-	n3KTNXgXqu+2lV8OMUwVyMl4GwIdqqvc8ZhTcgv/vmHHLxWMIjFepCxGThZ1KJb0
-	XhzCf9+60nK/JfiI9/DDBuVN28PqV4l6BraPUQoWx1/wvB+0A6mo9S9vzgcTZc6g
-	C3bWUY3TNrXnh7J4qg0ACGD8Xcwyfe8iZkmzjIqU1seM+knliKq+UuaRCb8tRtIn
-	W1XiQRfUieYGDVO0ipIuE909D0AK3dYJpt0xfetbgMny+1OGpFU4ME4qA==
+	:mime-version:content-transfer-encoding; s=pp1; bh=jKACk4qIdExim
+	ONCpIFkda9i+GjHzkMm4u1zXF6o2NM=; b=YcGf/o6deTPeptzqP8q618FvTlui1
+	1IjQ8vXcn8OciAX7u0P0YbAK423XyN3KZBJ30WQ6PHaqgaCkyG2fKbGUoJxZ2SGd
+	pepR7mPlSTY3ObOWIFb/aFNXu+iWtf7lfrpwhdnpi50257MqJKt0fJTZUq98Mizu
+	wensHJaNYMY+3fkwyYamAz3txpZvweJP+sTL7KaAeqjHC1OhDR879wnd6L6kxAuB
+	JL8QTadYJ2m9AbOpZaw8dply6ECt0k9cYI2fL0RUFPg5/ZyIFj2S3bwvufAHDAms
+	//Jr16BgIThVxLm41fpBcff28YoaLmNEUmu0mdbfVKIu06ft8xBlCMTig==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41n41adsap-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41n3vdebuv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Sep 2024 06:45:11 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 48H6itL3029752;
-	Tue, 17 Sep 2024 06:45:11 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41n41adsaj-1
+	Tue, 17 Sep 2024 06:45:13 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 48H6gaoi011755;
+	Tue, 17 Sep 2024 06:45:13 GMT
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41n3vdebur-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Sep 2024 06:45:11 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 48H5Ic5u001918;
-	Tue, 17 Sep 2024 06:45:10 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 41nmtukrw7-1
+	Tue, 17 Sep 2024 06:45:13 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 48H6RULB000762;
+	Tue, 17 Sep 2024 06:45:12 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 41nntq3g77-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Sep 2024 06:45:10 +0000
+	Tue, 17 Sep 2024 06:45:12 +0000
 Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 48H6j7Xp45220344
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 48H6j8nt55509388
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 17 Sep 2024 06:45:07 GMT
+	Tue, 17 Sep 2024 06:45:08 GMT
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id E623B20043;
-	Tue, 17 Sep 2024 06:45:06 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 50C122004E;
+	Tue, 17 Sep 2024 06:45:08 +0000 (GMT)
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 59D9020040;
-	Tue, 17 Sep 2024 06:45:06 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id B88E320040;
+	Tue, 17 Sep 2024 06:45:07 +0000 (GMT)
 Received: from darkmoore.ibmuc.com (unknown [9.179.17.198])
 	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 17 Sep 2024 06:45:06 +0000 (GMT)
+	Tue, 17 Sep 2024 06:45:07 +0000 (GMT)
 From: Christoph Schlameuss <schlameuss@linux.ibm.com>
 To: kvm@vger.kernel.org
 Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -83,9 +83,9 @@ Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Claudio Imbrenda <imbrenda@linux.ibm.com>,
         David Hildenbrand <david@redhat.com>,
         Nina Schoetterl-Glausch <nsg@linux.ibm.com>, schlameuss@linux.ibm.com
-Subject: [PATCH v4 2/4] selftests: kvm: s390: Add uc_skey VM test case
-Date: Tue, 17 Sep 2024 08:44:54 +0200
-Message-ID: <20240917064456.210839-3-schlameuss@linux.ibm.com>
+Subject: [PATCH v4 3/4] selftests: kvm: s390: Verify reject memory region operations for ucontrol VMs
+Date: Tue, 17 Sep 2024 08:44:55 +0200
+Message-ID: <20240917064456.210839-4-schlameuss@linux.ibm.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20240917064456.210839-1-schlameuss@linux.ibm.com>
 References: <20240917064456.210839-1-schlameuss@linux.ibm.com>
@@ -97,145 +97,64 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 1c5B-RGrLZN3A1IYg_pf56-k1CkBmnC8
-X-Proofpoint-ORIG-GUID: 9TxThhuTenULYWaXo_5VOinHeUKJM--a
+X-Proofpoint-ORIG-GUID: 64CWbNe-2i0T8fXrlXgCMfVsVp4wH-xe
+X-Proofpoint-GUID: vCVb9-sR2rbxHtQcL-8Fn-DWCe60_tAU
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-17_02,2024-09-16_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 suspectscore=0 mlxscore=0 mlxlogscore=845 bulkscore=0
- impostorscore=0 phishscore=0 priorityscore=1501 spamscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ lowpriorityscore=0 suspectscore=0 bulkscore=0 clxscore=1015 mlxscore=0
+ malwarescore=0 mlxlogscore=999 priorityscore=1501 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2408220000 definitions=main-2409170049
 
-Add a test case manipulating s390 storage keys from within the ucontrol
-VM.
+Add a test case verifying KVM_SET_USER_MEMORY_REGION and
+KVM_SET_USER_MEMORY_REGION2 cannot be executed on ucontrol VMs.
+
+Executing this test case on not patched kernels will cause a null
+pointer dereference in the host kernel.
+This is fixed with commit:
+commit 7816e58967d0 ("kvm: s390: Reject memory region operations for ucontrol VMs")
 
 Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 ---
- .../selftests/kvm/s390x/ucontrol_test.c       | 89 ++++++++++++++++++-
- 1 file changed, 88 insertions(+), 1 deletion(-)
+ .../selftests/kvm/s390x/ucontrol_test.c       | 22 +++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
 diff --git a/tools/testing/selftests/kvm/s390x/ucontrol_test.c b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
-index fc0d6f9e3a50..c713aa03e920 100644
+index c713aa03e920..1f1c58f5ec2f 100644
 --- a/tools/testing/selftests/kvm/s390x/ucontrol_test.c
 +++ b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
-@@ -79,6 +79,33 @@ asm("test_mem_asm:\n"
- 	"	j	0b\n"
- );
- 
-+/* Test program manipulating storage keys */
-+extern char test_skey_asm[];
-+asm("test_skey_asm:\n"
-+	"xgr	%r0, %r0\n"
-+
-+	"0:\n"
-+	"	ahi	%r0,1\n"
-+	"	st	%r1,0(%r5,%r6)\n"
-+
-+	"	iske	%r1,%r6\n"
-+	"	ahi	%r0,1\n"
-+	"	diag	0,0,0x44\n"
-+
-+	"	sske	%r1,%r6\n"
-+	"	xgr	%r1,%r1\n"
-+	"	iske	%r1,%r6\n"
-+	"	ahi	%r0,1\n"
-+	"	diag	0,0,0x44\n"
-+
-+	"	rrbe	%r1,%r6\n"
-+	"	iske	%r1,%r6\n"
-+	"	ahi	%r0,1\n"
-+	"	diag	0,0,0x44\n"
-+
-+	"	j	0b\n"
-+);
-+
- FIXTURE(uc_kvm)
- {
- 	struct kvm_s390_sie_block *sie_block;
-@@ -299,8 +326,9 @@ static void uc_handle_exit_ucontrol(FIXTURE_DATA(uc_kvm) *self)
+@@ -401,6 +401,28 @@ static void uc_assert_diag44(FIXTURE_DATA(uc_kvm) * self)
+ 	TEST_ASSERT_EQ(0x440000, sie_block->ipb);
  }
  
- /* verify SIEIC exit
-- * * reset stop requests
-+ * * handle expected interception codes
-  * * fail on codes not expected in the test cases
-+ * Returns if interception is handled / execution can be continued
-  */
- static bool uc_handle_sieic(FIXTURE_DATA(uc_kvm) * self)
- {
-@@ -317,6 +345,10 @@ static bool uc_handle_sieic(FIXTURE_DATA(uc_kvm) * self)
- 		/* end execution in caller on intercepted instruction */
- 		pr_info("sie instruction interception\n");
- 		return false;
-+	case ICPT_KSS:
-+		/* disable KSS and continue; KVM would init the skeys here */
-+		sie_block->cpuflags &= ~CPUSTAT_KSS;
-+		return true;
- 	case ICPT_OPEREXC:
- 		/* operation exception */
- 		TEST_FAIL("sie exception on %.4x%.8x", sie_block->ipa, sie_block->ipb);
-@@ -473,4 +505,59 @@ TEST_F(uc_kvm, uc_gprs)
- 	ASSERT_EQ(1, sync_regs->gprs[0]);
- }
- 
-+TEST_F(uc_kvm, uc_skey)
++TEST_F(uc_kvm, uc_no_user_region)
 +{
-+	u64 test_vaddr = VM_MEM_SIZE - (SZ_1M / 2);
-+	struct kvm_sync_regs *sync_regs = &self->run->s.regs;
-+	struct kvm_run *run = self->run;
-+	u8 skeyvalue = 0x34;
++	struct kvm_userspace_memory_region region = {
++		.slot = 1,
++		.guest_phys_addr = self->code_gpa,
++		.memory_size = VM_MEM_EXT_SIZE,
++		.userspace_addr = (uintptr_t)self->code_hva,
++	};
++	struct kvm_userspace_memory_region2 region2 = {
++		.slot = 1,
++		.guest_phys_addr = self->code_gpa,
++		.memory_size = VM_MEM_EXT_SIZE,
++		.userspace_addr = (uintptr_t)self->code_hva,
++	};
 +
-+	/* copy test_skey_asm to code_hva / code_gpa */
-+	TH_LOG("copy code %p to vm mapped memory %p / %p",
-+	       &test_skey_asm, (void *)self->code_hva, (void *)self->code_gpa);
-+	memcpy((void *)self->code_hva, &test_skey_asm, PAGE_SIZE);
++	ASSERT_EQ(-1, ioctl(self->vm_fd, KVM_SET_USER_MEMORY_REGION, &region));
++	ASSERT_EQ(EINVAL, errno);
 +
-+	/* set register content for test_skey_asm to access not mapped memory */
-+	sync_regs->gprs[1] = skeyvalue;
-+	sync_regs->gprs[5] = self->base_gpa;
-+	sync_regs->gprs[6] = test_vaddr;
-+	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
-+
-+	/* DAT disabled + 64 bit mode */
-+	run->psw_mask = 0x0000000180000000ULL;
-+	run->psw_addr = self->code_gpa;
-+
-+	ASSERT_EQ(0, uc_run_once(self));
-+	ASSERT_EQ(true, uc_handle_exit(self));
-+	ASSERT_EQ(1, sync_regs->gprs[0]);
-+
-+	/* ISKE */
-+	ASSERT_EQ(0, uc_run_once(self));
-+	ASSERT_EQ(false, uc_handle_exit(self));
-+	ASSERT_EQ(2, sync_regs->gprs[0]);
-+	/* assert initial skey (ACC = 0, R & C = 1) */
-+	ASSERT_EQ(0x06, sync_regs->gprs[1]);
-+	uc_assert_diag44(self);
-+
-+	/* SSKE */
-+	sync_regs->gprs[1] = skeyvalue;
-+	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
-+	ASSERT_EQ(0, uc_run_once(self));
-+	ASSERT_EQ(false, uc_handle_exit(self));
-+	ASSERT_EQ(3, sync_regs->gprs[0]);
-+	ASSERT_EQ(skeyvalue, sync_regs->gprs[1]);
-+	uc_assert_diag44(self);
-+
-+	/* RRBE */
-+	sync_regs->gprs[1] = skeyvalue;
-+	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
-+	ASSERT_EQ(0, uc_run_once(self));
-+	ASSERT_EQ(false, uc_handle_exit(self));
-+	ASSERT_EQ(4, sync_regs->gprs[0]);
-+	/* assert R reset but rest of skey unchanged */
-+	ASSERT_EQ(skeyvalue & 0xfa, sync_regs->gprs[1]);
-+	ASSERT_EQ(0x00, sync_regs->gprs[1] & 0x04);
-+	uc_assert_diag44(self);
++	ASSERT_EQ(-1, ioctl(self->vm_fd, KVM_SET_USER_MEMORY_REGION2, &region2));
++	ASSERT_EQ(EINVAL, errno);
 +}
 +
- TEST_HARNESS_MAIN
+ TEST_F(uc_kvm, uc_map_unmap)
+ {
+ 	struct kvm_sync_regs *sync_regs = &self->run->s.regs;
 -- 
 2.46.0
 
