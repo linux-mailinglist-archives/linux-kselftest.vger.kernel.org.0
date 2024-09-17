@@ -1,82 +1,82 @@
-Return-Path: <linux-kselftest+bounces-18075-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18076-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C611C97B123
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 16:13:34 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 042B797B161
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 16:23:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A3A71F22962
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 14:13:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 389F5B26DFB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 14:23:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51A47167D83;
-	Tue, 17 Sep 2024 14:13:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73BA817BEB4;
+	Tue, 17 Sep 2024 14:20:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="iJF0PFdQ"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="LL7Zhjje"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11033101EE;
-	Tue, 17 Sep 2024 14:13:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C29817C233;
+	Tue, 17 Sep 2024 14:20:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726582409; cv=none; b=Fmm0aCp9ZQaaXpNn1LXRutUZ8Z4zUIQUQXSsKq5QL8R4DKSofGNxxKD0z2uTrAqF21WzXwjPGHb/x9hR+3CU0B9tMmtI0qe+ceFVOHU8zPPUGb+OqaaRDfq0nrhz6Vz4EfOdgxh28uUvx0lv2FIAgIwKMx9D/b07B2rCwaINTSY=
+	t=1726582829; cv=none; b=FfAQmvZmPkbZTr4NvwUC+HBX8Rc7zyDJHsun199q9GRCmpPr5mas6Ke0NG/MDeblGXp/NfFm3ErFerA/PUOwOm42P9VLZeh6krcZczzbJFv4J50UbJaXD6wZqoN7ei42vvKX1Bw0R0YjcoVzgIzCdyvbOYCLY+phYhjvl0rs/EQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726582409; c=relaxed/simple;
-	bh=CHB7qYaaUq/6N+MuMpxb1MRtpL2532JlUPExqg8SVZg=;
+	s=arc-20240116; t=1726582829; c=relaxed/simple;
+	bh=KbQr9/EWgoTXSqlJOhGuoTANkhizNH7aMzpMqgkylu4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HPn/taqoDpcRdMKflVtwjyz35dhHQXd29D+SRC2b9uIvciBJLO7B2v6msAMlUndoeGble6foKo+S7CYKxvvBsA7fq364roAwvyc7iWgUu8LqW+q0WKD92vQTesjDB8IhD2yiRO1RPHrhjw/GuDLJhZQ/pExVKh4qEAoK2SXuUuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=iJF0PFdQ; arc=none smtp.client-ip=148.163.158.5
+	 In-Reply-To:Content-Type; b=QnR4Wo+nkBhFPX5eMVZsBbhpx77R2llukBXxeKgB4qFg8upgT7wOW2eWZjt2el4Isyl12ClvoK8qVXbh0T5aG4/JnDU5BzxmibbrbL0abPnWKzoAg1DuVpgd1NlV/nOwfQxuEF6gHrnquW70nycQegNzVr557p+dQojoKXfWNwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=LL7Zhjje; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48H9rwTI006180;
-	Tue, 17 Sep 2024 14:13:21 GMT
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48HBEpAX031399;
+	Tue, 17 Sep 2024 14:20:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
 	message-id:date:mime-version:subject:to:cc:references:from
-	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=y
-	fpA/o023qjhniHa2+7rrmNyTm4+gmUYP+yLDGev8fk=; b=iJF0PFdQG2X0MxUYY
-	n1lSMGV2njTDp49zfCg94WjBOY5FbS7DXTJR9LSrJs6iSXD1x2492FN4PcvYiHQI
-	LNvRwZn8PA8yLDKfK2rWZoLZNg3FGRd8fkbx+yPKH3I901B+mFJNoxl/oIoQgzlO
-	sgClnMxSCbjTfamIMM/ko8WyBIEDzTPjRjIguU433+zwA3o73eOy+tOs7JuzNiet
-	LWZqyjUcDDv5bm4wGHydRbixwf6JhZVWTeTunkFyn3mLCd9RuFOnFKQR2xwcqvpC
-	2NnZket39ASeUs9ixGAkne0qkMCuTH32PNT/1/bYYU6k8TbFI3enKlxCRQBkwEDX
-	YCRmQ==
+	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=5
+	lc5qdCB4QqG+we7Yq4WSc1YALG7j2gghN4dJXLeJz4=; b=LL7Zhjjeyf7WOy59B
+	oVqxprkD8B3OhH5vktkWrcPPyiymsnxP8pmyVcuzFNhkHZBuVrmHY68d4ZL2RjDI
+	EG4HHbByvuvvy3DGJtyEJQmh/saVWVhvGuCKmXIQwuGozpBtfd1fVUD40IiFgkBN
+	MgJAD4RhdvwFJAhjb2oz3uEyn5hJrgM0zfcFwP3Hd9EjCDMKaMvzbnbSgUid77+K
+	jGx4uAJlCacE/ZAd9THyDO2McnqXkBXlOJ1t13u40QBgc0BUoP746yrtWdIV19pv
+	AtMPGNqCFk13urVPaOpquTT6YWruD9Qo6PP30R888Q6G7Ns8TuyAY8k5otOiXWSR
+	ocbLA==
 Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41n41ag0pv-1
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41n3vnr3r3-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Sep 2024 14:13:21 +0000 (GMT)
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 48HEBKLT027425;
-	Tue, 17 Sep 2024 14:13:20 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41n41ag0ps-1
+	Tue, 17 Sep 2024 14:20:20 +0000 (GMT)
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 48HEKKGB029469;
+	Tue, 17 Sep 2024 14:20:20 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41n3vnr3qy-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Sep 2024 14:13:20 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 48HBuZJu000612;
-	Tue, 17 Sep 2024 14:13:20 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 41nn715stk-1
+	Tue, 17 Sep 2024 14:20:20 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 48HBsatf002338;
+	Tue, 17 Sep 2024 14:20:19 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 41nmtunwgv-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Sep 2024 14:13:20 +0000
+	Tue, 17 Sep 2024 14:20:19 +0000
 Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 48HEDGWY51708166
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 48HEKFnq34734436
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 17 Sep 2024 14:13:16 GMT
+	Tue, 17 Sep 2024 14:20:16 GMT
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1EEE02004B;
-	Tue, 17 Sep 2024 14:13:16 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id D215C2004B;
+	Tue, 17 Sep 2024 14:20:15 +0000 (GMT)
 Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 9AF6720043;
-	Tue, 17 Sep 2024 14:13:15 +0000 (GMT)
+	by IMSVA (Postfix) with ESMTP id 52F4320043;
+	Tue, 17 Sep 2024 14:20:15 +0000 (GMT)
 Received: from [9.179.13.46] (unknown [9.179.13.46])
 	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 17 Sep 2024 14:13:15 +0000 (GMT)
-Message-ID: <3421909f-2177-443d-be52-58f5784f9f23@linux.ibm.com>
-Date: Tue, 17 Sep 2024 16:13:15 +0200
+	Tue, 17 Sep 2024 14:20:15 +0000 (GMT)
+Message-ID: <42c32ade-e0b2-4960-90ec-6c4a3ee07ede@linux.ibm.com>
+Date: Tue, 17 Sep 2024 16:20:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,7 +84,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/4] selftests: kvm: s390: Add uc_skey VM test case
+Subject: Re: [PATCH v4 4/4] fixup! selftests: kvm: s390: Add VM run test case
 To: Christoph Schlameuss <schlameuss@linux.ibm.com>, kvm@vger.kernel.org
 Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
@@ -93,7 +93,7 @@ Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
         David Hildenbrand <david@redhat.com>,
         Nina Schoetterl-Glausch <nsg@linux.ibm.com>
 References: <20240917064456.210839-1-schlameuss@linux.ibm.com>
- <20240917064456.210839-3-schlameuss@linux.ibm.com>
+ <20240917064456.210839-5-schlameuss@linux.ibm.com>
 Content-Language: en-US
 From: Janosch Frank <frankja@linux.ibm.com>
 Autocrypt: addr=frankja@linux.ibm.com; keydata=
@@ -138,54 +138,82 @@ Autocrypt: addr=frankja@linux.ibm.com; keydata=
  DchCqFm5adiSP5+OT4NjkKUeGpBe/aRyQSle/RropTgCi85pje/juYEn2P9UAgkfBJrOHvQ9
  Z+2Sva8FRd61NJLkCJ4LFumRn9wQlX2icFbi8UDV3do0hXJRRYTWCxrHscMhkrFWLhYiPF4i
  phX7UNdOWBQ90qpHyAxHmDazdo27gEjfvsgYMdveKknEOTEb5phwxWgg7BcIDoJf9UMC
-In-Reply-To: <20240917064456.210839-3-schlameuss@linux.ibm.com>
+In-Reply-To: <20240917064456.210839-5-schlameuss@linux.ibm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vTRIigGs2t7luYQ_V6E8LL3EVy7mLfau
-X-Proofpoint-ORIG-GUID: oz2zX5OOFWDYNBb4vMaZl6pxpuDBYMGx
+X-Proofpoint-ORIG-GUID: gDNOyiWB8N_nJI5mEBsRDyuo5rF2YnY6
+X-Proofpoint-GUID: dKZpNgPr4-ge0H5cg8WyAkrYJg7XdVNe
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-17_06,2024-09-16_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- lowpriorityscore=0 suspectscore=0 mlxscore=0 mlxlogscore=699 bulkscore=0
- impostorscore=0 phishscore=0 priorityscore=1501 spamscore=0 clxscore=1015
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2408220000 definitions=main-2409170100
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
+ priorityscore=1501 phishscore=0 clxscore=1015 malwarescore=0 bulkscore=0
+ impostorscore=0 spamscore=0 suspectscore=0 mlxscore=0 lowpriorityscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2408220000
+ definitions=main-2409170100
 
 On 9/17/24 8:44 AM, Christoph Schlameuss wrote:
-> Add a test case manipulating s390 storage keys from within the ucontrol
-> VM.
+> Fix pointer function arguments whitespaces.
 > 
 > Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
 
-With the nit fixed:
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+Generally we don't use the fixup prefix in upstream development AFAIK.
 
-> +	/* SSKE */
-> +	sync_regs->gprs[1] = skeyvalue;
-> +	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
-> +	ASSERT_EQ(0, uc_run_once(self));
-> +	ASSERT_EQ(false, uc_handle_exit(self));
-> +	ASSERT_EQ(3, sync_regs->gprs[0]);
-> +	ASSERT_EQ(skeyvalue, sync_regs->gprs[1]);
-> +	uc_assert_diag44(self);
-> +
-> +	/* RRBE */
-> +	sync_regs->gprs[1] = skeyvalue;
-> +	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
-> +	ASSERT_EQ(0, uc_run_once(self));
-> +	ASSERT_EQ(false, uc_handle_exit(self));
-> +	ASSERT_EQ(4, sync_regs->gprs[0]);
-> +	/* assert R reset but rest of skey unchanged */
-> +	ASSERT_EQ(skeyvalue & 0xfa, sync_regs->gprs[1]);
-> +	ASSERT_EQ(0x00, sync_regs->gprs[1] & 0x04);
 
-s/0x00/0/
+selftests: kvm: s390: Fix whitespace confusion in ucontrol test
 
-> +	uc_assert_diag44(self);
-> +}
-> +
->   TEST_HARNESS_MAIN
+Checkpatch thinks that we're doing a multiplication but we're obviously 
+not. Fix 4 instances where we adhered to wrong checkpatch advice.
+
+
+
+Let's wait and see if the first set of patches is being pulled, if not 
+we can still fix it up in the earlier patches making this patch obsolete.
+
+> ---
+>   tools/testing/selftests/kvm/s390x/ucontrol_test.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/s390x/ucontrol_test.c b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+> index 1f1c58f5ec2f..83061db79c83 100644
+> --- a/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+> +++ b/tools/testing/selftests/kvm/s390x/ucontrol_test.c
+> @@ -330,7 +330,7 @@ static void uc_handle_exit_ucontrol(FIXTURE_DATA(uc_kvm) *self)
+>    * * fail on codes not expected in the test cases
+>    * Returns if interception is handled / execution can be continued
+>    */
+> -static bool uc_handle_sieic(FIXTURE_DATA(uc_kvm) * self)
+> +static bool uc_handle_sieic(FIXTURE_DATA(uc_kvm) *self)
+>   {
+>   	struct kvm_s390_sie_block *sie_block = self->sie_block;
+>   	struct kvm_run *run = self->run;
+> @@ -359,7 +359,7 @@ static bool uc_handle_sieic(FIXTURE_DATA(uc_kvm) * self)
+>   }
+>   
+>   /* verify VM state on exit */
+> -static bool uc_handle_exit(FIXTURE_DATA(uc_kvm) * self)
+> +static bool uc_handle_exit(FIXTURE_DATA(uc_kvm) *self)
+>   {
+>   	struct kvm_run *run = self->run;
+>   
+> @@ -379,7 +379,7 @@ static bool uc_handle_exit(FIXTURE_DATA(uc_kvm) * self)
+>   }
+>   
+>   /* run the VM until interrupted */
+> -static int uc_run_once(FIXTURE_DATA(uc_kvm) * self)
+> +static int uc_run_once(FIXTURE_DATA(uc_kvm) *self)
+>   {
+>   	int rc;
+>   
+> @@ -390,7 +390,7 @@ static int uc_run_once(FIXTURE_DATA(uc_kvm) * self)
+>   	return rc;
+>   }
+>   
+> -static void uc_assert_diag44(FIXTURE_DATA(uc_kvm) * self)
+> +static void uc_assert_diag44(FIXTURE_DATA(uc_kvm) *self)
+>   {
+>   	struct kvm_s390_sie_block *sie_block = self->sie_block;
+>   
 
 
