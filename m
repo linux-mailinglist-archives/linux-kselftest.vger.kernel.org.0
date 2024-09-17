@@ -1,270 +1,191 @@
-Return-Path: <linux-kselftest+bounces-18074-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18075-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B1D297B0FD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 15:51:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C611C97B123
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 16:13:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E702A1F284A3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 13:51:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A3A71F22962
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Sep 2024 14:13:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A221A1741D0;
-	Tue, 17 Sep 2024 13:51:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51A47167D83;
+	Tue, 17 Sep 2024 14:13:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Ga9FkhL5";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Ga9FkhL5"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="iJF0PFdQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFC1158A2E;
-	Tue, 17 Sep 2024 13:51:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11033101EE;
+	Tue, 17 Sep 2024 14:13:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726581069; cv=none; b=uCs/IiqlK3S+mnPH2E3SrghT+htkVV+58oAgGDSB663UU+FNXEPjKZkKJsCnN46K1S+NP4RkkdJAUsQHTuOeD1u4iB7ddiEXUlsyQCTTH2O5rEDFYb6LTkoIDCVchuh5vC/f8RNAAhjLIWpUS2FdrM5ra1bJiSjvuV5Fq70mon4=
+	t=1726582409; cv=none; b=Fmm0aCp9ZQaaXpNn1LXRutUZ8Z4zUIQUQXSsKq5QL8R4DKSofGNxxKD0z2uTrAqF21WzXwjPGHb/x9hR+3CU0B9tMmtI0qe+ceFVOHU8zPPUGb+OqaaRDfq0nrhz6Vz4EfOdgxh28uUvx0lv2FIAgIwKMx9D/b07B2rCwaINTSY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726581069; c=relaxed/simple;
-	bh=6nhp0W2y5GkQBCqqZ0hc7jo/BV5otHqyXzVR0v08SPo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ttqf6RdSxFpEyrL62801Pf0+KeIMWhwAFIv7UUf1hIZYPIPTJ9DTiEj0siNPkcIz3qpaNdiRxtGPt1F8mxBPhdlPCO5W7798ymqTQH+SgNRZb62zOcbN887dspgA49N1nnqfBDwMHfm2GCxfFSvv95dSL3S+N5MqjxidJngBUuI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Ga9FkhL5; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Ga9FkhL5; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 1E2E22225E;
-	Tue, 17 Sep 2024 13:51:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1726581063; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=+b3LAnkaeaPY5YfFoetqDOd5/vbbIVM5dT4241vkxvU=;
-	b=Ga9FkhL5l4dDgGQiiWy4lAU6DGCQ6Zh0WLETrM8hbbTGXa21zhM4tgT75Nra+MqlSAdaHf
-	h03siCtEURvpw1Fq3MVtIcZGIwqxEAKhfg0FXeSf9uJDhgKq/019FF2tA974eyxGIorUgo
-	B/feCqWM9GqktmFu/ShJNCxGJZewErs=
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1726581063; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=+b3LAnkaeaPY5YfFoetqDOd5/vbbIVM5dT4241vkxvU=;
-	b=Ga9FkhL5l4dDgGQiiWy4lAU6DGCQ6Zh0WLETrM8hbbTGXa21zhM4tgT75Nra+MqlSAdaHf
-	h03siCtEURvpw1Fq3MVtIcZGIwqxEAKhfg0FXeSf9uJDhgKq/019FF2tA974eyxGIorUgo
-	B/feCqWM9GqktmFu/ShJNCxGJZewErs=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D9B0713AB6;
-	Tue, 17 Sep 2024 13:51:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id thK8MkaJ6WazNgAAD6G6ig
-	(envelope-from <mvetter@suse.com>); Tue, 17 Sep 2024 13:51:02 +0000
-From: Michael Vetter <mvetter@suse.com>
-To: linux-kselftest@vger.kernel.org,
-	live-patching@vger.kernel.org
-Cc: Michael Vetter <mvetter@suse.com>
-Subject: [PATCH v2] selftests: livepatch: test livepatching a kprobed function
-Date: Tue, 17 Sep 2024 15:50:53 +0200
-Message-ID: <20240917135059.73346-1-mvetter@suse.com>
-X-Mailer: git-send-email 2.46.0
+	s=arc-20240116; t=1726582409; c=relaxed/simple;
+	bh=CHB7qYaaUq/6N+MuMpxb1MRtpL2532JlUPExqg8SVZg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HPn/taqoDpcRdMKflVtwjyz35dhHQXd29D+SRC2b9uIvciBJLO7B2v6msAMlUndoeGble6foKo+S7CYKxvvBsA7fq364roAwvyc7iWgUu8LqW+q0WKD92vQTesjDB8IhD2yiRO1RPHrhjw/GuDLJhZQ/pExVKh4qEAoK2SXuUuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=iJF0PFdQ; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48H9rwTI006180;
+	Tue, 17 Sep 2024 14:13:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=y
+	fpA/o023qjhniHa2+7rrmNyTm4+gmUYP+yLDGev8fk=; b=iJF0PFdQG2X0MxUYY
+	n1lSMGV2njTDp49zfCg94WjBOY5FbS7DXTJR9LSrJs6iSXD1x2492FN4PcvYiHQI
+	LNvRwZn8PA8yLDKfK2rWZoLZNg3FGRd8fkbx+yPKH3I901B+mFJNoxl/oIoQgzlO
+	sgClnMxSCbjTfamIMM/ko8WyBIEDzTPjRjIguU433+zwA3o73eOy+tOs7JuzNiet
+	LWZqyjUcDDv5bm4wGHydRbixwf6JhZVWTeTunkFyn3mLCd9RuFOnFKQR2xwcqvpC
+	2NnZket39ASeUs9ixGAkne0qkMCuTH32PNT/1/bYYU6k8TbFI3enKlxCRQBkwEDX
+	YCRmQ==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41n41ag0pv-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Sep 2024 14:13:21 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 48HEBKLT027425;
+	Tue, 17 Sep 2024 14:13:20 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 41n41ag0ps-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Sep 2024 14:13:20 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 48HBuZJu000612;
+	Tue, 17 Sep 2024 14:13:20 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 41nn715stk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Sep 2024 14:13:20 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 48HEDGWY51708166
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 17 Sep 2024 14:13:16 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1EEE02004B;
+	Tue, 17 Sep 2024 14:13:16 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9AF6720043;
+	Tue, 17 Sep 2024 14:13:15 +0000 (GMT)
+Received: from [9.179.13.46] (unknown [9.179.13.46])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 17 Sep 2024 14:13:15 +0000 (GMT)
+Message-ID: <3421909f-2177-443d-be52-58f5784f9f23@linux.ibm.com>
+Date: Tue, 17 Sep 2024 16:13:15 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.com:email,suse.com:mid];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Score: -2.80
-X-Spam-Flag: NO
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/4] selftests: kvm: s390: Add uc_skey VM test case
+To: Christoph Schlameuss <schlameuss@linux.ibm.com>, kvm@vger.kernel.org
+Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>,
+        Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+References: <20240917064456.210839-1-schlameuss@linux.ibm.com>
+ <20240917064456.210839-3-schlameuss@linux.ibm.com>
+Content-Language: en-US
+From: Janosch Frank <frankja@linux.ibm.com>
+Autocrypt: addr=frankja@linux.ibm.com; keydata=
+ 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
+In-Reply-To: <20240917064456.210839-3-schlameuss@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: vTRIigGs2t7luYQ_V6E8LL3EVy7mLfau
+X-Proofpoint-ORIG-GUID: oz2zX5OOFWDYNBb4vMaZl6pxpuDBYMGx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-17_06,2024-09-16_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ lowpriorityscore=0 suspectscore=0 mlxscore=0 mlxlogscore=699 bulkscore=0
+ impostorscore=0 phishscore=0 priorityscore=1501 spamscore=0 clxscore=1015
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2408220000 definitions=main-2409170100
 
-The test proves that a function that is being kprobed and uses a
-post_handler cannot be livepatched.
+On 9/17/24 8:44 AM, Christoph Schlameuss wrote:
+> Add a test case manipulating s390 storage keys from within the ucontrol
+> VM.
+> 
+> Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
 
-Only one ftrace_ops with FTRACE_OPS_FL_IPMODIFY set may be registered
-to any given function at a time.
+With the nit fixed:
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
-Signed-off-by: Michael Vetter <mvetter@suse.com>
----
-V2:
-Save and restore kprobe state.
+> +	/* SSKE */
+> +	sync_regs->gprs[1] = skeyvalue;
+> +	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
+> +	ASSERT_EQ(0, uc_run_once(self));
+> +	ASSERT_EQ(false, uc_handle_exit(self));
+> +	ASSERT_EQ(3, sync_regs->gprs[0]);
+> +	ASSERT_EQ(skeyvalue, sync_regs->gprs[1]);
+> +	uc_assert_diag44(self);
+> +
+> +	/* RRBE */
+> +	sync_regs->gprs[1] = skeyvalue;
+> +	run->kvm_dirty_regs |= KVM_SYNC_GPRS;
+> +	ASSERT_EQ(0, uc_run_once(self));
+> +	ASSERT_EQ(false, uc_handle_exit(self));
+> +	ASSERT_EQ(4, sync_regs->gprs[0]);
+> +	/* assert R reset but rest of skey unchanged */
+> +	ASSERT_EQ(skeyvalue & 0xfa, sync_regs->gprs[1]);
+> +	ASSERT_EQ(0x00, sync_regs->gprs[1] & 0x04);
 
- tools/testing/selftests/livepatch/Makefile    |  3 +-
- .../selftests/livepatch/test-kprobe.sh        | 65 +++++++++++++++++++
- .../selftests/livepatch/test_modules/Makefile |  3 +-
- .../livepatch/test_modules/test_klp_kprobe.c  | 38 +++++++++++
- 4 files changed, 107 insertions(+), 2 deletions(-)
- create mode 100755 tools/testing/selftests/livepatch/test-kprobe.sh
- create mode 100644 tools/testing/selftests/livepatch/test_modules/test_klp_kprobe.c
+s/0x00/0/
 
-diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
-index 35418a4790be..a080eb54a215 100644
---- a/tools/testing/selftests/livepatch/Makefile
-+++ b/tools/testing/selftests/livepatch/Makefile
-@@ -10,7 +10,8 @@ TEST_PROGS := \
- 	test-state.sh \
- 	test-ftrace.sh \
- 	test-sysfs.sh \
--	test-syscall.sh
-+	test-syscall.sh \
-+	test-kprobe.sh
- 
- TEST_FILES := settings
- 
-diff --git a/tools/testing/selftests/livepatch/test-kprobe.sh b/tools/testing/selftests/livepatch/test-kprobe.sh
-new file mode 100755
-index 000000000000..fb7e9914f4a0
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test-kprobe.sh
-@@ -0,0 +1,65 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2024 SUSE
-+# Author: Michael Vetter <mvetter@suse.com>
-+
-+. $(dirname $0)/functions.sh
-+
-+MOD_LIVEPATCH=test_klp_livepatch
-+MOD_KPROBE=test_klp_kprobe
-+
-+setup_config
-+
-+# Kprobe a function and verify that we can't livepatch that same function
-+# when it uses a post_handler since only one IPMODIFY maybe be registered
-+# to any given function at a time.
-+
-+start_test "livepatch interaction with kprobed function with post_handler"
-+
-+STATE=$(cat /sys/kernel/debug/kprobes/enabled)
-+echo 1 > /sys/kernel/debug/kprobes/enabled
-+
-+load_mod $MOD_KPROBE has_post_handler=true
-+load_failing_mod $MOD_LIVEPATCH
-+unload_mod $MOD_KPROBE
-+
-+check_result "% insmod test_modules/test_klp_kprobe.ko has_post_handler=true
-+% insmod test_modules/$MOD_LIVEPATCH.ko
-+livepatch: enabling patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': initializing patching transition
-+livepatch: failed to register ftrace handler for function 'cmdline_proc_show' (-16)
-+livepatch: failed to patch object 'vmlinux'
-+livepatch: failed to enable patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': canceling patching transition, going to unpatch
-+livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': unpatching complete
-+insmod: ERROR: could not insert module test_modules/$MOD_LIVEPATCH.ko: Device or resource busy
-+% rmmod test_klp_kprobe"
-+
-+start_test "livepatch interaction with kprobed function without post_handler"
-+
-+load_mod $MOD_KPROBE has_post_handler=false
-+load_lp $MOD_LIVEPATCH
-+
-+unload_mod $MOD_KPROBE
-+disable_lp $MOD_LIVEPATCH
-+unload_lp $MOD_LIVEPATCH
-+
-+check_result "% insmod test_modules/test_klp_kprobe.ko has_post_handler=false
-+% insmod test_modules/$MOD_LIVEPATCH.ko
-+livepatch: enabling patch '$MOD_LIVEPATCH'
-+livepatch: '$MOD_LIVEPATCH': initializing patching transition
-+livepatch: '$MOD_LIVEPATCH': starting patching transition
-+livepatch: '$MOD_LIVEPATCH': completing patching transition
-+livepatch: '$MOD_LIVEPATCH': patching complete
-+% rmmod test_klp_kprobe
-+% echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
-+livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': starting unpatching transition
-+livepatch: '$MOD_LIVEPATCH': completing unpatching transition
-+livepatch: '$MOD_LIVEPATCH': unpatching complete
-+% rmmod $MOD_LIVEPATCH"
-+
-+echo $STATE > /sys/kernel/debug/kprobes/enabled
-+
-+exit 0
-diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
-index e6e638c4bcba..4981d270f128 100644
---- a/tools/testing/selftests/livepatch/test_modules/Makefile
-+++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-@@ -11,7 +11,8 @@ obj-m += test_klp_atomic_replace.o \
- 	test_klp_state2.o \
- 	test_klp_state3.o \
- 	test_klp_shadow_vars.o \
--	test_klp_syscall.o
-+	test_klp_syscall.o \
-+	test_klp_kprobe.o
- 
- # Ensure that KDIR exists, otherwise skip the compilation
- modules:
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_kprobe.c b/tools/testing/selftests/livepatch/test_modules/test_klp_kprobe.c
-new file mode 100644
-index 000000000000..49b579ea1054
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_kprobe.c
-@@ -0,0 +1,38 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (C) 2024 Marcos Paulo de Souza <mpdesouza@suse.com>
-+// Copyright (C) 2024 Michael Vetter <mvetter@suse.com>
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/kprobes.h>
-+
-+static bool has_post_handler = true;
-+module_param(has_post_handler, bool, 0444);
-+
-+static void __kprobes post_handler(struct kprobe *p, struct pt_regs *regs,
-+				unsigned long flags)
-+{
-+}
-+
-+static struct kprobe kp = {
-+	.symbol_name = "cmdline_proc_show",
-+};
-+
-+static int __init kprobe_init(void)
-+{
-+	if (has_post_handler)
-+		kp.post_handler = post_handler;
-+
-+	return register_kprobe(&kp);
-+}
-+
-+static void __exit kprobe_exit(void)
-+{
-+	unregister_kprobe(&kp);
-+}
-+
-+module_init(kprobe_init)
-+module_exit(kprobe_exit)
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Michael Vetter <mvetter@suse.com>");
-+MODULE_DESCRIPTION("Livepatch test: livepatch kprobed function");
--- 
-2.46.0
+> +	uc_assert_diag44(self);
+> +}
+> +
+>   TEST_HARNESS_MAIN
 
 
