@@ -1,73 +1,73 @@
-Return-Path: <linux-kselftest+bounces-18109-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18110-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DE9697BC73
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Sep 2024 14:47:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DA3097BC7A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Sep 2024 14:50:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDBC81C21324
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Sep 2024 12:47:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CB531C20A41
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Sep 2024 12:50:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63108189901;
-	Wed, 18 Sep 2024 12:47:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4650189914;
+	Wed, 18 Sep 2024 12:50:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Avn5dHax"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mT+sQUXY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com [209.85.222.54])
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E2E4409;
-	Wed, 18 Sep 2024 12:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185AE4409;
+	Wed, 18 Sep 2024 12:50:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726663620; cv=none; b=nU9+NsCkn8KTSHxQbdef9KE5slsg0wnSS5gZXRUlGSI3lid84uTnqQRecG5Mpp52EG6OxWWcrHTT+bcl6yaxveOgHgOfTrb9N0gsnimc7M3oTw7pBMyr+YXIOIfRAPpQ2beXz3cUWBC3TC588F3u39FBbwlcKKUVysk2Tt7Zia8=
+	t=1726663851; cv=none; b=PZEgG0Gx3JSKKQnlLEqj5RBsqp3Wm7wZFEZ52V3r0qckVSLYHNIAKx7JykrShAphzRygh6HWXV/9t9RPOKEIpRNay2G/p8i2YfDjp+gNd1U/C18qR1DCwK8/gFGyjgfoM2PUalDa0Ze8vpHgLHSdHnOltKXfdAALeNYqNJmTEg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726663620; c=relaxed/simple;
-	bh=FfCTcp0ZVpfsylfuxeYRb0/Fe0NXrZIXNkhO2rk/C3c=;
+	s=arc-20240116; t=1726663851; c=relaxed/simple;
+	bh=uDlnTnvVvMyw7JX1Uoi6GaMOvz/MV/USqCOkq8mWwYk=;
 	h=Date:From:To:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=gsZ3LmFA2xi9sCr7BBlhlokJ6oHJeCW6OMsS3mIJn3iUWD/cjxfeLnqwXQCBtXY3nM/3LTSnSeoyL1dHQg/RDcmQoogs21f2sB9uE3KQr7zxPDEIpniyX67uT+UFO4xqDiWxBaoHY4xoBAe2LCegXjOlGs777TVGjxh0iqza0i0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Avn5dHax; arc=none smtp.client-ip=209.85.222.54
+	 Mime-Version:Content-Type; b=hFQ4/2Ly3McxvI+jAcxpo3Y73sN7yoTKkoSWcj8cSMbvKq3KIwkB09tEm0/EWgQczxEzWmulut3OhlOQhL8o3gZ2AqiluIimUYDUNeKoLW+XeFkPdfLsgbInUJOLy0oy+T2HlZgcfUdwt1R0iDGOooaliz8wAafqsUwK7fzsu8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mT+sQUXY; arc=none smtp.client-ip=209.85.222.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-846c5c2a8e9so1336862241.1;
-        Wed, 18 Sep 2024 05:46:58 -0700 (PDT)
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-7a99fd5beb6so64217785a.0;
+        Wed, 18 Sep 2024 05:50:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726663618; x=1727268418; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1726663849; x=1727268649; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IEiE54XLGCyNeFLyuQe7PaxspDTPjoL4Q+YGo4YshIM=;
-        b=Avn5dHax1t0eaGgubb6zZwheophJccf6tw58NwaVuu/sjXcitJ9TuY3i767cL1hnCR
-         IDCuPUPTKWp1SCflsOWn6zWzAmvknC7fgnURlyVDb6CEX/73gjNxinS1MzFh1+NrQdZn
-         Bw6zognUkCi42e9m7WuN3CKG1UF8efMjt7+HmN5cWDjSy5vcZSHmXBePx33eP7r+pknV
-         GfHFXZ9JYQ7rjTNN2o4px+LqknqunMAvNigMqCqbPxPx5IAw/ogTXWXStLSXc53D5TM7
-         n+d3PxCxeHqvKVmssvYkB7FlOUpS8o+wj3NZoz7q39WMGs2cLxiWZPB158se/zWjCp4g
-         4Psg==
+        bh=35KF7hQs1kikuqDR+kQtANo84u9Pb+3OwPnZM9JJfy0=;
+        b=mT+sQUXY9qcU/PBQwf7EB/AcUbdWRwy9bpWiKb6my/au4llF2jqXwfPQT6m5h1iGBv
+         +BiCri9DQKcANeNVB740sq+vTlVUdUbnxvf+2gdJWcQKzqchuyY9Tqh3R3NWGp9GSIHp
+         kqMrPis/YKNKNIKYRSQZ1JXD16OGiTRgI8EEnhHMx0R2NWi1G/EzOVxIXY9aMv1etjhm
+         UW22LfWRRUv+jhiYoSYO10WVuQmL1uzwfjBjdJ8CpbsCq6M2J1tWQHjJ1OOb1ys1MHgj
+         rp1RiO9RzrCsJMqpAd3iUki3QpEQER1+tZ0CrtkA7CM+Uyl3JdMazcqiX2yXMjzaLgJW
+         NbBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726663618; x=1727268418;
+        d=1e100.net; s=20230601; t=1726663849; x=1727268649;
         h=content-transfer-encoding:mime-version:subject:references
          :in-reply-to:message-id:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IEiE54XLGCyNeFLyuQe7PaxspDTPjoL4Q+YGo4YshIM=;
-        b=R4KAiLnWK3sncMzpZXBH9wI5bI1bx6mg3jCNTekSzm8idMvgbufRCfyC4CvZwv+ORr
-         1advRkwmNfbTLrq5sDskyE8HuKch+mCettRxmeONIw1nOBZTPmO+xsUvimr5CJNP/LuA
-         YEHA12n31dyABa8+D23bgwNWArfmSQjOIB7x80ZU/rdOCl5qwRz7fTSDRRhVe8FVmjmj
-         xRel8ocLvAFIR/EYSwqoEkt3I8SlewqT1KnflX8GEMUBe9/O1S6lGmWL4b+7Z+wDr+ua
-         We9NFbmJTQOqoAdpQAKXl46SXuImRS7w5YmAlJyNe0iNxMu1EhTvLh2J+UqHInN0w5Ge
-         SzMw==
-X-Forwarded-Encrypted: i=1; AJvYcCUUblAfLVau9A+pINmwdEWBITsCwddQmDKWZnnBWPUxkQZ63AmLydAdUS0QKvrdbtLfWyJml4sPsDsh@vger.kernel.org, AJvYcCV+7BxAB2IPWpUi1r0egXNLXCgKm6iChP0LBl9RkcCvVBiSzVsn/M3yS2QNjTctSuiEFSsv6c84oR9nEemQ2n2w@vger.kernel.org, AJvYcCVxhgJdr/gEcb5VEMmkwDLbrhd7mJufwojvrliwZtctUYWyt26xqrDE5enLNFRV3RGJfOM=@vger.kernel.org, AJvYcCWjdq+0bXuqCFqCGfnJstuBWeQvTuUVbcBglUZDC/Z5P7z72HoRXrR3YRjq4USQPX0bTIqW0ZEt@vger.kernel.org, AJvYcCWmVqGPd92qnDQ28ApvnntyFygp7SgTTDs6g2dokRIu5RFidr1l2JnkIBGdncGj9CORrb2m9Z/wezpRja4M@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzrf0kjnanHE1plWqW+gp1EhmpuiDBp98dVdr/ZPodWjfKbvxDk
-	Q/rNvnn1B9BDWrTSfckoT4D086xZ4Ld9rSRU9uyML+t0PjMs0Aly
-X-Google-Smtp-Source: AGHT+IFrKCQScpPxemEjNo4inlsJUJ4zUHIc/PvEWxO3LcIB17Qy4vN/uLMJEYjH72+/k8IlZqRh8A==
-X-Received: by 2002:a05:6102:e07:b0:48f:dfb8:77aa with SMTP id ada2fe7eead31-49d414bab43mr15069675137.17.1726663617491;
-        Wed, 18 Sep 2024 05:46:57 -0700 (PDT)
+        bh=35KF7hQs1kikuqDR+kQtANo84u9Pb+3OwPnZM9JJfy0=;
+        b=RGdob1m6S/7uNVT0v90KLKmiTiJsaGIJ4fzGx3AMBL2XPxTxl5VKh/ABMVmH/WqtII
+         qBHjUG49UBDgJ7S8HQgm+Qv/JbXo28peGnDWvYXecsc5XJbPxWSL5TLXW+C8f76zJGMc
+         +Mn5cGuEAiyUmui6cztkaaH+21jh710qH5Mlz++55EOL4hqsRgExTTve1AMzje3pbRzZ
+         2gRAyBY3Rwk+4/t+SqF2Y3b3ZK/q2NYOEXGoeuNk/w4Ie4bdrBd8ZqyWA2PCG4d7h1gW
+         BTqA/3UfgNFsH8aJpDRWaoVsN83AHlD2D+10vNj0sEOPnQpGnJpFOgtZxzGhe/jXlCZi
+         WEqg==
+X-Forwarded-Encrypted: i=1; AJvYcCUA+mn3ZWCG6JfIw4x5rEHAKmXLLBrZjXKbyV/RTwjKLMEe0/VrYQ9i/ATyNd6Czf8BQYkv4O7H@vger.kernel.org, AJvYcCURV4t6760zrUzKNfETs1UJ/hwI1jlAd3jCKvIiYllOfAN9cvHUXFjvcSH88CKqDOoASNdL1aW/0pnbV9I1@vger.kernel.org, AJvYcCWBNcBYkjDejwwy/qR19R1mOiygCeZntP3ZNsqjovPvYakHcQ+5qBH4nnpjAjxwQOmLRXqCSfP/i5fn@vger.kernel.org, AJvYcCWyhNr8JtugayQcKCMwNjH8pw2giJ+6ZeQDy70HMSgvbEcVx4CrVl/88G8ycigEqmHsQE8GnYIr6fblkRvmDZsP@vger.kernel.org, AJvYcCXQRHHWvuSigvtIIUbZLSLbDcJnHEAnjuHdAqNPH6IxUMkr3sXwyW6rJn9J6wAKfx0V/GA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyq+xCtL/jQVRsvtpjIxeb0YYqmKVDKSAvPj/45EmOUcwmXT34l
+	fzb1frl5H6Ul/L3NiGbGL8NurUIXan2bLEUbl1MFZApqLuo9TPPC
+X-Google-Smtp-Source: AGHT+IFwuVhfNggEQ68X+zufvrQX/RDuAO82PihBbAXUSaRarLVHnusDTlqA2rOM/Q0xaUEj6O4NpQ==
+X-Received: by 2002:a05:620a:370f:b0:7a9:baa5:f772 with SMTP id af79cd13be357-7a9bf97b89emr5041961085a.19.1726663848806;
+        Wed, 18 Sep 2024 05:50:48 -0700 (PDT)
 Received: from localhost (23.67.48.34.bc.googleusercontent.com. [34.48.67.23])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6c58c645ce3sm43438606d6.67.2024.09.18.05.46.56
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-459aac68742sm48366831cf.10.2024.09.18.05.50.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Sep 2024 05:46:56 -0700 (PDT)
-Date: Wed, 18 Sep 2024 08:46:56 -0400
+        Wed, 18 Sep 2024 05:50:48 -0700 (PDT)
+Date: Wed, 18 Sep 2024 08:50:47 -0400
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 To: Akihiko Odaki <akihiko.odaki@daynix.com>, 
  Jonathan Corbet <corbet@lwn.net>, 
@@ -89,11 +89,11 @@ To: Akihiko Odaki <akihiko.odaki@daynix.com>,
  Yuri Benditovich <yuri.benditovich@daynix.com>, 
  Andrew Melnychenko <andrew@daynix.com>, 
  Akihiko Odaki <akihiko.odaki@daynix.com>
-Message-ID: <66eacbc0b16e7_29b986294cd@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20240915-rss-v3-1-c630015db082@daynix.com>
+Message-ID: <66eacca7de803_29b986294ac@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20240915-rss-v3-2-c630015db082@daynix.com>
 References: <20240915-rss-v3-0-c630015db082@daynix.com>
- <20240915-rss-v3-1-c630015db082@daynix.com>
-Subject: Re: [PATCH RFC v3 1/9] skbuff: Introduce SKB_EXT_TUN_VNET_HASH
+ <20240915-rss-v3-2-c630015db082@daynix.com>
+Subject: Re: [PATCH RFC v3 2/9] virtio_net: Add functions for hashing
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -105,64 +105,239 @@ Content-Type: text/plain;
 Content-Transfer-Encoding: 7bit
 
 Akihiko Odaki wrote:
-> This new extension will be used by tun to carry the hash values and
-> types to report with virtio-net headers.
+> They are useful to implement VIRTIO_NET_F_RSS and
+> VIRTIO_NET_F_HASH_REPORT.
 > 
 > Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
 > ---
->  include/linux/skbuff.h | 10 ++++++++++
->  net/core/skbuff.c      |  3 +++
->  2 files changed, 13 insertions(+)
+>  include/linux/virtio_net.h | 198 +++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 198 insertions(+)
 > 
-> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> index 29c3ea5b6e93..17cee21c9999 100644
-> --- a/include/linux/skbuff.h
-> +++ b/include/linux/skbuff.h
-> @@ -334,6 +334,13 @@ struct tc_skb_ext {
->  };
->  #endif
+> diff --git a/include/linux/virtio_net.h b/include/linux/virtio_net.h
+> index 6c395a2600e8..7ee2e2f2625a 100644
+> --- a/include/linux/virtio_net.h
+> +++ b/include/linux/virtio_net.h
+> @@ -9,6 +9,183 @@
+>  #include <uapi/linux/tcp.h>
+>  #include <uapi/linux/virtio_net.h>
 >  
-> +#if IS_ENABLED(CONFIG_TUN)
-> +struct tun_vnet_hash_ext {
+> +struct virtio_net_hash {
 > +	u32 value;
 > +	u16 report;
 > +};
-> +#endif
-
-This is unlikely to belong in skbuff.h
-
 > +
->  struct sk_buff_head {
->  	/* These two members must be first to match sk_buff. */
->  	struct_group_tagged(sk_buff_list, list,
-> @@ -4718,6 +4725,9 @@ enum skb_ext_id {
->  #endif
->  #if IS_ENABLED(CONFIG_MCTP_FLOWS)
->  	SKB_EXT_MCTP,
-> +#endif
-> +#if IS_ENABLED(CONFIG_TUN)
-> +	SKB_EXT_TUN_VNET_HASH,
->  #endif
->  	SKB_EXT_NUM, /* must be last */
->  };
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index 83f8cd8aa2d1..ce34523fd8de 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -4979,6 +4979,9 @@ static const u8 skb_ext_type_len[] = {
->  #if IS_ENABLED(CONFIG_MCTP_FLOWS)
->  	[SKB_EXT_MCTP] = SKB_EXT_CHUNKSIZEOF(struct mctp_flow),
->  #endif
-> +#if IS_ENABLED(CONFIG_TUN)
-> +	[SKB_EXT_TUN_VNET_HASH] = SKB_EXT_CHUNKSIZEOF(struct tun_vnet_hash_ext),
-> +#endif
->  };
->  
->  static __always_inline unsigned int skb_ext_total_length(void)
-> 
-> -- 
-> 2.46.0
-> 
+> +struct virtio_net_toeplitz_state {
+> +	u32 hash;
+> +	u32 key_buffer;
+> +	const __be32 *key;
+> +};
+> +
+> +#define VIRTIO_NET_SUPPORTED_HASH_TYPES (VIRTIO_NET_RSS_HASH_TYPE_IPv4 | \
+> +					 VIRTIO_NET_RSS_HASH_TYPE_TCPv4 | \
+> +					 VIRTIO_NET_RSS_HASH_TYPE_UDPv4 | \
+> +					 VIRTIO_NET_RSS_HASH_TYPE_IPv6 | \
+> +					 VIRTIO_NET_RSS_HASH_TYPE_TCPv6 | \
+> +					 VIRTIO_NET_RSS_HASH_TYPE_UDPv6)
+> +
+> +#define VIRTIO_NET_RSS_MAX_KEY_SIZE 40
+> +
+> +static inline void virtio_net_toeplitz(struct virtio_net_toeplitz_state *state,
+> +				       const __be32 *input, size_t len)
+> +{
+> +	u32 key;
+> +
+> +	while (len) {
+> +		state->key++;
+> +		key = be32_to_cpu(*state->key);
+> +
+> +		for (u32 bit = BIT(31); bit; bit >>= 1) {
+> +			if (be32_to_cpu(*input) & bit)
+> +				state->hash ^= state->key_buffer;
+> +
+> +			state->key_buffer =
+> +				(state->key_buffer << 1) | !!(key & bit);
+> +		}
+> +
+> +		input++;
+> +		len--;
+> +	}
+> +}
+> +
+> +static inline u8 virtio_net_hash_key_length(u32 types)
+> +{
+> +	size_t len = 0;
+> +
+> +	if (types & VIRTIO_NET_HASH_REPORT_IPv4)
+> +		len = max(len,
+> +			  sizeof(struct flow_dissector_key_ipv4_addrs));
+> +
+> +	if (types &
+> +	    (VIRTIO_NET_HASH_REPORT_TCPv4 | VIRTIO_NET_HASH_REPORT_UDPv4))
+> +		len = max(len,
+> +			  sizeof(struct flow_dissector_key_ipv4_addrs) +
+> +			  sizeof(struct flow_dissector_key_ports));
+> +
+> +	if (types & VIRTIO_NET_HASH_REPORT_IPv6)
+> +		len = max(len,
+> +			  sizeof(struct flow_dissector_key_ipv6_addrs));
+> +
+> +	if (types &
+> +	    (VIRTIO_NET_HASH_REPORT_TCPv6 | VIRTIO_NET_HASH_REPORT_UDPv6))
+> +		len = max(len,
+> +			  sizeof(struct flow_dissector_key_ipv6_addrs) +
+> +			  sizeof(struct flow_dissector_key_ports));
+> +
+> +	return 4 + len;
 
+Avoid raw constants like this 4. What field does it capture?
+
+Instead of working from shortest to longest and using max, how about
+the inverse and return as soon as a match is found.
+
+> +}
+> +
+> +static inline u32 virtio_net_hash_report(u32 types,
+> +					 struct flow_dissector_key_basic key)
+> +{
+> +	switch (key.n_proto) {
+> +	case htons(ETH_P_IP):
+> +		if (key.ip_proto == IPPROTO_TCP &&
+> +		    (types & VIRTIO_NET_RSS_HASH_TYPE_TCPv4))
+> +			return VIRTIO_NET_HASH_REPORT_TCPv4;
+> +
+> +		if (key.ip_proto == IPPROTO_UDP &&
+> +		    (types & VIRTIO_NET_RSS_HASH_TYPE_UDPv4))
+> +			return VIRTIO_NET_HASH_REPORT_UDPv4;
+> +
+> +		if (types & VIRTIO_NET_RSS_HASH_TYPE_IPv4)
+> +			return VIRTIO_NET_HASH_REPORT_IPv4;
+> +
+> +		return VIRTIO_NET_HASH_REPORT_NONE;
+> +
+> +	case htons(ETH_P_IPV6):
+> +		if (key.ip_proto == IPPROTO_TCP &&
+> +		    (types & VIRTIO_NET_RSS_HASH_TYPE_TCPv6))
+> +			return VIRTIO_NET_HASH_REPORT_TCPv6;
+> +
+> +		if (key.ip_proto == IPPROTO_UDP &&
+> +		    (types & VIRTIO_NET_RSS_HASH_TYPE_UDPv6))
+> +			return VIRTIO_NET_HASH_REPORT_UDPv6;
+> +
+> +		if (types & VIRTIO_NET_RSS_HASH_TYPE_IPv6)
+> +			return VIRTIO_NET_HASH_REPORT_IPv6;
+> +
+> +		return VIRTIO_NET_HASH_REPORT_NONE;
+> +
+> +	default:
+> +		return VIRTIO_NET_HASH_REPORT_NONE;
+> +	}
+> +}
+> +
+> +static inline bool virtio_net_hash_rss(const struct sk_buff *skb,
+> +				       u32 types, const __be32 *key,
+> +				       struct virtio_net_hash *hash)
+> +{
+> +	u16 report;
+
+nit: move below the struct declarations.
+
+> +	struct virtio_net_toeplitz_state toeplitz_state = {
+> +		.key_buffer = be32_to_cpu(*key),
+> +		.key = key
+> +	};
+> +	struct flow_keys flow;
+> +
+> +	if (!skb_flow_dissect_flow_keys(skb, &flow, 0))
+> +		return false;
+> +
+> +	report = virtio_net_hash_report(types, flow.basic);
+> +
+> +	switch (report) {
+> +	case VIRTIO_NET_HASH_REPORT_IPv4:
+> +		virtio_net_toeplitz(&toeplitz_state,
+> +				    (__be32 *)&flow.addrs.v4addrs,
+> +				    sizeof(flow.addrs.v4addrs) / 4);
+> +		break;
+> +
+> +	case VIRTIO_NET_HASH_REPORT_TCPv4:
+> +		virtio_net_toeplitz(&toeplitz_state,
+> +				    (__be32 *)&flow.addrs.v4addrs,
+> +				    sizeof(flow.addrs.v4addrs) / 4);
+> +		virtio_net_toeplitz(&toeplitz_state, &flow.ports.ports,
+> +				    1);
+> +		break;
+> +
+> +	case VIRTIO_NET_HASH_REPORT_UDPv4:
+> +		virtio_net_toeplitz(&toeplitz_state,
+> +				    (__be32 *)&flow.addrs.v4addrs,
+> +				    sizeof(flow.addrs.v4addrs) / 4);
+> +		virtio_net_toeplitz(&toeplitz_state, &flow.ports.ports,
+> +				    1);
+> +		break;
+> +
+> +	case VIRTIO_NET_HASH_REPORT_IPv6:
+> +		virtio_net_toeplitz(&toeplitz_state,
+> +				    (__be32 *)&flow.addrs.v6addrs,
+> +				    sizeof(flow.addrs.v6addrs) / 4);
+> +		break;
+> +
+> +	case VIRTIO_NET_HASH_REPORT_TCPv6:
+> +		virtio_net_toeplitz(&toeplitz_state,
+> +				    (__be32 *)&flow.addrs.v6addrs,
+> +				    sizeof(flow.addrs.v6addrs) / 4);
+> +		virtio_net_toeplitz(&toeplitz_state, &flow.ports.ports,
+> +				    1);
+> +		break;
+> +
+> +	case VIRTIO_NET_HASH_REPORT_UDPv6:
+> +		virtio_net_toeplitz(&toeplitz_state,
+> +				    (__be32 *)&flow.addrs.v6addrs,
+> +				    sizeof(flow.addrs.v6addrs) / 4);
+> +		virtio_net_toeplitz(&toeplitz_state, &flow.ports.ports,
+> +				    1);
+> +		break;
+> +
+> +	default:
+> +		return false;
+> +	}
+> +
+> +	hash->value = toeplitz_state.hash;
+> +	hash->report = report;
+> +
+> +	return true;
+> +}
+> +
+>  static inline bool virtio_net_hdr_match_proto(__be16 protocol, __u8 gso_type)
+>  {
+>  	switch (gso_type & ~VIRTIO_NET_HDR_GSO_ECN) {
+> @@ -239,4 +416,25 @@ static inline int virtio_net_hdr_from_skb(const struct sk_buff *skb,
+>  	return 0;
+>  }
+>  
+> +static inline int virtio_net_hdr_v1_hash_from_skb(const struct sk_buff *skb,
+> +						  struct virtio_net_hdr_v1_hash *hdr,
+> +						  bool has_data_valid,
+> +						  int vlan_hlen,
+> +						  const struct virtio_net_hash *hash)
+> +{
+> +	int ret;
+> +
+> +	memset(hdr, 0, sizeof(*hdr));
+> +
+> +	ret = virtio_net_hdr_from_skb(skb, (struct virtio_net_hdr *)hdr,
+> +				      true, has_data_valid, vlan_hlen);
+> +	if (!ret) {
+> +		hdr->hdr.num_buffers = cpu_to_le16(1);
+> +		hdr->hash_value = cpu_to_le32(hash->value);
+> +		hdr->hash_report = cpu_to_le16(hash->report);
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+
+I don't think that this helper is very helpful, as all the information
+it sets are first passed in. Just set the hdr fields directy in the
+caller. It is easier to follow the control flow.
 
 
