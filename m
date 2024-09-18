@@ -1,112 +1,145 @@
-Return-Path: <linux-kselftest+bounces-18092-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18093-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5666A97B67F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Sep 2024 02:47:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DEED97B781
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Sep 2024 07:46:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0ECA81F23B90
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Sep 2024 00:47:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4B5A1F21EEA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Sep 2024 05:46:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 642FB3D69;
-	Wed, 18 Sep 2024 00:47:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28F8A136327;
+	Wed, 18 Sep 2024 05:46:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zp3B7gNJ"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="NLbIB6CO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC4944C74
-	for <linux-kselftest@vger.kernel.org>; Wed, 18 Sep 2024 00:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726620468; cv=none; b=if7EhkdriyiV6jVLNqJXfahzBJxA8YmBZP2XlnYwD2E3l0zguX1YMFGpznuhGFujMSjO+kXS8K9q6JLvNvQPTSBi/v3zvnWU5EMjnlEX+qP/eI/x+IOhiAaplRo/wsnaR37ClhaabPSUSA3ZzH/66AEOUCF2DTfNUF/UF63HUB4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726620468; c=relaxed/simple;
-	bh=8ChpFh5J4k5VwqdplSAT7N6qPCDrU9/Q/Mw3nspbKNY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VSEgvcJiP4ERa9Bh7/V0ZA6E+5g7k9Vun5MUUZG7wb2sMFrz9P0iu7xrTEeDa3H70tFf6QJ48DlNgik9la1IzSggpwG3KNfKnPIQkO7AlCXMY7Kz/uD+1Ml6ZmqjbP6Bw322BnJtPAVEeup82tqB/oYDk5pxun7pfypLXwI6L3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zp3B7gNJ; arc=none smtp.client-ip=209.85.210.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-718e11e4186so5929849b3a.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Sep 2024 17:47:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726620466; x=1727225266; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0XmfhKZipeZYEXwyrzffE2tPQZ0P1qIBiefj4zYSrI4=;
-        b=Zp3B7gNJwktjdv/fekr1z5f9VQpGhtW5IPSEdwJpcJsHbpTHAGUmVYksBQeuojq6a0
-         9hGPkh2sZP/b7004qwa23d8eDCBZ6w0jUNAiCL60xAkKsX0EaTgs1REW601Udmbey6AF
-         mGNHhrzpo9NKghmNpE3/4NngmgnrP8/80UyR11bq6WnTUZ/YUCZoS/8JQy1DBRf/YxcW
-         njRvqJXkE2rNVnDv34emgiMuJEhoY+D9XwkIhqEL4sk+/9/zVSVcCOtX5PT3X1FBBZUZ
-         8V8os7OCxF0pb5V1BR2DSLvVj17soeO1AsVYMOhomsMD+CqwpKt9fEd8oTVLSCtZOCoh
-         5BdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726620466; x=1727225266;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0XmfhKZipeZYEXwyrzffE2tPQZ0P1qIBiefj4zYSrI4=;
-        b=gLDu3TINkRtkQeSCEjMcP89eULjfC2mk6WagTmbYlatIyd4HPMMUK3jYM9rjvGE1ak
-         1hpwskD9fAsZU0iCov4DW8FU/JPa4J6kUtjMnZlnizHK3PGxxtEB/RhU6NxX/Zc9N+UP
-         WthD2eHUcbjwc2u0QkjlfIMId80Eo+hw4CdClgXOPzj+iPWWtjiOZ4kgebABW4Ups58q
-         Pnj0asomd8EI1Q1v6GPK1TTSIJnfHqHKZ/vBuPYm28/1n802SFC9QU6ni8aVQFuMP+B1
-         P3a/klPt4mNey/Wd35kh5lUZHSHd11HmY87rOmW3IPrHtDRP4gql5+KcCCXgbL+FA2HH
-         TbGg==
-X-Gm-Message-State: AOJu0Yy15uJgdJ1J5ciku6Q8Zs5VJBF5BIasPLB3DMNkBafBIfYAdDJp
-	wSZNZSHw6eZsZVWi53mD+o9pwicxLePkNkLSFh8YBgfHSnfF/1RzdgVZl8oR
-X-Google-Smtp-Source: AGHT+IFCNegLK48ZHARRqZnGMAN97zjlfEVjhROT8fLZkttdYjICun/cFySnKY6QJiYWMZktMRRf3Q==
-X-Received: by 2002:a05:6a00:2302:b0:718:d7de:3be2 with SMTP id d2e1a72fcca58-71926091b7dmr32981375b3a.14.1726620465649;
-        Tue, 17 Sep 2024 17:47:45 -0700 (PDT)
-Received: from apollo.hsd1.ca.comcast.net ([2601:646:9d80:4380::7e81])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71944ab9cb1sm5718010b3a.52.2024.09.17.17.47.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Sep 2024 17:47:45 -0700 (PDT)
-From: Khem Raj <raj.khem@gmail.com>
-To: linux-kselftest@vger.kernel.org
-Cc: Khem Raj <raj.khem@gmail.com>,
-	John Stultz <jstultz@google.com>,
-	Shuah Khan <shuah@kernel.org>
-Subject: [PATCH] selftests: timers: Fix clock_adjtime for newer 32-bit arches
-Date: Tue, 17 Sep 2024 17:47:31 -0700
-Message-ID: <20240918004731.3295870-1-raj.khem@gmail.com>
-X-Mailer: git-send-email 2.46.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF691339A4;
+	Wed, 18 Sep 2024 05:46:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726638397; cv=pass; b=lFfCKQKnuPDo/7MNNCS8kLNu4klfEbcSsoVw1lykQYqKmCCPNO3C8PJifX3dXLgJbV3NkKMClLZMxdHrMHloWKm2/Osv7dqVJrVeY3eSZKpxo5urjZ1HHvM28wbmpSY6BbRc/eKkJ7nHbpjAPyh+smW+HfhfnUKEIsc9GLWS2zQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726638397; c=relaxed/simple;
+	bh=LT6K0WPKGVgwRRVo8p6lU+eEzGJzGV0VLG5k2HtD1As=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Ils+fNH0k2xw/Cb/1HFFykPD8i46RuGLbYNnZ18Y7vvCtG2NVM7sVi7QChmXOZ8yGxAkqP4oVGLQ1VIeioqHblfy3JkcRS5S5oqw6bItmySBswvl6ZP8j+AeIMRdkVxB0sRWZ1erLhtS1XJrjWM83Aecdn3ODGQZkLX2hEqctZU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=NLbIB6CO; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1726638375; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=SMU5Ji6YY7IaC0jHm0l+cFblMXz4OkLyQ2t+4lB/zQFRqKtv5xHq+h+fpVDWn1mXD5wyZpzQ6U2byH2lNiFT6Gd4RD//4/X5b5CRQc1XJj5IgG8fDoQX7WnYxMjamhPEA+y2Qso6WV4CgZbdron84fic1xLCBOXcjshzb0apBbU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1726638375; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=+T7DsFUS0IX9KOF0oXx+kzfEg5O8+v17rnwkmfflrAg=; 
+	b=Y4Pfl8dbAkBgk3OqWIXcgIcaTYPS+0kGU1XZHrxqPbEM16Iyy5xBIW+MTAw383cPJq6JD1EldOS3uehQyoh+8TBn7iFfOQ6gi677nkVjC1HTsqB7w2Qm31jMGSfUPd8Rl99nnUoPriSt5XEBJnYDS2ofgDrUZJMcTcyUqyvWc7g=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
+	dmarc=pass header.from=<Usama.Anjum@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1726638375;
+	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
+	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=+T7DsFUS0IX9KOF0oXx+kzfEg5O8+v17rnwkmfflrAg=;
+	b=NLbIB6COo8X+/MWgt8//wCwYehdzZE9WHG+LpQFJCKeJGq14GlAIUePFepJulTlG
+	bO+2WV6ofbUYXNvG0EuVQF5jYCKfTuD4WGojbkAfBf2UWpJaGxvW5Flm9AlMS9U6SC3
+	uprPEXzLldZD+gcnM+i89ubVM+OHmlcm6bGEvnnI=
+Received: by mx.zohomail.com with SMTPS id 1726638372856538.8419138041938;
+	Tue, 17 Sep 2024 22:46:12 -0700 (PDT)
+Message-ID: <0b847784-a95f-4ed5-a0fb-1b7b4023df13@collabora.com>
+Date: Wed, 18 Sep 2024 10:46:05 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Cc: Usama.Anjum@collabora.com, kernel@collabora.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [PATCH 1/2] kselftests: mm: Fix wrong __NR_userfaultfd value
+To: Shuah Khan <skhan@linuxfoundation.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>
+References: <20240912103151.1520254-1-usama.anjum@collabora.com>
+ <a9ae7dc4-275d-43c3-bf4c-b0090cb6bb12@linuxfoundation.org>
+ <3cb9d266-4d4b-4031-8603-da7fd9e3ad47@collabora.com>
+ <b3caeb96-2f48-4efd-a56c-e91dae891b48@linuxfoundation.org>
+Content-Language: en-US
+From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
+In-Reply-To: <b3caeb96-2f48-4efd-a56c-e91dae891b48@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 
-Newer 32-bit architectures e.g. riscv32 are using 64-bit time_t
-from get go, they have not wired __NR_clock_adjtime at all
-valid-adjtimex testcase fails to compile on such architectures.
-if this condition is found then use 64-bit adjtime syscall
+On 9/17/24 6:56 AM, Shuah Khan wrote:
+> On 9/16/24 00:32, Muhammad Usama Anjum wrote:
+>> On 9/12/24 8:44 PM, Shuah Khan wrote:
+>>> On 9/12/24 04:31, Muhammad Usama Anjum wrote:
+>>>> The value of __NR_userfaultfd was changed to 282 when
+>>>> asm-generic/unistd.h was included. It makes the test to fail every time
+>>>> as the correct number of this syscall on x86_64 is 323. Fix the header
+>>>> to asm/unistd.h.
+>>>>
+>>>
+>>> "please elaborate every time" - I just built on my x86_64 and built
+>>> just fine.
+>> The build isn't broken.
+>>
+>>> I am not saying this isn't a problem, it is good to
+>>> understand why and how it is failing before making the change.
+>> I mean to say that the test is failing at run time because the correct
+>> userfaultfd syscall isn't being found with __NR_userfaultfd = 282.
+>> _NR_userfaultfd's value depends on the header. When asm-generic/unistd.h
+>> is included, its value (282) is wrong. I've tested on x86_64.
+>>
+> 
+> Okay - how do you know this is wrong? can you provide more details.
+> 
+> git grep _NR_userfaultfd
+> include/uapi/asm-generic/unistd.h:#define __NR_userfaultfd 282
+> include/uapi/asm-generic/unistd.h:__SYSCALL(__NR_userfaultfd,
+> sys_userfaultfd)
+> tools/include/uapi/asm-generic/unistd.h:#define __NR_userfaultfd 282
+> 
+>> The fix is simple. Add the correct header which has _NR_userfaultfd =
+>> 323.
 
-Signed-off-by: Khem Raj <raj.khem@gmail.com>
-Cc: John Stultz <jstultz@google.com>
-Cc: Shuah Khan <shuah@kernel.org>
----
- tools/testing/selftests/timers/valid-adjtimex.c | 4 ++++
- 1 file changed, 4 insertions(+)
+grep -rnIF "#define __NR_userfaultfd"
+tools/include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
+arch/x86/include/generated/uapi/asm/unistd_32.h:374:#define
+__NR_userfaultfd 374
+arch/x86/include/generated/uapi/asm/unistd_64.h:327:#define
+__NR_userfaultfd 323
+arch/x86/include/generated/uapi/asm/unistd_x32.h:282:#define
+__NR_userfaultfd (__X32_SYSCALL_BIT + 323)
+arch/arm/include/generated/uapi/asm/unistd-eabi.h:347:#define
+__NR_userfaultfd (__NR_SYSCALL_BASE + 388)
+arch/arm/include/generated/uapi/asm/unistd-oabi.h:359:#define
+__NR_userfaultfd (__NR_SYSCALL_BASE + 388)
+include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
 
-diff --git a/tools/testing/selftests/timers/valid-adjtimex.c b/tools/testing/selftests/timers/valid-adjtimex.c
-index d500884801d8..ff4ff8b1d127 100644
---- a/tools/testing/selftests/timers/valid-adjtimex.c
-+++ b/tools/testing/selftests/timers/valid-adjtimex.c
-@@ -39,7 +39,11 @@
- #include <sys/syscall.h>
- int clock_adjtime(clockid_t id, struct timex *tx)
- {
-+#if !defined(__NR_clock_adjtime) && defined(__NR_clock_adjtime64)
-+	return syscall(__NR_clock_adjtime64, id, tx);
-+#else
- 	return syscall(__NR_clock_adjtime, id, tx);
-+#endif
- }
- 
- 
+The number is dependent on the architecture. The above data shows that:
+x86	374
+x86_64	323
+
+I'm unable to find the history of why it is set to 282 in unistd.h and
+when this problem happened.
+
+> 
+> I need more details on this number.
+> 
+> thanks,
+> -- Shuah
+
+-- 
+BR,
+Muhammad Usama Anjum
+
 
