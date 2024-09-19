@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-18126-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18127-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D409597C5D2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2024 10:28:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C19A397C6AD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2024 11:13:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B491284557
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2024 08:28:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F3FE51C24147
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2024 09:13:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7B1D1990A1;
-	Thu, 19 Sep 2024 08:28:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD4C0199E8D;
+	Thu, 19 Sep 2024 09:12:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ux/2guPp"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eDe3lEkJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34B5B198A30
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Sep 2024 08:28:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30FBC199954
+	for <linux-kselftest@vger.kernel.org>; Thu, 19 Sep 2024 09:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726734503; cv=none; b=WNvBkVp8/GL+RkaERIe2GgBgcYImEWfPsVzz+ggVNr+Ca54EFYztJ/ltWPaT5BDkA5R8IPtcqdN8vkGJ8Dxb98dfBDCw/wafxy7WfIaE4qYNAoc3TMH9FBSks8udN077srlFHtYn+4WE5B461BNU8k/8BiEPwB9SIZUm3YIgwVo=
+	t=1726737135; cv=none; b=oGuvOl/ZTzdoG0Mqa6wfTS4w7jZdlMARRn10qPok5ByiNzUZwvMEOZVk/23jWm51Fl5SqkUdpuMoZYXgyFtQlim+Apl6B1fXBsBIcg17TU68xz2cv4LxiOjzMOPJoUw3mERtZfWvoZXdDfuNocoxoUNXIVNSlR0Sbg4smMk7sIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726734503; c=relaxed/simple;
-	bh=2gP72M6YFehKxS7DvcQxqVtz0w8XMZ6zsRmrqlVay9c=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=s9saZ4Vj0ujdkW1R8akU4bJlGVkKEtTF1kSN7BQ5jTUOPDegv1tDH49o6ZeH4jcNj/u4Mz+P3D77/nvpEzyOY8eseI7moHuX1QKHpxBuy7uE2LYvWGNRs6xhppIw3ZOhKOILmL8JbAbhVz9D0ZPpts5seX0WilmNOoc52W4P4fM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ux/2guPp; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1726737135; c=relaxed/simple;
+	bh=GVQ0O2R1uWNT+xiUn1NlNaE8AFa47yPX2wZPeJVfj+o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b/Xd+l3aiKaLDdXJlyfAfgkSidXIGZ/iHScdJh1HSb1BibhB2U4Yn8pyaB66q+r8BL6F84SmH6SX/RcQPwha20peD2ooNWabCcofPawKeCH0EOIKaJZLVP/hLmUJj+8qrYnKizB/XMuGILy8SNEU95iKRVIOcATogjPvhlrI77I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eDe3lEkJ; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1726734501;
+	s=mimecast20190719; t=1726737133;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=hIvo4RERn6UxJSjQ1HziLRAQS2oan3Er/vAsptTFqv8=;
-	b=Ux/2guPpN2kj7fkXi3Zw/BxMxn1NEkT+VuZsPHj4x9fTsRx//tplJE9bOInHJAvrkm9LT5
-	zKuPDQQhyKmnt77fwvFhQr8TS7X3oRPGv5AB2e8fK7X7WNShb6e02aDAg9D2v0VgQDIewI
-	36J1/Ma6ZnERFm/Xodwl8w3G707+Drs=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=LCElEKBH0phTZF2fIQuSy/+s0JOFGaYopSCTxfI0dVI=;
+	b=eDe3lEkJNkvBzEi9lmWOhVHi1vVMMXgfrNe6IE8YSY76xUVbFARowsjKtSyJfPzidksVoJ
+	TVxDymS0AiyRyjLq0xaanB00app8nVlmodq+SWpEWZdobIGhlvZZQvtL+n//VMaxXVHhkf
+	BQnyNwMm7Mm0a0XvFyPsrKTrCmhWmuM=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-627-G3xawTsWNKaSg8cN91CovQ-1; Thu, 19 Sep 2024 04:28:19 -0400
-X-MC-Unique: G3xawTsWNKaSg8cN91CovQ-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-42cb6dc3365so3975945e9.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Sep 2024 01:28:19 -0700 (PDT)
+ us-mta-450-2cfXnCGaPIK1w1CAd0xUIw-1; Thu, 19 Sep 2024 05:12:10 -0400
+X-MC-Unique: 2cfXnCGaPIK1w1CAd0xUIw-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-374b385b146so264601f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Sep 2024 02:12:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726734498; x=1727339298;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1726737129; x=1727341929;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hIvo4RERn6UxJSjQ1HziLRAQS2oan3Er/vAsptTFqv8=;
-        b=N5Zz+VLyXGtrR/V7pnpdb4M3Tsoc+acxdqlt+Yi5JCy0j7V/wf6USWEQYKG4WjTI2H
-         ig7OYihIfht3T11DGkJhS90GBxkqXcKaTdsPEAXV9NC9CPFFAdhIei8vi4X4vvUIizRY
-         l0hc3KJlpmMRDwSV+FOrrUEEVRIc8Qox4Zv04BNZtjhHROa+0OM5QvT/zXllyIZ7ySd/
-         ywijd6uvvpZHIQN3hYT8wrWwkrL7kw77ShwCjFzGtDS8U+AxfQgrdYmkvJrWTgjwmdT3
-         CxngSQCDGWKMd71LE+3qUrL4FYRKd1yPoUDFebDrokMBoFkMwJXdcexftxhCi6ITKvAo
-         +bow==
-X-Forwarded-Encrypted: i=1; AJvYcCWi4KCJ9adqm7n5Hgq5zntIL0dXd8SSHR+IG4dmKfNLqOUExBG2eQC3BKOUx1tBs/h/Od2zdAruwDQhzcuUyKk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzd3qoFwd30XD4UsnFvFe3QhZw5Ry5PrgsP8BqW/PtgHLLAe+L5
-	DFAHrFROgJnjUloqUC44UUKY7wpyII9rGMsHnmF3QzGWb2hQ6V3BLoHjJJYtW3AGlOJJv9+36vi
-	S6+Z7A8WqL3GjuEaESpvDch69ref5funSGV2ZVpZ/CycIja+JP8muAEWj8Ei/QqPjDw==
-X-Received: by 2002:a5d:5c88:0:b0:378:fe6e:50ef with SMTP id ffacd0b85a97d-378fe6e51c7mr4537703f8f.5.1726734498280;
-        Thu, 19 Sep 2024 01:28:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEKAUzDZrvhgfNjEKeku8qMzKR68uKK/JreYx9wIbas9L0dAYzL4X6Z2WGnz1JAE1Og2rQx7A==
-X-Received: by 2002:a5d:5c88:0:b0:378:fe6e:50ef with SMTP id ffacd0b85a97d-378fe6e51c7mr4537686f8f.5.1726734497887;
-        Thu, 19 Sep 2024 01:28:17 -0700 (PDT)
+        bh=LCElEKBH0phTZF2fIQuSy/+s0JOFGaYopSCTxfI0dVI=;
+        b=cYQKD1UItywW87+2MT27GxrKGMxAvBChdLEKTAe6U62HmIGhOo11pfNsywhnWefQxa
+         JODDnOJKrmn74PHdCOZkDt+AEHmA1sVOoCei0xYTmpZ8h2JMVbdLCDhA989lSDg/dnKw
+         qjuVb9sCL5aOK9JBimQgr9Um+ugC9QHJ+tpDcQaATXcAm2h7swhttbiRpVHLveehbqPv
+         Wo83AmHYNK8DOeGp7HqFOX8nUptJZ5Mse9zPafsRMo/bn/IYy3Cj2Ru1q5ZAcg7lDxtC
+         wA26vd7+/cbKMmlXj+ALLGk24SviYRyGOe9xFuNIjiJCzAuTePse1EsKB9qnJVCzfR1n
+         03kw==
+X-Forwarded-Encrypted: i=1; AJvYcCUbBKUMlbH2faE4yyMIiJgKO8cGnMyGFI14YNWBvuikhy3Sq6o37qqauEIEkyRNfVjPMrtSNc17UatNXYoL4i0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxsu/SweL/Jddw17NW2YD0mLjeO2bLX7HvB1Yr/gHwm+KxK5AMZ
+	ZcUxcdXq6jw7swUz20mjZnntyACTbfkjoRjMqnVNYfHkS8Yuoab9vtGsRV49beeBJtffjgI6wzD
+	b2j+d9Owq4j+PAkeB72uL9+2iLM0lCsAiY41V0LXOFthXhe4aCBbGx7zTstV8t3O0Fg==
+X-Received: by 2002:a05:6000:1815:b0:368:65ad:529 with SMTP id ffacd0b85a97d-378c2d06172mr13926660f8f.17.1726737128716;
+        Thu, 19 Sep 2024 02:12:08 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHiP7Zyv2OHT77WQZsp/MpXZUyd+Js26zDK1QxecEwwjKk/DBBeqSWHEiTWMF4+k3n/zDLpFw==
+X-Received: by 2002:a05:6000:1815:b0:368:65ad:529 with SMTP id ffacd0b85a97d-378c2d06172mr13926622f8f.17.1726737128263;
+        Thu, 19 Sep 2024 02:12:08 -0700 (PDT)
 Received: from [192.168.88.100] (146-241-67-136.dyn.eolo.it. [146.241.67.136])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37a3b340c9csm1107459f8f.84.2024.09.19.01.28.16
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e75468765sm16452365e9.44.2024.09.19.02.12.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Sep 2024 01:28:17 -0700 (PDT)
-Message-ID: <404e37dd-2794-49b5-913a-2e3455f8c07f@redhat.com>
-Date: Thu, 19 Sep 2024 10:28:16 +0200
+        Thu, 19 Sep 2024 02:12:07 -0700 (PDT)
+Message-ID: <dd84c2d8-1571-41e9-8562-a4db232fbc38@redhat.com>
+Date: Thu, 19 Sep 2024 11:12:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,46 +82,66 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/1 V4] selftests: net: improve missing modules error
- message
-From: Paolo Abeni <pabeni@redhat.com>
-To: David Hunter <david.hunter.linux@gmail.com>, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, shuah@kernel.org
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240914160007.62418-1-david.hunter.linux@gmail.com>
- <a2462a8d-97b1-4494-8bc4-c5a09eee7d1b@redhat.com>
+Subject: Re: [PATCH net v4 0/2] bpf: devmap: provide rxq after redirect
+To: Florian Kauer <florian.kauer@linutronix.de>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+ David Ahern <dsahern@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Jesper Dangaard Brouer <brouer@redhat.com>,
+ linux-kselftest@vger.kernel.org
+References: <20240911-devel-koalo-fix-ingress-ifindex-v4-0-5c643ae10258@linutronix.de>
 Content-Language: en-US
-In-Reply-To: <a2462a8d-97b1-4494-8bc4-c5a09eee7d1b@redhat.com>
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <20240911-devel-koalo-fix-ingress-ifindex-v4-0-5c643ae10258@linutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 9/19/24 10:10, Paolo Abeni wrote:
-> On 9/14/24 18:00, David Hunter wrote:
->> The error message describing the required modules is inaccurate.
->> Currently, only  "SKIP: Need act_mirred module" is printed when any of
->> the modules are missing. As a result, users might only include that
->> module; however, three modules are required.
->>
->> Fix the error message to show any/all modules needed for the script file
->> to properly execute.
->>
->> Signed-off-by: David Hunter <david.hunter.linux@gmail.com>
+On 9/11/24 10:41, Florian Kauer wrote:
+> rxq contains a pointer to the device from where
+> the redirect happened. Currently, the BPF program
+> that was executed after a redirect via BPF_MAP_TYPE_DEVMAP*
+> does not have it set.
 > 
-> ## Form letter - net-next-closed
+> Add bugfix and related selftest.
 > 
-> The merge window for v6.11 and therefore net-next is closed for new
+> Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
+> ---
+> Changes in v4:
+> - return -> goto out_close, thanks Toke
+> - Link to v3: https://lore.kernel.org/r/20240909-devel-koalo-fix-ingress-ifindex-v3-0-66218191ecca@linutronix.de
+> 
+> Changes in v3:
+> - initialize skel to NULL, thanks Stanislav
+> - Link to v2: https://lore.kernel.org/r/20240906-devel-koalo-fix-ingress-ifindex-v2-0-4caa12c644b4@linutronix.de
+> 
+> Changes in v2:
+> - changed fixes tag
+> - added selftest
+> - Link to v1: https://lore.kernel.org/r/20240905-devel-koalo-fix-ingress-ifindex-v1-1-d12a0d74c29c@linutronix.de
+> 
+> ---
+> Florian Kauer (2):
+>        bpf: devmap: provide rxq after redirect
+>        bpf: selftests: send packet to devmap redirect XDP
+> 
+>   kernel/bpf/devmap.c                                |  11 +-
+>   .../selftests/bpf/prog_tests/xdp_devmap_attach.c   | 114 +++++++++++++++++++--
+>   2 files changed, 115 insertions(+), 10 deletions(-)
 
-FTR, typo above        ^^^^^ is actually v6.12. The rest is accurate.
+Alex, Daniel: this will go directly via the bpf tree, right?
 
-> drivers, features, code refactoring and optimizations. We are currently
-> accepting bug fixes only.
-> 
-> Please repost when net-next reopens after Sept 30th.
-> 
-> RFC patches sent for review only are obviously welcome at any time.
-> 
-> See:
-> https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
+Thanks,
+
+Paolo
 
 
