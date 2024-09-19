@@ -1,60 +1,57 @@
-Return-Path: <linux-kselftest+bounces-18132-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18133-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 793DF97CA48
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2024 15:42:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C66997CA8E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2024 15:56:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B8FA285E35
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2024 13:42:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A4295B23B86
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2024 13:56:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 394A219E83E;
-	Thu, 19 Sep 2024 13:42:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8387A19F408;
+	Thu, 19 Sep 2024 13:56:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PLDsHw0C"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JMgjs/+u"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04AD319D8BB;
-	Thu, 19 Sep 2024 13:42:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0F919EEC6;
+	Thu, 19 Sep 2024 13:56:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726753325; cv=none; b=KwP6XFuR67bnEBudFw800TNOHzek52HpMnHIb/eciP2nQgLaPWwf+9PGvSlfaGhNgvt7KulSVobgQfrxOMz0KRHRfA9syoq9qyPcRe/bSxBMgb9Wjkwhv0GpVAF2uGMZqNjJFCcGTYrLfcoCvi8jJeUlZHaMXkq8lWP6rprPWOg=
+	t=1726754162; cv=none; b=rYoxLbFi+LqmIvasHvF+Gre8X0dDtGGdKzgkVl4JyyWSM0kfQgxMLfxpEVISYRn/dyqpHhtJB2wTs9QyAZftuGoEs5pxyg9wVuB19LDXVQk+s5EYC3IgvETos/mHeev0Sfv2g9EIG7eITYmDyOWVro3md/7QqUaj6Sc4D2ww8WM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726753325; c=relaxed/simple;
-	bh=jQxDy751b9YjhDzWie/8758VZV89mHLnI1lsChkCIxY=;
+	s=arc-20240116; t=1726754162; c=relaxed/simple;
+	bh=FUIoneVuELrqS1CNv63Jdafju3cgq3W0v0AThpJiRqs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fczqfyrnu3OunZ11PpS8VvWPhEDLVwJRW5jYDwqd8tzq1iXtn0znuh8ooahLXCUKDaZshltutre29AJfImcg5geTunyAIJ7/X5i1C/2Pv/tD6rsjG+rbz0lgWW9vkn0ggI6kpu7DAGmBU+9Fzo5jdF/SPk/dNsMtI/P9MC95FPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PLDsHw0C; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A797C4CEC6;
-	Thu, 19 Sep 2024 13:42:02 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=hI/L1qG+mEsR+OHrcxQegjVN76uDGnE87JosjbvrDYEwaAXKgLOtFtDO+G0PIFWyzXYaDhAdStrbgFDrY/skPLlcZGWx0Hb9yRcQQHKTmGoKQq+aUgq432z1xSjPuVS2pFzW1dzsu0c2P0lxGyV5GM6ivPyXJltHi0NXgDhtezs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JMgjs/+u; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3432C4CEC4;
+	Thu, 19 Sep 2024 13:55:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726753324;
-	bh=jQxDy751b9YjhDzWie/8758VZV89mHLnI1lsChkCIxY=;
+	s=k20201202; t=1726754161;
+	bh=FUIoneVuELrqS1CNv63Jdafju3cgq3W0v0AThpJiRqs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PLDsHw0Cik3DgcQ0IeiK0t5A0uNB19Nz4rjAr7D4wakqScR5BQ9cD+MWZESwXM9iZ
-	 HWQ6D35iff5mGdK9rxiJw2S7JjcbCBJxp3YO2qDfflNOY81IAR5NZl2HkIOImIV09L
-	 +rRtCO+3olAi03hNlb4OazXfrUrP+mcQg9w0bl1xZIg8m518iU8XopuiJ52dxdJcul
-	 XjVaHSoNcUdtTrcIGSiUy4sUYIzZKxPDfihxUTU87ej9hLya5v9z4SMtDzpCDhys1A
-	 tZyGIy6BCAy8TQydf/jb3sVIZHxRqARlCmfL6LRqOSEkMI85/GqAFXcY87cC48a9Px
-	 4sv9sPdKjt1aA==
-Date: Thu, 19 Sep 2024 14:41:59 +0100
+	b=JMgjs/+uxiqe8HQ/PbmcxxRE00miX9ymA1Xs2crx+F3HcFAKpQe/WxggkN7ZbKT1j
+	 U9+9hUpTf4EflnjwiUoKrT2iXr4woDwln8r/BmLZhL2fs9+S7bqbP+Autl9T/DNH25
+	 ow/E27sjLuStpq7L5D8rKZB+5k8dWDobaEOPK2+uVnBi/ZvaMqGCOkqnRBD1elPE7O
+	 Cn3XmCMxexLgMKeySdgp6Mbcmj1B0HSMZkZzQITGfnu5g8VWlA4pb3MgmJIwZd6CHY
+	 7bw+S7hfuj0HQtfq27M0W7pxyBhEBfmKbH00sDh8eGb7AHicmU7/j331N+Rcny1gqn
+	 dtp/MoD4fDzxw==
+Date: Thu, 19 Sep 2024 14:55:57 +0100
 From: Simon Horman <horms@kernel.org>
-To: Jamie Bainbridge <jamie.bainbridge@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Ido Schimmel <idosch@nvidia.com>, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net v2] selftests: forwarding: Avoid false MDB
- delete/flush failures
-Message-ID: <20240919134159.GA1571683@kernel.org>
-References: <c92569919307749f879b9482b0f3e125b7d9d2e3.1726480066.git.jamie.bainbridge@gmail.com>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+	edumazet@google.com, pabeni@redhat.com, sdf@fomichev.me,
+	matttbe@kernel.org, linux-kselftest@vger.kernel.org,
+	Willem de Bruijn <willemb@google.com>
+Subject: Re: [PATCH net] selftests/net: packetdrill: increase timing
+ tolerance in debug mode
+Message-ID: <20240919135557.GD1571683@kernel.org>
+References: <20240919124412.3014326-1-willemdebruijn.kernel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,43 +60,23 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c92569919307749f879b9482b0f3e125b7d9d2e3.1726480066.git.jamie.bainbridge@gmail.com>
+In-Reply-To: <20240919124412.3014326-1-willemdebruijn.kernel@gmail.com>
 
-On Mon, Sep 16, 2024 at 07:49:05PM +1000, Jamie Bainbridge wrote:
-> Running this test on a small system produces different failures every
-> test checking deletions, and some flushes. From different test runs:
+On Thu, Sep 19, 2024 at 08:43:42AM -0400, Willem de Bruijn wrote:
+> From: Willem de Bruijn <willemb@google.com>
 > 
-> TEST: Common host entries configuration tests (L2)                [FAIL]
->   Failed to delete L2 host entry
+> Some packetdrill tests are flaky in debug mode. As discussed, increase
+> tolerance.
 > 
-> TEST: Common port group entries configuration tests (IPv4 (S, G)) [FAIL]
->   IPv4 (S, G) entry with VLAN 10 not deleted when VLAN was not specified
+> We have been doing this for debug builds outside ksft too.
 > 
-> TEST: Common port group entries configuration tests (IPv6 (*, G)) [FAIL]
->   IPv6 (*, G) entry with VLAN 10 not deleted when VLAN was not specified
+> Previous setting was 10000. A manual 50 runs in virtme-ng showed two
+> failures that needed 12000. To be on the safe side, Increase to 14000.
 > 
-> TEST: Flush tests                                                 [FAIL]
->   Entry not flushed by specified VLAN ID
-> 
-> TEST: Flush tests                                                 [FAIL]
->   IPv6 host entry not flushed by "nopermanent" state
-> 
-> Add a short sleep after deletion and flush to resolve this.
-> 
-> Create a delay variable just for this test to allow short sleep, the
-> lib.sh WAIT_TIME of 5 seconds makes the test far longer than necessary.
-> 
-> Tested on several weak systems with 0.1s delay:
-> - Ivy Bridge Celeron netbook (2014 x86_64)
-> - Raspberry Pi 3B (2016 aarch64)
-> - Small KVM VM on Intel 10th gen (2020 x86_64)
-> All these systems ran 25 test runs in a row with 100% pass OK.
-> 
-> Fixes: b6d00da08610 ("selftests: forwarding: Add bridge MDB test")
-> Signed-off-by: Jamie Bainbridge <jamie.bainbridge@gmail.com>
-> ---
-> v2: Avoid false check failures as seen by Jakub Kicinski.
-> ---
+> Link: https://lore.kernel.org/netdev/Zuhhe4-MQHd3EkfN@mini-arch/
+> Fixes: 1e42f73fd3c2 ("selftests/net: packetdrill: import tcp/zerocopy")
+> Reported-by: Stanislav Fomichev <sdf@fomichev.me>
+> Signed-off-by: Willem de Bruijn <willemb@google.com>
 
 Reviewed-by: Simon Horman <horms@kernel.org>
 
