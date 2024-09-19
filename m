@@ -1,52 +1,84 @@
-Return-Path: <linux-kselftest+bounces-18129-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18130-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3383197C892
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2024 13:22:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DD7697C971
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2024 14:44:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC6E92881B2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2024 11:22:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F25111F21AF7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Sep 2024 12:44:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7A0D19B3C3;
-	Thu, 19 Sep 2024 11:22:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FF6219DF69;
+	Thu, 19 Sep 2024 12:44:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YWrAna5P"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB94E19D075
-	for <linux-kselftest@vger.kernel.org>; Thu, 19 Sep 2024 11:22:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF78619D08C;
+	Thu, 19 Sep 2024 12:44:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726744961; cv=none; b=E7FWZIqU4Daeg8WEMKOjT9GkfieTTilUY80hYW/ifzxzFpG8WTdLXUrXIIeyoej4OoQ0eD1b+ogyLNW01i2z9lAHG39HQuRxrc3Jpy4Zjt0qPKMbUc6/JV8mbly666XLrlWeHNG8KgbwzcFrI4nxedw20ODKHlUVc8zgqXFCZ4g=
+	t=1726749859; cv=none; b=M965+VFofJvjYUroAH7DfA3taDEJ3G/I6libWVxIX7Td8jJif8fihYsSXa5DtDDoADkCsrS0gEilgrVYOF0jAoIuMQGUKfj2r7JwfHE4/znWKMXEh4yt18/59BG5F5WbJnuOq6v3/7uU1GVWpqAbYGlSNakSKcXLGbRM6XHMVe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726744961; c=relaxed/simple;
-	bh=9q4A+BpOjGXxp4crxWgi8OHCzkTKTnJftfdJ+o0I4fQ=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=R169z3NpoG4D4O1BChKAwjJ8hft007211m0lR7chYM5LKmiRMSL6xvfSWtdYPZRx4AoBcTXk8JaPWGpszzHs3gMKxWYN2Vpla4go+JBRjZkgJ2A8P/avRNNI5FMQO8tsAGMwozd98xCrFrY26zEmdGO+1/9UsZHTmkZjOYYc3D8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4X8Y4j3cHXzyRpQ;
-	Thu, 19 Sep 2024 19:21:41 +0800 (CST)
-Received: from dggpeml500003.china.huawei.com (unknown [7.185.36.200])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0B90D140134;
-	Thu, 19 Sep 2024 19:22:36 +0800 (CST)
-Received: from huawei.com (10.44.142.84) by dggpeml500003.china.huawei.com
- (7.185.36.200) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 19 Sep
- 2024 19:22:35 +0800
-From: Yu Liao <liaoyu15@huawei.com>
-To: <shuah@kernel.org>
-CC: <liaoyu15@huawei.com>, <liwei391@huawei.com>, <Jason@zx2c4.com>,
-	<christophe.leroy@csgroup.eu>, <broonie@kernel.org>,
-	<linux-kselftest@vger.kernel.org>
-Subject: [PATCH] selftests: vDSO: fix compile error for vdso_test_getrandom
-Date: Thu, 19 Sep 2024 19:18:41 +0800
-Message-ID: <20240919111841.20226-1-liaoyu15@huawei.com>
-X-Mailer: git-send-email 2.33.0
+	s=arc-20240116; t=1726749859; c=relaxed/simple;
+	bh=m7uoFWX/UlEJrIzmzKde9Axz0fo13HUh+VGEZG1CACY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OHtxKI3Olvr6aRtjgBdC8n0zr74Z2R3KeR8ZZBX5803cK3Xc6SNAtNtpoMrKOPyOb/WczDYEnraPQtQ795eNupwKDuNO9XE/0ewrN/gv+WNc/nbSeLo6JDRMNgS5zVPaAC4ZMv65bGwixqbyYou6BhfQdeJiP/lwWYBa4Ossxp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YWrAna5P; arc=none smtp.client-ip=209.85.160.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-457e153cbdcso7036901cf.2;
+        Thu, 19 Sep 2024 05:44:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1726749856; x=1727354656; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=f8ojNp82anMY4plClHiU9t1AUJZlRm2SyZbGYfRBoIo=;
+        b=YWrAna5PsKdxUClobkfI75/CiEACyBLqaCtrh200xTEvaO5JRbRPE9Bk1wvfy2axjU
+         b4y8TYPe4Q7DyujI7pnVlZp9oJ7Gpr3WvG4QA1qUVJOX9jNxElFUwaOI37ijqpuAEdmL
+         V91AeOQGnuylWO0J04UWoDQdUw+ZGVMBhwJk/PaUEwfy6m0+83yV6Or/JiT/aSS+55kY
+         lbkeI7JtkPAExX99gQS6yQYM0y7s2OSsFgtRIHrs5r48p8hW9hejvzpNrpgHOrvqVA8v
+         akPfRCMy9Pn7viNfNRX3uB6t3+/mR3p96ifaU+NF+xqkMDb2Cegpbw/4j3BciNFDTEt9
+         fWoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726749856; x=1727354656;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=f8ojNp82anMY4plClHiU9t1AUJZlRm2SyZbGYfRBoIo=;
+        b=oIvEUMZN/4Xq2aNTMs9XPen8X2G2V84K7gTgJuQkEABtxgMYT1zltWtEBkXqPJUEGP
+         FWrAtyP7VgWAIEvZNbDEoAPprYyvmwMeg6wv6PDY5yQu1AcjPRl9ateC9SL0d0p6FMv2
+         SjBTKrm6Ikd/Zj/TO2hZ9VbF4s/yaF57BOrNvjh+5DngKr0giD9AJ7cpWSpiuo2n48bG
+         vpMCbB6ELN/ScFsHTMGlawtAhhGxz/iRcZeqCCP/I1Kl34X+ai+5uc7EQs/Mig6tNzNT
+         58EC0MQocAt5CxLMksOr++KUR0ydJqjYv01a6zOurP9D4WvT5iK5ACwIdkoFAZI8VZFq
+         UTfg==
+X-Forwarded-Encrypted: i=1; AJvYcCVCT7pMgLUYyr6xTkQ+oTSiiVtUDMpHouGkspwY/RyW/51Lrs39vDdhhKYu9jIi/fGgbLrzahf0gX5nqOprooA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8KAHrsjHEg3WsqpXWC1+fR199Ds49lNYghrCMnH6YzsevPU41
+	bYIKKivKJ09XwJijvlAzESUANgFv01dljjxDzX/nZ1Oa7M5DGpBfn+qb7bVG
+X-Google-Smtp-Source: AGHT+IE/V6Hg2IZppFFuNCPC7XEaedNfaNyWWEileiDSoZX1E7QU0a7FnuvLwgbQcELWfSo4cglkKA==
+X-Received: by 2002:a05:622a:38e:b0:458:1dd3:e3a6 with SMTP id d75a77b69052e-4586030033dmr343391781cf.23.1726749856416;
+        Thu, 19 Sep 2024 05:44:16 -0700 (PDT)
+Received: from willemb.c.googlers.com.com (23.67.48.34.bc.googleusercontent.com. [34.48.67.23])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45b17878e25sm7155861cf.36.2024.09.19.05.44.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Sep 2024 05:44:15 -0700 (PDT)
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	sdf@fomichev.me,
+	matttbe@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Willem de Bruijn <willemb@google.com>
+Subject: [PATCH net] selftests/net: packetdrill: increase timing tolerance in debug mode
+Date: Thu, 19 Sep 2024 08:43:42 -0400
+Message-ID: <20240919124412.3014326-1-willemdebruijn.kernel@gmail.com>
+X-Mailer: git-send-email 2.46.0.662.g92d0881bb0-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,41 +86,50 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500003.china.huawei.com (7.185.36.200)
 
-When building selftests/vDSO:
-$ make -C tools/testing/selftests TARGETS=vDSO
-I hit the following compilation error:
+From: Willem de Bruijn <willemb@google.com>
 
-  vdso_test_getrandom.c:260:17: error: 'CLONE_NEWTIME' undeclared
-  (first use in this function); did you mean 'CLONE_NEWIPC'?
-    260 |  assert(unshare(CLONE_NEWTIME) == 0);
-        |                 ^~~~~~~~~~~~~
+Some packetdrill tests are flaky in debug mode. As discussed, increase
+tolerance.
 
-CLONE_NEWTIME is defined in linux/sched.h, so fix this by including
-<linux/sched.h>.
+We have been doing this for debug builds outside ksft too.
 
-Fixes: 2aec90036dcd ("selftests: vDSO: ensure vgetrandom works in a time namespace")
-Signed-off-by: Yu Liao <liaoyu15@huawei.com>
+Previous setting was 10000. A manual 50 runs in virtme-ng showed two
+failures that needed 12000. To be on the safe side, Increase to 14000.
+
+Link: https://lore.kernel.org/netdev/Zuhhe4-MQHd3EkfN@mini-arch/
+Fixes: 1e42f73fd3c2 ("selftests/net: packetdrill: import tcp/zerocopy")
+Reported-by: Stanislav Fomichev <sdf@fomichev.me>
+Signed-off-by: Willem de Bruijn <willemb@google.com>
 ---
- tools/testing/selftests/vDSO/vdso_test_getrandom.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/net/packetdrill/ksft_runner.sh | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getrandom.c b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-index 72a1d9b43a84..84f2bbb2d5e0 100644
---- a/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-@@ -19,6 +19,7 @@
- #include <sys/ptrace.h>
- #include <sys/wait.h>
- #include <sys/types.h>
-+#include <linux/sched.h>
- #include <linux/random.h>
- #include <linux/compiler.h>
- #include <linux/ptrace.h>
+diff --git a/tools/testing/selftests/net/packetdrill/ksft_runner.sh b/tools/testing/selftests/net/packetdrill/ksft_runner.sh
+index 7478c0c0c9aa..4071c133f29e 100755
+--- a/tools/testing/selftests/net/packetdrill/ksft_runner.sh
++++ b/tools/testing/selftests/net/packetdrill/ksft_runner.sh
+@@ -30,12 +30,17 @@ if [ -z "$(which packetdrill)" ]; then
+ 	exit "$KSFT_SKIP"
+ fi
+ 
++declare -a optargs
++if [[ -n "${KSFT_MACHINE_SLOW}" ]]; then
++	optargs+=('--tolerance_usecs=14000')
++fi
++
+ ktap_print_header
+ ktap_set_plan 2
+ 
+-unshare -n packetdrill ${ipv4_args[@]} $(basename $script) > /dev/null \
++unshare -n packetdrill ${ipv4_args[@]} ${optargs[@]} $(basename $script) > /dev/null \
+ 	&& ktap_test_pass "ipv4" || ktap_test_fail "ipv4"
+-unshare -n packetdrill ${ipv6_args[@]} $(basename $script) > /dev/null \
++unshare -n packetdrill ${ipv6_args[@]} ${optargs[@]} $(basename $script) > /dev/null \
+ 	&& ktap_test_pass "ipv6" || ktap_test_fail "ipv6"
+ 
+ ktap_finished
 -- 
-2.33.0
+2.46.0.662.g92d0881bb0-goog
 
 
