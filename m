@@ -1,147 +1,183 @@
-Return-Path: <linux-kselftest+bounces-18168-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18169-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A74EE97D5DB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 14:54:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A149997D732
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 16:59:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA8121C21907
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 12:54:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 621D52844B1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 14:59:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0235216EB4C;
-	Fri, 20 Sep 2024 12:54:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3062317C22E;
+	Fri, 20 Sep 2024 14:59:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TMU34yql"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="KAvxvmtG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8A716A94F;
-	Fri, 20 Sep 2024 12:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3F917C21B
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2024 14:59:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726836884; cv=none; b=BXxf7Ni1nrVhAvwGafSuQ3paYGPsCOapSIQX+1ioSnYalIsC1RG5bAMYCy4mW7Z2CCNalyXuQysJ3fmJsaLGzwqdB32on5SWWqeZg+NRKlUGEFL/ZC5zxQeM1R4UAwfXuQs6LejaA2isNHW/k54tyTsB7zELQAgX6k+nXRvCBF8=
+	t=1726844357; cv=none; b=VDsSCXNBW4tNuoxzxWIdZ+sPSeemtxkciQ+VK9zmtd6N6UoT1SvjwVBXISnH0JhOM7X0Z+9L5/r+OjIruCM2daZVWotZdfPa8qtJkQeAmFqumrjNDRBAaJmXFBR8qpsmOYZ5aF3mQtAAWba36/B5NZ0Nbx7HCzDH3aInQIB8aqk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726836884; c=relaxed/simple;
-	bh=9/XbiXvNtfo9Ahhxyxq6laPOnKE8m8Kp8tFx/t2A8HU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IYZmgn1afhG0pIuOneISwQmeZIeCTWAKT5nAKrTxDvYmeVmxGwHpa8iyGfw42orAVymnktCDTlhMcRPugQZIeVYwVRo9+kXui4Z8otGBTuewGt0zHJqiSNOkz0D+peTjNNdiZzIV9nK7vIN0t1aDefoy5QJGmKDro0Eip0KnA+U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TMU34yql; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a8d2b24b7a8so563676666b.1;
-        Fri, 20 Sep 2024 05:54:42 -0700 (PDT)
+	s=arc-20240116; t=1726844357; c=relaxed/simple;
+	bh=sKDpkDMkerixzA6Cw6aEtvJMOjylAkUEtEbo9QU2oQI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PlKWfQfYz1zyZrVwhsXr1+5OBWO+kRvaaC8VB6bFld9zJMyugC8rq4rsbe/N5waX4bSmc1xjpgw8cIkgzALclr/MhDA24A8vcr5EN73m8JBzLD27nTbePGnkZA16vVGEQYPx/8C3tq2A2C7fgMfDQ6EJXuX791bVU/BH2bfs3Xg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=KAvxvmtG; arc=none smtp.client-ip=209.85.166.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-831e62bfa98so112410239f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2024 07:59:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726836881; x=1727441681; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=RpseacMxjUgxJQCQ0p8XO6h9OmRZt38JJp1qVkqe51w=;
-        b=TMU34yql4hRf5Xae89m4gKygnh9tPT4rFGTWxIhra3qMQSfEbEovbATlU6ArvpigF8
-         x1KuU/uXkYSdkEzV4Z0ILaFScNgyHHThtG030/9vZdioAf7qUK/LqjteE6gTvOvIzaVH
-         EnZ0r1pB1R2By3IltUcwFBfkrDRe/9dqxocwQ5tbrZjWOIUFGknf8pkwrv5uO4SCtOxV
-         rB3R7Dff+31wvOlpbVm1h6ciUgswjuP9B/HxXpfH8BZC4a8CRogtOpBHZMmxV4hAHAWf
-         TTZG0uBm5lKtAzLvPJnYPquhKuhV+Cd1v2Na+8m42JoZKtOQ+czwafBI9kFzkR60hP5x
-         gIVQ==
+        d=linuxfoundation.org; s=google; t=1726844354; x=1727449154; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WYxe9kwrqo1GfeH3C0KfOo+V1SDp2i8OljG3N7NL5wA=;
+        b=KAvxvmtGBjV1aY5p/t4zUUgPBvFAyHZgLjomiC6K/XVk9X8Ww+ECJe/HH0DUoXZR/s
+         DgonTj+PP8yADz4ySZkK3vxu7cPe+rQ1GwcRA+seENc3p37N5G+tfw3XELXTJOXVdNNx
+         N5Jw7kZqjAsL9HDl36knG8qy7eKuTRX0bS2+4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726836881; x=1727441681;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RpseacMxjUgxJQCQ0p8XO6h9OmRZt38JJp1qVkqe51w=;
-        b=myEt3++IZ/CgaTzHk8lO+nSNkEsUGB0NKw+2XfZIgXFVMBae5sL2COmw9a+y1JvYvK
-         dDB8BZ7lFX9bbvyrLiTSClWrgeJAENFgUrjPJnJRrw+iIg8Ts5D9GRBW0nC93nhiUQoW
-         65g50RXRJwuLSmabqMhN9d1YyhyVP1NzZFUQNs7qDFqw/J2HNdwsnyxN4CIw4S38on08
-         fjkYx5JWNe7K90GiSFe/SBPZIZi34aDXB9S9eU7t/5S8Gw13spIOPgwIlQWfUM6wecZR
-         8MNbf5LyRiQEhyrpZ/3Y917buzeo10713NkWNuK+dyCI65CGqJB964tDk0bUNUxaSutg
-         11NQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUvm43/Vt26Bnktef7BOUmjSSsLPlX6f5wNi0lCJ2ZvGng3ZbW1n3rjGM/es1DYWSeMVXSXBlo2UrYHujjilg23@vger.kernel.org, AJvYcCW+9bK2AUk0CdPmVzVJMzJFS8868WoaDtLZy26GNENHhOW+4v5xlMVaLNG+wCToBlasMkC0JCsE@vger.kernel.org, AJvYcCXlKIAqTCWVb2v+Nx0SQ520L2Cen+6wKvWnYsi35QFnYD8oAw4JTQKjeLdzJnFXmKSSmdGfxTOsKSsh9Ds=@vger.kernel.org
-X-Gm-Message-State: AOJu0YweMQCVzISXeUD9hxfK7UVjVBARV16YEE3pyQaLo7XBLcgVT160
-	xQu5LfEePpOfF/XlqAKg14kcqqqb2MtBF1CNRFfzZgI7VLoLngDe209EUE4M5Ds/grJGb3aLlYG
-	Dk0IDx2xBGsNTzA2KnmIgah0GxJIetV7l+WngaQ==
-X-Google-Smtp-Source: AGHT+IFNG7eWZ0hTCSU9dnVSqE4S90H/FnkxsBpn+k7zYe1p9qup8+dfLEzF2OhL+u23ShqmAAZopTPFI7IK4WbqJI8=
-X-Received: by 2002:a17:907:94cf:b0:a77:c051:36a9 with SMTP id
- a640c23a62f3a-a90d35107d9mr296404166b.9.1726836881397; Fri, 20 Sep 2024
- 05:54:41 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1726844354; x=1727449154;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WYxe9kwrqo1GfeH3C0KfOo+V1SDp2i8OljG3N7NL5wA=;
+        b=fpp2YmoIPeE6Zdb3U7atuLse1ihRHRHhtr4nClAJb77sr7GgiOG1++Ta7I+omUp4Z6
+         2X2falQutp3jZObUGa+44JAqetitz/rsMf6ghgQdwzNl8YF1jn6q8A4Bw41IJWmk6nW3
+         I+LVUANgoRE8MvB6pl71P/RoQR4EtTkGNDT1W9D81/On4VnWdxbhOyzhTMtJ6mbjmJRp
+         Su/uzv+Bhd1cV+vck8KuTIOTWWpyx9fn+AiH3jjGpSLIdMtrHW3hLFKS7q3jiUTlHe1X
+         N0XrgxJTCdqPWLlxrLrs/bnHlvoKFhblDkKKf0XBNJcAESsaRYtHGPsRK5RSq0vtdbsV
+         gI8g==
+X-Forwarded-Encrypted: i=1; AJvYcCXIMRCabeIsY0wRbipEmyzjt6VzYRSWCL3X1Juh+3vXTdpvZo+TcSAEHqZbjsKPPoJUZXg+fJVGcrBaMz7+25I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/jcLQv9kt4SB0h3T9UyA4p0ZjO9s7WZpC/1LhWyMKZcDI5yl2
+	gzI1g3hD1lagzAEChXdhmrL7QQTH56ktZAhH77C5NYjvvYwW1qTGYfOYbxoMl9o=
+X-Google-Smtp-Source: AGHT+IFR1dxehC1DeauIKJjZxKxCtU9ZHfRiqWSorqoWsZuZa7+canQ6L2+MemljTc3siNvr4bdfdg==
+X-Received: by 2002:a05:6e02:1c49:b0:3a0:c88c:e668 with SMTP id e9e14a558f8ab-3a0c8cba344mr35924225ab.14.1726844354353;
+        Fri, 20 Sep 2024 07:59:14 -0700 (PDT)
+Received: from [10.212.145.178] ([12.216.155.19])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a092e72080sm41727115ab.68.2024.09.20.07.59.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Sep 2024 07:59:13 -0700 (PDT)
+Message-ID: <e2a4d2b4-ca3f-4d21-82d5-b87bc9de9358@linuxfoundation.org>
+Date: Fri, 20 Sep 2024 08:59:12 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <c92569919307749f879b9482b0f3e125b7d9d2e3.1726480066.git.jamie.bainbridge@gmail.com>
- <Zuw7d9eRGo4wdVP3@shredder.mtl.com>
-In-Reply-To: <Zuw7d9eRGo4wdVP3@shredder.mtl.com>
-From: Jamie Bainbridge <jamie.bainbridge@gmail.com>
-Date: Fri, 20 Sep 2024 22:54:29 +1000
-Message-ID: <CAAvyFNiAXb7wuDMi6tRVuzHUwkSwtCtJOzM7LGxk5nDEtaqgyQ@mail.gmail.com>
-Subject: Re: [PATCH net v2] selftests: forwarding: Avoid false MDB
- delete/flush failures
-To: Ido Schimmel <idosch@nvidia.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, netdev@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] kselftests: mm: Fix wrong __NR_userfaultfd value
+To: Muhammad Usama Anjum <Usama.Anjum@collabora.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>
+Cc: kernel@collabora.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ John Hubbard <jhubbard@nvidia.com>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240912103151.1520254-1-usama.anjum@collabora.com>
+ <a9ae7dc4-275d-43c3-bf4c-b0090cb6bb12@linuxfoundation.org>
+ <3cb9d266-4d4b-4031-8603-da7fd9e3ad47@collabora.com>
+ <b3caeb96-2f48-4efd-a56c-e91dae891b48@linuxfoundation.org>
+ <0b847784-a95f-4ed5-a0fb-1b7b4023df13@collabora.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <0b847784-a95f-4ed5-a0fb-1b7b4023df13@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, 20 Sept 2024 at 00:56, Ido Schimmel <idosch@nvidia.com> wrote:
->
-> Hi,
->
-> Thanks for the patch and sorry for the late reply (was OOO).
->
-> On Mon, Sep 16, 2024 at 07:49:05PM +1000, Jamie Bainbridge wrote:
-> > Running this test on a small system produces different failures every
-> > test checking deletions, and some flushes. From different test runs:
-> >
-> > TEST: Common host entries configuration tests (L2)                [FAIL]
-> >   Failed to delete L2 host entry
-> >
-> > TEST: Common port group entries configuration tests (IPv4 (S, G)) [FAIL]
-> >   IPv4 (S, G) entry with VLAN 10 not deleted when VLAN was not specified
-> >
-> > TEST: Common port group entries configuration tests (IPv6 (*, G)) [FAIL]
-> >   IPv6 (*, G) entry with VLAN 10 not deleted when VLAN was not specified
-> >
-> > TEST: Flush tests                                                 [FAIL]
-> >   Entry not flushed by specified VLAN ID
-> >
-> > TEST: Flush tests                                                 [FAIL]
-> >   IPv6 host entry not flushed by "nopermanent" state
-> >
-> > Add a short sleep after deletion and flush to resolve this.
->
-> The port group entry is removed from MDB entry's list synchronously, but
-> the MDB entry itself is removed from the hash table asynchronously and
-> the MDB get query will only return an error if an entry was not found
-> there.
->
-> IOW, I think that when you do get a response after deletion, the entry
-> you get is empty.
->
-> Can you please test the following patch [1] (w/o yours, obviously)?
->
-> [1]
-> diff --git a/net/bridge/br_mdb.c b/net/bridge/br_mdb.c
-> index bc37e47ad829..1a52a0bca086 100644
-> --- a/net/bridge/br_mdb.c
-> +++ b/net/bridge/br_mdb.c
-> @@ -1674,7 +1674,7 @@ int br_mdb_get(struct net_device *dev, struct nlattr *tb[], u32 portid, u32 seq,
->         spin_lock_bh(&br->multicast_lock);
->
->         mp = br_mdb_ip_get(br, &group);
-> -       if (!mp) {
-> +       if (!mp || (!mp->ports && !mp->host_joined)) {
->                 NL_SET_ERR_MSG_MOD(extack, "MDB entry not found");
->                 err = -ENOENT;
->                 goto unlock;
+On 9/17/24 23:46, Muhammad Usama Anjum wrote:
+> On 9/17/24 6:56 AM, Shuah Khan wrote:
+>> On 9/16/24 00:32, Muhammad Usama Anjum wrote:
+>>> On 9/12/24 8:44 PM, Shuah Khan wrote:
+>>>> On 9/12/24 04:31, Muhammad Usama Anjum wrote:
+>>>>> The value of __NR_userfaultfd was changed to 282 when
+>>>>> asm-generic/unistd.h was included. It makes the test to fail every time
+>>>>> as the correct number of this syscall on x86_64 is 323. Fix the header
+>>>>> to asm/unistd.h.
+>>>>>
+>>>>
+>>>> "please elaborate every time" - I just built on my x86_64 and built
+>>>> just fine.
+>>> The build isn't broken.
+>>>
+>>>> I am not saying this isn't a problem, it is good to
+>>>> understand why and how it is failing before making the change.
+>>> I mean to say that the test is failing at run time because the correct
+>>> userfaultfd syscall isn't being found with __NR_userfaultfd = 282.
+>>> _NR_userfaultfd's value depends on the header. When asm-generic/unistd.h
+>>> is included, its value (282) is wrong. I've tested on x86_64.
+>>>
+>>
+>> Okay - how do you know this is wrong? can you provide more details.
+>>
+>> git grep _NR_userfaultfd
+>> include/uapi/asm-generic/unistd.h:#define __NR_userfaultfd 282
+>> include/uapi/asm-generic/unistd.h:__SYSCALL(__NR_userfaultfd,
+>> sys_userfaultfd)
+>> tools/include/uapi/asm-generic/unistd.h:#define __NR_userfaultfd 282
+>>
+>>> The fix is simple. Add the correct header which has _NR_userfaultfd =
+>>> 323.
+> 
+> grep -rnIF "#define __NR_userfaultfd"
+> tools/include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
+> arch/x86/include/generated/uapi/asm/unistd_32.h:374:#define
+> __NR_userfaultfd 374
+> arch/x86/include/generated/uapi/asm/unistd_64.h:327:#define
+> __NR_userfaultfd 323
+> arch/x86/include/generated/uapi/asm/unistd_x32.h:282:#define
+> __NR_userfaultfd (__X32_SYSCALL_BIT + 323)
+> arch/arm/include/generated/uapi/asm/unistd-eabi.h:347:#define
+> __NR_userfaultfd (__NR_SYSCALL_BASE + 388)
+> arch/arm/include/generated/uapi/asm/unistd-oabi.h:359:#define
+> __NR_userfaultfd (__NR_SYSCALL_BASE + 388)
+> include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
+> 
+> The number is dependent on the architecture. The above data shows that:
+> x86	374
+> x86_64	323
 
-This works perfectly for me. Previously I would get at least 2
-failures in 10. Without my patch and with the above patch, 100 tests
-pass without any failure.
+Correct and the generated header files do the right thing and it is good to
+include them as this patch does.
 
-Many thanks for looking at this!
+This is a good find and fix. I wish you explained this in your changelog.
+Please add more details when you send v2.
 
-Jamie
+There could be other issues lurking based on what I found.
+
+The other two files are the problem where they hard code it to 282 without
+taking the __NR_SYSCALL_BASE for the arch into consideration:
+
+tools/include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
+include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
+
+> 
+> I'm unable to find the history of why it is set to 282 in unistd.h and
+> when this problem happened.
+
+According to git history it is added in the following commit to
+include/uapi/asm-generic/unistd.h:
+
+09f7298100ea9767324298ab0c7979f6d7463183
+Subject: [PATCH] userfaultfd: register uapi generic syscall (aarch64)
+
+and it is added in the following commit to tools/include/uapi/asm-generic/unistd.h
+34b009cfde2b8ce20a69c7bfd6bad4ce0e7cd970
+Subject: [PATCH] tools include: Grab copies of arm64 dependent unistd.h files
+
+I think, the above defines from include/uapi/asm-generic/unistd.h and
+tools/include/uapi/asm-generic/unistd.h should be removed.
+
+Maybe others familiar with userfaultfd can determine the best course of action.
+We might have other NR_ defines in these two files that are causing problems
+for tests and tools that we haven't uncovered yet.
+
+thanks,
+-- Shuah
 
