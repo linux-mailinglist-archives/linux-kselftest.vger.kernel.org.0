@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-18158-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18159-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36E4D97D206
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 09:49:48 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BD6D97D208
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 09:49:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B81ACB23438
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 07:49:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE5DE28129D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 07:49:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 799F94D9FB;
-	Fri, 20 Sep 2024 07:49:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E742502B1;
+	Fri, 20 Sep 2024 07:49:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kAQ9NI6X"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MYYovQTK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185874F218;
-	Fri, 20 Sep 2024 07:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B240B4D9FB;
+	Fri, 20 Sep 2024 07:49:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726818581; cv=none; b=oi9oWwTeEYvKJY0hv1B2X9vrklxUyR7KctZ8TnyNWzd8HULG9PkwEKhqWKrlUbkcBhk+/2XlQvXWMatrNvfqPNnc1GIHymmR9a6V1MWwxiSdze1SYkPD3LOYcdYeR9l1cwMgnzldbnHtHLjgSDPKJetvvaQzVCroo+Hmm7LP8N8=
+	t=1726818593; cv=none; b=QTgo6sqS2okGIoZ8Y8smliZr87JvyFExgGLuVfZiYdTFnsdzG7pUrzDEgPIs1yWU7NiJzmVm6A3IB3pkzN7UKkBx1FLJkdNZx4kB0eAzsfGimkshMwQe2qkD+FZ0nxcUlR24j6tC1Ttrc0jiocpo1Ol8j81qlX+lrGKp0/UmNzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726818581; c=relaxed/simple;
-	bh=E5TyztQhkUzZwMxV++0nI5EoQonMvNCb2Tdg38mkhYk=;
+	s=arc-20240116; t=1726818593; c=relaxed/simple;
+	bh=KWLDpztzVbYK1KBMhhpMWgMtRWDVoN5Lkrnz32H+YjA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=CFdb3kRd+Cq77/tZhADALb1rtCVY9cWwL1nVDo6kJbdFr++AbQV2xvk+CWdNmeHjjXQy4nYH9+3pEmVM6l0HLmcv4GYTjiV73fSqBMOJSvTrDxdKT/b11XpbKHZBPjy9qZbvwp4RIhqSiH9sk5fyiJJGEUtXmYtyOUncX7Ss6p8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kAQ9NI6X; arc=none smtp.client-ip=209.85.214.182
+	 MIME-Version; b=LjpTjKFEzVRyz+FbW5BpVtv1MLX3g3HfdzF5ng2jOgNUoSPcpJeIzu2vQQv5MGJDnMvHBVzAOvoqCg5N11g65ccRmLLdUe7YzjG/6IdILckz+hUX6/7Z5KHPCougqmtfFDef3sFpdOhI8KbFxvZ5Ryl91j2Q4mhxlpLpmbIhFsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MYYovQTK; arc=none smtp.client-ip=209.85.215.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2055a3f80a4so12167685ad.2;
-        Fri, 20 Sep 2024 00:49:40 -0700 (PDT)
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-7db908c9c83so822615a12.2;
+        Fri, 20 Sep 2024 00:49:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726818579; x=1727423379; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1726818591; x=1727423391; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=noFg1mq/xrw7o2KWB3ZfepYrijjvn8fHawORzc/mm6c=;
-        b=kAQ9NI6X1KbOfCVt02ADc9XAlpvWObHXDWK1qI80PY+DxVBBy/y3w673lrT32r94z8
-         o9stwZtnnFLSoPZ/JdbpnNvmZgPl3MEO/GIxVXhDOQKaxGVFvVpimBdzdv36FNFYJW/e
-         kQEFfU+plrE37XOyEk5Jms/9NaN8Q1BiRIvzgisD0iI/hqK1U7uIL7VYpd2IAQ5B3Ylc
-         Q28w2jinVMD0N/p8Km9HM56mqOhvCYRNiKzn3jkjt1F32bLkQl9tkyEEy2n/hz5F3EuQ
-         rgENrT8iwgInRHhlUEefvlszL6lSTxW3+Ku5tEwdCweLHDtSvvk7tInaRKjYYP3LULu8
-         +mqw==
+        bh=Oe+h4uk3Jrp0ffDd+CRexEyHhRh2av2HRgIHFJhluXo=;
+        b=MYYovQTKer42fr+Pu+9XSCObD+bmP2Dg+7Z9gou7zLHZcexW0F6IqPBqFcbXL+Ksqk
+         9pJIkf4dz2qSGVwz3qu7H9e9dNifDSDNZD94cgUrOLSHcXiyI2cXI+e5oyNFzH234w/+
+         gFnsgilx4M5EBiRCkG8cSdL6YPLtELxmnVvObJ4vZC10gYBtLyXSUMYxLNnime28jFka
+         7UYfvQC89LIUFjvv2LJB7FnyNvRlmkvM73Sj2nPlp4rbyMYUuSpwMCehxrfXaNgloWRf
+         dfPt8cTx6Zb3N/m76YrTEDeF4Jvr95sYjGKnj8aKUJEz+ZVS6CBMFU1ug6qRNReQFDqc
+         42mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726818579; x=1727423379;
+        d=1e100.net; s=20230601; t=1726818591; x=1727423391;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=noFg1mq/xrw7o2KWB3ZfepYrijjvn8fHawORzc/mm6c=;
-        b=pLxt4GfAAF5rAgJhiXaN2XUasGnijHF2VIgLsxUTWLCDme199b9pHzkgLc/JskwehE
-         9B4UK2YD5XaLugmQmynbbeJn7gjfEtY2r8MdvhtFsUDiJG5gTvpKYU0V4kUduWvnuPHH
-         rHp010zonKwAwup4ThBN6/rZe209sljNh/Pqhnvwe9uqDX4QXTYnxNPiVNPTGk4PYBj7
-         fRXwbLhwkOKC+VDJBhvT5LUWq+xJH2JXRf4vOmMgYgP7PnouSCOCjOaMMS9G4WTprxPN
-         xD2R4lL4YgNIhWxthzi1AhQcpXyhM4ffV/ezNmCyqBLdXCzwWkVf68+aAke4tYGqZuSg
-         gKrg==
-X-Forwarded-Encrypted: i=1; AJvYcCWZ4HCSsjAlEYQHuDuwiPhWfHRV5lzEMo9+PKYFM+IfpbckY3xRE45fttJbOV+PXLDEoHAO4l9E6+VdmLsxWqo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoJBIKp88ITtyOSx4n8DDYlLW7bWJ6CvZD3zU2U1iLTnrHs5/n
-	dDNGrJ0ysYo3dEGWDcMnXR4sDinaCfS5YIUlSFnZn4zVZHwsQV0AHMpXXg==
-X-Google-Smtp-Source: AGHT+IGJCPJ129JgNLt8JKJ4cnLDrd+a6uNiFccng6gWpt6GReTy81+QgyBIrdEUlkJwBxYTq4Wzgw==
-X-Received: by 2002:a17:903:41d2:b0:206:d69d:9ca6 with SMTP id d9443c01a7336-208d97f32dfmr18860205ad.10.1726818579097;
-        Fri, 20 Sep 2024 00:49:39 -0700 (PDT)
+        bh=Oe+h4uk3Jrp0ffDd+CRexEyHhRh2av2HRgIHFJhluXo=;
+        b=Rjinkt8RJVl+kcc8eFqLyjq2CzUEnCdlLLNRsoVAHDPiWCOVLAzMn/JcwaIxmt/Q8N
+         ZR+gMY8yK7n4S5Sa5YO5kS2C/Z8M0Sb38flDI7sTWBmtJge9jthM7xKLHMsRt7IG18vI
+         7w4cM3pL1Jl5UazZwn1MhNO+U/J/gZQYgtIv0zkvOuC6H1RggY3oO4pBSFPHkt+JIWzU
+         OYW0duiGtoRzVFlR+EN3Mc+Dd+2i0Jf1QwJC9uIJUpNe+Fiq5gd/aY7Elul/hyBX5al5
+         Ai8jLNPzoa2EFYDJ+LKjVl7GYEFwgvHCvbX9BY656XQy5CYl87CgOE16p/Jigw9gqw+S
+         hmBw==
+X-Forwarded-Encrypted: i=1; AJvYcCUpVRoEphru+fczBpillwIW34RoALg53/6zBBYTwhJjtlV5bFu5nnmRAm465phkoW0lh+Cp8+xB2PYi3gpEarA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyzUruPzyg/OTzIiCCv6zju7sCmiB6f/LafBgztSJgRcmo56bnQ
+	Tc37lnpdlMTzEOkwUG3SNrN7ylVyBHBxSXJo1G2xRY+wOYqHbgcQq2PzkA==
+X-Google-Smtp-Source: AGHT+IF0wXFZ5zT8dZVr/RFuwJJhx/R9KlLvE34+6aNfluIBlpNgagp69AeFE1t9bUot/HPYG8Tyfg==
+X-Received: by 2002:a05:6a21:398c:b0:1cf:9a86:a29b with SMTP id adf61e73a8af0-1d30a9000admr3411896637.20.1726818590593;
+        Fri, 20 Sep 2024 00:49:50 -0700 (PDT)
 Received: from localhost.localdomain (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20794600fe8sm90481625ad.68.2024.09.20.00.49.38
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20794600fe8sm90481625ad.68.2024.09.20.00.49.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Sep 2024 00:49:38 -0700 (PDT)
+        Fri, 20 Sep 2024 00:49:50 -0700 (PDT)
 From: Tony Ambardar <tony.ambardar@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Tony Ambardar <tony.ambardar@gmail.com>,
@@ -87,9 +87,9 @@ Cc: Tony Ambardar <tony.ambardar@gmail.com>,
 	Shuah Khan <shuah@kernel.org>,
 	Jean-Philippe Brucker <jean-philippe@linaro.org>,
 	Viktor Malik <vmalik@redhat.com>
-Subject: [PATCH bpf-next v1 2/3] bpf: btf: Ensure natural alignment of .BTF_ids section
-Date: Fri, 20 Sep 2024 00:49:12 -0700
-Message-Id: <714d7ab8a48172c67ddc027c85b2a0dad0312a74.1726806756.git.tony.ambardar@gmail.com>
+Subject: [PATCH bpf-next v1 3/3] tools/bpf, selftests/bpf : Sync btf_ids.h to tools
+Date: Fri, 20 Sep 2024 00:49:13 -0700
+Message-Id: <728fd3a356ae5f9a0c0a84d8b9fc6af1bcd22c1d.1726806756.git.tony.ambardar@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1726806756.git.tony.ambardar@gmail.com>
 References: <cover.1726806756.git.tony.ambardar@gmail.com>
@@ -101,25 +101,81 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-While building of vmlinux employs a linker script to align the .BTF_ids
-section to 4 bytes, other usage leaves .BTF_ids unaligned and may lead to
-problems (e.g. [1]). Post-processing and libelf-based endian translation by
-resolve_btfids may also potentially suffer from misalignment.
+Update to include latest changes, including BTF_SET8 support and correct
+alignment of .BTF_ids sections, and remove the now-redundant alignment fix
+introduced in 3effc06a4dde ("selftests/bpf: Fix alignment of .BTF_ids").
 
-Update encoding macros in btf_ids.h to always align BTF ID data to 4 bytes.
-
-[1]: 3effc06a4dde ("selftests/bpf: Fix alignment of .BTF_ids")
-
+CC: Jean-Philippe Brucker <jean-philippe@linaro.org>
 Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
 ---
- include/linux/btf_ids.h | 1 +
- 1 file changed, 1 insertion(+)
+ tools/include/linux/btf_ids.h                 | 80 +++++++++++++++++--
+ .../selftests/bpf/prog_tests/resolve_btfids.c |  6 --
+ 2 files changed, 74 insertions(+), 12 deletions(-)
 
-diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
-index c0e3e1426a82..c10b163dc340 100644
---- a/include/linux/btf_ids.h
-+++ b/include/linux/btf_ids.h
-@@ -89,6 +89,7 @@ word							\
+diff --git a/tools/include/linux/btf_ids.h b/tools/include/linux/btf_ids.h
+index 72ea363d434d..3ba37d00e3ae 100644
+--- a/tools/include/linux/btf_ids.h
++++ b/tools/include/linux/btf_ids.h
+@@ -10,6 +10,9 @@ struct btf_id_set {
+ 	u32 ids[];
+ };
+ 
++/* This flag implies BTF_SET8 holds kfunc(s) */
++#define BTF_SET8_KFUNCS		(1 << 0)
++
+ struct btf_id_set8 {
+ 	u32 cnt;
+ 	u32 flags;
+@@ -21,7 +24,8 @@ struct btf_id_set8 {
+ 
+ #ifdef CONFIG_DEBUG_INFO_BTF
+ 
+-#include <linux/compiler.h> /* for __PASTE */
++#include <linux/compiler.h> /* for __PASTE and __maybe_unused */
++#include <linux/stringify.h>
+ 
+ /*
+  * Following macros help to define lists of BTF IDs placed
+@@ -35,7 +39,7 @@ struct btf_id_set8 {
+ 
+ #define BTF_IDS_SECTION ".BTF_ids"
+ 
+-#define ____BTF_ID(symbol)				\
++#define ____BTF_ID(symbol, word)			\
+ asm(							\
+ ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
+ ".local " #symbol " ;                          \n"	\
+@@ -43,10 +47,11 @@ asm(							\
+ ".size  " #symbol ", 4;                        \n"	\
+ #symbol ":                                     \n"	\
+ ".zero 4                                       \n"	\
++word							\
+ ".popsection;                                  \n");
+ 
+-#define __BTF_ID(symbol) \
+-	____BTF_ID(symbol)
++#define __BTF_ID(symbol, word) \
++	____BTF_ID(symbol, word)
+ 
+ #define __ID(prefix) \
+ 	__PASTE(__PASTE(prefix, __COUNTER__), __LINE__)
+@@ -56,7 +61,14 @@ asm(							\
+  * to 4 zero bytes.
+  */
+ #define BTF_ID(prefix, name) \
+-	__BTF_ID(__ID(__BTF_ID__##prefix##__##name##__))
++	__BTF_ID(__ID(__BTF_ID__##prefix##__##name##__), "")
++
++#define ____BTF_ID_FLAGS(prefix, name, flags) \
++	__BTF_ID(__ID(__BTF_ID__##prefix##__##name##__), ".long " #flags "\n")
++#define __BTF_ID_FLAGS(prefix, name, flags, ...) \
++	____BTF_ID_FLAGS(prefix, name, flags)
++#define BTF_ID_FLAGS(prefix, name, ...) \
++	__BTF_ID_FLAGS(prefix, name, ##__VA_ARGS__, 0)
+ 
+ /*
+  * The BTF_ID_LIST macro defines pure (unsorted) list
+@@ -76,6 +88,7 @@ asm(							\
  #define __BTF_ID_LIST(name, scope)			\
  asm(							\
  ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
@@ -127,6 +183,103 @@ index c0e3e1426a82..c10b163dc340 100644
  "." #scope " " #name ";                        \n"	\
  #name ":;                                      \n"	\
  ".popsection;                                  \n");
+@@ -155,10 +168,58 @@ asm(							\
+ ".popsection;                                 \n");	\
+ extern struct btf_id_set name;
+ 
++/*
++ * The BTF_SET8_START/END macros pair defines sorted list of
++ * BTF IDs and their flags plus its members count, with the
++ * following layout:
++ *
++ * BTF_SET8_START(list)
++ * BTF_ID_FLAGS(type1, name1, flags)
++ * BTF_ID_FLAGS(type2, name2, flags)
++ * BTF_SET8_END(list)
++ *
++ * __BTF_ID__set8__list:
++ * .zero 8
++ * list:
++ * __BTF_ID__type1__name1__3:
++ * .zero 4
++ * .word (1 << 0) | (1 << 2)
++ * __BTF_ID__type2__name2__5:
++ * .zero 4
++ * .word (1 << 3) | (1 << 1) | (1 << 2)
++ *
++ */
++#define __BTF_SET8_START(name, scope, flags)		\
++__BTF_ID_LIST(name, local)				\
++asm(							\
++".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
++"." #scope " __BTF_ID__set8__" #name ";        \n"	\
++"__BTF_ID__set8__" #name ":;                   \n"	\
++".zero 4                                       \n"	\
++".long " __stringify(flags)                   "\n"	\
++".popsection;                                  \n");
++
++#define BTF_SET8_START(name)				\
++__BTF_SET8_START(name, local, 0)
++
++#define BTF_SET8_END(name)				\
++asm(							\
++".pushsection " BTF_IDS_SECTION ",\"a\";      \n"	\
++".size __BTF_ID__set8__" #name ", .-" #name "  \n"	\
++".popsection;                                 \n");	\
++extern struct btf_id_set8 name;
++
++#define BTF_KFUNCS_START(name)				\
++__BTF_SET8_START(name, local, BTF_SET8_KFUNCS)
++
++#define BTF_KFUNCS_END(name)				\
++BTF_SET8_END(name)
++
+ #else
+ 
+-#define BTF_ID_LIST(name) static u32 __maybe_unused name[5];
++#define BTF_ID_LIST(name) static u32 __maybe_unused name[64];
+ #define BTF_ID(prefix, name)
++#define BTF_ID_FLAGS(prefix, name, ...)
+ #define BTF_ID_UNUSED
+ #define BTF_ID_LIST_GLOBAL(name, n) u32 __maybe_unused name[n];
+ #define BTF_ID_LIST_SINGLE(name, prefix, typename) static u32 __maybe_unused name[1];
+@@ -166,6 +227,10 @@ extern struct btf_id_set name;
+ #define BTF_SET_START(name) static struct btf_id_set __maybe_unused name = { 0 };
+ #define BTF_SET_START_GLOBAL(name) static struct btf_id_set __maybe_unused name = { 0 };
+ #define BTF_SET_END(name)
++#define BTF_SET8_START(name) static struct btf_id_set8 __maybe_unused name = { 0 };
++#define BTF_SET8_END(name)
++#define BTF_KFUNCS_START(name) static struct btf_id_set8 __maybe_unused name = { .flags = BTF_SET8_KFUNCS };
++#define BTF_KFUNCS_END(name)
+ 
+ #endif /* CONFIG_DEBUG_INFO_BTF */
+ 
+@@ -215,5 +280,8 @@ MAX_BTF_TRACING_TYPE,
+ };
+ 
+ extern u32 btf_tracing_ids[];
++extern u32 bpf_cgroup_btf_id[];
++extern u32 bpf_local_storage_map_btf_id[];
++extern u32 btf_bpf_map_id[];
+ 
+ #endif
+diff --git a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+index 51544372f52e..c3c021e3783e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
++++ b/tools/testing/selftests/bpf/prog_tests/resolve_btfids.c
+@@ -28,12 +28,6 @@ struct symbol test_symbols[] = {
+ 	{ "func",    BTF_KIND_FUNC,    -1 },
+ };
+ 
+-/* Align the .BTF_ids section to 4 bytes */
+-asm (
+-".pushsection " BTF_IDS_SECTION " ,\"a\"; \n"
+-".balign 4, 0;                            \n"
+-".popsection;                             \n");
+-
+ BTF_ID_LIST(test_list_local)
+ BTF_ID_UNUSED
+ BTF_ID(typedef, S)
 -- 
 2.34.1
 
