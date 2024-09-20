@@ -1,144 +1,135 @@
-Return-Path: <linux-kselftest+bounces-18175-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18176-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F058F97D869
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 18:37:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 621C197D8BA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 18:57:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A79441F22C5B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 16:37:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21BBD281B12
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 16:57:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57E8817DFE9;
-	Fri, 20 Sep 2024 16:37:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ED9917BEC6;
+	Fri, 20 Sep 2024 16:57:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="JGIwn20b"
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="P9YTrZY4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF0601E517
-	for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2024 16:37:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D52D17E00A
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2024 16:57:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726850254; cv=none; b=TASal3epO0VtVWRUNpzFhgm8MH1hqaE/0IpVSYA27t07FTByb2znLWxQwZuOh8XYVbzyAzg0GAWNLGPkTbUqpPjop68LWZu5U1A5ywGx71n2RnZJPZVexTYm2VhffGZGRsTk/B3cDzPhUoU5+lB5AjX0EAsVGw01bjOJDe08Vns=
+	t=1726851470; cv=none; b=iBoeyDtNtLSF0o5uCor/RPZ9MGrw4mr5RG5JOdr2ROAhvEa108ZST1qaZaE2CEJIsPls78E7vcYceYk4rwRwKjSWqTo8YrHevpKDsgunmget2PUGMyni//vDtiw6fo7QNJSuNirE9UGPxD2I1ndyY7SEb0tTSrzQHFM8hFqsulo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726850254; c=relaxed/simple;
-	bh=CLdeFhcXjFW/Rn670pgZvMahwb04Xg2afg6QSLEsW9M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eeX2CdQQxIPD+3KOGaOef363KiQpmWDa5aBfiARBWiVm84z+Uppljg3LrQNddq6GtfZl8aSPBPbb4QifWsRNRJVIqOqD4d+gycARuOUkTxm+2SP7470992u+xbLDdCL49PcBBTX8TJqyxveIhE4X7gXsXaI7NX394H1RN+h/FwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=JGIwn20b; arc=none smtp.client-ip=209.85.167.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3db3763e924so223936b6e.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2024 09:37:31 -0700 (PDT)
+	s=arc-20240116; t=1726851470; c=relaxed/simple;
+	bh=0VndrB7wUbmZML5AQ3UnMNv6I2BM2u35xkfH2xKB9Z8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EMx236EuiOBAgni0tam/VI9L9/CQ1vTl/ZeeuLw9fPmaBSdCbd7g06RF9tJAv1ZXqy06QhTCZLszx/4EQt5O4QAnamj/w19B+etoFVWqSSGe2o0a8Gy9Q9mstIfaW76p7KdXqpKlXRyNo4vc5/PIRR142PcqHql7MTjY8r1GYTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=P9YTrZY4; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-42cbaf9bfdbso20057935e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2024 09:57:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1726850251; x=1727455051; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aeUoiC4xV3CiCxio8wPUbYZ9DxOg+zY+E1xCmjqF+qE=;
-        b=JGIwn20bV1Jl3+RqvTu6eBnUUzjlhm69/EXrjM1sItTAwffQkPpUm2xD0+k/P9zNEU
-         EcrkwBbhaTnRZGqj1CjUveQ68nYirkXhWFqXVmnLNAGOacknExPmHBQouGr+aAwVMwov
-         ULan7rNbT5Bmf+8sm1xkHP7+epfKPqeqbiGS8=
+        d=cloudflare.com; s=google09082023; t=1726851466; x=1727456266; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cPGcaGILxwhfTJ1AkidUV1js05svfUGNV2qC8S2ASMs=;
+        b=P9YTrZY4DK5p/LuSg3f+iCc8bfAAkYHSkjjmzXerwyMe3vn+n+dHTrZweFZn7aHp8g
+         EhVLEMSIr5RfKLUcOe04gAhe7pbr1oeemudYbWLD2a39CHhmHSWuGHzP3R4zxr+pMXeK
+         1OYB3jSArecRbuHK62VJN6QkxeKkinTX00YGjpGGKL+g2sPIJ6T+J9b0sD9S4RuyzyZz
+         mI+GMqWt2lokLMaVRlMEUKX9rEca6xCO4HcdV3YGQ8ety15beBnNBEnwZeGQ//TyGYp1
+         FdutSJ91DwzS/kJ4/1chZ1yRLlIBZpGLyTp1WU7eYP0l7HQ0nYS5AaLACcXonFkq1MHj
+         sfFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726850251; x=1727455051;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aeUoiC4xV3CiCxio8wPUbYZ9DxOg+zY+E1xCmjqF+qE=;
-        b=KoRhI//t6lT3AMJK0PufQuBLhxRBgVjw2WC3qVR86QVLege1HfrVmw+EUCVh6t5cnK
-         67k2NM8xTaiLFyOqLWr6gxUsiXmNUEEEtBReskKIj4MqqtWwqAqdTs4oyWCjDMznjiYP
-         tw0zTiZh1c11hy59ai9ehqLD/r+Rj5c9qRIUFOeSUdh13Nl7xcHLE8bojLM3SrBJlMKF
-         uOpGI7QSLH+jiwKr8wUGMvgb/I+w8puDyXQ9J1HRMrDINxLwa0kfb/uonp926J4BKBlv
-         IgNba3yo8EO4MDVme+KJtvWHXiRsyV4FS6wu4ET/RtAC4UsLVKQ8ULzQDyVyzn+7H/j4
-         iO1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXnu+Z/NG91wJDwt5o1V/GKshfRtjxk43EAfs1FDQvU6NaTSBmgW/xyGVctHHVcp+5MX8LTJ8iopUk8SrF4l+s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yybrz1rcgrEEPBmj5J2/A8nTulBRre7gKMDtPR3z1QBRNiNkF9M
-	xf/0YurbupiZTcWX9udJLfq4Ku9cXXVCbmxEJ4tbWx8i2bqlOrLNq4VIbbhGnyXYqBXHHUxcybJ
-	LSk6nQQskjN0Jc/6/r+2b6lX6LH9L6T1F9Xgf
-X-Google-Smtp-Source: AGHT+IEgc6oFjG/AVNeyCwNJdiZ7/4I53v5fqxBfmjiWXrV2OLBvKIkIyisPGyrs125247P4H7Q2d819NzxIHSA2I1E=
-X-Received: by 2002:a05:6870:870c:b0:277:db1c:7c6a with SMTP id
- 586e51a60fabf-2803a62c744mr749865fac.7.1726850250833; Fri, 20 Sep 2024
- 09:37:30 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1726851467; x=1727456267;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cPGcaGILxwhfTJ1AkidUV1js05svfUGNV2qC8S2ASMs=;
+        b=r7g9JfdkipDzVGYKElITYoZWpDDE0Yd14YzTaY2GzaVFUyuzk5KcZxGT7TdW53v32/
+         fHhG3mJ09ltSW5M3fJgnnfcGebmlVR6S0F/qKxyeRshaix55UxmzfX8Wl0kUbDfIvvui
+         EtWl2il5I0Fu77zP0t2ri0lP+mraNwcFB/euSkSxyfFRwotPPYqBfFBmH7f0pWaGxb6d
+         VOyxkcKiG4/DxxrdQjrglEA3obT5nPgJPccKqKJxtBoCPvC2+UChu7Oz2Lbf83Jjb09L
+         c6E2WhpEYVsr/l2mD63Bf1OvdyzobzbyHVRDCtS/b8/V35VSuGHxpLdCAJNnDlUK+Dvh
+         CZ0g==
+X-Forwarded-Encrypted: i=1; AJvYcCXNG0wIakBVGq5ztlWxORqBtZqaTtHgjgzZteUrlbv8wvqJOyI8qX+0/2D2B45neJM6NhMSzWHIfL/eE9bh4qE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRCmY8F+czoa/JckMHFIEOBHyKK+DmMHLb+keSkCxs/Iacp3sz
+	bULRq9cJahv5ZWZ7s0gH8UJhtGYUXTLOnFeseAAH7qhHMa9pA4qrksjI027r4Qk=
+X-Google-Smtp-Source: AGHT+IH47FhS6BitJFEObpSEKWNYV6OlALdb/YS1wlurIrhxIx0joR4JwIU0GtIJDWKAkg4lShG/Ig==
+X-Received: by 2002:a05:600c:1e25:b0:42c:b6e4:e3ac with SMTP id 5b1f17b1804b1-42e7abe228fmr29196115e9.3.1726851465308;
+        Fri, 20 Sep 2024 09:57:45 -0700 (PDT)
+Received: from GHGHG14 ([2a09:bac5:50ca:432::6b:72])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e7540e464sm54855295e9.4.2024.09.20.09.57.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 20 Sep 2024 09:57:44 -0700 (PDT)
+Date: Fri, 20 Sep 2024 17:57:30 +0100
+From: Tiago Lam <tiagolam@cloudflare.com>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	David Ahern <dsahern@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Jakub Sitnicki <jakub@cloudflare.com>, kernel-team@cloudflare.com
+Subject: Re: [RFC PATCH 1/3] ipv4: Run a reverse sk_lookup on sendmsg.
+Message-ID: <Zu2pev10zUAEnbYm@GHGHG14>
+References: <20240913-reverse-sk-lookup-v1-0-e721ea003d4c@cloudflare.com>
+ <20240913-reverse-sk-lookup-v1-1-e721ea003d4c@cloudflare.com>
+ <66eacb6317540_29b986294b5@willemb.c.googlers.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240830180237.1220027-1-jeffxu@chromium.org> <20240830180237.1220027-5-jeffxu@chromium.org>
- <e7ea2b84-8d10-40fe-a14f-837bca851ea9@lucifer.local> <fd927106-2fc3-4b96-8014-2c517229bc99@lucifer.local>
- <CABi2SkUpCf+aOa2sPED8CosG5ccqjFd7ouot8gXi9ECqsHiZhw@mail.gmail.com>
- <4944ce41-9fe1-4e22-8967-f6bd7eafae3f@lucifer.local> <CABi2SkUgDZtJtRJe+J9UNdtZn=EQzZcbMB685P=1rR7DUhg=6Q@mail.gmail.com>
- <ZurTHc1C27iqofjp@finisterre.sirena.org.uk>
-In-Reply-To: <ZurTHc1C27iqofjp@finisterre.sirena.org.uk>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Fri, 20 Sep 2024 09:37:17 -0700
-Message-ID: <CABi2SkUQM8girk31jDYMfx8kVoG0xXMwaSDWmu90b4ZmtdmHHQ@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] selftests/mseal: add more tests for mmap
-To: Mark Brown <broonie@kernel.org>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Muhammad Usama Anjum <usama.anjum@collabora.com>, akpm@linux-foundation.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-hardening@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	pedro.falcato@gmail.com, willy@infradead.org, vbabka@suse.cz, 
-	Liam.Howlett@oracle.com, rientjes@google.com, keescook@chromium.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <66eacb6317540_29b986294b5@willemb.c.googlers.com.notmuch>
 
-Hi Mark
+On Wed, Sep 18, 2024 at 08:45:23AM -0400, Willem de Bruijn wrote:
+> Tiago Lam wrote:
+> > In order to check if egress traffic should be allowed through, we run a
+> > reverse socket lookup (i.e. normal socket lookup with the src/dst
+> > addresses and ports reversed) to check if the corresponding ingress
+> > traffic is allowed in.
+> 
+> The subject and this description makes it sound that the change always
+> runs a reverse sk_lookup on sendmsg.
+> 
+> It also focuses on the mechanism, rather than the purpose.
+> 
+> The feature here adds IP_ORIGDSTADDR as a way to respond from a
+> user configured address. With the sk_lookup limited to this new
+> special case, as a safety to allow it.
+> 
+> If I read this correctly, I suggest rewording the cover letter and
+> commit to make this intent and behavior more explicit.
+> 
 
-On Wed, Sep 18, 2024 at 6:18=E2=80=AFAM Mark Brown <broonie@kernel.org> wro=
-te:
->
-> On Fri, Sep 13, 2024 at 03:50:00PM -0700, Jeff Xu wrote:
->
-> > Even though the number of lines is large in these patches, its main
-> > intention is to test Pedro's in-place change (from can_modify_mm to
-> > can_modify_vma). Before this patch,  the test had a common pattern:
-> > setup memory layout, seal the memory, perform a few mm-api steps, verif=
-y
-> > return code (not zero).  Because of the nature of out-of-loop,  it is
-> > sufficient to just verify the error code in a few cases.
->
-> > With Pedro's in-loop change, the sealing check happens later in the
-> > stack, thus there are more things and scenarios to verify. And there we=
-re
-> > feedback to me during in-loop change that selftest should be extensive
-> > enough to discover all regressions.  Even though this viewpoint is subj=
-ect
-> > to debate. Since none would want to do it, I thought I would just do it=
-.
->
-> > So the Patch V3 1/5 is dedicated entirely to increasing the verificatio=
-n
-> > for existing scenarios, this including checking return code code, vma-s=
-ize,
-> > etc after mm api return.
->
-> > Patch V3 3/5 are for unmap(), during review of V2 of Pedro's in-loop
-> > change, we discovered a bug in unmap(), and unmap() is not atomic.
-> > This leads to 4/5(mmap), 5/5(mremap), which calls munmap().
-> > In addition, I add scenarios to cover cross-multiple-vma cases.
->
-> > The  high-level goal of mseal test are two folds:
-> > 1> make sure sealing is working correctly under different scenarios,
-> > i.e. sealed mapping are not modified.
-> > 2> For unsealed memory, added mseal code  doesn't regress on regular mm=
- API.
->
-> > The goal 2 is as important as 1, that is why tests usually are done in
-> > two phases, one with sealing, the other without.
->
-> That's vastly more detail than is in the changelogs for the actual
-> patches (which are just a few lines each) or the cover letter of the
-> series.  I don't have the MM knowledge to assess the detail of what
-> you're saying but I can't help but think that it'd help a lot with
-> review if all this detail were part of the actual submission.
-Agreed, will update and give more detail in the next version of the patch.
+I think that makes sense, given this is really about two things:
+1. Allowing users to use IP_ORIGDSTADDR to set src address and/or port
+on sendmsg();
+2. When they do, allow for that return traffic to exit without any extra
+configuration, thus limiting how users can take advantage of this new
+functionality.
 
-Thanks
--Jeff
+I've made a few changes which hopefully makes that clearer in v2, which
+I'm sending shortly. Thanks for these suggestions!
+
+Tiago.
 
