@@ -1,334 +1,280 @@
-Return-Path: <linux-kselftest+bounces-18154-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0A3F97D0FF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 07:53:28 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE2F997D17F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 09:10:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8375328194E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 05:53:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A3F4B22005
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 07:10:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4BE82746B;
-	Fri, 20 Sep 2024 05:53:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE88144C81;
+	Fri, 20 Sep 2024 07:10:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="oA2XTXab"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="0cf+gOkn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2061.outbound.protection.outlook.com [40.107.244.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE284EBE;
-	Fri, 20 Sep 2024 05:53:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726811603; cv=fail; b=OgUBKsqsAKIBGK6D0r5IpvMHmCbRue9L7ql4n1WKZ+zftbf2PHcBPSjlxQdgbxAMoqQvYJ9NNrHS80gJR4fUxdXy5tNoOZKNOw+Xxgen/FnKQzOQaQyA5Z3XpI/V+gSkCHikoaQvUvAo7FBE1nkUWK6ADsPs7lb7Hbdcmt10XkY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726811603; c=relaxed/simple;
-	bh=ollwjnXI54Pb4hEtjkMH4quVFkPZOjAx/xVNovkIe68=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=XLPyYNa9VELdLB2CPetyp6/qeXlzyrpea8bsjbSY3+DfaJQIpicgL4JkE+3/7K7GElA7pJGoe6ncCMEYnsKF7/kVC1exrUrp5ekJmgEkiquOo3UXF4U0xtFVjK6CF2FgVsyp0dPdp0Z21U9Hfj7wtf/eLusidr9ai2TycE92Cyo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=oA2XTXab; arc=fail smtp.client-ip=40.107.244.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=yz4mp4yGeRK+bkr3DHKDHbiHtoS8WNLApheKc2xq7/WqaaMlKvFlP2R4Y2rx9ClDomGtXu23NrknR1r3UsuqGETpp0VIc6ci+MVwG/IGTNn99DoUPfGsZ0754tw6sawYkluzDFiDoqvKKKmp/if5XgdzedOWMfyxq6XDR/K64kzf3h/n00UaZ0WoVfiFqXA04y+w4hSs+TVMdOJe8TezmZ5pfVxHuMrHmIv0LUVafgodca7kxXk9/6ZlTinwO5NVHdMd55lzw/8wddXDbD5YZRxNeD8EIEeC7x72D91/qr5V3iAHJL6lB5UUZhYyFfa0nrPrI2zcj6Lm/GxaZdWKIg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AVN7TiWKwT2tapVh134qWSfAMtX2A2iIFUbJZ8WM2oA=;
- b=YZqlYGtIDSnIbeoQrqIOTtojRoWU/1EWcnoTsf3KgyFmS8pAg9bjCzcgRbA3WJLchuMjcbyXv/lXiDDIkqoMObVKV0NaqUWIE9wQQZs+UAZrVxrQY1+/pzpN+UCyUFxeZI4M6wPk5RoFYHGniqKp//x4X1DpTO9ktUUKL4SYwU8wLsb3cBWVISIpdQknj77wGxNSEMzMGgXU+alw8SaUaJUTuYdtxqkC1p3yoW7Wn8SGwT2Bk+3Ynv4Mex5DP1MJl6bPtPkq6JrZplqt5QsbEQMwbKwanFv4EZPvE+TYH0d8nq3LNVN/laFTNBT1+5lFq3t09L0TnJEiYdoVPrhdaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AVN7TiWKwT2tapVh134qWSfAMtX2A2iIFUbJZ8WM2oA=;
- b=oA2XTXabMNuwQqi3OMrPteywX/PdyEZSjEHOqQelUZV/07XCJCV7/GLDyqkqM3cu/s0QmJpf9z7UM4TzN519EBdp28fwyxJOfNgeMfFpSnpwNi/7Qj9/a7YjZaEY1/FfaTj6w7RC5PeRCOUM77SgH3GngcZS34RzIfQPoq9fH40=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB6214.namprd12.prod.outlook.com (2603:10b6:8:96::13) by
- SJ0PR12MB8116.namprd12.prod.outlook.com (2603:10b6:a03:4ec::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.21; Fri, 20 Sep
- 2024 05:53:19 +0000
-Received: from DS7PR12MB6214.namprd12.prod.outlook.com
- ([fe80::17e6:16c7:6bc1:26fb]) by DS7PR12MB6214.namprd12.prod.outlook.com
- ([fe80::17e6:16c7:6bc1:26fb%5]) with mapi id 15.20.7982.016; Fri, 20 Sep 2024
- 05:53:19 +0000
-Message-ID: <76355a11-a0ba-4a28-bf51-454facfd59e5@amd.com>
-Date: Fri, 20 Sep 2024 11:23:10 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v1 1/4] x86/cpufeatures: Add CPUID feature bit for the
- Bus Lock Threshold
-To: Borislav Petkov <bp@alien8.de>, Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- pbonzini@redhat.com, shuah@kernel.org, nikunj@amd.com,
- thomas.lendacky@amd.com, vkuznets@redhat.com, babu.moger@amd.com,
- Manali Shukla <manali.shukla@amd.com>
-References: <20240709175145.9986-1-manali.shukla@amd.com>
- <20240709175145.9986-2-manali.shukla@amd.com> <Zr-qkJirOC_GM9o6@google.com>
- <20240829064811.GAZtAZqzWkmF79VOs7@fat_crate.local>
- <ZtFNwOG5oPwNF2bU@google.com>
- <20240830082136.GAZtGBEMyF-MbWXrPo@fat_crate.local>
-Content-Language: en-US
-From: Manali Shukla <manali.shukla@amd.com>
-In-Reply-To: <20240830082136.GAZtGBEMyF-MbWXrPo@fat_crate.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: MA1P287CA0021.INDP287.PROD.OUTLOOK.COM
- (2603:1096:a00:35::29) To DS7PR12MB6214.namprd12.prod.outlook.com
- (2603:10b6:8:96::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E9F3BB50
+	for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2024 07:10:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726816242; cv=none; b=oAxasKK9fr4/pVEGfkW1dRfdEzG7UaHyUElqUbfeXkbMTDPTO/CW5rPcaTIE7ZboBLr3dPROpYalno7FMtp4UC5X/dF5DTq+Zye8KhuUCnIECUdhBm8sNOxh1HdPWuNliyI+6RxIsc8YU8uGb66TIvCTXn5MJX3Jx066Q945Oek=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726816242; c=relaxed/simple;
+	bh=S1R0h+w5vkjrXN9bz/6mg5enb0nnqetA5Sxd8kY/f5M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dJzqZENAE4SbPRDVWT9he6JUqgb7GdD3a252CnCFT+gjXOgwZ9lDKYkcLtEaclHpX6NlknKm1BDs0Uk5afsXyXwAw/Lt03PVrV/NXqHKsiZ1NxCPbLpttmPWWUBN4ogLS68hOfdHMao8OAPiLNboojejcJwUcCQ+MlfhWro9inc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=0cf+gOkn; arc=none smtp.client-ip=209.85.219.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6c51d1df755so12900036d6.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 20 Sep 2024 00:10:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1726816240; x=1727421040; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=matHERfOvewU1RyaLnTVpQh5GFSsoYnSdouus4cHcuQ=;
+        b=0cf+gOkncIAlRY62/y88Jvdlu8cxW8/Ril3AqBpG2Be1reuJVXfl7P0zFfgchnyiYD
+         6YJsa9iccRG1odQhKbckRSBoZPMG4L069OxqjfGVaOWeBRWjnTslOMl3oGLuiGvBl7nc
+         pq44PE0jd9kbH9nS7W4kHRvm84K9kQkvzF+txcmypdoFGBOjqlD6cpH1HMtIeTGm3yfb
+         fluxDAwFctCnPn3pvExax6QPldkkbsEPab/HgJRC4K1HFsi+Vt76M6dIsFUHI2lTgbwz
+         v1ASD3FU/uWTU052to95E3dQ7PwgmQiVpH0RC69b6kBWoLqm1Fiv38YtV9CSPYmRpVHo
+         R0Yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1726816240; x=1727421040;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=matHERfOvewU1RyaLnTVpQh5GFSsoYnSdouus4cHcuQ=;
+        b=L0STR7PnISsTrGke8ZN0LUWjAXW2LKhkZKLgiBqY8aT9TYfjmdqlsGFRJ3Yq72rF1a
+         YSaQFYL4VE35jT/SqaODx5WldLw7VJZs1kGkIwB08nEc7D6lQndAxuKMvTTer8PX3lI5
+         zajTgrkegaDN3OxHGxtVQWCH6+TDUaXXwD/OiSN0sH885tT/69Eh3XMt0oe6G68lWDf5
+         Ykp+WMi0HRC+HBztmQcaxmmxU6dVTgOL+tDpHQFWRp3zphRB1RYaXXhq1f/3rYLC4UPK
+         0qlB4+X5CnkhW0xHDKWK197TG9D03C4XGqCFhQESllVarHmXFmFv4JYLP1hZ/QF4ImhC
+         mtvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUBxxzPja5aXVckPzhO3HgBcB3fHZYg7tb6bgg7ehvv9XO5rsn/OZxujQscEPVfjM42uhleWpudPz5fnhU86vg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwC4ZBcuk6+La+7KABHHbvHoc8ZA0Iw+R73tBN9y3gyxUPs6hhj
+	DZIIm6RiymeZP0n8tROH7KWlNOmKTqoXIphPC9iE5eB9FnFswi0Pj0jeEnfLn/NYWr20Jgx9hu4
+	0KdPM1+ydh0Fr/TPuZLIgYmRkDr7Nb3ZsOKpR
+X-Google-Smtp-Source: AGHT+IE/zEqFDw4bxTIHzfHfmbEBCqAfcea8hS6VNlyAN1cEKS3IQ+w2FK3MjrrxzD9urrX9o3ENlOPHhs8Zz3mGrGs=
+X-Received: by 2002:a05:6214:5785:b0:6c5:f91d:9d2 with SMTP id
+ 6a1803df08f44-6c7bd4d1e5amr25521346d6.14.1726816236088; Fri, 20 Sep 2024
+ 00:10:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6214:EE_|SJ0PR12MB8116:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1b7ecca4-9b2c-4c46-5902-08dcd9388754
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?NmQ4amlraU5senN6QWtWNFQvUWJZY2k1NDN5dFF1bGI0aGlKcUlEOWY5bGlh?=
- =?utf-8?B?NFlUOENqdGtzdWtDZWhnZzh5U2hhN3g2Rnc3VWV1djZ1Nkx4ZmdoRFdhSHo5?=
- =?utf-8?B?YklXc2U2Z2xxc2cwR281SUhBVFBVUHNWVWpMalA2TFVPTmU2NzNidVZ3SHlV?=
- =?utf-8?B?dTRoazZFczRHTjBHY1FzT2hVejViUFVBOE5BZ1VvelRyMU5sL25PcDhEK2pl?=
- =?utf-8?B?ZXM0azJRZSt2eWlJa1IxTlBTb0g2SUZUZzk4bXBncGZUaFJEaVVvaE5KQlVT?=
- =?utf-8?B?SzlzN2Ztc3dvK3RRZlRKQ0hNNjRXOWIwZmluUEhoNk10V24rRi9zWWJ6ZWFV?=
- =?utf-8?B?QlkvVXkyZW1GNmJqRktScmIzQ2hYRXl2NVdQN2ZQeTkwT2wzOC9rVmc5ZHNq?=
- =?utf-8?B?VFppa25WZVJ5S0w2aUZneVB5REttOFJjeWZCK0NpRCt5RC8xTDlDaXZpeVBp?=
- =?utf-8?B?dnZnS2IvSmZ0cklJbWgvT0VtWk50K0R2VW5LM00xMFpyNzEzTU5rczYrUTd5?=
- =?utf-8?B?cEpEb0VPWEFhai9pVzQxRm92NGhSVWEyUEIyYnF5WG9ubElQZUYyb1ZsLzJD?=
- =?utf-8?B?NGZYdXJvY1ByVmsrNVErdC9zby8wM2dKbXRuUzdXWCtYUnNSTVIxekh3Tmhy?=
- =?utf-8?B?T2hqWnY4OWxUL0JDaUU1ZHkyYWJtcjFIcGZEZU9Ud3hnUGloM1VLVEp3NEdY?=
- =?utf-8?B?amJIcTRlVEV3ZW9KcElCWVNWdUJsZDhuY1ZTK292eU9RaFZnUmZvQTQyaExM?=
- =?utf-8?B?cVM4Ry9YTFVZdGVSRUZEeERtVXFsNUxuR3lzYUxsU0dOMEp0KzF6aUk4RzVw?=
- =?utf-8?B?Z0JiclhrZmZ6emFHYjBHb2FiQ1RsSVphU0c5M0o2bklSNGRpUUlUSlBnTzV6?=
- =?utf-8?B?dm1iZVRuUnEzQ1RaZ2tDMW5KK1BJaE5pUnNuMTZoanFHdXBuMnk4ZzVybTRD?=
- =?utf-8?B?b1NIRm9udE43OExkWFhnOVVDbUJ4b1oyNGt3NzZDVTI1TzZFVjZYcXZNcDlj?=
- =?utf-8?B?Y2pNaGt0V2xyR3h3TThXbE5wWEtNaVBMR3psWG56aXVUZmtENk5mOEhseHY2?=
- =?utf-8?B?Z0dNYVovL04zR0FOWlVjeUZuUzdoeWRMeDNOOVZqNjBQL0QzaE9HdHJ5QjJU?=
- =?utf-8?B?VjBYdVZ2Z2swMVNiZzh1KzkwOGhyN25obFJyZXc0YUlBTW1TaXBhVWhqQ1da?=
- =?utf-8?B?bThRQXJkNHNzbWNHOFRpWjlNc1BXbGZDR3YrRlB2V0oxWXRxRVFBVzZOZVNH?=
- =?utf-8?B?SlN3VSt1OVJydkxPVVVRYktPR2JYdmx2ZTJBUzRjTGxOSldxc05SYWVWSVJr?=
- =?utf-8?B?azFRY1VzLzl0N1R6VXN5NHgvRDgyYVB0UUo0alVVSFlqOEkzaXVrMHFKNU02?=
- =?utf-8?B?Vlkvb09iUlRTYjlJVEVXb3kwbUEwa2swY3JiczhMcWJtTkpiRlRLa0tZc243?=
- =?utf-8?B?MXJtMllCY2hiU0JvVlhZUlErTm1yYzZqTGZUWUV3UDVkSmtQK1N1L0h0NE5E?=
- =?utf-8?B?UTZYaU5TTjkyaFpydVJLdm5MakZvZkNsN1pKMU1MRUc1Tm1HTmtMcnovTkZQ?=
- =?utf-8?B?S0VsSEkvZ2h3T0tOQTE5OC9zeG1yMkJ6c05GM0gwS0VzaUd5OGo0RUVnSUFj?=
- =?utf-8?B?N0xkSS9qWllGRG5ZVWZ0Umh2R21QSjNGZ1ozNFN0Y0Y0VXBHdENOaDVPMHdG?=
- =?utf-8?B?aVFMa3R1ODIxSzF4ck5NMWc4RE9XLzVYVkw5S2loOXUwZGt4eHdUWlN3bnZR?=
- =?utf-8?B?OHVFMStSTUFhMVJncGkxaU9KMTlnQk5ab2lNSkxKRjQxK2RFT0loM3FPWnMy?=
- =?utf-8?B?UU43bzZNKzNkUVJLYlpOUT09?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6214.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?QlhTYlJMOHdpdC9lMkl2UFhGYWo3SEZQTW1GMXhBdUFCcTVuV2Q4RU05dkFC?=
- =?utf-8?B?cEd3NnFDQzMvOEI5UWl1R2dyK0VXdk16YUhXRWdjU0M2dlBtckdUVGd5dit0?=
- =?utf-8?B?bCtoK3NuUTM0V2Q1dWJ3SXJFc3B6UVlsbE93UU8zOUFqNWQyRUJGQTdFWXV4?=
- =?utf-8?B?MUd5NW9ET0p0WHJmSUYxYUNJNXI1TnRuQ0M3QlRCWlFERGVQSk1JdkoveERY?=
- =?utf-8?B?eVQ5Y2JvSjJqcERwTkg4S1pUS2hKdkhnMHNjUzFhM01NVGx1eEVPRytTT0c2?=
- =?utf-8?B?cXcvTXFQVU80ajlnTUg1TTJKRlZxeHBYbWphT1BmYWlTb1FzQWJiZFpZS2to?=
- =?utf-8?B?NFRDVzh2NEl2SGdFZmUwTWt4NFdEUWszNUJ0V0dSN2REVXhwVmVMODhZS3Ju?=
- =?utf-8?B?RC9lQ0J1dnJ0WGkzbEtaVC91RTNxbUZIY29yWmxqMElqVzB5b2YzYmFSMzNC?=
- =?utf-8?B?ZUJvbmNSUUVZS054VWJ1NkpmTGZnMWdjekZXTFNTRmhLODMwdWJNcWQ2MHpV?=
- =?utf-8?B?K05BcXJ1QVQ2TE8reTZYdkM3dHlaZjlhOFN6TzIxL29jZkcrZmhocEx1a1ls?=
- =?utf-8?B?eGo4VHgyUktwUDI0WUFlcmFVYk5sQzhKVUxUalhHSGhpOEVtMXVlQUFHN0Nw?=
- =?utf-8?B?eURTNEVWb2V4Vm9KcnVRWUZiTnhSelA0MW5kRjN0bHBJRGg5QzdqRWlVbHE1?=
- =?utf-8?B?MFV3a0NRbG03VDdlbVdKdFFoT25qclNTTWg1NEI0RVpCN3lhTklDMmdYeDRH?=
- =?utf-8?B?S3UxSnoyTVgxZGZBV0VCcDI4OVhwOW01TkthSGhoNGZTZjlJOW83Y2JyRzZl?=
- =?utf-8?B?aFJnWkhDWVlwTWpOOWUxaW4rMHJ5OFBSWklCSEJaTWxRUHJ3Z3pTUHE1RlJQ?=
- =?utf-8?B?RlVOMnBqenREQzkxNE4rTDlVMXBWNWxtczdSN1dvYm83RkhUaWxUM0lPQUo5?=
- =?utf-8?B?TnBlazkwcjFPOXlTbkErMzVGWGx0dDJoUHFPTXZOd1FjTUJHOUZWbU44dnJM?=
- =?utf-8?B?Q0c2Sm9lOEEvK241em9zN1c3NTI0blA2Z3BENU1FeWRtbktjL3UwZE9YVGN1?=
- =?utf-8?B?ZmsvaEZyV3JyT0RhNWVoRWhka01KdldDRERrdHRPYkRIUmZ6NG5nNWhTRzhG?=
- =?utf-8?B?ZFkzQ1R2cTVzNTNGSTA0akVmTWVXYVFRSmo0V0xONjM2WkljVzdaaXpkWjVW?=
- =?utf-8?B?RG5JZ3Nvdkw4d2puU1NiYk01RUxlTTArK1RFbjJmQVRtSUNndnFISUpYYm03?=
- =?utf-8?B?NDZLMCtsWEVZT3YvZ04vZWVxQlVwK3JYTFQwNUFCSDRLOUlNdTE5QStzR0g0?=
- =?utf-8?B?eUxnUno0Qmx5NzRLV2JmQTJUbkRsSmJzL1RLdENZem9vS2VnOEFPQ1I4aEdW?=
- =?utf-8?B?TWZCUGpqdUtnMnBVMjZoZzMrTklvMWd6Z05wditCTnhrRkxrZE4zQTh2Q0hP?=
- =?utf-8?B?V2RBQVN0b2Z3ajUvNUV3aGducGlwbmptNG5BcDJsTkJTYTNKZzFFS1R1K0Zq?=
- =?utf-8?B?MkpvbkdaL2ZPSmtjVk96N2tRSHM2OENvdXYrU0N3S3lGSHlHYkpmSHFEZEo0?=
- =?utf-8?B?WjgwTWlHQTZTdGQ3VjRIMllQRExkVmpHVW5LV3pUWlU2V1JFZ1lEY3pObjFI?=
- =?utf-8?B?a0JuaTQ3RjZyY3pRWHlhbENNMitwaDQyejBuT1lqM1pkdDBSVmg4OXlPVTlE?=
- =?utf-8?B?YmI0STZET2c2VWptaUNZVGVHMGhrY2hYQXJFdEJKR2kxdVBLK3dRclVoTGRx?=
- =?utf-8?B?NXM0dDM1aWdibmpuT1VpamN2MFlEM1hrSmgvUmNtZjVkV085R1FYTnU1ZGpE?=
- =?utf-8?B?d01ER3pUdVlGdkdkZlVnMjdTMG1TNUZIRm9YR2hIZGw4ZmJISUNUT0dYeWQ1?=
- =?utf-8?B?QUxmNFU0NTM4T2t0Zk9iSE9Db1AzUE8yQWRuVExSRmFOK1BzWTJtUVpGZjV0?=
- =?utf-8?B?YzZ1NjVUNktHWmF5a0dFZXlLejhGemkrSWZYL0tzNDhpenZhYXQwUy9MNyt1?=
- =?utf-8?B?bzA1cDFIbmVUTkcyK253eXYzWnpQTXhMdXZ3dzNVZ0liaE1xeStIa2czODBk?=
- =?utf-8?B?N2dCM0JzT2ltdVVJT1QrUkc1aUd0ZE12aWVRNkNmL2d5MlpUZ242UlJ4OWtO?=
- =?utf-8?Q?t3yaE/FCoTOCc3Ik6YQlJFKrB?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b7ecca4-9b2c-4c46-5902-08dcd9388754
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6214.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2024 05:53:19.5237
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: edJzIP5E+FE0szqaItMlCI7FTpGXuc7gxGhBrAX8XBDGp+cUSmW6qIiPOEg09qgktrr6J1sYeLVW63VcOccG7g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB8116
+References: <20240917005116.304090-1-arturacb@gmail.com> <bd5eb792-124f-4eaa-9ff9-a99765d1ef73@linuxfoundation.org>
+In-Reply-To: <bd5eb792-124f-4eaa-9ff9-a99765d1ef73@linuxfoundation.org>
+From: David Gow <davidgow@google.com>
+Date: Fri, 20 Sep 2024 15:10:19 +0800
+Message-ID: <CABVgOSmNcmnRCn5Q05U1wBebSGTM=OdUXuT7SA-poHXUgKubaQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/1] Add KUnit tests for llist
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Artur Alves <arturacb@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-kernel@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, 
+	Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, n@nfraprado.net, andrealmeid@riseup.net, 
+	vinicius@nukelet.com, diego.daniel.professional@gmail.com
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="0000000000009abe59062287bc9a"
 
-On 8/30/2024 1:51 PM, Borislav Petkov wrote:
-> On Thu, Aug 29, 2024 at 09:42:40PM -0700, Sean Christopherson wrote:
->> Ah, sorry, if the platform+kernel supports the feature, not just raw CPU=
-.
->=20
-> Yeah, that's not always trivial, as I'm sure you know. Especially if it i=
-s
-> a complicated feature like, SNP, for example, which needs fw and platform=
- to
-> be configured properly and so on.
->=20
->> And because that utility is not available by default on most targets I c=
-are
->> about, and having to build and copy over a binary is annoying (though th=
-is
->> is a minor gripe).
->=20
-> I'm keeping that thing as simple as possible on purpose. So if you wanna =
-make
-> it available on such targets, I'm all ears.
-> =20
->> That said, what I really want in most cases is to know if _KVM_ supports
->> a feature.  I'll think more on this, I have a few vague ideas for gettin=
-g
->> a pile of information out of KVM without needing to add more uABI.
->=20
-> That's exactly my pet peeve - making it a uABI and then supporting it for=
-eva.
->=20
-> We have tried to explain what cpuinfo should be:
->=20
-> Documentation/arch/x86/cpuinfo.rst
->=20
-> The gist of it is:
->=20
-> "So, the current use of /proc/cpuinfo is to show features which the kerne=
-l has
-> *enabled* and *supports*. As in: the CPUID feature flag is there, there's=
- an
-> additional setup which the kernel has done while booting and the function=
-ality
-> is ready to use. A perfect example for that is "user_shstk" where additio=
-nal
-> code enablement is present in the kernel to support shadow stack for user
-> programs."
->=20
-> So if it is something that has been enabled and is actively supported, th=
-en
-> sure, ofc. What I don't want to have there is a partial mirror of every
-> possible CPUID flag which is going to be a senseless and useless madness.
->=20
-> Dunno, I guess if we had a
->=20
-> "virt: ..."
->=20
-> line in /proc/cpuinfo which has flags of what the hypervisor has enabled =
-as
-> a feature, it might not be such a wrong idea... with the above caveats, o=
-fc.
-> I don't think you want a flurry of patches setting all possible flags jus=
-t
-> because.
->=20
-> Or maybe somewhere else where you can query it conveniently...
->=20
+--0000000000009abe59062287bc9a
+Content-Type: text/plain; charset="UTF-8"
 
-I came up with this patch. Does it look okay?
+On Fri, 20 Sept 2024 at 00:01, Shuah Khan <skhan@linuxfoundation.org> wrote:
+>
+> On 9/16/24 18:51, Artur Alves wrote:
+> > Hi all,
+> >
+> > This is part of a hackathon organized by LKCAMP[1], focused on writing
+> > tests using KUnit. We reached out a while ago asking for advice on what
+> > would be a useful contribution[2] and ended up choosing data structures
+> > that did not yet have tests.
+> >
+> > This patch adds tests for the llist data structure, defined in
+> > include/linux/llist.h, and is inspired by the KUnit tests for the doubly
+> > linked list in lib/list-test.c[3].
+> >
+> > It is important to note that this patch depends on the patch referenced
+> > in [4], as it utilizes the newly created lib/tests/ subdirectory.
+> >
+> > [1] https://lkcamp.dev/about/
+> > [2] https://lore.kernel.org/all/Zktnt7rjKryTh9-N@arch/
+> > [3] https://elixir.bootlin.com/linux/latest/source/lib/list-test.c
+> > [4] https://lore.kernel.org/all/20240720181025.work.002-kees@kernel.org/
+> >
+> > ---
+> > Changes in v3:
+> >      - Resolved checkpatch warnings:
+> >          - Renamed tests for macros starting with 'for_each'
+>
+> Shouldn't this a separate patch to make it easy to review?
+>
 
-diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufe=
-ature.h
-index 0b9611da6c53..74c52bfd8cf2 100644
---- a/arch/x86/include/asm/cpufeature.h
-+++ b/arch/x86/include/asm/cpufeature.h
-@@ -41,6 +41,7 @@ enum cpuid_leafs
- #define x86_cap_flag_num(flag) ((flag) >> 5), ((flag) & 31)
-=20
- extern const char * const x86_cap_flags[NCAPINTS*32];
-+extern const char * const x86_virt_flags[NCAPINTS*32];
- extern const char * const x86_power_flags[32];
- #define X86_CAP_FMT "%s"
- #define x86_cap_flag(flag) x86_cap_flags[flag]
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpuf=
-eatures.h
-index 734940fdb6c1..20f389ee0079 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -382,7 +382,7 @@
- #define X86_FEATURE_V_SPEC_CTRL		(15*32+20) /* "v_spec_ctrl" Virtual SPEC_=
-CTRL */
- #define X86_FEATURE_VNMI		(15*32+25) /* "vnmi" Virtual NMI */
- #define X86_FEATURE_SVME_ADDR_CHK	(15*32+28) /* SVME addr check */
--#define X86_FEATURE_BUS_LOCK_THRESHOLD	(15*32+29) /* "" Bus lock threshold=
- */
-+#define X86_VIRT_FEATURE_BUS_LOCK_THRESHOLD	(15*32+29) /* "buslock" Bus lo=
-ck threshold */
-=20
- /* Intel-defined CPU features, CPUID level 0x00000007:0 (ECX), word 16 */
- #define X86_FEATURE_AVX512VBMI		(16*32+ 1) /* "avx512vbmi" AVX512 Vector B=
-it Manipulation instructions*/
-diff --git a/arch/x86/kernel/cpu/mkcapflags.sh b/arch/x86/kernel/cpu/mkcapf=
-lags.sh
-index 68f537347466..3671c7892c56 100644
---- a/arch/x86/kernel/cpu/mkcapflags.sh
-+++ b/arch/x86/kernel/cpu/mkcapflags.sh
-@@ -62,6 +62,9 @@ trap 'rm "$OUT"' EXIT
- 	dump_array "x86_bug_flags" "NBUGINTS*32" "X86_BUG_" "NCAPINTS*32" $2
- 	echo ""
-=20
-+	dump_array "x86_virt_flags" "NCAPINTS*32" "X86_VIRT_FEATURE_" "" $2
-+	echo ""
-+
- 	echo "#ifdef CONFIG_X86_VMX_FEATURE_NAMES"
- 	echo "#ifndef _ASM_X86_VMXFEATURES_H"
- 	echo "#include <asm/vmxfeatures.h>"
-diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-index e65fae63660e..3068b0a110e4 100644
---- a/arch/x86/kernel/cpu/proc.c
-+++ b/arch/x86/kernel/cpu/proc.c
-@@ -103,6 +103,11 @@ static int show_cpuinfo(struct seq_file *m, void *v)
- 		if (cpu_has(c, i) && x86_cap_flags[i] !=3D NULL)
- 			seq_printf(m, " %s", x86_cap_flags[i]);
-=20
-+	seq_puts(m, "\nvirt\t\t:");
-+	for (i =3D 0; i < 32*NCAPINTS; i++)
-+		if (cpu_has(c, i) && x86_virt_flags[i] !=3D NULL)
-+			seq_printf(m, " %s", x86_virt_flags[i]);
-+
- #ifdef CONFIG_X86_VMX_FEATURE_NAMES
- 	if (cpu_has(c, X86_FEATURE_VMX) && c->vmx_capability[0]) {
- 		seq_puts(m, "\nvmx flags\t:");
+I think that, if this were renaming these in an already existing test
+(like the confusingly similar list test), then yes. But since it's
+only a change from v2, I think we're okay.
+
+> >          - Removed link from commit message
+> >      - Replaced hardcoded constants with ENTRIES_SIZE
+>
+> Shouldn't this a separate patch to make it easy to review?
+
+Again, if we want to change this in other tests (list, hlist) we
+should split it into a separate patch, but I think it's okay for llist
+to go in with these already cleaned up.
+
+>
+> >      - Updated initialization of llist_node array
+> >      - Fixed typos
+> >      - Update Kconfig.debug message for llist_kunit
+>
+> Are these changes to existing code or warnings on your added code?
+
+I think these are all changes to the added code since v2. Artur, is that right?
+
+> >
+> > Changes in v2:
+> >      - Add MODULE_DESCRIPTION()
+> >      - Move the tests from lib/llist_kunit.c to lib/tests/llist_kunit.c
+> >      - Change the license from "GPL v2" to "GPL"
+> >
+> > Artur Alves (1):
+> >    lib/llist_kunit.c: add KUnit tests for llist
+> >
+> >   lib/Kconfig.debug       |  11 ++
+> >   lib/tests/Makefile      |   1 +
+> >   lib/tests/llist_kunit.c | 358 ++++++++++++++++++++++++++++++++++++++++
+> >   3 files changed, 370 insertions(+)
+> >   create mode 100644 lib/tests/llist_kunit.c
+> >
+>
+> You are combining lot of changes in one single patch. Each change as a separate
+> patch will help reviewers.
+>
+> Adding new test should be a separate patch.
+>
+> - renaming as a separate patch
+>
+
+I think given that these are just changes between patch versions, not
+renaming/modifying already committed code, that this is okay to go in
+as one patch?
+
+The actual patch is only doing one thing: adding a test suite for the
+llist structure. I don't see the point in committing a version of it
+only to immediately rename things and clean bits up separately in this
+case.
 
 
-Output for this patch from /proc/cpuinfo looks like below:
+Cheers,
+-- David
 
-flags           : fpu vme de pse tsc msr pae mce cx8 apic sep mtrr pge mca =
-cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall nx mmxext fxsr_opt pdpe=
-1gb rdtscp lm constant_tsc rep_good amd_lbr_v2 nopl xtopology nonstop_tsc c=
-puid extd_apicid aperfmperf rapl pni pclmulqdq monitor ssse3 fma cx16 pcid =
-sse4_1 sse4_2 x2apic movbe popcnt aes xsave avx f16c rdrand lahf_lm cmp_leg=
-acy svm extapic cr8_legacy abm sse4a misalignsse 3dnowprefetch osvw ibs ski=
-nit wdt tce topoext perfctr_core perfctr_nb bpext perfctr_llc mwaitx cpb ca=
-t_l3 cdp_l3 hw_pstate ssbd mba perfmon_v2 ibrs ibpb stibp vmmcall fsgsbase =
-tsc_adjust bmi1 avx2 smep bmi2 erms invpcid cqm rdt_a avx512f avx512dq rdse=
-ed adx smap avx512ifma clflushopt clwb avx512cd sha_ni avx512bw avx512vl xs=
-aveopt xsavec xgetbv1 xsaves cqm_llc cqm_occup_llc cqm_mbm_total cqm_mbm_lo=
-cal avx_vnni avx512_bf16 clzero irperf xsaveerptr rdpru wbnoinvd amd_ppin c=
-ppc arat npt lbrv svm_lock nrip_save tsc_scale vmcb_clean flushbyasid decod=
-eassists pausefilter pfthreshold avic v_vmsave_vmload vgif x2avic v_spec_ct=
-rl vnmi avx512vbmi umip pku ospke avx512_vbmi2 gfni vaes vpclmulqdq avx512_=
-vnni avx512_bitalg avx512_vpopcntdq la57 rdpid movdiri movdir64b overflow_r=
-ecov succor smca fsrm avx512_vp2intersect flush_l1d sev sev_es sev_snp debu=
-g_swap amd_lbr_pmc_freeze
-virt            : buslock
-bugs            : sysret_ss_attrs spectre_v1 spectre_v2 spec_store_bypass
+--0000000000009abe59062287bc9a
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-- Manali
+MIIUqgYJKoZIhvcNAQcCoIIUmzCCFJcCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
+4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
+mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
+KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
+VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
+ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
+vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
+BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
+OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
+1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
+ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
+BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
+18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
+bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
+AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
+BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
+A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
+MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
+jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
+0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
+jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
+jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
+C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
+NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
+zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
+A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
+hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
+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
+erg7AgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
+/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFKFQnbTpSq0q
+cOYnlrbegXJIIvA6MFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
+BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
+MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
+LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
+bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
+FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
+c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBR
+nRJBmUP+IpudtmSQ/R55Sv0qv8TO9zHTlIdsIf2Gc/zeCi0SamUQkFWb01d7Q+20kcpxNzwV6M7y
+hDRk5uuVFvtVxOrmbhflCo0uBpD9vz/symtfJYZLNyvSDi1PIVrwGNpyRrD0W6VQJxzzsBTwsO+S
+XWN3+x70+QDf7+zovW7KF0/y8QYD6PIN7Y9LRUXct0HKhatkHmO3w6MSJatnqSvsjffIwpNecUMo
+h10c6Etz17b7tbGdxdxLw8njN+UnfoFp3v4irrafB6jkArRfsR5TscZUUKej0ihl7mXEKUBmClkP
+ndcbXHFxS6WTkpjvl7Jjja8DdWJSJmdEWUnFjnQnDrqLqvYjeVMS/8IBF57eyT6yEPrMzA+Zd+f5
+hnM7HuBSGvVHv+c/rlHVp0S364DBGXj11obl7nKgL9D59QwC5/kNJ1whoKwsATUSepanzALdOTn3
+BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
+0DhqINx2fw0bwhpfFGADOZDe5DVhI7AIW/kEMHuIgAJ/HPgyn1+tldOPWiFLQbTNNBnfGv9sDPz0
+hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
+AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
+BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
+eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgdxDiv2xiYnKbGDT5DI71k+G5D71P
+KVrXH9Q+fnru4BEwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQw
+OTIwMDcxMDQwWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAFBQvB71vrs8TBzmmstb722eDNNp5a5OkHYUspMvilwcTYkK
++EF9NaVG8nQVc71vIhoyCtTygPuoPEx8XnIIdPubgemaq5JQkkLRAawxlGgr9JkdhqM0gIUOeoE3
+d/xE9qdtJz1qEADqThCEy7N2SIUTWAEugeUh1fQAIBDwI+/kopy+P33n3AHILFASzqBAovyfsamK
+z/EonDBgCNcWpfpbYtR/MbTKJ3g9EEHCx6QzGYSCJXYLDFYdp/3boazq3caCwjSjQapkYxRN5hMQ
+U2Bh5Ow6kBR2g+0VBFWy78AGy6tE+CDXqXAWPPDdzNLLddaqSFMv1oULGw1XCSFEoJk=
+--0000000000009abe59062287bc9a--
 
