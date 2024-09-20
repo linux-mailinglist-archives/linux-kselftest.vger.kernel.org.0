@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-18157-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18158-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14A0497D204
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 09:49:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36E4D97D206
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 09:49:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFE0928405D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 07:49:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B81ACB23438
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Sep 2024 07:49:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E79C4D9FB;
-	Fri, 20 Sep 2024 07:49:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 799F94D9FB;
+	Fri, 20 Sep 2024 07:49:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g2k/a3VL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kAQ9NI6X"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C09D318C31;
-	Fri, 20 Sep 2024 07:49:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 185874F218;
+	Fri, 20 Sep 2024 07:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726818576; cv=none; b=Kxf5ZPhzul74Ejw5EwJBp75BRVFlc/SNgYgTT7Ro7n8XlY4QDzN3ESekZgidC61rexzJGnZMToGpNK7KwzoSxFSgXfdC6adbse2wUsKcngoiDkiVeRrqZ0qH1YU28+JxNXysvEZlEgLGSAAMGKbGFRbGUqqqc0g1sBlRrmSAxWM=
+	t=1726818581; cv=none; b=oi9oWwTeEYvKJY0hv1B2X9vrklxUyR7KctZ8TnyNWzd8HULG9PkwEKhqWKrlUbkcBhk+/2XlQvXWMatrNvfqPNnc1GIHymmR9a6V1MWwxiSdze1SYkPD3LOYcdYeR9l1cwMgnzldbnHtHLjgSDPKJetvvaQzVCroo+Hmm7LP8N8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726818576; c=relaxed/simple;
-	bh=UdR7OY0xFoG+tfXspehd4joUISB06hU7m5FYvKAtyB0=;
+	s=arc-20240116; t=1726818581; c=relaxed/simple;
+	bh=E5TyztQhkUzZwMxV++0nI5EoQonMvNCb2Tdg38mkhYk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UPIzJL9wDhynvPEZbsRT9GLqe9fLGfHJlBAHvTFHYpbX/u9ELTiGjwHeUayACYt+f1ySk528OVvDaoMB57uqpa5WQFJVSUQmoFIiAK7ypOtculiRMPlOPVgbN82KBE1pAvXDmB8cmtgCjMkyIzc4CVdfAMrTkAouQ1ZCJgtia8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g2k/a3VL; arc=none smtp.client-ip=209.85.214.181
+	 MIME-Version; b=CFdb3kRd+Cq77/tZhADALb1rtCVY9cWwL1nVDo6kJbdFr++AbQV2xvk+CWdNmeHjjXQy4nYH9+3pEmVM6l0HLmcv4GYTjiV73fSqBMOJSvTrDxdKT/b11XpbKHZBPjy9qZbvwp4RIhqSiH9sk5fyiJJGEUtXmYtyOUncX7Ss6p8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kAQ9NI6X; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2068bee21d8so18958635ad.2;
-        Fri, 20 Sep 2024 00:49:34 -0700 (PDT)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2055a3f80a4so12167685ad.2;
+        Fri, 20 Sep 2024 00:49:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1726818574; x=1727423374; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1726818579; x=1727423379; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=abGv7ZYxKC/o8Cd72GEqYyIVpQ7Se9j4BfOFM0A9UgM=;
-        b=g2k/a3VL3gPpETSxnkAhbEy7ORquWj9VVeZn1DZ56vgEGFY4u67s0Etnt1lYYCwv0C
-         b2ZGGqYJHPKmzWTjZIsBCAqXL6qD7CpQa0p8Yl4WB5WLJkljVwKszyLgBmzBBo0zwY66
-         Mg8++wr5eHmCkK9UpXq2HOnEQBuIMMZWnGkX34Ytsp46aPA03yP7tSjctmTfibCIvM1z
-         bwhOZERcFOe6yeOLQnlrv0EEc3J72zjhS/rNJt0Xt7UXklYhUP6hJ/xDYVM5MUixH31w
-         PKT64ruV3ja0AnDaTE+ByzNQC4Sq2oyuVWO4gDfJOW6G8Z+NnDbPsCqBsZUfCaSaty1C
-         L2mw==
+        bh=noFg1mq/xrw7o2KWB3ZfepYrijjvn8fHawORzc/mm6c=;
+        b=kAQ9NI6X1KbOfCVt02ADc9XAlpvWObHXDWK1qI80PY+DxVBBy/y3w673lrT32r94z8
+         o9stwZtnnFLSoPZ/JdbpnNvmZgPl3MEO/GIxVXhDOQKaxGVFvVpimBdzdv36FNFYJW/e
+         kQEFfU+plrE37XOyEk5Jms/9NaN8Q1BiRIvzgisD0iI/hqK1U7uIL7VYpd2IAQ5B3Ylc
+         Q28w2jinVMD0N/p8Km9HM56mqOhvCYRNiKzn3jkjt1F32bLkQl9tkyEEy2n/hz5F3EuQ
+         rgENrT8iwgInRHhlUEefvlszL6lSTxW3+Ku5tEwdCweLHDtSvvk7tInaRKjYYP3LULu8
+         +mqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726818574; x=1727423374;
+        d=1e100.net; s=20230601; t=1726818579; x=1727423379;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=abGv7ZYxKC/o8Cd72GEqYyIVpQ7Se9j4BfOFM0A9UgM=;
-        b=weM+fOdUsK2Q5yEt2F90sw6vTVJQgzGnNT5cM/qVZp8YGIleAwyw9aerCDchYTXw3Z
-         Y1WdrNaw5jqjr6X69A2HF5sFG4XXbeW5tLYASdEUhDQiHpgOYfHmV7k7E3iIH/z4CLCw
-         3J2t8HUNG2BD3ouv82D58MYTxs7Z6MIbdKYJ0vfGhbNDmNhzlSjMQ6VCM8rAHmn5TeAK
-         x6pnxBhnVDJrgf3E1j/1TCxDpku6Un5HthJH+9+S/diECxgnL8Z7ZYj65STXUiQfyGhk
-         t5SKmH8NBHyL44aEKBO4QGlijZqzrOmEg4aXWuDN4jEgvk3CCaVnXy6G7Ca2HYOZIMhf
-         4NqA==
-X-Forwarded-Encrypted: i=1; AJvYcCVTIiMGYVhtS0aqHHNXij5nBpODb4vYB18M3zOIb7CQxH69UgD/gYWVMv+Zwjb+XRHIrFQZPgfKO2nOc1sYqXQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx75ZyRkAWzdXTCWOFJNJPxN/AA/6bOW6pmJpecbcD5rIXvc4s0
-	Wny/p8gxRch+5wiCAR5Mw7IOEvjEgz7GPMo6LGk62zmyvXxDcwaH9XwdpQ==
-X-Google-Smtp-Source: AGHT+IFxw2kpBYI7gwi/oRlUejiutCiyxd2492vAazSopvummxjAcZ7MfI3jXDBI3KyuOcoPb9NAtw==
-X-Received: by 2002:a17:902:f788:b0:205:7829:9d83 with SMTP id d9443c01a7336-208d8447bacmr27622115ad.38.1726818573799;
-        Fri, 20 Sep 2024 00:49:33 -0700 (PDT)
+        bh=noFg1mq/xrw7o2KWB3ZfepYrijjvn8fHawORzc/mm6c=;
+        b=pLxt4GfAAF5rAgJhiXaN2XUasGnijHF2VIgLsxUTWLCDme199b9pHzkgLc/JskwehE
+         9B4UK2YD5XaLugmQmynbbeJn7gjfEtY2r8MdvhtFsUDiJG5gTvpKYU0V4kUduWvnuPHH
+         rHp010zonKwAwup4ThBN6/rZe209sljNh/Pqhnvwe9uqDX4QXTYnxNPiVNPTGk4PYBj7
+         fRXwbLhwkOKC+VDJBhvT5LUWq+xJH2JXRf4vOmMgYgP7PnouSCOCjOaMMS9G4WTprxPN
+         xD2R4lL4YgNIhWxthzi1AhQcpXyhM4ffV/ezNmCyqBLdXCzwWkVf68+aAke4tYGqZuSg
+         gKrg==
+X-Forwarded-Encrypted: i=1; AJvYcCWZ4HCSsjAlEYQHuDuwiPhWfHRV5lzEMo9+PKYFM+IfpbckY3xRE45fttJbOV+PXLDEoHAO4l9E6+VdmLsxWqo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoJBIKp88ITtyOSx4n8DDYlLW7bWJ6CvZD3zU2U1iLTnrHs5/n
+	dDNGrJ0ysYo3dEGWDcMnXR4sDinaCfS5YIUlSFnZn4zVZHwsQV0AHMpXXg==
+X-Google-Smtp-Source: AGHT+IGJCPJ129JgNLt8JKJ4cnLDrd+a6uNiFccng6gWpt6GReTy81+QgyBIrdEUlkJwBxYTq4Wzgw==
+X-Received: by 2002:a17:903:41d2:b0:206:d69d:9ca6 with SMTP id d9443c01a7336-208d97f32dfmr18860205ad.10.1726818579097;
+        Fri, 20 Sep 2024 00:49:39 -0700 (PDT)
 Received: from localhost.localdomain (69-172-146-21.cable.teksavvy.com. [69.172.146.21])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20794600fe8sm90481625ad.68.2024.09.20.00.49.33
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20794600fe8sm90481625ad.68.2024.09.20.00.49.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Sep 2024 00:49:33 -0700 (PDT)
+        Fri, 20 Sep 2024 00:49:38 -0700 (PDT)
 From: Tony Ambardar <tony.ambardar@gmail.com>
 To: bpf@vger.kernel.org
 Cc: Tony Ambardar <tony.ambardar@gmail.com>,
@@ -87,9 +87,9 @@ Cc: Tony Ambardar <tony.ambardar@gmail.com>,
 	Shuah Khan <shuah@kernel.org>,
 	Jean-Philippe Brucker <jean-philippe@linaro.org>,
 	Viktor Malik <vmalik@redhat.com>
-Subject: [PATCH bpf-next v1 1/3] tools/resolve_btfids: Simplify handling cross-endian compilation
-Date: Fri, 20 Sep 2024 00:49:11 -0700
-Message-Id: <609abfededc3664da891514fcd687990547b8be4.1726806756.git.tony.ambardar@gmail.com>
+Subject: [PATCH bpf-next v1 2/3] bpf: btf: Ensure natural alignment of .BTF_ids section
+Date: Fri, 20 Sep 2024 00:49:12 -0700
+Message-Id: <714d7ab8a48172c67ddc027c85b2a0dad0312a74.1726806756.git.tony.ambardar@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1726806756.git.tony.ambardar@gmail.com>
 References: <cover.1726806756.git.tony.ambardar@gmail.com>
@@ -101,150 +101,32 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Initially, the .BTF_ids section was created zero-filled and then patched
-with BTF IDs by resolve_btfids on the build host. Patching was done in
-native endianness and thus failed to work for cross-endian compile targets.
-This was fixed in [1] by using libelf-based translation to output patched
-data in target byte order.
+While building of vmlinux employs a linker script to align the .BTF_ids
+section to 4 bytes, other usage leaves .BTF_ids unaligned and may lead to
+problems (e.g. [1]). Post-processing and libelf-based endian translation by
+resolve_btfids may also potentially suffer from misalignment.
 
-The addition of 8-byte BTF sets in [2] lead to .BTF_ids creation with both
-target-endian values and zero-filled data to be later patched. This again
-broke cross-endian compilation as the already-correct target-endian values
-were translated on output by libelf [1]. The problem was worked around [3]
-by manually converting BTF SET8 values to native endianness, so that final
-libelf output translation yields data in target byte order.
+Update encoding macros in btf_ids.h to always align BTF ID data to 4 bytes.
 
-Simplify and make the code more robust against future changes like [2] by
-employing libelf-based endian translation on both input and output, which
-is typical of libelf usage.
+[1]: 3effc06a4dde ("selftests/bpf: Fix alignment of .BTF_ids")
 
-[1]: 61e8aeda9398 ("bpf: Fix libelf endian handling in resolv_btfids")
-[2]: ef2c6f370a63 ("tools/resolve_btfids: Add support for 8-byte BTF sets")
-[3]: 903fad439466 ("tools/resolve_btfids: Fix cross-compilation to non-host endianness")
-
-CC: Viktor Malik <vmalik@redhat.com>
 Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
 ---
- tools/bpf/resolve_btfids/main.c | 60 ++++++++++++---------------------
- 1 file changed, 22 insertions(+), 38 deletions(-)
+ include/linux/btf_ids.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/bpf/resolve_btfids/main.c b/tools/bpf/resolve_btfids/main.c
-index d54aaa0619df..9f1ab23ed014 100644
---- a/tools/bpf/resolve_btfids/main.c
-+++ b/tools/bpf/resolve_btfids/main.c
-@@ -90,14 +90,6 @@
- 
- #define ADDR_CNT	100
- 
--#if __BYTE_ORDER == __LITTLE_ENDIAN
--# define ELFDATANATIVE	ELFDATA2LSB
--#elif __BYTE_ORDER == __BIG_ENDIAN
--# define ELFDATANATIVE	ELFDATA2MSB
--#else
--# error "Unknown machine endianness!"
--#endif
--
- struct btf_id {
- 	struct rb_node	 rb_node;
- 	char		*name;
-@@ -125,7 +117,6 @@ struct object {
- 		int		 idlist_shndx;
- 		size_t		 strtabidx;
- 		unsigned long	 idlist_addr;
--		int		 encoding;
- 	} efile;
- 
- 	struct rb_root	sets;
-@@ -325,11 +316,30 @@ static int compressed_section_fix(Elf *elf, Elf_Scn *scn, GElf_Shdr *sh)
- 	return 0;
- }
- 
-+static int btfids_endian_fix(struct object *obj)
-+{
-+	Elf_Data *btfids = obj->efile.idlist;
-+	Elf *elf = obj->efile.elf;
-+	int file_byteorder;
-+
-+	/* This should always succeed due to prior ELF checks */
-+	file_byteorder = elf_getident(elf, NULL)[EI_DATA];
-+
-+	/* Set type to ensure endian translation occurs, and manually invoke
-+	 * translation on input since .BTF_ids section as created disables it.
-+	 */
-+	btfids->d_type = ELF_T_WORD;
-+	if (gelf_xlatetom(elf, btfids, btfids, file_byteorder) == NULL) {
-+		pr_err("FAILED xlatetom .BTF_ids data: %s\n", elf_errmsg(-1));
-+		return -1;
-+	}
-+	return 0;
-+}
-+
- static int elf_collect(struct object *obj)
- {
- 	Elf_Scn *scn = NULL;
- 	size_t shdrstrndx;
--	GElf_Ehdr ehdr;
- 	int idx = 0;
- 	Elf *elf;
- 	int fd;
-@@ -361,13 +371,6 @@ static int elf_collect(struct object *obj)
- 		return -1;
- 	}
- 
--	if (gelf_getehdr(obj->efile.elf, &ehdr) == NULL) {
--		pr_err("FAILED cannot get ELF header: %s\n",
--			elf_errmsg(-1));
--		return -1;
--	}
--	obj->efile.encoding = ehdr.e_ident[EI_DATA];
--
- 	/*
- 	 * Scan all the elf sections and look for save data
- 	 * from .BTF_ids section and symbols.
-@@ -409,6 +412,8 @@ static int elf_collect(struct object *obj)
- 			obj->efile.idlist       = data;
- 			obj->efile.idlist_shndx = idx;
- 			obj->efile.idlist_addr  = sh.sh_addr;
-+			if (btfids_endian_fix(obj))
-+				return -1;
- 		} else if (!strcmp(name, BTF_BASE_ELF_SEC)) {
- 			/* If a .BTF.base section is found, do not resolve
- 			 * BTF ids relative to vmlinux; resolve relative
-@@ -706,24 +711,6 @@ static int sets_patch(struct object *obj)
- 			 */
- 			BUILD_BUG_ON((u32 *)set8->pairs != &set8->pairs[0].id);
- 			qsort(set8->pairs, set8->cnt, sizeof(set8->pairs[0]), cmp_id);
--
--			/*
--			 * When ELF endianness does not match endianness of the
--			 * host, libelf will do the translation when updating
--			 * the ELF. This, however, corrupts SET8 flags which are
--			 * already in the target endianness. So, let's bswap
--			 * them to the host endianness and libelf will then
--			 * correctly translate everything.
--			 */
--			if (obj->efile.encoding != ELFDATANATIVE) {
--				int i;
--
--				set8->flags = bswap_32(set8->flags);
--				for (i = 0; i < set8->cnt; i++) {
--					set8->pairs[i].flags =
--						bswap_32(set8->pairs[i].flags);
--				}
--			}
- 		}
- 
- 		pr_debug("sorting  addr %5lu: cnt %6d [%s]\n",
-@@ -748,9 +735,6 @@ static int symbols_patch(struct object *obj)
- 	if (sets_patch(obj))
- 		return -1;
- 
--	/* Set type to ensure endian translation occurs. */
--	obj->efile.idlist->d_type = ELF_T_WORD;
--
- 	elf_flagdata(obj->efile.idlist, ELF_C_SET, ELF_F_DIRTY);
- 
- 	err = elf_update(obj->efile.elf, ELF_C_WRITE);
+diff --git a/include/linux/btf_ids.h b/include/linux/btf_ids.h
+index c0e3e1426a82..c10b163dc340 100644
+--- a/include/linux/btf_ids.h
++++ b/include/linux/btf_ids.h
+@@ -89,6 +89,7 @@ word							\
+ #define __BTF_ID_LIST(name, scope)			\
+ asm(							\
+ ".pushsection " BTF_IDS_SECTION ",\"a\";       \n"	\
++".balign 4, 0;                                 \n"	\
+ "." #scope " " #name ";                        \n"	\
+ #name ":;                                      \n"	\
+ ".popsection;                                  \n");
 -- 
 2.34.1
 
