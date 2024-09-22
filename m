@@ -1,229 +1,147 @@
-Return-Path: <linux-kselftest+bounces-18197-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18198-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EB3697E09A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Sep 2024 10:40:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 367B597E0D2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Sep 2024 12:05:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF1921F2114B
-	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Sep 2024 08:40:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C48F1C20A06
+	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Sep 2024 10:05:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA7D193409;
-	Sun, 22 Sep 2024 08:40:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 383D4136328;
+	Sun, 22 Sep 2024 10:05:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="TNBeKhOK";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="prLWwB3Q"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dA4av/9V"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fout4-smtp.messagingengine.com (fout4-smtp.messagingengine.com [103.168.172.147])
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 621E7134C4;
-	Sun, 22 Sep 2024 08:40:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2DEB273FC;
+	Sun, 22 Sep 2024 10:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726994414; cv=none; b=qet9QJVvYR/M44WRosuxBlAxowftx0J4lD8qFpSABhYi4pkGxJp7Kio1ZZt0/E1mRVCJaUfjlo9mkcWUsR0t7G7//0HR7FyzTYBYvF/qyUJJyoWw5AvIVyJtTVNdOAk86lBuTriHfacDx1dzR23TWoAJr245nI7gFBj7IWHQTik=
+	t=1726999516; cv=none; b=fQeno6hJrMbG8Yx6BUzd5e286VPdOarlWlfLmKB3kzfLX26UoqaeibNhmOa/QMoNVAi19vdbPX8iP3sQvAfv9nxXZWGn/MbaeykkTsb6pmoR4Cqwzm9XNMhv3Uz/bjVKpy9vBRTRrT9JXWfOG/z59YTj8/8kTD97UTSLaNm/i4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726994414; c=relaxed/simple;
-	bh=NvtNCWYLxAUUYaf1ZV3bfcHr8aPZfVyTOA42rrYChrw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Gpf+vzVPDAVWKpM9mSqnObbTguzLkp1In/kFzt7vZjb5gN3HRCZK479fGvGNCnTqQ35UVQK5KZ7R23KEpHs4qlUCxLlODpX8vRZb2Z3bQANqXvZq2yOHOxtJB1lJUaAOmX5ooS5XaS8/uAnL2JCIOQPtP7xVCj5Eae2PlX9YAVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=TNBeKhOK; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=prLWwB3Q; arc=none smtp.client-ip=103.168.172.147
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
-Received: from phl-compute-12.internal (phl-compute-12.phl.internal [10.202.2.52])
-	by mailfout.phl.internal (Postfix) with ESMTP id 584DB1380284;
-	Sun, 22 Sep 2024 04:40:11 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-12.internal (MEProxy); Sun, 22 Sep 2024 04:40:11 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1726994411; x=1727080811; bh=L8BCOmBV7Q
-	cjMxVuy7I8eLqXWe+XQi090UTPa04zCPk=; b=TNBeKhOKoEd9adPkKsRGNaXRNz
-	9IoMMiqZR597YU7Spsvyg/+hj4x5drB5c5wOUtpLVGLHry8FipEFyEnsOL5r6oVJ
-	zo80eq6IN9ehZcj9fHtJNPjA3c5hZftD9lOJMwZDYQGMb0ar04tW8aCL80LgVHFJ
-	M8b6pzC8T5UenQyEG0PL4B8hw3faio6DK5Gh6nLxX0Y/ExLyoAJTuWJW66jVqmTX
-	7bl3qdMsCrXhw/iE4Xy+vQOyTjE15yCZNTVXYk7OBbMBzunRBYDvHmIQZ060CXdD
-	yExbjvO5rjAbYATtP3IJuYHupKMiJrxeB9xIWPCSeY5c0vnf3JmzD4KrFbow==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1726994411; x=1727080811; bh=L8BCOmBV7QcjMxVuy7I8eLqXWe+X
-	Qi090UTPa04zCPk=; b=prLWwB3Qd+m4HjjF7HpB+BP5Yh1RWxH9T/lFAHcVuHOe
-	haogI+PFD6ZzqH9UolQ7VhkE/27kQKOdpS6drsmvCUHCzGTmjTh4QBT6jVUKt6tC
-	6RzAC+VAsFxDJl+zGy1u4Tk21mJgl87w31JFF/UE6U80MyPOpfBL/yOaZiY+vc2u
-	Y86RVKt+HUGXHDfBnlTzLvnCIJl09uDeUjFCvDaApQJ4ZJQqAIGusO3CReKdGrvb
-	qbs1wW5L3rGa2tEZGhKHbovwXDx5/dQsWlW02tyTVxoq0thmO3wU43vSpSZAlRWO
-	BzpVPnKKizsFBK1P2x2ossAHdlRUMR07Dipxapt4ng==
-X-ME-Sender: <xms:6tfvZlOw7KrUmnVHAAWWV7Z3HAuVQtwftWJGSqPwMkegSCKwou3LKg>
-    <xme:6tfvZn_Bqzt9cJeZagDq7fNRvWjQgUbAXdQuXyik5HDW1B9ocMZ5xpzJ3xtymA7rh
-    oezZC1ecVFEuN6oZg>
-X-ME-Received: <xmr:6tfvZkTVbTLRtkQv_orXBfg67KhrJ4tj8i07iA6SilCmzpKN8-ekBw7c1d8CcO9Y0OlJsz6Do_bsLmbzhgGVS7fJZmcJuR2xDTl-sySHX-Kp8w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrudeljedgtdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlje
-    dtmdenucfjughrpeffhffvvefukfhfgggtuggjsehttdfstddttddvnecuhfhrohhmpeff
-    rghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnh
-    epvdefkeetuddufeeigedtheefffekuedukeehudffudfffffggeeitdetgfdvhfdvnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesug
-    iguhhuuhdrgiihiidpnhgspghrtghpthhtohepudekpdhmohguvgepshhmthhpohhuthdp
-    rhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtohepuggrnh
-    hivghlsehiohhgvggrrhgsohigrdhnvghtpdhrtghpthhtohepshhhuhgrhheskhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtoheprghnughrihhisehkvghrnhgvlhdrohhrghdprhgtph
-    htthhopegrshhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjohhhnhdrfhgrshht
-    rggsvghnugesghhmrghilhdrtghomhdprhgtphhtthhopehmrghrthhinhdrlhgruheslh
-    hinhhugidruggvvhdprhgtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhgpdhrtghp
-    thhtohephihonhhghhhonhhgrdhsohhngheslhhinhhugidruggvvh
-X-ME-Proxy: <xmx:6tfvZhtS8v3WG-JpGU7cDOCtiwXzFc4Y1XuprJKXDucsu0P3O4_i2g>
-    <xmx:6tfvZtf7GC1EfCwgDM-Ssyq--1C_TOhuHvC1gC0JQnsoQWpEOeeZOg>
-    <xmx:6tfvZt0AAcNrB_bbC-FseMoQZF_KxIwvrVYjXxsRPg4JeE_8vuI7KA>
-    <xmx:6tfvZp99jdLKtbs4EP1p5eCEimJizrJGk4XkB_mKv8vVkHPyQ0YUUA>
-    <xmx:69fvZgWbQ2b7du7rNDLwYlbrZBzzZg5wYjrC-51lH6cF4Uhp_zKO-PWD>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 22 Sep 2024 04:40:08 -0400 (EDT)
-Date: Sun, 22 Sep 2024 02:40:07 -0600
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: daniel@iogearbox.net, shuah@kernel.org, andrii@kernel.org, 
-	ast@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me, haoluo@google.com, 
-	jolsa@kernel.org, mykolal@fb.com, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH bpf-next v2 1/2] bpf: verifier: Support eliding map
- lookup nullness
-Message-ID: <x32qvwnfnouk2zbvllwi7xy6w7jyjp6ifobumuohf4fy32sy2x@gczdukjvjo36>
-References: <cover.1726458273.git.dxu@dxuuu.xyz>
- <3b54139f8d4877e0487daebdd799c3878ee27ed0.1726458273.git.dxu@dxuuu.xyz>
- <a1b7e902e6f8be05f7d42bf340484b64583e1389.camel@gmail.com>
+	s=arc-20240116; t=1726999516; c=relaxed/simple;
+	bh=YnLtsOfTjT9EQgqTzxpvhc1dEV1mk5RAxzYv6QT3UG4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bUe14GlKJDhsM5dr85ghT1UVa7manf4dQo1h41GOX35rcrMTcAEl3UB+PlUVNaT/rycxDIODEQlfcOu7fzJtWB2/Kf3DU6ucEREHLZuO0eJ/sck/Jf8lPHUVBrd3oll5oEqTmqjYBp7brYe7er/ev3SqC19NoYl1sUs486NYr6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dA4av/9V; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 10B8F20003;
+	Sun, 22 Sep 2024 10:05:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1726999505;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jFkKQu0XpPY3Dq9x7D5aT3zWAuzC7LNnMPNJnHsb9us=;
+	b=dA4av/9V/GIHM6T9ynpPQ38492Fr3lu6VVV0wKCRvbDcCaP8rNHaN/fV7dCrpCv8dGFxsF
+	AB1Q3BKtgMNT81jn8SLcLTnYXpifv+KXhYyiimv25049cNHx4KXD7qFr8zWxsT4T88zHbO
+	Zs6/9dAtYnO2QZRT5cqoqxYukKuknNdIwCZETNKfjxmrA1DFwPf+AOYwT7ZrTLMNji2+Zu
+	Io+/I6XwOS7t2Kc87SlBiFKj6byykbfy+bklMfrCUVZTkZGcl5UtFEWwJL1/CSPpGwMza2
+	Ppbho/ka7lzjzIENcOrl9j3/yLcwEPZkdyt3sz0J9Mxq+XpUXNjlN1Iqx+HACQ==
+Message-ID: <464e0ae0-d6e3-4da4-a157-f74260f96275@bootlin.com>
+Date: Sun, 22 Sep 2024 12:04:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a1b7e902e6f8be05f7d42bf340484b64583e1389.camel@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: convert test_xdp_features.sh
+ to test_progs
+To: Jakub Kicinski <kuba@kernel.org>, Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>, ebpf@linuxfoundation.org,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+References: <20240910-convert_xdp_tests-v2-1-a46367c9d038@bootlin.com>
+ <64df8d41-6cfb-45a9-8337-5cc04daedb60@linux.dev> <ZuVWmxoqXFI3qvVI@lore-desk>
+ <20240914063828.7bd73c5e@kernel.org>
+Content-Language: en-US
+From: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+In-Reply-To: <20240914063828.7bd73c5e@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-On Fri, Sep 20, 2024 at 03:05:35PM GMT, Eduard Zingerman wrote:
-> On Sun, 2024-09-15 at 21:45 -0600, Daniel Xu wrote:
-> > This commit allows progs to elide a null check on statically known map
-> > lookup keys. In other words, if the verifier can statically prove that
-> > the lookup will be in-bounds, allow the prog to drop the null check.
-> > 
-> > This is useful for two reasons:
-> > 
-> > 1. Large numbers of nullness checks (especially when they cannot fail)
-> >    unnecessarily pushes prog towards BPF_COMPLEXITY_LIMIT_JMP_SEQ.
-> > 2. It forms a tighter contract between programmer and verifier.
-> > 
-> > For (1), bpftrace is starting to make heavier use of percpu scratch
-> > maps. As a result, for user scripts with large number of unrolled loops,
-> > we are starting to hit jump complexity verification errors.  These
-> > percpu lookups cannot fail anyways, as we only use static key values.
-> > Eliding nullness probably results in less work for verifier as well.
-> > 
-> > For (2), percpu scratch maps are often used as a larger stack, as the
-> > currrent stack is limited to 512 bytes. In these situations, it is
-> > desirable for the programmer to express: "this lookup should never fail,
-> > and if it does, it means I messed up the code". By omitting the null
-> > check, the programmer can "ask" the verifier to double check the logic.
-> 
-> Nit: maybe add a few lines why tools/testing/selftests/bpf/progs/iters.c
->      has to be changed.
+Hello all, sorry for the slow feedback, I have been off last week.
 
-Ack.
+On 9/14/24 15:38, Jakub Kicinski wrote:
+> On Sat, 14 Sep 2024 11:25:47 +0200 Lorenzo Bianconi wrote:
+>> On Sep 13, Martin KaFai Lau wrote:
+>>> test a physical network device that supports a certain XDP features.
+>>>
+>>> iiuc, test_xdp_features.sh only uses the veth and veth will also be the only
+>>> device tested after moving to prog_tests/xdp_features.c? It is a reasonable
+>>> addition to test_progs for an end-to-end xdp test by using veth. However,
+>>> test_progs will not be able to test the physical network device.
+>>>
+>>> Lorenzo, is the xdp_features.c still used for device testing?
+>>
+>> correct, xdp_features.c is intended to test the real xdp features supported by
+>> the NIC under test (DUT), not just the advertised ones (iirc that was a
+>> requisite to add xdp kernel feature support). For this reason we need two
+>> separated processes running on the tester device and on the DUT (they are
+>> usually two different devices). test_xdp_features.sh was just a simple test
+>> script used to develop xdp_features.c.
+>> What about extending xdp_features.c to integrate it in the CI?
 
-> 
-> [...]
-> 
-> > +/* Returns constant key value if possible, else -1 */
-> > +static long get_constant_map_key(struct bpf_verifier_env *env,
-> > +				 struct bpf_reg_state *key)
-> > +{
-> > +	struct bpf_func_state *state = func(env, key);
-> > +	struct bpf_reg_state *reg;
-> > +	int stack_off;
-> > +	int slot;
-> > +	int spi;
-> > +
-> > +	if (key->type != PTR_TO_STACK)
-> > +		return -1;
-> > +	if (!tnum_is_const(key->var_off))
-> > +		return -1;
-> > +
-> > +	stack_off = key->off + key->var_off.value;
-> > +	slot = -stack_off - 1;
-> > +	if (slot >= state->allocated_stack)
-> > +		/* Stack uninitialized */
-> > +		return -1;
-> 
-> I'm not sure verifier guarantees that key->off is negative.
-> E.g. the following simple program:
-> 
->     0: (b7) r1 = 16                       ; R1_w=16
->     1: (bf) r2 = r10                      ; R2_w=fp0 R10=fp0
->     2: (0f) r2 += r1
->     mark_precise: frame0: last_idx 2 first_idx 0 subseq_idx -1 
->     mark_precise: frame0: regs=r1 stack= before 1: (bf) r2 = r10
->     mark_precise: frame0: regs=r1 stack= before 0: (b7) r1 = 16
->     3: R1_w=16 R2_w=fp16
-> 
-> => I think 'slot' should be checked to be >= 0.
+So IIUC Lorenzo's answer, we _need_ to keep the possibility to run this test on
+real hardware, and so we _need_ to still be able to run two processes, possibly
+on two different machines. If that's so, indeed my rework breaks this. I have
+then multiple questions/doubts before being able to rework this:
+- the main goal of this rework is to be able to automatically run this test in
+CI, and the resulting constraint is that it must integrate in a standalone,
+already-existing c program (test_progs). I guess I can preserve the standalone
+xdp_features program as it is, and make test_progs just start  it twice (on two
+different veths). It would involve the following changes:
+  - keep a dedicated build step for this small, standalone xdp_features.c, and
+add a "controller" part in test_progs (instead of fully migrating xdp_features
+program into test_progs, which  is what the current series revision does)
+  - simply make the controller part create the testing network in CI, fork/start
+the xdp_features program on both veths, and check return codes.
+My main concern is about the possible flakiness of this whole setup (multiple
+processes and tcp/udp channels involved), but if keeping the standalone version
+is really needed, I can give a try. Does it sound reasonable ?
+- one part of my overall goal is to clean up the tools/testing/selftests/bpf
+directory from anything that is not tested automatically. What should we do with
+the wrapping shell script (test_xdp_features.sh) ? Since test_progs will
+automate the test with veths, I guess it is still ok to just remove it ?
 
-Ah, so in case stack grows "up" right? Which seems invalid but probably
-good to check.
+> No preference but just to raise awareness - drivers/net's NetDrvEpEnv
+> class provides the setup for running tests with an endpoint.
+> XDP tests intended for HW would fit there pretty well.
 
-> 
-> > +
-> > +	spi = slot / BPF_REG_SIZE;
-> > +	reg = &state->stack[spi].spilled_ptr;
-> > +	if (!tnum_is_const(reg->var_off))
-> > +		/* Stack value not statically known */
-> > +		return -1;
-> > +
-> > +	return reg->var_off.value;
-> > +}
-> > +
-> >  static int get_helper_proto(struct bpf_verifier_env *env, int func_id,
-> >  			    const struct bpf_func_proto **ptr)
-> >  {
-> > @@ -10511,6 +10557,15 @@ static int check_helper_call(struct bpf_verifier_env *env, struct bpf_insn *insn
-> >  			env->insn_aux_data[insn_idx].storage_get_func_atomic = true;
-> >  	}
-> >  
-> > +	/* Logically we are trying to check on key register state before
-> > +	 * the helper is called, so process here. Otherwise argument processing
-> > +	 * may clobber the spilled key values.
-> > +	 */
-> > +	regs = cur_regs(env);
-> > +	if (func_id == BPF_FUNC_map_lookup_elem)
-> > +		meta.const_map_key = get_constant_map_key(env, &regs[BPF_REG_2]);
-> 
-> Nit: there is a long 'switch (func_id)' slightly below this point,
->      maybe move this check there?
+Thanks for the hint. If we want to keep some tooling for real hw xdp features
+testing, maybe we could add a small part in tools/testing/selftests/drivers/net
+and make it use this NetDrvEpEnv ? Or it is a bigger hint that the whole test
+about xdp features could be moved there (and then tested by net kselftests
+rather than by ebpf ci specifically) ? @Lorenzo and eBPF tests maintainers, any
+opinion ?
 
-I had that initially but discovered that verifier marks the stack value
-as unknown as part of check_func_arg(). I _think_ it was:
+Thanks,
 
-        if (is_spilled_reg(&state->stack[spi]) &&
-            (state->stack[spi].spilled_ptr.type == SCALAR_VALUE ||
-             env->allow_ptr_leaks)) {
-                if (clobber) {
-                        __mark_reg_unknown(env, &state->stack[spi].spilled_ptr);
-                        for (j = 0; j < BPF_REG_SIZE; j++)
-                                scrub_spilled_slot(&state->stack[spi].slot_type[j]);
-                }
-                goto mark;
-        }
+Alexis
 
-I remember spending some time debugging it. Which is why I left that
-comment above this code.
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-Thanks for reviewing!
 
