@@ -1,153 +1,133 @@
-Return-Path: <linux-kselftest+bounces-18199-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18200-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69FB197E224
-	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Sep 2024 17:05:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9980F97E274
+	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Sep 2024 18:23:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8CE2B20CBF
-	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Sep 2024 15:05:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D88992812BF
+	for <lists+linux-kselftest@lfdr.de>; Sun, 22 Sep 2024 16:23:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7D84B647;
-	Sun, 22 Sep 2024 15:05:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AECF1C695;
+	Sun, 22 Sep 2024 16:23:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G9FPfOMG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PFyb9MGT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2910633E1;
-	Sun, 22 Sep 2024 15:05:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE95ABA2E;
+	Sun, 22 Sep 2024 16:23:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727017513; cv=none; b=KwH+ww2p+2jlYZvgcDdMKhM5TcHsPAPHSwFUoG4mHsnZNc02qCOo1V+uMOf8Jg+ZiJ5bG5gNctuF2kiAYLCP2/a1jZJ3e/oXmuO+RegY3O0crnCCnfg3iZZ2vza19qnF4xjDqPYP+rwvcg7uCdiThk3rQ/ymbwXbAEvC5jaEtl8=
+	t=1727022214; cv=none; b=e2pmoAcJ6Jg0XhkOgnhFJu2oCD4H54nSyCA45CaQTL5NxJhgoHcTLCyUmjiiP+VC3d8m4VvsYlkPv5vcz4N7AFd7NwmCiMJZ0w+T780ytyPYpTm+6hpAFKzLXLhYSYqkf8TzP09QG8/tvBBSvMDjqpYfemDwpeOjUVGe+dmXnYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727017513; c=relaxed/simple;
-	bh=udfkU2rZFc87DErPc2zl+mRlTTmZa02H1Od8ymTqZ9o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kx1qGXm0Ctl5kBxGl73PZdIjbIDoYm6jVNOzRncVGJRnYdFJDsDD3Jf0/yDKYXoOAwQAHgAbFclyIGjO+1WUaHVhcF2l5PI/lhjgl7SqwN2rN/JI2XLjYSOYm854HFAzqIRGNNOFukbjxG1blfCYT5Z26zsqt/wcRGq/MvvrX9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G9FPfOMG; arc=none smtp.client-ip=209.85.210.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1727022214; c=relaxed/simple;
+	bh=dgbk0GepYMfUAgep3wFQBc6FfyQBzJrgxVP1kPHTNks=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AtQ14gCjziQr9+D3769c11hb5izrYtcgzbX3JxIgqvkgLW8NaJ2dDt1IVfAltAy4VMVURFy7YKpNYf0QA524+gmIvJClpArvAIeykTNc8knZvk1s/NGi8nzaGZq4Q3E0qLChJQeo+TgrGjosOOifE52S5j5hWaPILcBPuB16nxA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PFyb9MGT; arc=none smtp.client-ip=209.85.219.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-71798a15ce5so3176108b3a.0;
-        Sun, 22 Sep 2024 08:05:11 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e1a819488e3so2777366276.3;
+        Sun, 22 Sep 2024 09:23:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727017511; x=1727622311; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=SgC05laigZrc9YhdUETMJtepcdb1sic4eQ1AKtV1354=;
-        b=G9FPfOMGtZnv2TpTF1rqjz4XUCohzXgoYx+lmmgolUacrDLqRHStEnOPHa/dZjTCM+
-         b5mBP2Wsj5PBcLOfz220CjTju4EDEz4fl8O+2KJEV9ktAKiRsUG1OdXs73yzVACJKOFy
-         GrvwOMvEbYTh8bH2VdTPiqEKZ3GAjZ2UNc7P2TEpqbZJCZLr8FcB9J4TKSq7GbzLUGQr
-         F3x3XBaiDImz0JEE/XHVYQOZIXP4f3D6kY+K2HSktoDUtT1cHTPPcbF6z+D+2Gx7dW+7
-         Vg4hFGOdYraIb4C2FXm1Qs3yJHr/MWmUOX2sk7HONuEmdhP567gcAmfXnZQERJILwTZ8
-         BmyA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727017511; x=1727622311;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1727022211; x=1727627011; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SgC05laigZrc9YhdUETMJtepcdb1sic4eQ1AKtV1354=;
-        b=csw/wcSDAeBlkls3WJUKwUtpzjpf2XG+k+8G/EniaaRUsJPFTt1c72ZmAmCzoAQYY+
-         u8PipuPNLP64e+fITTAOKBHyF0ZnXWtCtBorrBEXNuU3FNdgQmpxqMygjIfveJO5jW6J
-         KlHtk2qA8qaUJ9wVbUhrzhUYgRc2JoCrbVVpdsdnS+0MEAANDaV4Q4DX7AkFLS4uQM09
-         Apw/W0A7H0CS5YE8uwucqkq0Qb+aIw2IKemcO8Owh45zwCfiMrThLnV22bm8RVcsHlF7
-         1qx7irIQPsgSlbwYsGtDq0iWBz572dJv/V+VE7vFkp4QjmrcL9iQVzk+MyM6lchswMGO
-         ra6g==
-X-Forwarded-Encrypted: i=1; AJvYcCVi0Svn7r57X8FOK4PP9vHbpqcbMLYZCoFQpzh6DDdZKigCLoYYVA6oJ7I+xKkkuf9eKUzewo8Xb0sYdws=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfrKHlE4U5q6HlxJ+EVPEK6Q+2O8q4VxS92+XrY7PX7NsuD7wR
-	FQTyeOFrh8BapIDfcekDyuMhJ3cLStCfoqC5K++1vVr6vDYLaBLpCSf76w==
-X-Google-Smtp-Source: AGHT+IF0cJKDW57QxCia931Z/mbqBavpY7Cc9jHHL0OINn7+qqn2WUuqwsc3xhsFUa09Jbu5wWbcNg==
-X-Received: by 2002:a05:6a21:6801:b0:1cc:d9dc:5637 with SMTP id adf61e73a8af0-1d30a9ccfa9mr14085967637.23.1727017511291;
-        Sun, 22 Sep 2024 08:05:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7db4998ff14sm13831649a12.66.2024.09.22.08.05.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 22 Sep 2024 08:05:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-From: Guenter Roeck <linux@roeck-us.net>
-To: David Gow <davidgow@google.com>
-Cc: linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>,
-	I Hsin Cheng <richard120310@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>
-Subject: [PATCH] Revert "list: test: fix tests for list_cut_position()"
-Date: Sun, 22 Sep 2024 08:05:07 -0700
-Message-ID: <20240922150507.553814-1-linux@roeck-us.net>
-X-Mailer: git-send-email 2.45.2
+        bh=wEHQZ7aV2v97Y8TR3PMXm+WQO/EG3K5hYw1BGfIK/c4=;
+        b=PFyb9MGTGQCVlFSmFzEDKsVu7QugHHEql6MGbr9FHZsWgT7AGW9AzUxcydY2H3JTz0
+         T7y9RG7Ly/7cp8LN3e9LxKyH3FCVOHtoftcssiYBeKEDRH7yWb74TPUtelZQ16mqi+yx
+         rXOVwuXmyklDL2vJkyi3w5PFcfwnkuvEhQmc4vHhpm7NUS7IOgCRqLIVgy1MOg8WurWC
+         jskL4Z4hkn3vxrvcARWP/GtA4LTLr05295cPBE3J0Ia4G+YFibSCm0QGaPT72JoWbOsB
+         6j0x2Mmdn2w203Lds0LsxqBZZJ4fZFUf8ciiPocJk/6lKsBrLK4WGTXB7tcBVP5mT5Sm
+         XjyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727022211; x=1727627011;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wEHQZ7aV2v97Y8TR3PMXm+WQO/EG3K5hYw1BGfIK/c4=;
+        b=UQE8fum0RcGQ/O2+M9quIRoIRy0+NQjaPRoexO/MTkQdSX5f8xIT3ncub1KzK4YFvJ
+         t/UannrelNYQ+CPhDMlvxbqzZnnaSSqICNKECtsQi+v+QZsH4NhgEhWqGV75Zet9YnnP
+         zCvlqkfDoI7kshdVPYnn+3R8NsATEOxJPDPQNV2Mas/2JY3fD5toOFoRRKRvxShvxVRo
+         hceKH/Bug6FGoiSUMD8bU9B3RGf8BvrgIb+rx6C4nsx2f8yMNWnDwpkv3Ec6jXMlihY+
+         QyG8NGtdm6QsVTVFJE2K+WhfJciVtIA6qv1gFLIyh60BpbtjRdQzxjwN50EzZJpfeW8x
+         17/A==
+X-Forwarded-Encrypted: i=1; AJvYcCVi3sKTSk6FMlDc1eUG34OOO5r8uYLln24vy8E1iXrDZRY6SZKUnmEexwFVCeXslFCv4jrlB2foC6pG46z2VQEn@vger.kernel.org, AJvYcCVjg9iRK7g3wbX2TyAxX80bI549omt7JkPYcv3irGjVyGBp3JWkdVTjib5gLf5u6YG/Vrhk2pjzqAzpQcQq@vger.kernel.org, AJvYcCW2UKJxY4W/Dj35v8wFfCoJNyeWC1fgaSfBTd/k6T3O8W/KGUOkOTDCakI6bVNLRFG2KW4WMKmV@vger.kernel.org, AJvYcCWYXpaTClPBpycVFLzVpnnhwfku3/7dvqhqU5jBa4mELJWz4yPYQMrocGaNWS0AXvTYdKw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YymI5l2EsgISGdjAdU/4ikDK58b038RXTenoiTDze/IO2TbyrQs
+	n41XlVfMyVRktSVgjIQ19NrQMz+SNN81PcJHqmY+GCJOmJ2NnqWFf1uakIFYEfLvvl+X2+PP72H
+	Z3zmmYu+qJk/evLKVHHVCQBlCj50=
+X-Google-Smtp-Source: AGHT+IF0UyOWjybQXZgWQIKE9WssLRn86JYKnQHBctQJAEy/AvR8IQWn2xGNT5sKqRgFleUnd1kKm56erKflXFLSF9k=
+X-Received: by 2002:a05:6902:2609:b0:e1d:1746:52da with SMTP id
+ 3f1490d57ef6-e2252f34709mr5427596276.21.1727022210713; Sun, 22 Sep 2024
+ 09:23:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240920-reverse-sk-lookup-v2-0-916a48c47d56@cloudflare.com> <20240920-reverse-sk-lookup-v2-1-916a48c47d56@cloudflare.com>
+In-Reply-To: <20240920-reverse-sk-lookup-v2-1-916a48c47d56@cloudflare.com>
+From: ericnetdev dumazet <erdnetdev@gmail.com>
+Date: Sun, 22 Sep 2024 18:23:19 +0200
+Message-ID: <CAHTyZGwm4pHZg1eSdF6bbk7_WcJ4k25YzWtRKbfWNC_e6gUNVQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/3] ipv4: Support setting src port in sendmsg().
+To: Tiago Lam <tiagolam@cloudflare.com>
+Cc: "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Jakub Sitnicki <jakub@cloudflare.com>, 
+	kernel-team@cloudflare.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This reverts commit e620799c414a035dea1208bcb51c869744931dbb.
+Le ven. 20 sept. 2024 =C3=A0 19:03, Tiago Lam <tiagolam@cloudflare.com> a =
+=C3=A9crit :
+>
+> sendmsg() doesn't currently allow users to set the src port from which
+> egress traffic should be sent from. This is possible if a user wants to
+> configure the src address from which egress traffic should be sent from
+> - with the IP_PKTINFO ancillary message, a user is currently able to
+>   specify a source address to egress from when calling sendmsg().
+> However, this still requires the user to set the IP_TRANSPARENT flag
+> using setsockopt(), which happens to require special privileges in the
+> case of IPv4.
+>
+> To support users setting the src port for egress traffic when using
+> sendmsg(), this patch extends the ancillary messages supported by
+> sendmsg() to support the IP_ORIGDSTADDR ancillary message, reusing the
+> same cmsg and struct used in recvmsg() - which already supports
+> specifying a port.
+>
+> Additionally, to avoid having to have special configurations, such as
+> IP_TRANSPARENT, this patch allows egress traffic that's been configured
+> using (the newly added) IP_ORIGDSTADDR to proceed if there's an ingress
+> socket lookup (sk_lookup) that matches that traffic - by performing a
+> reserve sk_lookup. Thus, if the sk_lookup reverse call returns a socket
+> that matches the egress socket, we also let the egress traffic through -
+> following the principle of, allowing return traffic to proceed if
+> ingress traffic is allowed in. In case no match is found in the reverse
+> sk_lookup, traffic falls back to the regular egress path.
+>
+> This reverse lookup is only performed in case an sk_lookup ebpf program
+> is attached and the source address and/or port for the return traffic
+> have been modified using the (newly added) IP_ORIGDSTADDR in sendmsg.
 
-The commit introduces unit test failures.
+Is it compatible with SO_REUSEPORT ?
 
-     Expected cur == &entries[i], but
-         cur == 0000037fffadfd80
-         &entries[i] == 0000037fffadfd60
-     # list_test_list_cut_position: pass:0 fail:1 skip:0 total:1
-     not ok 21 list_test_list_cut_position
-     # list_test_list_cut_before: EXPECTATION FAILED at lib/list-test.c:444
-     Expected cur == &entries[i], but
-         cur == 0000037fffa9fd70
-         &entries[i] == 0000037fffa9fd60
-     # list_test_list_cut_before: EXPECTATION FAILED at lib/list-test.c:444
-     Expected cur == &entries[i], but
-         cur == 0000037fffa9fd80
-         &entries[i] == 0000037fffa9fd70
+Most heavy duty UDP servers use SO_REUSEPORT to spread incoming
+packets to multiple sockets.
 
-Revert it.
-
-Fixes: e620799c414a ("list: test: fix tests for list_cut_position()")
-Cc: I Hsin Cheng <richard120310@gmail.com>
-Cc: David Gow <davidgow@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- lib/list-test.c | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/lib/list-test.c b/lib/list-test.c
-index 4f3dc75baec1..e207c4c98d70 100644
---- a/lib/list-test.c
-+++ b/lib/list-test.c
-@@ -408,13 +408,10 @@ static void list_test_list_cut_position(struct kunit *test)
- 
- 	KUNIT_EXPECT_EQ(test, i, 2);
- 
--	i = 0;
- 	list_for_each(cur, &list1) {
- 		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
- 		i++;
- 	}
--
--	KUNIT_EXPECT_EQ(test, i, 1);
- }
- 
- static void list_test_list_cut_before(struct kunit *test)
-@@ -439,13 +436,10 @@ static void list_test_list_cut_before(struct kunit *test)
- 
- 	KUNIT_EXPECT_EQ(test, i, 1);
- 
--	i = 0;
- 	list_for_each(cur, &list1) {
- 		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
- 		i++;
- 	}
--
--	KUNIT_EXPECT_EQ(test, i, 2);
- }
- 
- static void list_test_list_splice(struct kunit *test)
--- 
-2.45.2
-
+How is the reverse lookup going to choose the 'right' socket ?
 
