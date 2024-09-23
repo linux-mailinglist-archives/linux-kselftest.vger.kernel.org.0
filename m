@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-18233-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F52C97EE7F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 17:49:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B229C97EEC3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 18:01:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E9121F226C4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 15:49:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77A38281546
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 16:01:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1CD119E98D;
-	Mon, 23 Sep 2024 15:48:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D16DA19924A;
+	Mon, 23 Sep 2024 16:01:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="PArgJNDQ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cRAown0/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44D919E7F3
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2024 15:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DF7A18E25
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2024 16:01:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727106516; cv=none; b=ZAoW7oTT8FngrdZRhBGwcqYCoMWeibf9EzqEhNtZjzSK+zeiz+ZQk9T6ednhbiaYefc3laUH/nkMmXtlSKtJEgGxCdG4WLTZ1d/MQNs8cMW7Nj3Aq8cTQrlUzVtBxDwbactaO8lFa3aUylid6KQGTejOBzViy9vsHEJnjcrUs5I=
+	t=1727107297; cv=none; b=hkXyIMcrYj5NZg461Cl7f/AJDR/c88hoO8385sEchiNLjye6n46HTmcFuia4ffhiSC/EW04LiC3r8MNUiJDziRrJK5ACBeTOuYnhRW0Qfic/TrUuPHUlTGHOsKhVPKr90W+84nGNiBSykByAHl1fI0i1taqgvMEWdKy+6RoIDUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727106516; c=relaxed/simple;
-	bh=6AUAFawZBwEYX6wA6R/JHVcKxBorO1W5/vjMhI5Fnz8=;
+	s=arc-20240116; t=1727107297; c=relaxed/simple;
+	bh=yspVqEEveq6ZyrJvWKmdhNPB1+L73B7yIVlcbXkjREk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EKCCfPK5XrBaw6W0P2x9tZ7PWLoC7Hx9x7H6nkEymWGTqUMqU6L+iua3kjG9l1AYQ1s/M5QbynWix2KHoWUCr9f4/Px3/vmYt696145uqz+eOa4FveQk2dHGLatx0JaG6/MKK9d1idu+mzl2WCz+DCOYX+c+pqZbJQXlPZK7ULI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=PArgJNDQ; arc=none smtp.client-ip=209.85.166.43
+	 In-Reply-To:Content-Type; b=ScEeGOdKkR9IFLIcKGg1NT8MeFgdfk0uy2O7/rAfPAZH2dXbg3AM6p7IzBtoXEbd/QiyOn+/ENIiKolyNH8FyUO0vFj8ZK1Y3r1qzVPgDd2i5gNcUAyqwwB7DD5CFO8RSI2u0XCBHaPD9hnO4EporYdke5HSph3e8ASA/a9iFMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cRAown0/; arc=none smtp.client-ip=209.85.166.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-82aab679b7bso156547739f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2024 08:48:33 -0700 (PDT)
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-82cdc21b5d8so239260739f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2024 09:01:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1727106513; x=1727711313; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1727107294; x=1727712094; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=XfewFcLEr2Hab28qFyt3LChk9UsqxcJHnv6Miiyoqbs=;
-        b=PArgJNDQ+o10JbxeAE2CcWmGtDnnJ7fwpvYNVhEI30Z80CGDjXOXcrARULYNEcVx5f
-         HXYaBPmNfrA4xGZcOpvF1eOuZBrcPUe7URS5C/2rGQ2K2Mgau1S6UfL4e/6tJAnSubtX
-         5z4y5AVfYxY0fCLiKzheU8lu7oiLpjVeMXTUk=
+        bh=qEml613ScxlbxV2rYvuLeC1V8WRj6hDYMm4pZjj0Dbk=;
+        b=cRAown0/DK4sI6Izpm2MnU5EVHW6aSyonp/kPVwmARNCUjwP7/WJ29mROR0Yuqw/3a
+         1CEupIiUt8O1a3VV67WncL0tLPvFPVS9+ku8aDRxPGs39W6/s9VAX1iFnGUu6shm92UP
+         ZHejrxISjz4BMYeNvmI7Gu8RJq+QOw4lO0nNM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727106513; x=1727711313;
+        d=1e100.net; s=20230601; t=1727107294; x=1727712094;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XfewFcLEr2Hab28qFyt3LChk9UsqxcJHnv6Miiyoqbs=;
-        b=WnjMNJ20XLSEvOK6WZNrUNEkX3PehSmPK32asBE/I9rbFbGFsiVbVuUz+FlwVKBPyH
-         72hXDpeoMMPbPOV39Y6+w1G5TYimOV378UK7YU/qbEhhKg/8h5m0ijovPzMXHlKffCXJ
-         zIp+w2By7DYCPuCuatPoWGEPILeYwom+Zsi8+coGw4tMnXTxIEL+ym/1IzID0hAa8OBk
-         p9tk+jJRXjE01D76JkzcBPCk1o7LuPpMl2y5VJR8K8Af6DluqwXPXWwEENom2kR8iy6H
-         wAUb46JaG/kAJEfqn+Au0erb5diRbo8SR3raK4r5jYMdip1k34a7UdW8RONN/4YBcvea
-         XA9A==
-X-Forwarded-Encrypted: i=1; AJvYcCUBKGVBpyEVQagxuLzsqlkUJ3dUCQwk2FDg0BylP+gVwkgidt3UwQPn1PPDQA/32XSGXRjk8SOybdVl1DKrFRk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyr5E8hMYOfNiDbdwnZlwHJhni69W2pnSaoKWdl+pPWc8fgZ8gR
-	v3P6kq8viE62BtEzIRuz5LgBFNMd6jWPuqOdYEp0JP0EIUh8amocdUB7U8ZvFiQ=
-X-Google-Smtp-Source: AGHT+IGWKJbuVpZdyroTo8OcMbSyZTxXo1Q/AjVDwq/pPrFbUHte/UKcaVbflle9CKdeqDONU09fGA==
-X-Received: by 2002:a05:6e02:2163:b0:398:39f:8b4d with SMTP id e9e14a558f8ab-3a0c9cd0a71mr112974745ab.5.1727106512847;
-        Mon, 23 Sep 2024 08:48:32 -0700 (PDT)
+        bh=qEml613ScxlbxV2rYvuLeC1V8WRj6hDYMm4pZjj0Dbk=;
+        b=lFfYQXtbr3PJI3mFxftOGhePVfLgufEVNCiXCyrtMrIRxO82MCJMgDfTNAcekoQkzp
+         rB21We4dNZHCvXpMw5Be/kO+siGG/IuKoeD69TNADKOR4pqgM5M6KtfOFko7lThKgEc8
+         1T9J0Bm+iM/eAl3mG0mUE7jco6/+2sHJM10PBd8wVXnWlq9qpTaYd61InpJlrrAlj8si
+         zf3m1A/DUwfxeTlyaVwhbgWbj3Rjh94wJ86CUrUK2XGV6AIcPF1wGD26pDYTeLM9v++L
+         aWIYdIZv2aujHj3GHlfzdfpVxTqhFO6a2WFMc0cAe3tAIQdi3xKkwxHiprH5PtyTKj3U
+         r/RA==
+X-Forwarded-Encrypted: i=1; AJvYcCU66F4Ne9UyvIkoUML2dXj50+SM7DxiCaEeWbo5EGCmKc4obH4OR4YZ3XGHKg2lGITM9UXTONKzNUN9smNnV4k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKjyc/T7ntFv6JexrBJvm3e/InedmUGSeCp4mF8fxR7xNWkgK8
+	KFcl3zk6NGnuUtfJuyCPs/uemCORfLccXJ5wULmY6CL56nUeKzjg5X44dKgXI2w=
+X-Google-Smtp-Source: AGHT+IH1YGCGJJ3r++ctoT2ootUH7ze8FehY9Z9KUJuVPkNr2J3rM+XTA+PCfIdF8RFkh6IHB4QBAg==
+X-Received: by 2002:a05:6602:6d08:b0:82c:ec62:6602 with SMTP id ca18e2360f4ac-8320b328ce5mr990358739f.12.1727107294259;
+        Mon, 23 Sep 2024 09:01:34 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a0c9f22728sm26001055ab.83.2024.09.23.08.48.31
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-82d492b9676sm562541739f.33.2024.09.23.09.01.32
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Sep 2024 08:48:32 -0700 (PDT)
-Message-ID: <3276d15a-9865-4387-84d0-bff062a159de@linuxfoundation.org>
-Date: Mon, 23 Sep 2024 09:48:31 -0600
+        Mon, 23 Sep 2024 09:01:33 -0700 (PDT)
+Message-ID: <92f63189-851c-44d1-951e-6a6c39eb223f@linuxfoundation.org>
+Date: Mon, 23 Sep 2024 10:01:32 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,135 +73,68 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/1] Add KUnit tests for llist
-To: Artur Alves Cavalcante de Barros <arturacb@gmail.com>,
- David Gow <davidgow@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- n@nfraprado.net, andrealmeid@riseup.net, vinicius@nukelet.com,
- diego.daniel.professional@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240917005116.304090-1-arturacb@gmail.com>
- <bd5eb792-124f-4eaa-9ff9-a99765d1ef73@linuxfoundation.org>
- <CABVgOSmNcmnRCn5Q05U1wBebSGTM=OdUXuT7SA-poHXUgKubaQ@mail.gmail.com>
- <ce313b67-416e-44fe-865c-77388883556c@gmail.com>
+Subject: Re: [PATCH v2] kselftests: mm: Fix wrong __NR_userfaultfd value
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ David Hildenbrand <david@redhat.com>, John Hubbard <jhubbard@nvidia.com>
+Cc: kernel@collabora.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240923053836.3270393-1-usama.anjum@collabora.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <ce313b67-416e-44fe-865c-77388883556c@gmail.com>
+In-Reply-To: <20240923053836.3270393-1-usama.anjum@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 9/20/24 20:49, Artur Alves Cavalcante de Barros wrote:
-> On 9/20/24 4:10 AM, David Gow wrote:
->> On Fri, 20 Sept 2024 at 00:01, Shuah Khan <skhan@linuxfoundation.org> wrote:
->>>
->>> On 9/16/24 18:51, Artur Alves wrote:
->>>> Hi all,
->>>>
->>>> This is part of a hackathon organized by LKCAMP[1], focused on writing
->>>> tests using KUnit. We reached out a while ago asking for advice on what
->>>> would be a useful contribution[2] and ended up choosing data structures
->>>> that did not yet have tests.
->>>>
->>>> This patch adds tests for the llist data structure, defined in
->>>> include/linux/llist.h, and is inspired by the KUnit tests for the doubly
->>>> linked list in lib/list-test.c[3].
->>>>
->>>> It is important to note that this patch depends on the patch referenced
->>>> in [4], as it utilizes the newly created lib/tests/ subdirectory.
->>>>
->>>> [1] https://lkcamp.dev/about/
->>>> [2] https://lore.kernel.org/all/Zktnt7rjKryTh9-N@arch/
->>>> [3] https://elixir.bootlin.com/linux/latest/source/lib/list-test.c
->>>> [4] https://lore.kernel.org/all/20240720181025.work.002-kees@kernel.org/
->>>>
->>>> ---
->>>> Changes in v3:
->>>>       - Resolved checkpatch warnings:
->>>>           - Renamed tests for macros starting with 'for_each'
->>>
->>> Shouldn't this a separate patch to make it easy to review?
->>>
->>
->> I think that, if this were renaming these in an already existing test
->> (like the confusingly similar list test), then yes. But since it's
->> only a change from v2, I think we're okay.
->>
+On 9/22/24 23:38, Muhammad Usama Anjum wrote:
+> grep -rnIF "#define __NR_userfaultfd"
+> tools/include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
+> arch/x86/include/generated/uapi/asm/unistd_32.h:374:#define
+> __NR_userfaultfd 374
+> arch/x86/include/generated/uapi/asm/unistd_64.h:327:#define
+> __NR_userfaultfd 323
+> arch/x86/include/generated/uapi/asm/unistd_x32.h:282:#define
+> __NR_userfaultfd (__X32_SYSCALL_BIT + 323)
+> arch/arm/include/generated/uapi/asm/unistd-eabi.h:347:#define
+> __NR_userfaultfd (__NR_SYSCALL_BASE + 388)
+> arch/arm/include/generated/uapi/asm/unistd-oabi.h:359:#define
+> __NR_userfaultfd (__NR_SYSCALL_BASE + 388)
+> include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
 > 
-> Yes, the renaming refers to some test cases from the test suite that I'm adding, with the purpose of resolving some checkpatch warnings, as suggested by Rae Moar's review[1].
+> The number is dependent on the architecture. The above data shows that:
+> x86	374
+> x86_64	323
 > 
->>>>           - Removed link from commit message
->>>>       - Replaced hardcoded constants with ENTRIES_SIZE
->>>
->>> Shouldn't this a separate patch to make it easy to review?
->>
->> Again, if we want to change this in other tests (list, hlist) we
->> should split it into a separate patch, but I think it's okay for llist
->> to go in with these already cleaned up.
->>
->>>
->>>>       - Updated initialization of llist_node array
->>>>       - Fixed typos
->>>>       - Update Kconfig.debug message for llist_kunit
->>>
->>> Are these changes to existing code or warnings on your added code?
->>
->> I think these are all changes to the added code since v2. Artur, is that right?
->>
+> The value of __NR_userfaultfd was changed to 282 when
+> asm-generic/unistd.h was included. It makes the test to fail every time
+> as the correct number of this syscall on x86_64 is 323. Fix the header
+> to asm/unistd.h.
 > 
-> This is the case! All changes are in the added code, so it doesn't introduce any checkpatch warnings that were present in v2.
+> Fixes: a5c6bc590094 ("selftests/mm: remove local __NR_* definitions")
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> ---
+>   tools/testing/selftests/mm/pagemap_ioctl.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->>>>
->>>> Changes in v2:
->>>>       - Add MODULE_DESCRIPTION()
->>>>       - Move the tests from lib/llist_kunit.c to lib/tests/llist_kunit.c
->>>>       - Change the license from "GPL v2" to "GPL"
->>>>
->>>> Artur Alves (1):
->>>>     lib/llist_kunit.c: add KUnit tests for llist
->>>>
->>>>    lib/Kconfig.debug       |  11 ++
->>>>    lib/tests/Makefile      |   1 +
->>>>    lib/tests/llist_kunit.c | 358 ++++++++++++++++++++++++++++++++++++++++
->>>>    3 files changed, 370 insertions(+)
->>>>    create mode 100644 lib/tests/llist_kunit.c
->>>>
->>>
->>> You are combining lot of changes in one single patch. Each change as a separate
->>> patch will help reviewers.
->>>
->>> Adding new test should be a separate patch.
->>>
->>> - renaming as a separate patch
->>>
->>
->> I think given that these are just changes between patch versions, not
->> renaming/modifying already committed code, that this is okay to go in
->> as one patch?
->>
->> The actual patch is only doing one thing: adding a test suite for the
->> llist structure. I don't see the point in committing a version of it
->> only to immediately rename things and clean bits up separately in this
->> case.
->>
->>
->> Cheers,
->> -- David
-> 
-> Thanks for replying!
-> 
-> I'd like to reaffirm that the patch is, in fact, doing one thing: adding tests for the llist data structure. All the changes in V2 and V3 refer to the code that I'm adding. I'm not modifying any existing list tests, only adding new ones.
-> 
-> [1] https://lore.kernel.org/all/20240903214027.77533-1-arturacb@gmail.com/T/#mc29a53b120d2f8589f8bd882ab972d15c8a3d202
-> 
-> Best regards,
-> - Artur
+> diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
+> index fc90af2a97b80..bcc73b4e805c6 100644
+> --- a/tools/testing/selftests/mm/pagemap_ioctl.c
+> +++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+> @@ -15,7 +15,7 @@
+>   #include <sys/ioctl.h>
+>   #include <sys/stat.h>
+>   #include <math.h>
+> -#include <asm-generic/unistd.h>
+> +#include <asm/unistd.h>
+>   #include <pthread.h>
+>   #include <sys/resource.h>
+>   #include <assert.h>
 
-Sounds good to me. It was a bit confusing because the v2 and v3 change
-new and code which wasn't clear to me.
+Thank you.
+
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
 thanks,
 -- Shuah
-
-
 
