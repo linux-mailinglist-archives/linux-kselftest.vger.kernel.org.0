@@ -1,276 +1,157 @@
-Return-Path: <linux-kselftest+bounces-18254-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18255-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE1A897F149
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 21:39:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6857597F1C3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 22:47:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0E211C217E9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 19:39:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F4121C20B98
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 20:47:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93F9A19FA8C;
-	Mon, 23 Sep 2024 19:39:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B48FB2E419;
+	Mon, 23 Sep 2024 20:47:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Rwr6JOxb";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hgYHeLhk";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Rwr6JOxb";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hgYHeLhk"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="duV7iq52"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97ACB1A01DB;
-	Mon, 23 Sep 2024 19:39:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A07A114A85
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2024 20:47:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727120350; cv=none; b=YdrLWWdsc4deCijoE1e2K4E1TZ68A70eKlnNsfM5rBpaW3XjQk9XcwLdXoCnwmoMmFfjUPRjrqtIdYo4hFFmngXPyiNnMixVSURh0foG/rKSYz/kgsUHGa1POhYTfq4NdbkZSzxrMsqGrAWXY88HIlwq2Pf62SWnqs2ms/dRsnE=
+	t=1727124464; cv=none; b=Ir8Vi37rGuauffX77ZbY6dbnIuyWSu6ajQrgHn5mWCJR5S6rTQGO9RXT3/svL5T6cpZ58xztFh9ONugfN36C/wQLrc71r6XNrrZpUghc1SjHKnLxiZlz+SzA2wQUwmPmjVvwCOz76eFXGGvyYf9KH8JIry4oNijs+D0gfF8k4LU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727120350; c=relaxed/simple;
-	bh=fif18Gbqv3h2FyGK8EMsN1zq5El7xh5nAnmet2jGCBg=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=WXTmwBemD6vBh7+1wbwXlBZ3XIn4Ob4SkST9L9ak7WmA24hBJaRLYPCkfi5lbBX0WsYX0ekuXQMz2L80RZL1NRmmKr//rQZ8PKlwxQPn9RE6sJgBJ7bnx/eldt9rwIX8Vwwmi2POzMzEbrBjXq65448i4C/a+eIU1Kgf3syozaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Rwr6JOxb; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hgYHeLhk; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=Rwr6JOxb; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hgYHeLhk; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 7AF1E21DC3;
-	Mon, 23 Sep 2024 19:39:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1727120346; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=btFVzvo3cYlCIaFbLMC8UzMj/n6rmtuNvZUl+PCyxSQ=;
-	b=Rwr6JOxbkiklNQw+x4Hjx6dHODAJH+Vwmbh1oihVfmkQC7lsG+p5BjchvPPL04TD2zATCg
-	TifUqy+Diu6JkyKTwQ4p/pZlVE2/b+WV5V2ts7eGqv0d/UucPlG/p5Ds0FgTFCaz4Exzfi
-	comE3NVl7Z2xAnjL4VIhyNaSx61SsZM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1727120346;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=btFVzvo3cYlCIaFbLMC8UzMj/n6rmtuNvZUl+PCyxSQ=;
-	b=hgYHeLhkGlG/3YkB/t+moHHtkdI3ssLeOy9yq9aecJLkPfk3Yh/cev2O45V2KL92Y1Ehr6
-	oumwpzkQmAwe5CAQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1727120346; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=btFVzvo3cYlCIaFbLMC8UzMj/n6rmtuNvZUl+PCyxSQ=;
-	b=Rwr6JOxbkiklNQw+x4Hjx6dHODAJH+Vwmbh1oihVfmkQC7lsG+p5BjchvPPL04TD2zATCg
-	TifUqy+Diu6JkyKTwQ4p/pZlVE2/b+WV5V2ts7eGqv0d/UucPlG/p5Ds0FgTFCaz4Exzfi
-	comE3NVl7Z2xAnjL4VIhyNaSx61SsZM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1727120346;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=btFVzvo3cYlCIaFbLMC8UzMj/n6rmtuNvZUl+PCyxSQ=;
-	b=hgYHeLhkGlG/3YkB/t+moHHtkdI3ssLeOy9yq9aecJLkPfk3Yh/cev2O45V2KL92Y1Ehr6
-	oumwpzkQmAwe5CAQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 360B31347F;
-	Mon, 23 Sep 2024 19:39:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id Oor9BtrD8Wa0OQAAD6G6ig
-	(envelope-from <krisman@suse.de>); Mon, 23 Sep 2024 19:39:06 +0000
-From: Gabriel Krisman Bertazi <krisman@suse.de>
-To: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
-Cc: Gabriel Krisman Bertazi <krisman@kernel.org>,  David Gow
- <davidgow@google.com>,  Shuah Khan <skhan@linuxfoundation.org>,
-  linux-fsdevel@vger.kernel.org,  ~lkcamp/patches@lists.sr.ht,
-  linux-kselftest@vger.kernel.org,  kunit-dev@googlegroups.com,
-  porlando@lkcamp.dev,  dpereira@lkcamp.dev
-Subject: Re: [PATCH 1/2] unicode: kunit: refactor selftest to kunit tests
-In-Reply-To: <20240923173454.264852-2-gbittencourt@lkcamp.dev> (Gabriela
-	Bittencourt's message of "Mon, 23 Sep 2024 14:34:53 -0300")
-References: <20240923173454.264852-1-gbittencourt@lkcamp.dev>
-	<20240923173454.264852-2-gbittencourt@lkcamp.dev>
-Date: Mon, 23 Sep 2024 15:39:05 -0400
-Message-ID: <87r09axiqu.fsf@mailhost.krisman.be>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1727124464; c=relaxed/simple;
+	bh=TzDKGgO6LPsZchkz40skAqRjNMNkz2CE8RoLCbQIesg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=G1mIby7Hh6o0maHRKzh7jnJamcyEhElhIcSrouIbiePIFTOgTMOarj0stBuz60PuH4iOuuvXoz84tJV4pxtQHPqIyA2HcDr0BGZd2Fx41qY8QHYdgL+o4yZI8Gy4uE9wz/xpYS7Ya86vXosp84OQeeCUeZXrVKivgIy8uM9wbgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=duV7iq52; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48NIMWTu004194;
+	Mon, 23 Sep 2024 20:47:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=corp-2023-11-20; bh=9Bl0YNzjl6AjdS
+	LmwVbXCZAk4F2bRbW7r2paRHvtXe0=; b=duV7iq52lm2IeHE5V8C7hXmXOZ4lDB
+	z4TQGYDLNMZq6+J5VOxKmjiSCo0UXKLWoJ0QSxOk9GLc75qpUZq0d5aqWiSatAQ/
+	ErOQ9SIxn3skF4PD7Myfs2M0duKsV12yehzhfWHDqrZhXj8Adxtac/052jHamoFG
+	TfTLlXBGyEO2xb83OrobHwdE34Gc9SSj+Fnp7ftrL6HG08O2LR5DnQKSbT9HSNj+
+	1jaCGZ5jjL5G17WNM8U5B4xuhdrD94B2eIbYrJhi33ahL2psEbmTERFo0c+ThnR3
+	Nxviv5kdplzn6TLzXFfGxto+qyiIMN1/JXvNnBOI85/TZcjFkiMj+Rrg==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41sp6cbcv3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 23 Sep 2024 20:47:33 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 48NK816O029610;
+	Mon, 23 Sep 2024 20:47:32 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 41smk8ajmh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 23 Sep 2024 20:47:32 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 48NKfxVi012099;
+	Mon, 23 Sep 2024 20:47:31 GMT
+Received: from ca-dev110.us.oracle.com (ca-dev110.us.oracle.com [10.129.136.45])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 41smk8ajkv-1;
+	Mon, 23 Sep 2024 20:47:31 +0000
+From: Yifei Liu <yifei.l.liu@oracle.com>
+To: shuah@kernel.org
+Cc: yifei.l.liu@oracle.com, linux-kselftest@vger.kernel.org,
+        ramanan.govindarajan@oracle.com, sinadin.shan@oracle.com
+Subject: [PATCH v6.11 v5.15 v5.4 v4.19 1/1] selftests: breakpoints: use remaining time to check if suspend succeed
+Date: Mon, 23 Sep 2024 13:47:18 -0700
+Message-ID: <20240923204718.1862074-1-yifei.l.liu@oracle.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Score: -4.30
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	RCVD_TLS_ALL(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[lkcamp.dev:email]
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-23_15,2024-09-23_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxlogscore=999
+ phishscore=0 mlxscore=0 bulkscore=0 suspectscore=0 malwarescore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2408220000 definitions=main-2409230150
+X-Proofpoint-GUID: HkPvu-qWwD-f63w9eqtbA3O8BhqUb_I7
+X-Proofpoint-ORIG-GUID: HkPvu-qWwD-f63w9eqtbA3O8BhqUb_I7
 
-Gabriela Bittencourt <gbittencourt@lkcamp.dev> writes:
+We recently notice that the step_after_suspend_test would
+fail on our plenty devices.  The test believesit failed to
+enter suspend state with
 
->
-> -static ssize_t utf8len(const struct unicode_map *um, enum utf8_normalization n,
-> -		const char *s)
-> +static ssize_t utf8len(const struct unicode_map *um, enum utf8_normalization n, const char *s)
->  {
+$ sudo ./step_after_suspend_test
+TAP version 13
+Bail out! Failed to enter Suspend state
 
-Please, do not make indentation-only changes, specially as part of a larger
-change.  It makes the patch much harder to review.
+However, in the kernel message, I indeed see the system get
+suspended and then wake up later.
 
+[611172.033108] PM: suspend entry (s2idle)
+[611172.044940] Filesystems sync: 0.006 seconds
+[611172.052254] Freezing user space processes
+[611172.059319] Freezing user space processes completed (elapsed 0.001 seconds)
+[611172.067920] OOM killer disabled.
+[611172.072465] Freezing remaining freezable tasks
+[611172.080332] Freezing remaining freezable tasks completed (elapsed 0.001 seconds)
+[611172.089724] printk: Suspending console(s) (use no_console_suspend to debug)
+[611172.117126] serial 00:03: disabled
+--- some other hardware get reconnected ---
+[611203.136277] OOM killer enabled.
+[611203.140637] Restarting tasks ...
+[611203.141135] usb 1-8.1: USB disconnect, device number 7
+[611203.141755] done.
+[611203.155268] random: crng reseeded on system resumption
+[611203.162059] PM: suspend exit
 
->  	return utf8nlen(um, n, s, (size_t)-1);
->  }
->  
->  static int utf8cursor(struct utf8cursor *u8c, const struct unicode_map *um,
-> -		enum utf8_normalization n, const char *s)
-> +		      enum utf8_normalization n, const char *s)
+After investigation, I notice that for the code block
+if (write(power_state_fd, "mem", strlen("mem")) != strlen("mem"))
+	ksft_exit_fail_msg("Failed to enter Suspend state\n");
 
-likewise.
+The write will return -1 and errno is set to 16 (device busy).
+It should be caused by the write function is not successfully returned
+before the system suspend and the return value get messed when waking up.
+As a result, It may be better to check the time passed of those few instructions
+to determine whether the suspend is executed correctly for it is pretty hard to
+execute those few lines for 5 seconds.
 
->  {
->  	return utf8ncursor(u8c, um, n, s, (unsigned int)-1);
->  }
->  
-> -static void check_utf8_nfdi(struct unicode_map *um)
-> +static void check_utf8_nfdi(struct kunit *test)
->  {
->  	int i;
->  	struct utf8cursor u8c;
-> +	struct unicode_map *um = test->priv;
->  
->  	for (i = 0; i < ARRAY_SIZE(nfdi_test_data); i++) {
->  		int len = strlen(nfdi_test_data[i].str);
-> @@ -181,28 +161,29 @@ static void check_utf8_nfdi(struct unicode_map *um)
->  		int j = 0;
->  		unsigned char c;
->  
-> -		test((utf8len(um, UTF8_NFDI, nfdi_test_data[i].str) == nlen));
-> -		test((utf8nlen(um, UTF8_NFDI, nfdi_test_data[i].str, len) ==
-> -			nlen));
-> +		KUNIT_EXPECT_EQ(test, utf8len(um, UTF8_NFDI, nfdi_test_data[i].str), nlen);
-> +		KUNIT_EXPECT_EQ(test, utf8nlen(um, UTF8_NFDI, nfdi_test_data[i].str, len),
-> +				nlen);
-> -		if (utf8cursor(&u8c, um, UTF8_NFDI, nfdi_test_data[i].str) < 0)
-> -			pr_err("can't create cursor\n");
-> +		KUNIT_EXPECT_GE_MSG(test, utf8cursor(&u8c, um, UTF8_NFDI, nfdi_test_data[i].str),
-> +				    0, "Can't create cursor\n");
+The timer to wake up the system is set to expired after 5 seconds and no-rearm.
+If the timer remaining time is 0 second and 0 nano secomd, it means the timer
+expired and wake the system up. Otherwise, the system could be considered to
+enter the suspend state failed if there is any remaining time.
 
-These KUNIT_ macros are way less readable than the existing code,
-IMO. the old macro makes it obvious what we are checking, without having
-to dig into the definition.  But, meh, I can live with it.
+Fixes: bfd092b8c2728 ("selftests: breakpoint: add step_after_suspend_test")
+Reported-by: Sinadin Shan <sinadin.shan@oracle.com>
+Signed-off-by: Yifei Liu <yifei.l.liu@oracle.com>
+---
+ .../testing/selftests/breakpoints/step_after_suspend_test.c  | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-
-
->  
->  		while ((c = utf8byte(&u8c)) > 0) {
-> -			test_f((c == nfdi_test_data[i].dec[j]),
-> -			       "Unexpected byte 0x%x should be 0x%x\n",
-> -			       c, nfdi_test_data[i].dec[j]);
-> +			KUNIT_EXPECT_EQ_MSG(test, c, nfdi_test_data[i].dec[j],
-> +					    "Unexpected byte 0x%x should be 0x%x\n",
-> +					    c, nfdi_test_data[i].dec[j]);
->  			j++;
->  		}
->  
-> -		test((j == nlen));
-> +		KUNIT_EXPECT_EQ(test, j, nlen);
->  	}
->  }
->  
-> -static void check_utf8_nfdicf(struct unicode_map *um)
-> +static void check_utf8_nfdicf(struct kunit *test)
->  {
->  	int i;
->  	struct utf8cursor u8c;
-> +	struct unicode_map *um = test->priv;
->  
->  	for (i = 0; i < ARRAY_SIZE(nfdicf_test_data); i++) {
->  		int len = strlen(nfdicf_test_data[i].str);
-> @@ -210,29 +191,30 @@ static void check_utf8_nfdicf(struct unicode_map *um)
->  		int j = 0;
->  		unsigned char c;
->  
-> -		test((utf8len(um, UTF8_NFDICF, nfdicf_test_data[i].str) ==
-> -				nlen));
-> -		test((utf8nlen(um, UTF8_NFDICF, nfdicf_test_data[i].str, len) ==
-> -				nlen));
-> +		KUNIT_EXPECT_EQ(test, utf8len(um, UTF8_NFDICF, nfdicf_test_data[i].str),
-> +				nlen);
-> +		KUNIT_EXPECT_EQ(test, utf8nlen(um, UTF8_NFDICF, nfdicf_test_data[i].str, len),
-> +				nlen);
->  
-> -		if (utf8cursor(&u8c, um, UTF8_NFDICF,
-> -				nfdicf_test_data[i].str) < 0)
-> -			pr_err("can't create cursor\n");
-> +		KUNIT_EXPECT_GE_MSG(test,
-> +				    utf8cursor(&u8c, um, UTF8_NFDICF, nfdicf_test_data[i].str),
-> +				    0, "Can't create cursor\n");
->  
->  		while ((c = utf8byte(&u8c)) > 0) {
-> -			test_f((c == nfdicf_test_data[i].ncf[j]),
-> -			       "Unexpected byte 0x%x should be 0x%x\n",
-> -			       c, nfdicf_test_data[i].ncf[j]);
-> +			KUNIT_EXPECT_EQ_MSG(test, c, nfdicf_test_data[i].ncf[j],
-> +					    "Unexpected byte 0x%x should be 0x%x\n",
-> +					    c, nfdicf_test_data[i].ncf[j]);
->  			j++;
->  		}
->  
-> -		test((j == nlen));
-> +		KUNIT_EXPECT_EQ(test, j, nlen);
->  	}
->  }
->  
-> -static void check_utf8_comparisons(struct unicode_map *table)
-> +static void check_utf8_comparisons(struct kunit *test)
->  {
->  	int i;
-> +	struct unicode_map *um = test->priv;
->  
->  	for (i = 0; i < ARRAY_SIZE(nfdi_test_data); i++) {
->  		const struct qstr s1 = {.name = nfdi_test_data[i].str,
-> @@ -240,8 +222,9 @@ static void check_utf8_comparisons(struct unicode_map *table)
->  		const struct qstr s2 = {.name = nfdi_test_data[i].dec,
->  					.len = sizeof(nfdi_test_data[i].dec)};
->  
-> -		test_f(!utf8_strncmp(table, &s1, &s2),
-> -		       "%s %s comparison mismatch\n", s1.name, s2.name);
-> +		// strncmp returns 0 when strings are equal
-
-We don't do comments with // in the kernel (aside from SPDX).  Please, use /* */.
-
-> +		KUNIT_EXPECT_EQ_MSG(test, utf8_strncmp(um, &s1, &s2), 0,
-> +				    "%s %s comparison mismatch\n", s1.name, s2.name);
-
-Yuck. This is even less readable.  Is there a kunit macro that receives
-an expression, similar to WARN_ON/BUG_ON? It would be way more readable.
-Something like this.
-
-KUNIT_BLA(test, utf8_strncmp(um, &s1,&s2) == 0, "BAD TEST!")
-
-
+diff --git a/tools/testing/selftests/breakpoints/step_after_suspend_test.c b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
+index dfec31fb9b30d..33f5542bf741d 100644
+--- a/tools/testing/selftests/breakpoints/step_after_suspend_test.c
++++ b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
+@@ -152,7 +152,10 @@ void suspend(void)
+ 	if (err < 0)
+ 		ksft_exit_fail_msg("timerfd_settime() failed\n");
+ 
+-	if (write(power_state_fd, "mem", strlen("mem")) != strlen("mem"))
++	system("(echo mem > /sys/power/state) 2> /dev/null");
++
++	timerfd_gettime(timerfd,&spec);
++	if (spec.it_value.tv_sec != 0 || spec.it_value.tv_nsec != 0)
+ 		ksft_exit_fail_msg("Failed to enter Suspend state\n");
+ 
+ 	close(timerfd);
 -- 
-Gabriel Krisman Bertazi
+2.46.0
+
 
