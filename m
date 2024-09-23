@@ -1,71 +1,47 @@
-Return-Path: <linux-kselftest+bounces-18230-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18231-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71E3897EE4F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 17:37:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A04D97EE65
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 17:42:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BEEB28274D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 15:37:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 496CC1C21414
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 15:42:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 546B61E52C;
-	Mon, 23 Sep 2024 15:37:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A38D519CC0D;
+	Mon, 23 Sep 2024 15:42:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DKWHQ63d"
+	dkim=pass (2048-bit key) header.d=lkcamp.dev header.i=@lkcamp.dev header.b="APlDxWqm";
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="Az776og0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EFC92745E
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2024 15:37:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0EF019E960
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2024 15:42:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727105859; cv=none; b=CtWiC0yoT9xhE01neqgOw2sGKMb9DvOnKuNPUNcUslamTlWn7nfMMwX/fNJ9qdWJQsH3aoRYXqnaZQ/+dVc/23k3CfN/YWl+tSIUkFR2H4DjoKuKqPcYTIvIq3rt9DnLO4GfxU6I1Hc73e6GGCcJVAFGQzfuWsWYQM9J2NR8W/M=
+	t=1727106155; cv=none; b=jr/X7uusUAgwwfU8LvAMNzdCNIseDcVQb825Pbq0+HaMWA+q/LExZTn5Nhhjlyfj9X/7LssGKBCQc8C7h9NRWjxpJu3uuxMYbdCZwJRSCLbpm5rxLdyha3bnQ/Uf7zGpPFG2dBRY2B+MtZarD6UsSgH+A8aP68s9lR/ePwz7Fus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727105859; c=relaxed/simple;
-	bh=uEBXxbOqW9Yy42sheFICqD9rtp2i0UdIcZqgsO+Kkbg=;
+	s=arc-20240116; t=1727106155; c=relaxed/simple;
+	bh=jiaxN8v6Qalp5o4bqqg3abzazuoU9/7sYLZwTbmnuaY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YH87XSX/nzexdwrxrH/z9gy11/1h+udd5pYNOTfhCZSZNlPAtI9nuJR7RIqciRqSPXHaoB1nG1MmheHHmZ4sD8wouah9VX/T1Ns66iO+reUv8fUWiwsAtHqh578eCrfeNfEFskNFXi6R3SabzkV37HKsakrR0CRztHzhLLnivlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DKWHQ63d; arc=none smtp.client-ip=209.85.166.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-82ce1cd2026so164213839f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2024 08:37:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1727105856; x=1727710656; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8ChnhTuQxXCD3M0IDZrD7IY52BB3CsfsDy3DMStkhbo=;
-        b=DKWHQ63dT2YySF3rainD/qj8NlQQHOgIpraBhFH5EkcrNpE6qqRz+hr/DdLuth1GcJ
-         29p0sjEm8VpnMkbB18aUeOOiV9sgKpn1PrNQ1YnX2RYIB9C0Oey5IcnuHhdVjMNAi+As
-         vZDJBbPVXmZZjZKoJevY3RlU3IHPYU+kQDE8A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727105856; x=1727710656;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8ChnhTuQxXCD3M0IDZrD7IY52BB3CsfsDy3DMStkhbo=;
-        b=TyHFV/GwMACErwximl2EsRa97zg54tnGGd1Dy7s0ixqjkSx0n/7tdz04rZxpo81oZ8
-         y30UdOBKvIDMANaD1cD+97Pq7GWNZArxTzjPdTsZYHp/t9GObimQgPMZvWifIoyf/Z1u
-         tNCaT1piAUZsFKrxj4OBOaB64W6o29EmZFF1uSx2JD1haUYkESW00Hunj/w/r/3Dl6lr
-         LkN7qmkbIvpV8eCoHpXC3iwXFYAN4DT724jKZ6qkKTMUi7azKFNxwJLA3W/JU210Cm+C
-         RdWFHqPXl6F9Mn97Dq26zVir7awykQjIpn/F8KtR/KGtQqCl6eFi1UoBAPwty6rkEqsQ
-         2nTg==
-X-Forwarded-Encrypted: i=1; AJvYcCWQnqfsf0RyZ71YWxRbMukZpWkemO1IyfP+yqMKAXMJrpStUHotpp462S2HhMRwXerNpKH76uQSUOICDU23wa8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuwRGcYNxqG5lfpFIMVv0skS9/lmmtq2NVddX+osKNMZLKza3t
-	8FSKf5Nxt4wiMLXHGEQafXqoaNf/2bbeNtUp7sXG7xTj7NPY7cY1eOpBy64whjg=
-X-Google-Smtp-Source: AGHT+IGkBoe9g6AC10ZnghD/s42mRzu3a6XZXWZI2VqYr0f/1XseSyixXFgDtmO4j3Ue/qTPh2qc/w==
-X-Received: by 2002:a05:6602:1685:b0:82a:4480:badc with SMTP id ca18e2360f4ac-83209d7cff7mr961034539f.10.1727105856186;
-        Mon, 23 Sep 2024 08:37:36 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4d37ed5994bsm5129395173.179.2024.09.23.08.37.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Sep 2024 08:37:35 -0700 (PDT)
-Message-ID: <c89d0a27-7641-4832-b598-51c5eaae3a30@linuxfoundation.org>
-Date: Mon, 23 Sep 2024 09:37:34 -0600
+	 In-Reply-To:Content-Type; b=rFA4CgjTIlL4SUHq25ABrxz7dTa4dH8rjzA2emlPHc55mrhTkTL0Q134SIVgUzQyIplOddnrYQlv79d+65NjGPNg30fLjU7lcDo1cgCbufqRs9tPNe10EiZUMZb/KVIJPoCLrMbITEMFIP9dlA50nHz95eT8qTS6fM9xu0fdYxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lkcamp.dev; spf=pass smtp.mailfrom=lkcamp.dev; dkim=pass (2048-bit key) header.d=lkcamp.dev header.i=@lkcamp.dev header.b=APlDxWqm; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=Az776og0; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lkcamp.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lkcamp.dev
+Authentication-Results: purelymail.com; auth=pass
+DKIM-Signature: a=rsa-sha256; b=APlDxWqmTBXAFe7838HFRj9wZn/EWIxAzqoUbY+dtTNtL3NrEjwwpb2IytDBm2MipAoeI4721ewChjGJvkv8WjGylOmIee53b4nhX5tx8UQ9K6cn9wjS6GPMLKbTRXzQjO0toZlPrf/3O2NzaRKA/gK0k4Zm4tGR98tQ9DYO523wUm0kKXOP4gPJLl7OBze7+WI4s3h5tLgaEj13ptNEyjgRx1B4reyGFqMUR9mkKM+bbfwlSo4eXFawqOgqiCm5n4eCewVJzQXmJXF9kd4KWuRlIrHG1CpKaVEqlW0MydwDSd1SwPMEPk4/TDa5MBii+Ypgtw1usXjclr26pGWH0A==; s=purelymail3; d=lkcamp.dev; v=1; bh=jiaxN8v6Qalp5o4bqqg3abzazuoU9/7sYLZwTbmnuaY=; h=Received:Date:Subject:To:From;
+DKIM-Signature: a=rsa-sha256; b=Az776og0L+ls8jqQjYsVmQ9ClT/HCXcaXmtyN6Qjm5EOYbkcJ9XnxOHW3KxOIsyDP7eimWjHRwAzFU9pNtNI6NI16TmExBu7WIAHh2AAj41hIzInk2asE6CKSH+zvPMFuJ6w8ZqSZhxhSdVnDS9cbC3+T409mzTalb2rccfTScoQ5XkpqJL2Re+snnvhpGFxpByzCfLO+bgGgSE/Xnqih3UMyez2rdcdRc/2f1JUtlkZaKwq9aI35IBC4C79woiNz1nlIN4hLk/TInDzgAJ+Mzf6CE5mVsQXL6C0+u0MLn4xuqeWRn4jC39GYOi1SIk7SLlEy7QPLi1bWsvY9b7IAQ==; s=purelymail3; d=purelymail.com; v=1; bh=jiaxN8v6Qalp5o4bqqg3abzazuoU9/7sYLZwTbmnuaY=; h=Feedback-ID:Received:Date:Subject:To:From;
+Feedback-ID: 48571:7130:null:purelymail
+X-Pm-Original-To: linux-kselftest@vger.kernel.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1210100400;
+          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+          Mon, 23 Sep 2024 15:42:18 +0000 (UTC)
+Message-ID: <53395c4b-8e7e-4871-aeed-cf56215a3c26@lkcamp.dev>
+Date: Mon, 23 Sep 2024 12:42:14 -0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,147 +49,54 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [External] : Re: [PATCH v6.11 v5.15 v5.4 v4.19 1/1] selftests:
- breakpoints: use time passed to check if suspend succeed
-To: Yifei Liu <yifei.l.liu@oracle.com>
-Cc: "shuah@kernel.org" <shuah@kernel.org>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- Ramanan Govindarajan <ramanan.govindarajan@oracle.com>,
- Sinadin Shan <sinadin.shan@oracle.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240917224837.478684-1-yifei.l.liu@oracle.com>
- <6cdd7cc3-e5ca-48b0-bd49-d33bbf908cda@linuxfoundation.org>
- <504209C8-0565-413D-BE89-A0ADE4E153AF@oracle.com>
- <9c1e9b57-649f-4f96-ab5d-ea512e05c1b9@linuxfoundation.org>
- <C8B50D46-3294-4B3A-B731-3A4B1ED0380D@oracle.com>
+Subject: Re: [PATCH 0/2] unicode: kunit: refactor selftest to kunit tests
+To: Gabriela Bittencourt <gbittencourt@lkcamp.dev>,
+ Gabriel Krisman Bertazi <krisman@kernel.org>, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, ~lkcamp/patches@lists.sr.ht,
+ dpereira@lkcamp.dev
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ Pedro Orlando <porlando@lkcamp.dev>
+References: <20240922201631.179925-1-gbittencourt@lkcamp.dev>
 Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <C8B50D46-3294-4B3A-B731-3A4B1ED0380D@oracle.com>
+From: Pedro Orlando <porlando@lkcamp.dev>
+In-Reply-To: <20240922201631.179925-1-gbittencourt@lkcamp.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 9/20/24 11:52, Yifei Liu wrote:
-> Hi Shuah,
-> 
->> On Sep 20, 2024, at 8:07 AM, Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> On 9/19/24 17:09, Yifei Liu wrote:
->>> Hi Shuah,
->>>> On Sep 19, 2024, at 11:36 AM, Shuah Khan <skhan@linuxfoundation.org> wrote:
->>>>
->>>> On 9/17/24 16:48, Yifei Liu wrote:
->>>>> We recently notice that the step_after_suspend_test would
->>>>> fail on our plenty devices.  The test believesit failed to
->>>>
->>>> What are "plenty devices"
->>>> recently noticed?
->>> We have seen this issue on more than one platforms, including bare metal device and virtual machine.
->>>> Typo - believesit?
->>> Yes, missing a space here. It should be
->>> The test believes itself ffailed to enter suspend state.
->>> Thank you for pointing out.
->>>>
->>>>> enter suspend state with
->>>>> $ sudo ./step_after_suspend_test
->>>>> TAP version 13
->>>>> Bail out! Failed to enter Suspend state
->>>>> However, in the kernel message, I indeed see the system get
->>>>> suspended and then wake up later.
->>>>> [611172.033108] PM: suspend entry (s2idle)
->>>>> [611172.044940] Filesystems sync: 0.006 seconds
->>>>> [611172.052254] Freezing user space processes
->>>>> [611172.059319] Freezing user space processes completed (elapsed 0.001 seconds)
->>>>> [611172.067920] OOM killer disabled.
->>>>> [611172.072465] Freezing remaining freezable tasks
->>>>> [611172.080332] Freezing remaining freezable tasks completed (elapsed 0.001 seconds)
->>>>> [611172.089724] printk: Suspending console(s) (use no_console_suspend to debug)
->>>>> [611172.117126] serial 00:03: disabled
->>>>> --- some other hardware get reconnected ---
->>>>> [611203.136277] OOM killer enabled.
->>>>> [611203.140637] Restarting tasks ...
->>>>> [611203.141135] usb 1-8.1: USB disconnect, device number 7
->>>>> [611203.141755] done.
->>>>> [611203.155268] random: crng reseeded on system resumption
->>>>> [611203.162059] PM: suspend exit
->>>>> After investigation, I notice that for the code block
->>>>> if (write(power_state_fd, "mem", strlen("mem")) != strlen("mem"))
->>>>> ksft_exit_fail_msg("Failed to enter Suspend state\n");
->>>>> The write will return -1 and errno is set to 16 (device busy).
->>>>> It should be caused by the write function is not successfully returned
->>>>> before the system suspend and the return value get messed when waking up.
->>>>> As a result, It may be better to check the time passed of those few instructions
->>>>> to determine whether the suspend is executed correctly for it is pretty hard to
->>>>> execute those few lines for 4 seconds, or even more if it is not long enough.
->>>>
->>>> I don't think this is the right fix. Can you change this to do echo instead.
->>>> It does the same thing, but it goes through sysfs interface instead of direct
->>>> write:
->>>>
->>>> ret = system("echo mem > /sys/power/state”);
->>> Sure, I can do that.
->>>>
->>>>> Fixes: bfd092b8c2728 ("selftests: breakpoint: add step_after_suspend_test")
->>>>> Reported-by: Sinadin Shan <sinadin.shan@oracle.com>
->>>>> Signed-off-by: Yifei Liu <yifei.l.liu@oracle.com>
->>>>> ---
->>>>>   .../selftests/breakpoints/step_after_suspend_test.c      | 9 +++++++--
->>>>>   1 file changed, 7 insertions(+), 2 deletions(-)
->>>>> diff --git a/tools/testing/selftests/breakpoints/step_after_suspend_test.c b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
->>>>> index dfec31fb9b30d..d615f091e5bae 100644
->>>>> --- a/tools/testing/selftests/breakpoints/step_after_suspend_test.c
->>>>> +++ b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
->>>>> @@ -18,6 +18,7 @@
->>>>>   #include <sys/timerfd.h>
->>>>>   #include <sys/types.h>
->>>>>   #include <sys/wait.h>
->>>>> +#include <time.h>
->>>>>     #include "../kselftest.h"
->>>>>   @@ -133,6 +134,7 @@ void suspend(void)
->>>>>    int timerfd;
->>>>>    int err;
->>>>>    struct itimerspec spec = {};
->>>>> + clock_t t;
->>>>>      if (getuid() != 0)
->>>>>    ksft_exit_skip("Please run the test as root - Exiting.\n");
->>>>> @@ -152,8 +154,11 @@ void suspend(void)
->>>>>    if (err < 0)
->>>>>    ksft_exit_fail_msg("timerfd_settime() failed\n");
->>>>
->>>> I don't think you will need to add clock() code. timerfd_settime()
->>>> sets the time for 5 seconds and you can simply extend the alarm
->>>> time.
->>>>
->>>> There needs to be some logic to check timer elapse and poll the
->>>> timer_fd
->>> Yes, it is also a choice to check the remaining time of the timer. We could use timerfd_gettime() to get the remaining time. The timer would not rearm because the it_interval value is not set (set to 0). Then if the remaining time has both 0 or seconds and nano-seconds (tv_sec and tv_nsec), it should point out the time goes for at least 5 seconds. If the system fails to enter suspend state and waked up by the timer, it should not take 5 whole seconds or more to get to the check line.
->>
->> Right, You will have to check the remaining time. There is an example in
->> tools/testing/selftests/timers/alarmtimer-suspend.c you can refer to.
-> I checked the remaining value, if the suspend succeed, it would be all 0 (0s and 0 ns). If it failed to enter suspend by any chance, it would be a non-zero value.
->>
->>> Would you prefer this methods?
->>
->> I am curious what happens with starting suspend with sysfs first and then
->> explore checking elapsed timer.
->>
->> system("echo mem > /sys/power/state”);
-> I checked this, and find that it will give a similar failure.
-> 
-> sh: line 1: echo: write error: Device or resource busy
-> 
-> The console command will get its return result after the suspend and wake up. Maybe we could do
-> 
-> system("echo mem > /sys/power/state >/dev/nul”);
++CC linux-kselftest
 
-Yes. The idea is that we go through the sysfs interface as opposed
-to writing to the file directly.
+-------
 
+On 22/09/2024 17:16, Gabriela Bittencourt wrote:
+> Hey all,
 > 
-> To avoid an error message in the console. And we are checking the success of suspend by the time, so it would not be necessary for us to see the output of this console command.
+> We are making these changes as part of a KUnit Hackathon at LKCamp [1].
 > 
-
-Sounds good to me.
-
-thanks,
--- Shuah
+> This patch sets out to refactor fs/unicode/utf8-selftest.c to KUnit tests.
+> 
+> The first commit is the refactoring itself from self test into KUnit, while
+> the second one applies the naming style conventions.
+> 
+> We appreciate any feedback and suggestions. :)
+> 
+> [1] https://lkcamp.dev/about/
+> 
+> Co-developed-by: Pedro Orlando <porlando@lkcamp.dev>
+> Co-developed-by: Danilo Pereira <dpereira@lkcamp.dev>
+> Signed-off-by: Pedro Orlando <porlando@lkcamp.dev>
+> Signed-off-by: Danilo Pereira <dpereira@lkcamp.dev>
+> Signed-off-by: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
+> 
+> Gabriela Bittencourt (2):
+>    unicode: kunit: refactor selftest to kunit tests
+>    unicode: kunit: change tests filename and path
+> 
+>   fs/unicode/Kconfig                            |   5 +-
+>   fs/unicode/Makefile                           |   2 +-
+>   fs/unicode/tests/.kunitconfig                 |   3 +
+>   .../{utf8-selftest.c => tests/utf8_kunit.c}   | 152 ++++++++----------
+>   4 files changed, 76 insertions(+), 86 deletions(-)
+>   create mode 100644 fs/unicode/tests/.kunitconfig
+>   rename fs/unicode/{utf8-selftest.c => tests/utf8_kunit.c} (63%)
+> 
 
