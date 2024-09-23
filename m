@@ -1,102 +1,145 @@
-Return-Path: <linux-kselftest+bounces-18231-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18232-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A04D97EE65
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 17:42:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39B6197EE77
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 17:48:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 496CC1C21414
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 15:42:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D8AF01F22639
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 15:48:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A38D519CC0D;
-	Mon, 23 Sep 2024 15:42:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lkcamp.dev header.i=@lkcamp.dev header.b="APlDxWqm";
-	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="Az776og0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0C9F199229;
+	Mon, 23 Sep 2024 15:48:07 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0EF019E960
-	for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2024 15:42:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8224197A9B
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2024 15:48:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727106155; cv=none; b=jr/X7uusUAgwwfU8LvAMNzdCNIseDcVQb825Pbq0+HaMWA+q/LExZTn5Nhhjlyfj9X/7LssGKBCQc8C7h9NRWjxpJu3uuxMYbdCZwJRSCLbpm5rxLdyha3bnQ/Uf7zGpPFG2dBRY2B+MtZarD6UsSgH+A8aP68s9lR/ePwz7Fus=
+	t=1727106487; cv=none; b=SHU4tGkSy6L8geBA3H69UKxq/mfw0vwnQpX9D3B4JoJKZ1i87r95i8JI2hrpesAk1Vwfjwdz2ggBr61efvTFO3GS58sjtdykp4JtPS7WymPOZ7qwbus6YOsVvJmHKc0+jb4MSeQdXpP9pNF981O2EBSLF+9nj2mV3A/zfwZyJ2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727106155; c=relaxed/simple;
-	bh=jiaxN8v6Qalp5o4bqqg3abzazuoU9/7sYLZwTbmnuaY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rFA4CgjTIlL4SUHq25ABrxz7dTa4dH8rjzA2emlPHc55mrhTkTL0Q134SIVgUzQyIplOddnrYQlv79d+65NjGPNg30fLjU7lcDo1cgCbufqRs9tPNe10EiZUMZb/KVIJPoCLrMbITEMFIP9dlA50nHz95eT8qTS6fM9xu0fdYxM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lkcamp.dev; spf=pass smtp.mailfrom=lkcamp.dev; dkim=pass (2048-bit key) header.d=lkcamp.dev header.i=@lkcamp.dev header.b=APlDxWqm; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=Az776og0; arc=none smtp.client-ip=34.202.193.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lkcamp.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lkcamp.dev
-Authentication-Results: purelymail.com; auth=pass
-DKIM-Signature: a=rsa-sha256; b=APlDxWqmTBXAFe7838HFRj9wZn/EWIxAzqoUbY+dtTNtL3NrEjwwpb2IytDBm2MipAoeI4721ewChjGJvkv8WjGylOmIee53b4nhX5tx8UQ9K6cn9wjS6GPMLKbTRXzQjO0toZlPrf/3O2NzaRKA/gK0k4Zm4tGR98tQ9DYO523wUm0kKXOP4gPJLl7OBze7+WI4s3h5tLgaEj13ptNEyjgRx1B4reyGFqMUR9mkKM+bbfwlSo4eXFawqOgqiCm5n4eCewVJzQXmJXF9kd4KWuRlIrHG1CpKaVEqlW0MydwDSd1SwPMEPk4/TDa5MBii+Ypgtw1usXjclr26pGWH0A==; s=purelymail3; d=lkcamp.dev; v=1; bh=jiaxN8v6Qalp5o4bqqg3abzazuoU9/7sYLZwTbmnuaY=; h=Received:Date:Subject:To:From;
-DKIM-Signature: a=rsa-sha256; b=Az776og0L+ls8jqQjYsVmQ9ClT/HCXcaXmtyN6Qjm5EOYbkcJ9XnxOHW3KxOIsyDP7eimWjHRwAzFU9pNtNI6NI16TmExBu7WIAHh2AAj41hIzInk2asE6CKSH+zvPMFuJ6w8ZqSZhxhSdVnDS9cbC3+T409mzTalb2rccfTScoQ5XkpqJL2Re+snnvhpGFxpByzCfLO+bgGgSE/Xnqih3UMyez2rdcdRc/2f1JUtlkZaKwq9aI35IBC4C79woiNz1nlIN4hLk/TInDzgAJ+Mzf6CE5mVsQXL6C0+u0MLn4xuqeWRn4jC39GYOi1SIk7SLlEy7QPLi1bWsvY9b7IAQ==; s=purelymail3; d=purelymail.com; v=1; bh=jiaxN8v6Qalp5o4bqqg3abzazuoU9/7sYLZwTbmnuaY=; h=Feedback-ID:Received:Date:Subject:To:From;
-Feedback-ID: 48571:7130:null:purelymail
-X-Pm-Original-To: linux-kselftest@vger.kernel.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1210100400;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Mon, 23 Sep 2024 15:42:18 +0000 (UTC)
-Message-ID: <53395c4b-8e7e-4871-aeed-cf56215a3c26@lkcamp.dev>
-Date: Mon, 23 Sep 2024 12:42:14 -0300
+	s=arc-20240116; t=1727106487; c=relaxed/simple;
+	bh=hkoieWxJ0471/Q4wgFmy+wiZ2lpn7t8bPYZ/cXRThjo=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=QLnwSXU5FilJSVVRL8wKKZXg9xF6CoouzRz5htCX8Pok/u38H0A1+MHwKsXnljLEu08Dxmq0KauMgKfwO9bCzHldJMSQrcpCCprjmv+epKCdUYqhcOLxkj+vAsnwUPEFzn26dBeWH8PAqDFFpDH0Psa7rP7md55q9aIWCZ8ib98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-21-fwPuqpVfPIO66RunyFwVag-1; Mon, 23 Sep 2024 16:46:23 +0100
+X-MC-Unique: fwPuqpVfPIO66RunyFwVag-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 23 Sep
+ 2024 16:45:27 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Mon, 23 Sep 2024 16:45:27 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Jakub Sitnicki' <jakub@cloudflare.com>, Martin KaFai Lau
+	<martin.lau@linux.dev>, 'Tiago Lam' <tiagolam@cloudflare.com>, Eric Dumazet
+	<edumazet@google.com>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+CC: "David S. Miller" <davem@davemloft.net>, David Ahern <dsahern@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, "Alexei
+ Starovoitov" <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+	"Andrii Nakryiko" <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, John
+ Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa
+	<jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan
+	<shuah@kernel.org>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"kernel-team@cloudflare.com" <kernel-team@cloudflare.com>
+Subject: RE: [RFC PATCH v2 2/3] ipv6: Support setting src port in sendmsg().
+Thread-Topic: [RFC PATCH v2 2/3] ipv6: Support setting src port in sendmsg().
+Thread-Index: AQHbDci8OgyMoKtrJE6wBcqRmpwTjbJlgCZQ
+Date: Mon, 23 Sep 2024 15:45:27 +0000
+Message-ID: <29fea23839cf489488f9228a44e79d21@AcuMS.aculab.com>
+References: <20240920-reverse-sk-lookup-v2-0-916a48c47d56@cloudflare.com>
+	<20240920-reverse-sk-lookup-v2-2-916a48c47d56@cloudflare.com>
+	<855fc71343a149479c7da96438bf9e32@AcuMS.aculab.com>
+ <87r09a771t.fsf@cloudflare.com>
+In-Reply-To: <87r09a771t.fsf@cloudflare.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] unicode: kunit: refactor selftest to kunit tests
-To: Gabriela Bittencourt <gbittencourt@lkcamp.dev>,
- Gabriel Krisman Bertazi <krisman@kernel.org>, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, ~lkcamp/patches@lists.sr.ht,
- dpereira@lkcamp.dev
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- Pedro Orlando <porlando@lkcamp.dev>
-References: <20240922201631.179925-1-gbittencourt@lkcamp.dev>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-From: Pedro Orlando <porlando@lkcamp.dev>
-In-Reply-To: <20240922201631.179925-1-gbittencourt@lkcamp.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-+CC linux-kselftest
+From: Jakub Sitnicki
+> Sent: 23 September 2024 15:56
+>=20
+> On Mon, Sep 23, 2024 at 01:08 PM GMT, David Laight wrote:
+> > From: Tiago Lam <tiagolam@cloudflare.com>
+>=20
+> [...]
+>=20
+> >> To limit its usage, a reverse socket lookup is performed to check if t=
+he
+> >> configured egress source address and/or port have any ingress sk_looku=
+p
+> >> match. If it does, traffic is allowed to proceed, otherwise it falls
+> >> back to the regular egress path.
+> >
+> > Is that really useful/necessary?
+>=20
+> We've been asking ourselves the same question during Plumbers with
+> Martin.
+>=20
+> Unprivileges processes can already source UDP traffic from (almost) any
+> IP & port by binding a socket to the desired source port and passing
+> IP_PKTINFO. So perhaps having a reverse socket lookup is an overkill.
 
--------
+Traditionally you'd need to bind to the source port on any local IP
+(or the wildcard IP) that didn't have another socket bound to that port.
+Modern Linux might have more restrictions and SO_REUSADDR muddies things.
 
-On 22/09/2024 17:16, Gabriela Bittencourt wrote:
-> Hey all,
-> 
-> We are making these changes as part of a KUnit Hackathon at LKCamp [1].
-> 
-> This patch sets out to refactor fs/unicode/utf8-selftest.c to KUnit tests.
-> 
-> The first commit is the refactoring itself from self test into KUnit, while
-> the second one applies the naming style conventions.
-> 
-> We appreciate any feedback and suggestions. :)
-> 
-> [1] https://lkcamp.dev/about/
-> 
-> Co-developed-by: Pedro Orlando <porlando@lkcamp.dev>
-> Co-developed-by: Danilo Pereira <dpereira@lkcamp.dev>
-> Signed-off-by: Pedro Orlando <porlando@lkcamp.dev>
-> Signed-off-by: Danilo Pereira <dpereira@lkcamp.dev>
-> Signed-off-by: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
-> 
-> Gabriela Bittencourt (2):
->    unicode: kunit: refactor selftest to kunit tests
->    unicode: kunit: change tests filename and path
-> 
->   fs/unicode/Kconfig                            |   5 +-
->   fs/unicode/Makefile                           |   2 +-
->   fs/unicode/tests/.kunitconfig                 |   3 +
->   .../{utf8-selftest.c => tests/utf8_kunit.c}   | 152 ++++++++----------
->   4 files changed, 76 insertions(+), 86 deletions(-)
->   create mode 100644 fs/unicode/tests/.kunitconfig
->   rename fs/unicode/{utf8-selftest.c => tests/utf8_kunit.c} (63%)
-> 
+And I don't think you can do a connect() on an unbound UDP socket to
+set the source port at the same time as the destination IP+port.
+(That would actually be useful.)
+
+OTOH if you just want to send a UDP message you can just use another
+system on the same network.
+You might need to spoof the source mac - but that isn't hard (although
+it might confuse any ethernet switches).
+
+> We should probably respect net.ipv4.ip_local_reserved_ports and
+> net.ipv4.ip_unprivileged_port_start system settings, though, or check
+> for relevant caps.
+
+True.
+
+> Open question if it is acceptable to disregard exclusive UDP port
+> ownership by sockets binding to a wildcard address without SO_REUSEADDR?
+
+We've often suffered from the opposite - a program binds to the wildcard
+IP and everything works until something else binds to the same port and
+a specific local IP.
+I'm sure this is grief some on both TCP and UDP - especially since you
+often need to set SO_REUSADDR to stop other things breaking.
+
+=09David
+=20
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1=
+PT, UK
+Registration No: 1397386 (Wales)
+
 
