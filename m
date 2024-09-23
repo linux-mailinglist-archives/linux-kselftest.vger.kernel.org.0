@@ -1,121 +1,107 @@
-Return-Path: <linux-kselftest+bounces-18204-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18211-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD1CB97E5AA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 07:39:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FA4997E86C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 11:19:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDF7D1C20A3B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 05:39:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A3E76B20586
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Sep 2024 09:19:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66EC0184;
-	Mon, 23 Sep 2024 05:39:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A56CB194A44;
+	Mon, 23 Sep 2024 09:19:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b="H1cBJTb7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="QblQaMIz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0DEEEAF6;
-	Mon, 23 Sep 2024 05:39:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727069943; cv=pass; b=Nuk3SV7Ut+jCNAMlMfWThKs35kaHFgsELy2LzRIELdKczI7CkWIXyP/LFMlfMZsp7vjTDlWUAIpE8K+U2Xj+is22JaiGrN2fXJ+E6/RZf3qXwE6Jywvc5UQRA5v1QewH8SbFZtqSyYcO4jks5/cWzW3bWrLfA95gCBkmm3ZvVhw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727069943; c=relaxed/simple;
-	bh=FJ2ttu3ymdbUtGl8rWp/seAINoEH0qpMdehsWGCuTjQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=avC4cIpIXIW6IFoMx132SzGFRu1QTYB3m49I9Uta5GS6KEippHM12jlDRlcxuwXEJA98LHlnwu/7xwGa1CWZP9CkitO58veoy58Qr+da8xe+yHKi15DaJ/jcJa74wNSlnhowPKyNRewzkHv5/pTYETPklapSfq3WAr8Tw1cTQFE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=usama.anjum@collabora.com header.b=H1cBJTb7; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1727069929; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Z/8Bb/arnKe09EnTuqR2Yvj/va37Jm96E7h5HfhDvnFHWLeWUX3aEyA3bmv7XuAtmu+yTAUvBdbHBEk4bKirUgFA2ppPieA7wNn51MiyZ6W7w/gBHfsGoKV6OLBDVVOYvUYrjDdsHODik6gkcE5jxyp8Bsgv9drL+AZS3qw0s7Q=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1727069929; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=PmmGSXySg6IlnsTDXpl7Bn2vkcG7CZ7INIi8sf8r2Gc=; 
-	b=KLqIQfOyyngHtcEMhpmhYAJJ1fE+MY7LL3HVJFgtEcjH1n1FGOcIRtN2J9LJtj1PeLVWmJf/4gRrCytNrlguJYhpcn3mp7N+qiZh4k6YzznjYQEOGWJoL2dqia+QpEXeZOe0ioe+IVGA7rFRV31B7tov560HfTi3PaYrvXEeukM=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=usama.anjum@collabora.com;
-	dmarc=pass header.from=<usama.anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1727069929;
-	s=zohomail; d=collabora.com; i=usama.anjum@collabora.com;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=PmmGSXySg6IlnsTDXpl7Bn2vkcG7CZ7INIi8sf8r2Gc=;
-	b=H1cBJTb7AKHnE3gCNfJHz2jCquRTwqs2VdCWE+0d1tVoP7h7X7t+r4/BwlirNSyY
-	1jEXzCmMGz0JujOQsPFHLcKljj8bBccKaCcb6kqBn8yGk13+vfThbIvCiiGZb889Qax
-	oc5lPe+sspNpd2RjZFsHcw6HssV5IE9n+phvD4ds=
-Received: by mx.zohomail.com with SMTPS id 1727069928216470.38431144075696;
-	Sun, 22 Sep 2024 22:38:48 -0700 (PDT)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	David Hildenbrand <david@redhat.com>,
-	John Hubbard <jhubbard@nvidia.com>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	kernel@collabora.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] kselftests: mm: Fix wrong __NR_userfaultfd value
-Date: Mon, 23 Sep 2024 10:38:36 +0500
-Message-Id: <20240923053836.3270393-1-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.39.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03CD21946B9
+	for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2024 09:19:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727083161; cv=none; b=rK0LmPeJdgY99NKa168l75qca3d7FReU39q3kc8k2yCYHfKV/2vPJyTGH0mpYPS4vM+FCGw1zPi7/YsgglYEfX3C7zvIhlMaO/AQKMmMH5tvN2qBYQ2zCtn+Qs7vtBd8P9E59GSHMqEXQk3HlMwdR08zRTqnA1C40VDzBAvFffU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727083161; c=relaxed/simple;
+	bh=B3l/swgMf574HH64zSYfiVu/QiFNrAq4Z16UV6S+QtA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AosoSVmjRECm7vCtUrQNSlWnBOrticjdWdaVEqxaxWInjezmFNP/PQGqzma4uX/uJthcpTZ/aVaao7HOoJd9fSa9foapZtCQTuYaRwCBmy2uQX5t8z/vEkyiNnV1M92rYpjGob/IXudlo0hWZuJuWbn23VNNwOytxUqqtQtIOg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=QblQaMIz; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-374c4c6cb29so4094592f8f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2024 02:19:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1727083158; x=1727687958; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B3l/swgMf574HH64zSYfiVu/QiFNrAq4Z16UV6S+QtA=;
+        b=QblQaMIzanz4vcpxR4tinf4AJ/ZLQh5LqiPgyQFVSjNiF1AH4+SE4103PysS7ew3bt
+         f1XjQY8fFkhDxqYJIpZ9YsdcHe+h6I3JZqZCMM1cqOU5FbAkqgMvl6VCi+AdpD88TS31
+         c31rbGk3vNRET+47HB3asSp0x/HM26Tdlmn9CbRy63x189E2ocm0rlsbSI9DSN65n0Gf
+         JAC7A9t3DDMLLQFlKU0QDNl1APdfvMePrpxH7g6PQb/Nr63UKB/hflB9w5VQL8azfrZl
+         ymBa77BKtbsKPQaLWkw6JOQciI66QTAb+OIDH8iC7ErcseCqOy7/TDNMJsRHuE0ROO2j
+         Y/tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727083158; x=1727687958;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=B3l/swgMf574HH64zSYfiVu/QiFNrAq4Z16UV6S+QtA=;
+        b=URyis8q6IHcaHFLXlaUw1PgJLU+UXa0gnV2tCR+dBATqFwI/W+NbQ8r4d/mXMhDBLH
+         Qe+lj1s2xvBnQm1HP5uqYy9Fie9fDsUHG5bn4II4wIuprtsnzX5MsRcCe3jPWkg7Gu1R
+         5A6dg/A6sD4vubNljxykTRxvg9moU4JvUoZQByouuGjwwrbmtmpMTIDeV4oh8Jl9J1tu
+         QBOYys4mspqtMub+vnDG+MYJRbnxrrp3VMJpmNq+0o+NgKJmFR+B39WwlZgoKo+zzo2P
+         Cyk6A4pnRm0zRDcGr6NEjVB0WFpL+8NSkftaa+0ypIfXfpEgPxo5Wxt4Rw7wKNWOBKxo
+         o+Ow==
+X-Forwarded-Encrypted: i=1; AJvYcCVMXFHXVYvza91neSoDqUwpL/qsMsW4oit8BnidppDAvBCrjDfLo3ILnkYQPYwEsPyIfGJKFjDLyEH+zjpsfSA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyPPCFGlb8oh46F1WHhKjS0TKrFA5dtFkVtrvfNJQivPb5qmlI
+	sUEDE7vozO+gYbsaek5R15wakbmzpMemgpiipsodigROGMwmFSq0hnQ1lp51KIyuKj4AoxnTmWq
+	4MS26iQ81U9N4ygfG7jFjB+wKQHk+li3FILxS
+X-Google-Smtp-Source: AGHT+IG8mTC7dZL5MuqZKSFkhdYrDhY5fQw3AdXSlqu/ln2d+nUSR0gl5ejLSmoHcOVCy570O482RNIR3NkEQQXC1dQ=
+X-Received: by 2002:a5d:4144:0:b0:374:c29a:a0d6 with SMTP id
+ ffacd0b85a97d-37a422533bemr8151963f8f.2.1727083158117; Mon, 23 Sep 2024
+ 02:19:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+References: <20240913213041.395655-1-gary@garyguo.net> <20240913213041.395655-6-gary@garyguo.net>
+In-Reply-To: <20240913213041.395655-6-gary@garyguo.net>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Mon, 23 Sep 2024 11:19:05 +0200
+Message-ID: <CAH5fLgj2_8ej2Xs8rSj1rasYj6S+oQcoh7=+vRnfdZXz71Obxg@mail.gmail.com>
+Subject: Re: [PATCH 5/5] rust: cleanup unnecessary casts
+To: Gary Guo <gary@garyguo.net>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, 
+	Rae Moar <rmoar@google.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Wedson Almeida Filho <wedsonaf@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@samsung.com>, 
+	Trevor Gross <tmgross@umich.edu>, Martin Rodriguez Reboredo <yakoyoku@gmail.com>, 
+	Michael Vetter <jubalh@iodoru.org>, Finn Behrens <me@kloenk.dev>, 
+	Valentin Obst <kernel@valentinobst.de>, Danilo Krummrich <dakr@redhat.com>, 
+	Yutaro Ohno <yutaro.ono.418@gmail.com>, Wedson Almeida Filho <walmeida@microsoft.com>, 
+	Asahi Lina <lina@asahilina.net>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, rust-for-linux@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-grep -rnIF "#define __NR_userfaultfd"
-tools/include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
-arch/x86/include/generated/uapi/asm/unistd_32.h:374:#define
-__NR_userfaultfd 374
-arch/x86/include/generated/uapi/asm/unistd_64.h:327:#define
-__NR_userfaultfd 323
-arch/x86/include/generated/uapi/asm/unistd_x32.h:282:#define
-__NR_userfaultfd (__X32_SYSCALL_BIT + 323)
-arch/arm/include/generated/uapi/asm/unistd-eabi.h:347:#define
-__NR_userfaultfd (__NR_SYSCALL_BASE + 388)
-arch/arm/include/generated/uapi/asm/unistd-oabi.h:359:#define
-__NR_userfaultfd (__NR_SYSCALL_BASE + 388)
-include/uapi/asm-generic/unistd.h:681:#define __NR_userfaultfd 282
+On Fri, Sep 13, 2024 at 11:33=E2=80=AFPM Gary Guo <gary@garyguo.net> wrote:
+>
+> With `long` mapped to `isize`, `size_t`/`__kernel_size_t` mapped to
+> usize and `char` mapped to `u8`, many of the existing casts are no
+> longer necessary.
+>
+> Signed-off-by: Gary Guo <gary@garyguo.net>
 
-The number is dependent on the architecture. The above data shows that:
-x86	374
-x86_64	323
+This is great!
 
-The value of __NR_userfaultfd was changed to 282 when
-asm-generic/unistd.h was included. It makes the test to fail every time
-as the correct number of this syscall on x86_64 is 323. Fix the header
-to asm/unistd.h.
-
-Fixes: a5c6bc590094 ("selftests/mm: remove local __NR_* definitions")
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/mm/pagemap_ioctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-index fc90af2a97b80..bcc73b4e805c6 100644
---- a/tools/testing/selftests/mm/pagemap_ioctl.c
-+++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-@@ -15,7 +15,7 @@
- #include <sys/ioctl.h>
- #include <sys/stat.h>
- #include <math.h>
--#include <asm-generic/unistd.h>
-+#include <asm/unistd.h>
- #include <pthread.h>
- #include <sys/resource.h>
- #include <assert.h>
--- 
-2.39.2
-
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 
