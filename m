@@ -1,110 +1,93 @@
-Return-Path: <linux-kselftest+bounces-18326-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18327-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59609984CE9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 23:33:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E43E0984CFB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 23:40:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A866284BBF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 21:33:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E635B21228
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 21:40:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED77912F5B3;
-	Tue, 24 Sep 2024 21:33:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2D8213CF86;
+	Tue, 24 Sep 2024 21:40:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b="Y1jY88Na"
+	dkim=pass (2048-bit key) header.d=krisman.be header.i=@krisman.be header.b="SMJFFxC/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EB2A17557;
-	Tue, 24 Sep 2024 21:33:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.252.153.129
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB5F713B792;
+	Tue, 24 Sep 2024 21:40:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727213606; cv=none; b=NFzOcA7MCCR7qHrBFGTFxmicGf/zfu8EuqvUAl2ERwnQpPXWfQIzmZjZogYmiEDbzk6UT5cdtG7UDmfTGnOZRSLwWPe9P1F4gBOes5yyNcXVGEEGl0pYgbsRUNsdLmedhgULnFnx4SMSRu+dwCMxSHaqHVrWMMxnVo0JHI46EcM=
+	t=1727214040; cv=none; b=Q/NfAfWyDSujorQnrPGEYbNcPeL5eYRK+8dxuQ6b682bwqwhoHf0hmlTKbALWrOz/sCKJZ5cvlMqsbXH4cBFmHRPu/Ij5LuPJrPhNhpyB49bEw7CeJa4nP6VBbGV92zjNV6638fMw/JJHjO2d1aXhUCvIFZkUAHKwkst02btxjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727213606; c=relaxed/simple;
-	bh=OjF0ucnfYYvF6CDeHwrxxqODXeaTRoOBgmqktmPAVy4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:Cc:From:
-	 In-Reply-To:Content-Type; b=MxLGpUBsOcWek6TrU5Nvt1TmACsaEHOFy9yJcHuSHGhJqr7ICKzUS/KLcsoBffirXGBdOIw50d9miIg4F2EQ/Hp4As5zMBk8jhrMP0I6TamovNjbHUqrYRG3rcunnB108VSNDAIzqxzfWp2aja5oVuCHPhoEEBkauLXsxSz7LEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riseup.net; spf=pass smtp.mailfrom=riseup.net; dkim=pass (1024-bit key) header.d=riseup.net header.i=@riseup.net header.b=Y1jY88Na; arc=none smtp.client-ip=198.252.153.129
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riseup.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riseup.net
-Received: from mx0.riseup.net (mx0-pn.riseup.net [10.0.1.42])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx1.riseup.net (Postfix) with ESMTPS id 4XCtQD5WL7zDqQ3;
-	Tue, 24 Sep 2024 21:33:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-	t=1727213604; bh=OjF0ucnfYYvF6CDeHwrxxqODXeaTRoOBgmqktmPAVy4=;
-	h=Date:Subject:To:References:Cc:From:In-Reply-To:From;
-	b=Y1jY88NayE7/5gs3HMNYueAX+fXyo3eHnkI6L5Ka6PkYkJQnQNLRZSpqaaIbyABgJ
-	 qHTYjSY14ESWUNOW30tkBOuQ04ApPG7xIJQ2vdQ0psZOcsY8nYxfbUkSrS4hyzEHDv
-	 /9jEhmXkqIyyRAuVU2xk7g8bP8m8RiaciqOZpgtU=
-Received: from fews01-sea.riseup.net (fews01-sea-pn.riseup.net [10.0.1.109])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx0.riseup.net (Postfix) with ESMTPS id 4XCtQ61P7Mz9w0h;
-	Tue, 24 Sep 2024 21:33:18 +0000 (UTC)
-X-Riseup-User-ID: 22C5D9AB7542B38831EC3FCDFD435E6CD26FEACDE9C2BA0FE9A1A50B109603EE
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-	 by fews01-sea.riseup.net (Postfix) with ESMTPSA id 4XCtQ31nsjzJrrG;
-	Tue, 24 Sep 2024 21:33:15 +0000 (UTC)
-Message-ID: <8291c6eb-750a-4ab2-8904-65d723d034dd@riseup.net>
-Date: Tue, 24 Sep 2024 23:33:13 +0200
+	s=arc-20240116; t=1727214040; c=relaxed/simple;
+	bh=QPBzZ3SMXvnMiZiD02ai/RQDT8O0tJouF/VUgawARdw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=FyOMglh6aXJYHnvYEespX7re+o2awjzcA20rm54G4MeOzLet7IMG2JJupxY5lJ1rLcpR/u8DNW0X/XTVhIkdpUPH5t6x8tTVISqGj0bQxVlJVbJQ1xGFxuf/u3iZq9jvk6XpZGh2s99KeUGu2cbpVDVqyEuYKh1Sf6s2YNSYLkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=krisman.be; spf=pass smtp.mailfrom=krisman.be; dkim=pass (2048-bit key) header.d=krisman.be header.i=@krisman.be header.b=SMJFFxC/; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=krisman.be
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=krisman.be
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E1F14240002;
+	Tue, 24 Sep 2024 21:40:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=krisman.be; s=gm1;
+	t=1727214030;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=kaJj1MLXDZ4CV94KUfIQzONUVPr+m/dVwLv4YyvGwsU=;
+	b=SMJFFxC/nctHg0+2vf5m8UHwCTJFYoxK5cjW0DfXRH6YPhm5iaU9zAtmlunKi0fqOMyB3a
+	qpB4AXTkpQZSNqRman/lebrsUaEnRt1edxfHuAJg9dcQk7QunnZ63A2PAzMP4qsxJJYvaB
+	A18gSHPxE2TUUW6WZRN/M8hiFXDJPLS3px1lcw2U0wrrlgkfCyxF0RiStjKByMTQIWz3nW
+	UaRPCrdT7Rp5YlvbM5vUcY8o2YaJGZdESegYJi/xQhMcfwQHXADc43kFMQ9f7m+fHORPg9
+	w+gdumknm3jsqlaH2qngBsK6Gni0EGS5pj2DXRsjWfmlDvxOjxCo13dkagKZzg==
+From: Gabriel Krisman Bertazi <gabriel@krisman.be>
+To: =?utf-8?Q?Andr=C3=A9?= Almeida <andrealmeid@riseup.net>
+Cc: Gabriela Bittencourt <gbittencourt@lkcamp.dev>,
+  linux-kselftest@vger.kernel.org,  Gabriel Krisman Bertazi
+ <krisman@kernel.org>,  linux-fsdevel@vger.kernel.org,  Shuah Khan
+ <skhan@linuxfoundation.org>,  David Gow <davidgow@google.com>,
+  kunit-dev@googlegroups.com,  porlando@lkcamp.dev,  dpereira@lkcamp.dev,
+  ~lkcamp/patches@lists.sr.ht
+Subject: Re: [PATCH 1/2] unicode: kunit: refactor selftest to kunit tests
+In-Reply-To: <eb26f009-37e9-4988-ae86-c349af3f9a6b@riseup.net>
+ (=?utf-8?Q?=22Andr=C3=A9?=
+	Almeida"'s message of "Tue, 24 Sep 2024 23:30:31 +0200")
+References: <20240923173454.264852-1-gbittencourt@lkcamp.dev>
+	<20240923173454.264852-2-gbittencourt@lkcamp.dev>
+	<eb26f009-37e9-4988-ae86-c349af3f9a6b@riseup.net>
+Date: Tue, 24 Sep 2024 17:40:27 -0400
+Message-ID: <87wmj0wx10.fsf@mailhost.krisman.be>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 0/1] Add KUnit tests for lib/crc16.c
-To: Vinicius Peixoto <vpeixoto@lkcamp.dev>
-References: <20240922232643.535329-1-vpeixoto@lkcamp.dev>
-Content-Language: en-US
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, ~lkcamp/patches@lists.sr.ht,
- Rae Moar <rmoar@google.com>, David Gow <davidgow@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-From: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@riseup.net>
-In-Reply-To: <20240922232643.535329-1-vpeixoto@lkcamp.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: gabriel@krisman.be
 
-Hey!
+Andr=C3=A9 Almeida <andrealmeid@riseup.net> writes:
 
-On 9/23/24 01:26, Vinicius Peixoto wrote:
-> Hi all,
+> Hey!
 >
-> This patch was developed during a hackathon organized by LKCAMP [1],
-> with the objective of writing KUnit tests, both to introduce people to
-> the kernel development process and to learn about different subsystems
-> (with the positive side effect of improving the kernel test coverage, of
-> course).
+> On 9/23/24 19:34, Gabriela Bittencourt wrote:
+>> Instead of creating 'test' functions, use kunit functions to test
+>> utf-8 support in unicode subsystem.
 >
-> We noticed there were tests for CRC32 in lib/crc32test.c and thought it
-> would be nice to have something similar for CRC16, since it seems to be
-> widely used in network drivers (as well as in some ext4 code).
->
-> Although this patch turned out quite big, most of the LOCs come from
-> tables containing randomly-generated test data that we use to validate
-> the kernel's implementation of CRC-16.
-Can you share how you created the tables? Given that is impossible to 
-review the table itself, at least people will be able to see how they 
-got created at least.
-> We would really appreciate any feedback/suggestions on how to improve
-> this. Thanks! :-)
->
-> Vinicius Peixoto (1):
->    lib/crc16_kunit.c: add KUnit tests for crc16
->
->   lib/Kconfig.debug |   8 +
->   lib/Makefile      |   1 +
->   lib/crc16_kunit.c | 715 ++++++++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 724 insertions(+)
->   create mode 100644 lib/crc16_kunit.c
->
+> I think it would be nice to explain in the commit message what are the
+> benefits of this change, why refactoring into KUnit is a good idea?
+
+TBH, I wouldn't mind dropping this code altogether.  We have similar
+coverage in fstests already. It was useful when developing fs/unicode
+but nowadays, it seems moot.
+
+--=20
+Gabriel Krisman Bertazi
 
