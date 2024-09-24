@@ -1,96 +1,373 @@
-Return-Path: <linux-kselftest+bounces-18263-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18264-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF900983B69
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 04:58:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2231983B6C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 05:00:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F1BAB20FA4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 02:58:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E7DAB22045
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 03:00:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F8B223DE;
-	Tue, 24 Sep 2024 02:57:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB4EF175BF;
+	Tue, 24 Sep 2024 03:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I+FhX4w2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4752E1BC20
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2024 02:57:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE80EAD7
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2024 03:00:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727146679; cv=none; b=pgkOkYCcXnfrrdrQou//j2D6pcfou4+AQPBK6mNVhPT9hRyfH3XEBTzOR9Z7Gn8qXBI2V5sgJcrx0cPVcZp8D83zwXCHcBOIBUy+dtSUjIXCPGR9XECp3eNNCzg5DaOuxlV5Rr5Ih7IlpCaVBlnevrT4/Omm8yLCXWYm4iNj3/Q=
+	t=1727146808; cv=none; b=A20vlhVbuY1GfMyAfvkZQYjYGia2jKrgWaFgabPczyi3Xl+RKyTKxM81hpRvig1uQP93qqa1ULR9SMBJvQLRI7+tmL4KSw4EuNcpcGJj6mBFtfAMaqoxQ2nmf7lBVy627QEdt5GYiWt0oJAE2mycvhEeTIpl6JRY2FFxXMIIk6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727146679; c=relaxed/simple;
-	bh=zlgxtnpK0qR9EXKm+4ZIMyH+B3hARclBL6NJ1G+aD4c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=dmGKkiDYVLDexdRU+TDt9E86jy3USLbX0J96MuubNmPyqJr+Te+EivSjy7ylikOH4xwC0rlAf8fIOtkC4FrdlD79j0x4XrHxEh9I8DsGt87Dn1hQH5FJwB542Wgfl5b9bDfpKts8wue0pRmT+8svnutyi4JkynabxCcloOQeepM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.174])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4XCPcM0ntZzfcWc;
-	Tue, 24 Sep 2024 10:55:31 +0800 (CST)
-Received: from dggpeml500003.china.huawei.com (unknown [7.185.36.200])
-	by mail.maildlp.com (Postfix) with ESMTPS id A5F691401F0;
-	Tue, 24 Sep 2024 10:57:47 +0800 (CST)
-Received: from [10.174.177.173] (10.174.177.173) by
- dggpeml500003.china.huawei.com (7.185.36.200) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 24 Sep 2024 10:57:47 +0800
-Message-ID: <702f6d09-5216-eef5-299d-6445cfca8233@huawei.com>
-Date: Tue, 24 Sep 2024 10:57:46 +0800
+	s=arc-20240116; t=1727146808; c=relaxed/simple;
+	bh=PGKVfCFLOcXyG1UJ64FDSbsGJz7GJVylmoPAjSei5mc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Xvqz4pi2kRqk7ApqAwLg06aHPiMNp67K65k2zZ7hXL/N5/7iHqmZ8voQl6VK1dqN06cInANUAxGK66CYnAoNPtQupD9ONW/7uY7uOJEILHGb7f9uw3/6doXbrjINBSu5iq61V0QxCqgTozzUUeLxb7Dln9KwRvSNorem6owdaLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I+FhX4w2; arc=none smtp.client-ip=209.85.221.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-5019d48b1aaso1125732e0c.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Sep 2024 20:00:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727146806; x=1727751606; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nU+Wd+xETs3An1e9pyRBvPBluwxhPMxkS03pCtGHAuY=;
+        b=I+FhX4w2RA1nLPawd78IqAQ+OZSHuRKtqQ4lwnB6puKzJuHyUSAJQIR96EWmV1F5nd
+         llYlA/6CtyIPlHYYbC0oxSSAw+ESDAZr34fA+aI4yETmG0f/h18QDRCW5bnjkRJgp7S0
+         CdHTUSKLQzoFPu3lVZbDZRczP1xGUfDvx3K1OonKvVoDUgUKJhWFdys6UusQTqXokPA8
+         sLtmcJZ+BOXggNh2eDDpLuShrHm452SDTC9XgaAJc2DhQ2AcCl7AdYjZTIASZISzXnyd
+         GNkeUVYUSFpoETwD3G41FEtbfX0fUr/rULBi6AZ+jPERLIL7m0x2FB9KYdXL6FhXsBGz
+         RFkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727146806; x=1727751606;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nU+Wd+xETs3An1e9pyRBvPBluwxhPMxkS03pCtGHAuY=;
+        b=ORQzMCtGKxII+AtioIbBe2iTh0eM0NBHZMYUoutjCQiXYejoRqYVvNNxs34leNFKEs
+         87usdh9IRSECIMFTZ5iAUTSnCeYQoXyUZ06CmX5XVR9t48n7C5DD2mVmkU8h5KSB0O7X
+         7xwtQCKvczIwJeD7VFFaaHIT0aNCEwmg82QwPdL9Ng/g3dAYgVJFGMN9SCvrcFoqi0aV
+         ZieOAPMmSfRtQjO9DFro5QFTA0qR9QCv/loPA1wdZ3V5Ms6j8LIRPQS2JRwU8biu77p/
+         gENxQx0nhR8G56YoPpLB+avHgtR+YZhrSHEshWYm0Q+Nj1ShpPYU8+BTg2ExvUrzDCQW
+         BxHw==
+X-Forwarded-Encrypted: i=1; AJvYcCVV+0Xtc3pbSr4+x3dZXlSHlSNV8c8w4dPRCk4WskKS3+U/APebp+GlBMunixsXH/gm7IGD7hmPLr2jdSRmbsw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz89J4oN3RZcaZz7p4lydLOlqAqzX04k1csvWzjRFFKofgJGEjy
+	IRIHZAinxmUxzBUWyl0CeRjYO/Qgl/VRJTUzUrUJ2/brJH9f0TB3
+X-Google-Smtp-Source: AGHT+IGZ0Rz2z0bn6FdZif0Y9AzsJm59+n9vupufk9+1k3TxlIVxLv1CUbs8X86kSWoManPYVqpWGg==
+X-Received: by 2002:a05:6122:2a4b:b0:502:873f:13c2 with SMTP id 71dfb90a1353d-503e055467fmr8126285e0c.13.1727146805574;
+        Mon, 23 Sep 2024 20:00:05 -0700 (PDT)
+Received: from x13.. (syn-142-197-128-048.res.spectrum.com. [142.197.128.48])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-505aa080d82sm374760e0c.35.2024.09.23.20.00.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Sep 2024 20:00:04 -0700 (PDT)
+From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+To: brendan.higgins@linux.dev,
+	davidgow@google.com,
+	rmoar@google.com,
+	quic_jjohnson@quicinc.com,
+	macro@orcam.me.uk,
+	npitre@baylibre.com,
+	tpiepho@gmail.com
+Cc: Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH] lib: math: Move kunit tests into tests/ subdir
+Date: Mon, 23 Sep 2024 22:59:33 -0400
+Message-ID: <20240924025935.165499-1-luis.hernandez093@gmail.com>
+X-Mailer: git-send-email 2.46.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.0
-Subject: Re: [PATCH] selftests: vDSO: fix compile error for
- vdso_test_getrandom
-Content-Language: en-US
-To: Shuah Khan <skhan@linuxfoundation.org>, "Jason A. Donenfeld"
-	<Jason@zx2c4.com>, Christophe Leroy <christophe.leroy@csgroup.eu>
-CC: <shuah@kernel.org>, <liwei391@huawei.com>, <broonie@kernel.org>,
-	<linux-kselftest@vger.kernel.org>, Xie XiuQi <xiexiuqi@huawei.com>
-References: <20240919111841.20226-1-liaoyu15@huawei.com>
- <20ef1a1d-db00-44a7-a550-0b293d6e0d0e@linuxfoundation.org>
- <0010d5c7-388e-d648-8320-83b9fd16e615@huawei.com>
- <3e3507d8-f17c-4af8-83cb-682190f5bf67@csgroup.eu>
- <CAHmME9p9iy+d2wx3vpD1XbVde9WvcJ1agTOqcNw4z=WABVn5XQ@mail.gmail.com>
- <87684869-4565-4a4a-845f-4301242be52a@linuxfoundation.org>
-From: Yu Liao <liaoyu15@huawei.com>
-In-Reply-To: <87684869-4565-4a4a-845f-4301242be52a@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpeml500003.china.huawei.com (7.185.36.200)
+Content-Transfer-Encoding: 8bit
 
-Hi,
-On 2024/9/23 23:30, Shuah Khan wrote:
-> On 9/20/24 09:31, Jason A. Donenfeld wrote:
->> Indeed probably <sched.h> is what's wanted here.
->>
-> 
-> Yu Liao, Please send v2 as per the review comments.
-> 
+Cc: linux-kselftest@vger.kernel.org,
+    kunit-dev@googlegroups.com,
+    skhan@linuxfoundation.org,
+	ricardo@marliere.net,
+    linux-kernel-mentees@lists.linuxfoundation.org
 
-CLONE_NEWTIME was introduced in glibc-2.36, which was released in August 2022.
-As Christophe mentioned, <sched.h> is already indirectly included by
-<phread.h>, so this issue does not exist if glibc version higher than 2.36.
+This patch is a follow-up task from a discussion stemming from point 3
+in a recent patch introducing the int_pow kunit test [1] and
+documentation regarding kunit test style and nomenclature [2].
 
-Additionally, CLONE_NEWTIME was introduced in Linux 5.6 in March 2020, the
-CLONE_ macros are also defined in <linux/sched.h>, which is part of the
-kernel-header package.
+Colocate all kunit test suites in lib/math/tests/ and
+follow the recommended naming convention for files <suite>_kunit.c
+and kconfig entries CONFIG_<name>_KUNIT_TEST.
 
-My environment is Ubuntu 22.04 (Linux 5.15 + glibc 2.35), after upgrading to a
-newer version of glibc, the issue appears to be resolved.
-It seems to me that including <sched.h> might be unnecessary. I would greatly
-appreciate your guidance on how best to handle this situation.
+Link: https://lore.kernel.org/all/CABVgOS=-vh5TqHFCq_jo=ffq8v_nGgr6JsPnOZag3e6+19ysxQ@mail.gmail.com/ [1]
+Link: https://docs.kernel.org/dev-tools/kunit/style.html [2]
 
-Best regards,
-Yu
+Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+---
+ arch/m68k/configs/amiga_defconfig                           | 2 +-
+ arch/m68k/configs/apollo_defconfig                          | 2 +-
+ arch/m68k/configs/atari_defconfig                           | 2 +-
+ arch/m68k/configs/bvme6000_defconfig                        | 2 +-
+ arch/m68k/configs/hp300_defconfig                           | 2 +-
+ arch/m68k/configs/mac_defconfig                             | 2 +-
+ arch/m68k/configs/multi_defconfig                           | 2 +-
+ arch/m68k/configs/mvme147_defconfig                         | 2 +-
+ arch/m68k/configs/mvme16x_defconfig                         | 2 +-
+ arch/m68k/configs/q40_defconfig                             | 2 +-
+ arch/m68k/configs/sun3_defconfig                            | 2 +-
+ arch/m68k/configs/sun3x_defconfig                           | 2 +-
+ arch/powerpc/configs/ppc64_defconfig                        | 2 +-
+ lib/Kconfig.debug                                           | 6 +++---
+ lib/math/Makefile                                           | 5 +----
+ lib/math/tests/Makefile                                     | 5 ++++-
+ lib/math/{test_div64.c => tests/div64_kunit.c}              | 0
+ .../mul_u64_u64_div_u64_kunit.c}                            | 0
+ lib/math/{rational-test.c => tests/rational_kunit.c}        | 0
+ 19 files changed, 21 insertions(+), 21 deletions(-)
+ rename lib/math/{test_div64.c => tests/div64_kunit.c} (100%)
+ rename lib/math/{test_mul_u64_u64_div_u64.c => tests/mul_u64_u64_div_u64_kunit.c} (100%)
+ rename lib/math/{rational-test.c => tests/rational_kunit.c} (100%)
+
+diff --git a/arch/m68k/configs/amiga_defconfig b/arch/m68k/configs/amiga_defconfig
+index d01dc47d52ea..7ba9311c084c 100644
+--- a/arch/m68k/configs/amiga_defconfig
++++ b/arch/m68k/configs/amiga_defconfig
+@@ -619,7 +619,7 @@ CONFIG_KUNIT=m
+ CONFIG_KUNIT_ALL_TESTS=m
+ CONFIG_TEST_DHRY=m
+ CONFIG_TEST_MIN_HEAP=m
+-CONFIG_TEST_DIV64=m
++CONFIG_DIV64_KUNIT_TEST=m
+ CONFIG_REED_SOLOMON_TEST=m
+ CONFIG_ATOMIC64_SELFTEST=m
+ CONFIG_ASYNC_RAID6_TEST=m
+diff --git a/arch/m68k/configs/apollo_defconfig b/arch/m68k/configs/apollo_defconfig
+index 46808e581d7b..273fe4032b85 100644
+--- a/arch/m68k/configs/apollo_defconfig
++++ b/arch/m68k/configs/apollo_defconfig
+@@ -576,7 +576,7 @@ CONFIG_KUNIT=m
+ CONFIG_KUNIT_ALL_TESTS=m
+ CONFIG_TEST_DHRY=m
+ CONFIG_TEST_MIN_HEAP=m
+-CONFIG_TEST_DIV64=m
++CONFIG_DIV64_KUNIT_TEST=m
+ CONFIG_REED_SOLOMON_TEST=m
+ CONFIG_ATOMIC64_SELFTEST=m
+ CONFIG_ASYNC_RAID6_TEST=m
+diff --git a/arch/m68k/configs/atari_defconfig b/arch/m68k/configs/atari_defconfig
+index 4469a7839c9d..9976cda99fc1 100644
+--- a/arch/m68k/configs/atari_defconfig
++++ b/arch/m68k/configs/atari_defconfig
+@@ -596,7 +596,7 @@ CONFIG_KUNIT=m
+ CONFIG_KUNIT_ALL_TESTS=m
+ CONFIG_TEST_DHRY=m
+ CONFIG_TEST_MIN_HEAP=m
+-CONFIG_TEST_DIV64=m
++CONFIG_DIV64_KUNIT_TEST=m
+ CONFIG_REED_SOLOMON_TEST=m
+ CONFIG_ATOMIC64_SELFTEST=m
+ CONFIG_ASYNC_RAID6_TEST=m
+diff --git a/arch/m68k/configs/bvme6000_defconfig b/arch/m68k/configs/bvme6000_defconfig
+index c0719322c028..f59082c8fe06 100644
+--- a/arch/m68k/configs/bvme6000_defconfig
++++ b/arch/m68k/configs/bvme6000_defconfig
+@@ -568,7 +568,7 @@ CONFIG_KUNIT=m
+ CONFIG_KUNIT_ALL_TESTS=m
+ CONFIG_TEST_DHRY=m
+ CONFIG_TEST_MIN_HEAP=m
+-CONFIG_TEST_DIV64=m
++CONFIG_DIV64_KUNIT_TEST=m
+ CONFIG_REED_SOLOMON_TEST=m
+ CONFIG_ATOMIC64_SELFTEST=m
+ CONFIG_ASYNC_RAID6_TEST=m
+diff --git a/arch/m68k/configs/hp300_defconfig b/arch/m68k/configs/hp300_defconfig
+index 8d429e63f8f2..6db3556da9ac 100644
+--- a/arch/m68k/configs/hp300_defconfig
++++ b/arch/m68k/configs/hp300_defconfig
+@@ -578,7 +578,7 @@ CONFIG_KUNIT=m
+ CONFIG_KUNIT_ALL_TESTS=m
+ CONFIG_TEST_DHRY=m
+ CONFIG_TEST_MIN_HEAP=m
+-CONFIG_TEST_DIV64=m
++CONFIG_DIV64_KUNIT_TEST=m
+ CONFIG_REED_SOLOMON_TEST=m
+ CONFIG_ATOMIC64_SELFTEST=m
+ CONFIG_ASYNC_RAID6_TEST=m
+diff --git a/arch/m68k/configs/mac_defconfig b/arch/m68k/configs/mac_defconfig
+index bafd33da27c1..25c06b5c83ee 100644
+--- a/arch/m68k/configs/mac_defconfig
++++ b/arch/m68k/configs/mac_defconfig
+@@ -595,7 +595,7 @@ CONFIG_KUNIT=m
+ CONFIG_KUNIT_ALL_TESTS=m
+ CONFIG_TEST_DHRY=m
+ CONFIG_TEST_MIN_HEAP=m
+-CONFIG_TEST_DIV64=m
++CONFIG_DIV64_KUNIT_TEST=m
+ CONFIG_REED_SOLOMON_TEST=m
+ CONFIG_ATOMIC64_SELFTEST=m
+ CONFIG_ASYNC_RAID6_TEST=m
+diff --git a/arch/m68k/configs/multi_defconfig b/arch/m68k/configs/multi_defconfig
+index 6f5ca3f85ea1..35e57e0ee139 100644
+--- a/arch/m68k/configs/multi_defconfig
++++ b/arch/m68k/configs/multi_defconfig
+@@ -681,7 +681,7 @@ CONFIG_KUNIT=m
+ CONFIG_KUNIT_ALL_TESTS=m
+ CONFIG_TEST_DHRY=m
+ CONFIG_TEST_MIN_HEAP=m
+-CONFIG_TEST_DIV64=m
++CONFIG_DIV64_KUNIT_TEST=m
+ CONFIG_REED_SOLOMON_TEST=m
+ CONFIG_ATOMIC64_SELFTEST=m
+ CONFIG_ASYNC_RAID6_TEST=m
+diff --git a/arch/m68k/configs/mvme147_defconfig b/arch/m68k/configs/mvme147_defconfig
+index d16b328c7136..d253b686119a 100644
+--- a/arch/m68k/configs/mvme147_defconfig
++++ b/arch/m68k/configs/mvme147_defconfig
+@@ -567,7 +567,7 @@ CONFIG_KUNIT=m
+ CONFIG_KUNIT_ALL_TESTS=m
+ CONFIG_TEST_DHRY=m
+ CONFIG_TEST_MIN_HEAP=m
+-CONFIG_TEST_DIV64=m
++CONFIG_DIV64_KUNIT_TEST=m
+ CONFIG_REED_SOLOMON_TEST=m
+ CONFIG_ATOMIC64_SELFTEST=m
+ CONFIG_ASYNC_RAID6_TEST=m
+diff --git a/arch/m68k/configs/mvme16x_defconfig b/arch/m68k/configs/mvme16x_defconfig
+index 80f6c15a5ed5..62bc6ad63783 100644
+--- a/arch/m68k/configs/mvme16x_defconfig
++++ b/arch/m68k/configs/mvme16x_defconfig
+@@ -568,7 +568,7 @@ CONFIG_KUNIT=m
+ CONFIG_KUNIT_ALL_TESTS=m
+ CONFIG_TEST_DHRY=m
+ CONFIG_TEST_MIN_HEAP=m
+-CONFIG_TEST_DIV64=m
++CONFIG_DIV64_KUNIT_TEST=m
+ CONFIG_REED_SOLOMON_TEST=m
+ CONFIG_ATOMIC64_SELFTEST=m
+ CONFIG_ASYNC_RAID6_TEST=m
+diff --git a/arch/m68k/configs/q40_defconfig b/arch/m68k/configs/q40_defconfig
+index 0e81589f0ee2..caba39c61bac 100644
+--- a/arch/m68k/configs/q40_defconfig
++++ b/arch/m68k/configs/q40_defconfig
+@@ -585,7 +585,7 @@ CONFIG_KUNIT=m
+ CONFIG_KUNIT_ALL_TESTS=m
+ CONFIG_TEST_DHRY=m
+ CONFIG_TEST_MIN_HEAP=m
+-CONFIG_TEST_DIV64=m
++CONFIG_DIV64_KUNIT_TEST=m
+ CONFIG_REED_SOLOMON_TEST=m
+ CONFIG_ATOMIC64_SELFTEST=m
+ CONFIG_ASYNC_RAID6_TEST=m
+diff --git a/arch/m68k/configs/sun3_defconfig b/arch/m68k/configs/sun3_defconfig
+index 8cd785290339..a348f645ed55 100644
+--- a/arch/m68k/configs/sun3_defconfig
++++ b/arch/m68k/configs/sun3_defconfig
+@@ -565,7 +565,7 @@ CONFIG_KUNIT=m
+ CONFIG_KUNIT_ALL_TESTS=m
+ CONFIG_TEST_DHRY=m
+ CONFIG_TEST_MIN_HEAP=m
+-CONFIG_TEST_DIV64=m
++CONFIG_DIV64_KUNIT_TEST=m
+ CONFIG_REED_SOLOMON_TEST=m
+ CONFIG_ATOMIC64_SELFTEST=m
+ CONFIG_ASYNC_RAID6_TEST=m
+diff --git a/arch/m68k/configs/sun3x_defconfig b/arch/m68k/configs/sun3x_defconfig
+index 78035369f60f..f8b3cfc3275b 100644
+--- a/arch/m68k/configs/sun3x_defconfig
++++ b/arch/m68k/configs/sun3x_defconfig
+@@ -566,7 +566,7 @@ CONFIG_KUNIT=m
+ CONFIG_KUNIT_ALL_TESTS=m
+ CONFIG_TEST_DHRY=m
+ CONFIG_TEST_MIN_HEAP=m
+-CONFIG_TEST_DIV64=m
++CONFIG_DIV64_KUNIT_TEST=m
+ CONFIG_REED_SOLOMON_TEST=m
+ CONFIG_ATOMIC64_SELFTEST=m
+ CONFIG_ASYNC_RAID6_TEST=m
+diff --git a/arch/powerpc/configs/ppc64_defconfig b/arch/powerpc/configs/ppc64_defconfig
+index a5e3e7f97f4d..f1f21765c0c1 100644
+--- a/arch/powerpc/configs/ppc64_defconfig
++++ b/arch/powerpc/configs/ppc64_defconfig
+@@ -435,7 +435,7 @@ CONFIG_KUNIT=m
+ CONFIG_KUNIT_ALL_TESTS=m
+ CONFIG_LKDTM=m
+ CONFIG_TEST_MIN_HEAP=m
+-CONFIG_TEST_DIV64=m
++CONFIG_DIV64_KUNIT_TEST=m
+ CONFIG_BACKTRACE_SELF_TEST=m
+ CONFIG_TEST_REF_TRACKER=m
+ CONFIG_RBTREE_TEST=m
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index bc8faa4509e1..49807e18b0fc 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2281,7 +2281,7 @@ config TEST_SORT
+ 
+ 	  If unsure, say N.
+ 
+-config TEST_DIV64
++config DIV64_KUNIT_TEST
+ 	tristate "64bit/32bit division and modulo test"
+ 	depends on DEBUG_KERNEL || m
+ 	help
+@@ -2291,7 +2291,7 @@ config TEST_DIV64
+ 
+ 	  If unsure, say N.
+ 
+-config TEST_MULDIV64
++config MULDIV64_KUNIT_TEST
+ 	tristate "mul_u64_u64_div_u64() test"
+ 	depends on DEBUG_KERNEL || m
+ 	help
+@@ -3074,7 +3074,7 @@ endmenu # "Rust"
+ 
+ endmenu # Kernel hacking
+ 
+-config INT_POW_TEST
++config INT_POW_KUNIT_TEST
+ 	tristate "Integer exponentiation (int_pow) test" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
+ 	default KUNIT_ALL_TESTS
+diff --git a/lib/math/Makefile b/lib/math/Makefile
+index 3ef11305f8d2..1c489501ff57 100644
+--- a/lib/math/Makefile
++++ b/lib/math/Makefile
+@@ -5,7 +5,4 @@ obj-$(CONFIG_CORDIC)		+= cordic.o
+ obj-$(CONFIG_PRIME_NUMBERS)	+= prime_numbers.o
+ obj-$(CONFIG_RATIONAL)		+= rational.o
+ 
+-obj-$(CONFIG_INT_POW_TEST)  += tests/int_pow_kunit.o
+-obj-$(CONFIG_TEST_DIV64)	+= test_div64.o
+-obj-$(CONFIG_TEST_MULDIV64)	+= test_mul_u64_u64_div_u64.o
+-obj-$(CONFIG_RATIONAL_KUNIT_TEST) += rational-test.o
++obj-y  += tests/
+diff --git a/lib/math/tests/Makefile b/lib/math/tests/Makefile
+index 6a169123320a..f9a0a0e6b73a 100644
+--- a/lib/math/tests/Makefile
++++ b/lib/math/tests/Makefile
+@@ -1,3 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ 
+-obj-$(CONFIG_INT_POW_TEST) += int_pow_kunit.o
++obj-$(CONFIG_DIV64_KUNIT_TEST)    += div64_kunit.o
++obj-$(CONFIG_INT_POW_KUNIT_TEST)  += int_pow_kunit.o
++obj-$(CONFIG_MULDIV64_KUNIT_TEST) += mul_u64_u64_div_u64_kunit.o
++obj-$(CONFIG_RATIONAL_KUNIT_TEST) += rational_kunit.o
+diff --git a/lib/math/test_div64.c b/lib/math/tests/div64_kunit.c
+similarity index 100%
+rename from lib/math/test_div64.c
+rename to lib/math/tests/div64_kunit.c
+diff --git a/lib/math/test_mul_u64_u64_div_u64.c b/lib/math/tests/mul_u64_u64_div_u64_kunit.c
+similarity index 100%
+rename from lib/math/test_mul_u64_u64_div_u64.c
+rename to lib/math/tests/mul_u64_u64_div_u64_kunit.c
+diff --git a/lib/math/rational-test.c b/lib/math/tests/rational_kunit.c
+similarity index 100%
+rename from lib/math/rational-test.c
+rename to lib/math/tests/rational_kunit.c
+-- 
+2.46.1
+
 
