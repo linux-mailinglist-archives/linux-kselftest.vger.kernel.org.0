@@ -1,174 +1,124 @@
-Return-Path: <linux-kselftest+bounces-18320-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18321-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9515984B41
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 20:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B80D984B4F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 20:47:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0BF00B22A55
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 18:45:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 25032B22F9D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 18:47:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E5431AC895;
-	Tue, 24 Sep 2024 18:44:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D94E1AC88D;
+	Tue, 24 Sep 2024 18:47:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MdEafUwB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AP5SaqOb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D742C1AC880;
-	Tue, 24 Sep 2024 18:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39EAC80BF8;
+	Tue, 24 Sep 2024 18:47:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727203481; cv=none; b=py36uPUW91JTGk2EjEpkDSYbaukWOhCWAz+oD6pWcl49b7DwXwdvQF8Gh9bGaI8RsLZL/pRrdycErogZdTvKMXxxnd+cr0w6o1547dWoQGFoExbCxI6ZIOVpL6ZgwQ5PEvEHYiuDi/y73a5I0r1b1kfUp+qo9zxUeuccbKivSrw=
+	t=1727203643; cv=none; b=g7TKsleAg3EqmDxEJkKDdEGvzZdyL6+48xOBLPGqpITfU/tjENQ2Dt1eV3HKgwVdD/sDKy5YT7yfpAhpHWTZJRij+LJnakWQylwDiIfda2FG2mVtXrQPZcXb2b5J+SJObUiFZdfr+VDHhaPXCecXT2t72qXmOoNN9j1q0Qzne8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727203481; c=relaxed/simple;
-	bh=m+/VvRQ+++wCtbEd9ey3Gz7C1C/Zkqpv+B5faIBfK0M=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=aQwum0Uvqwp110CIhU2oyOvAPJ5GeX4eePHLAj4tCopB4bPTzQCnhNGoFeo0yEeu/l3MJbwZ6rSzhzzDIhBKl0u5FeCSg2vMNn+vDmwfCFwEiGX4ls3f8JMXdHs8O+vSDaDql4wdFCmRDCCz8TrNJxA14s6i5Yjfzvs6FEsd7hE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MdEafUwB; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2d877e9054eso4111441a91.3;
-        Tue, 24 Sep 2024 11:44:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727203479; x=1727808279; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=q1TSmoyn8iXw1Hwv/qLhBv9Dztb3b91fPaP0YK6BdNM=;
-        b=MdEafUwB9MdSyi+5yDkzRNixkanje/AL56lUhR9pCwynp5LSK74PsZfaRymRKoJLWj
-         GTeG7Ic/U1XPmHrVQQI2L+0oPCWicj1sr96+6X7Gkjm40XG0TOpKQaT20rEk8rniIH+n
-         n9YzAEfuuV7xisvgHRy/x/3eF5mWXol8iPodNaSIDTsaTGz/ugFrnd1SmpfpqWC6SWDB
-         YcS6aeYuyhQZqFUrpBAlsQhHhlgja4CDyBSTvvhaLVBZR7d9OfQXOUOy1RJceAhgqlHj
-         taKV9EyJgCUGznIS78p6KH+qd3Y7EyYawC3FExodcz9zsdPXci7e1QOyH80LgPlcuRFG
-         uvBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727203479; x=1727808279;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=q1TSmoyn8iXw1Hwv/qLhBv9Dztb3b91fPaP0YK6BdNM=;
-        b=sUqVZkZOX5omRwN6boDnyFS6PnrQn3Nc5Eo+uJuZ83JS5Rc4bH9usAM2aaPqij5Lpd
-         QYOlSIGNydb/s1p4Yce+5CD5VU13xYq3MtVxw3XJXJiOmcAGvD+/KcnmDBkUfStLN0/M
-         iIiPKNzSq5h+kcxAGumMRI0r/jnqvwsWsLhjp4tp5W8iM00YoG5ULIpR4XFlsJDwfc8y
-         zdWksIzKq1IhiYDPers5TJUYUJ6Z8cRg3FzDsMd2BShvZfBoEr4lkjG9OchMKaaPSED1
-         3oS9K88wZIFR/mAKM0nLJOinB5Eo4W8VK1WonoTGcAnrKRo79+OC89JVQmiqY0vM6lLs
-         joRw==
-X-Forwarded-Encrypted: i=1; AJvYcCVXtBJgnolDXKpDc5hfrrfiCHd9M4vtIzFWrKxMch6iC//F8GDUE5imOo5WF49g6iRKLV0=@vger.kernel.org, AJvYcCVuZ8iyqSP1C2x8g19SDev877PPPE2J0QuPsQGe4AFtrYUGOTBSKBg9LIhN+zLLCBnQQ1RbDeuQluHyb2LRZW6S@vger.kernel.org, AJvYcCWlNbFTeL6FJTI/kP2WBtEUA2+TfxbGvP9kVT6HJG/F8smbLDIZcrlFrioMlSR4bfyBMDZwTyfrOfA4VKjm@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9iMmo6ZvyuRrFWtOAAm/5YGQK8e77LvKtCQG8XfPiN2be7GYV
-	j/iZHUgulsfJbwagyQt0x4NsbCkarv7GycNCb8jffZEtPX0y9m+7
-X-Google-Smtp-Source: AGHT+IE0VymKndO2jnvRjxP3110G2PKk/L89WWltJ4sm3Qb6iXETmYcoRM6hJuqYAODg6uZeBcco4A==
-X-Received: by 2002:a17:90a:3d86:b0:2d8:8509:85cd with SMTP id 98e67ed59e1d1-2e06b0074demr73099a91.40.1727203479168;
-        Tue, 24 Sep 2024 11:44:39 -0700 (PDT)
-Received: from [192.168.0.235] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2dd6eecaea5sm11710719a91.34.2024.09.24.11.44.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Sep 2024 11:44:38 -0700 (PDT)
-Message-ID: <b9012c196537e64fb148232de3f97053891c1de8.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: verifier: Support eliding map
- lookup nullness
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Daniel Xu <dxu@dxuuu.xyz>, shuah@kernel.org, daniel@iogearbox.net, 
-	ast@kernel.org, andrii@kernel.org
-Cc: john.fastabend@gmail.com, martin.lau@linux.dev, song@kernel.org, 
- yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
- haoluo@google.com,  jolsa@kernel.org, mykolal@fb.com, bpf@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- kernel-team@meta.com
-Date: Tue, 24 Sep 2024 11:44:33 -0700
-In-Reply-To: <815cefa75561c30bec8ca62b9261d4706fa25bb6.1727174358.git.dxu@dxuuu.xyz>
-References: <cover.1727174358.git.dxu@dxuuu.xyz>
-	 <815cefa75561c30bec8ca62b9261d4706fa25bb6.1727174358.git.dxu@dxuuu.xyz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
+	s=arc-20240116; t=1727203643; c=relaxed/simple;
+	bh=I3xlCxCgRrlgcGeWrdThprr/PtPPIOpTGHY52oR0aX0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=odNYixOGBkhedTyUOawA7X2uaWotw3wiLhRgaAf9AR0E76qit9EIpVLlEDj0wSNti4oDGR6fJ5NJw7Xb7U+xjHWbDvSstsLvyVC/Yzh2PoN307PhrHAR3W+rYsCcMvc9hk2/0Apwf/mTSvywFz4yiL4jptZKevNxLDGxJXBbo+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AP5SaqOb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4541C4CEC4;
+	Tue, 24 Sep 2024 18:47:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727203642;
+	bh=I3xlCxCgRrlgcGeWrdThprr/PtPPIOpTGHY52oR0aX0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=AP5SaqObdxk8329qse9ot1zeEYmDkYzoBbJyY9H75XKFBlGv9Q3soJarnbacBkcql
+	 XgG32wn4OlQY0qF2n3nLWJiGJLbv1TQc8K2Nwv8MLNkaKbWL7r7C3jBXiXtzFR8pSf
+	 j7UcKDzV38fkCnCK+GswlS9yomcg14zXG9dHbAz6N4S00ujDBP5dgeLd0f+ly3c6p/
+	 VZ5siPNXjmpV8yBZd3yi3zVp8Z4vxnwAez+m8T3mT47e8gRnyGZmxVF+7MYYzuoLN9
+	 iR4m+zd1xf2GoyoZu1Q3uhbFtBf8jzW7ccnWz14lj+/IECv2jbf8FUoE1GqYOBGirO
+	 h+71i/2/oDCpQ==
+From: SeongJae Park <sj@kernel.org>
+To: David Hunter <david.hunter.linux@gmail.com>
+Cc: SeongJae Park <sj@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Allison Henderson <allison.henderson@oracle.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-rdma@vger.kernel.org,
+	rds-devel@oss.oracle.com,
+	javier.carrasco.cruz@gmail.com
+Subject: Re: [PATCH v1 1/1] selftests: set executable bit
+Date: Tue, 24 Sep 2024 11:47:18 -0700
+Message-ID: <20240924184719.686727-1-sj@kernel.org>
+X-Mailer: git-send-email 2.46.1
+In-Reply-To: <20240924175500.17212-1-david.hunter.linux@gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, 2024-09-24 at 04:40 -0600, Daniel Xu wrote:
-> This commit allows progs to elide a null check on statically known map
-> lookup keys. In other words, if the verifier can statically prove that
-> the lookup will be in-bounds, allow the prog to drop the null check.
->=20
-> This is useful for two reasons:
->=20
-> 1. Large numbers of nullness checks (especially when they cannot fail)
->    unnecessarily pushes prog towards BPF_COMPLEXITY_LIMIT_JMP_SEQ.
-> 2. It forms a tighter contract between programmer and verifier.
->=20
-> For (1), bpftrace is starting to make heavier use of percpu scratch
-> maps. As a result, for user scripts with large number of unrolled loops,
-> we are starting to hit jump complexity verification errors.  These
-> percpu lookups cannot fail anyways, as we only use static key values.
-> Eliding nullness probably results in less work for verifier as well.
->=20
-> For (2), percpu scratch maps are often used as a larger stack, as the
-> currrent stack is limited to 512 bytes. In these situations, it is
-> desirable for the programmer to express: "this lookup should never fail,
-> and if it does, it means I messed up the code". By omitting the null
-> check, the programmer can "ask" the verifier to double check the logic.
->=20
-> Tests also have to be updated in sync with these changes, as the
-> verifier is more efficient with this change. Notable, iters.c tests had
-> to be changed to use a map type that still requires null checks, as it's
-> exercising verifier tracking logic w.r.t iterators.
->=20
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+Hi David,
+
+On Tue, 24 Sep 2024 13:54:57 -0400 David Hunter <david.hunter.linux@gmail.com> wrote:
+
+> Turn on the executable bit for the following script files. These scripts
+> are set to TEST_PROGS in their respective Makefiles, but currently, when
+> these tests are run, a warning occurs:
+> 
+>   # Warning: <file> is not executable
+
+Thank you so much for finding this issue and sending this nice fix!
+
+> 
+> Signed-off-by: David Hunter <david.hunter.linux@gmail.com>
 > ---
+>  tools/testing/selftests/damon/damon_nr_regions.py                 | 0
+>  tools/testing/selftests/damon/damos_apply_interval.py             | 0
+>  tools/testing/selftests/damon/damos_quota.py                      | 0
+>  tools/testing/selftests/damon/damos_quota_goal.py                 | 0
+>  tools/testing/selftests/damon/damos_tried_regions.py              | 0
+>  tools/testing/selftests/damon/debugfs_target_ids_pid_leak.sh      | 0
+>  .../damon/debugfs_target_ids_read_before_terminate_race.sh        | 0
+>  .../selftests/damon/sysfs_update_schemes_tried_regions_hang.py    | 0
+>  .../damon/sysfs_update_schemes_tried_regions_wss_estimation.py    | 0
+>  tools/testing/selftests/net/rds/test.py                           | 0
+>  10 files changed, 0 insertions(+), 0 deletions(-)
+>  mode change 100644 => 100755 tools/testing/selftests/damon/damon_nr_regions.py
+>  mode change 100644 => 100755 tools/testing/selftests/damon/damos_apply_interval.py
+>  mode change 100644 => 100755 tools/testing/selftests/damon/damos_quota.py
+>  mode change 100644 => 100755 tools/testing/selftests/damon/damos_quota_goal.py
+>  mode change 100644 => 100755 tools/testing/selftests/damon/damos_tried_regions.py
+>  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_target_ids_pid_leak.sh
+>  mode change 100644 => 100755 tools/testing/selftests/damon/debugfs_target_ids_read_before_terminate_race.sh
+>  mode change 100644 => 100755 tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py
+>  mode change 100644 => 100755 tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
+>  mode change 100644 => 100755 tools/testing/selftests/net/rds/test.py
 
-Acked-by: Eduard Zingerman <eddyz87@gmail.com>
+However, a very similar fix has already posted [1] and merged [2] into the
+mainline.  So, apparently there was a trivial race.  I'm looking forward to
+your next patches for DAMON, though!
 
-[...]
+[1] https://lore.kernel.org/20240827030336.7930-4-sj@kernel.org
+[2] https://github.com/torvalds/linux/commit/8c211412c5dffd090eaea5ee033cd729f8e5f873
 
-> +/* Returns constant key value if possible, else -1 */
-> +static long get_constant_map_key(struct bpf_verifier_env *env,
-> +				 struct bpf_reg_state *key)
-> +{
-> +	struct bpf_func_state *state =3D func(env, key);
-> +	struct bpf_reg_state *reg;
-> +	int stack_off;
-> +	int slot;
-> +	int spi;
-> +
-> +	if (key->type !=3D PTR_TO_STACK)
-> +		return -1;
-> +	if (!tnum_is_const(key->var_off))
-> +		return -1;
-> +
-> +	stack_off =3D key->off + key->var_off.value;
-> +	slot =3D -stack_off - 1;
-> +	if (slot < 0)
-> +		/* Stack grew upwards */
-> +		return -1;
 
-Nitpick: I'd also add a test like below:
-
-SEC("socket")
-__failure __msg("invalid indirect access to stack R2 off=3D4096 size=3D4")
-__naked void key_lookup_at_invalid_fp(void)
-{
-	asm volatile ("					\
-	r1 =3D %[map_array] ll;				\
-	r2 =3D r10;					\
-	r2 +=3D 4096;					\
-	call %[bpf_map_lookup_elem];			\
-	r0 =3D *(u64*)(r0 + 0);				\
-	exit;						\
-"	:
-	: __imm(bpf_map_lookup_elem),
-	  __imm_addr(map_array)
-	: __clobber_all);
-}
-
-(double checked with v2 and this test does cause page fault)
+Thanks,
+SJ
 
 [...]
-
 
