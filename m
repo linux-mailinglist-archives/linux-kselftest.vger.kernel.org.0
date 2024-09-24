@@ -1,74 +1,75 @@
-Return-Path: <linux-kselftest+bounces-18298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18299-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83AD298461C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 14:49:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F7D7984621
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 14:49:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B050F1C22909
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 12:49:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD8711F23D30
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 12:49:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B6581A0BD6;
-	Tue, 24 Sep 2024 12:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 509951A76BD;
+	Tue, 24 Sep 2024 12:49:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cZD08kL9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HswAqeJB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D111A270;
-	Tue, 24 Sep 2024 12:49:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1785481B7;
+	Tue, 24 Sep 2024 12:49:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727182157; cv=none; b=VYAgiiXKl5oTrT+yJ4ARbpRANSIjSbZZWobex8MoJ51xIxMsncp+5Ruyn/zsLNLCDE3Ijj0BrbvTmZFYpt1+kU0Xl6i142mt+Mm3WNjSyoxZ8G234JBxAeADSDSBkb7eF/6E5vgrm8NbAOMacEneItS9yMxHER0MONXD1nTDXu0=
+	t=1727182158; cv=none; b=YzTYxFE5Q/mjwC1xtmEIU4BHkdNl+rVlX7pis6Pu3THjwi9IsjklUe0F9Ocs9d1xz0XqrHi5muVjbKxWjWB/0krDQDkDj6S+0GYJWocVCMeMxQud6rX5dwUUD70Fg9oLXsKhlV4LAVoOfHg/KieGF4U0hSaPKmXUU7pHVCHOIas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727182157; c=relaxed/simple;
-	bh=9QGjApg6eWCbeS4kZh0gNjKR95Z8he6c64YgKoxqz6Q=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fsgb+WVN8lv2mb4OB0JmiOJuNiAypDnIntYVXB37VJnNKjbDgEXWas77il7DhWqsWKT2ffmEkGITlNY2MPEW348XJq2c7KjOWGcoG+i++v1fV81MIZj4UvpGBvE0kaR+o6+Fbis+40ID4PGE8A9aAMeuaDU7F8VyhpApU9RTm+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cZD08kL9; arc=none smtp.client-ip=209.85.208.170
+	s=arc-20240116; t=1727182158; c=relaxed/simple;
+	bh=VAzLbhePXQTUa0RgQqWgt2vOIC7KZp5Sq9bUPalwf7E=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=NJlJLlS5379zlR/NaNWwY8F51E1EA2G6vhScXqVQVigfUUQTKEKxWsNgc6PnV5HT+ryvywtJ3mdn0hGjrf35bbNSwC1OBatteGlVhhdnyVV2N5AUCbIQedVTWxHplNNOeUJ8Rd1Z/NSRTBs3wlBAIcBD7P0MCZ5NZ6Se1HwiVyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HswAqeJB; arc=none smtp.client-ip=209.85.208.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2f66423686bso48431001fa.3;
-        Tue, 24 Sep 2024 05:49:15 -0700 (PDT)
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5c5bca59416so3239381a12.1;
+        Tue, 24 Sep 2024 05:49:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727182154; x=1727786954; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XkfcF9Kbwvbpcpz52USf47BwMvRETyUhgdMgF2eZ6p0=;
-        b=cZD08kL9ny0LnNZexVolnaRE+q/IdWWpAnUZ8NeuLp0dtvVqpwaRR7NbXiB9XKF45M
-         Px9Ez42GitMdbztHNHbnM1mZUr6zXFxFrwzK/zKz/9GGTv4YWqwZCAzN1KhP9VUCIH4o
-         ovsv7jAKQgnWp+TAfiYycBkwoFtAm7nF2zF8PEifdSW+A2ko5Sw9JGRAnrk/vSq8Kgc2
-         GuqZHLnYPkCE90zEaRz23MMsrbTnnnsRFpj3HnOrRRYeuRvnyUkt4K7QoL2GqDMmK7Bp
-         fsVTTGEyT78tbwX/FfW9CxSCJXED9qkD9IOyoevP+8vdYcfjV5lAz1osAZMSYwXR11Ww
-         klkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727182154; x=1727786954;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1727182155; x=1727786955; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=XkfcF9Kbwvbpcpz52USf47BwMvRETyUhgdMgF2eZ6p0=;
-        b=wikul/qDOwDSRNPi5aMiCkDlo2ydzyIatnNLs0lvoShpIOiFUhIhG6ogfLQgwiljuW
-         PDMPz5HEFmDyoVpN1Pa0sHaV8AxeJmhkLqT4smw6Hcpae3T27s8Nz/C5MjJlvYGvVgqQ
-         8m0EWY2QjaXRCTLjjM6ritCYovK8bJiT++aK2qZW51KidefT8x8A559WrnihPRusfIaP
-         boKuKjy1FVTCGo/3VTZQ1gr5AtakzSdBW+4Rr7pm4lk07vJt3PHYkjP9x7UlMu9B0nLt
-         dDHNDID0l2mO3Wjc7i1QO/DvjkhNLNYLNdkf6QaJNre2Nr0Q00KP7JRhFw/iE0J0Xgov
-         Xp+A==
-X-Forwarded-Encrypted: i=1; AJvYcCUBpNWwCGhHXQ/ENhQQLBlF8rn7gUQaa+T4LU8tg1lWIf9sE1MqwZ3AmNx43PmEYmHlKGiAn+Iu@vger.kernel.org, AJvYcCW0De64KdSL+SbMA8iyAa9Vk+Y0nJcu9f4nOevUwSyOri0oaItbPGVwutZsvhaeioVWJHmZcfpHTuKVt1c=@vger.kernel.org, AJvYcCWs7Yr6X8Ndg+CubkixPanX2qAPwOmIMjR8gTNALV7mbmRbEKaReyBjkjesbByURMfqDV1qsWCmGDP9nw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIVwNtzDVC6/CPMs6jZBhN55oOQ+222dZqFdt+XChHWryUNQh0
-	1UrQO1QvC7Ri6HQov7fK8VYqenKqoj2fhN4LOoU/FRnftMpXyQF7
-X-Google-Smtp-Source: AGHT+IEeaoaZNwgYWsmOF94yInjDZ6PXr09ERcAY0a8ekQMv/z/m1gYX13niyCD330MjkSiAKsNtag==
-X-Received: by 2002:a2e:a9a8:0:b0:2f7:7d69:cb55 with SMTP id 38308e7fff4ca-2f7cc2bcffdmr73238161fa.0.1727182153259;
-        Tue, 24 Sep 2024 05:49:13 -0700 (PDT)
+        bh=My/o3x2ZINOHGQf4kyCetcXoEUn+zJEi0VQbO3a2Fzs=;
+        b=HswAqeJBIJn5yiVOr9ZZH4bqKx02TKZHn23XVdO0voGiZANqkQKP2xMtA3d4AkZEb3
+         d4+GRNc8JJdGTWaMPyFaz8J0jD/6RZMumnb3e6FySkNgdy4O/mQmlfxsujrPWGf4vyAn
+         B8yAXxtDUPGppP+u6D7VKaW4DaZUU1oDWq875z+TYNzb8yP4RFrUmXRb9OWmBENs/9Pf
+         5Wbba4Zim21TDUd+YOBW4XairDNJ+T6Y4upeYmZYXCCY55Mbm4dPUKEVrHfD1me42jgA
+         URoFvA3Fos4ZLwaLxcrRBYbNRzHXeJ97wB9Ov8ofIDZhHUqZNaPuZg+8y+YImWLChAzD
+         l9FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727182155; x=1727786955;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=My/o3x2ZINOHGQf4kyCetcXoEUn+zJEi0VQbO3a2Fzs=;
+        b=a/uWDG+wDQ0EDyZ4RQ6qzYyhDLRcgGxxLPL8aeeM9mM8ZPBhfliMbjk6HUI8KpbnIb
+         e6rUMzJ/AjTXjpzN3iLd3RjRIns0n5fH3Mi+A+7GgbA+MqKIZIjB/sUDAGROI9w5xoS8
+         EvjVQKvWS3xm/uX51orhZed5nA+tWOpnuu1+CCqI56dptl/AuESnUQCMW+uyFflj8Iwt
+         DQCzb3XxuGvLeXnHLYKVJkqzjaQGa0SDmi5kgz6Qb9gtepqp+WaFrYRxyiHr0hsYWUmn
+         KwAeL9Cnj8b/aVBIH0DGSwNHYuqO6i/nXipXPgSY/L+t+Wkoav5k6Ex4y44RXL9Aj7GA
+         y/kQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU1V71LUoNomkTC0aWpFB394lDdtV+u7xNQCVrI/s3BNv1d+6oySFOUeCN/ptfM0YpxeE1yKrCZFIA0miU=@vger.kernel.org, AJvYcCUy/Q5PbUiEqvohvE2f4du4XWn0+pvs/lJCFBSFAVFf6oMcmF5EB+t+MjVlu/pbpCOCZ5f+WWmSPa0IjQ==@vger.kernel.org, AJvYcCXEeTeOMEVh5/F916gXC2kxo+R3dK0uYOuTW2YeCL10byzNeDvQgL1t7mfp/0U1tuRFGPD/dPAU@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkDEe7PC+6yHg4AUMiWwsYOzT8gVCWyNtBjSP5PjA+iN5c7oAc
+	O/DaJWSuOud0JGHTdn4cQOK9UxZCkt6ibUvTGQ4Bm6DCFgk9Y1tH
+X-Google-Smtp-Source: AGHT+IGbzfhIVwxpNRqAdKVpWJx3mcKdQ9M5j9hwogScJ7XBf8i2j19IloZ7SDrkMCQ1VKnGcbzkow==
+X-Received: by 2002:a05:6402:274a:b0:5c5:c5fb:57d5 with SMTP id 4fb4d7f45d1cf-5c5c5fb5846mr3475751a12.33.1727182154700;
+        Tue, 24 Sep 2024 05:49:14 -0700 (PDT)
 Received: from [127.0.1.1] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c5cf4c500dsm704932a12.61.2024.09.24.05.49.12
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5c5cf4c500dsm704932a12.61.2024.09.24.05.49.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Sep 2024 05:49:12 -0700 (PDT)
+        Tue, 24 Sep 2024 05:49:14 -0700 (PDT)
 From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Subject: [PATCH 0/4] selftsets: gitignore and clean target file additions
-Date: Tue, 24 Sep 2024 14:49:06 +0200
-Message-Id: <20240924-selftests-gitignore-v1-0-9755ac883388@gmail.com>
+Date: Tue, 24 Sep 2024 14:49:07 +0200
+Subject: [PATCH 1/4] selftests: add unshare_test and msg_oob to gitignore
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,9 +78,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEK18mYC/x3MSQqAMBAF0atIrw2YQUGvIi4cvrFBoqSDCOLdD
- S7fouohQWQIdcVDERcLHyFDlwXN2xg8FC/ZZCrjqtY4JdjXBEmiPCf24YhQcFpbi2aup4VyeUa
- sfP/XfnjfD/WAMqFlAAAA
+Message-Id: <20240924-selftests-gitignore-v1-1-9755ac883388@gmail.com>
+References: <20240924-selftests-gitignore-v1-0-9755ac883388@gmail.com>
+In-Reply-To: <20240924-selftests-gitignore-v1-0-9755ac883388@gmail.com>
 To: Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
  Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
  Paolo Abeni <pabeni@redhat.com>, 
@@ -90,38 +91,44 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  rds-devel@oss.oracle.com, linux-mm@kvack.org, 
  Javier Carrasco <javier.carrasco.cruz@gmail.com>
 X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1727182152; l=991;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1727182152; l=950;
  i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=9QGjApg6eWCbeS4kZh0gNjKR95Z8he6c64YgKoxqz6Q=;
- b=gpZqwmT3dLPwdDO9Z3vf/zoFskB5jdC87a0gj0m8DOCySuxELJwoiDlIQXBJId+JX7oHFh9OX
- kN+oEPrXp1BB6PJM67yRSs66f1Hw4Mp8wxHpA+CeYRZj7RSsn5JAtyy
+ bh=VAzLbhePXQTUa0RgQqWgt2vOIC7KZp5Sq9bUPalwf7E=;
+ b=xvXLVdISnFCMi59JGXVRzSF3prM3iNEQxB7oXBjdoLHN/H9U5FoZR/hioZ5OlqOfitP/HoqK6
+ R8GDASHLXq0A8+6cF/HQ0MteV/eqwZQBqSX15Dh1Mb03SVnDL5fGZZV
 X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
  pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-Trivial patches to update the gitignore files unders selftests, and a
-little addition to EXTRA_CLEAN under net/rds to account for the
-automatically generated include.sh.
+These executables are missing from their corresponding gitignore files.
+Add them to the lists.
 
 Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 ---
-Javier Carrasco (4):
-      selftests: add unshare_test and msg_oob to gitignore
-      selftests: rds: add include.sh to EXTRA_CLEAN
-      selftests: rds: add gitignore file for include.sh
-      selftests: exec: update gitignore for load_address
+ tools/testing/selftests/core/.gitignore | 1 +
+ tools/testing/selftests/net/.gitignore  | 1 +
+ 2 files changed, 2 insertions(+)
 
- tools/testing/selftests/core/.gitignore    | 1 +
- tools/testing/selftests/exec/.gitignore    | 2 +-
- tools/testing/selftests/net/.gitignore     | 1 +
- tools/testing/selftests/net/rds/.gitignore | 1 +
- tools/testing/selftests/net/rds/Makefile   | 2 +-
- 5 files changed, 5 insertions(+), 2 deletions(-)
----
-base-commit: 4d0326b60bb753627437fff0f76bf1525bcda422
-change-id: 20240924-selftests-gitignore-e41133e6c5bd
+diff --git a/tools/testing/selftests/core/.gitignore b/tools/testing/selftests/core/.gitignore
+index 6e6712ce5817..7999361992aa 100644
+--- a/tools/testing/selftests/core/.gitignore
++++ b/tools/testing/selftests/core/.gitignore
+@@ -1 +1,2 @@
+ close_range_test
++unshare_test
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index 1c04c780db66..9dcdff533414 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -17,6 +17,7 @@ ipv6_flowlabel
+ ipv6_flowlabel_mgr
+ log.txt
+ msg_zerocopy
++msg_oob
+ ncdevmem
+ nettest
+ psock_fanout
 
-Best regards,
 -- 
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
+2.43.0
 
 
