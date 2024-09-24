@@ -1,131 +1,123 @@
-Return-Path: <linux-kselftest+bounces-18329-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18330-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD4D7984DFA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 00:41:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A19E984E9E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 01:06:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B2C828551A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 22:41:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 19DDFB262A6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 23:05:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F14DF16DEB3;
-	Tue, 24 Sep 2024 22:41:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79C7518593F;
+	Tue, 24 Sep 2024 23:01:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SLqyPgRt"
+	dkim=pass (2048-bit key) header.d=lkcamp.dev header.i=@lkcamp.dev header.b="ol3TPljd";
+	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="RH2AzJEL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-171.mta1.migadu.com (out-171.mta1.migadu.com [95.215.58.171])
+Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BE513D8A3
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2024 22:41:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B305183CCD
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2024 23:01:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727217668; cv=none; b=aWlnneN8XcauQ6bx0vIUpWMf+bB8B7BFjpPWpmVOeT15mpQhLdY2beNht+rqABaoDKp9zPjXBsK0vYCIAzr5U1YFjRvvGYWGpYc6VTCgYUuGuFAgiO4wccK4dsM0kiKs/58pZ5W+3LhcJmw7d1I5CCNCqH+q8Eqk1Obw8RHg3mo=
+	t=1727218864; cv=none; b=iKfWe1k4IJvlmFfwOP4EfvexiKy6/Acmys5tS4WxQmo9VODsJukj7JAzD779OFlaiKXyRuZS1moMc/xEvxpLrFLz72TXc0hiKo183VsM/CunuJstpIetfIUbzsIdlofSQ4+VdP8zUfDF2gnXk5N2vshVxrMX5tqx6beI4W7Q6ng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727217668; c=relaxed/simple;
-	bh=NhMixv5kl+9QH6xYXoXAIcF/J3IXlleAgXvIX0252z8=;
+	s=arc-20240116; t=1727218864; c=relaxed/simple;
+	bh=2bZ2QjhUxtrcmCd1aeLBq1AehNwWii0833L9Y9DH4/A=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oS2bx264Mq+xiffIYjtKNoRbsKLmqsxv+2hQL/Esy2Nht2O90XXiT6mBUzS1Jz0eV9WS/yrsxmrCkNtUIBzA+GZKmpDJKpLcIQw1C74hWRUZS77wA5HhpwKqsu66Km/FzLrjTyNR1PBWknpwmNNR/lWHOGlvUy8CDQXG4b8wkk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SLqyPgRt; arc=none smtp.client-ip=95.215.58.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <c7c16253-eff3-4d34-80c3-884790ecfdb4@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1727217663;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=D/3ql7hSu6hfJ6OUqVAGGrToVQdofg7CuYaFZlYBk80=;
-	b=SLqyPgRtLkk/M3T3thMFA4Fk9htRI6ziWWflbkjrvNW+jLBX6iVw63Kg2ZVUh+c6tbkWgP
-	GVAB6wHaVDQijoBgFZclOYkd22LPH2GX6TUK7HEr9HQm3yldyj9S/BbIczOBrPWqRi4188
-	1IgMXcJqtnKIYjKEqhuEFpd70PjRN3k=
-Date: Tue, 24 Sep 2024 15:40:53 -0700
+	 In-Reply-To:Content-Type; b=pF5JmM9X53RazF+Ynl24npQq9LOBIuFrhxLwEFplH5ht0CJToNxLWgdgaFSb8iZyaMuwqu3Y18bflgMO6WHMamkiwiEIzNSIuRWxzK2sMhFDor6c8ZBZgyyawnMg2mYFV7W+cv3Cvggr+UwyCKKPu3wk1rKI7Zgi3wEy0pzNU6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lkcamp.dev; spf=pass smtp.mailfrom=lkcamp.dev; dkim=pass (2048-bit key) header.d=lkcamp.dev header.i=@lkcamp.dev header.b=ol3TPljd; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=RH2AzJEL; arc=none smtp.client-ip=34.202.193.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lkcamp.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lkcamp.dev
+DKIM-Signature: a=rsa-sha256; b=ol3TPljdANgRxYCl1bOK58yVha0axzwNJvjTt9HNn9MpLlLEmYhES44en+QhQX54l6t+IgwYZfenDqCsiUn0dECQQxY9HAQwKStH+MlBeqrDfnX6g9Wdm6241dA7EIMIeBxUCziBeF7cvTCeO37vL/b4X8GAB0bP6BUXIvCcmh5AZdm88ALAxUXiTaF98oCbjbaRJe7vnrrK2gIAtt25FADoz+x11f+R4txHRKjpdioCT/nx57AaEoLn1BItIuXuSuURMOW+q3Qb/Qn0iu9F2LeJjFws2HFvkzFBpmoj41ftkbHVXdYmSNC51ROgAY+z0pe4Svd32FvC2MOEKOTppw==; s=purelymail1; d=lkcamp.dev; v=1; bh=2bZ2QjhUxtrcmCd1aeLBq1AehNwWii0833L9Y9DH4/A=; h=Received:Date:Subject:To:From;
+DKIM-Signature: a=rsa-sha256; b=RH2AzJELkw7bEHbwbJp/mkojFjcLtwYuK7fegZT6ybXDtHfwakRDi5zDIW6m4MQ97IcSp46RlvPU5Ezmfh0PcYr2E4Aqqz5VXsSRywkhJTvbWwKbY6PwHD4joByEqP99KbnnRsx1hHng/lezBXLiogkdTe7W0R2SiA8HlnZXyPF4N1V28/4hpd8hGOiV4mQHEd6iay82GCQ0vYWgTFrECUHtyOxVX5r9++JYg8e8Pf0/QvDjuYvPtEMVK3uUhWR5oT6YjyPj5SXqsKS7zxqD/18rPTCAMe7m7/rFVe6Edaj3YSBNuQCPedT3dvnbkE13oL+4H5cZULCboU3JejNLqg==; s=purelymail1; d=purelymail.com; v=1; bh=2bZ2QjhUxtrcmCd1aeLBq1AehNwWii0833L9Y9DH4/A=; h=Feedback-ID:Received:Date:Subject:To:From;
+Feedback-ID: 40580:7130:null:purelymail
+X-Pm-Original-To: linux-kselftest@vger.kernel.org
+Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 2145792936;
+          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
+          Tue, 24 Sep 2024 23:00:30 +0000 (UTC)
+Message-ID: <6d3025ed-e00d-4f8a-bab7-256cf78774af@lkcamp.dev>
+Date: Tue, 24 Sep 2024 20:00:09 -0300
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v1] selftests/bpf:Enhance bpf ability to detect
- ksym read error by libcap
-To: Lin Yikai <yikai.lin@vivo.com>
-Cc: bpf@vger.kernel.org, opensource.kernel@vivo.com,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <ndesaulniers@google.com>, Bill Wendling
- <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20240914092426.431066-1-yikai.lin@vivo.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/1] Add KUnit tests for lib/crc16.c
+To: =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@riseup.net>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, ~lkcamp/patches@lists.sr.ht,
+ Rae Moar <rmoar@google.com>, David Gow <davidgow@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20240922232643.535329-1-vpeixoto@lkcamp.dev>
+ <8291c6eb-750a-4ab2-8904-65d723d034dd@riseup.net>
+From: Vinicius Peixoto <vpeixoto@lkcamp.dev>
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <20240914092426.431066-1-yikai.lin@vivo.com>
+In-Reply-To: <8291c6eb-750a-4ab2-8904-65d723d034dd@riseup.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
+X-MIME-Autoconverted: from 8bit to quoted-printable by Purelymail
 
-On 9/14/24 11:24 AM, Lin Yikai wrote:
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 04716a5e43f1..369c5ad8fc4a 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -183,7 +183,7 @@ NON_CHECK_FEAT_TARGETS := clean docs-clean
->   CHECK_FEAT := $(filter-out $(NON_CHECK_FEAT_TARGETS),$(or $(MAKECMDGOALS), "none"))
->   ifneq ($(CHECK_FEAT),)
->   FEATURE_USER := .selftests
-> -FEATURE_TESTS := llvm
-> +FEATURE_TESTS := llvm libcap
->   FEATURE_DISPLAY := $(FEATURE_TESTS)
->   
->   # Makefile.feature expects OUTPUT to end with a slash
-> @@ -208,6 +208,11 @@ ifeq ($(feature-llvm),1)
->     LLVM_LDFLAGS += $(shell $(LLVM_CONFIG) --ldflags)
->   endif
->   
-> +ifeq ($(feature-libcap), 1)
-> +  CFLAGS += -DHAVE_LIBCAP_SUPPORT
-> +  LDLIBS += -lcap
-> +endif
-> +
+Hi Andre=CC=81,
 
-[ ... ]
+On 9/24/24 6:33 PM, Andr=C3=A9 Almeida wrote:
+> Hey!
+>=20
+> On 9/23/24 01:26, Vinicius Peixoto wrote:
+>> Hi all,
+>>
+>> This patch was developed during a hackathon organized by LKCAMP [1],
+>> with the objective of writing KUnit tests, both to introduce people to
+>> the kernel development process and to learn about different subsystems
+>> (with the positive side effect of improving the kernel test coverage, of
+>> course).
+>>
+>> We noticed there were tests for CRC32 in lib/crc32test.c and thought it
+>> would be nice to have something similar for CRC16, since it seems to be
+>> widely used in network drivers (as well as in some ext4 code).
+>>
+>> Although this patch turned out quite big, most of the LOCs come from
+>> tables containing randomly-generated test data that we use to validate
+>> the kernel's implementation of CRC-16.
+> Can you share how you created the tables? Given that is impossible to=20
+> review the table itself, at least people will be able to see how they=20
+> got created at least.
 
-> @@ -31,6 +35,55 @@ struct ksyms {
->   static struct ksyms *ksyms;
->   static pthread_mutex_t ksyms_mutex = PTHREAD_MUTEX_INITIALIZER;
->   
-> +#ifdef HAVE_LIBCAP_SUPPORT
-> +#include <sys/capability.h>
-> +static bool bpf_cap__capable(cap_value_t cap)
-> +{
-> +	cap_flag_value_t val;
-> +	cap_t caps = cap_get_proc();
-> +
-> +	if (!caps)
-> +		return false;
-> +
-> +	if (cap_get_flag(caps, cap, CAP_EFFECTIVE, &val) != 0)
+Yes, of course, that was an oversight on my part. I'll make sure to add=20
+a more detailed explanation in the cover letter/commit message for the=20
+next revisions. Thanks for the suggestion!
 
-Instead of adding new dependency on libcap, please check if capget() can 
-directly be used. Take a look at tools/testing/selftests/bpf/cap_helpers.c.
+This test follows lib/crc32test.c very closely; the data table is filled=20
+with 4096 random bytes, and the idea is to calculate several checksums=20
+within it by randomly choosing a i) start offset within the data buffer,=20
+ii) number of bytes after the start offset and iii) input CRC.
 
-pw-bot: cr
+The checksums for the randomly-generated test cases were calculated=20
+using a reference implementation [1] and this test compares them against=20
+the values yielded by the kernel's implementation.
 
-> +		val = CAP_CLEAR;
-> +
-> +	if (cap_free(caps) != 0)
-> +		return false;
-> +
-> +	return val == CAP_SET;
-> +}
+Thanks,
+Vinicius
+
+[1] https://github.com/lammertb/libcrc/blob/master/src/crc16.c
+
+>> We would really appreciate any feedback/suggestions on how to improve
+>> this. Thanks! :-)
+>>
+>> Vinicius Peixoto (1):
+>> =C2=A0=C2=A0 lib/crc16_kunit.c: add KUnit tests for crc16
+>>
+>> =C2=A0 lib/Kconfig.debug |=C2=A0=C2=A0 8 +
+>> =C2=A0 lib/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
+>> =C2=A0 lib/crc16_kunit.c | 715 +++++++++++++++++++++++++++++++++++++++++=
++++++
+>> =C2=A0 3 files changed, 724 insertions(+)
+>> =C2=A0 create mode 100644 lib/crc16_kunit.c
+>>
+
 
