@@ -1,51 +1,52 @@
-Return-Path: <linux-kselftest+bounces-18310-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18314-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0F2D984919
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 18:07:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CF33984929
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 18:08:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B74B1C21D88
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 16:07:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D67C41F24420
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 16:08:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 103301ABEDF;
-	Tue, 24 Sep 2024 16:05:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7EC31AE87D;
+	Tue, 24 Sep 2024 16:05:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="g3XaFWO1"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="V/N5Rg3P"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20F5D1AAE39;
-	Tue, 24 Sep 2024 16:05:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2AEC1AD9F2;
+	Tue, 24 Sep 2024 16:05:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727193934; cv=none; b=afqVl813ySgpgWrGFbPQ6zaVY2yGYixauL5pvQnGy+rzj797S+NQhNINH/5sTQotkF+Q9nIuK/+5npBYXLgxmd1pATqeu1lVfm+jG1DrA6kU3toY8ZBjvD1d3+BGYNw4Hog36TNgZ8/wlJ908jTliTH4610F6yjr4iFyBd/BWpI=
+	t=1727193937; cv=none; b=XewBYo07E9zLH1FkoKjkvyd9/2Qm2zEZz93rZoNNiGYR4a674pacnqrxZrMUFO2ZtBekqbbJ3Glf925AyCOxEVblAyAIJk+DTLxpLhcWOvsmveydeIuDpENz8VlYaQobhDR0WUv/NQGiqTx7lio3sQSGfTqD3eRG3hCPcq77iyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727193934; c=relaxed/simple;
-	bh=DLpACTWgg6UtjxsumUlE13iTjn9+HG31gwbzCwRyKA0=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=JSGdtyrD3unDD4+y+P80aoWbgHH2HGLTvPUC0nhZ7HdwM8M2Slsyvns+VDLe/Nzw6smpVku4tJQHa62dbw+PUWoOsnhOlk1n5ZIQkPg3UJJjspLvlnzmy86Kzn/f7i2aqnx0HXJwWvCLFdopX6rrY+pCW4YGMFzNXOcLdedtpW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=g3XaFWO1; arc=none smtp.client-ip=90.155.50.34
+	s=arc-20240116; t=1727193937; c=relaxed/simple;
+	bh=yhBC47VxMFMURrLgNn2H2pCVde/A1Z2RUJyvVL0nEaU=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=tXOsxDGvk62u+CFAN0cOBWWsKmsTOgq2lfmGyv0NRZpYZt+a8Gc250GsvJhBM+P1MhuYwwtqDygtu6RSySH5f6uv8VGH++aVz6K7DsDT0QoCINi5QGnhptWrDlqrFMU0zzAKdKyu7tSs1XnMkTJzINsl1GyjiRr9TJ49P0TQrV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=desiato.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=V/N5Rg3P; arc=none smtp.client-ip=90.155.92.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=desiato.srs.infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=Sender:Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:Cc:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=gpbsniFgtOHZgJp8y3v9VSnosB7+jAV6rr5l+o89n6M=; b=g3XaFWO1202OH9wg8+ui4k8BIq
-	89Dv4D35YFZdKmNtpcLAnPnyrwiJP3Bk/fe/WDOqIc0R6r9eMwvwIfvA58vUbCchjXD93242mOhic
-	ugZ1O+TKxyFgFTK7lY8G7r6tbLD/VpgeAbFHEH89FDn0vmPP4h/kgeooTWbvd+QHCjiRJbRANdrW/
-	oaOzLHqfvFP9dkzAjAlP20hVHc3g8hZWSPzuXd/LMrdK3zRJ8j+4pS2wW7vCLS9vY/nEzhR3mVvrP
-	jOmt8gC7Wh8Eau7tACXrWLuHwUxnWhERpKDa48bxFvhBJKFXKaphLfuN6N/HkswkSIZLKTmqwlAqA
-	y1hE4yug==;
+	d=infradead.org; s=desiato.20200630; h=Sender:Content-Transfer-Encoding:
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:To:From:Reply-To:
+	Cc:Content-Type:Content-ID:Content-Description;
+	bh=VDRAzL7e2vQUFFjq+37YNHnN529VC0jgeD6HXShR8jg=; b=V/N5Rg3PY/NzhoEk9klBXJqfc4
+	6hvcEPGq122IpCSvqwrDL25pJi1So6CanRKOIKAu/oBem+IMT86aWBwneJPb7veLTWnPl5eQITTT2
+	srshfka80Tvok7NVQQoQmu4KyCkeDz2Khoms0181ky7YeVff0Z3SBkdTq/4W2h8qulGzsUxSa1iH1
+	+NvebaolXSyneOlRFH4Otxpqs5E3ooXK4VLvZqaB33YWqzaygW0GFVu/Gm0xPMS6f6MPqUteV1J1U
+	zcmeUuRcJXqCqN1wG33fs6hpOjKbNAmp48bIj6tXfsFUD9jdY/E/vNFB6UNsviTQMlwDHHJSssQHt
+	Aw7TA27Q==;
 Received: from [2001:8b0:10b:1::ebe] (helo=i7.infradead.org)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1st82K-00000001vkN-3jSP;
-	Tue, 24 Sep 2024 16:05:13 +0000
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1st82M-00000001rIY-30sg;
+	Tue, 24 Sep 2024 16:05:15 +0000
 Received: from dwoodhou by i7.infradead.org with local (Exim 4.97.1 #2 (Red Hat Linux))
-	id 1st82K-0000000HMiM-1Pnb;
+	id 1st82K-0000000HMiP-1bv5;
 	Tue, 24 Sep 2024 17:05:12 +0100
 From: David Woodhouse <dwmw2@infradead.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
@@ -71,10 +72,12 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	kvmarm@lists.linux.dev,
 	linux-pm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v4 1/6] firmware/psci: Add definitions for PSCI v1.3 specification
-Date: Tue, 24 Sep 2024 17:05:07 +0100
-Message-ID: <20240924160512.4138879-1-dwmw2@infradead.org>
+Subject: [PATCH v4 2/6] KVM: arm64: Add PSCI v1.3 SYSTEM_OFF2 function for hibernation
+Date: Tue, 24 Sep 2024 17:05:08 +0100
+Message-ID: <20240924160512.4138879-2-dwmw2@infradead.org>
 X-Mailer: git-send-email 2.44.0
+In-Reply-To: <20240924160512.4138879-1-dwmw2@infradead.org>
+References: <20240924160512.4138879-1-dwmw2@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,71 +86,140 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: David Woodhouse <dwmw2@infradead.org>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by desiato.infradead.org. See http://www.infradead.org/rpr.html
 
 From: David Woodhouse <dwmw@amazon.co.uk>
 
-The v1.3 PSCI spec (https://developer.arm.com/documentation/den0022) adds
-SYSTEM_OFF2, CLEAN_INV_MEMREGION and CLEAN_INV_MEMREGION_ATTRIBUTES
-functions. Add definitions for them and their parameters, along with the
-new TIMEOUT, RATE_LIMITED and BUSY error values.
+The PSCI v1.3 specification (alpha) adds support for a SYSTEM_OFF2 function
+which is analogous to ACPI S4 state. This will allow hosting environments
+to determine that a guest is hibernated rather than just powered off, and
+ensure that they preserve the virtual environment appropriately to allow
+the guest to resume safely (or bump the hardware_signature in the FACS to
+trigger a clean reboot instead).
+
+The beta version will be changed to say that PSCI_FEATURES returns a bit
+mask of the supported hibernate types, which is implemented here.
+
+Although this new feature is inflicted unconditionally on unexpecting
+userspace, it ought to be mostly OK because it still results in the same
+KVM_SYSTEM_EVENT_SHUTDOWN event, just with a new flag which hopefully
+won't cause userspace to get unhappy.
 
 Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
- include/uapi/linux/psci.h | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ Documentation/virt/kvm/api.rst    | 11 +++++++++
+ arch/arm64/include/uapi/asm/kvm.h |  6 +++++
+ arch/arm64/kvm/psci.c             | 37 +++++++++++++++++++++++++++++++
+ 3 files changed, 54 insertions(+)
 
-diff --git a/include/uapi/linux/psci.h b/include/uapi/linux/psci.h
-index 42a40ad3fb62..082ed689fdaf 100644
---- a/include/uapi/linux/psci.h
-+++ b/include/uapi/linux/psci.h
-@@ -59,6 +59,8 @@
- #define PSCI_1_1_FN_SYSTEM_RESET2		PSCI_0_2_FN(18)
- #define PSCI_1_1_FN_MEM_PROTECT			PSCI_0_2_FN(19)
- #define PSCI_1_1_FN_MEM_PROTECT_CHECK_RANGE	PSCI_0_2_FN(20)
-+#define PSCI_1_3_FN_SYSTEM_OFF2			PSCI_0_2_FN(21)
-+#define PSCI_1_3_FN_CLEAN_INV_MEMREGION_ATTRIBUTES PSCI_0_2_FN(23)
+diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+index b3be87489108..2918898b7047 100644
+--- a/Documentation/virt/kvm/api.rst
++++ b/Documentation/virt/kvm/api.rst
+@@ -6840,6 +6840,10 @@ the first `ndata` items (possibly zero) of the data array are valid.
+    the guest issued a SYSTEM_RESET2 call according to v1.1 of the PSCI
+    specification.
  
- #define PSCI_1_0_FN64_CPU_DEFAULT_SUSPEND	PSCI_0_2_FN64(12)
- #define PSCI_1_0_FN64_NODE_HW_STATE		PSCI_0_2_FN64(13)
-@@ -68,6 +70,8 @@
- 
- #define PSCI_1_1_FN64_SYSTEM_RESET2		PSCI_0_2_FN64(18)
- #define PSCI_1_1_FN64_MEM_PROTECT_CHECK_RANGE	PSCI_0_2_FN64(20)
-+#define PSCI_1_3_FN64_SYSTEM_OFF2		PSCI_0_2_FN64(21)
-+#define PSCI_1_3_FN64_CLEAN_INV_MEMREGION	PSCI_0_2_FN64(22)
- 
- /* PSCI v0.2 power state encoding for CPU_SUSPEND function */
- #define PSCI_0_2_POWER_STATE_ID_MASK		0xffff
-@@ -100,6 +104,19 @@
- #define PSCI_1_1_RESET_TYPE_SYSTEM_WARM_RESET	0
- #define PSCI_1_1_RESET_TYPE_VENDOR_START	0x80000000U
- 
-+/* PSCI v1.3 hibernate type for SYSTEM_OFF2 */
-+#define PSCI_1_3_HIBERNATE_TYPE_OFF		0
++ - for arm64, data[0] is set to KVM_SYSTEM_EVENT_SHUTDOWN_FLAG_PSCI_OFF2
++   if the guest issued a SYSTEM_OFF2 call according to v1.3 of the PSCI
++   specification.
 +
-+/* PSCI v1.3 flags for CLEAN_INV_MEMREGION */
-+#define PSCI_1_3_CLEAN_INV_MEMREGION_FLAG_DRY_RUN	BIT(0)
-+
-+/* PSCI v1.3 attributes for CLEAN_INV_MEMREGION_ATTRIBUTES */
-+#define PSCI_1_3_CLEAN_INV_MEMREGION_ATTR_OP_TYPE	0
-+#define PSCI_1_3_CLEAN_INV_MEMREGION_ATTR_CPU_RDVZ	1
-+#define PSCI_1_3_CLEAN_INV_MEMREGION_ATTR_LATENCY	2
-+#define PSCI_1_3_CLEAN_INV_MEMREGION_ATTR_RATE_LIMIT	3
-+#define PSCI_1_3_CLEAN_INV_MEMREGION_ATTR_TIMEOUT	4
-+
- /* PSCI version decoding (independent of PSCI version) */
- #define PSCI_VERSION_MAJOR_SHIFT		16
- #define PSCI_VERSION_MINOR_MASK			\
-@@ -133,5 +150,8 @@
- #define PSCI_RET_NOT_PRESENT			-7
- #define PSCI_RET_DISABLED			-8
- #define PSCI_RET_INVALID_ADDRESS		-9
-+#define PSCI_RET_TIMEOUT			-10
-+#define PSCI_RET_RATE_LIMITED			-11
-+#define PSCI_RET_BUSY				-12
+  - for RISC-V, data[0] is set to the value of the second argument of the
+    ``sbi_system_reset`` call.
  
- #endif /* _UAPI_LINUX_PSCI_H */
+@@ -6873,6 +6877,13 @@ either:
+  - Deny the guest request to suspend the VM. See ARM DEN0022D.b 5.19.2
+    "Caller responsibilities" for possible return values.
+ 
++Hibernation using the PSCI SYSTEM_OFF2 call is enabled when PSCI v1.3
++is enabled. If a guest invokes the PSCI SYSTEM_OFF2 function, KVM will
++exit to userspace with the KVM_SYSTEM_EVENT_SHUTDOWN event type and with
++data[0] set to KVM_SYSTEM_EVENT_SHUTDOWN_FLAG_PSCI_OFF2. The only
++supported hibernate type for the SYSTEM_OFF2 function is HIBERNATE_OFF
++0x0).
++
+ ::
+ 
+ 		/* KVM_EXIT_IOAPIC_EOI */
+diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+index 964df31da975..66736ff04011 100644
+--- a/arch/arm64/include/uapi/asm/kvm.h
++++ b/arch/arm64/include/uapi/asm/kvm.h
+@@ -484,6 +484,12 @@ enum {
+  */
+ #define KVM_SYSTEM_EVENT_RESET_FLAG_PSCI_RESET2	(1ULL << 0)
+ 
++/*
++ * Shutdown caused by a PSCI v1.3 SYSTEM_OFF2 call.
++ * Valid only when the system event has a type of KVM_SYSTEM_EVENT_SHUTDOWN.
++ */
++#define KVM_SYSTEM_EVENT_SHUTDOWN_FLAG_PSCI_OFF2	(1ULL << 0)
++
+ /* run->fail_entry.hardware_entry_failure_reason codes. */
+ #define KVM_EXIT_FAIL_ENTRY_CPU_UNSUPPORTED	(1ULL << 0)
+ 
+diff --git a/arch/arm64/kvm/psci.c b/arch/arm64/kvm/psci.c
+index 1f69b667332b..fd0f82464f7d 100644
+--- a/arch/arm64/kvm/psci.c
++++ b/arch/arm64/kvm/psci.c
+@@ -194,6 +194,12 @@ static void kvm_psci_system_off(struct kvm_vcpu *vcpu)
+ 	kvm_prepare_system_event(vcpu, KVM_SYSTEM_EVENT_SHUTDOWN, 0);
+ }
+ 
++static void kvm_psci_system_off2(struct kvm_vcpu *vcpu)
++{
++	kvm_prepare_system_event(vcpu, KVM_SYSTEM_EVENT_SHUTDOWN,
++				 KVM_SYSTEM_EVENT_SHUTDOWN_FLAG_PSCI_OFF2);
++}
++
+ static void kvm_psci_system_reset(struct kvm_vcpu *vcpu)
+ {
+ 	kvm_prepare_system_event(vcpu, KVM_SYSTEM_EVENT_RESET, 0);
+@@ -358,6 +364,11 @@ static int kvm_psci_1_x_call(struct kvm_vcpu *vcpu, u32 minor)
+ 			if (minor >= 1)
+ 				val = 0;
+ 			break;
++		case PSCI_1_3_FN_SYSTEM_OFF2:
++		case PSCI_1_3_FN64_SYSTEM_OFF2:
++			if (minor >= 3)
++				val = BIT(PSCI_1_3_HIBERNATE_TYPE_OFF);
++			break;
+ 		}
+ 		break;
+ 	case PSCI_1_0_FN_SYSTEM_SUSPEND:
+@@ -392,6 +403,32 @@ static int kvm_psci_1_x_call(struct kvm_vcpu *vcpu, u32 minor)
+ 			break;
+ 		}
+ 		break;
++	case PSCI_1_3_FN_SYSTEM_OFF2:
++		kvm_psci_narrow_to_32bit(vcpu);
++		fallthrough;
++	case PSCI_1_3_FN64_SYSTEM_OFF2:
++		if (minor < 3)
++			break;
++
++		arg = smccc_get_arg1(vcpu);
++		if (arg != PSCI_1_3_HIBERNATE_TYPE_OFF) {
++			val = PSCI_RET_INVALID_PARAMS;
++			break;
++		}
++		kvm_psci_system_off2(vcpu);
++		/*
++		 * We shouldn't be going back to guest VCPU after
++		 * receiving SYSTEM_OFF2 request.
++		 *
++		 * If user space accidentally/deliberately resumes
++		 * guest VCPU after SYSTEM_OFF2 request then guest
++		 * VCPU should see internal failure from PSCI return
++		 * value. To achieve this, we preload r0 (or x0) with
++		 * PSCI return value INTERNAL_FAILURE.
++		 */
++		val = PSCI_RET_INTERNAL_FAILURE;
++		ret = 0;
++		break;
+ 	default:
+ 		return kvm_psci_0_2_call(vcpu);
+ 	}
 -- 
 2.44.0
 
