@@ -1,232 +1,391 @@
-Return-Path: <linux-kselftest+bounces-18273-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18274-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0025A983FF8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 10:08:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 922BF984135
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 10:57:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1BC1286A48
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 08:08:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B22811C227F7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 08:57:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B5AC14D2BD;
-	Tue, 24 Sep 2024 08:08:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D10D1547DC;
+	Tue, 24 Sep 2024 08:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="btAqethU"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="qvZu7605"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2A0B14BF8D;
-	Tue, 24 Sep 2024 08:08:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.21
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727165309; cv=fail; b=j1tlAtxZ+/VaqRvahULElpOr80fzjQIYMM8yiaZ8dMlt/uAmWJ4vPztUc+HoZfmwcSkRDs2ZrSXZTY1eB/3Gu0SXSsaROup7DoF0oHKYKdt9y8oxAHMlNzy5u6ruqUGf7aKPXrrF4lkwgWedELFtIfGIlEl9Yn0pJrQ2V9eZZss=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727165309; c=relaxed/simple;
-	bh=GMT3IqqKDdRYRb1QQhWSMg4Qqg+tXzXUfqaut1cXtIM=;
-	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
-	 Content-Disposition:MIME-Version; b=H/iQMMZQcPdjuBRuajj5SMOMqkTjr864aV1GUQBg5xfshdqFDUDnyqqniqgY86vRoIQ/kyaX+xcn9hv1qlwpjc+uKGGPdkvd1Bkywm6S2uHdloYLlUukKDu2YRj6oso6rw5QHElMd80CB3uT+hfLdOz0B+samB9HScDK0RL9MOc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=btAqethU; arc=fail smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727165308; x=1758701308;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=GMT3IqqKDdRYRb1QQhWSMg4Qqg+tXzXUfqaut1cXtIM=;
-  b=btAqethUN/GwLH/LX63X4uFobHxSh5OXZ+6HsU5KZJ1Or4IAOysZTdff
-   lxazIEgxPQTb4f0Ty03AjCLZWhbp7IONGHAV1ORCgGdTjtApD0TcptEP+
-   5jvOrBPT13TDjwMiVPcqiy4Z9TyGC6wY1KKwpGhD9pYAmb0eePuPHuXZd
-   EwQygfKrgzvBuiLdbyw/3715Mr9Dq4xWAFvTH3afO3rFMXIt91Tu+UjXr
-   jJAaL1Od5MBrjg0oh0qOfWEo6TFe5K5DpTekoJ/E3wPAlJwoPJj/PKjcM
-   NtbJ8nVeii4clSmjzqA8PnBDKgXmUkgGwph63xdikpYTrZvwG5GA99a4y
-   Q==;
-X-CSE-ConnectionGUID: MkrZnNXCR02ybSfj6EpUdA==
-X-CSE-MsgGUID: dQl7K+W5SFSfXOrKk724QQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11204"; a="26096015"
-X-IronPort-AV: E=Sophos;i="6.10,253,1719903600"; 
-   d="scan'208";a="26096015"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Sep 2024 01:08:27 -0700
-X-CSE-ConnectionGUID: MyEwSSFvRXu+RqWJEvPW7A==
-X-CSE-MsgGUID: RWxZxAUxSuOSclLn/cH5Mg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,253,1719903600"; 
-   d="scan'208";a="70934204"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 24 Sep 2024 01:08:23 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 24 Sep 2024 01:08:21 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Tue, 24 Sep 2024 01:08:21 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.169)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 24 Sep 2024 01:08:21 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=FjRqVSMygBw07uLFcFkD+sF9aQo8/TcamZIPEb2whJT0d13UUeQ6V13dZyUIx/0HzamgAxzMaBIk+rQTosH2gSpRa9dDzu6ciMw3la3IUMp1Ep/aJTIa3D1uEI1+qzK0R9IWyUdRPDCEUOxSG1PgF63k3cyTafpLh0pZyRsYp16gkxULD2rKZnsBQgaEMPX7VoURlTZb8nVJ3YQN8IE6MqvneMgdcT8+tNBx6YqciOxthDrHTDcsk8j8clt2TK+ztz7kadTvMA+ZifCDph+k7/VEXhMcEMJYtO9Hg8QC1fA91iA2DT78QH5MuMJ0rUlU0pSMKjmbrplqHInfnxYUEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mu/J/PYqQsCo3wxrhW2dpHHndz1kI0NT+Zxj0+NGZD0=;
- b=jtGGLDQ7CKLXGDJb6gZdLpLOd3yLzqjz0BdWTOjo49ypPjXKJo2yVxQpBY5poBan88ATMQdSJqlXgQVTiNLJwzeeluOOkH9qj/3ToARnCbEr9ktkZA+8r8oHNEAALnR0FYc2eiUHVJaZIcMcpRQW5dDkwRa5Rdkb8mbv08rLkJ9zXUIYxqf+s/10OY7V2Lh3j/kNfsF3a7R1iNvAtZi3gzWIjPqg6L5PMn8NTf9Gpm8cRU0+16HxC4v6dAZtr5bx0eRl/FR++lQ7OCLTv4xnbwyx/fwsnlfkDpxfG0ATts2oJ5NxH2fcc8Elu3ZUXj/hJz6jhM96G1jYCg52NmxJBw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from LV3PR11MB8603.namprd11.prod.outlook.com (2603:10b6:408:1b6::9)
- by PH8PR11MB6831.namprd11.prod.outlook.com (2603:10b6:510:22d::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7982.25; Tue, 24 Sep
- 2024 08:08:19 +0000
-Received: from LV3PR11MB8603.namprd11.prod.outlook.com
- ([fe80::4622:29cf:32b:7e5c]) by LV3PR11MB8603.namprd11.prod.outlook.com
- ([fe80::4622:29cf:32b:7e5c%5]) with mapi id 15.20.7982.022; Tue, 24 Sep 2024
- 08:08:19 +0000
-Date: Tue, 24 Sep 2024 16:08:10 +0800
-From: kernel test robot <oliver.sang@intel.com>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-CC: <oe-lkp@lists.linux.dev>, <lkp@intel.com>, <linux-kernel@vger.kernel.org>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, <linux-kselftest@vger.kernel.org>,
-	<oliver.sang@intel.com>
-Subject: [linus:master] [selftests]  ecb8bd70d5:
- kernel-selftests.vDSO.vdso_standalone_test_x86.fail
-Message-ID: <202409241558.98e13f6f-oliver.sang@intel.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-X-ClientProxiedBy: SI2PR02CA0004.apcprd02.prod.outlook.com
- (2603:1096:4:194::14) To LV3PR11MB8603.namprd11.prod.outlook.com
- (2603:10b6:408:1b6::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91FD9153801
+	for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2024 08:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727168219; cv=none; b=CR/tZas0WsL07r9snoKQkjXXqOccglPea8xEDldk3H+IyL9pqiGuFCzrszFICMUP8slr8iqsSGKqdhZtVsTwUtt8wuJaZ/JKsL5FJf9vblgxt/ggg61nY0O8On8LyNdZgnuiVybRo+7jf926uU6enzRU9cTFVESQJdEsHq5fCgY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727168219; c=relaxed/simple;
+	bh=FY8V5GzsCDooZpLgfnYKx2RnxQCDxyemvSKkxopjkZg=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:References:
+	 In-Reply-To:Content-Type; b=p5JpH3r3IB9VtBXmO6yHnoFtBYngBq4/YGIb9ek0E7Kbgy7E+eG+fw0kY8JwK5DcxH9fTB5OFwdxggI8E0JddRPZ0p1bv2V6T+fwlSsnR//bYvcXLIwXpsPUwLU3bQahv7JDlUAFHAr0QGToHxL+1MBJI9POhCnVqLAaoFK+NDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=none smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=qvZu7605; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=daynix.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a8d100e9ce0so632644866b.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2024 01:56:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1727168215; x=1727773015; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :to:subject:from:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mTOtY69+D3laLvm3lofHZC4VOFk5IqvXXwlXV/C57AY=;
+        b=qvZu7605u2skjjo2CtT/+G56Rekuulz+0RtfbGHJoVpCXnjJ/1CPbhaBMGyocs5vKC
+         1h84EjTGBsKSZFpbVp95J1NN9MnSU9O87AhPVaMnbTmEwb/0jKznE0HuNe4//ql5RXsO
+         5ilZe+wYyz5AU86SndYF73uLleY8r5mJwZjIsgQOEoe63wcf0TEj1xojblGsUmsVBWHI
+         NYbKkUvTrFbGl0+VLImAfW3+MmpxZAuIj1dFjmop8Ea4QsCG5jqNGdG8j65CALManQCX
+         XSLvtJJbWJn/OAOtrRdyHW/MBI0UkLXf7BFwTqTf3+pSpMjwlI72egRpqNHbrDiCJPm6
+         7b0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727168215; x=1727773015;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :to:subject:from:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mTOtY69+D3laLvm3lofHZC4VOFk5IqvXXwlXV/C57AY=;
+        b=J+BTcpE09mc0ierB7aJz6PdXE9Hcw2ovxkAEA8dilQqYGHknfzEbyOXoYsq9iv16EK
+         oXV0vhp1cxQCgctaGYZO1MlQ2uGfrQCuXuJsue6cSUqldNRM1hth2Nkf4NdqKMsxW7CL
+         gn6LBfo1b4TDqrpa5RBZMfQLgQvQ9rpmQAnjWQrzs9jigobwQ6byHzwmQHkUfYSva968
+         wVD0jkeLGuL5ExFmXg4D+t7h5XvMkldaB6OEJxj3IOuAo33KR6gB41FsqAhXJzcvap7Z
+         WPvcCUvs50htaBYGA5li3oGRn4SkDim5dhI/wEAcTGt4fIF6kH9cSg1mC3T1iKFaalu+
+         4lYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXiSpyDXysTZugyXbTJ9JNdMrl55+GS0ES3cUbvXR4/IVq3mVqzMex9LxwnFXKWKr0JjPTH/iQRuAoiQUB93og=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBDeLzZoNVizZsHtLLX6lepZVMLF1KU2lpzCKapZ2RU+MKZesH
+	IY8vSXi48GcMqXH9d9RXWcNVWOdrA4R6lAuL4985gmZxGrHgKaInWLE8Kcfhd70=
+X-Google-Smtp-Source: AGHT+IF4rso5jI+pMGJ6HEm3qXucrD9xt3jHbVEmxBUrmDkUnfPORUY8Y/d/DncPI/Tyw6+CRzGKfQ==
+X-Received: by 2002:a17:906:bc12:b0:a86:ad3c:6d2d with SMTP id a640c23a62f3a-a90d5838cf6mr1218070666b.61.1727168214811;
+        Tue, 24 Sep 2024 01:56:54 -0700 (PDT)
+Received: from [10.241.20.238] ([193.32.29.227])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9392f4f8a6sm59038566b.50.2024.09.24.01.56.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 24 Sep 2024 01:56:54 -0700 (PDT)
+Message-ID: <694a8f81-616e-47d0-8185-5b73626c4109@daynix.com>
+Date: Tue, 24 Sep 2024 10:56:52 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV3PR11MB8603:EE_|PH8PR11MB6831:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0cf2fa16-8b57-4e55-381f-08dcdc700d23
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
-X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?atIrowimI66VCg7zTl8bMXjiFDnCwuwTPd0HGpPU/TytAD87gJr4vWm7/oi/?=
- =?us-ascii?Q?g6O4lh3lBsX4bauSPsb/Na3Eaci/7QgZMU6JySt8T68Z+XV0t61tcycqiJ+u?=
- =?us-ascii?Q?v+HNRQjUl0ipMuBWHUEn5oWkbT22IUpascezZr0sZgfvc4jtdba65Jj8sTc+?=
- =?us-ascii?Q?7OougUwcASrIexAPpv3OHmWiBERRev8sYi975vyi8n5dPrF8YhB671R9hv1V?=
- =?us-ascii?Q?WClKyI4IHSdqbO13AdD/+n1QDMKvaeLCZAmf36ZilBQruZ9adZSgJDBDnxAv?=
- =?us-ascii?Q?e/+cwLCnwu6ed/h/PhBeKb82Z0Cwal+8JBQcM1NwsTQq5vLP25N6tECfEYZ8?=
- =?us-ascii?Q?pAyaN/1uMLEXsKylPM/p8SH5Fdaew4bZiCz0SX7XUYlDWJU3wIvqMdyyfrcx?=
- =?us-ascii?Q?pMW1RygDIbZkP5l5D82EpwDwFEgXz9DnvPcn8quE3pT+dYkZu7NLqCPF4IpK?=
- =?us-ascii?Q?k9TleCuWayy2HikUNmnxpXaOgd7VO1DaF1WV92xg7DE9Ad3YJfolAEUPdd12?=
- =?us-ascii?Q?+9KHTptyHvsZtuQQeqwz9xfOcFdaYWW0MUw9mcIFddVWaV7Dm+5+Uw7cZnaD?=
- =?us-ascii?Q?tiVmVXEYc8RYyT0i3/OV92HgJe2uPbnurnQhtiJj2nbETq0Th8Ug8PM3YP7O?=
- =?us-ascii?Q?Zg+sxyAUVyIOcao5zet0xpP+mnsSAfFeXJbKDcIobiGKfPgdhwZVabpFE70J?=
- =?us-ascii?Q?5HTweiZX28yJ+QyXN1eygp/iry1t9JzbBcao3bW4LkjFQVdg8+0WGi/Js5kP?=
- =?us-ascii?Q?5z4eQvUOzU2T373xh7nUPxaHSYbAOfPu3ml5ffsssqx+j4gtIcG9/yMVnBEb?=
- =?us-ascii?Q?vNaIP2c7J0mJzCpXui262igX66hweZHFVyCPpjiQL78XokUclHFnWzxtpPVs?=
- =?us-ascii?Q?uAynHQW8Odp/algbjyNMQsU74xKUPIEqKK7Mjb9q1loAqA430rouECGcvsOp?=
- =?us-ascii?Q?cUhCKXDdr9I4io3un+v7wDxb5Ub2WDF4EwDLwcZ8MI/tKoZ03m6ZLQ6HKGab?=
- =?us-ascii?Q?27LhzZXtyGa1ulhzs2dHOE6qsFhAyx+g2n0z2YeRZ7TeQuNVucA9UC/AV1zb?=
- =?us-ascii?Q?6yOPrtgXx7D8d1eqKwL3tw1nBGMVsr/KM+VFfqeQt7NukOoyB6pFCUnFtezf?=
- =?us-ascii?Q?BMO+2mCz4MkoP6MSpwlenX+S8E3my2IvMiOyDJh4Hnsd2EQj8CYTcQxKwzXD?=
- =?us-ascii?Q?dWNIYUOmJ0DgLsczMnajmUB2TW1/zxhpWblrM5w6PtkhRzkPFFWImoGtvMUm?=
- =?us-ascii?Q?n1XRCXhM3Es3vceNkCfTH/K9T9uJH8P/rjMWaMeXP1sPXie+dEHrzOnn9kAq?=
- =?us-ascii?Q?Ysg=3D?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV3PR11MB8603.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?l1sbJk0gzDbLHD82iJjRuXTeb7giDzeD7R88YjrBTxVMzc3HA5J3bbGWZ+Nv?=
- =?us-ascii?Q?E8ELvmTmixa+79ZLCu/Br4zU6om31pYY8orxyG0Lr3xyszm1XsndjaVt1nCM?=
- =?us-ascii?Q?gPseRl18tt/YmsYO2uKsFeCA1jNt1wVahhSFy51uEgIaWGFtrr9fbJaws1I4?=
- =?us-ascii?Q?qsH9JH+t497p17IGi2B10RqZ0wEpCrYE7KYgkKegyfs8BGGf6HS9tjbwG+BT?=
- =?us-ascii?Q?QWIFzoYFF1OCIgVu603pbI6K1SOGRVjAXdDKxTQOtqg9sTCscAaTZHoTTKe7?=
- =?us-ascii?Q?DRJwcMoOtru7saCroWbozpPE5P6RWL5kzuF/erM6tUGvyjMFcFIAvPHj9cmm?=
- =?us-ascii?Q?qgd+kBTl7kz2j9P+Cbj22tOcLgwTirYnvAxKGu50Lz7w8+RA0O4p5ubHRKSW?=
- =?us-ascii?Q?x3Gl4OdWBbTAnjtSY8FRatmleDYsKmLnHWGVfjLVfbCGCbeI/bcPn2/ouxmn?=
- =?us-ascii?Q?2+bcxau7JzJpBdbMjzjexcCGpaH14cNnC687OH7Y0Je3RYnHIhjZzQD61/nN?=
- =?us-ascii?Q?pNXAgXj/KIj+nuvyGrOuo/khbKXgUH1MrAcdw3V4CDZtr0S3oQcH/ARhymmz?=
- =?us-ascii?Q?4NaXlsPYi5HAuRJPOLBhky047UXYe9oqIL9DtWyq1Jqtx2+2U34LZoDnDtTL?=
- =?us-ascii?Q?TykT1EIYSWKFJoFqGehSqgyMn1EtkkAc6DSVdskIIeoaf6ZjDpX4e+MWMsZ7?=
- =?us-ascii?Q?nsvsREE7YnwWISQjy8nWoYidmKST9+SntiU4WInMu93vy4+9RUS/Y9cZvl1B?=
- =?us-ascii?Q?x95tUXXD3vjtib/RcUO28CqIb21H5qYpiWni52ShBhl2uWlQ4iUias2Lh866?=
- =?us-ascii?Q?C5Ghf3AkY9qJMzi1DE8Kgy6tpydnZA86f6zUCGmCzlHG5+kRktMoCy74DCqt?=
- =?us-ascii?Q?HQ9hGnoJ3lLSrojtIaivE3QnYLTxUISRU92shYOJDkGH/e1mx8VbU7q+yCUQ?=
- =?us-ascii?Q?dhX1qWobDOYaQzZpJYfFF7Q63jQXM2JHwKW5qUkeV/hG2bf0n0THCCTdnyuw?=
- =?us-ascii?Q?yA22XPHqUyUQ4sU87M5/4yQU486704lIgPSHg83WfPk+13u0Fvuf+wmFvJ3I?=
- =?us-ascii?Q?+4iUSbQvV2Zn7VuuEHyvN4KF+TYPnAbGJsM+HnQf+A+wsvCJLyMqw2Uc85fK?=
- =?us-ascii?Q?lSZdZ1hW83Gr9ptPn8zYkY4/MkK/8613AhyAQGSxXrZvjH0zE56fYcYD88vz?=
- =?us-ascii?Q?nee6q6yloDTY/pDH9Hr7+Gar7P56f5YedXj3ggTeUqDkfaVdJO8qM33/zqaU?=
- =?us-ascii?Q?AGJ/kYDmQbIBynb2Be5879vyaNrDbYGiksLbwD35lG8cE9wmWHA1OwIhM05r?=
- =?us-ascii?Q?qey+Ac0oktSWDa6QgwiRuK/9Wlni17BIulv+Ei03KoBuIQbaA0vXb277virN?=
- =?us-ascii?Q?fYrSyK/DXDBZ6TGUCTRrnsYUW5JOfK5Qgk2XD/5sJTLyIq8vJc+T34onyTPx?=
- =?us-ascii?Q?N6r8/obWfIkQV83tUS3gc3OQHtkJ2JCycaFwrN0+iXIG/ufZ2aDiF+DowKQX?=
- =?us-ascii?Q?au4QynmH5tpnN79qNF0cUIrJpl/4iZ3U3eeIWKfB8hiWH+c8x1qzPp0QoBYn?=
- =?us-ascii?Q?slAuXM2Se3H+2s/ExbJvZBGpl3ByYSc2atyFwRTmbHf5XMalX1bPUHL+afoT?=
- =?us-ascii?Q?fw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0cf2fa16-8b57-4e55-381f-08dcdc700d23
-X-MS-Exchange-CrossTenant-AuthSource: LV3PR11MB8603.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Sep 2024 08:08:19.5329
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: fKU/cmwTy2MsqX2EThZOme1kBFTNQBBJq1gSZSemO+ARWkeQqppdpBT6EsXCG7TNw+pMevzDq/dz4JHevcVHaw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB6831
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+From: Akihiko Odaki <akihiko.odaki@daynix.com>
+Subject: Re: [PATCH RFC v3 7/9] tun: Introduce virtio-net RSS
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Jonathan Corbet <corbet@lwn.net>, Jason Wang <jasowang@redhat.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, kvm@vger.kernel.org,
+ virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
+ Yuri Benditovich <yuri.benditovich@daynix.com>,
+ Andrew Melnychenko <andrew@daynix.com>
+References: <20240915-rss-v3-0-c630015db082@daynix.com>
+ <20240915-rss-v3-7-c630015db082@daynix.com>
+ <66ead59563da7_29b98629486@willemb.c.googlers.com.notmuch>
+Content-Language: en-US
+In-Reply-To: <66ead59563da7_29b98629486@willemb.c.googlers.com.notmuch>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+On 2024/09/18 15:28, Willem de Bruijn wrote:
+> Akihiko Odaki wrote:
+>> RSS is a receive steering algorithm that can be negotiated to use with
+>> virtio_net. Conventionally the hash calculation was done by the VMM.
+>> However, computing the hash after the queue was chosen defeats the
+>> purpose of RSS.
+>>
+>> Another approach is to use eBPF steering program. This approach has
+>> another downside: it cannot report the calculated hash due to the
+>> restrictive nature of eBPF steering program.
+>>
+>> Introduce the code to perform RSS to the kernel in order to overcome
+>> thse challenges. An alternative solution is to extend the eBPF steering
+>> program so that it will be able to report to the userspace, but I didn't
+>> opt for it because extending the current mechanism of eBPF steering
+>> program as is because it relies on legacy context rewriting, and
+>> introducing kfunc-based eBPF will result in non-UAPI dependency while
+>> the other relevant virtualization APIs such as KVM and vhost_net are
+>> UAPIs.
+>>
+>> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+>> ---
+>>   drivers/net/tun.c           | 119 +++++++++++++++++++++++++++++++++++++++-----
+>>   include/uapi/linux/if_tun.h |  27 ++++++++++
+>>   2 files changed, 133 insertions(+), 13 deletions(-)
+>>
+>> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+>> index b8fcd71becac..5a429b391144 100644
+>> --- a/drivers/net/tun.c
+>> +++ b/drivers/net/tun.c
+>> @@ -175,6 +175,9 @@ struct tun_prog {
+>>   
+>>   struct tun_vnet_hash_container {
+>>   	struct tun_vnet_hash common;
+>> +	struct tun_vnet_hash_rss rss;
+>> +	__be32 rss_key[VIRTIO_NET_RSS_MAX_KEY_SIZE];
+>> +	u16 rss_indirection_table[];
+>>   };
+>>   
+>>   /* Since the socket were moved to tun_file, to preserve the behavior of persist
+>> @@ -227,7 +230,7 @@ struct veth {
+>>   };
+>>   
+>>   static const struct tun_vnet_hash tun_vnet_hash_cap = {
+>> -	.flags = TUN_VNET_HASH_REPORT,
+>> +	.flags = TUN_VNET_HASH_REPORT | TUN_VNET_HASH_RSS,
+>>   	.types = VIRTIO_NET_SUPPORTED_HASH_TYPES
+>>   };
+>>   
+>> @@ -591,6 +594,36 @@ static u16 tun_ebpf_select_queue(struct tun_struct *tun, struct sk_buff *skb)
+>>   	return ret % numqueues;
+>>   }
+>>   
+>> +static u16 tun_vnet_rss_select_queue(struct tun_struct *tun,
+>> +				     struct sk_buff *skb,
+>> +				     const struct tun_vnet_hash_container *vnet_hash)
+>> +{
+>> +	struct tun_vnet_hash_ext *ext;
+>> +	struct virtio_net_hash hash;
+>> +	u32 numqueues = READ_ONCE(tun->numqueues);
+>> +	u16 txq, index;
+>> +
+>> +	if (!numqueues)
+>> +		return 0;
+>> +
+>> +	if (!virtio_net_hash_rss(skb, vnet_hash->common.types, vnet_hash->rss_key,
+>> +				 &hash))
+>> +		return vnet_hash->rss.unclassified_queue % numqueues;
+>> +
+>> +	if (vnet_hash->common.flags & TUN_VNET_HASH_REPORT) {
+>> +		ext = skb_ext_add(skb, SKB_EXT_TUN_VNET_HASH);
+>> +		if (ext) {
+>> +			ext->value = hash.value;
+>> +			ext->report = hash.report;
+>> +		}
+>> +	}
+>> +
+>> +	index = hash.value & vnet_hash->rss.indirection_table_mask;
+>> +	txq = READ_ONCE(vnet_hash->rss_indirection_table[index]);
+>> +
+>> +	return txq % numqueues;
+>> +}
+>> +
+>>   static u16 tun_select_queue(struct net_device *dev, struct sk_buff *skb,
+>>   			    struct net_device *sb_dev)
+>>   {
+>> @@ -603,7 +636,10 @@ static u16 tun_select_queue(struct net_device *dev, struct sk_buff *skb,
+>>   	} else {
+>>   		struct tun_vnet_hash_container *vnet_hash = rcu_dereference(tun->vnet_hash);
+>>   
+>> -		ret = tun_automq_select_queue(tun, skb, vnet_hash);
+>> +		if (vnet_hash && (vnet_hash->common.flags & TUN_VNET_HASH_RSS))
+>> +			ret = tun_vnet_rss_select_queue(tun, skb, vnet_hash);
+>> +		else
+>> +			ret = tun_automq_select_queue(tun, skb, vnet_hash);
+>>   	}
+>>   	rcu_read_unlock();
+>>   
+>> @@ -3085,13 +3121,9 @@ static int tun_set_queue(struct file *file, struct ifreq *ifr)
+>>   }
+>>   
+>>   static int tun_set_ebpf(struct tun_struct *tun, struct tun_prog __rcu **prog_p,
+>> -			void __user *data)
+>> +			int fd)
+>>   {
+>>   	struct bpf_prog *prog;
+>> -	int fd;
+>> -
+>> -	if (copy_from_user(&fd, data, sizeof(fd)))
+>> -		return -EFAULT;
+>>   
+>>   	if (fd == -1) {
+>>   		prog = NULL;
+>> @@ -3157,6 +3189,7 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
+>>   	int ifindex;
+>>   	int sndbuf;
+>>   	int vnet_hdr_sz;
+>> +	int fd;
+>>   	int le;
+>>   	int ret;
+>>   	bool do_notify = false;
+>> @@ -3460,11 +3493,27 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
+>>   		break;
+>>   
+>>   	case TUNSETSTEERINGEBPF:
+>> -		ret = tun_set_ebpf(tun, &tun->steering_prog, argp);
+>> +		if (get_user(fd, (int __user *)argp)) {
+>> +			ret = -EFAULT;
+>> +			break;
+>> +		}
+>> +
+>> +		vnet_hash = rtnl_dereference(tun->vnet_hash);
+>> +		if (fd != -1 && vnet_hash && (vnet_hash->common.flags & TUN_VNET_HASH_RSS)) {
+>> +			ret = -EBUSY;
+>> +			break;
+>> +		}
+>> +
+>> +		ret = tun_set_ebpf(tun, &tun->steering_prog, fd);
+>>   		break;
+>>   
+>>   	case TUNSETFILTEREBPF:
+>> -		ret = tun_set_ebpf(tun, &tun->filter_prog, argp);
+>> +		if (get_user(fd, (int __user *)argp)) {
+>> +			ret = -EFAULT;
+>> +			break;
+>> +		}
+>> +
+>> +		ret = tun_set_ebpf(tun, &tun->filter_prog, fd);
+>>   		break;
+>>   
+>>   	case TUNSETCARRIER:
+>> @@ -3496,10 +3545,54 @@ static long __tun_chr_ioctl(struct file *file, unsigned int cmd,
+>>   			break;
+>>   		}
+>>   
+>> -		vnet_hash = kmalloc(sizeof(vnet_hash->common), GFP_KERNEL);
+>> -		if (!vnet_hash) {
+>> -			ret = -ENOMEM;
+>> -			break;
+>> +		if (vnet_hash_common.flags & TUN_VNET_HASH_RSS) {
+>> +			struct tun_vnet_hash_rss rss;
+>> +			size_t indirection_table_size;
+>> +			size_t key_size;
+>> +			size_t size;
+>> +
+>> +			if (tun->steering_prog) {
+>> +				ret = -EBUSY;
+>> +				break;
+>> +			}
+>> +
+>> +			if (copy_from_user(&rss, argp, sizeof(rss))) {
+>> +				ret = -EFAULT;
+>> +				break;
+>> +			}
+>> +			argp = (struct tun_vnet_hash_rss __user *)argp + 1;
+>> +
+>> +			indirection_table_size = ((size_t)rss.indirection_table_mask + 1) * 2;
+> 
+> Why make uapi a mask rather than a length?
 
+It follows the virtio specification. It is actually used as a mask in 
+tun_vnet_rss_select_queue().
 
-Hello,
+> 
+> Also is there a upper length bounds sanity check for this input from
+> userspace?
 
-kernel test robot noticed "kernel-selftests.vDSO.vdso_standalone_test_x86.fail" on:
+No, but the maximum size is limited to 128 bytes because the 
+indirection_table_mask is 16-bit and it indexes an array of 16-bit integers.
 
-commit: ecb8bd70d51ccf9009219a6097cef293deada65b ("selftests: vDSO: build tests with O2 optimization")
-https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> 
+>> +			key_size = virtio_net_hash_key_length(vnet_hash_common.types);
+>> +			size = sizeof(*vnet_hash) + indirection_table_size + key_size;
+> 
+> key_size is included in sizeof(*vnet_hash), always
+> VIRTIO_NET_RSS_MAX_KEY_SIZE.
 
-in testcase: kernel-selftests
-version: kernel-selftests-x86_64-977d51cf-1_20240508
-with following parameters:
+I will fix this by replacing it with:
+struct_size(vnet_hash, rss_indirection_table,
+             (size_t)rss.indirection_table_mask + 1)
 
-	group: group-03
+Regards,
+Akihiko Odaki
 
-
-
-compiler: gcc-12
-test machine: 36 threads 1 sockets Intel(R) Core(TM) i9-10980XE CPU @ 3.00GHz (Cascade Lake) with 32G memory
-
-(please refer to attached dmesg/kmsg for entire log/backtrace)
-
-
-
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <oliver.sang@intel.com>
-| Closes: https://lore.kernel.org/oe-lkp/202409241558.98e13f6f-oliver.sang@intel.com
-
-
-
-# timeout set to 300
-# selftests: vDSO: vdso_standalone_test_x86
-# Segmentation fault
-not ok 5 selftests: vDSO: vdso_standalone_test_x86 # exit=139
-
-
-
-The kernel config and materials to reproduce are available at:
-https://download.01.org/0day-ci/archive/20240924/202409241558.98e13f6f-oliver.sang@intel.com
-
-
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
-
+>> +
+>> +			vnet_hash = kmalloc(size, GFP_KERNEL);
+>> +			if (!vnet_hash) {
+>> +				ret = -ENOMEM;
+>> +				break;
+>> +			}
+>> +
+>> +			if (copy_from_user(vnet_hash->rss_indirection_table,
+>> +					   argp, indirection_table_size)) {
+>> +				kfree(vnet_hash);
+>> +				ret = -EFAULT;
+>> +				break;
+>> +			}
+>> +			argp = (u16 __user *)argp + rss.indirection_table_mask + 1;
+>> +
+>> +			if (copy_from_user(vnet_hash->rss_key, argp, key_size)) {
+>> +				kfree(vnet_hash);
+>> +				ret = -EFAULT;
+>> +				break;
+>> +			}
+>> +
+>> +			vnet_hash->rss = rss;
+>> +		} else {
+>> +			vnet_hash = kmalloc(sizeof(vnet_hash->common), GFP_KERNEL);
+>> +			if (!vnet_hash) {
+>> +				ret = -ENOMEM;
+>> +				break;
+>> +			}
+>>   		}
+>>   
+>>   		vnet_hash->common = vnet_hash_common;
+>> diff --git a/include/uapi/linux/if_tun.h b/include/uapi/linux/if_tun.h
+>> index 1561e8ce0a0a..1c130409db5d 100644
+>> --- a/include/uapi/linux/if_tun.h
+>> +++ b/include/uapi/linux/if_tun.h
+>> @@ -75,6 +75,14 @@
+>>    *
+>>    * The argument is a pointer to &struct tun_vnet_hash.
+>>    *
+>> + * The argument is a pointer to the compound of the following in order if
+>> + * %TUN_VNET_HASH_RSS is set:
+>> + *
+>> + * 1. &struct tun_vnet_hash
+>> + * 2. &struct tun_vnet_hash_rss
+>> + * 3. Indirection table
+>> + * 4. Key
+>> + *
+>>    * %TUNSETVNETHDRSZ ioctl must be called with a number greater than or equal to
+>>    * the size of &struct virtio_net_hdr_v1_hash before calling this ioctl with
+>>    * %TUN_VNET_HASH_REPORT.
+>> @@ -144,6 +152,13 @@ struct tun_filter {
+>>    */
+>>   #define TUN_VNET_HASH_REPORT	0x0001
+>>   
+>> +/**
+>> + * define TUN_VNET_HASH_RSS - Request virtio_net RSS
+>> + *
+>> + * This is mutually exclusive with eBPF steering program.
+>> + */
+>> +#define TUN_VNET_HASH_RSS	0x0002
+>> +
+>>   /**
+>>    * struct tun_vnet_hash - virtio_net hashing configuration
+>>    * @flags:
+>> @@ -159,4 +174,16 @@ struct tun_vnet_hash {
+>>   	__u32 types;
+>>   };
+>>   
+>> +/**
+>> + * struct tun_vnet_hash_rss - virtio_net RSS configuration
+>> + * @indirection_table_mask:
+>> + *		Bitmask to be applied to the indirection table index
+>> + * @unclassified_queue:
+>> + *		The index of the queue to place unclassified packets in
+>> + */
+>> +struct tun_vnet_hash_rss {
+>> +	__u16 indirection_table_mask;
+>> +	__u16 unclassified_queue;
+>> +};
+>> +
+>>   #endif /* _UAPI__IF_TUN_H */
+>>
+>> -- 
+>> 2.46.0
+>>
+> 
+> 
 
