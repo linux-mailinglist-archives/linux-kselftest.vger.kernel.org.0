@@ -1,320 +1,101 @@
-Return-Path: <linux-kselftest+bounces-18292-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18294-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 183369843D3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 12:41:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C587B984438
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 13:09:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C58BF286857
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 10:41:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6FDC81F222F9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 11:09:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D920619F120;
-	Tue, 24 Sep 2024 10:40:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3E4D1A4E9F;
+	Tue, 24 Sep 2024 11:09:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="TqiF7xRb";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Cyt2VHFS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d5i5pQY9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFC1419EEB7;
-	Tue, 24 Sep 2024 10:40:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E941419E98A;
+	Tue, 24 Sep 2024 11:09:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727174431; cv=none; b=cs5+c93A5LbbM3a8UWJLr0ZyuIRb8hdpevvhPh8tTSQVLc29RsY9OdKRrJPvfP/a1YqbhWD1Qk/7MFTNsdeG4kBBgp+sUjb4cS2M0xZvW5QJdZuJhIr1gmO+4Fr3gAnv8ozAdAwFgqKvbjILmqgS6mWJSNhYAFxYmogsCKcsqHs=
+	t=1727176174; cv=none; b=n47AqGjC93p5dOKfiWQMG+neCjKA5bNTFbsvqIj8v1R7U0VxFaNfdqM2kWGjs48LYIlMEXNF9DRvdhZGDZ7UA1Bze/9ZECHqJK+TDladSjQkLxURRzexGlIdNh1BCWESiFfz/7j0EkcFZ8dtCyTfIZH4pmF6zMF98OmpkCwC2+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727174431; c=relaxed/simple;
-	bh=ryGGQ01u25GfzFcnfpQ+eQMm7gzGWJ8S+REeHBF0Bok=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LZbCRbk9P36+zpegVPlqwc6A6EEiGhd6CjYvWEi6ZT5lgtUfELXbS8vmHHgqXkBkn1j8wR10cjVIT/yGJ2RQSfA8+OxJTvfuc5Gix5FPzPKOjKIx66txNj4QNwaB2A3jEH9RtLNrHCM0NbZTqySaL3W8mmwNYljm6fMNl1lKLEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz; spf=pass smtp.mailfrom=dxuuu.xyz; dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b=TqiF7xRb; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Cyt2VHFS; arc=none smtp.client-ip=103.168.172.159
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id ADBEE114030F;
-	Tue, 24 Sep 2024 06:40:28 -0400 (EDT)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Tue, 24 Sep 2024 06:40:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1727174428; x=
-	1727260828; bh=tm27dyNaV+N171Lor7VvQJK/9qI5IQauKtiSXWUnARg=; b=T
-	qiF7xRbnIC6UybUVNYP+K1WAvCVUNMbLJhC0hY68kBOreT1QtmUl9fFy9tjQLd5d
-	6qpKeogbumXnMLE2FXtCkufHVVFSze9x1kgJ/NJa2CksZGaWgUtllWfFUDCQmdJJ
-	7TdMSkTI9WCRrn7ijxfQxtkef2xNl8iARqPskbV6pMJdURhP97WA+5Y7fBu3/0g+
-	iGvr6zxTpHzDOjAwLotTJiwqvVHCEDRDo0Su617pp8MGdHi5NZU3C71yhckAoaw8
-	gZiujxvYbcFt3HQPaXdEYOuv+3O+zbM5EaqbVg3CpntJl0QYz7ZmV5s6sVnKjeMg
-	2BPDuc1W6FkFJi2ODc3GA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1727174428; x=
-	1727260828; bh=tm27dyNaV+N171Lor7VvQJK/9qI5IQauKtiSXWUnARg=; b=C
-	yt2VHFS6SyvggsSMaTSewvrmHr3n5YZBmfwZofn+EXykTrkG6iNPPCqrFFhhPUfz
-	lGn+KoUpQtVLCs3RtpcJhbBywKBNWAwIxFWy8Ia7QT6BZFkiKUMqPfSrZxtq2BvJ
-	/yVABdeI6xNLk2nKLG3oAMSKWs/D2iJw2fi3XSwBxb0Xs4kUHSWHjQhHfQsN3xWm
-	klYGRFxpgRIOc8K7u9k5iwNs+4ACtppCMKmWBaK/ijudgp5Ur7XM1BpW2zzy5nJg
-	5k02S188pK5gvTBjPMbLAKOYDiVIl2FyKeX3VMCw6sBEJMPxN5d5aPoShEbV6Hvf
-	ZYsGdVyB0lkqpSW/tjCbw==
-X-ME-Sender: <xms:HJfyZiWM1jsvHLgA9LK5gSw8fupCrTCNKi5x1u9A6sY6FGwM0ZMrGw>
-    <xme:HJfyZukFVczhiI8azp2Gt73cmQdrwcy7ASMatx1P3jhFP8kiS1-YpXtaQj5q57aSY
-    mSxPQStsrx0dhqNMw>
-X-ME-Received: <xmr:HJfyZmYyr9u0_Qn2NvGShvdDPtYZKwYGcu7pUS0MwSX14OoYYPKlEXoKVsW5p7u8-3R4ql7t4u9X32Jp0aZm7X7LgM9wphcean70aMT8-3NdJuti-Zen>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvddtvddgfedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlje
-    dtmdenucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeff
-    rghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnh
-    epgfefgfegjefhudeikedvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesug
-    iguhhuuhdrgiihiidpnhgspghrtghpthhtohepudekpdhmohguvgepshhmthhpohhuthdp
-    rhgtphhtthhopehshhhurghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnih
-    gvlhesihhoghgvrghrsghogidrnhgvthdprhgtphhtthhopegrshhtsehkvghrnhgvlhdr
-    ohhrghdprhgtphhtthhopegvugguhiiikeejsehgmhgrihhlrdgtohhmpdhrtghpthhtoh
-    eprghnughrihhisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehmhihkohhlrghlsehf
-    sgdrtghomhdprhgtphhtthhopehmrghrthhinhdrlhgruheslhhinhhugidruggvvhdprh
-    gtphhtthhopehsohhngheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohephihonhhghhho
-    nhhgrdhsohhngheslhhinhhugidruggvvh
-X-ME-Proxy: <xmx:HJfyZpWFyx9r9iZOhPEyuORSdoR1m7v0XIwehuavly7dMSSYNxFDLw>
-    <xmx:HJfyZsmCS_vK8ychJmPq0LYgtBrsxyz5JHh8nRrxTf4KfP-Z3wvGcg>
-    <xmx:HJfyZufh2TZNq27tGnPdu6xNj-Ap7kDfiORaf5T7uV0xioqByN0cMQ>
-    <xmx:HJfyZuFKTCE7NcVMvJekMWPgwTg5YrSs1PYvLsOvnZFEpjPwTLTnEg>
-    <xmx:HJfyZrd-DA2RobS6_p72nyvCKPyCXXgQMq3wZB-wOWNyTMHRwnycWTAE>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 24 Sep 2024 06:40:26 -0400 (EDT)
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: shuah@kernel.org,
-	daniel@iogearbox.net,
-	ast@kernel.org,
-	eddyz87@gmail.com,
-	andrii@kernel.org
-Cc: mykolal@fb.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH bpf-next v3 2/2] bpf: selftests: verifier: Add nullness elision tests
-Date: Tue, 24 Sep 2024 04:40:09 -0600
-Message-ID: <0fe2a76efed263378c9739795d88d77a5ee81ff5.1727174358.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <cover.1727174358.git.dxu@dxuuu.xyz>
-References: <cover.1727174358.git.dxu@dxuuu.xyz>
+	s=arc-20240116; t=1727176174; c=relaxed/simple;
+	bh=C2KsKJ3VaL6KowMsuyZfe6cS0JW8ksINh3HbU6/3l4o=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pNWQT7tl3xHDSt6US/8mIfKlDEM5woB3VFQi8DkjVdSGG4rTZafu6q0U309JU6sOuf+bzfKG//tfq5e+UMbX+CfBtLBkvPU0ZpB+BoCvLnlFQQGyh33R9Rh3nIGozWRQRPzh+z9RjVm5mic7U6eppi9XFkfSnyC1WPu4yZ7spgw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d5i5pQY9; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-206b9455460so40923855ad.0;
+        Tue, 24 Sep 2024 04:09:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727176172; x=1727780972; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=C2KsKJ3VaL6KowMsuyZfe6cS0JW8ksINh3HbU6/3l4o=;
+        b=d5i5pQY9atJEjM2B3U0EUV9r8FfczM8dnYAuALHBLERkZsn6RbOQGs8W1auAun/M0p
+         wKjvshK/ssYIWtLrO0zI2r74XxjU3qEOLhDFvCUtUtstZstxmzyDXMlctggDjWbG9v9B
+         c5WfBVQ0fR4Ne45OLkol+fn1dX1lj5c6BQs5MJgl5fBT+Tp4WERvJ7Xh3dJIJ2XsLLGc
+         8+Efn/PQ2AbH8vC6RZ3cbaeroIl7fOghNkF/Cjyqwe2Nuq82JY/g0cfz9FSuJo3PQI4T
+         7aCwUI+F73szKCbIM1Rjvb79Rgo2f/VuJnQMt5j5Dvxp9pu5C4XHy16m4Jpw0zChuJqi
+         3rfA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727176172; x=1727780972;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=C2KsKJ3VaL6KowMsuyZfe6cS0JW8ksINh3HbU6/3l4o=;
+        b=URtJWr8rF2ag2F0+eE8J4SYLvZnSiVQvi4dPe4LkAT7f3EpRypOBfb2/3MNv2jlWu4
+         vQjVij/XKL+WbzNXniXDfwWOLiOe5MUUrU8wa5vfZlulIgj4R4Mrv7fZgEGqiWpSTpWp
+         85AipDmlyaoRUXQEiT514K42T4IKuzL17OgixHDL6AMQWTp1uvNOwx3hqYyA4qJEMuY2
+         LMJdZ+SQew7sEYAOJAAwoMzm0iuC1MLpCBqiN63dwAr+yyaLOBIKrBlxCMwKDe3HyZQR
+         wRzR7AID/1sI395kPq/4EdYd89XsxJXHwOGibra33etDLaZ7U6s1QC/onT0v6tOrxkWY
+         pHFg==
+X-Forwarded-Encrypted: i=1; AJvYcCUF5WUpF08TFg4pTFHkjbYEp8IrOu4alogn6FSiJzZrbB0ig5b0bW1BXSQgF95/5i8ksf1uyKk0W0/u5qrA@vger.kernel.org, AJvYcCV+Zk8kp/b+BkqYPoFHThy9oKJKZmLAw3ELuSGE7RD14t7a57Em8EpimWYDrED4mi3JTnM=@vger.kernel.org, AJvYcCXey52aawInweXKW9W16qoWyF3YNpy/I0ZlhWkzAfgBdTt0+KIUI4jmTv0TUnuR+ADqsEtYzn6DKPzxgdg81rOD@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCcjsTjZLy7aJYoEKv6mBvxfe1U8SicQ0KbYN1t7L/5Rdlf+jX
+	OuBGUZ6Qfmsrxq8jatFACTDlcb8ROCo0q3KwaM7amiBu3v34ybRYRFhvVy26
+X-Google-Smtp-Source: AGHT+IGQq7X7HpuEbTOkrYYaoD11F1CKrWkGCj4fLeKD+7f3XfOb82rNHyRUHVh8KI7/32lG7s/rmg==
+X-Received: by 2002:a17:902:cecb:b0:206:9dfb:3e9e with SMTP id d9443c01a7336-20aed09feeamr42684295ad.10.1727176172141;
+        Tue, 24 Sep 2024 04:09:32 -0700 (PDT)
+Received: from [192.168.0.235] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20af1851f88sm8584975ad.242.2024.09.24.04.09.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Sep 2024 04:09:31 -0700 (PDT)
+Message-ID: <df4f18a91ae9bf016a569fe65ad5a164541345ab.camel@gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Add missing va_end.
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: zhangjiao2 <zhangjiao2@cmss.chinamobile.com>, andrii@kernel.org
+Cc: shuah@kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Date: Tue, 24 Sep 2024 04:09:27 -0700
+In-Reply-To: <20240924045534.8672-1-zhangjiao2@cmss.chinamobile.com>
+References: <20240924045534.8672-1-zhangjiao2@cmss.chinamobile.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-1.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Test that nullness elision works for common use cases. For example, we
-want to check that both full and subreg stack slots are recognized. As
-well as when there's both const and non-const values of R2 leading up to
-a lookup. And obviously some bound checks.
+On Tue, 2024-09-24 at 12:55 +0800, zhangjiao2 wrote:
+> From: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+>=20
+> There is no va_end after va_copy, just add it.
+>=20
+> Signed-off-by: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+> ---
+
+My bad, thank you for fixing this.
 
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- .../bpf/progs/verifier_array_access.c         | 166 ++++++++++++++++++
- 1 file changed, 166 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/progs/verifier_array_access.c b/tools/testing/selftests/bpf/progs/verifier_array_access.c
-index 95d7ecc12963..2e74504ddbb5 100644
---- a/tools/testing/selftests/bpf/progs/verifier_array_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_array_access.c
-@@ -28,6 +28,20 @@ struct {
- 	__uint(map_flags, BPF_F_WRONLY_PROG);
- } map_array_wo SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_PERCPU_ARRAY);
-+	__uint(max_entries, 2);
-+	__type(key, int);
-+	__type(value, struct test_val);
-+} map_array_pcpu SEC(".maps");
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 2);
-+	__type(key, int);
-+	__type(value, struct test_val);
-+} map_array SEC(".maps");
-+
- struct {
- 	__uint(type, BPF_MAP_TYPE_HASH);
- 	__uint(max_entries, 1);
-@@ -526,4 +540,156 @@ l0_%=:	exit;						\
- 	: __clobber_all);
- }
- 
-+SEC("socket")
-+__description("valid map access into an array using constant without nullness")
-+__success __retval(4)
-+__naked void an_array_with_a_constant_no_nullness(void)
-+{
-+	asm volatile ("					\
-+	r1 = 1;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_array] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	r1 = %[test_val_foo];				\
-+	*(u64*)(r0 + 0) = r1;				\
-+	r0 = *(u64*)(r0 + 0);				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_array),
-+	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("valid multiple map access into an array using constant without nullness")
-+__success __retval(8)
-+__naked void multiple_array_with_a_constant_no_nullness(void)
-+{
-+	asm volatile ("					\
-+	r1 = 1;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_array] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	r6 = %[test_val_foo];				\
-+	*(u64*)(r0 + 0) = r6;				\
-+	r7 = *(u64*)(r0 + 0);				\
-+	r1 = 0;						\
-+	*(u64*)(r10 - 16) = r1;				\
-+	r2 = r10;					\
-+	r2 += -16;					\
-+	r1 = %[map_array] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	*(u64*)(r0 + 0) = r6;				\
-+	r1 = *(u64*)(r0 + 0);				\
-+	r7 += r1;					\
-+	r0 = r7;					\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_array),
-+	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("valid map access into an array using 32-bit constant without nullness")
-+__success __retval(4)
-+__naked void an_array_with_a_32bit_constant_no_nullness(void)
-+{
-+	asm volatile ("					\
-+	r1 = 1;						\
-+	*(u32*)(r10 - 4) = r1;				\
-+	r2 = r10;					\
-+	r2 += -4;					\
-+	r1 = %[map_array] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	r1 = %[test_val_foo];				\
-+	*(u64*)(r0 + 0) = r1;				\
-+	r0 = *(u64*)(r0 + 0);				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_array),
-+	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("valid map access into a pcpu array using constant without nullness")
-+__success __retval(4)
-+__naked void a_pcpu_array_with_a_constant_no_nullness(void)
-+{
-+	asm volatile ("					\
-+	r1 = 1;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_array_pcpu] ll;			\
-+	call %[bpf_map_lookup_elem];			\
-+	r1 = %[test_val_foo];				\
-+	*(u64*)(r0 + 0) = r1;				\
-+	r0 = *(u64*)(r0 + 0);				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_array_pcpu),
-+	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("invalid map access into an array using constant without nullness")
-+__failure __msg("R0 invalid mem access 'map_value_or_null'")
-+__naked void an_array_with_a_constant_no_nullness_out_of_bounds(void)
-+{
-+	asm volatile ("					\
-+	r1 = 3;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	r1 = %[map_array] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	r1 = %[test_val_foo];				\
-+	*(u64*)(r0 + 0) = r1;				\
-+	r0 = *(u64*)(r0 + 0);				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_array),
-+	  __imm_const(test_val_foo, offsetof(struct test_val, foo))
-+	: __clobber_all);
-+}
-+
-+SEC("socket")
-+__description("invalid elided lookup using const and non-const key")
-+__failure __msg("R0 invalid mem access 'map_value_or_null'")
-+__naked void mixed_const_and_non_const_key_lookup(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	if r0 > 42 goto l1_%=;				\
-+	*(u64*)(r10 - 8) = r0;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+	goto l0_%=;					\
-+l1_%=:	r1 = 1;						\
-+	*(u64*)(r10 - 8) = r1;				\
-+	r2 = r10;					\
-+	r2 += -8;					\
-+l0_%=:	r1 = %[map_array] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	r0 = *(u64*)(r0 + 0);				\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32),
-+	  __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_array)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.46.0
 
 
