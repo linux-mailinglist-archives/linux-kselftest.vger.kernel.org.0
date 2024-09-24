@@ -1,124 +1,106 @@
-Return-Path: <linux-kselftest+bounces-18303-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18304-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 218FA984661
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 15:06:02 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F20A984833
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 17:05:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4EC5282E5A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 13:06:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7890C1C215AD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 15:05:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C4021A706F;
-	Tue, 24 Sep 2024 13:05:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VCwvZzHT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 037D21A76DC;
+	Tue, 24 Sep 2024 15:05:29 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAF121B85DD;
-	Tue, 24 Sep 2024 13:05:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D74971A7249;
+	Tue, 24 Sep 2024 15:05:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727183156; cv=none; b=ISbsJ1bOdWemBKZ3Wmr9YWb/HOBT9CUNpQaVe1jKWvCt1j02RgczpYd/7dydGsAXjzG0D0FCyIHZzz/JO9CSY+55+fK5OInImp6uymwqO6dDLoCRwY+KTKScadoom+vVvPIjYUdqQVBHALDLiHVY8R2YJn/xBncB1+3peO10HmM=
+	t=1727190328; cv=none; b=ovGRrRo4l0givJM/kGQopkAVVXJ95KSYHoqSr2qrZsCzEjYz4cfrucumKYVxhRD8AvXuhMwS/gNlsHBWfN3mXil8w5RmYkVpYauolH6r0crsQhrlnyk/SIrurQpyzoJ8UehcOta/hTN/i/trKOMDUQg4VQMaVDqXf2wTcGMgpU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727183156; c=relaxed/simple;
-	bh=Qjfkvp5NGxGZwA6T1g5vVDbjGsM0vKbe4sPFNhJ0gMg=;
+	s=arc-20240116; t=1727190328; c=relaxed/simple;
+	bh=QtmtI/XsOxI4ganGGiCkXFRl2cFP6LPOQ66sNlWb99w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TudqCn26fH6E4xST8tFornrDf++w6z59BzNxNYGSGI9neZDxBA4VlI4KwLmmpI353BF54wuLcaZ5aCYFVTYxkwkL2sJnmX0cqNwg9KbU4JrTiOADcJWDQJD2hA7VLmhI/6xTrzKY+AxmuzqnWE+2ovDIWj0KQGRJtOXhFbphfWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VCwvZzHT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 783F8C4CEC4;
-	Tue, 24 Sep 2024 13:05:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727183156;
-	bh=Qjfkvp5NGxGZwA6T1g5vVDbjGsM0vKbe4sPFNhJ0gMg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VCwvZzHTT9yxyAvB2n8zK8p7WY1pmoFea6z+aE9IL/IfzVWoVPfR8uXfaU1uK+Sg4
-	 zytQ0T1k6W1qH0L5t/uHf2w+AEW0SGL7DvqCAjU74Odo7Wm8BteRNN7kq7KY+XFQkm
-	 i4ctdi7zFur41pQbVczHrkGGZ/3C0kAn0E3FV44J9fauG//51XXrDXq5ZzDqfyt5Ll
-	 PvTuujfe5rWsvl4Osrr/I4gIbY55YZZcATwE26ximLa+qdY0W7GCmLr3dP5PxsxSzx
-	 6oy5XMuOsaf3CMtuZXH8HYDZLvglkF40PDca9mcjQnY26jq87AL467dB92HqgOAiwZ
-	 xpJVQjjHct5fw==
-Date: Tue, 24 Sep 2024 14:05:50 +0100
-From: Simon Horman <horms@kernel.org>
-To: Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Jason Wang <jasowang@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	"Michael S. Tsirkin" <mst@redhat.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-	linux-kselftest@vger.kernel.org,
-	Yuri Benditovich <yuri.benditovich@daynix.com>,
-	Andrew Melnychenko <andrew@daynix.com>,
-	Stephen Hemminger <stephen@networkplumber.org>,
-	gur.stavi@huawei.com
-Subject: Re: [PATCH RFC v4 7/9] tun: Introduce virtio-net RSS
-Message-ID: <20240924130550.GJ4029621@kernel.org>
-References: <20240924-rss-v4-0-84e932ec0e6c@daynix.com>
- <20240924-rss-v4-7-84e932ec0e6c@daynix.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=WYNVk1vr2owtYNu4KInOpIEvugOSsOw2+LqrNWp8g9DJaTZq4C/xyyx3KhVEEQ3Pz/08k00G/oEpsgLk20WnHOA9IZkx+ujqNEzcnxs7TunTjGycLmVx8gkUSPBYwo/JCDbzoZ+Un2axRXoZWNs7/Dy8TFn+0pfEYYH+S5YFZag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 68898DA7;
+	Tue, 24 Sep 2024 08:05:54 -0700 (PDT)
+Received: from e133380.arm.com (e133380.arm.com [10.1.197.51])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9B4EF3F7A6;
+	Tue, 24 Sep 2024 08:05:20 -0700 (PDT)
+Date: Tue, 24 Sep 2024 16:04:43 +0100
+From: Dave Martin <Dave.Martin@arm.com>
+To: Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: Joey Gouly <joey.gouly@arm.com>, linux-arm-kernel@lists.infradead.org,
+	nd@arm.com, akpm@linux-foundation.org, aneesh.kumar@kernel.org,
+	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
+	broonie@kernel.org, catalin.marinas@arm.com,
+	christophe.leroy@csgroup.eu, dave.hansen@linux.intel.com,
+	hpa@zytor.com, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
+	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
+	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
+	szabolcs.nagy@arm.com, tglx@linutronix.de, will@kernel.org,
+	x86@kernel.org, kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 19/30] arm64: add POE signal support
+Message-ID: <ZvLVC0/baXfJHgww@e133380.arm.com>
+References: <20240822151113.1479789-1-joey.gouly@arm.com>
+ <20240822151113.1479789-20-joey.gouly@arm.com>
+ <47e1537f-5b60-4541-aed1-a20e804c137d@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240924-rss-v4-7-84e932ec0e6c@daynix.com>
+In-Reply-To: <47e1537f-5b60-4541-aed1-a20e804c137d@arm.com>
 
-On Tue, Sep 24, 2024 at 11:01:12AM +0200, Akihiko Odaki wrote:
-> RSS is a receive steering algorithm that can be negotiated to use with
-> virtio_net. Conventionally the hash calculation was done by the VMM.
-> However, computing the hash after the queue was chosen defeats the
-> purpose of RSS.
+On Tue, Sep 24, 2024 at 01:27:58PM +0200, Kevin Brodsky wrote:
+> On 22/08/2024 17:11, Joey Gouly wrote:
+> > @@ -1178,6 +1237,9 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
+> >  		sme_smstop();
+> >  	}
+> >  
+> > +	if (system_supports_poe())
+> > +		write_sysreg_s(POR_EL0_INIT, SYS_POR_EL0);
 > 
-> Another approach is to use eBPF steering program. This approach has
-> another downside: it cannot report the calculated hash due to the
-> restrictive nature of eBPF steering program.
+> At the point where setup_return() is called, the signal frame has
+> already been written to the user stack. In other words, we write to the
+> user stack first, and then reset POR_EL0. This may be problematic,
+> especially if we are using the alternate signal stack, which the
+> interrupted POR_EL0 may not grant access to. In that situation uaccess
+> will fail and we'll end up with a SIGSEGV.
 > 
-> Introduce the code to perform RSS to the kernel in order to overcome
-> thse challenges. An alternative solution is to extend the eBPF steering
-> program so that it will be able to report to the userspace, but I didn't
-> opt for it because extending the current mechanism of eBPF steering
-> program as is because it relies on legacy context rewriting, and
-> introducing kfunc-based eBPF will result in non-UAPI dependency while
-> the other relevant virtualization APIs such as KVM and vhost_net are
-> UAPIs.
+> This issue has already been discussed on the x86 side, and as it happens
+> patches to reset PKRU early [1] have just landed. I don't think this is
+> a blocker for getting this series landed, but we should try and align
+> with x86. If there's no objection, I'm planning to work on a counterpart
+> to the x86 series (resetting POR_EL0 early during signal delivery).
 > 
-> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> Kevin
+> 
+> [1]
+> https://lore.kernel.org/lkml/20240802061318.2140081-2-aruna.ramakrishna@oracle.com/
 
-...
++1, all the uaccess in signal delivery is done by the kernel on behalf
+of the signal handler context, so we should do it with (at least) the
+same memory permissions that the signal handler is going to be entered
+with.
 
-> diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+(In an ideal world, userspace would save this information itself, using
+its own handler permissions -- well, no, in an ideal world we wouldn't
+have the signal delivery mechanism at all, but hopefully you get the
+idea.)
 
-...
-
-> @@ -333,8 +336,10 @@ static long tun_set_vnet_be(struct tun_struct *tun, int __user *argp)
->  		return -EFAULT;
->  
->  	if (be) {
-> +		struct tun_vnet_hash_container *vnet_hash = rtnl_dereference(tun->vnet_hash);
-> +
->  		if (!(tun->flags & TUN_VNET_LE) &&
-> -		    (tun->vnet_hash.flags & TUN_VNET_HASH_REPORT))
-> +		    vnet_hash && (vnet_hash->flags & TUN_VNET_HASH_REPORT))
-
-Hi Odaki-san,
-
-I am wondering if the above should this be vnet_hash->common.flags?
-I am seeing this:
-
-../drivers/net/tun.c:342:44: error: ‘struct tun_vnet_hash_container’ has no member named ‘flags’
-  342 |                     vnet_hash && (vnet_hash->flags & TUN_VNET_HASH_REPORT))
-
-...
+Cheers
+---Dave
+> 
 
