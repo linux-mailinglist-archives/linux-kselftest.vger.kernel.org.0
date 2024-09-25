@@ -1,149 +1,133 @@
-Return-Path: <linux-kselftest+bounces-18362-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18363-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4972986587
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 19:20:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 598C9986590
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 19:26:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41B58B25FE0
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 17:19:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CF882871E3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 17:26:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA0E44AEF2;
-	Wed, 25 Sep 2024 17:19:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA2764AEF2;
+	Wed, 25 Sep 2024 17:26:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AgB/sXzr"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DEp+GMnE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315DF1BC59
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 17:19:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 200C7210E9
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 17:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727284793; cv=none; b=Kocl48mo8scmEyC9iCjdHLnchRH4NUzu8hwps3KOnHzUIGzfEMGtwtypVE0RjgJS4o1DWlkdQKjgO5CPbVm/n/wgyIOFiPYeVPP1oN1S0v76VuiFACVLQ0zgYDQQJgMIUXFQ2awUT0V7rKPS7S5+mg4J8+rbQeLXBX6EQt2AW8E=
+	t=1727285183; cv=none; b=Feip42mywzPEIQdYipMkGTesFdFaY0Rqkt8K3GLL4mka6iATmowRSiIHQ9fYzL1AJRui1hagzFFloY4dcZX/1wRIhQJiE8P11QTJkDoviOh5LNCxYSEOW7/Lzy62ZC9+1XASiFNErg+OG0r7zEv6aDh18YaIX79MoEoh8DtWwEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727284793; c=relaxed/simple;
-	bh=d4IpwX5nlSO5cDGSa5aXj5jWaVcOOV64wkjcy4P3qPk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f4xvB+MGcMi/thGwmnRW41FuekJAjMFqW++LuwDUl4E8z5YkFG4Fuc1+AI/X6H0L5MMLgPlvL7OQSlFBBbiY0Xn54mIl/PWjUzXn+vqsIDNugd5ZXGoInwpl+GCGDicfjzsedTlyXUrqxqydJnEmxHtvv5Sh62tiT7edPtXbcE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AgB/sXzr; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a8d4979b843so11156166b.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 10:19:51 -0700 (PDT)
+	s=arc-20240116; t=1727285183; c=relaxed/simple;
+	bh=S/MhFgcRKcARF4C/WkE2tB9txWJI/GeERMG8nD/tZck=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XO9sfiKK/+TunMzgybu8zlTL7bfDQqOTNvuFl14gaDPEmdR6IuyiY+0QjBH5JDMU9Z3CrdLBSU2+bxYDoieget/OK3mknnRs+y6CT6r4On2l9xsOv3r/RPglw3u2zRjegC79wYGc7svIa972LuKjpAzAIUWDSKvdh3pSXepJcnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DEp+GMnE; arc=none smtp.client-ip=209.85.166.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-82ab349320fso3384039f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 10:26:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727284790; x=1727889590; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RYs3lutzoSncSJnmfL88IPhJU6GFg8JSR7+JveJBSXw=;
-        b=AgB/sXzrTEwLK7GjsG8swbFM3Rm+0BDxm98LCE8iZw1Q+6C6zxO4ISePTDj8/EJ26k
-         tT8Nk4oFKxFZCYF0XK5CcM6YVlX+Zjvprxz2PbVhFoHXKdzchNfkTo1UMZNE3iFz/KQR
-         wz2FVDgyGi/Ma1QYJvndB9PgKeBedGUmOdyMyjAhunVcNYTCt9JdOY3JT8qzsdnFt12C
-         cN+RzVlRFoWX434rQUY/yvJEskg4Gpg+ymAA8cEzz5rpE+DTIyKBZ1L65ktpPTdpxXLW
-         g7iPB5DHEY4tS8FzCjCOfMiw2YvPNzr0HS5IHZszOmb8JhwV11H/1kaMM0duei5ZFXX7
-         dWvA==
+        d=linuxfoundation.org; s=google; t=1727285181; x=1727889981; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Nsw+zRp/Ze7eW9+6epMJhd53fkKQRkg9ETNvRz5Ml1s=;
+        b=DEp+GMnEaQdkwIxuRnR/Q4BUn+p0hZvjX3hJYuW7J2OaX0HuYCylpUGmbDDkH76DeO
+         lDDKTb/cVv/+A0wttuGZI2VuytfETI6dYFA2FEzgEF+bqFaCUtvCQ1p+jnj+BvF30zKz
+         4N94GA9MNoH63l871adHrqMDocKdPGecr+0Y4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727284790; x=1727889590;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RYs3lutzoSncSJnmfL88IPhJU6GFg8JSR7+JveJBSXw=;
-        b=gLd7F8kVjbD23vAYUAPGlewlBuWulQFyVPrieEhtP1KUssIhPaMSVb6kK9AeZSV7cx
-         XlHBQHlVJVlZ1EaHxTppTVmfSMNG3oxDaSulMYL4wLDl9g9oDUAKQV8aBq6++yJLkdTg
-         YRwO7aObUC510nQxXHepZqIXB12jj/PFs+vgo7xb72t7CjqB6uJgVd5i07sFMcHJ+0am
-         AZHS3tXCDPO5fbJenNxewj45/88qWjBw6r6YSVhZCMgWFwh9kOYYnzBbtDh9o6Lbim7v
-         rn8KGZ3Cb5XJ0JbRkDE2IqE1M4yrmx5iRALHXnVBgsYXdHddd/zOzn+z3zTmkbfI/KUW
-         n6YA==
-X-Forwarded-Encrypted: i=1; AJvYcCXgS+pEXwaSgMrR3PLkCJtbhoCYtgF9fHtguJ8eiScYEWLdLZHpTFWEbmjDirst2ayt1en5N+eZoRk8F+xdHU8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhnGaSXIGWbmAzBKTQTOXSCkwVX8oFIDkoyDeJWDXhM6otDziF
-	tIdseDqb2ljeP9WWkxb68rtT6fdHA6uehijg9Holv0AXBXz1rag+Dl7NMBq6ESE+C/aZQFxXXxi
-	kgxgvtX8SLvKI8WAekNOIjcZu0FPruYjOgXY=
-X-Google-Smtp-Source: AGHT+IFyn2mf1UVSsCFu8lWRGIXgqLCKvYnu/Kas1apOkizFMWiUjPIRa49FBbVRGqjAVy1cJ0Y6b9lKinYOCGiAhJI=
-X-Received: by 2002:a17:907:960c:b0:a8d:2faf:d333 with SMTP id
- a640c23a62f3a-a93a03c3fc1mr300475966b.35.1727284790060; Wed, 25 Sep 2024
- 10:19:50 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1727285181; x=1727889981;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nsw+zRp/Ze7eW9+6epMJhd53fkKQRkg9ETNvRz5Ml1s=;
+        b=aeraALF4JpKHlOXmCqCs6sw+o0Znagzd3d5yT6bphB29kxwl0W1NQplMAJRcnhNA0S
+         NpNZm5umpfJ+C0LLNDb/DFV83voPWt04jcWVb372P4Rwng9b4IReHz8jBpc/cqnY4FOO
+         e+B5TL/Qh9KAVOMqMr+XB4fGd70GzSoSX9kfJLOm6M1/LjuNQ7a2dF83HG0A+z7N0+CX
+         qfmzZ3mLY4YI2R1G5Eg9Fh1p1EcsCtUdsYlaJrVdsUi3nBSEeqQYng2tRe2X/yEiKRW3
+         y5dQGVFMUqjuhNj4WbgS3Z6w6SG+8Xz3oRzmrmT1qU6gXC/irwtCN6aPOG1xmNo03Cs6
+         v5FA==
+X-Forwarded-Encrypted: i=1; AJvYcCXHjb0YjrlNxjbKAva92snfUOzlFm8dyNaEQ7Ty5NbCv3GeCMt5tp8xyXM5fWse0AFCLHU6mMMxuvDoU5Gbxpg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yza9H3Le0JOK6PHqZ7HMaJyEJZTM1S7KmJqG4XRn6XGKzIZbWvD
+	0zHKrm6jd81a6/M0gF/R6s6r4DpmmNTgOHq4H1RmGP6UA9vHvmauBzvs9fLaPB8CeNuiyT7KbeF
+	Y
+X-Google-Smtp-Source: AGHT+IGmRIDkJ5EYcMz5zDv+p0A3MLFtNlRBHwMyJenq92Hsd1XC41WvVZMfEbFtv+gq53kcE8kOfQ==
+X-Received: by 2002:a05:6602:2c01:b0:82a:7181:200f with SMTP id ca18e2360f4ac-83247d26137mr450776739f.9.1727285181091;
+        Wed, 25 Sep 2024 10:26:21 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4d40f1bcd9asm1181347173.95.2024.09.25.10.26.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Sep 2024 10:26:20 -0700 (PDT)
+Message-ID: <3f0d12ba-0e52-41f9-9cbd-34bc1225121e@linuxfoundation.org>
+Date: Wed, 25 Sep 2024 11:26:19 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1727191485.git.skhan@linuxfoundation.org> <4f3a0acd903aeee52fb71acaec1106d513a2e88b.1727191485.git.skhan@linuxfoundation.org>
-In-Reply-To: <4f3a0acd903aeee52fb71acaec1106d513a2e88b.1727191485.git.skhan@linuxfoundation.org>
-From: John Stultz <jstultz@google.com>
-Date: Wed, 25 Sep 2024 10:19:38 -0700
-Message-ID: <CANDhNCoC50Mhyo19O2drqXU7g-3j+wkFteTyi1jg1_5pCyzwYQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] selftests:timers: posix_timers: Fix
- warn_unused_result in __fatal_error()
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: tglx@linutronix.de, sboyd@kernel.org, shuah@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: Makefile: create OUTPUT dir
+To: Jakub Kicinski <kuba@kernel.org>, Anders Roxell <anders.roxell@linaro.org>
+Cc: shuah@kernel.org, willemb@google.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20240916075655.4117151-1-anders.roxell@linaro.org>
+ <952aeec9-c21f-46ce-bf68-e6ffce51630c@linuxfoundation.org>
+ <20240920123827.715ff109@kernel.org>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20240920123827.715ff109@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 24, 2024 at 8:57=E2=80=AFAM Shuah Khan <skhan@linuxfoundation.o=
-rg> wrote:
->
-> __fatal_error routine doesn't check strerror_r() return value,
-> which results in the following compile time warning:
->
-> posix_timers.c: In function =E2=80=98__fatal_error=E2=80=99:
-> posix_timers.c:31:9: warning: ignoring return value of =E2=80=98strerror_=
-r=E2=80=99 declared with attribute =E2=80=98warn_unused_result=E2=80=99 [-W=
-unused-result]
->    31 |         strerror_r(errno, buf, sizeof(buf));
->
-> Fix this by adding a check for return value and error handling appropriat=
-e
-> for the GNU-specific strerror_r() in use in __fatal_error(). Check if
-> return string is null and handle accordingly.
->
-> From Linux strerror_r() manual page:
->
-> "The GNU-specific strerror_r() returns a pointer to a string containing
-> the error message. This may be either a pointer to a string that the
-> function stores in buf, or a pointer to some (immutable) static string
-> (in which case buf is unused). If the function stores a string in buf,
-> then at most buflen bytes are stored (the string may be truncated if
-> buflen is too small and errnum is unknown). The string always includes
-> a terminating null byte."
->
-> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-> ---
->  tools/testing/selftests/timers/posix_timers.c | 12 ++++++++----
->  1 file changed, 8 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testin=
-g/selftests/timers/posix_timers.c
-> index 16bd49492efa..ddb1cebc844e 100644
-> --- a/tools/testing/selftests/timers/posix_timers.c
-> +++ b/tools/testing/selftests/timers/posix_timers.c
-> @@ -26,13 +26,17 @@
->  static void __fatal_error(const char *test, const char *name, const char=
- *what)
->  {
->         char buf[64];
-> +       char *ret_str =3D NULL;
->
-> -       strerror_r(errno, buf, sizeof(buf));
-> +       ret_str =3D strerror_r(errno, buf, sizeof(buf));
->
-> -       if (name && strlen(name))
-> -               ksft_exit_fail_msg("%s %s %s %s\n", test, name, what, buf=
-);
-> +       if (name && strlen(name) && ret_str)
-> +               ksft_exit_fail_msg("%s %s %s %s\n", test, name, what, ret=
-_str);
-> +       else if (ret_str)
-> +               ksft_exit_fail_msg("%s %s %s\n", test, what, ret_str);
->         else
-> -               ksft_exit_fail_msg("%s %s %s\n", test, what, buf);
-> +               ksft_exit_fail_msg("%s %s\n", test, what);
-> +
->  }
+On 9/20/24 04:38, Jakub Kicinski wrote:
+> On Thu, 19 Sep 2024 09:51:47 -0600 Shuah Khan wrote:
+>>> @@ -261,6 +261,7 @@ ifdef INSTALL_PATH
+>>>    	@ret=1;	\
+>>>    	for TARGET in $(TARGETS) $(INSTALL_DEP_TARGETS); do \
+>>>    		BUILD_TARGET=$$BUILD/$$TARGET;	\
+>>> +		mkdir -p $$BUILD_TARGET;	\
+>>>    		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET install \
+>>>    				INSTALL_PATH=$(INSTALL_PATH)/$$TARGET \
+>>>    				SRC_PATH=$(shell readlink -e $$(pwd)) \
+>>
+>> Doesn't the "all" target mkdir work for this case? Why do we need another mkdir here?
+> 
+> I was wondering about that, too. Looks like the code from the all
+> target is copy/pasted in the install target except the mkdir line.
+> Best fix would be to make the dependency work, I don't understand
+> why it doesn't already, tho.
 
-Acked-by: John Stultz <jstultz@google.com>
+I think this could be the issue:
+
+net main Makefile doesn't have handling for subdirs. It looks
+like the way this is handled is by adding an entry to the main
+Makefile:
+
+TARGETS += net/af_unix
+TARGETS += net/forwarding
+TARGETS += net/hsr
+TARGETS += net/mptcp
+TARGETS += net/openvswitch
+TARGETS += net/tcp_ao
+TARGETS += net/netfilter
+
+So the solution would be similar adding net/lib to the main
+Makefile.
+
+Anders, can you try the above and see if it works.
+
+Another issue - lib/Makefile
+TEST_GEN_FILES += csum needs to be TEST_GEN_FILES = csum
+
+thanks,
+-- Shuah
+
 
