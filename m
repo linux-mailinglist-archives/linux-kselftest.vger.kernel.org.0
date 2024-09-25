@@ -1,91 +1,139 @@
-Return-Path: <linux-kselftest+bounces-18371-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18372-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AADE9986759
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 22:02:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD1839868B1
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 23:55:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59B8D2819E6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 20:02:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BD9A1F2265D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 21:55:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43A8F13DDDD;
-	Wed, 25 Sep 2024 20:02:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E25A2154452;
+	Wed, 25 Sep 2024 21:55:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RqSeqGfC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JvS3Bv9N"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B307208CA;
-	Wed, 25 Sep 2024 20:02:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FF414C91;
+	Wed, 25 Sep 2024 21:55:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727294522; cv=none; b=EwBU7RhmF1c5iXv6UI2hSk3LYKoljcPuJ5ceOK7b6eZnI+5abyFkgx659RMlHe9lSpV9DySY2ZnLOL46r9iFmB8g8Mk/UsQRaeVQuDtFynM2AaPOVkOxm3t5pKu9xq52tbuOLGthlJjY37KWf+/4HdLbEhOfLmWlXhpZ2nz51UQ=
+	t=1727301320; cv=none; b=VDp3BNCBRLOB44YjMNGJ3fds+lo+7Pxn5xn0qNNkdNe9NFquJ9FgAz1h4hedEz0x6cIuP3KHUEFBzkMjQyX77HdKoyY0O7ZlUVwXr6uOZVbGCeRiwHEmnDqY9d0V4/KMse4kRUuCvnTeB6tIWZpsLaIq+67yBg6mr8pUCaGTXgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727294522; c=relaxed/simple;
-	bh=GuAtbY3FxHHtmaHMBG3KUXH3yBXNnrSuxiRVAzTx8ds=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=BpZnJG3aJOgMTkgh5jFhGMmPbtjulbaR/n7zj4mIcaEBPdWlIz0yk8w5UVwtEg2yPmm9jWgXXthc7JsGTJJkPeDSymZ8a+w0I9r7Yr12BGdA1VGsAgChJKVRVd/+3SwyR7gNgaEpCBGLui+55b2fKBi8w35Egt1Jjqq668H9c1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RqSeqGfC; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <895a685b-7449-4bf1-b14d-00aee1d8f75b@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1727294518;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YfbUzqws6stxPgb9eT4nEGannHed53FdV2xBgbx4dKI=;
-	b=RqSeqGfCCZ6YmwlRXsgxBrh7ruqVV3x98v/vzK+XODrCAMKQ6MCbfMsk/ECbPaOVf0KXu5
-	ZHHvyrJab4ckHdNyOJzRZlRUbyijhqluskNcQdDO0pmety1vfUgVUBQxZxZjTavhUhfc2W
-	p0eLT8aScNV5RHFz5mYDza7TmPMRoj0=
-Date: Wed, 25 Sep 2024 13:01:43 -0700
+	s=arc-20240116; t=1727301320; c=relaxed/simple;
+	bh=vxG9Q6QSTtFcvhnEY8P6xoSiQfhrYXqvTk6sHzPTLvQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=rpVtQCppaTVMUf4s541cwVjwbUpSfS97OCfhaZ8mNx6P4ru4aWuAHdkTGBr+vsKfyK4vS7QmzE/AcSDf4mKz2RyuviwCtaAYIx1yFFHZSO5s7QoDrrapiKuKwIcIeK4jdc8iszC4w0G+GTKrrMf3F6UtgZExTql4wEyiZMUzJ6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JvS3Bv9N; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-42cb60aff1eso2417555e9.0;
+        Wed, 25 Sep 2024 14:55:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727301317; x=1727906117; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XbUIdirgb2NKn/al311NR4bdvWEF/7y80ibmO08goVU=;
+        b=JvS3Bv9NdoHyKvLWEG05mStM3lTsXZdidfBlBLpOVkjRp97ityNtULNtasl79ky8gt
+         3SCbDg6xwqLHaxb9irV17BMz90lwRGmrOxc1lYNI1ZiyNofUVkVKXExpIHd6SEvGD/zq
+         cTZC3yTrPuqlc3bCQOf7mWEHrL/wg/qdJEcYIPckskinnwkpY3A7XIIR65KNugXzX7j1
+         vJigQnMJQoxPcJQKHWRei2GkRLzroCeUbawShWvmNDRgre1ZpScF368rErFe5vuwHN8x
+         nWe0pvm3M4MubjXOzl0wA9aWDkdjZpKmxTUSB9bOAUD++VNWgeyhWMkbcDsYA3NmsBfr
+         nzgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727301317; x=1727906117;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XbUIdirgb2NKn/al311NR4bdvWEF/7y80ibmO08goVU=;
+        b=s93SpN/dhSsWiHAE+fCVyQj6J4HxYhfhUM+v6ehupAEEnf2duwe0wTk3VtdfonlWbr
+         d6Qsfz30EpZdcZB5FYT+7Q6jy8fEelhrMlE1l9jGZS2kUVjzKTYZn9sGJMKNlZlBVUlg
+         Sj83iyqLdukNMBrs2LXq/RfvTEZUKiu00hG6UVoZPH6wqyXfRSG1e9HS5hXmFFmmDKGE
+         GaHTI/5DkMSOm3/q4+DLWOIXJpHF/j2i/U0lB23Z0ZI5/UJO/ONKG6SYYgToU9CiGwgO
+         bg5YNxKRe/ltGAXoUY/lLgBhBUlocWl0coxXIEkU9LvpGCbP7uPoRRT3pkBGeA6281H3
+         025w==
+X-Forwarded-Encrypted: i=1; AJvYcCUsumg1h34GI+BLcvFaQSKvOK3RLuX1tSVqz43hpbKhp0xR/ON8ABhTAQK//+JmH4qXwjYi/vBGphJHIg==@vger.kernel.org, AJvYcCVF6mYcmvqixAjGGc0kgLxIQ3foRZPaFOtKXPZNj4BPTK7esC418WMkbo2npcGKj9ozyxjOtmz0/kKj7rI=@vger.kernel.org, AJvYcCW4ForYomM6+62Lk/HIzA4MRmG1WT9J2owQ8Gq/+ipJt/q6+9LVLD0g5/u2TydmmkzAXkeYprVl@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgQidjAhviqy8MYo9UTxq6Vw9j+EDofLav8h7YVUPCdC/MiNpd
+	g6wZSxwt16kG3o742OIh7gDyVloMOD0qdF64qXmBqORtg2XVvR2ZzJzTq3rZ
+X-Google-Smtp-Source: AGHT+IEeBAHoqDG18W4bQGBegjI+2ccmYpkdAttee07RXyuyt/ZPCiSlRQfkj6RZsGdv8nvIQ6GcCQ==
+X-Received: by 2002:a5d:4e10:0:b0:374:c10c:83b3 with SMTP id ffacd0b85a97d-37cc24c5b4amr2748949f8f.54.1727301316926;
+        Wed, 25 Sep 2024 14:55:16 -0700 (PDT)
+Received: from [127.0.1.1] (2a02-8389-41cf-e200-370b-ca26-d622-f1c3.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:370b:ca26:d622:f1c3])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e96a165fdsm29129385e9.34.2024.09.25.14.55.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 25 Sep 2024 14:55:15 -0700 (PDT)
+From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH v3 0/5] selftests: gitignore and clean target file
+ additions
+Date: Wed, 25 Sep 2024 23:55:10 +0200
+Message-Id: <20240925-selftests-gitignore-v3-0-9db896474170@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: convert test_xdp_features.sh
- to test_progs
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Martin KaFai Lau <martin.lau@linux.dev>
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- Lorenzo Bianconi <lorenzo@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Jakub Kicinski <kuba@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>, ebpf@linuxfoundation.org,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-References: <20240910-convert_xdp_tests-v2-1-a46367c9d038@bootlin.com>
- <64df8d41-6cfb-45a9-8337-5cc04daedb60@linux.dev> <ZuVWmxoqXFI3qvVI@lore-desk>
- <20240914063828.7bd73c5e@kernel.org>
- <464e0ae0-d6e3-4da4-a157-f74260f96275@bootlin.com>
- <366e4392-bd00-4120-8585-a71b3952e365@linux.dev>
-Content-Language: en-US
-In-Reply-To: <366e4392-bd00-4120-8585-a71b3952e365@linux.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+X-B4-Tracking: v=1; b=H4sIAL6G9GYC/33NSw6CMBCA4auQrq2hL21deQ/jAspQJgFq2qbRE
+ O5uYcXCOLt/kvlmIRECQiS3aiEBMkb0cwlxqogdmtkBxa404TWXteGSRhj7BDFF6jChm30ACpI
+ xIeBiVduRcvkK0ON7Vx/P0gPG5MNnf5LZtv3vZUZraq5KNVZrIbS+u6nB8Wz9RDYv86Ohfhu8G
+ G2ZDnrOjDJHY13XL8MTft/6AAAA
+To: Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Allison Henderson <allison.henderson@oracle.com>, 
+ Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, linux-rdma@vger.kernel.org, 
+ rds-devel@oss.oracle.com, linux-mm@kvack.org, 
+ Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.14-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1727301314; l=1410;
+ i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
+ bh=vxG9Q6QSTtFcvhnEY8P6xoSiQfhrYXqvTk6sHzPTLvQ=;
+ b=CnL4QtmtajcGgAdChsd9/mZ55gyhRR03ZZFXZTxpWO87aLIAQQpQGrgmIi0LxnvK+ikpCrSqV
+ e3xOuXA8IR7D1lnLlfbIFWqw4pZibDCqDhKsgkDxTcD/H2RzL4ETi8A
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-On 9/25/24 3:37 AM, Martin KaFai Lau wrote:
-> I am not sure which case in xdp_features.c does not have existing coverage in 
-> test_progs. From a quick look, it seems only BPF_MAP_TYPE_CPUMAP is missing 
-> (please check)?
+Trivial patches to update the gitignore files unders selftests, and a
+little addition to EXTRA_CLEAN under net/rds to account for the
+automatically generated include.sh.
 
-Re: CPUMAP, I noticed there is a xdp_(cpu)map_attach.c test but it only does 
-attach test. May be something similar can be done like 
-https://lore.kernel.org/bpf/20240911-devel-koalo-fix-ingress-ifindex-v4-2-5c643ae10258@linutronix.de/ 
-to exercise the xdp prog that does cpumap redirect.
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Changes in v3:
+- Split new entries in core and net gitignore files into two patches.
+- Link to v2: https://lore.kernel.org/r/20240925-selftests-gitignore-v2-0-bbbbdef21959@gmail.com
+
+Changes in v2:
+- [PATCH 4/4] add excepction for load_address.c (must be tracked).
+- Link to v1: https://lore.kernel.org/r/20240924-selftests-gitignore-v1-0-9755ac883388@gmail.com
+
+---
+Javier Carrasco (5):
+      selftests: core: add unshare_test to gitignore
+      selftests: net: add msg_oob to gitignore
+      selftests: rds: add include.sh to EXTRA_CLEAN
+      selftests: rds: add gitignore file for include.sh
+      selftests: exec: update gitignore for load_address
+
+ tools/testing/selftests/core/.gitignore    | 1 +
+ tools/testing/selftests/exec/.gitignore    | 3 ++-
+ tools/testing/selftests/net/.gitignore     | 1 +
+ tools/testing/selftests/net/rds/.gitignore | 1 +
+ tools/testing/selftests/net/rds/Makefile   | 2 +-
+ 5 files changed, 6 insertions(+), 2 deletions(-)
+---
+base-commit: 4d0326b60bb753627437fff0f76bf1525bcda422
+change-id: 20240924-selftests-gitignore-e41133e6c5bd
+
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
+
 
