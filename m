@@ -1,117 +1,111 @@
-Return-Path: <linux-kselftest+bounces-18346-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18344-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C6E3B985AD2
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 14:15:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BECF79857F8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 13:27:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69E61B23091
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 12:15:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F10A2859AB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 11:27:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB7C0188926;
-	Wed, 25 Sep 2024 11:45:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ly7QgBXT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D295315CD46;
+	Wed, 25 Sep 2024 11:27:42 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE16C188907;
-	Wed, 25 Sep 2024 11:45:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA19B6FDC
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 11:27:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727264758; cv=none; b=jc8oGaixDjZdeisyJNY8LptUbNWfWGNM7pDM7mcv94uxO+gQCHAXbbb6xZuO7zD26pbG2oCy7ZmroggOobZf1C13ByspN6PW/g9xIA+7XNRIGKX5Jkf6mSLoKCsgDBNuA7B8AYiTQ+9p1RJsXuGUmIZmwTAgkVxxxZhkkXu+09A=
+	t=1727263662; cv=none; b=o8IeZjKh33E/oq6VPW060sGm1MDN90dup46MK3B6Fg51DteHmKenCY3vslqLPYjwAsRVjODElQtb7GhLN8mBQdrncJnKTWXGYj8BCpQIQ4cyD1Wv5ExjocAm6F0GcIQP3ld7VYYCbIVqd9Ouwav97uVn6dWWx17EitG3kowtLH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727264758; c=relaxed/simple;
-	bh=k9RDrPj+Z2firOORPKM9HyK8UpTlqYHTGGRiT3jYDFg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GUkopRbNbo2VboBeuZ73JpaD3JYtK47nqGZMfkd7kwHU5jJQQvuwaVU0AWgGH4U3qIlrVB8Ab1fz8uMt549jNhlYKfFpcSd9MULRyaCCkvmHdqYbt6s05PMMA5znzjID5C07BB1dyT9INfpxpsPQNXmEelp89TLceUx12US2AUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ly7QgBXT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64329C4CEC3;
-	Wed, 25 Sep 2024 11:45:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727264758;
-	bh=k9RDrPj+Z2firOORPKM9HyK8UpTlqYHTGGRiT3jYDFg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Ly7QgBXT28jlqT/UK+RDgO6Jt/ynuKX1WOPRdgAiNWr6oh0eFEGPa0rivNZAEYUvV
-	 a1xcXZ2l3iaI2zCAkYcednxTtdIQya9+oJ1hXWjG68A11kLDNyveHW8ueRymGkfGLB
-	 lzS685/WkeJPaKzrchyDT/QQ6vdqoEAl2LNfxLKMsLI44BJ9pe38LVkFlhEPidpF4s
-	 7zCktnKur101Z84fZaehXVSY6Ys0x3k/kA/Ud49JJbGsZFPSuYIurAejENGwJnecp2
-	 yoXiwiztE+8VgkUmubKlbUaHf/TNxkeh2PXTicJEZ39h8JsotMvTezyRUEcoQFbu5v
-	 0CXPFzM+7ojdQ==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Jiri Olsa <olsajiri@gmail.com>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Sasha Levin <sashal@kernel.org>,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	shuah@kernel.org,
-	mcoquelin.stm32@gmail.com,
-	alexandre.torgue@foss.st.com,
-	thinker.li@gmail.com,
-	martin.lau@kernel.org,
-	geliang@kernel.org,
-	bentiss@kernel.org,
-	jrife@google.com,
-	alan.maguire@oracle.com,
-	dxu@dxuuu.xyz,
-	davemarchevsky@fb.com,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.11 147/244] selftests/bpf: fix uprobe.path leak in bpf_testmod
-Date: Wed, 25 Sep 2024 07:26:08 -0400
-Message-ID: <20240925113641.1297102-147-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240925113641.1297102-1-sashal@kernel.org>
-References: <20240925113641.1297102-1-sashal@kernel.org>
+	s=arc-20240116; t=1727263662; c=relaxed/simple;
+	bh=nlwY4nKqkWCXyO3T2vmHu68hC7HddzgTamRajvxJbjk=;
+	h=From:To:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=pES0ueFJE3xNVRsqYqi1P0ZSeFvL7H5DzyS7EJo9nec3ltkh1miErYKkz05/OgaG+VXz+ci+hTodD9YcGaM3iWsfRM2a+OZwVYxNMq231sZ8w+yhBXgTynUv6rtSH/HQtJkK28Wk5wk3AItA51Twpwi10koiMQjMTT/JxxJLuR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.86.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-201-7-hegE0WNKa5nIuQIrIH7w-1; Wed, 25 Sep 2024 12:27:30 +0100
+X-MC-Unique: 7-hegE0WNKa5nIuQIrIH7w-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Wed, 25 Sep
+ 2024 12:26:43 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Wed, 25 Sep 2024 12:26:43 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Vinicius Peixoto' <vpeixoto@lkcamp.dev>, Brendan Higgins
+	<brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar
+	<rmoar@google.com>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "kunit-dev@googlegroups.com"
+	<kunit-dev@googlegroups.com>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+	"~lkcamp/patches@lists.sr.ht" <~lkcamp/patches@lists.sr.ht>
+Subject: RE: [PATCH 0/1] Add KUnit tests for lib/crc16.c
+Thread-Topic: [PATCH 0/1] Add KUnit tests for lib/crc16.c
+Thread-Index: AQHbDUbburejGRqRfUyI9R5kM3ntM7JoXa8Q
+Date: Wed, 25 Sep 2024 11:26:43 +0000
+Message-ID: <51c4ba25f9284a749b451ca203fcc124@AcuMS.aculab.com>
+References: <20240922232643.535329-1-vpeixoto@lkcamp.dev>
+In-Reply-To: <20240922232643.535329-1-vpeixoto@lkcamp.dev>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.11
-Content-Transfer-Encoding: 8bit
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-From: Jiri Olsa <olsajiri@gmail.com>
-
-[ Upstream commit db61e6a4eee5a7884b2cafeaf407895f253bbaa7 ]
-
-testmod_unregister_uprobe() forgets to path_put(&uprobe.path).
-
-Signed-off-by: Jiri Olsa <olsajiri@gmail.com>
-Signed-off-by: Oleg Nesterov <oleg@redhat.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20240801132724.GA8791@redhat.com
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-index fd28c1157bd3d..72f565af4f829 100644
---- a/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/bpf_testmod/bpf_testmod.c
-@@ -477,6 +477,7 @@ static void testmod_unregister_uprobe(void)
- 	if (uprobe.offset) {
- 		uprobe_unregister(d_real_inode(uprobe.path.dentry),
- 				  uprobe.offset, &uprobe.consumer);
-+		path_put(&uprobe.path);
- 		uprobe.offset = 0;
- 	}
- 
--- 
-2.43.0
+RnJvbTogVmluaWNpdXMgUGVpeG90bw0KPiBTZW50OiAyMyBTZXB0ZW1iZXIgMjAyNCAwMDoyNw0K
+PiANCj4gSGkgYWxsLA0KPiANCj4gVGhpcyBwYXRjaCB3YXMgZGV2ZWxvcGVkIGR1cmluZyBhIGhh
+Y2thdGhvbiBvcmdhbml6ZWQgYnkgTEtDQU1QIFsxXSwNCj4gd2l0aCB0aGUgb2JqZWN0aXZlIG9m
+IHdyaXRpbmcgS1VuaXQgdGVzdHMsIGJvdGggdG8gaW50cm9kdWNlIHBlb3BsZSB0bw0KPiB0aGUg
+a2VybmVsIGRldmVsb3BtZW50IHByb2Nlc3MgYW5kIHRvIGxlYXJuIGFib3V0IGRpZmZlcmVudCBz
+dWJzeXN0ZW1zDQo+ICh3aXRoIHRoZSBwb3NpdGl2ZSBzaWRlIGVmZmVjdCBvZiBpbXByb3Zpbmcg
+dGhlIGtlcm5lbCB0ZXN0IGNvdmVyYWdlLCBvZg0KPiBjb3Vyc2UpLg0KPiANCj4gV2Ugbm90aWNl
+ZCB0aGVyZSB3ZXJlIHRlc3RzIGZvciBDUkMzMiBpbiBsaWIvY3JjMzJ0ZXN0LmMgYW5kIHRob3Vn
+aHQgaXQNCj4gd291bGQgYmUgbmljZSB0byBoYXZlIHNvbWV0aGluZyBzaW1pbGFyIGZvciBDUkMx
+Niwgc2luY2UgaXQgc2VlbXMgdG8gYmUNCj4gd2lkZWx5IHVzZWQgaW4gbmV0d29yayBkcml2ZXJz
+IChhcyB3ZWxsIGFzIGluIHNvbWUgZXh0NCBjb2RlKS4NCj4gDQo+IEFsdGhvdWdoIHRoaXMgcGF0
+Y2ggdHVybmVkIG91dCBxdWl0ZSBiaWcsIG1vc3Qgb2YgdGhlIExPQ3MgY29tZSBmcm9tDQo+IHRh
+YmxlcyBjb250YWluaW5nIHJhbmRvbWx5LWdlbmVyYXRlZCB0ZXN0IGRhdGEgdGhhdCB3ZSB1c2Ug
+dG8gdmFsaWRhdGUNCj4gdGhlIGtlcm5lbCdzIGltcGxlbWVudGF0aW9uIG9mIENSQy0xNi4NCj4g
+DQo+IFdlIHdvdWxkIHJlYWxseSBhcHByZWNpYXRlIGFueSBmZWVkYmFjay9zdWdnZXN0aW9ucyBv
+biBob3cgdG8gaW1wcm92ZQ0KPiB0aGlzLiBUaGFua3MhIDotKQ0KDQpXb3VsZCBpcyBiZSBiZXR0
+ZXIgdG8gdXNlIGEgdHJpdmlhbCBQUk5HIHRvIGdlbmVyYXRlIHJlcGVhdGFibGUgJ3JhbmRvbSBl
+bm91Z2gnDQpkYXRhLCByYXRoZXIgdGhhbiBoYXZpbmcgYSBsYXJnZSBzdGF0aWMgYXJyYXk/DQoN
+CkFzIGEgbWF0dGVyIG9mIGludGVyZXN0LCBob3cgaW4gY3JjMTYgaW1wbGVtZW50ZWQgKEkga25v
+dyBJIGNvdWxkIGxvb2spLg0KVGhlIGNvZGUgdmVyc2lvbjoNCg0KdWludDMyX3QNCmNyY19zdGVw
+KHVpbnQzMl90IGNyYywgdWludDMyX3QgYnl0ZV92YWwpDQp7DQogICAgdWludDMyX3QgdCA9IGNy
+YyBeIChieXRlX3ZhbCAmIDB4ZmYpOw0KICAgIHQgPSAodCBeIHQgPDwgNCkgJiAweGZmOw0KICAg
+IHJldHVybiBjcmMgPj4gOCBeIHQgPDwgOCBeIHQgPDwgMyBeIHQgPj4gNDsNCn0NCg0KbWF5IHdl
+bGwgYmUgZmFzdGVyIHRoYW4gYSBsb29rdXAgdGFibGUgdmVyc2lvbi4NCkVzcGVjaWFsbHkgb24g
+bW9kZXJuIG11bHRpLWlzc3VlIGNwdSBhbmQvb3IgZm9yIHNtYWxsIGJ1ZmZlcnMgd2hlcmUgdGhl
+IGxvb2t1cA0KdGFibGUgd29uJ3QgbmVjZXNzYXJpbHkgYmUgcmVzaWRlbnQgaW4gdGhlIEQtY2Fj
+aGUuDQoNCkl0IGlzIHNsaWdodGx5IHNsb3dlciB0aGFuIHRoZSB0YWJsZSBsb29rdXAgb24gdGhl
+IHNpbXBsZSBOaW9zLUlJIGNwdS4NCkJ1dCB3ZSB1c2UgYSBjdXN0b20gaW5zdHJ1Y3Rpb24gdG8g
+ZG8gaXQgaW4gb25lIGNsb2NrLg0KDQoJRGF2aWQNCg0KPiANCj4gVmluaWNpdXMgUGVpeG90byAo
+MSk6DQo+ICAgbGliL2NyYzE2X2t1bml0LmM6IGFkZCBLVW5pdCB0ZXN0cyBmb3IgY3JjMTYNCj4g
+DQo+ICBsaWIvS2NvbmZpZy5kZWJ1ZyB8ICAgOCArDQo+ICBsaWIvTWFrZWZpbGUgICAgICB8ICAg
+MSArDQo+ICBsaWIvY3JjMTZfa3VuaXQuYyB8IDcxNSArKysrKysrKysrKysrKysrKysrKysrKysr
+KysrKysrKysrKysrKysrKysrKysrDQo+ICAzIGZpbGVzIGNoYW5nZWQsIDcyNCBpbnNlcnRpb25z
+KCspDQo+ICBjcmVhdGUgbW9kZSAxMDA2NDQgbGliL2NyYzE2X2t1bml0LmMNCj4gDQo+IC0tDQo+
+IDIuNDMuMA0KPiANCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJv
+YWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24g
+Tm86IDEzOTczODYgKFdhbGVzKQ0K
 
 
