@@ -1,131 +1,148 @@
-Return-Path: <linux-kselftest+bounces-18377-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18378-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AB159868C5
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 23:56:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F02D986917
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Sep 2024 00:14:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 429662822FE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 21:56:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CE3CF1C2184F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 22:14:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDBA218452A;
-	Wed, 25 Sep 2024 21:55:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65742153BC1;
+	Wed, 25 Sep 2024 22:14:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dtByoH3a"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="Qqkv7BK4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13C0417DFFC;
-	Wed, 25 Sep 2024 21:55:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56CC71D5AD5;
+	Wed, 25 Sep 2024 22:14:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727301333; cv=none; b=XPC5FWK/FjODTejY4kX9jYC58BF20a8g9q4wqmI8c58pfJNb4qhQ3DMgfoAcs+kbfmBsg8AqwO7dv9h68qAz5jaL9L+Mn8cVZZfysci3uaVfJx+0Uaj3rA4PvYWIi6JxmXgj77W5cDIrJEraOVj1JZG8hzr3/ijpx0PjETKa7/o=
+	t=1727302449; cv=none; b=ie0rw/CDtOjEWQZndfPsZRt2ZGXI5BkQb330fRJMBqdnAezQtJ7kSR3wCCiMKzaRP4LiC2KnxYrrOPMVQq3wQq70pP2JsxZfSo3WurkMAbfZ8ZbCqw+U0QNR8i6q0YPTY8wnLiVsnpUU7oDcFZh+puVfhRz33OWYInKR2JZcPKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727301333; c=relaxed/simple;
-	bh=7IW7RTcLpOgxZZP501qb1vVbPlEm3RjQ1ux8c067MVg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=U9CILG6kT+HJb+3b19T6G2YiaCtkc2Qu78RU5Ct8yepp0dhG+J3UOQEQHYg/P3Q7pmNgKcqqXmipvK6yN4WyLolMQoNI4Drsf9hxHw2bCn+UAhwzhB4cDpKoROeV+vscJ3BD61T+KDhb0p9VcP/9BKTJL1m+2VchE873dP65G9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dtByoH3a; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-42cae4eb026so2678735e9.0;
-        Wed, 25 Sep 2024 14:55:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727301330; x=1727906130; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7lsxEOCwsoXbFkn1yMDzhagn4UCZ4K4wi9PS2Tk4cfw=;
-        b=dtByoH3aTMkROufvYDRMPmRqCDtKlQkltGZTEiHV1qERrfDFo6CrGECy9T91IkzT+E
-         tLh7vaM0ii6N+xJWqKUEf98alKcvmo7EuEKOQGOsUhD01SEV/fveDjUs0sUjdjRV7a7k
-         rgaBHIOrc6aohfydp+AMGdN3vzixJrffWirMXLTHQpHOdoa/c5+boa+ICJAk8g6ppbFX
-         NEPlQx36/gQFi9ClvoMma4pDSc7U0RXpoj2OslqmYfTzvG+AHuvOFTNA9fM47uwj0Fqy
-         OoWABsUcXzGE8Rkv0Py5z3PTNBdGJ5wSbyK24Kh5CKcli41r11FAZANsQYMdIpqrQpvT
-         jCrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727301330; x=1727906130;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7lsxEOCwsoXbFkn1yMDzhagn4UCZ4K4wi9PS2Tk4cfw=;
-        b=E0JcKhqG2VLjjXGLMG2v2NZOudEiFWhagPABV0zHksWRF7KDiMC8aKSOl65/j2z1fJ
-         jQVRU1v1JpKD5cbGJpPQLo7p78skyWIzeHSEKcLv+OpzALGM4nG/YoM9n32HNA9Ds4Yr
-         rbXZ0hUVi4y0CU4RJ0dhcF2/zczlDEzchgj+NhGWpwJXnDSCcPXI++M+Z0W//blus+wn
-         a1ys6Ay8u8gPr5XhgTdxKT19cRiSTWQZ4xA4IffnfdS82VNCT5WI7Soj+Btfvb9TCdSa
-         noelCeezWw3IO858u15SXPhXEScCW/ZLLSFsjl+7iJPDIRE39Ev8IlMlFsMYx6mTsnQ0
-         vHew==
-X-Forwarded-Encrypted: i=1; AJvYcCUW7B9nh6tYpm7nheMtjDAt6tauE1HcINZGvZo36KIlQm5+mLxo3WnxMpouF/FQZOyS58ZRnpzD@vger.kernel.org, AJvYcCVV4xAtJq5F4sFIsApW5BdEsxmCCeaMe9hIwiD+0QkFN63YyGeJy/6BvDwotL251eeKaCs/YfLuksUdlg==@vger.kernel.org, AJvYcCWWLJVnhx4A4pKdItmSq3ahfyCuQ//pSE2G4Do5ddaXOlmEA9AnaGDZB7nNYKke7KpfyICDlHCS4Mk4880=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLST5TkZ2mX5waRCrrWdZdJdUBAkDuRGYzsv8rpMdpkbvCfpV7
-	MOoSkIxoTk7Lp+F91BEa7vJ3PkepKlg0K8OlX4fktUWNyKyfJeuphJqQk+wq
-X-Google-Smtp-Source: AGHT+IGFQ4MmWyqAfjWrEI1rjvVqY2tB3bR3hAOHcc/V4KmU3OJf507LaJsJ9K1hmAgn0cYE5Pffvw==
-X-Received: by 2002:a05:600c:4447:b0:428:f0c2:ef4a with SMTP id 5b1f17b1804b1-42e9610d4famr26735415e9.13.1727301329607;
-        Wed, 25 Sep 2024 14:55:29 -0700 (PDT)
-Received: from [127.0.1.1] (2a02-8389-41cf-e200-370b-ca26-d622-f1c3.cable.dynamic.v6.surfer.at. [2a02:8389:41cf:e200:370b:ca26:d622:f1c3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e96a165fdsm29129385e9.34.2024.09.25.14.55.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Sep 2024 14:55:28 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Wed, 25 Sep 2024 23:55:15 +0200
-Subject: [PATCH v3 5/5] selftests: exec: update gitignore for load_address
+	s=arc-20240116; t=1727302449; c=relaxed/simple;
+	bh=IF41UnyDrl53g+NYIdXxL2UzRFa3oU7Z0qkEPuNrQUI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M4HunHpjgu0nlFvvx8LzC5V3DKIkLwcw/YDHhpnn9mbxakp6S4slO3/xL3YhKYHhXMimCSfSbXFei3VQotQXSTEdSO+Cbgy1Hn5wSfSvhDrsKtKbtXRzUJxbX/0dtBkKNOr1r2SfRQqQKR3rumGu31ImlLlJHny363CLW5rrPoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=Qqkv7BK4; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [192.168.7.205] ([71.202.166.45])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 48PMDMTL889345
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 25 Sep 2024 15:13:23 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 48PMDMTL889345
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2024091601; t=1727302404;
+	bh=g5RH7RZbXQVW+UpYk6LsTd2oLH0NAup72AHZEkEBk7g=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Qqkv7BK45SoUUrLPuZ/VMtYlhuHPSof+LhTQxp8X/Gvmn+rODfXnAU3V3BVtyAnI0
+	 7ydgtN+JW3vBfCJ9cAOv6BDDDcfTDKBf+d22xo7htig+8t8ztVE/GO22Z4TB5ederi
+	 g2I4ENVx51wLUbicAj4LER+Y+36gdqblDdv1SNKzJaScfqY5x9aysxBn3dgYZIWYzE
+	 jSgPy1Mnodt5JfhK7ggCPgEQfYTsvv0Vo0YTWbqRGYbE+gCD+irBBlyagDtek6wpd1
+	 ZeseV3vbk1FZu5vtYVv9WJQr9mmCfX0HIvLSnM/Fe2ivl98Do5wblJvmSBV3c1q/jh
+	 a+4RC7gAe27Aw==
+Message-ID: <496a337d-a20d-4122-93a9-1520779c6d2d@zytor.com>
+Date: Wed, 25 Sep 2024 15:13:22 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 07/25] KVM: VMX: Set intercept for FRED MSRs
+To: Sean Christopherson <seanjc@google.com>
+Cc: Chao Gao <chao.gao@intel.com>, Xin Li <xin3.li@intel.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        pbonzini@redhat.com, corbet@lwn.net, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, shuah@kernel.org, vkuznets@redhat.com,
+        peterz@infradead.org, ravi.v.shankar@intel.com
+References: <20240207172646.3981-1-xin3.li@intel.com>
+ <20240207172646.3981-8-xin3.li@intel.com> <ZiJzFsoHR41Sd8lE@chao-email>
+ <ZmoT0jaX_3Ww3Uzu@google.com>
+ <feefa9d1-f266-414f-bb7b-b770ef0d8ec6@zytor.com>
+ <ZuNJlzXntREQVb3n@google.com>
+ <d65e62d2-ca64-4b29-8656-bb8411fe837d@zytor.com>
+ <ZvQaNRhrsSJTYji3@google.com>
+Content-Language: en-US
+From: Xin Li <xin@zytor.com>
+Autocrypt: addr=xin@zytor.com; keydata=
+ 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
+ l75w1xInsg==
+In-Reply-To: <ZvQaNRhrsSJTYji3@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240925-selftests-gitignore-v3-5-9db896474170@gmail.com>
-References: <20240925-selftests-gitignore-v3-0-9db896474170@gmail.com>
-In-Reply-To: <20240925-selftests-gitignore-v3-0-9db896474170@gmail.com>
-To: Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Allison Henderson <allison.henderson@oracle.com>, 
- Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, linux-rdma@vger.kernel.org, 
- rds-devel@oss.oracle.com, linux-mm@kvack.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1727301314; l=863;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=7IW7RTcLpOgxZZP501qb1vVbPlEm3RjQ1ux8c067MVg=;
- b=Q8EBY9TuoJ+RJFrfKdvGQwxnNe7qFkXDAOZLpLfhaTWfVIq9NWgNnXRqga/0GXQemSOfZcvWn
- QSsC2tB/7BGCciQzNNepQjHas8bvtW1izvO6asFGNoGinEtOFX/3Xst
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-The name of the "load_address" objects has been modified, but the
-corresponding entry in the gitignore file must be updated.
+On 9/25/2024 7:12 AM, Sean Christopherson wrote:
+> On Wed, Sep 18, 2024, Xin Li wrote:
+>> You mean the following patch set, right?
+> 
+> Yep, and presumably the KVM support as well:
 
-Update the load_address entry in the gitignore file to account for
-the new names, adding an exception to keep on tracking load_address.c.
+I assume it's close to KVM upstreaming criteria :)
 
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- tools/testing/selftests/exec/.gitignore | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> https://lore.kernel.org/all/20240219074733.122080-1-weijiang.yang@intel.com
+> 
+>> https://lore.kernel.org/kvm/20240531090331.13713-1-weijiang.yang@intel.com/
+> 
+...
+>>
+>> When FRED is advertised to a guest, KVM should allow FRED SSP MSRs
+>> accesses through disabling FRED SSP MSRs interception no matter whether
+>> supervisor shadow stacks are enabled or not.
+> 
+> KVM doesn't necessarily need to disabling MSR interception, e.g. if the expectation
+> is that the guest will rarely/never access the MSRs when CET is unsupported, then
+> we're likely better off going with a trap-and-emulate model.  KVM needs to emulate
+> RDMSR and WRMSR no matter what, e.g. in case the guest triggers a WRMSR when KVM
+> is emulating, and so that userspace can get/set MSR values.
+> 
+> And this means that yes, FRED virtualization needs to land after CET virtualization,
+> otherwise managing the conflicts/dependencies will be a nightmare.
+> 
 
-diff --git a/tools/testing/selftests/exec/.gitignore b/tools/testing/selftests/exec/.gitignore
-index 90c238ba6a4b..a0dc5d4bf733 100644
---- a/tools/testing/selftests/exec/.gitignore
-+++ b/tools/testing/selftests/exec/.gitignore
-@@ -9,7 +9,8 @@ execveat.ephemeral
- execveat.denatured
- non-regular
- null-argv
--/load_address_*
-+/load_address.*
-+!load_address.c
- /recursion-depth
- xxxxxxxx*
- pipe
+No argument.
 
--- 
-2.43.0
-
+Thanks!
+     Xin
 
