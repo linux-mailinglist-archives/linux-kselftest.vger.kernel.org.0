@@ -1,131 +1,174 @@
-Return-Path: <linux-kselftest+bounces-18354-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18355-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E703B986017
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 16:14:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B991986164
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 16:48:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22F541C261DA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 14:14:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2E281F2948E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 14:48:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81BFF1BAEEA;
-	Wed, 25 Sep 2024 12:24:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF1A183CA8;
+	Wed, 25 Sep 2024 14:12:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iJ0VksGw"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4WVAvYoQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-yb1-f202.google.com (mail-yb1-f202.google.com [209.85.219.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C6C1AD9D1;
-	Wed, 25 Sep 2024 12:24:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 394B91D5ACD
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 14:12:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727267051; cv=none; b=WhnDM9ueU3PhENABcwEmTZusTB4pExlbYsPFzJZ/3S1+A4hvtkL56iY9zzU3SficfSBb/b0T4mSP2+nVE6a6FyFwlfNvuNMeIjtXOvLIUhcqJfyVCFK+aLkWqaqJAVoewiHeG9FJaIUgAqWehGNgb5BT0AAsbRKmmwA9TdbwPQE=
+	t=1727273529; cv=none; b=f6Be86GIQAvqgw59lguu7lL8umWpIYKF72l99XlWy6d5Nvf0Q/dv/g71Iyi3R0PRhTrDazX7YvrjVQHzUVc/0fz/l18zjPtd9J9voJECPEVIHblNYd1f8hXuamZ/5zzutoSGQd3KsQd3nXTp3ganlSFFCu8AR36edTenkm0CX6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727267051; c=relaxed/simple;
-	bh=7IW7RTcLpOgxZZP501qb1vVbPlEm3RjQ1ux8c067MVg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=l8k5/FdMxSB3f5mqt+zUOhsXJFp1LOx7ybr//Dhw4M2L9u61knzvPbpurcTP6BpyfMzwVfyS9I0YtzAHDzO739L3UPbXIvca3qB/lmnE3lQ8CRKtw6sguDYk4j0fNH6L0mw8QysWgGh//zfEOZPrlLpCTBuUs33CQXQG+bJiKHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iJ0VksGw; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a93a1cda54dso110514366b.2;
-        Wed, 25 Sep 2024 05:24:09 -0700 (PDT)
+	s=arc-20240116; t=1727273529; c=relaxed/simple;
+	bh=caZMVSss+hfeV7WP34KAQwEKIbUpl7RXfA/CctTtTn0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=gDn46G9DOOma29Os41i97Ex/vbC9KVzKCNm/Qim7O1eTnu3N96Nr0Tcc5Fnmqu/pJ1eOmwAvxKIBUex6cTyxyhhKRV8CoPTt9NqqLtYrxdWUfJC0FlmSe10lzs8DJO7pOhP41RSZmcxcaUEgUoLmh6DiuhxxAz9JeGejOkfLLRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4WVAvYoQ; arc=none smtp.client-ip=209.85.219.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-yb1-f202.google.com with SMTP id 3f1490d57ef6-e225c289c90so8668668276.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 07:12:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727267048; x=1727871848; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+        d=google.com; s=20230601; t=1727273527; x=1727878327; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7lsxEOCwsoXbFkn1yMDzhagn4UCZ4K4wi9PS2Tk4cfw=;
-        b=iJ0VksGwxXA0GAnHfAO5Hx1mNeKsJEIjKk4T9tD1N9TGRsuXkth5yuJcGg/MLYJJyx
-         3WsUtRrmLaqYJYmm6rU7F3DZ4iAFIPU9KH8scgvnmfw8J+uefWLP+VJHPKAWcl7IOAyh
-         fzNOjSU81aNStFiY66Nvpi2ThJFmWQk0ROqnx5gXAU3BQzgWml+Zf2JpYAyAMX85ndiC
-         HMSThbdiE+Meqb/Db6gExaFUMZ6BFTa+rkB9cRjnZdf0uMMWTRP5FhuBP8AVOY0eN9Wx
-         58+H0x8PBMgiExYcf9Dmr5fPOasYYb2RQS/MDl1QNGpfzg2lMDn5oKHq76smPXqh7B3D
-         hG1A==
+        bh=zfLBjs5PHlghwVrU7vpRjJ03RkAESW4WXi5zlWV+fXA=;
+        b=4WVAvYoQaD0Fi/WB33In28H6NeooazTCZfrEguVrRSL5+HpcrSnZLgTgFo3mVAWUWQ
+         oFhsSzjoaDth7euLFYf4xWnBD1AncMfaBV3wWQO2iHoTEZPg8vjt7rY7+vMal1v3ib0n
+         UsWbiuFD9icZu0iO+38YfwM1U6zJikyYlcpEMm7779BkPbMvzhNq3wzJYviXsQHQg4bP
+         fakYM7NRbozwlTcQXcQvlsw4ZCTjGZXyOL9+upqaZvfJKqkzOTwsahW2cFP4HoVIXI6o
+         zDxbe+TYTH0InXa56qJ67fYiOiwIujwf+id5X4ApuYiZqv2gpM/Mr3Fx953h0tJDeraZ
+         WJSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727267048; x=1727871848;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7lsxEOCwsoXbFkn1yMDzhagn4UCZ4K4wi9PS2Tk4cfw=;
-        b=uXtWiUEBeiWiSu2nHeKyvC3xDljKKoMpcWIUhMnYAcXnRqONP482moTysx1o/bzqnh
-         A2Q0qbY+oVUHtiAIzQrjIm5LfTr62jkrByw2FkDgp3RBF9rPYqizFAI+GjGg6rWa96QS
-         3s4q5OROIQD0Yhlspk8bQ9WFUW+ltSkA8v3ol8ftECutlSRl0Qa3IhRNhtyvt3nuWit0
-         /Di3/igLZk3v61IqXMtIkuDUBxf/4AHGsLbQzc4hHnsIUVDohBXQAOFv3rfAZdCIOhpl
-         U+NuNA13iKj0oUJ5oigYFHF72BfEvDHFqBjkZx7kRENjEl5/x6IPZHsBoDqnDf+5pbq8
-         zJAA==
-X-Forwarded-Encrypted: i=1; AJvYcCU+YXcmMmmhpEthIkUH+zc06e8wK7Inr3SXaejMcwi17rMG2ZJsJo5BOYWHzrCUzTfLDsH8YKRi@vger.kernel.org, AJvYcCVEqXm5opib6G6ZN7NIKNsT0J2D9lTxqBN6ejqfKkIwqxn6gmIVedWnQ4hdT5iGYUnbC8xaf+OIWE507jY=@vger.kernel.org, AJvYcCX8JGWRze/N3cQptYQ7IHZ2QW7BiRC0O7Z/p8IG9uTeQ+u/evru05Czj2TtXYeAfgrQLfH4497qITgJpw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhS+FooCak56RHebhmp0zeMk6+nqubpebZktlwxCqYXvG4a2Z8
-	PMNog2ruwiy1jOgHXX9OytXQEzx/WzdEKnU0Oij4HoqmdKZE5Kv5XgJf9k6r
-X-Google-Smtp-Source: AGHT+IE4F7MIDE3gwFeysvFqd14Ezun9YWADHyABgtnmSAAaZD5uc9HiNFKlc7yZ3pZl3TekZbH5og==
-X-Received: by 2002:a17:907:3f22:b0:a91:a5f:c9ce with SMTP id a640c23a62f3a-a93a0678b45mr199090966b.62.1727267047542;
-        Wed, 25 Sep 2024 05:24:07 -0700 (PDT)
-Received: from [127.0.1.1] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a93930f8529sm204745566b.185.2024.09.25.05.24.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 25 Sep 2024 05:24:06 -0700 (PDT)
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Wed, 25 Sep 2024 14:23:47 +0200
-Subject: [PATCH v2 4/4] selftests: exec: update gitignore for load_address
+        d=1e100.net; s=20230601; t=1727273527; x=1727878327;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zfLBjs5PHlghwVrU7vpRjJ03RkAESW4WXi5zlWV+fXA=;
+        b=T9xzJndvPGdCH1AHTxZNQT+jnSYO7QfxQsdqr2gY+VvJnY6sGtFApoJv/MOT3jexOt
+         BNYvxwzp5GRAl1HeY8EFtTS5XPfLSFMGsa/ukgSAXms6AqT3F5nag/oPCHoMvcYP4NO7
+         g/UDISa0i87F4UxGZuHxqI8dM2WoiwSnnffY+gzSDhXv2g1PV5K/H1baB8xCRKXG+cWJ
+         fhVyIFRq8wzRsdBhL+CF+0xTawXujpP8RlptySYJpHQXljh8H75WfhzWPToTGhjcqL2w
+         zBwbFEBpDqJakATWhaTWHhDee8QLdyLm0X/qv/YjwSb5U7MXy72+uKGcu8tZA5tSNB73
+         w2Mw==
+X-Forwarded-Encrypted: i=1; AJvYcCU4iYylngdMdArveO911hTbRvL4oYBUCFWIXbYDqbLrzn2NuQn/ghygXdhV69VH8IoVRWthVku0vwJmuoGYvJ4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8W1Hv4lJ/60a2KMvKWmFqYxk91J4guk0srdVelsOLYATKo1us
+	aoGcfO3kG4ITN2AebcYHFEQoOxXEMh+aVOUlbjq/bz5F2rmPCuYiCl+RLzfjkOZ4PMKyar5eYXW
+	r2g==
+X-Google-Smtp-Source: AGHT+IEPGReoQdLJ0WXkwCLY6OOacP06JYe3XTYe/8Qo1kKrLFuqeITXcsLs6p91L7BG4e12yJbQXU3iqh4=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a05:6902:289:b0:e0b:af9b:fb79 with SMTP id
+ 3f1490d57ef6-e24d7a104admr29937276.3.1727273527163; Wed, 25 Sep 2024 07:12:07
+ -0700 (PDT)
+Date: Wed, 25 Sep 2024 07:12:05 -0700
+In-Reply-To: <d65e62d2-ca64-4b29-8656-bb8411fe837d@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <20240207172646.3981-1-xin3.li@intel.com> <20240207172646.3981-8-xin3.li@intel.com>
+ <ZiJzFsoHR41Sd8lE@chao-email> <ZmoT0jaX_3Ww3Uzu@google.com>
+ <feefa9d1-f266-414f-bb7b-b770ef0d8ec6@zytor.com> <ZuNJlzXntREQVb3n@google.com>
+ <d65e62d2-ca64-4b29-8656-bb8411fe837d@zytor.com>
+Message-ID: <ZvQaNRhrsSJTYji3@google.com>
+Subject: Re: [PATCH v2 07/25] KVM: VMX: Set intercept for FRED MSRs
+From: Sean Christopherson <seanjc@google.com>
+To: Xin Li <xin@zytor.com>
+Cc: Chao Gao <chao.gao@intel.com>, Xin Li <xin3.li@intel.com>, linux-kernel@vger.kernel.org, 
+	kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, pbonzini@redhat.com, corbet@lwn.net, 
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, shuah@kernel.org, 
+	vkuznets@redhat.com, peterz@infradead.org, ravi.v.shankar@intel.com
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240925-selftests-gitignore-v2-4-bbbbdef21959@gmail.com>
-References: <20240925-selftests-gitignore-v2-0-bbbbdef21959@gmail.com>
-In-Reply-To: <20240925-selftests-gitignore-v2-0-bbbbdef21959@gmail.com>
-To: Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Allison Henderson <allison.henderson@oracle.com>, 
- Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, linux-rdma@vger.kernel.org, 
- rds-devel@oss.oracle.com, linux-mm@kvack.org, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1727267039; l=863;
- i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=7IW7RTcLpOgxZZP501qb1vVbPlEm3RjQ1ux8c067MVg=;
- b=v8ert1fyzU29Kss8HWM/CpR6nWddO6lRb1LJMQ2XTPCGjiku6Fddv7JlMSDP/OQatWPfTnZTB
- xjcWVveyjUXDVsdPiKSJhTEoqD4HbeAol+FD7G3Qdu2pBkQaV63S1jk
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
+Content-Transfer-Encoding: quoted-printable
 
-The name of the "load_address" objects has been modified, but the
-corresponding entry in the gitignore file must be updated.
+On Wed, Sep 18, 2024, Xin Li wrote:
+> > > MSR_IA32_FRED_SSP0 is an alias of the CET MSR_IA32_PL0_SSP and likely=
+ to
+> > > be used in the same way as FRED RSP0, i.e., host FRED SSP0 _should_ b=
+e
+> > > restored in arch_exit_to_user_mode_prepare().  However as of today Li=
+nux
+> > > has no plan to utilize kernel shadow stack thus no one cares host FRE=
+D
+> > > SSP0 (no?).  But lets say anyway it is host's responsibility to manag=
+e
+> > > host FRED SSP0, then KVM only needs to take care of guest FRED SSP0
+> > > (just like how KVM should handle guest FRED RSP0) even before the
+> > > supervisor shadow stack feature is advertised to guest.
+> >=20
+> > Heh, I'm not sure what your question is, or if there even is a question=
+.  KVM
+> > needs to context switch FRED SSP0 if FRED is exposed to the guest, but =
+presumably
+> > that will be done through XSAVE state?  If that's the long term plan, I=
+ would
+> > prefer to focus on merging CET virtualization first, and then land FRED=
+ virtualization
+> > on top so that KVM doesn't have to carry intermediate code to deal with=
+ the aliased
+> > MSR.
+>=20
+> You mean the following patch set, right?
 
-Update the load_address entry in the gitignore file to account for
-the new names, adding an exception to keep on tracking load_address.c.
+Yep, and presumably the KVM support as well:
 
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- tools/testing/selftests/exec/.gitignore | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+https://lore.kernel.org/all/20240219074733.122080-1-weijiang.yang@intel.com
 
-diff --git a/tools/testing/selftests/exec/.gitignore b/tools/testing/selftests/exec/.gitignore
-index 90c238ba6a4b..a0dc5d4bf733 100644
---- a/tools/testing/selftests/exec/.gitignore
-+++ b/tools/testing/selftests/exec/.gitignore
-@@ -9,7 +9,8 @@ execveat.ephemeral
- execveat.denatured
- non-regular
- null-argv
--/load_address_*
-+/load_address.*
-+!load_address.c
- /recursion-depth
- xxxxxxxx*
- pipe
+> https://lore.kernel.org/kvm/20240531090331.13713-1-weijiang.yang@intel.co=
+m/
 
--- 
-2.43.0
+...
 
+> > Ugh, but what happens if a CPU (or the host kernel) supports FRED but n=
+ot CET SS?
+> > Or is that effectively an illegal combination?
+>=20
+> The FRED Spec says:
+>=20
+> IA32_FRED_SSP1, IA32_FRED_SSP2, and IA32_FRED_SSP3 (MSR indices 1D1H=E2=
+=80=93
+> 1D3H). Together with the existing MSR IA32_PL0_SSP (MSR index 6A4H), thes=
+e
+> are the FRED SSP MSRs.
+>=20
+> The FRED SSP MSRs are supported by any processor that enumerates
+> CPUID.(EAX=3D7,ECX=3D1):EAX.FRED[bit 17] as 1. If such a processor does n=
+ot
+> support CET, FRED transitions will not use the MSRs (because shadow stack=
+s
+> are not enabled), but the MSRs would still be accessible using RDMSR and
+> WRMSR.
+>=20
+>=20
+> So they are independent, just that FRED SSP MSRs are NOT used if
+> supervisor shadow stacks are not enabled (obviously Qemu can be
+> configured to not advertise CET but FRED).
+>=20
+> When FRED is advertised to a guest, KVM should allow FRED SSP MSRs
+> accesses through disabling FRED SSP MSRs interception no matter whether
+> supervisor shadow stacks are enabled or not.
+
+KVM doesn't necessarily need to disabling MSR interception, e.g. if the exp=
+ectation
+is that the guest will rarely/never access the MSRs when CET is unsupported=
+, then
+we're likely better off going with a trap-and-emulate model.  KVM needs to =
+emulate
+RDMSR and WRMSR no matter what, e.g. in case the guest triggers a WRMSR whe=
+n KVM
+is emulating, and so that userspace can get/set MSR values.
+
+And this means that yes, FRED virtualization needs to land after CET virtua=
+lization,
+otherwise managing the conflicts/dependencies will be a nightmare.
 
