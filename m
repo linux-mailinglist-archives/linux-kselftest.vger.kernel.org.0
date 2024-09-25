@@ -1,130 +1,210 @@
-Return-Path: <linux-kselftest+bounces-18332-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18333-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7187984F38
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 01:59:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 122D1984F95
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 02:50:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2484B1C230DF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Sep 2024 23:59:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C7E6B20EFC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 00:50:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9254A189BA7;
-	Tue, 24 Sep 2024 23:59:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8495132103;
+	Wed, 25 Sep 2024 00:50:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="C1s8JMVQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LR+V/BUw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64BF186E57
-	for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2024 23:59:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8CE6130499;
+	Wed, 25 Sep 2024 00:50:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727222378; cv=none; b=XFx06KevEr93+09iw+to+Aj4jdphGYeWF0JaENepEGixU5XNITAGcKtMzSsXDZWVGJ0D1clYTA271xwdyFYwLscrp+NGmjUhhfMJkd32X7KkUlyawQbDsOrRXoqGRHGHicrWDARwAM1fDm0eeB1Pg+Gp6zLY5LpZZ7s6GpcnzF8=
+	t=1727225406; cv=none; b=Re8ddgqePCLI1Xs0xNVBTEtxhGJmCHIGkFJFPr7xyqsEluoeT0aPRQaNL9Imv8zTFHsk5UDrMZLWG5t+7CmtXCBEr1kkDOUTy6oWPzD5mJBfRfYnukW6Mg4lT3SpN5IeXXaOedg8pohjlryiqKDnz5t3XTf6XRm2DuHUgEl+UQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727222378; c=relaxed/simple;
-	bh=NPBhGsZGXeHhMhqBrOs0lKj/hQr4Of+6SHrSbODGWf4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WsMfV/gS9x3rRatNE4ejDvZMDssZTzAU44WsytSvEyhkUjCcEBXj01oB9ea8m1RqKAQ6w1jcR1JOMiUyT1FFGn6XN10d39qDcUV/O8AFZWmEgEbTBSiE4SGr4h+Oj07JHnsJeuMDRcD9aqXqP9GcvAdcgtUAnWB6ZLbRxTLrrXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=C1s8JMVQ; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5c5b9d2195eso4668598a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Sep 2024 16:59:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727222375; x=1727827175; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kI/ysPTxQWzKUDDa2gWjdjf1UvW+7XakeF8GyEGFOL4=;
-        b=C1s8JMVQK72Or/DSqyLJddljAAr1GPC6xpU4g8GQH/zuuTw+Uq1U/eIevT0wvc8bnk
-         CnPH1pzbq8lNTEQn09jeX1oOwydIX6kHmQkF2/Bret20o2Qf2ylxjJryk4GRCgfCvaL/
-         USsz5xUSIkRUIDnLV9HwohaOM09bNWGy1Trtooh6tmrVkk5/fLoGz5OXxkbOy2DhpFLs
-         H3C4gPzmg9THz/thIC7obNyinBGQ4hKMgwA4d1NceBGAR4Z46JErp0keHP/FMBVsRr8a
-         oi5ld/RnpkgbXM9ATBYvVU3ep3o5jjeXOPBSIxyAWBdvc3jzjNC/+AcVchpCZ0p984e2
-         D/4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727222375; x=1727827175;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kI/ysPTxQWzKUDDa2gWjdjf1UvW+7XakeF8GyEGFOL4=;
-        b=CsScbG/v5En2sH9r5c7o6qYiF8REOxcrVUIuZivsUyffLfaNSQWDwL8vkwBM3ne1E+
-         LKCV/crp1b2AfZffHEZRrNFPXGXDhdbiHCYVMcnf44ft1L4C4AmAD+hkImCNMHrcs4es
-         nNogxKXJWc8/slzGfPJ0XF8r7DtUxFl/uOmPMhbd2wrQo1FEQg+SgLAmJIv+1PpJDd3W
-         0mVL8kuK3ASnkxL+nfQRh0MnYU97Hj33W0H9QswIBoiwWzunw5EFAjbMsiuP/WqaAlRR
-         xeDL1HLB+tqIqMTtwFoj8VFyEKOoD8Qrwa7ZeEplWN2yObk2jbOVG9hrYLRmEhAmWSeI
-         9Ekw==
-X-Forwarded-Encrypted: i=1; AJvYcCUTFeKuYepvZStILoIM10B9QeyMB/6hzdw5PVvMYj+8EfOK2DYwCcIuR3InZcb2Y43U47gkNRWfFdVHAW6FjYI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytbRhYXyQBWJmCv/GAkVlytut9kFSevbVa6OLf8vh2cTalLmIA
-	sZ4tktkyy+yf/BdkSIuuaDmZ0TKnfR1gP2Hq2TyagJBg+toH+rtxA0DcyIf7DIeMpbKlEdQBD8+
-	O4QCraWJNksDfSTv2rhngq7k9yfnDG7jqwvo=
-X-Google-Smtp-Source: AGHT+IEFAG3wub9OvDEOs3FiLz5OFqv+WsMgtvScIRg52xRzRH+AwJSsf6BAU1gkGTOMfniTFrgvm8bolZPFDbB+GIQ=
-X-Received: by 2002:a17:907:7d9f:b0:a77:b01b:f949 with SMTP id
- a640c23a62f3a-a93a03e3726mr75990466b.35.1727222374772; Tue, 24 Sep 2024
- 16:59:34 -0700 (PDT)
+	s=arc-20240116; t=1727225406; c=relaxed/simple;
+	bh=n9b2CcW3JcflL4xUUDh/blICAcUDGjmnRZHdA6aXMZY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ChmkqGk4s8+e4ENM/BtNQtJuXfUhh6mZrmOdsdnxzewSnH1TKpU1Cbz4iggib0PpFKcN+A8gKjr8qm7Vy1iFNkrGREkrsbkDdFtIpuqLkC5bzTM8aXX8Bgk+kb+XjvSyCKgETCJ/hguIhR1vI9xYuTuiltci1AvqaebNrk+gGjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LR+V/BUw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA45AC4CEC4;
+	Wed, 25 Sep 2024 00:50:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727225406;
+	bh=n9b2CcW3JcflL4xUUDh/blICAcUDGjmnRZHdA6aXMZY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=LR+V/BUwffxK2X8mV7Pu6x1gSzmO5d1+YwaUopuUgjZQQjGV4xF3ff5eGISvr6OA+
+	 ZA5RUiT6oHOwtxpqfKT94uOKh6VVgEqH7/EfWPg8GDU/k726DvcbpjwRJ666LWEAm+
+	 P93PeVXMUFiKRWq2FUsR5YArVAahxeER1e12WeoLWHKGlfCa7GKwWrUaookXDPGeRL
+	 6+WTmUNBG9Vz/lB6PcxWvOMgt/4TmpDithskA7MdHzXtYQQZzqsndMalWoK3uYS2FK
+	 6KkONLkFvnoAJwg0RD6HbuAM1Mg20mz9Bffh5GKenPtpLL6ebVfgcqSpciijPbOatz
+	 FwARod0/wKabw==
+Date: Tue, 24 Sep 2024 17:53:26 -0700
+From: Bjorn Andersson <andersson@kernel.org>
+To: Wasim Nazir <quic_wasimn@quicinc.com>
+Cc: Shuah Khan <shuah@kernel.org>, 
+	Mathieu Poirier <mathieu.poirier@linaro.org>, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH] selftest: remoteproc: Add basic test for start/stop
+ sequence
+Message-ID: <ad6zsxcmqxavf7uo76ipriqjg7ipijafkaehgs5wthyyf364lv@kg4kzrxgucgl>
+References: <20240920175842.388781-1-quic_wasimn@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1727191485.git.skhan@linuxfoundation.org> <f797bc704d8eb03234a3447c77fa7b704339f89a.1727191485.git.skhan@linuxfoundation.org>
-In-Reply-To: <f797bc704d8eb03234a3447c77fa7b704339f89a.1727191485.git.skhan@linuxfoundation.org>
-From: John Stultz <jstultz@google.com>
-Date: Tue, 24 Sep 2024 16:59:22 -0700
-Message-ID: <CANDhNCpsEQL+S8gadXMjvbE-6r8c6owzz+_DhN6JAVqQ8Hg=_g@mail.gmail.com>
-Subject: Re: [PATCH 2/2] selftests: timers: Remove local NSEC_PER_SEC and
- USEC_PER_SEC defines
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: tglx@linutronix.de, sboyd@kernel.org, shuah@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240920175842.388781-1-quic_wasimn@quicinc.com>
 
-On Tue, Sep 24, 2024 at 8:57=E2=80=AFAM Shuah Khan <skhan@linuxfoundation.o=
-rg> wrote:
->
-> Remove local NSEC_PER_SEC and USEC_PER_SEC defines. Pick them up from
-> include/vdso/time64.h. This requires -I $(top_srcdir) to the timers
-> Makefile to include the include/vdso/time64.h.
->
-> posix_timers test names the defines NSECS_PER_SEC and USECS_PER_SEC.
-> Include the include/vdso/time64.h and change NSECS_PER_SEC and
-> USECS_PER_SEC references to NSEC_PER_SEC and USEC_PER_SEC respectively.
+On Fri, Sep 20, 2024 at 11:28:42PM GMT, Wasim Nazir wrote:
+> Add new basic remoteproc test that check start/stop
+> sequence of all subsystems available.
+> 
 
-Nit: You got the last bit switched there. This patch changes local
-NSEC_PER_SEC to the upstream defined NSECS_PER_SEC.
+Please describe your test scenario more than just "check start/stop
+sequence".
 
-Overall no objection from me. I've always pushed to have the tests be
-mostly self-contained so they can be built outside of the kernel
-source, but at this point the current kselftest.h dependencies means
-it already takes some work, so this isn't introducing an undue
-hardship.
+Signed-off-by...
 
-Other then the nit,
-  Acked-by: John Stultz <jstultz@google.com>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index e062b5328341..aff76edc4242 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -18225,6 +18225,7 @@ F:	Documentation/staging/remoteproc.rst
+>  F:	drivers/remoteproc/
+>  F:	include/linux/remoteproc.h
+>  F:	include/linux/remoteproc/
+> +F:	tools/testing/selftests/remoteproc/
+> 
+>  REMOTE PROCESSOR MESSAGING (RPMSG) SUBSYSTEM
+>  M:	Bjorn Andersson <andersson@kernel.org>
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+> index 697f13bbbc32..31db0311efdc 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -68,6 +68,7 @@ TARGETS += proc
+>  TARGETS += pstore
+>  TARGETS += ptrace
+>  TARGETS += openat2
+> +TARGETS += remoteproc
+>  TARGETS += resctrl
+>  TARGETS += riscv
+>  TARGETS += rlimits
+> diff --git a/tools/testing/selftests/remoteproc/Makefile b/tools/testing/selftests/remoteproc/Makefile
+> new file mode 100644
+> index 000000000000..a84b3934fd36
+> --- /dev/null
+> +++ b/tools/testing/selftests/remoteproc/Makefile
+> @@ -0,0 +1,4 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +TEST_PROGS := remoteproc_test.sh
+> +
+> +include ../lib.mk
+> diff --git a/tools/testing/selftests/remoteproc/config b/tools/testing/selftests/remoteproc/config
+> new file mode 100644
+> index 000000000000..a5c237d2f3b4
+> --- /dev/null
+> +++ b/tools/testing/selftests/remoteproc/config
+> @@ -0,0 +1 @@
+> +CONFIG_REMOTEPROC=y
+> diff --git a/tools/testing/selftests/remoteproc/remoteproc_test.sh b/tools/testing/selftests/remoteproc/remoteproc_test.sh
+> new file mode 100644
+> index 000000000000..88c8f15d8406
+> --- /dev/null
+> +++ b/tools/testing/selftests/remoteproc/remoteproc_test.sh
+> @@ -0,0 +1,165 @@
+> +#!/bin/sh
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
+> +#
+> +
+> +DIR="$(dirname $(readlink -f "$0"))"
+> +
+> +KTAP_HELPERS="${DIR}/../kselftest/ktap_helpers.sh"
+> +if [ -e "$KTAP_HELPERS" ]; then
+> +    source "$KTAP_HELPERS"
+> +else
+> +    echo -n "1..0 # SKIP $KTAP_HELPERS file not found"
+> +	exit 4
+> +fi
+> +
+> +RPROC_SYS=/sys/class/remoteproc
+> +RPROC_SEQ_SLEEP=5
+> +rproc_ss_files=
+> +num_tests=0
+> +test_err=0
+> +
+> +check_error() {
+> +	if [ $? -ne 0 ]; then
+> +		test_err=$((test_err+1))
+> +		ktap_print_msg "$@"
+> +	fi
+> +}
+> +
+> +rproc_seq_test_ss_one() {
+> +	ss=$1
 
-> diff --git a/tools/testing/selftests/timers/adjtick.c b/tools/testing/sel=
-ftests/timers/adjtick.c
-> index 205b76a4abb4..cb9a30f54662 100644
-> --- a/tools/testing/selftests/timers/adjtick.c
-> +++ b/tools/testing/selftests/timers/adjtick.c
-> @@ -22,14 +22,12 @@
->  #include <sys/time.h>
->  #include <sys/timex.h>
->  #include <time.h>
-> +#include <include/vdso/time64.h>
->
->  #include "../kselftest.h"
->
->  #define CLOCK_MONOTONIC_RAW    4
+"ss" or "subsystem" are Qualcomm terms, please use "remoteproc instance"
+instead.
 
-I suspect CLOCK_MONOTONIC_RAW (and the other clockid definitions)
-could be similarly removed here as well in a future patch?
+> +	rproc=${RPROC_SYS}/$ss
+> +	rproc_name=$(cat $rproc/name)
+> +	rproc_state=$(cat $rproc/state)
+> +	rproc_ssr=$(cat $rproc/recovery)
+> +	ktap_print_msg "Testing rproc sequence for $rproc_name"
+> +
+> +	# Reset test_err value
+> +	test_err=0
+> +	if [ "$rproc_ssr" != "enabled" ]; then
+> +		echo enabled > $rproc/recovery
+> +		check_error "$rproc_name SSR-enabled failed"
 
-thanks
--john
+Same with "SSR", you can express this with standard terms.
+
+Why do we need "recovery" enabled in order to perform start/stop or
+stop/start testing? Doesn't recovery only affect the crash code path?
+
+> +	fi
+> +
+> +	if [ "$rproc_state" != "running" ]; then
+
+I'd like to see your arguments in the commit message, or a comment here,
+of why you do either start/stop or stop/start - instead of e.g. make
+sure they are all stopped and then start/stop them in the test.
+
+
+PS. Please use check go/upstream and adopt b4.
+
+Regards,
+Bjorn
+
+> +		echo start > "$rproc/state"
+> +		check_error "$rproc_name state-start failed"
+> +
+> +		sleep ${RPROC_SEQ_SLEEP}
+> +
+> +		echo stop > "$rproc/state"
+> +		check_error "$rproc_name state-stop failed"
+> +	else
+> +		echo stop > "$rproc/state"
+> +		check_error "$rproc_name state-stop failed"
+> +
+> +		sleep ${RPROC_SEQ_SLEEP}
+> +
+> +		echo start > "$rproc/state"
+> +		check_error "$rproc_name state-start failed"
+> +	fi
+> +
+> +	if [ $test_err -ne 0 ]; then
+> +		ktap_test_fail "$rproc_name"
+> +	else
+> +		ktap_test_pass "$rproc_name"
+> +	fi
+> +}
 
