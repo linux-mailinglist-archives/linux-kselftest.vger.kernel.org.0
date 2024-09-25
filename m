@@ -1,138 +1,149 @@
-Return-Path: <linux-kselftest+bounces-18361-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18362-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A3AB986507
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 18:42:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4972986587
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 19:20:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FEF11F26AA1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 16:42:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41B58B25FE0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 17:19:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD426F2F2;
-	Wed, 25 Sep 2024 16:41:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA0E44AEF2;
+	Wed, 25 Sep 2024 17:19:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cIkU1HrO"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AgB/sXzr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9394313CA9C
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 16:41:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 315DF1BC59
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 17:19:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727282486; cv=none; b=ZOYfiLlISYnljs5s2wL41VYNo6u8o/sP6OG7abxOsFm0yTP9xBTdDZRm2MXer7ceiRL4bL9iMmwCAQaYS+QWwMJHgRp1Cgz5bjryHxmfCRFQ1jyqSWDiagoomaS6dIDXMdStYj6dO7zTRHnB57DsUtJCH3QqkkOLB9jA4VkNUB4=
+	t=1727284793; cv=none; b=Kocl48mo8scmEyC9iCjdHLnchRH4NUzu8hwps3KOnHzUIGzfEMGtwtypVE0RjgJS4o1DWlkdQKjgO5CPbVm/n/wgyIOFiPYeVPP1oN1S0v76VuiFACVLQ0zgYDQQJgMIUXFQ2awUT0V7rKPS7S5+mg4J8+rbQeLXBX6EQt2AW8E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727282486; c=relaxed/simple;
-	bh=PI67tLirlz221GqZjEYs9n3s8qaQlx8hfCr23HTlcm8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FdKm4jD/sZCqDcqIqp72n2mTqtiv4bFYli2y+binRA0AZsUeDNevyeVqHl9IsQkhsQRx8Jt5/zOdNWku2Ax8qx/xSBXRQXZHgP7D1PCjo+JBwk7MCCmU9LSYQaNq5qTYklWKc/9RpEH5HDM2q3JLEjq4/ZToqemPcEfCoOYpPpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cIkU1HrO; arc=none smtp.client-ip=209.85.160.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-27d045a73easo100429fac.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 09:41:23 -0700 (PDT)
+	s=arc-20240116; t=1727284793; c=relaxed/simple;
+	bh=d4IpwX5nlSO5cDGSa5aXj5jWaVcOOV64wkjcy4P3qPk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=f4xvB+MGcMi/thGwmnRW41FuekJAjMFqW++LuwDUl4E8z5YkFG4Fuc1+AI/X6H0L5MMLgPlvL7OQSlFBBbiY0Xn54mIl/PWjUzXn+vqsIDNugd5ZXGoInwpl+GCGDicfjzsedTlyXUrqxqydJnEmxHtvv5Sh62tiT7edPtXbcE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=AgB/sXzr; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-a8d4979b843so11156166b.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 10:19:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1727282482; x=1727887282; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ooWKkaH8UA51S7NKCStf2gXeN7ic3yySCOlAB9zd8A=;
-        b=cIkU1HrOEtjVGDPshVSdsT6rSNS0sMD6xZVk5OvU9L5BdUw5iAqTVtklXvA0HyHn9N
-         gFthYUMf8ecP54K1fbCXasO2BKcNb7qLTg1F/7SrjRqyTXKhXXPxB+VPqTctcJNVRIhk
-         C5fExHjkS8XmQKBBC7OJbvtt+2RyhFAxMpFLk=
+        d=google.com; s=20230601; t=1727284790; x=1727889590; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RYs3lutzoSncSJnmfL88IPhJU6GFg8JSR7+JveJBSXw=;
+        b=AgB/sXzrTEwLK7GjsG8swbFM3Rm+0BDxm98LCE8iZw1Q+6C6zxO4ISePTDj8/EJ26k
+         tT8Nk4oFKxFZCYF0XK5CcM6YVlX+Zjvprxz2PbVhFoHXKdzchNfkTo1UMZNE3iFz/KQR
+         wz2FVDgyGi/Ma1QYJvndB9PgKeBedGUmOdyMyjAhunVcNYTCt9JdOY3JT8qzsdnFt12C
+         cN+RzVlRFoWX434rQUY/yvJEskg4Gpg+ymAA8cEzz5rpE+DTIyKBZ1L65ktpPTdpxXLW
+         g7iPB5DHEY4tS8FzCjCOfMiw2YvPNzr0HS5IHZszOmb8JhwV11H/1kaMM0duei5ZFXX7
+         dWvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727282482; x=1727887282;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ooWKkaH8UA51S7NKCStf2gXeN7ic3yySCOlAB9zd8A=;
-        b=JX+aAfaq0nzzs+TZJ/bWdiSQtPRxwqduJgRoIQw5KsZH6iY0VT6fyol7cwQHGxjivG
-         1XYBl7+3l0IdNEvyibieHGcqShLNTJ/lw/Vw89aPasj6Fp0qt6O2ejEGF+9NgqLAgDzm
-         1VQBdEhoTNAB3Rr24fZI2aAC/6cqnUDfhJqsGmNkBV0NnJiiM0U3PY6uHnSIZHyJ+RE4
-         I9vGthDz1ccF/cBTl5t0eJoFKoxyF4TrKDaGlSo4UT9PD4diniXLHxjDlbQ3/CwmhJ86
-         aaScOb25U7R/CbswFxD3KJVJRLaDTXz39ilmK1XDOmIO0gbZYuJlCx+WMJ2CmJZ52dRr
-         LkCw==
-X-Gm-Message-State: AOJu0YyKqwDekhWvH2kH3m/QZlmvmWmJQjuMiwSeTIb3SZmV/iqSHEXc
-	fqVEzx+snuF/jLmuoix00La4BH1jbNSTL+39XsL6nBoUDPZrFe9CvkOsTm8pk2U=
-X-Google-Smtp-Source: AGHT+IEu+wsD5M8hLLJhawisq6UBLFx5/tPt56xJ6tx3Ztxg/IR/TZ9MyYAirmSPX4RgkZwIftpF1A==
-X-Received: by 2002:a05:6871:e01a:b0:27c:df8c:8dac with SMTP id 586e51a60fabf-286e13655e6mr2784227fac.13.1727282482594;
-        Wed, 25 Sep 2024 09:41:22 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-283afabfcffsm1399050fac.58.2024.09.25.09.41.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Sep 2024 09:41:21 -0700 (PDT)
-Message-ID: <62f52cb9-1173-46aa-96a0-d48de011fdc2@linuxfoundation.org>
-Date: Wed, 25 Sep 2024 10:41:20 -0600
+        d=1e100.net; s=20230601; t=1727284790; x=1727889590;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RYs3lutzoSncSJnmfL88IPhJU6GFg8JSR7+JveJBSXw=;
+        b=gLd7F8kVjbD23vAYUAPGlewlBuWulQFyVPrieEhtP1KUssIhPaMSVb6kK9AeZSV7cx
+         XlHBQHlVJVlZ1EaHxTppTVmfSMNG3oxDaSulMYL4wLDl9g9oDUAKQV8aBq6++yJLkdTg
+         YRwO7aObUC510nQxXHepZqIXB12jj/PFs+vgo7xb72t7CjqB6uJgVd5i07sFMcHJ+0am
+         AZHS3tXCDPO5fbJenNxewj45/88qWjBw6r6YSVhZCMgWFwh9kOYYnzBbtDh9o6Lbim7v
+         rn8KGZ3Cb5XJ0JbRkDE2IqE1M4yrmx5iRALHXnVBgsYXdHddd/zOzn+z3zTmkbfI/KUW
+         n6YA==
+X-Forwarded-Encrypted: i=1; AJvYcCXgS+pEXwaSgMrR3PLkCJtbhoCYtgF9fHtguJ8eiScYEWLdLZHpTFWEbmjDirst2ayt1en5N+eZoRk8F+xdHU8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhnGaSXIGWbmAzBKTQTOXSCkwVX8oFIDkoyDeJWDXhM6otDziF
+	tIdseDqb2ljeP9WWkxb68rtT6fdHA6uehijg9Holv0AXBXz1rag+Dl7NMBq6ESE+C/aZQFxXXxi
+	kgxgvtX8SLvKI8WAekNOIjcZu0FPruYjOgXY=
+X-Google-Smtp-Source: AGHT+IFyn2mf1UVSsCFu8lWRGIXgqLCKvYnu/Kas1apOkizFMWiUjPIRa49FBbVRGqjAVy1cJ0Y6b9lKinYOCGiAhJI=
+X-Received: by 2002:a17:907:960c:b0:a8d:2faf:d333 with SMTP id
+ a640c23a62f3a-a93a03c3fc1mr300475966b.35.1727284790060; Wed, 25 Sep 2024
+ 10:19:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] selftests: add unshare_test and msg_oob to
- gitignore
-To: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>,
- Allison Henderson <allison.henderson@oracle.com>,
- Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, linux-rdma@vger.kernel.org,
- rds-devel@oss.oracle.com, linux-mm@kvack.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240925-selftests-gitignore-v2-0-bbbbdef21959@gmail.com>
- <20240925-selftests-gitignore-v2-1-bbbbdef21959@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240925-selftests-gitignore-v2-1-bbbbdef21959@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1727191485.git.skhan@linuxfoundation.org> <4f3a0acd903aeee52fb71acaec1106d513a2e88b.1727191485.git.skhan@linuxfoundation.org>
+In-Reply-To: <4f3a0acd903aeee52fb71acaec1106d513a2e88b.1727191485.git.skhan@linuxfoundation.org>
+From: John Stultz <jstultz@google.com>
+Date: Wed, 25 Sep 2024 10:19:38 -0700
+Message-ID: <CANDhNCoC50Mhyo19O2drqXU7g-3j+wkFteTyi1jg1_5pCyzwYQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] selftests:timers: posix_timers: Fix
+ warn_unused_result in __fatal_error()
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: tglx@linutronix.de, sboyd@kernel.org, shuah@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/25/24 06:23, Javier Carrasco wrote:
-> These executables are missing from their corresponding gitignore files.
-> Add them to the lists.
-> 
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+On Tue, Sep 24, 2024 at 8:57=E2=80=AFAM Shuah Khan <skhan@linuxfoundation.o=
+rg> wrote:
+>
+> __fatal_error routine doesn't check strerror_r() return value,
+> which results in the following compile time warning:
+>
+> posix_timers.c: In function =E2=80=98__fatal_error=E2=80=99:
+> posix_timers.c:31:9: warning: ignoring return value of =E2=80=98strerror_=
+r=E2=80=99 declared with attribute =E2=80=98warn_unused_result=E2=80=99 [-W=
+unused-result]
+>    31 |         strerror_r(errno, buf, sizeof(buf));
+>
+> Fix this by adding a check for return value and error handling appropriat=
+e
+> for the GNU-specific strerror_r() in use in __fatal_error(). Check if
+> return string is null and handle accordingly.
+>
+> From Linux strerror_r() manual page:
+>
+> "The GNU-specific strerror_r() returns a pointer to a string containing
+> the error message. This may be either a pointer to a string that the
+> function stores in buf, or a pointer to some (immutable) static string
+> (in which case buf is unused). If the function stores a string in buf,
+> then at most buflen bytes are stored (the string may be truncated if
+> buflen is too small and errnum is unknown). The string always includes
+> a terminating null byte."
+>
+> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 > ---
->   tools/testing/selftests/core/.gitignore | 1 +
->   tools/testing/selftests/net/.gitignore  | 1 +
->   2 files changed, 2 insertions(+)
-> 
+>  tools/testing/selftests/timers/posix_timers.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/timers/posix_timers.c b/tools/testin=
+g/selftests/timers/posix_timers.c
+> index 16bd49492efa..ddb1cebc844e 100644
+> --- a/tools/testing/selftests/timers/posix_timers.c
+> +++ b/tools/testing/selftests/timers/posix_timers.c
+> @@ -26,13 +26,17 @@
+>  static void __fatal_error(const char *test, const char *name, const char=
+ *what)
+>  {
+>         char buf[64];
+> +       char *ret_str =3D NULL;
+>
+> -       strerror_r(errno, buf, sizeof(buf));
+> +       ret_str =3D strerror_r(errno, buf, sizeof(buf));
+>
+> -       if (name && strlen(name))
+> -               ksft_exit_fail_msg("%s %s %s %s\n", test, name, what, buf=
+);
+> +       if (name && strlen(name) && ret_str)
+> +               ksft_exit_fail_msg("%s %s %s %s\n", test, name, what, ret=
+_str);
+> +       else if (ret_str)
+> +               ksft_exit_fail_msg("%s %s %s\n", test, what, ret_str);
+>         else
+> -               ksft_exit_fail_msg("%s %s %s\n", test, what, buf);
+> +               ksft_exit_fail_msg("%s %s\n", test, what);
+> +
+>  }
 
-Can you split these into two patches. It will be easier
-for the net patch to go through the net tree.
-
-I take the core changes through my tree. net changes go
-through net tree.
-
-Also helps avoid any future merge conflicts if new tests
-get added to net
-
-> diff --git a/tools/testing/selftests/core/.gitignore b/tools/testing/selftests/core/.gitignore
-> index 6e6712ce5817..7999361992aa 100644
-> --- a/tools/testing/selftests/core/.gitignore
-> +++ b/tools/testing/selftests/core/.gitignore
-> @@ -1 +1,2 @@
->   close_range_test
-> +unshare_test
-> diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-> index 1c04c780db66..9dcdff533414 100644
-> --- a/tools/testing/selftests/net/.gitignore
-> +++ b/tools/testing/selftests/net/.gitignore
-> @@ -17,6 +17,7 @@ ipv6_flowlabel
->   ipv6_flowlabel_mgr
->   log.txt
->   msg_zerocopy
-> +msg_oob
->   ncdevmem
->   nettest
->   psock_fanout
-> 
-
-thanks,
--- Shuah
+Acked-by: John Stultz <jstultz@google.com>
 
