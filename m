@@ -1,121 +1,91 @@
-Return-Path: <linux-kselftest+bounces-18370-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18371-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63E87986721
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 21:45:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AADE9986759
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 22:02:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A7D12845CA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 19:45:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 59B8D2819E6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 20:02:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BF0A14659F;
-	Wed, 25 Sep 2024 19:45:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43A8F13DDDD;
+	Wed, 25 Sep 2024 20:02:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="xgT8KXNL"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RqSeqGfC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 667FB142E83
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 19:45:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B307208CA;
+	Wed, 25 Sep 2024 20:02:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727293549; cv=none; b=JUpJk74cA+dTVXK5BYXUkSa6ftSCZ0OVmc5N12ETdZdDWK4jn5zj4OSyueUGOreRMp1q3eKRjhIcH0OOFf+vTEbpPJTtHN6keEc5lX0tCWmXKN699pJaw/25Gv7b6j5HZDLWiHDGvjkmWDQErK2qlEI8OcV6Ba//R87Hj0AwIds=
+	t=1727294522; cv=none; b=EwBU7RhmF1c5iXv6UI2hSk3LYKoljcPuJ5ceOK7b6eZnI+5abyFkgx659RMlHe9lSpV9DySY2ZnLOL46r9iFmB8g8Mk/UsQRaeVQuDtFynM2AaPOVkOxm3t5pKu9xq52tbuOLGthlJjY37KWf+/4HdLbEhOfLmWlXhpZ2nz51UQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727293549; c=relaxed/simple;
-	bh=/+kdZQ5YHJwk5UqW5/x5VvZy36jmX/1B0aCZVsLz934=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jg2uup0sovtyLUpNZrGA5V41UnQCHE+WHFXa9gozzUJnSjzmX30oEJzHWrVoepuLtrJwtyR0zUW3cki9grZ0XqxoYENdtFdn9KUSU1m9uU+EOHIPjiKD7JiNrMw02MUtW0bJ2pnBr7yDVE1b5h3ic8GmHc/+mOgL+2QY/Msv4Gc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=xgT8KXNL; arc=none smtp.client-ip=91.218.175.184
+	s=arc-20240116; t=1727294522; c=relaxed/simple;
+	bh=GuAtbY3FxHHtmaHMBG3KUXH3yBXNnrSuxiRVAzTx8ds=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=BpZnJG3aJOgMTkgh5jFhGMmPbtjulbaR/n7zj4mIcaEBPdWlIz0yk8w5UVwtEg2yPmm9jWgXXthc7JsGTJJkPeDSymZ8a+w0I9r7Yr12BGdA1VGsAgChJKVRVd/+3SwyR7gNgaEpCBGLui+55b2fKBi8w35Egt1Jjqq668H9c1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RqSeqGfC; arc=none smtp.client-ip=95.215.58.183
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <97229412-7506-4b71-b77a-0993b2f07c60@linux.dev>
+Message-ID: <895a685b-7449-4bf1-b14d-00aee1d8f75b@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1727293544;
+	t=1727294518;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Cl+NY6biSh5nINCc+id3pfw9oMtmyYXAOxWEXpGs8ic=;
-	b=xgT8KXNLGBDFMYK6h/xeqLhMy9HNx2NijbwLLNN1DCzbhE7MUHDViEplQcSANS/w2hbFM5
-	VksTKHCTRpqyi6bgXDV2Q5zC0cQVvZLAxw1BD4+6UNtmOmbf0H7Jow37QLH33GhAAJYrWi
-	RkTw9YuQmIOxYM8r1lrkidraCF2Ab70=
-Date: Wed, 25 Sep 2024 12:45:34 -0700
+	bh=YfbUzqws6stxPgb9eT4nEGannHed53FdV2xBgbx4dKI=;
+	b=RqSeqGfCCZ6YmwlRXsgxBrh7ruqVV3x98v/vzK+XODrCAMKQ6MCbfMsk/ECbPaOVf0KXu5
+	ZHHvyrJab4ckHdNyOJzRZlRUbyijhqluskNcQdDO0pmety1vfUgVUBQxZxZjTavhUhfc2W
+	p0eLT8aScNV5RHFz5mYDza7TmPMRoj0=
+Date: Wed, 25 Sep 2024 13:01:43 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH net v4 0/2] bpf: devmap: provide rxq after redirect
-To: Paolo Abeni <pabeni@redhat.com>,
- Florian Kauer <florian.kauer@linutronix.de>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- David Ahern <dsahern@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- Jesper Dangaard Brouer <brouer@redhat.com>, linux-kselftest@vger.kernel.org
-References: <20240911-devel-koalo-fix-ingress-ifindex-v4-0-5c643ae10258@linutronix.de>
- <dd84c2d8-1571-41e9-8562-a4db232fbc38@redhat.com>
-Content-Language: en-US
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: convert test_xdp_features.sh
+ to test_progs
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <dd84c2d8-1571-41e9-8562-a4db232fbc38@redhat.com>
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ Lorenzo Bianconi <lorenzo@kernel.org>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Jakub Kicinski <kuba@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Maxime Chevallier <maxime.chevallier@bootlin.com>, ebpf@linuxfoundation.org,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+References: <20240910-convert_xdp_tests-v2-1-a46367c9d038@bootlin.com>
+ <64df8d41-6cfb-45a9-8337-5cc04daedb60@linux.dev> <ZuVWmxoqXFI3qvVI@lore-desk>
+ <20240914063828.7bd73c5e@kernel.org>
+ <464e0ae0-d6e3-4da4-a157-f74260f96275@bootlin.com>
+ <366e4392-bd00-4120-8585-a71b3952e365@linux.dev>
+Content-Language: en-US
+In-Reply-To: <366e4392-bd00-4120-8585-a71b3952e365@linux.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-On 9/19/24 11:12 AM, Paolo Abeni wrote:
-> On 9/11/24 10:41, Florian Kauer wrote:
->> rxq contains a pointer to the device from where
->> the redirect happened. Currently, the BPF program
->> that was executed after a redirect via BPF_MAP_TYPE_DEVMAP*
->> does not have it set.
->>
->> Add bugfix and related selftest.
->>
->> Signed-off-by: Florian Kauer <florian.kauer@linutronix.de>
->> ---
->> Changes in v4:
->> - return -> goto out_close, thanks Toke
->> - Link to v3: https://lore.kernel.org/r/20240909-devel-koalo-fix-ingress- 
->> ifindex-v3-0-66218191ecca@linutronix.de
->>
->> Changes in v3:
->> - initialize skel to NULL, thanks Stanislav
->> - Link to v2: https://lore.kernel.org/r/20240906-devel-koalo-fix-ingress- 
->> ifindex-v2-0-4caa12c644b4@linutronix.de
->>
->> Changes in v2:
->> - changed fixes tag
->> - added selftest
->> - Link to v1: https://lore.kernel.org/r/20240905-devel-koalo-fix-ingress- 
->> ifindex-v1-1-d12a0d74c29c@linutronix.de
->>
->> ---
->> Florian Kauer (2):
->>        bpf: devmap: provide rxq after redirect
->>        bpf: selftests: send packet to devmap redirect XDP
->>
->>   kernel/bpf/devmap.c                                |  11 +-
->>   .../selftests/bpf/prog_tests/xdp_devmap_attach.c   | 114 +++++++++++++++++++--
->>   2 files changed, 115 insertions(+), 10 deletions(-)
-> 
-> Alex, Daniel: this will go directly via the bpf tree, right?
+On 9/25/24 3:37 AM, Martin KaFai Lau wrote:
+> I am not sure which case in xdp_features.c does not have existing coverage in 
+> test_progs. From a quick look, it seems only BPF_MAP_TYPE_CPUMAP is missing 
+> (please check)?
 
-The patches lgtm also. Yes, it can directly go to the bpf tree.
-
-It is useful if I can get an ack from netdev (Paolo?) at least for patch 1. Thanks.
-
+Re: CPUMAP, I noticed there is a xdp_(cpu)map_attach.c test but it only does 
+attach test. May be something similar can be done like 
+https://lore.kernel.org/bpf/20240911-devel-koalo-fix-ingress-ifindex-v4-2-5c643ae10258@linutronix.de/ 
+to exercise the xdp prog that does cpumap redirect.
 
