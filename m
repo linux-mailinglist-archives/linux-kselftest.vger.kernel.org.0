@@ -1,133 +1,150 @@
-Return-Path: <linux-kselftest+bounces-18363-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18364-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 598C9986590
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 19:26:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF6019865A8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 19:33:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CF882871E3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 17:26:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9982E1F21356
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Sep 2024 17:33:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA2764AEF2;
-	Wed, 25 Sep 2024 17:26:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E00AE54656;
+	Wed, 25 Sep 2024 17:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DEp+GMnE"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="eBqTVA5Z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 200C7210E9
-	for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 17:26:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DE349624
+	for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 17:33:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727285183; cv=none; b=Feip42mywzPEIQdYipMkGTesFdFaY0Rqkt8K3GLL4mka6iATmowRSiIHQ9fYzL1AJRui1hagzFFloY4dcZX/1wRIhQJiE8P11QTJkDoviOh5LNCxYSEOW7/Lzy62ZC9+1XASiFNErg+OG0r7zEv6aDh18YaIX79MoEoh8DtWwEI=
+	t=1727285624; cv=none; b=fs6umdXDT4AuzbEs4CSfb7NwgoNJv1DbjfhDX1aXekfhtwQq1DQJ5E8mLns4wp2CLzGZ49gLZrL+QHOfvaPgP2laQzoDiCY6WCBX0KtDgp1B3Q6KYVcY2L3J1mxlpQGJqG9KgRno/zKdl4zY8xWkoXmmyv21A9z4zgs4kcyeByE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727285183; c=relaxed/simple;
-	bh=S/MhFgcRKcARF4C/WkE2tB9txWJI/GeERMG8nD/tZck=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XO9sfiKK/+TunMzgybu8zlTL7bfDQqOTNvuFl14gaDPEmdR6IuyiY+0QjBH5JDMU9Z3CrdLBSU2+bxYDoieget/OK3mknnRs+y6CT6r4On2l9xsOv3r/RPglw3u2zRjegC79wYGc7svIa972LuKjpAzAIUWDSKvdh3pSXepJcnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DEp+GMnE; arc=none smtp.client-ip=209.85.166.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-82ab349320fso3384039f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 10:26:21 -0700 (PDT)
+	s=arc-20240116; t=1727285624; c=relaxed/simple;
+	bh=sRZR8qh7UzzgZh+dnd71Rif1yJr40LYLdX/AWA02/dw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=foI1H/q1XZD973QrdAezlrFgvAhVKqbAlPpOlCxpo8uysj641i+msMI73EfqaMplPRpn9zxTaS2v1D5OwnoYf3WRf3e/pFiG9DZ90UCIEfzUDPvTY1yJwFn5cvxJ0VlWEdxIDGzbwLD+df8XbE8IKEMQDJ7DxtYUnLjEDwQ3Kho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=eBqTVA5Z; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-a910860e4dcso12116266b.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Sep 2024 10:33:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1727285181; x=1727889981; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Nsw+zRp/Ze7eW9+6epMJhd53fkKQRkg9ETNvRz5Ml1s=;
-        b=DEp+GMnEaQdkwIxuRnR/Q4BUn+p0hZvjX3hJYuW7J2OaX0HuYCylpUGmbDDkH76DeO
-         lDDKTb/cVv/+A0wttuGZI2VuytfETI6dYFA2FEzgEF+bqFaCUtvCQ1p+jnj+BvF30zKz
-         4N94GA9MNoH63l871adHrqMDocKdPGecr+0Y4=
+        d=google.com; s=20230601; t=1727285621; x=1727890421; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t0mE3cmG1UxBKNjTv38VsA/8AlwoySypDMzbCz8nx40=;
+        b=eBqTVA5ZQzG/VCDq6Ltrwax38xIt36CpmpJlrTZDU0gjNZ0IDfLim0RoQbMcQ4NvFk
+         N+x2vahRAAb/Ie5CZVd1QoVBmPNlKhFQ/XSAfJjm02NZp2iB6fMwd6Adw2Ykor8+ObCv
+         JexWve7NHIkW1mAsg+4mHxIvKaMRwnvIxUJ9JWoTH6bhIg8x0o8UxvrK1LehR+tCG7n2
+         GhO8hER4yAsaOyxv3bb5M0QMigT+jp+b43j6fSvDy7xNEGAIBrqLhl51UTetddzy0OUp
+         iW/nWCCm3dYi3S21fZeqi+XLghhgXHBybOL598e7XbydkpvBH7sQd5WkKMCWd8xTtweV
+         +pWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727285181; x=1727889981;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nsw+zRp/Ze7eW9+6epMJhd53fkKQRkg9ETNvRz5Ml1s=;
-        b=aeraALF4JpKHlOXmCqCs6sw+o0Znagzd3d5yT6bphB29kxwl0W1NQplMAJRcnhNA0S
-         NpNZm5umpfJ+C0LLNDb/DFV83voPWt04jcWVb372P4Rwng9b4IReHz8jBpc/cqnY4FOO
-         e+B5TL/Qh9KAVOMqMr+XB4fGd70GzSoSX9kfJLOm6M1/LjuNQ7a2dF83HG0A+z7N0+CX
-         qfmzZ3mLY4YI2R1G5Eg9Fh1p1EcsCtUdsYlaJrVdsUi3nBSEeqQYng2tRe2X/yEiKRW3
-         y5dQGVFMUqjuhNj4WbgS3Z6w6SG+8Xz3oRzmrmT1qU6gXC/irwtCN6aPOG1xmNo03Cs6
-         v5FA==
-X-Forwarded-Encrypted: i=1; AJvYcCXHjb0YjrlNxjbKAva92snfUOzlFm8dyNaEQ7Ty5NbCv3GeCMt5tp8xyXM5fWse0AFCLHU6mMMxuvDoU5Gbxpg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yza9H3Le0JOK6PHqZ7HMaJyEJZTM1S7KmJqG4XRn6XGKzIZbWvD
-	0zHKrm6jd81a6/M0gF/R6s6r4DpmmNTgOHq4H1RmGP6UA9vHvmauBzvs9fLaPB8CeNuiyT7KbeF
-	Y
-X-Google-Smtp-Source: AGHT+IGmRIDkJ5EYcMz5zDv+p0A3MLFtNlRBHwMyJenq92Hsd1XC41WvVZMfEbFtv+gq53kcE8kOfQ==
-X-Received: by 2002:a05:6602:2c01:b0:82a:7181:200f with SMTP id ca18e2360f4ac-83247d26137mr450776739f.9.1727285181091;
-        Wed, 25 Sep 2024 10:26:21 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4d40f1bcd9asm1181347173.95.2024.09.25.10.26.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 25 Sep 2024 10:26:20 -0700 (PDT)
-Message-ID: <3f0d12ba-0e52-41f9-9cbd-34bc1225121e@linuxfoundation.org>
-Date: Wed, 25 Sep 2024 11:26:19 -0600
+        d=1e100.net; s=20230601; t=1727285621; x=1727890421;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t0mE3cmG1UxBKNjTv38VsA/8AlwoySypDMzbCz8nx40=;
+        b=ZQE/RPthn9FC0U/KpxehWVbAqCJ0Xu13pR4atFi5MgZITC5zCBGo9MNkzmlHxUqw1M
+         +mF7U4ACfZ2yLwdi0p/3ELswkVP5JiQig+RHo0o8FgOkt03vFwMiJyI9xutV30/R4pxS
+         cz9CT7j3rJIeGR5bD62G0c1cD//1vjXhK4bGDB8U4Obb3OXPAb2QKl4V0JBusxfYzEMC
+         Kj/s5OgJf46bD1pepZ231g4R6HDrsBiwkRWrSeXh7NSWcn0bvJTiJMV5IH4Kf+bi9Ktr
+         byQtByUDONNNCya6dnxaPTeYUvfJlOyeGkRFx4Xs+Xa+FTrFLLHO3KnlD2AN2nmezmiG
+         XIXA==
+X-Forwarded-Encrypted: i=1; AJvYcCVjJIVpQW/+mktmW0Vl1rXF79Gr/8ZvvyyzPo10ez3Q9urutQOhbb0cVHF0RRgbSF9gtI/4pVVvKfG0BOF5gdc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzilQkpuzz1d9kPaYGkOufBsadXahLmTEMr0rI5BMMWwTQltvZ+
+	cuUtoXYPyEkIr9thCoPJt68x34jB5roUEY+gbcqwRNSpfYcXDraExZUCJqZBfc+GMwT1rI3+nDS
+	GEZwz58AYXs57EP62DN1HywH5O6t+MIw20J8=
+X-Google-Smtp-Source: AGHT+IEKYCfjzY+zOC7A8PpoeNigo2nDiTdRzgKt6xy0G8xhUHZWn/4IMc8JYMsjLyQdX2eBiO9PWPy+ZE41r41NKV0=
+X-Received: by 2002:a17:907:ea8:b0:a8b:154b:7643 with SMTP id
+ a640c23a62f3a-a93a03abebamr302057466b.28.1727285621170; Wed, 25 Sep 2024
+ 10:33:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: Makefile: create OUTPUT dir
-To: Jakub Kicinski <kuba@kernel.org>, Anders Roxell <anders.roxell@linaro.org>
-Cc: shuah@kernel.org, willemb@google.com, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240916075655.4117151-1-anders.roxell@linaro.org>
- <952aeec9-c21f-46ce-bf68-e6ffce51630c@linuxfoundation.org>
- <20240920123827.715ff109@kernel.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240920123827.715ff109@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1727191485.git.skhan@linuxfoundation.org>
+ <f797bc704d8eb03234a3447c77fa7b704339f89a.1727191485.git.skhan@linuxfoundation.org>
+ <CANDhNCpsEQL+S8gadXMjvbE-6r8c6owzz+_DhN6JAVqQ8Hg=_g@mail.gmail.com> <b0647b67-5cba-4e42-9d42-d12ba2aa2174@linuxfoundation.org>
+In-Reply-To: <b0647b67-5cba-4e42-9d42-d12ba2aa2174@linuxfoundation.org>
+From: John Stultz <jstultz@google.com>
+Date: Wed, 25 Sep 2024 10:33:28 -0700
+Message-ID: <CANDhNCr18_+dQxPqjMCvEU3Z4s9iypFYUNFZT3CrONmeGxJZ1Q@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftests: timers: Remove local NSEC_PER_SEC and
+ USEC_PER_SEC defines
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: tglx@linutronix.de, sboyd@kernel.org, shuah@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 9/20/24 04:38, Jakub Kicinski wrote:
-> On Thu, 19 Sep 2024 09:51:47 -0600 Shuah Khan wrote:
->>> @@ -261,6 +261,7 @@ ifdef INSTALL_PATH
->>>    	@ret=1;	\
->>>    	for TARGET in $(TARGETS) $(INSTALL_DEP_TARGETS); do \
->>>    		BUILD_TARGET=$$BUILD/$$TARGET;	\
->>> +		mkdir -p $$BUILD_TARGET;	\
->>>    		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET install \
->>>    				INSTALL_PATH=$(INSTALL_PATH)/$$TARGET \
->>>    				SRC_PATH=$(shell readlink -e $$(pwd)) \
->>
->> Doesn't the "all" target mkdir work for this case? Why do we need another mkdir here?
-> 
-> I was wondering about that, too. Looks like the code from the all
-> target is copy/pasted in the install target except the mkdir line.
-> Best fix would be to make the dependency work, I don't understand
-> why it doesn't already, tho.
+On Wed, Sep 25, 2024 at 8:20=E2=80=AFAM Shuah Khan <skhan@linuxfoundation.o=
+rg> wrote:
+>
+> On 9/24/24 17:59, John Stultz wrote:
+> > On Tue, Sep 24, 2024 at 8:57=E2=80=AFAM Shuah Khan <skhan@linuxfoundati=
+on.org> wrote:
+> >>
+> >> Remove local NSEC_PER_SEC and USEC_PER_SEC defines. Pick them up from
+> >> include/vdso/time64.h. This requires -I $(top_srcdir) to the timers
+> >> Makefile to include the include/vdso/time64.h.
+> >>
+> >> posix_timers test names the defines NSECS_PER_SEC and USECS_PER_SEC.
+> >> Include the include/vdso/time64.h and change NSECS_PER_SEC and
+> >> USECS_PER_SEC references to NSEC_PER_SEC and USEC_PER_SEC respectively=
+.
+> >
+> > Nit: You got the last bit switched there. This patch changes local
+> > NSEC_PER_SEC to the upstream defined NSECS_PER_SEC.
+>
+> I think what IO have is correct. posix_timers defines them as NSECS_PER_S=
+EC
+> and USECS_PER_SEC and the header file doesn't have the extra S. It could
+> use rephrasing thought to make it clear.
 
-I think this could be the issue:
+?
+But the patch is removing the local non-plural NSEC_PER_SEC usage in
+posix_timers?
 
-net main Makefile doesn't have handling for subdirs. It looks
-like the way this is handled is by adding an entry to the main
-Makefile:
+-#define NSEC_PER_SEC           1000000000LL
+-#define USEC_PER_SEC           1000000
+-
 
-TARGETS += net/af_unix
-TARGETS += net/forwarding
-TARGETS += net/hsr
-TARGETS += net/mptcp
-TARGETS += net/openvswitch
-TARGETS += net/tcp_ao
-TARGETS += net/netfilter
+As the headers do have the values with the extra S.
 
-So the solution would be similar adding net/lib to the main
-Makefile.
+So I'm confused (sort of my natural state :), but this is a minor nit,
+so apologies and just ignore me if I'm really getting it backwards
+here.
 
-Anders, can you try the above and see if it works.
 
-Another issue - lib/Makefile
-TEST_GEN_FILES += csum needs to be TEST_GEN_FILES = csum
+> Is it okay to fix this when I apply the patch or would you like me to sen=
+d v2?
+>
 
-thanks,
--- Shuah
+I don't need a v2
 
+> >
+> > Overall no objection from me. I've always pushed to have the tests be
+> > mostly self-contained so they can be built outside of the kernel
+> > source, but at this point the current kselftest.h dependencies means
+> > it already takes some work, so this isn't introducing an undue
+> > hardship.
+> >
+>
+> Yes. At this point it would be hard to build it outside. DO you think
+> these defines can be part of uapi?
+
+Maybe, though they are so common I fret it would cause folks trouble
+with redefinition collisions.
+
+Thanks for doing this cleanup!
+-john
 
