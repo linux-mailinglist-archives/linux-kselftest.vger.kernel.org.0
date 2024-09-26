@@ -1,144 +1,188 @@
-Return-Path: <linux-kselftest+bounces-18389-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18390-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60CDF986FAF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Sep 2024 11:12:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64ADE986FB5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Sep 2024 11:15:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8867A1C20A87
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Sep 2024 09:12:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D66F41F2303A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Sep 2024 09:15:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14DA41A76C9;
-	Thu, 26 Sep 2024 09:12:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F8C01AB51F;
+	Thu, 26 Sep 2024 09:15:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kCoR6uN8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EyUaenZD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E07FD155732;
-	Thu, 26 Sep 2024 09:12:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A26415532A;
+	Thu, 26 Sep 2024 09:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727341951; cv=none; b=Nae8B4pWkMbjgocvwNCCBE/bWpMu2LWw1FbNkCN7NVLLuVjgONDSdeaBsXl9jFTkRTojgRjiN8s50+j7Lk1HC32kZHxl1Mht9qIuhvFIjfjnU26sB8yEFP7pmABXU2E1kndaapmcWJrefTJ3RMGzx0sO+0Fu0evR6hh6FpA9+C8=
+	t=1727342101; cv=none; b=CduheW2hvAyNPBGz+V4N97UHk9FOuquLrV9aDSUU/4Bp3Y3Icon6TKx5Uls60eNqf4IU379Zw7Q5odGWXRcr+u16lcgKRic1Dlpt7F0LY/s36IucpNCknyGNeADx64CbpI9iHdgrHK/ZOi5c26EoaJg/P2KJDO+UC5a2OHoadSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727341951; c=relaxed/simple;
-	bh=ZKPO7LaH1boT2Q/2fUSllK6Ezud3wVvP9yzCnH27P/E=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Z932e78OHi/ERvttvO/DvMF7OgQLTvaEiZNoK4VHkyV1tvWVoFvACoK9y5XzmqkHZNY2+J/yWMeVewfYd+UYIJJ0fl0qP4zxKjqp/GAXIhague3DMFPUMScbU4vpdO29cUX3EDQQ6jRFmd0IlivFCIUZ17TutE5ONFYw+NljBhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kCoR6uN8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7DB6C4CEC5;
-	Thu, 26 Sep 2024 09:12:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727341950;
-	bh=ZKPO7LaH1boT2Q/2fUSllK6Ezud3wVvP9yzCnH27P/E=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=kCoR6uN8OMKfJbqMZYho67I/IoM12JEYOhjVWglI1nPi6pi+6CfdRGxZb699MfLmB
-	 YIOf0h6j5Bsor6Fdk3YplhKIU4/M/LZmPBKgCcjaJ5SEZ8y2XITgDT07DONOLS/DeG
-	 O/tz9Ij/e60CFzJ1LrvYdOFevsVdvx6O8nBMTC9yNYy5avLtB0Be+UzREd/3fuTYUF
-	 TnK9HGtlt4sjdwKT1JYkrFQ8crky5syj187qTP9TqcUA+RiOjnnmrIjAeRWv7GEA1w
-	 LPkGBBRvkgZnH0PGP4EMvcpJUMfj5+86w+YCYlMOrfyGSCIY4WDS5irmPnmlRF0Hsz
-	 89WUEAP59aXGg==
-Message-ID: <76d0de38-aff5-41e9-8085-afeb97b4d4f4@kernel.org>
-Date: Thu, 26 Sep 2024 11:12:25 +0200
+	s=arc-20240116; t=1727342101; c=relaxed/simple;
+	bh=5CRALTb60twaABfzMtifOzQaiO9ApKULKNiRaSr55Og=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=K4NP6UkdIZYCc1gjFbqqlpNf8VnFLZJ7hohoDMiSux8GBo5jaNHIj7eSXGoMsQJSeKPuSb/BPbo3dGC+y98p/XwAUyfiD3UuECAUTXPVCKqHi/pzM8BNBaL7i57+9daa/eoiCkuUCvgfl71Q5RCJ4Brd4MXIuVJHQVC7iZnopbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EyUaenZD; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a90188ae58eso93188266b.1;
+        Thu, 26 Sep 2024 02:14:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727342097; x=1727946897; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5CRALTb60twaABfzMtifOzQaiO9ApKULKNiRaSr55Og=;
+        b=EyUaenZDmPVWrlL7GXFz7XO9GlyuRiFdDZxwXmDklH9zMo0o2B034aHrhmFO6KOA9T
+         7ZuHgBLy0eofILEy8AJRCtAy5eEFbV7edO5834DOFBpoQ4lnwzSYIDotN8KNcymVowCD
+         R2+t+D1GUrYD4PByygV9jyHz4dUYxIa6XZjKu4byTgomI9JwqaZoNf2sPUQYY5GkYQaP
+         EW/8/i6gZdjG31IivudzxvTJG+7PIm/fo4BCoZ+JOtFcj/OzqekKaGdkVnXgwGTXghk/
+         5XulnRFgHmWlTWxSQOuIZ3h8/DDasJdjH5N/2Cz3kJnozPUk3fxryufx2CbCzg5ngHE8
+         pO+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727342097; x=1727946897;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=5CRALTb60twaABfzMtifOzQaiO9ApKULKNiRaSr55Og=;
+        b=ZP83C6GXywtvI9dHdiJ9+eZGZUJVknsZwe9zyyyVZgZOitMQ2JhEbeo9yiq0CkpM4C
+         tDtVZxi69v6Wfppabwrkhspn1f+7G755kyTYzCD+aDdU6xde5rjwPJdnTB8e4fK8NKaJ
+         ASGFdmm2NsroTE0BJahI4uBCu0PTt4xhfhJ5Olgbf3iGQw4dRkiWLn9ed/72gNsAy022
+         Oed1zq27vabTI5X6xEr+r5SXmOMXKWovXn49Zjm/3Qv4l/5w4fY5LL4/Ok089nXsaAuz
+         7j4vz65T8wSNkdkP/xxW+d6Zow5YtkdLyQGe0CizkORC96VzqaDw6GsDd9/DQHeaWmG8
+         jrWA==
+X-Forwarded-Encrypted: i=1; AJvYcCU6ePmPedJ/F7Us8vPXQasxmRmdNv9kS/mzFO5lgflRh6FHCARmtzlZHWVO0VuAp3C1oBQ=@vger.kernel.org, AJvYcCUcGRLWD+6yU6vmjTtYQ5javLsUoGFIjGsiGrVosPiESql8EIHnMb8STPScHJFBw0/crvlaRbwzIDEG@vger.kernel.org, AJvYcCVJk0Vkr98UA/6qTNh65ER74Zl70OlhuxIT3LPl0fxDM6/jrYF6ZD1bNmI3CsRJ9kKObAwNWyNKUrSS0PTr@vger.kernel.org, AJvYcCVPAn0k/HdWYrz67U2wkxn4OBiS6t8ds1K6IJy7zYZ8P0UqWf7WbzTLJbXR8AvTA07KP3kio+DYXcNDG6UhPegM@vger.kernel.org, AJvYcCXmjXYOBZav78RpDtK9X+7UseGwIZL7mImpMnwPCHSh8eWSnrX+jInNsgNuMH2151V4OnKObsVsycI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZHjNJsiTVCl2sD0ntlMpijgt2IdQV9IqQgRdbsWqRAntNtMYf
+	c2J/avguajjhFqyQRges1bKz+Q0X97kDPowkk7PAvvluSRGshqo1
+X-Google-Smtp-Source: AGHT+IFuQpCkW97RwiXsH3H+4pPmO2s5+Udb73F6RcjEM6YRZ3bpHYtgsjXjgkpzlG78J1VZAoyE3w==
+X-Received: by 2002:a17:907:7d8a:b0:a8b:6ee7:ba29 with SMTP id a640c23a62f3a-a93a05e7e95mr521203166b.44.1727342097231;
+        Thu, 26 Sep 2024 02:14:57 -0700 (PDT)
+Received: from ?IPv6:2001:b07:5d29:f42d:438a:71d4:3b8a:6ddf? ([2001:b07:5d29:f42d:438a:71d4:3b8a:6ddf])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a93931336b4sm322256666b.188.2024.09.26.02.14.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Sep 2024 02:14:56 -0700 (PDT)
+Message-ID: <709968e9b2a947787177f7ea3eefcc89546bffd2.camel@gmail.com>
+Subject: Re: [PATCH v4 2/6] KVM: arm64: Add PSCI v1.3 SYSTEM_OFF2 function
+ for hibernation
+From: Francesco Lavra <francescolavra.fl@gmail.com>
+To: David Woodhouse <dwmw2@infradead.org>, Paolo Bonzini
+ <pbonzini@redhat.com>,  Jonathan Corbet <corbet@lwn.net>, Marc Zyngier
+ <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, James Morse
+ <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui
+ Yu <yuzenghui@huawei.com>, Catalin Marinas <catalin.marinas@arm.com>, Will
+ Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>, Lorenzo
+ Pieralisi <lpieralisi@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, Shuah Khan
+ <shuah@kernel.org>, David Woodhouse <dwmw@amazon.co.uk>,
+ kvm@vger.kernel.org,  linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org,  linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev,  linux-pm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+Date: Thu, 26 Sep 2024 11:14:54 +0200
+In-Reply-To: <20240924160512.4138879-2-dwmw2@infradead.org>
+References: <20240924160512.4138879-1-dwmw2@infradead.org>
+	 <20240924160512.4138879-2-dwmw2@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net] selftests/net: packetdrill: increase timing tolerance
- in debug mode
-Content-Language: en-GB
-From: Matthieu Baerts <matttbe@kernel.org>
-To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, netdev@vger.kernel.org
-Cc: davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
- pabeni@redhat.com, sdf@fomichev.me, linux-kselftest@vger.kernel.org,
- Willem de Bruijn <willemb@google.com>
-References: <20240919124412.3014326-1-willemdebruijn.kernel@gmail.com>
- <0849977a-e772-4778-9130-c8ac0539bbdc@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <0849977a-e772-4778-9130-c8ac0539bbdc@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-Hi Willem,
+On Tue, 2024-09-24 at 17:05 +0100, David Woodhouse wrote:
+> From: David Woodhouse <dwmw@amazon.co.uk>
+>=20
+> The PSCI v1.3 specification (alpha) adds support for a SYSTEM_OFF2
 
-On 20/09/2024 00:03, Matthieu Baerts wrote:
-> On 19/09/2024 14:43, Willem de Bruijn wrote:
->> From: Willem de Bruijn <willemb@google.com>
+Can remove (alpha).
 
-(...)
+> function
+> which is analogous to ACPI S4 state. This will allow hosting
+> environments
+> to determine that a guest is hibernated rather than just powered off,
+> and
+> ensure that they preserve the virtual environment appropriately to
+> allow
+> the guest to resume safely (or bump the hardware_signature in the
+> FACS to
+> trigger a clean reboot instead).
+>=20
+> The beta version will be changed to say that PSCI_FEATURES returns a
+> bit
+> mask of the supported hibernate types, which is implemented here.
 
->> We have been doing this for debug builds outside ksft too.
->>
->> Previous setting was 10000. A manual 50 runs in virtme-ng showed two
->> failures that needed 12000. To be on the safe side, Increase to 14000.
-> 
-> So far (in 3 runs), it looks like 14000 is enough. But I guess it is
-> still a bit too early to conclude that.
-> 
-> https://netdev.bots.linux.dev/contest.html?executor=vmksft-packetdrill-dbg
-> 
-> (Your patch has been introduced in the net-next-2024-09-19--15-00 branch.)
-One week after the introduction of this patch and >50 builds, it looks
-like the results are good, only one issue related to timing issues:
+Since the final spec has been released, we can revise or remove the
+above wording.
 
-https://netdev-3.bots.linux.dev/vmksft-packetdrill-dbg/results/782181/1-tcp-slow-start-slow-start-after-win-update-pkt/stdout
+> Although this new feature is inflicted unconditionally on unexpecting
+> userspace, it ought to be mostly OK because it still results in the
+> same
+> KVM_SYSTEM_EVENT_SHUTDOWN event, just with a new flag which hopefully
+> won't cause userspace to get unhappy.
+>=20
+> Signed-off-by: David Woodhouse <dwmw@amazon.co.uk>
+> ---
+> =C2=A0Documentation/virt/kvm/api.rst=C2=A0=C2=A0=C2=A0 | 11 +++++++++
+> =C2=A0arch/arm64/include/uapi/asm/kvm.h |=C2=A0 6 +++++
+> =C2=A0arch/arm64/kvm/psci.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 37
+> +++++++++++++++++++++++++++++++
+> =C2=A03 files changed, 54 insertions(+)
+>=20
+> diff --git a/Documentation/virt/kvm/api.rst
+> b/Documentation/virt/kvm/api.rst
+> index b3be87489108..2918898b7047 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -6840,6 +6840,10 @@ the first `ndata` items (possibly zero) of the
+> data array are valid.
+> =C2=A0=C2=A0=C2=A0 the guest issued a SYSTEM_RESET2 call according to v1.=
+1 of the
+> PSCI
+> =C2=A0=C2=A0=C2=A0 specification.
+> =C2=A0
+> + - for arm64, data[0] is set to
+> KVM_SYSTEM_EVENT_SHUTDOWN_FLAG_PSCI_OFF2
+> +=C2=A0=C2=A0 if the guest issued a SYSTEM_OFF2 call according to v1.3 of=
+ the
+> PSCI
+> +=C2=A0=C2=A0 specification.
+> +
+> =C2=A0 - for RISC-V, data[0] is set to the value of the second argument o=
+f
+> the
+> =C2=A0=C2=A0=C2=A0 ``sbi_system_reset`` call.
+> =C2=A0
+> @@ -6873,6 +6877,13 @@ either:
+> =C2=A0 - Deny the guest request to suspend the VM. See ARM DEN0022D.b
+> 5.19.2
+> =C2=A0=C2=A0=C2=A0 "Caller responsibilities" for possible return values.
+> =C2=A0
+> +Hibernation using the PSCI SYSTEM_OFF2 call is enabled when PSCI
+> v1.3
+> +is enabled. If a guest invokes the PSCI SYSTEM_OFF2 function, KVM
+> will
+> +exit to userspace with the KVM_SYSTEM_EVENT_SHUTDOWN event type and
+> with
+> +data[0] set to KVM_SYSTEM_EVENT_SHUTDOWN_FLAG_PSCI_OFF2. The only
+> +supported hibernate type for the SYSTEM_OFF2 function is
+> HIBERNATE_OFF
+> +0x0).
 
-And it passed after a retry.
-
-https://netdev.bots.linux.dev/flakes.html?min-flip=0&tn-needle=packetdrill
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
+The spec says that the HIBERNATE_OFF parameter value is 0x1, not 0x0
+(which is kind of unfortunate because it doesn't match the
+corresponding bit in the feature flags).
+So, either the BIT(PSCI_1_3_HIBERNATE_TYPE_OFF) value should be used
+for the SYSTEM_OFF2 functions in the code, or the definition should be
+changed in the header file (unless the text in the spec is wrong).
 
 
