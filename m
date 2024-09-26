@@ -1,151 +1,93 @@
-Return-Path: <linux-kselftest+bounces-18403-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18404-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F7AA98772E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Sep 2024 18:04:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF9E998777A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Sep 2024 18:22:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EE581F22114
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Sep 2024 16:04:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E6A9284E75
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Sep 2024 16:22:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95421158210;
-	Thu, 26 Sep 2024 16:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="F868qumm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EAB8155A3C;
+	Thu, 26 Sep 2024 16:22:12 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18BC653368
-	for <linux-kselftest@vger.kernel.org>; Thu, 26 Sep 2024 16:03:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD87A14A4E0
+	for <linux-kselftest@vger.kernel.org>; Thu, 26 Sep 2024 16:22:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.85.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727366636; cv=none; b=SH6lmExTPmn16qWerjp2St2UO20xS1xVo2QhV+HG9iGIH0dqx8/ayKt/RvCwhmf7J55GKQbFUXyP/C6tqAHfwdOShVM90N/iJb5bSI1PT83dR67HaucVflB20UJMn7NVZM2+lVDDooKJ6+XyIGtr8TTxKgsIo+OmPnYGG1SkGGs=
+	t=1727367732; cv=none; b=Yce0JYsSn4fEyllES/1e5R1M437hhzL63i0mhtKPD+N7wB4pwIK/rzhwVrQSLopYxA9qXX0N3jBKmazb7HlvOGvUqKOPDEnCklBSV4lZZkgiq4gRzpkfOKgubbYWUgfi9lfvshGhe/GIDN3DSPmJ4nKS91p6EyGOdNB0snrGnuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727366636; c=relaxed/simple;
-	bh=RCbWaVdkpNKmgGJq2L3D+EvSQFwN0XWkCmjsWGwaEww=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g5VRJtQd0wYVJcIQiuYmm5G1VvVBzFGsVA9pjQThjQGcjjv5sF4Mc8Yo5XFXZ2C8bKyqVqmoax+tvP1k3B9LjVLchPosBsdKbQRaaFBPCuz4gP+2UNyBW+O7xyLM4YEiFkdFxh3/ph7uxbNkdwlPEiF+iuaXxKAnYXn6tUqAwFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=F868qumm; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2e0a74ce880so553111a91.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 26 Sep 2024 09:03:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1727366633; x=1727971433; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=l7bPPk0kAmsAXYjb0/D93cH5UC48AsXEk9c6DNPfZ9Q=;
-        b=F868qumm9tpJ2qqRbWddNPp3TGMKvpBu+wfVqjAwgXsQqLGMjIw1i1v0aUYg1BBAs6
-         qW7bkXOIKsLU627+QRxDNHJLhCUePykaWdr62jhflaJoDx17EgpOzp+1hK9IM/JR7F1H
-         qPyaeNYnwiYZyEYbM8SbcEexfY1Tr5AMqNH5A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727366633; x=1727971433;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=l7bPPk0kAmsAXYjb0/D93cH5UC48AsXEk9c6DNPfZ9Q=;
-        b=uUEkE+IzzMu4b0utlL5L1TsYkhjsVyFFHvC6hPWtPIuFB1DerdKiJHqdoRO+7E+gLy
-         dgOM/vepyrVKRnzKVS7vD3eXEzsbqPJ6FecXJ1n2cpieZFrORIjOCHYBITZ+bSDKR5ZK
-         mGzia3qO0Hbh0cNZwZRqKyQASFOHvxRU3m0b5LX0gwE6Sm2pXv1RLBH77J7Td0lCv1sH
-         lAWpU/TEtLv8nV2IPkzaVkpRPmNKVk//BsEeRBxYr78bYHeIV4mZPpcnShIMCNiqe/ty
-         JgT8+6jeIWAmPjEsYtdx4Nt9gF5bvv5XfoazE34JYHHCcdK9oQulQkgjT/XDNM9Fx4Br
-         1bzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWz4EmUnDmdXf7tmq9Ni1p6cxnv6CRYEdc2BbMr26EGlmffhmJPAyDxwaQYQSSU1UiuQHvsXzEQa1YuAFJPhYg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YykRxKJVTO8FwtOG9i+1S6Z1rzDYrQlBzNOBgU+pqW+feHniU4C
-	fy82eIoGCyQkM9L7ZEWIurhNUpvbUETSRWXFeLf/ixoehEWnYFO0LDZvzVUxqHM=
-X-Google-Smtp-Source: AGHT+IHTpMcYmF9z2kltnsJqkihXDzYulmllfE5WCQAP4YEs16N79sFK7tcp+DcdzifQ+u5hSHcozA==
-X-Received: by 2002:a17:90a:8a8c:b0:2e0:94da:bfd2 with SMTP id 98e67ed59e1d1-2e0b899cc3amr225520a91.8.1727366632896;
-        Thu, 26 Sep 2024 09:03:52 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4d8888c33f8sm21149173.89.2024.09.26.09.03.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Sep 2024 09:03:52 -0700 (PDT)
-Message-ID: <5d9c8052-e7ca-4819-bd0c-d7f88905c7a1@linuxfoundation.org>
-Date: Thu, 26 Sep 2024 10:03:50 -0600
+	s=arc-20240116; t=1727367732; c=relaxed/simple;
+	bh=O6+YVeNDRTi0JnhIKBZA5TXaFxsqhvlhr61gALTh0Bs=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=FOG8raiM2f0s83EfS0VlYEfLaVhjeqTr6j/Z79hgfaBxwdPBmEMe6cePkWCU8wTvWrLLN5L67ERBEndPU8NgFil6oHf9tngrHxNvv6FLNl9U1bGAQZ64mFnzykq1mLvcvrLTc1zgx1+sktf2aFv06a+ZOHXN4o7fL1KJY2pzkX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM; spf=pass smtp.mailfrom=aculab.com; arc=none smtp.client-ip=185.58.85.151
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ACULAB.COM
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=aculab.com
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-266-SFvXZk6PPUOdnKT3Tr7TnQ-1; Thu, 26 Sep 2024 17:22:00 +0100
+X-MC-Unique: SFvXZk6PPUOdnKT3Tr7TnQ-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Thu, 26 Sep
+ 2024 17:21:12 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Thu, 26 Sep 2024 17:21:12 +0100
+From: David Laight <David.Laight@ACULAB.COM>
+To: 'Vinicius Peixoto' <vpeixoto@lkcamp.dev>, =?utf-8?B?QW5kcsOpIEFsbWVpZGE=?=
+	<andrealmeid@riseup.net>
+CC: Brendan Higgins <brendan.higgins@linux.dev>, "~lkcamp/patches@lists.sr.ht"
+	<~lkcamp/patches@lists.sr.ht>, Rae Moar <rmoar@google.com>, David Gow
+	<davidgow@google.com>, Andrew Morton <akpm@linux-foundation.org>,
+	"kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Subject: RE: [PATCH 0/1] Add KUnit tests for lib/crc16.c
+Thread-Topic: [PATCH 0/1] Add KUnit tests for lib/crc16.c
+Thread-Index: AQHbDtY1vq0etu3wdUK8sqieRnvh+bJqPLsw
+Date: Thu, 26 Sep 2024 16:21:12 +0000
+Message-ID: <7f67ae7f15524e4eab6b15cdfd750a04@AcuMS.aculab.com>
+References: <20240922232643.535329-1-vpeixoto@lkcamp.dev>
+ <8291c6eb-750a-4ab2-8904-65d723d034dd@riseup.net>
+ <6d3025ed-e00d-4f8a-bab7-256cf78774af@lkcamp.dev>
+In-Reply-To: <6d3025ed-e00d-4f8a-bab7-256cf78774af@lkcamp.dev>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] selftests/mm: hugetlb_fault_after_madv: use
- default hguetlb page size
-To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Mario Casquero <mcasquer@redhat.com>, Breno Leitao <leitao@debian.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240926152044.2205129-1-david@redhat.com>
- <20240926152044.2205129-2-david@redhat.com>
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20240926152044.2205129-2-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
 
-On 9/26/24 09:20, David Hildenbrand wrote:
-> We currently assume that the hugetlb page size is 2 MiB, which is
-> why we mmap() a 2 MiB range.
-> 
-> Is the default hugetlb size is larger, mmap() will fail because the
-> range is not suitable. If the default hugetlb size is smaller (e.g.,
-> s390x), mmap() will fail because we would need more than one hugetlb
-> page, but just asserted that we have exactly one.
-> 
-> So let's simply use the default hugetlb page size instead of hard-coded
-> 2 MiB, so the test isn't unconditionally skipped on architectures like
-> s390x.
-> 
-> Before this patch on s390x:
-> $ ./hugetlb_fault_after_madv
-> 	1..0 # SKIP Failed to allocated huge page
-> 
-> With this change on s390x:
-> 	$ ./hugetlb_fault_after_madv
-> 
-> While at it, make "huge_ptr" static.
-> 
-> Reported-by: Mario Casquero <mcasquer@redhat.com>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-> ---
->   .../selftests/mm/hugetlb_fault_after_madv.c        | 14 +++++++++-----
->   1 file changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-> index 73b81c632366..ff3ba675278d 100644
-> --- a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-> +++ b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-> @@ -9,10 +9,10 @@
->   #include "vm_util.h"
->   #include "../kselftest.h"
->   
-> -#define MMAP_SIZE (1 << 21)
->   #define INLOOP_ITER 100
->   
-> -char *huge_ptr;
-> +static char *huge_ptr;
-> +static size_t huge_page_size;
->   
->   /* Touch the memory while it is being madvised() */
->   void *touch(void *unused)
-> @@ -30,7 +30,7 @@ void *madv(void *unused)
->   	usleep(rand() % 10);
->   
->   	for (int i = 0; i < INLOOP_ITER; i++)
-> -		madvise(huge_ptr, MMAP_SIZE, MADV_DONTNEED);
-> +		madvise(huge_ptr, huge_page_size, MADV_DONTNEED);
+Li4uDQo+IFRoZSBjaGVja3N1bXMgZm9yIHRoZSByYW5kb21seS1nZW5lcmF0ZWQgdGVzdCBjYXNl
+cyB3ZXJlIGNhbGN1bGF0ZWQNCj4gdXNpbmcgYSByZWZlcmVuY2UgaW1wbGVtZW50YXRpb24gWzFd
+IGFuZCB0aGlzIHRlc3QgY29tcGFyZXMgdGhlbSBhZ2FpbnN0DQo+IHRoZSB2YWx1ZXMgeWllbGRl
+ZCBieSB0aGUga2VybmVsJ3MgaW1wbGVtZW50YXRpb24uDQoNCkknZCBqdXN0IHVzZSBhIG5hw692
+ZSBpbXBsZW1lbnRhdGlvbiAtIGRvZXNuJ3QgcmVhbGx5IG1hdHRlcg0KaWYgaXQgaXMgYSBiaXQg
+c2xvdy4NCg0KU2xvdyBpcyByZWxhdGl2ZSAtIHRoaXMgY29kZSBvbmx5IHRha2VzIDM1bXMgdG8g
+Y3JjLTY0IG92ZXIgNU1CIG9mIGRhdGEuDQoNCnsNCiAgICB2b2xhdGlsZSBjb25zdCB1aW50MzJf
+dCAqciA9IChjb25zdCB2b2lkICopYnVmOw0KICAgIGZvciAoY3JjID0gMDsgciA8IChjb25zdCB1
+aW50MzJfdCAqKWJ1Zl9lbmQ7IHIrKykgew0KICAgICAgICB1aW50NjRfdCB2YWwgPSBsZTMydG9o
+KCpyKTsNCiAgICAgICAgY3JjIF49IGJzd2FwNjQodmFsKTsNCiAgICAgICAgZm9yIChpID0gMDsg
+aSA8IDMyOyBpKyspIHsNCiAgICAgICAgICAgIGlmIChjcmMgJiAoMXVsbCA8PCA2MykpDQogICAg
+ICAgICAgICAgICAgY3JjID0gKGNyYyA8PCAxKSBeIDB4NDJmMGUxZWJhOWVhMzY5M3VsbDsNCiAg
+ICAgICAgICAgIGVsc2UNCiAgICAgICAgICAgICAgICBjcmMgPSBjcmMgPDwgMTsNCiAgICAgICAg
+fQ0KICAgIH0NCn0NCg0KCURhdmlkDQoNCi0NClJlZ2lzdGVyZWQgQWRkcmVzcyBMYWtlc2lkZSwg
+QnJhbWxleSBSb2FkLCBNb3VudCBGYXJtLCBNaWx0b24gS2V5bmVzLCBNSzEgMVBULCBVSw0KUmVn
+aXN0cmF0aW9uIE5vOiAxMzk3Mzg2IChXYWxlcykNCg==
 
-Magical effects of hard-coded values :)
-
-Thank you for fixing this
-
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
 
