@@ -1,69 +1,69 @@
-Return-Path: <linux-kselftest+bounces-18496-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18498-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1628E9888E4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 18:17:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C37F29888EC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 18:18:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 384571C22124
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 16:17:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89C2528416F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 16:18:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC1081C1AC6;
-	Fri, 27 Sep 2024 16:17:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF82B1C1730;
+	Fri, 27 Sep 2024 16:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="WFAN+kEF"
+	dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b="jjew5vEN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-52003.amazon.com (smtp-fw-52003.amazon.com [52.119.213.152])
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9DDC1C1AA1;
-	Fri, 27 Sep 2024 16:17:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.119.213.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60D0518BC26;
+	Fri, 27 Sep 2024 16:17:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727453832; cv=none; b=HE4d3QNJDjn12Z6ICLeVZToaj1KAxzx+gyKNW88sCt+1iJi5ia2Efx/yjmB2vU7uh559bSHXapouj2NU2VjWiPKqveszi+b9LwkBLmJBJOFUMXk+Hdv1DscB7/gYstPAlnc0MfMfXmBDyZaaxDGUn8HwFR4wyPBszxz8RFufwGs=
+	t=1727453848; cv=none; b=b5GEP+VojNOqI942MtIm5rsYadjUDDU221okCf3pt2S55nEUcdS8ul7iCjVtfdXct7qH0lOKw7+EKlaXwGnLao5f4TNyFpJl/NpJgh1PIH91zaoLmDxHXtsoGxEzcgKJcayBQQFCf4GKJu0SOF16LwsXKTrtqDBYlaKbjJrp6rg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727453832; c=relaxed/simple;
-	bh=RghIMU6uIdFNDzCKtnmY2oP8kty8pu1u3nq8CdXw/5Y=;
+	s=arc-20240116; t=1727453848; c=relaxed/simple;
+	bh=bITM0Aeng2J6eq1p6hx8dT3atihTw0CutEtJW/1eOSY=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=EkjDY9XuJ8opZf0f2pdn+erUy6+ZYtycoYtK7x1qv/XrsRwJUp5thwsRVxhCnbKAtp/al/rUsxHxW7pr/jNA9whbYO2FUCGCKpf3Y9NodweyZrslLJ5iQzQdYPXFSRqkOQB3gHdGEwBT0H2Y9I/QxtVRmD6T6qXmYwWVcRfEkJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=WFAN+kEF; arc=none smtp.client-ip=52.119.213.152
+	 MIME-Version:Content-Type; b=t9ll2GHB6+MEuGKe0ai1gkZXKNu6FaXlm3sV6qY9iqgy2Pn6DX18vgiCD/hrttjvy02oCLqLikGhNDVBTgdT3quXOKxxRqi4v7MKmxbWJyL9rViMTZ7DYb4YJJSD5bLCWH9+LvuPu/tHaWZ4Xdf6OFLeeZQ8aatdifBc8e4qFCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.com header.i=@amazon.com header.b=jjew5vEN; arc=none smtp.client-ip=99.78.197.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1727453831; x=1758989831;
+  t=1727453847; x=1758989847;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=b0/S9vkMMP7VyaImZo2up9+08R6m4hPYhq9a5rpoyds=;
-  b=WFAN+kEFLqhbHnG40tqaJEPrLvGgBjkRTtEEcQnJjy8T9Cc5QqVa2czj
-   unG7QywTk+BaF2rIadncajhcY7Wn3vTzaVz7vu2ryif0DafKKNehip09m
-   SxoBHeWdPh77v9KuF6jZ/0OXgBqSbVbMhfvS/McjNw/NM+1WjA5YWIM9v
-   o=;
+  bh=v/pCxVzGGt00J4HeXCQPyQbX0vz+zoWW8SfA60zWySw=;
+  b=jjew5vENxA3E9TV4WkYMc6Xn069QMqTuqjL3cYUK4LnuofUv0CMYfMsu
+   YYMmhtNE1TKDtYMsT/WPzqJ4VoVkFMDA80MgE6PjvbLBCIaiHpWaaciZE
+   q3lkcyhey0IHWaXtFHRkdbYYF8PswhSYfGewn855c9plc9KTt15/dSBWI
+   U=;
 X-IronPort-AV: E=Sophos;i="6.11,159,1725321600"; 
-   d="scan'208";a="28893675"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-52003.iad7.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 16:17:08 +0000
-Received: from EX19MTAEUA001.ant.amazon.com [10.0.17.79:64200]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.17.12:2525] with esmtp (Farcaster)
- id c183a50a-f73e-4b03-a672-6b92376c341a; Fri, 27 Sep 2024 16:17:07 +0000 (UTC)
-X-Farcaster-Flow-ID: c183a50a-f73e-4b03-a672-6b92376c341a
-Received: from EX19D032EUB002.ant.amazon.com (10.252.61.47) by
- EX19MTAEUA001.ant.amazon.com (10.252.50.192) with Microsoft SMTP Server
+   d="scan'208";a="335991852"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.25.36.210])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2024 16:17:10 +0000
+Received: from EX19MTAEUC002.ant.amazon.com [10.0.10.100:14418]
+ by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.9.81:2525] with esmtp (Farcaster)
+ id f6dd7ae9-f1d5-4b5e-bace-701045ca9ffd; Fri, 27 Sep 2024 16:17:08 +0000 (UTC)
+X-Farcaster-Flow-ID: f6dd7ae9-f1d5-4b5e-bace-701045ca9ffd
+Received: from EX19D031EUB001.ant.amazon.com (10.252.61.29) by
+ EX19MTAEUC002.ant.amazon.com (10.252.51.245) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Fri, 27 Sep 2024 16:17:07 +0000
-Received: from EX19MTAUEB001.ant.amazon.com (10.252.135.35) by
- EX19D032EUB002.ant.amazon.com (10.252.61.47) with Microsoft SMTP Server
+ Fri, 27 Sep 2024 16:17:08 +0000
+Received: from EX19MTAUEA002.ant.amazon.com (10.252.134.9) by
+ EX19D031EUB001.ant.amazon.com (10.252.61.29) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Fri, 27 Sep 2024 16:17:06 +0000
+ Fri, 27 Sep 2024 16:17:08 +0000
 Received: from email-imr-corp-prod-iad-all-1b-85daddd1.us-east-1.amazon.com
- (10.43.8.2) by mail-relay.amazon.com (10.252.135.35) with Microsoft SMTP
+ (10.43.8.2) by mail-relay.amazon.com (10.252.134.34) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id
- 15.2.1258.34 via Frontend Transport; Fri, 27 Sep 2024 16:17:06 +0000
+ 15.2.1258.34 via Frontend Transport; Fri, 27 Sep 2024 16:17:07 +0000
 Received: from dev-dsk-iorlov-1b-d2eae488.eu-west-1.amazon.com (dev-dsk-iorlov-1b-d2eae488.eu-west-1.amazon.com [10.253.74.38])
-	by email-imr-corp-prod-iad-all-1b-85daddd1.us-east-1.amazon.com (Postfix) with ESMTPS id 1AFBF403FC;
-	Fri, 27 Sep 2024 16:17:05 +0000 (UTC)
+	by email-imr-corp-prod-iad-all-1b-85daddd1.us-east-1.amazon.com (Postfix) with ESMTPS id 854B8403DD;
+	Fri, 27 Sep 2024 16:17:06 +0000 (UTC)
 From: Ivan Orlov <iorlov@amazon.com>
 To: <bp@alien8.de>, <dave.hansen@linux.intel.com>, <mingo@redhat.com>,
 	<pbonzini@redhat.com>, <seanjc@google.com>, <shuah@kernel.org>,
@@ -72,9 +72,9 @@ CC: Ivan Orlov <iorlov@amazon.com>, <hpa@zytor.com>, <kvm@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
 	<x86@kernel.org>, <jalliste@amazon.com>, <nh-open-source@amazon.com>,
 	<pdurrant@amazon.co.uk>
-Subject: [PATCH 2/3] KVM: vmx, svm, mmu: Process MMIO during event delivery
-Date: Fri, 27 Sep 2024 16:16:56 +0000
-Message-ID: <20240927161657.68110-3-iorlov@amazon.com>
+Subject: [PATCH 3/3] selftests: KVM: Add test case for MMIO during event delivery
+Date: Fri, 27 Sep 2024 16:16:57 +0000
+Message-ID: <20240927161657.68110-4-iorlov@amazon.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20240927161657.68110-1-iorlov@amazon.com>
 References: <20240927161657.68110-1-iorlov@amazon.com>
@@ -87,149 +87,84 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 
-Currently, the situation when guest accesses MMIO during event delivery
-is handled differently in VMX and SVM: on VMX KVM returns internal error
-with suberror = KVM_INTERNAL_ERROR_DELIVERY_EV, when SVM simply goes
-into infinite loop trying to deliver an event again and again.
+Extend the 'set_memory_region_test' with a test case which covers the
+MMIO during event delivery error handling. The test case
 
-Such a situation could happen when the exception occurs with guest IDTR
-(or GDTR) descriptor base pointing to an MMIO address.
-
-Even with fixes for infinite loops on TDP failures applied, the problem
-still exists on SVM.
-
-Eliminate the SVM/VMX difference by returning a KVM internal error with
-suberror = KVM_INTERNAL_ERROR_DELIVERY_EV for both SVM and VMX. As we
-don't have a reliable way to detect MMIO operation on SVM before
-actually looking at the GPA, move the problem detection into the common
-KVM x86 layer (into the kvm_mmu_page_fault function) and add the
-PFERR_EVT_DELIVERY flag which gets set in the SVM/VMX specific vmexit
-handler to signal that we are in the middle of the event delivery.
-
-This way we won't introduce much overhead for VMX platform either, as
-the situation when the guest accesses MMIO during event delivery is
-quite rare and shouldn't happen frequently.
+1) Tries to set an IDT descriptor base to point to an MMIO address
+2) Generates a #GP
+3) Verifies that we got a correct exit reason (KVM_EXIT_INTERNAL_ERROR)
+   and suberror code (KVM_INTERNAL_ERROR_DELIVERY_EV)
+4) Verifies that we got a corrent "faulty" GPA in internal.data[3]
 
 Signed-off-by: Ivan Orlov <iorlov@amazon.com>
 ---
- arch/x86/include/asm/kvm_host.h |  6 ++++++
- arch/x86/kvm/mmu/mmu.c          | 15 ++++++++++++++-
- arch/x86/kvm/svm/svm.c          |  4 ++++
- arch/x86/kvm/vmx/vmx.c          | 21 +++++++++------------
- 4 files changed, 33 insertions(+), 13 deletions(-)
+ .../selftests/kvm/set_memory_region_test.c    | 46 +++++++++++++++++++
+ 1 file changed, 46 insertions(+)
 
-diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-index 348daba424dd..a1088239c9f5 100644
---- a/arch/x86/include/asm/kvm_host.h
-+++ b/arch/x86/include/asm/kvm_host.h
-@@ -282,6 +282,12 @@ enum x86_intercept_stage;
- #define PFERR_PRIVATE_ACCESS   BIT_ULL(49)
- #define PFERR_SYNTHETIC_MASK   (PFERR_IMPLICIT_ACCESS | PFERR_PRIVATE_ACCESS)
- 
-+/*
-+ * EVT_DELIVERY is a KVM-defined flag used to indicate that a fault occurred
-+ * during event delivery.
-+ */
-+#define PFERR_EVT_DELIVERY     BIT_ULL(50)
-+
- /* apic attention bits */
- #define KVM_APIC_CHECK_VAPIC	0
- /*
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index e081f785fb23..36e25a6ba364 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -6120,8 +6120,21 @@ int noinline kvm_mmu_page_fault(struct kvm_vcpu *vcpu, gpa_t cr2_or_gpa, u64 err
- 			return -EFAULT;
- 
- 		r = handle_mmio_page_fault(vcpu, cr2_or_gpa, direct);
--		if (r == RET_PF_EMULATE)
-+		if (r == RET_PF_EMULATE) {
-+			/*
-+			 * Check if the guest is accessing MMIO during event delivery. For
-+			 * instance, it could happen if the guest sets IDT / GDT descriptor
-+			 * base to point to an MMIO address. We can't deliver such an event
-+			 * without VMM intervention, so return a corresponding internal error
-+			 * instead (otherwise, vCPU will fall into infinite loop trying to
-+			 * deliver the event again and again).
-+			 */
-+			if (error_code & PFERR_EVT_DELIVERY) {
-+				kvm_prepare_ev_delivery_failure_exit(vcpu, cr2_or_gpa, true);
-+				return 0;
-+			}
- 			goto emulate;
-+		}
- 	}
- 
- 	if (r == RET_PF_INVALID) {
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index 9df3e1e5ae81..93ce8c3d02f3 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -2059,6 +2059,10 @@ static int npf_interception(struct kvm_vcpu *vcpu)
- 	u64 fault_address = svm->vmcb->control.exit_info_2;
- 	u64 error_code = svm->vmcb->control.exit_info_1;
- 
-+	/* Check if we have events awaiting delivery */
-+	if (svm->vmcb->control.exit_int_info & SVM_EXITINTINFO_TYPE_MASK)
-+		error_code |= PFERR_EVT_DELIVERY;
-+
- 	/*
- 	 * WARN if hardware generates a fault with an error code that collides
- 	 * with KVM-defined sythentic flags.  Clear the flags and continue on,
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index afd785e7f3a3..bbe1126c3c7d 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -5828,6 +5828,11 @@ static int handle_ept_violation(struct kvm_vcpu *vcpu)
- static int handle_ept_misconfig(struct kvm_vcpu *vcpu)
- {
- 	gpa_t gpa;
-+	u64 error_code = PFERR_RSVD_MASK;
-+
-+	/* Do we have events awaiting delivery? */
-+	error_code |= (to_vmx(vcpu)->idt_vectoring_info & VECTORING_INFO_VALID_MASK)
-+		     ? PFERR_EVT_DELIVERY : 0;
- 
- 	if (vmx_check_emulate_instruction(vcpu, EMULTYPE_PF, NULL, 0))
- 		return 1;
-@@ -5843,7 +5848,7 @@ static int handle_ept_misconfig(struct kvm_vcpu *vcpu)
- 		return kvm_skip_emulated_instruction(vcpu);
- 	}
- 
--	return kvm_mmu_page_fault(vcpu, gpa, PFERR_RSVD_MASK, NULL, 0);
-+	return kvm_mmu_page_fault(vcpu, gpa, error_code, NULL, 0);
+diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
+index a8267628e9ed..e9e97346edf1 100644
+--- a/tools/testing/selftests/kvm/set_memory_region_test.c
++++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+@@ -553,6 +553,51 @@ static void test_add_overlapping_private_memory_regions(void)
+ 	close(memfd);
+ 	kvm_vm_free(vm);
  }
++
++static const struct desc_ptr faulty_idt_desc = {
++	.address = MEM_REGION_GPA,
++	.size = 0xFFF,
++};
++
++static void guest_code_faulty_idt_desc(void)
++{
++	__asm__ __volatile__("lidt %0"::"m"(faulty_idt_desc));
++
++	/* Generate a #GP by dereferencing a non-canonical address */
++	*((uint8_t *)0xDEADBEEFDEADBEEFULL) = 0x1;
++
++	/* We should never reach this point */
++	GUEST_ASSERT(0);
++}
++
++/*
++ * This test tries to point the IDT descriptor base to an MMIO address. This action
++ * should cause a KVM internal error, so the VMM could handle such situations gracefully.
++ */
++static void test_faulty_idt_desc(void)
++{
++	struct kvm_vm *vm;
++	struct kvm_vcpu *vcpu;
++
++	pr_info("Testing a faulty IDT descriptor pointing to an MMIO address\n");
++
++	vm = vm_create_with_one_vcpu(&vcpu, guest_code_faulty_idt_desc);
++	virt_map(vm, MEM_REGION_GPA, MEM_REGION_GPA, 1);
++
++	vcpu_run(vcpu);
++	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_INTERNAL_ERROR);
++	TEST_ASSERT(vcpu->run->internal.suberror == KVM_INTERNAL_ERROR_DELIVERY_EV,
++		    "Unexpected suberror = %d", vcpu->run->internal.suberror);
++	TEST_ASSERT(vcpu->run->internal.ndata > 4, "Unexpected internal error data array size = %d",
++		    vcpu->run->internal.ndata);
++
++	/* The "faulty" GPA address should be = IDT base + offset of the GP vector */
++	TEST_ASSERT(vcpu->run->internal.data[3] == MEM_REGION_GPA +
++		    GP_VECTOR * sizeof(struct idt_entry),
++		    "Unexpected GPA = %llx", vcpu->run->internal.data[3]);
++
++	kvm_vm_free(vm);
++}
+ #endif
  
- static int handle_nmi_window(struct kvm_vcpu *vcpu)
-@@ -6536,24 +6541,16 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
- 		return 0;
- 	}
+ int main(int argc, char *argv[])
+@@ -568,6 +613,7 @@ int main(int argc, char *argv[])
+ 	 * KVM_RUN fails with ENOEXEC or EFAULT.
+ 	 */
+ 	test_zero_memory_regions();
++	test_faulty_idt_desc();
+ #endif
  
--	/*
--	 * Note:
--	 * Do not try to fix EXIT_REASON_EPT_MISCONFIG if it caused by
--	 * delivery event since it indicates guest is accessing MMIO.
--	 * The vm-exit can be triggered again after return to guest that
--	 * will cause infinite loop.
--	 */
- 	if ((vectoring_info & VECTORING_INFO_VALID_MASK) &&
- 	    (exit_reason.basic != EXIT_REASON_EXCEPTION_NMI &&
- 	     exit_reason.basic != EXIT_REASON_EPT_VIOLATION &&
- 	     exit_reason.basic != EXIT_REASON_PML_FULL &&
- 	     exit_reason.basic != EXIT_REASON_APIC_ACCESS &&
- 	     exit_reason.basic != EXIT_REASON_TASK_SWITCH &&
--	     exit_reason.basic != EXIT_REASON_NOTIFY)) {
-+	     exit_reason.basic != EXIT_REASON_NOTIFY &&
-+	     exit_reason.basic != EXIT_REASON_EPT_MISCONFIG)) {
- 		gpa_t gpa = vmcs_read64(GUEST_PHYSICAL_ADDRESS);
--		bool is_mmio = exit_reason.basic == EXIT_REASON_EPT_MISCONFIG;
--
--		kvm_prepare_ev_delivery_failure_exit(vcpu, gpa, is_mmio);
-+		kvm_prepare_ev_delivery_failure_exit(vcpu, gpa, false);
- 		return 0;
- 	}
- 
+ 	test_invalid_memory_region_flags();
 -- 
 2.43.0
 
