@@ -1,129 +1,169 @@
-Return-Path: <linux-kselftest+bounces-18439-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 633A0987D83
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 06:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F2FE987D89
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 06:14:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0AF228342D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 04:14:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5E4E2842C2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 04:14:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98EE6171E65;
-	Fri, 27 Sep 2024 04:14:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D316172BCE;
+	Fri, 27 Sep 2024 04:14:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="miwQ4aP6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qur09JOl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4670171092;
-	Fri, 27 Sep 2024 04:14:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B5B2AE84;
+	Fri, 27 Sep 2024 04:14:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727410443; cv=none; b=oZZcYoRaml0Q3WzkGQJscnXX+PGFqHffZQcWiQlVTRznEseVajdEDXsModXa/zYLdKSctUBdFWalmZCNS7Wz3JwzOFzvFa0cs8WRhkhiE2MX4TtSQ+mt+tEnpZXE83XXfEeLw9Q+jOmpMHlFEzwwMpnUkqZIc7TOjOrgFDCR8F8=
+	t=1727410453; cv=none; b=bjyV9bmjq9ERUsHqeRNPyIeSA+Ukrg1u7jZa0BxyPl1G6S0OhPcrMuPka4uKJKhnOp4aEx8EoGifVoJZGujwt0q5eaDV2tm/yAKRV0fvSTe6HszfA5IT8yvh9gETcV8S1zDxP7cG6jv+s+iLSb3iIy4j7xd2JR/CC49CLzulPzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727410443; c=relaxed/simple;
-	bh=o1mp1D74UI9E7IMGxkY0GJk9Ctz5Y8Xr+aXJNGB3eUw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Gq6Amc+BcCFETjbmAE3GdHp+DeX+uoKoYRo12uErC/euHYn0rjmb7Vsoj/Ge7EEqxJrFBdVv16y7Pv8kAuMj8WzfFsLvphLG77kH6/WcEke0uQyEB+Qn7YcnVlVldpIWHzYkc3invlWvzCao4+YtbCCDHA/3RseC34c2CuUM/tE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=miwQ4aP6; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1727410453; c=relaxed/simple;
+	bh=JVL2fUPhe7PhfPh2yglWF3nfspxFiAyHvNIEuOzsF4Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VE04jW3FGvpLXcO40vPcc42nMqSstjl9XUQbC1/MNBjRf6JnElYIpMiqMhzPE/KPF5lWamkcMPRF3++m76t59WiTyWE0zE8iM64KFrBE9lQLglsA2o/1fSx4D0cgqdEHO1+wCfpckE/Vp7alMvaM3TJRDX9hgB4m6yul/BJenMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qur09JOl; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-71b8d10e990so135693b3a.3;
-        Thu, 26 Sep 2024 21:14:01 -0700 (PDT)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-206aee4073cso17849155ad.1;
+        Thu, 26 Sep 2024 21:14:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727410440; x=1728015240; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vUExd/HvXISJzOnUZpKfBxGs6Kqdkihoj+/Acbs9JJc=;
-        b=miwQ4aP6XvsKZhJeFBLWzdG7IKlll2dcD2NO+m/T9X15ia0VaWN1DhskMLSXXavQwm
-         yiI7UvXxYl2dkRmSp0ohp34zWRpRg8TxjCcYSiTLyULGu2f9ZyXwDzbJxxUSlC/QjY5o
-         3RDxsTxh/7ZMyCi6JC4/h3V+S6xwJdsmw79I88a7C00fDGqoJlAght9XainEE9ny3sSF
-         e4ZEJUt8kAQE3pa/79N/A6nQ5RX8CUVKuzi3Ot6OrYxpX+1ABfEf0s/zzvbS0WPxmCOo
-         CnjMiyZjrRAN3mhum4ph5/L+Q1ijZKrax1FwhhQBUr6Ygiy1jVuNtlp398kHgiBbQe46
-         APiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727410440; x=1728015240;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1727410451; x=1728015251; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vUExd/HvXISJzOnUZpKfBxGs6Kqdkihoj+/Acbs9JJc=;
-        b=rzbHE/0GLnq2pmB+041jeC5GBPq3K5R91CBB2Ls9lz6uJ+Q6WnR+2kJQVOH2aH23c9
-         5T+OeH78Gjty0439cwWGzEC285226gORixoA3xXzpQq05jlhZVxSvBLEq5jWn+FwEJ4f
-         1YPszEyscsz/727Mfl6JmnWnguov0mG6Hx3Yky1OKf9WLicJS5on+4qCk54A5XscjWOX
-         pYHhBB5dEx+pXy7COgXc/Yy0uirbk5k/+pqsmTOugeASJoJHbXfF0fL3Ps16qmM3Izck
-         f7s3nwD39x0P32Xyt36bYXpKm2hOk4LdJYTQ6wxIpUEvXlWb+k5mgvHbupVwg/e1RJdr
-         M0vA==
-X-Forwarded-Encrypted: i=1; AJvYcCUCpeyK7eLIXV87lS/7ETMqamO04VahS7z66JDK4HWiVAGMSDVp8tTtoKmeN68NqOxB7HXr18NkQatmcyk=@vger.kernel.org, AJvYcCV1Lu3aA1V1jwCw6Zgrzs3B+NgsAjsOiOhmY93cth26Jtx9JFXj5QmT8O+cdLJqnAWVBp+jtSsST2yT8g==@vger.kernel.org, AJvYcCVt4rruWVNEWUXBcPuIy/+hZ/Dv3B9KO/XmqTglmyaqlwWsN2Ta6BWjg9ZzJKgyVkATmBFYqo7+Um/a4DKAXGQ1@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEtJ//bg4mg6wh2kUV5InFNLKwNgENaG00UH+sVQ4kljmxAWPI
-	flZA12kI1OwSQKjwQ6k/Y/EfMH7f9fyQoGbQgREdoqrW99U6RgEnFmn/hephN+9rfA==
-X-Google-Smtp-Source: AGHT+IE5SAx7BYv5N77+UUEF9ITGukQudJ+s69ilmU5GDAbJqHJJi2THX8m6kLa+SqCaWtIsyVq8Zw==
-X-Received: by 2002:a05:6a20:6f05:b0:1d2:e987:c343 with SMTP id adf61e73a8af0-1d4fa6c82a8mr2700027637.24.1727410440409;
-        Thu, 26 Sep 2024 21:14:00 -0700 (PDT)
-Received: from haliu-mac.redhat.com ([240e:34c:5766:2070:398a:da67:287e:ed6c])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7e6db2cb063sm689941a12.55.2024.09.26.21.13.57
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 26 Sep 2024 21:13:59 -0700 (PDT)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: netdev@vger.kernel.org
-Cc: Allison Henderson <allison.henderson@oracle.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Vegard Nossum <vegard.nossum@oracle.com>,
-	Chuck Lever <chuck.lever@oracle.com>,
-	linux-rdma@vger.kernel.org,
-	rds-devel@oss.oracle.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net] selftests: rds: move include.sh to TEST_FILES
-Date: Fri, 27 Sep 2024 12:13:49 +0800
-Message-Id: <20240927041349.81216-1-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.39.3 (Apple Git-146)
+        bh=zmPC7xOEq4xiQYbTsTCCja7E17GlGBjk59a6Y6qmbow=;
+        b=Qur09JOlkHbBXshLpChKTSxuQZSAykBrwObI3ikF2+MvvZELFM4eGQgtUk3wXoWpwW
+         KLCoGrj/1fEQCr89g+5wJoq2X7CtWPlUT1qeW6AC7JImyf9SpeIhrUEVbAWdW7wi5znd
+         9LjVZbhWquXcGdZUJandrFfN9yuag35g9nYe8h59pGnKrqql21uILunwxZ6nrfrwLhht
+         YWEfdrha3uADqAhw0HgcSj255/JHaiLHGOq9Yvaa95oGDpk7oj+uo64M3qqyciQ1/EO2
+         M1h4kXzgDwde53BahlA7OXS/xpbiphYmbi/agZAPJQ0YXCk0LxKafU9cFJugDW7iyoNK
+         1Y8Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727410451; x=1728015251;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zmPC7xOEq4xiQYbTsTCCja7E17GlGBjk59a6Y6qmbow=;
+        b=wiM8P6i9hKJiC5jmI5DWytLSpSFq3kO9VrTJ4Fh7laoLO+ISo9MhDDsoUc6TL71Nsr
+         aFp3rNsd08eDlK0uSoQugUcGcTyn6gGge3Nu6V73Sct5YAbGbBSQXKLlR3mReUbtfP3I
+         a4+wtNCwry6zXLJoe5GRGYoix3D6Id751DD4Dyukkcv415H9hVpF0Tcfq1QBUmn+41qK
+         vf35ssjZYgHDSTmInn2Ug9xLfWgvmNXoM8s/TbYzATZFbJe9A9Tjq4wJkfTM14IkF/Gn
+         kaJrCwCFI+y9YrhNHwaEjJ9Jsc9YTGu+A13K8cD77fi5f11TTOlSTqyq8KGMkYY4202x
+         e1Fw==
+X-Forwarded-Encrypted: i=1; AJvYcCU2ZXaP4ugo0HY8z39XAxnc/aTVg95XEsOxCLGvrPuxzlqBhWqOW55zJdes+CYxjy3rFtltoP418DUw@vger.kernel.org, AJvYcCWVGAweQmd4H+CmCPC7oOOe5JLlSXF4yBW0lGP2VjILbvhD/Z9KiTk/RU5kd9GAsN1jO1MZlcSlAfIB@vger.kernel.org, AJvYcCWXu8U7S+fM+wGO6M2BNFtzRXhESfxdtaarghy6FxdV4MWy3nQ5HxX1pc00i0q47cNvGGgIrTSeZRVMXYtZ@vger.kernel.org, AJvYcCXq99sVKXXEpdLOVNcuZbGagTUhoi5sBYWwJlRug5A+vPqDBev2z/lESzi2od5TFCFP3Ve9J3nlWn2e77on8hQ3@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfnI6O7hHO25AeH3gx+/yiaK0stT1Epe9H3OK5Cwo57bWXiHu7
+	S5FcWZ0BwjogIjj1K5FJ4cgDPMRIWFNo0qPG4LmTw3yrAoP8ojNN
+X-Google-Smtp-Source: AGHT+IHDmvSZ+vvEz962F4lkQhrBabPVtLhowwYwbXZHolk9sYGt9iof/C7/GGTTa5vwr7vZ0BjGBw==
+X-Received: by 2002:a17:902:da81:b0:206:adf0:4f15 with SMTP id d9443c01a7336-20b367d035emr34323555ad.8.1727410450894;
+        Thu, 26 Sep 2024 21:14:10 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7e6db2bc531sm689914a12.32.2024.09.26.21.14.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Sep 2024 21:14:09 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Thu, 26 Sep 2024 21:14:08 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	patches@lists.linux.dev, kunit-dev@googlegroups.com,
+	linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Daniel Latypov <dlatypov@google.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Maxime Ripard <maxime@cerno.tech>,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: Re: [PATCH v8 8/8] clk: Add KUnit tests for clks registered with
+ struct clk_parent_data
+Message-ID: <6cd337fb-38f0-41cb-b942-5844b84433db@roeck-us.net>
+References: <20240718210513.3801024-1-sboyd@kernel.org>
+ <20240718210513.3801024-9-sboyd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240718210513.3801024-9-sboyd@kernel.org>
 
-The include.sh file is generated for inclusion and should not be executable.
-Otherwise, it will be added to kselftest-list.txt. Additionally, add the
-executable bit for test.py at the same time to ensure proper functionality.
+Hi Stephen,
 
-Fixes: 3ade6ce1255e ("selftests: rds: add testing infrastructure")
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+On Thu, Jul 18, 2024 at 02:05:07PM -0700, Stephen Boyd wrote:
+> Test that clks registered with 'struct clk_parent_data' work as
+> intended and can find their parents.
+> 
+
+When testing this on arm64, I see the error below. The error is only
+seen if I boot through efi, i.e., with "-bios QEMU_EFI-aarch64.fd"
+qemu parameter.
+
+Any idea what might cause the problem ?
+
+Thanks,
+Guenter
+
 ---
- tools/testing/selftests/net/rds/Makefile | 3 ++-
- tools/testing/selftests/net/rds/test.py  | 0
- 2 files changed, 2 insertions(+), 1 deletion(-)
- mode change 100644 => 100755 tools/testing/selftests/net/rds/test.py
-
-diff --git a/tools/testing/selftests/net/rds/Makefile b/tools/testing/selftests/net/rds/Makefile
-index da9714bc7aad..cf30307a829b 100644
---- a/tools/testing/selftests/net/rds/Makefile
-+++ b/tools/testing/selftests/net/rds/Makefile
-@@ -4,9 +4,10 @@ all:
- 	@echo mk_build_dir="$(shell pwd)" > include.sh
- 
- TEST_PROGS := run.sh \
--	include.sh \
- 	test.py
- 
-+TEST_FILES := include.sh
-+
- EXTRA_CLEAN := /tmp/rds_logs
- 
- include ../../lib.mk
-diff --git a/tools/testing/selftests/net/rds/test.py b/tools/testing/selftests/net/rds/test.py
-old mode 100644
-new mode 100755
--- 
-2.39.3 (Apple Git-146)
-
+[   20.464809]     KTAP version 1
+[   20.464865]     # Subtest: clk_register_clk_parent_data_of
+[   20.464936]     # module: clk_test
+[   20.464979]     1..1
+[   20.465098]         KTAP version 1
+[   20.465208]         # Subtest: clk_register_clk_parent_data_of_test
+[   20.468964] OF: overlay: find target, node: /fragment@0, path '/' not found
+[   20.469558] OF: overlay: init_overlay_changeset() failed, ret = -22
+[   20.470177]     # clk_register_clk_parent_data_of_test: ASSERTION FAILED at drivers/clk/clk_test.c:2760
+[   20.470177]     Expected 0 == ({ extern uint8_t __dtbo_kunit_clk_parent_data_test_begin[]; extern uint8_t __dtbo_kunit_clk_parent_data_test_end[]; __of_overlay_apply_kunit((test), __dtbo_kunit_clk_parent_data_test_begin, __dtbo_kunit_clk_parent_data_test_end); }), but
+[   20.470177]         ({ extern uint8_t __dtbo_kunit_clk_parent_data_test_begin[]; extern uint8_t __dtbo_kunit_clk_parent_data_test_end[]; __of_overlay_apply_kunit((test), __dtbo_kunit_clk_parent_data_test_begin, __dtbo_kunit_clk_parent_data_test_end); }) == -22 (0xffffffffffffffea)
+[   20.471793]         not ok 1 clk_parent_data_of_index_test
+[   20.474095] OF: overlay: find target, node: /fragment@0, path '/' not found
+[   20.474373] OF: overlay: init_overlay_changeset() failed, ret = -22
+[   20.474737]     # clk_register_clk_parent_data_of_test: ASSERTION FAILED at drivers/clk/clk_test.c:2760
+[   20.474737]     Expected 0 == ({ extern uint8_t __dtbo_kunit_clk_parent_data_test_begin[]; extern uint8_t __dtbo_kunit_clk_parent_data_test_end[]; __of_overlay_apply_kunit((test), __dtbo_kunit_clk_parent_data_test_begin, __dtbo_kunit_clk_parent_data_test_end); }), but
+[   20.474737]         ({ extern uint8_t __dtbo_kunit_clk_parent_data_test_begin[]; extern uint8_t __dtbo_kunit_clk_parent_data_test_end[]; __of_overlay_apply_kunit((test), __dtbo_kunit_clk_parent_data_test_begin, __dtbo_kunit_clk_parent_data_test_end); }) == -22 (0xffffffffffffffea)
+[   20.477677]         not ok 2 clk_parent_data_of_fwname_test
+[   20.479773] OF: overlay: find target, node: /fragment@0, path '/' not found
+[   20.479941] OF: overlay: init_overlay_changeset() failed, ret = -22
+[   20.480160]     # clk_register_clk_parent_data_of_test: ASSERTION FAILED at drivers/clk/clk_test.c:2760
+[   20.480160]     Expected 0 == ({ extern uint8_t __dtbo_kunit_clk_parent_data_test_begin[]; extern uint8_t __dtbo_kunit_clk_parent_data_test_end[]; __of_overlay_apply_kunit((test), __dtbo_kunit_clk_parent_data_test_begin, __dtbo_kunit_clk_parent_data_test_end); }), but
+[   20.480160]         ({ extern uint8_t __dtbo_kunit_clk_parent_data_test_begin[]; extern uint8_t __dtbo_kunit_clk_parent_data_test_end[]; __of_overlay_apply_kunit((test), __dtbo_kunit_clk_parent_data_test_begin, __dtbo_kunit_clk_parent_data_test_end); }) == -22 (0xffffffffffffffea)
+[   20.481513]         not ok 3 clk_parent_data_of_name_test
+[   20.483711] OF: overlay: find target, node: /fragment@0, path '/' not found
+[   20.483878] OF: overlay: init_overlay_changeset() failed, ret = -22
+[   20.484100]     # clk_register_clk_parent_data_of_test: ASSERTION FAILED at drivers/clk/clk_test.c:2760
+[   20.484100]     Expected 0 == ({ extern uint8_t __dtbo_kunit_clk_parent_data_test_begin[]; extern uint8_t __dtbo_kunit_clk_parent_data_test_end[]; __of_overlay_apply_kunit((test), __dtbo_kunit_clk_parent_data_test_begin, __dtbo_kunit_clk_parent_data_test_end); }), but
+[   20.484100]         ({ extern uint8_t __dtbo_kunit_clk_parent_data_test_begin[]; extern uint8_t __dtbo_kunit_clk_parent_data_test_end[]; __of_overlay_apply_kunit((test), __dtbo_kunit_clk_parent_data_test_begin, __dtbo_kunit_clk_parent_data_test_end); }) == -22 (0xffffffffffffffea)
+[   20.485444]         not ok 4 clk_parent_data_of_fwname_name_test
+[   20.487432] OF: overlay: find target, node: /fragment@0, path '/' not found
+[   20.487600] OF: overlay: init_overlay_changeset() failed, ret = -22
+[   20.487841]     # clk_register_clk_parent_data_of_test: ASSERTION FAILED at drivers/clk/clk_test.c:2760
+[   20.487841]     Expected 0 == ({ extern uint8_t __dtbo_kunit_clk_parent_data_test_begin[]; extern uint8_t __dtbo_kunit_clk_parent_data_test_end[]; __of_overlay_apply_kunit((test), __dtbo_kunit_clk_parent_data_test_begin, __dtbo_kunit_clk_parent_data_test_end); }), but
+[   20.487841]         ({ extern uint8_t __dtbo_kunit_clk_parent_data_test_begin[]; extern uint8_t __dtbo_kunit_clk_parent_data_test_end[]; __of_overlay_apply_kunit((test), __dtbo_kunit_clk_parent_data_test_begin, __dtbo_kunit_clk_parent_data_test_end); }) == -22 (0xffffffffffffffea)
+[   20.489207]         not ok 5 clk_parent_data_of_index_name_priority_test
+[   20.490998] OF: overlay: find target, node: /fragment@0, path '/' not found
+[   20.491504] OF: overlay: init_overlay_changeset() failed, ret = -22
+[   20.491725]     # clk_register_clk_parent_data_of_test: ASSERTION FAILED at drivers/clk/clk_test.c:2760
+[   20.491725]     Expected 0 == ({ extern uint8_t __dtbo_kunit_clk_parent_data_test_begin[]; extern uint8_t __dtbo_kunit_clk_parent_data_test_end[]; __of_overlay_apply_kunit((test), __dtbo_kunit_clk_parent_data_test_begin, __dtbo_kunit_clk_parent_data_test_end); }), but
+[   20.491725]         ({ extern uint8_t __dtbo_kunit_clk_parent_data_test_begin[]; extern uint8_t __dtbo_kunit_clk_parent_data_test_end[]; __of_overlay_apply_kunit((test), __dtbo_kunit_clk_parent_data_test_begin, __dtbo_kunit_clk_parent_data_test_end); }) == -22 (0xffffffffffffffea)
+[   20.493053]         not ok 6 clk_parent_data_of_index_fwname_name_priority_test
+[   20.493583]     # clk_register_clk_parent_data_of_test: pass:0 fail:6 skip:0 total:6
+[   20.493701]     not ok 1 clk_register_clk_parent_data_of_test
+[   20.493822] # clk_register_clk_parent_data_of: pass:0 fail:1 skip:0 total:1
+[   20.493920] # Totals: pass:0 fail:6 skip:0 total:6
+[   20.494032] not ok 49 clk_register_clk_parent_data_of
 
