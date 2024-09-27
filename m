@@ -1,151 +1,150 @@
-Return-Path: <linux-kselftest+bounces-18515-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18518-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C7CF988BA2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 22:59:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 57D56988BF2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 23:46:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 476811F21A83
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 20:59:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CCFC1F221CE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 21:46:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 166B51C2DCB;
-	Fri, 27 Sep 2024 20:59:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5FFD18A92D;
+	Fri, 27 Sep 2024 21:45:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cwAHd66r"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="K2UkHR3p"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E36E1C2317;
-	Fri, 27 Sep 2024 20:59:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B54C171E5F
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2024 21:45:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727470750; cv=none; b=qVLc3o4VeSBJLDJvD5mxizu7Lyv6Mw3UtOYDMUxb/lcwm7tk7Speg37WE1kZUQOCICAr/oh1KUD0fEr3BcN37e+0Y95Hs2fPNKC/c6XfbKsWb8Xe62hdTGzww2JepBrGCQkPz8oiWNnBw9RC/TM4STs8uvGvI4Hozc/E+siFbvc=
+	t=1727473559; cv=none; b=j7tdITOIAM6RCXq2in4GCnL5mAbZ3jUPyuEVzGTEvXs8uCKU9BSHMCxs8qxt+MMpX3rhtMEM14d+EX2ykY8SCoTDjRiyZp9idvvYByVSF2S6HT5k1+Z0A1vzsnw0gonz164sqLwPermXYdqU7gsMYjFvRojzypkDratg/rbH4X8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727470750; c=relaxed/simple;
-	bh=fnM3H4wnBAXCZbJ0HEWaAgPxQS9Y1e52aZrt0e5s9/s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XmT6MjEkjllQlLxAgCXsM8qkMEC462yuUNHeDEXu/kki6coQR9DZkL/FI5GxL8aNqi9u3ATcDl/Y5j2L0usu7P7IHKveJknr/cE0jaesuTx0YDF6eEniuGe6rUSAzEoYQ6IargTlM0f1BX3sqsubUIa5AJk1DcEC4yP4NNGokbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cwAHd66r; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2e0b93157caso1110206a91.0;
-        Fri, 27 Sep 2024 13:59:08 -0700 (PDT)
+	s=arc-20240116; t=1727473559; c=relaxed/simple;
+	bh=Dn+5co4Ik7qXfVp+tmlGU94lXVpEMC43+qqGeuUfbnw=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=PJSoOQrvVrT1P205jCzbql57uOkvGEPXecnf1hGjAORcdSGungkWwpmIkQlcn2ybDmx/FkydrbdEwprDkrl3Goymws4JNiwRzRzgqL6uJKsXTJTXK4wrEMIuVgdz0Kns2q7tpJFRy2xFuocBWgA2/Yf7HkUDJAJDkm2x505HjDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=K2UkHR3p; arc=none smtp.client-ip=209.85.210.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-718816be6cbso2304298b3a.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2024 14:45:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727470748; x=1728075548; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8yS9H3DUqSh4+1N7AkOP+SYlaTHqv5UhoSoo/j5k+2k=;
-        b=cwAHd66r7Uit5MTQL2Si/ZFE7TSP5Ij93iglgK4HYaP/QphgldhgPT+FH1h+8t+nld
-         YH0e9hOUx+SG/bOPxofmeo2i4JckdSRjIJVj7Vd1wG5IXOrMhXYvhlZyAV9hPf48/Fl6
-         I2UMDjd5VYHpK8U1D7IiWpahgWnKKYB4aEleWUvBGIu3RWO5as3ruzNWAbfFdZCqpr+0
-         IwF8hMJNHLCJE0yPZxwdQAhDhWUmJLQxr1JctaUK9LnBcbz7BqRasaqPj1KVyc2eN4qk
-         eQW+Ot81auZGX+8mPKEO5WNB00Bsv3Dv0+hZ04x6BsxeefwguA+rdmcj8ZZVEJQxRzlF
-         uxjw==
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1727473557; x=1728078357; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=7DLirDrMuCTEsjziZAZCEw2KDnGuxQtgMwz+CHkSY3w=;
+        b=K2UkHR3piG1PXJKHOkCepHk/vBr/M7imOcWBlUJoEIVawbbqdKr0QGmgd4vHVwuqW+
+         dhLmJ5zGF0LrDetrKgAxvkk0A42F6OuLQ8uPQQ1zbnUAwgeAUBe2jHY1hioBZYLxAbrk
+         Erc57ofLe6lHS3IXyTQmk5qaoiRz6k4Pyf21JkDmDwZ5D6hQVadB++kXZnt7gB/xvDDu
+         WFI+7pWqpJDk3qXDhQfBr18tc1m60mO+XJibvL5mvh16bz6YGbmBb6ytANhIjHp3zq+m
+         mu6JR3bVXC9vmWrysL1x3/1xcRIavmDnKMHgXFZQw/FEYDP6noa+dOFffLulXln3qQW9
+         LFOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727470748; x=1728075548;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8yS9H3DUqSh4+1N7AkOP+SYlaTHqv5UhoSoo/j5k+2k=;
-        b=exQl6tTEp6+HduD/n9sMmoOxXFUh76x0KpUsWVWTQSt0/PjL6JZdb2PxiMkLFOWpJu
-         FqM2JFcl3pMvF8t6Q3fO5rOh93gLGvtH5f9Ea0sEdVPksF7pV08keb64ZnTgrTAX2d9Q
-         htAWs3S8yCTy3gl5vzA7duIDyUa8yDyrEgF2uFwenskqkn6k4evijUu4vUzoAE0x9p3I
-         D0yARjLm05+Un94dJP70p6A5fLQa5yMZTJnPqFX2a/qEWFmbam4sdCQX1+9r4BJG9qIQ
-         5n4mNMAC8iesp//hcFMaX8zXAMoLQ4lfNQDLRwTM+GNsH0utahxt/VkqVNK65WsQbM45
-         Oexw==
-X-Forwarded-Encrypted: i=1; AJvYcCVcS8DqFJzY79rVm8sLXBhUBeUiPuxEhe6cfbxG0wAQyxEWYZzygXGGb5zjnchWWS5871gucB7prjJd76i+@vger.kernel.org, AJvYcCWnIqbwB0aWgsY2YEcW8iPZkT9pRv8ExHyWOx5ZHQDlGXbXuHDipRrPbxFSCTwcrZOI6r2vdLrOlVX/5DqZ9mEb@vger.kernel.org, AJvYcCXQ7ZgDl02tKdQZC9BOYxW3dSZ946JrQlbYlWZ/O3cNxXFNSOglpm2p36NY9m3N4U9S2gw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6Q27jZO3oP7dhbVf7VeVuL7hxeNlcGmqhP+WLS+tz54hwQiS1
-	yJKO+rw83bJEc51FtbKPmXN1owctiXLfoSc6IRXJC4oQJmUM1sbOouRgJTNDTpbjdvoN2sMi3ra
-	dJKbYOv/b9p9ztfREjTOWGB7djo0=
-X-Google-Smtp-Source: AGHT+IHVGYzkg7zX+Li8+rcjjNN8BeB6X2hawaJlDm3sLNTdoAo66nKXyEGUiagb4SKdZzOPC/h3R/OfDsTpnKk/284=
-X-Received: by 2002:a17:90a:4747:b0:2c9:90fa:b9f8 with SMTP id
- 98e67ed59e1d1-2e0b71cae48mr7464837a91.10.1727470747867; Fri, 27 Sep 2024
- 13:59:07 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1727473558; x=1728078358;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=7DLirDrMuCTEsjziZAZCEw2KDnGuxQtgMwz+CHkSY3w=;
+        b=VpvR5jzr0GFZzgQlCRzWo439K/qB8mP2IVb/OrQ+vAsiK7vblv1LChfxxP7kt9+pz3
+         smrMO8JBACwTS7ggv0AKRWuUaxl0VKamuEw81oscunmE4E5U5jaaMIZqa+rmq6Tt9bKA
+         +wrwWb+rSB1AQbRm+Nxl7VIDbHpXlorWzL9I1CU1DX8qYgqNSJiIbdyPG4u44xl+Y86v
+         CrZHZ+Jvj9ATOcazYamlPrzx/abOQBeqnmQt8MIqtiN6LuT7iEmbdDH1plL6t3Z7/sBM
+         pVVTTJJ0U8eEIupErDH20eUt/kqfL9VjO3ujtaIwlKGvoTlrJ2uxxwQNKstTEFsIvTnY
+         d5ag==
+X-Forwarded-Encrypted: i=1; AJvYcCU5mtxpojh/uIggcCf5Sevl6NfMknskRWtEYoIgwRYC04JZ35CP7HEbrZIT277vTOIQpC+1AVflY8YAtHk0+mE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRDQO9r31muYqR6IbQSE+eS/9+hqkj3ltC/aGMsq8Rw4RCxTtV
+	mZv8Sadj9ZkB+zCyjAVvsd7vGGXHZW0robacZfhNu572SHxCZMjRf183KXFJSm0=
+X-Google-Smtp-Source: AGHT+IFPAlV7ujsLCTXlyy+snKCV9vUx19ALqlRQkAiu9hVMAu+S+qiEaulBwl/crX8aoGOObsRgrw==
+X-Received: by 2002:a05:6a21:1690:b0:1ce:d1b0:bc65 with SMTP id adf61e73a8af0-1d4fa7c7282mr6068409637.43.1727473557625;
+        Fri, 27 Sep 2024 14:45:57 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71b264d73f3sm2120108b3a.90.2024.09.27.14.45.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 27 Sep 2024 14:45:56 -0700 (PDT)
+Message-ID: <66f72794.050a0220.191cb6.cec7@mx.google.com>
+Date: Fri, 27 Sep 2024 14:45:56 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240927082313.116139-1-jiapeng.chong@linux.alibaba.com>
-In-Reply-To: <20240927082313.116139-1-jiapeng.chong@linux.alibaba.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 27 Sep 2024 13:58:55 -0700
-Message-ID: <CAEf4Bzaau0apKBM75BedphVUA9EHXfzC7wr4ugVZqohWZbLxRg@mail.gmail.com>
-Subject: Re: [PATCH -next] selftests/bpf: Use ARRAY_SIZE for array length
-To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-Cc: andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, 
-	daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
-	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: test
+X-Kernelci-Kernel: linux_kselftest-next-6.12-rc1-1-g4b721fcc094e
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+Subject: kselftest/next kselftest-seccomp: 2 runs,
+ 1 regressions (linux_kselftest-next-6.12-rc1-1-g4b721fcc094e)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On Fri, Sep 27, 2024 at 1:23=E2=80=AFAM Jiapeng Chong
-<jiapeng.chong@linux.alibaba.com> wrote:
->
-> Use of macro ARRAY_SIZE to calculate array size minimizes
-> the redundant code and improves code reusability.
->
-> ./tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c:98:34-35: WARNI=
-NG: Use ARRAY_SIZE.
-> ./tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c:93:29-30: WARNI=
-NG: Use ARRAY_SIZE.
-> ./tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c:101:34-35: WARN=
-ING: Use ARRAY_SIZE.
->
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D11167
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c b/to=
-ols/testing/selftests/bpf/prog_tests/core_reloc_raw.c
-> index a18d3680fb16..5e576c6cecca 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
-> @@ -7,7 +7,7 @@
->  #include <sys/syscall.h>
->  #include <bpf/libbpf.h>
->  #include <bpf/btf.h>
-> -
-> +#include "kselftest.h"
+kselftest/next kselftest-seccomp: 2 runs, 1 regressions (linux_kselftest-ne=
+xt-6.12-rc1-1-g4b721fcc094e)
 
-this doesn't compile, and I don't think you need this include
+Regressions Summary
+-------------------
 
-pw-bot: cr
+platform                    | arch | lab         | compiler | defconfig    =
+                | regressions
+----------------------------+------+-------------+----------+--------------=
+----------------+------------
+stm32mp157a-dhcor-avenger96 | arm  | lab-broonie | gcc-12   | multi_v7_defc=
+onfig+kselftest | 1          =
 
->  #include "test_progs.h"
->  #include "test_btf.h"
->  #include "bpf/libbpf_internal.h"
-> @@ -90,15 +90,15 @@ static void test_bad_local_id(void)
->         attr.prog_type =3D BPF_TRACE_RAW_TP;
->         attr.license =3D (__u64)"GPL";
->         attr.insns =3D (__u64)&insns;
-> -       attr.insn_cnt =3D sizeof(insns) / sizeof(*insns);
-> +       attr.insn_cnt =3D ARRAY_SIZE(insns);
->         attr.log_buf =3D (__u64)log;
->         attr.log_size =3D sizeof(log);
->         attr.log_level =3D log_level;
->         attr.func_info =3D (__u64)funcs;
-> -       attr.func_info_cnt =3D sizeof(funcs) / sizeof(*funcs);
-> +       attr.func_info_cnt =3D ARRAY_SIZE(funcs);
->         attr.func_info_rec_size =3D sizeof(*funcs);
->         attr.core_relos =3D (__u64)relos;
-> -       attr.core_relo_cnt =3D sizeof(relos) / sizeof(*relos);
-> +       attr.core_relo_cnt =3D ARRAY_SIZE(relos);
->         attr.core_relo_rec_size =3D sizeof(*relos);
->         prog_fd =3D sys_bpf_prog_load(&attr, sizeof(attr), 1);
->         saved_errno =3D errno;
-> --
-> 2.32.0.3.g01195cf9f
->
+
+  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/linu=
+x_kselftest-next-6.12-rc1-1-g4b721fcc094e/plan/kselftest-seccomp/
+
+  Test:     kselftest-seccomp
+  Tree:     kselftest
+  Branch:   next
+  Describe: linux_kselftest-next-6.12-rc1-1-g4b721fcc094e
+  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
+lftest.git
+  SHA:      4b721fcc094e9eb6dd4702df8d79ab11e120833d =
+
+
+
+Test Regressions
+---------------- =
+
+
+
+platform                    | arch | lab         | compiler | defconfig    =
+                | regressions
+----------------------------+------+-------------+----------+--------------=
+----------------+------------
+stm32mp157a-dhcor-avenger96 | arm  | lab-broonie | gcc-12   | multi_v7_defc=
+onfig+kselftest | 1          =
+
+
+  Details:     https://kernelci.org/test/plan/id/66f71c2a254fc0e2a4c8685e
+
+  Results:     0 PASS, 1 FAIL, 0 SKIP
+  Full config: multi_v7_defconfig+kselftest
+  Compiler:    gcc-12 (arm-linux-gnueabihf-gcc (Debian 12.2.0-14) 12.2.0)
+  Plain log:   https://storage.kernelci.org//kselftest/next/linux_kselftest=
+-next-6.12-rc1-1-g4b721fcc094e/arm/multi_v7_defconfig+kselftest/gcc-12/lab-=
+broonie/kselftest-seccomp-stm32mp157a-dhcor-avenger96.txt
+  HTML log:    https://storage.kernelci.org//kselftest/next/linux_kselftest=
+-next-6.12-rc1-1-g4b721fcc094e/arm/multi_v7_defconfig+kselftest/gcc-12/lab-=
+broonie/kselftest-seccomp-stm32mp157a-dhcor-avenger96.html
+  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
+elftest/20240313.0/armhf/initrd.cpio.gz =
+
+
+
+  * kselftest-seccomp.login: https://kernelci.org/test/case/id/66f71c2a254f=
+c0e2a4c8685f
+        failing since 59 days (last pass: v6.10-rc7-29-gdf09b0bb09ea, first=
+ fail: v6.11-rc1) =
+
+ =20
 
