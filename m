@@ -1,151 +1,135 @@
-Return-Path: <linux-kselftest+bounces-18493-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18494-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19B859888A0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 17:59:47 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFBD69888DA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 18:16:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C85CF2833A3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 15:59:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFF0C1C20FC7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 16:16:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A48121C1744;
-	Fri, 27 Sep 2024 15:59:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78174142621;
+	Fri, 27 Sep 2024 16:16:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="id/IfExZ"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bmSxR155"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C8491C172D
-	for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2024 15:59:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D25A323B0
+	for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2024 16:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727452783; cv=none; b=gWaTKFItTnEJ4olIQz4ONTmWQo+np1unr/GZto7jtVxIsHg3gOOuANxgEl7zpZsjBL3G+VHDIllqRGapZAmniIKSagiJ7p4vO8UuYhiY1vZz0tZCmYvPkDGYGDBxxXPFpP8I/PBCDGHgnUHa3AT86Qw/3bckE7hWeQMH+ehJAm0=
+	t=1727453796; cv=none; b=KtNp2gP6FKmQAVafBhv7cKsR/wJ3W8rHhPqverfEsg0eeG5BDAMpeG1vaM+o7a1xSRv6zh5gnG9bi9OexPyIhGHEZ7SCh8UsXYsDjS8704ux5o8RUcScbXets2DGSngD682AoDO9qBQOKqTgnR8xJu3fyfUqVs5vyl+QLf4y/ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727452783; c=relaxed/simple;
-	bh=mNcJxIvrUlKBRWm7kcRpla8DkgOPTgYac1kq5Li84zw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ng4rjGqFiKkEv6SZCzEMkWcY3L6ymkSFKUnKNljBI9ErZUID1TtAIzx931823/VzVIgNiIR3X53ShJ5Fi4nRfAR+Kk67wrgdPjJpYoRcUeaWtj28uzaPYOWf3xCV4xf5XwM/O+QzvJrh6gH6OcQks+VRRLGvUWwyKy1klBzkXQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=id/IfExZ; arc=none smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4581cec6079so268321cf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2024 08:59:41 -0700 (PDT)
+	s=arc-20240116; t=1727453796; c=relaxed/simple;
+	bh=Wu52U0EBGUW8RDbNXrq7iBFkfNUHVmBD2A0I09aK/XU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gAtWKETr/Cw6VfQ2pdkZrMkv5nmvkpsL5/JhEMDOIM+SWjpqjfnoxldb7fppNXlJAY97MfChpUy6zVX4JT4sMaaDS1SCC7ximM3JLskziNbNOczYh8ioRNo9zAdt8S0wE+XMO+VnWZlX+Z9zjfRnkCo/IC8hhQ3bUGZdboKgITI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bmSxR155; arc=none smtp.client-ip=209.85.166.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-831e62bfa98so106598939f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Sep 2024 09:16:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727452781; x=1728057581; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mNcJxIvrUlKBRWm7kcRpla8DkgOPTgYac1kq5Li84zw=;
-        b=id/IfExZIybVGoBSsnSiG7/vQHEuzRHtH/vKaao7WIX1PODdhznLY3KkcVEjQsO98l
-         lWlDESmfBMxT0NGZsuDsqVZpNbKZZFpat5nfgnljzxFcpo8E/Xolcm2XODGe/+7HGTBs
-         EgYWD6ExQ451Qbau8D5SLrkOGEBFbXFv1Ci1bJ/rMpTslpfiNQiKnZPnZxxFTGAZubhS
-         BiwCckdCk5bxc6o62sqxFlxo5WPDkh+mNAx19BwTS27LX87NoMtIAgs+xsZSxGZyJw/v
-         BZKkgrUROdwaR2tx9nyddpZBRNAd0dw2jROIv9kZefSSldmqftJjPBwIhMnCCu4ZfMYX
-         TN7g==
+        d=linuxfoundation.org; s=google; t=1727453794; x=1728058594; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HR9L1tFGwvsuWLdcZhMfYeFWtiRJ32Evy1PyzIhswm4=;
+        b=bmSxR155LpztWLjHuK6OM0XH94QISn4Cqa81heCkCyb5UEC+4TRjr/I2E53cOBwyGX
+         42L0hLiGtkq/WGzzGYYaOa+BLvFHkkJGc2Os+T1omyzcbPEgFmiXkB42ab0pef67UTWE
+         JVKeSMdgXCc3TRjddUPE7HxeTXc5bw2ZNtiM4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727452781; x=1728057581;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mNcJxIvrUlKBRWm7kcRpla8DkgOPTgYac1kq5Li84zw=;
-        b=nXPpZ6fO9mdVLVp8/xCCbsQwLBAD7aIhg38bTsmWSjQx1ZCUcPAtO4V5Mscwl4qm3b
-         A246c37URFIOqUqVgjRldQHWG6A3RJmzKjvH6lE1akxNvK0oXkngqy8TMzLPLygweqNB
-         52OUAUu5tshoUp5mzjModlZGfdONrjbqiUAtpv5jdcEUPzmiuOR2KMo//vb3P15uLS84
-         qYTlkU9Z/TrAMQBZZ1M9FsXNEAMz+mxhkVoCPU4yRDfX+5bmQ5f4d+CSnAS7VETmykeZ
-         ZUJ55nhuJdKMjU6R3CozwZNPS47UogaW9/VjY+rEchuRZNH5st//Qaf/SgjUJCEEsIJ0
-         L9Xw==
-X-Forwarded-Encrypted: i=1; AJvYcCXe/kZHog7XziI5UhSL/wn4DzmX4I0HN9B30zfnPvcnHeoPlHiwRBq497J8TIlQiR8RzVSrtuaMPBwnc7xH0/I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxaPC1nThtqwLSpeCzUYEqC3JuPr1InJXj+c4/fUagt5bqnFT0L
-	QuHt23q4KHwaaEf7TTe+GwZjvIEV38sOgFohPU6QXEEQEE3iM03n3t9vZ932Q8HvoTy1a7+kMm/
-	lczSYkLnA7e9SwGiAzinau2a5OhuSTbawoA/N
-X-Google-Smtp-Source: AGHT+IFh0GldhtACuS2QaxWHGVDuBc4fpilU9wj8Ngw31fpS/kV2OS2lVOxcZUl6UKTvobIZccHNBjO0lZzjRDP7+Ko=
-X-Received: by 2002:a05:622a:a491:b0:453:58c8:3fd1 with SMTP id
- d75a77b69052e-45c9feb0724mr3810001cf.0.1727452780668; Fri, 27 Sep 2024
- 08:59:40 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1727453794; x=1728058594;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HR9L1tFGwvsuWLdcZhMfYeFWtiRJ32Evy1PyzIhswm4=;
+        b=A60lb7OEKCtpoEiBOj89SgOqpZCj0TGlOySDq4+DWPbvCDgePOnocgnAcOrm6IRLE5
+         z1anEgCCZy8i/AcZs7xqd+/BXIyPCpcDqPZvX+f4krv7ZpaEN82S3K5rxy1fS7ynJVBj
+         9i4UQ5ACs7AcotR3h+1pcIcsPk798XuDt3jgN6K0A9TXtnkWsaYoqZWGwumJrKYkZpom
+         +tCYyj1z1E5Sy5tk5pLY6rNkbYslMTji18yZNXNqcuwkOxSvVRmtCURk8MEgmGAcKcgc
+         CzqvK33hJcqp+alGK0d6TfG9GGMhuG/W0wfrtHOQ3lHaGskkh64YT1ekL8hlEdnu3xBn
+         NWuw==
+X-Forwarded-Encrypted: i=1; AJvYcCXFEz1BAAEjZekfNcztYb0Ahce45+miq7BGR29w/pmkQhoWB82AmJKGk9EZdkLUvnDE+j64S2D+TB1weNlZGkQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0xwkEVrvG1Q6sUhdBuur8DJtYwxBnnYGqFJQZe7H8Dnk/DsHb
+	VCBvQ/iaRKf+Mmfqa7JehiDedmJjJ++HKvrysdl+u/dlnGY2Je9MZiBMB4llsJU=
+X-Google-Smtp-Source: AGHT+IEP5nmUu95Efe+WgHxrtI1tFEnKpgExLNzW4lKixMYXEZzO3I9iY25TPelr+EvCIoR5XQW/Sw==
+X-Received: by 2002:a05:6602:2b0b:b0:81f:8f5d:6e19 with SMTP id ca18e2360f4ac-834931ae996mr458104939f.2.1727453793860;
+        Fri, 27 Sep 2024 09:16:33 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4d888835209sm554605173.11.2024.09.27.09.16.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 27 Sep 2024 09:16:33 -0700 (PDT)
+Message-ID: <765e0a55-8bb6-45a7-a32e-73b40f92f7dd@linuxfoundation.org>
+Date: Fri, 27 Sep 2024 10:16:32 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1724776335.git.nicolinc@nvidia.com> <6348cc7a72ce9f2ac0e9caf9737e70177a01eb74.1724776335.git.nicolinc@nvidia.com>
- <Zva4PJ3FhpMlWxhF@google.com> <20240927140141.GA4568@nvidia.com>
- <Zva_nFXZgT4MEfDg@google.com> <20240927145808.GB4568@nvidia.com>
-In-Reply-To: <20240927145808.GB4568@nvidia.com>
-From: Mostafa Saleh <smostafa@google.com>
-Date: Fri, 27 Sep 2024 16:59:29 +0100
-Message-ID: <CAFgf54q9j1NjEBxHtf8sqpx5i01PAqwpuwZg-Bt5AOAf-Rwaew@mail.gmail.com>
-Subject: Re: [PATCH v2 06/19] iommufd/viommu: Add IOMMU_VIOMMU_SET/UNSET_VDEV_ID
- ioctl
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Nicolin Chen <nicolinc@nvidia.com>, kevin.tian@intel.com, will@kernel.org, 
-	joro@8bytes.org, suravee.suthikulpanit@amd.com, robin.murphy@arm.com, 
-	dwmw2@infradead.org, baolu.lu@linux.intel.com, shuah@kernel.org, 
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev, 
-	linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
-	eric.auger@redhat.com, jean-philippe@linaro.org, mdf@kernel.org, 
-	mshavit@google.com, shameerali.kolothum.thodi@huawei.com, yi.l.liu@intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net v2] selftests: forwarding: no_forwarding: Fix issue
+ related with assigning two different vids to the same interface.
+To: =?UTF-8?Q?Kacper_Ludwi=C5=84ski?= <kac.ludwinski@protonmail.com>,
+ "davem@davemloft.net" <davem@davemloft.net>
+Cc: "kuba@kernel.org" <kuba@kernel.org>,
+ "vladimir.oltean@nxp.com" <vladimir.oltean@nxp.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "pabeni@redhat.com" <pabeni@redhat.com>, "petrm@nvidia.com"
+ <petrm@nvidia.com>, "horms@kernel.org" <horms@kernel.org>,
+ "edumazet@google.com" <edumazet@google.com>,
+ "shuah@kernel.org" <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
+References: <fQknN_r6POzmrp8UVjyA3cknLnB1HB9I_jfaHoQScvvgHr59VfUNRs9IDo4kQHm1uxEp8_Luym2Vi6_aUGJIec3ZPhjY2qnJ57NgLZGA3K4=@protonmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <fQknN_r6POzmrp8UVjyA3cknLnB1HB9I_jfaHoQScvvgHr59VfUNRs9IDo4kQHm1uxEp8_Luym2Vi6_aUGJIec3ZPhjY2qnJ57NgLZGA3K4=@protonmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 27, 2024 at 3:58=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
-ote:
->
-> On Fri, Sep 27, 2024 at 02:22:20PM +0000, Mostafa Saleh wrote:
->
-> > > We don't support multi SID through this interface, at least in this
-> > > version.
-> > >
-> > > To do multi-sid you have to inform the VM of all the different pSIDs
-> > > the device has and then setup the vSID/pSID translation to map them
-> > > all to the HW invalidation logic.
-> >
-> > Why would the VM need to know the pSID?
->
-> It doesn't need to know the pSID exactly, but it needs to know all the
-> pSIDs that exist and have them be labeled with vSIDs.
->
-> With cmdq direct assignment the VM has to issue an ATS invalidation
-> for each and every physical device using its vSID. There is no HW path
-> to handle a 1:N v/p SID relationship.
->
+On 9/27/24 01:03, Kacper Ludwiński wrote:
+> Fix typo.
 
-I see, that's for the cmdq assignment.
+Remove the above line. It gives the impression that this is
+a minor spelling fix when it is not. It is fixing a problem
+that prevents the test from running correctly.
 
-> > Ah, I thought IOMMUFD would be used instead of VFIO_TYPE1*, which shoul=
-d cover
-> > platform devices (VFIO-platform) or am I missing something?
->
-> It does work with platform, but AFAIK nobody is interested in that so
-> it hasn't been any focus. Enabling multi-sid nesting, sub stream ids,
-> etc is some additional work I think.
->
-> But what I mean is the really hard use case for the vSID/pSID mapping
-> is ATS invalidation and you won't use ATS invalidation on platform so
-> multi-sid likely doesn't matter.
->
-> STE/CD invalidation could possibly be pushed down through the
-> per-domain ioctl and replicated to all domain attachments. We don't
-> have code in the series to do that, but it could work from a uAPI
-> perspective.
->
-> > If possible, can the UAPI be designed with this in mind, even if not
-> > implemented now?
->
-> It is reasonable to ask. I think things are extensible enough. I'd
-> imagine we can add a flag 'secondary ID' and then a new field
-> 'secondary ID index' to the vdev operations when someone wants to take
-> this on.
->
+> Currently, the second bridge command overwrites the first one.
+> Fix this by adding this VID to the interface behind $swp2.
+> 
+> Fixes: 476a4f05d9b8 ("selftests: forwarding: add a no_forwarding.sh test")
+> Signed-off-by: Kacper Ludwinski <kacper@ludwinski.dev>
+> ---
+>   tools/testing/selftests/net/forwarding/no_forwarding.sh | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/net/forwarding/no_forwarding.sh b/tools/testing/selftests/net/forwarding/no_forwarding.sh
+> index 9e677aa64a06..694ece9ba3a7 100755
+> --- a/tools/testing/selftests/net/forwarding/no_forwarding.sh
+> +++ b/tools/testing/selftests/net/forwarding/no_forwarding.sh
+> @@ -202,7 +202,7 @@ one_bridge_two_pvids()
+>   	ip link set $swp2 master br0
+> 
+>   	bridge vlan add dev $swp1 vid 1 pvid untagged
+> -	bridge vlan add dev $swp1 vid 2 pvid untagged
+> +	bridge vlan add dev $swp2 vid 2 pvid untagged
+> 
+>   	run_test "Switch ports in VLAN-aware bridge with different PVIDs"
+> 
+> --
+> 2.43.0
+> 
 
-Makes sense, I can take this when I start doing the pKVM work with
-IOMMUFD, in case it wasn't supported by then.
+With the above change:
 
-Thanks,
-Mostafa
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
 
-> Jason
+thanks,
+-- Shuah
 
