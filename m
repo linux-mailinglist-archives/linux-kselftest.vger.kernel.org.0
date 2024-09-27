@@ -1,137 +1,151 @@
-Return-Path: <linux-kselftest+bounces-18514-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18515-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEBC9988B8D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 22:52:49 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C7CF988BA2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 22:59:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79B881F23ECD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 20:52:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 476811F21A83
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 20:59:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5CA41C2DC6;
-	Fri, 27 Sep 2024 20:52:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 166B51C2DCB;
+	Fri, 27 Sep 2024 20:59:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HNvUxch6"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cwAHd66r"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BB3B381B1;
-	Fri, 27 Sep 2024 20:52:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E36E1C2317;
+	Fri, 27 Sep 2024 20:59:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727470363; cv=none; b=WnIcLmsuDSqfzZK6w9E04chDfAj0P/tib60ugzKdg60GhD+nP2YfWeUhmyLT8V3gbdbakAGer2ERfn8qe0vkw/0cmhEE4wnYa0tYM/zo0GrWPApn52gPXBPTu6QDGGcF6RMO4qNpkxFPXWqCnH/wBytybZ4alb9KCzFfXniLNuw=
+	t=1727470750; cv=none; b=qVLc3o4VeSBJLDJvD5mxizu7Lyv6Mw3UtOYDMUxb/lcwm7tk7Speg37WE1kZUQOCICAr/oh1KUD0fEr3BcN37e+0Y95Hs2fPNKC/c6XfbKsWb8Xe62hdTGzww2JepBrGCQkPz8oiWNnBw9RC/TM4STs8uvGvI4Hozc/E+siFbvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727470363; c=relaxed/simple;
-	bh=5HQ7nexSna66xPv4Uft4SvJSqfBv9IvTVQKyrU297/M=;
+	s=arc-20240116; t=1727470750; c=relaxed/simple;
+	bh=fnM3H4wnBAXCZbJ0HEWaAgPxQS9Y1e52aZrt0e5s9/s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R+PHfDxsUeq5j4ueQ38THPY44fbHmIVn0yYlq9wgZNfvv5S7ftGquEXeyc/h+Zeyv7Py57Q/sERG7FjW9P2u3EWTngF6eLoIJE4FQrNCxDU9UiuI2OOwfma+02pjSMCcpVn6XdxnEtcUJVO021XSyW4wy0R8t5FtbvYS68F/fLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HNvUxch6; arc=none smtp.client-ip=209.85.216.48
+	 To:Cc:Content-Type; b=XmT6MjEkjllQlLxAgCXsM8qkMEC462yuUNHeDEXu/kki6coQR9DZkL/FI5GxL8aNqi9u3ATcDl/Y5j2L0usu7P7IHKveJknr/cE0jaesuTx0YDF6eEniuGe6rUSAzEoYQ6IargTlM0f1BX3sqsubUIa5AJk1DcEC4yP4NNGokbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cwAHd66r; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2e0b9bca173so1078963a91.0;
-        Fri, 27 Sep 2024 13:52:40 -0700 (PDT)
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2e0b93157caso1110206a91.0;
+        Fri, 27 Sep 2024 13:59:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727470360; x=1728075160; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1727470748; x=1728075548; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=S3TYipBZ3m1z5f8qjnQDPEJvDOrdajfpoFzHpH9lwD4=;
-        b=HNvUxch6BsPg4OHbIxYtsyx+Gcqrg8OzvlwJTrgJLJ0tmOHM8cG5V0p3whmA1tHEZn
-         aovsmTIb44/0TTSZvoV6DYRGljbgNO1HlGVRRWGl1suqdLO+O3i1uAFFJ/4W5YGq0VoR
-         bWpU06Rfc9jat6QH+VuEm8NApEN1lr7nLw2yK2mGDszWIg5I3e8MPCA9C0hUeb9pB9lY
-         BAPZ5rH4WuorpOv5zTQnKMnDNMNisGuPcdetJSVbPKIA4BHubbwQCOcGVbpKjfqNlc/Y
-         dWyfw2/flkA/3u7X3Z0+fwvNTDZsrMsRTb//PL4a4AW5f4LDfV1j6hJ4J+CmCFoqXOlW
-         1V2A==
+        bh=8yS9H3DUqSh4+1N7AkOP+SYlaTHqv5UhoSoo/j5k+2k=;
+        b=cwAHd66r7Uit5MTQL2Si/ZFE7TSP5Ij93iglgK4HYaP/QphgldhgPT+FH1h+8t+nld
+         YH0e9hOUx+SG/bOPxofmeo2i4JckdSRjIJVj7Vd1wG5IXOrMhXYvhlZyAV9hPf48/Fl6
+         I2UMDjd5VYHpK8U1D7IiWpahgWnKKYB4aEleWUvBGIu3RWO5as3ruzNWAbfFdZCqpr+0
+         IwF8hMJNHLCJE0yPZxwdQAhDhWUmJLQxr1JctaUK9LnBcbz7BqRasaqPj1KVyc2eN4qk
+         eQW+Ot81auZGX+8mPKEO5WNB00Bsv3Dv0+hZ04x6BsxeefwguA+rdmcj8ZZVEJQxRzlF
+         uxjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727470360; x=1728075160;
+        d=1e100.net; s=20230601; t=1727470748; x=1728075548;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=S3TYipBZ3m1z5f8qjnQDPEJvDOrdajfpoFzHpH9lwD4=;
-        b=K1xaY7DxeR2o4yRcj1zE9EnmY69185T0oElQP65g1Gg6KNr+AWNyq0eCHJ598nzX4q
-         hlXcsC3zC2/BJbd6LNJUdgz8c+Yi/EtuV6i1uFnbrEAvQBkgHPktks8yx/xht6rH4SpA
-         I5HPr8BCQ24dLHl+4xBgE2AaZuz+1sO1EQZJXtp3I/4j7K4XSSQ4TPp6PE832Whbdg55
-         sejdMdl1LDAlpCem1D4JUBE7XRXP5zDjltI0PVyPTXb++KRS03/hDd6XIdOI6BDh/1YQ
-         4Y40D33C2tSSMNw2yo92iKJ58OM2QJtCGCSYTcm4MTcG6ux4kz1Dv5qGnER2Cb0COP0K
-         IakQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUFUsDTAwyXNojwKkE4lCKsH6Ehe9lSnnMC0DDQJF1Y17srFNpVk6cQZN26iZVaJymRro8VWQqS@vger.kernel.org, AJvYcCVk3n89lwjdQ2AVOde6pg0qcVsKxvLlvFcFaPiqpD4Hpr4PdvTJ57ujQZRnFzPo0iGA41/qBMFn2wz2KXt6zfQw@vger.kernel.org, AJvYcCXEaYgiDenSgPsLGo+9UtSo08DBfCwknghfSBSzapaeJfOpjAmWoG6vI7rO1+fH+uFx4vvuDPYivb9GHKTf@vger.kernel.org, AJvYcCXZDLRhL0S8LwhQhJlRQXy6UJS3pVZ9zpFAAe0Ljl3aHb5VzTYa5Os95D2oX4eNS4YRkf0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy67Y8sri786ELITfipm+Z5jwocXj96mcwVbnl602jUKu7e9Mdj
-	7gBRnXtl4YxtuDzLRF/DPWczSsCYZvhldf9kSt/sdmNrwc82qNT8FrfaPzYNU0ZC7/XCFJDkMuU
-	DJqV4l8c1fjJoFY1pD+nvZ7NaRes=
-X-Google-Smtp-Source: AGHT+IEFhFMPeqUPjTgmjT1tXk15Ei+RGYN6cAMgWrzG7SlH7HHLGBUE3WXEHcKrs4bM5vI2Sf3P/hNnxP6niY+vBKE=
-X-Received: by 2002:a17:90b:3587:b0:2d8:94d6:3499 with SMTP id
- 98e67ed59e1d1-2e0b8ed4c1fmr4973657a91.37.1727470360536; Fri, 27 Sep 2024
- 13:52:40 -0700 (PDT)
+        bh=8yS9H3DUqSh4+1N7AkOP+SYlaTHqv5UhoSoo/j5k+2k=;
+        b=exQl6tTEp6+HduD/n9sMmoOxXFUh76x0KpUsWVWTQSt0/PjL6JZdb2PxiMkLFOWpJu
+         FqM2JFcl3pMvF8t6Q3fO5rOh93gLGvtH5f9Ea0sEdVPksF7pV08keb64ZnTgrTAX2d9Q
+         htAWs3S8yCTy3gl5vzA7duIDyUa8yDyrEgF2uFwenskqkn6k4evijUu4vUzoAE0x9p3I
+         D0yARjLm05+Un94dJP70p6A5fLQa5yMZTJnPqFX2a/qEWFmbam4sdCQX1+9r4BJG9qIQ
+         5n4mNMAC8iesp//hcFMaX8zXAMoLQ4lfNQDLRwTM+GNsH0utahxt/VkqVNK65WsQbM45
+         Oexw==
+X-Forwarded-Encrypted: i=1; AJvYcCVcS8DqFJzY79rVm8sLXBhUBeUiPuxEhe6cfbxG0wAQyxEWYZzygXGGb5zjnchWWS5871gucB7prjJd76i+@vger.kernel.org, AJvYcCWnIqbwB0aWgsY2YEcW8iPZkT9pRv8ExHyWOx5ZHQDlGXbXuHDipRrPbxFSCTwcrZOI6r2vdLrOlVX/5DqZ9mEb@vger.kernel.org, AJvYcCXQ7ZgDl02tKdQZC9BOYxW3dSZ946JrQlbYlWZ/O3cNxXFNSOglpm2p36NY9m3N4U9S2gw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx6Q27jZO3oP7dhbVf7VeVuL7hxeNlcGmqhP+WLS+tz54hwQiS1
+	yJKO+rw83bJEc51FtbKPmXN1owctiXLfoSc6IRXJC4oQJmUM1sbOouRgJTNDTpbjdvoN2sMi3ra
+	dJKbYOv/b9p9ztfREjTOWGB7djo0=
+X-Google-Smtp-Source: AGHT+IHVGYzkg7zX+Li8+rcjjNN8BeB6X2hawaJlDm3sLNTdoAo66nKXyEGUiagb4SKdZzOPC/h3R/OfDsTpnKk/284=
+X-Received: by 2002:a17:90a:4747:b0:2c9:90fa:b9f8 with SMTP id
+ 98e67ed59e1d1-2e0b71cae48mr7464837a91.10.1727470747867; Fri, 27 Sep 2024
+ 13:59:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240927131355.350918-1-bjorn@kernel.org> <20240927131355.350918-2-bjorn@kernel.org>
-In-Reply-To: <20240927131355.350918-2-bjorn@kernel.org>
+References: <20240927082313.116139-1-jiapeng.chong@linux.alibaba.com>
+In-Reply-To: <20240927082313.116139-1-jiapeng.chong@linux.alibaba.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 27 Sep 2024 13:52:28 -0700
-Message-ID: <CAEf4BzaWneXBv401rOdW8ijBTqRn_Ut4FFvhbsPShh5_pjV33A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests: bpf: Add missing per-arch include path
-To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Mykola Lysenko <mykolal@fb.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
-	=?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, Charlie Jenkins <charlie@rivosinc.com>
+Date: Fri, 27 Sep 2024 13:58:55 -0700
+Message-ID: <CAEf4Bzaau0apKBM75BedphVUA9EHXfzC7wr4ugVZqohWZbLxRg@mail.gmail.com>
+Subject: Re: [PATCH -next] selftests/bpf: Use ARRAY_SIZE for array length
+To: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc: andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com, ast@kernel.org, 
+	daniel@iogearbox.net, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org, 
+	sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Sep 27, 2024 at 6:14=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel=
-.org> wrote:
+On Fri, Sep 27, 2024 at 1:23=E2=80=AFAM Jiapeng Chong
+<jiapeng.chong@linux.alibaba.com> wrote:
 >
-> From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+> Use of macro ARRAY_SIZE to calculate array size minimizes
+> the redundant code and improves code reusability.
 >
-> The prog_tests programs do not include the per-arch tools include
-> path, e.g. tools/arch/riscv/include. Some architectures depend those
-> files to build properly.
+> ./tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c:98:34-35: WARNI=
+NG: Use ARRAY_SIZE.
+> ./tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c:93:29-30: WARNI=
+NG: Use ARRAY_SIZE.
+> ./tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c:101:34-35: WARN=
+ING: Use ARRAY_SIZE.
 >
-> Include tools/arch/$(SUBARCH)/include in the selftests bpf build.
->
-> Fixes: 6d74d178fe6e ("tools: Add riscv barrier implementation")
-> Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Closes: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D11167
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 > ---
->  tools/testing/selftests/bpf/Makefile | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 >
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
-ts/bpf/Makefile
-> index 365740f24d2e..d6a53afa449f 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -10,6 +10,7 @@ TOOLSDIR :=3D $(abspath ../../..)
->  LIBDIR :=3D $(TOOLSDIR)/lib
->  BPFDIR :=3D $(LIBDIR)/bpf
->  TOOLSINCDIR :=3D $(TOOLSDIR)/include
-> +TOOLSARCHINCDIR :=3D $(TOOLSDIR)/arch/$(SRCARCH)/include
->  BPFTOOLDIR :=3D $(TOOLSDIR)/bpf/bpftool
->  APIDIR :=3D $(TOOLSINCDIR)/uapi
->  ifneq ($(O),)
-> @@ -44,7 +45,7 @@ CFLAGS +=3D -g $(OPT_FLAGS) -rdynamic                  =
-                 \
->           -Wall -Werror -fno-omit-frame-pointer                         \
->           $(GENFLAGS) $(SAN_CFLAGS) $(LIBELF_CFLAGS)                    \
->           -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)          \
-> -         -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)
-> +         -I$(TOOLSINCDIR) -I$(TOOLSARCHINCDIR) -I$(APIDIR) -I$(OUTPUT)
+> diff --git a/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c b/to=
+ols/testing/selftests/bpf/prog_tests/core_reloc_raw.c
+> index a18d3680fb16..5e576c6cecca 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/core_reloc_raw.c
+> @@ -7,7 +7,7 @@
+>  #include <sys/syscall.h>
+>  #include <bpf/libbpf.h>
+>  #include <bpf/btf.h>
+> -
+> +#include "kselftest.h"
 
-Eduard was going to switch selftests to use kernel UAPI headers, I
-wonder if we should do just that and then set up arch-specific
-includes from kernel (not from tools/) as well?
+this doesn't compile, and I don't think you need this include
 
->  LDFLAGS +=3D $(SAN_LDFLAGS)
->  LDLIBS +=3D $(LIBELF_LIBS) -lz -lrt -lpthread
->
+pw-bot: cr
+
+>  #include "test_progs.h"
+>  #include "test_btf.h"
+>  #include "bpf/libbpf_internal.h"
+> @@ -90,15 +90,15 @@ static void test_bad_local_id(void)
+>         attr.prog_type =3D BPF_TRACE_RAW_TP;
+>         attr.license =3D (__u64)"GPL";
+>         attr.insns =3D (__u64)&insns;
+> -       attr.insn_cnt =3D sizeof(insns) / sizeof(*insns);
+> +       attr.insn_cnt =3D ARRAY_SIZE(insns);
+>         attr.log_buf =3D (__u64)log;
+>         attr.log_size =3D sizeof(log);
+>         attr.log_level =3D log_level;
+>         attr.func_info =3D (__u64)funcs;
+> -       attr.func_info_cnt =3D sizeof(funcs) / sizeof(*funcs);
+> +       attr.func_info_cnt =3D ARRAY_SIZE(funcs);
+>         attr.func_info_rec_size =3D sizeof(*funcs);
+>         attr.core_relos =3D (__u64)relos;
+> -       attr.core_relo_cnt =3D sizeof(relos) / sizeof(*relos);
+> +       attr.core_relo_cnt =3D ARRAY_SIZE(relos);
+>         attr.core_relo_rec_size =3D sizeof(*relos);
+>         prog_fd =3D sys_bpf_prog_load(&attr, sizeof(attr), 1);
+>         saved_errno =3D errno;
 > --
-> 2.43.0
+> 2.32.0.3.g01195cf9f
 >
 
