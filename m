@@ -1,142 +1,165 @@
-Return-Path: <linux-kselftest+bounces-18492-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18491-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5506398888D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 17:51:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91063988880
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 17:46:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5695CB21A24
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 15:51:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 19C8DB21C03
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 15:46:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B39414F12F;
-	Fri, 27 Sep 2024 15:51:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LZzhiuY8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F7D71465A9;
+	Fri, 27 Sep 2024 15:46:34 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out02.mta.xmission.com (out02.mta.xmission.com [166.70.13.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F352D18B1A;
-	Fri, 27 Sep 2024 15:51:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1DD613C914;
+	Fri, 27 Sep 2024 15:46:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727452293; cv=none; b=Q+L9ch7vygOfQQ35j/iPVyGboDsyVow+bbhwW21mzSa6oYIrWHn346jaDXZeMRPywn5HzQLuz0qYnK1p8exKCtqmexUYmaeW291K3u7xqnZZNOmfo8xl4Jpf4QjHpKuIQ9HodiXDOLgYPghHmRmjSCnzFEWjzBPPtcEFN5+5dlA=
+	t=1727451994; cv=none; b=dkD/w7Ndiby6LON1O/1AUJ7fgGaz3paLjhGSAAweyaVX2Hb8P0q/2oiE3TESLJjk82KvKJFBb5vbNNxsIK218TotV+k/lu7ahrjKTn9sKEGk88fsNc8KGkk07tHQMLYynpLPAYs3d9oLy2Sr5YqXj9+66IfXpk7741p6JDQGb3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727452293; c=relaxed/simple;
-	bh=Be+ZGbp3IfAlLZpZF/dmewOvihf2CFmNlZ+Q66KjvMg=;
-	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References; b=KcucUGrd0MWBvKtl413CCv8LgmGbjd1cA+yLGVojM6tLByVYnbH4I99mwuECZuyRlKkVmyk77i7Em8044hTKnMECe+R/T1bCY53GCUeygqLKosuDRvfFnFVjv9enetWYgUUEc78tT0v4UcvxdnJKK53g2gqImjXMJ/g88aG5mUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LZzhiuY8; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-206aee40676so20053045ad.0;
-        Fri, 27 Sep 2024 08:51:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727452290; x=1728057090; darn=vger.kernel.org;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=siq7XCFpoWz1j+ij/CuNUWO3s9GtQAEeoPcY53GflA8=;
-        b=LZzhiuY8xSsYPUo4JFGcP+NDGY/4nggzmc9BuRVRJ2zE+87Y1oXLSXJ9EgQOuNBL76
-         OfYGNF+FW+TJco0iokhaQotPzyhij0lIsicyi+S9c4m/ieXNHwQCM1Sx7yVxLglTvf8m
-         25BWLlqTpkBQ5gipZCOdY7JGyNYJvBzR5vtZ+vDKLjG0sDaoDIf5qwIOqxrHYhyHu8d8
-         YUlmvwzmHNkmDapr/lj5qGzqUcqJLoxQFgF/THaq73sodHs7gCEog1ALcGeowz1nyd3f
-         EZ7o8btu9W1qh4ops9bFXC/gWGkxTAJzARjEV+b5gEI0waFwCBMgxhxmJ12mR9H5wVMS
-         0bXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727452290; x=1728057090;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=siq7XCFpoWz1j+ij/CuNUWO3s9GtQAEeoPcY53GflA8=;
-        b=QoTgnFZNRlx9VJG/vBd4amghvJPxSAVgvRzIHhM+ue0uzo4AMmJTtNh4ZQg/YwKqlE
-         MlhfiiYlwt7DtWngf0ahjDuueOCtugutE9+3LdKZTsZlKR/DhXlCyjM7fWICmxKKsAH4
-         mobEtQsWWoAd1hLuDX5bmDja3lfHU34MKAMXfKVdRyCeeSrVWIOrqmrdSKB9Bdc3xR5f
-         OFigGWKtYC76SO5vdkCdohPu5zGJScrdMGcrguOxpgDHR8Z4CUrW+4evQHODGH4eHx6q
-         ZDgCH+oDiLw5U0wTdQrHOrQoBOvd9Jb2fAa3NA/uz66oxLo0HiO6JI7CiOpMwg3Yoj+O
-         uDYg==
-X-Forwarded-Encrypted: i=1; AJvYcCU+TfDELExEbbitIOqGzMp57paU7y0QoA3C1CZ0r4L2uK2r9Gc8YkV7YIPqyGmO6HJ7Y6q4LPPi+cuyXdWEzjfa@vger.kernel.org, AJvYcCWZ+FIopcZARVctN5VaGfw/3FfHTIADGtjWmfMdbKpdgRrPA66ovywMhsvx+EszPBELYEVGRelRFEuAnhI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJAvm5HttozTt+k73ybKpEkLsw5QG0dq9kEGkudneqCz0W49yo
-	5b9EMfZCBWJ+yQHYg28bGpdD7oPmoOR1TfKWoIIngtmviYo36Eh3Wg8wqw==
-X-Google-Smtp-Source: AGHT+IHYen+9SCB9zAwc+2YM+I/YJeUCIgN9O5oINntyeB1ech4upS2dfT1q+IPsJIFbM8mIsRWLFg==
-X-Received: by 2002:a17:903:11cd:b0:206:96ae:dc57 with SMTP id d9443c01a7336-20b37b912b5mr62267395ad.48.1727452290237;
-        Fri, 27 Sep 2024 08:51:30 -0700 (PDT)
-Received: from dw-tp ([171.76.86.51])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b37da2667sm15170095ad.102.2024.09.27.08.51.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Sep 2024 08:51:29 -0700 (PDT)
-From: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-To: zhangjiao2 <zhangjiao2@cmss.chinamobile.com>, shuah@kernel.org
-Cc: mpe@ellerman.id.au, linuxppc-dev@lists.ozlabs.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, zhang jiao <zhangjiao2@cmss.chinamobile.com>
-Subject: Re: [PATCH] selftests/powerpc: Rm the unnecessary remove function.
-In-Reply-To: <20240927043125.8199-1-zhangjiao2@cmss.chinamobile.com>
-Date: Fri, 27 Sep 2024 21:15:41 +0530
-Message-ID: <87h6a1aymy.fsf@gmail.com>
-References: <20240927043125.8199-1-zhangjiao2@cmss.chinamobile.com>
+	s=arc-20240116; t=1727451994; c=relaxed/simple;
+	bh=tZZoVXnv/PRD54q+iCr5mOAfer9k2Sw1tPHZcIZfnww=;
+	h=From:To:Cc:References:Date:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type:Subject; b=Tb2gT1ofcMo522GlLpFye6hQhl4TbPEicvpEzfyMWxntwpTB35XwQWP48os7oeidcBKjYcdAevjhVItW4LS7UM4hNMfrb9lp6J+3R8hR4ERxtXV9kwUaxGZtnrVesY9A3YRd38Av5AA4gprNJ2oT9dsu6T9nkyXL1Z9UHO1iJrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
+Received: from in02.mta.xmission.com ([166.70.13.52]:36308)
+	by out02.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1suDAr-00AfzR-Hh; Fri, 27 Sep 2024 09:46:29 -0600
+Received: from ip68-227-165-127.om.om.cox.net ([68.227.165.127]:50292 helo=email.froward.int.ebiederm.org.xmission.com)
+	by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1suDAq-00Chi3-EP; Fri, 27 Sep 2024 09:46:29 -0600
+From: "Eric W. Biederman" <ebiederm@xmission.com>
+To: Tycho Andersen <tycho@tycho.pizza>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>,  Christian Brauner
+ <brauner@kernel.org>,  Jan Kara <jack@suse.cz>,  Kees Cook
+ <kees@kernel.org>,  linux-fsdevel@vger.kernel.org,  linux-mm@kvack.org,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,  Tycho
+ Andersen <tandersen@netflix.com>,  Zbigniew =?utf-8?Q?J=C4=99drzejewski-S?=
+ =?utf-8?Q?zmek?=
+ <zbyszek@in.waw.pl>,  Aleksa Sarai <cyphar@cyphar.com>
+References: <20240927151746.391931-1-tycho@tycho.pizza>
+Date: Fri, 27 Sep 2024 10:45:58 -0500
+In-Reply-To: <20240927151746.391931-1-tycho@tycho.pizza> (Tycho Andersen's
+	message of "Fri, 27 Sep 2024 09:17:45 -0600")
+Message-ID: <87ikuhw155.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-XM-SPF: eid=1suDAq-00Chi3-EP;;;mid=<87ikuhw155.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.227.165.127;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX19JXeMpjE5lwEscr8j+IipPi94Su8pZcjo=
+X-Spam-Level: ******
+X-Spam-Virus: No
+X-Spam-Report: 
+	*  7.0 XM_URI_RBL URI blacklisted in uri.bl.xmission.com
+	*      [URIs: waw.pl]
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	* -0.0 BAYES_40 BODY: Bayes spam probability is 20 to 40%
+	*      [score: 0.3455]
+	*  0.7 XMSubLong Long Subject
+	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+	*  0.0 XM_B_Unicode BODY: Testing for specific types of unicode
+	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+	*      [sa02 1397; Body=1 Fuz1=1 Fuz2=1]
+	*  0.0 T_TooManySym_01 4+ unique symbols in subject
+	*  0.0 T_TooManySym_02 5+ unique symbols in subject
+X-Spam-DCC: XMission; sa02 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ******;Tycho Andersen <tycho@tycho.pizza>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 529 ms - load_scoreonly_sql: 0.02 (0.0%),
+	signal_user_changed: 3.9 (0.7%), b_tie_ro: 2.7 (0.5%), parse: 0.70
+	(0.1%), extract_message_metadata: 16 (3.0%), get_uri_detail_list: 1.56
+	(0.3%), tests_pri_-2000: 30 (5.7%), tests_pri_-1000: 1.85 (0.3%),
+	tests_pri_-950: 0.89 (0.2%), tests_pri_-900: 0.73 (0.1%),
+	tests_pri_-90: 214 (40.5%), check_bayes: 213 (40.3%), b_tokenize: 6
+	(1.1%), b_tok_get_all: 93 (17.5%), b_comp_prob: 1.61 (0.3%),
+	b_tok_touch_all: 111 (20.9%), b_finish: 0.69 (0.1%), tests_pri_0: 250
+	(47.4%), check_dkim_signature: 0.36 (0.1%), check_dkim_adsp: 3.2
+	(0.6%), poll_dns_idle: 1.96 (0.4%), tests_pri_10: 1.56 (0.3%),
+	tests_pri_500: 6 (1.2%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH v2 1/2] exec: add a flag for "reasonable" execveat() comm
+X-SA-Exim-Connect-IP: 166.70.13.52
+X-SA-Exim-Rcpt-To: cyphar@cyphar.com, zbyszek@in.waw.pl, tandersen@netflix.com, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, kees@kernel.org, jack@suse.cz, brauner@kernel.org, viro@zeniv.linux.org.uk, tycho@tycho.pizza
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-SA-Exim-Scanned: No (on out02.mta.xmission.com); SAEximRunCond expanded to false
 
-zhangjiao2 <zhangjiao2@cmss.chinamobile.com> writes:
+Tycho Andersen <tycho@tycho.pizza> writes:
 
-> From: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+> From: Tycho Andersen <tandersen@netflix.com>
 >
-> Path is not initialized before use,
-> remove the unnecessary remove function.
+> Zbigniew mentioned at Linux Plumber's that systemd is interested in
+> switching to execveat() for service execution, but can't, because the
+> contents of /proc/pid/comm are the file descriptor which was used,
+> instead of the path to the binary. This makes the output of tools like
+> top and ps useless, especially in a world where most fds are opened
+> CLOEXEC so the number is truly meaningless.
 >
-> Signed-off-by: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+> Change exec path to fix up /proc/pid/comm in the case where we have
+> allocated one of these synthetic paths in bprm_init(). This way the actual
+> exec machinery is unchanged, but cosmetically the comm looks reasonable to
+> admins investigating things.
+
+Perhaps change the subject to match the code.
+
+> Signed-off-by: Tycho Andersen <tandersen@netflix.com>
+> Suggested-by: Zbigniew J=C4=99drzejewski-Szmek <zbyszek@in.waw.pl>
+> CC: Aleksa Sarai <cyphar@cyphar.com>
+> Link: https://github.com/uapi-group/kernel-features#set-comm-field-before=
+-exec
 > ---
->  tools/testing/selftests/powerpc/mm/tlbie_test.c | 1 -
->  1 file changed, 1 deletion(-)
+> v2: * drop the flag, everyone :)
+>     * change the rendered value to f_path.dentry->d_name.name instead of
+>       argv[0], Eric
+> ---
+>  fs/exec.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
 >
-> diff --git a/tools/testing/selftests/powerpc/mm/tlbie_test.c b/tools/testing/selftests/powerpc/mm/tlbie_test.c
-> index 48344a74b212..fd1456d16a7d 100644
-> --- a/tools/testing/selftests/powerpc/mm/tlbie_test.c
-> +++ b/tools/testing/selftests/powerpc/mm/tlbie_test.c
-> @@ -314,7 +314,6 @@ static inline void end_verification_log(unsigned int tid, unsigned nr_anamolies)
->  	fclose(f);
->  
->  	if (nr_anamolies == 0) {
-> -		remove(path);
->  		return;
->  	}
+> diff --git a/fs/exec.c b/fs/exec.c
+> index dad402d55681..9520359a8dcc 100644
+> --- a/fs/exec.c
+> +++ b/fs/exec.c
+> @@ -1416,7 +1416,18 @@ int begin_new_exec(struct linux_binprm * bprm)
+>  		set_dumpable(current->mm, SUID_DUMP_USER);
+>=20=20
+>  	perf_event_exec();
+> -	__set_task_comm(me, kbasename(bprm->filename), true);
+> +
+> +	/*
+> +	 * If fdpath was set, execveat() made up a path that will
+> +	 * probably not be useful to admins running ps or similar.
+> +	 * Let's fix it up to be something reasonable.
+> +	 */
+> +	if (bprm->fdpath) {
+> +		BUILD_BUG_ON(TASK_COMM_LEN > DNAME_INLINE_LEN);
+> +		__set_task_comm(me, bprm->file->f_path.dentry->d_name.name, true);
 
-Nice catch. Indeed the path is uninitialized here. 
+We can just do this regardless of bprm->fdpath.
 
-However, I believe the above "if" block should come after initializing
-the path. The idea is if there were no anamolies noted, then we can
-simply remove the log file and return.
+It will be a change of behavior on when executing symlinks and possibly
+mount points but I don't think we care.  If we do then we can add make
+it conditional with "if (bprm->fdpath)"
 
-Something like below. Thoughts?
+At the very least using the above version unconditionally ought to flush
+out any bugs.
 
-diff --git a/tools/testing/selftests/powerpc/mm/tlbie_test.c b/tools/testing/selftests/powerpc/mm/tlbie_test.c
-index 48344a74b212..35f0098399cc 100644
---- a/tools/testing/selftests/powerpc/mm/tlbie_test.c
-+++ b/tools/testing/selftests/powerpc/mm/tlbie_test.c
-@@ -313,16 +313,16 @@ static inline void end_verification_log(unsigned int tid, unsigned nr_anamolies)
+It should be 99% application invisible as all an application can see
+is argv0.  So it is only ps and friends where the comm value is visible.
 
-        fclose(f);
-
--       if (nr_anamolies == 0) {
--               remove(path);
--               return;
--       }
--
-        sprintf(logfile, logfilename, tid);
-        strcpy(path, logdir);
-        strcat(path, separator);
-        strcat(path, logfile);
-
-+       if (nr_anamolies == 0) {
-+               remove(path);
-+               return;
-+       }
-+
-        printf("Thread %02d chunk has %d corrupted words. For details check %s\n",
-                tid, nr_anamolies, path);
- }
-
-
--ritesh
+Eric
 
