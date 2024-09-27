@@ -1,82 +1,82 @@
-Return-Path: <linux-kselftest+bounces-18513-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18514-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77F35988B87
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 22:51:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEBC9988B8D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 22:52:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8D671C22B7C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 20:51:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79B881F23ECD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Sep 2024 20:52:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F4941C2DBB;
-	Fri, 27 Sep 2024 20:51:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5CA41C2DC6;
+	Fri, 27 Sep 2024 20:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z8d70gWB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HNvUxch6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B1D91C1AAA;
-	Fri, 27 Sep 2024 20:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BB3B381B1;
+	Fri, 27 Sep 2024 20:52:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727470270; cv=none; b=cMHN+kd2H0MKrbWvrIK8lUu3AW8KOuhmwecZhJS0GIM6WnGMiZPAdFhavorgV06tYqs2eoLv0uep0RFBRkViH53vHBwNXCnTEufjgEB4DxA5NbNbI47DDaF1ool9/Bbli4OAnqGVvG2N1+8owIG1oLJt/AwuhOCf9pduP0Bnwfo=
+	t=1727470363; cv=none; b=WnIcLmsuDSqfzZK6w9E04chDfAj0P/tib60ugzKdg60GhD+nP2YfWeUhmyLT8V3gbdbakAGer2ERfn8qe0vkw/0cmhEE4wnYa0tYM/zo0GrWPApn52gPXBPTu6QDGGcF6RMO4qNpkxFPXWqCnH/wBytybZ4alb9KCzFfXniLNuw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727470270; c=relaxed/simple;
-	bh=fv5Ohlk21LIsF20JuYNmFrvmslpVoam9RSrEzIPvyFI=;
+	s=arc-20240116; t=1727470363; c=relaxed/simple;
+	bh=5HQ7nexSna66xPv4Uft4SvJSqfBv9IvTVQKyrU297/M=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Nln+UfwuE5f5/b7MGun4qbEdKACjJqykpDiPrjnAs1mjheDh1osYukerRliY6LUlPNX+P1dSZxMs8dQPxOqXsfPTS/Pn9CmHof5J8Mz0VCPA3wOaj5pxO0FYt+JsieCzEi05ULJIx3xElMuC3dQzQ8vkrNV1vHd1Lg4p7hnlCWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z8d70gWB; arc=none smtp.client-ip=209.85.214.169
+	 To:Cc:Content-Type; b=R+PHfDxsUeq5j4ueQ38THPY44fbHmIVn0yYlq9wgZNfvv5S7ftGquEXeyc/h+Zeyv7Py57Q/sERG7FjW9P2u3EWTngF6eLoIJE4FQrNCxDU9UiuI2OOwfma+02pjSMCcpVn6XdxnEtcUJVO021XSyW4wy0R8t5FtbvYS68F/fLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HNvUxch6; arc=none smtp.client-ip=209.85.216.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2068acc8a4fso24365155ad.1;
-        Fri, 27 Sep 2024 13:51:08 -0700 (PDT)
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2e0b9bca173so1078963a91.0;
+        Fri, 27 Sep 2024 13:52:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727470268; x=1728075068; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1727470360; x=1728075160; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=shLDirPvQHu0zX2krQXjYGhHMytzkPRkdTMRivfTN8M=;
-        b=Z8d70gWBCVUQYacppnGuM6YPaPABI25s4y8o3uZ0F54L6hbNNVJM9g24TPQd8511qz
-         7Vu3jcVBjxWnaLke1EH9LAJwhitWBxFLIsmCnMeLsDFl3SArlWV1xiYhR3sqRBWzvnSC
-         8rhDSVyvIrudCG9pw6ptKSRG5pmjCWd1W//lxtFjQUmykL1IPiWeVVc3K2EURbA7LFlV
-         r+S06uZYlrYd24yHqiHLVU4n8l2nugWXS0Ab/r1yrJ6XxGCuFYgGxJU8QiYdroPpI9Kg
-         4lBcF0WWkZZURqQEZXdr8zNSVo5wgMj1yy8SR+WrVrqUgJPfmFbFHDs3Ls2fuAOyHHXL
-         HdBw==
+        bh=S3TYipBZ3m1z5f8qjnQDPEJvDOrdajfpoFzHpH9lwD4=;
+        b=HNvUxch6BsPg4OHbIxYtsyx+Gcqrg8OzvlwJTrgJLJ0tmOHM8cG5V0p3whmA1tHEZn
+         aovsmTIb44/0TTSZvoV6DYRGljbgNO1HlGVRRWGl1suqdLO+O3i1uAFFJ/4W5YGq0VoR
+         bWpU06Rfc9jat6QH+VuEm8NApEN1lr7nLw2yK2mGDszWIg5I3e8MPCA9C0hUeb9pB9lY
+         BAPZ5rH4WuorpOv5zTQnKMnDNMNisGuPcdetJSVbPKIA4BHubbwQCOcGVbpKjfqNlc/Y
+         dWyfw2/flkA/3u7X3Z0+fwvNTDZsrMsRTb//PL4a4AW5f4LDfV1j6hJ4J+CmCFoqXOlW
+         1V2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727470268; x=1728075068;
+        d=1e100.net; s=20230601; t=1727470360; x=1728075160;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=shLDirPvQHu0zX2krQXjYGhHMytzkPRkdTMRivfTN8M=;
-        b=k1Mf7gV8QmjeH6iVuXmFrS6GHe0WaodcmVZuXF7CWPMqmGsirjxqi6vye5G7kS7Yzg
-         pUiH6cNJgE4ztmOH0KVzUERPJXXVXVdYNp3Uef0ZCz8++nJiEbgAA1JlURr0eeL0JFwV
-         oeEtMuLaSopMVV4Q4CpP2lLVxa76hurQrskBLI7L+MMYgtrlJG+BQy+dzUOZpOWrR7sb
-         oFoLgan0SmLljcNuPB47egEBWk+g14SKN8O8+t+x3trK9shrmMycg2f01rDZEE7S1kht
-         DxVZkR33zR9lkxcmpDfs3cbqq4meOhikrr9bgLLNrKallE8HC3A/O0gbKRBM/llFzESv
-         PdOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVTw14ZaFyqHFOaH6ehzj/hDtGsTXcxpQHgHqNqTeqYw+QkE8FH277G1Jpx7tJui7DhK5PqgPuwTM88LlIJ@vger.kernel.org, AJvYcCVclkGZMJdRJLbxYWJBjamWvVAeoLqRYPELsrPQVn8rRTzPAQqHsRB1J3nk6abYLWeHEjGjxUWt@vger.kernel.org, AJvYcCXA3cT2ZaAcS4G6ItVMODj2Jzk+QyJn+N0BHAa7BdNpfwfEeZG7OH/HNxMpifz9Q5B8AX0W2dk5mWd7mEPkBaoj@vger.kernel.org, AJvYcCXukTP614m60ry8PKzARo6enqm7KnaFjw+LjD2Yx7czqWj+2izE5HO31R74CkbVt2RyczM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydTkXmN78/U1/WPoLbEcnzDebsKkqb08Rm+HKFAN01RrVdmmT+
-	HROHSnXqlzS30ZOQMxTR6hOQPu7IC3aFKyc6vT905hgISGobFRsMXZnAxjKRRlPIvkWlFvpEeaw
-	gJWbRSPXtDtWXUObfoITtcAWNVu0=
-X-Google-Smtp-Source: AGHT+IFc1YB99jbzqgA1b3v/qMqek7DloIcwJTgr24Uxixyvc8uET1u/DUrw9pFeTRB5saCg2/+neLug3iuvpvUpUDM=
-X-Received: by 2002:a17:90a:6d43:b0:2e0:8e36:132 with SMTP id
- 98e67ed59e1d1-2e0b89ac7f4mr5057181a91.3.1727470267698; Fri, 27 Sep 2024
- 13:51:07 -0700 (PDT)
+        bh=S3TYipBZ3m1z5f8qjnQDPEJvDOrdajfpoFzHpH9lwD4=;
+        b=K1xaY7DxeR2o4yRcj1zE9EnmY69185T0oElQP65g1Gg6KNr+AWNyq0eCHJ598nzX4q
+         hlXcsC3zC2/BJbd6LNJUdgz8c+Yi/EtuV6i1uFnbrEAvQBkgHPktks8yx/xht6rH4SpA
+         I5HPr8BCQ24dLHl+4xBgE2AaZuz+1sO1EQZJXtp3I/4j7K4XSSQ4TPp6PE832Whbdg55
+         sejdMdl1LDAlpCem1D4JUBE7XRXP5zDjltI0PVyPTXb++KRS03/hDd6XIdOI6BDh/1YQ
+         4Y40D33C2tSSMNw2yo92iKJ58OM2QJtCGCSYTcm4MTcG6ux4kz1Dv5qGnER2Cb0COP0K
+         IakQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUFUsDTAwyXNojwKkE4lCKsH6Ehe9lSnnMC0DDQJF1Y17srFNpVk6cQZN26iZVaJymRro8VWQqS@vger.kernel.org, AJvYcCVk3n89lwjdQ2AVOde6pg0qcVsKxvLlvFcFaPiqpD4Hpr4PdvTJ57ujQZRnFzPo0iGA41/qBMFn2wz2KXt6zfQw@vger.kernel.org, AJvYcCXEaYgiDenSgPsLGo+9UtSo08DBfCwknghfSBSzapaeJfOpjAmWoG6vI7rO1+fH+uFx4vvuDPYivb9GHKTf@vger.kernel.org, AJvYcCXZDLRhL0S8LwhQhJlRQXy6UJS3pVZ9zpFAAe0Ljl3aHb5VzTYa5Os95D2oX4eNS4YRkf0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy67Y8sri786ELITfipm+Z5jwocXj96mcwVbnl602jUKu7e9Mdj
+	7gBRnXtl4YxtuDzLRF/DPWczSsCYZvhldf9kSt/sdmNrwc82qNT8FrfaPzYNU0ZC7/XCFJDkMuU
+	DJqV4l8c1fjJoFY1pD+nvZ7NaRes=
+X-Google-Smtp-Source: AGHT+IEFhFMPeqUPjTgmjT1tXk15Ei+RGYN6cAMgWrzG7SlH7HHLGBUE3WXEHcKrs4bM5vI2Sf3P/hNnxP6niY+vBKE=
+X-Received: by 2002:a17:90b:3587:b0:2d8:94d6:3499 with SMTP id
+ 98e67ed59e1d1-2e0b8ed4c1fmr4973657a91.37.1727470360536; Fri, 27 Sep 2024
+ 13:52:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240927131355.350918-1-bjorn@kernel.org>
-In-Reply-To: <20240927131355.350918-1-bjorn@kernel.org>
+References: <20240927131355.350918-1-bjorn@kernel.org> <20240927131355.350918-2-bjorn@kernel.org>
+In-Reply-To: <20240927131355.350918-2-bjorn@kernel.org>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Fri, 27 Sep 2024 13:50:55 -0700
-Message-ID: <CAEf4BzYCf2+8JkCjWZWGaNQcEc_=WO_emP2GPBQGZyrWm8APUg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 1/2] libbpf: Add missing per-arch include path
+Date: Fri, 27 Sep 2024 13:52:28 -0700
+Message-ID: <CAEf4BzaWneXBv401rOdW8ijBTqRn_Ut4FFvhbsPShh5_pjV33A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests: bpf: Add missing per-arch include path
 To: =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
 Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
 	Mykola Lysenko <mykolal@fb.com>, bpf@vger.kernel.org, netdev@vger.kernel.org, 
@@ -91,41 +91,46 @@ On Fri, Sep 27, 2024 at 6:14=E2=80=AFAM Bj=C3=B6rn T=C3=B6pel <bjorn@kernel=
 >
 > From: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
 >
-> libbpf does not include the per-arch tools include path, e.g.
-> tools/arch/riscv/include. Some architectures depend those files to
-> build properly.
+> The prog_tests programs do not include the per-arch tools include
+> path, e.g. tools/arch/riscv/include. Some architectures depend those
+> files to build properly.
 >
-> Include tools/arch/$(SUBARCH)/include in the libbpf build.
+> Include tools/arch/$(SUBARCH)/include in the selftests bpf build.
 >
 > Fixes: 6d74d178fe6e ("tools: Add riscv barrier implementation")
 > Signed-off-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
 > ---
->  tools/lib/bpf/Makefile | 3 ++-
+>  tools/testing/selftests/bpf/Makefile | 3 ++-
 >  1 file changed, 2 insertions(+), 1 deletion(-)
 >
-> diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-> index 1b22f0f37288..857a5f7b413d 100644
-> --- a/tools/lib/bpf/Makefile
-> +++ b/tools/lib/bpf/Makefile
-> @@ -61,7 +61,8 @@ ifndef VERBOSE
->  endif
->
->  INCLUDES =3D -I$(or $(OUTPUT),.) \
-> -          -I$(srctree)/tools/include -I$(srctree)/tools/include/uapi
-> +          -I$(srctree)/tools/include -I$(srctree)/tools/include/uapi \
-> +          -I$(srctree)/tools/arch/$(SRCARCH)/include
->
->  export prefix libdir src obj
->
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftes=
+ts/bpf/Makefile
+> index 365740f24d2e..d6a53afa449f 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -10,6 +10,7 @@ TOOLSDIR :=3D $(abspath ../../..)
+>  LIBDIR :=3D $(TOOLSDIR)/lib
+>  BPFDIR :=3D $(LIBDIR)/bpf
+>  TOOLSINCDIR :=3D $(TOOLSDIR)/include
+> +TOOLSARCHINCDIR :=3D $(TOOLSDIR)/arch/$(SRCARCH)/include
+>  BPFTOOLDIR :=3D $(TOOLSDIR)/bpf/bpftool
+>  APIDIR :=3D $(TOOLSINCDIR)/uapi
+>  ifneq ($(O),)
+> @@ -44,7 +45,7 @@ CFLAGS +=3D -g $(OPT_FLAGS) -rdynamic                  =
+                 \
+>           -Wall -Werror -fno-omit-frame-pointer                         \
+>           $(GENFLAGS) $(SAN_CFLAGS) $(LIBELF_CFLAGS)                    \
+>           -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)          \
+> -         -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)
+> +         -I$(TOOLSINCDIR) -I$(TOOLSARCHINCDIR) -I$(APIDIR) -I$(OUTPUT)
 
-Do you know what exactly is used from tools/arch/$(SRCARCH)/include
-for (I assume) RISC-V? I'm asking because we'd need to make sure that
-Github version of libbpf Makefile and include directory has all the
-necessary pieces as well (so I'd appreciate if you could take a look
-at that as well, if you haven't already).
+Eduard was going to switch selftests to use kernel UAPI headers, I
+wonder if we should do just that and then set up arch-specific
+includes from kernel (not from tools/) as well?
 
+>  LDFLAGS +=3D $(SAN_LDFLAGS)
+>  LDLIBS +=3D $(LIBELF_LIBS) -lz -lrt -lpthread
 >
-> base-commit: db5ca265e3334b48c4e3fa07eef79e8bc578c430
 > --
 > 2.43.0
 >
