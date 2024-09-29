@@ -1,182 +1,109 @@
-Return-Path: <linux-kselftest+bounces-18539-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18540-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CFB1989295
-	for <lists+linux-kselftest@lfdr.de>; Sun, 29 Sep 2024 04:07:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16A619892CA
+	for <lists+linux-kselftest@lfdr.de>; Sun, 29 Sep 2024 04:56:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84FE328542B
-	for <lists+linux-kselftest@lfdr.de>; Sun, 29 Sep 2024 02:07:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3018B1C21A83
+	for <lists+linux-kselftest@lfdr.de>; Sun, 29 Sep 2024 02:56:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF7C714287;
-	Sun, 29 Sep 2024 02:07:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49EAEF9CF;
+	Sun, 29 Sep 2024 02:56:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PFOwkDGf"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jfRGgLvd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 046F218EB1
-	for <linux-kselftest@vger.kernel.org>; Sun, 29 Sep 2024 02:07:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F76AD2F
+	for <linux-kselftest@vger.kernel.org>; Sun, 29 Sep 2024 02:56:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727575647; cv=none; b=lQ/nmKkYCfXRIRWm4eE7HaVx4czOjXb4dv6ZiDKlOmt7WwC+1/QQfhx7eFT70wb7H+EpvLzmGxQ1FFZoRjMCTll14ZB4xaDVRD6/6dhC/NYYt8bhcG7qgu8mF+LZnxzXFKia8vKApMqU4ZyH7P2Fio9+tC2a9IX1YPhylgLE0xE=
+	t=1727578592; cv=none; b=f348fDmFJAcKBm3rjcN886ubkuY9/k0Fp9TQYOtsy+wsKALv0wIAE/kwT3N1aSWtaiTnYdqWik6BSV7u5kFtQMwqZpHUiKzuR+Ex1bjg/KMhx2W+5bp/eYu76M6FFgq8/hOBg9zxdBddyM9gTfxq5Lwj27wYUz9hcej97g5su3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727575647; c=relaxed/simple;
-	bh=TO6F9WUFFXlq7WPqrSDsnpUMpKF1xFzm56hCVzpmjMk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OYFg8QPMOxco57sfCz8qKZEzwZmn5J7PYlgF61i4PGYq8wj+1XTk7/JmZrDVP971eb/9mC8Nk3Dghrnc1TP9tfCetVtJqJVQzo5AH2sGruIsYs782zHu1iqMuDW+zoSMNYZwv9Ov3l8h22hvvMj5iFBqEc0z53c4cRWENJGr6k8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PFOwkDGf; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1727575645;
+	s=arc-20240116; t=1727578592; c=relaxed/simple;
+	bh=ZNrn55PWsk8wtnGQc04faZ4pr+YeNKSQfg0MCQQXexw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aLFag5Ey6QPUIteRfTev0ARThZoiE28Z+rx4Z/DwjuE0MOCMFmqMAtZEwStmqRR5dToAHGycyUZ+MvJXdpfQKH95FqOO6pPCj7Trfmh8rj9++390d65ctx2YxFg2fRbQ2uGKjJHfjsG/cAkmMELkkXqt248vW4Nt3U4/TkAhfVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=jfRGgLvd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE42C4CEC3;
+	Sun, 29 Sep 2024 02:56:31 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jfRGgLvd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+	t=1727578589;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TO6F9WUFFXlq7WPqrSDsnpUMpKF1xFzm56hCVzpmjMk=;
-	b=PFOwkDGfqZRTdRa+vO2LbLy8UjqJg5awchQ37wMOJg5uTGD3IfXg3eIgD8DLcmn604+jcy
-	nu7qpdTEj/tFiaOUHbCN06ICgvLZTOWoyqQbomCT0+HWBHDQGhmmOoBs1T+MA60iR0nsRq
-	OYTOTkN77HTlLAFDLO3foo6zKFyztlE=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-635-1R1gpU3iMWetVUoN56Kfzw-1; Sat, 28 Sep 2024 22:07:23 -0400
-X-MC-Unique: 1R1gpU3iMWetVUoN56Kfzw-1
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-7e6cc094c2fso3986857a12.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 28 Sep 2024 19:07:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727575643; x=1728180443;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TO6F9WUFFXlq7WPqrSDsnpUMpKF1xFzm56hCVzpmjMk=;
-        b=m+d7xdluzreJV4cS2Pv4JXDujQBT2/Vq0vGTN/YVYYrUa6SMebAi9Mw33aHFb6v8BQ
-         k6/+NybEijU3dAPa9sxqW7Re1P5ebihdmkNjnz+7Y6+gzoIgugyU0ZsweyYYiFSHxcr0
-         OC+Hc7rP59zor8w3Ft0Wq+ZdQ703MiE/DoIMC2uyhiPDUKzb4dwhduYBFUt1MS9qtHI2
-         VQ23waIu3n0ZcgKJAFS0LQQCf39/rNCva7DDQFHUMfs/TqNjptSPTPZOyfYS6JN4HqGJ
-         PWWHyBxKcHqYZPVUljs2aqge/Rat2wICJeqjUbNIT8/SyS7vi2OYmNzmct0KqsffXaL0
-         E3wg==
-X-Forwarded-Encrypted: i=1; AJvYcCUBtvx6PUy+hmeMUL4HM2umjpfOjOdnCiRkTRi9Cxrw1xssk0SmU15ndscM+i8i0tXHaqBALO32b7/mXy5MbZA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyitdnMuHhpo0bP2QiGXFGu6kcogHZ/MKt8kI246dt39hLSIoyT
-	1FS/vHLsaI3S+jnyHmmNAZBlAiaV66kQ6yiQbFHVqKgSh4Jh/MWwy9//eEpEZhSCOgZA5NfqlMs
-	on/E18nQsA1KcDi3Rz1m9d9tXxxc+WKFOThhi3Nd1dRLFu+VFMo2EFVoCFuL6OEcWadE01I2wDE
-	XWy8cAgfMK1RlScP8Roy5u3Ap+ZC8puHs/WfslQfjZ
-X-Received: by 2002:a17:90a:d994:b0:2d8:e6d8:14c8 with SMTP id 98e67ed59e1d1-2e0b72ebe66mr12848829a91.15.1727575642714;
-        Sat, 28 Sep 2024 19:07:22 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEj0CCQ8up3FJXqhdPxg4H3lCO7LjesFN419E2sMSG36WbFWRO8y7aomLGECK7sl9/s5dIhUxnui4OmPKl9ZQY=
-X-Received: by 2002:a17:90a:d994:b0:2d8:e6d8:14c8 with SMTP id
- 98e67ed59e1d1-2e0b72ebe66mr12848791a91.15.1727575642243; Sat, 28 Sep 2024
- 19:07:22 -0700 (PDT)
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ww6kKCFc3caUgpbqEUifZRElNQcYesR9JFOgX/FcPhs=;
+	b=jfRGgLvdjWNrNCusDzWyjx0dMMw4AHu9XC/0h2rq5WLWNqxk8L3ky/2ZNGR/czkoQdsM3n
+	Q52M6CTXfC8lc6zaopoo9JOq2d2cguC4k/UrfED/UeKQENphRHdrJowI4YDabQMju7nW7O
+	9nAQW0OHdYMg+DFSLuqvc/EMQv1YdAk=
+Received: 
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id db73b4a7 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Sun, 29 Sep 2024 02:56:29 +0000 (UTC)
+From: "Jason A. Donenfeld" <Jason@zx2c4.com>
+To: linux-kselftest@vger.kernel.org,
+	skhan@linuxfoundation.org
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Subject: [PATCH] selftests: vDSO: align getrandom states to cache line
+Date: Sun, 29 Sep 2024 04:55:49 +0200
+Message-ID: <20240929025620.2056732-1-Jason@zx2c4.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240924-rss-v4-0-84e932ec0e6c@daynix.com> <CACGkMEvMuBe5=wQxZMns4R-oJtVOWGhKM3sXy8U6wSQX7c=iWQ@mail.gmail.com>
- <c3bc8d58-1f0e-4633-bb01-d646fcd03f54@daynix.com> <CACGkMEu3u=_=PWW-=XavJRduiHJuZwv11OrMZbnBNVn1fptRUw@mail.gmail.com>
- <6c101c08-4364-4211-a883-cb206d57303d@daynix.com>
-In-Reply-To: <6c101c08-4364-4211-a883-cb206d57303d@daynix.com>
-From: Jason Wang <jasowang@redhat.com>
-Date: Sun, 29 Sep 2024 10:07:11 +0800
-Message-ID: <CACGkMEtscr17UOufUtyPp1OvALL8LcycpbRp6CyVMF=jYzAjAA@mail.gmail.com>
-Subject: Re: [PATCH RFC v4 0/9] tun: Introduce virtio-net hashing feature
-To: Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc: Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, kvm@vger.kernel.org, 
-	virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org, 
-	Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>, 
-	Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 27, 2024 at 3:51=E2=80=AFPM Akihiko Odaki <akihiko.odaki@daynix=
-.com> wrote:
->
-> On 2024/09/27 13:31, Jason Wang wrote:
-> > On Fri, Sep 27, 2024 at 10:11=E2=80=AFAM Akihiko Odaki <akihiko.odaki@d=
-aynix.com> wrote:
-> >>
-> >> On 2024/09/25 12:30, Jason Wang wrote:
-> >>> On Tue, Sep 24, 2024 at 5:01=E2=80=AFPM Akihiko Odaki <akihiko.odaki@=
-daynix.com> wrote:
-> >>>>
-> >>>> virtio-net have two usage of hashes: one is RSS and another is hash
-> >>>> reporting. Conventionally the hash calculation was done by the VMM.
-> >>>> However, computing the hash after the queue was chosen defeats the
-> >>>> purpose of RSS.
-> >>>>
-> >>>> Another approach is to use eBPF steering program. This approach has
-> >>>> another downside: it cannot report the calculated hash due to the
-> >>>> restrictive nature of eBPF.
-> >>>>
-> >>>> Introduce the code to compute hashes to the kernel in order to overc=
-ome
-> >>>> thse challenges.
-> >>>>
-> >>>> An alternative solution is to extend the eBPF steering program so th=
-at it
-> >>>> will be able to report to the userspace, but it is based on context
-> >>>> rewrites, which is in feature freeze. We can adopt kfuncs, but they =
-will
-> >>>> not be UAPIs. We opt to ioctl to align with other relevant UAPIs (KV=
-M
-> >>>> and vhost_net).
-> >>>>
-> >>>
-> >>> I wonder if we could clone the skb and reuse some to store the hash,
-> >>> then the steering eBPF program can access these fields without
-> >>> introducing full RSS in the kernel?
-> >>
-> >> I don't get how cloning the skb can solve the issue.
-> >>
-> >> We can certainly implement Toeplitz function in the kernel or even wit=
-h
-> >> tc-bpf to store a hash value that can be used for eBPF steering progra=
-m
-> >> and virtio hash reporting. However we don't have a means of storing a
-> >> hash type, which is specific to virtio hash reporting and lacks a
-> >> corresponding skb field.
-> >
-> > I may miss something but looking at sk_filter_is_valid_access(). It
-> > looks to me we can make use of skb->cb[0..4]?
->
-> I didn't opt to using cb. Below is the rationale:
->
-> cb is for tail call so it means we reuse the field for a different
-> purpose. The context rewrite allows adding a field without increasing
-> the size of the underlying storage (the real sk_buff) so we should add a
-> new field instead of reusing an existing field to avoid confusion.
->
-> We are however no longer allowed to add a new field. In my
-> understanding, this is because it is an UAPI, and eBPF maintainers found
-> it is difficult to maintain its stability.
->
-> Reusing cb for hash reporting is a workaround to avoid having a new
-> field, but it does not solve the underlying problem (i.e., keeping eBPF
-> as stable as UAPI is unreasonably hard). In my opinion, adding an ioctl
-> is a reasonable option to keep the API as stable as other virtualization
-> UAPIs while respecting the underlying intention of the context rewrite
-> feature freeze.
+This prevents false sharing, which makes a large difference on machines
+with several NUMA nodes, such as on a dual socket Intel(R) Xeon(R) Gold
+6338 CPU @ 2.00GHz, where the "bench-multi" test goes from 2.7s down to
+1.9s. While this is just test code, it also forms the basis of how folks
+will wind up implementing this in libraries, so we should implement this
+simple cache alignment improvement here.
 
-Fair enough.
+Suggested-by: Florian Weimer <fweimer@redhat.com>
+Cc: Adhemerval Zanella <adhemerval.zanella@linaro.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ tools/testing/selftests/vDSO/vdso_test_getrandom.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
 
-Btw, I remember DPDK implements tuntap RSS via eBPF as well (probably
-via cls or other). It might worth to see if anything we miss here.
-
-Thanks
-
->
-> Regards,
-> Akihiko Odaki
->
+diff --git a/tools/testing/selftests/vDSO/vdso_test_getrandom.c b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
+index 72a1d9b43a84..e5e83dbec589 100644
+--- a/tools/testing/selftests/vDSO/vdso_test_getrandom.c
++++ b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
+@@ -59,10 +59,12 @@ static void *vgetrandom_get_state(void)
+ 		size_t page_size = getpagesize();
+ 		size_t new_cap;
+ 		size_t alloc_size, num = sysconf(_SC_NPROCESSORS_ONLN); /* Just a decent heuristic. */
++		size_t state_size_aligned, cache_line_size = sysconf(_SC_LEVEL1_DCACHE_LINESIZE) ?: 1;
+ 		void *new_block, *new_states;
+ 
+-		alloc_size = (num * vgrnd.params.size_of_opaque_state + page_size - 1) & (~(page_size - 1));
+-		num = (page_size / vgrnd.params.size_of_opaque_state) * (alloc_size / page_size);
++		state_size_aligned = (vgrnd.params.size_of_opaque_state + cache_line_size - 1) & (~(cache_line_size - 1));
++		alloc_size = (num * state_size_aligned + page_size - 1) & (~(page_size - 1));
++		num = (page_size / state_size_aligned) * (alloc_size / page_size);
+ 		new_block = mmap(0, alloc_size, vgrnd.params.mmap_prot, vgrnd.params.mmap_flags, -1, 0);
+ 		if (new_block == MAP_FAILED)
+ 			goto out;
+@@ -78,7 +80,7 @@ static void *vgetrandom_get_state(void)
+ 			if (((uintptr_t)new_block & (page_size - 1)) + vgrnd.params.size_of_opaque_state > page_size)
+ 				new_block = (void *)(((uintptr_t)new_block + page_size - 1) & (~(page_size - 1)));
+ 			vgrnd.states[i] = new_block;
+-			new_block += vgrnd.params.size_of_opaque_state;
++			new_block += state_size_aligned;
+ 		}
+ 		vgrnd.len = num;
+ 		goto success;
+-- 
+2.46.0
 
 
