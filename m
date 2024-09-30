@@ -1,104 +1,162 @@
-Return-Path: <linux-kselftest+bounces-18688-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18689-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BC4E98AE6C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 22:32:11 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B305498AE7B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 22:36:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7DAC1F22E98
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 20:32:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F306282B6F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 20:36:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71C43174EF0;
-	Mon, 30 Sep 2024 20:32:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35A6A1A0BE3;
+	Mon, 30 Sep 2024 20:36:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="dg9blAMH"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="IE2Jypug"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 589EA74421
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Sep 2024 20:32:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EAF51A0AFA
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Sep 2024 20:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727728326; cv=none; b=X7G2eXSIv1vZ1Kbujkx0aB2+hp3HLW+X4I63WjdHzfJy+KrxQnWKs1deTdweO3x8KmSaiSR0fIohB/JyP2pJZYFYHnYNf8+kmNNxtAYBylivtpbLnhY1Jpf8Izj49F8cdZ9B+tLKWpcIlnQoEvEAV7jHd0RWhbaGrqWdnDutPJs=
+	t=1727728579; cv=none; b=TXE6cSfmHcy+MI0gtMJd6jQ0Wa4KqBWA9X0gBmRD59WCUGChuOeHXGFy2DYIUnOWwjK0+eUccTNGfnhA/oVu3vD2DEYBlpwMBrLgC+KM+obGLKERxuQo6l3JfcoDF8fbQWP1IQ94NRiJsoxnnqZ2tB2b8GZ0n33F8lGnsgQ+axg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727728326; c=relaxed/simple;
-	bh=iuTBkTsVyUwHG/0VX7MtzJpflCWh6jClaP5eVt/7IPQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=i5MlHg68hkv6WE68wrWD9jn97XMPmbTwZ6CEX1eVtIW/rJyeTZYKaDQVJzQIB0KlGqhVfYU5UG7cYyyMk69YI67zCPOJh+8PmggqPCqoH02MXwpuAPQoBRBm+iIW2ztF5nyGTdLih/fjEFELXExpV9+mh23P6AwlRPDQ0KmXnTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=dg9blAMH; arc=none smtp.client-ip=209.85.166.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-8323b555ae2so239754639f.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Sep 2024 13:32:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1727728323; x=1728333123; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=fh9PH2Jop7KznotYQEt9VOPK+AuZOwXiP4v5Ug8+hPc=;
-        b=dg9blAMHXjsDSvMjGp6PaflU7q+fvbVJFchBu+h2kJ5zzhwFA6VKzGRgwW5BNgTaC4
-         mEea/B8VqPC5bhm4pSQ4YmCRY+GNPDsr47Y9v/SClmP8JmA4d7rJNqgGNfohN+ejLqVd
-         PXTdKOxrDZdBDRZPqR0HJlafjB7RbAEuFI+og=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727728323; x=1728333123;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fh9PH2Jop7KznotYQEt9VOPK+AuZOwXiP4v5Ug8+hPc=;
-        b=BT7JniMKAuTKeJaki7mo6JHbcAUVqK+10uX4a8ith95vvxqi0IZTzmSCD3wWnhdJnw
-         GnjMI1U4QWfy38tuxQyoHerb06SZx+WnzkcHPVtlVWZtJ11LVHFoU1RlhvXXj92oK+6k
-         salJpC0J+uZJ8HxAJf7shaenA65mSLpX/bY+5s6hPRftLHXLFFvRKfCPuOt2l/pYCztG
-         bwHrFJPGWojk4x+97Mxtwh0EdyltJdtH9aDgq4W6Omk+DCjTMrnVoLli55dYJ3lMbeSb
-         YQ1oOlEl/0TBDqEdrucPw7sI+nmhAdfSCDKLYxBY6R16IbNYcoEvJTxb8focAZmYP0zG
-         wVLA==
-X-Forwarded-Encrypted: i=1; AJvYcCVOrPEH1w7pkW+L4JOsj+kAeuwVEA/RE3gtHuQ7DKWL8mTh9TnxBDFrv8bVrSp3dIIpjr4NbN+IWZm3QSBDbdQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxz5cfGmkIQqnxxaxzDF+ixV3ebLXiuZAT6Qyu0BkEl7TP0589Y
-	JdIotdV5KoN/Qb9b7NFXXITre63tEfeIcogil6/KjFdQawlXsjJWL5m60fg6RoU=
-X-Google-Smtp-Source: AGHT+IHiJKMaCXtddQeMdqbzlj9+mgu41HkyhLDB0xfNP3HkFbQViAqxH4ZR5Vmwe1Tup1wyJLXA6g==
-X-Received: by 2002:a05:6602:1653:b0:82c:e8d2:f86b with SMTP id ca18e2360f4ac-834932796c6mr1072841339f.14.1727728323394;
-        Mon, 30 Sep 2024 13:32:03 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4d88884a431sm2269417173.64.2024.09.30.13.32.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Sep 2024 13:32:03 -0700 (PDT)
-Message-ID: <ef99a697-5d3b-40e5-a917-6f983b53e5cd@linuxfoundation.org>
-Date: Mon, 30 Sep 2024 14:32:02 -0600
+	s=arc-20240116; t=1727728579; c=relaxed/simple;
+	bh=fjj+H27SITZvSaj8uGxIke26HuuV0UX+i0tHiqKA1HQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CPKCZfNwE36XlIhKK4Rcmsrwl32HE03hs7OZrbrm98hImO7BWjaPfYf/2PhQ2PuhoVLIJ1lX8Lmrw28apkEobkB4+LyjiXeNQ5jFdcME6kM3PnfWsdnep+2TJzHPFkLdBkgXZU4KF+JMaQ3vMyIdrg16PL1IRWMLV1JePuVhCPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=IE2Jypug; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 48UJu9jE011794;
+	Mon, 30 Sep 2024 20:36:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding; s=corp-2023-11-20; bh=r+ilioLAvtY+bb
+	JQnjK0k/pzRXX3F2cw6gF7/DU2S84=; b=IE2JypugdxzZCxaviSRyaECVGNh8Gb
+	WsO8LdU2tKDFi/ecSdesbqihciB0Ge4DYXU7M8BWDTLPT3VnL91HXhjGORGGjOhj
+	ImmyZ6D2Qh8QhuGP9X2quDxJtTb0SrKZXxee7NBViGs7AOWW34jCbBLfl2dmuell
+	IfeHoAjucReO0m4iibII9Y2i/2QgYSmIlBJR1t1E+BxgliKSNM5A0OdP1F8Q1QHW
+	CIrQejvjzxy8/Aj+H7W1qYAX34S0X6q/veSBets434ANjY2E20qXXKJQhFpALNuV
+	IkoGkbJwFbEuO7H45j0KtPlfXVGrgqwhHadkVJzsG21VriXqQ2tdRh4Q==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 41x87d4qpj-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 30 Sep 2024 20:36:13 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 48UKDvMH028553;
+	Mon, 30 Sep 2024 20:36:12 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 41x886tmnm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 30 Sep 2024 20:36:12 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 48UKaBbO007150;
+	Mon, 30 Sep 2024 20:36:11 GMT
+Received: from ca-dev110.us.oracle.com (ca-dev110.us.oracle.com [10.129.136.45])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 41x886tmmt-1;
+	Mon, 30 Sep 2024 20:36:11 +0000
+From: Yifei Liu <yifei.l.liu@oracle.com>
+To: shuah@kernel.org
+Cc: yifei.l.liu@oracle.com, linux-kselftest@vger.kernel.org,
+        ramanan.govindarajan@oracle.com, sinadin.shan@oracle.com
+Subject: [PATCH v4 v6.11 v5.15 v5.4 v4.19 1/1] selftests: breakpoints: use remaining time to check if suspend succeed
+Date: Mon, 30 Sep 2024 13:36:03 -0700
+Message-ID: <20240930203603.2854629-1-yifei.l.liu@oracle.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: update core.c
-To: =?UTF-8?B?T2thbiBUw7xtw7xrbMO8?= <okantumukluu@gmail.com>,
- shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?=
- <mic@digikod.net>, Kees Cook <keescook@chromium.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <CAJb+kEmFoTXCKh=xSfCas7B=oQP1p8vnn5eoa=zn54FRXOOntg@mail.gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CAJb+kEmFoTXCKh=xSfCas7B=oQP1p8vnn5eoa=zn54FRXOOntg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-09-30_20,2024-09-30_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 mlxscore=0 malwarescore=0
+ mlxlogscore=999 phishscore=0 suspectscore=0 spamscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2408220000
+ definitions=main-2409300148
+X-Proofpoint-GUID: iQlEZR4InHlOZGWUpGzJbTkd7PcoRpIf
+X-Proofpoint-ORIG-GUID: iQlEZR4InHlOZGWUpGzJbTkd7PcoRpIf
 
-On 9/29/24 16:40, Okan Tümüklü wrote:
-> 1:The control flow was simplified by using else if statements instead of goto structure.
-> 
-> 2:Error conditions are handled more clearly.
-> 
-> 3:The device_unlock call at the end of the function is guaranteed in all cases.
-> 
-> Github request : https://github.com/torvalds/linux/pull/967 <https://github.com/torvalds/linux/pull/967>
+"step_after_suspend_test fails with device busy error while
+writing to /sys/power/state to start suspend."  The test believes
+it failed to enter suspend state with
 
-Please send patches for these changes.
+$ sudo ./step_after_suspend_test
+TAP version 13
+Bail out! Failed to enter Suspend state
 
-Refer to submitting patches document in the kernel repo.
+However, in the kernel message, I indeed see the system get
+suspended and then wake up later.
 
-thanks,
--- Shuah
+[611172.033108] PM: suspend entry (s2idle)
+[611172.044940] Filesystems sync: 0.006 seconds
+[611172.052254] Freezing user space processes
+[611172.059319] Freezing user space processes completed (elapsed 0.001 seconds)
+[611172.067920] OOM killer disabled.
+[611172.072465] Freezing remaining freezable tasks
+[611172.080332] Freezing remaining freezable tasks completed (elapsed 0.001 seconds)
+[611172.089724] printk: Suspending console(s) (use no_console_suspend to debug)
+[611172.117126] serial 00:03: disabled
+--- some other hardware get reconnected ---
+[611203.136277] OOM killer enabled.
+[611203.140637] Restarting tasks ...
+[611203.141135] usb 1-8.1: USB disconnect, device number 7
+[611203.141755] done.
+[611203.155268] random: crng reseeded on system resumption
+[611203.162059] PM: suspend exit
+
+After investigation, I noticed that for the code block
+if (write(power_state_fd, "mem", strlen("mem")) != strlen("mem"))
+	ksft_exit_fail_msg("Failed to enter Suspend state\n");
+
+The write will return -1 and errno is set to 16 (device busy).
+It should be caused by the write function is not successfully returned
+before the system suspend and the return value get messed when waking up.
+As a result, It may be better to check the time passed of those few 
+instructions to determine whether the suspend is executed correctly for
+it is pretty hard to execute those few lines for 5 seconds.
+
+The timer to wake up the system is set to expire after 5 seconds and 
+no re-arm. If the timer remaining time is 0 second and 0 nano secomd,
+it means the timer expired and wake the system up. Otherwise, the system
+could be considered to enter the suspend state failed if there is any
+remaining time.
+
+After appling this patch, the test would not fail for it believes the
+system does not go to suspend by mistake. It now could continue to the
+rest part of the test after suspend.
+
+Fixes: bfd092b8c272 ("selftests: breakpoint: add step_after_suspend_test")
+Reported-by: Sinadin Shan <sinadin.shan@oracle.com>
+Signed-off-by: Yifei Liu <yifei.l.liu@oracle.com>
+---
+ .../testing/selftests/breakpoints/step_after_suspend_test.c  | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/breakpoints/step_after_suspend_test.c b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
+index dfec31fb9b30d..8d275f03e977f 100644
+--- a/tools/testing/selftests/breakpoints/step_after_suspend_test.c
++++ b/tools/testing/selftests/breakpoints/step_after_suspend_test.c
+@@ -152,7 +152,10 @@ void suspend(void)
+ 	if (err < 0)
+ 		ksft_exit_fail_msg("timerfd_settime() failed\n");
+ 
+-	if (write(power_state_fd, "mem", strlen("mem")) != strlen("mem"))
++	system("(echo mem > /sys/power/state) 2> /dev/null");
++
++	timerfd_gettime(timerfd, &spec);
++	if (spec.it_value.tv_sec != 0 || spec.it_value.tv_nsec != 0)
+ 		ksft_exit_fail_msg("Failed to enter Suspend state\n");
+ 
+ 	close(timerfd);
+-- 
+2.46.0
+
 
