@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-18627-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18628-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D97F98A2D2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 14:38:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5785998A2DA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 14:39:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AEA22823E4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 12:38:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A05B1C22A7B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 12:39:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 215701917C7;
-	Mon, 30 Sep 2024 12:37:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CC55191F77;
+	Mon, 30 Sep 2024 12:37:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HbyAAphp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IO7OQX/0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B9D190064;
-	Mon, 30 Sep 2024 12:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88AB0191461;
+	Mon, 30 Sep 2024 12:37:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727699838; cv=none; b=f6h6GniG45otiof/213I4xY/ct4gadEMmBgGNUussyY45M8ITl0jDtxluyciW0Vb+UN2vJgXVwJVZZ+panujdXfWQ7iwaI3DJ0ZVAMgi3LNnN0eQESQiljdfbZ7lgcu3/nTa98SWLnSQm+MbwwdeNTxrVGHyinixi48FGaE3DkE=
+	t=1727699839; cv=none; b=f09SoUhJsjIApT7fng/tDAxIbZ4NVF/+9yTcPw8lMRay0+4lcwkBtzraTzLUBBHLBa2bjjvzCqNJZ7lDW7rOHdAQDJ1AAgdzk1PaJSzDgoTCV0Z36nuooIU+memE2+Lz09y+WXfusMFqVsKlBYvA2xQ0EK+9MxDQrduL+JG87lI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727699838; c=relaxed/simple;
-	bh=8FnpV8pfNTtAult4r6PHmRMy2NVO4ZM/CFmfsQMzUcA=;
+	s=arc-20240116; t=1727699839; c=relaxed/simple;
+	bh=eyqLoQ6tOjYdsem/GmZ7tIXtJ+3/koGZ4orrV5NEPFc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IDlzUycU0ahQ8nuk52tZ6rBdMLmGzjI0R1e/K6QzqQiCYjuWuMqgN6u3j/clm2vn1FgtMZkEvhcw6oex41Vs+fnGE9Rq4ISOjsy3DUa0N/1W8lcblO9cDQE0rGYgs1HibrJjecS62QnpwNqDlOsRJE8nv2XK3gouUlmZ2P6/fqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HbyAAphp; arc=none smtp.client-ip=209.85.128.52
+	 MIME-Version; b=mbujs5AfWdkrOPNZUy5iq6d4RidWrqA6ui4/u3YNpL693v+vJ2F4SuNihnqSxkeaEBAgRfWXHVrJ5ZBYGw4Q2USL2FNs/XeeP+EgDx07YdG6nejY84nr5iME704Ng7VaAwj2GxSqEyjw8zyuSq8fAutO1b6rTwaTM1dA75WQ7YQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IO7OQX/0; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-42cb1e623d1so40073445e9.0;
-        Mon, 30 Sep 2024 05:37:16 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-42cba6cdf32so38166385e9.1;
+        Mon, 30 Sep 2024 05:37:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727699834; x=1728304634; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1727699836; x=1728304636; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iIz4XxD/MXWvSuHKaNsZDh3MppYU6Ey9Ren8dN/1Nnw=;
-        b=HbyAAphpUEKM7Z/kT8Wg4y9qUBIc3W71/TL1p9r/AMqNfsp38qj5uRZiKFsyDDNPwA
-         BRILOVpCWN3UtEkclYwd8kxo6j9mjNueGibxZAQsINHE1DwNmvb0mI5Bb45IULxmydQn
-         6CAXT8pvnK5C7MGGVrM9/Ak6/ccqTa6qtWxpctigF+LPE+q4HF1AZK+v8I74EoU7lwgX
-         cwodiwSRZZYW5capbUWhfvWNufICG9YtM5nAyBSGsbp++9GM4+3W2ljfY89dFChzqZal
-         ZJLZ/c2pX3kIBpjdvqXVjo4HDr35wk5H8cMriwUY3YNO3pVkEcq2npBeHRlypiiE/i+5
-         0WJA==
+        bh=NOB1xBCChyVodl1AKBCRn0/gjY8Cy4B28eaNVB3ngoA=;
+        b=IO7OQX/0SsdDZ1ZuwiJll2oosoI4/usH/okcapDpOfjGqScRZSTjTVEcahrP6o9bty
+         YEQBOjLId7NQmqFlxkti0hzvfCuz6V5q/HhDeREpV3S6fGeIQ0+xFyG/Ij4KySoqrmvM
+         lfemPxWSkSMu1C6uiXkIvZSpQtTHLB7vjZDjDJ7lFsT3SRa7WfdPq2gRcm096MJCx8GB
+         Kl7eaFGvef/3aRub7G8RWdxZLH0LgwALUySz/AJquDEa9yR8V+MnIThI/1Fb9HLZ9IU3
+         aa6UR+SLiTpF/NGu7XGmuTuYFYB2YKtqumu0zNQZ0GbZfk6nuGoWkINposNCpEjdi5G3
+         0Xwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727699834; x=1728304634;
+        d=1e100.net; s=20230601; t=1727699836; x=1728304636;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iIz4XxD/MXWvSuHKaNsZDh3MppYU6Ey9Ren8dN/1Nnw=;
-        b=KpDwSp1HwWIPR6rrAElGNyYz92HqmLrcg0NiR3VhwhbqExmNATRYcdlpU2KffdgL4q
-         S6jmPrrsnxkbxF/N/FO2gyI79bc9SiuNNcSvcrSiwip+dcT0erPyNs+8YhuJrch5iJxY
-         vnleCSvJq97T3My325alVlkXLLNgJbJRTJOk7G29oZ2F4dQArsquTY8uvjITZ3N3S20h
-         FPiQywySibvZKiDhbHbxRAKzl+e4Ckeowp0QmPvRv5FP/EEnbGyq3AFWATJPolVjbscf
-         lcLGfZwZdQyf9FYF7S9j8pB0r8pCkuHs2VSt/nXEF9PMekWPtO02ZjUsUPxL3z0SF9Xv
-         eR5A==
-X-Forwarded-Encrypted: i=1; AJvYcCULwM63HjK7FXoP9RfZeuY5qavjWut/zlvZ+oSeYBZdLd6VtxoUlgpyj+0YLGqucU+ZzGVfoy2P9HuyEKBQ@vger.kernel.org, AJvYcCUaQqMIlxEMX5HODmPT9VU1I9M7FDbIC7V90YY/Ol6wzfmgZaQP9vwv6ZdQdgWb7W7sM6zHKnD+4rDmMA==@vger.kernel.org, AJvYcCUpaX78ChZLGpEZWnYppAi1dLWXbRS8oS9cz32DxvNMMTCXWFbNO8UMZiiEHp+G20PwICZbVSW3RtYRStgcVg==@vger.kernel.org, AJvYcCVIyP94g39xr1K5MMa+osKtuwW9sy6PjUCmw0Aq1uXd7h0BvIWfCrLZzSrRl1pfmfrpPLY=@vger.kernel.org, AJvYcCVyaEy/5NHYAlp6mz3UA+duDGLyQeuIskABbw3zZuKNzBUMMIM2L+zad9dfRa34VxegMrbOYFdmwz4U+DDT0b27@vger.kernel.org, AJvYcCWtwiMlL6M4OhYjtkw1ORJ7S5GUBu84zJQqXBidH03i5eMGzM8u/4ttKQhjX1jEB4LbWiZuGr4r9bgjmsHi@vger.kernel.org, AJvYcCXVszerHk/vlNtH/3Ut0ZPtdRtZL9zruajSmoC7hL61WrnGNnJdLjIjzp73KbXUEb8YoOQgz711MIZxehs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIyhIc1fxNrQTvpse59IvxdxJUi3tsO9SZr/2EF5XHqMtMJ1UT
-	xvVnLeSLkbeK7bx96l/m+mh2YsPbOMlPYjUXgqA5X0gpVvX7u0/V
-X-Google-Smtp-Source: AGHT+IHLebdUj03VIWRmjVk+jZmmDpfIAH8/fQg7ILqXr2avcVfhMeGRYFMjONtxE6BzkKSMTbFFfw==
-X-Received: by 2002:a05:600c:1549:b0:42c:a574:6360 with SMTP id 5b1f17b1804b1-42f584a1d5cmr91192685e9.29.1727699834409;
-        Mon, 30 Sep 2024 05:37:14 -0700 (PDT)
+        bh=NOB1xBCChyVodl1AKBCRn0/gjY8Cy4B28eaNVB3ngoA=;
+        b=LtvUADDuzMoJqxy4KDpX9WpUVo4+VqtCVSq8kB9DQgoxHNC7gJ4/VyeuqAAA5iAAZ5
+         3pyOLZsHXy6aDHkn1tRRPMd995VQdXWgsUgc3Dw7XgNpHzmwUgSDu0vuGq+T5wd+Hing
+         tSejwDrk5kWpSOWrkr+1W4gm/+1u2V/FgDgDqJ5+ZWBbJd14fAiVRun1jLlenKvGMtlG
+         RM7qnbclhcdLgSJIkQnSS5Zr4fr3nSOa0bJw6j4X1NFg8Tt7dDXWMyMl3eZsV2rfhrRQ
+         IS8BeO3t9rd68N1EBSi2j7ewQMIN9MszEVq99ML2d43ULs0eCEXSYRQv6VVkqPSp+oBy
+         Bjxw==
+X-Forwarded-Encrypted: i=1; AJvYcCUV8FI7PB0S0whRRUW/ccfkM+oi5MQyKhuNHa6pm9yOwFy19cLwQqXfpHktqwaGWBhT6xF6l6TK9kP8Y1ztog==@vger.kernel.org, AJvYcCUw9aebcf+UjlcrBwUC6ubai1ZethUi7KA+kjTr4w4EbQkedwxBo3wKYK4XUCsNX2/BB34=@vger.kernel.org, AJvYcCV4UnBu+nezVh+QZSU0tnnVK4MH8/QhdwcmSCfN26qp9g5a/yjt2fRNF3Cf/lPKCc16kB0Sb0tfXAFYc8lM@vger.kernel.org, AJvYcCWmAinVtDgo/HbCJw6sKnT7VKHYF5TExYgaui+VO1WPlmUNacAxJDHbJwycihvWef1IGWzPyrAbCaGqI4X7Bz6/@vger.kernel.org, AJvYcCX2df2puRwKM/jnPWx1apNOgQE9JdXCXgdrg1HBj//NpWVbGzIkDUNzy9Fnxvg/RBSomtWALZrB1sASk/o=@vger.kernel.org, AJvYcCXDRdYdrbXxHpmqekNXLckvhY95rSyNuEoVl69LjEmsaz26poWJ4QfxLmSJItiAdEFGEq6iTiWwT7DzzSPc@vger.kernel.org, AJvYcCXTHuQmcoKd6w8Kd3mFP7B+DkpL97qghoXX71ff+ezhhkOeci/yXWeHUffS5M9kNy5AZCbIm94Rfc/IlA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxPUoezsheRACyfyyx5HvuHzi5SA7P0ph/FqrqW5zWRXEmOf1p
+	dDVMwNjxTB6P1ChwtcNt+xC0APUNPyt2ha+RcV6kV64G20ZIZB1z
+X-Google-Smtp-Source: AGHT+IFX7UFFJ9mFBZg+bn1buBc9cHhJrMVxmqzrsXfLIQStfn4WgdL6i0BO6HCbDChBmeLhRHv16g==
+X-Received: by 2002:a05:600c:1c85:b0:42c:c073:412b with SMTP id 5b1f17b1804b1-42f58490786mr95354705e9.30.1727699835819;
+        Mon, 30 Sep 2024 05:37:15 -0700 (PDT)
 Received: from fedora.iskraemeco.si ([193.77.86.250])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e96a52308sm149011355e9.43.2024.09.30.05.37.13
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e96a52308sm149011355e9.43.2024.09.30.05.37.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2024 05:37:13 -0700 (PDT)
+        Mon, 30 Sep 2024 05:37:15 -0700 (PDT)
 From: Uros Bizjak <ubizjak@gmail.com>
 To: x86@kernel.org,
 	linux-crypto@vger.kernel.org,
@@ -81,14 +81,11 @@ To: x86@kernel.org,
 	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org
 Cc: Uros Bizjak <ubizjak@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>
-Subject: [PATCH v3 04/19] drm/lib: Include <linux/prandom.h> instead of <linux/random.h>
-Date: Mon, 30 Sep 2024 14:33:15 +0200
-Message-ID: <20240930123702.803617-5-ubizjak@gmail.com>
+	Hans Verkuil <hverkuil@xs4all.nl>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>
+Subject: [PATCH v3 05/19] media: vivid: Include <linux/prandom.h> in vivid-vid-cap.c
+Date: Mon, 30 Sep 2024 14:33:16 +0200
+Message-ID: <20240930123702.803617-6-ubizjak@gmail.com>
 X-Mailer: git-send-email 2.46.2
 In-Reply-To: <20240930123702.803617-1-ubizjak@gmail.com>
 References: <20240930123702.803617-1-ubizjak@gmail.com>
@@ -100,33 +97,29 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Substitute the inclusion of <linux/random.h> header with
-<linux/prandom.h> to allow the removal of legacy inclusion
-of <linux/prandom.h> from <linux/random.h>.
+Include <linux/prandom.h> to allow the removal of legacy
+inclusion of <linux/prandom.h> from <linux/random.h>.
 
 Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
+Acked-by: Hans Verkuil <hverkuil@xs4all.nl>
+Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
 ---
- drivers/gpu/drm/lib/drm_random.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/media/test-drivers/vivid/vivid-vid-cap.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/gpu/drm/lib/drm_random.h b/drivers/gpu/drm/lib/drm_random.h
-index 5543bf0474bc..9f827260a89d 100644
---- a/drivers/gpu/drm/lib/drm_random.h
-+++ b/drivers/gpu/drm/lib/drm_random.h
-@@ -6,7 +6,7 @@
-  * be transposed to lib/ at the earliest convenience.
-  */
- 
--#include <linux/random.h>
+diff --git a/drivers/media/test-drivers/vivid/vivid-vid-cap.c b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+index 69620e0a35a0..184460eb356e 100644
+--- a/drivers/media/test-drivers/vivid/vivid-vid-cap.c
++++ b/drivers/media/test-drivers/vivid/vivid-vid-cap.c
+@@ -10,6 +10,7 @@
+ #include <linux/sched.h>
+ #include <linux/vmalloc.h>
+ #include <linux/videodev2.h>
 +#include <linux/prandom.h>
- 
- #define DRM_RND_STATE_INITIALIZER(seed__) ({				\
- 	struct rnd_state state__;					\
+ #include <linux/v4l2-dv-timings.h>
+ #include <media/v4l2-common.h>
+ #include <media/v4l2-event.h>
 -- 
 2.46.2
 
