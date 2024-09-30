@@ -1,226 +1,246 @@
-Return-Path: <linux-kselftest+bounces-18648-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18649-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEC6698A5DE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 15:49:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AC7598A5E8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 15:52:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BAED28319C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 13:49:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EAA41C22593
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 13:52:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D8118FDCD;
-	Mon, 30 Sep 2024 13:49:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B08FC18FDB2;
+	Mon, 30 Sep 2024 13:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YQqtYTlo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TsO7ae9L"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF7B18F2CF;
-	Mon, 30 Sep 2024 13:49:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8D654D9FE;
+	Mon, 30 Sep 2024 13:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727704188; cv=none; b=Dudg5I+zLohaM1uq1OhMy1VpsSr/SPTVR0VkpAdYvJqeduitv1kCIiCnOes5EhpowbrnKI3/rQNdz9t/1Zl0nBxr+dNnH9+UmbPwWKXDeq2TUj2OsP2OMJKQbFRfaNibTALhlhS2QhRuX3O8RqvsEjzXZHsGcBReG3XhiqFWm1U=
+	t=1727704340; cv=none; b=fvAeakSS6mW0gt9A/t+JBt9tTC48pn4ZZ58EYWFXP3tNVCIGwgs0bDb5jDiAz58Gmzt/++gyHU+xVa3kKG1Gr8qO1i451yNLJ6j3e6kKd2jDZT3CGewnIOhuYTjSxTr0QZxTJqi2jnvZFOaV7mDE58JyxhONHn/IKxVFQl8wrMk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727704188; c=relaxed/simple;
-	bh=CMRtgHOyVoHjwQIEEvabYPyGlC1aDfVrMwNWnFIZg1E=;
+	s=arc-20240116; t=1727704340; c=relaxed/simple;
+	bh=LoRGxtWYz5q0JftDlHdTeNxriMQmKKzgzfPx3HFoHVQ=;
 	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=hetJzQoLw0G5x6SKO7i8hgP8/rugXX4u1sST70M6CrArrIH72LM3mt7AwnK0mhAcLGrfOgWU8nf+X7GkT0gWD6dAPWExaG+1QbzLq+GkNM2UTQRCxf6flFV+tHU+vb7eamOx+HlL3lp72xR4MGBdMtHNJiiPf82neTvWeqhc7rk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YQqtYTlo; arc=none smtp.client-ip=192.198.163.16
+	 MIME-Version:Content-Type; b=dZ0Alh92rPfuMYTlUHZi8Awzokogz8yEmptud12bYqgCQmNb3Hds3xP+sD+MXDepzVOslWLNRGyE575dAtpbMl2AWO1rAVSvnZgjZGOCEkHYOiCpIJQHFND/jub0LTDmapPCnSPnyvawM5yk7KmTirIdTMrCMzXtN3gH3eOyu0k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TsO7ae9L; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727704187; x=1759240187;
+  t=1727704339; x=1759240339;
   h=from:date:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=CMRtgHOyVoHjwQIEEvabYPyGlC1aDfVrMwNWnFIZg1E=;
-  b=YQqtYTlo+Tje2AMlYHq50cjxOC8s+FB3sA7/0LeXLsDtjyrRUM4pP9y/
-   IIdcg4CMdvDtYLzzXuzymnfrtUQ8BA3Xkody216O+BfqhiGSKrChxLNgR
-   DxKUzQ1P28lfkZpfH74opwIzyqPTPVNBjZuM/ZZlYWFHEZfLIpf8ELaGh
-   bPJH07y00wBqoTrh3On0s/pqeIpRbXeGTDqqbuIau8tEJBrAREEvQnesv
-   z1NNZWceAdZ1827smCEQzBUElVBAbTFCqT+49QbCjN4QxC4AR0g7Wt4W7
-   HDPjn6ywKYrb8nlIa/aJaNNVHYDWwXLKG8jyzUiKToBZwme8vZ/SefI/m
+  bh=LoRGxtWYz5q0JftDlHdTeNxriMQmKKzgzfPx3HFoHVQ=;
+  b=TsO7ae9Lk9P/g/c984exndYftv/KCem7o0GCpuFg+PjQqKmHyPdvxOHW
+   F/6i+aqSOVT8wHBKDD6N4uXSo6U4EKD1RpxxauwVSQEvSZiWBluBMAWhq
+   roI4hqA8LIe5Yt+QK78DhUpYE9y3EU4cmDFyhyBwBcHzrwMrATNKnYvTP
+   czjjCcV1b/FrBCfuIOPwIa4ayLtW2i7jl7uYdyd/ftm1rq72MoSav0fFa
+   GklNP2ICIDu2rS92mlQ0ro2ewRYKBLYEdVRL6Wpc/osIyVLurufuPedt3
+   XBDZQ2gu/MQWS7CZh+SmxzjusDmY9ER6BFbWTsPY8Btr4AHz0ErTFLYli
    A==;
-X-CSE-ConnectionGUID: 1duwETtOQH2khmf7lHN+CQ==
-X-CSE-MsgGUID: lyI+DQKaS8OlgyduPQnrAA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11211"; a="14417844"
+X-CSE-ConnectionGUID: jcyONqgsTfmtIVkW0Pakhw==
+X-CSE-MsgGUID: uQt33fqqT22h1qgdfMGfuQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11211"; a="52207941"
 X-IronPort-AV: E=Sophos;i="6.11,165,1725346800"; 
-   d="scan'208";a="14417844"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 06:49:46 -0700
-X-CSE-ConnectionGUID: xV2u+7xNSK62NVSHZL/5nw==
-X-CSE-MsgGUID: a2MBGPZjQX2cXpNoodiRJw==
+   d="scan'208";a="52207941"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 06:52:16 -0700
+X-CSE-ConnectionGUID: N8oAuKZRQ2WeEDi/dUVtqg==
+X-CSE-MsgGUID: 6PheTJ2dSHm2TGCkq4mtew==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,165,1725346800"; 
-   d="scan'208";a="73177741"
+   d="scan'208";a="96639867"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.26])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 06:49:43 -0700
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 06:52:14 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 30 Sep 2024 16:49:39 +0300 (EEST)
+Date: Mon, 30 Sep 2024 16:52:09 +0300 (EEST)
 To: Reinette Chatre <reinette.chatre@intel.com>
 cc: fenghua.yu@intel.com, shuah@kernel.org, tony.luck@intel.com, 
     peternewman@google.com, babu.moger@amd.com, 
     =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
     linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2 06/13] selftests/resctrl: Remove "once" parameter
- required to be false
-In-Reply-To: <1f5ad02dc424bfc3cca705ed9a322df8f35f2ff4.1726164080.git.reinette.chatre@intel.com>
-Message-ID: <f692fe7c-e81d-2086-fc1d-f3af436580c1@linux.intel.com>
-References: <cover.1726164080.git.reinette.chatre@intel.com> <1f5ad02dc424bfc3cca705ed9a322df8f35f2ff4.1726164080.git.reinette.chatre@intel.com>
+Subject: Re: [PATCH V2 07/13] selftests/resctrl: Only support measured read
+ operation
+In-Reply-To: <491d5a951751dd74ccb84e175f6dd457dbed5c31.1726164080.git.reinette.chatre@intel.com>
+Message-ID: <f18e1956-0eda-2674-2948-72059489c21b@linux.intel.com>
+References: <cover.1726164080.git.reinette.chatre@intel.com> <491d5a951751dd74ccb84e175f6dd457dbed5c31.1726164080.git.reinette.chatre@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-2035177807-1727704179=:938"
-
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323328-2035177807-1727704179=:938
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: text/plain; charset=US-ASCII
 
 On Thu, 12 Sep 2024, Reinette Chatre wrote:
 
-> The CMT, MBM, and MBA tests rely on a benchmark that runs while
-> the test makes changes to needed configuration (for example memory
-> bandwidth allocation) and takes needed measurements. By default
-> the "fill_buf" benchmark is used and by default (via its
-> "once =3D false" setting) "fill_buf" is configured to run until
-> terminated after the test completes.
->=20
-> An unintended consequence of enabling the user to override the
-> benchmark also enables the user to change parameters to the
-> "fill_buf" benchmark. This enables the user to set "fill_buf" to
-> only cycle through the buffer once (by setting "once =3D true")
-> and thus breaking the CMT, MBA, and MBM tests that expect
-> workload/interference to be reflected by their measurements.
->=20
-> Prevent user space from changing the "once" parameter and ensure
-> that it is always false for the CMT, MBA, and MBM tests.
->=20
-> Suggested-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+> The CMT, MBM, and MBA tests rely on a benchmark to generate
+> memory traffic. By default this is the "fill_buf" benchmark that
+> can be replaced via the "-b" command line argument.
+> 
+> The original intent of the "-b" command line parameter was
+> to replace the default "fill_buf" benchmark, but the implementation
+> also exposes an alternative use case where the "fill_buf" parameters
+> itself can be modified. One of the parameters to "fill_buf" is the
+> "operation" that can be either "read" or "write" and indicates
+> whether the "fill_buf" should use "read" or "write" operations on the
+> allocated buffer.
+> 
+> While replacing "fill_buf" default parameters is technically possible,
+> replacing the default "read" parameter with "write" is not supported
+> because the MBA and MBM tests only measure "read" operations. The
+> "read" operation is also most appropriate for the CMT test that aims
+> to use the benchmark to allocate into the cache.
+> 
+> Avoid any potential inconsistencies between test and measurement by
+> removing code for unsupported "write" operations to the buffer.
+> Ignore any attempt from user space to enable this unsupported test
+> configuration, instead always use read operations.
+> 
 > Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 > ---
 > Changes since V1:
-> - New patch
+> - New patch.
 > ---
->  tools/testing/selftests/resctrl/fill_buf.c      |  7 ++++---
->  tools/testing/selftests/resctrl/resctrl.h       |  2 +-
->  tools/testing/selftests/resctrl/resctrl_tests.c |  8 +++++++-
->  tools/testing/selftests/resctrl/resctrl_val.c   | 11 +----------
->  4 files changed, 13 insertions(+), 15 deletions(-)
->=20
-> diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/s=
-elftests/resctrl/fill_buf.c
-> index 34e5df721430..854f0108d8e6 100644
+>  tools/testing/selftests/resctrl/fill_buf.c    | 28 ++-----------------
+>  tools/testing/selftests/resctrl/resctrl.h     |  2 +-
+>  .../testing/selftests/resctrl/resctrl_tests.c |  5 +++-
+>  tools/testing/selftests/resctrl/resctrl_val.c |  5 ++--
+>  4 files changed, 9 insertions(+), 31 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
+> index 854f0108d8e6..e4f1cea317f1 100644
 > --- a/tools/testing/selftests/resctrl/fill_buf.c
 > +++ b/tools/testing/selftests/resctrl/fill_buf.c
-> @@ -151,7 +151,7 @@ unsigned char *alloc_buffer(size_t buf_size, int memf=
-lush)
->  =09return buf;
+> @@ -88,18 +88,6 @@ static int fill_one_span_read(unsigned char *buf, size_t buf_size)
+>  	return sum;
 >  }
-> =20
-> -int run_fill_buf(size_t buf_size, int memflush, int op, bool once)
-> +int run_fill_buf(size_t buf_size, int memflush, int op)
+>  
+> -static void fill_one_span_write(unsigned char *buf, size_t buf_size)
+> -{
+> -	unsigned char *end_ptr = buf + buf_size;
+> -	unsigned char *p;
+> -
+> -	p = buf;
+> -	while (p < end_ptr) {
+> -		*p = '1';
+> -		p += (CL_SIZE / 2);
+> -	}
+> -}
+> -
+>  void fill_cache_read(unsigned char *buf, size_t buf_size, bool once)
 >  {
->  =09unsigned char *buf;
-> =20
-> @@ -160,9 +160,10 @@ int run_fill_buf(size_t buf_size, int memflush, int =
-op, bool once)
->  =09=09return -1;
-> =20
->  =09if (op =3D=3D 0)
-> -=09=09fill_cache_read(buf, buf_size, once);
-> +=09=09fill_cache_read(buf, buf_size, false);
->  =09else
-> -=09=09fill_cache_write(buf, buf_size, once);
-> +=09=09fill_cache_write(buf, buf_size, false);
-> +
->  =09free(buf);
-> =20
->  =09return 0;
-> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/se=
-lftests/resctrl/resctrl.h
-> index 2dda56084588..51f5f4b25e06 100644
+>  	int ret = 0;
+> @@ -114,15 +102,6 @@ void fill_cache_read(unsigned char *buf, size_t buf_size, bool once)
+>  	*value_sink = ret;
+>  }
+>  
+> -static void fill_cache_write(unsigned char *buf, size_t buf_size, bool once)
+> -{
+> -	while (1) {
+> -		fill_one_span_write(buf, buf_size);
+> -		if (once)
+> -			break;
+> -	}
+> -}
+> -
+>  unsigned char *alloc_buffer(size_t buf_size, int memflush)
+>  {
+>  	void *buf = NULL;
+> @@ -151,7 +130,7 @@ unsigned char *alloc_buffer(size_t buf_size, int memflush)
+>  	return buf;
+>  }
+>  
+> -int run_fill_buf(size_t buf_size, int memflush, int op)
+> +int run_fill_buf(size_t buf_size, int memflush)
+>  {
+>  	unsigned char *buf;
+>  
+> @@ -159,10 +138,7 @@ int run_fill_buf(size_t buf_size, int memflush, int op)
+>  	if (!buf)
+>  		return -1;
+>  
+> -	if (op == 0)
+> -		fill_cache_read(buf, buf_size, false);
+> -	else
+> -		fill_cache_write(buf, buf_size, false);
+> +	fill_cache_read(buf, buf_size, false);
+>  
+>  	free(buf);
+>  
+> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+> index 51f5f4b25e06..ba1ce1b35699 100644
 > --- a/tools/testing/selftests/resctrl/resctrl.h
 > +++ b/tools/testing/selftests/resctrl/resctrl.h
-> @@ -142,7 +142,7 @@ int perf_event_open(struct perf_event_attr *hw_event,=
- pid_t pid, int cpu,
+> @@ -142,7 +142,7 @@ int perf_event_open(struct perf_event_attr *hw_event, pid_t pid, int cpu,
 >  unsigned char *alloc_buffer(size_t buf_size, int memflush);
 >  void mem_flush(unsigned char *buf, size_t buf_size);
 >  void fill_cache_read(unsigned char *buf, size_t buf_size, bool once);
-> -int run_fill_buf(size_t buf_size, int memflush, int op, bool once);
-> +int run_fill_buf(size_t buf_size, int memflush, int op);
+> -int run_fill_buf(size_t buf_size, int memflush, int op);
+> +int run_fill_buf(size_t buf_size, int memflush);
 >  int initialize_mem_bw_imc(void);
 >  int measure_mem_bw(const struct user_params *uparams,
->  =09=09   struct resctrl_val_param *param, pid_t bm_pid,
-> diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/test=
-ing/selftests/resctrl/resctrl_tests.c
-> index ecbb7605a981..bee4123a5a9b 100644
+>  		   struct resctrl_val_param *param, pid_t bm_pid,
+> diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+> index bee4123a5a9b..60627dbae20a 100644
 > --- a/tools/testing/selftests/resctrl/resctrl_tests.c
 > +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-> @@ -266,7 +266,13 @@ int main(int argc, char **argv)
->  =09=09uparams.benchmark_cmd[1] =3D span_str;
->  =09=09uparams.benchmark_cmd[2] =3D "1";
->  =09=09uparams.benchmark_cmd[3] =3D "0";
-> -=09=09uparams.benchmark_cmd[4] =3D "false";
-> +=09=09/*
-> +=09=09 * Fourth parameter was previously used to indicate
-> +=09=09 * how long "fill_buf" should run for, with "false"
-> +=09=09 * ("fill_buf" will keep running until terminated)
-> +=09=09 * the only option that works.
-> +=09=09 */
-> +=09=09uparams.benchmark_cmd[4] =3D NULL;
->  =09=09uparams.benchmark_cmd[5] =3D NULL;
+> @@ -265,13 +265,16 @@ int main(int argc, char **argv)
+>  			ksft_exit_fail_msg("Out of memory!\n");
+>  		uparams.benchmark_cmd[1] = span_str;
+>  		uparams.benchmark_cmd[2] = "1";
+> -		uparams.benchmark_cmd[3] = "0";
+>  		/*
+> +		 * Third parameter was previously used for "operation"
+> +		 * (read/write) of which only (now default) "read"/"0"
+> +		 * works.
+>  		 * Fourth parameter was previously used to indicate
+>  		 * how long "fill_buf" should run for, with "false"
+>  		 * ("fill_buf" will keep running until terminated)
+>  		 * the only option that works.
+>  		 */
+> +		uparams.benchmark_cmd[3] = NULL;
+>  		uparams.benchmark_cmd[4] = NULL;
+>  		uparams.benchmark_cmd[5] = NULL;
 
-Why is the [5] assignment kept around? Is something depending on this=20
-double NULL termination? This patch removed the access to [4] so I=20
-don't see anything beyong [3] accessed explicitly.
+The same question as with the previous patch, why is [4] = NULL kept 
+around?
 
---=20
+-- 
  i.
 
->  =09}
-> =20
-> diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testin=
-g/selftests/resctrl/resctrl_val.c
-> index e88d5ca30517..5331354aaf64 100644
+>  	}
+> diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
+> index 5331354aaf64..8b5973c5e934 100644
 > --- a/tools/testing/selftests/resctrl/resctrl_val.c
 > +++ b/tools/testing/selftests/resctrl/resctrl_val.c
-> @@ -625,7 +625,6 @@ static void run_benchmark(int signum, siginfo_t *info=
-, void *ucontext)
->  =09int operation, ret, memflush;
->  =09char **benchmark_cmd;
->  =09size_t span;
-> -=09bool once;
->  =09FILE *fp;
-> =20
->  =09benchmark_cmd =3D info->si_ptr;
-> @@ -645,16 +644,8 @@ static void run_benchmark(int signum, siginfo_t *inf=
-o, void *ucontext)
->  =09=09span =3D strtoul(benchmark_cmd[1], NULL, 10);
->  =09=09memflush =3D  atoi(benchmark_cmd[2]);
->  =09=09operation =3D atoi(benchmark_cmd[3]);
-> -=09=09if (!strcmp(benchmark_cmd[4], "true")) {
-> -=09=09=09once =3D true;
-> -=09=09} else if (!strcmp(benchmark_cmd[4], "false")) {
-> -=09=09=09once =3D false;
-> -=09=09} else {
-> -=09=09=09ksft_print_msg("Invalid once parameter\n");
-> -=09=09=09parent_exit(ppid);
-> -=09=09}
-> =20
-> -=09=09if (run_fill_buf(span, memflush, operation, once))
-> +=09=09if (run_fill_buf(span, memflush, operation))
->  =09=09=09fprintf(stderr, "Error in running fill buffer\n");
->  =09} else {
->  =09=09/* Execute specified benchmark */
->=20
---8323328-2035177807-1727704179=:938--
+> @@ -622,8 +622,8 @@ int measure_mem_bw(const struct user_params *uparams,
+>   */
+>  static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
+>  {
+> -	int operation, ret, memflush;
+>  	char **benchmark_cmd;
+> +	int ret, memflush;
+>  	size_t span;
+>  	FILE *fp;
+>  
+> @@ -643,9 +643,8 @@ static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
+>  		/* Execute default fill_buf benchmark */
+>  		span = strtoul(benchmark_cmd[1], NULL, 10);
+>  		memflush =  atoi(benchmark_cmd[2]);
+> -		operation = atoi(benchmark_cmd[3]);
+>  
+> -		if (run_fill_buf(span, memflush, operation))
+> +		if (run_fill_buf(span, memflush))
+>  			fprintf(stderr, "Error in running fill buffer\n");
+>  	} else {
+>  		/* Execute specified benchmark */
+> 
+
 
