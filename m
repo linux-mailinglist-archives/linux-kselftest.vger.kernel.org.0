@@ -1,172 +1,172 @@
-Return-Path: <linux-kselftest+bounces-18676-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F58398ABA3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 20:07:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A8B498ABAD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 20:10:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52D1428348D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 18:07:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6C232819FF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 18:10:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5EAB197A98;
-	Mon, 30 Sep 2024 18:07:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46D431990BB;
+	Mon, 30 Sep 2024 18:10:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YGUXn12M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lYiS4Yb1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04CC5192D7F;
-	Mon, 30 Sep 2024 18:07:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18FA22B9A5;
+	Mon, 30 Sep 2024 18:10:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727719659; cv=none; b=INFIxfqttR4NZmJ4aH82gtbnNMDROpV+yzpYxcWaTB8ZcZ/fvSpQA57Wlh+CbV1lIc9e7Wc7/UulNgi8iwxY25aMSrDRAWLMEU80NRpvbs99IkbgdcuOGcym/H2A0+eNYK1F/oGsgU96kvD9REUQBYrHoi0I8TlTr0SNVFgwKvo=
+	t=1727719842; cv=none; b=BTkd6gpLB5r2CWQl1xvVAfLNJ4dQ5tkjP8VX99rrA2DLeV6FjxNfIvZyQKRBeMnbnZ2CQrwR3HRjkxSv+18BrdvkrXfFcLRydj4Gxn8vMsOdCUu7eo66PRkFGqyfIQABQhWrkfQPqBuIs9sKfazs6oQSGlOFHD4EukJgV6L/m/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727719659; c=relaxed/simple;
-	bh=/OQ1KrxkGaM4pmRJR4cp2j2Yxi9P63AE+31ryt6tBH4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Lc241VLZvKHvUUgaRJ+1mJd6WkdodsqYvG3wn2qoTA1dkR+YXhl/uChIuQMPNom9hRD1Ft2VPdzgA7/ST4Q6Zbl9LB/1vOKoQxbhTeIRjiit0X77xDyi9rnDiHoBKk4v2Vox9HtjsESLqPw+iqVZNK+zmM4wApqbkBU1xMQV0Xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YGUXn12M; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5c87c7d6ad4so4539176a12.3;
-        Mon, 30 Sep 2024 11:07:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727719654; x=1728324454; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KY0iwTLU6dMbnSBlFFGwESeicvDgtQgfBKe38KXMEGc=;
-        b=YGUXn12MKoY/2MveT676gci2o0QU0rXRR1R1OebPxjGpVvGpxr4wbO8vUvDFNVIzJ/
-         8F0L3Wp8kkdLv0d+2kO5GiSxgAbhhiDpBySQF2GOCVvFBBCqaqqww/bHoR9bon1RyASN
-         kG/fEyZs2h6rti2WTtdT6dGTbK6q6fo/wuvRthpa7ncbX0uWFjAJMcKmGYA6befWGupD
-         c0Bhs33u2Ydfon8b5+01157zH1gOZYPgRqGRCbSggbGewznZL77rR0BPsM1+mGjig82e
-         wv8F3Pr8gcgVfnSeBb1zwFkMOUzLB+Mn9gfTfF7Jqs9b6S17ZR7sCwXPliFm/u6/eLV+
-         m0hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727719654; x=1728324454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KY0iwTLU6dMbnSBlFFGwESeicvDgtQgfBKe38KXMEGc=;
-        b=JkitAKs+LgXq/K+QORhk8nsw84I/Ao9ltyqHRIWjxsRZ6Ve/JVDEp0HOOIfh8aiB0V
-         TQuG+IeeKNdiQ/TkroeUYVsO2XSY12ZlsgQaVDkDzuDzrEHloXZxkDmCFEgUOIS6FXnE
-         IL/LVxpND1qr5drNosyZfhiSzbfzB6+uT4iZ3d3zHgHKim752g2s3OCDzHUujAUS2Re5
-         XH6Tkl2hLltUS+XmzZOMW4yE2ELwDUmxPN6+XZcyShLv46Lkvdfma4gq13wYx6uUMj0B
-         v4Xj/mPq6yXTQOSZJFTjEybqO41vn7cKiO251H1iqGOqNOzsqnT6yzqfCjAsYMT62eEl
-         5rNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUP0GziB5T4dPsw9m5xFKSDnQk0ztw+Rq19LB9FnMo+e4reNqQ5781xWxWdEUMXCxAl2A5JNWyNJf3hxV2d2J4D@vger.kernel.org, AJvYcCUXsSYpKHsGN/IFFsKfekoma7rbx+purGnDqwlnv2NZ/6E3mRvrBILlcsWU0+zsSxxdDWXVhyBS@vger.kernel.org, AJvYcCWYXWWahiXV/fuQ+4TQMAmVphLc6KfAg2nnLrYe0VZwohwSfr5wr8ydNynLWO2t1j/9poXKKIe0jSuvveCt@vger.kernel.org
-X-Gm-Message-State: AOJu0YykH+k3hixp+GWXxV9CeGuuyaYAY1VEHGE1FTNarwRDjK7t81a0
-	Tu1CJ/6e5YMpUboQo5qrgugyssSkx/zpOKqcUEkC5avclkEWtO5mdzY1t3a8CwR9X963ZY/f11B
-	sMgF7XfT+tYRqWIxUx/Tx5JgLAJI=
-X-Google-Smtp-Source: AGHT+IFP6WDNQPZ9jjVjlI/4U88hFaj1AgY82DAJT5+4CxUr5/y7oYHvgbttXNKqqMeFnisx/Fdz1kFN0xEIbYzbO7Y=
-X-Received: by 2002:a05:6402:2713:b0:5c8:9ee6:379a with SMTP id
- 4fb4d7f45d1cf-5c89ee6397dmr1926054a12.30.1727719653955; Mon, 30 Sep 2024
- 11:07:33 -0700 (PDT)
+	s=arc-20240116; t=1727719842; c=relaxed/simple;
+	bh=p+4eAbKdm/M8VlSF2gSqSAFLMDWbjTItNCInUwxMqGw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Trcop4hdelnOfjx1lG20Hmvj0ZxVa6kUg7Wthcn40BcT/ycMo5CAcYAOfb/3OODjm2HEYQ8PeDcjqeZGU+sthubGDq0GYroe+Syh1sDJS2X2S37LHDpGdxNQsWdxCPWqcdgrZ5vNDGU2v7ZBoYvltG7gt9GwUhbNsxAcnP491wg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lYiS4Yb1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F19F9C4CEC7;
+	Mon, 30 Sep 2024 18:10:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727719841;
+	bh=p+4eAbKdm/M8VlSF2gSqSAFLMDWbjTItNCInUwxMqGw=;
+	h=From:Date:Subject:To:Cc:From;
+	b=lYiS4Yb1vCHuIAsCaQcTurAgVqrd3o1pN7jYZ5wSdF+fxhFopn8+QirlCd+aza+KS
+	 jn+y4x3yErrHJuxoRqj/mrHgdMPkhQghEUQ9rPCt8x9Tmxh0sbCRG5kIDr0kv+KBJ8
+	 p+M+SdKs8tdfelhfKKwXerdKIb3BGS2vKNiye0eIT0onJ4ONB7jPM7zkNL8NHeHKTb
+	 u/uljz3u9M4zj3OUdqFoxM/GqtM4TWTEB2Rz/DpbeoDfYTiMKIjXkmV3QIC1hOMDr8
+	 fbfLnEA5C0vQLkqMMG1C1+6r2xfhJNqjSMYBYZU01x9B0Sb0OfOVvcY06oV+32Lm7L
+	 f9Rg0BaIpkpLQ==
+From: Mark Brown <broonie@kernel.org>
+Date: Mon, 30 Sep 2024 19:10:33 +0100
+Subject: [PATCH] KVM: selftests: Fix build on architectures other than
+ x86_64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240923142006.3592304-1-joshua.hahnjy@gmail.com>
- <20240923142006.3592304-3-joshua.hahnjy@gmail.com> <xmayvi6p6brlx3whqcgv2wzniggrfdfqq7wnl3ojzme5kvfwpy@65ijmy7s2tye>
-In-Reply-To: <xmayvi6p6brlx3whqcgv2wzniggrfdfqq7wnl3ojzme5kvfwpy@65ijmy7s2tye>
-From: Joshua Hahn <joshua.hahnjy@gmail.com>
-Date: Mon, 30 Sep 2024 14:07:22 -0400
-Message-ID: <CAN+CAwO8XEAkoBDc03Zveaci9hASaFvk8ybQ2Mwoy_VacqgRfA@mail.gmail.com>
-Subject: Re: [PATCH v3 2/2] cgroup/rstat: Selftests for niced CPU statistics
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: tj@kernel.org, cgroups@vger.kernel.org, hannes@cmpxchg.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	lizefan.x@bytedance.com, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20240930-kvm-build-breakage-v1-1-866fad3cc164@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAJnp+mYC/x2MWwqAIBAArxL7nWBmz6tEH5ZrLfZCSQLp7kmfA
+ zMTwaMj9NBnERwG8nQeCYo8g3lVx4KMdGIQXEjelZzZsLPppk2zyaGyKhmqksLIWjet6SCFl0N
+ Dzz8dxvf9AN36tLNkAAAA
+To: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+ Yan Zhao <yan.y.zhao@intel.com>
+Cc: Aishwarya TCV <aishwarya.tcv@arm.com>, 
+ Linus Torvalds <torvalds@linux-foundation.org>, kvm@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.15-dev-99b12
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3597; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=p+4eAbKdm/M8VlSF2gSqSAFLMDWbjTItNCInUwxMqGw=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBm+umeiXL+eBh5K8EcsK4TkH6siaEAZW1gBwAN0rXH
+ 66pWKBmJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZvrpngAKCRAk1otyXVSH0NQCCA
+ CFHs6avAhs/x2OVh92gsETEmnBwAymAqp9QZlyOU/JWZmPGxk/vEPxmoMKdTs7oFjpZY3N5bRY2Okr
+ ALJcKqLzISnAt3XOKme7zK2ydzUL7oXLWMLDXmCP0AwDWOkT+xUYq2bl87NhRhxInzWYWoM1ovoyqs
+ Ms0L2FOG4AY3B/x6iiYKs9zkrUWdbHJAYUJ+/u5mp5MN/wHiZRgCbMa096xObhEvPa/AC96CoaKZ3g
+ zLzVkmjgHSFIj9z7JJqlhoQqHHU0clTKlc9jEgwhGFt/tDsBNnXe5UsEBSf2ZsRn5jXBgXKd6CsIdn
+ E4RSa6Hw6j0GVWwR74bYYKQsiRUlMA
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Thu, Sep 26, 2024 at 2:10=E2=80=AFPM Michal Koutn=C3=BD <mkoutny@suse.co=
-m> wrote:
->
-> On Mon, Sep 23, 2024 at 07:20:06AM GMT, Joshua Hahn <joshua.hahnjy@gmail.=
-com> wrote:
-> > +/*
-> > + * Creates a nice process that consumes CPU and checks that the elapse=
-d
-> > + * usertime in the cgroup is close to the expected time.
-> > + */
-> > +     user_usec =3D cg_read_key_long(cpucg, "cpu.stat", "user_usec");
-> > +     nice_usec =3D cg_read_key_long(cpucg, "cpu.stat", "nice_usec");
-> > +     if (user_usec !=3D 0 || nice_usec !=3D 0)
-> > +             goto cleanup;
->
-> Can you please distinguish a check between non-zero nice_usec and
-> non-existent nice_usec (KSFT_FAIL vs KSFT_SKIP)? So that the selftest is
-> usable on older kernels too.
+The recent addition of support for testing with the x86 specific quirk
+KVM_X86_QUIRK_SLOT_ZAP_ALL disabled in the generic memslot tests broke the
+build of the KVM selftests for all other architectures:
 
-Yes, this sounds good to me -- I will include it in a v4, which I am
-hoping to send out soon.
+In file included from include/kvm_util.h:8,
+                 from include/memstress.h:13,
+                 from memslot_modification_stress_test.c:21:
+memslot_modification_stress_test.c: In function ‘main’:
+memslot_modification_stress_test.c:176:38: error: ‘KVM_X86_QUIRK_SLOT_ZAP_ALL’ undeclared (first use in this function)
+  176 |                                      KVM_X86_QUIRK_SLOT_ZAP_ALL);
+      |                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~
 
-> > +
-> > +     /*
-> > +      * We fork here to create a new process that can be niced without
-> > +      * polluting the nice value of other selftests
-> > +      */
-> > +     pid =3D fork();
-> > +     if (pid < 0) {
-> > +             goto cleanup;
-> > +     } else if (pid =3D=3D 0) {
-> > +             struct cpu_hog_func_param param =3D {
-> > +                     .nprocs =3D 1,
-> > +                     .ts =3D {
-> > +                             .tv_sec =3D usage_seconds,
-> > +                             .tv_nsec =3D 0,
-> > +                     },
-> > +                     .clock_type =3D CPU_HOG_CLOCK_PROCESS,
-> > +             };
-> > +
-> > +             /* Try to keep niced CPU usage as constrained to hog_cpu =
-as possible */
-> > +             nice(1);
-> > +             cg_run(cpucg, hog_cpus_timed, (void *)&param);
->
-> Notice that cg_run() does fork itself internally.
-> So you can call hog_cpus_timed(cpucg, (void *)&param) directly, no
-> need for the fork with cg_run(). (Alternatively substitute fork in this
-> test with the fork in cg_run() but with extension of cpu_hog_func_params
-> with the nice value.)
->
-> Thanks,
-> Michal
+Add __x86_64__ guard defines to avoid building the relevant code on other
+architectures.
 
-Thank you for your feedback, Michal.
-The reason I used a fork in the testing is so that I could isolate the nice=
-d
-portion of the test to only the CPU hog. If I were to nice(1) --> cg_hog()
-in a single process without forking, this would mean that the cleanup porti=
-on
-of the test would also be run as a niced process, contributing to the stat =
-and
-potentially dirtying the value (which is tested for accuracy via
-`values_close`).
+Fixes: 61de4c34b51c ("KVM: selftests: Test memslot move in memslot_perf_test with quirk disabled")
+Fixes: 218f6415004a ("KVM: selftests: Allow slot modification stress test with quirk disabled")
+Reported-by: Aishwarya TCV <aishwarya.tcv@arm.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+This is obviously disruptive for testing of KVM changes on non-x86
+architectures.
+---
+ tools/testing/selftests/kvm/memslot_modification_stress_test.c | 2 ++
+ tools/testing/selftests/kvm/memslot_perf_test.c                | 6 ++++++
+ 2 files changed, 8 insertions(+)
 
-The other thing that I considered when writing this was that while it is
-possible to make a process nicer, it is impossible to make a process less
-nice. This would mean that the comparison & cleanup portions would also be
-run nicely if I do not call fork().
+diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+index e3343f0df9e1..c81a84990eab 100644
+--- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
++++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+@@ -169,12 +169,14 @@ int main(int argc, char *argv[])
+ 		case 'i':
+ 			p.nr_iterations = atoi_positive("Number of iterations", optarg);
+ 			break;
++#ifdef __x86_64__
+ 		case 'q':
+ 			p.disable_slot_zap_quirk = true;
+ 
+ 			TEST_REQUIRE(kvm_check_cap(KVM_CAP_DISABLE_QUIRKS2) &
+ 				     KVM_X86_QUIRK_SLOT_ZAP_ALL);
+ 			break;
++#endif
+ 		case 'h':
+ 		default:
+ 			help(argv[0]);
+diff --git a/tools/testing/selftests/kvm/memslot_perf_test.c b/tools/testing/selftests/kvm/memslot_perf_test.c
+index 893366982f77..989ffe0d047f 100644
+--- a/tools/testing/selftests/kvm/memslot_perf_test.c
++++ b/tools/testing/selftests/kvm/memslot_perf_test.c
+@@ -113,7 +113,9 @@ static_assert(ATOMIC_BOOL_LOCK_FREE == 2, "atomic bool is not lockless");
+ static sem_t vcpu_ready;
+ 
+ static bool map_unmap_verify;
++#ifdef __x86_64__
+ static bool disable_slot_zap_quirk;
++#endif
+ 
+ static bool verbose;
+ #define pr_info_v(...)				\
+@@ -579,8 +581,10 @@ static bool test_memslot_move_prepare(struct vm_data *data,
+ 	uint32_t guest_page_size = data->vm->page_size;
+ 	uint64_t movesrcgpa, movetestgpa;
+ 
++#ifdef __x86_64__
+ 	if (disable_slot_zap_quirk)
+ 		vm_enable_cap(data->vm, KVM_CAP_DISABLE_QUIRKS2, KVM_X86_QUIRK_SLOT_ZAP_ALL);
++#endif
+ 
+ 	movesrcgpa = vm_slot2gpa(data, data->nslots - 1);
+ 
+@@ -971,11 +975,13 @@ static bool parse_args(int argc, char *argv[],
+ 		case 'd':
+ 			map_unmap_verify = true;
+ 			break;
++#ifdef __x86_64__
+ 		case 'q':
+ 			disable_slot_zap_quirk = true;
+ 			TEST_REQUIRE(kvm_check_cap(KVM_CAP_DISABLE_QUIRKS2) &
+ 				     KVM_X86_QUIRK_SLOT_ZAP_ALL);
+ 			break;
++#endif
+ 		case 's':
+ 			targs->nslots = atoi_paranoid(optarg);
+ 			if (targs->nslots <= 1 && targs->nslots != -1) {
 
-What do you think? Do you think that this increase in granularity /
-accuracy is worth the increase in code complexity? I do agree that it
-would be much easier to read if there was no fork.
+---
+base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
+change-id: 20240930-kvm-build-breakage-a542f46d78f9
 
-Alternatively, I can add a new parameter to cpu_hog_func_param that
-takes in a nice value. For this however, I am afraid of changing the
-function signature of existing utility functions, since it would mean
-breaking support for older functions or others currently working on this.
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
-Thank you for your detailed feedback again -- I will also change up the
-diffstat and indentation issues you brought up from the first part of the p=
-atch.
-
-Joshua
 
