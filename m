@@ -1,172 +1,123 @@
-Return-Path: <linux-kselftest+bounces-18680-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18681-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3909198AC0B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 20:25:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83C4698AC59
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 20:47:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED5A1283285
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 18:25:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2E7BC28178E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 18:47:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A2FF19308C;
-	Mon, 30 Sep 2024 18:25:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FCD119047C;
+	Mon, 30 Sep 2024 18:47:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="pBxPDX5B"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AzpE/FBd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2AFE2B9A5
-	for <linux-kselftest@vger.kernel.org>; Mon, 30 Sep 2024 18:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06C491991A4;
+	Mon, 30 Sep 2024 18:47:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727720729; cv=none; b=FijY5xYNFQvdbvS99Ei0Sl7sFEhSqfJ3LiFpjh4pLtfFi8GemuL9GhhquHb9X93pPUhJ800Qu6tA34vv2SVxo40xcw+YmYOn1KYnm/JPFdJarmg6onSZDyODBzNfW12W6FHITBGUebB7gtG6JKMqTRcV/d0lKJXdSOXkJDsrbZ8=
+	t=1727722041; cv=none; b=d7xvN+bCEtyf5Cf+PFXX31Slhs2P4xChJcB0e85XyQy6TydpTN0/7gfi+aQpRF2qmFigY3HR8lDY4VduUJIMI9hGlumDJ2mit0k98k7b3vxggHMERzR3kuDRxNvaNNXZ+xmZI2sE1g8qYPKp1ihrxd/YfEUDa67CCKpFAyFXyvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727720729; c=relaxed/simple;
-	bh=lAPYo4phA8n78e5EYRHFp/PhJ6PyBrnB1w7qXwJXapw=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=U2nCgHwD0QZRk7+J3+SgID6ja3nLwiToQN9GuWlYXnibfNawNIZIAM6WFwdxHAYS/WMKKW52zEMefx6MqWhFBYzSwSxipVDLgI3HGlws0B0QT3UOxMc/hWDbOZx+mJhWxT4L7XS101ZiR5tx6RQh3iZ9ZDVHhjorO4+3PGHt53k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=pBxPDX5B; arc=none smtp.client-ip=209.85.166.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-3a0cdd77dbeso16447405ab.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Sep 2024 11:25:27 -0700 (PDT)
+	s=arc-20240116; t=1727722041; c=relaxed/simple;
+	bh=wlKR5YJKB1mmVV3+WAkqqj7X5XgFZixGlMgFKAXGVmc=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=nnqMY2uLNMHDSFKAJ51H0LJI/qlUSe1NLMjpsxXgxcszsiP6GprjwBksOkmQD0tqQzlh6yy9u2cAlYvlB5HfKuNY06LtuDrD6vVJmD143GsEBJCG9owvmCa+4qAzXES9Lz1r6HTngew7gZwYuiwuKZnn+ugj4PR2XDztyQCKu34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AzpE/FBd; arc=none smtp.client-ip=209.85.219.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e25d15846baso4028748276.3;
+        Mon, 30 Sep 2024 11:47:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1727720727; x=1728325527; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=x8MU0D47RTUGAw7/c2lj9vd5eyt0Ge45pDa1v1gKz5o=;
-        b=pBxPDX5BTQleNOMlbNna90Mc/YzFVykOoBGO2KDyi7n1C0Pw6bIgfX0Huyw383BlBB
-         3Ja5FZr1gp4fs5op2jDHrxxXfcxJlZGuCaPloQLI5acgI8X8eCSv8CeQo6Te1PFTt819
-         pxynFtw7Gc2DNjWYSHihEf/7E1uFfDq/xC89y5NoO6edooLi5iYvVrZI0xY7wrXDgMhz
-         66UksxrQWEq92ohJl0UicpE7IsPQUYKoncHv/RRYU+NsTor89g3vcL5/hWpIYh32mvQU
-         p3dBOHqpopE0hUSAH7tkELjsn/iEboWiy9xDbeF4sClc5bZMMECPcElHZI3IbBOfIU8S
-         8mng==
+        d=gmail.com; s=20230601; t=1727722039; x=1728326839; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J9KMPP1jbyyxtbkcgcPK1qa0G10Iw9wXQN8QIpti5/w=;
+        b=AzpE/FBdmvwqeFfSMy9IFlGrjD7dbuHrJNtptwrpk0yhq/JfaqCFJ7nKDnxDY0JP62
+         Oyb+SBnnw2047oe6z/Ue0aPpRUvrJ4Nz8DedkjF/tW8ciZ2/6uVtcbQdCIwYgwxuzlAT
+         nyLZ0exLdJfIq8skTXhBf0/qnpEmCQhhY6H1Uu/tYNhWkieIrdSpp5dbuR0HqFf0Q3Gq
+         aTRwjJh6TAQjwlt8Y+WCacX8QWn3uk+iKx+xmvFgoiRwwEgpjcZwDLpXfAYq/Jhr5Xnd
+         OMTDZeEko8vI+kx7Y7PqHgaU+txO3mGCycsUaCKFSZF0ZQoCs5CNNXvg0cobwbtF4C8f
+         iyvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727720727; x=1728325527;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=x8MU0D47RTUGAw7/c2lj9vd5eyt0Ge45pDa1v1gKz5o=;
-        b=jDFJm5mHp3dj50wK2AvaVxd8AWZoG9XDZQkDpd+LSoxniadkQhKbS4RSuNRw1T1Jl0
-         NodBp97U4ihbG0OQMlgOGpIaKnxnilmGgjvXnS8UvYs5LoUNvUX8FZXpbWapMUyqTvWb
-         Tf9bBA9gCzqcJ7GdyGNac/pbLKYnHyLWs+y+4FBNsk8vfcLBTb05ecmlq7ao7LPUlgFA
-         si5SJRPpvo7E8ceNYHsAjRQ7q13DzOStcx5mAqVdGlQ8xWOeIFvNbxDU4oTbU8M6+Oh6
-         F1FRs29tbXu/sbQURTXqDvMHfwOuTXAn241HT9ml28Tv+8QGy/xqejJPOIxL4AkIZ8If
-         Avaw==
-X-Forwarded-Encrypted: i=1; AJvYcCUIiB4jOgd2MaAY2Op8pgronF2d6qOH+g4H2jDs8dmkXMl7UeepbJ7Wk+PWaLgNmR4dVPGAFEbLKTKDC4IkkYw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzLJAL2pOKhiENyH3q4mmxQmzvkLyVglZUvz2DcrhOGc5hcNVGp
-	2I5NP3sIYU0nkP0CwaHfgvXEeSid4PdACvORYLAbIwf/tFK9Zr8ZTEwPl1q4v3k=
-X-Google-Smtp-Source: AGHT+IEtKnVIiiVu0H/JkosOHBbveOanEpKPzpstVpRePpUJVU8l7CSxCtLLbnwCzsXgSyQ7vOrM3w==
-X-Received: by 2002:a05:6e02:190a:b0:3a0:9829:100b with SMTP id e9e14a558f8ab-3a3451be445mr100415195ab.21.1727720726822;
-        Mon, 30 Sep 2024 11:25:26 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7e6db5ed118sm6944451a12.71.2024.09.30.11.25.26
+        d=1e100.net; s=20230601; t=1727722039; x=1728326839;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=J9KMPP1jbyyxtbkcgcPK1qa0G10Iw9wXQN8QIpti5/w=;
+        b=MT0FATLN/+HDLmgqG0M3r0ny0YNX0bjuFYk3RZGIC67BsNOcSYmyqjEkOC2v8ygqpL
+         VWfFRGOZgLxOi6VWQp0/KJuF/DXjw4NufF/V5cs6ch0CnGgFPC2GuLrgvJWG+rcsAAgR
+         XfAm5nfXvOtnnMCoNvkWroZcVB442E7555VTSDAwOZ1uZ87mI30YG7mUOndYf9YrrmGH
+         OeWvERJUQt2xT91P5VyB7z62etkUMQwiOe+ph8AOCuzZhorI97l/CRh96rSDleQ2zuu4
+         NCK8FKfCQO5caBjO7jltg8WjRemkClSd6jMs3u/BQMUWf9LLNOdxS3Q/0S77xUg7/uVf
+         HaEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUCZbKvFlB8TiMe/dZcILuCgTPYpIk1lQbLeDqK6jvWWtvnQ/7wCjm7YmzF3XI1g2RPYDDuttqXL/A9kSM=@vger.kernel.org, AJvYcCUMJJFjwjtq+ODWOV70gyJVrOO8I4xaH7mb/uiNf2rBaOftMPkqamGQMrKh4lsrirh0W5Ocb7ijDIY6Q0yLMyIM@vger.kernel.org, AJvYcCW5s2AVST0d84qQHF5fnHTGWbinxWZx+PmfKLWA0HLRbPgC45i5oQ96Xaa6w33UT2BRnK27Bm2Y@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSaOYsima80fouOTunccWkmDaqVjkxXBjQkHfTdE3QegnPomvP
+	xeM/1ZEe6lej8G1XRm5qM6P1oXHwewcf2uv1AJDPu379NL85YHKp
+X-Google-Smtp-Source: AGHT+IHL1BKLenw0daNrXqmMBT6YtFG5iCpdSCAsluFTxb9w7Gu9kxwH/P1PDrObdQkb6/fTphuFKg==
+X-Received: by 2002:a05:6902:2b03:b0:e22:515e:7e7d with SMTP id 3f1490d57ef6-e2604c7b782mr10782836276.35.1727722038983;
+        Mon, 30 Sep 2024 11:47:18 -0700 (PDT)
+Received: from localhost (23.67.48.34.bc.googleusercontent.com. [34.48.67.23])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cb3b5ff1basm42375786d6.12.2024.09.30.11.47.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2024 11:25:26 -0700 (PDT)
-Message-ID: <66faed16.630a0220.2d0b7e.b1f3@mx.google.com>
-Date: Mon, 30 Sep 2024 11:25:26 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 30 Sep 2024 11:47:18 -0700 (PDT)
+Date: Mon, 30 Sep 2024 14:47:18 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Sean Anderson <sean.anderson@linux.dev>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ "David S . Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ netdev@vger.kernel.org
+Cc: Willem de Bruijn <willemb@google.com>, 
+ Shuah Khan <shuah@kernel.org>, 
+ linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+Message-ID: <66faf2363787a_18c93d294fe@willemb.c.googlers.com.notmuch>
+In-Reply-To: <83297afc-f2fa-4fb6-be0f-f73905f726ef@linux.dev>
+References: <20240930162935.980712-1-sean.anderson@linux.dev>
+ <66fadcd4b8f08_18740029417@willemb.c.googlers.com.notmuch>
+ <83297afc-f2fa-4fb6-be0f-f73905f726ef@linux.dev>
+Subject: Re: [PATCH net-next] selftests: net: csum: Clean up
+ recv_verify_packet_ipv6
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.12-rc1
-X-Kernelci-Branch: fixes
-X-Kernelci-Tree: kselftest
-Subject: kselftest/fixes build: 7 builds: 2 failed, 5 passed,
- 1 warning (v6.12-rc1)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-kselftest/fixes build: 7 builds: 2 failed, 5 passed, 1 warning (v6.12-rc1)
+Sean Anderson wrote:
+> On 9/30/24 13:16, Willem de Bruijn wrote:
+> > Sean Anderson wrote:
+> >> Rename ip_len to payload_len since the length in this case refers only
+> >> to the payload, and not the entire IP packet like for IPv4. While we're
+> >> at it, just use the variable directly when calling
+> >> recv_verify_packet_udp/tcp.
+> >> 
+> >> Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
+> > 
+> > Not sure such refactoring patches are worth the effort.
+> 
+> Well, FWIW you commented on this in your review, so I figured I'd send it.
+> 
+> https://lore.kernel.org/all/66dbb4fcbf560_2af86229423@willemb.c.googlers.com.notmuch/
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
-l/v6.12-rc1/
+True. I meant if respun.
 
-Tree: kselftest
-Branch: fixes
-Git Describe: v6.12-rc1
-Git Commit: 9852d85ec9d492ebef56dc5f229416c925758edc
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
+Whether such changes are worth it as standalone patch is subjective.
+And I get where you're coming from, given that thread.
 
-Build Failures Detected:
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 
-arm64:
-    defconfig+kselftest+arm64-chromebook: (clang-16) FAIL
-    defconfig+kselftest+arm64-chromebook: (gcc-12) FAIL
-
-Warnings Detected:
-
-arm64:
-
-arm:
-
-i386:
-
-x86_64:
-    x86_64_defconfig+kselftest (clang-16): 1 warning
-
-
-Warnings summary:
-
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
- !ENDBR: .text+0x14fd19
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-12) =E2=80=94 FAIL, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, clang-16) =E2=80=94 FAIL, 0 er=
-rors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
-arning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
-BR: .text+0x14fd19
-
----
-For more info write to <info@kernelci.org>
 
