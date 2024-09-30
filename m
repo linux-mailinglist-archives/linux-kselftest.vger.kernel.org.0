@@ -1,277 +1,257 @@
-Return-Path: <linux-kselftest+bounces-18700-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18701-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D663098B0B2
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 01:18:48 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E610F98B13B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 01:55:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F8E828227F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 23:18:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15ABB1C20EF2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 23:55:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B12E7188A1A;
-	Mon, 30 Sep 2024 23:18:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C454B185B54;
+	Mon, 30 Sep 2024 23:55:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j9aMnG/H"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XlgJr/HZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32FF187322;
-	Mon, 30 Sep 2024 23:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727738324; cv=fail; b=mnPneM02n+weHreAknq2GTd75BWyFd8TawzETTKLd82gzPgTGvReE5n635/MGQs9tq30jqHicXbxqk76SVozzZdHlksClGvgNp3emZiQlodtsQSkrFqe0U0xrghx1uVc8yMD/duAA5n+iuWlkSPXB1l540EUhsvEwBPDEbSixNU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727738324; c=relaxed/simple;
-	bh=sMSTCptB0hcv6LocGKDNLEecG/BZwsi/qQlLeBmqde8=;
-	h=Message-ID:Date:Subject:To:References:CC:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=SwUlIA+xoB8Xyij6QPRdv8wZVUbQ0B/6Sd0ZbMomnW2ny12hhKCVQ4V4ZQu21SYe6MFVKUXkVqaPSDFh0JfWyS5k0pnBi713tqZuzPCbtpm13H7TJgybhhQ2fGAutO0uoVvbSPbGDOXp+HIR13UCOf72oEtyZhsixMsiAbtC6Eo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j9aMnG/H; arc=fail smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1727738323; x=1759274323;
-  h=message-id:date:subject:to:references:cc:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=sMSTCptB0hcv6LocGKDNLEecG/BZwsi/qQlLeBmqde8=;
-  b=j9aMnG/HATV94efK3NJLiqX4Ax3nQZQsyVciweFvFKqWTQ8HY2BVYhPn
-   ASBzd3Qkx69ywcj2fCqkqR6OMA+uRgHluBiJK0bdTpqvoVjoR7jLyVOTS
-   ekggmOM/RvVWA8FU8kThA8BPswm/qfjczH8IRJzKN6GwG52gWurzIRySA
-   dq2QoV8CYIL2JrZUxdwfrs2oX7crsS9BUNyaLB2plel0aiXLF6G82TCw2
-   AN0g0L6oP1BQ7NcZPNCIhVAG11J5cHICtGNEd3kJITyNMKcHVqmkGor15
-   +13wm5KgWTElZoS0fNc3G5UOYE7nZmZJvXHBXkPXmDlb/AGiyn1jm9rHu
-   Q==;
-X-CSE-ConnectionGUID: N+AbAlR2S/GM5AWkIIIERQ==
-X-CSE-MsgGUID: WSMtOEKSQK2L4HbsTH77bA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11211"; a="26309974"
-X-IronPort-AV: E=Sophos;i="6.11,166,1725346800"; 
-   d="scan'208";a="26309974"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Sep 2024 16:18:42 -0700
-X-CSE-ConnectionGUID: rvEKRqLwRNC8whgCAYb/Yg==
-X-CSE-MsgGUID: RAByxd3jRGScPxebRXcTVg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,166,1725346800"; 
-   d="scan'208";a="73507601"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orviesa009.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 30 Sep 2024 16:18:42 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Mon, 30 Sep 2024 16:18:41 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Mon, 30 Sep 2024 16:18:41 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Mon, 30 Sep 2024 16:18:40 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=G02MNwx6kFxTKM8zzrOWbzq1thvSq6/bl10MrWBzaW/rfbnjaJs58GK9WeW7/xomqrNG76tp9q5Fow+dWOtPDUUXX1TNvjMdy45AMIMMdEtGeNFdTAJB0OdbAUPGzHCzkg0vAkywsDbXXa+ioDRUZSxHgiV2Auc1BJMgoNrbBH1yhgBwow+LzPUYj41NcxsjnE8yhEtr4VaF6aOlB6KEPbPrbowcMFS4UabUpXsUq2+ooJU/MuWxTN98s8R4H71nc0BqfA4HaroHJgy94sKop+ZhlSQ0PDH/LSPUDRYkPq49z+DQ/Pio9OrHMX9Qczu4uWKghMgEzqVUhjZvsEoqyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=l3jpSQATPKjbQktD7hb+zWyFP7bVA66C9qg9b3oXrZA=;
- b=EuqzAv/Yy17YWWvH4rZ/RH0WyX0q5fMO6L5ZthGsiA9Q6t/rdGFBoit6509MgSNk5Ki9pmlCM/qWM5xC9q+wZKZpa76QW8sn/LmAIpVHv31SJxJgNSU1nc5h4ph/m4ztJXsS7QYqBbZu7JBIn2A1JWMJcXlOxHLEx51wyRV/XdloV37z/eSNQG/YtI+oFEfevpLz9intdNPWC95qgpmcA0mmoSLqjTmQsEazQRJ5fBKyjvXGOb8SCkNu7DpQAL65nuffyGmqhkcOq1fFKk5CdceLZsyYAbo01O0rEF+MrXotn7UpKTORRROOXQJNCHrlUA+Od97pj/5cJpAeppqrnA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CO1PR11MB5089.namprd11.prod.outlook.com (2603:10b6:303:9b::16)
- by DS0PR11MB7189.namprd11.prod.outlook.com (2603:10b6:8:137::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8005.26; Mon, 30 Sep
- 2024 23:18:33 +0000
-Received: from CO1PR11MB5089.namprd11.prod.outlook.com
- ([fe80::7de8:e1b1:a3b:b8a8]) by CO1PR11MB5089.namprd11.prod.outlook.com
- ([fe80::7de8:e1b1:a3b:b8a8%4]) with mapi id 15.20.8005.026; Mon, 30 Sep 2024
- 23:18:33 +0000
-Message-ID: <dd9b940d-c5a6-46aa-ab00-73cbb3cab635@intel.com>
-Date: Mon, 30 Sep 2024 16:18:31 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Revert "list: test: fix tests for list_cut_position()"
-To: Guenter Roeck <linux@roeck-us.net>
-References: <20240922150507.553814-1-linux@roeck-us.net>
-Content-Language: en-US
-CC: <akpm@linux-foundation.org>, <davidgow@google.com>,
-	<kunit-dev@googlegroups.com>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <richard120310@gmail.com>
-From: Jacob Keller <jacob.e.keller@intel.com>
-In-Reply-To: <20240922150507.553814-1-linux@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0021.namprd13.prod.outlook.com
- (2603:10b6:a03:2c0::26) To CO1PR11MB5089.namprd11.prod.outlook.com
- (2603:10b6:303:9b::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E1B2C1B4;
+	Mon, 30 Sep 2024 23:55:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727740534; cv=none; b=YXVOa7KHYyKL6fgoB3/TH8nCunSha/ECe+7wmxtFyI7wEheAJe0yNj78Ew+Yxp0Evdr/r1edx1CHyWK4Dzg1D4wXFSlHvwJOPPzwZl1wznZsZXjYzG3NWJ+TPYD46g9LuedK8Z2guAvYowyDoEQMVeML8fFpARZ/mKuUN5rvwe8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727740534; c=relaxed/simple;
+	bh=AEbxpuoDyQlKNjMTsjmrecQmtX0KN6+QkKgFaWUu9ug=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=KAmYsEr7Lk7e9QWHaZeKiDwFcBXA+SBWJxIx7V2lL9LF4kBa/NAYcgAFHEUeNedP39WeSLQOwibIqW7ke16uflj58WcPVoy7KT8w7UNwi7SDQJkcNVOlaGzNJHo0bO+XqmWuwAnHlMXM8e+M7TuZFmeytoukRHpnMJtdtYMJAbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XlgJr/HZ; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-20b9b35c7c3so11959225ad.3;
+        Mon, 30 Sep 2024 16:55:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727740530; x=1728345330; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=xyLe7HDF8tj4qcFQQx2PY14u20UHG0zSU8IZccyeBT8=;
+        b=XlgJr/HZRqYmGDRLadwb6weE9bCgGwhLjZH07R03xfNR2xPyPBgZfeiUPDemjlOujF
+         2+43KyFB9oQvmw9byuVt8bo0mNQryQrbZ4Hz3NGSH0F66uhVXJoXw+M5CJ+t6t9i3ONd
+         I8oLnr06c7YQXNuAXaE20rRyxT+sgL53FHxDAIUK11rjOmEXY1VO5In3L7etOmKj308k
+         hAnLhtRx6rM46hIh9fmTJovZASOJl4l8ronI96+Q3CARWGcnTweXA2V2n8AEuzSDbVX/
+         tsFPNEBFDTNIRCZMt+ksLkXefXW1Je7LWfeF5yPQNV1kaCbmzr9t+ROOzL/flM38qksf
+         j92A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727740530; x=1728345330;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :references:cc:to:from:subject:user-agent:mime-version:date
+         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xyLe7HDF8tj4qcFQQx2PY14u20UHG0zSU8IZccyeBT8=;
+        b=drtFW3+AFerwvTVKM3txb5YOkQ9AOGOSR/q6dKmem/Xrg8u+12HPjrU4gr2dBKBerb
+         TqFbOwIWpE1Mc1AyiE1A37WPKEHpG916Q54Li450ZMCU9PAMq9Az0rx5+tAbGIPK7QID
+         oPqEOAc97hzMmQPpZiuFHLASrL5k+YCYHWKnX4K8L9YOZhMemHwKu/VoewwyScyMBje2
+         8zqUXMB5bX3RVkM88/bow7B+5HfOjtgYnl95i9Lhjqt/G9A3c/IMsORhRaPWiemBN0eK
+         KCYiHEQoQtfpMTrHHk7VbWKNyHqcf/jozoE2Bu2KqeAEDKvUwLqrRdLXpLdJvToK70hS
+         uiWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU+n/sbIHcFr6g8TBOzJVKazlbXWucs8lKOkXukdz3IJcvx0kPpSVQVmlHP6RBdJBS4UAiSzzt8laiyXu0t2NTq@vger.kernel.org, AJvYcCVQE0cTDr9ARMlhOPR/3GBL87R6mcuCVrK16TFH4j3Utv2pwPuwawOhc5Hd0fgmeIClK9+MbRucNTNcknE=@vger.kernel.org, AJvYcCVhPh/ApI2z+JxJgZYECaTfyWt4hkM46jUVCUWFFIJdUAZr5ENL/obrSeHsPCKzGOqcvHAR@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRlvOuiewTFvtoeBO2uEVIunK5lGiOBn9/eHk7s2T07TjD8xGu
+	gyntp0OHjvo5abupmo28EYPtnaJocmc2EIfEC+Ulu9f5zF7wRuGM
+X-Google-Smtp-Source: AGHT+IEGhEU8tP0wb7U0q3ZKlCr4VTXuzkkroyrbA3DKB/mesUbUOP8lXp3q8MaWyex1kvOHGuP70g==
+X-Received: by 2002:a17:902:dac5:b0:20b:4ea4:dd0b with SMTP id d9443c01a7336-20b4ea4dfd1mr195583595ad.4.1727740529935;
+        Mon, 30 Sep 2024 16:55:29 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b640fcd15sm37491495ad.284.2024.09.30.16.55.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Sep 2024 16:55:28 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ee52f8af-ef1a-4382-ab9a-f9781157d1be@roeck-us.net>
+Date: Mon, 30 Sep 2024 16:55:26 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PR11MB5089:EE_|DS0PR11MB7189:EE_
-X-MS-Office365-Filtering-Correlation-Id: 026b8f66-0db2-4539-84b5-08dce1a6341e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?b1VyUjFDWEZCdGNvUHZDYmIvamNVcVoxeE5GMzVoN1dPZ3pvMEMwbDNPaGNt?=
- =?utf-8?B?UnNHUUZLaldxa1d4a09xTVlrM0tuclpyd3dyNGZVQVFRbGZHL0tzam5JM0R3?=
- =?utf-8?B?a0FrSjFmU2hpdTBJYWV0aS9FY3o1Y05sdlVFWDZoTmh1bFh5MTlXNFNPcStj?=
- =?utf-8?B?aHl4azJjRWhkc21YVHpIcVFJNjZ1ZEViSEtDK0RMdXJvMUhvZ0p2QitwRTBj?=
- =?utf-8?B?amRhd2ZCUzU4cVRRR0JuQjU0TW93SHgvRE1LKzNsSXNvVFZ3MVp5cmx2a0hW?=
- =?utf-8?B?NVhPVnZqS3hJRlJKOU14WkNtNHNzdlE4bTU1S2wzcUtUVUZ2Wm5HUExMbXJ3?=
- =?utf-8?B?L1dJT1N5TGt0OXNWc0V1Vk4yVlVYWUZMa3ZIaFczZjNYMXVxdVg5MEVzQzNx?=
- =?utf-8?B?WjZldE1HbVZWZzVOUytYV0J5QWRWT0dUSUszUUhNbXlXQ290eHVjKzNGam5x?=
- =?utf-8?B?cFAxWjBPTE8wQytJQXVmQzNqWUlzYUtsbkxDWHRDSWpQWm9jMlpSS214bXY1?=
- =?utf-8?B?ek82bjRCcnNKbWNocmkxL25tMnBSSzVMeEQ2STZTRzB2eWhub0lZVVBwUGZS?=
- =?utf-8?B?TjRBdmR1Tm5wNUhLWVdKK0hXZEI2ZEVTWGQ3N2gyVFJMUWxuRTRjS2dlblNT?=
- =?utf-8?B?bUZ3MzZJbGJwSmZwbWs4ZXQ3L2JKcHZlMlVKd2tVR1l5dTNmWkhLVWJUcmE2?=
- =?utf-8?B?Y3YyYUcxWFgxc0JpcHBIRDcyRFBraDZJcHRuRGFyWEo2NW5CRmwxYk9ZUjlI?=
- =?utf-8?B?dkQ3TGlwTVpNZXVsa2cwTmQ4THhwRHkwZjJ6RFQ2QmxEWndYb3B3T3JQSjZF?=
- =?utf-8?B?MmJMdTlnK2ZzdzA2ZE5YRjl3WjVWQUFOZ0lqRTMxb2hoWkphb0FxanFCTUti?=
- =?utf-8?B?VyswWXdWSGlnMW5FaWFzTnFMQkhFamVLT2szdE9ybTBvb1hoSjVNOTBlV0ww?=
- =?utf-8?B?dnorRmlHRmcrVWFGeG1yNnkwWldrSFUvUENnTFYrQ0QxYlFOQWUrL3o5YmI3?=
- =?utf-8?B?TWtxT3FkQ3BjdjB6Y2ZkTXlPWXAzN3FySWI1bHpJYXF3LzNGR24zaUdXZ0Ez?=
- =?utf-8?B?dDVPU21QdmVXTnpHb2lxVUdkbmJrbXE0Y1FFV2RieVhYQUh0aVUwWHJKRVRp?=
- =?utf-8?B?WTJLNnIwVzk1UUVTRkE5aDdTalFJVG5RQkZCMTRuVkJxdWNYVHRxRmJ2Snc3?=
- =?utf-8?B?TFpYUVZTSHVtbjBLOXNJL0Z0ZDVnVUg3REZtd0JjWkNMSVlMWEpaT3hxKzJ2?=
- =?utf-8?B?TTZQR2U5dE9mT3o1L0duZGhMTGg2Q2c3NFdqYnNVSXh2ZUw3Nmp5ZmRvNkpC?=
- =?utf-8?B?Z0xRVU9sT1U3ZDA0OGdTYkI2WGpZUW5XVjBpQk5XMVRER2dhWWdpSkdFTGpG?=
- =?utf-8?B?Zm10NkdudWUzWk1EZ1VCK1Fabi9VcXByTHVLWkg2bWE3TU5zR3NzZ05JQ29D?=
- =?utf-8?B?d3pieTRTcktvWEdpRWJhMC90SmdieDZ5eFc2RXFWMXU3cWNwMVJHa2xrOTA5?=
- =?utf-8?B?L28zVU85RHNkZkRVN3lWYmZXZ20wcXBLc2pqM0xnYVF2d1RoQXpSc2RRN1Nx?=
- =?utf-8?B?NXZQdUFJcEFSVFdUd3RUZkFBSmlYR004RCs3ZmQrSUJudnpXT09nZTJtSnBa?=
- =?utf-8?B?VG1JejQ1OHVDbSs5UEhoRlBacS8vWlpDK21mRzZrZ1o4WisrZUs0SnZHSjRT?=
- =?utf-8?B?VXJlL2tJRXQwV0xGTGppa0VYUXpjQjBmZkUwSllpMDRlTE9seXdlY29nPT0=?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5089.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NzRxUXFRQWFvbnVFQlRnQ2FYdXRtd1ZQWWxvT2dTaXJuWThJUkR5a01XRG5w?=
- =?utf-8?B?QytZbXcyaTVtcWhBdEF3cHlKdG5YeWVZR2M4U0gxdTBrTmpSbTMvbW85VDRC?=
- =?utf-8?B?SzBZWnkvYisrVHMvUHh3TUhNdTRFdmhjeHdob1M3UFpsdFFUdWtpU1A5REhm?=
- =?utf-8?B?KytqNm01YmtzQkExcVFzWFNHWm00ZEJoOUhNVTZseFZhUjdhV2tjZUJuT2Rn?=
- =?utf-8?B?VE1FbkNSK3VpQWtFdG1majNLZG9MdWhSNEZCNmtPZFJEMVZhKzcxcnlNdWxr?=
- =?utf-8?B?VWpzSXJaM3U2RGdwTGMxSE9ZaXlaRzVBMG1KYjB1VEVpNkdLQzdOZXFvRDNN?=
- =?utf-8?B?M2xlYUltVjFJc2l6NUs1VDd5QkRLc0lYRVVaakh2QWJFb0xPeWRDenVaMWh4?=
- =?utf-8?B?TDJBUk1pR1BZWEtEZlpUbEw0S3gvdVdQb1VRTEwyL0F1NGtrdUp2S3pRY0xY?=
- =?utf-8?B?Wk1YLzJ4cnhJZnYzVXZCN1ZTaEk4d1BteWVQMEJtZ1ZhMHhYUWZ0d1RzVDRB?=
- =?utf-8?B?UmV2aURUQy9hdTVHZ2w3L1JHbnZtWmFCWS90OUVnMUQyZFIxblAwRHJhUUsx?=
- =?utf-8?B?T2JFazIwM3UyRWdtS1FjUlhYNkFPTm9UZWxvdjJtZGdQZ1pWQzlPcWtTMmhH?=
- =?utf-8?B?QS8zVFJsR3EwTWR3K085RjRpdnpKTFZodmU4ejZ4Z0NZdlRlbXFmakhaUFg5?=
- =?utf-8?B?TlkzVEtqWnd2MitFM0ozVUxwY1ZrN3JuZE85MXVPQXZjdnZwR0lORDJBSzZ4?=
- =?utf-8?B?Vnh5SlB1anhMaDd2QmpDU3VJUnZFaDhUQ2NmYUREZUZPcTdGenZBbEMxS3ZX?=
- =?utf-8?B?RnJyY2hEWHkrUk1hSVhLNkQzeFBzd3QrWTRxRjExWU5Gek1RNGZITVFnaGNM?=
- =?utf-8?B?S2JIR0IwUkJEa0F0cGtYRUZhR2psY0VWckFzMkxIcnFmVnJ2WXhmUWFuRjNi?=
- =?utf-8?B?Q1pJUWVFOHpIVDMxa0ZBK2pySFVvZjIyQ0VsQkx6cGUwMHNibnFnOS9xQUZs?=
- =?utf-8?B?Ukx4UjlGS1dVay85WkJIQnVMV3VPT0N0ektBcnExS1JIRUw3eERQdmVncnZz?=
- =?utf-8?B?Wkw5eldySHJzeFZkYlZ3cEF5VFVlbHRqeWIrOTZWajFxcC9FQTVFRUtjN0Rj?=
- =?utf-8?B?NXVxbS9KNmR5NU9YdE5lOW1SNS9ESkNBNEZTUXBYcWV1R1hwdTB3bEFhYUU0?=
- =?utf-8?B?a3pycHR5T210YmYramx4Q1c5TEU0cEloQ1ZHZnpicUlhYXV3OFBFbG43RC9x?=
- =?utf-8?B?LzNkSUpZYS96bkVEQUJCQzdUM0hnaHdHQWpla2RzbUZqVEoyUllYc1ZVODJH?=
- =?utf-8?B?OGxIdmlEOXlqTHZiK2lZUUZVRmVOaHpKeHdKV1o4NUM0R21BWDFYQWpKVzNU?=
- =?utf-8?B?RHl2MEx2WWQzRkFKMDkzV1VhNEgxU3hyblViRlUzTmE4SmtQejJFdXQ1ZlBC?=
- =?utf-8?B?QjBNaHE3UDRLMnlacWplcVorWjBiR3oxVFA2Vmhka2Nqc01wQ0gyMkdDMGMv?=
- =?utf-8?B?NkFEQ2NWVXp4Y00xSWNJbDZyaG5YU3BWc09tcVdScmRFSWJNSGE5QkFWR1ZV?=
- =?utf-8?B?SmZYOXY2RnlrV2lySjEzd3h3bkF6SDNyTFB3V0NXY00wQ0lwS2N0YlFZYVl6?=
- =?utf-8?B?OGFwTzhhRmxYYm9aL0ZvemFnV2htclNSdEJienJyRWVqRE8vRXlXaEx5ZkJx?=
- =?utf-8?B?NkQrdVVXRWJoWlhjMDVjN2l5TjBscGZSMElaa2pTR0FKb3lyTUZ6VTBuL25r?=
- =?utf-8?B?WEFBL2t2NkNnTm5aWklzdWNmWUFZbEpqWWx1d0thcUJ5Q3dJSDlVd2oxaC9k?=
- =?utf-8?B?dFk5VE54SHd3N09xbUZPMGlxRUx0NkY1anBISVE5OFBRVmdLTmR3MHFWUkJk?=
- =?utf-8?B?amtIVHdLTWl1NWVMbnFKb0tOWmtWVE9zSWlFeG5pNmhySnpDMWhxOGhWdzlP?=
- =?utf-8?B?VDN3QWtWRE9CaGM0cVhFZXZEaGFHS2lieHIvTjYxZ2ZYZlp0aTc1MWFVYnox?=
- =?utf-8?B?SVpjSCswODBMUnlkdFVYbFpabGVKbUZmTlRMK0g2cFc4d2xzT3pTaFhPWEtZ?=
- =?utf-8?B?YlNiSU9FSVdRKzRKa2h2VEpRUkN3N2ZUM08rTEQvcFV1SlJxNGJKOFlCNG1k?=
- =?utf-8?B?Z3dEMytRczlvMnVlWDJESDVKSzUxbFlJczdmdnRtM085RjVreklSSitYQUpJ?=
- =?utf-8?B?cnc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 026b8f66-0db2-4539-84b5-08dce1a6341e
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5089.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Sep 2024 23:18:33.6996
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AYnB9mE70efcITFlqp/AI3SQpyVDEyz6t5DqmWrinAejNBCAwpQbDgLXauA4PdG51QRz5n6wHK1CEmlTuH6kns23pUBSnVQavzT7xVw67eA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7189
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH slab hotfixes 2/2] kunit: move call to
+ kunit_run_all_tests() after rcu_end_inkernel_boot()
+From: Guenter Roeck <linux@roeck-us.net>
+To: Vlastimil Babka <vbabka@suse.cz>,
+ Andrew Morton <akpm@linux-foundation.org>, Christoph Lameter <cl@linux.com>,
+ David Rientjes <rientjes@google.com>,
+ Roman Gushchin <roman.gushchin@linux.dev>,
+ Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org
+Cc: "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng
+ <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>,
+ rcu@vger.kernel.org, David Gow <davidgow@google.com>,
+ Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, Brendan Higgins <brendan.higgins@linux.dev>
+References: <20240930-b4-slub-kunit-fix-v1-0-32ca9dbbbc11@suse.cz>
+ <20240930-b4-slub-kunit-fix-v1-2-32ca9dbbbc11@suse.cz>
+ <9dd56c26-12db-4b69-af0e-fdea33bb8208@roeck-us.net>
+Content-Language: en-US
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <9dd56c26-12db-4b69-af0e-fdea33bb8208@roeck-us.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+On 9/30/24 11:50, Guenter Roeck wrote:
+> On 9/30/24 01:37, Vlastimil Babka wrote:
+>> Guenter Roeck reports that the new slub kunit tests added by commit
+>> 4e1c44b3db79 ("kunit, slub: add test_kfree_rcu() and
+>> test_leak_destroy()") cause a lockup on boot on several architectures
+>> when the kunit tests are configured to be built-in and not modules.
+>>
+>> These tests invoke kfree_rcu() and kvfree_rcu_barrier() and boot
+>> sequence inspection showed the runner for built-in kunit tests
+>> kunit_run_all_tests() is called before setting system_state to
+>> SYSTEM_RUNNING and calling rcu_end_inkernel_boot(), so this seems like a
+>> likely cause. So while I was unable to reproduce the problem myself,
+>> moving the call to kunit_run_all_tests() a bit later in the boot seems
+>> to have fixed the lockup problem according to Guenter's limited testing.
+>>
+>> No kunit tests should be broken by calling the built-in executor a bit
+>> later, as when compiled as modules, they are still executed even later
+>> than this.
+>>
 
+Actually, that is wrong.
 
-On 9/22/2024 8:05 AM, Guenter Roeck wrote:
-> This reverts commit e620799c414a035dea1208bcb51c869744931dbb.
+Turns out kunit_iov_iter (and other kunit tests) are marked __init.
+That means those unit tests have to run before the init code is released,
+and it actually _is_ harmful to run the tests after rcu_end_inkernel_boot()
+because at that time free_initmem() has already been called.
+
+Guenter
+
+>> Fixes: 4e1c44b3db79 ("kunit, slub: add test_kfree_rcu() and test_leak_destroy()")
+>> Reported-by: Guenter Roeck <linux@roeck-us.net>
+>> Closes: https://lore.kernel.org/all/6fcb1252-7990-4f0d-8027-5e83f0fb9409@roeck-us.net/
+>> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+>> Cc: Boqun Feng <boqun.feng@gmail.com>
+>> Cc: Uladzislau Rezki <urezki@gmail.com>
+>> Cc: rcu@vger.kernel.org
+>> Cc: Brendan Higgins <brendanhiggins@google.com>
+>> Cc: David Gow <davidgow@google.com>
+>> Cc: Rae Moar <rmoar@google.com>
+>> Cc: linux-kselftest@vger.kernel.org
+>> Cc: kunit-dev@googlegroups.com
+>> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+>> ---
+>>   init/main.c | 4 ++--
+>>   1 file changed, 2 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/init/main.c b/init/main.c
+>> index c4778edae7972f512d5eefe8400075ac35a70d1c..7890ebb00e84b8bd7bac28923fb1fe571b3e9ee2 100644
+>> --- a/init/main.c
+>> +++ b/init/main.c
+>> @@ -1489,6 +1489,8 @@ static int __ref kernel_init(void *unused)
+>>       rcu_end_inkernel_boot();
+>> +    kunit_run_all_tests();
+>> +
+>>       do_sysctl_args();
+>>       if (ramdisk_execute_command) {
+>> @@ -1579,8 +1581,6 @@ static noinline void __init kernel_init_freeable(void)
+>>       do_basic_setup();
+>> -    kunit_run_all_tests();
+>> -
+>>       wait_for_initramfs();
+>>       console_on_rootfs();
+>>
+> Unfortunately it doesn't work. With this patch applied, I get many backtraces
+> similar to the following, and ultimately the image crashes. This is with arm64.
+> I do not see the problem if I drop this patch.
 > 
-> The commit introduces unit test failures.
+> Guenter
 > 
->      Expected cur == &entries[i], but
->          cur == 0000037fffadfd80
->          &entries[i] == 0000037fffadfd60
->      # list_test_list_cut_position: pass:0 fail:1 skip:0 total:1
->      not ok 21 list_test_list_cut_position
->      # list_test_list_cut_before: EXPECTATION FAILED at lib/list-test.c:444
->      Expected cur == &entries[i], but
->          cur == 0000037fffa9fd70
->          &entries[i] == 0000037fffa9fd60
->      # list_test_list_cut_before: EXPECTATION FAILED at lib/list-test.c:444
->      Expected cur == &entries[i], but
->          cur == 0000037fffa9fd80
->          &entries[i] == 0000037fffa9fd70
-> 
-> Revert it.
-> 
-> Fixes: e620799c414a ("list: test: fix tests for list_cut_position()")
-> Cc: I Hsin Cheng <richard120310@gmail.com>
-> Cc: David Gow <davidgow@google.com>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
 > ---
-
-I ran into this as well.
-
-Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
-
->  lib/list-test.c | 6 ------
->  1 file changed, 6 deletions(-)
+> [    9.465871]     KTAP version 1
+> [    9.465964]     # Subtest: iov_iter
+> [    9.466056]     # module: kunit_iov_iter
+> [    9.466115]     1..12
+> [    9.467000] Unable to handle kernel paging request at virtual address ffffc37db5c9f26c
+> [    9.467244] Mem abort info:
+> [    9.467332]   ESR = 0x0000000086000007
+> [    9.467454]   EC = 0x21: IABT (current EL), IL = 32 bits
+> [    9.467576]   SET = 0, FnV = 0
+> [    9.467667]   EA = 0, S1PTW = 0
+> [    9.467762]   FSC = 0x07: level 3 translation fault
+> [    9.467912] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000042a59000
+> [    9.468055] [ffffc37db5c9f26c] pgd=0000000000000000, p4d=1000000044b36003, pud=1000000044b37003, pmd=1000000044b3a003, pte=0000000000000000
+> [    9.469430] Internal error: Oops: 0000000086000007 [#1] PREEMPT SMP
+> [    9.469687] Modules linked in:
+> [    9.470035] CPU: 0 UID: 0 PID: 550 Comm: kunit_try_catch Tainted: G                 N 6.12.0-rc1-00005-ga65e3eb58cdb #1
+> [    9.470290] Tainted: [N]=TEST
+> [    9.470356] Hardware name: linux,dummy-virt (DT)
+> [    9.470530] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    9.470656] pc : iov_kunit_copy_to_kvec+0x0/0x334
+> [    9.471055] lr : kunit_try_run_case+0x6c/0x15c
+> [    9.471145] sp : ffff800080883de0
+> [    9.471210] x29: ffff800080883e20 x28: 0000000000000000 x27: 0000000000000000
+> [    9.471376] x26: 0000000000000000 x25: 0000000000000000 x24: ffff80008000bb68
+> [    9.471501] x23: ffffc37db3f7093c x22: ffff80008000b940 x21: ffff545847af4c00
+> [    9.471622] x20: ffff545847cd3940 x19: ffff80008000bb50 x18: 0000000000000006
+> [    9.471742] x17: 6c61746f7420303a x16: 70696b7320303a6c x15: 0000000000000172
+> [    9.471863] x14: 0000000000020000 x13: 0000000000000000 x12: ffffc37db6a600c8
+> [    9.471983] x11: 0000000000000043 x10: 0000000000000043 x9 : 1fffffffffffffff
+> [    9.472122] x8 : 00000000ffffffff x7 : 000000001040d4fd x6 : ffffc37db70c3810
+> [    9.472243] x5 : 0000000000000000 x4 : ffffffffc4653600 x3 : 000000003b9ac9ff
+> [    9.472363] x2 : 0000000000000001 x1 : ffffc37db5c9f26c x0 : ffff80008000bb50
+> [    9.472572] Call trace:
+> [    9.472636]  iov_kunit_copy_to_kvec+0x0/0x334
+> [    9.472740]  kunit_generic_run_threadfn_adapter+0x28/0x4c
+> [    9.472835]  kthread+0x11c/0x120
+> [    9.472903]  ret_from_fork+0x10/0x20
+> [    9.473146] Code: ???????? ???????? ???????? ???????? (????????)
+> [    9.473505] ---[ end trace 0000000000000000 ]---
 > 
-> diff --git a/lib/list-test.c b/lib/list-test.c
-> index 4f3dc75baec1..e207c4c98d70 100644
-> --- a/lib/list-test.c
-> +++ b/lib/list-test.c
-> @@ -408,13 +408,10 @@ static void list_test_list_cut_position(struct kunit *test)
->  
->  	KUNIT_EXPECT_EQ(test, i, 2);
->  
-> -	i = 0;
->  	list_for_each(cur, &list1) {
->  		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
->  		i++;
->  	}
-> -
-> -	KUNIT_EXPECT_EQ(test, i, 1);
->  }
->  
->  static void list_test_list_cut_before(struct kunit *test)
-> @@ -439,13 +436,10 @@ static void list_test_list_cut_before(struct kunit *test)
->  
->  	KUNIT_EXPECT_EQ(test, i, 1);
->  
-> -	i = 0;
->  	list_for_each(cur, &list1) {
->  		KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
->  		i++;
->  	}
-> -
-> -	KUNIT_EXPECT_EQ(test, i, 2);
 
-This test failure was also pointed out during an earlier review of the
-patch..
-
-> https://lore.kernel.org/all/CABVgOSmn=SEwq3je3+vJ-S1Rwb=cLT2a3_WKOQsHu9xZYEZhrg@mail.gmail.com/
-
-I suspect what we really want here is an explicit check against the
-length of the lists.
 
