@@ -1,257 +1,254 @@
-Return-Path: <linux-kselftest+bounces-18701-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18702-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E610F98B13B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 01:55:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B73898B13F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 01:59:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15ABB1C20EF2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 23:55:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EC1D3282A61
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 23:59:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C454B185B54;
-	Mon, 30 Sep 2024 23:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 666DF186E33;
+	Mon, 30 Sep 2024 23:59:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XlgJr/HZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H5yxE/fh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E1B2C1B4;
-	Mon, 30 Sep 2024 23:55:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E8E2C1B4;
+	Mon, 30 Sep 2024 23:59:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727740534; cv=none; b=YXVOa7KHYyKL6fgoB3/TH8nCunSha/ECe+7wmxtFyI7wEheAJe0yNj78Ew+Yxp0Evdr/r1edx1CHyWK4Dzg1D4wXFSlHvwJOPPzwZl1wznZsZXjYzG3NWJ+TPYD46g9LuedK8Z2guAvYowyDoEQMVeML8fFpARZ/mKuUN5rvwe8=
+	t=1727740778; cv=none; b=TYDqnuASONInZUgYAmVIxC3lu0K6+0Sdq/A6yvwV/s1BM1rr+sxE9XCPxSqzxZwmIqvBElH+DxJj60hz5FLwBaC6eT8RtSeIPScQozc/3lWrmoDe15nOrAXWu/xlNos3SE05QFficbCxU1wjBIT9YoVO3MCmSlrZC6J/0WppT5s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727740534; c=relaxed/simple;
-	bh=AEbxpuoDyQlKNjMTsjmrecQmtX0KN6+QkKgFaWUu9ug=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=KAmYsEr7Lk7e9QWHaZeKiDwFcBXA+SBWJxIx7V2lL9LF4kBa/NAYcgAFHEUeNedP39WeSLQOwibIqW7ke16uflj58WcPVoy7KT8w7UNwi7SDQJkcNVOlaGzNJHo0bO+XqmWuwAnHlMXM8e+M7TuZFmeytoukRHpnMJtdtYMJAbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XlgJr/HZ; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+	s=arc-20240116; t=1727740778; c=relaxed/simple;
+	bh=bHJTfIv/bQKEaDRRNzyllEiHmX2BmrRj0mXBc5jpiMo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=dfzypiRkN8xEdNQKl1ZTM1a+jQLwshmCSkLynBXkdYNnqgOT2Y82MEhuDzyINp1Ct5jIO7BbE6exAuBBF5be9bP3EivYXxQtul27q/OBi890Y2YFxeUvoKXkucKVWa7qiuXVwu4kiNM5LCw0V1vNgJnFm9Pl9IKVEjGsdeqTyyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H5yxE/fh; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-20b9b35c7c3so11959225ad.3;
-        Mon, 30 Sep 2024 16:55:30 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e260754066cso3028164276.1;
+        Mon, 30 Sep 2024 16:59:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727740530; x=1728345330; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=xyLe7HDF8tj4qcFQQx2PY14u20UHG0zSU8IZccyeBT8=;
-        b=XlgJr/HZRqYmGDRLadwb6weE9bCgGwhLjZH07R03xfNR2xPyPBgZfeiUPDemjlOujF
-         2+43KyFB9oQvmw9byuVt8bo0mNQryQrbZ4Hz3NGSH0F66uhVXJoXw+M5CJ+t6t9i3ONd
-         I8oLnr06c7YQXNuAXaE20rRyxT+sgL53FHxDAIUK11rjOmEXY1VO5In3L7etOmKj308k
-         hAnLhtRx6rM46hIh9fmTJovZASOJl4l8ronI96+Q3CARWGcnTweXA2V2n8AEuzSDbVX/
-         tsFPNEBFDTNIRCZMt+ksLkXefXW1Je7LWfeF5yPQNV1kaCbmzr9t+ROOzL/flM38qksf
-         j92A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727740530; x=1728345330;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:sender:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1727740775; x=1728345575; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=xyLe7HDF8tj4qcFQQx2PY14u20UHG0zSU8IZccyeBT8=;
-        b=drtFW3+AFerwvTVKM3txb5YOkQ9AOGOSR/q6dKmem/Xrg8u+12HPjrU4gr2dBKBerb
-         TqFbOwIWpE1Mc1AyiE1A37WPKEHpG916Q54Li450ZMCU9PAMq9Az0rx5+tAbGIPK7QID
-         oPqEOAc97hzMmQPpZiuFHLASrL5k+YCYHWKnX4K8L9YOZhMemHwKu/VoewwyScyMBje2
-         8zqUXMB5bX3RVkM88/bow7B+5HfOjtgYnl95i9Lhjqt/G9A3c/IMsORhRaPWiemBN0eK
-         KCYiHEQoQtfpMTrHHk7VbWKNyHqcf/jozoE2Bu2KqeAEDKvUwLqrRdLXpLdJvToK70hS
-         uiWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+n/sbIHcFr6g8TBOzJVKazlbXWucs8lKOkXukdz3IJcvx0kPpSVQVmlHP6RBdJBS4UAiSzzt8laiyXu0t2NTq@vger.kernel.org, AJvYcCVQE0cTDr9ARMlhOPR/3GBL87R6mcuCVrK16TFH4j3Utv2pwPuwawOhc5Hd0fgmeIClK9+MbRucNTNcknE=@vger.kernel.org, AJvYcCVhPh/ApI2z+JxJgZYECaTfyWt4hkM46jUVCUWFFIJdUAZr5ENL/obrSeHsPCKzGOqcvHAR@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRlvOuiewTFvtoeBO2uEVIunK5lGiOBn9/eHk7s2T07TjD8xGu
-	gyntp0OHjvo5abupmo28EYPtnaJocmc2EIfEC+Ulu9f5zF7wRuGM
-X-Google-Smtp-Source: AGHT+IEGhEU8tP0wb7U0q3ZKlCr4VTXuzkkroyrbA3DKB/mesUbUOP8lXp3q8MaWyex1kvOHGuP70g==
-X-Received: by 2002:a17:902:dac5:b0:20b:4ea4:dd0b with SMTP id d9443c01a7336-20b4ea4dfd1mr195583595ad.4.1727740529935;
-        Mon, 30 Sep 2024 16:55:29 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b640fcd15sm37491495ad.284.2024.09.30.16.55.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Sep 2024 16:55:28 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ee52f8af-ef1a-4382-ab9a-f9781157d1be@roeck-us.net>
-Date: Mon, 30 Sep 2024 16:55:26 -0700
+        bh=0Omp0TCRUqYPq/kqA2kywyGRQS2WH8xmPRfAWQrDh08=;
+        b=H5yxE/fhiA+XdAzS1wFlIZdwYJF5FajVlA3HPr9KgYr6Z0u45bMU4jxTRv3ByGN6AC
+         FnTGlgd3Vlrcag6A0ea+isZgv1cJszVQToq6JjLIpTrqqtskKksfw79rJkdUMgO2EF7T
+         CT4/x3pGxgjRv19HIRTStiVzxanYrx4bMSk8eHIsU4B9L3ipb8lwqmiK9xhI/jw3fUNi
+         beg0c1wRWIidN8f1xQFSXTQtlb+vynuRPUvGmVKIV/6ofPDwVlk5s7xEl9aPkxvKrg5G
+         dSKi7aa62BdeksYOhoxcuMD5yRthuBQgc5iyzXIRH+FGOzyn+z79Rbg3eJvveiN8HMew
+         Ge7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727740775; x=1728345575;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0Omp0TCRUqYPq/kqA2kywyGRQS2WH8xmPRfAWQrDh08=;
+        b=qS1v6nCAvC+s1sTXR8DwDYqNBwlklLw1wOkMyCj8iQjlssgPk5zqfQhk3YEO8nLHd1
+         skV9MOPDXCSajWMuDvNDHuybWFFc17kVQnh69t9LREjY4162HKdW7uUfAH2iofxse7X/
+         LaKCSuMdzCb9fNkoPz0I0mL8EiaLn0Bw4zZXshfucUY9ogzQjZ2v7PhdhHZbBphmWGCr
+         CWiHrcQoZHouAdEJ9sniK5TvF9R7OE8vlX+AhiNFgjNKVze2UiRzfEeGkfkMRquYQnZp
+         +u6LQreeFneC9kzrsMcf8jUvDAjDNcGJam0AwkHSfM1JWPISO8lWgB50+lSbiEsbBdO1
+         cefQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVall4QuH+77d2oq32Jf60MG1rAse5UKpaq8ayZ3NUK2e+o5XoHOGYngPyQxwHdgZDcTJhNEJVUcpU/4TfKVCQt@vger.kernel.org, AJvYcCVjQ4dF+wkZcaYH1vlnoGCobUxeEzE+xUsvHsN11cD6JWyDPT33u6AtkOaB0a9xiFzRGuORbhq3oJbF9jQG@vger.kernel.org, AJvYcCX4XMNINf2bNzlJ3G1kB+Znyc7hby8Zn1lwnzXE/K2BiSGcwzaCwW3Nzwu6dCtWKHDYtdI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyybaoNrNBw+Fz+KCDaVDTDlb/OFZXXS7O0guhFccLzhQ8IwTtU
+	WTWQvMw7QYBN17HhlvnuLKkd5VlerfkZds8seLjgV5ARmb7Flxwy
+X-Google-Smtp-Source: AGHT+IGfhUcsgW0vXTpQM/RQpsEALLTzaOy9gzajslyDHkJNDwRuqCj3icvML3SzIvbGJP83yw/24A==
+X-Received: by 2002:a05:6902:a0a:b0:e25:e38b:a46e with SMTP id 3f1490d57ef6-e2604b158ddmr10631946276.1.1727740775564;
+        Mon, 30 Sep 2024 16:59:35 -0700 (PDT)
+Received: from dev-ubuntu-0.. (104-15-236-76.lightspeed.rlghnc.sbcglobal.net. [104.15.236.76])
+        by smtp.googlemail.com with ESMTPSA id 3f1490d57ef6-e25e42210acsm2701553276.35.2024.09.30.16.59.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Sep 2024 16:59:34 -0700 (PDT)
+From: tyrone-wu <wudevelops@gmail.com>
+To: olsajiri@gmail.com,
+	laoar.shao@gmail.com,
+	andrii.nakryiko@gmail.com,
+	wudevelops@gmail.com,
+	bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	mykolal@fb.com,
+	shuah@kernel.org,
+	kernel-patches-bot@fb.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf] bpf: fix unpopulated name_len field in perf_event link info
+Date: Mon, 30 Sep 2024 23:59:20 +0000
+Message-ID: <20240930235920.125417-1-wudevelops@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <ZvqLanKfaO9dLlf4@krava>
+References: <ZvqLanKfaO9dLlf4@krava>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH slab hotfixes 2/2] kunit: move call to
- kunit_run_all_tests() after rcu_end_inkernel_boot()
-From: Guenter Roeck <linux@roeck-us.net>
-To: Vlastimil Babka <vbabka@suse.cz>,
- Andrew Morton <akpm@linux-foundation.org>, Christoph Lameter <cl@linux.com>,
- David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng
- <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>,
- rcu@vger.kernel.org, David Gow <davidgow@google.com>,
- Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, Brendan Higgins <brendan.higgins@linux.dev>
-References: <20240930-b4-slub-kunit-fix-v1-0-32ca9dbbbc11@suse.cz>
- <20240930-b4-slub-kunit-fix-v1-2-32ca9dbbbc11@suse.cz>
- <9dd56c26-12db-4b69-af0e-fdea33bb8208@roeck-us.net>
-Content-Language: en-US
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <9dd56c26-12db-4b69-af0e-fdea33bb8208@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 9/30/24 11:50, Guenter Roeck wrote:
-> On 9/30/24 01:37, Vlastimil Babka wrote:
->> Guenter Roeck reports that the new slub kunit tests added by commit
->> 4e1c44b3db79 ("kunit, slub: add test_kfree_rcu() and
->> test_leak_destroy()") cause a lockup on boot on several architectures
->> when the kunit tests are configured to be built-in and not modules.
->>
->> These tests invoke kfree_rcu() and kvfree_rcu_barrier() and boot
->> sequence inspection showed the runner for built-in kunit tests
->> kunit_run_all_tests() is called before setting system_state to
->> SYSTEM_RUNNING and calling rcu_end_inkernel_boot(), so this seems like a
->> likely cause. So while I was unable to reproduce the problem myself,
->> moving the call to kunit_run_all_tests() a bit later in the boot seems
->> to have fixed the lockup problem according to Guenter's limited testing.
->>
->> No kunit tests should be broken by calling the built-in executor a bit
->> later, as when compiled as modules, they are still executed even later
->> than this.
->>
+Previously when retrieving `bpf_link_info.perf_event` for
+kprobe/uprobe/tracepoint, the `name_len` field was not populated by the
+kernel, leaving it to reflect the value initially set by the user. This
+behavior was inconsistent with how other input/output string buffer
+fields function (e.g. `raw_tracepoint.tp_name_len`).
 
-Actually, that is wrong.
+This patch fills `name_len` with the actual size of the string name. The
+ relevant selftests have also been updated to assert that `name_len`
+contains the correct size rather than 0.
 
-Turns out kunit_iov_iter (and other kunit tests) are marked __init.
-That means those unit tests have to run before the init code is released,
-and it actually _is_ harmful to run the tests after rcu_end_inkernel_boot()
-because at that time free_initmem() has already been called.
+Link: https://lore.kernel.org/bpf/CABVU1kXwQXhqQGe0RTrr7eegtM6SVW_KayZBy16-yb0Snztmtg@mail.gmail.com/
+Fixes: 1b715e1b0ec5 ("bpf: Support ->fill_link_info for perf_event")
+Signed-off-by: tyrone-wu <wudevelops@gmail.com>
+---
+ kernel/bpf/syscall.c                          | 25 +++++++++++++------
+ .../selftests/bpf/prog_tests/fill_link_info.c |  6 ++---
+ 2 files changed, 20 insertions(+), 11 deletions(-)
 
-Guenter
-
->> Fixes: 4e1c44b3db79 ("kunit, slub: add test_kfree_rcu() and test_leak_destroy()")
->> Reported-by: Guenter Roeck <linux@roeck-us.net>
->> Closes: https://lore.kernel.org/all/6fcb1252-7990-4f0d-8027-5e83f0fb9409@roeck-us.net/
->> Cc: "Paul E. McKenney" <paulmck@kernel.org>
->> Cc: Boqun Feng <boqun.feng@gmail.com>
->> Cc: Uladzislau Rezki <urezki@gmail.com>
->> Cc: rcu@vger.kernel.org
->> Cc: Brendan Higgins <brendanhiggins@google.com>
->> Cc: David Gow <davidgow@google.com>
->> Cc: Rae Moar <rmoar@google.com>
->> Cc: linux-kselftest@vger.kernel.org
->> Cc: kunit-dev@googlegroups.com
->> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
->> ---
->>   init/main.c | 4 ++--
->>   1 file changed, 2 insertions(+), 2 deletions(-)
->>
->> diff --git a/init/main.c b/init/main.c
->> index c4778edae7972f512d5eefe8400075ac35a70d1c..7890ebb00e84b8bd7bac28923fb1fe571b3e9ee2 100644
->> --- a/init/main.c
->> +++ b/init/main.c
->> @@ -1489,6 +1489,8 @@ static int __ref kernel_init(void *unused)
->>       rcu_end_inkernel_boot();
->> +    kunit_run_all_tests();
->> +
->>       do_sysctl_args();
->>       if (ramdisk_execute_command) {
->> @@ -1579,8 +1581,6 @@ static noinline void __init kernel_init_freeable(void)
->>       do_basic_setup();
->> -    kunit_run_all_tests();
->> -
->>       wait_for_initramfs();
->>       console_on_rootfs();
->>
-> Unfortunately it doesn't work. With this patch applied, I get many backtraces
-> similar to the following, and ultimately the image crashes. This is with arm64.
-> I do not see the problem if I drop this patch.
-> 
-> Guenter
-> 
-> ---
-> [    9.465871]     KTAP version 1
-> [    9.465964]     # Subtest: iov_iter
-> [    9.466056]     # module: kunit_iov_iter
-> [    9.466115]     1..12
-> [    9.467000] Unable to handle kernel paging request at virtual address ffffc37db5c9f26c
-> [    9.467244] Mem abort info:
-> [    9.467332]   ESR = 0x0000000086000007
-> [    9.467454]   EC = 0x21: IABT (current EL), IL = 32 bits
-> [    9.467576]   SET = 0, FnV = 0
-> [    9.467667]   EA = 0, S1PTW = 0
-> [    9.467762]   FSC = 0x07: level 3 translation fault
-> [    9.467912] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000042a59000
-> [    9.468055] [ffffc37db5c9f26c] pgd=0000000000000000, p4d=1000000044b36003, pud=1000000044b37003, pmd=1000000044b3a003, pte=0000000000000000
-> [    9.469430] Internal error: Oops: 0000000086000007 [#1] PREEMPT SMP
-> [    9.469687] Modules linked in:
-> [    9.470035] CPU: 0 UID: 0 PID: 550 Comm: kunit_try_catch Tainted: G                 N 6.12.0-rc1-00005-ga65e3eb58cdb #1
-> [    9.470290] Tainted: [N]=TEST
-> [    9.470356] Hardware name: linux,dummy-virt (DT)
-> [    9.470530] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [    9.470656] pc : iov_kunit_copy_to_kvec+0x0/0x334
-> [    9.471055] lr : kunit_try_run_case+0x6c/0x15c
-> [    9.471145] sp : ffff800080883de0
-> [    9.471210] x29: ffff800080883e20 x28: 0000000000000000 x27: 0000000000000000
-> [    9.471376] x26: 0000000000000000 x25: 0000000000000000 x24: ffff80008000bb68
-> [    9.471501] x23: ffffc37db3f7093c x22: ffff80008000b940 x21: ffff545847af4c00
-> [    9.471622] x20: ffff545847cd3940 x19: ffff80008000bb50 x18: 0000000000000006
-> [    9.471742] x17: 6c61746f7420303a x16: 70696b7320303a6c x15: 0000000000000172
-> [    9.471863] x14: 0000000000020000 x13: 0000000000000000 x12: ffffc37db6a600c8
-> [    9.471983] x11: 0000000000000043 x10: 0000000000000043 x9 : 1fffffffffffffff
-> [    9.472122] x8 : 00000000ffffffff x7 : 000000001040d4fd x6 : ffffc37db70c3810
-> [    9.472243] x5 : 0000000000000000 x4 : ffffffffc4653600 x3 : 000000003b9ac9ff
-> [    9.472363] x2 : 0000000000000001 x1 : ffffc37db5c9f26c x0 : ffff80008000bb50
-> [    9.472572] Call trace:
-> [    9.472636]  iov_kunit_copy_to_kvec+0x0/0x334
-> [    9.472740]  kunit_generic_run_threadfn_adapter+0x28/0x4c
-> [    9.472835]  kthread+0x11c/0x120
-> [    9.472903]  ret_from_fork+0x10/0x20
-> [    9.473146] Code: ???????? ???????? ???????? ???????? (????????)
-> [    9.473505] ---[ end trace 0000000000000000 ]---
-> 
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index a8f1808a1ca5..90b6add4d0c9 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3565,7 +3565,7 @@ static void bpf_perf_link_dealloc(struct bpf_link *link)
+ }
+ 
+ static int bpf_perf_link_fill_common(const struct perf_event *event,
+-				     char __user *uname, u32 ulen,
++				     char __user *uname, u32 *ulen,
+ 				     u64 *probe_offset, u64 *probe_addr,
+ 				     u32 *fd_type, unsigned long *missed)
+ {
+@@ -3574,18 +3574,20 @@ static int bpf_perf_link_fill_common(const struct perf_event *event,
+ 	size_t len;
+ 	int err;
+ 
+-	if (!ulen ^ !uname)
++	if (!(*ulen) ^ !uname)
+ 		return -EINVAL;
+ 
+ 	err = bpf_get_perf_event_info(event, &prog_id, fd_type, &buf,
+ 				      probe_offset, probe_addr, missed);
+ 	if (err)
+ 		return err;
++
++	len = strlen(buf);
++	*ulen = len + 1;
+ 	if (!uname)
+ 		return 0;
+ 	if (buf) {
+-		len = strlen(buf);
+-		err = bpf_copy_to_user(uname, buf, ulen, len);
++		err = bpf_copy_to_user(uname, buf, *ulen, len);
+ 		if (err)
+ 			return err;
+ 	} else {
+@@ -3609,7 +3611,7 @@ static int bpf_perf_link_fill_kprobe(const struct perf_event *event,
+ 
+ 	uname = u64_to_user_ptr(info->perf_event.kprobe.func_name);
+ 	ulen = info->perf_event.kprobe.name_len;
+-	err = bpf_perf_link_fill_common(event, uname, ulen, &offset, &addr,
++	err = bpf_perf_link_fill_common(event, uname, &ulen, &offset, &addr,
+ 					&type, &missed);
+ 	if (err)
+ 		return err;
+@@ -3617,7 +3619,7 @@ static int bpf_perf_link_fill_kprobe(const struct perf_event *event,
+ 		info->perf_event.type = BPF_PERF_EVENT_KRETPROBE;
+ 	else
+ 		info->perf_event.type = BPF_PERF_EVENT_KPROBE;
+-
++	info->perf_event.kprobe.name_len = ulen;
+ 	info->perf_event.kprobe.offset = offset;
+ 	info->perf_event.kprobe.missed = missed;
+ 	if (!kallsyms_show_value(current_cred()))
+@@ -3639,7 +3641,7 @@ static int bpf_perf_link_fill_uprobe(const struct perf_event *event,
+ 
+ 	uname = u64_to_user_ptr(info->perf_event.uprobe.file_name);
+ 	ulen = info->perf_event.uprobe.name_len;
+-	err = bpf_perf_link_fill_common(event, uname, ulen, &offset, &addr,
++	err = bpf_perf_link_fill_common(event, uname, &ulen, &offset, &addr,
+ 					&type, NULL);
+ 	if (err)
+ 		return err;
+@@ -3648,6 +3650,7 @@ static int bpf_perf_link_fill_uprobe(const struct perf_event *event,
+ 		info->perf_event.type = BPF_PERF_EVENT_URETPROBE;
+ 	else
+ 		info->perf_event.type = BPF_PERF_EVENT_UPROBE;
++	info->perf_event.uprobe.name_len = ulen;
+ 	info->perf_event.uprobe.offset = offset;
+ 	info->perf_event.uprobe.cookie = event->bpf_cookie;
+ 	return 0;
+@@ -3673,12 +3676,18 @@ static int bpf_perf_link_fill_tracepoint(const struct perf_event *event,
+ {
+ 	char __user *uname;
+ 	u32 ulen;
++	int err;
+ 
+ 	uname = u64_to_user_ptr(info->perf_event.tracepoint.tp_name);
+ 	ulen = info->perf_event.tracepoint.name_len;
++	err = bpf_perf_link_fill_common(event, uname, &ulen, NULL, NULL, NULL, NULL);
++	if (err)
++		return err;
++
+ 	info->perf_event.type = BPF_PERF_EVENT_TRACEPOINT;
++	info->perf_event.tracepoint.name_len = ulen;
+ 	info->perf_event.tracepoint.cookie = event->bpf_cookie;
+-	return bpf_perf_link_fill_common(event, uname, ulen, NULL, NULL, NULL, NULL);
++	return 0;
+ }
+ 
+ static int bpf_perf_link_fill_perf_event(const struct perf_event *event,
+diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
+index f3932941bbaa..59077f260404 100644
+--- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
++++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
+@@ -67,8 +67,8 @@ static int verify_perf_link_info(int fd, enum bpf_perf_event_type type, long add
+ 
+ 		ASSERT_EQ(info.perf_event.kprobe.cookie, PERF_EVENT_COOKIE, "kprobe_cookie");
+ 
++		ASSERT_EQ(info.perf_event.kprobe.name_len, strlen(KPROBE_FUNC) + 1, "name_len");
+ 		if (!info.perf_event.kprobe.func_name) {
+-			ASSERT_EQ(info.perf_event.kprobe.name_len, 0, "name_len");
+ 			info.perf_event.kprobe.func_name = ptr_to_u64(&buf);
+ 			info.perf_event.kprobe.name_len = sizeof(buf);
+ 			goto again;
+@@ -79,8 +79,8 @@ static int verify_perf_link_info(int fd, enum bpf_perf_event_type type, long add
+ 		ASSERT_EQ(err, 0, "cmp_kprobe_func_name");
+ 		break;
+ 	case BPF_PERF_EVENT_TRACEPOINT:
++		ASSERT_EQ(info.perf_event.tracepoint.name_len, strlen(TP_NAME) + 1, "name_len");
+ 		if (!info.perf_event.tracepoint.tp_name) {
+-			ASSERT_EQ(info.perf_event.tracepoint.name_len, 0, "name_len");
+ 			info.perf_event.tracepoint.tp_name = ptr_to_u64(&buf);
+ 			info.perf_event.tracepoint.name_len = sizeof(buf);
+ 			goto again;
+@@ -96,8 +96,8 @@ static int verify_perf_link_info(int fd, enum bpf_perf_event_type type, long add
+ 	case BPF_PERF_EVENT_URETPROBE:
+ 		ASSERT_EQ(info.perf_event.uprobe.offset, offset, "uprobe_offset");
+ 
++		ASSERT_EQ(info.perf_event.uprobe.name_len, strlen(UPROBE_FILE) + 1, "name_len");
+ 		if (!info.perf_event.uprobe.file_name) {
+-			ASSERT_EQ(info.perf_event.uprobe.name_len, 0, "name_len");
+ 			info.perf_event.uprobe.file_name = ptr_to_u64(&buf);
+ 			info.perf_event.uprobe.name_len = sizeof(buf);
+ 			goto again;
+-- 
+2.43.0
 
 
