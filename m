@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-18641-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18642-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4E5C98A346
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 14:45:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E7AA98A33E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 14:44:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E48FB291E7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 12:44:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B09DB1C211BF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 12:44:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BEC719C55B;
-	Mon, 30 Sep 2024 12:37:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0A3119CC2E;
+	Mon, 30 Sep 2024 12:37:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LeeJ7rVs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hxnBRV00"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B21219AD97;
-	Mon, 30 Sep 2024 12:37:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2E9319C540;
+	Mon, 30 Sep 2024 12:37:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727699857; cv=none; b=EAXg7fPqCaRlTaMi/b0D3NQXUL1k7Has42TQPbTu4CpD/FlCZSycku2BbewqH22A7aKpoza8Gu1n3W8LYstuwrQ/3aE6JEnZk78B0g2WdJ/KAPoRtXCWK+8yD7n6JKa/xjXVqpycAo/DJo7bv4fH0mz61MvkxOWR/CH5/L3vAAM=
+	t=1727699858; cv=none; b=E3F403grfAK8tgcx/5xKEnpnqX17PU0/JIUl03P1j8h04k7Pl4faxKlWeFhUPdIbWCsZZa46Jltn1wBanQXigg3vrhR0WU3Y/wNwDuQF8uirh5j0vJDv0cP6r6MchOQ7FKpxkozHPdVzRQiCtY8PUgS7iZ3spww7zexqyU+qMWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727699857; c=relaxed/simple;
-	bh=eI30oJEkTpORKqeVvScrV8NEvv05TGBrlosAxlR+md4=;
+	s=arc-20240116; t=1727699858; c=relaxed/simple;
+	bh=tjQh285Zc+G9Xm9tSEh9EovHMoX5eFJh64k3SUZLibA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=T+PspZ7MqnSrv4VVKpci1QVhI9w0fJaTFMsLX/ROMAK9rNz0RsFiDLpwVehLNfgBErLItzDkJyTGrDgSrtUevgR6Zlb1VxKNk8aazC8OEbO0aBgHf1CqGs6dsLpq6/hPucdLJQKh6DEo09lLi4CCbUF+Hd2wbaEB6smKvFt9YPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LeeJ7rVs; arc=none smtp.client-ip=209.85.128.41
+	 MIME-Version; b=G4rfGi60NkD1xzyK6DIIPc6/BErFrnKyU+A3mxCgQxUsG5+dip96qkCUf5BlDVrWHeS6K5iM6fcZScuwLH7asWkG/ohFBPbUxM9t3oIxwJ6X+5QaqZW7MsJuePGpSznA6vKmiK1plGYdZCAVQ47vUIIebnvDkumgnLaICPpljTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hxnBRV00; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-42cd46f3a26so34227455e9.2;
-        Mon, 30 Sep 2024 05:37:35 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-42cb1e623d1so40078205e9.0;
+        Mon, 30 Sep 2024 05:37:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727699854; x=1728304654; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1727699855; x=1728304655; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4mtn3Z+z0ZXxXMNcR2ig5e/IN1sKqO9BkR2/07EQmxE=;
-        b=LeeJ7rVsqa523wBOix6n7xcLb2fQtE5V1bgCf12oMqtBvwfKDYEU4SU/GSvSZLyGbJ
-         YgWn7qowWBksOBe24JNVX/nGlIdKvFcPe6GCEBB8HsWjt48oG/eOqgmkHuAn0SY5bKiJ
-         x9bDzGR4NYoLLUaJt3r2sDMU2puHynZvw8uwmUAElYgCRgwr9OCJYFgD5ZfJ/BIzgjyM
-         lpgyFNtRG8t4cZdqYvdQtq9b5QgWKVecW53VjYFpp1GtkmSRlqnjXiLGuq7AcI/DBCc5
-         b61QxCyZXJjd/ie1+7KwIytsTJEqkfmzosE8zZ9xv/rM9pxXqWNPxlxsn1J4bZMLf7lW
-         zTHw==
+        bh=b0+j8HZP1cVf+QQUDZOhjhaodRPqf5Kzd1FP1uUxc6s=;
+        b=hxnBRV00bnxZXi7Rt/x9shr35Na6wfQFg6KGQ0BKdbZMu1QmH0hK9/BbFBcPmyRoaz
+         52vH59w8qCudS2ywsuv8w2RQoUYoUJKiNnYWr+EPUK/1kzGeXSbxvg5l7sofO4FAb8WF
+         YHGfYL3WGJZBeWYTckyDgubwrUfsFS0l3U8AnSliNJjHEhTVEYjb0WoFdDdElUiiOq3L
+         5kqGL4qrmtA0maWRLc6nhEZVO/N5Xz3zPg09s+zEtkfC+a4AjvLaFlB/gKwzyKv9VM+i
+         esz4GQADaYl/0EMDgE9oHgR8iZzwz++cisocuuA7Yf6HzQMtep/NGTJINZ+ky1ddqKH3
+         SLrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727699854; x=1728304654;
+        d=1e100.net; s=20230601; t=1727699855; x=1728304655;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4mtn3Z+z0ZXxXMNcR2ig5e/IN1sKqO9BkR2/07EQmxE=;
-        b=Bv6mulvuToWzwGT88QArEs4EUOMq4u7nXv+0jASBgy5xnqlqk2Rm2YVGoqJBvKlvFF
-         ILuBhYzNNE7DzPpH4pePWai+iAOV7RE3qnOcBosTMjUQKIMcig/XeUjYSjOnFZwM62B0
-         t65mqy4KKPGP2Gwu7fTkf98Glly02b441zsv/2QRUGnNIxs3yElgHgRVr8ewiJVmVats
-         ypbQlYTAa8gB3BzUJsuCPi6lms7BtxRQNV/IDoHiabngbnizHZjTHzo5yNp2GNR1RAxt
-         5IDZFXTbipWnDUE/mx6z1l8Yf5S4SSVVl1KrucuPbVhPHgokn4/xPTSRZ0ffXUuWABfh
-         Ehyw==
-X-Forwarded-Encrypted: i=1; AJvYcCU3zpWk/fXtCBVvQIhsWIdOPIs1vhMIPTqaIYxKgpGwE1LvxLG8drE3F91N8s1OZFsIu3t5/lcxirpKzbhcmA==@vger.kernel.org, AJvYcCUDo1rYSC9RoAcm3Zkx72hqTURzu7qMDyYGxw/VFlFfRWwJN8biDnAk+EmqliO1J/fN6y0=@vger.kernel.org, AJvYcCUf6t3YxSzalgyWKD0J3QevNYwaC4WWcDkUAPKSeO1HhT7Sh92vDbZRbRE5FNzaeevs8mWKXIJRpnBSjfBj@vger.kernel.org, AJvYcCUxPzVWVHSW/4HbIjfUXTOfF4OUYonVMfznHyfvPW8XsWHsehTEAfydvfMZbihqIvo7bqizqc70Ah6ZK3GH@vger.kernel.org, AJvYcCWHqJUFvHazJXK0gfbj+tXOviaU5hLKDtG6XgGL3yimHBhWF7gLvG1iN+9h9a99LnR2i2MLPMDNTc6TBMU=@vger.kernel.org, AJvYcCXXPwWAbeTMpGp9xEuG2Ba7w1UdJQAxAmmjMkHj1FFw9WryXEmPMCS4j4kqpfNvEmeZzdz9PO8qOclhX31Nanks@vger.kernel.org, AJvYcCXevs08cH+5Q7yBSxB+fHV3hf5OoCND05rC8xosiGnbGRHIYGTALsajkvQ9NDQob8pFnzXjFjl0mV0Uhg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZ3coCKyOiEilPrAQOG0IBFNeX+umTG8zkSKNJerqexfHizMim
-	B5wFygR9pLjaho9LBP+CgGHNmreHy7KjcUly3X39faDr/hlP35Qr
-X-Google-Smtp-Source: AGHT+IHR5GBV9Sk+AH/yXxWplf7Dccbv713xjj5lLaRHbnIJlkBTu8kMh1LwOxClCDrwdMW16rb5Wg==
-X-Received: by 2002:a05:600c:4e86:b0:42c:bb75:4f86 with SMTP id 5b1f17b1804b1-42f58498ba3mr80097165e9.32.1727699853769;
-        Mon, 30 Sep 2024 05:37:33 -0700 (PDT)
+        bh=b0+j8HZP1cVf+QQUDZOhjhaodRPqf5Kzd1FP1uUxc6s=;
+        b=oSyPut9FuQas8DjUzcB5Jah6nQkUtEnyJGAFIlPbfa4Rj1LS1HvV5BHWxP1BV9dqn5
+         W7cirkmoYKFjEqfm8CEj+ypaeBAIALHvnEqb1PlmaFacH5ZWv3XNNhCbj6nR1KTENRm6
+         JpTV85j0lDj0Z4ViJ3+HlA6SGv9GPGvJjvqZ8syCAVTV2krmAAXklbo1X4c3nKo/nuUD
+         4I0PjHekzoDQ+vbjupLW36//sGIdX7QWo6sPV8HVGmNQkZSfzuEEoq4EI7MQm8kziCBW
+         y1XOuaQa7QDqa+zzB5zq0tSFMsnb7BlUBtYEet19Mv0VqOOnO1aT8xabW1xYSkn9LfX/
+         7lyA==
+X-Forwarded-Encrypted: i=1; AJvYcCVTmTdMSqKQfVcW2NFXxvVQVfYwRZJKqb7HC/WKq2RLYl0KM/HZnL6U4Nw2LI9TzJbTP28Dyftkcl5ktXaw@vger.kernel.org, AJvYcCW+nPqAS7cuqRtNVZ3oEnstIe0YaKHTu0DeWkQ4ylY4Q2YaWLVNaIVp2OYLxVUi64oRmJz/jKjCAPbEHVvWIZ/i@vger.kernel.org, AJvYcCWEnDkBif+Go5iJjgmpQiOSFlkClzTlryEevms1oE9MNtOHivmE92JuU8tQ5XgG1WckgA8=@vger.kernel.org, AJvYcCWhg9unkSKmoeLmQOKoUwmzZ5RD9d7dq26qh+WBsksqH2RNxCzu8KZPNgwiaSQA8yv4UO2cuXOEpfq851p2wA==@vger.kernel.org, AJvYcCX9rPe8uIcDtSo8DUpRMkRtZkTrvEHNqeajV7YriZL5krAEoQyyTAsXi36tRvwrSiul7NcSePs8CaDgsiw=@vger.kernel.org, AJvYcCXCkzqDm8SwT4dH0raMw25FTCUZ2H20qpvZJOvwCt1wkRCGwvofsvKtA7b83Okm2Oc/mIAhfdiCGr0lMA==@vger.kernel.org, AJvYcCXkgjl9JnvujxsgZ9qps1idZlxQOqxvU+BzkuB1yaGXdafH35nxWdcyD7NhoFA4wqMKY+FtH1CeGwi8U+2f@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywx3TVSIeS0ug+XqYcbDj+nKdwk5TB4HedOdNnmfOB/MlN6Qz1i
+	+ctSDSpZbnWN//UDVqzTbXjw4/QfitjYNavztYGa8MI16c6rod/KxU2fiMl0YAY=
+X-Google-Smtp-Source: AGHT+IHdC1cyaWvS05r5143QqcQIcUYzzrxVQfsNi8sq552bi8Bx4Z/Dm3LJ5ZgNcGYz44ssbU9Czw==
+X-Received: by 2002:a05:600c:1da6:b0:42c:b187:bde9 with SMTP id 5b1f17b1804b1-42f584a2dd7mr90988995e9.30.1727699855019;
+        Mon, 30 Sep 2024 05:37:35 -0700 (PDT)
 Received: from fedora.iskraemeco.si ([193.77.86.250])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e96a52308sm149011355e9.43.2024.09.30.05.37.32
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42e96a52308sm149011355e9.43.2024.09.30.05.37.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2024 05:37:32 -0700 (PDT)
+        Mon, 30 Sep 2024 05:37:34 -0700 (PDT)
 From: Uros Bizjak <ubizjak@gmail.com>
 To: x86@kernel.org,
 	linux-crypto@vger.kernel.org,
@@ -83,10 +83,10 @@ To: x86@kernel.org,
 Cc: Uros Bizjak <ubizjak@gmail.com>,
 	"Theodore Ts'o" <tytso@mit.edu>,
 	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH v3 18/19] random: Do not include <linux/prandom.h> in <linux/random.h>
-Date: Mon, 30 Sep 2024 14:33:29 +0200
-Message-ID: <20240930123702.803617-19-ubizjak@gmail.com>
+	Kent Overstreet <kent.overstreet@linux.dev>
+Subject: [PATCH v3 19/19] prandom: Include <linux/percpu.h> in <linux/prandom.h>
+Date: Mon, 30 Sep 2024 14:33:30 +0200
+Message-ID: <20240930123702.803617-20-ubizjak@gmail.com>
 X-Mailer: git-send-email 2.46.2
 In-Reply-To: <20240930123702.803617-1-ubizjak@gmail.com>
 References: <20240930123702.803617-1-ubizjak@gmail.com>
@@ -98,40 +98,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Files that use prandom infrastructure are now converted to
-use <linux/prandom.h> header instead of <linux/random.h>.
-Remove the legacy inclusion of <linux/prandom.h> from
-<linux/random.h>.
+<linux/percpu.h> include was removed from <linux/prandom.h>
+in d9f29deb7fe8 ("prandom: Remove unused include") because
+this inclusion broke arm64 due to a circular dependency
+on include files.
 
-This is the "nice cleanup" part, wished in c0842fbc1b18.
+__percpu tag is defined in include/linux/compiler_types.h, so there
+is currently no direct need for the inclusion of <linux/percpu.h>.
+However, in [1] we would like to repurpose __percpu tag as a named
+address space qualifier, where __percpu macro uses defines from
+<linux/percpu.h>.
+
+The circular dependency was removed in ddd8e37ebaa1 ("random: Do not
+include <linux/prandom.h> in <linux/random.h>") and it cleared
+the path for the inclusion of <linux/percpu.h> in <linux/prandom.h>.
+
+This patch is basically a revert of d9f29deb7fe8
+("prandom: Remove unused include").
+
+[1] https://lore.kernel.org/lkml/20240812115945.484051-4-ubizjak@gmail.com/
 
 Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
-Fixes: c0842fbc1b18 ("random32: move the pseudo-random 32-bit definitions to prandom.h")
 Cc: "Theodore Ts'o" <tytso@mit.edu>
 Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Kent Overstreet <kent.overstreet@linux.dev>
 ---
- include/linux/random.h | 7 -------
- 1 file changed, 7 deletions(-)
+ include/linux/prandom.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/include/linux/random.h b/include/linux/random.h
-index b0a940af4fff..333cecfca93f 100644
---- a/include/linux/random.h
-+++ b/include/linux/random.h
-@@ -145,13 +145,6 @@ declare_get_random_var_wait(u64, u32)
- declare_get_random_var_wait(long, unsigned long)
- #undef declare_get_random_var
+diff --git a/include/linux/prandom.h b/include/linux/prandom.h
+index f7f1e5251c67..f2ed5b72b3d6 100644
+--- a/include/linux/prandom.h
++++ b/include/linux/prandom.h
+@@ -10,6 +10,7 @@
  
--/*
-- * This is designed to be standalone for just prandom
-- * users, but for now we include it from <linux/random.h>
-- * for legacy reasons.
-- */
--#include <linux/prandom.h>
--
- #ifdef CONFIG_SMP
- int random_prepare_cpu(unsigned int cpu);
- int random_online_cpu(unsigned int cpu);
+ #include <linux/types.h>
+ #include <linux/once.h>
++#include <linux/percpu.h>
+ #include <linux/random.h>
+ 
+ struct rnd_state {
 -- 
 2.46.2
 
