@@ -1,79 +1,59 @@
-Return-Path: <linux-kselftest+bounces-18661-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18662-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F05B98A992
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 18:17:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 292C598A9C3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 18:29:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E13F4B25D5B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 16:14:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC9E61F226D8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Sep 2024 16:29:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EACB3192D94;
-	Mon, 30 Sep 2024 16:11:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12B33193077;
+	Mon, 30 Sep 2024 16:29:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FzvPkONX"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ivxxvpRS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76DAC13F43A;
-	Mon, 30 Sep 2024 16:11:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A490193064
+	for <linux-kselftest@vger.kernel.org>; Mon, 30 Sep 2024 16:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727712684; cv=none; b=NbfEDUBzIraBn3kiMNaffDNvsaoP/uavAqKJmP4iXpCTpVXDdTaB2+WK73Zt7tAPQRygA7jn5JM8ec11e4hP6ui0ISBIh+gqFW5ULveXBbn1D+f4Y4+w9K15ffsXbIEecn5ucgM1w36ATS7epIUZzaThlVhcbW9wKx2caxMXROM=
+	t=1727713785; cv=none; b=cdNJjgEvMOixkZSC7uWE8iF9Dtj09+IJ7yOo5HExUrVUcDvjPWkTEe0Cw6XszroybE+G/Na965dxig7LrQdwb6O6Zaj0mCyt5baAFT7KHXeamR9eAVHwzE/AMzdEAQpxKQoBID0c+l03VwazFhHS3THJmnkPTvKIxeZzVblopRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727712684; c=relaxed/simple;
-	bh=8+OVRreonuvkTKuC1HI/6B9AZ4oAZdT2gdk7ln9ZFH4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Re5YPwltbzYPGffB7yOI5d5E3aZgo1J9PcFW9dKCpx7ckjWZ57rRqqC6NdAVIu0DnRwL218Zf8s+QDx05vYd6b7t21oASSOXieolTqDOgIN4FaB4BpQ1OVBHLfGzNoaSGVUcxPr5sruk5kqR9TuL/ZxxCPX/dSDP8844+DsQylE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FzvPkONX; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-719b17b2da1so3279501b3a.0;
-        Mon, 30 Sep 2024 09:11:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727712683; x=1728317483; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cQkiXIQ41ha4J31LRfSNYWTwIsS7OY5TSI8WxyVPd4g=;
-        b=FzvPkONX2y2Y6pVFPxO7Ygl+eZnUyjv0v5da/5CnBLDyugHPpLwC7RHPw4goW7PfMG
-         cVS/T3+9ijeGC++Ss5PfIV51RveMJyWmgUxiS0LF6rKQ5mROCHTd1zJKUv4mrmj7Z06/
-         UPAcJ4Ns/y70Hpe/W4FLTlJArFJnWvan4rLVg9tSKA4P2yKO+YNRGsjJ9h8eUPnDTrHb
-         Q8a7rzCRU80iHquEPMz8bksTjC7ZrYWel5D2Zr7zqAX2SwimUASEcynqcBwJ/nPYase3
-         eEgeSIlwzkhMGcqbGbXziuLdbj/bGl4D/PGXs69R1G16jK9JJBUPQEKISDi90+ZlyOnc
-         bo3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727712683; x=1728317483;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cQkiXIQ41ha4J31LRfSNYWTwIsS7OY5TSI8WxyVPd4g=;
-        b=mgCRggPDFXmMWan030L9Xdp6wg7m4Idl2HweNfaJ4+4ECPfIVM+L1cTDvtq6m0hs2N
-         GYQ+69R3rOoWslPBirATW/ZyP5rVyYFG4jCNfvAzvYgTmoqwmIVoEwEDX+83E06xMBPv
-         zsSE/OTN1e1aBHImBzrdQojVL/gVi+Mn/5uncMSOKSJEsyc6vWqMTnzFrWKxXlwOJonG
-         4/e2K5qRpRt3DeJLIYAZ5n0f51oWMC0G2XV391zhm1oocDB/P25pHlNETAS0NjjvcLzq
-         Btn6Wrw+NL18A5DRDV/7ukGSBbyVYn+8/Q76odBI74fduhy0w2yXvjw6YTWdoYElfoWo
-         bZiw==
-X-Forwarded-Encrypted: i=1; AJvYcCWakLa2ps2IKSsu2V0hK/HiREDqcC4uiUiML81p1LGjqbTIZ0oszleW8v0j3laqHf8KdEF8v9akF8iTHZ6JuVdz@vger.kernel.org, AJvYcCWi3+oSvdb8Azxw9SrksGS5hhceQC2a+b1P/OgvXnKI9sQsa1hY7Zsew3lzxzYt9v4l6/ItGpaQ+IBEgMGC@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw7QnRXB0LyKMdZlqClqfbo3t6+xsPwRauVLCdX5dD6E/mil9O5
-	PQ+P3AUQtdVJDe+Z00XJq1qOi3eA4Bs2Di4S38v6fKeK1NR1QQ/TfFbpZDWa
-X-Google-Smtp-Source: AGHT+IGIwxLKZ+cI5cm1TUV4imjcKpJhPVbagYMdCkjtn2z/EBBOGdT3Nt4W5u0X/0fmFKiKy0UpmQ==
-X-Received: by 2002:a05:6a21:2fc7:b0:1cf:2853:bc6c with SMTP id adf61e73a8af0-1d4fa7b4ea2mr17646935637.33.1727712682556;
-        Mon, 30 Sep 2024 09:11:22 -0700 (PDT)
-Received: from BiscuitBobby.am.students.amrita.edu ([123.63.2.2])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71b264986eesm6395184b3a.38.2024.09.30.09.11.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Sep 2024 09:11:22 -0700 (PDT)
-From: Siddharth Menon <simeddon@gmail.com>
-To: shuah@kernel.org
-Cc: Siddharth Menon <simeddon@gmail.com>,
-	linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/proc/proc-empty-vm.c: Test for unmapped process
-Date: Mon, 30 Sep 2024 21:39:56 +0530
-Message-Id: <20240930160955.28502-1-simeddon@gmail.com>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1727713785; c=relaxed/simple;
+	bh=GepLR1MXCvDebTt/jsMxUFggGLRHtMkq3G0437bRe6U=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pWwOpzW5/poGojpxS9r39FMBNeqMh114JhzUCJ0tY3hGQ4kbMoCvM50m3IviNgkuSLWDvLTMguzz1RgdQoG5PV7NVcCZf5TOWVSpzcxxnX9aDQjrlj87eShx2YYOqzU6vg/tH6IOzCoLL9uNFKaAKwYPS7MCylk1RPFAyscUgA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ivxxvpRS; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1727713781;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ctpjEXxAQhBELHgt/nsdF0ZF04pW65sAwCl2IcBKy8I=;
+	b=ivxxvpRSBJKf/+2OVB8NJ/BZsJiYbTzE2I+4izIwNOORJBkjo63G6Puwz5ii0Gvoxx0xqH
+	K+tKUYA5gs35KHocDmSPWrJCrcG+TGq+5D0hbUtAmVOmbjIhd6Y9OyMfa/dh3EzWWL08ui
+	Q2a+i2h45tU6vLpBqn9rBcJBTZW8Wbo=
+From: Sean Anderson <sean.anderson@linux.dev>
+To: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org
+Cc: Willem de Bruijn <willemb@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sean Anderson <sean.anderson@linux.dev>
+Subject: [PATCH net-next] selftests: net: csum: Clean up recv_verify_packet_ipv6
+Date: Mon, 30 Sep 2024 12:29:34 -0400
+Message-Id: <20240930162935.980712-1-sean.anderson@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -81,86 +61,52 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-Check if VMsize is 0 to determine whether the process has been unmapped.
-The child process cannot signal the parent that it has unmapped itself,
-as it no longer exists. This includes unmapping the text segment,
-preventing the child from proceeding to the next instruction.
+Rename ip_len to payload_len since the length in this case refers only
+to the payload, and not the entire IP packet like for IPv4. While we're
+at it, just use the variable directly when calling
+recv_verify_packet_udp/tcp.
 
-Signed-off-by: Siddharth Menon <simeddon@gmail.com>
+Signed-off-by: Sean Anderson <sean.anderson@linux.dev>
 ---
- tools/testing/selftests/proc/proc-empty-vm.c | 50 ++++++++++++++++++++
- 1 file changed, 50 insertions(+)
 
-diff --git a/tools/testing/selftests/proc/proc-empty-vm.c b/tools/testing/selftests/proc/proc-empty-vm.c
-index b3f898aab4ab..8ee000b0ddd7 100644
---- a/tools/testing/selftests/proc/proc-empty-vm.c
-+++ b/tools/testing/selftests/proc/proc-empty-vm.c
-@@ -213,6 +213,53 @@ static void vsyscall(void)
- }
- #endif
- 
-+static int test_proc_pid_mem(pid_t pid)
-+{
-+	char buf[4096];
-+	char *line;
-+	int vm_size = -1;
-+
-+	snprintf(buf, sizeof(buf), "/proc/%d/status", pid);
-+	int fd = open(buf, O_RDONLY);
-+
-+	if (fd == -1) {
-+		if (errno == ENOENT) {
-+			// Process does not exist
-+			return EXIT_SUCCESS;
-+		}
-+	perror("open /proc/[pid]/status");
-+	return EXIT_FAILURE;
-+	}
-+
-+	ssize_t rv = read(fd, buf, sizeof(buf) - 1);
-+
-+	if (rv == -1) {
-+		perror("read");
-+		close(fd);
-+		return EXIT_FAILURE;
-+	}
-+	buf[rv] = '\0';
-+
-+	line = strtok(buf, "\n");
-+	while (line != NULL) {
-+		// Check for VmSize
-+		if (strncmp(line, "VmSize:", 7) == 0) {
-+			sscanf(line, "VmSize: %d", &vm_size);
-+			break;
-+		}
-+		line = strtok(NULL, "\n");
-+	}
-+
-+	close(fd);
-+
-+	// Check if VmSize is 0
-+	if (vm_size == 0) {
-+		return EXIT_SUCCESS;
-+	}
-+
-+	return EXIT_FAILURE;
-+}
-+
- static int test_proc_pid_maps(pid_t pid)
+ tools/testing/selftests/net/lib/csum.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/net/lib/csum.c b/tools/testing/selftests/net/lib/csum.c
+index e0a34e5e8dd5..27437590eeb5 100644
+--- a/tools/testing/selftests/net/lib/csum.c
++++ b/tools/testing/selftests/net/lib/csum.c
+@@ -675,22 +675,20 @@ static int recv_verify_packet_ipv6(void *nh, int len)
  {
- 	char buf[4096];
-@@ -508,6 +555,9 @@ int main(void)
- 		 */
- 		sleep(1);
+ 	struct ipv6hdr *ip6h = nh;
+ 	uint16_t proto = cfg_encap ? IPPROTO_UDP : cfg_proto;
+-	uint16_t ip_len;
++	uint16_t payload_len;
  
-+		if (rv == EXIT_SUCCESS) {
-+			rv = test_proc_pid_mem(pid);
-+		}
- 		if (rv == EXIT_SUCCESS) {
- 			rv = test_proc_pid_maps(pid);
- 		}
+ 	if (len < sizeof(*ip6h) || ip6h->nexthdr != proto)
+ 		return -1;
+ 
+-	ip_len = ntohs(ip6h->payload_len);
+-	if (ip_len > len - sizeof(*ip6h))
++	payload_len = ntohs(ip6h->payload_len);
++	if (payload_len > len - sizeof(*ip6h))
+ 		return -1;
+ 
+-	len = ip_len;
+ 	iph_addr_p = &ip6h->saddr;
+-
+ 	if (proto == IPPROTO_TCP)
+-		return recv_verify_packet_tcp(ip6h + 1, len);
++		return recv_verify_packet_tcp(ip6h + 1, payload_len);
+ 	else
+-		return recv_verify_packet_udp(ip6h + 1, len);
++		return recv_verify_packet_udp(ip6h + 1, payload_len);
+ }
+ 
+ /* return whether auxdata includes TP_STATUS_CSUM_VALID */
 -- 
-2.39.5
+2.35.1.1320.gc452695387.dirty
 
 
