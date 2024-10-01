@@ -1,172 +1,91 @@
-Return-Path: <linux-kselftest+bounces-18799-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18800-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4A3E98C34E
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 18:24:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FA9B98C35F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 18:27:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E14291C24342
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 16:24:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28E90B2234C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 16:27:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C3241CCB35;
-	Tue,  1 Oct 2024 16:21:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA3CB1C9EA6;
+	Tue,  1 Oct 2024 16:26:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="IvVD1i3P";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="79AnOGlo"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lQ/jdD+8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88291CCB22;
-	Tue,  1 Oct 2024 16:21:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99BEC1C68AC
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Oct 2024 16:26:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727799662; cv=none; b=rJ3uZCm0zXIEHClJGXH1gbSRJJoBgF+dxDQ3a4oP+ryWb2a8/vqudb+iJyu6bPfOUhQAdss88EuBkoFNG6DtJAYisHGJfjPFckZoeRC/eYEi1wpqusN6hyDnB4yvIGGNk0poHJbMxxL5+kwGFAp77YabiGPnxmZLU+u/Q/qjHpw=
+	t=1727800017; cv=none; b=o8lIyi/YVuYEKhLUyz4n8rdq+K/xsrYJEVdS+O9oMsArzphWt1xxYLhWTs6f3Otv8r9PPk/ONjl/X1qoZHEvWCkSFK3oABbDbNa2KwxaW6bxVWGzcbfXtwo+sLntgjWMcD+pHm8DtlAFVXH89ZZOxcHBipSKx5s6UABCb1I0rk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727799662; c=relaxed/simple;
-	bh=50Kc/VqmKtTSOxHAWjBypYOatXvkpvo9/GVb9cRxjAs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XBXMs4tzjZS8Sws/Iyfc32sJ9soKd2eHeOL81xWrxMRpkxk0WLvPhM2SRVfblX0v6BTE0pjEP0TvWFF+In58wyiXVsiOhr6yzQX0O6ehb0jFUn4/y62PK3dqBzPwcAO1OhB/GQlSpcNawjhCrQTPzh5lO0MKUVEfTmrwiUDiB2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=IvVD1i3P; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=79AnOGlo; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 1756F1FCEB;
-	Tue,  1 Oct 2024 16:20:57 +0000 (UTC)
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1727799657; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=l/QBF9ogG+rLgjsYlGtd5nYLAr8eD5n5eV3Wh2PFS6s=;
-	b=IvVD1i3PZoO/G0+SShUuHjmGbgr04z/JU5VYqn7PyYalIFAZK3wDKdp4SVdGNvIdx6Zn0r
-	XE3ZyuxQd3vOvjZTSSNf8DTYBoROimPtL2+NhzOAgXAZ7jx+D/nfgIIurnlPXJ1gpfkgB3
-	Du68vOdEIPlMrO1rvkQ5KkaIMvNmdM8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1727799657;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=l/QBF9ogG+rLgjsYlGtd5nYLAr8eD5n5eV3Wh2PFS6s=;
-	b=79AnOGloyFDDJnxc20ufPXTF7TToPL8scRX1tzFKC3c6jBT4T+SgMdZOHniLljNnMFTc3M
-	udE/zrrCO3/hHsDA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D4AC913A91;
-	Tue,  1 Oct 2024 16:20:56 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id iEqkM2gh/GaHRAAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Tue, 01 Oct 2024 16:20:56 +0000
-From: Vlastimil Babka <vbabka@suse.cz>
-Date: Tue, 01 Oct 2024 18:20:49 +0200
-Subject: [PATCH slab hotfixes v2 2/2] slub/kunit: skip test_kfree_rcu when
- the slub kunit test is built-in
+	s=arc-20240116; t=1727800017; c=relaxed/simple;
+	bh=VrBnfLC+zVG9IFbwmPZHicLTfNZlFBrRSS5dHeuq9lc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=T8Dn3XgS+THwaNK74ToqOUlQqNFEfT/NgeYIlXeMeP4aLs6VYi/UY3CE48wggGyvNYxR+MiMXt4rM+SSRnKA5/TgzUb4X5etBmsrCPyXwb6ftIgUxpu7IORQtobcs/q9kGwIDiPQIotC7e7sB8QNjJjrj8D43xulkjfld/Qdf2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lQ/jdD+8; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-20b40c7fd8eso234885ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Oct 2024 09:26:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1727800016; x=1728404816; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VrBnfLC+zVG9IFbwmPZHicLTfNZlFBrRSS5dHeuq9lc=;
+        b=lQ/jdD+8AwDRQzwMqcxcYd6wkn2V65gZXTvavuwkX7bUAQYO+TfEESLoocovZhxme1
+         xUjE8oXTxu/6E5wWQxLLqTHVArX5X4oyH0ysDHZHjeRZ+at0dN/l2IzXfCPDRR6oEQ/i
+         Dz18vKEGgeJy/UT6NDznZkHLjEFsVt1hZXyQRA4abiIrRCZthMdpxwTlYKnmpkpKJD+3
+         zxQzefc2qBZYORE8gcBDLC1P1oZtHQNaPQMV0Ay5M1rKJ85HccKWQqI9Nf+ljYWaIQEH
+         j7S2zNxqhcDZsuckgg/Sg+pWyniyLAVErPkD4Etyadm4Pg0hoXxKmLHDAkbv1wB1OAF6
+         hxlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727800016; x=1728404816;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VrBnfLC+zVG9IFbwmPZHicLTfNZlFBrRSS5dHeuq9lc=;
+        b=GArpTN+/7PUPS52bO1oM7JBGo1TsQyoddLXQGjMM8iQk5JxO1EBV48UMTvcTSjNDid
+         lYyRzN8vKvVc11L5Va5l3u9+PPGnAt/se2BFPIydauTfLb6Gk2JK3G18w9hbsKT/Lg4C
+         4h88M3SFJLpRATBWcieq3X7oakj/is5eXZu8fMtkFZGr0HeV/b9JrBb5YONG5v4R0UgO
+         AGEiMm5njeVdD+hJkVe6UYGd9CHz90CjaxfQl4sIFXCd6kgvSHhW0ZEv1OqeC4PKfrBB
+         WEbxw0GxIyLdLn2deLxBhOPpQuRVk4vNGMgGLW55fVCzfIRlf99xNEYriPL6ref0cfpe
+         enBw==
+X-Forwarded-Encrypted: i=1; AJvYcCUbMl6YR1Lmzh62OGgeZErJpdt1vKAKcOtSqFWx01dSnxdoIoozMfP4utdh3mvMGWke9bHiUGwgPB5AGZ0ybPU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpWQF9MTrCZeYuhRXClRBLGtKS4lrkxiNYo4XpJ/0XRPdKlogj
+	ZZxvSiCC0xrro4FIHI/Nf63lx5oZzwQklOZ8X4V5u/JAeV5VZfa+EUQmYa2RBhP6pULmeU/Xnn0
+	SpGHOnUqGM3tms9FPQxfmXTMlmLSSW1uQD/ji
+X-Google-Smtp-Source: AGHT+IHdrQbAqpejQaNhVvnlIZgEwuDo5VjmqDx/kOgnNdj+gWj66NYWwVdsH2uRpgkV2fh2pLnWhSrh6EUiZbbDSoI=
+X-Received: by 2002:a17:903:228a:b0:20b:a3f7:ca8e with SMTP id
+ d9443c01a7336-20bb0804a02mr2571395ad.13.1727800015581; Tue, 01 Oct 2024
+ 09:26:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241001-b4-slub-kunit-fix-v2-2-2d995d3ecb49@suse.cz>
-References: <20241001-b4-slub-kunit-fix-v2-0-2d995d3ecb49@suse.cz>
-In-Reply-To: <20241001-b4-slub-kunit-fix-v2-0-2d995d3ecb49@suse.cz>
-To: Christoph Lameter <cl@linux.com>, David Rientjes <rientjes@google.com>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>, 
- Andrew Morton <akpm@linux-foundation.org>, 
- Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-kernel@vger.kernel.org, 
- linux-mm@kvack.org, Vlastimil Babka <vbabka@suse.cz>, 
- Guenter Roeck <linux@roeck-us.net>, "Paul E. McKenney" <paulmck@kernel.org>, 
- Boqun Feng <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>, 
- rcu@vger.kernel.org, David Gow <davidgow@google.com>, 
- Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org, 
- kunit-dev@googlegroups.com, Brendan Higgins <brendan.higgins@linux.dev>
-X-Mailer: b4 0.14.2
-X-Spamd-Result: default: False [-4.00 / 50.00];
-	REPLY(-4.00)[];
-	TAGGED_RCPT(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Score: -4.00
-X-Rspamd-Queue-Id: 1756F1FCEB
-X-Rspamd-Pre-Result: action=no action;
-	module=replies;
-	Message is reply to one we originated
-X-Rspamd-Action: no action
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Level: 
+References: <20240905200551.4099064-1-jrife@google.com>
+In-Reply-To: <20240905200551.4099064-1-jrife@google.com>
+From: Jordan Rife <jrife@google.com>
+Date: Tue, 1 Oct 2024 09:26:44 -0700
+Message-ID: <CADKFtnQGCic1fAQFbwBZVmYsZb2jykaBzPMrOMVuvENxUSZ6bQ@mail.gmail.com>
+Subject: Re: [PATCH v2 net-next] wireguard: allowedips: Add
+ WGALLOWEDIP_F_REMOVE_ME flag
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>, wireguard@lists.zx2c4.com
+Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Guenter Roeck reports that the new slub kunit tests added by commit
-4e1c44b3db79 ("kunit, slub: add test_kfree_rcu() and
-test_leak_destroy()") cause a lockup on boot on several architectures
-when the kunit tests are configured to be built-in and not modules.
+Hi Jason,
 
-The test_kfree_rcu test invokes kfree_rcu() and boot sequence inspection
-showed the runner for built-in kunit tests kunit_run_all_tests() is
-called before setting system_state to SYSTEM_RUNNING and calling
-rcu_end_inkernel_boot(), so this seems like a likely cause. So while I
-was unable to reproduce the problem myself, skipping the test when the
-slub_kunit module is built-in should avoid the issue.
+Just reaching out to see if you've had a chance to take a look at this. Thanks!
 
-An alternative fix that was moving the call to kunit_run_all_tests() a
-bit later in the boot was tried, but has broken tests with functions
-marked as __init due to free_initmem() already being done.
-
-Fixes: 4e1c44b3db79 ("kunit, slub: add test_kfree_rcu() and test_leak_destroy()")
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Closes: https://lore.kernel.org/all/6fcb1252-7990-4f0d-8027-5e83f0fb9409@roeck-us.net/
-Cc: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Boqun Feng <boqun.feng@gmail.com>
-Cc: Uladzislau Rezki <urezki@gmail.com>
-Cc: rcu@vger.kernel.org
-Cc: Brendan Higgins <brendanhiggins@google.com>
-Cc: David Gow <davidgow@google.com>
-Cc: Rae Moar <rmoar@google.com>
-Cc: linux-kselftest@vger.kernel.org
-Cc: kunit-dev@googlegroups.com
-Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
----
- lib/slub_kunit.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
-
-diff --git a/lib/slub_kunit.c b/lib/slub_kunit.c
-index 85d51ec09846d4fa219db6bda336c6f0b89e98e4..80e39f003344858722a544ad62ed84e885574054 100644
---- a/lib/slub_kunit.c
-+++ b/lib/slub_kunit.c
-@@ -164,10 +164,16 @@ struct test_kfree_rcu_struct {
- 
- static void test_kfree_rcu(struct kunit *test)
- {
--	struct kmem_cache *s = test_kmem_cache_create("TestSlub_kfree_rcu",
--				sizeof(struct test_kfree_rcu_struct),
--				SLAB_NO_MERGE);
--	struct test_kfree_rcu_struct *p = kmem_cache_alloc(s, GFP_KERNEL);
-+	struct kmem_cache *s;
-+	struct test_kfree_rcu_struct *p;
-+
-+	if (IS_BUILTIN(CONFIG_SLUB_KUNIT_TEST))
-+		kunit_skip(test, "can't do kfree_rcu() when test is built-in");
-+
-+	s = test_kmem_cache_create("TestSlub_kfree_rcu",
-+				   sizeof(struct test_kfree_rcu_struct),
-+				   SLAB_NO_MERGE);
-+	p = kmem_cache_alloc(s, GFP_KERNEL);
- 
- 	kfree_rcu(p, rcu);
- 	kmem_cache_destroy(s);
-
--- 
-2.46.1
-
+-Jordan
 
