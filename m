@@ -1,290 +1,210 @@
-Return-Path: <linux-kselftest+bounces-18728-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E75798B725
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 10:38:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DEADF98B79F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 10:54:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CF6F28390A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 08:38:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E3ACB24C59
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 08:54:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED21119DF61;
-	Tue,  1 Oct 2024 08:37:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9007619D08C;
+	Tue,  1 Oct 2024 08:54:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="C/vywLpT";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="IqibOtaW";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="C/vywLpT";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="IqibOtaW"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="qtValy6a"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2045.outbound.protection.outlook.com [40.107.95.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A7D619AD5C;
-	Tue,  1 Oct 2024 08:37:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727771836; cv=none; b=WVUOOQvXgmVtq1c5OroefHu4alzbeLCvvdOBxnwo9LfEuELoCvJ+c1YW79BHaFZtcq7kjSrEnGxHSaFSHLzGP5BcADm8GyNUzQrp8QLVujVwob6Sneqr4FuzukNLu65W8amvJw5MoC/P++Usovj70+iGZoFsUj0c6O/JgPruyNQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727771836; c=relaxed/simple;
-	bh=8a1k4nvuJee1xWuk2wirbRH2ovNTmhsw4NtFJTBefGc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AIl6vWvUW3fE/Dhc3tE3uQqx/82FCl6GAmRzpC4fpA20qvbYuXPrMKYhzQZJsOPMz8mIabOCJtzApF+v9JJ1XhZMD7/Ledlh1Z7nhCQCJnrbcMxzCOHIv8QEx5vx23iHhxpxdPKaGG0IZs6CGz7seRN77VRjskIAyzvbOofobVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=C/vywLpT; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=IqibOtaW; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=C/vywLpT; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=IqibOtaW; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 910BB21AFE;
-	Tue,  1 Oct 2024 08:37:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1727771826; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Wz6iF7VA/XvwkekcIHafjhP+48pOMPmGqg5ohl9g+/c=;
-	b=C/vywLpTeb8iVDIjG5slIvToARzmWXiYCXaqVwADoLhuFj09D0a1X/VUGGI59jnJxTJDWH
-	rKSM4I7+lZRvtZOZy0VGvHKbfsGIdMk/RD+iAbDamLtMflSLPQmm8FZr8aJ2PnA7Oimb4a
-	eszHU8HWWyCZKmmDqNgaD2ztK7qvuvQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1727771826;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Wz6iF7VA/XvwkekcIHafjhP+48pOMPmGqg5ohl9g+/c=;
-	b=IqibOtaW835sOiirqnRMWp3ZL/xLWkEV4m1N7vFcusweGOjSkGYMAKBJ8ZEEbu9LFlKMS2
-	PK1d/shX7dY2wyBA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1727771826; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Wz6iF7VA/XvwkekcIHafjhP+48pOMPmGqg5ohl9g+/c=;
-	b=C/vywLpTeb8iVDIjG5slIvToARzmWXiYCXaqVwADoLhuFj09D0a1X/VUGGI59jnJxTJDWH
-	rKSM4I7+lZRvtZOZy0VGvHKbfsGIdMk/RD+iAbDamLtMflSLPQmm8FZr8aJ2PnA7Oimb4a
-	eszHU8HWWyCZKmmDqNgaD2ztK7qvuvQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1727771826;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Wz6iF7VA/XvwkekcIHafjhP+48pOMPmGqg5ohl9g+/c=;
-	b=IqibOtaW835sOiirqnRMWp3ZL/xLWkEV4m1N7vFcusweGOjSkGYMAKBJ8ZEEbu9LFlKMS2
-	PK1d/shX7dY2wyBA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4347913A6E;
-	Tue,  1 Oct 2024 08:37:06 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id VBOhD7K0+2bgLwAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Tue, 01 Oct 2024 08:37:06 +0000
-Message-ID: <5ccae4ec-0b98-4f84-89be-9ba49f75e85e@suse.cz>
-Date: Tue, 1 Oct 2024 10:39:35 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F392D19D07A;
+	Tue,  1 Oct 2024 08:54:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.45
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727772859; cv=fail; b=Bpi7lyQvsg8B8+4vBJTZUmh078UggKHpSPOXpgqtg8QM7XnBBNL4XUrpKnoGKrsQ7TFbEhZrFppZC0qIg5aQnlUUQTRKujgtbaibGdhpOC+dE/5luKNNBIvRTtE0TWd7pqSA43BJvcHoToIXBs0RYRoQrjYCNx3JKz5BMSz+YQQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727772859; c=relaxed/simple;
+	bh=o6yLI5UtVm9uGSUy4BjEpoNa8ahIZuJ0Ec2GE14lMYg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=S5oP4sQWScypYcMGWSJ3RnDjPzRow2d8RbqIbIzUzukM3E+S/SnIgl5cKT99OKvZBSBFp0C+mu/UKqeRAkWUak88XTJht2UH3hPLt6WjrKhuNB3t8/tVA9os3R+g76ZrI1a2RcaTMREBbK2isGxZEl4xa5/thGf+TFfRKYPBLKQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=qtValy6a; arc=fail smtp.client-ip=40.107.95.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bRHpNtSWogwiBr5yk0+IL62C2DhTCVgQHIwfAdMvfARASBb0fMgc9a7imxysosynfsBAnxKRkJpUZhNQ0S6V2i+DE2biU/EZ5yJ4IcJU8MhudU8uYGocJj0ZFGYaUNxfKzkZjDAFDfjQr+zg3ODwCE/MK9O/NJO1+N+g/8rC84s/5sVUS+M7qQ+E9969jdpunSPCrER1bClzC7hYJA5E0nf6Wov7ZvXLbZTZoWuT50RiCmm78XnQr0lKTv84UV6/YvT8wt4efNg8AF1l1XdNtGt8+sbSP5sIZGyRD0nZ0X/YKUlQ1i85FckHhbau3Qv/ViYyGPu2TwNcI7WcR0Ra/A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VUtBzc50RdH+EFt2YLXMObkUbfdaMdsP0sTO6Y/RVg4=;
+ b=XDB18NLFUH7XI3AiH+sfPsrT1dXdW9Nk0IQAhe0+i+QnA5AhmLIRUac5D6Sb871R0lpccT4BYQ0NpMyXrfpnNx/e1d2oJ6ukqBY7mxbfEOVLCBGP4T0+ACcfp0Y25eT+825WavNWQJrqJsoUkwzq3GibCsIcLdbR/jyXhR+qNu3FXSCjtcg0S77k5eeuWMFNrzXkFMyh9mWeai50i7+6dd0x8cNWH5Cuc80fTHqkepf4bPO1W1X1CCA0ptlEu2f04s89khi63SZuh6QsIvRvgNXuKhKQxqrKzw8jjdRGusb9wgmyRvD3StEHb7HY9fk3Wb92Nyb0tTUTSCsBA2qeCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=huawei.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VUtBzc50RdH+EFt2YLXMObkUbfdaMdsP0sTO6Y/RVg4=;
+ b=qtValy6aJ+QVP8bW+NjTyBwuUVKDhWLLWSdA0xI/R9r4OFpphB4ylP+ATbTel/AU319TY5Iidzol44pxA/Vmxh7ywDtkq6bqDNZgFla8kQ7KQYLdDnKsXIKStMsC71nZjyPAqKFDAklFGWM3Bm/7zF2lZL9/uMEVIYSftOH4ci1X9ouLBqHKGFyYmDVxJqx0tmCq3ZS47ON8xafE9X7Mdw5TCYTvp9PPeMdyEn6/If6BJIUg8AvbRfhE4vHOLvGfuigXRnT4TVOjBUMZOgN/cT9p7NVG1ZhWQhHgYgVbPNeeg4ETGMwyb3RvF6Xq+ocVAIRbH+wzjqtXR7VmnloAPA==
+Received: from SJ0PR05CA0074.namprd05.prod.outlook.com (2603:10b6:a03:332::19)
+ by CY8PR12MB7564.namprd12.prod.outlook.com (2603:10b6:930:97::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8005.27; Tue, 1 Oct
+ 2024 08:54:14 +0000
+Received: from SJ1PEPF000023CD.namprd02.prod.outlook.com
+ (2603:10b6:a03:332:cafe::91) by SJ0PR05CA0074.outlook.office365.com
+ (2603:10b6:a03:332::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.15 via Frontend
+ Transport; Tue, 1 Oct 2024 08:54:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ SJ1PEPF000023CD.mail.protection.outlook.com (10.167.244.8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8026.11 via Frontend Transport; Tue, 1 Oct 2024 08:54:13 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Tue, 1 Oct 2024
+ 01:54:08 -0700
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ drhqmail202.nvidia.com (10.126.190.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.4; Tue, 1 Oct 2024 01:54:08 -0700
+Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com
+ (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
+ Transport; Tue, 1 Oct 2024 01:54:07 -0700
+Date: Tue, 1 Oct 2024 01:54:05 -0700
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: Dan Williams <dan.j.williams@intel.com>, <kevin.tian@intel.com>,
+	<will@kernel.org>, <joro@8bytes.org>, <suravee.suthikulpanit@amd.com>,
+	<robin.murphy@arm.com>, <dwmw2@infradead.org>, <baolu.lu@linux.intel.com>,
+	<shuah@kernel.org>, <linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
+	<eric.auger@redhat.com>, <jean-philippe@linaro.org>, <mdf@kernel.org>,
+	<mshavit@google.com>, <shameerali.kolothum.thodi@huawei.com>,
+	<smostafa@google.com>, <yi.l.liu@intel.com>
+Subject: Re: [PATCH v2 06/19] iommufd/viommu: Add
+ IOMMU_VIOMMU_SET/UNSET_VDEV_ID ioctl
+Message-ID: <Zvu4rZosYFjCuEC/@Asurada-Nvidia>
+References: <cover.1724776335.git.nicolinc@nvidia.com>
+ <6348cc7a72ce9f2ac0e9caf9737e70177a01eb74.1724776335.git.nicolinc@nvidia.com>
+ <20240905160353.GP1358970@nvidia.com>
+ <ZtnsaWgeuuy7+cJG@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH slab hotfixes 2/2] kunit: move call to
- kunit_run_all_tests() after rcu_end_inkernel_boot()
-To: Guenter Roeck <linux@roeck-us.net>,
- Andrew Morton <akpm@linux-foundation.org>, Christoph Lameter <cl@linux.com>,
- David Rientjes <rientjes@google.com>,
- Roman Gushchin <roman.gushchin@linux.dev>,
- Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org
-Cc: "Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng
- <boqun.feng@gmail.com>, Uladzislau Rezki <urezki@gmail.com>,
- rcu@vger.kernel.org, David Gow <davidgow@google.com>,
- Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com, Brendan Higgins <brendan.higgins@linux.dev>
-References: <20240930-b4-slub-kunit-fix-v1-0-32ca9dbbbc11@suse.cz>
- <20240930-b4-slub-kunit-fix-v1-2-32ca9dbbbc11@suse.cz>
- <9dd56c26-12db-4b69-af0e-fdea33bb8208@roeck-us.net>
- <ee52f8af-ef1a-4382-ab9a-f9781157d1be@roeck-us.net>
-From: Vlastimil Babka <vbabka@suse.cz>
-Content-Language: en-US
-In-Reply-To: <ee52f8af-ef1a-4382-ab9a-f9781157d1be@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -2.80
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_RCPT(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	FREEMAIL_TO(0.00)[roeck-us.net,linux-foundation.org,linux.com,google.com,linux.dev,gmail.com,vger.kernel.org,kvack.org];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,gmail.com,vger.kernel.org,google.com,googlegroups.com,linux.dev];
-	MID_RHS_MATCH_FROM(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	TO_DN_SOME(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZtnsaWgeuuy7+cJG@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ1PEPF000023CD:EE_|CY8PR12MB7564:EE_
+X-MS-Office365-Filtering-Correlation-Id: 28f30d74-aefb-4f18-1f9c-08dce1f69fa4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|82310400026|7416014|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?hv219JXzZBwJSWw1HjzOR2wWGuVXQG1hDGHZUUcrdiS9boRdK3liuWZrCe83?=
+ =?us-ascii?Q?JrDCbq7jCpWTovSzpMwGWcl8o+Qj9RBPuyLtYUZbbBDUMrxz4q9nbD8EsAqL?=
+ =?us-ascii?Q?za1vjD6IwhFl10WmwnFOMYjKXvdUyu66JnwMHUYRu3B5LNzEG/s63UVzkn5B?=
+ =?us-ascii?Q?9r6xnhxhNah7O3ghANZPc+24+Osg6/Hi20ivjNlpOO53HkF384/UWTmJaJ1+?=
+ =?us-ascii?Q?tuOYjhFNDDiPlrE4laIrjIAT+1gySOXsH0yesM49wgP31nC/VWONkm1IVYiW?=
+ =?us-ascii?Q?cYVISvtlcpGzI3t58rI3apsyB0+OMJYQm57CyWfG9gxM2eELAMjWd6SRJYQa?=
+ =?us-ascii?Q?lf/Zy9Ww04fztMk6ET6gQvrxAPiEDrJ4jD2JgdlAeBu2LvMB1K5DZpoN+h+5?=
+ =?us-ascii?Q?DQ7iynZVarNkh6XqMQFDjwq9Bk+k8YeBvAhqh3WXoTdGtsNIqiOBmOkJ1UHK?=
+ =?us-ascii?Q?6auLkrbXIjS13IEWgH4yzgyY5LyOM+rwyegu0ZeVRrnnaHpO0sPJC80SUZil?=
+ =?us-ascii?Q?xWU0Tcj3uqIoSoak9d1Z8q60nz3unnEN6bhrAy196s16XjpMHLZA0DsUWTP5?=
+ =?us-ascii?Q?8VFDh+PEjQCNcjqdhAI7NXVhqRJtmYqN36kgbsUCddLMZqkfUBSQIaZKk97Y?=
+ =?us-ascii?Q?G99Uw9veLD7iEfdk8N7csS0MGhHnrUamiSASAa/8Bs7j6TgZlsICrlDk3vg9?=
+ =?us-ascii?Q?vllc3FZAhhGqgS/NNityeicUOUOT0/syMP2cAYNxEoxqRizusCF/ZZxHOaIs?=
+ =?us-ascii?Q?cDSyKgudqGZ2gRDMx5TlfkqxlAeS0dHarAyqxljtmShC4KeSHpf7n0fwFUZr?=
+ =?us-ascii?Q?EwHAXhgad+jUNfG6Z9StaVpxHFP3a2in9Ez3DTbVkWGRRRWzd6addS/8ptLE?=
+ =?us-ascii?Q?u+YGty4HUfPge+dzXuAs3M6AtBeHnrZTz5F6WhHTCikab/toPJasUdkqIWzJ?=
+ =?us-ascii?Q?jh8oIBm2icrI0ClrS2MPbqwewf9EaXQBesqr5/WFUl1IbL2A/fjAXjOx04pk?=
+ =?us-ascii?Q?tlCgYv0S/rOkZwwTxzUVVHhMKux66xSpAxViy9+uKFrOfzFSog6ic4M3Z6Xg?=
+ =?us-ascii?Q?mmzViaQDAh7ovx+WwIPhN8qu+l26FvjTXDFHiuGZCkTmjOyhXPM6ZADDG3aG?=
+ =?us-ascii?Q?afn752qybakFWmQb58Pmy804WFD6Awt3fuTqFUzOlJZhE6hbsqf/Zi1g6MC+?=
+ =?us-ascii?Q?YCwQBHypnapkRkusydJ4GBGMNT+nnC5pmI2Zw7MhsCT6gLrd5F4cSm/DJ6wp?=
+ =?us-ascii?Q?WQ8K3de+NrJdszwt9X0B+WjPREjMKz6cl5Flkuiglt9Mwkpwbt0k6GG98Kdt?=
+ =?us-ascii?Q?tHsTJNChaeY/goDjfqam037ukgp7wtyGH7adMFKoZMP/p/pUgX//5J4r94R0?=
+ =?us-ascii?Q?URmyMsVCE93JXyGofpm6JT3YMoPh+zCbm3bwDQTmzYC64/uQFuEuCSzGlv0W?=
+ =?us-ascii?Q?JZMurQidBPenoNR5/yCQTWnsHosHW1Zv?=
+X-Forefront-Antispam-Report:
+	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Oct 2024 08:54:13.5993
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28f30d74-aefb-4f18-1f9c-08dce1f69fa4
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SJ1PEPF000023CD.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7564
 
-On 10/1/24 1:55 AM, Guenter Roeck wrote:
-> On 9/30/24 11:50, Guenter Roeck wrote:
->> On 9/30/24 01:37, Vlastimil Babka wrote:
->>> Guenter Roeck reports that the new slub kunit tests added by commit
->>> 4e1c44b3db79 ("kunit, slub: add test_kfree_rcu() and
->>> test_leak_destroy()") cause a lockup on boot on several architectures
->>> when the kunit tests are configured to be built-in and not modules.
->>>
->>> These tests invoke kfree_rcu() and kvfree_rcu_barrier() and boot
->>> sequence inspection showed the runner for built-in kunit tests
->>> kunit_run_all_tests() is called before setting system_state to
->>> SYSTEM_RUNNING and calling rcu_end_inkernel_boot(), so this seems like a
->>> likely cause. So while I was unable to reproduce the problem myself,
->>> moving the call to kunit_run_all_tests() a bit later in the boot seems
->>> to have fixed the lockup problem according to Guenter's limited testing.
->>>
->>> No kunit tests should be broken by calling the built-in executor a bit
->>> later, as when compiled as modules, they are still executed even later
->>> than this.
->>>
-> 
-> Actually, that is wrong.
-> 
-> Turns out kunit_iov_iter (and other kunit tests) are marked __init.
-> That means those unit tests have to run before the init code is released,
-> and it actually _is_ harmful to run the tests after rcu_end_inkernel_boot()
-> because at that time free_initmem() has already been called.
+On Thu, Sep 05, 2024 at 10:38:23AM -0700, Nicolin Chen wrote:
+> On Thu, Sep 05, 2024 at 01:03:53PM -0300, Jason Gunthorpe wrote:
+> > On Tue, Aug 27, 2024 at 09:59:43AM -0700, Nicolin Chen wrote:
+> > > Introduce a pair of new ioctls to set/unset a per-viommu virtual device id
+> > > that should be linked to a physical device id via an idev pointer.
+> > 
+> > Given some of the other discussions around CC I suspect we should
+> > rename these to 'create/destroy virtual device' with an eye that
+> > eventually they would be extended like other ops with per-CC platform
+> > data.
+> > 
+> > ie this would be the interface to tell the CC trusted world that a
+> > secure device is being added to a VM with some additional flags..
+> > 
+> > Right now it only conveys the vRID parameter of the virtual device
+> > being created.
+> >
+> > A following question is if these objects should have their own IDs in
+> > the iommufd space too, and then unset is not unset but just a normal
+> > destroy object. If so then the thing you put in the ids xarray would
+> > also just be a normal object struct.
 
-Oh, guess that explains why the kunit_run_all_tests() executor is called
-so suspiciously early. Of course when built as modules, __init has a
-different lifetime.
+I found that adding it as a new object makes things a lot of easier
+since a vdevice can take refcounts of both viommu and idev. So both
+destroy() callbacks wouldn't be bothered.
 
-Guess I will just skip the two new tests using kfree_rcu() when the slub
-kunit is built-in then. Thanks for testing.
+While confirming if I am missing something from the review comments,
+I am not quite sure what is "the thing you put in the ids xarray"..
+I only added a vRID xarray per viommu, yet that doesn't seem to be
+able to merge into the normal object struct. Mind elaborating?
 
-> Guenter
+Thanks
+Nicolin
+
+> > This is probably worth doing if this is going to grow more CC stuff
+> > later.
 > 
->>> Fixes: 4e1c44b3db79 ("kunit, slub: add test_kfree_rcu() and
->>> test_leak_destroy()")
->>> Reported-by: Guenter Roeck <linux@roeck-us.net>
->>> Closes:
->>> https://lore.kernel.org/all/6fcb1252-7990-4f0d-8027-5e83f0fb9409@roeck-us.net/
->>> Cc: "Paul E. McKenney" <paulmck@kernel.org>
->>> Cc: Boqun Feng <boqun.feng@gmail.com>
->>> Cc: Uladzislau Rezki <urezki@gmail.com>
->>> Cc: rcu@vger.kernel.org
->>> Cc: Brendan Higgins <brendanhiggins@google.com>
->>> Cc: David Gow <davidgow@google.com>
->>> Cc: Rae Moar <rmoar@google.com>
->>> Cc: linux-kselftest@vger.kernel.org
->>> Cc: kunit-dev@googlegroups.com
->>> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
->>> ---
->>>   init/main.c | 4 ++--
->>>   1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/init/main.c b/init/main.c
->>> index
->>> c4778edae7972f512d5eefe8400075ac35a70d1c..7890ebb00e84b8bd7bac28923fb1fe571b3e9ee2 100644
->>> --- a/init/main.c
->>> +++ b/init/main.c
->>> @@ -1489,6 +1489,8 @@ static int __ref kernel_init(void *unused)
->>>       rcu_end_inkernel_boot();
->>> +    kunit_run_all_tests();
->>> +
->>>       do_sysctl_args();
->>>       if (ramdisk_execute_command) {
->>> @@ -1579,8 +1581,6 @@ static noinline void __init
->>> kernel_init_freeable(void)
->>>       do_basic_setup();
->>> -    kunit_run_all_tests();
->>> -
->>>       wait_for_initramfs();
->>>       console_on_rootfs();
->>>
->> Unfortunately it doesn't work. With this patch applied, I get many
->> backtraces
->> similar to the following, and ultimately the image crashes. This is
->> with arm64.
->> I do not see the problem if I drop this patch.
->>
->> Guenter
->>
->> ---
->> [    9.465871]     KTAP version 1
->> [    9.465964]     # Subtest: iov_iter
->> [    9.466056]     # module: kunit_iov_iter
->> [    9.466115]     1..12
->> [    9.467000] Unable to handle kernel paging request at virtual
->> address ffffc37db5c9f26c
->> [    9.467244] Mem abort info:
->> [    9.467332]   ESR = 0x0000000086000007
->> [    9.467454]   EC = 0x21: IABT (current EL), IL = 32 bits
->> [    9.467576]   SET = 0, FnV = 0
->> [    9.467667]   EA = 0, S1PTW = 0
->> [    9.467762]   FSC = 0x07: level 3 translation fault
->> [    9.467912] swapper pgtable: 4k pages, 48-bit VAs,
->> pgdp=0000000042a59000
->> [    9.468055] [ffffc37db5c9f26c] pgd=0000000000000000,
->> p4d=1000000044b36003, pud=1000000044b37003, pmd=1000000044b3a003,
->> pte=0000000000000000
->> [    9.469430] Internal error: Oops: 0000000086000007 [#1] PREEMPT SMP
->> [    9.469687] Modules linked in:
->> [    9.470035] CPU: 0 UID: 0 PID: 550 Comm: kunit_try_catch Tainted:
->> G                 N 6.12.0-rc1-00005-ga65e3eb58cdb #1
->> [    9.470290] Tainted: [N]=TEST
->> [    9.470356] Hardware name: linux,dummy-virt (DT)
->> [    9.470530] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS
->> BTYPE=--)
->> [    9.470656] pc : iov_kunit_copy_to_kvec+0x0/0x334
->> [    9.471055] lr : kunit_try_run_case+0x6c/0x15c
->> [    9.471145] sp : ffff800080883de0
->> [    9.471210] x29: ffff800080883e20 x28: 0000000000000000 x27:
->> 0000000000000000
->> [    9.471376] x26: 0000000000000000 x25: 0000000000000000 x24:
->> ffff80008000bb68
->> [    9.471501] x23: ffffc37db3f7093c x22: ffff80008000b940 x21:
->> ffff545847af4c00
->> [    9.471622] x20: ffff545847cd3940 x19: ffff80008000bb50 x18:
->> 0000000000000006
->> [    9.471742] x17: 6c61746f7420303a x16: 70696b7320303a6c x15:
->> 0000000000000172
->> [    9.471863] x14: 0000000000020000 x13: 0000000000000000 x12:
->> ffffc37db6a600c8
->> [    9.471983] x11: 0000000000000043 x10: 0000000000000043 x9 :
->> 1fffffffffffffff
->> [    9.472122] x8 : 00000000ffffffff x7 : 000000001040d4fd x6 :
->> ffffc37db70c3810
->> [    9.472243] x5 : 0000000000000000 x4 : ffffffffc4653600 x3 :
->> 000000003b9ac9ff
->> [    9.472363] x2 : 0000000000000001 x1 : ffffc37db5c9f26c x0 :
->> ffff80008000bb50
->> [    9.472572] Call trace:
->> [    9.472636]  iov_kunit_copy_to_kvec+0x0/0x334
->> [    9.472740]  kunit_generic_run_threadfn_adapter+0x28/0x4c
->> [    9.472835]  kthread+0x11c/0x120
->> [    9.472903]  ret_from_fork+0x10/0x20
->> [    9.473146] Code: ???????? ???????? ???????? ???????? (????????)
->> [    9.473505] ---[ end trace 0000000000000000 ]---
->>
+> Having to admit that I have been struggling to find a better name
+> than set_vdev_id, I also thought about something similar to that
+> "create/destroy virtual device', yet was not that confident since
+> we only have virtual device ID in its data structure. Also, the
+> virtual device sounds a bit confusing, given we already have idev.
 > 
+> That being said, if we have a clear picture that in the long term
+> we would extend it to hold more information, I think it could be
+> a smart move.
+> 
+> Perhaps virtual device can have its own "attach" to vIOMMU? Or
+> would you still prefer attaching via proxy hwpt_nested?
+> 
+> Thanks
+> Nicolin
 
