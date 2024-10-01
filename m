@@ -1,145 +1,162 @@
-Return-Path: <linux-kselftest+bounces-18756-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18757-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6E5898C147
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 17:12:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69FD798C154
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 17:14:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D64E21C233BB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 15:12:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1CF4B1F233D5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 15:14:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B3191C9B76;
-	Tue,  1 Oct 2024 15:12:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A02A1C9EB3;
+	Tue,  1 Oct 2024 15:14:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k8KtUs35"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="P9RaiR6X"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D106CC2E3;
-	Tue,  1 Oct 2024 15:12:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C541C9EA3
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Oct 2024 15:14:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727795567; cv=none; b=rCr9K9u8bKnwxSuEtOAXoZjRTlpgKgdxwZgBqjmAwt7EwzhYr9svxIHOHdaNUQFBaVL/TEp9aSOA3r74Rsdfc8HoHLkM26T73Wd0VCRpM2JYi2uYBJU6CQIyQ3IxN2+jdsaTrn1msJoVaegYKclPefYhpKbFUETyEDkJttIk+fA=
+	t=1727795694; cv=none; b=LdMrr3JNWderzf6rBnFIcKyCJurQA5q4e6GRPoIjqG612lT23Bgnl0bISDYjvs2ShQkiLj4ryV3UDZ1sQBM2ztwaOwKYdrujJ6Y/SV5tLh3KNgUrJu52Xtw2eQeMU4DfkvEIDTuWWOqpEYOR4hoZqfsLi9dbRffj0ht9foPN8ms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727795567; c=relaxed/simple;
-	bh=3M5R3aHg3xERtwZKfjTx22n2xMrDolENmdNB/EM3IQM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GYcA13o6rBbohpD/h4ZNYyir1PZoNh7Vig4vzc+EIUVr1sYKho3+SqZN0n7XHpLdw9I9MjCYxWzPwBL94PfE6ronpaJfGIAjg9F71ns5ViDot09CEXErcGT1Lrv3ZbyD6SrJsysKHaIfGZgCV48emjWXU84YzH2oxFtnFZd9R7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k8KtUs35; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34B0FC4CEC6;
-	Tue,  1 Oct 2024 15:12:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727795567;
-	bh=3M5R3aHg3xERtwZKfjTx22n2xMrDolENmdNB/EM3IQM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=k8KtUs35gDoRTP23Rh4QX6UerYWHCzT0X91Iy6A2k1VzCalnEksE2aKpy0rNPwQyL
-	 t2JDs4Por0gXn/vSdhhUPSqvTik7P6IZyMDAhDyQZES0vbiZNYLPc8P125f2r0S5ij
-	 5EcQoaqnHP1MdjA9SrSnFEHMN8yP1SUWqLPLP9uGpXzQUD+imYTPD6r+pCFA+SHlsE
-	 n8y0Kt2/Q6+xMCtOzY9vkLdcKODPVS7yzTF9sRa6sFHWuTJvQogj/j8a/2ETyLvaWm
-	 xdKwSN6QxHwodVuZ7F4HGTptD3wKXGGUZdyrlUWNWLAuDzm9Yk7PQkefIGjqQsaPZv
-	 Eltp9y8MM4iow==
-Date: Tue, 1 Oct 2024 17:12:38 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>, 
-	Florian Weimer <fweimer@redhat.com>
-Cc: "broonie@kernel.org" <broonie@kernel.org>, 
-	"dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>, "shuah@kernel.org" <shuah@kernel.org>, 
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>, "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, 
-	"debug@rivosinc.com" <debug@rivosinc.com>, "mgorman@suse.de" <mgorman@suse.de>, 
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>, "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "mingo@redhat.com" <mingo@redhat.com>, 
-	"rostedt@goodmis.org" <rostedt@goodmis.org>, "hjl.tools@gmail.com" <hjl.tools@gmail.com>, 
-	"tglx@linutronix.de" <tglx@linutronix.de>, "fweimer@redhat.com" <fweimer@redhat.com>, 
-	"vschneid@redhat.com" <vschneid@redhat.com>, "catalin.marinas@arm.com" <catalin.marinas@arm.com>, 
-	"kees@kernel.org" <kees@kernel.org>, "will@kernel.org" <will@kernel.org>, 
-	"hpa@zytor.com" <hpa@zytor.com>, "jannh@google.com" <jannh@google.com>, 
-	"peterz@infradead.org" <peterz@infradead.org>, "yury.khrustalev@arm.com" <yury.khrustalev@arm.com>, 
-	"bp@alien8.de" <bp@alien8.de>, "wilco.dijkstra@arm.com" <wilco.dijkstra@arm.com>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "bsegall@google.com" <bsegall@google.com>, 
-	"juri.lelli@redhat.com" <juri.lelli@redhat.com>, "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH RFT v9 4/8] fork: Add shadow stack support to clone3()
-Message-ID: <20241001-atheismus-stetig-4f6f3001715c@brauner>
-References: <dc8328dbaa01ca7443eeb75024752c673904e3a4.camel@intel.com>
- <cc2e7d86-c890-4cb1-8cad-1cfaa9f53dc8@sirena.org.uk>
- <82be9ec6e43a018add8d9bbc6ba67feee676f32e.camel@intel.com>
- <5643761f-cc38-4e41-9ddd-f0a1934f8724@sirena.org.uk>
- <9f022aa4cd3e2dc82d0c963e9d2bf5c7ddd5b92a.camel@intel.com>
- <77bc051d-b2c9-4e3a-b956-be8879048e20@sirena.org.uk>
- <5464b915b52bf3b91ec70201736479a5347838af.camel@intel.com>
- <158190d9-a4a6-4647-84e8-f4ae036d984b@sirena.org.uk>
- <20240927-springen-fortpflanzen-34a303373088@brauner>
- <727524e9109022632250ab0485f5ecc1c1900092.camel@intel.com>
+	s=arc-20240116; t=1727795694; c=relaxed/simple;
+	bh=vGfztZfGRFWc4NBs1quyq8Qr4M8gtUs6U3u8lP4FNeQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FbSdhRYUyoHYBmEdR7mbMSo1bEfQzeMf/vS/njL6u/kxRBA+k9Kbo26LoiO9+nNUCeOwOpDIGToDqHX953lbwsJ/UfjudWE1xWvQSxepfzBhUOcg1dcJ4jcQEB+2c+4jX4HaL1cRBKUgdH9IlKmbkNli71lzB8JPR+sLaBPGuQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=P9RaiR6X; arc=none smtp.client-ip=209.85.166.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-3a3525ba6aaso8902435ab.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Oct 2024 08:14:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1727795691; x=1728400491; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=kKqi6XAaCDK4ylDvOJNyWgR8U3btYX9UaPK/lnzXIXY=;
+        b=P9RaiR6XixRGUHqE6aOSlXaS0ZB5mEnnE2GTOxtd8U+rKL5soSEa7lX/xsCNo0LDXy
+         SZEfWWzq9mNYElr/OJL0RgRAHyPZZ/gfNmcv0Kq7uyZrYTTa1MRSPapbeeq0LCpCViXq
+         gnGudGV/92wN0o0E6qwuz3Ae37xazpz1nXk7w=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727795691; x=1728400491;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=kKqi6XAaCDK4ylDvOJNyWgR8U3btYX9UaPK/lnzXIXY=;
+        b=VGvpk1pOGbvCieere2oaJXRDhphh7qmRS6X7CJ4UZQHNiEgLROJaGHQ27vGmKi9DOD
+         LUcHyo37gu1Sq/1i8gOCqojJFb3SZg2tAQvH0eYIILOuMwOluFHtJqy5Bd22wCHmIBmn
+         BQx5Z92gX99rIXwzR/C/FRoKbERfz0u+aRpIfQ25ENUuLM4/P/kk6HS4eWMBbIR4dG2Z
+         S0mKrnO9QTo+d2AmCdAxLB1P7U1D9OfSP+yOiL/MSLR7ZEcBQqtIz4qy9ZtjfRz3vPYL
+         zcDKDl0dnPJTDwIziKz028FOFj/vu7OGGfWLFHnqf8odYePW0Cn2u3IAZc9OlKcdQ1u6
+         owow==
+X-Forwarded-Encrypted: i=1; AJvYcCWhi2CKanlCHQmQ0bK2ylJjbFyCeboNkcKQaZLip/nzkYsmIqpMY/PXBXzOggsYaRz2FhfL2bRMgXFq0ZkK1KY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8jrWLFP5MPbIILVHIbNWw5KaSwyF/Fddc+3DI2fE2nrnWGe5x
+	ZWmP2c873VH/O8Yxu3w3RILzEjLreJ4c/KEryLlFj3szCF8NNCcheVmbsFcf3Ig=
+X-Google-Smtp-Source: AGHT+IHPRaDLHh5NNr+7xNJ7xQp3GFEDDjA2gli79iP+lkT3RW37GJzP/Nly6ScHDzliGfN1hpNRrg==
+X-Received: by 2002:a05:6e02:1d10:b0:3a0:4db0:ddbf with SMTP id e9e14a558f8ab-3a34515d316mr128132985ab.8.1727795691507;
+        Tue, 01 Oct 2024 08:14:51 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4d8888c2c51sm2677358173.102.2024.10.01.08.14.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Oct 2024 08:14:51 -0700 (PDT)
+Message-ID: <7ad58665-ed3f-4b20-b7ee-5d8314de3cc2@linuxfoundation.org>
+Date: Tue, 1 Oct 2024 09:14:49 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <727524e9109022632250ab0485f5ecc1c1900092.camel@intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] selftests/exec: add a test to enforce execveat()'s
+ comm
+To: Tycho Andersen <tycho@tycho.pizza>,
+ Alexander Viro <viro@zeniv.linux.org.uk>,
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+ Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>
+Cc: linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Tycho Andersen <tandersen@netflix.com>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241001134945.798662-1-tycho@tycho.pizza>
+ <20241001134945.798662-2-tycho@tycho.pizza>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20241001134945.798662-2-tycho@tycho.pizza>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Sep 27, 2024 at 03:21:59PM GMT, Edgecombe, Rick P wrote:
-> On Fri, 2024-09-27 at 10:50 +0200, Christian Brauner wrote:
-> > The legacy clone system call had required userspace to know in which
-> > direction the stack was growing and then pass down the stack pointer
-> > appropriately (e.g., parisc grows upwards).
-> > 
-> > And in fact, the old clone() system call did take an additional
-> > stack_size argument on specific architectures. For example, on
-> > microblaze.
-> > 
-> > Also, when clone3() was done we still had ia64 in the tree which had a
-> > separate clone2() system call that also required a stack_size argument.
-> > 
-> > So userspace ended up with code like this or worse:
-> > 
-> >      #define __STACK_SIZE (8 * 1024 * 1024)
-> >      pid_t sys_clone(int (*fn)(void *), void *arg, int flags, int *pidfd)
-> >      {
-> >              pid_t ret;
-> >              void *stack;
-> > 
-> >              stack = malloc(__STACK_SIZE);
-> >              if (!stack)
-> >                      return -ENOMEM;
-> > 
-> >      #ifdef __ia64__
-> >              ret = __clone2(fn, stack, __STACK_SIZE, flags | SIGCHLD, arg, pidfd);
-> >      #elif defined(__parisc__) /* stack grows up */
-> >              ret = clone(fn, stack, flags | SIGCHLD, arg, pidfd);
-> >      #else
-> >              ret = clone(fn, stack + __STACK_SIZE, flags | SIGCHLD, arg, pidfd);
-> >      #endif
-> >              return ret;
-> >      }
-> > 
-> > So we talked to the glibc folks which preferred the kernel to do all
-> > this nonsense for them as it has that knowledge.
+On 10/1/24 07:49, Tycho Andersen wrote:
+> From: Tycho Andersen <tandersen@netflix.com>
 > 
-> Thanks for the info!
-> 
-> > 
-> > My preference is to keep the api consistent and require a stack_size for
-> > shadow stacks as well.
-> 
-> Did you catch that a token can be at a different offsets location on the stack
-> depending on args passed to map_shadow_stack? So userspace will need something
-> like the code above, but that adjusts the 'shadow_stack_size' such that the
-> kernel looks for the token in the right place. It will be even weirder if
-> someone uses clone3 to switch to a stack that has already been used, and pivoted
-> off of, such that a token was left in the middle of the stack. In that case
-> userspace would have to come up with args disconnected from the actual size of
-> the shadow stack such that the kernel would be cajoled into looking for the
-> token in the right place.
-> 
-> A shadow stack size is more symmetric on the surface, but I'm not sure it will
-> be easier for userspace to handle. So I think we should just have a pointer to
-> the token. But it will be a usable implementation either way.
+> We want to ensure that /proc/self/comm stays useful for execveat() callers.
 
-Maybe it's best to let glibc folks decide what is better/more ergonomic for them.
+This commit message is vague? What does staying useful mean?
+Elaborate on the staying useful and the tests added to ensure.
+Add test results as well.
+
+> 
+> Signed-off-by: Tycho Andersen <tandersen@netflix.com>
+> ---
+>   tools/testing/selftests/exec/execveat.c | 25 +++++++++++++++++++++++++
+>   1 file changed, 25 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/exec/execveat.c b/tools/testing/selftests/exec/execveat.c
+> index 071e03532cba..091029f4ca9b 100644
+> --- a/tools/testing/selftests/exec/execveat.c
+> +++ b/tools/testing/selftests/exec/execveat.c
+> @@ -419,6 +419,9 @@ int main(int argc, char **argv)
+>   	if (argc >= 2) {
+>   		/* If we are invoked with an argument, don't run tests. */
+>   		const char *in_test = getenv("IN_TEST");
+> +		/* TASK_COMM_LEN == 16 */
+> +		char buf[32];
+> +		int fd;
+>   
+>   		if (verbose) {
+>   			ksft_print_msg("invoked with:\n");
+> @@ -432,6 +435,28 @@ int main(int argc, char **argv)
+>   			return 1;
+>   		}
+>   
+> +		fd = open("/proc/self/comm", O_RDONLY);
+> +		if (fd < 0) {
+> +			perror("open comm");
+
+The existing code in this file uses ksft_perror() - please keep
+the new code consistent with the existing code.
+
+> +			return 1;
+> +		}
+> +
+> +		if (read(fd, buf, sizeof(buf)) < 0) {
+> +			close(fd);
+> +			perror("read comm");
+
+Same comment as above.
+
+> +			return 1;
+> +		}
+> +		close(fd);
+> +
+> +		/*
+> +		 * /proc/self/comm should fail to convert to an integer, i.e.
+> +		 * atoi() should return 0.
+> +		 */
+> +		if (atoi(buf) != 0) {
+> +			ksft_print_msg("bad /proc/self/comm: %s", buf);
+> +			return 1;
+> +		}
+> +
+>   		/* Use the final argument as an exit code. */
+>   		rc = atoi(argv[argc - 1]);
+>   		exit(rc);
+
+thanks,
+-- Shuah
 
