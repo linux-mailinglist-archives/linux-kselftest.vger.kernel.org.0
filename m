@@ -1,222 +1,224 @@
-Return-Path: <linux-kselftest+bounces-18717-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18721-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 326DD98B3EE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 07:54:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A570298B485
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 08:35:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA85128317A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 05:54:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 333B51F2453B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 06:35:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45E951BBBD4;
-	Tue,  1 Oct 2024 05:54:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E16AC1BD000;
+	Tue,  1 Oct 2024 06:34:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="ukDHPS0t"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="LmvpH7W0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2066.outbound.protection.outlook.com [40.107.237.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCF51BBBC1
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Oct 2024 05:54:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727762077; cv=none; b=QIsBG9BfHurIZRZciuiUnfIIm1iVmJ0VmtMa/3BmRq70CPZSPOsGyKzGV81NyP9Lsp3MIEx9VwQ0GMDTLD9jbu456lp7y4HbPLSjDVPzJjLRaiQL0AWNLHQ6ZOl7oadRXjVqmOXSbirRYY9qOkep6UZJEvq+eEzAZbIUKW9yktk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727762077; c=relaxed/simple;
-	bh=jwGSkO56afJU1ZykB3f/IrdDpZ6b9CUjy6ikv5vxw2U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QsXGqUNBFe8KRiW1MFp+ZB98Mtv/X8CYZuXNbm0/stCg4YQnBclP5LcKC7lfeAI9lXsyiixEiml10pBQf2uKE0iluiKZopsSB0LrQHAMLawN7tHHX3hAyVVE7HRAUMPx/w25oX+O5W3EERSdomhU2XK+DLFZKrm6Ut+MTs+fv9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=none smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=ukDHPS0t; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=daynix.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20b90984971so17387215ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Sep 2024 22:54:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1727762075; x=1728366875; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GW6JKIMSJkoy7ESOeaiL6uJ49rRhUcpJss1NlSyIBZo=;
-        b=ukDHPS0tpA5ik3e06H83dlUdD1y9rAadF8h51l8S+cQjflbKasMRqWTYWRCl2a0/kO
-         NQOls3IE2N3+8VKfS3WynlCm7CjcrsbUaTSsx/k1W23z74fDZ/j6PvJw7rn5gVdo9CP4
-         c+vJ5/Nh8O0DIwvoNv+jq5ZDEO2yFlsH+ImmYMWsDWRJRME8+kbUSQ+kneUDCLInal3/
-         O/9rj6dfGAgNZAZtQYtd+zbojcczdi0Ozuo3sS8RaHvkbtV1DsmuEK8OVqrNHQwFHTy+
-         n7EhpWzmOrtKfdkwDlqZLsHh8ESOiCh5dZP45GAtpLavPdvwUcvE2l/3EWtBCOQV4Mgx
-         Mdvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727762075; x=1728366875;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GW6JKIMSJkoy7ESOeaiL6uJ49rRhUcpJss1NlSyIBZo=;
-        b=C7fLWKc0+JrQDrb0aN0zDuRubtVzJ94hrNq1pqYPiBoQZ9yE3acGNHR+dyKHx+WeyH
-         /sIIaQay15emFXZFr8R9P8NsZBC1GBYEWl/sz3T/rcNyq/cjH4KDnzmqfXlhh+UHG7qM
-         eF90QuiPpEmilqsIb6ALBJZ9v6cgO5RjEXIY0gwHCu256CD9dbQD3UsuFfgSYPDgPg1l
-         WS8VbeMHJlMxYxSQgGWjKQyzA5i3nwUvnhWuf6aRnDC0c3VN4wLEV4cyOFl9ozsY3WU1
-         aj9/lEpkwdPINv47fwn38ZBf/inS1Y4oOz2wqN7UQ9e9dTULJYhOdntUnuxPDGUeSe/4
-         JWCA==
-X-Forwarded-Encrypted: i=1; AJvYcCVCrqjYJr4wjy+X4FH1C9IVVv+GhqmqbtcFm1tw6CMcd8ZfhyaOuLnIbFDsYqCDlw4EcQUfe5u+l/LsWfEqHjk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyp2fFph+8oaAPjlhMpmthU6dpHpW4txdvw5oCw0brC4hi3zqr3
-	+gxb20Gc5q6B53eV8VRcNWypL9ZIxkco+Na5bNMmHE2he5EryYpyw/etnYm8aEk=
-X-Google-Smtp-Source: AGHT+IFhIsPLEQ/TcepiVOkMJKIDjkaQae3ulnJtI9h3ifP3aAnGkfCXTch2f3Cv0L6+buDt1VANcQ==
-X-Received: by 2002:a17:902:c40b:b0:205:968b:31ab with SMTP id d9443c01a7336-20b37bcacf4mr225656085ad.58.1727762074890;
-        Mon, 30 Sep 2024 22:54:34 -0700 (PDT)
-Received: from [157.82.207.107] ([157.82.207.107])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20b37e4efdasm63400305ad.252.2024.09.30.22.54.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Sep 2024 22:54:34 -0700 (PDT)
-Message-ID: <f437d2d6-e4a2-4539-bd30-f312bbf0eac8@daynix.com>
-Date: Tue, 1 Oct 2024 14:54:29 +0900
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F6D29CFE;
+	Tue,  1 Oct 2024 06:34:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.66
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1727764480; cv=fail; b=ZNempwwIvdUe6m4ZdSZi9HIckwbioH1KLMln7CH6yeOMAMP7w5nreUFYTLNmjBckdqrT6m7w32MpeEUTLyM+hxvpGW0WKkYoROCUgnR4tdXezTzKX6ombFMkH1Rvosv5KEmLUhvOHDKR0lIW2183thmM3j/U4uMan4Q8W9fjSTQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1727764480; c=relaxed/simple;
+	bh=sqkh6ghssAMk0w1CrrIFA1A22luv/gG28d6jjtIETIE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ceknoqPHg2NZNHZrtACK9tPLS4JD67/tagiKOCjfNUI6zFIQYWykOBgXR3T9gLihKf2wHccOu7o3fp18DsG7VYgA6n2AakTjWwK+QpaS0iNrArfQJFcmbigp5Y3OdQJJjww3Mk8SAC7VY47hL5WMr/7OUZ9yqtUDQkwZfhh0kwI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=LmvpH7W0; arc=fail smtp.client-ip=40.107.237.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=IaOhyNsuR1+t51N71GUurFBZivtfRxMRW8mac3PGuBVRx3lgWknOzuvOCGI8tHYcAob/b79/pKoWwa1BoBn5O2g5/0fbbB/qMFs3kiqagir3/iUSgzYY8xUftfNGT3lLRLCWdZV7X1y7/83CXiikhioVhmJyarQFfZJ1dkGJX6t8EHwXF6Vf2zZ/eAsHl7mmFdgJFGoQECqjUygQsmCkkqeg9ubT1Thg/BU5IvNN02IMcGpXywuyncAVZna2p+sYS2eMBtTPrL1bT6LnBLf2lcQnikfa54/4WY9AUzCpNUcZY+jaJX59y9qb6eL8LBc3Yd8WptBruT04QXgV3NmAGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IP9oIs+WP/clDRlBBUmq+4oex78u3KG2bQ8DQ/lAAg4=;
+ b=bdrOBLr2oXD9rM07BS4FEpv3ktcKxpzI9VKOvi81q3hIj4NSr/PRGuI/5IhNbac6jNOlAw/m2Kl6+IwrW5W+erY8m1jxnQyYm6gWA7dByYKNlVmKLg4KMOnMPKvyQsMPorJ63zEZAX6qOKxKTpRavod93fb9LqK3i14TIkMh4uDiT4EzXQp8alaxN+Rc5Fm85nLp69jbSqWl1wqdu2ZkfaTzKdXo0s2FucDxSHgN1rDuticW0T5LaAcu6ToKc1yL3HqH7eGZRXbWa4Y5otKqE2nkMUxmT2egDXa6WhnfWcilwlVJJhVlji4tWVDJutNswGiY5CwJuKaF4rVeQC1rFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IP9oIs+WP/clDRlBBUmq+4oex78u3KG2bQ8DQ/lAAg4=;
+ b=LmvpH7W0naOXoANlLf27rTEAhchSvkGDQXnd5zsNX6ICQihhGAV4m3JuyA/eyj0o+1zVKoGuuO7UmNVQND2jpZyqbpiHpxTpFZ5HMCtlypse1Y7f9QanBHDKe3lvqR+zlPZgj7DqY1kOL+bs+qzHkWeCl/fiiMjAI7KeF7aTUKg=
+Received: from SN6PR04CA0104.namprd04.prod.outlook.com (2603:10b6:805:f2::45)
+ by PH7PR12MB9066.namprd12.prod.outlook.com (2603:10b6:510:1f6::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8005.27; Tue, 1 Oct
+ 2024 06:34:31 +0000
+Received: from SN1PEPF000397AE.namprd05.prod.outlook.com
+ (2603:10b6:805:f2:cafe::b4) by SN6PR04CA0104.outlook.office365.com
+ (2603:10b6:805:f2::45) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8005.27 via Frontend
+ Transport; Tue, 1 Oct 2024 06:34:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SN1PEPF000397AE.mail.protection.outlook.com (10.167.248.52) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8026.11 via Frontend Transport; Tue, 1 Oct 2024 06:34:30 +0000
+Received: from chalupa-d178host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Tue, 1 Oct
+ 2024 01:34:29 -0500
+From: Manali Shukla <manali.shukla@amd.com>
+To: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC: <pbonzini@redhat.com>, <seanjc@google.com>, <shuah@kernel.org>,
+	<nikunj@amd.com>, <thomas.lendacky@amd.com>, <vkuznets@redhat.com>,
+	<manali.shukla@amd.com>, <bp@alien8.de>, <babu.moger@amd.com>
+Subject: [RFC PATCH v2 0/5] Add support for the Bus Lock Threshold
+Date: Tue, 1 Oct 2024 06:34:08 +0000
+Message-ID: <20241001063413.687787-1-manali.shukla@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v4 0/9] tun: Introduce virtio-net hashing feature
-To: Stephen Hemminger <stephen@networkplumber.org>
-Cc: Jason Wang <jasowang@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Shuah Khan <shuah@kernel.org>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, kvm@vger.kernel.org,
- virtualization@lists.linux-foundation.org, linux-kselftest@vger.kernel.org,
- Yuri Benditovich <yuri.benditovich@daynix.com>,
- Andrew Melnychenko <andrew@daynix.com>, gur.stavi@huawei.com
-References: <20240924-rss-v4-0-84e932ec0e6c@daynix.com>
- <CACGkMEvMuBe5=wQxZMns4R-oJtVOWGhKM3sXy8U6wSQX7c=iWQ@mail.gmail.com>
- <c3bc8d58-1f0e-4633-bb01-d646fcd03f54@daynix.com>
- <CACGkMEu3u=_=PWW-=XavJRduiHJuZwv11OrMZbnBNVn1fptRUw@mail.gmail.com>
- <6c101c08-4364-4211-a883-cb206d57303d@daynix.com>
- <CACGkMEtscr17UOufUtyPp1OvALL8LcycpbRp6CyVMF=jYzAjAA@mail.gmail.com>
- <447dca19-58c5-4c01-b60e-cfe5e601961a@daynix.com>
- <20240929083314.02d47d69@hermes.local>
-Content-Language: en-US
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <20240929083314.02d47d69@hermes.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF000397AE:EE_|PH7PR12MB9066:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7f61e1cf-a120-4777-8e25-08dce1e31b31
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|36860700013|1800799024|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?HUpKuojp52iQ13YztsyAlbTdzlECe12ORz9h2XrnzysmBWsug8s1g2e/gpaQ?=
+ =?us-ascii?Q?D0kvavex37CkAKDGvE5ZDT8knRdLpWYfzKKjH5H5H17z/brfd9H8D7OtX/iJ?=
+ =?us-ascii?Q?D07DdvHb2M49lMcxvTeSEpLmrg9Mxl7Vok2JqShWoprHctn9qFOmZIU6bHr5?=
+ =?us-ascii?Q?C/65VEKzmWgWhq5bkZNLYPbyNoGmaJjS7U4TG4NzaxegRLeKhRshnAFOZHQY?=
+ =?us-ascii?Q?Pl3lkb45cfFRLWZ3baMn2zZBU4rbLinb7LoSDtk04GGxhJT+2uyE6uUK48PT?=
+ =?us-ascii?Q?V8Xl8gxBsQjOKUM0YOyMh0W0Lzb9qe45fLBJ+ZCygpcQP1kapZT1cb4D9fLa?=
+ =?us-ascii?Q?edde1lmQCwW0jgdmHXH9/uoG38nJu9cqjFL1BKJtCrhLCBPTBLw964yNJOAa?=
+ =?us-ascii?Q?/0D2rzSfFnlUJ1SB5Mq7xAZyK14dA9ZnTAqVSPqz5MJqJDsGFzlVbGRHfvKL?=
+ =?us-ascii?Q?6RTwKuYWKyrxDsIypVmN1AgkdWQGIQ5IMoyYW+V0LRXvSlUT/l14IR7nn0pO?=
+ =?us-ascii?Q?OICdkpj0EHDF9etDp20ar61sM7eDjVIqz+6N01Kb0zQEZRXrV5hchpYvSvOn?=
+ =?us-ascii?Q?Ax38ezuXqNSzBDt8FOsSgYwGjOga10MU8zUEWczFgMFDE6sqsfteWZ8M79AW?=
+ =?us-ascii?Q?k1b/gCtAXpN1vHB6Av8JhmGT0uq4dncn7dis9h64WlpjinuBu8f9I9jomh8v?=
+ =?us-ascii?Q?ROF8buWdlEgg1D7kFjVFeDL0htXvmkaCJr2STZgVkVvqJdHNO2ArcnPtWvci?=
+ =?us-ascii?Q?/UrKrOLmhqd37UxFWpcXbLivcsLv6Fk73KDiVe04Cs6/f4DShEptI1c0nwMX?=
+ =?us-ascii?Q?CaA15NVE9SlclFg06yP5edQHNskiQ3AxtOn6BLggp+A8z8OHezaL4EROoTks?=
+ =?us-ascii?Q?jS2log/NIJYQnMyS3SF5wYDNdFhV2N9L8e+duom7BNVQNplrR0IeGdISns8c?=
+ =?us-ascii?Q?VkJMhqy61sv2g9yUj1V4QJtKDF+/zHAoLsg4R/y4RGcfBxR6wJb4pSE+xAV4?=
+ =?us-ascii?Q?xfTJZf7WvIb3sc8DMuS+s2iIgyDDRUYIyHtZynMSdQBZPOoHCVkGRARwB1Tu?=
+ =?us-ascii?Q?V9OEU6XlVnfInujmi5snMRkKHoicWFdpamWXTKm/PQRwRYZ/JJxmvdfiS7WA?=
+ =?us-ascii?Q?QBf2dAYORCaLj3MJbcAVa4KAR4cPQFy6aS9WwG8kNN/ku/AmEnw+1Gmm+2+z?=
+ =?us-ascii?Q?l5+MV6NZEi3voVvo1FPZkQ7cIMhvR24kjMmt+F+7zKUXq7RBGQj8vtf4PKRB?=
+ =?us-ascii?Q?g8SUhCD4tQSbf1yrEQ8XhL08mszTIafMTVaccJq/it8Dajp7fvVPyGmSQIRi?=
+ =?us-ascii?Q?xLQivYCD8KqbxlYtRC0Ix2uy+jC2WzDDEyaN+Mkkki09q23qIPhCKN/3VjPv?=
+ =?us-ascii?Q?/E/Qt68nlkeax3A6WRhEGTXdSg4D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(1800799024)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Oct 2024 06:34:30.9044
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7f61e1cf-a120-4777-8e25-08dce1e31b31
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF000397AE.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9066
 
-On 2024/09/30 0:33, Stephen Hemminger wrote:
-> On Sun, 29 Sep 2024 16:10:47 +0900
-> Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
-> 
->> On 2024/09/29 11:07, Jason Wang wrote:
->>> On Fri, Sep 27, 2024 at 3:51 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->>>>
->>>> On 2024/09/27 13:31, Jason Wang wrote:
->>>>> On Fri, Sep 27, 2024 at 10:11 AM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->>>>>>
->>>>>> On 2024/09/25 12:30, Jason Wang wrote:
->>>>>>> On Tue, Sep 24, 2024 at 5:01 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->>>>>>>>
->>>>>>>> virtio-net have two usage of hashes: one is RSS and another is hash
->>>>>>>> reporting. Conventionally the hash calculation was done by the VMM.
->>>>>>>> However, computing the hash after the queue was chosen defeats the
->>>>>>>> purpose of RSS.
->>>>>>>>
->>>>>>>> Another approach is to use eBPF steering program. This approach has
->>>>>>>> another downside: it cannot report the calculated hash due to the
->>>>>>>> restrictive nature of eBPF.
->>>>>>>>
->>>>>>>> Introduce the code to compute hashes to the kernel in order to overcome
->>>>>>>> thse challenges.
->>>>>>>>
->>>>>>>> An alternative solution is to extend the eBPF steering program so that it
->>>>>>>> will be able to report to the userspace, but it is based on context
->>>>>>>> rewrites, which is in feature freeze. We can adopt kfuncs, but they will
->>>>>>>> not be UAPIs. We opt to ioctl to align with other relevant UAPIs (KVM
->>>>>>>> and vhost_net).
->>>>>>>>   
->>>>>>>
->>>>>>> I wonder if we could clone the skb and reuse some to store the hash,
->>>>>>> then the steering eBPF program can access these fields without
->>>>>>> introducing full RSS in the kernel?
->>>>>>
->>>>>> I don't get how cloning the skb can solve the issue.
->>>>>>
->>>>>> We can certainly implement Toeplitz function in the kernel or even with
->>>>>> tc-bpf to store a hash value that can be used for eBPF steering program
->>>>>> and virtio hash reporting. However we don't have a means of storing a
->>>>>> hash type, which is specific to virtio hash reporting and lacks a
->>>>>> corresponding skb field.
->>>>>
->>>>> I may miss something but looking at sk_filter_is_valid_access(). It
->>>>> looks to me we can make use of skb->cb[0..4]?
->>>>
->>>> I didn't opt to using cb. Below is the rationale:
->>>>
->>>> cb is for tail call so it means we reuse the field for a different
->>>> purpose. The context rewrite allows adding a field without increasing
->>>> the size of the underlying storage (the real sk_buff) so we should add a
->>>> new field instead of reusing an existing field to avoid confusion.
->>>>
->>>> We are however no longer allowed to add a new field. In my
->>>> understanding, this is because it is an UAPI, and eBPF maintainers found
->>>> it is difficult to maintain its stability.
->>>>
->>>> Reusing cb for hash reporting is a workaround to avoid having a new
->>>> field, but it does not solve the underlying problem (i.e., keeping eBPF
->>>> as stable as UAPI is unreasonably hard). In my opinion, adding an ioctl
->>>> is a reasonable option to keep the API as stable as other virtualization
->>>> UAPIs while respecting the underlying intention of the context rewrite
->>>> feature freeze.
->>>
->>> Fair enough.
->>>
->>> Btw, I remember DPDK implements tuntap RSS via eBPF as well (probably
->>> via cls or other). It might worth to see if anything we miss here.
->>
->> Thanks for the information. I wonder why they used cls instead of
->> steering program. Perhaps it may be due to compatibility with macvtap
->> and ipvtap, which don't steering program.
->>
->> Their RSS implementation looks cleaner so I will improve my RSS
->> implementation accordingly.
->>
-> 
-> DPDK needs to support flow rules. The specific case is where packets
-> are classified by a flow, then RSS is done across a subset of the queues.
-> The support for flow in TUN driver is more academic than useful,
-> I fixed it for current BPF, but doubt anyone is using it really.
-> 
-> A full steering program would be good, but would require much more
-> complexity to take a general set of flow rules then communicate that
-> to the steering program.
-> 
+Misbehaving guests can cause bus locks to degrade the performance of
+a system. Non-WB (write-back) and misaligned locked RMW
+(read-modify-write) instructions are referred to as "bus locks" and
+require system wide synchronization among all processors to guarantee
+the atomicity. The bus locks can impose notable performance penalties
+for all processors within the system.
 
-It reminded me of RSS context and flow filter. Some physical NICs 
-support to use a dedicated RSS context for packets matched with flow 
-filter, and virtio is also gaining corresponding features.
+Support for the Bus Lock Threshold is indicated by CPUID
+Fn8000_000A_EDX[29] BusLockThreshold=1, the VMCB provides a Bus Lock
+Threshold enable bit and an unsigned 16-bit Bus Lock Threshold count.
 
-RSS context: https://github.com/oasis-tcs/virtio-spec/issues/178
-Flow filter: https://github.com/oasis-tcs/virtio-spec/issues/179
+VMCB intercept bit
+    VMCB Offset     Bits    Function
+    14h             5       Intercept bus lock operations
 
-I considered about the possibility of supporting these features with tc 
-instead of adding ioctls to tuntap, but it seems not appropriate for 
-virtualization use case.
+Bus lock threshold count
+    VMCB Offset     Bits    Function
+    120h            15:0    Bus lock counter
 
-In a virtualization use case, tuntap is configured according to requests 
-of guests, and the code processing these requests need to have minimal 
-permissions for security. This goal is achieved by passing a file 
-descriptor that represents a tuntap from a privileged process (e.g., 
-libvirt) to the process handling guest requests (e.g., QEMU).
+During VMRUN, the bus lock threshold count is fetched and stored in an
+internal count register.  Prior to executing a bus lock within the
+guest, the processor verifies the count in the bus lock register. If
+the count is greater than zero, the processor executes the bus lock,
+reducing the count. However, if the count is zero, the bus lock
+operation is not performed, and instead, a Bus Lock Threshold #VMEXIT
+is triggered to transfer control to the Virtual Machine Monitor (VMM).
 
-However, tc is configured with rtnetlink, which does not seem to have an 
-interface to delegate a permission for one particular device to another 
-process.
+A Bus Lock Threshold #VMEXIT is reported to the VMM with VMEXIT code
+0xA5h, VMEXIT_BUSLOCK. EXITINFO1 and EXITINFO2 are set to 0 on
+a VMEXIT_BUSLOCK.  On a #VMEXIT, the processor writes the current
+value of the Bus Lock Threshold Counter to the VMCB.
 
-For now I'll continue working on the current approach that is based on 
-ioctl and lacks RSS context and flow filter features. Eventually they 
-are also likely to require new ioctls if they are to be supported with 
-vhost_net.
+More details about the Bus Lock Threshold feature can be found in AMD
+APM [1].
 
-Regards,
-Akihiko Odaki
+v1 -> v2
+- Incorporated misc review comments from Sean.
+- Removed bus_lock_counter module parameter.
+- Set the value of bus_lock_counter to zero by default and reload the value by 1
+  in bus lock exit handler.
+- Add documentation for the behavioral difference for KVM_EXIT_BUS_LOCK.
+- Improved selftest for buslock to work on SVM and VMX.
+- Rewrite the commit messages.
+
+Patches are prepared on kvm-next/next (0cdcc99eeaed)
+
+Testing done:
+- Added a selftest for the Bus Lock Threshold functionality.
+- The bus lock threshold selftest has been tested on both Intel and AMD platforms.
+- Tested the Bus Lock Threshold functionality on SEV and SEV-ES guests.
+- Tested the Bus Lock Threshold functionality on nested guests.
+
+v1: https://lore.kernel.org/kvm/20240709175145.9986-4-manali.shukla@amd.com/T/
+[1]: AMD64 Architecture Programmer's Manual Pub. 24593, April 2024,
+     Vol 2, 15.14.5 Bus Lock Threshold.
+     https://bugzilla.kernel.org/attachment.cgi?id=306250
+
+Manali Shukla (3):
+  x86/cpu: Add virt tag in /proc/cpuinfo
+  x86/cpufeatures: Add CPUID feature bit for the Bus Lock Threshold
+  KVM: X86: Add documentation about behavioral difference for
+    KVM_EXIT_BUS_LOCK
+
+Nikunj A Dadhania (2):
+  KVM: SVM: Enable Bus lock threshold exit
+  KVM: selftests: Add bus lock exit test
+
+ Documentation/virt/kvm/api.rst                |   5 +
+ arch/x86/include/asm/cpufeature.h             |   1 +
+ arch/x86/include/asm/cpufeatures.h            |   1 +
+ arch/x86/include/asm/svm.h                    |   5 +-
+ arch/x86/include/uapi/asm/svm.h               |   2 +
+ arch/x86/kernel/cpu/mkcapflags.sh             |   3 +
+ arch/x86/kernel/cpu/proc.c                    |   5 +
+ arch/x86/kvm/svm/nested.c                     |  12 ++
+ arch/x86/kvm/svm/svm.c                        |  29 ++++
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/x86_64/kvm_buslock_test.c   | 130 ++++++++++++++++++
+ 11 files changed, 193 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/kvm_buslock_test.c
+
+
+base-commit: 0cdcc99eeaedf2422c80d75760293fdbb476cec1
+-- 
+2.34.1
+
 
