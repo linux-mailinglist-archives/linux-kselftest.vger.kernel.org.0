@@ -1,56 +1,74 @@
-Return-Path: <linux-kselftest+bounces-18762-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18763-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D77E98C1E8
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 17:44:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2381398C248
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 18:07:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3FF81F2147B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 15:44:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB7452865B9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 16:07:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD59B1C9EDC;
-	Tue,  1 Oct 2024 15:44:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EF771CB51F;
+	Tue,  1 Oct 2024 16:07:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="T4xJxuhW"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="EATPRsyy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F61C1C8FD5;
-	Tue,  1 Oct 2024 15:44:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE621CB50B
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Oct 2024 16:06:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727797454; cv=none; b=acRKYjZC4Fty4lNBV+SpXjtXULJj1GwkedN/0VKnZpZlmjdxe80HvcrEx+ooitZmAJJlkAUaScFj9rOlkkDv0g3aqicIJeT9Rk0NUtEOZCoY9c+6qczyoWQEcrVNuvDpBquV7dz2+TyJOMnvvoo5WGmqcxmWeZcwIS3CkVvGBt0=
+	t=1727798821; cv=none; b=kqEuzImTqgG9fHcCSfCAWIKhq/ouvzFoE5QT8RfxwwLRQL/9RX9ry3N310LaY5Y30NkV/+NYNnpo07Lgq2/ZdYQW2CHtAPYY1ItejIPES4tnosGF+xJxvZ1tyxNNbasb5Rq7ckXyCHPo16J272hiIq73rhk4p5PyIdBuAo0zLjs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727797454; c=relaxed/simple;
-	bh=uh9EhIRmTQfFlAsmyL3OVDGo/q51it5ueX+NO09uEbc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=smLZKm1oDd3SaLMz0UeQ+xTBgxX/Mr6j2I7ntA3PvbtQ52c7F21MGA/ylZAP/6QTzhBebbEJYBQv3FH7zoEFylQE/wSFrDCsLhAKhjfp+ysNFaC9FD+UsJBjSr/7fapVfP+NnTq61S9h867s2l46Dv3wCnNEPl7WDYw3GaW5mXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=T4xJxuhW; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1727797451;
-	bh=uh9EhIRmTQfFlAsmyL3OVDGo/q51it5ueX+NO09uEbc=;
-	h=From:Date:Subject:To:Cc:From;
-	b=T4xJxuhWZDmr4RQw/qGKq8YoSdDeaRZSKIJ7crVtLTibbNqgnVmCCQXMIL7s7cxN7
-	 SM2GZadJykWIgbjaosM4l6L6HrcNbx1FK7xzd4OPpbafP22gYF9vAnwSN/yemHtom/
-	 nN68JbmHn/mMLS5gtOcMfGW9e+msWXsRjVMfs7mXZbUfDjGcxBRYUYlipeKXgd1XfQ
-	 MdsldGQz1qxgly7N0Z7k+d366fX7iP1ApsQqX7j5DgfhezKeWIjIO1OUTPe2mzT7Vv
-	 5MLVFYLpPMJmYZRP9FaDkEDY5iEfI30XgsRHlSJDMthv5hBToonOa9SBU3Emx1tXJr
-	 /EJWSIr5UnPFg==
-Received: from [192.168.1.33] (pool-100-2-116-133.nycmny.fios.verizon.net [100.2.116.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 62CEC17E0FE4;
-	Tue,  1 Oct 2024 17:44:10 +0200 (CEST)
-From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Date: Tue, 01 Oct 2024 11:43:23 -0400
-Subject: [PATCH] docs: dev-tools: Add documentation for the device focused
- kselftests
+	s=arc-20240116; t=1727798821; c=relaxed/simple;
+	bh=m0FIsgogONUZNmfchDshFIQ0w4NVb3xrsAQwcxIIjy4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=LewZ8Fd6NxfHFvIsLDdQFIPvMA/ZnPgz20OLceGem+doMRWZggdUSb9gX7k74YT8ez5IfwiM6zF8ojvOoHqDfW8+AzeK3CDtl65sSI9iIlo4LldX9/Ujr64le5auNaN1B/+ZSvd1mlUrCDvPguau6HR4qyJ5A5/5z34Yr+xEsA4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=EATPRsyy; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2e078d28fe9so4160400a91.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Oct 2024 09:06:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1727798819; x=1728403619; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=p/+CAfw719K7trKUOdaKnGov4VX+rClpCqrk7kv+YBo=;
+        b=EATPRsyyj2q81GehYdkE/ZPRkVpxUhaGQPNLwl5bQNm46SaY8JdKO1nQfezQO+L3C+
+         pa1hJX2R2MlKtDJ8uycgj5oUbZagsgL9ik0quQ5TyaHiBwDr1iJ000m/+gZ7H1TeQcm1
+         4XtRyWCv1JFRn8dIHkUj6nD1kPc9NZUKyt8CDWDAOtT8mWcyLa0lwwR37CkZ16DXZxgS
+         wIdN6osroeGGZhncvNLCOVFHDdtI9DjVw5KW2QVC2QeIBNxQ+QCMErY1LExVTkbAh9rl
+         /nGEHP5WAy2wd1a0YoKs9111yc/4//iwyjdkXwnn24JDzdJm6FefeSiTWOGweXFrRmGk
+         QBig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727798819; x=1728403619;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p/+CAfw719K7trKUOdaKnGov4VX+rClpCqrk7kv+YBo=;
+        b=Z/Tff70rBOx1QQfZIRoFZ4G14arHm/gnIb8EjWTWQSHTOoJa5XGBSn8HyOGMWYhepN
+         42gm+kEZdqpg87PFlobPdP3TZcO8tyxnQHL7Bu2pS2x5ZxlbvlqYjNlTmQZ0jNEfrtsw
+         hKE3AWcW3fGfn39XEoB0ftrosZEoRN0YyZnrEzmBKAKzAC5eG4c6Kha9h8pEHDzLYNy9
+         sAXuZKFp9S8eACHk89M+P13cfEXN30vOsrGhRGmRqpZOjtqJmkLFKrgh/A8Sw8jPZaR9
+         ZMyRttNK6IBntS0f08N/8vl2HvT0SoKTBS3X4nR2IbwuqO2hfkn2ZwkFMBXdP+LTr1/9
+         fURg==
+X-Forwarded-Encrypted: i=1; AJvYcCXSMA9RZ4XK+U/akqYkQ3ZwkMPeck40xT8UyfXNGpvW9LS3VSkyq0fgos2xIb+7ze56bI/mcfmNAcPSD8CTxDE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3d7FZwsvDfvuxCPUskotTr6cMGQeN29KeEz4EvWnOIHqmtckv
+	MjNEywGocBF79zhqpdFPSuw610cJIBISTTIhA0DO8cVXo+d9N9Bz3dUVv75Esq4=
+X-Google-Smtp-Source: AGHT+IEN2dus5eCDv3FJ6JG+o53WejlfJ1X7DX0j+cv1B0CFXJtJs/0I33VncpmVbaQmMUBwG53XiQ==
+X-Received: by 2002:a17:90b:46cd:b0:2d3:ba42:775c with SMTP id 98e67ed59e1d1-2e184521a79mr281772a91.1.1727798818585;
+        Tue, 01 Oct 2024 09:06:58 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e06e1d7d47sm13843973a91.28.2024.10.01.09.06.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Oct 2024 09:06:58 -0700 (PDT)
+From: Deepak Gupta <debug@rivosinc.com>
+Subject: [PATCH 00/33] riscv control-flow integrity for usermode
+Date: Tue, 01 Oct 2024 09:06:05 -0700
+Message-Id: <20241001-v5_user_cfi_series-v1-0-3ba65b6e550f@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,113 +77,288 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241001-kselftest-device-docs-v1-1-be28b70dd855@collabora.com>
-X-B4-Tracking: v=1; b=H4sIAJoY/GYC/x2M0QpAQBAAf0X7bOtWCL8iD9wtNjq6ldTl310ep
- 2YmgnIQVuiyCIFvUTl8AsozsOvoF0ZxiaEwRUnGEG7K+3yxXuiSbhndYRVr24wlEZl2qiC1Z+B
- Znv/bD+/7ARsAJ4ZnAAAA
-To: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org, 
- workflows@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, kernelci@lists.linux.dev, 
- =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-X-Mailer: b4 0.14.1
+X-B4-Tracking: v=1; b=H4sIAO0d/GYC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDS2MD3TLT+FKgnvjktMx4iF5d45RkY2OjNIs00yQjJaDGgqLUtMwKsKH
+ RsbW1ALWj2ONkAAAA
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, 
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+ Vlastimil Babka <vbabka@suse.cz>, 
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Christian Brauner <brauner@kernel.org>, 
+ Peter Zijlstra <peterz@infradead.org>, Oleg Nesterov <oleg@redhat.com>, 
+ Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+ linux-mm@kvack.org, linux-riscv@lists.infradead.org, 
+ devicetree@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ alistair.francis@wdc.com, richard.henderson@linaro.org, jim.shu@sifive.com, 
+ andybnac@gmail.com, kito.cheng@sifive.com, charlie@rivosinc.com, 
+ atishp@rivosinc.com, evan@rivosinc.com, cleger@rivosinc.com, 
+ alexghiti@rivosinc.com, samitolvanen@google.com, broonie@kernel.org, 
+ rick.p.edgecombe@intel.com, Deepak Gupta <debug@rivosinc.com>, 
+ David Hildenbrand <david@redhat.com>, 
+ Carlos Bilbao <carlos.bilbao.osdev@gmail.com>, 
+ Samuel Holland <samuel.holland@sifive.com>, 
+ Andrew Jones <ajones@ventanamicro.com>, 
+ Conor Dooley <conor.dooley@microchip.com>, Andy Chiu <andy.chiu@sifive.com>
+X-Mailer: b4 0.14.0
 
-Add documentation for the kselftests focused on testing devices and
-point to it from the kselftest documentation. There are multiple tests
-in this category so the aim of this page is to make it clear when to run
-each test.
+v5 for cpu assisted riscv user mode control flow integrity.
+zicfiss and zicfilp [1] are ratified riscv CPU extensions.
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Changes in this version are
+- rebased on v6.12-rc1
+- Fixed schema related issues in device tree file
+- Fixed some of the documentation related issues in zicfilp/ss.rst
+  (style issues and added index)
+- added `SHADOW_STACK_SET_MARKER` so that implementation can define base
+  of shadow stack.
+- Fixed warnings on definitions added in usercfi.h when
+  CONFIG_RISCV_USER_CFI is not selected.
+- Adopted context header based signal handling as proposed by Andy Chiu
+- Added support for enabling kernel mode access to shadow stack using
+  FWFT [4]
+
+v4 [3] and v3 [2] are earlier versions of patch series.
+
+To get more information on kernel interactions with respect to
+zicfilp and zicfiss, patch series adds documentation for
+`zicfilp` and `zicfiss`
+
+Documentation/arch/riscv/zicfiss.rst
+Documentation/arch/riscv/zicfilp.rst
+
+How to test this series
+=======================
+
+Toolchain
+---------
+$ git clone git@github.com:sifive/riscv-gnu-toolchain.git -b cfi-dev
+$ riscv-gnu-toolchain/configure --prefix=<path-to-where-to-build> --with-arch=rv64gc_zicfilp_zicfiss --enable-linux --disable-gdb  --with-extra-multilib-test="rv64gc_zicfilp_zicfiss-lp64d:-static"
+$ make -j$(nproc)
+
+Qemu
+----
+$ git clone git@github.com:deepak0414/qemu.git -b zicfilp_zicfiss_ratified_master_july11
+$ cd qemu
+$ mkdir build
+$ cd build
+$ ../configure --target-list=riscv64-softmmu
+$ make -j$(nproc)
+
+Opensbi
+-------
+$ git clone git@github.com:deepak0414/opensbi.git -b v6_cfi_spec_split_opensbi
+$ make CROSS_COMPILE=<your riscv toolchain> -j$(nproc) PLATFORM=generic
+
+Linux
+-----
+Running defconfig is fine. CFI is enabled by default if the toolchain
+supports it.
+
+$ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc) defconfig
+$ make ARCH=riscv CROSS_COMPILE=<path-to-cfi-riscv-gnu-toolchain>/build/bin/riscv64-unknown-linux-gnu- -j$(nproc)
+
+Running
+-------
+
+Modify your qemu command to have:
+-bios <path-to-cfi-opensbi>/build/platform/generic/firmware/fw_dynamic.bin
+-cpu rv64,zicfilp=true,zicfiss=true,zimop=true,zcmop=true
+
+vDSO related Opens (in the flux)
+=================================
+
+I am listing these opens for laying out plan and what to expect in future
+patch sets. And of course for the sake of discussion.
+
+Shadow stack and landing pad enabling in vDSO
+----------------------------------------------
+vDSO must have shadow stack and landing pad support compiled in for task
+to have shadow stack and landing pad support. This patch series doesn't
+enable that (yet). Enabling shadow stack support in vDSO should be
+straight forward (intend to do that in next versions of patch set). Enabling
+landing pad support in vDSO requires some collaboration with toolchain folks
+to follow a single label scheme for all object binaries. This is necessary to
+ensure that all indirect call-sites are setting correct label and target landing
+pads are decorated with same label scheme.
+
+How many vDSOs
+---------------
+Shadow stack instructions are carved out of zimop (may be operations) and if CPU
+doesn't implement zimop, they're illegal instructions. Kernel could be running on
+a CPU which may or may not implement zimop. And thus kernel will have to carry 2
+different vDSOs and expose the appropriate one depending on whether CPU implements
+zimop or not.
+
+[1] - https://github.com/riscv/riscv-cfi
+[2] - https://lore.kernel.org/lkml/20240403234054.2020347-1-debug@rivosinc.com/
+[3] - https://lore.kernel.org/all/20240912231650.3740732-1-debug@rivosinc.com/
+[4] - https://github.com/riscv-non-isa/riscv-sbi-doc/blob/master/src/ext-firmware-features.adoc
+
 ---
-This patch depends on patch "kselftest: devices: Add test to detect
-missing devices" [1], since this patch documents that test.
+changelog
+---------
 
-[1] https://lore.kernel.org/all/20240928-kselftest-dev-exist-v2-1-fab07de6b80b@collabora.com
----
- Documentation/dev-tools/kselftest.rst       |  9 ++++++
- Documentation/dev-tools/testing-devices.rst | 47 +++++++++++++++++++++++++++++
- 2 files changed, 56 insertions(+)
+v4
+--
+- rebased on 6.11-rc6
+- envcfg: Converged with Samuel Holland's patches for envcfg management on per-
+thread basis.
+- vma_is_shadow_stack is renamed to is_vma_shadow_stack
+- picked up Mark Brown's `ARCH_HAS_USER_SHADOW_STACK` patch
+- signal context: using extended context management to maintain compatibility.
+- fixed `-Wmissing-prototypes` compiler warnings for prctl functions
+- Documentation fixes and amending typos.
 
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index f3766e326d1e..fdb1df86783a 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -31,6 +31,15 @@ kselftest runs as a userspace process.  Tests that can be written/run in
- userspace may wish to use the `Test Harness`_.  Tests that need to be
- run in kernel space may wish to use a `Test Module`_.
- 
-+Documentation on the tests
-+==========================
-+
-+For documentation on the kselftests themselves, see:
-+
-+.. toctree::
-+
-+   testing-devices
-+
- Running the selftests (hotplug tests are run in limited mode)
- =============================================================
- 
-diff --git a/Documentation/dev-tools/testing-devices.rst b/Documentation/dev-tools/testing-devices.rst
-new file mode 100644
-index 000000000000..ab26adb99051
---- /dev/null
-+++ b/Documentation/dev-tools/testing-devices.rst
-@@ -0,0 +1,47 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+.. Copyright (c) 2024 Collabora Ltd
-+
-+=============================
-+Device testing with kselftest
-+=============================
-+
-+
-+There are a few different kselftests available for testing devices generically,
-+with some overlap in coverage and different requirements. This document aims to
-+give an overview of each one.
-+
-+Note: Paths in this document are relative to the kselftest folder
-+(``tools/testing/selftests``).
-+
-+Device oriented kselftests:
-+
-+* Devicetree (``dt``)
-+
-+  * **Coverage**: Probe status for devices described in Devicetree
-+  * **Requirements**: None
-+
-+* Error logs (``devices/error_logs``)
-+
-+  * **Coverage**: Error (or more critical) log messages presence coming from any
-+    device
-+  * **Requirements**: None
-+
-+* Discoverable bus (``devices/probe``)
-+
-+  * **Coverage**: Presence and probe status of USB or PCI devices that have been
-+    described in the reference file
-+  * **Requirements**: Manually describe the devices that should be tested in a
-+    YAML reference file (see ``devices/probe/boards/google,spherion.yaml`` for
-+    an example)
-+
-+* Exist (``devices/exist``)
-+
-+  * **Coverage**: Presence of all devices
-+  * **Requirements**: Generate the reference (see ``devices/exist/README.rst``
-+    for details) on a known-good kernel
-+
-+Therefore, the suggestion is to enable the error log and devicetree tests on all
-+(DT-based) platforms, since they don't have any requirements. Then to greatly
-+improve coverage, generate the reference for each platform and enable the exist
-+test. The discoverable bus test can be used to verify the probe status of
-+specific USB or PCI devices, but is probably not worth it for most cases.
+v3
+--
+envcfg:
+logic to pick up base envcfg had a bug where `ENVCFG_CBZE` could have been
+picked on per task basis, even though CPU didn't implement it. Fixed in
+this series.
+
+dt-bindings:
+As suggested, split into separate commit. fixed the messaging that spec is
+in public review
+
+arch_is_shadow_stack change:
+arch_is_shadow_stack changed to vma_is_shadow_stack
+
+hwprobe:
+zicfiss / zicfilp if present will get enumerated in hwprobe
+
+selftests:
+As suggested, added object and binary filenames to .gitignore
+Selftest binary anyways need to be compiled with cfi enabled compiler which
+will make sure that landing pad and shadow stack are enabled. Thus removed
+separate enable/disable tests. Cleaned up tests a bit.
+
+v2
+--
+
+- Using config `CONFIG_RISCV_USER_CFI`, kernel support for riscv control flow
+integrity for user mode programs can be compiled in the kernel.
+
+- Enabling of control flow integrity for user programs is left to user runtime
+
+- This patch series introduces arch agnostic `prctls` to enable shadow stack
+and indirect branch tracking. And implements them on riscv.
+
+Signed-off-by: Deepak Gupta <debug@rivosinc.com>
 
 ---
-base-commit: cea5425829f77e476b03702426f6b3701299b925
-change-id: 20241001-kselftest-device-docs-6c8a411109b5
+Andy Chiu (1):
+      riscv: signal: abstract header saving for setup_sigcontext
 
-Best regards,
--- 
-Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Clément Léger (1):
+      riscv: Add Firmware Feature SBI extensions definitions
+
+Deepak Gupta (26):
+      mm: helper `is_shadow_stack_vma` to check shadow stack vma
+      riscv/Kconfig: enable HAVE_EXIT_THREAD for riscv
+      riscv: zicfilp / zicfiss in dt-bindings (extensions.yaml)
+      riscv: zicfiss / zicfilp enumeration
+      riscv: zicfiss / zicfilp extension csr and bit definitions
+      riscv: usercfi state for task and save/restore of CSR_SSP on trap entry/exit
+      riscv/mm : ensure PROT_WRITE leads to VM_READ | VM_WRITE
+      riscv mm: manufacture shadow stack pte
+      riscv mmu: teach pte_mkwrite to manufacture shadow stack PTEs
+      riscv mmu: write protect and shadow stack
+      riscv/mm: Implement map_shadow_stack() syscall
+      riscv/shstk: If needed allocate a new shadow stack on clone
+      prctl: arch-agnostic prctl for indirect branch tracking
+      riscv: Implements arch agnostic shadow stack prctls
+      riscv: Implements arch agnostic indirect branch tracking prctls
+      riscv/traps: Introduce software check exception
+      riscv signal: save and restore of shadow stack for signal
+      riscv/kernel: update __show_regs to print shadow stack register
+      riscv/ptrace: riscv cfi status and state via ptrace and in core files
+      riscv/hwprobe: zicfilp / zicfiss enumeration in hwprobe
+      riscv: enable kernel access to shadow stack memory via FWFT sbi call
+      riscv: kernel command line option to opt out of user cfi
+      riscv: create a config for shadow stack and landing pad instr support
+      riscv: Documentation for landing pad / indirect branch tracking
+      riscv: Documentation for shadow stack on riscv
+      kselftest/riscv: kselftest for user mode cfi
+
+Mark Brown (2):
+      mm: Introduce ARCH_HAS_USER_SHADOW_STACK
+      prctl: arch-agnostic prctl for shadow stack
+
+Samuel Holland (3):
+      riscv: Enable cbo.zero only when all harts support Zicboz
+      riscv: Add support for per-thread envcfg CSR values
+      riscv: Call riscv_user_isa_enable() only on the boot hart
+
+ Documentation/arch/riscv/index.rst                 |   2 +
+ Documentation/arch/riscv/zicfilp.rst               | 115 +++++
+ Documentation/arch/riscv/zicfiss.rst               | 176 +++++++
+ .../devicetree/bindings/riscv/extensions.yaml      |  14 +
+ arch/riscv/Kconfig                                 |  20 +
+ arch/riscv/include/asm/asm-prototypes.h            |   1 +
+ arch/riscv/include/asm/cpufeature.h                |  15 +-
+ arch/riscv/include/asm/csr.h                       |  16 +
+ arch/riscv/include/asm/entry-common.h              |   2 +
+ arch/riscv/include/asm/hwcap.h                     |   2 +
+ arch/riscv/include/asm/mman.h                      |  24 +
+ arch/riscv/include/asm/pgtable.h                   |  30 +-
+ arch/riscv/include/asm/processor.h                 |   2 +
+ arch/riscv/include/asm/sbi.h                       |  27 ++
+ arch/riscv/include/asm/switch_to.h                 |   8 +
+ arch/riscv/include/asm/thread_info.h               |   4 +
+ arch/riscv/include/asm/usercfi.h                   |  89 ++++
+ arch/riscv/include/uapi/asm/hwprobe.h              |   2 +
+ arch/riscv/include/uapi/asm/ptrace.h               |  22 +
+ arch/riscv/include/uapi/asm/sigcontext.h           |   1 +
+ arch/riscv/kernel/Makefile                         |   2 +
+ arch/riscv/kernel/asm-offsets.c                    |   8 +
+ arch/riscv/kernel/cpufeature.c                     |  13 +-
+ arch/riscv/kernel/entry.S                          |  31 +-
+ arch/riscv/kernel/head.S                           |  12 +
+ arch/riscv/kernel/process.c                        |  31 +-
+ arch/riscv/kernel/ptrace.c                         |  83 ++++
+ arch/riscv/kernel/signal.c                         | 140 +++++-
+ arch/riscv/kernel/smpboot.c                        |   2 -
+ arch/riscv/kernel/suspend.c                        |   4 +-
+ arch/riscv/kernel/sys_hwprobe.c                    |   2 +
+ arch/riscv/kernel/sys_riscv.c                      |  10 +
+ arch/riscv/kernel/traps.c                          |  42 ++
+ arch/riscv/kernel/usercfi.c                        | 526 +++++++++++++++++++++
+ arch/riscv/mm/init.c                               |   2 +-
+ arch/riscv/mm/pgtable.c                            |  17 +
+ arch/x86/Kconfig                                   |   1 +
+ fs/proc/task_mmu.c                                 |   2 +-
+ include/linux/cpu.h                                |   4 +
+ include/linux/mm.h                                 |   5 +-
+ include/uapi/asm-generic/mman.h                    |   4 +
+ include/uapi/linux/elf.h                           |   1 +
+ include/uapi/linux/prctl.h                         |  48 ++
+ kernel/sys.c                                       |  60 +++
+ mm/Kconfig                                         |   6 +
+ mm/gup.c                                           |   2 +-
+ mm/mmap.c                                          |   1 +
+ mm/vma.h                                           |  10 +-
+ tools/testing/selftests/riscv/Makefile             |   2 +-
+ tools/testing/selftests/riscv/cfi/.gitignore       |   3 +
+ tools/testing/selftests/riscv/cfi/Makefile         |  10 +
+ tools/testing/selftests/riscv/cfi/cfi_rv_test.h    |  83 ++++
+ tools/testing/selftests/riscv/cfi/riscv_cfi_test.c |  82 ++++
+ tools/testing/selftests/riscv/cfi/shadowstack.c    | 362 ++++++++++++++
+ tools/testing/selftests/riscv/cfi/shadowstack.h    |  37 ++
+ 55 files changed, 2178 insertions(+), 42 deletions(-)
+---
+base-commit: 9852d85ec9d492ebef56dc5f229416c925758edc
+change-id: 20240930-v5_user_cfi_series-3dc332f8f5b2
+--
+- debug
 
 
