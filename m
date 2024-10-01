@@ -1,174 +1,161 @@
-Return-Path: <linux-kselftest+bounces-18742-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18743-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DD5198BEC5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 16:01:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DDBB98BFF0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 16:30:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD9CB1F223AF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 14:01:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 717901C23DC6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 14:30:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D35D51C7B67;
-	Tue,  1 Oct 2024 13:59:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CD4F1C6F5E;
+	Tue,  1 Oct 2024 14:30:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tycho.pizza header.i=@tycho.pizza header.b="gN5z/a/i";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AHVl+I89"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RMOflocR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447951C6F70;
-	Tue,  1 Oct 2024 13:59:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DBEF1A4F0D;
+	Tue,  1 Oct 2024 14:30:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727791173; cv=none; b=QWgrExISf8FTtu8DdQ4HLMGQITUCR+UBB27RMti2054kbbfxShYeoE5JY3OxpWeMaWXGFpa/RCMseKTzFdnN66XqLN7ZLC39amMxVNU2rf+yCk8wOhCausBSusmrx40dTHRObOf4g4QCIHMY9MwdgXuwCNe+K7uhkaJUK3lRT7w=
+	t=1727793034; cv=none; b=nk/n258f67bycjtwg62BAS3zSLuzjBWyJBv7Y6Kjs2buwmHwRt4ilL6/148Tbb30Se0VSQQk3JSiJA8mG/EMO0EPoUevk6K4k47EIWbTaMMXJmAOKxckrh9OFsIaugwP0i7Ehoe2uRDevJ3/7vlSug+E7s0Bqvgd+DK3zg4xWsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727791173; c=relaxed/simple;
-	bh=Au412/fFbpquOp/lmA/1fVR4HYznA9tZpqoVa2f6kL0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ZpfHx4Q2Yis2TvNrwZE0J0MzjOBOgkIzNVJ2rSRu76/xOXforipdJn3CSgefQ1DgL0by6q2YeDgL61/pasMwLD3ha8FM+7w3JTb7F1PRgyiICMwh+IqvbpXBWYPkfTbt4htd4byxnijd60IL97Y+7JzM3iFYG5OzoawLBCjG5P8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tycho.pizza; spf=pass smtp.mailfrom=tycho.pizza; dkim=pass (2048-bit key) header.d=tycho.pizza header.i=@tycho.pizza header.b=gN5z/a/i; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=AHVl+I89; arc=none smtp.client-ip=103.168.172.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tycho.pizza
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tycho.pizza
-Received: from phl-compute-11.internal (phl-compute-11.phl.internal [10.202.2.51])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 60FD011413C3;
-	Tue,  1 Oct 2024 09:59:30 -0400 (EDT)
-Received: from phl-mailfrontend-01 ([10.202.2.162])
-  by phl-compute-11.internal (MEProxy); Tue, 01 Oct 2024 09:59:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
-	cc:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1727791170; x=
-	1727877570; bh=jcSby7W+5uYeteUvGb/mYaE5eneel7efJMsI4xZNg/Q=; b=g
-	N5z/a/iyRdao1WtZNXNECk6YIAmT7yLSEGJP3YhwYvDJKvJYZ0XhzasPsCbSVXPk
-	0dD7JBoaOs980RnGLrtTZ/18RTNe29uptwG35eF6lHIrr/EAB09lv9Ydlxr4srNH
-	XSFIusvwFwD6oIPJmniPtL4vY2VRDDGDipfJYyOAKHZcK/aKWg8pQ5GMMB7VuVKx
-	xGzEBetglynBN3Hcppu0M6gzFIv/NXqHQLu3WsWT5VdZRtJkkTpGHMfyw6l8uY0O
-	NV3IohKYhg0U5I0dMfOss7TFczldK/NN5i+UUzzh8jQjt7VfyUVs4m+FPs0oHe1U
-	7ms9+TEa5R0jRbUyqAOGw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1727791170; x=
-	1727877570; bh=jcSby7W+5uYeteUvGb/mYaE5eneel7efJMsI4xZNg/Q=; b=A
-	HVl+I89YBj4SHx7zwYhyOy7tAg9w5f5A9DTKUEqiD5WauZOKPX9tMPT9bZ7xx6Zu
-	Aw80Iy3SKIDkaall/OlIQr4ViRM7376x1B0LVXr5DX9BMSMbSsbm2fj6/QbsuV8s
-	LWMIbwc4BF5TGu0ajlUO8CFMw90PWNb8mNQH6wzw5j6moVjf6+kB5qQkHu3g3cus
-	EImZvX4QIZgA/ezV1zhd0LXuxPxvqrtga+WAwLqpYTBM3/h5RQafN5otyLm7N2oQ
-	yrHOoNBRO3OF3pk6tOEM9UXox1hFrahkb16Ll3bW8cbKOCaUB0frDkoz0+Nv2Zgc
-	lKpr/aDbdrOr7/vKTi2Ag==
-X-ME-Sender: <xms:QQD8ZqWbDk82-avuQbk40sqIKjPMB7fV-brHKe6ta1QFGyLp5hmHgQ>
-    <xme:QQD8ZmmfIKOkS4YKVJ2cG6hsfwi_jvjcYCphqShMTZSD20eo2wuyT1Is0GB0I-35t
-    CvuADBNn49wZsleXcQ>
-X-ME-Received: <xmr:QQD8ZuaNSL7u00nDc3uibjFWZ354cI5FzaVkNKyeB5Qg4y6ywy32daQyESy5VI-Qv6QJEPT9yiN9KMJt1yNboNpZ_y_zIRnQJQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvddujedgieelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredttden
-    ucfhrhhomhepvfihtghhohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrph
-    hiiiiirgeqnecuggftrfgrthhtvghrnhepvdegffehledvleejvdethffgieefveevhfei
-    gefffffgheeguedtieektdeigeeunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepthihtghhohesthihtghhohdrphhiiiiirgdpnhgspghrtghp
-    thhtohepuddupdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehvihhrohesiigvnh
-    hivhdrlhhinhhugidrohhrghdruhhkpdhrtghpthhtohepsghrrghunhgvrheskhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtohepjhgrtghksehsuhhsvgdrtgiipdhrtghpthhtohepvg
-    gsihgvuggvrhhmseigmhhishhsihhonhdrtghomhdprhgtphhtthhopehkvggvsheskhgv
-    rhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqfhhsuggvvhgvlhesvhhgvghrrd
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmmheskhhvrggtkhdrohhr
-    ghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdroh
-    hrghdprhgtphhtthhopehlihhnuhigqdhkshgvlhhfthgvshhtsehvghgvrhdrkhgvrhhn
-    vghlrdhorhhg
-X-ME-Proxy: <xmx:QgD8ZhV7TL1IOVGojztA0cmrDmIYw4eRPUzMD2KhDj3XJWv-QgNMdQ>
-    <xmx:QgD8ZkkKxTmeeQTqNSekYUW3i0bIEjCi14nuqOn15iFkfmjoDrBc-Q>
-    <xmx:QgD8ZmeTVeqGTL-qxXRWgAQcVHqRAs9ujBxyJbD_3ahfsz-_kSd_6g>
-    <xmx:QgD8ZmHeb1BiFUrnIXEMUAP9O9rPmdsEO_dnWjv4maRBn8Skfv5hGg>
-    <xmx:QgD8ZudNI9Q_IJm1z-mDjEBt-oJZaTFSn_fxo3jux-kZPKrKszzg9lOZ>
-Feedback-ID: i21f147d5:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 1 Oct 2024 09:59:28 -0400 (EDT)
-From: Tycho Andersen <tycho@tycho.pizza>
-To: Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>,
-	Jan Kara <jack@suse.cz>,
-	Eric Biederman <ebiederm@xmission.com>,
-	Kees Cook <kees@kernel.org>
-Cc: linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Tycho Andersen <tycho@tycho.pizza>,
-	Tycho Andersen <tandersen@netflix.com>
-Subject: [PATCH v3 2/2] selftests/exec: add a test to enforce execveat()'s comm
-Date: Tue,  1 Oct 2024 07:49:45 -0600
-Message-Id: <20241001134945.798662-2-tycho@tycho.pizza>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241001134945.798662-1-tycho@tycho.pizza>
-References: <20241001134945.798662-1-tycho@tycho.pizza>
+	s=arc-20240116; t=1727793034; c=relaxed/simple;
+	bh=nGvYMRuh7zWFI6VcJ1HEzDn8S8Ie85YQyayn0q6e0wA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bUKH8mSOuFah9DU+9ERLKIYAqwypE/x3Khz8E/+AXPeiREyzlHw7+SFhkK5WjU3ipUJzSFme83UQCmGtDyKqvgOOWrB4OgZpZYgPA/1uB2z46swwE4TtOqI7GcixYUVDKRLOE0CDBvSApEPebnq7P4cOYnxxQq0x54WlDpgFfGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RMOflocR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35DC4C4CEC6;
+	Tue,  1 Oct 2024 14:30:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727793033;
+	bh=nGvYMRuh7zWFI6VcJ1HEzDn8S8Ie85YQyayn0q6e0wA=;
+	h=From:Subject:Date:To:Cc:From;
+	b=RMOflocR27fAPoPNikaQQqiyPFUktpj1l7yvZEjGUShbQXcLh10UHGxC/dPm/rfAg
+	 gXg+rs4ov6fasC1w0uPWfwQBR2XrtNYW+jLE1kos42OlYv7pvUldKBz6XP5/OIOZFQ
+	 /bTMuLUG8K99wKb6BPtOD9bAOsuwPQnFRJPzqFq4ltLHGcA9uv+0cBhXBpg2pJ/sAJ
+	 hSZgy0mOKdztCf0LSU8ac63p19OFpSGUaSW1vJ/Tvy9r6YaOrUJiD2dyKprcuxqAOx
+	 1ccBokXZdWDmjqRfGDlfi+Cop/EQLxySoyA4d5JaOiU4MEYHuxyoEYQtX++ROMnG6m
+	 f0XBoxNhbZZZw==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Subject: [PATCH HID v3 0/9] HID: bpf: add a new hook to control hid-generic
+Date: Tue, 01 Oct 2024 16:30:04 +0200
+Message-Id: <20241001-hid-bpf-hid-generic-v3-0-2ef1019468df@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGwH/GYC/23NwQ6CMAwG4FchPTuzDYbMkwcP+gzGA7AOGs0gm
+ 1k0hHd32UkTTs3f5v+6QEBPGOBYLOAxUqDJpVDuCujH1g3IyKQMksuKN1KzkQzrZpvngC61e1Y
+ LddBWdUpXClJz9mjpndUbXK5nuKflSOE1+U/+FEU+ZVTzchONgnGmlRCtqlUnTXt6oHf43E9+y
+ GCUP4jg24hMCG9KY3vRaNSHP2Rd1y8dzFnJAQEAAA==
+To: Jiri Kosina <jikos@kernel.org>, 
+ Peter Hutterer <peter.hutterer@who-t.net>, Vicki Pfau <vi@endrift.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ Benjamin Tissoires <bentiss@kernel.org>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1727793031; l=4175;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=nGvYMRuh7zWFI6VcJ1HEzDn8S8Ie85YQyayn0q6e0wA=;
+ b=Qj28gsmtXPhAagUhfKkQqh5Hd7LFduYqBUKvzE+46XVGZZAYocJHJ7KWnoK/+Lb3yKoG9/4wN
+ QN/VbeCsnN7D+T/v3uS7Df8pUFPDJdMHPOfrE3o2cp6/zXARcrSF/GI
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-From: Tycho Andersen <tandersen@netflix.com>
+This is a slight change from the fundamentals of HID-BPF.
+In theory, HID-BPF is abstract to the kernel itself, and makes
+only changes at the HID level (through report descriptors or
+events emitted to/from the device).
 
-We want to ensure that /proc/self/comm stays useful for execveat() callers.
+However, we have seen a few use cases where HID-BPF might interact with
+the running kernel when the target device is already handled by a
+specific device.
 
-Signed-off-by: Tycho Andersen <tandersen@netflix.com>
+For example, the XP-Pen/Huion/UC-Logic tablets are handled by
+hid-uclogic but this driver is also doing a report descriptor fixup
+without checking if the device has already been fixed by HID-BPF.
+
+In the same way, another recent example[0] was when a cheap foot pedal is
+used and tricks iPhones and Windows machines by presenting itself as a
+known Apple wireless keyboard. The problem is that this fake keyboard is
+not presenting a compatible report descriptor and hid-core merges all
+device nodes together making libinput ignore the keyboard part for
+historical reasons.
+
+This series aims at tackling this problem:
+- first, we promote hid_bpf_report_descriptor_fixup to be called before
+  any driver is even matched for the device
+- then we allow hdev->quirks to be written during report_fixup and add a
+  new quirk to force hid-core to ignore any non hid-generic driver.
+
+Basically, it means that when we insert a BPF program to fix a device,
+we can force hid-generic to handle the device, and thus preventing
+any other kernel driver to tamper with our device.
+
+This branch is on top of the for-6.12/upstream-fixes branch of hid.git.
+
+[0] https://gitlab.freedesktop.org/libinput/libinput/-/issues/1014
+
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
- tools/testing/selftests/exec/execveat.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+Changes in v3:
+- dropped the last 2 patches with hid-input control, as I'm not 100%
+  sure of it
+- changed the first patch to avoid a double free on cleanup of a device
+  when a HID-BPF program was attached
+- kept Peter's rev-by for all but patches 1 and 6
+- Link to v2: https://lore.kernel.org/r/20240910-hid-bpf-hid-generic-v2-0-083dfc189e97@kernel.org
 
-diff --git a/tools/testing/selftests/exec/execveat.c b/tools/testing/selftests/exec/execveat.c
-index 071e03532cba..091029f4ca9b 100644
---- a/tools/testing/selftests/exec/execveat.c
-+++ b/tools/testing/selftests/exec/execveat.c
-@@ -419,6 +419,9 @@ int main(int argc, char **argv)
- 	if (argc >= 2) {
- 		/* If we are invoked with an argument, don't run tests. */
- 		const char *in_test = getenv("IN_TEST");
-+		/* TASK_COMM_LEN == 16 */
-+		char buf[32];
-+		int fd;
- 
- 		if (verbose) {
- 			ksft_print_msg("invoked with:\n");
-@@ -432,6 +435,28 @@ int main(int argc, char **argv)
- 			return 1;
- 		}
- 
-+		fd = open("/proc/self/comm", O_RDONLY);
-+		if (fd < 0) {
-+			perror("open comm");
-+			return 1;
-+		}
-+
-+		if (read(fd, buf, sizeof(buf)) < 0) {
-+			close(fd);
-+			perror("read comm");
-+			return 1;
-+		}
-+		close(fd);
-+
-+		/*
-+		 * /proc/self/comm should fail to convert to an integer, i.e.
-+		 * atoi() should return 0.
-+		 */
-+		if (atoi(buf) != 0) {
-+			ksft_print_msg("bad /proc/self/comm: %s", buf);
-+			return 1;
-+		}
-+
- 		/* Use the final argument as an exit code. */
- 		rc = atoi(argv[argc - 1]);
- 		exit(rc);
+Changes in v2:
+- Refactored the API to not use a new hook but hid_bpf_rdesc_fixup
+  instead
+- Some cleanups in hid-core.c probe() device to not kmemdup multiple
+  time the report descriptor when it's not required
+- I'm still not 100% sure the HID_QUIRK_IGNORE_HIDINPUT is that
+  required, but I can not think of anything else at the moment to
+  temporary disable any driver input device.
+- Link to v1: https://lore.kernel.org/r/20240903-hid-bpf-hid-generic-v1-0-9511a565b2da@kernel.org
+
+---
+Benjamin Tissoires (9):
+      HID: bpf: move HID-BPF report descriptor fixup earlier
+      HID: core: save one kmemdup during .probe()
+      HID: core: remove one more kmemdup on .probe()
+      HID: bpf: allow write access to quirks field in struct hid_device
+      selftests/hid: add dependency on hid_common.h
+      selftests/hid: cleanup C tests by adding a common struct uhid_device
+      selftests/hid: allow to parametrize bus/vid/pid/rdesc on the test device
+      HID: add per device quirk to force bind to hid-generic
+      selftests/hid: add test for assigning a given device to hid-generic
+
+ drivers/hid/bpf/hid_bpf_dispatch.c                 |   9 +-
+ drivers/hid/bpf/hid_bpf_struct_ops.c               |   1 +
+ drivers/hid/hid-core.c                             |  84 +++++++++---
+ drivers/hid/hid-generic.c                          |   3 +
+ include/linux/hid.h                                |  20 +--
+ include/linux/hid_bpf.h                            |  11 +-
+ tools/testing/selftests/hid/Makefile               |   2 +-
+ tools/testing/selftests/hid/hid_bpf.c              | 151 ++++++++++++++-------
+ tools/testing/selftests/hid/hid_common.h           | 112 ++++++++++-----
+ tools/testing/selftests/hid/hidraw.c               |  36 ++---
+ tools/testing/selftests/hid/progs/hid.c            |  12 ++
+ .../testing/selftests/hid/progs/hid_bpf_helpers.h  |   6 +-
+ 12 files changed, 296 insertions(+), 151 deletions(-)
+---
+base-commit: acd5f76fd5292c91628e04da83e8b78c986cfa2b
+change-id: 20240829-hid-bpf-hid-generic-61579f5b5945
+
+Best regards,
 -- 
-2.34.1
+Benjamin Tissoires <bentiss@kernel.org>
 
 
