@@ -1,106 +1,164 @@
-Return-Path: <linux-kselftest+bounces-18802-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18803-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFDDD98C39A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 18:41:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 973D098C4A5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 19:36:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6E95284775
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 16:41:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 458811F25789
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 17:36:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86BA61CB520;
-	Tue,  1 Oct 2024 16:41:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 429C11CC8A6;
+	Tue,  1 Oct 2024 17:33:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gZ3XCU+u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vl4xZL6Y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 167FC1CB505
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Oct 2024 16:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A7C1CC15B;
+	Tue,  1 Oct 2024 17:33:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727800890; cv=none; b=S3lpnCvV6pJ2GzZ0QyriqSKvX3zy1rIjSri6g3jRK1ix6kym1DgwSxjB2f8XsUCLxoQaiT0nxX+e3HOiNICkU2EMXSJknMzn/PwjctTCGDfMDFTQGCBJ0HtaMmbW44H1hjQxKoOe71pXAINZeg7sJI0+JvdV6lj3d7SecRpAAj8=
+	t=1727804003; cv=none; b=mJv1xuKo51WByTuDT4RI8wQ3e0VQgiJ+hs5fDABeT1F5aTC6hf5dq86wjELF8Yrm4oy3nupWW+g3b7wSPOqA1k+nxkV1qBbV32jNLhDHbNrOqSlb1O08iMtgcGyRrK3yqHYxtvLEkBfXPsPRG8mFWeZl28HiQBXs3aVM4wfXNqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727800890; c=relaxed/simple;
-	bh=+jkyghh59xKMjZU+NbWVLGYubWbREKsEtCY/7RDZWJo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=kCkdKt6uP1ana1GQqcAuB0+2a2XPd2YWZMdKkZprNf6LuW+/KoxiexSjb9OQHz4IWgidxpXvj7nbPWRqq14bORP+rB2bT0WbhX7GB7YYeT0GQs43iFpxmXRSOYn8aZfpyd6xTfmBwq4JPCWB+gSTPILok3bY/+O9shUK3//IIXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gZ3XCU+u; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6e230808455so66489707b3.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Oct 2024 09:41:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727800888; x=1728405688; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5SgvFUZ0l32mNtnLi+B64uXI+aFBZc2L8UZwkiGU+28=;
-        b=gZ3XCU+uYa+SYRI3cF9x2LMUbO6QXzCSbfPZIfT9MD8tsAGF8No1QmLiX66zCBumte
-         r7X71G1ldpoL27sCo2bgPLttQrWYb+UX28G/uRajM/IQjDvdasWZgjbD1BM6b/X1oQLu
-         aiPDNnC+GlEHruwo4mRtdKp+MsKQqnrjO2ZqLeL9leiH1A5Ecq6TxtY7vMi/RsIGERYc
-         XJ4GSPB6EHOpKVMtzumW3ZjdC06cT+Xv+DtlR+IBf4Ez+2f3VcXO0AeqSU2F4qLG4gVQ
-         ey0WZk0+D7jSSmJJNNXLFDhQfzxskoXhFYjJSue7wM0Hzq2ciLuyTNbyRR1dz74Boloc
-         IM9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727800888; x=1728405688;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5SgvFUZ0l32mNtnLi+B64uXI+aFBZc2L8UZwkiGU+28=;
-        b=sT0gjcAZZkOUk3Kq4pVu1PGQXoaV4U2VF4D/yMRf1MWP9ngTR/1zw1bnx4IXGfXrs+
-         gEC3OGFqAkDhk8Q0KZPOxbxJUfX0NCzbyu4aY8RvqlKZRTOWIHtY3W3LiFF4e+sElw1F
-         BP3FvEPXL5Gbu5qQDVvSA+yjDUmI6Ccolg4JzMVkwLEKu+Qhd78vmkdhshQppyX0DM6h
-         r808XFnrlmDGzui+rZ1Gw9z+itN5Y8XVQVrLwqarIMZQYcuU7B7zlrngFahOzn3sWxQ+
-         v/t0UWSi65NU+anY+VqbbZFo35nZq9M971/BQSCrTNnbm71czEZbPbRgW35kU0ltOe1d
-         o7Ng==
-X-Forwarded-Encrypted: i=1; AJvYcCUkpR5dQ/Yr/N+o3o4sQTKAVKRTPpPq7mafgXgtOxDRRLc1LndUw41lcs5Ul8beQPw22SkiSM0VSC24Hhnocfw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVWoZTaUWIRBbgyi1zkSN7yJ69tKJs4wQLVxLIAtM7C6uW1msO
-	ENIYgh2eztwOcSC8XZcOzfrPowhTvArCkrnzAENYKAbbhz5+TPb4Q9s7bTC9FaQ04NnV+DnQuxA
-	Zlg==
-X-Google-Smtp-Source: AGHT+IHmFdl+55S7IDy0xeVjWu3kw9xgQ6F6bPYxyY0wCyWqpm+n/FjY6pMqElJJTCVMRNqkjSGzVAZMI9g=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a05:690c:fd4:b0:6b0:57ec:c5f9 with SMTP id
- 00721157ae682-6e2a298509bmr85077b3.0.1727800887949; Tue, 01 Oct 2024 09:41:27
- -0700 (PDT)
-Date: Tue, 1 Oct 2024 09:41:26 -0700
-In-Reply-To: <20241001063413.687787-2-manali.shukla@amd.com>
+	s=arc-20240116; t=1727804003; c=relaxed/simple;
+	bh=prDur8m2vd+I3bZCB3BSpi/S83VkG6ayAgQVvfgOpWk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Q9xt6hNb5vL9cY/nN+TJ9E6dv64lO7TTU3vdA/nFOCgksEg96Ea0H57HE9kw4veri9pOYQhoByan7oqCNsEEN21MpupyOWtAgGGjEfTeKp8s6tLEmzM/YvxskjgrC5i88rkB1/wywLNfKmPkL4LuaaOmqZPBH2LFcD6oxgAR6+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vl4xZL6Y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60C96C4CEC6;
+	Tue,  1 Oct 2024 17:33:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727804002;
+	bh=prDur8m2vd+I3bZCB3BSpi/S83VkG6ayAgQVvfgOpWk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Vl4xZL6YY2Dae9PlED3ufSGitTd1p2Z0N5zYmFWfHiwR/lXhaP0C903fl0oURIT3K
+	 tDj5vOligYpmrbdAYDDqKj2nUm8Cf0Pz7E8cDhGvjhDnTyh4s6sFO/p5GrfFNPXUv/
+	 u6KUS8MVirPOvcimQUBMMvgDTMTXMOy3cpVjFiITZp52b5FZJpc51pLmyv7apALkr0
+	 IVxsw1MXfpa1U86lqAGko43eBb+CJNNgMQkdMOyP24R9uopQOEXsvVf0II0wrStoJr
+	 25ktGQgkFpfufClnjsX2BT2THDD/1+ic3SJsZzS+NJyTnAYibCe/Uecdr4uM+yegis
+	 IqKQ6dOENudmQ==
+Date: Tue, 1 Oct 2024 18:33:14 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Christian Brauner <brauner@kernel.org>
+Cc: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	"dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"mgorman@suse.de" <mgorman@suse.de>,
+	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"vschneid@redhat.com" <vschneid@redhat.com>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"kees@kernel.org" <kees@kernel.org>,
+	"will@kernel.org" <will@kernel.org>,
+	"hpa@zytor.com" <hpa@zytor.com>,
+	"jannh@google.com" <jannh@google.com>,
+	"peterz@infradead.org" <peterz@infradead.org>,
+	"yury.khrustalev@arm.com" <yury.khrustalev@arm.com>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"wilco.dijkstra@arm.com" <wilco.dijkstra@arm.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"bsegall@google.com" <bsegall@google.com>,
+	"juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+	"x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH RFT v9 4/8] fork: Add shadow stack support to clone3()
+Message-ID: <6bf15851-03fe-40cd-b95c-f7e2ca40ac54@sirena.org.uk>
+References: <cc2e7d86-c890-4cb1-8cad-1cfaa9f53dc8@sirena.org.uk>
+ <82be9ec6e43a018add8d9bbc6ba67feee676f32e.camel@intel.com>
+ <5643761f-cc38-4e41-9ddd-f0a1934f8724@sirena.org.uk>
+ <9f022aa4cd3e2dc82d0c963e9d2bf5c7ddd5b92a.camel@intel.com>
+ <77bc051d-b2c9-4e3a-b956-be8879048e20@sirena.org.uk>
+ <5464b915b52bf3b91ec70201736479a5347838af.camel@intel.com>
+ <158190d9-a4a6-4647-84e8-f4ae036d984b@sirena.org.uk>
+ <20240927-springen-fortpflanzen-34a303373088@brauner>
+ <727524e9109022632250ab0485f5ecc1c1900092.camel@intel.com>
+ <20241001-atheismus-stetig-4f6f3001715c@brauner>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20241001063413.687787-1-manali.shukla@amd.com> <20241001063413.687787-2-manali.shukla@amd.com>
-Message-ID: <ZvwmA-Z_T44zcSJZ@google.com>
-Subject: Re: [RFC PATCH v2 1/5] x86/cpu: Add virt tag in /proc/cpuinfo
-From: Sean Christopherson <seanjc@google.com>
-To: Manali Shukla <manali.shukla@amd.com>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, pbonzini@redhat.com, 
-	shuah@kernel.org, nikunj@amd.com, thomas.lendacky@amd.com, 
-	vkuznets@redhat.com, bp@alien8.de, babu.moger@amd.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="BRHYL8Lzq6CYUNzt"
+Content-Disposition: inline
+In-Reply-To: <20241001-atheismus-stetig-4f6f3001715c@brauner>
+X-Cookie: Even a hawk is an eagle among crows.
 
-On Tue, Oct 01, 2024, Manali Shukla wrote:
-> Add support for generating Virtualization feature names in capflags.c
-> and use the resulting x86_virt_flags to print the virt flags in
-> /proc/cpuinfo.
-> 
-> Currently, it is difficult to check if a feature is supported in _KVM_.
-> Manually querying cpuid to know whether the feature is supported or not
-> can be quite tedious at times.
-> 
-> Print the features supported in KVM hypervisor in a dedicated "virt"
-> line instead of adding them to the common "flags".
 
-First off, printing flags in a separate section doesn't magically connect them
-to KVM support.  E.g. if you cut this series after patch 2, BUS_LOCK_THRESHOLD
-will show up in "virt" despite KVM not supporting the feature.
+--BRHYL8Lzq6CYUNzt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Second, deviating from the X86_FEATURE_* syntax will make it _harder_ for KVM to
-manage its configuration.
+On Tue, Oct 01, 2024 at 05:12:38PM +0200, Christian Brauner wrote:
+> On Fri, Sep 27, 2024 at 03:21:59PM GMT, Edgecombe, Rick P wrote:
 
-Third, this is completely orthogonal to supporting bus lock threshold in KVM,
-i.e. belongs in a separate series.
+> > Did you catch that a token can be at a different offsets location on th=
+e stack
+> > depending on args passed to map_shadow_stack? So userspace will need so=
+mething
+> > like the code above, but that adjusts the 'shadow_stack_size' such that=
+ the
+> > kernel looks for the token in the right place. It will be even weirder =
+if
+> > someone uses clone3 to switch to a stack that has already been used, an=
+d pivoted
+> > off of, such that a token was left in the middle of the stack. In that =
+case
+> > userspace would have to come up with args disconnected from the actual =
+size of
+> > the shadow stack such that the kernel would be cajoled into looking for=
+ the
+> > token in the right place.
+> >=20
+> > A shadow stack size is more symmetric on the surface, but I'm not sure =
+it will
+> > be easier for userspace to handle. So I think we should just have a poi=
+nter to
+> > the token. But it will be a usable implementation either way.
+
+My suspicion would be that if we're doing the pivot to a previously used
+shadow stack we'd also be pivoting the regular stack along with it which
+would face similar issues with having an unusual method for specifying
+the stack top so I don't know how much we're really winning.  Like we
+both keep saying either of the interfaces works though, it's just a
+taste question with both having downsides.
+
+> Maybe it's best to let glibc folks decide what is better/more ergonomic f=
+or them.
+
+The relevant people are on the thread I think. =20
+
+I've rebased onto v6.12-rc1, assuming I don't notice anything horrible
+in testing I'll post that with the ABI unchanged for now.
+
+--BRHYL8Lzq6CYUNzt
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmb8MlkACgkQJNaLcl1U
+h9AoNQf+Jkavle4N/yks/qB+Ufu+4UFkdBffqruCufymGzobEFRaeKJvJJAKtfka
+wz/fgNd8tiTpVq0SlpdFyG9UumI6HQBCcgQBBnO32/rOct21Lt5WQnEMDTj+PXB+
+8n8HkvNnzGKFPsfPZ7iavCVRiBFQpQYQKOWLWWG76ZQcAhvVz/OZyXLOV7NoGCwx
+mmQu+825ZeRg07YrPqF/8DhAeBSYYxLgEUly9H1R7hhj90lTKyup7nUJCmGPgxR6
+FgewpWMk1Lmhf4jS70PMXEEapT/ergA8BvqrhuTRftD6cj26G5kg1vIcAZ0ohqar
+4HHk4ioCgvzeAywd9/wEltOUrJVDsg==
+=4Sah
+-----END PGP SIGNATURE-----
+
+--BRHYL8Lzq6CYUNzt--
 
