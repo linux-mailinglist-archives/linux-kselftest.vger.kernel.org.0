@@ -1,164 +1,111 @@
-Return-Path: <linux-kselftest+bounces-18803-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18804-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 973D098C4A5
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 19:36:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E64198C4C9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 19:50:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 458811F25789
-	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 17:36:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2AA7DB21D69
+	for <lists+linux-kselftest@lfdr.de>; Tue,  1 Oct 2024 17:50:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 429C11CC8A6;
-	Tue,  1 Oct 2024 17:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B30DC1CB501;
+	Tue,  1 Oct 2024 17:50:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vl4xZL6Y"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TZncx9rm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A7C1CC15B;
-	Tue,  1 Oct 2024 17:33:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 103A81C242E;
+	Tue,  1 Oct 2024 17:50:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727804003; cv=none; b=mJv1xuKo51WByTuDT4RI8wQ3e0VQgiJ+hs5fDABeT1F5aTC6hf5dq86wjELF8Yrm4oy3nupWW+g3b7wSPOqA1k+nxkV1qBbV32jNLhDHbNrOqSlb1O08iMtgcGyRrK3yqHYxtvLEkBfXPsPRG8mFWeZl28HiQBXs3aVM4wfXNqc=
+	t=1727805027; cv=none; b=mxwQrFKZs8nPc9cHMh5+M9jGwTiTfrlcLE0Tk/y8v+Kh8mCBlIpwAAK9RPaLm467qw7XonG5pP//TIY5bEPLlJKIBZyv5HVWL3b0gPydL+ODUjOTKnkGz2bzobMPW7Fgjg32rnCjFXwARJO4BOHBqlhCt2qDE4Ji1WPB0siRv1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727804003; c=relaxed/simple;
-	bh=prDur8m2vd+I3bZCB3BSpi/S83VkG6ayAgQVvfgOpWk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q9xt6hNb5vL9cY/nN+TJ9E6dv64lO7TTU3vdA/nFOCgksEg96Ea0H57HE9kw4veri9pOYQhoByan7oqCNsEEN21MpupyOWtAgGGjEfTeKp8s6tLEmzM/YvxskjgrC5i88rkB1/wywLNfKmPkL4LuaaOmqZPBH2LFcD6oxgAR6+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vl4xZL6Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60C96C4CEC6;
-	Tue,  1 Oct 2024 17:33:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727804002;
-	bh=prDur8m2vd+I3bZCB3BSpi/S83VkG6ayAgQVvfgOpWk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Vl4xZL6YY2Dae9PlED3ufSGitTd1p2Z0N5zYmFWfHiwR/lXhaP0C903fl0oURIT3K
-	 tDj5vOligYpmrbdAYDDqKj2nUm8Cf0Pz7E8cDhGvjhDnTyh4s6sFO/p5GrfFNPXUv/
-	 u6KUS8MVirPOvcimQUBMMvgDTMTXMOy3cpVjFiITZp52b5FZJpc51pLmyv7apALkr0
-	 IVxsw1MXfpa1U86lqAGko43eBb+CJNNgMQkdMOyP24R9uopQOEXsvVf0II0wrStoJr
-	 25ktGQgkFpfufClnjsX2BT2THDD/1+ic3SJsZzS+NJyTnAYibCe/Uecdr4uM+yegis
-	 IqKQ6dOENudmQ==
-Date: Tue, 1 Oct 2024 18:33:14 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Christian Brauner <brauner@kernel.org>
-Cc: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	"dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"mgorman@suse.de" <mgorman@suse.de>,
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"vschneid@redhat.com" <vschneid@redhat.com>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"kees@kernel.org" <kees@kernel.org>,
-	"will@kernel.org" <will@kernel.org>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"jannh@google.com" <jannh@google.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"yury.khrustalev@arm.com" <yury.khrustalev@arm.com>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"wilco.dijkstra@arm.com" <wilco.dijkstra@arm.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"bsegall@google.com" <bsegall@google.com>,
-	"juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-	"x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH RFT v9 4/8] fork: Add shadow stack support to clone3()
-Message-ID: <6bf15851-03fe-40cd-b95c-f7e2ca40ac54@sirena.org.uk>
-References: <cc2e7d86-c890-4cb1-8cad-1cfaa9f53dc8@sirena.org.uk>
- <82be9ec6e43a018add8d9bbc6ba67feee676f32e.camel@intel.com>
- <5643761f-cc38-4e41-9ddd-f0a1934f8724@sirena.org.uk>
- <9f022aa4cd3e2dc82d0c963e9d2bf5c7ddd5b92a.camel@intel.com>
- <77bc051d-b2c9-4e3a-b956-be8879048e20@sirena.org.uk>
- <5464b915b52bf3b91ec70201736479a5347838af.camel@intel.com>
- <158190d9-a4a6-4647-84e8-f4ae036d984b@sirena.org.uk>
- <20240927-springen-fortpflanzen-34a303373088@brauner>
- <727524e9109022632250ab0485f5ecc1c1900092.camel@intel.com>
- <20241001-atheismus-stetig-4f6f3001715c@brauner>
+	s=arc-20240116; t=1727805027; c=relaxed/simple;
+	bh=LCWVpajAikQ+toPAXwPJaPLnAy7DAfal7nkQHKA9yws=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Bd3eb51sARYYf52flxX/W3jOuTI2TXd1/npQMzIiZr7+14f4SZoEviSaFbyyLpk+s8kDeDA/j9S66cfFC2eVzlNGCIs3bHpDBqQMzUyGpVNolJrRtWsDq05y34QGRX9KLzo16Kyi9df5qKva1RPsgKmNtyMZS8HJXX0+Y+uf86c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TZncx9rm; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5c87c7d6ad4so5986961a12.3;
+        Tue, 01 Oct 2024 10:50:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1727805024; x=1728409824; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LCWVpajAikQ+toPAXwPJaPLnAy7DAfal7nkQHKA9yws=;
+        b=TZncx9rmzCC3RsuKfMGEg7IYKTVJxeh62b4SN5sOlwHFs/WLa8XQYhHUb3aDcNZzjz
+         sgOOiN/g50/GqX4tH01mZNYZRe2eYyIQMwaCZosh1IALhNIn0KXih14fnSaSQtoUzhu7
+         Fanux1la9WZIeseBrcKmE8Ye5C8SDmTzalCXionLZJjGYPZwOTiTMgVJRlENYKQkrUhs
+         zYb71ctorNdJxzACffhWLkx81PhPkdVCCDEN9wXvIjO50bOImOzqCF/DVbVXX1gjOrmj
+         BrWfT0E6FjIZipMdbWzR4P+foua99px1nnMe3SaF2LVup20N+Uk1gH4axxACNkqEQ0a1
+         MRlA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727805024; x=1728409824;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LCWVpajAikQ+toPAXwPJaPLnAy7DAfal7nkQHKA9yws=;
+        b=F177nG8PMomVlKLkCn0w9R1NjrFmkL3zUK3xKXLqZ7FdTl9Fps6CBRP1M/jtseuB2P
+         uZMBNRv+rnJHK+jw6MsQsWPed5DPbgvEygZ9kPYXY+XNt0pYh3eZRYUHAJuuGUHbSfNF
+         xF8fR4gnU2qYd7u3AFYVSmKxT71+CghwmViwBSlv7GcGpPhQerabOLsOjfmAgnTXHoDd
+         KqvtyR6PM6FTLDHVSfjgSyP6JYHiWpDjaYFTe4g8oyhDfea4o2IVgBqmdZZAQPM3MbA8
+         3P6dSreLv2WFYiZHRf7hY2BqAbRyNQRhkm+o242G0cj1/UumqVxb6ZUGT5i6xO14g9Mq
+         jYqA==
+X-Forwarded-Encrypted: i=1; AJvYcCUUjc/IsQnCTMzV+mu66lG2NMf8o/6YPloLNhzQ0Y6LArp0HRpkxXNcXN9d2rCJ1tu28VZHteIl6SbjwgsTWdWI@vger.kernel.org, AJvYcCUuicqR6EIWa9dVIYBI2Ns1Fe4L4z5X/4NiOVPUBWYXrzQHVUkfhLKa37VFtHbVjnoPnFLAzouhf6gRMDp5@vger.kernel.org, AJvYcCXVqqA3yGds0RzJ3N4Dr5MP6XTIEG1DK9Gi7JER2yviRqSMNOHcOlo8oz37y8N9p1kbky58snFC@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxhK/lF00mXzQ/ZbGSSh/H7/d6g2lAniZQeDRIKgyt8wQWtgJn
+	zZR9uGN6yNkfu1ggxm0dgtHsXM7jqd4mkcksxGbGXEWHiNrVeh4fVntC0FpJi0DrHqE1DrVWtMa
+	z0DgaB3MGb0E2DG3cBtFBTdSQKnQ=
+X-Google-Smtp-Source: AGHT+IFgvIzj7DBl0y5N2epf79BbIYuUEEl/ozcyirEICsugUX7UEjuzXWtbCf1MWErSoG6HsTmK+nS4lMWP8PuwFYM=
+X-Received: by 2002:a05:6402:210f:b0:5c5:ba82:c3b1 with SMTP id
+ 4fb4d7f45d1cf-5c8b1b8b391mr139688a12.29.1727805024017; Tue, 01 Oct 2024
+ 10:50:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="BRHYL8Lzq6CYUNzt"
-Content-Disposition: inline
-In-Reply-To: <20241001-atheismus-stetig-4f6f3001715c@brauner>
-X-Cookie: Even a hawk is an eagle among crows.
+References: <20240923142006.3592304-1-joshua.hahnjy@gmail.com>
+ <20240923142006.3592304-3-joshua.hahnjy@gmail.com> <xmayvi6p6brlx3whqcgv2wzniggrfdfqq7wnl3ojzme5kvfwpy@65ijmy7s2tye>
+ <CAN+CAwO8XEAkoBDc03Zveaci9hASaFvk8ybQ2Mwoy_VacqgRfA@mail.gmail.com> <4l4afsuzqd6vowki7ldafoikpyw5sfwcvhhpeaezwhdmdj54bc@fhp6yt3ygq3r>
+In-Reply-To: <4l4afsuzqd6vowki7ldafoikpyw5sfwcvhhpeaezwhdmdj54bc@fhp6yt3ygq3r>
+From: Joshua Hahn <joshua.hahnjy@gmail.com>
+Date: Tue, 1 Oct 2024 13:50:12 -0400
+Message-ID: <CAN+CAwP048b_cbw1jQf4Z0eGatbkaVW=AbL2MqjaDnuDZM-1ig@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] cgroup/rstat: Selftests for niced CPU statistics
+To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc: tj@kernel.org, cgroups@vger.kernel.org, hannes@cmpxchg.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	lizefan.x@bytedance.com, shuah@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+> My motivation comes from debugging cgroup selftests when strace is quite
+> useful and your implementation adds the unnecessary fork which makes the
+> strace (slightly) less readable.
 
---BRHYL8Lzq6CYUNzt
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This makes sense, thank you for the context. I hadn't considered debugging
+considerations much, but I can imagine that it becomes harder to read
+once the code & strace becomes clogged up.
 
-On Tue, Oct 01, 2024 at 05:12:38PM +0200, Christian Brauner wrote:
-> On Fri, Sep 27, 2024 at 03:21:59PM GMT, Edgecombe, Rick P wrote:
+> > Do you think that this increase in granularity / accuracy is worth the
+> > increase in code complexity? I do agree that it would be much easier
+> > to read if there was no fork.
+>
+> I think both changes (no cg_run or cpu_hog_func_param extension) could
+> be reasonably small changes (existing usages of cpu_hog_func_param
+> extension would default to zero nice, so the actual change would only be
+> in hog_cpus_timed()).
 
-> > Did you catch that a token can be at a different offsets location on th=
-e stack
-> > depending on args passed to map_shadow_stack? So userspace will need so=
-mething
-> > like the code above, but that adjusts the 'shadow_stack_size' such that=
- the
-> > kernel looks for the token in the right place. It will be even weirder =
-if
-> > someone uses clone3 to switch to a stack that has already been used, an=
-d pivoted
-> > off of, such that a token was left in the middle of the stack. In that =
-case
-> > userspace would have to come up with args disconnected from the actual =
-size of
-> > the shadow stack such that the kernel would be cajoled into looking for=
- the
-> > token in the right place.
-> >=20
-> > A shadow stack size is more symmetric on the surface, but I'm not sure =
-it will
-> > be easier for userspace to handle. So I think we should just have a poi=
-nter to
-> > the token. But it will be a usable implementation either way.
+I think I will stick with the no cg_run option. Initially, I had
+wanted to use it
+to maintain the same style with the other selftests in test_cpu.c, but I think
+it creates more unnecessary unreadability.
 
-My suspicion would be that if we're doing the pivot to a previously used
-shadow stack we'd also be pivoting the regular stack along with it which
-would face similar issues with having an unusual method for specifying
-the stack top so I don't know how much we're really winning.  Like we
-both keep saying either of the interfaces works though, it's just a
-taste question with both having downsides.
-
-> Maybe it's best to let glibc folks decide what is better/more ergonomic f=
-or them.
-
-The relevant people are on the thread I think. =20
-
-I've rebased onto v6.12-rc1, assuming I don't notice anything horrible
-in testing I'll post that with the ABI unchanged for now.
-
---BRHYL8Lzq6CYUNzt
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmb8MlkACgkQJNaLcl1U
-h9AoNQf+Jkavle4N/yks/qB+Ufu+4UFkdBffqruCufymGzobEFRaeKJvJJAKtfka
-wz/fgNd8tiTpVq0SlpdFyG9UumI6HQBCcgQBBnO32/rOct21Lt5WQnEMDTj+PXB+
-8n8HkvNnzGKFPsfPZ7iavCVRiBFQpQYQKOWLWWG76ZQcAhvVz/OZyXLOV7NoGCwx
-mmQu+825ZeRg07YrPqF/8DhAeBSYYxLgEUly9H1R7hhj90lTKyup7nUJCmGPgxR6
-FgewpWMk1Lmhf4jS70PMXEEapT/ergA8BvqrhuTRftD6cj26G5kg1vIcAZ0ohqar
-4HHk4ioCgvzeAywd9/wEltOUrJVDsg==
-=4Sah
------END PGP SIGNATURE-----
-
---BRHYL8Lzq6CYUNzt--
+Thank you again,
+Joshua
 
