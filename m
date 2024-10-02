@@ -1,107 +1,134 @@
-Return-Path: <linux-kselftest+bounces-18863-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18864-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2448F98CC82
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 07:49:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1AD898CCFF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 08:16:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E5767B223CA
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 05:49:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36432B209F0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 06:16:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5458328B6;
-	Wed,  2 Oct 2024 05:49:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3254A5464E;
+	Wed,  2 Oct 2024 06:16:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NBizqqRR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="J2Zyd1+U"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED1C611187;
-	Wed,  2 Oct 2024 05:49:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840642581
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Oct 2024 06:16:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727848164; cv=none; b=VALCcLaOtjtJSZUaqRuF46vwsGKUva64TAA4ApfMb1XvQI+5WUTN4gzGwNythR7lBEo+xXfXfod0V2jwRR3gilSFSlSt2q/52Wx2G/0xXb/Rx3LecpINUON0JI23XLhLiZBIR4SXDVN4U6lh5ePNiXK2A6PI8Us1jby/y8WGwqk=
+	t=1727849763; cv=none; b=pZ2g984LCMNehxGDm7GYW9nK+E7UDXa0IK7OnDQI4zC3TA1wDAYgXORQm0PP5bLOTXm9N86meBpaIucN5WRIdkWVhVuXSRlkpcYKfyW30EHPRJ6kf/FBtFV+oHnRXjpxIcsMZLMicbkAbxIvgy9cRU1zy27mwknpij2pbjKZXxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727848164; c=relaxed/simple;
-	bh=jN9gZYCswg6gKZaVN94WrWBooJCLjdCRYJVy0+NyVfA=;
-	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References; b=IkC81wwWUSzf3q7H1KnYVi42LoB0lywiJvL8wNXMicpzdMN08CW2n+7lK6h//cM5NXZE5LnV1hEQo30BHm23cdhyfTc+8XyF1y43h2eEod+JjKdpIT9tx1XPO54QJ0qLHWWtU+Bv6US4YDqnotY0rWHuHj+caZtNs12s7eealFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NBizqqRR; arc=none smtp.client-ip=209.85.210.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-7198de684a7so4446878b3a.2;
-        Tue, 01 Oct 2024 22:49:22 -0700 (PDT)
+	s=arc-20240116; t=1727849763; c=relaxed/simple;
+	bh=FacS+RxJ3BW4bmTumlrVfS7MPk3cld+LlzDq2XVlxoI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=S/fH3cv5rvG0RS6LfbrA1hPI1wf4rUIytPGOpJy1GSUstE4adsPEwASqPeMvmxAUJsIGIWnQIHL5TUmRtjRiTWRqAwKxSRgjAO65K0b/lDZRMtMNNVsPM2cWwaosdA833lJLerfCZl/lQWPKRjRB7ZbTjPgkYckdbhk8IfTcTE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=J2Zyd1+U; arc=none smtp.client-ip=209.85.219.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6cb3a412136so10207186d6.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Oct 2024 23:16:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727848162; x=1728452962; darn=vger.kernel.org;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=nAi3+Jj7VO1oSuzWLs/Xs3zSVfvIN3Gva8xKesxmS0Q=;
-        b=NBizqqRRsN5ScM/Vgzp6H/4ijP/QT6e191wLTs4Dk32qVbmAx8o7xL9I8Y0T7Ct+7Q
-         dQEUzEJ26OWt7LUBfWHDmZjASikA+fWltRrw9Pw+oUTCp4xJ1sef3PG31Ym6bn5TpDuE
-         Es0QwiFIxY6mNrMF/dLtSXGzoIbcj7WHqhPzyTEPpv61nARPLTOwNt4sD2VTDHsuJRHN
-         gfC4EGbvaY830noenYYTylTG0OQ5EJuBMOcQU+TN/jvG4zVUH9KpmNYwP6jNUZTjV98Z
-         RO3N1Ou5O5fu3r3p2t7bTmbIFgKfLscWxJAReon9NS9IzVYKm4VgGoY9b5zGx8u3KDPI
-         su5Q==
+        d=linaro.org; s=google; t=1727849760; x=1728454560; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QusyBxhWG6kce2Y5x4Y+LHwtNZweZbMz+ILN7YtljGo=;
+        b=J2Zyd1+U8IRsYHwnG5XWat+hUOIcUV0HqNdDFIPl8sx6oRePwFP+PXc578ORIj2Hbj
+         MPdsEw7iypJ5p92HHhblj8yXWJ+rMjBqP4U84RGBkJ9epqCMUkmjfdnorpQuMVUaQNUA
+         TK2xpp2JKOzlOtzuUQ8gRrXgEop3YTe7WDmPJ+1gEW5Gsf6zWgkUeinCH1XnSXK/6yI2
+         Chjlm5nyuaXjXYurZijBpkPlsegQs9WmIuqRBbPhiuJ7d2aoo62OUh3U2vrdYrLm9K2k
+         PDldqnekW9ARa2Xb8GhAOklph7wb9ZHx7lWKkoHe59ST2Ha98OxeX08/P7rOWHy5Gjf8
+         Jr5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727848162; x=1728452962;
-        h=references:message-id:date:in-reply-to:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nAi3+Jj7VO1oSuzWLs/Xs3zSVfvIN3Gva8xKesxmS0Q=;
-        b=wz2+Dd0NF9fUGexpcpZ3qVKpQd7hFg5UIXPgFt+BsKG6vcNUdK5ge16wo0cutFLKpH
-         1SXlzjYQt8xML/fB37lfgpjNHTumADegc/gPVqkd6c+xL9313Wk1nGBwQ3s1ErSYwum5
-         LjmFyE83xVnWbKP171cvzII/s9KG6yP5PyhnruMQhP0LopzR59z+kHF6VG72OZTPuO6s
-         78/M+i+Smcd+vatXm5/ENrqswkU0BIunELjDXQ6dwiNIIDW3LeY1OHRc+WA3WU9u+u60
-         M9Ydt1u2EYDnVc6iUNf3vj047tu2p06Uo3it2TT083zXpu2JphUGr4tdtjUfsqGoGtEA
-         E7XQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX2fwRTY+5P/urV5KH7hhXxlv9WuiVTV5mmPrdWPWkw74QtPqUkk65OyQJo87lbIoo6t0SncCbCBkcq9B4GBGA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6GEnRykX5jz73dHF/RYeucELa7+NRHQgM+RXqmfSCFkkFOJmp
-	YUlflYtRdKncd5G8t+iEXw3APuyy9btd6v0etajvyu/5M9mUlx8y
-X-Google-Smtp-Source: AGHT+IEctg1bG1h01FMpZ7KPv7MN8I3/B8gsYF6W6p4t+ELncb4q7gaLjWWJyeNYbzuFubS/soGvgQ==
-X-Received: by 2002:aa7:8886:0:b0:70d:2e7e:1853 with SMTP id d2e1a72fcca58-71dc5d54399mr3506061b3a.19.1727848162143;
-        Tue, 01 Oct 2024 22:49:22 -0700 (PDT)
-Received: from dw-tp ([171.76.83.199])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71b264bcca6sm9114024b3a.78.2024.10.01.22.49.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Oct 2024 22:49:21 -0700 (PDT)
-From: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-To: zhangjiao2 <zhangjiao2@cmss.chinamobile.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, mpe@ellerman.id.au, shuah@kernel.org, zhang jiao <zhangjiao2@cmss.chinamobile.com>
-Subject: Re: [PATCH v2] selftests/powerpc: Remove the path after initialization.
-In-Reply-To: <20240930012757.2395-1-zhangjiao2@cmss.chinamobile.com>
-Date: Wed, 02 Oct 2024 11:15:11 +0530
-Message-ID: <87frpfxdlk.fsf@gmail.com>
-References: <20240930012757.2395-1-zhangjiao2@cmss.chinamobile.com>
+        d=1e100.net; s=20230601; t=1727849760; x=1728454560;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QusyBxhWG6kce2Y5x4Y+LHwtNZweZbMz+ILN7YtljGo=;
+        b=lz+SDCZeorQd44hIE055L4vGd7f3IXPlGvrHYyo6MnY9FRVGEqhMm7AdTtquFBH7iF
+         MxU6/IYwh6YQymeZaEsijwdZ9jifyy7pDH6QK9/eMivLbWoOKhTUmhHVQfnyEY89TbpZ
+         cryTeJHHFPFZJgK/5oWFYuHsDefdep3nCqtfLnEoGMjgNKXO/LRzID6P0EY9TDC7kNi9
+         5jSYSrnTGh8joEmFDqgn/5WlvBXRy9Tt9ZxFzbWNTexrWlj88xtYjH5VtSrLzqtm7wiv
+         S05EZoXnGlinfCXW1KN4MUia085KV1Xr0JuBv+fBOULvZ8hPEFbntlUp/8YA/Lx5p0vD
+         8jiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7EHHNn2nN6NnC/9dnzKH/gta9nXMreAr9iVOSs5wSOXhdh+MZf/v0TuGbEK4wUhogvpWrC3csaik8Pc0Go7A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0thWUH8AyCuttFevTLTA1/CisEHgfRCW4RTSjVIM3ExXYwFKS
+	O6HElJi5RbjZ220H3WR7rXyPF5Z+llU6t8k7IHUye1pEtJ+OVmAzAoDojGTtvAUTXHiBISxpchC
+	0WKCmVjv1r1dz9AmE0j0CcNXa8zjQLPtA/sbsiw==
+X-Google-Smtp-Source: AGHT+IGAg4TCemPw86guaqJaE1WEUtkb1Aps6zw6PogBPUaG3ligTBAvVmjeOroQni0OEFKdUHaR401CeP6tSqSI7b4=
+X-Received: by 2002:a05:6214:1bc9:b0:6cb:1fad:82b2 with SMTP id
+ 6a1803df08f44-6cb819c4132mr14420456d6.3.1727849760430; Tue, 01 Oct 2024
+ 23:16:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20240916075655.4117151-1-anders.roxell@linaro.org>
+ <952aeec9-c21f-46ce-bf68-e6ffce51630c@linuxfoundation.org>
+ <20240920123827.715ff109@kernel.org> <3f0d12ba-0e52-41f9-9cbd-34bc1225121e@linuxfoundation.org>
+In-Reply-To: <3f0d12ba-0e52-41f9-9cbd-34bc1225121e@linuxfoundation.org>
+From: Anders Roxell <anders.roxell@linaro.org>
+Date: Wed, 2 Oct 2024 08:15:48 +0200
+Message-ID: <CADYN=9JO-h5L8+CBE9rKY9fnA2sJmam6_MzpZB38Bmn5D4fdPQ@mail.gmail.com>
+Subject: Re: [PATCH] selftests: Makefile: create OUTPUT dir
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Jakub Kicinski <kuba@kernel.org>, shuah@kernel.org, willemb@google.com, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-zhangjiao2 <zhangjiao2@cmss.chinamobile.com> writes:
-
-> From: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+On Wed, 25 Sept 2024 at 19:26, Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
-> If there were no anamolies noted, then we can
-> simply remove the log file and return, ....
+> On 9/20/24 04:38, Jakub Kicinski wrote:
+> > On Thu, 19 Sep 2024 09:51:47 -0600 Shuah Khan wrote:
+> >>> @@ -261,6 +261,7 @@ ifdef INSTALL_PATH
+> >>>     @ret=1; \
+> >>>     for TARGET in $(TARGETS) $(INSTALL_DEP_TARGETS); do \
+> >>>             BUILD_TARGET=$$BUILD/$$TARGET;  \
+> >>> +           mkdir -p $$BUILD_TARGET;        \
+> >>>             $(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET install \
+> >>>                             INSTALL_PATH=$(INSTALL_PATH)/$$TARGET \
+> >>>                             SRC_PATH=$(shell readlink -e $$(pwd)) \
+> >>
+> >> Doesn't the "all" target mkdir work for this case? Why do we need another mkdir here?
+> >
+> > I was wondering about that, too. Looks like the code from the all
+> > target is copy/pasted in the install target except the mkdir line.
+> > Best fix would be to make the dependency work, I don't understand
+> > why it doesn't already, tho.
+>
+> I think this could be the issue:
+>
+> net main Makefile doesn't have handling for subdirs. It looks
+> like the way this is handled is by adding an entry to the main
+> Makefile:
+>
+> TARGETS += net/af_unix
+> TARGETS += net/forwarding
+> TARGETS += net/hsr
+> TARGETS += net/mptcp
+> TARGETS += net/openvswitch
+> TARGETS += net/tcp_ao
+> TARGETS += net/netfilter
+>
+> So the solution would be similar adding net/lib to the main
+> Makefile.
+>
+> Anders, can you try the above and see if it works.
 
-after the path variable has been initialized.
-
-(minor nit)
-
+Sadly that didn't help.
 
 >
-> Signed-off-by: zhang jiao <zhangjiao2@cmss.chinamobile.com>
-> ---
-> v1->v2:
-> 	Remove the path after initialization.
+> Another issue - lib/Makefile
+> TEST_GEN_FILES += csum needs to be TEST_GEN_FILES = csum
 >
->  tools/testing/selftests/powerpc/mm/tlbie_test.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-
-
-Thanks for the fix. Looks good to me. 
-Please feel free to add - 
-
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+> thanks,
+> -- Shuah
+>
 
