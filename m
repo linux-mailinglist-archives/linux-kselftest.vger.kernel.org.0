@@ -1,149 +1,131 @@
-Return-Path: <linux-kselftest+bounces-18930-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18931-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D39A98E484
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 23:01:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F2A098E48D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 23:03:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C0BEE1C21A2F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 21:01:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB42C1F23C19
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 21:03:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D90F4197A69;
-	Wed,  2 Oct 2024 21:01:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37601212F18;
+	Wed,  2 Oct 2024 21:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aTU7o2bj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jmwllp6j"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC464745F4;
-	Wed,  2 Oct 2024 21:01:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EECD4745F4;
+	Wed,  2 Oct 2024 21:03:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727902874; cv=none; b=Yt9PdLEtWjCwoboRhwLjbYrYopgfb/Rzvs5b99QBZDFG8HTWjjOOg1ydPmC26oG6I3el2iJKSIrAoxnrLruxfeOGXGc4b75JvDEs40xXFIcssbQQTEPLanLTh4h31mI4TL+aNgS1Hqo/3w9j+/0HHDyAIMuERJPkrGu82GbegiE=
+	t=1727903017; cv=none; b=PbAS9J6uhKL4KPU0wmgnAf18oyUVz8CQRYOFzHfu2uPj6IMkVWV2ErfIb+v32L0Y+qJapSQAPY1xSxIzkOAF8u5xT7J9ausrYdL7S1ttIzPfDf1GGjlmMj1K9S3wa/TQCz+7j03SAEbH4J1sfhDlKWqDwkGEV+/Vwx3SV/hMOtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727902874; c=relaxed/simple;
-	bh=LRRZb5jbN3mdDq16uHd5GpfD2+xzWvO+kARF1tW0Lrk=;
+	s=arc-20240116; t=1727903017; c=relaxed/simple;
+	bh=T/J+bsNsUgw22rlBrYHJdcx0PE1m7ec1tmy77h9yuls=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r2JGsZ9oOPKcK8yceNnnbukyIyL4/tw5gjCsXIDvh54ylz9IWX2GdMd02+jOjo86cS0Ee4JMm7NyOfsaI7xgVvtgjrtWCrS2/WM7zAO0LTodWbOVnAXNxFJxnOWQ0FpibgQ0v3J70YEI52CO9lR7wuOgkBs2qDZUuBC8+378SdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aTU7o2bj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D12CEC4CEC2;
-	Wed,  2 Oct 2024 21:01:13 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=IZp5MoLle7iAq6YMeasL8eNvzvGo10NY6/NYhyNu/yuIN/wuB3Gt46v9kewfCHp0iFJlTFzOhTh5ltqzpXT6sakDlPT+lW43rqpFjs9JurB0af80MHRKwpr9yAwFcFfuo9l0bwG5e+A2/OpbIjj6Gyfe4nH5yhYwbTp/VqZ7o5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jmwllp6j; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A9FC4CEC2;
+	Wed,  2 Oct 2024 21:03:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727902874;
-	bh=LRRZb5jbN3mdDq16uHd5GpfD2+xzWvO+kARF1tW0Lrk=;
+	s=k20201202; t=1727903016;
+	bh=T/J+bsNsUgw22rlBrYHJdcx0PE1m7ec1tmy77h9yuls=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aTU7o2bjYGW+IyKz614dLl3om0M2iW4jlpprrpvFGHDktQxL7+5BcL9lmA73Eosqr
-	 +oMyQs+FLNEH1mneB7CkqxM8U0G1QvvQPoAL/dqRbcvKkIl7HO+hubPbilIa5dNB0L
-	 ocMyuRV2WRlIh3fzJFEZ5GnNQN4nexjPt8Swbw8zn+pssd5/0qTE4jxuLXlgy2iAby
-	 r8dDumJ/LM2hqmm9GEcfKTc/rgrKTMhpAVqKtII5lSyyjDR9smNCMmivCnMz3k4OPd
-	 oZMgaL2O+av2Z5HxLKxUD/Ah9r4dLt/Orxa1++sTHEokk25XRsgqEdOo0S2zqsqx70
-	 3bxBo3SOxcmvg==
-Date: Wed, 2 Oct 2024 22:01:10 +0100
-From: Mark Brown <broonie@kernel.org>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "brauner@kernel.org" <brauner@kernel.org>,
-	"dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"mgorman@suse.de" <mgorman@suse.de>,
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"vschneid@redhat.com" <vschneid@redhat.com>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"kees@kernel.org" <kees@kernel.org>,
-	"will@kernel.org" <will@kernel.org>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"jannh@google.com" <jannh@google.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"yury.khrustalev@arm.com" <yury.khrustalev@arm.com>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"wilco.dijkstra@arm.com" <wilco.dijkstra@arm.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"bsegall@google.com" <bsegall@google.com>,
-	"juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-	"x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH RFT v9 4/8] fork: Add shadow stack support to clone3()
-Message-ID: <Zv20luC6us-LEMqN@finisterre.sirena.org.uk>
-References: <9f022aa4cd3e2dc82d0c963e9d2bf5c7ddd5b92a.camel@intel.com>
- <77bc051d-b2c9-4e3a-b956-be8879048e20@sirena.org.uk>
- <5464b915b52bf3b91ec70201736479a5347838af.camel@intel.com>
- <158190d9-a4a6-4647-84e8-f4ae036d984b@sirena.org.uk>
- <20240927-springen-fortpflanzen-34a303373088@brauner>
- <727524e9109022632250ab0485f5ecc1c1900092.camel@intel.com>
- <20241001-atheismus-stetig-4f6f3001715c@brauner>
- <6bf15851-03fe-40cd-b95c-f7e2ca40ac54@sirena.org.uk>
- <0999160fd5282ac129aab300b667af35d7251582.camel@intel.com>
- <b7ef38c9-1e87-468f-94a5-a3c7f209d200@sirena.org.uk>
+	b=Jmwllp6jzRETuClzX6i3XersBeu6pr5GCmFLlKZUoLVMVYp98nR8I1WBsoziE1zwv
+	 EqLtCFWqPGJSD96kzZpm58e3IsTbFS7WDAX/QDivj9IgWJB8G+loz3oUm+b3k+Vvfg
+	 5fJ5j6eLgua8KQ7IIkJDZ4frWJ2mmOyEdrVzJL3Mhhg2OGLV7RgIUBMO+k0lqmw0wT
+	 nTitMwjJNI14VX3a/mC5weH5VNLpjfvsCpIjvdGAv1Jt3ysB1issay1HQfQxnI0rFp
+	 2tniOP6L1zeIj89TM5ZmkNI70CjZOSWSGmwzAhNH9ZgcYj++UnNtpYvJbDk2jxE51K
+	 ILXa6mUOgiYBA==
+Date: Wed, 2 Oct 2024 16:03:35 -0500
+From: Rob Herring <robh@kernel.org>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	alistair.francis@wdc.com, richard.henderson@linaro.org,
+	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
+	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
+	cleger@rivosinc.com, alexghiti@rivosinc.com,
+	samitolvanen@google.com, broonie@kernel.org,
+	rick.p.edgecombe@intel.com
+Subject: Re: [PATCH 07/33] riscv: zicfilp / zicfiss in dt-bindings
+ (extensions.yaml)
+Message-ID: <20241002210335.GA1307114-robh@kernel.org>
+References: <20241001-v5_user_cfi_series-v1-0-3ba65b6e550f@rivosinc.com>
+ <20241001-v5_user_cfi_series-v1-7-3ba65b6e550f@rivosinc.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="tOwcQFVW/KtwHJ9x"
-Content-Disposition: inline
-In-Reply-To: <b7ef38c9-1e87-468f-94a5-a3c7f209d200@sirena.org.uk>
-X-Cookie: Editing is a rewording activity.
-
-
---tOwcQFVW/KtwHJ9x
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241001-v5_user_cfi_series-v1-7-3ba65b6e550f@rivosinc.com>
 
-On Wed, Oct 02, 2024 at 02:42:58PM +0100, Mark Brown wrote:
-> On Tue, Oct 01, 2024 at 11:03:10PM +0000, Edgecombe, Rick P wrote:
+On Tue, Oct 01, 2024 at 09:06:12AM -0700, Deepak Gupta wrote:
+> Make an entry for cfi extensions in extensions.yaml.
 
-> > I'm not so sure. The thing is a regular stack can be re-used in full - =
-just set
-> > the RSP to the end and take advantage of the whole stack. A shadow stac=
-k can
-> > only be used where there is a token.
+Run "git log --oneline" on the file/subsystem and follow the subject 
+prefix pattern.
 
-> Yeah, I'm not sure how appealing it is trying to use a memory pool with
-> of shadow stacks - like you say you can't reset the top of the stack so
-> you need to keep track of that when the stack becomes unused.  If the
-> users don't leave the SSP at the top of the stack then unless writes
-> have been enabled (which has security issues) then gradually the size of
-> the shadow stacks will be eroded which will need to be managed.  You
-> could do it, but it's clearly not really how things are supposed to
-> work.  The use case with starting a new worker thread for an existing in
-> use state seems much more appealing.
-
-BTW it's probably also worth noting that at least on arm64 (perhaps x86
-is different here?) the shadow stack of a thread that exited won't have
-a token placed on it so it won't be possible to use it with clone3() at
-all unless another token is written.  To get a shadow stack you could
-use with clone3() you'd either need to allocate a new one, pivot away
-=66rom one that's currently in use or enable shadow stack writes and place
-a token.
-
---tOwcQFVW/KtwHJ9x
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmb9tJIACgkQJNaLcl1U
-h9Bkpwf/c6g+k2PVrSLzsEUR3JAZSDFGui28/pfaqYsoTehL3za4CT5tjk1LE6YV
-0T54vGR5M2n41vh8T//I4ItTAkb/Xs2p0FEsEqESF8a9LSuuFSdM3yp2woqwgeXz
-FZcE6ysVZhHoGcChbWjtnDcrILmFR0VJAIUInMWYwsYam4LtHaW+YEO7NFBCtYPv
-WS0BNEv+lGtTFbM8qNfFBWQGvRp+WkSUPKrpRThcY/UmXPqrrgd8E4d/U5qX/4GO
-7f3+czgZpE8nz5hF8aaWSBwr/dARz7FvnSPdiDXuTASrPZF5jwURJWPQVrm6GoTy
-t2qA84msWefPCTiBqxyKM/pYry5ifA==
-=dR04
------END PGP SIGNATURE-----
-
---tOwcQFVW/KtwHJ9x--
+> 
+> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+> ---
+>  Documentation/devicetree/bindings/riscv/extensions.yaml | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> index 2cf2026cff57..356c60fd6cc8 100644
+> --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
+> @@ -368,6 +368,20 @@ properties:
+>              The standard Zicboz extension for cache-block zeroing as ratified
+>              in commit 3dd606f ("Create cmobase-v1.0.pdf") of riscv-CMOs.
+>  
+> +        - const: zicfilp
+> +          description: |
+> +            The standard Zicfilp extension for enforcing forward edge
+> +            control-flow integrity as ratified in commit 3f8e450 ("merge
+> +            pull request #227 from ved-rivos/0709") of riscv-cfi
+> +            github repo.
+> +
+> +        - const: zicfiss
+> +          description: |
+> +            The standard Zicfiss extension for enforcing backward edge
+> +            control-flow integrity as ratified in commit 3f8e450 ("merge
+> +            pull request #227 from ved-rivos/0709") of riscv-cfi
+> +            github repo.
+> +
+>          - const: zicntr
+>            description:
+>              The standard Zicntr extension for base counters and timers, as
+> 
+> -- 
+> 2.45.0
+> 
 
