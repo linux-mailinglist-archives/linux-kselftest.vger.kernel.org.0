@@ -1,133 +1,152 @@
-Return-Path: <linux-kselftest+bounces-18902-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18903-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9546398D80A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 15:56:10 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC8C698D9BD
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 16:14:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDE1D1C2224E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 13:56:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3CAD3B23B7E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 14:14:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E1BD1D0798;
-	Wed,  2 Oct 2024 13:55:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37FB41D1E75;
+	Wed,  2 Oct 2024 14:09:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="NxZRftrh"
+	dkim=pass (2048-bit key) header.d=tycho.pizza header.i=@tycho.pizza header.b="FZXvD6c8";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hVhpksMZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E7801D04AD
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Oct 2024 13:55:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 041461D07BD;
+	Wed,  2 Oct 2024 14:09:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727877329; cv=none; b=jLLK9REN+1V+q5PiYqEjN38Nii8TKC7glhHKRzNU9Xt3RRlizQosr8c5AZFAjDZZv/HRq8QsJT5XfibjBTi3cTjjTMIXeL/jtl6Cxiv5rv1AT+1ba9ShQR6rywLsq7nEGzcDgDzyDtdkfEb6NF8R1uw5NLt+q0T11OR8Gtt1biQ=
+	t=1727878191; cv=none; b=oOP5EirgwNUiicazrHmOw9PhAIQ3LTASxn4iChFOXHeIBfvMOPfogjLuQVkkspjEoq3Z+M90w1SUT5Sx9/p5W1g03GmPC/v9bh4bgVDwqjgQ7F8neq86mkUg7n39H75RaDZSzYsLQSwxI1RFx6LVRQJWDbRxMssNfQ3NFl7CJkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727877329; c=relaxed/simple;
-	bh=RDpSbNQaDPalzXWgewd8bEdAjy1zCTSQo6NGuq3hSPg=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ufez+H+a8Km/heVLd9aJJKSWmB1jZQJ3uIsexXWp28dr9+/CvlBGXQuakq0mcpPs+vVCbxQ7AnYnlYYrB9fIXlYszmkmOPZ6GLadazyFwlk2zAYtKIKDA934m1ZGBpD+OHmdGebF3tEbAQLhsXPH/ImYkUs2KO/6nOM2+zDCBYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=NxZRftrh; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a8d2b24b7a8so165190166b.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Oct 2024 06:55:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1727877325; x=1728482125; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RDpSbNQaDPalzXWgewd8bEdAjy1zCTSQo6NGuq3hSPg=;
-        b=NxZRftrhVOv2NtWBwWxwYyKDMdscMW0QBWux+J8HoIdPM9W8prBONKxoAQr0pmJROJ
-         LavHk50fRdbVyUYEdfh+toMsNdzjaXb9hO355eZRfcwiImFBL4Iu0Y91RVHIkbt4pEpr
-         j39p0xESRTtJ8/hGYH39aTs0LCieaQGNvPNZJhxjak/S6stzYIOX9Djr3EJQGFpmpaqY
-         hG22JWpPiOPOP2KpUQV2qxPuxsH/CXNU8JOrZ56cZcYlyNJ/giIc5XQ6ZZu/dXSHp/Nk
-         JpieS4jnttMIJDvwOj18iX6SFFZBtwnqho+2e3V70ppiW93LkOFFW1nOYCly+L/pqWCN
-         ybew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727877325; x=1728482125;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=RDpSbNQaDPalzXWgewd8bEdAjy1zCTSQo6NGuq3hSPg=;
-        b=rn90m7+MnBRf7wkvo3AMgnRt82OAywvr8Qd+Hmv/3WMbZJk2fzHjnfah2JfsJ6w0Cr
-         58UHzw8iANK5NfSv1mKTldIBw2Y1jIBetPahivRHba4RbsiYWQ8L0rW0fbiYGJjiXtPk
-         HclweTd5RjrbDu5DIWKPUY0pvQvErMQx16P++noUujYFMb6EYYr3A5vaALNw4au+ikO8
-         d2ZkqbTT8iDVG7DPie4mfN01FvElLEW1VnUcDGJh71dJV2gc+7fjvQrC7wdI9p3gOAsB
-         xFZqTD3JYWTmkcN9t0kBFBsjjN+8JUe+gI3WctiP+APBaQeWtWe4eo+mS7A8jr7y45h0
-         MDgQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVK4v5JRitbGC1fVBW+iP08w9f+PpXEJ2uyudPpeE7fFBqLtjfKo1jDmytgk5iWxMsDyEujMMQ5tCqZ/vWwQTY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ38lfouKgUcH5MqutkCSXGjhIOKXN851Qx7Sed4uPOGgbR13L
-	RhdwnF4wNP3Yc8MSFHVKiqFhczh9OgpmlKxHg7NyU10cbNkR9ITrbCaMdqzYaOo=
-X-Google-Smtp-Source: AGHT+IEctmrJcjBla3MxukdSa9h3HgBV8uibC0mDNbF2CRtB14uct2W30kUOVg3kkSfcxIUeHLqaBQ==
-X-Received: by 2002:a17:907:3e26:b0:a90:34e8:6761 with SMTP id a640c23a62f3a-a967be75f55mr790298466b.6.1727877325496;
-        Wed, 02 Oct 2024 06:55:25 -0700 (PDT)
-Received: from [192.168.3.3] (151.36.160.45.gramnet.com.br. [45.160.36.151])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a93c2775995sm866099566b.41.2024.10.02.06.55.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2024 06:55:25 -0700 (PDT)
-Message-ID: <33e18a57dedf8295828ef7f6b8daded8bd771999.camel@suse.com>
-Subject: Re: [PATCH v4 0/3] selftests: livepatch: test livepatching a
- kprobed function
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Michael Vetter <mvetter@suse.com>, linux-kselftest@vger.kernel.org, 
-	live-patching@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Wed, 02 Oct 2024 10:55:18 -0300
-In-Reply-To: <20240930093308.65103-1-mvetter@suse.com>
-References: <20240930093308.65103-1-mvetter@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.0 (by Flathub.org) 
+	s=arc-20240116; t=1727878191; c=relaxed/simple;
+	bh=t7sMXL29ykoJyeu82nXO9yxES6WmjOpirFkBSpRF/eA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AzEf9pRnQX5ZIUVipumfEQJpvIOH5Kp1K3Lw/JBBMWTnNPbusptatqPWEdfGrCLj5Hp7gycVlGjOrvW8GZiPtySyEPu3PSBWJxUDWkBQ73tVR3cq/zQG+EkVrCMQ5k8Zo8x99+YEtVv+p2/DVpEicvn8cmL+urfLVwnOv0VM0mQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tycho.pizza; spf=pass smtp.mailfrom=tycho.pizza; dkim=pass (2048-bit key) header.d=tycho.pizza header.i=@tycho.pizza header.b=FZXvD6c8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hVhpksMZ; arc=none smtp.client-ip=103.168.172.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tycho.pizza
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tycho.pizza
+Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 2106A11401B1;
+	Wed,  2 Oct 2024 10:09:48 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Wed, 02 Oct 2024 10:09:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1727878188;
+	 x=1727964588; bh=D9f5mwetgYmnswxXDIMmoQPKc8ofGIpzwf7vHe4haFM=; b=
+	FZXvD6c8gX9dl4ov59CcEc9JhfyiDf3XlQu9nsZe3/M0U3iGEJU0OiLUOKdIpLHT
+	2bm+KcYUFVnsBXlsoEP6qstmx4F8Dk7FKW6H4ylsUmgKQUIrAA9C+FDSR3EXCP5M
+	vIbX7OvgaOSqMHllkREj/qfjMIb0btv4rS4YPpE0wCTL2qFDnxrxgc+Kze6CadeM
+	JgiZLKeNVKQPm7Nn/lwKwsG2XXIed+zH719Q4smlPqhv69nMP4l/W/A/EqqoGMd0
+	WY3e9AraTaedvFfSFcu7wyukSKNRehKmI53NRcO11pZ/xuh13EGVOYeH67ZPqbj0
+	boELUedf84CFtYsL/tOsSw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1727878188; x=
+	1727964588; bh=D9f5mwetgYmnswxXDIMmoQPKc8ofGIpzwf7vHe4haFM=; b=h
+	VhpksMZbTy3hg05gWDKTwOsgC8FIYIfg3LIRJNCuCWiqcda27qYgWdcyHLEiVDXW
+	E/GsA2cH14E+xL8eH9RRixsc+Wbb9smIsxBtZYWCnna92pjharmvMY7udbAXo7db
+	/QV0ZOTS4D5PHOcVf8A+YcABAvpoafR14DShE00cttOqTqf3yVgyvnl7z/8+Zadp
+	zuIEtcII8s4tIINxcxPRpssMYuKp227RpuQQO28tFk63HjgmcwlYTfYA4Q8JQ53J
+	AX3h6wFt2XXnCwqEbZnPM0PkBlX/0s/JDt5RogEmi7F+XerOrmkPoiIAC2bQLDYo
+	UYrAwfqVZtDvCfdZoUJ9g==
+X-ME-Sender: <xms:K1T9Zt_tLnNC_T29NT0b_z517yQtTv0beNPHGp0Es2P29O1k7HreIA>
+    <xme:K1T9Zhu-Oyi7XZNNOcRG77aJJy9QtTubGJMtDMKS6lqwXqXDzVQEYq0vwRuDJ42l_
+    FNWxcSVEvBbacM_tBg>
+X-ME-Received: <xmr:K1T9ZrCLgHA48tR-fBgCfLfCbLs1g63_wY7fcuKzqVJIG_LqaJZ8mhDREDM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeftddrvdduledgieelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkeertddttdej
+    necuhfhrohhmpefvhigthhhoucetnhguvghrshgvnhcuoehthigthhhosehthigthhhord
+    hpihiiiigrqeenucggtffrrghtthgvrhhnpeettddvheefffetkeejieehhfehieekgedv
+    jeelieehkeefueevheehteegteevgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpehthigthhhosehthigthhhordhpihiiiigrpdhnsggprhgt
+    phhtthhopeduvddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepiigshihsiigvkh
+    esihhnrdifrgifrdhplhdprhgtphhtthhopegthihphhgrrhestgihphhhrghrrdgtohhm
+    pdhrtghpthhtohepvhhirhhoseiivghnihhvrdhlihhnuhigrdhorhhgrdhukhdprhgtph
+    htthhopegsrhgruhhnvghrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjrggtkhes
+    shhushgvrdgtiidprhgtphhtthhopegvsghivgguvghrmhesgihmihhsshhiohhnrdgtoh
+    hmpdhrtghpthhtohepkhgvvghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhn
+    uhigqdhfshguvghvvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplh
+    hinhhugidqmhhmsehkvhgrtghkrdhorhhg
+X-ME-Proxy: <xmx:K1T9ZhcGXw-di1j1tq5NWYGCdHJrtHxD_rVE6gwgajI20aKIaMWlSg>
+    <xmx:K1T9ZiMGZratpkdbwjcVhBjaTC7sHdL6IhOWmyXk7e8Fezao4q-Njg>
+    <xmx:K1T9ZjmrHtZyafp24NXMOrZCpuRD5gqCPBq4iKoKjW2fy8C6yB19EA>
+    <xmx:K1T9ZsuuDXJG1UYLrfHQQALGQ5IeoUq8efJmCLjzTz_cby-N9096cg>
+    <xmx:LFT9Zun3fgu8Ws1cncVI_2Aca-bkUnds9bikcsOAxwgiekvO1883f_ad>
+Feedback-ID: i21f147d5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 2 Oct 2024 10:09:45 -0400 (EDT)
+Date: Wed, 2 Oct 2024 08:09:42 -0600
+From: Tycho Andersen <tycho@tycho.pizza>
+To: Zbigniew =?utf-8?Q?J=C4=99drzejewski-Szmek?= <zbyszek@in.waw.pl>
+Cc: Aleksa Sarai <cyphar@cyphar.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Tycho Andersen <tandersen@netflix.com>
+Subject: Re: [PATCH v3 1/2] exec: fix up /proc/pid/comm in the
+ execveat(AT_EMPTY_PATH) case
+Message-ID: <Zv1UJmR1UZUG2P/t@tycho.pizza>
+References: <20241001134945.798662-1-tycho@tycho.pizza>
+ <20241001.175124-western.preview.meager.saws-pzvpWxOhfokt@cyphar.com>
+ <Zv1OayMEmLP2kjhj@kawka3.in.waw.pl>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Zv1OayMEmLP2kjhj@kawka3.in.waw.pl>
 
-On Mon, 2024-09-30 at 11:33 +0200, Michael Vetter wrote:
-> Thanks to Miroslav, Petr and Marcos for the reviews!
+On Wed, Oct 02, 2024 at 01:45:15PM +0000, Zbigniew Jędrzejewski-Szmek wrote:
+> On Tue, Oct 01, 2024 at 08:42:56PM +0200, Aleksa Sarai wrote:
+> > On 2024-10-01, Tycho Andersen <tycho@tycho.pizza> wrote:
+> > > From: Tycho Andersen <tandersen@netflix.com>
+> > > 
+> > > Zbigniew mentioned at Linux Plumber's that systemd is interested in
+> > > switching to execveat() for service execution, but can't, because the
+> > > contents of /proc/pid/comm are the file descriptor which was used,
+> > > instead of the path to the binary. This makes the output of tools like
+> > > top and ps useless, especially in a world where most fds are opened
+> > > CLOEXEC so the number is truly meaningless.
+> > > 
+> > > Change exec path to fix up /proc/pid/comm in the case where we have
+> > > allocated one of these synthetic paths in bprm_init(). This way the actual
+> > > exec machinery is unchanged, but cosmetically the comm looks reasonable to
+> > > admins investigating things.
+> > 
+> > While I still think the argv[0] solution was semantically nicer, it
+> > seems this is enough to fix the systemd problem for most cases and so we
+> > can revisit the argv[0] discussion in another 10 years. :D
+> 
+...
 
-As the only changes were regarding bash nitpicks I keep my review from
-earlier patchset, so:
+> Unfortunately, I don't think that the approach with
+> f_path.dentry->d_name.name can be used :(
 
-Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+hmm. Somehow earlier I had managed to convince myself that this gives
+the right answer for symlinks too (instead of the original
+kbasename(__d_path(file->f_path, root, buf, buflen)), but now upon
+retesting it doesn't. So I agree, seems like the argv[0] hack is
+needed unfortunately.
 
->=20
-> V4:
-> Use variable for /sys/kernel/debug.
-> Be consistent with "" around variables.
-> Fix path in commit message to /sys/kernel/debug/kprobes/enabled.
->=20
-> V3:
-> Save and restore kprobe state also when test fails, by integrating it
-> into setup_config() and cleanup().
-> Rename SYSFS variables in a more logical way.
-> Sort test modules in alphabetical order.
-> Rename module description.
->=20
-> V2:
-> Save and restore kprobe state.
->=20
-> Michael Vetter (3):
-> =C2=A0 selftests: livepatch: rename KLP_SYSFS_DIR to SYSFS_KLP_DIR
-> =C2=A0 selftests: livepatch: save and restore kprobe state
-> =C2=A0 selftests: livepatch: test livepatching a kprobed function
->=20
-> =C2=A0tools/testing/selftests/livepatch/Makefile=C2=A0=C2=A0=C2=A0 |=C2=
-=A0 3 +-
-> =C2=A0.../testing/selftests/livepatch/functions.sh=C2=A0 | 19 ++++--
-> =C2=A0.../selftests/livepatch/test-kprobe.sh=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 | 62
-> +++++++++++++++++++
-> =C2=A0.../selftests/livepatch/test_modules/Makefile |=C2=A0 3 +-
-> =C2=A0.../livepatch/test_modules/test_klp_kprobe.c=C2=A0 | 38 +++++++++++=
-+
-> =C2=A05 files changed, 117 insertions(+), 8 deletions(-)
-> =C2=A0create mode 100755 tools/testing/selftests/livepatch/test-kprobe.sh
-> =C2=A0create mode 100644
-> tools/testing/selftests/livepatch/test_modules/test_klp_kprobe.c
->=20
-
+Tycho
 
