@@ -1,131 +1,126 @@
-Return-Path: <linux-kselftest+bounces-18931-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18932-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F2A098E48D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 23:03:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6B4698E4D6
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 23:24:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB42C1F23C19
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 21:03:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FD041F23BA2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 21:24:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37601212F18;
-	Wed,  2 Oct 2024 21:03:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3160217327;
+	Wed,  2 Oct 2024 21:24:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jmwllp6j"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="F9EBj7y9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-181.mta1.migadu.com (out-181.mta1.migadu.com [95.215.58.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EECD4745F4;
-	Wed,  2 Oct 2024 21:03:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D20782141D6;
+	Wed,  2 Oct 2024 21:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727903017; cv=none; b=PbAS9J6uhKL4KPU0wmgnAf18oyUVz8CQRYOFzHfu2uPj6IMkVWV2ErfIb+v32L0Y+qJapSQAPY1xSxIzkOAF8u5xT7J9ausrYdL7S1ttIzPfDf1GGjlmMj1K9S3wa/TQCz+7j03SAEbH4J1sfhDlKWqDwkGEV+/Vwx3SV/hMOtQ=
+	t=1727904262; cv=none; b=OXmVP3qTZcCiWrur9GPMrbkovUh2pSSOjOyVAytPu8jrw0tDTpIbdTwmUBql1+9hqQ1tmvXYVo0mgYYBftci29bb0SN/gR0lOybDZjnGf7pXaV5i3GOrdFGlkYpX55n+H9HhWI3yhDCP/9HyGSJNuUmAr7A0Njz5xpe2F6Kiy5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727903017; c=relaxed/simple;
-	bh=T/J+bsNsUgw22rlBrYHJdcx0PE1m7ec1tmy77h9yuls=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IZp5MoLle7iAq6YMeasL8eNvzvGo10NY6/NYhyNu/yuIN/wuB3Gt46v9kewfCHp0iFJlTFzOhTh5ltqzpXT6sakDlPT+lW43rqpFjs9JurB0af80MHRKwpr9yAwFcFfuo9l0bwG5e+A2/OpbIjj6Gyfe4nH5yhYwbTp/VqZ7o5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jmwllp6j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A9FC4CEC2;
-	Wed,  2 Oct 2024 21:03:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1727903016;
-	bh=T/J+bsNsUgw22rlBrYHJdcx0PE1m7ec1tmy77h9yuls=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Jmwllp6jzRETuClzX6i3XersBeu6pr5GCmFLlKZUoLVMVYp98nR8I1WBsoziE1zwv
-	 EqLtCFWqPGJSD96kzZpm58e3IsTbFS7WDAX/QDivj9IgWJB8G+loz3oUm+b3k+Vvfg
-	 5fJ5j6eLgua8KQ7IIkJDZ4frWJ2mmOyEdrVzJL3Mhhg2OGLV7RgIUBMO+k0lqmw0wT
-	 nTitMwjJNI14VX3a/mC5weH5VNLpjfvsCpIjvdGAv1Jt3ysB1issay1HQfQxnI0rFp
-	 2tniOP6L1zeIj89TM5ZmkNI70CjZOSWSGmwzAhNH9ZgcYj++UnNtpYvJbDk2jxE51K
-	 ILXa6mUOgiYBA==
-Date: Wed, 2 Oct 2024 16:03:35 -0500
-From: Rob Herring <robh@kernel.org>
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	alistair.francis@wdc.com, richard.henderson@linaro.org,
-	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	cleger@rivosinc.com, alexghiti@rivosinc.com,
-	samitolvanen@google.com, broonie@kernel.org,
-	rick.p.edgecombe@intel.com
-Subject: Re: [PATCH 07/33] riscv: zicfilp / zicfiss in dt-bindings
- (extensions.yaml)
-Message-ID: <20241002210335.GA1307114-robh@kernel.org>
-References: <20241001-v5_user_cfi_series-v1-0-3ba65b6e550f@rivosinc.com>
- <20241001-v5_user_cfi_series-v1-7-3ba65b6e550f@rivosinc.com>
+	s=arc-20240116; t=1727904262; c=relaxed/simple;
+	bh=d4U3RojMz/eNE93mws2Q+0pKSf58wykiAO9y5d3i5VE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a0m73Jn0En07wKNXSUcFaXp4k2yi+Loct2XNqSMnLDup6v+JgDBCT0esrIB5IDMD9r07rtpKiFkp9K89v4sAC1IUJFf73JssFXhOL4DRchOpa3J4jz86xCcNOS19Nb+0CUMJQoZqf2IeSU5B/1ry6bR3a8CV6ZK/TZJHNEC2/ro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=F9EBj7y9; arc=none smtp.client-ip=95.215.58.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <c4ee29b6-5dfc-44f6-af5c-02d042b42cc0@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1727904257;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dzrFlAl+U9N/Vy9YLPbpe2/5D1bNUacg3gz/EIn3Ehc=;
+	b=F9EBj7y9tzDZaNghtcYY8ER48y+QN4OJ3arZmeBjwomgtm67pOgn4ruOgihm2w3Ye/X/Xk
+	MThy3N76+BM9JYP/tz+ywTp6x4GfLETs4CXG4zbzwLgNtt2K6kQpxN837yhRo88IRKQeUn
+	d1mk7kzQPU556EQqIB6wMrtt/YEqAP0=
+Date: Wed, 2 Oct 2024 14:24:08 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241001-v5_user_cfi_series-v1-7-3ba65b6e550f@rivosinc.com>
+Subject: Re: [PATCH net v4 2/2] bpf: selftests: send packet to devmap redirect
+ XDP
+To: Florian Kauer <florian.kauer@linutronix.de>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller"
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+ David Ahern <dsahern@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>,
+ Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Jesper Dangaard Brouer <brouer@redhat.com>, linux-kselftest@vger.kernel.org
+References: <20240911-devel-koalo-fix-ingress-ifindex-v4-0-5c643ae10258@linutronix.de>
+ <20240911-devel-koalo-fix-ingress-ifindex-v4-2-5c643ae10258@linutronix.de>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Martin KaFai Lau <martin.lau@linux.dev>
+Content-Language: en-US
+In-Reply-To: <20240911-devel-koalo-fix-ingress-ifindex-v4-2-5c643ae10258@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Tue, Oct 01, 2024 at 09:06:12AM -0700, Deepak Gupta wrote:
-> Make an entry for cfi extensions in extensions.yaml.
+On 9/11/24 1:41 AM, Florian Kauer wrote:
+> @@ -25,14 +28,11 @@ static void test_xdp_with_devmap_helpers(void)
+>   	if (!ASSERT_OK_PTR(skel, "test_xdp_with_devmap_helpers__open_and_load"))
+>   		return;
+>   
+> -	dm_fd = bpf_program__fd(skel->progs.xdp_redir_prog);
+> -	err = bpf_xdp_attach(IFINDEX_LO, dm_fd, XDP_FLAGS_SKB_MODE, NULL);
+> +	dm_fd_redir = bpf_program__fd(skel->progs.xdp_redir_prog);
+> +	err = bpf_xdp_attach(IFINDEX_LO, dm_fd_redir, XDP_FLAGS_SKB_MODE, NULL);
+>   	if (!ASSERT_OK(err, "Generic attach of program with 8-byte devmap"))
+>   		goto out_close;
+>   
+> -	err = bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
+> -	ASSERT_OK(err, "XDP program detach");
+> -
+>   	dm_fd = bpf_program__fd(skel->progs.xdp_dummy_dm);
+>   	map_fd = bpf_map__fd(skel->maps.dm_ports);
+>   	err = bpf_prog_get_info_by_fd(dm_fd, &info, &len);
+> @@ -47,6 +47,23 @@ static void test_xdp_with_devmap_helpers(void)
+>   	ASSERT_OK(err, "Read devmap entry");
+>   	ASSERT_EQ(info.id, val.bpf_prog.id, "Match program id to devmap entry prog_id");
+>   
+> +	/* send a packet to trigger any potential bugs in there */
+> +	char data[10] = {};
+> +	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
+> +			    .data_in = &data,
+> +			    .data_size_in = 10,
+> +			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
+> +			    .repeat = 1,
+> +		);
+> +	err = bpf_prog_test_run_opts(dm_fd_redir, &opts);
 
-Run "git log --oneline" on the file/subsystem and follow the subject 
-prefix pattern.
+I am seeing pr_warn on "Driver unsupported XDP return value on prog 
+xdp_redir_prog...". There is an existing bug in xdp_redir_prog(). I fixed it 
+with this:
 
-> 
-> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
-> ---
->  Documentation/devicetree/bindings/riscv/extensions.yaml | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Documentation/devicetree/bindings/riscv/extensions.yaml
-> index 2cf2026cff57..356c60fd6cc8 100644
-> --- a/Documentation/devicetree/bindings/riscv/extensions.yaml
-> +++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
-> @@ -368,6 +368,20 @@ properties:
->              The standard Zicboz extension for cache-block zeroing as ratified
->              in commit 3dd606f ("Create cmobase-v1.0.pdf") of riscv-CMOs.
->  
-> +        - const: zicfilp
-> +          description: |
-> +            The standard Zicfilp extension for enforcing forward edge
-> +            control-flow integrity as ratified in commit 3f8e450 ("merge
-> +            pull request #227 from ved-rivos/0709") of riscv-cfi
-> +            github repo.
-> +
-> +        - const: zicfiss
-> +          description: |
-> +            The standard Zicfiss extension for enforcing backward edge
-> +            control-flow integrity as ratified in commit 3f8e450 ("merge
-> +            pull request #227 from ved-rivos/0709") of riscv-cfi
-> +            github repo.
-> +
->          - const: zicntr
->            description:
->              The standard Zicntr extension for base counters and timers, as
-> 
-> -- 
-> 2.45.0
-> 
+SEC("xdp")
+int xdp_redir_prog(struct xdp_md *ctx)
+{
+-	return bpf_redirect_map(&dm_ports, 1, 0);
++﻿﻿	return bpf_redirect_map(&dm_ports, 0, 0);
+}
+
+and also wrapped the above "lo" test in its own netns also.
+
+Applied to the bpf tree. Thanks.
+
 
