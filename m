@@ -1,109 +1,138 @@
-Return-Path: <linux-kselftest+bounces-18910-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18909-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D14398DF31
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 17:30:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 585F698DF2C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 17:30:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD847285B68
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 15:30:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FC5C287551
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 15:30:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89E321D0E1B;
-	Wed,  2 Oct 2024 15:29:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5FA91D0DCE;
+	Wed,  2 Oct 2024 15:29:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hSaUd6ho"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="b7Ci9Cpl";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="sI1fLzLo";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="T7uS2sD+";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ADWlWGVs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C1D1D0B88;
-	Wed,  2 Oct 2024 15:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D662B1D0977;
+	Wed,  2 Oct 2024 15:29:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727882979; cv=none; b=DIYe+RlYsmTHYtelAhlDHt7MeBFgMZFHxSEDctJkTTyjvlmIctkjyVPjU7m7J1w30K8ERcrwcvFP8+VEr8EK3w1DE+mQHLJvRUlo+LNPv3hNpRCZov4NJAuQ6Q8N2YEzgii9ks85ykTMbJmcfVwlKTBMLzPz2vOraBIngToKeTM=
+	t=1727882945; cv=none; b=shTfLQqUQFICnjcYtpLmMLl89Uk66H/EKIpqCsKmVwUNsPSpmNKrm17WUvAmLPbUl0/RW1Lrub0FdECkDckdzSQjjoHPUzQXUlSBmtBYuvlhOPS9yQCIE9JT1rPNn4mCCM3BHZMn7HFwObLYGimKgW4kyTQH1La5w+z6mP+k9cU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727882979; c=relaxed/simple;
-	bh=KcWe2p4//ReZ22XPDI1sSHKXLXNrSm/uqNaJ3zBqUb0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=sBSqicNgzt48+slbrx5v5GhvvakfevrhirR12FdkYIL9S3QyQEQEkpp/io0/or5Zwu/gh5Va3d62LpiF+tDpHF19CCVB6xjNMoVB32c01snOd8uKAABETpY4xw1ysixRuhResZNQMPCEijFUKbT+lysHSsu9O18opoDDdm2KptI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hSaUd6ho; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-71b8d10e990so3428469b3a.3;
-        Wed, 02 Oct 2024 08:29:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727882977; x=1728487777; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nge7JqBO8y1Nt32fqYmbMoUQ5ZDhat8l9e47yakT2j0=;
-        b=hSaUd6hoeKb/iKjdod/KZ21ZwjTwRfPWemuFs+qJsKxhsa2zGhXFvGlvyd1EOZSj4S
-         BnTj1S4Ns76mN6S/LlxN7wR7PgMPnmAJW0NTalPuqcY/rlWLK4qu3sl7z5FC/oAlGDTD
-         Gq8qifhce+RMCZ0QCw+N6imOhayvQEp8T1K6rhAc4rwdOM50hzt2wXuZn++8F0Hxi8BJ
-         RgT51K2fLjghgFSbM8TkM2c2XNGBpRy1rFGKWDnig6QbO42CqfBC2+a0nZTTj63ros6H
-         LieSUDK7ipqQ1r3pdx62UKx+WvgInJZn2IHVKfIp4zjFGQDQmTjM97Bv738SezWj9d/y
-         KPvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727882977; x=1728487777;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Nge7JqBO8y1Nt32fqYmbMoUQ5ZDhat8l9e47yakT2j0=;
-        b=mbK2gtLtklTJIz14MWdmPQcW3Pwunb3PDV3QEjls6G64IMSE7RGGQ5Zc2nqryUAsh/
-         zNt/LDVqXA6OeFK/+ibGkzCgQm/hIYiCpmGkIQNpL/um7Q1XCpekiZn2qyS+pPEMeDxg
-         t7F7svu89Ro9RWux3kh8DEZf16rEBSO8ZQZnNgOvRmZCVN7d7WUVzVcBQE9zv51VOiCO
-         F3ikitFCfWlKhJYO7KRdMZXXKOYCh4fvUSGhjKhwnx9gqzZFHls0cnFV6sG5cY3SSvZq
-         qiGXQnlR0/ZNZ54iUy8lkggikfKgWcDUsZ4knPsc/0DA8hiYSQx8t/e/nI2Suiej6IA0
-         UnJw==
-X-Forwarded-Encrypted: i=1; AJvYcCVSOJDgEUIzHh5YwbX/mONeILiJMoEM3RWVLsE29wZeChz3iN1wZ/c/I3h72CIY5a2AyjeGHALhOSs8i08=@vger.kernel.org, AJvYcCXebdquRlbteI6Ehe9U1hm5Qab+fQP0bfO2M9g28U8yXKzGyXgoFcxxqVw8Z2rXyZ7MuqoB+z37/iYw47j/3b4G@vger.kernel.org
-X-Gm-Message-State: AOJu0YwcV4qmZjIj6Gi3395LMKekZFiE9dPClDYpqQnD73Pm3ZCz7ikt
-	aSUKC5oM3TeYonZxAUBkqv9wgH1yoKtpxlPorsumkAkvfG9ctCCZ
-X-Google-Smtp-Source: AGHT+IGajUHlPqJ18foTX/9BkGVtb9utfYvyvBixhhmmnEWfIo9T2x2Yw+FWPf1rfVrxvjY3E73qog==
-X-Received: by 2002:a05:6a00:13a1:b0:717:88eb:824d with SMTP id d2e1a72fcca58-71dc5c78135mr6106100b3a.7.1727882977213;
-        Wed, 02 Oct 2024 08:29:37 -0700 (PDT)
-Received: from purva-IdeaPad-Gaming-3-15IHU6.lan ([2409:40c0:23f:2448:4ee3:a2dd:4021:3733])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71b265166e2sm9872830b3a.131.2024.10.02.08.29.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2024 08:29:36 -0700 (PDT)
-From: SurajSonawane2415 <surajsonawane0215@gmail.com>
-To: shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: SurajSonawane2415 <surajsonawane0215@gmail.com>
-Subject: [PATCH] selftests/vdso: Add linux/sched.h to fix CLONE_NEWTIME build error
-Date: Wed,  2 Oct 2024 20:58:49 +0530
-Message-Id: <20241002152849.111841-1-surajsonawane0215@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1727882945; c=relaxed/simple;
+	bh=tQtFzWGWGLIeg3feHBfHQqmvpku6sKX2gfyV988jgs4=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=d89QNAHgP3Yms8HlFn6OUFugMTFRar84gAS8+sFCIysYuhBqqdWOV3TJ6cWRJg+jGbdzE4BmV4TD0DG+61HCGwuDaLnMRmk1N3jK5SPszEEEr3nW7BKOx+XNUk3NyDlKajfu9xpxCROb+9KS540yrmisNs/qdPr+huLP5Lg6ER4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=b7Ci9Cpl; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=sI1fLzLo; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=T7uS2sD+; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=ADWlWGVs; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from pobox.suse.cz (unknown [10.100.2.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id E7DB421C6F;
+	Wed,  2 Oct 2024 15:29:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1727882942; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YSgt+aBeUQZdrYwlwWCHJ4/usq6jRi1d3IFr2yfT9GI=;
+	b=b7Ci9CplGYIoV9VMgwQLW04YhSNjs56Z4tUNHL0L50Z18QS2KCry5+AqxcwDhYIC29tgt3
+	F+JWWJOENyezsc2/9wnodZC7SSeHLVF5C2ceJOnG9k2XGUruTIIxiB7zVA3rjBugf77DQA
+	MPjvr8Vec54ufCoRayMhDeKmUp23Z1g=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1727882942;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YSgt+aBeUQZdrYwlwWCHJ4/usq6jRi1d3IFr2yfT9GI=;
+	b=sI1fLzLoa0ce0nUtNEc/odU9L48dpWfg1G1YEK/lifFOLWiOuysimWbC8OzuUoip0XKP55
+	2ZUqTjiw+tqDiFAA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1727882941; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YSgt+aBeUQZdrYwlwWCHJ4/usq6jRi1d3IFr2yfT9GI=;
+	b=T7uS2sD+czDLy+KN1Igf/AhTWzSsKa28B0cCvlzyo6D7MBvHiC/x9myr3YzBAKBrT9y4i/
+	Qe+isxgz/JtitHthNeJicdoRwPqi4/F8Xly3//aLOVsUY+Ktw9cbc47Xnicfz9q7kEtJ7O
+	T/axdsyhf4UBXxjSlrJAzMOv3TIVwdI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1727882941;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YSgt+aBeUQZdrYwlwWCHJ4/usq6jRi1d3IFr2yfT9GI=;
+	b=ADWlWGVsm0pwzqBpPGn5T+mP4B4sMsHZ0FHZ9EO25rDsTNRkEHS8CJ1eB7nU9mbjri8pDe
+	s61P7q+MGdmJ83AQ==
+Date: Wed, 2 Oct 2024 17:29:01 +0200 (CEST)
+From: Miroslav Benes <mbenes@suse.cz>
+To: Michael Vetter <mvetter@suse.com>
+cc: linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org, 
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 3/3] selftests: livepatch: test livepatching a kprobed
+ function
+In-Reply-To: <20240930093308.65103-4-mvetter@suse.com>
+Message-ID: <alpine.LSU.2.21.2410021724040.23724@pobox.suse.cz>
+References: <20240930093308.65103-1-mvetter@suse.com> <20240930093308.65103-4-mvetter@suse.com>
+User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Score: -4.30
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.991];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_ZERO(0.00)[0];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCPT_COUNT_THREE(0.00)[4];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email]
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-Fix build error in vdso_test_getrandom.c due to missing CLONE_NEWTIME.
-Include linux/sched.h to define CLONE_NEWTIME.
-Ensure successful compilation by resolving the missing header issue.
+Hi,
 
-Signed-off-by: SurajSonawane2415 <surajsonawane0215@gmail.com>
----
- tools/testing/selftests/vDSO/vdso_test_getrandom.c | 1 +
- 1 file changed, 1 insertion(+)
+On Mon, 30 Sep 2024, Michael Vetter wrote:
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getrandom.c b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-index 72a1d9b43..3f2a4dbf8 100644
---- a/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-@@ -22,6 +22,7 @@
- #include <linux/random.h>
- #include <linux/compiler.h>
- #include <linux/ptrace.h>
-+#include <linux/sched.h>
- 
- #include "../kselftest.h"
- #include "parse_vdso.h"
--- 
-2.34.1
+> The test proves that a function that is being kprobed and uses a
+> post_handler cannot be livepatched.
+> 
+> Only one ftrace_ops with FTRACE_OPS_FL_IPMODIFY set may be registered
+> to any given function at a time.
+> 
+> Signed-off-by: Michael Vetter <mvetter@suse.com>
 
+since my memory is short, I wondered why you need a separate module to 
+register a kprobe for cmdline_proc_show() in vmlinux and why it cannot be 
+achieved through tracefs. So... the test ensures that 
+FTRACE_OPS_FL_IPMODIFY is exclusive. A kprobe sets FTRACE_OPS_FL_IPMODIFY 
+flag if and only if post_handler is not NULL which also indicates a 
+situation when regs->ip may be changed in that kprobe. This is something 
+which cannot be done in tracefs and hence the module.
+
+It was not clear to me from the changelog.
+
+Miroslav
 
