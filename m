@@ -1,76 +1,75 @@
-Return-Path: <linux-kselftest+bounces-18889-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18890-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8D1798CFB4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 11:08:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31E9C98CFB9
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 11:09:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 407711F21E4A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 09:08:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCC171F21C47
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 09:09:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0CCD1DFE14;
-	Wed,  2 Oct 2024 09:03:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E669C1E00B9;
+	Wed,  2 Oct 2024 09:03:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="GV/d1h4Q"
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="BNRIXeeU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557131CC16F
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Oct 2024 09:03:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 341A41990BA
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Oct 2024 09:03:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727859826; cv=none; b=T3oMitt3ZGepWQ5M+3au1ZiCzrRCE6owdtusLVLJdb0L2Rk0JUBFOZXRm7NM8xvj0riKU3iCVWvJ7ebMVmyLp3VULS24Xd8gUUS1M6FOtatiWM0xMOoJWYhzBDZ75jl+CLemR7COJXeLxPYYt+HnqtmxfAezrrrubykNXqDI5qo=
+	t=1727859827; cv=none; b=UV3/WGv1fdXh79psOgOG6tAhOB9Nmm5/BFBX6eteDB+CroNZsH25wn3VPnBYV6kuIIOZTUKYGjBhgFQDK69HmcwFf3FzQr/AB2hCQACVXk0wE08SWgMElFRcJA/jsbtL09Pe7BF3VdaQuixQhgOKzhYSi5Z7nwbGfLv3+aJLNp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727859826; c=relaxed/simple;
-	bh=poxxnPMFHBlbgk9hT4KAoFDOsyv5Cr0vROL/GXgxBiE=;
+	s=arc-20240116; t=1727859827; c=relaxed/simple;
+	bh=0HczZybwcOvyDCXb/Fw0Kq345nQiLm5f4dZXh7KvAg0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=qJjGMbtkRHVdQ+TWcKjtyrHQYsqAl6DMlotTmpYVmsuvT+8/TObVREOgk64MpR+JqB1qHAUO7kh7HP9TRtd4nDtFmVTV7Nzep6gDDmQuem0zyRIk+ZzrPzt05QFbViOB2xVFzjYX/3WihPRBDMs6s97QhPvmk/pN2zexb9v/DLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=GV/d1h4Q; arc=none smtp.client-ip=209.85.221.46
+	 In-Reply-To:To:Cc; b=JlxlnmBZgqxt7GN1kpBVf8gpgwG+ARupHd6Hxw3bFQNgWKy3S6DWfeStQHlgg1awOF6HO4jMpk28pVYChb8sfkLMOEp+0MgObR+CybtQSsugv2P9OYVmtnP/s/OIJNZskPVGXUZwJG0tq09zOhbW2eHpKRBabI9okif9La3Nmbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=BNRIXeeU; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=openvpn.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-37cdac05af9so4062111f8f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Oct 2024 02:03:44 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-37cd8972738so3250987f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Oct 2024 02:03:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1727859823; x=1728464623; darn=vger.kernel.org;
+        d=openvpn.net; s=google; t=1727859824; x=1728464624; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Z1g5ErvOWdSDbVBAMFtgccgGsR+CcI40dCMnEOfXG5Q=;
-        b=GV/d1h4Qf1LZEGio6mtJXom7t8AFQtKLKO2ICdv2UFXWgRJoPKFsjhULgSWnbSvXzW
-         uUCfGPlZGLny8OGyb2OGe9/yD6I9+/APep9vktwOTE5wLkTCBREzn8HTFMqef3xxgSTv
-         vO4Sav7dCxIJZYyiCXy2Y3vuWw/QzAv3MhW+AFbxtM2DBUzbKbbtgpHgFkHtkwA6aIoJ
-         fgcw3f3w6LFY8jZAxydgLAymUizxLDmkNsygyngKjhjzQMEyIaNYbfnsiHkOY0BNhvZV
-         DQhdkL97y/HmdCjxHV6ikwRPaElign7+bKrxsp9ya2L0fJkb214SVxmeBjs8OP0HAs5B
-         b2XQ==
+        bh=Jtid/4Ggea81hP8xAarmxZwacDuX1oN1onp/X4GHPpc=;
+        b=BNRIXeeUiKFWw0PuShIhM0vt8kJnlsZHwe24vpmp6S4QViLAXL3tBONMniNN/eEOFZ
+         N6QopwbtJOmlfeuv3EnHUDv5JujinXaS5n/Ipe7VdBs1MBiXaosDQAR8qykFxvOkbwHo
+         9l1V7b2NZD3JfocF96Jufnajr6ID4VSfEpyLr2XjHon776PAN84yB9mA4/+JdhRF4IH+
+         3kTj0IXQOBuYeFbL3vqsKi4krvY0uKSPEC1CcwBdvLtymz8IbdXH7JY8KCM81UOsoLmX
+         VY+OvMd54b09hufruFIMskQBaGoGcZiyw45WjosHUo2B6CDblPuWJYrP1oHR/EUnrKS3
+         wDcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727859823; x=1728464623;
+        d=1e100.net; s=20230601; t=1727859824; x=1728464624;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Z1g5ErvOWdSDbVBAMFtgccgGsR+CcI40dCMnEOfXG5Q=;
-        b=H4Zl6G0lmMuHxJcfjkEfq+244M4vmoWm9YlVHmwD+k1lFuCi7i0YdxEb4MJZ8n814C
-         +833kLtU+sx5ujcGkcyhoHSyYT4Bzs+uH9xmIIwVmPfb1voyw97+dYt4LK4DovAVkGqh
-         wud81FvcBTY2CYfiuc/jRM+7Tp3Vl6+i1anxQiCxUCm12CxkTTvnXzuNpRt+zsMMdwyy
-         Wl48HqsdytBqYZSKKTWBWZhTdZyEBE0A4rFSZHReN3WO/BQak5ah8nwa0spurqANbdNh
-         Gmyf+C7kraGzICcWT+M3+oYVnClVZH/AVJttI5y7twt12NApTkXtFFCLNK0rmWabgcE5
-         yJcA==
-X-Forwarded-Encrypted: i=1; AJvYcCVklql7xj01Z6XSW/ECHNxsNGxvrzPcl6C7/LrT1RxkmsaJU5IXAZH0WnqbqBglMJio4Pl/h/0MJifKDzhlFgc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPkWGl86ejgWkocOtmE9o8MCl5J0J2BOYuYBzxgWI/1EKGo+bR
-	sbwMQZtlElSzPlp9CLqgZxyCpX1KfBb/wb+WtWLTw873eFYdrGpaqWNgz64Lh/I=
-X-Google-Smtp-Source: AGHT+IH7fw/E/kQ3V24xzbtq3adS/XElxX31aae+kZFgbO0z9PggBosgYGxEoE3ngXbkU7APgvBgPA==
-X-Received: by 2002:a5d:4108:0:b0:37c:cce6:997d with SMTP id ffacd0b85a97d-37cfb8cf38cmr2076166f8f.20.1727859822608;
-        Wed, 02 Oct 2024 02:03:42 -0700 (PDT)
+        bh=Jtid/4Ggea81hP8xAarmxZwacDuX1oN1onp/X4GHPpc=;
+        b=SggIE+VER89eY5siocWafEZPmjr+WGbynJrTwF+o4F3t3CYB9dE9OsWA3STZEmbiCM
+         lh8ZUQj4ePGfbCxv06QomxHeGUvH4mqg+mruCkta2QA011nWhMzOSrlLp+jtephb/lJE
+         PjFAVyXVLmQsrlvFgZ92DyEB9Kpx8U2pR/QX68NVatHZ3eoo/yScXLhnWL5poHtxgXQR
+         aaFbqv2kNPb4z8wu3PM8pnrFexrEdx4K5bDlO/EdSMR5fweACUFt2/Pf9KV8BCY8iQp9
+         UfLNThLJF43bMIMlZhBg+bS1Br8ojQDrd1lDXnJW4ymUBJMXua/ywgF6RmsprhCRuqFu
+         TADg==
+X-Forwarded-Encrypted: i=1; AJvYcCXLC/lDMNzXfS6zZMmmJ+i8vMGRgi6yvxYtgQe8fDQwnflJAl2VggRYTuMSMHwQddyBp4VE9uk1iYHZR59mh8Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx3s7O4DvTHdf3twxX3Cx8RegPAegNVV+AjuLW+13gtfs67MsN9
+	1dbGYFeYKNaS9jcqy3FxkgvoPkLK5wOcTUXsDliVonpD92owaAI0mCyx1Aj+qwo=
+X-Google-Smtp-Source: AGHT+IHF+moQuogaubmFiV9fQExZlkakNdb2tJX5ZJm8bc81FDHr5npglK+ha3mscDcMX8g5JXpqFQ==
+X-Received: by 2002:a5d:498e:0:b0:37c:c4b4:3396 with SMTP id ffacd0b85a97d-37cfb9d454cmr1409760f8f.29.1727859823678;
+        Wed, 02 Oct 2024 02:03:43 -0700 (PDT)
 Received: from serenity.mandelbit.com ([2001:67c:2fbc:1:da6e:ecd8:2234:c32e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37cd56e8822sm13602320f8f.50.2024.10.02.02.03.41
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37cd56e8822sm13602320f8f.50.2024.10.02.02.03.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2024 02:03:42 -0700 (PDT)
+        Wed, 02 Oct 2024 02:03:43 -0700 (PDT)
 From: Antonio Quartulli <antonio@openvpn.net>
-Date: Wed, 02 Oct 2024 11:02:36 +0200
-Subject: [PATCH net-next v8 22/24] ovpn: notify userspace when a peer is
- deleted
+Date: Wed, 02 Oct 2024 11:02:37 +0200
+Subject: [PATCH net-next v8 23/24] ovpn: add basic ethtool support
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,130 +78,79 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241002-b4-ovpn-v8-22-37ceffcffbde@openvpn.net>
+Message-Id: <20241002-b4-ovpn-v8-23-37ceffcffbde@openvpn.net>
 References: <20241002-b4-ovpn-v8-0-37ceffcffbde@openvpn.net>
 In-Reply-To: <20241002-b4-ovpn-v8-0-37ceffcffbde@openvpn.net>
 To: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
  Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>, 
  Antonio Quartulli <antonio@openvpn.net>, Shuah Khan <shuah@kernel.org>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, sd@queasysnail.net, ryazanov.s.a@gmail.com
+ linux-kselftest@vger.kernel.org, sd@queasysnail.net, ryazanov.s.a@gmail.com, 
+ Andrew Lunn <andrew@lunn.ch>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3246; i=antonio@openvpn.net;
- h=from:subject:message-id; bh=poxxnPMFHBlbgk9hT4KAoFDOsyv5Cr0vROL/GXgxBiE=;
- b=owEBbQGS/pANAwAIAQtw5TqgONWHAcsmYgBm/QxTNGlDMBkkc6iZHWRsImvE3HBTYIXK4k31G
- ZWbXzIQ3rGJATMEAAEIAB0WIQSZq9xs+NQS5N5fwPwLcOU6oDjVhwUCZv0MUwAKCRALcOU6oDjV
- h1tdCAC0zOmuy1ivCPWZ7NSHAKEAslKsZkAfD2e29GZ9yIJ3/eUZzHReWipsVVB4a60CNoWBDS5
- lNS9lc2ugXq+YF7h3CSnFLYJ+PsnWFx9TwDvAROujAPWLSRT3+pqtges/3bnS00tjE03wAg8vGd
- dyk3/LMDb47yHd4BEvvDBZ5MJNLFFgVLUkfdO1MKkRmJzyXNayw6YkoYf0vkjjYKcHnAnzKYR78
- wLvN1FPK4t/x+R1aMAXzQLq5sZvet7b/C8viwCeXVgyHV1cMi3LAuZcemDcTausTB2zxU/7dbQ0
- AMlxMizMwzwNhbX7+/sUIEDvjHiUJhd8ZeJ4WGDsAOLUrtT4
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1696; i=antonio@openvpn.net;
+ h=from:subject:message-id; bh=0HczZybwcOvyDCXb/Fw0Kq345nQiLm5f4dZXh7KvAg0=;
+ b=owEBbQGS/pANAwAIAQtw5TqgONWHAcsmYgBm/QxTy21F+BrAC+0BHzA21YyFzTw73Iap1BeA4
+ QiQ06zZYkaJATMEAAEIAB0WIQSZq9xs+NQS5N5fwPwLcOU6oDjVhwUCZv0MUwAKCRALcOU6oDjV
+ hxhlB/0TB9PzRSCIcixOB4y3zYbwFDJCgJpMby3jkPceLt/4GRyPssjFpp1QvRt6sfyxB8Ziu1g
+ 2hTw0pKX8RiWiL2jFFVo5FLFbDhwvwMNMz9eN2MCTfedFMiA5gwsaXC4imQl1Vm5E/pOyTLSTWk
+ uxbDvdTbGs8yYLpw0H9Xk+ZEowVBaV0+T+Vu+FFXhPk7n53ixreCGgtlpLNRa0W9Qr5WauUflbz
+ 2dUFL+63/+z0Hs0UcFJ3B0bn95TYVTEUkp+dCcOh9uvOVZ8R4dnEPkw/b4m08Bq430+ERb0uEOD
+ v3c1k8Ix+/5ZTqpyC/1OUGvmYxFqYPXNS1+sfxe3AZGBkpUL
 X-Developer-Key: i=antonio@openvpn.net; a=openpgp;
  fpr=CABDA1282017C267219885C748F0CCB68F59D14C
 
-Whenever a peer is deleted, send a notification to userspace so that it
-can react accordingly.
+Implement support for basic ethtool functionality.
 
-This is most important when a peer is deleted due to ping timeout,
-because it all happens in kernelspace and thus userspace has no direct
-way to learn about it.
+Note that ovpn is a virtual device driver, therefore
+various ethtool APIs are just not meaningful and thus
+not implemented.
 
 Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 ---
- drivers/net/ovpn/netlink.c | 55 ++++++++++++++++++++++++++++++++++++++++++++++
- drivers/net/ovpn/netlink.h |  1 +
- drivers/net/ovpn/peer.c    |  1 +
- 3 files changed, 57 insertions(+)
+ drivers/net/ovpn/main.c | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
 
-diff --git a/drivers/net/ovpn/netlink.c b/drivers/net/ovpn/netlink.c
-index e9cf847e99026e78eee4d65b62911671e8c2e407..b96c84fcc24921b2cd173ec2b6358b59eec72b39 100644
---- a/drivers/net/ovpn/netlink.c
-+++ b/drivers/net/ovpn/netlink.c
-@@ -963,6 +963,61 @@ int ovpn_nl_key_del_doit(struct sk_buff *skb, struct genl_info *info)
- 	return 0;
+diff --git a/drivers/net/ovpn/main.c b/drivers/net/ovpn/main.c
+index 6048df5890c8fa46f3d91498903b4277a33f06db..a164b6ca2a4b8d69a76938fcd1b76d1f2e563dd8 100644
+--- a/drivers/net/ovpn/main.c
++++ b/drivers/net/ovpn/main.c
+@@ -7,6 +7,7 @@
+  *		James Yonan <james@openvpn.net>
+  */
+ 
++#include <linux/ethtool.h>
+ #include <linux/genetlink.h>
+ #include <linux/module.h>
+ #include <linux/netdevice.h>
+@@ -137,6 +138,19 @@ bool ovpn_dev_is_valid(const struct net_device *dev)
+ 	return dev->netdev_ops->ndo_start_xmit == ovpn_net_xmit;
  }
  
-+/**
-+ * ovpn_nl_peer_del_notify - notify userspace about peer being deleted
-+ * @peer: the peer being deleted
-+ *
-+ * Return: 0 on success or a negative error code otherwise
-+ */
-+int ovpn_nl_peer_del_notify(struct ovpn_peer *peer)
++static void ovpn_get_drvinfo(struct net_device *dev,
++			     struct ethtool_drvinfo *info)
 +{
-+	struct sk_buff *msg;
-+	struct nlattr *attr;
-+	int ret = -EMSGSIZE;
-+	void *hdr;
-+
-+	netdev_info(peer->ovpn->dev, "deleting peer with id %u, reason %d\n",
-+		    peer->id, peer->delete_reason);
-+
-+	msg = nlmsg_new(100, GFP_ATOMIC);
-+	if (!msg)
-+		return -ENOMEM;
-+
-+	hdr = genlmsg_put(msg, 0, 0, &ovpn_nl_family, 0, OVPN_CMD_PEER_DEL_NTF);
-+	if (!hdr) {
-+		ret = -ENOBUFS;
-+		goto err_free_msg;
-+	}
-+
-+	if (nla_put_u32(msg, OVPN_A_IFINDEX, peer->ovpn->dev->ifindex))
-+		goto err_cancel_msg;
-+
-+	attr = nla_nest_start(msg, OVPN_A_PEER);
-+	if (!attr)
-+		goto err_cancel_msg;
-+
-+	if (nla_put_u8(msg, OVPN_A_PEER_DEL_REASON, peer->delete_reason))
-+		goto err_cancel_msg;
-+
-+	if (nla_put_u32(msg, OVPN_A_PEER_ID, peer->id))
-+		goto err_cancel_msg;
-+
-+	nla_nest_end(msg, attr);
-+
-+	genlmsg_end(msg, hdr);
-+
-+	genlmsg_multicast_netns(&ovpn_nl_family, dev_net(peer->ovpn->dev), msg,
-+				0, OVPN_NLGRP_PEERS, GFP_ATOMIC);
-+
-+	return 0;
-+
-+err_cancel_msg:
-+	genlmsg_cancel(msg, hdr);
-+err_free_msg:
-+	nlmsg_free(msg);
-+	return ret;
++	strscpy(info->driver, OVPN_FAMILY_NAME, sizeof(info->driver));
++	strscpy(info->bus_info, "ovpn", sizeof(info->bus_info));
 +}
 +
- /**
-  * ovpn_nl_key_swap_notify - notify userspace peer's key must be renewed
-  * @peer: the peer whose key needs to be renewed
-diff --git a/drivers/net/ovpn/netlink.h b/drivers/net/ovpn/netlink.h
-index 33390b13c8904d40b629662005a9eb92ff617c3b..4ab3abcf23dba11f6b92e3d69e700693adbc671b 100644
---- a/drivers/net/ovpn/netlink.h
-+++ b/drivers/net/ovpn/netlink.h
-@@ -12,6 +12,7 @@
- int ovpn_nl_register(void);
- void ovpn_nl_unregister(void);
++static const struct ethtool_ops ovpn_ethtool_ops = {
++	.get_drvinfo		= ovpn_get_drvinfo,
++	.get_link		= ethtool_op_get_link,
++	.get_ts_info		= ethtool_op_get_ts_info,
++};
++
+ static struct rtnl_link_ops ovpn_link_ops = {
+ 	.kind = OVPN_FAMILY_NAME,
+ 	.netns_refund = false,
+@@ -158,6 +172,7 @@ static void ovpn_setup(struct net_device *dev)
  
-+int ovpn_nl_peer_del_notify(struct ovpn_peer *peer);
- int ovpn_nl_key_swap_notify(struct ovpn_peer *peer, u8 key_id);
+ 	dev->pcpu_stat_type = NETDEV_PCPU_STAT_TSTATS;
  
- #endif /* _NET_OVPN_NETLINK_H_ */
-diff --git a/drivers/net/ovpn/peer.c b/drivers/net/ovpn/peer.c
-index 1ce31f0317cb3593a8edf95c43d03a0bddb0a58f..f201bcddb2d792e4f6b759d5e1fed42234aa1410 100644
---- a/drivers/net/ovpn/peer.c
-+++ b/drivers/net/ovpn/peer.c
-@@ -249,6 +249,7 @@ void ovpn_peer_release_kref(struct kref *kref)
- 
- 	if (peer->sock)
- 		ovpn_socket_put(peer->sock);
-+	ovpn_nl_peer_del_notify(peer);
- 	call_rcu(&peer->rcu, ovpn_peer_release_rcu);
- }
++	dev->ethtool_ops = &ovpn_ethtool_ops;
+ 	dev->netdev_ops = &ovpn_netdev_ops;
+ 	dev->rtnl_link_ops = &ovpn_link_ops;
  
 
 -- 
