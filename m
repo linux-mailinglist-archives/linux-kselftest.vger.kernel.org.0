@@ -1,34 +1,34 @@
-Return-Path: <linux-kselftest+bounces-18895-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18896-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02CFE98D2B7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 14:08:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3443598D2E0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 14:15:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DCD11C21984
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 12:08:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58D4D1C21C87
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 12:15:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BB631CF5E9;
-	Wed,  2 Oct 2024 12:08:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D163F1CF7AD;
+	Wed,  2 Oct 2024 12:15:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="dgYfgxVJ"
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="m2dbdoYH"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735451CF5E4;
-	Wed,  2 Oct 2024 12:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF10DD528;
+	Wed,  2 Oct 2024 12:15:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727870881; cv=none; b=OFYdXRM3x3zUkSKog0iea6fBl6RzagoYttXoLd78IuhCbvgxbnMPQTklx58HsUx4vqs6c57JwAGsZt8kbd/wMP434GRCXuOdi9+eqbO3onofBscjZy3zbkvhN0zZbeAzz+NELtRmaRabe+zN9trltb+PzacRBgDl7qarGzECYsQ=
+	t=1727871329; cv=none; b=YK3venBw4CP/BPEVFkZfbim0nqOtXrGRwYcBj5JQxHlf3d9iNGKUrMY640eO4P3ppes0EPngzLpie6sy2U1H3Z4r1YHKSPAMrwqEO4k3QmM7nXok8vaglz0gBGBurhkykY7eJHuRa9gdortEOQU0bIrEUTLpD18OZ0B6r/8tZ4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727870881; c=relaxed/simple;
-	bh=gn4F9pB4na9+7GgpzpyseAb8fGmzrSbQ7CICsquYq28=;
+	s=arc-20240116; t=1727871329; c=relaxed/simple;
+	bh=v9HtDp2AGTgs7MGkZDOH8FBHojkU/QN2bXhPmNoMQb4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=L6PIdoiy9qHA5TgicLD7KVN/ApqoWlPQGW7sakv7NPGM5m0jODw9h+jFSDVRPRy/dkJGSbnThmxyxZItWixId/Owiwg03XFu2apLrjTtB0gTzmXvhbEvLiLdjgFIcv1rZpUNn2qmAQ82GiSMAtGlDlliwHJEosoX1+7Xpu1T3ns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=dgYfgxVJ; arc=none smtp.client-ip=213.133.104.62
+	 In-Reply-To:Content-Type; b=hg7M/OIS5RElOspLdBHlhyN6NAOcfOZXsH3wpel+QcifAmIEgxd8PlmXBSjVWf8Q5vTnwbCeFrc0zGG6lN/D/es9cK6v6T2lSJmSqI/mi0LYoMlOVF4tej+CnkuUdj/xD04H5HgJl/nWYnM2TYu+7KgU21fwAnUVZQ4x2OHscCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=m2dbdoYH; arc=none smtp.client-ip=213.133.104.62
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -36,25 +36,25 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=ywfq2v21PV6eapCc1G1aqc4sN2E2b3BC6Na6Mmcquao=; b=dgYfgxVJr1u82vTP9Trk34qgP3
-	QhM+J/H3sZWqtFMrzTAXeywDeWzk5NcB/fJHSqYYBo1NiLsJ+nsbFw3tYJ++eDsJ+TfTSEfwqHVGC
-	vLt4lxNCMkv1y0FeKtVb5V390tydl2DZdYH8Gchd/mQjpHp+MOzJuNQNsLhCxn8/1pcLhSYHFInsQ
-	ir/KcHFqBhmGixGTGFkqbGDgIIAdgjo73yWvPysp2QVPl/L/tWLyPCQtjOmzVBBP8fChGIs733D3K
-	vXZOAYYoMXCgf7EhRCjc4MdSolbLm7i6k2cmNMysyHc3aF5FzT0x++2/2IUF3M6dE0SkAr2H8cReW
-	zPRU65xw==;
+	bh=91SnTQPV/pOlvNUmRYPrqyFMG9TNi+tbdjyNQHyBA7Q=; b=m2dbdoYHQz96ZaiRNiy4dnnZOW
+	hLcGSDmCYd3A52cDhaOzlEMkgdYS1vrHwpz/kAZ7Pnqyk9xFbQBDoB/mwIH5si2Kegbn+Xq380rsM
+	tIhGqpC5p8YSd5Tzfsips4svJ1d71EcQbKF0S2vpt+AjRwITfGto+GRZ6gVxri+oP/96Jv5eX6yCd
+	hrjWLRWjmSILlSYr5nrQIqljgtvNbk5csg5P6PxzO4mapBrOKkiPZmSJQJgHCuhtYn33Krzm54fDa
+	DZqNq66hASWXSVPC9QDnPPxFQigpI1tRAlpmRwfOHdzrP1p57zkX2nWV32TNeSkYfk3Rqapvv0EIi
+	TB1bjNBA==;
 Received: from sslproxy02.your-server.de ([78.47.166.47])
 	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1svy96-000HPM-4s; Wed, 02 Oct 2024 14:07:55 +0200
+	id 1svyGL-000IVW-53; Wed, 02 Oct 2024 14:15:24 +0200
 Received: from [178.197.249.44] (helo=[192.168.1.114])
 	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <daniel@iogearbox.net>)
-	id 1svy94-0006Hb-30;
-	Wed, 02 Oct 2024 14:07:55 +0200
-Message-ID: <6c80ed1a-6b6f-4920-9b80-a25d8b40cca4@iogearbox.net>
-Date: Wed, 2 Oct 2024 14:07:54 +0200
+	id 1svyGK-000B9w-0o;
+	Wed, 02 Oct 2024 14:15:24 +0200
+Message-ID: <511a2e2f-6bdd-4e62-b647-796ca4c53119@iogearbox.net>
+Date: Wed, 2 Oct 2024 14:15:23 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,19 +62,13 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next] selftests, bpf: Skip MPLS test_tc_tunnel tests
- if MPLS is unavailable
-To: Simon Horman <horms@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- alexis.lothore@bootlin.com
-References: <20240927-mpls-skip-v1-1-1bc38abf917e@kernel.org>
+Subject: Re: [PATCH] selftests/bpf: Add __init and __exit to the functions
+ bpf_test_no_cfi_init()/bpf_test_no_cfi_exit()
+To: Yaxiong Tian <tianyaxiong@kylinos.cn>, martin.lau@linux.dev,
+ ast@kernel.org, andrii@kernel.org, shuah@kernel.org, hinker.li@gmail.com
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Yaxiong Tian <iambestgod@outlook.com>
+References: <20240930013301.10817-1-tianyaxiong@kylinos.cn>
 Content-Language: en-US
 From: Daniel Borkmann <daniel@iogearbox.net>
 Autocrypt: addr=daniel@iogearbox.net; keydata=
@@ -120,99 +114,47 @@ Autocrypt: addr=daniel@iogearbox.net; keydata=
  rUD9YI1Je/WifL/HbIubHCCdK8/N7rblgUrZJMG3W+7vAvZsOh/6VTZeP4wCe7Gs/cJhE2gI
  DmGcR+7rQvbFQC4zQxEjo8fNaTwjpzLM9NIp4vG9SDIqAm20MXzLBAeVkofixCsosUWUODxP
  owLbpg7pFRJGL9YyEHpS7MGPb3jSLzucMAFXgoI8rVqoq6si2sxr2l0VsNH5o3NgoAgJNIg=
-In-Reply-To: <20240927-mpls-skip-v1-1-1bc38abf917e@kernel.org>
+In-Reply-To: <20240930013301.10817-1-tianyaxiong@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Authenticated-Sender: daniel@iogearbox.net
 X-Virus-Scanned: Clear (ClamAV 0.103.10/27415/Wed Oct  2 10:52:29 2024)
 
-[ +Alexis ]
-
-On 9/27/24 2:05 PM, Simon Horman wrote:
-> If MPLS is not available in the kernel then skip MPLS tests.
+On 9/30/24 3:33 AM, Yaxiong Tian wrote:
+> From: Yaxiong Tian <iambestgod@outlook.com>
 >
-> This avoids the test failing in situations where the test is not
-> supported by the underlying kernel.
+> To save some running memory,Add __init and __exit to the
+> module load/unload functions.
 >
-> In the case where all tests are run, just skip over the MPLS tests
-> without altering the exit code of the overall test run - there
-> is only one exit code in this scenario.
+> Signed-off-by: Yaxiong Tian <tianyaxiong@kylinos.cn>
+> ---
+>   tools/testing/selftests/bpf/bpf_test_no_cfi/bpf_test_no_cfi.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
 >
-> In the case where a single test is run, exit with KSFT_SKIP (4).
->
-> In both cases log an informative message.
->
-> Signed-off-by: Simon Horman <horms@kernel.org>
-
-Are you running this as part of net selftests / CI which is why you
-need this? (And if yes, why excluding MPLS?)
-
-Alexis is working on converting tests like these into our BPF CI into
-test_progs, I'm not sure whether we need to make that more
-complex unless there is a compelling reason to exclude MPLS?
+> diff --git a/tools/testing/selftests/bpf/bpf_test_no_cfi/bpf_test_no_cfi.c b/tools/testing/selftests/bpf/bpf_test_no_cfi/bpf_test_no_cfi.c
+> index 948eb3962732..aa571ab3c6c6 100644
+> --- a/tools/testing/selftests/bpf/bpf_test_no_cfi/bpf_test_no_cfi.c
+> +++ b/tools/testing/selftests/bpf/bpf_test_no_cfi/bpf_test_no_cfi.c
+> @@ -56,7 +56,7 @@ static struct bpf_struct_ops test_no_cif_ops = {
+>   	.owner = THIS_MODULE,
+>   };
+>   
+> -static int bpf_test_no_cfi_init(void)
+> +static int __init bpf_test_no_cfi_init(void)
+>   {
+>   	int ret;
+>   
+> @@ -71,7 +71,7 @@ static int bpf_test_no_cfi_init(void)
+>   	return ret;
+>   }
+>   
+> -static void bpf_test_no_cfi_exit(void)
+> +static void __exit bpf_test_no_cfi_exit(void)
+>   {
+>   }
+Not that the memory saving matters too much in this context, but lets also
+annotate bpf_testmod_init and bpf_testmod_exit while at it?
 
 Thanks,
 Daniel
-
-> ---
->   tools/testing/selftests/bpf/test_tc_tunnel.sh | 22 ++++++++++++++++++++--
->   1 file changed, 20 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/test_tc_tunnel.sh b/tools/testing/selftests/bpf/test_tc_tunnel.sh
-> index 7989ec608454..71cddabc4ade 100755
-> --- a/tools/testing/selftests/bpf/test_tc_tunnel.sh
-> +++ b/tools/testing/selftests/bpf/test_tc_tunnel.sh
-> @@ -102,6 +102,20 @@ wait_for_port() {
->   	return 1
->   }
->   
-> +skip_mac() {
-> +	if [ "$1" = "mpls" ]; then
-> +		modprobe mpls_iptunnel || true
-> +		modprobe mpls_gso || true
-> +
-> +		if [ ! -e /proc/sys/net/mpls/platform_labels ]; then
-> +			echo -e "skip:    mpls tunnel not supported by kernel\n"
-> +			return # true
-> +		fi
-> +	fi
-> +
-> +	false
-> +}
-> +
->   set -e
->   
->   # no arguments: automated test, run all
-> @@ -125,6 +139,8 @@ if [[ "$#" -eq "0" ]]; then
->   	$0 ipv6 ip6vxlan eth 2000
->   
->   	for mac in none mpls eth ; do
-> +		! skip_mac "$mac" || continue
-> +
->   		echo "ip gre $mac"
->   		$0 ipv4 gre $mac 100
->   
-> @@ -193,6 +209,10 @@ readonly tuntype=$2
->   readonly mac=$3
->   readonly datalen=$4
->   
-> +if skip_mac "$mac"; then
-> +	exit 4 # KSFT_SKIP=4
-> +fi
-> +
->   echo "encap ${addr1} to ${addr2}, type ${tuntype}, mac ${mac} len ${datalen}"
->   
->   trap cleanup EXIT
-> @@ -278,8 +298,6 @@ elif [[ "$tuntype" =~ (gre|vxlan) && "$mac" == "eth" ]]; then
->   		  awk '/ether/ { print $2 }')
->   	ip netns exec "${ns2}" ip link set testtun0 address $ethaddr
->   elif [[ "$mac" == "mpls" ]]; then
-> -	modprobe mpls_iptunnel ||true
-> -	modprobe mpls_gso ||true
->   	ip netns exec "${ns2}" sysctl -qw net.mpls.platform_labels=65536
->   	ip netns exec "${ns2}" ip -f mpls route add 1000 dev lo
->   	ip netns exec "${ns2}" ip link set lo up
->
->
-
 
