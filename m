@@ -1,198 +1,134 @@
-Return-Path: <linux-kselftest+bounces-18918-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18919-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF94798E201
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 20:00:21 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCCD398E259
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 20:24:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D28101C22CDB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 18:00:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8662E284A4C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 18:24:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29C501D1751;
-	Wed,  2 Oct 2024 18:00:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F454212F0D;
+	Wed,  2 Oct 2024 18:24:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="epDG35Aj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HpLyxwDc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B937018B09
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Oct 2024 18:00:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E440F1D0BA2;
+	Wed,  2 Oct 2024 18:24:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727892016; cv=none; b=E6R4WvrD66m7IIm6cX8LmuVukcjbDM9N5zpd6JYe89JkWQL8ipp63qRU8D9o3tejusUclWlvOjfiRe9FQ92lw/iByLkHQI+jHoLqEMitqW+GbUHDvD3erzGOrXNVACLXEJbXpev3bJSuDTuabvg4T8+eznxu5hDX2oFEzTnOYZM=
+	t=1727893465; cv=none; b=PfkXg2L7vJHCMMjUPdVfs9UFvti754YU9W1Z3s2YUhItkZudMlUMlfJbmbm4i8g8u6q/xbpkaVYnqFaMEUiDhJ+xah9y0WpixFk1AIO8wuUPYJhrzFm3GBzJfVHmUz2kqN9wTusnYjiU6jcmSB8BaCPV/nMLHjI/FJ3VRGgUTWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727892016; c=relaxed/simple;
-	bh=VXOOUNdnAEhPqciXyVZksZiXTp0bQQtRDANzdI1gkBA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fr94gRWg5X4bgK28FOfbmPGBmsWC2hYqj71JQEEUtyX1mzuk4ZsFEhmmGTyf82XhAuQDhPSIGYrYb7RqTBfM8c093BlKKB1kTvvLBd3y3YHznK0sMw7opS3hpPksr0hPU6WIMOe//nqBzMeOworuMu7YFJDEugQkeMtPtI/AA/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=epDG35Aj; arc=none smtp.client-ip=209.85.166.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-82ce1cd202cso4864239f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Oct 2024 11:00:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1727892013; x=1728496813; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=h2ii6GPB8LbcDkdZtu/vEyeCXjQrhQgW3fBbVs7hZZg=;
-        b=epDG35AjWOTR3ZFt2UlUdU+I4KpFz+LfzyeqB6CdD/KXyxZ3f9DWXq33XR9yDNsN3D
-         4BsYR7Lvr9rL+DKqEK10qyqPk4rCJQ3uz60fZ+B/jtwWgwFFivuyiTQdyb0V/DakKww/
-         jGmgy0oroINrUs29ocEuxqfAYlFTjSxoH84nc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727892013; x=1728496813;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h2ii6GPB8LbcDkdZtu/vEyeCXjQrhQgW3fBbVs7hZZg=;
-        b=CW7nHsMUqepXMYXNjAKtRy8zr7GkBjxGjUnQry92vLjM8h+GBBKJviCoxYzalTHYvH
-         aP3rZzQ/r8uEkFafZm0MOgugdbe1RdGQ56zyOCStBpFYh2moWjQo9HgFWq5/i4hAHvGa
-         VCOsx3HQFpQYCeNnnOV6sVoJAWZH/1Dds4qzXFe7Q7NZDU5GlTxz5rLqzrX6GGwd6OUM
-         RWNzuSrj6DSsLCXIpxvRvu/n4snVnMr26ykqkfBng2UYzVR+aXChy07ldoagq0A2WxJA
-         kkMoDNtCVuUV0O+/hUDlGb3P8moDQCOBKaxt43X4lhaxC1cetaYVQehF+70MqZdzBf65
-         MRLA==
-X-Forwarded-Encrypted: i=1; AJvYcCXddE0UuOoLxC/UFVFA+8aO3KnhPOU+lFuN19oMutgAbJP7dBu0Lv0IySFZ6SXgykcnnXDmzy/gpZnD8r2pcdQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxocOe9Yay29ZoS933C2AGyYAcFWP8HXVnJTEui3eLDXKMQulHF
-	PzFl32bKD9WrZulZZ71XQM8cMpes7s+k2M53ZmTUEYFOV1dusyqDRO+rEWUv0dk=
-X-Google-Smtp-Source: AGHT+IFZG+oK4eRQhMYCZ+1EA/WngOtJ5AXbNw+nKvg+PAQy26l2faeXkJTKlKwWhIU/wZbdksh8gQ==
-X-Received: by 2002:a05:6e02:1a6c:b0:3a0:9026:3b65 with SMTP id e9e14a558f8ab-3a365954e63mr38914205ab.25.1727892012800;
-        Wed, 02 Oct 2024 11:00:12 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4d888835090sm3187850173.15.2024.10.02.11.00.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Oct 2024 11:00:11 -0700 (PDT)
-Message-ID: <0040a842-de9c-4f9c-9d61-c1bfbd010470@linuxfoundation.org>
-Date: Wed, 2 Oct 2024 12:00:10 -0600
+	s=arc-20240116; t=1727893465; c=relaxed/simple;
+	bh=Xn5r/F/y3n+IVpjGqNQ5xxlIqpNtWX913WJmrs1pThE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u7uWIBxI9rCW4y8mrtACrt3pke4a1pYL+uiRPDB/6k2cLiQnO3smwt7TASScNSkkfzsyuW25qkEMzbfPWj/UzpIbfFlKFaIz4tqJDof2KUWyIt03s4K5R6x/wiDAmbhJ3KszeGT3YiA1cHxzcSrjaIJsqDRrDa+SC2if9Oz2YjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HpLyxwDc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4524BC4CEC2;
+	Wed,  2 Oct 2024 18:24:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727893464;
+	bh=Xn5r/F/y3n+IVpjGqNQ5xxlIqpNtWX913WJmrs1pThE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HpLyxwDchSeqF4R9rk9zqytwWCTBbpujg7WnOnXPszioolkSCIFdMKzkLWZeF4ohP
+	 PssFFutZ0TqK/qn3q51d9EEuAw1pmYyCIWQjcAmufjUCC0l618/rZcYNJWnnizCg2G
+	 1CNq7+MXFCmw+6MEaE1iTjnB6QQMMH8g2IbrGHBviaxXC3DKarwixTHZrjcuZIVaF8
+	 uykmFydsc/VUQbPXgNyiEqKDEo6UDITxmpz1IbAxb3J0yd96UH6KQ5fJ2jmwinS3Lh
+	 bV3306MvladnEqvxq3o8HLRZ428Zey8544gcd+Ycx/nCEeiynVhb3l2MR99n+DXhMT
+	 0AeL/bD/KzbNQ==
+Date: Wed, 2 Oct 2024 19:24:12 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	David Spickett <david.spickett@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v13 16/40] KVM: arm64: Manage GCS access and registers
+ for guests
+Message-ID: <37fbc082-6bda-46e3-9ee7-9240b41f26fd@sirena.org.uk>
+References: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+ <20241001-arm64-gcs-v13-16-222b78d87eee@kernel.org>
+ <86bk0373nq.wl-maz@kernel.org>
+ <86a5fm7b4i.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] docs: dev-tools: Add documentation for the device focused
- kselftests
-To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
- Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
-Cc: kernel@collabora.com, linux-kselftest@vger.kernel.org,
- workflows@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernelci@lists.linux.dev,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20241001-kselftest-device-docs-v1-1-be28b70dd855@collabora.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241001-kselftest-device-docs-v1-1-be28b70dd855@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="f644fc4VKEnWPPLA"
+Content-Disposition: inline
+In-Reply-To: <86a5fm7b4i.wl-maz@kernel.org>
+X-Cookie: Know Thy User.
 
-On 10/1/24 09:43, Nícolas F. R. A. Prado wrote:
-> Add documentation for the kselftests focused on testing devices and
-> point to it from the kselftest documentation. There are multiple tests
-> in this category so the aim of this page is to make it clear when to run
-> each test.
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
-> This patch depends on patch "kselftest: devices: Add test to detect
-> missing devices" [1], since this patch documents that test.
-> 
-> [1] https://lore.kernel.org/all/20240928-kselftest-dev-exist-v2-1-fab07de6b80b@collabora.com
-> ---
->   Documentation/dev-tools/kselftest.rst       |  9 ++++++
->   Documentation/dev-tools/testing-devices.rst | 47 +++++++++++++++++++++++++++++
 
-The new file needs to be added to Documentation/dev-tools/index.rst
+--f644fc4VKEnWPPLA
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Docs make should have warned about this?
+On Wed, Oct 02, 2024 at 04:55:25PM +0100, Marc Zyngier wrote:
+> Marc Zyngier <maz@kernel.org> wrote:
 
->   2 files changed, 56 insertions(+)
-> 
-> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-> index f3766e326d1e..fdb1df86783a 100644
-> --- a/Documentation/dev-tools/kselftest.rst
-> +++ b/Documentation/dev-tools/kselftest.rst
-> @@ -31,6 +31,15 @@ kselftest runs as a userspace process.  Tests that can be written/run in
->   userspace may wish to use the `Test Harness`_.  Tests that need to be
->   run in kernel space may wish to use a `Test Module`_.
->   
-> +Documentation on the tests
-> +==========================
-> +
-> +For documentation on the kselftests themselves, see:
-> +
-> +.. toctree::
-> +
-> +   testing-devices
-> +
->   Running the selftests (hotplug tests are run in limited mode)
->   =============================================================
->   
-> diff --git a/Documentation/dev-tools/testing-devices.rst b/Documentation/dev-tools/testing-devices.rst
-> new file mode 100644
-> index 000000000000..ab26adb99051
-> --- /dev/null
-> +++ b/Documentation/dev-tools/testing-devices.rst
-> @@ -0,0 +1,47 @@
-> +.. SPDX-License-Identifier: GPL-2.0
-> +.. Copyright (c) 2024 Collabora Ltd
-> +
-> +=============================
-> +Device testing with kselftest
-> +=============================
-> +
+> > > +	if (!kvm_has_gcs(kvm))
+> > > +		kvm->arch.fgu[HFGxTR_GROUP] |= (HFGxTR_EL2_nGCS_EL0 |
+> > > +						HFGxTR_EL2_nGCS_EL1);
 
-Get rid of the extra blank line.
+> > Why are you still allowing the GCS instructions when GCS isn't
+> > enabled?
 
-> +
-> +There are a few different kselftests available for testing devices generically,
-> +with some overlap in coverage and different requirements. This document aims to
-> +give an overview of each one.
-> +
-> +Note: Paths in this document are relative to the kselftest folder
-> +(``tools/testing/selftests``).
-> +
-> +Device oriented kselftests:
-> +
-> +* Devicetree (``dt``)
-> +
-> +  * **Coverage**: Probe status for devices described in Devicetree
-> +  * **Requirements**: None
-> +
-> +* Error logs (``devices/error_logs``)
-> +
-> +  * **Coverage**: Error (or more critical) log messages presence coming from any
-> +    device
-> +  * **Requirements**: None
-> +
-> +* Discoverable bus (``devices/probe``)
-> +
-> +  * **Coverage**: Presence and probe status of USB or PCI devices that have been
-> +    described in the reference file
-> +  * **Requirements**: Manually describe the devices that should be tested in a
-> +    YAML reference file (see ``devices/probe/boards/google,spherion.yaml`` for
-> +    an example)
-> +
-> +* Exist (``devices/exist``)
-> +
-> +  * **Coverage**: Presence of all devices
-> +  * **Requirements**: Generate the reference (see ``devices/exist/README.rst``
-> +    for details) on a known-good kernel
-> +
-> +Therefore, the suggestion is to enable the error log and devicetree tests on all
-> +(DT-based) platforms, since they don't have any requirements. Then to greatly
-> +improve coverage, generate the reference for each platform and enable the exist
-> +test. The discoverable bus test can be used to verify the probe status of
-> +specific USB or PCI devices, but is probably not worth it for most cases.
-> 
-> ---
-> base-commit: cea5425829f77e476b03702426f6b3701299b925
-> change-id: 20241001-kselftest-device-docs-6c8a411109b5
-> 
-> Best regards,
+> Scratch that, they are NOPs when GCS isn't enabled, so there shouldn't
+> be any need for extra traps.
 
-thanks,
--- Shuah
+They are, though really they should UNDEF if GCS isn't there (which I
+had thought was what you were referencing here).  Equally we only have
+traps for a subset of GCS instructions and it's not like there aren't a
+whole bunch of untrappable extensions anyway so it's not clear it's
+worth the effort just for that.
+
+--f644fc4VKEnWPPLA
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmb9j8sACgkQJNaLcl1U
+h9AOWQf8DFoVOjrYp2ocafOH0wTbI6Jawr1ucPRjwYcn5sAGuTLywrEihNxOR42y
+l62ygvYkYtUWpgViQZqrQznNkYbdxg7O6dnvc4ywKu0iWo1KPVJFT0At7NZp6Pxy
+z8z/9OOYjxelIy33541t+XgjS3MxR3LA2PJSZd7ZOd4sHZMl7t1oLNi/s9HV0LAK
+/xkcFEkwnX1y0EndbVnntD9crF+J0pBIuO1z3wtywncxixscc0PgM3e1mvmTmYu6
+k62weouXEqlaiF5DZ6hHH4iHj8mPMYlnmvEz6Dsiev6PWcCm2hYrKiIO44ThjQJU
+OggiVTV8pqPtukHW/VmVN/VFPC5k6w==
+=YDrc
+-----END PGP SIGNATURE-----
+
+--f644fc4VKEnWPPLA--
 
