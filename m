@@ -1,138 +1,135 @@
-Return-Path: <linux-kselftest+bounces-18909-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18911-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 585F698DF2C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 17:30:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB54F98E019
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 18:04:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FC5C287551
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 15:30:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ACE66B22F31
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 15:56:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5FA91D0DCE;
-	Wed,  2 Oct 2024 15:29:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC6BA1D0B97;
+	Wed,  2 Oct 2024 15:55:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="b7Ci9Cpl";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="sI1fLzLo";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="T7uS2sD+";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="ADWlWGVs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k9RkyEgh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D662B1D0977;
-	Wed,  2 Oct 2024 15:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47B41940B0;
+	Wed,  2 Oct 2024 15:55:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727882945; cv=none; b=shTfLQqUQFICnjcYtpLmMLl89Uk66H/EKIpqCsKmVwUNsPSpmNKrm17WUvAmLPbUl0/RW1Lrub0FdECkDckdzSQjjoHPUzQXUlSBmtBYuvlhOPS9yQCIE9JT1rPNn4mCCM3BHZMn7HFwObLYGimKgW4kyTQH1La5w+z6mP+k9cU=
+	t=1727884529; cv=none; b=BFPWknSNz0C56zeMhAWndvH3DZSPm2aEK4v9QU9Dq89fdXYPOMuqhW3PQBA2cBhleMtc79U7Nb9ynC3eXlGRp2vnqce8AyMaU+1aWdqTstilldZEsEBnG6kL+ZilMt39sXE20FZ7GTxR9xuW8s7BpNVbkdG/5Z8OZ4sO1IgdRKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727882945; c=relaxed/simple;
-	bh=tQtFzWGWGLIeg3feHBfHQqmvpku6sKX2gfyV988jgs4=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=d89QNAHgP3Yms8HlFn6OUFugMTFRar84gAS8+sFCIysYuhBqqdWOV3TJ6cWRJg+jGbdzE4BmV4TD0DG+61HCGwuDaLnMRmk1N3jK5SPszEEEr3nW7BKOx+XNUk3NyDlKajfu9xpxCROb+9KS540yrmisNs/qdPr+huLP5Lg6ER4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=b7Ci9Cpl; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=sI1fLzLo; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=T7uS2sD+; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=ADWlWGVs; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from pobox.suse.cz (unknown [10.100.2.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id E7DB421C6F;
-	Wed,  2 Oct 2024 15:29:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1727882942; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YSgt+aBeUQZdrYwlwWCHJ4/usq6jRi1d3IFr2yfT9GI=;
-	b=b7Ci9CplGYIoV9VMgwQLW04YhSNjs56Z4tUNHL0L50Z18QS2KCry5+AqxcwDhYIC29tgt3
-	F+JWWJOENyezsc2/9wnodZC7SSeHLVF5C2ceJOnG9k2XGUruTIIxiB7zVA3rjBugf77DQA
-	MPjvr8Vec54ufCoRayMhDeKmUp23Z1g=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1727882942;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YSgt+aBeUQZdrYwlwWCHJ4/usq6jRi1d3IFr2yfT9GI=;
-	b=sI1fLzLoa0ce0nUtNEc/odU9L48dpWfg1G1YEK/lifFOLWiOuysimWbC8OzuUoip0XKP55
-	2ZUqTjiw+tqDiFAA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1727882941; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YSgt+aBeUQZdrYwlwWCHJ4/usq6jRi1d3IFr2yfT9GI=;
-	b=T7uS2sD+czDLy+KN1Igf/AhTWzSsKa28B0cCvlzyo6D7MBvHiC/x9myr3YzBAKBrT9y4i/
-	Qe+isxgz/JtitHthNeJicdoRwPqi4/F8Xly3//aLOVsUY+Ktw9cbc47Xnicfz9q7kEtJ7O
-	T/axdsyhf4UBXxjSlrJAzMOv3TIVwdI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1727882941;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YSgt+aBeUQZdrYwlwWCHJ4/usq6jRi1d3IFr2yfT9GI=;
-	b=ADWlWGVsm0pwzqBpPGn5T+mP4B4sMsHZ0FHZ9EO25rDsTNRkEHS8CJ1eB7nU9mbjri8pDe
-	s61P7q+MGdmJ83AQ==
-Date: Wed, 2 Oct 2024 17:29:01 +0200 (CEST)
-From: Miroslav Benes <mbenes@suse.cz>
-To: Michael Vetter <mvetter@suse.com>
-cc: linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org, 
-    linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] selftests: livepatch: test livepatching a kprobed
- function
-In-Reply-To: <20240930093308.65103-4-mvetter@suse.com>
-Message-ID: <alpine.LSU.2.21.2410021724040.23724@pobox.suse.cz>
-References: <20240930093308.65103-1-mvetter@suse.com> <20240930093308.65103-4-mvetter@suse.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+	s=arc-20240116; t=1727884529; c=relaxed/simple;
+	bh=27HUeDVHXOs+OLA9bA8uKhz/MQrgdafn0/iAATWL0mM=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BSqb7psb5hJOtY4wAztllP3xLFEOxLzysKVuyaLSvUA/xwhHrgSt4pOdG4ok2wM7w2YVsajBkzeu67SJzgQKyrGhT8equzW91kMPGRI3uS5LED/2CzApd8ej9aH+KNA/Ly8XZHkUIbOmsC+SKrfhj6GW9GSY8EyWiFBG+cA8SaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k9RkyEgh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79667C4CEC2;
+	Wed,  2 Oct 2024 15:55:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727884529;
+	bh=27HUeDVHXOs+OLA9bA8uKhz/MQrgdafn0/iAATWL0mM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=k9RkyEgh+Y/YS87nAPF1Ao6uiCfC2Ka09hloc087gdGHJXHVDYXjBmR2ceETg9ni6
+	 deks86zaFNOb6z1/RiWcTXvOF0U/JLOW08+SpteRcOBc5nPa3btIZx+FKc8OiNN7e+
+	 FEG/zba/f2YQ1sA2bH3Qf0Z5Uaro4RI1sXzvYN+fyrehRew3uav87f7UIuG26TbRhf
+	 SHQvJ+naVNRRTRSJjCOOekaQRb5r/ZRFkTQWCmGQOBDzHBWS9b9AJAbC35w5zYjD/x
+	 A1nX477cbgft4pfSE+Rw4NrdL8NdIF2MVohLnxdgNDdBRy1nbrrn5eOA9cIL3jvekY
+	 d3ZSOc2PuCwsA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1sw1hG-00H6P0-9r;
+	Wed, 02 Oct 2024 16:55:26 +0100
+Date: Wed, 02 Oct 2024 16:55:25 +0100
+Message-ID: <86a5fm7b4i.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	David Spickett <david.spickett@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v13 16/40] KVM: arm64: Manage GCS access and registers for guests
+In-Reply-To: <86bk0373nq.wl-maz@kernel.org>
+References: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+	<20241001-arm64-gcs-v13-16-222b78d87eee@kernel.org>
+	<86bk0373nq.wl-maz@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-X-Spam-Score: -4.30
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-0.991];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_ZERO(0.00)[0];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email]
-X-Spam-Flag: NO
-X-Spam-Level: 
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, corbet@lwn.net, akpm@linux-foundation.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, arnd@arndb.de, oleg@redhat.com, ebiederm@xmission.com, shuah@kernel.org, rick.p.edgecombe@intel.com, debug@rivosinc.com, ardb@kernel.org, Szabolcs.Nagy@arm.com, kees@kernel.org, hjl.tools@gmail.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, fweimer@redhat.com, brauner@kernel.org, thiago.bauermann@linaro.org, ross.burton@arm.com, david.spickett@arm.com, yury.khrustalev@arm.com, wilco.dijkstra@arm.com, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-Hi,
-
-On Mon, 30 Sep 2024, Michael Vetter wrote:
-
-> The test proves that a function that is being kprobed and uses a
-> post_handler cannot be livepatched.
+On Wed, 02 Oct 2024 01:24:25 +0100,
+Marc Zyngier <maz@kernel.org> wrote:
 > 
-> Only one ftrace_ops with FTRACE_OPS_FL_IPMODIFY set may be registered
-> to any given function at a time.
+> On Tue, 01 Oct 2024 23:58:55 +0100,
+> Mark Brown <broonie@kernel.org> wrote:
 > 
-> Signed-off-by: Michael Vetter <mvetter@suse.com>
+> > @@ -4714,6 +4735,10 @@ void kvm_calculate_traps(struct kvm_vcpu *vcpu)
+> >  		kvm->arch.fgu[HFGxTR_GROUP] |= (HFGxTR_EL2_nPOR_EL1 |
+> >  						HFGxTR_EL2_nPOR_EL0);
+> >  
+> > +	if (!kvm_has_gcs(kvm))
+> > +		kvm->arch.fgu[HFGxTR_GROUP] |= (HFGxTR_EL2_nGCS_EL0 |
+> > +						HFGxTR_EL2_nGCS_EL1);
+> > +
+> 
+> Why are you still allowing the GCS instructions when GCS isn't
+> enabled?
 
-since my memory is short, I wondered why you need a separate module to 
-register a kprobe for cmdline_proc_show() in vmlinux and why it cannot be 
-achieved through tracefs. So... the test ensures that 
-FTRACE_OPS_FL_IPMODIFY is exclusive. A kprobe sets FTRACE_OPS_FL_IPMODIFY 
-flag if and only if post_handler is not NULL which also indicates a 
-situation when regs->ip may be changed in that kprobe. This is something 
-which cannot be done in tracefs and hence the module.
+Scratch that, they are NOPs when GCS isn't enabled, so there shouldn't
+be any need for extra traps.
 
-It was not clear to me from the changelog.
+	M.
 
-Miroslav
+-- 
+Without deviation from the norm, progress is not possible.
 
