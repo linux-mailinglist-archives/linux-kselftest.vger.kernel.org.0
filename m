@@ -1,209 +1,151 @@
-Return-Path: <linux-kselftest+bounces-18923-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18924-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E56A298E2CC
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 20:47:29 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A35E98E374
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 21:29:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96BD02832AA
-	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 18:47:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CA021C22EF9
+	for <lists+linux-kselftest@lfdr.de>; Wed,  2 Oct 2024 19:29:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBC8F2141CD;
-	Wed,  2 Oct 2024 18:47:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5215C215F70;
+	Wed,  2 Oct 2024 19:29:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X9xbvJP7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sDyp8qd2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5831012C54D;
-	Wed,  2 Oct 2024 18:47:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A63718AE4;
+	Wed,  2 Oct 2024 19:29:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727894843; cv=none; b=q2uWz3n4O6JVzgJdzmw21IwoGjPoSOIJKZJR1RkQtep2lp/8YdFQveuXZ2w0WfaUsarLybRAiR+seBgVB89vFfnipj/0Mngn4Egu+0gXuW9nOQeh/8GQt0l9PfIoBmT8DgKzhdfkR7U3PWToVGWtY1MDgNzQ9UTftDwbZwY2xuQ=
+	t=1727897373; cv=none; b=g2jQdYFC9GaTu94KVR33UstNlT+pdpWO0KKYSrR4uAyW9zay4612iW389PdyBOnw8faoTygUARW2njvS7Ohhet4hLS2H1u+KfS8/1ArcPAbpZKBT2FUSkWKjqqCCe+2iYcRIxOX6sIvNig6kHPjPyzauqZr0KJQ75HYLqfF33jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727894843; c=relaxed/simple;
-	bh=YsSQ0UZQ42+HsQOmvt431Xeo+OAAE9Nt2Ug+vGbteyg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gpoDbj/zzTviLGTLNO/I2PrjmDzhfZyoUwBV/T0YQJHxOjQt0Ac5cc5iSpr26A3S0wWhAVjLj5MgqveZI1ExrHUoXfVoaPqQfAM6ZOB8EO5tMiV7l/YVodUAMxyq7A8WwBrArnkUVQDbg4X2l2bVAVdmfd6WZD1F6Es5ZnW0Vog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X9xbvJP7; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e25c5ed057dso113400276.3;
-        Wed, 02 Oct 2024 11:47:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1727894841; x=1728499641; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=laEBf5vHi4hjshp/PRiToF+zF79bzXAlmMUWVmfjsT4=;
-        b=X9xbvJP7O3HpYjDyTwTsl3y4rrR/Jl6y+WiVFSyxAsaZW4z5ez4y6/lL5MabGpLIeO
-         DYFNClpc1jyEa1sb53oeXBjS7DlydIV1ePM30M2LpFGDEJZlfoVudZdcOmizOf27GlAx
-         KUOmF/l4r2uBj3daUtQAOxaCyWeJbpXzJ17US0IIiUdU7TOXO2khfY8fT/8McHOJJcge
-         sK9qVYYJcDnU1hCICYfz/eidV52debishN9EdE9RaC6dlMMXmKV63f8Z2H7KAGJHGARb
-         1O57sko+nM1mdM6RO5vgQ6KOJZQPFmb7k6I9bm1p29m29cRAxxcPFbtKY25f/upyrTbx
-         7NMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727894841; x=1728499641;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=laEBf5vHi4hjshp/PRiToF+zF79bzXAlmMUWVmfjsT4=;
-        b=bdWWUQlyDkcbXGjO25yC9ViiF5kTBxHqIuHAj8OCNf2z10Ugn37PVQGjjsHmlV+gWb
-         fvk3Ikujm0vMmWnN8tnU4TtQCzeJI+KgJy/5Ncsj8j0EM+5NoOTdFTh+oXHBfNKN0OS7
-         WqlcXCTCBaoeVIJj8EwaHG1dabQYGHF8S/DD7fWaAltspjHrWK2GaS2QShcaJjYbTjiN
-         nFRKLAQObJeYCjjBKAt5VpfUVakY3z3a831AF/Dg0bhlvbj/i86x6OEZRulseitXMqpH
-         xJkeGMmlXHFOml5oXmQfcVe7Yug2ZENyvyS2McM7BSwFyPR+J54dvd72n2T5wGDvhJ1o
-         bnPA==
-X-Forwarded-Encrypted: i=1; AJvYcCXyJNBHnPITvQPPqsSiaSlAdZesckCaTer4PPUSr/s16ZnjJHqhTh9u5Xp3pF7+ZQ5VxzHim3/LrA7ZwLuM8L0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUZjUHZSFuZdpmZXpE1xTmQbaLEwkiP2sfevhMEdNKeRNmSioa
-	PO1tvD4IaJTCEmoREmaN9gDWU/4YRKuzayP2rv8ulit0Ex9sIGCp
-X-Google-Smtp-Source: AGHT+IFJ8hiGGrPFp1iTyqBASD6gCwMssBsiTgaftDz/GFSoMPb39u+qjfORwViKZyR/T1WN8nhYrw==
-X-Received: by 2002:a05:690c:3006:b0:6d5:7b2f:60a0 with SMTP id 00721157ae682-6e2a306e1afmr30904847b3.34.1727894841136;
-        Wed, 02 Oct 2024 11:47:21 -0700 (PDT)
-Received: from localhost (fwdproxy-frc-002.fbsv.net. [2a03:2880:21ff:2::face:b00c])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e2453981b0sm25664737b3.130.2024.10.02.11.47.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Oct 2024 11:47:20 -0700 (PDT)
-From: Joshua Hahn <joshua.hahnjy@gmail.com>
-To: tj@kernel.org,
-	mkoutny@suse.com
-Cc: cgroups@vger.kernel.org,
-	hannes@cmpxchg.org,
-	linux-kernel@vger.org,
+	s=arc-20240116; t=1727897373; c=relaxed/simple;
+	bh=8oiK5IU7Qhw1ttezR2j18nH046N1hl/vjVmhxTcZaFY=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GElZw0GaqiiZVz6kxyg8sXCUjhX6J0ZOMQgYQquuI0gaGVchdhwxmFgJgNzFtMENb/BKi5iezgj1o9ne+2nGZMVkuv8g8VKPdsedF5rNlC00nEJKrpDOWY6t6dhLXp0ICuGJYVi6uobJ6uAR5N1kXLyd+OINa8Pnuc91Pf5By7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sDyp8qd2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E90C4CEC2;
+	Wed,  2 Oct 2024 19:29:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727897372;
+	bh=8oiK5IU7Qhw1ttezR2j18nH046N1hl/vjVmhxTcZaFY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=sDyp8qd2iGUJbVxlIon1SZp0FoCrNFapbJG6H1XLZJstGoks821loMKlBgRtxS2pt
+	 FRMpM8u13XP2/wZpMtv0JlrO0jXiITzPaCiB72pKFeO+VvHW3+f1LgmulYoBNWB+Wc
+	 q5Ob/UPjxZeQZLg/1xo3xEkj9k47VllAkXb8ds4i7xTjY8QOSXI1pIQRZQc4ZAl7ol
+	 IrbDPhKzw5eOK+NaxfsunNLGLprzo+1j5t5Q0Sqmp/TzkTjPB9+Td2DEYrencPTYwG
+	 WkLUopQgg8gRDgGEaIYV6F8k4PHvmdqIkrvNGMYQZCkTapZ70VoT52gNc1EMmKbZGi
+	 pJC9UA2ziOg9w==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1sw52P-00H99U-5J;
+	Wed, 02 Oct 2024 20:29:29 +0100
+Date: Wed, 02 Oct 2024 20:29:28 +0100
+Message-ID: <868qv6717r.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	David Spickett <david.spickett@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
-	lizefan.x@bytedance.com,
-	shuah@kernel.org
-Subject: [PATCH v4 2/2] cgroup/rstat: Selftests for niced CPU statistics
-Date: Wed,  2 Oct 2024 11:47:17 -0700
-Message-ID: <20241002184717.153302-3-joshua.hahnjy@gmail.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241002184717.153302-1-joshua.hahnjy@gmail.com>
-References: <20241002184717.153302-1-joshua.hahnjy@gmail.com>
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v13 16/40] KVM: arm64: Manage GCS access and registers for guests
+In-Reply-To: <37fbc082-6bda-46e3-9ee7-9240b41f26fd@sirena.org.uk>
+References: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+	<20241001-arm64-gcs-v13-16-222b78d87eee@kernel.org>
+	<86bk0373nq.wl-maz@kernel.org>
+	<86a5fm7b4i.wl-maz@kernel.org>
+	<37fbc082-6bda-46e3-9ee7-9240b41f26fd@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, corbet@lwn.net, akpm@linux-foundation.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, arnd@arndb.de, oleg@redhat.com, ebiederm@xmission.com, shuah@kernel.org, rick.p.edgecombe@intel.com, debug@rivosinc.com, ardb@kernel.org, Szabolcs.Nagy@arm.com, kees@kernel.org, hjl.tools@gmail.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, fweimer@redhat.com, brauner@kernel.org, thiago.bauermann@linaro.org, ross.burton@arm.com, david.spickett@arm.com, yury.khrustalev@arm.com, wilco.dijkstra@arm.com, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-From: Joshua Hahn <joshua.hahn6@gmail.com>
+On Wed, 02 Oct 2024 19:24:12 +0100,
+Mark Brown <broonie@kernel.org> wrote:
+> 
+> [1  <text/plain; us-ascii (7bit)>]
+> On Wed, Oct 02, 2024 at 04:55:25PM +0100, Marc Zyngier wrote:
+> > Marc Zyngier <maz@kernel.org> wrote:
+> 
+> > > > +	if (!kvm_has_gcs(kvm))
+> > > > +		kvm->arch.fgu[HFGxTR_GROUP] |= (HFGxTR_EL2_nGCS_EL0 |
+> > > > +						HFGxTR_EL2_nGCS_EL1);
+> 
+> > > Why are you still allowing the GCS instructions when GCS isn't
+> > > enabled?
+> 
+> > Scratch that, they are NOPs when GCS isn't enabled, so there shouldn't
+> > be any need for extra traps.
+> 
+> They are, though really they should UNDEF if GCS isn't there (which I
+> had thought was what you were referencing here).  Equally we only have
+> traps for a subset of GCS instructions and it's not like there aren't a
+> whole bunch of untrappable extensions anyway so it's not clear it's
+> worth the effort just for that.
 
-Creates a cgroup with a single nice CPU hog process running.
-fork() is called to generate the nice process because un-nicing is
-not possible (see man nice(3)). If fork() was not used to generate
-the CPU hog, we would run the rest of the cgroup selftest suite as a
-nice process.
+If the encodings UNDEF when GCS is not implemented (i.e. they are not
+in the NOP space), then all trapable instructions should absolutely
+UNDEF (and yes, it is worth the effort, even if it is only to
+demonstrate that the architecture is sub-par).
 
-Signed-off-by: Joshua Hahn <joshua.hahnjy@gmail.com>
----
- tools/testing/selftests/cgroup/test_cpu.c | 75 +++++++++++++++++++++++
- 1 file changed, 75 insertions(+)
+So I expect the next version to handle traps for GCSPUSHX, GCSPOPX,
+GCSPUSHM, GCSSTR and GCSSTTR when GCS isn't enabled.
 
-diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
-index dad2ed82f3ef..201ce14cb422 100644
---- a/tools/testing/selftests/cgroup/test_cpu.c
-+++ b/tools/testing/selftests/cgroup/test_cpu.c
-@@ -8,6 +8,7 @@
- #include <pthread.h>
- #include <stdio.h>
- #include <time.h>
-+#include <unistd.h>
- 
- #include "../kselftest.h"
- #include "cgroup_util.h"
-@@ -229,6 +230,79 @@ static int test_cpucg_stats(const char *root)
- 	return ret;
- }
- 
-+/*
-+ * Creates a nice process that consumes CPU and checks that the elapsed
-+ * usertime in the cgroup is close to the expected time.
-+ */
-+static int test_cpucg_nice(const char *root)
-+{
-+	int ret = KSFT_FAIL;
-+	int status;
-+	long user_usec, nice_usec;
-+	long usage_seconds = 2;
-+	long expected_nice_usec = usage_seconds * USEC_PER_SEC;
-+	char *cpucg;
-+	pid_t pid;
-+
-+	cpucg = cg_name(root, "cpucg_test");
-+	if (!cpucg)
-+		goto cleanup;
-+
-+	if (cg_create(cpucg))
-+		goto cleanup;
-+
-+	user_usec = cg_read_key_long(cpucg, "cpu.stat", "user_usec");
-+	nice_usec = cg_read_key_long(cpucg, "cpu.stat", "nice_usec");
-+	if (nice_usec == -1)
-+		ret = KSFT_SKIP;
-+	if (user_usec != 0 || nice_usec != 0)
-+		goto cleanup;
-+
-+	/*
-+	 * We fork here to create a new process that can be niced without
-+	 * polluting the nice value of other selftests
-+	 */
-+	pid = fork();
-+	if (pid < 0) {
-+		goto cleanup;
-+	} else if (pid == 0) {
-+		struct cpu_hog_func_param param = {
-+			.nprocs = 1,
-+			.ts = {
-+				.tv_sec = usage_seconds,
-+				.tv_nsec = 0,
-+			},
-+			.clock_type = CPU_HOG_CLOCK_PROCESS,
-+		};
-+		char buf[64];
-+		snprintf(buf, sizeof(buf), "%d", getpid());
-+		if (cg_write(cpucg, "cgroup.procs", buf))
-+			goto cleanup;
-+
-+		/* Try to keep niced CPU usage as constrained to hog_cpu as possible */
-+		nice(1);
-+		hog_cpus_timed(cpucg, param);
-+		exit(0);
-+	} else {
-+		waitpid(pid, &status, 0);
-+		if (!WIFEXITED(status))
-+			goto cleanup;
-+
-+		user_usec = cg_read_key_long(cpucg, "cpu.stat", "user_usec");
-+		nice_usec = cg_read_key_long(cpucg, "cpu.stat", "nice_usec");
-+		if (!values_close(nice_usec, expected_nice_usec, 1))
-+			goto cleanup;
-+
-+		ret = KSFT_PASS;
-+	}
-+
-+cleanup:
-+	cg_destroy(cpucg);
-+	free(cpucg);
-+
-+	return ret;
-+}
-+
- static int
- run_cpucg_weight_test(
- 		const char *root,
-@@ -686,6 +760,7 @@ struct cpucg_test {
- } tests[] = {
- 	T(test_cpucg_subtree_control),
- 	T(test_cpucg_stats),
-+	T(test_cpucg_nice),
- 	T(test_cpucg_weight_overprovisioned),
- 	T(test_cpucg_weight_underprovisioned),
- 	T(test_cpucg_nested_weight_overprovisioned),
+I'm also pretty sure this is missing some form of sanitisation for
+PSTATE.EXLOCK, and looking at the pseudocode, you seem to be missing
+the handling of that bit on exception injection.
+
+	M.
+
 -- 
-2.43.5
-
+Without deviation from the norm, progress is not possible.
 
