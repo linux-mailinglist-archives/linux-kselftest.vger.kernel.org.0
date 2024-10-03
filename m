@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-18984-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18985-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF9A398F912
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 23:41:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A427398F9C7
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 00:21:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 908622822C4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 21:41:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 649112847DA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 22:21:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 766951C4606;
-	Thu,  3 Oct 2024 21:41:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5D3C1C9EDF;
+	Thu,  3 Oct 2024 22:21:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NGbAhFyY"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="V0Xv8QTZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C74D1BD01F
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Oct 2024 21:41:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0371824BD
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Oct 2024 22:21:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727991683; cv=none; b=OIMVJ7xfqtaEictQEhNDWtPWCPz2kRUYoqkXLclChkMcWGf+oKpJzaKcrJEVU24u1Pkw5T5/f6AAjYUKJYOK09Ne7yofvQFU58+s/NacnLB88aO0GYX8LUdvnPgEk/76l1XagWwBzE6B9LAcEVG+dEdAZv9zOghtTlOV2v/lUog=
+	t=1727994093; cv=none; b=n034xSBDkUjuas60RqF4wIQAT7gThJiRxY38A6nvsFfRozsYTbnKjc00JWOuaKKAhsA8rkLYaD77o2KlotkXBQA0krgoGx/kGLNkjvfIVHooMbpiYzCHEEsoc6Mr0K7k7a8fuUsxA6jyTOmAjs8bzn1VLKZJHmJJbF9UzZCikEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727991683; c=relaxed/simple;
-	bh=U3jI55LYF4f1QL7Iz9Tn/+ivZTTA7wcXjkL2Ry8cnJY=;
+	s=arc-20240116; t=1727994093; c=relaxed/simple;
+	bh=OHyoJebI7E/zmh77wDoBaOAYwoU9zA6n+0AgohtEJjo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tNOQo4j+MmGQ+f0hNcuPAr2c4XwbOTp9c0oGJxmDYQWDzG/OAd/ENQDOOin0utGa54doLpIHgeFseU+3lmiOg1RMuSVj+G6HtSX+0nwE9oKGVHDjMiUq5uNMzDGIykCoB/qYkGqG/HtTY7Gomo2xXCQ01BBjlw/FQyva1YwF6yQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NGbAhFyY; arc=none smtp.client-ip=209.85.166.178
+	 In-Reply-To:Content-Type; b=H+inpOB+3gcJkgmI17Gz5CL1Ud5TaKCRlWimm1EcXgzpRXTggGcwz7yJ7bIpCDwHmkyntelwxH+6+90dAW2E9xM38g4kZLDZDr+i5lBpgwth0MLLRNpAKDnDKe+KpTTt7X8Pho17KjUEW7bvA7Ku/aLLSLB953j4ZbFsycS6FLw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=V0Xv8QTZ; arc=none smtp.client-ip=209.85.166.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3a2761f1227so4685395ab.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Oct 2024 14:41:20 -0700 (PDT)
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-3a1a90bd015so5168805ab.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Oct 2024 15:21:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1727991679; x=1728596479; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1727994091; x=1728598891; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=16ODzNekwQkzCd2X6LG7F9NAs3ABPkRxl2t0mavCzOA=;
-        b=NGbAhFyYu2Zr4iYHD0JPnZtEZoKb+OH9VYLDN7kl9dKtaJrvqNYPmiryNVFBoSXA+Q
-         ioGAJ9//McNfJ7VuTh2s/hJBjc8ErHsM/nvl5LYxCB0PQyWzyz2iMOzH3m5jevxeBXiC
-         z95olLDubZp8A9UZlPIXX+Sxc4orlCYZuwUUs=
+        bh=hJYxjwKUfvb2gopYuUlZQJmzXvSJGMYWzcnS2aVlrTk=;
+        b=V0Xv8QTZUXwPFAmtAdSiUDo6pXfiiGrgQtR0m1Rgg1L8MydKxVpQ29QF9I47QrctWb
+         EfzmpDuTB7GMKuvOEo7CqIi193CNEpgiTrSsjqAyJEz+BLq+AiPnebcOmdl3+IJdlSDF
+         hkFiElKG1eMBIV2JUL9OBoIfHxZQACNGcpcbc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727991679; x=1728596479;
+        d=1e100.net; s=20230601; t=1727994091; x=1728598891;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=16ODzNekwQkzCd2X6LG7F9NAs3ABPkRxl2t0mavCzOA=;
-        b=ssbETF9Kh8Hoe+Ot1aIUu24IKyiC1MH7uTmBeA1HrK2e5kUqQSw0xegAcNtweX5WtB
-         Goc/phn9774vJogZkzGBpQi8iFkVwp3Cx4azBegvIgSrohybme+Pj3xj3+VioSAqbfTT
-         u+Ka7JFxGR/NO3vk6GPNazktjPXTMpUtqmzE20ILV1kED9fcUqZIG5sCQs5bu34kp8LY
-         c2hrhIgqbE+Ay6vCFECsp2nD172j2A7Q//gxD/qFkHRQjT1xWf/6a38IMtSbPRpwAowI
-         sZ+34AoHb6t/RZnr6/F3EHhzJUWRNtWP/gbM1+ZnrzX60U8YdjZdgAlrugfW76oWtpsJ
-         FD2A==
-X-Forwarded-Encrypted: i=1; AJvYcCUxjLkTEB/8NBNRJi+7qtW8J3gofsh2BHD1G1C8BKk6Yn+zFUto20dfxRazEgajQ02PlowVM5361u/mofs98Zo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyu+5YNU5bmYhuh1MAicqrCAcy6LAGCqoG0wQ2cElRf/beginD7
-	6+U+CvUs6P3qdq/u0aLY+jkIV3Tju0mA3FUWDNwsAXb6GltuZ/wc7iD20fAhDKE=
-X-Google-Smtp-Source: AGHT+IGhUXX1dOTI9CaPOgZqIoNBcNAM+IEVoCm2oGQ2NBH9fhl6ZhTI8PMx/s/seudoGkIb3tuLGw==
-X-Received: by 2002:a92:c269:0:b0:3a0:92e5:af68 with SMTP id e9e14a558f8ab-3a375b9aba9mr5251055ab.15.1727991679320;
-        Thu, 03 Oct 2024 14:41:19 -0700 (PDT)
+        bh=hJYxjwKUfvb2gopYuUlZQJmzXvSJGMYWzcnS2aVlrTk=;
+        b=jkfU6TX4ojn4LRW5TERbNLOOVFLbJU61eKsdyZL8jOH8ayedjiGvVfghAff33J9eqG
+         qFdX+e+ZltHGXXl37wIZjasmxOrZE9rNxlRhXUes2Ahnz6C/h73pDDJmcfy1wriDj1UP
+         ciHk9ZuYjm3hy93Q0+MSTBapeDnVI1BLvZPDKD6b6ZNB1A7z1fNa7dDA2YJzT8pCXxij
+         KMzFNHiAnQS5+D9BpaJmnsP6WrSDcg3Q3ooMVSZQI1V1Q5DYXnKRgKEgQRH579wg9W3a
+         LGYbeln32Xr1fU5+z/bv5sSwdkXwakGmdvB5bJuycu35T0P08Ih0+UALX4jvUWTS3G0h
+         Xt4A==
+X-Forwarded-Encrypted: i=1; AJvYcCUKcF7qfIiH10UvIyCT8obAIYQDgQaCXoH1sZFvgb6Nsoe4PGYlQ+kA7vLe9NRqOIijTMxJm3Xv6HkJY7B7axQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw+Ui2LuzRZxxumZxYG5IQGcykdaePlOECzvAcZ+o/lP5XP90o+
+	vne3P/8AEN7hzTez9517aFb+oIq/fiPifBtHgAXBdcMW7tlNEcV4jxTevsE0cwc=
+X-Google-Smtp-Source: AGHT+IH4SyskZQycld8bBGiJmBC0+c9KqMCxwLOnldKRcc0y3Vs98Md6YTu6gD/qYhBIntoXWcHPhg==
+X-Received: by 2002:a05:6e02:1c29:b0:3a2:6cd7:3250 with SMTP id e9e14a558f8ab-3a375a976bfmr6217515ab.10.1727994090657;
+        Thu, 03 Oct 2024 15:21:30 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4db55969139sm442308173.55.2024.10.03.14.41.18
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4db5585f252sm460260173.27.2024.10.03.15.21.29
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Oct 2024 14:41:18 -0700 (PDT)
-Message-ID: <2767f7da-355c-4abf-9eb7-b409e0c9ccab@linuxfoundation.org>
-Date: Thu, 3 Oct 2024 15:41:18 -0600
+        Thu, 03 Oct 2024 15:21:30 -0700 (PDT)
+Message-ID: <c491b362-5ba1-462b-a033-8a5de45c406a@linuxfoundation.org>
+Date: Thu, 3 Oct 2024 16:21:29 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,70 +73,54 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/1] Add KUnit tests for kfifo
-To: Vinicius Peixoto <vpeixoto@lkcamp.dev>,
- Diego Vieira <diego.daniel.professional@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow
- <davidgow@google.com>, Rae Moar <rmoar@google.com>,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Cc: n@nfraprado.net, andrealmeid@riseup.net, vinicius@nukelet.com,
- ~lkcamp/patches@lists.sr.ht, Shuah Khan <skhan@linuxfoundation.org>
-References: <20240903213649.21467-1-diego.daniel.professional@gmail.com>
- <04b041a2-d38c-4399-b4a5-1506b5a23e55@lkcamp.dev>
+Subject: Re: [PATCH] selftests: vDSO: fix compile error for
+ vdso_test_getrandom
+To: Yu Liao <liaoyu15@huawei.com>, "Jason A. Donenfeld" <Jason@zx2c4.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: shuah@kernel.org, liwei391@huawei.com, broonie@kernel.org,
+ linux-kselftest@vger.kernel.org, Xie XiuQi <xiexiuqi@huawei.com>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20240919111841.20226-1-liaoyu15@huawei.com>
+ <20ef1a1d-db00-44a7-a550-0b293d6e0d0e@linuxfoundation.org>
+ <0010d5c7-388e-d648-8320-83b9fd16e615@huawei.com>
+ <3e3507d8-f17c-4af8-83cb-682190f5bf67@csgroup.eu>
+ <CAHmME9p9iy+d2wx3vpD1XbVde9WvcJ1agTOqcNw4z=WABVn5XQ@mail.gmail.com>
+ <87684869-4565-4a4a-845f-4301242be52a@linuxfoundation.org>
+ <702f6d09-5216-eef5-299d-6445cfca8233@huawei.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <04b041a2-d38c-4399-b4a5-1506b5a23e55@lkcamp.dev>
+In-Reply-To: <702f6d09-5216-eef5-299d-6445cfca8233@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 9/21/24 17:15, Vinicius Peixoto wrote:
-> Hi all,
-> 
-> On 9/3/24 18:36, Diego Vieira wrote:
->> Hi all,
+On 9/23/24 20:57, Yu Liao wrote:
+> Hi,
+> On 2024/9/23 23:30, Shuah Khan wrote:
+>> On 9/20/24 09:31, Jason A. Donenfeld wrote:
+>>> Indeed probably <sched.h> is what's wanted here.
+>>>
 >>
->> This is part of a hackathon organized by LKCAMP [1], focused on writing
->> tests using KUnit. We reached out a while ago asking for advice on what would
->> be a useful contribution [2] and ended up choosing data structures that did
->> not yet have tests.
->>
->> This patch series depends on the patch that moves the KUnit tests on lib/
->> into lib/tests/ [3].
->>
->> This patch adds tests for the kfifo data structure, defined in
->> include/linux/kfifo.h, and is inspired by the KUnit tests for the doubly
->> linked list in lib/tests/list-test.c (previously at lib/list-test.c) [4].
->>
->> [1] https://lkcamp.dev/about/
->> [2] https://lore.kernel.org/all/Zktnt7rjKryTh9-N@arch/
->> [3] https://lore.kernel.org/all/20240720181025.work.002-kees@kernel.org/
->> [4] https://elixir.bootlin.com/linux/latest/source/lib/list-test.c
->>
->> ---
->> Changes in v2:
->>      - Add MODULE_DESCRIPTION()
->>      - Move the tests from lib/kfifo-test.c to lib/tests/kfifo_kunit.c
->>
->> Diego Vieira (1):
->>    lib/tests/kfifo_kunit.c: add tests for the kfifo structure
->>
->>   lib/Kconfig.debug       |  14 +++
->>   lib/tests/Makefile      |   1 +
->>   lib/tests/kfifo_kunit.c | 224 ++++++++++++++++++++++++++++++++++++++++
->>   3 files changed, 239 insertions(+)
->>   create mode 100644 lib/tests/kfifo_kunit.c
+>> Yu Liao, Please send v2 as per the review comments.
 >>
 > 
-> Gentle ping, is there any chance could we get some opinions on this? :-)
+> CLONE_NEWTIME was introduced in glibc-2.36, which was released in August 2022.
+> As Christophe mentioned, <sched.h> is already indirectly included by
+> <phread.h>, so this issue does not exist if glibc version higher than 2.36.
 > 
-> I know that this patch is quite big, plus LPC just ended and people are probably very busy, but we would really appreciate some feedback on this one. Thanks in advance!
+> Additionally, CLONE_NEWTIME was introduced in Linux 5.6 in March 2020, the
+> CLONE_ macros are also defined in <linux/sched.h>, which is part of the
+> kernel-header package.
+> 
+> My environment is Ubuntu 22.04 (Linux 5.15 + glibc 2.35), after upgrading to a
+> newer version of glibc, the issue appears to be resolved.
+> It seems to me that including <sched.h> might be unnecessary. I would greatly
+> appreciate your guidance on how best to handle this situation.
 > 
 
-Which repo is this based on?
+Please send me v2 with sched.h included explicitly. It is better do do so
+than having it come from <phread.h> indirectly.
 
 thanks,
--- Shuah
-
+-- SHuah
 
 
