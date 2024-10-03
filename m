@@ -1,168 +1,170 @@
-Return-Path: <linux-kselftest+bounces-18977-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18978-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA1F698F805
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 22:23:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A15F898F833
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 22:44:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A37882829E6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 20:23:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 130DDB21384
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 20:44:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F391AE850;
-	Thu,  3 Oct 2024 20:23:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 850BF1AD418;
+	Thu,  3 Oct 2024 20:44:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wZK2WmAb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CK8+l19S"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21391AAE05
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Oct 2024 20:23:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0D91A4E95;
+	Thu,  3 Oct 2024 20:44:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727987021; cv=none; b=uOb+bY5NwqJPdLS0epmqQkPgQQABcLRlSedJW5kz6ccU0RneRL6KFcX847M8RveXQ5bWavr/wm0FIMLE3EHQnKFCIIW77ey/QlhRZUFbiBL5ivt5e4FuJS6WlTB8MKCGuWWhONu24QVQu+5Z3Ywyz/rwpsQobq08cE5iO1Ri0xk=
+	t=1727988277; cv=none; b=GghfuyjPbOQtwIPBXHmq2anYDPnQoVP3ZnTb6IMLLIP44MeBim1Y3YTcCwkKkrBkHsQ8+RFXb9GO8yClHdVHIn74uOLIDNfmM5HSQQhBG3kpbA1Ee6gbE7JYXR0SzlQOAaAEbN8fosUY8zq4AvO2pQMBEzA1ZePuAi44mE5IO3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727987021; c=relaxed/simple;
-	bh=9VA3PqYMSXMSKGPh4htGFi/0/3JHfkNHId5Y+qOLBsQ=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=IXip1jCrwMpRVX/hRbWRZUWArsOAYwo4Cvrk1D5MOnYE7kYa4aJMK+B7Uw1ihssuVEvFIaPiWf8V6FMbB5vRm/dCfiRhHkMHyoNCGGAQFhj5TokZwTdatemtyt6xWNPWgXop94bqUBQ21T3XmfR5LQdKgtaTnT9DnmJ9gOupT28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wZK2WmAb; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-20b333a1871so15924535ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Oct 2024 13:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727987018; x=1728591818; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=bsrxlfd04OhEv+n0CPbWpU82YP7zkM1b/vn5t74+eZQ=;
-        b=wZK2WmAbTB9D61/WhdMyO4Kagh/+tP8+qhn2RSuZr2yGHruC4QBdPmR+da6d89x7MA
-         0FBAF9VTQmNJTsln7tZpvHfrLiri0PXSy+u2Znfl44RGXUs6+1EHJa4BzIQuMB5CIsbC
-         F1GqWpN356u7rmhos5Pd3yEEIpoWd8gHpFXf81nj9TM7omQZQJYM2bAX3MSo3ODDChtj
-         s7WJozxAwiOjSA2L/07k5uPV3ZS6MvZtZIyW6VAT8Hfxjk4BoAYU8cA1O0iZQtXS2s/h
-         iplxi8Azh4n2TH/irNoC2C9dphUd+ZvAt90hbDyZFkhASa7RKvJ+Hz1fV7RWVzx3VtX+
-         UkOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727987018; x=1728591818;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bsrxlfd04OhEv+n0CPbWpU82YP7zkM1b/vn5t74+eZQ=;
-        b=nNbOrvoQiJWEqZZ0TDokQr5D7qlbBXyFQYrERHCoMKpNUtM5Oiei/zjsT0zNIou4eE
-         NenkFjKjXJJjWo38e32KSMOPvt9VYa0c8hKtPmTeb8Nchv4U9oUo979u7hc+jNTq9SMG
-         DgDxN8AuwCKaW0lsYWCronESH0Gk1W/V9NIAbzNxVANOdhT9p65FxhECNNyUdb73/CPM
-         FdVq5NHxs/OadJ7ELwV5SR1+4XN0hf4PXL8J/nTrgXy9ukfQZa8DX/ZlELtldLpyBkFS
-         LCxlj5cZHvaKNHHnEgQo1WtGQDeXXQvT1RFoHI+Ge95kE0W5MTj9jJh2e2CZKMswP6rC
-         KRTg==
-X-Forwarded-Encrypted: i=1; AJvYcCXu8accvSyo2IHSZ/VmWDJO9Pih+WphVdoy//DmxZxOh402W942dUQ1KLUthK7wcGBseEMjFkj3nKFvXfNqEFQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOxn3XX9LVt+UmCNSwzFrgY5vygCj1bqpqkgQiaTZO/BNrF1vz
-	g3P7Zw/uesG33GNSu2iyhzyEh8+Jj1rZgFe1Kdn9lJQiHW81mIdbf8wlKcfv/YU4yrGCbjjsYTa
-	aonVN3jmA33eFk5tc8vtj7Q==
-X-Google-Smtp-Source: AGHT+IFpD6BWHM5h+33v0jB6Q6n9bSyUbGf9Hz29V0yy4Czzzteo1cbIqPdjyXE3Ss97ow9Hj9/CtpXBjfv/MY3knw==
-X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:146:b875:ac13:a9fc])
- (user=ackerleytng job=sendgmr) by 2002:a17:903:187:b0:20b:bd8d:427a with SMTP
- id d9443c01a7336-20bfe17d820mr65455ad.5.1727987017910; Thu, 03 Oct 2024
- 13:23:37 -0700 (PDT)
-Date: Thu, 03 Oct 2024 20:23:36 +0000
-In-Reply-To: <20240913151802822-0700.eberman@hu-eberman-lv.qualcomm.com>
- (message from Elliot Berman on Fri, 13 Sep 2024 15:26:30 -0700)
+	s=arc-20240116; t=1727988277; c=relaxed/simple;
+	bh=Z/NepnLQvC9zwa506iqymehwr9+AQKb4uIfYu9cH2E4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aeqwso1/8wwZVYuV9Furh3c/F1nzVuacqYyOd7BUZBAoZlmqC2PrDKAFgWzeKd8bm7GT85511PlSARMfl79WaxQIAAcr7GYjcpJKNd72hFRK6XtUu69QYMZ/XhgTdWTLkC+tPAeuw6zPL11bMDD1+s8y7ik7+Q3iehCSS6v6/pk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CK8+l19S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE95DC4CECC;
+	Thu,  3 Oct 2024 20:44:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727988276;
+	bh=Z/NepnLQvC9zwa506iqymehwr9+AQKb4uIfYu9cH2E4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=CK8+l19SonV9F/8OHmIX9AZnWPEyXlF6mWIMkcxFeE3SWnosoNiw/XeAufsSL6+s8
+	 //usIvCVUjRilpr/BCZiT9usSpw8AlJj3O20AzA4ejQaiEnd1rX7OJDsBCh6Mop8jY
+	 j+h6E+fINX9wpR6y/zBWkztO1pEj7y6akwL52FZ5CPahqMR2AH8+HGIcXOa9YbADcR
+	 HKIduhcjmMRpNhq6z0qukg0EdNz5jp9AWiBTyNE/x2+khKBiy6Ll09ePaAgG6D249X
+	 zZbJlYKJMI+fj8CNWQJGvCxMlpAeKsOz0tgcNw04UABAZ82EsylqzvoXcK9TCypJUL
+	 YSzIcaBS4Tw2A==
+Message-ID: <a15bd01b-dc78-4a74-ab71-42b14bb1cedd@kernel.org>
+Date: Thu, 3 Oct 2024 14:44:20 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <diqz34ldszp3.fsf@ackerleytng-ctop.c.googlers.com>
-Subject: Re: [RFC PATCH 15/39] KVM: guest_memfd: hugetlb: allocate and
- truncate from hugetlb
-From: Ackerley Tng <ackerleytng@google.com>
-To: Elliot Berman <quic_eberman@quicinc.com>
-Cc: tabba@google.com, roypat@amazon.co.uk, jgg@nvidia.com, peterx@redhat.com, 
-	david@redhat.com, rientjes@google.com, fvdl@google.com, jthoughton@google.com, 
-	seanjc@google.com, pbonzini@redhat.com, zhiquan1.li@intel.com, 
-	fan.du@intel.com, jun.miao@intel.com, isaku.yamahata@intel.com, 
-	muchun.song@linux.dev, mike.kravetz@oracle.com, erdemaktas@google.com, 
-	vannapurve@google.com, qperret@google.com, jhubbard@nvidia.com, 
-	willy@infradead.org, shuah@kernel.org, brauner@kernel.org, bfoster@redhat.com, 
-	kent.overstreet@linux.dev, pvorel@suse.cz, rppt@kernel.org, 
-	richard.weiyang@gmail.com, anup@brainfault.org, haibo1.xu@intel.com, 
-	ajones@ventanamicro.com, vkuznets@redhat.com, maciej.wieczor-retman@intel.com, 
-	pgonda@google.com, oliver.upton@linux.dev, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-fsdevel@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC] MAINTAINERS: split kselftest entry into 'framework' and
+ 'all'
+To: Jakub Kicinski <kuba@kernel.org>, shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org, workflows@vger.kernel.org
+References: <20241003142328.622730-1-kuba@kernel.org>
+Content-Language: en-US
+From: Shuah <shuah@kernel.org>
+In-Reply-To: <20241003142328.622730-1-kuba@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Elliot Berman <quic_eberman@quicinc.com> writes:
+On 10/3/24 08:23, Jakub Kicinski wrote:
+> The testing effort is increasing throughout the community.
+> The tests are generally merged into the subsystem trees,
+> and are of relatively narrow interest. The patch volume on
+> linux-kselftest@vger.kernel.org makes it hard to follow
+> the changes to the framework, and discuss proposals.
+> 
 
-> On Tue, Sep 10, 2024 at 11:43:46PM +0000, Ackerley Tng wrote:
->> If HugeTLB is requested at guest_memfd creation time, HugeTLB pages
->> will be used to back guest_memfd.
->> 
->> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
->>
->> <snip>
->>
->> +/**
->> + * Use the uptodate flag to indicate that the folio is prepared for KVM's usage.
->> + */
->>  static inline void kvm_gmem_mark_prepared(struct folio *folio)
->>  {
->>  	folio_mark_uptodate(folio);
->> @@ -72,13 +84,18 @@ static inline void kvm_gmem_mark_prepared(struct folio *folio)
->>  static int kvm_gmem_prepare_folio(struct kvm *kvm, struct kvm_memory_slot *slot,
->>  				  gfn_t gfn, struct folio *folio)
->>  {
->> -	unsigned long nr_pages, i;
->>  	pgoff_t index;
->>  	int r;
->>  
->> -	nr_pages = folio_nr_pages(folio);
->> -	for (i = 0; i < nr_pages; i++)
->> -		clear_highpage(folio_page(folio, i));
->> +	if (folio_test_hugetlb(folio)) {
->> +		folio_zero_user(folio, folio->index << PAGE_SHIFT);
->
-> Is (folio->index << PAGE_SHIFT) the right address hint to provide?
-> I don't think we can say the folio will be mapped at this address since
-> this value is an offset into the file.  In most cases, I believe it
-> won't be mapped anywhere since we just allocated it.
+I agree with you that the linux-kselftest mailing list is high
+volume list and it is hard to keep up with it.
+
+> Create a new ML for "all" of kselftests (tests and framework),
+> replacing the old list. Use the old list for framework changes
+> only. It would cause less churn to create a ML for just the
+> framework, but I prefer to use the shorter name for the list
+> which has much more practical use.
+> 
+
+I am not sure if the split it helps with reducing the work for
+maintainers and reviewers. We might end up watching both lists.
+I know I have to.
+
+It is hard enough with one list for people to cc the right people
+and the list itself when they send patches. I am concerned that with
+two lists it becomes harder.
+
+selftests have grown year after year and we have about 109 subdirs
+under selftests as of 6.12.
+  
+Some of these are high volume, active, and longer term citizens of
+selftests: net, mm, and bpf. Developers and maintainers from these
+subsystems are very engaged in test development and using the tests
+for their development activities. This also includes they fit into
+the selftest common infrastructure or core.
+
+These are the subsystems that don't require my attention as much to
+make sure builds and installs are working correctly. These tests
+have been around a long time and the problems if any were are ironed
+out. I sanity check the Makefile changes and if there is new test that
+gets added.
+
+There are several other subsystems that aren't highly active. I take
+these patches through my tree. Whenever a new subsystem/directory gets
+added, I review to make sure Makefile that anchors the test to selftest
+core is correct.
+
+Most subsystems' test patches get reviewed by their developers which
+is how it should be. The tests should be reviewed by developers
+and maintainers in those subsystems.
+
+Can we solve the problem of hard to follow the changes to the framework,
+and discuss proposals another way?
+
+- Naming convention selftests/core for core/common framework patches
+   We have to get people to do this. New ML has the same issue of getting
+   people to use the right ML.
 
 
-vaddr in folio_zero_user(folio, vaddr) is eventually passed to
-clear_user_page(). clear_user_page() uses vaddr to clean up dcaches on
-some architectures, according to Documentation/core-api/cachetlb.rst.
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> Posting as an RFC because we need to create the new ML.
+> 
+> CC: shuah@kernel.org
+> CC: linux-kselftest@vger.kernel.org
+> CC: workflows@vger.kernel.org
+> ---
+>   MAINTAINERS | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c27f3190737f..9a03dc1c8974 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -12401,6 +12401,18 @@ S:	Maintained
+>   Q:	https://patchwork.kernel.org/project/linux-kselftest/list/
+>   T:	git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
+>   F:	Documentation/dev-tools/kselftest*
+> +F:	tools/testing/selftests/kselftest/
+> +F:	tools/testing/selftests/lib/
+> +F:	tools/testing/selftests/lib.mk
+> +F:	tools/testing/selftests/Makefile
+> +F:	tools/testing/selftests/*.sh
+> +F:	tools/testing/selftests/*.h
 
-In this patch series, folio_zero_user() is used in 2 places:
+I would add these somehow to core/framework. Some of the
+issues CI runs into require fixes to individual test makefiles.
 
-+ kvm_gmem_prepare_folio()
-+ kvm_gmem_fault()
+selftests/*testdirs*/Makefile
 
-folio->index is valid by the time folio_zero_user() is called in
-kvm_gmem_prepare_folio(), because when kvm_gmem_prepare_folio() is called, the
-folio is already in the filemap, and folio->index is set when the folios is
-added to the filemap.
+If we do decide on creating two lists, I would prefer creating
+an alias for exiting linux-kselftest to linux-kselftest-all
+and then create a new list kselftest-core
 
-In kvm_gmem_fault(), kvm_gmem_get_folio() also returns a folio in the filemap
-and so folio->index is valid by the tiem folio_zero_user() is called.
+> +
+> +KERNEL SELFTEST TESTS
+> +M:	Shuah Khan <shuah@kernel.org>
+> +M:	Shuah Khan <skhan@linuxfoundation.org>
+> +L:	linux-kselftest-all@vger.kernel.org
+> +S:	Maintained
+>   F:	tools/testing/selftests/
+>   
+>   KERNEL SMB3 SERVER (KSMBD)
 
-Hence in both cases where folio_zero_user() is called, folio->index <<
-PAGE_SHIFT returns the offset in the file.
+thanks,
+-- Shuah
 
-In hugetlb's fallocate, the offset within the file is passed in the call to
-folio_zero_user(), which is why the offset within the file was used here.
-
-In the next revision I will refactor this to something like
-kvm_gmem_prepare_folio_shared() and kvm_gmem_prepare_folio_private().
-
-In kvm_gmem_prepare_folio_private(), folio->index << PAGE_SHIFT can still be
-passed as addr_hint to align with HugeTLB. When being prepared as a private
-folio, the folio will be mapped by KVM: addr_hint won't matter since this folio
-isn't going to be mapped into userspace. If the folio was previously used as a
-shared page, unmapping would have flushed the dcache.
-
-In kvm_gmem_prepare_folio_shared(), the folio will subsequently be mapped and
-vmf->real_address should be passed as addr_hint.
-
-Thanks for this question!
 
