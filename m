@@ -1,150 +1,150 @@
-Return-Path: <linux-kselftest+bounces-18966-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18967-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 275A898F1B3
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 16:41:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5C3598F1D6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 16:51:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA5AB1F22455
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 14:41:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6EBE1C20BBA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 14:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7367819F424;
-	Thu,  3 Oct 2024 14:41:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 783B71A0716;
+	Thu,  3 Oct 2024 14:51:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="K87whl/U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SozEYIMN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A7E19F412;
-	Thu,  3 Oct 2024 14:41:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370E81E52C;
+	Thu,  3 Oct 2024 14:51:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727966482; cv=none; b=Jz37GXJtkQDCmygqNUWHR3hB0diFheeTcBMZmBnX4m/vMc68WMFEiVebiWRk8d6EaIKwkzPpcZImZrWEkRdPfcS6Uxc4+lWg3o1R7eGZtBTf1uIzeZS32a0Z6fvkrgbsBZQJZs90wN2JGy3bfUANM5kV0D72GY5rcVvkwubKVNE=
+	t=1727967062; cv=none; b=TM4Rc2uAhBet7HBW+6ObcM61SW/+oKNpivI3LrGTrt76jgg3yGmmsoacfj8cOY2n2p5YV05o2avwGl4Uy3lJv0IFxqsYzdD+kC7quHBHVu6OVdzUp+9P9q6pDDqsA/sauCa7InCfeuewF2fAo5IiE7CYkvTNJrtRMvBTOPM+ZX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727966482; c=relaxed/simple;
-	bh=3KUgYZAvBROUVRlj9xA2dwDZBFvPABlTt1AcVlOUlXo=;
+	s=arc-20240116; t=1727967062; c=relaxed/simple;
+	bh=84mxqz11Cs3IrhMMq/BoLGimGyYEOQcc4TuOpIDegpo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JPZ3YUxA8dCErl3QbbzWs9xqyVIiZXPt5Z6zvZW8MUIqsZJJzkVVOGMHWElJ7kGShZXZnzptwVFz6d9WSv/tpXSBfLs9yHIdyug9sNGn6h+nCUkGE3I7Nt/7pAv9PVyF6BmEznw2hJ3EX6mG4fQtKguLiDtd/nKIYaask80e/i0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=K87whl/U; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1727966477;
-	bh=3KUgYZAvBROUVRlj9xA2dwDZBFvPABlTt1AcVlOUlXo=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=sAQGUBI7arMhkQd2/JSBXZQJ8ZWp4giunLbB0QyuOdHprQ+9Gu50iqD0D2GXpWFd+C6IXGsNqr/L+VahvNTOXLxKDhRq7l+Xh+R5Y0z/71W3iLIK5rUcsC7QIgLXGAHW5rsskQxFiHktSfwMQUR5neaZZl9y/0KD8/sP2QXldUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SozEYIMN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E93DC4CEC5;
+	Thu,  3 Oct 2024 14:50:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727967061;
+	bh=84mxqz11Cs3IrhMMq/BoLGimGyYEOQcc4TuOpIDegpo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=K87whl/UPgzHZr6nvDL/vuqKx814CKy7hkJumknnGce9dCIjhik4v+dIMtXQybjPq
-	 g1LTU3JFFRJHzEscbD7fO5rzyxZ523HCqxXBREmUknoWVE8wlMFQo37Wm3aYOFdfai
-	 vPuc2gxk9jJKcFWnodnS525rh5AQCsxaktnz/CRVN6AIwFqNzi1WeX+wjJNFkN2++U
-	 XQyL5FsdPu7zzepnx+TJHRPft6ciayl9HhaKhixD6jp5dgMO6ymb0/PZB/Wb7ZdSdJ
-	 Rl08qZuweqXXyWXpGtPaAvnzF/PT5KYZkctKDcm3uk79NzO9QL6GamnNtgbqEutg02
-	 2Uf0cCTO65hdA==
-Received: from notapiano (pool-100-2-116-133.nycmny.fios.verizon.net [100.2.116.133])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 3769D17E35FD;
-	Thu,  3 Oct 2024 16:41:16 +0200 (CEST)
-Date: Thu, 3 Oct 2024 10:41:13 -0400
-From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	kernel@collabora.com, linux-kselftest@vger.kernel.org,
-	workflows@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernelci@lists.linux.dev
-Subject: Re: [PATCH] docs: dev-tools: Add documentation for the device
- focused kselftests
-Message-ID: <ef428a44-783c-43c3-81c6-9abf88ae8949@notapiano>
-References: <20241001-kselftest-device-docs-v1-1-be28b70dd855@collabora.com>
- <0040a842-de9c-4f9c-9d61-c1bfbd010470@linuxfoundation.org>
+	b=SozEYIMNfQdA08ap8zdn8koBK0e5WTFzbIvCrwSxzNz2okoVA4Jx2ISGiwZcQMrUP
+	 /TLWP6uF2cb6g0RNpjG4GheIE3lAb32d74kKnEgOKsiDOPJe0zDlVAmWLdr2dGh8lk
+	 U9TRTmA/9PqNPDvOaDo7Szldk08hT7tOyKoM0RvAYRBqtvmtNRpoEhRJ1vTST8kSbp
+	 8kePx2BdLGQOLdH2pvbKe5TaKxhNT1zvBzqboN5sDp6/ze1cLtrOXfBr55ZZAuxDw0
+	 xK/xXsog4yA9O6+RT0K+o4ID+cG6v8tIPPKVpIDa0N4xb6B6bS3JHGF5xok5wdLF1A
+	 +oqqmKo+tGMiw==
+Date: Thu, 3 Oct 2024 15:50:47 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	David Spickett <david.spickett@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v13 16/40] KVM: arm64: Manage GCS access and registers
+ for guests
+Message-ID: <1ec14d13-7db6-4642-a14b-db8ae362e594@sirena.org.uk>
+References: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+ <20241001-arm64-gcs-v13-16-222b78d87eee@kernel.org>
+ <86bk0373nq.wl-maz@kernel.org>
+ <86a5fm7b4i.wl-maz@kernel.org>
+ <37fbc082-6bda-46e3-9ee7-9240b41f26fd@sirena.org.uk>
+ <868qv6717r.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Hfl6icctJG+FIkDo"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0040a842-de9c-4f9c-9d61-c1bfbd010470@linuxfoundation.org>
+In-Reply-To: <868qv6717r.wl-maz@kernel.org>
+X-Cookie: I'm into SOFTWARE!
 
-On Wed, Oct 02, 2024 at 12:00:10PM -0600, Shuah Khan wrote:
-> On 10/1/24 09:43, Nícolas F. R. A. Prado wrote:
-> > Add documentation for the kselftests focused on testing devices and
-> > point to it from the kselftest documentation. There are multiple tests
-> > in this category so the aim of this page is to make it clear when to run
-> > each test.
-> > 
-> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> > ---
-> > This patch depends on patch "kselftest: devices: Add test to detect
-> > missing devices" [1], since this patch documents that test.
-> > 
-> > [1] https://lore.kernel.org/all/20240928-kselftest-dev-exist-v2-1-fab07de6b80b@collabora.com
-> > ---
-> >   Documentation/dev-tools/kselftest.rst       |  9 ++++++
-> >   Documentation/dev-tools/testing-devices.rst | 47 +++++++++++++++++++++++++++++
-> 
-> The new file needs to be added to Documentation/dev-tools/index.rst
-> 
-> Docs make should have warned about this?
 
-There is no warning. I have added this new document in a new toctree in the
-kselftest.rst, as you can see in the hunk below.
+--Hfl6icctJG+FIkDo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Since this new page is specific to kselftest, I think listing it on the
-kselftest page makes the most sense and will make it easier to find.
+On Wed, Oct 02, 2024 at 08:29:28PM +0100, Marc Zyngier wrote:
+> Mark Brown <broonie@kernel.org> wrote:
 
-Do you want the new file to be listed in both places (ie kselftest.rst and
-index.rst)? It will show up in the index.rst next to kselftest rather than
-inside it.
+> > They are, though really they should UNDEF if GCS isn't there (which I
+> > had thought was what you were referencing here).  Equally we only have
+> > traps for a subset of GCS instructions and it's not like there aren't a
+> > whole bunch of untrappable extensions anyway so it's not clear it's
+> > worth the effort just for that.
 
-Another option would be to do like kunit and create a directory for kselftest
-and have an index.rst there to point to both the current kselftest.rst and the
-new document. Structure-wise that would probably be the best approach.
+> If the encodings UNDEF when GCS is not implemented (i.e. they are not
+> in the NOP space), then all trapable instructions should absolutely
+> UNDEF (and yes, it is worth the effort, even if it is only to
+> demonstrate that the architecture is sub-par).
 
-> 
-> >   2 files changed, 56 insertions(+)
-> > 
-> > diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-> > index f3766e326d1e..fdb1df86783a 100644
-> > --- a/Documentation/dev-tools/kselftest.rst
-> > +++ b/Documentation/dev-tools/kselftest.rst
-> > @@ -31,6 +31,15 @@ kselftest runs as a userspace process.  Tests that can be written/run in
-> >   userspace may wish to use the `Test Harness`_.  Tests that need to be
-> >   run in kernel space may wish to use a `Test Module`_.
-> > +Documentation on the tests
-> > +==========================
-> > +
-> > +For documentation on the kselftests themselves, see:
-> > +
-> > +.. toctree::
-> > +
-> > +   testing-devices
-> > +
-> >   Running the selftests (hotplug tests are run in limited mode)
-> >   =============================================================
-> > diff --git a/Documentation/dev-tools/testing-devices.rst b/Documentation/dev-tools/testing-devices.rst
-> > new file mode 100644
-> > index 000000000000..ab26adb99051
-> > --- /dev/null
-> > +++ b/Documentation/dev-tools/testing-devices.rst
-> > @@ -0,0 +1,47 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +.. Copyright (c) 2024 Collabora Ltd
-> > +
-> > +=============================
-> > +Device testing with kselftest
-> > +=============================
-> > +
-> 
-> Get rid of the extra blank line.
+Yes, see DDI0487 K.a C5.9.  If you're concerned about being unable to
+generate UNDEFs there's a rather large set of existing extensions where
+that's not possible, most of the hwcaps in the hwcap selftest that don't
+set sigill_reliable but do have a SIGILL generator for a start.
 
-Ack.
+> So I expect the next version to handle traps for GCSPUSHX, GCSPOPX,
+> GCSPUSHM, GCSSTR and GCSSTTR when GCS isn't enabled.
 
-Thanks,
-Nícolas
+OK, I already had that change locally after your first message.
+
+> I'm also pretty sure this is missing some form of sanitisation for
+> PSTATE.EXLOCK, and looking at the pseudocode, you seem to be missing
+> the handling of that bit on exception injection.
+
+Ah, yes - I think I see the missing exception injection handling in
+enter_exception64().  I'm not seeing what you're referencing with
+sanitisation though, could you give me some more specific pointers
+please?
+
+--Hfl6icctJG+FIkDo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmb+r0YACgkQJNaLcl1U
+h9CPnwf/RsvoCd86wK5IpYW+I+BQekRext2o88ILr987SA+imxBsKq7L8n9hdvkg
+XOQxpyooxGUM9SkA9nuEFp0h5XNzoKf9AgiI+7lypHe0Nr07zzVdh4oq/A5WuiKB
+v231xK6ewa2AEAEvwwYxzafSbmn7fU0Cbjg1+ioSRCNWAa5XVA8rEFJX8ND6TVff
+pzx8UKtoFPltnc8jZHY/cPDTnXHvugmZiz/FC/9KDy/hCmuTCkYJBstD1zP9g3f0
+1e3X2QZ804cZ5n6MGJSpU3ReexcVxbVoXsdiZiV017zmN6qUMnjJnQJ/NknLUWdK
+80HXbpm8hN30vdK0zT5J7KSqtxLkzQ==
+=8W1g
+-----END PGP SIGNATURE-----
+
+--Hfl6icctJG+FIkDo--
 
