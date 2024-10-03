@@ -1,330 +1,216 @@
-Return-Path: <linux-kselftest+bounces-18959-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18960-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0045998EC32
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 11:20:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9CE198ECBC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 12:15:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6F52D1F22107
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 09:20:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C503B2303E
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 10:15:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCA15145B27;
-	Thu,  3 Oct 2024 09:20:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04A80149C54;
+	Thu,  3 Oct 2024 10:15:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="FigTZQoM"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="a3y8GoBY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB52B13CFB8;
-	Thu,  3 Oct 2024 09:20:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B89E1B969
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Oct 2024 10:15:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727947252; cv=none; b=u/YzBLsuykkHFvr06xICeb192wGLa9sUJGO0lgzFtNDW36WuXcYmT581DO9mGFawHtpMQdy4UZdD0DXk5q3wx9cBLrMWmCKQ05K3v1L03uUe0V+bAoux31uNmvroPhjbJvirnRpOorEuvHZ1c6FNY6gcSxAF0OKvtYccVIMnMyc=
+	t=1727950521; cv=none; b=lZOrEjLYX6VvmGZguQO8jHYLMkhk87mg/0aW5owayn0WrAVh/k8N5t7xtQsL8D4f9hewI8y11yYsYdpjKagJNWOW0Ge8p01ve6uoDHbDCDW874Ne6uOkzl0DUVUeHvXVG3JTlB55HVI91zMjFcN0dIg8zDSsoK8EmKk68LVKyNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727947252; c=relaxed/simple;
-	bh=NfQncgWPFyaHgbioFiexl7rGbC4z6BCOkL7xL3esQdc=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MojxLcWshv/xYsoKWne25ksbTBdrOK4/zORbfg2Q3+DwRzbpdnjIuGvMFow/usHH7rUmA52tWfqR/jRMfj11PNpKxnnwsqMqqSLUkao+AsJ7V19J2Bz9WSkXLr9dJ3w8kZTOcMbB7XPJWpwNDcCV0TTwJar9uvZLLeJM4oAZsf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=FigTZQoM; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4934WdWd015803;
-	Thu, 3 Oct 2024 09:20:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=Iz2rY8jbndLfHvEarCD5o9TP
-	fOlEtCcaQg9CpP6UU2w=; b=FigTZQoMJQYVoDUtUMrGmBTSnKLNmwy1Ue+hBmCf
-	62EdP8G4JlPKqreeQamiGiUEs1L4oSIQeZMsE5qH0rQIaF/U/L3ioRQTVEyk6IEJ
-	Qfs/gu2rv2SntUEPVgnwdlq6kFddATzDUhOe51w8JeYtng/wV4/UbRp5xeaIBrMS
-	6JhaSpmcdbGuJrEMHtIO4kDNuK5FOgHL/QuLW/e6lew+EiCssbgncNTfiJ28c49T
-	88DiyBdHOmr4eXuRuE964DYI8YyoWQxOJi1ff7NUjbYWEgeNFZcdq9ku1miFBP4n
-	97ZFaHF696KSZI963ddxoNUphOzhDSQJRu0c7bnXfyoftw==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 41x94hnx11-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 03 Oct 2024 09:20:46 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4939KdRq028362
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 3 Oct 2024 09:20:39 GMT
-Received: from hu-wasimn-hyd.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 3 Oct 2024 02:20:37 -0700
-Date: Thu, 3 Oct 2024 14:50:22 +0530
-From: Wasim Nazir <quic_wasimn@quicinc.com>
-To: Bjorn Andersson <andersson@kernel.org>
-CC: Shuah Khan <shuah@kernel.org>,
-        Mathieu Poirier
-	<mathieu.poirier@linaro.org>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-remoteproc@vger.kernel.org>
-Subject: Re: [PATCH v2] selftest: remoteproc: Add basic test for start/stop
- sequence
-Message-ID: <Zv5h1hQ/Ji8aJ/GI@hu-wasimn-hyd.qualcomm.com>
-References: <20240927112132.3927298-1-quic_wasimn@quicinc.com>
- <xee5pz7qha3nn2ldr6ogtikbrc23d4mrxabdfv6ujtbtj7fcch@whh726b6xlhc>
+	s=arc-20240116; t=1727950521; c=relaxed/simple;
+	bh=W/q391NOLcv4N9mlbQz9RJQksLSfpRms186k8UVJH4c=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=JasGlw2noAbufdDVczUH09XRHXbJ8TBovLXfIA7Ra5vZK5gRtaPqhbEixEuGOyU61reYKyE8DTttpFQb5QCYaRaBCUUQAxALjmkIRmJVp8nQwbL7+1kD+AQ8Cz5zAovhdu32Ze004sxGEl3F2HK9C30csOeOr+9djzBJ9Htiepg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--maheshb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=a3y8GoBY; arc=none smtp.client-ip=209.85.128.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--maheshb.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6d7124939beso11370297b3.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Oct 2024 03:15:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1727950519; x=1728555319; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=hHKdquS6rEAHEJhD2/T+ynunH+V8kyPoT7KF23CFusM=;
+        b=a3y8GoBYEUUmN0ipH1yRF5e6otP0uwaVzf+ITX/k2bky84yi6Wpnwg9vhhV2AEqRsR
+         VhKSZrxBugrWirlQP3pjTy5PEKCTaHHuI+y3tErZts6zo6T3rLGbfMq3WVO3IY1yMnP8
+         gxlJaw7womYP+V9v97n+j3mvID+c60atfPlanRGVdeElIWfiDd5X++szhUvlV2m6ST9c
+         Ox/PXcM90Qh19L28U8XWUIirO3ZtLC3Kk6EZOy68IbTXbsPg1A7Qi6MbTb7zNkrPMniJ
+         P6hQgZRahf5XG1JRm1+ZX4JiAaroC7kqbbxzoIHEyAABuz0juV9aLOLfGHjWyhMKlxeG
+         RzJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727950519; x=1728555319;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hHKdquS6rEAHEJhD2/T+ynunH+V8kyPoT7KF23CFusM=;
+        b=O8dS6CxLuGbQ1Ab4xjka1zd/EoiMLuSKFYvnd7oiGUY6jjUi2ATHyvYCc158xoV/3k
+         nEtnP7+q6no72Fg946nPlNJOPKlnYg8c6Y0e9Of9qPCVJsRwTAmWLvk2JNfC/pCs8SFA
+         we/yKnKF/g7LfKaUIhz98JxEZKQxbod7pqH5kz/+s57JRzusq1V2CNOhnRMmGUgBoAUc
+         BjkZTtb2VSR3E6yHc14gbpWoKJMO9aHb7i8yYFBk0BroCkZ30hyKyNrcY1xbXSmxB5WL
+         bgW6M5F9Q6YY3lcnDqhVWXkhoEl7pnI4D5U8jx89BrHIi6wWSGdj0dWexQ0WK/fPRDPI
+         LVRg==
+X-Forwarded-Encrypted: i=1; AJvYcCUHmuJ1nNPcMt2g9FggYKgDXd46JRBHbykhH6vhu8jcDgtjQNr1dF3tp0O2vVdPt9llA6Z6gzIL8KYRNgkSAkw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxzQ5F/9ZAyjmz+W4Uclsawa2qIgCMlaB6TgwT+O8zwvdLbVTyH
+	/dUf8L3axalWvmvMd965MALZaenx9v5w1rae7O015kXdzREguTSGdr2iGSZz6PY+L4qft0vpbhB
+	3aBzE3A==
+X-Google-Smtp-Source: AGHT+IHbTtVLF5lQRzT0cojiPwAXbALhrRqnHeQPHtnAhxKUugHPtymnjGPCwftIdoHQpZYJ1Eb0btP9KbgV
+X-Received: from coldfire.c.googlers.com ([fda3:e722:ac3:cc00:12b:2883:ac1c:9f5])
+ (user=maheshb job=sendgmr) by 2002:a05:6902:f08:b0:e16:4d66:982e with SMTP id
+ 3f1490d57ef6-e26383bed76mr15020276.5.1727950518812; Thu, 03 Oct 2024 03:15:18
+ -0700 (PDT)
+Date: Thu,  3 Oct 2024 03:15:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <xee5pz7qha3nn2ldr6ogtikbrc23d4mrxabdfv6ujtbtj7fcch@whh726b6xlhc>
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: HBJ4d3LoJv0pINwWfAn9YRDuscYOg8G6
-X-Proofpoint-ORIG-GUID: HBJ4d3LoJv0pINwWfAn9YRDuscYOg8G6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 phishscore=0
- mlxscore=0 malwarescore=0 mlxlogscore=999 priorityscore=1501
- impostorscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0 suspectscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2408220000 definitions=main-2410030067
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.46.1.824.gd892dcdcdd-goog
+Message-ID: <20241003101506.769418-1-maheshb@google.com>
+Subject: [PATCH net-next] selftest/ptp: update ptp selftest to exercise the
+ gettimex options
+From: Mahesh Bandewar <maheshb@google.com>
+To: Netdev <netdev@vger.kernel.org>, Kselftest <linux-kselftest@vger.kernel.org>
+Cc: Mahesh Bandewar <mahesh@bandewar.net>, Mahesh Bandewar <maheshb@google.com>, 
+	Shuah Khan <shuah@kernel.org>, Richard Cochran <richardcochran@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sun, Sep 29, 2024 at 10:03:23PM -0500, Bjorn Andersson wrote:
-> On Fri, Sep 27, 2024 at 04:51:32PM GMT, Wasim Nazir wrote:
-> > This test includes:
-> >     1) Start/stop test for each rproc instance sequencially
-> >     2) Start/stop test for all rproc instances concurrently
-> > 
-> 
-> This fails to describe the purpose of the patch. Provide a proper commit
-> mesasge.
-> 
-> In particular, I expect an argumentation for your test scheme. Will this
-> work across all remoteproc instances? Does it have any dependencies,
-> etc...
-As we are tesing only the core ops based on the availabe sysfs entries,
-it should work accross targets where remoteproc config is enabled & instances
-are available. Otherwise I am skipping the tests.
-Please correct me if I am missing anything here.
+With the inclusion of commit c259acab839e ("ptp/ioctl: support
+MONOTONIC{,_RAW} timestamps for PTP_SYS_OFFSET_EXTENDED") clock_gettime()
+now allows retrieval of pre/post timestamps for CLOCK_MONOTONIC and
+CLOCK_MONOTONIC_RAW timebases along with the previously supported
+CLOCK_REALTIME.
 
-I will try to elaborate purpose of the tests in next patch.
-> 
-> > Changes in v2:
-> > - Update commit message
-> > - Addressed start/stop flow
-> 
-> The changelog goes below the '---' line, adjacent to your diffstat -
-> which is missing from your patch. I don't know how you're sending these
-> patches, but your system is either configured weirdly or you're not
-> following my instructions on go/upstream.
-> 
-Will do the correction in next patch.
-> > 
-> > Signed-off-by: Wasim Nazir <quic_wasimn@quicinc.com>
-> > 
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index a77770cd96b8..02ebad5ae790 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -19596,6 +19596,7 @@ F:	Documentation/staging/remoteproc.rst
-> >  F:	drivers/remoteproc/
-> >  F:	include/linux/remoteproc.h
-> >  F:	include/linux/remoteproc/
-> > +F:	tools/testing/selftests/remoteproc/
-> > 
-> >  REMOTE PROCESSOR MESSAGING (RPMSG) SUBSYSTEM
-> >  M:	Bjorn Andersson <andersson@kernel.org>
-> > diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> > index b38199965f99..0c8a0f427d01 100644
-> > --- a/tools/testing/selftests/Makefile
-> > +++ b/tools/testing/selftests/Makefile
-> > @@ -82,6 +82,7 @@ TARGETS += proc
-> >  TARGETS += pstore
-> >  TARGETS += ptrace
-> >  TARGETS += openat2
-> > +TARGETS += remoteproc
-> >  TARGETS += resctrl
-> >  TARGETS += riscv
-> >  TARGETS += rlimits
-> > diff --git a/tools/testing/selftests/remoteproc/Makefile b/tools/testing/selftests/remoteproc/Makefile
-> > new file mode 100644
-> > index 000000000000..a84b3934fd36
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/remoteproc/Makefile
-> > @@ -0,0 +1,4 @@
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +TEST_PROGS := remoteproc_test.sh
-> > +
-> > +include ../lib.mk
-> > diff --git a/tools/testing/selftests/remoteproc/config b/tools/testing/selftests/remoteproc/config
-> > new file mode 100644
-> > index 000000000000..a5c237d2f3b4
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/remoteproc/config
-> > @@ -0,0 +1 @@
-> > +CONFIG_REMOTEPROC=y
-> > diff --git a/tools/testing/selftests/remoteproc/remoteproc_test.sh b/tools/testing/selftests/remoteproc/remoteproc_test.sh
-> > new file mode 100644
-> > index 000000000000..589368285307
-> > --- /dev/null
-> > +++ b/tools/testing/selftests/remoteproc/remoteproc_test.sh
-> > @@ -0,0 +1,134 @@
-> > +#!/bin/sh
-> > +# SPDX-License-Identifier: GPL-2.0
-> > +#
-> > +# Copyright (c) 2024 Qualcomm Innovation Center, Inc. All rights reserved.
-> > +#
-> > +
-> > +DIR="$(dirname $(readlink -f "$0"))"
-> > +
-> > +KTAP_HELPERS="${DIR}/../kselftest/ktap_helpers.sh"
-> > +if [ -e "$KTAP_HELPERS" ]; then
-> > +    . "$KTAP_HELPERS"
-> > +else
-> > +    echo -n "1..0 # SKIP $KTAP_HELPERS file not found"
-> > +    exit 4
-> > +fi
-> > +
-> > +RPROC_SYS=/sys/class/remoteproc
-> > +RPROC_SEQ_SLEEP=5
-> > +rproc_instances=
-> > +# Declare an array to save initial states of each instance
-> > +org_instance_to_state=""
-> > +num_tests=0
-> > +test_err=0
-> > +
-> > +check_error() {
-> > +	if [ $? -ne 0 ]; then
-> > +		test_err=$((test_err+1))
-> > +		ktap_print_msg "$@"
-> > +	fi
-> > +}
-> > +
-> > +rproc_stop_instances() {
-> > +	for instance in ${rproc_instances}; do
-> > +		rproc=${RPROC_SYS}/$instance
-> > +		rproc_name=$(cat $rproc/name)
-> > +		rproc_state=$(cat $rproc/state)
-> > +
-> > +		echo stop > "$rproc/state"
-> > +		check_error "$rproc_name state-stop failed at state $rproc_state"
-> > +	done
-> > +	sleep ${RPROC_SEQ_SLEEP}
-> > +}
-> > +
-> > +rproc_start_instances() {
-> > +	for instance in ${rproc_instances}; do
-> > +		rproc=${RPROC_SYS}/$instance
-> > +		rproc_name=$(cat $rproc/name)
-> > +		rproc_state=$(cat $rproc/state)
-> > +
-> > +		echo start > "$rproc/state"
-> > +		check_error "$rproc_name state-start failed at state $rproc_state"
-> > +	done
-> > +	sleep ${RPROC_SEQ_SLEEP}
-> > +}
-> > +
-> > +rproc_seq_test_instance_one() {
-> > +	instance=$1
-> > +	rproc=${RPROC_SYS}/$instance
-> > +	rproc_name=$(cat $rproc/name)
-> > +	rproc_state=$(cat $rproc/state)
-> > +	ktap_print_msg "Testing rproc sequence for $rproc_name"
-> > +
-> > +	# Reset test_err value
-> > +	test_err=0
-> > +
-> > +	# Begin start/stop sequence
-> > +	echo start > "$rproc/state"
-> > +	check_error "$rproc_name state-start failed at state $rproc_state"
-> > +
-> > +	sleep ${RPROC_SEQ_SLEEP}
-> > +
-> > +	echo stop > "$rproc/state"
-> > +	check_error "$rproc_name state-stop failed at state $rproc_state"
-> > +
-> > +	if [ $test_err -ne 0 ]; then
-> > +		ktap_test_fail "$rproc_name"
-> > +	else
-> > +		ktap_test_pass "$rproc_name"
-> > +	fi
-> > +}
-> > +
-> > +rproc_seq_test_instances_concurrently() {
-> > +	# Reset test_err value
-> > +	test_err=0
-> > +
-> > +	rproc_start_instances
-> > +
-> > +	rproc_stop_instances
-> > +
-> > +	if [ $test_err -ne 0 ]; then
-> > +		ktap_test_fail "for any of $rproc_instances"
-> > +	else
-> > +		ktap_test_pass "for all $rproc_instances"
-> > +	fi
-> > +}
-> > +
-> > +ktap_print_header
-> > +
-> > +if [ ! -d "${RPROC_SYS}" ]; then
-> > +	ktap_skip_all "${RPROC_SYS} doesn't exist."
-> > +	exit "${KSFT_SKIP}"
-> > +fi
-> > +
-> > +rproc_instances=$(find ${RPROC_SYS}/remoteproc* -maxdepth 1 -exec basename {} \;)
-> > +num_tests=$(echo ${rproc_instances} | wc -w)
-> > +if [ "${num_tests}" -eq 0 ]; then
-> > +	ktap_skip_all "${RPROC_SYS}/remoteproc* doesn't exist."
-> > +	exit "${KSFT_SKIP}"
-> > +fi
-> > +
-> > +# Total tests will be:
-> > +# 1) Seq tests for each instance sequencially
-> > +# 2) Seq tests for all instances concurrently
-> > +num_tests=$((num_tests+1))
-> > +
-> > +ktap_set_plan "${num_tests}"
-> > +
-> > +# Stop all instances
-> > +rproc_stop_instances
-> 
-> Will this not fail for remoteproc instances that aren't started
-> automatically?
-This is don't care case where I only intend to stop previous instances
-wherever applicable.
+This patch adds a command line option 'y' to the testptp program to
+choose one of the allowed timebases [realtime aka system, monotonic,
+and monotonic-raw).
 
-After this I am expecting that all instances will be in stop state so
-that I can test start/stop sequence. This is inline to the previous review comments.
+Signed-off-by: Mahesh Bandewar <maheshb@google.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Richard Cochran <richardcochran@gmail.com>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Jakub Kicinski <kuba@kernel.org>
+---
+ tools/testing/selftests/ptp/testptp.c | 62 ++++++++++++++++++++++++---
+ 1 file changed, 57 insertions(+), 5 deletions(-)
 
-I will add comments in code for further clarification.
+diff --git a/tools/testing/selftests/ptp/testptp.c b/tools/testing/selftests/ptp/testptp.c
+index 011252fe238c..58064151f2c8 100644
+--- a/tools/testing/selftests/ptp/testptp.c
++++ b/tools/testing/selftests/ptp/testptp.c
+@@ -146,6 +146,7 @@ static void usage(char *progname)
+ 		" -T val     set the ptp clock time to 'val' seconds\n"
+ 		" -x val     get an extended ptp clock time with the desired number of samples (up to %d)\n"
+ 		" -X         get a ptp clock cross timestamp\n"
++		" -y val     pre/post tstamp timebase to use {realtime|monotonic|monotonic-raw}\n"
+ 		" -z         test combinations of rising/falling external time stamp flags\n",
+ 		progname, PTP_MAX_SAMPLES);
+ }
+@@ -189,6 +190,7 @@ int main(int argc, char *argv[])
+ 	int seconds = 0;
+ 	int settime = 0;
+ 	int channel = -1;
++	clockid_t ext_clockid = CLOCK_REALTIME;
+ 
+ 	int64_t t1, t2, tp;
+ 	int64_t interval, offset;
+@@ -198,7 +200,7 @@ int main(int argc, char *argv[])
+ 
+ 	progname = strrchr(argv[0], '/');
+ 	progname = progname ? 1+progname : argv[0];
+-	while (EOF != (c = getopt(argc, argv, "cd:e:f:F:ghH:i:k:lL:n:o:p:P:sSt:T:w:x:Xz"))) {
++	while (EOF != (c = getopt(argc, argv, "cd:e:f:F:ghH:i:k:lL:n:o:p:P:sSt:T:w:x:Xy:z"))) {
+ 		switch (c) {
+ 		case 'c':
+ 			capabilities = 1;
+@@ -278,6 +280,21 @@ int main(int argc, char *argv[])
+ 		case 'X':
+ 			getcross = 1;
+ 			break;
++		case 'y':
++			if (!strcasecmp(optarg, "realtime"))
++				ext_clockid = CLOCK_REALTIME;
++			else if (!strcasecmp(optarg, "monotonic"))
++				ext_clockid = CLOCK_MONOTONIC;
++			else if (!strcasecmp(optarg, "monotonic-raw"))
++				ext_clockid = CLOCK_MONOTONIC_RAW;
++			else {
++				fprintf(stderr,
++					"type needs to be realtime, monotonic or monotonic-raw; was given %s\n",
++					optarg);
++				return -1;
++			}
++			break;
++
+ 		case 'z':
+ 			flagtest = 1;
+ 			break;
+@@ -566,6 +583,7 @@ int main(int argc, char *argv[])
+ 		}
+ 
+ 		soe->n_samples = getextended;
++		soe->clockid = ext_clockid;
+ 
+ 		if (ioctl(fd, PTP_SYS_OFFSET_EXTENDED, soe)) {
+ 			perror("PTP_SYS_OFFSET_EXTENDED");
+@@ -574,12 +592,46 @@ int main(int argc, char *argv[])
+ 			       getextended);
+ 
+ 			for (i = 0; i < getextended; i++) {
+-				printf("sample #%2d: system time before: %lld.%09u\n",
+-				       i, soe->ts[i][0].sec, soe->ts[i][0].nsec);
++				switch (ext_clockid) {
++				case CLOCK_REALTIME:
++					printf("sample #%2d: real time before: %lld.%09u\n",
++					       i, soe->ts[i][0].sec,
++					       soe->ts[i][0].nsec);
++					break;
++				case CLOCK_MONOTONIC:
++					printf("sample #%2d: monotonic time before: %lld.%09u\n",
++					       i, soe->ts[i][0].sec,
++					       soe->ts[i][0].nsec);
++					break;
++				case CLOCK_MONOTONIC_RAW:
++					printf("sample #%2d: monotonic-raw time before: %lld.%09u\n",
++					       i, soe->ts[i][0].sec,
++					       soe->ts[i][0].nsec);
++					break;
++				default:
++					break;
++				}
+ 				printf("            phc time: %lld.%09u\n",
+ 				       soe->ts[i][1].sec, soe->ts[i][1].nsec);
+-				printf("            system time after: %lld.%09u\n",
+-				       soe->ts[i][2].sec, soe->ts[i][2].nsec);
++				switch (ext_clockid) {
++				case CLOCK_REALTIME:
++					printf("            real time after: %lld.%09u\n",
++					       soe->ts[i][2].sec,
++					       soe->ts[i][2].nsec);
++					break;
++				case CLOCK_MONOTONIC:
++					printf("            monotonic time after: %lld.%09u\n",
++					       soe->ts[i][2].sec,
++					       soe->ts[i][2].nsec);
++					break;
++				case CLOCK_MONOTONIC_RAW:
++					printf("            monotonic-raw time after: %lld.%09u\n",
++					       soe->ts[i][2].sec,
++					       soe->ts[i][2].nsec);
++					break;
++				default:
++					break;
++				}
+ 			}
+ 		}
+ 
+-- 
+2.46.1.824.gd892dcdcdd-goog
 
-Thanks & Regards,
-Wasim
-> 
-> Regards,
-> Bjorn
-> 
-> > +
-> > +# Test 1
-> > +ktap_print_msg "Testing rproc start/stop sequence for each instance sequencially"
-> > +for instance in ${rproc_instances}; do
-> > +	rproc_seq_test_instance_one $instance
-> > +done
-> > +
-> > +# Test 2
-> > +ktap_print_msg "Testing rproc start/stop sequence for all instances concurrently"
-> > +rproc_seq_test_instances_concurrently
-> > +
-> > +# Restore all instances
-> > +rproc_start_instances
-> > +
-> > +ktap_finished
-> > --
-> > 2.46.1
-> > 
-> 
 
