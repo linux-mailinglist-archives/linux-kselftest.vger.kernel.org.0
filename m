@@ -1,183 +1,230 @@
-Return-Path: <linux-kselftest+bounces-18991-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18992-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1304D98FAC2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 01:43:45 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC24698FAFF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 01:48:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6960BB218D9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 23:43:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 19203B22B17
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 23:48:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD0DF1CF5CE;
-	Thu,  3 Oct 2024 23:43:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D0221D1743;
+	Thu,  3 Oct 2024 23:46:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="R6sGEK0S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F5/19+JC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544061CB308
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Oct 2024 23:43:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 689E81D07B5;
+	Thu,  3 Oct 2024 23:46:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727999018; cv=none; b=QsjjeUzXfHkVJqMo6W3RTAKmr0IdiSy2GyhxgRTJtpuY06dtW5p3fBQOJloM53FcJWsCnCHYlPmH3tbLLAAHQoEYaTVQO7sxItjsGtX/uEcevr5arxhl6BIIZvM4OFkXIEd38PS2H9aI/m3Sy/sz3h7oYSXT3crV52TdQnXi6FY=
+	t=1727999203; cv=none; b=LU2PAKJddXrTex3XWi0Ovw9ukpmkW64RJCrp75oVfp/MGYNfTKecCAh31KmxbVE/kDlj9hipLYGVQ5ibNFB6JoMMfd1sGOo39ffkzaeNSwH31b1gEDW5vOM4zSjWoQM8eeCPVvg/DHLVDQWfCxsdzJwJjE3DIm9S8GGi2YEkgXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727999018; c=relaxed/simple;
-	bh=5U29iZZFBxQGptPoLMifIvs/bpbj5DZBwz1fHxqdbD8=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=r8dSYRyOqWlxyp2MhgbPBXjp1PAt+PW5pdVl4CXxHqeno/bAk9CzRySNowF+lVUKLILiQlTzD+IDmwMKUl3f/8wyzbU4clyKr2VKuPlKNKd7QQyiBxsJAljm+ftqRzmAQImpobNwkDIy6Fx4hM53cy4m9q/9l3r2iHsNUzSiETw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=R6sGEK0S; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2e18b6cd304so1579906a91.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Oct 2024 16:43:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727999017; x=1728603817; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SN3dVjC5fB1CQSshX6WwUlOM21L2K4T7gTVUDpU5VO4=;
-        b=R6sGEK0SG4OOmzKed1UA7F7lPzL4KmkbrArDZb192L9hwUxy2xew76wDcibZdyIdow
-         bKKkP9r3jV82sI7qBZg8p3jBaFRgdsfm76/YTe/MYa27Di5bO8HcVKifYDDnz3tQm6uY
-         GzvO2/GuBaTRJMUCaGJr7BWP8B+07lLTeqbroj3coeQpqfvBxhZa56jaTqJXOcST2fzj
-         xLtkuidp+n0FWreMRXKGvLWheBGSYotgygi1cdvt91E6LzHdcDLt4Ag6aIJEqTt7BM6n
-         LaPPZDQWkAtW25g7mLgo9oiB6ogJpulukrd8DzBJl39EUTrK3nXh8aKUHfNt29/GGvRE
-         KCLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727999017; x=1728603817;
-        h=cc:to:from:subject:message-id:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SN3dVjC5fB1CQSshX6WwUlOM21L2K4T7gTVUDpU5VO4=;
-        b=W8YziBw59hnLKsXFjru17w/VLZNUduZcU9v1snwXzyummx1TmXWQEOotHZ6GWRpAdp
-         Pclm/wsr945IRJ2sv6oJCVXJCr8t11jp1oNYB3ycSzb0iLMMesQ9hcKM72+GRXxNQmZH
-         u0UBTTaT243lsPSXiZ7BuHOmEJJDaxgqXSaH18m35eElAw37u70vZWJFWDHuXTj/Nhp5
-         o5Uf5Ch5VnhJMUd1Uy3HZmdegLlxC5WlW3nxE8ZSOd/MrpJlxqL8gAE32duyKufUu+2V
-         L3N/ggKPcBXhdGM1USwIQsfnPS25OJfHePcVtTzD/RvqJQnBfKMVP9yZ6tKvGByKaOCH
-         uPpA==
-X-Forwarded-Encrypted: i=1; AJvYcCWB4SFlkB0cMUaodArGT4qaRDZ6VynHZdVNEdE4CL9sWiPtn9lkVpeM0WIB/6tfvqbys9oxx0A0B6PTJ95nOC8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjhfkcEVSTv6xcsFcdkAwkL6p3sxVvNG2YKmnEcV2KrjGx5Us4
-	VJxPcLmHpsgq2RZry0ZG/XmqOWh66OqwAiDadBhpEFA7xP1ZTQ6KtuY1sCY+0m+HamKg/nnc8zd
-	P1p5DkHVI6CBLIoakbRFRuQ==
-X-Google-Smtp-Source: AGHT+IHBOIxM9r0ehPl4c3IhMwECnflPechWmOVBJu0WiGbLsRHWGkU66D8A48Rkw+4e+C8ZFyGr8wE06O6tn38x1g==
-X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:146:b875:ac13:a9fc])
- (user=ackerleytng job=sendgmr) by 2002:a17:90a:51c7:b0:2e0:72ab:98e9 with
- SMTP id 98e67ed59e1d1-2e1e5dc5fcemr2279a91.0.1727999016517; Thu, 03 Oct 2024
- 16:43:36 -0700 (PDT)
-Date: Thu, 03 Oct 2024 23:43:35 +0000
-In-Reply-To: <diqzzfnkswiv.fsf@ackerleytng-ctop.c.googlers.com> (message from
- Ackerley Tng on Thu, 03 Oct 2024 21:32:08 +0000)
+	s=arc-20240116; t=1727999203; c=relaxed/simple;
+	bh=d87RLPsqMRDHm/5vfS1K/yGBaUfYR1Kog9kelwLBOdY=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=MrAD9A3q0EOzhRdDxpsLNf96jE6iEhByWkKDBXgULewFUD45BF0LRBTnEHDwZy1TCmvy+PFK+gI0l7ENBK/XYhT9O4s7eJCvYsr/cLSVge0QJvPf+BjkyxTG8Z5lTi+4215c+/IGhH04ZTMf7uXAVKNTUsTQmnB4pxIyYEsN0c8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F5/19+JC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8913C4CEC5;
+	Thu,  3 Oct 2024 23:46:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1727999203;
+	bh=d87RLPsqMRDHm/5vfS1K/yGBaUfYR1Kog9kelwLBOdY=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=F5/19+JCZah2NSLpQZhUQKdl4Pt0gLFrrpcxQ0Dla+wSNiw0wawlki9X3g/Idypyy
+	 qYKCXSIAxvzSc5DyaLorD4OPtCtF9ZQXuq943etotmLYgRbGGwbu7mPtA7zeE2NveO
+	 h4GHghokJ8A4kx6I80UV9HttQUmq9eFq3r0VjOPaIuFcn2hWW2XyLHk/rwr34Nr4ZT
+	 yhaZWgNws0V85RoJa1hC1jOJCVyJdCvphFgsa2WWhitUlHZ9tBqC3l6R9pks9lNyXG
+	 Ub71agYtEk82GIP4knWK4ChTjRDh9WLYyqsWi2UmiHUo9AQz+orDSs4oIH99ZbnHjF
+	 r2GGfQhxyVfCw==
+Message-ID: <4a8abb5f501279de7907629f4dd6be24.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <diqzwmiosqfs.fsf@ackerleytng-ctop.c.googlers.com>
-Subject: Re: [RFC PATCH 30/39] KVM: guest_memfd: Handle folio preparation for
- guest_memfd mmap
-From: Ackerley Tng <ackerleytng@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: quic_eberman@quicinc.com, tabba@google.com, roypat@amazon.co.uk, 
-	jgg@nvidia.com, peterx@redhat.com, david@redhat.com, rientjes@google.com, 
-	fvdl@google.com, jthoughton@google.com, seanjc@google.com, 
-	pbonzini@redhat.com, zhiquan1.li@intel.com, fan.du@intel.com, 
-	jun.miao@intel.com, isaku.yamahata@intel.com, muchun.song@linux.dev, 
-	mike.kravetz@oracle.com, erdemaktas@google.com, vannapurve@google.com, 
-	qperret@google.com, jhubbard@nvidia.com, willy@infradead.org, 
-	shuah@kernel.org, brauner@kernel.org, bfoster@redhat.com, 
-	kent.overstreet@linux.dev, pvorel@suse.cz, rppt@kernel.org, 
-	richard.weiyang@gmail.com, anup@brainfault.org, haibo1.xu@intel.com, 
-	ajones@ventanamicro.com, vkuznets@redhat.com, maciej.wieczor-retman@intel.com, 
-	pgonda@google.com, oliver.upton@linux.dev, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-fsdevel@kvack.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <f5f1c42d-77c0-48c7-ac52-3d4a3b5c2b47@roeck-us.net>
+References: <20240718210513.3801024-1-sboyd@kernel.org> <6cd337fb-38f0-41cb-b942-5844b84433db@roeck-us.net> <a339ec8c-38f6-425a-94d1-ad69b5ddbd88@roeck-us.net> <dcd8894f-1eb6-4b5c-9e6f-f6e584c601d2@roeck-us.net> <6f5a5b5f-71a7-4ed3-8cb3-d930bbce599b@linuxfoundation.org> <ba88a29c-f05e-4ca3-82d1-0a634613caee@roeck-us.net> <4216b852-11a2-41ae-bb01-5f9b578ee41b@roeck-us.net> <879831a8-2039-4cdb-bce2-aefdeb7ab25f@linuxfoundation.org> <da260b77-2ecb-4486-90cb-6db456d381ef@linuxfoundation.org> <f5f1c42d-77c0-48c7-ac52-3d4a3b5c2b47@roeck-us.net>
+Subject: Re: [PATCH v8 8/8] clk: Add KUnit tests for clks registered with struct clk_parent_data
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, patches@lists.linux.dev, kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rafael J . Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, Daniel Latypov <dlatypov@google.com>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Maxime Ripard <maxime@cerno.tech>, Geert Uytterhoeven <geert+renesas@glider.be>
+To: Guenter Roeck <linux@roeck-us.net>, Shuah Khan <skhan@linuxfoundation.org>
+Date: Thu, 03 Oct 2024 16:46:40 -0700
+User-Agent: alot/0.10
 
-Ackerley Tng <ackerleytng@google.com> writes:
+Quoting Guenter Roeck (2024-09-28 14:32:35)
+> On 9/28/24 12:27, Shuah Khan wrote:
+> > On 9/28/24 11:54, Shuah Khan wrote:
+> >> On 9/28/24 11:31, Guenter Roeck wrote:
+> >>> On 9/27/24 17:08, Guenter Roeck wrote:
+> >>>> On 9/27/24 13:45, Shuah Khan wrote:
+> >>>>> On 9/27/24 10:19, Guenter Roeck wrote:
+> >>>>>> Copying devicetree maintainers.
+> >>>>>>
+> >>>>>> On Thu, Sep 26, 2024 at 09:39:38PM -0700, Guenter Roeck wrote:
+> >>>>>>> On Thu, Sep 26, 2024 at 09:14:11PM -0700, Guenter Roeck wrote:
+> >>>>>>>> Hi Stephen,
+> >>>>>>>>
+> >>>>>>>> On Thu, Jul 18, 2024 at 02:05:07PM -0700, Stephen Boyd wrote:
+> >>>>>>>>> Test that clks registered with 'struct clk_parent_data' work as
+> >>>>>>>>> intended and can find their parents.
+> >>>>>>>>>
+> >>>>>>>>
+> >>>>>>>> When testing this on arm64, I see the error below. The error is =
+only
+> >>>>>>>> seen if I boot through efi, i.e., with "-bios QEMU_EFI-aarch64.f=
+d"
+> >>>>>>>> qemu parameter.
+> >>>>>>>>
+> >>>>>>>> Any idea what might cause the problem ?
+> >>>>>>>>
+> >>>>>>> I noticed that the new overlay tests fail as well, also with "pat=
+h '/' not
+> >>>>>>> found".
+> >>>>>>>
+> >>>>>>> [Maybe] answering my own question: I think the problem may be tha=
+t there
+> >>>>>>> is no devicetree file and thus no devicetree root when booting th=
+rough
+> >>>>>>> efi (in other words, of_root is NULL). Would it make sense to ski=
+p the
+> >>>>>>> tests in that case ?
+> >>>>>>>
+> >>>>>>
+> >>>>>> The problem is that of_root is not initialized in arm64 boots if A=
+CPI
+> >>>>>> is enabled.
+> >>>>>>
+> >>>>>> =C2=A0From arch/arm64/kernel/setup.c:setup_arch():
+> >>>>>>
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0if (acpi_disabled)
+> >>>>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unflatten_device_tree()=
+;=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 // initializes of_root
 
-> Elliot Berman <quic_eberman@quicinc.com> writes:
->
->> On Tue, Sep 10, 2024 at 11:44:01PM +0000, Ackerley Tng wrote:
->>> Since guest_memfd now supports mmap(), folios have to be prepared
->>> before they are faulted into userspace.
->>>
->>> When memory attributes are switched between shared and private, the
->>> up-to-date flags will be cleared.
->>>
->>> Use the folio's up-to-date flag to indicate being ready for the guest
->>> usage and can be used to mark whether the folio is ready for shared OR
->>> private use.
->>
->> Clearing the up-to-date flag also means that the page gets zero'd out
->> whenever it transitions between shared and private (either direction).
->> pKVM (Android) hypervisor policy can allow in-place conversion between
->> shared/private.
->>
->> I believe the important thing is that sev_gmem_prepare() needs to be
->> called prior to giving page to guest. In my series, I had made a
->> ->prepare_inaccessible() callback where KVM would only do this part.
->> When transitioning to inaccessible, only that callback would be made,
->> besides the bookkeeping. The folio zeroing happens once when allocating
->> the folio if the folio is initially accessible (faultable).
->>
->> From x86 CoCo perspective, I think it also makes sense to not zero
->> the folio when changing faultiblity from private to shared:
->>  - If guest is sharing some data with host, you've wiped the data and
->>    guest has to copy again.
->>  - Or, if SEV/TDX enforces that page is zero'd between transitions,
->>    Linux has duplicated the work that trusted entity has already done.
->>
->> Fuad and I can help add some details for the conversion. Hopefully we
->> can figure out some of the plan at plumbers this week.
->
-> Zeroing the page prevents leaking host data (see function docstring for
-> kvm_gmem_prepare_folio() introduced in [1]), so we definitely don't want
-> to introduce a kernel data leak bug here.
+Oof I forgot that Rob didn't apply the patch that let an empty root live
+on ARM64 ACPI systems. See this thread[1] for all the details.
 
-Actually it seems like filemap_grab_folio() already gets a zeroed page.
+> >>>>>>
+> >>>>>> ACPI is enabled if the system boots from EFI. This also affects
+> >>>>>> CONFIG_OF_KUNIT_TEST, which explicitly checks if of_root exists and
+> >>>>>> fails the test if it doesn't.
+> >>>>>>
+> >>>>>> I think those tests need to add a check for this condition, or aff=
+ected
+> >>>>>> machines won't be able to run those unit tests. The obvious soluti=
+on would
+> >>>>>> be to check if of_root is set, but then the associated test case in
+> >>>>>> CONFIG_OF_KUNIT_TEST would not make sense.
+> >>>>>>
+> >>>>>> Any suggestions ?
+> >>>>>>
 
-filemap_grab_folio() eventually calls __alloc_pages_noprof()
--> get_page_from_freelist()
-   -> prep_new_page()
-      -> post_alloc_hook()
+I think that's the best we can do for now. Basically add a check like
 
-and post_alloc_hook() calls kernel_init_pages(), which zeroes the page,
-depending on kernel config.
+	if (IS_ENABLED(CONFIG_ARM64) && acpi_disabled)
+		kunit_skip(test, "ARM64 + ACPI rejects DT overlays");
 
-Paolo, was calling clear_highpage() in kvm_gmem_prepare_folio() zeroing an
-already empty page returned from filemap_grab_folio()?
+to the overlay application function and the DT test.
 
-> In-place conversion does require preservation of data, so for
-> conversions, shall we zero depending on VM type?
->
-> + Gunyah: don't zero since ->prepare_inaccessible() is a no-op
-> + pKVM: don't zero
-> + TDX: don't zero
-> + SEV: AMD Architecture Programmers Manual 7.10.6 says there is no
->   automatic encryption and implies no zeroing, hence perform zeroing
-> + KVM_X86_SW_PROTECTED_VM: Doesn't have a formal definition so I guess
->   we could require zeroing on transition?
->
-> This way, the uptodate flag means that it has been prepared (as in
-> sev_gmem_prepare()), and zeroed if required by VM type.
->
-> Regarding flushing the dcache/tlb in your other question [2], if we
-> don't use folio_zero_user(), can we relying on unmapping within core-mm
-> to flush after shared use, and unmapping within KVM To flush after
-> private use?
->
-> Or should flush_dcache_folio() be explicitly called on kvm_gmem_fault()?
->
-> clear_highpage(), used in the non-hugetlb (original) path, doesn't flush
-> the dcache. Was that intended?
->
->> Thanks,
->> Elliot
->>
->>>
->>> <snip>
->
-> [1] https://lore.kernel.org/all/20240726185157.72821-8-pbonzini@redhat.com/
-> [2] https://lore.kernel.org/all/diqz34ldszp3.fsf@ackerleytng-ctop.c.googlers.com/
+> >>>>>
+> >>>>> Would it work if these tests check if acpi_disabled and skip if it =
+isn't
+> >>>>> disabled? It might be low overhead condition to check from these te=
+sts.
+> >>>>>
+> >>>>> acpi_disabled is exported:
+> >>>>>
+> >>>>> arch/arm64/kernel/acpi.c:EXPORT_SYMBOL(acpi_disabled);
+> >>>>> arch/loongarch/kernel/acpi.c:EXPORT_SYMBOL(acpi_disabled);
+> >>>>> arch/riscv/kernel/acpi.c:EXPORT_SYMBOL(acpi_disabled);
+> >>>>> arch/x86/kernel/acpi/boot.c:EXPORT_SYMBOL(acpi_disabled);
+> >>>>>
+> >>>>
+> >>>> I don't think that would work. Looking through the use of acpi_init,
+> >>>> I don't think that of_root is always NULL when acpi_init is false; t=
+hat
+> >>>> just happens to be the case on arm64 when booting through efi.
+> >>>> However, even arm64 has the following code.
+> >>>>
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (acpi_disabled)
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 psci_dt_init();
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 else
+> >>>> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 psci_acpi_init();
+> >>>>
+> >>>> While psci_dt_init() doesn't set of_root, it does try to do a device=
+tree
+> >>>> match. So there must be some other condition where acpi_disabled is =
+set
+> >>>> but of_root is set anyway. I just have not found that code path.
+> >>>>
+> >>>
+> >>> I ended up disabling all affected unit tests for arm64. I'll do the s=
+ame
+> >>> for other architectures if I encounter the problem there as well.
+> >>>
+> >>> Unfortunately that includes all clock unit tests because the tests re=
+quiring
+> >>> devicetree support can not be enabled/disabled separately, but that c=
+an't be
+> >>> helped and is still better than "mandatory" failures.
+> >>>
+> >>
+> >=20
+> > of_root is set in drivers/of/pdt.c when it creates the root node.
+> > This could be a definitive test for kunit tests that depend on
+> > devicetree support.
+> >=20
+>=20
+> That is not always the case, including arm64. It is primarily set in
+> unflatten_devicetree(), which is not called on arm64 unless acpi_is disab=
+led
+> (see above).
+
+>=20
+> > It is an exported symbol. drivers/of/base.c exports it.
+> >=20
+>=20
+> Yes, checking if of_root is NULL and skipping the test in that case might=
+ help,
+> but then there is the of_dtb_root_node_populates_of_root unit test which
+> explicitly fails if of_root is NULL. The comment describing the test is
+>=20
+> /*
+>   * Test that the 'of_root' global variable is always populated when DT c=
+ode is
+>   * enabled. Remove this test once of_root is removed from global access.
+>   */
+>=20
+> The devicetree unit test code explicitly assumes that of_root is set if
+> CONFIG_OF_EARLY_FLATTREE is enabled, but that is not always the case
+> (again, of_root is NULL on arm64 unless acpi is disabled).
+>=20
+
+That DT test has been there for a few releases. Is this the first time
+those tests have been run on arm64+acpi? I didn't try after sending the
+patches and forgot that the patch was dropped.
+
+How are you running kunit tests? I installed the qemu-efi-aarch64 debian
+package to get QEMU_EFI.fd but passing that to the kunit.py run command
+with --qemu_args=3D"-bios /usr/share/qemu-efi-aarch64/QEMU_EFI.fd" didn't
+get me beyond the point that the EFI stub boots linux. I think the
+serial console must not be working and thus the kunit wrapper waits for
+something to show up but nothing ever does. I haven't dug any further
+though, so maybe you have a working command.
+
+Here's my command that isn't working:
+
+./tools/testing/kunit/kunit.py run --arch=3Darm64 --kunitconfig=3Ddrivers/o=
+f --qemu_args=3D"-bios /usr/share/qemu-efi-aarch64/QEMU_EFI.fd"=09
+
+[1] https://lore.kernel.org/all/20240217010557.2381548-6-sboyd@kernel.org/
 
