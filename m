@@ -1,315 +1,245 @@
-Return-Path: <linux-kselftest+bounces-18948-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18949-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06AF498E8BB
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 05:13:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FFB498E947
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 07:10:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 213EC1C20D7E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 03:13:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F048A1C21BFF
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 05:10:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21FE71DFED;
-	Thu,  3 Oct 2024 03:13:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0DBF45023;
+	Thu,  3 Oct 2024 05:10:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="I4wWrlCB"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="srdEkmst"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f170.google.com (mail-vk1-f170.google.com [209.85.221.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F28111BDE6
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Oct 2024 03:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C66CC364A9
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Oct 2024 05:09:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727925213; cv=none; b=VgCmxgvMIyJstzv67fZmIvTNhqLt21CDpjz9UaIlrD5k/ciS7k4bojhEyEMBfutxg0az3Fl6z69SSlFK6GG1wsDfLoa49fOrtqMbeYlePpfcejhsJWCOKeCOYUHuLhrphkeOvkS3jG/INcJY8bWAefJYsOkEh5L++mc7zKYLq/8=
+	t=1727932200; cv=none; b=CtGfhqfx4UepRZCLn66qEYEUszTDJJRxSIVd0EXZNpF3sl+2D40Mwn2lTZ88Xpe/ez1Ch3aJH97xCE6WtYEf2Nqb0ORW7Tb3qIrt9CW3y9EGIYR2ZHfT6kZXbwuxKblW1Y5fHDF9L+hD2UsK/yTStcxqq6Kc5eyLoX7Er7cdZzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727925213; c=relaxed/simple;
-	bh=loeZfKXnQKSFNZ3EI9AH1mVfgk2ybacrqxdl5I2CLvM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Uy7XDR7ifpZOhxWfUOtytqjAeI4iBnHnybDdnF4d38jekXV6WoCAY/TP85kC1AHn3i52vq4dfNtufezmsOu2b1utGdZ/f3XoSBE0SiQZUHeXuzXNpobLvLYvwTzo9yrMp5TWjHae/pv4dqotAlzZ2NEJFF2nyquizwp6zsAqaso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=I4wWrlCB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C8E08C4CEC2;
-	Thu,  3 Oct 2024 03:13:29 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="I4wWrlCB"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1727925208;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DuYy5H/FnWIxgZ9Ji/RewwzZORxH4WEyZ+xy994gXr0=;
-	b=I4wWrlCBgzt+WCZMInTsTIGrklR8532Rvv2Iz9UlDRLSkewsj3U4cGzepJR/cCGfoDoTy4
-	dw6ieYbEBM8mTpM+iZcvPcUD7+btlE3kfjjqEt8Cvczf8uPaCeImliR9W9ZTNka7Tf49SO
-	WAgA9MNoz/CxrTgkeNFh+tu7JN2CK3c=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 2381a895 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Thu, 3 Oct 2024 03:13:28 +0000 (UTC)
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: skhan@linuxfoundation.org,
-	greg@kroah.com,
-	linux-kselftest@vger.kernel.org
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH kselftest 3/3] selftests: vDSO: improve getrandom and chacha error messages
-Date: Thu,  3 Oct 2024 05:13:07 +0200
-Message-ID: <20241003031307.2236454-4-Jason@zx2c4.com>
-In-Reply-To: <20241003031307.2236454-1-Jason@zx2c4.com>
-References: <Zv20olVBlnxL9UnS@zx2c4.com>
- <20241003031307.2236454-1-Jason@zx2c4.com>
+	s=arc-20240116; t=1727932200; c=relaxed/simple;
+	bh=qrbLRk/FSxnCiu6axn74hXEdJnOeoT94Cx/ecRppH2A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ueu5BC07RXT+lGyvKQ6WlMgW57HmO+el4EAJKDXreYdpsSfDUqumKlpUvy/7v6StwYCgipAAUGIrCf8aui7u0BYpTPQ/X3q3lFE96PtBVJlWhVy9M1wsDWpyAAJF5JvFN7h1cVTqlueHsPBHrOShke0aDOyld8beB8P3h8CO35Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=srdEkmst; arc=none smtp.client-ip=209.85.221.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-vk1-f170.google.com with SMTP id 71dfb90a1353d-5086a0f250eso204596e0c.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Oct 2024 22:09:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1727932198; x=1728536998; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ywgtKyqh0N3Dye97MVd0kIqtuLbIpst9nSCmWrn174Q=;
+        b=srdEkmst7swwBdms08hYXlb+laEPRhwbNdaFf7sR9baZTAPoGKHlkCL7SbUu0RORx7
+         QeCd7HahCBHsuTr4h3bsSTxJCts16nSCQraL721HB65Xj01hnf3MSahjd/WjPKF3shRx
+         9r7WUzj6c4d8qLZ8ERjnm3+PzWUrIu8R0D2A2F++cyf47SSYSbE9/Th7bFgEOPMN7r3S
+         4KxQ7HrEAvHRP4ZoULO8iBje7zTzFiJ0K/SeMPBCQlsiMdj8KLWgKLs+maPUywJyYujK
+         +Q3Ard52Bq3E/uKDObmDkUNNZyiVK6QFjaa4fee1GjsvbXQSGLrF4LdHwwkfsPzmJqHc
+         u+Yw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1727932198; x=1728536998;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ywgtKyqh0N3Dye97MVd0kIqtuLbIpst9nSCmWrn174Q=;
+        b=RPqcM1iWreRsux/UeD3og60zvHbn0Ie6zSCeZX4p/P5voTtXoXHa75i2s2+9Z/N4Em
+         fBEm2YB/Ve5lMBvunRTE/na4NwN80LejO21Xu6O4B8ovFu25vWrnu2+3fDJsp3Q8Om+L
+         V29htbFSgPvTwW+gBQN42NAC4/MereFWFCZ2agFZs8SegxDa1iAas+vWPJASULgAT+PR
+         wiz2aWsbYVtsD22WOCD+6WLdMU0TQkxyMT26lMh5nCzcxwscQNjQv97tlFW2LVjexhry
+         WvDDFYdQmj0iI7DGgcp7/4SC8ceEkwIMXkX6R8faQWrK8xcg10ozPtYyI5B6cSmdVOmU
+         esOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXwM4VaL+bhu4D3yZdbmzAJvB3oAYcpdKv5G6iTBj8KPh+b61mOiaKaCrDyHe7WIEHTnqor91mQIibl6yD+Gg4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUwcQsR+3ZH8Tte2g8zulbJxCHAZZdaAfxITKTjXadGRxnlzFs
+	Dal3j5WGSDcf0NkmL53loOFm6SdCBU6cYVhYeq+3/Dvtl3ikLkbjC2vK58lgKoz7S8Tc8tsZG7l
+	2YEMd0iMwsEVdwiW13ubrkCB4DEjkPuoFprWOmw==
+X-Google-Smtp-Source: AGHT+IE9u2+/8nC7XjQNdK9e4FXcoT1LUX+A/NRgmnjoZdPr9xDcH7NfQFwxfX9f507kLSYP5FbG/rzvoA7a+mzNSY0=
+X-Received: by 2002:a05:6122:794:b0:4f6:a697:d380 with SMTP id
+ 71dfb90a1353d-50c582122a0mr4539080e0c.10.1727932197603; Wed, 02 Oct 2024
+ 22:09:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241002125751.964700919@linuxfoundation.org>
+In-Reply-To: <20241002125751.964700919@linuxfoundation.org>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Thu, 3 Oct 2024 10:39:45 +0530
+Message-ID: <CA+G9fYtcs_bFp_N+Q59Nn_bM2AT0Xm4utdh6vT+Cdvj6D=VP+w@mail.gmail.com>
+Subject: Re: [PATCH 6.6 000/538] 6.6.54-rc1 review
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
+	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
+	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org, allen.lkml@gmail.com, 
+	broonie@kernel.org, Kui-Feng Lee <thinker.li@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, bpf <bpf@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Improve the error and skip condition messages to let the developer know
-precisely where a test has failed. Also make better use of the ksft api
-for this.
+On Wed, 2 Oct 2024 at 19:56, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 6.6.54 release.
+> There are 538 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 04 Oct 2024 12:56:13 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.6.54-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.6.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- .../testing/selftests/vDSO/vdso_test_chacha.c | 27 ++++---
- .../selftests/vDSO/vdso_test_getrandom.c      | 75 ++++++++-----------
- 2 files changed, 49 insertions(+), 53 deletions(-)
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_chacha.c b/tools/testing/selftests/vDSO/vdso_test_chacha.c
-index b1ea532c5996..60c5ea5cb925 100644
---- a/tools/testing/selftests/vDSO/vdso_test_chacha.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_chacha.c
-@@ -90,10 +90,8 @@ int main(int argc, char *argv[])
- 	ksft_set_plan(1);
- 
- 	for (unsigned int trial = 0; trial < TRIALS; ++trial) {
--		if (getrandom(key, sizeof(key), 0) != sizeof(key)) {
--			printf("getrandom() failed!\n");
--			return KSFT_SKIP;
--		}
-+		if (getrandom(key, sizeof(key), 0) != sizeof(key))
-+			ksft_exit_skip("getrandom() failed unexpectedly\n");
- 		memset(counter1, 0, sizeof(counter1));
- 		reference_chacha20_blocks(output1, key, counter1, BLOCKS);
- 		for (unsigned int split = 0; split < BLOCKS; ++split) {
-@@ -102,8 +100,10 @@ int main(int argc, char *argv[])
- 			if (split)
- 				__arch_chacha20_blocks_nostack(output2, key, counter2, split);
- 			__arch_chacha20_blocks_nostack(output2 + split * BLOCK_SIZE, key, counter2, BLOCKS - split);
--			if (memcmp(output1, output2, sizeof(output1)) || memcmp(counter1, counter2, sizeof(counter1)))
--				return KSFT_FAIL;
-+			if (memcmp(output1, output2, sizeof(output1)))
-+				ksft_exit_fail_msg("Main loop outputs do not match on trial %u, split %u\n", trial, split);
-+			if (memcmp(counter1, counter2, sizeof(counter1)))
-+				ksft_exit_fail_msg("Main loop counters do not match on trial %u, split %u\n", trial, split);
- 		}
- 	}
- 	memset(counter1, 0, sizeof(counter1));
-@@ -113,14 +113,19 @@ int main(int argc, char *argv[])
- 
- 	reference_chacha20_blocks(output1, key, counter1, BLOCKS);
- 	__arch_chacha20_blocks_nostack(output2, key, counter2, BLOCKS);
--	if (memcmp(output1, output2, sizeof(output1)) || memcmp(counter1, counter2, sizeof(counter1)))
--		return KSFT_FAIL;
-+	if (memcmp(output1, output2, sizeof(output1)))
-+		ksft_exit_fail_msg("Block limit outputs do not match after first round\n");
-+	if (memcmp(counter1, counter2, sizeof(counter1)))
-+		ksft_exit_fail_msg("Block limit counters do not match after first round\n");
- 
- 	reference_chacha20_blocks(output1, key, counter1, BLOCKS);
- 	__arch_chacha20_blocks_nostack(output2, key, counter2, BLOCKS);
--	if (memcmp(output1, output2, sizeof(output1)) || memcmp(counter1, counter2, sizeof(counter1)))
--		return KSFT_FAIL;
-+	if (memcmp(output1, output2, sizeof(output1)))
-+		ksft_exit_fail_msg("Block limit outputs do not match after second round\n");
-+	if (memcmp(counter1, counter2, sizeof(counter1)))
-+		ksft_exit_fail_msg("Block limit counters do not match after second round\n");
- 
- 	ksft_test_result_pass("chacha: PASS\n");
--	return KSFT_PASS;
-+	ksft_exit_pass();
-+	return 0;
- }
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getrandom.c b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-index 5489a2f07434..f6f7054900ab 100644
---- a/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-@@ -40,6 +40,9 @@
- 	} while (0)
- #endif
- 
-+#define ksft_assert(condition) \
-+	if (!(condition)) ksft_exit_fail_msg("Assertion failed: %s\n", #condition)
-+
- static struct {
- 	pthread_mutex_t lock;
- 	void **states;
-@@ -109,26 +112,19 @@ static void vgetrandom_init(void)
- 	const char *version = versions[VDSO_VERSION];
- 	const char *name = names[VDSO_NAMES][6];
- 	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
--	size_t ret;
-+	ssize_t ret;
- 
--	if (!sysinfo_ehdr) {
--		printf("AT_SYSINFO_EHDR is not present!\n");
--		exit(KSFT_SKIP);
--	}
-+	if (!sysinfo_ehdr)
-+		ksft_exit_skip("AT_SYSINFO_EHDR is not present\n");
- 	vdso_init_from_sysinfo_ehdr(sysinfo_ehdr);
- 	vgrnd.fn = (__typeof__(vgrnd.fn))vdso_sym(version, name);
--	if (!vgrnd.fn) {
--		printf("%s is missing!\n", name);
--		exit(KSFT_SKIP);
--	}
-+	if (!vgrnd.fn)
-+		ksft_exit_skip("%s@%s symbol is missing from vDSO\n", name, version);
- 	ret = VDSO_CALL(vgrnd.fn, 5, NULL, 0, 0, &vgrnd.params, ~0UL);
--	if (ret == -ENOSYS) {
--		printf("unsupported architecture\n");
--		exit(KSFT_SKIP);
--	} else if (ret) {
--		printf("failed to fetch vgetrandom params!\n");
--		exit(KSFT_FAIL);
--	}
-+	if (ret == -ENOSYS)
-+		ksft_exit_skip("CPU does not have runtime support\n");
-+	else if (ret)
-+		ksft_exit_fail_msg("Failed to fetch vgetrandom params: %zd\n", ret);
- }
- 
- static ssize_t vgetrandom(void *buf, size_t len, unsigned long flags)
-@@ -137,10 +133,7 @@ static ssize_t vgetrandom(void *buf, size_t len, unsigned long flags)
- 
- 	if (!state) {
- 		state = vgetrandom_get_state();
--		if (!state) {
--			printf("vgetrandom_get_state failed!\n");
--			exit(KSFT_FAIL);
--		}
-+		ksft_assert(state);
- 	}
- 	return VDSO_CALL(vgrnd.fn, 5, buf, len, flags, state, vgrnd.params.size_of_opaque_state);
- }
-@@ -152,7 +145,7 @@ static void *test_vdso_getrandom(void *ctx)
- 	for (size_t i = 0; i < TRIALS; ++i) {
- 		unsigned int val;
- 		ssize_t ret = vgetrandom(&val, sizeof(val), 0);
--		assert(ret == sizeof(val));
-+		ksft_assert(ret == sizeof(val));
- 	}
- 	return NULL;
- }
-@@ -162,7 +155,7 @@ static void *test_libc_getrandom(void *ctx)
- 	for (size_t i = 0; i < TRIALS; ++i) {
- 		unsigned int val;
- 		ssize_t ret = getrandom(&val, sizeof(val), 0);
--		assert(ret == sizeof(val));
-+		ksft_assert(ret == sizeof(val));
- 	}
- 	return NULL;
- }
-@@ -172,7 +165,7 @@ static void *test_syscall_getrandom(void *ctx)
- 	for (size_t i = 0; i < TRIALS; ++i) {
- 		unsigned int val;
- 		ssize_t ret = syscall(__NR_getrandom, &val, sizeof(val), 0);
--		assert(ret == sizeof(val));
-+		ksft_assert(ret == sizeof(val));
- 	}
- 	return NULL;
- }
-@@ -207,7 +200,7 @@ static void bench_multi(void)
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 	for (size_t i = 0; i < THREADS; ++i)
--		assert(pthread_create(&threads[i], NULL, test_vdso_getrandom, NULL) == 0);
-+		ksft_assert(pthread_create(&threads[i], NULL, test_vdso_getrandom, NULL) == 0);
- 	for (size_t i = 0; i < THREADS; ++i)
- 		pthread_join(threads[i], NULL);
- 	clock_gettime(CLOCK_MONOTONIC, &end);
-@@ -216,7 +209,7 @@ static void bench_multi(void)
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 	for (size_t i = 0; i < THREADS; ++i)
--		assert(pthread_create(&threads[i], NULL, test_libc_getrandom, NULL) == 0);
-+		ksft_assert(pthread_create(&threads[i], NULL, test_libc_getrandom, NULL) == 0);
- 	for (size_t i = 0; i < THREADS; ++i)
- 		pthread_join(threads[i], NULL);
- 	clock_gettime(CLOCK_MONOTONIC, &end);
-@@ -225,7 +218,7 @@ static void bench_multi(void)
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 	for (size_t i = 0; i < THREADS; ++i)
--		assert(pthread_create(&threads[i], NULL, test_syscall_getrandom, NULL) == 0);
-+		ksft_assert(pthread_create(&threads[i], NULL, test_syscall_getrandom, NULL) == 0);
- 	for (size_t i = 0; i < THREADS; ++i)
- 		pthread_join(threads[i], NULL);
- 	clock_gettime(CLOCK_MONOTONIC, &end);
-@@ -250,48 +243,46 @@ static void kselftest(void)
- 
- 	for (size_t i = 0; i < 1000; ++i) {
- 		ssize_t ret = vgetrandom(weird_size, sizeof(weird_size), 0);
--		if (ret != sizeof(weird_size))
--			exit(KSFT_FAIL);
-+		ksft_assert(ret == sizeof(weird_size));
- 	}
- 
- 	ksft_test_result_pass("getrandom: PASS\n");
- 
- 	unshare(CLONE_NEWUSER);
--	assert(unshare(CLONE_NEWTIME) == 0);
-+	ksft_assert(unshare(CLONE_NEWTIME) == 0);
- 	child = fork();
--	assert(child >= 0);
-+	ksft_assert(child >= 0);
- 	if (!child) {
- 		vgetrandom_init();
- 		child = getpid();
--		assert(ptrace(PTRACE_TRACEME, 0, NULL, NULL) == 0);
--		assert(kill(child, SIGSTOP) == 0);
--		assert(vgetrandom(weird_size, sizeof(weird_size), 0) == sizeof(weird_size));
-+		ksft_assert(ptrace(PTRACE_TRACEME, 0, NULL, NULL) == 0);
-+		ksft_assert(kill(child, SIGSTOP) == 0);
-+		ksft_assert(vgetrandom(weird_size, sizeof(weird_size), 0) == sizeof(weird_size));
- 		_exit(0);
- 	}
- 	for (;;) {
- 		struct ptrace_syscall_info info = { 0 };
- 		int status, ret;
--		assert(waitpid(child, &status, 0) >= 0);
-+		ksft_assert(waitpid(child, &status, 0) >= 0);
- 		if (WIFEXITED(status)) {
--			if (WEXITSTATUS(status) != 0)
--				exit(KSFT_FAIL);
-+			ksft_assert(WEXITSTATUS(status) == 0);
- 			break;
- 		}
--		assert(WIFSTOPPED(status));
-+		ksft_assert(WIFSTOPPED(status));
- 		if (WSTOPSIG(status) == SIGSTOP)
--			assert(ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESYSGOOD) == 0);
-+			ksft_assert(ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESYSGOOD) == 0);
- 		else if (WSTOPSIG(status) == (SIGTRAP | 0x80)) {
--			assert(ptrace(PTRACE_GET_SYSCALL_INFO, child, sizeof(info), &info) > 0);
-+			ksft_assert(ptrace(PTRACE_GET_SYSCALL_INFO, child, sizeof(info), &info) > 0);
- 			if (info.op == PTRACE_SYSCALL_INFO_ENTRY && info.entry.nr == __NR_getrandom &&
- 			    info.entry.args[0] == (uintptr_t)weird_size && info.entry.args[1] == sizeof(weird_size))
--				exit(KSFT_FAIL);
-+				ksft_exit_fail_msg("vgetrandom passed buffer to syscall getrandom unexpectedly\n");
- 		}
--		assert(ptrace(PTRACE_SYSCALL, child, 0, 0) == 0);
-+		ksft_assert(ptrace(PTRACE_SYSCALL, child, 0, 0) == 0);
- 	}
- 
- 	ksft_test_result_pass("getrandom timens: PASS\n");
- 
--	exit(KSFT_PASS);
-+	ksft_exit_pass();
- }
- 
- static void usage(const char *argv0)
--- 
-2.46.0
+As other reported selftests bpf build failed,
 
+libbpf.c: In function 'bpf_object__create_map':
+libbpf.c:5215:50: error: 'BPF_F_VTYPE_BTF_OBJ_FD' undeclared (first
+use in this function)
+ 5215 |                         create_attr.map_flags |= BPF_F_VTYPE_BTF_OBJ_FD;
+      |                                                  ^~~~~~~~~~~~~~~~~~~~~~
+libbpf.c:5215:50: note: each undeclared identifier is reported only
+once for each function it appears in
+
+due to commit,
+  9e926acda0c2e libbpf: Find correct module BTFs for struct_ops maps and progs.
+
+Build log:
+-------
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2msz2dGbiCYZjR2hPFlN5xFUOhX/
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 6.6.54-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+* git commit: 1bbd78667e8e467cac0a2bc31d183b9d9983f448
+* git describe: v6.6.53-539-g1bbd78667e8e
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.6.y/build/v6.6.53-539-g1bbd78667e8e
+
+## Test Regressions (compared to v6.6.51-145-g3ecfbb62e37a)
+
+## Metric Regressions (compared to v6.6.51-145-g3ecfbb62e37a)
+
+## Test Fixes (compared to v6.6.51-145-g3ecfbb62e37a)
+
+## Metric Fixes (compared to v6.6.51-145-g3ecfbb62e37a)
+
+## Test result summary
+total: 170988, pass: 150287, fail: 1587, skip: 18917, xfail: 197
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 129 total, 129 passed, 0 failed
+* arm64: 41 total, 41 passed, 0 failed
+* i386: 28 total, 26 passed, 2 failed
+* mips: 26 total, 25 passed, 1 failed
+* parisc: 4 total, 4 passed, 0 failed
+* powerpc: 36 total, 35 passed, 1 failed
+* riscv: 10 total, 10 passed, 0 failed
+* s390: 14 total, 13 passed, 1 failed
+* sh: 10 total, 10 passed, 0 failed
+* sparc: 7 total, 7 passed, 0 failed
+* x86_64: 33 total, 33 passed, 0 failed
+
+## Test suites summary
+* boot
+* commands
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-efivarfs
+* kselftest-exec
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-filesystems-epoll
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-mincore
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-mptcp
+* kselftest-openat2
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-tc-testing
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-watchdog
+* kselftest-x86
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-hugetlb
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* perf
+* rcutorture
+
+--
+Linaro LKFT
+https://lkft.linaro.org
 
