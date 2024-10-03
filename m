@@ -1,231 +1,442 @@
-Return-Path: <linux-kselftest+bounces-18953-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18954-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21BE998E9D5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 08:52:39 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 161CA98E9DA
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 08:53:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9A032818A1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 06:52:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 39F9A1C21F1C
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 06:53:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F836823DF;
-	Thu,  3 Oct 2024 06:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5997A7F460;
+	Thu,  3 Oct 2024 06:53:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZxmSjezo"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nm3Cq+BQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C360B81AB1
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Oct 2024 06:52:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4952F8286A
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Oct 2024 06:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727938345; cv=none; b=BRxbg3x0bnMwK7GcTDANJDV/cxI00EOBxojsRIWvFXcWs2LtGh76TqttuZDDDSckikX+4rrDYN3Uo/jTYxdHiDWhmxe5nUgCkq8ojzF9VXwmu2vmFKZAD9jgUda9F9USR4M+aJXRCS3LdF6MtYBZzF7UGqMA9i4UCrXf8BPPsI8=
+	t=1727938395; cv=none; b=Jdf+vZ+mrfcN3GLpjaptEpHt+2LcDcxibwwNBCPJTJTd6nwdvnruv1cbPyVVe4LUwB3blcXd+1TJfNDvgIWoIhQlmnDJMLT8eGLdS512xd28jyc8/ZfoQOKZef/+HfIdHaX2zyw+1oM8UbmfXR4/8LSBan4ItjkFXVeB0/1AD40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727938345; c=relaxed/simple;
-	bh=aWA+Su4GzrubFzLlRa355dlP267ZvwBw3obazTVE2IE=;
+	s=arc-20240116; t=1727938395; c=relaxed/simple;
+	bh=UPDsCKq7tHksWJr7J0K7fJCz7uWhUwHwQ+9D+DH2KQA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YcxHubpcYS/TzpV7rKeHLNCT/oDZeORfhmNMafYEkSmjxebl2tWyuLvWpltZlTXndPHeaR5UCtn4FSX7zs4Np0JYRS9qVJtpkwzXu8Rmzia6aYpVvpaTXylabLbu4Vf0qOOgck0H3OF+IHdAMO6Zb1OBCthDReW2oY3cbJ+4X14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZxmSjezo; arc=none smtp.client-ip=209.85.219.43
+	 To:Cc:Content-Type; b=gfv2VQeV9YTL2ifEYvq21jv5oqUd5liWCAGsPWhNgodmLZJDfq4nX+TGvWdQ3ulCbvP5vJJHRslIFJptAnyqQurjiSBKSqN0YbWZ3a7PLzWInNcZLIid0MB6qnuZo3RwFtRVkqxdb7V975KMH/YQWaDM819Q6XLbWJHZUNTexEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nm3Cq+BQ; arc=none smtp.client-ip=209.85.219.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6c5acb785f2so3619246d6.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Oct 2024 23:52:23 -0700 (PDT)
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6cb82317809so5124316d6.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Oct 2024 23:53:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727938343; x=1728543143; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1727938392; x=1728543192; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=aouNe6yH5/A1d/PEKDAxlv/dJ/0z7ySUFi+MDO5aoWU=;
-        b=ZxmSjezonMN3PfeNBn23hQoARhVbXmjlfNulX/Ct5Jx5fFzaQEPwNPKvmZmn6rK5ow
-         Hwiuj3nBM8foHEsXNU42/4X8n2YX7s6axcwO/THTS77PXYsmYY7ON97LVei7vg1P3l+w
-         lBdjms6YbOwjD8NNFoFx2LjSDahX1F0G/WSZFzK3dJiPiw2/iAiLhA2aFfCj119Af50B
-         1EeD7Y5k1AZtamakGQm8DIgewPLolTo1YiD7LHA/EKL4UkfIeEKMnaWEcB4jxELYFvPq
-         PQfr/DoNkbdwI/3zZOyv6hT9CH/JTLWpG4H/Q8YcjkIzcGSeaqX4mDn2EIDaMoDGfmEL
-         54yw==
+        bh=9D6+QdKKqvOamolgEivNrl6oyVhPY9IhyHMc+5/fdHg=;
+        b=nm3Cq+BQvi/LM1rbfAYq9PaLtXIjkVneWcHq8Ig+ncVy8xD0JS/+d/JX6Zm8J64hJm
+         i1it6hIvzhuOcWqY/aSEqk311m9MyUj3K6s54eZJFAnnuTsZg7lfJtThG2FMrAlBL3tB
+         bbNDVCwBmsMszuUApRG9l82gW+79HlGOA0o/Y0+0DC2OYZWMiwipI9xpseg+Cd2K2kPV
+         msUOAWUoMje4pWAnfH30PnKTI3xVo1glzkOvoiNaVAaCxNQgoIyvok4nMoGfaeR2Fr0f
+         I5+8+VstIVbUy8C2AuhG3rHM8q/DEGTdSvfxt75gaReDfdMtL463tRUnY9YyMN25deNP
+         TXzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727938343; x=1728543143;
+        d=1e100.net; s=20230601; t=1727938392; x=1728543192;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=aouNe6yH5/A1d/PEKDAxlv/dJ/0z7ySUFi+MDO5aoWU=;
-        b=IROGFFX0J8/BSavksVXHFpO356FZC3PFq6ZMJZogdk3JWmcQmy++NdjJwC2XuF/EOX
-         GOoIs2hD4hige5kEJAECB9ATMK2BGlPUkKmHlYDvXGTeab46ewROTbwH5Zhpiq2u1Nem
-         V0j6BaZOAb3mKdiPhprK/v6kS3pgxYvkfnArB7Wx7SreVirSSW4HhpW5ygYeE67engk3
-         Y2NuYg8WJ3g2RQ0K52BPLFqxgVZg4Js6v1JQj5iv43Z1VEqXOSzeprzFCIeMBkibJ7Gq
-         7V6z/HkA4DyvvIziHbUrxlYmhgWcPc5PQXJl6BGN7tITkQXIbew0giOkQ7LhYN7pQqvW
-         4hGg==
-X-Forwarded-Encrypted: i=1; AJvYcCV3MI2PHpldeeR/F5TxPoM/PDl+ZU/e3VOiiCq6MNHyDK81UJDgHqQpAWzfZP5HwGDvGM+7qO+aM47TC3jCF5s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyq9wWAPiOkt0YarCJ4ZU9QO7aF0AD5TipZeueKRWSPR02yRDIj
-	seLbV0myq/Z4lk3LA88fXpXEDmiNrrI6uajLpRqHAiFdQ8sr+6C//v1lfIvWrCOIAziWIZOPb0l
-	T3BlCf2zRbeB24I0yR4OLS71yyPb4AQ1va6Pl
-X-Google-Smtp-Source: AGHT+IHhxG8s8ItijTps88fFJLz8xQb6cCNhASYpJNvFv+ZfK4juq/0SlfazKvQBC0lKIpizCOIcXdvl6455ahg22iI=
-X-Received: by 2002:a05:6214:3bca:b0:6cb:3ba5:79e1 with SMTP id
- 6a1803df08f44-6cb819b2c12mr80871086d6.11.1727938342540; Wed, 02 Oct 2024
- 23:52:22 -0700 (PDT)
+        bh=9D6+QdKKqvOamolgEivNrl6oyVhPY9IhyHMc+5/fdHg=;
+        b=pI2BVFjSRznm+d8JhH+2ZHqp41tNgHCXfBTx/dGocD/2e3+eXGnKtGWxjsUP7kl9RC
+         gtS+QHDJ8TrKcmKHHhGpeoZWbTCE7x2Ctezu+Qn9BmOQXBQ45aj0gxbyuxrNdLf3vjhC
+         y1cpmTnXrHybOGjwi/GFIe6BcBsgNXV+2Ch10o2HWbUPZaMwm5OzedGTFiK9KidPjfEL
+         TDuNAIByGy/QIC+7vYjcZ+NReF45UtUZ7XByRgSKOHnQq/sRVc9XULralXmt3Dv+Dagf
+         yfZwUPzrdNbQVRTCYyOJR1CkIOcwinzMifht3NyXz0r4Gx3cHFhwIpL+EgwUvUQ9d+SX
+         5/Cw==
+X-Forwarded-Encrypted: i=1; AJvYcCUw2YDNjQ/O2Gm05Btn8VWfKmiVeEKGa5tG4T9omS6jEi78tg2STDPvjCE6CWGsoV2RMRNkBNPOmnn3FHGzon8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWalN1rjS+SoyS29CR2r8PNSZFnbENc2M8ecOOJ8GG6P/RNoP7
+	TYcHeRX2lUJWXa6j3KG9mC8WjDwvTKRdvPocwW+jcfskeIVdJCWAyjeX6xUtAMOcdesmdw+Begq
+	VrjWuim31vSdPQdyeG8SPk6jzN0PuOo5KNaYrK+LKL5znZu6Hwg==
+X-Google-Smtp-Source: AGHT+IFnOGmIZf9sce+yT3E5ll3GRIzCCr5f9XCTMypPPXy1nXXxK8+bz2Ow4KhLTWSVonhb8H1Ci4xHfzVEIn+qIeg=
+X-Received: by 2002:a05:6214:3381:b0:6c7:c79c:f55 with SMTP id
+ 6a1803df08f44-6cb81a0b163mr66254846d6.14.1727938391950; Wed, 02 Oct 2024
+ 23:53:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240930-b4-slub-kunit-fix-v1-0-32ca9dbbbc11@suse.cz>
- <20240930-b4-slub-kunit-fix-v1-2-32ca9dbbbc11@suse.cz> <9dd56c26-12db-4b69-af0e-fdea33bb8208@roeck-us.net>
- <ee52f8af-ef1a-4382-ab9a-f9781157d1be@roeck-us.net>
-In-Reply-To: <ee52f8af-ef1a-4382-ab9a-f9781157d1be@roeck-us.net>
+References: <20240928235825.96961-1-porlando@lkcamp.dev> <20240928235825.96961-2-porlando@lkcamp.dev>
+In-Reply-To: <20240928235825.96961-2-porlando@lkcamp.dev>
 From: David Gow <davidgow@google.com>
-Date: Thu, 3 Oct 2024 14:52:11 +0800
-Message-ID: <CABVgOSkhwCoeV_1YCOnGatCGWwZ62Oa8dZ_VzZ+qtPixzw5NfQ@mail.gmail.com>
-Subject: Re: [PATCH slab hotfixes 2/2] kunit: move call to kunit_run_all_tests()
- after rcu_end_inkernel_boot()
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: Vlastimil Babka <vbabka@suse.cz>, Andrew Morton <akpm@linux-foundation.org>, 
-	Christoph Lameter <cl@linux.com>, David Rientjes <rientjes@google.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Hyeonggon Yoo <42.hyeyoo@gmail.com>, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	"Paul E. McKenney" <paulmck@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, 
-	Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org, Rae Moar <rmoar@google.com>, 
+Date: Thu, 3 Oct 2024 14:53:00 +0800
+Message-ID: <CABVgOSmDNgcwfVO46MQBs8zfBYW6amXuuDCPDPq+4ziw4RPfyw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] unicode: kunit: refactor selftest to kunit tests
+To: Pedro Orlando <porlando@lkcamp.dev>
+Cc: Gabriel Krisman Bertazi <krisman@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	linux-fsdevel@vger.kernel.org, ~lkcamp/patches@lists.sr.ht, 
 	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	Brendan Higgins <brendan.higgins@linux.dev>
+	Gabriela Bittencourt <gbittencourt@lkcamp.dev>, Danilo Pereira <dpereira@lkcamp.dev>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000021d05706238cff81"
+	boundary="00000000000014d44d06238d0251"
 
---00000000000021d05706238cff81
+--00000000000014d44d06238d0251
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 1 Oct 2024 at 07:55, Guenter Roeck <linux@roeck-us.net> wrote:
+On Sun, 29 Sept 2024 at 08:00, Pedro Orlando <porlando@lkcamp.dev> wrote:
 >
-> On 9/30/24 11:50, Guenter Roeck wrote:
-> > On 9/30/24 01:37, Vlastimil Babka wrote:
-> >> Guenter Roeck reports that the new slub kunit tests added by commit
-> >> 4e1c44b3db79 ("kunit, slub: add test_kfree_rcu() and
-> >> test_leak_destroy()") cause a lockup on boot on several architectures
-> >> when the kunit tests are configured to be built-in and not modules.
-> >>
-> >> These tests invoke kfree_rcu() and kvfree_rcu_barrier() and boot
-> >> sequence inspection showed the runner for built-in kunit tests
-> >> kunit_run_all_tests() is called before setting system_state to
-> >> SYSTEM_RUNNING and calling rcu_end_inkernel_boot(), so this seems like a
-> >> likely cause. So while I was unable to reproduce the problem myself,
-> >> moving the call to kunit_run_all_tests() a bit later in the boot seems
-> >> to have fixed the lockup problem according to Guenter's limited testing.
-> >>
-> >> No kunit tests should be broken by calling the built-in executor a bit
-> >> later, as when compiled as modules, they are still executed even later
-> >> than this.
-> >>
+> From: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
 >
-> Actually, that is wrong.
+> Refactoring 'test' functions into kunit tests, to test utf-8 support in
+> unicode subsystem.
 >
-> Turns out kunit_iov_iter (and other kunit tests) are marked __init.
-> That means those unit tests have to run before the init code is released,
-> and it actually _is_ harmful to run the tests after rcu_end_inkernel_boot()
-> because at that time free_initmem() has already been called.
+> This allows the utf8 tests to be run alongside the KUnit test suite
+> using kunit-tool, quickly compiling and running all desired tests as
+> part of the KUnit test suite, instead of compiling the selftest module
+> and loading it.
+>
+> The refactoring kept the original testing logic intact, while adopting a
+> testing pattern across different kernel modules and leveraging KUnit's
+> benefits.
+>
+> Co-developed-by: Pedro Orlando <porlando@lkcamp.dev>
+> Signed-off-by: Pedro Orlando <porlando@lkcamp.dev>
+> Co-developed-by: Danilo Pereira <dpereira@lkcamp.dev>
+> Signed-off-by: Danilo Pereira <dpereira@lkcamp.dev>
+> Signed-off-by: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
+> ---
+>
+> About the KUNIT readability, there are two ways of obtaing the results:
+> 1- using `_TRUE(test, func == ret)` which may make the code more
+> readable, but the error message less informative. For example:
+> `false, but expect true`; unless we use _TRUE_MSG(test, cond, msg) to
+> customize the error message (which is what we've done here).
+> 2- using `_EQ(test, func, ret)` which may be a little less readable, but the
+> default error message will carry more information. For example:
+> `64, but expected 0`
+>
+> ---
 
-Yeah: some tests are marked __init. KUnit does actually mark these
-with an attribute, so we can potentially split the execution up into
-an 'init' part which runs early, and a later part, but there are some
-complications if we still want to track the total number of tests and
-support filtering, etc. properly.
 
-That's something I think we'll look at for 6.13: in the meantime,
-skipping the problematic slub tests when built-in seems to be the
-right short-term fix. I'll look into having the built-in executor
-moved later for non-init tests once we've worked out how best to adapt
-the filter/KTAP output code to do so as cleanly as possible.
+This looks good to me, and runs fine here. Thanks!
+
+I do like the idea of keeping these as KUnit tests, even if fstests
+has some unicode tests itself and the code is pretty battle-hardened,
+as these are a good, quick way to sanity-check any changes during
+development, and to catch regressions early.
+
+Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
 
+>  fs/unicode/.kunitconfig    |   3 +
+>  fs/unicode/Kconfig         |   5 +-
+>  fs/unicode/Makefile        |   2 +-
+>  fs/unicode/utf8-selftest.c | 149 +++++++++++++++++--------------------
+>  4 files changed, 76 insertions(+), 83 deletions(-)
+>  create mode 100644 fs/unicode/.kunitconfig
 >
-> Guenter
+> diff --git a/fs/unicode/.kunitconfig b/fs/unicode/.kunitconfig
+> new file mode 100644
+> index 000000000000..62dd5c171f9c
+> --- /dev/null
+> +++ b/fs/unicode/.kunitconfig
+> @@ -0,0 +1,3 @@
+> +CONFIG_KUNIT=y
+> +CONFIG_UNICODE=y
+> +CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST=y
+> diff --git a/fs/unicode/Kconfig b/fs/unicode/Kconfig
+> index da786a687fdc..4ad2c36550f1 100644
+> --- a/fs/unicode/Kconfig
+> +++ b/fs/unicode/Kconfig
+> @@ -10,6 +10,7 @@ config UNICODE
+>           be a separate loadable module that gets requested only when a file
+>           system actually use it.
 >
-> >> Fixes: 4e1c44b3db79 ("kunit, slub: add test_kfree_rcu() and test_leak_destroy()")
-> >> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> >> Closes: https://lore.kernel.org/all/6fcb1252-7990-4f0d-8027-5e83f0fb9409@roeck-us.net/
-> >> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> >> Cc: Boqun Feng <boqun.feng@gmail.com>
-> >> Cc: Uladzislau Rezki <urezki@gmail.com>
-> >> Cc: rcu@vger.kernel.org
-> >> Cc: Brendan Higgins <brendanhiggins@google.com>
-> >> Cc: David Gow <davidgow@google.com>
-> >> Cc: Rae Moar <rmoar@google.com>
-> >> Cc: linux-kselftest@vger.kernel.org
-> >> Cc: kunit-dev@googlegroups.com
-> >> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> >> ---
-> >>   init/main.c | 4 ++--
-> >>   1 file changed, 2 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/init/main.c b/init/main.c
-> >> index c4778edae7972f512d5eefe8400075ac35a70d1c..7890ebb00e84b8bd7bac28923fb1fe571b3e9ee2 100644
-> >> --- a/init/main.c
-> >> +++ b/init/main.c
-> >> @@ -1489,6 +1489,8 @@ static int __ref kernel_init(void *unused)
-> >>       rcu_end_inkernel_boot();
-> >> +    kunit_run_all_tests();
-> >> +
-> >>       do_sysctl_args();
-> >>       if (ramdisk_execute_command) {
-> >> @@ -1579,8 +1581,6 @@ static noinline void __init kernel_init_freeable(void)
-> >>       do_basic_setup();
-> >> -    kunit_run_all_tests();
-> >> -
-> >>       wait_for_initramfs();
-> >>       console_on_rootfs();
-> >>
-> > Unfortunately it doesn't work. With this patch applied, I get many backtraces
-> > similar to the following, and ultimately the image crashes. This is with arm64.
-> > I do not see the problem if I drop this patch.
-> >
-> > Guenter
-> >
-> > ---
-> > [    9.465871]     KTAP version 1
-> > [    9.465964]     # Subtest: iov_iter
-> > [    9.466056]     # module: kunit_iov_iter
-> > [    9.466115]     1..12
-> > [    9.467000] Unable to handle kernel paging request at virtual address ffffc37db5c9f26c
-> > [    9.467244] Mem abort info:
-> > [    9.467332]   ESR = 0x0000000086000007
-> > [    9.467454]   EC = 0x21: IABT (current EL), IL = 32 bits
-> > [    9.467576]   SET = 0, FnV = 0
-> > [    9.467667]   EA = 0, S1PTW = 0
-> > [    9.467762]   FSC = 0x07: level 3 translation fault
-> > [    9.467912] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000042a59000
-> > [    9.468055] [ffffc37db5c9f26c] pgd=0000000000000000, p4d=1000000044b36003, pud=1000000044b37003, pmd=1000000044b3a003, pte=0000000000000000
-> > [    9.469430] Internal error: Oops: 0000000086000007 [#1] PREEMPT SMP
-> > [    9.469687] Modules linked in:
-> > [    9.470035] CPU: 0 UID: 0 PID: 550 Comm: kunit_try_catch Tainted: G                 N 6.12.0-rc1-00005-ga65e3eb58cdb #1
-> > [    9.470290] Tainted: [N]=TEST
-> > [    9.470356] Hardware name: linux,dummy-virt (DT)
-> > [    9.470530] pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [    9.470656] pc : iov_kunit_copy_to_kvec+0x0/0x334
-> > [    9.471055] lr : kunit_try_run_case+0x6c/0x15c
-> > [    9.471145] sp : ffff800080883de0
-> > [    9.471210] x29: ffff800080883e20 x28: 0000000000000000 x27: 0000000000000000
-> > [    9.471376] x26: 0000000000000000 x25: 0000000000000000 x24: ffff80008000bb68
-> > [    9.471501] x23: ffffc37db3f7093c x22: ffff80008000b940 x21: ffff545847af4c00
-> > [    9.471622] x20: ffff545847cd3940 x19: ffff80008000bb50 x18: 0000000000000006
-> > [    9.471742] x17: 6c61746f7420303a x16: 70696b7320303a6c x15: 0000000000000172
-> > [    9.471863] x14: 0000000000020000 x13: 0000000000000000 x12: ffffc37db6a600c8
-> > [    9.471983] x11: 0000000000000043 x10: 0000000000000043 x9 : 1fffffffffffffff
-> > [    9.472122] x8 : 00000000ffffffff x7 : 000000001040d4fd x6 : ffffc37db70c3810
-> > [    9.472243] x5 : 0000000000000000 x4 : ffffffffc4653600 x3 : 000000003b9ac9ff
-> > [    9.472363] x2 : 0000000000000001 x1 : ffffc37db5c9f26c x0 : ffff80008000bb50
-> > [    9.472572] Call trace:
-> > [    9.472636]  iov_kunit_copy_to_kvec+0x0/0x334
-> > [    9.472740]  kunit_generic_run_threadfn_adapter+0x28/0x4c
-> > [    9.472835]  kthread+0x11c/0x120
-> > [    9.472903]  ret_from_fork+0x10/0x20
-> > [    9.473146] Code: ???????? ???????? ???????? ???????? (????????)
-> > [    9.473505] ---[ end trace 0000000000000000 ]---
-> >
+> -config UNICODE_NORMALIZATION_SELFTEST
+> +config UNICODE_NORMALIZATION_KUNIT_TEST
+>         tristate "Test UTF-8 normalization support"
+> -       depends on UNICODE
+> +       depends on UNICODE && KUNIT
+> +       default KUNIT_ALL_TESTS
+> diff --git a/fs/unicode/Makefile b/fs/unicode/Makefile
+> index e309afe2b2bb..37bbcbc628a1 100644
+> --- a/fs/unicode/Makefile
+> +++ b/fs/unicode/Makefile
+> @@ -4,7 +4,7 @@ ifneq ($(CONFIG_UNICODE),)
+>  obj-y                  += unicode.o
+>  endif
+>  obj-$(CONFIG_UNICODE)  += utf8data.o
+> -obj-$(CONFIG_UNICODE_NORMALIZATION_SELFTEST) += utf8-selftest.o
+> +obj-$(CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST) += utf8-selftest.o
+>
+>  unicode-y := utf8-norm.o utf8-core.o
+>
+> diff --git a/fs/unicode/utf8-selftest.c b/fs/unicode/utf8-selftest.c
+> index 600e15efe9ed..52ab68ef2bbc 100644
+> --- a/fs/unicode/utf8-selftest.c
+> +++ b/fs/unicode/utf8-selftest.c
+> @@ -1,38 +1,18 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * Kernel module for testing utf-8 support.
+> + * KUnit tests for utf-8 support.
+>   *
+>   * Copyright 2017 Collabora Ltd.
+>   */
+>
+> -#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> -
+> -#include <linux/module.h>
+> -#include <linux/printk.h>
+>  #include <linux/unicode.h>
+> -#include <linux/dcache.h>
+> +#include <kunit/test.h>
+>
+>  #include "utf8n.h"
+>
+> -static unsigned int failed_tests;
+> -static unsigned int total_tests;
+> -
+>  /* Tests will be based on this version. */
+>  #define UTF8_LATEST    UNICODE_AGE(12, 1, 0)
+>
+> -#define _test(cond, func, line, fmt, ...) do {                         \
+> -               total_tests++;                                          \
+> -               if (!cond) {                                            \
+> -                       failed_tests++;                                 \
+> -                       pr_err("test %s:%d Failed: %s%s",               \
+> -                              func, line, #cond, (fmt?":":"."));       \
+> -                       if (fmt)                                        \
+> -                               pr_err(fmt, ##__VA_ARGS__);             \
+> -               }                                                       \
+> -       } while (0)
+> -#define test_f(cond, fmt, ...) _test(cond, __func__, __LINE__, fmt, ##__VA_ARGS__)
+> -#define test(cond) _test(cond, __func__, __LINE__, "")
+> -
+>  static const struct {
+>         /* UTF-8 strings in this vector _must_ be NULL-terminated. */
+>         unsigned char str[10];
+> @@ -170,69 +150,74 @@ static int utf8cursor(struct utf8cursor *u8c, const struct unicode_map *um,
+>         return utf8ncursor(u8c, um, n, s, (unsigned int)-1);
+>  }
+>
+> -static void check_utf8_nfdi(struct unicode_map *um)
+> +static void check_utf8_nfdi(struct kunit *test)
+>  {
+>         int i;
+>         struct utf8cursor u8c;
+> +       struct unicode_map *um = test->priv;
+>
+>         for (i = 0; i < ARRAY_SIZE(nfdi_test_data); i++) {
+>                 int len = strlen(nfdi_test_data[i].str);
+>                 int nlen = strlen(nfdi_test_data[i].dec);
+>                 int j = 0;
+>                 unsigned char c;
+> +               int ret;
+>
+> -               test((utf8len(um, UTF8_NFDI, nfdi_test_data[i].str) == nlen));
+> -               test((utf8nlen(um, UTF8_NFDI, nfdi_test_data[i].str, len) ==
+> -                       nlen));
+> +               KUNIT_EXPECT_EQ(test, utf8len(um, UTF8_NFDI, nfdi_test_data[i].str), nlen);
+> +               KUNIT_EXPECT_EQ(test, utf8nlen(um, UTF8_NFDI, nfdi_test_data[i].str, len),
+> +                               nlen);
+>
+> -               if (utf8cursor(&u8c, um, UTF8_NFDI, nfdi_test_data[i].str) < 0)
+> -                       pr_err("can't create cursor\n");
+> +
+> +               ret = utf8cursor(&u8c, um, UTF8_NFDI, nfdi_test_data[i].str);
+> +               KUNIT_EXPECT_TRUE_MSG(test, ret >= 0, "Can't create cursor\n");
+>
+>                 while ((c = utf8byte(&u8c)) > 0) {
+> -                       test_f((c == nfdi_test_data[i].dec[j]),
+> -                              "Unexpected byte 0x%x should be 0x%x\n",
+> -                              c, nfdi_test_data[i].dec[j]);
+> +                       KUNIT_EXPECT_EQ_MSG(test, c, nfdi_test_data[i].dec[j],
+> +                                           "Unexpected byte 0x%x should be 0x%x\n",
+> +                                           c, nfdi_test_data[i].dec[j]);
+>                         j++;
+>                 }
+>
+> -               test((j == nlen));
+> +               KUNIT_EXPECT_EQ(test, j, nlen);
+>         }
+>  }
+>
+> -static void check_utf8_nfdicf(struct unicode_map *um)
+> +static void check_utf8_nfdicf(struct kunit *test)
+>  {
+>         int i;
+>         struct utf8cursor u8c;
+> +       struct unicode_map *um = test->priv;
+>
+>         for (i = 0; i < ARRAY_SIZE(nfdicf_test_data); i++) {
+>                 int len = strlen(nfdicf_test_data[i].str);
+>                 int nlen = strlen(nfdicf_test_data[i].ncf);
+>                 int j = 0;
+> +               int ret;
+>                 unsigned char c;
+>
+> -               test((utf8len(um, UTF8_NFDICF, nfdicf_test_data[i].str) ==
+> -                               nlen));
+> -               test((utf8nlen(um, UTF8_NFDICF, nfdicf_test_data[i].str, len) ==
+> -                               nlen));
+> +               KUNIT_EXPECT_EQ(test, utf8len(um, UTF8_NFDICF, nfdicf_test_data[i].str),
+> +                               nlen);
+> +               KUNIT_EXPECT_EQ(test, utf8nlen(um, UTF8_NFDICF, nfdicf_test_data[i].str, len),
+> +                               nlen);
+>
+> -               if (utf8cursor(&u8c, um, UTF8_NFDICF,
+> -                               nfdicf_test_data[i].str) < 0)
+> -                       pr_err("can't create cursor\n");
+> +               ret = utf8cursor(&u8c, um, UTF8_NFDICF, nfdicf_test_data[i].str);
+> +               KUNIT_EXPECT_TRUE_MSG(test, ret >= 0, "Can't create cursor\n");
+>
+>                 while ((c = utf8byte(&u8c)) > 0) {
+> -                       test_f((c == nfdicf_test_data[i].ncf[j]),
+> -                              "Unexpected byte 0x%x should be 0x%x\n",
+> -                              c, nfdicf_test_data[i].ncf[j]);
+> +                       KUNIT_EXPECT_EQ_MSG(test, c, nfdicf_test_data[i].ncf[j],
+> +                                           "Unexpected byte 0x%x should be 0x%x\n",
+> +                                           c, nfdicf_test_data[i].ncf[j]);
+>                         j++;
+>                 }
+>
+> -               test((j == nlen));
+> +               KUNIT_EXPECT_EQ(test, j, nlen);
+>         }
+>  }
+>
+> -static void check_utf8_comparisons(struct unicode_map *table)
+> +static void check_utf8_comparisons(struct kunit *test)
+>  {
+>         int i;
+> +       struct unicode_map *um = test->priv;
+>
+>         for (i = 0; i < ARRAY_SIZE(nfdi_test_data); i++) {
+>                 const struct qstr s1 = {.name = nfdi_test_data[i].str,
+> @@ -240,8 +225,9 @@ static void check_utf8_comparisons(struct unicode_map *table)
+>                 const struct qstr s2 = {.name = nfdi_test_data[i].dec,
+>                                         .len = sizeof(nfdi_test_data[i].dec)};
+>
+> -               test_f(!utf8_strncmp(table, &s1, &s2),
+> -                      "%s %s comparison mismatch\n", s1.name, s2.name);
+> +               /* strncmp returns 0 when strings are equal */
+> +               KUNIT_EXPECT_TRUE_MSG(test, utf8_strncmp(um, &s1, &s2) == 0,
+> +                                   "%s %s comparison mismatch\n", s1.name, s2.name);
+>         }
+>
+>         for (i = 0; i < ARRAY_SIZE(nfdicf_test_data); i++) {
+> @@ -250,62 +236,65 @@ static void check_utf8_comparisons(struct unicode_map *table)
+>                 const struct qstr s2 = {.name = nfdicf_test_data[i].ncf,
+>                                         .len = sizeof(nfdicf_test_data[i].ncf)};
+>
+> -               test_f(!utf8_strncasecmp(table, &s1, &s2),
+> -                      "%s %s comparison mismatch\n", s1.name, s2.name);
+> +               /* strncasecmp returns 0 when strings are equal */
+> +               KUNIT_EXPECT_TRUE_MSG(test, utf8_strncasecmp(um, &s1, &s2) == 0,
+> +                                   "%s %s comparison mismatch\n", s1.name, s2.name);
+>         }
+>  }
+>
+> -static void check_supported_versions(struct unicode_map *um)
+> +static void check_supported_versions(struct kunit *test)
+>  {
+> +       struct unicode_map *um = test->priv;
+>         /* Unicode 7.0.0 should be supported. */
+> -       test(utf8version_is_supported(um, UNICODE_AGE(7, 0, 0)));
+> +       KUNIT_EXPECT_TRUE(test, utf8version_is_supported(um, UNICODE_AGE(7, 0, 0)));
+>
+>         /* Unicode 9.0.0 should be supported. */
+> -       test(utf8version_is_supported(um, UNICODE_AGE(9, 0, 0)));
+> +       KUNIT_EXPECT_TRUE(test, utf8version_is_supported(um, UNICODE_AGE(9, 0, 0)));
+>
+>         /* Unicode 1x.0.0 (the latest version) should be supported. */
+> -       test(utf8version_is_supported(um, UTF8_LATEST));
+> +       KUNIT_EXPECT_TRUE(test, utf8version_is_supported(um, UTF8_LATEST));
+>
+>         /* Next versions don't exist. */
+> -       test(!utf8version_is_supported(um, UNICODE_AGE(13, 0, 0)));
+> -       test(!utf8version_is_supported(um, UNICODE_AGE(0, 0, 0)));
+> -       test(!utf8version_is_supported(um, UNICODE_AGE(-1, -1, -1)));
+> +       KUNIT_EXPECT_FALSE(test, utf8version_is_supported(um, UNICODE_AGE(13, 0, 0)));
+> +       KUNIT_EXPECT_FALSE(test, utf8version_is_supported(um, UNICODE_AGE(0, 0, 0)));
+> +       KUNIT_EXPECT_FALSE(test, utf8version_is_supported(um, UNICODE_AGE(-1, -1, -1)));
+>  }
+>
+> -static int __init init_test_ucd(void)
+> +static struct kunit_case unicode_normalization_test_cases[] = {
+> +       KUNIT_CASE(check_supported_versions),
+> +       KUNIT_CASE(check_utf8_comparisons),
+> +       KUNIT_CASE(check_utf8_nfdicf),
+> +       KUNIT_CASE(check_utf8_nfdi),
+> +       {}
+> +};
+> +
+> +static int init_test_ucd(struct kunit *test)
+>  {
+> -       struct unicode_map *um;
+> +       struct unicode_map *um = utf8_load(UTF8_LATEST);
+>
+> -       failed_tests = 0;
+> -       total_tests = 0;
+> +       test->priv = um;
+>
+> -       um = utf8_load(UTF8_LATEST);
+> -       if (IS_ERR(um)) {
+> -               pr_err("%s: Unable to load utf8 table.\n", __func__);
+> -               return PTR_ERR(um);
+> -       }
+> +       KUNIT_EXPECT_EQ_MSG(test, IS_ERR(um), 0,
+> +                           "%s: Unable to load utf8 table.\n", __func__);
+>
+> -       check_supported_versions(um);
+> -       check_utf8_nfdi(um);
+> -       check_utf8_nfdicf(um);
+> -       check_utf8_comparisons(um);
+> -
+> -       if (!failed_tests)
+> -               pr_info("All %u tests passed\n", total_tests);
+> -       else
+> -               pr_err("%u out of %u tests failed\n", failed_tests,
+> -                      total_tests);
+> -       utf8_unload(um);
+>         return 0;
+>  }
+>
+> -static void __exit exit_test_ucd(void)
+> +static void exit_test_ucd(struct kunit *test)
+>  {
+> +       utf8_unload(test->priv);
+>  }
+>
+> -module_init(init_test_ucd);
+> -module_exit(exit_test_ucd);
+> +static struct kunit_suite unicode_normalization_test_suite = {
+> +       .name = "unicode_normalization",
+> +       .test_cases = unicode_normalization_test_cases,
+> +       .init = init_test_ucd,
+> +       .exit = exit_test_ucd,
+> +};
+> +
+> +kunit_test_suite(unicode_normalization_test_suite);
+> +
+>
+>  MODULE_AUTHOR("Gabriel Krisman Bertazi <krisman@collabora.co.uk>");
+> -MODULE_DESCRIPTION("Kernel module for testing utf-8 support");
+> +MODULE_DESCRIPTION("KUnit tests for utf-8 support.");
+>  MODULE_LICENSE("GPL");
+> --
+> 2.34.1
 >
 
---00000000000021d05706238cff81
+--00000000000014d44d06238d0251
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -315,14 +526,14 @@ BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
 hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
 AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
-eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgqgwbQBDR1ZnBhuSbns4SsepiM7At
-mXJOwXGC+8gUyk8wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
-MDAzMDY1MjIzWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgpycgYr+nTjv/kZ9eyLKEscFLhYcP
+hGgvQENzDbKNPo4wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
+MDAzMDY1MzEyWjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAGZW/jgKnwXsh2DGuhEt3sPQZCIIa6Fpg9Swc11pd5huUDKZ
-kPY7rArqANj9qf5HcdpzWSBpJcwAORCW2rhFdlMBrF5uIvgY4DpZ1wdhwcsoV1o6dIiVgHHZsnr3
-eEfn2eOhfTsyYD3T961VdQ1VmdAg1dtrvSaqo0kPxG4c3pVmZStFXMMZe3NX/zLkBsVypnfEtCp4
-9Uy5A5yyvfpBvBTfFfAgC4rP5k1EDMhE1Jqk9cqm5bsPFo72UTDKiHBDN/GwRoZGbwr+Eocwyxzz
-Kw7+FeusqHdkSWwtWjqrzdIr+f1RkDPlJnv4oSTdTEDw80oaBJufQ76B4s5Lh+WbBXs=
---00000000000021d05706238cff81--
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAJ/9DMcME58Uila6VI+IigRvVn+9vS8yn1a2nferWq//MzrI
+uJCsEo6Ix99fItyN4DJPK1R9lIzqNMKBkLMzYvWFNyuNVBYKPKxo6zRca4t3ikickYCydJPiVX/+
+y5gIHCJ7xeYCdjKhmTSjDhW1wjWSXCjYco2kmRdicRb+y9Zq1jO4wuREIykh3sL0cSIoTkQmHkcx
+dVhupgwxAZ+lZk7zt00N+SSd1bEtbGJamrDqDtAXRiRqDyHdq3N9JwMsg+Dag8t0zcHNzzgML47U
+Q5Ue6aU44N/SeGxLn1CMJ8gFxMHddMv2UHBIF6IvL1KbAw3Sdad/muIUcsAq42BetDU=
+--00000000000014d44d06238d0251--
 
