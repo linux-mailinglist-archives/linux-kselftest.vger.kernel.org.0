@@ -1,156 +1,145 @@
-Return-Path: <linux-kselftest+bounces-18951-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18952-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 166ED98E9C6
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 08:49:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD33B98E9D3
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 08:52:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C77D1C21CC1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 06:49:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FF62281993
+	for <lists+linux-kselftest@lfdr.de>; Thu,  3 Oct 2024 06:52:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CC0653363;
-	Thu,  3 Oct 2024 06:49:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1238584A50;
+	Thu,  3 Oct 2024 06:52:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A+f05LM9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cdYL7i3w"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E09BE20328
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Oct 2024 06:49:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746FB83CD2
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Oct 2024 06:52:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727938169; cv=none; b=f+Tih1Kz84QqwNQGDTYQO8yOYUd4R5N60CF0T49SMX6PSOF0GkPEMuTqDAbieVfNW7aWx9kokBQ/Im1IECWuErnIis7fwPSO7qUdgc4ZTblSjJB/PNNifnlc9CGJq68eHgDK+4ebHoQrzPUkwW2z+z3WFlkTr3X3c+6GnZ6nWGI=
+	t=1727938330; cv=none; b=FNo55w1LbDqaifnHKct6j99heL3ABd2rFtva3RRBa+cqNWjb6GoA/S+m46gdg2UUPOywkCqchRl5ZDYMHK3iEJVuPxxrZPDseFI59T24/0jHq9USing6RqRn0ElLzHoub7Nfzt0sHLn1SLQA5f65T8+j0Eto+i0EaNCUOFZi1+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727938169; c=relaxed/simple;
-	bh=wLUj2O7JkugRFRqwGr4NNK9ET26QGJFfHF7GEfhHGIg=;
+	s=arc-20240116; t=1727938330; c=relaxed/simple;
+	bh=ZkCIN7PFUBkdFJLDl4r4m4gnPqI6aWM9zPaR1UDVDLU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O0jCuUxLx52IVJaskvzttEC35RWG7EVHbhWobTJ2c45KyWJTBuhLHzdynC8QVIu3TCXNKmYkk36ypK7BQxII6fxUA1YIuh+CuMRBwsHPJTHhQ0gO7i1VqyKj0bqkUoZoaVCUz6Y3MXnmlEDB7V/Saj8FnRtKjiMHe54pCS3ma4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=A+f05LM9; arc=none smtp.client-ip=209.85.219.53
+	 To:Cc:Content-Type; b=Mp+YCrhZ4Crd2T+pkFbn9eGHxLYQ8Gc1esb8Nt9TR8vnIMvP53S02VETosG97JPU3ZWkUIZTWFQ8DVbxyRfCaJazr0Ih3GyvnO9eEa/+J3rldYYQwB84wVvN0XgNTReC1808VhfTCBi+I5fXldu7D6VuHh/cZJ2k40w2FvEGMOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cdYL7i3w; arc=none smtp.client-ip=209.85.219.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6cb259e2eafso5843596d6.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Oct 2024 23:49:27 -0700 (PDT)
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6cb37b34a87so4572076d6.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Oct 2024 23:52:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1727938167; x=1728542967; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1727938327; x=1728543127; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=f77kszoTy+hnl6ELD0AsPvBXz8D5Sxn6qsNLcP/tlwY=;
-        b=A+f05LM9Y8uNFItmaTYnlLlWW+0YS1xH8QLSwwklxkQSCt41u5M3tPfy2YhsV2ajFI
-         +N8sTr4uFyXXnJ0qesKpze9yR5YS3tz0rfcI3SS9p7WSWHXl3T+Ugv44x+ROzf8pFmuP
-         tVsjqlp0eKFBkpfiypfyo/qzyAaNbhDzSCZfozC6Twq5MPsW7Rs7u/IzQvhKGA/xbjP9
-         +bnDHb7XhsIRPLffsA9myzJJVU8hyd0GJE79+J2NUd3g3FP74bpnwsP0eyvGZ0XFdryR
-         X3YtMrY6eLEvMcC8d1kAxmCcjAPJmAds1+ue1CUHG+RG3rrxNWa2e+ctI3clG4CzMTD5
-         Q2pw==
+        bh=txr3hXa5OXXWMyejT/XDzT1KzVrohpG6QoPrichld1Y=;
+        b=cdYL7i3wwC5mOpRXzy0R1BH7OvddpqGlkzq1SA/YkGH+iCdBpac4R1h4v9/jBjHN8E
+         Lsoa7WYyYXkzX/+ImuyHNQGNUToU1cMac+EJhPf85or8GUSflxT1Ra6EOK5h+Lhq0N3Z
+         2X1vdxYHiN8ClLi/VcsDpLdWqISJR7o15hVwXHbOupavoQZRXXld8YaTUh+VxF20AmxJ
+         Oc1lYp6GFcBhjMjOnfrydrDwSRKDoPPS09Qxr2t+yxw161aJkzdIDZ9upsK4XrtjACh3
+         2LJzHdgou6v3DLWPYutijBXFlwfQ+F5v5Tfp7/j5SUvg/VaEXute3zZZMcSy+fca+pyd
+         FZuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1727938167; x=1728542967;
+        d=1e100.net; s=20230601; t=1727938327; x=1728543127;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=f77kszoTy+hnl6ELD0AsPvBXz8D5Sxn6qsNLcP/tlwY=;
-        b=GddzWCPU1yaKtWjwDZ/hOEXxCUDzMlhx5BCgcRZuKzxSvEmvQ0dID0+fb1MVEDFb4c
-         A7WXWIR4zxieeJz9kNpLPhIC8UrKg4gb1m1L/x/XxkA+PktVjH/zvuT6vwZqN8fBWLRX
-         6IQblMQbx/TWv9VyY90Vz0JVWVoGoMsMeUeQ27vMZgdB9yKQR0f0+d1JyvLvPDATW5Af
-         SUSjQs5UNNHOI30aYHS7JS37jpcTF40euTbd3JJUnbb2es4TzeaCODgnYQ5HMTjHgfEi
-         OX7yVJsVgUeYBexc97fH8WCKgPA5BIkYJdTMgth3HCRrijtl8+OJB5QEQefqsmJnjISr
-         woaw==
-X-Forwarded-Encrypted: i=1; AJvYcCXUvud9VLHqIppKasLEVhzCVW8omJT8XCzPNk/X1CYQSrfUdr4f/0rlWvn/7lhwfX7IwUSZA9w7WqBoZ/PShgs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyylnRNIayouDatCWy3oykVUmmmyTcwICJMVTjVm4tFoLUn9pI3
-	+d54bzNuGSNM6G2cJsm2c6si93Oyl2Y/ot1+WOlDcZg2IJpkCOd1CqbSaregplzYbxUEn0j8Jij
-	2acGeRNjK65sBM/Erui85ixR9K+uR6c7KuNuI
-X-Google-Smtp-Source: AGHT+IHdiB6y5AMS8uWPJDu3EF//gyoppPQtEyT37keOJhwATkYnxyxSa7ChdfpxBo9S906WG3U6i94l0Rw4HCCjqaM=
-X-Received: by 2002:a05:6214:4986:b0:6cb:3da9:d5a2 with SMTP id
- 6a1803df08f44-6cb901482efmr44664876d6.19.1727938166620; Wed, 02 Oct 2024
- 23:49:26 -0700 (PDT)
+        bh=txr3hXa5OXXWMyejT/XDzT1KzVrohpG6QoPrichld1Y=;
+        b=j6JMZ5OJwXwhcOhaTSKAnJgrCUBFkGcB5MMzfcZ1Orp6ONPar4JFjBEQl9lNwpVdBL
+         z+/aHqYAs6r7YzkVYJSH6rxP/uwlwfGUm9ml1DSzmwVXifTftHraMMGWI/hNjOOcjHbd
+         CZm+3b+KNLYdK4sD+UXkaxaTvM6dWOdaaUH+Bafud73UdkCMd/hAZ5wz8cBEp2lenQQg
+         B+p0BNkxzhwGLikKR7HDfBJv/u5CbDyMBmaAy3+ZK/Xgb/sL9NsbkQrl5Xsg+k7E6H21
+         boSGYeZjc8zZRZS+ok9UKiF0hXcBCrA3djQe0l1yUiLtWU7UB2wjPUz05lK/Y8cNkdIM
+         w23A==
+X-Forwarded-Encrypted: i=1; AJvYcCXbQeDLh13f+j7RLmsaDYI7QfSwBCztnX0+4oJb6pX+OS84OVqp2RVXvockNRCYzrKOlmVi3EUnDbw8NT4CL1s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yys7yYlDQR8s2JJFgG67gAKYi3FcTHQXzEf5rTYcPx5IgayuZBj
+	9NU9O/0ozqLyQ8SeAKySCSv4hmzqH4Y3GkRQ9qfdTdVRfHRg0jQC9P7Q2SpMdWAlUkAAULIjcXl
+	hjg/IZLygHJnzwP57PeGImmB6O1+MbnP6vMeT
+X-Google-Smtp-Source: AGHT+IH8Dw9neEJ7yDMdU5jY9GrBpdOG3e7mQ5tQGwaFgsFCt5Imzv3sSEJg57yGMBuBKuVSHZjKP9eEVpD2VZ1GgO0=
+X-Received: by 2002:a05:6214:2f87:b0:6c5:997a:3f63 with SMTP id
+ 6a1803df08f44-6cb81b99014mr65889066d6.46.1727938327149; Wed, 02 Oct 2024
+ 23:52:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240930170633.42475-1-richard120310@gmail.com>
-In-Reply-To: <20240930170633.42475-1-richard120310@gmail.com>
+References: <20240922150507.553814-1-linux@roeck-us.net> <dd9b940d-c5a6-46aa-ab00-73cbb3cab635@intel.com>
+ <6b46f75a-cfef-4426-bab7-68959d044978@linuxfoundation.org>
+In-Reply-To: <6b46f75a-cfef-4426-bab7-68959d044978@linuxfoundation.org>
 From: David Gow <davidgow@google.com>
-Date: Thu, 3 Oct 2024 14:49:15 +0800
-Message-ID: <CABVgOS=8-UH4Exnh8nw3zws9xrcearCvH8_NDFC_tsZL+KhJ8w@mail.gmail.com>
-Subject: Re: [RESEND PATCH v3] list: test: Mending tests for list_cut_position()
-To: I Hsin Cheng <richard120310@gmail.com>
-Cc: akpm@linux-foundation.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Date: Thu, 3 Oct 2024 14:51:56 +0800
+Message-ID: <CABVgOSkoHLysgbeCr=7LfL+vhFdZFNNdUj0=nAr1cQMh9jQ8HQ@mail.gmail.com>
+Subject: Re: [PATCH] Revert "list: test: fix tests for list_cut_position()"
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Jacob Keller <jacob.e.keller@intel.com>, Guenter Roeck <linux@roeck-us.net>, 
+	akpm@linux-foundation.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	richard120310@gmail.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000a5db3d06238cf4f1"
+	boundary="00000000000037e88a06238cfe69"
 
---000000000000a5db3d06238cf4f1
+--00000000000037e88a06238cfe69
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 1 Oct 2024 at 01:06, I Hsin Cheng <richard120310@gmail.com> wrote:
+On Thu, 3 Oct 2024 at 04:39, Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
-> Mending test for list_cut_position*() for the missing check of integer
-> "i" after the second loop. The variable should be checked for second
-> time to make sure both lists after the cut operation are formed as
-> expected.
+> On 9/30/24 17:18, Jacob Keller wrote:
+> >
+> >
+> > On 9/22/2024 8:05 AM, Guenter Roeck wrote:
+> >> This reverts commit e620799c414a035dea1208bcb51c869744931dbb.
+> >>
+> >> The commit introduces unit test failures.
+> >>
+> >>       Expected cur == &entries[i], but
+> >>           cur == 0000037fffadfd80
+> >>           &entries[i] == 0000037fffadfd60
+> >>       # list_test_list_cut_position: pass:0 fail:1 skip:0 total:1
+> >>       not ok 21 list_test_list_cut_position
+> >>       # list_test_list_cut_before: EXPECTATION FAILED at lib/list-test.c:444
+> >>       Expected cur == &entries[i], but
+> >>           cur == 0000037fffa9fd70
+> >>           &entries[i] == 0000037fffa9fd60
+> >>       # list_test_list_cut_before: EXPECTATION FAILED at lib/list-test.c:444
+> >>       Expected cur == &entries[i], but
+> >>           cur == 0000037fffa9fd80
+> >>           &entries[i] == 0000037fffa9fd70
+> >>
+> >> Revert it.
+> >>
+> >> Fixes: e620799c414a ("list: test: fix tests for list_cut_position()")
+> >> Cc: I Hsin Cheng <richard120310@gmail.com>
+> >> Cc: David Gow <davidgow@google.com>
+> >> Cc: Andrew Morton <akpm@linux-foundation.org>
+> >> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> >> ---
+> >
+> > I ran into this as well.
+> >
+> > Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
+> >
 >
-> Signed-off-by: I Hsin Cheng <richard120310@gmail.com>
-> ---
+> Please take a look and let me know if you are okay with this patch.
 
-Thanks. I've tested this, and it works now and makes sense.
+This (and the original patch which was reverted) were both picked up
+via another tree and have already been applied to torvalds/master.
 
-I would recommend updating the patch description slightly, as it's a
-little bit confusing as-is (partly due to the early version having
-already been applied and reverted).
-Could we describe this (a) in the imperative mood, and (b) focus less
-on this being a "fix" or "mend" and more on what the new check does.
-For example, something like:
-"Check the total number of elements in both resultant lists are
-correct. Previously, only the first list's size was checked, so
-additional elements in the second list would not have been caught."
+A re-work of the original patch is in
+https://lore.kernel.org/linux-kselftest/20240930170633.42475-1-richard120310@gmail.com/
+-- it looks fine to me (modulo the description being a bit confusing)
+and should be applied as a new patch, ignoring this and the previous
+version.
 
-Otherwise, this is fine.
-
-Reviewed-by: David Gow <davidgow@google.com>
-
-Thanks for your patience,
 -- David
 
-
-
-
->  lib/list-test.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/lib/list-test.c b/lib/list-test.c
-> index 37cbc33e9fdb..b4b3810c71d0 100644
-> --- a/lib/list-test.c
-> +++ b/lib/list-test.c
-> @@ -408,6 +408,8 @@ static void list_test_list_cut_position(struct kunit *test)
->                 KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
->                 i++;
->         }
-> +
-> +       KUNIT_EXPECT_EQ(test, i, 3);
->  }
->
->  static void list_test_list_cut_before(struct kunit *test)
-> @@ -436,6 +438,8 @@ static void list_test_list_cut_before(struct kunit *test)
->                 KUNIT_EXPECT_PTR_EQ(test, cur, &entries[i]);
->                 i++;
->         }
-> +
-> +       KUNIT_EXPECT_EQ(test, i, 3);
->  }
->
->  static void list_test_list_splice(struct kunit *test)
-> --
-> 2.43.0
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20240930170633.42475-1-richard120310%40gmail.com.
-
---000000000000a5db3d06238cf4f1
+--00000000000037e88a06238cfe69
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -240,14 +229,14 @@ BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
 hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
 AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
 BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
-eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgyPE/N5Fe8y3LfPb6rGZf12bHq8RM
-Q+lbNPH3D/FgOYcwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
-MDAzMDY0OTI3WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
+eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQgt8gSVIJMD+L5e7tjGyE8ZnoTG8vT
+SEgwGMv5deZ3SkAwGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
+MDAzMDY1MjA3WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
 YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAIIkdjCiB6jhk76DTDTgaCM3biQhykcVf2DPNF6Ks0vilrBE
-VIhjFjCaVzEdQS3FAGObJ6fCjQesOmBFf3kJ+D1htORGp32FK2ZrVlNlCFdgA5+uNbBQq3PL1j3l
-h/c9R3/iyDXFmPozrNUiPD8xt3nGkUg1omtIBUSFvnVWv+oS31Mr5caycRTY89f6OEI1XG01jiRR
-rxgPJQ7YHxohbJL0fP5n6SoIG21O9p+uENJiLMDRZBjaC5/Z7uhRFUVXDzwvdStDr/hYSNLnwnJo
-DBhWJ5/ZvW3Um17CyjOBhw2kIWWM+ACsBou3+39/d5CPqsGVwS1JmKx89Ug3QlNVjBU=
---000000000000a5db3d06238cf4f1--
+BAIBMA0GCSqGSIb3DQEBAQUABIIBAMhnL72jVukmuNR1fO4N0j6gTI6A21YB+dRxXl3MS1Rvf8ZN
+wSm+9DcsLx3cEY3Iclu2vMY0XNqe+Bhl/fR2srAqMcOeKy54cJ6urunAYfTxQu7hs9Vvtd77ZrQN
+wEHSIecIajVzhn6HAd7QBew0FBwOB+rCnFdq7BH79RBYeDql73UZ1DysvKL32vtNrvune4Pmqije
+I8jDepVyZpEbijME2o+yOFvccJKjHT7bEm4orRjjtep0A8Lo+XFxbXSay0dcicbjLhLIU+UlB7iM
+JMHAyKH8Tbe7TV49Ocrjmrwlq00DMYX2XMLKM3DCYJovROnj2rhqHQ1w4ohsOQ/6QRg=
+--00000000000037e88a06238cfe69--
 
