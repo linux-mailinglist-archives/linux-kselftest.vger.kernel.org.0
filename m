@@ -1,105 +1,232 @@
-Return-Path: <linux-kselftest+bounces-19008-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19009-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1BDB98FD44
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 08:24:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 18B93990026
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 11:45:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0CD32B223F3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 06:24:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE11028542F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 09:45:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 566D88289E;
-	Fri,  4 Oct 2024 06:24:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05A0C148827;
+	Fri,  4 Oct 2024 09:43:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="d6g66t3i"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K6O24UIr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE4B54DA00;
-	Fri,  4 Oct 2024 06:24:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDEF2179BB;
+	Fri,  4 Oct 2024 09:42:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728023045; cv=none; b=gY/Xt+4KoGngRSDCKSKRE4xVI9BFED3b56dmSLmXmSbsH2AmWPMEEc8sjj/a743BdVTJjGjeOb6gmEeHAsaZ32rcOkqBjMYOblYfDZZxSO4JBHzUQUp0lALnz4+94oDcAU6iNLmNHWn7l45+VcrQLbiaJuyTNimkjBmeawh3eZk=
+	t=1728034979; cv=none; b=LN4f3nhEI2CHa1Ak2zks+YZixIrh3g+so46gtdn+kX4CbH2vwvtHDn0GB8EJ0gpMCRkDJZzUyMRFf7e3kq3TXXhApwEjcShFIeSmlJub++DCx1kVSUSI937vfDE8h8WcXtVKw0EMVk7yZL73WjUZBeUHtPtu/QUKgnszusi9ATQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728023045; c=relaxed/simple;
-	bh=HvkxK1aTVBWtEPE6QbXJJ7jlS4gRi5139c+pO4Kp4zE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FUtyIKpjoZUxaMcYVx1Vn6OucU0iUr711zHfBnJZQw/wSGY7yvJwkGZI/ig+FWmpKVU4uRrDjmcB0KA/GmUITpJkl9pG5g3+rFWjCaR7DMAQHHuDJJO2v1Zaz9WZMSc0cO6Ce1FqMBJDbrekIT8jCWUYAVG7byS3+7a9tcwe9G0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=d6g66t3i; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C6793FF802;
-	Fri,  4 Oct 2024 06:23:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1728023034;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=03W9nGxDFHr9kO1XmOKBkDSteAW+ydtDQleISvuWWCk=;
-	b=d6g66t3ipiiFrIVhtdhw4UAkXa/n2n9VnL5Jnjqe5xUr6SEykqyOiY04TLUzM6qoRrY3q3
-	1B1CDCdg+7V6rO+Nkl5g6yEpcatu0Nh5j/T2KlnGAKI+AZMoDiRyZQeL/imcglgPYwfbCN
-	IGzxg859wHPXJgHRUO99BAh0xKZpUHyQcUh7dsXFqajJ2nxQq+0WiDfeJm1awZmsGNUieU
-	zcqCZ0had7VD0LU0YgNT/gxRApe7IE9MhGVdjx1+1sr7YMqMuMa8ejV+0efDgWxsLW+Iiw
-	a1rAevU5pjsCA+T8pdIQcBYYkI4KYGY7fPS0WaFbn0xFFqXNUd4prpZL+ZOTwA==
-Message-ID: <24611a2f-ff5a-47e4-af48-9faad03273d3@bootlin.com>
-Date: Fri, 4 Oct 2024 08:23:52 +0200
+	s=arc-20240116; t=1728034979; c=relaxed/simple;
+	bh=SzhRbPk78jtGFOBCsX0ZbmHldM75YK5G46pTsUz7W2A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=pQqvg6GDJTunOQLMsAnH40DpfADfx2EJLy4AiX5AfAIcK8dY0VKBZnT08xufqwntLLJeanRbo4gjxNgOdQ70wgPaQraiROa9XwH7oO+GDGZhD6rcYgLV9r6PAgjmZaUOOqHIzgtnAbk55PR2Ciiplf7QIj5bJQ/+G09p2Zb5Ueo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K6O24UIr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76F50C4CEC6;
+	Fri,  4 Oct 2024 09:42:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728034979;
+	bh=SzhRbPk78jtGFOBCsX0ZbmHldM75YK5G46pTsUz7W2A=;
+	h=From:To:Cc:Subject:Date:From;
+	b=K6O24UIrnQLvTn2gf3tB4sV3i5xDEFVB8dYD+wUb7ntkgmHrol4txY5c1cCuaD/Fp
+	 gO5mQrMCLw/Lwjmhzuu5bj9lkgYwNXUNrYysI9LO+0OarhhTP0gD2/mwHU5jlanowY
+	 236S4FQ0Jw5Nx377/hmDZaIPvZ4beLHmqREhQ+vXmW/k52t/upg3CY8ouuTCL31+EB
+	 9uPvLAb9xAQBNliOtgTfhZWGuTmtGhDwpKGhZw6A2GLMiSrycHgnqdy4SB1ZrRa+nX
+	 JpsIfIEx6FDaDyNspvZkNAO70gb1i1JqmPrNmUv3lEw7NTrz918G2220FK/4I5cGGN
+	 1ZhZ+KWb9tbQw==
+From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To: Tejun Heo <tj@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+	bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH] selftests: sched_ext: Add sched_ext as proper selftest target
+Date: Fri,  4 Oct 2024 11:42:46 +0200
+Message-ID: <20241004094247.795385-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: convert test_xdp_features.sh
- to test_progs
-To: Martin KaFai Lau <martin.lau@linux.dev>
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Jakub Kicinski <kuba@kernel.org>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Maxime Chevallier <maxime.chevallier@bootlin.com>, ebpf@linuxfoundation.org,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-References: <20240910-convert_xdp_tests-v2-1-a46367c9d038@bootlin.com>
- <64df8d41-6cfb-45a9-8337-5cc04daedb60@linux.dev> <ZuVWmxoqXFI3qvVI@lore-desk>
- <20240914063828.7bd73c5e@kernel.org>
- <464e0ae0-d6e3-4da4-a157-f74260f96275@bootlin.com>
- <366e4392-bd00-4120-8585-a71b3952e365@linux.dev>
- <6d23b607-b6d6-4074-8778-c50bf3bd0b91@linux.dev>
-Content-Language: en-US
-From: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-In-Reply-To: <6d23b607-b6d6-4074-8778-c50bf3bd0b91@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-GND-Sasl: alexis.lothore@bootlin.com
 
-On 10/4/24 06:44, Martin KaFai Lau wrote:
-> On 9/24/24 6:37 PM, Martin KaFai Lau wrote:
->> There are other .sh tests that could better use the test_progs migration. In
->> particular the ones without existing test coverage. For non XDP related,
->> test_tcp_check_syncookie.sh, test_flow_dissector.sh, and test_tc_edt.sh should
->> be the good ones.
-> 
-> I just took a closer look at the test_tc_edt.* for another reason. It seems
-> doing some bandwidth test which may not be a good fit (e.g. too flaky) for
-> test_progs. I would leave it to the bottom of the todo list for now.
+From: Björn Töpel <bjorn@rivosinc.com>
 
-ACK, thanks
+The sched_ext selftests is missing proper cross-compilation support, a
+proper target entry, and out-of-tree build support.
 
+When building the kselftest suite, e.g.:
 
+  make ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- \
+    SKIP_TARGETS="" O=/output/foo -C tools/testing/selftests install
+
+The expectation is that the sched_ext is included, cross-built, and
+placed into /output/foo.
+
+Add CROSS_COMPILE, OUTPUT, and TARGETS support to the sched_ext
+selftest.
+
+Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+---
+ tools/testing/selftests/Makefile           |  1 +
+ tools/testing/selftests/sched_ext/Makefile | 59 +++++++++++++++-------
+ 2 files changed, 41 insertions(+), 19 deletions(-)
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index b38199965f99..20ee8a0b795c 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -88,6 +88,7 @@ TARGETS += rlimits
+ TARGETS += rseq
+ TARGETS += rtc
+ TARGETS += rust
++TARGETS += sched_ext
+ TARGETS += seccomp
+ TARGETS += sgx
+ TARGETS += sigaltstack
+diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
+index 0754a2c110a1..66467a99184d 100644
+--- a/tools/testing/selftests/sched_ext/Makefile
++++ b/tools/testing/selftests/sched_ext/Makefile
+@@ -13,14 +13,8 @@ LLVM_SUFFIX := $(LLVM)
+ endif
+ 
+ CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX) $(CLANG_FLAGS) -fintegrated-as
+-else
+-CC := gcc
+ endif # LLVM
+ 
+-ifneq ($(CROSS_COMPILE),)
+-$(error CROSS_COMPILE not supported for scx selftests)
+-endif # CROSS_COMPILE
+-
+ CURDIR := $(abspath .)
+ REPOROOT := $(abspath ../../../..)
+ TOOLSDIR := $(REPOROOT)/tools
+@@ -34,18 +28,39 @@ GENHDR := $(GENDIR)/autoconf.h
+ SCXTOOLSDIR := $(TOOLSDIR)/sched_ext
+ SCXTOOLSINCDIR := $(TOOLSDIR)/sched_ext/include
+ 
+-OUTPUT_DIR := $(CURDIR)/build
++ifeq (,$(OUTPUT))
++OUTPUT := $(CURDIR)/build
++RUNNER_DIR := $(CURDIR)
++else
++OUTPUT_DIR := $(OUTPUT)
++RUNNER_DIR := $(OUTPUT)
++endif
+ OBJ_DIR := $(OUTPUT_DIR)/obj
+ INCLUDE_DIR := $(OUTPUT_DIR)/include
+ BPFOBJ_DIR := $(OBJ_DIR)/libbpf
+ SCXOBJ_DIR := $(OBJ_DIR)/sched_ext
+ BPFOBJ := $(BPFOBJ_DIR)/libbpf.a
+ LIBBPF_OUTPUT := $(OBJ_DIR)/libbpf/libbpf.a
+-DEFAULT_BPFTOOL := $(OUTPUT_DIR)/sbin/bpftool
+ HOST_BUILD_DIR := $(OBJ_DIR)
+ HOST_OUTPUT_DIR := $(OUTPUT_DIR)
+ 
+-VMLINUX_BTF_PATHS ?= ../../../../vmlinux					\
++ifneq ($(CROSS_COMPILE),)
++DEFAULT_BPFTOOL := $(OUTPUT_DIR)/host/sbin/bpftool
++HOST_OBJ_DIR := $(OBJ_DIR)/host/bpftool
++HOST_LIBBPF_OUTPUT := $(OBJ_DIR)/host/libbpf/
++HOST_LIBBPF_DESTDIR := $(OUTPUT_DIR)/host/
++HOST_DESTDIR := $(OUTPUT_DIR)/host/
++else
++DEFAULT_BPFTOOL := $(OUTPUT_DIR)/sbin/bpftool
++HOST_OBJ_DIR := $(OBJ_DIR)/bpftool
++HOST_LIBBPF_OUTPUT := $(OBJ_DIR)/libbpf/
++HOST_LIBBPF_DESTDIR := $(OUTPUT_DIR)/
++HOST_DESTDIR := $(OUTPUT_DIR)/
++endif
++
++VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)					\
++		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)		\
++		     ../../../../vmlinux					\
+ 		     /sys/kernel/btf/vmlinux					\
+ 		     /boot/vmlinux-$(shell uname -r)
+ VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
+@@ -80,17 +95,23 @@ IS_LITTLE_ENDIAN = $(shell $(CC) -dM -E - </dev/null |				\
+ # Use '-idirafter': Don't interfere with include mechanics except where the
+ # build would have failed anyways.
+ define get_sys_includes
+-$(shell $(1) -v -E - </dev/null 2>&1 \
++$(shell $(1) $(2) -v -E - </dev/null 2>&1 \
+ 	| sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
+-$(shell $(1) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
++$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
+ endef
+ 
++ifneq ($(CROSS_COMPILE),)
++CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
++endif
++
++CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
++
+ BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH)					\
+ 	     $(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)		\
+ 	     -I$(CURDIR)/include -I$(CURDIR)/include/bpf-compat			\
+ 	     -I$(INCLUDE_DIR) -I$(APIDIR) -I$(SCXTOOLSINCDIR)			\
+ 	     -I$(REPOROOT)/include						\
+-	     $(call get_sys_includes,$(CLANG))					\
++	     $(CLANG_SYS_INCLUDES) 						\
+ 	     -Wall -Wno-compare-distinct-pointer-types				\
+ 	     -Wno-incompatible-function-pointer-types				\
+ 	     -O2 -mcpu=v3
+@@ -98,7 +119,7 @@ BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH)					\
+ # sort removes libbpf duplicates when not cross-building
+ MAKE_DIRS := $(sort $(OBJ_DIR)/libbpf $(OBJ_DIR)/libbpf				\
+ 	       $(OBJ_DIR)/bpftool $(OBJ_DIR)/resolve_btfids			\
+-	       $(INCLUDE_DIR) $(SCXOBJ_DIR))
++	       $(HOST_OBJ_DIR) $(INCLUDE_DIR) $(SCXOBJ_DIR))
+ 
+ $(MAKE_DIRS):
+ 	$(call msg,MKDIR,,$@)
+@@ -112,14 +133,14 @@ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)			\
+ 		    DESTDIR=$(OUTPUT_DIR) prefix= all install_headers
+ 
+ $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)	\
+-		    $(LIBBPF_OUTPUT) | $(OBJ_DIR)/bpftool
++		    $(LIBBPF_OUTPUT) | $(HOST_OBJ_DIR)
+ 	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)				\
+ 		    ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD)		\
+ 		    EXTRA_CFLAGS='-g -O0'					\
+-		    OUTPUT=$(OBJ_DIR)/bpftool/					\
+-		    LIBBPF_OUTPUT=$(OBJ_DIR)/libbpf/				\
+-		    LIBBPF_DESTDIR=$(OUTPUT_DIR)/				\
+-		    prefix= DESTDIR=$(OUTPUT_DIR)/ install-bin
++		    OUTPUT=$(HOST_OBJ_DIR)/					\
++		    LIBBPF_OUTPUT=$(HOST_LIBBPF_OUTPUT)				\
++		    LIBBPF_DESTDIR=$(HOST_LIBBPF_DESTDIR)			\
++		    prefix= DESTDIR=$(HOST_DESTDIR) install-bin
+ 
+ $(INCLUDE_DIR)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL) | $(INCLUDE_DIR)
+ ifeq ($(VMLINUX_H),)
+@@ -203,7 +224,7 @@ $(SCXOBJ_DIR)/util.o: util.c | $(SCXOBJ_DIR)
+ 
+ runner: $(SCXOBJ_DIR)/runner.o $(SCXOBJ_DIR)/util.o $(BPFOBJ) $(testcase-targets)
+ 	@echo "$(testcase-targets)"
+-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
++	$(CC) $(CFLAGS) -o $(RUNNER_DIR)/$@ $^ $(LDFLAGS)
+ 
+ TEST_GEN_PROGS := runner
+ 
+
+base-commit: 0c559323bbaabee7346c12e74b497e283aaafef5
 -- 
-Alexis Lothoré, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.43.0
+
 
