@@ -1,104 +1,106 @@
-Return-Path: <linux-kselftest+bounces-19011-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19012-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F012990051
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 11:54:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CB84990185
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 12:45:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B91051F24650
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 09:54:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6079528292A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 10:44:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1825C1487DF;
-	Fri,  4 Oct 2024 09:53:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC18B155C8A;
+	Fri,  4 Oct 2024 10:44:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IlImvfew"
+	dkim=pass (1024-bit key) header.d=amazon.de header.i=@amazon.de header.b="oR3Of1Wf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF91714659B;
-	Fri,  4 Oct 2024 09:53:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469B01553AF;
+	Fri,  4 Oct 2024 10:44:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.190.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728035638; cv=none; b=oiyoIeWRi+gvqQFq5y++4O5zqWQ7wais/gywEi0HTPT5DTF+XA9+7aTzgDPLO92C+esE7AxPBCaxDUy3mE3CK56hNVzdPHg1jMWD8vGSB3vTjTvPsqeIZBYKSmk/brUybxyHEx7+n74jLv6HtMk+G/EzfTDMbcYXDRtOvOKHvnE=
+	t=1728038694; cv=none; b=VTC1qoZVdqikqieLCW9evSw9D+A3mMBVJAMoYqmYk6XPEniGeJAALueCmfJEu6BVKYS/Br9LaOWAdK4SNnRflaInxw89umRUy1LcJMWfzJTQ11Mc4vCUorUmfc/G7Zt+d9MS7UM325IwNnrFXUyT7d66TEbmzxBE772d4NUA3p8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728035638; c=relaxed/simple;
-	bh=+gpexw+GwzFZ1lHSAbDPE9XzLQf8wRp0a9tbaMAgoHY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aINnCqSN+SnxujzrQqvkXn5hZwuB7MujeC4YxNZ3ApEsge82YW9CeTZqDL+KZGoWjP7Pwx/gJsFOCRlVy0qrXLODZH7g+4XeyoNFV565V4/d+yelBJKFYmvNOw3NIARZqkUEvCAfFbAcxJJIVHMnBGYnq9Awvh8qLaveIrLus0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IlImvfew; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A55C4C4CEC6;
-	Fri,  4 Oct 2024 09:53:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728035637;
-	bh=+gpexw+GwzFZ1lHSAbDPE9XzLQf8wRp0a9tbaMAgoHY=;
-	h=From:To:Cc:Subject:Date:From;
-	b=IlImvfewMB2ZAGEK2TtFwv+s6oPed/fZfd0vY+v7tn6rsY8dKyGaWZVUbxH8/FiaP
-	 TJbDmjgthJAyCsX394bPOyNilMqhBu3rw0ayhCGQ2sc/szq0bxxU19Py2QuvwJjtfB
-	 S4hduUL0Fgqx60GcBoiXUSZb9ZRHBtcN2aIekUzncWB5EvGrh6lUrqHqnJXHiVuE+8
-	 QuiK6JrVE+ZpdiDFvSSuIAKeDOdlnKfXd6/oS+bNCD/GmDw7fRyug1TwFJC0mTJNIz
-	 5e9obZNTkgni0SmOkfMQVh5IJl06s/ivk1q5JUWiv1B5E+6/D4uI+EfKncv9E/Zs8J
-	 CVVjnAte6oRSA==
-From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
-To: Mark Brown <broonie@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Mykola Lysenko <mykolal@fb.com>
-Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] selftests: Do not skip BPF selftests by default
-Date: Fri,  4 Oct 2024 11:53:47 +0200
-Message-ID: <20241004095348.797020-1-bjorn@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1728038694; c=relaxed/simple;
+	bh=pPE4/I601JrMIy+XM5295Vjl31RBUgIJ/rXqcSjo5c4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=nlK6slzXIppXnp3zt4ZxM0EL3EXGaRtu2UADOLpoF4kyIQUIMMmnImmsNzhsEP0hM0DWtgUlMB5wutdzqD/fhfepEPL8IXH7ni+tGC4sN+rU5jm8XNe0nsv11n6Kj74OK/ENAQYcXSldnGNvjHbH6+T1IDJQRibRlZzvJfjKQE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (1024-bit key) header.d=amazon.de header.i=@amazon.de header.b=oR3Of1Wf; arc=none smtp.client-ip=207.171.190.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1728038694; x=1759574694;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pPE4/I601JrMIy+XM5295Vjl31RBUgIJ/rXqcSjo5c4=;
+  b=oR3Of1Wf3HEo0dnwjdj9QbOoKLlal8JmUjY1VqjmajiWOso5ovkldN2a
+   nW3HSKi2u16NPX0mCuCfjeOhqn2MYK1icoyhHtZwgINDo1LHvqJKtIGZM
+   dJkftOs02UjrtQ1EUALedb+9lnWyUkHF1IzVWw2JMVw2OxvCyZwR/u/Me
+   Y=;
+X-IronPort-AV: E=Sophos;i="6.11,177,1725321600"; 
+   d="scan'208";a="372905230"
+Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.25.36.210])
+  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 10:44:44 +0000
+Received: from EX19MTAEUC002.ant.amazon.com [10.0.10.100:37237]
+ by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.45.76:2525] with esmtp (Farcaster)
+ id 1351fef0-1ef8-4c2c-b61d-a56b05783d23; Fri, 4 Oct 2024 10:44:42 +0000 (UTC)
+X-Farcaster-Flow-ID: 1351fef0-1ef8-4c2c-b61d-a56b05783d23
+Received: from EX19D041EUB003.ant.amazon.com (10.252.61.118) by
+ EX19MTAEUC002.ant.amazon.com (10.252.51.181) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
+ Fri, 4 Oct 2024 10:44:41 +0000
+Received: from [10.95.86.80] (10.95.86.80) by EX19D041EUB003.ant.amazon.com
+ (10.252.61.118) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34; Fri, 4 Oct 2024
+ 10:44:35 +0000
+Message-ID: <3208be2b-7e9f-413b-a9dc-c36ef4e3d177@amazon.de>
+Date: Fri, 4 Oct 2024 12:44:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/15] KVM: x86: Introduce new ioctl KVM_TRANSLATE2
+To: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+	<seanjc@google.com>, Vitaly Kuznetsov <vkuznets@redhat.com>
+CC: Nicolas Saenz Julienne <nsaenz@amazon.com>, Alexander Graf
+	<graf@amazon.de>, James Gowans <jgowans@amazon.com>,
+	<nh-open-source@amazon.com>, Thomas Gleixner <tglx@linutronix.de>, "Ingo
+ Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, <linux-kernel@vger.kernel.org>,
+	<kvm@vger.kernel.org>, <x86@kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <kvmarm@lists.linux.dev>,
+	<kvm-riscv@lists.infradead.org>, Nikolas Wipper <nik.wipper@gmx.de>
+References: <20240910152207.38974-1-nikwip@amazon.de>
+From: Nikolas Wipper <nikwip@amazon.de>
+Content-Language: en-US
+In-Reply-To: <20240910152207.38974-1-nikwip@amazon.de>
+X-ClientProxiedBy: EX19D046UWB003.ant.amazon.com (10.13.139.174) To
+ EX19D041EUB003.ant.amazon.com (10.252.61.118)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 
-From: Björn Töpel <bjorn@rivosinc.com>
-
-This effectively is a revert of commit 7a6eb7c34a78 ("selftests: Skip
-BPF seftests by default"). At the time when this was added, BPF had
-"build time dependencies on cutting edge versions". Since then a
-number of BPF capable tests has been included in net, hid, sched_ext.
-
-There is no reason not to include BPF by default in the build.
-
-Remove BPF from the selftests skiplist.
-
-Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
----
- tools/testing/selftests/Makefile | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index b38199965f99..88f59a5fef96 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -129,10 +129,8 @@ ifeq ($(filter net/lib,$(TARGETS)),)
- endif
- endif
- 
--# User can optionally provide a TARGETS skiplist.  By default we skip
--# BPF since it has cutting edge build time dependencies which require
--# more effort to install.
--SKIP_TARGETS ?= bpf
-+# User can optionally provide a TARGETS skiplist.
-+SKIP_TARGETS ?=
- ifneq ($(SKIP_TARGETS),)
- 	TMP := $(filter-out $(SKIP_TARGETS), $(TARGETS))
- 	override TARGETS := $(TMP)
-
-base-commit: 0c559323bbaabee7346c12e74b497e283aaafef5
--- 
-2.43.0
+SSBzYXcgdGhpcyBvbiBhbm90aGVyIHNlcmllc1sqXToKCj4gaWYgS1ZNX1RSQU5TTEFURTIgbGFu
+ZHMgKHRob3VnaCBJJ20gc29tZXdoYXQgY3VyaW91cyBhcyB0byB3aHkgUUVNVSBkb2Vzbid0IGRv
+Cj4gdGhlIHBhZ2Ugd2Fsa3MgaXRzZWxmKS4KClRoZSBzaW1wbGUgcmVhc29uIGZvciBrZWVwaW5n
+IHRoaXMgZnVuY3Rpb25hbGl0eSBpbiBLVk0sIGlzIHRoYXQgaXQgYWxyZWFkeQpoYXMgYSBtYXR1
+cmUsIHByb2R1Y3Rpb24tbGV2ZWwgcGFnZSB3YWxrZXIgKHdoaWNoIGlzIGFscmVhZHkgZXhwb3Nl
+ZCkgYW5kCmNyZWF0aW5nIHNvbWV0aGluZyBzaW1pbGFyIFFFTVUgd291bGQgdGFrZSBhIGxvdCBs
+b25nZXIgYW5kIHdvdWxkIGJlIG11Y2gKaGFyZGVyIHRvIG1haW50YWluIHRoYW4ganVzdCBjcmVh
+dGluZyBhbiBBUEkgdGhhdCBsZXZlcmFnZXMgdGhlIGV4aXN0aW5nCndhbGtlci4KClsqXSBodHRw
+czovL2xvcmUua2VybmVsLm9yZy9sa21sL1p2SnNlVm9UN2dOX0dCRzNAZ29vZ2xlLmNvbS9ULyNt
+YjBiMjNhMWY1MDIzMTkyYTQ0MmRiNGExNjYyOWQ5Y2E3NGViNmI1ZQoKcHM6IHRoaXMgaXMgYWxz
+byBhIGdlbnRsZSBwaW5nIGZvciByZXZpZXcsIGlmIHRoaXMgZ290IGxvc3QgaW4gYmV0d2Vlbgpj
+b25mZXJlbmNlcwoKCgpBbWF6b24gV2ViIFNlcnZpY2VzIERldmVsb3BtZW50IENlbnRlciBHZXJt
+YW55IEdtYkgKS3JhdXNlbnN0ci4gMzgKMTAxMTcgQmVybGluCkdlc2NoYWVmdHNmdWVocnVuZzog
+Q2hyaXN0aWFuIFNjaGxhZWdlciwgSm9uYXRoYW4gV2Vpc3MKRWluZ2V0cmFnZW4gYW0gQW10c2dl
+cmljaHQgQ2hhcmxvdHRlbmJ1cmcgdW50ZXIgSFJCIDI1Nzc2NCBCClNpdHo6IEJlcmxpbgpVc3Qt
+SUQ6IERFIDM2NSA1MzggNTk3Cg==
 
 
