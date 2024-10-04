@@ -1,106 +1,107 @@
-Return-Path: <linux-kselftest+bounces-19012-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19013-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CB84990185
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 12:45:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61B879901F0
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 13:19:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6079528292A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 10:44:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E857EB2363C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 11:19:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC18B155C8A;
-	Fri,  4 Oct 2024 10:44:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.de header.i=@amazon.de header.b="oR3Of1Wf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B89B15666B;
+	Fri,  4 Oct 2024 11:18:56 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469B01553AF;
-	Fri,  4 Oct 2024 10:44:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=207.171.190.10
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6CF1224D1;
+	Fri,  4 Oct 2024 11:18:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728038694; cv=none; b=VTC1qoZVdqikqieLCW9evSw9D+A3mMBVJAMoYqmYk6XPEniGeJAALueCmfJEu6BVKYS/Br9LaOWAdK4SNnRflaInxw89umRUy1LcJMWfzJTQ11Mc4vCUorUmfc/G7Zt+d9MS7UM325IwNnrFXUyT7d66TEbmzxBE772d4NUA3p8=
+	t=1728040736; cv=none; b=VW7Knnu9G5xdq2hOvPhZdf5wFpQ4ZYtiqqW7ZsXreZgFgUvmvUIJ3OneaVbGXkGbba8VE7IN9F12Q26vQvtXyOzbO42ATL2Y9X2gIgl1+4WCUnBegCChwcT6FiUo5Hker+iekPhxAM8zkQk4Ct9jTQXnV1JzQxSe++lXdGKUPnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728038694; c=relaxed/simple;
-	bh=pPE4/I601JrMIy+XM5295Vjl31RBUgIJ/rXqcSjo5c4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=nlK6slzXIppXnp3zt4ZxM0EL3EXGaRtu2UADOLpoF4kyIQUIMMmnImmsNzhsEP0hM0DWtgUlMB5wutdzqD/fhfepEPL8IXH7ni+tGC4sN+rU5jm8XNe0nsv11n6Kj74OK/ENAQYcXSldnGNvjHbH6+T1IDJQRibRlZzvJfjKQE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (1024-bit key) header.d=amazon.de header.i=@amazon.de header.b=oR3Of1Wf; arc=none smtp.client-ip=207.171.190.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1728038694; x=1759574694;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pPE4/I601JrMIy+XM5295Vjl31RBUgIJ/rXqcSjo5c4=;
-  b=oR3Of1Wf3HEo0dnwjdj9QbOoKLlal8JmUjY1VqjmajiWOso5ovkldN2a
-   nW3HSKi2u16NPX0mCuCfjeOhqn2MYK1icoyhHtZwgINDo1LHvqJKtIGZM
-   dJkftOs02UjrtQ1EUALedb+9lnWyUkHF1IzVWw2JMVw2OxvCyZwR/u/Me
-   Y=;
-X-IronPort-AV: E=Sophos;i="6.11,177,1725321600"; 
-   d="scan'208";a="372905230"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-east-1.prod.farcaster.email.amazon.dev) ([10.25.36.210])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 10:44:44 +0000
-Received: from EX19MTAEUC002.ant.amazon.com [10.0.10.100:37237]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.45.76:2525] with esmtp (Farcaster)
- id 1351fef0-1ef8-4c2c-b61d-a56b05783d23; Fri, 4 Oct 2024 10:44:42 +0000 (UTC)
-X-Farcaster-Flow-ID: 1351fef0-1ef8-4c2c-b61d-a56b05783d23
-Received: from EX19D041EUB003.ant.amazon.com (10.252.61.118) by
- EX19MTAEUC002.ant.amazon.com (10.252.51.181) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Fri, 4 Oct 2024 10:44:41 +0000
-Received: from [10.95.86.80] (10.95.86.80) by EX19D041EUB003.ant.amazon.com
- (10.252.61.118) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34; Fri, 4 Oct 2024
- 10:44:35 +0000
-Message-ID: <3208be2b-7e9f-413b-a9dc-c36ef4e3d177@amazon.de>
-Date: Fri, 4 Oct 2024 12:44:30 +0200
+	s=arc-20240116; t=1728040736; c=relaxed/simple;
+	bh=pZHox8K1Nmvgt3lxsApWtJFu8tZf+W8GEvc4spiFT0A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o3kjrljMSxvGGSKBmubQjma5vGj/0PH5b2OTKTPnb38LSrJXXp1rzelLuNM4O4KLwDJ1xbO5VoKcbuhTq0IBgtgfEqfZOHXuzG6M8SHwOJqxuZHNMDGUglk95mEY79PInsCOd+UDFA6B9EauP/xyLSDavspP6vyDyioJ5sToypg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8DEE0339;
+	Fri,  4 Oct 2024 04:19:23 -0700 (PDT)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0DE1F3F640;
+	Fri,  4 Oct 2024 04:18:47 -0700 (PDT)
+Date: Fri, 4 Oct 2024 14:18:45 +0300
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	David Spickett <david.spickett@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v13 22/40] arm64/gcs: Ensure that new threads have a GCS
+Message-ID: <Zv_PFVffwIkKevzE@arm.com>
+References: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+ <20241001-arm64-gcs-v13-22-222b78d87eee@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/15] KVM: x86: Introduce new ioctl KVM_TRANSLATE2
-To: Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
-	<seanjc@google.com>, Vitaly Kuznetsov <vkuznets@redhat.com>
-CC: Nicolas Saenz Julienne <nsaenz@amazon.com>, Alexander Graf
-	<graf@amazon.de>, James Gowans <jgowans@amazon.com>,
-	<nh-open-source@amazon.com>, Thomas Gleixner <tglx@linutronix.de>, "Ingo
- Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, <linux-kernel@vger.kernel.org>,
-	<kvm@vger.kernel.org>, <x86@kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <kvmarm@lists.linux.dev>,
-	<kvm-riscv@lists.infradead.org>, Nikolas Wipper <nik.wipper@gmx.de>
-References: <20240910152207.38974-1-nikwip@amazon.de>
-From: Nikolas Wipper <nikwip@amazon.de>
-Content-Language: en-US
-In-Reply-To: <20240910152207.38974-1-nikwip@amazon.de>
-X-ClientProxiedBy: EX19D046UWB003.ant.amazon.com (10.13.139.174) To
- EX19D041EUB003.ant.amazon.com (10.252.61.118)
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241001-arm64-gcs-v13-22-222b78d87eee@kernel.org>
 
-SSBzYXcgdGhpcyBvbiBhbm90aGVyIHNlcmllc1sqXToKCj4gaWYgS1ZNX1RSQU5TTEFURTIgbGFu
-ZHMgKHRob3VnaCBJJ20gc29tZXdoYXQgY3VyaW91cyBhcyB0byB3aHkgUUVNVSBkb2Vzbid0IGRv
-Cj4gdGhlIHBhZ2Ugd2Fsa3MgaXRzZWxmKS4KClRoZSBzaW1wbGUgcmVhc29uIGZvciBrZWVwaW5n
-IHRoaXMgZnVuY3Rpb25hbGl0eSBpbiBLVk0sIGlzIHRoYXQgaXQgYWxyZWFkeQpoYXMgYSBtYXR1
-cmUsIHByb2R1Y3Rpb24tbGV2ZWwgcGFnZSB3YWxrZXIgKHdoaWNoIGlzIGFscmVhZHkgZXhwb3Nl
-ZCkgYW5kCmNyZWF0aW5nIHNvbWV0aGluZyBzaW1pbGFyIFFFTVUgd291bGQgdGFrZSBhIGxvdCBs
-b25nZXIgYW5kIHdvdWxkIGJlIG11Y2gKaGFyZGVyIHRvIG1haW50YWluIHRoYW4ganVzdCBjcmVh
-dGluZyBhbiBBUEkgdGhhdCBsZXZlcmFnZXMgdGhlIGV4aXN0aW5nCndhbGtlci4KClsqXSBodHRw
-czovL2xvcmUua2VybmVsLm9yZy9sa21sL1p2SnNlVm9UN2dOX0dCRzNAZ29vZ2xlLmNvbS9ULyNt
-YjBiMjNhMWY1MDIzMTkyYTQ0MmRiNGExNjYyOWQ5Y2E3NGViNmI1ZQoKcHM6IHRoaXMgaXMgYWxz
-byBhIGdlbnRsZSBwaW5nIGZvciByZXZpZXcsIGlmIHRoaXMgZ290IGxvc3QgaW4gYmV0d2Vlbgpj
-b25mZXJlbmNlcwoKCgpBbWF6b24gV2ViIFNlcnZpY2VzIERldmVsb3BtZW50IENlbnRlciBHZXJt
-YW55IEdtYkgKS3JhdXNlbnN0ci4gMzgKMTAxMTcgQmVybGluCkdlc2NoYWVmdHNmdWVocnVuZzog
-Q2hyaXN0aWFuIFNjaGxhZWdlciwgSm9uYXRoYW4gV2Vpc3MKRWluZ2V0cmFnZW4gYW0gQW10c2dl
-cmljaHQgQ2hhcmxvdHRlbmJ1cmcgdW50ZXIgSFJCIDI1Nzc2NCBCClNpdHo6IEJlcmxpbgpVc3Qt
-SUQ6IERFIDM2NSA1MzggNTk3Cg==
+On Tue, Oct 01, 2024 at 11:59:01PM +0100, Mark Brown wrote:
+> When a new thread is created by a thread with GCS enabled the GCS needs
+> to be specified along with the regular stack.
+> 
+> Unfortunately plain clone() is not extensible and existing clone3()
+> users will not specify a stack so all existing code would be broken if
+> we mandated specifying the stack explicitly.  For compatibility with
+> these cases and also x86 (which did not initially implement clone3()
+> support for shadow stacks) if no GCS is specified we will allocate one
+> so when a thread is created which has GCS enabled allocate one for it.
+> We follow the extensively discussed x86 implementation and allocate
+> min(RLIMIT_STACK/2, 2G).  Since the GCS only stores the call stack and not
+> any variables this should be more than sufficient for most applications.
+> 
+> GCSs allocated via this mechanism will be freed when the thread exits.
 
+I think Szabolcs mentioned a GCS leak with v12:
+
+https://lore.kernel.org/r/ZtrihWQFyb2/XrQV@arm.com
+
+(and in some private messages IIRC)
+
+Has this been identified? The changelog only mentions a leak in v8.
+
+-- 
+Catalin
 
