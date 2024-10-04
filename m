@@ -1,288 +1,147 @@
-Return-Path: <linux-kselftest+bounces-18997-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18998-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B12398FB98
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 02:37:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 63D4F98FBAE
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 02:43:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9056C1F226B8
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 00:37:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D82941F22598
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 00:43:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E056917FE;
-	Fri,  4 Oct 2024 00:37:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6960A17FE;
+	Fri,  4 Oct 2024 00:42:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HAgNBxzu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e7V3NzlS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F069B1849;
-	Fri,  4 Oct 2024 00:37:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3680111CBD;
+	Fri,  4 Oct 2024 00:42:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728002253; cv=none; b=Xdc31gxXSFBw+idaGcjJoh1PmHIj+LqRG0NamuAhIwhBWcouHYOEHslxwuUF4tP6PR1CdZHxV7O8W9vuOQ8KBl7HdR+vcFpRJlSYV9vBcJc4Dib3Z6qM9+EiMl+OPBUHTaLVls1CWhYRHbCQ+LbMEp/zNDfZFSkFLwTersqPaLk=
+	t=1728002577; cv=none; b=Ov+WZ6EOJI4bXxIiOMvla0OzxeTFbRrW6DZ/Q6LblkqS9nwRgEOLtYwVhh7TTFLeIwkYjPmRcb7V+bPrQ/etI3lqd4LDRsBPwjYcf0w2XcRKyP6rHT+0Q/01gqz7hl8IFawPjQIWexJIjtOC4XLMVy/ai1nyMLHSrQcmKn8TGQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728002253; c=relaxed/simple;
-	bh=iuTIq8azHxkVMYBm+FQ9RzqHxLlTrREuRHlcvEcbUdg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=j1UCSOMUHyEM8h7yZlVotT84EkaV/KGGAsXH+49pnZWAf3vBZOEAmxGss/4mz//r0ncxn8+Q1JE9jrXpqecPA83NHnAkq/0/w2FZrRu4SO5uwOuIWkgnIOBCIqnHgcTzYn+V+II+b9iVaIsJyuELeAwV2GVXRO9v38jXaob24Lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HAgNBxzu; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-37ccdc0d7f6so1099582f8f.0;
-        Thu, 03 Oct 2024 17:37:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728002250; x=1728607050; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OpL4nhjHMtPB/hb4YyGjFSchO8APqauV2DpacZ1oo+8=;
-        b=HAgNBxzuQmeyjj7l4bVV6wUwpEhGZvDUeTZxi6Piegh3Ds7xDRJzb0Jgw7ZNqr5CP/
-         RWc6jNKHYrIuZhsXQ5iTSEHnZUx+ek5KfwdXI5DLuoLuGdzZvwp45eeqTcY7rbf1eZJG
-         qR0PXNLVqndVdWy4Y4WeTTFWl6Mj5TLbzQARxJ0wBpdZkeb1iEMBBIDZvnxGBs1/q6kr
-         6f2iZgKVxTn5Byn/nIO1EUJVkQFP6LEVUbxvP6hSGMw46Z/1Wg5vBFPMCZiweXHi9WC9
-         cwrMRTh1ZhdD1E7R6ZbW+awoRdqdK3sSqzvuAJZgwxQyvDNy7+hvffxNi/ALY6OWLX1M
-         mXjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728002250; x=1728607050;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OpL4nhjHMtPB/hb4YyGjFSchO8APqauV2DpacZ1oo+8=;
-        b=qO/OUxiAfbpOJoSahWpZAi1T5JDSt++EDHzGZYhtELI7uZt56zVzVrsJkUkn+gx7T6
-         5Ubww+J6Q+7k5c5UlhQEhmqxZGlw/p7RmyWH956D6TWatyabdeQK7vDGB/mADOJGPaPt
-         WxtFvVSShhGGvdEk4OZxXSxmPYLwJoKiwxOBT0lfQEbnNqwy3vj7GJPslYNz1tbJU6s5
-         IMDValdokWK/Xr1RqRG7nHBrycHdVO+o2CfBltllTSll9bQwXWt2gU0U6UIth/wdUJsi
-         UMMF/80PKzE5PXKr5H0PFjf1Xr7MDWpQ0ZsqMaEt8KVvfgxx+WU+tmW5ShjCN7bu0JPX
-         c/3g==
-X-Forwarded-Encrypted: i=1; AJvYcCUg/wYaysJ9C+txXBqXJAWOSsRMjEOuSQRn1FN7jqHtP/WQfukBNdGDWQ2ite2EJsR3CszsiPb7k0LPWxSK@vger.kernel.org, AJvYcCUmCMvoksdPjcCW29s1m/zciGhTAHEwTu50q2W34IVd9wLiNf3EPF8Wht3uU6cTz96pl+Q=@vger.kernel.org, AJvYcCWLuJYNMevNBLRSe8fmVReN5TWWsMuQl6N7zR7V56D+23mkEDSCtXEFcSzRtZEJOCARd+BYEYLe2yV2N4hnqPky@vger.kernel.org
-X-Gm-Message-State: AOJu0YykGqSFSI47tomb+v1xKYaPsWav50vpPfdgObIrkkvgdUDbYo7O
-	3ki2FsfmAPwjZB+3/GeeNmxHj1F3FwabFdQ1IYAhVPTv4HmHmp+MJxpr7T0BvKf3OVQeDRuy6o9
-	j+yH6A+y/JUy6zptDIGicMBo2j0I=
-X-Google-Smtp-Source: AGHT+IFK/lZXz0IHoUgrXllBUT9eLn/Ael0Qb2qyqEG4kyySLrrVw4B9bs8rgZjv/Z6k79wgsQ4OkBzEk1b71P+EW7c=
-X-Received: by 2002:a5d:4250:0:b0:37c:d276:f04 with SMTP id
- ffacd0b85a97d-37d0e7d40f1mr588373f8f.45.1728002250056; Thu, 03 Oct 2024
- 17:37:30 -0700 (PDT)
+	s=arc-20240116; t=1728002577; c=relaxed/simple;
+	bh=kMMo9BAc0r9Ly2hSQLr4fnwD0fAa39h+ExMmstruj/Q=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=euABGkFCdrX55Yir6vm2LB/IDmJBssUVbWwALg7NZvaOkcWbkyXXojoEIAduiRf48uG0ZQlS/QBW1fWpm+o4H1+pyuu1mG5V7aZSDHE1QUIPD3mYN2SnnGB00A5hSQXMetJFSZI9dRzx9SzeesQ9gCvF5tDnRVc2AyspgznNbjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e7V3NzlS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 943E4C4CEC7;
+	Fri,  4 Oct 2024 00:42:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728002576;
+	bh=kMMo9BAc0r9Ly2hSQLr4fnwD0fAa39h+ExMmstruj/Q=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=e7V3NzlSubY7reZLd5JUnQsOasf7lH26uNnmDfrfJagQCqYL4qr11fwPJVsi7HNpi
+	 QgZOm+6DPsGITx3dheRWzcPgD8niD3La1DnxQSiFeUWxz0cMKfojzlKFzJePWSAKNw
+	 9eFb5q25wS4KmlRqZtuCWDL4CWjJlXUUAlbalZPI6xV+Gpy5cV+aqNQcQ8xAN3ccb4
+	 pGtuMR9+Zjd/8YZoItg0yoiqLQt7Gd9V+lQywlZ523pD1+hnEfp6A7Y9OasEg8mCsY
+	 w0V2XNgp/oGC0YT07gWFxj4lRjzm+S99bXSplJi5fnIp+OsH6qW9gx3K+EtgWJyGBE
+	 btQwmPJSnWLKw==
+Message-ID: <cd31493888acc2b64a4986954dfa43ae.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1727914243.git.dxu@dxuuu.xyz> <4ed563d21d1e34508a347a5b91a8089cbbae47c2.1727914243.git.dxu@dxuuu.xyz>
-In-Reply-To: <4ed563d21d1e34508a347a5b91a8089cbbae47c2.1727914243.git.dxu@dxuuu.xyz>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 3 Oct 2024 17:37:18 -0700
-Message-ID: <CAADnVQJdGmZJHURndkB42Fk4KVsr8XPKHSYygN7qAA7HEAbo6A@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v4 1/2] bpf: verifier: Support eliding map lookup nullness
-To: Daniel Xu <dxu@dxuuu.xyz>
-Cc: Alexei Starovoitov <ast@kernel.org>, Eddy Z <eddyz87@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Shuah Khan <shuah@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, bpf <bpf@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Kernel Team <kernel-team@meta.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <3e1de608-008c-4439-acd2-647a288dcdc0@roeck-us.net>
+References: <20240718210513.3801024-1-sboyd@kernel.org> <dcd8894f-1eb6-4b5c-9e6f-f6e584c601d2@roeck-us.net> <6f5a5b5f-71a7-4ed3-8cb3-d930bbce599b@linuxfoundation.org> <ba88a29c-f05e-4ca3-82d1-0a634613caee@roeck-us.net> <4216b852-11a2-41ae-bb01-5f9b578ee41b@roeck-us.net> <879831a8-2039-4cdb-bce2-aefdeb7ab25f@linuxfoundation.org> <da260b77-2ecb-4486-90cb-6db456d381ef@linuxfoundation.org> <f5f1c42d-77c0-48c7-ac52-3d4a3b5c2b47@roeck-us.net> <4a8abb5f501279de7907629f4dd6be24.sboyd@kernel.org> <3e1de608-008c-4439-acd2-647a288dcdc0@roeck-us.net>
+Subject: Re: [PATCH v8 8/8] clk: Add KUnit tests for clks registered with struct clk_parent_data
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, patches@lists.linux.dev, kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rafael J.Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, Daniel Latypov <dlatypov@google.com>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Maxime Ripard <maxime@cerno.tech>, Geert Uytterhoeven <geert+renesas@glider.be>
+To: Guenter Roeck <linux@roeck-us.net>, Shuah Khan <skhan@linuxfoundation.org>
+Date: Thu, 03 Oct 2024 17:42:54 -0700
+User-Agent: alot/0.10
 
-On Wed, Oct 2, 2024 at 5:12=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
->
-> This commit allows progs to elide a null check on statically known map
-> lookup keys. In other words, if the verifier can statically prove that
-> the lookup will be in-bounds, allow the prog to drop the null check.
->
-> This is useful for two reasons:
->
-> 1. Large numbers of nullness checks (especially when they cannot fail)
->    unnecessarily pushes prog towards BPF_COMPLEXITY_LIMIT_JMP_SEQ.
-> 2. It forms a tighter contract between programmer and verifier.
->
-> For (1), bpftrace is starting to make heavier use of percpu scratch
-> maps. As a result, for user scripts with large number of unrolled loops,
-> we are starting to hit jump complexity verification errors.  These
-> percpu lookups cannot fail anyways, as we only use static key values.
-> Eliding nullness probably results in less work for verifier as well.
->
-> For (2), percpu scratch maps are often used as a larger stack, as the
-> currrent stack is limited to 512 bytes. In these situations, it is
-> desirable for the programmer to express: "this lookup should never fail,
-> and if it does, it means I messed up the code". By omitting the null
-> check, the programmer can "ask" the verifier to double check the logic.
->
-> Tests also have to be updated in sync with these changes, as the
-> verifier is more efficient with this change. Notable, iters.c tests had
-> to be changed to use a map type that still requires null checks, as it's
-> exercising verifier tracking logic w.r.t iterators.
->
-> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> ---
->  kernel/bpf/verifier.c                         | 73 ++++++++++++++++++-
->  tools/testing/selftests/bpf/progs/iters.c     | 14 ++--
->  .../selftests/bpf/progs/map_kptr_fail.c       |  2 +-
->  .../selftests/bpf/progs/verifier_map_in_map.c |  2 +-
->  .../testing/selftests/bpf/verifier/map_kptr.c |  2 +-
->  5 files changed, 82 insertions(+), 11 deletions(-)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index 7d9b38ffd220..9ee2cd6c0508 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -284,6 +284,7 @@ struct bpf_call_arg_meta {
->         u32 ret_btf_id;
->         u32 subprogno;
->         struct btf_field *kptr_field;
-> +       long const_map_key;
+Quoting Guenter Roeck (2024-10-03 17:25:37)
+> On 10/3/24 16:46, Stephen Boyd wrote:
+> [ ... ]
+> > That DT test has been there for a few releases. Is this the first time
+> > those tests have been run on arm64+acpi? I didn't try after sending the
+> > patches and forgot that the patch was dropped.
+> >=20
+>=20
+> Previously I had the affected tests disabled and never tracked down the p=
+roblem.
+> Since the problem is now spreading to additional tests, I finally tracked=
+ it down,
+> that is all.
 
-key might collide with special -1 on 32-bit archs ?
-s64 instead ?
+Ok great. Good to know this isn't a new problem. Thanks for tracking it
+down.
 
->  };
->
->  struct bpf_kfunc_call_arg_meta {
-> @@ -10416,6 +10417,60 @@ static void update_loop_inline_state(struct bpf_=
-verifier_env *env, u32 subprogno
->                                  state->callback_subprogno =3D=3D subprog=
-no);
->  }
->
-> +/* Returns whether or not the given map type can potentially elide
-> + * lookup return value nullness check. This is possible if the key
-> + * is statically known.
-> + */
-> +static bool can_elide_value_nullness(enum bpf_map_type type)
-> +{
-> +       switch (type) {
-> +       case BPF_MAP_TYPE_ARRAY:
-> +       case BPF_MAP_TYPE_PERCPU_ARRAY:
-> +               return true;
-> +       default:
-> +               return false;
-> +       }
-> +}
-> +
-> +/* Returns constant key value if possible, else -1 */
-> +static long get_constant_map_key(struct bpf_verifier_env *env,
-> +                                struct bpf_reg_state *key)
-> +{
-> +       struct bpf_func_state *state =3D func(env, key);
-> +       struct bpf_reg_state *reg;
-> +       int stack_off;
-> +       int slot;
-> +       int spi;
-> +
-> +       if (!env->bpf_capable)
-> +               return -1;
-> +       if (key->type !=3D PTR_TO_STACK)
-> +               return -1;
-> +       if (!tnum_is_const(key->var_off))
-> +               return -1;
-> +
-> +       stack_off =3D key->off + key->var_off.value;
-> +       slot =3D -stack_off - 1;
-> +       if (slot < 0)
-> +               /* Stack grew upwards. This is properly checked
-> +                * as part of helper argument processing, but since
-> +                * this runs before those checks, we need to preemptively
-> +                * do this here.
-> +                */
-> +               return -1;
-> +       else if (slot >=3D state->allocated_stack)
-> +               /* Stack uninitialized */
-> +               return -1;
-> +
-> +       spi =3D slot / BPF_REG_SIZE;
-> +       reg =3D &state->stack[spi].spilled_ptr;
+>=20
+> > How are you running kunit tests? I installed the qemu-efi-aarch64 debian
+> > package to get QEMU_EFI.fd but passing that to the kunit.py run command
+> > with --qemu_args=3D"-bios /usr/share/qemu-efi-aarch64/QEMU_EFI.fd" didn=
+'t
+> > get me beyond the point that the EFI stub boots linux. I think the
+> > serial console must not be working and thus the kunit wrapper waits for
+> > something to show up but nothing ever does. I haven't dug any further
+> > though, so maybe you have a working command.
+> >=20
+>=20
+> I run all tests during boot, not from the command line. I also use the -b=
+ios
+> command but don't recall any issues with the console. I specify the
+> console on the qemu command line; depending on the qemu machine it is eit=
+her
+> ttyS0 or ttyAMA0. The init script then finds and selects the active conso=
+le.
 
-reg->type =3D=3D SCALAR
-check is missing.
-slot->type should also be checked.
-spiller_ptr is only correct for STACK_SPILL.
+Can you please describe how you run the kunit test? And provide the qemu
+command you run to boot arm64 with acpi?
 
-it should also recognize that STACK_ZERO means zero.
+>=20
+> > Here's my command that isn't working:
+> >=20
+> > ./tools/testing/kunit/kunit.py run --arch=3Darm64 --kunitconfig=3Ddrive=
+rs/of --qemu_args=3D"-bios /usr/share/qemu-efi-aarch64/QEMU_EFI.fd" =20
+> >=20
+>=20
+> I can't really see what that command is actually doing ;-).
 
-> +       if (!tnum_is_const(reg->var_off))
-> +               /* Stack value not statically known */
-> +               return -1;
+It eventually runs this qemu command
 
-I suspect tnum_is_const could pass for pointers and other !scalar.
+qemu-system-aarch64 -nodefaults -m 1024 -kernel .kunit/arch/arm64/boot/Imag=
+e.gz -append 'kunit.enable=3D1 console=3DttyAMA0 kunit_shutdown=3Dreboot' -=
+no-reboot -nographic -serial stdio -machine virt -cpu max,pauth-impdef=3Don=
+ -bios /usr/share/qemu-efi-aarch64/QEMU_EFI.fd
 
-> +
-> +       return reg->var_off.value;
+I see that it fails because the architected timer isn't there after I
+add an earlycon=3Dpl011,0x9000000 to the kernel commandline. I suspect
+passing a bios like this is incorrect, but I rarely run qemu manually so
+I don't know what I'm doing wrong.
 
-and this will be zero by accident.
+NR_IRQS: 64, nr_irqs: 64, preallocated irqs: 0
+rcu: srcu_init: Setting srcu_struct sizes based on contention.
+timer_probe: no matching timers found
+Kernel panic - not syncing: Unable to initialise architected timer.
+CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.11.0-rc1-00261-g497f7c30=
+f184 #203
+Call trace:
+ dump_backtrace+0x94/0xec
+ show_stack+0x18/0x24
+ dump_stack_lvl+0x38/0x90
+ dump_stack+0x18/0x24
+ panic+0x36c/0x380
+ early_brk64+0x0/0xa8
+ start_kernel+0x27c/0x558
+ __primary_switched+0x80/0x88
+---[ end Kernel panic - not syncing: Unable to initialise architected timer=
+. ]---
 
-Bits of check_stack_read_fixed_off() should probably be
-factored out and used here.
+>=20
+> I'll just keep the affected tests disabled on arm64 for the time being.
 
-> +}
-> +
->  static int get_helper_proto(struct bpf_verifier_env *env, int func_id,
->                             const struct bpf_func_proto **ptr)
->  {
-> @@ -10513,6 +10568,15 @@ static int check_helper_call(struct bpf_verifier=
-_env *env, struct bpf_insn *insn
->                         env->insn_aux_data[insn_idx].storage_get_func_ato=
-mic =3D true;
->         }
->
-> +       /* Logically we are trying to check on key register state before
-> +        * the helper is called, so process here. Otherwise argument proc=
-essing
-> +        * may clobber the spilled key values.
-> +        */
-> +       regs =3D cur_regs(env);
-> +       if (func_id =3D=3D BPF_FUNC_map_lookup_elem)
-> +               meta.const_map_key =3D get_constant_map_key(env, &regs[BP=
-F_REG_2]);
-> +
-> +
-
-I think the logic is too specific.
-Let's make it more generic.
-It probably better to do later in:
-case ARG_PTR_TO_MAP_KEY:
-after check_helper_mem_access() returns 0
-and store into meta.const_map_key.
-
->         meta.func_id =3D func_id;
->         /* check args */
->         for (i =3D 0; i < MAX_BPF_FUNC_REG_ARGS; i++) {
-> @@ -10773,10 +10837,17 @@ static int check_helper_call(struct bpf_verifie=
-r_env *env, struct bpf_insn *insn
->                                 "kernel subsystem misconfigured verifier\=
-n");
->                         return -EINVAL;
->                 }
-> +
-> +               if (func_id =3D=3D BPF_FUNC_map_lookup_elem &&
-
-and only here check for func_id.
-
-Saving meta.const_map_key can be unconditional for all ARG_PTR_TO_MAP_KEY.
-
-We can use it in a follow up to optimize lookup/update from arrays.
-Currently array_map_gen_lookup() still emits a load from key
-and bounds check.
-All that can be optimized with const_map_key.
-
-> +                   can_elide_value_nullness(meta.map_ptr->map_type) &&
-> +                   meta.const_map_key >=3D 0 &&
-> +                   meta.const_map_key < meta.map_ptr->max_entries)
-> +                       ret_flag &=3D ~PTR_MAYBE_NULL;
-> +
->                 regs[BPF_REG_0].map_ptr =3D meta.map_ptr;
->                 regs[BPF_REG_0].map_uid =3D meta.map_uid;
->                 regs[BPF_REG_0].type =3D PTR_TO_MAP_VALUE | ret_flag;
-> -               if (!type_may_be_null(ret_type) &&
-> +               if (!type_may_be_null(regs[BPF_REG_0].type) &&
-
-I would use ret_flag here instead of R0.type.
-
-pw-bot: cr
+We should skip the tests on arm64+acpi, which is similar to disabling
+but not exactly the same. There will likely be more DT overlay usage in
+kunit and so that will lead to more test disabling. Skipping properly is
+the better solution.
 
