@@ -1,128 +1,201 @@
-Return-Path: <linux-kselftest+bounces-19069-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19070-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93A07991024
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 22:19:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A86DC991092
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 22:29:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B8681F2747F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 20:19:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67AAAB31215
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 20:27:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5F261DD9C8;
-	Fri,  4 Oct 2024 20:00:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08F9A1DD9D8;
+	Fri,  4 Oct 2024 20:17:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lkcamp.dev header.i=@lkcamp.dev header.b="anUMBa7m";
-	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="D611fMmw"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="RNgu7eDB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2057.outbound.protection.outlook.com [40.107.243.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14851DD887
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Oct 2024 20:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728072041; cv=none; b=m6CFTGHoIduoi8MTqFNXamplSC1HcGMgIx3WTUb80Cez5d+cKvPYl22d9/7WXVM1k7cPK0qnz1YZ81ZnfW6l/9uaLyhsYACyGpJRRSerLNLfWQHXqwn9UeV9Pm3HD2y8fDlCRQSY58/JewK1zbs1jQU3eXy3vLz8Oqn9zaLlp3I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728072041; c=relaxed/simple;
-	bh=ekDVyd3HSW+N9GGe5wx6qgFGUh9DrSzRbbdlNF11H4U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vAHT2PYSmP904eQ7nyJA8wAkW7eX8GxQ4eXf0VlLUk32xIZCv0X/SUliaqTS3RbcnB5w0v2PBX4Vybx2aFOn4sgnZahFr2NoDA7CQdIgPTYPBmOixuh3pN1H2xas/Df03zHim6fFxlVPuJXaMfPPGUzhw4PBR/zA3oOdpbjYm8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lkcamp.dev; spf=pass smtp.mailfrom=lkcamp.dev; dkim=pass (2048-bit key) header.d=lkcamp.dev header.i=@lkcamp.dev header.b=anUMBa7m; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=D611fMmw; arc=none smtp.client-ip=34.202.193.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=lkcamp.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lkcamp.dev
-Authentication-Results: purelymail.com; auth=pass
-DKIM-Signature: a=rsa-sha256; b=anUMBa7miv2KnYlo9FugDs76NEAcaNgSgg4eueR2Pq2z53fDGz+QPAmvkkj8Y0QVkLCoFryqNrSAviLLoIOwhLxzY6soStO2/CV5nZq6gS7vv5sXYO06iOeHylKl4vG3f24SEzR3irbLv3kfQYBwsex2AzqhV5ek1ouxzVyqdxxDDAxFLSxYZn48hEkbkFtljNNUe0IvVjcDPPuVKvBn9uy57eKAIUtcHru/nr7LEhS82edJ7yNz2krP/+7kfi1q/RFBIA4Xl2KGI5aH1h2DZSTawFDYRrKwYjC/KSqubc2IRJug2iq/+TmJBweGE8SgPBdBXZ1zeB9ZSdWB0s4N5g==; s=purelymail2; d=lkcamp.dev; v=1; bh=ekDVyd3HSW+N9GGe5wx6qgFGUh9DrSzRbbdlNF11H4U=; h=Received:Date:Subject:To:From;
-DKIM-Signature: a=rsa-sha256; b=D611fMmwfmIh/7exGGLPv9bEV0vft4x2GewhYmdBmzzTTvpeH0HYpK9wQ9GbFYu2/KkFloJFOuNEP0ZlQZVByfnQ+8Uo/BOioJekOAxINrL2YEFwR0ELXHdV/lMc0/DH7NSps2VbHM5mkB0uD3ldEeCqi/p8lSuQU3S/oC9023QhKpN20/zoOLZ5CMnJu2qGxzg6Dd69oPqDUiOM1AdyeQXFmaZJCsRGY71Nl9u85rxOIE13asVzWTo4OPghnWu7Z7jU1STc5Lxtv4nkXJiLOcEZiE8i6MAkIc+GsBUQ6LCx5ns5SV/TalhM3Ev19geALSoEAIxQDKPNhXETky2dAw==; s=purelymail2; d=purelymail.com; v=1; bh=ekDVyd3HSW+N9GGe5wx6qgFGUh9DrSzRbbdlNF11H4U=; h=Feedback-ID:Received:Date:Subject:To:From;
-Feedback-ID: 40580:7130:null:purelymail
-X-Pm-Original-To: linux-kselftest@vger.kernel.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id -1324637488;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Fri, 04 Oct 2024 20:00:02 +0000 (UTC)
-Message-ID: <6a5c9c54-54d9-45d6-b739-269985956513@lkcamp.dev>
-Date: Fri, 4 Oct 2024 16:59:58 -0300
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 694171DD88F;
+	Fri,  4 Oct 2024 20:17:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.57
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728073072; cv=fail; b=BVTkmcgZ7b5liaMskOFNynEKhUFfC3QYHMD3Zo/rYn24bUiQfYsbh6Qgq8aBSu0svIsvr4Ke/DWjDlEiRbSuJn+PmNVhqfMVm8WGjSuMCl1tAKnf3+1wIMSxqOE8f6H+uJGpWhospEBvu502IakwJYqx6HdO0HvFquEh1hhEcnk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728073072; c=relaxed/simple;
+	bh=iDtHpX1v0TQwSf4sC2p6V9j4DnwYjY6kH95SPVD4rjA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=L8r5DXdihV53hW1DjqBPmPbBBIg4h0MnbWw3zbMm/cnhIleW6XS1btkYEqpNGgp6kH7IXeO2aLiIDFA93a20YRDDnGrFfJzuB8GSpm2Y300HsdQ6geNag8H88PQU4KHH8NBOsiPsKhm1TG6eRd7eKNXZgj3ZiUpZnOwUx/B6SwI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=RNgu7eDB; arc=fail smtp.client-ip=40.107.243.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=oRSxFGMOjo6/Wx5p/qKPaToG71BkwLIEU8hX2RAjvhSCIyLJD93tMfuM3mTl4dEhbYcHhx9aCQOzlt8d8xdA82TBbkiQXLJDI+jHIcjZiz9KRy3rzB9BYRsXw7zA/On/EQxGtqkVnrDVBVUCoWGV32fR2LoN2VnqepnqBO2rUPo3CVKeRVCWE2q0TLQeOBX5NQ9hZyBh68N+2F9fYNR8GVGCZN/2Tl1+doZ1B7VV3/LnT3bR7x2ctnRcm+SZDu+/7gSqRNpEwFX5sXsJh5DYVjOQTxp+/XTX7g+nY355XhYwCLtXd5yyEDEPnhYNNbysX+0B9htIjzIajzrb1wvEkA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iMVdrA5ty3hnSJaBH92IzkjbF4suwljJPiMSU+6dAks=;
+ b=evOkluLFruDuN54CeipTK5V9ej519usMQb27tYI+zWH9QbySXwErrcw/x4Igh2j0DZPWQiHyQnyAU+GmcE9WnFNOIcjlLYERTEdk2jLrDy8+ToJ4gOjjKgudqG0F0JHKwkJvox/7WedeW+Y4y7b+Cry08h1KRMsy95YcQlBuEFhMTLiKjaTNmSs7HP3l6WTplyy6x/l5xvZRKh9RcnsOilzP14eC+Zo66IJYf9Y112tl8GSapTu2wRiXGwYuuIAiGfaQdo+gQiVu5qNuHHAfckFB6pwcb26p4KwVHwySJvdzGi3IEWNxOvPuR4Obj6JwU6CiGJK94GDkz7UDdO5Z2w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iMVdrA5ty3hnSJaBH92IzkjbF4suwljJPiMSU+6dAks=;
+ b=RNgu7eDBAxIRCcS9a6Bkzl3wxaNeQq9H6i5mrDKqOVJwxDB2aPUOFK9HfGDBrb1bdtghfbn4jm7C+y3DP3wUM0NnOzfuKEqOH47LUoZzkBHvp7C1Zs0Ph602cB87Uw5IWAAWi0GuIQ+vDgiWDRQ4XUHplS9BbbnagiMJBC/6xe26q1ZSv6Iunl6l8780xcQ5CxqUpZNZYxpiX/BOJ9t7hw6cuZvNmK0NYMkqsIyWr6JMhkFDtBH02ceW4pmpQq51RQa7Rl/t63DU8ZHAEuHjhfeOZ+PT9C5K6T8oRIdnd0im3kzzE7v70TzyXHUD/0QDDorWmHMUr01cKcXjNMBI1g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
+ by PH7PR12MB6693.namprd12.prod.outlook.com (2603:10b6:510:1b0::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.18; Fri, 4 Oct
+ 2024 20:17:48 +0000
+Received: from CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
+ ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.8026.017; Fri, 4 Oct 2024
+ 20:17:47 +0000
+Date: Fri, 4 Oct 2024 17:17:46 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Nicolin Chen <nicolinc@nvidia.com>
+Cc: Alexey Kardashevskiy <aik@amd.com>, kevin.tian@intel.com,
+	will@kernel.org, joro@8bytes.org, suravee.suthikulpanit@amd.com,
+	robin.murphy@arm.com, dwmw2@infradead.org, baolu.lu@linux.intel.com,
+	shuah@kernel.org, linux-kernel@vger.kernel.org,
+	iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, eric.auger@redhat.com,
+	jean-philippe@linaro.org, mdf@kernel.org, mshavit@google.com,
+	shameerali.kolothum.thodi@huawei.com, smostafa@google.com,
+	yi.l.liu@intel.com
+Subject: Re: [PATCH v2 06/19] iommufd/viommu: Add
+ IOMMU_VIOMMU_SET/UNSET_VDEV_ID ioctl
+Message-ID: <20241004201746.GK1365916@nvidia.com>
+References: <cover.1724776335.git.nicolinc@nvidia.com>
+ <6348cc7a72ce9f2ac0e9caf9737e70177a01eb74.1724776335.git.nicolinc@nvidia.com>
+ <35701c5e-030a-4f52-b6f6-ed18368fb2cd@amd.com>
+ <20241004114147.GF1365916@nvidia.com>
+ <ZwAwWr+q3ZGkZCSM@Asurada-Nvidia>
+ <20241004185019.GJ1365916@nvidia.com>
+ <ZwBBH+9hwuGKOstl@Asurada-Nvidia>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZwBBH+9hwuGKOstl@Asurada-Nvidia>
+X-ClientProxiedBy: BLAPR03CA0118.namprd03.prod.outlook.com
+ (2603:10b6:208:32a::33) To CH3PR12MB8659.namprd12.prod.outlook.com
+ (2603:10b6:610:17c::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] lib/crc16_kunit.c: add KUnit tests for crc16
-To: kernel test robot <lkp@intel.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: oe-kbuild-all@lists.linux.dev,
- Linux Memory Management List <linux-mm@kvack.org>,
- linux-kernel@vger.kernel.org, ~lkcamp/patches@lists.sr.ht,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow
- <davidgow@google.com>, Rae Moar <rmoar@google.com>,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- Enzo Bertoloti <ebertoloti@lkcamp.dev>,
- Fabricio Gasperin <fgasperin@lkcamp.dev>,
- David Laight <David.Laight@aculab.com>
-References: <20241003-crc16-kunit-v2-1-5fe74b113e1e@lkcamp.dev>
- <202410050215.eU9509xy-lkp@intel.com>
-Content-Language: en-US
-From: Vinicius Peixoto <vpeixoto@lkcamp.dev>
-In-Reply-To: <202410050215.eU9509xy-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|PH7PR12MB6693:EE_
+X-MS-Office365-Filtering-Correlation-Id: d0257981-dc2d-401b-87ba-08dce4b19d37
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Dv6TBRFFj+ag+s1HBOs0mYQ6nvksJHAu7Hv1nrLuzCQb/C99tOWxxMMNmfTd?=
+ =?us-ascii?Q?daO7OnviDhBGpIlto4ieOb2r/my7tGfMXkpUvVSs2yGaWPale9C4HwE4/G9k?=
+ =?us-ascii?Q?y8pCW66LfhN13nzNEyh5ml7GXjWEechvi7ciubRBiqyND96Iy9rHW+41OsZg?=
+ =?us-ascii?Q?+gfnJ9p32yYMxeUnRvEvWpC9Lgv2ItlAYYXfVShYeTtRrGFHZBdN7yyZ/IK9?=
+ =?us-ascii?Q?0xn603KUbfjP5Y+anvjhiPjRQUz48ElgECsJ0KcBXqDJmoB7kVCenU8M5t0h?=
+ =?us-ascii?Q?LpP17IRBqQ728jS8viFPtg4Wn6qMibgTO5/5D4zwm+pqd7j/g4zpFRGUGrty?=
+ =?us-ascii?Q?eNoF7Vua+LBw0s6tFO3ZcFmGPxF9MYDZHj5JJs4bfYpa0SX/2dpJDScY0l4d?=
+ =?us-ascii?Q?+YDfBwRf0ALqSTJY43eSu8yT2o0MIdzbRuVEsHVhPLA/Xa1QGQiCMwNOyL0U?=
+ =?us-ascii?Q?cTzXEtKpj/QjdUBxOUjS0ZlMhlnJ2uouZg6/1sB1MU/tHT0SHjz7sCsgp4G/?=
+ =?us-ascii?Q?Yn9GGQxMUaWPi5XPWRbOQMgBiMB00S5wckxFfHviYSX3SgOQN8GL+U2yrUgy?=
+ =?us-ascii?Q?Lm+0iU4X7Bxtl7pdJ6InEk3WdcdA3ffOCt1Vb9GJJ7Td+/tTjdeCqPB597Pu?=
+ =?us-ascii?Q?hwTc/eLaBJ345uG5C07tFLTtFR6LmrfHTlhvv32jvAxcWXXrVOzppA8J2hgP?=
+ =?us-ascii?Q?d/CzTeaRNfQhmUWXkhl2vYL4ChYVwUBQ0TK9X5oeOl+ULj4HLWMLp8xUgJLE?=
+ =?us-ascii?Q?3rmksWW677GkshknjKGcbeORL12zfUYG9GlDXXIeiPlJ5bJbdlT43hirYy8l?=
+ =?us-ascii?Q?S8LitrkQKmDw4KDeAjpbI8lQSDRtTxmLQerpq7d4RkD8pN9z+nA3DF9G2tqG?=
+ =?us-ascii?Q?wjxuRGlo1fiyXxDNUiVsA0ffe7/DnCTjyeIg1LGoepSGF1gLOYUhkJmTtLBB?=
+ =?us-ascii?Q?IrFAblJbcaYpyhY6/Glugsz1i3PzhItzftfeF7hNYqArMZ8bv9RpIiYiDcJI?=
+ =?us-ascii?Q?WZ4/5b5AFxZY7Fhmi/2Zglf1b/xCbz1pOFAs7p13624heZV+K0GiO0QJGvla?=
+ =?us-ascii?Q?KR/aVxJ/Y/MI80HXwFtmUYivyW+OJmdkERnkv8wl88drzZAEyF3KL07yS6h1?=
+ =?us-ascii?Q?zMtSSw4G52pjyqiyhFcCCBNTY2FutaAYR0lzlt4xPosRhleMQk2IQZLUns3p?=
+ =?us-ascii?Q?jF4ghzC4QJjXh7ADLoIHZG7cEZCVqRb6M/MY+HrvaU0Vczqt+YngiouxRjqD?=
+ =?us-ascii?Q?v/dyUdek0/Hpmyx9GOkWhmDX9T/AmIlnCWRxJ8Svqw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?s0O7OYlO27tKMuLEceg9NGVlShRBt4CytO9jP4NlIC0PDNu3DL6LXLUB1dvO?=
+ =?us-ascii?Q?ImuK1BWCn2TPGGwWFF+XbgRJu2ZGKWfXPKVUeryHoIl819Ah1MIWWWyr1VfI?=
+ =?us-ascii?Q?lDtTaNXWSWyBLBUVxCQI7asqJWjC8jiKI/rBJ7E9Jje5jJOmFzJJgwpIZMvy?=
+ =?us-ascii?Q?dGF4cAx0utO+qhpsGK3WspMziW2iljIx0Gn3+eIWwjeqHXyPDsWZ5TVw31CD?=
+ =?us-ascii?Q?CIasXDRvI/adv9X56NyD6SN7PcLxMMe8PrUMLquutEa00JVL6JPS50LVxh1E?=
+ =?us-ascii?Q?yvE0Oz3dJHOsdb35Qa9RBDfuV+FHxUn9lRXey8oDcx0zJcj8jsxyb7ZUi/AU?=
+ =?us-ascii?Q?9lQLBqFse6Iu4JbnvCEGAGnrdpW5VW9+f3oO+dJ/CMgorAAtJ4LcYcAYEsm1?=
+ =?us-ascii?Q?V8LX1Di8hoBBtpf+xDpZBHLZTJsnr2nH/RuaEdjl47iJw0juVRqMdfiX7bVK?=
+ =?us-ascii?Q?4Hk0ughKKz9NJtJCMBm3mPL0ifuYeGTPizBeSwvrpYp8E4mNBD0HS6lc0gW9?=
+ =?us-ascii?Q?zXyG7Iea08dAuFAZeHouNUAHcmtoqqjHH52wyYUC+5XYn0vLH3L5WiULSOPL?=
+ =?us-ascii?Q?HZHODxenXNcf6pPtk1Mb/yT8bbHt24ukshM8Xpfmf8FhiTi4jW+IY38WyMMc?=
+ =?us-ascii?Q?MBrXIg8IRy0JUG90BhsPW64y0f/K565buv4bQN/xwsDCVY0SVQtZWKsm361p?=
+ =?us-ascii?Q?ELzdEOpTyV/KwLvht4q0Y80tnbRB/lVJDW+vxjjrAjokBc7J621+InuWJKqS?=
+ =?us-ascii?Q?LqLTW6W9/FVMbXg4WduWq+n9fMiMeezMr8NE5y9luV+QmrJ3/fu75S+BPCbH?=
+ =?us-ascii?Q?yOkETSowFXzjcx7gqSOZCgwz7fCzVpw1ZdYunSx2m8EJjb1pCrXFC0j9N8pm?=
+ =?us-ascii?Q?hkwIk1idMhKdb6fZ/D2srHDcVo6v/47pcWXmpGYODrPWHvdOc4/qRZmyQZcI?=
+ =?us-ascii?Q?4bszlBWJYt4StqpawG9aZLWIqWZtgm4alqlPcCOxy7WXVVCSP7UDTmDyBo4d?=
+ =?us-ascii?Q?/ghNTgcUp6GrJyVDYr//apMphnJwaUE7lCXDF587G/RqF8Y3Vc9BBNQ+OSGp?=
+ =?us-ascii?Q?SQv43vFE5+f+cNV6kQkq+i4kzgHV1FkPrfQPJAyykIxkZrpHOrSFZVTMPaAA?=
+ =?us-ascii?Q?d3zSC5+KTmufHllVsUJO8Vj6MCiNJmo4pcumeHYa4ez7lmRYHDy3K73J38Nv?=
+ =?us-ascii?Q?fxenDaXyBSmOr7e8OuElDzKyx7rVr1Nep8SK1aR4MC9KJMC8CxVobBqpem8o?=
+ =?us-ascii?Q?NyPUd5LM1vgWsIrqoQFOyl9ieHme4BUnXN6BowSXXlqDlK8RUCYPFwRd+jMt?=
+ =?us-ascii?Q?AOF7XUlx2+uOF/BWxiPjeiSDd6U6pG5EaTXc7FOCf4IvyO0bUBbMWV1VPPdL?=
+ =?us-ascii?Q?nc3Hkr8s8ZfTuRJ6lia0ir0O4TN3kOL+fAfcvcbtY00hX1a8vT5F7jn7vpnR?=
+ =?us-ascii?Q?2xWPQlZT0CItAjlHfI2t4SzwRA3QAajJDca01TT5kFkEyqrr9jVs8QScbD88?=
+ =?us-ascii?Q?d+2qHXtkENZss4zQzABCvxw7vq+bL4RYY+wL39qBIUqfuZBYsb+Uc5ZNT7Lb?=
+ =?us-ascii?Q?bfq9XCYiz/popHO0XFw=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0257981-dc2d-401b-87ba-08dce4b19d37
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2024 20:17:47.8941
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OENtIF2wrXKjFKGmIKiYq7T6X8173YndfF3a35v+0yBQkP4Pah6GxMCr66vql/qG
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB6693
 
-On 10/4/24 15:40, kernel test robot wrote:
-> Hi Vinicius,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on 9852d85ec9d492ebef56dc5f229416c925758edc]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Vinicius-Peixoto/lib-crc16_kunit-c-add-KUnit-tests-for-crc16/20241004-050248
-> base:   9852d85ec9d492ebef56dc5f229416c925758edc
-> patch link:    https://lore.kernel.org/r/20241003-crc16-kunit-v2-1-5fe74b113e1e%40lkcamp.dev
-> patch subject: [PATCH v2] lib/crc16_kunit.c: add KUnit tests for crc16
-> config: parisc-randconfig-r071-20241005 (https://download.01.org/0day-ci/archive/20241005/202410050215.eU9509xy-lkp@intel.com/config)
-> compiler: hppa-linux-gcc (GCC) 14.1.0
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241005/202410050215.eU9509xy-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202410050215.eU9509xy-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->>> lib/crc16_kunit.c:29: warning: Excess struct member 'crc16' description in 'crc16_test'
->     lib/crc16_kunit.c:96: warning: Function parameter or struct member 'test' not described in 'crc16_test_empty'
->     lib/crc16_kunit.c:111: warning: Function parameter or struct member 'test' not described in 'crc16_test_correctness'
->     lib/crc16_kunit.c:132: warning: Function parameter or struct member 'test' not described in 'crc16_test_combine'
-> 
+On Fri, Oct 04, 2024 at 12:25:19PM -0700, Nicolin Chen wrote:
 
-Ah, oops, I forgot to update the function documentation for v2. I will 
-fix these warnings in v3.
+> With that, I wonder what is better for the initial version of
+> this structure, a generic virtual ID or a driver-named ID like
+> "Stream ID"? The latter might be more understandable/flexible, 
+> so we won't need to justify a generic virtual ID along the way
+> if something changes in the nature?
 
-> Kconfig warnings: (for reference only)
->     WARNING: unmet direct dependencies detected for GET_FREE_REGION
->     Depends on [n]: SPARSEMEM [=n]
->     Selected by [m]:
->     - RESOURCE_KUNIT_TEST [=m] && RUNTIME_TESTING_MENU [=y] && KUNIT [=m]
+I think the name could be a bit more specific "viommu_device_id"
+maybe? And elaborate in the kdoc that this is about the identifier
+that the iommu HW itself uses.
+> That sounds wider than what I defined it for in my patch:
+>  * struct iommu_vdevice_alloc - ioctl(IOMMU_VDEVICE_ALLOC)
+>  * ...
+>  * Allocate a virtual device instance (for a physical device) against a vIOMMU.
+>  * This instance holds the device's information in a VM, related to its vIOMMU.
 > 
-> 
-> vim +29 lib/crc16_kunit.c
-> 
->      17	
->      18	/**
->      19	 * struct crc16_test - CRC16 test data
->      20	 * @crc: initial input value to CRC16
->      21	 * @start: Start index within the data buffer
->      22	 * @length: Length of the data
->      23	 * @crc16: Expected CRC16 value for the test
->      24	 */
->      25	static struct crc16_test {
->      26		u16 crc;
->      27		u16 start;
->      28		u16 length;
->    > 29	} tests[CRC16_KUNIT_TEST_SIZE];
->      30	
-> 
+> Would you please help rephrase it? It'd be also helpful for me
+> to update the doc.
 
+I think that is still OK for the moment.
+
+> Though I feel slightly odd if we define it wider than "vIOMMU"
+> since this is an iommufd header...
+
+The notion I have is that vIOMMU would expand to encompass not just
+the physical hypervisor controled vIOMMU but also the vIOMMU
+controlled by the trusted "lowervisor" in a pkvm/cc/whatever world.
+
+Alexey is working on vIOMMU support in CC which has the trusted world
+do some of the trusted vIOMMU components. I'm hoping the other people
+in this area will look at his design and make it fit nicely to
+everyone.
+
+Jason
 
