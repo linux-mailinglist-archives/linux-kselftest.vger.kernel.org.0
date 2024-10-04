@@ -1,95 +1,98 @@
-Return-Path: <linux-kselftest+bounces-19079-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19080-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CC8E9912F0
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2024 01:21:18 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1005E99134C
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2024 01:52:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7C7BAB22FAD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 23:21:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC1E91F23C85
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 23:52:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 680FD158543;
-	Fri,  4 Oct 2024 23:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB8F51547DA;
+	Fri,  4 Oct 2024 23:52:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mTNTEvXz"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="O/yQWvvu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EB7D1514F8;
-	Fri,  4 Oct 2024 23:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD7B1798C;
+	Fri,  4 Oct 2024 23:52:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728084038; cv=none; b=ZNB8SMoskqkFoL5diwGFRR0LZBSbAV/oO0qbGLVX5fJ/6PBO4iUBnpAz87GBg50tTwj22goT9t2jcGRSFA8iT2susQDf2mC5GKwUf9l/IMBOPQh5HSoqxCrfaLpsIraHT82B+DrfX+VesSJ4x94RarbmWXE5mCV+8P2TqJypoWE=
+	t=1728085945; cv=none; b=Rcmsu747SCBujYHx6EuKZh6aCqauOkow0yGMuNXhYU2kRmSvJJx2Nccf3qfZDKo4cGLjJSdIgDd7+kUwhaStT5QP+tPqUXaOccc+D4tY3U3zhUgLZfiJJVOKa/RbcGS+H5X2d7mdEgnw0o3BluwdY1UvvZnNObytyRgJefv8WEo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728084038; c=relaxed/simple;
-	bh=YE6/LtsHcve4zJZuiAbHCkfw8TXv/uO2ioTzaMSOKH0=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Pit1CzQJFBclvpycIfSGeI04X0vp3hSYwHgPEROk+R8ACXikw5HE0jeIqfXkA+cIdXd4TZFwpq/vO4DJFrAoHSaU1I2uXMhdyESdplP9HabwwXLaj3q7Ya0hkgvuDvUHHo1W4QJk9hKPIkVbcZvapW1238XtQ6fT8o4dyS33l6Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mTNTEvXz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 163BAC4CED0;
-	Fri,  4 Oct 2024 23:20:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728084038;
-	bh=YE6/LtsHcve4zJZuiAbHCkfw8TXv/uO2ioTzaMSOKH0=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=mTNTEvXzch/8/X343lHdwDcGqyoSRC1UiPWHD5VeHuIGCK5Fxv9vv97hmg/fxmhSw
-	 dsCR3YCwt4vAt0rhF644qe8nYvAKr6rBUoSa0TeYVIs7Haq9T7iHVyt+EWhZXt1IIE
-	 aIdummhJhegPE//qQzEl8M1or0ETj4ha4xFmA+4+6E/Srbr0dofESdW/zxjY5GXG9s
-	 EkJwQQpz52po8zSPrFgBpIIOqgDbxhNyqqU0KD5cxF8VpCUETrdd/47OUPkfkDthu/
-	 waRvn7jCWMeaYsHtVwsip1L7ltuYe4tbWsjW+oyju9VdwkVHkbIrzLZg5XDtdHleif
-	 JHRQfPK/fqLMw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EAD6739F76FF;
-	Fri,  4 Oct 2024 23:20:42 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1728085945; c=relaxed/simple;
+	bh=e7uYEUVrwAmgJEKxlmdLdTFW6JlEeZeDh+5bDid9gok=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RrmxltGQQNoEDf9k3dW9EtLv5MtXIqzZJuw+Uiw5+xV0uKco5NKCXV32dpP2FF1t1wRDePV4v56e9LqPi2Q01BvkwCEfosV02Z+S/gkQlyK426DErn33jG7u2IRMUUWoRbCFHhOiJOHua4oysMUBC99nTw1JYYUDYPX3aoH9hmU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=O/yQWvvu; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description;
+	bh=Cy5y7ftGIYSuJU1GDHG1e2mx2IRBKUaxFGuxqtudW+o=; b=O/yQWvvu1ppQMMoFjbp9pRAD6b
+	etawhsfETbuSHSpHTtHfSM7ca2XXxf67ibJaFjhOugIdsI3zxLqJIgtx3pZcwz2Up1iSbrBCwdskN
+	+SRgWlN3d0marg8CO1LRbFRTSK888EvlBOd5YAAuGSsvLZli/ZtrPu5zovW46BFAUSl3e8nmb41Rh
+	EAYqPVjy6QMNA3i4aYgmHNSO2XdkE1Quk4cws66SOyNWz5ycPYsGVuUM9ZyC0wpuwyH4DwVX5niml
+	EYNVA/3L/PZpe1H9r3bIHdnrsQtvsCBUtrqaq40Ow4Qwq3ZIQzf+n4nS3OC07IThxqtlH2qT90dAE
+	R8djFPcQ==;
+Received: from [50.53.2.24] (helo=[192.168.254.17])
+	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1sws5o-0000000Bb1Z-46SU;
+	Fri, 04 Oct 2024 23:52:17 +0000
+Message-ID: <78f05735-cca3-491e-b2d6-c673427efa07@infradead.org>
+Date: Fri, 4 Oct 2024 16:52:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 0/2] selftests: net: ioam: add tunsrc support
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <172808404149.2772330.14314026538003665489.git-patchwork-notify@kernel.org>
-Date: Fri, 04 Oct 2024 23:20:41 +0000
-References: <20241002162731.19847-1-justin.iurman@uliege.be>
-In-Reply-To: <20241002162731.19847-1-justin.iurman@uliege.be>
-To: Justin Iurman <justin.iurman@uliege.be>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/1] mseal: update mseal.rst
+To: Jeff Xu <jeffxu@chromium.org>
+Cc: akpm@linux-foundation.org, keescook@chromium.org, corbet@lwn.net,
+ jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org, jannh@google.com,
+ sroettger@google.com, pedro.falcato@gmail.com,
+ linux-hardening@vger.kernel.org, willy@infradead.org,
+ gregkh@linuxfoundation.org, torvalds@linux-foundation.org,
+ deraadt@openbsd.org, usama.anjum@collabora.com, surenb@google.com,
+ merimus@google.com, lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com,
+ enh@google.com
+References: <20241001002628.2239032-1-jeffxu@chromium.org>
+ <20241001002628.2239032-2-jeffxu@chromium.org>
+ <4544a4b3-d5b6-4f6b-b3d5-6c309eb8fa9d@infradead.org>
+ <CABi2SkUhcEY7KxuRX3edOHJZbo2kZOZfa0sWrcG2_T0rnvHCWQ@mail.gmail.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CABi2SkUhcEY7KxuRX3edOHJZbo2kZOZfa0sWrcG2_T0rnvHCWQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello:
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
 
-On Wed,  2 Oct 2024 18:27:29 +0200 you wrote:
-> v2:
->  - v1 missed the merge window, so while we're at it...
->  - split changes into two patches instead of one for readability (#1
->    removes the ioam selftests, #2 adds the updated ioam selftests)
+On 10/4/24 9:52 AM, Jeff Xu wrote:
+>> above is not a sentence but I don't know how to fix it.
+>>
+> Would below work ?
 > 
-> TL;DR This patch comes from a discussion we had with Jakub and Paolo on
-> aligning the ioam selftests with its new "tunsrc" feature.
-> 
-> [...]
+> Certain destructive madvise behaviors, specifically MADV_DONTNEED,
+> MADV_FREE, MADV_DONTNEED_LOCKED, MADV_FREE, MADV_DONTFORK,
+> MADV_WIPEONFORK, can pose risks when applied to anonymous memory by
+> threads without write permissions. These behaviors have the potential
+> to modify region contents by discarding pages, effectively performing
+> a memset(0) operation on the anonymous memory.
 
-Here is the summary with links:
-  - [net-next,v2,1/2] selftests: net: remove ioam tests
-    https://git.kernel.org/netdev/net-next/c/897408d5e224
-  - [net-next,v2,2/2] selftests: net: add new ioam tests
-    https://git.kernel.org/netdev/net-next/c/2d2b5028b4ab
+Yes, that works.
+Or at least it explains the problem, like Theo said.
 
-You are awesome, thank you!
+Thanks.
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+~Randy
 
