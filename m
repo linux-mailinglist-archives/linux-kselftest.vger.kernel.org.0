@@ -1,98 +1,196 @@
-Return-Path: <linux-kselftest+bounces-19021-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19022-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1D87990499
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 15:39:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41BED9904E1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 15:52:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6F74FB212B5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 13:39:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61D091C21164
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 13:52:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7D00210198;
-	Fri,  4 Oct 2024 13:38:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lj0tX4Fa"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A32A212F07;
+	Fri,  4 Oct 2024 13:52:29 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFED15B97E;
-	Fri,  4 Oct 2024 13:38:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69D0B212EEE;
+	Fri,  4 Oct 2024 13:52:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728049136; cv=none; b=qjI4UrZylYwyjp+IWTXvu0iH2arKUWQAI5gqmptgmmkXZs55dlY8c81JcaYFRRaPnsGKUJfK8N03gS4jnWQ6s0LVTxA5bS4yWNN5pJVxQu5WRzwV+IG4eF1cM+9g4djvQF28fBwBaMo1hB4GlocR9kGQ70Bg/gUxb7Xham6FtJQ=
+	t=1728049949; cv=none; b=S+2ZB1/9HsoURbtcaIYbyiC2clZn3iIIWDOYQEz92gOxHD/6Dzld5MnsE+h7pIFG9Ia/kXK3owQ1rFHJ4J/NTGzdgzP79YCPyDzET/52jlzC0F6H3e097zhFxUKtGmVbJX4w1omxI3bhBCeynIMyzjVxZZiH951ChNcKtQrf5nA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728049136; c=relaxed/simple;
-	bh=MbwCBbQfVBOEVxdvZYeuqOkCdxo6nLHQpcZl976M6o0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FVJwiiSkXl3ITyGNmclhoxPkuB1u2eGrakaKvzjIthZmRQ9cWty3I1KealgJEjEfmusBpl5tGf/q8a9aAgulGPSFTbB0DdPRjfuEwUyKOKRVOjYYg2+MOpTTW6MvM71JLU+jTefxdJXhdyXOpc/H87yxQ7Al/PD0GRtYJcJANag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lj0tX4Fa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E01DAC4CEC6;
-	Fri,  4 Oct 2024 13:38:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728049136;
-	bh=MbwCBbQfVBOEVxdvZYeuqOkCdxo6nLHQpcZl976M6o0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=lj0tX4FaMuRJS1fv4v7zpxIlE0o/Za6sIyhw/UD2qmRYqLiPx0rtogMqJg+995uV3
-	 sIs4vTIJC5UPeDaOijmMTNyG1Tqe56y4NFTE4tGfbY9opoXVl8anZciVlRfYCDUei4
-	 gWcIOdvjlMkHMLNi+R8yWt+qAc6meUCa0nv83nmqd6n6wAnxg/EuLxqQNTdxiz6jHk
-	 TEbZd1oCh1es3pn0vdxrAkxZaoBg+0n41vjSTpU82HxxJqvz/9zFBslJp+FVS43JTV
-	 GyLD1VUCfI/ZZI0Bc3DsE1m2Yqgb5HkjP43E4deW14wK7p6uRiWHyXtUMWaWdyYmQ4
-	 oib+OzhqAku+w==
-Date: Fri, 4 Oct 2024 06:38:55 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Donald Hunter <donald.hunter@gmail.com>
-Cc: Antonio Quartulli <antonio@openvpn.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
- <shuah@kernel.org>, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, sd@queasysnail.net, ryazanov.s.a@gmail.com
-Subject: Re: [PATCH net-next v8 01/24] netlink: add NLA_POLICY_MAX_LEN macro
-Message-ID: <20241004063855.1a693dd1@kernel.org>
-In-Reply-To: <m2msjkf2jn.fsf@gmail.com>
-References: <20241002-b4-ovpn-v8-0-37ceffcffbde@openvpn.net>
-	<20241002-b4-ovpn-v8-1-37ceffcffbde@openvpn.net>
-	<m2msjkf2jn.fsf@gmail.com>
+	s=arc-20240116; t=1728049949; c=relaxed/simple;
+	bh=CgGaF1WPSG5Fi8uzeesZWuMpwpxItmoNQIqnngNVELo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sljDY5+XXEMXzWYrpiDuD5MNo9CB6aHrJiF11d72/VJgWTljhoGn1CCFdhMR2TY7mulIsBsBaWhbKTVcWq4YkAN21wG1YQ9KQgW/tRAH9H6in90/Yk7SU844WzmZTZu4yP6KIxQivp7j4c6FRaXYtuZqvyh7BKLeoZEBooN9VbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96531C4CEC6;
+	Fri,  4 Oct 2024 13:52:22 +0000 (UTC)
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Will Deacon <will@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	Kees Cook <kees@kernel.org>,
+	Mark Brown <broonie@kernel.org>
+Cc: "H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	David Spickett <david.spickett@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	David Hildenbrand <david@redhat.com>,
+	"Mike Rapoport (IBM)" <rppt@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: (subset) [PATCH v13 00/40] arm64/gcs: Provide support for GCS in userspace
+Date: Fri,  4 Oct 2024 14:52:20 +0100
+Message-Id: <172804948348.2705006.18010706949544079891.b4-ty@arm.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+References: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Fri, 04 Oct 2024 13:58:04 +0100 Donald Hunter wrote:
-> > @@ -466,6 +466,8 @@ class TypeBinary(Type):
-> >      def _attr_policy(self, policy):
-> >          if 'exact-len' in self.checks:
-> >              mem = 'NLA_POLICY_EXACT_LEN(' + str(self.get_limit('exact-len')) + ')'
-> > +        elif 'max-len' in self.checks:
-> > +            mem = 'NLA_POLICY_MAX_LEN(' + str(self.get_limit('max-len')) + ')'  
+On Tue, 01 Oct 2024 23:58:39 +0100, Mark Brown wrote:
+> The arm64 Guarded Control Stack (GCS) feature provides support for
+> hardware protected stacks of return addresses, intended to provide
+> hardening against return oriented programming (ROP) attacks and to make
+> it easier to gather call stacks for applications such as profiling.
 > 
-> This takes precedence over min-length. What if both are set? The logic
-> should probably check and use NLA_POLICY_RANGE
-
-Or we could check if len(self.checks) <= 1 early and throw our hands up
-if there is more, for now?
-
-> >          else:
-> >              mem = '{ '
-> >              if len(self.checks) == 1 and 'min-len' in self.checks:  
+> When GCS is active a secondary stack called the Guarded Control Stack is
+> maintained, protected with a memory attribute which means that it can
+> only be written with specific GCS operations.  The current GCS pointer
+> can not be directly written to by userspace.  When a BL is executed the
+> value stored in LR is also pushed onto the GCS, and when a RET is
+> executed the top of the GCS is popped and compared to LR with a fault
+> being raised if the values do not match.  GCS operations may only be
+> performed on GCS pages, a data abort is generated if they are not.
 > 
-> Perhaps this should use NLA_POLICY_MIN_LEN ? In fact the current code
-> looks broken to me because the NLA_BINARY len check in validate_nla() is
-> a max length check, right?
-> 
-> https://elixir.bootlin.com/linux/v6.11.1/source/lib/nlattr.c#L499
-> 
-> The alternative is you emit an explicit initializer that includes the
-> correct NLA_VALIDATE_* type and sets type, min and/or max.
+> [...]
 
-Yeah, this code leads to endless confusion. We use NLA_UNSPEC (0) 
-if min-len is set (IOW we don't set .type to NLA_BINARY). NLA_UNSPEC 
-has different semantics for len.
+I applied most of the series to arm64 (for-next/gcs), apart from two KVM
+patches - 16 and 40 (the latter is the kselftest). I usually start
+picking patches at -rc3 but the glibc folk are waiting for these patches
+to at least end up in a maintainer's branch. Of course, these patches
+are subject to change until the final 6.13 release.
 
-Agreed that we should probably clean this up, but no bug AFAICT.
+The KVM patches can go on top once agreed (or they can go in via the KVM
+tree, I don't mind either way).
+
+Thanks!
+
+[01/40] mm: Introduce ARCH_HAS_USER_SHADOW_STACK
+        https://git.kernel.org/arm64/c/bcc9d04e749a
+[02/40] mm: Define VM_HIGH_ARCH_6
+        https://git.kernel.org/arm64/c/9ab515b18f84
+[03/40] arm64/mm: Restructure arch_validate_flags() for extensibility
+        https://git.kernel.org/arm64/c/f645e888b1a6
+[04/40] prctl: arch-agnostic prctl for shadow stack
+        https://git.kernel.org/arm64/c/91e102e79740
+[05/40] mman: Add map_shadow_stack() flags
+        https://git.kernel.org/arm64/c/3630e82ab6bd
+[06/40] arm64: Document boot requirements for Guarded Control Stacks
+        https://git.kernel.org/arm64/c/830ae8a39685
+[07/40] arm64/gcs: Document the ABI for Guarded Control Stacks
+        https://git.kernel.org/arm64/c/7058bf87cd59
+[08/40] arm64/sysreg: Add definitions for architected GCS caps
+        https://git.kernel.org/arm64/c/ce0641d48ddd
+[09/40] arm64/gcs: Add manual encodings of GCS instructions
+        https://git.kernel.org/arm64/c/dad947cc22cf
+[10/40] arm64/gcs: Provide put_user_gcs()
+        https://git.kernel.org/arm64/c/d0aa2b435186
+[11/40] arm64/gcs: Provide basic EL2 setup to allow GCS usage at EL0 and EL1
+        https://git.kernel.org/arm64/c/ff5181d8a2a8
+[12/40] arm64/cpufeature: Runtime detection of Guarded Control Stack (GCS)
+        https://git.kernel.org/arm64/c/6487c963083c
+[13/40] arm64/mm: Allocate PIE slots for EL0 guarded control stack
+        https://git.kernel.org/arm64/c/092055f1508c
+[14/40] mm: Define VM_SHADOW_STACK for arm64 when we support GCS
+        https://git.kernel.org/arm64/c/ae80e1629aea
+[15/40] arm64/mm: Map pages for guarded control stack
+        https://git.kernel.org/arm64/c/6497b66ba694
+[17/40] arm64/idreg: Add overrride for GCS
+        https://git.kernel.org/arm64/c/a94452112ce4
+[18/40] arm64/hwcap: Add hwcap for GCS
+        https://git.kernel.org/arm64/c/eefc98711f84
+[19/40] arm64/traps: Handle GCS exceptions
+        https://git.kernel.org/arm64/c/8ce71d270536
+[20/40] arm64/mm: Handle GCS data aborts
+        https://git.kernel.org/arm64/c/cfad706e8f6d
+[21/40] arm64/gcs: Context switch GCS state for EL0
+        https://git.kernel.org/arm64/c/fc84bc5378a8
+[22/40] arm64/gcs: Ensure that new threads have a GCS
+        https://git.kernel.org/arm64/c/506496bcbb42
+[23/40] arm64/gcs: Implement shadow stack prctl() interface
+        https://git.kernel.org/arm64/c/b57180c75c7e
+[24/40] arm64/mm: Implement map_shadow_stack()
+        https://git.kernel.org/arm64/c/8f3e750673b2
+[25/40] arm64/signal: Set up and restore the GCS context for signal handlers
+        https://git.kernel.org/arm64/c/eaf62ce1563b
+[26/40] arm64/signal: Expose GCS state in signal frames
+        https://git.kernel.org/arm64/c/16f47bb9ac8a
+[27/40] arm64/ptrace: Expose GCS via ptrace and core files
+        https://git.kernel.org/arm64/c/7ec3b57cb29f
+[28/40] arm64: Add Kconfig for Guarded Control Stack (GCS)
+        https://git.kernel.org/arm64/c/5d8b172e7005
+[29/40] kselftest/arm64: Verify the GCS hwcap
+        https://git.kernel.org/arm64/c/7a2f671db61f
+[30/40] kselftest/arm64: Add GCS as a detected feature in the signal tests
+        https://git.kernel.org/arm64/c/b2d2f11ff5d6
+[31/40] kselftest/arm64: Add framework support for GCS to signal handling tests
+        https://git.kernel.org/arm64/c/0d426f7dd9a0
+[32/40] kselftest/arm64: Allow signals tests to specify an expected si_code
+        https://git.kernel.org/arm64/c/956573ac1890
+[33/40] kselftest/arm64: Always run signals tests with GCS enabled
+        https://git.kernel.org/arm64/c/42155a8eb0f6
+[34/40] kselftest/arm64: Add very basic GCS test program
+        https://git.kernel.org/arm64/c/3d37d4307e0f
+[35/40] kselftest/arm64: Add a GCS test program built with the system libc
+        https://git.kernel.org/arm64/c/a505a52b4e29
+[36/40] kselftest/arm64: Add test coverage for GCS mode locking
+        https://git.kernel.org/arm64/c/58d69a3e3582
+[37/40] kselftest/arm64: Add GCS signal tests
+        https://git.kernel.org/arm64/c/794b64ca5665
+[38/40] kselftest/arm64: Add a GCS stress test
+        https://git.kernel.org/arm64/c/05e6cfff58c4
+[39/40] kselftest/arm64: Enable GCS for the FP stress tests
+        https://git.kernel.org/arm64/c/bb9ae1a66c85
+
+-- 
+Catalin
+
 
