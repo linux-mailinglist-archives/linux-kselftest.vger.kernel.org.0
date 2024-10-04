@@ -1,72 +1,76 @@
-Return-Path: <linux-kselftest+bounces-18995-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-18996-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12E1998FB5D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 02:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DA1A298FB7F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 02:25:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4507E1C225C4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 00:03:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A9FB1C2219E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 00:25:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA055153BED;
-	Fri,  4 Oct 2024 00:01:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0708E1862;
+	Fri,  4 Oct 2024 00:25:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BqfCbb4G"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YTde6pFK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25B517571
-	for <linux-kselftest@vger.kernel.org>; Fri,  4 Oct 2024 00:01:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4481417C9;
+	Fri,  4 Oct 2024 00:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728000067; cv=none; b=lVvCU7ol06n9J+uDBJ4M7bmnKq1Fi+Inp7hnzXpabzr4gKma0uXtahXZ17UESPsI6ZO5gtM8I9V6Y17z8schJ125zB7K3vlnbig8Dp296t+1E3yS1qgEdXU8MR/qNJ74SseLnYqHUDl9tVYkgJK6Z/5lklMGg8+ldabeDHwjUVc=
+	t=1728001542; cv=none; b=Gw408uHSedmpCMxLSBFX01JiMINgo1Wi71fPip6D4T74umP+d5ca2nGXfpGEOXxMYfl6tinsF7/gwLatYRmAmD6PorzZh1G9SJE/bP0kLhEhO/VxLVR7/0AlQzjJrWqYBpHXStmx7KqzroybL47xdS1E2SJRxp/o6FdAOhLhuu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728000067; c=relaxed/simple;
-	bh=Uk8PYF1jkvRqrAuznedTKDFcx8jh6uWwYlptJbhFscM=;
+	s=arc-20240116; t=1728001542; c=relaxed/simple;
+	bh=779lYMg7A1shUof+Yjz9lPBh8Op5yoFdY4l7YSTdfYA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=txKcvvx1YlVP+mnkB09kqWDbHt4/ElJi8BbXHqngkWbLlLbtpdYAF6jExTYSVlQx36uhXrd6orVYaq7WRp67ZTdqDy9GyPj98X5rzI5RFwNnGL5Fr4qym3k6pvb1RScf5C9pv7GryUEqIK2RAupsBsW71d2lwuHeP7Auy4xTm/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BqfCbb4G; arc=none smtp.client-ip=209.85.166.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-82cdb749598so73399639f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 03 Oct 2024 17:01:03 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=tR/+sko9AD+jMVT5mywVJ23ghWdyMuQadXIrAntITUs+lG+WlPgLob1vuA6NuAO2K/Ce8J4OifZRKjt+fDSyKYx8Frv9/1nMPGVTKtAL2vJpadk65/FvAQLZsGUVQ/6on9MdTofFKK1WtQyAgK1x379Eqk0aiF9FDvSwZAhcrV0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YTde6pFK; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-208cf673b8dso15927015ad.3;
+        Thu, 03 Oct 2024 17:25:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1728000063; x=1728604863; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WOGFPQ6jAXNerE13UVZtADeZtxdDJrEYc49/QlGda6k=;
-        b=BqfCbb4GBQcGoUnkKnnRxaIxl6McRiM5QFoe9y7D3A7JsZYekXFMo5uErHMiHHFDKY
-         Jz5J2b3qROZUL6vmarEB2psk4NaKYjif/2SmSECImRmraXHW+GqWQ6D6nYsTCU3V6bT1
-         IzieV48Gp5K3jZVqOV1S7LCae9S1egDHDWwyA=
+        d=gmail.com; s=20230601; t=1728001541; x=1728606341; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ECaR81O0dfOWEMlG/slJPyPVvFIWLy+OC747Xh2FARo=;
+        b=YTde6pFKaAupCWmY6VT39hcQUK6iG7rmCnmgmo7r3SpdWt7Iva/IWlRRbnzbmdSUic
+         xscMwVbqScjeWFfZTA71e3gKxVsxxkQWCdVulfXTyw5dJf7PJZKULRWhENrVOey4wK3d
+         wEn0/NiJYEzH/9I0mGTgYFe/eqYO9Q72+ZBM96r6XiEggHVocf7CfYAXQs/Y+1+ijyUq
+         Dv0PCOFG8IYpxpKLp09pbNdpn4Ma5ekJn37W6GEm05s21Icxf1LIgJS/h5Zd/oZLwtZS
+         kRjBP/kwVQQ7t4diGgvwl5niX0awm2TLM33aGDYtUjfQZaB3RDKdlNUA1YdFhQ48wU0+
+         QciA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728000063; x=1728604863;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WOGFPQ6jAXNerE13UVZtADeZtxdDJrEYc49/QlGda6k=;
-        b=GwDh8RuM2ZWSZM899cnraoTnyYp9HE07ZZgRImro3kfmfeyPXZfp3msBgijM6leYcw
-         s9f/jIC5Okj92wagnt4EztNoJnS/fqWHUWvQ0ln3xqG9MUvIC8nFW86tXujjD1reDTGw
-         hYYAxAHzN+TYCMH7pMD206UHfVaL7z+AhrtayyZncHI4wDtR3Lb9mbABzLCXlMFCWeTv
-         Hm5mkiMWJwJ8M/opOPJUVWOYxe28K3IrOIJ1aj1XNvLSox9Of/zzJOPqyghmNucslztO
-         tqkCVtfc5Vl5AjFv5WPdRXJgCEndDdrmPeWT3v2gQrPXA78dGN1DZb7ux+w9wnImqnOC
-         C3aQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXCiHLALWuWSREya6AGdFOVq1gMtmLWJJ1sPEFklRHc4N2UmpgZumY6d5SfjuohiX/HewO1OP+AjRxMILRBjxk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjLg7WizMncHW9eUsPE2KYWZxzJN0xY5gfqgp9PJwxCMG5iV6i
-	vkq6NiDIbU7H3WWc+dT2M3eRItSWvWmCUsbZf2kzPdED6DcgrncwwtchpuE92dxFihmQPuOJbLb
-	O
-X-Google-Smtp-Source: AGHT+IHIccZXhQUNgi92VPytZaHIJ6MpIN1peJv8CYFwgdHXLLxczbVb2tz1DUdVGBu72XFuQ8IYrA==
-X-Received: by 2002:a05:6602:1412:b0:82a:2a0b:1c7d with SMTP id ca18e2360f4ac-834f7c7f15emr145501039f.5.1728000062948;
-        Thu, 03 Oct 2024 17:01:02 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4db55ad6608sm489068173.171.2024.10.03.17.01.02
+        d=1e100.net; s=20230601; t=1728001541; x=1728606341;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ECaR81O0dfOWEMlG/slJPyPVvFIWLy+OC747Xh2FARo=;
+        b=b7UJLHkAgOLhJwDr0JPhZZHLIIwBrF2oTFBRAYsD4mHNvYYi8Rb7p3gtoYPlQZCPMf
+         a10v4DStgH46fTe6bBDaliwtDJIsNaFksvTTjfi1E6WRlUpeCK+NjpLQGm/qpo2JuKr7
+         jy7JhwII76nkoOnQPEMDX/+bjmKrBGvewQM1gajRxqQOn0DTsKcoBYQrVLKRimYvZ2HY
+         iySJuCdyRlZEsplP5yom0wIkD29PXHoshJwTqsADw1+Kpn1kss3+oOh59xH9Oaoj0qYZ
+         Esg+dPJSob7Y/a2IBnEwFfqY4WpbzXMwuvISnM9deSS1ctWympRX7RBxt/GkK68GLwTg
+         2Hgw==
+X-Forwarded-Encrypted: i=1; AJvYcCUwKbVGfgZxNyNl3fomwa0fSWLP4Bn0JrXu0+WjOIUvELNx9KcKHT3quZ8LtOw7C2YaNUKkLuLU1kQt@vger.kernel.org, AJvYcCW82V38vrU3oLa5ByLJOmSXIGbyRv94ZJJFSeN0kngd5uF+b+JRMcj5Ytp08poTRNkBUVtEMbIvs14RIkKtI9HK@vger.kernel.org, AJvYcCWPBuLOnkq8a3WrVrkJDb2QMX+ksPi7lp6ayUpgnYnJvoY58jPeyORAv2pJm9v+CQimJEr37qGkKuXz5Tev@vger.kernel.org, AJvYcCXye2Zp/wPCejz9EYgobURdSnmlMtJvugQse/1Sk+UDLelPlQKWF2Ij4PjRVACLKI8DXVTM0vloI55s@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyV984f0i+aDP7S8AnPQfmuYqsadjMgXAATcuTQZ3+vGMxJBHF
+	0W2+mMhBbPlRBUHWT4VkKQHz7RkewKuzje1bxcSPiC5WwjRxPjzmsuRIPQ==
+X-Google-Smtp-Source: AGHT+IHXX/IAk06czL0zXYWi6NSdPKSTpkoq597FjOvEcCYS4wBfPZe7/ujoqgqQqMUNK8cj0VeJ7w==
+X-Received: by 2002:a17:902:ebcd:b0:203:a030:d0a1 with SMTP id d9443c01a7336-20bff18cadfmr16665975ad.58.1728001540634;
+        Thu, 03 Oct 2024 17:25:40 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20beead2573sm14601105ad.6.2024.10.03.17.25.38
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Oct 2024 17:01:02 -0700 (PDT)
-Message-ID: <5a926b36-59e8-465d-a824-e869959f2b10@linuxfoundation.org>
-Date: Thu, 3 Oct 2024 18:01:01 -0600
+        Thu, 03 Oct 2024 17:25:39 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <3e1de608-008c-4439-acd2-647a288dcdc0@roeck-us.net>
+Date: Thu, 3 Oct 2024 17:25:37 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,82 +78,117 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: Makefile: create OUTPUT dir
-To: Anders Roxell <anders.roxell@linaro.org>
-Cc: Jakub Kicinski <kuba@kernel.org>, shuah@kernel.org, willemb@google.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20240916075655.4117151-1-anders.roxell@linaro.org>
- <952aeec9-c21f-46ce-bf68-e6ffce51630c@linuxfoundation.org>
- <20240920123827.715ff109@kernel.org>
- <3f0d12ba-0e52-41f9-9cbd-34bc1225121e@linuxfoundation.org>
- <CADYN=9JO-h5L8+CBE9rKY9fnA2sJmam6_MzpZB38Bmn5D4fdPQ@mail.gmail.com>
+Subject: Re: [PATCH v8 8/8] clk: Add KUnit tests for clks registered with
+ struct clk_parent_data
+To: Stephen Boyd <sboyd@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+ linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+ patches@lists.linux.dev, kunit-dev@googlegroups.com,
+ linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org,
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow
+ <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J.Wysocki" <rafael@kernel.org>, Rob Herring <robh@kernel.org>,
+ Saravana Kannan <saravanak@google.com>, Daniel Latypov
+ <dlatypov@google.com>, Christian Marangi <ansuelsmth@gmail.com>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, Maxime Ripard <maxime@cerno.tech>,
+ Geert Uytterhoeven <geert+renesas@glider.be>
+References: <20240718210513.3801024-1-sboyd@kernel.org>
+ <6cd337fb-38f0-41cb-b942-5844b84433db@roeck-us.net>
+ <a339ec8c-38f6-425a-94d1-ad69b5ddbd88@roeck-us.net>
+ <dcd8894f-1eb6-4b5c-9e6f-f6e584c601d2@roeck-us.net>
+ <6f5a5b5f-71a7-4ed3-8cb3-d930bbce599b@linuxfoundation.org>
+ <ba88a29c-f05e-4ca3-82d1-0a634613caee@roeck-us.net>
+ <4216b852-11a2-41ae-bb01-5f9b578ee41b@roeck-us.net>
+ <879831a8-2039-4cdb-bce2-aefdeb7ab25f@linuxfoundation.org>
+ <da260b77-2ecb-4486-90cb-6db456d381ef@linuxfoundation.org>
+ <f5f1c42d-77c0-48c7-ac52-3d4a3b5c2b47@roeck-us.net>
+ <4a8abb5f501279de7907629f4dd6be24.sboyd@kernel.org>
 Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CADYN=9JO-h5L8+CBE9rKY9fnA2sJmam6_MzpZB38Bmn5D4fdPQ@mail.gmail.com>
+From: Guenter Roeck <linux@roeck-us.net>
+Autocrypt: addr=linux@roeck-us.net; keydata=
+ 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
+ mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
+In-Reply-To: <4a8abb5f501279de7907629f4dd6be24.sboyd@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 10/2/24 00:15, Anders Roxell wrote:
-> On Wed, 25 Sept 2024 at 19:26, Shuah Khan <skhan@linuxfoundation.org> wrote:
->>
->> On 9/20/24 04:38, Jakub Kicinski wrote:
->>> On Thu, 19 Sep 2024 09:51:47 -0600 Shuah Khan wrote:
->>>>> @@ -261,6 +261,7 @@ ifdef INSTALL_PATH
->>>>>      @ret=1; \
->>>>>      for TARGET in $(TARGETS) $(INSTALL_DEP_TARGETS); do \
->>>>>              BUILD_TARGET=$$BUILD/$$TARGET;  \
->>>>> +           mkdir -p $$BUILD_TARGET;        \
->>>>>              $(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET install \
->>>>>                              INSTALL_PATH=$(INSTALL_PATH)/$$TARGET \
->>>>>                              SRC_PATH=$(shell readlink -e $$(pwd)) \
->>>>
->>>> Doesn't the "all" target mkdir work for this case? Why do we need another mkdir here?
->>>
->>> I was wondering about that, too. Looks like the code from the all
->>> target is copy/pasted in the install target except the mkdir line.
->>> Best fix would be to make the dependency work, I don't understand
->>> why it doesn't already, tho.
->>
->> I think this could be the issue:
->>
->> net main Makefile doesn't have handling for subdirs. It looks
->> like the way this is handled is by adding an entry to the main
->> Makefile:
->>
->> TARGETS += net/af_unix
->> TARGETS += net/forwarding
->> TARGETS += net/hsr
->> TARGETS += net/mptcp
->> TARGETS += net/openvswitch
->> TARGETS += net/tcp_ao
->> TARGETS += net/netfilter
->>
->> So the solution would be similar adding net/lib to the main
->> Makefile.
->>
->> Anders, can you try the above and see if it works.
-> 
-> Sadly that didn't help.
+On 10/3/24 16:46, Stephen Boyd wrote:
+[ ... ]
+> That DT test has been there for a few releases. Is this the first time
+> those tests have been run on arm64+acpi? I didn't try after sending the
+> patches and forgot that the patch was dropped.
 > 
 
-Okay. I tried the following:
+Previously I had the affected tests disabled and never tracked down the problem.
+Since the problem is now spreading to additional tests, I finally tracked it down,
+that is all.
 
-make kselftest-all TARGETS=net/lib O=/tmp
+> How are you running kunit tests? I installed the qemu-efi-aarch64 debian
+> package to get QEMU_EFI.fd but passing that to the kunit.py run command
+> with --qemu_args="-bios /usr/share/qemu-efi-aarch64/QEMU_EFI.fd" didn't
+> get me beyond the point that the EFI stub boots linux. I think the
+> serial console must not be working and thus the kunit wrapper waits for
+> something to show up but nothing ever does. I haven't dug any further
+> though, so maybe you have a working command.
+> 
 
-I see /tmp/kselftest/net/lib/csum
+I run all tests during boot, not from the command line. I also use the -bios
+command but don't recall any issues with the console. I specify the
+console on the qemu command line; depending on the qemu machine it is either
+ttyS0 or ttyAMA0. The init script then finds and selects the active console.
 
-Can you give me the exact command you are running?
+> Here's my command that isn't working:
+> 
+> ./tools/testing/kunit/kunit.py run --arch=arm64 --kunitconfig=drivers/of --qemu_args="-bios /usr/share/qemu-efi-aarch64/QEMU_EFI.fd"	
+> 
 
-The following from selftests/Makefile should take care of this.
+I can't really see what that command is actually doing ;-).
 
-# Networking tests want the net/lib target, include it automatically
-ifneq ($(filter net drivers/net drivers/net/hw,$(TARGETS)),)
-ifeq ($(filter net/lib,$(TARGETS)),)
-         INSTALL_DEP_TARGETS := net/lib
-endif
-endif
+I'll just keep the affected tests disabled on arm64 for the time being.
 
-thanks,
--- Shuah
+Thanks,
+Guenter
+
 
