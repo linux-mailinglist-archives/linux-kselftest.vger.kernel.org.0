@@ -1,86 +1,86 @@
-Return-Path: <linux-kselftest+bounces-19074-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19075-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B259D99123F
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2024 00:21:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36FC1991243
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2024 00:24:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 53BA1B21031
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 22:21:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A94971F23C52
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 22:24:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8898C1ADFFC;
-	Fri,  4 Oct 2024 22:21:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62C261AE003;
+	Fri,  4 Oct 2024 22:23:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SIds8Ydt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b8Oakp+D"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A08D140E34;
-	Fri,  4 Oct 2024 22:21:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED11140E34;
+	Fri,  4 Oct 2024 22:23:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.14
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728080502; cv=fail; b=YNTdpzP5l88AQUpFseSPQJAumlJQQdJKEN1asmyYN+9yDryuQeff6I8MK3ErcMOARyvmLH0kpv+YueYw9o65SwrlhZaZk/h9zPheXxpdgLvvymJVBbY0rzAh1KHatblklIPDGaf+Hzzp6HEdnHmmjYf+vkhTJ58IdYfp3cuM0dc=
+	t=1728080637; cv=fail; b=qnf/Us1tltJjGDHQ5bruEsamY8iu5smg0sf5hfz9qi/d60Eow+LrTKd11DDFZ9LeZQl4vK+oRrm0CMbVshxRSVI91fhuiAy9VIejlmGdNXYqsf5/K7WqIUnpkQMfLzdN07ihYe3mh7PaIoA5/elilcIOtGicj5cFXkYftuFBvmU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728080502; c=relaxed/simple;
-	bh=JUnmLB/h/Z50WbCoRkj9LpFa/hGqEfEikE5t0vG+gYg=;
+	s=arc-20240116; t=1728080637; c=relaxed/simple;
+	bh=FkaKlcliGxmW1swnaYIcWwtMX08tTJsOcZYEPEWcktc=;
 	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=UTNHdhMXZqFSEJ5iXv2KrYnJocicLdzm5BlCJ7IjFgbyZu6b7ry9ta0Mk40Ois6S9CRaAH/RZRIZ/RjJeI2GrHYthQyfZ7nx8aDuiCeScXTrYWdxZCa9xH+pDMLRp9jap49pDtTgH+uUsJmzSSzDjT0YiUMpt60+gfKGx/pxJ8o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SIds8Ydt; arc=fail smtp.client-ip=192.198.163.16
+	 Content-Type:MIME-Version; b=D/OIIkbBrCWYIEseNZz4zLvYk1z9TyW1fyj/FezLw6kWBzKevNQSgCgxQmiW7K+iKhj2zVmyjZiAqnhfqsw17Z1P2IzVFlHV5xayCUb10ZxPyV1MEiaq7meWhC62ivIW6OKOkBYQEt4HJY34yOZEp88N8tjZhFxPKmZ1lQyoRrQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b8Oakp+D; arc=fail smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728080501; x=1759616501;
+  t=1728080635; x=1759616635;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=JUnmLB/h/Z50WbCoRkj9LpFa/hGqEfEikE5t0vG+gYg=;
-  b=SIds8Ydtybev4aGD35C5jAWLU8j+xfq5d4sF94e86xLXRcMTbtZBHck+
-   9x3UxaSGZ65qS2mG63cV7zY64OoVO+LV9GTCAeop0HcaScI6nPcZ3Jujo
-   ob25volI7REpu0lHaYmTNjDhHcJanGPngPx4cPgiLW+ZSpQ+nmZc7gwPY
-   XJBdpIFNrMnIYSKqHd1eJTKg0it11oj7AQ/V2L9pzAkeC9CcEFTo8nG2c
-   K3O9mfpwfVn8cXJNOgTkxD5G/SqgoeAAGt/WIw+lvFq6MBFv5w+X/3G/v
-   e/rRd59WHcvnaM3L0WXD4e03Q9YJr+YNsqmWx9mdKbVxSPHrOWztsZb94
+  bh=FkaKlcliGxmW1swnaYIcWwtMX08tTJsOcZYEPEWcktc=;
+  b=b8Oakp+DFSP1AlUpP6MeRNJDPEWpmNnjKwhG2ioRjTsGrUZB6jCZ1t7B
+   6i/RcqBp44i1tbK7ne/Ja/hdLTU7w1RW34lQvMsrHGiOU1+be0eFoaR0O
+   XDDyvN2X4+1WvALI+T+txo+yHgCOK30u/xt/i3eG1Q8RI+hsOE8FQWoWg
+   Jyv6sW9FNyR/nnGVOGnLKWakFLK48JPLHAIwOhKISZb09FHHkoC3MTfuq
+   OGqAT6UOUI1PVbeOteDFTwCVXBxDOwDddD+o8y2njdeHvgvJy5Lh+8bAh
+   9bcO1LbqVerQOeWceZYaZmDKaGKnCtffRT/4PD9BQ9WmXGUdUD3Fq2Zt7
    A==;
-X-CSE-ConnectionGUID: gIxFyfXsQJyWTUazNlsXrg==
-X-CSE-MsgGUID: jeOQtOMGRHi8tyAFLvGMWA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="14937513"
+X-CSE-ConnectionGUID: u20b/X+mRfmpsBN0kVCRuQ==
+X-CSE-MsgGUID: WfQ6YAwPSiqOHhvB2KxMcg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="31111243"
 X-IronPort-AV: E=Sophos;i="6.11,178,1725346800"; 
-   d="scan'208";a="14937513"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 15:21:40 -0700
-X-CSE-ConnectionGUID: HoHbCt2mSpKwpFAkkaANnA==
-X-CSE-MsgGUID: fpudGWr0SeKTWaabJWlTCQ==
+   d="scan'208";a="31111243"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 15:23:55 -0700
+X-CSE-ConnectionGUID: PPkDuTYLQxGmyTQfCxwyDA==
+X-CSE-MsgGUID: noRjhSXjTsKW3NqZ/kecGQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,178,1725346800"; 
-   d="scan'208";a="74423953"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 04 Oct 2024 15:21:40 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+   d="scan'208";a="79407371"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmviesa004.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 04 Oct 2024 15:23:55 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Fri, 4 Oct 2024 15:21:38 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ 15.1.2507.39; Fri, 4 Oct 2024 15:23:54 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Fri, 4 Oct 2024 15:21:38 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ 15.1.2507.39; Fri, 4 Oct 2024 15:23:53 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Fri, 4 Oct 2024 15:21:38 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.169)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ 15.1.2507.39 via Frontend Transport; Fri, 4 Oct 2024 15:23:53 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.49) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Fri, 4 Oct 2024 15:21:36 -0700
+ 15.1.2507.39; Fri, 4 Oct 2024 15:23:53 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WJewmgiS6/PadgADFVFfGrV4wOfK82I3E00vjegr0Pdfew95bTeaMUutWeDciTmQnFyFWODqTH14uJhc/k0qmTTEkfKrfOosNSwsvRoKr4Lk/ZjkTwrTU5YtstnoRooe3zVbWF/fXwXgFEQ7PwAId0VwJWRnZc2dh3yGfX+0n5d7F9BLAalS3kHz9TvMJAHiz5Otv0oZvjagPPsXHG/7oDPtygVAhxBkSIvd813AjlKa2ySZH/XIMqiH6Re2SP7TH+CapoJGTI+o5vy2hxdkxqkCWH1G3R4p+FgxeteFRCyZkMIGrFbk4NltG5uKcYvD5A3hf2K7lGtgqUeBCWVrkg==
+ b=FvB+CxlxHCDD06hXz3qkfrUeDmpHGXINAtjnffTQerw7LxDvB3K6MzHJBIqx0E7QFWBRbN4wjyrv+arK6C7ijvdK1vhnwz0WSnIGz9ZJy8hxtBY3GFNG/eYG+96I/D2BagRftuU6+RM83BpYuJweAMwgfNoS/2waxMEzSmOnoQHUeAnsfNWip7Wbtie1zxjJGoJMIXOuVFdkpwJ2metscPXpcChNHADuhdG+hlAqM5nVXJqZ/idcy6gUK7M/WfOVrYuuWACqxYIYDbWSly65Zkqre+XwGxHSau1lsodgXp7//IU64POuXEAZfRPMw3+Tco46m0wSKRedFKB66mmnOA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hBvL4jXZJN+6xsgEWqyNKq0f3ITlI/N02RW8Dq0J/2k=;
- b=mED5oy44LRrGxpgaPuoursmU0movABa2zE9iez/AQljTEIZx8w+oTnVZt2Y0uwH+RKWWjti1iX4SZvddHWF2NkN7Jq9428RogWuqFTZSJsHHWyg112NOQ/wDdmKF2gUNqjY43UVpVgeUromz7K3xvf51JM1LbIMhptf+AZ4uxDntEUnhDw3P7u74ep7oyFG8vW8tBdkL1AgnBJVwaZWWuQzTFonqoUHWItSUhdgLeOACcoGlZcu8b0OJnE+G3XkxrFIwNTBSHjiTURXSHN3xEH6IpqfxzbVgkoH0jCzqJscch/ox+yBFrOcYZJvqrXSgrEA7jWrwTKm/95m47BDYig==
+ bh=5ExQ9acto2875kp4uHoFkmzUOUwq8a/eICAYx8H1ZXk=;
+ b=gUpK7hefsrS3JoSAiBc4TOootaGzvohoczq0Y6SYcKsQwQz5kl6anxuhtiD5mstS7iloi7Bf1uaUw2EXZw1MwqvLGfW23Jfw38HMf2vB8owXnVLEi7bf7QmWs1+Yok+svmBo+mu5khHhHXvkdkIg151pc4M/z1yZPdgDBUuNC1OgB5pKh1Z5BpGh7FEYT558Mb4JOsYDbjSvwVSnOgrbmCzastx9q3tpAj3mGZcAKUxTlIO2m6PAjn+Z37cHVXIwjodrwA3z86q+U/BQLYctsLWYLy38n79iAfiqNTAOnGLpyqHU8MU7uFmHJCjX+Ob1nuF+o3rt23hqDt6tCzl5vg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
@@ -90,32 +90,31 @@ Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
  by SA1PR11MB7112.namprd11.prod.outlook.com (2603:10b6:806:2b7::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8005.26; Fri, 4 Oct
- 2024 22:21:34 +0000
+ 2024 22:23:51 +0000
 Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::61a:aa57:1d81:a9cf]) by SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::61a:aa57:1d81:a9cf%6]) with mapi id 15.20.8026.017; Fri, 4 Oct 2024
- 22:21:33 +0000
-Message-ID: <6ae8be57-be40-4b85-a171-ce535bb5b5a4@intel.com>
-Date: Fri, 4 Oct 2024 15:21:31 -0700
+ 22:23:51 +0000
+Message-ID: <348c20a9-8639-411c-9576-5b0c7f08d5c5@intel.com>
+Date: Fri, 4 Oct 2024 15:23:48 -0700
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V2 09/13] selftests/resctrl: Make benchmark parameter
- passing robust
+Subject: Re: [PATCH V2 11/13] selftests/resctrl: Use cache size to determine
+ "fill_buf" buffer size
 To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 CC: <fenghua.yu@intel.com>, <shuah@kernel.org>, <tony.luck@intel.com>,
 	<peternewman@google.com>, <babu.moger@amd.com>,
 	=?UTF-8?Q?Maciej_Wiecz=C3=B3r-Retman?= <maciej.wieczor-retman@intel.com>,
 	<linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
 References: <cover.1726164080.git.reinette.chatre@intel.com>
- <d1501b608a3d5c101af9b6a8a519c8b05392a558.1726164080.git.reinette.chatre@intel.com>
- <9a70486a-5cb1-98ff-4ac6-498907886d2b@linux.intel.com>
+ <ad51e32e5d4f8d99b691e7269e5179228e6a13a7.1726164080.git.reinette.chatre@intel.com>
+ <ea3aca92-1571-7220-6211-6424de0b21da@linux.intel.com>
 From: Reinette Chatre <reinette.chatre@intel.com>
 Content-Language: en-US
-In-Reply-To: <9a70486a-5cb1-98ff-4ac6-498907886d2b@linux.intel.com>
+In-Reply-To: <ea3aca92-1571-7220-6211-6424de0b21da@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW4PR03CA0204.namprd03.prod.outlook.com
- (2603:10b6:303:b8::29) To SJ2PR11MB7573.namprd11.prod.outlook.com
- (2603:10b6:a03:4d2::10)
+X-ClientProxiedBy: MW2PR16CA0010.namprd16.prod.outlook.com (2603:10b6:907::23)
+ To SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -124,193 +123,182 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|SA1PR11MB7112:EE_
-X-MS-Office365-Filtering-Correlation-Id: e0ee89eb-23b8-4355-ba55-08dce4c2e72b
+X-MS-Office365-Filtering-Correlation-Id: 3e6ea6fc-8529-4882-c562-08dce4c33968
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?UGNuWkxFSFVoczY4MkRMbG5ybGpYMTJjOWZLZm5OL0RvRHdVVWkvUWxER3Jq?=
- =?utf-8?B?Y2QzQS82alNhWlgxRXlHOE4wOW5kU2x4dE56alArazlKSVVnMlVrSGVXSktr?=
- =?utf-8?B?QUdmbHJBSDlrTXQzTjR1bzIzZkcxL0k1L3F0Z1FYRE1MSkZud2ZNY3IxUXJn?=
- =?utf-8?B?aWllV1JWcTAvalIzdXBBdi9sa3p2bS9NNTVlMUgyVm5YS09GZEZEYTlrNEtJ?=
- =?utf-8?B?NVY2TXNOWk1hMFZIdHJmc09RRUFQMHBHdmxQT1dFZS9uVjkrcVgyTHJzNjVG?=
- =?utf-8?B?UjV5Wkd5c21xcEFvUFVBaFlHVDNDcTY1ZUFtNytrekorTktKS0tjVitScHhL?=
- =?utf-8?B?Yi8xTk55SE9kTVdPMjhxK0tqb2FsdjRMbzhMeng2NTJWMmdYcGRJc0NCSGlJ?=
- =?utf-8?B?bFU3T2Vab1kzWWE2WUpka0t0NjNHVHdlRlJoYXE2MllFRldQOW05WlRtUzRr?=
- =?utf-8?B?M2kzaUpNSXp4ZXJYa09CWEVncXkvWWcvK0pORW9xZG02MHlzUm16R1lxWmc4?=
- =?utf-8?B?ZEdqZzB5SGdpb0llODV5SFJadlE1Ky8wNG1IUldvcyt1RDV5eU82TjBJaXhX?=
- =?utf-8?B?NjRLa0NwL25wb3M3NEQ0V2d2amZSWW5VbkZCUzYzNmVpRk1VK3FLNFRpYUpN?=
- =?utf-8?B?YWxwdENDMXpDYnA3T1JSWjR1Y3Zoa1lLY0JuSDMrVmhPT0NVQ0gzblRaNGtM?=
- =?utf-8?B?Wll3NkYxTmpkTUZUblVhZURDUWliZ0Urdk1oNTZuMW9qQytNK3loUFVnYnBu?=
- =?utf-8?B?MkZYMlVIeWVoSlR5bjRtYVdHN0w0TEJSMmRDbUdZZDNrSmJJbVRMSlVCOHBC?=
- =?utf-8?B?T0xDeGNaaTFzMWMzQVBXM2k0ZVhNd0lXSEFZWDZBeXFoL0FEY2tjYXpYeTB4?=
- =?utf-8?B?bWJjaEE1RHVaaERaRlBkRmR2aVEvRVNXUm5VK09OdUNHS0ZsNzJkVmppSTl1?=
- =?utf-8?B?NE9mVmpGbmNIMGxYeUl2dzdDQVpJWFlObnVEQnVLS0lGUEoyR0NCbXVzTjJz?=
- =?utf-8?B?eXAyRU01dWs4UE4zUmtpR1ZBdlV4NlIwaDRLaDk2MENrL2laZHZsb1JPd0lD?=
- =?utf-8?B?a1U3WEoveC9Na0F2ckxya2tXOFpjMm5xYTAyN1doajcycElGYmZ3b0Jya1Zy?=
- =?utf-8?B?alA0SG5aUFpaNlduUE10M3dXMTFiTm5YY2Rjdkl5bk9pVlArUWZ1WkNNMTlF?=
- =?utf-8?B?ek8zei9DRHdVN3oxZVJsU0k2TkRBbS9xR05FWnl4TVhBYU5Fdk1NczNzYm5l?=
- =?utf-8?B?aFRUbWNkQ3VoNE5OYVcrUStUTGJqdDRQMzlEcFpxdkdQQUJHbEVFZkNYcXJS?=
- =?utf-8?B?RjQvZ1g3MEdBOWhEWTVwY2ZETmw2Qkp0dnRkVzZtdlRLQ3djTVZaWkJ2UWty?=
- =?utf-8?B?eXc1WmVFM0xMN1lsek9Fb0xBM0dncWdINmFWSVNGYk5rY21BelUydlNicGxV?=
- =?utf-8?B?WElVbmRuMERzMHZmdU13c1RpTExXeDFvQUs0R2d2TDJhWnBsL0UvMVE3aGVY?=
- =?utf-8?B?TUVPOEFDcHV5bFRWK3FaVXdsN2FJb1lzS1hESWVWalVMV3JMak9kRmR2aGFD?=
- =?utf-8?B?Zm1PVS9rRFNEeUdqdWV5RmNzbW41dnIyLzNPYWsrRWpnRFlBbWJDL3RadFFq?=
- =?utf-8?B?RTIraFpLemc4ZHBTWlU1WFNyaGdIRHdOaVYzZHdjSU5iVGFyVU95aWx3OUN3?=
- =?utf-8?B?S3l4d0x3Z3UxMWJZRUVzZ0lWb0k5dVJvRmp6cCtOMWdiSlk5d1BvSVhBPT0=?=
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?YTZ6NkNKd1I4NVJ2NmJIblBsLzBCcmZyU3BSby9lZkhYZmFOSnMxL1luTHA2?=
+ =?utf-8?B?cHpMQ3dRckNXV2JCOFJ4bkl0am5ROUxVa2dRSzBsS1pSUW5PL201SjdGNHJC?=
+ =?utf-8?B?YW45bEtGbXJ0UkFOaWtEd2g1b1lhRCthM3BPMGEvMGpnajJReUtLMlhKajZH?=
+ =?utf-8?B?bU14ZG1xWkJpd3o2Z0dGVGowWWNFOXRiTzk5Y1F3V0hKNnhhT3JsajBnOVA1?=
+ =?utf-8?B?blA3YXJSeGpqcVNPN2V4eTNuL0xSemdEZmlXT0VwVHFmUmRkQTBqK2FFajBM?=
+ =?utf-8?B?VnNzaXhiS0JWMWpveWdMbUxNSHdHSTVKN2NNVEp4ZG9HTE1wRVlzWnEvd0lR?=
+ =?utf-8?B?WS9ibm42a2xVWGZWZHdndXltR2NaTjJVclpKZUd6aFZLMEFNM2xJN3JYdjFM?=
+ =?utf-8?B?K0l0RWV2ZTJsVHBTbVNFaml0TjFxYXRxZXhNT1pmZHVJTU5hdmRVR1FoYzV1?=
+ =?utf-8?B?bjVablVCaWtQNDBUa1hVM01IZUNJbzVYbVVEbzAvcGhHUmZmSTcrT253a0s0?=
+ =?utf-8?B?SDVoSHJhY3NqNzBaMkxVZUVQRlQ5SitnL0pQYXhZZU40VTV6WVo2cGU4S29l?=
+ =?utf-8?B?M3pjRUNEblpFcWs0MzBhcnFzRi9teHpmRzBFcGJmaEl3QlV1ekRyOXFpN2pL?=
+ =?utf-8?B?OHFnOENoT0VEZ0xCV29taDVQQ1YzM1cvRHkxaHNkM0V4YnBvZ3dFalBESlBk?=
+ =?utf-8?B?T3dyaGRLQ3pNNWdFbWdwellleVAxcDZsL3dEeXVVRjJFTDlqMHJXQ2d0ZzNI?=
+ =?utf-8?B?dkN4d2NYOVBhMWJveG9pckZiejR1OXlhWFFWMTBTQk5SeDJjRkV5a3ZTT21O?=
+ =?utf-8?B?TDEvandzbWlJTzhJUEo0N3I3R1lYaXVyZ093K042c1g0UTk5WUI2b3FyeVNw?=
+ =?utf-8?B?Nmh4bnN3U2dIV21laFlZNWg4U0ptSHdJK3JmbjNkeUwyeWEydEd5T0FmbW1t?=
+ =?utf-8?B?MFM5eUltczZpZHFLaDk0WTEzMmVYV1FKNTlaWDN0L0ZFZk10cHA2ZmwxMzU1?=
+ =?utf-8?B?dnZNY1lGZHVlYURobzhwUW42cUdxUkxla0pJQWRTTjZXMTRrcmRrR0crNzlv?=
+ =?utf-8?B?aHZWSVVMT2p1UklLaHBwR09PczRTQUFIZWlpVVdya016aGhaRWM5dGdpR1hU?=
+ =?utf-8?B?K3VkK3BobWExZElJVE5qeUdSaGd2Ym1zV3FpYllSWXFGM3Q3UEFJYlZpb2ds?=
+ =?utf-8?B?c21ya3RkZFd1QjJiOTVFU0Z4azFTR20vRXVYSTNsNkdEc1VrRkNNYm02Z3Fj?=
+ =?utf-8?B?S2RaV3I0UVhJUXlteFBKaDBCY2UzTzVmN0VBODNWYmc4TUpSV2VsRjE5RlFw?=
+ =?utf-8?B?dnNYTW9DWGtLVXE0cHpyTVptcGpsb1NaYzhZNG9RcXllN0RyakxJQjlRclVx?=
+ =?utf-8?B?VHRCUVFDcUs1R2ZORmZaTjgzdTB3UUxTNmNNUTBPMEhoVjhGNWpSUFdFY29H?=
+ =?utf-8?B?ditkeW9UdHBnQVhLNG8ySUE4UkJOdnp2MlMvbmwzcGNqL041UU9Sa0Y4ZjI5?=
+ =?utf-8?B?bGxhd3BsWGJ1Z01XcXEyNTVJeGdnQm5zOG5GK2ROKzFZY2RXbWcrVjFaY0dF?=
+ =?utf-8?B?TWlIZ3ZTdVYybXFaT0xrV0JleERqeEFGNy9DUU9kdzRmc3hMRUZBazRqV05k?=
+ =?utf-8?B?aEZjWjNTSHJXN1pBamRkaTJXQ3pSZ3FzRTByZGpHbVpCVlVOQ05qejE0bVhv?=
+ =?utf-8?B?cTlSdlFJVVVqRWxaR1FFcDE5emRlUVZBYU5Wa1J4dXUxcStPUXc4Yzh3PT0=?=
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MjJLNFhNL0lVdm9neTlrbmw1SFBsdHozZkZLSHhOL3J0bEhXSkhVbUhsUHpM?=
- =?utf-8?B?aEJjRDlQL3FtQzF5Vng2dVNlUUV3d0F6VFpjQVRxZCtQMlg1WVhBVXhTTUxw?=
- =?utf-8?B?RlR4Nm01UXhGS2lMNkZvNldweDhiclhVTzd3a2tpRUduQkszRXAwazdQL2JU?=
- =?utf-8?B?QWlHRjYrazRjNXhpVDBaeEwwY2xCWU1nd1hESHA3cEd6S2U4d3gyblEvcE1C?=
- =?utf-8?B?d2dZWHpLSVRJTHNubzdKNjZvVFhGN05FV2ZQamljaEZvTXFCUllqTlJXRTVr?=
- =?utf-8?B?ZElyWG1SYVN2eE42dXBsRzRZVHNuUXQxVkdmN0VGWEp0bjBtK3EzTFVxcFU1?=
- =?utf-8?B?ZFgrYks4Vml6Rk94c0RrbDBNMDVOWHY0Q3k2Z3ZqMDFQY1poejlwWWowSnp6?=
- =?utf-8?B?U0RYdkJUU0RxaUxHa2N1SXc4Tlg5Vmh2Y0hLUFpBbmV6VVpUd1poaVBhUHJV?=
- =?utf-8?B?TmdON2VYem05OGpObkNKNlRzdm9QY3ZyY1lQU0tENjl1SllJNkdlbmdhczVl?=
- =?utf-8?B?c0dDbEZnMDFUa2dHWDFJSFZCRm92OFJOdlBSMVpzQm5LdWp4dTVoTmRDays3?=
- =?utf-8?B?dDQwYVRjSlNWWStxMGFzcE8zOFlFMk1JR2pzZ2o4Um9mcGVaOXhtZ0NWUmdY?=
- =?utf-8?B?K0YvOVJGbWhJQmRUQWJUT0xVcmpCMEdnSWE5azNyMjAwdzRBMHEyYy8vQXBV?=
- =?utf-8?B?eU1uNS9YeUxaZURxWU9SbVVBejVncHNQTjY1U2VzVkFjVVN5ekxTeWloVUpQ?=
- =?utf-8?B?cmVwaTlQMWUzcTBEOENDV21Jd1RmNEZMTm1TUVdEbW42N0dsM0dJYVRlNzhi?=
- =?utf-8?B?bHdJRnExeGsraFFZREtwNEJPYUpqcmJoVENaa1JzWDdUQ0c3U2QrdGlNQXZl?=
- =?utf-8?B?Tm4vNkx2eVNuZ0hmUUp4ZVZKcjJJdDl0blRGT3dKdGx5ZmFsTjI3V1ZtcGR4?=
- =?utf-8?B?T01LUjVWTTZ2YmJucnBDem1YcnJabVNxQ0lxLzFIWVhxWXZJcDVDMXJLOWN2?=
- =?utf-8?B?N202MStFMi90WnVpRHpjaGMxTzEzcUNIYkkxTEdEOWFOekhraUtqUlcvT1oz?=
- =?utf-8?B?TEdMaWMvNXpLL3lUaE9qb2ZXd3VrbXpiL2t1SjUrYzdyVWJNakJaTEZUOWpw?=
- =?utf-8?B?K1hjSHhlUWZrMW9pQjk4aWl2dE1lRjJkbGYrVUsvLzFoU2syVDJTWlZrUlFN?=
- =?utf-8?B?WHNuL0c3WlNUdm1ZY0doMjgzbi9pdXpmN2FjeEVHSjBDWXBaTkhFeEl2WGxQ?=
- =?utf-8?B?NHNVNGpvMVA0cG1HTWtQRC9ROTluYm52bDZyQ1ZHMW5SZ2JlVFFqOUpuQnJv?=
- =?utf-8?B?d2I5M09XbnFTeTJqWWE0UU53Mll1cVFJQTcxVjQ1dkpibUplcktaQ3ZRZi9V?=
- =?utf-8?B?NFhBSEs2c1RzWWVVajJVUjVDbW5uNzZ0TTJwQTVxUnVZZEhKb2ExVVNwL21z?=
- =?utf-8?B?S3M4a1RKWjlVRVdZV0E4M2E2QjFuMkg5ZkYrUDRQK2MwZUx5WU5oQ0IrU0xM?=
- =?utf-8?B?NkkydWVCdU90N0NiaDZHUk9iMFQwOXNBZ2t2aEdjL1pPNkRsd010c2hwOFVM?=
- =?utf-8?B?UEtjQXkxUlFzU0FOWE9TQVVFMHJERHZGSUNURVljclowR1JZRzJmbWh5MTNL?=
- =?utf-8?B?dXhnQTZ1ZXh4ek1CZ203T0VYMGloclZwSjZHR2FDTlgweC9Ya0c4ekR0cjJX?=
- =?utf-8?B?RzQ2eFE3MUVvcEFiNWlJc05WL0pRYzFIdEwrSXdFQXVaSFFIM2E5NTdBTUxu?=
- =?utf-8?B?dElGNlRiQzJleTlvN0EvTFJVOFpwTzFSOUl3L3UyZ1djTWVnOEhGV2NBMlNI?=
- =?utf-8?B?bE0xTmt1M2R6cUsrN2M0dmZja1pIeisxZ1NvdWZ2YnU2MTNDNkxMRHdDRkQ0?=
- =?utf-8?B?OTByZU5xSWFldlUvYlh0MUhQTG1QeVRaRzg5Vnlya245K3NkOENpakpaem9w?=
- =?utf-8?B?UE93KzVkeUdWWjhpSEIzZnJhTW9pVE5tdWRYa0E0UnNGczhnblJCVDR4OU53?=
- =?utf-8?B?WW1JOVVmTkorcENJSGNEaDV3WUxCYUJET3EwM2ZrU2hhWndZT2FFOXF3Ykwx?=
- =?utf-8?B?UzZlY3RkNC9abnlERGMvTVJSSGZkd0U5VVgrd2xSay92ZHZIMFh5YXpnYXEv?=
- =?utf-8?B?MGNFZ3djQ0JhUHlOcCtQT2pWWWxHd0NmR2VHWVZ4TG5XYnAvUk0reWE4NVJ3?=
- =?utf-8?B?Y3c9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: e0ee89eb-23b8-4355-ba55-08dce4c2e72b
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L2p5NWdLQ0hqU1dXV3BUbkZ5OHFHL1RjSmZ1SVJQMVlYQjQwbHJzMnU4MHZC?=
+ =?utf-8?B?YzJXUDhtcm90cWtOb0hnSTY2K0JXYWZiNWwxejl3Y3lGM205RUd1Y0pvbVpU?=
+ =?utf-8?B?dzJSTmM2M1I5UCt4bFRSUUVvWFBGQzRPZDhIR25ZWGxocTRQRWxOM0M3Mldk?=
+ =?utf-8?B?cS9xWlVVektIU1JJRmljeWhqMHpKOEYxRXA3WmZwOXZSMmFkaHNnNGVValBq?=
+ =?utf-8?B?K1EreGMrN0pRSHVaR25FRlV0Si91cnBwQVFOODd6YktaZWtnaG81WnVxNjhI?=
+ =?utf-8?B?VUxVUm9sMm91VjA1YURtOGxSaE9MNmRJbVBpYm5Vc2YyYnd5MEw1M2xtNEtL?=
+ =?utf-8?B?aVEweVUyVmNyU0R2bWNxWi9FVHRMdG9tNFlxUlMxazNwZVEwY2RDZFlTMTdj?=
+ =?utf-8?B?ZTltZ3p5djZ4OWZlNUJTWFh1dzhKbkg5YTRGakVuVjEydEJ3bFlIWi8vWnBF?=
+ =?utf-8?B?ZDZwQWNMN21ha1IxRTJIR2ZZTDY0M0hYb2xTV3lvallscDZMTVpCTC9tWUlj?=
+ =?utf-8?B?ZHZCMUxHTXg5Vnd2MkN3aDc4WG9TbTN2QzArbjBaYm83ZWhpeDllRnpBajNp?=
+ =?utf-8?B?cW0ydGJIRi9TdlBkSkM1ampqTmhrS3FrcjZ2eXp1QXUrZDFMcEdNWXVEUzJD?=
+ =?utf-8?B?U3FXeWJRUHgrOXVyTXlTZEN4SFF4aklzUWFlMXYyZ3hoa0lnOUg3OTNGZVlh?=
+ =?utf-8?B?K3gyVTQrcmY2cmJQUllheUM4MVdTNThaRVdIMlo5cGFYMkswQ3RyYmozbkRS?=
+ =?utf-8?B?cjhwMFNOQjJLUW4vTGxKZjkwK1BZVWx1bXIyejJRVE1SNkE2ZmVFVlhTVzM0?=
+ =?utf-8?B?eTAyMnhsZnZlczlBMFljQ25yNHYxT2NyWi9nNkQ0MllMUXFzQkxMcUwxaE1P?=
+ =?utf-8?B?T1didjVwZnEyS2ZyeCtWcXVUcFRiME5HbWpoRVU3NUVFRHYzdkkreHZYckNV?=
+ =?utf-8?B?WStyTnlYQ0NteVgwSjNQTTJ6SGNLdXkxeHR3VXltQzFmcTZvdGg2WGF2NlpM?=
+ =?utf-8?B?dGpsWGlIb25vQXVWcjVrcXpkcTZGV0JNSzV2TmV6WU52VHJraUx0ZWxUWGdS?=
+ =?utf-8?B?dHNwYnhURlhkdWV1UnFoeXhnSFY1bUNPWktlM25UU3pVTVptNGdDQXlRdFZp?=
+ =?utf-8?B?eU5tWlZBU1piTlgzMlNBVXl2Z3M1bVVTcy9aeENKWEdiZm4wcUZ1eHpFaDZP?=
+ =?utf-8?B?UVhOaFRhdXcxampWeGVydGVDRGJnMURnbXJaUE5ZaDFxQ3k0T0RqTHlyS0pa?=
+ =?utf-8?B?UjlOZ2QyYmZqbUhSUUp1RzZlWmJYRGFoMkV3YkJaYkRpS0ViZXFodE5DcEFH?=
+ =?utf-8?B?SG9BVS9kdzduamhuTUVDOGJ0ejN1YWtGd1gwaU5IY0RmbWNNNURFc1JKZDl1?=
+ =?utf-8?B?MzlBUG1LV1JIamY2a3UxcHZYVXU2a25SZnN1SGNpbytsNytRL0NtVUROa05w?=
+ =?utf-8?B?OWlaT2ZSVlNsbTBxQysvZVpYeHVTSzJ3U1BZRUR6a2taMUtpSmhwMDFRNXNM?=
+ =?utf-8?B?Z25oYitrTG8zdWc5UXZwVmFUaVdoR25aR0Jsdk5LNWJHUm1wTFNHWGpYU0V0?=
+ =?utf-8?B?WHZnbTZaaWtTUWV4Yno5SnJJa2toa0pleHRxUEpYbXhMOHdvc2FjQ0I5d2xk?=
+ =?utf-8?B?cUR6RDhGc2JJREZxWUxMd2hsOG1WNGtyVmNpYUVQb0ZLcGR0a05IT3o3UkRD?=
+ =?utf-8?B?eFhreS9yaHEzeEg4RVU3bUVMcEs5MmtIT1NLcjFUUW8zYlM4Q05TVllYWVNF?=
+ =?utf-8?B?bUlIU3NoQ2VMUWtYaTRpYURtRFhpeGJYZFQ0ejBIeC80NEpQRFNQeUplMU43?=
+ =?utf-8?B?Qk9LRHEyTUF6RTZ0SkYyVC9kQ3doSGdHeldKcFRydXdmM2RDSVAxcVIrZXBz?=
+ =?utf-8?B?eTZMSGJvUExjcHp4T0g4S2VZb2VYQWJDSXEyYWQwUlVTLzZ0ZmNVVXVNUE90?=
+ =?utf-8?B?TkE0QmEyQlZVZjkrSmdUbW4wbzB4cDczT0ppaDNOek1pdHpmWldtT0dETUR3?=
+ =?utf-8?B?R2xOb21DK3EzdEJiUEtOUzlwSk8rNWxLaGo2OG41aURhRU5lNG9HSGhjUlRJ?=
+ =?utf-8?B?c2RRbHlpNDFpT1JUQUFQaTdENHpvRTNZWFh6cXJaT1d2Z0xhVk1HcW1vNTgz?=
+ =?utf-8?B?S2Y4UG93YXZoY2daa2I4QlZPRmk0aDlMbVpDWm9rUzhjZ2dzS2ViMlNMOXdK?=
+ =?utf-8?B?V3c9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e6ea6fc-8529-4882-c562-08dce4c33968
 X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2024 22:21:33.4302
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2024 22:23:51.3451
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pfdavqhRFUmRXAuj1T+oXIdVnutPUOI209kLdxT/S/vdeM9ldspNBULOrFsND7Bx3QqJKSHec4gG5Kn4DIrP8gVGZOEQtAbHYUGFw72GQvY=
+X-MS-Exchange-CrossTenant-UserPrincipalName: uxj85SwvTF2Gk2zaYzhlObVgf7B29XRnn5si89ADrV5HvQONx6OuaJfpS5IKlouSNwRTcT8aSdAi7JM+VWK3C2EK/QJeCY/sMEE/DEfVJpc=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB7112
 X-OriginatorOrg: intel.com
 
 Hi Ilpo,
 
-On 10/4/24 7:05 AM, Ilpo Järvinen wrote:
+On 10/4/24 7:20 AM, Ilpo Järvinen wrote:
 > On Thu, 12 Sep 2024, Reinette Chatre wrote:
-
->>  tools/testing/selftests/resctrl/cmt_test.c    |  32 ++----
->>  tools/testing/selftests/resctrl/mba_test.c    |  13 ++-
->>  tools/testing/selftests/resctrl/mbm_test.c    |  22 ++--
->>  tools/testing/selftests/resctrl/resctrl.h     |  54 ++++++---
->>  .../testing/selftests/resctrl/resctrl_tests.c | 104 +++++++++++++-----
->>  tools/testing/selftests/resctrl/resctrl_val.c |  43 ++++----
->>  6 files changed, 176 insertions(+), 92 deletions(-)
+> 
+>> By default the MBM and MBA tests use the "fill_buf" benchmark to
+>> read from a buffer with the goal to measure the memory bandwidth
+>> generated by this buffer access.
 >>
->> diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
->> index 0c045080d808..a7effe76b419 100644
->> --- a/tools/testing/selftests/resctrl/cmt_test.c
->> +++ b/tools/testing/selftests/resctrl/cmt_test.c
->> @@ -116,15 +116,13 @@ static void cmt_test_cleanup(void)
->>  
->>  static int cmt_run_test(const struct resctrl_test *test, const struct user_params *uparams)
->>  {
->> -	const char * const *cmd = uparams->benchmark_cmd;
->> -	const char *new_cmd[BENCHMARK_ARGS];
->> +	struct fill_buf_param fill_buf = {0};
-> 
-> Empty initializer is enough to have the fields initialized to zero.
-
-Sure.
-
-...
-
->> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
->> index 82801245e4c1..98462752cb46 100644
->> --- a/tools/testing/selftests/resctrl/resctrl.h
->> +++ b/tools/testing/selftests/resctrl/resctrl.h
->> @@ -43,16 +43,35 @@
->>  
->>  #define DEFAULT_SPAN		(250 * MB)
->>  
->> +/*
->> + * fill_buf_param:	"fill_buf" benchmark parameters
->> + * @buf_size:		Size (in bytes) of buffer used in benchmark.
->> + *			"fill_buf" allocates and initializes buffer of
->> + *			@buf_size. User can change value via command line.
->> + * @memflush:		If 0 then the buffer will not be flushed after
->> + *			allocation and initialization, otherwise the
->> + *			buffer will be flushed. User can change value via
->> + *			command line.
->> + */
->> +struct fill_buf_param {
->> +	size_t		buf_size;
->> +	int		memflush;
-> 
-> bool?
-> 
-> Or is there a plan to use other values than 0 and 1?
-
-Sure. There is no need to keep the original user provided values. I am not aware of
-any other planned values. 
-
->> +static struct fill_buf_param *alloc_fill_buf_param(struct user_params *uparams)
->> +{
->> +	struct fill_buf_param *fill_param = NULL;
->> +	char *endptr = NULL;
+>> Care should be taken when sizing the buffer used by the "fill_buf"
+>> benchmark. If the buffer is small enough to fit in the cache then
+>> it cannot be expected that the benchmark will generate much memory
+>> bandwidth. For example, on a system with 320MB L3 cache the existing
+>> hardcoded default of 250MB is insufficient.
+>>
+>> Use the measured cache size to determine a buffer size that can be
+>> expected to trigger memory access while keeping the existing default
+>> as minimum that has been appropriate for testing so far.
+>>
+>> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+>> ---
+>> Changes since V1:
+>> - Ensure buffer is at least double L3 cache size. (Ilpo)
+>> - Support user override of default buffer size. (Ilpo)
+>> ---
+>>  tools/testing/selftests/resctrl/mba_test.c | 8 +++++++-
+>>  tools/testing/selftests/resctrl/mbm_test.c | 8 +++++++-
+>>  2 files changed, 14 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+>> index 7e43056c8737..d8d9637c1951 100644
+>> --- a/tools/testing/selftests/resctrl/mba_test.c
+>> +++ b/tools/testing/selftests/resctrl/mba_test.c
+>> @@ -182,7 +182,13 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
+>>  		fill_buf.memflush = uparams->fill_buf->memflush;
+>>  		param.fill_buf = &fill_buf;
+>>  	} else if (!uparams->benchmark_cmd[0]) {
+>> -		fill_buf.buf_size = DEFAULT_SPAN;
+>> +		unsigned long cache_total_size = 0;
 >> +
->> +	if (!uparams->benchmark_cmd[0] || strcmp(uparams->benchmark_cmd[0], "fill_buf"))
->> +		return NULL;
+>> +		ret = get_cache_size(uparams->cpu, "L3", &cache_total_size);
+>> +		if (ret)
+>> +			return ret;
+>> +		fill_buf.buf_size = cache_total_size * 2 > DEFAULT_SPAN ?
+>> +				    cache_total_size * 2 : DEFAULT_SPAN;
+>>  		fill_buf.memflush = 1;
+>>  		param.fill_buf = &fill_buf;
+>>  	}
+>> diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+>> index b1f03a73333f..7635ee6b9339 100644
+>> --- a/tools/testing/selftests/resctrl/mbm_test.c
+>> +++ b/tools/testing/selftests/resctrl/mbm_test.c
+>> @@ -149,7 +149,13 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
+>>  		fill_buf.memflush = uparams->fill_buf->memflush;
+>>  		param.fill_buf = &fill_buf;
+>>  	} else if (!uparams->benchmark_cmd[0]) {
+>> -		fill_buf.buf_size = DEFAULT_SPAN;
+>> +		unsigned long cache_total_size = 0;
 >> +
->> +	fill_param = malloc(sizeof(*fill_param));
->> +	if (!fill_param)
->> +		ksft_exit_skip("Unable to allocate memory for fill_buf parameters.\n");
->> +
->> +	if (uparams->benchmark_cmd[1]) {
->> +		errno = 0;
->> +		fill_param->buf_size = strtoul(uparams->benchmark_cmd[1], &endptr, 10);
->> +		if (errno || uparams->benchmark_cmd[1] == endptr) {
+>> +		ret = get_cache_size(uparams->cpu, "L3", &cache_total_size);
+>> +		if (ret)
+>> +			return ret;
+>> +		fill_buf.buf_size = cache_total_size * 2 > DEFAULT_SPAN ?
+>> +				    cache_total_size * 2 : DEFAULT_SPAN;
+>>  		fill_buf.memflush = 1;
+>>  		param.fill_buf = &fill_buf;
+>>  	}
+>>
 > 
-> Should this also check that there is no extra garbage?
+> It has a bit of code duplication feel in it so I'd consider adding 
+> something like ssize_t get_default_span() (perhaps there exists a better 
+> name for it that is not "span" based). Also DEFAULT_SPAN is no longer
+> truly the default span.
 
-Good point. Instead of adding another check I plan to replace existing endptr check
-with a different test that ensures that "*endptr == '\0'".
+Good suggestion.  How about get_fill_buf_size()?
 
+Regarding the "DEFAULT_SPAN" it seems to have some 'magic number smell' to
+it. When I tried to eliminate it and only rely on cache size the tests
+were failing on some earlier platforms with smaller L3. I then started
+treating it as a minimum in order to keep original behavior on these earlier
+systems. Perhaps renaming it to "MINIMUM_SPAN" would make this change
+clear?
 
->>  static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
->>  {
->> -	char **benchmark_cmd;
->> -	int ret, memflush;
->> -	size_t span;
->> +	struct benchmark_info *benchmark_info;
->> +	const struct user_params *uparams;
->> +	struct resctrl_val_param *param;
->>  	FILE *fp;
->> +	int ret;
->>  
->> -	benchmark_cmd = info->si_ptr;
->> +	benchmark_info = info->si_ptr;
 > 
-> I'd just assign this directly while defining the local variable.
+> But neither is the end of the world as is...
+> 
+> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> 
 > 
 
-Sure.
-
-Thank you.
+Thank you very much.
 
 Reinette
+
 
