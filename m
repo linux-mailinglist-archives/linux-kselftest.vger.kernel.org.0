@@ -1,69 +1,69 @@
-Return-Path: <linux-kselftest+bounces-19028-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19029-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DADC990574
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 16:10:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37FEC990578
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 16:10:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1CDFEB22BC3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 14:10:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 442491C21814
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 14:10:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED33A216A24;
-	Fri,  4 Oct 2024 14:09:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE346215F55;
+	Fri,  4 Oct 2024 14:09:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.de header.i=@amazon.de header.b="Rg72AFB1"
+	dkim=pass (1024-bit key) header.d=amazon.de header.i=@amazon.de header.b="Q9lrNkYg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F80D215F58;
-	Fri,  4 Oct 2024 14:09:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4592141D3;
+	Fri,  4 Oct 2024 14:09:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=72.21.196.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728050967; cv=none; b=PKoeYdw05tus2FAfCFZrhJoL0JMKBTEijvOFTh3tdkXaK12irGAgXAjkqgKDH/Sh+kJ9TLnhT7l/N1ZDiszZo10o100eYZ7a/MFyiqsTMjuEWKWvQLW37iTTq9+U8+U/7Jkwk9deddTlcbCSQdtJbz5Q5v/gFQWbctgtquwEsMg=
+	t=1728050995; cv=none; b=jkWagYe6/sS7VtucU0sHGfzq1d9CUue53dL1f8EoYteYL0XFJ0ls4Tw+OoFmviuL+bnw4JJYOh/mIE8tfitknUlduOVAAvKPDOycrIz+xCbgVqv/FTAyPcOVwvZrGuXmrSPLeI026KFvk4KLbmYOQ5KFnf6RKtM6pEyeGmGAtSc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728050967; c=relaxed/simple;
-	bh=ijdUR2tr23wvuK2BDcqM5eeebMA0pBaquvBvJve5Y+c=;
+	s=arc-20240116; t=1728050995; c=relaxed/simple;
+	bh=PBWunUlE2HKldlDCMDHY1HsP3G0Nm9kXB9Qg70SWmiw=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=I4oaaI3TkMjmbRtU3Ove2ro5K6EIEs58pTJ2B8PXdLpewOyZMa8ClgPzKxjRDswx+dasDzVSxlvVoIGyo6qx+dqW+LBM81sv8ae/+2OiRnDHpgf7EgQA4BUxqryLDvAiUbIEE+S9esXASqDgeOSOGU0drrisA5uqeB9FTyWsGAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (1024-bit key) header.d=amazon.de header.i=@amazon.de header.b=Rg72AFB1; arc=none smtp.client-ip=99.78.197.218
+	 MIME-Version:Content-Type; b=ppjqe5fCtd9y0vUApOQE+PJ46vajBPx6ozoWmSIEs5KIg7o5yxfRIon4SpFCxicnyTs2NX1MhHRUBnfoNxtl3is4EFYAFKfOpOCuKdM7Ju8uJAkZAgMxcslQpUjZj2hQncEtLQxyzoQxQr2J5D8D0orAVG/5n1ZhmeaEM1Ny4rE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (1024-bit key) header.d=amazon.de header.i=@amazon.de header.b=Q9lrNkYg; arc=none smtp.client-ip=72.21.196.25
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1728050967; x=1759586967;
+  t=1728050995; x=1759586995;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=AG/ptwPUku9Mc+u82giaMkWtyLl7RVKvof7I4SY5+cM=;
-  b=Rg72AFB1DJwqqtnE6Bujeiv6CJ7CoLEXSiU1PKMQu7bxISb6Riq01VlJ
-   M4w9XKa6hURXKfw6a5SFrP6Z936wE91fEAGJgg4kyIX11FKV+RFXA7jLS
-   cKIPk5eGvnNrEhELFdKdivp4yWErM/GLhJ3d8DmX4e6qpb5YK/DVnyRZb
-   4=;
+  bh=bTyTxdXDkqtaFKJhoIWU6tpWvAMHM4NmS0qwKkyNGls=;
+  b=Q9lrNkYgqb2HS1b9w21sDR8js9VVYjUR5e0VKezcG22lfDpq6FH4Mqlo
+   xiCapZHVTeNbOESPvYFmuY4k8nsTURLkTW1Na60blD2MUIfeJKy2lHpNx
+   oHK1jOJZs5B5M7NLKPn6RhhSMoZGLcBkRUm6Dv5tFVvbsjItlbZ60UHj0
+   I=;
 X-IronPort-AV: E=Sophos;i="6.11,177,1725321600"; 
-   d="scan'208";a="339710977"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.210])
-  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 14:09:26 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [10.0.7.35:49576]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.4.107:2525] with esmtp (Farcaster)
- id eb11cd6e-058f-40b7-9473-d65ea63f28a6; Fri, 4 Oct 2024 14:09:25 +0000 (UTC)
-X-Farcaster-Flow-ID: eb11cd6e-058f-40b7-9473-d65ea63f28a6
-Received: from EX19D020UWA001.ant.amazon.com (10.13.138.249) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.218) with Microsoft SMTP Server
+   d="scan'208";a="432592906"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 14:09:49 +0000
+Received: from EX19MTAUWA001.ant.amazon.com [10.0.7.35:27215]
+ by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.57.100:2525] with esmtp (Farcaster)
+ id 837820b9-f6bd-4e90-a60f-14a0c3cb0afb; Fri, 4 Oct 2024 14:09:47 +0000 (UTC)
+X-Farcaster-Flow-ID: 837820b9-f6bd-4e90-a60f-14a0c3cb0afb
+Received: from EX19D020UWC003.ant.amazon.com (10.13.138.187) by
+ EX19MTAUWA001.ant.amazon.com (10.250.64.217) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Fri, 4 Oct 2024 14:09:25 +0000
-Received: from EX19MTAUEC001.ant.amazon.com (10.252.135.222) by
- EX19D020UWA001.ant.amazon.com (10.13.138.249) with Microsoft SMTP Server
+ Fri, 4 Oct 2024 14:09:43 +0000
+Received: from EX19MTAUWC001.ant.amazon.com (10.250.64.145) by
+ EX19D020UWC003.ant.amazon.com (10.13.138.187) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Fri, 4 Oct 2024 14:09:24 +0000
-Received: from email-imr-corp-prod-iad-all-1b-8410187a.us-east-1.amazon.com
- (10.43.8.6) by mail-relay.amazon.com (10.252.135.200) with Microsoft SMTP
+ Fri, 4 Oct 2024 14:09:43 +0000
+Received: from email-imr-corp-prod-pdx-all-2b-22fa938e.us-west-2.amazon.com
+ (10.25.36.210) by mail-relay.amazon.com (10.250.64.145) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id
- 15.2.1258.34 via Frontend Transport; Fri, 4 Oct 2024 14:09:24 +0000
+ 15.2.1258.34 via Frontend Transport; Fri, 4 Oct 2024 14:09:43 +0000
 Received: from dev-dsk-nikwip-1b-bc9ec026.eu-west-1.amazon.com (dev-dsk-nikwip-1b-bc9ec026.eu-west-1.amazon.com [10.253.74.52])
-	by email-imr-corp-prod-iad-all-1b-8410187a.us-east-1.amazon.com (Postfix) with ESMTPS id E6810405B1;
-	Fri,  4 Oct 2024 14:09:22 +0000 (UTC)
+	by email-imr-corp-prod-pdx-all-2b-22fa938e.us-west-2.amazon.com (Postfix) with ESMTPS id 87583C0504;
+	Fri,  4 Oct 2024 14:09:40 +0000 (UTC)
 From: Nikolas Wipper <nikwip@amazon.de>
 To: Vitaly Kuznetsov <vkuznets@redhat.com>
 CC: Nicolas Saenz Julienne <nsaenz@amazon.com>, Alexander Graf
@@ -75,9 +75,9 @@ CC: Nicolas Saenz Julienne <nsaenz@amazon.com>, Alexander Graf
 	<linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>, <x86@kernel.org>,
 	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, "Nikolas
  Wipper" <nikwip@amazon.de>
-Subject: [PATCH 4/7] KVM: Introduce KVM_HYPERV_SET_TLB_FLUSH_INHIBIT
-Date: Fri, 4 Oct 2024 14:08:07 +0000
-Message-ID: <20241004140810.34231-5-nikwip@amazon.de>
+Subject: [PATCH 5/7] KVM: x86: Implement KVM_HYPERV_SET_TLB_FLUSH_INHIBIT
+Date: Fri, 4 Oct 2024 14:08:08 +0000
+Message-ID: <20241004140810.34231-6-nikwip@amazon.de>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20241004140810.34231-1-nikwip@amazon.de>
 References: <20241004140810.34231-1-nikwip@amazon.de>
@@ -90,47 +90,179 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 
-Introduce a new ioctl to control whether remote flushing via Hyper-V
-hyper-calls should be allowed on a vCPU. When the tlb_flush_inhibit bit is
-set, vCPUs attempting to flush the TLB of the inhibitied vCPU will be
-suspended until the bit is clearded.
+Implement KVM_HYPERV_SET_TLB_FLUSH_INHIBIT for x86. Apart from setting/
+clearing the internal TLB flush inhibit flag this ioctl also wakes up
+vCPUs suspended and waiting on this vCPU.
+
+When the flag is set, a vCPU trying to flush the inhibited vCPUs TLB with
+a Hyper-V hyper-call suspendeds until the bit is cleared again. The hyper-
+call finishes internally, but the instruction isn't skipped, and execution
+doesn't return to the guest. This behaviour and the suspended state itself
+are specified in Microsoft's "Hypervisor Top Level Functional
+Specification" (TLFS).
+
+To maintain thread safety during suspension and unsuspension, the IOCTL
+uses the KVM SRCU. After flipping the flush inhibit flag, it synchronizes
+SRCU to ensure that all running TLB flush attempts that saw the old state,
+finish before the IOCTL exits. If the flag was changed to inhibit new TLB
+flushes, this guarantees that no TLB flushes happen once the ioctl exits.
+If the flag was changed to no longer inhibit TLB flushes, the
+synchronization ensures that all suspended CPUs finished entering the
+suspended state properly, so they can be unsuspended again.
+
+Once TLB flushes are no longer inhibited, all suspended vCPUs are
+unsuspended.
 
 Signed-off-by: Nikolas Wipper <nikwip@amazon.de>
 ---
- include/uapi/linux/kvm.h | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ arch/x86/include/asm/kvm_host.h |  2 ++
+ arch/x86/kvm/hyperv.c           | 22 ++++++++++++++++++++
+ arch/x86/kvm/x86.c              | 37 +++++++++++++++++++++++++++++++++
+ 3 files changed, 61 insertions(+)
 
-diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-index 637efc055145..3bc43fdcab88 100644
---- a/include/uapi/linux/kvm.h
-+++ b/include/uapi/linux/kvm.h
-@@ -933,6 +933,7 @@ struct kvm_enable_cap {
- #define KVM_CAP_PRE_FAULT_MEMORY 236
- #define KVM_CAP_X86_APIC_BUS_CYCLES_NS 237
- #define KVM_CAP_X86_GUEST_MODE 238
-+#define KVM_CAP_HYPERV_TLB_FLUSH_INHIBIT 239
+diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+index 7571ac578884..ab3a9beb61a2 100644
+--- a/arch/x86/include/asm/kvm_host.h
++++ b/arch/x86/include/asm/kvm_host.h
+@@ -698,6 +698,8 @@ struct kvm_vcpu_hv {
  
- struct kvm_irq_routing_irqchip {
- 	__u32 irqchip;
-@@ -1573,4 +1574,18 @@ struct kvm_pre_fault_memory {
- 	__u64 padding[5];
+ 	bool suspended;
+ 	int waiting_on;
++
++	int tlb_flush_inhibit;
  };
  
-+/* Available with KVM_CAP_HYPERV_TLBFLUSH */
-+#define KVM_HYPERV_SET_TLB_FLUSH_INHIBIT \
-+	_IOW(KVMIO,  0xd6, struct kvm_hyperv_tlb_flush_inhibit)
+ struct kvm_hypervisor_cpuid {
+diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+index e68fbc0c7fc1..40ea8340838f 100644
+--- a/arch/x86/kvm/hyperv.c
++++ b/arch/x86/kvm/hyperv.c
+@@ -2137,6 +2137,9 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 		bitmap_zero(vcpu_mask, KVM_MAX_VCPUS);
+ 
+ 		kvm_for_each_vcpu(i, v, kvm) {
++			if (READ_ONCE(v->arch.hyperv->tlb_flush_inhibit))
++				goto ret_suspend;
 +
-+/* for KVM_HYPERV_SET_TLB_FLUSH_INHIBIT */
-+struct kvm_hyperv_tlb_flush_inhibit {
-+	/* in */
-+	__u16 flags;
-+#define KVM_HYPERV_UNINHIBIT_TLB_FLUSH 0
-+#define KVM_HYPERV_INHIBIT_TLB_FLUSH 1
-+	__u8  inhibit;
-+	__u8  reserved[5];
-+};
+ 			__set_bit(i, vcpu_mask);
+ 		}
+ 	} else if (!is_guest_mode(vcpu)) {
+@@ -2148,6 +2151,9 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 				__clear_bit(i, vcpu_mask);
+ 				continue;
+ 			}
 +
- #endif /* __LINUX_KVM_H */
++			if (READ_ONCE(v->arch.hyperv->tlb_flush_inhibit))
++				goto ret_suspend;
+ 		}
+ 	} else {
+ 		struct kvm_vcpu_hv *hv_v;
+@@ -2175,6 +2181,9 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 						    sparse_banks))
+ 				continue;
+ 
++			if (READ_ONCE(v->arch.hyperv->tlb_flush_inhibit))
++				goto ret_suspend;
++
+ 			__set_bit(i, vcpu_mask);
+ 		}
+ 	}
+@@ -2193,6 +2202,9 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
+ 	/* We always do full TLB flush, set 'Reps completed' = 'Rep Count' */
+ 	return (u64)HV_STATUS_SUCCESS |
+ 		((u64)hc->rep_cnt << HV_HYPERCALL_REP_COMP_OFFSET);
++ret_suspend:
++	kvm_hv_vcpu_suspend_tlb_flush(vcpu, v->vcpu_id);
++	return -EBUSY;
+ }
+ 
+ static void kvm_hv_send_ipi_to_many(struct kvm *kvm, u32 vector,
+@@ -2380,6 +2392,13 @@ static int kvm_hv_hypercall_complete(struct kvm_vcpu *vcpu, u64 result)
+ 	u32 tlb_lock_count = 0;
+ 	int ret;
+ 
++	/*
++	 * Reached when the hyper-call resulted in a suspension of the vCPU.
++	 * The instruction will be re-tried once the vCPU is unsuspended.
++	 */
++	if (kvm_hv_vcpu_suspended(vcpu))
++		return 1;
++
+ 	if (hv_result_success(result) && is_guest_mode(vcpu) &&
+ 	    kvm_hv_is_tlb_flush_hcall(vcpu) &&
+ 	    kvm_read_guest(vcpu->kvm, to_hv_vcpu(vcpu)->nested.pa_page_gpa,
+@@ -2919,6 +2938,9 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
+ 
+ void kvm_hv_vcpu_suspend_tlb_flush(struct kvm_vcpu *vcpu, int vcpu_id)
+ {
++	RCU_LOCKDEP_WARN(!srcu_read_lock_held(&vcpu->kvm->srcu),
++			 "Suspicious Hyper-V TLB flush inhibit usage\n");
++
+ 	/* waiting_on's store should happen before suspended's */
+ 	WRITE_ONCE(vcpu->arch.hyperv->waiting_on, vcpu_id);
+ 	WRITE_ONCE(vcpu->arch.hyperv->suspended, true);
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 18d0a300e79a..1f925e32a927 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -4642,6 +4642,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
+ 	case KVM_CAP_HYPERV_CPUID:
+ 	case KVM_CAP_HYPERV_ENFORCE_CPUID:
+ 	case KVM_CAP_SYS_HYPERV_CPUID:
++	case KVM_CAP_HYPERV_TLB_FLUSH_INHIBIT:
+ #endif
+ 	case KVM_CAP_PCI_SEGMENT:
+ 	case KVM_CAP_DEBUGREGS:
+@@ -5853,6 +5854,31 @@ static int kvm_vcpu_ioctl_enable_cap(struct kvm_vcpu *vcpu,
+ 	}
+ }
+ 
++static int kvm_vcpu_ioctl_set_tlb_flush_inhibit(struct kvm_vcpu *vcpu,
++						struct kvm_hyperv_tlb_flush_inhibit *set)
++{
++	if (set->inhibit == READ_ONCE(vcpu->arch.hyperv->tlb_flush_inhibit))
++		return 0;
++
++	WRITE_ONCE(vcpu->arch.hyperv->tlb_flush_inhibit, set->inhibit);
++
++	/*
++	 * synchronize_srcu() ensures that:
++	 * - On inhibit, all concurrent TLB flushes finished before this ioctl
++	 *   exits.
++	 * - On uninhibit, there are no longer vCPUs being suspended due to this
++	 *   inhibit.
++	 * This function can't race with itself, because vCPU IOCTLs are
++	 * serialized, so if the inhibit bit is already the desired value this
++	 * synchronization has already happened.
++	 */
++	synchronize_srcu(&vcpu->kvm->srcu);
++	if (!set->inhibit)
++		kvm_hv_vcpu_unsuspend_tlb_flush(vcpu);
++
++	return 0;
++}
++
+ long kvm_arch_vcpu_ioctl(struct file *filp,
+ 			 unsigned int ioctl, unsigned long arg)
+ {
+@@ -6306,6 +6332,17 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
+ 	case KVM_SET_DEVICE_ATTR:
+ 		r = kvm_vcpu_ioctl_device_attr(vcpu, ioctl, argp);
+ 		break;
++#ifdef CONFIG_KVM_HYPERV
++	case KVM_HYPERV_SET_TLB_FLUSH_INHIBIT: {
++		struct kvm_hyperv_tlb_flush_inhibit set;
++
++		r = -EFAULT;
++		if (copy_from_user(&set, argp, sizeof(set)))
++			goto out;
++		r = kvm_vcpu_ioctl_set_tlb_flush_inhibit(vcpu, &set);
++		break;
++	}
++#endif
+ 	default:
+ 		r = -EINVAL;
+ 	}
 -- 
 2.40.1
 
