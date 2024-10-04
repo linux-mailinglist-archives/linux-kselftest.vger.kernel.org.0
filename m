@@ -1,258 +1,474 @@
-Return-Path: <linux-kselftest+bounces-19031-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19032-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4897C990581
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 16:11:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2475B99058A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 16:11:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF6801F21D8B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 14:11:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 441BE1C21299
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 14:11:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DC3F215F50;
-	Fri,  4 Oct 2024 14:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BEF02141D3;
+	Fri,  4 Oct 2024 14:11:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.de header.i=@amazon.de header.b="bOkoNvV1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="aNZ6qE6y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADDF32141C9;
-	Fri,  4 Oct 2024 14:10:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72186212EEA;
+	Fri,  4 Oct 2024 14:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728051029; cv=none; b=L67+pnCzYzYdOoVdGRCoo/xAv1fDHMfazUqLv2+xP74ayrBZArNYR9RyoDpEWIYHHdB+RiUQfPyvi57/jkg6ypmHPW61EUyV+EdqN4lN6b+Oqv5kHyRek+7yYjRrgv1OA3U6OoE0el57At689P4ARPN1bkMVw1e+ivOSlF2p3V8=
+	t=1728051082; cv=none; b=M5Ym8/aV6eXxkecvhwtVSlTmpHWY+OYtzOXY3YcSgLhinwHCBDCAtacfah6A+1gu9WWwl0ZlBhB5oJoHoGMtYdMTUQdCkoYO2tEAvv5G42Vf6BkldedIs3Ys2y5sgbiQQqQwamTfEdYCmzx9N5A9avIuorjggZdHDVH+sEMAyLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728051029; c=relaxed/simple;
-	bh=qLZ0dHJJR8y5UGNyoPLEZazqvffEldWZGWTPPwohkMQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tmojR2zKQ9oUxM40INLEhYRmUPkiTQkKNEN3ySC2/bvLQUIax+q9TRf6E9KMDgcS+Nm8G6PQuOuHMoSJvNzm1nzSWeDpsbDSIyQZ3XIg//5tfyz5xNxEnc+Lk+wtLcFj0UKpawpJHcXV58+aLNDVR+6gsx0G9WnDqSpbCFFkUYw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de; spf=pass smtp.mailfrom=amazon.de; dkim=pass (1024-bit key) header.d=amazon.de header.i=@amazon.de header.b=bOkoNvV1; arc=none smtp.client-ip=99.78.197.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1728051027; x=1759587027;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qLZ0dHJJR8y5UGNyoPLEZazqvffEldWZGWTPPwohkMQ=;
-  b=bOkoNvV1ItnV6OdH9rE+EHr1daMiVKvCRqXF+YeNNPLHy2XmdwDVEww7
-   yqdQj5urvEEtIVv2oV4uVwA3FrcjPNSZANGPOPdlX98O/2kDwlWbTNUdI
-   6h4D6K8jhDYq2Sc1aQa+7QYrZhO/kweAuHTx3cWlpdMhlBEOPdbHUBSrN
-   A=;
-X-IronPort-AV: E=Sophos;i="6.11,177,1725321600"; 
-   d="scan'208";a="135245914"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
-  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 14:10:25 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [10.0.21.151:5490]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.57.100:2525] with esmtp (Farcaster)
- id cf9536d7-31c7-4604-8950-7576c1ee7d34; Fri, 4 Oct 2024 14:10:25 +0000 (UTC)
-X-Farcaster-Flow-ID: cf9536d7-31c7-4604-8950-7576c1ee7d34
-Received: from EX19D020UWA003.ant.amazon.com (10.13.138.254) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Fri, 4 Oct 2024 14:10:19 +0000
-Received: from EX19MTAUWB001.ant.amazon.com (10.250.64.248) by
- EX19D020UWA003.ant.amazon.com (10.13.138.254) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Fri, 4 Oct 2024 14:10:19 +0000
-Received: from email-imr-corp-prod-pdx-all-2b-f5cd2367.us-west-2.amazon.com
- (10.25.36.214) by mail-relay.amazon.com (10.250.64.254) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id
- 15.2.1258.34 via Frontend Transport; Fri, 4 Oct 2024 14:10:19 +0000
-Received: from dev-dsk-nikwip-1b-bc9ec026.eu-west-1.amazon.com (dev-dsk-nikwip-1b-bc9ec026.eu-west-1.amazon.com [10.253.74.52])
-	by email-imr-corp-prod-pdx-all-2b-f5cd2367.us-west-2.amazon.com (Postfix) with ESMTPS id 7A34AC0165;
-	Fri,  4 Oct 2024 14:10:16 +0000 (UTC)
-From: Nikolas Wipper <nikwip@amazon.de>
-To: Vitaly Kuznetsov <vkuznets@redhat.com>
-CC: Nicolas Saenz Julienne <nsaenz@amazon.com>, Alexander Graf
-	<graf@amazon.de>, James Gowans <jgowans@amazon.com>,
-	<nh-open-source@amazon.com>, Sean Christopherson <seanjc@google.com>, "Paolo
- Bonzini" <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, "Ingo
- Molnar" <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, Nikolas Wipper <nik.wipper@gmx.de>,
-	<linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>, <x86@kernel.org>,
-	<linux-doc@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, "Nikolas
- Wipper" <nikwip@amazon.de>
-Subject: [PATCH 7/7] KVM: selftests: Add tests for KVM_HYPERV_SET_TLB_FLUSH_INHIBIT
-Date: Fri, 4 Oct 2024 14:08:10 +0000
-Message-ID: <20241004140810.34231-8-nikwip@amazon.de>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20241004140810.34231-1-nikwip@amazon.de>
-References: <20241004140810.34231-1-nikwip@amazon.de>
+	s=arc-20240116; t=1728051082; c=relaxed/simple;
+	bh=Nwp845l10Zh5dEAny2NLoc/0356a4QNSSMZpBMdcDvQ=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=TetwSZnzqzulFwHynl90z+3++RCAXcPxVr1IBkYc+7PirLuS/Jj2HSUrAIVR+nMjFRyBO8ECakGnw3kuyypH6T30L7OoyG/QRr7ORewXwcgrP5QodfFREkjdBMRyJ7TzNzmOZsB/h7SjxWhLcRzakhHfYyz6MT1Duyf4FM3Jf/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=aNZ6qE6y; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728051081; x=1759587081;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Nwp845l10Zh5dEAny2NLoc/0356a4QNSSMZpBMdcDvQ=;
+  b=aNZ6qE6yY0XclFpe9DROOvvbSCBj5HZO4UphnfqmMuQrCLc9dCKMy49u
+   5px99o8DqV63+IfxgmOK9sort9BtqrCk1Xefodof7W8H8IJJ5VvzrTcua
+   HeMA19c8uJ7YCocZbK1ZV3/W4YRcm3Id/O9IxyZeobnGS/KJJyXMF2Yys
+   eGfq38cigvc59Z+VLbKq2Gb66bLxu8JZpM6zFfnErxuF1qbbO6VmktrDa
+   IUnmJMduCc1iQp3bHdMyEYN56GgMun6cOOunChgxxBOOx34BFR5tH5Nzi
+   qodqlJzzsqiXxZfmjbiPvpzOq3mFRlq1RqPgn2gDmb/0FpwtxCSn8drYi
+   Q==;
+X-CSE-ConnectionGUID: xsJ4JBAbSW22bg+snr0VOg==
+X-CSE-MsgGUID: U8A8wGGvQyuBrPRztFh9WQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="44741342"
+X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
+   d="scan'208";a="44741342"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 07:11:19 -0700
+X-CSE-ConnectionGUID: 9SCwF67sRXCbrVHgE6sMkA==
+X-CSE-MsgGUID: uqDaLssJSlGiVTwArgO43w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
+   d="scan'208";a="79686194"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.148])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 07:11:16 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 4 Oct 2024 17:11:12 +0300 (EEST)
+To: Reinette Chatre <reinette.chatre@intel.com>
+cc: fenghua.yu@intel.com, shuah@kernel.org, tony.luck@intel.com, 
+    peternewman@google.com, babu.moger@amd.com, 
+    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
+    linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH V2 10/13] selftests/resctrl: Ensure measurements skip
+ initialization of default benchmark
+In-Reply-To: <3f9f6c40da0f147171df2b1e6ca159ff0ac0f344.1726164080.git.reinette.chatre@intel.com>
+Message-ID: <dc50c9d9-3ee6-c769-cf8c-36027f9ea6bb@linux.intel.com>
+References: <cover.1726164080.git.reinette.chatre@intel.com> <3f9f6c40da0f147171df2b1e6ca159ff0ac0f344.1726164080.git.reinette.chatre@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+Content-Type: multipart/mixed; boundary="8323328-882515112-1728051072=:957"
 
-QWRkIGJhc2ljIHRlc3QgZm9yIEtWTV9IWVBFUlZfU0VUX1RMQl9GTFVTSF9JTkhJQklULiBTaW5j
-ZSBpbmZvcm1hdGlvbgphYm91dCB0aGUgc3VzcGVuc2lvbiBpcyBub3QgY29tbXVuaWNhdGVkIHRv
-IHVzZXJzcGFjZSB0aGlzIHRlc3QgY2hlY2tzIGZvcgpzdXNwZW5zaW9uIGJ5IGNoZWNraW5nIHdo
-ZXRoZXIgdGhlIHRocmVhZCBydW5uaW5nIGEgdkNQVSBpcyBzdGlsbApleGVjdXRpbmcuCgpTaWdu
-ZWQtb2ZmLWJ5OiBOaWtvbGFzIFdpcHBlciA8bmlrd2lwQGFtYXpvbi5kZT4KLS0tCiB0b29scy90
-ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0vTWFrZWZpbGUgICAgICAgICAgfCAgIDEgKwogLi4uL2t2bS94
-ODZfNjQvaHlwZXJ2X3RsYl9mbHVzaF9pbmhpYml0LmMgICAgIHwgMjc0ICsrKysrKysrKysrKysr
-KysrKwogMiBmaWxlcyBjaGFuZ2VkLCAyNzUgaW5zZXJ0aW9ucygrKQogY3JlYXRlIG1vZGUgMTAw
-NjQ0IHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2t2bS94ODZfNjQvaHlwZXJ2X3RsYl9mbHVzaF9p
-bmhpYml0LmMKCmRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0vTWFrZWZp
-bGUgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0vTWFrZWZpbGUKaW5kZXggNDVjYjcwYzA0
-OGJiLi4wOThjOWMzZjlhZDggMTAwNjQ0Ci0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2t2
-bS9NYWtlZmlsZQorKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0vTWFrZWZpbGUKQEAg
-LTc5LDYgKzc5LDcgQEAgVEVTVF9HRU5fUFJPR1NfeDg2XzY0ICs9IHg4Nl82NC9oeXBlcnZfZmVh
-dHVyZXMKIFRFU1RfR0VOX1BST0dTX3g4Nl82NCArPSB4ODZfNjQvaHlwZXJ2X2lwaQogVEVTVF9H
-RU5fUFJPR1NfeDg2XzY0ICs9IHg4Nl82NC9oeXBlcnZfc3ZtX3Rlc3QKIFRFU1RfR0VOX1BST0dT
-X3g4Nl82NCArPSB4ODZfNjQvaHlwZXJ2X3RsYl9mbHVzaAorVEVTVF9HRU5fUFJPR1NfeDg2XzY0
-ICs9IHg4Nl82NC9oeXBlcnZfdGxiX2ZsdXNoX2luaGliaXQKIFRFU1RfR0VOX1BST0dTX3g4Nl82
-NCArPSB4ODZfNjQva3ZtX2Nsb2NrX3Rlc3QKIFRFU1RfR0VOX1BST0dTX3g4Nl82NCArPSB4ODZf
-NjQva3ZtX3B2X3Rlc3QKIFRFU1RfR0VOX1BST0dTX3g4Nl82NCArPSB4ODZfNjQvbW9uaXRvcl9t
-d2FpdF90ZXN0CmRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9rdm0veDg2XzY0
-L2h5cGVydl90bGJfZmx1c2hfaW5oaWJpdC5jIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMva3Zt
-L3g4Nl82NC9oeXBlcnZfdGxiX2ZsdXNoX2luaGliaXQuYwpuZXcgZmlsZSBtb2RlIDEwMDY0NApp
-bmRleCAwMDAwMDAwMDAwMDAuLjYzOGVkNmVjOGFlMQotLS0gL2Rldi9udWxsCisrKyBiL3Rvb2xz
-L3Rlc3Rpbmcvc2VsZnRlc3RzL2t2bS94ODZfNjQvaHlwZXJ2X3RsYl9mbHVzaF9pbmhpYml0LmMK
-QEAgLTAsMCArMSwyNzQgQEAKKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVyOiBHUEwtMi4wCisv
-KgorICogVGVzdCBmb3IgS1ZNJ3MgZW11bGF0aW9uIG9mIEh5cGVyLVYncyBUbGJGbHVzaEluaGli
-aXQgYml0CisgKgorICogQ29weXJpZ2h0IMKpIDIwMjQgQW1hem9uLmNvbSwgSW5jLiBvciBpdHMg
-YWZmaWxpYXRlcy4gQWxsIFJpZ2h0cyBSZXNlcnZlZC4KKyAqLworI2luY2x1ZGUgPHB0aHJlYWQu
-aD4KKyNpbmNsdWRlIDx0aW1lLmg+CisKKyNpbmNsdWRlICJhcGljLmgiCisjaW5jbHVkZSAiaHlw
-ZXJ2LmgiCisKK3N0cnVjdCB0aW1lc3BlYyBhYnN0aW1lOworCitzdHJ1Y3QgdGVzdF9kYXRhIHsK
-Kwlib29sIGVudGVyZWQ7CisJYm9vbCBoeXBlcmNhbGxfZG9uZTsKKwl2bV9wYWRkcl90IGhjYWxs
-X2dwYTsKK307CisKK3ZvaWQgZ3Vlc3RfbWFpbih2bV92YWRkcl90IHRlc3RfZGF0YSkKK3sKKwlz
-dHJ1Y3QgdGVzdF9kYXRhICpkYXRhID0gKHN0cnVjdCB0ZXN0X2RhdGEgKil0ZXN0X2RhdGE7CisK
-Kwl3cm1zcihIVl9YNjRfTVNSX0dVRVNUX09TX0lELCBIWVBFUlZfTElOVVhfT1NfSUQpOworCXdy
-bXNyKEhWX1g2NF9NU1JfSFlQRVJDQUxMLCBkYXRhLT5oY2FsbF9ncGEpOworCisJV1JJVEVfT05D
-RShkYXRhLT5lbnRlcmVkLCB0cnVlKTsKKworCS8qIEFsaWduZWQgZm9yIGxvYWRpbmcgaW50byBY
-TU0gcmVnaXN0ZXJzICovCisJX19hbGlnbmVkKDE2KSB1NjQgcHJvY2Vzc29yX21hc2sgPSBCSVQo
-MCkgfCBCSVQoMSkgfCBCSVQoMik7CisKKwkvKiBTZXR1cCBmYXN0IGh5cGVyLWNhbGwgKi8KKwlo
-eXBlcnZfd3JpdGVfeG1tX2lucHV0KCZwcm9jZXNzb3JfbWFzaywgMSk7CisJaHlwZXJ2X2h5cGVy
-Y2FsbChIVkNBTExfRkxVU0hfVklSVFVBTF9BRERSRVNTX1NQQUNFIHwKKwkJCQkgSFZfSFlQRVJD
-QUxMX0ZBU1RfQklULAorCQkJIDB4MCwgSFZfRkxVU0hfQUxMX1ZJUlRVQUxfQUREUkVTU19TUEFD
-RVMpOworCWRhdGEtPmh5cGVyY2FsbF9kb25lID0gdHJ1ZTsKKworCUdVRVNUX0RPTkUoKTsKK30K
-Kworc3RydWN0IHRlc3RfZGF0YSAqdGVzdF9kYXRhX2luaXQoc3RydWN0IGt2bV92Y3B1ICp2Y3B1
-KQoreworCXZtX3ZhZGRyX3QgdGVzdF9kYXRhX3BhZ2U7CisKKwl0ZXN0X2RhdGFfcGFnZSA9IHZt
-X3ZhZGRyX2FsbG9jX3BhZ2UodmNwdS0+dm0pOworCisJdmNwdV9hcmdzX3NldCh2Y3B1LCAxLCB0
-ZXN0X2RhdGFfcGFnZSk7CisKKwlyZXR1cm4gKHN0cnVjdCB0ZXN0X2RhdGEgKilhZGRyX2d2YTJo
-dmEodmNwdS0+dm0sIHRlc3RfZGF0YV9wYWdlKTsKK30KKworc3RhdGljIHZvaWQgKnZjcHVfdGhy
-ZWFkKHZvaWQgKmFyZykKK3sKKwlzdHJ1Y3Qga3ZtX3ZjcHUgKnZjcHUgPSAoc3RydWN0IGt2bV92
-Y3B1ICopYXJnOworCXN0cnVjdCB1Y2FsbCB1YzsKKworCXdoaWxlICgxKSB7CisJCXZjcHVfcnVu
-KHZjcHUpOworCisJCVRFU1RfQVNTRVJUX0tWTV9FWElUX1JFQVNPTih2Y3B1LCBLVk1fRVhJVF9J
-Tyk7CisKKwkJc3dpdGNoIChnZXRfdWNhbGwodmNwdSwgJnVjKSkgeworCQljYXNlIFVDQUxMX1BS
-SU5URjoKKwkJCVJFUE9SVF9HVUVTVF9QUklOVEYodWMpOworCQkJYnJlYWs7CisJCWRlZmF1bHQ6
-CisJCQlURVNUX0FTU0VSVF9FUShnZXRfdWNhbGwodmNwdSwgJnVjKSwgVUNBTExfRE9ORSk7CisJ
-CQlyZXR1cm4gTlVMTDsKKwkJfQorCX0KK30KKworLyogVGVzdCBvbmUgdkNQVSBiZWluZyBpbmhp
-Yml0ZWQgd2hpbGUgYW5vdGhlciB0cmllcyB0byBmbHVzaCBpdHMgVExCICovCit2b2lkIHRlc3Rf
-c2luZ2xlKHN0cnVjdCBrdm1fdm0gKnZtLCBzdHJ1Y3Qga3ZtX3ZjcHUgKmluaGliaXRvciwKKwkJ
-IHN0cnVjdCBrdm1fdmNwdSAqZmx1c2hlcikKK3sKKwlzdHJ1Y3Qga3ZtX2h5cGVydl90bGJfZmx1
-c2hfaW5oaWJpdCBzZXQ7CisJc3RydWN0IHRlc3RfZGF0YSAqZGF0YTsKKwl1bnNpZ25lZCBpbnQg
-dG9fc2xlZXA7CisJcHRocmVhZF90IHRocmVhZDsKKworCXByaW50ZigiJXMgLi4uXHQiLCBfX2Z1
-bmNfXyk7CisKKwl2Y3B1X2FyY2hfc2V0X2VudHJ5X3BvaW50KGZsdXNoZXIsIGd1ZXN0X21haW4p
-OworCisJZGF0YSA9IHRlc3RfZGF0YV9pbml0KGZsdXNoZXIpOworCisJZGF0YS0+ZW50ZXJlZCA9
-IGZhbHNlOworCWRhdGEtPmh5cGVyY2FsbF9kb25lID0gZmFsc2U7CisJZGF0YS0+aGNhbGxfZ3Bh
-ID0gYWRkcl9ndmEyZ3BhKHZtLCB2bV92YWRkcl9hbGxvY19wYWdlcyh2bSwgMSkpOworCisJc2V0
-LmluaGliaXQgPSB0cnVlOworCXZjcHVfaW9jdGwoaW5oaWJpdG9yLCBLVk1fSFlQRVJWX1NFVF9U
-TEJfRkxVU0hfSU5ISUJJVCwgJnNldCk7CisKKwlwdGhyZWFkX2NyZWF0ZSgmdGhyZWFkLCBOVUxM
-LCB2Y3B1X3RocmVhZCwgZmx1c2hlcik7CisKKwkvKiBXYWl0aW5nIG9uIHRoZSBndWVzdCB0byBm
-dWxseSBlbnRlciAqLworCXdoaWxlIChSRUFEX09OQ0UoZGF0YS0+ZW50ZXJlZCkgPT0gZmFsc2Up
-CisJCWFzbSB2b2xhdGlsZSAoIm5vcCIpOworCisJLyogR2l2ZSB0aGUgZ3Vlc3Qgc29tZSB0aW1l
-IHRvIGF0dGVtcHQgdGhlIGh5cGVyLWNhbGwgKi8KKwl0b19zbGVlcCA9IDI7CisJd2hpbGUgKCh0
-b19zbGVlcCA9IHNsZWVwKHRvX3NsZWVwKSkpCisJCWFzbSB2b2xhdGlsZSAoIm5vcCIpOworCisJ
-VEVTVF9BU1NFUlRfRVEoZGF0YS0+aHlwZXJjYWxsX2RvbmUsIGZhbHNlKTsKKwlURVNUX0FTU0VS
-VChwdGhyZWFkX3RyeWpvaW5fbnAodGhyZWFkLCBOVUxMKSAhPSAwLCAidGhyZWFkIGZpbmlzaGVk
-IGVhcmx5Iik7CisKKwlzZXQuaW5oaWJpdCA9IGZhbHNlOworCXZjcHVfaW9jdGwoaW5oaWJpdG9y
-LCBLVk1fSFlQRVJWX1NFVF9UTEJfRkxVU0hfSU5ISUJJVCwgJnNldCk7CisKKwljbG9ja19nZXR0
-aW1lKENMT0NLX1JFQUxUSU1FLCAmYWJzdGltZSk7CisJYWJzdGltZS50dl9zZWMgKz0gNTsKKwlU
-RVNUX0FTU0VSVChwdGhyZWFkX3RpbWVkam9pbl9ucCh0aHJlYWQsIE5VTEwsICZhYnN0aW1lKSA9
-PSAwLAorCQkgICAgImNvdWxkbid0IGpvaW4gdGhyZWFkIik7CisKKwlURVNUX0FTU0VSVF9FUShk
-YXRhLT5oeXBlcmNhbGxfZG9uZSwgdHJ1ZSk7CisKKwlwcmludGYoIltva11cbiIpOworfQorCisv
-KiBUZXN0IG9uZSB2Q1BVIGJlaW5nIGluaGliaXRlZCB3aGlsZSB0d28gb3RoZXJzIHRyeSB0byBm
-bHVzaCBpdHMgVExCICovCit2b2lkIHRlc3RfbXVsdGlfZmx1c2hlcihzdHJ1Y3Qga3ZtX3ZtICp2
-bSwgc3RydWN0IGt2bV92Y3B1ICppbmhpYml0b3IsCisJCQlzdHJ1Y3Qga3ZtX3ZjcHUgKmZsdXNo
-ZXIxLCBzdHJ1Y3Qga3ZtX3ZjcHUgKmZsdXNoZXIyKQoreworCXN0cnVjdCBrdm1faHlwZXJ2X3Rs
-Yl9mbHVzaF9pbmhpYml0IHNldDsKKwlzdHJ1Y3QgdGVzdF9kYXRhICpkYXRhMSwgKmRhdGEyOwor
-CXB0aHJlYWRfdCB0aHJlYWQxLCB0aHJlYWQyOworCXVuc2lnbmVkIGludCB0b19zbGVlcDsKKwor
-CXByaW50ZigiJXMgLi4uXHQiLCBfX2Z1bmNfXyk7CisKKwl2Y3B1X2FyY2hfc2V0X2VudHJ5X3Bv
-aW50KGZsdXNoZXIxLCBndWVzdF9tYWluKTsKKwl2Y3B1X2FyY2hfc2V0X2VudHJ5X3BvaW50KGZs
-dXNoZXIyLCBndWVzdF9tYWluKTsKKworCWRhdGExID0gdGVzdF9kYXRhX2luaXQoZmx1c2hlcjEp
-OworCWRhdGEyID0gdGVzdF9kYXRhX2luaXQoZmx1c2hlcjIpOworCisJZGF0YTEtPmVudGVyZWQg
-PSBmYWxzZTsKKwlkYXRhMS0+aHlwZXJjYWxsX2RvbmUgPSBmYWxzZTsKKwlkYXRhMS0+aGNhbGxf
-Z3BhID0gYWRkcl9ndmEyZ3BhKHZtLCB2bV92YWRkcl9hbGxvY19wYWdlcyh2bSwgMSkpOworCWRh
-dGEyLT5lbnRlcmVkID0gZmFsc2U7CisJZGF0YTItPmh5cGVyY2FsbF9kb25lID0gZmFsc2U7CisJ
-ZGF0YTItPmhjYWxsX2dwYSA9IGFkZHJfZ3ZhMmdwYSh2bSwgdm1fdmFkZHJfYWxsb2NfcGFnZXMo
-dm0sIDEpKTsKKworCXNldC5pbmhpYml0ID0gdHJ1ZTsKKwl2Y3B1X2lvY3RsKGluaGliaXRvciwg
-S1ZNX0hZUEVSVl9TRVRfVExCX0ZMVVNIX0lOSElCSVQsICZzZXQpOworCisJcHRocmVhZF9jcmVh
-dGUoJnRocmVhZDEsIE5VTEwsIHZjcHVfdGhyZWFkLCBmbHVzaGVyMSk7CisJcHRocmVhZF9jcmVh
-dGUoJnRocmVhZDIsIE5VTEwsIHZjcHVfdGhyZWFkLCBmbHVzaGVyMik7CisKKwkvKiBXYWl0aW5n
-IG9uIHRoZSBndWVzdHMgdG8gZnVsbHkgZW50ZXIgKi8KKwl3aGlsZSAoUkVBRF9PTkNFKGRhdGEx
-LT5lbnRlcmVkKSA9PSBmYWxzZSkKKwkJYXNtIHZvbGF0aWxlKCJub3AiKTsKKwl3aGlsZSAoUkVB
-RF9PTkNFKGRhdGEyLT5lbnRlcmVkKSA9PSBmYWxzZSkKKwkJYXNtIHZvbGF0aWxlKCJub3AiKTsK
-KworCS8qIEdpdmUgdGhlIGd1ZXN0cyBzb21lIHRpbWUgdG8gYXR0ZW1wdCB0aGUgaHlwZXItY2Fs
-bCAqLworCXRvX3NsZWVwID0gMjsKKwl3aGlsZSAoKHRvX3NsZWVwID0gc2xlZXAodG9fc2xlZXAp
-KSkKKwkJYXNtIHZvbGF0aWxlKCJub3AiKTsKKworCVRFU1RfQVNTRVJUX0VRKGRhdGExLT5oeXBl
-cmNhbGxfZG9uZSwgZmFsc2UpOworCVRFU1RfQVNTRVJUX0VRKGRhdGEyLT5oeXBlcmNhbGxfZG9u
-ZSwgZmFsc2UpOworCisJVEVTVF9BU1NFUlQocHRocmVhZF90cnlqb2luX25wKHRocmVhZDEsIE5V
-TEwpICE9IDAsCisJCSAgICAidGhyZWFkIDEgZmluaXNoZWQgZWFybHkiKTsKKwlURVNUX0FTU0VS
-VChwdGhyZWFkX3RyeWpvaW5fbnAodGhyZWFkMiwgTlVMTCkgIT0gMCwKKwkJICAgICJ0aHJlYWQg
-MiBmaW5pc2hlZCBlYXJseSIpOworCisJc2V0LmluaGliaXQgPSBmYWxzZTsKKwl2Y3B1X2lvY3Rs
-KGluaGliaXRvciwgS1ZNX0hZUEVSVl9TRVRfVExCX0ZMVVNIX0lOSElCSVQsICZzZXQpOworCisJ
-Y2xvY2tfZ2V0dGltZShDTE9DS19SRUFMVElNRSwgJmFic3RpbWUpOworCWFic3RpbWUudHZfc2Vj
-ICs9IDU7CisJVEVTVF9BU1NFUlQocHRocmVhZF90aW1lZGpvaW5fbnAodGhyZWFkMSwgTlVMTCwg
-JmFic3RpbWUpID09IDAsCisJCSAgICAiY291bGRuJ3Qgam9pbiB0aHJlYWQxIik7CisKKwljbG9j
-a19nZXR0aW1lKENMT0NLX1JFQUxUSU1FLCAmYWJzdGltZSk7CisJYWJzdGltZS50dl9zZWMgKz0g
-NTsKKwlURVNUX0FTU0VSVChwdGhyZWFkX3RpbWVkam9pbl9ucCh0aHJlYWQyLCBOVUxMLCAmYWJz
-dGltZSkgPT0gMCwKKwkJICAgICJjb3VsZG4ndCBqb2luIHRocmVhZDIiKTsKKworCVRFU1RfQVNT
-RVJUX0VRKGRhdGExLT5oeXBlcmNhbGxfZG9uZSwgdHJ1ZSk7CisJVEVTVF9BU1NFUlRfRVEoZGF0
-YTItPmh5cGVyY2FsbF9kb25lLCB0cnVlKTsKKworCXByaW50ZigiW29rXVxuIik7Cit9CisKKy8q
-IFRlc3QgdHdvIHZDUFVzIGJlaW5nIGluaGliaXRlZCB3aGlsZSBhbm90aGVyIHRyaWVzIHRvIGZs
-dXNoIHRoZWlyIFRMQnMgKi8KK3ZvaWQgdGVzdF9tdWx0aV9pbmhpYml0b3Ioc3RydWN0IGt2bV92
-bSAqdm0sIHN0cnVjdCBrdm1fdmNwdSAqaW5oaWJpdG9yMSwKKwkJCSAgc3RydWN0IGt2bV92Y3B1
-ICppbmhpYml0b3IyLCBzdHJ1Y3Qga3ZtX3ZjcHUgKmZsdXNoZXIpCit7CisJc3RydWN0IGt2bV9o
-eXBlcnZfdGxiX2ZsdXNoX2luaGliaXQgc2V0OworCXN0cnVjdCB0ZXN0X2RhdGEgKmRhdGE7CisJ
-dW5zaWduZWQgaW50IHRvX3NsZWVwOworCXB0aHJlYWRfdCB0aHJlYWQ7CisKKwlwcmludGYoIiVz
-IC4uLlx0IiwgX19mdW5jX18pOworCisJdmNwdV9hcmNoX3NldF9lbnRyeV9wb2ludChmbHVzaGVy
-LCBndWVzdF9tYWluKTsKKworCWRhdGEgPSB0ZXN0X2RhdGFfaW5pdChmbHVzaGVyKTsKKworCWRh
-dGEtPmVudGVyZWQgPSBmYWxzZTsKKwlkYXRhLT5oeXBlcmNhbGxfZG9uZSA9IGZhbHNlOworCWRh
-dGEtPmhjYWxsX2dwYSA9IGFkZHJfZ3ZhMmdwYSh2bSwgdm1fdmFkZHJfYWxsb2NfcGFnZXModm0s
-IDEpKTsKKworCXNldC5pbmhpYml0ID0gdHJ1ZTsKKwl2Y3B1X2lvY3RsKGluaGliaXRvcjEsIEtW
-TV9IWVBFUlZfU0VUX1RMQl9GTFVTSF9JTkhJQklULCAmc2V0KTsKKwl2Y3B1X2lvY3RsKGluaGli
-aXRvcjIsIEtWTV9IWVBFUlZfU0VUX1RMQl9GTFVTSF9JTkhJQklULCAmc2V0KTsKKworCXB0aHJl
-YWRfY3JlYXRlKCZ0aHJlYWQsIE5VTEwsIHZjcHVfdGhyZWFkLCBmbHVzaGVyKTsKKworCS8qIFdh
-aXRpbmcgb24gdGhlIGd1ZXN0IHRvIGZ1bGx5IGVudGVyICovCisJd2hpbGUgKFJFQURfT05DRShk
-YXRhLT5lbnRlcmVkKSA9PSBmYWxzZSkKKwkJYXNtIHZvbGF0aWxlICgibm9wIik7CisKKwkvKiBH
-aXZlIHRoZSBndWVzdCBzb21lIHRpbWUgdG8gYXR0ZW1wdCB0aGUgaHlwZXItY2FsbCAqLworCXRv
-X3NsZWVwID0gMjsKKwl3aGlsZSAoKHRvX3NsZWVwID0gc2xlZXAodG9fc2xlZXApKSkKKwkJYXNt
-IHZvbGF0aWxlICgibm9wIik7CisKKwlURVNUX0FTU0VSVF9FUShkYXRhLT5oeXBlcmNhbGxfZG9u
-ZSwgZmFsc2UpOworCVRFU1RfQVNTRVJUKHB0aHJlYWRfdHJ5am9pbl9ucCh0aHJlYWQsIE5VTEwp
-ICE9IDAsICJ0aHJlYWQgZmluaXNoZWQgZWFybHkiKTsKKworCXNldC5pbmhpYml0ID0gZmFsc2U7
-CisJdmNwdV9pb2N0bChpbmhpYml0b3IxLCBLVk1fSFlQRVJWX1NFVF9UTEJfRkxVU0hfSU5ISUJJ
-VCwgJnNldCk7CisKKwl0b19zbGVlcCA9IDE7CisJd2hpbGUgKCh0b19zbGVlcCA9IHNsZWVwKHRv
-X3NsZWVwKSkpCisJCWFzbSB2b2xhdGlsZSAoIm5vcCIpOworCisJVEVTVF9BU1NFUlRfRVEoZGF0
-YS0+aHlwZXJjYWxsX2RvbmUsIGZhbHNlKTsKKwlURVNUX0FTU0VSVChwdGhyZWFkX3RyeWpvaW5f
-bnAodGhyZWFkLCBOVUxMKSAhPSAwLCAidGhyZWFkIGZpbmlzaGVkIGVhcmx5Iik7CisKKwlzZXQu
-aW5oaWJpdCA9IGZhbHNlOworCXZjcHVfaW9jdGwoaW5oaWJpdG9yMiwgS1ZNX0hZUEVSVl9TRVRf
-VExCX0ZMVVNIX0lOSElCSVQsICZzZXQpOworCisJY2xvY2tfZ2V0dGltZShDTE9DS19SRUFMVElN
-RSwgJmFic3RpbWUpOworCWFic3RpbWUudHZfc2VjICs9IDU7CisJVEVTVF9BU1NFUlQocHRocmVh
-ZF90aW1lZGpvaW5fbnAodGhyZWFkLCBOVUxMLCAmYWJzdGltZSkgPT0gMCwKKwkJICAgICJjb3Vs
-ZG4ndCBqb2luIHRocmVhZCIpOworCisJVEVTVF9BU1NFUlRfRVEoZGF0YS0+ZW50ZXJlZCwgdHJ1
-ZSk7CisJVEVTVF9BU1NFUlRfRVEoZGF0YS0+aHlwZXJjYWxsX2RvbmUsIHRydWUpOworCisJcHJp
-bnRmKCJbb2tdXG4iKTsKK30KKworaW50IG1haW4oaW50IGFyZ2MsIGNoYXIgKmFyZ3ZbXSkKK3sK
-KwlzdHJ1Y3Qga3ZtX3ZjcHUgKnZjcHVbM107CisJc3RydWN0IGt2bV92bSAqdm07CisKKwlURVNU
-X1JFUVVJUkUoa3ZtX2hhc19jYXAoS1ZNX0NBUF9IWVBFUlZfVExCRkxVU0gpKTsKKwlURVNUX1JF
-UVVJUkUoa3ZtX2hhc19jYXAoS1ZNX0NBUF9IWVBFUlZfVExCX0ZMVVNIX0lOSElCSVQpKTsKKwor
-CXZtID0gdm1fY3JlYXRlX3dpdGhfdmNwdXMoMywgZ3Vlc3RfbWFpbiwgdmNwdSk7CisKKwl2Y3B1
-X3NldF9odl9jcHVpZCh2Y3B1WzBdKTsKKwl2Y3B1X3NldF9odl9jcHVpZCh2Y3B1WzFdKTsKKwl2
-Y3B1X3NldF9odl9jcHVpZCh2Y3B1WzJdKTsKKworCXRlc3Rfc2luZ2xlKHZtLCB2Y3B1WzFdLCB2
-Y3B1WzBdKTsKKwl0ZXN0X211bHRpX2ZsdXNoZXIodm0sIHZjcHVbMV0sIHZjcHVbMF0sIHZjcHVb
-Ml0pOworCXRlc3RfbXVsdGlfaW5oaWJpdG9yKHZtLCB2Y3B1WzFdLCB2Y3B1WzJdLCB2Y3B1WzBd
-KTsKKworCWt2bV92bV9mcmVlKHZtKTsKKworCXJldHVybiAwOworfQotLSAKMi40MC4xCgoKCgpB
-bWF6b24gV2ViIFNlcnZpY2VzIERldmVsb3BtZW50IENlbnRlciBHZXJtYW55IEdtYkgKS3JhdXNl
-bnN0ci4gMzgKMTAxMTcgQmVybGluCkdlc2NoYWVmdHNmdWVocnVuZzogQ2hyaXN0aWFuIFNjaGxh
-ZWdlciwgSm9uYXRoYW4gV2Vpc3MKRWluZ2V0cmFnZW4gYW0gQW10c2dlcmljaHQgQ2hhcmxvdHRl
-bmJ1cmcgdW50ZXIgSFJCIDI1Nzc2NCBCClNpdHo6IEJlcmxpbgpVc3QtSUQ6IERFIDM2NSA1Mzgg
-NTk3Cg==
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
+--8323328-882515112-1728051072=:957
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+
+On Thu, 12 Sep 2024, Reinette Chatre wrote:
+
+> The CMT, MBA, and MBM tests rely on the resctrl_val() wrapper to
+> start and run a benchmark while providing test specific flows
+> via callbacks to do test specific configuration and measurements.
+>=20
+> At a high level, the resctrl_val() flow is:
+> =09a) Start by fork()ing a child process that installs a signal
+> =09   handler for SIGUSR1 that, on receipt of SIGUSR1, will
+> =09   start running a benchmark.
+> =09b) Assign the child process created in (a) to the resctrl
+> =09   control and monitoring group that dictates the memory and
+> =09   cache allocations with which the process can run and will
+> =09   contain all resctrl monitoring data of that process.
+> =09c) Once parent and child are considered "ready" (determined via
+> =09   a message over a pipe) the parent signals the child (via
+> =09   SIGUSR1) to start the benchmark, waits one second for the
+> =09   benchmark to run, and then starts collecting monitoring data
+> =09   for the tests, potentially also changing allocation
+> =09   configuration depending on the various test callbacks.
+>=20
+> A problem with the above flow is the "black box" view of the
+> benchmark that is combined with an arbitrarily chosen
+> "wait one second" before measurements start. No matter what
+> the benchmark does, it is given one second to initialize before
+> measurements start.
+>=20
+> The default benchmark "fill_buf" consists of two parts,
+> first it prepares a buffer (allocate, initialize, then flush), then it
+> reads from the buffer (in unpredictable ways) until terminated.
+> Depending on the system and the size of the buffer, the first "prepare"
+> part may not be complete by the time the one second delay expires. Test
+> measurements may thus start before the work needing to be measured runs.
+>=20
+> Split the default benchmark into its "prepare" and "runtime" parts and
+> simplify the resctrl_val() wrapper while doing so. This same split
+> cannot be done for the user provided benchmark (without a user
+> interface change), so the current behavior is maintained for user
+> provided benchmark.
+>=20
+> Assign the test itself to the control and monitoring group and run the
+> "prepare" part of the benchmark in this context, ensuring it runs with
+> required cache and memory bandwidth allocations. With the benchmark
+> preparation complete it is only needed to fork() the "runtime" part
+> of the benchmark (or entire user provided benchmark).
+>=20
+> Keep the "wait one second" delay before measurements start. For the
+> default "fill_buf" benchmark this time now covers only the "runtime"
+> portion that needs to be measured. For the user provided benchmark this
+> delay maintains current behavior.
+>=20
+> Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+
+Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+
+--=20
+ i.
+
+> ---
+> Changes since V1:
+> - Keep the fflush(stdout) before fork() to avoid duplicate messages. (Ilp=
+o)
+> - Re-order in series to that the new behavior is introduced after issues
+>   with existing behavior is addressed.
+> ---
+>  tools/testing/selftests/resctrl/fill_buf.c    |  15 --
+>  tools/testing/selftests/resctrl/resctrl.h     |   1 -
+>  tools/testing/selftests/resctrl/resctrl_val.c | 199 +++++-------------
+>  3 files changed, 50 insertions(+), 165 deletions(-)
+>=20
+> diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/s=
+elftests/resctrl/fill_buf.c
+> index e4f1cea317f1..75956345cb12 100644
+> --- a/tools/testing/selftests/resctrl/fill_buf.c
+> +++ b/tools/testing/selftests/resctrl/fill_buf.c
+> @@ -129,18 +129,3 @@ unsigned char *alloc_buffer(size_t buf_size, int mem=
+flush)
+> =20
+>  =09return buf;
+>  }
+> -
+> -int run_fill_buf(size_t buf_size, int memflush)
+> -{
+> -=09unsigned char *buf;
+> -
+> -=09buf =3D alloc_buffer(buf_size, memflush);
+> -=09if (!buf)
+> -=09=09return -1;
+> -
+> -=09fill_cache_read(buf, buf_size, false);
+> -
+> -=09free(buf);
+> -
+> -=09return 0;
+> -}
+> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/se=
+lftests/resctrl/resctrl.h
+> index 98462752cb46..dc01dc75cba5 100644
+> --- a/tools/testing/selftests/resctrl/resctrl.h
+> +++ b/tools/testing/selftests/resctrl/resctrl.h
+> @@ -168,7 +168,6 @@ int perf_event_open(struct perf_event_attr *hw_event,=
+ pid_t pid, int cpu,
+>  unsigned char *alloc_buffer(size_t buf_size, int memflush);
+>  void mem_flush(unsigned char *buf, size_t buf_size);
+>  void fill_cache_read(unsigned char *buf, size_t buf_size, bool once);
+> -int run_fill_buf(size_t buf_size, int memflush);
+>  int initialize_read_mem_bw_imc(void);
+>  int measure_read_mem_bw(const struct user_params *uparams,
+>  =09=09=09struct resctrl_val_param *param, pid_t bm_pid);
+> diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testin=
+g/selftests/resctrl/resctrl_val.c
+> index 380c3f218d01..f025be5c7d82 100644
+> --- a/tools/testing/selftests/resctrl/resctrl_val.c
+> +++ b/tools/testing/selftests/resctrl/resctrl_val.c
+> @@ -373,7 +373,7 @@ static int get_mem_bw_resctrl(FILE *fp, unsigned long=
+ *mbm_total)
+>  =09return 0;
+>  }
+> =20
+> -static pid_t bm_pid, ppid;
+> +static pid_t bm_pid;
+> =20
+>  void ctrlc_handler(int signum, siginfo_t *info, void *ptr)
+>  {
+> @@ -431,13 +431,6 @@ void signal_handler_unregister(void)
+>  =09}
+>  }
+> =20
+> -static void parent_exit(pid_t ppid)
+> -{
+> -=09kill(ppid, SIGKILL);
+> -=09umount_resctrlfs();
+> -=09exit(EXIT_FAILURE);
+> -}
+> -
+>  /*
+>   * print_results_bw:=09the memory bandwidth results are stored in a file
+>   * @filename:=09=09file that stores the results
+> @@ -535,56 +528,6 @@ int measure_read_mem_bw(const struct user_params *up=
+arams,
+>  =09return ret;
+>  }
+> =20
+> -struct benchmark_info {
+> -=09const struct user_params *uparams;
+> -=09struct resctrl_val_param *param;
+> -};
+> -
+> -/*
+> - * run_benchmark - Run a specified benchmark or fill_buf (default benchm=
+ark)
+> - *=09=09   in specified signal. Direct benchmark stdio to /dev/null.
+> - * @signum:=09signal number
+> - * @info:=09signal info
+> - * @ucontext:=09user context in signal handling
+> - */
+> -static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
+> -{
+> -=09struct benchmark_info *benchmark_info;
+> -=09const struct user_params *uparams;
+> -=09struct resctrl_val_param *param;
+> -=09FILE *fp;
+> -=09int ret;
+> -
+> -=09benchmark_info =3D info->si_ptr;
+> -=09uparams =3D benchmark_info->uparams;
+> -=09param =3D benchmark_info->param;
+> -
+> -=09/*
+> -=09 * Direct stdio of child to /dev/null, so that only parent writes to
+> -=09 * stdio (console)
+> -=09 */
+> -=09fp =3D freopen("/dev/null", "w", stdout);
+> -=09if (!fp) {
+> -=09=09ksft_perror("Unable to direct benchmark status to /dev/null");
+> -=09=09parent_exit(ppid);
+> -=09}
+> -
+> -=09if (param->fill_buf) {
+> -=09=09if (run_fill_buf(param->fill_buf->buf_size,
+> -=09=09=09=09 param->fill_buf->memflush))
+> -=09=09=09fprintf(stderr, "Error in running fill buffer\n");
+> -=09} else if (uparams->benchmark_cmd[0]) {
+> -=09=09/* Execute specified benchmark */
+> -=09=09ret =3D execvp(uparams->benchmark_cmd[0], (char **)uparams->benchm=
+ark_cmd);
+> -=09=09if (ret)
+> -=09=09=09ksft_perror("execvp");
+> -=09}
+> -
+> -=09fclose(stdout);
+> -=09ksft_print_msg("Unable to run specified benchmark\n");
+> -=09parent_exit(ppid);
+> -}
+> -
+>  /*
+>   * resctrl_val:=09execute benchmark and measure memory bandwidth on
+>   *=09=09=09the benchmark
+> @@ -598,12 +541,11 @@ int resctrl_val(const struct resctrl_test *test,
+>  =09=09const struct user_params *uparams,
+>  =09=09struct resctrl_val_param *param)
+>  {
+> -=09struct benchmark_info benchmark_info;
+> -=09struct sigaction sigact;
+> -=09int ret =3D 0, pipefd[2];
+> -=09char pipe_message =3D 0;
+> -=09union sigval value;
+> +=09unsigned char *buf =3D NULL;
+> +=09cpu_set_t old_affinity;
+>  =09int domain_id;
+> +=09int ret =3D 0;
+> +=09pid_t ppid;
+> =20
+>  =09if (strcmp(param->filename, "") =3D=3D 0)
+>  =09=09sprintf(param->filename, "stdio");
+> @@ -614,108 +556,65 @@ int resctrl_val(const struct resctrl_test *test,
+>  =09=09return ret;
+>  =09}
+> =20
+> -=09benchmark_info.uparams =3D uparams;
+> -=09benchmark_info.param =3D param;
+> -
+> -=09/*
+> -=09 * If benchmark wasn't successfully started by child, then child shou=
+ld
+> -=09 * kill parent, so save parent's pid
+> -=09 */
+>  =09ppid =3D getpid();
+> =20
+> -=09if (pipe(pipefd)) {
+> -=09=09ksft_perror("Unable to create pipe");
+> +=09/* Taskset test to specified CPU. */
+> +=09ret =3D taskset_benchmark(ppid, uparams->cpu, &old_affinity);
+> +=09if (ret)
+> +=09=09return ret;
+> =20
+> -=09=09return -1;
+> +=09/* Write test to specified control & monitoring group in resctrl FS. =
+*/
+> +=09ret =3D write_bm_pid_to_resctrl(ppid, param->ctrlgrp, param->mongrp);
+> +=09if (ret)
+> +=09=09goto reset_affinity;
+> +
+> +=09if (param->init) {
+> +=09=09ret =3D param->init(param, domain_id);
+> +=09=09if (ret)
+> +=09=09=09goto reset_affinity;
+>  =09}
+> =20
+>  =09/*
+> -=09 * Fork to start benchmark, save child's pid so that it can be killed
+> -=09 * when needed
+> +=09 * If not running user provided benchmark, run the default
+> +=09 * "fill_buf". First phase of "fill_buf" is to prepare the
+> +=09 * buffer that the benchmark will operate on. No measurements
+> +=09 * are needed during this phase and prepared memory will be
+> +=09 * passed to next part of benchmark via copy-on-write thus
+> +=09 * no impact on the benchmark that relies on reading from
+> +=09 * memory only.
+>  =09 */
+> +=09if (param->fill_buf) {
+> +=09=09buf =3D alloc_buffer(param->fill_buf->buf_size,
+> +=09=09=09=09   param->fill_buf->memflush);
+> +=09=09if (!buf) {
+> +=09=09=09ret =3D -ENOMEM;
+> +=09=09=09goto reset_affinity;
+> +=09=09}
+> +=09}
+> +
+>  =09fflush(stdout);
+>  =09bm_pid =3D fork();
+>  =09if (bm_pid =3D=3D -1) {
+> +=09=09ret =3D -errno;
+>  =09=09ksft_perror("Unable to fork");
+> -
+> -=09=09return -1;
+> +=09=09goto free_buf;
+>  =09}
+> =20
+> +=09/*
+> +=09 * What needs to be measured runs in separate process until
+> +=09 * terminated.
+> +=09 */
+>  =09if (bm_pid =3D=3D 0) {
+> -=09=09/*
+> -=09=09 * Mask all signals except SIGUSR1, parent uses SIGUSR1 to
+> -=09=09 * start benchmark
+> -=09=09 */
+> -=09=09sigfillset(&sigact.sa_mask);
+> -=09=09sigdelset(&sigact.sa_mask, SIGUSR1);
+> -
+> -=09=09sigact.sa_sigaction =3D run_benchmark;
+> -=09=09sigact.sa_flags =3D SA_SIGINFO;
+> -
+> -=09=09/* Register for "SIGUSR1" signal from parent */
+> -=09=09if (sigaction(SIGUSR1, &sigact, NULL)) {
+> -=09=09=09ksft_perror("Can't register child for signal");
+> -=09=09=09parent_exit(ppid);
+> -=09=09}
+> -
+> -=09=09/* Tell parent that child is ready */
+> -=09=09close(pipefd[0]);
+> -=09=09pipe_message =3D 1;
+> -=09=09if (write(pipefd[1], &pipe_message, sizeof(pipe_message)) <
+> -=09=09    sizeof(pipe_message)) {
+> -=09=09=09ksft_perror("Failed signaling parent process");
+> -=09=09=09close(pipefd[1]);
+> -=09=09=09return -1;
+> -=09=09}
+> -=09=09close(pipefd[1]);
+> -
+> -=09=09/* Suspend child until delivery of "SIGUSR1" from parent */
+> -=09=09sigsuspend(&sigact.sa_mask);
+> -
+> -=09=09ksft_perror("Child is done");
+> -=09=09parent_exit(ppid);
+> +=09=09if (param->fill_buf)
+> +=09=09=09fill_cache_read(buf, param->fill_buf->buf_size, false);
+> +=09=09else if (uparams->benchmark_cmd[0])
+> +=09=09=09execvp(uparams->benchmark_cmd[0], (char **)uparams->benchmark_c=
+md);
+> +=09=09exit(EXIT_SUCCESS);
+>  =09}
+> =20
+>  =09ksft_print_msg("Benchmark PID: %d\n", (int)bm_pid);
+> =20
+> -=09value.sival_ptr =3D (void *)&benchmark_info;
+> -
+> -=09/* Taskset benchmark to specified cpu */
+> -=09ret =3D taskset_benchmark(bm_pid, uparams->cpu, NULL);
+> -=09if (ret)
+> -=09=09goto out;
+> -
+> -=09/* Write benchmark to specified control&monitoring grp in resctrl FS =
+*/
+> -=09ret =3D write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp=
+);
+> -=09if (ret)
+> -=09=09goto out;
+> -
+> -=09if (param->init) {
+> -=09=09ret =3D param->init(param, domain_id);
+> -=09=09if (ret)
+> -=09=09=09goto out;
+> -=09}
+> -
+> -=09/* Parent waits for child to be ready. */
+> -=09close(pipefd[1]);
+> -=09while (pipe_message !=3D 1) {
+> -=09=09if (read(pipefd[0], &pipe_message, sizeof(pipe_message)) <
+> -=09=09    sizeof(pipe_message)) {
+> -=09=09=09ksft_perror("Failed reading message from child process");
+> -=09=09=09close(pipefd[0]);
+> -=09=09=09goto out;
+> -=09=09}
+> -=09}
+> -=09close(pipefd[0]);
+> -
+> -=09/* Signal child to start benchmark */
+> -=09if (sigqueue(bm_pid, SIGUSR1, value) =3D=3D -1) {
+> -=09=09ksft_perror("sigqueue SIGUSR1 to child");
+> -=09=09ret =3D -1;
+> -=09=09goto out;
+> -=09}
+> -
+> -=09/* Give benchmark enough time to fully run */
+> +=09/* Give benchmark enough time to fully run. */
+>  =09sleep(1);
+> =20
+>  =09/* Test runs until the callback setup() tells the test to stop. */
+> @@ -733,8 +632,10 @@ int resctrl_val(const struct resctrl_test *test,
+>  =09=09=09break;
+>  =09}
+> =20
+> -out:
+>  =09kill(bm_pid, SIGKILL);
+> -
+> +free_buf:
+> +=09free(buf);
+> +reset_affinity:
+> +=09taskset_restore(ppid, &old_affinity);
+>  =09return ret;
+>  }
+>=20
+
+--8323328-882515112-1728051072=:957--
 
