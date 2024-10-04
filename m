@@ -1,160 +1,224 @@
-Return-Path: <linux-kselftest+bounces-19041-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19042-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 855599907F5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 17:48:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54F1D9908BF
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 18:13:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47EA92847D6
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 15:48:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3492284258
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 16:13:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 738341DD871;
-	Fri,  4 Oct 2024 15:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61A191C3029;
+	Fri,  4 Oct 2024 16:13:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RMlonaRN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iU5DI7kd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2F3B1D9A6F;
-	Fri,  4 Oct 2024 15:40:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D82B9381AF;
+	Fri,  4 Oct 2024 16:13:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728056421; cv=none; b=Sv2FgCEHrEXEgdXrUBUv2HdgmVRMlhyL7Zs/dSABBIuumtZwN2kmoF523uwsg/RoRh4lo/1y3wUxnab2h9W2tMYcMlu8LSKnzp5zRJ21JoEb3r1/n/DIAD/GcuujZErAg2RfgjPNBFiwhzcwixT1j6DYBfs7OuMp3zB9Xsu/ov0=
+	t=1728058434; cv=none; b=k9lAU34mgPAK4R8jdS9SVwFaESdbHTSeo+k30HqraVQOeAyZ3hOCpAtQCzmzbQW+/FipiD+bZ757uMB1PmttjrSdaruZFCz2HKgxhC25dM3kDRBf0l/5/rUppGvmJ8ULfVDpKuqp5LOL0TP2lUV0MeAcCmn7DH9DviWyrM0p9Kg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728056421; c=relaxed/simple;
-	bh=OySBO2fdgm9NInb3HLtlVZ9DT5rqfr4CjyzaYKoX3HQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m7H6MWWYib8bN1nE/TBfTWRhyCIskcZ+brgb2x7a51E6B6FdetIvu1+lPHCOnUsDAqLr+aaQm4cz1zZcsrw2231V2RmSf5pILnOALqvpwUkn1tRhuMdUEQeAWQL/8K7b0i/j/RBjAoEp9+GNadNEki3L6iyqDObigJh8l3h1hWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RMlonaRN; arc=none smtp.client-ip=209.85.219.174
+	s=arc-20240116; t=1728058434; c=relaxed/simple;
+	bh=dJAfntnZzQya7mN+gT3g+rTVith19gd7qVwVeRJ2oBE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jjSlf8iy59b5Jmt9wXMKz6cdAPldNTCH4aMbnGxLmqeuioePWnLafTzqR5aKY797kNkGcxRRSiVg093X6ACq70ejeQOAKx/0/U+P2XqFnArJ7+22pl9JZ287GkJ+GFo0z1P2Hui6acoIC3kRFE/f1x3qzYba0a25ePty/U3LHDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iU5DI7kd; arc=none smtp.client-ip=209.85.167.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e25e4023cafso1755555276.2;
-        Fri, 04 Oct 2024 08:40:19 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3e0438e81aaso1487144b6e.3;
+        Fri, 04 Oct 2024 09:13:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728056419; x=1728661219; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1728058432; x=1728663232; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GNfDutvQ2rKfjQOG2zcCXcBclmjuCvlaQWSIPQ4D/Ng=;
-        b=RMlonaRNP8WXJUE+TCATelDCiPgTheKgi+OtnYaeJUPK8MBnW0c2VENxLVkLN1hsF0
-         mpMZ2Hwg/CGaScx62CerFpZM8YupAW0MQ5aUITB6fS9LbUWT2m8AQEDtiFHR51JIhxfk
-         Bu2Q58fkon/qHh9RUGFja9DbmvNqc3as2P6z/CfhfMaTRRiu418Of3QXITuSZJvq0Dq1
-         +YrEfegoq0exObqK4/RTaXCeKBBdF7FJYmZe8TIqvEv/6l4rUzo8vX6CZ7x3TOBRdW2L
-         0io3BDVDy7hLjeOA4SqiO9L10llhXpDznXjNcF1SA8+W9IRVPkb/dHCqv8zI9sCeS8eH
-         bkXQ==
+        bh=BPXkDiio5eXbULzjvO9np+NwvbpW7NE+9+S5kYGgGQY=;
+        b=iU5DI7kd0+H6eY4m6GnNsM8C7pEBrbRSEJFcUQ6CoSwhCqnGuG91QBXb4DjZ2JCPdv
+         BK0YsSV4WRK73VjHZMQITrEWoNbs/onFYwT+bRkLWz6Zyki5G31C6cuwnTYJ/NGFgPbj
+         E6HbyCxSk2bwlgq+U/kt6tMdreIy5taDifJLs1RivmvssC/VMuBtP+SJAgpyCcHNHJWZ
+         lA8CDNFuCJertOnnpaiA4ka3gaa2cSDDjTYW3V0YG78a+yn4PEMZ2CnpCDME2xqx69T0
+         0NXuTh7VNMEoP4oifPwKK8T2UNRu1F63E9v3MxwVLm/Rk2/JyNVDPE7crZ7bzqyrDuFR
+         9GaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728056419; x=1728661219;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1728058432; x=1728663232;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GNfDutvQ2rKfjQOG2zcCXcBclmjuCvlaQWSIPQ4D/Ng=;
-        b=oP99qZci4zpGOhnxUzO5vjfDiyxEmix42FGZS0rqJfoLbFIgtNWAluGQecybxYJPC4
-         EFVzSRTqlOEvdcfB0LYBx7YgjaEwgLoBv04w4RhTLoDBb+s+8vt5WUe7WwPw815fp2r1
-         VtcCMuDqvHUOH5GJXlpt2JjnbWe7BjLk+GUDoDn6zH0LhIFtgInhAU+VeDYYfs4Wb9GA
-         VgVDx9DZnUMfFsDZOEMOb3svrQQflPJ60CjsGu4B8OZeygW0pkiAPJHJaOZ6nkza2Tfh
-         Q+e70wF479mS0qKUfabAcX9zdA7XnGSuPMGPWl6jObVZOoCWGDnC3Cqfwxm4ZuVrB9Mh
-         v6VA==
-X-Forwarded-Encrypted: i=1; AJvYcCUWz8PuBJj6TImnMTyYnhJTxbCYgFfgaan+DoxzRK7fIEmKZZC2H4tKDra+FIpXPlvCgVQaGDR0Ii+A6+xt/f/T@vger.kernel.org, AJvYcCWFTh9iZxYGvtaL00SORbpkWzYKQiPVuocbbTJ77zC+A425znpvNBt4P6IiEakyFUdO/9aAOZvBl8K2kVhH@vger.kernel.org, AJvYcCXXu8WRJkS6lc2QI4gLHfORlLkUlWFJX0kfLvRcgQQz/t5KLBv6pgC//HwiPsN66A/EOZ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7esL2K/bjfnQabDEW5BZfv59ewRFn0lopvOS7LZboMBvUL3qK
-	zF9T8S65Nd/9NW09XN5QYasMlUDRgBESoK8sIhzU7YM9j3al/+4I
-X-Google-Smtp-Source: AGHT+IFXt8KkAyFmo7MmvW7gQumVXcw0rlAOCqK+TX6tSIAyGU+AnrIQn/iu8EPyg9c/UT8GbyN6FQ==
-X-Received: by 2002:a05:6902:200b:b0:e25:ce91:52da with SMTP id 3f1490d57ef6-e2893922427mr2093664276.39.1728056418745;
-        Fri, 04 Oct 2024 08:40:18 -0700 (PDT)
-Received: from dev-ubuntu-0.. (104-15-236-76.lightspeed.rlghnc.sbcglobal.net. [104.15.236.76])
-        by smtp.googlemail.com with ESMTPSA id 3f1490d57ef6-e2885d2ae37sm628475276.20.2024.10.04.08.40.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Oct 2024 08:40:18 -0700 (PDT)
-From: tyrone-wu <wudevelops@gmail.com>
-To: olsajiri@gmail.com,
-	wudevelops@gmail.com
-Cc: andrii.nakryiko@gmail.com,
-	andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	haoluo@google.com,
-	john.fastabend@gmail.com,
-	kernel-patches-bot@fb.com,
-	kpsingh@kernel.org,
-	laoar.shao@gmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	martin.lau@linux.dev,
-	mykolal@fb.com,
-	sdf@fomichev.me,
-	shuah@kernel.org,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	Jiri Olsa <jolsa@kernel.org>
-Subject: [PATCH bpf v4 2/2] selftests/bpf: fix perf_event link info name_len assertion
-Date: Fri,  4 Oct 2024 15:40:02 +0000
-Message-ID: <20241004154002.10979-2-wudevelops@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241004154002.10979-1-wudevelops@gmail.com>
-References: <Zv_PP6Gs5cq3W2Ey@krava>
- <20241004154002.10979-1-wudevelops@gmail.com>
+        bh=BPXkDiio5eXbULzjvO9np+NwvbpW7NE+9+S5kYGgGQY=;
+        b=HWs6m4l6s6Twf3/+6/30L61UUPh4nqgHiEA0Cixc72santq3cY4s+5dCKPYh2jN740
+         +uT4nhtSilaaRaKe0bICLhkFza5upNNIofCwbbhSDunJ3XHzw/Izg794dlTrSJPAIwi+
+         OmDR9Kydl7OovTLYACR6Y+vYu+eREQcnHqtl1cq2PuuccHaBZlVlbK/qfyyZunsEGERu
+         lJchh4ty+v0eyQ8J4JyAZigIqK0HANJK3t5UIoRI7XuGxMRYhnv0lM6YLWIknEYetv1l
+         zSYxizlmh8c8lP1FSjxVBY7kwTc++Zc4FKrFVsISApf1C8j/zjTjD9T1N5N4zCTiDC7f
+         vJsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUp7+5Oc+r3L5xDGo1VAnVE4G7dADVWRu5I1KwjcPV06PLP/J98NHc605rgWNpbjsnq+vRS3XkgSm+agnUiUwJu@vger.kernel.org, AJvYcCWYv02h2nxiMMqa8uexUrsG3HGfOaCyWKzbSLvrAweiUyPDeMTIBHPDTNCFBuTl3Hy2bO+RGPzqv64X+rE=@vger.kernel.org, AJvYcCXZ1n6aK2EmQR43/IGS4lxn4Qrb5XNCik1ydsqynRkuxi0auw7Rr8H9oCZXKuLKcIbcc20TobqZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YyznM96SUGzezF5XZLq90SAF8mzLd/jemjr7Q7TnNQruKXd4nIM
+	/f4LG322ZPKqEwlXobf23ehfepqVJ3w4RPxSrwOGMrjvCQHc55p01HCZHueknsh6ZCKUkZs1gez
+	+/aEG8jKcFO6mSulspz75hKYq6w9W6oKAfWU=
+X-Google-Smtp-Source: AGHT+IG2wG7zvp8lD22cxclwAlfI49tPJqndqP3wcYiVayug01oP69knhRI+zufZ7ETFh+vPoSdqohTHdIPOykVnly8=
+X-Received: by 2002:a05:6870:c1d5:b0:25e:24a0:4c96 with SMTP id
+ 586e51a60fabf-287c1da0268mr2415162fac.11.1728058431958; Fri, 04 Oct 2024
+ 09:13:51 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241002-b4-ovpn-v8-0-37ceffcffbde@openvpn.net> <20241002-b4-ovpn-v8-3-37ceffcffbde@openvpn.net>
+In-Reply-To: <20241002-b4-ovpn-v8-3-37ceffcffbde@openvpn.net>
+From: Donald Hunter <donald.hunter@gmail.com>
+Date: Fri, 4 Oct 2024 17:13:40 +0100
+Message-ID: <CAD4GDZyZruh+gbA+=Wu_2aSOnaF8R6eDRU0=EE0qnWe-bTi2-Q@mail.gmail.com>
+Subject: Re: [PATCH net-next v8 03/24] ovpn: add basic netlink support
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	sd@queasysnail.net, ryazanov.s.a@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Fix `name_len` field assertions in `bpf_link_info.perf_event` for
-kprobe/uprobe/tracepoint to validate correct name size instead of 0.
+On Wed, 2 Oct 2024 at 10:03, Antonio Quartulli <antonio@openvpn.net> wrote:
+>
+> +definitions:
+> +  -
+> +    type: const
+> +    name: nonce-tail-size
+> +    value: 8
+> +  -
+> +    type: enum
+> +    name: cipher-alg
+> +    value-start: 0
 
-Link: https://lore.kernel.org/bpf/CABVU1kXwQXhqQGe0RTrr7eegtM6SVW_KayZBy16-yb0Snztmtg@mail.gmail.com/
-Fixes: 23cf7aa539dc ("selftests/bpf: Add selftest for fill_link_info")
-Signed-off-by: tyrone-wu <wudevelops@gmail.com>
-Acked-by: Jiri Olsa <jolsa@kernel.org>
----
-V3 -> V4:
-Link: https://lore.kernel.org/bpf/Zv_PP6Gs5cq3W2Ey@krava/
-- Split patch into separate kernel and selftest change
+value-start defaults to 0 for enum so this is unnecessary. Same for
+the following enum definitions.
 
- tools/testing/selftests/bpf/prog_tests/fill_link_info.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+> +    entries: [ none, aes-gcm, chacha20-poly1305 ]
+> +  -
+> +    type: enum
+> +    name: del-peer-reason
+> +    value-start: 0
+> +    entries: [ teardown, userspace, expired, transport-error, transport-=
+disconnect ]
+> +  -
+> +    type: enum
+> +    name: key-slot
+> +    value-start: 0
+> +    entries: [ primary, secondary ]
+> +  -
+> +    type: enum
+> +    name: mode
+> +    value-start: 0
+> +    entries: [ p2p, mp ]
+> +
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-index f3932941bbaa..59077f260404 100644
---- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-@@ -67,8 +67,8 @@ static int verify_perf_link_info(int fd, enum bpf_perf_event_type type, long add
- 
- 		ASSERT_EQ(info.perf_event.kprobe.cookie, PERF_EVENT_COOKIE, "kprobe_cookie");
- 
-+		ASSERT_EQ(info.perf_event.kprobe.name_len, strlen(KPROBE_FUNC) + 1, "name_len");
- 		if (!info.perf_event.kprobe.func_name) {
--			ASSERT_EQ(info.perf_event.kprobe.name_len, 0, "name_len");
- 			info.perf_event.kprobe.func_name = ptr_to_u64(&buf);
- 			info.perf_event.kprobe.name_len = sizeof(buf);
- 			goto again;
-@@ -79,8 +79,8 @@ static int verify_perf_link_info(int fd, enum bpf_perf_event_type type, long add
- 		ASSERT_EQ(err, 0, "cmp_kprobe_func_name");
- 		break;
- 	case BPF_PERF_EVENT_TRACEPOINT:
-+		ASSERT_EQ(info.perf_event.tracepoint.name_len, strlen(TP_NAME) + 1, "name_len");
- 		if (!info.perf_event.tracepoint.tp_name) {
--			ASSERT_EQ(info.perf_event.tracepoint.name_len, 0, "name_len");
- 			info.perf_event.tracepoint.tp_name = ptr_to_u64(&buf);
- 			info.perf_event.tracepoint.name_len = sizeof(buf);
- 			goto again;
-@@ -96,8 +96,8 @@ static int verify_perf_link_info(int fd, enum bpf_perf_event_type type, long add
- 	case BPF_PERF_EVENT_URETPROBE:
- 		ASSERT_EQ(info.perf_event.uprobe.offset, offset, "uprobe_offset");
- 
-+		ASSERT_EQ(info.perf_event.uprobe.name_len, strlen(UPROBE_FILE) + 1, "name_len");
- 		if (!info.perf_event.uprobe.file_name) {
--			ASSERT_EQ(info.perf_event.uprobe.name_len, 0, "name_len");
- 			info.perf_event.uprobe.file_name = ptr_to_u64(&buf);
- 			info.perf_event.uprobe.name_len = sizeof(buf);
- 			goto again;
--- 
-2.43.0
+[...]
 
+> +operations:
+> +  list:
+> +    -
+> +      name: dev-new
+> +      attribute-set: ovpn
+> +      flags: [ admin-perm ]
+> +      doc: Create a new interface of type ovpn
+> +      do:
+> +        request:
+> +          attributes:
+> +            - ifname
+> +            - mode
+> +        reply:
+> +          attributes:
+> +            - ifname
+> +            - ifindex
+> +    -
+> +      name: dev-del
+> +      attribute-set: ovpn
+> +      flags: [ admin-perm ]
+> +      doc: Delete existing interface of type ovpn
+> +      do:
+> +        pre: ovpn-nl-pre-doit
+> +        post: ovpn-nl-post-doit
+> +        request:
+> +          attributes:
+> +            - ifindex
+
+There's no dev-get do/dump op. I think there should be one for
+diagnostics and metrics.
+
+> +    -
+> +      name: key-new
+> +      attribute-set: ovpn
+> +      flags: [ admin-perm ]
+> +      doc: Add a cipher key for a specific peer
+> +      do:
+> +        pre: ovpn-nl-pre-doit
+> +        post: ovpn-nl-post-doit
+> +        request:
+> +          attributes:
+> +            - ifindex
+> +            - keyconf
+> +    -
+> +      name: key-swap
+> +      attribute-set: ovpn
+> +      flags: [ admin-perm ]
+> +      doc: Swap primary and secondary session keys for a specific peer
+> +      do:
+> +        pre: ovpn-nl-pre-doit
+> +        post: ovpn-nl-post-doit
+> +        request:
+> +          attributes:
+> +            - ifindex
+> +            - keyconf
+> +    -
+> +      name: key-swap-ntf
+> +      notify: key-new
+
+This doesn't work because key-new doesn't have a reply. You should
+define it with an event: block instead. You can see the build errors
+here:
+
+make -C tools/net/ynl
+
+CC ovpn-user.o
+In file included from ovpn-user.c:8:
+ovpn-user.h:1194:33: error: field =E2=80=98obj=E2=80=99 has incomplete type
+ 1194 |         struct ovpn_key_new_rsp obj __attribute__((aligned(8)));
+      |                                 ^~~
+ovpn-user.c:835:35: error: =E2=80=98ovpn_key_new_rsp_parse=E2=80=99 undecla=
+red here
+(not in a function); did you mean =E2=80=98ovpn_dev_new_rsp_parse=E2=80=99?
+  835 |                 .cb             =3D ovpn_key_new_rsp_parse,
+      |                                   ^~~~~~~~~~~~~~~~~~~~~~
+      |                                   ovpn_dev_new_rsp_parse
+make[1]: *** [Makefile:41: ovpn-user.o] Error 1
+
+> +      doc: |
+> +        Notification about key having exhausted its IV space and requiri=
+ng
+> +        renegotiation
+> +      mcgrp: peers
+> +    -
+> +      name: key-del
+> +      attribute-set: ovpn
+> +      flags: [ admin-perm ]
+> +      doc: Delete cipher key for a specific peer
+> +      do:
+> +        pre: ovpn-nl-pre-doit
+> +        post: ovpn-nl-post-doit
+> +        request:
+> +          attributes:
+> +            - ifindex
+> +            - keyconf
+> +
+> +mcast-groups:
+> +  list:
+> +    -
+> +      name: peers
 
