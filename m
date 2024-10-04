@@ -1,129 +1,191 @@
-Return-Path: <linux-kselftest+bounces-19063-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19064-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15CF0990F88
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 22:01:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DB99990F6B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 21:59:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4ABA7B28EC1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 19:59:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B11428219E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 19:59:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AA891332A1;
-	Fri,  4 Oct 2024 19:00:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=krisman.be header.i=@krisman.be header.b="GLl6W1Dm"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D7781DF720;
+	Fri,  4 Oct 2024 19:00:20 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55D968289E;
-	Fri,  4 Oct 2024 19:00:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AFFF12F375;
+	Fri,  4 Oct 2024 19:00:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728068418; cv=none; b=e8tAoxH4XzVthId05zIuHbUY+KyhlkHsw4sfzLHDTU+NKkkttH6xkb0LGGzDAKYX1tAHC+VvXkK6rCDhu0CLFB4RY1yUWpFajquxubeT9tT2cKKZrHufGEjEfcq8K9WW/Zzi9m5asz8mB1RZ3r/V8iY12jN3lfI+cs7U8ywefpY=
+	t=1728068420; cv=none; b=JfkYR28cg+2AudU0TDgTOCE0yUQ3duKG3+/qv1JlbKogUAaY8wPJvWVfL5+l7lkLR5SVWmfUOjq33qdJkC+gJZ6W+iHdpDz0QaY//KUsRL/EivE/P/E+2bYh5QYa1vTDQGDjMoS/AXx1ssWBi58hcVhX0KxUYhg0d+Ui+Act1OE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728068418; c=relaxed/simple;
-	bh=kDPhIOhRF/uzQkaM9pjAhz97+sk3r8bY2o96T4XK5S8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=iSMEYQwvGGUq1BjvW9FNZmz7H+KiEL4O1Nc7ggoKq07EWXjr+hkmGQ8MaBvQUR/5kybv8jCe0kP8FGuxRS0un525kC3xFFSFCLzGjAzm7QZpSqtZqFjEszloxZkV4pkdiBv4fVe4zrzy+vY8U6SMCrSTbgBc88V73EZ8m/cj+CU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=krisman.be; spf=pass smtp.mailfrom=krisman.be; dkim=pass (2048-bit key) header.d=krisman.be header.i=@krisman.be header.b=GLl6W1Dm; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=krisman.be
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=krisman.be
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6DD71FF804;
-	Fri,  4 Oct 2024 19:00:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=krisman.be; s=gm1;
-	t=1728068413;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NKH79yYRcFrkjMOXVFhQVQVbLafFFDnV8gtNqwhEnGQ=;
-	b=GLl6W1DmwIhVNyP2yE6eUw52M8tF8hphkQPmUsWi2/SRN0VEje5bEui4+M8xz/4MLbUV33
-	y4feaU1rtPuJCpA+rSORxdEtRwm3g3yOs5oDeYtnQIft4OZWAQUEGG7oecnFd9SUbj8l+5
-	c2Qc4U52r0WURkVEpBGIhNo/rrPjfNTWi3GfQ0c+O2a12iJG5A4/ro+G6QAb1CthMl5RQQ
-	ehnmXPxAT8MqyYF3teJElhGiBqHIEJ5m48loo2bOQr5UBc1tPpFjyCU91awcyNKEZfOZPp
-	neDiWUr++Kt63mFMaltxJ0USY1HOfcRI6ZfWGPZr67otx07+zFAYoI5EM3eoLQ==
-From: Gabriel Krisman Bertazi <gabriel@krisman.be>
-To: Pedro Orlando <porlando@lkcamp.dev>
-Cc: Gabriel Krisman Bertazi <krisman@kernel.org>,  David Gow
- <davidgow@google.com>,  Shuah Khan <skhan@linuxfoundation.org>,
-  linux-fsdevel@vger.kernel.org,  ~lkcamp/patches@lists.sr.ht,
-  linux-kselftest@vger.kernel.org,  kunit-dev@googlegroups.com,  Gabriela
- Bittencourt <gbittencourt@lkcamp.dev>,  Danilo Pereira
- <dpereira@lkcamp.dev>
-Subject: Re: [PATCH v2 2/2] unicode: kunit: change tests filename and path
-In-Reply-To: <20240928235825.96961-3-porlando@lkcamp.dev> (Pedro Orlando's
-	message of "Sat, 28 Sep 2024 20:58:28 -0300")
-References: <20240928235825.96961-1-porlando@lkcamp.dev>
-	<20240928235825.96961-3-porlando@lkcamp.dev>
-Date: Fri, 04 Oct 2024 15:00:10 -0400
-Message-ID: <87iku7u211.fsf@mailhost.krisman.be>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1728068420; c=relaxed/simple;
+	bh=SOKYJYKzZbDHyOEtbIb1irA4DK+VBkWWqh78oJuf3eM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tmwle0jRb8lDg8Lk4cv98GMg9YDXYMatyk/opYrOUwjRAWTzsdBQUmKSeVNVxyTKHFKNtNaUScwADGcVd0/wEDdFSX3rJIp4D2cN2M6ISzZx6Mb5qdj0HD4CItSdpbqhI6Ji97xxnkUXb8z0qr45VHKmlZAZOoyuOVmRsUgrOHs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6cb3ba0a9a2so15504126d6.2;
+        Fri, 04 Oct 2024 12:00:17 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728068417; x=1728673217;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qkxm/OHPet7Zjw6QCsjdjVbVeK6Q7QSnuwybW1OxgWc=;
+        b=kdJEdvvy7lfWMTwmE8BnmKpslvbA/PCH5hgpATtcPrYZcEoWPLxE2PSxTcPG/HKyUo
+         hPrC4tcL9QiDrvCWZB7EqSBmZf0/ug9DYh6O6vIQ99NRGFCzwUknlV1uBSPit9cjIsFs
+         NGPVz9onvza8WlIR11938D9NlckOKSnqQhOAvWTdbxzNrUH/nubvkaHgYriYdI8I2pjC
+         /qmv+/sKOTPITOZfP/uvHgSHY/CyenjdxedMRKKfzoRecgPk/eaiya5Cgjnd/QFATgb4
+         8oioNyg+tD+ugRrFGmGFGNmhP8JC4z8JV4iz3WkKb3GNJjG1WiorUonMp6maUhaZxJ6M
+         uBww==
+X-Forwarded-Encrypted: i=1; AJvYcCVInmUXG0pwjImXgINzxopwjoh6GO9kPeufV/kFE7Iu9d688EfDpnF/V3Ty7iQQ+0rA0Co=@vger.kernel.org, AJvYcCVZM9BhbejM7TDUkw2ixs9bE1M1AJEHMfNyUbe14Hlsh/SA76UnFdaukzueGg13edQfsf0A30OdP2rSdGG5@vger.kernel.org, AJvYcCVeuGNjcWrburpGgySKY2rEv6qBXSdpg2OxcWhl3vBaPVJ9n/shdTlIKMD47262On/h8qkc3q3jp/qMELwaCgGj@vger.kernel.org
+X-Gm-Message-State: AOJu0YxIdzfANL4DujAVrGfyDlk5MkpxKn8jdEUGWBYMNi2YnCYXfNed
+	Pc3iZ+KTZym2qZZGqMdQ3uuI1vhPnOrgc8jxabLcdC2PvNj5AoBS
+X-Google-Smtp-Source: AGHT+IHwmWhUNZLoKBZBzrHAuiK/CRzNPe6zvX+k5dVAbJhsyyQHmJcbtMkjFYFKuTouPQicMUcpxw==
+X-Received: by 2002:a05:6214:5503:b0:6c3:5833:260f with SMTP id 6a1803df08f44-6cb9a4eafe7mr45102326d6.39.1728068416859;
+        Fri, 04 Oct 2024 12:00:16 -0700 (PDT)
+Received: from maniforge (c-76-141-129-107.hsd1.il.comcast.net. [76.141.129.107])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cba47512bdsm1688556d6.88.2024.10.04.12.00.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 04 Oct 2024 12:00:15 -0700 (PDT)
+Date: Fri, 4 Oct 2024 14:00:13 -0500
+From: David Vernet <void@manifault.com>
+To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+Cc: Tejun Heo <tj@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+	Anders Roxell <anders.roxell@linaro.org>
+Subject: Re: [PATCH] selftests: sched_ext: Add sched_ext as proper selftest
+ target
+Message-ID: <20241004190013.GB56767@maniforge>
+References: <20241004094247.795385-1-bjorn@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-GND-Sasl: gabriel@krisman.be
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="xuk+u8UxomGOBld1"
+Content-Disposition: inline
+In-Reply-To: <20241004094247.795385-1-bjorn@kernel.org>
+User-Agent: Mutt/2.2.13 (00d56288) (2024-03-09)
 
-Pedro Orlando <porlando@lkcamp.dev> writes:
 
-> From: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
->
-> Change utf8 kunit test filename and path to follow the style
-> convention on Documentation/dev-tools/kunit/style.rst
->
-> Co-developed-by: Pedro Orlando <porlando@lkcamp.dev>
-> Signed-off-by: Pedro Orlando <porlando@lkcamp.dev>
-> Co-developed-by: Danilo Pereira <dpereira@lkcamp.dev>
-> Signed-off-by: Danilo Pereira <dpereira@lkcamp.dev>
-> Signed-off-by: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
+--xuk+u8UxomGOBld1
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Fri, Oct 04, 2024 at 11:42:46AM +0200, Bj=F6rn T=F6pel wrote:
+> From: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
+
+Thanks a lot Bj=F6rn for working on this.
+
+> The sched_ext selftests is missing proper cross-compilation support, a
+> proper target entry, and out-of-tree build support.
+>=20
+> When building the kselftest suite, e.g.:
+>=20
+>   make ARCH=3Driscv CROSS_COMPILE=3Driscv64-linux-gnu- \
+>     SKIP_TARGETS=3D"" O=3D/output/foo -C tools/testing/selftests install
+>=20
+> The expectation is that the sched_ext is included, cross-built, and
+> placed into /output/foo.
+>=20
+> Add CROSS_COMPILE, OUTPUT, and TARGETS support to the sched_ext
+> selftest.
+>=20
+> Signed-off-by: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
 > ---
->  fs/unicode/Makefile                                | 2 +-
->  fs/unicode/{ => tests}/.kunitconfig                | 0
->  fs/unicode/{utf8-selftest.c => tests/utf8_kunit.c} | 0
->  3 files changed, 1 insertion(+), 1 deletion(-)
->  rename fs/unicode/{ => tests}/.kunitconfig (100%)
->  rename fs/unicode/{utf8-selftest.c => tests/utf8_kunit.c} (100%)
->
-> diff --git a/fs/unicode/Makefile b/fs/unicode/Makefile
-> index 37bbcbc628a1..d95be7fb9f6b 100644
-> --- a/fs/unicode/Makefile
-> +++ b/fs/unicode/Makefile
-> @@ -4,7 +4,7 @@ ifneq ($(CONFIG_UNICODE),)
->  obj-y			+= unicode.o
+>  tools/testing/selftests/Makefile           |  1 +
+>  tools/testing/selftests/sched_ext/Makefile | 59 +++++++++++++++-------
+>  2 files changed, 41 insertions(+), 19 deletions(-)
+>=20
+> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/M=
+akefile
+> index b38199965f99..20ee8a0b795c 100644
+> --- a/tools/testing/selftests/Makefile
+> +++ b/tools/testing/selftests/Makefile
+> @@ -88,6 +88,7 @@ TARGETS +=3D rlimits
+>  TARGETS +=3D rseq
+>  TARGETS +=3D rtc
+>  TARGETS +=3D rust
+> +TARGETS +=3D sched_ext
+>  TARGETS +=3D seccomp
+>  TARGETS +=3D sgx
+>  TARGETS +=3D sigaltstack
+> diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/s=
+elftests/sched_ext/Makefile
+> index 0754a2c110a1..66467a99184d 100644
+> --- a/tools/testing/selftests/sched_ext/Makefile
+> +++ b/tools/testing/selftests/sched_ext/Makefile
+> @@ -13,14 +13,8 @@ LLVM_SUFFIX :=3D $(LLVM)
 >  endif
->  obj-$(CONFIG_UNICODE)	+= utf8data.o
-> -obj-$(CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST) += utf8-selftest.o
-> +obj-$(CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST) += tests/utf8_kunit.o
+> =20
+>  CC :=3D $(LLVM_PREFIX)clang$(LLVM_SUFFIX) $(CLANG_FLAGS) -fintegrated-as
+> -else
+> -CC :=3D gcc
 
-This breaks compilation for me.
+Given that we're including ../lib.mk, can we just get rid of this whole blo=
+ck?
 
-fs/unicode/tests/utf8_kunit.c:11:10: fatal error: utf8n.h: No such file or directory
-   11 | #include "utf8n.h"
-      |          ^~~~~~~~~
+>  endif # LLVM
+> =20
+> -ifneq ($(CROSS_COMPILE),)
+> -$(error CROSS_COMPILE not supported for scx selftests)
+> -endif # CROSS_COMPILE
+> -
+>  CURDIR :=3D $(abspath .)
+>  REPOROOT :=3D $(abspath ../../../..)
+>  TOOLSDIR :=3D $(REPOROOT)/tools
+> @@ -34,18 +28,39 @@ GENHDR :=3D $(GENDIR)/autoconf.h
+>  SCXTOOLSDIR :=3D $(TOOLSDIR)/sched_ext
+>  SCXTOOLSINCDIR :=3D $(TOOLSDIR)/sched_ext/include
+> =20
+> -OUTPUT_DIR :=3D $(CURDIR)/build
+> +ifeq (,$(OUTPUT))
+> +OUTPUT :=3D $(CURDIR)/build
+> +RUNNER_DIR :=3D $(CURDIR)
+> +else
+> +OUTPUT_DIR :=3D $(OUTPUT)
 
-After this patch that local header is now in the parent directory.
+This breaks if you use make from the selftests/sched_ext directory.  AFAICT=
+ it
+looks like OUTPUT is always set in ../lib.mk, so we always go to the OUTPUT=
+_DIR
+:=3D $(CURDIR) branch. Because of that, running `make clean` will delete the
+whole sched_ext selftests directory. Also, did you mean for the first branc=
+h to
+be:
 
-I'm building with:
++OUTPUT_DIR :=3D $(CURDIR)/build
 
-CONFIG_UNICODE=m
-CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST=m
+as opposed to:
 
->  unicode-y := utf8-norm.o utf8-core.o
->  
-> diff --git a/fs/unicode/.kunitconfig b/fs/unicode/tests/.kunitconfig
-> similarity index 100%
-> rename from fs/unicode/.kunitconfig
-> rename to fs/unicode/tests/.kunitconfig
-> diff --git a/fs/unicode/utf8-selftest.c b/fs/unicode/tests/utf8_kunit.c
-> similarity index 100%
-> rename from fs/unicode/utf8-selftest.c
-> rename to fs/unicode/tests/utf8_kunit.c
+> +OUTPUT :=3D $(CURDIR)/build
 
--- 
-Gabriel Krisman Bertazi
+[...]
+
+Thanks,
+David
+
+--xuk+u8UxomGOBld1
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZwA7PQAKCRBZ5LhpZcTz
+ZPoZAP9bSuKYYs994wmUp8WMfOXDiFGe8xsav/5htQkIbRVslwD+OudAqVtsa2Qe
+PbwPgF0KtahM0Aa0bMGJ3l9vyX7aTAw=
+=t/6n
+-----END PGP SIGNATURE-----
+
+--xuk+u8UxomGOBld1--
 
