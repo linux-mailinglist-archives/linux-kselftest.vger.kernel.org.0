@@ -1,182 +1,211 @@
-Return-Path: <linux-kselftest+bounces-19035-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19036-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 906809905EB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 16:23:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A25C4990610
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 16:29:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B758A1C20D52
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 14:23:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58AE2281357
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 14:29:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3932A215F6B;
-	Fri,  4 Oct 2024 14:23:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14945217329;
+	Fri,  4 Oct 2024 14:29:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X/Iq1FxQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bGywVOPk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE0A1B7E9;
-	Fri,  4 Oct 2024 14:23:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7973F69D2B;
+	Fri,  4 Oct 2024 14:29:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728051802; cv=none; b=eYL2Ycf3vGsdsV2e8Vu8bVsd9zuaDSLY+D7AN+ZtuWhSnEJlxtOg9Ja/jGba+wUXzG4YbNuJiUp+MhVyrl4qVDXrLs2CgsPjcBHCg3gy7FzQ554o93VvCBlLs+mD18h0XQ+LJJ8zuOQ2rEiC/uRaCKI+i7IPfMXhFAV2R1+AUAw=
+	t=1728052157; cv=none; b=SPaTA7pM5vuNzLojkISQnbziEc9uOcDvUyIb+Nr5NLopxbXAMQQLpz0q6+BSNFF9NNgJ1R5ujwik5fmi0Po6lu/j4TapuBjA0PlzOQuB9z1ReX/E2YOX/IHKrytKyzHaWKIcnTiVYkaHZvpTN7ME8VA0S9go7RQWGbkdo3chdSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728051802; c=relaxed/simple;
-	bh=0Whr7Iiiz7JTv4iwA1dRvewJcTvZDGDXgwnUjPWvl5Q=;
+	s=arc-20240116; t=1728052157; c=relaxed/simple;
+	bh=+xJ2e/2ZWeA2xZeTvHj9oDcCGL8RxqZ9NDAt5mhkv8I=;
 	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=hMlt2L9BJ/rBlOTEZjjiMADC3hUWd9ptQr7emoQNKs8YAj/8XWNXIJCGFJ/8Pdzj2HpH8s1KoC55uzd7n3TduXERDzg0hqP7Nu2emfi4hYwHjH+Ju/rEqJS17K1eqllCAHmLlSMt3pqJdHFpA4qgSF6WweFazUqPkTagbIaIcb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X/Iq1FxQ; arc=none smtp.client-ip=198.175.65.11
+	 MIME-Version:Content-Type; b=kUp5QqgTbipJNnRuVm/HPu2B0TN4XMadehuY912mnlwgX1kQmYnWjDMO7aK5UzOLiUT9+pXOMVvuiKgugCAMGeAsOdL7c/5NEXb0NF9UM/JBZ6cDhfwYw3OYzi0IRvgPDtGfW7j4p8R4q/FEgoIs+v1YCIZ8UnMS8g3pgNzprwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bGywVOPk; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728051801; x=1759587801;
+  t=1728052156; x=1759588156;
   h=from:date:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=0Whr7Iiiz7JTv4iwA1dRvewJcTvZDGDXgwnUjPWvl5Q=;
-  b=X/Iq1FxQfFUyh7L9MpmOZWp+sUO17Nn6HDx/NiTyCaJy89BfxOB9GAu1
-   fgA9qUhUe2kJ97dkgQ7Alagd72bN0TXA+1eif4N95tf3p13ZypjdLi2hi
-   ZWy4Lhz44IOI6hyKMrenBU0rnqquIToFyGBA+TLH+C8Hd5mShVCykiaHl
-   p9hhzYt80uyTaVeYgADnl1pRo+j7Wy8mv6+ks1AA/X3LKWCgUqv8BnrYy
-   ikOC3J8+mF46KBaLqXj/mR+lvujnrh6TV6Z4q/71/pKtdducK4BTsAV3n
-   ls1P16L0muM4QW08PRO5W08+GVsX4jU7G8X07utVtTkkQSzh7uVVw3U3a
-   Q==;
-X-CSE-ConnectionGUID: 3TFZyVC3RXevjnRF2oRjnQ==
-X-CSE-MsgGUID: o7ChRlSjRA6KomDPdd8Xiw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="37844905"
+  bh=+xJ2e/2ZWeA2xZeTvHj9oDcCGL8RxqZ9NDAt5mhkv8I=;
+  b=bGywVOPkGmL1HuyUn1Xgu7P1M/bBfRUM+L3hPZyI2X45yxrtLOqDxKF+
+   IXVU5j4MmAPxaiPl4fOhox/+2eik31I8SAKF01YEfTRXRqeuh9VNsrLHG
+   KOxygB+fDHKT1wk6EfD7Pey9wTncfxE+7+fBpcusCfjXmiNqTsqk0GGGN
+   db4g+vgCEZwQEZJpTbUG3oFo+dNkC8/UlGjV+CIgnkOIeEkvx8n8aYQT3
+   EAM9XrbtIPnik/evKwyCNlRh9txgKdwZdKrEXaVwlOjEFwh+hmQzGiIL+
+   OZ6WWqfdaeQJAU0G9UzkFUwxZY75RYvvl+ORBkoMYGmQjqJYJSlIbOILS
+   w==;
+X-CSE-ConnectionGUID: OA7Y+dNFTPWXUs0gRiEqvA==
+X-CSE-MsgGUID: MukXreDzSiq0RPG9IJEtZg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11215"; a="38669397"
 X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
-   d="scan'208";a="37844905"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 07:23:20 -0700
-X-CSE-ConnectionGUID: NTNlezLZSxSGcR2JKlgWqA==
-X-CSE-MsgGUID: QyOuXLnnQuCNJzx0aclTvQ==
+   d="scan'208";a="38669397"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 07:29:15 -0700
+X-CSE-ConnectionGUID: A3RpAHD/SjquMhedKXwYvg==
+X-CSE-MsgGUID: K32YuJU8Q66NtVYrhmta8g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,177,1725346800"; 
-   d="scan'208";a="74830288"
+   d="scan'208";a="112199240"
 Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.148])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 07:23:16 -0700
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2024 07:29:13 -0700
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 4 Oct 2024 17:23:13 +0300 (EEST)
+Date: Fri, 4 Oct 2024 17:29:09 +0300 (EEST)
 To: Reinette Chatre <reinette.chatre@intel.com>
 cc: fenghua.yu@intel.com, shuah@kernel.org, tony.luck@intel.com, 
     peternewman@google.com, babu.moger@amd.com, 
     =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
     linux-kselftest@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V2 12/13] selftests/resctrl: Do not compare performance
- counters and resctrl at low bandwidth
-In-Reply-To: <955545d3377afc359d7b8b3915455bfdfc0d6605.1726164080.git.reinette.chatre@intel.com>
-Message-ID: <b728c9c2-49a3-50b8-433a-b38e47a25303@linux.intel.com>
-References: <cover.1726164080.git.reinette.chatre@intel.com> <955545d3377afc359d7b8b3915455bfdfc0d6605.1726164080.git.reinette.chatre@intel.com>
+Subject: Re: [PATCH V2 13/13] selftests/resctrl: Keep results from first test
+ run
+In-Reply-To: <46200b49e874c69a05538b813852af0e1eeeea4c.1726164080.git.reinette.chatre@intel.com>
+Message-ID: <45af2a8c-517d-8f0d-137d-ad0f3f6a3c68@linux.intel.com>
+References: <cover.1726164080.git.reinette.chatre@intel.com> <46200b49e874c69a05538b813852af0e1eeeea4c.1726164080.git.reinette.chatre@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1344179437-1728051793=:957"
+Content-Type: multipart/mixed; boundary="8323328-1904508778-1728052149=:957"
 
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323328-1344179437-1728051793=:957
+--8323328-1904508778-1728052149=:957
 Content-Type: text/plain; charset=ISO-8859-15
 Content-Transfer-Encoding: QUOTED-PRINTABLE
 
 On Thu, 12 Sep 2024, Reinette Chatre wrote:
 
-> The MBA test incrementally throttles memory bandwidth, each time
-> followed by a comparison between the memory bandwidth observed
-> by the performance counters and resctrl respectively.
+> The resctrl selftests drop the results from every first test run
+> to avoid (per comment) "inaccurate due to monitoring setup transition
+> phase" data. Previously inaccurate data resulted from workloads needing
+> some time to "settle" and also the measurements themselves to
+> account for earlier measurements to measure across needed timeframe.
 >=20
-> While a comparison between performance counters and resctrl is
-> generally appropriate, they do not have an identical view of
-> memory bandwidth. For example RAS features or memory performance
-> features that generate memory traffic may drive accesses that are
-> counted differently by performance counters and MBM respectively,
-> for instance generating "overhead" traffic which is not counted
-> against any specific RMID. As a ratio, this different view of memory
-> bandwidth becomes more apparent at low memory bandwidths.
+> commit da50de0a92f3 ("selftests/resctrl: Calculate resctrl FS derived mem
+> bw over sleep(1) only")
 >=20
-> It is not practical to enable/disable the various features that
-> may generate memory bandwidth to give performance counters and
-> resctrl an identical view. Instead, do not compare performance
-> counters and resctrl view of memory bandwidth when the memory
-> bandwidth is low.
+> ensured that measurements accurately measure just the time frame of
+> interest. The default "fill_buf" benchmark since separated the buffer
+> prepare phase from the benchmark run phase reducing the need for the
+> tests themselves to accommodate the benchmark's "settle" time.
 >=20
-> Bandwidth throttling behaves differently across platforms
-> so it is not appropriate to drop measurement data simply based
-> on the throttling level. Instead, use a threshold of 750MiB
-> that has been observed to support adequate comparison between
-> performance counters and resctrl.
+> With these enhancements there are no remaining portions needing
+> to "settle" and the first test run can contribute to measurements.
 >=20
 > Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
 > ---
 > Changes since V1:
-> - Fix code alignment and spacing.
-> - Modify flow to use "continue" instead of "break" now that
->   earlier changes decreases throttling.
-> - Expand comment of define to elaborate causes of discrepancy
->   between performance counters and MBM.
+> - Remove comment about needing results from first run removed.
+> - Fix existing incorrect spacing while changing line.
 > ---
->  tools/testing/selftests/resctrl/mba_test.c |  7 +++++++
->  tools/testing/selftests/resctrl/resctrl.h  | 10 ++++++++++
->  2 files changed, 17 insertions(+)
+>  tools/testing/selftests/resctrl/cmt_test.c |  5 ++---
+>  tools/testing/selftests/resctrl/mba_test.c | 10 +++-------
+>  tools/testing/selftests/resctrl/mbm_test.c | 10 +++-------
+>  3 files changed, 8 insertions(+), 17 deletions(-)
 >=20
+> diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/s=
+elftests/resctrl/cmt_test.c
+> index a7effe76b419..d4b85d144985 100644
+> --- a/tools/testing/selftests/resctrl/cmt_test.c
+> +++ b/tools/testing/selftests/resctrl/cmt_test.c
+> @@ -99,14 +99,13 @@ static int check_results(struct resctrl_val_param *pa=
+ram, size_t span, int no_of
+>  =09=09}
+> =20
+>  =09=09/* Field 3 is llc occ resc value */
+> -=09=09if (runs > 0)
+> -=09=09=09sum_llc_occu_resc +=3D strtoul(token_array[3], NULL, 0);
+> +=09=09sum_llc_occu_resc +=3D strtoul(token_array[3], NULL, 0);
+>  =09=09runs++;
+>  =09}
+>  =09fclose(fp);
+> =20
+>  =09return show_results_info(sum_llc_occu_resc, no_of_bits, span,
+> -=09=09=09=09 MAX_DIFF, MAX_DIFF_PERCENT, runs - 1, true);
+> +=09=09=09=09 MAX_DIFF, MAX_DIFF_PERCENT, runs, true);
+>  }
+> =20
+>  static void cmt_test_cleanup(void)
 > diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/s=
 elftests/resctrl/mba_test.c
-> index d8d9637c1951..5c6063d0a77c 100644
+> index 5c6063d0a77c..89c2446b9f80 100644
 > --- a/tools/testing/selftests/resctrl/mba_test.c
 > +++ b/tools/testing/selftests/resctrl/mba_test.c
-> @@ -98,6 +98,13 @@ static bool show_mba_info(unsigned long *bw_imc, unsig=
-ned long *bw_resc)
+> @@ -86,18 +86,14 @@ static bool show_mba_info(unsigned long *bw_imc, unsi=
+gned long *bw_resc)
+>  =09=09int avg_diff_per;
+>  =09=09float avg_diff;
 > =20
->  =09=09avg_bw_imc =3D sum_bw_imc / (NUM_OF_RUNS - 1);
->  =09=09avg_bw_resc =3D sum_bw_resc / (NUM_OF_RUNS - 1);
-> +=09=09if (avg_bw_imc < THROTTLE_THRESHOLD || avg_bw_resc < THROTTLE_THRE=
+> -=09=09/*
+> -=09=09 * The first run is discarded due to inaccurate value from
+> -=09=09 * phase transition.
+> -=09=09 */
+> -=09=09for (runs =3D NUM_OF_RUNS * allocation + 1;
+> +=09=09for (runs =3D NUM_OF_RUNS * allocation;
+>  =09=09     runs < NUM_OF_RUNS * allocation + NUM_OF_RUNS ; runs++) {
+>  =09=09=09sum_bw_imc +=3D bw_imc[runs];
+>  =09=09=09sum_bw_resc +=3D bw_resc[runs];
+>  =09=09}
+> =20
+> -=09=09avg_bw_imc =3D sum_bw_imc / (NUM_OF_RUNS - 1);
+> -=09=09avg_bw_resc =3D sum_bw_resc / (NUM_OF_RUNS - 1);
+> +=09=09avg_bw_imc =3D sum_bw_imc / NUM_OF_RUNS;
+> +=09=09avg_bw_resc =3D sum_bw_resc / NUM_OF_RUNS;
+>  =09=09if (avg_bw_imc < THROTTLE_THRESHOLD || avg_bw_resc < THROTTLE_THRE=
 SHOLD) {
-> +=09=09=09ksft_print_msg("Bandwidth below threshold (%d MiB). Dropping re=
+>  =09=09=09ksft_print_msg("Bandwidth below threshold (%d MiB). Dropping re=
 sults from MBA schemata %u.\n",
-> +=09=09=09=09       THROTTLE_THRESHOLD,
-> +=09=09=09=09       ALLOCATION_MIN + ALLOCATION_STEP * allocation);
-> +=09=09=09continue;
-> +=09=09}
-> +
->  =09=09avg_diff =3D (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
->  =09=09avg_diff_per =3D (int)(avg_diff * 100);
+>  =09=09=09=09       THROTTLE_THRESHOLD,
+> diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/s=
+elftests/resctrl/mbm_test.c
+> index 7635ee6b9339..8c818e292dce 100644
+> --- a/tools/testing/selftests/resctrl/mbm_test.c
+> +++ b/tools/testing/selftests/resctrl/mbm_test.c
+> @@ -22,17 +22,13 @@ show_bw_info(unsigned long *bw_imc, unsigned long *bw=
+_resc, size_t span)
+>  =09int runs, ret, avg_diff_per;
+>  =09float avg_diff =3D 0;
 > =20
-> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/se=
-lftests/resctrl/resctrl.h
-> index dc01dc75cba5..eb151ac74938 100644
-> --- a/tools/testing/selftests/resctrl/resctrl.h
-> +++ b/tools/testing/selftests/resctrl/resctrl.h
-> @@ -43,6 +43,16 @@
+> -=09/*
+> -=09 * Discard the first value which is inaccurate due to monitoring setu=
+p
+> -=09 * transition phase.
+> -=09 */
+> -=09for (runs =3D 1; runs < NUM_OF_RUNS ; runs++) {
+> +=09for (runs =3D 0; runs < NUM_OF_RUNS; runs++) {
+>  =09=09sum_bw_imc +=3D bw_imc[runs];
+>  =09=09sum_bw_resc +=3D bw_resc[runs];
+>  =09}
 > =20
->  #define DEFAULT_SPAN=09=09(250 * MB)
-> =20
-> +/*
-> + * Memory bandwidth (in MiB) below which the bandwidth comparisons
-> + * between iMC and resctrl are considered unreliable. For example RAS
-> + * features or memory performance features that generate memory traffic
-> + * may drive accesses that are counted differently by performance counte=
-rs
-> + * and MBM respectively, for instance generating "overhead" traffic whic=
-h
-> + * is not counted against any specific RMID.
-> + */
-> +#define THROTTLE_THRESHOLD=09750
-> +
->  /*
->   * fill_buf_param:=09"fill_buf" benchmark parameters
->   * @buf_size:=09=09Size (in bytes) of buffer used in benchmark.
->=20
+> -=09avg_bw_imc =3D sum_bw_imc / 4;
+> -=09avg_bw_resc =3D sum_bw_resc / 4;
+> +=09avg_bw_imc =3D sum_bw_imc / NUM_OF_RUNS;
+> +=09avg_bw_resc =3D sum_bw_resc / NUM_OF_RUNS;
+>  =09avg_diff =3D (float)labs(avg_bw_resc - avg_bw_imc) / avg_bw_imc;
+>  =09avg_diff_per =3D (int)(avg_diff * 100);
+
+While the patch itself is fine, I notice the code has this magic number=20
+gem too:
+
+        unsigned long bw_imc[1024], bw_resc[1024];
 
 Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+
 
 --=20
  i.
 
---8323328-1344179437-1728051793=:957--
+--8323328-1904508778-1728052149=:957--
 
