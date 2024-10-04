@@ -1,275 +1,226 @@
-Return-Path: <linux-kselftest+bounces-19002-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19004-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ADFF98FD08
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 07:33:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34B0C98FD0A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 07:34:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B059B21ED5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 05:33:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40F481C2145A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 05:34:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DC634AECE;
-	Fri,  4 Oct 2024 05:33:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDC028120C;
+	Fri,  4 Oct 2024 05:34:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="nBpC0nil"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="qQpQ6WgK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2053.outbound.protection.outlook.com [40.107.95.53])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2089.outbound.protection.outlook.com [40.107.220.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EBE7A55;
-	Fri,  4 Oct 2024 05:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.95.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28A3949641;
+	Fri,  4 Oct 2024 05:34:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.89
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728020013; cv=fail; b=ky8364ZP+C7kKN5/dECsSXC7Cahu4FOonmyl353PvkZOjc3Xzerp2uB+tS0oDJFxs10UYjXJuHm0gSmBbGM1FORQlU2lzog4GeSRl1IyPOXyyxXRZCVW4ncJfN3TWYwfASVzrgk4c3743heZOvP56zaNUKKrdqCHyFhnUuhlEqU=
+	t=1728020045; cv=fail; b=T8nNccS0FsJ1AQFrQ29IX3MQwyOHk/UnZ1PYtfaJRlGmK3SmY0J9gpt948ITW166xm1OZ4pu3Wgr2GCXXStRr9b9AWxzXVhAih2/DZ0ctDmFyytAn4cp/qiTbhaa3ryauTvAsohpzDnPxCytV/KpDmGygP1WW/cZlKp/4qjp5FQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728020013; c=relaxed/simple;
-	bh=SpO3onBzAK5EHmXMYzuMvBQTFbeuPNCIydcJLZvWnro=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tj4rVAfttWTgg4QhLYLwbPlmuQq2xXkqPZuRjM9pkCh4g2AanLfVWR5hjwidtX8yeZ8g7g8oqVTBoMwUVlgkI0k+JHaIvW0+WK3fYNgHXcSO1vAaJCXCz8Cg46+BgZqoKWANWRegILbazNsK4C6ZIP6RAyazBRRUqHG/M4BsSVI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=nBpC0nil; arc=fail smtp.client-ip=40.107.95.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	s=arc-20240116; t=1728020045; c=relaxed/simple;
+	bh=72mrjgpJcFHR92ObdIiA6CTgjPW70E/5Yijg7Bg/q8k=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=StZH2JQjZZBC4tAP9kZkbTZ/4zHjgurZbyQ/SBSa/k2gAv2OUXYTGw1+g3I7ZDujRAhYbntboz5Kylsvmzg3DhDZWOTvGAz5PKz7+BjJ0/W0XTgKvLp7270FHgn/jKscxDTm4uLvn6WAMZi99GeolvQqPDHnHnkLPAy6oTZMEjQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=qQpQ6WgK; arc=fail smtp.client-ip=40.107.220.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=IXTDYPOdQtl68kXBPGS+4fzEW69Sga+675VXxwumhO2auSRvrFjBjVa/xybJIfSEyW8z1KISEfXKLUSkHuan077UtupJuasKFkGzKgXQZQdD5IN3O0/REOOQvF8Y0cnZNPlZZQGAF6frjDOyUvHQEmGo5oqdonSckDLV1uKMPlGcBCNfOYUNigW36T2XcDUrXXq9RzYL/8mJIsVit/3wXKh1IlINuM9ShFukF5jAJw1z8rrRVT4cjpffOP9CzzcZ+OGJ/1MzdDcjvI+AxBxBVcSpALAOfMYfLOkk7K0Ey6JYZBoYJYZC6SbA2s78G9AR1to4nRzIuRluyQhPwbh15A==
+ b=wrhW+4G91Owxt2XIBwB7tYtjFJOZusm7P7w/hDS280xk3RFBTM0m2Au5hMyQJobY78Me+oAWG+SNBENBxxIueuygoJ1iiPQmtA3/WcQGiRX94iVBAqDxrQQLkOO0lw1FQThfgGSBe4Kj46nIR0OmDFYeov2T/rLvlZqJKVCU8fm7lmQ2Ly7mSMmQb4pBRL1pHrPV8pPYrMgQQPy0BbaB2MjYFhJ/Uh41Ek/NbiMRKlXblMwG0dWAL5Trn4zmHQpERSc4B+S262yp/ug5BKDbbik0ifLIQluaNtr5oGu3ddHQduh+/uIfp6rF+p6E6dKQPiw6qmRDrNSbIRm2HYnpzw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CcdpJE9jFr2Flrs6gJDDo4yPMIAU+lNdut+ayE3A3NU=;
- b=uiF7QruESjBWwL56lZmwfyv8PMdFIIHHSbNsFizpFSRpTQ4Mz5SbWVAPY4LBKhwxLc/dkN8tLhxS6JZ9mYnZSq38C2i0nR070eO9lCuvgoZHOt7n9E2GWxjWe+JcAIMfa/RMAt6rAncOa92yRD941PH6fjnIu8oLM6As2kmRvgBI6bVneAKn/An7S9si+KZczbnUrWq2nr4Nvgt863xYgfo6yvdYQRltS3gOdalYncdcQwNWY/ispM7nkfMnOW1hr9kn1VG8lBrgWeRMtWzTzI5peQjZgvpHTiG2CPA6UO1fpUsJxoo7sE3BsBZ+dXt+2XLv9ITU8NM8iLY0OWo3Pw==
+ bh=2sNu0spT7uBUfTQ5jo5L4yWe/rZLJGgjO4qcF7nJbMQ=;
+ b=XgSZotIxk1wpTIAX2t8l5UCvBlJ1YWgB9q0RN3C1d7iPAptjGQIRetH8I9pD/X5gZnbqLiWgSXoMfzAuODEx9Q+cRoCY/oVJHQtaUV94Xx/7KDp2GxGZfOOSGHgG7n9sEFd3LEFcFanZHnxSAU3/2IKH1j5GoXe1+vw3g8UhWUP1NMbJWrb4k3uE392MCgxtUppU/AjCXZKjMpWiO0ai7eQCiaQW1tZbM/ZgX43kLEu+XRCw3OdHj/lZeKkCnpIRYmMDe1oh0BLi4eHxRDS+Zh5n8crG9gwDmvkVfGJXcARzLgP9/1QfmHtzHlYXW019ltLPAuw/uibLzUmNxrYbzA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=amd.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CcdpJE9jFr2Flrs6gJDDo4yPMIAU+lNdut+ayE3A3NU=;
- b=nBpC0nileSG9B2/bLNSIFlR4sDE+aqFYwYQt2W9UZRN/BuV+W8r2uwkqjOaLao7Gdr+U7dYhePvJkPGvFL/eDH8G0bZ6Trw8+GK6CrhHEtbu0cyBQL6eP+xjSSXZl7HeMp1Z1O+XZMRhdg0J2ck4h0bCFG9zCj+4Okien5qJ6MbkXO9KTPRCqgsx93HO4nmdq4Byr+JYnUAtpJFsVxAuSyPtg/sh+O4epaTNbBPV0o4ZpVgDVzcY5DUaf4wIUaA+7DBAw6O4+EpbkdrS9ccsuxU/lFYPo39GcF4a0aNQf8+kJFFEL/mowxQ+lnHlIztOSdAUO110gA27bpA0E1P3PA==
-Received: from SJ0PR03CA0056.namprd03.prod.outlook.com (2603:10b6:a03:33e::31)
- by BL3PR12MB6593.namprd12.prod.outlook.com (2603:10b6:208:38c::14) with
+ bh=2sNu0spT7uBUfTQ5jo5L4yWe/rZLJGgjO4qcF7nJbMQ=;
+ b=qQpQ6WgK3zL8a35zstSmCWDkYBEZR4GUSXMzBXpfVJ6oHH9IeYAsi0sX8Q1sjyb2zRxs2PkDnTuFnP098ldcbL7miec2QBrPWZB+ka6OsFZoNcaWDs3HXQmkgU4CScVzZvK+VMrTsrVdMK8h4yrfyrDMNKhDQLrfMhbBNQVivQw=
+Received: from MN0P222CA0017.NAMP222.PROD.OUTLOOK.COM (2603:10b6:208:531::22)
+ by IA1PR12MB8587.namprd12.prod.outlook.com (2603:10b6:208:450::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.15; Fri, 4 Oct
- 2024 05:33:23 +0000
-Received: from CO1PEPF000044EE.namprd05.prod.outlook.com
- (2603:10b6:a03:33e:cafe::b9) by SJ0PR03CA0056.outlook.office365.com
- (2603:10b6:a03:33e::31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.16; Fri, 4 Oct
+ 2024 05:34:00 +0000
+Received: from BL6PEPF0001AB58.namprd02.prod.outlook.com
+ (2603:10b6:208:531:cafe::ab) by MN0P222CA0017.outlook.office365.com
+ (2603:10b6:208:531::22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.18 via Frontend
- Transport; Fri, 4 Oct 2024 05:33:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- CO1PEPF000044EE.mail.protection.outlook.com (10.167.241.68) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8026.11 via Frontend Transport; Fri, 4 Oct 2024 05:33:22 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Thu, 3 Oct 2024
- 22:33:16 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.4; Thu, 3 Oct 2024 22:33:15 -0700
-Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4 via Frontend
- Transport; Thu, 3 Oct 2024 22:33:14 -0700
-Date: Thu, 3 Oct 2024 22:33:13 -0700
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Alexey Kardashevskiy <aik@amd.com>
-CC: <jgg@nvidia.com>, <kevin.tian@intel.com>, <will@kernel.org>,
-	<joro@8bytes.org>, <suravee.suthikulpanit@amd.com>, <robin.murphy@arm.com>,
-	<dwmw2@infradead.org>, <baolu.lu@linux.intel.com>, <shuah@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <iommu@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<eric.auger@redhat.com>, <jean-philippe@linaro.org>, <mdf@kernel.org>,
-	<mshavit@google.com>, <shameerali.kolothum.thodi@huawei.com>,
-	<smostafa@google.com>, <yi.l.liu@intel.com>
-Subject: Re: [PATCH v2 06/19] iommufd/viommu: Add
- IOMMU_VIOMMU_SET/UNSET_VDEV_ID ioctl
-Message-ID: <Zv9+GWM/r8+QxEEk@Asurada-Nvidia>
-References: <cover.1724776335.git.nicolinc@nvidia.com>
- <6348cc7a72ce9f2ac0e9caf9737e70177a01eb74.1724776335.git.nicolinc@nvidia.com>
- <35701c5e-030a-4f52-b6f6-ed18368fb2cd@amd.com>
+ Transport; Fri, 4 Oct 2024 05:33:59 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL6PEPF0001AB58.mail.protection.outlook.com (10.167.241.10) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8026.11 via Frontend Transport; Fri, 4 Oct 2024 05:33:59 +0000
+Received: from chalupa-d178host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 4 Oct
+ 2024 00:33:58 -0500
+From: Manali Shukla <manali.shukla@amd.com>
+To: <kvm@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+CC: <pbonzini@redhat.com>, <seanjc@google.com>, <shuah@kernel.org>,
+	<nikunj@amd.com>, <thomas.lendacky@amd.com>, <vkuznets@redhat.com>,
+	<manali.shukla@amd.com>, <bp@alien8.de>, <babu.moger@amd.com>
+Subject: [PATCH v3 0/4]  Add support for the Bus Lock Threshold
+Date: Fri, 4 Oct 2024 05:33:37 +0000
+Message-ID: <20241004053341.5726-1-manali.shukla@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <35701c5e-030a-4f52-b6f6-ed18368fb2cd@amd.com>
-X-NV-OnPremToCloud: ExternallySecured
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000044EE:EE_|BL3PR12MB6593:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7e6ace7a-4352-4f39-95e5-08dce4360fe4
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB58:EE_|IA1PR12MB8587:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8c7f0202-7e63-45f5-2865-08dce4362626
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|82310400026|376014|36860700013|1800799024;
+	BCL:0;ARA:13230040|82310400026|376014|1800799024|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?c3o1MTZEdjhRblJ3U2tSNUFFTVFZNmZhQkVYRlkzQlVtcjVNVXF1YWdseGJQ?=
- =?utf-8?B?dXZOTDljZndZSVZGdUpoMkN1SWJZeDV4T2YvK3ZkZGpaRmtNZ0JVelRJOUkr?=
- =?utf-8?B?MlFZTkIxUVhIVWt3ZFpOcUk4TTZvME93Yy8vd2tvMTRFeWhtTkFZbE0vSjc3?=
- =?utf-8?B?d1NDQkhUMnFYT3hBN3lJeG5ZNzJYdEkwcC9VRzdnRHpsQjdZQkV4a0xVNC9C?=
- =?utf-8?B?V21sZllCbDR0bFhyUXF4R0huTTZBUGhPVm4zR25yekErMzNGS1JuUDhlMUlW?=
- =?utf-8?B?TE9ENHBXMER1SFE3QmlUZUd1aU94enNSTGpQWkU4WGFKV0RyRldERHR3TWNC?=
- =?utf-8?B?QXFqNmdscTBKSzNYYnZNRllCV24vbzdFSmh2NmFac05qTThHbFBOUjMxeUlD?=
- =?utf-8?B?SnFJcnROQmZ5ZDZ5TE1xd0pXQUsxZlpDOUVkcTRBNUVXZndQWjhCTEFmZGZB?=
- =?utf-8?B?aVlrek5LeTZBd2lnd013UHlXbkZRZmViNDc3ZXgwVXI2eWZWaFNpWG54T3FD?=
- =?utf-8?B?NktIWFByV2FZVi8vdXB1dzFzNmttR0ViVkJwNlhKOE4vVTUzYVJsQ05hOWR5?=
- =?utf-8?B?OU50aThrVStWNFViZWlObjZ1M1ZUYzhtWERGMk85S3N4RVVKdGpEZVlhT1Fa?=
- =?utf-8?B?TW41L1ZxM2oyUU5COHd1VnNsWURhRUNTbHZ0SnhlVkM5Vjgzd1JsL1R3Mytt?=
- =?utf-8?B?RU1ZYmlaYXpjaDNYb25ldUdQVTkwa1YwL2RUa0JmWWFYdlk4WTBLOCs0TjJp?=
- =?utf-8?B?cHljd2xHVldhQkZaVW83ZVB5V0J1cDRYMEUwYnpGOWF2SkdCblIrR3FkMmVN?=
- =?utf-8?B?TjN4WS93OHNmYTZLc0tlU3Jkem5UdHdtU2ZhaUxlN2UvSDFScmdmbWsybHRK?=
- =?utf-8?B?dWlYbEdMVWVvWWM1L3FteE54UkdhNUR5UGZlaVBaakdOMnZkcTgwU1Q2WDRy?=
- =?utf-8?B?QlNWMGU3WFdZOTZScWZ4aGtJVzlVVzd6QTVGNTlYRlgrY1hKREQ4bDZDaFY4?=
- =?utf-8?B?aVBvMFVLUDIxbG1welRPOFZWYkE0Y1pqZXFQTEZTUStVU2haZklVZzZBTXZ1?=
- =?utf-8?B?dURrZ0VuZUtPOXQzd3BnK2kzcUl0bm1qYThsV3VxYWUycUtoeUpRcWRtWjBH?=
- =?utf-8?B?VzNwSkkvL0Y5RUQ5NTFWTFI4NjJQbVJJYVg2aWRNWkw5bUZDeW5mVU9rNFZZ?=
- =?utf-8?B?ZEREMk5RRjFDeW5pd2sxU3NzK1pVck1KQ0ZKRk9PeUZuZ0lNendnVnN2Z0pC?=
- =?utf-8?B?amtkSnFnb09yRk1TcUxsT2h0ejNNb3ZpYWhVdzJTQmswenhOYXVVOVpBNUxP?=
- =?utf-8?B?dk1Ua1FrQXRHczcxZEF5ekxSalhuOWtvNitQSFVKKzRGN1NIc2FVMFVjSWJ1?=
- =?utf-8?B?RkRsbVQrb3JwdjZkQmxLNzVvRXVNaFJVOUYxc3Q1aHoyYWpJUms2Y0N0N3Nx?=
- =?utf-8?B?ck04OEk5N0hxN0NUSTErV0ttSXFOT01vN3lLanBVcU9zbnlzaWh1KzNpaXUr?=
- =?utf-8?B?ZDkrcnVhWUJxTHhYWjRGZEZSKzdFRkNzeWRHcVUyL1M0N2YwMCsrbmUyTE9k?=
- =?utf-8?B?ZTFxTVdlbHlZYUFYL0U5M1B4VEE2c2FidU44eDczZU5lM2FOSHZ4RjRuNllQ?=
- =?utf-8?B?a3NsYnBwUFVMWWtsQ091OHRyK0E3NjhQVFdvdWNtNkE5OTlxTFJSMEluV1hn?=
- =?utf-8?B?WXdCNFVnT3dubGQyWUp1SExJZkJzODljcWFVWDFQcjZCUVVWcWY1YXQ4dDBO?=
- =?utf-8?B?Ykx4MXFTdU9HOWxmMmRrQ0VoTDhQMnVLQjRLSWkrR251RFlzcFVpL3ZORjNw?=
- =?utf-8?B?T0srOFFDc01EMnk0ZUR1dzM3SDgrUFZPWEJQSGNaUWZ5NGgzbmhVRjF6MmJU?=
- =?utf-8?Q?zCYw7B0eAvwCR?=
+	=?us-ascii?Q?Sk3vzlMR0FxXDIYy9JEPZvpPBTXC9upiBtPeWredE3eSwaznlrkIdNSF2DDe?=
+ =?us-ascii?Q?a5FB7CUPwRY3asO0nhSvN7la6vSpSm4Gu2QNMVHaZhGQ+tAs/9D7wZ1b9z3Z?=
+ =?us-ascii?Q?xfkyUnHmvCGKkNyEQIeuPILXBfP90bff62G30/BNkqcziH8sEU0jR7s4t/dR?=
+ =?us-ascii?Q?vseew5t3ITq6W24VvO/KiDf92dXI+AcxHLv84QHxpRLh6WNAoHHAHaCZJXys?=
+ =?us-ascii?Q?9oMa/GddwMQgb0mkzRrZ19gkvldd9z3Jwgelz0yFyFfpz9WT/Sns7jydznyx?=
+ =?us-ascii?Q?PRK5IDf/yeqkDAae09M1oSt0TZwXy+IEEUyYaG8PldV3agT5LDnWBEr39WAc?=
+ =?us-ascii?Q?VDCMywnBEg/Edi7cxef0Ty8Ttmy2Mvttq1QPfS1bndy7I9h7LjYhwnlSxRal?=
+ =?us-ascii?Q?C6WIODT56zAOFk7mP5pV4MabQQSiDqyiLdFlnOA4pFMtGXPoc3hkt7rWHb0O?=
+ =?us-ascii?Q?fnWHaE7E/ucMMK/wAftQOJgo9WuTDML6zy7sZFP+Yc09FGNY0Eq1TtagExel?=
+ =?us-ascii?Q?H/POrXjFd4WT62B1NTfkutx+p9GqnZS18xYOz24e0pf3bosyff4JsHuUiWCu?=
+ =?us-ascii?Q?OP80IzPxYjONc00r7jox/X8W+x3NeTixjxVZdbyRmNTm6zCAsX3/te+9640A?=
+ =?us-ascii?Q?oLtvhahzrZBhXaZ/5kH/l9j+/lXfTwNQ8l/VPy+UfWogqmvdAM/5anEjf5iE?=
+ =?us-ascii?Q?d9OS6WYcrrh8Q9JvxwMMNHpRacB08jhvwS0P8TXNAlgrf8mNS/Ezu9cw0igz?=
+ =?us-ascii?Q?du6aoFuTUFjUxl5EJRFUOmEzueZnOBf0FVXQkmN2ShDsajEHRIKn+Xs7BmML?=
+ =?us-ascii?Q?4niX1w61rTMagxMcUuE+rRUiAz5pNcbRg1cCbdmXBk+nrVe6P2KWc76EhWAY?=
+ =?us-ascii?Q?Oo/YOeE+9cCxXTOOL3U7DWrb11DwCbt+qMqPsKKHs6zO7ITcYAyuscW5b1sn?=
+ =?us-ascii?Q?Adc+SBDfYqkuJun+A49W12F0VP/dTYS0L6TvKmS/xJOImUIM+OuwMaAzpTtt?=
+ =?us-ascii?Q?0xGX0qosf3bfubD5S86twq9XN+md/Jve2a6Pi/Fufn61tOQyaGg5YJbXy98v?=
+ =?us-ascii?Q?HxYihA2C6U4WrFRact7BElCKhMlja6ZgHL9cuE8VUMSB3yg2EhKr7KU3lawt?=
+ =?us-ascii?Q?tEgCcftUQUY0yszv4EbSG1aI5YCC/Ntr9q2B5Q5KLfMkSYBoQecSOtF3XFRz?=
+ =?us-ascii?Q?H7gvN6bXdmWV+E0xD4usS6pay60RMcrsSo3hqQLH+NYtLHsy9K2Au7C578iu?=
+ =?us-ascii?Q?xQVkKss7FSoFikBIOo8ADEY1H8oEaAwTvvOcy3qhOH9XYSkhYVQZDIJJYTAW?=
+ =?us-ascii?Q?kLGJEVTLQXjKvlWbKhtxGnumUYeSaFL1eHOorbU/usVJUqd3v0t/oXedSfUX?=
+ =?us-ascii?Q?Tk/ZFnn5+HssiAvqH9vwVp09WPWe?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230040)(7416014)(82310400026)(376014)(36860700013)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2024 05:33:22.5148
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2024 05:33:59.8233
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7e6ace7a-4352-4f39-95e5-08dce4360fe4
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8c7f0202-7e63-45f5-2865-08dce4362626
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CO1PEPF000044EE.namprd05.prod.outlook.com
+	BL6PEPF0001AB58.namprd02.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6593
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8587
 
-On Fri, Oct 04, 2024 at 02:32:28PM +1000, Alexey Kardashevskiy wrote:
-> > +/**
-> > + * struct iommu_viommu_set_vdev_id - ioctl(IOMMU_VIOMMU_SET_VDEV_ID)
-> > + * @size: sizeof(struct iommu_viommu_set_vdev_id)
-> > + * @viommu_id: viommu ID to associate with the device to store its virtual ID
-> > + * @dev_id: device ID to set its virtual ID
-> > + * @__reserved: Must be 0
-> > + * @vdev_id: Virtual device ID
-> > + *
-> > + * Set a viommu-specific virtual ID of a device
-> > + */
-> > +struct iommu_viommu_set_vdev_id {
-> > +     __u32 size;
-> > +     __u32 viommu_id;
-> > +     __u32 dev_id;
-> 
-> Is this ID from vfio_device_bind_iommufd.out_devid?
+Misbehaving guests can cause bus locks to degrade the performance of
+a system. Non-WB (write-back) and misaligned locked RMW
+(read-modify-write) instructions are referred to as "bus locks" and
+require system wide synchronization among all processors to guarantee
+the atomicity. The bus locks can impose notable performance penalties
+for all processors within the system.
 
-Yes.
+Support for the Bus Lock Threshold is indicated by CPUID
+Fn8000_000A_EDX[29] BusLockThreshold=1, the VMCB provides a Bus Lock
+Threshold enable bit and an unsigned 16-bit Bus Lock Threshold count.
 
-> > +     __u32 __reserved;
-> > +     __aligned_u64 vdev_id;
-> 
-> What is the nature of this id? It is not the guest's BDFn, is it? The
+VMCB intercept bit
+    VMCB Offset     Bits    Function
+    14h             5       Intercept bus lock operations
 
-Not exactly but certainly can be related. Explaining below..
+Bus lock threshold count
+    VMCB Offset     Bits    Function
+    120h            15:0    Bus lock counter
 
-> code suggests it is ARM's "SID" == "stream ID" and "
+During VMRUN, the bus lock threshold count is fetched and stored in an
+internal count register.  Prior to executing a bus lock within the
+guest, the processor verifies the count in the bus lock register. If
+the count is greater than zero, the processor executes the bus lock,
+reducing the count. However, if the count is zero, the bus lock
+operation is not performed, and instead, a Bus Lock Threshold #VMEXIT
+is triggered to transfer control to the Virtual Machine Monitor (VMM).
 
-Yes. That's the first use case of that.
+A Bus Lock Threshold #VMEXIT is reported to the VMM with VMEXIT code
+0xA5h, VMEXIT_BUSLOCK. EXITINFO1 and EXITINFO2 are set to 0 on
+a VMEXIT_BUSLOCK.  On a #VMEXIT, the processor writes the current
+value of the Bus Lock Threshold Counter to the VMCB.
 
-> a device might be
-> able to generate multiple StreamIDs" (how, why?) 🤯 And these streams
-> seem to have nothing to do with PCIe IDE streams, right?
+More details about the Bus Lock Threshold feature can be found in AMD
+APM [1].
 
-PCI device only has one stream ID per its SMMU.
+v2 -> v3
+- Drop parch to add virt tag in /proc/cpuinfo.
+- Incorporated Tom's review comments.
 
-So the Stream ID is more like a channel ID or client ID from the
-SMMU (IOMMU) view. A PCI device's Stream ID can be calculated from
-the BDF numbers + the Stream-ID base of that PCI bus.
+v1 -> v2
+- Incorporated misc review comments from Sean.
+- Removed bus_lock_counter module parameter.
+- Set the value of bus_lock_counter to zero by default and reload the value by 1
+  in bus lock exit handler.
+- Add documentation for the behavioral difference for KVM_EXIT_BUS_LOCK.
+- Improved selftest for buslock to work on SVM and VMX.
+- Rewrite the commit messages.
+      
+Patches are prepared on kvm-next/next (efbc6bd090f4).
 
-That said, this is all about IOMMU. So, it is likely more natural
-to forward an IOMMU-specific ID (vStream ID for a vSMMU) v.s. BDF.
+Testing done:
+- Added a selftest for the Bus Lock Threshold functionality.
+- The bus lock threshold selftest has been tested on both Intel and AMD platforms.
+- Tested the Bus Lock Threshold functionality on SEV, SEV-ES, SEV-SNP guests.
+- Tested the Bus Lock Threshold functionality on nested guests.
 
-> For my SEV-TIO exercise ("trusted IO"), I am looking for a kernel
-> interface to pass the guest's BDFs for a specific host device (which is
-> passed through) and nothing in the kernel has any knowledge of it atm,
-> is this the right place, or another ioctl() is needed here?
-> 
-> Sorry, I am too ignorant about ARM :)
+v1: https://lore.kernel.org/kvm/20240709175145.9986-4-manali.shukla@amd.com/T/
+v2: https://lore.kernel.org/kvm/20241001063413.687787-4-manali.shukla@amd.com/T/
 
-We are reworking this ioctl to an IOMMU_VDEVICE_ALLOC cmd, meaning
-a virtual device allocation. A virtual device is another bond when
-an iommufd_device connects to an iommufd_viommu in the VM. The name
-"vDEVICE" and "virtual device" still need to go through discussion,
-so they aren't finalized. But the idea here is to have a structure
-to gather all virtualization information of the intersection of the
-device and the vIOMMU in the VM.
+[1]: AMD64 Architecture Programmer's Manual Pub. 24593, April 2024,
+     Vol 2, 15.14.5 Bus Lock Threshold.
+     https://bugzilla.kernel.org/attachment.cgi?id=306250
 
-On the other hand, BDF is very PCI specific yet IOMMU independent.
-E.g. it could exist for a PCI device even without a vIOMMU in the
-VM, i.e. there is no vDEVICE in such case. Right?
+Manali Shukla (2):
+  x86/cpufeatures: Add CPUID feature bit for the Bus Lock Threshold
+  KVM: X86: Add documentation about behavioral difference for
+    KVM_EXIT_BUS_LOCK
 
-So, if your use case relies on IOMMU and it is even a part of the
-IOMMU virtualization features, I think you are looking at the right
-place. And we should discuss how to incorporate that. Otherwise, I
-feel the struct vfio_pci might be the one to extend?
+Nikunj A Dadhania (2):
+  KVM: SVM: Enable Bus lock threshold exit
+  KVM: selftests: Add bus lock exit test
 
-> > +};
-> > +#define IOMMU_VIOMMU_SET_VDEV_ID _IO(IOMMUFD_TYPE, IOMMUFD_CMD_VIOMMU_SET_VDEV_ID)
-> > +
-> > +/**
-> > + * struct iommu_viommu_unset_vdev_id - ioctl(IOMMU_VIOMMU_UNSET_VDEV_ID)
-> > + * @size: sizeof(struct iommu_viommu_unset_vdev_id)
-> > + * @viommu_id: viommu ID associated with the device to delete its virtual ID
-> > + * @dev_id: device ID to unset its virtual ID
-> > + * @__reserved: Must be 0
-> > + * @vdev_id: Virtual device ID (for verification)
-> > + *
-> > + * Unset a viommu-specific virtual ID of a device
-> > + */
-> > +struct iommu_viommu_unset_vdev_id {
-> > +     __u32 size;
-> > +     __u32 viommu_id;
-> > +     __u32 dev_id;
-> > +     __u32 __reserved;
-> > +     __aligned_u64 vdev_id;
-> > +};
-> > +#define IOMMU_VIOMMU_UNSET_VDEV_ID _IO(IOMMUFD_TYPE, IOMMUFD_CMD_VIOMMU_UNSET_VDEV_ID)
-> >   #endif
-> 
-> Nit: "git format-patch -O orderfile" makes patches nicer by putting the
-> documentation first (.h before .c, in this case) with the "ordefile"
-> looking like this:
-> 
-> ===
-> *.txt
-> configure
-> *Makefile*
-> *.json
-> *.h
-> *.c
-> ===
+ Documentation/virt/kvm/api.rst                |   4 +
+ arch/x86/include/asm/cpufeatures.h            |   1 +
+ arch/x86/include/asm/svm.h                    |   5 +-
+ arch/x86/include/uapi/asm/svm.h               |   2 +
+ arch/x86/kvm/svm/nested.c                     |  10 ++
+ arch/x86/kvm/svm/svm.c                        |  27 ++++
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/x86_64/kvm_buslock_test.c   | 130 ++++++++++++++++++
+ 8 files changed, 179 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/kvm_buslock_test.c
 
-Interesting :)
 
-Will try it!
+base-commit: efbc6bd090f48ccf64f7a8dd5daea775821d57ec
+-- 
+2.34.1
 
-Thanks
-Nicolin
 
