@@ -1,191 +1,417 @@
-Return-Path: <linux-kselftest+bounces-19064-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19065-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DB99990F6B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 21:59:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B300990F74
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 22:00:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B11428219E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 19:59:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8463F1F24318
+	for <lists+linux-kselftest@lfdr.de>; Fri,  4 Oct 2024 20:00:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D7781DF720;
-	Fri,  4 Oct 2024 19:00:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EFBD1F8917;
+	Fri,  4 Oct 2024 19:02:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=krisman.be header.i=@krisman.be header.b="k+0KvPzq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AFFF12F375;
-	Fri,  4 Oct 2024 19:00:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E0121F8908;
+	Fri,  4 Oct 2024 19:02:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728068420; cv=none; b=JfkYR28cg+2AudU0TDgTOCE0yUQ3duKG3+/qv1JlbKogUAaY8wPJvWVfL5+l7lkLR5SVWmfUOjq33qdJkC+gJZ6W+iHdpDz0QaY//KUsRL/EivE/P/E+2bYh5QYa1vTDQGDjMoS/AXx1ssWBi58hcVhX0KxUYhg0d+Ui+Act1OE=
+	t=1728068548; cv=none; b=dRAdaR+hhkBsWQaIA+dINzAZwyyqjvUVXInlvo9lelq/8Ykbo4zz87Um6ojAiRrlzETWa0Or6PMRxH5P57waTTNpZhHbWIem11JsO7O9KYrFbsQf0egwiV1I82S7x8JRxq5W/XACip6foFCK7RccXQWLuD/Mew4aD/8VdYnNpPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728068420; c=relaxed/simple;
-	bh=SOKYJYKzZbDHyOEtbIb1irA4DK+VBkWWqh78oJuf3eM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tmwle0jRb8lDg8Lk4cv98GMg9YDXYMatyk/opYrOUwjRAWTzsdBQUmKSeVNVxyTKHFKNtNaUScwADGcVd0/wEDdFSX3rJIp4D2cN2M6ISzZx6Mb5qdj0HD4CItSdpbqhI6Ji97xxnkUXb8z0qr45VHKmlZAZOoyuOVmRsUgrOHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=manifault.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6cb3ba0a9a2so15504126d6.2;
-        Fri, 04 Oct 2024 12:00:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728068417; x=1728673217;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qkxm/OHPet7Zjw6QCsjdjVbVeK6Q7QSnuwybW1OxgWc=;
-        b=kdJEdvvy7lfWMTwmE8BnmKpslvbA/PCH5hgpATtcPrYZcEoWPLxE2PSxTcPG/HKyUo
-         hPrC4tcL9QiDrvCWZB7EqSBmZf0/ug9DYh6O6vIQ99NRGFCzwUknlV1uBSPit9cjIsFs
-         NGPVz9onvza8WlIR11938D9NlckOKSnqQhOAvWTdbxzNrUH/nubvkaHgYriYdI8I2pjC
-         /qmv+/sKOTPITOZfP/uvHgSHY/CyenjdxedMRKKfzoRecgPk/eaiya5Cgjnd/QFATgb4
-         8oioNyg+tD+ugRrFGmGFGNmhP8JC4z8JV4iz3WkKb3GNJjG1WiorUonMp6maUhaZxJ6M
-         uBww==
-X-Forwarded-Encrypted: i=1; AJvYcCVInmUXG0pwjImXgINzxopwjoh6GO9kPeufV/kFE7Iu9d688EfDpnF/V3Ty7iQQ+0rA0Co=@vger.kernel.org, AJvYcCVZM9BhbejM7TDUkw2ixs9bE1M1AJEHMfNyUbe14Hlsh/SA76UnFdaukzueGg13edQfsf0A30OdP2rSdGG5@vger.kernel.org, AJvYcCVeuGNjcWrburpGgySKY2rEv6qBXSdpg2OxcWhl3vBaPVJ9n/shdTlIKMD47262On/h8qkc3q3jp/qMELwaCgGj@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIdzfANL4DujAVrGfyDlk5MkpxKn8jdEUGWBYMNi2YnCYXfNed
-	Pc3iZ+KTZym2qZZGqMdQ3uuI1vhPnOrgc8jxabLcdC2PvNj5AoBS
-X-Google-Smtp-Source: AGHT+IHwmWhUNZLoKBZBzrHAuiK/CRzNPe6zvX+k5dVAbJhsyyQHmJcbtMkjFYFKuTouPQicMUcpxw==
-X-Received: by 2002:a05:6214:5503:b0:6c3:5833:260f with SMTP id 6a1803df08f44-6cb9a4eafe7mr45102326d6.39.1728068416859;
-        Fri, 04 Oct 2024 12:00:16 -0700 (PDT)
-Received: from maniforge (c-76-141-129-107.hsd1.il.comcast.net. [76.141.129.107])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cba47512bdsm1688556d6.88.2024.10.04.12.00.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Oct 2024 12:00:15 -0700 (PDT)
-Date: Fri, 4 Oct 2024 14:00:13 -0500
-From: David Vernet <void@manifault.com>
-To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
-Cc: Tejun Heo <tj@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-	bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
-	Anders Roxell <anders.roxell@linaro.org>
-Subject: Re: [PATCH] selftests: sched_ext: Add sched_ext as proper selftest
- target
-Message-ID: <20241004190013.GB56767@maniforge>
-References: <20241004094247.795385-1-bjorn@kernel.org>
+	s=arc-20240116; t=1728068548; c=relaxed/simple;
+	bh=l6JvoKpRdgfvV0dCjxUMZg3nh0Y6K15RX3qpNJjSzoQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=nYcgLYw1aBMHjn1KZaGt0DhvQxYx1gEgBqtXIawPU8OQXfjdsxmTVMqXm8P0J3928C4cQXLs8RyaV05x6/kEA3zu9RFNfF04EK/HPjmCVoV2KIlnMc6FjuC4IxbLrBTFotN/xKmfOubJcC91dN7KR/f3PDX7RnC0QhVnRWxF2g4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=krisman.be; spf=pass smtp.mailfrom=krisman.be; dkim=pass (2048-bit key) header.d=krisman.be header.i=@krisman.be header.b=k+0KvPzq; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=krisman.be
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=krisman.be
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 812DD240002;
+	Fri,  4 Oct 2024 19:02:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=krisman.be; s=gm1;
+	t=1728068544;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rATiV63PFZNca7MyjtMbfytVApwd1ZCe6rS5EGReR74=;
+	b=k+0KvPzq57+bhscakMinHuVrMgIRGG4FXykFWFeP1CVtXamKX5ltrMJHcch4UKTAhzbgRV
+	kxRL5dd5SZjfR69WvpZPYm/N47F1VyVWAZZSFl7xshNaMo8CPkrczJBzTaBsiWS/2k4SP4
+	Uaxv1gKhuXGwvtQoIxNkJAkJuVUi/jgwLin5kFMQj27s0H3M4+/3CdiE4UA3DkRpm2CgQj
+	jKKgaCxQL7mT4fZllEj5xL5sW0+7eVC3DfplzdgqP/MLPuL7j8JhA3j82/obKpxwjrDpQ6
+	hhklpFZ4K20GCirYgg3Egxlq1/tE+Kk3dlVYTWBO1tAzV/9FQcodxsGHIm80MQ==
+From: Gabriel Krisman Bertazi <gabriel@krisman.be>
+To: Pedro Orlando <porlando@lkcamp.dev>
+Cc: Gabriel Krisman Bertazi <krisman@kernel.org>,  David Gow
+ <davidgow@google.com>,  Shuah Khan <skhan@linuxfoundation.org>,
+  linux-fsdevel@vger.kernel.org,  ~lkcamp/patches@lists.sr.ht,
+  linux-kselftest@vger.kernel.org,  kunit-dev@googlegroups.com,  Gabriela
+ Bittencourt <gbittencourt@lkcamp.dev>,  Danilo Pereira
+ <dpereira@lkcamp.dev>
+Subject: Re: [PATCH v2 1/2] unicode: kunit: refactor selftest to kunit tests
+In-Reply-To: <20240928235825.96961-2-porlando@lkcamp.dev> (Pedro Orlando's
+	message of "Sat, 28 Sep 2024 20:58:26 -0300")
+References: <20240928235825.96961-1-porlando@lkcamp.dev>
+	<20240928235825.96961-2-porlando@lkcamp.dev>
+Date: Fri, 04 Oct 2024 15:02:21 -0400
+Message-ID: <87ed4vu1xe.fsf@mailhost.krisman.be>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xuk+u8UxomGOBld1"
-Content-Disposition: inline
-In-Reply-To: <20241004094247.795385-1-bjorn@kernel.org>
-User-Agent: Mutt/2.2.13 (00d56288) (2024-03-09)
+Content-Type: text/plain
+X-GND-Sasl: gabriel@krisman.be
 
+Pedro Orlando <porlando@lkcamp.dev> writes:
 
---xuk+u8UxomGOBld1
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Oct 04, 2024 at 11:42:46AM +0200, Bj=F6rn T=F6pel wrote:
-> From: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
-
-Thanks a lot Bj=F6rn for working on this.
-
-> The sched_ext selftests is missing proper cross-compilation support, a
-> proper target entry, and out-of-tree build support.
->=20
-> When building the kselftest suite, e.g.:
->=20
->   make ARCH=3Driscv CROSS_COMPILE=3Driscv64-linux-gnu- \
->     SKIP_TARGETS=3D"" O=3D/output/foo -C tools/testing/selftests install
->=20
-> The expectation is that the sched_ext is included, cross-built, and
-> placed into /output/foo.
->=20
-> Add CROSS_COMPILE, OUTPUT, and TARGETS support to the sched_ext
-> selftest.
->=20
-> Signed-off-by: Bj=F6rn T=F6pel <bjorn@rivosinc.com>
+> From: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
+>
+> Refactoring 'test' functions into kunit tests, to test utf-8 support in
+> unicode subsystem.
+>
+> This allows the utf8 tests to be run alongside the KUnit test suite
+> using kunit-tool, quickly compiling and running all desired tests as
+> part of the KUnit test suite, instead of compiling the selftest module
+> and loading it.
+>
+> The refactoring kept the original testing logic intact, while adopting a
+> testing pattern across different kernel modules and leveraging KUnit's
+> benefits.
+>
+> Co-developed-by: Pedro Orlando <porlando@lkcamp.dev>
+> Signed-off-by: Pedro Orlando <porlando@lkcamp.dev>
+> Co-developed-by: Danilo Pereira <dpereira@lkcamp.dev>
+> Signed-off-by: Danilo Pereira <dpereira@lkcamp.dev>
+> Signed-off-by: Gabriela Bittencourt <gbittencourt@lkcamp.dev>
 > ---
->  tools/testing/selftests/Makefile           |  1 +
->  tools/testing/selftests/sched_ext/Makefile | 59 +++++++++++++++-------
->  2 files changed, 41 insertions(+), 19 deletions(-)
->=20
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/M=
-akefile
-> index b38199965f99..20ee8a0b795c 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -88,6 +88,7 @@ TARGETS +=3D rlimits
->  TARGETS +=3D rseq
->  TARGETS +=3D rtc
->  TARGETS +=3D rust
-> +TARGETS +=3D sched_ext
->  TARGETS +=3D seccomp
->  TARGETS +=3D sgx
->  TARGETS +=3D sigaltstack
-> diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/s=
-elftests/sched_ext/Makefile
-> index 0754a2c110a1..66467a99184d 100644
-> --- a/tools/testing/selftests/sched_ext/Makefile
-> +++ b/tools/testing/selftests/sched_ext/Makefile
-> @@ -13,14 +13,8 @@ LLVM_SUFFIX :=3D $(LLVM)
+>
+> About the KUNIT readability, there are two ways of obtaing the results:
+> 1- using `_TRUE(test, func == ret)` which may make the code more
+> readable, but the error message less informative. For example:
+> `false, but expect true`; unless we use _TRUE_MSG(test, cond, msg) to
+> customize the error message (which is what we've done here).
+> 2- using `_EQ(test, func, ret)` which may be a little less readable, but the
+> default error message will carry more information. For example:
+> `64, but expected 0`
+>
+> ---
+>  fs/unicode/.kunitconfig    |   3 +
+>  fs/unicode/Kconfig         |   5 +-
+>  fs/unicode/Makefile        |   2 +-
+>  fs/unicode/utf8-selftest.c | 149 +++++++++++++++++--------------------
+>  4 files changed, 76 insertions(+), 83 deletions(-)
+>  create mode 100644 fs/unicode/.kunitconfig
+>
+> diff --git a/fs/unicode/.kunitconfig b/fs/unicode/.kunitconfig
+> new file mode 100644
+> index 000000000000..62dd5c171f9c
+> --- /dev/null
+> +++ b/fs/unicode/.kunitconfig
+> @@ -0,0 +1,3 @@
+> +CONFIG_KUNIT=y
+> +CONFIG_UNICODE=y
+> +CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST=y
+> diff --git a/fs/unicode/Kconfig b/fs/unicode/Kconfig
+> index da786a687fdc..4ad2c36550f1 100644
+> --- a/fs/unicode/Kconfig
+> +++ b/fs/unicode/Kconfig
+> @@ -10,6 +10,7 @@ config UNICODE
+>  	  be a separate loadable module that gets requested only when a file
+>  	  system actually use it.
+>  
+> -config UNICODE_NORMALIZATION_SELFTEST
+> +config UNICODE_NORMALIZATION_KUNIT_TEST
+
+This rename is missing a spot at the bottom of utf8norm.c:
+
+#ifdef CONFIG_UNICODE_NORMALIZATION_SELFTEST_MODULE
+EXPORT_SYMBOL_GPL(utf8version_is_supported);
+EXPORT_SYMBOL_GPL(utf8nlen);
+EXPORT_SYMBOL_GPL(utf8ncursor);
+EXPORT_SYMBOL_GPL(utf8byte);
+#endif
+
+Which is needed when UNICODE_NORMALIZATION_KUNIT_TEST=m.
+
+>  	tristate "Test UTF-8 normalization support"
+> -	depends on UNICODE
+> +	depends on UNICODE && KUNIT
+> +	default KUNIT_ALL_TESTS
+> diff --git a/fs/unicode/Makefile b/fs/unicode/Makefile
+> index e309afe2b2bb..37bbcbc628a1 100644
+> --- a/fs/unicode/Makefile
+> +++ b/fs/unicode/Makefile
+> @@ -4,7 +4,7 @@ ifneq ($(CONFIG_UNICODE),)
+>  obj-y			+= unicode.o
 >  endif
-> =20
->  CC :=3D $(LLVM_PREFIX)clang$(LLVM_SUFFIX) $(CLANG_FLAGS) -fintegrated-as
-> -else
-> -CC :=3D gcc
-
-Given that we're including ../lib.mk, can we just get rid of this whole blo=
-ck?
-
->  endif # LLVM
-> =20
-> -ifneq ($(CROSS_COMPILE),)
-> -$(error CROSS_COMPILE not supported for scx selftests)
-> -endif # CROSS_COMPILE
+>  obj-$(CONFIG_UNICODE)	+= utf8data.o
+> -obj-$(CONFIG_UNICODE_NORMALIZATION_SELFTEST) += utf8-selftest.o
+> +obj-$(CONFIG_UNICODE_NORMALIZATION_KUNIT_TEST) += utf8-selftest.o
+>  
+>  unicode-y := utf8-norm.o utf8-core.o
+>  
+> diff --git a/fs/unicode/utf8-selftest.c b/fs/unicode/utf8-selftest.c
+> index 600e15efe9ed..52ab68ef2bbc 100644
+> --- a/fs/unicode/utf8-selftest.c
+> +++ b/fs/unicode/utf8-selftest.c
+> @@ -1,38 +1,18 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+> - * Kernel module for testing utf-8 support.
+> + * KUnit tests for utf-8 support.
+>   *
+>   * Copyright 2017 Collabora Ltd.
+>   */
+>  
+> -#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 > -
->  CURDIR :=3D $(abspath .)
->  REPOROOT :=3D $(abspath ../../../..)
->  TOOLSDIR :=3D $(REPOROOT)/tools
-> @@ -34,18 +28,39 @@ GENHDR :=3D $(GENDIR)/autoconf.h
->  SCXTOOLSDIR :=3D $(TOOLSDIR)/sched_ext
->  SCXTOOLSINCDIR :=3D $(TOOLSDIR)/sched_ext/include
-> =20
-> -OUTPUT_DIR :=3D $(CURDIR)/build
-> +ifeq (,$(OUTPUT))
-> +OUTPUT :=3D $(CURDIR)/build
-> +RUNNER_DIR :=3D $(CURDIR)
-> +else
-> +OUTPUT_DIR :=3D $(OUTPUT)
+> -#include <linux/module.h>
+> -#include <linux/printk.h>
+>  #include <linux/unicode.h>
+> -#include <linux/dcache.h>
+> +#include <kunit/test.h>
+>  
+>  #include "utf8n.h"
+>  
+> -static unsigned int failed_tests;
+> -static unsigned int total_tests;
+> -
+>  /* Tests will be based on this version. */
+>  #define UTF8_LATEST	UNICODE_AGE(12, 1, 0)
+>  
+> -#define _test(cond, func, line, fmt, ...) do {				\
+> -		total_tests++;						\
+> -		if (!cond) {						\
+> -			failed_tests++;					\
+> -			pr_err("test %s:%d Failed: %s%s",		\
+> -			       func, line, #cond, (fmt?":":"."));	\
+> -			if (fmt)					\
+> -				pr_err(fmt, ##__VA_ARGS__);		\
+> -		}							\
+> -	} while (0)
+> -#define test_f(cond, fmt, ...) _test(cond, __func__, __LINE__, fmt, ##__VA_ARGS__)
+> -#define test(cond) _test(cond, __func__, __LINE__, "")
+> -
+>  static const struct {
+>  	/* UTF-8 strings in this vector _must_ be NULL-terminated. */
+>  	unsigned char str[10];
+> @@ -170,69 +150,74 @@ static int utf8cursor(struct utf8cursor *u8c, const struct unicode_map *um,
+>  	return utf8ncursor(u8c, um, n, s, (unsigned int)-1);
+>  }
+>  
+> -static void check_utf8_nfdi(struct unicode_map *um)
+> +static void check_utf8_nfdi(struct kunit *test)
+>  {
+>  	int i;
+>  	struct utf8cursor u8c;
+> +	struct unicode_map *um = test->priv;
+>  
+>  	for (i = 0; i < ARRAY_SIZE(nfdi_test_data); i++) {
+>  		int len = strlen(nfdi_test_data[i].str);
+>  		int nlen = strlen(nfdi_test_data[i].dec);
+>  		int j = 0;
+>  		unsigned char c;
+> +		int ret;
+>  
+> -		test((utf8len(um, UTF8_NFDI, nfdi_test_data[i].str) == nlen));
+> -		test((utf8nlen(um, UTF8_NFDI, nfdi_test_data[i].str, len) ==
+> -			nlen));
+> +		KUNIT_EXPECT_EQ(test, utf8len(um, UTF8_NFDI, nfdi_test_data[i].str), nlen);
+> +		KUNIT_EXPECT_EQ(test, utf8nlen(um, UTF8_NFDI, nfdi_test_data[i].str, len),
+> +				nlen);
+>  
+> -		if (utf8cursor(&u8c, um, UTF8_NFDI, nfdi_test_data[i].str) < 0)
+> -			pr_err("can't create cursor\n");
+> +
+> +		ret = utf8cursor(&u8c, um, UTF8_NFDI, nfdi_test_data[i].str);
+> +		KUNIT_EXPECT_TRUE_MSG(test, ret >= 0, "Can't create cursor\n");
+>  
+>  		while ((c = utf8byte(&u8c)) > 0) {
+> -			test_f((c == nfdi_test_data[i].dec[j]),
+> -			       "Unexpected byte 0x%x should be 0x%x\n",
+> -			       c, nfdi_test_data[i].dec[j]);
+> +			KUNIT_EXPECT_EQ_MSG(test, c, nfdi_test_data[i].dec[j],
+> +					    "Unexpected byte 0x%x should be 0x%x\n",
+> +					    c, nfdi_test_data[i].dec[j]);
+>  			j++;
+>  		}
+>  
+> -		test((j == nlen));
+> +		KUNIT_EXPECT_EQ(test, j, nlen);
+>  	}
+>  }
+>  
+> -static void check_utf8_nfdicf(struct unicode_map *um)
+> +static void check_utf8_nfdicf(struct kunit *test)
+>  {
+>  	int i;
+>  	struct utf8cursor u8c;
+> +	struct unicode_map *um = test->priv;
+>  
+>  	for (i = 0; i < ARRAY_SIZE(nfdicf_test_data); i++) {
+>  		int len = strlen(nfdicf_test_data[i].str);
+>  		int nlen = strlen(nfdicf_test_data[i].ncf);
+>  		int j = 0;
+> +		int ret;
+>  		unsigned char c;
+>  
+> -		test((utf8len(um, UTF8_NFDICF, nfdicf_test_data[i].str) ==
+> -				nlen));
+> -		test((utf8nlen(um, UTF8_NFDICF, nfdicf_test_data[i].str, len) ==
+> -				nlen));
+> +		KUNIT_EXPECT_EQ(test, utf8len(um, UTF8_NFDICF, nfdicf_test_data[i].str),
+> +				nlen);
+> +		KUNIT_EXPECT_EQ(test, utf8nlen(um, UTF8_NFDICF, nfdicf_test_data[i].str, len),
+> +				nlen);
+>  
+> -		if (utf8cursor(&u8c, um, UTF8_NFDICF,
+> -				nfdicf_test_data[i].str) < 0)
+> -			pr_err("can't create cursor\n");
+> +		ret = utf8cursor(&u8c, um, UTF8_NFDICF, nfdicf_test_data[i].str);
+> +		KUNIT_EXPECT_TRUE_MSG(test, ret >= 0, "Can't create cursor\n");
+>  
+>  		while ((c = utf8byte(&u8c)) > 0) {
+> -			test_f((c == nfdicf_test_data[i].ncf[j]),
+> -			       "Unexpected byte 0x%x should be 0x%x\n",
+> -			       c, nfdicf_test_data[i].ncf[j]);
+> +			KUNIT_EXPECT_EQ_MSG(test, c, nfdicf_test_data[i].ncf[j],
+> +					    "Unexpected byte 0x%x should be 0x%x\n",
+> +					    c, nfdicf_test_data[i].ncf[j]);
+>  			j++;
+>  		}
+>  
+> -		test((j == nlen));
+> +		KUNIT_EXPECT_EQ(test, j, nlen);
+>  	}
+>  }
+>  
+> -static void check_utf8_comparisons(struct unicode_map *table)
+> +static void check_utf8_comparisons(struct kunit *test)
+>  {
+>  	int i;
+> +	struct unicode_map *um = test->priv;
+>  
+>  	for (i = 0; i < ARRAY_SIZE(nfdi_test_data); i++) {
+>  		const struct qstr s1 = {.name = nfdi_test_data[i].str,
+> @@ -240,8 +225,9 @@ static void check_utf8_comparisons(struct unicode_map *table)
+>  		const struct qstr s2 = {.name = nfdi_test_data[i].dec,
+>  					.len = sizeof(nfdi_test_data[i].dec)};
+>  
+> -		test_f(!utf8_strncmp(table, &s1, &s2),
+> -		       "%s %s comparison mismatch\n", s1.name, s2.name);
+> +		/* strncmp returns 0 when strings are equal */
+> +		KUNIT_EXPECT_TRUE_MSG(test, utf8_strncmp(um, &s1, &s2) == 0,
+> +				    "%s %s comparison mismatch\n", s1.name, s2.name);
+>  	}
+>  
+>  	for (i = 0; i < ARRAY_SIZE(nfdicf_test_data); i++) {
+> @@ -250,62 +236,65 @@ static void check_utf8_comparisons(struct unicode_map *table)
+>  		const struct qstr s2 = {.name = nfdicf_test_data[i].ncf,
+>  					.len = sizeof(nfdicf_test_data[i].ncf)};
+>  
+> -		test_f(!utf8_strncasecmp(table, &s1, &s2),
+> -		       "%s %s comparison mismatch\n", s1.name, s2.name);
+> +		/* strncasecmp returns 0 when strings are equal */
+> +		KUNIT_EXPECT_TRUE_MSG(test, utf8_strncasecmp(um, &s1, &s2) == 0,
+> +				    "%s %s comparison mismatch\n", s1.name, s2.name);
+>  	}
+>  }
+>  
+> -static void check_supported_versions(struct unicode_map *um)
+> +static void check_supported_versions(struct kunit *test)
+>  {
+> +	struct unicode_map *um = test->priv;
+>  	/* Unicode 7.0.0 should be supported. */
+> -	test(utf8version_is_supported(um, UNICODE_AGE(7, 0, 0)));
+> +	KUNIT_EXPECT_TRUE(test, utf8version_is_supported(um, UNICODE_AGE(7, 0, 0)));
+>  
+>  	/* Unicode 9.0.0 should be supported. */
+> -	test(utf8version_is_supported(um, UNICODE_AGE(9, 0, 0)));
+> +	KUNIT_EXPECT_TRUE(test, utf8version_is_supported(um, UNICODE_AGE(9, 0, 0)));
+>  
+>  	/* Unicode 1x.0.0 (the latest version) should be supported. */
+> -	test(utf8version_is_supported(um, UTF8_LATEST));
+> +	KUNIT_EXPECT_TRUE(test, utf8version_is_supported(um, UTF8_LATEST));
+>  
+>  	/* Next versions don't exist. */
+> -	test(!utf8version_is_supported(um, UNICODE_AGE(13, 0, 0)));
+> -	test(!utf8version_is_supported(um, UNICODE_AGE(0, 0, 0)));
+> -	test(!utf8version_is_supported(um, UNICODE_AGE(-1, -1, -1)));
+> +	KUNIT_EXPECT_FALSE(test, utf8version_is_supported(um, UNICODE_AGE(13, 0, 0)));
+> +	KUNIT_EXPECT_FALSE(test, utf8version_is_supported(um, UNICODE_AGE(0, 0, 0)));
+> +	KUNIT_EXPECT_FALSE(test, utf8version_is_supported(um, UNICODE_AGE(-1, -1, -1)));
+>  }
+>  
+> -static int __init init_test_ucd(void)
+> +static struct kunit_case unicode_normalization_test_cases[] = {
+> +	KUNIT_CASE(check_supported_versions),
+> +	KUNIT_CASE(check_utf8_comparisons),
+> +	KUNIT_CASE(check_utf8_nfdicf),
+> +	KUNIT_CASE(check_utf8_nfdi),
+> +	{}
+> +};
+> +
+> +static int init_test_ucd(struct kunit *test)
+>  {
+> -	struct unicode_map *um;
+> +	struct unicode_map *um = utf8_load(UTF8_LATEST);
+>  
+> -	failed_tests = 0;
+> -	total_tests = 0;
+> +	test->priv = um;
+>  
+> -	um = utf8_load(UTF8_LATEST);
+> -	if (IS_ERR(um)) {
+> -		pr_err("%s: Unable to load utf8 table.\n", __func__);
+> -		return PTR_ERR(um);
+> -	}
+> +	KUNIT_EXPECT_EQ_MSG(test, IS_ERR(um), 0,
+> +			    "%s: Unable to load utf8 table.\n", __func__);
+>  
+> -	check_supported_versions(um);
+> -	check_utf8_nfdi(um);
+> -	check_utf8_nfdicf(um);
+> -	check_utf8_comparisons(um);
+> -
+> -	if (!failed_tests)
+> -		pr_info("All %u tests passed\n", total_tests);
+> -	else
+> -		pr_err("%u out of %u tests failed\n", failed_tests,
+> -		       total_tests);
+> -	utf8_unload(um);
+>  	return 0;
+>  }
+>  
+> -static void __exit exit_test_ucd(void)
+> +static void exit_test_ucd(struct kunit *test)
+>  {
+> +	utf8_unload(test->priv);
+>  }
+>  
+> -module_init(init_test_ucd);
+> -module_exit(exit_test_ucd);
+> +static struct kunit_suite unicode_normalization_test_suite = {
+> +	.name = "unicode_normalization",
+> +	.test_cases = unicode_normalization_test_cases,
+> +	.init = init_test_ucd,
+> +	.exit = exit_test_ucd,
+> +};
+> +
+> +kunit_test_suite(unicode_normalization_test_suite);
+> +
+>  
+>  MODULE_AUTHOR("Gabriel Krisman Bertazi <krisman@collabora.co.uk>");
+> -MODULE_DESCRIPTION("Kernel module for testing utf-8 support");
+> +MODULE_DESCRIPTION("KUnit tests for utf-8 support.");
+>  MODULE_LICENSE("GPL");
 
-This breaks if you use make from the selftests/sched_ext directory.  AFAICT=
- it
-looks like OUTPUT is always set in ../lib.mk, so we always go to the OUTPUT=
-_DIR
-:=3D $(CURDIR) branch. Because of that, running `make clean` will delete the
-whole sched_ext selftests directory. Also, did you mean for the first branc=
-h to
-be:
-
-+OUTPUT_DIR :=3D $(CURDIR)/build
-
-as opposed to:
-
-> +OUTPUT :=3D $(CURDIR)/build
-
-[...]
-
-Thanks,
-David
-
---xuk+u8UxomGOBld1
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQRBxU1So5MTLwphjdFZ5LhpZcTzZAUCZwA7PQAKCRBZ5LhpZcTz
-ZPoZAP9bSuKYYs994wmUp8WMfOXDiFGe8xsav/5htQkIbRVslwD+OudAqVtsa2Qe
-PbwPgF0KtahM0Aa0bMGJ3l9vyX7aTAw=
-=t/6n
------END PGP SIGNATURE-----
-
---xuk+u8UxomGOBld1--
+-- 
+Gabriel Krisman Bertazi
 
