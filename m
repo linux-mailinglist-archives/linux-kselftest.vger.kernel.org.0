@@ -1,75 +1,76 @@
-Return-Path: <linux-kselftest+bounces-19087-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19088-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3E5399147D
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2024 07:30:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B30799147F
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2024 07:30:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6C42EB20EE1
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2024 05:30:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DADE1C21EF8
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2024 05:30:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC7746F305;
-	Sat,  5 Oct 2024 05:29:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C67912FB34;
+	Sat,  5 Oct 2024 05:29:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BO8C2kHk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B5qUAZlA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A57839FC1;
-	Sat,  5 Oct 2024 05:29:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E23056B8C;
+	Sat,  5 Oct 2024 05:29:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728106191; cv=none; b=RSmPeDmxiKKvGlfLjdPJMeB/xgvfO3ogSzQavNfMDUiZ9X50qcPf6v8aBXbySO8YpJ4n8QUgE2vrMYLdMp4gorpU9mNI7fXo+PSXZ7HdpHBWp7S+HXdNSszKhdrKTvCK+4bCqbMw5IvED1VFDRKSrFrATJkGZwS4V8ruCilU4gI=
+	t=1728106193; cv=none; b=RxVaeW3XL8/wWKAk6+zqD8tGc6TO3p01ARHxih7ZA74iGhruwasBbGuyCMeXUSx+bZcKI3SQt+c25xgbr78WnEFyGPjV+GVylr2UzYLAKFRHv2zETUBwwoepxlGSiegh64RSHC0sa1ZG50AhkbOCFfklVKDN+8zmA5PIZ9P5x3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728106191; c=relaxed/simple;
-	bh=GhQP3J2nKwfiXrLOqCxmXd7UQTbYFkQpLCYaHd5lsPg=;
+	s=arc-20240116; t=1728106193; c=relaxed/simple;
+	bh=8790Q/Q1L9GpIQvA++SYhF21GrVeItoSfRTYmLGUJdc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=b3yvgVhaSM+0x2wdXMOYxylgCbJz5ROOgYPlNjadJnL7GkVn7S6rVmJ29EYK9yBE60bfDXD0O31sPAuEESCdJW7TSzI0whTxZqUHpNIznRkegIbLnnpHQB5tjq4HccyiRvYxAb2jdckLg+73rf3Spx9Q5n33dIavUs1xGNILp1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BO8C2kHk; arc=none smtp.client-ip=209.85.128.54
+	 In-Reply-To:To:Cc; b=d/NSXAonMJG0LJ3f3KAhqV1Gra2PhsP33pCIWsde2Bo5a5HrLjDhCG8LbFP7h+P/Jj+CgRzCjFd5emVIiKwfCqoR2h5UYE7KK+akq0aoqV89OhkOAgfpRVtMkSbPagph644WNTRHnS1BPvCMJQYxC+yrdlRWXHp7AD4Y27wWFIc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B5qUAZlA; arc=none smtp.client-ip=209.85.128.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-42cae4eb026so27363935e9.0;
-        Fri, 04 Oct 2024 22:29:49 -0700 (PDT)
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-42cb0f28bfbso24640225e9.1;
+        Fri, 04 Oct 2024 22:29:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728106188; x=1728710988; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728106190; x=1728710990; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=DvPOQYJRyRd7U7aH4BgtwF0snD1det/GMDLsQ3VXPSE=;
-        b=BO8C2kHkck/XIAiDooBGUfTU5TCAS2jNKrGvuhvNfPiaPr1UzVvJEcKFsZGjizR7ay
-         Swj8lGdw56ZY5kD+yokXL3JAhwiDM2BLp/+8Z7en5vme0BMOOyMDAvMxqSasxuXc8IGT
-         Z+jhNGizLWZFpdFnKDrqbDi1oRQAwmiWhyQhGNppOS5k6196A01aI7M6JIs024THh5mS
-         w2DEVIJXvv3UNimkF3GlbhKJ0ojOdNUWq1Bm34MCyhf1KyD3nmdwE1bcWaOmqfwTbSoH
-         GiakDJKe/tt1IqqdW5hWKeIolAbeqMnDrAkshuCwJh2rwNjDxi0YFMPTb8pWG7hQOYhV
-         BF+Q==
+        bh=FfTolaWUR5Q7eogVqqR9oLr+YzOGV80VHcoSRCsh1YQ=;
+        b=B5qUAZlA/L79im4QUcQuo+47rLT4ZCjKQbtkKBlo5RTV2kS0P8ic8Xzv3SnCu1axEd
+         mJ9fpWsAGE6c+6AQ5HnGlftif5qO6WL7JUDg4VkafZW4kPkqR4nt6+N/dTOExbHHCiLA
+         pU+cm1VyUkh3A+1rrONS72ZUq+VbRs/kcyGYUDIYiVnWVlaZGdFv9ifRLqWopxayw1iy
+         9OG5b2ZVocpHgh5Ru5c3tNf2oEUBV+xjy7jskvhJ16S9BaZbtbst1+l55ijOvTHrx68e
+         uM5S+cRI7vAhGwg0JKiK0F+qKkz1JSuMiZJE2FyeP/LzK/Ha5CxUUjpCEeg9hQlZLZye
+         Ehwg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728106188; x=1728710988;
+        d=1e100.net; s=20230601; t=1728106190; x=1728710990;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DvPOQYJRyRd7U7aH4BgtwF0snD1det/GMDLsQ3VXPSE=;
-        b=rHuxsnJwZvEiWxhqelIynmxUPuDRYAgeR6qU8vDfbml0/4B7F71M9N6GlZ0WfZzaqz
-         jJ3T1GqxfoSVijdKQmRwjLNOli/T7eXATzIR5RevxFGShxPQhvIzEK7FAprhbfrNBXSC
-         3TeL+t4i/rAso0DlDDfg5o2Yn0B+5eeXqcwoI7F3kWeOJd2Ya7FElzxwD9gshN6777xB
-         g+00cBAoctq7CPwrqKx7USRR48leJkDoq5eo7fNNh29+ULgWo2v4H/YJU4lfMU+3fQZu
-         2etdGMETEMjaljiDStCULf1zyvh8q/fzvJnRcrQQlT8DRaNNook5ihieXSWLlZdxZZcU
-         cO6A==
-X-Forwarded-Encrypted: i=1; AJvYcCVR2DXay07PsKQjOLtvvYoOqlYnPkOZPBK1+euXR3Lh99YorvjPaEQ4iFdkD1bUXi+BG7NeUslogkGUy/M=@vger.kernel.org, AJvYcCVfrFyqnZ9DMdxJNx0QuybiN3HthBAoK+CYCq4wHTkKuelhxrCB5PxQGaAT0l/dBhrQc0Ti0j77kOzgiA==@vger.kernel.org, AJvYcCXU144Lcb1D7TLD1AoPe18/FI+sJTbPIY7iw3UfESXHaq/69AGuwLUGCYppGLmI57ko9stRxaGCxA9PtNn/S42r@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMjAJjEuehJMQ+YSM8DKq2isUee0HnoeVftCcS//AOsjafExiR
-	ZXtu8uDOI0opPRdQTczcRVg1oqGgSzRM6WNfqUnFaiDjUBtWQyCF
-X-Google-Smtp-Source: AGHT+IHs040QHXHGwc6YYq/WXRpFdCqLNZLLjxrMiIvQ4JlAVjsy5SjLx0mIEOB7wUcbyIykPy43Ng==
-X-Received: by 2002:a05:600c:4ecb:b0:42e:93eb:ca26 with SMTP id 5b1f17b1804b1-42f85aa9258mr38062385e9.11.1728106188083;
-        Fri, 04 Oct 2024 22:29:48 -0700 (PDT)
+        bh=FfTolaWUR5Q7eogVqqR9oLr+YzOGV80VHcoSRCsh1YQ=;
+        b=RKDt1f/3Ji3ljvS5zsjFElfCCBiMTHuzAFpfd1Nv26TU4ub7XlReU1UAiwRuW2ZiDg
+         wQ7Pb0gFWNbCHJ+j2m0OM/d+cpKosT45xC7ss72RzpyqIIHPdYN30om4stMUSt8OIpRx
+         ceNdN35sV9EiGsfSRpazU1WXKeJY709bnlk0HK6dCKlqGtkbYaFDDTuiYO4Tq7hLxTHd
+         FcRMJbc9dC0l8m6XX7KLHK5ki8DAb5/aEANsiS2uCzDoW/S3JPQWNaAOxs9DKAkNcY1w
+         oT1nQvXfTiJQbldooHqfa9mLLY70gWtp2F72SORKudHrFPJlm2alwYU8zuOudfPk5wOK
+         Bt+A==
+X-Forwarded-Encrypted: i=1; AJvYcCUUdbS2mSQAjzDxUCropMDi3HaQbcRgS8Ny7nH6bfA7caorsMJL6jvv1OCHGm1tcmAqtGWCYpoboV+AaYyb0XqG@vger.kernel.org, AJvYcCW380pPHgBmrMJ/ZJONUW7ZTezXP4YiGl/2cHng4raJAFFhI3SfY5EVOyNDofd4PB8nfbfaJuR5AaXLXA==@vger.kernel.org, AJvYcCXOxvelwCacF7NvlHzFnIoOrukYmqOT/gITLWWOoVenqdxskDRBfd5L26y0vYIm8Act8r5Rj8eYHaKFyeo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgTtv8VWFR9UaFJxSRlrTINYn429jZ+3xC7tYjcAmr9fAPwn85
+	CUNHc6bQWjA1Ps//HSFOP5qOGB5kjTYbzL1wew0JfvFv3G6ikHXk
+X-Google-Smtp-Source: AGHT+IEiiKV2X+DFQ18qbBAB5KxJpAfXKOAQHXiJYlgTQ7qEjXUbETWXjNl0bgLzoKFteDYRrg00oQ==
+X-Received: by 2002:a7b:c8d6:0:b0:42c:b22e:fc23 with SMTP id 5b1f17b1804b1-42f8a01e691mr10715685e9.15.1728106189476;
+        Fri, 04 Oct 2024 22:29:49 -0700 (PDT)
 Received: from [127.0.1.1] (ip5f5ac341.dynamic.kabel-deutschland.de. [95.90.195.65])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42f89ed952asm13103105e9.45.2024.10.04.22.29.46
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-42f89ed952asm13103105e9.45.2024.10.04.22.29.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 04 Oct 2024 22:29:47 -0700 (PDT)
+        Fri, 04 Oct 2024 22:29:48 -0700 (PDT)
 From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date: Sat, 05 Oct 2024 07:29:40 +0200
-Subject: [PATCH net v2 1/3] selftests: net: add msg_oob to gitignore
+Date: Sat, 05 Oct 2024 07:29:41 +0200
+Subject: [PATCH net v2 2/3] selftests: net: rds: add include.sh to
+ EXTRA_CLEAN
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,7 +79,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241005-net-selftests-gitignore-v2-1-3a0b2876394a@gmail.com>
+Message-Id: <20241005-net-selftests-gitignore-v2-2-3a0b2876394a@gmail.com>
 References: <20241005-net-selftests-gitignore-v2-0-3a0b2876394a@gmail.com>
 In-Reply-To: <20241005-net-selftests-gitignore-v2-0-3a0b2876394a@gmail.com>
 To: "David S. Miller" <davem@davemloft.net>, 
@@ -89,34 +90,36 @@ Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org, 
  rds-devel@oss.oracle.com, Javier Carrasco <javier.carrasco.cruz@gmail.com>
 X-Mailer: b4 0.14-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1728106184; l=629;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1728106184; l=852;
  i=javier.carrasco.cruz@gmail.com; s=20240312; h=from:subject:message-id;
- bh=GhQP3J2nKwfiXrLOqCxmXd7UQTbYFkQpLCYaHd5lsPg=;
- b=IlvSfmfV/hWgk/JqrXQ3SjlT5PHzqi2dhcaOBgH/hnjY0Q5lnayClcUZBbMRsl4BKvK8A1hLp
- z+VH61R/vTHCES+IvlkZB711aY8lOGsC2B7o/zKZmuVzYJmOWlNBjf1
+ bh=8790Q/Q1L9GpIQvA++SYhF21GrVeItoSfRTYmLGUJdc=;
+ b=Ev9uEdDejL/eR68OQnFj6mhsBC+kqAvTslFI/lXRqBFNuW3X5AwUFZ89W5KYkenVmWkBNVwaM
+ qJM4xppVYB5BuF1n9q9pygcIu8VGSoECgGgiULjzfiYUQVsMhITzaC6
 X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
  pk=lzSIvIzMz0JhJrzLXI0HAdPwsNPSSmEn6RbS+PTS9aQ=
 
-This executable is missing from the corresponding gitignore file.
-Add msg_oob to the net gitignore list.
+The include.sh file is generated when building the net/rds selftests,
+but there is no rule to delete it with the clean target. Add the file to
+EXTRA_CLEAN in order to remove it when required.
 
+Reviewed-by: Allison Henderson <allison.henderson@oracle.com>
 Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 ---
- tools/testing/selftests/net/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/net/rds/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
-index 1c04c780db66..9dcdff533414 100644
---- a/tools/testing/selftests/net/.gitignore
-+++ b/tools/testing/selftests/net/.gitignore
-@@ -17,6 +17,7 @@ ipv6_flowlabel
- ipv6_flowlabel_mgr
- log.txt
- msg_zerocopy
-+msg_oob
- ncdevmem
- nettest
- psock_fanout
+diff --git a/tools/testing/selftests/net/rds/Makefile b/tools/testing/selftests/net/rds/Makefile
+index cf30307a829b..1803c39dbacb 100644
+--- a/tools/testing/selftests/net/rds/Makefile
++++ b/tools/testing/selftests/net/rds/Makefile
+@@ -8,6 +8,6 @@ TEST_PROGS := run.sh \
+ 
+ TEST_FILES := include.sh
+ 
+-EXTRA_CLEAN := /tmp/rds_logs
++EXTRA_CLEAN := /tmp/rds_logs include.sh
+ 
+ include ../../lib.mk
 
 -- 
 2.43.0
