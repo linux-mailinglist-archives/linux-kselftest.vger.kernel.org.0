@@ -1,128 +1,119 @@
-Return-Path: <linux-kselftest+bounces-19112-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19113-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5369B99171F
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2024 16:03:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73C7899173F
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2024 16:14:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 851391C21441
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2024 14:03:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A0D31C21531
+	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2024 14:14:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDEE4156243;
-	Sat,  5 Oct 2024 14:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02FFF1509BF;
+	Sat,  5 Oct 2024 14:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iuIsvClV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t7TcEjn8"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B49AA155C96;
-	Sat,  5 Oct 2024 14:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C090813A24E;
+	Sat,  5 Oct 2024 14:14:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728136932; cv=none; b=T32bsNW5V0zeZS4FJV/grAzBDhx9tVzbfqcqWbcQQIvlMr5JPSvZ2Ud9WMi0C8hhAIqFp1f1dYu93BAvHsILvapSgD5WcuMAXWwRsL2EXTfySyF+ATHRPI/PAk+XTp6Dbj1CW/VrgD0ZNvRdQhUbPZ7GyfO4aVR28tMLFT39eCs=
+	t=1728137664; cv=none; b=reYuA9FiW8nHhIQK5HbNcr8VKaPaIi2jGiuCcc7qUQa2N4dAPgHV80EzXq5nj5PRcUhpwl9UITJ46idTcP67WJSC1pEPuWWK0hBuBecKNf+3xblJXJhDkMHNStJ/5tb4jyp6Cg7Nxvj7j5Nfx3Afd07k0tqr4DxpjCkNEqGmcoA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728136932; c=relaxed/simple;
-	bh=5VikhLow5tX+OhRXx9cV5qsiUujBLh2clzakxZt/A0o=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UaoJORk3V4fdK1FbUjVpb8GWmTwY5v0ufwZqRbIcp5r2iT/YL1ILAirRDTzLiOD1dMs9dXlJ+RNmF5z/s+fOpVy72GM18A/nLrCVLlDgvT/vtoyb7hDIYsElUH0XVnrlQwYchiRr3ROYvlj2g5/Csw+sEK+T5OU4j7/H7/HVP5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iuIsvClV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC43C4CEC2;
-	Sat,  5 Oct 2024 14:02:12 +0000 (UTC)
+	s=arc-20240116; t=1728137664; c=relaxed/simple;
+	bh=rqef6z37tTRS6xVZHzzMQ/a+6aNMrJcvG4GllSXvWS4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jHXriUiJgSYQBAATMSJjFyRbsmUsDp2PoGxIKB/hAtM/m41AQp1J+rqcPc/eLwVzKyZNM0cCwnlDTlUBeMckoZ6HV2G3etRbelroDRiWz5M8H0l9D23D0F4709VYwWJPbX7N41p7jc2GAY+ObLgrLDv21VeO0Yy44VluEMsa/Cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t7TcEjn8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08CA5C4CEC2;
+	Sat,  5 Oct 2024 14:14:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728136932;
-	bh=5VikhLow5tX+OhRXx9cV5qsiUujBLh2clzakxZt/A0o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=iuIsvClVQzM4cST6dTjTiJRfb8Hl1g4+F5BFB/67Uy2g1BlP3Xmu6PagQzIk29AGx
-	 d7/gK8UFENqBPF3/QeP5XgxKpLpZsOBrU8qpJtl98J4E+KiLPmw+Ufg9gWmezjgMVH
-	 sladHwwu/9Gey4yfEq9c1ZgSBX7BVz8A1P5kDwjVKe/QEAxb/kUNRXnwQ65ocbEm7J
-	 BS8eeZ0G2zAaXfY1MAEF8Lmglm+4GGbaXZbzCqBlqPVr/vtH9tBockTa1yts2YOn45
-	 0v/IKFLXug7Xuv8B4k5d0Rjfvj3rnfkqzyf4GzoZd+Iu5JRwkp/vwhiOWIf5V8YLj/
-	 TG6oL2wZASxMA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1sx5MI-000c40-2c;
-	Sat, 05 Oct 2024 15:02:10 +0100
-Date: Sat, 05 Oct 2024 15:02:09 +0100
-Message-ID: <87ed4uveam.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Mark Brown <broonie@kernel.org>
+	s=k20201202; t=1728137664;
+	bh=rqef6z37tTRS6xVZHzzMQ/a+6aNMrJcvG4GllSXvWS4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=t7TcEjn8vFeumYvp6IIucFIxiiMAlL73sGyNIMejwA9XAkTnJQlGNW2etsK/nBnCR
+	 SZaLPqInXxdTnv8Mn9l7jbCdIVQqsgsWnmEPtBoWV+xyn3Z2RMt4SZ8Q//tuGtLgMv
+	 8mYJ/pRbiLFtd88PwQTmQL78rnmjGz4kvOXb9wL6GkoRqcdlHDKnVlCrWsRv+CUiTC
+	 1xfmBxVABQxxVLEX0W1w+R6goHfzu2E0Tym/TxE17bLtHotIRL9adSm88mjLqkbmC6
+	 qhZNgEC9yfa+WJJxbqom00vngtl/kaTbbgP2Oc7CO+KuVmSg7Qb+5rGjAEaSmvvGNb
+	 2QiQMCVta4G/g==
+Date: Sat, 5 Oct 2024 15:14:21 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
 Cc: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
 	Oliver Upton <oliver.upton@linux.dev>,
 	Joey Gouly <joey.gouly@arm.com>,
 	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v14 3/5] KVM: arm64: Manage GCS access and registers for guests
-In-Reply-To: <ZwFDmaeIgPKfmJnj@finisterre.sirena.org.uk>
+	Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v14 4/5] KVM: arm64: Set PSTATE.EXLOCK when entering an
+ exception
+Message-ID: <ZwFJvV7lrFStWD-r@finisterre.sirena.org.uk>
 References: <20241005-arm64-gcs-v14-0-59060cd6092b@kernel.org>
-	<20241005-arm64-gcs-v14-3-59060cd6092b@kernel.org>
-	<87iku6vl4z.wl-maz@kernel.org>
-	<ZwE6V9cqf7jD1rTc@finisterre.sirena.org.uk>
-	<87frpavgam.wl-maz@kernel.org>
-	<ZwFDmaeIgPKfmJnj@finisterre.sirena.org.uk>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+ <20241005-arm64-gcs-v14-4-59060cd6092b@kernel.org>
+ <87h69qvi9y.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, joey.gouly@arm.com, suzuki.poulose@arm.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="7srDnRXLH2tW0fM5"
+Content-Disposition: inline
+In-Reply-To: <87h69qvi9y.wl-maz@kernel.org>
+X-Cookie: Editing is a rewording activity.
 
-On Sat, 05 Oct 2024 14:48:09 +0100,
-Mark Brown <broonie@kernel.org> wrote:
->=20
-> [1  <text/plain; us-ascii (7bit)>]
-> On Sat, Oct 05, 2024 at 02:18:57PM +0100, Marc Zyngier wrote:
-> > Mark Brown <broonie@kernel.org> wrote:
-> > > On Sat, Oct 05, 2024 at 12:34:20PM +0100, Marc Zyngier wrote:
->=20
-> > > > Where is the handling of traps resulting of HFGITR_EL2.nGCSSTR_EL1?
->=20
-> > > These will trap with an EC of 0x2d which isn't known so I was expecti=
-ng
-> > > this to get handled in the same way as for example a return of false
-> > > from kvm_hyp_handle_fpsimd() for SVE when unsupported, or for the
-> > > simiarly unknown SME EC, currently.  I gather from your comment that
-> > > you're instead expecting to see an explicit exit handler for this EC
-> > > that just injects the UNDEF directly?
->=20
-> > Not just inject an UNDEF directly, but also track whether this needs
-> > to be forwarded when the guest's HFGITR_EL2.nGCSSTR_EL1 is 0 while not
-> > being not RES0. Basically following what the pseudocode describes.
->=20
-> Ah, I see.  I'd been under the impression that the generic machinery was
-> supposed to handle this already using the descriptions in
-> emulate-nested.c and we only needed handlers for more specific actions.
 
-=46rom that very file:
+--7srDnRXLH2tW0fM5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-/*
- * Map encoding to trap bits for exception reported with EC=3D0x18.
- [...]
- */
+On Sat, Oct 05, 2024 at 01:36:09PM +0100, Marc Zyngier wrote:
+> Mark Brown <broonie@kernel.org> wrote:
 
-Everything else needs special handling.
+> > +	// PSTATE.EXLOCK is set to 0 upon any exception to a higher
+> > +	// EL, or to GCSCR_ELx.EXLOCKEN for an exception to the same
+> > +	// exception level.  See ARM DDI 0487 RWTXBY, D.1.3.2 in K.a.
+> > +	if (kvm_has_gcs(vcpu->kvm) &&
+> > +	    (target_mode & PSR_EL_MASK) == (mode & PSR_EL_MASK)) {
+> > +		u64 gcscr = __vcpu_read_sys_reg(vcpu, GCSCR_EL1);
 
-	M.
+> No, please. This only works by luck when a guest has AArch32 EL0, and
+> creates more havoc on a NV guest. In general, this PSR_EL_MASK creates
+> more problem than anything else, and doesn't fit the rest of the code.
 
---=20
-Without deviation from the norm, progress is not possible.
+You say luck, I say careful architecture definition but sure.
+
+> So this needs to:
+> - explicitly only apply to exceptions from AArch64
+> - handle exception from EL2, since this helper already deals with that
+
+> The latter point of course means introducing GCSCR_EL2 (and everything
+> that depends on it, such as the trap handling).
+
+For clarity, which trap handling specifically?
+
+--7srDnRXLH2tW0fM5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcBSb0ACgkQJNaLcl1U
+h9CARwf/W/4NPsmf9qhqoOTzd0rZbHoSTiPcidtGSwoehyH7lZAHiN7aWC4VGzZ/
+NNnT/s8zL3SKw38Ow9EFIt0/kNVlc6yjdo8r9RVT5TYMAl/noRDS12MM8BgK/c8E
+LzXHbOcoxrsSdFAGS3ORw/cVCRRQffw5RTSdkUsArXU5RXxzRHdPHCBn8tu2FlWx
+kPnkUzm7jfeRldHf0SIMtwEo+Uki1Yk9wWPBbAkna0ToTU1dRsGr4E8VLUDYajYv
+iWmLuEhoQMji7UO8XB+PcjkydMU40e/SnjFztV+M+gsCKruAxMrI0jXOCwhmT7qB
+me4Ik1c9rgceNAXrkR7zawTtNDgr3Q==
+=S3+a
+-----END PGP SIGNATURE-----
+
+--7srDnRXLH2tW0fM5--
 
