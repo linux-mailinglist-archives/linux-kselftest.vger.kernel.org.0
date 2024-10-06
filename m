@@ -1,386 +1,222 @@
-Return-Path: <linux-kselftest+bounces-19118-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19119-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2ED8991B36
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Oct 2024 00:25:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0718E991C67
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Oct 2024 05:35:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62C8F1F218A3
-	for <lists+linux-kselftest@lfdr.de>; Sat,  5 Oct 2024 22:25:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BF8E1F21E25
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Oct 2024 03:35:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F05F515AD9C;
-	Sat,  5 Oct 2024 22:25:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32DD714884C;
+	Sun,  6 Oct 2024 03:35:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OlNVyW4e"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eaMAPRqT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ua1-f49.google.com (mail-ua1-f49.google.com [209.85.222.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F8D2B9A6
-	for <linux-kselftest@vger.kernel.org>; Sat,  5 Oct 2024 22:25:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.49
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728167111; cv=none; b=Z8WA0CfxFEEQ4QnjbIaEArBr2CQF0RJWWFdAdOF6+WSXKeBxhldEVWmWRY0VAC+FLydtt9Ucp2bG8r/K+i2yorT7yMK1BMuAsQp151EbpySqR4Q6Nii2LJ3hWbnoHLe/BnItyWN+hs9Rf+ApsxjBXC1+dmtPaOKppb2Yr/FOL9c=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728167111; c=relaxed/simple;
-	bh=q82pZifR1W2blH4N/+nd55gnwNOI6BUTGrkjzF+o/b0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=r1N5O2m08kHSs2RXuxiv0a/LC9fCTL/3c3bTsKPHTQqIbe6P5TFRbu4kFCiLXZ7aqgVJ19OqHGUHCOc3EkZAnRyV1yIpf/Z4MhCHrj3+7u07rmcncWQbdr42XaTXDpF1e53nh0ExbqLf4/dtqwSM4fdw/N79kmFNTMYokGM8SH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OlNVyW4e; arc=none smtp.client-ip=209.85.222.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f49.google.com with SMTP id a1e0cc1a2514c-84eb2f32097so939894241.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 05 Oct 2024 15:25:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728167109; x=1728771909; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TDfiCHkM6iRNBN2C/aIKKCpm5M7jUVZxqO9j658Fvlo=;
-        b=OlNVyW4eKbQzaK49N1obt3JUiqgwNOOJvWvs1UFW7RVbx6EG7ZNOn/XKXw0WyuYtkr
-         tkvxzCBt3lliWk7lUcnjJuD5Va+7TFUFpg1hGvzFXFg0FXoQ9S0q9jicurEQxR6Ll7nb
-         VvKH1ZtKZeNtlNh2k6U3f0ZIoEwe/TD+/qBGdmatvF34joH1820CAltwVTfcgxsUhn7E
-         cfQRhN++YPiI4QfRLcsf0c6mMtAERVGUGjEV4LkrShP5hUTSCnxTsJUYOUBWsBh1IiUb
-         oa7q16OmZyMyJGQsD+GfllUzGmoIyc9yTiR9c5TVSSYyGiB5vrlTx9pBISyxic34bT7V
-         HMuw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728167109; x=1728771909;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TDfiCHkM6iRNBN2C/aIKKCpm5M7jUVZxqO9j658Fvlo=;
-        b=bESXuCdN9vz4aLhN4SCQtDpBZl3on+gZATsEEEV0hWdNF3mSLoOS92g6Q/afy2MMRL
-         ABK49hk1AOncSw12rbujhhgFfWemWLpm6BbJD1WBIUXM3OxNDwmsJwoiBvw1qQsvKihn
-         1Rk+WCx+ZQOweVMRw5dIh92YESwagIgREu8w/yrP1QXG7Jt51yhLbc8do7u1kKBSCGy5
-         iR/nvGolfe6t9GD4DoASgS7C8JGMcftP72wbhvXWMHTAdSN3sDYWmMlh1nqC1/RrgQvF
-         Rb+Jz55G2hM43sGKVGGverV4J2rA0GMWZhKTu+Z4OfqUEeEuQeXOG7EhBQDP+g4L0aym
-         AzUw==
-X-Forwarded-Encrypted: i=1; AJvYcCUsotkejq8M6vTwHxV/cz8OGQhmDAAwZJiagorkjMP3CN9reAn3zh2qhfWkx+XslsVMOfoJluY2vwNapKYutxY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzk+V6WvSqJTobn1kE9mhTTM26YC/psDWaO7dMDy146EvctPlrG
-	e4EHAs7lc5faV6e3bIgvj4bInvxa5RRFoL0r/d2hmfgCaIVq+X89
-X-Google-Smtp-Source: AGHT+IG9IC6wXOdmrb4x8YrDY/Q2PgIvr82+BNrG5moIFbBBl6jXPRRtTozwbv0WiOmFCmnNv7bmPg==
-X-Received: by 2002:a05:6122:3126:b0:50a:12e4:2618 with SMTP id 71dfb90a1353d-50c85448878mr6747290e0c.2.1728167108805;
-        Sat, 05 Oct 2024 15:25:08 -0700 (PDT)
-Received: from x13.. ([186.1.186.79])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-50c9ae365c3sm383791e0c.44.2024.10.05.15.25.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 05 Oct 2024 15:25:07 -0700 (PDT)
-From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
-To: brendan.higgins@linux.dev,
-	davidgow@google.com,
-	rmoar@google.com,
-	quic_jjohnson@quicinc.com,
-	macro@orcam.me.uk,
-	npitre@baylibre.com,
-	tpiepho@gmail.com
-Cc: Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	skhan@linuxfoundation.org,
-	ricardo@marliere.net,
-	linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH v3] lib: math: Move kunit tests into tests/ subdir
-Date: Sat,  5 Oct 2024 18:24:45 -0400
-Message-ID: <20241005222446.10471-1-luis.hernandez093@gmail.com>
-X-Mailer: git-send-email 2.46.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B812744C;
+	Sun,  6 Oct 2024 03:35:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.11
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728185708; cv=fail; b=ja2ZGKpYATU/Du+X/mPqepwheXCKnP5/Ehs/3x2rX6sgtf/d1CYuaZV0Xq9RU1RvQIAYLxUhzZDQ+NZ6n+EF1Qv763SGRwnFO6IEF2AxDDRsHSjx8NAwRNMPct++6oKA7LB2xjDebFsMMHvOlsbdRJRzgkme3upDksoMqI6PqHQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728185708; c=relaxed/simple;
+	bh=IiCOU8mWu+ZEB8mcMPDonthNv7Qpdf9AzOKD3BV06Wg=;
+	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=MmkijtVrP8EcElLHJGr3U1OwHwYMTy9OcbbLs9P1vJijM61hpKUJbNpMqKwhpGJbb7xLnvMIYq+/us/E+KiGrEuq9pMXRtdQpm6+ovL0+4YDN+Vt7s9UejvYEP7kB/9lrojetqEJb9+VG6uOd2gm6HsrTp7B8JCu8xKFJQzXxFY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eaMAPRqT; arc=fail smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728185707; x=1759721707;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   mime-version;
+  bh=IiCOU8mWu+ZEB8mcMPDonthNv7Qpdf9AzOKD3BV06Wg=;
+  b=eaMAPRqT9krvqslqflNN/2kkT2JhXpPoaxmtEwTkiAX7tdRorqnHlP5i
+   oEFK0uXALiLAg7KZ5ykiqdfA+MWlCaJzLAeSajNRtBnZNUIvQDOykXoHv
+   EnDdmGVITlUH0d2Oe8PaO7XQ97Ej+IDp3/9ZOIIHrEadIOCc0Q/sjr4lq
+   ZYS8tph6KspMAuNeZmu5sk6SavL5J8qJ+Yu68pLN26+r/EAgUDI06IbS4
+   NZWSr22tszq4XwQ+aQcmM3evnxf972kTzVuqk6il7Jszl11GfwUkT6tRp
+   F+yfARJvtzi7VcJH9IHB0O69XENAoXUkKA/7+6G3O5IpLoeR2VMjBmxne
+   A==;
+X-CSE-ConnectionGUID: 7GUQnP/9STmViliq1ClcOA==
+X-CSE-MsgGUID: ZMynWAXBQOezieQcQniqog==
+X-IronPort-AV: E=McAfee;i="6700,10204,11216"; a="37932440"
+X-IronPort-AV: E=Sophos;i="6.11,181,1725346800"; 
+   d="scan'208";a="37932440"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Oct 2024 20:35:06 -0700
+X-CSE-ConnectionGUID: +rW0AL4LQiSb1K4NdKD8sg==
+X-CSE-MsgGUID: k+44Kj6ZSuOxO2xxu7pK2Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,181,1725346800"; 
+   d="scan'208";a="79523306"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 05 Oct 2024 20:35:04 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Sat, 5 Oct 2024 20:35:05 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Sat, 5 Oct 2024 20:35:04 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Sat, 5 Oct 2024 20:35:04 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.174)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Sat, 5 Oct 2024 20:35:04 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=gYut0HolGE/VCsbbE02cMQbJrQ1BUvyPNBhSnscXcT8NTo6E4VQDvUEnZpzEfb1VGZeRpTaIZ7DSC12h1/aekNmOCnRTzdYYUYgNYvftl4Piz9jiZ1vhTYfbydE+t1Q2tviThxfY2piBlRBwrvvEW6HqF7DqxG7jo5gbxa6luVoeBWI3ptmrXxhUCDwTjbW/FKJEmNvNkbboUVLLwGwXMUY0IwKCN/FiMxqoWM+aeGURnXAhbgpqPeg8TXUtccSa6lue57gedJcENpCehCB0c2Dv6dfGzlJY+Cy0x0SVoXPER2/sI6Fmsc/sCgDZbX8ZW9uthKVI3nmrgFHQf8RZJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=o8lLX/IzJrCnvGzpyQZaDjDY2Zv2ox7jCAa4FNiPVqk=;
+ b=x/fWDKa8LCNFrEVtaXHo7UAmwIhbKzMCvurETMHwMxuOuk17WqP1zZTrPmaQbK37Q7hcnG+Ha5j32xFr35581hOe0fW1js7Mc2K1d4Ow2Glmh/oI+J7PeBx5EggFDpnKGiz/rUY+ihkizSVX6Jxqk2lK5isjAsRltMUIw9Dnt3ZNI1YW9duURFi4aMT/PPhugC08pCFGD4hubVwJ1vxLkKZBEo8tmKsUlmMtMZWHMD9/JAXnJEuYX3wn/RLxVYSzu+sc1Od94iHdi58OlbrVYjd0NTa1keagc4+iu5QuJaYsrFbkxpJCF7tZAGVBWtaIZ+9l/7+mrA4kP6DrI9Lq3g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM4PR11MB5423.namprd11.prod.outlook.com (2603:10b6:5:39b::20)
+ by LV3PR11MB8694.namprd11.prod.outlook.com (2603:10b6:408:21b::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.20; Sun, 6 Oct
+ 2024 03:35:02 +0000
+Received: from DM4PR11MB5423.namprd11.prod.outlook.com
+ ([fe80::dffa:e0c8:dbf1:c82e]) by DM4PR11MB5423.namprd11.prod.outlook.com
+ ([fe80::dffa:e0c8:dbf1:c82e%3]) with mapi id 15.20.8026.019; Sun, 6 Oct 2024
+ 03:35:02 +0000
+Date: Sun, 6 Oct 2024 11:34:50 +0800
+From: kernel test robot <lkp@intel.com>
+To: Manali Shukla <manali.shukla@amd.com>, <kvm@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>
+CC: <oe-kbuild-all@lists.linux.dev>, <pbonzini@redhat.com>,
+	<seanjc@google.com>, <shuah@kernel.org>, <nikunj@amd.com>,
+	<thomas.lendacky@amd.com>, <vkuznets@redhat.com>, <manali.shukla@amd.com>,
+	<bp@alien8.de>, <babu.moger@amd.com>
+Subject: Re: [PATCH v3 4/4] KVM: selftests: Add bus lock exit test
+Message-ID: <ZwIFWq0Xj/DNM/Kq@rli9-mobl>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20241004053341.5726-5-manali.shukla@amd.com>
+X-ClientProxiedBy: SG2PR04CA0154.apcprd04.prod.outlook.com (2603:1096:4::16)
+ To DM4PR11MB5423.namprd11.prod.outlook.com (2603:10b6:5:39b::20)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR11MB5423:EE_|LV3PR11MB8694:EE_
+X-MS-Office365-Filtering-Correlation-Id: da7f18af-14f4-4343-5f03-08dce5b7dc5a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|7416014|366016;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?e+ZH3rhXK29829Eu1fPCT8yZ0w0ZoNDKAQmgHrCMlScwqx9F4q3wmTyuIK9j?=
+ =?us-ascii?Q?hjmJvT4uwoNy88DjOg/WKcV86+JschAzmYpQ5ybEBs/4d4gJGOm5fR7XSvuH?=
+ =?us-ascii?Q?EztAE8DlNvocCyvN4Z9GYqZBxqB4nhleqoT2I3rH2WEb3ND7BvAdezVC0qqS?=
+ =?us-ascii?Q?+Y/ccWVY806HEoIcEEhkRyftEWn+hnSqgt2ai9lR9YZH6riItJ+eBdydAZu3?=
+ =?us-ascii?Q?1L95CQECvmrqaEBu4nNXtYQiqw0aUn6WcESPpFyZTsik33PJJieIFvU1aduB?=
+ =?us-ascii?Q?fPdPlV7acMb94ia49uFP+O1N/U6+U2iGYMDGugaWj+jwffzSvMTG7K3ZWXRu?=
+ =?us-ascii?Q?12xvQNIrCWy2f5+QEA5zcLKOab3aA19HvBrRQUa/fltp5rEFukNlTyaCA3Vs?=
+ =?us-ascii?Q?kCdVgJyfElvoEjYDDQVnyvaUYkLTapNKFAg/wmIYMSwlYQqM8TDUxor187j5?=
+ =?us-ascii?Q?2x85awMyZsUMhU1gQOA4smC6IuqMf6zLZh1J4p97mPCGpfMA3pQkGmpChynJ?=
+ =?us-ascii?Q?G34h7+UX0huc2AT9lvkw4+kdIr2/esFEnQF0dswK5Qy58mCOyB+nE0pcDegD?=
+ =?us-ascii?Q?DjrNWOhI3ACbCFmPEEbp44hVz2BVJSOGFL+YkgCMIGDqNB2lL9M5tIp0AxoD?=
+ =?us-ascii?Q?BsIX3MTU1c2Ps/1r+EATytsVAzbFuYvoTpklNRYdMNI+JfwBRd3/h4k0wGy7?=
+ =?us-ascii?Q?XPPutuF/aE0yV37A4xN4N9ztmrZWsPMzMYfSD78x8BeLAxNHu7J+bU5V5eNE?=
+ =?us-ascii?Q?PqEwEtJ8kYXlN5aRqdMcpCoJcqy7hlIYajEd1c+rIZzjAGDzwC2/GdmcF4Az?=
+ =?us-ascii?Q?CsUC2B+/mflQNNVnd9IsnNJNYKoBqAlb9SSeSP/+QboVYAE6IbKgT92fI92U?=
+ =?us-ascii?Q?kiRTJSWz1mZ7dJRmIV8yGhW5bhXgpFoDQKC02taaJM8Ijyf7BZ0tpfKDlODJ?=
+ =?us-ascii?Q?3ja4Si8ndrhivD77bz1u5km59az6UInlq3XswJfQZHte+DO2rJVJ0XPU0blR?=
+ =?us-ascii?Q?JGVNU2BLtbmXrRzJnX0TcjNfz7Q431ga6QcYKzm2Htudl1rXp5ApcMFEfr55?=
+ =?us-ascii?Q?T6kF5VUYl29mR0WPHlVBgqFkh2exxbLulREt/W8aa4wnLqfZ3KhFrv5lUmML?=
+ =?us-ascii?Q?+1F/vvDX/VYafUYj6MqU9qqGlARLbbmTAp0Hkm3TAMFvjG+GJ9Epbx7FNFuw?=
+ =?us-ascii?Q?fMjnkhxqtzIaJq5FgeveG5tphXfvbVDhqis7uhbHjQx0gel7gZ8KuSoKI1g?=
+ =?us-ascii?Q?=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5423.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(7416014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7NwYEL/UgPrnmaMzqmeG5khBeoy3dNiTgnWpkGGY//T/y00XfUgWqABiDtWx?=
+ =?us-ascii?Q?1SGARaPoqPVJ3o7F6vrhtCC0gX5vkIO7Ol+RX28zJUnE1ZkzDmNJhCeMay9a?=
+ =?us-ascii?Q?87F/eBzG7JU2pZ2r5myEGOXqrrJ9z1I2Ut/n/2w+28myoNxsvhUejMH/MRme?=
+ =?us-ascii?Q?evcujcEQ4ZruOHr8Ngh4GBm/1X9A461j87m69qN3LYf8uVyjyu9A6CGoieiR?=
+ =?us-ascii?Q?mFFKSIg7Lm+8GbiX9L9nUaAftVyOvrvvLTPqZe70bJy41V1Rtzo61uNMUJe6?=
+ =?us-ascii?Q?f7j4u8xr6ttta25lOmc50W/b6gr3JXtVP1j8tJDwn0UlF7wRJwmaHAiBmWRD?=
+ =?us-ascii?Q?2ga6kgVl9rl3X8zjFL8G9gavyM2dR/QTN878T9qD6Ol/T3D30uXBw75yu3r0?=
+ =?us-ascii?Q?HtKkhJjJj6Hz3nKCdQigLqxRC6zfpSN38lvStOyvVzPyloG4wPmWM1C3tyP9?=
+ =?us-ascii?Q?vrzLDccs9RDwDbUJ4a5vQ/lzCwLnbZ+WFamgjlhn7s1gvqSx3N/X6qBBxRCc?=
+ =?us-ascii?Q?Ri+RpT1xg0osXORrPDWZFAfY6e6N4kvoNkom3pUioRGVjZJ1fMHuqCN8CQt0?=
+ =?us-ascii?Q?Wcb5Wt1Fv827JIfMXj6zihDnZDUMm1ztBL6bTTOs4/ocNiWLgnULj+HVHhyL?=
+ =?us-ascii?Q?Iq5aVM3TK117zca9PGn5pDmMXuPgZa1wtMjFw04WrJXCi757Krn/RSFbt1ju?=
+ =?us-ascii?Q?nDCw6GBQDr3XiTkWJLWq2KL6SXBO78CRyazUnGZ4jin/k/o1kvzuB2kkZ1c/?=
+ =?us-ascii?Q?yiI3BqpXSQm8ckOzLN0uzSfJDljffvgyEC4LyzsGl7Qwe9IHMh7RY+zjIoWa?=
+ =?us-ascii?Q?Fgc6tMfxEPdjRkv72YROsg41W5xFzxvO8i7bbDlKBY5XVjG0jZ1ldHG4b84P?=
+ =?us-ascii?Q?F27A1hO6uK53E5EWlf7nvwdY86Nl6hEBIwDX6pyQqGFRTVnCOCAOVM4ca1KN?=
+ =?us-ascii?Q?/9BpGNUrxrhQc3q8GslJRjJ2wGgEl7aJ/836B+9ccEPZ1ChYAr8UvUdujMpJ?=
+ =?us-ascii?Q?ZtpP3gFnxMkc7And04FbKGbZvUzbyBfmNe3Yb3AJcRjBu/yJhGDVRAZRAgq8?=
+ =?us-ascii?Q?HIrYNnhCQucyxD1Se/WwpdBHjZRK3JECEGglgsEuJiI2+6Y7sFKMeL+xA6jq?=
+ =?us-ascii?Q?2p+vLoTHwqXIKHPgUQqVxv4B3PdM2YGiQU0ewfNBqZ2bJCRhr1DRDJ4SJIe8?=
+ =?us-ascii?Q?fG/WeK5z/4YMd9JTuQNh/GD59bhBMOVj0vXD5duoV55Pjf+a+fTAlOThvWCX?=
+ =?us-ascii?Q?EZC7UIoxZT9WcqQkFhpfUxHnZq3ZKR/qrDN9fmK0OJt3PyKI2E/uxDSYwL/h?=
+ =?us-ascii?Q?E+5Uv1VCzCmJvbIp3x4FW3B1xydvf4hI5Dp1lawUq8avGw/Qg0AWB5STz4iT?=
+ =?us-ascii?Q?SvC6hUME5fBaIUIfaFKcKTqFSFGFNVO312rx4AydSjavpyWsg0QOtxmH0/Hq?=
+ =?us-ascii?Q?h6w+5FcsNOyHR894Ze8lnBNr/m6Bshk0UZ4sfizJNAgiwc6399Me2j8vMsca?=
+ =?us-ascii?Q?uPsSp4TW/RmBqpVLhngkO9wz3GpQ4+4RZ9m2qkeT3AYTZq3EzjujBZotfksn?=
+ =?us-ascii?Q?s56ePDnxyaoRC2iHGXK13fZWwo82PE3M8grWDlLE?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: da7f18af-14f4-4343-5f03-08dce5b7dc5a
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5423.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Oct 2024 03:35:02.2416
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SiQNit2L8nzYrYI7q0u+nBe8g+fIU6OFWv0WSXXxJ819tMcA8kh9s2AZZZTA729ramTfig7hxQBx8uZ8+qXN5Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR11MB8694
+X-OriginatorOrg: intel.com
 
-This patch is a follow-up task from a discussion stemming from point 3
-in a recent patch introducing the int_pow kunit test [1] and
-documentation regarding kunit test style and nomenclature [2].
+Hi Manali,
 
-Colocate all kunit test suites in lib/math/tests/ and
-follow recommended naming convention for files <suite>_kunit.c
-and kconfig entries CONFIG_<name>_KUNIT_TEST.
+kernel test robot noticed the following build warnings:
 
-Link: https://lore.kernel.org/all/CABVgOS=-vh5TqHFCq_jo=ffq8v_nGgr6JsPnOZag3e6+19ysxQ@mail.gmail.com/ [1]
-Link: https://docs.kernel.org/dev-tools/kunit/style.html [2]
+[auto build test WARNING on efbc6bd090f48ccf64f7a8dd5daea775821d57ec]
 
-Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
----
-Changes in v2: Fix cc recipient list inclusion in cover letter
-Changes in v3: Update mul_u64_u64_div_u64_kunit.c path in comment describing shell script
----
- arch/m68k/configs/amiga_defconfig                           | 2 +-
- arch/m68k/configs/apollo_defconfig                          | 2 +-
- arch/m68k/configs/atari_defconfig                           | 2 +-
- arch/m68k/configs/bvme6000_defconfig                        | 2 +-
- arch/m68k/configs/hp300_defconfig                           | 2 +-
- arch/m68k/configs/mac_defconfig                             | 2 +-
- arch/m68k/configs/multi_defconfig                           | 2 +-
- arch/m68k/configs/mvme147_defconfig                         | 2 +-
- arch/m68k/configs/mvme16x_defconfig                         | 2 +-
- arch/m68k/configs/q40_defconfig                             | 2 +-
- arch/m68k/configs/sun3_defconfig                            | 2 +-
- arch/m68k/configs/sun3x_defconfig                           | 2 +-
- arch/powerpc/configs/ppc64_defconfig                        | 2 +-
- lib/Kconfig.debug                                           | 6 +++---
- lib/math/Makefile                                           | 5 +----
- lib/math/tests/Makefile                                     | 5 ++++-
- lib/math/{test_div64.c => tests/div64_kunit.c}              | 0
- .../mul_u64_u64_div_u64_kunit.c}                            | 2 +-
- lib/math/{rational-test.c => tests/rational_kunit.c}        | 0
- 19 files changed, 22 insertions(+), 22 deletions(-)
- rename lib/math/{test_div64.c => tests/div64_kunit.c} (100%)
- rename lib/math/{test_mul_u64_u64_div_u64.c => tests/mul_u64_u64_div_u64_kunit.c} (98%)
- rename lib/math/{rational-test.c => tests/rational_kunit.c} (100%)
+url:    https://github.com/intel-lab-lkp/linux/commits/Manali-Shukla/x86-cpufeatures-Add-CPUID-feature-bit-for-the-Bus-Lock-Threshold/20241004-133639
+base:   efbc6bd090f48ccf64f7a8dd5daea775821d57ec
+patch link:    https://lore.kernel.org/r/20241004053341.5726-5-manali.shukla%40amd.com
+patch subject: [PATCH v3 4/4] KVM: selftests: Add bus lock exit test
+:::::: branch date: 2 days ago
+:::::: commit date: 2 days ago
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241006/202410060638.ZXRqIbIj-lkp@intel.com/reproduce)
 
-diff --git a/arch/m68k/configs/amiga_defconfig b/arch/m68k/configs/amiga_defconfig
-index d01dc47d52ea..7ba9311c084c 100644
---- a/arch/m68k/configs/amiga_defconfig
-+++ b/arch/m68k/configs/amiga_defconfig
-@@ -619,7 +619,7 @@ CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
- CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
--CONFIG_TEST_DIV64=m
-+CONFIG_DIV64_KUNIT_TEST=m
- CONFIG_REED_SOLOMON_TEST=m
- CONFIG_ATOMIC64_SELFTEST=m
- CONFIG_ASYNC_RAID6_TEST=m
-diff --git a/arch/m68k/configs/apollo_defconfig b/arch/m68k/configs/apollo_defconfig
-index 46808e581d7b..273fe4032b85 100644
---- a/arch/m68k/configs/apollo_defconfig
-+++ b/arch/m68k/configs/apollo_defconfig
-@@ -576,7 +576,7 @@ CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
- CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
--CONFIG_TEST_DIV64=m
-+CONFIG_DIV64_KUNIT_TEST=m
- CONFIG_REED_SOLOMON_TEST=m
- CONFIG_ATOMIC64_SELFTEST=m
- CONFIG_ASYNC_RAID6_TEST=m
-diff --git a/arch/m68k/configs/atari_defconfig b/arch/m68k/configs/atari_defconfig
-index 4469a7839c9d..9976cda99fc1 100644
---- a/arch/m68k/configs/atari_defconfig
-+++ b/arch/m68k/configs/atari_defconfig
-@@ -596,7 +596,7 @@ CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
- CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
--CONFIG_TEST_DIV64=m
-+CONFIG_DIV64_KUNIT_TEST=m
- CONFIG_REED_SOLOMON_TEST=m
- CONFIG_ATOMIC64_SELFTEST=m
- CONFIG_ASYNC_RAID6_TEST=m
-diff --git a/arch/m68k/configs/bvme6000_defconfig b/arch/m68k/configs/bvme6000_defconfig
-index c0719322c028..f59082c8fe06 100644
---- a/arch/m68k/configs/bvme6000_defconfig
-+++ b/arch/m68k/configs/bvme6000_defconfig
-@@ -568,7 +568,7 @@ CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
- CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
--CONFIG_TEST_DIV64=m
-+CONFIG_DIV64_KUNIT_TEST=m
- CONFIG_REED_SOLOMON_TEST=m
- CONFIG_ATOMIC64_SELFTEST=m
- CONFIG_ASYNC_RAID6_TEST=m
-diff --git a/arch/m68k/configs/hp300_defconfig b/arch/m68k/configs/hp300_defconfig
-index 8d429e63f8f2..6db3556da9ac 100644
---- a/arch/m68k/configs/hp300_defconfig
-+++ b/arch/m68k/configs/hp300_defconfig
-@@ -578,7 +578,7 @@ CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
- CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
--CONFIG_TEST_DIV64=m
-+CONFIG_DIV64_KUNIT_TEST=m
- CONFIG_REED_SOLOMON_TEST=m
- CONFIG_ATOMIC64_SELFTEST=m
- CONFIG_ASYNC_RAID6_TEST=m
-diff --git a/arch/m68k/configs/mac_defconfig b/arch/m68k/configs/mac_defconfig
-index bafd33da27c1..25c06b5c83ee 100644
---- a/arch/m68k/configs/mac_defconfig
-+++ b/arch/m68k/configs/mac_defconfig
-@@ -595,7 +595,7 @@ CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
- CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
--CONFIG_TEST_DIV64=m
-+CONFIG_DIV64_KUNIT_TEST=m
- CONFIG_REED_SOLOMON_TEST=m
- CONFIG_ATOMIC64_SELFTEST=m
- CONFIG_ASYNC_RAID6_TEST=m
-diff --git a/arch/m68k/configs/multi_defconfig b/arch/m68k/configs/multi_defconfig
-index 6f5ca3f85ea1..35e57e0ee139 100644
---- a/arch/m68k/configs/multi_defconfig
-+++ b/arch/m68k/configs/multi_defconfig
-@@ -681,7 +681,7 @@ CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
- CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
--CONFIG_TEST_DIV64=m
-+CONFIG_DIV64_KUNIT_TEST=m
- CONFIG_REED_SOLOMON_TEST=m
- CONFIG_ATOMIC64_SELFTEST=m
- CONFIG_ASYNC_RAID6_TEST=m
-diff --git a/arch/m68k/configs/mvme147_defconfig b/arch/m68k/configs/mvme147_defconfig
-index d16b328c7136..d253b686119a 100644
---- a/arch/m68k/configs/mvme147_defconfig
-+++ b/arch/m68k/configs/mvme147_defconfig
-@@ -567,7 +567,7 @@ CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
- CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
--CONFIG_TEST_DIV64=m
-+CONFIG_DIV64_KUNIT_TEST=m
- CONFIG_REED_SOLOMON_TEST=m
- CONFIG_ATOMIC64_SELFTEST=m
- CONFIG_ASYNC_RAID6_TEST=m
-diff --git a/arch/m68k/configs/mvme16x_defconfig b/arch/m68k/configs/mvme16x_defconfig
-index 80f6c15a5ed5..62bc6ad63783 100644
---- a/arch/m68k/configs/mvme16x_defconfig
-+++ b/arch/m68k/configs/mvme16x_defconfig
-@@ -568,7 +568,7 @@ CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
- CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
--CONFIG_TEST_DIV64=m
-+CONFIG_DIV64_KUNIT_TEST=m
- CONFIG_REED_SOLOMON_TEST=m
- CONFIG_ATOMIC64_SELFTEST=m
- CONFIG_ASYNC_RAID6_TEST=m
-diff --git a/arch/m68k/configs/q40_defconfig b/arch/m68k/configs/q40_defconfig
-index 0e81589f0ee2..caba39c61bac 100644
---- a/arch/m68k/configs/q40_defconfig
-+++ b/arch/m68k/configs/q40_defconfig
-@@ -585,7 +585,7 @@ CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
- CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
--CONFIG_TEST_DIV64=m
-+CONFIG_DIV64_KUNIT_TEST=m
- CONFIG_REED_SOLOMON_TEST=m
- CONFIG_ATOMIC64_SELFTEST=m
- CONFIG_ASYNC_RAID6_TEST=m
-diff --git a/arch/m68k/configs/sun3_defconfig b/arch/m68k/configs/sun3_defconfig
-index 8cd785290339..a348f645ed55 100644
---- a/arch/m68k/configs/sun3_defconfig
-+++ b/arch/m68k/configs/sun3_defconfig
-@@ -565,7 +565,7 @@ CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
- CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
--CONFIG_TEST_DIV64=m
-+CONFIG_DIV64_KUNIT_TEST=m
- CONFIG_REED_SOLOMON_TEST=m
- CONFIG_ATOMIC64_SELFTEST=m
- CONFIG_ASYNC_RAID6_TEST=m
-diff --git a/arch/m68k/configs/sun3x_defconfig b/arch/m68k/configs/sun3x_defconfig
-index 78035369f60f..f8b3cfc3275b 100644
---- a/arch/m68k/configs/sun3x_defconfig
-+++ b/arch/m68k/configs/sun3x_defconfig
-@@ -566,7 +566,7 @@ CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
- CONFIG_TEST_DHRY=m
- CONFIG_TEST_MIN_HEAP=m
--CONFIG_TEST_DIV64=m
-+CONFIG_DIV64_KUNIT_TEST=m
- CONFIG_REED_SOLOMON_TEST=m
- CONFIG_ATOMIC64_SELFTEST=m
- CONFIG_ASYNC_RAID6_TEST=m
-diff --git a/arch/powerpc/configs/ppc64_defconfig b/arch/powerpc/configs/ppc64_defconfig
-index a5e3e7f97f4d..f1f21765c0c1 100644
---- a/arch/powerpc/configs/ppc64_defconfig
-+++ b/arch/powerpc/configs/ppc64_defconfig
-@@ -435,7 +435,7 @@ CONFIG_KUNIT=m
- CONFIG_KUNIT_ALL_TESTS=m
- CONFIG_LKDTM=m
- CONFIG_TEST_MIN_HEAP=m
--CONFIG_TEST_DIV64=m
-+CONFIG_DIV64_KUNIT_TEST=m
- CONFIG_BACKTRACE_SELF_TEST=m
- CONFIG_TEST_REF_TRACKER=m
- CONFIG_RBTREE_TEST=m
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 7315f643817a..0d6c979f0bfd 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2296,7 +2296,7 @@ config TEST_SORT
- 
- 	  If unsure, say N.
- 
--config TEST_DIV64
-+config DIV64_KUNIT_TEST
- 	tristate "64bit/32bit division and modulo test"
- 	depends on DEBUG_KERNEL || m
- 	help
-@@ -2306,7 +2306,7 @@ config TEST_DIV64
- 
- 	  If unsure, say N.
- 
--config TEST_MULDIV64
-+config MULDIV64_KUNIT_TEST
- 	tristate "mul_u64_u64_div_u64() test"
- 	depends on DEBUG_KERNEL || m
- 	help
-@@ -3089,7 +3089,7 @@ endmenu # "Rust"
- 
- endmenu # Kernel hacking
- 
--config INT_POW_TEST
-+config INT_POW_KUNIT_TEST
- 	tristate "Integer exponentiation (int_pow) test" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
- 	default KUNIT_ALL_TESTS
-diff --git a/lib/math/Makefile b/lib/math/Makefile
-index 3ef11305f8d2..1c489501ff57 100644
---- a/lib/math/Makefile
-+++ b/lib/math/Makefile
-@@ -5,7 +5,4 @@ obj-$(CONFIG_CORDIC)		+= cordic.o
- obj-$(CONFIG_PRIME_NUMBERS)	+= prime_numbers.o
- obj-$(CONFIG_RATIONAL)		+= rational.o
- 
--obj-$(CONFIG_INT_POW_TEST)  += tests/int_pow_kunit.o
--obj-$(CONFIG_TEST_DIV64)	+= test_div64.o
--obj-$(CONFIG_TEST_MULDIV64)	+= test_mul_u64_u64_div_u64.o
--obj-$(CONFIG_RATIONAL_KUNIT_TEST) += rational-test.o
-+obj-y  += tests/
-diff --git a/lib/math/tests/Makefile b/lib/math/tests/Makefile
-index 6a169123320a..f9a0a0e6b73a 100644
---- a/lib/math/tests/Makefile
-+++ b/lib/math/tests/Makefile
-@@ -1,3 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-only
- 
--obj-$(CONFIG_INT_POW_TEST) += int_pow_kunit.o
-+obj-$(CONFIG_DIV64_KUNIT_TEST)    += div64_kunit.o
-+obj-$(CONFIG_INT_POW_KUNIT_TEST)  += int_pow_kunit.o
-+obj-$(CONFIG_MULDIV64_KUNIT_TEST) += mul_u64_u64_div_u64_kunit.o
-+obj-$(CONFIG_RATIONAL_KUNIT_TEST) += rational_kunit.o
-diff --git a/lib/math/test_div64.c b/lib/math/tests/div64_kunit.c
-similarity index 100%
-rename from lib/math/test_div64.c
-rename to lib/math/tests/div64_kunit.c
-diff --git a/lib/math/test_mul_u64_u64_div_u64.c b/lib/math/tests/mul_u64_u64_div_u64_kunit.c
-similarity index 98%
-rename from lib/math/test_mul_u64_u64_div_u64.c
-rename to lib/math/tests/mul_u64_u64_div_u64_kunit.c
-index 58d058de4e73..f61f571a0a2e 100644
---- a/lib/math/test_mul_u64_u64_div_u64.c
-+++ b/lib/math/tests/mul_u64_u64_div_u64_kunit.c
-@@ -49,7 +49,7 @@ static test_params test_values[] = {
-  *
-  * #!/bin/sh
-  * sed -ne 's/^{ \+\(.*\), \+\(.*\), \+\(.*\), \+\(.*\) },$/\1 \2 \3 \4/p' \
-- *     lib/math/test_mul_u64_u64_div_u64.c |
-+ *     lib/math/tests/mul_u64_u64_div_u64_kunit.c |
-  * while read a b c r; do
-  *   expected=$( printf "obase=16; ibase=16; %X * %X / %X\n" $a $b $c | bc )
-  *   given=$( printf "%X\n" $r )
-diff --git a/lib/math/rational-test.c b/lib/math/tests/rational_kunit.c
-similarity index 100%
-rename from lib/math/rational-test.c
-rename to lib/math/tests/rational_kunit.c
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/r/202410060638.ZXRqIbIj-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   x86_64/kvm_buslock_test.c: In function 'buslock_add':
+>> x86_64/kvm_buslock_test.c:36:39: warning: taking address of packed member of 'struct buslock_test' may result in an unaligned pointer value [-Waddress-of-packed-member]
+      36 |                 buslock_atomic_add(2, &test.val);
+         |                                       ^~~~~~~~~
+   At top level:
+   cc1: note: unrecognized command-line option '-Wno-gnu-variable-sized-type-not-at-end' may have been intended to silence earlier diagnostics
+
 -- 
-2.46.2
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
 
