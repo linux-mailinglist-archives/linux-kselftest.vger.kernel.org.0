@@ -1,193 +1,248 @@
-Return-Path: <linux-kselftest+bounces-19133-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19134-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E4B4992023
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Oct 2024 19:54:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3DD19920EC
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Oct 2024 21:51:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8953A1F218E6
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Oct 2024 17:54:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCE051C209E6
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Oct 2024 19:51:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3E2D18991B;
-	Sun,  6 Oct 2024 17:54:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 177AA18A933;
+	Sun,  6 Oct 2024 19:51:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b="XmNK0Pm8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hiXB8905"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2211228377;
-	Sun,  6 Oct 2024 17:54:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728237247; cv=pass; b=qOgl4H+yGo/sQQZT14BHcYg4CB6edawKoOQOqbULwB2JGeh+ffL2+j419/TT+45j6btTzXBN2RsWplhtG8dcWQJIYL89Quvwd4SG+CQelHnZgh+6k62xeKw7AQKPLnReiu4gOoDG4QaM3iq5lm9Clqx3BMMfTfRy+CwWVR2TYjg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728237247; c=relaxed/simple;
-	bh=BjiXsL+KzJMtLRg2VOkzfZQ/KCtQf5NUzaW2sSbaEfE=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ScTTSN0+M+cxhZrJmdjqXRpJCh5n0BTu7CyP5MxRzl0wnMYu9gv0rFSakXvFiQoA27FdNeg9vDiB8WXUvEYsm5MggPohh0Y2itFYAfPGMLlBvSlpbx8moV0ZPefUcGB6ZOkDHFaZexGNMrpRlBPfH5th4yKlU1wguJ+HuWRQK+Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=Usama.Anjum@collabora.com header.b=XmNK0Pm8; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1728237226; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=JrecHpJJjq+le7Cch8iMQ00Jl10IxUEg8AdklhwPaHe6jLfNGQej5eeMqLPD11s6wVfuTCa97FqcB/u7TFu8pribJbt8BTdfMyMR0yJVtYcbXb7We+sZbU5ku3YIuSScDypM94JnsA47cpQHduHSkssABLrb425xpkfFryZbMIA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1728237226; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=XTnVDAmnVGyJDi/jgM2YrR/nJtg9MBkwlu2KSem8Wh8=; 
-	b=BGm0xk5L8zLrUsy/0LV1PVbAmRioiYqSRTlw/Wi6YPZNLWkkShyWTgiKCUvGHGy7Pqdsnl+CC2B7Tr7g6V4QR8HTEsKwD9W0LapL/JTYYCzRVGjDlY4dxc0wf5XY1aLLThIvHsHPtFt9bgvRCYYS+inS7EMEW/pCYVaeE6N3gUg=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=Usama.Anjum@collabora.com;
-	dmarc=pass header.from=<Usama.Anjum@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1728237226;
-	s=zohomail; d=collabora.com; i=Usama.Anjum@collabora.com;
-	h=Message-ID:Date:Date:MIME-Version:Cc:Cc:Subject:Subject:To:To:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=XTnVDAmnVGyJDi/jgM2YrR/nJtg9MBkwlu2KSem8Wh8=;
-	b=XmNK0Pm8739o8mTtjI9Y4zO2oEnhKe5Q9DSyaV1eO+QUJiwQ5KNJZ2a3NdDeGJx8
-	133V1k99tF0WW/CeJ0ZCAQm5PI6r1D/xi+g3iIPDSdZlLKXM8sW2skQc6P1MjHOfyWl
-	QHrnHx2oIoxQ2jectMOycWXUkpVGn1W/A+DhZKwQ=
-Received: by mx.zohomail.com with SMTPS id 1728237224277627.9130859707182;
-	Sun, 6 Oct 2024 10:53:44 -0700 (PDT)
-Message-ID: <d1015505-132b-4a94-b7b2-7ba9105b95e6@collabora.com>
-Date: Sun, 6 Oct 2024 22:53:37 +0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67A17155336;
+	Sun,  6 Oct 2024 19:51:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728244302; cv=none; b=QFQlxR1RP6IJM6GyQSu4JNN7Hez9o3bLN86fKaO1eybFo2qwEqxSBZ64PRplEfzXzVQlC29CpsJTx/jzOL68SC0wX1+e2p+cYS0kKVVTJwx6ppUczkaSdwxWgG5VePTVjNiYgHgas1HjnK27PWrXG6GcWpUfN2DCqF675FuN4Vg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728244302; c=relaxed/simple;
+	bh=JD0ZaFsBGdGyGRUvz7UgbjrYOncXvvoMXQUeqJXz9Y8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=A7BMfJ4cXezCnYPaSbCarnOXA3MSw/GJXjJ2HogobxMKPXfa/i1nG+FzN8K8HxCbJ3cMECbxLzxCZ1eLTjNLhwHHJR4XKxyp09DoSfXc4zY/8+BahUGgZ4RBuT0OSfJxQWE8xfinmgR7KxVwfy94DDIfAsPm568QwKojyqD9w1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hiXB8905; arc=none smtp.client-ip=209.85.128.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6e2e3e4f65dso6495067b3.3;
+        Sun, 06 Oct 2024 12:51:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728244299; x=1728849099; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xfOLbWrnxSwVRrFjZQozO1EugIQbxg//4Wl+zKG3SI4=;
+        b=hiXB8905UABJXWv8g84+0Dt67UBIREwb/4ekFYiLioB9n/vp1Z4IVaJ44kirIYkO3b
+         WQrik2oz/CQlnw7HpoQlC1rKJmNBXvrbDUB8715xY+4EEujqmUokUQduDBNzMnT1bLmg
+         oQBCxyAt+nyF3ue/lBQ6EAvt6JRgXWjqoodTTqjOIVYFU0oRBTpz1/AEAZ9JiC684wRM
+         eF7AliK9o/KX8H6LzY3JqJ/bBmedjzUtCQLmXhQ7/c5B9iG6onaR97ND2PpoxHs9Xozj
+         AcXWqRPIhTEowbdj/5bisxfU+exVJuxrU2WPtJhX2Ubxjw8IGJda2eKJecF4mSFWlVz/
+         qK/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728244299; x=1728849099;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xfOLbWrnxSwVRrFjZQozO1EugIQbxg//4Wl+zKG3SI4=;
+        b=v9Hmlu7kMY7K4iAoxiEjvbHwDWMDX/rzASOam4iLLr6QVxHWdkoQp3et9+oSIb62FC
+         Xfof7k7MUTo9a4Wj+hBYN5rD+qsDxNVCICveCFjsJmcjEBv32lduSwvw4BjbWsKVUZDV
+         LPTmcDlQsN2onLS+oHumIw3/7gDUtzfjmnKea7AHQYYlWZl4EHk4uzOhQaskGIIV/WK9
+         uJSt+D7AxR9wSSagAiXtybZd1kkNdCnoGi40smdtr/H5qBmVOhKCPXn0MwjGnrP7xh0A
+         amsAml3XZHqk/w7MTywimsy4a0yLZH6auJJzO5VP/t4nj4345/x50n0O8UFAwXWISane
+         Yo9w==
+X-Forwarded-Encrypted: i=1; AJvYcCUuDYGJvg0+C5zbnh4hBw+1FS0mhe8r0o8XOoatyt20xYl42p/DSV+sd8M76DfuXYXc9JdP+XI51mAW2Hsd@vger.kernel.org, AJvYcCVgUnSKi9iBPGRkOWIWiGY2FHOJeoMX/E1mFFj2mohE+ffr0/OAYPiSY69BWBoJbNUGVDQ=@vger.kernel.org, AJvYcCXjbpnFcZSDQonaQE2K3eN5Yzp455k5d9r7oDJNExlX+UPGfYcHgC7sn5Po3v+gjK1pwair4n8yRaootmsND1AR@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdtmFzG+cmaW+zSTiTAesKq/mSOWhXTuisUgXrcjjOT90HNOY1
+	BjFcuZWxS5dMUnfUcjOmCjpQiiN+PPjaO5Do3B9P6/dFWTIIxTOH
+X-Google-Smtp-Source: AGHT+IFrlrPAmnJaewbsl4jWg3CKdwAPd7mRW4VdFIv+dgKES0+ZGQ3FK27qHG2FYeJOiomZqtXK/w==
+X-Received: by 2002:a05:690c:18:b0:6dd:bf29:cece with SMTP id 00721157ae682-6e2c7295b9cmr57113017b3.36.1728244299274;
+        Sun, 06 Oct 2024 12:51:39 -0700 (PDT)
+Received: from dev-ubuntu-0.. (104-15-236-76.lightspeed.rlghnc.sbcglobal.net. [104.15.236.76])
+        by smtp.googlemail.com with ESMTPSA id 00721157ae682-6e2d93d6effsm7811297b3.100.2024.10.06.12.51.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 06 Oct 2024 12:51:38 -0700 (PDT)
+From: tyrone-wu <wudevelops@gmail.com>
+To: laoar.shao@gmail.com,
+	wudevelops@gmail.com
+Cc: andrii.nakryiko@gmail.com,
+	andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	haoluo@google.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kernel-patches-bot@fb.com,
+	kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	martin.lau@linux.dev,
+	mykolal@fb.com,
+	olsajiri@gmail.com,
+	sdf@fomichev.me,
+	shuah@kernel.org,
+	song@kernel.org,
+	yonghong.song@linux.dev
+Subject: [PATCH bpf v5 1/2] bpf: fix unpopulated name_len field in perf_event link info
+Date: Sun,  6 Oct 2024 19:51:30 +0000
+Message-ID: <20241006195131.563006-1-wudevelops@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CALOAHbC5xm7Cbfhau3z5X2PqUhiHECNWAPtJCWiOVqTKmdZp-Q@mail.gmail.com>
+References: <CALOAHbC5xm7Cbfhau3z5X2PqUhiHECNWAPtJCWiOVqTKmdZp-Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Usama.Anjum@collabora.com, linux-kernel@vger.kernel.org,
- kernel-team@android.com, linux-mm@kvack.org
-Subject: Re: [PATCH 1/2] selftests/mm: replace atomic_bool with
- pthread_barrier_t
-To: Edward Liaw <edliaw@google.com>, linux-kselftest@vger.kernel.org,
- Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
- Lokesh Gidra <lokeshgidra@google.com>, Peter Xu <peterx@redhat.com>
-References: <20241003211716.371786-1-edliaw@google.com>
- <20241003211716.371786-2-edliaw@google.com>
-Content-Language: en-US
-From: Muhammad Usama Anjum <Usama.Anjum@collabora.com>
-In-Reply-To: <20241003211716.371786-2-edliaw@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
+Content-Transfer-Encoding: 8bit
 
-On 10/4/24 2:17 AM, Edward Liaw wrote:
-> Swaps synchronization primitive with pthread_barrier, so that
-> stdatomic.h does not need to be included.
-> 
-> The synchronization is needed on Android ARM64; we see a deadlock with
-> pthread_create when the parent thread races forward before the child has
-> a chance to start doing work.
-> 
-> Fixes: 8c864371b2a1 ("selftests/mm: fix ARM related issue with fork after
-> pthread_create")
-> Signed-off-by: Edward Liaw <edliaw@google.com>
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Previously when retrieving `bpf_link_info.perf_event` for
+kprobe/uprobe/tracepoint, the `name_len` field was not populated by the
+kernel, leaving it to reflect the value initially set by the user. This
+behavior was inconsistent with how other input/output string buffer
+fields function (e.g. `raw_tracepoint.tp_name_len`).
 
-> ---
->  tools/testing/selftests/mm/uffd-common.c     |  5 +++--
->  tools/testing/selftests/mm/uffd-common.h     |  3 +--
->  tools/testing/selftests/mm/uffd-unit-tests.c | 14 ++++++++------
->  3 files changed, 12 insertions(+), 10 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
-> index 717539eddf98..852e7281026e 100644
-> --- a/tools/testing/selftests/mm/uffd-common.c
-> +++ b/tools/testing/selftests/mm/uffd-common.c
-> @@ -18,7 +18,7 @@ bool test_uffdio_wp = true;
->  unsigned long long *count_verify;
->  uffd_test_ops_t *uffd_test_ops;
->  uffd_test_case_ops_t *uffd_test_case_ops;
-> -atomic_bool ready_for_fork;
-> +pthread_barrier_t ready_for_fork;
->  
->  static int uffd_mem_fd_create(off_t mem_size, bool hugetlb)
->  {
-> @@ -519,7 +519,8 @@ void *uffd_poll_thread(void *arg)
->  	pollfd[1].fd = pipefd[cpu*2];
->  	pollfd[1].events = POLLIN;
->  
-> -	ready_for_fork = true;
-> +	/* Ready for parent thread to fork */
-> +	pthread_barrier_wait(&ready_for_fork);
->  
->  	for (;;) {
->  		ret = poll(pollfd, 2, -1);
-> diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
-> index a70ae10b5f62..3e6228d8e0dc 100644
-> --- a/tools/testing/selftests/mm/uffd-common.h
-> +++ b/tools/testing/selftests/mm/uffd-common.h
-> @@ -33,7 +33,6 @@
->  #include <inttypes.h>
->  #include <stdint.h>
->  #include <sys/random.h>
-> -#include <stdatomic.h>
->  
->  #include "../kselftest.h"
->  #include "vm_util.h"
-> @@ -105,7 +104,7 @@ extern bool map_shared;
->  extern bool test_uffdio_wp;
->  extern unsigned long long *count_verify;
->  extern volatile bool test_uffdio_copy_eexist;
-> -extern atomic_bool ready_for_fork;
-> +extern pthread_barrier_t ready_for_fork;
->  
->  extern uffd_test_ops_t anon_uffd_test_ops;
->  extern uffd_test_ops_t shmem_uffd_test_ops;
-> diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-> index b3d21eed203d..3db2296ac631 100644
-> --- a/tools/testing/selftests/mm/uffd-unit-tests.c
-> +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-> @@ -774,7 +774,7 @@ static void uffd_sigbus_test_common(bool wp)
->  	char c;
->  	struct uffd_args args = { 0 };
->  
-> -	ready_for_fork = false;
-> +	pthread_barrier_init(&ready_for_fork, NULL, 2);
->  
->  	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
->  
-> @@ -791,8 +791,9 @@ static void uffd_sigbus_test_common(bool wp)
->  	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
->  		err("uffd_poll_thread create");
->  
-> -	while (!ready_for_fork)
-> -		; /* Wait for the poll_thread to start executing before forking */
-> +	/* Wait for child thread to start before forking */
-> +	pthread_barrier_wait(&ready_for_fork);
-> +	pthread_barrier_destroy(&ready_for_fork);
->  
->  	pid = fork();
->  	if (pid < 0)
-> @@ -833,7 +834,7 @@ static void uffd_events_test_common(bool wp)
->  	char c;
->  	struct uffd_args args = { 0 };
->  
-> -	ready_for_fork = false;
-> +	pthread_barrier_init(&ready_for_fork, NULL, 2);
->  
->  	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
->  	if (uffd_register(uffd, area_dst, nr_pages * page_size,
-> @@ -844,8 +845,9 @@ static void uffd_events_test_common(bool wp)
->  	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
->  		err("uffd_poll_thread create");
->  
-> -	while (!ready_for_fork)
-> -		; /* Wait for the poll_thread to start executing before forking */
-> +	/* Wait for child thread to start before forking */
-> +	pthread_barrier_wait(&ready_for_fork);
-> +	pthread_barrier_destroy(&ready_for_fork);
->  
->  	pid = fork();
->  	if (pid < 0)
+This patch fills `name_len` with the actual size of the string name.
 
+Link: https://lore.kernel.org/bpf/CABVU1kXwQXhqQGe0RTrr7eegtM6SVW_KayZBy16-yb0Snztmtg@mail.gmail.com/
+Fixes: 1b715e1b0ec5 ("bpf: Support ->fill_link_info for perf_event")
+Signed-off-by: tyrone-wu <wudevelops@gmail.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+---
+V4 -> V5:
+Link: https://lore.kernel.org/bpf/CALOAHbC5xm7Cbfhau3z5X2PqUhiHECNWAPtJCWiOVqTKmdZp-Q@mail.gmail.com/
+- Check that buf is not NULL before retrieving/using its length
+
+V3 -> V4:
+Link: https://lore.kernel.org/bpf/Zv_PP6Gs5cq3W2Ey@krava/
+- Split patch into separate kernel and selftest change
+
+V2 -> V3:
+Link: https://lore.kernel.org/bpf/Zv7sISV0yEyGlEM3@krava/
+- Use clearer variable name for user set/inputted name len (name_len -> input_len)
+- Change (name_len -> input_len) type from size_t to u32 since it's only received and used as u32
+
+V1 -> V2:
+Link: https://lore.kernel.org/bpf/Zv0wl-S13WJnIkb_@krava/
+- Use user set *ulen in bpf_copy_to_user before overwriting *ulen
+
+ kernel/bpf/syscall.c | 38 ++++++++++++++++++++++++--------------
+ 1 file changed, 24 insertions(+), 14 deletions(-)
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index a8f1808a1ca5..3df192a6bdcc 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3565,32 +3565,35 @@ static void bpf_perf_link_dealloc(struct bpf_link *link)
+ }
+ 
+ static int bpf_perf_link_fill_common(const struct perf_event *event,
+-				     char __user *uname, u32 ulen,
++				     char __user *uname, u32 *ulen,
+ 				     u64 *probe_offset, u64 *probe_addr,
+ 				     u32 *fd_type, unsigned long *missed)
+ {
+ 	const char *buf;
+-	u32 prog_id;
++	u32 prog_id, input_len;
+ 	size_t len;
+ 	int err;
+ 
+-	if (!ulen ^ !uname)
++	if (!(*ulen) ^ !uname)
+ 		return -EINVAL;
+ 
+ 	err = bpf_get_perf_event_info(event, &prog_id, fd_type, &buf,
+ 				      probe_offset, probe_addr, missed);
+ 	if (err)
+ 		return err;
+-	if (!uname)
+-		return 0;
++
+ 	if (buf) {
++		input_len = *ulen;
+ 		len = strlen(buf);
+-		err = bpf_copy_to_user(uname, buf, ulen, len);
+-		if (err)
+-			return err;
+-	} else {
+-		char zero = '\0';
++		*ulen = len + 1;
+ 
++		if (uname) {
++			err = bpf_copy_to_user(uname, buf, input_len, len);
++			if (err)
++				return err;
++		}
++	} else if (uname) {
++		char zero = '\0';
+ 		if (put_user(zero, uname))
+ 			return -EFAULT;
+ 	}
+@@ -3609,7 +3612,7 @@ static int bpf_perf_link_fill_kprobe(const struct perf_event *event,
+ 
+ 	uname = u64_to_user_ptr(info->perf_event.kprobe.func_name);
+ 	ulen = info->perf_event.kprobe.name_len;
+-	err = bpf_perf_link_fill_common(event, uname, ulen, &offset, &addr,
++	err = bpf_perf_link_fill_common(event, uname, &ulen, &offset, &addr,
+ 					&type, &missed);
+ 	if (err)
+ 		return err;
+@@ -3617,7 +3620,7 @@ static int bpf_perf_link_fill_kprobe(const struct perf_event *event,
+ 		info->perf_event.type = BPF_PERF_EVENT_KRETPROBE;
+ 	else
+ 		info->perf_event.type = BPF_PERF_EVENT_KPROBE;
+-
++	info->perf_event.kprobe.name_len = ulen;
+ 	info->perf_event.kprobe.offset = offset;
+ 	info->perf_event.kprobe.missed = missed;
+ 	if (!kallsyms_show_value(current_cred()))
+@@ -3639,7 +3642,7 @@ static int bpf_perf_link_fill_uprobe(const struct perf_event *event,
+ 
+ 	uname = u64_to_user_ptr(info->perf_event.uprobe.file_name);
+ 	ulen = info->perf_event.uprobe.name_len;
+-	err = bpf_perf_link_fill_common(event, uname, ulen, &offset, &addr,
++	err = bpf_perf_link_fill_common(event, uname, &ulen, &offset, &addr,
+ 					&type, NULL);
+ 	if (err)
+ 		return err;
+@@ -3648,6 +3651,7 @@ static int bpf_perf_link_fill_uprobe(const struct perf_event *event,
+ 		info->perf_event.type = BPF_PERF_EVENT_URETPROBE;
+ 	else
+ 		info->perf_event.type = BPF_PERF_EVENT_UPROBE;
++	info->perf_event.uprobe.name_len = ulen;
+ 	info->perf_event.uprobe.offset = offset;
+ 	info->perf_event.uprobe.cookie = event->bpf_cookie;
+ 	return 0;
+@@ -3673,12 +3677,18 @@ static int bpf_perf_link_fill_tracepoint(const struct perf_event *event,
+ {
+ 	char __user *uname;
+ 	u32 ulen;
++	int err;
+ 
+ 	uname = u64_to_user_ptr(info->perf_event.tracepoint.tp_name);
+ 	ulen = info->perf_event.tracepoint.name_len;
++	err = bpf_perf_link_fill_common(event, uname, &ulen, NULL, NULL, NULL, NULL);
++	if (err)
++		return err;
++
+ 	info->perf_event.type = BPF_PERF_EVENT_TRACEPOINT;
++	info->perf_event.tracepoint.name_len = ulen;
+ 	info->perf_event.tracepoint.cookie = event->bpf_cookie;
+-	return bpf_perf_link_fill_common(event, uname, ulen, NULL, NULL, NULL, NULL);
++	return 0;
+ }
+ 
+ static int bpf_perf_link_fill_perf_event(const struct perf_event *event,
 -- 
-BR,
-Muhammad Usama Anjum
+2.43.0
 
 
