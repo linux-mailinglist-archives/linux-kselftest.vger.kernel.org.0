@@ -1,59 +1,59 @@
-Return-Path: <linux-kselftest+bounces-19124-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19125-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45046991C96
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Oct 2024 06:41:04 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16CE1991C97
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Oct 2024 06:41:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F41F91F220C9
-	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Oct 2024 04:41:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB73628356A
+	for <lists+linux-kselftest@lfdr.de>; Sun,  6 Oct 2024 04:41:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8396615DBA3;
-	Sun,  6 Oct 2024 04:41:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 750C6156991;
+	Sun,  6 Oct 2024 04:41:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YU1HHpgi"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="FNuKgNSF"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF947F6
-	for <linux-kselftest@vger.kernel.org>; Sun,  6 Oct 2024 04:41:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 500657F6
+	for <linux-kselftest@vger.kernel.org>; Sun,  6 Oct 2024 04:41:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728189662; cv=none; b=Q+8x/FWy8ZmoikQhlXyqHev0iNRAwa0lZXGqpskV/hIbt8A3zFABcavmF8M8tw1brF49ioUS1m/xWsbXY7mlT2I+umZ8+E3/60YH7twi3JGw80P2KX3ct5dkdt+wbqwptuqHTSmpyXaQR+eHvWmUnyG6uDvfX+M6TjFY7FoHves=
+	t=1728189664; cv=none; b=K3BvE65mbuqromTH9LHXFoRG1pLn3ucCRR9FdrNfC9QU6YMdauSaOdOHGRQ1kBRSFTL1yULUsDFce/LAmuiZ4k91nW+3J9S9uLSencvQMVHhxWnz3qtzj6KWiWVtv4hon+Vb0DwS8RwqUMkmxh0XmkIwJUDPMkaX1s48R874Dd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728189662; c=relaxed/simple;
-	bh=eOIhupWs2Yj6AvR/6WQfOuTKvHmsB5rAi9xiniciXF8=;
+	s=arc-20240116; t=1728189664; c=relaxed/simple;
+	bh=NA7IjeAkCez3D5MrCFxUmubsGu7CAdsjI8nkSedOvew=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LP+4iZ2M/PIyo/0vSm6UVBuT6J/mDdv1tYcw1jIBfxr4d2xuJFQ3fn6AB4ZtcaXFuAwnu2XI28P+t3L2CtAmtNaHnsGiXU7P81NXIQqXg9SUocPACcXPhxcFFufrrkHmiNEoLSuEPgSDCZGKAXVmVL1rZfU6s/iaSXro9c7Nywk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=YU1HHpgi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78704C4CEDD;
-	Sun,  6 Oct 2024 04:41:01 +0000 (UTC)
+	 MIME-Version; b=VKbhKe0N8UlaU0/6aFLDj1IshqssU3yyHG7ujDJCUUc3lvZ0HblLhsH5B3j3Kc9JC79dyf8+ePDcRJF55iI9/4PJRJ/2z8rXFFOmUjbnlzsGRPwrQQ6csVzjMd8q3ge+xwjiEnPlQ5zUKqxvDrlcXGH92zQjNzJ1GokpdXnu8TA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=FNuKgNSF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 440A0C4CECD;
+	Sun,  6 Oct 2024 04:41:03 +0000 (UTC)
 Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="YU1HHpgi"
+	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="FNuKgNSF"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1728189660;
+	t=1728189662;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=947A4OsStNqgBaafOg5xyfT5O+jzq7lmMf0oYTjYY78=;
-	b=YU1HHpgi4AFRjc3jgK96YQwkJGOWcxmR4DS6GAzVvL/NX5H8bGZs6nHwkglj/L0MU/GANo
-	0LV/MtxubTxmSquE5EV+XPERfsphOMy9KqYFsSb2hbIIBIG4pC57RaaR7zuW/9ZfW3DLJo
-	CUzzgIXsaZknzh1tbfht5lo0GOmyXgs=
+	bh=/dXY7UF9Q4bFxXXPJoUi2e9/1cduHdxX7QGyfhvnWTQ=;
+	b=FNuKgNSFUb0tWCIYeCimlGzGo9+hd5yEWpH7M2kMNzDB9gCDMTXQBol11b57fXaKWBEEHf
+	zsPj2hke0y+dy6EwDp8OetQD7lESfll4s8cxcIV0N7jh3Ba81SRaumFoRGJj4Jx4OgMcJg
+	Smvwi7n0k160CFrIZ01q3QRdZnDK6Wk=
 Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 85382ffc (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Sun, 6 Oct 2024 04:41:00 +0000 (UTC)
+	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id f2cb74ec (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+	Sun, 6 Oct 2024 04:41:02 +0000 (UTC)
 From: "Jason A. Donenfeld" <Jason@zx2c4.com>
 To: linux-kselftest@vger.kernel.org,
 	greg@kroah.com,
 	skhan@linuxfoundation.org
 Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH kselftest v2 3/4] selftests: vDSO: improve getrandom and chacha error messages
-Date: Sun,  6 Oct 2024 06:40:16 +0200
-Message-ID: <20241006044017.2417623-3-Jason@zx2c4.com>
+Subject: [PATCH kselftest v2 4/4] selftests: vDSO: unconditionally build chacha test
+Date: Sun,  6 Oct 2024 06:40:17 +0200
+Message-ID: <20241006044017.2417623-4-Jason@zx2c4.com>
 In-Reply-To: <20241006044017.2417623-1-Jason@zx2c4.com>
 References: <CAHmME9qEp8Emg88wWR_oOT39hSaooLDd2L5YPetFrH3O-CgkBQ@mail.gmail.com>
  <20241006044017.2417623-1-Jason@zx2c4.com>
@@ -65,250 +65,144 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Improve the error and skip condition messages to let the developer know
-precisely where a test has failed. Also make better use of the ksft api
-for this.
+Rather than using symlinks to find the vgetrandom-chacha.S file for each
+arch, store this in a file that uses the compiler to determine
+architecture, and then make use of weak symbols to skip the test on
+architectures that don't provide the code.
 
 Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- .../testing/selftests/vDSO/vdso_test_chacha.c | 27 ++++---
- .../selftests/vDSO/vdso_test_getrandom.c      | 75 ++++++++-----------
- 2 files changed, 49 insertions(+), 53 deletions(-)
+ tools/arch/arm64/vdso                            |  1 -
+ tools/arch/loongarch/vdso                        |  1 -
+ tools/arch/powerpc/vdso                          |  1 -
+ tools/arch/s390/vdso                             |  1 -
+ tools/arch/x86/vdso                              |  1 -
+ tools/testing/selftests/vDSO/Makefile            |  6 +-----
+ tools/testing/selftests/vDSO/vdso_test_chacha.c  |  6 ++++++
+ .../selftests/vDSO/vgetrandom-chacha-finder.S    | 16 ++++++++++++++++
+ 8 files changed, 23 insertions(+), 10 deletions(-)
+ delete mode 120000 tools/arch/arm64/vdso
+ delete mode 120000 tools/arch/loongarch/vdso
+ delete mode 120000 tools/arch/powerpc/vdso
+ delete mode 120000 tools/arch/s390/vdso
+ delete mode 120000 tools/arch/x86/vdso
+ create mode 100644 tools/testing/selftests/vDSO/vgetrandom-chacha-finder.S
 
+diff --git a/tools/arch/arm64/vdso b/tools/arch/arm64/vdso
+deleted file mode 120000
+index 233c7a26f6e5..000000000000
+--- a/tools/arch/arm64/vdso
++++ /dev/null
+@@ -1 +0,0 @@
+-../../../arch/arm64/kernel/vdso
+\ No newline at end of file
+diff --git a/tools/arch/loongarch/vdso b/tools/arch/loongarch/vdso
+deleted file mode 120000
+index ebda43a82db7..000000000000
+--- a/tools/arch/loongarch/vdso
++++ /dev/null
+@@ -1 +0,0 @@
+-../../../arch/loongarch/vdso
+\ No newline at end of file
+diff --git a/tools/arch/powerpc/vdso b/tools/arch/powerpc/vdso
+deleted file mode 120000
+index 4e676d1d1cb4..000000000000
+--- a/tools/arch/powerpc/vdso
++++ /dev/null
+@@ -1 +0,0 @@
+-../../../arch/powerpc/kernel/vdso
+\ No newline at end of file
+diff --git a/tools/arch/s390/vdso b/tools/arch/s390/vdso
+deleted file mode 120000
+index 6cf4c1cebdcd..000000000000
+--- a/tools/arch/s390/vdso
++++ /dev/null
+@@ -1 +0,0 @@
+-../../../arch/s390/kernel/vdso64
+\ No newline at end of file
+diff --git a/tools/arch/x86/vdso b/tools/arch/x86/vdso
+deleted file mode 120000
+index 7eb962fd3454..000000000000
+--- a/tools/arch/x86/vdso
++++ /dev/null
+@@ -1 +0,0 @@
+-../../../arch/x86/entry/vdso/
+\ No newline at end of file
+diff --git a/tools/testing/selftests/vDSO/Makefile b/tools/testing/selftests/vDSO/Makefile
+index 96b4f2a766e2..e453c178d97f 100644
+--- a/tools/testing/selftests/vDSO/Makefile
++++ b/tools/testing/selftests/vDSO/Makefile
+@@ -1,6 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
+ include ../../../scripts/Makefile.arch
+-top_srcdir = $(realpath ../../../..)
+ 
+ TEST_GEN_PROGS := vdso_test_gettimeofday
+ TEST_GEN_PROGS += vdso_test_getcpu
+@@ -11,15 +10,12 @@ TEST_GEN_PROGS += vdso_standalone_test_x86
+ endif
+ TEST_GEN_PROGS += vdso_test_correctness
+ TEST_GEN_PROGS += vdso_test_getrandom
+-ifneq ($(wildcard $(top_srcdir)/tools/arch/$(SRCARCH)/vdso/vgetrandom-chacha.S),)
+ TEST_GEN_PROGS += vdso_test_chacha
+-endif
+ 
+ CFLAGS := -std=gnu99 -O2
+ 
+ ifeq ($(CONFIG_X86_32),y)
+ LDLIBS += -lgcc_s
+-TEST_GEN_PROGS := $(filter-out vdso_test_chacha,$(TEST_GEN_PROGS))
+ endif
+ 
+ include ../lib.mk
+@@ -39,7 +35,7 @@ $(OUTPUT)/vdso_test_getrandom: CFLAGS += -isystem $(top_srcdir)/tools/include \
+                                          $(KHDR_INCLUDES) \
+                                          -isystem $(top_srcdir)/include/uapi
+ 
+-$(OUTPUT)/vdso_test_chacha: $(top_srcdir)/tools/arch/$(SRCARCH)/vdso/vgetrandom-chacha.S
++$(OUTPUT)/vdso_test_chacha: vgetrandom-chacha-finder.S
+ $(OUTPUT)/vdso_test_chacha: CFLAGS += -idirafter $(top_srcdir)/tools/include \
+                                       -idirafter $(top_srcdir)/tools/include/generated \
+                                       -idirafter $(top_srcdir)/arch/$(SRCARCH)/include \
 diff --git a/tools/testing/selftests/vDSO/vdso_test_chacha.c b/tools/testing/selftests/vDSO/vdso_test_chacha.c
-index b1ea532c5996..60c5ea5cb925 100644
+index 60c5ea5cb925..e68f1cd4ebcf 100644
 --- a/tools/testing/selftests/vDSO/vdso_test_chacha.c
 +++ b/tools/testing/selftests/vDSO/vdso_test_chacha.c
-@@ -90,10 +90,8 @@ int main(int argc, char *argv[])
- 	ksft_set_plan(1);
+@@ -78,6 +78,12 @@ typedef uint32_t u32;
+ typedef uint64_t u64;
+ #include <vdso/getrandom.h>
  
- 	for (unsigned int trial = 0; trial < TRIALS; ++trial) {
--		if (getrandom(key, sizeof(key), 0) != sizeof(key)) {
--			printf("getrandom() failed!\n");
--			return KSFT_SKIP;
--		}
-+		if (getrandom(key, sizeof(key), 0) != sizeof(key))
-+			ksft_exit_skip("getrandom() failed unexpectedly\n");
- 		memset(counter1, 0, sizeof(counter1));
- 		reference_chacha20_blocks(output1, key, counter1, BLOCKS);
- 		for (unsigned int split = 0; split < BLOCKS; ++split) {
-@@ -102,8 +100,10 @@ int main(int argc, char *argv[])
- 			if (split)
- 				__arch_chacha20_blocks_nostack(output2, key, counter2, split);
- 			__arch_chacha20_blocks_nostack(output2 + split * BLOCK_SIZE, key, counter2, BLOCKS - split);
--			if (memcmp(output1, output2, sizeof(output1)) || memcmp(counter1, counter2, sizeof(counter1)))
--				return KSFT_FAIL;
-+			if (memcmp(output1, output2, sizeof(output1)))
-+				ksft_exit_fail_msg("Main loop outputs do not match on trial %u, split %u\n", trial, split);
-+			if (memcmp(counter1, counter2, sizeof(counter1)))
-+				ksft_exit_fail_msg("Main loop counters do not match on trial %u, split %u\n", trial, split);
- 		}
- 	}
- 	memset(counter1, 0, sizeof(counter1));
-@@ -113,14 +113,19 @@ int main(int argc, char *argv[])
- 
- 	reference_chacha20_blocks(output1, key, counter1, BLOCKS);
- 	__arch_chacha20_blocks_nostack(output2, key, counter2, BLOCKS);
--	if (memcmp(output1, output2, sizeof(output1)) || memcmp(counter1, counter2, sizeof(counter1)))
--		return KSFT_FAIL;
-+	if (memcmp(output1, output2, sizeof(output1)))
-+		ksft_exit_fail_msg("Block limit outputs do not match after first round\n");
-+	if (memcmp(counter1, counter2, sizeof(counter1)))
-+		ksft_exit_fail_msg("Block limit counters do not match after first round\n");
- 
- 	reference_chacha20_blocks(output1, key, counter1, BLOCKS);
- 	__arch_chacha20_blocks_nostack(output2, key, counter2, BLOCKS);
--	if (memcmp(output1, output2, sizeof(output1)) || memcmp(counter1, counter2, sizeof(counter1)))
--		return KSFT_FAIL;
-+	if (memcmp(output1, output2, sizeof(output1)))
-+		ksft_exit_fail_msg("Block limit outputs do not match after second round\n");
-+	if (memcmp(counter1, counter2, sizeof(counter1)))
-+		ksft_exit_fail_msg("Block limit counters do not match after second round\n");
- 
- 	ksft_test_result_pass("chacha: PASS\n");
--	return KSFT_PASS;
-+	ksft_exit_pass();
-+	return 0;
- }
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getrandom.c b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-index 5489a2f07434..50ec9ad4c7ec 100644
---- a/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-@@ -40,6 +40,9 @@
- 	} while (0)
- #endif
- 
-+#define ksft_assert(condition) \
-+	do { if (!(condition)) ksft_exit_fail_msg("Assertion failed: %s\n", #condition); } while (0)
++__attribute__((weak))
++void __arch_chacha20_blocks_nostack(u8 *dst_bytes, const u32 *key, u32 *counter, size_t nblocks)
++{
++	ksft_exit_skip("Not implemented on architecture\n");
++}
 +
- static struct {
- 	pthread_mutex_t lock;
- 	void **states;
-@@ -109,26 +112,19 @@ static void vgetrandom_init(void)
- 	const char *version = versions[VDSO_VERSION];
- 	const char *name = names[VDSO_NAMES][6];
- 	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
--	size_t ret;
-+	ssize_t ret;
- 
--	if (!sysinfo_ehdr) {
--		printf("AT_SYSINFO_EHDR is not present!\n");
--		exit(KSFT_SKIP);
--	}
-+	if (!sysinfo_ehdr)
-+		ksft_exit_skip("AT_SYSINFO_EHDR is not present\n");
- 	vdso_init_from_sysinfo_ehdr(sysinfo_ehdr);
- 	vgrnd.fn = (__typeof__(vgrnd.fn))vdso_sym(version, name);
--	if (!vgrnd.fn) {
--		printf("%s is missing!\n", name);
--		exit(KSFT_SKIP);
--	}
-+	if (!vgrnd.fn)
-+		ksft_exit_skip("%s@%s symbol is missing from vDSO\n", name, version);
- 	ret = VDSO_CALL(vgrnd.fn, 5, NULL, 0, 0, &vgrnd.params, ~0UL);
--	if (ret == -ENOSYS) {
--		printf("unsupported architecture\n");
--		exit(KSFT_SKIP);
--	} else if (ret) {
--		printf("failed to fetch vgetrandom params!\n");
--		exit(KSFT_FAIL);
--	}
-+	if (ret == -ENOSYS)
-+		ksft_exit_skip("CPU does not have runtime support\n");
-+	else if (ret)
-+		ksft_exit_fail_msg("Failed to fetch vgetrandom params: %zd\n", ret);
- }
- 
- static ssize_t vgetrandom(void *buf, size_t len, unsigned long flags)
-@@ -137,10 +133,7 @@ static ssize_t vgetrandom(void *buf, size_t len, unsigned long flags)
- 
- 	if (!state) {
- 		state = vgetrandom_get_state();
--		if (!state) {
--			printf("vgetrandom_get_state failed!\n");
--			exit(KSFT_FAIL);
--		}
-+		ksft_assert(state);
- 	}
- 	return VDSO_CALL(vgrnd.fn, 5, buf, len, flags, state, vgrnd.params.size_of_opaque_state);
- }
-@@ -152,7 +145,7 @@ static void *test_vdso_getrandom(void *ctx)
- 	for (size_t i = 0; i < TRIALS; ++i) {
- 		unsigned int val;
- 		ssize_t ret = vgetrandom(&val, sizeof(val), 0);
--		assert(ret == sizeof(val));
-+		ksft_assert(ret == sizeof(val));
- 	}
- 	return NULL;
- }
-@@ -162,7 +155,7 @@ static void *test_libc_getrandom(void *ctx)
- 	for (size_t i = 0; i < TRIALS; ++i) {
- 		unsigned int val;
- 		ssize_t ret = getrandom(&val, sizeof(val), 0);
--		assert(ret == sizeof(val));
-+		ksft_assert(ret == sizeof(val));
- 	}
- 	return NULL;
- }
-@@ -172,7 +165,7 @@ static void *test_syscall_getrandom(void *ctx)
- 	for (size_t i = 0; i < TRIALS; ++i) {
- 		unsigned int val;
- 		ssize_t ret = syscall(__NR_getrandom, &val, sizeof(val), 0);
--		assert(ret == sizeof(val));
-+		ksft_assert(ret == sizeof(val));
- 	}
- 	return NULL;
- }
-@@ -207,7 +200,7 @@ static void bench_multi(void)
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 	for (size_t i = 0; i < THREADS; ++i)
--		assert(pthread_create(&threads[i], NULL, test_vdso_getrandom, NULL) == 0);
-+		ksft_assert(pthread_create(&threads[i], NULL, test_vdso_getrandom, NULL) == 0);
- 	for (size_t i = 0; i < THREADS; ++i)
- 		pthread_join(threads[i], NULL);
- 	clock_gettime(CLOCK_MONOTONIC, &end);
-@@ -216,7 +209,7 @@ static void bench_multi(void)
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 	for (size_t i = 0; i < THREADS; ++i)
--		assert(pthread_create(&threads[i], NULL, test_libc_getrandom, NULL) == 0);
-+		ksft_assert(pthread_create(&threads[i], NULL, test_libc_getrandom, NULL) == 0);
- 	for (size_t i = 0; i < THREADS; ++i)
- 		pthread_join(threads[i], NULL);
- 	clock_gettime(CLOCK_MONOTONIC, &end);
-@@ -225,7 +218,7 @@ static void bench_multi(void)
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 	for (size_t i = 0; i < THREADS; ++i)
--		assert(pthread_create(&threads[i], NULL, test_syscall_getrandom, NULL) == 0);
-+		ksft_assert(pthread_create(&threads[i], NULL, test_syscall_getrandom, NULL) == 0);
- 	for (size_t i = 0; i < THREADS; ++i)
- 		pthread_join(threads[i], NULL);
- 	clock_gettime(CLOCK_MONOTONIC, &end);
-@@ -250,48 +243,46 @@ static void kselftest(void)
- 
- 	for (size_t i = 0; i < 1000; ++i) {
- 		ssize_t ret = vgetrandom(weird_size, sizeof(weird_size), 0);
--		if (ret != sizeof(weird_size))
--			exit(KSFT_FAIL);
-+		ksft_assert(ret == sizeof(weird_size));
- 	}
- 
- 	ksft_test_result_pass("getrandom: PASS\n");
- 
- 	unshare(CLONE_NEWUSER);
--	assert(unshare(CLONE_NEWTIME) == 0);
-+	ksft_assert(unshare(CLONE_NEWTIME) == 0);
- 	child = fork();
--	assert(child >= 0);
-+	ksft_assert(child >= 0);
- 	if (!child) {
- 		vgetrandom_init();
- 		child = getpid();
--		assert(ptrace(PTRACE_TRACEME, 0, NULL, NULL) == 0);
--		assert(kill(child, SIGSTOP) == 0);
--		assert(vgetrandom(weird_size, sizeof(weird_size), 0) == sizeof(weird_size));
-+		ksft_assert(ptrace(PTRACE_TRACEME, 0, NULL, NULL) == 0);
-+		ksft_assert(kill(child, SIGSTOP) == 0);
-+		ksft_assert(vgetrandom(weird_size, sizeof(weird_size), 0) == sizeof(weird_size));
- 		_exit(0);
- 	}
- 	for (;;) {
- 		struct ptrace_syscall_info info = { 0 };
- 		int status, ret;
--		assert(waitpid(child, &status, 0) >= 0);
-+		ksft_assert(waitpid(child, &status, 0) >= 0);
- 		if (WIFEXITED(status)) {
--			if (WEXITSTATUS(status) != 0)
--				exit(KSFT_FAIL);
-+			ksft_assert(WEXITSTATUS(status) == 0);
- 			break;
- 		}
--		assert(WIFSTOPPED(status));
-+		ksft_assert(WIFSTOPPED(status));
- 		if (WSTOPSIG(status) == SIGSTOP)
--			assert(ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESYSGOOD) == 0);
-+			ksft_assert(ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESYSGOOD) == 0);
- 		else if (WSTOPSIG(status) == (SIGTRAP | 0x80)) {
--			assert(ptrace(PTRACE_GET_SYSCALL_INFO, child, sizeof(info), &info) > 0);
-+			ksft_assert(ptrace(PTRACE_GET_SYSCALL_INFO, child, sizeof(info), &info) > 0);
- 			if (info.op == PTRACE_SYSCALL_INFO_ENTRY && info.entry.nr == __NR_getrandom &&
- 			    info.entry.args[0] == (uintptr_t)weird_size && info.entry.args[1] == sizeof(weird_size))
--				exit(KSFT_FAIL);
-+				ksft_exit_fail_msg("vgetrandom passed buffer to syscall getrandom unexpectedly\n");
- 		}
--		assert(ptrace(PTRACE_SYSCALL, child, 0, 0) == 0);
-+		ksft_assert(ptrace(PTRACE_SYSCALL, child, 0, 0) == 0);
- 	}
- 
- 	ksft_test_result_pass("getrandom timens: PASS\n");
- 
--	exit(KSFT_PASS);
-+	ksft_exit_pass();
- }
- 
- static void usage(const char *argv0)
+ int main(int argc, char *argv[])
+ {
+ 	enum { TRIALS = 1000, BLOCKS = 128, BLOCK_SIZE = 64 };
+diff --git a/tools/testing/selftests/vDSO/vgetrandom-chacha-finder.S b/tools/testing/selftests/vDSO/vgetrandom-chacha-finder.S
+new file mode 100644
+index 000000000000..1ca240ddaab7
+--- /dev/null
++++ b/tools/testing/selftests/vDSO/vgetrandom-chacha-finder.S
+@@ -0,0 +1,16 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2024 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
++ */
++
++#if defined(__aarch64__)
++#include "../../../../arch/arm64/kernel/vdso/vgetrandom-chacha.S"
++#elif defined(__loongarch__)
++#include "../../../../arch/loongarch/vdso/vgetrandom-chacha.S"
++#elif defined(__powerpc__) || defined(__powerpc64__)
++#include "../../../../arch/powerpc/kernel/vdso/vgetrandom-chacha.S"
++#elif defined(__s390x__)
++#include "../../../../arch/s390/kernel/vdso64/vgetrandom-chacha.S"
++#elif defined(__x86_64__)
++#include "../../../../arch/x86/entry/vdso/vgetrandom-chacha.S"
++#endif
 -- 
 2.46.0
 
