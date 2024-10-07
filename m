@@ -1,154 +1,118 @@
-Return-Path: <linux-kselftest+bounces-19159-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19161-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 538A7993257
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 18:01:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CDB639932FD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 18:21:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BA0A2848CD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 16:01:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 82C5528313A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 16:21:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17B8C1D9323;
-	Mon,  7 Oct 2024 16:01:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07E5A1DA2E5;
+	Mon,  7 Oct 2024 16:21:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WMvlMyGg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P4c60YB/"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAEB1D4615;
-	Mon,  7 Oct 2024 16:01:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDDC21D4152;
+	Mon,  7 Oct 2024 16:21:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728316862; cv=none; b=Ri6WoodCATUehcmQBKW37jKkXipQii7quK25eYYzWzmq/gzX/YW5iozUGBftd9h2dz89PIhuFnq58Vcgz2lG1f1ZeGiAwcg+F+xc7CXvRTiw9YrKiq4ZtDniDPv2PQbU9cY4urkLYy0mZNyEiDmH5bgomxNSGYB5KHNuDiseCYQ=
+	t=1728318105; cv=none; b=cb0fp2EdwNwS92Q7QlKRT/AFTz6EwvBP4/rbFz2uRzlr+5Yjw3lghmeFCMNKSHLSVWgKN6M1S6zzKCFtBnudTyB9JhskToDLEdZ5JfD81czyYhA5mdz22Bh0xmHuQnCj2NWhrZmNOECrtAcY6Oe1eUo7DR6cK6LWp4xM57BwDtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728316862; c=relaxed/simple;
-	bh=e2NBHTw6PPvjULzXCQpYbFWcRNCqsXQxPgENG33mKoQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=C1UOj9XtFLi+oUF7533yu95unfBzZTIfTNa6VBnUafHZn3jVQEjTKp+ykOi6KoHsY0FkLcG0nzjwE+rjyfpu89JUalwDH0cPTyx1lq9eVtCmifJHE4CdCS/Eq5rW0bVQf/tfwPoP5jh+r8V0W3qPdRAm4fYkD9+4WGTg3pMCJEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WMvlMyGg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C2E7C4CEC7;
-	Mon,  7 Oct 2024 16:01:00 +0000 (UTC)
+	s=arc-20240116; t=1728318105; c=relaxed/simple;
+	bh=PoWOtQj6nr9yo/vCoJ1K+oh816ywT+jG0OzA4+bxEvA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tTRIacSZ9rijZeP3SMdoYkOkMaPX4t71EZOYgNbV/XGXL8xH8JHWicAenNB/InErqkDir5YBGbOrKULVVg/KJ9VyVXC0LqxWcvoplLSn1G4z09Nfe7M80eZOLkDSAcEY1rjRT/PBsm+bI4sK17SqSWL8pMVx71q7vvHisH66cw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P4c60YB/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07E6DC4CEC6;
+	Mon,  7 Oct 2024 16:21:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728316861;
-	bh=e2NBHTw6PPvjULzXCQpYbFWcRNCqsXQxPgENG33mKoQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=WMvlMyGgn0mENSHuioUpratdm0Fb72jH/kyBzfNDdc11bZdmf3uNCn5qkmZiqgAjA
-	 3ZgPvnDTMA/gDx07PgsHCfRvUUnLr1IBUyvMZ73Abl/ur+HQ14iEqXtKy3vXr7JRjM
-	 MlB7ynIIb4SOzxaNenMQFfx2laXFSRsI2HH+0ndsfY+NTFJPjHQ3ymJFsy9YDIATXv
-	 1jtvMsLJyLpwgwK83CxA/HKgkJ6cyX8TtM7h2AJixNYiNMj41W9xuQ6F3C+aVJxI8I
-	 JjVsW2EV//PdyPUejWOFFV/pJMg95M+X3wSlsdtlmRGY82RB4OEnPrvcmEPr8wLw0W
-	 OPYet1W0eHtfA==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Shuah Khan
- <shuah@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, =?utf-8?B?QmrDtnJuIFTDtnBlbA==?=
- <bjorn@rivosinc.com>,
- bpf@vger.kernel.org, linux-riscv@lists.infradead.org, Anders Roxell
- <anders.roxell@linaro.org>
+	s=k20201202; t=1728318105;
+	bh=PoWOtQj6nr9yo/vCoJ1K+oh816ywT+jG0OzA4+bxEvA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=P4c60YB/3QXa3mURnfXL8Ghv/b6KAgZmA2FrqRnKW8h4XQIysndHls9cl89GK2UJI
+	 +fQF0ig4Jt+4Sg4XSbRrhyMD5Nj7fao2ipJT0Lp3bray3rnjJrNJ9igw3z2QAT8ney
+	 IXB1ExI6sxdOlBNw8FCufB+FiriiVxjDRSwYHUXAaldJYU/qsbwvGNIE0BmPlgTOHP
+	 dgi8ggs14XXIpDtt0iJ9NwbgHRippzrwajCbBQapPZTWB2kgrJ0LzxnAJfZ2aneBgn
+	 cWtYSj+8EuxHwY1lBTENiwUfvmhuCjvK881WNPTnnUoBfxQY+iU0/rtQZocWA5kjNx
+	 Jto0n4hRkqxww==
+Date: Mon, 7 Oct 2024 17:20:21 +0100
+From: Mark Brown <broonie@kernel.org>
+To: =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
+Cc: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
+	Anders Roxell <anders.roxell@linaro.org>
 Subject: Re: [PATCH v2] selftests: sched_ext: Add sched_ext as proper
  selftest target
-In-Reply-To: <ZwQBqlG6MShCkNrU@finisterre.sirena.org.uk>
+Message-ID: <ZwQKRe7iIzZjjEQd@finisterre.sirena.org.uk>
 References: <20241007073133.989166-1-bjorn@kernel.org>
  <ZwQBqlG6MShCkNrU@finisterre.sirena.org.uk>
-Date: Mon, 07 Oct 2024 18:00:57 +0200
-Message-ID: <87r08rnbra.fsf@all.your.base.are.belong.to.us>
+ <87r08rnbra.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="mdbUJb1cNu8O2f9z"
+Content-Disposition: inline
+In-Reply-To: <87r08rnbra.fsf@all.your.base.are.belong.to.us>
+X-Cookie: Editing is a rewording activity.
+
+
+--mdbUJb1cNu8O2f9z
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Mark Brown <broonie@kernel.org> writes:
+On Mon, Oct 07, 2024 at 06:00:57PM +0200, Bj=F6rn T=F6pel wrote:
+> Mark Brown <broonie@kernel.org> writes:
+> > On Mon, Oct 07, 2024 at 09:31:32AM +0200, Bj=F6rn T=F6pel wrote:
 
-> On Mon, Oct 07, 2024 at 09:31:32AM +0200, Bj=C3=B6rn T=C3=B6pel wrote:
->
->> When building the kselftest suite, e.g.:
->
->>   make ARCH=3Driscv CROSS_COMPILE=3Driscv64-linux-gnu- \
->>     SKIP_TARGETS=3D"" O=3D/output/foo -C tools/testing/selftests install
->
->> The expectation is that the sched_ext is included, cross-built, and
->> placed into /output/foo.
->
-> When building for arm64 with this applied on top of mainline or -next
-> I'm seeing:
+> >   CLNG-BPF create_dsq.bpf.o
+> > In file included from create_dsq.bpf.c:9:
+> > /home/broonie/git/linux/tools/sched_ext/include/scx/common.bpf.h:33:17:=
+ error: use of undeclared identifier 'SCX_DSQ_FLAG_BUILTIN'
+> >    33 |         _Static_assert(SCX_DSQ_FLAG_BUILTIN,
+> >       |                        ^
 
-Thanks for taking it for a spin!
+> This is most likely due to incorrect VMLINUX_BTF_PATHS, so that
+> vmlinux.h is incorrectly generated. Try grepping for
+> SCX_DSQ_FLAG_BUILTIN in vmlinux.h.
 
->    make ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- -C tools/testing/=
-selftests TARGETS=3Dsched_ext SKIP_TARGETS=3D"
->
-> give
->
->   CLNG-BPF create_dsq.bpf.o
-> In file included from create_dsq.bpf.c:9:
-> /home/broonie/git/linux/tools/sched_ext/include/scx/common.bpf.h:33:17: e=
-rror: use of undeclared identifier 'SCX_DSQ_FLAG_BUILTIN'
->    33 |         _Static_assert(SCX_DSQ_FLAG_BUILTIN,
->       |                        ^
+Yeah, it's not in the generated files:
 
-This is most likely due to incorrect VMLINUX_BTF_PATHS, so that
-vmlinux.h is incorrectly generated. Try grepping for
-SCX_DSQ_FLAG_BUILTIN in vmlinux.h.
+broonie@finisterre:~/git/linux$ grep SCX_DSQ_FLAG_BUILTIN ./tools/testing/s=
+elftests/sched_ext/build/include/vmlinux.h ./tools/testing/selftests/sched_=
+ext/build/obj/bpftool/vmlinux.h
+broonie@finisterre:~/git/linux$=20
 
-> and more (my system clang is clang 20).  It's also failing with a native
-> x86_64 build in the same way.  I've run "make headers_install", it looks
-> like clang is not getting told about the copy of the headers installed
-> in ./usr/include:
->
-> clang -g -D__TARGET_ARCH_x86 -mlittle-endian -I/home/broonie/git/linux/to=
-ols/testing/selftests/sched_ext/include -I/home/broonie/git/linux/tools/tes=
-ting/selftests/sched_ext/include/bpf-compat -I/home/broonie/git/linux/tools=
-/testing/selftests/sched_ext/build/include -I/home/broonie/git/linux/tools/=
-include/uapi -I/home/broonie/git/linux/tools/sched_ext/include -I/home/broo=
-nie/git/linux/include -idirafter /usr/lib/llvm-20/lib/clang/20/include -idi=
-rafter /usr/local/include -idirafter /usr/include/x86_64-linux-gnu -idiraft=
-er /usr/include  -Wall -Wno-compare-distinct-pointer-types -Wno-incompatibl=
-e-function-pointer-types -O2 -mcpu=3Dv3 -target bpf -c create_dsq.bpf.c -o =
-/home/broonie/git/linux/tools/testing/selftests/sched_ext/build/obj/sched_e=
-xt/create_dsq.bpf.o
+I didn't actually build a kernel, if the build system needs a kernel
+it's just silently not detected that it's missing?
 
-The sched_ext BPF programs relies on a vmlinux.h, which is generated
-using bpftool and the vmlinux with BTF information. Have you built a
-kernel with BTF support?
+--mdbUJb1cNu8O2f9z
+Content-Type: application/pgp-signature; name="signature.asc"
 
->> Add CROSS_COMPILE, OUTPUT, and TARGETS support to the sched_ext
->> selftest. Also, remove some variables that were unused by the
->> Makefile.
->
->> +ifneq ($(CROSS_COMPILE),)
->> +DEFAULT_BPFTOOL :=3D $(OUTPUT_DIR)/host/sbin/bpftool
->> +HOST_OBJ_DIR :=3D $(OBJ_DIR)/host/bpftool
->> +HOST_LIBBPF_OUTPUT :=3D $(OBJ_DIR)/host/libbpf/
->> +HOST_LIBBPF_DESTDIR :=3D $(OUTPUT_DIR)/host/
->> +HOST_DESTDIR :=3D $(OUTPUT_DIR)/host/
->> +else
->> +DEFAULT_BPFTOOL :=3D $(OUTPUT_DIR)/sbin/bpftool
->> +HOST_OBJ_DIR :=3D $(OBJ_DIR)/bpftool
->> +HOST_LIBBPF_OUTPUT :=3D $(OBJ_DIR)/libbpf/
->> +HOST_LIBBPF_DESTDIR :=3D $(OUTPUT_DIR)/
->> +HOST_DESTDIR :=3D $(OUTPUT_DIR)/
->> +endif
->
-> This won't detect a cross compile when building using LLVM as that
-> doesn't need to set CROSS_COMPILE, it can use the same binaries for all
-> targets.  There's runes in the Makefile for the mm selftests for
-> identifying the target architecture, though actually I'm wondering if
-> it's worth just always building the host copy and never having to worry
-> if the target build is a cross build or not?  It's obvious overhead in
-> the native case though if we actually need the target copy.
+-----BEGIN PGP SIGNATURE-----
 
-Yeah, that would indeed simplify things! I'll spin a v3 with that (and
-wait for more feedback).
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcECkUACgkQJNaLcl1U
+h9BY3AgAhgSd/gtJOHhPdgDJdlWHAcccsg0/qZNJNyUwqLK62pnBWJtCXAN3P1ur
+6wfsjd2wIRRomHekliWei8/9wsP3Ag+/uUSMbeczP7xDAouuwtPUZlDDjQq8hMrk
+2bSTZmTIa2qpjrrfKJRLsX5RDGziW+Q6C3A4hSSa5+l2Ys1lU9Z4rr96eMzoDvTM
+sAyppbbqUPHE59Wqn2L8vHA4qO9ODaYc+VmEZkZPOS661nN9pcImXFu9jd3sbquR
+ZhCA5Jzmj83gP2U4rmSlhWna45c+io68Nd5Zf7ZrdFYceR5VFPkKWRry+a/N/bPg
+JuUBz8uQVlPVg5VsbFNnqbcT+b+SGw==
+=AxkR
+-----END PGP SIGNATURE-----
 
-
-Thanks for testing the patch!
-Bj=C3=B6rn
+--mdbUJb1cNu8O2f9z--
 
