@@ -1,185 +1,251 @@
-Return-Path: <linux-kselftest+bounces-19174-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19175-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 574AA993634
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 20:28:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69553993637
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 20:29:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0DBD1F20FD4
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 18:28:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 268A0281D13
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 18:29:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFA721DDC32;
-	Mon,  7 Oct 2024 18:28:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B061DDC3A;
+	Mon,  7 Oct 2024 18:29:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="N7FKxFFc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lf6sfLmi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2065.outbound.protection.outlook.com [40.107.237.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482F8132111;
-	Mon,  7 Oct 2024 18:28:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.65
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728325703; cv=fail; b=dfIcjRbF+jQPsaoeBCP9lVCW4QOlccnN2s6F4oUvmQLkajzBEzr5/HrN1hSIo/3l/uENCuz7T+78pyuQLVktPYWDrlSjV+m3mMnzYprVeFsvx2u6vTjnl1Nr+4sLUMSEHYBqI+paK5GMhyXT5Jihvm2f16FEmMQind2XUXi5QQs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728325703; c=relaxed/simple;
-	bh=PxK0B534OKTMfsALVti+J4sISb/ugdNQiXMLUnGzKLI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=V4GxUzufJN/EhzZ5q1DbWrgV3SL2beFqZVGEcAuWiES2mLt+EbViCBVc+WVo1sbpygth1sfB+9SZoNnJSMy53AJYDF9depEFDIED3sjnR1Rkyte5liAps+3c45uIOTJoMHKqObT5pZNYxCVCNKoTgiQVJf+PX8k351SggdZX6iA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=N7FKxFFc; arc=fail smtp.client-ip=40.107.237.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PfzcQW84H6mbFXpGSMNUYPFxC+qxAk8ggjocQjYjXIxQof1iGM7OxoJJu4e4Ur3SBiwdVR1BYIlz7B5xYPXN2BkQEEnalXX7WawlyAoUdS+wltSt/hfcFpSmlwwUjm0usyPVhiHIkMsvdXXpt3rIl6I7yUiqUuZ4RYkiW/BZx7O08hSfOjjFEWTBltUc88Ospvm2BSfD1/DaXIRMQuW7lzdh1MsDDy4fSUOH5XXfoggN5jJa1MuKXfu4BFBZgS3MdV7ta3oyrmMi27sacjYcgsi8Op8wvK9QYXFZ4kAeW/8yTERUQOQNlr+26Rol+G05L37nB4PdtzhxXE5WjVwDrw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=T7oTc/DCthphR58HBR0CePI3LWzYF0j22cdUQl/+ziU=;
- b=a+38+4V70XPRlV/zFu3oQvRXH4vGEJoQmF6Ve2KCTUDQLzimVt1Nwn6t9yCvzwrzWgZyEZlYU6Uz41AVgzamRslSh1MXcYx46PJem4GLO/Be2DD2W7pU+maWV9J0SI2CK5rz7NvTX+U8e/Qn6sv6fDNxRZLiJmbmN9XlPTKccXPbNYqrthxvcFIUgx5l50Kzta+DEbqf0ISSjJgD/qAtwN99dEzMG0UWxMUaqQVRVUGTKpQTzINTV+jTkpgpHk7H4o3TMjrKFcmd+POkSh5ps3Tok9l8ORaVDx86vGxpt+JZfqC/2y58WLcoaLHXEApt36aB3WLnBltjIIXrisUQ4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=T7oTc/DCthphR58HBR0CePI3LWzYF0j22cdUQl/+ziU=;
- b=N7FKxFFcXKLNUc+lY4iDOqRayzvEB4eHiW/mR7tCSgRgNXNSayBWbM1c8a/oq8uLyPf3Hj0yIr+KFoAXe1ZOJDGXW1YHiX3ujAk9AFRpZ0PduEriGsLQ+WGN+207vclHBi66l5C58EQ41bVRW7Fkm1aulnmxbzoZtnJnvM6Y4P8ibIbvCyjaWk5syx7jAdwReIGj7DxApys2u2HTeWvbhQm2fL9ReRSfE+g3HToVG7iL5LWj6nlIMHsWNnq00zVwcIvnQYkcEmQlaS6/KDzwpA9+b8pjS5MVAtcIuE3fk1Hn3ozNtmOrOnEB37mncWSuhLvZ2+ThiMGBokAGD/jMuw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by SJ1PR12MB6314.namprd12.prod.outlook.com (2603:10b6:a03:457::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.22; Mon, 7 Oct
- 2024 18:28:17 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.8026.020; Mon, 7 Oct 2024
- 18:28:17 +0000
-Date: Mon, 7 Oct 2024 15:28:16 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: kevin.tian@intel.com, will@kernel.org, joro@8bytes.org,
-	suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
-	dwmw2@infradead.org, baolu.lu@linux.intel.com, shuah@kernel.org,
-	linux-kernel@vger.kernel.org, iommu@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, eric.auger@redhat.com,
-	jean-philippe@linaro.org, mdf@kernel.org, mshavit@google.com,
-	shameerali.kolothum.thodi@huawei.com, smostafa@google.com,
-	yi.l.liu@intel.com
-Subject: Re: [PATCH v2 10/19] iommufd/viommu: Add vdev_id helpers for IOMMU
- drivers
-Message-ID: <20241007182816.GD1365916@nvidia.com>
-References: <6ccdfb27c7aa5a5bb7e153165cf90114cae4687c.1724776335.git.nicolinc@nvidia.com>
- <20240905161415.GS1358970@nvidia.com>
- <ZtnwG/Kmaf+fZFAv@nvidia.com>
- <20240911231103.GR58321@nvidia.com>
- <ZuJdPHRbMeYFATT7@nvidia.com>
- <ZwDMb3F8/cCFhwcQ@Asurada-Nvidia>
- <20241007153837.GT1365916@nvidia.com>
- <ZwQOAvoJrMWOuxxd@Asurada-Nvidia>
- <20241007171119.GY1365916@nvidia.com>
- <ZwQZbYiCdf6WVGG5@Asurada-Nvidia>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZwQZbYiCdf6WVGG5@Asurada-Nvidia>
-X-ClientProxiedBy: BLAPR03CA0073.namprd03.prod.outlook.com
- (2603:10b6:208:329::18) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AA881DD52D;
+	Mon,  7 Oct 2024 18:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728325784; cv=none; b=jN/df6jdbRxhwVM6L7isrU4XzFix2h5rwPwK5eApHeEMvTQLi7oEb4uFqMAeUweAToQDO1qlfVN92uVBM4LHnyeCpgx9/+uzBtV95qaQab0RlvnHQtmQPeLbCkKnexCl8Z0LjLu0clJwqyGxZgeCMi3WxFWvSHBabysv2fQiyzI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728325784; c=relaxed/simple;
+	bh=QhyJG1yefxH1ukiGpEgjlQYVZ/MxwqI9nEfhMYYcmD8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ubmQNQYwNrW1aKO76z3Swpop5el3x5xC5q8yQrwBzJAmUxmCyKS8hHxPzKOap3DP/dh8H9ytF/Be9khalsCFHIur2c+HMr/EFsgLOhvQEyJT7Tu3Ikoy/uwB4X3mq6jw7jFTWR9rZ6/N5QJe96nXABJ27YeRmGrO/6jRN/FT63g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lf6sfLmi; arc=none smtp.client-ip=209.85.128.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6e25f3748e0so47110697b3.0;
+        Mon, 07 Oct 2024 11:29:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728325782; x=1728930582; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=j9tL+fiEIisanOLXgHGQUAxH9XfudE5xPb2xakDmuBk=;
+        b=Lf6sfLmifHkSRqAguKPYtnHm1sWOrpnQoZHLmoJlEccRSq8+IqT5eJ7qAAajbMgH8C
+         4kTJJU9FUf1xsA5SpSTKLPxhTS+rxYzXO8Z3vnQLzZjLrrgQ60qzbHB38zhp86Wl1bPB
+         FcBlIV+hAoYzhkCtNn6w1WVu1+6YSE4UU2SXGD1NB4s+noyWYtWv0J/ZxKCqxRyKB4YQ
+         bS+3eR840EfD58iqjCQrTBrtVBn9XbVU4TSoNVHf/8Z197DlCCKgKDOayUhwdFJryq6T
+         6CRrElP4aYINd8v1aTzAfMfl5ekxwrksuamskaoo1Nb91ibFKXfqTq1wwzv4IwVoEWPF
+         Jc1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728325782; x=1728930582;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=j9tL+fiEIisanOLXgHGQUAxH9XfudE5xPb2xakDmuBk=;
+        b=i552u8LhjorA6Ri+zF0HLuyTw5Z46AVMex51hre8+3iUmpqif5ioAQU44CEpJJZ7aD
+         FEgjxs4He9vy4XzGXLUI3MiI6TonPlbs38DNOJPZxczX9g0by6tTuYSWc8TRhmcMroQX
+         sjdKMkxiBE1KdvHQn2J3ZO4kR3aUllqC0tg3lsvBIURSrhElpMvO2kd4zHjqJfLXbJG2
+         AjYlYE8YzADD5daZ5kIYqqU4n3hAIiyEkmz8rfpzC6PPfG0IvBG0aIKkNTD9jNVlBdys
+         UOWB88eUXsIX9VxNhdsfgD0ksclfUPq+GrVa+mVzAoQ5nbZQZuNpIzwKrFEqdv1L7MlI
+         61EQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUtetSn6wLdeIHj61nDtHv6frR0oDxKB/O91K0xW4DFAD/ZsDmP9BdECK5mAwwA6ts/2iXi6G2QIIHUvVvO@vger.kernel.org, AJvYcCVd7kIBZ1SYaFgF7k8gKikDE8s5VwQNjeLNE9URr27+XdegHneKwDTp5rzVwWg/qL/wKzMwtBBUQwYoxmP2vqNM@vger.kernel.org, AJvYcCWBCE0riUgKfmitWrg09wbVcrfdnQrKrMGNzJOruy2UiV/DmRb56SWnzy4FJi26NghF1BQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOHuPPqHPjsp55TgsBJSl6XOsXZAa7qtQvhh354xAcmtjoPlUx
+	W5icAyJUcWl591NCZ+cWFwngeUhhpFnDTImB8jm0wgOmDezkU1VouZnO/Odo
+X-Google-Smtp-Source: AGHT+IFxRXXkyXYrbz4bkr7Zxus1zEAxwXPdFVCO/p5Eqbpv2MrtpmYKCXpDdSRinH+YQu1wXePscg==
+X-Received: by 2002:a05:690c:39c:b0:6e2:767:8a64 with SMTP id 00721157ae682-6e2c729eab6mr104318897b3.37.1728325782187;
+        Mon, 07 Oct 2024 11:29:42 -0700 (PDT)
+Received: from dev-ubuntu-0.. (104-15-236-76.lightspeed.rlghnc.sbcglobal.net. [104.15.236.76])
+        by smtp.googlemail.com with ESMTPSA id 00721157ae682-6e2d926aec5sm11377977b3.2.2024.10.07.11.29.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Oct 2024 11:29:41 -0700 (PDT)
+From: Tyrone Wu <wudevelops@gmail.com>
+To: olsajiri@gmail.com,
+	laoar.shao@gmail.com,
+	wudevelops@gmail.com
+Cc: andrii.nakryiko@gmail.com,
+	andrii@kernel.org,
+	ast@kernel.org,
+	bpf@vger.kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	haoluo@google.com,
+	john.fastabend@gmail.com,
+	kernel-patches-bot@fb.com,
+	kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	martin.lau@linux.dev,
+	mykolal@fb.com,
+	sdf@fomichev.me,
+	shuah@kernel.org,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	Jiri Olsa <jolsa@kernel.org>
+Subject: [PATCH bpf v6 1/2] bpf: fix unpopulated name_len field in perf_event link info
+Date: Mon,  7 Oct 2024 18:29:32 +0000
+Message-ID: <20241007182933.8841-1-wudevelops@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <ZwOWs_XrBtlTGE24@krava>
+References: <ZwOWs_XrBtlTGE24@krava>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|SJ1PR12MB6314:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8419f830-44c5-4dad-2e00-08dce6fdd052
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?YfXhVk6Lx0DrLhEZaQyhXrc+UN9kjAyAnHdg0NtJDXVZguutzEbgMKFqysTv?=
- =?us-ascii?Q?PO1nris1wqKrdXqdk0Q/sHrpHpi9Fi6d6nKcR2Fr2GiJgG4HZ2LQzLeQd19s?=
- =?us-ascii?Q?xK+HEKwG7eP5K3QL+qV9yBeqf9sh6TaRUPe9iBfn7jmjtoE71IITQsgQp9wu?=
- =?us-ascii?Q?DZr6+Kpl/slz8Z1w+LAlOXMq/UsF84rXEIt7+n+09YxUJRVZlpaBmehU6tiu?=
- =?us-ascii?Q?U5PjzDs2TK7/UbvN3A5hmsdCAl/Xs1Edz9hyFZtJ948eyNHZj6kYe1zZ3TRg?=
- =?us-ascii?Q?7IcOESkWyMFU3XL4LU8Z2TM5Z6uffhSk/ofb3AqMJDrV9kLk8zq3jj7cRcI4?=
- =?us-ascii?Q?L2hBvCJWXbuIbDfldtyj58FAJFGqf9TfZ1LLwwx+asl/mFEEzfWUd7ArFhIM?=
- =?us-ascii?Q?s0vrG0YDa5Zze7rTHPj9AEuOxw7u0ksF0ssO/exJYFtww4mCMciYfZJU/g8u?=
- =?us-ascii?Q?3/z4KqveTs8MXdXngKXPG89Mw7Qbf7JqCNyJ8Cg3oMah2IKmodmltRW9Coyh?=
- =?us-ascii?Q?TvzarKAQrDZ0VS55dsQWPWzIy9PIbiafeezqrMjK5kECvtEA/pjeE3qZI02f?=
- =?us-ascii?Q?wp35IL9hwoilsqizb1npQZi1ScAYD12LlspN3xCKlTbQWZV6GKZp6PCw49dp?=
- =?us-ascii?Q?0b4svtUjcdXBgpOdBis8cQV/LjqpnNjeN1YLKXtm12GwKZenZj4xKCvvWtWW?=
- =?us-ascii?Q?An8G6PZzFPpqsfZCUogTADMzi4e+2+DNMbywtrU+0m023N3kZr1FQi76dMpO?=
- =?us-ascii?Q?qFpEMKiFacmt67S3CpIiXlL+Jz3Dgirhjp6cJ5zDkv5D3AxgYfZ7NWv8ZKpl?=
- =?us-ascii?Q?+GpsGb17d7PCUYKhCZ5f9jqcKBjJ2lqT80DLz2UfSC2/uXxrH+hEt7m11ozF?=
- =?us-ascii?Q?kTH+S+5RF20gNwUM283b+l9JEq6mY2svxytjA9yC8A5EVb5nOORRZ09rDSgg?=
- =?us-ascii?Q?MbGWKffMmCOfNEOqHmoA9DxDzCCQE0JGKWtmiLaxZ84EO809ZdSjWxIxgkzx?=
- =?us-ascii?Q?yGIJRmNVr0LCUmdHVPrftMwYM9PTTMsYBHGe8GOEtQIE2lwC9lSfUQEP3rev?=
- =?us-ascii?Q?+dh6GGXzIcSB68oLgu/2pln+x3zy2UGkm7RURzj5G0bw0bKaNunUoZ3ETw8Y?=
- =?us-ascii?Q?UwI60GBlGWm5urHro5+ui/Uq4dxpzf0W3z65kkLfOMV2zAs4Ex+CHJMek7Pj?=
- =?us-ascii?Q?7JB9aiMBJiD6jPNUoo0RlP43n3vep4fiTJOKvdRBB5hvM85H1aUT4GoWkOKF?=
- =?us-ascii?Q?KBVSGKnVMDz2JoxlTTeNoYtiXy7w5wH8vXKc7QcgHQ=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?XRGpnLl2QCqjF1ZlZwejnMcRSesH6rqQ6HxEcMpUC18OPui34ICZdJ6Mpu73?=
- =?us-ascii?Q?g8sQl3bno/4KYW9LPVOdSKBwmhEFYAbqnJF2UnGJy2/d+SZPUhq5JSf+SDq2?=
- =?us-ascii?Q?ZiIkEO/XLx74XQmn6pYyyk230BBnq4T7UGPCkXbl0LlHSxmLWfNhq0h8DjU+?=
- =?us-ascii?Q?8gmDU/V3gaXPeCB1xeyCCHf5gGsP6hlytmBSEsgsYPEHeVdwIjBdoR3ufMBj?=
- =?us-ascii?Q?PbuaGOs+qWaWhRoq+TG7L5x5zl94WqPnopE8cRpQoR8ZM6TMgogC2V44SJYQ?=
- =?us-ascii?Q?ItGWz+Xc9X5ZsHoBM7u1vghf9/qs4YdAgrJAbZfGcEO/Jpkdyy57yJBtilGS?=
- =?us-ascii?Q?NjLaU+Xy7NlfAFPxujYKU6GKgP5fbQSweFaq2TO7MgST+VSidSp+ND3sctvh?=
- =?us-ascii?Q?4VSmw/MPMaaLQYBArijvACgere0QU5X/sWTop7/yN5dBzSQi9mc8xsnkxsWV?=
- =?us-ascii?Q?VAjnUHS+fvcxOkuh0Fi528T5zZrJHSRSL6KfbQnumHj0TDdRFFAdrrHmAsJN?=
- =?us-ascii?Q?CvuS6XNuXiPP/D9jQMAKEW5YJKWPOYwUqd4SMyoMBHvkfIIt2CZsjHRtue7L?=
- =?us-ascii?Q?vKIcOHQdThHs5aPGJQn+90JCOhpv02skKYBwtP0eOogPnJ9jL2M9Wglg3qG3?=
- =?us-ascii?Q?+gcqKMg5XVVhLnb0JYf8SYU4PmXuUGe3iGr+OrrtsGY7ey6QwO8fUPZcRgOH?=
- =?us-ascii?Q?dlqlMSxSQ8mjv/CgffsZPFgX+RHyosRjPmdL5WYdX+15MK8XP0gAoW0Yaek0?=
- =?us-ascii?Q?KsdjBwSb7nbNmnWCyhimTqzp5TJO/jiwtrh/0LilH8w5hK2ZWIJs10Xkd8wA?=
- =?us-ascii?Q?zdIBBHGNSIoKGP8NiI3Wm6daXGHPbv9tBJLollrAVfhnkbiN0KG55XumvMH+?=
- =?us-ascii?Q?AOb13uriffpTV916vfQq+9ik2VEcEGO3kA0gg6flc795YO0t7bEZx8E4q1sW?=
- =?us-ascii?Q?eRC86KVQkvc0D0yYbJwZnWVV7K7EMOR17Ety4osSd2QyGikto3gX4WBAD3ED?=
- =?us-ascii?Q?JPpG5uKSiBlhFiuDr6nFrHLQriRSwi5i2mhHysTyw2yzzlyF/x61fNlyXPLw?=
- =?us-ascii?Q?OUgMiJ8CnI8D3Y9QA8QSZ7IJvoiz2qtHAQFHunYTKDSPrZV5JDZNzkvWbraQ?=
- =?us-ascii?Q?JqY85MUeweV6T+MnudUWO5eNJ+fAJH/4MTHB1DiER2keq9BC6qkX0ePq5S7B?=
- =?us-ascii?Q?v3U3YepZHQxQK9REHfFLk2KrYhBD7t/iidzmoLQpwC7u46g+NQ3Dw7f2xsHh?=
- =?us-ascii?Q?wKgJdu3f+/CuFu8tCQsabyzHssxRIsb5icAZmptjNl4tfvZjliVmW4Qvws3R?=
- =?us-ascii?Q?9F/yc+n97ZyVJO4GZovqfTXnrDfLJDQnIf9RC8h5xVawQOp+iLyQqlwmYG7+?=
- =?us-ascii?Q?VX+7Mjr/a4u+U/lFFuCla98doOrCR9NBoBDhUtPhMMXz3EV2XyfHQBP6ktk8?=
- =?us-ascii?Q?5pthnjejU4qHZUKYs2SD3Og3/coZEMzjX9nkIJSgS199BCLrSpD6sYDeF4KR?=
- =?us-ascii?Q?TR2akGKkP8E9449LMT4W48AOVmpNeXdyUCXz8az+x+Bjkca2nCLGk76U/URz?=
- =?us-ascii?Q?ClHNCcFZ6UdcyQPJe9k=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8419f830-44c5-4dad-2e00-08dce6fdd052
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Oct 2024 18:28:17.7533
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IKbB7M/llpG8nggQjyUtMZfuQ1oEqrTFGshnjbnHpVDOes4eVGlvXkn5Ahroe1Qg
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6314
+Content-Transfer-Encoding: 8bit
 
-On Mon, Oct 07, 2024 at 10:25:01AM -0700, Nicolin Chen wrote:
+From: tyrone-wu <wudevelops@gmail.com>
 
-> This is for vdev/dev v.s. hwpt. We need the lock for viommu's
-> vdev xarray.
-> 
-> Yet, giving a 2nd thought, I feel the lock would be useless if
-> a driver tries to refer the returned vdev (with this helper)
-> after the vdev object is destroyed..
-> 
-> We could only note something similar that caller must be aware
-> of the life cycle of vdev itself..
+Previously when retrieving `bpf_link_info.perf_event` for
+kprobe/uprobe/tracepoint, the `name_len` field was not populated by the
+kernel, leaving it to reflect the value initially set by the user. This
+behavior was inconsistent with how other input/output string buffer
+fields function (e.g. `raw_tracepoint.tp_name_len`).
 
-Yes, I imagined you'd use the xa_lock for this an it solves both
-problems at once.
+This patch fills `name_len` with the actual size of the string name.
 
-Jason
+Link: https://lore.kernel.org/bpf/CABVU1kXwQXhqQGe0RTrr7eegtM6SVW_KayZBy16-yb0Snztmtg@mail.gmail.com/
+Fixes: 1b715e1b0ec5 ("bpf: Support ->fill_link_info for perf_event")
+Signed-off-by: Tyrone Wu <wudevelops@gmail.com>
+Acked-by: Jiri Olsa <jolsa@kernel.org>
+Acked-by: Yafang Shao <laoar.shao@gmail.com>
+---
+V5 -> V6:
+Link: https://lore.kernel.org/bpf/ZwOWs_XrBtlTGE24@krava/
+- Use simpler buf check while keeping V4
+- Fix netdev/checkpatch warning for 80 cols exceeded
+- Fix Signed-off-by to use real name instead of git username
+
+V4 -> V5:
+Link: https://lore.kernel.org/bpf/CALOAHbC5xm7Cbfhau3z5X2PqUhiHECNWAPtJCWiOVqTKmdZp-Q@mail.gmail.com/
+- Check that buf is not NULL before retrieving/using its length
+
+V3 -> V4:
+Link: https://lore.kernel.org/bpf/Zv_PP6Gs5cq3W2Ey@krava/
+- Split patch into separate kernel and selftest change
+
+V2 -> V3:
+Link: https://lore.kernel.org/bpf/Zv7sISV0yEyGlEM3@krava/
+- Use clearer variable name for user set/inputted name len (name_len -> input_len)
+- Change (name_len -> input_len) type from size_t to u32 since it's only received and used as u32
+
+V1 -> V2:
+Link: https://lore.kernel.org/bpf/Zv0wl-S13WJnIkb_@krava/
+- Use user set *ulen in bpf_copy_to_user before overwriting *ulen
+
+ kernel/bpf/syscall.c | 32 +++++++++++++++++++++++---------
+ 1 file changed, 23 insertions(+), 9 deletions(-)
+
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index a8f1808a1ca5..b5a7e428ac16 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3565,27 +3565,33 @@ static void bpf_perf_link_dealloc(struct bpf_link *link)
+ }
+ 
+ static int bpf_perf_link_fill_common(const struct perf_event *event,
+-				     char __user *uname, u32 ulen,
++				     char __user *uname, u32 *ulen,
+ 				     u64 *probe_offset, u64 *probe_addr,
+ 				     u32 *fd_type, unsigned long *missed)
+ {
+ 	const char *buf;
+-	u32 prog_id;
++	u32 prog_id, input_len;
+ 	size_t len;
+ 	int err;
+ 
+-	if (!ulen ^ !uname)
++	if (!(*ulen) ^ !uname)
+ 		return -EINVAL;
+ 
+ 	err = bpf_get_perf_event_info(event, &prog_id, fd_type, &buf,
+ 				      probe_offset, probe_addr, missed);
+ 	if (err)
+ 		return err;
++
++	if (buf) {
++		input_len = *ulen;
++		len = strlen(buf);
++		*ulen = len + 1;
++	}
+ 	if (!uname)
+ 		return 0;
++
+ 	if (buf) {
+-		len = strlen(buf);
+-		err = bpf_copy_to_user(uname, buf, ulen, len);
++		err = bpf_copy_to_user(uname, buf, input_len, len);
+ 		if (err)
+ 			return err;
+ 	} else {
+@@ -3609,7 +3615,7 @@ static int bpf_perf_link_fill_kprobe(const struct perf_event *event,
+ 
+ 	uname = u64_to_user_ptr(info->perf_event.kprobe.func_name);
+ 	ulen = info->perf_event.kprobe.name_len;
+-	err = bpf_perf_link_fill_common(event, uname, ulen, &offset, &addr,
++	err = bpf_perf_link_fill_common(event, uname, &ulen, &offset, &addr,
+ 					&type, &missed);
+ 	if (err)
+ 		return err;
+@@ -3617,7 +3623,7 @@ static int bpf_perf_link_fill_kprobe(const struct perf_event *event,
+ 		info->perf_event.type = BPF_PERF_EVENT_KRETPROBE;
+ 	else
+ 		info->perf_event.type = BPF_PERF_EVENT_KPROBE;
+-
++	info->perf_event.kprobe.name_len = ulen;
+ 	info->perf_event.kprobe.offset = offset;
+ 	info->perf_event.kprobe.missed = missed;
+ 	if (!kallsyms_show_value(current_cred()))
+@@ -3639,7 +3645,7 @@ static int bpf_perf_link_fill_uprobe(const struct perf_event *event,
+ 
+ 	uname = u64_to_user_ptr(info->perf_event.uprobe.file_name);
+ 	ulen = info->perf_event.uprobe.name_len;
+-	err = bpf_perf_link_fill_common(event, uname, ulen, &offset, &addr,
++	err = bpf_perf_link_fill_common(event, uname, &ulen, &offset, &addr,
+ 					&type, NULL);
+ 	if (err)
+ 		return err;
+@@ -3648,6 +3654,7 @@ static int bpf_perf_link_fill_uprobe(const struct perf_event *event,
+ 		info->perf_event.type = BPF_PERF_EVENT_URETPROBE;
+ 	else
+ 		info->perf_event.type = BPF_PERF_EVENT_UPROBE;
++	info->perf_event.uprobe.name_len = ulen;
+ 	info->perf_event.uprobe.offset = offset;
+ 	info->perf_event.uprobe.cookie = event->bpf_cookie;
+ 	return 0;
+@@ -3673,12 +3680,19 @@ static int bpf_perf_link_fill_tracepoint(const struct perf_event *event,
+ {
+ 	char __user *uname;
+ 	u32 ulen;
++	int err;
+ 
+ 	uname = u64_to_user_ptr(info->perf_event.tracepoint.tp_name);
+ 	ulen = info->perf_event.tracepoint.name_len;
++	err = bpf_perf_link_fill_common(event, uname, &ulen, NULL, NULL, NULL,
++					NULL);
++	if (err)
++		return err;
++
+ 	info->perf_event.type = BPF_PERF_EVENT_TRACEPOINT;
++	info->perf_event.tracepoint.name_len = ulen;
+ 	info->perf_event.tracepoint.cookie = event->bpf_cookie;
+-	return bpf_perf_link_fill_common(event, uname, ulen, NULL, NULL, NULL, NULL);
++	return 0;
+ }
+ 
+ static int bpf_perf_link_fill_perf_event(const struct perf_event *event,
+-- 
+2.43.0
+
 
