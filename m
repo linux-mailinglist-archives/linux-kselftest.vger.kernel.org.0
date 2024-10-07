@@ -1,315 +1,180 @@
-Return-Path: <linux-kselftest+bounces-19185-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19186-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9A94993985
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 23:46:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97656993B33
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 01:30:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EDAF51C21261
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 21:46:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 56964283286
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 23:30:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D9D2175D38;
-	Mon,  7 Oct 2024 21:46:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B624B192B6F;
+	Mon,  7 Oct 2024 23:30:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="IivwmPSa"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="ktby9xLk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6962774C08
-	for <linux-kselftest@vger.kernel.org>; Mon,  7 Oct 2024 21:46:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C049018C33C
+	for <linux-kselftest@vger.kernel.org>; Mon,  7 Oct 2024 23:30:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728337574; cv=none; b=LxVOxFz5+CR1iSorDNs1fqcMe4bKhKlpzI+S5L1hW3p1A9ixnsgAAlRP1qRtTVyikd8eq5OZN+jm/dLBjpcMXl2Z7oAS3o7KUHT4jmuXT009szhUKf9vcTmFAnIjHa6utzUhf+dFihc9MFyee3VeqlIxx2660AOuXvJAyolMTL0=
+	t=1728343815; cv=none; b=Iw7cfuLX7ZTxkroEYGLfSBsVeVy5doxN3km7+SlR+Ez+IKL9cVVy4a0M+7+X1VsE8IlJIDns1wFpyRR80LsKZSn1o6Hb9BFlbu92LN84lDTFzO2Ry74eRgcMgLSCyTHPhcqweTwY5BtBW2h3/j8vweHBSzzjQDyKEx90QfFOeJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728337574; c=relaxed/simple;
-	bh=Dy5PsWHF/hd0Qs1WR035jds0f1A0JqB40ld1GT1T6jM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JGUzELrljZNBOskfU4oWWJlhy56fk0pD6UvxNC/Ktx66xIoODmEJMJx26VnFwIlX4prRM7twNL2OcLAwaLyV/piQ2SHQkTxN/SZAPjq2j8FJ/IgX2ho0IzosL0Tdy+fREjNRQCuOzEXi4GZNar66cyiADALKNbCZLv+3h1TQ6j8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=IivwmPSa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BB87C4CEC6;
-	Mon,  7 Oct 2024 21:46:13 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="IivwmPSa"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1728337568;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VFiFlqN0v+4ELpL9sZmgo6GRX/7LhppnKlv9q/ahwLs=;
-	b=IivwmPSavWd3DcVTh8jbp7C5i5QWniDJOILAoVgBMGHkgs9GILS4erAdozZWXyBdpowsft
-	Hk42CODOJl30yaSSBiD8qmsUUp3bUejMgKPF1ndKd6tph+waYOKYbR27wAI3mnaHeImXOE
-	iG8n8GcXvODp/XPlN0Ao8CnnAIjt7M8=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id a1939a3f (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Mon, 7 Oct 2024 21:46:08 +0000 (UTC)
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: linux-kselftest@vger.kernel.org,
-	greg@kroah.com,
-	skhan@linuxfoundation.org
-Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: [PATCH kselftest v3 3/3] selftests: vDSO: improve getrandom and chacha error messages
-Date: Mon,  7 Oct 2024 23:45:58 +0200
-Message-ID: <20241007214558.2590492-3-Jason@zx2c4.com>
-In-Reply-To: <20241007214558.2590492-1-Jason@zx2c4.com>
-References: <6d8c0894-f3c4-42ff-9794-03d675142a7c@linuxfoundation.org>
- <20241007214558.2590492-1-Jason@zx2c4.com>
+	s=arc-20240116; t=1728343815; c=relaxed/simple;
+	bh=S1F++puxXk1Ulj8gHCvxmOOAcPGjm+vi9Ym0UiVV8hc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ozvza2XS71opsD/TFZUnPaz/8fsNmWHdlB3FyeieKeP6qUIBiUvGBYOd4tvpa1ZMjhUa7tqA6V/rTUYERa5Zl5OKHxAiQvERQ5qbPyzr+TJ83/4UNwsknR69Ze5/6EcoAQCTfm+j/iXqmmnXgaxPTHdxOBjPhyUUjYgd8U59IKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=ktby9xLk; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-71df0dbee46so1793414b3a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 07 Oct 2024 16:30:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1728343812; x=1728948612; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=e7/GR1vy5g6MzSW/6AGsBA6lPgGhyPg9oR0WwZB3CYI=;
+        b=ktby9xLkZAr2/l0cdYu5vXBZSpJTc8C1WJY4c0br7+rLMbpYJICVnk5B8OlUVXfThH
+         WiW2iiUvC5W0J2qdKb/9cuSXSuQF4i51HcPsmcDJpiaBmm6YjTRrH2tBqMMlaV++p3fG
+         u0E26Y23eCqRzhG6wbKWlJJIvsfnQ98Jy1HKkmUM2sv1Zg6jL/s+woWdKI+17vZr+XXC
+         OYorqtcblNuNivuqozuxo2THjZyAK2r1TCSwDiOf1tz9n3Dkfeon1W/kvpl+j6kegFsF
+         w5Ea1KLLz5H33G8KmASrKvkCvKstLrFWKDHQ5r8yEUOyR15C3KJlRe5TCnXqknDhd2oO
+         /60w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728343812; x=1728948612;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=e7/GR1vy5g6MzSW/6AGsBA6lPgGhyPg9oR0WwZB3CYI=;
+        b=AKXmUlWaYU0KvevoeK+rVTl2ZHGcGq82Ygu9PkHSH/s3d6/FWwDKjuM1LtS4Q+ADv1
+         BYxj2ArbyXYb6SfcU8Kw5iroe7GRiwIunI9JcgF9Z+ZwP3t+YZlqVtGjAT4GmFeskZ1Y
+         zFEWDO1eVkDvlYMet0h19KhBTkMMHFYbQeIuAWuBgyls9WlX2cP9eDhnpihG4zwAB9MX
+         UIMZKLK69OC4+pRFCZavKZFO8Bfr6GiZORNVPKuCBeQoLAAxqaqbEiJP3OLTlwfnhcgW
+         3qg62Tf9lgJ7dNXHeZzRK3P1giQTm0hSHGQXkoOGnmv/7EfCr/6dnCl95I/BGri4bczT
+         JkTA==
+X-Forwarded-Encrypted: i=1; AJvYcCXzjCiR4ReriJspti3obVKzXPoeuYqyJjYi8grEYO5/kjVYhHoHOggdth1RBTNiOIaDoGCzol1T+GNvfUxyzeQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrK3wtIjPhWG8ob+6KX9b+C8Ytx6Ffo+Y3FzRULWm4F9vz/VnK
+	7bcGouglHen+IyPF+I/eMOASbSk1o0CSRWyyUpuRLNxCfII3hVBum0kTZKa6ow4=
+X-Google-Smtp-Source: AGHT+IGbBDU9FuYkbc/ROL+eEuwX1ANHvoegHjKgVYPBMiJcEOGbwaOtHTQqomqAdeFDnRJFbE5XwQ==
+X-Received: by 2002:a05:6a00:8a03:b0:71d:ee1b:c854 with SMTP id d2e1a72fcca58-71dee1bcacamr11916142b3a.9.1728343812103;
+        Mon, 07 Oct 2024 16:30:12 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71df0cbba1csm4970382b3a.33.2024.10.07.16.30.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Oct 2024 16:30:11 -0700 (PDT)
+Date: Mon, 7 Oct 2024 16:30:08 -0700
+From: Deepak Gupta <debug@rivosinc.com>
+To: Zong Li <zong.li@sifive.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Christian Brauner <brauner@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
+	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	alistair.francis@wdc.com, richard.henderson@linaro.org,
+	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
+	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
+	cleger@rivosinc.com, alexghiti@rivosinc.com,
+	samitolvanen@google.com, broonie@kernel.org,
+	rick.p.edgecombe@intel.com
+Subject: Re: [PATCH 16/33] riscv/shstk: If needed allocate a new shadow stack
+ on clone
+Message-ID: <ZwRvAEwFbrpq3zZq@debug.ba.rivosinc.com>
+References: <20241001-v5_user_cfi_series-v1-0-3ba65b6e550f@rivosinc.com>
+ <20241001-v5_user_cfi_series-v1-16-3ba65b6e550f@rivosinc.com>
+ <CANXhq0rpwQkZ9+mZLGVUq=r4WiA8BbZ-eeTDogf3fzeEPqeeqA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANXhq0rpwQkZ9+mZLGVUq=r4WiA8BbZ-eeTDogf3fzeEPqeeqA@mail.gmail.com>
 
-Improve the error and skip condition messages to let the developer know
-precisely where a test has failed. Also make better use of the ksft api
-for this.
+On Mon, Oct 07, 2024 at 04:17:47PM +0800, Zong Li wrote:
+>On Wed, Oct 2, 2024 at 12:20 AM Deepak Gupta <debug@rivosinc.com> wrote:
+>>
+>> Userspace specifies CLONE_VM to share address space and spawn new thread.
+>> `clone` allow userspace to specify a new stack for new thread. However
+>> there is no way to specify new shadow stack base address without changing
+>> API. This patch allocates a new shadow stack whenever CLONE_VM is given.
+>>
+>> In case of CLONE_VFORK, parent is suspended until child finishes and thus
+>> can child use parent shadow stack. In case of !CLONE_VM, COW kicks in
+>> because entire address space is copied from parent to child.
+>>
+>> `clone3` is extensible and can provide mechanisms using which shadow stack
+>> as an input parameter can be provided. This is not settled yet and being
+>> extensively discussed on mailing list. Once that's settled, this commit
+>> will adapt to that.
+>>
+>> Signed-off-by: Deepak Gupta <debug@rivosinc.com>
+>> ---
+>>  arch/riscv/include/asm/usercfi.h |  25 ++++++++
 
-Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
----
- .../testing/selftests/vDSO/vdso_test_chacha.c | 27 ++++---
- .../selftests/vDSO/vdso_test_getrandom.c      | 75 ++++++++-----------
- 2 files changed, 49 insertions(+), 53 deletions(-)
+... snipped...
 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_chacha.c b/tools/testing/selftests/vDSO/vdso_test_chacha.c
-index c66eb9df89bd..8757f738b0b1 100644
---- a/tools/testing/selftests/vDSO/vdso_test_chacha.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_chacha.c
-@@ -91,10 +91,8 @@ int main(int argc, char *argv[])
- 	ksft_set_plan(1);
- 
- 	for (unsigned int trial = 0; trial < TRIALS; ++trial) {
--		if (getrandom(key, sizeof(key), 0) != sizeof(key)) {
--			printf("getrandom() failed!\n");
--			return KSFT_SKIP;
--		}
-+		if (getrandom(key, sizeof(key), 0) != sizeof(key))
-+			ksft_exit_skip("getrandom() failed unexpectedly\n");
- 		memset(counter1, 0, sizeof(counter1));
- 		reference_chacha20_blocks(output1, key, counter1, BLOCKS);
- 		for (unsigned int split = 0; split < BLOCKS; ++split) {
-@@ -103,8 +101,10 @@ int main(int argc, char *argv[])
- 			if (split)
- 				__arch_chacha20_blocks_nostack(output2, key, counter2, split);
- 			__arch_chacha20_blocks_nostack(output2 + split * BLOCK_SIZE, key, counter2, BLOCKS - split);
--			if (memcmp(output1, output2, sizeof(output1)) || memcmp(counter1, counter2, sizeof(counter1)))
--				return KSFT_FAIL;
-+			if (memcmp(output1, output2, sizeof(output1)))
-+				ksft_exit_fail_msg("Main loop outputs do not match on trial %u, split %u\n", trial, split);
-+			if (memcmp(counter1, counter2, sizeof(counter1)))
-+				ksft_exit_fail_msg("Main loop counters do not match on trial %u, split %u\n", trial, split);
- 		}
- 	}
- 	memset(counter1, 0, sizeof(counter1));
-@@ -114,14 +114,19 @@ int main(int argc, char *argv[])
- 
- 	reference_chacha20_blocks(output1, key, counter1, BLOCKS);
- 	__arch_chacha20_blocks_nostack(output2, key, counter2, BLOCKS);
--	if (memcmp(output1, output2, sizeof(output1)) || memcmp(counter1, counter2, sizeof(counter1)))
--		return KSFT_FAIL;
-+	if (memcmp(output1, output2, sizeof(output1)))
-+		ksft_exit_fail_msg("Block limit outputs do not match after first round\n");
-+	if (memcmp(counter1, counter2, sizeof(counter1)))
-+		ksft_exit_fail_msg("Block limit counters do not match after first round\n");
- 
- 	reference_chacha20_blocks(output1, key, counter1, BLOCKS);
- 	__arch_chacha20_blocks_nostack(output2, key, counter2, BLOCKS);
--	if (memcmp(output1, output2, sizeof(output1)) || memcmp(counter1, counter2, sizeof(counter1)))
--		return KSFT_FAIL;
-+	if (memcmp(output1, output2, sizeof(output1)))
-+		ksft_exit_fail_msg("Block limit outputs do not match after second round\n");
-+	if (memcmp(counter1, counter2, sizeof(counter1)))
-+		ksft_exit_fail_msg("Block limit counters do not match after second round\n");
- 
- 	ksft_test_result_pass("chacha: PASS\n");
--	return KSFT_PASS;
-+	ksft_exit_pass();
-+	return 0;
- }
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getrandom.c b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-index 5489a2f07434..50ec9ad4c7ec 100644
---- a/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_getrandom.c
-@@ -40,6 +40,9 @@
- 	} while (0)
- #endif
- 
-+#define ksft_assert(condition) \
-+	do { if (!(condition)) ksft_exit_fail_msg("Assertion failed: %s\n", #condition); } while (0)
-+
- static struct {
- 	pthread_mutex_t lock;
- 	void **states;
-@@ -109,26 +112,19 @@ static void vgetrandom_init(void)
- 	const char *version = versions[VDSO_VERSION];
- 	const char *name = names[VDSO_NAMES][6];
- 	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
--	size_t ret;
-+	ssize_t ret;
- 
--	if (!sysinfo_ehdr) {
--		printf("AT_SYSINFO_EHDR is not present!\n");
--		exit(KSFT_SKIP);
--	}
-+	if (!sysinfo_ehdr)
-+		ksft_exit_skip("AT_SYSINFO_EHDR is not present\n");
- 	vdso_init_from_sysinfo_ehdr(sysinfo_ehdr);
- 	vgrnd.fn = (__typeof__(vgrnd.fn))vdso_sym(version, name);
--	if (!vgrnd.fn) {
--		printf("%s is missing!\n", name);
--		exit(KSFT_SKIP);
--	}
-+	if (!vgrnd.fn)
-+		ksft_exit_skip("%s@%s symbol is missing from vDSO\n", name, version);
- 	ret = VDSO_CALL(vgrnd.fn, 5, NULL, 0, 0, &vgrnd.params, ~0UL);
--	if (ret == -ENOSYS) {
--		printf("unsupported architecture\n");
--		exit(KSFT_SKIP);
--	} else if (ret) {
--		printf("failed to fetch vgetrandom params!\n");
--		exit(KSFT_FAIL);
--	}
-+	if (ret == -ENOSYS)
-+		ksft_exit_skip("CPU does not have runtime support\n");
-+	else if (ret)
-+		ksft_exit_fail_msg("Failed to fetch vgetrandom params: %zd\n", ret);
- }
- 
- static ssize_t vgetrandom(void *buf, size_t len, unsigned long flags)
-@@ -137,10 +133,7 @@ static ssize_t vgetrandom(void *buf, size_t len, unsigned long flags)
- 
- 	if (!state) {
- 		state = vgetrandom_get_state();
--		if (!state) {
--			printf("vgetrandom_get_state failed!\n");
--			exit(KSFT_FAIL);
--		}
-+		ksft_assert(state);
- 	}
- 	return VDSO_CALL(vgrnd.fn, 5, buf, len, flags, state, vgrnd.params.size_of_opaque_state);
- }
-@@ -152,7 +145,7 @@ static void *test_vdso_getrandom(void *ctx)
- 	for (size_t i = 0; i < TRIALS; ++i) {
- 		unsigned int val;
- 		ssize_t ret = vgetrandom(&val, sizeof(val), 0);
--		assert(ret == sizeof(val));
-+		ksft_assert(ret == sizeof(val));
- 	}
- 	return NULL;
- }
-@@ -162,7 +155,7 @@ static void *test_libc_getrandom(void *ctx)
- 	for (size_t i = 0; i < TRIALS; ++i) {
- 		unsigned int val;
- 		ssize_t ret = getrandom(&val, sizeof(val), 0);
--		assert(ret == sizeof(val));
-+		ksft_assert(ret == sizeof(val));
- 	}
- 	return NULL;
- }
-@@ -172,7 +165,7 @@ static void *test_syscall_getrandom(void *ctx)
- 	for (size_t i = 0; i < TRIALS; ++i) {
- 		unsigned int val;
- 		ssize_t ret = syscall(__NR_getrandom, &val, sizeof(val), 0);
--		assert(ret == sizeof(val));
-+		ksft_assert(ret == sizeof(val));
- 	}
- 	return NULL;
- }
-@@ -207,7 +200,7 @@ static void bench_multi(void)
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 	for (size_t i = 0; i < THREADS; ++i)
--		assert(pthread_create(&threads[i], NULL, test_vdso_getrandom, NULL) == 0);
-+		ksft_assert(pthread_create(&threads[i], NULL, test_vdso_getrandom, NULL) == 0);
- 	for (size_t i = 0; i < THREADS; ++i)
- 		pthread_join(threads[i], NULL);
- 	clock_gettime(CLOCK_MONOTONIC, &end);
-@@ -216,7 +209,7 @@ static void bench_multi(void)
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 	for (size_t i = 0; i < THREADS; ++i)
--		assert(pthread_create(&threads[i], NULL, test_libc_getrandom, NULL) == 0);
-+		ksft_assert(pthread_create(&threads[i], NULL, test_libc_getrandom, NULL) == 0);
- 	for (size_t i = 0; i < THREADS; ++i)
- 		pthread_join(threads[i], NULL);
- 	clock_gettime(CLOCK_MONOTONIC, &end);
-@@ -225,7 +218,7 @@ static void bench_multi(void)
- 
- 	clock_gettime(CLOCK_MONOTONIC, &start);
- 	for (size_t i = 0; i < THREADS; ++i)
--		assert(pthread_create(&threads[i], NULL, test_syscall_getrandom, NULL) == 0);
-+		ksft_assert(pthread_create(&threads[i], NULL, test_syscall_getrandom, NULL) == 0);
- 	for (size_t i = 0; i < THREADS; ++i)
- 		pthread_join(threads[i], NULL);
- 	clock_gettime(CLOCK_MONOTONIC, &end);
-@@ -250,48 +243,46 @@ static void kselftest(void)
- 
- 	for (size_t i = 0; i < 1000; ++i) {
- 		ssize_t ret = vgetrandom(weird_size, sizeof(weird_size), 0);
--		if (ret != sizeof(weird_size))
--			exit(KSFT_FAIL);
-+		ksft_assert(ret == sizeof(weird_size));
- 	}
- 
- 	ksft_test_result_pass("getrandom: PASS\n");
- 
- 	unshare(CLONE_NEWUSER);
--	assert(unshare(CLONE_NEWTIME) == 0);
-+	ksft_assert(unshare(CLONE_NEWTIME) == 0);
- 	child = fork();
--	assert(child >= 0);
-+	ksft_assert(child >= 0);
- 	if (!child) {
- 		vgetrandom_init();
- 		child = getpid();
--		assert(ptrace(PTRACE_TRACEME, 0, NULL, NULL) == 0);
--		assert(kill(child, SIGSTOP) == 0);
--		assert(vgetrandom(weird_size, sizeof(weird_size), 0) == sizeof(weird_size));
-+		ksft_assert(ptrace(PTRACE_TRACEME, 0, NULL, NULL) == 0);
-+		ksft_assert(kill(child, SIGSTOP) == 0);
-+		ksft_assert(vgetrandom(weird_size, sizeof(weird_size), 0) == sizeof(weird_size));
- 		_exit(0);
- 	}
- 	for (;;) {
- 		struct ptrace_syscall_info info = { 0 };
- 		int status, ret;
--		assert(waitpid(child, &status, 0) >= 0);
-+		ksft_assert(waitpid(child, &status, 0) >= 0);
- 		if (WIFEXITED(status)) {
--			if (WEXITSTATUS(status) != 0)
--				exit(KSFT_FAIL);
-+			ksft_assert(WEXITSTATUS(status) == 0);
- 			break;
- 		}
--		assert(WIFSTOPPED(status));
-+		ksft_assert(WIFSTOPPED(status));
- 		if (WSTOPSIG(status) == SIGSTOP)
--			assert(ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESYSGOOD) == 0);
-+			ksft_assert(ptrace(PTRACE_SETOPTIONS, child, 0, PTRACE_O_TRACESYSGOOD) == 0);
- 		else if (WSTOPSIG(status) == (SIGTRAP | 0x80)) {
--			assert(ptrace(PTRACE_GET_SYSCALL_INFO, child, sizeof(info), &info) > 0);
-+			ksft_assert(ptrace(PTRACE_GET_SYSCALL_INFO, child, sizeof(info), &info) > 0);
- 			if (info.op == PTRACE_SYSCALL_INFO_ENTRY && info.entry.nr == __NR_getrandom &&
- 			    info.entry.args[0] == (uintptr_t)weird_size && info.entry.args[1] == sizeof(weird_size))
--				exit(KSFT_FAIL);
-+				ksft_exit_fail_msg("vgetrandom passed buffer to syscall getrandom unexpectedly\n");
- 		}
--		assert(ptrace(PTRACE_SYSCALL, child, 0, 0) == 0);
-+		ksft_assert(ptrace(PTRACE_SYSCALL, child, 0, 0) == 0);
- 	}
- 
- 	ksft_test_result_pass("getrandom timens: PASS\n");
- 
--	exit(KSFT_PASS);
-+	ksft_exit_pass();
- }
- 
- static void usage(const char *argv0)
--- 
-2.46.0
+>> +
+>> +/*
+>> + * This gets called during clone/clone3/fork. And is needed to allocate a shadow stack for
+>> + * cases where CLONE_VM is specified and thus a different stack is specified by user. We
+>> + * thus need a separate shadow stack too. How does separate shadow stack is specified by
+>> + * user is still being debated. Once that's settled, remove this part of the comment.
+>> + * This function simply returns 0 if shadow stack are not supported or if separate shadow
+>> + * stack allocation is not needed (like in case of !CLONE_VM)
+>> + */
+>> +unsigned long shstk_alloc_thread_stack(struct task_struct *tsk,
+>> +                                          const struct kernel_clone_args *args)
+>> +{
+>> +       unsigned long addr, size;
+>> +
+>> +       /* If shadow stack is not supported, return 0 */
+>> +       if (!cpu_supports_shadow_stack())
+>> +               return 0;
+>> +
+>> +       /*
+>> +        * If shadow stack is not enabled on the new thread, skip any
+>> +        * switch to a new shadow stack.
+>> +        */
+>> +       if (is_shstk_enabled(tsk))
+>
+>Hi Deepak,
+>Should it be '!' is_shstk_enabled(tsk)?
 
+Yes it is a bug. It seems like fork without CLONE_VM or with CLONE_VFORK, it was returning
+0 anyways. And in the case of CLONE_VM (used by pthread), it was not doing the right thing.
+Most of the testing has been with busybox build (independent binaries0 driven via buildroot
+setup. Wondering why it wasn't caught.
+
+Anyways, will fix it. Thanks for catching it.
+
+>
+>> +               return 0;
+>> +
+>> +       /*
 
