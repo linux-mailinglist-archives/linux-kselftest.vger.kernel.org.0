@@ -1,205 +1,154 @@
-Return-Path: <linux-kselftest+bounces-19158-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19159-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B6F599325A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 18:01:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 538A7993257
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 18:01:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95532B251CD
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 15:59:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BA0A2848CD
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 16:01:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59C591DA10E;
-	Mon,  7 Oct 2024 15:57:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17B8C1D9323;
+	Mon,  7 Oct 2024 16:01:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="rQ2qtdDH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WMvlMyGg"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-6002.amazon.com (smtp-fw-6002.amazon.com [52.95.49.90])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550761D95A3;
-	Mon,  7 Oct 2024 15:57:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.95.49.90
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCAEB1D4615;
+	Mon,  7 Oct 2024 16:01:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728316624; cv=none; b=l9Yy+D+0QiLxcaNSmKO0TssaKI1y42RCTqSd82fByrTRa8gv1xvRsq4I6a2pVVBq4P8VXWsrCN6E718nIgJqJfgOI1H7ulp5A3Wl32UJqYjf2/3uGhXML03A/jfoyx5o+uK315ECg7CXQUUY3Nyt8OTkS7a+0dNqo5E42jqJhSE=
+	t=1728316862; cv=none; b=Ri6WoodCATUehcmQBKW37jKkXipQii7quK25eYYzWzmq/gzX/YW5iozUGBftd9h2dz89PIhuFnq58Vcgz2lG1f1ZeGiAwcg+F+xc7CXvRTiw9YrKiq4ZtDniDPv2PQbU9cY4urkLYy0mZNyEiDmH5bgomxNSGYB5KHNuDiseCYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728316624; c=relaxed/simple;
-	bh=7s8rQAcIg97vHRkLNkkiG3T/6K73DTRu5PGFhizuEtw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=OWs7UEOEY5YKoHYIQaBprs/v2zRtAyM28N0Vt3Es7bGSBFB9jfvo3emF/P3IhT8nfKNJwvXIX+3JDPB9LTInPj49rY+RBvCJZX/gCfSAPk5scR3DzUIVrHwgx+QCsmILgSWXAqBw6JaCZXlfi+j6RRkl+nzmJ2Jkfcg0zrTpTSk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=rQ2qtdDH; arc=none smtp.client-ip=52.95.49.90
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
-  s=amazon201209; t=1728316622; x=1759852622;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=GiJM5/3RB7kREr4++92FJZ3G6aQv+RCcdKcWV7SOVMk=;
-  b=rQ2qtdDHyrOfDpWi2gcjv13g/aLBmcVr6dDQ9OYEKNsoBNWqtzQWqTSr
-   +ndmZ3bTPv3FKZ673a+rXeWQFJiTb5HshPcGBjDXnjDPRR6/Xr5i+7ZDK
-   jPzmKoynjXpv7jaGDOcR04gzoLDHk52agtzubCh7gzf+iIZ6oMvTe0QwM
-   s=;
-X-IronPort-AV: E=Sophos;i="6.11,184,1725321600"; 
-   d="scan'208";a="438881514"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.43.8.6])
-  by smtp-border-fw-6002.iad6.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Oct 2024 15:56:55 +0000
-Received: from EX19MTAUWA002.ant.amazon.com [10.0.21.151:63359]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.41.198:2525] with esmtp (Farcaster)
- id dee9626c-3d64-4128-98b5-9eed2f937ae6; Mon, 7 Oct 2024 15:56:55 +0000 (UTC)
-X-Farcaster-Flow-ID: dee9626c-3d64-4128-98b5-9eed2f937ae6
-Received: from EX19D003UWC003.ant.amazon.com (10.13.138.173) by
- EX19MTAUWA002.ant.amazon.com (10.250.64.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Mon, 7 Oct 2024 15:56:48 +0000
-Received: from EX19MTAUWB001.ant.amazon.com (10.250.64.248) by
- EX19D003UWC003.ant.amazon.com (10.13.138.173) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.35;
- Mon, 7 Oct 2024 15:56:48 +0000
-Received: from email-imr-corp-prod-iad-all-1a-6ea42a62.us-east-1.amazon.com
- (10.25.36.214) by mail-relay.amazon.com (10.250.64.254) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id
- 15.2.1258.34 via Frontend Transport; Mon, 7 Oct 2024 15:56:48 +0000
-Received: from [127.0.0.1] (dev-dsk-roypat-1c-dbe2a224.eu-west-1.amazon.com [172.19.88.180])
-	by email-imr-corp-prod-iad-all-1a-6ea42a62.us-east-1.amazon.com (Postfix) with ESMTPS id 4CFBD4027E;
-	Mon,  7 Oct 2024 15:56:43 +0000 (UTC)
-Message-ID: <e8f55fef-1821-408e-88ed-b25200ef66c9@amazon.co.uk>
-Date: Mon, 7 Oct 2024 16:56:42 +0100
+	s=arc-20240116; t=1728316862; c=relaxed/simple;
+	bh=e2NBHTw6PPvjULzXCQpYbFWcRNCqsXQxPgENG33mKoQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=C1UOj9XtFLi+oUF7533yu95unfBzZTIfTNa6VBnUafHZn3jVQEjTKp+ykOi6KoHsY0FkLcG0nzjwE+rjyfpu89JUalwDH0cPTyx1lq9eVtCmifJHE4CdCS/Eq5rW0bVQf/tfwPoP5jh+r8V0W3qPdRAm4fYkD9+4WGTg3pMCJEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WMvlMyGg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C2E7C4CEC7;
+	Mon,  7 Oct 2024 16:01:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728316861;
+	bh=e2NBHTw6PPvjULzXCQpYbFWcRNCqsXQxPgENG33mKoQ=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=WMvlMyGgn0mENSHuioUpratdm0Fb72jH/kyBzfNDdc11bZdmf3uNCn5qkmZiqgAjA
+	 3ZgPvnDTMA/gDx07PgsHCfRvUUnLr1IBUyvMZ73Abl/ur+HQ14iEqXtKy3vXr7JRjM
+	 MlB7ynIIb4SOzxaNenMQFfx2laXFSRsI2HH+0ndsfY+NTFJPjHQ3ymJFsy9YDIATXv
+	 1jtvMsLJyLpwgwK83CxA/HKgkJ6cyX8TtM7h2AJixNYiNMj41W9xuQ6F3C+aVJxI8I
+	 JjVsW2EV//PdyPUejWOFFV/pJMg95M+X3wSlsdtlmRGY82RB4OEnPrvcmEPr8wLw0W
+	 OPYet1W0eHtfA==
+From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Tejun Heo <tj@kernel.org>, David Vernet <void@manifault.com>, Shuah Khan
+ <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, =?utf-8?B?QmrDtnJuIFTDtnBlbA==?=
+ <bjorn@rivosinc.com>,
+ bpf@vger.kernel.org, linux-riscv@lists.infradead.org, Anders Roxell
+ <anders.roxell@linaro.org>
+Subject: Re: [PATCH v2] selftests: sched_ext: Add sched_ext as proper
+ selftest target
+In-Reply-To: <ZwQBqlG6MShCkNrU@finisterre.sirena.org.uk>
+References: <20241007073133.989166-1-bjorn@kernel.org>
+ <ZwQBqlG6MShCkNrU@finisterre.sirena.org.uk>
+Date: Mon, 07 Oct 2024 18:00:57 +0200
+Message-ID: <87r08rnbra.fsf@all.your.base.are.belong.to.us>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 30/39] KVM: guest_memfd: Handle folio preparation for
- guest_memfd mmap
-To: Ackerley Tng <ackerleytng@google.com>, Elliot Berman
-	<quic_eberman@quicinc.com>
-CC: <tabba@google.com>, <jgg@nvidia.com>, <peterx@redhat.com>,
-	<david@redhat.com>, <rientjes@google.com>, <fvdl@google.com>,
-	<jthoughton@google.com>, <seanjc@google.com>, <pbonzini@redhat.com>,
-	<zhiquan1.li@intel.com>, <fan.du@intel.com>, <jun.miao@intel.com>,
-	<isaku.yamahata@intel.com>, <muchun.song@linux.dev>,
-	<mike.kravetz@oracle.com>, <erdemaktas@google.com>, <vannapurve@google.com>,
-	<qperret@google.com>, <jhubbard@nvidia.com>, <willy@infradead.org>,
-	<shuah@kernel.org>, <brauner@kernel.org>, <bfoster@redhat.com>,
-	<kent.overstreet@linux.dev>, <pvorel@suse.cz>, <rppt@kernel.org>,
-	<richard.weiyang@gmail.com>, <anup@brainfault.org>, <haibo1.xu@intel.com>,
-	<ajones@ventanamicro.com>, <vkuznets@redhat.com>,
-	<maciej.wieczor-retman@intel.com>, <pgonda@google.com>,
-	<oliver.upton@linux.dev>, <linux-kernel@vger.kernel.org>,
-	<linux-mm@kvack.org>, <kvm@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-fsdevel@kvack.org>, James Gowans
-	<jgowans@amazon.com>, "Kalyazin, Nikita" <kalyazin@amazon.co.uk>, "Manwaring,
- Derek" <derekmn@amazon.com>
-References: <diqzzfnkswiv.fsf@ackerleytng-ctop.c.googlers.com>
-From: Patrick Roy <roypat@amazon.co.uk>
-Content-Language: en-US
-Autocrypt: addr=roypat@amazon.co.uk; keydata=
- xjMEY0UgYhYJKwYBBAHaRw8BAQdA7lj+ADr5b96qBcdINFVJSOg8RGtKthL5x77F2ABMh4PN
- NVBhdHJpY2sgUm95IChHaXRodWIga2V5IGFtYXpvbikgPHJveXBhdEBhbWF6b24uY28udWs+
- wpMEExYKADsWIQQ5DAcjaM+IvmZPLohVg4tqeAbEAgUCY0UgYgIbAwULCQgHAgIiAgYVCgkI
- CwIEFgIDAQIeBwIXgAAKCRBVg4tqeAbEAmQKAQC1jMl/KT9pQHEdALF7SA1iJ9tpA5ppl1J9
- AOIP7Nr9SwD/fvIWkq0QDnq69eK7HqW14CA7AToCF6NBqZ8r7ksi+QLOOARjRSBiEgorBgEE
- AZdVAQUBAQdAqoMhGmiXJ3DMGeXrlaDA+v/aF/ah7ARbFV4ukHyz+CkDAQgHwngEGBYKACAW
- IQQ5DAcjaM+IvmZPLohVg4tqeAbEAgUCY0UgYgIbDAAKCRBVg4tqeAbEAtjHAQDkh5jZRIsZ
- 7JMNkPMSCd5PuSy0/Gdx8LGgsxxPMZwePgEAn5Tnh4fVbf00esnoK588bYQgJBioXtuXhtom
- 8hlxFQM=
-In-Reply-To: <diqzzfnkswiv.fsf@ackerleytng-ctop.c.googlers.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Ackerley,
+Mark Brown <broonie@kernel.org> writes:
 
-On Thu, 2024-10-03 at 22:32 +0100, Ackerley Tng wrote:
-> Elliot Berman <quic_eberman@quicinc.com> writes:
-> 
->> On Tue, Sep 10, 2024 at 11:44:01PM +0000, Ackerley Tng wrote:
->>> Since guest_memfd now supports mmap(), folios have to be prepared
->>> before they are faulted into userspace.
->>>
->>> When memory attributes are switched between shared and private, the
->>> up-to-date flags will be cleared.
->>>
->>> Use the folio's up-to-date flag to indicate being ready for the guest
->>> usage and can be used to mark whether the folio is ready for shared OR
->>> private use.
->>
->> Clearing the up-to-date flag also means that the page gets zero'd out
->> whenever it transitions between shared and private (either direction).
->> pKVM (Android) hypervisor policy can allow in-place conversion between
->> shared/private.
->>
->> I believe the important thing is that sev_gmem_prepare() needs to be
->> called prior to giving page to guest. In my series, I had made a
->> ->prepare_inaccessible() callback where KVM would only do this part.
->> When transitioning to inaccessible, only that callback would be made,
->> besides the bookkeeping. The folio zeroing happens once when allocating
->> the folio if the folio is initially accessible (faultable).
->>
->> From x86 CoCo perspective, I think it also makes sense to not zero
->> the folio when changing faultiblity from private to shared:
->>  - If guest is sharing some data with host, you've wiped the data and
->>    guest has to copy again.
->>  - Or, if SEV/TDX enforces that page is zero'd between transitions,
->>    Linux has duplicated the work that trusted entity has already done.
->>
->> Fuad and I can help add some details for the conversion. Hopefully we
->> can figure out some of the plan at plumbers this week.
-> 
-> Zeroing the page prevents leaking host data (see function docstring for
-> kvm_gmem_prepare_folio() introduced in [1]), so we definitely don't want
-> to introduce a kernel data leak bug here.
-> 
-> In-place conversion does require preservation of data, so for
-> conversions, shall we zero depending on VM type?
-> 
-> + Gunyah: don't zero since ->prepare_inaccessible() is a no-op
-> + pKVM: don't zero
-> + TDX: don't zero
-> + SEV: AMD Architecture Programmers Manual 7.10.6 says there is no
->   automatic encryption and implies no zeroing, hence perform zeroing
-> + KVM_X86_SW_PROTECTED_VM: Doesn't have a formal definition so I guess
->   we could require zeroing on transition?
+> On Mon, Oct 07, 2024 at 09:31:32AM +0200, Bj=C3=B6rn T=C3=B6pel wrote:
+>
+>> When building the kselftest suite, e.g.:
+>
+>>   make ARCH=3Driscv CROSS_COMPILE=3Driscv64-linux-gnu- \
+>>     SKIP_TARGETS=3D"" O=3D/output/foo -C tools/testing/selftests install
+>
+>> The expectation is that the sched_ext is included, cross-built, and
+>> placed into /output/foo.
+>
+> When building for arm64 with this applied on top of mainline or -next
+> I'm seeing:
 
-Maybe for KVM_X86_SW_PROTECTED_VM we could make zero-ing configurable
-via some CREATE_GUEST_MEMFD flag, instead of forcing one specific
-behavior. 
+Thanks for taking it for a spin!
 
-For the "non-CoCo with direct map entries removed" VMs that we at AWS
-are going for, we'd like a VM type with host-controlled in-place
-conversions which doesn't zero on transitions, so if
-KVM_X86_SW_PROTECTED_VM ends up zeroing, we'd need to add another new VM
-type for that.
+>    make ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux-gnu- -C tools/testing/=
+selftests TARGETS=3Dsched_ext SKIP_TARGETS=3D"
+>
+> give
+>
+>   CLNG-BPF create_dsq.bpf.o
+> In file included from create_dsq.bpf.c:9:
+> /home/broonie/git/linux/tools/sched_ext/include/scx/common.bpf.h:33:17: e=
+rror: use of undeclared identifier 'SCX_DSQ_FLAG_BUILTIN'
+>    33 |         _Static_assert(SCX_DSQ_FLAG_BUILTIN,
+>       |                        ^
 
-Somewhat related sidenote: For VMs that allow inplace conversions and do
-not zero, we do not need to zap the stage-2 mappings on memory attribute
-changes, right?
+This is most likely due to incorrect VMLINUX_BTF_PATHS, so that
+vmlinux.h is incorrectly generated. Try grepping for
+SCX_DSQ_FLAG_BUILTIN in vmlinux.h.
 
-> This way, the uptodate flag means that it has been prepared (as in
-> sev_gmem_prepare()), and zeroed if required by VM type.
-> 
-> Regarding flushing the dcache/tlb in your other question [2], if we
-> don't use folio_zero_user(), can we relying on unmapping within core-mm
-> to flush after shared use, and unmapping within KVM To flush after
-> private use?
-> 
-> Or should flush_dcache_folio() be explicitly called on kvm_gmem_fault()?
-> 
-> clear_highpage(), used in the non-hugetlb (original) path, doesn't flush
-> the dcache. Was that intended?
-> 
->> Thanks,
->> Elliot
->>
->>>
->>> <snip>
-> 
-> [1] https://lore.kernel.org/all/20240726185157.72821-8-pbonzini@redhat.com/
-> [2] https://lore.kernel.org/all/diqz34ldszp3.fsf@ackerleytng-ctop.c.googlers.com/
+> and more (my system clang is clang 20).  It's also failing with a native
+> x86_64 build in the same way.  I've run "make headers_install", it looks
+> like clang is not getting told about the copy of the headers installed
+> in ./usr/include:
+>
+> clang -g -D__TARGET_ARCH_x86 -mlittle-endian -I/home/broonie/git/linux/to=
+ols/testing/selftests/sched_ext/include -I/home/broonie/git/linux/tools/tes=
+ting/selftests/sched_ext/include/bpf-compat -I/home/broonie/git/linux/tools=
+/testing/selftests/sched_ext/build/include -I/home/broonie/git/linux/tools/=
+include/uapi -I/home/broonie/git/linux/tools/sched_ext/include -I/home/broo=
+nie/git/linux/include -idirafter /usr/lib/llvm-20/lib/clang/20/include -idi=
+rafter /usr/local/include -idirafter /usr/include/x86_64-linux-gnu -idiraft=
+er /usr/include  -Wall -Wno-compare-distinct-pointer-types -Wno-incompatibl=
+e-function-pointer-types -O2 -mcpu=3Dv3 -target bpf -c create_dsq.bpf.c -o =
+/home/broonie/git/linux/tools/testing/selftests/sched_ext/build/obj/sched_e=
+xt/create_dsq.bpf.o
 
-Best, 
-Patrick
+The sched_ext BPF programs relies on a vmlinux.h, which is generated
+using bpftool and the vmlinux with BTF information. Have you built a
+kernel with BTF support?
+
+>> Add CROSS_COMPILE, OUTPUT, and TARGETS support to the sched_ext
+>> selftest. Also, remove some variables that were unused by the
+>> Makefile.
+>
+>> +ifneq ($(CROSS_COMPILE),)
+>> +DEFAULT_BPFTOOL :=3D $(OUTPUT_DIR)/host/sbin/bpftool
+>> +HOST_OBJ_DIR :=3D $(OBJ_DIR)/host/bpftool
+>> +HOST_LIBBPF_OUTPUT :=3D $(OBJ_DIR)/host/libbpf/
+>> +HOST_LIBBPF_DESTDIR :=3D $(OUTPUT_DIR)/host/
+>> +HOST_DESTDIR :=3D $(OUTPUT_DIR)/host/
+>> +else
+>> +DEFAULT_BPFTOOL :=3D $(OUTPUT_DIR)/sbin/bpftool
+>> +HOST_OBJ_DIR :=3D $(OBJ_DIR)/bpftool
+>> +HOST_LIBBPF_OUTPUT :=3D $(OBJ_DIR)/libbpf/
+>> +HOST_LIBBPF_DESTDIR :=3D $(OUTPUT_DIR)/
+>> +HOST_DESTDIR :=3D $(OUTPUT_DIR)/
+>> +endif
+>
+> This won't detect a cross compile when building using LLVM as that
+> doesn't need to set CROSS_COMPILE, it can use the same binaries for all
+> targets.  There's runes in the Makefile for the mm selftests for
+> identifying the target architecture, though actually I'm wondering if
+> it's worth just always building the host copy and never having to worry
+> if the target build is a cross build or not?  It's obvious overhead in
+> the native case though if we actually need the target copy.
+
+Yeah, that would indeed simplify things! I'll spin a v3 with that (and
+wait for more feedback).
+
+
+Thanks for testing the patch!
+Bj=C3=B6rn
 
