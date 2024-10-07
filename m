@@ -1,287 +1,228 @@
-Return-Path: <linux-kselftest+bounces-19140-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19141-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C9E0992618
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 09:31:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3920E9926A6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 10:07:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 559931C223C0
-	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 07:31:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7A42280D64
+	for <lists+linux-kselftest@lfdr.de>; Mon,  7 Oct 2024 08:07:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A712176AAE;
-	Mon,  7 Oct 2024 07:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED6F718787D;
+	Mon,  7 Oct 2024 08:07:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SLNFMf52"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JXUKKJWm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D732C74C08;
-	Mon,  7 Oct 2024 07:31:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21FDC18732B;
+	Mon,  7 Oct 2024 08:07:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728286301; cv=none; b=FUxgB8wmmPgbUoC0oMDOOM8bmb8L1YqhKmkNhGFl75eu5NJLlLuIAabhV6flrmhcfc22utJCT9R5NWKefjSS6B5iN/nW0sawGIKUFeG4Pl9V1W1D1UUILESrDk4Zh0srxawNqGdwXK3Ym7L1NetwZ1dMfUgLYKbUa3OrhA45wTM=
+	t=1728288441; cv=none; b=pvd4pExffe4dJthsIXTQdgxBI3dlmBra3UT4yzCq0jnPhiBk61dVC/45ji4u9WNyYPLbaPXK/RRa2/OQt7hEVhXSS4gKsYQeLO37bz/eSQOeGDPc0tYUzZSEsE/BQ4zQan9gJtZDunz5oFmQWV2p1Y9jH9nbJCHnk4ft/XltOwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728286301; c=relaxed/simple;
-	bh=MQvwg8vb9dS8GngN/GkkuavJEoeBFMRsx6M3qD2yGik=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=DrxWzS52ziB3fOXdKoHPpRIs7hwsWmfSa3CGWvz1REBNHnIxIYB52itwzwYzyng02dOAdfOamjwiF2oaGqxE8ajCINyFY1fwp8KRYarnKi+knlRZJ1JhniMnlSP7BXrWX9MJ0Eh2o4a2NPhRGkc9RXckD8xt8cRm6qsfbhv9aK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SLNFMf52; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE4A1C4CEC6;
-	Mon,  7 Oct 2024 07:31:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728286300;
-	bh=MQvwg8vb9dS8GngN/GkkuavJEoeBFMRsx6M3qD2yGik=;
-	h=From:To:Cc:Subject:Date:From;
-	b=SLNFMf52qee2NT2FJBw+6q2wuOMrRwDdMT9RM/QC5e2BstAUBj1Hc6Vr72M6IG11g
-	 djun7MKPdqc0Kr/PJEVHYIoosQ/oLZkHEjjziMtAgf5dl6A3AYdR92JqT9jc9MIfH3
-	 AeVt6XCeXoMtV8pARxhMIXcCftCy82uoiZXMLtUl4qQkVWNE3po9fLfY3QR3bvJrc9
-	 J0qSd1HdIhIhDBnUoySKUfOjM6hd05YmpbnrVvs80B0EBAxZiq/JO9VTEFPsFzmmup
-	 BpqN4Xtq6M1vtmyGrphbZrfa7H3AhxPbserL89mENsKTAXKY3ZQwiJz7RdNyezNLLG
-	 2uhJB0raF5AqA==
-From: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
-To: Tejun Heo <tj@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Mark Brown <broonie@kernel.org>
-Cc: =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	Anders Roxell <anders.roxell@linaro.org>
-Subject: [PATCH v2] selftests: sched_ext: Add sched_ext as proper selftest target
-Date: Mon,  7 Oct 2024 09:31:32 +0200
-Message-ID: <20241007073133.989166-1-bjorn@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1728288441; c=relaxed/simple;
+	bh=jYk4qTv8kAO5SLDx69XdaqTCkdLRACIjygpJLLT8lMc=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JmsaX9gy/48rsCnVsghJVy3WaATrzbBJ40/Uh+82oNrnZ+M9CpKqHHjps5lH9z+FZiRMU7N6gn/VzBr9qxRSr1UhseVn8blusRUVF9D6UxZtRxiO9lyfCoO2cVdWIB4GjsejgVlatYUENndVLH+HXhHPaBK6M2cQqbFK+OTvwV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JXUKKJWm; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-42e5e1e6d37so41773355e9.3;
+        Mon, 07 Oct 2024 01:07:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728288437; x=1728893237; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ja9w7vdCtDERzAoUGyjJRlwbo3h/9osUMg9vAVY7lrg=;
+        b=JXUKKJWmCbK1cho5KaHHPIaFl+VA+GxJAQttxW0EQJ0ab8wT5HDW23jqR2ctTgsjlK
+         1tuyUrzVOQ1dOT7W4S/dMrzEkRoz+vFDl8YZfQH7QlJFHFkLJfj5dq1gQMLKPYYecbNh
+         m0wYdg8pYkkSwa0DMkze8yEACjEZUbCXDkP35e2KgwXR+dDjijsjMJDbGGlFn3Qo/20i
+         wFQ8seRGoXQ2/fmdpM16uHT4+WKal22478JR9nDoZLYGezliQyP92cGFKXYv0xtMt/qD
+         JDjc/o+FSkGiZAi/nDqSATCzBnsLGx4WMpSdfUYdchXVhhGnmKC9ku9vjlFD6CY2vzd0
+         uqHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728288437; x=1728893237;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ja9w7vdCtDERzAoUGyjJRlwbo3h/9osUMg9vAVY7lrg=;
+        b=oe+cuOcyXsfgihsU+pvk7a329kTSSHap2rgWSaEbMakpWmvpU2KucgEZcVc6e1YrKa
+         heJ/qKihilr+hm0us1CxXZnjc2qVd/jRHWV/T5WkW7Emq8h00xfxW716JVC5ds/Wt+F+
+         f0mOu1BZcVOJ72agtNrnrB+4bvApDcTxI+4MaBUhb0194UrgUiAcBRFY6w8IRo2JMt5U
+         UY5NnqRKsF2DlFRkrOb3RT7HP02SsV5lZL1LLtxqZWZQ4OGgLDs/Sbor4RGy9Ws6cT2U
+         yq9bt/ENz5+ytpP96WNBT5V2q8ssB19hnZtYvx8uvPlMyr47i7uGP25pA0/2h3mFyVTQ
+         zLYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVMdkKUTg5StZTd33wu/Sep2pbtSvoxPABAi/SxjCfQlwfebrEDL+WhS25SD09Ouz+U/BSKqDjXNir+jVMY@vger.kernel.org, AJvYcCVufFfsSRdyKTI+MPbvH8FEHYIzcHoJ1w+21jimRS3JX80JDnwiBtSMNuVR5FrOnhCdynh8trAfR2bn77qvviEg@vger.kernel.org, AJvYcCW6eCrkvLpK4Mk1ktzi9AeRMN43Jx0awvu+rHJQuE24Y5jf6Gg9k+4iI/CMtnQpn6zqIb0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTc/rbYljCxsCh1Z4ufSTIbuipPCLbsmdsSZNwaARVob2Z316a
+	ntuNtM3S7u2YlbpAuCFtC2Ji+ggooeKp47Lif+cFfGT6kPw0TFth
+X-Google-Smtp-Source: AGHT+IGSZXGhFxXfwLuS2KmWGon7scorT641BYrPKbpsyplMaCJjjvTl27nzQjR/VfC+jJ97tU13AQ==
+X-Received: by 2002:a05:600c:1c10:b0:42c:b62c:9f36 with SMTP id 5b1f17b1804b1-42f85a6d528mr87316785e9.5.1728288437146;
+        Mon, 07 Oct 2024 01:07:17 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d1691a56dsm5116236f8f.41.2024.10.07.01.07.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Oct 2024 01:07:16 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 7 Oct 2024 10:07:15 +0200
+To: tyrone-wu <wudevelops@gmail.com>
+Cc: laoar.shao@gmail.com, andrii.nakryiko@gmail.com, andrii@kernel.org,
+	ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+	eddyz87@gmail.com, haoluo@google.com, john.fastabend@gmail.com,
+	kernel-patches-bot@fb.com, kpsingh@kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	martin.lau@linux.dev, mykolal@fb.com, olsajiri@gmail.com,
+	sdf@fomichev.me, shuah@kernel.org, song@kernel.org,
+	yonghong.song@linux.dev
+Subject: Re: [PATCH bpf v5 1/2] bpf: fix unpopulated name_len field in
+ perf_event link info
+Message-ID: <ZwOWs_XrBtlTGE24@krava>
+References: <CALOAHbC5xm7Cbfhau3z5X2PqUhiHECNWAPtJCWiOVqTKmdZp-Q@mail.gmail.com>
+ <20241006195131.563006-1-wudevelops@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241006195131.563006-1-wudevelops@gmail.com>
 
-From: Björn Töpel <bjorn@rivosinc.com>
+On Sun, Oct 06, 2024 at 07:51:30PM +0000, tyrone-wu wrote:
+> Previously when retrieving `bpf_link_info.perf_event` for
+> kprobe/uprobe/tracepoint, the `name_len` field was not populated by the
+> kernel, leaving it to reflect the value initially set by the user. This
+> behavior was inconsistent with how other input/output string buffer
+> fields function (e.g. `raw_tracepoint.tp_name_len`).
+> 
+> This patch fills `name_len` with the actual size of the string name.
+> 
+> Link: https://lore.kernel.org/bpf/CABVU1kXwQXhqQGe0RTrr7eegtM6SVW_KayZBy16-yb0Snztmtg@mail.gmail.com/
+> Fixes: 1b715e1b0ec5 ("bpf: Support ->fill_link_info for perf_event")
+> Signed-off-by: tyrone-wu <wudevelops@gmail.com>
+> Acked-by: Jiri Olsa <jolsa@kernel.org>
+> ---
+> V4 -> V5:
+> Link: https://lore.kernel.org/bpf/CALOAHbC5xm7Cbfhau3z5X2PqUhiHECNWAPtJCWiOVqTKmdZp-Q@mail.gmail.com/
+> - Check that buf is not NULL before retrieving/using its length
+> 
+> V3 -> V4:
+> Link: https://lore.kernel.org/bpf/Zv_PP6Gs5cq3W2Ey@krava/
+> - Split patch into separate kernel and selftest change
+> 
+> V2 -> V3:
+> Link: https://lore.kernel.org/bpf/Zv7sISV0yEyGlEM3@krava/
+> - Use clearer variable name for user set/inputted name len (name_len -> input_len)
+> - Change (name_len -> input_len) type from size_t to u32 since it's only received and used as u32
+> 
+> V1 -> V2:
+> Link: https://lore.kernel.org/bpf/Zv0wl-S13WJnIkb_@krava/
+> - Use user set *ulen in bpf_copy_to_user before overwriting *ulen
+> 
+>  kernel/bpf/syscall.c | 38 ++++++++++++++++++++++++--------------
+>  1 file changed, 24 insertions(+), 14 deletions(-)
+> 
+> diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> index a8f1808a1ca5..3df192a6bdcc 100644
+> --- a/kernel/bpf/syscall.c
+> +++ b/kernel/bpf/syscall.c
+> @@ -3565,32 +3565,35 @@ static void bpf_perf_link_dealloc(struct bpf_link *link)
+>  }
+>  
+>  static int bpf_perf_link_fill_common(const struct perf_event *event,
+> -				     char __user *uname, u32 ulen,
+> +				     char __user *uname, u32 *ulen,
+>  				     u64 *probe_offset, u64 *probe_addr,
+>  				     u32 *fd_type, unsigned long *missed)
+>  {
+>  	const char *buf;
+> -	u32 prog_id;
+> +	u32 prog_id, input_len;
+>  	size_t len;
+>  	int err;
+>  
+> -	if (!ulen ^ !uname)
+> +	if (!(*ulen) ^ !uname)
+>  		return -EINVAL;
+>  
+>  	err = bpf_get_perf_event_info(event, &prog_id, fd_type, &buf,
+>  				      probe_offset, probe_addr, missed);
+>  	if (err)
+>  		return err;
+> -	if (!uname)
+> -		return 0;
+> +
+>  	if (buf) {
+> +		input_len = *ulen;
+>  		len = strlen(buf);
+> -		err = bpf_copy_to_user(uname, buf, ulen, len);
+> -		if (err)
+> -			return err;
+> -	} else {
+> -		char zero = '\0';
+> +		*ulen = len + 1;
+>  
+> +		if (uname) {
+> +			err = bpf_copy_to_user(uname, buf, input_len, len);
+> +			if (err)
+> +				return err;
+> +		}
+> +	} else if (uname) {
+> +		char zero = '\0';
+>  		if (put_user(zero, uname))
+>  			return -EFAULT;
+>  	}
 
-The sched_ext selftests is missing proper cross-compilation support, a
-proper target entry, and out-of-tree build support.
+hm, why not just simple check buf for and keep the rest? seems less complicated..
 
-When building the kselftest suite, e.g.:
+jirka
 
-  make ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- \
-    SKIP_TARGETS="" O=/output/foo -C tools/testing/selftests install
 
-The expectation is that the sched_ext is included, cross-built, and
-placed into /output/foo.
-
-Add CROSS_COMPILE, OUTPUT, and TARGETS support to the sched_ext
-selftest. Also, remove some variables that were unused by the
-Makefile.
-
-Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
 ---
-v2: * Removed the duplicated LLVM prefix parsing (David)
-    * Made sure make clean didn't do a complete mess (David)
-    * Added sched_ext to default skip (Shuah)
----
-tools/testing/selftests/Makefile           |  9 +--
- tools/testing/selftests/sched_ext/Makefile | 80 +++++++++++-----------
- 2 files changed, 45 insertions(+), 44 deletions(-)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index b38199965f99..363d031a16f7 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -88,6 +88,7 @@ TARGETS += rlimits
- TARGETS += rseq
- TARGETS += rtc
- TARGETS += rust
-+TARGETS += sched_ext
- TARGETS += seccomp
- TARGETS += sgx
- TARGETS += sigaltstack
-@@ -129,10 +130,10 @@ ifeq ($(filter net/lib,$(TARGETS)),)
- endif
- endif
+diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+index a8f1808a1ca5..e393b94b90ec 100644
+--- a/kernel/bpf/syscall.c
++++ b/kernel/bpf/syscall.c
+@@ -3565,27 +3565,31 @@ static void bpf_perf_link_dealloc(struct bpf_link *link)
+ }
  
--# User can optionally provide a TARGETS skiplist.  By default we skip
--# BPF since it has cutting edge build time dependencies which require
--# more effort to install.
--SKIP_TARGETS ?= bpf
-+# User can optionally provide a TARGETS skiplist. By default we skip
-+# targets using BPF since it has cutting edge build time dependencies
-+# which require more effort to install.
-+SKIP_TARGETS ?= bpf sched_ext
- ifneq ($(SKIP_TARGETS),)
- 	TMP := $(filter-out $(SKIP_TARGETS), $(TARGETS))
- 	override TARGETS := $(TMP)
-diff --git a/tools/testing/selftests/sched_ext/Makefile b/tools/testing/selftests/sched_ext/Makefile
-index 0754a2c110a1..acab9732b23e 100644
---- a/tools/testing/selftests/sched_ext/Makefile
-+++ b/tools/testing/selftests/sched_ext/Makefile
-@@ -3,24 +3,13 @@
- include ../../../build/Build.include
- include ../../../scripts/Makefile.arch
- include ../../../scripts/Makefile.include
-+
-+TEST_GEN_PROGS := runner
-+
-+# override lib.mk's default rules
-+OVERRIDE_TARGETS := 1
- include ../lib.mk
+ static int bpf_perf_link_fill_common(const struct perf_event *event,
+-				     char __user *uname, u32 ulen,
++				     char __user *uname, u32 *ulen,
+ 				     u64 *probe_offset, u64 *probe_addr,
+ 				     u32 *fd_type, unsigned long *missed)
+ {
+ 	const char *buf;
+-	u32 prog_id;
++	u32 prog_id, input_len;
+ 	size_t len;
+ 	int err;
  
--ifneq ($(LLVM),)
--ifneq ($(filter %/,$(LLVM)),)
--LLVM_PREFIX := $(LLVM)
--else ifneq ($(filter -%,$(LLVM)),)
--LLVM_SUFFIX := $(LLVM)
--endif
--
--CC := $(LLVM_PREFIX)clang$(LLVM_SUFFIX) $(CLANG_FLAGS) -fintegrated-as
--else
--CC := gcc
--endif # LLVM
--
--ifneq ($(CROSS_COMPILE),)
--$(error CROSS_COMPILE not supported for scx selftests)
--endif # CROSS_COMPILE
--
- CURDIR := $(abspath .)
- REPOROOT := $(abspath ../../../..)
- TOOLSDIR := $(REPOROOT)/tools
-@@ -34,18 +23,31 @@ GENHDR := $(GENDIR)/autoconf.h
- SCXTOOLSDIR := $(TOOLSDIR)/sched_ext
- SCXTOOLSINCDIR := $(TOOLSDIR)/sched_ext/include
+-	if (!ulen ^ !uname)
++	if (!(*ulen) ^ !uname)
+ 		return -EINVAL;
  
--OUTPUT_DIR := $(CURDIR)/build
-+OUTPUT_DIR := $(OUTPUT)/build
- OBJ_DIR := $(OUTPUT_DIR)/obj
- INCLUDE_DIR := $(OUTPUT_DIR)/include
- BPFOBJ_DIR := $(OBJ_DIR)/libbpf
- SCXOBJ_DIR := $(OBJ_DIR)/sched_ext
- BPFOBJ := $(BPFOBJ_DIR)/libbpf.a
- LIBBPF_OUTPUT := $(OBJ_DIR)/libbpf/libbpf.a
--DEFAULT_BPFTOOL := $(OUTPUT_DIR)/sbin/bpftool
--HOST_BUILD_DIR := $(OBJ_DIR)
--HOST_OUTPUT_DIR := $(OUTPUT_DIR)
- 
--VMLINUX_BTF_PATHS ?= ../../../../vmlinux					\
-+ifneq ($(CROSS_COMPILE),)
-+DEFAULT_BPFTOOL := $(OUTPUT_DIR)/host/sbin/bpftool
-+HOST_OBJ_DIR := $(OBJ_DIR)/host/bpftool
-+HOST_LIBBPF_OUTPUT := $(OBJ_DIR)/host/libbpf/
-+HOST_LIBBPF_DESTDIR := $(OUTPUT_DIR)/host/
-+HOST_DESTDIR := $(OUTPUT_DIR)/host/
-+else
-+DEFAULT_BPFTOOL := $(OUTPUT_DIR)/sbin/bpftool
-+HOST_OBJ_DIR := $(OBJ_DIR)/bpftool
-+HOST_LIBBPF_OUTPUT := $(OBJ_DIR)/libbpf/
-+HOST_LIBBPF_DESTDIR := $(OUTPUT_DIR)/
-+HOST_DESTDIR := $(OUTPUT_DIR)/
-+endif
-+
-+VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)					\
-+		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)		\
-+		     ../../../../vmlinux					\
- 		     /sys/kernel/btf/vmlinux					\
- 		     /boot/vmlinux-$(shell uname -r)
- VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
-@@ -80,17 +82,23 @@ IS_LITTLE_ENDIAN = $(shell $(CC) -dM -E - </dev/null |				\
- # Use '-idirafter': Don't interfere with include mechanics except where the
- # build would have failed anyways.
- define get_sys_includes
--$(shell $(1) -v -E - </dev/null 2>&1 \
-+$(shell $(1) $(2) -v -E - </dev/null 2>&1 \
- 	| sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
--$(shell $(1) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
-+$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
- endef
- 
-+ifneq ($(CROSS_COMPILE),)
-+CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
-+endif
-+
-+CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
-+
- BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH)					\
- 	     $(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)		\
- 	     -I$(CURDIR)/include -I$(CURDIR)/include/bpf-compat			\
- 	     -I$(INCLUDE_DIR) -I$(APIDIR) -I$(SCXTOOLSINCDIR)			\
- 	     -I$(REPOROOT)/include						\
--	     $(call get_sys_includes,$(CLANG))					\
-+	     $(CLANG_SYS_INCLUDES) 						\
- 	     -Wall -Wno-compare-distinct-pointer-types				\
- 	     -Wno-incompatible-function-pointer-types				\
- 	     -O2 -mcpu=v3
-@@ -98,7 +106,7 @@ BPF_CFLAGS = -g -D__TARGET_ARCH_$(SRCARCH)					\
- # sort removes libbpf duplicates when not cross-building
- MAKE_DIRS := $(sort $(OBJ_DIR)/libbpf $(OBJ_DIR)/libbpf				\
- 	       $(OBJ_DIR)/bpftool $(OBJ_DIR)/resolve_btfids			\
--	       $(INCLUDE_DIR) $(SCXOBJ_DIR))
-+	       $(HOST_OBJ_DIR) $(INCLUDE_DIR) $(SCXOBJ_DIR))
- 
- $(MAKE_DIRS):
- 	$(call msg,MKDIR,,$@)
-@@ -112,14 +120,14 @@ $(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)			\
- 		    DESTDIR=$(OUTPUT_DIR) prefix= all install_headers
- 
- $(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile)	\
--		    $(LIBBPF_OUTPUT) | $(OBJ_DIR)/bpftool
-+		    $(LIBBPF_OUTPUT) | $(HOST_OBJ_DIR)
- 	$(Q)$(MAKE) $(submake_extras)  -C $(BPFTOOLDIR)				\
- 		    ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD)		\
- 		    EXTRA_CFLAGS='-g -O0'					\
--		    OUTPUT=$(OBJ_DIR)/bpftool/					\
--		    LIBBPF_OUTPUT=$(OBJ_DIR)/libbpf/				\
--		    LIBBPF_DESTDIR=$(OUTPUT_DIR)/				\
--		    prefix= DESTDIR=$(OUTPUT_DIR)/ install-bin
-+		    OUTPUT=$(HOST_OBJ_DIR)/					\
-+		    LIBBPF_OUTPUT=$(HOST_LIBBPF_OUTPUT)				\
-+		    LIBBPF_DESTDIR=$(HOST_LIBBPF_DESTDIR)			\
-+		    prefix= DESTDIR=$(HOST_DESTDIR) install-bin
- 
- $(INCLUDE_DIR)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL) | $(INCLUDE_DIR)
- ifeq ($(VMLINUX_H),)
-@@ -150,9 +158,7 @@ $(INCLUDE_DIR)/%.bpf.skel.h: $(SCXOBJ_DIR)/%.bpf.o $(INCLUDE_DIR)/vmlinux.h $(BP
- 
- override define CLEAN
- 	rm -rf $(OUTPUT_DIR)
--	rm -f *.o *.bpf.o *.bpf.skel.h *.bpf.subskel.h
- 	rm -f $(TEST_GEN_PROGS)
--	rm -f runner
- endef
- 
- # Every testcase takes all of the BPF progs are dependencies by default. This
-@@ -196,21 +202,15 @@ $(SCXOBJ_DIR)/runner.o: runner.c | $(SCXOBJ_DIR)
- # function doesn't support using implicit rules otherwise.
- $(testcase-targets): $(SCXOBJ_DIR)/%.o: %.c $(SCXOBJ_DIR)/runner.o $(all_test_bpfprogs) | $(SCXOBJ_DIR)
- 	$(eval test=$(patsubst %.o,%.c,$(notdir $@)))
--	$(CC) $(CFLAGS) -c $< -o $@ $(SCXOBJ_DIR)/runner.o
-+	$(CC) $(CFLAGS) -c $< -o $@
- 
- $(SCXOBJ_DIR)/util.o: util.c | $(SCXOBJ_DIR)
- 	$(CC) $(CFLAGS) -c $< -o $@
- 
--runner: $(SCXOBJ_DIR)/runner.o $(SCXOBJ_DIR)/util.o $(BPFOBJ) $(testcase-targets)
-+$(OUTPUT)/runner: $(SCXOBJ_DIR)/runner.o $(SCXOBJ_DIR)/util.o $(BPFOBJ) $(testcase-targets)
- 	@echo "$(testcase-targets)"
- 	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
- 
--TEST_GEN_PROGS := runner
--
--all: runner
--
--.PHONY: all clean help
--
- .DEFAULT_GOAL := all
- 
- .DELETE_ON_ERROR:
-
-base-commit: 8cf0b93919e13d1e8d4466eb4080a4c4d9d66d7b
--- 
-2.43.0
-
+ 	err = bpf_get_perf_event_info(event, &prog_id, fd_type, &buf,
+ 				      probe_offset, probe_addr, missed);
+ 	if (err)
+ 		return err;
++	if (buf) {
++		input_len = *ulen;
++		len = strlen(buf);
++		*ulen = len + 1;
++	}
+ 	if (!uname)
+ 		return 0;
+ 	if (buf) {
+-		len = strlen(buf);
+-		err = bpf_copy_to_user(uname, buf, ulen, len);
++		err = bpf_copy_to_user(uname, buf, input_len, len);
+ 		if (err)
+ 			return err;
+ 	} else {
 
