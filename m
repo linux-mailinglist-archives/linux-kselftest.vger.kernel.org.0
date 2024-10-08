@@ -1,43 +1,44 @@
-Return-Path: <linux-kselftest+bounces-19231-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19232-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46D35994562
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 12:29:26 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C745994565
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 12:29:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61EDB1C24BB3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 10:29:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC331286BA9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 10:29:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F59C198836;
-	Tue,  8 Oct 2024 10:29:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E41B1C231E;
+	Tue,  8 Oct 2024 10:29:26 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC6151779B1;
-	Tue,  8 Oct 2024 10:29:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D7081779B1;
+	Tue,  8 Oct 2024 10:29:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728383361; cv=none; b=oMtbhElgEXwWr8hwNnv0QzSWYM7xeZXdzBFmCZArpvxlty5DnSJlVT6+f6KfM69V4V9Fh5ymyQG4gDzZW8VJL8yceB6anGMkv0m/IzdSIL3s6rbW/wbTCbn+WvF7go6EmcTbcwCNmtKDRI6FWuqnH/lPvl8pm13O1V2t44TBDdo=
+	t=1728383366; cv=none; b=aZiZWnvP/p0DBpFiKDKUVCYRAvjwimVAKZZOe5vzoGDZDgjKBR2Dymyg/CC2lZuxWMij39ggLDWiQp/vLQVz1Z2KtjcAXV/a68kfpx1DvkWGJeG72XXYRAXXNUIQLkjKZWGPvXz3+r4ywfF67ibZyo5xm5Gf0isnrWeVvA6ePOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728383361; c=relaxed/simple;
-	bh=cSxMEZo4dYqlh8/0TzamPzyRZ/MF1/XyyCo33WuItSA=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=jg2+HnM6YVdo4YsZRAgD4C+AFqG7knppwvpCuDoRHs2wttNFwJoP11ThE3pToLwAFg7X3xuxJaSuTuQ1wHbUGlCFodGAyzANUPx+MqJTlzfXCRRbuUgmAbawSna6J8eQ8BPmdBC1aU7TZRb0K6QiH2oE68eXat8CMBpgG6pOI7s=
+	s=arc-20240116; t=1728383366; c=relaxed/simple;
+	bh=pjtIaP4a1Q8eXmJbm5mUwmzGh9nInGfQha9qscS3zLg=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HSFGbYjht2t52lgNAVDxKmKlFz/fYftp5OnJRVTXgY5aLfJs+yjHN5RU5Wasz3YGg4j/PZxcYRNYP1H3115uBjXnKwrbkJj89CCgHYVahkc84E6jUaW4JCp+gD3d3DKUrwgARHovALVq+h3s8RFoic03cLPNsVGwIcz3dcCSBYo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XNC021ryRz6J6rb;
-	Tue,  8 Oct 2024 18:28:02 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XNC1H5Mxgz6K9Bm;
+	Tue,  8 Oct 2024 18:29:07 +0800 (CST)
 Received: from frapeml500005.china.huawei.com (unknown [7.182.85.13])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6BF411402C6;
-	Tue,  8 Oct 2024 18:29:16 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 5C8EB140133;
+	Tue,  8 Oct 2024 18:29:22 +0800 (CST)
 Received: from china (10.200.201.82) by frapeml500005.china.huawei.com
  (7.182.85.13) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 8 Oct
- 2024 12:29:10 +0200
+ 2024 12:29:16 +0200
 From: Gur Stavi <gur.stavi@huawei.com>
 To: Gur Stavi <gur.stavi@huawei.com>
 CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "David S.
@@ -45,10 +46,12 @@ CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "David S.
  Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
 	<shuah@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
 	<linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next v02 0/2] net: af_packet: allow joining a fanout when link is down
-Date: Tue, 8 Oct 2024 13:27:57 +0300
-Message-ID: <cover.1728382839.git.gur.stavi@huawei.com>
+Subject: [PATCH net-next v02 1/2] af_packet: allow fanout_add when socket is not RUNNING
+Date: Tue, 8 Oct 2024 13:27:58 +0300
+Message-ID: <05852e3043d2b0a7a5ca51d456e82966dcb72f03.1728382839.git.gur.stavi@huawei.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <cover.1728382839.git.gur.stavi@huawei.com>
+References: <cover.1728382839.git.gur.stavi@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,37 +68,44 @@ and leave a fanout while closed regardless of link state.
 However, socket was forbidden from joining a fanout while it was not
 RUNNING.
 
-This patch allows PACKET socket to join a fanout while not RUNNING.
-Selftest psock_fanout is extended to test this scenario.
-This is the only test that was performed.
+This patch allows PACKET socket to join fanout while not RUNNING.
 
-This scenario was identified while studying DPDK pmd_af_packet_drv.
-Since sockets are only created during initialization, there is no reason
-to fail the initialization if a single link is temporarily down.
+Signed-off-by: Gur Stavi <gur.stavi@huawei.com>
+---
+ net/packet/af_packet.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-I hope it is not considered as breaking user space and that applications
-are not designed to expect this failure.
-
-
-Changes:
-
-V02:
-* psock_fanout: use explicit loopback up/down instead of toggle.
-* psock_fanout: don't try to restore loopback state on failure.
-* Rephrase commit message about "leaving a fanout".
-
-V01: https://lore.kernel.org/netdev/cover.1728303615.git.gur.stavi@huawei.com/
-
-Gur Stavi (2):
-  af_packet: allow fanout_add when socket is not RUNNING
-  selftests: net/psock_fanout: socket joins fanout when link is down
-
- net/packet/af_packet.c                     | 10 +++---
- tools/testing/selftests/net/psock_fanout.c | 42 ++++++++++++++++++++--
- 2 files changed, 44 insertions(+), 8 deletions(-)
-
-
-base-commit: f95b4725e796b12e5f347a0d161e1d3843142aa8
+diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
+index f8942062f776..fb2cca73d953 100644
+--- a/net/packet/af_packet.c
++++ b/net/packet/af_packet.c
+@@ -1846,21 +1846,21 @@ static int fanout_add(struct sock *sk, struct fanout_args *args)
+ 	err = -EINVAL;
+ 
+ 	spin_lock(&po->bind_lock);
+-	if (packet_sock_flag(po, PACKET_SOCK_RUNNING) &&
+-	    match->type == type &&
++	if (match->type == type &&
+ 	    match->prot_hook.type == po->prot_hook.type &&
+ 	    match->prot_hook.dev == po->prot_hook.dev) {
+ 		err = -ENOSPC;
+ 		if (refcount_read(&match->sk_ref) < match->max_num_members) {
+-			__dev_remove_pack(&po->prot_hook);
+-
+ 			/* Paired with packet_setsockopt(PACKET_FANOUT_DATA) */
+ 			WRITE_ONCE(po->fanout, match);
+ 
+ 			po->rollover = rollover;
+ 			rollover = NULL;
+ 			refcount_set(&match->sk_ref, refcount_read(&match->sk_ref) + 1);
+-			__fanout_link(sk, po);
++			if (packet_sock_flag(po, PACKET_SOCK_RUNNING)) {
++				__dev_remove_pack(&po->prot_hook);
++				__fanout_link(sk, po);
++			}
+ 			err = 0;
+ 		}
+ 	}
 -- 
 2.45.2
 
