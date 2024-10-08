@@ -1,131 +1,109 @@
-Return-Path: <linux-kselftest+bounces-19195-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19196-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70A0B993DDE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 06:18:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15D5E993E29
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 07:06:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DD031C23F85
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 04:18:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C16351F218DB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 05:06:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62D0D7DA87;
-	Tue,  8 Oct 2024 04:18:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB1AB7E575;
+	Tue,  8 Oct 2024 05:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="alyBN47R"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e1SPDENw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 398933C0C
-	for <linux-kselftest@vger.kernel.org>; Tue,  8 Oct 2024 04:18:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E687C23A6;
+	Tue,  8 Oct 2024 05:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728361091; cv=none; b=eOqD5/5tG2jIPHbStbS1ZervcKXigCJ58bG5cWG31kPKsYdxgr5OD1nJKYpQAhYF5nFUlKc80GEyCQxqZmQkOw8jzJ2jzmS4KsrjfPw4Q1SG4LeAIRS8hFSYh3LlYKm9xOmMQO9iocTK2xhrhaM2NeS5Ea28FP/rtC4/tx1VL2E=
+	t=1728363956; cv=none; b=h8Cj4DkVpFCh6AZFofspoNPKC3w/IHd+B27jA4/XNDpTbjCNWyrV5ZPXKzI6LC2LPjv8MzFlDRVsrNGZIjMPZ8156nnAedfru1+N2lawyh4L43a4PiLyQM/xvRIq/qgh8FbbXd+vB6yKGmRwj8JVZq92Z9ExnTS8BqoZLNcyMmE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728361091; c=relaxed/simple;
-	bh=VSZhSzhnbdu2NNszsJIrOuSYNRWmYaP3/73tTqZqx84=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FhZEcJGa+eTVhVRZkiYCPj7FnEWd5OnCK5RIkpIQei4rzclcBb/9JPlnLJJCfrnnkSJbLYPCryt0CtVd+MkAox9MwA6VB5b08FNiC6KVODGSxekxSu35lohzAtJb/fG/lWq15w+ouLz3XkoNItOQ7b4nTiaMSY5SS+NMzyccEb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=alyBN47R; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2e0b467da03so638681a91.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 07 Oct 2024 21:18:09 -0700 (PDT)
+	s=arc-20240116; t=1728363956; c=relaxed/simple;
+	bh=GzqgHMmQW/zLl2NUoOcPLLAhpn2pNv8p/0ISc/fRhJc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mA9R5wppA67puQuZG5/tapdBA0HdfsEp5hAM0OalDed0OxixXdPDi71fbWHIDF4+03/V0d9s2g3D9Hi1urFSYx2GuLkJgUe0CbxjO96Qp9dUGRPQi/OQMDiWAl8367EW+cHHUebuAcCp2FXGGZF9lUks+KaZsacKEAQQoRzf140=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e1SPDENw; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-20b0b2528d8so58911215ad.2;
+        Mon, 07 Oct 2024 22:05:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1728361088; x=1728965888; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0vVQPrureiyHbwYAfJliFzmOeqMNDULWaSzE3MpLwxE=;
-        b=alyBN47RBaxB6GiJTR5sc5kqoidS0N9tcrk4Ypz1OsaKm9Q7FrBefq15hwVkzVNEiE
-         LCdv8E4LhZbmIxKsnnWpGEzN2noH/SZtKzArHx/givDt6VEfcbK9fFRa18IFOXwndHVY
-         /uP0XoEySMfjDnfkFmwT096TNhbJazNQCDMSU=
+        d=gmail.com; s=20230601; t=1728363954; x=1728968754; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vJPaVyRilo4aUQXwNgV/yaJuQyIUzylhfjLuhOyZnOs=;
+        b=e1SPDENwv1vv8ZlYsrxhrZVHq7E8dIkLUxc6ncsEvTeoMrq23d5z127sTT8flK5yK7
+         KDfSKLU/edJdm9Cvq2sB0EemZoo521y/NriR+TNzF7raJIEyAjqhfafbdCCKapWiXPfl
+         HfAZWEqtM3COB12kom3tFhfwvyhQG7eCJuNLFMdl8AuRkVF42sLCdiwFwQYHGv7lmxnL
+         kvPPdLvYrwe5//RYX3cNJVf2O0G1uf6tt0bnwM6Apb9LwNc3xyHT8ABQzbeOBtOO/5ye
+         beHW3M5x5hwCOmlDsqmIwjAEtwXjq68Byi+2OSAZNciTxllIAUbrqGqLhYi1pBWUVCxb
+         IqAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728361088; x=1728965888;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1728363954; x=1728968754;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0vVQPrureiyHbwYAfJliFzmOeqMNDULWaSzE3MpLwxE=;
-        b=bHfuS98khviafmSOOHIdKs1DC70UWiUoF0z68bAPNVmrTsPRg8fk1mhM0ZF37XPglC
-         F9w3RbVKyW3mpXLt0XGIyTzXyHVn28POBabrBwQ0rmpHlwiSNC7X67Ef0TqBNgebkQnN
-         BMPgSqrkLEZ8s12aJdnmnOrAnBcFf0QpN1JPrl/Mn2hwT0phg+qbGD9fXC5pSNPjrrLc
-         z17ImJ4GFyf3H8oelI4LFw9CsIiuJXR5IXZEYNt3jWp5dsnldeODahunj/A73RBRhnRH
-         1w2Mnl4p4SUKhWwp/33An2PNmbQfeYZbyxtuRggaEW3gDBTHRN2xyC7IS6fPLSoKXYp6
-         Ch7g==
-X-Forwarded-Encrypted: i=1; AJvYcCXmfg0DtAl094BAxKT53AF6xHlZpUfaRip0KViwT3Lo1dAko5D1eba9/tb+3ZodwGoq+h+kalzwrSw5KPyJpvE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwUKMxJd3VSw+xhdNuQzs9abcg4xMQ1H9O8Lbodq9Df7icWCufi
-	txntVoouI9EI5hOj9SsX8M2y8MaDJ8co6AK+callNFAGURqdCoaKFDhiRECWHg==
-X-Google-Smtp-Source: AGHT+IETmZkdIfaU3KgL1a0e2OY78XhZ0gDO7l0Fn6ylun8F9SxSWEg+1I1jGGXk76KQfXMjITSOzA==
-X-Received: by 2002:a17:903:2345:b0:20b:99cd:c27e with SMTP id d9443c01a7336-20bfe02ba29mr86787295ad.3.1728361088521;
-        Mon, 07 Oct 2024 21:18:08 -0700 (PDT)
-Received: from localhost (56.4.82.34.bc.googleusercontent.com. [34.82.4.56])
-        by smtp.gmail.com with UTF8SMTPSA id 98e67ed59e1d1-2e1e85da3f0sm8049197a91.30.2024.10.07.21.18.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 07 Oct 2024 21:18:08 -0700 (PDT)
-From: jeffxu@chromium.org
-To: akpm@linux-foundation.org,
-	keescook@chromium.org,
-	corbet@lwn.net
-Cc: jorgelo@chromium.org,
-	groeck@chromium.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	jannh@google.com,
-	sroettger@google.com,
-	pedro.falcato@gmail.com,
-	linux-hardening@vger.kernel.org,
-	willy@infradead.org,
-	gregkh@linuxfoundation.org,
-	torvalds@linux-foundation.org,
-	deraadt@openbsd.org,
-	usama.anjum@collabora.com,
-	surenb@google.com,
-	merimus@google.com,
-	rdunlap@infradead.org,
-	lorenzo.stoakes@oracle.com,
-	Liam.Howlett@oracle.com,
-	enh@google.com,
-	Jeff Xu <jeffxu@chromium.org>
-Subject: [PATCH] mseal.rst additional fix
-Date: Tue,  8 Oct 2024 04:18:04 +0000
-Message-ID: <20241008041804.1481453-1-jeffxu@chromium.org>
-X-Mailer: git-send-email 2.47.0.rc0.187.ge670bccf7e-goog
-In-Reply-To: <20241008040942.1478931-2-jeffxu@chromium.org>
-References: <20241008040942.1478931-2-jeffxu@chromium.org>
+        bh=vJPaVyRilo4aUQXwNgV/yaJuQyIUzylhfjLuhOyZnOs=;
+        b=KvV93htVpNhRpwUjJT6TobeII5vndQm3fv1FUtn+TNhrycLGCzcCEt4q2gHsre9joq
+         2q3XsmeKsjsWoLjGXq4EJu+TpFYRPYZ/aZqRfbK67cUE6TwoY7uZCnDcsgpp1xOCgUrs
+         wfx3fBKgU6akELndAtN9yvW/5t/FR0yeiORQgWPtQXw0lWyKgtYk9a0afLa44cV8Qs6g
+         fb8lhKl0VIg79FE4vlF7pygMwzYe6e2sik+54WaKxriQXwkTr0pWpYjy3bEmWaUJBFtw
+         1Tqf6MSTwvPpxFPsQAey6iUsxzI/fMw4Ers6KX0P7ywnHMPNfC7IW/ycki70vhOS4Vyc
+         TzVw==
+X-Forwarded-Encrypted: i=1; AJvYcCVlXuyAQZthMUaZ9kUFGPpgJiX2HlNyV0WYj0AjANfQt+4U6y76UZhtLrmUOmSEz/hCdqZc0h9w@vger.kernel.org, AJvYcCWCfk/z+P2WxcTR08BNZB09LzUQqONOUbr6rSDMDsjuZi17ltL0MqetrNgioUwuO9C7fubMatQfquH97XE=@vger.kernel.org, AJvYcCWatuFmuFoogPv5DtKBhqdTkFzg3OwrSilhhVXJJ7jWnhBSfrR0vIU5ibFGSLn5qefd43Bu8rkTt3VdCRCjSm2Y@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwgjpA4QAkpzxXONtn8gYgG6aEPAokT9hodhFuodBZsHjR2emL
+	MHndhMnwrBs218l4kuNJ+r4E0gFzX36h0vmUZkjs9zExUerjRGxT+zvALg==
+X-Google-Smtp-Source: AGHT+IHNfiOqpN2OMHamtFVd/3dPEh6k1BxaJ4wfYQnpULCLQy2CIwF/qE+PtdV2qFyQD/2rHuA5Vw==
+X-Received: by 2002:a17:903:2a85:b0:20b:9e14:c138 with SMTP id d9443c01a7336-20bfdff1a88mr241542855ad.23.1728363954203;
+        Mon, 07 Oct 2024 22:05:54 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c138b1ad6sm47900635ad.31.2024.10.07.22.05.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Oct 2024 22:05:52 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Mon, 7 Oct 2024 22:05:51 -0700
+From: Guenter Roeck <linux@roeck-us.net>
+To: Greg Thelen <gthelen@google.com>
+Cc: Shuah Khan <shuah@kernel.org>, Mina Almasry <almasrymina@google.com>,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests: make kselftest-clean remove libynl outputs
+Message-ID: <8edbf2aa-0101-4a6a-ba16-3e67806f34f6@roeck-us.net>
+References: <20241005215600.852260-1-gthelen@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241005215600.852260-1-gthelen@google.com>
 
-From: Jeff Xu <jeffxu@chromium.org>
+On Sat, Oct 05, 2024 at 02:56:00PM -0700, Greg Thelen wrote:
+> Starting with 6.12 commit 85585b4bc8d8 ("selftests: add ncdevmem, netcat
+> for devmem TCP") kselftest-all creates additional outputs that
+> kselftest-clean does not cleanup:
+>   $ make defconfig
+>   $ make kselftest-all
+>   $ make kselftest-clean
+>   $ git clean -ndxf | grep tools/net
+>   Would remove tools/net/ynl/lib/__pycache__/
+>   Would remove tools/net/ynl/lib/ynl.a
+>   Would remove tools/net/ynl/lib/ynl.d
+>   Would remove tools/net/ynl/lib/ynl.o
+> 
+> Make kselftest-clean remove the newly added net/ynl outputs.
+> 
+> Fixes: 85585b4bc8d8 ("selftests: add ncdevmem, netcat for devmem TCP")
+> Signed-off-by: Greg Thelen <gthelen@google.com>
 
-Change "overwrite" to overwrites"
-
-Signed-off-by: Jeff Xu <jeffxu@chromium.org>
----
- Documentation/userspace-api/mseal.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/Documentation/userspace-api/mseal.rst b/Documentation/userspace-api/mseal.rst
-index 41102f74c5e2..54bbcce330ec 100644
---- a/Documentation/userspace-api/mseal.rst
-+++ b/Documentation/userspace-api/mseal.rst
-@@ -97,7 +97,7 @@ Blocked mm syscall for sealed mapping
-    The first set of syscalls to block is munmap, mremap, mmap. They can
-    either leave an empty space in the address space, therefore allowing
-    replacement with a new mapping with new set of attributes, or can
--   overwrite the existing mapping with another mapping.
-+   overwrites the existing mapping with another mapping.
- 
-    mprotect and pkey_mprotect are blocked because they changes the
-    protection bits (RWX) of the mapping.
--- 
-2.47.0.rc0.187.ge670bccf7e-goog
-
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
 
