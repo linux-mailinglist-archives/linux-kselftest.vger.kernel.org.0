@@ -1,54 +1,55 @@
-Return-Path: <linux-kselftest+bounces-19234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19235-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 332819946D1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 13:27:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BDECE9946D5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 13:27:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A4D211F2506C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 11:27:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40E621F24521
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 11:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49DA71D271C;
-	Tue,  8 Oct 2024 11:27:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC5241DACBE;
+	Tue,  8 Oct 2024 11:27:08 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B2F816EB76;
-	Tue,  8 Oct 2024 11:27:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E3051D5CDB;
+	Tue,  8 Oct 2024 11:27:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728386823; cv=none; b=NbP0ueQ0ScFfnkEmStKzToUMg6MdItXJY+yyD2iI31UhqgazO+M3IxQZ7Ep8W0zfF1z0iLHybIn5TDkgCoB0pUqNVvbRFTjPu1w+UhuT2XNlwKGQjliNcsTuBtwlsk0g7iPr14Z5RhIKqv2gF/VVM8AayF0ZPFU/Y1oCWaT2tAQ=
+	t=1728386828; cv=none; b=sKsEB+zXj0tn5F8xlvh5I3C2hXKbvcS9jhoWfL+EfaJorZ63lMw1nxMPOh3m6YOQurxvPCSH/e+m1S6eHKWcSNEzgQRNAtiYDdXFVEA7ntiR6vs65M/PT2OMmJNVnlgFr5Kgkci+bjiBymOfpA9dFvTunZse4C0VOIgqNGxOWr4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728386823; c=relaxed/simple;
-	bh=UALAcd2VKqqd9fBfQMtU/n87HNrMI6/BqMgRiPEZ96s=;
+	s=arc-20240116; t=1728386828; c=relaxed/simple;
+	bh=Mi8J6ANQbsgM6lLr6epNjH7ca8g7RjB2xbovdEeHH5k=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=P7SfYHWa6gUUySVnx9jnkyTE7PMGJF4MxuGtQ/hUYLH0i52v5x7rYY6I7hCfGJel5nZ78XvlydevEmH7RvqROO7g0iBIOrHzWmATSdUVRggxP1ceWtwPSg+XRes34oZ2ElZ2g713HCJctf1MAqxzBhX9Kf8Qb6FU3RIIY68oF6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
+	 MIME-Version:Content-Type; b=k1gGfLdkQmuCfGBrueBl6PEjlk/uTxjBh9lr+NMmvSl3owvy1IfUdKiFbmYghLhkvd4axqhw29cO8dMjBm5L+YKXTheS/Gfb9XWay2X6mMElVEXloD9eqxZht/LW54nx65a+GOJgPmTCGjxTsrwqPjSapL6CDahel6dDpVbK0zE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4XNDGn3tSFz1SCDD;
-	Tue,  8 Oct 2024 19:25:53 +0800 (CST)
+Received: from mail.maildlp.com (unknown [172.19.163.252])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4XNDGf5N2czySsn;
+	Tue,  8 Oct 2024 19:25:46 +0800 (CST)
 Received: from dggpemf200006.china.huawei.com (unknown [7.185.36.61])
-	by mail.maildlp.com (Postfix) with ESMTPS id 2703C14013B;
-	Tue,  8 Oct 2024 19:26:58 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id F2EC01800CF;
+	Tue,  8 Oct 2024 19:27:01 +0800 (CST)
 Received: from localhost.localdomain (10.90.30.45) by
  dggpemf200006.china.huawei.com (7.185.36.61) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 8 Oct 2024 19:26:57 +0800
+ 15.2.1544.11; Tue, 8 Oct 2024 19:27:01 +0800
 From: Yunsheng Lin <linyunsheng@huawei.com>
 To: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
 CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Yunsheng Lin
-	<linyunsheng@huawei.com>, Alexander Duyck <alexander.duyck@gmail.com>,
-	Alexander Duyck <alexanderduyck@fb.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-	<linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next v20 01/14] mm: page_frag: add a test module for page_frag
-Date: Tue, 8 Oct 2024 19:20:35 +0800
-Message-ID: <20241008112049.2279307-2-linyunsheng@huawei.com>
+	<linyunsheng@huawei.com>, David Howells <dhowells@redhat.com>, Alexander
+ Duyck <alexander.duyck@gmail.com>, Andrew Morton <akpm@linux-foundation.org>,
+	Alexander Duyck <alexanderduyck@fb.com>, Eric Dumazet <edumazet@google.com>,
+	Shuah Khan <shuah@kernel.org>, <linux-mm@kvack.org>,
+	<linux-kselftest@vger.kernel.org>
+Subject: [PATCH net-next v20 02/14] mm: move the page fragment allocator from page_alloc into its own file
+Date: Tue, 8 Oct 2024 19:20:36 +0800
+Message-ID: <20241008112049.2279307-3-linyunsheng@huawei.com>
 X-Mailer: git-send-email 2.30.0
 In-Reply-To: <20241008112049.2279307-1-linyunsheng@huawei.com>
 References: <20241008112049.2279307-1-linyunsheng@huawei.com>
@@ -63,453 +64,522 @@ Content-Type: text/plain
 X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
  dggpemf200006.china.huawei.com (7.185.36.61)
 
-The testing is done by ensuring that the fragment allocated
-from a frag_frag_cache instance is pushed into a ptr_ring
-instance in a kthread binded to a specified cpu, and a kthread
-binded to a specified cpu will pop the fragment from the
-ptr_ring and free the fragment.
+Inspired by [1], move the page fragment allocator from page_alloc
+into its own c file and header file, as we are about to make more
+change for it to replace another page_frag implementation in
+sock.c
 
+As this patchset is going to replace 'struct page_frag' with
+'struct page_frag_cache' in sched.h, including page_frag_cache.h
+in sched.h has a compiler error caused by interdependence between
+mm_types.h and mm.h for asm-offsets.c, see [2]. So avoid the compiler
+error by moving 'struct page_frag_cache' to mm_types_task.h as
+suggested by Alexander, see [3].
+
+1. https://lore.kernel.org/all/20230411160902.4134381-3-dhowells@redhat.com/
+2. https://lore.kernel.org/all/15623dac-9358-4597-b3ee-3694a5956920@gmail.com/
+3. https://lore.kernel.org/all/CAKgT0UdH1yD=LSCXFJ=YM_aiA4OomD-2wXykO42bizaWMt_HOA@mail.gmail.com/
+CC: David Howells <dhowells@redhat.com>
 CC: Alexander Duyck <alexander.duyck@gmail.com>
 Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+Acked-by: Andrew Morton <akpm@linux-foundation.org>
 Reviewed-by: Alexander Duyck <alexanderduyck@fb.com>
 ---
- tools/testing/selftests/mm/Makefile           |   3 +
- tools/testing/selftests/mm/page_frag/Makefile |  18 ++
- .../selftests/mm/page_frag/page_frag_test.c   | 173 ++++++++++++++++++
- tools/testing/selftests/mm/run_vmtests.sh     |   8 +
- tools/testing/selftests/mm/test_page_frag.sh  | 171 +++++++++++++++++
- 5 files changed, 373 insertions(+)
- create mode 100644 tools/testing/selftests/mm/page_frag/Makefile
- create mode 100644 tools/testing/selftests/mm/page_frag/page_frag_test.c
- create mode 100755 tools/testing/selftests/mm/test_page_frag.sh
+ include/linux/gfp.h                           |  22 ---
+ include/linux/mm_types.h                      |  18 ---
+ include/linux/mm_types_task.h                 |  18 +++
+ include/linux/page_frag_cache.h               |  31 ++++
+ include/linux/skbuff.h                        |   1 +
+ mm/Makefile                                   |   1 +
+ mm/page_alloc.c                               | 136 ----------------
+ mm/page_frag_cache.c                          | 145 ++++++++++++++++++
+ .../selftests/mm/page_frag/page_frag_test.c   |   2 +-
+ 9 files changed, 197 insertions(+), 177 deletions(-)
+ create mode 100644 include/linux/page_frag_cache.h
+ create mode 100644 mm/page_frag_cache.c
 
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 02e1204971b0..acec529baaca 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -36,6 +36,8 @@ MAKEFLAGS += --no-builtin-rules
- CFLAGS = -Wall -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
- LDLIBS = -lrt -lpthread -lm
+diff --git a/include/linux/gfp.h b/include/linux/gfp.h
+index a951de920e20..a0a6d25f883f 100644
+--- a/include/linux/gfp.h
++++ b/include/linux/gfp.h
+@@ -371,28 +371,6 @@ __meminit void *alloc_pages_exact_nid_noprof(int nid, size_t size, gfp_t gfp_mas
+ extern void __free_pages(struct page *page, unsigned int order);
+ extern void free_pages(unsigned long addr, unsigned int order);
  
-+TEST_GEN_MODS_DIR := page_frag
-+
- TEST_GEN_FILES = cow
- TEST_GEN_FILES += compaction_test
- TEST_GEN_FILES += gup_longterm
-@@ -126,6 +128,7 @@ TEST_FILES += test_hmm.sh
- TEST_FILES += va_high_addr_switch.sh
- TEST_FILES += charge_reserved_hugetlb.sh
- TEST_FILES += hugetlb_reparenting_test.sh
-+TEST_FILES += test_page_frag.sh
+-struct page_frag_cache;
+-void page_frag_cache_drain(struct page_frag_cache *nc);
+-extern void __page_frag_cache_drain(struct page *page, unsigned int count);
+-void *__page_frag_alloc_align(struct page_frag_cache *nc, unsigned int fragsz,
+-			      gfp_t gfp_mask, unsigned int align_mask);
+-
+-static inline void *page_frag_alloc_align(struct page_frag_cache *nc,
+-					  unsigned int fragsz, gfp_t gfp_mask,
+-					  unsigned int align)
+-{
+-	WARN_ON_ONCE(!is_power_of_2(align));
+-	return __page_frag_alloc_align(nc, fragsz, gfp_mask, -align);
+-}
+-
+-static inline void *page_frag_alloc(struct page_frag_cache *nc,
+-			     unsigned int fragsz, gfp_t gfp_mask)
+-{
+-	return __page_frag_alloc_align(nc, fragsz, gfp_mask, ~0u);
+-}
+-
+-extern void page_frag_free(void *addr);
+-
+ #define __free_page(page) __free_pages((page), 0)
+ #define free_page(addr) free_pages((addr), 0)
  
- # required by charge_reserved_hugetlb.sh
- TEST_FILES += write_hugetlb_memory.sh
-diff --git a/tools/testing/selftests/mm/page_frag/Makefile b/tools/testing/selftests/mm/page_frag/Makefile
+diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
+index 6e3bdf8e38bc..92314ef2d978 100644
+--- a/include/linux/mm_types.h
++++ b/include/linux/mm_types.h
+@@ -521,9 +521,6 @@ static_assert(sizeof(struct ptdesc) <= sizeof(struct page));
+  */
+ #define STRUCT_PAGE_MAX_SHIFT	(order_base_2(sizeof(struct page)))
+ 
+-#define PAGE_FRAG_CACHE_MAX_SIZE	__ALIGN_MASK(32768, ~PAGE_MASK)
+-#define PAGE_FRAG_CACHE_MAX_ORDER	get_order(PAGE_FRAG_CACHE_MAX_SIZE)
+-
+ /*
+  * page_private can be used on tail pages.  However, PagePrivate is only
+  * checked by the VM on the head page.  So page_private on the tail pages
+@@ -542,21 +539,6 @@ static inline void *folio_get_private(struct folio *folio)
+ 	return folio->private;
+ }
+ 
+-struct page_frag_cache {
+-	void * va;
+-#if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
+-	__u16 offset;
+-	__u16 size;
+-#else
+-	__u32 offset;
+-#endif
+-	/* we maintain a pagecount bias, so that we dont dirty cache line
+-	 * containing page->_refcount every time we allocate a fragment.
+-	 */
+-	unsigned int		pagecnt_bias;
+-	bool pfmemalloc;
+-};
+-
+ typedef unsigned long vm_flags_t;
+ 
+ /*
+diff --git a/include/linux/mm_types_task.h b/include/linux/mm_types_task.h
+index bff5706b76e1..0ac6daebdd5c 100644
+--- a/include/linux/mm_types_task.h
++++ b/include/linux/mm_types_task.h
+@@ -8,6 +8,7 @@
+  * (These are defined separately to decouple sched.h from mm_types.h as much as possible.)
+  */
+ 
++#include <linux/align.h>
+ #include <linux/types.h>
+ 
+ #include <asm/page.h>
+@@ -43,6 +44,23 @@ struct page_frag {
+ #endif
+ };
+ 
++#define PAGE_FRAG_CACHE_MAX_SIZE	__ALIGN_MASK(32768, ~PAGE_MASK)
++#define PAGE_FRAG_CACHE_MAX_ORDER	get_order(PAGE_FRAG_CACHE_MAX_SIZE)
++struct page_frag_cache {
++	void *va;
++#if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
++	__u16 offset;
++	__u16 size;
++#else
++	__u32 offset;
++#endif
++	/* we maintain a pagecount bias, so that we dont dirty cache line
++	 * containing page->_refcount every time we allocate a fragment.
++	 */
++	unsigned int		pagecnt_bias;
++	bool pfmemalloc;
++};
++
+ /* Track pages that require TLB flushes */
+ struct tlbflush_unmap_batch {
+ #ifdef CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH
+diff --git a/include/linux/page_frag_cache.h b/include/linux/page_frag_cache.h
 new file mode 100644
-index 000000000000..58dda74d50a3
+index 000000000000..67ac8626ed9b
 --- /dev/null
-+++ b/tools/testing/selftests/mm/page_frag/Makefile
-@@ -0,0 +1,18 @@
-+PAGE_FRAG_TEST_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
-+KDIR ?= $(abspath $(PAGE_FRAG_TEST_DIR)/../../../../..)
++++ b/include/linux/page_frag_cache.h
+@@ -0,0 +1,31 @@
++/* SPDX-License-Identifier: GPL-2.0 */
 +
-+ifeq ($(V),1)
-+Q =
-+else
-+Q = @
-+endif
++#ifndef _LINUX_PAGE_FRAG_CACHE_H
++#define _LINUX_PAGE_FRAG_CACHE_H
 +
-+MODULES = page_frag_test.ko
++#include <linux/log2.h>
++#include <linux/mm_types_task.h>
++#include <linux/types.h>
 +
-+obj-m += page_frag_test.o
++void page_frag_cache_drain(struct page_frag_cache *nc);
++void __page_frag_cache_drain(struct page *page, unsigned int count);
++void *__page_frag_alloc_align(struct page_frag_cache *nc, unsigned int fragsz,
++			      gfp_t gfp_mask, unsigned int align_mask);
 +
-+all:
-+	+$(Q)make -C $(KDIR) M=$(PAGE_FRAG_TEST_DIR) modules
++static inline void *page_frag_alloc_align(struct page_frag_cache *nc,
++					  unsigned int fragsz, gfp_t gfp_mask,
++					  unsigned int align)
++{
++	WARN_ON_ONCE(!is_power_of_2(align));
++	return __page_frag_alloc_align(nc, fragsz, gfp_mask, -align);
++}
 +
-+clean:
-+	+$(Q)make -C $(KDIR) M=$(PAGE_FRAG_TEST_DIR) clean
-diff --git a/tools/testing/selftests/mm/page_frag/page_frag_test.c b/tools/testing/selftests/mm/page_frag/page_frag_test.c
++static inline void *page_frag_alloc(struct page_frag_cache *nc,
++				    unsigned int fragsz, gfp_t gfp_mask)
++{
++	return __page_frag_alloc_align(nc, fragsz, gfp_mask, ~0u);
++}
++
++void page_frag_free(void *addr);
++
++#endif
+diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+index 39f1d16f3628..560e2b49f98b 100644
+--- a/include/linux/skbuff.h
++++ b/include/linux/skbuff.h
+@@ -31,6 +31,7 @@
+ #include <linux/in6.h>
+ #include <linux/if_packet.h>
+ #include <linux/llist.h>
++#include <linux/page_frag_cache.h>
+ #include <net/flow.h>
+ #if IS_ENABLED(CONFIG_NF_CONNTRACK)
+ #include <linux/netfilter/nf_conntrack_common.h>
+diff --git a/mm/Makefile b/mm/Makefile
+index d5639b036166..dba52bb0da8a 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -65,6 +65,7 @@ page-alloc-$(CONFIG_SHUFFLE_PAGE_ALLOCATOR) += shuffle.o
+ memory-hotplug-$(CONFIG_MEMORY_HOTPLUG) += memory_hotplug.o
+ 
+ obj-y += page-alloc.o
++obj-y += page_frag_cache.o
+ obj-y += init-mm.o
+ obj-y += memblock.o
+ obj-y += $(memory-hotplug-y)
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 8afab64814dc..6ca2abce857b 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -4836,142 +4836,6 @@ void free_pages(unsigned long addr, unsigned int order)
+ 
+ EXPORT_SYMBOL(free_pages);
+ 
+-/*
+- * Page Fragment:
+- *  An arbitrary-length arbitrary-offset area of memory which resides
+- *  within a 0 or higher order page.  Multiple fragments within that page
+- *  are individually refcounted, in the page's reference counter.
+- *
+- * The page_frag functions below provide a simple allocation framework for
+- * page fragments.  This is used by the network stack and network device
+- * drivers to provide a backing region of memory for use as either an
+- * sk_buff->head, or to be used in the "frags" portion of skb_shared_info.
+- */
+-static struct page *__page_frag_cache_refill(struct page_frag_cache *nc,
+-					     gfp_t gfp_mask)
+-{
+-	struct page *page = NULL;
+-	gfp_t gfp = gfp_mask;
+-
+-#if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
+-	gfp_mask = (gfp_mask & ~__GFP_DIRECT_RECLAIM) |  __GFP_COMP |
+-		   __GFP_NOWARN | __GFP_NORETRY | __GFP_NOMEMALLOC;
+-	page = alloc_pages_node(NUMA_NO_NODE, gfp_mask,
+-				PAGE_FRAG_CACHE_MAX_ORDER);
+-	nc->size = page ? PAGE_FRAG_CACHE_MAX_SIZE : PAGE_SIZE;
+-#endif
+-	if (unlikely(!page))
+-		page = alloc_pages_node(NUMA_NO_NODE, gfp, 0);
+-
+-	nc->va = page ? page_address(page) : NULL;
+-
+-	return page;
+-}
+-
+-void page_frag_cache_drain(struct page_frag_cache *nc)
+-{
+-	if (!nc->va)
+-		return;
+-
+-	__page_frag_cache_drain(virt_to_head_page(nc->va), nc->pagecnt_bias);
+-	nc->va = NULL;
+-}
+-EXPORT_SYMBOL(page_frag_cache_drain);
+-
+-void __page_frag_cache_drain(struct page *page, unsigned int count)
+-{
+-	VM_BUG_ON_PAGE(page_ref_count(page) == 0, page);
+-
+-	if (page_ref_sub_and_test(page, count))
+-		free_unref_page(page, compound_order(page));
+-}
+-EXPORT_SYMBOL(__page_frag_cache_drain);
+-
+-void *__page_frag_alloc_align(struct page_frag_cache *nc,
+-			      unsigned int fragsz, gfp_t gfp_mask,
+-			      unsigned int align_mask)
+-{
+-	unsigned int size = PAGE_SIZE;
+-	struct page *page;
+-	int offset;
+-
+-	if (unlikely(!nc->va)) {
+-refill:
+-		page = __page_frag_cache_refill(nc, gfp_mask);
+-		if (!page)
+-			return NULL;
+-
+-#if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
+-		/* if size can vary use size else just use PAGE_SIZE */
+-		size = nc->size;
+-#endif
+-		/* Even if we own the page, we do not use atomic_set().
+-		 * This would break get_page_unless_zero() users.
+-		 */
+-		page_ref_add(page, PAGE_FRAG_CACHE_MAX_SIZE);
+-
+-		/* reset page count bias and offset to start of new frag */
+-		nc->pfmemalloc = page_is_pfmemalloc(page);
+-		nc->pagecnt_bias = PAGE_FRAG_CACHE_MAX_SIZE + 1;
+-		nc->offset = size;
+-	}
+-
+-	offset = nc->offset - fragsz;
+-	if (unlikely(offset < 0)) {
+-		page = virt_to_page(nc->va);
+-
+-		if (!page_ref_sub_and_test(page, nc->pagecnt_bias))
+-			goto refill;
+-
+-		if (unlikely(nc->pfmemalloc)) {
+-			free_unref_page(page, compound_order(page));
+-			goto refill;
+-		}
+-
+-#if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
+-		/* if size can vary use size else just use PAGE_SIZE */
+-		size = nc->size;
+-#endif
+-		/* OK, page count is 0, we can safely set it */
+-		set_page_count(page, PAGE_FRAG_CACHE_MAX_SIZE + 1);
+-
+-		/* reset page count bias and offset to start of new frag */
+-		nc->pagecnt_bias = PAGE_FRAG_CACHE_MAX_SIZE + 1;
+-		offset = size - fragsz;
+-		if (unlikely(offset < 0)) {
+-			/*
+-			 * The caller is trying to allocate a fragment
+-			 * with fragsz > PAGE_SIZE but the cache isn't big
+-			 * enough to satisfy the request, this may
+-			 * happen in low memory conditions.
+-			 * We don't release the cache page because
+-			 * it could make memory pressure worse
+-			 * so we simply return NULL here.
+-			 */
+-			return NULL;
+-		}
+-	}
+-
+-	nc->pagecnt_bias--;
+-	offset &= align_mask;
+-	nc->offset = offset;
+-
+-	return nc->va + offset;
+-}
+-EXPORT_SYMBOL(__page_frag_alloc_align);
+-
+-/*
+- * Frees a page fragment allocated out of either a compound or order 0 page.
+- */
+-void page_frag_free(void *addr)
+-{
+-	struct page *page = virt_to_head_page(addr);
+-
+-	if (unlikely(put_page_testzero(page)))
+-		free_unref_page(page, compound_order(page));
+-}
+-EXPORT_SYMBOL(page_frag_free);
+-
+ static void *make_alloc_exact(unsigned long addr, unsigned int order,
+ 		size_t size)
+ {
+diff --git a/mm/page_frag_cache.c b/mm/page_frag_cache.c
 new file mode 100644
-index 000000000000..eeb2b6bc681a
+index 000000000000..609a485cd02a
 --- /dev/null
-+++ b/tools/testing/selftests/mm/page_frag/page_frag_test.c
-@@ -0,0 +1,173 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+/*
-+ * Test module for page_frag cache
++++ b/mm/page_frag_cache.c
+@@ -0,0 +1,145 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/* Page fragment allocator
 + *
-+ * Copyright (C) 2024 Yunsheng Lin <linyunsheng@huawei.com>
++ * Page Fragment:
++ *  An arbitrary-length arbitrary-offset area of memory which resides within a
++ *  0 or higher order page.  Multiple fragments within that page are
++ *  individually refcounted, in the page's reference counter.
++ *
++ * The page_frag functions provide a simple allocation framework for page
++ * fragments.  This is used by the network stack and network device drivers to
++ * provide a backing region of memory for use as either an sk_buff->head, or to
++ * be used in the "frags" portion of skb_shared_info.
 + */
 +
++#include <linux/export.h>
++#include <linux/gfp_types.h>
++#include <linux/init.h>
 +#include <linux/mm.h>
-+#include <linux/module.h>
-+#include <linux/cpumask.h>
-+#include <linux/completion.h>
-+#include <linux/ptr_ring.h>
-+#include <linux/kthread.h>
++#include <linux/page_frag_cache.h>
++#include "internal.h"
 +
-+static struct ptr_ring ptr_ring;
-+static int nr_objs = 512;
-+static atomic_t nthreads;
-+static struct completion wait;
-+static struct page_frag_cache test_nc;
-+static int test_popped;
-+static int test_pushed;
-+
-+static int nr_test = 2000000;
-+module_param(nr_test, int, 0);
-+MODULE_PARM_DESC(nr_test, "number of iterations to test");
-+
-+static bool test_align;
-+module_param(test_align, bool, 0);
-+MODULE_PARM_DESC(test_align, "use align API for testing");
-+
-+static int test_alloc_len = 2048;
-+module_param(test_alloc_len, int, 0);
-+MODULE_PARM_DESC(test_alloc_len, "alloc len for testing");
-+
-+static int test_push_cpu;
-+module_param(test_push_cpu, int, 0);
-+MODULE_PARM_DESC(test_push_cpu, "test cpu for pushing fragment");
-+
-+static int test_pop_cpu;
-+module_param(test_pop_cpu, int, 0);
-+MODULE_PARM_DESC(test_pop_cpu, "test cpu for popping fragment");
-+
-+static int page_frag_pop_thread(void *arg)
++static struct page *__page_frag_cache_refill(struct page_frag_cache *nc,
++					     gfp_t gfp_mask)
 +{
-+	struct ptr_ring *ring = arg;
++	struct page *page = NULL;
++	gfp_t gfp = gfp_mask;
 +
-+	pr_info("page_frag pop test thread begins on cpu %d\n",
-+		smp_processor_id());
++#if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
++	gfp_mask = (gfp_mask & ~__GFP_DIRECT_RECLAIM) |  __GFP_COMP |
++		   __GFP_NOWARN | __GFP_NORETRY | __GFP_NOMEMALLOC;
++	page = alloc_pages_node(NUMA_NO_NODE, gfp_mask,
++				PAGE_FRAG_CACHE_MAX_ORDER);
++	nc->size = page ? PAGE_FRAG_CACHE_MAX_SIZE : PAGE_SIZE;
++#endif
++	if (unlikely(!page))
++		page = alloc_pages_node(NUMA_NO_NODE, gfp, 0);
 +
-+	while (test_popped < nr_test) {
-+		void *obj = __ptr_ring_consume(ring);
++	nc->va = page ? page_address(page) : NULL;
 +
-+		if (obj) {
-+			test_popped++;
-+			page_frag_free(obj);
-+		} else {
-+			cond_resched();
++	return page;
++}
++
++void page_frag_cache_drain(struct page_frag_cache *nc)
++{
++	if (!nc->va)
++		return;
++
++	__page_frag_cache_drain(virt_to_head_page(nc->va), nc->pagecnt_bias);
++	nc->va = NULL;
++}
++EXPORT_SYMBOL(page_frag_cache_drain);
++
++void __page_frag_cache_drain(struct page *page, unsigned int count)
++{
++	VM_BUG_ON_PAGE(page_ref_count(page) == 0, page);
++
++	if (page_ref_sub_and_test(page, count))
++		free_unref_page(page, compound_order(page));
++}
++EXPORT_SYMBOL(__page_frag_cache_drain);
++
++void *__page_frag_alloc_align(struct page_frag_cache *nc,
++			      unsigned int fragsz, gfp_t gfp_mask,
++			      unsigned int align_mask)
++{
++	unsigned int size = PAGE_SIZE;
++	struct page *page;
++	int offset;
++
++	if (unlikely(!nc->va)) {
++refill:
++		page = __page_frag_cache_refill(nc, gfp_mask);
++		if (!page)
++			return NULL;
++
++#if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
++		/* if size can vary use size else just use PAGE_SIZE */
++		size = nc->size;
++#endif
++		/* Even if we own the page, we do not use atomic_set().
++		 * This would break get_page_unless_zero() users.
++		 */
++		page_ref_add(page, PAGE_FRAG_CACHE_MAX_SIZE);
++
++		/* reset page count bias and offset to start of new frag */
++		nc->pfmemalloc = page_is_pfmemalloc(page);
++		nc->pagecnt_bias = PAGE_FRAG_CACHE_MAX_SIZE + 1;
++		nc->offset = size;
++	}
++
++	offset = nc->offset - fragsz;
++	if (unlikely(offset < 0)) {
++		page = virt_to_page(nc->va);
++
++		if (!page_ref_sub_and_test(page, nc->pagecnt_bias))
++			goto refill;
++
++		if (unlikely(nc->pfmemalloc)) {
++			free_unref_page(page, compound_order(page));
++			goto refill;
++		}
++
++#if (PAGE_SIZE < PAGE_FRAG_CACHE_MAX_SIZE)
++		/* if size can vary use size else just use PAGE_SIZE */
++		size = nc->size;
++#endif
++		/* OK, page count is 0, we can safely set it */
++		set_page_count(page, PAGE_FRAG_CACHE_MAX_SIZE + 1);
++
++		/* reset page count bias and offset to start of new frag */
++		nc->pagecnt_bias = PAGE_FRAG_CACHE_MAX_SIZE + 1;
++		offset = size - fragsz;
++		if (unlikely(offset < 0)) {
++			/*
++			 * The caller is trying to allocate a fragment
++			 * with fragsz > PAGE_SIZE but the cache isn't big
++			 * enough to satisfy the request, this may
++			 * happen in low memory conditions.
++			 * We don't release the cache page because
++			 * it could make memory pressure worse
++			 * so we simply return NULL here.
++			 */
++			return NULL;
 +		}
 +	}
 +
-+	if (atomic_dec_and_test(&nthreads))
-+		complete(&wait);
++	nc->pagecnt_bias--;
++	offset &= align_mask;
++	nc->offset = offset;
 +
-+	pr_info("page_frag pop test thread exits on cpu %d\n",
-+		smp_processor_id());
-+
-+	return 0;
++	return nc->va + offset;
 +}
++EXPORT_SYMBOL(__page_frag_alloc_align);
 +
-+static int page_frag_push_thread(void *arg)
++/*
++ * Frees a page fragment allocated out of either a compound or order 0 page.
++ */
++void page_frag_free(void *addr)
 +{
-+	struct ptr_ring *ring = arg;
++	struct page *page = virt_to_head_page(addr);
 +
-+	pr_info("page_frag push test thread begins on cpu %d\n",
-+		smp_processor_id());
-+
-+	while (test_pushed < nr_test) {
-+		void *va;
-+		int ret;
-+
-+		if (test_align) {
-+			va = page_frag_alloc_align(&test_nc, test_alloc_len,
-+						   GFP_KERNEL, SMP_CACHE_BYTES);
-+
-+			WARN_ONCE((unsigned long)va & (SMP_CACHE_BYTES - 1),
-+				  "unaligned va returned\n");
-+		} else {
-+			va = page_frag_alloc(&test_nc, test_alloc_len, GFP_KERNEL);
-+		}
-+
-+		if (!va)
-+			continue;
-+
-+		ret = __ptr_ring_produce(ring, va);
-+		if (ret) {
-+			page_frag_free(va);
-+			cond_resched();
-+		} else {
-+			test_pushed++;
-+		}
-+	}
-+
-+	pr_info("page_frag push test thread exits on cpu %d\n",
-+		smp_processor_id());
-+
-+	if (atomic_dec_and_test(&nthreads))
-+		complete(&wait);
-+
-+	return 0;
++	if (unlikely(put_page_testzero(page)))
++		free_unref_page(page, compound_order(page));
 +}
-+
-+static int __init page_frag_test_init(void)
-+{
-+	struct task_struct *tsk_push, *tsk_pop;
-+	ktime_t start;
-+	u64 duration;
-+	int ret;
-+
-+	test_nc.va = NULL;
-+	atomic_set(&nthreads, 2);
-+	init_completion(&wait);
-+
-+	if (test_alloc_len > PAGE_SIZE || test_alloc_len <= 0 ||
-+	    !cpu_active(test_push_cpu) || !cpu_active(test_pop_cpu))
-+		return -EINVAL;
-+
-+	ret = ptr_ring_init(&ptr_ring, nr_objs, GFP_KERNEL);
-+	if (ret)
-+		return ret;
-+
-+	tsk_push = kthread_create_on_cpu(page_frag_push_thread, &ptr_ring,
-+					 test_push_cpu, "page_frag_push");
-+	if (IS_ERR(tsk_push))
-+		return PTR_ERR(tsk_push);
-+
-+	tsk_pop = kthread_create_on_cpu(page_frag_pop_thread, &ptr_ring,
-+					test_pop_cpu, "page_frag_pop");
-+	if (IS_ERR(tsk_pop)) {
-+		kthread_stop(tsk_push);
-+		return PTR_ERR(tsk_pop);
-+	}
-+
-+	start = ktime_get();
-+	wake_up_process(tsk_push);
-+	wake_up_process(tsk_pop);
-+
-+	pr_info("waiting for test to complete\n");
-+
-+	while (!wait_for_completion_timeout(&wait, msecs_to_jiffies(10000)))
-+		pr_info("page_frag_test progress: pushed = %d, popped = %d\n",
-+			test_pushed, test_popped);
-+
-+	duration = (u64)ktime_us_delta(ktime_get(), start);
-+	pr_info("%d of iterations for %s testing took: %lluus\n", nr_test,
-+		test_align ? "aligned" : "non-aligned", duration);
-+
-+	ptr_ring_cleanup(&ptr_ring, NULL);
-+	page_frag_cache_drain(&test_nc);
-+
-+	return -EAGAIN;
-+}
-+
-+static void __exit page_frag_test_exit(void)
-+{
-+}
-+
-+module_init(page_frag_test_init);
-+module_exit(page_frag_test_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Yunsheng Lin <linyunsheng@huawei.com>");
-+MODULE_DESCRIPTION("Test module for page_frag");
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index c5797ad1d37b..2c5394584af4 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -75,6 +75,8 @@ separated by spaces:
- 	read-only VMAs
- - mdwe
- 	test prctl(PR_SET_MDWE, ...)
-+- page_frag
-+	test handling of page fragment allocation and freeing
++EXPORT_SYMBOL(page_frag_free);
+diff --git a/tools/testing/selftests/mm/page_frag/page_frag_test.c b/tools/testing/selftests/mm/page_frag/page_frag_test.c
+index eeb2b6bc681a..fdf204550c9a 100644
+--- a/tools/testing/selftests/mm/page_frag/page_frag_test.c
++++ b/tools/testing/selftests/mm/page_frag/page_frag_test.c
+@@ -6,12 +6,12 @@
+  * Copyright (C) 2024 Yunsheng Lin <linyunsheng@huawei.com>
+  */
  
- example: ./run_vmtests.sh -t "hmm mmap ksm"
- EOF
-@@ -456,6 +458,12 @@ CATEGORY="mkdirty" run_test ./mkdirty
+-#include <linux/mm.h>
+ #include <linux/module.h>
+ #include <linux/cpumask.h>
+ #include <linux/completion.h>
+ #include <linux/ptr_ring.h>
+ #include <linux/kthread.h>
++#include <linux/page_frag_cache.h>
  
- CATEGORY="mdwe" run_test ./mdwe_test
- 
-+CATEGORY="page_frag" run_test ./test_page_frag.sh smoke
-+
-+CATEGORY="page_frag" run_test ./test_page_frag.sh aligned
-+
-+CATEGORY="page_frag" run_test ./test_page_frag.sh nonaligned
-+
- echo "SUMMARY: PASS=${count_pass} SKIP=${count_skip} FAIL=${count_fail}" | tap_prefix
- echo "1..${count_total}" | tap_output
- 
-diff --git a/tools/testing/selftests/mm/test_page_frag.sh b/tools/testing/selftests/mm/test_page_frag.sh
-new file mode 100755
-index 000000000000..d750d910c899
---- /dev/null
-+++ b/tools/testing/selftests/mm/test_page_frag.sh
-@@ -0,0 +1,171 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Copyright (C) 2024 Yunsheng Lin <linyunsheng@huawei.com>
-+# Copyright (C) 2018 Uladzislau Rezki (Sony) <urezki@gmail.com>
-+#
-+# This is a test script for the kernel test driver to test the
-+# correctness and performance of page_frag's implementation.
-+# Therefore it is just a kernel module loader. You can specify
-+# and pass different parameters in order to:
-+#     a) analyse performance of page fragment allocations;
-+#     b) stressing and stability check of page_frag subsystem.
-+
-+DRIVER="./page_frag/page_frag_test.ko"
-+CPU_LIST=$(grep -m 2 processor /proc/cpuinfo | cut -d ' ' -f 2)
-+TEST_CPU_0=$(echo $CPU_LIST | awk '{print $1}')
-+
-+if [ $(echo $CPU_LIST | wc -w) -gt 1 ]; then
-+	TEST_CPU_1=$(echo $CPU_LIST | awk '{print $2}')
-+	NR_TEST=100000000
-+else
-+	TEST_CPU_1=$TEST_CPU_0
-+	NR_TEST=1000000
-+fi
-+
-+# 1 if fails
-+exitcode=1
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+
-+#
-+# Static templates for testing of page_frag APIs.
-+# Also it is possible to pass any supported parameters manually.
-+#
-+SMOKE_PARAM="test_push_cpu=$TEST_CPU_0 test_pop_cpu=$TEST_CPU_1"
-+NONALIGNED_PARAM="$SMOKE_PARAM test_alloc_len=75 nr_test=$NR_TEST"
-+ALIGNED_PARAM="$NONALIGNED_PARAM test_align=1"
-+
-+check_test_requirements()
-+{
-+	uid=$(id -u)
-+	if [ $uid -ne 0 ]; then
-+		echo "$0: Must be run as root"
-+		exit $ksft_skip
-+	fi
-+
-+	if ! which insmod > /dev/null 2>&1; then
-+		echo "$0: You need insmod installed"
-+		exit $ksft_skip
-+	fi
-+
-+	if [ ! -f $DRIVER ]; then
-+		echo "$0: You need to compile page_frag_test module"
-+		exit $ksft_skip
-+	fi
-+}
-+
-+run_nonaligned_check()
-+{
-+	echo "Run performance tests to evaluate how fast nonaligned alloc API is."
-+
-+	insmod $DRIVER $NONALIGNED_PARAM > /dev/null 2>&1
-+	echo "Done."
-+	echo "Check the kernel ring buffer to see the summary."
-+}
-+
-+run_aligned_check()
-+{
-+	echo "Run performance tests to evaluate how fast aligned alloc API is."
-+
-+	insmod $DRIVER $ALIGNED_PARAM > /dev/null 2>&1
-+	echo "Done."
-+	echo "Check the kernel ring buffer to see the summary."
-+}
-+
-+run_smoke_check()
-+{
-+	echo "Run smoke test."
-+
-+	insmod $DRIVER $SMOKE_PARAM > /dev/null 2>&1
-+	echo "Done."
-+	echo "Check the kernel ring buffer to see the summary."
-+}
-+
-+usage()
-+{
-+	echo -n "Usage: $0 [ aligned ] | [ nonaligned ] | | [ smoke ] | "
-+	echo "manual parameters"
-+	echo
-+	echo "Valid tests and parameters:"
-+	echo
-+	modinfo $DRIVER
-+	echo
-+	echo "Example usage:"
-+	echo
-+	echo "# Shows help message"
-+	echo "$0"
-+	echo
-+	echo "# Smoke testing"
-+	echo "$0 smoke"
-+	echo
-+	echo "# Performance testing for nonaligned alloc API"
-+	echo "$0 nonaligned"
-+	echo
-+	echo "# Performance testing for aligned alloc API"
-+	echo "$0 aligned"
-+	echo
-+	exit 0
-+}
-+
-+function validate_passed_args()
-+{
-+	VALID_ARGS=`modinfo $DRIVER | awk '/parm:/ {print $2}' | sed 's/:.*//'`
-+
-+	#
-+	# Something has been passed, check it.
-+	#
-+	for passed_arg in $@; do
-+		key=${passed_arg//=*/}
-+		valid=0
-+
-+		for valid_arg in $VALID_ARGS; do
-+			if [[ $key = $valid_arg ]]; then
-+				valid=1
-+				break
-+			fi
-+		done
-+
-+		if [[ $valid -ne 1 ]]; then
-+			echo "Error: key is not correct: ${key}"
-+			exit $exitcode
-+		fi
-+	done
-+}
-+
-+function run_manual_check()
-+{
-+	#
-+	# Validate passed parameters. If there is wrong one,
-+	# the script exists and does not execute further.
-+	#
-+	validate_passed_args $@
-+
-+	echo "Run the test with following parameters: $@"
-+	insmod $DRIVER $@ > /dev/null 2>&1
-+	echo "Done."
-+	echo "Check the kernel ring buffer to see the summary."
-+}
-+
-+function run_test()
-+{
-+	if [ $# -eq 0 ]; then
-+		usage
-+	else
-+		if [[ "$1" = "smoke" ]]; then
-+			run_smoke_check
-+		elif [[ "$1" = "nonaligned" ]]; then
-+			run_nonaligned_check
-+		elif [[ "$1" = "aligned" ]]; then
-+			run_aligned_check
-+		else
-+			run_manual_check $@
-+		fi
-+	fi
-+}
-+
-+check_test_requirements
-+run_test $@
-+
-+exit 0
+ static struct ptr_ring ptr_ring;
+ static int nr_objs = 512;
 -- 
 2.33.0
 
