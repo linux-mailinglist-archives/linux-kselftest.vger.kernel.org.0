@@ -1,267 +1,163 @@
-Return-Path: <linux-kselftest+bounces-19237-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19238-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDC999946EC
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 13:30:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAE8D9948AD
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 14:15:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8171E287ED7
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 11:30:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECFBC1C214F0
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 12:15:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1EBB1DF994;
-	Tue,  8 Oct 2024 11:27:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B98231CDFB8;
+	Tue,  8 Oct 2024 12:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Ru0k7M/H"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DB991DF986;
-	Tue,  8 Oct 2024 11:27:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFAD1E485;
+	Tue,  8 Oct 2024 12:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728386844; cv=none; b=CWWiSnBLRyb95jkoEdAgKrOcOxb5cV7Lf3RiXQAelNXwAWAYaMCkYnU30Jf92Liz27JCrHmaOxFtoBkUduM3Lh0uGxZjDR4PsXuTi1J+u+Bsaf/rzGL7aL560Mx1hBCS4jPUbYMY3MhAtJA5Jg7E8h8C15MfYF6/mc1RejzQF2E=
+	t=1728389737; cv=none; b=HyPYDfvJtlLkFdvT2yScobxH0YaSxJCuXVYBfUCS0lnZlNBwg6/WPtxM9X0d16bQhVn8jpS0baBC/sWGF4/LU5Sut7BFXykJODW/ARnFpvf0CuMaMqBeetvGRbZ7cZdqGBDqyw8vV+76z39fHHrDaNVzrhNCatVu1ALElppRIjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728386844; c=relaxed/simple;
-	bh=sLW4ldvOJRjkPZnKM4rLgWmlDyX6RMCz6n1n+jbFG/M=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YT2pFjTrQYtFnfBaKHwnLc9ITilDCqvCi7rt6+XNJQXEbjcPT7maKbQIzQurVz91hbJuVk0o0iOMkeDOQqRXZAK80rGRispYJskWyXtxHQAdS7LoEpdnPyY0YlIHH7nK7w5dotbptNsToiH65YPS4gyioVyKrYjua/9ZAf1AU7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4XNDHB71Djz2DdFy;
-	Tue,  8 Oct 2024 19:26:14 +0800 (CST)
-Received: from dggpemf200006.china.huawei.com (unknown [7.185.36.61])
-	by mail.maildlp.com (Postfix) with ESMTPS id 0559B1401F1;
-	Tue,  8 Oct 2024 19:27:19 +0800 (CST)
-Received: from localhost.localdomain (10.90.30.45) by
- dggpemf200006.china.huawei.com (7.185.36.61) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Tue, 8 Oct 2024 19:27:18 +0800
-From: Yunsheng Lin <linyunsheng@huawei.com>
-To: <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Yunsheng Lin
-	<linyunsheng@huawei.com>, Alexander Duyck <alexander.duyck@gmail.com>, Andrew
- Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-	<linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next v20 11/14] mm: page_frag: add testing for the newly added prepare API
-Date: Tue, 8 Oct 2024 19:20:45 +0800
-Message-ID: <20241008112049.2279307-12-linyunsheng@huawei.com>
-X-Mailer: git-send-email 2.30.0
-In-Reply-To: <20241008112049.2279307-1-linyunsheng@huawei.com>
-References: <20241008112049.2279307-1-linyunsheng@huawei.com>
+	s=arc-20240116; t=1728389737; c=relaxed/simple;
+	bh=rfLeZv8FubnCAd0PFU+nY8XTBaYUV7FJ4UPjvxW79k8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Sd/FbHWGUbrOxoEEY7lm4vkfVRiFc44OMMxm+8x5LrK0KDwKMX8A0M4UT3fT4t1UMaXAYQQ5+f9PL6ueEZo07GuQlghisaNk89j0c2/0laV3vdY+RpgI0ocn1XrOGtqkekqyTluSwnSzh/jNOV0D9qxSoAEvnU1jf64t123tdbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Ru0k7M/H; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 498AJjrg000354;
+	Tue, 8 Oct 2024 12:15:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=pp1; bh=D
+	/Yih5U/uDSx89i9n8GFG//aFMjKF2HQpQcU9YGqz3g=; b=Ru0k7M/H4dq7Ia0pg
+	kWz17N3JvAveoYuKGehmt4Q4RuE4X5ImrhhFlsngFiX9cN1ZKRtGzeFTPY0ePGUe
+	wlVqKCSitcnXR4U1A4vMxi0U8l9bEbNrjjvCAyLTUKp76ek7l6yvMlw+Qz5T9u6E
+	uhPbW64AgLtmZADr3msUtfqbCFwWqBhk/Jma6G2Xv31L206WAJnqOwxd0i9SZGCL
+	1TcUcqRhvf8RSujofMu41/YxJrAVCTgoYvSTbWlGBoUvILFiiS4KMs31fkTfjJ++
+	fTPfeyABoG8wXbPgiE61oO92zJDGX/LY+5YVvcO7yIBESqV8OygxNF6DHfzcz0xC
+	w6VRw==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4252vpghq6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 08 Oct 2024 12:15:32 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 498CFWKG016521;
+	Tue, 8 Oct 2024 12:15:32 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4252vpghq3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 08 Oct 2024 12:15:32 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 498AVNMS022867;
+	Tue, 8 Oct 2024 12:15:31 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 423jg0usr9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 08 Oct 2024 12:15:31 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 498CFRfu18743674
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 8 Oct 2024 12:15:27 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A17BC2004B;
+	Tue,  8 Oct 2024 12:15:27 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 318EF20043;
+	Tue,  8 Oct 2024 12:15:27 +0000 (GMT)
+Received: from [9.171.9.6] (unknown [9.171.9.6])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue,  8 Oct 2024 12:15:27 +0000 (GMT)
+Message-ID: <fb005423-3bc4-48fe-85eb-f4fadbabeef4@linux.ibm.com>
+Date: Tue, 8 Oct 2024 14:15:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemf200006.china.huawei.com (7.185.36.61)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/4] selftests: kvm: s390: Fix whitespace confusion in
+ ucontrol test
+To: Christoph Schlameuss <schlameuss@linux.ibm.com>, kvm@vger.kernel.org
+Cc: linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Hildenbrand <david@redhat.com>
+References: <20241008074253.370481-1-schlameuss@linux.ibm.com>
+ <20241008074253.370481-5-schlameuss@linux.ibm.com>
+Content-Language: en-US
+From: Janosch Frank <frankja@linux.ibm.com>
+Autocrypt: addr=frankja@linux.ibm.com; keydata=
+ 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
+In-Reply-To: <20241008074253.370481-5-schlameuss@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: U9P8WDRKT1HDuhxFnTQcg9waUxViHMiy
+X-Proofpoint-GUID: LV3Mf7rAJt9HYO5RcowrghVB_JHX_w5A
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-08_10,2024-10-08_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ lowpriorityscore=0 priorityscore=1501 impostorscore=0 mlxscore=0
+ bulkscore=0 adultscore=0 mlxlogscore=802 suspectscore=0 clxscore=1015
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2409260000 definitions=main-2410080075
 
-Add testing for the newly added prepare API, for both aligned
-and non-aligned API, also probe API is also tested along with
-prepare API.
+On 10/8/24 9:42 AM, Christoph Schlameuss wrote:
+> Checkpatch thinks that we're doing a multiplication but we're obviously
+> not. Fix 4 instances where we adhered to wrong checkpatch advice.
+> 
+> Signed-off-by: Christoph Schlameuss <schlameuss@linux.ibm.com>
 
-CC: Alexander Duyck <alexander.duyck@gmail.com>
-Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
----
- .../selftests/mm/page_frag/page_frag_test.c   | 66 +++++++++++++++++--
- tools/testing/selftests/mm/run_vmtests.sh     |  4 ++
- tools/testing/selftests/mm/test_page_frag.sh  | 31 +++++++++
- 3 files changed, 96 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/page_frag/page_frag_test.c b/tools/testing/selftests/mm/page_frag/page_frag_test.c
-index 36543a129e40..567bcc6a181e 100644
---- a/tools/testing/selftests/mm/page_frag/page_frag_test.c
-+++ b/tools/testing/selftests/mm/page_frag/page_frag_test.c
-@@ -29,6 +29,10 @@ static bool test_align;
- module_param(test_align, bool, 0);
- MODULE_PARM_DESC(test_align, "use align API for testing");
- 
-+static bool test_prepare;
-+module_param(test_prepare, bool, 0);
-+MODULE_PARM_DESC(test_prepare, "use prepare API for testing");
-+
- static int test_alloc_len = 2048;
- module_param(test_alloc_len, int, 0);
- MODULE_PARM_DESC(test_alloc_len, "alloc len for testing");
-@@ -68,6 +72,18 @@ static int page_frag_pop_thread(void *arg)
- 	return 0;
- }
- 
-+static void frag_frag_test_commit(struct page_frag_cache *nc,
-+				  struct page_frag *prepare_pfrag,
-+				  struct page_frag *probe_pfrag,
-+				  unsigned int used_sz)
-+{
-+	WARN_ON_ONCE(prepare_pfrag->page != probe_pfrag->page ||
-+		     prepare_pfrag->offset != probe_pfrag->offset ||
-+		     prepare_pfrag->size != probe_pfrag->size);
-+
-+	page_frag_commit(nc, prepare_pfrag, used_sz);
-+}
-+
- static int page_frag_push_thread(void *arg)
- {
- 	struct ptr_ring *ring = arg;
-@@ -80,13 +96,52 @@ static int page_frag_push_thread(void *arg)
- 		int ret;
- 
- 		if (test_align) {
--			va = page_frag_alloc_align(&test_nc, test_alloc_len,
--						   GFP_KERNEL, SMP_CACHE_BYTES);
-+			if (test_prepare) {
-+				struct page_frag prepare_frag, probe_frag;
-+				void *probe_va;
-+
-+				va = page_frag_alloc_refill_prepare_align(&test_nc,
-+									  test_alloc_len,
-+									  &prepare_frag,
-+									  GFP_KERNEL,
-+									  SMP_CACHE_BYTES);
-+
-+				probe_va = __page_frag_alloc_refill_probe_align(&test_nc,
-+										test_alloc_len,
-+										&probe_frag,
-+										-SMP_CACHE_BYTES);
-+				WARN_ON_ONCE(va != probe_va);
-+
-+				if (likely(va))
-+					frag_frag_test_commit(&test_nc, &prepare_frag,
-+							      &probe_frag, test_alloc_len);
-+			} else {
-+				va = page_frag_alloc_align(&test_nc,
-+							   test_alloc_len,
-+							   GFP_KERNEL,
-+							   SMP_CACHE_BYTES);
-+			}
- 
- 			WARN_ONCE((unsigned long)va & (SMP_CACHE_BYTES - 1),
- 				  "unaligned va returned\n");
- 		} else {
--			va = page_frag_alloc(&test_nc, test_alloc_len, GFP_KERNEL);
-+			if (test_prepare) {
-+				struct page_frag prepare_frag, probe_frag;
-+				void *probe_va;
-+
-+				va = page_frag_alloc_refill_prepare(&test_nc, test_alloc_len,
-+								    &prepare_frag, GFP_KERNEL);
-+
-+				probe_va = page_frag_alloc_refill_probe(&test_nc, test_alloc_len,
-+									&probe_frag);
-+
-+				WARN_ON_ONCE(va != probe_va);
-+				if (likely(va))
-+					frag_frag_test_commit(&test_nc, &prepare_frag,
-+							      &probe_frag, test_alloc_len);
-+			} else {
-+				va = page_frag_alloc(&test_nc, test_alloc_len, GFP_KERNEL);
-+			}
- 		}
- 
- 		if (!va)
-@@ -152,8 +207,9 @@ static int __init page_frag_test_init(void)
- 			test_pushed, test_popped);
- 
- 	duration = (u64)ktime_us_delta(ktime_get(), start);
--	pr_info("%d of iterations for %s testing took: %lluus\n", nr_test,
--		test_align ? "aligned" : "non-aligned", duration);
-+	pr_info("%d of iterations for %s %s API testing took: %lluus\n", nr_test,
-+		test_align ? "aligned" : "non-aligned",
-+		test_prepare ? "prepare" : "alloc", duration);
- 
- 	ptr_ring_cleanup(&ptr_ring, NULL);
- 	page_frag_cache_drain(&test_nc);
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 2c5394584af4..f6ff9080a6f2 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -464,6 +464,10 @@ CATEGORY="page_frag" run_test ./test_page_frag.sh aligned
- 
- CATEGORY="page_frag" run_test ./test_page_frag.sh nonaligned
- 
-+CATEGORY="page_frag" run_test ./test_page_frag.sh aligned_prepare
-+
-+CATEGORY="page_frag" run_test ./test_page_frag.sh nonaligned_prepare
-+
- echo "SUMMARY: PASS=${count_pass} SKIP=${count_skip} FAIL=${count_fail}" | tap_prefix
- echo "1..${count_total}" | tap_output
- 
-diff --git a/tools/testing/selftests/mm/test_page_frag.sh b/tools/testing/selftests/mm/test_page_frag.sh
-index d750d910c899..71c3531fa38e 100755
---- a/tools/testing/selftests/mm/test_page_frag.sh
-+++ b/tools/testing/selftests/mm/test_page_frag.sh
-@@ -36,6 +36,8 @@ ksft_skip=4
- SMOKE_PARAM="test_push_cpu=$TEST_CPU_0 test_pop_cpu=$TEST_CPU_1"
- NONALIGNED_PARAM="$SMOKE_PARAM test_alloc_len=75 nr_test=$NR_TEST"
- ALIGNED_PARAM="$NONALIGNED_PARAM test_align=1"
-+NONALIGNED_PREPARE_PARAM="$NONALIGNED_PARAM test_prepare=1"
-+ALIGNED_PREPARE_PARAM="$ALIGNED_PARAM test_prepare=1"
- 
- check_test_requirements()
- {
-@@ -74,6 +76,24 @@ run_aligned_check()
- 	echo "Check the kernel ring buffer to see the summary."
- }
- 
-+run_nonaligned_prepare_check()
-+{
-+	echo "Run performance tests to evaluate how fast nonaligned prepare API is."
-+
-+	insmod $DRIVER $NONALIGNED_PREPARE_PARAM > /dev/null 2>&1
-+	echo "Done."
-+	echo "Ccheck the kernel ring buffer to see the summary."
-+}
-+
-+run_aligned_prepare_check()
-+{
-+	echo "Run performance tests to evaluate how fast aligned prepare API is."
-+
-+	insmod $DRIVER $ALIGNED_PREPARE_PARAM > /dev/null 2>&1
-+	echo "Done."
-+	echo "Check the kernel ring buffer to see the summary."
-+}
-+
- run_smoke_check()
- {
- 	echo "Run smoke test."
-@@ -86,6 +106,7 @@ run_smoke_check()
- usage()
- {
- 	echo -n "Usage: $0 [ aligned ] | [ nonaligned ] | | [ smoke ] | "
-+	echo "[ aligned_prepare ] | [ nonaligned_prepare ] | "
- 	echo "manual parameters"
- 	echo
- 	echo "Valid tests and parameters:"
-@@ -106,6 +127,12 @@ usage()
- 	echo "# Performance testing for aligned alloc API"
- 	echo "$0 aligned"
- 	echo
-+	echo "# Performance testing for nonaligned prepare API"
-+	echo "$0 nonaligned_prepare"
-+	echo
-+	echo "# Performance testing for aligned prepare API"
-+	echo "$0 aligned_prepare"
-+	echo
- 	exit 0
- }
- 
-@@ -159,6 +186,10 @@ function run_test()
- 			run_nonaligned_check
- 		elif [[ "$1" = "aligned" ]]; then
- 			run_aligned_check
-+		elif [[ "$1" = "nonaligned_prepare" ]]; then
-+			run_nonaligned_prepare_check
-+		elif [[ "$1" = "aligned_prepare" ]]; then
-+			run_aligned_prepare_check
- 		else
- 			run_manual_check $@
- 		fi
--- 
-2.33.0
-
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
 
