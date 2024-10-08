@@ -1,152 +1,121 @@
-Return-Path: <linux-kselftest+bounces-19243-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19244-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54BA79951AF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 16:30:58 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9534099525E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 16:51:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D24A2874DF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 14:30:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C62F61C21BEA
+	for <lists+linux-kselftest@lfdr.de>; Tue,  8 Oct 2024 14:51:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA3B01E04A1;
-	Tue,  8 Oct 2024 14:26:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D805A1DFDB1;
+	Tue,  8 Oct 2024 14:51:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fGkV9mJe"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="SieLekxt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B62F1DF997;
-	Tue,  8 Oct 2024 14:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AE8218CBED;
+	Tue,  8 Oct 2024 14:51:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728397611; cv=none; b=kgZrFgyB/eW80yWxTBPMIXbV05pLEJmzNOobNNXYoCxvsP5Q4fpbPA/qh1PRtueXTJX1x+FKfNGB5xdHGSgG4nwNqAcBT4VwtxwW2pd1ksITz3819xDzljYmM56Jcz4qH+0wvplxPVP6o5+HBIEO3tfL4duRONwrQ+crn9tTl88=
+	t=1728399068; cv=none; b=Q2bM7oxZN3/E7mF/xDkdYIWOAKwAKT5CtAu0sSPf6a5nB6e2JMb8d+u384UJv9BLyaQz3A4l2tZH1nEEZqn04y6VsYCU08pTK5GBwxqiTeC4wNfsMdHVg+Zx5aDpdCoeeq7UJI9ttNbRDYYtZPppvdo513NOcMhes2x279uCvRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728397611; c=relaxed/simple;
-	bh=5ou9s79hZP7IJi0atBe2w+sGV08MvzEwGEPv46Ev4SI=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=gjX4nOV4vijc+kfV6MNE3yJmt/JgQcSCequDUujSBoCOEry1Nr5ITruQIW0GKnFGvNiZwJ48ZEaOfd0oA6R8dpgIYwrf/BF7P+xoXjW9cPWn774T0HDQAGl8UgjsLz/fg6kTgJSvwyToaIbbf0PGj/QyJmVQ51zzeDOjNVL6qt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fGkV9mJe; arc=none smtp.client-ip=209.85.219.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-6cbc565ec74so3539386d6.2;
-        Tue, 08 Oct 2024 07:26:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728397609; x=1729002409; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+uxRQHc+uPQaV16IH3xwpSF/k0OvqVA7/Q2MK0pWFB0=;
-        b=fGkV9mJe++P67WGU3YuBanHFL4keij/yVyBudh7+o+oZrJS4LRV9y5ICD6XjYfnkA5
-         1TfhEmXXr1vD46M1xhQMEewoA4pxhUOCIhUAHw1XG6UAm9WwSOKRnYgxkI6vaQAcYBax
-         X2qsDnKkJ7zVyn3Pz5rudRkOI9oyOl5Qio5QZKdT3XkLaV3sbYksvRWqf2ciatQLjjYj
-         uisGc/cvswUg247Udl81qDLqAOxOCnkihyi9RKZ/GNFf5hfFnz9J0m7fVjlcyPFjhDk8
-         GHBFvpZbZVe4uAfehMh1EFUzccZf7i+grzCAsegr6yMZ5FyDyVklQNlatzWhbq2F4GRv
-         q9xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728397609; x=1729002409;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=+uxRQHc+uPQaV16IH3xwpSF/k0OvqVA7/Q2MK0pWFB0=;
-        b=QbYZRy+5mlCBk+g8oD6/epcV0AzRZieflNp6z2LgHYc/0g7bN9xhpE6iLBv5vfOIjy
-         mgupqWZeQl3E4bXOR7sf973L9ejGIlqH6q2OsU6Siezdgw/yfmcT6ZrHZxbDDi8aAw50
-         fEYPXW/pAkzEo4bbsiGE3O9jznlI4gvXm4gtjnAJHn0RYUKdrpSL4IEq9ZmfNQkVWJlH
-         eOL6+BOH5ztFpyE2IOURCa6CxQa3BXMglASHpVHvmMMQAUZK1T+515HmUh2J8Hg0ZBhP
-         JoozEot2mB4hUAjxPzFeib+hcbyxPiQduxOVGjODf8bUYc5jHaqQMkk/5mKiSZqfs2p/
-         iTSg==
-X-Forwarded-Encrypted: i=1; AJvYcCUOtqDmsSc8u4UCMwwa9FWlRddl5Q7C2Ie78LMoZR4bV31OEVbO/ygyFx3XaJbSCUsuik4lgg+grJaG9YTKX4+k@vger.kernel.org, AJvYcCXsb388X/WitTeC2cVcZQr5wA5lArFJEGSVjpI89dc39ty4N6yFn3W36kHvbpk8XnEZ3uHJIDCHYpWpt80=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/lEhax0BJddRM12QwP2beepSLMW4h8rXqkCZRAPNLZa4mvxkJ
-	OcGf6EJImxBuPaa8Ins8ipJBhzi6M8bvgRYwa7oi3Oyv8GlJVf1l
-X-Google-Smtp-Source: AGHT+IE4jKK4xIe2uPWyxTBGz2FMwZiAjK08LFfGYKVQi7oYYTllFNlIG9gucViV8dF0Wew1mIKE3g==
-X-Received: by 2002:a05:6214:3c98:b0:6cb:3c08:30a0 with SMTP id 6a1803df08f44-6cb9a49d136mr282176306d6.49.1728397608977;
-        Tue, 08 Oct 2024 07:26:48 -0700 (PDT)
-Received: from localhost (86.235.150.34.bc.googleusercontent.com. [34.150.235.86])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cba46e3a8bsm36099356d6.58.2024.10.08.07.26.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 08 Oct 2024 07:26:48 -0700 (PDT)
-Date: Tue, 08 Oct 2024 10:26:47 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Gur Stavi <gur.stavi@huawei.com>, 
- Gur Stavi <gur.stavi@huawei.com>
-Cc: netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
- linux-kselftest@vger.kernel.org
-Message-ID: <67054127bb083_18b21e2943f@willemb.c.googlers.com.notmuch>
-In-Reply-To: <05852e3043d2b0a7a5ca51d456e82966dcb72f03.1728382839.git.gur.stavi@huawei.com>
-References: <cover.1728382839.git.gur.stavi@huawei.com>
- <05852e3043d2b0a7a5ca51d456e82966dcb72f03.1728382839.git.gur.stavi@huawei.com>
-Subject: Re: [PATCH net-next v02 1/2] af_packet: allow fanout_add when socket
- is not RUNNING
+	s=arc-20240116; t=1728399068; c=relaxed/simple;
+	bh=p/9acfdEgaLxVZfogRhnfANqjd3z7mrfWD179zJel/M=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Sl4X+tJXQQDRn9ylZL/Gbwa1DvP7lpUbbLZn8GU/ARazEV94gFStWmwlSqb8JDNs6hrgdTdcGEOV2BnoQZTwgy7s/IshV3l4P25xoI9N+vhVBNKXu20ohrzwuVNQhrxzd7UJlIKz1b7KunJEeBhVS2f9t6z2WoSu3ASHSya/BcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=SieLekxt; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9C6244000A;
+	Tue,  8 Oct 2024 14:51:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1728399064;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=T8JTIkRyYPw4ANhnRm9O1xslQPulRbbv6/2c4JrZHr0=;
+	b=SieLekxt9CJgTwGfAISBzmrG8aI1Zw9QyaTNvG7O3mRQexMn+MGTAUtKxIRU1XJd9AGUhr
+	OWoKrOtvHK+ncs/rsblUPL64zUk+f5lggblH4VOsnTdeW4F+gt11zJmMpCfUYvH5jL6PKK
+	fuNCgJkNkg5EwJfnXI8KIDQCzBX13d2sMGj9n3A8j9uUH3J/fED+EovzLoHU4wdyqo1bAo
+	niIeKT6ZAJhMBIy152AtsoprW1mCyn2kaBo+XQ7Am8E+PSqVjxCRluYd/7dvub+1FUo9pO
+	vb/R8q4zfhr0b+ELQqfWkweSIQMvOusWpnEiCK8g1WKk4OnHVTJ6hd+pDwT1oA==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Tue, 08 Oct 2024 16:50:57 +0200
+Subject: [PATCH bpf] selftests/bpf: add missing header include for htons
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20241008-network_helpers_fix-v1-1-2c2ae03df7ef@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIANBGBWcC/x2MWwqAIBAAryL7naA96HGViMjaailU1qggunvS5
+ wzMPBCQCQM04gHGkwI5G0EnAsZ1sAtKmiJDqtJcK1VJi8fleOtX3D1y6Ge6pTGmnHRR1XWmIJa
+ eMer/2oLxM3Tv+wEKzjpBagAAAA==
+X-Change-ID: 20241008-network_helpers_fix-bbb7d1589930
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: alexis.lothore@bootlin.com
 
-Gur Stavi wrote:
-> PACKET socket can retain its fanout membership through link down and up
-> and leave a fanout while closed regardless of link state.
-> However, socket was forbidden from joining a fanout while it was not
-> RUNNING.
-> 
-> This patch allows PACKET socket to join fanout while not RUNNING.
-> 
-> Signed-off-by: Gur Stavi <gur.stavi@huawei.com>
-> ---
->  net/packet/af_packet.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/net/packet/af_packet.c b/net/packet/af_packet.c
-> index f8942062f776..fb2cca73d953 100644
-> --- a/net/packet/af_packet.c
-> +++ b/net/packet/af_packet.c
-> @@ -1846,21 +1846,21 @@ static int fanout_add(struct sock *sk, struct fanout_args *args)
->  	err = -EINVAL;
->  
->  	spin_lock(&po->bind_lock);
-> -	if (packet_sock_flag(po, PACKET_SOCK_RUNNING) &&
-> -	    match->type == type &&
-> +	if (match->type == type &&
->  	    match->prot_hook.type == po->prot_hook.type &&
->  	    match->prot_hook.dev == po->prot_hook.dev) {
+Including the network_helpers.h header in tests can lead to the following
+build error:
 
-Remaining unaddressed issue is that the socket can now be added
-before being bound. See comment in v1.
+./network_helpers.h: In function ‘csum_tcpudp_magic’:
+./network_helpers.h:116:14: error: implicit declaration of function \
+  ‘htons’ [-Werror=implicit-function-declaration]
+  116 |         s += htons(proto + len);
 
->  		err = -ENOSPC;
->  		if (refcount_read(&match->sk_ref) < match->max_num_members) {
-> -			__dev_remove_pack(&po->prot_hook);
-> -
->  			/* Paired with packet_setsockopt(PACKET_FANOUT_DATA) */
->  			WRITE_ONCE(po->fanout, match);
->  
->  			po->rollover = rollover;
->  			rollover = NULL;
->  			refcount_set(&match->sk_ref, refcount_read(&match->sk_ref) + 1);
-> -			__fanout_link(sk, po);
-> +			if (packet_sock_flag(po, PACKET_SOCK_RUNNING)) {
-> +				__dev_remove_pack(&po->prot_hook);
-> +				__fanout_link(sk, po);
-> +			}
->  			err = 0;
->  		}
->  	}
-> -- 
-> 2.45.2
-> 
+The error is avoided in many cases thanks to some other headers included
+earlier and bringing in arpa/inet.h (ie: test_progs.h).
 
+Make sure that test_progs build success does not depend on header ordering
+by adding the missing header include in network_helpers.h
+
+Fixes: f6642de0c3e9 ("selftests/bpf: Add csum helpers")
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+ tools/testing/selftests/bpf/network_helpers.h | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/bpf/network_helpers.h b/tools/testing/selftests/bpf/network_helpers.h
+index c72c16e1aff825439896b38e59962ffafe92dc71..5764155b6d25188ed38e828e1e4a8a08f8a83934 100644
+--- a/tools/testing/selftests/bpf/network_helpers.h
++++ b/tools/testing/selftests/bpf/network_helpers.h
+@@ -1,6 +1,7 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ #ifndef __NETWORK_HELPERS_H
+ #define __NETWORK_HELPERS_H
++#include <arpa/inet.h>
+ #include <sys/socket.h>
+ #include <sys/types.h>
+ #include <linux/types.h>
+
+---
+base-commit: 67a7c7b656cfc10a7280f71641fb9e88726e8a5d
+change-id: 20241008-network_helpers_fix-bbb7d1589930
+
+Best regards,
+-- 
+Alexis Lothoré, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
