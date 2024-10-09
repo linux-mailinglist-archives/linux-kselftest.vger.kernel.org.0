@@ -1,119 +1,88 @@
-Return-Path: <linux-kselftest+bounces-19391-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19392-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75D519973FF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 20:04:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F09599756D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 21:07:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2BF9D1F24141
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 18:04:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A438F1F22020
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 19:07:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D10B91A265B;
-	Wed,  9 Oct 2024 18:04:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFA821E1C36;
+	Wed,  9 Oct 2024 19:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sGRLqNV0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 753121A0AFA;
-	Wed,  9 Oct 2024 18:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D8B1E1A2D;
+	Wed,  9 Oct 2024 19:07:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728497044; cv=none; b=HJdI3T8AjpEzvN2ZpTrsv+d25l2LBZjCRupZWQKoPFvdRItW23RvTcyI89fhOqE5FAGzJNr7pcrTXMlpq4aX3MbGlMKfTUXwjUnxkHcrcnEegfbBGnl4eiqy46q6IuY4We3UM6A4ktEv2EFBAvu3s7XQpdnH/7PrIytOmvzKT7s=
+	t=1728500832; cv=none; b=KsVs8c15MTsOFGxj3tvoMOuKtK77r6VHRKbpoUSe1eTlvRvhfVdmptfCNI0XA5zsgh82Q12hpnjO5cpc8KYc8tMhzI6xaHiNgYxLfu+WnJcHqHoMoAc5PUy62Oz8IfYt2I5g+t6+odWjYNebytZrpj58cljBIp8bKEl7ZC1wrSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728497044; c=relaxed/simple;
-	bh=QLVGJ3iUM6M7egVEwdhZvZ9wMeXkHUm6sKMK2XPCmyY=;
-	h=From:To:CC:References:In-Reply-To:Subject:Date:Message-ID:
-	 MIME-Version:Content-Type; b=EuzU7TzQ+OH/py6m1iC0API0nl6CNqcKSP+ghVJFo8ssdUlqu7Y/c+v7Yx6wRf+kuFjvl+2Mf+TiFmmwAhow//q2MzHmMM4LsTyq9MAbOCiS9osFCf4ACgAZmeLZQ1b9BrEgtcMm+s3lImuQKtTP+JbjOBAABBNH+L3n9nffH6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XP0yb2KCYz6L6xf;
-	Thu, 10 Oct 2024 01:59:35 +0800 (CST)
-Received: from frapeml500005.china.huawei.com (unknown [7.182.85.13])
-	by mail.maildlp.com (Postfix) with ESMTPS id EA562140CB9;
-	Thu, 10 Oct 2024 02:03:54 +0800 (CST)
-Received: from GurSIX1 (10.204.104.225) by frapeml500005.china.huawei.com
- (7.182.85.13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 9 Oct
- 2024 20:03:48 +0200
-From: Gur Stavi <gur.stavi@huawei.com>
-To: 'Willem de Bruijn' <willemdebruijn.kernel@gmail.com>
-CC: <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <pabeni@redhat.com>, <shuah@kernel.org>
-References: <67054127bb083_18b21e2943f@willemb.c.googlers.com.notmuch> <20241009065837.354332-1-gur.stavi@huawei.com> <67068a44bff02_1cca3129431@willemb.c.googlers.com.notmuch>
-In-Reply-To: <67068a44bff02_1cca3129431@willemb.c.googlers.com.notmuch>
-Subject: RE: [PATCH net-next v02 1/2] af_packet: allow fanout_add when socket is not RUNNING
-Date: Wed, 9 Oct 2024 21:03:41 +0300
-Message-ID: <002201db1a75$9a83b420$cf8b1c60$@huawei.com>
+	s=arc-20240116; t=1728500832; c=relaxed/simple;
+	bh=4YhfyUPTJur7qJRzsElWPQS3vLCvkLgU3avegz4EN2Y=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=PXqJHctmuezFYRTzSnKMM3ixX5yWN7N/Xu6Q6BVDsxfhRW3plYxFGnQmQSPvoPTxKaVLdGBLwux3teIzpcrkunq1B6Y81QP56SD2KC/cIzhh2TouslPQtQNkaOyUOVSue/cDn45ryqL43un2M0/+hkw5VWNWzlJtYc0r7tlFyuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sGRLqNV0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FAC7C4CEC3;
+	Wed,  9 Oct 2024 19:07:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728500831;
+	bh=4YhfyUPTJur7qJRzsElWPQS3vLCvkLgU3avegz4EN2Y=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=sGRLqNV02n9pRRQsPmE0+bdGuK0ZSiJR+hnkoYqhKd/oPWvDtKOC9eMTzNVeQE0B0
+	 F0HReY/2YKP7xrDZQ5D8OpU8DtXhhufOgpQdY/yqBYlQ8cLaC4apN5MAsCrEqAi1LI
+	 A10Nt40p/jo11FOVMLrp/HQwldHtug3X8bnQbT0GxU63oOjj6woCLT+T4X/hXbvMzW
+	 4VbCSPD7VLnKXHt/Q7Eu2S3CR667uY0Xo2Wiu8g37sjinFy7JcXNCC/4b6T2FjMpIh
+	 gXqIiomtWTwJpW70OiuG7CHrV01jtk7X3JtWMgUodw+XVc5xKIKYU0GiE9az2+VANU
+	 1qjw3YZCruJ4g==
+Message-ID: <81668a9199b39fe46cefd256d3eac44c.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQHbGWzwQMZqw76ooUWOpIJuIeDZyLJ8x9WAgAEVHYCAAHM4AIAAYj2w
-Content-Language: en-us
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- frapeml500005.china.huawei.com (7.182.85.13)
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <594e8e50-8322-480e-ae34-3f8e14f3fe18@roeck-us.net>
+References: <20240718210513.3801024-1-sboyd@kernel.org> <879831a8-2039-4cdb-bce2-aefdeb7ab25f@linuxfoundation.org> <da260b77-2ecb-4486-90cb-6db456d381ef@linuxfoundation.org> <f5f1c42d-77c0-48c7-ac52-3d4a3b5c2b47@roeck-us.net> <4a8abb5f501279de7907629f4dd6be24.sboyd@kernel.org> <3e1de608-008c-4439-acd2-647a288dcdc0@roeck-us.net> <cd31493888acc2b64a4986954dfa43ae.sboyd@kernel.org> <cb1e0119-6e3e-4fd2-92ea-3fec18f5843d@roeck-us.net> <ccd372f2754e80d6c01e38a9596bed34.sboyd@kernel.org> <594e8e50-8322-480e-ae34-3f8e14f3fe18@roeck-us.net>
+Subject: Re: [PATCH v8 8/8] clk: Add KUnit tests for clks registered with struct clk_parent_data
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, patches@lists.linux.dev, kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rafael J.Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, Daniel Latypov <dlatypov@google.com>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Maxime Ripard <maxime@cerno.tech>, Geert Uytterhoeven <geert+renesas@glider.be>
+To: Guenter Roeck <linux@roeck-us.net>, Shuah Khan <skhan@linuxfoundation.org>
+Date: Wed, 09 Oct 2024 12:07:09 -0700
+User-Agent: alot/0.10
 
-> Gur Stavi wrote:
-> > >> @@ -1846,21 +1846,21 @@ static int fanout_add(struct sock *sk,
-> struct fanout_args *args)
-> > >>  	err = -EINVAL;
-> > >>
-> > >>  	spin_lock(&po->bind_lock);
-> > >> -	if (packet_sock_flag(po, PACKET_SOCK_RUNNING) &&
-> > >> -	    match->type == type &&
-> > >> +	if (match->type == type &&
-> > >>  	    match->prot_hook.type == po->prot_hook.type &&
-> > >>  	    match->prot_hook.dev == po->prot_hook.dev) {
-> > >
-> > > Remaining unaddressed issue is that the socket can now be added
-> > > before being bound. See comment in v1.
-> >
-> > I extended the psock_fanout test with unbound fanout test.
-> >
-> > As far as I understand, the easiest way to verify bind is to test that
-> > po->prot_hook.dev != NULL, since we are under a bind_lock anyway.
-> > But perhaps a more readable and direct approach to test "bind" would be
-> > to test po->ifindex != -1, as ifindex is commented as "bound device".
-> > However, at the moment ifindex is not initialized to -1, I can add such
-> > initialization, but perhaps I do not fully understand all the logic.
-> >
-> > Any preferences?
-> 
-> prot_hook.dev is not necessarily set if a packet socket is bound.
-> It may be bound to any device. See dev_add_pack and ptype_head.
-> 
-> prot_hook.type, on the other hand, must be set if bound and is only
-> modified with the bind_lock held too.
-> 
-> Well, and in packet_create. But setsockopt PACKET_FANOUT_ADD also
-> succeeds in case bind() was not called explicitly first to bind to
-> a specific device or change ptype.
+Quoting Guenter Roeck (2024-10-08 16:27:37)
+> On 10/8/24 16:12, Stephen Boyd wrote:
+> >=20
+> > The best I can come up with then is to test for a NULL of_root when
+> > CONFIG_ARM64 and CONFIG_ACPI are enabled, because the tests
+> > intentionally don't work when both those configs are enabled and the
+> > 'of_root' isn't populated. In all other cases the 'of_root' missing is a
+> > bug. I'll probably make this into some sort of kunit helper function in
+> > of_private.h and send it to DT maintainers.
+>=20
+> Sounds good. Thanks a lot for tracking this down.
+>=20
+> That makes me wonder though why only arm64 has that restriction. Both
+> riscv and loongarch have ACPI enabled in their defconfig files but call
+> unflatten_device_tree() unconditionally.
+>=20
+> Oh well ...
 
-Please clarify the last paragraph? When you say "also succeeds" do you
-mean SHOULD succeed or MAY SUCCEED by mistake if "something" happens ???
+Some of the reason is described in the thread I linked earlier. In
+particular, this email from Mark[1]. There's also more comments from
+Mark on an earlier patchset[2]. Maybe arm64 will allow it later, and
+then we'll be able to revert this skip patch.
 
-Do you refer to the following scenario: socket is created with non-zero
-protocol and becomes RUNNING "without bind" for all devices. In that case
-it can be added to FANOUT without bind. Is that considered a bug or does
-the bind requirement for fanout only apply for all-protocol (0) sockets?
-
-What about using ifindex to detect bind? Initialize it to -1 in
-packet_create and ensure that packet_do_bind, on success, sets it
-to device id or 0?
-
-psock_fanout, should probably be extended with scenarios that test
-"all devices" and all/specific protocols. Any specific scenario
-suggestions?
-
-
+[1] https://lore.kernel.org/all/Zd4dQpHO7em1ji67@FVFF77S0Q05N.cambridge.arm=
+.com/
+[2] https://lore.kernel.org/all/ZaZtbU9hre3YhZam@FVFF77S0Q05N/
 
