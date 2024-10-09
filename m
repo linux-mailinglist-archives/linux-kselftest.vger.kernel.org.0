@@ -1,88 +1,254 @@
-Return-Path: <linux-kselftest+bounces-19392-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19393-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F09599756D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 21:07:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A7A299768F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 22:41:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A438F1F22020
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 19:07:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8937F1C22AAF
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 20:41:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFA821E1C36;
-	Wed,  9 Oct 2024 19:07:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F0711E1C30;
+	Wed,  9 Oct 2024 20:41:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sGRLqNV0"
+	dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b="zYwdBi+I"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D8B1E1A2D;
-	Wed,  9 Oct 2024 19:07:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0E6B1E0B9A;
+	Wed,  9 Oct 2024 20:41:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728500832; cv=none; b=KsVs8c15MTsOFGxj3tvoMOuKtK77r6VHRKbpoUSe1eTlvRvhfVdmptfCNI0XA5zsgh82Q12hpnjO5cpc8KYc8tMhzI6xaHiNgYxLfu+WnJcHqHoMoAc5PUy62Oz8IfYt2I5g+t6+odWjYNebytZrpj58cljBIp8bKEl7ZC1wrSk=
+	t=1728506475; cv=none; b=B2dQSBgmyUwnBzNKyxA+RECKiBCniLZmobfaukI/fvANr0cFpbQuYM8ptNoV2ZNjNefaXyaFiLGhaFqM/zm6Ff6cKsJ/1p41B3+cisagMgJOBUPAwFqjHSa5OcWgshC5BRweDSpW0A9QFAitQpyY5V5hvrDW1UG7FUkSYZtY/q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728500832; c=relaxed/simple;
-	bh=4YhfyUPTJur7qJRzsElWPQS3vLCvkLgU3avegz4EN2Y=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=PXqJHctmuezFYRTzSnKMM3ixX5yWN7N/Xu6Q6BVDsxfhRW3plYxFGnQmQSPvoPTxKaVLdGBLwux3teIzpcrkunq1B6Y81QP56SD2KC/cIzhh2TouslPQtQNkaOyUOVSue/cDn45ryqL43un2M0/+hkw5VWNWzlJtYc0r7tlFyuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sGRLqNV0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FAC7C4CEC3;
-	Wed,  9 Oct 2024 19:07:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728500831;
-	bh=4YhfyUPTJur7qJRzsElWPQS3vLCvkLgU3avegz4EN2Y=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=sGRLqNV02n9pRRQsPmE0+bdGuK0ZSiJR+hnkoYqhKd/oPWvDtKOC9eMTzNVeQE0B0
-	 F0HReY/2YKP7xrDZQ5D8OpU8DtXhhufOgpQdY/yqBYlQ8cLaC4apN5MAsCrEqAi1LI
-	 A10Nt40p/jo11FOVMLrp/HQwldHtug3X8bnQbT0GxU63oOjj6woCLT+T4X/hXbvMzW
-	 4VbCSPD7VLnKXHt/Q7Eu2S3CR667uY0Xo2Wiu8g37sjinFy7JcXNCC/4b6T2FjMpIh
-	 gXqIiomtWTwJpW70OiuG7CHrV01jtk7X3JtWMgUodw+XVc5xKIKYU0GiE9az2+VANU
-	 1qjw3YZCruJ4g==
-Message-ID: <81668a9199b39fe46cefd256d3eac44c.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1728506475; c=relaxed/simple;
+	bh=fLp878y712Pv6p2I0M+yT3Ue0HAchRHtUJcJJ81jbqc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=kvgcpdnaGcWtxK9dA/BNh79YeoylymxUGyFWanlhH27V1j+oBNYgYnzJ9FVQKXjstipd5tY1HlGmBhaNCh+391NaJj4pp2IFWNYS9Ns3nd6qpNXk36NzlIwB8LLwVNK8NIQn3/Egqt0ymWm3rde2s62GVBFl2BQrmOqYk10Eehw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com; spf=pass smtp.mailfrom=cyphar.com; dkim=pass (2048-bit key) header.d=cyphar.com header.i=@cyphar.com header.b=zYwdBi+I; arc=none smtp.client-ip=80.241.56.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cyphar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cyphar.com
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4XP4Xv3PYnz9sZW;
+	Wed,  9 Oct 2024 22:41:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
+	t=1728506463;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=ITsBaG6eslEMjXWHd24r26tlRz+O6KlCV+pPMoBlPw8=;
+	b=zYwdBi+IffUlF4DDMCMwKtP55iT0kqtjVZHY9LWe2Oizuackdb2Mp+OyTOusl7VyPmmbGO
+	xif+bZ+IZah/YEJSShFnoR+y4EfqRj7A/nwARbbRdtqfhEfom6PkUIdZxL1+8mTAAoEZul
+	1IWSkZ6TCtPgLwZ1n+nxUc2pO1X+J5repq3DunEZqgNluFlI2IhDK+W0+GAldvy6UuA1xs
+	n0WkwOQD0ZmYSbryyJzxnAyMnS0Ypc9GuTfVZOkTmW/mTKcGyNttHB0euMO08LRmdqeJx4
+	I7kyXWWu+lh0OQVIIBLIekYSDuII7qArI9IadPUmViW+Pcdkk2th738EhhPJHA==
+From: Aleksa Sarai <cyphar@cyphar.com>
+Subject: [PATCH RFC v3 00/10] extensible syscalls: CHECK_FIELDS to allow
+ for easier feature detection
+Date: Thu, 10 Oct 2024 07:40:33 +1100
+Message-Id: <20241010-extensible-structs-check_fields-v3-0-d2833dfe6edd@cyphar.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <594e8e50-8322-480e-ae34-3f8e14f3fe18@roeck-us.net>
-References: <20240718210513.3801024-1-sboyd@kernel.org> <879831a8-2039-4cdb-bce2-aefdeb7ab25f@linuxfoundation.org> <da260b77-2ecb-4486-90cb-6db456d381ef@linuxfoundation.org> <f5f1c42d-77c0-48c7-ac52-3d4a3b5c2b47@roeck-us.net> <4a8abb5f501279de7907629f4dd6be24.sboyd@kernel.org> <3e1de608-008c-4439-acd2-647a288dcdc0@roeck-us.net> <cd31493888acc2b64a4986954dfa43ae.sboyd@kernel.org> <cb1e0119-6e3e-4fd2-92ea-3fec18f5843d@roeck-us.net> <ccd372f2754e80d6c01e38a9596bed34.sboyd@kernel.org> <594e8e50-8322-480e-ae34-3f8e14f3fe18@roeck-us.net>
-Subject: Re: [PATCH v8 8/8] clk: Add KUnit tests for clks registered with struct clk_parent_data
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, patches@lists.linux.dev, kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, devicetree@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rafael J.Wysocki <rafael@kernel.org>, Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>, Daniel Latypov <dlatypov@google.com>, Christian Marangi <ansuelsmth@gmail.com>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, Maxime Ripard <maxime@cerno.tech>, Geert Uytterhoeven <geert+renesas@glider.be>
-To: Guenter Roeck <linux@roeck-us.net>, Shuah Khan <skhan@linuxfoundation.org>
-Date: Wed, 09 Oct 2024 12:07:09 -0700
-User-Agent: alot/0.10
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAEHqBmcC/4XN0QrCIBTG8VcJrzOccyu7CoIeoNuIcHpMaW1DT
+ TbG3j3xqq52+Z0Dv/+MPDgLHh03M3IQrbd9l0a53SBpRPcEbFXaiBLKyIGUGMYAnbdNC9gH95H
+ BY2lAvh7aQqs8FmwPnEnQNS9QUgYH2o65cEPXyxnd09FYH3o35Wos8isHOKGrgVhggitWAS9BA
+ dX0JKfBCLeT/Tvjkf6C9TpIE0g0qxVVwBuh/sBlWb6MVfI2JQEAAA==
+To: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+ Juri Lelli <juri.lelli@redhat.com>, 
+ Vincent Guittot <vincent.guittot@linaro.org>, 
+ Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>, 
+ Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+ Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>
+Cc: Kees Cook <kees@kernel.org>, Florian Weimer <fweimer@redhat.com>, 
+ Arnd Bergmann <arnd@arndb.de>, Mark Rutland <mark.rutland@arm.com>, 
+ linux-kernel@vger.kernel.org, linux-api@vger.kernel.org, 
+ linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>, 
+ stable@vger.kernel.org
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7467; i=cyphar@cyphar.com;
+ h=from:subject:message-id; bh=fLp878y712Pv6p2I0M+yT3Ue0HAchRHtUJcJJ81jbqc=;
+ b=owGbwMvMwCWmMf3Xpe0vXfIZT6slMaSzvQoMvfh4fsaCf8LPeVo31OTs8t8YtKOyl01pRvzEn
+ GP8PFddOkpZGMS4GGTFFFm2+XmGbpq/+Eryp5VsMHNYmUCGMHBxCsBEPt1lZPgYvMeqIVY/+ZT9
+ x22rM9clBIQcKr3q61e97qqOxeflabUM/xQtyjQ6U/tahavVl9w9uEOzbJ14qkjnOieupzXhnsk
+ hnAA=
+X-Developer-Key: i=cyphar@cyphar.com; a=openpgp;
+ fpr=C9C370B246B09F6DBCFC744C34401015D1D2D386
 
-Quoting Guenter Roeck (2024-10-08 16:27:37)
-> On 10/8/24 16:12, Stephen Boyd wrote:
-> >=20
-> > The best I can come up with then is to test for a NULL of_root when
-> > CONFIG_ARM64 and CONFIG_ACPI are enabled, because the tests
-> > intentionally don't work when both those configs are enabled and the
-> > 'of_root' isn't populated. In all other cases the 'of_root' missing is a
-> > bug. I'll probably make this into some sort of kunit helper function in
-> > of_private.h and send it to DT maintainers.
->=20
-> Sounds good. Thanks a lot for tracking this down.
->=20
-> That makes me wonder though why only arm64 has that restriction. Both
-> riscv and loongarch have ACPI enabled in their defconfig files but call
-> unflatten_device_tree() unconditionally.
->=20
-> Oh well ...
+This is something that I've been thinking about for a while. We had a
+discussion at LPC 2020 about this[1] but the proposals suggested there
+never materialised.
 
-Some of the reason is described in the thread I linked earlier. In
-particular, this email from Mark[1]. There's also more comments from
-Mark on an earlier patchset[2]. Maybe arm64 will allow it later, and
-then we'll be able to revert this skip patch.
+In short, it is quite difficult for userspace to detect the feature
+capability of syscalls at runtime. This is something a lot of programs
+want to do, but they are forced to create elaborate scenarios to try to
+figure out if a feature is supported without causing damage to the
+system. For the vast majority of cases, each individual feature also
+needs to be tested individually (because syscall results are
+all-or-nothing), so testing even a single syscall's feature set can
+easily inflate the startup time of programs.
 
-[1] https://lore.kernel.org/all/Zd4dQpHO7em1ji67@FVFF77S0Q05N.cambridge.arm=
-.com/
-[2] https://lore.kernel.org/all/ZaZtbU9hre3YhZam@FVFF77S0Q05N/
+This patchset implements the fairly minimal design I proposed in this
+talk[2] and in some old LKML threads (though I can't find the exact
+references ATM). The general flow looks like:
+
+ 1. Userspace will indicate to the kernel that a syscall should a be
+    no-op by setting the top bit of the extensible struct size argument.
+
+    We will almost certainly never support exabyte sized structs, so the
+    top bits are free for us to use as makeshift flag bits. This is
+    preferable to using the per-syscall flag field inside the structure
+    because seccomp can easily detect the bit in the flag and allow the
+    probe or forcefully return -EEXTSYS_NOOP.
+
+ 2. The kernel will then fill the provided structure with every valid
+    bit pattern that the current kernel understands.
+
+    For flags or other bitflag-like fields, this is the set of valid
+    flags or bits. For pointer fields or fields that take an arbitrary
+    value, the field has every bit set (0xFF... to fill the field) to
+    indicate that any value is valid in the field.
+
+ 3. The syscall then returns -EEXTSYS_NOOP which is an errno that will
+    only ever be used for this purpose (so userspace can be sure that
+    the request succeeded).
+
+    On older kernels, the syscall will return a different error (usually
+    -E2BIG or -EFAULT) and userspace can do their old-fashioned checks.
+
+ 4. Userspace can then check which flags and fields are supported by
+    looking at the fields in the returned structure. Flags are checked
+    by doing an AND with the flags field, and field support can checked
+    by comparing to 0. In principle you could just AND the entire
+    structure if you wanted to do this check generically without caring
+    about the structure contents (this is what libraries might consider
+    doing).
+
+    Userspace can even find out the internal kernel structure size by
+    passing a PAGE_SIZE buffer and seeing how many bytes are non-zero.
+
+    As with copy_struct_from_user(), this is designed to be forward- and
+    backwards- compatible.
+
+This allows programas to get a one-shot understanding of what features a
+syscall supports without having to do any elaborate setups or tricks to
+detect support for destructive features. Flags can simply be ANDed to
+check if they are in the supported set, and fields can just be checked
+to see if they are non-zero.
+
+This patchset is IMHO the simplest way we can add the ability to
+introspect the feature set of extensible struct (copy_struct_from_user)
+syscalls. It doesn't preclude the chance of a more generic mechanism
+being added later.
+
+The intended way of using this interface to get feature information
+looks something like the following (imagine that openat2 has gained a
+new field and a new flag in the future):
+
+  static bool openat2_no_automount_supported;
+  static bool openat2_cwd_fd_supported;
+
+  int check_openat2_support(void)
+  {
+      int err;
+      struct open_how how = {};
+
+      err = openat2(AT_FDCWD, ".", &how, CHECK_FIELDS | sizeof(how));
+      assert(err < 0);
+      switch (errno) {
+      case EFAULT: case E2BIG:
+          /* Old kernel... */
+          check_support_the_old_way();
+          break;
+      case EEXTSYS_NOOP:
+          openat2_no_automount_supported = (how.flags & RESOLVE_NO_AUTOMOUNT);
+          openat2_cwd_fd_supported = (how.cwd_fd != 0);
+          break;
+      }
+  }
+
+This series adds CHECK_FIELDS support for the following extensible
+struct syscalls, as they are quite likely to grow flags in the near
+future:
+
+ * openat2
+ * clone3
+ * mount_setattr
+
+[1]: https://lwn.net/Articles/830666/
+[2]: https://youtu.be/ggD-eb3yPVs
+
+Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
+---
+Changes in v3:
+- Fix copy_struct_to_user() return values in case of clear_user() failure.
+- v2: <https://lore.kernel.org/r/20240906-extensible-structs-check_fields-v2-0-0f46d2de9bad@cyphar.com>
+Changes in v2:
+- Add CHECK_FIELDS support to mount_setattr(2).
+- Fix build failure on architectures with custom errno values.
+- Rework selftests to use the tools/ uAPI headers rather than custom
+  defining EEXTSYS_NOOP.
+- Make sure we return -EINVAL and -E2BIG for invalid sizes even if
+  CHECK_FIELDS is set, and add some tests for that.
+- v1: <https://lore.kernel.org/r/20240902-extensible-structs-check_fields-v1-0-545e93ede2f2@cyphar.com>
+
+---
+Aleksa Sarai (10):
+      uaccess: add copy_struct_to_user helper
+      sched_getattr: port to copy_struct_to_user
+      openat2: explicitly return -E2BIG for (usize > PAGE_SIZE)
+      openat2: add CHECK_FIELDS flag to usize argument
+      selftests: openat2: add 0xFF poisoned data after misaligned struct
+      selftests: openat2: add CHECK_FIELDS selftests
+      clone3: add CHECK_FIELDS flag to usize argument
+      selftests: clone3: add CHECK_FIELDS selftests
+      mount_setattr: add CHECK_FIELDS flag to usize argument
+      selftests: mount_setattr: add CHECK_FIELDS selftest
+
+ arch/alpha/include/uapi/asm/errno.h                |   3 +
+ arch/mips/include/uapi/asm/errno.h                 |   3 +
+ arch/parisc/include/uapi/asm/errno.h               |   3 +
+ arch/sparc/include/uapi/asm/errno.h                |   3 +
+ fs/namespace.c                                     |  17 ++
+ fs/open.c                                          |  18 ++
+ include/linux/uaccess.h                            |  97 ++++++++
+ include/uapi/asm-generic/errno.h                   |   3 +
+ include/uapi/linux/openat2.h                       |   2 +
+ kernel/fork.c                                      |  30 ++-
+ kernel/sched/syscalls.c                            |  42 +---
+ tools/arch/alpha/include/uapi/asm/errno.h          |   3 +
+ tools/arch/mips/include/uapi/asm/errno.h           |   3 +
+ tools/arch/parisc/include/uapi/asm/errno.h         |   3 +
+ tools/arch/sparc/include/uapi/asm/errno.h          |   3 +
+ tools/include/uapi/asm-generic/errno.h             |   3 +
+ tools/include/uapi/asm-generic/posix_types.h       | 101 ++++++++
+ tools/testing/selftests/clone3/.gitignore          |   1 +
+ tools/testing/selftests/clone3/Makefile            |   4 +-
+ .../testing/selftests/clone3/clone3_check_fields.c | 264 +++++++++++++++++++++
+ tools/testing/selftests/mount_setattr/Makefile     |   2 +-
+ .../selftests/mount_setattr/mount_setattr_test.c   |  53 ++++-
+ tools/testing/selftests/openat2/Makefile           |   2 +
+ tools/testing/selftests/openat2/openat2_test.c     | 165 ++++++++++++-
+ 24 files changed, 777 insertions(+), 51 deletions(-)
+---
+base-commit: 98f7e32f20d28ec452afb208f9cffc08448a2652
+change-id: 20240803-extensible-structs-check_fields-a47e94cef691
+
+Best regards,
+-- 
+Aleksa Sarai <cyphar@cyphar.com>
+
 
