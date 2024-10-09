@@ -1,140 +1,133 @@
-Return-Path: <linux-kselftest+bounces-19352-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19353-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30757996CA3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 15:49:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56256996CB0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 15:51:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D14281F2209D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 13:49:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08A5E1F21927
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 13:51:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBF9A19DF44;
-	Wed,  9 Oct 2024 13:48:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CFD01991D0;
+	Wed,  9 Oct 2024 13:51:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Pdo8gp3L"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GC4L+EtS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9A1199EB4;
-	Wed,  9 Oct 2024 13:48:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A938B192D6E;
+	Wed,  9 Oct 2024 13:51:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728481710; cv=none; b=UXs+pZxTqtWa3wlcC3lAuBlW6Oc1IW5Ugevs2VEAvn2HgBbQoQ7AksJNR+fffYKl+V1bHizN4/4Bwri/vIgvXWTakAeNvgMWlJxxoSs/yKS1zWQZU2lBV6rQCEZuRg0E2t6oxqUnO7l9Ya8dfFU3qnzvYQ2rnHYnR7VE2b5jmcw=
+	t=1728481864; cv=none; b=A1RxGXfm8zyVER/vLS9SFAH4fLn6mu3B4X+d0gR8G34DhqWNHrykmDIBtmhksT1Ecf9rSGe9kxh2PXN+s9tV28q6uWX3GZQ97uMmkwQvmkSL4lURqZrHx/vtDoyH0hzDBO5dN2OdPTU9D/dpvu12ibqxpbdM1+qMeyL+xjHitvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728481710; c=relaxed/simple;
-	bh=4X5DGfyWxEPM/0ikMp5z7NrlJL6XW2GVIEdgsZkNuW8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=n0AoaDF3U53GMvwVYSH4DQZ09SMJ4hZ6p54vTmVXmbcOOcHD0ZesA7mE/vQq2sx+CR7rfhZL5bbmPy7NrN2LTnn1f61boBNjlM9w47eLnAfwIPHGRK8YeMQXTy2f7oWr7KsYeHgmV9ZmfnaQnTlzwrLDhmLGK+UUdZnpO0O7p9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Pdo8gp3L; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 89305E0003;
-	Wed,  9 Oct 2024 13:48:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1728481699;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1t3g4J+GTOeYfumohKa7CpVJ/L96IZxUx7EresHVtC0=;
-	b=Pdo8gp3LYcIn3zEYWZupx4IHoSn3b5WR4Ko6S+em+Jqr+sM9QmappQQz52qxpXJ5BniXfJ
-	EROjtUNgpgVL1gdh+YEPDZGxrlH84vdi1pw7WOTYl+U5cJdoGWcWzJ+j6FAVmE44J1w8B+
-	7JJKwWWZH1TB0Zc9caIHkkukvuNHNVJMqJx530ekfKzuBUMtyOYOi9Sh0dNobYFeNxzc06
-	svkjGaPx45QQVUlz4t6Qfl5NePLjmVp3W7jc7NXmBbkhDvGw9EDuBgmbqFCFro3dAQycsg
-	z36Kz/v+5Bxq1UDarsn+CHZ3AGH/fKY64RH6W9Pv+8LO6Y9JeToXxbZ9ScuBYQ==
-Message-ID: <d7451a56-f883-4e98-b3a7-407138d09181@bootlin.com>
-Date: Wed, 9 Oct 2024 15:48:18 +0200
+	s=arc-20240116; t=1728481864; c=relaxed/simple;
+	bh=7JXbVvEDPzan+Cb5PlA35BuMqUzWL66UXvEGnnp08KM=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=nm06sZ/vff7mP/Z4h+zNWMyOIA5Av+4D6+z/dhBjV15Soh+vgnqM4uoL0KWCgJ+kxJHxvaCPkfdsudN9VHHYqyc/p47NHF+gjpu7Ycgboz3ktIo0vZdmlVjw1ec6/CX0np+wVgNNOcqCWbnL90/BSpSEcWgNNvKuKpW6psWpEUU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GC4L+EtS; arc=none smtp.client-ip=209.85.217.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4a3c8b8cf78so2525445137.0;
+        Wed, 09 Oct 2024 06:51:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728481861; x=1729086661; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zxorcdFJTora9Qz/aUcFQRS7K6k631IINdmiD7aAfHM=;
+        b=GC4L+EtSw9JEnRlPqcOh1xBDz4p2JN8+oL4zjC3g68VXKzpvQIsy2OmLfO9a1W2MaZ
+         MaUyMLA1X0UG8lxHP00JlYOnWWMqDE1WDb0EBJC0TzJe0sd2uCMfP0kogHkdrQzW/ema
+         OnTENG0GGwwyI3QioBQP4e43gq/rIN5X+B18eNwsqVRjNCeHeqt3HzXRCEvk+C3Fco08
+         L5nAIIqR6otf4XEx8jAwwQMIlyXrCdomKcCk5aHQ4cIWCzcfaRJBVUmGOIZHm2Fg4kd1
+         MOSa8U/go4zDwyVgBxEEGmtZ7KygpD7b2uDFCJTaKsdyuJ6We4w8SBxiL+Z0G2BOMYkl
+         bPlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728481861; x=1729086661;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zxorcdFJTora9Qz/aUcFQRS7K6k631IINdmiD7aAfHM=;
+        b=JZRu4PNypLpPMA7HSHWsNVqcdu+Uxt6GEZuFErBffvGaWMhqUhZdf9tln66X5VAxA6
+         FolG2oldqRJGqvffeiRrp99fkaoc/i6lbdIfbu7zxfvpBeffl+7Q/0/wy3impA2+9Mfe
+         uW652+b2L6txuofzj74aUcMRhcjGxFprrdVF48KeV9ljocIFM3z3Xm21X7TOWnD4q/aU
+         Zo2a4i5z5OBF/PC3e3w76+Jg4UNVFIGGsyG0oHRHUEYroMfG7BUsRZSY14xaU7DnB6H9
+         LjhbtrGlCDMedov7Qq1xAeh3tRAzE19rVdTorGu8H8s/+vHgpm56QUFAZqZTUUByXqgf
+         J+fw==
+X-Forwarded-Encrypted: i=1; AJvYcCUnwLUFht1/st/iAVJkCeFxpYirTbWtIzZniJXVX61dsuMml/vDok3QAmi3Oen0olm/uI+Ijs6f@vger.kernel.org, AJvYcCWecvegcQTaleeTWH/vW/B91uXhyRNlqHTAiMwPPn08nxkSewI3AUO0Z9bxtKhbAh3wCrS6fimjJOxge2M=@vger.kernel.org, AJvYcCXjW7xKlmXvF8Mb0Yioy5pTjXIqsslove7/OYXfBtVj7TKwWuUYFW8fg+5Yq+MGq1NMSp6grBy1zjU4OgIo5pwy@vger.kernel.org
+X-Gm-Message-State: AOJu0YyncJD2xsx2FGpgXw3FIdW/TcgMR0Yyd+b05kgj4w5nVIB9/iXA
+	2e9+PDPNBMd4ZywLv882lPTJcLCe2xfeFjNGfTWmH1gf+PBKX8em
+X-Google-Smtp-Source: AGHT+IHwpE6vd3uwyFp4XXsCWi/iNSPtgTNRAdRiWMJk/LVFKNRqPSLhhy90D7iawGR99/IXZgWY4A==
+X-Received: by 2002:a05:6102:c48:b0:4a3:d46a:3597 with SMTP id ada2fe7eead31-4a448e5a6d1mr1768845137.28.1728481861467;
+        Wed, 09 Oct 2024 06:51:01 -0700 (PDT)
+Received: from localhost (86.235.150.34.bc.googleusercontent.com. [34.150.235.86])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45da74b2123sm46473161cf.20.2024.10.09.06.51.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Oct 2024 06:51:01 -0700 (PDT)
+Date: Wed, 09 Oct 2024 09:51:00 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Gur Stavi <gur.stavi@huawei.com>, 
+ willemdebruijn.kernel@gmail.com
+Cc: davem@davemloft.net, 
+ edumazet@google.com, 
+ gur.stavi@huawei.com, 
+ kuba@kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ netdev@vger.kernel.org, 
+ pabeni@redhat.com, 
+ shuah@kernel.org
+Message-ID: <67068a44bff02_1cca3129431@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20241009065837.354332-1-gur.stavi@huawei.com>
+References: <67054127bb083_18b21e2943f@willemb.c.googlers.com.notmuch>
+ <20241009065837.354332-1-gur.stavi@huawei.com>
+Subject: Re: [PATCH net-next v02 1/2] af_packet: allow fanout_add when socket
+ is not RUNNING
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v1] selftests/bpf: Fix error compiling
- cgroup_ancestor.c with musl libc
-To: Tony Ambardar <tony.ambardar@gmail.com>, bpf@vger.kernel.org
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org
-References: <20241008231232.634047-1-tony.ambardar@gmail.com>
-From: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <20241008231232.634047-1-tony.ambardar@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: alexis.lothore@bootlin.com
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Hello Tony,
-
-On 10/9/24 01:12, Tony Ambardar wrote:
-> Existing code calls connect() with a 'struct sockaddr_in6 *' argument
-> where a 'struct sockaddr *' argument is declared, yielding compile errors
-> when building for mips64el/musl-libc:
+Gur Stavi wrote:
+> >> @@ -1846,21 +1846,21 @@ static int fanout_add(struct sock *sk, struct fanout_args *args)
+> >>  	err = -EINVAL;
+> >>
+> >>  	spin_lock(&po->bind_lock);
+> >> -	if (packet_sock_flag(po, PACKET_SOCK_RUNNING) &&
+> >> -	    match->type == type &&
+> >> +	if (match->type == type &&
+> >>  	    match->prot_hook.type == po->prot_hook.type &&
+> >>  	    match->prot_hook.dev == po->prot_hook.dev) {
+> >
+> > Remaining unaddressed issue is that the socket can now be added
+> > before being bound. See comment in v1.
 > 
-> In file included from cgroup_ancestor.c:3:
-> cgroup_ancestor.c: In function 'send_datagram':
-> cgroup_ancestor.c:38:38: error: passing argument 2 of 'connect' from incompatible pointer type [-Werror=incompatible-pointer-types]
->    38 |         if (!ASSERT_OK(connect(sock, &addr, sizeof(addr)), "connect")) {
->       |                                      ^~~~~
->       |                                      |
->       |                                      struct sockaddr_in6 *
-> ./test_progs.h:343:29: note: in definition of macro 'ASSERT_OK'
->   343 |         long long ___res = (res);                                       \
->       |                             ^~~
-> In file included from .../netinet/in.h:10,
->                  from .../arpa/inet.h:9,
->                  from ./test_progs.h:17:
-> .../sys/socket.h:386:19: note: expected 'const struct sockaddr *' but argument is of type 'struct sockaddr_in6 *'
->   386 | int connect (int, const struct sockaddr *, socklen_t);
->       |                   ^~~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
+> I extended the psock_fanout test with unbound fanout test.
 > 
-> This only compiles because of a glibc extension allowing declaration of the
-> argument as a "transparent union" which includes both types above.
+> As far as I understand, the easiest way to verify bind is to test that
+> po->prot_hook.dev != NULL, since we are under a bind_lock anyway.
+> But perhaps a more readable and direct approach to test "bind" would be
+> to test po->ifindex != -1, as ifindex is commented as "bound device".
+> However, at the moment ifindex is not initialized to -1, I can add such
+> initialization, but perhaps I do not fully understand all the logic.
 > 
-> Explicitly cast the argument to allow compiling for both musl and glibc.
+> Any preferences?
 
-Thanks for the fix and the details :) Indeed it looks like all other tests
-perform this cast on connect (either to (void *) or (struct sockaddr *)) to
-prevent this issue, so that's a miss on my side when I rewrote this test.
+prot_hook.dev is not necessarily set if a packet socket is bound.
+It may be bound to any device. See dev_add_pack and ptype_head.
 
-> Cc: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> Fixes: f957c230e173 ("selftests/bpf: convert test_skb_cgroup_id_user to test_progs")
-> Signed-off-by: Tony Ambardar <tony.ambardar@gmail.com>
+prot_hook.type, on the other hand, must be set if bound and is only
+modified with the bind_lock held too.
 
-Reviewed-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-
-> ---
->  tools/testing/selftests/bpf/prog_tests/cgroup_ancestor.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_ancestor.c b/tools/testing/selftests/bpf/prog_tests/cgroup_ancestor.c
-> index 9250a1e9f9af..3f9ffdf71343 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/cgroup_ancestor.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/cgroup_ancestor.c
-> @@ -35,7 +35,7 @@ static int send_datagram(void)
->  	if (!ASSERT_OK_FD(sock, "create socket"))
->  		return sock;
->  
-> -	if (!ASSERT_OK(connect(sock, &addr, sizeof(addr)), "connect")) {
-> +	if (!ASSERT_OK(connect(sock, (struct sockaddr *)&addr, sizeof(addr)), "connect")) {
->  		close(sock);
->  		return -1;
->  	}
-
-
--- 
-Alexis Lothoré, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Well, and in packet_create. But setsockopt PACKET_FANOUT_ADD also
+succeeds in case bind() was not called explicitly first to bind to
+a specific device or change ptype.
 
