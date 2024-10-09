@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-19343-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19344-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D3749969A3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 14:10:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCE289969A5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 14:10:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED506282ECE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 12:10:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E4811F23B28
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 12:10:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 015FE193064;
-	Wed,  9 Oct 2024 12:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85030192D80;
+	Wed,  9 Oct 2024 12:10:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Btu8ZoTy"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aLK7JcAb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2059.outbound.protection.outlook.com [40.107.237.59])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2069.outbound.protection.outlook.com [40.107.92.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C58D193419;
-	Wed,  9 Oct 2024 12:10:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.59
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B68CA192B96;
+	Wed,  9 Oct 2024 12:10:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.69
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728475811; cv=fail; b=hlPVQa1Ae7c74QYkVFZDjGkst0EnbhOl0U3+c4caIYPkXYn96EWBqpsmJEVh/lCLN8Km9nfl25f0zuQkDhAyKAkTNPMCy1aliyrrf0uXSAWYRfcbegN/pPk+MS1b6hCymi0R6hoSqwtTqadd33LF2phqZ3dGMa68O89u3dvdS+I=
+	t=1728475817; cv=fail; b=cPAYMFNvVWMFud8ii537msLGCKGv5m7yz4mEfuVQAT3l9YX0b4k29FXay20mBq5QvjUaDFMqgNQm5ln6m/uVTXOggsmm+dmtMCSFUosUpFQDKVhEHWfHwi0QiHvib1JR1bsmM7AFHxwv68NBufOUH66hV7JMKlJyGB5llWQQ2P8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728475811; c=relaxed/simple;
-	bh=9XZWsVsdy78ua9m+mpDUI5r/ZCBzuBv9qeHo1cyy37U=;
+	s=arc-20240116; t=1728475817; c=relaxed/simple;
+	bh=QmP4JnLTev14VFwGS4zTXKTeNR1iLxBEnCTfB5mvUkc=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=PP4btKkhsICU/idikjLnIymaaIoDLlExS8/7VSyAuY2y1O1vCEAwWtqThnqUNkZKQDNCfomxfQn9VEKn+y9yZCuEErXiFlbMmJ8pYPFXfvD8o1Ml8iF8NOa7glxqg2u+bQqfXNfkpZI8qx74U1fkY2SpPeB1h9++AJ9QT8TADCU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Btu8ZoTy; arc=fail smtp.client-ip=40.107.237.59
+	 MIME-Version:Content-Type; b=IjeGOaPMJOsTSt9up4dOEOSJWyz06BnUjzEgnj87ux2MQ5RYFZLZAw13xLxXTnGklkKRzYA32J3b6+GISxkogyTOxurbKHyGWJ3UXHAdx1TeZO/qDVDHBuolvTPLBojOCansuk2G0THkSUhLzMTm9oP9K4QoBuL/EspZGPro2K4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aLK7JcAb; arc=fail smtp.client-ip=40.107.92.69
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=a0lJ+p2E82iL4c8ZpOqxVd8KUgKDxyZxyFphlJ1sBNVEyhkY95QOyxxHj885TmVkRKTKnrtWnjtHcgDys56RLW6wLiJy3NnCM5HeB8D8Emjc7sHrWNYvxP2Lq5qzRwjudCSjqCIJr6gQG4lvuq6mZjaWY7lHacRsoIo2w/iqURYfXeXQnZzjepUHbCUnVdDpl9BCyefI+LBqH2EHqz03lZWUpySEAjI53k+NACFGaJO62ehpWPgy/0MOWyEcbIrmqvhPPAfp19020DwYA7lGs3zMYMCR5bOkhACHLgNZeq736f6WCOHd6jNccuqA6Dj+xABDdtVRBk2OnGLmNyL+Jg==
+ b=LaE4Ba0GaZMkCBiNQSVUVlRzDDR0kZsuDL2zeL52WSZcexmPlBK5oHqw4BA8Bx+JcIU0k6os3KsxA5pf9maupanN7vwjk0onEENQtbqTRfUFaJXIvUgxAyGi9mVEmv7WYk7H0diifE3lJZCt1y7hUOJtxIy0nP4hjLJiHRUufNoElHk87f15NWHFw5tcl64VHp/LzMK99yB14xV2xMrHFVQjRJCyF1jyPw37y1an3ZeQWVkvnCc3sJxcKPULmcFTZoyNuwK9+hIQYE0D/QkDT/tI6Phy4NU4ga+WwJSQp6RWaxFGYIrH0syYNF4+j/Jxp5dFMvDxHT2Wv67HKATHAg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xSOfF2v7ewPViEBuf2+/sSDQpyGmcSLnmmrk3nLHXeQ=;
- b=VLd5SboJo3KR0f1SbSxksCtqrokrhZL0FTRn10fkMy6w1Pr+wTMyzCW/JIL+b/1GLUkUh0lFufnM+EW30sxKoVXOo50d05Cd1/kywxQJ15sxW99Qga/sPnKcz9JXGz3TunsxL7eD2lSwgIDpnI9WonXEw+J1kW5pepmo18apj7cg2MYnZtZaMXD9cu1IOQMhuVKDiSZlD0GGrapRwawhdckCsTYbKiUJAfDrCDx02PQX63u7fmoMsTxFJ1EXJc/NZVW3x3ETL6JOuL2GJWRXIVY3+IsxkRkSDgj7btatrJLh6f16V28IrB1jmFQoLcphqppTNFnH8louFWuhi7Vv7w==
+ bh=XE4tiSQAFHiQC4a395xfqzFWq0VymUTdBw+LHLe9G9o=;
+ b=FNF4ZWuncOtugKNvhcSzOMikKeXXZOjm6BN7bSZU/mcWQnZpAf4RLcp8TRHNrvXRJmD3YAgG7OWJffKUrRaH2Qu0yC5OIqoYfWtyRww5hs95jwof/mNtqzztFCOceh4F6WdBIfi+BAX5zjfKNgRv1N25xj8WvzCjkW7ZE0P1OJDeh8NPEs/0F6ihjzPu+j43FuK0cjOHHlaAwh5pllW/K0FnsKaBJlfBLS4/Gg6ZOyIoHLUcstw8sBm+yxmpJTcBtFGUDNqNmKDpnQTVOMSBDVobvsfXsAX39VTLtH65NHRNfo+C6PwcbpSXCY1extmDktyhG8HR2UIzePF5Zt+qqA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xSOfF2v7ewPViEBuf2+/sSDQpyGmcSLnmmrk3nLHXeQ=;
- b=Btu8ZoTytpPrIlVnSBnmsxYMkMpZDxQsd+5tMjmFAb9VRY22eolFT/L1rR/Q+R3oZix01+Lh3qXiywE67eJZRxwFF1jNFA+NSm4Z3U5PcjygLxZJmP8vMiz81XNcQBLOuoZ1YvqcSR4yDQ/YTZ62AgvJZ3D/z90j0jYG9758GbViknt0a15HjbqM3Qs/TuHlADhQ0k1RCSb3nstx7X7kD5YNGuzvg3adIPt5IMeVX/7cMAKTMFNRGgWzTI4NFSufnagSvCLfHV/wpWpvxStf2hCYpcQb5GK+HwhHGYEhq+77SYkvIv5cW0ZNwjFU1SbEh6qU2l6RcQp3F+vfX2wCqA==
-Received: from CH3P221CA0016.NAMP221.PROD.OUTLOOK.COM (2603:10b6:610:1e7::8)
- by MW6PR12MB9000.namprd12.prod.outlook.com (2603:10b6:303:24b::11) with
+ bh=XE4tiSQAFHiQC4a395xfqzFWq0VymUTdBw+LHLe9G9o=;
+ b=aLK7JcAbGQgXZOzOLmOJn8SMVV5olyGGc3HdaDF6HkFkkHu70S4cy2WsziDMjmMoJZFaSsIhqqId9rC+zwy0QOL5S379FylOA1eGyCv0BiFSdMxZYC2V8V2dZimwc+12X3usnkb2jO7espjPT3eHao+xMlcBQOykhSzl4LEKp5oGKYl97PTijJYFO9dXfsbOkZ5+qMTKVOWDFTChKavMUHdhd7/i67vH2nj6jJUm7huYfmZ/VBiA55gb4AO3TosbncS+5M2LyV9BQZ7aIVTeTl2STLYQLP/SYyLOTA0goQrsmeo/6BnCU/hQMBhvwRu5lvuzevZQEkQTPpSWIqILiA==
+Received: from CH0PR03CA0449.namprd03.prod.outlook.com (2603:10b6:610:10e::25)
+ by DM6PR12MB4354.namprd12.prod.outlook.com (2603:10b6:5:28f::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.23; Wed, 9 Oct
- 2024 12:10:05 +0000
-Received: from DS2PEPF00003442.namprd04.prod.outlook.com
- (2603:10b6:610:1e7:cafe::14) by CH3P221CA0016.outlook.office365.com
- (2603:10b6:610:1e7::8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8026.24 via Frontend
- Transport; Wed, 9 Oct 2024 12:10:05 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.16; Wed, 9 Oct
+ 2024 12:10:07 +0000
+Received: from DS2PEPF00003448.namprd04.prod.outlook.com
+ (2603:10b6:610:10e:cafe::f3) by CH0PR03CA0449.outlook.office365.com
+ (2603:10b6:610:10e::25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.17 via Frontend
+ Transport; Wed, 9 Oct 2024 12:10:07 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DS2PEPF00003442.mail.protection.outlook.com (10.167.17.69) with Microsoft
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DS2PEPF00003448.mail.protection.outlook.com (10.167.17.75) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8048.13 via Frontend Transport; Wed, 9 Oct 2024 12:10:04 +0000
+ 15.20.8048.13 via Frontend Transport; Wed, 9 Oct 2024 12:10:07 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 9 Oct 2024
- 05:09:50 -0700
+ 05:09:57 -0700
 Received: from localhost.localdomain (10.126.230.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 9 Oct 2024
- 05:09:44 -0700
+ 05:09:51 -0700
 From: Petr Machata <petrm@nvidia.com>
 To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
 	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
@@ -84,9 +84,9 @@ CC: <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
 	"Vladimir Oltean" <vladimir.oltean@nxp.com>, Ido Schimmel
 	<idosch@nvidia.com>, "Przemek Kitszel" <przemyslaw.kitszel@intel.com>, Petr
  Machata <petrm@nvidia.com>, <mlxsw@nvidia.com>
-Subject: [PATCH net-next 05/10] selftests: TBF: Use defer for test cleanup
-Date: Wed, 9 Oct 2024 14:06:23 +0200
-Message-ID: <dda188e0d7674466f6d8bfaa6be48ebe02b66c73.1728473602.git.petrm@nvidia.com>
+Subject: [PATCH net-next 06/10] selftests: ETS: Use defer for test cleanup
+Date: Wed, 9 Oct 2024 14:06:24 +0200
+Message-ID: <d0ed0c88e3b5bd479fbc1592352cf029ed1f18bf.1728473602.git.petrm@nvidia.com>
 X-Mailer: git-send-email 2.46.1
 In-Reply-To: <cover.1728473602.git.petrm@nvidia.com>
 References: <cover.1728473602.git.petrm@nvidia.com>
@@ -102,192 +102,269 @@ X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS2PEPF00003442:EE_|MW6PR12MB9000:EE_
-X-MS-Office365-Filtering-Correlation-Id: 906ce7f4-398a-41f9-8b13-08dce85b4f52
+X-MS-TrafficTypeDiagnostic: DS2PEPF00003448:EE_|DM6PR12MB4354:EE_
+X-MS-Office365-Filtering-Correlation-Id: 41399f9b-b815-4f5f-88a3-08dce85b50e3
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|82310400026|1800799024|36860700013;
+	BCL:0;ARA:13230040|376014|7416014|36860700013|82310400026|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?Rxcsz2iWmkTE0IlunWgoI/2c2AwFTg2TpxO3qafX9XwB8PSMlZdsH6yA1591?=
- =?us-ascii?Q?H2Pc1TVcZx7RyEYgoNVKH85whZOD1GhSu68fvUwZp42XXFHG2K3IutvPvOIl?=
- =?us-ascii?Q?5caYOlq62AtkIoUj20pJqBtuH13oLFTHrnujVhMaSwVEgUVoVmPL4CPvQE6U?=
- =?us-ascii?Q?dhEudbythvplhzgSmE99wLVlIhY+8CqHQZtED8dKHf6V8e8+v5hCrailU/b9?=
- =?us-ascii?Q?NgLCViA/F5TKrnzZjMPoFK8q2K0jllBWqOhfNrgnSiJYEzsuantEvbs9UWFR?=
- =?us-ascii?Q?ZWxbqUxpPjed1216fPDEGy2KgOr+1qxukfIi+VuT8h+KuMlCyqTMLG+8coVJ?=
- =?us-ascii?Q?vYGoSCkotTUDSz7xqlD1A7Ow/bTa0CmGm5Jg4mMLA00wlbdoWbJj2onYkOZT?=
- =?us-ascii?Q?wmKr/8Fm/XkXDpIXbAD/pEM/jT9SkSwYTaVv9lelAJB6SXk669Str7yQ1Dfq?=
- =?us-ascii?Q?P0nfl5C+z8XFoY7jI0np8WMzgLzfAk19y2blL+UxBw3IgrMgQpPJ8SgVOZRg?=
- =?us-ascii?Q?HYUliwwrm01u9lWcTKfkQ7mKO9zAtQ2qo2xUKHLwa1F3jGxoF4E45jJqkV9G?=
- =?us-ascii?Q?QSsVREu+oXHnyIgYv1TaOaZ7vB/U0UpMH8bKt1tiLMuOnipXJKBCWk46IoRC?=
- =?us-ascii?Q?u0X0XjJ7jURKng7IAdbJgR2MTqjoEza4zmAo7Wr3Rtri1KRfj13xRBSfPxpP?=
- =?us-ascii?Q?hUPOM3fsYafeDoDXAf6bsAat0NTUIgPyLVKQGExkCHz0GCDWMFT+jddEh6QV?=
- =?us-ascii?Q?XLzeWK9+F8QhPa0GL9GAP00VLRlb5CNXl8jTzwlSX7P6oD8ZNyCJsviYfM86?=
- =?us-ascii?Q?KEln/CkVOjWmZMoBj7A02UN06P0irrl7gURN7nw1sBg51NCma6MgRcjNkpho?=
- =?us-ascii?Q?O4zxZ45HJuaX3M/qjqlxer0KDS3fOcLp8n4MHz3IHyv0o/OUVlzcPWP/H42j?=
- =?us-ascii?Q?97lUN0qbcNzlfZQzXCJkhJWYpkzOWMcOJ/BUnmnLKzCbQbck/cxWhf7U9XnF?=
- =?us-ascii?Q?anFCR9QnE6Opj+vE4GfA5LYhbfg3jquA8X8AJKBbUMZ3dqFkuQVkEl1ikowo?=
- =?us-ascii?Q?uvQ87nc7MiKlPRFzMfsKnmAZvAkGbV9a/CnZJovixKkQTbiTgZAxOM3uzIRu?=
- =?us-ascii?Q?Bm3ZKkYNukq/DZrIeTHg8lqjtgjRCuws/MoW0mSmQMYvv2u2xx7vQeghmYQ1?=
- =?us-ascii?Q?k+7/SdYdbuSUWcDBonMVJYqWBJxNIH17g18thgtjTW39OgfNWDTIt1QdQhbs?=
- =?us-ascii?Q?cuasSFkk+mJoLVNosqDcTsK/Hn78Auw2HNVnjlq4b1kRIqFT5oAyZDNLyilI?=
- =?us-ascii?Q?HnWGxBLsSxTRjIFQYxCYm6cUxfwr95KJR6/gc291JEQev9M/jNFuiJRFZgJZ?=
- =?us-ascii?Q?Nrplyr4=3D?=
+	=?us-ascii?Q?trvOJDeecgIgGA4btrKqfj6Z2L8GuknJuKyfjBYJ0ZvWhohFSoukW0xVv9Y/?=
+ =?us-ascii?Q?I8GFPiIJLiPVg2j6vEreAh/g6Lhyw+uVnC62f08OTGmrkx8vish2FXit+xMq?=
+ =?us-ascii?Q?zajDjS0+TUvWSwXPGkDKGLgT7XNKj9U3XEjYSwEjzyAuO2jIvYE6AgV+DhQr?=
+ =?us-ascii?Q?ZLZbR3XNbe27evzvGCiH8udKCYax5uA++ZsLFaCtpZCYc5G7lN+tGQeqkNy5?=
+ =?us-ascii?Q?44dis4H0dBx/+exhe9VWUz+98ITJQ9zD9ADLAJUE+e/Ag6s829Hm5xyapI57?=
+ =?us-ascii?Q?l4akyy3gCRHcGRRLilty8hjaaRDebaG4Q9SqzTpvxRng+bXLwrLSPouvGEwT?=
+ =?us-ascii?Q?U/ldu3hQTQd18SoNrLrM8TZ+yHmQlWC53RahWJyC+Bih+Xg41+ggwlxbg0N6?=
+ =?us-ascii?Q?3bb3nZ5Ay8WY7CsYlCbP2Cn8vjVpQ6uwcWJmviWjU0EALnw80ul71X7Y/48c?=
+ =?us-ascii?Q?IA+MsombJ1IFArg536uWPVZiTWYgO6PfjDiJ46RySbdfVS7TJseBNJvGLkMy?=
+ =?us-ascii?Q?p1GqhQSFrn/4nSSLNzz7O7dRF/lg01RxvQwjJenjQDYT19MlH0y0f+fZrvFW?=
+ =?us-ascii?Q?sPcwXX/eM4Tvz1qb6cXoVPjrS9dQ0jIp7qfb4dqiUSKSaB1AcXQPTpl0VQQw?=
+ =?us-ascii?Q?Ne9DZ39aGmnZzBulztxDJh+VMeEiO57QyIN0f1s2moiLbX+JP/mgwyQOn3Jh?=
+ =?us-ascii?Q?nut4FaN7P+8RfyFdbSp1qjmOtI7iU1jSSCOob18hZc3bLa3Eh+v7ZNzTJXoL?=
+ =?us-ascii?Q?mGVpvowaPhkWN+TRBCrH1uvfSVxBiJYGbY0kOWLKFANN2mJxTUHSP+k7d18m?=
+ =?us-ascii?Q?gerL1IUdx0BCL2KAw/PZEwNm5j6aAIoAdD7Tfiw9ulB+zsE+T95HO38cLjZ+?=
+ =?us-ascii?Q?FDFFGeSjii4o56cIdYeoguSrcUSYN6FimN4VoUsw7nSJ0X0wG+PmUq3e/V81?=
+ =?us-ascii?Q?qNUTLgBQbz62ezWmKZyhLrDs2lYOkVwDAttTjzlIIyC5ohd1ZA8B8Odd7qVK?=
+ =?us-ascii?Q?MFTdvacugoGEFjWvVehc3tl0lTeedrRq8saRyXc9qmw8CpnIHKTxPhMK3NBb?=
+ =?us-ascii?Q?UMitXyfaz1ioIEQr4ckFfLUuAQ5LARG77kyPucG2ZVF6ma0nzemhQ2dxylT9?=
+ =?us-ascii?Q?cRyTCGJDwn2Ms532y6hIqj85nDF5PFtYl6He2GqwuAT74la9ffD5gjJHOolH?=
+ =?us-ascii?Q?3r2cE8QO0Q1emQzyWvQiUHfEM6OjyRxIlKD9/TiPH+hMN7P8KJG1glxX9FnZ?=
+ =?us-ascii?Q?WYsccLJeuoHfqZyBil7MkW1n/3y7PmERvjHjHhKo3ddebEwVbwK4535YSbzX?=
+ =?us-ascii?Q?5MySVQdCQr13auerXVaxW+q5Qyh9j8ARto/KAZs+27mJqV02TNS7rlwwsxKZ?=
+ =?us-ascii?Q?XVk8XYc=3D?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(376014)(7416014)(36860700013)(82310400026)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2024 12:10:04.8839
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2024 12:10:07.5118
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 906ce7f4-398a-41f9-8b13-08dce85b4f52
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41399f9b-b815-4f5f-88a3-08dce85b50e3
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	DS2PEPF00003442.namprd04.prod.outlook.com
+	DS2PEPF00003448.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB9000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4354
 
 Use the defer framework to schedule cleanups as soon as the command is
 executed.
 
 Signed-off-by: Petr Machata <petrm@nvidia.com>
 ---
- .../selftests/net/forwarding/sch_tbf_core.sh  | 91 ++++++-------------
- .../net/forwarding/sch_tbf_etsprio.sh         |  7 +-
- .../selftests/net/forwarding/sch_tbf_root.sh  |  3 +-
- 3 files changed, 36 insertions(+), 65 deletions(-)
+ .../selftests/drivers/net/mlxsw/sch_ets.sh    | 26 +++---
+ .../selftests/net/forwarding/sch_ets.sh       |  7 +-
+ .../selftests/net/forwarding/sch_ets_core.sh  | 81 +++++++------------
+ .../selftests/net/forwarding/sch_ets_tests.sh | 14 ++--
+ 4 files changed, 50 insertions(+), 78 deletions(-)
 
-diff --git a/tools/testing/selftests/net/forwarding/sch_tbf_core.sh b/tools/testing/selftests/net/forwarding/sch_tbf_core.sh
-index 9cd884d4a5de..ec309a5086bc 100644
---- a/tools/testing/selftests/net/forwarding/sch_tbf_core.sh
-+++ b/tools/testing/selftests/net/forwarding/sch_tbf_core.sh
-@@ -60,68 +60,65 @@ host_create()
- 	local host=$1; shift
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/sch_ets.sh b/tools/testing/selftests/drivers/net/mlxsw/sch_ets.sh
+index 139175fd03e7..4aaceb6b2b60 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/sch_ets.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/sch_ets.sh
+@@ -21,6 +21,7 @@ switch_create()
+ 	# Create a bottleneck so that the DWRR process can kick in.
+ 	tc qdisc replace dev $swp2 root handle 3: tbf rate 1gbit \
+ 		burst 128K limit 1G
++	defer tc qdisc del dev $swp2 root handle 3:
  
- 	simple_if_init $dev
-+	defer simple_if_fini $dev
+ 	ets_switch_create
+ 
+@@ -30,16 +31,27 @@ switch_create()
+ 	# for the DWRR process.
+ 	devlink_port_pool_th_save $swp1 0
+ 	devlink_port_pool_th_set $swp1 0 12
++	defer devlink_port_pool_th_restore $swp1 0
 +
- 	mtu_set $dev 10000
-+	defer mtu_restore $dev
+ 	devlink_tc_bind_pool_th_save $swp1 0 ingress
+ 	devlink_tc_bind_pool_th_set $swp1 0 ingress 0 12
++	defer devlink_tc_bind_pool_th_restore $swp1 0 ingress
++
+ 	devlink_port_pool_th_save $swp2 4
+ 	devlink_port_pool_th_set $swp2 4 12
++	defer devlink_port_pool_th_restore $swp2 4
++
+ 	devlink_tc_bind_pool_th_save $swp2 7 egress
+ 	devlink_tc_bind_pool_th_set $swp2 7 egress 4 5
++	defer devlink_tc_bind_pool_th_restore $swp2 7 egress
++
+ 	devlink_tc_bind_pool_th_save $swp2 6 egress
+ 	devlink_tc_bind_pool_th_set $swp2 6 egress 4 5
++	defer devlink_tc_bind_pool_th_restore $swp2 6 egress
++
+ 	devlink_tc_bind_pool_th_save $swp2 5 egress
+ 	devlink_tc_bind_pool_th_set $swp2 5 egress 4 5
++	defer devlink_tc_bind_pool_th_restore $swp2 5 egress
  
- 	vlan_create $dev 10 v$dev $(ipaddr $host 10)/28
-+	defer vlan_destroy $dev 10
- 	ip link set dev $dev.10 type vlan egress 0:0
- 
- 	vlan_create $dev 11 v$dev $(ipaddr $host 11)/28
-+	defer vlan_destroy $dev 11
- 	ip link set dev $dev.11 type vlan egress 0:1
+ 	# Note: sch_ets_core.sh uses VLAN ingress-qos-map to assign packet
+ 	# priorities at $swp1 based on their 802.1p headers. ingress-qos-map is
+@@ -47,20 +59,6 @@ switch_create()
+ 	# 1:1, which is the mapping currently hard-coded by the driver.
  }
  
--host_destroy()
+-switch_destroy()
 -{
--	local dev=$1; shift
+-	devlink_tc_bind_pool_th_restore $swp2 5 egress
+-	devlink_tc_bind_pool_th_restore $swp2 6 egress
+-	devlink_tc_bind_pool_th_restore $swp2 7 egress
+-	devlink_port_pool_th_restore $swp2 4
+-	devlink_tc_bind_pool_th_restore $swp1 0 ingress
+-	devlink_port_pool_th_restore $swp1 0
 -
--	vlan_destroy $dev 11
--	vlan_destroy $dev 10
--	mtu_restore $dev
--	simple_if_fini $dev
+-	ets_switch_destroy
+-
+-	tc qdisc del dev $swp2 root handle 3:
 -}
 -
- h1_create()
+ # Callback from sch_ets_tests.sh
+ collect_stats()
  {
- 	host_create $h1 1
+diff --git a/tools/testing/selftests/net/forwarding/sch_ets.sh b/tools/testing/selftests/net/forwarding/sch_ets.sh
+index e60c8b4818cc..1f6f53e284b5 100755
+--- a/tools/testing/selftests/net/forwarding/sch_ets.sh
++++ b/tools/testing/selftests/net/forwarding/sch_ets.sh
+@@ -24,15 +24,10 @@ switch_create()
+ 	# Create a bottleneck so that the DWRR process can kick in.
+ 	tc qdisc add dev $swp2 root handle 1: tbf \
+ 	   rate 1Gbit burst 1Mbit latency 100ms
++	defer tc qdisc del dev $swp2 root
+ 	PARENT="parent 1:"
+ }
+ 
+-switch_destroy()
+-{
+-	ets_switch_destroy
+-	tc qdisc del dev $swp2 root
+-}
+-
+ # Callback from sch_ets_tests.sh
+ collect_stats()
+ {
+diff --git a/tools/testing/selftests/net/forwarding/sch_ets_core.sh b/tools/testing/selftests/net/forwarding/sch_ets_core.sh
+index f906fcc66572..8f9922c695b0 100644
+--- a/tools/testing/selftests/net/forwarding/sch_ets_core.sh
++++ b/tools/testing/selftests/net/forwarding/sch_ets_core.sh
+@@ -166,89 +166,78 @@ h1_create()
+ 	local i;
+ 
+ 	simple_if_init $h1
++	defer simple_if_fini $h1
++
+ 	mtu_set $h1 9900
++	defer mtu_restore $h1
++
+ 	for i in {0..2}; do
+ 		vlan_create $h1 1$i v$h1 $(sip $i)/28
++		defer vlan_destroy $h1 1$i
+ 		ip link set dev $h1.1$i type vlan egress 0:$i
+ 	done
  }
  
 -h1_destroy()
 -{
--	host_destroy $h1
+-	local i
+-
+-	for i in {0..2}; do
+-		vlan_destroy $h1 1$i
+-	done
+-	mtu_restore $h1
+-	simple_if_fini $h1
 -}
 -
  h2_create()
  {
- 	host_create $h2 2
+ 	local i
  
- 	tc qdisc add dev $h2 clsact
-+	defer tc qdisc del dev $h2 clsact
+ 	simple_if_init $h2
++	defer simple_if_fini $h2
 +
- 	tc filter add dev $h2 ingress pref 1010 prot 802.1q \
- 	   flower $TCFLAGS vlan_id 10 action pass
- 	tc filter add dev $h2 ingress pref 1011 prot 802.1q \
- 	   flower $TCFLAGS vlan_id 11 action pass
+ 	mtu_set $h2 9900
++	defer mtu_restore $h2
++
+ 	for i in {0..2}; do
+ 		vlan_create $h2 1$i v$h2 $(dip $i)/28
++		defer vlan_destroy $h2 1$i
+ 	done
  }
  
 -h2_destroy()
 -{
--	tc qdisc del dev $h2 clsact
--	host_destroy $h2
+-	local i
+-
+-	for i in {0..2}; do
+-		vlan_destroy $h2 1$i
+-	done
+-	mtu_restore $h2
+-	simple_if_fini $h2
 -}
 -
- switch_create()
+ ets_switch_create()
  {
- 	local intf
- 	local vlan
+ 	local i
  
- 	ip link add dev br10 type bridge
-+	defer ip link del dev br10
+ 	ip link set dev $swp1 up
++	defer ip link set dev $swp1 down
 +
- 	ip link add dev br11 type bridge
-+	defer ip link del dev br11
+ 	mtu_set $swp1 9900
++	defer mtu_restore $swp1
  
- 	for intf in $swp1 $swp2; do
- 		ip link set dev $intf up
-+		defer ip link set dev $intf down
+ 	ip link set dev $swp2 up
++	defer ip link set dev $swp2 down
 +
- 		mtu_set $intf 10000
-+		defer mtu_restore $intf
+ 	mtu_set $swp2 9900
++	defer mtu_restore $swp2
  
- 		for vlan in 10 11; do
- 			vlan_create $intf $vlan
-+			defer vlan_destroy $intf $vlan
+ 	for i in {0..2}; do
+ 		vlan_create $swp1 1$i
++		defer vlan_destroy $swp1 1$i
+ 		ip link set dev $swp1.1$i type vlan ingress 0:0 1:1 2:2
+ 
+ 		vlan_create $swp2 1$i
++		defer vlan_destroy $swp2 1$i
+ 
+ 		ip link add dev br1$i type bridge
++		defer ip link del dev br1$i
 +
- 			ip link set dev $intf.$vlan master br$vlan
-+			defer ip link set dev $intf.$vlan nomaster
+ 		ip link set dev $swp1.1$i master br1$i
++		defer ip link set dev $swp1.1$i nomaster
 +
- 			ip link set dev $intf.$vlan up
-+			defer ip link set dev $intf.$vlan down
- 		done
+ 		ip link set dev $swp2.1$i master br1$i
++		defer ip link set dev $swp2.1$i nomaster
+ 
+ 		ip link set dev br1$i up
++		defer ip link set dev br1$i down
++
+ 		ip link set dev $swp1.1$i up
++		defer ip link set dev $swp1.1$i down
++
+ 		ip link set dev $swp2.1$i up
++		defer ip link set dev $swp2.1$i down
  	done
- 
-@@ -130,34 +127,10 @@ switch_create()
- 	done
- 
- 	ip link set dev br10 up
-+	defer ip link set dev br10 down
-+
- 	ip link set dev br11 up
 -}
--
--switch_destroy()
+ 
+-ets_switch_destroy()
 -{
--	local intf
--	local vlan
+-	local i
 -
--	# A test may have been interrupted mid-run, with Qdisc installed. Delete
--	# it here.
--	tc qdisc del dev $swp2 root 2>/dev/null
+-	ets_delete_qdisc
 -
--	ip link set dev br11 down
--	ip link set dev br10 down
--
--	for intf in $swp2 $swp1; do
--		for vlan in 11 10; do
--			ip link set dev $intf.$vlan down
--			ip link set dev $intf.$vlan nomaster
--			vlan_destroy $intf $vlan
--		done
--
--		mtu_restore $intf
--		ip link set dev $intf down
+-	for i in {0..2}; do
+-		ip link del dev br1$i
+-		vlan_destroy $swp2 1$i
+-		vlan_destroy $swp1 1$i
 -	done
 -
--	ip link del dev br11
--	ip link del dev br10
-+	defer ip link set dev br11 down
+-	mtu_restore $swp2
+-	ip link set dev $swp2 down
+-
+-	mtu_restore $swp1
+-	ip link set dev $swp1 down
++	defer ets_delete_qdisc
  }
  
  setup_prepare()
-@@ -177,23 +150,13 @@ setup_prepare()
- 	h2_mac=$(mac_get $h2)
+@@ -263,23 +252,13 @@ setup_prepare()
+ 	hut=$h2
  
  	vrf_prepare
 +	defer vrf_cleanup
@@ -310,91 +387,51 @@ index 9cd884d4a5de..ec309a5086bc 100644
 -
  ping_ipv4()
  {
- 	ping_test $h1.10 $(ipaddr 2 10) " vlan 10"
-@@ -207,18 +170,18 @@ tbf_get_counter()
- 	tc_rule_stats_get $h2 10$vlan ingress .bytes
- }
+ 	ping_test $h1.10 $(dip 0) " vlan 10"
+diff --git a/tools/testing/selftests/net/forwarding/sch_ets_tests.sh b/tools/testing/selftests/net/forwarding/sch_ets_tests.sh
+index f9d26a7911bb..08240d3e3c87 100644
+--- a/tools/testing/selftests/net/forwarding/sch_ets_tests.sh
++++ b/tools/testing/selftests/net/forwarding/sch_ets_tests.sh
+@@ -90,6 +90,7 @@ __ets_dwrr_test()
  
--do_tbf_test()
-+__tbf_test()
- {
- 	local vlan=$1; shift
- 	local mbit=$1; shift
+ 	for stream in ${streams[@]}; do
+ 		ets_start_traffic $stream
++		defer stop_traffic $!
+ 	done
  
- 	start_traffic $h1.$vlan $(ipaddr 1 $vlan) $(ipaddr 2 $vlan) $h2_mac
-+	defer stop_traffic $!
- 	sleep 5 # Wait for the burst to dwindle
- 
- 	local t2=$(busywait_for_counter 1000 +1 tbf_get_counter $vlan)
  	sleep 10
- 	local t3=$(tbf_get_counter $vlan)
--	stop_traffic
- 
- 	RET=0
- 
-@@ -231,3 +194,9 @@ do_tbf_test()
- 
- 	log_test "TC $((vlan - 10)): TBF rate ${mbit}Mbit"
- }
-+
-+do_tbf_test()
-+{
-+	in_defer_scope \
-+		__tbf_test "$@"
-+}
-diff --git a/tools/testing/selftests/net/forwarding/sch_tbf_etsprio.sh b/tools/testing/selftests/net/forwarding/sch_tbf_etsprio.sh
-index df9bcd6a811a..c182a04282bc 100644
---- a/tools/testing/selftests/net/forwarding/sch_tbf_etsprio.sh
-+++ b/tools/testing/selftests/net/forwarding/sch_tbf_etsprio.sh
-@@ -30,8 +30,9 @@ tbf_test()
- 	# This test is used for both ETS and PRIO. Even though we only need two
- 	# bands, PRIO demands a minimum of three.
- 	tc qdisc add dev $swp2 root handle 10: $QDISC 3 priomap 2 1 0
-+	defer tc qdisc del dev $swp2 root
-+
- 	tbf_test_one 128K
--	tc qdisc del dev $swp2 root
- }
- 
- tbf_root_test()
-@@ -42,6 +43,8 @@ tbf_root_test()
- 
- 	tc qdisc replace dev $swp2 root handle 1: \
- 		tbf rate 400Mbit burst $bs limit 1M
-+	defer tc qdisc del dev $swp2 root
-+
- 	tc qdisc replace dev $swp2 parent 1:1 handle 10: \
- 		$QDISC 3 priomap 2 1 0
- 	tc qdisc replace dev $swp2 parent 10:3 handle 103: \
-@@ -53,8 +56,6 @@ tbf_root_test()
- 
- 	do_tbf_test 10 400 $bs
- 	do_tbf_test 11 400 $bs
+@@ -120,25 +121,24 @@ __ets_dwrr_test()
+ 				       ${d[0]} ${d[$i]}
+ 		fi
+ 	done
 -
--	tc qdisc del dev $swp2 root
+-	for stream in ${streams[@]}; do
+-		stop_traffic
+-	done
  }
  
- if type -t sch_tbf_pre_hook >/dev/null; then
-diff --git a/tools/testing/selftests/net/forwarding/sch_tbf_root.sh b/tools/testing/selftests/net/forwarding/sch_tbf_root.sh
-index 96c997be0d03..9f20320f8d84 100755
---- a/tools/testing/selftests/net/forwarding/sch_tbf_root.sh
-+++ b/tools/testing/selftests/net/forwarding/sch_tbf_root.sh
-@@ -14,13 +14,14 @@ tbf_test_one()
- 
- 	tc qdisc replace dev $swp2 root handle 108: tbf \
- 	   rate 400Mbit burst $bs limit 1M
-+	defer tc qdisc del dev $swp2 root
-+
- 	do_tbf_test 10 400 $bs
- }
- 
- tbf_test()
+ ets_dwrr_test_012()
  {
- 	tbf_test_one 128K
--	tc qdisc del dev $swp2 root
+-	__ets_dwrr_test 0 1 2
++	in_defer_scope \
++		__ets_dwrr_test 0 1 2
  }
  
- if type -t sch_tbf_pre_hook >/dev/null; then
+ ets_dwrr_test_01()
+ {
+-	__ets_dwrr_test 0 1
++	in_defer_scope \
++		__ets_dwrr_test 0 1
+ }
+ 
+ ets_dwrr_test_12()
+ {
+-	__ets_dwrr_test 1 2
++	in_defer_scope \
++		__ets_dwrr_test 1 2
+ }
+ 
+ ets_qdisc_setup()
 -- 
 2.45.0
 
