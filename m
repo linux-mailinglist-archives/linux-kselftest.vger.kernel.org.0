@@ -1,119 +1,173 @@
-Return-Path: <linux-kselftest+bounces-19408-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19409-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB8D6997882
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 00:32:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 265409978B4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 00:51:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD2802846CB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 22:32:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96F1C1F21862
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 22:51:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A36461E3DD8;
-	Wed,  9 Oct 2024 22:31:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71204188587;
+	Wed,  9 Oct 2024 22:51:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b="JTieHRHn"
+	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="g40yPUF0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailtransmit05.runbox.com (mailtransmit05.runbox.com [185.226.149.38])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27F11E3786;
-	Wed,  9 Oct 2024 22:31:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.38
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6C738DD6
+	for <linux-kselftest@vger.kernel.org>; Wed,  9 Oct 2024 22:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728513104; cv=none; b=RrzjCf62Z94gIlkZ8F/6oF1lSoJ4zz6Bj3n9sV1PWQ6aZTUk9uzPEuCSMJ9F2nOCqmWFv5uye2DYhkedOgrpK6qhcegEilytfML+jiywod7ofZCwFx4CO0P3VMbj0dovXm+ULIhhPRoTNMMwMyr+ZJlh1GTS9wDqClgSDbzHfg8=
+	t=1728514274; cv=none; b=a7ouvxLSt5TlidJXdljioTVC78L3RKN5eLvTGYrNJkqTZAVYRnQd7sWZOZ7fK6GqVu3usPAOkIA2qUdSWUqF33UxYgPiOAVoE4WGhZy4huD2ojwCpdzlY82Gs/R1yUYsHdcHkAw5ZgwY/kbtWW/5rubPB5sb8ofLndeTG67jWjw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728513104; c=relaxed/simple;
-	bh=s16GKP7PIIzYD3NjhkiAU6d8d8MyvTH/H5PWTSkhsKU=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=afc8S/76Fa2Q9I3MfBz7o9XpEyrPLXfwkUFa39bJZls6JWzkknuwR9VZCYbbQTlfkjkiF3NyY0JFwu/wnYzPKexAUDU8XciHsyWx9jrZ08XsYC9sbH4mGvrdZDk3+UgWa/rNYk2UpAuXeSLZTPY4ubaVXFVStgosra5XuuZusrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co; spf=pass smtp.mailfrom=rbox.co; dkim=pass (2048-bit key) header.d=rbox.co header.i=@rbox.co header.b=JTieHRHn; arc=none smtp.client-ip=185.226.149.38
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rbox.co
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rbox.co
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit05.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <mhal@rbox.co>)
-	id 1syfDQ-001qmc-2R; Thu, 10 Oct 2024 00:31:32 +0200
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=rbox.co;
-	s=selector1; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:References:
-	Cc:To:Subject:From:MIME-Version:Date:Message-ID;
-	bh=IBi/mETRE54sSOUeSu5Xs+ajeMs0LsADF1LzwwtI7CQ=; b=JTieHRHn55ksiW920a9adiNGcQ
-	WqcC/H16K1/TkPDVf5YkAQQxZTB5aefDlgXeinGOTQfzYsl1Jp8oSmZi+D2cFcZ3aq31SGhtBQPjZ
-	6Eegz61Z31dJfC4GY1R1x0hSB/hLhGJymNEvWNqbHlo0GNhdqkOKyWF52EG0qWG+4UrwErkLBgEdX
-	pTlMGhBqkrCufZxgXx9eONTxvIQuFQ7iug8oNAc1xpUaWc34cTYxEFeZpyJ7C1ooQ2YeS931y0Zv+
-	g3KIKPQxYNhJjGmKM9bU2eN6BJs5n2mdpJmUS8LsllV048ghqCRzS+vGxDamC111aJKYaXnTslU7E
-	VgIBHzfQ==;
-Received: from [10.9.9.73] (helo=submission02.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <mhal@rbox.co>)
-	id 1syfDP-0005ul-0C; Thu, 10 Oct 2024 00:31:31 +0200
-Received: by submission02.runbox with esmtpsa  [Authenticated ID (604044)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1syfD9-00Esvy-UY; Thu, 10 Oct 2024 00:31:16 +0200
-Message-ID: <dc968352-4ce6-46a0-af69-058e29aa0df4@rbox.co>
-Date: Thu, 10 Oct 2024 00:31:13 +0200
+	s=arc-20240116; t=1728514274; c=relaxed/simple;
+	bh=5OzzCsqeGJY8HGaT9XWNNPXhiSKTiec/IBeoY5zeyOc=;
+	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=L1StPjYA0lQUj+lGjS2TrFtOdPFr3yUiLaVvQN4mHx7Lvp+1boYi0qpq/y2nVvPminV+XuFMmASqw3X5UCbFCj4xuiRy+pnZp+p0vOzGYp00eH5xRecAI6rZN3o4mkJW4PqwBXxiIlleIJ2LzaxzBgGU+smJJQfIHa6UyOJK8kU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=g40yPUF0; arc=none smtp.client-ip=209.85.210.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-71de9e1f374so228075b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 09 Oct 2024 15:51:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1728514272; x=1729119072; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=NFJvlQwrSSopdzCzZ0CspmqiGNbR/aW2giNxMT+p06M=;
+        b=g40yPUF04s3Zmc4IuAdKdh6UsPPhwKl0LuWfB5+syQM9+YdYA0vYRdHDCmz6FTPecW
+         mIhdMi1ixRl1pG77J6896l5u/h2sm926claQBOVAIFoLO+87cGVvsV17gVt8+XromM9U
+         j4cLu3AdcwZtMVeAki+2wAqPmmiVqlDelONXb6rwvfLzKQrJ7IQm7CCs/WD6QV3VQVPL
+         Q6OkzfHaLkbu5/v8PkeiZI1EBgAG1YQSjJjH9l98bLNxHsXIvpHgGKHH97R3yeQO8Gkg
+         +lOrnvNXyyYSlw7QGtItdSfBztUtJDrmUwZvcjhwqAghjqtnyoCqfLFdsLaLuVQRkZAJ
+         GA3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728514272; x=1729119072;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NFJvlQwrSSopdzCzZ0CspmqiGNbR/aW2giNxMT+p06M=;
+        b=v4GuOR27CJreUTnYQ+Zd4Hdw+qT/5P5ayA8YVRhoYKGdcyizQbDRxXpJULRyYUbzwy
+         62dbhofUo2HADq2IQblCVXqwL3KhOd5IYkyAquwxYxyV0vpDEepiGJd2uNcBSSFzfTl6
+         GNPVvFwlfRfj5nZZ/zNbuBsZwFCcPLA0E+ZRFXFfs0Tvy1DZGgW787bEroP66QZyo83v
+         5kptO8SCLwKCAcrR+BAzbuhPp4tomUEpEaf/u9luvvznutr0N8Gi8Homh+ZZR5xPlRlE
+         GHWWG2hxXyknaZqFryPvmn5hren3GI+TdxuaC97M1E46PisFVxeOLISG0TDGdwZ+pCUF
+         gdIg==
+X-Forwarded-Encrypted: i=1; AJvYcCVsSAj7lRTFI5mkrX8b5Kqn/G8WPRoMAfBbd6BVhLayUYQHeMC009PHRDhC8ba6q3skhEsDBPbv4zoWM8THVGg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJ4MSPsX+NuGmTPGjiw1PqFFzsPkcm2UbQaqMSoCHytA7+WVwu
+	nL+b+Ljo+4AIZqAHMiWD8UfX9xFzYyVpjVYWHRvK+ViSKxR3mTv7jNq0hu7mXa0=
+X-Google-Smtp-Source: AGHT+IE5VI2SWsHXBOQEmkyPjwDbYIT/yt4KELnWaaNuyq35meS24rk8c7VJWFNh2u1XVSF8NJEe8Q==
+X-Received: by 2002:a05:6a20:9e4c:b0:1d2:e8d8:dd46 with SMTP id adf61e73a8af0-1d8a3c005a2mr6006169637.15.1728514271962;
+        Wed, 09 Oct 2024 15:51:11 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71df0cd0610sm8310831b3a.69.2024.10.09.15.51.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 09 Oct 2024 15:51:11 -0700 (PDT)
+Message-ID: <670708df.a70a0220.53045.f807@mx.google.com>
+Date: Wed, 09 Oct 2024 15:51:11 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Michal Luczaj <mhal@rbox.co>
-Subject: Re: [PATCH bpf-next v2 0/6] selftests/bpf: Various sockmap-related
- fixes
-To: Jakub Sitnicki <jakub@cloudflare.com>
-Cc: Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman
- <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20240731-selftest-sockmap-fixes-v2-0-08a0c73abed2@rbox.co>
- <87y159yi5m.fsf@cloudflare.com>
- <249a7dc3-34e2-4579-aae7-8b38b145e4bb@rbox.co>
- <87ttfxy28s.fsf@cloudflare.com>
- <42939687-20f9-4a45-b7c2-342a0e11a014@rbox.co>
- <877cccqnvj.fsf@cloudflare.com>
- <e78254c5-8f2f-4dc5-bf81-401caefabdd1@rbox.co>
- <0d4edea2-f989-484f-88bc-d8fb6acd7572@rbox.co>
- <87ikuh78z5.fsf@cloudflare.com>
- <ab60e5c2-90a1-43c3-936b-10520c751dfb@rbox.co>
- <87y12xy5fe.fsf@cloudflare.com>
-Content-Language: pl-PL, en-GB
-In-Reply-To: <87y12xy5fe.fsf@cloudflare.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: linux_kselftest-fixes-6.12-rc2-5-gdc7da277516a0
+X-Kernelci-Branch: fixes
+X-Kernelci-Tree: kselftest
+Subject: kselftest/fixes build: 7 builds: 2 failed, 5 passed,
+ 1 warning (linux_kselftest-fixes-6.12-rc2-5-gdc7da277516a0)
+To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+ shuah@kernel.org
+From: "kernelci.org bot" <bot@kernelci.org>
 
-On 10/9/24 11:46, Jakub Sitnicki wrote:
-> That's curious. We don't override the proto::sendmsg callback for
-> protocols which don't support sk_msg redirects, like UDP:
-> 
-> https://elixir.bootlin.com/linux/v6.12-rc2/source/net/ipv4/udp_bpf.c#L114
-> 
-> The packet should get delivered to the peer socket as w/o sockmap.
-> I will have to double check that.
+kselftest/fixes build: 7 builds: 2 failed, 5 passed, 1 warning (linux_kself=
+test-fixes-6.12-rc2-5-gdc7da277516a0)
 
-Ugh, no, you're right. I was checking the wrong queue all that time...
-Sorry for the confusion.
+Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
+l/linux_kselftest-fixes-6.12-rc2-5-gdc7da277516a0/
 
-> Thanks. And yes - if possible, better to push fixes separately. Because
-> they go through the bpf tree, and they will still land in the upcoming
-> -rc releases (and get backported).
-> 
-> While improvements go through bpf-next. Of course that sometimes makes
-> life more difficult if the improvements depend on some fixes...
+Tree: kselftest
+Branch: fixes
+Git Describe: linux_kselftest-fixes-6.12-rc2-5-gdc7da277516a0
+Git Commit: dc7da277516a0f22fcb4ae904c4ce0083ae0b9ff
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
-I'm afraid that's the case for the redir selftest to run cleanly.
-Anyway, so those are the fixes mentioned, targeting bpf:
-https://lore.kernel.org/bpf/20241009-vsock-fixes-for-redir-v1-0-e455416f6d78@rbox.co/
+Build Failures Detected:
 
-> Not sure if anything from bpf-next gets backported if it has a Fixes
-> tag. We can ask the stable kernel maintainers, if needed.
+arm64:
+    defconfig+kselftest+arm64-chromebook: (clang-16) FAIL
+    defconfig+kselftest+arm64-chromebook: (gcc-12) FAIL
+
+Warnings Detected:
+
+arm64:
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
+ !ENDBR: .text+0x14fd19
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-12) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-12) =E2=80=94 FAIL, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, clang-16) =E2=80=94 FAIL, 0 er=
+rors, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-12) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-12) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-12) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
+BR: .text+0x14fd19
+
+---
+For more info write to <info@kernelci.org>
 
