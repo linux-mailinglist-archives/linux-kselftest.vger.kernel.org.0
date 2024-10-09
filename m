@@ -1,91 +1,101 @@
-Return-Path: <linux-kselftest+bounces-19353-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19354-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56256996CB0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 15:51:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5A65996CB6
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 15:51:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08A5E1F21927
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 13:51:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 509C9B2543E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 13:51:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CFD01991D0;
-	Wed,  9 Oct 2024 13:51:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FF881991CC;
+	Wed,  9 Oct 2024 13:51:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GC4L+EtS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ijMnoR0I"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
+Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A938B192D6E;
-	Wed,  9 Oct 2024 13:51:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 275A0198E7B;
+	Wed,  9 Oct 2024 13:51:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728481864; cv=none; b=A1RxGXfm8zyVER/vLS9SFAH4fLn6mu3B4X+d0gR8G34DhqWNHrykmDIBtmhksT1Ecf9rSGe9kxh2PXN+s9tV28q6uWX3GZQ97uMmkwQvmkSL4lURqZrHx/vtDoyH0hzDBO5dN2OdPTU9D/dpvu12ibqxpbdM1+qMeyL+xjHitvc=
+	t=1728481909; cv=none; b=O37+QJNvIeRCjuge/+d0n/baTjVPlHVMuxqh7XsMxQRIftfztWf68AAe0iNrd5KWGor3Hdo3koUWo28VhdAFczqdLtx6rmGFe1Bov+CHsDex3+TE+f98bBvBpOFBuAga65CqKUV9Y2CSneDviWOa7hpJ72nak/vJ99iqzGJ2yxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728481864; c=relaxed/simple;
-	bh=7JXbVvEDPzan+Cb5PlA35BuMqUzWL66UXvEGnnp08KM=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=nm06sZ/vff7mP/Z4h+zNWMyOIA5Av+4D6+z/dhBjV15Soh+vgnqM4uoL0KWCgJ+kxJHxvaCPkfdsudN9VHHYqyc/p47NHF+gjpu7Ycgboz3ktIo0vZdmlVjw1ec6/CX0np+wVgNNOcqCWbnL90/BSpSEcWgNNvKuKpW6psWpEUU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GC4L+EtS; arc=none smtp.client-ip=209.85.217.41
+	s=arc-20240116; t=1728481909; c=relaxed/simple;
+	bh=jYgb7BwLs38wtXSfN1wpIvBf5tLjsHOZeuzvh4Bgntk=;
+	h=Date:From:To:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=a6iPfpwW+BYikBf3y6Zv0STUH2NldL9eCT4a/H4eVrahtTtk69l6YFUYYjbrzM9LJK65/8v/J/h5VLX3yDdz3TXtP7J4LIFw6t1h/zwM0IvRjv/7AR3ZS/yHZYU63zXkZsDjN2XTj5xlhGMieKwAFej9CJgTv7GVu4AKru6lg6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ijMnoR0I; arc=none smtp.client-ip=209.85.219.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4a3c8b8cf78so2525445137.0;
-        Wed, 09 Oct 2024 06:51:02 -0700 (PDT)
+Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6cbd550b648so2179896d6.0;
+        Wed, 09 Oct 2024 06:51:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728481861; x=1729086661; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728481907; x=1729086707; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :in-reply-to:message-id:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zxorcdFJTora9Qz/aUcFQRS7K6k631IINdmiD7aAfHM=;
-        b=GC4L+EtSw9JEnRlPqcOh1xBDz4p2JN8+oL4zjC3g68VXKzpvQIsy2OmLfO9a1W2MaZ
-         MaUyMLA1X0UG8lxHP00JlYOnWWMqDE1WDb0EBJC0TzJe0sd2uCMfP0kogHkdrQzW/ema
-         OnTENG0GGwwyI3QioBQP4e43gq/rIN5X+B18eNwsqVRjNCeHeqt3HzXRCEvk+C3Fco08
-         L5nAIIqR6otf4XEx8jAwwQMIlyXrCdomKcCk5aHQ4cIWCzcfaRJBVUmGOIZHm2Fg4kd1
-         MOSa8U/go4zDwyVgBxEEGmtZ7KygpD7b2uDFCJTaKsdyuJ6We4w8SBxiL+Z0G2BOMYkl
-         bPlg==
+        bh=tUc34dZTHKciGaII3zabz1ZKWWaMos36cbYH1GBxAp8=;
+        b=ijMnoR0It9zDof8YnOZuP6DexnR7PztZyVvGOby6q8ll5BB764L0oQGG2IYioJCWAl
+         XUIpeAzlhrAYhE9bUVUt73YBJgzJdB6nZlKrPzJE9M6WyFqFXC+S4wC45/PxTGaNfMxO
+         NrRQiHU4GGe6yA6PccURE/6s5y1ZMbNkc8V6iursFvNO9FLvdHAMstEn0GwlCNtMlw+T
+         RrA3XTsVssHz6EiEvzwNsMjUuxEa6D+1o6+bfpjKZWIASTx17q89xlrhionqOI9biDYH
+         wlyT3Ln++S6UFIISQP3kCIcFvixi43ivhcxy2VS/7lfin1gGetmTtyuqZy5/2OBoCxXO
+         ZSLA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728481861; x=1729086661;
+        d=1e100.net; s=20230601; t=1728481907; x=1729086707;
         h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zxorcdFJTora9Qz/aUcFQRS7K6k631IINdmiD7aAfHM=;
-        b=JZRu4PNypLpPMA7HSHWsNVqcdu+Uxt6GEZuFErBffvGaWMhqUhZdf9tln66X5VAxA6
-         FolG2oldqRJGqvffeiRrp99fkaoc/i6lbdIfbu7zxfvpBeffl+7Q/0/wy3impA2+9Mfe
-         uW652+b2L6txuofzj74aUcMRhcjGxFprrdVF48KeV9ljocIFM3z3Xm21X7TOWnD4q/aU
-         Zo2a4i5z5OBF/PC3e3w76+Jg4UNVFIGGsyG0oHRHUEYroMfG7BUsRZSY14xaU7DnB6H9
-         LjhbtrGlCDMedov7Qq1xAeh3tRAzE19rVdTorGu8H8s/+vHgpm56QUFAZqZTUUByXqgf
-         J+fw==
-X-Forwarded-Encrypted: i=1; AJvYcCUnwLUFht1/st/iAVJkCeFxpYirTbWtIzZniJXVX61dsuMml/vDok3QAmi3Oen0olm/uI+Ijs6f@vger.kernel.org, AJvYcCWecvegcQTaleeTWH/vW/B91uXhyRNlqHTAiMwPPn08nxkSewI3AUO0Z9bxtKhbAh3wCrS6fimjJOxge2M=@vger.kernel.org, AJvYcCXjW7xKlmXvF8Mb0Yioy5pTjXIqsslove7/OYXfBtVj7TKwWuUYFW8fg+5Yq+MGq1NMSp6grBy1zjU4OgIo5pwy@vger.kernel.org
-X-Gm-Message-State: AOJu0YyncJD2xsx2FGpgXw3FIdW/TcgMR0Yyd+b05kgj4w5nVIB9/iXA
-	2e9+PDPNBMd4ZywLv882lPTJcLCe2xfeFjNGfTWmH1gf+PBKX8em
-X-Google-Smtp-Source: AGHT+IHwpE6vd3uwyFp4XXsCWi/iNSPtgTNRAdRiWMJk/LVFKNRqPSLhhy90D7iawGR99/IXZgWY4A==
-X-Received: by 2002:a05:6102:c48:b0:4a3:d46a:3597 with SMTP id ada2fe7eead31-4a448e5a6d1mr1768845137.28.1728481861467;
-        Wed, 09 Oct 2024 06:51:01 -0700 (PDT)
+         :in-reply-to:message-id:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tUc34dZTHKciGaII3zabz1ZKWWaMos36cbYH1GBxAp8=;
+        b=W2MIm+BXPu4P4sVqc8RpfxhxuxD5ADYF0mV5edGnb2kuMF2iGijRmJqFrANcob6EPo
+         q3qeh4S04kOhsXkac84oN+jVVOKLmUzgemzqsAcN8wgHtJbop6ksHqWX9Kz0fEtRf/6n
+         I9wBhVSgqomgnlqFJQXUZV7wh4m1Yutl7iZKud4WKA9iEYLt1VXNbEXfnndcJ28p+wNx
+         LsMLy2fGLtl6mfm1qjRxIRQ6PjY3337mlYhWjV9XgUaSbGvCdTIlR5HAl5MRgO/9O8D3
+         qKAMqbxSU1gJhf9M6HYaxp6miU6PeeL2a7/zqgm0qz60sxUCMcf6+qzQjzrDEcC90RPQ
+         o3QA==
+X-Forwarded-Encrypted: i=1; AJvYcCU8OXqIQt/6OoEM0anjfyKXa43wIJhJy8oxd37O2gt9U0yMXuXNaiY9s3m6uxS34iQLKOM=@vger.kernel.org, AJvYcCUOcx2y1W3TZphZwZ1Z7Emb5OK4DdAq+31aeI/93N9VZEiBs3Bie/eknQ4pSK8wNjcuvW/851Zdk/o2zg60MjuJ@vger.kernel.org, AJvYcCVTU9kFJKjSf91vdtzNiSC/F0E8mj/ooq7LMFIBvf/2aDrYe5umeTmJOuQl1+9GFNawchXIRmOW@vger.kernel.org, AJvYcCWS9NS9mEqCgQY1/Oin6NK5Wifl4t0rvVVeBQKDGcnkVx5SN2DpC/mssQdN16d65TApOM/TJk2i4N9s@vger.kernel.org, AJvYcCXSx6IIzS6lVAmro9XbhqLmECGJO69Zs5B6EYZLEl0dP6yNAQjqhwtIZhalOp+XCajjatYLTI8vummNa6fH@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0Yq4vYyv+aSyl/7dpz54d3sgPz2VWszKl/ByO8bTaRShYyJo2
+	lBHp38+JETZo3N7udL1u7vwd4RimS26IiorsClBsZ9rzAQt9pL3k
+X-Google-Smtp-Source: AGHT+IGkew5/j69otxM8iwfX7gFjP4eK+FksUEv8jew+/bnfYJy9/Nhw1Lw41t2weOaHSSLA4zni5w==
+X-Received: by 2002:a05:6214:5d83:b0:6cb:3cc8:5d7a with SMTP id 6a1803df08f44-6cbc955e801mr51908116d6.35.1728481907058;
+        Wed, 09 Oct 2024 06:51:47 -0700 (PDT)
 Received: from localhost (86.235.150.34.bc.googleusercontent.com. [34.150.235.86])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-45da74b2123sm46473161cf.20.2024.10.09.06.51.01
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cba4751294sm46132086d6.93.2024.10.09.06.51.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 09 Oct 2024 06:51:01 -0700 (PDT)
-Date: Wed, 09 Oct 2024 09:51:00 -0400
+        Wed, 09 Oct 2024 06:51:46 -0700 (PDT)
+Date: Wed, 09 Oct 2024 09:51:46 -0400
 From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Gur Stavi <gur.stavi@huawei.com>, 
- willemdebruijn.kernel@gmail.com
-Cc: davem@davemloft.net, 
- edumazet@google.com, 
- gur.stavi@huawei.com, 
- kuba@kernel.org, 
+To: Akihiko Odaki <akihiko.odaki@daynix.com>, 
+ Jonathan Corbet <corbet@lwn.net>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Jason Wang <jasowang@redhat.com>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ "Michael S. Tsirkin" <mst@redhat.com>, 
+ Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+ Shuah Khan <shuah@kernel.org>, 
+ linux-doc@vger.kernel.org, 
  linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
  netdev@vger.kernel.org, 
- pabeni@redhat.com, 
- shuah@kernel.org
-Message-ID: <67068a44bff02_1cca3129431@willemb.c.googlers.com.notmuch>
-In-Reply-To: <20241009065837.354332-1-gur.stavi@huawei.com>
-References: <67054127bb083_18b21e2943f@willemb.c.googlers.com.notmuch>
- <20241009065837.354332-1-gur.stavi@huawei.com>
-Subject: Re: [PATCH net-next v02 1/2] af_packet: allow fanout_add when socket
- is not RUNNING
+ kvm@vger.kernel.org, 
+ virtualization@lists.linux-foundation.org, 
+ linux-kselftest@vger.kernel.org, 
+ Yuri Benditovich <yuri.benditovich@daynix.com>, 
+ Andrew Melnychenko <andrew@daynix.com>, 
+ Stephen Hemminger <stephen@networkplumber.org>, 
+ gur.stavi@huawei.com, 
+ Akihiko Odaki <akihiko.odaki@daynix.com>
+Message-ID: <67068a7261d8c_1cca3129414@willemb.c.googlers.com.notmuch>
+In-Reply-To: <20241008-rss-v5-1-f3cf68df005d@daynix.com>
+References: <20241008-rss-v5-0-f3cf68df005d@daynix.com>
+ <20241008-rss-v5-1-f3cf68df005d@daynix.com>
+Subject: Re: [PATCH RFC v5 01/10] virtio_net: Add functions for hashing
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -96,38 +106,13 @@ Content-Type: text/plain;
  charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-Gur Stavi wrote:
-> >> @@ -1846,21 +1846,21 @@ static int fanout_add(struct sock *sk, struct fanout_args *args)
-> >>  	err = -EINVAL;
-> >>
-> >>  	spin_lock(&po->bind_lock);
-> >> -	if (packet_sock_flag(po, PACKET_SOCK_RUNNING) &&
-> >> -	    match->type == type &&
-> >> +	if (match->type == type &&
-> >>  	    match->prot_hook.type == po->prot_hook.type &&
-> >>  	    match->prot_hook.dev == po->prot_hook.dev) {
-> >
-> > Remaining unaddressed issue is that the socket can now be added
-> > before being bound. See comment in v1.
+Akihiko Odaki wrote:
+> They are useful to implement VIRTIO_NET_F_RSS and
+> VIRTIO_NET_F_HASH_REPORT.
 > 
-> I extended the psock_fanout test with unbound fanout test.
-> 
-> As far as I understand, the easiest way to verify bind is to test that
-> po->prot_hook.dev != NULL, since we are under a bind_lock anyway.
-> But perhaps a more readable and direct approach to test "bind" would be
-> to test po->ifindex != -1, as ifindex is commented as "bound device".
-> However, at the moment ifindex is not initialized to -1, I can add such
-> initialization, but perhaps I do not fully understand all the logic.
-> 
-> Any preferences?
+> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> ---
+>  include/linux/virtio_net.h | 188 +++++++++++++++++++++++++++++++++++++++++++++
 
-prot_hook.dev is not necessarily set if a packet socket is bound.
-It may be bound to any device. See dev_add_pack and ptype_head.
-
-prot_hook.type, on the other hand, must be set if bound and is only
-modified with the bind_lock held too.
-
-Well, and in packet_create. But setsockopt PACKET_FANOUT_ADD also
-succeeds in case bind() was not called explicitly first to bind to
-a specific device or change ptype.
+No need for these to be in header files
 
