@@ -1,153 +1,109 @@
-Return-Path: <linux-kselftest+bounces-19320-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19321-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C981996009
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 08:46:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 893D699603A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 09:00:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D96DEB243E1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 06:45:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 475A32837EE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 07:00:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38FDE175D4F;
-	Wed,  9 Oct 2024 06:45:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC0217A584;
+	Wed,  9 Oct 2024 06:59:59 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A066B160884;
-	Wed,  9 Oct 2024 06:45:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6FC122EEF;
+	Wed,  9 Oct 2024 06:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728456353; cv=none; b=u64AFqRwWf/DRhn0+/hX1Px7SSlyvGr6ZQwPFhTGdnuhKzBg3ilWXf1o+zxwyPRQusoYXez2QxF5aq2n05Cg+vdL86hO7RTiKenioneKuImcCifK5vUuYv4FrD9vAUeeH4XKS1aDEH/t60Hf3KbrUUXTmQ+5KK7+5cdtMLlohSk=
+	t=1728457199; cv=none; b=IgXfOG2V77l5Cgk9PFaNgmLU6w8PkTLlPkjz8pZI7U9PLb+WrBzVnncNWaPSR1Jw5jXAnrduKT1bd1rUNfWDa/Oz3mrNSyoP/qXUuDkREqYSI1BW6cKkdpSOt9FW6FcyD+6gz02gAuNjvJNmvDVeYomO+w9PIO94vBjKH47u7D4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728456353; c=relaxed/simple;
-	bh=y3R/OdfVQw//Toxh5Ba7jVhLdI/mruOtrfsaMXw1ZIw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q/lrhwiSTrTxngjgtTiGoPuCBRSvTG2BHBaLDG/E3ZApomt2w9Peww3QSPtNDLjaWJD/1gIucus6+f+w/YeokFBp46nLHVMkKI2WfQ2XysmIk0yjtKFggRs1qLTxLM1QUGcOhB/UW+ABEbkVODWXsau+CLF1OJYPkHgZGRnfN90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 1a110008860a11efa216b1d71e6e1362-20241009
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:2320cfc8-3a9d-4ff3-8c70-5c26baf5c2c7,IP:0,U
-	RL:0,TC:0,Content:2,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:2
-X-CID-META: VersionHash:82c5f88,CLOUDID:9a1f0c2a7dbc2fad7d675b4dfba75ee9,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:4|-5,EDM:-3,IP:nil,UR
-	L:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:
-	1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 1,FCT|NGT
-X-CID-BAS: 1,FCT|NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: 1a110008860a11efa216b1d71e6e1362-20241009
-Received: from node2.com.cn [(10.44.16.197)] by mailgw.kylinos.cn
-	(envelope-from <luyun@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 536540262; Wed, 09 Oct 2024 14:45:41 +0800
-Received: from node2.com.cn (localhost [127.0.0.1])
-	by node2.com.cn (NSMail) with SMTP id 824D3B8075B2;
-	Wed,  9 Oct 2024 14:45:41 +0800 (CST)
-X-ns-mid: postfix-67062695-44634086
-Received: from [10.42.20.151] (unknown [10.42.20.151])
-	by node2.com.cn (NSMail) with ESMTPA id E03AEB8075B2;
-	Wed,  9 Oct 2024 06:45:40 +0000 (UTC)
-Message-ID: <292ce016-51a9-4e0f-a7e2-f72d025bdb82@kylinos.cn>
-Date: Wed, 9 Oct 2024 14:45:27 +0800
+	s=arc-20240116; t=1728457199; c=relaxed/simple;
+	bh=7RypAYANtvjscXzssx+cDk3GNauz3Z3B3l7U+b6IANM=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UNfbMBZKDtUxjKOWpjBwLJT6DnV2oIIVJwNwEWvoQQNEDXmu/dGxM4YaRmrzEz13dMt110pL8ppV8M9TwCS3HA55RZDvh9Sz3Wkp8znBraT3nnt4WFAiegnjmMuGEa44WQ9HAPqFaNvUfHwLotm2UExGV+lwInULFPiLksF9Q84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XNkDR0Xmdz6GBSq;
+	Wed,  9 Oct 2024 14:55:35 +0800 (CST)
+Received: from frapeml500005.china.huawei.com (unknown [7.182.85.13])
+	by mail.maildlp.com (Postfix) with ESMTPS id EEDD7140447;
+	Wed,  9 Oct 2024 14:59:53 +0800 (CST)
+Received: from china (10.200.201.82) by frapeml500005.china.huawei.com
+ (7.182.85.13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 9 Oct
+ 2024 08:59:48 +0200
+From: Gur Stavi <gur.stavi@huawei.com>
+To: <willemdebruijn.kernel@gmail.com>
+CC: <davem@davemloft.net>, <edumazet@google.com>, <gur.stavi@huawei.com>,
+	<kuba@kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<pabeni@redhat.com>, <shuah@kernel.org>
+Subject: Re: [PATCH net-next v02 1/2] af_packet: allow fanout_add when socket is not RUNNING
+Date: Wed, 9 Oct 2024 09:58:37 +0300
+Message-ID: <20241009065837.354332-1-gur.stavi@huawei.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <67054127bb083_18b21e2943f@willemb.c.googlers.com.notmuch>
+References: <67054127bb083_18b21e2943f@willemb.c.googlers.com.notmuch>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftest: hid: add the missing tests directory
-To: Shuah Khan <skhan@linuxfoundation.org>, jikos@kernel.org,
- bentiss@kernel.org, shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241008093120.3081899-1-luyun@kylinos.cn>
- <e54c70db-a14d-43e6-b221-0c0712893ee7@linuxfoundation.org>
-Content-Language: en-US
-From: luyun <luyun@kylinos.cn>
-In-Reply-To: <e54c70db-a14d-43e6-b221-0c0712893ee7@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ frapeml500005.china.huawei.com (7.182.85.13)
 
-
-=E5=9C=A8 2024/10/9 03:33, Shuah Khan =E5=86=99=E9=81=93:
-> On 10/8/24 03:31, Yun Lu wrote:
->> Commit 160c826b4dd0 ("selftest: hid: add missing=20
->> run-hid-tools-tests.sh")
->> has added the run-hid-tools-tests.sh script for it to be installed, bu=
-t
->> I forgot to add the tests directory together.
+>> @@ -1846,21 +1846,21 @@ static int fanout_add(struct sock *sk, struct fanout_args *args)
+>>  	err = -EINVAL;
 >>
->> In fact, the run-hid-tools-tests.sh script uses the scripts in the tes=
-ts
->> directory to run tests. The tests directory also needs to be added to =
-be
->> installed
-> Include the error you are seeing in here.
+>>  	spin_lock(&po->bind_lock);
+>> -	if (packet_sock_flag(po, PACKET_SOCK_RUNNING) &&
+>> -	    match->type == type &&
+>> +	if (match->type == type &&
+>>  	    match->prot_hook.type == po->prot_hook.type &&
+>>  	    match->prot_hook.dev == po->prot_hook.dev) {
+>
+> Remaining unaddressed issue is that the socket can now be added
+> before being bound. See comment in v1.
 
-If running the test case without the tests directory,=C2=A0 the error mes=
-sage=20
-will like this:
+I extended the psock_fanout test with unbound fanout test.
 
- =C2=A0=C2=A0=C2=A0 cd $KSFT_INSTALL_PATH
+As far as I understand, the easiest way to verify bind is to test that
+po->prot_hook.dev != NULL, since we are under a bind_lock anyway.
+But perhaps a more readable and direct approach to test "bind" would be
+to test po->ifindex != -1, as ifindex is commented as "bound device".
+However, at the moment ifindex is not initialized to -1, I can add such
+initialization, but perhaps I do not fully understand all the logic.
 
- =C2=A0=C2=A0=C2=A0 ./run_kselftest.sh -t hid:hid-core.sh
-
-
-# /usr/lib/python3.11/site-packages/_pytest/config/__init__.py:331:=20
-PluggyTeardownRaisedWarning: A plugin raised an exception during an=20
-old-style hookwrapper teardown.
-# Plugin: helpconfig, Hook: pytest_cmdline_parse
-# UsageError: usage: __main__.py [options] [file_or_dir] [file_or_dir] [.=
-..]
-# __main__.py: error: unrecognized arguments: --udevd
-#=C2=A0=C2=A0 inifile: None
-#=C2=A0=C2=A0 rootdir: /root/linux/kselftest_install/hid
-
+Any preferences?
 
 >
+>>  		err = -ENOSPC;
+>>  		if (refcount_read(&match->sk_ref) < match->max_num_members) {
+>> -			__dev_remove_pack(&po->prot_hook);
+>> -
+>>  			/* Paired with packet_setsockopt(PACKET_FANOUT_DATA) */
+>>  			WRITE_ONCE(po->fanout, match);
 >>
->> Fixes: ffb85d5c9e80 ("selftests: hid: import hid-tools hid-core tests"=
-)
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Yun Lu <luyun@kylinos.cn>
->> ---
->> =C2=A0 tools/testing/selftests/hid/Makefile | 1 +
->> =C2=A0 1 file changed, 1 insertion(+)
->>
->> diff --git a/tools/testing/selftests/hid/Makefile=20
->> b/tools/testing/selftests/hid/Makefile
->> index 38ae31bb07b5..662209f5fabc 100644
->> --- a/tools/testing/selftests/hid/Makefile
->> +++ b/tools/testing/selftests/hid/Makefile
->> @@ -18,6 +18,7 @@ TEST_PROGS +=3D hid-usb_crash.sh
->> =C2=A0 TEST_PROGS +=3D hid-wacom.sh
->> =C2=A0 =C2=A0 TEST_FILES :=3D run-hid-tools-tests.sh
->> +TEST_FILES +=3D tests
->
-> What about the files if any under the tests directory?
-> The install rule would handle the case, however, did
-> you verify that those are copied as well?
-
-Yes, the install rule will copy the entire directory (including all=20
-files under the directory),
-
-and I have confirmed it.
-
-
-Thanks and best regards.
-
---Yun Lu
-
->
->> =C2=A0 =C2=A0 CXX ?=3D $(CROSS_COMPILE)g++
->
-> thanks,
-> -- Shuah
->
+>>  			po->rollover = rollover;
+>>  			rollover = NULL;
+>>  			refcount_set(&match->sk_ref, refcount_read(&match->sk_ref) + 1);
+>> -			__fanout_link(sk, po);
+>> +			if (packet_sock_flag(po, PACKET_SOCK_RUNNING)) {
+>> +				__dev_remove_pack(&po->prot_hook);
+>> +				__fanout_link(sk, po);
+>> +			}
+>>  			err = 0;
+>>  		}
+>>  	}
+> --
 
