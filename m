@@ -1,80 +1,80 @@
-Return-Path: <linux-kselftest+bounces-19346-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19348-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27B5F9969AB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 14:10:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3564A9969AE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 14:11:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA8F0281AC5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 12:10:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 594D61C23D22
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 12:11:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93DC4192D97;
-	Wed,  9 Oct 2024 12:10:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0C02193432;
+	Wed,  9 Oct 2024 12:10:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="flTHLlHb"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="cQqwm/g+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2063.outbound.protection.outlook.com [40.107.236.63])
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2074.outbound.protection.outlook.com [40.107.96.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9393A190072;
-	Wed,  9 Oct 2024 12:10:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.63
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83CB19006F;
+	Wed,  9 Oct 2024 12:10:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.96.74
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728475832; cv=fail; b=X0VUmVU/JqIK1+XF78sqgZvduxowvAyVsHMowkpe91kS6kYhu1jCL4T5/n1E7OyPL2GY0GqvuWuniSsKx4Y/P4xYJNP2R1KsNlGpsvPQo0c7zEzugBC9TcZWqXCr/+qtJ+25cBi6sRB+O72SH/KqTzcicLgJYyMGEeRoxk/pQXQ=
+	t=1728475844; cv=fail; b=kTF/Ry9FsiAkZm2Kh5k2XpQr5in87R3ULZXrDxR1r2wCi47Kc9PM+Sm0C+z2Tow+6pL8rIMDJjaC6FTXlsgF0chkvu8WRab5Sg44XcFt4G7FrjLwl7OQYQpuFFtQiRMwqnGYP9g82vKrL6tvtf9xYw4BK6aBdylTk9y50VNDl00=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728475832; c=relaxed/simple;
-	bh=rpy+x0vc78lZ4LbaVLMTj0KPKBxawl7m5ERl5vdien8=;
+	s=arc-20240116; t=1728475844; c=relaxed/simple;
+	bh=9PGRiBQm/ApCeGx5PATZWY6/Ljsu3RCC40RCRLULLhQ=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZBR+L3R/1Dk3zfgIkpN/A0pEruape+uOAreGP5qFr78EoJrma9hKSOGP+fdcy9Cn6d3aiLMGMa2AMzk5sFL6u/TLlwOcZzLyJ2/pR49kpHygp2yoCO7d1BhVhBibIgTzrrfRyzNmvMfuBM6nd/QtDGU5HbiInKSAKI0/RDN5AAU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=flTHLlHb; arc=fail smtp.client-ip=40.107.236.63
+	 MIME-Version:Content-Type; b=iFNWCYrH9XBDSRifu3d2910+avxmBRBCzZf8pTmud4vK2WL8DCwnA9GAwOIUcVzEvX6KntLIle/tYriMXmAmBufdQMmhX/XArGFUjcTTjf9vVKk+nO5LtjgtIeUGlUi29kGGw2nPJe4LIE7d6DuyX6WNZTK4R6pzdMGnK4KoNk8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=cQqwm/g+; arc=fail smtp.client-ip=40.107.96.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=asVgra5A2OJW2k5FW4dcxTREy+HzfNXs5SgnlJhOFnJdm1zQ0jJXhg5cJZUiV2+DMpSusjRwj9Mk4qDKKGAopfpdHT/RNHhtlNbe+ITU0XgYF0CSoJmGT1sN8aPAaMvqv6mpyy5dYrZvPWHrMBj32qzpJD56Mn6w+6iK9sUkV/4dJpMF/vGQHXxOVDWQFbD5s5lVSLdUxQ09wSlnz1UKH9kFPCNIlNgw/TFHMxsLhRvzGefiqCauAX//inKjcVXxu4MgGtQkU2bBjj+o7N7N/HqDFiqui4x4V7X5gKLEMeQZLzRm2e/rfyoxCpCsyIdbor3h4iSl2SwVJYK5HtiULw==
+ b=r2uX2f4WcCcKWvqYguwTaMdm2rH94ie4rE/E/wsCIFx6CrzPsWl9GolvugoL6lcajdV75yUAWvq5/CNymVHjyJaih6NCXhUpKI5h6G4gBknQzwNNw63p4LcB+oj5OaUzsmHZYRxz6T3GdIUWmW5CZOSsPWQgngAVELk+aCo1KGXzUeqwvW/q3spXNFQttqQSI/7aFqA/mwbpXtT4h9aOm0mu2nozGqR52Aaoqu3ksGXb4Zwfq7DrwEq7o7+eSdx0EFVs2ZIkhgwl5hMzknvlvtxglzw3wc8H3DSF6R/iF0kIKQchhuTbovqv2v10IXVxU0eDyEc/mDUzzn3XzqtbvA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A0UuiXORT+ug6c0oBl32NLkP0UqjlEWaC7OnNoaxuUE=;
- b=F/2s+yivFLmRHKWb7EBIzsdBskNRtpigEDewaZJyExH+lLwkjUzkPF3kc2xf4ZVAF7ciHASSpflX7s+E3V/RHrMGMWKoFfjHxmYcEFoJHdOCurLcYenJHgSUswDXrOVXtrI/soIAhrW24uZ2LFLH3F+afcASWVBmxpgnCOvntexPGKwVaCV0i7l9yyJvBzBWKFA9s3iQGU5cOINSPcpqZjH1GsMdJIBt1g5PZU3dXq1y/2ldgYEnakMCiw9+4ohtZYqr/9QjcFtftUyb+SUIK1WdokBtQcvHPYW7RoM6EteC21NbtMCmuilv4xthnlxSlVu189XlPYBEV+HjlhF4/A==
+ bh=q/1i1D71+QW3wXnzlxEgi0qBWvlZaqrZR/7tsBQ6nkQ=;
+ b=y/fEFMSwunj40QIESce9OPQ+riMOtbMNKYNhqLPq1n4/tNw5WbwnkWs74Nl2LVcBjEvwnF/pTUDgTbOZSB7uexFiOITfNraah6XLvaFOv3TzmOufhTMKSGplGxscmXQ3T9t92at7AxGKQ3DPEIaOXiRYEskLx/cJ+njeolzzScyhN04QFYhpmPKUD8j6M4AFh7BzQKyurC8ZWovOw64K/TYufyv6sYtgStxJjYHXj7MeXqMxOB1K29A8qHqxOb2jkcZrHhvYZir57aPYK4Ecge/KP30dekJ965Fl5i1Q9RzWXvZI4/XiPF3X1HTW5cuILy3L6QijzUwJScE6VRqIqA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A0UuiXORT+ug6c0oBl32NLkP0UqjlEWaC7OnNoaxuUE=;
- b=flTHLlHb0tj5WFtv6flS9eGGNPLfVE8I9X9rHtaEcAe91GV17PGBrh5rj/V6uk1DAlAxkQGPZWAK2BJDWyh4WI11ZjnnMT6sVL8gGSNSYpQqMRWD+bAYEzSqB3Cbz7COrbqdzbm6YPkleBHXY3Kf98cpQaqfFQWNWu/ZRVzmFaI5m2epYBpKd28L4IhrnAGdDIEU3N+A6RHnRctaK9s4+1Cp/yp4E31Mz2GdfZir4I57D4xZ303SSFrEEhaqETodW78fZk8X3lVk9aTk3msiU+61XiP0j/rhIK4P8Lkj1D1Ch2ueWLZ0c7cL4mBhCTiEk1U2ydvplUkoQl/d/dTmbw==
-Received: from CH0PR03CA0444.namprd03.prod.outlook.com (2603:10b6:610:10e::12)
- by PH7PR12MB8108.namprd12.prod.outlook.com (2603:10b6:510:2bc::14) with
+ bh=q/1i1D71+QW3wXnzlxEgi0qBWvlZaqrZR/7tsBQ6nkQ=;
+ b=cQqwm/g+KXlpCaGxDkhI6kByQcd6JSi+qqSgxTytCbisURIukJGEBLLe/8X0WSzlA7sGOe/CPpAJ4Q+Fn9Re3A4nAP8TVx1MIQ7J2c7tdRGoPBlh1awCazrB6/8zkNhfLTA01whZB1hy4hkLD0ZCbYKua3V8CJ6XUPmuKZcAxY71TsrXco3jhgA8TIP7+xZgtJx7zsZ3dsah+/z0TxuI9SMqhRM3wOYFnRPWXPBOrPQKwstqs19LZtNU35cdi5almib/06rTcHzVqEUW8qNo0br0AO3dkx2xM6SX28VWtpX/2wOGwlUGWvJi8Yr6AVwcsw6CFTkM/qsFkJTZSg18EA==
+Received: from DM6PR02CA0060.namprd02.prod.outlook.com (2603:10b6:5:177::37)
+ by CY8PR12MB7633.namprd12.prod.outlook.com (2603:10b6:930:9c::19) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.18; Wed, 9 Oct
- 2024 12:10:26 +0000
-Received: from DS2PEPF00003448.namprd04.prod.outlook.com
- (2603:10b6:610:10e:cafe::9f) by CH0PR03CA0444.outlook.office365.com
- (2603:10b6:610:10e::12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.16; Wed, 9 Oct
+ 2024 12:10:36 +0000
+Received: from DS2PEPF00003445.namprd04.prod.outlook.com
+ (2603:10b6:5:177:cafe::60) by DM6PR02CA0060.outlook.office365.com
+ (2603:10b6:5:177::37) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.17 via Frontend
- Transport; Wed, 9 Oct 2024 12:10:25 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ Transport; Wed, 9 Oct 2024 12:10:36 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DS2PEPF00003448.mail.protection.outlook.com (10.167.17.75) with Microsoft
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DS2PEPF00003445.mail.protection.outlook.com (10.167.17.72) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8048.13 via Frontend Transport; Wed, 9 Oct 2024 12:10:25 +0000
+ 15.20.8048.13 via Frontend Transport; Wed, 9 Oct 2024 12:10:36 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 9 Oct 2024
- 05:10:11 -0700
+ 05:10:19 -0700
 Received: from localhost.localdomain (10.126.230.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.4; Wed, 9 Oct 2024
- 05:10:04 -0700
+ 05:10:11 -0700
 From: Petr Machata <petrm@nvidia.com>
 To: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
 	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
@@ -84,9 +84,9 @@ CC: <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
 	"Vladimir Oltean" <vladimir.oltean@nxp.com>, Ido Schimmel
 	<idosch@nvidia.com>, "Przemek Kitszel" <przemyslaw.kitszel@intel.com>, Petr
  Machata <petrm@nvidia.com>, <mlxsw@nvidia.com>
-Subject: [PATCH net-next 08/10] selftests: mlxsw: qos_ets_strict: Use defer for test cleanup
-Date: Wed, 9 Oct 2024 14:06:26 +0200
-Message-ID: <2c6f94b03d019ee4244459bb0829fcd70134c91c.1728473602.git.petrm@nvidia.com>
+Subject: [PATCH net-next 09/10] selftests: mlxsw: qos_max_descriptors: Use defer for test cleanup
+Date: Wed, 9 Oct 2024 14:06:27 +0200
+Message-ID: <1871e147c5f3ea3af68bd5fbc7285895d123d869.1728473602.git.petrm@nvidia.com>
 X-Mailer: git-send-email 2.46.1
 In-Reply-To: <cover.1728473602.git.petrm@nvidia.com>
 References: <cover.1728473602.git.petrm@nvidia.com>
@@ -102,71 +102,68 @@ X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS2PEPF00003448:EE_|PH7PR12MB8108:EE_
-X-MS-Office365-Filtering-Correlation-Id: f25e14c8-cb95-401a-aaa2-08dce85b5bc6
+X-MS-TrafficTypeDiagnostic: DS2PEPF00003445:EE_|CY8PR12MB7633:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8a41d884-3257-4ed7-8177-08dce85b620c
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|36860700013|376014|82310400026;
+	BCL:0;ARA:13230040|36860700013|376014|7416014|82310400026|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?6R6fiCP5jcHnwBNTsbf3P6azc3TlYuFC8UpFgoXr/C4lSfRFsqK/2ZQS7aqt?=
- =?us-ascii?Q?ZVvBgAknxOsNHBfrsslJ6udoD+hxyBNFEfadPcnqRK1f9zrlOoM3iAWK7XcJ?=
- =?us-ascii?Q?3ojkpsCMEK0b0ZBGWrutxc3dYOPNtslo/oXM19gPnSNJ3tjn04OEtnLsmP4M?=
- =?us-ascii?Q?BaNBfsWmyfcyWr+9lj5BK7gpN6MD5cKahCvMdzlLGJaJIm+vmWV1P62l14X3?=
- =?us-ascii?Q?5Vhil397jLs8jVZCpEEt4RXbNg5gX9dwNMFAce6VE1xe20ljqS9eFny0j70O?=
- =?us-ascii?Q?1mn7Ocm+dYip6iABJ3mB9hhoowhqzjnT2m3eF9an2Sf4P3bfgopCeaznRBx3?=
- =?us-ascii?Q?VfccfqUcDMgfLDV4cnLvfSCzFOudAxOUvoYgYnZZnuTlUZ8kZdL5uRnMc6vo?=
- =?us-ascii?Q?UfgImJa175hlbK0HEyNxiV9Q9eZrBnzbEiHY9gZtsuQdAbqXrkhrmUqx4sO9?=
- =?us-ascii?Q?vDcnD6fkUVG3Q0lQW3nrDNgywfYpCYdnTZGejcfnhhgPUa9A/BoAYr1ZTYuZ?=
- =?us-ascii?Q?u534rY8Tm8eFuBvJkc7N0uhSlZRBnKSScgUXKVYdtlHUP1w6eU83o1S9Es7J?=
- =?us-ascii?Q?whogZoogh4EVG/5xAQoWS+ug8ztQa072fH7OYRwmQ55s32a16CEAwRA/8L9i?=
- =?us-ascii?Q?2yTMRverSkYdfpQElLDG7YFJ4gypqfWn/RvqqtQErva8ujP2pI7Dd8RCm9I/?=
- =?us-ascii?Q?GBMiR1wG3GUgLadktSFYL05c5hjWkKsbJSXt3kIyhpiMmt/In/cCblwkY/Sf?=
- =?us-ascii?Q?+y0I4iMLx1S6fcqS9LKOpkvUMd4f3/wkw6Cin0bBQjTFQow7Jc/6V01eZEPt?=
- =?us-ascii?Q?8ssW7fk3QZ0804+LkVVOmxXyRODao3PtINPXStRz5LaIeg4ssbHnAZR9INTe?=
- =?us-ascii?Q?MFG1gIJoGWkot8cYvmuOQHPG10H4MGHriI1EANV+fuAVRVI6jn1gUDO0T3OC?=
- =?us-ascii?Q?cwvTY3wl+09HWZpUfTZm9Iep6RsiJ4l6zZNlZvdpAXlZBtWLE5lHyWW80A2E?=
- =?us-ascii?Q?gLtpbZuHLzJRvJjFRTUjZkvmvNVo7g3MM48eGvj/85BVc49kmEmGcR9Z7ZBN?=
- =?us-ascii?Q?/aeAdRC56RqrV2td9ndYAPm2x7rUYjJ47JmqNrzGLdY8eEVf9108t95Fk0/C?=
- =?us-ascii?Q?Ykb9teKJqoA236SOVmh87rCd5Wm8MUhy4Cdx1XD9Lu2skdks1WS23TNtmaym?=
- =?us-ascii?Q?PWa5z2vyelCI5FhKYyYFrqhExzS8FYvzvNSWToEF4124Z2IINB/jhwC32on2?=
- =?us-ascii?Q?HXHSDXnMl7i8MFLz95CKAQLdLMgma560Qmqh0MT/+ydHpNGZzTgqKVDLg5b9?=
- =?us-ascii?Q?yJLX54A2uLoY2yLW5PFE2DZ9EVP4K6i86oDtKtkuye/yW0vwrk21KpFWqao6?=
- =?us-ascii?Q?ck6KxGw=3D?=
+	=?us-ascii?Q?3h0S6WqCRHXpUNIODYRCY2FfeXIN5V9FJP7Z35CxfXsBcG+JlYHV3hpOosIl?=
+ =?us-ascii?Q?T91D1Bkqmwi6LffqWWyWYQqIfXnvRCFQB/xCgqCGNqYkil/QO7T9VIIrVpBE?=
+ =?us-ascii?Q?fZmezmbjNTDytH3RMh27ym2oy1lbjGEipoXL0Lwe78z/zepbq9pJqgsRRMSU?=
+ =?us-ascii?Q?SHyobXmOXdMLhDsapTsmp7DzQgAPUoItUXrB273TH/2lx1Auon4q2PLKhryy?=
+ =?us-ascii?Q?v02GqLx+Xd/FsLPZz9J3zxyV0hx3A+ugiPfKtDH76MiemYusKy6huYo9HT0S?=
+ =?us-ascii?Q?y1KeXktr+i/iKknFIh88Jl3dLHEVKsojXFLwbXuLvcyEancDopEk74e6ZNhG?=
+ =?us-ascii?Q?bzBSD8QSEZkDldM+4lNCaRYRI/V5ggnFbYlyytP2aWfelyn2t0Rcb7VqUIJT?=
+ =?us-ascii?Q?SMBHL81GmviGtnWtP1iHvdAM9ZY4pvDm6lIfLT7Ojj8aCd5ZPh0K8OQOZvV6?=
+ =?us-ascii?Q?pO6l7MhPhN0z86TP/OGYq0bMEGvq1Wc4I2cnFTQxN3djYEbQH54F2a3qnRHl?=
+ =?us-ascii?Q?G2xze9hYt570842smvPwQyfCMN6N1lEWy6V49hGeAWwbMWJMnnzDIRCfg/9a?=
+ =?us-ascii?Q?gJOkxHpi079A282bQbRmd2pfWtYQro7M3IEYTrGEYSleo3mcznDxp/xmoVbc?=
+ =?us-ascii?Q?osx/Z8JIOfydZ1k2zOXW625eBXCw+hZZB+nga3YDAIZGcDauEAZWS9w6PRTp?=
+ =?us-ascii?Q?CEcELOoIDAxbshI/nuRhu+knPR+bksfgnJD5XG3unyu+dbU9gq4h/kobebwi?=
+ =?us-ascii?Q?XQdgnSEws3uGovIE7zRDcL0/HujKGUrWfKrbsVlnr6AFV5cUpPcmedb0PcI7?=
+ =?us-ascii?Q?ePfjMekS4rh+quQRTi8CJyuVIbTFbGJM34enP9ckacnF/yL+a0Bs0irThuAA?=
+ =?us-ascii?Q?Vx7KtIqqr895G00fKf/LVGg3VNMu4xdjx0t908rXWhPy9HLL8g9Rt1U8wuG9?=
+ =?us-ascii?Q?6IL67PwmfcDeH+BERL34A3mLogk15O8vIGMejmooQeurXLNgMAuRjUIkeQr5?=
+ =?us-ascii?Q?iWwao4pnqlbzDvqRbR1iZ5jhTvBTwcY39wIM1ZjZgkKBvRQdxORQUcR8KF6a?=
+ =?us-ascii?Q?GetOLpIgyP+pr5QUKYNe+HC4MUvwYgCTQUGpNvXTeOmCq/vCOX/byQzO2lk1?=
+ =?us-ascii?Q?byh6dgj3oaeEcL8ZN3gPVkZ513SHLIiN8oogNV4GBcUq9FeTKy080kpy0sdU?=
+ =?us-ascii?Q?UtOr6yFQYlNv2pbvoladQARsoe60l4VXGG0SZW94ZsSQOy1BVvhEtaTXLS1j?=
+ =?us-ascii?Q?yObS/Iwo448TKUqVspmWoYkPYMhGamIAKT0A3V1LJPRosO6SZqd2lS94uPee?=
+ =?us-ascii?Q?Ck65E409a1LZYHJD8Qq0wpfLXMxomJvn/qG/LBOToGIExZeN6KNjFJB5bNRS?=
+ =?us-ascii?Q?E4PWr1E=3D?=
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(36860700013)(376014)(82310400026);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700013)(376014)(7416014)(82310400026)(1800799024);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2024 12:10:25.7775
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Oct 2024 12:10:36.2860
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f25e14c8-cb95-401a-aaa2-08dce85b5bc6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8a41d884-3257-4ed7-8177-08dce85b620c
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	DS2PEPF00003448.namprd04.prod.outlook.com
+	DS2PEPF00003445.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8108
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7633
 
 Use the defer framework to schedule cleanups as soon as the command is
 executed.
 
 Signed-off-by: Petr Machata <petrm@nvidia.com>
 ---
- .../drivers/net/mlxsw/qos_ets_strict.sh       | 167 +++++++++---------
- 1 file changed, 85 insertions(+), 82 deletions(-)
+ .../drivers/net/mlxsw/qos_max_descriptors.sh  | 118 ++++++------------
+ 1 file changed, 41 insertions(+), 77 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/mlxsw/qos_ets_strict.sh b/tools/testing/selftests/drivers/net/mlxsw/qos_ets_strict.sh
-index fee74f215cec..d5b6f2cc9a29 100755
---- a/tools/testing/selftests/drivers/net/mlxsw/qos_ets_strict.sh
-+++ b/tools/testing/selftests/drivers/net/mlxsw/qos_ets_strict.sh
-@@ -58,65 +58,62 @@ source qos_lib.sh
+diff --git a/tools/testing/selftests/drivers/net/mlxsw/qos_max_descriptors.sh b/tools/testing/selftests/drivers/net/mlxsw/qos_max_descriptors.sh
+index 5ac4f795e333..2b5d2c2751d5 100755
+--- a/tools/testing/selftests/drivers/net/mlxsw/qos_max_descriptors.sh
++++ b/tools/testing/selftests/drivers/net/mlxsw/qos_max_descriptors.sh
+@@ -69,127 +69,103 @@ mlxsw_only_on_spectrum 2+ || exit
  h1_create()
  {
  	simple_if_init $h1
 +	defer simple_if_fini $h1
-+
- 	mtu_set $h1 10000
-+	defer mtu_restore $h1
  
  	vlan_create $h1 111 v$h1 192.0.2.33/28
 +	defer vlan_destroy $h1 111
@@ -177,7 +174,6 @@ index fee74f215cec..d5b6f2cc9a29 100755
 -{
 -	vlan_destroy $h1 111
 -
--	mtu_restore $h1
 -	simple_if_fini $h1
 -}
 -
@@ -185,203 +181,159 @@ index fee74f215cec..d5b6f2cc9a29 100755
  {
  	simple_if_init $h2
 +	defer simple_if_fini $h2
-+
- 	mtu_set $h2 10000
-+	defer mtu_restore $h2
  
- 	vlan_create $h2 222 v$h2 192.0.2.65/28
-+	defer vlan_destroy $h2 222
- 	ip link set dev $h2.222 type vlan egress-qos-map 0:2
- }
- 
+ 	vlan_create $h2 111 v$h2 192.0.2.34/28
+-}
+-
 -h2_destroy()
 -{
--	vlan_destroy $h2 222
+-	vlan_destroy $h2 111
 -
--	mtu_restore $h2
 -	simple_if_fini $h2
--}
--
- h3_create()
- {
- 	simple_if_init $h3
-+	defer simple_if_fini $h3
-+
- 	mtu_set $h3 10000
-+	defer mtu_restore $h3
- 
- 	vlan_create $h3 111 v$h3 192.0.2.34/28
-+	defer vlan_destroy $h3 111
-+
- 	vlan_create $h3 222 v$h3 192.0.2.66/28
--}
--
--h3_destroy()
--{
--	vlan_destroy $h3 222
--	vlan_destroy $h3 111
--
--	mtu_restore $h3
--	simple_if_fini $h3
-+	defer vlan_destroy $h3 222
++	defer vlan_destroy $h2 111
  }
  
  switch_create()
  {
+ 	# pools
+ 	# -----
++	# devlink_pool_size_thtype_restore needs to be done first so that we can
++	# reset the various limits to values that are only valid for the
++	# original static / dynamic setting.
+ 
+ 	devlink_pool_size_thtype_save 1
+-	devlink_pool_size_thtype_save 6
+-
+-	devlink_port_pool_th_save $swp1 1
+-	devlink_port_pool_th_save $swp2 6
+-
+-	devlink_tc_bind_pool_th_save $swp1 1 ingress
+-	devlink_tc_bind_pool_th_save $swp2 1 egress
+-
+ 	devlink_pool_size_thtype_set 1 dynamic $MAX_POOL_SIZE
++	defer_prio devlink_pool_size_thtype_restore 1
++
++	devlink_pool_size_thtype_save 6
+ 	devlink_pool_size_thtype_set 6 static $MAX_POOL_SIZE
++	defer_prio devlink_pool_size_thtype_restore 6
+ 
+ 	# $swp1
+ 	# -----
+ 
  	ip link set dev $swp1 up
 +	defer ip link set dev $swp1 down
 +
- 	mtu_set $swp1 10000
-+	defer mtu_restore $swp1
+ 	vlan_create $swp1 111
++	defer vlan_destroy $swp1 111
+ 	ip link set dev $swp1.111 type vlan ingress-qos-map 0:0 1:1
+ 
++	devlink_port_pool_th_save $swp1 1
+ 	devlink_port_pool_th_set $swp1 1 16
++	defer devlink_tc_bind_pool_th_restore $swp1 1 ingress
++
++	devlink_tc_bind_pool_th_save $swp1 1 ingress
+ 	devlink_tc_bind_pool_th_set $swp1 1 ingress 1 16
++	defer devlink_port_pool_th_restore $swp1 1
+ 
+ 	tc qdisc replace dev $swp1 root handle 1: \
+ 	   ets bands 8 strict 8 priomap 7 6
++	defer tc qdisc del dev $swp1 root
++
+ 	dcb buffer set dev $swp1 prio-buffer all:0 1:1
++	defer dcb buffer set dev $swp1 prio-buffer all:0
+ 
+ 	# $swp2
+ 	# -----
  
  	ip link set dev $swp2 up
 +	defer ip link set dev $swp2 down
 +
- 	mtu_set $swp2 10000
-+	defer mtu_restore $swp2
+ 	vlan_create $swp2 111
++	defer vlan_destroy $swp2 111
+ 	ip link set dev $swp2.111 type vlan egress-qos-map 0:0 1:1
  
- 	# prio n -> TC n, strict scheduling
- 	lldptool -T -i $swp3 -V ETS-CFG up2tc=0:0,1:1,2:2,3:3,4:4,5:5,6:6,7:7
-+	defer lldptool -T -i $swp3 -V ETS-CFG up2tc=0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0
++	devlink_port_pool_th_save $swp2 6
+ 	devlink_port_pool_th_set $swp2 6 $MAX_POOL_SIZE
++	defer devlink_tc_bind_pool_th_restore $swp2 1 egress
 +
- 	lldptool -T -i $swp3 -V ETS-CFG tsa=$(
- 			)"0:strict,"$(
- 			)"1:strict,"$(
-@@ -129,85 +126,90 @@ switch_create()
- 	sleep 1
++	devlink_tc_bind_pool_th_save $swp2 1 egress
+ 	devlink_tc_bind_pool_th_set $swp2 1 egress 6 $MAX_POOL_SIZE
++	defer devlink_port_pool_th_restore $swp2 6
  
- 	ip link set dev $swp3 up
-+	defer ip link set dev $swp3 down
+ 	tc qdisc replace dev $swp2 root handle 1: tbf rate $SHAPER_RATE \
+ 		burst 128K limit 500M
++	defer tc qdisc del dev $swp2 root
 +
- 	mtu_set $swp3 10000
-+	defer mtu_restore $swp3
-+
- 	tc qdisc replace dev $swp3 root handle 101: tbf rate 1gbit \
- 		burst 128K limit 1G
-+	defer tc qdisc del dev $swp3 root handle 101:
+ 	tc qdisc replace dev $swp2 parent 1:1 handle 11: \
+ 		ets bands 8 strict 8 priomap 7 6
++	defer tc qdisc del dev $swp2 parent 1:1 handle 11:
  
- 	vlan_create $swp1 111
-+	defer vlan_destroy $swp1 111
-+
- 	vlan_create $swp2 222
-+	defer vlan_destroy $swp2 222
-+
- 	vlan_create $swp3 111
-+	defer vlan_destroy $swp3 111
-+
- 	vlan_create $swp3 222
-+	defer vlan_destroy $swp3 222
+ 	# bridge
+ 	# ------
  
- 	ip link add name br111 type bridge vlan_filtering 0
-+	defer ip link del dev br111
- 	ip link set dev br111 addrgenmode none
+ 	ip link add name br1 type bridge vlan_filtering 0
++	defer ip link del dev br1
 +
- 	ip link set dev br111 up
-+	defer ip link set dev br111 down
-+
- 	ip link set dev $swp1.111 master br111
+ 	ip link set dev $swp1.111 master br1
 +	defer ip link set dev $swp1.111 nomaster
 +
- 	ip link set dev $swp3.111 master br111
-+	defer ip link set dev $swp3.111 nomaster
+ 	ip link set dev br1 up
++	defer ip link set dev br1 down
  
- 	ip link add name br222 type bridge vlan_filtering 0
-+	defer ip link del dev br222
- 	ip link set dev br222 addrgenmode none
-+
- 	ip link set dev br222 up
-+	defer ip link set dev br222 down
-+
- 	ip link set dev $swp2.222 master br222
-+	defer ip link set dev $swp2.222 nomaster
-+
- 	ip link set dev $swp3.222 master br222
-+	defer ip link set dev $swp3.222 nomaster
- 
- 	# Make sure that ingress quotas are smaller than egress so that there is
- 	# room for both streams of traffic to be admitted to shared buffer.
- 	devlink_pool_size_thtype_save 0
- 	devlink_pool_size_thtype_set 0 dynamic 10000000
-+	defer devlink_pool_size_thtype_restore 0
-+
- 	devlink_pool_size_thtype_save 4
- 	devlink_pool_size_thtype_set 4 dynamic 10000000
-+	defer devlink_pool_size_thtype_restore 4
- 
- 	devlink_port_pool_th_save $swp1 0
- 	devlink_port_pool_th_set $swp1 0 6
-+	defer devlink_port_pool_th_restore $swp1 0
-+
- 	devlink_tc_bind_pool_th_save $swp1 1 ingress
- 	devlink_tc_bind_pool_th_set $swp1 1 ingress 0 6
-+	defer devlink_tc_bind_pool_th_restore $swp1 1 ingress
- 
- 	devlink_port_pool_th_save $swp2 0
- 	devlink_port_pool_th_set $swp2 0 6
-+	defer devlink_port_pool_th_restore $swp2 0
-+
- 	devlink_tc_bind_pool_th_save $swp2 2 ingress
- 	devlink_tc_bind_pool_th_set $swp2 2 ingress 0 6
-+	defer devlink_tc_bind_pool_th_restore $swp2 2 ingress
- 
- 	devlink_tc_bind_pool_th_save $swp3 1 egress
- 	devlink_tc_bind_pool_th_set $swp3 1 egress 4 7
-+	defer devlink_tc_bind_pool_th_restore $swp3 1 egress
-+
- 	devlink_tc_bind_pool_th_save $swp3 2 egress
- 	devlink_tc_bind_pool_th_set $swp3 2 egress 4 7
-+	defer devlink_tc_bind_pool_th_restore $swp3 2 egress
-+
- 	devlink_port_pool_th_save $swp3 4
- 	devlink_port_pool_th_set $swp3 4 7
+ 	ip link set dev $swp2.111 master br1
 -}
 -
 -switch_destroy()
 -{
--	devlink_port_pool_th_restore $swp3 4
--	devlink_tc_bind_pool_th_restore $swp3 2 egress
--	devlink_tc_bind_pool_th_restore $swp3 1 egress
+-	# Do this first so that we can reset the limits to values that are only
+-	# valid for the original static / dynamic setting.
+-	devlink_pool_size_thtype_restore 6
+-	devlink_pool_size_thtype_restore 1
 -
--	devlink_tc_bind_pool_th_restore $swp2 2 ingress
--	devlink_port_pool_th_restore $swp2 0
+-	# bridge
+-	# ------
 -
--	devlink_tc_bind_pool_th_restore $swp1 1 ingress
--	devlink_port_pool_th_restore $swp1 0
+-	ip link set dev $swp2.111 nomaster
 -
--	devlink_pool_size_thtype_restore 4
--	devlink_pool_size_thtype_restore 0
+-	ip link set dev br1 down
+-	ip link set dev $swp1.111 nomaster
+-	ip link del dev br1
 -
--	ip link del dev br222
--	ip link del dev br111
+-	# $swp2
+-	# -----
 -
--	vlan_destroy $swp3 222
--	vlan_destroy $swp3 111
--	vlan_destroy $swp2 222
--	vlan_destroy $swp1 111
+-	tc qdisc del dev $swp2 parent 1:1 handle 11:
+-	tc qdisc del dev $swp2 root
 -
--	tc qdisc del dev $swp3 root handle 101:
--	mtu_restore $swp3
--	ip link set dev $swp3 down
--	lldptool -T -i $swp3 -V ETS-CFG up2tc=0:0,1:0,2:0,3:0,4:0,5:0,6:0,7:0
+-	devlink_tc_bind_pool_th_restore $swp2 1 egress
+-	devlink_port_pool_th_restore $swp2 6
 -
--	mtu_restore $swp2
+-	vlan_destroy $swp2 111
 -	ip link set dev $swp2 down
 -
--	mtu_restore $swp1
+-	# $swp1
+-	# -----
+-
+-	dcb buffer set dev $swp1 prio-buffer all:0
+-	tc qdisc del dev $swp1 root
+-
+-	devlink_tc_bind_pool_th_restore $swp1 1 ingress
+-	devlink_port_pool_th_restore $swp1 1
+-
+-	vlan_destroy $swp1 111
 -	ip link set dev $swp1 down
-+	defer devlink_port_pool_th_restore $swp3 4
++	defer ip link set dev $swp2.111 nomaster
  }
  
  setup_prepare()
-@@ -224,6 +226,7 @@ setup_prepare()
- 	h3mac=$(mac_get $h3)
+@@ -203,23 +179,13 @@ setup_prepare()
+ 	h2mac=$(mac_get $h2)
  
  	vrf_prepare
 +	defer vrf_cleanup
  
  	h1_create
  	h2_create
-@@ -231,18 +234,6 @@ setup_prepare()
  	switch_create
  }
  
@@ -390,7 +342,6 @@ index fee74f215cec..d5b6f2cc9a29 100755
 -	pre_cleanup
 -
 -	switch_destroy
--	h3_destroy
 -	h2_destroy
 -	h1_destroy
 -
@@ -399,66 +350,25 @@ index fee74f215cec..d5b6f2cc9a29 100755
 -
  ping_ipv4()
  {
- 	ping_test $h1 192.0.2.34 " from H1"
-@@ -261,21 +252,38 @@ rel()
- 	"
+ 	ping_test $h1 192.0.2.34 " h1->h2"
+@@ -251,6 +217,7 @@ max_descriptors()
+ 
+ 	log_info "Send many small packets, packet size = $pktsize bytes"
+ 	start_traffic_pktsize $pktsize $h1.111 192.0.2.33 192.0.2.34 $h2mac
++	defer stop_traffic $!
+ 
+ 	# Sleep to wait for congestion.
+ 	sleep 5
+@@ -268,9 +235,6 @@ max_descriptors()
+ 	check_err $(bc <<< "$perc_used < $exp_perc_used") \
+ 		"Expected > $exp_perc_used% of descriptors, handle $perc_used%"
+ 
+-	stop_traffic
+-	sleep 1
+-
+ 	log_test "Maximum descriptors usage. The percentage used is $perc_used%"
  }
  
-+__run_hi_measure_rate()
-+{
-+	local what=$1; shift
-+	local -a uc_rate
-+
-+	start_traffic $h2.222 192.0.2.65 192.0.2.66 $h3mac
-+	defer stop_traffic $!
-+
-+	uc_rate=($(measure_rate $swp2 $h3 rx_octets_prio_2 "$what"))
-+	check_err $? "Could not get high enough $what ingress rate"
-+
-+	echo ${uc_rate[@]}
-+}
-+
-+run_hi_measure_rate()
-+{
-+	in_defer_scope __run_hi_measure_rate "$@"
-+}
-+
- test_ets_strict()
- {
- 	RET=0
- 
- 	# Run high-prio traffic on its own.
--	start_traffic $h2.222 192.0.2.65 192.0.2.66 $h3mac
- 	local -a rate_2
--	rate_2=($(measure_rate $swp2 $h3 rx_octets_prio_2 "prio 2"))
--	check_err $? "Could not get high enough prio-2 ingress rate"
-+	rate_2=($(run_hi_measure_rate "prio 2"))
- 	local rate_2_in=${rate_2[0]}
- 	local rate_2_eg=${rate_2[1]}
--	stop_traffic # $h2.222
- 
- 	# Start low-prio stream.
- 	start_traffic $h1.111 192.0.2.33 192.0.2.34 $h3mac
-+	defer stop_traffic $!
- 
- 	local -a rate_1
- 	rate_1=($(measure_rate $swp1 $h3 rx_octets_prio_1 "prio 1"))
-@@ -290,14 +298,9 @@ test_ets_strict()
- 	check_err $(bc <<< "$rel21 > 105")
- 
- 	# Start the high-prio stream--now both streams run.
--	start_traffic $h2.222 192.0.2.65 192.0.2.66 $h3mac
--	rate_3=($(measure_rate $swp2 $h3 rx_octets_prio_2 "prio 2 w/ 1"))
--	check_err $? "Could not get high enough prio-2 ingress rate with prio-1"
-+	rate_3=($(run_hi_measure_rate "prio 2+1"))
- 	local rate_3_in=${rate_3[0]}
- 	local rate_3_eg=${rate_3[1]}
--	stop_traffic # $h2.222
--
--	stop_traffic # $h1.111
- 
- 	# High-prio should have about the same throughput whether or not
- 	# low-prio is in the system.
 -- 
 2.45.0
 
