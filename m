@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-19331-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19332-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 878C39966C0
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 12:13:54 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C94A9966C4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 12:14:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F931281A36
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 10:13:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 074D0B20A4F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 10:14:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 589B1190079;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE768191F7C;
 	Wed,  9 Oct 2024 10:12:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="EcYyMg4v"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jWqPrOf+"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D0AB18E032;
-	Wed,  9 Oct 2024 10:12:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C46B18F2C4;
+	Wed,  9 Oct 2024 10:12:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728468748; cv=none; b=Zdi2Rk1GOekmbLPHXdNjiQc6pQt4Ovkmb8j6zyaE+XloYszbIre1MBbW1uBnPXIUqdh2Ul7EgpjcT7KjoBu8npUP93KR1cInw8EJqvAP/gvMr96rPQ7lmVXwVfb/gjUV3QeMbgN9vL4jDXqaJWVON3rvZKHeLBxPUmrnQ6bqig8=
+	t=1728468748; cv=none; b=McSKLL1fisDVDm5R/vHlvoFqSPRNznxD2taJ0vmriIUeyaQoRe+HrzjdPK23lGJt4doRJ64XaxvfGdhVB/Isb2z3OouQQzekLaaBLsrgcBWaHbV1xyNIZlCEuIRtVThnRXJwvO0+IMS4Kro5vi83e8W8QZBByYqsLkSwfec/UIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1728468748; c=relaxed/simple;
-	bh=/MjG4vnVCYH/bL0Fpir5fybtc7DNNdbav0sj509sn3Y=;
+	bh=7j9vq35pXyRAcVc3ZRAoNyo9ZAAvkSUotw0OPx7aaTk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nyK/kjeA390b0bYg9KpHmhTK4Lo6JVlqsI+mOAif/TEEEE/vJu9b8m0zdkY3GUz/rwNvUmDB/5QWCV5g15nhe/sR+OxMWf/U6CH9+sSl0xUwagJvRMWA5i+miUcb3OajQyZ96NSJh//4ra1CFbgq196s3zu3a5W1JsNU+0kcmdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=EcYyMg4v; arc=none smtp.client-ip=217.70.183.199
+	 In-Reply-To:To:Cc; b=DHApQmHICmwc9DDx0RnmcxQUKlGgQ7PuDjT9PLvfnd4fU9EuYs2uXngW1Vx6kLMYjvao0jWYYBQTPJcOvYaWOBet4gFqo7KmiM5qDqoijqjEUuldXJw9OG6TfwwI9sQw0/94y3SLPoQXCFGAJDJFO47FC8EHsekturjIweSFfLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=jWqPrOf+; arc=none smtp.client-ip=217.70.183.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1A112FF802;
-	Wed,  9 Oct 2024 10:12:17 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 358D6FF811;
+	Wed,  9 Oct 2024 10:12:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1728468738;
+	t=1728468739;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=aFvx6YzdwynWAS6DUpsryuCGHx2eWE9Ff6QlQJ4FstI=;
-	b=EcYyMg4vo0+feLXKUX+0EOPFaOZ5nwJ1FFrSexYv59X9JpPb7b/SE5XXjpem4/Ug+KMdy1
-	PMNEClDRDFPSpP9WMECxPSHuMeUdWlZSnMGERlXlyKLV1TbZmjK2wjk2C+qXQcMoaurD5n
-	87h2ynaQ0s7ZLPyP39+EJ+5xpvHHh3sM3V9WSH7E0Dy2d16Zrm2BZWfkvYa1svUlv48xcl
-	tQX7VbDy45ua2u0lIK9P+5jabheZeURI65JUecz3eOikr8h5xZC4rzH/OcO5euK+tcjm8G
-	1C+K+IS21LhYB4t/5NB4/L3DtahD5ZF1AYoGlQh+LgKSOocQr74OE93oziyxWQ==
+	bh=Eu33JTzN4sTvi1v3XIuk8Ur/NqSxuhd85F01Nc7EkjU=;
+	b=jWqPrOf+md0dM+VyGixNbUyMEKSVYnqKNr1kzG3n6cFeVhHJRK8lg9Xo962x8AXu+GK0Uq
+	h2wKJ5wgpdI5GeSyWdHlFZUD4v8ycu6Zz/Xe4QCsffKMNBT9CGxRYYMQJHYSfH9rDn02F/
+	VffH2ys9zpw2rlGHWt39VdbKML2F6PkY+AMkNTFP/RMt1pLk212msqDgIssC4wcGTO+qWE
+	7qyyO0rwsi0xUfj2flV1g36HjqijYH+8WlNs4//X0HOAmmft5PCpCC75QPanOFwkjWVxpe
+	OlamNvFgykUM/2HDzsTRrTaRT1i6PQ0kCzf0sblhP6hXg20PtDNwz81bQlr26g==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Wed, 09 Oct 2024 12:12:08 +0200
-Subject: [PATCH bpf-next v3 2/3] selftests/bpf: make xdp_cpumap_attach keep
- redirect prog attached
+Date: Wed, 09 Oct 2024 12:12:09 +0200
+Subject: [PATCH bpf-next v3 3/3] selftests/bpf: check program redirect in
+ xdp_cpumap_attach
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241009-convert_xdp_tests-v3-2-51cea913710c@bootlin.com>
+Message-Id: <20241009-convert_xdp_tests-v3-3-51cea913710c@bootlin.com>
 References: <20241009-convert_xdp_tests-v3-0-51cea913710c@bootlin.com>
 In-Reply-To: <20241009-convert_xdp_tests-v3-0-51cea913710c@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -80,215 +80,77 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: alexis.lothore@bootlin.com
 
-Current test only checks attach/detach on cpu map type program, and so
-does not check that it can be properly executed, neither that it
-redirects correctly.
+xdp_cpumap_attach, in its current form, only checks that an xdp cpumap
+program can be executed, but not that it performs correctly the cpu
+redirect as configured by userspace (bpf_prog_test_run_opts will return
+success even if the redirect program returns an error)
 
-Update the existing test to extend its coverage:
-- keep the redirected program loaded
-- try to execute it through bpf_prog_test_run_opts with some dummy
-  context
-
-While at it, bring the following minor improvements:
-- isolate test interface in its own namespace
-- replicate the test on a veth pair
+Add a check to ensure that the program performs the configured redirect
+as well. The check is based on a global variable incremented by a
+chained program executed only if the redirect program properly executes.
 
 Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
-This change is based on the similar update brought to xdp_devmap_attach
-([1]) and then realigns xdp_cpumap_attach with it
-
-[1] https://lore.kernel.org/bpf/20240911-devel-koalo-fix-ingress-ifindex-v4-2-5c643ae10258@linutronix.de/
-
 Changes in v3:
 - new patch
 ---
- .../selftests/bpf/prog_tests/xdp_cpumap_attach.c   | 124 +++++++++++++++++++--
- 1 file changed, 117 insertions(+), 7 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c     | 10 ++++++++--
+ .../testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c |  5 +++++
+ 2 files changed, 13 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-index 481626a875d1c3db9c7bfe92c3cca6e967a6d45c..31c225f0239613f6b5adad36b5b0e6e85eeddd9a 100644
+index 31c225f0239613f6b5adad36b5b0e6e85eeddd9a..57d1661dc72aeb152c7cb9c2f63e3b47bf1799d8 100644
 --- a/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
 +++ b/tools/testing/selftests/bpf/prog_tests/xdp_cpumap_attach.c
-@@ -2,35 +2,41 @@
- #include <uapi/linux/bpf.h>
- #include <linux/if_link.h>
- #include <test_progs.h>
-+#include <network_helpers.h>
+@@ -62,8 +62,11 @@ static void test_xdp_with_cpumap_helpers(void)
+ 	err = bpf_prog_test_run_opts(prog_redir_fd, &opts);
+ 	ASSERT_OK(err, "XDP test run");
  
- #include "test_xdp_with_cpumap_frags_helpers.skel.h"
- #include "test_xdp_with_cpumap_helpers.skel.h"
+-	/* wait for the packets to be flushed */
++	/* wait for the packets to be flushed, then check that redirect has been
++	 * performed
++	 */
+ 	kern_sync_rcu();
++	ASSERT_NEQ(skel->bss->redirect_count, 0, "redirected packets");
  
- #define IFINDEX_LO	1
-+#define TEST_NS "cpu_attach_ns"
+ 	err = bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
+ 	ASSERT_OK(err, "XDP program detach");
+@@ -203,8 +206,11 @@ static void test_xdp_with_cpumap_helpers_veth(void)
+ 	err = bpf_prog_test_run_opts(cm_fd_redir, &opts);
+ 	ASSERT_OK(err, "XDP test run");
  
- static void test_xdp_with_cpumap_helpers(void)
+-	/* wait for the packets to be flushed */
++	/* wait for the packets to be flushed, then check that redirect has been
++	 * performed
++	 */
+ 	kern_sync_rcu();
++	ASSERT_NEQ(skel->bss->redirect_count, 0, "redirected packets");
+ 
+ 	err = bpf_xdp_detach(ifindex_src, XDP_FLAGS_DRV_MODE, NULL);
+ 	ASSERT_OK(err, "XDP program detach");
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c b/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c
+index d848fe96924e32a72e1e0327e3afffeb349b933e..3619239b01b741dfd81bbebf5d9a62e0cf71e4f4 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c
+@@ -12,6 +12,8 @@ struct {
+ 	__uint(max_entries, 4);
+ } cpu_map SEC(".maps");
+ 
++__u32 redirect_count = 0;
++
+ SEC("xdp")
+ int xdp_redir_prog(struct xdp_md *ctx)
  {
--	struct test_xdp_with_cpumap_helpers *skel;
-+	struct test_xdp_with_cpumap_helpers *skel = NULL;
- 	struct bpf_prog_info info = {};
- 	__u32 len = sizeof(info);
- 	struct bpf_cpumap_val val = {
- 		.qsize = 192,
- 	};
--	int err, prog_fd, map_fd;
-+	int err, prog_fd, prog_redir_fd, map_fd;
-+	struct nstoken *nstoken = NULL;
- 	__u32 idx = 0;
- 
-+	SYS(out_close, "ip netns add %s", TEST_NS);
-+	nstoken = open_netns(TEST_NS);
-+	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
-+		goto out_close;
-+	SYS(out_close, "ip link set dev lo up");
-+
- 	skel = test_xdp_with_cpumap_helpers__open_and_load();
- 	if (!ASSERT_OK_PTR(skel, "test_xdp_with_cpumap_helpers__open_and_load"))
- 		return;
- 
--	prog_fd = bpf_program__fd(skel->progs.xdp_redir_prog);
--	err = bpf_xdp_attach(IFINDEX_LO, prog_fd, XDP_FLAGS_SKB_MODE, NULL);
-+	prog_redir_fd = bpf_program__fd(skel->progs.xdp_redir_prog);
-+	err = bpf_xdp_attach(IFINDEX_LO, prog_redir_fd, XDP_FLAGS_SKB_MODE, NULL);
- 	if (!ASSERT_OK(err, "Generic attach of program with 8-byte CPUMAP"))
- 		goto out_close;
- 
--	err = bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
--	ASSERT_OK(err, "XDP program detach");
--
- 	prog_fd = bpf_program__fd(skel->progs.xdp_dummy_cm);
- 	map_fd = bpf_map__fd(skel->maps.cpu_map);
- 	err = bpf_prog_get_info_by_fd(prog_fd, &info, &len);
-@@ -45,6 +51,23 @@ static void test_xdp_with_cpumap_helpers(void)
- 	ASSERT_OK(err, "Read cpumap entry");
- 	ASSERT_EQ(info.id, val.bpf_prog.id, "Match program id to cpumap entry prog_id");
- 
-+	/* send a packet to trigger any potential bugs in there */
-+	char data[10] = {};
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-+			    .data_in = &data,
-+			    .data_size_in = 10,
-+			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
-+			    .repeat = 1,
-+		);
-+	err = bpf_prog_test_run_opts(prog_redir_fd, &opts);
-+	ASSERT_OK(err, "XDP test run");
-+
-+	/* wait for the packets to be flushed */
-+	kern_sync_rcu();
-+
-+	err = bpf_xdp_detach(IFINDEX_LO, XDP_FLAGS_SKB_MODE, NULL);
-+	ASSERT_OK(err, "XDP program detach");
-+
- 	/* can not attach BPF_XDP_CPUMAP program to a device */
- 	err = bpf_xdp_attach(IFINDEX_LO, prog_fd, XDP_FLAGS_SKB_MODE, NULL);
- 	if (!ASSERT_NEQ(err, 0, "Attach of BPF_XDP_CPUMAP program"))
-@@ -65,6 +88,8 @@ static void test_xdp_with_cpumap_helpers(void)
- 	ASSERT_NEQ(err, 0, "Add BPF_XDP program with frags to cpumap entry");
- 
- out_close:
-+	close_netns(nstoken);
-+	SYS_NOFAIL("ip netns del %s", TEST_NS);
- 	test_xdp_with_cpumap_helpers__destroy(skel);
- }
- 
-@@ -111,6 +136,88 @@ static void test_xdp_with_cpumap_frags_helpers(void)
- 	test_xdp_with_cpumap_frags_helpers__destroy(skel);
- }
- 
-+static void test_xdp_with_cpumap_helpers_veth(void)
-+{
-+	int err, cm_fd, cm_fd_redir, map_fd, ifindex_dst, ifindex_src;
-+	struct test_xdp_with_cpumap_helpers *skel = NULL;
-+	struct bpf_prog_info info = {};
-+	struct bpf_cpumap_val val = {
-+		.qsize = 192
-+	};
-+	struct nstoken *nstoken = NULL;
-+	__u32 len = sizeof(info);
-+	__u32 idx = 0;
-+
-+	SYS(out_close, "ip netns add %s", TEST_NS);
-+	nstoken = open_netns(TEST_NS);
-+	if (!ASSERT_OK_PTR(nstoken, "open_netns"))
-+		goto out_close;
-+
-+	SYS(out_close, "ip link add veth_src type veth peer name veth_dst");
-+	SYS(out_close, "ip link set dev veth_src up");
-+	SYS(out_close, "ip link set dev veth_dst up");
-+
-+	ifindex_src = if_nametoindex("veth_src");
-+	ifindex_dst = if_nametoindex("veth_dst");
-+	if (!ASSERT_NEQ(ifindex_src, 0, "val.ifindex") ||
-+	    !ASSERT_NEQ(ifindex_dst, 0, "ifindex_dst"))
-+		goto out_close;
-+
-+	skel = test_xdp_with_cpumap_helpers__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "test_xdp_with_cpumap_helpers__open_and_load"))
-+		goto out_close;
-+
-+	cm_fd_redir = bpf_program__fd(skel->progs.xdp_redir_prog);
-+	err = bpf_xdp_attach(ifindex_src, cm_fd_redir, XDP_FLAGS_DRV_MODE, NULL);
-+	if (!ASSERT_OK(err, "Attach of program with 8-byte cpumap"))
-+		goto out_close;
-+
-+	cm_fd = bpf_program__fd(skel->progs.xdp_dummy_cm);
-+	map_fd = bpf_map__fd(skel->maps.cpu_map);
-+	err = bpf_prog_get_info_by_fd(cm_fd, &info, &len);
-+	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd"))
-+		goto out_close;
-+
-+	val.bpf_prog.fd = cm_fd;
-+	err = bpf_map_update_elem(map_fd, &idx, &val, 0);
-+	ASSERT_OK(err, "Add program to cpumap entry");
-+
-+	err = bpf_map_lookup_elem(map_fd, &idx, &val);
-+	ASSERT_OK(err, "Read cpumap entry");
-+	ASSERT_EQ(info.id, val.bpf_prog.id, "Match program id to cpumap entry prog_id");
-+
-+	/* attach dummy to other side to enable reception */
-+	cm_fd = bpf_program__fd(skel->progs.xdp_dummy_prog);
-+	err = bpf_xdp_attach(ifindex_dst, cm_fd, XDP_FLAGS_DRV_MODE, NULL);
-+	if (!ASSERT_OK(err, "Attach of dummy XDP"))
-+		goto out_close;
-+
-+	/* send a packet to trigger any potential bugs in there */
-+	char data[10] = {};
-+	DECLARE_LIBBPF_OPTS(bpf_test_run_opts, opts,
-+			    .data_in = &data,
-+			    .data_size_in = 10,
-+			    .flags = BPF_F_TEST_XDP_LIVE_FRAMES,
-+			    .repeat = 1,
-+		);
-+	err = bpf_prog_test_run_opts(cm_fd_redir, &opts);
-+	ASSERT_OK(err, "XDP test run");
-+
-+	/* wait for the packets to be flushed */
-+	kern_sync_rcu();
-+
-+	err = bpf_xdp_detach(ifindex_src, XDP_FLAGS_DRV_MODE, NULL);
-+	ASSERT_OK(err, "XDP program detach");
-+
-+	err = bpf_xdp_detach(ifindex_dst, XDP_FLAGS_DRV_MODE, NULL);
-+	ASSERT_OK(err, "XDP program detach");
-+
-+out_close:
-+	close_netns(nstoken);
-+	SYS_NOFAIL("ip netns del %s", TEST_NS);
-+	test_xdp_with_cpumap_helpers__destroy(skel);
-+}
-+
- void serial_test_xdp_cpumap_attach(void)
+@@ -27,6 +29,9 @@ int xdp_dummy_prog(struct xdp_md *ctx)
+ SEC("xdp/cpumap")
+ int xdp_dummy_cm(struct xdp_md *ctx)
  {
- 	if (test__start_subtest("CPUMAP with programs in entries"))
-@@ -118,4 +225,7 @@ void serial_test_xdp_cpumap_attach(void)
- 
- 	if (test__start_subtest("CPUMAP with frags programs in entries"))
- 		test_xdp_with_cpumap_frags_helpers();
++	if (bpf_get_smp_processor_id() == 0)
++		redirect_count++;
 +
-+	if (test__start_subtest("CPUMAP attach with programs in entries on veth"))
-+		test_xdp_with_cpumap_helpers_veth();
- }
+ 	if (ctx->ingress_ifindex == IFINDEX_LO)
+ 		return XDP_DROP;
+ 
 
 -- 
 2.46.2
