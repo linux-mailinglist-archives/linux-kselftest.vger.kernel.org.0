@@ -1,53 +1,54 @@
-Return-Path: <linux-kselftest+bounces-19329-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19330-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 139A09966B9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 12:13:28 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 112459966BC
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 12:13:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 858D3B29192
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 10:13:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2D39281BCD
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 10:13:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2924218EFE0;
-	Wed,  9 Oct 2024 10:12:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4118318FDAE;
+	Wed,  9 Oct 2024 10:12:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fOIh2jjA"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="PbNAs8+Z"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45A017CA0B;
-	Wed,  9 Oct 2024 10:12:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E05618E751;
+	Wed,  9 Oct 2024 10:12:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728468746; cv=none; b=upbfuRh5w8fozviX9du1zCg46Ktnr5SwxlqvD04Mz8dEplxKqPAbx5WSV+TKOrW6odLAcxAy3ojT9TKBMWozM7R85d+LBvuZRLusmUntr/Ci4sKheuNhs5WY8SCrND5n4ZmCy7vwW8SyX8E6AkQYFNuD1nFQqZx88hu0jYdRPF8=
+	t=1728468747; cv=none; b=OBK838GUmFsdRz5psuVIYZp4XB9jMlaySeJr/kmBR31eLoazW03WlAUiK1Buk5xbZZCY4hECgHAulzdWPUmnLl7gZJuSwk6FJas3H3YxkhEcp42P1/JvyPdLnU/VJrtJrXbQ/Bo4YrD+iL18ER8eZRhazegyVPx7TAUZds9iEd0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728468746; c=relaxed/simple;
-	bh=npGKvyeioLE06tBNL1YmPaUQnt8E9+OXJkchpa69dcA=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=EbBpDgMxIfI3Zsip1B0tUXrWUsCiMUKzj1fxlQxnMzQSYGqkv+5ytJh62eg0mRDvNaORKwxEwmfNX7gSEB/dxGFHuqP8QVB8saz3FkWyTTfB+syHUgX1GQUQwO8o+DYy9SqoBxIkP9cc/mTItblz1a1VWJS5XjgrljZMpTLigJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fOIh2jjA; arc=none smtp.client-ip=217.70.183.199
+	s=arc-20240116; t=1728468747; c=relaxed/simple;
+	bh=+sARYNDXya94+YnYkLip8MAbxcbLt0ahvueDeRSmTro=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=JcU7tDRFXERXV3pCX9dF+Y4yy8MwBOBxuzCTwECB9SPyXHP9bEIgdxlmkilu9AIh4a2igiUidVTS+fQxPKuDsY+tGC92oLf8GjJDvX9yX+dDMTVl+5tLmVuA/oew3dPNWCAL3ubBx5uKzUtJBQ2tLC+VRKeAHbSS8N+XES6hfQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=PbNAs8+Z; arc=none smtp.client-ip=217.70.183.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 08283FF80A;
-	Wed,  9 Oct 2024 10:12:13 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C980BFF805;
+	Wed,  9 Oct 2024 10:12:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1728468735;
+	t=1728468737;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=au3WNM1NuptJfk9wL4AyL68aOJt4+58bPzDihYVGsZU=;
-	b=fOIh2jjAxjyb8LuImtILl/w8+ctcXz0lqYq+Ode2HpZ10vzjj/aQwxT18H+QesHfEXwHy9
-	86QCpwBvLkmhidUMszST3qOS1Y4dU0TFBZzzA2tyfA/O3ivNXiVgjVmsDywRUaA3ljJNI1
-	5DSigRg9DF9oan+07cQgdGkmXz5eWlHrRjrEK5iuCvEyrwSxGwbowQeOIPG7fU2UU9EwGs
-	1WfCaNoEivKTT2tZsm55iCKoXJCEnzqzGeijvdCKS+LOfvViXx2SzShP0bNB/8wlMtzKdD
-	r9T0EoF3sqeD9y7Mgmap0frVK9S0lD01UC4tlDW689stQy1g7R29zSqfwSrr+w==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=wvGaG4iHniQKZT0Rk4g1io76BAEbe8ISZyb9QH08KlU=;
+	b=PbNAs8+Z2DIETxeSLPLqmy15dh91DCTk0b1gZjFq3GVo/+GPi5K6hNAIba4ywTjwhV83Go
+	qHaj2ILOA//oNPBuCSAtte70oumv0qpv1F7L3+StkBQKd8NNNeKkC9JtTmY3c6Y6L2q+Dt
+	G/aBJWZ1gj+MqqyiYvn9q/quT93JlZFpAAyPwNsN/OBOrBUoe0FmjrnNFNIAMt5C6hmPLw
+	z0R7FGLnFUxar6QG5ZauCibgg4aOosB/7tfdQF8Jcx6i9isxc95oe1JXlXx7+qjhSlcjEh
+	FHYksVHknzDisArZ7xz3bcSohDFAUuTBmoeDBzVLrxZBh6anxQd4/cx9+kp+zA==
 From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Subject: [PATCH bpf-next v3 0/3] selftests/bpf: add coverage for
- xdp_features in test_progs
-Date: Wed, 09 Oct 2024 12:12:06 +0200
-Message-Id: <20241009-convert_xdp_tests-v3-0-51cea913710c@bootlin.com>
+Date: Wed, 09 Oct 2024 12:12:07 +0200
+Subject: [PATCH bpf-next v3 1/3] selftests/bpf: fix bpf_map_redirect call
+ for cpu map test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,11 +57,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAPZWBmcC/23OTQrDIBAF4KsE17X4k5imq96jlBB1bIRWg4qkh
- Ny94qqFLB+P+d5sKEKwENG12VCAbKP1rgR+apCaJ/cEbHXJiBHWkp4TrLzLENK46mVMEFPESmk
- hpAHOtUTlbglg7FrNO5KLwQ7WhB6lmW1MPnzqWKa1r+5AhgM3U0zxwDoJnZEAXN2k9+ll3Vn5d
- /Uy+zHo0W+ZFWNqBRe9GjThl39j3/cvxgVZtwIBAAA=
-X-Change-ID: 20240730-convert_xdp_tests-ccd66bfe33db
+Message-Id: <20241009-convert_xdp_tests-v3-1-51cea913710c@bootlin.com>
+References: <20241009-convert_xdp_tests-v3-0-51cea913710c@bootlin.com>
+In-Reply-To: <20241009-convert_xdp_tests-v3-0-51cea913710c@bootlin.com>
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, 
  "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
@@ -81,52 +80,39 @@ Cc: ebpf@linuxfoundation.org,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: alexis.lothore@bootlin.com
 
-Hello,
-this small series aims to increase coverage of xdp features in
-test_progs. The initial versions proposed to rework test_xdp_features.sh
-to make it fit in test_progs, but some discussions in v1 and v2 showed
-that the script is still needed as a standalone tool. So this new
-revision lets test_xdp_features.sh as-is, and rather adds missing
-coverage in existing test (cpu map). The new revision is now also a
-follow-up to the update performed by Florian Kauer in [1] for devmap
-programs testing.
+xdp_redir_prog currently redirects packets based on the entry at index 1
+in cpu_map, but the corresponding test only manipulates the entry at
+index 0. This does not really affect the test in its current form since
+the program is detached before having the opportunity to execute, but it
+needs to be fixed before being able improve the corresponding test (ie,
+not only test attach/detach but also the redirect feature)
 
-[1] https://lore.kernel.org/bpf/20240911-devel-koalo-fix-ingress-ifindex-v4-2-5c643ae10258@linutronix.de/
+Fix this XDP program by making it redirect packets based on entry 0 in
+cpu_map instead of entry 1.
 
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
 Changes in v3:
-- Drop xdp_features rework commit
-- update xdp_cpumap_attach to extend its coverage
-- Link to v2: https://lore.kernel.org/r/20240910-convert_xdp_tests-v2-1-a46367c9d038@bootlin.com
-
-Changes in v2:
-- fix endianness management in userspace packet parsing (call htonl on
-  constant rather than packet part)
-
-The new test has been run in a local x86 environment and in CI:
- #560/1   xdp_cpumap_attach/CPUMAP with programs in entries:OK
- #560/2   xdp_cpumap_attach/CPUMAP with frags programs in entries:OK
- #560/3   xdp_cpumap_attach/CPUMAP attach with programs in entries on veth:OK
- #560     xdp_cpumap_attach:OK
- Summary: 1/3 PASSED, 0 SKIPPED, 0 FAILED
-
+- new patch
 ---
-Alexis Lothoré (eBPF Foundation) (3):
-      selftests/bpf: fix bpf_map_redirect call for cpu map test
-      selftests/bpf: make xdp_cpumap_attach keep redirect prog attached
-      selftests/bpf: check program redirect in xdp_cpumap_attach
+ tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- .../selftests/bpf/prog_tests/xdp_cpumap_attach.c   | 130 +++++++++++++++++++--
- .../bpf/progs/test_xdp_with_cpumap_helpers.c       |   7 +-
- 2 files changed, 129 insertions(+), 8 deletions(-)
----
-base-commit: 058d7c3d1691e2e4a4963716ec6c047dff778637
-change-id: 20240730-convert_xdp_tests-ccd66bfe33db
+diff --git a/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c b/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c
+index 20ec6723df18a6e8c036bf7754fbed83f2d2430b..d848fe96924e32a72e1e0327e3afffeb349b933e 100644
+--- a/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c
++++ b/tools/testing/selftests/bpf/progs/test_xdp_with_cpumap_helpers.c
+@@ -15,7 +15,7 @@ struct {
+ SEC("xdp")
+ int xdp_redir_prog(struct xdp_md *ctx)
+ {
+-	return bpf_redirect_map(&cpu_map, 1, 0);
++	return bpf_redirect_map(&cpu_map, 0, 0);
+ }
+ 
+ SEC("xdp")
 
-Best regards,
 -- 
-Alexis Lothoré, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.46.2
 
 
