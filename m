@@ -1,37 +1,38 @@
-Return-Path: <linux-kselftest+bounces-19318-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19317-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 836E3995ED5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 07:14:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDB4F995ED4
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 07:14:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B57651C21B0C
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 968031F23891
 	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 05:14:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BE9D155744;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67C3A155739;
 	Wed,  9 Oct 2024 05:14:46 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C63F2F46;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63897143C45;
 	Wed,  9 Oct 2024 05:14:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728450886; cv=none; b=jNXyyAKRU6cYHxoK2Xs81fm01uUnZNNy0juyxcHUFJWlN2g7advT/uE0zyK99CX2hGXY+o0FHYS/gNJXzRPuWikvM3r9PjcKrGJMOJ31EeknooKD5VGeSFNW7wQfx77h0wDwTXG7q6jsiBNMrqgrH59O1Ay06Vho7c5LulDRrIM=
+	t=1728450886; cv=none; b=qYbmR8lihMuRTqkF8c1cETC7Za9+RZCudCk02BLbxPTFaRz+nNuvBSQduFY4trPQjRv7XUNg8b9HDgHhLy6zNWXg06cS/ogk31M9yVus6Hr58GGOeCUfaeZxGMio7wNOQSO90w8n6lXDaDjlCXj6GMGHJANHKKL3fYVxuhwFPms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1728450886; c=relaxed/simple;
-	bh=3Ki/9I5DuL/abGyhYfOoLWRfZH0OJCMKk1fVz5xIM9c=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GBznIAPzDMPUPWhKgc2qmKXxWFLIb2ylWs6AIp70wdxPHUg9TqfettumpMc9Gys29MahbwHrg5Gz6TNJ7h1sbul7HPZ4XqceyavjAUx3P0HThAN1gF1D9Qr3OfIioHGXH0bEiU3NuLT/0ZomDdt84Fwg0H2oXHAoNX/WgrhlewI=
+	bh=DfW85rTUY4zRns51cOLr0Gm+/C47u5W1UqywQ1IuFms=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=SfZbdSkDbpL99uHoCaa64Pv8nyjnjOJIwYEoFDcN0IZJnnA5RZUoL0TnqOZawq3yUZPhrBP+R304qwVkM3OuAzBVtSZfAq/fioO61ifurZiFAjKiOg0A0ViCJdtoVrTuorBJ80UhtuDMmR0qxnbkpzosolmdqKcKu4a41Fr4/TM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C60DFEC;
-	Tue,  8 Oct 2024 22:15:06 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4880B139F;
+	Tue,  8 Oct 2024 22:15:13 -0700 (PDT)
 Received: from e116581.blr.arm.com (e116581.arm.com [10.162.42.17])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B33EF3F64C;
-	Tue,  8 Oct 2024 22:14:30 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 90BBA3F64C;
+	Tue,  8 Oct 2024 22:14:37 -0700 (PDT)
 From: Dev Jain <dev.jain@arm.com>
 To: shuah@kernel.org,
 	oleg@redhat.com
@@ -51,10 +52,12 @@ Cc: mingo@kernel.org,
 	sj@kernel.org,
 	skhan@linuxfoundation.org,
 	Dev Jain <dev.jain@arm.com>
-Subject: [RESEND] [PATCH v6 0/2] Add test to distinguish between thread's signal mask and ucontext_t
-Date: Wed,  9 Oct 2024 10:44:22 +0530
-Message-Id: <20241009051424.333380-1-dev.jain@arm.com>
+Subject: [RESEND] [PATCH v6 1/2] selftests: Rename sigaltstack to generic signal
+Date: Wed,  9 Oct 2024 10:44:23 +0530
+Message-Id: <20241009051424.333380-2-dev.jain@arm.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241009051424.333380-1-dev.jain@arm.com>
+References: <20241009051424.333380-1-dev.jain@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,112 +66,53 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch series is motivated by the following observation:
+Rename sigaltstack to generic signal directory, to allow adding more
+signal tests in the future.
 
-Raise a signal, jump to signal handler. The ucontext_t structure dumped
-by kernel to userspace has a uc_sigmask field having the mask of blocked
-signals. If you run a fresh minimalistic program doing this, this field
-is empty, even if you block some signals while registering the handler
-with sigaction().
-
-Here is what the man-pages have to say:
-
-sigaction(2): "sa_mask specifies a mask of signals which should be blocked
-(i.e., added to the signal mask of the thread in which the signal handler
-is invoked) during execution of the signal handler. In addition, the
-signal which triggered the handler will be blocked, unless the SA_NODEFER
-flag is used."
-
-signal(7): Under "Execution of signal handlers", (1.3) implies:
-
-"The thread's current signal mask is accessible via the ucontext_t
-object that is pointed to by the third argument of the signal handler."
-
-But, (1.4) states:
-
-"Any signals specified in act->sa_mask when registering the handler with
-sigprocmask(2) are added to the thread's signal mask.  The signal being
-delivered is also added to the signal mask, unless SA_NODEFER was
-specified when registering the handler.  These signals are thus blocked
-while the handler executes."
-
-There clearly is no distinction being made in the man pages between
-"Thread's signal mask" and ucontext_t; this logically should imply
-that a signal blocked by populating struct sigaction should be visible
-in ucontext_t.
-
-Here is what the kernel code does (for Aarch64):
-
-do_signal() -> handle_signal() -> sigmask_to_save(), which returns
-&current->blocked, is passed to setup_rt_frame() -> setup_sigframe() ->
-__copy_to_user(). Hence, &current->blocked is copied to ucontext_t
-exposed to userspace. Returning back to handle_signal(),
-signal_setup_done() -> signal_delivered() -> sigorsets() and
-set_current_blocked() are responsible for using information from
-struct ksignal ksig, which was populated through the sigaction()
-system call in kernel/signal.c:
-copy_from_user(&new_sa.sa, act, sizeof(new_sa.sa)),
-to update &current->blocked; hence, the set of blocked signals for the
-current thread is updated AFTER the kernel dumps ucontext_t to
-userspace.
-
-Assuming that the above is indeed the intended behaviour, because it
-semantically makes sense, since the signals blocked using sigaction()
-remain blocked only till the execution of the handler, and not in the
-context present before jumping to the handler (but nothing can be
-confirmed from the man-pages), the series introduces a test for
-mangling with uc_sigmask. I will send a separate series to fix the
-man-pages.
-
-The proposed selftest has been tested out on Aarch32, Aarch64 and x86_64.
-
-v5->v6:
- - Drop renaming of sas.c
- - Include the explanation from the cover letter in the changelog
-   for the second patch
-
-v4->v5:
- - Remove a redundant print statement
-
-v3->v4:
- - Allocate sigsets as automatic variables to avoid malloc()
-
-v2->v3:
- - ucontext describes current state -> ucontext describes interrupted context
- - Add a comment for blockage of USR2 even after return from handler
- - Describe blockage of signals in a better way
-
-v1->v2:
- - Replace all occurrences of SIGPIPE with SIGSEGV
- - Fixed a mismatch between code comment and ksft log
- - Add a testcase: Raise the same signal again; it must not be queued
- - Remove unneeded <assert.h>, <unistd.h>
- - Give a detailed test description in the comments; also describe the
-   exact meaning of delivered and blocked
- - Handle errors for all libc functions/syscalls
- - Mention tests in Makefile and .gitignore in alphabetical order
-
-v1:
- - https://lore.kernel.org/all/20240607122319.768640-1-dev.jain@arm.com/
-
-
-Dev Jain (2):
-  selftests: Rename sigaltstack to generic signal
-  selftests: Add a test mangling with uc_sigmask
-
- tools/testing/selftests/Makefile              |   2 +-
- .../{sigaltstack => signal}/.gitignore        |   1 +
- .../{sigaltstack => signal}/Makefile          |   3 +-
- .../current_stack_pointer.h                   |   0
- .../selftests/signal/mangle_uc_sigmask.c      | 184 ++++++++++++++++++
- .../selftests/{sigaltstack => signal}/sas.c   |   0
- 6 files changed, 188 insertions(+), 2 deletions(-)
- rename tools/testing/selftests/{sigaltstack => signal}/.gitignore (70%)
- rename tools/testing/selftests/{sigaltstack => signal}/Makefile (56%)
+Signed-off-by: Dev Jain <dev.jain@arm.com>
+Reviewed-by: Mark Brown <broonie@kernel.org>
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+---
+ tools/testing/selftests/Makefile                                | 2 +-
+ tools/testing/selftests/{sigaltstack => signal}/.gitignore      | 0
+ tools/testing/selftests/{sigaltstack => signal}/Makefile        | 0
+ .../selftests/{sigaltstack => signal}/current_stack_pointer.h   | 0
+ tools/testing/selftests/{sigaltstack => signal}/sas.c           | 0
+ 5 files changed, 1 insertion(+), 1 deletion(-)
+ rename tools/testing/selftests/{sigaltstack => signal}/.gitignore (100%)
+ rename tools/testing/selftests/{sigaltstack => signal}/Makefile (100%)
  rename tools/testing/selftests/{sigaltstack => signal}/current_stack_pointer.h (100%)
- create mode 100644 tools/testing/selftests/signal/mangle_uc_sigmask.c
  rename tools/testing/selftests/{sigaltstack => signal}/sas.c (100%)
 
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index bc8fe9e8f7f2..edbe30fb3304 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -87,7 +87,7 @@ TARGETS += rtc
+ TARGETS += rust
+ TARGETS += seccomp
+ TARGETS += sgx
+-TARGETS += sigaltstack
++TARGETS += signal
+ TARGETS += size
+ TARGETS += sparc64
+ TARGETS += splice
+diff --git a/tools/testing/selftests/sigaltstack/.gitignore b/tools/testing/selftests/signal/.gitignore
+similarity index 100%
+rename from tools/testing/selftests/sigaltstack/.gitignore
+rename to tools/testing/selftests/signal/.gitignore
+diff --git a/tools/testing/selftests/sigaltstack/Makefile b/tools/testing/selftests/signal/Makefile
+similarity index 100%
+rename from tools/testing/selftests/sigaltstack/Makefile
+rename to tools/testing/selftests/signal/Makefile
+diff --git a/tools/testing/selftests/sigaltstack/current_stack_pointer.h b/tools/testing/selftests/signal/current_stack_pointer.h
+similarity index 100%
+rename from tools/testing/selftests/sigaltstack/current_stack_pointer.h
+rename to tools/testing/selftests/signal/current_stack_pointer.h
+diff --git a/tools/testing/selftests/sigaltstack/sas.c b/tools/testing/selftests/signal/sas.c
+similarity index 100%
+rename from tools/testing/selftests/sigaltstack/sas.c
+rename to tools/testing/selftests/signal/sas.c
 -- 
 2.30.2
 
