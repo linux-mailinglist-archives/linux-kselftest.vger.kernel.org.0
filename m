@@ -1,168 +1,312 @@
-Return-Path: <linux-kselftest+bounces-19312-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19313-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A26CA995CBD
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 03:11:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93B13995CFB
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 03:31:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5F651C215BF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 01:11:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 186011F25E05
+	for <lists+linux-kselftest@lfdr.de>; Wed,  9 Oct 2024 01:31:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D41515380B;
-	Wed,  9 Oct 2024 01:09:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 977235A7AA;
+	Wed,  9 Oct 2024 01:30:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hd9FN0uc"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="i1jA8xcQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D3714389F
-	for <linux-kselftest@vger.kernel.org>; Wed,  9 Oct 2024 01:09:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B649918C31;
+	Wed,  9 Oct 2024 01:30:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=167.114.26.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728436175; cv=none; b=kLPUqhnYMMwQeDsxMbwm/PjeZNZHdpWmNBEw14bl9dU7hL/8/Ge3guj70aLmss+9QZrNttP2hD/HgDGmNDapJxYBUSHvuJoZkoqttHPekDwr1M4k8qiGpGmu8G5kzZheH8uD4+qDn9Vg55JQhapZrN09kbPeBbanPjtcKKjR3G4=
+	t=1728437430; cv=none; b=PvtObEq8IaGdExC1nQ38ZLMEqwVCZsGaIZRlaeblUIlxybUWfgtOXbLLKtwMDARhHDDzhnVSuvkRVeyekRPMggyZCNC8w3dVDBgIay69WPw9cRK2wuMhDWaW6RML2hdZyRPIHYc99Wd83YKW2a7pRU0jMX0Ou5Zz8JqbKDE9wF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728436175; c=relaxed/simple;
-	bh=Uv3ph2Jbb71RnVGQn6CQgpcPAjQBngBYdLG0ZjCTVAM=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=qTvTjA8Dhgz+zHe+S+vxbfpyLW70wIdsP+zGur/mDeAfRSt/eB1JZJWxdpQ1VlOfizQlkoodKlDkUxmsrakHA4G8Nv5UsFTk68I9rSYVQUKQGSRhbkN7uw5dO5TzJmV6fI7N36oxyXjN5rCHDcQGEjxfzeuKXB2rN4fU4t7GSmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hd9FN0uc; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728436174; x=1759972174;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Uv3ph2Jbb71RnVGQn6CQgpcPAjQBngBYdLG0ZjCTVAM=;
-  b=hd9FN0uciDdeAUfsaAABIOVzYJ685ePc4/TfuJ4jGUnlIognlDQxQTsk
-   hUYz2b2VNCTrxYfcDdS9AMvc7BjG1xMtlGJBzve/7pq3evsnI55FwI8UU
-   jE0NDL/CT+LRwEbaQF/+6L3u++RjolpIOeM/8F7Dd2wf9RKFkBOz3wSbr
-   hrzlkd1eLUh3RSTtEtiX9eVW7Kxr8KTz3Ja2lypWAjZ9AMGFcJspK0Vnt
-   VbQyF1GAC2dXQIP5NXycxrYHAif6zttAcCugmK64kwXq6CWHEqmWaWBkl
-   Dytt0JkuOL/41wlFlHtY3dUrOCmmcn1BwEmP3Ha0CH2qpdAN4dUIZQ8Y7
-   g==;
-X-CSE-ConnectionGUID: JRoEUe2tSLSkgQifBNew/A==
-X-CSE-MsgGUID: Qsis5Hm6RdGNdHz8C6LR0g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11219"; a="39093019"
-X-IronPort-AV: E=Sophos;i="6.11,188,1725346800"; 
-   d="scan'208";a="39093019"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 18:09:30 -0700
-X-CSE-ConnectionGUID: g1QmcFj6T+m8eR+E/mZ5mA==
-X-CSE-MsgGUID: w0G7lixHR36IJkASZuyVTw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,188,1725346800"; 
-   d="scan'208";a="99414093"
-Received: from unknown (HELO [10.238.0.51]) ([10.238.0.51])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Oct 2024 18:09:27 -0700
-Message-ID: <50824ceb-71c4-4b1b-95ba-291461d647b6@linux.intel.com>
-Date: Wed, 9 Oct 2024 09:09:25 +0800
+	s=arc-20240116; t=1728437430; c=relaxed/simple;
+	bh=jto2qXAdpV3rkAjfMaoAiJB6zTqwHnFS7BUKe4TF2dg=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UREMuXUhT/ucF7kZySHqkJqHKd2W5/D+1jupS5VY40ilOUWtCbnCVZyhaen2T687ULGBcLoSxzEv13chf7c5kksZ/+hbc6t/YMx5jnsL1hLnN5E/gHEA2uFqEcm3w5dnFT+kjKcs5g/1tnQmtq0zK+FJk4PPQuvykaSaNHOfhYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=i1jA8xcQ; arc=none smtp.client-ip=167.114.26.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+	s=smtpout1; t=1728437427;
+	bh=jto2qXAdpV3rkAjfMaoAiJB6zTqwHnFS7BUKe4TF2dg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=i1jA8xcQ5LPpJ2BCBxK/f/ZmqrAo4plPCr1yIx65DDoK/dxsvC0KMf+ggXh2vKlUl
+	 37snxLYl4T3A5gcmUrsnve9YgHuoMAzfjUbM4b9bXvb08e+nsibxwVriNlfmuxh1tn
+	 nmJVuHVv0MQ25tkEIzuFtg8JYWO3Qfhz0I25F55JUnP9K4MiyjMdThl+80GKcmJ7dD
+	 lEyf3jdAOJ3eKbolqNw9sxritdtuJXbs340OQqx+bqFdGZHCdhxDXkqA9t7Q9c0gMG
+	 IeRjhE4ZA6/dBztCFnQqMUTLBl4JxCoycOPPmLDdC6lKQeTpMf2/k973YZh7lkB3aA
+	 Outb9csHmeCWQ==
+Received: from thinkos.internal.efficios.com (unknown [IPv6:2606:6d00:100:4000:cacb:9855:de1f:ded2])
+	by smtpout.efficios.com (Postfix) with ESMTPSA id 4XNb1H5JxzzSBT;
+	Tue,  8 Oct 2024 21:30:27 -0400 (EDT)
+From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Carlos O'Donell <carlos@redhat.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	linux-kselftest@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH 1/1] selftests/rseq: Fix mm_cid test failure
+Date: Tue,  8 Oct 2024 21:28:01 -0400
+Message-Id: <20241009012801.2062026-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: baolu.lu@linux.intel.com,
- "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
- "eric.auger@redhat.com" <eric.auger@redhat.com>,
- "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
- "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
- "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
- "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "vasant.hegde@amd.com" <vasant.hegde@amd.com>
-Subject: Re: [PATCH v2 3/6] iommu/vt-d: Make intel_iommu_set_dev_pasid() to
- handle domain replacement
-To: "Tian, Kevin" <kevin.tian@intel.com>, "Liu, Yi L" <yi.l.liu@intel.com>,
- "joro@8bytes.org" <joro@8bytes.org>, "jgg@nvidia.com" <jgg@nvidia.com>
-References: <20240912130427.10119-1-yi.l.liu@intel.com>
- <20240912130427.10119-4-yi.l.liu@intel.com>
- <a2cbc96f-7be3-4f70-a38b-540eddfd7c23@linux.intel.com>
- <52ec3423-6061-4178-8728-832b5f61af15@linux.intel.com>
- <BN9PR11MB5276AF2CB65A36369CF10A008C762@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Language: en-US
-From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <BN9PR11MB5276AF2CB65A36369CF10A008C762@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 2024/9/30 15:19, Tian, Kevin wrote:
->> From: Baolu Lu <baolu.lu@linux.intel.com>
->> Sent: Friday, September 13, 2024 10:17 AM
->>
->> On 9/13/24 9:35 AM, Baolu Lu wrote:
->>> On 9/12/24 9:04 PM, Yi Liu wrote:
->>>> +static void intel_iommu_remove_dev_pasid(struct device *dev, ioasid_t
->>>> pasid,
->>>> +                     struct iommu_domain *domain)
->>>> +{
->>>> +    struct device_domain_info *info = dev_iommu_priv_get(dev);
->>>> +    struct intel_iommu *iommu = info->iommu;
->>>> +
->>>>        intel_pasid_tear_down_entry(iommu, dev, pasid,
->>>>                        INTEL_PASID_TEARDOWN_DRAIN_PRQ);
->>>> +    if (domain->type == IOMMU_DOMAIN_IDENTITY)
->>>> +        return;
->>>
->>> The static identity domain is not capable of handling page requests.
->>> Therefore there is no need to drain PRQ for an identity domain removal.
->>>
->>> So it probably should be something like this:
->>>
->>>       if (domain->type == IOMMU_DOMAIN_IDENTITY) {
->>>           intel_pasid_tear_down_entry(iommu, dev, pasid, 0);
->>>           return;
->>>       }
->>>
->>>       intel_pasid_tear_down_entry(iommu, dev, pasid,
->>>                                       INTEL_PASID_TEARDOWN_DRAIN_PRQ);
->>
->> Just revisited this. It seems that we just need to drain PRQ if the
->> attached domain is iopf-capable. Therefore, how about making it like
->> this?
->>
->> 	unsigned int flags = 0;
->>
->> 	if (domain->iopf_handler)
->> 		flags |= INTEL_PASID_TEARDOWN_DRAIN_PRQ;
->>
->> 	intel_pasid_tear_down_entry(iommu, dev, pasid, flags);
->>
->> 	/* Identity domain has no meta data for pasid. */
->> 	if (domain->type == IOMMU_DOMAIN_IDENTITY)
->> 		return;
->>
-> 
-> this is the right thing to do, but also suggesting a bug in existing
-> code. intel_pasid_tear_down_entry() is not just for PRQ drain.
-> It's also about iotlb/devtlb invalidation. From device p.o.v it
-> has no idea about the translation mode in the IOMMU side and
-> always caches the valid mappings in devtlb when ATS is enabled.
+Adapt the rseq.c/rseq.h code to follow GNU C library changes introduced by:
 
-Yes. You are right.
+glibc commit 2e456ccf0c34 ("Linux: Make __rseq_size useful for feature detection (bug 31965)")
 
-intel_pasid_tear_down_entry() takes care of iotlb/devtlb invalidation.
-So it's fine as long as intel_pasid_tear_down_entry() is called for the
-IDENTITY domain path, right?
+Without this fix, rseq selftests for mm_cid fail:
 
-> Existing code skips all those housekeeping for identify domain
-> by early return before intel_pasid_tear_down_entry(). We need
-> a separate fix for it before this series?
+./run_param_test.sh
+Default parameters
+Running test spinlock
+Running compare-twice test spinlock
+Running mm_cid test spinlock
+Error: cpu id getter unavailable
 
-Existing code doesn't skip intel_pasid_tear_down_entry().
+[ This is based on the following branch:
+  https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git
+  branch: fixes ]
 
-         if (domain->type == IOMMU_DOMAIN_IDENTITY) {
-                 intel_pasid_tear_down_entry(iommu, dev, pasid, false);
-                 return;
-         }
+Fixes: 18c2355838e7 ("selftests/rseq: Implement rseq mm_cid field support")
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+CC: Boqun Feng <boqun.feng@gmail.com>
+CC: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>
+CC: Carlos O'Donell <carlos@redhat.com>
+CC: Florian Weimer <fweimer@redhat.com>
+CC: linux-kselftest@vger.kernel.org
+CC: stable@vger.kernel.org
+---
+ tools/testing/selftests/rseq/rseq.c | 110 +++++++++++++++++++---------
+ tools/testing/selftests/rseq/rseq.h |  10 +--
+ 2 files changed, 77 insertions(+), 43 deletions(-)
 
-Or anything I overlooked?
+diff --git a/tools/testing/selftests/rseq/rseq.c b/tools/testing/selftests/rseq/rseq.c
+index 96e812bdf8a4..5b9772cdf265 100644
+--- a/tools/testing/selftests/rseq/rseq.c
++++ b/tools/testing/selftests/rseq/rseq.c
+@@ -60,12 +60,6 @@ unsigned int rseq_size = -1U;
+ /* Flags used during rseq registration.  */
+ unsigned int rseq_flags;
+ 
+-/*
+- * rseq feature size supported by the kernel. 0 if the registration was
+- * unsuccessful.
+- */
+-unsigned int rseq_feature_size = -1U;
+-
+ static int rseq_ownership;
+ static int rseq_reg_success;	/* At least one rseq registration has succeded. */
+ 
+@@ -111,6 +105,43 @@ int rseq_available(void)
+ 	}
+ }
+ 
++/* The rseq areas need to be at least 32 bytes. */
++static
++unsigned int get_rseq_min_alloc_size(void)
++{
++	unsigned int alloc_size = rseq_size;
++
++	if (alloc_size < ORIG_RSEQ_ALLOC_SIZE)
++		alloc_size = ORIG_RSEQ_ALLOC_SIZE;
++	return alloc_size;
++}
++
++/*
++ * Return the feature size supported by the kernel.
++ *
++ * Depending on the value returned by getauxval(AT_RSEQ_FEATURE_SIZE):
++ *
++ * 0:   Return ORIG_RSEQ_FEATURE_SIZE (20)
++ * > 0: Return the value from getauxval(AT_RSEQ_FEATURE_SIZE).
++ *
++ * It should never return a value below ORIG_RSEQ_FEATURE_SIZE.
++ */
++static
++unsigned int get_rseq_kernel_feature_size(void)
++{
++	unsigned long auxv_rseq_feature_size, auxv_rseq_align;
++
++	auxv_rseq_align = getauxval(AT_RSEQ_ALIGN);
++	assert(!auxv_rseq_align || auxv_rseq_align <= RSEQ_THREAD_AREA_ALLOC_SIZE);
++
++	auxv_rseq_feature_size = getauxval(AT_RSEQ_FEATURE_SIZE);
++	assert(!auxv_rseq_feature_size || auxv_rseq_feature_size <= RSEQ_THREAD_AREA_ALLOC_SIZE);
++	if (auxv_rseq_feature_size)
++		return auxv_rseq_feature_size;
++	else
++		return ORIG_RSEQ_FEATURE_SIZE;
++}
++
+ int rseq_register_current_thread(void)
+ {
+ 	int rc;
+@@ -119,7 +150,7 @@ int rseq_register_current_thread(void)
+ 		/* Treat libc's ownership as a successful registration. */
+ 		return 0;
+ 	}
+-	rc = sys_rseq(&__rseq_abi, rseq_size, 0, RSEQ_SIG);
++	rc = sys_rseq(&__rseq_abi, get_rseq_min_alloc_size(), 0, RSEQ_SIG);
+ 	if (rc) {
+ 		if (RSEQ_READ_ONCE(rseq_reg_success)) {
+ 			/* Incoherent success/failure within process. */
+@@ -140,28 +171,12 @@ int rseq_unregister_current_thread(void)
+ 		/* Treat libc's ownership as a successful unregistration. */
+ 		return 0;
+ 	}
+-	rc = sys_rseq(&__rseq_abi, rseq_size, RSEQ_ABI_FLAG_UNREGISTER, RSEQ_SIG);
++	rc = sys_rseq(&__rseq_abi, get_rseq_min_alloc_size(), RSEQ_ABI_FLAG_UNREGISTER, RSEQ_SIG);
+ 	if (rc)
+ 		return -1;
+ 	return 0;
+ }
+ 
+-static
+-unsigned int get_rseq_feature_size(void)
+-{
+-	unsigned long auxv_rseq_feature_size, auxv_rseq_align;
+-
+-	auxv_rseq_align = getauxval(AT_RSEQ_ALIGN);
+-	assert(!auxv_rseq_align || auxv_rseq_align <= RSEQ_THREAD_AREA_ALLOC_SIZE);
+-
+-	auxv_rseq_feature_size = getauxval(AT_RSEQ_FEATURE_SIZE);
+-	assert(!auxv_rseq_feature_size || auxv_rseq_feature_size <= RSEQ_THREAD_AREA_ALLOC_SIZE);
+-	if (auxv_rseq_feature_size)
+-		return auxv_rseq_feature_size;
+-	else
+-		return ORIG_RSEQ_FEATURE_SIZE;
+-}
+-
+ static __attribute__((constructor))
+ void rseq_init(void)
+ {
+@@ -178,28 +193,54 @@ void rseq_init(void)
+ 	}
+ 	if (libc_rseq_size_p && libc_rseq_offset_p && libc_rseq_flags_p &&
+ 			*libc_rseq_size_p != 0) {
++		unsigned int libc_rseq_size;
++
+ 		/* rseq registration owned by glibc */
+ 		rseq_offset = *libc_rseq_offset_p;
+-		rseq_size = *libc_rseq_size_p;
++		libc_rseq_size = *libc_rseq_size_p;
+ 		rseq_flags = *libc_rseq_flags_p;
+-		rseq_feature_size = get_rseq_feature_size();
+-		if (rseq_feature_size > rseq_size)
+-			rseq_feature_size = rseq_size;
++
++		/*
++		 * Previous versions of glibc expose the value
++		 * 32 even though the kernel only supported 20
++		 * bytes initially. Therefore treat 32 as a
++		 * special-case. glibc 2.40 exposes a 20 bytes
++		 * __rseq_size without using getauxval(3) to
++		 * query the supported size, while still allocating a 32
++		 * bytes area. Also treat 20 as a special-case.
++		 *
++		 * Special-cases are handled by using the following
++		 * value as active feature set size:
++		 *
++		 *   rseq_size = min(32, get_rseq_kernel_feature_size())
++		 */
++		switch (libc_rseq_size) {
++		case ORIG_RSEQ_FEATURE_SIZE:
++			fallthrough;
++		case ORIG_RSEQ_ALLOC_SIZE:
++		{
++			unsigned int rseq_kernel_feature_size = get_rseq_kernel_feature_size();
++
++			if (rseq_kernel_feature_size < ORIG_RSEQ_ALLOC_SIZE)
++				rseq_size = rseq_kernel_feature_size;
++			else
++				rseq_size = ORIG_RSEQ_ALLOC_SIZE;
++			break;
++		}
++		default:
++			/* Otherwise just use the __rseq_size from libc as rseq_size. */
++			rseq_size = libc_rseq_size;
++			break;
++		}
+ 		return;
+ 	}
+ 	rseq_ownership = 1;
+ 	if (!rseq_available()) {
+ 		rseq_size = 0;
+-		rseq_feature_size = 0;
+ 		return;
+ 	}
+ 	rseq_offset = (void *)&__rseq_abi - rseq_thread_pointer();
+ 	rseq_flags = 0;
+-	rseq_feature_size = get_rseq_feature_size();
+-	if (rseq_feature_size == ORIG_RSEQ_FEATURE_SIZE)
+-		rseq_size = ORIG_RSEQ_ALLOC_SIZE;
+-	else
+-		rseq_size = RSEQ_THREAD_AREA_ALLOC_SIZE;
+ }
+ 
+ static __attribute__((destructor))
+@@ -209,7 +250,6 @@ void rseq_exit(void)
+ 		return;
+ 	rseq_offset = 0;
+ 	rseq_size = -1U;
+-	rseq_feature_size = -1U;
+ 	rseq_ownership = 0;
+ }
+ 
+diff --git a/tools/testing/selftests/rseq/rseq.h b/tools/testing/selftests/rseq/rseq.h
+index d7364ea4d201..4e217b620e0c 100644
+--- a/tools/testing/selftests/rseq/rseq.h
++++ b/tools/testing/selftests/rseq/rseq.h
+@@ -68,12 +68,6 @@ extern unsigned int rseq_size;
+ /* Flags used during rseq registration. */
+ extern unsigned int rseq_flags;
+ 
+-/*
+- * rseq feature size supported by the kernel. 0 if the registration was
+- * unsuccessful.
+- */
+-extern unsigned int rseq_feature_size;
+-
+ enum rseq_mo {
+ 	RSEQ_MO_RELAXED = 0,
+ 	RSEQ_MO_CONSUME = 1,	/* Unused */
+@@ -193,7 +187,7 @@ static inline uint32_t rseq_current_cpu(void)
+ 
+ static inline bool rseq_node_id_available(void)
+ {
+-	return (int) rseq_feature_size >= rseq_offsetofend(struct rseq_abi, node_id);
++	return (int) rseq_size >= rseq_offsetofend(struct rseq_abi, node_id);
+ }
+ 
+ /*
+@@ -207,7 +201,7 @@ static inline uint32_t rseq_current_node_id(void)
+ 
+ static inline bool rseq_mm_cid_available(void)
+ {
+-	return (int) rseq_feature_size >= rseq_offsetofend(struct rseq_abi, mm_cid);
++	return (int) rseq_size >= rseq_offsetofend(struct rseq_abi, mm_cid);
+ }
+ 
+ static inline uint32_t rseq_current_mm_cid(void)
+-- 
+2.39.2
 
-Thanks,
-baolu
 
