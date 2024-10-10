@@ -1,76 +1,76 @@
-Return-Path: <linux-kselftest+bounces-19427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 300B799813B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 11:00:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7C2099813C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 11:00:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B09721F25700
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 09:00:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6881282A2B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 09:00:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A3471BD51F;
-	Thu, 10 Oct 2024 08:57:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 253841BDAA8;
+	Thu, 10 Oct 2024 08:57:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KLKLnxzG"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="C/Sz14si"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E1B190059
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2024 08:57:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BA091BDA88
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2024 08:57:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728550662; cv=none; b=lPZ5IgOD86C6nWn2I6HitidQAfkd0HxCEFQjf0u3vPAWbhfqTqZ7xj+kQUN5VXcXHhp7w18G4vsbRLl/YC2leAp+GfjD8C3ZswjBoRBZlZrshYio1pg1Dpdh2ySIS/siimfufhgRmFsdLTTJUrRmF6afprKLpOUzCuPkUMZ1RE8=
+	t=1728550665; cv=none; b=Rw5Q364LxJmX/Wa4RmmBdOJgIhfBRhjSJrbAjFwQ8liCMIfHRL9vo4u2D1V76Y5AhP5K8Ib4iOvHbAJXt3zGvSAuSxkeAzDSd65+Yq7ePF9QI8+CoRAPZTsxkHMKIqiramyUgWldXxNzWy+rfTKlGTLJabZv/K5POR/okBvNG1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728550662; c=relaxed/simple;
-	bh=yMUiDyaDw0rmD/dvo9jvxidKU8GUMKeVKhtisHpbTEM=;
+	s=arc-20240116; t=1728550665; c=relaxed/simple;
+	bh=jzd87EcNDbdw6bw+ZOELD0fitbOeuelfZ1tFytR59eg=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=YcaCSIzfNk3/X41xuZroPTq4NknigiW42YGjEyJwX4mIHVCYG0oY9+sDr8Y8s9i6FHg0fxQqHMBpsIZNDQYPiuO1koQXa6LoYo1F2dlnc1b/lvalWpcmp2hLJcPUrOMk4Hgg1rJ7vYg/qK5UFsoagEHOTVWgFGd5YEhia2Tm+70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KLKLnxzG; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version:Content-Type; b=ANGcZp3B5cV+EHdlIsUJZDaggyNIHZ7b8b+cVPa56J0jlb9P49Yabsp46GMtFuuxIVu3u7m6JUCo414bw84KMrXsfV0yAdLv3ffx1oUe//KnqJyjuPQTMbuy+PL/FM8+fkVUawSSg3PPWN389XuVOAqrb3JSKlNNI3bEDV4VAW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=C/Sz14si; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1728550658;
+	s=mimecast20190719; t=1728550662;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=6TrX2zEj2ZgP1RN5eSGwq6SD54cXQjSCTkkf2QKYXQk=;
-	b=KLKLnxzGPgyXI0l1z0pjqUSYBalk2AV2kafYs69U8iur4iA7DAq5dRhrb4M3uTIdEOdsPs
-	ehSVFXBY2/7NCCv1ggaXlO2UNEwPoUzba4untKCbIGgi2VMnyQ8dvLaMT9934HGLDThY5y
-	ldWREa3gJg+731t+Xnwg5QwXy79RmZ4=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=TVThSOvoNxV/KE/0q+DXcUSmpgIScmqPjQ+ixsvMJSM=;
+	b=C/Sz14siaonqfMB4M3oDyacGLgRYo5OO8MNZ0eBKe+qiqOtHYRt6+aMJLqjtUbutSl2B67
+	Ip+Jzu0HCIyaXSzLIodXCls4BgBlZsULjv/trh9SN6oQY0h4flrE430XBiAHCpStx3ZDu+
+	dXxG+5bt2f+a+9hTONjHcAjLFJKx/gg=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-13-eY1kNJMrNR2xlaWBIKpX4g-1; Thu, 10 Oct 2024 04:57:37 -0400
-X-MC-Unique: eY1kNJMrNR2xlaWBIKpX4g-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-37d325e2b47so300663f8f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2024 01:57:37 -0700 (PDT)
+ us-mta-197-_pS0X6CmN5WB9yQEHUoIqQ-1; Thu, 10 Oct 2024 04:57:41 -0400
+X-MC-Unique: _pS0X6CmN5WB9yQEHUoIqQ-1
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-42cceb06940so4415065e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2024 01:57:41 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728550656; x=1729155456;
+        d=1e100.net; s=20230601; t=1728550660; x=1729155460;
         h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
          :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6TrX2zEj2ZgP1RN5eSGwq6SD54cXQjSCTkkf2QKYXQk=;
-        b=B2t1050BuetuBh4lhvZY8jqHKWP6F7/qRvJd8SSVPhexbR1r4Xr/1XWuZDbsBn7Qn6
-         Ub398E/mq7B/aaw0PRgQAO+NKv5PmTtZzJ8cZ2nczOFQBAdF8M4et6YdOLIeoeXKFd/b
-         na0281sYZoiDMNR7Czp0ouTHwyI+sJ+E5H/7Dmks6RBlT6+/tXwwrPq/uvvhrxKaMbW7
-         Sb2DKf01SLOvj15A/WNUQMiobpxcNOmw5w0+ru4IYog+3b7iwCd7HUXVNVKgTbocnmOX
-         TFp5KHCazD2DuTtRYN1gvTEdhyuAIzYszVev6hRE5RjBaloorPzX4nCgR3dvOEKOGUtZ
-         d2pA==
-X-Forwarded-Encrypted: i=1; AJvYcCV+edFeZCLq7WqQpqK/kZnBom37n4fLQD/hW5TzkFQMhazWDOyMkYPBF3nqL5ToUOiwKj4yFcDM0b0HnSVplMM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3bar3MnzGY6LHC0dHRB5yo1EjTD35VuunInMa2kRnetvIhhb+
-	Ep+D/lSD/2e77955eu4G67hkABgqVJgXm8oAOaPlnuMLhlXpy3Uuw20wtnrsD5M2mW4hYOGjR6V
-	wq5jBLkaqN4AWEywtZU4EW27wPK01lhaYsqWwHkXK6KKB5vjfm9Lh0wfJRG4wHau+Xw==
-X-Received: by 2002:adf:e5cc:0:b0:374:baeb:2ec with SMTP id ffacd0b85a97d-37d47e9dbd1mr2045008f8f.19.1728550656060;
-        Thu, 10 Oct 2024 01:57:36 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEtznOMy68s/vt2yJMLa35Bsj6so4bbqxkVQgeKXfgOXOylGrq3sapfjI90PeS2dco4Q6E5xg==
-X-Received: by 2002:adf:e5cc:0:b0:374:baeb:2ec with SMTP id ffacd0b85a97d-37d47e9dbd1mr2044978f8f.19.1728550655529;
-        Thu, 10 Oct 2024 01:57:35 -0700 (PDT)
+        bh=TVThSOvoNxV/KE/0q+DXcUSmpgIScmqPjQ+ixsvMJSM=;
+        b=BfSD8DnaP/YjQP4VuoNhg62oLcHIyvoRdD3e5FpLH4eIeNN+ZgKEBY+FhKfoU/tuRH
+         rna8DfAnk2X4KWGpQs576vtWBqpYFgGyuSxuXnysnd1l0L598N2IKY3exUD0dGlFTWJv
+         KZwM2I7q09iVtL6nf7yPVOh3cx4dOhOUblrNjn0ST0F3iOh1r5ULs4n/q0HjKH2Cyfm1
+         HCIlUMmaXn7q5CguR/Ez/LhIi96fVHdkRPOE+vPr53cyDqxkHcLruWAoiPsN7Dsa7i52
+         feyO0dEQ0n54/dFncXVDeenoBXw46INPEoBK0Aie0Gn0kAv6kIwDSiXRdVXC/uVuGRCV
+         MOBA==
+X-Forwarded-Encrypted: i=1; AJvYcCWDJDs2aqJjnhk9Yu9iPyLjVlGiSNWVjx2QI1wE+xzxmW9ZVzndC/fpNufXH4fbYCP/8LTyOpwn64T1sxRbBgw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdlpfZYR237n23uEq/7iTfPhrnRkRzx2/5CPJFi3bqLCyEwxdp
+	iUdSD/92aJeAZjGuwuuPjoKke+z+/LuZZcNU19UiJ368fC8QjzU2k4XFHFCZ833iXQdkodDzFPL
+	kGNZ45Wr4v/XeRM2OI48aMTfcVUgHjM6XRWnY6TLokJT/gN5/GWMqJ/81iux4YmbnLg==
+X-Received: by 2002:a05:600c:384c:b0:42c:ba1f:5475 with SMTP id 5b1f17b1804b1-430d5d89857mr49079565e9.26.1728550660382;
+        Thu, 10 Oct 2024 01:57:40 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEg1fwLzWN7F6wE7fj226buZ5WpkZAnIyD5LIz/nUpwxzScWIAB3w1FhioDK5Do+tAdTOoEZw==
+X-Received: by 2002:a05:600c:384c:b0:42c:ba1f:5475 with SMTP id 5b1f17b1804b1-430d5d89857mr49079225e9.26.1728550659967;
+        Thu, 10 Oct 2024 01:57:39 -0700 (PDT)
 Received: from fedora (g2.ign.cz. [91.219.240.8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d4b6bcf50sm914167f8f.29.2024.10.10.01.57.34
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-430ccf51770sm42504825e9.22.2024.10.10.01.57.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2024 01:57:35 -0700 (PDT)
+        Thu, 10 Oct 2024 01:57:39 -0700 (PDT)
 From: Vitaly Kuznetsov <vkuznets@redhat.com>
 To: Nikolas Wipper <nikwip@amazon.de>
 Cc: Nicolas Saenz Julienne <nsaenz@amazon.com>, Alexander Graf
@@ -80,14 +80,14 @@ Cc: Nicolas Saenz Julienne <nsaenz@amazon.com>, Alexander Graf
  Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
  <dave.hansen@linux.intel.com>, Nikolas Wipper <nik.wipper@gmx.de>,
  linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, Nikolas
- Wipper <nikwip@amazon.de>
-Subject: Re: [PATCH 5/7] KVM: x86: Implement KVM_HYPERV_SET_TLB_FLUSH_INHIBIT
-In-Reply-To: <20241004140810.34231-6-nikwip@amazon.de>
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, Nikolas Wipper
+ <nikwip@amazon.de>
+Subject: Re: [PATCH 4/7] KVM: Introduce KVM_HYPERV_SET_TLB_FLUSH_INHIBIT
+In-Reply-To: <20241004140810.34231-5-nikwip@amazon.de>
 References: <20241004140810.34231-1-nikwip@amazon.de>
- <20241004140810.34231-6-nikwip@amazon.de>
-Date: Thu, 10 Oct 2024 10:57:34 +0200
-Message-ID: <878quwgwsh.fsf@redhat.com>
+ <20241004140810.34231-5-nikwip@amazon.de>
+Date: Thu, 10 Oct 2024 10:57:38 +0200
+Message-ID: <877caggwsd.fsf@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -98,205 +98,51 @@ Content-Type: text/plain
 
 Nikolas Wipper <nikwip@amazon.de> writes:
 
-> Implement KVM_HYPERV_SET_TLB_FLUSH_INHIBIT for x86. Apart from setting/
-> clearing the internal TLB flush inhibit flag this ioctl also wakes up
-> vCPUs suspended and waiting on this vCPU.
->
-> When the flag is set, a vCPU trying to flush the inhibited vCPUs TLB with
-> a Hyper-V hyper-call suspendeds until the bit is cleared again. The hyper-
-> call finishes internally, but the instruction isn't skipped, and execution
-> doesn't return to the guest. This behaviour and the suspended state itself
-> are specified in Microsoft's "Hypervisor Top Level Functional
-> Specification" (TLFS).
->
-> To maintain thread safety during suspension and unsuspension, the IOCTL
-> uses the KVM SRCU. After flipping the flush inhibit flag, it synchronizes
-> SRCU to ensure that all running TLB flush attempts that saw the old state,
-> finish before the IOCTL exits. If the flag was changed to inhibit new TLB
-> flushes, this guarantees that no TLB flushes happen once the ioctl exits.
-> If the flag was changed to no longer inhibit TLB flushes, the
-> synchronization ensures that all suspended CPUs finished entering the
-> suspended state properly, so they can be unsuspended again.
->
-> Once TLB flushes are no longer inhibited, all suspended vCPUs are
-> unsuspended.
+> Introduce a new ioctl to control whether remote flushing via Hyper-V
+> hyper-calls should be allowed on a vCPU. When the tlb_flush_inhibit bit is
+> set, vCPUs attempting to flush the TLB of the inhibitied vCPU will be
+> suspended until the bit is clearded.
 >
 > Signed-off-by: Nikolas Wipper <nikwip@amazon.de>
 > ---
->  arch/x86/include/asm/kvm_host.h |  2 ++
->  arch/x86/kvm/hyperv.c           | 22 ++++++++++++++++++++
->  arch/x86/kvm/x86.c              | 37 +++++++++++++++++++++++++++++++++
->  3 files changed, 61 insertions(+)
+>  include/uapi/linux/kvm.h | 15 +++++++++++++++
+
+I guess we can merge this patch with documentation (PATCH1) or even
+implementation (PATCH5) as I don't see why separation helps here.
+
+>  1 file changed, 15 insertions(+)
 >
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 7571ac578884..ab3a9beb61a2 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -698,6 +698,8 @@ struct kvm_vcpu_hv {
+> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
+> index 637efc055145..3bc43fdcab88 100644
+> --- a/include/uapi/linux/kvm.h
+> +++ b/include/uapi/linux/kvm.h
+> @@ -933,6 +933,7 @@ struct kvm_enable_cap {
+>  #define KVM_CAP_PRE_FAULT_MEMORY 236
+>  #define KVM_CAP_X86_APIC_BUS_CYCLES_NS 237
+>  #define KVM_CAP_X86_GUEST_MODE 238
+> +#define KVM_CAP_HYPERV_TLB_FLUSH_INHIBIT 239
 >  
->  	bool suspended;
->  	int waiting_on;
-> +
-> +	int tlb_flush_inhibit;
-
-This is basically boolean, right? And we only make it 'int' to be able
-to store 'u8' from the ioctl? This doesn't look very clean. Do you
-envision anything but '1'/'0' in 'inhibit'? If not, maybe we can just
-make it a flag (and e.g. extend 'flags' to be u32/u64)? This way we can
-convert 'tlb_flush_inhibit' to a normal bool.
-
+>  struct kvm_irq_routing_irqchip {
+>  	__u32 irqchip;
+> @@ -1573,4 +1574,18 @@ struct kvm_pre_fault_memory {
+>  	__u64 padding[5];
 >  };
 >  
->  struct kvm_hypervisor_cpuid {
-> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
-> index e68fbc0c7fc1..40ea8340838f 100644
-> --- a/arch/x86/kvm/hyperv.c
-> +++ b/arch/x86/kvm/hyperv.c
-> @@ -2137,6 +2137,9 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  		bitmap_zero(vcpu_mask, KVM_MAX_VCPUS);
->  
->  		kvm_for_each_vcpu(i, v, kvm) {
-> +			if (READ_ONCE(v->arch.hyperv->tlb_flush_inhibit))
-> +				goto ret_suspend;
+> +/* Available with KVM_CAP_HYPERV_TLBFLUSH */
+> +#define KVM_HYPERV_SET_TLB_FLUSH_INHIBIT \
+> +	_IOW(KVMIO,  0xd6, struct kvm_hyperv_tlb_flush_inhibit)
 > +
->  			__set_bit(i, vcpu_mask);
->  		}
->  	} else if (!is_guest_mode(vcpu)) {
-> @@ -2148,6 +2151,9 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  				__clear_bit(i, vcpu_mask);
->  				continue;
->  			}
+> +/* for KVM_HYPERV_SET_TLB_FLUSH_INHIBIT */
+> +struct kvm_hyperv_tlb_flush_inhibit {
+> +	/* in */
+> +	__u16 flags;
+> +#define KVM_HYPERV_UNINHIBIT_TLB_FLUSH 0
+> +#define KVM_HYPERV_INHIBIT_TLB_FLUSH 1
+> +	__u8  inhibit;
+> +	__u8  reserved[5];
+> +};
 > +
-> +			if (READ_ONCE(v->arch.hyperv->tlb_flush_inhibit))
-> +				goto ret_suspend;
->  		}
->  	} else {
->  		struct kvm_vcpu_hv *hv_v;
-> @@ -2175,6 +2181,9 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  						    sparse_banks))
->  				continue;
->  
-> +			if (READ_ONCE(v->arch.hyperv->tlb_flush_inhibit))
-> +				goto ret_suspend;
-> +
-
-These READ_ONCEs make me think I misunderstand something here, please
-bear with me :-).
-
-Like we're trying to protect against 'tlb_flush_inhibit' being read
-somewhere in the beginning of the function and want to generate real
-memory accesses. But what happens if tlb_flush_inhibit changes right
-_after_ we checked it here and _before_ we actuall do
-kvm_make_vcpus_request_mask()? Wouldn't it be a problem? In case it
-would, I think we need to reverse the order: do
-kvm_make_vcpus_request_mask() anyway and after it go through vcpu_mask
-checking whether any of the affected vCPUs has 'tlb_flush_inhibit' and
-if it does, suspend the caller.
-
->  			__set_bit(i, vcpu_mask);
->  		}
->  	}
-> @@ -2193,6 +2202,9 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu, struct kvm_hv_hcall *hc)
->  	/* We always do full TLB flush, set 'Reps completed' = 'Rep Count' */
->  	return (u64)HV_STATUS_SUCCESS |
->  		((u64)hc->rep_cnt << HV_HYPERCALL_REP_COMP_OFFSET);
-> +ret_suspend:
-> +	kvm_hv_vcpu_suspend_tlb_flush(vcpu, v->vcpu_id);
-> +	return -EBUSY;
->  }
->  
->  static void kvm_hv_send_ipi_to_many(struct kvm *kvm, u32 vector,
-> @@ -2380,6 +2392,13 @@ static int kvm_hv_hypercall_complete(struct kvm_vcpu *vcpu, u64 result)
->  	u32 tlb_lock_count = 0;
->  	int ret;
->  
-> +	/*
-> +	 * Reached when the hyper-call resulted in a suspension of the vCPU.
-> +	 * The instruction will be re-tried once the vCPU is unsuspended.
-> +	 */
-> +	if (kvm_hv_vcpu_suspended(vcpu))
-> +		return 1;
-> +
->  	if (hv_result_success(result) && is_guest_mode(vcpu) &&
->  	    kvm_hv_is_tlb_flush_hcall(vcpu) &&
->  	    kvm_read_guest(vcpu->kvm, to_hv_vcpu(vcpu)->nested.pa_page_gpa,
-> @@ -2919,6 +2938,9 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struct kvm_cpuid2 *cpuid,
->  
->  void kvm_hv_vcpu_suspend_tlb_flush(struct kvm_vcpu *vcpu, int vcpu_id)
->  {
-> +	RCU_LOCKDEP_WARN(!srcu_read_lock_held(&vcpu->kvm->srcu),
-> +			 "Suspicious Hyper-V TLB flush inhibit usage\n");
-> +
->  	/* waiting_on's store should happen before suspended's */
->  	WRITE_ONCE(vcpu->arch.hyperv->waiting_on, vcpu_id);
->  	WRITE_ONCE(vcpu->arch.hyperv->suspended, true);
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index 18d0a300e79a..1f925e32a927 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -4642,6 +4642,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
->  	case KVM_CAP_HYPERV_CPUID:
->  	case KVM_CAP_HYPERV_ENFORCE_CPUID:
->  	case KVM_CAP_SYS_HYPERV_CPUID:
-> +	case KVM_CAP_HYPERV_TLB_FLUSH_INHIBIT:
->  #endif
->  	case KVM_CAP_PCI_SEGMENT:
->  	case KVM_CAP_DEBUGREGS:
-> @@ -5853,6 +5854,31 @@ static int kvm_vcpu_ioctl_enable_cap(struct kvm_vcpu *vcpu,
->  	}
->  }
->  
-> +static int kvm_vcpu_ioctl_set_tlb_flush_inhibit(struct kvm_vcpu *vcpu,
-> +						struct kvm_hyperv_tlb_flush_inhibit *set)
-> +{
-> +	if (set->inhibit == READ_ONCE(vcpu->arch.hyperv->tlb_flush_inhibit))
-> +		return 0;
-> +
-> +	WRITE_ONCE(vcpu->arch.hyperv->tlb_flush_inhibit, set->inhibit);
-
-As you say before, vCPU ioctls are serialized and noone else sets
-tlb_flush_inhibit, do I understand correctly that
-READ_ONCE()/WRITE_ONCE() are redundant here?
-
-> +
-> +	/*
-> +	 * synchronize_srcu() ensures that:
-> +	 * - On inhibit, all concurrent TLB flushes finished before this ioctl
-> +	 *   exits.
-> +	 * - On uninhibit, there are no longer vCPUs being suspended due to this
-> +	 *   inhibit.
-> +	 * This function can't race with itself, because vCPU IOCTLs are
-> +	 * serialized, so if the inhibit bit is already the desired value this
-> +	 * synchronization has already happened.
-> +	 */
-> +	synchronize_srcu(&vcpu->kvm->srcu);
-> +	if (!set->inhibit)
-> +		kvm_hv_vcpu_unsuspend_tlb_flush(vcpu);
-> +
-> +	return 0;
-> +}
-> +
->  long kvm_arch_vcpu_ioctl(struct file *filp,
->  			 unsigned int ioctl, unsigned long arg)
->  {
-> @@ -6306,6 +6332,17 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
->  	case KVM_SET_DEVICE_ATTR:
->  		r = kvm_vcpu_ioctl_device_attr(vcpu, ioctl, argp);
->  		break;
-> +#ifdef CONFIG_KVM_HYPERV
-> +	case KVM_HYPERV_SET_TLB_FLUSH_INHIBIT: {
-> +		struct kvm_hyperv_tlb_flush_inhibit set;
-> +
-> +		r = -EFAULT;
-> +		if (copy_from_user(&set, argp, sizeof(set)))
-> +			goto out;
-> +		r = kvm_vcpu_ioctl_set_tlb_flush_inhibit(vcpu, &set);
-> +		break;
-> +	}
-> +#endif
->  	default:
->  		r = -EINVAL;
->  	}
+>  #endif /* __LINUX_KVM_H */
 
 -- 
 Vitaly
