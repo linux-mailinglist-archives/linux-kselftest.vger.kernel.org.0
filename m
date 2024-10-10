@@ -1,110 +1,110 @@
-Return-Path: <linux-kselftest+bounces-19420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19421-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A34C997CBF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 07:57:54 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8536997D24
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 08:24:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6D121F238B8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 05:57:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 047E41C20F13
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 06:24:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BA6C19D072;
-	Thu, 10 Oct 2024 05:57:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C4301A0AF1;
+	Thu, 10 Oct 2024 06:24:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="uNDHpbgk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cmccmta1.chinamobile.com (cmccmta4.chinamobile.com [111.22.67.137])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E12B718C03D;
-	Thu, 10 Oct 2024 05:57:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.137
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C86AB1A0731;
+	Thu, 10 Oct 2024 06:24:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728539868; cv=none; b=jX32PAbGPlca8iXnW97UozG+FGgrFoPDAmhT+V70e4UJewyFRqw9qw7RV9pYGIf7wKxHIBfOCT2h8h3Q9g7kUPC1QUeNAA+nGkeP/RoOGUDVTS7X7HFnWjr7nCmBQUMbVvkqIlqmBNCPBtC/9AhQXO1M7+VlPOMbFTKte/njEeY=
+	t=1728541475; cv=none; b=RGHZv1F9EuJ2PDU6IuJznhkycSPE9c9yWido8l33q/nf+q/F6JNmDBd70krHIHVgm8KLYyggcK3hHKat5zRsdYnYn+VylXHAv7bpbF4euz/GDhIkio5wD9ehMf9BG2woNZmd8gvqcxiqvXyWnEwbXnR3Feri9cEqD3ThBHeYTOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728539868; c=relaxed/simple;
-	bh=X9v9yBXSafI2LhG4V2RsAbWdn5xXD+4jgAZ0zNJjFPc=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=pOZAsyjSsweANj0Vz0kX01xYM1lCTIn1ldjbfOgmgSoDlPGyg6luAl7IdOAxxQBD4b5IHdih+y7IrsJI+ST8iSk5KujWN+qRo7FVpG6yJfSYsU2XlLNB2ZayPvgdrGg9XghQ90sGC4FxdbMDO9K+034OYsVzt0rDl53D1buUZRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app04-12004 (RichMail) with SMTP id 2ee467076cccdec-c56ea;
-	Thu, 10 Oct 2024 13:57:39 +0800 (CST)
-X-RM-TRANSID:2ee467076cccdec-c56ea
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from ubuntu.localdomain (unknown[10.55.1.71])
-	by rmsmtp-syy-appsvr09-12009 (RichMail) with SMTP id 2ee967076cd247e-380c6;
-	Thu, 10 Oct 2024 13:57:39 +0800 (CST)
-X-RM-TRANSID:2ee967076cd247e-380c6
-From: Zhu Jun <zhujun2@cmss.chinamobile.com>
-To: andrii@kernel.org
-Cc: eddyz87@gmail.com,
-	shuah@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	zhujun2@cmss.chinamobile.com,
-	mykolal@fb.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org
-Subject: [PATCH] selftests/bpf: Removed redundant fd after close in bpf_prog_load_log_buf
-Date: Wed,  9 Oct 2024 22:57:37 -0700
-Message-Id: <20241010055737.4292-1-zhujun2@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1728541475; c=relaxed/simple;
+	bh=M1pNevWEIqXXclY0XMWmxwReI9M6IUcCjETbN7GlI98=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=adOCA3z9/gWmmyHiC0f1zNrrVW/V7GnjIeWrouMgHndrX7gx2PR6+fjx2wyWlbs1rsVj02EBzbK28KnkfD2PYCeJwzMXHqK3wKnIL0k4GvVaAk+tJocaky+qW5hIoi8wSaEJL9+Y/z4m7qdF2WwQWmVmu9rWBg/6VggWriMtz64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=uNDHpbgk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA350C4CEC6;
+	Thu, 10 Oct 2024 06:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1728541474;
+	bh=M1pNevWEIqXXclY0XMWmxwReI9M6IUcCjETbN7GlI98=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uNDHpbgklhLrpHNYKZOsHNu6PIs8UvQ17rdUv9wYJ55k7Xmtz/rW48Nxa73ijUe5b
+	 ssjzXGRDr+gBU82vKDbYx4qVFidm+nRRWYhqwHwBab/DTxbu2FZrhZdR70a7/bN1Mm
+	 zEIu6RtVEkK1PffZh7NOxbvLco9EAFiixqUJV4Nk=
+Date: Thu, 10 Oct 2024 08:24:31 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Aleksa Sarai <cyphar@cyphar.com>
+Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
+	Kees Cook <kees@kernel.org>, Florian Weimer <fweimer@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH RFC v3 03/10] openat2: explicitly return -E2BIG for
+ (usize > PAGE_SIZE)
+Message-ID: <2024101010-heaving-overhung-a067@gregkh>
+References: <20241010-extensible-structs-check_fields-v3-0-d2833dfe6edd@cyphar.com>
+ <20241010-extensible-structs-check_fields-v3-3-d2833dfe6edd@cyphar.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241010-extensible-structs-check_fields-v3-3-d2833dfe6edd@cyphar.com>
 
-Removed unnecessary `fd = -1` assignments after closing file descriptors.
-because it will be assigned by the function bpf_prog_load().This improves
-code readability and removes redundant operations.
+On Thu, Oct 10, 2024 at 07:40:36AM +1100, Aleksa Sarai wrote:
+> While we do currently return -EFAULT in this case, it seems prudent to
+> follow the behaviour of other syscalls like clone3. It seems quite
+> unlikely that anyone depends on this error code being EFAULT, but we can
+> always revert this if it turns out to be an issue.
+> 
+> Cc: <stable@vger.kernel.org> # v5.6+
+> Fixes: fddb5d430ad9 ("open: introduce openat2(2) syscall")
+> Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
+> ---
+>  fs/open.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/fs/open.c b/fs/open.c
+> index 22adbef7ecc2..30bfcddd505d 100644
+> --- a/fs/open.c
+> +++ b/fs/open.c
+> @@ -1458,6 +1458,8 @@ SYSCALL_DEFINE4(openat2, int, dfd, const char __user *, filename,
+>  
+>  	if (unlikely(usize < OPEN_HOW_SIZE_VER0))
+>  		return -EINVAL;
+> +	if (unlikely(usize > PAGE_SIZE))
+> +		return -E2BIG;
+>  
+>  	err = copy_struct_from_user(&tmp, sizeof(tmp), how, usize);
+>  	if (err)
+> 
+> -- 
+> 2.46.1
 
-Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
----
- tools/testing/selftests/bpf/prog_tests/log_buf.c | 3 ---
- 1 file changed, 3 deletions(-)
+Why isn't this just sent as a normal fix to be included now and not
+burried in a RFC series?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/log_buf.c b/tools/testing/selftests/bpf/prog_tests/log_buf.c
-index 27676a04d0b6..169ce689b97c 100644
---- a/tools/testing/selftests/bpf/prog_tests/log_buf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/log_buf.c
-@@ -169,7 +169,6 @@ static void bpf_prog_load_log_buf(void)
- 	ASSERT_GE(fd, 0, "good_fd1");
- 	if (fd >= 0)
- 		close(fd);
--	fd = -1;
- 
- 	/* log_level == 2 should always fill log_buf, even for good prog */
- 	log_buf[0] = '\0';
-@@ -180,7 +179,6 @@ static void bpf_prog_load_log_buf(void)
- 	ASSERT_GE(fd, 0, "good_fd2");
- 	if (fd >= 0)
- 		close(fd);
--	fd = -1;
- 
- 	/* log_level == 0 should fill log_buf for bad prog */
- 	log_buf[0] = '\0';
-@@ -191,7 +189,6 @@ static void bpf_prog_load_log_buf(void)
- 	ASSERT_LT(fd, 0, "bad_fd");
- 	if (fd >= 0)
- 		close(fd);
--	fd = -1;
- 
- 	free(log_buf);
- }
--- 
-2.17.1
+thanks,
 
-
-
+greg k-h
 
