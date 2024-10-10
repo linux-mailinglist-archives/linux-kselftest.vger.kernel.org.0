@@ -1,120 +1,141 @@
-Return-Path: <linux-kselftest+bounces-19480-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19481-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BE7299945F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 23:24:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9090C9994DE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 00:01:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE3A7283EDC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 21:24:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FC7F28541A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 22:01:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCD311E5015;
-	Thu, 10 Oct 2024 21:24:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDF551E284A;
+	Thu, 10 Oct 2024 22:01:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="a3AkH2dR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NfRIo8xV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6C21E2830
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2024 21:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49E07188CAE;
+	Thu, 10 Oct 2024 22:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728595463; cv=none; b=EpSRkDcszeUmpiEhpn1nGExYnvFCZ1+tjZH0XF90Lna0Sj30UY4a5fbVDxPGWhCDub/0YOpD1BEFic01KPf9TVuN1F/qLJv1litTAI5S07ytEjsCp0f/Boqn056F7ytIEsbzMd8oeBBejVGS0RjaWRNUo0z46I5gMIgyOy2ZD+c=
+	t=1728597674; cv=none; b=B2vZ0H2bCQ801bqzerC63G+BJezt+2phfQIiC0Y+oGPSAounms/dx5BzniI7+OnJU3G1HBCuiRnHBgzr81KFYP/ikPlQfbx1mX16Ob0PPgebeQu/wTz0qTpihftIBU4jEk7Ni8RIkYMjmTBuYwvycWGMinYIAeXtInC7PKtHWwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728595463; c=relaxed/simple;
-	bh=IvXBq22p6qcwQpaq5eTge6FDXANkdgf7r8d8TkHkgHI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MkKg4GzuSLdsdFrKaouM1YEfchoJ7s9LJRSdZ55nnI31ZcD3HqOfE8CV01jl8tm3TmzImM7vqx80vj4yreiOIH4tZWa+SZPN/B6A4MlaBOBuVDmSyav/rC7f1arNMaPD1h1Tk67fdAfvxShvqrCoctGuE85o0ZdvduqYEdqFmN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=a3AkH2dR; arc=none smtp.client-ip=209.85.166.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f52.google.com with SMTP id ca18e2360f4ac-835496c8d6fso71629039f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2024 14:24:20 -0700 (PDT)
+	s=arc-20240116; t=1728597674; c=relaxed/simple;
+	bh=IqrqVRAGWmUTngX9JyJMpYS2/1LzBtHqam0T8qPIgNM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bW4xIOJHhnv340atmvUSRna1t4RMAFH79vxFQKG0WtzYkuV1KtbaJhv7Wq9JFpIbJCLCdelx37jAjlCkd74Z+gTAPrcqeGLu+Q9DlUSgUtvtlfuYHhxRmg0xEpxms9HX+Lqur7A/CmoBrnfJrcTDgYg6w3EXzbbnBIhiECO4F04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NfRIo8xV; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-7e9e38dd5f1so1166331a12.0;
+        Thu, 10 Oct 2024 15:01:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1728595459; x=1729200259; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tnFmO+JO0vAHh3WQGgxd4V2TgjaB2XL1XQA6JbK9oG4=;
-        b=a3AkH2dRu5bBnfgc1V8oAhte1wIURt1DzWv5DLVaj0VHLi18xY1OAqOJFYVHTsFzp4
-         RiCGH8ZmxHJMKslrf727pIFtVI6vGy5ziIoydridCa6qMvMLsjT6uodrHYCEa10hlZ9n
-         8cx28NejJZDLqdU2StoKIjiUTDWvnELyenrPE=
+        d=gmail.com; s=20230601; t=1728597672; x=1729202472; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WLcwOUla2fi4WryQZC9pITLT3xq49m68i6L5ryo+y5s=;
+        b=NfRIo8xViwuO3JUVi7JjR9HDghFI8DjV6w7O5j6u0TzQwT7YikUD58F0A8rDhbnRqX
+         r1D1rR0FY+JLS7q3rzRJ1uo8Y7OQ3vQycnuscZ+AhtQfN13O5T6GgAPEugkja5KTFQdG
+         CNxs4qV2ffOWnVQ913ljVUdgfR8/P137uPIz6OfT4GMs/+wt1veg0O+17tMzLNemjxV/
+         +TigNCm6pAJ42ULcP1097oT6kY7LnReLbE6LIE3msbU4/2klZTrqghtmYWarqsT/QoQp
+         Gq6boDb8bl4cTvIZc6e2oW4gFcHII2bQcMDqo1/J+ercvCWjmQrP1n7umezbnCwGBrv7
+         K27Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728595459; x=1729200259;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tnFmO+JO0vAHh3WQGgxd4V2TgjaB2XL1XQA6JbK9oG4=;
-        b=jPvkpY0FxYb9wYTKJhlGMzSZQZdO2C71G/lvdTmpjZT3+bjKhVWXJ2w3ANf9Vw7jWk
-         g/v03iry9YUj4+bNyPrZjkedYdgmVZkoU3gJxxRX87lj4/vFiwRnnbsd4VgTk0bIqTjE
-         iWXZMiv6W00DLdM7i2DveTHVmzJ+b+VLiVy4uYM6njxoTCJpDxKxcb6EkdH7YE9vnokX
-         HWP9u/xawqmrWpyRAlrz3PkJmDqHilQxYDtMeHg+gvX0h/WJUXFg0TMZpRkcJAhUYWG5
-         yl9j37+Kf4YBjl+g9MuBhGTJuoSSpJmCtDmVVmLaGwSrov7JLu6nr3H3UTbZbR3AbyHi
-         xpdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV2DLTvAIVcVXav3yEnbDObyGaMgBACKa4Nq22COcifztXx2xLOMytvMUUhiKZlGKw4VXDwOjJeKrRET2PX5Po=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVFdDMkEv5yGcveJjpuQp03pL8AF8YVTDnNJQtzdHmsm451fsA
-	PGqyCApAYuqr3NkbFc2SVnrjVNk6j85pOk/GUYiFLIP58tvsJQ5gxWxeStFXVWs=
-X-Google-Smtp-Source: AGHT+IGd8YjULQ5BgNmgPudrci6pRddPv1aAy6Zho1lX9ktZjptVS9rb0mbIN/F9nZopayfpk8di4Q==
-X-Received: by 2002:a92:ca4c:0:b0:3a2:aed1:1285 with SMTP id e9e14a558f8ab-3a3b5c7bd20mr4241855ab.0.1728595459638;
-        Thu, 10 Oct 2024 14:24:19 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dbadaa8cb2sm387245173.123.2024.10.10.14.24.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Oct 2024 14:24:19 -0700 (PDT)
-Message-ID: <0ba33212-d38d-42f1-9864-010e1802a7ac@linuxfoundation.org>
-Date: Thu, 10 Oct 2024 15:24:18 -0600
+        d=1e100.net; s=20230601; t=1728597672; x=1729202472;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WLcwOUla2fi4WryQZC9pITLT3xq49m68i6L5ryo+y5s=;
+        b=vCGZz2rlbdqdBEKxX+LKiQMCoewnpfRHj5i63VIkWKFdLIeEZ0KHOWaQnX7P42y0s+
+         9d6tUTn/Uag7kOm19bTMR4gQ3zQH4MuMpv3kz3a0NsiF/rySaWpQPi5jkiE/HjKzz1gZ
+         OjzImM+rLcN2QUmt6oC62HrnLCDWggm00xc7rRdXfZVhI5P3e/8uAe7XzWpb/ASsDuEN
+         pJsdyBl8a/jE/yXbZjrvJMu6XPE+NFzvbFLBYWqnKlnplbyAEyiotrGblK3FQgoktbCK
+         1LG3qnAeeC8FJewYOSX0nsegnThMyaJAgByybF1cpYDCfmBpn7xJxQMRoTyZcQ8x3rgJ
+         FQ/w==
+X-Forwarded-Encrypted: i=1; AJvYcCVsdjBdQD5nkSzlXDhQlFz4rHKTGfuJGJNJrWi5hJ1PwPNbfFO6/fQO9bVJWRRlcnwUhVStAlIn5s/dTX++6XKs@vger.kernel.org, AJvYcCW2NyGSCtSXvwGFA0r6mRldoYyygod6h6vhIpzOoliQNbKyF85ChDnsxg2yuvIJxqpXudihQBjg6CRAV9k/eHLgXUWJ@vger.kernel.org, AJvYcCXd6cpMrRWL2QciEEf3m5nNn4HGHSTx9OmMGWbpLCYHK1H+ILTCX0+SbXlpWPD40w2cXjac4pvbvshXdVE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywr0uTEQLzyn2ySlR/KaEeOVFZS0aeUZyCrJKULWv5XhQwBraVf
+	EUvy10LlX37eR7vU5XHl0L4B7/9pwmm8294VJFEBQXuForA06f3dKTNO5dLOVtwqyt8bbHKwIzm
+	pKtbxsvKS2ObbTS+T6il0vSSqmwBS9QjP
+X-Google-Smtp-Source: AGHT+IHWqBnwD9Qz9bUKjePD4Lcw9JynVMvCGdfFK2afXtJlMLe+UYYEUJ2v1N1JhWUHdofyf/tHHrKSHl0k8vTVypk=
+X-Received: by 2002:a17:90a:bc97:b0:2e2:cd22:b092 with SMTP id
+ 98e67ed59e1d1-2e2f0a6e9cdmr866900a91.16.1728597672490; Thu, 10 Oct 2024
+ 15:01:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] ftrace/selftest: Test combination of function_graph
- tracer and function profiler
-To: Steven Rostedt <rostedt@goodmis.org>, LKML
- <linux-kernel@vger.kernel.org>,
- Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
- linux-kselftest@vger.kernel.org
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20241010165235.35122877@gandalf.local.home>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241010165235.35122877@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20241009220638.333429-1-wudevelops@gmail.com> <20241009220638.333429-2-wudevelops@gmail.com>
+In-Reply-To: <20241009220638.333429-2-wudevelops@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 10 Oct 2024 15:01:00 -0700
+Message-ID: <CAEf4BzYo12vao0GPYPC=3SMTzc5c8kZSFCE+D63ACgtjs7QhVw@mail.gmail.com>
+Subject: Re: [PATCH bpf v1 2/2] selftests/bpf: assert link info uprobe_multi
+ count & path_size if unset
+To: Tyrone Wu <wudevelops@gmail.com>
+Cc: bpf@vger.kernel.org, kpsingh@kernel.org, mattbobrowski@google.com, 
+	song@kernel.org, jolsa@kernel.org, ast@kernel.org, daniel@iogearbox.net, 
+	andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, 
+	yonghong.song@linux.dev, john.fastabend@gmail.com, sdf@fomichev.me, 
+	haoluo@google.com, rostedt@goodmis.org, mhiramat@kernel.org, 
+	mathieu.desnoyers@efficios.com, mykolal@fb.com, shuah@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kernel-patches-bot@fb.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/10/24 14:52, Steven Rostedt wrote:
-> From: Steven Rostedt <rostedt@goodmis.org>
-> 
-> Masami reported a bug when running function graph tracing then the
-> function profiler. The following commands would cause a kernel crash:
-> 
->    # cd /sys/kernel/tracing/
->    # echo function_graph > current_tracer
->    # echo 1 > function_profile_enabled
-> 
-> In that order. Create a test to test this two to make sure this does not
-> come back as a regression.
-> 
-> Link: https://lore.kernel.org/172398528350.293426.8347220120333730248.stgit@devnote2
-> 
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+On Wed, Oct 9, 2024 at 3:07=E2=80=AFPM Tyrone Wu <wudevelops@gmail.com> wro=
+te:
+>
+> Add assertions in `bpf_link_info.uprobe_multi` test to verify that
+> `count` and `path_size` fields are correctly populated when the fields
+> are unset.
+>
+> This tests a previous bug where the `path_size` field was not populated
+> when `path` and `path_size` were unset.
+>
+> Signed-off-by: Tyrone Wu <wudevelops@gmail.com>
 > ---
-> Changes since v2: https://lore.kernel.org/20241004145618.18436d7e@gandalf.local.home
-> 
-> - Fixed grammar of comment
-> 
+>  tools/testing/selftests/bpf/prog_tests/fill_link_info.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/to=
+ols/testing/selftests/bpf/prog_tests/fill_link_info.c
+> index f3932941bbaa..a38cf2a999fe 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
+> @@ -417,6 +417,13 @@ verify_umulti_link_info(int fd, bool retprobe, __u64=
+ *offsets,
+>         if (!ASSERT_NEQ(err, -1, "readlink"))
+>                 return -1;
+>
+> +       memset(&info, 0, sizeof(info));
+> +       err =3D bpf_link_get_info_by_fd(fd, &info, &len);
 
-Thank you. Applied to linux-kselftest fixes for next rc.
+if (!ASSERT_OK(err, "link_get_info"))
+    return -1;
 
-thanks,
--- Shuah
+?
 
+Other than this, LGTM.
+
+pw-bot: cr
+
+> +
+> +       ASSERT_EQ(info.uprobe_multi.count, 3, "info.uprobe_multi.count");
+> +       ASSERT_EQ(info.uprobe_multi.path_size, strlen(path) + 1,
+> +                 "info.uprobe_multi.path_size");
+> +
+>         for (bit =3D 0; bit < 8; bit++) {
+>                 memset(&info, 0, sizeof(info));
+>                 info.uprobe_multi.path =3D ptr_to_u64(path_buf);
+> --
+> 2.43.0
+>
 
