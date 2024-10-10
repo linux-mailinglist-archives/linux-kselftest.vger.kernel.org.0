@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-19443-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19444-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4FD8998A21
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 16:45:32 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0363C998A25
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 16:45:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C71A71C24071
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 14:45:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84D7728987B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 14:45:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F5711E9064;
-	Thu, 10 Oct 2024 14:32:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A7FE1FAC38;
+	Thu, 10 Oct 2024 14:32:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lurMV7uk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="J7gZj/lz"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2C61CBEA0;
-	Thu, 10 Oct 2024 14:32:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF5D61FAC33;
+	Thu, 10 Oct 2024 14:32:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728570751; cv=none; b=cdRT6e/TaY7iMzGKgi8FAZEiEqjeFXkHbjrVIYicUxl2I+P6TctJK8clJj8kdh0A7h47ndedxJ+jtWQeUngOacK95onTjmSG+/wQdarxWIBcvKsroMY8KLrXEWmrAuC7B9p80iWliJFvBKJx+kZkbJbgjM4BadMzSgObJFKSiIg=
+	t=1728570756; cv=none; b=Uih2jc/dRu3PaBrrhCP9o6Yl7tAX1jQdpqvqvCi+fCY7ewJ4TsAEXUAdxHMjiYZ9npabmfFlbUDuhvV+UQHdNC8i0s2G+lhEjo2OTly5/PdijsWbV5mvTvLB0DAu0vZzN/NGlwst3s5cASoZQWDULY34+Q40mZGzj8RpAwmvcOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728570751; c=relaxed/simple;
-	bh=RIkzm8s+UqO9ZE+38HTFnfVOxc5zFK1dr9ab+2KoDs8=;
+	s=arc-20240116; t=1728570756; c=relaxed/simple;
+	bh=NF3SWiWc6dI2FV3WgDiuj4mVl+ymLqKeoOTcA5Qp884=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c5RA2r8cIJjkImdJstOKkV8Xq0Zx9QqhJWJ29QiSKQb5z9w9Kc0VAm8N6wkXqm4JEkxZbeTbeZJab8eOHe5G8GeLgyH7IJ2IOlgqd5pg2PKQFc2VF2ONzghjFYU/6slaivQyjBO4Szvf0HNVVblGfAmyNJar2JwPjIuUfwzawqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lurMV7uk; arc=none smtp.client-ip=198.175.65.18
+	 MIME-Version; b=pNnQnRtAt0T2eZFi14w8KM/7Z8UO5FtHUkIK3Y3lBZzQCW0A0EU0OjvgX8cdfHA7ALOD+qgCy90pjhI/aQU2+uL/KmpmTV5XXaNuXW1OQrll1/H0yf41iE+AgJ2uCi8GHa9DWExU9VmuGbZhOjCvCXlJQtKvjLdSTys3MyQWrMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=J7gZj/lz; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728570749; x=1760106749;
+  t=1728570755; x=1760106755;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=RIkzm8s+UqO9ZE+38HTFnfVOxc5zFK1dr9ab+2KoDs8=;
-  b=lurMV7uklchIaFTK7S6LxFnoyG2UGp1Yuo6oEQbuSHtFkR5UlT9kqs2e
-   6kizXZXSRdQ6q4Qe0gdP7DQrfI0fJlNKZaUexbgqjghbAdE4EDn67W4Vz
-   HUgaaP1jGN2IANpOVzhdvFIjRmKkBVfi5RBl1PidJ299exigKbXKGgLq1
-   FL9TaVD9X/130Wpruh67x6Ij3WZYygcXBbZSx0R7H5E/KqI51h7BEHIBW
-   I69B5tV6x3fbWRun4REW6LXLvbD14ohFqRzhvpWDCeuTViDfR1VKXu/cb
-   cxnJTQi4OSvfYHC4r5BDc2+qsf64c6VVpK4CuCDyILS3Nxe9VQrNv1emy
-   A==;
-X-CSE-ConnectionGUID: tVk66enbRVKMbwseClOOzw==
-X-CSE-MsgGUID: E9ORp1r1QwKQAsphItGlDQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="28064057"
+  bh=NF3SWiWc6dI2FV3WgDiuj4mVl+ymLqKeoOTcA5Qp884=;
+  b=J7gZj/lzfcnyixt6bRcqKG6Z/FMM5H5iseba+dhp+ScnDM384+DeOM17
+   0C7mLnsFsn6MR8L+iP+YFBgwPfyoGIEIQXERulg6XTkeR5nCvvLdxrIBh
+   Vp9eA5i/Nw0r61YEFRd1P1w8/R9TcLzlXfGKY8pBNL1Kb5am85RQUr7FF
+   6evNhTJWih7+A3+/wl/+1jgHlxGP/x1fteV821cUxd5vq/vsFbhLsUyse
+   qBsMLqmKg/oc7N1YXw7D0EhZMLukON3cl9AOdNRtXMJHLW4VtWs1OMvD7
+   J0iG6xF4p1ItMCHoHKxuqQo5GUPDSqBCPN7YGcaSgr/9OjBS4BLEUOR4r
+   Q==;
+X-CSE-ConnectionGUID: QKRDb6jNSAaK9QGcKr/TFA==
+X-CSE-MsgGUID: SAmiNLLaQnulFwlLX3rCRA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="28064086"
 X-IronPort-AV: E=Sophos;i="6.11,193,1725346800"; 
-   d="scan'208";a="28064057"
+   d="scan'208";a="28064086"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 07:32:26 -0700
-X-CSE-ConnectionGUID: DqQhQVeXTci6O6wKVy113g==
-X-CSE-MsgGUID: Xu6bnZqOSUSOMbU8Qdg5/Q==
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 07:32:34 -0700
+X-CSE-ConnectionGUID: 6zbVZ9luSvOd1AZ21zpgmg==
+X-CSE-MsgGUID: nB9pGqrHSM2z5rKEVbeBfQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,193,1725346800"; 
-   d="scan'208";a="81188970"
+   d="scan'208";a="81189067"
 Received: from ahunter6-mobl1.ger.corp.intel.com (HELO localhost.localdomain) ([10.246.16.81])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 07:32:15 -0700
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 07:32:24 -0700
 From: Adrian Hunter <adrian.hunter@intel.com>
 To: Peter Zijlstra <peterz@infradead.org>,
 	Sean Christopherson <seanjc@google.com>,
@@ -93,9 +93,9 @@ Cc: Ingo Molnar <mingo@redhat.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-perf-users@vger.kernel.org
-Subject: [PATCH V12 01/14] perf/x86/intel/pt: Fix buffer full but size is 0 case
-Date: Thu, 10 Oct 2024 17:31:38 +0300
-Message-ID: <20241010143152.19071-2-adrian.hunter@intel.com>
+Subject: [PATCH V12 02/14] KVM: x86: Fix Intel PT IA32_RTIT_CTL MSR validation
+Date: Thu, 10 Oct 2024 17:31:39 +0300
+Message-ID: <20241010143152.19071-3-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241010143152.19071-1-adrian.hunter@intel.com>
 References: <20241010143152.19071-1-adrian.hunter@intel.com>
@@ -108,119 +108,31 @@ MIME-Version: 1.0
 Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Content-Transfer-Encoding: 8bit
 
-If the trace data buffer becomes full, a truncated flag [T] is reported
-in PERF_RECORD_AUX.  In some cases, the size reported is 0, even though
-data must have been added to make the buffer full.
+Fix KVM IA32_RTIT_CTL MSR validation logic so that if RTIT_CTL_TRACEEN
+bit is cleared, then other bits are allowed to change also. For example,
+writing 0 to IA32_RTIT_CTL in order to stop tracing, is valid.
 
-That happens when the buffer fills up from empty to full before the
-Intel PT driver has updated the buffer position.  Then the driver
-calculates the new buffer position before calculating the data size.
-If the old and new positions are the same, the data size is reported
-as 0, even though it is really the whole buffer size.
-
-Fix by detecting when the buffer position is wrapped, and adjust the
-data size calculation accordingly.
-
-Example
-
-  Use a very small buffer size (8K) and observe the size of truncated [T]
-  data. Before the fix, it is possible to see records of 0 size.
-
-  Before:
-
-    $ perf record -m,8K -e intel_pt// uname
-    Linux
-    [ perf record: Woken up 2 times to write data ]
-    [ perf record: Captured and wrote 0.105 MB perf.data ]
-    $ perf script -D --no-itrace | grep AUX | grep -F '[T]'
-    Warning:
-    AUX data lost 2 times out of 3!
-
-    5 19462712368111 0x19710 [0x40]: PERF_RECORD_AUX offset: 0 size: 0 flags: 0x1 [T]
-    5 19462712700046 0x19ba8 [0x40]: PERF_RECORD_AUX offset: 0x170 size: 0xe90 flags: 0x1 [T]
-
- After:
-
-    $ perf record -m,8K -e intel_pt// uname
-    Linux
-    [ perf record: Woken up 3 times to write data ]
-    [ perf record: Captured and wrote 0.040 MB perf.data ]
-    $ perf script -D --no-itrace | grep AUX | grep -F '[T]'
-    Warning:
-    AUX data lost 2 times out of 3!
-
-    1 113720802995 0x4948 [0x40]: PERF_RECORD_AUX offset: 0 size: 0x2000 flags: 0x1 [T]
-    1 113720979812 0x6b10 [0x40]: PERF_RECORD_AUX offset: 0x2000 size: 0x2000 flags: 0x1 [T]
-
-Fixes: 52ca9ced3f70 ("perf/x86/intel/pt: Add Intel PT PMU driver")
+Fixes: bf8c55d8dc09 ("KVM: x86: Implement Intel PT MSRs read/write emulation")
 Cc: stable@vger.kernel.org
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 ---
- arch/x86/events/intel/pt.c | 11 ++++++++---
- arch/x86/events/intel/pt.h |  2 ++
- 2 files changed, 10 insertions(+), 3 deletions(-)
+ arch/x86/kvm/vmx/vmx.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/events/intel/pt.c b/arch/x86/events/intel/pt.c
-index fd4670a6694e..a087bc0c5498 100644
---- a/arch/x86/events/intel/pt.c
-+++ b/arch/x86/events/intel/pt.c
-@@ -828,11 +828,13 @@ static void pt_buffer_advance(struct pt_buffer *buf)
- 	buf->cur_idx++;
+diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+index 1a4438358c5e..eaf4965ac6df 100644
+--- a/arch/x86/kvm/vmx/vmx.c
++++ b/arch/x86/kvm/vmx/vmx.c
+@@ -1635,7 +1635,8 @@ static int vmx_rtit_ctl_check(struct kvm_vcpu *vcpu, u64 data)
+ 	 * result in a #GP unless the same write also clears TraceEn.
+ 	 */
+ 	if ((vmx->pt_desc.guest.ctl & RTIT_CTL_TRACEEN) &&
+-		((vmx->pt_desc.guest.ctl ^ data) & ~RTIT_CTL_TRACEEN))
++	    (data & RTIT_CTL_TRACEEN) &&
++	    data != vmx->pt_desc.guest.ctl)
+ 		return 1;
  
- 	if (buf->cur_idx == buf->cur->last) {
--		if (buf->cur == buf->last)
-+		if (buf->cur == buf->last) {
- 			buf->cur = buf->first;
--		else
-+			buf->wrapped = true;
-+		} else {
- 			buf->cur = list_entry(buf->cur->list.next, struct topa,
- 					      list);
-+		}
- 		buf->cur_idx = 0;
- 	}
- }
-@@ -846,8 +848,11 @@ static void pt_buffer_advance(struct pt_buffer *buf)
- static void pt_update_head(struct pt *pt)
- {
- 	struct pt_buffer *buf = perf_get_aux(&pt->handle);
-+	bool wrapped = buf->wrapped;
- 	u64 topa_idx, base, old;
- 
-+	buf->wrapped = false;
-+
- 	if (buf->single) {
- 		local_set(&buf->data_size, buf->output_off);
- 		return;
-@@ -865,7 +870,7 @@ static void pt_update_head(struct pt *pt)
- 	} else {
- 		old = (local64_xchg(&buf->head, base) &
- 		       ((buf->nr_pages << PAGE_SHIFT) - 1));
--		if (base < old)
-+		if (base < old || (base == old && wrapped))
- 			base += buf->nr_pages << PAGE_SHIFT;
- 
- 		local_add(base - old, &buf->data_size);
-diff --git a/arch/x86/events/intel/pt.h b/arch/x86/events/intel/pt.h
-index f5e46c04c145..a1b6c04b7f68 100644
---- a/arch/x86/events/intel/pt.h
-+++ b/arch/x86/events/intel/pt.h
-@@ -65,6 +65,7 @@ struct pt_pmu {
-  * @head:	logical write offset inside the buffer
-  * @snapshot:	if this is for a snapshot/overwrite counter
-  * @single:	use Single Range Output instead of ToPA
-+ * @wrapped:	buffer advance wrapped back to the first topa table
-  * @stop_pos:	STOP topa entry index
-  * @intr_pos:	INT topa entry index
-  * @stop_te:	STOP topa entry pointer
-@@ -82,6 +83,7 @@ struct pt_buffer {
- 	local64_t		head;
- 	bool			snapshot;
- 	bool			single;
-+	bool			wrapped;
- 	long			stop_pos, intr_pos;
- 	struct topa_entry	*stop_te, *intr_te;
- 	void			**data_pages;
+ 	/*
 -- 
 2.43.0
 
