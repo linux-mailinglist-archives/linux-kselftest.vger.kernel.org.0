@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-19462-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19463-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AAAA998D23
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 18:21:31 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DE95998E05
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 19:05:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 907041C20443
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 16:21:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7337DB27B7C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 17:04:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D831CC140;
-	Thu, 10 Oct 2024 16:21:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 694CD198A24;
+	Thu, 10 Oct 2024 17:04:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b="BpmLz5Nr"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DiY/AwjH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30476188CAD;
-	Thu, 10 Oct 2024 16:21:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=99.78.197.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A463219AA68
+	for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2024 17:04:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728577287; cv=none; b=gOcog6sii2m4Dlyc5ZhxA0zjs8Tqd+M07GFpy2rXTeo8u00wyW3Yy557LHnrEThS2jmQe/6NPpnQKev47wSmNiZZg1+A4k/vXQv4tg1WzLs1nh9+1HfxxxsB2pIU4wKUGXU11GckI0mEJq9MSXF01J7wOCkVUWGdQs4Qo1oojY8=
+	t=1728579887; cv=none; b=C9d1d5LyuFOKKGhCklGNQEfMMXVt4BDb0YSqaep+ZAv47D5FfKpxgbKbpsYR4N0iwcPPQP4tgAfPkxXzeKLqv/gCRVEqnuwSsbyw6wveeptbJTQYSRPE3ztwGbiI2Sk3t/4rqh+qmGEdLGqRn8cfe/CBYLn7bYLRQJSWRIVjGHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728577287; c=relaxed/simple;
-	bh=eAqlKEg54OE2Af6mt09K7YZboWmPjS4B1Z4T31HCZPE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=h6zoE1BaWHrkzKFqL5VcR8Bt18ArfVCcn1s/qT0KqKuWh2C3dmZ0F9DAdR24TqOqrL1/gU/cn2iHuvbu+FLxmuaSuxwEg+xdgmM/Vep9gP44GHtQQm3OpvXPXcNvk3UzibgnP2zhgzq+Udf/A42LuBVMD2sfocMz2cge9YzH9q8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (1024-bit key) header.d=amazon.co.uk header.i=@amazon.co.uk header.b=BpmLz5Nr; arc=none smtp.client-ip=99.78.197.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.co.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1728579887; c=relaxed/simple;
+	bh=i5dx0UhQ/tTF7VQwfxB7kDXoCRCqQDi/mml7CFO95Q0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cQ4hN/osnmrESEl0P2AX2lGtT4Oaa3tL8OgBl2BP4GbAAUCtuKumTK1Xj9WOWHRSUFRJ6K5kKhH8UPNPRnzWgYMRJKIJg3BUa42JXVbON2+rr+1N/GE0vJ4CfY0yp3/whnVgrAiv9xlxze9pz6JAJCa6Bxo0NM2z9Ea2JmokfK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DiY/AwjH; arc=none smtp.client-ip=209.85.166.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3a3a5cd2a3bso6316145ab.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2024 10:04:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.co.uk; i=@amazon.co.uk; q=dns/txt;
-  s=amazon201209; t=1728577285; x=1760113285;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TcYNx3yACowR5XTJPfVNB9CsPeswpDejBELDbhhAE0o=;
-  b=BpmLz5NrLd7BaEkvLVSEXQxpr9JsCuC48zIJycvnt7Q3a6LxBMmWjHfs
-   d3p4/C+18/oz/BOQXGlcTrSiMgu8hQCKZ4SOIBGVlBx71SgNd4tJDBZgj
-   A12oEJNUFnBF0yFvNijJosKF1WsTKyiYvRl12jgCii3VNmj76nMQeTEpp
-   E=;
-X-IronPort-AV: E=Sophos;i="6.11,193,1725321600"; 
-   d="scan'208";a="137487477"
-Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO smtpout.prod.us-west-2.prod.farcaster.email.amazon.dev) ([10.25.36.214])
-  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 16:21:23 +0000
-Received: from EX19MTAEUC001.ant.amazon.com [10.0.43.254:33134]
- by smtpin.naws.eu-west-1.prod.farcaster.email.amazon.dev [10.0.17.150:2525] with esmtp (Farcaster)
- id d0294a3e-94ae-4c3f-9c3f-178089dd3584; Thu, 10 Oct 2024 16:21:22 +0000 (UTC)
-X-Farcaster-Flow-ID: d0294a3e-94ae-4c3f-9c3f-178089dd3584
-Received: from EX19D022EUC003.ant.amazon.com (10.252.51.167) by
- EX19MTAEUC001.ant.amazon.com (10.252.51.155) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Thu, 10 Oct 2024 16:21:17 +0000
-Received: from EX19MTAUEA002.ant.amazon.com (10.252.134.9) by
- EX19D022EUC003.ant.amazon.com (10.252.51.167) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1258.34;
- Thu, 10 Oct 2024 16:21:17 +0000
-Received: from email-imr-corp-prod-iad-all-1a-93a35fb4.us-east-1.amazon.com
- (10.43.8.2) by mail-relay.amazon.com (10.252.134.34) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id
- 15.2.1258.34 via Frontend Transport; Thu, 10 Oct 2024 16:21:17 +0000
-Received: from [127.0.0.1] (dev-dsk-roypat-1c-dbe2a224.eu-west-1.amazon.com [172.19.88.180])
-	by email-imr-corp-prod-iad-all-1a-93a35fb4.us-east-1.amazon.com (Postfix) with ESMTPS id 75D4E4060D;
-	Thu, 10 Oct 2024 16:21:12 +0000 (UTC)
-Message-ID: <6bca3ad4-3eca-4a75-a775-5f8b0467d7a3@amazon.co.uk>
-Date: Thu, 10 Oct 2024 17:21:11 +0100
+        d=linuxfoundation.org; s=google; t=1728579885; x=1729184685; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hUDkh/kjwV3Ai2AwiP8Kl7C0pSMOQvoqahsvYlIjyPA=;
+        b=DiY/AwjH3vRMI8RIly/8DBpdIklJc4macdRuaz7zn4YVoIczvq2qSJ2bZHOinEBign
+         dQD5AUcR9pOO7FMPC7vnLuPVvn0Px1iZBhrTp3Gtl/koseS7A79zSGy+l/lL/3xkK2yO
+         XCuRSHMmBBjlLU/bGNozV19ei8CJoBTvwoQ+M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728579885; x=1729184685;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hUDkh/kjwV3Ai2AwiP8Kl7C0pSMOQvoqahsvYlIjyPA=;
+        b=KWs70vu3sB9RjUg9+rKTofVfXwrVJTJk4GfOGsj0ngubXgKDLIomRqpDz4CrFTYBa3
+         Z6AGE5wdVEs8HcQzhdF1/Urbvrh9gopdiR7BZY/g6QBYl1tpTr7JbbUrZFe5EmHrVGkt
+         lv2g4/vSuFny13JyerSRCjIIOlvKs7O0RXNsWkUhal4x/wg6uGFQF5RQbVMZiRVxL90z
+         97W1gtFRCYcoTpzxUCKy+WfGOlqfElN4pEpEJFxkOGmuH+tC9SrKMdXhKd1aOSueSOUI
+         uVZxpAF9KZNNTqxu1EhwAL0xw70Ggd5KAPlLtYHtXITxtH/WMsoDtYg9tzbzQfcEY5h2
+         8ksA==
+X-Forwarded-Encrypted: i=1; AJvYcCUAETrOPr2TMPwdcQLHYZE3l9ZuvT9F9UCgeQWvy5A3YnWf3hNtUGSjVfEB7TBdxIDTeOEnw9yDu2e1MDNsWWU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5yWMTQAybsFH5nZ0QRYkH/bcBobg6DDSPWpbeIwMi/pfRhUYd
+	mwcm7F1mGFHeVOi30TqAqWmlc8YlEJt54s+Mzs0EcWnLHGpvIXRiIF8IoRccPqk=
+X-Google-Smtp-Source: AGHT+IEmIOQmx+WWs5L52kh0YJyVZPtoP5znB1H5OJDnusEZHA3cnEBsF6SLubdvdK9UJeIt/LZ+bQ==
+X-Received: by 2002:a05:6e02:178d:b0:3a3:9337:4ce2 with SMTP id e9e14a558f8ab-3a397cda124mr63977615ab.2.1728579884706;
+        Thu, 10 Oct 2024 10:04:44 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dbada84990sm311977173.113.2024.10.10.10.04.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 10 Oct 2024 10:04:44 -0700 (PDT)
+Message-ID: <63a7811c-c2cb-472f-bfa1-3b45bc65da10@linuxfoundation.org>
+Date: Thu, 10 Oct 2024 11:04:43 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,163 +73,52 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 30/39] KVM: guest_memfd: Handle folio preparation for
- guest_memfd mmap
-To: Sean Christopherson <seanjc@google.com>, Ackerley Tng
-	<ackerleytng@google.com>
-CC: <quic_eberman@quicinc.com>, <tabba@google.com>, <jgg@nvidia.com>,
-	<peterx@redhat.com>, <david@redhat.com>, <rientjes@google.com>,
-	<fvdl@google.com>, <jthoughton@google.com>, <pbonzini@redhat.com>,
-	<zhiquan1.li@intel.com>, <fan.du@intel.com>, <jun.miao@intel.com>,
-	<isaku.yamahata@intel.com>, <muchun.song@linux.dev>,
-	<mike.kravetz@oracle.com>, <erdemaktas@google.com>, <vannapurve@google.com>,
-	<qperret@google.com>, <jhubbard@nvidia.com>, <willy@infradead.org>,
-	<shuah@kernel.org>, <brauner@kernel.org>, <bfoster@redhat.com>,
-	<kent.overstreet@linux.dev>, <pvorel@suse.cz>, <rppt@kernel.org>,
-	<richard.weiyang@gmail.com>, <anup@brainfault.org>, <haibo1.xu@intel.com>,
-	<ajones@ventanamicro.com>, <vkuznets@redhat.com>,
-	<maciej.wieczor-retman@intel.com>, <pgonda@google.com>,
-	<oliver.upton@linux.dev>, <linux-kernel@vger.kernel.org>,
-	<linux-mm@kvack.org>, <kvm@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-fsdevel@kvack.org>,
-	<jgowans@amazon.com>, <kalyazin@amazon.co.uk>, <derekmn@amazon.com>
-References: <e8f55fef-1821-408e-88ed-b25200ef66c9@amazon.co.uk>
- <diqz1q0qtqnd.fsf@ackerleytng-ctop.c.googlers.com>
- <ZwWOfXd9becAm4lH@google.com>
-From: Patrick Roy <roypat@amazon.co.uk>
+Subject: Re: [PATCH v2] ftrace/selftest: Test combination of function_graph
+ tracer and function profiler
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+ Steven Rostedt <rostedt@goodmis.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <20241004145618.18436d7e@gandalf.local.home>
+ <20241008093314.8b263b6bd2e23c6a8345b65f@kernel.org>
 Content-Language: en-US
-Autocrypt: addr=roypat@amazon.co.uk; keydata=
- xjMEY0UgYhYJKwYBBAHaRw8BAQdA7lj+ADr5b96qBcdINFVJSOg8RGtKthL5x77F2ABMh4PN
- NVBhdHJpY2sgUm95IChHaXRodWIga2V5IGFtYXpvbikgPHJveXBhdEBhbWF6b24uY28udWs+
- wpMEExYKADsWIQQ5DAcjaM+IvmZPLohVg4tqeAbEAgUCY0UgYgIbAwULCQgHAgIiAgYVCgkI
- CwIEFgIDAQIeBwIXgAAKCRBVg4tqeAbEAmQKAQC1jMl/KT9pQHEdALF7SA1iJ9tpA5ppl1J9
- AOIP7Nr9SwD/fvIWkq0QDnq69eK7HqW14CA7AToCF6NBqZ8r7ksi+QLOOARjRSBiEgorBgEE
- AZdVAQUBAQdAqoMhGmiXJ3DMGeXrlaDA+v/aF/ah7ARbFV4ukHyz+CkDAQgHwngEGBYKACAW
- IQQ5DAcjaM+IvmZPLohVg4tqeAbEAgUCY0UgYgIbDAAKCRBVg4tqeAbEAtjHAQDkh5jZRIsZ
- 7JMNkPMSCd5PuSy0/Gdx8LGgsxxPMZwePgEAn5Tnh4fVbf00esnoK588bYQgJBioXtuXhtom
- 8hlxFQM=
-In-Reply-To: <ZwWOfXd9becAm4lH@google.com>
-Content-Type: text/plain; charset="UTF-8"
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20241008093314.8b263b6bd2e23c6a8345b65f@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-
-
-On Tue, 2024-10-08 at 20:56 +0100, Sean Christopherson wrote:
-> On Tue, Oct 08, 2024, Ackerley Tng wrote:
->> Patrick Roy <roypat@amazon.co.uk> writes:
->>> For the "non-CoCo with direct map entries removed" VMs that we at AWS
->>> are going for, we'd like a VM type with host-controlled in-place
->>> conversions which doesn't zero on transitions,
+On 10/7/24 18:33, Masami Hiramatsu (Google) wrote:
+> On Fri, 4 Oct 2024 14:56:18 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
 > 
-> Hmm, your use case shouldn't need conversions _for KVM_, as there's no need for
-> KVM to care if userspace or the guest _wants_ a page to be shared vs. private.
-> Userspace is fully trusted to manage things; KVM simply reacts to the current
-> state of things.
+>> From: Steven Rostedt <rostedt@goodmis.org>
+>>
+>> Masami reported a bug when running function graph tracing then the
+>> function profiler. The following commands would cause a kernel crash:
+>>
+>>    # cd /sys/kernel/tracing/
+>>    # echo function_graph > current_tracer
+>>    # echo 1 > function_profile_enabled
+>>
+>> In that order. Create a test to test this two to make sure this does not
+>> come back as a regression.
+>>
+>> Link: https://lore.kernel.org/172398528350.293426.8347220120333730248.stgit@devnote2
+>>
 > 
-> And more importantly, whether or not the direct map is zapped needs to be a
-> property of the guest_memfd inode, i.e. can't be associated with a struct kvm.
-> I forget who got volunteered to do the work,
-
-I think me? At least we talked about it briefly
-
-> but we're going to need similar
-> functionality for tracking the state of individual pages in a huge folio, as
-> folio_mark_uptodate() is too coarse-grained.  I.e. at some point, I expect that
-> guest_memfd will make it easy-ish to determine whether or not the direct map has
-> been obliterated.
+> Looks good to me.
 > 
-> The shared vs. private attributes tracking in KVM is still needed (I think), as
-> it communicates what userspace _wants_, whereas he guest_memfd machinery will
-> track what the state _is_.
-
-If I'm understanding this patch series correctly, the approach taken
-here is to force the KVM memory attributes and the internal guest_memfd
-state to be in-sync, because the VMA from mmap()ing guest_memfd is
-reflected back into the userspace_addr of the memslot. So, to me, in
-this world, "direct map zapped iff
-kvm_has_mem_attributes(KVM_MEMORY_ATTRIBUTES_PRIVATE)", with memory
-attribute changes forcing the corresponding gmem state change. That's
-why I was talking about conversions above.
-
-I've played around with this locally, and since KVM seems to generally
-use copy_from_user and friends to access the userspace_addr VMA, (aka
-private mem that's reflected back into memslots here), with this things
-like MMIO emulation can be oblivious to gmem's existence, since
-copy_from_user and co don't require GUP or presence of direct map
-entries (well, "oblivious" in the sense that things like kvm_read_guest
-currently ignore memory attributes and unconditionally access
-userspace_addr, which I suppose is not really wanted for VMs where
-userspace_addr and guest_memfd aren't short-circuited like this). The
-exception is kvm_clock, where the pv_time page would need to be
-explicitly converted to shared to restore the direct map entry, although
-I think we could just let userspace deal with making sure this page is
-shared (and then, if gmem supports GUP on shared memory, even the
-gfn_to_pfn_caches could work without gmem knowledge. Without GUP, we'd
-still need a tiny hack in the uhva->pfn translation somewhere to handle
-gmem vmas, but iirc you did mention that having kvm-clock be special
-might be fine).
-
-I guess it does come down to what you note below, answering the question
-of "how does KVM internally access guest_memfd for non-CoCo VMs".  Is
-there any way we can make uaccesses like above work? I've finally gotten
-around to re-running some performance benchmarks of my on-demand
-reinsertion patches with all the needed TLB flushes added, and my fio
-benchmark on a virtio-blk device suffers a ~50% throughput regression,
-which does not necessarily spark joy. And I think James H.  mentioned at
-LPC that making the userfault stuff work with my patches would be quite
-hard. All this in addition to you also not necessarily sounding too keen
-on it either :D
-
->>> so if KVM_X86_SW_PROTECTED_VM ends up zeroing, we'd need to add another new
->>> VM type for that.
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 > 
-> Maybe we should sneak in a s/KVM_X86_SW_PROTECTED_VM/KVM_X86_SW_HARDENED_VM rename?
-> The original thought behind "software protected VM" was to do a slow build of
-> something akin to pKVM, but realistically I don't think that idea is going anywhere.
+> Thanks!
+> 
+>> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 
-Ah, admittedly I've thought of KVM_X86_SW_PROTECTED_VM as a bit of a
-playground where various configurations other VM types enforce can be
-mixed and matched (e.g. zero on conversions yes/no, direct map removal
-yes/no) so more of a KVM_X86_GMEM_VM, but am happy to update my
-understanding :) 
+Steve, Would you like me take this one through my tree?
 
-> Alternatively, depending on how KVM accesses guest memory that's been removed from
-> the direct map, another solution would be to allow "regular" VMs to bind memslots
-> to guest_memfd, i.e. if the non-CoCo use case needs/wnats to bind all memory to
-> guest_memfd, not just "private" mappings.
-> 
-> That's probably the biggest topic of discussion: how do we want to allow mapping
-> guest_memfd into the guest, without direct map entries, but while still allowing
-> KVM to access guest memory as needed, e.g. for shadow paging.  One approach is
-> your RFC, where KVM maps guest_memfd pfns on-demand.
-> 
-> Another (slightly crazy) approach would be use protection keys to provide the
-> security properties that you want, while giving KVM (and userspace) a quick-and-easy
-> override to access guest memory.
-> 
->  1. mmap() guest_memfd into userpace with RW protections
->  2. Configure PKRU to make guest_memfd memory inaccessible by default
->  3. Swizzle PKRU on-demand when intentionally accessing guest memory
-> 
-> It's essentially the same idea as SMAP+STAC/CLAC, just applied to guest memory
-> instead of to usersepace memory.
-> 
-> The benefit of the PKRU approach is that there are no PTE modifications, and thus
-> no TLB flushes, and only the CPU that is access guest memory gains temporary
-> access.  The big downside is that it would be limited to modern hardware, but
-> that might be acceptable, especially if it simplifies KVM's implementation.
+thanks,
+-- Shuah
 
-Mh, but we only have 16 protection keys, so we cannot give each VM a
-unique one. And if all guest memory shares the same protection key, then
-during the on-demand swizzling the CPU would get access to _all_ guest
-memory on the host, which "feels" scary. What do you think, @Derek?
-
-Does ARM have something equivalent, btw?
-
->>> Somewhat related sidenote: For VMs that allow inplace conversions and do
->>> not zero, we do not need to zap the stage-2 mappings on memory attribute
->>> changes, right?
-> 
-> See above.  I don't think conversions by toggling the shared/private flag in
-> KVM's memory attributes is the right fit for your use case.
 
