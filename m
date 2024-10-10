@@ -1,124 +1,120 @@
-Return-Path: <linux-kselftest+bounces-19463-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19464-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DE95998E05
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 19:05:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67000998E16
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 19:11:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7337DB27B7C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 17:04:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02B21283738
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 17:11:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 694CD198A24;
-	Thu, 10 Oct 2024 17:04:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E41719C559;
+	Thu, 10 Oct 2024 17:11:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DiY/AwjH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HbnRhmje"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A463219AA68
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2024 17:04:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ACE738F9C;
+	Thu, 10 Oct 2024 17:11:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728579887; cv=none; b=C9d1d5LyuFOKKGhCklGNQEfMMXVt4BDb0YSqaep+ZAv47D5FfKpxgbKbpsYR4N0iwcPPQP4tgAfPkxXzeKLqv/gCRVEqnuwSsbyw6wveeptbJTQYSRPE3ztwGbiI2Sk3t/4rqh+qmGEdLGqRn8cfe/CBYLn7bYLRQJSWRIVjGHg=
+	t=1728580278; cv=none; b=b9QBuQL7woTDh36eJN2tklLtz9cj+H58Z6tquLGv4eEj66+jNDTLS31Bbn7w1H7Piw89NxYyPe1pJoi7fHvsJ3juWeETJGOwAep+h3N3wJfLIn7T50KKkaxdVJIGZGWJJsyH3NfGhgh7c7s0TqPntsU9pNVfRbWbocQLMRThGs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728579887; c=relaxed/simple;
-	bh=i5dx0UhQ/tTF7VQwfxB7kDXoCRCqQDi/mml7CFO95Q0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cQ4hN/osnmrESEl0P2AX2lGtT4Oaa3tL8OgBl2BP4GbAAUCtuKumTK1Xj9WOWHRSUFRJ6K5kKhH8UPNPRnzWgYMRJKIJg3BUa42JXVbON2+rr+1N/GE0vJ4CfY0yp3/whnVgrAiv9xlxze9pz6JAJCa6Bxo0NM2z9Ea2JmokfK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DiY/AwjH; arc=none smtp.client-ip=209.85.166.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-3a3a5cd2a3bso6316145ab.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2024 10:04:45 -0700 (PDT)
+	s=arc-20240116; t=1728580278; c=relaxed/simple;
+	bh=8fEtXadOHBRvHkdpXei7gLNnPqq0rK0haWuSXFsWkAY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AwzUdwuj/V987xTMZr4MTAbo+2LebHgPGmxAEFnnMo/YxVx+YW43TgzmUD30gM2D45dRqVUWR73iAUEVmrZMy8Ys4mkE0Ncq9JKQweTyPzfOoVb8vOiVI15Csyqithd3X3cbGC76FTzAeqAa/w7M7qOPXkEiAnWMEjkNMEyo76g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HbnRhmje; arc=none smtp.client-ip=209.85.208.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5c9362c26d8so1588084a12.1;
+        Thu, 10 Oct 2024 10:11:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1728579885; x=1729184685; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hUDkh/kjwV3Ai2AwiP8Kl7C0pSMOQvoqahsvYlIjyPA=;
-        b=DiY/AwjH3vRMI8RIly/8DBpdIklJc4macdRuaz7zn4YVoIczvq2qSJ2bZHOinEBign
-         dQD5AUcR9pOO7FMPC7vnLuPVvn0Px1iZBhrTp3Gtl/koseS7A79zSGy+l/lL/3xkK2yO
-         XCuRSHMmBBjlLU/bGNozV19ei8CJoBTvwoQ+M=
+        d=gmail.com; s=20230601; t=1728580275; x=1729185075; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=bTBObgng5fDja2DGdr7TNcsQ0xUC1/ypeIDleBZZD/8=;
+        b=HbnRhmje3DN2fgG3FgFwetO639szILwXk4kTvklePscu+5NIwKIGXSTAnJ/vWED/Ig
+         9YigVMl5GUvCVAUp9rZvQwTUlEOVMU4zlZsajfmeZnj13a4khtuztXcYiWGXf00orquW
+         SwilQRRMKfQzbY3WD0dCRtkMsy0XtEQuEoqnW+IAk81hff0c2kPMpTJwO3o3Pt6VtPEl
+         PjXH0sFgN6QVtSrgrpsJRTuFcSaWaTg46OWxNijgwEYDEiklr03hPBHJwOZyi5Dwg1lZ
+         alcI8FvvCkXaB/SCBujwWmVMAmNMljMbmaVdH6Y41hIYOVWfxizm5n7SoTcHU3zMHlr9
+         Ck4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728579885; x=1729184685;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hUDkh/kjwV3Ai2AwiP8Kl7C0pSMOQvoqahsvYlIjyPA=;
-        b=KWs70vu3sB9RjUg9+rKTofVfXwrVJTJk4GfOGsj0ngubXgKDLIomRqpDz4CrFTYBa3
-         Z6AGE5wdVEs8HcQzhdF1/Urbvrh9gopdiR7BZY/g6QBYl1tpTr7JbbUrZFe5EmHrVGkt
-         lv2g4/vSuFny13JyerSRCjIIOlvKs7O0RXNsWkUhal4x/wg6uGFQF5RQbVMZiRVxL90z
-         97W1gtFRCYcoTpzxUCKy+WfGOlqfElN4pEpEJFxkOGmuH+tC9SrKMdXhKd1aOSueSOUI
-         uVZxpAF9KZNNTqxu1EhwAL0xw70Ggd5KAPlLtYHtXITxtH/WMsoDtYg9tzbzQfcEY5h2
-         8ksA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAETrOPr2TMPwdcQLHYZE3l9ZuvT9F9UCgeQWvy5A3YnWf3hNtUGSjVfEB7TBdxIDTeOEnw9yDu2e1MDNsWWU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5yWMTQAybsFH5nZ0QRYkH/bcBobg6DDSPWpbeIwMi/pfRhUYd
-	mwcm7F1mGFHeVOi30TqAqWmlc8YlEJt54s+Mzs0EcWnLHGpvIXRiIF8IoRccPqk=
-X-Google-Smtp-Source: AGHT+IEmIOQmx+WWs5L52kh0YJyVZPtoP5znB1H5OJDnusEZHA3cnEBsF6SLubdvdK9UJeIt/LZ+bQ==
-X-Received: by 2002:a05:6e02:178d:b0:3a3:9337:4ce2 with SMTP id e9e14a558f8ab-3a397cda124mr63977615ab.2.1728579884706;
-        Thu, 10 Oct 2024 10:04:44 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dbada84990sm311977173.113.2024.10.10.10.04.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Oct 2024 10:04:44 -0700 (PDT)
-Message-ID: <63a7811c-c2cb-472f-bfa1-3b45bc65da10@linuxfoundation.org>
-Date: Thu, 10 Oct 2024 11:04:43 -0600
+        d=1e100.net; s=20230601; t=1728580275; x=1729185075;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bTBObgng5fDja2DGdr7TNcsQ0xUC1/ypeIDleBZZD/8=;
+        b=iJO20ky/4h4z36PYR44FXd14KXAXXTgmobgI2k94x7YnDzNbQyhijdYm3PrhW6Oqxj
+         9H+FBNgeJBelYdeVHVLN4KgLmhDvlpmZl1TPrPzGBblmS92sJWaduc6lctwMUrrOWZHz
+         6s86k1++J8tAkdVI5woDRT+p6MkpkYFXHs2m2W6qJu6YVMZVdRujvnGvxFDUzAvOX3ci
+         wATtUs+YM+LZSr2EQo9ZKlHC/oUx52Zi/vhWo0Fajy0P6CWzrMx8OtM37BJ3soZWfGhc
+         bd9LcUDC0KwjuXi+ZLw2pSP8333t78dKGnNXzyk6UJ2emyxGXhGFf3KeqnIgw+DI54L+
+         Er9g==
+X-Forwarded-Encrypted: i=1; AJvYcCUhs2uL66I3zem6Tb3Gra3j61i8rXmAdRoTqsgLEeFS58XfltV2p9Nu7kS8/NzgTGHfkxBNJ9L+@vger.kernel.org, AJvYcCVQykzYRwmHoTAYWKo9T0v6g4l2RGUjpeZgfVQtlNtkhYQP5MH9PE9l3vRx8EkJ6Vgw5BUEFZZ3N1Knzo9W/07a@vger.kernel.org, AJvYcCVx8kWv7alOADbw8zNR+uFkBRKtfHMdMZNe6P/QamSOpVIM99izzv+cy/3uvPl96KByYky0hWrF6xEkG2U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGWLvTkvhGTfYOzJm4u+w8Bvjy2KZHd9CNb/ZjgxirYWtsCrRd
+	ghyS1hS6Hit00jFm6CnsF6cwaCV27dG3z6LummzX5Y4d4/8vZRf6
+X-Google-Smtp-Source: AGHT+IHeA8Mkgr2bkktWiIZzys5lXcpPMy714NYIlzPycTzg8/XHBh8KDPfUc7rrUr4BrzWoe3en/w==
+X-Received: by 2002:a17:907:728f:b0:a99:5f65:fd9a with SMTP id a640c23a62f3a-a99a13b0aefmr310447566b.21.1728580274725;
+        Thu, 10 Oct 2024 10:11:14 -0700 (PDT)
+Received: from localhost (net-2-44-97-22.cust.vodafonedsl.it. [2.44.97.22])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a99a80f2593sm112731666b.215.2024.10.10.10.11.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 10 Oct 2024 10:11:14 -0700 (PDT)
+Date: Thu, 10 Oct 2024 19:11:12 +0200
+From: Alessandro Zanni <alessandro.zanni87@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, edumazet@google.com, pabeni@redhat.com, 
+	shuah@kernel.org, petrm@nvidia.com, dw@davidwei.uk, martin.lau@kernel.org, 
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	skhan@linuxfoundation.org, anupnewsmail@gmail.com
+Subject: Re: [PATCH] selftests: drivers: net: fix name not defined
+Message-ID: <u7j2kzlhhf4yvluijqckc57xey6ymglrszte66t6bmacce73gh@cmojzmkphrdi>
+References: <20241008220137.274660-1-alessandro.zanni87@gmail.com>
+ <20241009193256.2dd476c5@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] ftrace/selftest: Test combination of function_graph
- tracer and function profiler
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
- Steven Rostedt <rostedt@goodmis.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- linux-kselftest@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20241004145618.18436d7e@gandalf.local.home>
- <20241008093314.8b263b6bd2e23c6a8345b65f@kernel.org>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241008093314.8b263b6bd2e23c6a8345b65f@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241009193256.2dd476c5@kernel.org>
 
-On 10/7/24 18:33, Masami Hiramatsu (Google) wrote:
-> On Fri, 4 Oct 2024 14:56:18 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
+On 24/10/09 07:32, Jakub Kicinski wrote:
+> On Wed,  9 Oct 2024 00:01:33 +0200 Alessandro Zanni wrote:
+> > This fix solves this error, when calling kselftest with targets "drivers/net":
+> > 
+> > File "tools/testing/selftests/net/lib/py/nsim.py", line 64, in __init__
+> >   if e.errno == errno.ENOSPC:
+> > NameError: name 'errno' is not defined
+> > 
+> > The module errno makes available standard error system symbols.
 > 
->> From: Steven Rostedt <rostedt@goodmis.org>
->>
->> Masami reported a bug when running function graph tracing then the
->> function profiler. The following commands would cause a kernel crash:
->>
->>    # cd /sys/kernel/tracing/
->>    # echo function_graph > current_tracer
->>    # echo 1 > function_profile_enabled
->>
->> In that order. Create a test to test this two to make sure this does not
->> come back as a regression.
->>
->> Link: https://lore.kernel.org/172398528350.293426.8347220120333730248.stgit@devnote2
->>
+> Can you say more about how you hit this error?
 > 
-> Looks good to me.
-> 
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> 
-> Thanks!
-> 
->> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> If it's just based on static analysis please mention that in the commit
+> message, and also mention that the problem doesn't happen in practice.
+> This will avoid the patch being backported unnecessarily.
 
-Steve, Would you like me take this one through my tree?
+I didn't use static analysis tool. I've run the test manually.
+I got the error from executing:
+make --silent kselftest TARGETS="drivers/net"
 
-thanks,
--- Shuah
+Thanks for pointing out, I'll prepare a v2 patch with the command used.
 
+> We run all the tests in our CI, and the problem is not hit. But I agree
+> with you that the import is theoretically missing.
+
+When I ran the test, the function ctrl_write() raised an OSError. So, 
+in my case, it was also a practical error.
+
+> -- 
+> pw-bot: cr
 
