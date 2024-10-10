@@ -1,97 +1,91 @@
-Return-Path: <linux-kselftest+bounces-19422-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19423-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE190997D3E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 08:32:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FA68997D8C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 08:46:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AA5D1C23CD8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 06:32:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F37EAB20E97
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 06:46:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D2181A2653;
-	Thu, 10 Oct 2024 06:32:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 656781A01C6;
+	Thu, 10 Oct 2024 06:46:15 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cygnus.enyo.de (cygnus.enyo.de [79.140.189.114])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 054DF18DF81;
-	Thu, 10 Oct 2024 06:32:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.140.189.114
+Received: from cmccmta3.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B2B32F50;
+	Thu, 10 Oct 2024 06:46:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728541935; cv=none; b=dvD2fByHQwqo8htTHM5eTSsoIMpywWbVbxKsXV4sm41NX+9z0+1Ezt7TEqh5Shygd+alLJkScsbmGlX7Sz9i1R5TcJQX1bc6579zYkF2EZJxvkAJzO8UADhds0sjnLypOtnB4fw8sqPOirXih+JuDZUMGv1MtaVzgx3OiBfIZ3E=
+	t=1728542775; cv=none; b=DqcRfD3EwK9hVRNL6hxum9Q6i2A6l/2ZWbCKODmXeUKspdz48rDzQIqpq5DtmTZ3Spq9TWE8ZNFR73FTVt09SuJRXmLxRdNN+oDeIsJX7vneyPcqbU9FuH4etWwPaQ0JSUYHKAQSQyhN0pRFDRHW6nM2CgMHrkpw5FLnOjPo/rE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728541935; c=relaxed/simple;
-	bh=V2kO13Sp536cUh/fcCKZAzX5GRu3GPW5Wblh2HA5ICE=;
-	h=From:To:Cc:Subject:References:Date:In-Reply-To:Message-ID:
-	 MIME-Version:Content-Type; b=tzuuO5VJdPxmuwg2lcq2CKhey/1RipXgloXf+ICAdi2TEIxUXQq8PguBuEp1njHUxw+K8/FIc2yO7BRP9YVT7vprLxlpj2IhqGi4KSbPKJx2zNA8CeDqEoNiEvZOyqB8BzX39hog5bfCJrW5MTNRD/5vuKxaTWzUOjuWH3DMsew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=deneb.enyo.de; spf=pass smtp.mailfrom=deneb.enyo.de; arc=none smtp.client-ip=79.140.189.114
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=deneb.enyo.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=deneb.enyo.de
-Received: from [172.17.203.2] (port=37769 helo=deneb.enyo.de)
-	by albireo.enyo.de ([172.17.140.2]) with esmtps (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	id 1symcq-0005LL-2t;
-	Thu, 10 Oct 2024 06:26:16 +0000
-Received: from fw by deneb.enyo.de with local (Exim 4.96)
-	(envelope-from <fw@deneb.enyo.de>)
-	id 1symcq-00142n-11;
-	Thu, 10 Oct 2024 08:26:16 +0200
-From: Florian Weimer <fw@deneb.enyo.de>
-To: Aleksa Sarai <cyphar@cyphar.com>
-Cc: Ingo Molnar <mingo@redhat.com>,  Peter Zijlstra <peterz@infradead.org>,
-  Juri Lelli <juri.lelli@redhat.com>,  Vincent Guittot
- <vincent.guittot@linaro.org>,  Dietmar Eggemann
- <dietmar.eggemann@arm.com>,  Steven Rostedt <rostedt@goodmis.org>,  Ben
- Segall <bsegall@google.com>,  Mel Gorman <mgorman@suse.de>,  Valentin
- Schneider <vschneid@redhat.com>,  Alexander Viro
- <viro@zeniv.linux.org.uk>,  Christian Brauner <brauner@kernel.org>,  Jan
- Kara <jack@suse.cz>,  Arnd Bergmann <arnd@arndb.de>,  Shuah Khan
- <shuah@kernel.org>,  Kees Cook <kees@kernel.org>,  Florian Weimer
- <fweimer@redhat.com>,  Mark Rutland <mark.rutland@arm.com>,
-  linux-kernel@vger.kernel.org,  linux-api@vger.kernel.org,
-  linux-fsdevel@vger.kernel.org,  linux-arch@vger.kernel.org,
-  linux-kselftest@vger.kernel.org,  stable@vger.kernel.org
-Subject: Re: [PATCH RFC v3 00/10] extensible syscalls: CHECK_FIELDS to allow
- for easier feature detection
-References: <20241010-extensible-structs-check_fields-v3-0-d2833dfe6edd@cyphar.com>
-Date: Thu, 10 Oct 2024 08:26:16 +0200
-In-Reply-To: <20241010-extensible-structs-check_fields-v3-0-d2833dfe6edd@cyphar.com>
-	(Aleksa Sarai's message of "Thu, 10 Oct 2024 07:40:33 +1100")
-Message-ID: <87jzegfp87.fsf@mid.deneb.enyo.de>
+	s=arc-20240116; t=1728542775; c=relaxed/simple;
+	bh=D5BRSPBPiILM4yEAvVbU5zoG52ij8jUvL4aJwkls0Jo=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=ie1Xz1X2LrY5Ct/5p/x+9RoDruOvq5Xjv/HrSPbapwgYCPfyWKSvZ1zt0htnIrWKHYrHmaCbuwXtBXlPWbscI8zVUHmjB30tLRwqz5Ll0sLgN5qNlNMgYPjLP0cNsIgRaYt0CgRUBTguUXM0K8kTka+5uboYEBZVVgZ32N4WTa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app09-12009 (RichMail) with SMTP id 2ee96707782a492-fb49f;
+	Thu, 10 Oct 2024 14:46:02 +0800 (CST)
+X-RM-TRANSID:2ee96707782a492-fb49f
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from ubuntu.localdomain (unknown[10.55.1.71])
+	by rmsmtp-syy-appsvr01-12001 (RichMail) with SMTP id 2ee167077828a81-3baa6;
+	Thu, 10 Oct 2024 14:46:02 +0800 (CST)
+X-RM-TRANSID:2ee167077828a81-3baa6
+From: Zhu Jun <zhujun2@cmss.chinamobile.com>
+To: andrii@kernel.org
+Cc: eddyz87@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	zhujun2@cmss.chinamobile.com,
+	mykolal@fb.com,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org
+Subject: [PATCH] selftests/bpf: Removed redundant variable
+Date: Wed,  9 Oct 2024 23:46:00 -0700
+Message-Id: <20241010064600.4574-1-zhujun2@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
 
-* Aleksa Sarai:
+The error check is no longer needed for this test case,
+simplifying the code.
 
-> This is something that I've been thinking about for a while. We had a
-> discussion at LPC 2020 about this[1] but the proposals suggested there
-> never materialised.
->
-> In short, it is quite difficult for userspace to detect the feature
-> capability of syscalls at runtime. This is something a lot of programs
-> want to do, but they are forced to create elaborate scenarios to try to
-> figure out if a feature is supported without causing damage to the
-> system. For the vast majority of cases, each individual feature also
-> needs to be tested individually (because syscall results are
-> all-or-nothing), so testing even a single syscall's feature set can
-> easily inflate the startup time of programs.
->
-> This patchset implements the fairly minimal design I proposed in this
-> talk[2] and in some old LKML threads (though I can't find the exact
-> references ATM). The general flow looks like:
+Signed-off-by: Zhu Jun <zhujun2@cmss.chinamobile.com>
+---
+ tools/testing/selftests/bpf/prog_tests/signal_pending.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-By the way, I have recently tried to document things from a glibc
-perspective (which is a bit broader because we also have purely
-userspace types):
+diff --git a/tools/testing/selftests/bpf/prog_tests/signal_pending.c b/tools/testing/selftests/bpf/prog_tests/signal_pending.c
+index 70b49da5ca0a..8920fadb3aa9 100644
+--- a/tools/testing/selftests/bpf/prog_tests/signal_pending.c
++++ b/tools/testing/selftests/bpf/prog_tests/signal_pending.c
+@@ -36,7 +36,7 @@ static void test_signal_pending_by_type(enum bpf_prog_type prog_type)
+ 	err = setitimer(ITIMER_REAL, &timeo, NULL);
+ 	ASSERT_OK(err, "test-run-signal-timer");
+ 
+-	err = bpf_prog_test_run_opts(prog_fd, &topts);
++	bpf_prog_test_run_opts(prog_fd, &topts);
+ 	ASSERT_LE(topts.duration, 500000000 /* 500ms */,
+ 		  "test-run-signal-duration");
+ 
+-- 
+2.17.1
 
-  [PATCH RFC] manual: Document how types change
-  <https://inbox.sourceware.org/libc-alpha/8734m4n1ij.fsf@oldenburg3.str.redhat.com/>
 
-(This patch has not yet been reviewed.)
+
 
