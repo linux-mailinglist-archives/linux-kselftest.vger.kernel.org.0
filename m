@@ -1,111 +1,116 @@
-Return-Path: <linux-kselftest+bounces-19431-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19432-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 275C2998339
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 12:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F2C0998381
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 12:26:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCCCA1F251A2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 10:10:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92E341F22E18
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 10:26:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 336A81C1AD8;
-	Thu, 10 Oct 2024 10:09:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TuLhCxS/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C2B01BF324;
+	Thu, 10 Oct 2024 10:26:42 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A191BF300;
-	Thu, 10 Oct 2024 10:09:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89FFE1A00ED;
+	Thu, 10 Oct 2024 10:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728554986; cv=none; b=rqE5vvcK1E0UYrSYKbxvHjZxaLQGRjcIV3NopUHG/D1dena7adKykfmeRtsuSUg6Pjl85Qs8x63MfQFqtVeuhkqTWEkPH3o91nsvxUusuZrv2JvOCW1FQtksDBulMVPyiB6YBX9XbyY0mxwSvLZ1H9vgRMoCl6zvzbb4YeRwYoM=
+	t=1728556002; cv=none; b=DBBpbuw9fJbja46jYmTt7E8uQrHKO1yeEMir/eF5o7uLLXVl+yqj81H8g0N5nnUZw8U5zRhFaV5dbP9//9ecv3D5yYuKNrxFf2RpYftSGU+GEbwVvIa+e4GYtriytSRX1Dp25A8DEaFxmLu6sNn2LiwVqDA2VvG9fE3AC81jmEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728554986; c=relaxed/simple;
-	bh=vCTqIl7jShZpEr0sVmMbfnvFvzmbv2n1ITL19Rj+AWQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tNPXgGwsclvxdA2mNiBQxhqw3cDS9KeIr44T6nPMEgbTX4kQcFamBjwqKQIrOcUji9UH5Dj9uYxT7a+0q5aXWkVvR1CryhfCa560poHlrRIxq7q6pMLydESbx8mVWGiXDcPWwmbhX+KzP5/v1LHSK8RhFil4PT+p08f/1FUa0kQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TuLhCxS/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85CBDC4CECC;
-	Thu, 10 Oct 2024 10:09:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728554985;
-	bh=vCTqIl7jShZpEr0sVmMbfnvFvzmbv2n1ITL19Rj+AWQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TuLhCxS/kum3UUxI2LxetVqLBebi9ov//MNFTqAdCuXEOE2k5dBBp3lBbyLXKK1UD
-	 +JnBouAShZSx0FpbD1wRXccZwC6S5evYkUqXkmc3pb7TwrRkNF7XTFMW+9jA1xhz6g
-	 BEVS/dNs7+Th8yU89mXKH4GwQV8YO2J+M+WF1DMgtm8X1SWYEWhYQc4lKKF6iKH7JL
-	 Q3vQcsttS3UHj3CZ29aCP1vYw+sX2AYnz93OehQpgxoxdgBDmK3DxHAjkCMHCl6dNS
-	 elj6E5VT44QVNzgeYiHWSZQ2IAZpulbv1bkoWqGkYStFVgf0vu/R9VZZAjmsUtGr9O
-	 egsFyXIZheGog==
-From: Christian Brauner <brauner@kernel.org>
-To: Aleksa Sarai <cyphar@cyphar.com>
-Cc: Christian Brauner <brauner@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Florian Weimer <fweimer@redhat.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Mark Rutland <mark.rutland@arm.com>,
-	linux-kernel@vger.kernel.org,
-	linux-api@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org,
-	linux-arch@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org,
-	Ingo Molnar <mingo@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>,
-	Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Jan Kara <jack@suse.cz>,
-	Shuah Khan <shuah@kernel.org>
-Subject: Re: (subset) [PATCH RFC v3 03/10] openat2: explicitly return -E2BIG for (usize > PAGE_SIZE)
-Date: Thu, 10 Oct 2024 12:09:35 +0200
-Message-ID: <20241010-pikant-neuer-4dbf48940683@brauner>
+	s=arc-20240116; t=1728556002; c=relaxed/simple;
+	bh=pT4X5NIIqRyYvomMIPc9xAQxol7NIw83QUZsWL2HaU8=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=QN0udxNLlcpYVn8i6LlFHcEJmn3mwAKTqzWf210SDmnJTZU/QVdHpIILn0nIr27OfVFQ9Mru7J8b/kHeq+Ov8Zr0w1B64u2ZWEY42EauGR1ItU911yq17NDC6GiIEJoz5UL/gprGkVXx0lR8sMxhnWowPIZnR9sBfodD6dYKXUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.216])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XPQmS26NNz6L7Cb;
+	Thu, 10 Oct 2024 18:22:16 +0800 (CST)
+Received: from frapeml500005.china.huawei.com (unknown [7.182.85.13])
+	by mail.maildlp.com (Postfix) with ESMTPS id E58321400D9;
+	Thu, 10 Oct 2024 18:26:36 +0800 (CST)
+Received: from china (10.200.201.82) by frapeml500005.china.huawei.com
+ (7.182.85.13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Thu, 10 Oct
+ 2024 12:26:31 +0200
+From: Gur Stavi <gur.stavi@huawei.com>
+To: Gur Stavi <gur.stavi@huawei.com>
+CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "David S.
+ Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
+ Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+	<shuah@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	<linux-kselftest@vger.kernel.org>
+Subject: [PATCH net-next v03 0/3] net: af_packet: allow joining a fanout when link is down
+Date: Thu, 10 Oct 2024 13:25:11 +0300
+Message-ID: <cover.1728555449.git.gur.stavi@huawei.com>
 X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241010-extensible-structs-check_fields-v3-3-d2833dfe6edd@cyphar.com>
-References: <20241010-extensible-structs-check_fields-v3-0-d2833dfe6edd@cyphar.com> <20241010-extensible-structs-check_fields-v3-3-d2833dfe6edd@cyphar.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1115; i=brauner@kernel.org; h=from:subject:message-id; bh=vCTqIl7jShZpEr0sVmMbfnvFvzmbv2n1ITL19Rj+AWQ=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaSzL3/gcn99iY5JAhOL4eyvLi/V4x5oM8gLr39yhtl0e 47m5MrMjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgImI32X4K5d4O//zV+UpEjpp /sHnas908812W3pp/pJJfp53gmsuCTP84TN9cNBg4oRf+UorZZVbtjcUbzs4L+1Zj1eBQeMCj9y 3bAA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ frapeml500005.china.huawei.com (7.182.85.13)
 
-On Thu, 10 Oct 2024 07:40:36 +1100, Aleksa Sarai wrote:
-> While we do currently return -EFAULT in this case, it seems prudent to
-> follow the behaviour of other syscalls like clone3. It seems quite
-> unlikely that anyone depends on this error code being EFAULT, but we can
-> always revert this if it turns out to be an issue.
-> 
-> 
+PACKET socket can retain its fanout membership through link down and up
+and leave a fanout while closed regardless of link state.
+However, socket was forbidden from joining a fanout while it was not
+RUNNING.
 
-Applied to the vfs.fixes branch of the vfs/vfs.git tree.
-Patches in the vfs.fixes branch should appear in linux-next soon.
+This scenario was identified while studying DPDK pmd_af_packet_drv.
+Since sockets are only created during initialization, there is no reason
+to fail the initialization if a single link is temporarily down.
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+This patch allows PACKET socket to join a fanout while not RUNNING.
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+Selftest psock_fanout is extended to test this "fanout while link down"
+scenario.
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
+Selftest psock_fanout is also extended to test fanout create/join by
+socket that did not bind or specified a protocol, which carries an
+implicit bind.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs.fixes
+This is the only test that was performed.
 
-[03/10] openat2: explicitly return -E2BIG for (usize > PAGE_SIZE)
-        https://git.kernel.org/vfs/vfs/c/f92f0a1b0569
+Changes:
+
+V03:
+* psock_fanout: add test for joining fanout with unbound socket.
+* Test that socket can receive packets before adding it to a fanout match.
+  This is kind of replaces the RUNNING test that was removed.
+* Initialize po->ifindex in packet_create. To -1 if no protocol is specified
+  and add an explicit initialization to 0 if protocol is specified.
+* Refactor relevant code in fanout_add within bind_lock, as a sequence of
+  if {} else if {}, in order to reduce indentation of nested if statements and
+  provide specific error codes.
+
+V02: https://lore.kernel.org/netdev/cover.1728382839.git.gur.stavi@huawei.com
+* psock_fanout: use explicit loopback up/down instead of toggle.
+* psock_fanout: don't try to restore loopback state on failure.
+* Rephrase commit message about "leaving a fanout".
+
+V01: https://lore.kernel.org/netdev/cover.1728303615.git.gur.stavi@huawei.com/
+
+Gur Stavi (3):
+  af_packet: allow fanout_add when socket is not RUNNING
+  selftests: net/psock_fanout: socket joins fanout when link is down
+  selftests: net/psock_fanout: unbound socket fanout
+
+ net/packet/af_packet.c                     | 35 ++++++----
+ tools/testing/selftests/net/psock_fanout.c | 78 +++++++++++++++++++++-
+ 2 files changed, 96 insertions(+), 17 deletions(-)
+
+
+base-commit: 36efaca9cb28a893cad98f0448c39a8b698859e2
+-- 
+2.45.2
+
 
