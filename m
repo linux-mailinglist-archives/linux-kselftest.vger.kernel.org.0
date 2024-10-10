@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-19450-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BA07998A3A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 16:48:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B7C7998A3D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 16:49:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B08F1C23F1F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 14:48:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADABC1C22462
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 14:49:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E333B1FEFD6;
-	Thu, 10 Oct 2024 14:33:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38AB61FF7A7;
+	Thu, 10 Oct 2024 14:33:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bpwZhXVR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RO4NKK9I"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9591FEFBB;
-	Thu, 10 Oct 2024 14:33:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C35B1CC8A8;
+	Thu, 10 Oct 2024 14:33:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728570811; cv=none; b=HVo70beBmto+l5F2+KhIDKK8Bq968Ut6wiF3Ddjg//8hGQeJFNehhw+adv3rYGAiYhZ7iKxInjg2Xt7a93Qf1tLVmHGrWRv7RA+1cfbCqqtND9xx2UOEoMjHx8q3jREyUKCmPzysDisoWIQz82k2ehzBz2ClmUrgwhIGyox4VbY=
+	t=1728570821; cv=none; b=f7loWr/DcfV8cRCNgtlR6P2XEGX6ydR4uwDPy011Zrcnu8lLgDulMyC70w//O9LbxPbFITgGIss+cGRJrqbs7R7j7TSYCRzf7Fc6V37szazNARV8IagXnko026id/Bk/yfLlRE9CmDc+OLpa2yY/Ea1FhUwDtEaGisTQCSJaf2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728570811; c=relaxed/simple;
-	bh=qSLmULyuQLTlYMQgi0y7aT2AgtmJ5HDHawdb49crJfs=;
+	s=arc-20240116; t=1728570821; c=relaxed/simple;
+	bh=8Dz9ZBQ8KVb+g2025vnYrziobUu1HOW4dJzL4s7qHcg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=snOnZn2+fSbA0RjqeC/MnOxZ2t61ULwu44yhHQsZQyuCuWPH9qh+The11Eg5y07HBRRgz4yz3hj3Jb9cpIbpozweaZROdXRk0T4YZjEaEsCV4PUYYjF8Te+8CcsxYReEty56fYpPS8sTkQNIx7lMQx0IJoq92fXFj5JQKeoF5As=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bpwZhXVR; arc=none smtp.client-ip=198.175.65.18
+	 MIME-Version; b=buDklWqWsg9MNwJ2Z+pjrfx+MN+4VF171zb2sr1O8Qi5ar8JHG+rjDRY3VpIZYgXGHuahZTWcfzTzil5z/vYKHzT1i1Mv8xJen8J7Gg/Cbrc5mn0pySlxUV+7N+lZ7ME8QqfZq7S0BZoLSl8oPBxFp2qPUhVyJtS5p5RClVjhJg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RO4NKK9I; arc=none smtp.client-ip=198.175.65.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728570810; x=1760106810;
+  t=1728570819; x=1760106819;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=qSLmULyuQLTlYMQgi0y7aT2AgtmJ5HDHawdb49crJfs=;
-  b=bpwZhXVRZF7qblL8u/QdsXLz2ZzSL6PDHSxnqoFmfktcQ022PsrCvYpA
-   GAFTK22ufwIVa/LvCosD6XWfo5Muga2XlRFzRamdqtyDsI311oCa00eyL
-   PncyXslMTTMIPoYj/JbV2vMR/mufqH+SY+w0NgPX9aUiD+WG2R13v+4sy
-   BMFJvL6QR5uw71pG/oVjJpdYYI4si/UVEthDb+XuFtR86f1YG5q1tQ0aE
-   B1UZK7WZv8aqtBnhNlVdI2qFot4BUtNWxyoMvNvqKc4zSxnImni37zlMR
-   73LI6+xy5Ul2eK9kwRIly0bpQZrcQMrV3omUOlOmEKw/ctQrLPP/qBZcP
-   g==;
-X-CSE-ConnectionGUID: bkPz7NGMRRmDOwrEyGjKJQ==
-X-CSE-MsgGUID: MfDgB13mSTSlCpKFOQTW3w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="28064271"
+  bh=8Dz9ZBQ8KVb+g2025vnYrziobUu1HOW4dJzL4s7qHcg=;
+  b=RO4NKK9IuJNGt9hLdu2WXSFY+UnSGhKr0ABREQiqLZdpSMdWVITV2RMM
+   1Wb4Sq3V5nITI0jQZ/w5FgszTvWFVGRHVMQ3QLSDiUwpY1cZKWirZ5D+i
+   JI36GxW+bU5GsyNJE9zQx9qa7+VR2DtLVRVyC8bYJE6//P8lXTrI+HANB
+   POQVd/qUF6ETMjEARYrj6Q0CkWHle1AeGZM4SzJVu+jOt8IAo5Hr1zur3
+   zBAjbgJMdpE6L2xv3GlEe9Nr6qP053QEEw1f4fQ90dPWhL2mfUS4UUXdh
+   zyioVDEjx1bZRpRiwU39kC2E2qd2APiMnIu6lNWODuzhA0STh0FzqhhZN
+   A==;
+X-CSE-ConnectionGUID: fcQKJmLHSj6NTI5eHPnO0w==
+X-CSE-MsgGUID: S/rhvML2SV6LP7jpIFho5A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11220"; a="28064306"
 X-IronPort-AV: E=Sophos;i="6.11,193,1725346800"; 
-   d="scan'208";a="28064271"
+   d="scan'208";a="28064306"
 Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 07:33:30 -0700
-X-CSE-ConnectionGUID: Xgz0iM2QS3WIQVLatA3IUg==
-X-CSE-MsgGUID: 8hseDeOZSqulNhI151QSrA==
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 07:33:39 -0700
+X-CSE-ConnectionGUID: pYWMIG5SQQyhMRG/K83n4g==
+X-CSE-MsgGUID: k7hh+e3nSmyg2t2rVv74+A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,193,1725346800"; 
-   d="scan'208";a="81189382"
+   d="scan'208";a="81189425"
 Received: from ahunter6-mobl1.ger.corp.intel.com (HELO localhost.localdomain) ([10.246.16.81])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 07:33:20 -0700
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Oct 2024 07:33:29 -0700
 From: Adrian Hunter <adrian.hunter@intel.com>
 To: Peter Zijlstra <peterz@infradead.org>,
 	Sean Christopherson <seanjc@google.com>,
@@ -93,9 +93,9 @@ Cc: Ingo Molnar <mingo@redhat.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-perf-users@vger.kernel.org
-Subject: [PATCH V12 08/14] perf tools: Add aux_start_paused, aux_pause and aux_resume
-Date: Thu, 10 Oct 2024 17:31:45 +0300
-Message-ID: <20241010143152.19071-9-adrian.hunter@intel.com>
+Subject: [PATCH V12 09/14] perf tools: Add aux-action config term
+Date: Thu, 10 Oct 2024 17:31:46 +0300
+Message-ID: <20241010143152.19071-10-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241010143152.19071-1-adrian.hunter@intel.com>
 References: <20241010143152.19071-1-adrian.hunter@intel.com>
@@ -108,53 +108,146 @@ MIME-Version: 1.0
 Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Content-Transfer-Encoding: 8bit
 
-Add struct perf_event_attr members to support pause and resume of AUX area
-tracing.
+Add a new common config term "aux-action" to use for configuring AUX area
+trace pause / resume. The value is a string that will be parsed in a
+subsequent patch.
 
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 Acked-by: Ian Rogers <irogers@google.com>
 Reviewed-by: Andi Kleen <ak@linux.intel.com>
 ---
- tools/include/uapi/linux/perf_event.h     | 11 ++++++++++-
- tools/perf/util/perf_event_attr_fprintf.c |  3 +++
- 2 files changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
-index 4842c36fdf80..0524d541d4e3 100644
---- a/tools/include/uapi/linux/perf_event.h
-+++ b/tools/include/uapi/linux/perf_event.h
-@@ -511,7 +511,16 @@ struct perf_event_attr {
- 	__u16	sample_max_stack;
- 	__u16	__reserved_2;
- 	__u32	aux_sample_size;
--	__u32	__reserved_3;
-+
-+	union {
-+		__u32	aux_action;
-+		struct {
-+			__u32	aux_start_paused :  1, /* start AUX area tracing paused */
-+				aux_pause        :  1, /* on overflow, pause AUX area tracing */
-+				aux_resume       :  1, /* on overflow, resume AUX area tracing */
-+				__reserved_3     : 29;
-+		};
-+	};
- 
- 	/*
- 	 * User provided data if sigtrap=1, passed back to user via
-diff --git a/tools/perf/util/perf_event_attr_fprintf.c b/tools/perf/util/perf_event_attr_fprintf.c
-index 59fbbba79697..29db0aef9a74 100644
---- a/tools/perf/util/perf_event_attr_fprintf.c
-+++ b/tools/perf/util/perf_event_attr_fprintf.c
-@@ -335,6 +335,9 @@ int perf_event_attr__fprintf(FILE *fp, struct perf_event_attr *attr,
- 	PRINT_ATTRf(sample_max_stack, p_unsigned);
- 	PRINT_ATTRf(aux_sample_size, p_unsigned);
- 	PRINT_ATTRf(sig_data, p_unsigned);
-+	PRINT_ATTRf(aux_start_paused, p_unsigned);
-+	PRINT_ATTRf(aux_pause, p_unsigned);
-+	PRINT_ATTRf(aux_resume, p_unsigned);
- 
- 	return ret;
- }
+
+Changes in V7:
+
+	Add aux-action to perf_pmu__for_each_format
+
+
+ tools/perf/util/evsel.c        |  2 ++
+ tools/perf/util/evsel_config.h |  1 +
+ tools/perf/util/parse-events.c | 10 ++++++++++
+ tools/perf/util/parse-events.h |  1 +
+ tools/perf/util/parse-events.l |  1 +
+ tools/perf/util/pmu.c          |  1 +
+ 6 files changed, 16 insertions(+)
+
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index dbf9c8cee3c5..6aff26636152 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -1017,6 +1017,8 @@ static void evsel__apply_config_terms(struct evsel *evsel,
+ 		case EVSEL__CONFIG_TERM_AUX_OUTPUT:
+ 			attr->aux_output = term->val.aux_output ? 1 : 0;
+ 			break;
++		case EVSEL__CONFIG_TERM_AUX_ACTION:
++			break;
+ 		case EVSEL__CONFIG_TERM_AUX_SAMPLE_SIZE:
+ 			/* Already applied by auxtrace */
+ 			break;
+diff --git a/tools/perf/util/evsel_config.h b/tools/perf/util/evsel_config.h
+index aee6f808b512..af52a1516d0b 100644
+--- a/tools/perf/util/evsel_config.h
++++ b/tools/perf/util/evsel_config.h
+@@ -25,6 +25,7 @@ enum evsel_term_type {
+ 	EVSEL__CONFIG_TERM_BRANCH,
+ 	EVSEL__CONFIG_TERM_PERCORE,
+ 	EVSEL__CONFIG_TERM_AUX_OUTPUT,
++	EVSEL__CONFIG_TERM_AUX_ACTION,
+ 	EVSEL__CONFIG_TERM_AUX_SAMPLE_SIZE,
+ 	EVSEL__CONFIG_TERM_CFG_CHG,
+ };
+diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
+index 9a8be1e46d67..31705b6a41b9 100644
+--- a/tools/perf/util/parse-events.c
++++ b/tools/perf/util/parse-events.c
+@@ -821,6 +821,7 @@ static const char *config_term_name(enum parse_events__term_type term_type)
+ 		[PARSE_EVENTS__TERM_TYPE_DRV_CFG]		= "driver-config",
+ 		[PARSE_EVENTS__TERM_TYPE_PERCORE]		= "percore",
+ 		[PARSE_EVENTS__TERM_TYPE_AUX_OUTPUT]		= "aux-output",
++		[PARSE_EVENTS__TERM_TYPE_AUX_ACTION]		= "aux-action",
+ 		[PARSE_EVENTS__TERM_TYPE_AUX_SAMPLE_SIZE]	= "aux-sample-size",
+ 		[PARSE_EVENTS__TERM_TYPE_METRIC_ID]		= "metric-id",
+ 		[PARSE_EVENTS__TERM_TYPE_RAW]                   = "raw",
+@@ -870,6 +871,7 @@ config_term_avail(enum parse_events__term_type term_type, struct parse_events_er
+ 	case PARSE_EVENTS__TERM_TYPE_OVERWRITE:
+ 	case PARSE_EVENTS__TERM_TYPE_DRV_CFG:
+ 	case PARSE_EVENTS__TERM_TYPE_AUX_OUTPUT:
++	case PARSE_EVENTS__TERM_TYPE_AUX_ACTION:
+ 	case PARSE_EVENTS__TERM_TYPE_AUX_SAMPLE_SIZE:
+ 	case PARSE_EVENTS__TERM_TYPE_RAW:
+ 	case PARSE_EVENTS__TERM_TYPE_LEGACY_CACHE:
+@@ -989,6 +991,9 @@ do {									   \
+ 	case PARSE_EVENTS__TERM_TYPE_AUX_OUTPUT:
+ 		CHECK_TYPE_VAL(NUM);
+ 		break;
++	case PARSE_EVENTS__TERM_TYPE_AUX_ACTION:
++		CHECK_TYPE_VAL(STR);
++		break;
+ 	case PARSE_EVENTS__TERM_TYPE_AUX_SAMPLE_SIZE:
+ 		CHECK_TYPE_VAL(NUM);
+ 		if (term->val.num > UINT_MAX) {
+@@ -1106,6 +1111,7 @@ static int config_term_tracepoint(struct perf_event_attr *attr,
+ 	case PARSE_EVENTS__TERM_TYPE_OVERWRITE:
+ 	case PARSE_EVENTS__TERM_TYPE_NOOVERWRITE:
+ 	case PARSE_EVENTS__TERM_TYPE_AUX_OUTPUT:
++	case PARSE_EVENTS__TERM_TYPE_AUX_ACTION:
+ 	case PARSE_EVENTS__TERM_TYPE_AUX_SAMPLE_SIZE:
+ 		return config_term_common(attr, term, err);
+ 	case PARSE_EVENTS__TERM_TYPE_USER:
+@@ -1241,6 +1247,9 @@ do {								\
+ 			ADD_CONFIG_TERM_VAL(AUX_OUTPUT, aux_output,
+ 					    term->val.num ? 1 : 0, term->weak);
+ 			break;
++		case PARSE_EVENTS__TERM_TYPE_AUX_ACTION:
++			ADD_CONFIG_TERM_STR(AUX_ACTION, term->val.str, term->weak);
++			break;
+ 		case PARSE_EVENTS__TERM_TYPE_AUX_SAMPLE_SIZE:
+ 			ADD_CONFIG_TERM_VAL(AUX_SAMPLE_SIZE, aux_sample_size,
+ 					    term->val.num, term->weak);
+@@ -1303,6 +1312,7 @@ static int get_config_chgs(struct perf_pmu *pmu, struct parse_events_terms *head
+ 		case PARSE_EVENTS__TERM_TYPE_DRV_CFG:
+ 		case PARSE_EVENTS__TERM_TYPE_PERCORE:
+ 		case PARSE_EVENTS__TERM_TYPE_AUX_OUTPUT:
++		case PARSE_EVENTS__TERM_TYPE_AUX_ACTION:
+ 		case PARSE_EVENTS__TERM_TYPE_AUX_SAMPLE_SIZE:
+ 		case PARSE_EVENTS__TERM_TYPE_METRIC_ID:
+ 		case PARSE_EVENTS__TERM_TYPE_RAW:
+diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
+index 10cc9c433116..ac3f5acbf0ab 100644
+--- a/tools/perf/util/parse-events.h
++++ b/tools/perf/util/parse-events.h
+@@ -74,6 +74,7 @@ enum parse_events__term_type {
+ 	PARSE_EVENTS__TERM_TYPE_DRV_CFG,
+ 	PARSE_EVENTS__TERM_TYPE_PERCORE,
+ 	PARSE_EVENTS__TERM_TYPE_AUX_OUTPUT,
++	PARSE_EVENTS__TERM_TYPE_AUX_ACTION,
+ 	PARSE_EVENTS__TERM_TYPE_AUX_SAMPLE_SIZE,
+ 	PARSE_EVENTS__TERM_TYPE_METRIC_ID,
+ 	PARSE_EVENTS__TERM_TYPE_RAW,
+diff --git a/tools/perf/util/parse-events.l b/tools/perf/util/parse-events.l
+index 5a0bcd7f166a..6fa4b74fe0c3 100644
+--- a/tools/perf/util/parse-events.l
++++ b/tools/perf/util/parse-events.l
+@@ -329,6 +329,7 @@ overwrite		{ return term(yyscanner, PARSE_EVENTS__TERM_TYPE_OVERWRITE); }
+ no-overwrite		{ return term(yyscanner, PARSE_EVENTS__TERM_TYPE_NOOVERWRITE); }
+ percore			{ return term(yyscanner, PARSE_EVENTS__TERM_TYPE_PERCORE); }
+ aux-output		{ return term(yyscanner, PARSE_EVENTS__TERM_TYPE_AUX_OUTPUT); }
++aux-action		{ return term(yyscanner, PARSE_EVENTS__TERM_TYPE_AUX_ACTION); }
+ aux-sample-size		{ return term(yyscanner, PARSE_EVENTS__TERM_TYPE_AUX_SAMPLE_SIZE); }
+ metric-id		{ return term(yyscanner, PARSE_EVENTS__TERM_TYPE_METRIC_ID); }
+ cpu-cycles|cycles				{ return hw_term(yyscanner, PERF_COUNT_HW_CPU_CYCLES); }
+diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+index 61bdda01a05a..dee39d53bab4 100644
+--- a/tools/perf/util/pmu.c
++++ b/tools/perf/util/pmu.c
+@@ -1737,6 +1737,7 @@ int perf_pmu__for_each_format(struct perf_pmu *pmu, void *state, pmu_format_call
+ 		"no-overwrite",
+ 		"percore",
+ 		"aux-output",
++		"aux-action=(pause|resume|start-paused)",
+ 		"aux-sample-size=number",
+ 	};
+ 	struct perf_pmu_format *format;
 -- 
 2.43.0
 
