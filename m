@@ -1,178 +1,111 @@
-Return-Path: <linux-kselftest+bounces-19430-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19431-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 906FB998147
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 11:01:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 275C2998339
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 12:10:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B283C1C21BA0
-	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 09:01:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCCCA1F251A2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 10 Oct 2024 10:10:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE5121BE87E;
-	Thu, 10 Oct 2024 08:58:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 336A81C1AD8;
+	Thu, 10 Oct 2024 10:09:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BPBCV2yU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TuLhCxS/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36EFC1BBBFE
-	for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2024 08:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A191BF300;
+	Thu, 10 Oct 2024 10:09:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728550681; cv=none; b=FaiPfGMdBItJuOYtELdZx0Mqe3bIopWHhfyeMU/BUALFeCORHWcF2ro0rb4Y5HzTaNbD6wx2cApGa5GtK5WUSMti52UdX49pfbuhUUJzM0+frBxe9MzMRkL9AKQKaXp3ooGq9tHHetpAgy6T9b9r42LIL37nB9RkentXg3LUxlM=
+	t=1728554986; cv=none; b=rqE5vvcK1E0UYrSYKbxvHjZxaLQGRjcIV3NopUHG/D1dena7adKykfmeRtsuSUg6Pjl85Qs8x63MfQFqtVeuhkqTWEkPH3o91nsvxUusuZrv2JvOCW1FQtksDBulMVPyiB6YBX9XbyY0mxwSvLZ1H9vgRMoCl6zvzbb4YeRwYoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728550681; c=relaxed/simple;
-	bh=uEoD+N+ErCzjUQzAybretMtYvnPznERIurac1+tT/ug=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=gxAAH1di2kyz1sHWhVvq7/RgQWNf2TvPmZb3OXhrBHJlrSOSb4E1rKyNVBE9a3PFVvjJEJdJI/bxlHVR9FJA7sr+jw9Kb+dGtAGYV3hz3xbwFH6DDZy061ipeDy5qwDfnkeaGop0XcmH8fr6KvgLGSVuF0zd5A18PyfA5DRKgf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BPBCV2yU; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1728550679;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=V3mfLBxE7mgA5D2j+dKOJ0660aCNEHB3kXbTGLynC34=;
-	b=BPBCV2yUr/1yFMwuHtkIMBME2oPxGZE5HOpc9Budoa4tDQbnuOHITHaoQppR4tfAg7ov76
-	0w5o+DCiBT3wrVnbMU+TG7vFn0WTLNqBBmthENe6cQvq1EaDRnzQSI2Bt+Us6jFUtOmb0G
-	EnRZiGq1yjWW6l5Y0GvS3pZnDvHoqAk=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-139-E8CVQu5iMcu8DEEF7FZ2Hw-1; Thu, 10 Oct 2024 04:57:58 -0400
-X-MC-Unique: E8CVQu5iMcu8DEEF7FZ2Hw-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-430581bd920so4077895e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2024 01:57:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728550677; x=1729155477;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V3mfLBxE7mgA5D2j+dKOJ0660aCNEHB3kXbTGLynC34=;
-        b=kkFjpMetgcV6NEo/sKBSdtMfcOoTvMIKnreVMCgCh0rAkQtVxpeyJkRPwRn/FPPh8K
-         UbuDRZWVU6j/nzwhXoJqxgG2nHldzHoMA9Fq5MY2FtTDMJiwMKZxBJ3VyOm9WGod//8C
-         aP4Modj1BQO95PAKhCkcQHCNLZsqHDcANAG3MiCfp6AmeqR63XZMALzoA4cG/a/2O0ml
-         +jYmv85HE8dOrvuNk9mZqikGPwExaOi43d/DycirGU/LOjxuNxGkmrk9Ox8AQyk+FANN
-         AOLUz4P3J6G8o/nAZ6ml34yemgSa/vG4hm5mLAyTINZGh7Lk1w2xB/uxM0d6BmghSig5
-         tTfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWnTZZ5C89DmxDtIi5hekPw8xT3CocH0MISz5a+KVJl9LNkXVRiBkb4tfOQ0jdZBBYUoMJUWA9dSmqkMbmqh6o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJTXsBv1krF5Faru4L8CnYwexlJ5WaFp6qZfBVBhTRV8H/00Ip
-	kzcWpEd3r4Tqt71vQrxARHq7HYhJYWWvrGqWJQj8k9p0+3T9uenVeqS4uM4fVLFJdPqAE+HrxZG
-	ACS8f8l6gKpvPYTy7qIXKB0grVAtc1YaLrepVfeRd76KhYPouSOGuN+dAjTeYPhv2lDFzA5D/co
-	y01+G1LOaZ61O8eIIZ9tEixFFqhcSoxywc7xcCJ48U++LAj6TNmQ==
-X-Received: by 2002:a05:600c:a08:b0:42f:7ed4:4c26 with SMTP id 5b1f17b1804b1-430ccf1d794mr43479855e9.12.1728550676882;
-        Thu, 10 Oct 2024 01:57:56 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFO2YZz0KIdt9CH7YpTmaKm1V5sN7oLsDloXPoVkbSMJb4dyCl0+OpMHrvepMEuByPjcRlSzQ==
-X-Received: by 2002:a05:600c:a08:b0:42f:7ed4:4c26 with SMTP id 5b1f17b1804b1-430ccf1d794mr43479505e9.12.1728550676374;
-        Thu, 10 Oct 2024 01:57:56 -0700 (PDT)
-Received: from fedora (g2.ign.cz. [91.219.240.8])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d4b6a8666sm913435f8f.22.2024.10.10.01.57.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2024 01:57:56 -0700 (PDT)
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
-To: Nikolas Wipper <nikwip@amazon.de>
-Cc: Nicolas Saenz Julienne <nsaenz@amazon.com>, Alexander Graf
- <graf@amazon.de>, James Gowans <jgowans@amazon.com>,
- nh-open-source@amazon.com, Sean Christopherson <seanjc@google.com>, Paolo
- Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo
- Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, Nikolas Wipper <nik.wipper@gmx.de>,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org, x86@kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/7] KVM: Add API documentation for
- KVM_HYPERV_SET_TLB_FLUSH_INHIBIT
-In-Reply-To: <20241004140810.34231-2-nikwip@amazon.de>
-References: <20241004140810.34231-1-nikwip@amazon.de>
- <20241004140810.34231-2-nikwip@amazon.de>
-Date: Thu, 10 Oct 2024 10:57:55 +0200
-Message-ID: <874j5kgwrw.fsf@redhat.com>
+	s=arc-20240116; t=1728554986; c=relaxed/simple;
+	bh=vCTqIl7jShZpEr0sVmMbfnvFvzmbv2n1ITL19Rj+AWQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tNPXgGwsclvxdA2mNiBQxhqw3cDS9KeIr44T6nPMEgbTX4kQcFamBjwqKQIrOcUji9UH5Dj9uYxT7a+0q5aXWkVvR1CryhfCa560poHlrRIxq7q6pMLydESbx8mVWGiXDcPWwmbhX+KzP5/v1LHSK8RhFil4PT+p08f/1FUa0kQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TuLhCxS/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85CBDC4CECC;
+	Thu, 10 Oct 2024 10:09:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728554985;
+	bh=vCTqIl7jShZpEr0sVmMbfnvFvzmbv2n1ITL19Rj+AWQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=TuLhCxS/kum3UUxI2LxetVqLBebi9ov//MNFTqAdCuXEOE2k5dBBp3lBbyLXKK1UD
+	 +JnBouAShZSx0FpbD1wRXccZwC6S5evYkUqXkmc3pb7TwrRkNF7XTFMW+9jA1xhz6g
+	 BEVS/dNs7+Th8yU89mXKH4GwQV8YO2J+M+WF1DMgtm8X1SWYEWhYQc4lKKF6iKH7JL
+	 Q3vQcsttS3UHj3CZ29aCP1vYw+sX2AYnz93OehQpgxoxdgBDmK3DxHAjkCMHCl6dNS
+	 elj6E5VT44QVNzgeYiHWSZQ2IAZpulbv1bkoWqGkYStFVgf0vu/R9VZZAjmsUtGr9O
+	 egsFyXIZheGog==
+From: Christian Brauner <brauner@kernel.org>
+To: Aleksa Sarai <cyphar@cyphar.com>
+Cc: Christian Brauner <brauner@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Florian Weimer <fweimer@redhat.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Mark Rutland <mark.rutland@arm.com>,
+	linux-kernel@vger.kernel.org,
+	linux-api@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	stable@vger.kernel.org,
+	Ingo Molnar <mingo@redhat.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>,
+	Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Jan Kara <jack@suse.cz>,
+	Shuah Khan <shuah@kernel.org>
+Subject: Re: (subset) [PATCH RFC v3 03/10] openat2: explicitly return -E2BIG for (usize > PAGE_SIZE)
+Date: Thu, 10 Oct 2024 12:09:35 +0200
+Message-ID: <20241010-pikant-neuer-4dbf48940683@brauner>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241010-extensible-structs-check_fields-v3-3-d2833dfe6edd@cyphar.com>
+References: <20241010-extensible-structs-check_fields-v3-0-d2833dfe6edd@cyphar.com> <20241010-extensible-structs-check_fields-v3-3-d2833dfe6edd@cyphar.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1115; i=brauner@kernel.org; h=from:subject:message-id; bh=vCTqIl7jShZpEr0sVmMbfnvFvzmbv2n1ITL19Rj+AWQ=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaSzL3/gcn99iY5JAhOL4eyvLi/V4x5oM8gLr39yhtl0e 47m5MrMjlIWBjEuBlkxRRaHdpNwueU8FZuNMjVg5rAygQxh4OIUgImI32X4K5d4O//zV+UpEjpp /sHnas908812W3pp/pJJfp53gmsuCTP84TN9cNBg4oRf+UorZZVbtjcUbzs4L+1Zj1eBQeMCj9y 3bAA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
 
-Nikolas Wipper <nikwip@amazon.de> writes:
+On Thu, 10 Oct 2024 07:40:36 +1100, Aleksa Sarai wrote:
+> While we do currently return -EFAULT in this case, it seems prudent to
+> follow the behaviour of other syscalls like clone3. It seems quite
+> unlikely that anyone depends on this error code being EFAULT, but we can
+> always revert this if it turns out to be an issue.
+> 
+> 
 
-> Add API documentation for the new KVM_HYPERV_SET_TLB_FLUSH_INHIBIT ioctl.
->
-> Signed-off-by: Nikolas Wipper <nikwip@amazon.de>
-> ---
->  Documentation/virt/kvm/api.rst | 41 ++++++++++++++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
->
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index a4b7dc4a9dda..9c11a8af336b 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6443,6 +6443,47 @@ the capability to be present.
->  `flags` must currently be zero.
->  
->  
-> +4.144 KVM_HYPERV_SET_TLB_FLUSH_INHIBIT
-> +--------------------------------------
-> +
-> +:Capability: KVM_CAP_HYPERV_TLB_FLUSH_INHIBIT
-> +:Architectures: x86
-> +:Type: vcpu ioctl
-> +:Parameters: struct kvm_hyperv_tlb_flush_inhibit
-> +:returnReturns: 0 on success, this ioctl can't fail
-> +
-> +KVM_HYPERV_SET_TLB_FLUSH_INHIBIT allows userspace to prevent Hyper-V
-> hyper-calls
+Applied to the vfs.fixes branch of the vfs/vfs.git tree.
+Patches in the vfs.fixes branch should appear in linux-next soon.
 
-Very minor nitpick: I suggest standardize on "hypercall" spelling
-without the dash because:
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-$ grep -c hypercall Documentation/virt/kvm/api.rst
-56
-$ grep -c hyper-call Documentation/virt/kvm/api.rst
-3
+It's encouraged to provide Acked-bys and Reviewed-bys even though the
+patch has now been applied. If possible patch trailers will be updated.
 
-(I see all three 'hypercall', 'hyper-call', 'hyper call' usages in the
-wild and I honestly don't think it matters but it would be nice to
-adhere to one share across the same file / KVM docs).
+Note that commit hashes shown below are subject to change due to rebase,
+trailer updates or similar. If in doubt, please check the listed branch.
 
-> +that remotely flush a vCPU's TLB, i.e. HvFlushVirtualAddressSpace(Ex)/
-> +HvFlushVirtualAddressList(Ex). When the flag is set, a vCPU attempting to flush
-> +an inhibited vCPU will be suspended and will only resume once the flag is
-> +cleared again using this ioctl. During suspension, the vCPU will not finish the
-> +hyper-call, but may enter the guest to retry it. Because it is caused by a
-> +hyper-call, the suspension naturally happens on a guest instruction boundary.
-> +This behaviour and the suspend state itself are specified in Microsoft's
-> +"Hypervisor Top Level Functional Specification" (TLFS).
-> +
-> +::
-> +
-> +  /* for KVM_HYPERV_SET_TLB_FLUSH_INHIBIT */
-> +  struct kvm_hyperv_tlb_flush_inhibit {
-> +      /* in */
-> +      __u16 flags;
-> +  #define KVM_HYPERV_UNINHIBIT_TLB_FLUSH 0
-> +  #define KVM_HYPERV_INHIBIT_TLB_FLUSH 1
-> +      __u8  inhibit;
-> +      __u8 padding[5];
-> +  };
-> +
-> +No flags are specified so far, the corresponding field must be set to zero,
-> +otherwise the ioctl will fail with exit code -EINVAL.
-> +
-> +The suspension is transparent to userspace. It won't cause KVM_RUN to return or
-> +the MP state to be changed. The suspension cannot be manually induced or exited
-> +apart from changing the TLB flush inhibit flag of a targeted processor.
-> +
-> +There is no way for userspace to query the state of the flush inhibit flag.
-> +Userspace must keep track of the required state itself.
-> +
->  5. The kvm_run structure
->  ========================
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.fixes
 
--- 
-Vitaly
-
+[03/10] openat2: explicitly return -E2BIG for (usize > PAGE_SIZE)
+        https://git.kernel.org/vfs/vfs/c/f92f0a1b0569
 
