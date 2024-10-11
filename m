@@ -1,179 +1,92 @@
-Return-Path: <linux-kselftest+bounces-19528-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19529-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4418F999F81
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 10:59:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77A4D999FA6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 11:02:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E1B12285EEC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 08:59:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26EF52880A5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 09:02:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAE1320C46B;
-	Fri, 11 Oct 2024 08:59:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC8DA20C46C;
+	Fri, 11 Oct 2024 09:02:23 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2657120A5E2;
-	Fri, 11 Oct 2024 08:59:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C71C81FC8;
+	Fri, 11 Oct 2024 09:02:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728637173; cv=none; b=exKebqeEdnYFLIeV6QlFTpfIJSZ4W1w0hAXMGNF/TUE33TYyV/M+t/I9VVHAHmzaZhcZHjiT+N3kmHr3VosJTsehb11mDCerYqm65+ysOT12RFZG7SkKyrNLmkSpFBYEdBk+ANL8WiWH3rNKbXk6ETv99c+fIC79sa+XsBueAs8=
+	t=1728637343; cv=none; b=ncG9T1JV0QYkRoB5pUtI8kRULOqib/coEV6usMTpZ+tKNp1Kg5ZXp60OnI6ZJSPu16WzQCSoP1HDA18h/EEYRI7RCGPB1XRtbpxZINGEHPq2ORtTS5GKYsgF+IOJIhlyFw0tchsCHtzBhYan4vErHG4YJHo7dl83FNXYIlyf8WM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728637173; c=relaxed/simple;
-	bh=nc6A17rnILQmIKKtpPcrAfjXVsbFKsUmfKWuYF0xYVE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rN0+vlW84s5pH3g5qVFxL3GrU6mX95VFY+4weKa4rvXbCgtkuf0B7sHHiG3Q7o3IkPCmBgCBRT3lpNtsWtXKhUJqMmzID1OgtsH1GKO12C4beoXI4FiK/LALxJmZ5tz8DtsYoOQnebAGKVpSg3oSMQZGf9yIxrpwyd+srChEMu0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e28e4451e0bso1549405276.0;
-        Fri, 11 Oct 2024 01:59:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728637170; x=1729241970;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ykzu39AKcXejuBpU5m8IW6q6EkpIRw0KjmH9pDXGNvg=;
-        b=wJvLUQACSZCvvTrtQPVo+HjVjnskobDQGx3ex3xhndaV8r/Bko/nEzqtsypM08h07I
-         c50injTVjV2j0C9t2Kh94rw+R3zA5/9m9r16abQDeQ6aeWP61nPaagcmgbHeIqx83+QU
-         F8wcm/xE3CjWwxqpO/CrxtFMNF+z4V85JBzZkazWlWzKr5b0bOlpOLoq9/1L6KYbj9h/
-         Z8R6+F9jI5V6BJsNN9y2SzXIs3i2oDbEBMgLrjIXdwYiE5SleHZNLwKvHos728ddRChZ
-         MzKUqPznb6rzNRuhcZe0jsYZPt+TnDWfkjO+nGYOr2yljKNHlWAUseRABjRHx47ZjpNe
-         WqEQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVw+omKt28TArN6VTpBZuwYA/WPDpNs4EGRLXIAN3V8Lq6RR6z9YCs8RnPwhPVKNLtUDYVmyFBBjj4f9XRHXNeR@vger.kernel.org, AJvYcCWhJkl2V6ZAyQxajM9TRXS2//WQwnj/GpiskdwmXpd1KAarUJA0eknHXhb+IXs0KtJVufZQjiAxzjXNhlI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyv+XQlq2WmyN7sc5X6rLieVCUbqb83CjLGywG2C3dSoP8qTPk7
-	kt7AbUbPB6Vh2O/DKzFZPfiDHUk4bQTlFp05wiB32hNPyF0GOxUMdCRCO7v6uls=
-X-Google-Smtp-Source: AGHT+IGMH2q+47yN8Dkhst+SljTukcdc9/T1V3uWHCt9F1/qVebmk2raQBWcGFq9HcyIUlFmhmVJ8Q==
-X-Received: by 2002:a05:6902:13cf:b0:e29:1de:e1f4 with SMTP id 3f1490d57ef6-e2919dfb1d3mr1177124276.35.1728637169705;
-        Fri, 11 Oct 2024 01:59:29 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e332c27d10sm5125147b3.99.2024.10.11.01.59.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Oct 2024 01:59:28 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-6e20a8141c7so16861957b3.0;
-        Fri, 11 Oct 2024 01:59:28 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCV6mggg5M3tFw4jtWN7Xmbaq6AvKVUCEC+oADX5z66iKy+7g8uAAm7sIVQVFQs7Hm9PzgUVGuAMOXvxAd1tlBUf@vger.kernel.org, AJvYcCV7+fEe2g34FaT24n5l58skkGZE8XRdvnY5f9MJM3yCTZSnk67zF6UHEbM/rrZpMdgHCFUOoQgweFdgDjQ=@vger.kernel.org
-X-Received: by 2002:a05:690c:397:b0:6e2:e22:12d9 with SMTP id
- 00721157ae682-6e347b520d5mr11901267b3.35.1728637168527; Fri, 11 Oct 2024
- 01:59:28 -0700 (PDT)
+	s=arc-20240116; t=1728637343; c=relaxed/simple;
+	bh=M1N2+VjFOVpfNTTV4h8YD4Tm4hDrgQ0GEwyZZZtz+Z4=;
+	h=From:To:CC:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=UkmHKAddPcqt7LMK4dIS5IJZLH6n7PjKPzP1HLAaKWZaAUD5jKWM+rCYvcAJFopgxcTgFRN6ybaOsMocuT43taVPdylIyLM7l2PZqDRCEvkfoHRHtw6z4ogdJ/6kk97z8UqDyfOPX/PPAS+N/rI5grdycRsiHjG/oT/1dWiY3nA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XQ0w56f8Dz6K6TC;
+	Fri, 11 Oct 2024 17:00:53 +0800 (CST)
+Received: from frapeml500005.china.huawei.com (unknown [7.182.85.13])
+	by mail.maildlp.com (Postfix) with ESMTPS id 8550614010C;
+	Fri, 11 Oct 2024 17:02:17 +0800 (CST)
+Received: from GurSIX1 (10.204.104.109) by frapeml500005.china.huawei.com
+ (7.182.85.13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Fri, 11 Oct
+ 2024 11:02:11 +0200
+From: Gur Stavi <gur.stavi@huawei.com>
+To: 'Willem de Bruijn' <willemdebruijn.kernel@gmail.com>
+CC: <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <pabeni@redhat.com>, <shuah@kernel.org>
+References: <67054127bb083_18b21e2943f@willemb.c.googlers.com.notmuch> <20241009065837.354332-1-gur.stavi@huawei.com> <67068a44bff02_1cca3129431@willemb.c.googlers.com.notmuch> <002201db1a75$9a83b420$cf8b1c60$@huawei.com> <67072012c983a_1e805629421@willemb.c.googlers.com.notmuch> <002701db1ae3$368d9b70$a3a8d250$@huawei.com> <6707e3028d844_20573a294f0@willemb.c.googlers.com.notmuch> <000101db1b2f$7410c2f0$5c3248d0$@huawei.com> <67085135e4fe2_21530629429@willemb.c.googlers.com.notmuch>
+In-Reply-To: <67085135e4fe2_21530629429@willemb.c.googlers.com.notmuch>
+Subject: RE: [PATCH net-next v02 1/2] af_packet: allow fanout_add when socket is not RUNNING
+Date: Fri, 11 Oct 2024 12:02:05 +0300
+Message-ID: <000301db1bbc$453feae0$cfbfc0a0$@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241011072509.3068328-2-davidgow@google.com> <20241011072509.3068328-3-davidgow@google.com>
-In-Reply-To: <20241011072509.3068328-3-davidgow@google.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 11 Oct 2024 10:59:16 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUdotDYAgSDDrWi-TOj2o=5a53n452DydhD-Q0fjiGhew@mail.gmail.com>
-Message-ID: <CAMuHMdUdotDYAgSDDrWi-TOj2o=5a53n452DydhD-Q0fjiGhew@mail.gmail.com>
-Subject: Re: [PATCH 1/6] lib: math: Move kunit tests into tests/ subdir
-To: David Gow <davidgow@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Brendan Higgins <brendanhiggins@google.com>, Rae Moar <rmoar@google.com>, 
-	Kees Cook <kees@kernel.org>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, Luis Felipe Hernandez <luis.hernandez093@gmail.com>, 
-	quic_jjohnson@quicinc.com, macro@orcam.me.uk, tpiepho@gmail.com, 
-	ricardo@marliere.net, linux-kernel-mentees@lists.linuxfoundation.org, 
-	Nicolas Pitre <npitre@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Thread-Index: AQHbGWzwQMZqw76ooUWOpIJuIeDZyLJ8x9WAgAEVHYCAAHM4AIAA1CkdgADoeFuAAINGnIAAsEDw
+Content-Language: en-us
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ frapeml500005.china.huawei.com (7.182.85.13)
 
-Hi David,
+> 
+> If we don't care about opening up fanout groups to ETH_P_NONE, then
+> patch v2 seems sufficient. If explicitly blocking this, the ENXIO
+> return can be added, but ideally without touching the other lines.
 
-On Fri, Oct 11, 2024 at 9:31=E2=80=AFAM David Gow <davidgow@google.com> wro=
-te:
-> From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
->
-> This patch is a follow-up task from a discussion stemming from point 3
-> in a recent patch introducing the int_pow kunit test [1] and
-> documentation regarding kunit test style and nomenclature [2].
->
-> Colocate all kunit test suites in lib/math/tests/ and
-> follow recommended naming convention for files <suite>_kunit.c
-> and kconfig entries CONFIG_<name>_KUNIT_TEST.
->
-> Link: https://lore.kernel.org/all/CABVgOS=3D-vh5TqHFCq_jo=3Dffq8v_nGgr6Js=
-PnOZag3e6+19ysxQ@mail.gmail.com/ [1]
-> Link: https://docs.kernel.org/dev-tools/kunit/style.html [2]
->
-> Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
-> Acked-by: Nicolas Pitre <npitre@baylibre.com>
-> [Rebased on top of mm-nonmm-unstable.]
-> Signed-off-by: David Gow <davidgow@google.com>
+I don't think that allowing ETH_P_NONE is relevant.
+In my opinion the 2 options that should be considered to fail
+fanout_add are:
+1. Testing proto == 0
+2. Testing proto == 0 || ifindex == -1
 
-Thanks for your patch!
+The only corner case that is caught by [2] and missed by [1] is
+the "unlisted" case during do_bind. It is such a rare case that
+probably no one will ever encounter bind "unlisted" followed by
+FANOUT_ADD. And this is not a dangerous corner case that leads to
+system crash.
 
-> --- a/arch/m68k/configs/amiga_defconfig
-> +++ b/arch/m68k/configs/amiga_defconfig
-> @@ -619,7 +619,7 @@ CONFIG_KUNIT=3Dm
->  CONFIG_KUNIT_ALL_TESTS=3Dm
->  CONFIG_TEST_DHRY=3Dm
->  CONFIG_TEST_MIN_HEAP=3Dm
-> -CONFIG_TEST_DIV64=3Dm
-> +CONFIG_DIV64_KUNIT_TEST=3Dm
->  CONFIG_REED_SOLOMON_TEST=3Dm
->  CONFIG_ATOMIC64_SELFTEST=3Dm
->  CONFIG_ASYNC_RAID6_TEST=3Dm
+However, being a purist, I see the major goal of code review to promote
+correctness by identifying corner cases while improving style is a
+secondary priority. Since we did identify this corner case in our
+discussion I think we should still use [2].
+I don't consider the code complex. In fact, to me, the ifindex clause
+is a more understandable direct reason for failure than the proto which
+is indirect. Having the ifindex clause helps figuring out the proto
+clause.
 
-[...]
-
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2296,7 +2296,7 @@ config TEST_SORT
->
->           If unsure, say N.
->
-> -config TEST_DIV64
-> +config DIV64_KUNIT_TEST
->         tristate "64bit/32bit division and modulo test"
->         depends on DEBUG_KERNEL || m
->         help
-> @@ -2306,7 +2306,7 @@ config TEST_DIV64
->
->           If unsure, say N.
->
-> -config TEST_MULDIV64
-> +config MULDIV64_KUNIT_TEST
->         tristate "mul_u64_u64_div_u64() test"
->         depends on DEBUG_KERNEL || m
->         help
-
-This conflicts with "[PATCH] m68k: defconfig: Update defconfigs for
-v6.12-rc1"[1].  Of course the proper way forward would be to add
-"default KUNIT_ALL_TESTS" to all tests that still lack it, so I can
-just never queue that patch ;-)
-
-> @@ -2993,7 +2993,7 @@ config TEST_OBJPOOL
->
->           If unsure, say N.
->
-> -config INT_POW_TEST
-> +config INT_POW_KUNIT_TEST
->         tristate "Integer exponentiation (int_pow) test" if !KUNIT_ALL_TE=
-STS
->         depends on KUNIT
->         default KUNIT_ALL_TESTS
-
-[1] https://lore.kernel.org/all/4092672cb64b86ec3f300b4cf0ea0c2db2b52e2e.17=
-27699197.git.geert@linux-m68k.org/
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
