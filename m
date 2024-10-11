@@ -1,162 +1,161 @@
-Return-Path: <linux-kselftest+bounces-19560-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19561-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F16DA99AB14
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 20:37:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B6AB99AC6C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 21:08:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AA991F22404
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 18:37:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE7941C27215
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 19:08:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AEB11CF5DF;
-	Fri, 11 Oct 2024 18:36:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 865951C8FC1;
+	Fri, 11 Oct 2024 19:08:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kVt8ugzr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="epNstzDn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69FDD1C8FB7;
-	Fri, 11 Oct 2024 18:36:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEAEA1BDAA7;
+	Fri, 11 Oct 2024 19:08:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728671798; cv=none; b=XZxLajIs0JGy9gqsxh+3lQRQUYFmYySrM+R7VlYHTd+qjVweSICzkj0e71fQ9Rlwt6aJFKbpbTtybguJ5SA0X9I90ac9ELmWkv4J/fzshxs5wW8HW3ujjpzq/7uOkYQ8UMYFJiJr824C6hj4c4sA/JCHAZStWo4xViu2oNpV0U8=
+	t=1728673726; cv=none; b=cSuy4Ro+/qcJNOXep8UWqPZyLJYbCvk+hBBaKy+5YQyDx+hrBXz4jChQ9VqdzeeH0ycIwOeQzAIjSOUVNLoWE0EKEcC/IR0mnb9mfxRxPbe5sDAi++oQY2Tsn6zCeFzTDdhPNcK4QUOV1BZd3ZbOtdKvS+pd0Yq3YMHhxK4ou8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728671798; c=relaxed/simple;
-	bh=ayPciMWY//VbPSzpp2VbZbk7uWTZGaXOBvAeQgtBwzA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AK9TyZVgjo/RbdnZAOvVU/Sx8YWpbi2dHMfgJtnZSEk+MYOoTw8n7ARpGm1tijSDMeV4m9FL6ynF1D++lEPkovuMrZyI/uO4cwl7WafzEehbwI/0XoHfWnfMtKX9VMKR/tkT1ApUSpl55mW6LAd55Lvc21A3Yu3wpqKK9YAKJxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kVt8ugzr; arc=none smtp.client-ip=209.85.128.182
+	s=arc-20240116; t=1728673726; c=relaxed/simple;
+	bh=/g5HFJQ/qfXtxuJjeHarUEWpSdzo39LDrraUxmLlEos=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=GH+XX9LC5kKIfASioWzGM7TgCKlFpLiwlv4uuDoutbHf4U0Dg/eUmc7OfQ3FVBfBepLesC011RGfRrsjr6Piw66atwf+gkMyprP3s3NYFZzSpMefIj7veWJ2VGxBVZnMNB6qoBeXtc4KKnjK/g2XadwfA6nx31tuBkiEIfJMGTk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=epNstzDn; arc=none smtp.client-ip=209.85.219.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6e2346f164cso20646957b3.3;
-        Fri, 11 Oct 2024 11:36:37 -0700 (PDT)
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6c5ab2de184so14367226d6.0;
+        Fri, 11 Oct 2024 12:08:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728671796; x=1729276596; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1728673724; x=1729278524; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=D0I/3yItTQ/jGPmVdy1AuiludxZJFxBg01l9+u4Pb+Q=;
-        b=kVt8ugzrwd7atyJPCNjar/NfIf9ojRW7BIob9BPt3/WPtqBdn+9S2baLwqHWWi1PJQ
-         QMnNefGwqLgGJMIpDn9KSfvnRaBQTngUDKLc411Iw+MzY2yownih37xfMj/+90Bh3ZXR
-         QWCOo1p3pWmvjqPL8tDvg4UEtus6JTll7upcibSg1i/H89ylCU1AYQR4Nur4qPJ9BqgE
-         JwDKUyyNI4m0bVtIFIge21QTtfN/Wa2m3NxktSONNLHGsqBy3iDE7tXoaz/FudNs/gRg
-         GvGVGbtoY6Dmw65/sIGPxJplGUibuZ9VSOSMloj/fHdqzGmICcPaqqdFwK3TCoqau5sr
-         VVvg==
+        bh=3Y/geJzGabBXvfM/8UGblm0sFehSeKzBtHLuktddHvE=;
+        b=epNstzDnc6muLM7laZBh9dUAq71gztsgbFq/8+NS3lJZy8Smt75RKccCRUOGouAxVm
+         D4+bEW5eVJtCeupfTimX9PrzfhAJ9UYHvtsRHon7orUzFiiHjtDCjJ/GgzRTAh+PBFYc
+         RHrhHxW5FqrsqHJPG2QbWQGAkVDw5He/ViHvA/42+eE8Sk8F/jngUj3PWXlIGLuBXG02
+         LgUJDCkH5kH1GwQoqACcFetgj3z09bgufSoLcKPpqe46HV3POxXm8TGjXOTuNZFGZrDq
+         ufRm2isaY3kRN7c1W84J9522dn3HPbl878L2KkG7SdWaZ32ja0v/OMoKayc5sKpo1Rm+
+         YbSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728671796; x=1729276596;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=D0I/3yItTQ/jGPmVdy1AuiludxZJFxBg01l9+u4Pb+Q=;
-        b=omLotlVWFkd86uhmEnRjOjgnLhSglI7dCg5Ac1aLjvuH7ypyCdiwCWkyNB7X+cnmYO
-         /awhhs70z9EPPEd/1v+GueyLb5unmLCYKyWS+FyaieP8gAowDa/Dw7DMMZFvTzUjMlwV
-         ekOtT//vgPlaf7t3TGqU1Nbv4ri1evb+jffrgzkQ0bLuEUG2L7NZyJZF7Rq/E3hYR8BT
-         2bSlKiWhd/552stP3x1D949vHSTET0QBPeqj9WjRxDCKPJbECMOJVFHidF071EDC6hZk
-         KMpCmOivWJKn1RB5RtzaK3zJqfeUfE+kHrteP8kpE87oofh+7CSV0NORB4pvn4BTl9H7
-         +iIA==
-X-Forwarded-Encrypted: i=1; AJvYcCUbUW0g2u+6llfpq2ipsVcv+0BLBMsWurXDfCb23c5FmtqPcnDt3IREdgNomoqZELmSDUiyzaT5tZ34CqWcvNVh@vger.kernel.org, AJvYcCV80AF13tVvjS73zc/Y3M8+IZrGd3MBcPzAJ8NW+dCpmXvUekYbME5sBJ7xnGGWPh8mUhGKdBbxg4BaQuE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2EtCHbFqDVXeLsCbqFQRrOjZF3YnRXp7I+vaCSSi1bglOf0DI
-	/qsVwbBXKtI1v8aAMAHgXNnovfuTvkOUB9+B0JffKgfUlIoMGcKz
-X-Google-Smtp-Source: AGHT+IEkRojL52hJwweCx2O+wUTzR4I5MkaqX2ww+MF8GrcLEe5MjWVwn/h2w/MXIKyB1CbvEhASEQ==
-X-Received: by 2002:a05:690c:9c05:b0:6e2:2600:ed50 with SMTP id 00721157ae682-6e3479ca9dcmr38458547b3.21.1728671796308;
-        Fri, 11 Oct 2024 11:36:36 -0700 (PDT)
-Received: from localhost (fwdproxy-nha-112.fbsv.net. [2a03:2880:25ff:70::face:b00c])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e332b83e8dsm6983997b3.33.2024.10.11.11.36.35
+        d=1e100.net; s=20230601; t=1728673724; x=1729278524;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=3Y/geJzGabBXvfM/8UGblm0sFehSeKzBtHLuktddHvE=;
+        b=Z6D6/o2P6V8oce5zM1BIJ2GtQO7VJedx266lNuzXrFENly2/+X7y2QzN22TPVtJCtW
+         waeaTT1Y56MvwmxfXht09Wo2dw1xsL3VMJtbnxq8qUgzXOhMMe9GTDYSj/5tjjqRgvQQ
+         DU1wSHtNbsA5XIZZH1tbauY+bZ0P8MxEGFmDq3Ro3EV88OAMA/fwwI0ZIU8UOF/1oV7K
+         cQa4prTf+m6XiLC3I+WvgNrUtM0S5MB8GUET1G6eLRKglw4kaUQhC0EyXGTH/qxzKPko
+         LRw5O3e1Ow4kqHYP3PmQNRs3lt911a3Dr568E4ilhYZVSPuOStQ+/lx3wWCamd5Svwx/
+         /aeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUWEL0SMrp469g4/HiBu4MnDoG7DMwzhuyT7+X+7SFLh67+3dB2Uu2AJA0Iy14C1rw7GUEgXjBRL8iXJ6Q0w2Pw@vger.kernel.org, AJvYcCVLipPUjiZtbwaxMI3PUiGmBxanIAjBfc9xhyWiZcTryWUoZPfxwuvvEAAhk+h59Js4LjvD2SFa@vger.kernel.org, AJvYcCVda41N3RX0nfDCkFegtIN5s1CQrYIBNJ9TkoxCY7HMTSyAVLoHqQYHQHfuomZetNhdgW17UEn21IsiR68=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/e0dXtxVTvXe4U0b3Cg1agoY+61j2nECJe/ZMtnxLBd5R9BO1
+	DI39lbBRdNRTERqKn0XKd2NkmYEmKNpt9D7xkE9rwenKljFPpABk
+X-Google-Smtp-Source: AGHT+IF/SiYd5lqR3tMuI1/TV4/981yonR0uSduTSphD/IKyJ+JLfMwoMsQPJqNdLCwQHfkSTmri7g==
+X-Received: by 2002:a05:6214:390b:b0:6cb:ed3b:fab2 with SMTP id 6a1803df08f44-6cbf0074776mr45386496d6.19.1728673723674;
+        Fri, 11 Oct 2024 12:08:43 -0700 (PDT)
+Received: from localhost (86.235.150.34.bc.googleusercontent.com. [34.150.235.86])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cbe8636f11sm18090176d6.125.2024.10.11.12.08.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2024 11:36:36 -0700 (PDT)
-From: Daniel Zahka <daniel.zahka@gmail.com>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 2/2] selftests: drv-net: rss_ctx: add rss ctx busy testcase
-Date: Fri, 11 Oct 2024 11:35:48 -0700
-Message-ID: <20241011183549.1581021-3-daniel.zahka@gmail.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20241011183549.1581021-1-daniel.zahka@gmail.com>
-References: <20241011183549.1581021-1-daniel.zahka@gmail.com>
+        Fri, 11 Oct 2024 12:08:43 -0700 (PDT)
+Date: Fri, 11 Oct 2024 15:08:42 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Gur Stavi <gur.stavi@huawei.com>, 
+ 'Willem de Bruijn' <willemdebruijn.kernel@gmail.com>
+Cc: davem@davemloft.net, 
+ edumazet@google.com, 
+ kuba@kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ netdev@vger.kernel.org, 
+ pabeni@redhat.com, 
+ shuah@kernel.org
+Message-ID: <670977bac8b03_247429294f6@willemb.c.googlers.com.notmuch>
+In-Reply-To: <000401db1c00$bd86afe0$38940fa0$@huawei.com>
+References: <67054127bb083_18b21e2943f@willemb.c.googlers.com.notmuch>
+ <20241009065837.354332-1-gur.stavi@huawei.com>
+ <67068a44bff02_1cca3129431@willemb.c.googlers.com.notmuch>
+ <002201db1a75$9a83b420$cf8b1c60$@huawei.com>
+ <67072012c983a_1e805629421@willemb.c.googlers.com.notmuch>
+ <002701db1ae3$368d9b70$a3a8d250$@huawei.com>
+ <6707e3028d844_20573a294f0@willemb.c.googlers.com.notmuch>
+ <000101db1b2f$7410c2f0$5c3248d0$@huawei.com>
+ <67085135e4fe2_21530629429@willemb.c.googlers.com.notmuch>
+ <000301db1bbc$453feae0$cfbfc0a0$@huawei.com>
+ <670937c990fca_234aca29481@willemb.c.googlers.com.notmuch>
+ <000401db1c00$bd86afe0$38940fa0$@huawei.com>
+Subject: RE: [PATCH net-next v02 1/2] af_packet: allow fanout_add when socket
+ is not RUNNING
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-It should be invalid to delete an rss context while it is being
-referenced from an ntuple filter. ethtool core should prevent this
-from happening. This patch adds a testcase to verify this behavior.
+Gur Stavi wrote:
+> > Gur Stavi wrote:
+> > > >
+> > > > If we don't care about opening up fanout groups to ETH_P_NONE, then
+> > > > patch v2 seems sufficient. If explicitly blocking this, the ENXIO
+> > > > return can be added, but ideally without touching the other lines.
+> > >
+> > > I don't think that allowing ETH_P_NONE is relevant.
+> > > In my opinion the 2 options that should be considered to fail
+> > > fanout_add are:
+> > > 1. Testing proto == 0
+> > > 2. Testing proto == 0 || ifindex == -1
+> > >
+> > > The only corner case that is caught by [2] and missed by [1] is
+> > > the "unlisted" case during do_bind. It is such a rare case that
+> > > probably no one will ever encounter bind "unlisted" followed by
+> > > FANOUT_ADD. And this is not a dangerous corner case that leads to
+> > > system crash.
+> > >
+> > > However, being a purist, I see the major goal of code review to promote
+> > > correctness by identifying corner cases while improving style is a
+> > > secondary priority. Since we did identify this corner case in our
+> > > discussion I think we should still use [2].
+> > > I don't consider the code complex. In fact, to me, the ifindex clause
+> > > is a more understandable direct reason for failure than the proto which
+> > > is indirect. Having the ifindex clause helps figuring out the proto
+> > > clause.
+> > 
+> > It's interesting that the unlisted fix does not return ENODEV, but
+> > returns success and leaves the socket in an unbound state, equivalent
+> > to binding to ETH_P_NONE and ifindex 0. This seems surprising behavior
+> > to the caller.
+> > 
+> > On rereading that, I still do not see a purpose of special ifindex -1.
+> > 
+> >
+> 
+> Can this code be relevant?
+> 
+> 		case NETDEV_UP:
+> 			if (dev->ifindex == po->ifindex) {
+> 				spin_lock(&po->bind_lock);
+> 				if (po->num)
+> 					register_prot_hook(sk);
+> 				spin_unlock(&po->bind_lock);
+> 			}
+> 			break;
+> 
+> Perhaps, although the socket failed to (re) find the device, the device
+> is still aware of the socket and we need the ifindex condition to fail.
 
-Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
----
- .../selftests/drivers/net/hw/rss_ctx.py       | 32 +++++++++++++++++--
- 1 file changed, 30 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/drivers/net/hw/rss_ctx.py b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-index 9d7adb3cf33b..29995586993c 100755
---- a/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-+++ b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
-@@ -6,7 +6,7 @@ import random
- from lib.py import ksft_run, ksft_pr, ksft_exit, ksft_eq, ksft_ne, ksft_ge, ksft_lt
- from lib.py import NetDrvEpEnv
- from lib.py import EthtoolFamily, NetdevFamily
--from lib.py import KsftSkipEx
-+from lib.py import KsftSkipEx, KsftFailEx
- from lib.py import rand_port
- from lib.py import ethtool, ip, defer, GenerateTraffic, CmdExitFailure
- 
-@@ -606,6 +606,33 @@ def test_rss_context_overlap2(cfg):
-     test_rss_context_overlap(cfg, True)
- 
- 
-+def test_delete_rss_context_busy(cfg):
-+    """
-+    Test that deletion returns -EBUSY when an rss context is being used
-+    by an ntuple filter.
-+    """
-+
-+    require_ntuple(cfg)
-+
-+    # create additional rss context
-+    ctx_id = ethtool_create(cfg, "-X", "context new")
-+    ctx_deleter = defer(ethtool, f"-X {cfg.ifname} context {ctx_id} delete")
-+
-+    # utilize context from ntuple filter
-+    port = rand_port()
-+    flow = f"flow-type tcp{cfg.addr_ipver} dst-port {port} context {ctx_id}"
-+    ntuple_id = ethtool_create(cfg, "-N", flow)
-+    defer(ethtool, f"-N {cfg.ifname} delete {ntuple_id}")
-+
-+    # attempt to delete in-use context
-+    try:
-+        ctx_deleter.exec_only()
-+        ctx_deleter.cancel()
-+        raise KsftFailEx(f"deleted context {ctx_id} used by rule {ntuple_id}")
-+    except CmdExitFailure:
-+        pass
-+
-+
- def main() -> None:
-     with NetDrvEpEnv(__file__, nsim_test=False) as cfg:
-         cfg.ethnl = EthtoolFamily()
-@@ -616,7 +643,8 @@ def main() -> None:
-                   test_rss_context, test_rss_context4, test_rss_context32,
-                   test_rss_context_dump, test_rss_context_queue_reconfigure,
-                   test_rss_context_overlap, test_rss_context_overlap2,
--                  test_rss_context_out_of_order, test_rss_context4_create_with_cfg],
-+                  test_rss_context_out_of_order, test_rss_context4_create_with_cfg,
-+                  test_delete_rss_context_busy],
-                  args=(cfg, ))
-     ksft_exit()
- 
--- 
-2.43.5
-
+But the behavior is the same for ifindex -1 and 0. Devices always have
+an ifindex >= 1.
 
