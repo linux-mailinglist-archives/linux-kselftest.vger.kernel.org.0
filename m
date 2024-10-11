@@ -1,166 +1,275 @@
-Return-Path: <linux-kselftest+bounces-19565-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19566-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B2FB99AD0B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 21:46:37 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FF3F99ADD2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 22:56:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D743928C1E3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 19:46:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D577B2500F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 20:56:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A093C1D0E19;
-	Fri, 11 Oct 2024 19:46:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCD1C1D14F0;
+	Fri, 11 Oct 2024 20:55:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="lV4yCNxs"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OeleiByD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D0801D0E01
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2024 19:46:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845651D14FB
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2024 20:55:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728675964; cv=none; b=apkwX0aHBKpEcSkdMB3bwJpFMWZ4TeJAoGd+opmwjqLtxydIhk9MZnnLdqTtGWrQeJssmpNbe/6VxOGkgwI8qRQJw8kOtvSnudJhLS89vvir056W1NjzewptMDAXocLpzlqMvS3jtRi3gw2NbFlkVIll/pN9PY8ShbrzXKVEa4k=
+	t=1728680158; cv=none; b=Iivr7JbjjMkzV6PAM+ZOD2kaik/+falr1T3SYCngjJG7fZ+zLBHuWcLLK317RYQnLtKQObvWgVLWJuuUzLSb/sgDG4I7qkuLH1mEufHdLVGxgN6Be/p2CJTvOQZ/H3A5KI20r+sUsebgftMa5Sv96uZSWyoryvFBGVjIKO2R5p8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728675964; c=relaxed/simple;
-	bh=t7P/KEncHEjcXdz1K3PihQemKIQQ61oPnVKnhfUk5n8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k3F5wF4d65JqZlNlK9k7+mD8ISdW6ssFatyZHJxza8bNmHjl0ZOB7ARiaAJPEUZy6uZJQ2uEuIkpHkvl6ZaAgYjCnxdvzBrVpXuJKfDemSLwe9KBrOsw1xLOSDFJ58KjRu8I8XvlQ7cVAl6c7SDCw1wHx07id7939GaDdRef/No=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=lV4yCNxs; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-71e050190ddso1712565b3a.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2024 12:46:01 -0700 (PDT)
+	s=arc-20240116; t=1728680158; c=relaxed/simple;
+	bh=uC2xLUGeBTKyYtCrbYvB49i/24wKqmENpfcl+kT6kII=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jcJ4eeDZciUja/Yh5GSaBVzcqNMbdMwLGLgEJ3AAxWLJSZNxAetxgYZAoHHuLTMlHKRn4t40898ZE6PFfWapNP0gdUiJ9cUyZYKqu4sFdKRuxjVBok57ADRVyIAMXee7JL3VUYWHQ4iV76SxzX3msoH10P5Nnv9mtdkfBGvb560=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OeleiByD; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-4603d3e0547so60331cf.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2024 13:55:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1728675961; x=1729280761; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=exLsQV8+AgRTzSgIuh9REhlgyhIFFL6ykktOdGZoGFg=;
-        b=lV4yCNxsWdv45991ghfe2wns7l+/s/d+YLcrIZFmoS3x3hGwHVNM/lLDoTb1S148g/
-         wjCNMuU7ASe99vAOixL04qe3q/lGax6rpPyt1lm67ppD2F21CTYZGTN8/X4wycTxHsxL
-         P/A2LCQBZjkSqlvCJI7zm+qY8vwkdXglEPn3QADdA2zYO8iZeXVHbU9BZJLzXkn6beFT
-         ts9isgOszzowJr6cetdaSLt8ipo3Z6+Aey5qB1O+raze27joEJIvyv4Hklm3/FhjSfT8
-         jaZi6Qz7N48YVKso4KxssvtnXgxeSllxs48Rq9PKybtpTBlB++fwin5ip7uz97JKL8LE
-         BytA==
+        d=google.com; s=20230601; t=1728680155; x=1729284955; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KBFPzh5NlZh+7Zd1K+MhC4XZXtWT2loiufG6vbfnB2M=;
+        b=OeleiByDAP48vj8/ojIGt0ies1ajsLNjTX7T7hoO6BIRJE5PRHHa283ZsFgQOFid94
+         nbc30+ahp0AGN1VOuJp1tO4i/WH07eG9/pqjIQd1A15Zzn4veFRGimI3yelmcHV6s8cm
+         zOOF4DkTPqotg2EMT2W9qglnU4WG+skFARX8jYkbc7lfWwxQQk6jTBCUsHo/AjbhKrKG
+         tz7nJmT5rseBuR4KSBnOlKXLOoA7PLVtzzZIK1N8PDIdabEdvR8Rjz75c0jWTKSFAbqF
+         1Bpvtv5rjPOZ615jMpqRW9wbjDVCk8WGapbNKAFr6JiibYgOshIyKEKm9sK3L+Yc/4xd
+         msTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728675961; x=1729280761;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=exLsQV8+AgRTzSgIuh9REhlgyhIFFL6ykktOdGZoGFg=;
-        b=LD2z4MOJADLd1hyv5gUVfYmL0dYuWbY7TSFBb/PRMM4GuOCJd4Q5bLIngHIgzh3cmE
-         M7qtXuh+TJoKdNyDYAMYv67BnFWytH3Yk0NCAMEqfabX1+bl6cSeZc9CsFxska5QzkBJ
-         XqmXcATZZwKSsV65CgV4LM+29t/pcx73MepZhiFb8uD/AwJESXVHLv2eWT3Aipt8EUFJ
-         79zPRvWyTkd9p7Tc8QtOk/oAJ8oFbu11I3g/rnaV3aSqICe1tqZ+grxaSQWlw80ZNBDo
-         kLP5owFv6Jmpd8+uGgR22jeHt+JNe/j6/Cd8lAOWxxIOGGnsQLn5Khi3UEy4GytuZBTb
-         hiCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWxna20hKVyKc1l0w9zAB11y8YY0vDkt+17c5TVyidDAHrLNW3gLL4bFkjMDJ1uib8Xpodu4M0nTg1gDadALrA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5n6Ba0wXlk7UTcErUgU/iz/S2T1QGeBnYcAi06bCVKoxT13NI
-	YBIPAAzRtPj+znRYEJEEe50eAQZIAhDcj19yEgCmOG3Em4r7858FYwwsAIryCYg=
-X-Google-Smtp-Source: AGHT+IHj8rWFWjfeD1jnOseU69L54Nubw7fuAuLENErbM2G1CFqjE5ekNxV2rf8nSVkMr8qy+VgzZQ==
-X-Received: by 2002:a05:6a21:1519:b0:1cf:4d4e:532b with SMTP id adf61e73a8af0-1d8c96b986bmr675268637.43.1728675961468;
-        Fri, 11 Oct 2024 12:46:01 -0700 (PDT)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71e2ab0f1dcsm2951118b3a.209.2024.10.11.12.45.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2024 12:46:01 -0700 (PDT)
-Date: Fri, 11 Oct 2024 12:45:57 -0700
-From: Deepak Gupta <debug@rivosinc.com>
-To: Zong Li <zong.li@sifive.com>
-Cc: Mark Brown <broonie@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Conor Dooley <conor@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Christian Brauner <brauner@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-riscv@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	alistair.francis@wdc.com, richard.henderson@linaro.org,
-	jim.shu@sifive.com, andybnac@gmail.com, kito.cheng@sifive.com,
-	charlie@rivosinc.com, atishp@rivosinc.com, evan@rivosinc.com,
-	cleger@rivosinc.com, alexghiti@rivosinc.com,
-	samitolvanen@google.com, rick.p.edgecombe@intel.com
-Subject: Re: [PATCH v6 33/33] kselftest/riscv: kselftest for user mode cfi
-Message-ID: <ZwmAdRb5BRkPLbWg@debug.ba.rivosinc.com>
-References: <20241008-v5_user_cfi_series-v6-0-60d9fe073f37@rivosinc.com>
- <20241008-v5_user_cfi_series-v6-33-60d9fe073f37@rivosinc.com>
- <CANXhq0pXVS2s-hZNusPLoQ4qPkyi1S2BTQ-FyAvcz=cDctKQng@mail.gmail.com>
- <Zwj7aZj36TBGzpZa@finisterre.sirena.org.uk>
- <CANXhq0q49k6q3ZGYqzczMeFr+_rrfa9mL7FMu62xPHeUKfvhMw@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1728680155; x=1729284955;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KBFPzh5NlZh+7Zd1K+MhC4XZXtWT2loiufG6vbfnB2M=;
+        b=R+r8v/IM9ij9PHheWz17x+3tFeSE+0As66O1hcvO/HdLlnO3KP43Mu9sCY9KGFUeVP
+         pbSKoFzToCQkGxPISNYE4cH2kp0G4x7rB3yee0fOarESkfLHnIfNJOiwNq1yyh4eiIT9
+         IDbCDGYoVc1Vj4e1BSqI6JszqytPkCcbBpJyY/hOu2JU9VwQhbws7jBGnThgyqXq2xjs
+         0wrkeECgoo/1Fo/1mFbxYcxghKbWfWDvcWS3QEvYV60HRHPLonJEi00QJZaqU1biy+5e
+         k95Ti/+fc74dp39Dz5/vaM140W8fVXddBUBd+V517pUycGFMaiHTXouHC7WSS+Vx5X/3
+         0Mbw==
+X-Forwarded-Encrypted: i=1; AJvYcCXaL6AYZFytp9xEO8q78L1BXInlPZy8JbMQA0Pxd8+hdSMNJV0plmklYjw6gv05BgsOq7jotyT8jUnoyUqU8AA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzX3X/zToowLsITUAQT/VwMHzwGpcD379DfsEHMwwnKy6C/BlQq
+	e1f/42hiG76WSW+RpYRDOqgj2IiXFp2TCzhhAwt+oQ3Pe8NCJgwkKn4TdMiYs/I646wllXlNGP/
+	2p/PCb973/PhXCmvvCfefeLBDKTl0bK7p4+SN
+X-Google-Smtp-Source: AGHT+IG6IScrTSH9iJhbpLI7RLZRrQurOaPZvTBCGWMkP7mWaid454o5VBVq59wNWCmpMXfwr84ZSmZjgA3xj9fhNCc=
+X-Received: by 2002:a05:622a:a28c:b0:45c:9d26:8f6e with SMTP id
+ d75a77b69052e-46059c77ccdmr87721cf.21.1728680155167; Fri, 11 Oct 2024
+ 13:55:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANXhq0q49k6q3ZGYqzczMeFr+_rrfa9mL7FMu62xPHeUKfvhMw@mail.gmail.com>
+References: <cover.1727440966.git.lorenzo.stoakes@oracle.com>
+ <a578ee9bb656234d3a19bf9e97c3012378d31a19.1727440966.git.lorenzo.stoakes@oracle.com>
+ <CAG48ez3ursoL-f=mYpV79Do18XPPt+MPPHNUBv6uFE1GhpOwSA@mail.gmail.com>
+In-Reply-To: <CAG48ez3ursoL-f=mYpV79Do18XPPt+MPPHNUBv6uFE1GhpOwSA@mail.gmail.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Fri, 11 Oct 2024 13:55:42 -0700
+Message-ID: <CAJuCfpFaHz-xW1Rh-+rJ8iLyV19JuG9Rm-eJsz3aOm8dUj3Ewg@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/4] mm: madvise: implement lightweight guard page mechanism
+To: Jann Horn <jannh@google.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Matthew Wilcox <willy@infradead.org>, 
+	Vlastimil Babka <vbabka@suse.cz>, "Paul E . McKenney" <paulmck@kernel.org>, 
+	David Hildenbrand <david@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	Muchun Song <muchun.song@linux.dev>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org, 
+	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, linux-kselftest@vger.kernel.org, 
+	Sidhartha Kumar <sidhartha.kumar@oracle.com>, Vlastimil Babka <vbabka@suze.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Oct 11, 2024 at 07:43:30PM +0800, Zong Li wrote:
->On Fri, Oct 11, 2024 at 6:18 PM Mark Brown <broonie@kernel.org> wrote:
->>
->> On Fri, Oct 11, 2024 at 01:44:55PM +0800, Zong Li wrote:
->> > On Wed, Oct 9, 2024 at 7:46 AM Deepak Gupta <debug@rivosinc.com> wrote:
->>
->> > > +       if (si->si_code == SEGV_CPERR) {
->>
->> > Hi Deepak,
->> > I got some errors when building this test, I suppose they should be
->> > fixed in the next version.
->>
->> > riscv_cfi_test.c: In function 'sigsegv_handler':
->> > riscv_cfi_test.c:17:28: error: 'SEGV_CPERR' undeclared (first use in
->> > this function); did you mean 'SEGV_ACCERR'?
->> >    17 |         if (si->si_code == SEGV_CPERR) {
->> >       |                            ^~~~~~~~~~
->> >       |                            SEGV_ACCERR
->> >
->>
->> Did you run "make headers_install" prior to building kselftest to get
->> the current kernel's headers available for userspace builds?
+On Fri, Oct 11, 2024 at 11:12=E2=80=AFAM Jann Horn <jannh@google.com> wrote=
+:
 >
->Yes, I have run "make header" and "make header_install" before
->building the kselftest. This error happens when I cross compiled it,
->perhaps I can help to check if it is missing some header files or
->header search path.
+> On Fri, Sep 27, 2024 at 2:51=E2=80=AFPM Lorenzo Stoakes
+> <lorenzo.stoakes@oracle.com> wrote:
+> > Implement a new lightweight guard page feature, that is regions of user=
+land
+> > virtual memory that, when accessed, cause a fatal signal to arise.
+> [...]
+> > ---
+> >  arch/alpha/include/uapi/asm/mman.h     |   3 +
+> >  arch/mips/include/uapi/asm/mman.h      |   3 +
+> >  arch/parisc/include/uapi/asm/mman.h    |   3 +
+> >  arch/xtensa/include/uapi/asm/mman.h    |   3 +
+> >  include/uapi/asm-generic/mman-common.h |   3 +
+>
+> I kinda wonder if we could start moving the parts of those headers
+> that are the same for all architectures to include/uapi/linux/mman.h
+> instead... but that's maybe out of scope for this series.
+>
+> [...]
+> > diff --git a/mm/madvise.c b/mm/madvise.c
+> > index e871a72a6c32..7216e10723ae 100644
+> > --- a/mm/madvise.c
+> > +++ b/mm/madvise.c
+> > @@ -60,6 +60,7 @@ static int madvise_need_mmap_write(int behavior)
+> >         case MADV_POPULATE_READ:
+> >         case MADV_POPULATE_WRITE:
+> >         case MADV_COLLAPSE:
+> > +       case MADV_GUARD_UNPOISON: /* Only poisoning needs a write lock.=
+ */
+>
+> What does poisoning need a write lock for? anon_vma_prepare() doesn't
+> need it (it only needs mmap_lock held for reading),
+> zap_page_range_single() doesn't need it, and pagewalk also doesn't
+> need it as long as the range being walked is covered by a VMA, which
+> it is...
+>
+> I see you set PGWALK_WRLOCK in guard_poison_walk_ops with a comment
+> saying "We might need to install an anon_vma" - is that referring to
+> an older version of the patch where the anon_vma_prepare() call was
+> inside the pagewalk callback or something like that? Either way,
+> anon_vma_prepare() doesn't need write locks (it can't, it has to work
+> from the page fault handling path).
 
-That's wierd.
+I was wondering about that too and I can't find any reason for
+write-locking the mm for this operation. PGWALK_WRLOCK should also be
+changed to PGWALK_RDLOCK as we are not modifying the VMA.
 
-It doesn't fail for me even if I do not do `make headers_install`. But I am
-building kernel and selftests with toolchain which supports shadow stack and
-landing pad. It's defined in `siginfo.h`. When I built toolchain, I did point
-it at the latest kernel headers. May be that's the trick.
+BTW, I'm testing your patchset on Android and so far it is stable!
 
-"""
-
-$ grep -nir SEGV_CPERR /scratch/debug/linux/kbuild/usr/include/*
-/scratch/debug/linux/kbuild/usr/include/asm-generic/siginfo.h:240:#define SEGV_CPERR    10      /* Control protection fault */
-
-$ grep -nir SEGV_CPERR /scratch/debug/open_src/sifive_cfi_toolchain/INSTALL_Sept18/sysroot/usr/*
-/scratch/debug/open_src/sifive_cfi_toolchain/INSTALL_Sept18/sysroot/usr/include/asm-generic/siginfo.h:240:#define SEGV_CPERR    10      /* Control protection fault */
-/scratch/debug/open_src/sifive_cfi_toolchain/INSTALL_Sept18/sysroot/usr/include/bits/siginfo-consts.h:139:  SEGV_CPERR                  /* Control protection fault.  */
-/scratch/debug/open_src/sifive_cfi_toolchain/INSTALL_Sept18/sysroot/usr/include/bits/siginfo-consts.h:140:#  define SEGV_CPERR  SEGV_CPERR
-
-"""
-
+>
+> >                 return 0;
+> >         default:
+> >                 /* be safe, default to 1. list exceptions explicitly */
+> [...]
+> > +static long madvise_guard_poison(struct vm_area_struct *vma,
+> > +                                struct vm_area_struct **prev,
+> > +                                unsigned long start, unsigned long end=
+)
+> > +{
+> > +       long err;
+> > +       bool retried =3D false;
+> > +
+> > +       *prev =3D vma;
+> > +       if (!is_valid_guard_vma(vma, /* allow_locked =3D */false))
+> > +               return -EINVAL;
+> > +
+> > +       /*
+> > +        * Optimistically try to install the guard poison pages first. =
+If any
+> > +        * non-guard pages are encountered, give up and zap the range b=
+efore
+> > +        * trying again.
+> > +        */
+> > +       while (true) {
+> > +               unsigned long num_installed =3D 0;
+> > +
+> > +               /* Returns < 0 on error, =3D=3D 0 if success, > 0 if za=
+p needed. */
+> > +               err =3D walk_page_range_mm(vma->vm_mm, start, end,
+> > +                                        &guard_poison_walk_ops,
+> > +                                        &num_installed);
+> > +               /*
+> > +                * If we install poison markers, then the range is no l=
+onger
+> > +                * empty from a page table perspective and therefore it=
+'s
+> > +                * appropriate to have an anon_vma.
+> > +                *
+> > +                * This ensures that on fork, we copy page tables corre=
+ctly.
+> > +                */
+> > +               if (err >=3D 0 && num_installed > 0) {
+> > +                       int err_anon =3D anon_vma_prepare(vma);
+>
+> I'd move this up, to before we create poison PTEs. There's no harm in
+> attaching an anon_vma to the VMA even if the rest of the operation
+> fails; and I think it would be weird to have error paths that don't
+> attach an anon_vma even though they .
+>
+> > +                       if (err_anon)
+> > +                               err =3D err_anon;
+> > +               }
+> > +
+> > +               if (err <=3D 0)
+> > +                       return err;
+> > +
+> > +               if (!retried)
+> > +                       /*
+> > +                        * OK some of the range have non-guard pages ma=
+pped, zap
+> > +                        * them. This leaves existing guard pages in pl=
+ace.
+> > +                        */
+> > +                       zap_page_range_single(vma, start, end - start, =
+NULL);
+> > +               else
+> > +                       /*
+> > +                        * If we reach here, then there is a racing fau=
+lt that
+> > +                        * has populated the PTE after we zapped. Give =
+up and
+> > +                        * let the user know to try again.
+> > +                        */
+> > +                       return -EAGAIN;
+>
+> Hmm, yeah, it would be nice if we could avoid telling userspace to
+> loop on -EAGAIN but I guess we don't have any particularly good
+> options here? Well, we could bail out with -EINTR if a (fatal?) signal
+> is pending and otherwise keep looping... if we'd tell userspace "try
+> again on -EAGAIN", we might as well do that in the kernel...
+>
+> (Personally I would put curly braces around these branches because
+> they occupy multiple lines, though the coding style doesn't explicitly
+> say that, so I guess maybe it's a matter of personal preference...
+> adding curly braces here would match what is done, for example, in
+> relocate_vma_down().)
+>
+> > +               retried =3D true;
+> > +       }
+> > +}
+> > +
+> > +static int guard_unpoison_pte_entry(pte_t *pte, unsigned long addr,
+> > +                                   unsigned long next, struct mm_walk =
+*walk)
+> > +{
+> > +       pte_t ptent =3D ptep_get(pte);
+> > +
+> > +       if (is_guard_pte_marker(ptent)) {
+> > +               /* Simply clear the PTE marker. */
+> > +               pte_clear_not_present_full(walk->mm, addr, pte, true);
+>
+> I think that last parameter probably should be "false"? The sparc code
+> calls it "fullmm", which is a term the MM code uses when talking about
+> operations that remove all mappings in the entire mm_struct because
+> the process has died, which allows using some faster special-case
+> version of TLB shootdown or something along those lines.
+>
+> > +               update_mmu_cache(walk->vma, addr, pte);
+> > +       }
+> > +
+> > +       return 0;
+> > +}
+> > +
+> > +static const struct mm_walk_ops guard_unpoison_walk_ops =3D {
+> > +       .pte_entry              =3D guard_unpoison_pte_entry,
+> > +       .walk_lock              =3D PGWALK_RDLOCK,
+> > +};
+>
+> It is a _little_ weird that unpoisoning creates page tables when they
+> don't already exist, which will also prevent creating THP entries on
+> fault in such areas afterwards... but I guess it doesn't really matter
+> given that poisoning has that effect, too, and you probably usually
+> won't call MADV_GUARD_UNPOISON on an area that hasn't been poisoned
+> before... so I guess this is not an actionable comment.
 
