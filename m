@@ -1,73 +1,49 @@
-Return-Path: <linux-kselftest+bounces-19490-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19491-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 532459997FF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 02:35:41 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 763789998C6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 03:10:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 041E4280A11
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 00:35:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA1ACB22998
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 01:10:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90BA3126C01;
-	Fri, 11 Oct 2024 00:33:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD5DA79E1;
+	Fri, 11 Oct 2024 01:10:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b="rjx83H0j"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sDSUzqZ7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 141BF83CDB
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2024 00:33:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7B6171AF;
+	Fri, 11 Oct 2024 01:10:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728606786; cv=none; b=Kil4ajy4H97Oqi5mpJur8ldcnC4LbzoVy3U0KP5Wd9OqZSc1UBJSUu7G/cRPHxYwausmg03OxvcuF3rCOnxis1vFapAAHZIa2x0iYhf+2LpVi5xY8zovk+w8DJLGC9LUtEQGhF45gkR9EJhfyC5S8lRv1ObT6ndLiPTG6rTUOVM=
+	t=1728609027; cv=none; b=gnnHeJY1hkiF1YrkHaPdJWkRXdTlKLHmT0+UE+mHpyk9uM0JKnAIp2uk1dfxRVWWxvGIceZnZW6d+EYSSGDuXzTBTRSGB38cVC7u3HxHdWBy11MJWY5x0TZoKjnniG6DTF56YVnFdMVxyz33x799l0MiD2iLAeKYSEJZZY0q0WY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728606786; c=relaxed/simple;
-	bh=zKOuBam1Z0jLyEo8hlX3oRB6vMjNrjYVOPRJftekPjU=;
-	h=Message-ID:Date:Content-Type:MIME-Version:Subject:To:From; b=R2myFMWJuFY1Yuw186m9HoI+4UPp0c6BCstg2Ihyes0YSaLrXaYCvj2mpYHgy4S7wLF7Z88CAjpCGKX9zKpwdq4vKIdz95WpCGIuSVLEzAq4mo4XLc3yKG1YqpA/dG5z1TJTzuLLiMUU89NI3afYDlrfYK9dN5eDi7vI8EueFM4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org; spf=none smtp.mailfrom=kernelci.org; dkim=pass (2048-bit key) header.d=kernelci-org.20230601.gappssmtp.com header.i=@kernelci-org.20230601.gappssmtp.com header.b=rjx83H0j; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernelci.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=kernelci.org
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-20b5affde14so8997685ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2024 17:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1728606784; x=1729211584; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=P5Qbyx20w6W0hUwmut2KxlgJWbbajcAdMEpv1aZ6QKQ=;
-        b=rjx83H0jAHS62Uycn5IzELLoMwETMGLyHGPpySqOMNBKx1rUBrUC7OWSNfk+OyHAr1
-         L6G8mJENW9sSkKO1QmpR6sfpPmz7MieT7QPCB3GxFzYDxpz4hnofJkH7xvXLGLUdk9l/
-         gvmXY5IUzhTtuyJRsAzhIdfFj81l0Sue6q4bXA4NFKCjaqZsKbPYO0bYO8e1tvtCNR+2
-         D3PVRJmucDVtmSX/Ia9yEku2S9lk4wjJ5HmuebZf6iilWII2Hv5qLS/FtUY374/6wJ47
-         niYZsfnL6FkrilpMXY7tprezE8IGc0iD3frDM9l9F+NegI3/Rb4pNVWYzcVeuDTaAI/B
-         UrTg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728606784; x=1729211584;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=P5Qbyx20w6W0hUwmut2KxlgJWbbajcAdMEpv1aZ6QKQ=;
-        b=XDrFRj0vxQ/eO/ldbR0G1gcu2gsBihb/erDsJ+CyK2owI4hVTtgABmr+6YktKa1RtO
-         +vllb2XRrTu0qhDCYvTHczU9s9qykhHh1aHjDgGNBg9Ac9wJmKAq5uI4e9BeXVlC83Gb
-         TjokLoico7zp0MLvzVYzg04i+9alJESuuiIGujaW+uaZnWfgO89pytsleKGszeCsCZBn
-         dAzFSO9wEAksIS+0UjQdWoq5X0wdsnQ6UxMUJcEidD8CLohEhybCAdXncEHY75EouKHF
-         Fy5WMoJq/afwkTwBwhqetU1MTcyzSzQTQyHM0c7qCJcEEdzq+4quZAAN05EH8VQqnuu3
-         kL8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVWKJfGt6F6AfUNqyOtt7t/FPkKEAHgKvRxj20uTHk9RvdCuCADd1FVDoyoyFe+dftOjqb6UX6PvGhvYET+3MY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztjQPOkuSpt3aKV9IBAuRHP+EUkiTv0A7xt1fVpZYjQkBe1rDO
-	cfLuXNKVeNM3hpxKH/RI+XcuH0WjlEmq/k3iM0Nn+HEDavdONaSr4JLdXn+mj9ZUtVnoWbDME25
-	q
-X-Google-Smtp-Source: AGHT+IGwZgZZsbEfpGPvbYyJiYFyYa+s6IFcZ6ph/q/dg1CkC+WJ0TylUDeKCR0cl8hP+FdbMF8Uag==
-X-Received: by 2002:a17:902:ccca:b0:20c:8f98:5dbe with SMTP id d9443c01a7336-20ca1677b77mr12873075ad.33.1728606783976;
-        Thu, 10 Oct 2024 17:33:03 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8bc1c39fsm14801595ad.92.2024.10.10.17.33.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2024 17:33:03 -0700 (PDT)
-Message-ID: <6708723f.170a0220.1544d8.626a@mx.google.com>
-Date: Thu, 10 Oct 2024 17:33:03 -0700 (PDT)
+	s=arc-20240116; t=1728609027; c=relaxed/simple;
+	bh=ZI0A23ZM4MhhmeNAUdsZcQyjDinp01EptqoAMLrZoKw=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=eofvvmp1Rw5WW3Keb5WWGCVElL9ZfZWObG21KkMOWxTWHcm9HuDpwaJd29ECF0WZAVQ9B+uHgKx9tQaBiL0716qxYfOOcjplL+Pa59RUwGW0tvZJErZI4UYGOalBRiYi9dXB9nw+SKoFQhovfnbYkin6E5jAhkb062pGJdvadOw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sDSUzqZ7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1493CC4CEC6;
+	Fri, 11 Oct 2024 01:10:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1728609027;
+	bh=ZI0A23ZM4MhhmeNAUdsZcQyjDinp01EptqoAMLrZoKw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=sDSUzqZ79wL8hBXENQXAdTOA3E7PwihcVOAKKt2oFMEiQuERZkkAcf2rHkHBqbR75
+	 UOAyxsNqIZDJ7eZ09imYbd4YKvK9aonWKV5BQYCMc7LlNznBbIA8v1P6mCtLAM4tpb
+	 p/paLp4L54XBGO2vOpfFvlYwsdvqze4OWIuS8pjI8VR97Qbx6PzH6UH890FP8gYzqU
+	 HlNAFalqRDutsnYD/mbfIXOZzy33ESkYk8wRZd10Ic6UTGEYGAcph1quIucGS8YxI3
+	 eS97bTpBC4/+17fWFyD19H79Nk3QiRjfPrOKsWgePrmv6DsZH74k9CJJBBUxwyRCgO
+	 g4CHDLCUlSPrw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE25E3803263;
+	Fri, 11 Oct 2024 01:10:32 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -75,113 +51,55 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: linux_kselftest-fixes-6.12-rc2-6-ge26e42b5679ed
-X-Kernelci-Branch: fixes
-X-Kernelci-Tree: kselftest
-Subject: kselftest/fixes kselftest-cpufreq: 3 runs,
- 2 regressions (linux_kselftest-fixes-6.12-rc2-6-ge26e42b5679ed)
-To: kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
- shuah@kernel.org
-From: "kernelci.org bot" <bot@kernelci.org>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v3 0/3] selftests/bpf: add coverage for
+ xdp_features in test_progs
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <172860903151.2229933.3365379244670572288.git-patchwork-notify@kernel.org>
+Date: Fri, 11 Oct 2024 01:10:31 +0000
+References: <20241009-convert_xdp_tests-v3-0-51cea913710c@bootlin.com>
+In-Reply-To: <20241009-convert_xdp_tests-v3-0-51cea913710c@bootlin.com>
+To: =?utf-8?q?Alexis_Lothor=C3=A9_=3Calexis=2Elothore=40bootlin=2Ecom=3E?=@codeaurora.org
+Cc: ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+ kuba@kernel.org, hawk@kernel.org, john.fastabend@gmail.com,
+ andrii@kernel.org, martin.lau@linux.dev, eddyz87@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, kpsingh@kernel.org, sdf@fomichev.me,
+ haoluo@google.com, jolsa@kernel.org, mykolal@fb.com, shuah@kernel.org,
+ ebpf@linuxfoundation.org, thomas.petazzoni@bootlin.com,
+ netdev@vger.kernel.org, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-kselftest/fixes kselftest-cpufreq: 3 runs, 2 regressions (linux_kselftest-f=
-ixes-6.12-rc2-6-ge26e42b5679ed)
+Hello:
 
-Regressions Summary
--------------------
+This series was applied to bpf/bpf-next.git (net)
+by Martin KaFai Lau <martin.lau@kernel.org>:
 
-platform                     | arch  | lab         | compiler | defconfig  =
-         | regressions
------------------------------+-------+-------------+----------+------------=
----------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie | gcc-12   | defconfig+k=
-selftest | 1          =
+On Wed, 09 Oct 2024 12:12:06 +0200 you wrote:
+> Hello,
+> this small series aims to increase coverage of xdp features in
+> test_progs. The initial versions proposed to rework test_xdp_features.sh
+> to make it fit in test_progs, but some discussions in v1 and v2 showed
+> that the script is still needed as a standalone tool. So this new
+> revision lets test_xdp_features.sh as-is, and rather adds missing
+> coverage in existing test (cpu map). The new revision is now also a
+> follow-up to the update performed by Florian Kauer in [1] for devmap
+> programs testing.
+> 
+> [...]
 
-sun50i-a64-pine64-plus       | arm64 | lab-broonie | gcc-12   | defconfig+k=
-selftest | 1          =
+Here is the summary with links:
+  - [bpf-next,v3,1/3] selftests/bpf: fix bpf_map_redirect call for cpu map test
+    https://git.kernel.org/bpf/bpf-next/c/ac8d16b2d377
+  - [bpf-next,v3,2/3] selftests/bpf: make xdp_cpumap_attach keep redirect prog attached
+    https://git.kernel.org/bpf/bpf-next/c/d5fbcf46ee82
+  - [bpf-next,v3,3/3] selftests/bpf: check program redirect in xdp_cpumap_attach
+    https://git.kernel.org/bpf/bpf-next/c/d124d984c8a2
 
-
-  Details:  https://kernelci.org/test/job/kselftest/branch/fixes/kernel/lin=
-ux_kselftest-fixes-6.12-rc2-6-ge26e42b5679ed/plan/kselftest-cpufreq/
-
-  Test:     kselftest-cpufreq
-  Tree:     kselftest
-  Branch:   fixes
-  Describe: linux_kselftest-fixes-6.12-rc2-6-ge26e42b5679ed
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      e26e42b5679edf8c1226970325366f962555e58f =
-
-
-
-Test Regressions
----------------- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig  =
-         | regressions
------------------------------+-------+-------------+----------+------------=
----------+------------
-meson-gxl-s905x-libretech-cc | arm64 | lab-broonie | gcc-12   | defconfig+k=
-selftest | 1          =
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-  Details:     https://kernelci.org/test/plan/id/6708676e7a41ae1109c86861
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux_kselftes=
-t-fixes-6.12-rc2-6-ge26e42b5679ed/arm64/defconfig+kselftest/gcc-12/lab-broo=
-nie/kselftest-cpufreq-meson-gxl-s905x-libretech-cc.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux_kselftes=
-t-fixes-6.12-rc2-6-ge26e42b5679ed/arm64/defconfig+kselftest/gcc-12/lab-broo=
-nie/kselftest-cpufreq-meson-gxl-s905x-libretech-cc.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
-elftest/20240313.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/6708676e7a41=
-ae1109c86862
-        failing since 1 day (last pass: v6.12-rc1-5-g45a8897db67d4, first f=
-ail: linux_kselftest-fixes-6.12-rc2-4-g34d5b600172b) =
-
- =
-
-
-
-platform                     | arch  | lab         | compiler | defconfig  =
-         | regressions
------------------------------+-------+-------------+----------+------------=
----------+------------
-sun50i-a64-pine64-plus       | arm64 | lab-broonie | gcc-12   | defconfig+k=
-selftest | 1          =
-
-
-  Details:     https://kernelci.org/test/plan/id/67086a1a7942f7bc76c86875
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest
-  Compiler:    gcc-12 (aarch64-linux-gnu-gcc (Debian 12.2.0-14) 12.2.0)
-  Plain log:   https://storage.kernelci.org//kselftest/fixes/linux_kselftes=
-t-fixes-6.12-rc2-6-ge26e42b5679ed/arm64/defconfig+kselftest/gcc-12/lab-broo=
-nie/kselftest-cpufreq-sun50i-a64-pine64-plus.txt
-  HTML log:    https://storage.kernelci.org//kselftest/fixes/linux_kselftes=
-t-fixes-6.12-rc2-6-ge26e42b5679ed/arm64/defconfig+kselftest/gcc-12/lab-broo=
-nie/kselftest-cpufreq-sun50i-a64-pine64-plus.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bookworm-ks=
-elftest/20240313.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-cpufreq.login: https://kernelci.org/test/case/id/67086a1a7942=
-f7bc76c86876
-        failing since 1 day (last pass: v6.12-rc1-5-g45a8897db67d4, first f=
-ail: linux_kselftest-fixes-6.12-rc2-4-g34d5b600172b) =
-
- =20
 
