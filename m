@@ -1,149 +1,130 @@
-Return-Path: <linux-kselftest+bounces-19486-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19487-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75B469997CC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 02:31:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C27439997EB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 02:34:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A52B1F2363B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 00:31:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 900551C24F56
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 00:33:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D25BC1EF0BA;
-	Fri, 11 Oct 2024 00:08:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E10DF198822;
+	Fri, 11 Oct 2024 00:23:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="df/iC3wa"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Eabn3HjJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4486ABE5E;
-	Fri, 11 Oct 2024 00:08:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC9103FE4
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2024 00:23:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728605302; cv=none; b=rd1OBAWv/apBQr0egjDqB76HnSZIhqo2Bp2bCXnT79xuPncwR9/tncLSVcIuRUWnmsCijLBupZ3aRgmU/8pxwx92KHzEeoAOPt+kRMzH4JNlc59q/9RVZouzm37hH2MyPpTN2egN0oOL4qLbiF/GwrPTkeBtUSrzyrV0iXXVPLc=
+	t=1728606202; cv=none; b=upaHUt8f5432N9PY38FMqIm7gzFKKMphRpURSVetzn5kOhdigI9pDypX3UZ8aMuoEu04yHQlLfXWI9Ur4aB+a5UNwLkXnQ7dJQcqkz7cEyW92VDvaLjx6FRyr7wEuQhzfsMQhyg31bcyCzKxHnKaUoJWRzZq+IXj7wTRCaqW45g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728605302; c=relaxed/simple;
-	bh=ZVEfdiz6c4s0EMsLl5NC5d2FujU4f+4LZAUMJpXdVPs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gx0VNemZeBLUV/GBSb0eZhyagX+7bFUkw7cGIpucnfz9/m/qhhm7MzoWe6ApuLYofGfNXVbG1tigBiR4P84/w/bx8coZJokhefLFRFGIlAF/qF22S7P9XeyyWX4HHIyDjqZUwxwkZtnmuBdB3yyckSKmnVfSDgz8Gu2t5JWXMV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=df/iC3wa; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e2903a48ef7so1398112276.2;
-        Thu, 10 Oct 2024 17:08:20 -0700 (PDT)
+	s=arc-20240116; t=1728606202; c=relaxed/simple;
+	bh=IdU0NaITwVmuazq/pnPGvgKsS/eq1DvtYLNflhg9uP4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WtEm9UKGroobIbPBvJnlXfjuxwi8VnkbjZSmuSdoyUYbvyASqSsc/d5Mf2cl3knYa3MiB7YyuIZu4JpStQ1YEKdVszq3gNZ+TGFZXhnDhzaytzPYm2NVCEXtH+8Iepo6nSLt8+n3lH0MSGEhZm25ZFt2CCDUbU362U3Q02EDWxg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Eabn3HjJ; arc=none smtp.client-ip=209.85.160.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-26456710cfdso145774fac.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 10 Oct 2024 17:23:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728605300; x=1729210100; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=chromium.org; s=google; t=1728606199; x=1729210999; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/JR01YXV1P2okZLmugRB7I4AbkNbyiLPSpahOb0ItU8=;
-        b=df/iC3wafK1NVWea1Pf/ptA5MExN3qkbNIlLRzvUqbFx5DL8Y/MVaatyi8vvfSTZNF
-         2bfT2XZ4s8v0DZh3bG25HvYBpWSyj4LvDHLxbZUqz9f3A4tOHQoGR0j+SjwSJVLMhhpZ
-         T2vqC0L8LVGk4x4Swu9QVQ2D/eOjYXlendmCc9YYDY4yAf1OLHRtfEhBMeymYmqRN6Wi
-         XssEdqWmFO8ZKyleEu2q3e2VlSjCeLFmQw7eIsfX9Jz/ARQtj+lrMYos3KDh37YtzBJC
-         9r4s4xXNwZ8HU1B7kf6gF5+vDUNRNjETqyajd38lgJq+z6T7eH/9WU4X9q0SrdMEaa5X
-         Z8WQ==
+        bh=IVGdgRMRF72j9LkSnHZOZlGd3on28rqlWSf6lpgKKqM=;
+        b=Eabn3HjJsGByZktmfwlcsO/ZN51+EgTXxF+GDyS/pwXx/9Kh9q3HC0FE0y98+L8a48
+         ZGdUYIB3LkG157e+rezSvZ5mTwKmA1qzTMOukLXXQRvWV1JZoGTofz8DQsraKOvT18+v
+         P1o3dzu/UnkyVkhHSuXhkJh0152QP6Lllde/k=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728605300; x=1729210100;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1728606199; x=1729210999;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/JR01YXV1P2okZLmugRB7I4AbkNbyiLPSpahOb0ItU8=;
-        b=a7aAm2lEWxNsCgvEAx50u3vNAd/53eIY4/6lRDTOnDAJS3RKok9kEiz9K1w3JohQTO
-         uCWuoi/F9VJPp1P2SjbegHzrjg+zogdGZkovRg6Psoki7u0W+KpJIFjfQE6Iptia2wbX
-         daJ1cIPhFOd/AhcG7Cp99tg6Uns8GHPAgx7Ucqf4g3Vu/sOwy88uO8g6fpjvoUlmU/WF
-         cewg+TCk83fDrnbnZHgTYYb+Sel2CkAtNt82FPvtt1HzlUNy6UZCF9wrUMQn6RcOo2lT
-         lSAozc52+iZlewnyeRO6PjvOBFleNSW/8/MHx8fHUn61r9SzEzF5CKYKslSSrfgS6336
-         CF6A==
-X-Forwarded-Encrypted: i=1; AJvYcCUJUBel8EepFbSnraSrWIOvjlJiX5iNCocXv5vrj8FhmFMWZ7vFCqu0te230tFrsbXDprwV6fwrO2upyXxf@vger.kernel.org, AJvYcCUq5XhGsJhPGqIowNZh59tfYcjR0tyoluKkjbAo35wVUgUiIUvBuyEKLFlUUA8p7UdDep4K5w6wXzCkJida3dmq2Lu1@vger.kernel.org, AJvYcCVuSFCHSQtnMUZvRe33D3cGrQje2sYoVXObp7u+Lp/AetsI6grUiyf2NNP9JJU21hb6UNE=@vger.kernel.org, AJvYcCXSxcTrHRtSeJ1U954r+y4Y1tXnRQUgqzJoho2PrHyGgkwaIzZsaHclOgE20ziy1GuqVK064aKQ3i49GrqnIFB5@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx76Vv2SKCHrlE9ofFbG37BDXxTg1J0RpkZ6sqg3NS90ETTOR7U
-	gGICQmkPKfD9HeuzuFKpN9QrMFQsANYZWfiG9VdK7k0/BouV8/Ha
-X-Google-Smtp-Source: AGHT+IFwDWFQTYbCMg/5uEcXYx9WIfItSgCBpQ+5PvxXxZHKQcRO3JRwS9Ecz4+YSnkK9upsXsacjw==
-X-Received: by 2002:a05:6902:1021:b0:e28:f132:3fae with SMTP id 3f1490d57ef6-e2919ff3fd0mr778508276.48.1728605300083;
-        Thu, 10 Oct 2024 17:08:20 -0700 (PDT)
-Received: from dev-ubuntu-0.. (104-15-236-76.lightspeed.rlghnc.sbcglobal.net. [104.15.236.76])
-        by smtp.googlemail.com with ESMTPSA id 3f1490d57ef6-e290edf37dcsm548028276.1.2024.10.10.17.08.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2024 17:08:19 -0700 (PDT)
-From: Tyrone Wu <wudevelops@gmail.com>
-To: andrii.nakryiko@gmail.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	bpf@vger.kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	haoluo@google.com,
-	john.fastabend@gmail.com,
-	jolsa@kernel.org,
-	kernel-patches-bot@fb.com,
-	kpsingh@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	martin.lau@linux.dev,
-	mathieu.desnoyers@efficios.com,
-	mattbobrowski@google.com,
-	mhiramat@kernel.org,
-	mykolal@fb.com,
-	rostedt@goodmis.org,
-	sdf@fomichev.me,
-	shuah@kernel.org,
-	song@kernel.org,
-	wudevelops@gmail.com,
-	yonghong.song@linux.dev
-Subject: [PATCH bpf v2 2/2] selftests/bpf: assert link info uprobe_multi count & path_size if unset
-Date: Fri, 11 Oct 2024 00:08:03 +0000
-Message-ID: <20241011000803.681190-2-wudevelops@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241011000803.681190-1-wudevelops@gmail.com>
-References: <CAEf4BzYo12vao0GPYPC=3SMTzc5c8kZSFCE+D63ACgtjs7QhVw@mail.gmail.com>
- <20241011000803.681190-1-wudevelops@gmail.com>
+        bh=IVGdgRMRF72j9LkSnHZOZlGd3on28rqlWSf6lpgKKqM=;
+        b=ZIKrSf7WnP0PpUhhUiwb8XGKEwkSePLzgFM+KvnATOUMq+4ggRjdQybzawB0vkYCSL
+         dtC5t1R/HB+FWkF5M29+J6YPMrHUNSBwXbgbF2vtxeBTZHlxLYG7hk5L7ZtERpA6dvE1
+         YsgrsL2MhP6Vjp2/12Wt2bm4x8bjL07l9lCIvrew+8ZuxZaQocml00LbiZaS1Dk5pvPL
+         dODflNY0u/wPIKM02EHonM4hW1swYBEk2fp/L/3KInq4Smnv6CMXMAoRZoaM8lcCCAqR
+         dinECFezFGQb4172ioOr2/OEDrMdkvXhlVvgVAVjTQGyHvpb35DbEM9h+DgYKObXHEqo
+         XWTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXAxPFVyrrD1HBE9IsbR5xXcm1KCApkRtqJRyA6A6ca3zYukjhCtv8E4Ni/XaLIIc0a/F+FDFQ0BHOAZk3aw/I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsV5Cf/Cm9YO/IsOanPTMF6j56GsH3dB3WvT/wPZWUsAc7ub9r
+	V8FBX/x330HKhAki8wO0nvEJJYw4Pq7Ft8vRGs9LOWabPgNsXRPqzQjkfQ531OzsaTJGBrMZb1X
+	kK5OnKSe+10Fzut9Tq4DLd0mhfZNUvcZ14IOu
+X-Google-Smtp-Source: AGHT+IFT9pJJLCUSM/YLQyqqRxIfC3K7gw6udoC8IuTRrW138RcWE2mO/y2HCtMWqB0/IdaYqzd2MKMsfG/AmfyOKCo=
+X-Received: by 2002:a05:6870:7252:b0:260:ccfd:1efe with SMTP id
+ 586e51a60fabf-2886ddd8c92mr182982fac.6.1728606199035; Thu, 10 Oct 2024
+ 17:23:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241008040942.1478931-2-jeffxu@chromium.org> <20241008041804.1481453-1-jeffxu@chromium.org>
+ <5e1ef8a0-f063-4166-9d93-cf047cdd2792@infradead.org>
+In-Reply-To: <5e1ef8a0-f063-4166-9d93-cf047cdd2792@infradead.org>
+From: Jeff Xu <jeffxu@chromium.org>
+Date: Thu, 10 Oct 2024 17:23:06 -0700
+Message-ID: <CABi2SkXecdseZBeEJOeP8boP7aEAf815-1H6eMHDy=a4d1oXMg@mail.gmail.com>
+Subject: Re: [PATCH] mseal.rst additional fix
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: akpm@linux-foundation.org, keescook@chromium.org, corbet@lwn.net, 
+	jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, jannh@google.com, 
+	sroettger@google.com, pedro.falcato@gmail.com, 
+	linux-hardening@vger.kernel.org, willy@infradead.org, 
+	gregkh@linuxfoundation.org, torvalds@linux-foundation.org, 
+	deraadt@openbsd.org, usama.anjum@collabora.com, surenb@google.com, 
+	merimus@google.com, lorenzo.stoakes@oracle.com, Liam.Howlett@oracle.com, 
+	enh@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add assertions in `bpf_link_info.uprobe_multi` test to verify that
-`count` and `path_size` fields are correctly populated when the fields
-are unset.
+On Tue, Oct 8, 2024 at 9:37=E2=80=AFAM Randy Dunlap <rdunlap@infradead.org>=
+ wrote:
+>
+>
+>
+> On 10/7/24 9:18 PM, jeffxu@chromium.org wrote:
+> > From: Jeff Xu <jeffxu@chromium.org>
+> >
+> > Change "overwrite" to overwrites"
+> >
+> > Signed-off-by: Jeff Xu <jeffxu@chromium.org>
+> > ---
+> >  Documentation/userspace-api/mseal.rst | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/Documentation/userspace-api/mseal.rst b/Documentation/user=
+space-api/mseal.rst
+> > index 41102f74c5e2..54bbcce330ec 100644
+> > --- a/Documentation/userspace-api/mseal.rst
+> > +++ b/Documentation/userspace-api/mseal.rst
+> > @@ -97,7 +97,7 @@ Blocked mm syscall for sealed mapping
+> >     The first set of syscalls to block is munmap, mremap, mmap. They ca=
+n
+> >     either leave an empty space in the address space, therefore allowin=
+g
+> >     replacement with a new mapping with new set of attributes, or can
+> > -   overwrite the existing mapping with another mapping.
+> > +   overwrites the existing mapping with another mapping.
+>
+> No, that one is correct as is.
+>
+Ah, yes. Please ignore this additional patch.
 
-This tests a previous bug where the `path_size` field was not populated
-when `path` and `path_size` were unset.
-
-Signed-off-by: Tyrone Wu <wudevelops@gmail.com>
----
-V1 -> V2:
-- Verify bpf_link_get_info_by_fd was successful before continuing with test
-
- tools/testing/selftests/bpf/prog_tests/fill_link_info.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-index 745c5ada4c4b..d50cbd8040d4 100644
---- a/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fill_link_info.c
-@@ -420,6 +420,15 @@ verify_umulti_link_info(int fd, bool retprobe, __u64 *offsets,
- 	if (!ASSERT_NEQ(err, -1, "readlink"))
- 		return -1;
- 
-+	memset(&info, 0, sizeof(info));
-+	err = bpf_link_get_info_by_fd(fd, &info, &len);
-+	if (!ASSERT_OK(err, "bpf_link_get_info_by_fd"))
-+		return -1;
-+
-+	ASSERT_EQ(info.uprobe_multi.count, 3, "info.uprobe_multi.count");
-+	ASSERT_EQ(info.uprobe_multi.path_size, strlen(path) + 1,
-+		  "info.uprobe_multi.path_size");
-+
- 	for (bit = 0; bit < 8; bit++) {
- 		memset(&info, 0, sizeof(info));
- 		info.uprobe_multi.path = ptr_to_u64(path_buf);
--- 
-2.43.0
-
+> >
+> >     mprotect and pkey_mprotect are blocked because they changes the
+> >     protection bits (RWX) of the mapping.
+>
+> --
+> ~Randy
 
