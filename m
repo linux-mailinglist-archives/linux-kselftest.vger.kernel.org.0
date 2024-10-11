@@ -1,161 +1,141 @@
-Return-Path: <linux-kselftest+bounces-19561-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B6AB99AC6C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 21:08:51 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CBA999ACB2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 21:33:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE7941C27215
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 19:08:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F3721F22E08
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 19:33:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 865951C8FC1;
-	Fri, 11 Oct 2024 19:08:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02ECE1D017E;
+	Fri, 11 Oct 2024 19:33:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="epNstzDn"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lkvb84yC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEAEA1BDAA7;
-	Fri, 11 Oct 2024 19:08:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 687BC1CFEC8;
+	Fri, 11 Oct 2024 19:33:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728673726; cv=none; b=cSuy4Ro+/qcJNOXep8UWqPZyLJYbCvk+hBBaKy+5YQyDx+hrBXz4jChQ9VqdzeeH0ycIwOeQzAIjSOUVNLoWE0EKEcC/IR0mnb9mfxRxPbe5sDAi++oQY2Tsn6zCeFzTDdhPNcK4QUOV1BZd3ZbOtdKvS+pd0Yq3YMHhxK4ou8Q=
+	t=1728675185; cv=none; b=uBlmKhcAwwXxQfW+RUEO5nBpYgqdZKS6xWwfXQbf+ROi3GghlhWVzeF/FbeYTxJ02s0VnsJ5W0a4eeN+LXBccPeVglyfFYW3p/aEpg0ReSWF9dxx3GddXkSmgs8BWLBLDh7tw0AfrG07NPlNmrqYt8xV5uKsXQnadoSKa+xMEsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728673726; c=relaxed/simple;
-	bh=/g5HFJQ/qfXtxuJjeHarUEWpSdzo39LDrraUxmLlEos=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=GH+XX9LC5kKIfASioWzGM7TgCKlFpLiwlv4uuDoutbHf4U0Dg/eUmc7OfQ3FVBfBepLesC011RGfRrsjr6Piw66atwf+gkMyprP3s3NYFZzSpMefIj7veWJ2VGxBVZnMNB6qoBeXtc4KKnjK/g2XadwfA6nx31tuBkiEIfJMGTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=epNstzDn; arc=none smtp.client-ip=209.85.219.50
+	s=arc-20240116; t=1728675185; c=relaxed/simple;
+	bh=ipzMIamMroJVib8WZKOfbImQgAiOGGAWnBtSO52PkAI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FlB2CxYlkDUM7a2pBYvgCr6BQG3BhxSrZcnZ0z0wxJW8ZJFYX4UshxUJorG1/++QxfTgOBpIcdNDJPt81gyGgJVnHLWJ63stUZoZY8dClQmuU6+oa02ez6C5Q77HDIuYWcQS4ESmqQ91MM7RlqS6eyyBQx2q7PjWAnQqORQL4zU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lkvb84yC; arc=none smtp.client-ip=209.85.128.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6c5ab2de184so14367226d6.0;
-        Fri, 11 Oct 2024 12:08:44 -0700 (PDT)
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6e2772f7df9so22101187b3.2;
+        Fri, 11 Oct 2024 12:33:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728673724; x=1729278524; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3Y/geJzGabBXvfM/8UGblm0sFehSeKzBtHLuktddHvE=;
-        b=epNstzDnc6muLM7laZBh9dUAq71gztsgbFq/8+NS3lJZy8Smt75RKccCRUOGouAxVm
-         D4+bEW5eVJtCeupfTimX9PrzfhAJ9UYHvtsRHon7orUzFiiHjtDCjJ/GgzRTAh+PBFYc
-         RHrhHxW5FqrsqHJPG2QbWQGAkVDw5He/ViHvA/42+eE8Sk8F/jngUj3PWXlIGLuBXG02
-         LgUJDCkH5kH1GwQoqACcFetgj3z09bgufSoLcKPpqe46HV3POxXm8TGjXOTuNZFGZrDq
-         ufRm2isaY3kRN7c1W84J9522dn3HPbl878L2KkG7SdWaZ32ja0v/OMoKayc5sKpo1Rm+
-         YbSQ==
+        d=gmail.com; s=20230601; t=1728675183; x=1729279983; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cnRAe7a+r04KhLzqcnP2xNTdSejhtipAKUJmwQ7OKDY=;
+        b=Lkvb84yCQrmR+LGqjd7QsMMOU8uKBIg2+RHKrKdZISU2ebUzRdWPvnl88+2aFf8Ejj
+         fU4KXqUDEOCbOaaH7Zm6OmHxlx5OFoaXApxJkKlRPjKRoc0vszNFmCntAw+/lIhkHlKO
+         EmQ3OmBL2PWplPTQEwkf4ahouOBO4lsZKM8kT2PrLWh/k8np7MkklRdFfEv6DdbjbWdI
+         Jh4OBwu0Db3glYqKkdG9GlpPkF4X5WtlcLqlTE13LRAix0T8Rd3P97ZC1u05zu130QUw
+         WRYYtDA5aAWO9rlnjLHFGjarhD6t9DMWx811P4gHvAUHJRiEIu+8dcR6RNVTbOGsHx5D
+         OgWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728673724; x=1729278524;
-        h=content-transfer-encoding:mime-version:subject:references
-         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=3Y/geJzGabBXvfM/8UGblm0sFehSeKzBtHLuktddHvE=;
-        b=Z6D6/o2P6V8oce5zM1BIJ2GtQO7VJedx266lNuzXrFENly2/+X7y2QzN22TPVtJCtW
-         waeaTT1Y56MvwmxfXht09Wo2dw1xsL3VMJtbnxq8qUgzXOhMMe9GTDYSj/5tjjqRgvQQ
-         DU1wSHtNbsA5XIZZH1tbauY+bZ0P8MxEGFmDq3Ro3EV88OAMA/fwwI0ZIU8UOF/1oV7K
-         cQa4prTf+m6XiLC3I+WvgNrUtM0S5MB8GUET1G6eLRKglw4kaUQhC0EyXGTH/qxzKPko
-         LRw5O3e1Ow4kqHYP3PmQNRs3lt911a3Dr568E4ilhYZVSPuOStQ+/lx3wWCamd5Svwx/
-         /aeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUWEL0SMrp469g4/HiBu4MnDoG7DMwzhuyT7+X+7SFLh67+3dB2Uu2AJA0Iy14C1rw7GUEgXjBRL8iXJ6Q0w2Pw@vger.kernel.org, AJvYcCVLipPUjiZtbwaxMI3PUiGmBxanIAjBfc9xhyWiZcTryWUoZPfxwuvvEAAhk+h59Js4LjvD2SFa@vger.kernel.org, AJvYcCVda41N3RX0nfDCkFegtIN5s1CQrYIBNJ9TkoxCY7HMTSyAVLoHqQYHQHfuomZetNhdgW17UEn21IsiR68=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/e0dXtxVTvXe4U0b3Cg1agoY+61j2nECJe/ZMtnxLBd5R9BO1
-	DI39lbBRdNRTERqKn0XKd2NkmYEmKNpt9D7xkE9rwenKljFPpABk
-X-Google-Smtp-Source: AGHT+IF/SiYd5lqR3tMuI1/TV4/981yonR0uSduTSphD/IKyJ+JLfMwoMsQPJqNdLCwQHfkSTmri7g==
-X-Received: by 2002:a05:6214:390b:b0:6cb:ed3b:fab2 with SMTP id 6a1803df08f44-6cbf0074776mr45386496d6.19.1728673723674;
-        Fri, 11 Oct 2024 12:08:43 -0700 (PDT)
-Received: from localhost (86.235.150.34.bc.googleusercontent.com. [34.150.235.86])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6cbe8636f11sm18090176d6.125.2024.10.11.12.08.43
+        d=1e100.net; s=20230601; t=1728675183; x=1729279983;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cnRAe7a+r04KhLzqcnP2xNTdSejhtipAKUJmwQ7OKDY=;
+        b=imGV7jMl3jilRsvKsbmnDS3qg9LEZFZKglRqxYQUdDJ2MIZSElL4oqmFCar3qyAEW9
+         8JPYXz5Z2eR8+XUEOf02DJY6kPXE6W6gDVAImQhKGdj/0leGqiBWEr5+fbqzJ+Vo+DSv
+         U8qhSVhJ70MNTe5yniMigKcrnmsYs9PTTQh8z7f0+32u2cXaiDSx20Kffoblby7XZFMj
+         t5+U8ZdhGxjEhkYGg4gvuy6sg9PPZECY2wQgFu7FSSkQbCk3fKBhqYa3tI7YFzyh3nuO
+         t37gtXkNdAS1NEOQ+ypVH/+mYliKchbKoY2d/r46Npe2ozUwj/Oqg64+9gnBmGD0iMob
+         NIYw==
+X-Forwarded-Encrypted: i=1; AJvYcCVFcIw9BkVwjPThNujwwAjFM4Kg6sc7aZt+69F/QeCGNQ9KAmpPRvGRWjTD+A2PINWL2zivru4spKP6VIeU5O0f@vger.kernel.org, AJvYcCVuto12Lp1+/J6bF/F59GMMPqIrRcuO8XfYbTc6uZJqG1G6raJXV32l9e8/lcU9zTJnpT/bczjnaxyZ4xAgv58Q@vger.kernel.org, AJvYcCWW5huPf0gzqgax/vzKPTYUeQfdlyj9B7DzXvzq43GwmXEprDB2zEAIDzkoUWLxIqEnvbZV6vtv@vger.kernel.org, AJvYcCXloGj2nUfjvGPAX+NTDe/lVDhCOroer2dDb6KrqpVQVgl063P7wjqykfd8QFKhICg29Tqt8Mcb6HY1sls=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRuo9H5yK3U5wD1GrNgjYZLPDuRep+po78GnnwMEGNcv+gYHoV
+	V3fUapa9/kIHIEoFPH/du0HqVQQWS2KMAl/aaL53JajZNn/00RqkiIPx7AQS
+X-Google-Smtp-Source: AGHT+IHUPz0/Ui9FHEUoyCsEepGvC04qtfgoEazw4dYTo7Nv26hgnb+DNJN/rIvMcadhU+XpZWty1g==
+X-Received: by 2002:a05:690c:56ca:b0:6e3:1487:8554 with SMTP id 00721157ae682-6e347c6b70emr26611997b3.37.1728675182822;
+        Fri, 11 Oct 2024 12:33:02 -0700 (PDT)
+Received: from dev-ubuntu-0.. (104-15-236-76.lightspeed.rlghnc.sbcglobal.net. [104.15.236.76])
+        by smtp.googlemail.com with ESMTPSA id 00721157ae682-6e332c6f3b6sm7199127b3.115.2024.10.11.12.33.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Oct 2024 12:08:43 -0700 (PDT)
-Date: Fri, 11 Oct 2024 15:08:42 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: Gur Stavi <gur.stavi@huawei.com>, 
- 'Willem de Bruijn' <willemdebruijn.kernel@gmail.com>
-Cc: davem@davemloft.net, 
- edumazet@google.com, 
- kuba@kernel.org, 
- linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- netdev@vger.kernel.org, 
- pabeni@redhat.com, 
- shuah@kernel.org
-Message-ID: <670977bac8b03_247429294f6@willemb.c.googlers.com.notmuch>
-In-Reply-To: <000401db1c00$bd86afe0$38940fa0$@huawei.com>
-References: <67054127bb083_18b21e2943f@willemb.c.googlers.com.notmuch>
- <20241009065837.354332-1-gur.stavi@huawei.com>
- <67068a44bff02_1cca3129431@willemb.c.googlers.com.notmuch>
- <002201db1a75$9a83b420$cf8b1c60$@huawei.com>
- <67072012c983a_1e805629421@willemb.c.googlers.com.notmuch>
- <002701db1ae3$368d9b70$a3a8d250$@huawei.com>
- <6707e3028d844_20573a294f0@willemb.c.googlers.com.notmuch>
- <000101db1b2f$7410c2f0$5c3248d0$@huawei.com>
- <67085135e4fe2_21530629429@willemb.c.googlers.com.notmuch>
- <000301db1bbc$453feae0$cfbfc0a0$@huawei.com>
- <670937c990fca_234aca29481@willemb.c.googlers.com.notmuch>
- <000401db1c00$bd86afe0$38940fa0$@huawei.com>
-Subject: RE: [PATCH net-next v02 1/2] af_packet: allow fanout_add when socket
- is not RUNNING
+        Fri, 11 Oct 2024 12:33:02 -0700 (PDT)
+From: Tyrone Wu <wudevelops@gmail.com>
+To: bpf@vger.kernel.org,
+	wudevelops@gmail.com
+Cc: pablo@netfilter.org,
+	kadlec@netfilter.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	mykolal@fb.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	shuah@kernel.org,
+	riel@surriel.com,
+	shakeel.butt@linux.dev,
+	netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf v1 1/2] bpf: fix link info netfilter flags to populate defrag flag
+Date: Fri, 11 Oct 2024 19:32:51 +0000
+Message-ID: <20241011193252.178997-1-wudevelops@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Gur Stavi wrote:
-> > Gur Stavi wrote:
-> > > >
-> > > > If we don't care about opening up fanout groups to ETH_P_NONE, then
-> > > > patch v2 seems sufficient. If explicitly blocking this, the ENXIO
-> > > > return can be added, but ideally without touching the other lines.
-> > >
-> > > I don't think that allowing ETH_P_NONE is relevant.
-> > > In my opinion the 2 options that should be considered to fail
-> > > fanout_add are:
-> > > 1. Testing proto == 0
-> > > 2. Testing proto == 0 || ifindex == -1
-> > >
-> > > The only corner case that is caught by [2] and missed by [1] is
-> > > the "unlisted" case during do_bind. It is such a rare case that
-> > > probably no one will ever encounter bind "unlisted" followed by
-> > > FANOUT_ADD. And this is not a dangerous corner case that leads to
-> > > system crash.
-> > >
-> > > However, being a purist, I see the major goal of code review to promote
-> > > correctness by identifying corner cases while improving style is a
-> > > secondary priority. Since we did identify this corner case in our
-> > > discussion I think we should still use [2].
-> > > I don't consider the code complex. In fact, to me, the ifindex clause
-> > > is a more understandable direct reason for failure than the proto which
-> > > is indirect. Having the ifindex clause helps figuring out the proto
-> > > clause.
-> > 
-> > It's interesting that the unlisted fix does not return ENODEV, but
-> > returns success and leaves the socket in an unbound state, equivalent
-> > to binding to ETH_P_NONE and ifindex 0. This seems surprising behavior
-> > to the caller.
-> > 
-> > On rereading that, I still do not see a purpose of special ifindex -1.
-> > 
-> >
-> 
-> Can this code be relevant?
-> 
-> 		case NETDEV_UP:
-> 			if (dev->ifindex == po->ifindex) {
-> 				spin_lock(&po->bind_lock);
-> 				if (po->num)
-> 					register_prot_hook(sk);
-> 				spin_unlock(&po->bind_lock);
-> 			}
-> 			break;
-> 
-> Perhaps, although the socket failed to (re) find the device, the device
-> is still aware of the socket and we need the ifindex condition to fail.
+This patch correctly populates the `bpf_link_info.netfilter.flags` field
+when user passes the `BPF_F_NETFILTER_IP_DEFRAG` flag.
 
-But the behavior is the same for ifindex -1 and 0. Devices always have
-an ifindex >= 1.
+Fixes: 84601d6ee68a ("bpf: add bpf_link support for BPF_NETFILTER programs")
+Signed-off-by: Tyrone Wu <wudevelops@gmail.com>
+---
+ net/netfilter/nf_bpf_link.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/net/netfilter/nf_bpf_link.c b/net/netfilter/nf_bpf_link.c
+index 5257d5e7eb09..797fe8a9971e 100644
+--- a/net/netfilter/nf_bpf_link.c
++++ b/net/netfilter/nf_bpf_link.c
+@@ -150,11 +150,12 @@ static int bpf_nf_link_fill_link_info(const struct bpf_link *link,
+ 				      struct bpf_link_info *info)
+ {
+ 	struct bpf_nf_link *nf_link = container_of(link, struct bpf_nf_link, link);
++	const struct nf_defrag_hook *hook = nf_link->defrag_hook;
+ 
+ 	info->netfilter.pf = nf_link->hook_ops.pf;
+ 	info->netfilter.hooknum = nf_link->hook_ops.hooknum;
+ 	info->netfilter.priority = nf_link->hook_ops.priority;
+-	info->netfilter.flags = 0;
++	info->netfilter.flags = hook ? BPF_F_NETFILTER_IP_DEFRAG : 0;
+ 
+ 	return 0;
+ }
+-- 
+2.43.0
+
 
