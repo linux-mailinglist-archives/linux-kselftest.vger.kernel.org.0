@@ -1,261 +1,162 @@
-Return-Path: <linux-kselftest+bounces-19559-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19560-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6427A99AADF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 20:12:54 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F16DA99AB14
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 20:37:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC0C61F24422
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 18:12:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9AA991F22404
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 18:37:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2AA51CDA1C;
-	Fri, 11 Oct 2024 18:12:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AEB11CF5DF;
+	Fri, 11 Oct 2024 18:36:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="db04udrj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kVt8ugzr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A611C9EC7
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2024 18:12:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69FDD1C8FB7;
+	Fri, 11 Oct 2024 18:36:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728670337; cv=none; b=S/EcS3ysBITUSIj8dozUEJ8spKaZMrl5brXtKjdM8RVIKFdEKBbr3APRLdROHXcqZYhw8n+bUfpsTkaywW1aPUPOsBSmxx/nPNhC/jOu3WEEzRobKavJ9sZuzGrqWJRNMpE31HTuYGTtEMZ8ZSp825YCItr+HMhBMdzyLIWEn90=
+	t=1728671798; cv=none; b=XZxLajIs0JGy9gqsxh+3lQRQUYFmYySrM+R7VlYHTd+qjVweSICzkj0e71fQ9Rlwt6aJFKbpbTtybguJ5SA0X9I90ac9ELmWkv4J/fzshxs5wW8HW3ujjpzq/7uOkYQ8UMYFJiJr824C6hj4c4sA/JCHAZStWo4xViu2oNpV0U8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728670337; c=relaxed/simple;
-	bh=r95hHR2I319NNh4LBWo+gWmOZQHDCJgPNbLKzRADYd4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XVJXUGso3a5Fiu43cvUhE1uIhDi90igJNS9LIo18ixX96mzbh1nZZMDDt6A6wL6LxREp/gJdeMNJWXX0qpuNo5Uh6ZyOW66FQGRQehcP28O4Tcc7ozZnv6yHS+uweC/rcwSjSm5iHeDxpudmBT0/A+0t7etscutcywbOMiGRfz4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=db04udrj; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-539e19d8c41so2816e87.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2024 11:12:14 -0700 (PDT)
+	s=arc-20240116; t=1728671798; c=relaxed/simple;
+	bh=ayPciMWY//VbPSzpp2VbZbk7uWTZGaXOBvAeQgtBwzA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=AK9TyZVgjo/RbdnZAOvVU/Sx8YWpbi2dHMfgJtnZSEk+MYOoTw8n7ARpGm1tijSDMeV4m9FL6ynF1D++lEPkovuMrZyI/uO4cwl7WafzEehbwI/0XoHfWnfMtKX9VMKR/tkT1ApUSpl55mW6LAd55Lvc21A3Yu3wpqKK9YAKJxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kVt8ugzr; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6e2346f164cso20646957b3.3;
+        Fri, 11 Oct 2024 11:36:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728670333; x=1729275133; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1728671796; x=1729276596; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UUuCTwGEAieQUuHz9Si/8fQwhBeTxrZR6ij+65t6Jm8=;
-        b=db04udrjpQmgDQiyivjyJEAepsiIB951idjv00I5B55zlLVCcytCnYDuSY+5MFI6+G
-         jWzeh0QQbehoerjomKIJPa7Oo7oVqNL+XblI1IODEQzY/Ku8U5yYgB4QSG33uTr9V2Kj
-         VWzJHTABI5iF/FUyF3PbHQI68gA4soJgV9pc+yZGImt+cMR12X9pDyP9wlsW2GsaLkpX
-         NtNg+GsDIRYiu6mcDiG1bdYqvujafeQLj4lfVgZ7DIo9KFuOKsb7dKS18IvBLpekZnor
-         cVSNn0x4trxgL3quErNxMb17WTIntKONnUpFFP9txBVYU4plfGmBOcfV9AFBOcuZkAAD
-         gW3A==
+        bh=D0I/3yItTQ/jGPmVdy1AuiludxZJFxBg01l9+u4Pb+Q=;
+        b=kVt8ugzrwd7atyJPCNjar/NfIf9ojRW7BIob9BPt3/WPtqBdn+9S2baLwqHWWi1PJQ
+         QMnNefGwqLgGJMIpDn9KSfvnRaBQTngUDKLc411Iw+MzY2yownih37xfMj/+90Bh3ZXR
+         QWCOo1p3pWmvjqPL8tDvg4UEtus6JTll7upcibSg1i/H89ylCU1AYQR4Nur4qPJ9BqgE
+         JwDKUyyNI4m0bVtIFIge21QTtfN/Wa2m3NxktSONNLHGsqBy3iDE7tXoaz/FudNs/gRg
+         GvGVGbtoY6Dmw65/sIGPxJplGUibuZ9VSOSMloj/fHdqzGmICcPaqqdFwK3TCoqau5sr
+         VVvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728670333; x=1729275133;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1728671796; x=1729276596;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UUuCTwGEAieQUuHz9Si/8fQwhBeTxrZR6ij+65t6Jm8=;
-        b=w/ihUqpEWNzo9ECdAEsy0dK7sQiWkejvjdECCm25h9lbw5eTrsGxghc4IYnzimX9Yu
-         sFyd0DM5t/BJTjX0ix2gyAeyhr43SqBKlKaKx+C/ASWAtI73t9lKtl3/ik2wcRXGLvM9
-         fWBaoafiShGV2ZpAzmCW1xFGUpd+1QHM9mXdEKIdvS0h5R+xsfb7C/CjRkE+iUMltlWX
-         xUJHkewMHsGN4I6znp6tyY6Nv2NeH0OBuxR1OQEpa4CEv8iC4jrtGFi/QdKme3GciGet
-         76BKjGD5NbXBGmVA4WLrW3ptmAv10g9/FqLwrjXZhnPWzuCLuDRLN5ISqangdkilBwUq
-         3lQA==
-X-Forwarded-Encrypted: i=1; AJvYcCVu8cBMl2oVaT4tavsgH0MUiNceSCZ6hwEKG3BCc+8QSX4gA2wLrzD+HRBLnNTl1SY9OSY4OfOIYfgTDXjDCBw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/4gPhJdlCWhz+kzuKpVRrC+DwKt0IeRKgPR3D3uP0zqqgYiRX
-	LQj9DX48E0jZ3J++vBwNJyDUNeXYrmmULX1PtLxOYY72Odq4Mf7fWxJWGmoQHgQWBAzwCtFzv0k
-	/5Mb0MS/ySRazYFwx8C634G7iSQDVs4pMD3+D
-X-Google-Smtp-Source: AGHT+IGfIw5en7nMNwXR8WTMmoC6i/mmCdwod1VBWf2nU/vOj3kNQZOC5eep3RZM27n5ERgdi0RUSIce8GRDKg8cVxc=
-X-Received: by 2002:a05:6512:1154:b0:533:4620:ebe6 with SMTP id
- 2adb3069b0e04-539e5f9e005mr23838e87.4.1728670332348; Fri, 11 Oct 2024
- 11:12:12 -0700 (PDT)
+        bh=D0I/3yItTQ/jGPmVdy1AuiludxZJFxBg01l9+u4Pb+Q=;
+        b=omLotlVWFkd86uhmEnRjOjgnLhSglI7dCg5Ac1aLjvuH7ypyCdiwCWkyNB7X+cnmYO
+         /awhhs70z9EPPEd/1v+GueyLb5unmLCYKyWS+FyaieP8gAowDa/Dw7DMMZFvTzUjMlwV
+         ekOtT//vgPlaf7t3TGqU1Nbv4ri1evb+jffrgzkQ0bLuEUG2L7NZyJZF7Rq/E3hYR8BT
+         2bSlKiWhd/552stP3x1D949vHSTET0QBPeqj9WjRxDCKPJbECMOJVFHidF071EDC6hZk
+         KMpCmOivWJKn1RB5RtzaK3zJqfeUfE+kHrteP8kpE87oofh+7CSV0NORB4pvn4BTl9H7
+         +iIA==
+X-Forwarded-Encrypted: i=1; AJvYcCUbUW0g2u+6llfpq2ipsVcv+0BLBMsWurXDfCb23c5FmtqPcnDt3IREdgNomoqZELmSDUiyzaT5tZ34CqWcvNVh@vger.kernel.org, AJvYcCV80AF13tVvjS73zc/Y3M8+IZrGd3MBcPzAJ8NW+dCpmXvUekYbME5sBJ7xnGGWPh8mUhGKdBbxg4BaQuE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw2EtCHbFqDVXeLsCbqFQRrOjZF3YnRXp7I+vaCSSi1bglOf0DI
+	/qsVwbBXKtI1v8aAMAHgXNnovfuTvkOUB9+B0JffKgfUlIoMGcKz
+X-Google-Smtp-Source: AGHT+IEkRojL52hJwweCx2O+wUTzR4I5MkaqX2ww+MF8GrcLEe5MjWVwn/h2w/MXIKyB1CbvEhASEQ==
+X-Received: by 2002:a05:690c:9c05:b0:6e2:2600:ed50 with SMTP id 00721157ae682-6e3479ca9dcmr38458547b3.21.1728671796308;
+        Fri, 11 Oct 2024 11:36:36 -0700 (PDT)
+Received: from localhost (fwdproxy-nha-112.fbsv.net. [2a03:2880:25ff:70::face:b00c])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6e332b83e8dsm6983997b3.33.2024.10.11.11.36.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 11 Oct 2024 11:36:36 -0700 (PDT)
+From: Daniel Zahka <daniel.zahka@gmail.com>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next 2/2] selftests: drv-net: rss_ctx: add rss ctx busy testcase
+Date: Fri, 11 Oct 2024 11:35:48 -0700
+Message-ID: <20241011183549.1581021-3-daniel.zahka@gmail.com>
+X-Mailer: git-send-email 2.43.5
+In-Reply-To: <20241011183549.1581021-1-daniel.zahka@gmail.com>
+References: <20241011183549.1581021-1-daniel.zahka@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1727440966.git.lorenzo.stoakes@oracle.com> <a578ee9bb656234d3a19bf9e97c3012378d31a19.1727440966.git.lorenzo.stoakes@oracle.com>
-In-Reply-To: <a578ee9bb656234d3a19bf9e97c3012378d31a19.1727440966.git.lorenzo.stoakes@oracle.com>
-From: Jann Horn <jannh@google.com>
-Date: Fri, 11 Oct 2024 20:11:36 +0200
-Message-ID: <CAG48ez3ursoL-f=mYpV79Do18XPPt+MPPHNUBv6uFE1GhpOwSA@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/4] mm: madvise: implement lightweight guard page mechanism
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Suren Baghdasaryan <surenb@google.com>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Matthew Wilcox <willy@infradead.org>, 
-	Vlastimil Babka <vbabka@suse.cz>, "Paul E . McKenney" <paulmck@kernel.org>, 
-	David Hildenbrand <david@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	Muchun Song <muchun.song@linux.dev>, Richard Henderson <richard.henderson@linaro.org>, 
-	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
-	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org, 
-	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, linux-kselftest@vger.kernel.org, 
-	Sidhartha Kumar <sidhartha.kumar@oracle.com>, Vlastimil Babka <vbabka@suze.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Sep 27, 2024 at 2:51=E2=80=AFPM Lorenzo Stoakes
-<lorenzo.stoakes@oracle.com> wrote:
-> Implement a new lightweight guard page feature, that is regions of userla=
-nd
-> virtual memory that, when accessed, cause a fatal signal to arise.
-[...]
-> ---
->  arch/alpha/include/uapi/asm/mman.h     |   3 +
->  arch/mips/include/uapi/asm/mman.h      |   3 +
->  arch/parisc/include/uapi/asm/mman.h    |   3 +
->  arch/xtensa/include/uapi/asm/mman.h    |   3 +
->  include/uapi/asm-generic/mman-common.h |   3 +
+It should be invalid to delete an rss context while it is being
+referenced from an ntuple filter. ethtool core should prevent this
+from happening. This patch adds a testcase to verify this behavior.
 
-I kinda wonder if we could start moving the parts of those headers
-that are the same for all architectures to include/uapi/linux/mman.h
-instead... but that's maybe out of scope for this series.
+Signed-off-by: Daniel Zahka <daniel.zahka@gmail.com>
+---
+ .../selftests/drivers/net/hw/rss_ctx.py       | 32 +++++++++++++++++--
+ 1 file changed, 30 insertions(+), 2 deletions(-)
 
-[...]
-> diff --git a/mm/madvise.c b/mm/madvise.c
-> index e871a72a6c32..7216e10723ae 100644
-> --- a/mm/madvise.c
-> +++ b/mm/madvise.c
-> @@ -60,6 +60,7 @@ static int madvise_need_mmap_write(int behavior)
->         case MADV_POPULATE_READ:
->         case MADV_POPULATE_WRITE:
->         case MADV_COLLAPSE:
-> +       case MADV_GUARD_UNPOISON: /* Only poisoning needs a write lock. *=
-/
+diff --git a/tools/testing/selftests/drivers/net/hw/rss_ctx.py b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
+index 9d7adb3cf33b..29995586993c 100755
+--- a/tools/testing/selftests/drivers/net/hw/rss_ctx.py
++++ b/tools/testing/selftests/drivers/net/hw/rss_ctx.py
+@@ -6,7 +6,7 @@ import random
+ from lib.py import ksft_run, ksft_pr, ksft_exit, ksft_eq, ksft_ne, ksft_ge, ksft_lt
+ from lib.py import NetDrvEpEnv
+ from lib.py import EthtoolFamily, NetdevFamily
+-from lib.py import KsftSkipEx
++from lib.py import KsftSkipEx, KsftFailEx
+ from lib.py import rand_port
+ from lib.py import ethtool, ip, defer, GenerateTraffic, CmdExitFailure
+ 
+@@ -606,6 +606,33 @@ def test_rss_context_overlap2(cfg):
+     test_rss_context_overlap(cfg, True)
+ 
+ 
++def test_delete_rss_context_busy(cfg):
++    """
++    Test that deletion returns -EBUSY when an rss context is being used
++    by an ntuple filter.
++    """
++
++    require_ntuple(cfg)
++
++    # create additional rss context
++    ctx_id = ethtool_create(cfg, "-X", "context new")
++    ctx_deleter = defer(ethtool, f"-X {cfg.ifname} context {ctx_id} delete")
++
++    # utilize context from ntuple filter
++    port = rand_port()
++    flow = f"flow-type tcp{cfg.addr_ipver} dst-port {port} context {ctx_id}"
++    ntuple_id = ethtool_create(cfg, "-N", flow)
++    defer(ethtool, f"-N {cfg.ifname} delete {ntuple_id}")
++
++    # attempt to delete in-use context
++    try:
++        ctx_deleter.exec_only()
++        ctx_deleter.cancel()
++        raise KsftFailEx(f"deleted context {ctx_id} used by rule {ntuple_id}")
++    except CmdExitFailure:
++        pass
++
++
+ def main() -> None:
+     with NetDrvEpEnv(__file__, nsim_test=False) as cfg:
+         cfg.ethnl = EthtoolFamily()
+@@ -616,7 +643,8 @@ def main() -> None:
+                   test_rss_context, test_rss_context4, test_rss_context32,
+                   test_rss_context_dump, test_rss_context_queue_reconfigure,
+                   test_rss_context_overlap, test_rss_context_overlap2,
+-                  test_rss_context_out_of_order, test_rss_context4_create_with_cfg],
++                  test_rss_context_out_of_order, test_rss_context4_create_with_cfg,
++                  test_delete_rss_context_busy],
+                  args=(cfg, ))
+     ksft_exit()
+ 
+-- 
+2.43.5
 
-What does poisoning need a write lock for? anon_vma_prepare() doesn't
-need it (it only needs mmap_lock held for reading),
-zap_page_range_single() doesn't need it, and pagewalk also doesn't
-need it as long as the range being walked is covered by a VMA, which
-it is...
-
-I see you set PGWALK_WRLOCK in guard_poison_walk_ops with a comment
-saying "We might need to install an anon_vma" - is that referring to
-an older version of the patch where the anon_vma_prepare() call was
-inside the pagewalk callback or something like that? Either way,
-anon_vma_prepare() doesn't need write locks (it can't, it has to work
-from the page fault handling path).
-
->                 return 0;
->         default:
->                 /* be safe, default to 1. list exceptions explicitly */
-[...]
-> +static long madvise_guard_poison(struct vm_area_struct *vma,
-> +                                struct vm_area_struct **prev,
-> +                                unsigned long start, unsigned long end)
-> +{
-> +       long err;
-> +       bool retried =3D false;
-> +
-> +       *prev =3D vma;
-> +       if (!is_valid_guard_vma(vma, /* allow_locked =3D */false))
-> +               return -EINVAL;
-> +
-> +       /*
-> +        * Optimistically try to install the guard poison pages first. If=
- any
-> +        * non-guard pages are encountered, give up and zap the range bef=
-ore
-> +        * trying again.
-> +        */
-> +       while (true) {
-> +               unsigned long num_installed =3D 0;
-> +
-> +               /* Returns < 0 on error, =3D=3D 0 if success, > 0 if zap =
-needed. */
-> +               err =3D walk_page_range_mm(vma->vm_mm, start, end,
-> +                                        &guard_poison_walk_ops,
-> +                                        &num_installed);
-> +               /*
-> +                * If we install poison markers, then the range is no lon=
-ger
-> +                * empty from a page table perspective and therefore it's
-> +                * appropriate to have an anon_vma.
-> +                *
-> +                * This ensures that on fork, we copy page tables correct=
-ly.
-> +                */
-> +               if (err >=3D 0 && num_installed > 0) {
-> +                       int err_anon =3D anon_vma_prepare(vma);
-
-I'd move this up, to before we create poison PTEs. There's no harm in
-attaching an anon_vma to the VMA even if the rest of the operation
-fails; and I think it would be weird to have error paths that don't
-attach an anon_vma even though they .
-
-> +                       if (err_anon)
-> +                               err =3D err_anon;
-> +               }
-> +
-> +               if (err <=3D 0)
-> +                       return err;
-> +
-> +               if (!retried)
-> +                       /*
-> +                        * OK some of the range have non-guard pages mapp=
-ed, zap
-> +                        * them. This leaves existing guard pages in plac=
-e.
-> +                        */
-> +                       zap_page_range_single(vma, start, end - start, NU=
-LL);
-> +               else
-> +                       /*
-> +                        * If we reach here, then there is a racing fault=
- that
-> +                        * has populated the PTE after we zapped. Give up=
- and
-> +                        * let the user know to try again.
-> +                        */
-> +                       return -EAGAIN;
-
-Hmm, yeah, it would be nice if we could avoid telling userspace to
-loop on -EAGAIN but I guess we don't have any particularly good
-options here? Well, we could bail out with -EINTR if a (fatal?) signal
-is pending and otherwise keep looping... if we'd tell userspace "try
-again on -EAGAIN", we might as well do that in the kernel...
-
-(Personally I would put curly braces around these branches because
-they occupy multiple lines, though the coding style doesn't explicitly
-say that, so I guess maybe it's a matter of personal preference...
-adding curly braces here would match what is done, for example, in
-relocate_vma_down().)
-
-> +               retried =3D true;
-> +       }
-> +}
-> +
-> +static int guard_unpoison_pte_entry(pte_t *pte, unsigned long addr,
-> +                                   unsigned long next, struct mm_walk *w=
-alk)
-> +{
-> +       pte_t ptent =3D ptep_get(pte);
-> +
-> +       if (is_guard_pte_marker(ptent)) {
-> +               /* Simply clear the PTE marker. */
-> +               pte_clear_not_present_full(walk->mm, addr, pte, true);
-
-I think that last parameter probably should be "false"? The sparc code
-calls it "fullmm", which is a term the MM code uses when talking about
-operations that remove all mappings in the entire mm_struct because
-the process has died, which allows using some faster special-case
-version of TLB shootdown or something along those lines.
-
-> +               update_mmu_cache(walk->vma, addr, pte);
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct mm_walk_ops guard_unpoison_walk_ops =3D {
-> +       .pte_entry              =3D guard_unpoison_pte_entry,
-> +       .walk_lock              =3D PGWALK_RDLOCK,
-> +};
-
-It is a _little_ weird that unpoisoning creates page tables when they
-don't already exist, which will also prevent creating THP entries on
-fault in such areas afterwards... but I guess it doesn't really matter
-given that poisoning has that effect, too, and you probably usually
-won't call MADV_GUARD_UNPOISON on an area that hasn't been poisoned
-before... so I guess this is not an actionable comment.
 
