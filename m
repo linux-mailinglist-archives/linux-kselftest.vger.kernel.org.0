@@ -1,125 +1,165 @@
-Return-Path: <linux-kselftest+bounces-19548-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19549-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7B1C99A674
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 16:37:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F407499A76C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 17:22:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 133511C2155D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 14:37:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7870428514C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 15:22:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 639AB78C76;
-	Fri, 11 Oct 2024 14:36:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6174B1946CC;
+	Fri, 11 Oct 2024 15:22:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XCAMeVr0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KtknwSQZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39CED745F4;
-	Fri, 11 Oct 2024 14:36:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 980A728684;
+	Fri, 11 Oct 2024 15:22:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728657408; cv=none; b=Sqri0dqtuPTFSIsCaN2yABmKcV/oGgDdC9Atvb2NmJWvibBVkVHZCNqmACA3Fj0JgPMtwx1WHylH48l6efXrx10TRGj6QWV41gLqrMvejK+t1McCr0Hit6rc7NMs8eolqdp3SZX+skKpX2VjYAzf6eQTckVkdIaCbmwO2MiapEs=
+	t=1728660150; cv=none; b=cveuXBgtX+9SF49LqB5lERznl4D3Lo1hMXbNthvoO8ZY6nRyStWiILNRescZumPGWyzvRcqd5GtR5twCIVgnh45cWzc2qZewbbAf9aP1AJzO9VxNnvHceQFK6JaxVNsO7p9BVbmxs13lFEss//eh4gyqLr9tlSGjFt5/Up342ME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728657408; c=relaxed/simple;
-	bh=1ea53qrez4o6hsa0y87C5X/KVCdb6cASptIkacZH8m0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=bOX3i4LX/uOYtU8OBeaQTOLlavlzrnLT2S65XHfh98N3DpMlj31vF6KYHj9fMjRgVxIZ2KGSo/Ghr/CpASgQmNb7OmDyoiZXnk0OYalz9IqkjKBNsLFyUZVbFnKB4dyE7BpArCMEWrgFi6Ov0PzQe/WDHNoRux3rAGM8/zUxqH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XCAMeVr0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 822EDC4CEC3;
-	Fri, 11 Oct 2024 14:36:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728657408;
-	bh=1ea53qrez4o6hsa0y87C5X/KVCdb6cASptIkacZH8m0=;
-	h=From:Date:Subject:To:Cc:From;
-	b=XCAMeVr0Tbz5GecDr6+K2LhRuVVAfZIiblGVVc9KXFC9OxCWBHZZP+9k3wIzxMekA
-	 5xFwZxDdUapCLjieW6Y0TtGNrjdURu5QKXRLJ8Y2N4phF2zvV4fWclDuNDaXN9OUE/
-	 4pVHnVRSaRhuODKkgMoZkw380G8PyAjk0t/jYSYLAdDk2856GhcPMZ9/m7UIQRGTNH
-	 i6cuVpkIw+YBDOV8Rys/BtUodnY2qB6a4DYy4jZhog+u/rUZktumA+H3MKx++4965V
-	 SXViH2EJ/01zrXdat+Mp4mBnCe+zRT+cOMXMP1apMnLtfOPuVkf3DTiaoIKf09xT6Z
-	 hk+R1LwmmAuOA==
-From: Mark Brown <broonie@kernel.org>
-Date: Fri, 11 Oct 2024 15:36:25 +0100
-Subject: [PATCH] kselftest/arm64: Ensure stable names for GCS stress test
- results
+	s=arc-20240116; t=1728660150; c=relaxed/simple;
+	bh=nxZsK46cUu2erd6rj4K0CR3q1zTnMCN9PUd+04mgaVg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O43SUKkFZSA/cJt0cm8gz7pmuwFLbdLiL7EE2kt7nejaty8V/K226IPdEXa55D0fhdkVGgUDsS3soSXbbVYRRXC8xrnN+RyPhK+cWOE74GaQ4K5SbdWAMESXCJQrcurpZrN6kosvQINYCM+KiDQBNmyJNWMIcmeMaqAlIJsLErA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KtknwSQZ; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-a99650da839so361434666b.2;
+        Fri, 11 Oct 2024 08:22:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728660147; x=1729264947; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Zq9beYF4rIsjRUvsDJVJyZp04SMnaH+OieTyD7fM/mM=;
+        b=KtknwSQZFd0MgIEJ7mfR6xk1c+OF/NPSKaldmCbznjty2W7+5/UNIzdj/py4SB4bZ0
+         YV2Ttlkz3slFoADIUKaT75fvmkgKtJ+XYnq/NyXJNPvyWd+xXAbBJI6sYnLhq1/p9qdv
+         rrrVKgq5NwNKSFzESMCEVxMFUPcAukq9xbDo34V+Oeaojd+JGTumTsr60RDgjg4tkl5C
+         AKaR2RM219EBIy8UBjhDPvs5CRiZq0invOcgUyb8opFv7mxrOQn4P7eZ31jif2Us5UQN
+         ZTJJLDI+OUqDiRhrE9nNQLDdzya3wAaiOnWtqHr7zYWGySX4sYh8TgWD+lY9TxfcCXoE
+         SKDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728660147; x=1729264947;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Zq9beYF4rIsjRUvsDJVJyZp04SMnaH+OieTyD7fM/mM=;
+        b=IifMFg215QR+HBbKoSOScA3siQ9O/aFSuj2KucmtOnAyjqDYKeVVADVfxlUFtlxmWN
+         iNBCr+HVii9kn9uweCO3tTYEwRa//u6hmHRDTTf5CjP39Bx/2a6HWx91GbzxDXxojYt7
+         eMVjVmDlNHulyt4/Jm8q0kwi2ls2AH0qxLi8M0lqpCKahJaLQG0OZD6FEqjfyc1yBwyY
+         vAN+dQj4/5oX50JxvOMqnj5Zl3L3MQp3eXNIPfZF/F8z7/71tyFtOOtNxpUqRjiAUMI4
+         MAGhlxkQk4rdIXXhY4Rx4z5L9ShA1hSFNx8satiOc7ZmY3a7IauQsflCa0mbnfRdSDwH
+         ymTA==
+X-Forwarded-Encrypted: i=1; AJvYcCUfNqWbUrSrWg1/hhKNzUiqXyD9LU2M7FizmY07XUldxhmkBeRIEWa+inKJ8Pi9jVWzQ5r2KSvzDo8J34PFGhA=@vger.kernel.org, AJvYcCV7Ea6s4zvNWtgDEcCmKk0Txdy9e+0DDby3RDvBlToiQBfaSUtofzQYBLhHNmfSnwbJ7uOsydW6SGgCCaUKw0QbX+uz@vger.kernel.org, AJvYcCVW5CwcXUDkFtttZZgwAaZNnc6VwNUQXr/qw0K+KgqT48rjmUWL8xL2jxWKve8+2pFG6QvDs+xyzG7KmSzn@vger.kernel.org, AJvYcCXdlMxTOHK+7gx75T3t9Elh3DYmy835nLS5oWkF+W8r18eiXbDaiAOudCWQn098XhEcl1qRpA/dhFTp0ScfLyGS@vger.kernel.org
+X-Gm-Message-State: AOJu0YwR6iBsv/8rjaF9C47NK/7UE0r4Bnri7OYja5PSR+ikQ3RoBVEn
+	1Lrr2hSb3teBF0LyfAVgeiKA+54B8+SR56Bp4JR84269N07sCM4VTkrc38rguUrvftH2N+EsrsR
+	g1MlnkTvrNuPJKNuQq2WjCVUK0Js=
+X-Google-Smtp-Source: AGHT+IFrHoTgP4o6sHrBkw7DExcje8jOXrDOjBnraVSEKs53UdDVw3zgXivEdhUu4/PeBxqp9ArcS0Gl1eVumd4/4U0=
+X-Received: by 2002:a17:907:94ca:b0:a8d:1303:2283 with SMTP id
+ a640c23a62f3a-a99e3b7c5a5mr4738466b.30.1728660146704; Fri, 11 Oct 2024
+ 08:22:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241011-arm64-gcs-stress-stable-name-v1-1-4950f226218e@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAOg3CWcC/x3MQQrCQAxG4auUrA1Mho5UryIuxvq3DdhRklIKp
- Xd3dPX4Nm8nhymcrs1OhlVd36VCTg31Uy4jWJ/VFENsJYhwtvnc8tg7+2LwX/LjBS55BncphSS
- XAZIi1cXHMOj239/ux/EFj731xW4AAAA=
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.15-dev-99b12
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1617; i=broonie@kernel.org;
- h=from:subject:message-id; bh=1ea53qrez4o6hsa0y87C5X/KVCdb6cASptIkacZH8m0=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBnCTf9xKXHIf3VCZybYDBM5exrPgRIKfvh8ASb+
- uO9a8tZhfqJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZwk3/QAKCRAk1otyXVSH
- 0ObYB/9jOh8/jfo6HTYkE3K1TuGikVIeQBcVGtfmoSKn2BF5bjyyYwBejF5GwRv49vFtvkV6Nhc
- 2Ce+699mHrGBQdPaJH/hHMMMBPykaxkKcXvqnUVF42HGmGzsXMMD1DksmbnzSJII9Tjm+FqxQ7f
- UvadFRd59rahPn7GGj+UmaN7bGB/99cFbnXKz50Qylevjbi4ZlIfL/ajPniPfiZyL6NYjnJMoSD
- 8fea38JZCr+rNNF2KrbIleOZnB8H84YHrNrMjHppBMHOI83nwu3pXIqLLM6YwbKXwGVNNWgGxFy
- sOlhTs1+RiiRYrs+o7LzW6et60XxudRC0W0NrT+LPm0sRLh2
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+References: <20241011072509.3068328-2-davidgow@google.com> <20241011072509.3068328-5-davidgow@google.com>
+ <ZwkBgkthcQM7rLl7@smile.fi.intel.com> <CAMuHMdW=MF0H8YVuY6moLomTaxFEeCHgut1fruRGEkn79sbuTA@mail.gmail.com>
+ <ZwkuvKogPuik90fN@smile.fi.intel.com> <CAMuHMdU_1oZEeJ5Onrbtx-iZjrK_bQ6YWNMdRYp-E1_5E7rMSQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdU_1oZEeJ5Onrbtx-iZjrK_bQ6YWNMdRYp-E1_5E7rMSQ@mail.gmail.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Fri, 11 Oct 2024 18:21:50 +0300
+Message-ID: <CAHp75Vecwe_LaSKSprwfrdpDhoJbXgajQUVY23L+VyGoxtGH7A@mail.gmail.com>
+Subject: Re: [PATCH 3/6] lib: Move KUnit tests into tests/ subdirectory
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Andy Shevchenko <andy@kernel.org>, David Gow <davidgow@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Brendan Higgins <brendanhiggins@google.com>, Rae Moar <rmoar@google.com>, 
+	Kees Cook <kees@kernel.org>, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	Stephen Rothwell <sfr@canb.auug.org.au>, Yury Norov <yury.norov@gmail.com>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, "Jason A . Donenfeld" <Jason@zx2c4.com>, 
+	"Naveen N . Rao" <naveen.n.rao@linux.ibm.com>, 
+	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, "David S . Miller" <davem@davemloft.net>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mark Brown <broonie@kernel.org>, 
+	linux-hardening@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	Palmer Dabbelt <palmer@rivosinc.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Charlie Jenkins <charlie@rivosinc.com>, Simon Horman <horms@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Daniel Latypov <dlatypov@google.com>, 
+	Guenter Roeck <linux@roeck-us.net>, David Howells <dhowells@redhat.com>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Marco Elver <elver@google.com>, Mark Rutland <mark.rutland@arm.com>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, 
+	Nathan Chancellor <nathan@kernel.org>, Fangrui Song <maskray@google.com>, 
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The GCS stress test program currently uses the PID of the threads it
-creates in the test names it reports, resulting in unstable test names
-between runs. Fix this by using a thread number instead.
+On Fri, Oct 11, 2024 at 5:20=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68=
+k.org> wrote:
+> On Fri, Oct 11, 2024 at 3:57=E2=80=AFPM Andy Shevchenko <andy@kernel.org>=
+ wrote:
+> > On Fri, Oct 11, 2024 at 03:38:00PM +0200, Geert Uytterhoeven wrote:
+> > > On Fri, Oct 11, 2024 at 12:44=E2=80=AFPM Andy Shevchenko <andy@kernel=
+.org> wrote:
+> > > > On Fri, Oct 11, 2024 at 03:25:07PM +0800, David Gow wrote:
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/gcs/gcs-stress.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+...
 
-diff --git a/tools/testing/selftests/arm64/gcs/gcs-stress.c b/tools/testing/selftests/arm64/gcs/gcs-stress.c
-index bdec7ee8cfd5..03222c36c436 100644
---- a/tools/testing/selftests/arm64/gcs/gcs-stress.c
-+++ b/tools/testing/selftests/arm64/gcs/gcs-stress.c
-@@ -56,7 +56,7 @@ static int num_processors(void)
- 	return nproc;
- }
- 
--static void start_thread(struct child_data *child)
-+static void start_thread(struct child_data *child, int id)
- {
- 	int ret, pipefd[2], i;
- 	struct epoll_event ev;
-@@ -132,7 +132,7 @@ static void start_thread(struct child_data *child)
- 		ev.events = EPOLLIN | EPOLLHUP;
- 		ev.data.ptr = child;
- 
--		ret = asprintf(&child->name, "Thread-%d", child->pid);
-+		ret = asprintf(&child->name, "Thread-%d", id);
- 		if (ret == -1)
- 			ksft_exit_fail_msg("asprintf() failed\n");
- 
-@@ -437,7 +437,7 @@ int main(int argc, char **argv)
- 				   tests);
- 
- 	for (i = 0; i < gcs_threads; i++)
--		start_thread(&children[i]);
-+		start_thread(&children[i], i);
- 
- 	/*
- 	 * All children started, close the startup pipe and let them
+> > > > >  rename lib/{ =3D> tests}/bitfield_kunit.c (100%)
+> > > > >  rename lib/{ =3D> tests}/checksum_kunit.c (100%)
+> > > > >  rename lib/{ =3D> tests}/cmdline_kunit.c (100%)
+> > > > >  rename lib/{ =3D> tests}/cpumask_kunit.c (100%)
+> > > > >  rename lib/{ =3D> tests}/fortify_kunit.c (100%)
+> > > > >  rename lib/{ =3D> tests}/hashtable_test.c (100%)
+> > > > >  rename lib/{ =3D> tests}/is_signed_type_kunit.c (100%)
+> > > > >  rename lib/{ =3D> tests}/kunit_iov_iter.c (100%)
+> > > > >  rename lib/{ =3D> tests}/list-test.c (100%)
+> > > > >  rename lib/{ =3D> tests}/memcpy_kunit.c (100%)
+> > > > >  rename lib/{ =3D> tests}/overflow_kunit.c (100%)
+> > > > >  rename lib/{ =3D> tests}/siphash_kunit.c (100%)
+> > > > >  rename lib/{ =3D> tests}/slub_kunit.c (100%)
+> > > > >  rename lib/{ =3D> tests}/stackinit_kunit.c (100%)
+> > > > >  rename lib/{ =3D> tests}/string_helpers_kunit.c (100%)
+> > > > >  rename lib/{ =3D> tests}/string_kunit.c (100%)
+> > > > >  rename lib/{ =3D> tests}/test_bits.c (100%)
+> > > > >  rename lib/{ =3D> tests}/test_fprobe.c (100%)
+> > > > >  rename lib/{ =3D> tests}/test_hash.c (100%)
+> > > > >  rename lib/{ =3D> tests}/test_kprobes.c (100%)
+> > > > >  rename lib/{ =3D> tests}/test_linear_ranges.c (100%)
+> > > > >  rename lib/{ =3D> tests}/test_list_sort.c (100%)
+> > > > >  rename lib/{ =3D> tests}/test_sort.c (100%)
+> > > > >  rename lib/{ =3D> tests}/usercopy_kunit.c (100%)
+> > > >
+> > > > While I support the idea, I think this adds an additional churn in =
+creating a
+> > > > duplicate 'test' in the filenames. Why they all can't be cut while =
+removing?
+> > > > (at least this question is not answered in the commit message)
+> > >
+> > > To avoid duplicate *.ko file names?
+> >
+> > With what? Sorry, but I don't see how it's a problem. These are test ca=
+ses.
+> > Do they use kernel command line parameters? If so, shouldn't KUnit take=
+ care
+> > about it in a more proper way?
+>
+> If .e.g. lib/list_sort.o could be modular, its module would be called
+> "list_sort.ko", conflicting with the "list_sort.ko" test module.
 
----
-base-commit: bb9ae1a66c85eeb626864efd812c62026e126ec0
-change-id: 20241011-arm64-gcs-stress-stable-name-8550519fe152
+Can't this be solved by automatically adding a prefix in Makefile for
+kunit tests, for example?
 
-Best regards,
--- 
-Mark Brown <broonie@kernel.org>
-
+--=20
+With Best Regards,
+Andy Shevchenko
 
