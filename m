@@ -1,178 +1,179 @@
-Return-Path: <linux-kselftest+bounces-19544-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19545-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D273199A619
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 16:16:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4007899A62B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 16:21:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DFD11F21997
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 14:16:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0121285D23
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 14:21:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4885A21BB04;
-	Fri, 11 Oct 2024 14:14:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26A292185AF;
+	Fri, 11 Oct 2024 14:21:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="PyOQgagd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC1B21B45C;
-	Fri, 11 Oct 2024 14:14:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02B721E87B
+	for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2024 14:21:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728656082; cv=none; b=ax2fM2bSK2rW+HGj1BYawU0+HV86mpK1KZizXmagqQZ8958hFnf7GTFHg0DhU2vANsBRhsNlj/nxtMgO0snlMcBO/0UBno35qiyMaF6BrdR5V1cdZCg17xlpcqFbMj/tZMIX1G05hrrXnIShnm0pTz7MpY4g36doRGZa+8McJy4=
+	t=1728656469; cv=none; b=NLL/HZKpCHS5f0H+Eu1fk5x6EiTp+3xZnUvmwsbT6n76bLKgvRNEc1WKt3BTVM7stHcsqhLLvGjiwO7dhU18v0DJZEHcPQfoLaSXN5TyvEYOShgnv3OiddT3QAX9ckcVKh0Wk/R98NNYETOB+KOBUj/Fck1tKOHIl+FmybwiWjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728656082; c=relaxed/simple;
-	bh=ryyL7dxIat+0r10d+WkpqRKV7UFPwxP7xx/GPr0VPuo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=C1rPPbZIPj0dbHkAX9KTkjIw/LGEZDZDUHqvt3D9PvpohkxHK910iy7b4Rvr7nIXUdraXkV2CMH7FYE3hJ8em4RwQJYAE+eKI/x1g07Djh0h+Ev455DeGzAJFWTocwZ9KKsKTxT1TahpcUXeMhXUfnTQPswfh++dJi6oFE3GR6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e291b96a64dso801854276.3;
-        Fri, 11 Oct 2024 07:14:39 -0700 (PDT)
+	s=arc-20240116; t=1728656469; c=relaxed/simple;
+	bh=TYE5vXTXT7Cm/vgRYyKhBt1I+Zc/7FpaevYm7u7Hc7E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XtIr4q1oAcL7vhehHtURl/tFKi8JLnR3/EeWdv9yMB70diQvndX4hu55SnNyVtA4s/m9NMP5fhj3J27YgZsoBKqPNt7hO4+y6qmA/UAoDUooiRSNA1tDtJZepWnHmdlnpdji/Q1NgU5pLVByVDxeKLd3Wg3oyjL8/YctwfWeM94=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=PyOQgagd; arc=none smtp.client-ip=209.85.166.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3a363feabc6so10589635ab.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2024 07:21:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1728656466; x=1729261266; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=x2PJdME7gEpgZm4c7VOyfyN+e8wtfK6RNIHEqseNqOQ=;
+        b=PyOQgagdlbt6L5IvYedNskr+0xKmBHYjRW8qsFkj9TDVyFUNsY4oMMc+NP4+YI+R4+
+         7tZSYd0RdJfin3huBipBWVmT5BD/0N23T4Pd9yHNvZ1mT5Q1wfmsKHplvEu1TjqwzEsw
+         SzGW+FTESdnO1+9dFSGYSZ2MwY2vslOLFh2kA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728656077; x=1729260877;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gKxV6SBUpmC9EeWLExsOgYq7J6RKtlJifOwyXdEfMFs=;
-        b=bi5WIXRHq6KenqTi6MdjLUFe1o1I0TLBwnBuioAD/JdSakCWRgt57Yn1CI93W/qHIs
-         qO8g/9JVnm6PUCOmb7NnIlgk2lIoiKCc90GVEAoSaLKUrFkU87GUT24rxBUr2fJbqOp8
-         dFfEVDnt6NWNk/glhNIQ13VRlWqcm9+imvnZs9qqcil8XqFVbsseOLA1ovTv36D1NTtF
-         WIJcNEcmA/hrzGK+IQO7k+/Gl9CCqWF3yKLyvi1V6Qhn+PHw9UXNdVOAMLynu3aLtZ41
-         L33KKRdeqVbgh36fUOZtd0dAdvTXO1Cj+ZX58xswEDKvNu2/6i5b2t3IHbKuszRmh7oE
-         l4Bg==
-X-Forwarded-Encrypted: i=1; AJvYcCUGKNcG4V23JJwh55Ncmr1tFQVeiGGPfwSjStInJS26gFkBnIaBCCPUEMBsTE8uDBnMBOxFaF8/Xw4aKf0XD9XM@vger.kernel.org, AJvYcCUhnbxJ/AnobMAX60ymTxxVLegweX6+m1F18rUFfIAVsMXb4MgkJafyGg55OQzPGtqxx8Dmoz5pbqkjb72v7sc=@vger.kernel.org, AJvYcCVdNE4bjy9aunlHXd3H5ELPg7iXIL6pro5YjAFULn+kzD0vpGSfG+eOfUKDqId8PkukVywMYTJuqjxLB+IS@vger.kernel.org, AJvYcCVqX/PvNphbWwr0pnJSZuXvIqXIvsySMnPHgzKcX3W1W+yCPdl62fp1lSFIlcNhhyTGbZlQ3lyTD8FU4evjzVoaTbDI@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1Lgejb447dCFXw8cmu0hEpzzlGXcH0/nHiyaCNy/nBMN4Ssml
-	Y5IkFWfgj5ufT7Ic1fLmKNmA8VMfZzB5vosRAVPaMMtTXDJTNr/pa4P83eaC7s0=
-X-Google-Smtp-Source: AGHT+IGTGqF0lbsKbzdsjjpRLwPnSYvYN3jwWle7fZAE9967toH1WgDPgGhPoiX6its1dQztCIVWxQ==
-X-Received: by 2002:a05:6902:1503:b0:e20:2e8a:5b95 with SMTP id 3f1490d57ef6-e2919fe5e9cmr2674502276.39.1728656077261;
-        Fri, 11 Oct 2024 07:14:37 -0700 (PDT)
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com. [209.85.128.178])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e290ef7a8easm824512276.57.2024.10.11.07.14.36
+        d=1e100.net; s=20230601; t=1728656466; x=1729261266;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=x2PJdME7gEpgZm4c7VOyfyN+e8wtfK6RNIHEqseNqOQ=;
+        b=DoJTpstcmjTdXsSpt70wyoPlVYEViRg70JP7y0f3u0WTxYMo2al4TXrIA9DCuKg+nr
+         OkR0dA7ZvR4hwnB94hENEP4boxy1DiZyfsonYWIkERavcpr7bf7pepBNsBxGN/hCasnP
+         FbCdi1daYL8YSWILtf7NX6sX+tZrd9aQmoA++0e28VxhJcexbcKasj3is11WDfaBmAu2
+         gn+dJu95DEDqw67Il8laf+S+vDM1QUZ7i2AEfJ0Wnt36uPauG3t0GY0vwgZzcVurnIAf
+         42ZlH6XkZ+jFg5CrA2zpu7h6e50mahwIVGc0wxVbt98QdVK+2X/jjHHTsnJX2z/4SMyd
+         2DeA==
+X-Forwarded-Encrypted: i=1; AJvYcCXLwvZnrCblpTY+HbtppNWObJbsiM7HM5QTh2iAjKOOHP0IY5MMKF5bUxU7iUpdE4/x865B+s72JlqRWeU12ig=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfN6Wp7xNfCiPOuIR8rXHeBV8CCjntiI2S8QhHIkOUlAVkvnP8
+	SA8nGIjOWg6+KcM6KSU0uOTPFwhy3aOX9IDby+QD174zpK0l4r+TWB1zgxm98KI=
+X-Google-Smtp-Source: AGHT+IEwImqOyQAmT6fExrU/UEB3L6kghbfDP6gdwjhkhbR9nDrNGWSRu/G2qy6foQOPdk8aNrCEHA==
+X-Received: by 2002:a05:6e02:1e0a:b0:3a0:ce43:fb62 with SMTP id e9e14a558f8ab-3a3a71ddab2mr42676805ab.11.1728656465812;
+        Fri, 11 Oct 2024 07:21:05 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dbad9b0e90sm652358173.15.2024.10.11.07.21.04
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Oct 2024 07:14:36 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6dbc9a60480so19562197b3.0;
-        Fri, 11 Oct 2024 07:14:36 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVNNb79bCN3NrwZKEUwrh1+s68GfEw82mFSRgW3uKgDPBAVdcKF+LjB04TUIgOAcFg0hA36LFRF3deARCkrwP0+VMhS@vger.kernel.org, AJvYcCWYC6+jIKC2JbcG/F/lB/QSGOXuz0G+UyHfuuseBWQuJZDIOx463MFWMRTjm/R2LhSWz6oKxlILTl1jaw7U@vger.kernel.org, AJvYcCWc94QVCG2PrRSiOjDjBYQQSeOHjoPbzE5PrMm45pOvGTbsE0NeQyd5WEoidCdfd8ua1flInUoD06AubJo8Ek0=@vger.kernel.org, AJvYcCXGlcFOwZCqOwNCnaSP3QT7yLiXG2l5852T/1C5xwLIBUb+UiyaeK5gyz0b0g0r7noWJNNag0h8RUba334wrGGS@vger.kernel.org
-X-Received: by 2002:a05:690c:d85:b0:6de:351:3e with SMTP id
- 00721157ae682-6e3477c0654mr20357467b3.8.1728656076179; Fri, 11 Oct 2024
- 07:14:36 -0700 (PDT)
+        Fri, 11 Oct 2024 07:21:05 -0700 (PDT)
+Message-ID: <b2e02494-0f22-476e-bb79-f3a133b7fa07@linuxfoundation.org>
+Date: Fri, 11 Oct 2024 08:21:04 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241011072509.3068328-2-davidgow@google.com> <20241011072509.3068328-5-davidgow@google.com>
- <ZwkBgkthcQM7rLl7@smile.fi.intel.com> <CAMuHMdW=MF0H8YVuY6moLomTaxFEeCHgut1fruRGEkn79sbuTA@mail.gmail.com>
- <ZwkuvKogPuik90fN@smile.fi.intel.com>
-In-Reply-To: <ZwkuvKogPuik90fN@smile.fi.intel.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 11 Oct 2024 16:14:24 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdU_1oZEeJ5Onrbtx-iZjrK_bQ6YWNMdRYp-E1_5E7rMSQ@mail.gmail.com>
-Message-ID: <CAMuHMdU_1oZEeJ5Onrbtx-iZjrK_bQ6YWNMdRYp-E1_5E7rMSQ@mail.gmail.com>
-Subject: Re: [PATCH 3/6] lib: Move KUnit tests into tests/ subdirectory
-To: Andy Shevchenko <andy@kernel.org>
-Cc: David Gow <davidgow@google.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Brendan Higgins <brendanhiggins@google.com>, 
-	Rae Moar <rmoar@google.com>, Kees Cook <kees@kernel.org>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, Yury Norov <yury.norov@gmail.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, "Jason A . Donenfeld" <Jason@zx2c4.com>, 
-	"Naveen N . Rao" <naveen.n.rao@linux.ibm.com>, 
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, "David S . Miller" <davem@davemloft.net>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	linux-hardening@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	Palmer Dabbelt <palmer@rivosinc.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Charlie Jenkins <charlie@rivosinc.com>, Simon Horman <horms@kernel.org>, 
-	Jakub Kicinski <kuba@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Daniel Latypov <dlatypov@google.com>, 
-	Guenter Roeck <linux@roeck-us.net>, David Howells <dhowells@redhat.com>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Marco Elver <elver@google.com>, Mark Rutland <mark.rutland@arm.com>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, 
-	Nathan Chancellor <nathan@kernel.org>, Fangrui Song <maskray@google.com>, 
-	"Steven Rostedt (Google)" <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: clone3: Use the capget and capset syscall
+ directly
+To: zhouyuhang <zhouyuhang1010@163.com>, brauner@kernel.org, shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ zhouyuhang <zhouyuhang@kylinos.cn>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20241010121612.2601444-1-zhouyuhang1010@163.com>
+ <5b471a5c-c99d-42a5-943d-bb253127a202@linuxfoundation.org>
+ <a2ab9671-5095-47bf-82cf-0e167320772f@163.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <a2ab9671-5095-47bf-82cf-0e167320772f@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Andy,
+On 10/11/24 00:59, zhouyuhang wrote:
+> 
+> On 2024/10/10 23:50, Shuah Khan wrote:
+>> On 10/10/24 06:16, zhouyuhang wrote:
+>>> From: zhouyuhang <zhouyuhang@kylinos.cn>
+>>>
+>>> The libcap commit aca076443591 ("Make cap_t operations thread safe.") added a
+>>> __u8 mutex at the beginning of the struct _cap_struct,it changes the offset of
+>>> the members in the structure that breaks the assumption made in the "struct libcap"
+>>> definition in clone3_cap_checkpoint_restore.c.So use the capget and capset syscall
+>>> directly and remove the libcap library dependency like the commit 663af70aabb7
+>>> ("bpf: selftests: Add helpers to directly use the capget and capset syscall") does.
+>>>
+>>
+>> NIT: grammar and comma spacing. Please fix those for readability.
+>> e.g: Change "struct _cap_struct,it" to "struct _cap_struct, it"
+>> Fix others as well.
+>>
+> 
+> Thanks, I'll fix it in V2
+> 
+> 
+>>> Signed-off-by: zhouyuhang <zhouyuhang@kylinos.cn>
+>>> ---
+>>>   tools/testing/selftests/clone3/Makefile       |  1 -
+>>>   .../clone3/clone3_cap_checkpoint_restore.c    | 60 +++++++++----------
+>>>   2 files changed, 28 insertions(+), 33 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/clone3/Makefile b/tools/testing/selftests/clone3/Makefile
+>>> index 84832c369a2e..59d26e8da8d2 100644
+>>> --- a/tools/testing/selftests/clone3/Makefile
+>>> +++ b/tools/testing/selftests/clone3/Makefile
+>>> @@ -1,6 +1,5 @@
+>>>   # SPDX-License-Identifier: GPL-2.0
+>>>   CFLAGS += -g -std=gnu99 $(KHDR_INCLUDES)
+>>> -LDLIBS += -lcap
+>>>     TEST_GEN_PROGS := clone3 clone3_clear_sighand clone3_set_tid \
+>>>       clone3_cap_checkpoint_restore
+>>> diff --git a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+>>> index 3c196fa86c99..111912e2aead 100644
+>>> --- a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+>>> +++ b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+>>> @@ -15,7 +15,7 @@
+>>>   #include <stdio.h>
+>>>   #include <stdlib.h>
+>>>   #include <stdbool.h>
+>>> -#include <sys/capability.h>
+>>> +#include <linux/capability.h>
+>>>   #include <sys/prctl.h>
+>>>   #include <sys/syscall.h>
+>>>   #include <sys/types.h>
+>>> @@ -27,6 +27,13 @@
+>>>   #include "../kselftest_harness.h"
+>>>   #include "clone3_selftests.h"
+>>>   +#ifndef CAP_CHECKPOINT_RESTORE
+>>> +#define CAP_CHECKPOINT_RESTORE 40
+>>> +#endif
+>>> +
+>>
+>> Why is this necessary? This is defined in linux/capability.h.
+>>
+>>> +int capget(cap_user_header_t header, cap_user_data_t data);
+>>> +int capset(cap_user_header_t header, const cap_user_data_t data);
+>>
+>> In general prototypes such as these should be defined in header
+>> file. Why are we defining these here?
+>>
+>> These are defined in sys/capability.h
+>>
+>> I don't understand this change. You are removing sys/capability.h
+>> which requires you to add these defines here. This doesn't
+>> sound like a correct solution to me.
+>>
+> 
+> I tested it on my machine without libcap-dev installed, the /usr/include/linux/capability.h
+> 
+> is on this machine by default. Successfully compiled using #include <linux/capability.h>
+> 
+> but not with #include <sys/capability.h>. This patch removes libcap library dependencies.
+> 
+> And we don't use any part of sys/capability.h other than these two syscalls. So I think that's why it's necessary.
 
-On Fri, Oct 11, 2024 at 3:57=E2=80=AFPM Andy Shevchenko <andy@kernel.org> w=
-rote:
-> On Fri, Oct 11, 2024 at 03:38:00PM +0200, Geert Uytterhoeven wrote:
-> > On Fri, Oct 11, 2024 at 12:44=E2=80=AFPM Andy Shevchenko <andy@kernel.o=
-rg> wrote:
-> > > On Fri, Oct 11, 2024 at 03:25:07PM +0800, David Gow wrote:
-> > > > From: Kees Cook <kees@kernel.org>
-> > > >
-> > > > Following from the recent KUnit file naming discussion[1], move all
-> > > > KUnit tests in lib/ into lib/tests/.
-> > > >
-> > > > Link: https://lore.kernel.org/lkml/20240720165441.it.320-kees@kerne=
-l.org/ [1]
-> > > > Signed-off-by: Kees Cook <kees@kernel.org>
-> > > > Acked-by: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> > > > Acked-by: Jakub Kicinski <kuba@kernel.org>
-> > > > Acked-by: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-> > > > Reviewed-by: David Gow <davidgow@google.com>
-> > > > [Rebased onto mm-nonmm-unstable, moved usercopy_kunit]
-> > > > Signed-off-by: David Gow <davidgow@google.com>
-> > >
-> > > >  rename lib/{ =3D> tests}/bitfield_kunit.c (100%)
-> > > >  rename lib/{ =3D> tests}/checksum_kunit.c (100%)
-> > > >  rename lib/{ =3D> tests}/cmdline_kunit.c (100%)
-> > > >  rename lib/{ =3D> tests}/cpumask_kunit.c (100%)
-> > > >  rename lib/{ =3D> tests}/fortify_kunit.c (100%)
-> > > >  rename lib/{ =3D> tests}/hashtable_test.c (100%)
-> > > >  rename lib/{ =3D> tests}/is_signed_type_kunit.c (100%)
-> > > >  rename lib/{ =3D> tests}/kunit_iov_iter.c (100%)
-> > > >  rename lib/{ =3D> tests}/list-test.c (100%)
-> > > >  rename lib/{ =3D> tests}/memcpy_kunit.c (100%)
-> > > >  rename lib/{ =3D> tests}/overflow_kunit.c (100%)
-> > > >  rename lib/{ =3D> tests}/siphash_kunit.c (100%)
-> > > >  rename lib/{ =3D> tests}/slub_kunit.c (100%)
-> > > >  rename lib/{ =3D> tests}/stackinit_kunit.c (100%)
-> > > >  rename lib/{ =3D> tests}/string_helpers_kunit.c (100%)
-> > > >  rename lib/{ =3D> tests}/string_kunit.c (100%)
-> > > >  rename lib/{ =3D> tests}/test_bits.c (100%)
-> > > >  rename lib/{ =3D> tests}/test_fprobe.c (100%)
-> > > >  rename lib/{ =3D> tests}/test_hash.c (100%)
-> > > >  rename lib/{ =3D> tests}/test_kprobes.c (100%)
-> > > >  rename lib/{ =3D> tests}/test_linear_ranges.c (100%)
-> > > >  rename lib/{ =3D> tests}/test_list_sort.c (100%)
-> > > >  rename lib/{ =3D> tests}/test_sort.c (100%)
-> > > >  rename lib/{ =3D> tests}/usercopy_kunit.c (100%)
-> > >
-> > > While I support the idea, I think this adds an additional churn in cr=
-eating a
-> > > duplicate 'test' in the filenames. Why they all can't be cut while re=
-moving?
-> > > (at least this question is not answered in the commit message)
-> >
-> > To avoid duplicate *.ko file names?
->
-> With what? Sorry, but I don't see how it's a problem. These are test case=
-s.
-> Do they use kernel command line parameters? If so, shouldn't KUnit take c=
-are
-> about it in a more proper way?
+You are changing the code to not include sys/capability.h
+What happens if sys/capability.h along with linux/capability.h
 
-If .e.g. lib/list_sort.o could be modular, its module would be called
-"list_sort.ko", conflicting with the "list_sort.ko" test module.
+Do you see problems?
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+thanks,
+-- Shuah
 
