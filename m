@@ -1,602 +1,573 @@
-Return-Path: <linux-kselftest+bounces-19526-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19527-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C964999E21
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 09:41:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3406F999ED9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 10:21:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5E891F2133E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 07:41:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5A0C281769
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 08:21:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFC5E209F55;
-	Fri, 11 Oct 2024 07:41:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B9A20A5E5;
+	Fri, 11 Oct 2024 08:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="klwZNfcG"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="noHfuk3d";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ZN8pFbtG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8DA4209F4D
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2024 07:41:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728632488; cv=none; b=fmu3t94Rtsuq5WFFAufYokHiX6j7II5vR6PFGWzea8r3RvK5Wq8FthbtcksoC0VGfkD/otDQ6S7goniTEhtqOceYnyfmWe8oDn+8McLwVT3EfTSp5aU1vNEMNb9DzcRZtN4ssCVem9mrsBMbSrGKL8qEPzoGc8QkI95hKC3rV1s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728632488; c=relaxed/simple;
-	bh=Vr31J4NKtWh1sS877Cy6GUmzOYXOy5bEi2pcapzvXx4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YxdCuMUbAIYjnFwZ6m/Pn98BCGYkTa0H0ErwShDGfGPwISrX4xE+odal1XmdyFlLW8cvqWg0ggjuE95CpC0y0ZyRrGuaFPLWOVptT57CpfQz2sxwL8lGzsY9oBGZcRjUNjBv/FFGubDa0V1VszkAHtPvVOzwpU6gOjJn+KavqNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=klwZNfcG; arc=none smtp.client-ip=209.85.219.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6cbf0e6414aso2026236d6.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2024 00:41:25 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950A81CB334;
+	Fri, 11 Oct 2024 08:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728634863; cv=fail; b=k0CUP1ZwWj5AXBzPLOBmABCstZJMz8AHwDW/lL6l/6a3ZSUpYm8ogMIFv/PxPt+DyYweDG0rCEHcIqGhJBdgoyoP4x+/dNxlOxKI1cOT22csHpBZdQ4HzGN6GPakXVW+3G9U761rw8LvD8m/2CueqWMEObeF2HxXeL2iH0cI2EE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728634863; c=relaxed/simple;
+	bh=tnYHkwi2KgcxB42vbhsUs516ThI2Ehxm+yzMqWLJLbc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=UB+8u7X30VwR13d0apMHohps9J9ZDn5TdGUMfUoMi4aCYXtQEAimAIrP8djz6MxBmVPpE4E5rnlU6wLQtZdmTlLI6sxn/TCHEWpnEcz2aVimxmFvRhjIHTTpZ6MhrkXg6VjGSXCII2mq7x/P/KdYSGrCUIKlGyKzk3P7AAUtKRk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=noHfuk3d; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ZN8pFbtG; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49B8BePn030628;
+	Fri, 11 Oct 2024 08:20:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2023-11-20; bh=0VMMBnqpKJmrRY6esZ
+	2cnbWulZm5GJehcqKffdUXfd8=; b=noHfuk3d643igmQfvlBqm10hIhaLxezhWK
+	ryM+82TTYMBZBUw4AIBiPY2q84BHpGmejujV32qqufll/ekS8pagLCuC0gwt8S7o
+	eJgxQshqXftfWxft3fQLIoAkVweVu4uEQswZpsXYyvv8J9fSXgusFR/0WS8s9/Mj
+	YezAC9LP0TWC+9HKL9QtGrbrqiOQb6+kVTR4rNSEk5madEsletgxCuBkzu+IK+1D
+	Di59Cm8PbvMqsnxs8lQqihrHfNLK9RFHsDNoTnIo3FUAIR+L8jFWgtVP8xSFYxLi
+	3tSm5fgv5SaESULbCHX2xieA41EzSOdnh60AnKq1O3xLNY7XkcNw==
+Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42303ymc4x-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 11 Oct 2024 08:20:42 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49B6qVls034343;
+	Fri, 11 Oct 2024 08:20:42 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2176.outbound.protection.outlook.com [104.47.55.176])
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 422uwb26k1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 11 Oct 2024 08:20:42 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=F7lWk+R6wx14HHSJcnwMExPtoQhrv6HNf7ncyHHt8QlHLKFrdjheWiTyL9XIwJYcRfs65xiTPJb9UkhlzWdhZ/GLKYR6NfUMUFeyLjvxOTf+ACLxZ50OpRnQE5QYX8xLOC5TY9AwvNqqsDEksmqinz4+/A4NeHfNvdIQWSkYMnQBBmEgFkdSY0GBMuoF+P9cPTrg52xVaA5zQicM+J8JVFjL5TJcSKkCi8xlwtbaZZMHJ4AK3zfN6xk1zVtFWCJQeKlONPF6UOy9wnxALo9uk5VvGas8+GztrOlLjDTbI+ksIVeGxrbM9zcezH+oRr1+MyHsQpszcAUne6hDaslEIA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0VMMBnqpKJmrRY6esZ2cnbWulZm5GJehcqKffdUXfd8=;
+ b=kIBwkIaJlMu6RGTRwWmbN+qkILVT7bnmgr6SlXbP7osIaU32I6TDMKMMofIFEjal1zu/GpqtUMPXVrmw5IpdbntP6m2Dsy7sU48MCNZKQrmDI3q4bj/2bSHJ8nb+Wf6MciSKfL960eRvNTQrMIHwPKkqnJk1+j1vBllBSgdAhgrZpxPcAWBH/wvmG8Hr6G+OA/QFOOcQ0EQaIb6SSYr8+MKwrdxzKCgRqJ3R49Uap6nIYyleGxCmTYGq+dkop2u6ne1yz9R8a6R+x4eWT4Yp8r3d6T3zkaDdgdT8GRVcN/TZ8quI+KRA+r39Tdp92S2J97NQLMV4NGn5yjasF3e6dQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728632485; x=1729237285; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8BaKFo4iA4daeUxYlEPFAYS0JdW8kJ64k+jNq5DS7Zs=;
-        b=klwZNfcGz1RtVpyVTTvCs/L647heT6ElDGoAucbX94hVS5bMtR62TtHpHojddOuTjS
-         TO0oDZ+Gppl6jfvGoIaYsCSMTvGYTi+5qkKU1e/QwxAUoWsPbUIx3FOXXH+0HtzjxNVi
-         RzNq23WS6TjHBqKQ7rj/T00SepTWxQWK+a93dhsk/blAOrqZMGlmXF2DdM/bot70CmPW
-         mcWiPuhcaDcNFQV7OJM2C1/DvBh/vNfE3zMfMkjTdPZBe7qa1XpqwSvmBne/a/Rk1W6m
-         sSzFDANM7qvEt1Fw2CpbArzRDjCEIuJ4yhN/hpQHxOj32STFQKScxsE6NYpYZRHswSU0
-         DTBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728632485; x=1729237285;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8BaKFo4iA4daeUxYlEPFAYS0JdW8kJ64k+jNq5DS7Zs=;
-        b=LV6Wk78VcMTUFmIyY3bDqFuewycqPPnZbfJEx3Jf9D9jVAKd861Sn6smpS01Qpjyvw
-         OoeJ4Cp9sPv2WpJSUXMf0ieD7VlsJqfB4EiJNZfCqMOl+iBJ3BsG7C8n1D3uamrVmSr7
-         1nV+QeOYvYXNJbEuKDbmJXQGksC0Q1F0rptXwmQwRssT8v3lUJ2fspclPTaiCS2v7260
-         jWX+01rDUTET4IotIl4Y/fDbZlzJ49JR024Z7Jw2WNCkRGejHut0kezWxhpbuvZ5YYV9
-         yfpY3VXFZwrG1jPKvSyqB+4BMPPEL9vsOiMdIOptqYUmWgxsMkorkMdkWIEqpYMS25RD
-         YWnA==
-X-Forwarded-Encrypted: i=1; AJvYcCViOR+2EcaPKoZZrFzFbTcoWPcZ98Edvc9KaYaktAIBfmF8KB9nDyLdYAZGweG6jjg11XNRsMpZaJYib+7EWvI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yya7PdsLQ+ZFGcNWCRWHkyOkqjTLBRPOkOLAI2Q4yDlyu4IDSlP
-	TdHLPCcdTV3zY7EsQjOkPLUTXY3YWRK1+C6efs2EKiJnXyQ52kqYzhMyL/4z4M2HLDZu621PrMb
-	A4UU/zxdfOUnEsulU/vX+NX8bxaUdZccsirV0
-X-Google-Smtp-Source: AGHT+IHDT/eIP+Pbzm+Om/uBXkiRIL9h7c3KOxhsZUZ1+q9+BD3/W8/4GrYct/epDfZRG/JhiryJBtZsNSLPx6iD7bw=
-X-Received: by 2002:a05:6214:5b08:b0:6cb:e947:2d12 with SMTP id
- 6a1803df08f44-6cbeffff575mr19699606d6.25.1728632484422; Fri, 11 Oct 2024
- 00:41:24 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0VMMBnqpKJmrRY6esZ2cnbWulZm5GJehcqKffdUXfd8=;
+ b=ZN8pFbtGh6j82ZuMflYCwBpU+FkCG+xK8tcEBVU0htA8MdauDib9MBpBbCylNlBhXvZ6foO833maxnQbZi9UJYGeXphzIfXEs3/Q1OjVra8lMPKuokpscC4mLcVZK1s5f6EsyNA1rqvJHxxhcSNzs3n1g/8Yaki2jRhqyqmyGOA=
+Received: from SJ0PR10MB5613.namprd10.prod.outlook.com (2603:10b6:a03:3d0::5)
+ by MN0PR10MB5935.namprd10.prod.outlook.com (2603:10b6:208:3cd::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.18; Fri, 11 Oct
+ 2024 08:20:39 +0000
+Received: from SJ0PR10MB5613.namprd10.prod.outlook.com
+ ([fe80::4239:cf6f:9caa:940e]) by SJ0PR10MB5613.namprd10.prod.outlook.com
+ ([fe80::4239:cf6f:9caa:940e%5]) with mapi id 15.20.8048.017; Fri, 11 Oct 2024
+ 08:20:39 +0000
+Date: Fri, 11 Oct 2024 09:20:34 +0100
+From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 3/3] selftests: pidfd: add tests for PIDFD_SELF_*
+Message-ID: <71221c84-7721-42b7-add4-269a1f25c478@lucifer.local>
+References: <cover.1728578231.git.lorenzo.stoakes@oracle.com>
+ <8917d809e1509c4e0bce02436a493db29e2115b3.1728578231.git.lorenzo.stoakes@oracle.com>
+ <1d1190be-f74f-45ab-ac6c-2251d0bec1bc@linuxfoundation.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1d1190be-f74f-45ab-ac6c-2251d0bec1bc@linuxfoundation.org>
+X-ClientProxiedBy: LO4P123CA0462.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1aa::17) To SJ0PR10MB5613.namprd10.prod.outlook.com
+ (2603:10b6:a03:3d0::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240720181025.work.002-kees@kernel.org>
-In-Reply-To: <20240720181025.work.002-kees@kernel.org>
-From: David Gow <davidgow@google.com>
-Date: Fri, 11 Oct 2024 15:41:12 +0800
-Message-ID: <CABVgOSnXJcQ_E1DJK+==H7DZ0X7OnkaPsbaX=Oh=CZ4jjCVhkg@mail.gmail.com>
-Subject: Re: [PATCH] lib: Move KUnit tests into tests/ subdirectory
-To: Kees Cook <kees@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Yury Norov <yury.norov@gmail.com>, 
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>, "Jason A. Donenfeld" <Jason@zx2c4.com>, 
-	Andy Shevchenko <andy@kernel.org>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
-	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>, "David S. Miller" <davem@davemloft.net>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	Matti Vaittinen <mazziesaccount@gmail.com>, linux-hardening@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-trace-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Charlie Jenkins <charlie@rivosinc.com>, 
-	Simon Horman <horms@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Daniel Latypov <dlatypov@google.com>, 
-	Guenter Roeck <linux@roeck-us.net>, David Howells <dhowells@redhat.com>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Marco Elver <elver@google.com>, Mark Rutland <mark.rutland@arm.com>, 
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Nathan Chancellor <nathan@kernel.org>, 
-	Fangrui Song <maskray@google.com>, linux-kernel@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000037a56006242e9d87"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|MN0PR10MB5935:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6df5aa56-de5d-44de-93cf-08dce9cd9710
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|7416014|366016|10070799003;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?c2PmllvNDKBuVstKRZ1WG3Kpo+O2qICBr9/sDK/R5XQ0EWB7KubMfGIGej17?=
+ =?us-ascii?Q?mpn3JuJGupWZcglWyv1Q/LtN/RXBGARNzKugPk4owz1pOxbtOPDLmww5rdQP?=
+ =?us-ascii?Q?zFfxz97a0mKYeYnbpnCgAVddhKPrAYQh2kP2pJMsrCbj93sfZxJyXKbzL3BZ?=
+ =?us-ascii?Q?LCkVgwuWtG7dA5ZPqyK6YDhy+e/BeJOjGvp38CpISVegBeGofqZy/DzftRih?=
+ =?us-ascii?Q?YGH2DQ7AQUStBJEziJdsvp9tHCE5VBUN6eTyA3x0CcvDO2eG/7xqKdKWiwBE?=
+ =?us-ascii?Q?pHuasXNzNoCuw5PhRd0Gzrpy36/vG+pPp+BeGm5h9Kj9t8B1f2HRNtKNmpXH?=
+ =?us-ascii?Q?pkcSQg+4r/8QX2iADAeCjj5URvjqfpAH49oexV/OZ7D/s73oBqdQaulPNTkM?=
+ =?us-ascii?Q?LptEJj6D1FQJupswinn+pJq+TKYJ5AFC1o0iQF0SCrQ3mp1rxE2J6X3/2MIj?=
+ =?us-ascii?Q?QvXPj3bPmtloXBQBxmUU7lxlPm6ylQhvtsj9KzekQjvsqs2SfzjNZ0/m3Ssb?=
+ =?us-ascii?Q?uhOgpTkcnE+5HxFgxf4QfHSJ1riDXNXLbuWuKL5DEggsIkDMzClzQtQ3l42N?=
+ =?us-ascii?Q?mm5YXJiSgd7lfkU8//tAwxmTUsRz8CkBLyDBr/11LVEDVXSfj+j/j8599eqe?=
+ =?us-ascii?Q?26SuWl1uNtOBEdfmo9XBPyDsO9ZL7y39W01YlkUDM0zGlEg3oTCxIbGork1h?=
+ =?us-ascii?Q?j4xCXjcsSW2yXN8mYAYmEVXhBgu1cORxZOQSI3sgOcvn//wCPdSawfJOal2N?=
+ =?us-ascii?Q?UTK8K700teQvNNrJ+I037IkoaUqwUhzyQhXolCfsSonBdkxT8XF4Zl4LQCiq?=
+ =?us-ascii?Q?OJqfx35NLExLYjcedCa8OTMLGAJ1u2IKXt0YYwE41S4YWTBm5TXmBkCp98tB?=
+ =?us-ascii?Q?LAS/BceIVL9+C/c+Gz6CwB9dORua6m8BDoSkHuXgypDTOdL0T9JqVnw9lrjX?=
+ =?us-ascii?Q?WRU3Y4/KzEBEHXM8fUsBi+YiubcR26iQdTXqTVVePoID+el0h38T1i8TfTfc?=
+ =?us-ascii?Q?5reKtlFtr6f8Gcm+RiVCyvkmngDBXxRj+w1JF7tzON9aVIrOpf7Pv7XfTJxV?=
+ =?us-ascii?Q?bEjFFmP6QLpKyK+T6XEyrUSDl94hwB9usA3FJQF8I3l6y4/8+KVxwRlqIv0+?=
+ =?us-ascii?Q?t6u46XEenY9mHxASGiX46C5ydXeawUXReYCZbz+DFtnoRTtqtk8YcxFObMA+?=
+ =?us-ascii?Q?j4JVcxFZd/9JyPCXg/h9pbsTJAremHMkp56vekh9kZIlKh33zrLlIN9BKZUo?=
+ =?us-ascii?Q?Cxzpj6SyU4Ar49Ioqwd66WgPd0o6hB5DLwIZCL59/g=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(10070799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?6b6MP+cQXXH3RZT6JmN3sEoKxabfqAvcTO9avRFyTigSqs9Cfu7wYIav+Zaf?=
+ =?us-ascii?Q?y8VRqptioYMZCT5UhxryEZ36xISb8cw2NhqRSt5oP73gqYPLXBE72mq6FuiB?=
+ =?us-ascii?Q?c6BGpxQiYDShv2NC3yWS5wz0BZdrSDPBFLbjqXO50hDvg2TiyORnidAed7VV?=
+ =?us-ascii?Q?VX8b1AIgUnDvTwifvAVgx99UZkg6zpD5RuPiGNK5ATTS8fvJlLWD5Fpie3m9?=
+ =?us-ascii?Q?CHh2oAK2FayksxTuHla3RiqiRuy0LI6pzZs4Yv+ZTkBuXMde1xzHEz+R3tNi?=
+ =?us-ascii?Q?rG/n0O1XJjNV85Ev2kS2k6vtnqXqsWMaqF2g/Bj5gYqa9y9TvOI4UVgX5FDk?=
+ =?us-ascii?Q?UV70+qTbS18FpWtr6xFhuHEo40rCDN/SSJT5lmQqj9f3S0LlM5T3Em8nUe7i?=
+ =?us-ascii?Q?OPsTXVvbXPqWQsLUmO2U3tx3qMe1lnmJB55YtkjKQ3dxRbHxuW437wJ1iEln?=
+ =?us-ascii?Q?9yuJRYN484xeRNk9K63xqQ0UGfOX6mBQMsNNJdDU7TEYskaRb2XeLxTu6mk/?=
+ =?us-ascii?Q?DTs3w6EKdiPjzm26k7jYh8uJwotWrd3/tQoWIYsaYRmbMrnzVyOjxAbCr/Bd?=
+ =?us-ascii?Q?TaylTMhbvfaVl3TSTvJdsn3Gck3HYkKxxueidT89Styhy9IERQ6p3Q8qJNr8?=
+ =?us-ascii?Q?8WuqDQByYBUNI81IxXmesJdVhic5U3dqVYpfhe2HQW2bD3D4QUYhv5bjrPvS?=
+ =?us-ascii?Q?aczrlMp6c8N5+YvdF4X5VcuxumR4HGQpkxVy3WkGk1PJbw8nihOoCAcIfVtM?=
+ =?us-ascii?Q?l/n/5N9FNwtftdmFOltcqdNhRgNeUTFQ4iPa/tTCT52ty/iRkXtWOiboGHwc?=
+ =?us-ascii?Q?0AKUn/xZhA6kjH5d1QAFR11KPXjW/CKukHC2YlQpuESrz+ZxYYDStFFpPr3c?=
+ =?us-ascii?Q?bbdBHlRtoy1qLpbidEEJv/HvQD9a/V24abTp+Wt8bfPrT2xJmQb1quP4DP/Z?=
+ =?us-ascii?Q?fu7S0oZCawQPo65APplLrocmiIKPsrZMou7T708ShadTpe4hLEb5ZJHC0lGL?=
+ =?us-ascii?Q?o5nyVLH4IIqWC9K14dK2FoS5lhhOrvTz/PkLBUzZhrFEcpIW+gAlv4YJohvl?=
+ =?us-ascii?Q?zUCyxUSr8j0I0LLAgJl55W+WjwMoCAc3s4IVMFCf64RUDaYSfpBTiyWO9rPm?=
+ =?us-ascii?Q?m9q4rTP2c8sjEpYKxn7CiFDUj4xLEWqz8qFJE7AqatNxk0kWQYebcOM+J7h7?=
+ =?us-ascii?Q?Bt0RP/rQXYO+FbrpG2BWUjFfLEj+pgmfgqbSBo9jCZSybXzY4arOyK2qkr9j?=
+ =?us-ascii?Q?l8r4bLZ/Qd3b31j7lfFfVwhlfLYKHXoqnWmUnPeIx8xBoy4LPiO+I6kKiYwr?=
+ =?us-ascii?Q?gkCrL99HKYtWZNVLq0BdHWxe/oLcf1nNqeXezX+BHFnejzZmYKSjFAbrzV4c?=
+ =?us-ascii?Q?38WwkXwtUq6g58VcbNS833O+4ozQMyZBUpoVyeZdfEq9fezKPH5njasEgRAg?=
+ =?us-ascii?Q?DKZEXEMPtAFOrJnOpCNJfeOWakxtSj4eDvbZ4Q8Vb5bmN+tVaYNVFBISm0cO?=
+ =?us-ascii?Q?s21NFTGJ721f8dnji6rCW1DOoDUEXWiqs1hC1shGbQiH+1R0pdVQnIqXQQfh?=
+ =?us-ascii?Q?NCtM46RuofR6orekNnXGpO8myc61+V3ysoIPV74pzHMWQGneYHydyJkaenHf?=
+ =?us-ascii?Q?IQNEopHgH7vabtffMpqgwdhu9GgjL6v19989iYVByAaxwCjbrN22mN9RD1+3?=
+ =?us-ascii?Q?fGaX+Q=3D=3D?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	xmGTL0nNif1UOk78kAjalaN8Un5TLO6kjB7qp/5Hcdvn+0BDMa+ste612JGuo0vJ+4ZEscueJPR2zBK5cIMqDfOaXaza/KDfFLuRuO5Xl7jlF9cK1ZOfvTvl4MdxvLsE9mFz4POyP+/NxJGvDzmdRU3zF/UfUVTOvNA1iSektxV00hQAG4W5XBOjqL3FcoyuqO6JJKVw6LB3hHGuY9vv0efMobk7CZYoidrvAtv0lFIhUsXGv+ZAuuPzew93BerX9A8LG0Van5EBwkX8WlHNjrX7dUfo7B7JW6k1AVpNS9kMF0AAweFPLDMJuuluNfRk9F9MFfzrm/AQN/dJAPgP0vIFo2ssemuwIcTzZlIwly1EEhTzecYtmQcOnGROFX8SA54hk4HOzNnPibczPQpQfuvVWDMTxUYiwoXRXa7GZCi0urmvM+jB222n5gjM4iMnMKGT7bXAMyXK5hPpYDKItSmWPMumkvBaYxmiQeIRT5NAUm5b3yRaFH1eCARAe5d+tDO9hs73ETbMra68w/0hpCzvLQlC1xp1owDbFCYHEtBc22obnZ6su3Hn59ZvUXGPgXFzj/PeguiQ+Pt1NuqwnPPaCsVEhOXSwqJksacBOks=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6df5aa56-de5d-44de-93cf-08dce9cd9710
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB5613.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Oct 2024 08:20:39.2838
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uz0/5uyGoCna1GMT9RpAIsqebhPOFLJvKdkF4Ip5lvUt6G6/QZqo5FjdyhBBLnk5cUTWPQD9oJgSfcOXmTFj0f8ytU5fwJr7kw/xtJ7eYWI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR10MB5935
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-11_05,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ phishscore=0 mlxscore=0 suspectscore=0 bulkscore=0 spamscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2409260000 definitions=main-2410110055
+X-Proofpoint-ORIG-GUID: rRt3FzlTzpbdFAQXdm4iabYd38GEfnyw
+X-Proofpoint-GUID: rRt3FzlTzpbdFAQXdm4iabYd38GEfnyw
 
---00000000000037a56006242e9d87
-Content-Type: text/plain; charset="UTF-8"
+On Thu, Oct 10, 2024 at 05:16:22PM -0600, Shuah Khan wrote:
+> On 10/10/24 12:15, Lorenzo Stoakes wrote:
+> > Add tests to assert that PIDFD_SELF_* correctly refers to the current
+> > thread and process.
+> >
+> > This is only practically meaningful to pidfd_send_signal() and
+> > pidfd_getfd(), but also explicitly test that we disallow this feature for
+> > setns() where it would make no sense.
+> >
+> > We cannot reasonably wait on ourself using waitid(P_PIDFD, ...) so while in
+> > theory PIDFD_SELF_* would work here, we'd be left blocked if we tried it.
+> >
+> > We defer testing of mm-specific functionality which uses pidfd, namely
+> > process_madvise() and process_mrelease() to mm testing (though note the
+> > latter can not be sensibly tested as it would require the testing process
+> > to be dying).
+> >
+> > Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> > ---
+> >   tools/testing/selftests/pidfd/pidfd.h         |   8 ++
+> >   .../selftests/pidfd/pidfd_getfd_test.c        | 136 ++++++++++++++++++
+> >   .../selftests/pidfd/pidfd_setns_test.c        |  11 ++
+> >   tools/testing/selftests/pidfd/pidfd_test.c    |  67 +++++++--
+> >   4 files changed, 213 insertions(+), 9 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/pidfd/pidfd.h b/tools/testing/selftests/pidfd/pidfd.h
+> > index 88d6830ee004..1640b711889b 100644
+> > --- a/tools/testing/selftests/pidfd/pidfd.h
+> > +++ b/tools/testing/selftests/pidfd/pidfd.h
+> > @@ -50,6 +50,14 @@
+> >   #define PIDFD_NONBLOCK O_NONBLOCK
+> >   #endif
+> > +/* System header file may not have this available. */
+> > +#ifndef PIDFD_SELF_THREAD
+> > +#define PIDFD_SELF_THREAD -100
+> > +#endif
+> > +#ifndef PIDFD_SELF_THREAD_GROUP
+> > +#define PIDFD_SELF_THREAD_GROUP -200
+> > +#endif
+> > +
+>
+> Can't we pick these up from linux/pidfd.h - patch 2/3 adds
+> them.
 
-On Sun, 21 Jul 2024 at 02:10, Kees Cook <kees@kernel.org> wrote:
->
-> Following from the recent KUnit file naming discussion[1], move all
-> KUnit tests in lib/ into lib/tests/.
->
-> Link: https://lore.kernel.org/lkml/20240720165441.it.320-kees@kernel.org/ [1]
-> Signed-off-by: Kees Cook <kees@kernel.org>
-> ---
-> I can carry this in the hardening tree. To disrupt people as little as
-> possible, I'm hoping to send this either at the end of -rc1 or early
-> in -rc2.
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Yury Norov <yury.norov@gmail.com>
-> Cc: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> Cc: David Gow <davidgow@google.com>
-> Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
-> Cc: Andy Shevchenko <andy@kernel.org>
-> Cc: "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>
-> Cc: Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Matti Vaittinen <mazziesaccount@gmail.com>
-> Cc: linux-hardening@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: kunit-dev@googlegroups.com
-> Cc: linux-trace-kernel@vger.kernel.org
-> ---
+We're running this file in userland and it's not obvious we can correctly
+import this header, it'd be some "../../" thing out of the testing root
+directory and might not interact well with all scenarios in which this file
+is built.
 
-I've just rebased this and sent it out as part of a series of renames to Andrew:
-https://lore.kernel.org/linux-kselftest/20241011072509.3068328-5-davidgow@google.com/T/#u
+Also the existing tests do not seem to try to import that header, so it
+seemed the safest way of doing this.
 
-Hopefully this will be a workable way of getting all of the different
-renames (and other things entangled with renames) in, but let me know
-if it causes problems / if I broke it.
+>
+> >   /*
+> >    * The kernel reserves 300 pids via RESERVED_PIDS in kernel/pid.c
+> >    * That means, when it wraps around any pid < 300 will be skipped.
+> > diff --git a/tools/testing/selftests/pidfd/pidfd_getfd_test.c b/tools/testing/selftests/pidfd/pidfd_getfd_test.c
+> > index cd51d547b751..10793fc845ed 100644
+> > --- a/tools/testing/selftests/pidfd/pidfd_getfd_test.c
+> > +++ b/tools/testing/selftests/pidfd/pidfd_getfd_test.c
+> > @@ -6,6 +6,7 @@
+> >   #include <limits.h>
+> >   #include <linux/types.h>
+> >   #include <poll.h>
+> > +#include <pthread.h>
+> >   #include <sched.h>
+> >   #include <signal.h>
+> >   #include <stdio.h>
+> > @@ -15,6 +16,7 @@
+> >   #include <sys/prctl.h>
+> >   #include <sys/wait.h>
+> >   #include <unistd.h>
+> > +#include <sys/mman.h>
+> >   #include <sys/socket.h>
+> >   #include <linux/kcmp.h>
+> > @@ -114,6 +116,89 @@ static int child(int sk)
+> >   	return ret;
+> >   }
+> > +static int __pidfd_self_thread_worker(unsigned long page_size)
+> > +{
+> > +	int memfd;
+> > +	int newfd;
+> > +	char *ptr;
+> > +	int ret = 0;
+> > +
+> > +	/*
+> > +	 * Unshare our FDs so we have our own set. This means
+> > +	 * PIDFD_SELF_THREAD_GROUP will fail.
+> > +	 */
+> > +	if (unshare(CLONE_FILES) < 0) {
+> > +		ret = -errno;
+> > +		goto exit;
+> > +	}
+> > +
+> > +	/* Truncate, map in and write to our memfd. */
+> > +	memfd = sys_memfd_create("test_self_child", 0);
+>
+> Missing eror check.
 
-Cheers,
--- David
+Ack, I had to rapidly change this code to not use the ASSERT_xxx() stuff
+since abstracted out to helper function for pthread() to invoke and clearly
+did not do so carefully enough :) thanks for pointing out will fix this +
+other issues.
 
+>
+> > +	if (ftruncate(memfd, page_size)) {
+> > +		ret = -errno;
+> > +		goto exit;
+>
+> Hmm. you probably need scoped cleanup paths. "exit" closes
+> memfd and newfd which isn't open yet and sys_memfd_create()
+> could fail and memfd doesn't need closing?
 
+Yes... oops! Will fix.
 
->  MAINTAINERS                            | 18 ++++++-------
->  lib/Makefile                           | 35 +-----------------------
->  lib/tests/Makefile                     | 37 ++++++++++++++++++++++++++
->  lib/{ => tests}/bitfield_kunit.c       |  0
->  lib/{ => tests}/checksum_kunit.c       |  0
->  lib/{ => tests}/cmdline_kunit.c        |  0
->  lib/{ => tests}/cpumask_kunit.c        |  0
->  lib/{ => tests}/fortify_kunit.c        |  0
->  lib/{ => tests}/hashtable_test.c       |  0
->  lib/{ => tests}/is_signed_type_kunit.c |  0
->  lib/{ => tests}/kunit_iov_iter.c       |  0
->  lib/{ => tests}/list-test.c            |  0
->  lib/{ => tests}/memcpy_kunit.c         |  0
->  lib/{ => tests}/overflow_kunit.c       |  0
->  lib/{ => tests}/siphash_kunit.c        |  0
->  lib/{ => tests}/slub_kunit.c           |  0
->  lib/{ => tests}/stackinit_kunit.c      |  0
->  lib/{ => tests}/string_helpers_kunit.c |  0
->  lib/{ => tests}/string_kunit.c         |  0
->  lib/{ => tests}/test_bits.c            |  0
->  lib/{ => tests}/test_fprobe.c          |  0
->  lib/{ => tests}/test_hash.c            |  0
->  lib/{ => tests}/test_kprobes.c         |  0
->  lib/{ => tests}/test_linear_ranges.c   |  0
->  lib/{ => tests}/test_list_sort.c       |  0
->  lib/{ => tests}/test_sort.c            |  0
->  26 files changed, 47 insertions(+), 43 deletions(-)
->  create mode 100644 lib/tests/Makefile
->  rename lib/{ => tests}/bitfield_kunit.c (100%)
->  rename lib/{ => tests}/checksum_kunit.c (100%)
->  rename lib/{ => tests}/cmdline_kunit.c (100%)
->  rename lib/{ => tests}/cpumask_kunit.c (100%)
->  rename lib/{ => tests}/fortify_kunit.c (100%)
->  rename lib/{ => tests}/hashtable_test.c (100%)
->  rename lib/{ => tests}/is_signed_type_kunit.c (100%)
->  rename lib/{ => tests}/kunit_iov_iter.c (100%)
->  rename lib/{ => tests}/list-test.c (100%)
->  rename lib/{ => tests}/memcpy_kunit.c (100%)
->  rename lib/{ => tests}/overflow_kunit.c (100%)
->  rename lib/{ => tests}/siphash_kunit.c (100%)
->  rename lib/{ => tests}/slub_kunit.c (100%)
->  rename lib/{ => tests}/stackinit_kunit.c (100%)
->  rename lib/{ => tests}/string_helpers_kunit.c (100%)
->  rename lib/{ => tests}/string_kunit.c (100%)
->  rename lib/{ => tests}/test_bits.c (100%)
->  rename lib/{ => tests}/test_fprobe.c (100%)
->  rename lib/{ => tests}/test_hash.c (100%)
->  rename lib/{ => tests}/test_kprobes.c (100%)
->  rename lib/{ => tests}/test_linear_ranges.c (100%)
->  rename lib/{ => tests}/test_list_sort.c (100%)
->  rename lib/{ => tests}/test_sort.c (100%)
 >
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8754ac2c259d..3f4b9d007cbb 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3737,10 +3737,10 @@ F:      include/vdso/bits.h
->  F:     lib/bitmap-str.c
->  F:     lib/bitmap.c
->  F:     lib/cpumask.c
-> -F:     lib/cpumask_kunit.c
->  F:     lib/find_bit.c
->  F:     lib/find_bit_benchmark.c
->  F:     lib/test_bitmap.c
-> +F:     lib/tests/cpumask_kunit.c
->  F:     tools/include/linux/bitfield.h
->  F:     tools/include/linux/bitmap.h
->  F:     tools/include/linux/bits.h
-> @@ -8618,9 +8618,9 @@ L:        linux-hardening@vger.kernel.org
->  S:     Supported
->  T:     git git://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/hardening
->  F:     include/linux/fortify-string.h
-> -F:     lib/fortify_kunit.c
-> -F:     lib/memcpy_kunit.c
->  F:     lib/test_fortify/*
-> +F:     lib/tests/fortify_kunit.c
-> +F:     lib/tests/memcpy_kunit.c
->  F:     scripts/test_fortify.sh
->  K:     \b__NO_FORTIFY\b
+> > +	}
+> > +
+> > +	ptr = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
+> > +		   MAP_SHARED, memfd, 0);
+> > +	if (ptr == MAP_FAILED) {
+> > +		ret = -errno;
+> > +		goto exit;
+> > +	}
+> > +	ptr[0] = 'y';
+> > +	if (munmap(ptr, page_size)) {
+> > +		ret = -errno;
+> > +		goto exit;
+> > +	}
+> > +
+> > +	/* Get a thread-local duplicate of our memfd. */
+> > +	newfd = sys_pidfd_getfd(PIDFD_SELF_THREAD, memfd, 0);
+> > +	if (newfd < 0) {
+> > +		ret = -errno;
+> > +		goto exit;
 >
-> @@ -9246,9 +9246,9 @@ F:        include/linux/string.h
->  F:     include/linux/string_choices.h
->  F:     include/linux/string_helpers.h
->  F:     lib/string.c
-> -F:     lib/string_kunit.c
->  F:     lib/string_helpers.c
-> -F:     lib/string_helpers_kunit.c
-> +F:     lib/tests/string_helpers_kunit.c
-> +F:     lib/tests/string_kunit.c
->  F:     scripts/coccinelle/api/string_choices.cocci
->
->  GENERIC UIO DRIVER FOR PCI DEVICES
-> @@ -12347,7 +12347,7 @@ F:      Documentation/trace/kprobes.rst
->  F:     include/asm-generic/kprobes.h
->  F:     include/linux/kprobes.h
->  F:     kernel/kprobes.c
-> -F:     lib/test_kprobes.c
-> +F:     lib/tests/test_kprobes.c
->  F:     samples/kprobes
->
->  KS0108 LCD CONTROLLER DRIVER
-> @@ -12697,7 +12697,7 @@ M:      Mark Brown <broonie@kernel.org>
->  R:     Matti Vaittinen <mazziesaccount@gmail.com>
->  F:     include/linux/linear_range.h
->  F:     lib/linear_ranges.c
-> -F:     lib/test_linear_ranges.c
-> +F:     lib/tests/test_linear_ranges.c
->
->  LINUX FOR POWER MACINTOSH
->  L:     linuxppc-dev@lists.ozlabs.org
-> @@ -12824,7 +12824,7 @@ M:      David Gow <davidgow@google.com>
->  L:     linux-kselftest@vger.kernel.org
->  L:     kunit-dev@googlegroups.com
->  S:     Maintained
-> -F:     lib/list-test.c
-> +F:     lib/tests/list-test.c
->
->  LITEX PLATFORM
->  M:     Karol Gugala <kgugala@antmicro.com>
-> @@ -20498,7 +20498,7 @@ M:      Jason A. Donenfeld <Jason@zx2c4.com>
->  S:     Maintained
->  F:     include/linux/siphash.h
->  F:     lib/siphash.c
-> -F:     lib/siphash_kunit.c
-> +F:     lib/tests/siphash_kunit.c
->
->  SIS 190 ETHERNET DRIVER
->  M:     Francois Romieu <romieu@fr.zoreil.com>
-> diff --git a/lib/Makefile b/lib/Makefile
-> index 3b1769045651..f00fe120ee9e 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -49,9 +49,7 @@ obj-y += bcd.o sort.o parser.o debug_locks.o random32.o \
->          percpu-refcount.o rhashtable.o base64.o \
->          once.o refcount.o rcuref.o usercopy.o errseq.o bucket_locks.o \
->          generic-radix-tree.o bitmap-str.o
-> -obj-$(CONFIG_STRING_KUNIT_TEST) += string_kunit.o
->  obj-y += string_helpers.o
-> -obj-$(CONFIG_STRING_HELPERS_KUNIT_TEST) += string_helpers_kunit.o
->  obj-y += hexdump.o
->  obj-$(CONFIG_TEST_HEXDUMP) += test_hexdump.o
->  obj-y += kstrtox.o
-> @@ -62,22 +60,17 @@ obj-$(CONFIG_TEST_DHRY) += test_dhry.o
->  obj-$(CONFIG_TEST_FIRMWARE) += test_firmware.o
->  obj-$(CONFIG_TEST_BITOPS) += test_bitops.o
->  CFLAGS_test_bitops.o += -Werror
-> -obj-$(CONFIG_CPUMASK_KUNIT_TEST) += cpumask_kunit.o
->  obj-$(CONFIG_TEST_SYSCTL) += test_sysctl.o
-> -obj-$(CONFIG_TEST_IOV_ITER) += kunit_iov_iter.o
-> -obj-$(CONFIG_HASH_KUNIT_TEST) += test_hash.o
->  obj-$(CONFIG_TEST_IDA) += test_ida.o
->  obj-$(CONFIG_TEST_UBSAN) += test_ubsan.o
->  CFLAGS_test_ubsan.o += $(call cc-disable-warning, vla)
->  CFLAGS_test_ubsan.o += $(call cc-disable-warning, unused-but-set-variable)
->  UBSAN_SANITIZE_test_ubsan.o := y
->  obj-$(CONFIG_TEST_KSTRTOX) += test-kstrtox.o
-> -obj-$(CONFIG_TEST_LIST_SORT) += test_list_sort.o
->  obj-$(CONFIG_TEST_MIN_HEAP) += test_min_heap.o
->  obj-$(CONFIG_TEST_LKM) += test_module.o
->  obj-$(CONFIG_TEST_VMALLOC) += test_vmalloc.o
->  obj-$(CONFIG_TEST_RHASHTABLE) += test_rhashtable.o
-> -obj-$(CONFIG_TEST_SORT) += test_sort.o
->  obj-$(CONFIG_TEST_USER_COPY) += test_user_copy.o
->  obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_keys.o
->  obj-$(CONFIG_TEST_STATIC_KEYS) += test_static_key_base.o
-> @@ -104,10 +97,7 @@ obj-$(CONFIG_TEST_MEMINIT) += test_meminit.o
->  obj-$(CONFIG_TEST_LOCKUP) += test_lockup.o
->  obj-$(CONFIG_TEST_HMM) += test_hmm.o
->  obj-$(CONFIG_TEST_FREE_PAGES) += test_free_pages.o
-> -obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
->  obj-$(CONFIG_TEST_REF_TRACKER) += test_ref_tracker.o
-> -CFLAGS_test_fprobe.o += $(CC_FLAGS_FTRACE)
-> -obj-$(CONFIG_FPROBE_SANITY_TEST) += test_fprobe.o
->  obj-$(CONFIG_TEST_OBJPOOL) += test_objpool.o
->
->  obj-$(CONFIG_TEST_FPU) += test_fpu.o
-> @@ -129,7 +119,7 @@ endif
->  obj-$(CONFIG_DEBUG_INFO_REDUCED) += debug_info.o
->  CFLAGS_debug_info.o += $(call cc-option, -femit-struct-debug-detailed=any)
->
-> -obj-y += math/ crypto/
-> +obj-y += math/ crypto/ tests/
->
->  obj-$(CONFIG_GENERIC_IOMAP) += iomap.o
->  obj-$(CONFIG_HAS_IOMEM) += iomap_copy.o devres.o
-> @@ -366,29 +356,6 @@ obj-$(CONFIG_OBJAGG) += objagg.o
->  # pldmfw library
->  obj-$(CONFIG_PLDMFW) += pldmfw/
->
-> -# KUnit tests
-> -CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
-> -obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
-> -obj-$(CONFIG_CHECKSUM_KUNIT) += checksum_kunit.o
-> -obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
-> -obj-$(CONFIG_HASHTABLE_KUNIT_TEST) += hashtable_test.o
-> -obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
-> -obj-$(CONFIG_BITS_TEST) += test_bits.o
-> -obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
-> -obj-$(CONFIG_SLUB_KUNIT_TEST) += slub_kunit.o
-> -obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
-> -obj-$(CONFIG_IS_SIGNED_TYPE_KUNIT_TEST) += is_signed_type_kunit.o
-> -CFLAGS_overflow_kunit.o = $(call cc-disable-warning, tautological-constant-out-of-range-compare)
-> -obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
-> -CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
-> -obj-$(CONFIG_STACKINIT_KUNIT_TEST) += stackinit_kunit.o
-> -CFLAGS_fortify_kunit.o += $(call cc-disable-warning, unsequenced)
-> -CFLAGS_fortify_kunit.o += $(call cc-disable-warning, stringop-overread)
-> -CFLAGS_fortify_kunit.o += $(call cc-disable-warning, stringop-truncation)
-> -CFLAGS_fortify_kunit.o += $(DISABLE_STRUCTLEAK_PLUGIN)
-> -obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
-> -obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
-> -
->  obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
->
->  obj-$(CONFIG_FIRMWARE_TABLE) += fw_table.o
-> diff --git a/lib/tests/Makefile b/lib/tests/Makefile
-> new file mode 100644
-> index 000000000000..c6a14cc8663e
-> --- /dev/null
-> +++ b/lib/tests/Makefile
-> @@ -0,0 +1,37 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +#
-> +# Makefile for tests of kernel library functions.
-> +
-> +# KUnit tests
-> +CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
-> +obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
-> +obj-$(CONFIG_BITS_TEST) += test_bits.o
-> +obj-$(CONFIG_CHECKSUM_KUNIT) += checksum_kunit.o
-> +obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
-> +obj-$(CONFIG_CPUMASK_KUNIT_TEST) += cpumask_kunit.o
-> +CFLAGS_fortify_kunit.o += $(call cc-disable-warning, unsequenced)
-> +CFLAGS_fortify_kunit.o += $(call cc-disable-warning, stringop-overread)
-> +CFLAGS_fortify_kunit.o += $(call cc-disable-warning, stringop-truncation)
-> +CFLAGS_fortify_kunit.o += $(DISABLE_STRUCTLEAK_PLUGIN)
-> +obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
-> +CFLAGS_test_fprobe.o += $(CC_FLAGS_FTRACE)
-> +obj-$(CONFIG_FPROBE_SANITY_TEST) += test_fprobe.o
-> +obj-$(CONFIG_HASHTABLE_KUNIT_TEST) += hashtable_test.o
-> +obj-$(CONFIG_HASH_KUNIT_TEST) += test_hash.o
-> +obj-$(CONFIG_TEST_IOV_ITER) += kunit_iov_iter.o
-> +obj-$(CONFIG_IS_SIGNED_TYPE_KUNIT_TEST) += is_signed_type_kunit.o
-> +obj-$(CONFIG_KPROBES_SANITY_TEST) += test_kprobes.o
-> +obj-$(CONFIG_LIST_KUNIT_TEST) += list-test.o
-> +obj-$(CONFIG_TEST_LIST_SORT) += test_list_sort.o
-> +obj-$(CONFIG_LINEAR_RANGES_TEST) += test_linear_ranges.o
-> +obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
-> +CFLAGS_overflow_kunit.o = $(call cc-disable-warning, tautological-constant-out-of-range-compare)
-> +obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
-> +obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
-> +obj-$(CONFIG_SLUB_KUNIT_TEST) += slub_kunit.o
-> +obj-$(CONFIG_TEST_SORT) += test_sort.o
-> +CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
-> +obj-$(CONFIG_STACKINIT_KUNIT_TEST) += stackinit_kunit.o
-> +obj-$(CONFIG_STRING_KUNIT_TEST) += string_kunit.o
-> +obj-$(CONFIG_STRING_HELPERS_KUNIT_TEST) += string_helpers_kunit.o
-> +
-> diff --git a/lib/bitfield_kunit.c b/lib/tests/bitfield_kunit.c
-> similarity index 100%
-> rename from lib/bitfield_kunit.c
-> rename to lib/tests/bitfield_kunit.c
-> diff --git a/lib/checksum_kunit.c b/lib/tests/checksum_kunit.c
-> similarity index 100%
-> rename from lib/checksum_kunit.c
-> rename to lib/tests/checksum_kunit.c
-> diff --git a/lib/cmdline_kunit.c b/lib/tests/cmdline_kunit.c
-> similarity index 100%
-> rename from lib/cmdline_kunit.c
-> rename to lib/tests/cmdline_kunit.c
-> diff --git a/lib/cpumask_kunit.c b/lib/tests/cpumask_kunit.c
-> similarity index 100%
-> rename from lib/cpumask_kunit.c
-> rename to lib/tests/cpumask_kunit.c
-> diff --git a/lib/fortify_kunit.c b/lib/tests/fortify_kunit.c
-> similarity index 100%
-> rename from lib/fortify_kunit.c
-> rename to lib/tests/fortify_kunit.c
-> diff --git a/lib/hashtable_test.c b/lib/tests/hashtable_test.c
-> similarity index 100%
-> rename from lib/hashtable_test.c
-> rename to lib/tests/hashtable_test.c
-> diff --git a/lib/is_signed_type_kunit.c b/lib/tests/is_signed_type_kunit.c
-> similarity index 100%
-> rename from lib/is_signed_type_kunit.c
-> rename to lib/tests/is_signed_type_kunit.c
-> diff --git a/lib/kunit_iov_iter.c b/lib/tests/kunit_iov_iter.c
-> similarity index 100%
-> rename from lib/kunit_iov_iter.c
-> rename to lib/tests/kunit_iov_iter.c
-> diff --git a/lib/list-test.c b/lib/tests/list-test.c
-> similarity index 100%
-> rename from lib/list-test.c
-> rename to lib/tests/list-test.c
-> diff --git a/lib/memcpy_kunit.c b/lib/tests/memcpy_kunit.c
-> similarity index 100%
-> rename from lib/memcpy_kunit.c
-> rename to lib/tests/memcpy_kunit.c
-> diff --git a/lib/overflow_kunit.c b/lib/tests/overflow_kunit.c
-> similarity index 100%
-> rename from lib/overflow_kunit.c
-> rename to lib/tests/overflow_kunit.c
-> diff --git a/lib/siphash_kunit.c b/lib/tests/siphash_kunit.c
-> similarity index 100%
-> rename from lib/siphash_kunit.c
-> rename to lib/tests/siphash_kunit.c
-> diff --git a/lib/slub_kunit.c b/lib/tests/slub_kunit.c
-> similarity index 100%
-> rename from lib/slub_kunit.c
-> rename to lib/tests/slub_kunit.c
-> diff --git a/lib/stackinit_kunit.c b/lib/tests/stackinit_kunit.c
-> similarity index 100%
-> rename from lib/stackinit_kunit.c
-> rename to lib/tests/stackinit_kunit.c
-> diff --git a/lib/string_helpers_kunit.c b/lib/tests/string_helpers_kunit.c
-> similarity index 100%
-> rename from lib/string_helpers_kunit.c
-> rename to lib/tests/string_helpers_kunit.c
-> diff --git a/lib/string_kunit.c b/lib/tests/string_kunit.c
-> similarity index 100%
-> rename from lib/string_kunit.c
-> rename to lib/tests/string_kunit.c
-> diff --git a/lib/test_bits.c b/lib/tests/test_bits.c
-> similarity index 100%
-> rename from lib/test_bits.c
-> rename to lib/tests/test_bits.c
-> diff --git a/lib/test_fprobe.c b/lib/tests/test_fprobe.c
-> similarity index 100%
-> rename from lib/test_fprobe.c
-> rename to lib/tests/test_fprobe.c
-> diff --git a/lib/test_hash.c b/lib/tests/test_hash.c
-> similarity index 100%
-> rename from lib/test_hash.c
-> rename to lib/tests/test_hash.c
-> diff --git a/lib/test_kprobes.c b/lib/tests/test_kprobes.c
-> similarity index 100%
-> rename from lib/test_kprobes.c
-> rename to lib/tests/test_kprobes.c
-> diff --git a/lib/test_linear_ranges.c b/lib/tests/test_linear_ranges.c
-> similarity index 100%
-> rename from lib/test_linear_ranges.c
-> rename to lib/tests/test_linear_ranges.c
-> diff --git a/lib/test_list_sort.c b/lib/tests/test_list_sort.c
-> similarity index 100%
-> rename from lib/test_list_sort.c
-> rename to lib/tests/test_list_sort.c
-> diff --git a/lib/test_sort.c b/lib/tests/test_sort.c
-> similarity index 100%
-> rename from lib/test_sort.c
-> rename to lib/tests/test_sort.c
-> --
-> 2.34.1
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20240720181025.work.002-kees%40kernel.org.
+> Same comment here - "exit" closes newfd
 
---00000000000037a56006242e9d87
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+Ack will fix.
 
-MIIUqgYJKoZIhvcNAQcCoIIUmzCCFJcCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-ghIEMIIGkTCCBHmgAwIBAgIQfofDAVIq0iZG5Ok+mZCT2TANBgkqhkiG9w0BAQwFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSNjETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMzA0MTkwMzUzNDdaFw0zMjA0MTkwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFI2IFNNSU1FIENBIDIwMjMwggIiMA0GCSqGSIb3DQEBAQUAA4ICDwAwggIKAoICAQDYydcdmKyg
-4IBqVjT4XMf6SR2Ix+1ChW2efX6LpapgGIl63csmTdJQw8EcbwU9C691spkltzTASK2Ayi4aeosB
-mk63SPrdVjJNNTkSbTowej3xVVGnYwAjZ6/qcrIgRUNtd/mbtG7j9W80JoP6o2Szu6/mdjb/yxRM
-KaCDlloE9vID2jSNB5qOGkKKvN0x6I5e/B1Y6tidYDHemkW4Qv9mfE3xtDAoe5ygUvKA4KHQTOIy
-VQEFpd/ZAu1yvrEeA/egkcmdJs6o47sxfo9p/fGNsLm/TOOZg5aj5RHJbZlc0zQ3yZt1wh+NEe3x
-ewU5ZoFnETCjjTKz16eJ5RE21EmnCtLb3kU1s+t/L0RUU3XUAzMeBVYBEsEmNnbo1UiiuwUZBWiJ
-vMBxd9LeIodDzz3ULIN5Q84oYBOeWGI2ILvplRe9Fx/WBjHhl9rJgAXs2h9dAMVeEYIYkvW+9mpt
-BIU9cXUiO0bky1lumSRRg11fOgRzIJQsphStaOq5OPTb3pBiNpwWvYpvv5kCG2X58GfdR8SWA+fm
-OLXHcb5lRljrS4rT9MROG/QkZgNtoFLBo/r7qANrtlyAwPx5zPsQSwG9r8SFdgMTHnA2eWCZPOmN
-1Tt4xU4v9mQIHNqQBuNJLjlxvalUOdTRgw21OJAFt6Ncx5j/20Qw9FECnP+B3EPVmQIDAQABo4IB
-ZTCCAWEwDgYDVR0PAQH/BAQDAgGGMDMGA1UdJQQsMCoGCCsGAQUFBwMCBggrBgEFBQcDBAYJKwYB
-BAGCNxUGBgkrBgEEAYI3FQUwEgYDVR0TAQH/BAgwBgEB/wIBADAdBgNVHQ4EFgQUM7q+o9Q5TSoZ
-18hmkmiB/cHGycYwHwYDVR0jBBgwFoAUrmwFo5MT4qLn4tcc1sfwf8hnU6AwewYIKwYBBQUHAQEE
-bzBtMC4GCCsGAQUFBzABhiJodHRwOi8vb2NzcDIuZ2xvYmFsc2lnbi5jb20vcm9vdHI2MDsGCCsG
-AQUFBzAChi9odHRwOi8vc2VjdXJlLmdsb2JhbHNpZ24uY29tL2NhY2VydC9yb290LXI2LmNydDA2
-BgNVHR8ELzAtMCugKaAnhiVodHRwOi8vY3JsLmdsb2JhbHNpZ24uY29tL3Jvb3QtcjYuY3JsMBEG
-A1UdIAQKMAgwBgYEVR0gADANBgkqhkiG9w0BAQwFAAOCAgEAVc4mpSLg9A6QpSq1JNO6tURZ4rBI
-MkwhqdLrEsKs8z40RyxMURo+B2ZljZmFLcEVxyNt7zwpZ2IDfk4URESmfDTiy95jf856Hcwzdxfy
-jdwx0k7n4/0WK9ElybN4J95sgeGRcqd4pji6171bREVt0UlHrIRkftIMFK1bzU0dgpgLMu+ykJSE
-0Bog41D9T6Swl2RTuKYYO4UAl9nSjWN6CVP8rZQotJv8Kl2llpe83n6ULzNfe2QT67IB5sJdsrNk
-jIxSwaWjOUNddWvCk/b5qsVUROOuctPyYnAFTU5KY5qhyuiFTvvVlOMArFkStNlVKIufop5EQh6p
-jqDGT6rp4ANDoEWbHKd4mwrMtvrh51/8UzaJrLzj3GjdkJ/sPWkDbn+AIt6lrO8hbYSD8L7RQDqK
-C28FheVr4ynpkrWkT7Rl6npWhyumaCbjR+8bo9gs7rto9SPDhWhgPSR9R1//WF3mdHt8SKERhvtd
-NFkE3zf36V9Vnu0EO1ay2n5imrOfLkOVF3vtAjleJnesM/R7v5tMS0tWoIr39KaQNURwI//WVuR+
-zjqIQVx5s7Ta1GgEL56z0C5GJoNE1LvGXnQDyvDO6QeJVThFNgwkossyvmMAaPOJYnYCrYXiXXle
-A6TpL63Gu8foNftUO0T83JbV/e6J8iCOnGZwZDrubOtYn1QwggWDMIIDa6ADAgECAg5F5rsDgzPD
-hWVI5v9FUTANBgkqhkiG9w0BAQwFADBMMSAwHgYDVQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBS
-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
-erg7AgMBAAGjggHgMIIB3DAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1UdDwEB
-/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFKFQnbTpSq0q
-cOYnlrbegXJIIvA6MFgGA1UdIARRME8wCQYHZ4EMAQUBAjBCBgorBgEEAaAyCgMDMDQwMgYIKwYB
-BQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQC
-MAAwgZoGCCsGAQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWdu
-LmNvbS9jYS9nc2F0bGFzcjZzbWltZWNhMjAyMzBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5n
-bG9iYWxzaWduLmNvbS9jYWNlcnQvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3J0MB8GA1UdIwQYMBaA
-FDO6vqPUOU0qGdfIZpJogf3BxsnGMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFs
-c2lnbi5jb20vY2EvZ3NhdGxhc3I2c21pbWVjYTIwMjMuY3JsMA0GCSqGSIb3DQEBCwUAA4ICAQBR
-nRJBmUP+IpudtmSQ/R55Sv0qv8TO9zHTlIdsIf2Gc/zeCi0SamUQkFWb01d7Q+20kcpxNzwV6M7y
-hDRk5uuVFvtVxOrmbhflCo0uBpD9vz/symtfJYZLNyvSDi1PIVrwGNpyRrD0W6VQJxzzsBTwsO+S
-XWN3+x70+QDf7+zovW7KF0/y8QYD6PIN7Y9LRUXct0HKhatkHmO3w6MSJatnqSvsjffIwpNecUMo
-h10c6Etz17b7tbGdxdxLw8njN+UnfoFp3v4irrafB6jkArRfsR5TscZUUKej0ihl7mXEKUBmClkP
-ndcbXHFxS6WTkpjvl7Jjja8DdWJSJmdEWUnFjnQnDrqLqvYjeVMS/8IBF57eyT6yEPrMzA+Zd+f5
-hnM7HuBSGvVHv+c/rlHVp0S364DBGXj11obl7nKgL9D59QwC5/kNJ1whoKwsATUSepanzALdOTn3
-BavXUVE38e4c90il44T1bphqtLfmHZ1T5ZwxjtjzNMKy0Mb9j/jcFxfibCISYbnk661FBe38bhYj
-0DhqINx2fw0bwhpfFGADOZDe5DVhI7AIW/kEMHuIgAJ/HPgyn1+tldOPWiFLQbTNNBnfGv9sDPz0
-hWV2vSAXq35i+JS06BCkbGfE5ci6zFy4pt8fmqMGKFH/t3ELCTYo116lqUTDcVC8DAWN8E55aDGC
-AmowggJmAgEBMGgwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYtc2ExKjAo
-BgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjYgU01JTUUgQ0EgMjAyMwIQAZ6Vqszmp/3gGFW0sCFu
-eDANBglghkgBZQMEAgEFAKCB1DAvBgkqhkiG9w0BCQQxIgQg4cHpYsTHIsuR90Br85sWehCxHiFg
-6iopPQAwb8rbB20wGAYJKoZIhvcNAQkDMQsGCSqGSIb3DQEHATAcBgkqhkiG9w0BCQUxDxcNMjQx
-MDExMDc0MTI1WjBpBgkqhkiG9w0BCQ8xXDBaMAsGCWCGSAFlAwQBKjALBglghkgBZQMEARYwCwYJ
-YIZIAWUDBAECMAoGCCqGSIb3DQMHMAsGCSqGSIb3DQEBCjALBgkqhkiG9w0BAQcwCwYJYIZIAWUD
-BAIBMA0GCSqGSIb3DQEBAQUABIIBAEpo4IUUZCdZiQSwmGOn+Uf0qQ+oW/yuZHbul9LnrS+DU1Tx
-6/yVeuH8BXxkGFawr2AP0HwGETjTMJvg3FbvTDf1eMf/U+NGd+HuXADwRtVCUyyl43Gkr87gM6dc
-GbmHaBevW4n3/b/iPdGRcbrnEEuc8sTYYXWsCzlbkc08aLMrliId2ne+jprD5DXtfaKqbkplQkKH
-lmQPSuVV4763tpKuWd7JrmocnsP1s0r2yfzgKzEXDVuS0YdiI7/yRtLiT++y68q/dRe3zZVwvYWo
-mdQ8D0AVQj4xuADn5tN4TjF2JA/2ZQqxvJbGBfUj00ib4EwTEyticLpQ+EhpwtjROC8=
---00000000000037a56006242e9d87--
+>
+> > +	}
+> > +
+> > +	if (memfd == newfd) {
+> > +		ret = -EINVAL;
+> > +		goto exit;
+> > +	}
+> > +
+> > +	/* Map in new fd and make sure that the data is as expected. */
+> > +	ptr = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
+> > +		   MAP_SHARED, newfd, 0);
+> > +	if (ptr == MAP_FAILED) {
+> > +		ret = -errno;
+> > +		goto exit;
+> > +	}
+> > +
+> > +	if (ptr[0] != 'y') {
+> > +		ret = -EINVAL;
+> > +		goto exit;
+> > +	}
+> > +
+> > +	if (munmap(ptr, page_size)) {
+> > +		ret = -errno;
+> > +		goto exit;
+> > +	}
+> > +
+> > +exit:
+> > +	/* Cleanup. */
+> > +	close(newfd);
+> > +	close(memfd);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static void *pidfd_self_thread_worker(void *arg)
+> > +{
+> > +	unsigned long page_size = (unsigned long)arg;
+> > +	int ret;
+> > +
+> > +	ret = __pidfd_self_thread_worker(page_size);
+>
+> Don't you want to check error here?
+
+We check it from callers, and it is passed to them we can't assert here as
+we're not in a test.
+
+>
+> > +
+> > +	return (void *)(intptr_t)ret;
+> > +}
+> > +
+> >   FIXTURE(child)
+> >   {
+> >   	/*
+> > @@ -264,6 +349,57 @@ TEST_F(child, no_strange_EBADF)
+> >   	EXPECT_EQ(errno, ESRCH);
+> >   }
+> > +TEST(pidfd_self)
+> > +{
+> > +	int memfd = sys_memfd_create("test_self", 0);
+> > +	unsigned long page_size = sysconf(_SC_PAGESIZE);
+> > +	int newfd;
+> > +	char *ptr;
+> > +	pthread_t thread;
+> > +	void *res;
+> > +	int err;
+> > +
+> > +	ASSERT_GE(memfd, 0);
+> > +	ASSERT_EQ(ftruncate(memfd, page_size), 0);
+> > +
+> > +	/*
+> > +	 * Map so we can assert that the duplicated fd references the same
+> > +	 * memory.
+> > +	 */
+> > +	ptr = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
+> > +		   MAP_SHARED, memfd, 0);
+> > +	ASSERT_NE(ptr, MAP_FAILED);
+> > +	ptr[0] = 'x';
+> > +	ASSERT_EQ(munmap(ptr, page_size), 0);
+> > +
+> > +	/* Now get a duplicate of our memfd. */
+> > +	newfd = sys_pidfd_getfd(PIDFD_SELF_THREAD_GROUP, memfd, 0);
+> > +	ASSERT_GE(newfd, 0);
+> > +	ASSERT_NE(memfd, newfd);
+> > +
+> > +	/* Now map duplicate fd and make sure it references the same memory. */
+> > +	ptr = mmap(NULL, page_size, PROT_READ | PROT_WRITE,
+> > +		   MAP_SHARED, newfd, 0);
+> > +	ASSERT_NE(ptr, MAP_FAILED);
+> > +	ASSERT_EQ(ptr[0], 'x');
+> > +	ASSERT_EQ(munmap(ptr, page_size), 0);
+> > +
+> > +	/* Cleanup. */
+> > +	close(memfd);
+> > +	close(newfd);
+> > +
+> > +	/*
+> > +	 * Fire up the thread and assert that we can lookup the thread-specific
+> > +	 * PIDFD_SELF_THREAD (also aliased by PIDFD_SELF).
+> > +	 */
+> > +	ASSERT_EQ(pthread_create(&thread, NULL, pidfd_self_thread_worker,
+> > +				 (void *)page_size), 0);
+> > +	ASSERT_EQ(pthread_join(thread, &res), 0);
+> > +	err = (int)(intptr_t)res;
+> > +
+> > +	ASSERT_EQ(err, 0);
+> > +}
+> > +
+> >   #if __NR_pidfd_getfd == -1
+> >   int main(void)
+> >   {
+> > diff --git a/tools/testing/selftests/pidfd/pidfd_setns_test.c b/tools/testing/selftests/pidfd/pidfd_setns_test.c
+> > index 7c2a4349170a..bbd39dc5ceb7 100644
+> > --- a/tools/testing/selftests/pidfd/pidfd_setns_test.c
+> > +++ b/tools/testing/selftests/pidfd/pidfd_setns_test.c
+> > @@ -752,4 +752,15 @@ TEST(setns_einval)
+> >   	close(fd);
+> >   }
+> > +TEST(setns_pidfd_self_disallowed)
+> > +{
+> > +	ASSERT_EQ(setns(PIDFD_SELF_THREAD, 0), -1);
+> > +	EXPECT_EQ(errno, EBADF);
+> > +
+> > +	errno = 0;
+> > +
+> > +	ASSERT_EQ(setns(PIDFD_SELF_THREAD_GROUP, 0), -1);
+> > +	EXPECT_EQ(errno, EBADF);
+> > +}
+> > +
+> >   TEST_HARNESS_MAIN
+> > diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
+> > index 9faa686f90e4..ab5caa0368a1 100644
+> > --- a/tools/testing/selftests/pidfd/pidfd_test.c
+> > +++ b/tools/testing/selftests/pidfd/pidfd_test.c
+> > @@ -42,12 +42,41 @@ static pid_t pidfd_clone(int flags, int *pidfd, int (*fn)(void *))
+> >   #endif
+> >   }
+> > -static int signal_received;
+> > +static pthread_t signal_received;
+> >   static void set_signal_received_on_sigusr1(int sig)
+> >   {
+> >   	if (sig == SIGUSR1)
+> > -		signal_received = 1;
+> > +		signal_received = pthread_self();
+> > +}
+> > +
+> > +static int send_signal(int pidfd)
+> > +{
+> > +	int ret = 0;
+> > +
+> > +	if (sys_pidfd_send_signal(pidfd, SIGUSR1, NULL, 0) < 0) {
+> > +		ret = -EINVAL;
+> > +		goto exit;
+> > +	}
+> > +
+> > +	if (signal_received != pthread_self()) {
+> > +		ret = -EINVAL;
+> > +		goto exit;
+> > +	}
+> > +
+> > +exit:
+> > +	signal_received = 0;
+> > +	return ret;
+> > +}
+> > +
+> > +static void *send_signal_worker(void *arg)
+> > +{
+> > +	int pidfd = (int)(intptr_t)arg;
+> > +	int ret;
+> > +
+> > +	ret = send_signal(pidfd);
+> > +
+>
+> Same here - don't you have to check ret?
+
+As in the other case, we check that in the caller rather than here. I will
+add a comment to both to make it clear that we intentionally forward the
+error.
+
+>
+> > +	return (void *)(intptr_t)ret;
+> >   }
+> >   /*
+> > @@ -56,8 +85,11 @@ static void set_signal_received_on_sigusr1(int sig)
+> >    */
+> >   static int test_pidfd_send_signal_simple_success(void)
+> >   {
+> > -	int pidfd, ret;
+> > +	int pidfd;
+> >   	const char *test_name = "pidfd_send_signal send SIGUSR1";
+> > +	pthread_t thread;
+> > +	void *thread_res;
+> > +	int res;
+> >   	if (!have_pidfd_send_signal) {
+> >   		ksft_test_result_skip(
+> > @@ -74,17 +106,34 @@ static int test_pidfd_send_signal_simple_success(void)
+> >   	signal(SIGUSR1, set_signal_received_on_sigusr1);
+> > -	ret = sys_pidfd_send_signal(pidfd, SIGUSR1, NULL, 0);
+> > +	send_signal(pidfd);
+> >   	close(pidfd);
+> > -	if (ret < 0)
+> > -		ksft_exit_fail_msg("%s test: Failed to send signal\n",
+> > +
+> > +	/* Now try the same thing only using PIDFD_SELF_THREAD_GROUP. */
+> > +	res = send_signal(PIDFD_SELF_THREAD_GROUP);
+> > +	if (res)
+> > +		ksft_exit_fail_msg(
+> > +			"%s test: Error %d on PIDFD_SELF_THREAD_GROUP signal\n",
+> > +			test_name, res);
+> > +
+> > +	/*
+> > +	 * Now try the same thing in a thread and assert thread ID is equal to
+> > +	 * worker thread ID.
+> > +	 */
+> > +	if (pthread_create(&thread, NULL, send_signal_worker,
+> > +			   (void *)(intptr_t)PIDFD_SELF_THREAD))
+> > +		ksft_exit_fail_msg("%s test: Failed to create thread\n",
+> >   				   test_name);
+> > -	if (signal_received != 1)
+> > -		ksft_exit_fail_msg("%s test: Failed to receive signal\n",
+> > +	if (pthread_join(thread, &thread_res))
+> > +		ksft_exit_fail_msg("%s test: Failed to join thread\n",
+> >   				   test_name);
+> > +	res = (int)(intptr_t)thread_res;
+> > +	if (res)
+> > +		ksft_exit_fail_msg(
+> > +			"%s test: Error %d on PIDFD_SELF_THREAD signal\n",
+> > +			test_name, res);
+> > -	signal_received = 0;
+> >   	ksft_test_result_pass("%s test: Sent signal\n", test_name);
+> >   	return 0;
+> >   }
+>
+> thanks,
+> -- Shuah
+
+Thanks for the review!
 
