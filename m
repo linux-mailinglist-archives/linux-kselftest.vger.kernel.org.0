@@ -1,127 +1,161 @@
-Return-Path: <linux-kselftest+bounces-19542-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19543-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50C9099A57F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 15:54:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1DA899A588
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 15:57:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E03F7B22817
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 13:53:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 984E51F2366A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 13:57:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA4002194A4;
-	Fri, 11 Oct 2024 13:53:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gOwlOsBI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B49E219494;
+	Fri, 11 Oct 2024 13:57:32 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D4A2141C8
-	for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2024 13:53:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B892141C8;
+	Fri, 11 Oct 2024 13:57:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728654828; cv=none; b=NJzX0ubnE1wb0VPNkLLl/b3dmfygX4M91Q5KbqkCrQ42DEVky9qbkrp7hwGRwrHIxsAvrtn9mZE/VjA0lTYtwRFMwmHSvHLFuRAC+SHlFv0dSJjH003ekPSQtwl50h0lWx8OxLtc/cW67mahHYsqQ/pVeOI/BRPMBfiZ6VRioaQ=
+	t=1728655052; cv=none; b=NAM1ZA/4ak+OVBxUhy9Zd5cYJJncfjoeTD04E5UpjUpCJqvD1TEXl5lX+xq3buSUxaiZ+J895t9NiEVB22dn5dTQw5g7+99HchK5uxHUNrHRc4XZ2JmxvzjDtsfZnJlXELLppduHP7ghK6nq0y83pXxi8O9+5d1zgneJjl4orrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728654828; c=relaxed/simple;
-	bh=24PH1AvQ2UstDLFxh+naoT2b+0RbZS/2ZhRUHBgA1F0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=guygm6i/LYo2eWRAVHFUOfseH9dV0I8dol1adgT7s8XlKwgMd9u8CJicff9lgip1DxBrdNUCCqGhx6YdncCYXdN70eR2NxsyECXMgGwdkh0YDr5I5YwVoAh+7z/mgT8CKVI/QxUCFTtg7767W1516QJAQlse0PnhFumaZNp+S4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gOwlOsBI; arc=none smtp.client-ip=209.85.166.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-8378db14280so41212339f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2024 06:53:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1728654825; x=1729259625; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=IqLEhvqcyBsBrxJSzoEoaBYS5PEjWtm/RdX++xPA030=;
-        b=gOwlOsBIAM9Ppq8bkOtGAJX+F5pWL4SzQvB/2i9ZfCGMDQNb3oTWI0CiCEszJ/5RY/
-         VzRbKueijl4lWbpZdqnRd3EcWCTW55YcZePl+kYFlJNURF0qYgiFSIP8PHaVDdi7m6Hg
-         T7ixqjc66oD1FNKIfUV7uVn4i9Kt2HKi44W+c=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728654825; x=1729259625;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IqLEhvqcyBsBrxJSzoEoaBYS5PEjWtm/RdX++xPA030=;
-        b=XBOpEtGd+7R+OyN4AXONXxH4MKOSuqsZatdra+/a2OZSakG/ZTkpQxEdbXI73Ji4am
-         mGbk/EtgaYvgZIyambZspKBv+STv7QROIqPfd+fPio0lnXCIfTcQzgftXr1UmZcGBDlT
-         8+9KKNGIwksraKwa52wZ3ezRF6VySIpdgMq6reJrvyc6j3KGblQLlPxKCvyPpEk1rQmg
-         yLlHuKKpBLrCHxiFga+Z19ViINIBLLY4uMGZVs6WNzTIazdxtHBdbyJxBfHO69ds8fLt
-         JKVsNlcKJS0vFy8HbYCXu2hlH2qyRMLt/p7sjGlQVarOsnN78wpGAqkxdripyIcNOb0r
-         qIXg==
-X-Gm-Message-State: AOJu0Ywcvv+Cx74KPgAub1FNEUt18EAbkUcav9VVsaDP6AlbLRxvTOZE
-	BhPdB43rsnnvmHLq7/ccY787aV3wKTYfMsVVHjMOUe4Piqc7AWMM70a3qIRAcE4=
-X-Google-Smtp-Source: AGHT+IH0ZjoMsHPp8mc/5RWu/qnSPZNLYI8+lebD2YEEDdEZg0xP0TMZzqA7mZLEnkv71J+Hf3vnWw==
-X-Received: by 2002:a05:6602:6c19:b0:831:e9a8:ce2a with SMTP id ca18e2360f4ac-8379202d846mr206086939f.3.1728654824742;
-        Fri, 11 Oct 2024 06:53:44 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dbadada148sm647676173.158.2024.10.11.06.53.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 11 Oct 2024 06:53:44 -0700 (PDT)
-Message-ID: <e67664ac-dd20-40f3-9bee-0785d428ecce@linuxfoundation.org>
-Date: Fri, 11 Oct 2024 07:53:43 -0600
+	s=arc-20240116; t=1728655052; c=relaxed/simple;
+	bh=FlqDCnWuL4KNQhR+h6uUEKDEhbwcTxPaUFOaJyJ6vok=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZsrSC07SD16AKKvSyWgRIJndvsCDBfd8BMg4jzPZCERMFVPHeo2GTHFtwqwPERrzB5qOAcs04ZRvdcUkMSWXkB8FnQNNS9eIB6nHz42fphr9LeHWdqm2AvyCUFyMwUfUNjAVhuanxm1ykF+63LWUV8sz5nQ8Oe3CR79gRIvJzpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=fail smtp.mailfrom=kernel.org; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-CSE-ConnectionGUID: pNCWxJ7TSm69TECq9dWJWQ==
+X-CSE-MsgGUID: +fhCADBgT/6dYiFP86g8GQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28003221"
+X-IronPort-AV: E=Sophos;i="6.11,196,1725346800"; 
+   d="scan'208";a="28003221"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2024 06:57:30 -0700
+X-CSE-ConnectionGUID: 4cV1aK6qSp6BUgLfnhSevw==
+X-CSE-MsgGUID: aMc7/KfQQemJwd0eoRBBcA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,196,1725346800"; 
+   d="scan'208";a="81533277"
+Received: from smile.fi.intel.com ([10.237.72.154])
+  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2024 06:57:21 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andy@kernel.org>)
+	id 1szG8r-00000001uQy-0nOd;
+	Fri, 11 Oct 2024 16:57:17 +0300
+Date: Fri, 11 Oct 2024 16:57:16 +0300
+From: Andy Shevchenko <andy@kernel.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: David Gow <davidgow@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Brendan Higgins <brendanhiggins@google.com>,
+	Rae Moar <rmoar@google.com>, Kees Cook <kees@kernel.org>,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	"Naveen N . Rao" <naveen.n.rao@linux.ibm.com>,
+	Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mark Brown <broonie@kernel.org>, linux-hardening@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Simon Horman <horms@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Daniel Latypov <dlatypov@google.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	David Howells <dhowells@redhat.com>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	Marco Elver <elver@google.com>, Mark Rutland <mark.rutland@arm.com>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Fangrui Song <maskray@google.com>,
+	"Steven Rostedt (Google)" <rostedt@goodmis.org>
+Subject: Re: [PATCH 3/6] lib: Move KUnit tests into tests/ subdirectory
+Message-ID: <ZwkuvKogPuik90fN@smile.fi.intel.com>
+References: <20241011072509.3068328-2-davidgow@google.com>
+ <20241011072509.3068328-5-davidgow@google.com>
+ <ZwkBgkthcQM7rLl7@smile.fi.intel.com>
+ <CAMuHMdW=MF0H8YVuY6moLomTaxFEeCHgut1fruRGEkn79sbuTA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/6] KUnit test moves / renames
-To: David Gow <davidgow@google.com>, Andrew Morton
- <akpm@linux-foundation.org>, Brendan Higgins <brendanhiggins@google.com>,
- Rae Moar <rmoar@google.com>, Kees Cook <kees@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org, Stephen Rothwell <sfr@canb.auug.org.au>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20241011072509.3068328-2-davidgow@google.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241011072509.3068328-2-davidgow@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdW=MF0H8YVuY6moLomTaxFEeCHgut1fruRGEkn79sbuTA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On 10/11/24 01:25, David Gow wrote:
-> As discussed in [1], the KUnit test naming scheme has changed to avoid
-> name conflicts (and tab-completion woes) with the files being tested.
-> These renames and moves have caused a nasty set of merge conflicts, so
-> this series collates and rebases them all to be applied via
-> mm-nonmm-unstable alongside any lib/ changes[2].
+On Fri, Oct 11, 2024 at 03:38:00PM +0200, Geert Uytterhoeven wrote:
+> Hi Andy,
 > 
-> Thanks to everyone whose patches appear here, and everyone who reviewed
-> on the original series. I hope I didn't break them too much during the
-> rebase!
+> On Fri, Oct 11, 2024 at 12:44 PM Andy Shevchenko <andy@kernel.org> wrote:
+> > On Fri, Oct 11, 2024 at 03:25:07PM +0800, David Gow wrote:
+> > > From: Kees Cook <kees@kernel.org>
+> > >
+> > > Following from the recent KUnit file naming discussion[1], move all
+> > > KUnit tests in lib/ into lib/tests/.
+> > >
+> > > Link: https://lore.kernel.org/lkml/20240720165441.it.320-kees@kernel.org/ [1]
+> > > Signed-off-by: Kees Cook <kees@kernel.org>
+> > > Acked-by: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> > > Acked-by: Jakub Kicinski <kuba@kernel.org>
+> > > Acked-by: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+> > > Reviewed-by: David Gow <davidgow@google.com>
+> > > [Rebased onto mm-nonmm-unstable, moved usercopy_kunit]
+> > > Signed-off-by: David Gow <davidgow@google.com>
+> >
+> > >  rename lib/{ => tests}/bitfield_kunit.c (100%)
+> > >  rename lib/{ => tests}/checksum_kunit.c (100%)
+> > >  rename lib/{ => tests}/cmdline_kunit.c (100%)
+> > >  rename lib/{ => tests}/cpumask_kunit.c (100%)
+> > >  rename lib/{ => tests}/fortify_kunit.c (100%)
+> > >  rename lib/{ => tests}/hashtable_test.c (100%)
+> > >  rename lib/{ => tests}/is_signed_type_kunit.c (100%)
+> > >  rename lib/{ => tests}/kunit_iov_iter.c (100%)
+> > >  rename lib/{ => tests}/list-test.c (100%)
+> > >  rename lib/{ => tests}/memcpy_kunit.c (100%)
+> > >  rename lib/{ => tests}/overflow_kunit.c (100%)
+> > >  rename lib/{ => tests}/siphash_kunit.c (100%)
+> > >  rename lib/{ => tests}/slub_kunit.c (100%)
+> > >  rename lib/{ => tests}/stackinit_kunit.c (100%)
+> > >  rename lib/{ => tests}/string_helpers_kunit.c (100%)
+> > >  rename lib/{ => tests}/string_kunit.c (100%)
+> > >  rename lib/{ => tests}/test_bits.c (100%)
+> > >  rename lib/{ => tests}/test_fprobe.c (100%)
+> > >  rename lib/{ => tests}/test_hash.c (100%)
+> > >  rename lib/{ => tests}/test_kprobes.c (100%)
+> > >  rename lib/{ => tests}/test_linear_ranges.c (100%)
+> > >  rename lib/{ => tests}/test_list_sort.c (100%)
+> > >  rename lib/{ => tests}/test_sort.c (100%)
+> > >  rename lib/{ => tests}/usercopy_kunit.c (100%)
+> >
+> > While I support the idea, I think this adds an additional churn in creating a
+> > duplicate 'test' in the filenames. Why they all can't be cut while removing?
+> > (at least this question is not answered in the commit message)
 > 
-> Link: https://lore.kernel.org/lkml/20240720165441.it.320-kees@kernel.org/ [1]
-> Link: https://lore.kernel.org/lkml/CABVgOSmbSzcGUi=E4piSojh3A4_0GjE0fAYbqKjtYGbE9beYRQ@mail.gmail.com/ [2]
-> ---
-> 
-> Bruno Sobreira França (1):
->    lib/math: Add int_log test suite
-> 
-> Diego Vieira (1):
->    lib/tests/kfifo_kunit.c: add tests for the kfifo structure
-> 
-> Gabriela Bittencourt (2):
->    unicode: kunit: refactor selftest to kunit tests
->    unicode: kunit: change tests filename and path
-> 
-> Kees Cook (1):
->    lib: Move KUnit tests into tests/ subdirectory
-> 
-> Luis Felipe Hernandez (1):
->    lib: math: Move kunit tests into tests/ subdir
+> To avoid duplicate *.ko file names?
+
+With what? Sorry, but I don't see how it's a problem. These are test cases.
+Do they use kernel command line parameters? If so, shouldn't KUnit take care
+about it in a more proper way?
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-These look good to me. Thank you.
-
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
 
