@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-19504-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19505-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FF09999B6F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 06:04:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19BFF999B74
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 06:05:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C73672809B0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 04:04:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 705C31F24BCB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 04:05:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E39C20822E;
-	Fri, 11 Oct 2024 04:04:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 698CD20966F;
+	Fri, 11 Oct 2024 04:04:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RcRiOn0Q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="buIowBkZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928CD207A36;
-	Fri, 11 Oct 2024 04:04:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D5D61F9425;
+	Fri, 11 Oct 2024 04:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728619446; cv=none; b=XE3OIIOqjlpumHBzAJucg+GxD9ewfMK4qTiKcEeNnrKLO22ouCAHEoQiT2HglzMYrPItwQ4eFG1hB/Y4KNB3ehnGhDW9uj4oM/RjFchXF15jaYosoa/e/rUXTGtT6WSppkyXKeNGU4xd7n9LjI4X4Usuws+KOYcSVdjVuuMdVGk=
+	t=1728619451; cv=none; b=sGLiPAGQHT65UGMF1Pa9Sr3Ztdvxx4ViqK2fUrA3iQyyRr/V5+8OWnW4UX0mBVG31DX88ChYVqxjAO5ydi0tIJTANOYKh1JtwsGEL750QHlad4mdNQbJPWFevvQ+7VJ9Ob+V2mH2jydIShPrzaShQsuZriTe52TEk6L7egy1wtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728619446; c=relaxed/simple;
-	bh=w4yZMdlHY5+OJ5aLF35s96kaseIEwBH2crDXrYu+b6o=;
+	s=arc-20240116; t=1728619451; c=relaxed/simple;
+	bh=3S5srcW1eC0fjouJG/RPYd+q1AlQDqqyfW2eN5dHkJw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=OorZ5AGvRW5oybigSBjfqCrE7vpv29tOdpRBjoqmn6nk4QZkQOLRWsiZODZ1MtwWJkZ/ioPlJBpg9t0IAFqgEcn/tm+JyekUiSE5H7dcyj66UXhy5ZRIqYvR/ZIRVpSlZ40aO5QO+hZpDoq9/6imM4aleFfVydSK5lAW06VZbqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RcRiOn0Q; arc=none smtp.client-ip=209.85.214.178
+	 MIME-Version; b=VYiTqbmO+ssqcjB3DS2yGWv/N8e1y4SyWhh1ex99CM3Uexzc0kuGKvNVgFzVp4NN7pi0StnwHxDrlfhk7Lrch0TU3qTdegym79/V18x/YwVDiYq5FAGwYVwbSTY/d9+PjF+OAldbknryHKi223X3zuBhAkvVBIIlZdtBxicLlm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=buIowBkZ; arc=none smtp.client-ip=209.85.214.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-207115e3056so13021815ad.2;
-        Thu, 10 Oct 2024 21:04:04 -0700 (PDT)
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-20c6f492d2dso16398665ad.0;
+        Thu, 10 Oct 2024 21:04:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728619444; x=1729224244; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728619448; x=1729224248; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Kasmu9/ggl/0CmzSA7c+u+xGLon5zX8iCfWzEAuKatw=;
-        b=RcRiOn0Q5zgtemSnCOySthbVIpeN6nRempTDvZNG43uzNLnfSH68Q7mFHuoWDHrPNq
-         7ar5dNWaCNyUf28gTdhDM7eo2cSfGpyoGNz/dt407J1VcSvB2bkVOb3LuTetItbsI758
-         yF4b1v+7B5sKpT07FlAjtuJtw8qwZtljkAbSs5KchFwqSPJaQvIzjTi2f0uwN9lPHQFx
-         WDIgXuMtr3xbhotgqH7JL9eRy/3HsQkmOK9InE6qJvavrnf+KyDhiDYz1MH4HVWKm4yB
-         ArD/jBBkw3cEnfI4nR9q3B6fdhC00LmwsFzhIps5ws0myuuOnfJMM35RzpFoGsBAN7xg
-         tIMw==
+        bh=BEoivBBYPnTFxdv18pbri1Kddzc7soFdTxyTNsvGgJU=;
+        b=buIowBkZHhDmLKsB5y1zBjMi84ixlSDRlq+MC1VwDfrXmUfRDEPE2OHY3VkC1dv3je
+         WFrp9zz51UaCQCLcUWg3EJAKuGJAUYWeK6mmqFTVleLfu8NL1j/OqzwoFQcBb5JUpGI9
+         1jayrKTd+1vc6NY3ymac+93wmvDZbsLH+FJ6h8Fc/r/g5ywERIeMNMT85jqKybRb1xMa
+         WG43bhnz+zxJuIFNdawI/gvP9eHAZ3JwmSa/BnxAX3mnko/vGRxNBPGHGWzSBu9JU1op
+         PMf2ionzRowBJ1goJALYOXr3uRqCTLp9EEVEqePsiZJEtwPLoZVuN4Sr19WKcXwA6EfP
+         21Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728619444; x=1729224244;
+        d=1e100.net; s=20230601; t=1728619448; x=1729224248;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Kasmu9/ggl/0CmzSA7c+u+xGLon5zX8iCfWzEAuKatw=;
-        b=eWv/q+zf4KXIUGUXt54gZXNhKCX2ihwGlFDje6Pip/fBcfz+CW56pUCEkoHAZ6g9Vx
-         P1RuMIiBRAfeqeP3G5rc0bBtkXqj62zle6fm5bl++Dy78lTQ+HcdxKWJSUoO0EY1b2Ee
-         S9+MD+mqBxWYytg38sjGKXl9VVLKBecvr/bCSQL2Airi7hrHLWDPmh4DTki7FdyD4Jrs
-         KvLF8Cq2INjWL0NmdsWAyiY/Xgn5Bo5Ame5LiJVuTS2+Medh/kE9eP3SbtyGpnwYzKoX
-         mFOEpdXQKXrY02xXyBzap+d4QzcM+2eNhZcLoYNBrVt8o36SP1UxzAIQOLJmhpaiH5xS
-         boXw==
-X-Forwarded-Encrypted: i=1; AJvYcCVAYQl/qhfvDicMhKhKfEcJXROW12DzavZP64wrRnG+Gq+T7GAnkPMTIdzspwBGsAabGFyaqNoP3sfRXQ77FbX2@vger.kernel.org, AJvYcCWY9Z6OV07JJohlieh2jSyXJGlsrKK9SkZ33AV5NlT2Qw/MJr6s1qYt19OZDRcchaosKC+F4wGkjAC3QUs=@vger.kernel.org, AJvYcCWdHAo11ota8Q2ec98crHaudjG9y/KVA87A0jPZeQaT5tOx+6bP2u3iMDqOySFj/jCfec3GbWvY@vger.kernel.org
-X-Gm-Message-State: AOJu0YzT6l+W5V6e1Zgq/clIwtfQcKTzh9UaoiUwe64H65mxD/Zy91MC
-	UOoesTH81ETxwq7lbC/GqoZw2t2HsqdUYKDcY6LdX0UkHG9i8mY=
-X-Google-Smtp-Source: AGHT+IHL5cAKVhWxu9zRewt2Jb02SJ1c/UBGHRtCl8A8RF1KNHp8WBOfKXzCI7R/eAlOTuGAzlOHFg==
-X-Received: by 2002:a17:903:1247:b0:20b:7be8:8ecf with SMTP id d9443c01a7336-20ca16cc24cmr19818445ad.53.1728619443755;
-        Thu, 10 Oct 2024 21:04:03 -0700 (PDT)
+        bh=BEoivBBYPnTFxdv18pbri1Kddzc7soFdTxyTNsvGgJU=;
+        b=YvgBOWtQvHeR6WrQc5Uc79jG5/Lh4IvheVvbH7wo9OXUyO4mHIXCATslpwhmAyst1E
+         3xJENu6OhdSZz+nEAeTAsqFw6LtKGv3DNH9k8y+X0f8GkBjv8TXSrGTGVSmZiOjNNCUw
+         uvj0886kLXoDiJyu71f1UyXJ1g0cxfmjy7YdqCWuIqfxTC2LAF9yHQLFDXmRaUkENnYv
+         IsrUBPjf2HTJ/4vJbkXJbG3B+TCam5CftnoPQfUrIukjMa4aPCzAx/p3chxdF2bz6HdH
+         3rKcE4Y0b3HBG9D73z9+k/ejyQe/GkMB1CEvzFnR20cZlY8sm2Kt/FcCKGkUNEnUV4r1
+         Qrrg==
+X-Forwarded-Encrypted: i=1; AJvYcCWHLGQRU3oxjWXl3BP8ZdzyYF5ofDHp1HuzX/CzjLZmPg4dppTpvAKs6nJREygPllKBwZoMu6iW+FDKAJvEcmkg@vger.kernel.org, AJvYcCWRlTZylQ+WcHp51uC+aKX6g2bUhLuWGutK4rFxrXdjgg8uNoLh0nQYXUt3734oOllz1B+fzeZV@vger.kernel.org, AJvYcCXqpZbU3jLq9FQc3dXAY9Ndc7odF5XRaFPK8C2rQ1GV1F8X/VemJo25s5hyJacmA5yHz5SxiACoa1Z5vVI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAoxD6nPFcpfXOPsutVHR9xYhDo+pPuYVagTr7170epyjIsPQu
+	M5s9L6kmbzalhaKBeyGB0hzlQ3VsFHLcoRPyfLg3OkqNX9XFkFM=
+X-Google-Smtp-Source: AGHT+IFvnINCCAmBQPzh36IoE9z/UYIbK6VrQPG0E+qNR8bNGq51yny0canq+YdhCI+rT0weZ/VoLg==
+X-Received: by 2002:a17:902:e883:b0:20c:81f2:3481 with SMTP id d9443c01a7336-20ca1452b70mr18185085ad.22.1728619448370;
+        Thu, 10 Oct 2024 21:04:08 -0700 (PDT)
 Received: from vagrant.. ([114.71.48.94])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8c0e7716sm16443865ad.122.2024.10.10.21.03.59
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8c0e7716sm16443865ad.122.2024.10.10.21.04.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2024 21:04:03 -0700 (PDT)
+        Thu, 10 Oct 2024 21:04:07 -0700 (PDT)
 From: "Daniel T. Lee" <danieltimlee@gmail.com>
 To: Daniel Borkmann <daniel@iogearbox.net>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -86,9 +86,9 @@ Cc: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH,bpf-next v2 2/4] selftests/bpf: migrate cgroup sock create tests for prohibitig sockets
-Date: Fri, 11 Oct 2024 04:03:46 +0000
-Message-ID: <20241011040348.98042-3-danieltimlee@gmail.com>
+Subject: [PATCH,bpf-next v2 3/4] samples/bpf: remove obsolete cgroup related tests
+Date: Fri, 11 Oct 2024 04:03:47 +0000
+Message-ID: <20241011040348.98042-4-danieltimlee@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241011040348.98042-1-danieltimlee@gmail.com>
 References: <20241011040348.98042-1-danieltimlee@gmail.com>
@@ -100,123 +100,209 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch continues the migration and removal process for cgroup
-sock_create tests to selftests.
+This patch removes the obsolete cgroup related tests. These tests are
+now redundant because their functionality is already covered by more
+modern and comprehensive tests under selftests/bpf.
 
-The test being migrated verifies the ability of cgroup BPF to block the
-creation of specific types of sockets using a verdict. Specifically, the
-test denies socket creation when the socket is of type AF_INET{6},
-SOCK_DGRAM, and IPPROTO_ICMP{V6}. If the requested socket type matches
-these attributes, the cgroup BPF verdict blocks the socket creation.
+The following files are removed:
+- test_current_task_under_cgroup: tests bpf_current_task_under_cgroup()
+  to check if a task belongs to a cgroup. Already covered by
+  task_under_cgroup at selftest and other cgroup ID tests.
 
-As with the previous commit, this test currently lacks coverage in
-selftests, so this patch migrates the functionality into the sock_create
-tests under selftests. This migration ensures that the socket creation
-blocking behavior with cgroup bpf program is properly tested within the
-selftest framework.
+- test_cgrp2_tc: tests bpf_skb_under_cgroup() to filter packets based
+  on cgroup. This behavior is now validated by cgroup_skb_sk_lookup,
+  which uses bpf_skb_cgroup_id, making this test redundant.
+
+By removing these outdated tests, this patch helps streamline and
+modernize the test suite, avoiding duplication of test coverage.
 
 Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
 ---
-Chagnes in V2:
-- commit message fix
-
----
- samples/bpf/Makefile                          |   2 -
- samples/bpf/sock_flags.bpf.c                  |  47 --------
- samples/bpf/test_cgrp2_sock2.c                |  95 ----------------
- samples/bpf/test_cgrp2_sock2.sh               | 103 ------------------
- .../selftests/bpf/prog_tests/sock_create.c    |  83 +++++++++++++-
- 5 files changed, 80 insertions(+), 250 deletions(-)
- delete mode 100644 samples/bpf/sock_flags.bpf.c
- delete mode 100644 samples/bpf/test_cgrp2_sock2.c
- delete mode 100755 samples/bpf/test_cgrp2_sock2.sh
+ samples/bpf/Makefile                          |   9 -
+ samples/bpf/test_cgrp2_array_pin.c            | 106 ----------
+ samples/bpf/test_cgrp2_attach.c               | 177 -----------------
+ samples/bpf/test_cgrp2_tc.bpf.c               |  56 ------
+ samples/bpf/test_cgrp2_tc.sh                  | 187 ------------------
+ .../bpf/test_current_task_under_cgroup.bpf.c  |  43 ----
+ .../bpf/test_current_task_under_cgroup_user.c | 115 -----------
+ 7 files changed, 693 deletions(-)
+ delete mode 100644 samples/bpf/test_cgrp2_array_pin.c
+ delete mode 100644 samples/bpf/test_cgrp2_attach.c
+ delete mode 100644 samples/bpf/test_cgrp2_tc.bpf.c
+ delete mode 100755 samples/bpf/test_cgrp2_tc.sh
+ delete mode 100644 samples/bpf/test_current_task_under_cgroup.bpf.c
+ delete mode 100644 samples/bpf/test_current_task_under_cgroup_user.c
 
 diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index f514c6fb1ae2..cdfda15e859c 100644
+index cdfda15e859c..66827dbb93b3 100644
 --- a/samples/bpf/Makefile
 +++ b/samples/bpf/Makefile
-@@ -27,7 +27,6 @@ tprogs-y += map_perf_test
+@@ -25,10 +25,8 @@ tprogs-y += offwaketime
+ tprogs-y += spintest
+ tprogs-y += map_perf_test
  tprogs-y += test_overhead
- tprogs-y += test_cgrp2_array_pin
+-tprogs-y += test_cgrp2_array_pin
  tprogs-y += test_cgrp2_attach
--tprogs-y += test_cgrp2_sock2
  tprogs-y += xdp_router_ipv4
- tprogs-y += test_current_task_under_cgroup
+-tprogs-y += test_current_task_under_cgroup
  tprogs-y += trace_event
-@@ -75,7 +74,6 @@ map_perf_test-objs := map_perf_test_user.o
- test_overhead-objs := test_overhead_user.o
- test_cgrp2_array_pin-objs := test_cgrp2_array_pin.o
- test_cgrp2_attach-objs := test_cgrp2_attach.o
--test_cgrp2_sock2-objs := test_cgrp2_sock2.o
- test_current_task_under_cgroup-objs := $(CGROUP_HELPERS) \
- 				       test_current_task_under_cgroup_user.o
+ tprogs-y += sampleip
+ tprogs-y += tc_l2_redirect
+@@ -71,11 +69,6 @@ lathist-objs := lathist_user.o
+ offwaketime-objs := offwaketime_user.o $(TRACE_HELPERS)
+ spintest-objs := spintest_user.o $(TRACE_HELPERS)
+ map_perf_test-objs := map_perf_test_user.o
+-test_overhead-objs := test_overhead_user.o
+-test_cgrp2_array_pin-objs := test_cgrp2_array_pin.o
+-test_cgrp2_attach-objs := test_cgrp2_attach.o
+-test_current_task_under_cgroup-objs := $(CGROUP_HELPERS) \
+-				       test_current_task_under_cgroup_user.o
  trace_event-objs := trace_event_user.o $(TRACE_HELPERS)
-diff --git a/samples/bpf/sock_flags.bpf.c b/samples/bpf/sock_flags.bpf.c
+ sampleip-objs := sampleip_user.o $(TRACE_HELPERS)
+ tc_l2_redirect-objs := tc_l2_redirect_user.o
+@@ -117,8 +110,6 @@ always-y += test_overhead_tp.bpf.o
+ always-y += test_overhead_raw_tp.bpf.o
+ always-y += test_overhead_kprobe.bpf.o
+ always-y += parse_varlen.o parse_simple.o parse_ldabs.o
+-always-y += test_cgrp2_tc.bpf.o
+-always-y += test_current_task_under_cgroup.bpf.o
+ always-y += trace_event_kern.o
+ always-y += sampleip_kern.o
+ always-y += lwt_len_hist.bpf.o
+diff --git a/samples/bpf/test_cgrp2_array_pin.c b/samples/bpf/test_cgrp2_array_pin.c
 deleted file mode 100644
-index 0da749f6a9e1..000000000000
---- a/samples/bpf/sock_flags.bpf.c
+index 05e88aa63009..000000000000
+--- a/samples/bpf/test_cgrp2_array_pin.c
 +++ /dev/null
-@@ -1,47 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
--#include "vmlinux.h"
--#include "net_shared.h"
--#include <bpf/bpf_helpers.h>
+@@ -1,106 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/* Copyright (c) 2016 Facebook
+- */
+-#include <linux/unistd.h>
+-#include <linux/bpf.h>
 -
--SEC("cgroup/sock")
--int bpf_prog1(struct bpf_sock *sk)
+-#include <stdio.h>
+-#include <stdint.h>
+-#include <unistd.h>
+-#include <string.h>
+-#include <errno.h>
+-#include <fcntl.h>
+-
+-#include <bpf/bpf.h>
+-
+-static void usage(void)
 -{
--	char fmt[] = "socket: family %d type %d protocol %d\n";
--	char fmt2[] = "socket: uid %u gid %u\n";
--	__u64 gid_uid = bpf_get_current_uid_gid();
--	__u32 uid = gid_uid & 0xffffffff;
--	__u32 gid = gid_uid >> 32;
--
--	bpf_trace_printk(fmt, sizeof(fmt), sk->family, sk->type, sk->protocol);
--	bpf_trace_printk(fmt2, sizeof(fmt2), uid, gid);
--
--	/* block AF_INET6, SOCK_DGRAM, IPPROTO_ICMPV6 sockets
--	 * ie., make ping6 fail
--	 */
--	if (sk->family == AF_INET6 &&
--	    sk->type == SOCK_DGRAM   &&
--	    sk->protocol == IPPROTO_ICMPV6)
--		return 0;
--
--	return 1;
+-	printf("Usage: test_cgrp2_array_pin [...]\n");
+-	printf("       -F <file>   File to pin an BPF cgroup array\n");
+-	printf("       -U <file>   Update an already pinned BPF cgroup array\n");
+-	printf("       -v <value>  Full path of the cgroup2\n");
+-	printf("       -h          Display this help\n");
 -}
 -
--SEC("cgroup/sock")
--int bpf_prog2(struct bpf_sock *sk)
+-int main(int argc, char **argv)
 -{
--	char fmt[] = "socket: family %d type %d protocol %d\n";
+-	const char *pinned_file = NULL, *cg2 = NULL;
+-	int create_array = 1;
+-	int array_key = 0;
+-	int array_fd = -1;
+-	int cg2_fd = -1;
+-	int ret = -1;
+-	int opt;
 -
--	bpf_trace_printk(fmt, sizeof(fmt), sk->family, sk->type, sk->protocol);
+-	while ((opt = getopt(argc, argv, "F:U:v:")) != -1) {
+-		switch (opt) {
+-		/* General args */
+-		case 'F':
+-			pinned_file = optarg;
+-			break;
+-		case 'U':
+-			pinned_file = optarg;
+-			create_array = 0;
+-			break;
+-		case 'v':
+-			cg2 = optarg;
+-			break;
+-		default:
+-			usage();
+-			goto out;
+-		}
+-	}
 -
--	/* block AF_INET, SOCK_DGRAM, IPPROTO_ICMP sockets
--	 * ie., make ping fail
--	 */
--	if (sk->family == AF_INET &&
--	    sk->type == SOCK_DGRAM  &&
--	    sk->protocol == IPPROTO_ICMP)
--		return 0;
+-	if (!cg2 || !pinned_file) {
+-		usage();
+-		goto out;
+-	}
 -
--	return 1;
+-	cg2_fd = open(cg2, O_RDONLY);
+-	if (cg2_fd < 0) {
+-		fprintf(stderr, "open(%s,...): %s(%d)\n",
+-			cg2, strerror(errno), errno);
+-		goto out;
+-	}
+-
+-	if (create_array) {
+-		array_fd = bpf_map_create(BPF_MAP_TYPE_CGROUP_ARRAY, NULL,
+-					  sizeof(uint32_t), sizeof(uint32_t),
+-					  1, NULL);
+-		if (array_fd < 0) {
+-			fprintf(stderr,
+-				"bpf_create_map(BPF_MAP_TYPE_CGROUP_ARRAY,...): %s(%d)\n",
+-				strerror(errno), errno);
+-			goto out;
+-		}
+-	} else {
+-		array_fd = bpf_obj_get(pinned_file);
+-		if (array_fd < 0) {
+-			fprintf(stderr, "bpf_obj_get(%s): %s(%d)\n",
+-				pinned_file, strerror(errno), errno);
+-			goto out;
+-		}
+-	}
+-
+-	ret = bpf_map_update_elem(array_fd, &array_key, &cg2_fd, 0);
+-	if (ret) {
+-		perror("bpf_map_update_elem");
+-		goto out;
+-	}
+-
+-	if (create_array) {
+-		ret = bpf_obj_pin(array_fd, pinned_file);
+-		if (ret) {
+-			fprintf(stderr, "bpf_obj_pin(..., %s): %s(%d)\n",
+-				pinned_file, strerror(errno), errno);
+-			goto out;
+-		}
+-	}
+-
+-out:
+-	if (array_fd != -1)
+-		close(array_fd);
+-	if (cg2_fd != -1)
+-		close(cg2_fd);
+-	return ret;
 -}
--
--char _license[] SEC("license") = "GPL";
-diff --git a/samples/bpf/test_cgrp2_sock2.c b/samples/bpf/test_cgrp2_sock2.c
+diff --git a/samples/bpf/test_cgrp2_attach.c b/samples/bpf/test_cgrp2_attach.c
 deleted file mode 100644
-index e7060aaa2f5a..000000000000
---- a/samples/bpf/test_cgrp2_sock2.c
+index 68ce69457afe..000000000000
+--- a/samples/bpf/test_cgrp2_attach.c
 +++ /dev/null
-@@ -1,95 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0
+@@ -1,177 +0,0 @@
 -/* eBPF example program:
+- *
+- * - Creates arraymap in kernel with 4 bytes keys and 8 byte values
 - *
 - * - Loads eBPF program
 - *
-- *   The eBPF program loads a filter from file and attaches the
-- *   program to a cgroup using BPF_PROG_ATTACH
+- *   The eBPF program accesses the map passed in to store two pieces of
+- *   information. The number of invocations of the program, which maps
+- *   to the number of packets received, is stored to key 0. Key 1 is
+- *   incremented on each iteration by the number of bytes stored in
+- *   the skb.
+- *
+- * - Attaches the new program to a cgroup using BPF_PROG_ATTACH
+- *
+- * - Every second, reads map[0] and map[1] to see how many bytes and
+- *   packets were seen on any socket of tasks in the given cgroup.
 - */
 -
 -#define _GNU_SOURCE
@@ -229,317 +315,581 @@ index e7060aaa2f5a..000000000000
 -#include <assert.h>
 -#include <errno.h>
 -#include <fcntl.h>
--#include <net/if.h>
+-
 -#include <linux/bpf.h>
 -#include <bpf/bpf.h>
--#include <bpf/libbpf.h>
 -
 -#include "bpf_insn.h"
+-#include "bpf_util.h"
+-
+-enum {
+-	MAP_KEY_PACKETS,
+-	MAP_KEY_BYTES,
+-};
+-
+-char bpf_log_buf[BPF_LOG_BUF_SIZE];
+-
+-static int prog_load(int map_fd, int verdict)
+-{
+-	struct bpf_insn prog[] = {
+-		BPF_MOV64_REG(BPF_REG_6, BPF_REG_1), /* save r6 so it's not clobbered by BPF_CALL */
+-
+-		/* Count packets */
+-		BPF_MOV64_IMM(BPF_REG_0, MAP_KEY_PACKETS), /* r0 = 0 */
+-		BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_0, -4), /* *(u32 *)(fp - 4) = r0 */
+-		BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-		BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -4), /* r2 = fp - 4 */
+-		BPF_LD_MAP_FD(BPF_REG_1, map_fd), /* load map fd to r1 */
+-		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
+-		BPF_MOV64_IMM(BPF_REG_1, 1), /* r1 = 1 */
+-		BPF_ATOMIC_OP(BPF_DW, BPF_ADD, BPF_REG_0, BPF_REG_1, 0),
+-
+-		/* Count bytes */
+-		BPF_MOV64_IMM(BPF_REG_0, MAP_KEY_BYTES), /* r0 = 1 */
+-		BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_0, -4), /* *(u32 *)(fp - 4) = r0 */
+-		BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
+-		BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -4), /* r2 = fp - 4 */
+-		BPF_LD_MAP_FD(BPF_REG_1, map_fd),
+-		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
+-		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
+-		BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_6, offsetof(struct __sk_buff, len)), /* r1 = skb->len */
+-
+-		BPF_ATOMIC_OP(BPF_DW, BPF_ADD, BPF_REG_0, BPF_REG_1, 0),
+-
+-		BPF_MOV64_IMM(BPF_REG_0, verdict), /* r0 = verdict */
+-		BPF_EXIT_INSN(),
+-	};
+-	size_t insns_cnt = ARRAY_SIZE(prog);
+-	LIBBPF_OPTS(bpf_prog_load_opts, opts,
+-		.log_buf = bpf_log_buf,
+-		.log_size = BPF_LOG_BUF_SIZE,
+-	);
+-
+-	return bpf_prog_load(BPF_PROG_TYPE_CGROUP_SKB, NULL, "GPL",
+-			     prog, insns_cnt, &opts);
+-}
 -
 -static int usage(const char *argv0)
 -{
--	printf("Usage: %s cg-path filter-path [filter-id]\n", argv0);
+-	printf("Usage: %s [-d] [-D] <cg-path> <egress|ingress>\n", argv0);
+-	printf("	-d	Drop Traffic\n");
+-	printf("	-D	Detach filter, and exit\n");
 -	return EXIT_FAILURE;
+-}
+-
+-static int attach_filter(int cg_fd, int type, int verdict)
+-{
+-	int prog_fd, map_fd, ret, key;
+-	long long pkt_cnt, byte_cnt;
+-
+-	map_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, NULL,
+-				sizeof(key), sizeof(byte_cnt),
+-				256, NULL);
+-	if (map_fd < 0) {
+-		printf("Failed to create map: '%s'\n", strerror(errno));
+-		return EXIT_FAILURE;
+-	}
+-
+-	prog_fd = prog_load(map_fd, verdict);
+-	printf("Output from kernel verifier:\n%s\n-------\n", bpf_log_buf);
+-
+-	if (prog_fd < 0) {
+-		printf("Failed to load prog: '%s'\n", strerror(errno));
+-		return EXIT_FAILURE;
+-	}
+-
+-	ret = bpf_prog_attach(prog_fd, cg_fd, type, 0);
+-	if (ret < 0) {
+-		printf("Failed to attach prog to cgroup: '%s'\n",
+-		       strerror(errno));
+-		return EXIT_FAILURE;
+-	}
+-	while (1) {
+-		key = MAP_KEY_PACKETS;
+-		assert(bpf_map_lookup_elem(map_fd, &key, &pkt_cnt) == 0);
+-
+-		key = MAP_KEY_BYTES;
+-		assert(bpf_map_lookup_elem(map_fd, &key, &byte_cnt) == 0);
+-
+-		printf("cgroup received %lld packets, %lld bytes\n",
+-		       pkt_cnt, byte_cnt);
+-		sleep(1);
+-	}
+-
+-	return EXIT_SUCCESS;
 -}
 -
 -int main(int argc, char **argv)
 -{
--	int cg_fd, err, ret = EXIT_FAILURE, filter_id = 0, prog_cnt = 0;
--	const char *link_pin_path = "/sys/fs/bpf/test_cgrp2_sock2";
--	struct bpf_link *link = NULL;
--	struct bpf_program *progs[2];
--	struct bpf_program *prog;
--	struct bpf_object *obj;
+-	int detach_only = 0, verdict = 1;
+-	enum bpf_attach_type type;
+-	int opt, cg_fd, ret;
 -
--	if (argc < 3)
+-	while ((opt = getopt(argc, argv, "Dd")) != -1) {
+-		switch (opt) {
+-		case 'd':
+-			verdict = 0;
+-			break;
+-		case 'D':
+-			detach_only = 1;
+-			break;
+-		default:
+-			return usage(argv[0]);
+-		}
+-	}
+-
+-	if (argc - optind < 2)
 -		return usage(argv[0]);
 -
--	if (argc > 3)
--		filter_id = atoi(argv[3]);
+-	if (strcmp(argv[optind + 1], "ingress") == 0)
+-		type = BPF_CGROUP_INET_INGRESS;
+-	else if (strcmp(argv[optind + 1], "egress") == 0)
+-		type = BPF_CGROUP_INET_EGRESS;
+-	else
+-		return usage(argv[0]);
 -
--	cg_fd = open(argv[1], O_DIRECTORY | O_RDONLY);
+-	cg_fd = open(argv[optind], O_DIRECTORY | O_RDONLY);
 -	if (cg_fd < 0) {
 -		printf("Failed to open cgroup path: '%s'\n", strerror(errno));
--		return ret;
+-		return EXIT_FAILURE;
 -	}
 -
--	obj = bpf_object__open_file(argv[2], NULL);
+-	if (detach_only) {
+-		ret = bpf_prog_detach(cg_fd, type);
+-		printf("bpf_prog_detach() returned '%s' (%d)\n",
+-		       strerror(errno), errno);
+-	} else
+-		ret = attach_filter(cg_fd, type, verdict);
+-
+-	return ret;
+-}
+diff --git a/samples/bpf/test_cgrp2_tc.bpf.c b/samples/bpf/test_cgrp2_tc.bpf.c
+deleted file mode 100644
+index c7d2291d676f..000000000000
+--- a/samples/bpf/test_cgrp2_tc.bpf.c
++++ /dev/null
+@@ -1,56 +0,0 @@
+-/* Copyright (c) 2016 Facebook
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of version 2 of the GNU General Public
+- * License as published by the Free Software Foundation.
+- */
+-#define KBUILD_MODNAME "foo"
+-#include "vmlinux.h"
+-#include "net_shared.h"
+-#include <bpf/bpf_helpers.h>
+-
+-/* copy of 'struct ethhdr' without __packed */
+-struct eth_hdr {
+-	unsigned char   h_dest[ETH_ALEN];
+-	unsigned char   h_source[ETH_ALEN];
+-	unsigned short  h_proto;
+-};
+-
+-struct {
+-	__uint(type, BPF_MAP_TYPE_CGROUP_ARRAY);
+-	__type(key, u32);
+-	__type(value, u32);
+-	__uint(pinning, LIBBPF_PIN_BY_NAME);
+-	__uint(max_entries, 1);
+-} test_cgrp2_array_pin SEC(".maps");
+-
+-SEC("filter")
+-int handle_egress(struct __sk_buff *skb)
+-{
+-	void *data = (void *)(long)skb->data;
+-	struct eth_hdr *eth = data;
+-	struct ipv6hdr *ip6h = data + sizeof(*eth);
+-	void *data_end = (void *)(long)skb->data_end;
+-	char dont_care_msg[] = "dont care %04x %d\n";
+-	char pass_msg[] = "pass\n";
+-	char reject_msg[] = "reject\n";
+-
+-	/* single length check */
+-	if (data + sizeof(*eth) + sizeof(*ip6h) > data_end)
+-		return TC_ACT_OK;
+-
+-	if (eth->h_proto != bpf_htons(ETH_P_IPV6) ||
+-	    ip6h->nexthdr != IPPROTO_ICMPV6) {
+-		bpf_trace_printk(dont_care_msg, sizeof(dont_care_msg),
+-				 eth->h_proto, ip6h->nexthdr);
+-		return TC_ACT_OK;
+-	} else if (bpf_skb_under_cgroup(skb, &test_cgrp2_array_pin, 0) != 1) {
+-		bpf_trace_printk(pass_msg, sizeof(pass_msg));
+-		return TC_ACT_OK;
+-	} else {
+-		bpf_trace_printk(reject_msg, sizeof(reject_msg));
+-		return TC_ACT_SHOT;
+-	}
+-}
+-
+-char _license[] SEC("license") = "GPL";
+diff --git a/samples/bpf/test_cgrp2_tc.sh b/samples/bpf/test_cgrp2_tc.sh
+deleted file mode 100755
+index 38e8dbc9d16e..000000000000
+--- a/samples/bpf/test_cgrp2_tc.sh
++++ /dev/null
+@@ -1,187 +0,0 @@
+-#!/bin/bash
+-# SPDX-License-Identifier: GPL-2.0
+-
+-MY_DIR=$(dirname $0)
+-# Details on the bpf prog
+-BPF_CGRP2_ARRAY_NAME='test_cgrp2_array_pin'
+-BPF_PROG="$MY_DIR/test_cgrp2_tc.bpf.o"
+-BPF_SECTION='filter'
+-
+-[ -z "$TC" ] && TC='tc'
+-[ -z "$IP" ] && IP='ip'
+-
+-# Names of the veth interface, net namespace...etc.
+-HOST_IFC='ve'
+-NS_IFC='vens'
+-NS='ns'
+-
+-find_mnt() {
+-    cat /proc/mounts | \
+-	awk '{ if ($3 == "'$1'" && mnt == "") { mnt = $2 }} END { print mnt }'
+-}
+-
+-# Init cgroup2 vars
+-init_cgrp2_vars() {
+-    CGRP2_ROOT=$(find_mnt cgroup2)
+-    if [ -z "$CGRP2_ROOT" ]
+-    then
+-	CGRP2_ROOT='/mnt/cgroup2'
+-	MOUNT_CGRP2="yes"
+-    fi
+-    CGRP2_TC="$CGRP2_ROOT/tc"
+-    CGRP2_TC_LEAF="$CGRP2_TC/leaf"
+-}
+-
+-# Init bpf fs vars
+-init_bpf_fs_vars() {
+-    local bpf_fs_root=$(find_mnt bpf)
+-    [ -n "$bpf_fs_root" ] || return -1
+-    BPF_FS_TC_SHARE="$bpf_fs_root/tc/globals"
+-}
+-
+-setup_cgrp2() {
+-    case $1 in
+-	start)
+-	    if [ "$MOUNT_CGRP2" == 'yes' ]
+-	    then
+-		[ -d $CGRP2_ROOT ] || mkdir -p $CGRP2_ROOT
+-		mount -t cgroup2 none $CGRP2_ROOT || return $?
+-	    fi
+-	    mkdir -p $CGRP2_TC_LEAF
+-	    ;;
+-	*)
+-	    rmdir $CGRP2_TC_LEAF && rmdir $CGRP2_TC
+-	    [ "$MOUNT_CGRP2" == 'yes' ] && umount $CGRP2_ROOT
+-	    ;;
+-    esac
+-}
+-
+-setup_bpf_cgrp2_array() {
+-    local bpf_cgrp2_array="$BPF_FS_TC_SHARE/$BPF_CGRP2_ARRAY_NAME"
+-    case $1 in
+-	start)
+-	    $MY_DIR/test_cgrp2_array_pin -U $bpf_cgrp2_array -v $CGRP2_TC
+-	    ;;
+-	*)
+-	    [ -d "$BPF_FS_TC_SHARE" ] && rm -f $bpf_cgrp2_array
+-	    ;;
+-    esac
+-}
+-
+-setup_net() {
+-    case $1 in
+-	start)
+-	    $IP link add $HOST_IFC type veth peer name $NS_IFC || return $?
+-	    $IP link set dev $HOST_IFC up || return $?
+-	    sysctl -q net.ipv6.conf.$HOST_IFC.disable_ipv6=0
+-	    sysctl -q net.ipv6.conf.$HOST_IFC.accept_dad=0
+-
+-	    $IP netns add $NS || return $?
+-	    $IP link set dev $NS_IFC netns $NS || return $?
+-	    $IP -n $NS link set dev $NS_IFC up || return $?
+-	    $IP netns exec $NS sysctl -q net.ipv6.conf.$NS_IFC.disable_ipv6=0
+-	    $IP netns exec $NS sysctl -q net.ipv6.conf.$NS_IFC.accept_dad=0
+-	    $TC qdisc add dev $HOST_IFC clsact || return $?
+-	    $TC filter add dev $HOST_IFC egress bpf da obj $BPF_PROG sec $BPF_SECTION || return $?
+-	    ;;
+-	*)
+-	    $IP netns del $NS
+-	    $IP link del $HOST_IFC
+-	    ;;
+-    esac
+-}
+-
+-run_in_cgrp() {
+-    # Fork another bash and move it under the specified cgroup.
+-    # It makes the cgroup cleanup easier at the end of the test.
+-    cmd='echo $$ > '
+-    cmd="$cmd $1/cgroup.procs; exec $2"
+-    bash -c "$cmd"
+-}
+-
+-do_test() {
+-    run_in_cgrp $CGRP2_TC_LEAF "ping -6 -c3 ff02::1%$HOST_IFC >& /dev/null"
+-    local dropped=$($TC -s qdisc show dev $HOST_IFC | tail -3 | \
+-			   awk '/drop/{print substr($7, 0, index($7, ",")-1)}')
+-    if [[ $dropped -eq 0 ]]
+-    then
+-	echo "FAIL"
+-	return 1
+-    else
+-	echo "Successfully filtered $dropped packets"
+-	return 0
+-    fi
+-}
+-
+-do_exit() {
+-    if [ "$DEBUG" == "yes" ] && [ "$MODE" != 'cleanuponly' ]
+-    then
+-	echo "------ DEBUG ------"
+-	echo "mount: "; mount | grep -E '(cgroup2|bpf)'; echo
+-	echo "$CGRP2_TC_LEAF: "; ls -l $CGRP2_TC_LEAF; echo
+-	if [ -d "$BPF_FS_TC_SHARE" ]
+-	then
+-	    echo "$BPF_FS_TC_SHARE: "; ls -l $BPF_FS_TC_SHARE; echo
+-	fi
+-	echo "Host net:"
+-	$IP netns
+-	$IP link show dev $HOST_IFC
+-	$IP -6 a show dev $HOST_IFC
+-	$TC -s qdisc show dev $HOST_IFC
+-	echo
+-	echo "$NS net:"
+-	$IP -n $NS link show dev $NS_IFC
+-	$IP -n $NS -6 link show dev $NS_IFC
+-	echo "------ DEBUG ------"
+-	echo
+-    fi
+-
+-    if [ "$MODE" != 'nocleanup' ]
+-    then
+-	setup_net stop
+-	setup_bpf_cgrp2_array stop
+-	setup_cgrp2 stop
+-    fi
+-}
+-
+-init_cgrp2_vars
+-init_bpf_fs_vars
+-
+-while [[ $# -ge 1 ]]
+-do
+-    a="$1"
+-    case $a in
+-	debug)
+-	    DEBUG='yes'
+-	    shift 1
+-	    ;;
+-	cleanup-only)
+-	    MODE='cleanuponly'
+-	    shift 1
+-	    ;;
+-	no-cleanup)
+-	    MODE='nocleanup'
+-	    shift 1
+-	    ;;
+-	*)
+-	    echo "test_cgrp2_tc [debug] [cleanup-only | no-cleanup]"
+-	    echo "  debug: Print cgrp and network setup details at the end of the test"
+-	    echo "  cleanup-only: Try to cleanup things from last test.  No test will be run"
+-	    echo "  no-cleanup: Run the test but don't do cleanup at the end"
+-	    echo "[Note: If no arg is given, it will run the test and do cleanup at the end]"
+-	    echo
+-	    exit -1
+-	    ;;
+-    esac
+-done
+-
+-trap do_exit 0
+-
+-[ "$MODE" == 'cleanuponly' ] && exit
+-
+-setup_cgrp2 start || exit $?
+-setup_net start || exit $?
+-init_bpf_fs_vars || exit $?
+-setup_bpf_cgrp2_array start || exit $?
+-do_test
+-echo
+diff --git a/samples/bpf/test_current_task_under_cgroup.bpf.c b/samples/bpf/test_current_task_under_cgroup.bpf.c
+deleted file mode 100644
+index 58b9cf7ed659..000000000000
+--- a/samples/bpf/test_current_task_under_cgroup.bpf.c
++++ /dev/null
+@@ -1,43 +0,0 @@
+-/* Copyright (c) 2016 Sargun Dhillon <sargun@sargun.me>
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of version 2 of the GNU General Public
+- * License as published by the Free Software Foundation.
+- */
+-
+-#include "vmlinux.h"
+-#include <linux/version.h>
+-#include <bpf/bpf_helpers.h>
+-#include <bpf/bpf_tracing.h>
+-#include <bpf/bpf_core_read.h>
+-
+-struct {
+-	__uint(type, BPF_MAP_TYPE_CGROUP_ARRAY);
+-	__uint(key_size, sizeof(u32));
+-	__uint(value_size, sizeof(u32));
+-	__uint(max_entries, 1);
+-} cgroup_map SEC(".maps");
+-
+-struct {
+-	__uint(type, BPF_MAP_TYPE_ARRAY);
+-	__type(key, u32);
+-	__type(value, u64);
+-	__uint(max_entries, 1);
+-} perf_map SEC(".maps");
+-
+-/* Writes the last PID that called sync to a map at index 0 */
+-SEC("ksyscall/sync")
+-int BPF_KSYSCALL(bpf_prog1)
+-{
+-	u64 pid = bpf_get_current_pid_tgid();
+-	int idx = 0;
+-
+-	if (!bpf_current_task_under_cgroup(&cgroup_map, 0))
+-		return 0;
+-
+-	bpf_map_update_elem(&perf_map, &idx, &pid, BPF_ANY);
+-	return 0;
+-}
+-
+-char _license[] SEC("license") = "GPL";
+-u32 _version SEC("version") = LINUX_VERSION_CODE;
+diff --git a/samples/bpf/test_current_task_under_cgroup_user.c b/samples/bpf/test_current_task_under_cgroup_user.c
+deleted file mode 100644
+index 9726ed2a8a8b..000000000000
+--- a/samples/bpf/test_current_task_under_cgroup_user.c
++++ /dev/null
+@@ -1,115 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/* Copyright (c) 2016 Sargun Dhillon <sargun@sargun.me>
+- */
+-
+-#define _GNU_SOURCE
+-#include <stdio.h>
+-#include <unistd.h>
+-#include <bpf/bpf.h>
+-#include <bpf/libbpf.h>
+-#include "cgroup_helpers.h"
+-
+-#define CGROUP_PATH		"/my-cgroup"
+-
+-int main(int argc, char **argv)
+-{
+-	pid_t remote_pid, local_pid = getpid();
+-	int cg2 = -1, idx = 0, rc = 1;
+-	struct bpf_link *link = NULL;
+-	struct bpf_program *prog;
+-	struct bpf_object *obj;
+-	char filename[256];
+-	int map_fd[2];
+-
+-	snprintf(filename, sizeof(filename), "%s.bpf.o", argv[0]);
+-	obj = bpf_object__open_file(filename, NULL);
 -	if (libbpf_get_error(obj)) {
--		printf("ERROR: opening BPF object file failed\n");
--		return ret;
+-		fprintf(stderr, "ERROR: opening BPF object file failed\n");
+-		return 0;
 -	}
 -
--	bpf_object__for_each_program(prog, obj) {
--		progs[prog_cnt] = prog;
--		prog_cnt++;
--	}
--
--	if (filter_id >= prog_cnt) {
--		printf("Invalid program id; program not found in file\n");
+-	prog = bpf_object__find_program_by_name(obj, "bpf_prog1");
+-	if (!prog) {
+-		printf("finding a prog in obj file failed\n");
 -		goto cleanup;
 -	}
 -
 -	/* load BPF program */
 -	if (bpf_object__load(obj)) {
--		printf("ERROR: loading BPF object file failed\n");
+-		fprintf(stderr, "ERROR: loading BPF object file failed\n");
 -		goto cleanup;
 -	}
 -
--	link = bpf_program__attach_cgroup(progs[filter_id], cg_fd);
+-	map_fd[0] = bpf_object__find_map_fd_by_name(obj, "cgroup_map");
+-	map_fd[1] = bpf_object__find_map_fd_by_name(obj, "perf_map");
+-	if (map_fd[0] < 0 || map_fd[1] < 0) {
+-		fprintf(stderr, "ERROR: finding a map in obj file failed\n");
+-		goto cleanup;
+-	}
+-
+-	link = bpf_program__attach(prog);
 -	if (libbpf_get_error(link)) {
--		printf("ERROR: bpf_program__attach failed\n");
+-		fprintf(stderr, "ERROR: bpf_program__attach failed\n");
 -		link = NULL;
 -		goto cleanup;
 -	}
 -
--	err = bpf_link__pin(link, link_pin_path);
--	if (err < 0) {
--		printf("ERROR: bpf_link__pin failed: %d\n", err);
--		goto cleanup;
+-	if (setup_cgroup_environment())
+-		goto err;
+-
+-	cg2 = create_and_get_cgroup(CGROUP_PATH);
+-
+-	if (cg2 < 0)
+-		goto err;
+-
+-	if (bpf_map_update_elem(map_fd[0], &idx, &cg2, BPF_ANY)) {
+-		log_err("Adding target cgroup to map");
+-		goto err;
 -	}
 -
--	ret = EXIT_SUCCESS;
+-	if (join_cgroup(CGROUP_PATH))
+-		goto err;
+-
+-	/*
+-	 * The installed helper program catched the sync call, and should
+-	 * write it to the map.
+-	 */
+-
+-	sync();
+-	bpf_map_lookup_elem(map_fd[1], &idx, &remote_pid);
+-
+-	if (local_pid != remote_pid) {
+-		fprintf(stderr,
+-			"BPF Helper didn't write correct PID to map, but: %d\n",
+-			remote_pid);
+-		goto err;
+-	}
+-
+-	/* Verify the negative scenario; leave the cgroup */
+-	if (join_cgroup("/"))
+-		goto err;
+-
+-	remote_pid = 0;
+-	bpf_map_update_elem(map_fd[1], &idx, &remote_pid, BPF_ANY);
+-
+-	sync();
+-	bpf_map_lookup_elem(map_fd[1], &idx, &remote_pid);
+-
+-	if (local_pid == remote_pid) {
+-		fprintf(stderr, "BPF cgroup negative test did not work\n");
+-		goto err;
+-	}
+-
+-	rc = 0;
+-
+-err:
+-	if (cg2 != -1)
+-		close(cg2);
+-
+-	cleanup_cgroup_environment();
 -
 -cleanup:
 -	bpf_link__destroy(link);
 -	bpf_object__close(obj);
--	return ret;
+-	return rc;
 -}
-diff --git a/samples/bpf/test_cgrp2_sock2.sh b/samples/bpf/test_cgrp2_sock2.sh
-deleted file mode 100755
-index 82acff93d739..000000000000
---- a/samples/bpf/test_cgrp2_sock2.sh
-+++ /dev/null
-@@ -1,103 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--
--BPFFS=/sys/fs/bpf
--MY_DIR=$(dirname $0)
--TEST=$MY_DIR/test_cgrp2_sock2
--LINK_PIN=$BPFFS/test_cgrp2_sock2
--BPF_PROG=$MY_DIR/sock_flags.bpf.o
--
--function config_device {
--	ip netns add at_ns0
--	ip link add veth0 type veth peer name veth0b
--	ip link set veth0 netns at_ns0
--	ip netns exec at_ns0 sysctl -q net.ipv6.conf.veth0.disable_ipv6=0
--	ip netns exec at_ns0 ip addr add 172.16.1.100/24 dev veth0
--	ip netns exec at_ns0 ip addr add 2401:db00::1/64 dev veth0 nodad
--	ip netns exec at_ns0 ip link set dev veth0 up
--	sysctl -q net.ipv6.conf.veth0b.disable_ipv6=0
--	ip addr add 172.16.1.101/24 dev veth0b
--	ip addr add 2401:db00::2/64 dev veth0b nodad
--	ip link set veth0b up
--}
--
--function config_cgroup {
--	rm -rf /tmp/cgroupv2
--	mkdir -p /tmp/cgroupv2
--	mount -t cgroup2 none /tmp/cgroupv2
--	mkdir -p /tmp/cgroupv2/foo
--	echo $$ >> /tmp/cgroupv2/foo/cgroup.procs
--}
--
--function config_bpffs {
--	if mount | grep $BPFFS > /dev/null; then
--		echo "bpffs already mounted"
--	else
--		echo "bpffs not mounted. Mounting..."
--		mount -t bpf none $BPFFS
--	fi
--}
--
--function attach_bpf {
--	$TEST /tmp/cgroupv2/foo $BPF_PROG $1
--	[ $? -ne 0 ] && exit 1
--}
--
--function cleanup {
--	rm -rf $LINK_PIN
--	ip link del veth0b
--	ip netns delete at_ns0
--	umount /tmp/cgroupv2
--	rm -rf /tmp/cgroupv2
--}
--
--cleanup 2>/dev/null
--
--set -e
--config_device
--config_cgroup
--config_bpffs
--set +e
--
--#
--# Test 1 - fail ping6
--#
--attach_bpf 0
--ping -c1 -w1 172.16.1.100
--if [ $? -ne 0 ]; then
--	echo "ping failed when it should succeed"
--	cleanup
--	exit 1
--fi
--
--ping6 -c1 -w1 2401:db00::1
--if [ $? -eq 0 ]; then
--	echo "ping6 succeeded when it should not"
--	cleanup
--	exit 1
--fi
--
--rm -rf $LINK_PIN
--sleep 1                 # Wait for link detach
--
--#
--# Test 2 - fail ping
--#
--attach_bpf 1
--ping6 -c1 -w1 2401:db00::1
--if [ $? -ne 0 ]; then
--	echo "ping6 failed when it should succeed"
--	cleanup
--	exit 1
--fi
--
--ping -c1 -w1 172.16.1.100
--if [ $? -eq 0 ]; then
--	echo "ping succeeded when it should not"
--	cleanup
--	exit 1
--fi
--
--cleanup
--echo
--echo "*** PASS ***"
-diff --git a/tools/testing/selftests/bpf/prog_tests/sock_create.c b/tools/testing/selftests/bpf/prog_tests/sock_create.c
-index 072910c05c99..17a3713621dd 100644
---- a/tools/testing/selftests/bpf/prog_tests/sock_create.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sock_create.c
-@@ -6,6 +6,11 @@
- static char bpf_log_buf[4096];
- static bool verbose;
-
-+enum sock_create_test_error {
-+	OK = 0,
-+	DENY_CREATE,
-+};
-+
- static struct sock_create_test {
- 	const char			*descr;
- 	const struct bpf_insn		insns[64];
-@@ -14,9 +19,11 @@ static struct sock_create_test {
-
- 	int				domain;
- 	int				type;
-+	int				protocol;
-
- 	int				optname;
- 	int				optval;
-+	enum sock_create_test_error	error;
- } tests[] = {
- 	{
- 		.descr = "AF_INET set priority",
-@@ -164,6 +171,72 @@ static struct sock_create_test {
- 		.optname = SO_BINDTOIFINDEX,
- 		.optval = 1,
- 	},
-+	{
-+		.descr = "block AF_INET, SOCK_DGRAM, IPPROTO_ICMP socket",
-+		.insns = {
-+			BPF_MOV64_IMM(BPF_REG_0, 1),	/* r0 = verdict */
-+
-+			/* sock->family == AF_INET */
-+			BPF_LDX_MEM(BPF_H, BPF_REG_2, BPF_REG_1,
-+				    offsetof(struct bpf_sock, family)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_2, AF_INET, 5),
-+
-+			/* sock->type == SOCK_DGRAM */
-+			BPF_LDX_MEM(BPF_H, BPF_REG_2, BPF_REG_1,
-+				    offsetof(struct bpf_sock, type)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_2, SOCK_DGRAM, 3),
-+
-+			/* sock->protocol == IPPROTO_ICMP */
-+			BPF_LDX_MEM(BPF_H, BPF_REG_2, BPF_REG_1,
-+				    offsetof(struct bpf_sock, protocol)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_2, IPPROTO_ICMP, 1),
-+
-+			/* return 0 (block) */
-+			BPF_MOV64_IMM(BPF_REG_0, 0),
-+			BPF_EXIT_INSN(),
-+		},
-+		.expected_attach_type = BPF_CGROUP_INET_SOCK_CREATE,
-+		.attach_type = BPF_CGROUP_INET_SOCK_CREATE,
-+
-+		.domain = AF_INET,
-+		.type = SOCK_DGRAM,
-+		.protocol = IPPROTO_ICMP,
-+
-+		.error = DENY_CREATE,
-+	},
-+	{
-+		.descr = "block AF_INET6, SOCK_DGRAM, IPPROTO_ICMPV6 socket",
-+		.insns = {
-+			BPF_MOV64_IMM(BPF_REG_0, 1),	/* r0 = verdict */
-+
-+			/* sock->family == AF_INET6 */
-+			BPF_LDX_MEM(BPF_H, BPF_REG_2, BPF_REG_1,
-+				    offsetof(struct bpf_sock, family)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_2, AF_INET6, 5),
-+
-+			/* sock->type == SOCK_DGRAM */
-+			BPF_LDX_MEM(BPF_H, BPF_REG_2, BPF_REG_1,
-+				    offsetof(struct bpf_sock, type)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_2, SOCK_DGRAM, 3),
-+
-+			/* sock->protocol == IPPROTO_ICMPV6 */
-+			BPF_LDX_MEM(BPF_H, BPF_REG_2, BPF_REG_1,
-+				    offsetof(struct bpf_sock, protocol)),
-+			BPF_JMP_IMM(BPF_JNE, BPF_REG_2, IPPROTO_ICMPV6, 1),
-+
-+			/* return 0 (block) */
-+			BPF_MOV64_IMM(BPF_REG_0, 0),
-+			BPF_EXIT_INSN(),
-+		},
-+		.expected_attach_type = BPF_CGROUP_INET_SOCK_CREATE,
-+		.attach_type = BPF_CGROUP_INET_SOCK_CREATE,
-+
-+		.domain = AF_INET,
-+		.type = SOCK_DGRAM,
-+		.protocol = IPPROTO_ICMPV6,
-+
-+		.error = DENY_CREATE,
-+	},
- };
-
- static int load_prog(const struct bpf_insn *insns,
-@@ -208,9 +281,13 @@ static int run_test(int cgroup_fd, struct sock_create_test *test)
- 		goto close_prog_fd;
- 	}
-
--	sock_fd = socket(test->domain, test->type, 0);
-+	sock_fd = socket(test->domain, test->type, test->protocol);
- 	if (sock_fd < 0) {
--		log_err("Failed to create socket");
-+		if (test->error == DENY_CREATE)
-+			ret = 0;
-+		else
-+			log_err("Failed to create socket");
-+
- 		goto detach_prog;
- 	}
-
-@@ -226,7 +303,7 @@ static int run_test(int cgroup_fd, struct sock_create_test *test)
- 		goto cleanup;
- 	}
-
--	ret = 0;
-+	ret = test->error != OK;
-
- cleanup:
- 	close(sock_fd);
---
+-- 
 2.43.0
+
 
