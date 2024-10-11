@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-19510-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19511-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6C75999BDF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 06:50:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79A4F999BE2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 06:50:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62B941F25E91
-	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 04:50:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0362A28669A
+	for <lists+linux-kselftest@lfdr.de>; Fri, 11 Oct 2024 04:50:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2190C20967F;
-	Fri, 11 Oct 2024 04:49:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 704EA209F2D;
+	Fri, 11 Oct 2024 04:49:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HnGd76/k"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q0jrgRCG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24711F7062;
-	Fri, 11 Oct 2024 04:49:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37A10209F28;
+	Fri, 11 Oct 2024 04:49:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728622152; cv=none; b=tVF1+cjck0PMj1aH9H5h7PU7axSwCLIE4gZ9yYJM7GylV/m/6DOUJYNFnHdFy8XJGuz+QwVAyXfbxKpVsEaoourGNijV8pscHyW3S69pFtBFMh57eh9AXMnnFUAsia7cl7o6ElJLIMKS+qIt+zh/AWxpkJ/iqLVZ+gpymPHTn7E=
+	t=1728622156; cv=none; b=aOOAtBBFy5qM4DqlTOvYxrpxca+zCifemX5+ahKD2J/Po5X8ig9M+XC4NHKSMI/Mhls04qW2a4eSAtmYBijGiWB00ugtyPSoxmsFSy5Le7HwImNIvgO9SRmX1AWyF910WmCq08RWc6qXAKoIlcFI8PApdQ8xZSpUvisSZILoJ9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728622152; c=relaxed/simple;
-	bh=167JpMCkpDmGeoNBE3/6naV2tiAlZk2JG6k6TSsfqV4=;
+	s=arc-20240116; t=1728622156; c=relaxed/simple;
+	bh=Da4d8pxi6L+f5aEqaoLtt+qX+82o5XH0RiBtMtuGd1s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mTwXuqiMwDbxmsFjYf+BeyM8PRO2Rz0/E+PW4zvZwzAwf7ndSona/XZOK7lTTFOU6dlW1rkI21C+ZI4hBcsotBlTidqqnm5Md1QlzWsin20RrJw7baizprWxBSVCV80urDTDuvRhTmKkPyOOJpl9nAvBTUVX/jLczbBKt4LcElc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HnGd76/k; arc=none smtp.client-ip=209.85.210.172
+	 MIME-Version; b=nbRfMEFuzhsBXfSDlUNBcuNKKkih3NrFYRqytufjuPePecxwRwGZk3oklxFZr44Gzs66xFRlv0FTxSzCu3AkIyGxko/IMCU47lkN4uyE2q1amUzQtt7twz1sPmrWvEmB9pcwI4P7vyOO6xgE93fhKa+Gv8LE6C4uPb0fSicfn+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q0jrgRCG; arc=none smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-71e427e29c7so15649b3a.3;
-        Thu, 10 Oct 2024 21:49:09 -0700 (PDT)
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-7ea06275ef2so1132044a12.0;
+        Thu, 10 Oct 2024 21:49:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728622149; x=1729226949; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1728622153; x=1729226953; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FRSeyycIx/nZcEWb5U6GtdsSlGk+/AlWewxVSbiWqsA=;
-        b=HnGd76/kxehxBbRj/qxO0aP5l8BYhhe/oBa6BcqbCfhcx6vfcHOI8WmzAa/xufILnN
-         Synqr4khfnvkivQZt6OPg6JfXdTbJswN58gbHaILq3lIbcWEklW6LtdqF5zpQOZSjfTN
-         pHvIryJvGLVU+tE4mgRgaLeW1aC4tCaEmEunc9sXE2rpIHkpN2DqWSgndARmuLemgIHU
-         gHbYYKOqdZSYVR4oMYVnW9wRXXVE4Em/AV6TxfCE6SW2RF5slEwtqUgjOjGHcHvN562O
-         VwndX6sDrBBSTDgrNPzlL+TT6txDJpm5EyeT6oQ+0228HAwkHs5dmxGUJWr6Qciokff7
-         g6Yg==
+        bh=kb13UgZLlG19j0yFKmh4sL7IUNSft//rvJxiI7I7+Yo=;
+        b=Q0jrgRCGiJ8PZ8wDOj4KB7emRv8nfR8q+EmvsMOLyrEDMSzK/1/c+PIVsGejNwh56e
+         R61KZh62t+oLAJA7e/r46XNGNlB+HTO9Yhm6pNJB/bs8yxVRAXXJqqhF9WUw5eTxaWL2
+         ByBJm5DVxudWRMZ7GiAK2WyPklS6NMnfzwpVvIi7d0cFf1C4lKW1TT+ZMgJHjEJB6t5M
+         YkHCss8WRH30ZWUbI81jFDF9nxDQg7TFt6hyTN7YhS573Ii6rLe0lA16l36KkR77GgOY
+         LNFbTj1iTtlJT3bN3oBVq+4G4I0er2PMJNwiVfkavDYf3A0qVnCtAykh2NcTzgFc7erk
+         NvWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728622149; x=1729226949;
+        d=1e100.net; s=20230601; t=1728622153; x=1729226953;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FRSeyycIx/nZcEWb5U6GtdsSlGk+/AlWewxVSbiWqsA=;
-        b=Uxd6diKOgWtvcPdnynQZVe9zETVHv6LktC7YGJwaeISI36PKuaMv000r2oI8dL8eON
-         jDWiLzpkH7RTC5EPOkCcMvZrG30P79Wc9d2yMnxxu0SBRPwUgwm3XOWi27ifQYyjSBIW
-         OS67WMgd8Ec1Mn7eJOiGF51lJz/+qT6A4cH5Z+RwCDptXxv985PkWdg9q69sxjdK5WH9
-         Pfo449eT6EP/KqhBy0aDQerHyIqUDpaTGv3NMJk2ct5wwy7iUgASG+jy9rZZlj/Yhccm
-         SmYuHZ7moF1qrMTMSvGvhSm0QPOYmXeO9AyKv0koe82LHpRFLsbK4fOATdsXUdBGBx3Y
-         6//g==
-X-Forwarded-Encrypted: i=1; AJvYcCURvWzxeFJNG8fu8viF4xmFAdad0Nf9IT+dL9dtiaz0FnfPTxmp5zQF0WPJ7M2EMqPDKYOcw0WD@vger.kernel.org, AJvYcCUUkQDgU3skQ9sa3joBVLgNUGx6aFocdWqIkHWYE6Qz+19a9PVL4/nyRf5F4dhHMQdTMpMlngRgkiNyp1NkEt6i@vger.kernel.org, AJvYcCWL5Gpi0t4/46RR5t1FzH/NYKIdEZ7Byup0x6BLxROW710WwirIacBxC29Jb2LutF083iBBg+SMFLL5M+0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzNoyfxLpo8OJdsezYlQK9ebt5EExj1G3Tvn/0XjtQyNTL3R9r5
-	6jeSm1YBD/bXgXni9ZG1L9vzTlId5ZlX3TwKneFXO7OfnJg2nec=
-X-Google-Smtp-Source: AGHT+IFOQBxfJfdgAqaL95TaxaedW9LySKkXzUzQwp+QlWNsz3bZRweglWVgWqnqnH1hI81ywQgg7g==
-X-Received: by 2002:a05:6a20:e188:b0:1d7:11af:6a with SMTP id adf61e73a8af0-1d8bcf9f221mr1713294637.37.1728622148907;
-        Thu, 10 Oct 2024 21:49:08 -0700 (PDT)
+        bh=kb13UgZLlG19j0yFKmh4sL7IUNSft//rvJxiI7I7+Yo=;
+        b=tWXePqbtkI94xyD0keabAkKCiHWm/tAbLACailowtxFZIViSydQLB8BwpFCLgd/2DT
+         DyJr0edTwIDJYkJIyklAJGSHOYnjOzJln+8XGE+ZQdgt27m5aOgVtjOcw2bhgrv/KODM
+         j8pK01QPq3P+bazAhEidTEDZT4459YngZdXLoY+HbzMR6Y/7u+o9hfg5oUtxmQGdrwa9
+         1Ga4pL6Qog7J1O3Uyed5AbS/6N0z4zPCaOxDVsT1avvMLwVNtm/iTmhA8c1WbJR9xOJZ
+         PyOHwSphJEQB6LI+Q6TZqZLVPN1qEAAXQgYzCoNZlEGS68zMv4j/Yo1GvXvcOZ6DVNOa
+         Iyzg==
+X-Forwarded-Encrypted: i=1; AJvYcCVjKDcZ2N3fJdo8gPHSzx7RFKXbOxRosOLVC2XgVth8FjqQdGedGj0apQ0mUKeLhqPeDTRr3ie1ff0HkJhTkvhA@vger.kernel.org, AJvYcCXV78gfGlAHbHQgXtF+ykIK2QdiIeliHwBiMPQ/Oz3gc5GgD5Q/oLIUspqh7r5lU4G+43/vNYgc@vger.kernel.org, AJvYcCXkRC2wniZbFK36uw3pchw1o7CVxwcSjm5bTPMnnQpczEhOd8QpMZerQd79LpDmYi+pEDo8KFO7XpSPGSA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpEu3aTV5O6licO/AIlKeS7kQhoF0FfWCAtLF/Hj818iKQqBfQ
+	UpqwEBbey23KFepAWxpqtbZbV5zSpf/vmm4nDwBAuXXoaMeR1aE=
+X-Google-Smtp-Source: AGHT+IFA9wymQYcGafgVvzTM1hsfU8vVEMF8r++KW7N7JGn7f+rv//DUPf40eICbzhW7MjvVfIV+5g==
+X-Received: by 2002:a05:6a21:181a:b0:1d2:f0e2:4ad6 with SMTP id adf61e73a8af0-1d8bcf18450mr2118741637.18.1728622153380;
+        Thu, 10 Oct 2024 21:49:13 -0700 (PDT)
 Received: from vagrant.. ([114.71.48.94])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71e2ab105f9sm1856692b3a.216.2024.10.10.21.49.04
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-71e2ab105f9sm1856692b3a.216.2024.10.10.21.49.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 10 Oct 2024 21:49:08 -0700 (PDT)
+        Thu, 10 Oct 2024 21:49:12 -0700 (PDT)
 From: "Daniel T. Lee" <danieltimlee@gmail.com>
 To: Daniel Borkmann <daniel@iogearbox.net>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -86,9 +86,9 @@ Cc: bpf@vger.kernel.org,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	LKML <linux-kernel@vger.kernel.org>
-Subject: [PATCH,bpf-next v3 3/4] samples/bpf: remove obsolete cgroup related tests
-Date: Fri, 11 Oct 2024 04:48:46 +0000
-Message-ID: <20241011044847.51584-4-danieltimlee@gmail.com>
+Subject: [PATCH,bpf-next v3 4/4] samples/bpf: remove obsolete tracing related tests
+Date: Fri, 11 Oct 2024 04:48:47 +0000
+Message-ID: <20241011044847.51584-5-danieltimlee@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241011044847.51584-1-danieltimlee@gmail.com>
 References: <20241011044847.51584-1-danieltimlee@gmail.com>
@@ -100,704 +100,551 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch removes the obsolete cgroup related tests. These tests are
-now redundant because their functionality is already covered by more
-modern and comprehensive tests under selftests/bpf.
+The samples/bpf has become outdated and often does not follow up with
+the latest. This commit removes obsolete tracing-related tests.
+
+Specifically, 'test_overhead' is duplicate with selftests (and bench),
+and 'test_override_return', 'test_probe_write_user' tests are obsolete
+since they have been replaced by kprobe_multi_override and probe_user
+from selftests respectively.
 
 The following files are removed:
-- test_current_task_under_cgroup: tests bpf_current_task_under_cgroup()
-  to check if a task belongs to a cgroup. Already covered by
-  task_under_cgroup at selftest and other cgroup ID tests.
+- test_overhead: tests the overhead of BPF programs with task_rename,
+  now covered by selftests and benchmark tests (rename-*). [1]
 
-- test_cgrp2_tc: tests bpf_skb_under_cgroup() to filter packets based
-  on cgroup. This behavior is now validated by cgroup_skb_sk_lookup,
-  which uses bpf_skb_cgroup_id, making this test redundant.
+- test_override_return: tests the return override functionality, now
+  handled by kprobe_multi_override in selftests.
 
-By removing these outdated tests, this patch helps streamline and
-modernize the test suite, avoiding duplication of test coverage.
+- test_probe_write_user: tests the probe_write_user functionality,
+  now replaced by the probe_user test in selftests.
+
+This cleanup will help to streamline the testing framework by removing
+redundant tests.
+
+[1]: https://patchwork.kernel.org/cover/13759916
 
 Signed-off-by: Daniel T. Lee <danieltimlee@gmail.com>
 ---
-Changes in v3:
+Changes in V3:
 - Makefile fix
 
- samples/bpf/Makefile                          |   9 -
- samples/bpf/test_cgrp2_array_pin.c            | 106 ----------
- samples/bpf/test_cgrp2_attach.c               | 177 -----------------
- samples/bpf/test_cgrp2_tc.bpf.c               |  56 ------
- samples/bpf/test_cgrp2_tc.sh                  | 187 ------------------
- .../bpf/test_current_task_under_cgroup.bpf.c  |  43 ----
- .../bpf/test_current_task_under_cgroup_user.c | 115 -----------
- 7 files changed, 693 deletions(-)
- delete mode 100644 samples/bpf/test_cgrp2_array_pin.c
- delete mode 100644 samples/bpf/test_cgrp2_attach.c
- delete mode 100644 samples/bpf/test_cgrp2_tc.bpf.c
- delete mode 100755 samples/bpf/test_cgrp2_tc.sh
- delete mode 100644 samples/bpf/test_current_task_under_cgroup.bpf.c
- delete mode 100644 samples/bpf/test_current_task_under_cgroup_user.c
+ samples/bpf/Makefile                     |  11 --
+ samples/bpf/test_overhead_kprobe.bpf.c   |  41 -----
+ samples/bpf/test_overhead_raw_tp.bpf.c   |  17 --
+ samples/bpf/test_overhead_tp.bpf.c       |  23 ---
+ samples/bpf/test_overhead_user.c         | 225 -----------------------
+ samples/bpf/test_override_return.sh      |  16 --
+ samples/bpf/test_probe_write_user.bpf.c  |  52 ------
+ samples/bpf/test_probe_write_user_user.c | 108 -----------
+ samples/bpf/tracex7.bpf.c                |  15 --
+ samples/bpf/tracex7_user.c               |  56 ------
+ 10 files changed, 564 deletions(-)
+ delete mode 100644 samples/bpf/test_overhead_kprobe.bpf.c
+ delete mode 100644 samples/bpf/test_overhead_raw_tp.bpf.c
+ delete mode 100644 samples/bpf/test_overhead_tp.bpf.c
+ delete mode 100644 samples/bpf/test_overhead_user.c
+ delete mode 100755 samples/bpf/test_override_return.sh
+ delete mode 100644 samples/bpf/test_probe_write_user.bpf.c
+ delete mode 100644 samples/bpf/test_probe_write_user_user.c
+ delete mode 100644 samples/bpf/tracex7.bpf.c
+ delete mode 100644 samples/bpf/tracex7_user.c
 
 diff --git a/samples/bpf/Makefile b/samples/bpf/Makefile
-index 490833f8706a..e2abfc847389 100644
+index e2abfc847389..bcf103a4c14f 100644
 --- a/samples/bpf/Makefile
 +++ b/samples/bpf/Makefile
-@@ -25,10 +25,7 @@ tprogs-y += offwaketime
+@@ -17,14 +17,11 @@ tprogs-y += tracex3
+ tprogs-y += tracex4
+ tprogs-y += tracex5
+ tprogs-y += tracex6
+-tprogs-y += tracex7
+-tprogs-y += test_probe_write_user
+ tprogs-y += trace_output
+ tprogs-y += lathist
+ tprogs-y += offwaketime
  tprogs-y += spintest
  tprogs-y += map_perf_test
- tprogs-y += test_overhead
--tprogs-y += test_cgrp2_array_pin
--tprogs-y += test_cgrp2_attach
+-tprogs-y += test_overhead
  tprogs-y += xdp_router_ipv4
--tprogs-y += test_current_task_under_cgroup
  tprogs-y += trace_event
  tprogs-y += sampleip
- tprogs-y += tc_l2_redirect
-@@ -72,10 +69,6 @@ offwaketime-objs := offwaketime_user.o $(TRACE_HELPERS)
- spintest-objs := spintest_user.o $(TRACE_HELPERS)
- map_perf_test-objs := map_perf_test_user.o
- test_overhead-objs := test_overhead_user.o
--test_cgrp2_array_pin-objs := test_cgrp2_array_pin.o
--test_cgrp2_attach-objs := test_cgrp2_attach.o
--test_current_task_under_cgroup-objs := $(CGROUP_HELPERS) \
--				       test_current_task_under_cgroup_user.o
- trace_event-objs := trace_event_user.o $(TRACE_HELPERS)
- sampleip-objs := sampleip_user.o $(TRACE_HELPERS)
- tc_l2_redirect-objs := tc_l2_redirect_user.o
-@@ -116,8 +109,6 @@ always-y += test_overhead_tp.bpf.o
- always-y += test_overhead_raw_tp.bpf.o
- always-y += test_overhead_kprobe.bpf.o
+@@ -61,8 +58,6 @@ tracex3-objs := tracex3_user.o
+ tracex4-objs := tracex4_user.o
+ tracex5-objs := tracex5_user.o $(TRACE_HELPERS)
+ tracex6-objs := tracex6_user.o
+-tracex7-objs := tracex7_user.o
+-test_probe_write_user-objs := test_probe_write_user_user.o
+ trace_output-objs := trace_output_user.o
+ lathist-objs := lathist_user.o
+ offwaketime-objs := offwaketime_user.o $(TRACE_HELPERS)
+@@ -96,8 +91,6 @@ always-y += tracex3.bpf.o
+ always-y += tracex4.bpf.o
+ always-y += tracex5.bpf.o
+ always-y += tracex6.bpf.o
+-always-y += tracex7.bpf.o
+-always-y += test_probe_write_user.bpf.o
+ always-y += trace_output.bpf.o
+ always-y += tcbpf1_kern.o
+ always-y += tc_l2_redirect_kern.o
+@@ -105,9 +98,6 @@ always-y += lathist_kern.o
+ always-y += offwaketime.bpf.o
+ always-y += spintest.bpf.o
+ always-y += map_perf_test.bpf.o
+-always-y += test_overhead_tp.bpf.o
+-always-y += test_overhead_raw_tp.bpf.o
+-always-y += test_overhead_kprobe.bpf.o
  always-y += parse_varlen.o parse_simple.o parse_ldabs.o
--always-y += test_cgrp2_tc.bpf.o
--always-y += test_current_task_under_cgroup.bpf.o
  always-y += trace_event_kern.o
  always-y += sampleip_kern.o
- always-y += lwt_len_hist.bpf.o
-diff --git a/samples/bpf/test_cgrp2_array_pin.c b/samples/bpf/test_cgrp2_array_pin.c
+@@ -181,7 +171,6 @@ TPROGLDLIBS_xdp_router_ipv4	+= -lm -pthread
+ TPROGLDLIBS_tracex4		+= -lrt
+ TPROGLDLIBS_trace_output	+= -lrt
+ TPROGLDLIBS_map_perf_test	+= -lrt
+-TPROGLDLIBS_test_overhead	+= -lrt
+
+ # Allows pointing LLC/CLANG to a LLVM backend with bpf support, redefine on cmdline:
+ # make M=samples/bpf LLC=~/git/llvm-project/llvm/build/bin/llc CLANG=~/git/llvm-project/llvm/build/bin/clang
+diff --git a/samples/bpf/test_overhead_kprobe.bpf.c b/samples/bpf/test_overhead_kprobe.bpf.c
 deleted file mode 100644
-index 05e88aa63009..000000000000
---- a/samples/bpf/test_cgrp2_array_pin.c
+index 668cf5259c60..000000000000
+--- a/samples/bpf/test_overhead_kprobe.bpf.c
 +++ /dev/null
-@@ -1,106 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/* Copyright (c) 2016 Facebook
-- */
--#include <linux/unistd.h>
--#include <linux/bpf.h>
--
--#include <stdio.h>
--#include <stdint.h>
--#include <unistd.h>
--#include <string.h>
--#include <errno.h>
--#include <fcntl.h>
--
--#include <bpf/bpf.h>
--
--static void usage(void)
--{
--	printf("Usage: test_cgrp2_array_pin [...]\n");
--	printf("       -F <file>   File to pin an BPF cgroup array\n");
--	printf("       -U <file>   Update an already pinned BPF cgroup array\n");
--	printf("       -v <value>  Full path of the cgroup2\n");
--	printf("       -h          Display this help\n");
--}
--
--int main(int argc, char **argv)
--{
--	const char *pinned_file = NULL, *cg2 = NULL;
--	int create_array = 1;
--	int array_key = 0;
--	int array_fd = -1;
--	int cg2_fd = -1;
--	int ret = -1;
--	int opt;
--
--	while ((opt = getopt(argc, argv, "F:U:v:")) != -1) {
--		switch (opt) {
--		/* General args */
--		case 'F':
--			pinned_file = optarg;
--			break;
--		case 'U':
--			pinned_file = optarg;
--			create_array = 0;
--			break;
--		case 'v':
--			cg2 = optarg;
--			break;
--		default:
--			usage();
--			goto out;
--		}
--	}
--
--	if (!cg2 || !pinned_file) {
--		usage();
--		goto out;
--	}
--
--	cg2_fd = open(cg2, O_RDONLY);
--	if (cg2_fd < 0) {
--		fprintf(stderr, "open(%s,...): %s(%d)\n",
--			cg2, strerror(errno), errno);
--		goto out;
--	}
--
--	if (create_array) {
--		array_fd = bpf_map_create(BPF_MAP_TYPE_CGROUP_ARRAY, NULL,
--					  sizeof(uint32_t), sizeof(uint32_t),
--					  1, NULL);
--		if (array_fd < 0) {
--			fprintf(stderr,
--				"bpf_create_map(BPF_MAP_TYPE_CGROUP_ARRAY,...): %s(%d)\n",
--				strerror(errno), errno);
--			goto out;
--		}
--	} else {
--		array_fd = bpf_obj_get(pinned_file);
--		if (array_fd < 0) {
--			fprintf(stderr, "bpf_obj_get(%s): %s(%d)\n",
--				pinned_file, strerror(errno), errno);
--			goto out;
--		}
--	}
--
--	ret = bpf_map_update_elem(array_fd, &array_key, &cg2_fd, 0);
--	if (ret) {
--		perror("bpf_map_update_elem");
--		goto out;
--	}
--
--	if (create_array) {
--		ret = bpf_obj_pin(array_fd, pinned_file);
--		if (ret) {
--			fprintf(stderr, "bpf_obj_pin(..., %s): %s(%d)\n",
--				pinned_file, strerror(errno), errno);
--			goto out;
--		}
--	}
--
--out:
--	if (array_fd != -1)
--		close(array_fd);
--	if (cg2_fd != -1)
--		close(cg2_fd);
--	return ret;
--}
-diff --git a/samples/bpf/test_cgrp2_attach.c b/samples/bpf/test_cgrp2_attach.c
-deleted file mode 100644
-index 68ce69457afe..000000000000
---- a/samples/bpf/test_cgrp2_attach.c
-+++ /dev/null
-@@ -1,177 +0,0 @@
--/* eBPF example program:
-- *
-- * - Creates arraymap in kernel with 4 bytes keys and 8 byte values
-- *
-- * - Loads eBPF program
-- *
-- *   The eBPF program accesses the map passed in to store two pieces of
-- *   information. The number of invocations of the program, which maps
-- *   to the number of packets received, is stored to key 0. Key 1 is
-- *   incremented on each iteration by the number of bytes stored in
-- *   the skb.
-- *
-- * - Attaches the new program to a cgroup using BPF_PROG_ATTACH
-- *
-- * - Every second, reads map[0] and map[1] to see how many bytes and
-- *   packets were seen on any socket of tasks in the given cgroup.
-- */
--
--#define _GNU_SOURCE
--
--#include <stdio.h>
--#include <stdlib.h>
--#include <stddef.h>
--#include <string.h>
--#include <unistd.h>
--#include <assert.h>
--#include <errno.h>
--#include <fcntl.h>
--
--#include <linux/bpf.h>
--#include <bpf/bpf.h>
--
--#include "bpf_insn.h"
--#include "bpf_util.h"
--
--enum {
--	MAP_KEY_PACKETS,
--	MAP_KEY_BYTES,
--};
--
--char bpf_log_buf[BPF_LOG_BUF_SIZE];
--
--static int prog_load(int map_fd, int verdict)
--{
--	struct bpf_insn prog[] = {
--		BPF_MOV64_REG(BPF_REG_6, BPF_REG_1), /* save r6 so it's not clobbered by BPF_CALL */
--
--		/* Count packets */
--		BPF_MOV64_IMM(BPF_REG_0, MAP_KEY_PACKETS), /* r0 = 0 */
--		BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_0, -4), /* *(u32 *)(fp - 4) = r0 */
--		BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--		BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -4), /* r2 = fp - 4 */
--		BPF_LD_MAP_FD(BPF_REG_1, map_fd), /* load map fd to r1 */
--		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
--		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
--		BPF_MOV64_IMM(BPF_REG_1, 1), /* r1 = 1 */
--		BPF_ATOMIC_OP(BPF_DW, BPF_ADD, BPF_REG_0, BPF_REG_1, 0),
--
--		/* Count bytes */
--		BPF_MOV64_IMM(BPF_REG_0, MAP_KEY_BYTES), /* r0 = 1 */
--		BPF_STX_MEM(BPF_W, BPF_REG_10, BPF_REG_0, -4), /* *(u32 *)(fp - 4) = r0 */
--		BPF_MOV64_REG(BPF_REG_2, BPF_REG_10),
--		BPF_ALU64_IMM(BPF_ADD, BPF_REG_2, -4), /* r2 = fp - 4 */
--		BPF_LD_MAP_FD(BPF_REG_1, map_fd),
--		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, 0, 0, BPF_FUNC_map_lookup_elem),
--		BPF_JMP_IMM(BPF_JEQ, BPF_REG_0, 0, 2),
--		BPF_LDX_MEM(BPF_W, BPF_REG_1, BPF_REG_6, offsetof(struct __sk_buff, len)), /* r1 = skb->len */
--
--		BPF_ATOMIC_OP(BPF_DW, BPF_ADD, BPF_REG_0, BPF_REG_1, 0),
--
--		BPF_MOV64_IMM(BPF_REG_0, verdict), /* r0 = verdict */
--		BPF_EXIT_INSN(),
--	};
--	size_t insns_cnt = ARRAY_SIZE(prog);
--	LIBBPF_OPTS(bpf_prog_load_opts, opts,
--		.log_buf = bpf_log_buf,
--		.log_size = BPF_LOG_BUF_SIZE,
--	);
--
--	return bpf_prog_load(BPF_PROG_TYPE_CGROUP_SKB, NULL, "GPL",
--			     prog, insns_cnt, &opts);
--}
--
--static int usage(const char *argv0)
--{
--	printf("Usage: %s [-d] [-D] <cg-path> <egress|ingress>\n", argv0);
--	printf("	-d	Drop Traffic\n");
--	printf("	-D	Detach filter, and exit\n");
--	return EXIT_FAILURE;
--}
--
--static int attach_filter(int cg_fd, int type, int verdict)
--{
--	int prog_fd, map_fd, ret, key;
--	long long pkt_cnt, byte_cnt;
--
--	map_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, NULL,
--				sizeof(key), sizeof(byte_cnt),
--				256, NULL);
--	if (map_fd < 0) {
--		printf("Failed to create map: '%s'\n", strerror(errno));
--		return EXIT_FAILURE;
--	}
--
--	prog_fd = prog_load(map_fd, verdict);
--	printf("Output from kernel verifier:\n%s\n-------\n", bpf_log_buf);
--
--	if (prog_fd < 0) {
--		printf("Failed to load prog: '%s'\n", strerror(errno));
--		return EXIT_FAILURE;
--	}
--
--	ret = bpf_prog_attach(prog_fd, cg_fd, type, 0);
--	if (ret < 0) {
--		printf("Failed to attach prog to cgroup: '%s'\n",
--		       strerror(errno));
--		return EXIT_FAILURE;
--	}
--	while (1) {
--		key = MAP_KEY_PACKETS;
--		assert(bpf_map_lookup_elem(map_fd, &key, &pkt_cnt) == 0);
--
--		key = MAP_KEY_BYTES;
--		assert(bpf_map_lookup_elem(map_fd, &key, &byte_cnt) == 0);
--
--		printf("cgroup received %lld packets, %lld bytes\n",
--		       pkt_cnt, byte_cnt);
--		sleep(1);
--	}
--
--	return EXIT_SUCCESS;
--}
--
--int main(int argc, char **argv)
--{
--	int detach_only = 0, verdict = 1;
--	enum bpf_attach_type type;
--	int opt, cg_fd, ret;
--
--	while ((opt = getopt(argc, argv, "Dd")) != -1) {
--		switch (opt) {
--		case 'd':
--			verdict = 0;
--			break;
--		case 'D':
--			detach_only = 1;
--			break;
--		default:
--			return usage(argv[0]);
--		}
--	}
--
--	if (argc - optind < 2)
--		return usage(argv[0]);
--
--	if (strcmp(argv[optind + 1], "ingress") == 0)
--		type = BPF_CGROUP_INET_INGRESS;
--	else if (strcmp(argv[optind + 1], "egress") == 0)
--		type = BPF_CGROUP_INET_EGRESS;
--	else
--		return usage(argv[0]);
--
--	cg_fd = open(argv[optind], O_DIRECTORY | O_RDONLY);
--	if (cg_fd < 0) {
--		printf("Failed to open cgroup path: '%s'\n", strerror(errno));
--		return EXIT_FAILURE;
--	}
--
--	if (detach_only) {
--		ret = bpf_prog_detach(cg_fd, type);
--		printf("bpf_prog_detach() returned '%s' (%d)\n",
--		       strerror(errno), errno);
--	} else
--		ret = attach_filter(cg_fd, type, verdict);
--
--	return ret;
--}
-diff --git a/samples/bpf/test_cgrp2_tc.bpf.c b/samples/bpf/test_cgrp2_tc.bpf.c
-deleted file mode 100644
-index c7d2291d676f..000000000000
---- a/samples/bpf/test_cgrp2_tc.bpf.c
-+++ /dev/null
-@@ -1,56 +0,0 @@
+@@ -1,41 +0,0 @@
 -/* Copyright (c) 2016 Facebook
 - *
 - * This program is free software; you can redistribute it and/or
 - * modify it under the terms of version 2 of the GNU General Public
 - * License as published by the Free Software Foundation.
 - */
--#define KBUILD_MODNAME "foo"
--#include "vmlinux.h"
--#include "net_shared.h"
--#include <bpf/bpf_helpers.h>
--
--/* copy of 'struct ethhdr' without __packed */
--struct eth_hdr {
--	unsigned char   h_dest[ETH_ALEN];
--	unsigned char   h_source[ETH_ALEN];
--	unsigned short  h_proto;
--};
--
--struct {
--	__uint(type, BPF_MAP_TYPE_CGROUP_ARRAY);
--	__type(key, u32);
--	__type(value, u32);
--	__uint(pinning, LIBBPF_PIN_BY_NAME);
--	__uint(max_entries, 1);
--} test_cgrp2_array_pin SEC(".maps");
--
--SEC("filter")
--int handle_egress(struct __sk_buff *skb)
--{
--	void *data = (void *)(long)skb->data;
--	struct eth_hdr *eth = data;
--	struct ipv6hdr *ip6h = data + sizeof(*eth);
--	void *data_end = (void *)(long)skb->data_end;
--	char dont_care_msg[] = "dont care %04x %d\n";
--	char pass_msg[] = "pass\n";
--	char reject_msg[] = "reject\n";
--
--	/* single length check */
--	if (data + sizeof(*eth) + sizeof(*ip6h) > data_end)
--		return TC_ACT_OK;
--
--	if (eth->h_proto != bpf_htons(ETH_P_IPV6) ||
--	    ip6h->nexthdr != IPPROTO_ICMPV6) {
--		bpf_trace_printk(dont_care_msg, sizeof(dont_care_msg),
--				 eth->h_proto, ip6h->nexthdr);
--		return TC_ACT_OK;
--	} else if (bpf_skb_under_cgroup(skb, &test_cgrp2_array_pin, 0) != 1) {
--		bpf_trace_printk(pass_msg, sizeof(pass_msg));
--		return TC_ACT_OK;
--	} else {
--		bpf_trace_printk(reject_msg, sizeof(reject_msg));
--		return TC_ACT_SHOT;
--	}
--}
--
--char _license[] SEC("license") = "GPL";
-diff --git a/samples/bpf/test_cgrp2_tc.sh b/samples/bpf/test_cgrp2_tc.sh
-deleted file mode 100755
-index 38e8dbc9d16e..000000000000
---- a/samples/bpf/test_cgrp2_tc.sh
-+++ /dev/null
-@@ -1,187 +0,0 @@
--#!/bin/bash
--# SPDX-License-Identifier: GPL-2.0
--
--MY_DIR=$(dirname $0)
--# Details on the bpf prog
--BPF_CGRP2_ARRAY_NAME='test_cgrp2_array_pin'
--BPF_PROG="$MY_DIR/test_cgrp2_tc.bpf.o"
--BPF_SECTION='filter'
--
--[ -z "$TC" ] && TC='tc'
--[ -z "$IP" ] && IP='ip'
--
--# Names of the veth interface, net namespace...etc.
--HOST_IFC='ve'
--NS_IFC='vens'
--NS='ns'
--
--find_mnt() {
--    cat /proc/mounts | \
--	awk '{ if ($3 == "'$1'" && mnt == "") { mnt = $2 }} END { print mnt }'
--}
--
--# Init cgroup2 vars
--init_cgrp2_vars() {
--    CGRP2_ROOT=$(find_mnt cgroup2)
--    if [ -z "$CGRP2_ROOT" ]
--    then
--	CGRP2_ROOT='/mnt/cgroup2'
--	MOUNT_CGRP2="yes"
--    fi
--    CGRP2_TC="$CGRP2_ROOT/tc"
--    CGRP2_TC_LEAF="$CGRP2_TC/leaf"
--}
--
--# Init bpf fs vars
--init_bpf_fs_vars() {
--    local bpf_fs_root=$(find_mnt bpf)
--    [ -n "$bpf_fs_root" ] || return -1
--    BPF_FS_TC_SHARE="$bpf_fs_root/tc/globals"
--}
--
--setup_cgrp2() {
--    case $1 in
--	start)
--	    if [ "$MOUNT_CGRP2" == 'yes' ]
--	    then
--		[ -d $CGRP2_ROOT ] || mkdir -p $CGRP2_ROOT
--		mount -t cgroup2 none $CGRP2_ROOT || return $?
--	    fi
--	    mkdir -p $CGRP2_TC_LEAF
--	    ;;
--	*)
--	    rmdir $CGRP2_TC_LEAF && rmdir $CGRP2_TC
--	    [ "$MOUNT_CGRP2" == 'yes' ] && umount $CGRP2_ROOT
--	    ;;
--    esac
--}
--
--setup_bpf_cgrp2_array() {
--    local bpf_cgrp2_array="$BPF_FS_TC_SHARE/$BPF_CGRP2_ARRAY_NAME"
--    case $1 in
--	start)
--	    $MY_DIR/test_cgrp2_array_pin -U $bpf_cgrp2_array -v $CGRP2_TC
--	    ;;
--	*)
--	    [ -d "$BPF_FS_TC_SHARE" ] && rm -f $bpf_cgrp2_array
--	    ;;
--    esac
--}
--
--setup_net() {
--    case $1 in
--	start)
--	    $IP link add $HOST_IFC type veth peer name $NS_IFC || return $?
--	    $IP link set dev $HOST_IFC up || return $?
--	    sysctl -q net.ipv6.conf.$HOST_IFC.disable_ipv6=0
--	    sysctl -q net.ipv6.conf.$HOST_IFC.accept_dad=0
--
--	    $IP netns add $NS || return $?
--	    $IP link set dev $NS_IFC netns $NS || return $?
--	    $IP -n $NS link set dev $NS_IFC up || return $?
--	    $IP netns exec $NS sysctl -q net.ipv6.conf.$NS_IFC.disable_ipv6=0
--	    $IP netns exec $NS sysctl -q net.ipv6.conf.$NS_IFC.accept_dad=0
--	    $TC qdisc add dev $HOST_IFC clsact || return $?
--	    $TC filter add dev $HOST_IFC egress bpf da obj $BPF_PROG sec $BPF_SECTION || return $?
--	    ;;
--	*)
--	    $IP netns del $NS
--	    $IP link del $HOST_IFC
--	    ;;
--    esac
--}
--
--run_in_cgrp() {
--    # Fork another bash and move it under the specified cgroup.
--    # It makes the cgroup cleanup easier at the end of the test.
--    cmd='echo $$ > '
--    cmd="$cmd $1/cgroup.procs; exec $2"
--    bash -c "$cmd"
--}
--
--do_test() {
--    run_in_cgrp $CGRP2_TC_LEAF "ping -6 -c3 ff02::1%$HOST_IFC >& /dev/null"
--    local dropped=$($TC -s qdisc show dev $HOST_IFC | tail -3 | \
--			   awk '/drop/{print substr($7, 0, index($7, ",")-1)}')
--    if [[ $dropped -eq 0 ]]
--    then
--	echo "FAIL"
--	return 1
--    else
--	echo "Successfully filtered $dropped packets"
--	return 0
--    fi
--}
--
--do_exit() {
--    if [ "$DEBUG" == "yes" ] && [ "$MODE" != 'cleanuponly' ]
--    then
--	echo "------ DEBUG ------"
--	echo "mount: "; mount | grep -E '(cgroup2|bpf)'; echo
--	echo "$CGRP2_TC_LEAF: "; ls -l $CGRP2_TC_LEAF; echo
--	if [ -d "$BPF_FS_TC_SHARE" ]
--	then
--	    echo "$BPF_FS_TC_SHARE: "; ls -l $BPF_FS_TC_SHARE; echo
--	fi
--	echo "Host net:"
--	$IP netns
--	$IP link show dev $HOST_IFC
--	$IP -6 a show dev $HOST_IFC
--	$TC -s qdisc show dev $HOST_IFC
--	echo
--	echo "$NS net:"
--	$IP -n $NS link show dev $NS_IFC
--	$IP -n $NS -6 link show dev $NS_IFC
--	echo "------ DEBUG ------"
--	echo
--    fi
--
--    if [ "$MODE" != 'nocleanup' ]
--    then
--	setup_net stop
--	setup_bpf_cgrp2_array stop
--	setup_cgrp2 stop
--    fi
--}
--
--init_cgrp2_vars
--init_bpf_fs_vars
--
--while [[ $# -ge 1 ]]
--do
--    a="$1"
--    case $a in
--	debug)
--	    DEBUG='yes'
--	    shift 1
--	    ;;
--	cleanup-only)
--	    MODE='cleanuponly'
--	    shift 1
--	    ;;
--	no-cleanup)
--	    MODE='nocleanup'
--	    shift 1
--	    ;;
--	*)
--	    echo "test_cgrp2_tc [debug] [cleanup-only | no-cleanup]"
--	    echo "  debug: Print cgrp and network setup details at the end of the test"
--	    echo "  cleanup-only: Try to cleanup things from last test.  No test will be run"
--	    echo "  no-cleanup: Run the test but don't do cleanup at the end"
--	    echo "[Note: If no arg is given, it will run the test and do cleanup at the end]"
--	    echo
--	    exit -1
--	    ;;
--    esac
--done
--
--trap do_exit 0
--
--[ "$MODE" == 'cleanuponly' ] && exit
--
--setup_cgrp2 start || exit $?
--setup_net start || exit $?
--init_bpf_fs_vars || exit $?
--setup_bpf_cgrp2_array start || exit $?
--do_test
--echo
-diff --git a/samples/bpf/test_current_task_under_cgroup.bpf.c b/samples/bpf/test_current_task_under_cgroup.bpf.c
-deleted file mode 100644
-index 58b9cf7ed659..000000000000
---- a/samples/bpf/test_current_task_under_cgroup.bpf.c
-+++ /dev/null
-@@ -1,43 +0,0 @@
--/* Copyright (c) 2016 Sargun Dhillon <sargun@sargun.me>
-- *
-- * This program is free software; you can redistribute it and/or
-- * modify it under the terms of version 2 of the GNU General Public
-- * License as published by the Free Software Foundation.
-- */
--
 -#include "vmlinux.h"
 -#include <linux/version.h>
 -#include <bpf/bpf_helpers.h>
 -#include <bpf/bpf_tracing.h>
 -#include <bpf/bpf_core_read.h>
 -
--struct {
--	__uint(type, BPF_MAP_TYPE_CGROUP_ARRAY);
--	__uint(key_size, sizeof(u32));
--	__uint(value_size, sizeof(u32));
--	__uint(max_entries, 1);
--} cgroup_map SEC(".maps");
--
--struct {
--	__uint(type, BPF_MAP_TYPE_ARRAY);
--	__type(key, u32);
--	__type(value, u64);
--	__uint(max_entries, 1);
--} perf_map SEC(".maps");
--
--/* Writes the last PID that called sync to a map at index 0 */
--SEC("ksyscall/sync")
--int BPF_KSYSCALL(bpf_prog1)
+-SEC("kprobe/__set_task_comm")
+-int prog(struct pt_regs *ctx)
 -{
--	u64 pid = bpf_get_current_pid_tgid();
--	int idx = 0;
+-	struct signal_struct *signal;
+-	struct task_struct *tsk;
+-	char oldcomm[TASK_COMM_LEN] = {};
+-	char newcomm[TASK_COMM_LEN] = {};
+-	u16 oom_score_adj;
+-	u32 pid;
 -
--	if (!bpf_current_task_under_cgroup(&cgroup_map, 0))
--		return 0;
+-	tsk = (void *)PT_REGS_PARM1_CORE(ctx);
 -
--	bpf_map_update_elem(&perf_map, &idx, &pid, BPF_ANY);
+-	pid = BPF_CORE_READ(tsk, pid);
+-	bpf_core_read_str(oldcomm, sizeof(oldcomm), &tsk->comm);
+-	bpf_core_read_str(newcomm, sizeof(newcomm),
+-				  (void *)PT_REGS_PARM2(ctx));
+-	signal = BPF_CORE_READ(tsk, signal);
+-	oom_score_adj = BPF_CORE_READ(signal, oom_score_adj);
+-	return 0;
+-}
+-
+-SEC("kprobe/fib_table_lookup")
+-int prog2(struct pt_regs *ctx)
+-{
 -	return 0;
 -}
 -
 -char _license[] SEC("license") = "GPL";
 -u32 _version SEC("version") = LINUX_VERSION_CODE;
-diff --git a/samples/bpf/test_current_task_under_cgroup_user.c b/samples/bpf/test_current_task_under_cgroup_user.c
+diff --git a/samples/bpf/test_overhead_raw_tp.bpf.c b/samples/bpf/test_overhead_raw_tp.bpf.c
 deleted file mode 100644
-index 9726ed2a8a8b..000000000000
---- a/samples/bpf/test_current_task_under_cgroup_user.c
+index 6af39fe3f8dd..000000000000
+--- a/samples/bpf/test_overhead_raw_tp.bpf.c
 +++ /dev/null
-@@ -1,115 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/* Copyright (c) 2016 Sargun Dhillon <sargun@sargun.me>
-- */
+@@ -1,17 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-/* Copyright (c) 2018 Facebook */
+-#include "vmlinux.h"
+-#include <bpf/bpf_helpers.h>
 -
+-SEC("raw_tracepoint/task_rename")
+-int prog(struct bpf_raw_tracepoint_args *ctx)
+-{
+-	return 0;
+-}
+-
+-SEC("raw_tracepoint/fib_table_lookup")
+-int prog2(struct bpf_raw_tracepoint_args *ctx)
+-{
+-	return 0;
+-}
+-char _license[] SEC("license") = "GPL";
+diff --git a/samples/bpf/test_overhead_tp.bpf.c b/samples/bpf/test_overhead_tp.bpf.c
+deleted file mode 100644
+index 5dc08b587978..000000000000
+--- a/samples/bpf/test_overhead_tp.bpf.c
++++ /dev/null
+@@ -1,23 +0,0 @@
+-/* Copyright (c) 2016 Facebook
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of version 2 of the GNU General Public
+- * License as published by the Free Software Foundation.
+- */
+-#include "vmlinux.h"
+-#include <bpf/bpf_helpers.h>
+-
+-/* from /sys/kernel/tracing/events/task/task_rename/format */
+-SEC("tracepoint/task/task_rename")
+-int prog(struct trace_event_raw_task_rename *ctx)
+-{
+-	return 0;
+-}
+-
+-/* from /sys/kernel/tracing/events/fib/fib_table_lookup/format */
+-SEC("tracepoint/fib/fib_table_lookup")
+-int prog2(struct trace_event_raw_fib_table_lookup *ctx)
+-{
+-	return 0;
+-}
+-char _license[] SEC("license") = "GPL";
+diff --git a/samples/bpf/test_overhead_user.c b/samples/bpf/test_overhead_user.c
+deleted file mode 100644
+index dbd86f7b1473..000000000000
+--- a/samples/bpf/test_overhead_user.c
++++ /dev/null
+@@ -1,225 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/* Copyright (c) 2016 Facebook
+- */
 -#define _GNU_SOURCE
+-#include <sched.h>
+-#include <errno.h>
 -#include <stdio.h>
+-#include <sys/types.h>
+-#include <asm/unistd.h>
+-#include <fcntl.h>
 -#include <unistd.h>
+-#include <assert.h>
+-#include <sys/wait.h>
+-#include <sys/socket.h>
+-#include <arpa/inet.h>
+-#include <stdlib.h>
+-#include <signal.h>
+-#include <linux/bpf.h>
+-#include <string.h>
+-#include <time.h>
 -#include <bpf/bpf.h>
 -#include <bpf/libbpf.h>
--#include "cgroup_helpers.h"
 -
--#define CGROUP_PATH		"/my-cgroup"
+-#define MAX_CNT 1000000
+-#define DUMMY_IP "127.0.0.1"
+-#define DUMMY_PORT 80
+-
+-static struct bpf_link *links[2];
+-static struct bpf_object *obj;
+-static int cnt;
+-
+-static __u64 time_get_ns(void)
+-{
+-	struct timespec ts;
+-
+-	clock_gettime(CLOCK_MONOTONIC, &ts);
+-	return ts.tv_sec * 1000000000ull + ts.tv_nsec;
+-}
+-
+-static void test_task_rename(int cpu)
+-{
+-	char buf[] = "test\n";
+-	__u64 start_time;
+-	int i, fd;
+-
+-	fd = open("/proc/self/comm", O_WRONLY|O_TRUNC);
+-	if (fd < 0) {
+-		printf("couldn't open /proc\n");
+-		exit(1);
+-	}
+-	start_time = time_get_ns();
+-	for (i = 0; i < MAX_CNT; i++) {
+-		if (write(fd, buf, sizeof(buf)) < 0) {
+-			printf("task rename failed: %s\n", strerror(errno));
+-			close(fd);
+-			return;
+-		}
+-	}
+-	printf("task_rename:%d: %lld events per sec\n",
+-	       cpu, MAX_CNT * 1000000000ll / (time_get_ns() - start_time));
+-	close(fd);
+-}
+-
+-static void test_fib_table_lookup(int cpu)
+-{
+-	struct sockaddr_in addr;
+-	char buf[] = "test\n";
+-	__u64 start_time;
+-	int i, fd;
+-
+-	fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+-	if (fd < 0) {
+-		printf("couldn't open socket\n");
+-		exit(1);
+-	}
+-	memset((char *)&addr, 0, sizeof(addr));
+-	addr.sin_addr.s_addr = inet_addr(DUMMY_IP);
+-	addr.sin_port = htons(DUMMY_PORT);
+-	addr.sin_family = AF_INET;
+-	start_time = time_get_ns();
+-	for (i = 0; i < MAX_CNT; i++) {
+-		if (sendto(fd, buf, strlen(buf), 0,
+-			   (struct sockaddr *)&addr, sizeof(addr)) < 0) {
+-			printf("failed to start ping: %s\n", strerror(errno));
+-			close(fd);
+-			return;
+-		}
+-	}
+-	printf("fib_table_lookup:%d: %lld events per sec\n",
+-	       cpu, MAX_CNT * 1000000000ll / (time_get_ns() - start_time));
+-	close(fd);
+-}
+-
+-static void loop(int cpu, int flags)
+-{
+-	cpu_set_t cpuset;
+-
+-	CPU_ZERO(&cpuset);
+-	CPU_SET(cpu, &cpuset);
+-	sched_setaffinity(0, sizeof(cpuset), &cpuset);
+-
+-	if (flags & 1)
+-		test_task_rename(cpu);
+-	if (flags & 2)
+-		test_fib_table_lookup(cpu);
+-}
+-
+-static void run_perf_test(int tasks, int flags)
+-{
+-	pid_t pid[tasks];
+-	int i;
+-
+-	for (i = 0; i < tasks; i++) {
+-		pid[i] = fork();
+-		if (pid[i] == 0) {
+-			loop(i, flags);
+-			exit(0);
+-		} else if (pid[i] == -1) {
+-			printf("couldn't spawn #%d process\n", i);
+-			exit(1);
+-		}
+-	}
+-	for (i = 0; i < tasks; i++) {
+-		int status;
+-
+-		assert(waitpid(pid[i], &status, 0) == pid[i]);
+-		assert(status == 0);
+-	}
+-}
+-
+-static int load_progs(char *filename)
+-{
+-	struct bpf_program *prog;
+-	int err = 0;
+-
+-	obj = bpf_object__open_file(filename, NULL);
+-	err = libbpf_get_error(obj);
+-	if (err < 0) {
+-		fprintf(stderr, "ERROR: opening BPF object file failed\n");
+-		return err;
+-	}
+-
+-	/* load BPF program */
+-	err = bpf_object__load(obj);
+-	if (err < 0) {
+-		fprintf(stderr, "ERROR: loading BPF object file failed\n");
+-		return err;
+-	}
+-
+-	bpf_object__for_each_program(prog, obj) {
+-		links[cnt] = bpf_program__attach(prog);
+-		err = libbpf_get_error(links[cnt]);
+-		if (err < 0) {
+-			fprintf(stderr, "ERROR: bpf_program__attach failed\n");
+-			links[cnt] = NULL;
+-			return err;
+-		}
+-		cnt++;
+-	}
+-
+-	return err;
+-}
+-
+-static void unload_progs(void)
+-{
+-	while (cnt)
+-		bpf_link__destroy(links[--cnt]);
+-
+-	bpf_object__close(obj);
+-}
 -
 -int main(int argc, char **argv)
 -{
--	pid_t remote_pid, local_pid = getpid();
--	int cg2 = -1, idx = 0, rc = 1;
+-	int num_cpu = sysconf(_SC_NPROCESSORS_ONLN);
+-	int test_flags = ~0;
+-	char filename[256];
+-	int err = 0;
+-
+-
+-	if (argc > 1)
+-		test_flags = atoi(argv[1]) ? : test_flags;
+-	if (argc > 2)
+-		num_cpu = atoi(argv[2]) ? : num_cpu;
+-
+-	if (test_flags & 0x3) {
+-		printf("BASE\n");
+-		run_perf_test(num_cpu, test_flags);
+-	}
+-
+-	if (test_flags & 0xC) {
+-		snprintf(filename, sizeof(filename),
+-			 "%s_kprobe.bpf.o", argv[0]);
+-
+-		printf("w/KPROBE\n");
+-		err = load_progs(filename);
+-		if (!err)
+-			run_perf_test(num_cpu, test_flags >> 2);
+-
+-		unload_progs();
+-	}
+-
+-	if (test_flags & 0x30) {
+-		snprintf(filename, sizeof(filename),
+-			 "%s_tp.bpf.o", argv[0]);
+-		printf("w/TRACEPOINT\n");
+-		err = load_progs(filename);
+-		if (!err)
+-			run_perf_test(num_cpu, test_flags >> 4);
+-
+-		unload_progs();
+-	}
+-
+-	if (test_flags & 0xC0) {
+-		snprintf(filename, sizeof(filename),
+-			 "%s_raw_tp.bpf.o", argv[0]);
+-		printf("w/RAW_TRACEPOINT\n");
+-		err = load_progs(filename);
+-		if (!err)
+-			run_perf_test(num_cpu, test_flags >> 6);
+-
+-		unload_progs();
+-	}
+-
+-	return err;
+-}
+diff --git a/samples/bpf/test_override_return.sh b/samples/bpf/test_override_return.sh
+deleted file mode 100755
+index 35db26f736b9..000000000000
+--- a/samples/bpf/test_override_return.sh
++++ /dev/null
+@@ -1,16 +0,0 @@
+-#!/bin/bash
+-
+-rm -r tmpmnt
+-rm -f testfile.img
+-dd if=/dev/zero of=testfile.img bs=1M seek=1000 count=1
+-DEVICE=$(losetup --show -f testfile.img)
+-mkfs.btrfs -f $DEVICE
+-mkdir tmpmnt
+-./tracex7 $DEVICE
+-if [ $? -eq 0 ]
+-then
+-	echo "SUCCESS!"
+-else
+-	echo "FAILED!"
+-fi
+-losetup -d $DEVICE
+diff --git a/samples/bpf/test_probe_write_user.bpf.c b/samples/bpf/test_probe_write_user.bpf.c
+deleted file mode 100644
+index a4f3798b7fb0..000000000000
+--- a/samples/bpf/test_probe_write_user.bpf.c
++++ /dev/null
+@@ -1,52 +0,0 @@
+-/* Copyright (c) 2016 Sargun Dhillon <sargun@sargun.me>
+- *
+- * This program is free software; you can redistribute it and/or
+- * modify it under the terms of version 2 of the GNU General Public
+- * License as published by the Free Software Foundation.
+- */
+-#include "vmlinux.h"
+-#include <string.h>
+-#include <linux/version.h>
+-#include <bpf/bpf_helpers.h>
+-#include <bpf/bpf_tracing.h>
+-#include <bpf/bpf_core_read.h>
+-
+-struct {
+-	__uint(type, BPF_MAP_TYPE_HASH);
+-	__type(key, struct sockaddr_in);
+-	__type(value, struct sockaddr_in);
+-	__uint(max_entries, 256);
+-} dnat_map SEC(".maps");
+-
+-/* kprobe is NOT a stable ABI
+- * kernel functions can be removed, renamed or completely change semantics.
+- * Number of arguments and their positions can change, etc.
+- * In such case this bpf+kprobe example will no longer be meaningful
+- *
+- * This example sits on a syscall, and the syscall ABI is relatively stable
+- * of course, across platforms, and over time, the ABI may change.
+- */
+-SEC("ksyscall/connect")
+-int BPF_KSYSCALL(bpf_prog1, int fd, struct sockaddr_in *uservaddr,
+-		 int addrlen)
+-{
+-	struct sockaddr_in new_addr, orig_addr = {};
+-	struct sockaddr_in *mapped_addr;
+-
+-	if (addrlen > sizeof(orig_addr))
+-		return 0;
+-
+-	if (bpf_probe_read_user(&orig_addr, sizeof(orig_addr), uservaddr) != 0)
+-		return 0;
+-
+-	mapped_addr = bpf_map_lookup_elem(&dnat_map, &orig_addr);
+-	if (mapped_addr != NULL) {
+-		memcpy(&new_addr, mapped_addr, sizeof(new_addr));
+-		bpf_probe_write_user(uservaddr, &new_addr,
+-				     sizeof(new_addr));
+-	}
+-	return 0;
+-}
+-
+-char _license[] SEC("license") = "GPL";
+-u32 _version SEC("version") = LINUX_VERSION_CODE;
+diff --git a/samples/bpf/test_probe_write_user_user.c b/samples/bpf/test_probe_write_user_user.c
+deleted file mode 100644
+index 2a539aec4116..000000000000
+--- a/samples/bpf/test_probe_write_user_user.c
++++ /dev/null
+@@ -1,108 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0
+-#include <stdio.h>
+-#include <assert.h>
+-#include <unistd.h>
+-#include <bpf/bpf.h>
+-#include <bpf/libbpf.h>
+-#include <sys/socket.h>
+-#include <netinet/in.h>
+-#include <arpa/inet.h>
+-
+-int main(int ac, char **argv)
+-{
+-	struct sockaddr_in *serv_addr_in, *mapped_addr_in, *tmp_addr_in;
+-	struct sockaddr serv_addr, mapped_addr, tmp_addr;
+-	int serverfd, serverconnfd, clientfd, map_fd;
 -	struct bpf_link *link = NULL;
 -	struct bpf_program *prog;
 -	struct bpf_object *obj;
+-	socklen_t sockaddr_len;
 -	char filename[256];
--	int map_fd[2];
+-	char *ip;
+-
+-	serv_addr_in = (struct sockaddr_in *)&serv_addr;
+-	mapped_addr_in = (struct sockaddr_in *)&mapped_addr;
+-	tmp_addr_in = (struct sockaddr_in *)&tmp_addr;
 -
 -	snprintf(filename, sizeof(filename), "%s.bpf.o", argv[0]);
 -	obj = bpf_object__open_file(filename, NULL);
@@ -807,8 +654,8 @@ index 9726ed2a8a8b..000000000000
 -	}
 -
 -	prog = bpf_object__find_program_by_name(obj, "bpf_prog1");
--	if (!prog) {
--		printf("finding a prog in obj file failed\n");
+-	if (libbpf_get_error(prog)) {
+-		fprintf(stderr, "ERROR: finding a prog in obj file failed\n");
 -		goto cleanup;
 -	}
 -
@@ -818,9 +665,8 @@ index 9726ed2a8a8b..000000000000
 -		goto cleanup;
 -	}
 -
--	map_fd[0] = bpf_object__find_map_fd_by_name(obj, "cgroup_map");
--	map_fd[1] = bpf_object__find_map_fd_by_name(obj, "perf_map");
--	if (map_fd[0] < 0 || map_fd[1] < 0) {
+-	map_fd = bpf_object__find_map_fd_by_name(obj, "dnat_map");
+-	if (map_fd < 0) {
 -		fprintf(stderr, "ERROR: finding a map in obj file failed\n");
 -		goto cleanup;
 -	}
@@ -832,64 +678,138 @@ index 9726ed2a8a8b..000000000000
 -		goto cleanup;
 -	}
 -
--	if (setup_cgroup_environment())
--		goto err;
+-	assert((serverfd = socket(AF_INET, SOCK_STREAM, 0)) > 0);
+-	assert((clientfd = socket(AF_INET, SOCK_STREAM, 0)) > 0);
 -
--	cg2 = create_and_get_cgroup(CGROUP_PATH);
+-	/* Bind server to ephemeral port on lo */
+-	memset(&serv_addr, 0, sizeof(serv_addr));
+-	serv_addr_in->sin_family = AF_INET;
+-	serv_addr_in->sin_port = 0;
+-	serv_addr_in->sin_addr.s_addr = htonl(INADDR_LOOPBACK);
 -
--	if (cg2 < 0)
--		goto err;
+-	assert(bind(serverfd, &serv_addr, sizeof(serv_addr)) == 0);
 -
--	if (bpf_map_update_elem(map_fd[0], &idx, &cg2, BPF_ANY)) {
--		log_err("Adding target cgroup to map");
--		goto err;
--	}
+-	sockaddr_len = sizeof(serv_addr);
+-	assert(getsockname(serverfd, &serv_addr, &sockaddr_len) == 0);
+-	ip = inet_ntoa(serv_addr_in->sin_addr);
+-	printf("Server bound to: %s:%d\n", ip, ntohs(serv_addr_in->sin_port));
 -
--	if (join_cgroup(CGROUP_PATH))
--		goto err;
+-	memset(&mapped_addr, 0, sizeof(mapped_addr));
+-	mapped_addr_in->sin_family = AF_INET;
+-	mapped_addr_in->sin_port = htons(5555);
+-	mapped_addr_in->sin_addr.s_addr = inet_addr("255.255.255.255");
 -
--	/*
--	 * The installed helper program catched the sync call, and should
--	 * write it to the map.
--	 */
+-	assert(!bpf_map_update_elem(map_fd, &mapped_addr, &serv_addr, BPF_ANY));
 -
--	sync();
--	bpf_map_lookup_elem(map_fd[1], &idx, &remote_pid);
+-	assert(listen(serverfd, 5) == 0);
 -
--	if (local_pid != remote_pid) {
--		fprintf(stderr,
--			"BPF Helper didn't write correct PID to map, but: %d\n",
--			remote_pid);
--		goto err;
--	}
+-	ip = inet_ntoa(mapped_addr_in->sin_addr);
+-	printf("Client connecting to: %s:%d\n",
+-	       ip, ntohs(mapped_addr_in->sin_port));
+-	assert(connect(clientfd, &mapped_addr, sizeof(mapped_addr)) == 0);
 -
--	/* Verify the negative scenario; leave the cgroup */
--	if (join_cgroup("/"))
--		goto err;
+-	sockaddr_len = sizeof(tmp_addr);
+-	ip = inet_ntoa(tmp_addr_in->sin_addr);
+-	assert((serverconnfd = accept(serverfd, &tmp_addr, &sockaddr_len)) > 0);
+-	printf("Server received connection from: %s:%d\n",
+-	       ip, ntohs(tmp_addr_in->sin_port));
 -
--	remote_pid = 0;
--	bpf_map_update_elem(map_fd[1], &idx, &remote_pid, BPF_ANY);
+-	sockaddr_len = sizeof(tmp_addr);
+-	assert(getpeername(clientfd, &tmp_addr, &sockaddr_len) == 0);
+-	ip = inet_ntoa(tmp_addr_in->sin_addr);
+-	printf("Client's peer address: %s:%d\n",
+-	       ip, ntohs(tmp_addr_in->sin_port));
 -
--	sync();
--	bpf_map_lookup_elem(map_fd[1], &idx, &remote_pid);
--
--	if (local_pid == remote_pid) {
--		fprintf(stderr, "BPF cgroup negative test did not work\n");
--		goto err;
--	}
--
--	rc = 0;
--
--err:
--	if (cg2 != -1)
--		close(cg2);
--
--	cleanup_cgroup_environment();
+-	/* Is the server's getsockname = the socket getpeername */
+-	assert(memcmp(&serv_addr, &tmp_addr, sizeof(struct sockaddr_in)) == 0);
 -
 -cleanup:
 -	bpf_link__destroy(link);
 -	bpf_object__close(obj);
--	return rc;
+-	return 0;
+-}
+diff --git a/samples/bpf/tracex7.bpf.c b/samples/bpf/tracex7.bpf.c
+deleted file mode 100644
+index ab8d6704a5a4..000000000000
+--- a/samples/bpf/tracex7.bpf.c
++++ /dev/null
+@@ -1,15 +0,0 @@
+-#include "vmlinux.h"
+-#include <linux/version.h>
+-#include <bpf/bpf_helpers.h>
+-
+-SEC("kprobe/open_ctree")
+-int bpf_prog1(struct pt_regs *ctx)
+-{
+-	unsigned long rc = -12;
+-
+-	bpf_override_return(ctx, rc);
+-	return 0;
+-}
+-
+-char _license[] SEC("license") = "GPL";
+-u32 _version SEC("version") = LINUX_VERSION_CODE;
+diff --git a/samples/bpf/tracex7_user.c b/samples/bpf/tracex7_user.c
+deleted file mode 100644
+index b10b5e03a226..000000000000
+--- a/samples/bpf/tracex7_user.c
++++ /dev/null
+@@ -1,56 +0,0 @@
+-#define _GNU_SOURCE
+-
+-#include <stdio.h>
+-#include <unistd.h>
+-#include <bpf/libbpf.h>
+-
+-int main(int argc, char **argv)
+-{
+-	struct bpf_link *link = NULL;
+-	struct bpf_program *prog;
+-	struct bpf_object *obj;
+-	char filename[256];
+-	char command[256];
+-	int ret = 0;
+-	FILE *f;
+-
+-	if (!argv[1]) {
+-		fprintf(stderr, "ERROR: Run with the btrfs device argument!\n");
+-		return 0;
+-	}
+-
+-	snprintf(filename, sizeof(filename), "%s.bpf.o", argv[0]);
+-	obj = bpf_object__open_file(filename, NULL);
+-	if (libbpf_get_error(obj)) {
+-		fprintf(stderr, "ERROR: opening BPF object file failed\n");
+-		return 0;
+-	}
+-
+-	prog = bpf_object__find_program_by_name(obj, "bpf_prog1");
+-	if (!prog) {
+-		fprintf(stderr, "ERROR: finding a prog in obj file failed\n");
+-		goto cleanup;
+-	}
+-
+-	/* load BPF program */
+-	if (bpf_object__load(obj)) {
+-		fprintf(stderr, "ERROR: loading BPF object file failed\n");
+-		goto cleanup;
+-	}
+-
+-	link = bpf_program__attach(prog);
+-	if (libbpf_get_error(link)) {
+-		fprintf(stderr, "ERROR: bpf_program__attach failed\n");
+-		link = NULL;
+-		goto cleanup;
+-	}
+-
+-	snprintf(command, 256, "mount %s tmpmnt/", argv[1]);
+-	f = popen(command, "r");
+-	ret = pclose(f);
+-
+-cleanup:
+-	bpf_link__destroy(link);
+-	bpf_object__close(obj);
+-	return ret ? 0 : 1;
 -}
 --
 2.43.0
