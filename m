@@ -1,74 +1,74 @@
-Return-Path: <linux-kselftest+bounces-19599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD21B99B31A
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Oct 2024 12:42:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EA1499B32E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Oct 2024 12:57:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A9F21C21AC6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Oct 2024 10:42:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED7CC284312
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Oct 2024 10:57:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 319301547ED;
-	Sat, 12 Oct 2024 10:42:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F78C1552EE;
+	Sat, 12 Oct 2024 10:57:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="CJ1ch+Xs"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="CSeLt16K"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3865154426
-	for <linux-kselftest@vger.kernel.org>; Sat, 12 Oct 2024 10:42:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BFB01547CD
+	for <linux-kselftest@vger.kernel.org>; Sat, 12 Oct 2024 10:57:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728729759; cv=none; b=XF/62GbL1um/ta4KUInRncs8Qo6oUM9cYoB9OQPCqTgySwsD7M4FZT3kw4k0h3wzCdKp0quSZBSKb/CcknwcS7Ow/5Y3a3mZCDxgeUxDm/U14ZBl8D4mx6ZTlKDse67redUx7BtNc+FCa+cbSd3yUN5yxhiFqhsrsShqlYhzPCk=
+	t=1728730650; cv=none; b=ndkFg1fVaodwU86laNNgWOASw2HVBLGHutTwx1eWDgDmsrXKqvFLJGeLopw1BewWnmNb1dRecUZh4dNMKO2MTFMF3qPFuhslNoT+gTJELQCv8sZV7be8HhSjDqbrhM1dSp6kdfP6xnZTyNHYZ83jQgILCqo/gFK4GdssLGmLvxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728729759; c=relaxed/simple;
-	bh=F2Sp1fzcw8Uf/QMINhGhDYWS9F5dWa9nb4/qh8r/ALY=;
+	s=arc-20240116; t=1728730650; c=relaxed/simple;
+	bh=yzj48cWj4L8LiQC5ox1BGXI/Tjjq1Nx6uec3CrMVcKI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=jdBIXyeUNThMvgVQbcye+kC4qjNxOH90yld9otaEfxtyn4MshA7tD51wx0DjnJ8pvp9pn0Fx+fKECv7XnGRHlHdzjMkPh8slzHT8a2BHzwnoTpPA4DX98gl8JxU9OgLcm8lfWmzoDBVWaJBSUqHI6oN1VoFwKvhHaYBrGXPTv2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=none smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=CJ1ch+Xs; arc=none smtp.client-ip=209.85.214.175
+	 In-Reply-To:Content-Type; b=Hj7dZyyWaL/ho9e0okIksgxIJEhl5iYN9INw455aAFZu1CMeB5fvjKUK6xsKEXCrX6KUq13+f8nn4meIYb481HiCzXQ0f1gYQjMJG5t6qJVuyXHqLMsECBZ5wCPFtVzDl1XeRGzFwHoBeaSdHwjO7uyBTzMldMeATfeVioJ6Q/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com; spf=none smtp.mailfrom=daynix.com; dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b=CSeLt16K; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=daynix.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-20c70abba48so19098705ad.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 12 Oct 2024 03:42:37 -0700 (PDT)
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-7db908c9c83so1644810a12.2
+        for <linux-kselftest@vger.kernel.org>; Sat, 12 Oct 2024 03:57:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1728729757; x=1729334557; darn=vger.kernel.org;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1728730648; x=1729335448; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:to:subject:user-agent:mime-version:date:message-id:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=rnVDkA3/NaAKhKgMUHvmItPchk02Cn37cnkYPg5p2Qw=;
-        b=CJ1ch+XsP3k9Bdzgi04+URwvUed22kf7IKlTv1B37FV6auETP4UlJefSeJXGYF9vSb
-         BndSPWHOFR5xJEBQbpFAxbda8AOE0AO2cUs5dvj0yNA6O+i1JXchGPZMtEEcUBJ1jDpA
-         9ae5pOZ4/yMrP9TjbkbPbVtkeUGQhjollE3J4wiGs9fK52X2x1+HrGucK/JOEL2JW79P
-         6cInfHli9hUziadd/Wsbh4zll4iZ37mOZPwoSCDOt8srfmrJtBy+AFMV/iBVQfaWP60W
-         LDAvyZwIkTLvul7Ko140liyADahfYrbPfITSn4SlImw3918FdMwtiQzT5teJi6CGysLl
-         wU9g==
+        bh=RQHS9P9S9IhAfq2pHjdIrMEoP4ui2SXVS05dgp3eWDo=;
+        b=CSeLt16KDtXf38VTmxWsiaFLnugXTgimirMnF9N8sJe5GkzloTe+Cf2vHLD/+aTL3/
+         jsYZjwPHHeORE8nXdtkqDJmjwzhBQ8Vo2ESaQGb4lg/z6XYjXSqrk9a9r8xdJnPEKeHu
+         oAs2XGtt3uDAd9xGGQIvAlhmIEl51dgY4MCz6uTwGtyejn7w1eehw2/2Zc6hHT9YUK0y
+         zQL0NkzuObzhHwzwzsfCiahehxbzWJ8nHn1zWa1BhRnChTSau1gK81t2YlxnEE+/Mwx8
+         txJMD0M59MeuoRP5soEe/L+6zeOpBGCa47wkL0A/pWzorP2KXjci/My5fYT9f8dAAxLv
+         3roA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728729757; x=1729334557;
+        d=1e100.net; s=20230601; t=1728730648; x=1729335448;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rnVDkA3/NaAKhKgMUHvmItPchk02Cn37cnkYPg5p2Qw=;
-        b=mNleOy40C3xgwl+kiawDQFvekUhaF8Y7v1mHoAIpIugsEiPXgyLGUIq55rd31HK0Ag
-         5pA2zChG68bPACNIXhzHMtLX4VJoVJxCvNDpltm6lfKO8t0iPM7gPFBK4LsHXU7oNJ4Y
-         eRXLjMvP4AHrOo4LDfFLySM0JQPLX7mLhd6zFJKaFMaMmNYroy6nFrZEZSYRxxYDRHlW
-         XtdX6Kowi+O/EJiqUp3JFSo3lvyM+evLJzn4A6f+LOHR5uWhKZuX0hP49b6rW1+jKmMU
-         OpgFleJ+JMcUfFqrK0ZGpBN6ZBliRd6bDDj2zp0nmVJ/mTLa0LgzkGTRFvZzs6XSjW1Q
-         ISpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX5UFFuT1DpiiGdAopzE5+R2BlwEOkA3cdoxXy7vriy3OS1xUxRSRx0HgfBBMNMy9neR1Zt1FNomHV5rPKULgI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydKeuOmkQMqWSXeMkuISMqlJTLXmU9URPIM9k1PoCSmqXCnscn
-	YVIV+MrTtfs+FLwsvOC04S94l+bIU/krZsrNoDgmIiEsTOA7TCDKa3pvwgXinoU=
-X-Google-Smtp-Source: AGHT+IHAAJSka16NZVOG9ERRGT0s8XZNSpBXGOA3FY01waa9+ItcfG5gf6PTH3meZ9nN0csYqZ692Q==
-X-Received: by 2002:a17:902:e5d2:b0:20c:ce9c:bbb0 with SMTP id d9443c01a7336-20cce9cbddfmr6671465ad.0.1728729757238;
-        Sat, 12 Oct 2024 03:42:37 -0700 (PDT)
+        bh=RQHS9P9S9IhAfq2pHjdIrMEoP4ui2SXVS05dgp3eWDo=;
+        b=bGq4fj3ilzfutDZRKLKqZ8Av0YO0/j2cI4kpTbM1S5Kfw9zSqLYre1u5Dcd+cwMQXX
+         3p/nlKfSkNLNHJvK8zUd9D1HqcgKyUUuEx7tMZNS8bayKV4THTcA8eFNtezE3jckqAx3
+         Y2GuSCkdpgmYGASGClsceCYnZVx1FzSnFieh3ku4sfH5FXjqlIF1P//piFaZhhX13Kp6
+         tzBx/tf/8gXxuT+F7j5tgXeqafOWa9Wv2qVFLuHNzSvpIwAXELDJbSraBEBsyjjBOdVo
+         CKpZvRgvXRopa4OCqX7rlgSgYDMgtia72TIDmKQMwAEH7J6nU32giWI+AhEhUIgb28c3
+         5aaw==
+X-Forwarded-Encrypted: i=1; AJvYcCVVdN82RtTI3Nyo06b9Zsk8/7+bh1VWWtaGdBFSekZzGQDEB/rU3z0AV0N8PCH9gTsIMy62bcmvo7oXJtWL7vA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8sOL2AtKuFK02oM3EPwCXA1iZdx2RtpJ/rg2vi05H2vpYId5v
+	9QclIPd1ItoszzE60j6dVIRWzJiPM+460w4nW6pDKCaTVNQLIbpNerlGyw6aEpU=
+X-Google-Smtp-Source: AGHT+IFekv1Jof5V0rzE74khJL3aujdAI4lCz36fIxAEe87tyEoPh3HrVVeYVj30VhB4bKJv7WvZZQ==
+X-Received: by 2002:a05:6a20:e617:b0:1d8:aade:dae8 with SMTP id adf61e73a8af0-1d8c96c477bmr3811262637.49.1728730648461;
+        Sat, 12 Oct 2024 03:57:28 -0700 (PDT)
 Received: from [157.82.207.107] ([157.82.207.107])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20c8c33ffadsm35367635ad.266.2024.10.12.03.42.32
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ea6ed5f6d0sm676332a12.53.2024.10.12.03.57.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 12 Oct 2024 03:42:36 -0700 (PDT)
-Message-ID: <30bbebd8-1692-4b62-9a1f-070f6152061c@daynix.com>
-Date: Sat, 12 Oct 2024 19:42:31 +0900
+        Sat, 12 Oct 2024 03:57:28 -0700 (PDT)
+Message-ID: <f4501f54-875a-4c46-9e77-802bd81f4230@daynix.com>
+Date: Sat, 12 Oct 2024 19:57:22 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,7 +76,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v5 01/10] virtio_net: Add functions for hashing
+Subject: Re: [PATCH RFC v5 04/10] tun: Unify vnet implementation
 To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
  Jonathan Corbet <corbet@lwn.net>, Jason Wang <jasowang@redhat.com>,
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
@@ -90,25 +90,57 @@ To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
  Andrew Melnychenko <andrew@daynix.com>,
  Stephen Hemminger <stephen@networkplumber.org>, gur.stavi@huawei.com
 References: <20241008-rss-v5-0-f3cf68df005d@daynix.com>
- <20241008-rss-v5-1-f3cf68df005d@daynix.com>
- <67068a7261d8c_1cca3129414@willemb.c.googlers.com.notmuch>
+ <20241008-rss-v5-4-f3cf68df005d@daynix.com>
+ <67068b632d2d2_1cca3129484@willemb.c.googlers.com.notmuch>
 Content-Language: en-US
 From: Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <67068a7261d8c_1cca3129414@willemb.c.googlers.com.notmuch>
+In-Reply-To: <67068b632d2d2_1cca3129484@willemb.c.googlers.com.notmuch>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 2024/10/09 22:51, Willem de Bruijn wrote:
+On 2024/10/09 22:55, Willem de Bruijn wrote:
 > Akihiko Odaki wrote:
->> They are useful to implement VIRTIO_NET_F_RSS and
->> VIRTIO_NET_F_HASH_REPORT.
+>> Both tun and tap exposes the same set of virtio-net-related features.
+>> Unify their implementations to ease future changes.
 >>
 >> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
 >> ---
->>   include/linux/virtio_net.h | 188 +++++++++++++++++++++++++++++++++++++++++++++
+>>   MAINTAINERS            |   1 +
+>>   drivers/net/tap.c      | 172 ++++++----------------------------------
+>>   drivers/net/tun.c      | 208 ++++++++-----------------------------------------
+>>   drivers/net/tun_vnet.h | 181 ++++++++++++++++++++++++++++++++++++++++++
 > 
-> No need for these to be in header files
+> Same point: should not be in a header.
+> 
+> Also: I've looked into deduplicating code between the various tun, tap
+> and packet socket code as well.
+> 
+> In general it's a good idea. The main counter arguments is that such a
+> break in continuity also breaks backporting fixes to stable. So the
+> benefit must outweight that cost.
+> 
+> In this case, the benefits in terms of LoC are rather modest. Not sure
+> it's worth it.
+> 
+> Even more importantly: are the two code paths that you deduplicate
+> exactly identical? Often in the past the two subtly diverged over
+> time, e.g., due to new features added only to one of the two.
 
-I naively followed prior examples in this file. Do you have an 
-alternative idea?
+I find extracting the virtio_net-related code into functions is 
+beneficial. For example, tun_get_user() is a big function and extracting 
+the virtio_net-related code into tun_vnet_hdr_get() will ease 
+understanding tun_get_user() when you are not interested in virtio_net. 
+If virtio_net is your interest, you can look at this group of functions 
+to figure out how they interact with each other.
+
+Currently, the extracted code is almost identical for tun and tap so 
+they can share it. We can copy the code back (but keep functions as 
+semantic units) if they diverge in the future.
+
+> 
+> If so, call out any behavioral changes to either as a result of
+> deduplicating explicitly.
+
+This adds an error message for GSO failure, which was missing for tap. I 
+will note that in the next version.
 
