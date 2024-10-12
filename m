@@ -1,238 +1,148 @@
-Return-Path: <linux-kselftest+bounces-19579-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19580-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D65399AFA9
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Oct 2024 02:21:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8EB399AFB4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Oct 2024 02:46:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 070741F238DB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Oct 2024 00:21:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B26CB1F22F6D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 12 Oct 2024 00:46:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72519881E;
-	Sat, 12 Oct 2024 00:21:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE5CD8F49;
+	Sat, 12 Oct 2024 00:46:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YqqkBGVz"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="aj5BmZS9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE8153A7
-	for <linux-kselftest@vger.kernel.org>; Sat, 12 Oct 2024 00:21:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F4C423DE;
+	Sat, 12 Oct 2024 00:46:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728692510; cv=none; b=NUOEbj3oM//v8Qt42Kc6sM4XdM8BvdWV3RLz2QJ9o4NGFUVoQLV2oORF71m1eCpX3K5AmqIXw3McoreFcPw9sjHDWFc4ulVGKKWj6VQtIkGbO9A97DnRcRDOcHSyF36KcNrPGRUEP8vxPgCV48+QS2MWuYBbA/+SwWPh0wfayfk=
+	t=1728693963; cv=none; b=MFwXnczXDjZJxf1e/9lrL5wAaTrL6eSmtcJwU1vFf/xApV8yROLpYKq1hd/cvovTENMJQHz55rgyhvAgqNbU4/F8j64knCxAbFXEPFXxTHTAEKLfJb/xyBrjq8EahccKK918B/01Bz+g55vU2L1oASnu09c3a31TtsgO+i6z20k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728692510; c=relaxed/simple;
-	bh=DQ+hL4n7ns/jcpxR+c9OE6/V7v4D7xpS5MVAdpJyYck=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=geRcPwR/5A4IpamNoxOXiL+YMtSTjGddhliaE3skGb+QWdXSK6IziVJTsd6+TJiOLC4EtjTW4q5+55/wMqd7IN0vLhicETGU1xLHSbwEG558Ui11j5p2r5CanyJ5dopR7ZbI1zJeW1K0q02BcTm/edpoGyh2GvaMkHVv94UqUtE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YqqkBGVz; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6e2e5e376fcso55423777b3.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 11 Oct 2024 17:21:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728692508; x=1729297308; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=80TYEvDINN/ZhWp27g0pSsVe8yEUOU5CnuEFxk9tjSI=;
-        b=YqqkBGVz0hUOc73PsfKna1WygeWXA87XyedKiQTg3r8v7lSE7ythGqmzqLsWavwDHL
-         RqfQLRAVduhXX0WtbKd1HNCiPH4ZFdSpXZY54mkc47tMV+ZYH9Tk2X2V/5xjQ09KVwt6
-         u+snJ7Q4Iq6VG9qmYfH3v2any6LR7W5HhjdXpv1/pzGCVKYVdPNtBTZ77NpUJiftW7pn
-         2sfnLKFuIsk53GYrG0yqkC4mVn+HetN3HR2V01Ue5ncodhS8WPae4/6e+i6YZo+UyGbW
-         smcgpXZ3tkevSe/HfS0jYsKkr/ahO+LoBCuCnMNT4cevCRLGQWxabEA8j0Kby7KQ+SVE
-         gJtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728692508; x=1729297308;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=80TYEvDINN/ZhWp27g0pSsVe8yEUOU5CnuEFxk9tjSI=;
-        b=QboDEsyE3AtbCiRAbtcGjvpB+L77etpEjUf57KmJZJEr0IWl9mRsLl6VZl0l0UkNd5
-         7Zdcc3Qtx+rxXDwRd5aaI43Ps8lCRtbU0Kj0xMxojCCkHOq8yfDSb7Hul0zSr54IPqXk
-         61i5kxwep4H3T9bawrA1EaXtycRDJRXz+H8PBkuZZfR0O1HgSnXLm3FmQBVZ22c5Rlwz
-         AV7If/91zWua8iad6BfrqMgdo5HdhFFOoikyBHsOZW1megWe1a/KqsJxHG+1Z2ddfZcw
-         oJJ9dWGxsVIIU/DXSJab37TvlzOuuKAVpHs+/mlhexQzmbzg+lfjEEUJDO8DSfAzYS4g
-         LKug==
-X-Forwarded-Encrypted: i=1; AJvYcCVM4ADC0Y/5hjrdLRyMd+HEu+WhKwauaHQH7OC3nJPHcvUclUNfyUTjyDeRrGE82qg9czyQh6cqQ8FnbCusLLU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyU2gIdV7UbSILh1sUSvKUkrB3hN8czG9X2A/PSJftTD0fvYSan
-	gDGGqpPqT/IrHa9D+pjJSbiWXKqyEHMCUh28FahFOvD4aW2PUAeeSzcUo/PNV6AbTW/dMkq3GYf
-	KLQ==
-X-Google-Smtp-Source: AGHT+IE8twxV/hbdB3uHbG/bVu0SKqde502fj8APO5J/UtbrdZWgVevUlaIfsNjN+xe1tgDO/X2eQBAwzOk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:9d:3983:ac13:c240])
- (user=seanjc job=sendgmr) by 2002:a25:748e:0:b0:e28:e510:6ab1 with SMTP id
- 3f1490d57ef6-e2919fe7a06mr2445276.8.1728692507770; Fri, 11 Oct 2024 17:21:47
- -0700 (PDT)
-Date: Fri, 11 Oct 2024 17:21:46 -0700
-In-Reply-To: <20240927161657.68110-4-iorlov@amazon.com>
+	s=arc-20240116; t=1728693963; c=relaxed/simple;
+	bh=03mdz6rSQN+mEWSNjENY0OvO4Dq+Ckf7oqc8W6cqYGA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fIc78Hq5r4mAJd+g6G6eIXSQ5U8zcgmUZAFSfF9Z4Dkk3H3f6VfDu3m161EnjuC85Zk/r8rkDW25Tl2gJ9Km5WOl1z74PSqdkU+sX4deGTdkb/ZJkhfFFqLpUydQ0kU8LT9gQHo29jZxCzz5G+6nTWOjxlhepCSNetN6DadqYdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=aj5BmZS9; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246631.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49BKSd8x015032;
+	Sat, 12 Oct 2024 00:45:39 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=corp-2023-11-20; bh=401lJvQNKnrERdkGWRcfzv+ewoVPW
+	VojqXT3wod/tBs=; b=aj5BmZS9io5t7TFNKoUUe2Pt73Dvcafob1cCqA/di1/W7
+	goPPgI2G/3oyd32pFoW5uvAllUGsoANJbSPh+ltwWNks4zgIz8uJ9KvhVXDqnWw7
+	8tfzyfOuEGZ5Q47l+viZmWbtQics0mxldl4FLuEXwd/gxeTgOEcrAkT0QG9zOzC0
+	DMvkOBRPbkoN03Vv7TN7QfAteTSLC5yPDShztkQmN5EKNyEe4xOPQ9mJ1XfgBCbW
+	LptYnHpTyKe9avYs/bDf3GlbIb1gw6F8PU6CxUKKZRm8iksUknen2B4eArBVGuAL
+	2VUlnj3UyQq38GVZ+VLfhzHqHLCMBk+nqJwk0y4tg==
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 42300e63ja-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 12 Oct 2024 00:45:38 +0000 (GMT)
+Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49BNopYT005686;
+	Sat, 12 Oct 2024 00:45:37 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 422uwbvtbk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Sat, 12 Oct 2024 00:45:37 +0000
+Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49C0jbP1017077;
+	Sat, 12 Oct 2024 00:45:37 GMT
+Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
+	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 422uwbvtat-1;
+	Sat, 12 Oct 2024 00:45:36 +0000
+From: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+To: davem@davemloft.net, Liam.Howlett@Oracle.com
+Cc: edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        vschneid@redhat.com, jiri@resnulli.us, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, akpm@linux-foundation.org, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, anjali.k.kulkarni@oracle.com,
+        peili.io@oracle.com
+Subject: [PATCH net-next 0/3] Threads support in proc connector
+Date: Fri, 11 Oct 2024 17:45:29 -0700
+Message-ID: <20241012004532.2071738-1-anjali.k.kulkarni@oracle.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240927161657.68110-1-iorlov@amazon.com> <20240927161657.68110-4-iorlov@amazon.com>
-Message-ID: <ZwnBGtdbvmKHc4in@google.com>
-Subject: Re: [PATCH 3/3] selftests: KVM: Add test case for MMIO during event delivery
-From: Sean Christopherson <seanjc@google.com>
-To: Ivan Orlov <iorlov@amazon.com>
-Cc: bp@alien8.de, dave.hansen@linux.intel.com, mingo@redhat.com, 
-	pbonzini@redhat.com, shuah@kernel.org, tglx@linutronix.de, hpa@zytor.com, 
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, x86@kernel.org, jalliste@amazon.com, 
-	nh-open-source@amazon.com, pdurrant@amazon.co.uk
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-11_21,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 malwarescore=0
+ mlxlogscore=999 mlxscore=0 suspectscore=0 adultscore=0 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2409260000 definitions=main-2410120004
+X-Proofpoint-GUID: JrgheWxh_3SGgveG80bDl79-3est8sU2
+X-Proofpoint-ORIG-GUID: JrgheWxh_3SGgveG80bDl79-3est8sU2
 
-On Fri, Sep 27, 2024, Ivan Orlov wrote:
-> Extend the 'set_memory_region_test' with a test case which covers the
-> MMIO during event delivery error handling. The test case
-> 
-> 1) Tries to set an IDT descriptor base to point to an MMIO address
-> 2) Generates a #GP
-> 3) Verifies that we got a correct exit reason (KVM_EXIT_INTERNAL_ERROR)
->    and suberror code (KVM_INTERNAL_ERROR_DELIVERY_EV)
-> 4) Verifies that we got a corrent "faulty" GPA in internal.data[3]
-> 
-> Signed-off-by: Ivan Orlov <iorlov@amazon.com>
-> ---
->  .../selftests/kvm/set_memory_region_test.c    | 46 +++++++++++++++++++
->  1 file changed, 46 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
-> index a8267628e9ed..e9e97346edf1 100644
-> --- a/tools/testing/selftests/kvm/set_memory_region_test.c
-> +++ b/tools/testing/selftests/kvm/set_memory_region_test.c
-> @@ -553,6 +553,51 @@ static void test_add_overlapping_private_memory_regions(void)
->  	close(memfd);
->  	kvm_vm_free(vm);
->  }
-> +
-> +static const struct desc_ptr faulty_idt_desc = {
-> +	.address = MEM_REGION_GPA,
-> +	.size = 0xFFF,
-> +};
+Recently we committed a fix to allow processes to receive notifications for
+non-zero exits via the process connector module. Commit is a4c9a56e6a2c.
 
-There's no reason this needs to be global, i.e. declare it in the function, on
-the stack.
+However, for threads, when it does a pthread_exit(&exit_status) call, the
+kernel is not aware of the exit status with which pthread_exit is called.
+It is sent by child thread to the parent process, if it is waiting in
+pthread_join(). Hence, for a thread exiting abnormally, kernel cannot
+send notifications to any listening processes.
 
-> +
-> +static void guest_code_faulty_idt_desc(void)
-> +{
-> +	__asm__ __volatile__("lidt %0"::"m"(faulty_idt_desc));
+The exception to this is if the thread is sent a signal which it has not
+handled, and dies along with it's process as a result; for eg. SIGSEGV or
+SIGKILL. In this case, kernel is aware of the non-zero exit and sends a
+notification for it.
 
-It's not "faulty".  It specifically points at MMIO.  That is _very_ different
-than a "faulty" address, because an actual fault when vectoring an event would
-lead to triple fault shutdown.  And a benefit of declaring the descriptor locally
-is that you don't need to come up with a descriptive name :-) E.g.
+For our use case, we cannot have parent wait in pthread_join, one of the
+main reasons for this being that we do not want to track normal
+pthread_exit(), which could be a very large number. We only want to be
+notified of any abnormal exits. Hence, threads are created with
+pthread_attr_t set to PTHREAD_CREATE_DETACHED.
 
-	const struct desc_ptr idt_desc = {
-		.address = MEM_REGION_GPA,
-		.size = 0xfff,
-	};
+To fix this problem, we add a new type PROC_CN_MCAST_NOTIFY to proc connector
+API, which allows a thread to send it's exit status to kernel either when
+it needs to call pthread_exit() with non-zero value to indicate some
+error or from signal handler before pthread_exit().
 
-And it's probably worth adding a lidt() helper in processor.h (in a separate
-commit, because there's two other users that can be converted when it's added).
+Anjali Kulkarni (3):
+  connector/cn_proc: Add hash table for threads
+  connector/cn_proc: Kunit tests for threads hash table
+  connector/cn_proc: Selftest for threads
 
-> +
-> +	/* Generate a #GP by dereferencing a non-canonical address */
-> +	*((uint8_t *)0xDEADBEEFDEADBEEFULL) = 0x1;
+ drivers/connector/Makefile                    |   2 +-
+ drivers/connector/cn_hash.c                   | 240 ++++++++++++++++++
+ drivers/connector/cn_proc.c                   |  59 ++++-
+ drivers/connector/connector.c                 |  96 ++++++-
+ include/linux/connector.h                     |  47 ++++
+ include/linux/sched.h                         |   2 +-
+ include/uapi/linux/cn_proc.h                  |   4 +-
+ lib/Kconfig.debug                             |  17 ++
+ lib/Makefile                                  |   1 +
+ lib/cn_hash_test.c                            | 167 ++++++++++++
+ lib/cn_hash_test.h                            |  12 +
+ tools/testing/selftests/connector/Makefile    |  23 +-
+ .../testing/selftests/connector/proc_filter.c |   5 +
+ tools/testing/selftests/connector/thread.c    |  90 +++++++
+ .../selftests/connector/thread_filter.c       |  93 +++++++
+ 15 files changed, 848 insertions(+), 10 deletions(-)
+ create mode 100644 drivers/connector/cn_hash.c
+ create mode 100644 lib/cn_hash_test.c
+ create mode 100644 lib/cn_hash_test.h
+ create mode 100644 tools/testing/selftests/connector/thread.c
+ create mode 100644 tools/testing/selftests/connector/thread_filter.c
 
-Hmm, I could have sworn KVM-Unit-Tests' NONCANONICAL got pulled into selftests.
-Please do that as part of the test, e.g. add this to processor.h
+-- 
+2.46.0
 
-#define NONCANONICAL	0xaaaaaaaaaaaaaaaaull
-
-> +
-> +	/* We should never reach this point */
-
-No pronouns.  Yes, it's nitpicky, but "we" gets _very_ ambiguous when "we" could
-mean the admin, the user, the VMM, KVM, the guest, etc.
-
-> +	GUEST_ASSERT(0);
-> +}
-> +
-> +/*
-> + * This test tries to point the IDT descriptor base to an MMIO address.
-
-There is no try.  Do, or do not :-)
-
-Translation: just state what the code does, don't hedge.
-
-> This action
-
-Wrap at 89.
-
-> + * should cause a KVM internal error, so the VMM could handle such situations gracefully.
-
-Heh, don't editorialize what a VMM might do in comments.  For changelogs it's
-often helpful, as it provides justification and context for _why_ that is the
-behavior.  But for a selftest, just state what KVM's ABI is.  E.g. I guarantee
-there are plenty of VMMs that don't handle this situation gracefully :-)
-
-> + */
-> +static void test_faulty_idt_desc(void)
-> +{
-> +	struct kvm_vm *vm;
-> +	struct kvm_vcpu *vcpu;
-> +
-> +	pr_info("Testing a faulty IDT descriptor pointing to an MMIO address\n");
-> +
-> +	vm = vm_create_with_one_vcpu(&vcpu, guest_code_faulty_idt_desc);
-> +	virt_map(vm, MEM_REGION_GPA, MEM_REGION_GPA, 1);
-> +
-> +	vcpu_run(vcpu);
-> +	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_INTERNAL_ERROR);
-> +	TEST_ASSERT(vcpu->run->internal.suberror == KVM_INTERNAL_ERROR_DELIVERY_EV,
-> +		    "Unexpected suberror = %d", vcpu->run->internal.suberror);
-> +	TEST_ASSERT(vcpu->run->internal.ndata > 4, "Unexpected internal error data array size = %d",
-> +		    vcpu->run->internal.ndata);
-
-Capture "run", or maybe event "internal" in a local variable.  Doing so will
-shorten these lines and make the code easier to read.  I'd probably vote for
-grabbing "internal" since TEST_ASSERT_KVM_EXIT_REASON() takes care of asserting
-on the bits outside of "internal".
-
-> +	/* The "faulty" GPA address should be = IDT base + offset of the GP vector */
-
-GPA address is redundant.  GPA is Guest Physical Address.
-
-Again, avoid "faulty".  "reported" works nicely.  And try not to mix code with
-human language (though it's ok for math, e.g. the '+' is totally fine and
-preferred).  The '=' is hard to read because it looks like a typo.  And in this
-case, there's no need to actually say "equal to".  And similar to writing changelogs
-for humans instead of giving a play-by-play of the code, do the same for comments, e.g.
-
-	/* The reported GPA should be the address of the #GP entry in the IDT. */
-
-> +	TEST_ASSERT(vcpu->run->internal.data[3] == MEM_REGION_GPA +
-> +		    GP_VECTOR * sizeof(struct idt_entry),
-
-Put the math on one line, i.e.
-
-		    vcpu->run->internal.data[3] ==
-		    MEM_REGION_GPA + GP_VECTOR * sizeof(struct idt_entry),
-
-> +		    "Unexpected GPA = %llx", vcpu->run->internal.data[3]);
-
-Print what GPA was expected, so that the user doesn't have to manually figure
-that out.
-
-> +
-> +	kvm_vm_free(vm);
-> +}
->  #endif
->  
->  int main(int argc, char *argv[])
-> @@ -568,6 +613,7 @@ int main(int argc, char *argv[])
->  	 * KVM_RUN fails with ENOEXEC or EFAULT.
->  	 */
->  	test_zero_memory_regions();
-> +	test_faulty_idt_desc();
->  #endif
->  
->  	test_invalid_memory_region_flags();
-> -- 
-> 2.43.0
-> 
 
