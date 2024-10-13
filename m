@@ -1,66 +1,66 @@
-Return-Path: <linux-kselftest+bounces-19617-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19618-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 792D599BAB9
-	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Oct 2024 20:19:04 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA30E99BAEF
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Oct 2024 20:48:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 421C5281B0A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Oct 2024 18:19:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CE4C1F218F5
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Oct 2024 18:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 996D713AD22;
-	Sun, 13 Oct 2024 18:19:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DD421494CF;
+	Sun, 13 Oct 2024 18:48:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="k+N4NwDZ"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="BMeakRL6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B9B918E20;
-	Sun, 13 Oct 2024 18:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46B5114900B;
+	Sun, 13 Oct 2024 18:48:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728843540; cv=none; b=SGtBqnCFhu9Iwg0UfcAHJHG0MvBlROmqweANqPezEAeASx0JWXkGqCbUwUOsTuKw9iR1RPxcfXmv5rpop1TQ938iGLoKhN4/FtjwqcgHSD7pyRT4vkdE99ymHxcVm2vNKt+tFJ8ILbUfTNORiqXs614uqKEWAHycuzc8rwxMmtI=
+	t=1728845286; cv=none; b=FgKcXnF4wEBva1g/kokERMmfvexRxDMCSTSMWMm+TEM3xRM9iq44rsqG5KbVod8PlWFQtug+pKJi2CzjhRaiashI81jLmexDAAfLAokEeh40NJoYOmFcMQEcX8JFIUTBDYjyCBEsH2Gh1aODx4k6wlWHl5/yx9xxhjXVqyqc6ms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728843540; c=relaxed/simple;
-	bh=WKgSRZF8U/lEEfgudbmnwFpjS1QLnZzRS1IJzoc0CrU=;
+	s=arc-20240116; t=1728845286; c=relaxed/simple;
+	bh=5+qEXQ8j9Xk87g+b7ukViGdjwM4PAheqtOsCKYEne70=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gOCcjx2ho0ED543Ar0amxckSNF1W2l5Eq9F0FUG9d2D+bcbOg9Xj7DoZ8snS+bVkYhl8fqCPI3JgV2wU+dEvBSxsfyNSlsYUy1rFuu6YpNyTVs9X+upPo2JC9NOXnsZf4eOT0p0uBPvdp6x12XUhWms7MK8YP/Gjw+lZ9YTKLUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=k+N4NwDZ; arc=none smtp.client-ip=205.220.165.32
+	 MIME-Version; b=ry8hnV+d4Xpjqz5dEJor/2bNyolzN0Zj9WL0Vptvv/4LCyCU8D/XX5iGVeKJbYA7khRsU0EIEfleIf4eHMaV1EIzSfQ1/AhUf28IQVEX5ki/tOZuKs1ifyck7X1c4Ly4K09/vVa4vIG3cpYQhl+2gZfXhmToi2GuVqGgF8xPECU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=BMeakRL6; arc=none smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49DFNuDL010082;
-	Sun, 13 Oct 2024 17:06:27 GMT
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49D3rVTx028973;
+	Sun, 13 Oct 2024 17:06:31 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2023-11-20; bh=hrCoF
-	lgvo/STp2VEv7cUaEajniYQSt7LvflbN+xj+Ss=; b=k+N4NwDZEyysXTFDnXQ3g
-	5LFijXNtKvvr/Oz4FtXA3KTXIL7OIKJw4uRSbiXrZbHZWBtSZAZ2qk7Sn4EXG0sK
-	m1Z8ug79m30NrYKIltWspH56UDHJuKJMoFyuDdj+fpoRHRBBpmBSF8OItdoXXpE2
-	bUK6kcHF482MG/p1na/pFSkA1DfdayvYiSfJTeYdCnQ58A0UocMAxKRHTZjoXpPU
-	1SrlYLW+I2Vvg6OZTi/oG8johPafB+U0esr5pYO9WXq/DLJnqaZQf780z/QZr4td
-	FjEV/ycfcrJpuOwLifJClRVT22n7M6oybni9pAkdWkIunea1nCX8hZskhrKlFgxE
-	Q==
+	:mime-version:references:subject:to; s=corp-2023-11-20; bh=1gONX
+	+JYs/QTIX7dRpcXxTDtFE0fTePclVPcb/A4oJM=; b=BMeakRL6KXONKV5DyVz5r
+	/3SIOO0ZPN0RnKxQcKRhsicNUops9by+YVhEQtkeWHo7K1pSFl2fzjik+oHupqn/
+	MaIj7cMA+Ht2bDlB3x0kuuP1aKwQ6oEsv2CtWaJvJWbLLBMLZIgzWhoAzD8MBt2B
+	hzTCBbak6ROB9WA3F0tepMV92zhOEuu/5Ua1W+WpWINfQWHce64XfcjaYwpWmMHZ
+	RW5+B9pOdNm1A2pWO1FrdHm5qag8+1qMmHZDQDq+3JXl+lSRa3mvKdWoOTPiwwlU
+	EO0ZOpsp9aYx3hqPvR1bkhnqqiUvw+6C4jIWT3XNgSQK7Mli27gDEl9d1vh8Eom7
+	A==
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427gq79ahm-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427hnt19dm-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 13 Oct 2024 17:06:27 +0000 (GMT)
+	Sun, 13 Oct 2024 17:06:30 +0000 (GMT)
 Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49DB3eFY026283;
-	Sun, 13 Oct 2024 17:06:26 GMT
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49DGF14o026388;
+	Sun, 13 Oct 2024 17:06:30 GMT
 Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 427fj561dm-1
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 427fj561e6-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 13 Oct 2024 17:06:26 +0000
+	Sun, 13 Oct 2024 17:06:30 +0000
 Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49DH6MFA040166;
-	Sun, 13 Oct 2024 17:06:25 GMT
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 49DH6MFC040166;
+	Sun, 13 Oct 2024 17:06:29 GMT
 Received: from ca-dev112.us.oracle.com (ca-dev112.us.oracle.com [10.129.136.47])
-	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 427fj561c0-2;
-	Sun, 13 Oct 2024 17:06:25 +0000
+	by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 427fj561c0-3;
+	Sun, 13 Oct 2024 17:06:29 +0000
 From: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 To: davem@davemloft.net, Liam.Howlett@Oracle.com
 Cc: edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mingo@redhat.com,
@@ -71,9 +71,9 @@ Cc: edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, mingo@redhat.com,
         netdev@vger.kernel.org, akpm@linux-foundation.org, shuah@kernel.org,
         linux-kselftest@vger.kernel.org, anjali.k.kulkarni@oracle.com,
         peili.io@oracle.com
-Subject: [PATCH net-next v1 1/3] connector/cn_proc: Add hash table for threads
-Date: Sun, 13 Oct 2024 10:06:15 -0700
-Message-ID: <20241013170617.2139204-2-anjali.k.kulkarni@oracle.com>
+Subject: [PATCH net-next v1 2/3] connector/cn_proc: Kunit tests for threads hash table
+Date: Sun, 13 Oct 2024 10:06:16 -0700
+Message-ID: <20241013170617.2139204-3-anjali.k.kulkarni@oracle.com>
 X-Mailer: git-send-email 2.46.0
 In-Reply-To: <20241013170617.2139204-1-anjali.k.kulkarni@oracle.com>
 References: <20241013170617.2139204-1-anjali.k.kulkarni@oracle.com>
@@ -91,607 +91,396 @@ X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 malwar
  bulkscore=0 spamscore=0 mlxlogscore=999 phishscore=0 suspectscore=0
  classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
  definitions=main-2410130128
-X-Proofpoint-ORIG-GUID: Y-5PaFBOD-4Vo56mwUxOJleYK6meMjJz
-X-Proofpoint-GUID: Y-5PaFBOD-4Vo56mwUxOJleYK6meMjJz
+X-Proofpoint-ORIG-GUID: O5-wfkFHlNGFoPtdFyBKhLrYCWJzKhjh
+X-Proofpoint-GUID: O5-wfkFHlNGFoPtdFyBKhLrYCWJzKhjh
 
-Add a new type PROC_CN_MCAST_NOTIFY to proc connector API, which allows a
-thread to notify the kernel that is going to exit with a non-zero exit
-code and specify the exit code in it. When thread exits in the kernel,
-it will send this exit code as a proc filter notification to any
-listening process.
-Exiting thread can call this either when it wants to call pthread_exit()
-with non-zero value or from signal handler.
+Kunit tests to test hash table add, delete, duplicate add and delete.
+Add following configs and compile kernel code:
 
-Add a new file cn_hash.c which implements a hash table storing the exit
-codes of abnormally exiting threads, received by the system call above.
-The key used for the hash table is the pid of the thread, so when the
-thread actually exits, we lookup it's pid in the hash table and retrieve
-the exit code sent by user. If the exit code in struct task is 0, we
-then replace it with the user supplied non-zero exit code.
+CONFIG_CONNECTOR=y
+CONFIG_PROC_EVENTS=y
+CONFIG_NET=y
+CONFIG_KUNIT=m
+CONFIG_CN_HASH_KUNIT_TEST=m
 
-cn_hash.c implements the hash table add, delete, lookup operations.
-mutex_lock() and mutex_unlock() operations are used to safeguard the
-integrity of the hash table while adding or deleting elements.
-connector.c has the API calls, called from cn_proc.c, as well as calls
-to allocate, initialize and free the hash table.
+To run kunit tests:
+sudo modprobe cn_hash_test
 
-Add a new flag in PF_* flags of task_struct - EXIT_NOTIFY. This flag is
-set when user sends the exit code via PROC_CN_MCAST_NOTIFY. While
-exiting, this flag is checked and the hash table add or delete calls
-are only made if this flag is set.
-
-A refcount field hrefcnt is added in struct cn_hash_dev, to keep track
-of number of threads which have added an entry in hash table. Before
-freeing the struct cn_hash_dev, this value must be 0.
+Output of kunit tests and hash table contents are displayed in
+/var/log/messages (at KERN_DEBUG level).
 
 Signed-off-by: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 ---
- drivers/connector/Makefile    |   2 +-
- drivers/connector/cn_hash.c   | 195 ++++++++++++++++++++++++++++++++++
- drivers/connector/cn_proc.c   |  58 +++++++++-
- drivers/connector/connector.c |  83 ++++++++++++++-
- include/linux/connector.h     |  43 ++++++++
- include/linux/sched.h         |   2 +-
- include/uapi/linux/cn_proc.h  |   4 +-
- 7 files changed, 378 insertions(+), 9 deletions(-)
- create mode 100644 drivers/connector/cn_hash.c
+ drivers/connector/cn_hash.c   |  49 +++++++++-
+ drivers/connector/connector.c |  15 ++-
+ include/linux/connector.h     |   8 +-
+ lib/Kconfig.debug             |  17 ++++
+ lib/Makefile                  |   1 +
+ lib/cn_hash_test.c            | 167 ++++++++++++++++++++++++++++++++++
+ lib/cn_hash_test.h            |  12 +++
+ 7 files changed, 264 insertions(+), 5 deletions(-)
+ create mode 100644 lib/cn_hash_test.c
+ create mode 100644 lib/cn_hash_test.h
 
-diff --git a/drivers/connector/Makefile b/drivers/connector/Makefile
-index 1bf67d3df97d..cb1dcdf067ad 100644
---- a/drivers/connector/Makefile
-+++ b/drivers/connector/Makefile
-@@ -2,4 +2,4 @@
- obj-$(CONFIG_CONNECTOR)		+= cn.o
- obj-$(CONFIG_PROC_EVENTS)	+= cn_proc.o
- 
--cn-y				+= cn_queue.o connector.o
-+cn-y				+= cn_hash.o cn_queue.o connector.o
 diff --git a/drivers/connector/cn_hash.c b/drivers/connector/cn_hash.c
-new file mode 100644
-index 000000000000..a0211cd99132
---- /dev/null
+index a0211cd99132..8f0eb6acb158 100644
+--- a/drivers/connector/cn_hash.c
 +++ b/drivers/connector/cn_hash.c
-@@ -0,0 +1,195 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-+ *
-+ * Copyright (c) 2024 Oracle and/or its affiliates.
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/init.h>
-+#include <linux/connector.h>
-+#include <linux/mutex.h>
-+#include <linux/pid_namespace.h>
-+
-+#include <linux/cn_proc.h>
-+
-+struct cn_hash_dev *cn_hash_alloc_dev(const char *name)
-+{
-+	struct cn_hash_dev *hdev;
-+
-+	hdev = kzalloc(sizeof(*hdev), GFP_KERNEL);
-+	if (!hdev)
-+		return NULL;
-+
-+	snprintf(hdev->name, sizeof(hdev->name), "%s", name);
-+	atomic_set(&hdev->hrefcnt, 0);
-+	mutex_init(&hdev->uexit_hash_lock);
-+	hash_init(hdev->uexit_pid_htable);
-+	return hdev;
-+}
-+
-+void cn_hash_free_dev(struct cn_hash_dev *hdev)
+@@ -166,7 +166,7 @@ __u32 cn_hash_del_get_exval(struct cn_hash_dev *hdev, pid_t pid)
+ 	return 0;
+ }
+ 
+-__u32 cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid)
++int cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid)
+ {
+ 	struct uexit_pid_hnode *hnode;
+ 	__u32 excde;
+@@ -189,7 +189,52 @@ __u32 cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid)
+ 	return -EINVAL;
+ }
+ 
++int cn_hash_display_hlist(struct cn_hash_dev *hdev, pid_t pid, int max_len,
++				int *hkey, int *key_display)
 +{
 +	struct uexit_pid_hnode *hnode;
-+	struct hlist_node *tmp;
-+	int bucket;
-+
-+	pr_debug("%s: Freeing entire hdev %p\n", __func__, hdev);
++	int key, count = 0;
 +
 +	mutex_lock(&hdev->uexit_hash_lock);
-+	hash_for_each_safe(hdev->uexit_pid_htable, bucket, tmp,
-+			hnode, uexit_pid_hlist) {
-+		hash_del(&hnode->uexit_pid_hlist);
-+		pr_debug("%s: Freeing node for pid %d\n",
-+				__func__, hnode->pid);
-+		kfree(hnode);
-+	}
++	key = hash_min(pid, HASH_BITS(hdev->uexit_pid_htable));
++	pr_debug("Bucket: %d\n", key);
 +
-+	mutex_unlock(&hdev->uexit_hash_lock);
-+	mutex_destroy(&hdev->uexit_hash_lock);
-+
-+	while (atomic_read(&hdev->hrefcnt)) {
-+		pr_info("Waiting for %s to become free: refcnt=%d\n",
-+				hdev->name, atomic_read(&hdev->hrefcnt));
-+		msleep(1000);
-+	}
-+
-+	kfree(hdev);
-+}
-+
-+static struct uexit_pid_hnode *cn_hash_alloc_elem(__u32 uexit_code, pid_t pid)
-+{
-+	struct uexit_pid_hnode *elem;
-+
-+	elem = kzalloc(sizeof(*elem), GFP_KERNEL);
-+	if (!elem)
-+		return NULL;
-+
-+	INIT_HLIST_NODE(&elem->uexit_pid_hlist);
-+	elem->uexit_code = uexit_code;
-+	elem->pid = pid;
-+	return elem;
-+}
-+
-+void cn_hash_free_elem(struct uexit_pid_hnode *elem)
-+{
-+	kfree(elem);
-+}
-+
-+int cn_hash_add_elem(struct cn_hash_dev *hdev, __u32 uexit_code, pid_t pid)
-+{
-+	struct uexit_pid_hnode *elem, *hnode;
-+
-+	elem = cn_hash_alloc_elem(uexit_code, pid);
-+	if (!elem) {
-+		pr_err("%s: cn_hash_alloc_elem() returned NULL pid %d\n",
-+				__func__, pid);
-+		return -ENOMEM;
-+	}
-+
-+	mutex_lock(&hdev->uexit_hash_lock);
-+	/*
-+	 * Check if an entry for the same pid already exists
-+	 */
-+	hash_for_each_possible(hdev->uexit_pid_htable,
-+				hnode, uexit_pid_hlist, pid) {
-+		if (hnode->pid == pid) {
-+			mutex_unlock(&hdev->uexit_hash_lock);
-+			cn_hash_free_elem(elem);
-+			pr_debug("%s: pid %d already exists in hash table\n",
-+				__func__, pid);
-+			return -EEXIST;
++	hlist_for_each_entry(hnode,
++			&hdev->uexit_pid_htable[key],
++			uexit_pid_hlist) {
++		if (key_display[key] != 1) {
++			if (hnode->uexit_pid_hlist.next == NULL)
++				pr_debug("pid %d ", hnode->pid);
++			else
++				pr_debug("pid %d --> ", hnode->pid);
 +		}
++		count++;
 +	}
 +
-+	hash_add(hdev->uexit_pid_htable, &elem->uexit_pid_hlist, pid);
 +	mutex_unlock(&hdev->uexit_hash_lock);
 +
-+	atomic_inc(&hdev->hrefcnt);
++	if ((key_display[key] != 1) && !count)
++		pr_debug("(empty)\n");
 +
-+	pr_debug("%s: After hash_add of pid %d elem %p hrefcnt %d\n",
-+			__func__, pid, elem, atomic_read(&hdev->hrefcnt));
++	pr_debug("\n");
++
++	*hkey = key;
++
++	if (count > max_len) {
++		pr_err("%d entries in hlist for key %d, expected %d\n",
++				count, key, max_len);
++		return -EINVAL;
++	}
++
 +	return 0;
 +}
 +
-+int cn_hash_del_elem(struct cn_hash_dev *hdev, pid_t pid)
-+{
-+	struct uexit_pid_hnode *hnode;
-+	struct hlist_node *tmp;
+ bool cn_hash_table_empty(struct cn_hash_dev *hdev)
+ {
+-	return hash_empty(hdev->uexit_pid_htable);
++	bool is_empty;
 +
-+	mutex_lock(&hdev->uexit_hash_lock);
-+	hash_for_each_possible_safe(hdev->uexit_pid_htable,
-+				hnode, tmp, uexit_pid_hlist, pid) {
-+		if (hnode && hnode->pid == pid) {
-+			hash_del(&hnode->uexit_pid_hlist);
-+			mutex_unlock(&hdev->uexit_hash_lock);
-+			kfree(hnode);
-+			atomic_dec(&hdev->hrefcnt);
-+			pr_debug("%s: After hash_del of pid %d, hrefcnt %d\n",
-+					__func__, pid,
-+					atomic_read(&hdev->hrefcnt));
-+			return 0;
-+		}
-+	}
++	is_empty = hash_empty(hdev->uexit_pid_htable);
++	pr_debug("Hash table is %s\n", (is_empty ? "empty" : "not empty"));
 +
-+	mutex_unlock(&hdev->uexit_hash_lock);
-+	pr_err("%s: pid %d not found in hash table\n",
-+			__func__, pid);
-+	return -EINVAL;
-+}
-+
-+__u32 cn_hash_del_get_exval(struct cn_hash_dev *hdev, pid_t pid)
-+{
-+	struct uexit_pid_hnode *hnode;
-+	struct hlist_node *tmp;
-+	__u32 excde;
-+
-+	mutex_lock(&hdev->uexit_hash_lock);
-+	hash_for_each_possible_safe(hdev->uexit_pid_htable,
-+				hnode, tmp, uexit_pid_hlist, pid) {
-+		if (hnode->pid == pid) {
-+			excde = hnode->uexit_code;
-+			hash_del(&hnode->uexit_pid_hlist);
-+			mutex_unlock(&hdev->uexit_hash_lock);
-+			kfree(hnode);
-+			atomic_dec(&hdev->hrefcnt);
-+			pr_debug("%s: After hash_del of pid %d, found exit code %u hrefcnt %d\n",
-+					__func__, pid, excde,
-+					atomic_read(&hdev->hrefcnt));
-+			return excde;
-+		}
-+	}
-+
-+	mutex_unlock(&hdev->uexit_hash_lock);
-+	pr_err("%s: pid %d not found in hash table\n",
-+			__func__, pid);
-+	return 0;
-+}
-+
-+__u32 cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid)
-+{
-+	struct uexit_pid_hnode *hnode;
-+	__u32 excde;
-+
-+	mutex_lock(&hdev->uexit_hash_lock);
-+	hash_for_each_possible(hdev->uexit_pid_htable,
-+				hnode, uexit_pid_hlist, pid) {
-+		if (hnode->pid == pid) {
-+			excde = hnode->uexit_code;
-+			mutex_unlock(&hdev->uexit_hash_lock);
-+			pr_debug("%s: Found exit code %u for pid %d\n",
-+					__func__, excde, pid);
-+			return excde;
-+		}
-+	}
-+
-+	mutex_unlock(&hdev->uexit_hash_lock);
-+	pr_debug("%s: pid %d not found in hash table\n",
-+			__func__, pid);
-+	return -EINVAL;
-+}
-+
-+bool cn_hash_table_empty(struct cn_hash_dev *hdev)
-+{
-+	return hash_empty(hdev->uexit_pid_htable);
-+}
-diff --git a/drivers/connector/cn_proc.c b/drivers/connector/cn_proc.c
-index 44b19e696176..317ddde377ec 100644
---- a/drivers/connector/cn_proc.c
-+++ b/drivers/connector/cn_proc.c
-@@ -69,6 +69,8 @@ static int cn_filter(struct sock *dsk, struct sk_buff *skb, void *data)
- 	if ((__u32)val == PROC_EVENT_ALL)
- 		return 0;
- 
-+	pr_debug("%s: val %lx, what %x\n", __func__, val, what);
-+
- 	/*
- 	 * Drop packet if we have to report only non-zero exit status
- 	 * (PROC_EVENT_NONZERO_EXIT) and exit status is 0
-@@ -326,9 +328,15 @@ void proc_exit_connector(struct task_struct *task)
- 	struct proc_event *ev;
- 	struct task_struct *parent;
- 	__u8 buffer[CN_PROC_MSG_SIZE] __aligned(8);
-+	__u32 uexit_code;
- 
--	if (atomic_read(&proc_event_num_listeners) < 1)
-+	if (atomic_read(&proc_event_num_listeners) < 1) {
-+		if (likely(!(task->flags & PF_EXIT_NOTIFY)))
-+			return;
-+
-+		cn_del_elem(task->pid);
- 		return;
-+	}
- 
- 	msg = buffer_to_cn_msg(buffer);
- 	ev = (struct proc_event *)msg->data;
-@@ -337,7 +345,26 @@ void proc_exit_connector(struct task_struct *task)
- 	ev->what = PROC_EVENT_EXIT;
- 	ev->event_data.exit.process_pid = task->pid;
- 	ev->event_data.exit.process_tgid = task->tgid;
--	ev->event_data.exit.exit_code = task->exit_code;
-+	if (unlikely(task->flags & PF_EXIT_NOTIFY)) {
-+		task_lock(task);
-+		task->flags &= ~PF_EXIT_NOTIFY;
-+		task_unlock(task);
-+
-+		uexit_code = cn_del_get_exval(task->pid);
-+		if (uexit_code == 0) {
-+			pr_debug("%s: Returning with task's exit code %u\n",
-+					__func__, task->exit_code);
-+			ev->event_data.exit.exit_code = task->exit_code;
-+		} else {
-+			ev->event_data.exit.exit_code = uexit_code;
-+			pr_debug("%s: Reset PF_EXIT_NOTIFY & retrieved exit code %u from hash table, pid %d\n",
-+					__func__, task->pid,
-+					ev->event_data.exit.exit_code);
-+		}
-+	} else {
-+		ev->event_data.exit.exit_code = task->exit_code;
-+	}
-+
- 	ev->event_data.exit.exit_signal = task->exit_signal;
- 
- 	rcu_read_lock();
-@@ -413,6 +440,15 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
- 	if (msg->len == sizeof(*pinput)) {
- 		pinput = (struct proc_input *)msg->data;
- 		mc_op = pinput->mcast_op;
-+		if (mc_op == PROC_CN_MCAST_NOTIFY) {
-+			pr_debug("%s: Received PROC_CN_MCAST_NOTIFY, pid %d\n",
-+					__func__, current->pid);
-+			task_lock(current);
-+			current->flags |= PF_EXIT_NOTIFY;
-+			task_unlock(current);
-+			err = cn_add_elem(pinput->uexit_code, current->pid);
-+			return;
-+		}
- 		ev_type = pinput->event_type;
- 	} else if (msg->len == sizeof(mc_op)) {
- 		mc_op = *((enum proc_cn_mcast_op *)msg->data);
-@@ -432,6 +468,8 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
- 			sk->sk_user_data = kzalloc(sizeof(struct proc_input),
- 						   GFP_KERNEL);
- 			if (sk->sk_user_data == NULL) {
-+				pr_err("%s: ENOMEM for sk_user_data, pid %d\n",
-+						__func__, current->pid);
- 				err = ENOMEM;
- 				goto out;
- 			}
-@@ -442,21 +480,33 @@ static void cn_proc_mcast_ctl(struct cn_msg *msg,
- 		}
- 		((struct proc_input *)(sk->sk_user_data))->event_type =
- 			ev_type;
-+		pr_debug("%s: sk: %p pid: %d event_type: %x\n",
-+				__func__, sk, current->pid, ev_type);
- 		((struct proc_input *)(sk->sk_user_data))->mcast_op = mc_op;
- 	}
- 
- 	switch (mc_op) {
- 	case PROC_CN_MCAST_LISTEN:
--		if (initial || (prev_mc_op != PROC_CN_MCAST_LISTEN))
-+		if (initial || (prev_mc_op != PROC_CN_MCAST_LISTEN)) {
- 			atomic_inc(&proc_event_num_listeners);
-+			pr_debug("%s: PROC_CN_MCAST_LISTEN pid %d: Incremented listeners to %d\n",
-+					__func__, current->pid,
-+					atomic_read(&proc_event_num_listeners));
-+		}
- 		break;
- 	case PROC_CN_MCAST_IGNORE:
--		if (!initial && (prev_mc_op != PROC_CN_MCAST_IGNORE))
-+		if (!initial && (prev_mc_op != PROC_CN_MCAST_IGNORE)) {
- 			atomic_dec(&proc_event_num_listeners);
-+			pr_debug("%s: PROC_CN_MCAST_IGNORE pid %d: Decremented listeners to %d\n",
-+					__func__, current->pid,
-+					atomic_read(&proc_event_num_listeners));
-+		}
- 		((struct proc_input *)(sk->sk_user_data))->event_type =
- 			PROC_EVENT_NONE;
- 		break;
- 	default:
-+		pr_warn("%s: Invalid value for mc_op %d\n",
-+				__func__, mc_op);
- 		err = EINVAL;
- 		break;
- 	}
++	return is_empty;
+ }
 diff --git a/drivers/connector/connector.c b/drivers/connector/connector.c
-index 4028e8eeba82..506e3cbedf85 100644
+index 506e3cbedf85..28e60c8b0fdf 100644
 --- a/drivers/connector/connector.c
 +++ b/drivers/connector/connector.c
-@@ -271,6 +271,67 @@ static int __maybe_unused cn_proc_show(struct seq_file *m, void *v)
- 	return 0;
+@@ -308,7 +308,7 @@ int cn_add_elem(__u32 uexit_code, pid_t pid)
  }
+ EXPORT_SYMBOL_GPL(cn_add_elem);
  
-+__u32 cn_del_get_exval(pid_t pid)
-+{
-+	struct cn_dev *dev = &cdev;
-+	__u32 exval;
-+
-+	if (!cn_already_initialized)
-+		return 0;
-+
-+	exval = cn_hash_del_get_exval(dev->hdev, pid);
-+	return exval;
-+}
-+EXPORT_SYMBOL_GPL(cn_del_get_exval);
-+
-+int cn_del_elem(pid_t pid)
-+{
-+	struct cn_dev *dev = &cdev;
-+	int ret;
-+
-+	if (!cn_already_initialized)
-+		return 0;
-+
-+	ret = cn_hash_del_elem(dev->hdev, pid);
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(cn_del_elem);
-+
-+int cn_add_elem(__u32 uexit_code, pid_t pid)
-+{
-+	struct cn_dev *dev = &cdev;
-+
-+	if (!cn_already_initialized)
-+		return 0;
-+
-+	return cn_hash_add_elem(dev->hdev, uexit_code, pid);
-+}
-+EXPORT_SYMBOL_GPL(cn_add_elem);
-+
-+__u32 cn_get_exval(pid_t pid)
-+{
-+	struct cn_dev *dev = &cdev;
-+	__u32 exval;
-+
-+	if (!cn_already_initialized)
-+		return 0;
-+
-+	exval = cn_hash_get_exval(dev->hdev, pid);
-+	return exval;
-+}
-+EXPORT_SYMBOL_GPL(cn_get_exval);
-+
-+bool cn_table_empty(void)
-+{
-+	struct cn_dev *dev = &cdev;
-+
-+	if (!cn_already_initialized)
-+		return 0;
-+
-+	return cn_hash_table_empty(dev->hdev);
-+}
-+EXPORT_SYMBOL_GPL(cn_table_empty);
-+
- static int cn_init(void)
+-__u32 cn_get_exval(pid_t pid)
++int cn_get_exval(pid_t pid)
  {
  	struct cn_dev *dev = &cdev;
-@@ -283,18 +344,35 @@ static int cn_init(void)
- 	};
- 
- 	dev->nls = netlink_kernel_create(&init_net, NETLINK_CONNECTOR, &cfg);
--	if (!dev->nls)
-+	if (!dev->nls) {
-+		pr_err("%s: netlink_kernel_create failed, connector not initialized\n",
-+				__func__);
- 		return -EIO;
-+	}
- 
- 	dev->cbdev = cn_queue_alloc_dev("cqueue", dev->nls);
- 	if (!dev->cbdev) {
-+		pr_err("%s: Allocation of dev->cbdev failed, connector not initialized\n",
-+				__func__);
- 		netlink_kernel_release(dev->nls);
- 		return -EINVAL;
- 	}
- 
-+	dev->hdev = cn_hash_alloc_dev("pid hash table");
-+	if (!dev->hdev) {
-+		pr_err("%s: Allocation of dev->hdev failed, connector not initialized\n",
-+				__func__);
-+		netlink_kernel_release(dev->nls);
-+		cn_queue_free_dev(dev->cbdev);
-+		return -ENOMEM;
-+	}
-+
-+	pr_debug("Connector initialized, allocated hdev %p\n", dev->hdev);
-+
- 	cn_already_initialized = 1;
- 
--	proc_create_single("connector", S_IRUGO, init_net.proc_net, cn_proc_show);
-+	proc_create_single("connector", S_IRUGO, init_net.proc_net,
-+				cn_proc_show);
- 
- 	return 0;
+ 	__u32 exval;
+@@ -321,6 +321,19 @@ __u32 cn_get_exval(pid_t pid)
  }
-@@ -308,6 +386,7 @@ static void cn_fini(void)
- 	remove_proc_entry("connector", init_net.proc_net);
+ EXPORT_SYMBOL_GPL(cn_get_exval);
  
- 	cn_queue_free_dev(dev->cbdev);
-+	cn_hash_free_dev(dev->hdev);
- 	netlink_kernel_release(dev->nls);
- }
- 
++int cn_display_hlist(pid_t pid, int max_len, int *hkey,
++			int *key_display)
++{
++	struct cn_dev *dev = &cdev;
++
++	if (!cn_already_initialized)
++		return 0;
++
++	return cn_hash_display_hlist(dev->hdev, pid, max_len,
++					hkey, key_display);
++}
++EXPORT_SYMBOL_GPL(cn_display_hlist);
++
+ bool cn_table_empty(void)
+ {
+ 	struct cn_dev *dev = &cdev;
 diff --git a/include/linux/connector.h b/include/linux/connector.h
-index 70bc1160f3d8..094e1730a4f6 100644
+index 094e1730a4f6..af801c5005e8 100644
 --- a/include/linux/connector.h
 +++ b/include/linux/connector.h
-@@ -18,6 +18,8 @@
- #include <uapi/linux/connector.h>
+@@ -165,7 +165,7 @@ __u32 cn_hash_del_get_exval(struct cn_hash_dev *hdev, pid_t pid);
+ int cn_add_elem(__u32 uexit_code, pid_t pid);
+ int cn_del_elem(pid_t pid);
+ __u32 cn_del_get_exval(pid_t pid);
+-__u32 cn_get_exval(pid_t pid);
++int cn_get_exval(pid_t pid);
  
- #define CN_CBQ_NAMELEN		32
-+#define HASHT_NAMELEN		32
-+#define PID_HASH_TABLE_BITS	10
+ struct cn_hash_dev *cn_hash_alloc_dev(const char *name);
+ void cn_hash_free_dev(struct cn_hash_dev *hdev);
+@@ -175,9 +175,13 @@ void cn_hash_free_elem(struct uexit_pid_hnode *elem);
+ int cn_hash_add_elem(struct cn_hash_dev *hdev, __u32 uexit_code, pid_t pid);
+ int cn_hash_del_elem(struct cn_hash_dev *hdev, pid_t pid);
+ __u32 cn_hash_del_get_exval(struct cn_hash_dev *hdev, pid_t pid);
+-__u32 cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid);
++int cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid);
  
- struct cn_queue_dev {
- 	atomic_t refcnt;
-@@ -45,6 +47,19 @@ struct cn_callback_entry {
- 	u32 seq, group;
- };
+ bool cn_table_empty(void);
+ bool cn_hash_table_empty(struct cn_hash_dev *hdev);
  
-+struct uexit_pid_hnode {
-+	__u32 uexit_code;
-+	pid_t pid;
-+	struct hlist_node uexit_pid_hlist;
-+};
-+
-+struct cn_hash_dev {
-+	atomic_t hrefcnt;
-+	unsigned char name[HASHT_NAMELEN];
-+	struct mutex uexit_hash_lock;
-+	DECLARE_HASHTABLE(uexit_pid_htable, PID_HASH_TABLE_BITS);
-+};
-+
- struct cn_dev {
- 	struct cb_id id;
- 
-@@ -52,6 +67,7 @@ struct cn_dev {
- 	struct sock *nls;
- 
- 	struct cn_queue_dev *cbdev;
-+	struct cn_hash_dev *hdev;
- };
- 
- /**
-@@ -137,4 +153,31 @@ void cn_queue_free_dev(struct cn_queue_dev *dev);
- 
- int cn_cb_equal(const struct cb_id *, const struct cb_id *);
- 
-+struct cn_hash_dev *cn_hash_alloc_dev(const char *name);
-+void cn_hash_free_dev(struct cn_hash_dev *hdev);
-+struct uexit_pid_hnode *cn_hash_find_pid_node(struct cn_hash_dev *hdev,
-+						pid_t pid);
-+void cn_hash_free_elem(struct uexit_pid_hnode *elem);
-+int cn_hash_add_elem(struct cn_hash_dev *hdev, __u32 uexit_code, pid_t pid);
-+int cn_hash_del_elem(struct cn_hash_dev *hdev, pid_t pid);
-+__u32 cn_hash_del_get_exval(struct cn_hash_dev *hdev, pid_t pid);
-+
-+int cn_add_elem(__u32 uexit_code, pid_t pid);
-+int cn_del_elem(pid_t pid);
-+__u32 cn_del_get_exval(pid_t pid);
-+__u32 cn_get_exval(pid_t pid);
-+
-+struct cn_hash_dev *cn_hash_alloc_dev(const char *name);
-+void cn_hash_free_dev(struct cn_hash_dev *hdev);
-+struct uexit_pid_hnode *cn_hash_find_pid_node(struct cn_hash_dev *hdev,
-+						pid_t pid);
-+void cn_hash_free_elem(struct uexit_pid_hnode *elem);
-+int cn_hash_add_elem(struct cn_hash_dev *hdev, __u32 uexit_code, pid_t pid);
-+int cn_hash_del_elem(struct cn_hash_dev *hdev, pid_t pid);
-+__u32 cn_hash_del_get_exval(struct cn_hash_dev *hdev, pid_t pid);
-+__u32 cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid);
-+
-+bool cn_table_empty(void);
-+bool cn_hash_table_empty(struct cn_hash_dev *hdev);
++int cn_display_hlist(pid_t pid, int max_len, int *hkey, int *key_display);
++int cn_hash_display_hlist(struct cn_hash_dev *hdev, pid_t pid, int max_len,
++				int *hkey, int *key_display);
 +
  #endif				/* __CONNECTOR_H */
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index e6ee4258169a..a2339ae6208b 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -1673,7 +1673,7 @@ extern struct pid *cad_pid;
- #define PF_USED_MATH		0x00002000	/* If unset the fpu must be initialized before use */
- #define PF_USER_WORKER		0x00004000	/* Kernel thread cloned from userspace thread */
- #define PF_NOFREEZE		0x00008000	/* This thread should not be frozen */
--#define PF__HOLE__00010000	0x00010000
-+#define PF_EXIT_NOTIFY		0x00010000	/* This thread has sent an exit value to be sent as a notification to listening processes */
- #define PF_KSWAPD		0x00020000	/* I am kswapd */
- #define PF_MEMALLOC_NOFS	0x00040000	/* All allocations inherit GFP_NOFS. See memalloc_nfs_save() */
- #define PF_MEMALLOC_NOIO	0x00080000	/* All allocations inherit GFP_NOIO. See memalloc_noio_save() */
-diff --git a/include/uapi/linux/cn_proc.h b/include/uapi/linux/cn_proc.h
-index 18e3745b86cd..2b12a24e4651 100644
---- a/include/uapi/linux/cn_proc.h
-+++ b/include/uapi/linux/cn_proc.h
-@@ -27,7 +27,8 @@
-  */
- enum proc_cn_mcast_op {
- 	PROC_CN_MCAST_LISTEN = 1,
--	PROC_CN_MCAST_IGNORE = 2
-+	PROC_CN_MCAST_IGNORE = 2,
-+	PROC_CN_MCAST_NOTIFY = 3
- };
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 7315f643817a..23599beb9bec 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2705,6 +2705,23 @@ config HASHTABLE_KUNIT_TEST
  
- #define PROC_EVENT_ALL (PROC_EVENT_FORK | PROC_EVENT_EXEC | PROC_EVENT_UID |  \
-@@ -65,6 +66,7 @@ enum proc_cn_event {
- struct proc_input {
- 	enum proc_cn_mcast_op mcast_op;
- 	enum proc_cn_event event_type;
-+	__u32 uexit_code;
- };
+ 	  If unsure, say N.
  
- static inline enum proc_cn_event valid_event(enum proc_cn_event ev_type)
++config CONFIG_CN_HASH_KUNIT_TEST
++	tristate "KUnit Test for connector hashtable code" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  This builds the hashtable KUnit test suite.
++	  It tests the basic functionality of the API defined in
++	  drivers/connector/cn_hash.c.
++	  CONFIG_CONNECTOR=y, CONFIG_PROC_EVENTS=y as well as CONFIG_NET=y
++	  needs to be enabled along with CONFIG_CN_HASH_KUNIT_TEST=m and
++	  CONFIG_KUNIT=m in .config file to compile and then test as a kernel
++	  module with "modprobe cn_hash_test".
++	  For more information on KUnit and unit tests in general please
++	  refer to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
+ config LINEAR_RANGES_TEST
+ 	tristate "KUnit test for linear_ranges"
+ 	depends on KUNIT
+diff --git a/lib/Makefile b/lib/Makefile
+index 811ba12c8cd0..2c59c82b0b18 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -379,6 +379,7 @@ obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
+ obj-$(CONFIG_SLUB_KUNIT_TEST) += slub_kunit.o
+ obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
+ obj-$(CONFIG_IS_SIGNED_TYPE_KUNIT_TEST) += is_signed_type_kunit.o
++obj-$(CONFIG_CN_HASH_KUNIT_TEST) += cn_hash_test.o
+ CFLAGS_overflow_kunit.o = $(call cc-disable-warning, tautological-constant-out-of-range-compare)
+ obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
+ CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
+diff --git a/lib/cn_hash_test.c b/lib/cn_hash_test.c
+new file mode 100644
+index 000000000000..78c39c0a0997
+--- /dev/null
++++ b/lib/cn_hash_test.c
+@@ -0,0 +1,167 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit test for the connector threads hashtable code.
++ *
++ * Copyright (c) 2024 Oracle and/or its affiliates.
++ * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
++ */
++#include <kunit/test.h>
++
++#include "cn_hash_test.h"
++
++#define ARR_SIZE	4
++#define HASH_TABLE_LEN	1024
++
++struct add_data {
++	pid_t pid;
++	int exit_val;
++	int key;
++};
++
++static struct add_data adata[ARR_SIZE];
++static int key_display[HASH_TABLE_LEN];
++
++static int cn_hash_init(struct kunit *test)
++{
++	for (int i = 0; i < HASH_TABLE_LEN; i++)
++		key_display[i] = 0;
++
++	return 0;
++}
++
++static void cn_display_htable(struct kunit *test, int len)
++{
++	int i, err;
++
++	cn_hash_init(test);
++
++	pr_debug("\n");
++	pr_debug("Displaying hash table:\n");
++
++	for (i = 0; i < len; i++) {
++		err = cn_display_hlist(adata[i].pid, len, &adata[i].key,
++					key_display);
++		key_display[adata[i].key] = 1;
++		KUNIT_EXPECT_EQ(test, err, 0);
++	}
++}
++
++static void cn_hash_test_add(struct kunit *test)
++{
++	int err, i;
++	int exit_val;
++
++	adata[0].pid = 1;
++	adata[0].exit_val = 45;
++
++	adata[1].pid = 2;
++	adata[1].exit_val = 13;
++
++	adata[2].pid = 1024;
++	adata[2].exit_val = 16;
++
++	adata[3].pid = 1023;
++	adata[3].exit_val = 71;
++
++	for (i = 0; i < ARRAY_SIZE(adata); i++) {
++		err = cn_add_elem(adata[i].exit_val, adata[i].pid);
++		KUNIT_EXPECT_EQ_MSG(test, 0, err,
++				"Adding pid %d returned err %d",
++				adata[i].pid, err);
++
++		exit_val = cn_get_exval(adata[i].pid);
++		KUNIT_EXPECT_EQ(test, adata[i].exit_val, exit_val);
++	}
++
++	cn_display_htable(test, ARRAY_SIZE(adata));
++}
++
++static void cn_hash_test_del(struct kunit *test)
++{
++	int i, err;
++	int exit_val;
++
++	for (i = 0; i < ARRAY_SIZE(adata); i++) {
++		err = cn_del_elem(adata[i].pid);
++		KUNIT_EXPECT_EQ_MSG(test, 0, err,
++				"Deleting pid %d returned err %d",
++				adata[i].pid, err);
++
++		exit_val = cn_get_exval(adata[i].pid);
++		KUNIT_EXPECT_EQ(test, -EINVAL, exit_val);
++	}
++
++	cn_display_htable(test, ARRAY_SIZE(adata));
++	KUNIT_EXPECT_TRUE(test, cn_table_empty());
++}
++
++static void cn_hash_test_del_get_exval(struct kunit *test)
++{
++	int i, exval;
++
++	for (i = 0; i < ARRAY_SIZE(adata); i++) {
++		exval = cn_del_get_exval(adata[i].pid);
++		KUNIT_EXPECT_EQ(test, adata[i].exit_val, exval);
++
++		cn_display_htable(test, ARRAY_SIZE(adata));
++	}
++
++	KUNIT_EXPECT_TRUE(test, cn_table_empty());
++}
++static void cn_hash_test_dup_add(struct kunit *test)
++{
++	int err, exit_val;
++
++	adata[0].pid = 10;
++	adata[0].exit_val = 21;
++
++	err = cn_add_elem(adata[0].exit_val, adata[0].pid);
++	KUNIT_EXPECT_EQ(test, 0, err);
++
++	exit_val = cn_get_exval(adata[0].pid);
++	KUNIT_EXPECT_EQ(test, 21, exit_val);
++
++	adata[1].pid = 10;
++	adata[1].exit_val = 12;
++
++	err = cn_add_elem(adata[1].exit_val, adata[1].pid);
++	KUNIT_EXPECT_EQ(test, -EEXIST, err);
++
++	exit_val = cn_get_exval(adata[1].pid);
++	KUNIT_EXPECT_EQ(test, 21, exit_val);
++
++	cn_display_htable(test, 1);
++}
++
++static void cn_hash_test_dup_del(struct kunit *test)
++{
++	int err;
++
++	err = cn_del_elem(adata[0].pid);
++	KUNIT_EXPECT_EQ(test, 0, err);
++
++	err = cn_del_elem(adata[0].pid);
++	KUNIT_EXPECT_EQ(test, -EINVAL, err);
++
++	KUNIT_EXPECT_TRUE(test, cn_table_empty());
++}
++
++static struct kunit_case cn_hashtable_test_cases[] = {
++	KUNIT_CASE(cn_hash_test_add),
++	KUNIT_CASE(cn_hash_test_del),
++	KUNIT_CASE(cn_hash_test_dup_add),
++	KUNIT_CASE(cn_hash_test_dup_del),
++	KUNIT_CASE(cn_hash_test_add),
++	KUNIT_CASE(cn_hash_test_del_get_exval),
++	{},
++};
++
++static struct kunit_suite cn_hashtable_test_module = {
++	.name = "cn_hashtable",
++	.init = cn_hash_init,
++	.test_cases = cn_hashtable_test_cases,
++};
++kunit_test_suite(cn_hashtable_test_module);
++
++MODULE_DESCRIPTION("KUnit test for the connector threads hashtable code");
++MODULE_LICENSE("GPL");
+diff --git a/lib/cn_hash_test.h b/lib/cn_hash_test.h
+new file mode 100644
+index 000000000000..46fcda31b25c
+--- /dev/null
++++ b/lib/cn_hash_test.h
+@@ -0,0 +1,12 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/*
++ * Copyright (c) 2024 Oracle and/or its affiliates.
++ * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
++ */
++extern int cn_display_hlist(pid_t pid, int max_len, int *hkey,
++				int *key_display);
++extern int cn_del_elem(pid_t pid);
++extern int cn_add_elem(__u32 uexit_code, pid_t pid);
++extern __u32 cn_del_get_exval(pid_t pid);
++extern int cn_get_exval(pid_t pid);
++extern bool cn_table_empty(void);
 -- 
 2.46.0
 
