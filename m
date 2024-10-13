@@ -1,131 +1,171 @@
-Return-Path: <linux-kselftest+bounces-19613-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19614-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C0DE99B8B7
-	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Oct 2024 09:18:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6076799B9C7
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Oct 2024 16:48:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B5BA1C2123C
-	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Oct 2024 07:18:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D22D11F21A16
+	for <lists+linux-kselftest@lfdr.de>; Sun, 13 Oct 2024 14:48:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6667C139579;
-	Sun, 13 Oct 2024 07:17:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CDFB1465BE;
+	Sun, 13 Oct 2024 14:48:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="WqB/oQK5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A845770E4;
-	Sun, 13 Oct 2024 07:17:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D49C14600F
+	for <linux-kselftest@vger.kernel.org>; Sun, 13 Oct 2024 14:48:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728803867; cv=none; b=IMvANobNtglzxTMlBaUBXi5RH8IShF5i8Y8b90IyxjQUtoehr6scvxfYHsXjAyJHUGSMmwa4GX0S8QskP6gBp1uaIyjN/T2iusiL7PSnH9xQiMm23pG42pKI6hxXCdV5+WbtgLsFxCN5ROi/mH52YhtVg0qtxls0vmfi8QmZ1kg=
+	t=1728830903; cv=none; b=WbeqzhHnHBKlEkVNBJd6EeJdQO1wBm/CkKOH66LtaElm/woGZfL0kD8JlfJA4O45QoxExSSM3RbIF61V+iBBtHHARlH8yWKkjpggLSpNeIjayDeoChxUZrtvdMGwy/L0D8wfBjKKKljXJYKWPJjYvBuwei/WuXSj56GCF8dPNLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728803867; c=relaxed/simple;
-	bh=CFzNbzW1eEnEF6SnRyQ57jkQR8QwGYNI0Fag43gdHio=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RTzxAb6i5tyQwiboaawtr34/JFsykv7yeh80RsAawQ3M5asYmwBqWWWOfLOwiw/DbqeTenM4B2aTEMK74DmKtD4b9suOlp45O1sUoxoAvxwrJ67rCJ3IPJi32EkEWZCiuTmTcaNoQqNbgfBwuXi/AlS6+uQkfB3v0qBUdSBdknU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4XRBWZ6XRGz6K5fZ;
-	Sun, 13 Oct 2024 15:17:14 +0800 (CST)
-Received: from frapeml500005.china.huawei.com (unknown [7.182.85.13])
-	by mail.maildlp.com (Postfix) with ESMTPS id 2A261140447;
-	Sun, 13 Oct 2024 15:17:43 +0800 (CST)
-Received: from china (10.200.201.82) by frapeml500005.china.huawei.com
- (7.182.85.13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Sun, 13 Oct
- 2024 09:17:37 +0200
-From: Gur Stavi <gur.stavi@huawei.com>
-To: Gur Stavi <gur.stavi@huawei.com>
-CC: <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "David S.
- Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub
- Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
-	<shuah@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	<linux-kselftest@vger.kernel.org>
-Subject: [PATCH net-next v04 3/3] selftests: net/psock_fanout: unbound socket fanout
-Date: Sun, 13 Oct 2024 10:15:27 +0300
-Message-ID: <7612fa90f613100e2b64c563cab3d7fdf36010db.1728802323.git.gur.stavi@huawei.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <cover.1728802323.git.gur.stavi@huawei.com>
-References: <cover.1728802323.git.gur.stavi@huawei.com>
+	s=arc-20240116; t=1728830903; c=relaxed/simple;
+	bh=AUvPmuSjI+rSvTcZ0TXHVxonicItQiBtNVeLunp3GO4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I3Yef8TWXzFotc7VqItNnpdC3qx0/A3uJyugd7Tp684fWilnWfRwrck6kWvrhCQOR+Ho80fbwJaSqFU4vG14Ipx7wfFIQJP5syZVu+03yJLhJHqOh2F9y/tdIMwR1mS+/T5z9UwVLxTq219yv0So9Waie79/82jvUjLegbDWQPQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=WqB/oQK5; arc=none smtp.client-ip=95.215.58.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Sun, 13 Oct 2024 22:48:08 +0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1728830893;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qI54PFvBT5PcOYDFV+12ZGlyTxkytu6jiXpb+llrzHU=;
+	b=WqB/oQK5zMokzc6EZ5aJNHBlcHl2JlV72AphlV2ZqLzNP94S2H5Q93foU9SGtJfFGvNWAC
+	ClsRLz5CegxfxEfUI5clAIe4R2WDvraNsz01JsOUesl3jES5bdb2Gs3Ss918xxkZgsmL1O
+	SLAFrH+D5N1c4e5+vT9NA1CRWYOV1zY=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leo Yan <leo.yan@linux.dev>
+To: Adrian Hunter <adrian.hunter@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>, Ingo Molnar <mingo@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Thomas Richter <tmricht@linux.ibm.com>,
+	Hendrik Brueckner <brueckner@linux.ibm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mike Leach <mike.leach@linaro.org>,
+	James Clark <james.clark@arm.com>, coresight@lists.linaro.org,
+	linux-arm-kernel@lists.infradead.org,
+	Yicong Yang <yangyicong@hisilicon.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Will Deacon <will@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
+	Ian Rogers <irogers@google.com>, Andi Kleen <ak@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	H Peter Anvin <hpa@zytor.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Zhenyu Wang <zhenyuw@linux.intel.com>, kvm@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH V12 11/14] perf tools: Add missing_features for
+ aux_start_paused, aux_pause, aux_resume
+Message-ID: <20241013144808.GA45976@debian-dev>
+References: <20241010143152.19071-1-adrian.hunter@intel.com>
+ <20241010143152.19071-12-adrian.hunter@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- frapeml500005.china.huawei.com (7.182.85.13)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241010143152.19071-12-adrian.hunter@intel.com>
+X-Migadu-Flow: FLOW_OUT
 
-Add a test that validates that an unbound packet socket cannot create/join
-a fanout group.
+On Thu, Oct 10, 2024 at 05:31:48PM +0300, Adrian Hunter wrote:
+> Display "feature is not supported" error message if aux_start_paused,
+> aux_pause or aux_resume result in a perf_event_open() error.
+> 
+> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> Acked-by: Ian Rogers <irogers@google.com>
+> Reviewed-by: Andi Kleen <ak@linux.intel.com>
 
-Signed-off-by: Gur Stavi <gur.stavi@huawei.com>
----
- tools/testing/selftests/net/psock_fanout.c | 36 ++++++++++++++++++++++
- 1 file changed, 36 insertions(+)
+This patch looks good to me.
 
-diff --git a/tools/testing/selftests/net/psock_fanout.c b/tools/testing/selftests/net/psock_fanout.c
-index acdfae8f8a9a..84c524357075 100644
---- a/tools/testing/selftests/net/psock_fanout.c
-+++ b/tools/testing/selftests/net/psock_fanout.c
-@@ -279,6 +279,41 @@ static int sock_fanout_read(int fds[], char *rings[], const int expect[])
- 	return 0;
- }
- 
-+/* Test that creating/joining a fanout group fails for unbound socket without
-+ * a specified protocol
-+ */
-+static void test_unbound_fanout(void)
-+{
-+	int val, fd0, fd1, err;
-+
-+	fprintf(stderr, "test: unbound fanout\n");
-+	fd0 = socket(PF_PACKET, SOCK_RAW, 0);
-+	if (fd0 < 0) {
-+		perror("socket packet");
-+		exit(1);
-+	}
-+	/* Try to create a new fanout group. Should fail. */
-+	val = (PACKET_FANOUT_HASH << 16) | 1;
-+	err = setsockopt(fd0, SOL_PACKET, PACKET_FANOUT, &val, sizeof(val));
-+	if (!err) {
-+		fprintf(stderr, "ERROR: unbound socket fanout create\n");
-+		exit(1);
-+	}
-+	fd1 = sock_fanout_open(PACKET_FANOUT_HASH, 1);
-+	if (fd1 == -1) {
-+		fprintf(stderr, "ERROR: failed to open HASH socket\n");
-+		exit(1);
-+	}
-+	/* Try to join an existing fanout group. Should fail. */
-+	err = setsockopt(fd0, SOL_PACKET, PACKET_FANOUT, &val, sizeof(val));
-+	if (!err) {
-+		fprintf(stderr, "ERROR: unbound socket fanout join\n");
-+		exit(1);
-+	}
-+	close(fd0);
-+	close(fd1);
-+}
-+
- /* Test illegal mode + flag combination */
- static void test_control_single(void)
- {
-@@ -523,6 +558,7 @@ int main(int argc, char **argv)
- 	const int expect_uniqueid[2][2] = { { 20, 20},  { 20, 20 } };
- 	int port_off = 2, tries = 20, ret;
- 
-+	test_unbound_fanout();
- 	test_control_single();
- 	test_control_group(0);
- 	test_control_group(1);
--- 
-2.45.2
+A case is the Linux kernel has supported aux_pause_resume feature, but
+the PMU event does not support it. So we might consider to add a extra
+patch in perf:
 
+diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+index 927aa61e7b14..9a3191df2ec5 100644
+--- a/tools/perf/util/evsel.c
++++ b/tools/perf/util/evsel.c
+@@ -3373,6 +3373,10 @@ int evsel__open_strerror(struct evsel *evsel, struct target *target,
+                        return scnprintf(msg, size,
+        "%s: PMU Hardware doesn't support 'aux_output' feature",
+                                         evsel__name(evsel));
++               if (evsel->core.attr.aux_action)
++                       return scnprintf(msg, size,
++       "%s: PMU Hardware doesn't support 'aux_action' feature",
++                                        evsel__name(evsel));
+                if (evsel->core.attr.sample_period != 0)
+                        return scnprintf(msg, size,
+        "%s: PMU Hardware doesn't support sampling/overflow-interrupts. Try 'perf stat'",
+
+Thanks,
+Leo
+
+> ---
+>  tools/perf/util/evsel.c | 10 +++++++++-
+>  tools/perf/util/evsel.h |  1 +
+>  2 files changed, 10 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> index d34ceab9e454..927aa61e7b14 100644
+> --- a/tools/perf/util/evsel.c
+> +++ b/tools/perf/util/evsel.c
+> @@ -2147,7 +2147,13 @@ bool evsel__detect_missing_features(struct evsel *evsel)
+>  	 * Must probe features in the order they were added to the
+>  	 * perf_event_attr interface.
+>  	 */
+> -	if (!perf_missing_features.branch_counters &&
+> +	if (!perf_missing_features.aux_pause_resume &&
+> +	    (evsel->core.attr.aux_pause || evsel->core.attr.aux_resume ||
+> +	     evsel->core.attr.aux_start_paused)) {
+> +		perf_missing_features.aux_pause_resume = true;
+> +		pr_debug2_peo("Kernel has no aux_pause/aux_resume support, bailing out\n");
+> +		return false;
+> +	} else if (!perf_missing_features.branch_counters &&
+>  	    (evsel->core.attr.branch_sample_type & PERF_SAMPLE_BRANCH_COUNTERS)) {
+>  		perf_missing_features.branch_counters = true;
+>  		pr_debug2("switching off branch counters support\n");
+> @@ -3397,6 +3403,8 @@ int evsel__open_strerror(struct evsel *evsel, struct target *target,
+>  			return scnprintf(msg, size, "clockid feature not supported.");
+>  		if (perf_missing_features.clockid_wrong)
+>  			return scnprintf(msg, size, "wrong clockid (%d).", clockid);
+> +		if (perf_missing_features.aux_pause_resume)
+> +			return scnprintf(msg, size, "The 'aux_pause / aux_resume' feature is not supported, update the kernel.");
+>  		if (perf_missing_features.aux_output)
+>  			return scnprintf(msg, size, "The 'aux_output' feature is not supported, update the kernel.");
+>  		if (!target__has_cpu(target))
+> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+> index 15e745a9a798..778fcdb8261f 100644
+> --- a/tools/perf/util/evsel.h
+> +++ b/tools/perf/util/evsel.h
+> @@ -221,6 +221,7 @@ struct perf_missing_features {
+>  	bool weight_struct;
+>  	bool read_lost;
+>  	bool branch_counters;
+> +	bool aux_pause_resume;
+>  };
+>  
+>  extern struct perf_missing_features perf_missing_features;
+> -- 
+> 2.43.0
+> 
+> 
 
