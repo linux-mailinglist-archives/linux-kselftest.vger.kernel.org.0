@@ -1,43 +1,43 @@
-Return-Path: <linux-kselftest+bounces-19657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19658-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7EB799CDB2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 16:35:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EB5099CF29
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 16:52:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 864DA2827D8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 14:35:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EE3A28B423
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 14:52:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 072E01AA793;
-	Mon, 14 Oct 2024 14:35:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AC3D1AE017;
+	Mon, 14 Oct 2024 14:48:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="j9bPxjn7"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="g8Qldc6d"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0192E571;
-	Mon, 14 Oct 2024 14:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E7EE481B3;
+	Mon, 14 Oct 2024 14:48:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728916509; cv=none; b=XB6mg6yVwZMZbabdqZ1JLKnTpEWud65zZorhj+dH/PRU/U26axGHx6vpS2k4wcZJ87mIAdxHkstR+yPBO5nmk4Gi2tzclg82v+e+OmlNhsW6CfMl/agNCoc4AWdnrNLn3tBPjLBYdfyyn3gOjWdiqf7K0AZcBb1CZrU8LbZK0UU=
+	t=1728917289; cv=none; b=Rqm04GX1PtUhpPBEw25dc4hEJILTXYlF8uUUxI1LJ/1UVwm4vtms+KM7GAwnXJDdPxy4vKR8EQH+Emy45hY3Bqgrdgyw239LxKhfjvGgool+joUTJT4buTvlOk1n5TwCBGnFJYiVi94RwAmyPg5zoZkbrxe9pQsuyKZKVSr/3BY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728916509; c=relaxed/simple;
-	bh=ouDfWqcOhNHpj65eL5iZABGyHF6C/jEfTlitDGMESxc=;
+	s=arc-20240116; t=1728917289; c=relaxed/simple;
+	bh=/mNCmmI7sy6okCSU/K0mpQJbBcvuzTAm1gx7gSI1gFo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=syIoJuOTCNtEfz0GTjIbbdqNiVZIaN/xTAbZ15wxf2GF9ERJLUh2RqKq7qf5YYqYSo2oZRgf2lkKKGrxm+FqSZqHUC+MSUe3lC3gIvarvVofLydBYXMvcvNMvQ163YkRdTaRqIjr69F8mYi3XrYqegR/6sqM+a2H2xgBhOje1Ls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=j9bPxjn7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46B77C4CEC3;
-	Mon, 14 Oct 2024 14:35:09 +0000 (UTC)
+	 MIME-Version; b=RTmkYEXakl1ApPJUZKORF+hG5nEYXqWpMgKN20XC56wW8AWPc6kBk+/hL+wPwyDiJQlPeQbTmmbn6hoaEtUjZfDxdQB4GBCl5OTRcJgZ1WdLHPCRCxqoCuoWFzqYxGrk56fEQrxX4/EJ4fyBuYo0xC3ZYiRYJaf2e5AWOsRHwC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=g8Qldc6d; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC27C4CEC3;
+	Mon, 14 Oct 2024 14:48:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1728916509;
-	bh=ouDfWqcOhNHpj65eL5iZABGyHF6C/jEfTlitDGMESxc=;
+	s=korg; t=1728917289;
+	bh=/mNCmmI7sy6okCSU/K0mpQJbBcvuzTAm1gx7gSI1gFo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=j9bPxjn7MDE2bfdd0FjqtuAjKglJXRHtHSOlitkrL75Z4z6LvtCbcChRWqtJy6qH0
-	 fKd6RQQqjeTS1M7UqMvraUAeUDPzFp71vgmT68hKMn0O2qhwDcEurInatDQ7FJHqBc
-	 WTfGlM+btxWPVil+K5bccgRxEvjVaod0ywmtU1ow=
+	b=g8Qldc6daf+rGMOQkYSaBsy+ov3IVXItkUkmAR4gKPzSG2d6Eq/Dxrc4r6Amt02k4
+	 qmgXR+XuIg7F9lyF4njPMWQlebZG6Gn8wDGu3anvkh8o8Ewj6ZkNLCj4upk3pIcw++
+	 nENqoVDBxYUkpqq4wAT0kWXIrMajvQwCd22Jcaeg=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -50,12 +50,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Carlos ODonell <carlos@redhat.com>,
 	Florian Weimer <fweimer@redhat.com>,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH 6.11 205/214] selftests/rseq: Fix mm_cid test failure
-Date: Mon, 14 Oct 2024 16:21:08 +0200
-Message-ID: <20241014141052.976476446@linuxfoundation.org>
+Subject: [PATCH 6.6 206/213] selftests/rseq: Fix mm_cid test failure
+Date: Mon, 14 Oct 2024 16:21:52 +0200
+Message-ID: <20241014141051.001836938@linuxfoundation.org>
 X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241014141044.974962104@linuxfoundation.org>
-References: <20241014141044.974962104@linuxfoundation.org>
+In-Reply-To: <20241014141042.954319779@linuxfoundation.org>
+References: <20241014141042.954319779@linuxfoundation.org>
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -67,7 +67,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.11-stable review patch.  If anyone has any objections, please let me know.
+6.6-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
