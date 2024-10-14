@@ -1,328 +1,396 @@
-Return-Path: <linux-kselftest+bounces-19622-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19623-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2796099C711
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 12:24:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 256D499C784
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 12:51:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A9C671F2327A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 10:24:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8623CB22D78
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 10:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70A6B15B13B;
-	Mon, 14 Oct 2024 10:24:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76363184556;
+	Mon, 14 Oct 2024 10:51:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="SQBLBTRf";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="uodOnEML"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a3yb0TZ4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA244156676;
-	Mon, 14 Oct 2024 10:24:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728901451; cv=fail; b=bNq8gT05hwWzSSqgaxowYBjPAeItbFo1cwvjBKlNMrtVSvnxr4uDJI0PrkoDoNUvvb2IP66+BvaUK6KGslKpXyCxAbHi09s5PSu+EYgVaVyhfXYYmcb2PMRjsgkyI/79EbYc3gFqzRuxY6B9B1bOFNxPiROdlrTqI4OV9JnT4T8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728901451; c=relaxed/simple;
-	bh=bCkCP/h7mbi3nKAjvf3wlgXtqHBy/ixNaxwb1ypJ5tQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=dRRITJANtTkNBgtARx1UAK/Q26BNsYWGQ6aymHX9C7n4HEcZMcNsSCo5qA0o5Ndfk7547QFtuwpy9D1tV1PsCned1MTWd73Ml5/vkQ9vj5+TK18kt6Vzn3j8nTjGv+1bG9SmyjzvEm0zSSxDvV3LyEYmqJY/wn4DmUJlpwbsogE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=SQBLBTRf; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=uodOnEML; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49E9tw42032249;
-	Mon, 14 Oct 2024 10:23:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=6jkhPEFUpWo3F9gWwRdNtKb26Fb9mj9GLiXn3W5Ek18=; b=
-	SQBLBTRfaj9UqWcjfmGMfMYmV74RDtdLSSO3Ie6fZlnZpvOyCYJbgTrahsca2pxX
-	R1C5zGIg1IvSBmIAOApYKbnxqhBEeb9/LSFSCzVkB1VRgE1fSOG0cVzbYWhlZ3Ip
-	rbkSnrD5/Ove9bCw16F6nS7UFopBVqNKdvuXXhHP0/PRYKAzDeuicJpYhPFPIrTP
-	a18AQwcUmsVeSjBQkeZOnJoxI7/oc43ZxwVoNcDwkjoddpZvRRo7jOlXAA76q6Xz
-	8XUR1D31D8sroX8ktN7j/BWSzX9U6XIqs3zTjX39XUm1C3x073e/OcbmmDUZxDi4
-	v/HrGb7cRGfXfDiJ9bNeSg==
-Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427g1adwu9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 14 Oct 2024 10:23:23 +0000 (GMT)
-Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49EADFDq026558;
-	Mon, 14 Oct 2024 10:23:22 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2177.outbound.protection.outlook.com [104.47.58.177])
-	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjcdnkc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 14 Oct 2024 10:23:22 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=llBxRmVKqynfMi0fhb3WIse74ywdD67MNgsYHyaVKo4HeX3+wcJdZzHW0Z2P6FZNkRphXk0C3KLQ/lb0RvzlYMZWR9f+FE14IHYWlADjRF/+8d1abVhwnubRhI4Zf8TwJH/DJFve2TJOBhYyqVZLK26pHh3ARg+PhMugYb5z+4tPd+9Q5yxeHDMvNtirrAkRHKoKYIAEWnlt9dmB36XoUffXY/E78uAgUsKRtalBKxshtR3iCqwUlIx3QBFObGiyjZIincfafUJiebJCPXlZ3Im2M4Lx8d3X9xarqAgZGb87UD4fyfTa00suqBYDAa9h5lmzTIu2kbc4MvPAZ0I4Gg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6jkhPEFUpWo3F9gWwRdNtKb26Fb9mj9GLiXn3W5Ek18=;
- b=UdEl6KLdm152Ajq3zmSgVicsQsEhisSBfVoGyqLkEWP6gvOwPSEdYpYghK0pYkGu1nlcwov4au3soIsvj8dQrxMWtUZjn6gon1PSlhceqKxIRZhaVu6aAZN1G+JI1kfhHybF3urvhcB4hnKHKKa0bd2rUvv1mIk6OUVujvuo5sWpQWTjvQX6QX5lHXAuwgXN1AL4RlkPGWVhDt+kJwMRGQSGJm+8va3JO6ZShTPm2kuG6nX43A/j5N8jmCVoPujToh7aNBMk6ARalrWS581dU7v1AoNs4qyDceUuTjseq2BvixI8QVcDGm7FuaXPYiYDzyl6O4pU/KLbkntPUCmfhw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6jkhPEFUpWo3F9gWwRdNtKb26Fb9mj9GLiXn3W5Ek18=;
- b=uodOnEMLFNkdcKLSaPViwcMip206w38b5ExfsR7c2vC4nHTT7klszP++8CAqDJnyI+KsvAmCfZ6m2eOSR2HtsON6umXpySt8iZUTa7hBt6thFu3svOhibHMQTtu7v3OvfFIzKoxRttGCPrVnTqzsBrNM3lHjnOK1vubEjSH2CFs=
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com (2603:10b6:a03:3d0::5)
- by CO1PR10MB4593.namprd10.prod.outlook.com (2603:10b6:303:91::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.26; Mon, 14 Oct
- 2024 10:23:20 +0000
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e]) by SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e%5]) with mapi id 15.20.8048.020; Mon, 14 Oct 2024
- 10:23:19 +0000
-Date: Mon, 14 Oct 2024 11:23:16 +0100
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Jann Horn <jannh@google.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Muchun Song <muchun.song@linux.dev>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>, Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-        linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Subject: Re: [RFC PATCH 2/4] mm: add PTE_MARKER_GUARD PTE marker
-Message-ID: <34e41a11-10ef-4eb9-8c07-299d193dd8a7@lucifer.local>
-References: <cover.1727440966.git.lorenzo.stoakes@oracle.com>
- <03570f8a0ad2a9c0a92cc0c594e375c4185eccdc.1727440966.git.lorenzo.stoakes@oracle.com>
- <CAG48ez0rLrTrNiT93T2fG86w_n+ARRqNxOS6OXGS-Q_V54GjoQ@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG48ez0rLrTrNiT93T2fG86w_n+ARRqNxOS6OXGS-Q_V54GjoQ@mail.gmail.com>
-X-ClientProxiedBy: LO4P123CA0158.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:188::19) To SJ0PR10MB5613.namprd10.prod.outlook.com
- (2603:10b6:a03:3d0::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEAE915DBAB;
+	Mon, 14 Oct 2024 10:51:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1728903111; cv=none; b=qQEg7RKcPDI4XJT2QvhdAgEdU5LNR5zyV0D2VEXbudn44eUPOaV2tXpgxPfzxD1vKOcpSfAih/0p0YnQi3mg1yR+cpWTTN0NQBm8BtwCxcstbk3yrDZQpQ2ZDbxCQYiRiROSMuOnrgexE4zzNYiX/ZmDRs9RdnAPTVGXGFkYG7A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1728903111; c=relaxed/simple;
+	bh=qYEumhlNUbYifuU5iNUgkm0nE5G0eOknp0xGLENDs48=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hoZNDliSNMo8slMiUlfUFdZ467HT64BsC3TsqmZJ7VN/GsdXdPsIY/YBXI+Bu/C+4Yq9AlMuF2t3N4pWy8cqHTzgud0P1AvOVv7GT2OsUt+eemNm8+pTbwM7E+oNwZBurs3Cl/PIHl9++lOX2xF308iPTI4JBFPqzcHQFlnJeGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a3yb0TZ4; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1728903108; x=1760439108;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=qYEumhlNUbYifuU5iNUgkm0nE5G0eOknp0xGLENDs48=;
+  b=a3yb0TZ4NgoVu2FZrRakYLz30EVCQr45jJBvqpIaa/Npj9BXefr1TN6v
+   VzR+b8h7AK7JjBJnMk/Chmt6Htieana2XAnYdXpvK0cQLHT6zF6KCG4FF
+   1c47uNq3kc/okB0dfvHSL6TMlNfE7zfcOram+u318jl7vEhb8VZ+XE0t8
+   Fx7I2G4UrMBD0hpd82qDUkFw+2JrVax/5/xBusp2GKdmYdKdQrW2Kpig8
+   QwoVdwNPF+6ByKfVstHrn5CQDvp+JMuPqjTeOGDBp/o5Oga/AydyEwKkY
+   c3zcUB6Q4UdtqfkI79usS00Xq0lrLGvb39Fj94sq0THV2DzcX+sAeCNVh
+   Q==;
+X-CSE-ConnectionGUID: aomGou5jR0yC6IX2ugHtUw==
+X-CSE-MsgGUID: Fz3W2YPhQOK4mzxcT1rG7Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="39365964"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="39365964"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 03:51:48 -0700
+X-CSE-ConnectionGUID: UfAyJnRhRda/0l2ziP5FQA==
+X-CSE-MsgGUID: Mh7f2FbmQN+svofb6Pzt4w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,202,1725346800"; 
+   d="scan'208";a="77727338"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO localhost.localdomain) ([10.245.115.59])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 03:51:38 -0700
+From: Adrian Hunter <adrian.hunter@intel.com>
+To: Peter Zijlstra <peterz@infradead.org>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Cc: Ingo Molnar <mingo@redhat.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Thomas Richter <tmricht@linux.ibm.com>,
+	Hendrik Brueckner <brueckner@linux.ibm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Mike Leach <mike.leach@linaro.org>,
+	James Clark <james.clark@arm.com>,
+	coresight@lists.linaro.org,
+	linux-arm-kernel@lists.infradead.org,
+	Yicong Yang <yangyicong@hisilicon.com>,
+	Jonathan Cameron <jonathan.cameron@huawei.com>,
+	Will Deacon <will@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	Andi Kleen <ak@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	H Peter Anvin <hpa@zytor.com>,
+	Kan Liang <kan.liang@linux.intel.com>,
+	Zhenyu Wang <zhenyuw@linux.intel.com>,
+	mizhang@google.com,
+	kvm@vger.kernel.org,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org
+Subject: [PATCH V13 00/14] perf/core: Add ability for an event to "pause" or "resume" AUX area tracing
+Date: Mon, 14 Oct 2024 13:51:10 +0300
+Message-ID: <20241014105124.24473-1-adrian.hunter@intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|CO1PR10MB4593:EE_
-X-MS-Office365-Filtering-Correlation-Id: 812f1849-cc2f-4a8e-eb01-08dcec3a398d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?N2xsSmRqQWVFRk5jODVTc0JuY3NNWVh4RUZlS1Q4ZUtXbitVcWpvTG55TU8x?=
- =?utf-8?B?VU5neHhDT0Z2N3F3NU5mZ2RhMUlRQW9QWFJPTW5Bc3BmTVRhaXNiL1ZjVlpZ?=
- =?utf-8?B?VGZIR0oyVURUWXQyejhYYnBBVlNZSEpGN2dsUllsQXhCMG5Dc3c5SFhpNUpj?=
- =?utf-8?B?S3Q1WmxGSjVVa2ZjRUZGQU9ucUZxYzcyc3dSTWRuNnpzUXpwUzhPZmV5UTZY?=
- =?utf-8?B?dFVHZjVrVmpMZ0tlOTYvQzVZVjJsdjVCajJoZHdlQS9tY2pPYVRmekFrZVVo?=
- =?utf-8?B?OFJFM3FMMjFLTndpem8wOGtQWGVRL0Yzd1JYRlFuUVRTRldVZ2ZpUFFjTTFk?=
- =?utf-8?B?NnUvM2c5SFRERkpuWHMyL05pRXZwTXg1S052cHRJM3NaY2c5K0FXdmNHMURl?=
- =?utf-8?B?YzJZSE1uaWl6NDZ1VzhqNFRBWWc4MkxqbTFYRGdIeXViZVZQYWdyZmlrN3FN?=
- =?utf-8?B?bWRacDFaN1hGdFZZaHhDVzYxY3lVdUlOVVpZUmQ5WE8yZzd6Vllub3lnOXJ6?=
- =?utf-8?B?RTZ5SERuMFE4KzRQcjlmb1pkaFlTNld0OE5jdjF2Z1RYZXZyUWhGaGdNYTYy?=
- =?utf-8?B?L1JyalpNSU4xbWt6Yk5SZmJ3RVR0MytvWXJtUmtabWM2b1JWRGk3YXRuUGtD?=
- =?utf-8?B?dDVSdjY2VVlKdGlDMURzT2VWYUdJRlNSUXE5OTk3K1MxZFpzaVVvZ3pXdHdF?=
- =?utf-8?B?eElzUXgvck0rNzFTTFZYMVVnZUZSaHdraVlKSHpzb0dSZ2lacUhTSGpWTUJE?=
- =?utf-8?B?OS82Wmx3RVRTQVZkQ1hMa3lzZzcxUmp0K2lkUkN5aVdKNUY2MTRSTmJIVlJj?=
- =?utf-8?B?bDNsblBkWXVzakUxcVRjY1UzTmdyd0tLbkVRSTRvMlBqdGtWK0NEZ3VJT1N4?=
- =?utf-8?B?UVF6ZmNxYXppWXZEbkdOYUYwUTRIVThkNmdlSGRGdzBjRDdFVWFQZUIydnZm?=
- =?utf-8?B?OGptVVN4RkJyWnJzVFplSE1iT1FsbTlhNytBQWlEQ0gza2Rib1ZZeENBaVRF?=
- =?utf-8?B?d2FyQXRIRTUzdEMySE9JMHJCQ1FWVGlsRnZoaUptU3J4VHBCTDM4VjlnWExE?=
- =?utf-8?B?dHlUSGNSV3QxWGVtOC9VSDZBZElKblVmbHVWMlVDOTQzOGw2ejlxckhYN0dq?=
- =?utf-8?B?NWk2eU9KQ0duKzJJVTErNGpxVWl2UnhXb1ppVnBjU0VqaU9MS1hCYlJuQTZ6?=
- =?utf-8?B?RHRIZGZVL3dvNTA1MUlpb09LZkx2YWNOcmh5UWRIcW5Mb1JJZWFzeWlPd1FB?=
- =?utf-8?B?WXQ1bnkvQS9MeWgxbFZFdFFFR0wvVTBnVG1PSURERmlJMzUwbzkwQ1pnU3BI?=
- =?utf-8?B?VUlYNW1OZnZmLzVKUkVzTkZ0Z3ZMWnFPTkFJNkNMWEE2NklPWDgxRW03Tlk4?=
- =?utf-8?B?aHhTVWwzU1FtVHdzLzVORTVkN2ZaMkVXc1FQSWRoWlFNZkZPVmpzdDJYZGtn?=
- =?utf-8?B?eHpybDdKNnFienZJbFFwYVpWa1l6MER1UUFQKzN5N0hPaGpURFJyeW9BOWYr?=
- =?utf-8?B?WG9UeUtRQ2FucHhoUzZDbm1ncWppdkM5bElwN2pBM3BBN1ZHOVp0ZXlGRG1C?=
- =?utf-8?B?UCtmTmtqL0xJcXhSb3hQMjZxQUJ3b3I3VFRkWGlnT0NCbzdkYXJTaFdGeHRN?=
- =?utf-8?B?M0c3eVh5YTNwdGR6R050TEJ6bm1nOFVBRnhRbE54bERvcEtWNGdSTWFSZkxI?=
- =?utf-8?B?UHY4Mnp5Zmw5R0xoSnBZRWRleVQwRk8yV0RKc3RWTENZSTFCNlVwQXd3PT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?byt6aE04NVZla3psS2VDaFIrV2RvVm5FUGQ5RTh0WHp2bVo0b0MwUmx3TFhW?=
- =?utf-8?B?bXZNMWQyNkRoSjFOQWcwVkxPa2w2ZUtETWx2SWhCYVgvL0x3S3pCcmFjWjRp?=
- =?utf-8?B?dk9LUENlWkZqSWhyUjhRYmNpa1Z4aDlwNXVvTmpKRCtYa3RDS3FQMy85SEFj?=
- =?utf-8?B?OXdnTFJhYk1EQkRXTVBSaGhtTUxINzJ4RGp2RjI1MzVYQk1NY2lQc3pxTyti?=
- =?utf-8?B?TUJHVWhhVUg3SWJia1lvSjlTZ3ZCQUw3RzdjS1BqM0paVEEyaEJHY0NmRnAy?=
- =?utf-8?B?ZkRXc201NXJYMnF4LzRXWWc4QzVocGkrWFFFMG9qbXgvZFRYRmdFdXhIcG5T?=
- =?utf-8?B?czNoOUs3c3QzMGY1UjJZRTRheTlVMDliK1hhVHpMWkM3MzV5d0lrTWlDS2dS?=
- =?utf-8?B?UUpvZ2J6MlE3ZlZoK1pvZzZVRWJVeFcvS2NxRVV3ZDNhY2xLdFdqRzJDV1Q3?=
- =?utf-8?B?U2puWTRVY0xoM3hxbW4xOFpId0xJN3FTS3FpRmdodmIrZko1cnFPOW1NOUMy?=
- =?utf-8?B?eExrMkZFS0UvUnYzS2l6RGRxL1NiLy91SUpiZ1ExM014bUZUbXpTOEtTNWFF?=
- =?utf-8?B?T3Q2RmVrYkIySE5hS2dUWEdRcTFSUktKdklocm44eGYwbVJ5bksyamp3ZjA2?=
- =?utf-8?B?Nms2Q0NsY0orMDRRK2NscXpHRXh5a3gxMjBvZEs3alIxZEJ0cllyYmpJNjBT?=
- =?utf-8?B?OWxzamRKMngyR1I4TlQzSXFKRkJtYkpJSG82RDc1N2RybkdpQ0RvTVJJUUll?=
- =?utf-8?B?U2M2bGU0WVVHVUJlckRaU3U5SDg2ais2MDNiYjNnL0VSVXQwaVYyMTNXOWhC?=
- =?utf-8?B?c3JNOEJybldIV3JONll1VC8vOHc4Z3ZaRkY1anpTTUs4SGc3WTBubkJlWHVJ?=
- =?utf-8?B?OUp0UGFUY2NHa0dTd3QyemNLU3NFWGllRGhDemtHamY5RzYyZ1ppMkE5VFFZ?=
- =?utf-8?B?V3Avc2d6THBoTEpaQXFrQkt3WUk4bGFtUzJTKzdXRkNaRkxZVkNGSFZPZ0FV?=
- =?utf-8?B?cVBKRnZBWEFPUEl3UHFuSjdrclU0QzdrUHhOcU4vaDFaQ1k0RkY5Y1U3akdK?=
- =?utf-8?B?VWMxN2R5UWUrQ1RBZVhPQW03MnY1MFlNT3IvTStwWlZHTFNMeGcvSTVteFRJ?=
- =?utf-8?B?SGN0bVJvZEdlenVtbkJPTWtLWmVodWlsUUd5SmJiQ3RzVUFDVkp6aXVJSUtV?=
- =?utf-8?B?a2dhTG94WXFaNjJ6U1h1WE5Fd0tQRlhjUDd5aVBEc2xUYnRhdUFLM21WNkdW?=
- =?utf-8?B?T3BqN0ZKb25yRU9VMkFWR2QvRU9VMHhNUU0rVVBPcU5IZ2dFempMRGd2ZStr?=
- =?utf-8?B?MGVVVVVCd3gxa0IweFVUOWFoWkJ3V2dnMUdIK3BGSmpIaUc1enNSb3N2KzdU?=
- =?utf-8?B?TitQZ1puZnVGRDlQWGtSbHZvRzhZYUNrdFFOeWU1d2hGN05xU2ZPNVN6KzRo?=
- =?utf-8?B?dHNCTFB1Z05QMjBxVW9RcmJKcmtZQW9FbWJtYnBxanV6dTlFa000STB1dUpi?=
- =?utf-8?B?SUV1b016SDNuSWNRY0FYeUNXMVlHZ2UzZmFScHMxOG1BRk9JbnlNanZYc1VI?=
- =?utf-8?B?YmJLZHhabU5TVEh0a21zS0REQVozYTQreDgxZ2l6NUhLOWdEUUJYcmNYRmtk?=
- =?utf-8?B?WXRaUEwxRzFsWm1HUEp2OER6a3FJcnVPVEFKOXBXd2ZXbHg4RXVtWFpDNzR4?=
- =?utf-8?B?dDdjaXhKVmhGV0FEVjJsSVZCSEsrbmtJK3Znb3JJWGtOMzBualFvR05uZ1Bo?=
- =?utf-8?B?Qk5ncktsRkk1ZlcvQk5HTGtZTzNJa1RNVDkvcXNocHdLY3VaUWRLQVIwZUJP?=
- =?utf-8?B?WWFONnNGN3lRdG9UUzFReCtNVTR2MUdDVUpZVm9sV3dPeHY1ZTVYYXVVcnor?=
- =?utf-8?B?V1JSTTM0WHJLTXdHVE5jMHJ1cFMxbFlLWW9OZWVOc0R3K0RvcER2QWMrOEdx?=
- =?utf-8?B?cnNIY1JkM3dkV2lmd2J4QW83VUFTbndMK29NcEZFc1JBVTdsK25Ca3dQZ0Nq?=
- =?utf-8?B?eFkzaC80YnV6bXhZclNVRGorOFFmdEJlREpaRG52QWI3SnFCejU5WGlmczd3?=
- =?utf-8?B?RlRCOG9DNEpsV2l5Z2xvSGNydTFzVEJzY1FPaUZDY21ZdklZTVIrdGFWYjZM?=
- =?utf-8?B?NHozZk9Cd05yY1pnTFZDcXpXZGhHSFR2dzk2QnBQYTdDZkVCNmY3MVFZQUN6?=
- =?utf-8?B?a1E9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	q9DOnKcrlA0jRS/qNSk/2BUPny4Fc12ExOlUW2kKsyCF62vdkeEKoC8GfkQNthHZM4+MkSsnAhZeQ7DrbgH+y8UGQticDrUjReHmkKPhSp67EmJLsDqjNSCEbvofBFuFbqj6i3gDGUGYv/NG1rB4RFMRxlLvJjEAhS6EIN6sL5XowrdlDftXps7iU+TgsYRFTCB9xBx2J2BkvbNhlwYpTLlVYqSkHoy3A1km0JMjMVjQDDFQsKNWIRxAOBsGo8f4MZVKkRiNAFukoxMkZqpGRnnSRqNrNF+eDlGBJhJu0SYx3gW0I+d+3Uaex6qQkxoG283WU4rKNiawn1jQZw8tdAUCBOc4BNxZNAIov4a7lCvwHyRQmacbx2kTDpm3oLi9UWcbWvrRxJNXe571giS6H8RLe796GRomKEKato5nhNWrm2BPIqnX/u+2nAcliaSCrpj+kiMPtF/K82fdZdJPPlCOh3dxj5DEtTywhu5VUVErcOFYiYUjQWQVetObquxkKmlX38NCaMKm67sVKxVqqb1gUz6m2qnTzuv2QEnlVRgCa/boVzY2Zf7lFR2ukr0vyUI5mAuzvbxVY2B47GXwfc1k174y8rNy6lHzbzFJ5kk=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 812f1849-cc2f-4a8e-eb01-08dcec3a398d
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB5613.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Oct 2024 10:23:19.8677
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jz/Vcg1hqCByczBeEc+SeMPkwTGdJsKgSZXhwUcxb0lqMrfWTdp3jfQQtDAzwrlzi8SO4mXe0rF4sdx5j7JU0YvCnWjhsY4MT5ZzUrJaJwQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR10MB4593
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-14_09,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
- spamscore=0 malwarescore=0 bulkscore=0 suspectscore=0 mlxscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2409260000 definitions=main-2410140075
-X-Proofpoint-GUID: ABPEb02ui2fR-WRjM6Xr2r_9faOtN-UP
-X-Proofpoint-ORIG-GUID: ABPEb02ui2fR-WRjM6Xr2r_9faOtN-UP
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 11, 2024 at 08:11:32PM +0200, Jann Horn wrote:
-> On Fri, Sep 27, 2024 at 2:51 PM Lorenzo Stoakes
-> <lorenzo.stoakes@oracle.com> wrote:
-> > Add a new PTE marker that results in any access causing the accessing
-> > process to segfault.
-> [...]
-> >  static inline int is_poisoned_swp_entry(swp_entry_t entry)
-> > +{
-> > +       /*
-> > +        * We treat guard pages as poisoned too as these have the same semantics
-> > +        * as poisoned ranges, only with different fault handling.
-> > +        */
-> > +       return is_pte_marker_entry(entry) &&
-> > +               (pte_marker_get(entry) &
-> > +                (PTE_MARKER_POISONED | PTE_MARKER_GUARD));
-> > +}
->
-> This means MADV_FREE will also clear guard PTEs, right?
+Hi
 
-Yes, this is expected, it acts like unmap in effect (with a delayed
-effect), so we give it the same semantics. The same thing happens with
-hardware poisoning.
+Note for V12:
+	There was a small conflict between the Intel PT changes in
+	"KVM: x86: Fix Intel PT Host/Guest mode when host tracing" and the
+	changes in this patch set, so I have put the patch sets together,
+	along with outstanding fix "perf/x86/intel/pt: Fix buffer full but
+	size is 0 case"
 
-You can see in the tests what expectations we have with different
-operations, we assert there this specific behaviour:
+	Cover letter for KVM changes (patches 2 to 4):
 
-	/* Lazyfree range. */
-	ASSERT_EQ(madvise(ptr, 10 * page_size, MADV_FREE), 0);
+	There is a long-standing problem whereby running Intel PT on host and guest
+	in Host/Guest mode, causes VM-Entry failure.
 
-	/* This should simply clear the poison markers. */
-	for (i = 0; i < 10; i++) {
-		ASSERT_TRUE(try_read_write_buf(&ptr[i * page_size]));
-	}
+	The motivation for this patch set is to provide a fix for stable kernels
+	prior to the advent of the "Mediated Passthrough vPMU" patch set:
 
-The tests somewhat self-document expected behaviour.
+		https://lore.kernel.org/kvm/20240801045907.4010984-1-mizhang@google.com/
 
->
-> > diff --git a/mm/memory.c b/mm/memory.c
-> > index 5c6486e33e63..6c413c3d72fd 100644
-> > --- a/mm/memory.c
-> > +++ b/mm/memory.c
-> > @@ -1457,7 +1457,7 @@ static inline bool should_zap_folio(struct zap_details *details,
-> >         return !folio_test_anon(folio);
-> >  }
-> >
-> > -static inline bool zap_drop_file_uffd_wp(struct zap_details *details)
-> > +static inline bool zap_drop_markers(struct zap_details *details)
-> >  {
-> >         if (!details)
-> >                 return false;
-> > @@ -1478,7 +1478,7 @@ zap_install_uffd_wp_if_needed(struct vm_area_struct *vma,
-> >         if (vma_is_anonymous(vma))
-> >                 return;
-> >
-> > -       if (zap_drop_file_uffd_wp(details))
-> > +       if (zap_drop_markers(details))
-> >                 return;
-> >
-> >         for (;;) {
-> > @@ -1673,7 +1673,15 @@ static unsigned long zap_pte_range(struct mmu_gather *tlb,
-> >                          * drop the marker if explicitly requested.
-> >                          */
-> >                         if (!vma_is_anonymous(vma) &&
-> > -                           !zap_drop_file_uffd_wp(details))
-> > +                           !zap_drop_markers(details))
-> > +                               continue;
-> > +               } else if (is_guard_swp_entry(entry)) {
-> > +                       /*
-> > +                        * Ordinary zapping should not remove guard PTE
-> > +                        * markers. Only do so if we should remove PTE markers
-> > +                        * in general.
-> > +                        */
-> > +                       if (!zap_drop_markers(details))
-> >                                 continue;
->
-> Just a comment: It's nice that the feature is restricted to anonymous
-> VMAs, otherwise we'd have to figure out here what to do about
-> unmap_mapping_folio() (which sets ZAP_FLAG_DROP_MARKER together with
-> details.single_folio)...
+	which would render a large part of the fix unnecessary but likely not be
+	suitable for backport to stable due to its size and complexity.
 
-Yes this is not the only issue with file-backed mappings. Readahead being
-another, and plenty more.
+	Ideally, this patch set would be applied before "Mediated Passthrough vPMU"
 
-We will probably look at how we might do this once this patch set lands,
-and tackle all of these fun things then...
+	Note that the fix does not conflict with "Mediated Passthrough vPMU", it
+	is just that "Mediated Passthrough vPMU" will make the code to stop and
+	restart Intel PT unnecessary.
 
->
->
-> >                 } else if (is_hwpoison_entry(entry) ||
-> >                            is_poisoned_swp_entry(entry)) {
-> > @@ -4005,6 +4013,10 @@ static vm_fault_t handle_pte_marker(struct vm_fault *vmf)
-> >         if (marker & PTE_MARKER_POISONED)
-> >                 return VM_FAULT_HWPOISON;
-> >
-> > +       /* Hitting a guard page is always a fatal condition. */
-> > +       if (marker & PTE_MARKER_GUARD)
-> > +               return VM_FAULT_SIGSEGV;
-> > +
-> >         if (pte_marker_entry_uffd_wp(entry))
-> >                 return pte_marker_handle_uffd_wp(vmf);
-> >
-> > --
-> > 2.46.2
-> >
+Note for V11:
+	Moving aux_paused into a union within struct hw_perf_event caused
+	a regression because aux_paused was being written unconditionally
+	even though it is valid only for AUX (e.g. Intel PT) PMUs.
+	That is fixed in V11.
+
+Hardware traces, such as instruction traces, can produce a vast amount of
+trace data, so being able to reduce tracing to more specific circumstances
+can be useful.
+
+The ability to pause or resume tracing when another event happens, can do
+that.
+
+These patches add such a facilty and show how it would work for Intel
+Processor Trace.
+
+Maintainers of other AUX area tracing implementations are requested to
+consider if this is something they might employ and then whether or not
+the ABI would work for them.  Note, thank you to James Clark (ARM) for
+evaluating the API for Coresight.  Suzuki K Poulose (ARM) also responded
+positively to the RFC.
+
+Changes to perf tools are now (since V4) fleshed out.
+
+Please note, Intel® Architecture Instruction Set Extensions and Future
+Features Programming Reference March 2024 319433-052, currently:
+
+	https://cdrdv2.intel.com/v1/dl/getContent/671368
+
+introduces hardware pause / resume for Intel PT in a feature named
+Intel PT Trigger Tracing.
+
+For that more fields in perf_event_attr will be necessary.  The main
+differences are:
+	- it can be applied not just to overflows, but optionally to
+	every event
+	- a packet is emitted into the trace, optionally with IP
+	information
+	- no PMI
+	- works with PMC and DR (breakpoint) events only
+
+Here are the proposed additions to perf_event_attr, please comment:
+
+diff --git a/tools/include/uapi/linux/perf_event.h b/tools/include/uapi/linux/perf_event.h
+index 0c557f0a17b3..05dcc43f11bb 100644
+--- a/tools/include/uapi/linux/perf_event.h
++++ b/tools/include/uapi/linux/perf_event.h
+@@ -369,6 +369,22 @@ enum perf_event_read_format {
+ 	PERF_FORMAT_MAX = 1U << 5,		/* non-ABI */
+ };
+ 
++enum {
++	PERF_AUX_ACTION_START_PAUSED		=   1U << 0,
++	PERF_AUX_ACTION_PAUSE			=   1U << 1,
++	PERF_AUX_ACTION_RESUME			=   1U << 2,
++	PERF_AUX_ACTION_EMIT			=   1U << 3,
++	PERF_AUX_ACTION_NR			= 0x1f << 4,
++	PERF_AUX_ACTION_NO_IP			=   1U << 9,
++	PERF_AUX_ACTION_PAUSE_ON_EVT		=   1U << 10,
++	PERF_AUX_ACTION_RESUME_ON_EVT		=   1U << 11,
++	PERF_AUX_ACTION_EMIT_ON_EVT		=   1U << 12,
++	PERF_AUX_ACTION_NR_ON_EVT		= 0x1f << 13,
++	PERF_AUX_ACTION_NO_IP_ON_EVT		=   1U << 18,
++	PERF_AUX_ACTION_MASK			= ~PERF_AUX_ACTION_START_PAUSED,
++	PERF_AUX_PAUSE_RESUME_MASK		= PERF_AUX_ACTION_PAUSE | PERF_AUX_ACTION_RESUME,
++};
++
+ #define PERF_ATTR_SIZE_VER0	64	/* sizeof first published struct */
+ #define PERF_ATTR_SIZE_VER1	72	/* add: config2 */
+ #define PERF_ATTR_SIZE_VER2	80	/* add: branch_sample_type */
+@@ -515,10 +531,19 @@ struct perf_event_attr {
+ 	union {
+ 		__u32	aux_action;
+ 		struct {
+-			__u32	aux_start_paused :  1, /* start AUX area tracing paused */
+-				aux_pause        :  1, /* on overflow, pause AUX area tracing */
+-				aux_resume       :  1, /* on overflow, resume AUX area tracing */
+-				__reserved_3     : 29;
++			__u32	aux_start_paused  :  1, /* start AUX area tracing paused */
++				aux_pause         :  1, /* on overflow, pause AUX area tracing */
++				aux_resume        :  1, /* on overflow, resume AUX area tracing */
++				aux_emit          :  1, /* generate AUX records instead of events */
++				aux_nr            :  5, /* AUX area tracing reference number */
++				aux_no_ip         :  1, /* suppress IP in AUX records */
++				/* Following apply to event occurrence not overflows */
++				aux_pause_on_evt  :  1, /* on event, pause AUX area tracing */
++				aux_resume_on_evt :  1, /* on event, resume AUX area tracing */
++				aux_emit_on_evt   :  1, /* generate AUX records instead of events */
++				aux_nr_on_evt     :  5, /* AUX area tracing reference number */
++				aux_no_ip_on_evt  :  1, /* suppress IP in AUX records */
++				__reserved_3      : 13;
+ 		};
+ 	};
+
+
+Changes in V13:
+      perf/core: Add aux_pause, aux_resume, aux_start_paused
+	Do aux_resume at the end of __perf_event_overflow() so as to trace
+	less of perf itself
+
+      perf tools: Add missing_features for aux_start_paused, aux_pause, aux_resume
+	Add error message also in EOPNOTSUPP case (Leo)
+
+Changes in V12:
+	Add previously sent patch "perf/x86/intel/pt: Fix buffer full
+	but size is 0 case"
+
+	Add previously sent patch set "KVM: x86: Fix Intel PT Host/Guest
+	mode when host tracing"
+
+	Rebase on current tip plus patch set "KVM: x86: Fix Intel PT Host/Guest
+	mode when host tracing"
+
+Changes in V11:
+      perf/core: Add aux_pause, aux_resume, aux_start_paused
+	Make assignment to event->hw.aux_paused conditional on
+	(pmu->capabilities & PERF_PMU_CAP_AUX_PAUSE).
+
+      perf/x86/intel: Do not enable large PEBS for events with aux actions or aux sampling
+	Remove definition of has_aux_action() because it has
+	already been added as an inline function.
+
+      perf/x86/intel/pt: Fix sampling synchronization
+      perf tools: Enable evsel__is_aux_event() to work for ARM/ARM64
+      perf tools: Enable evsel__is_aux_event() to work for S390_CPUMSF
+	Dropped because they have already been applied
+
+Changes in V10:
+      perf/core: Add aux_pause, aux_resume, aux_start_paused
+	Move aux_paused into a union within struct hw_perf_event.
+	Additional comment wrt PERF_EF_PAUSE/PERF_EF_RESUME.
+	Factor out has_aux_action() as an inline function.
+	Use scoped_guard for irqsave.
+	Move calls of perf_event_aux_pause() from __perf_event_output()
+	to __perf_event_overflow().
+
+Changes in V9:
+      perf/x86/intel/pt: Fix sampling synchronization
+	New patch
+
+      perf/core: Add aux_pause, aux_resume, aux_start_paused
+	Move aux_paused to struct hw_perf_event
+
+      perf/x86/intel/pt: Add support for pause / resume
+	Add more comments and barriers for resume_allowed and
+	pause_allowed
+	Always use WRITE_ONCE with resume_allowed
+
+
+Changes in V8:
+
+      perf tools: Parse aux-action
+	Fix clang warning:
+	     util/auxtrace.c:821:7: error: missing field 'aux_action' initializer [-Werror,-Wmissing-field-initializers]
+	     821 |         {NULL},
+	         |              ^
+
+Changes in V7:
+
+	Add Andi's Reviewed-by for patches 2-12
+	Re-base
+
+Changes in V6:
+
+      perf/core: Add aux_pause, aux_resume, aux_start_paused
+	Removed READ/WRITE_ONCE from __perf_event_aux_pause()
+	Expanded comment about guarding against NMI
+
+Changes in V5:
+
+    perf/core: Add aux_pause, aux_resume, aux_start_paused
+	Added James' Ack
+
+    perf/x86/intel: Do not enable large PEBS for events with aux actions or aux sampling
+	New patch
+
+    perf tools
+	Added Ian's Ack
+
+Changes in V4:
+
+    perf/core: Add aux_pause, aux_resume, aux_start_paused
+	Rename aux_output_cfg -> aux_action
+	Reorder aux_action bits from:
+		aux_pause, aux_resume, aux_start_paused
+	to:
+		aux_start_paused, aux_pause, aux_resume
+	Fix aux_action bits __u64 -> __u32
+
+    coresight: Have a stab at support for pause / resume
+	Dropped
+
+    perf tools
+	All new patches
+
+Changes in RFC V3:
+
+    coresight: Have a stab at support for pause / resume
+	'mode' -> 'flags' so it at least compiles
+
+Changes in RFC V2:
+
+	Use ->stop() / ->start() instead of ->pause_resume()
+	Move aux_start_paused bit into aux_output_cfg
+	Tighten up when Intel PT pause / resume is allowed
+	Add an example of how it might work for CoreSight
+
+
+Adrian Hunter (14):
+      perf/x86/intel/pt: Fix buffer full but size is 0 case
+      KVM: x86: Fix Intel PT IA32_RTIT_CTL MSR validation
+      KVM: x86: Fix Intel PT Host/Guest mode when host tracing also
+      KVM: selftests: Add guest Intel PT test
+      perf/core: Add aux_pause, aux_resume, aux_start_paused
+      perf/x86/intel/pt: Add support for pause / resume
+      perf/x86/intel: Do not enable large PEBS for events with aux actions or aux sampling
+      perf tools: Add aux_start_paused, aux_pause and aux_resume
+      perf tools: Add aux-action config term
+      perf tools: Parse aux-action
+      perf tools: Add missing_features for aux_start_paused, aux_pause, aux_resume
+      perf intel-pt: Improve man page format
+      perf intel-pt: Add documentation for pause / resume
+      perf intel-pt: Add a test for pause / resume
+
+ arch/x86/events/intel/core.c                       |   4 +-
+ arch/x86/events/intel/pt.c                         | 209 +++++++-
+ arch/x86/events/intel/pt.h                         |  16 +
+ arch/x86/include/asm/intel_pt.h                    |   4 +
+ arch/x86/kvm/vmx/vmx.c                             |  26 +-
+ arch/x86/kvm/vmx/vmx.h                             |   1 -
+ include/linux/perf_event.h                         |  28 +
+ include/uapi/linux/perf_event.h                    |  11 +-
+ kernel/events/core.c                               |  75 ++-
+ kernel/events/internal.h                           |   1 +
+ tools/include/uapi/linux/perf_event.h              |  11 +-
+ tools/perf/Documentation/perf-intel-pt.txt         | 596 +++++++++++++--------
+ tools/perf/Documentation/perf-record.txt           |   4 +
+ tools/perf/builtin-record.c                        |   4 +-
+ tools/perf/tests/shell/test_intel_pt.sh            |  28 +
+ tools/perf/util/auxtrace.c                         |  67 ++-
+ tools/perf/util/auxtrace.h                         |   6 +-
+ tools/perf/util/evsel.c                            |  15 +
+ tools/perf/util/evsel.h                            |   1 +
+ tools/perf/util/evsel_config.h                     |   1 +
+ tools/perf/util/parse-events.c                     |  10 +
+ tools/perf/util/parse-events.h                     |   1 +
+ tools/perf/util/parse-events.l                     |   1 +
+ tools/perf/util/perf_event_attr_fprintf.c          |   3 +
+ tools/perf/util/pmu.c                              |   1 +
+ tools/testing/selftests/kvm/Makefile               |   1 +
+ .../selftests/kvm/include/x86_64/processor.h       |   1 +
+ tools/testing/selftests/kvm/x86_64/intel_pt.c      | 381 +++++++++++++
+ 28 files changed, 1243 insertions(+), 264 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/intel_pt.c
+
+
+Regards
+Adrian
 
