@@ -1,314 +1,182 @@
-Return-Path: <linux-kselftest+bounces-19658-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EB5099CF29
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 16:52:05 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7EA499CD98
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 16:34:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EE3A28B423
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 14:52:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D056B228E1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 14:34:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AC3D1AE017;
-	Mon, 14 Oct 2024 14:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB9751ABEC2;
+	Mon, 14 Oct 2024 14:34:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="g8Qldc6d"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="LHAn4QAG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E7EE481B3;
-	Mon, 14 Oct 2024 14:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D472C1ABEBA
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 14:34:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728917289; cv=none; b=Rqm04GX1PtUhpPBEw25dc4hEJILTXYlF8uUUxI1LJ/1UVwm4vtms+KM7GAwnXJDdPxy4vKR8EQH+Emy45hY3Bqgrdgyw239LxKhfjvGgool+joUTJT4buTvlOk1n5TwCBGnFJYiVi94RwAmyPg5zoZkbrxe9pQsuyKZKVSr/3BY=
+	t=1728916444; cv=none; b=npjT/h3OseSr/fLaHmts/uTeVtYQPquFx14NW3ifC/qHZWUTSvaTrtybSzqCrdxZvtkntv7bkWOZEiTlrhdGwXTRmOlbrodfgZ2kuiDW69Z9NRZngQ9YEbH5+4VfANtysuCsbGkd6GIEskktLdsjwQolr89tvfVdZZmUQEdPDG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728917289; c=relaxed/simple;
-	bh=/mNCmmI7sy6okCSU/K0mpQJbBcvuzTAm1gx7gSI1gFo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RTmkYEXakl1ApPJUZKORF+hG5nEYXqWpMgKN20XC56wW8AWPc6kBk+/hL+wPwyDiJQlPeQbTmmbn6hoaEtUjZfDxdQB4GBCl5OTRcJgZ1WdLHPCRCxqoCuoWFzqYxGrk56fEQrxX4/EJ4fyBuYo0xC3ZYiRYJaf2e5AWOsRHwC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=g8Qldc6d; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FC27C4CEC3;
-	Mon, 14 Oct 2024 14:48:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1728917289;
-	bh=/mNCmmI7sy6okCSU/K0mpQJbBcvuzTAm1gx7gSI1gFo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=g8Qldc6daf+rGMOQkYSaBsy+ov3IVXItkUkmAR4gKPzSG2d6Eq/Dxrc4r6Amt02k4
-	 qmgXR+XuIg7F9lyF4njPMWQlebZG6Gn8wDGu3anvkh8o8Ewj6ZkNLCj4upk3pIcw++
-	 nENqoVDBxYUkpqq4wAT0kWXIrMajvQwCd22Jcaeg=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: stable@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	patches@lists.linux.dev,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Boqun Feng <boqun.feng@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Carlos ODonell <carlos@redhat.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH 6.6 206/213] selftests/rseq: Fix mm_cid test failure
-Date: Mon, 14 Oct 2024 16:21:52 +0200
-Message-ID: <20241014141051.001836938@linuxfoundation.org>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241014141042.954319779@linuxfoundation.org>
-References: <20241014141042.954319779@linuxfoundation.org>
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
+	s=arc-20240116; t=1728916444; c=relaxed/simple;
+	bh=3OxyjW6caETvvuftipAto/JP5HGaH56ZmiLo8YxjIgk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Nafc5ukJGPOcQhd6mXF+BNSy3SWTfxBKdHFFZYM565y52kbaIXgFFapuhDr2S/DFcumRaPcKzLdNDs6gtNGxhHFdxJAcMzo7jwclUUUdaIc8AyN/NOrCpgpbaR+en4QqOFi5X5kwmnWR7Ok/i+amU4qSlOo1q9/VPkaUrP0Byp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=LHAn4QAG; arc=none smtp.client-ip=209.85.166.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-8354955f115so181731339f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 07:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1728916442; x=1729521242; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BZFiFSV2S6ephEEXxaRsM/YTIpGDjHwKVrQbLRq0m74=;
+        b=LHAn4QAGSll1eE/HMgAwesfDfZ68OE/RRaEsD53z96UgS329eLqZavLF1uk2z1t8BA
+         O4pMhWYXEPf8inAMuGPmlnDm157PkFemJaWjMqRtilnfLSIn/OzLcKZctoHOYlO8PFq/
+         5QF/kby6lWI0nyQIlGomPaPX2B4YcQOsyUwgrq6mYrwlRa+p+7At3UpL1iwajhC2Q3I/
+         rADy7FvjGp2/+XMC9Exm/izwIMaQYy1c76iLwb1vMDg9A2u5YpNmcI9gW2jfCqsF1wRL
+         SkjpYV7rnAdK6r/2lVMlrBB/xVx3Nmex1nOmOwVZN4nbkteh/enZoY1GnftzlyFoTijk
+         Gzbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728916442; x=1729521242;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BZFiFSV2S6ephEEXxaRsM/YTIpGDjHwKVrQbLRq0m74=;
+        b=SdpD9vEAR4RCV9ZizMMWZNzfzKvva9/nF45VtmOwFFj9o0W78XC4fy+yzztnpRQ82u
+         iCnkYRS76buWisBGvIXub7xJ625Hm5SDS3B1U5AvnsBJsav4WdAs4fcWdPAMvYhyWg3N
+         RqTxiSSv9aBXwNqmRLNDTm4tot17+zfxD/zY9/Q7PN9kSBKFhmsA2TPRPhTVuD06o0O8
+         1v2GZqWFcpobtXUSjWVW8AfI4UrIbXfuKAeMgHmy8OxXJJwR+e2lbbSCauKqfBJ0w43a
+         2E0Z7mk+/aOWLvEIn16lz+dcObJ5vD1dng3LEWFLDUSxMh+kOXshz2DLUQ27dxPqlUAG
+         6Abg==
+X-Forwarded-Encrypted: i=1; AJvYcCXctgAERtg7OsieUKj7ymNRxK1+x5UPBTXMbzRI+6AUV4wl9i0EEbTbg77xRoXm2yCMBtGo6iWItOaDsee4hEQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/tdAHELQv0ZbKkxVimaDEr7drbdeRjgnwCwqdhy1CuGlK5Zpm
+	xkI2RXprpRsGsMYGNbQZCrAsV4tbBVvbV6JeWlzMuIAIzj0GLLZDy5TOEBCOJpT+h0yOrLXw3rV
+	uQAcmvycF0m4bOHjRFpXj4ueT0M1lFSmW0KvqgQ==
+X-Google-Smtp-Source: AGHT+IFYJowFNk6TiJAeIlJ6VE4pS1HwOZ1J0S0O0mVVAaMh1gyG2y64c+9AiCOVdFTYNqR+gnZqJMfVyAe4szQJ6+M=
+X-Received: by 2002:a05:6602:3f91:b0:837:7e21:1677 with SMTP id
+ ca18e2360f4ac-837929fd68fmr950720739f.4.1728916441860; Mon, 14 Oct 2024
+ 07:34:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241008-v5_user_cfi_series-v6-0-60d9fe073f37@rivosinc.com>
+ <20241008-v5_user_cfi_series-v6-33-60d9fe073f37@rivosinc.com>
+ <CANXhq0pXVS2s-hZNusPLoQ4qPkyi1S2BTQ-FyAvcz=cDctKQng@mail.gmail.com>
+ <Zwj7aZj36TBGzpZa@finisterre.sirena.org.uk> <CANXhq0q49k6q3ZGYqzczMeFr+_rrfa9mL7FMu62xPHeUKfvhMw@mail.gmail.com>
+ <ZwmAdRb5BRkPLbWg@debug.ba.rivosinc.com>
+In-Reply-To: <ZwmAdRb5BRkPLbWg@debug.ba.rivosinc.com>
+From: Zong Li <zong.li@sifive.com>
+Date: Mon, 14 Oct 2024 22:33:50 +0800
+Message-ID: <CANXhq0rH_07JRGbBnMTntPxhOQcXzxrcRJ0WAN7T6oQX7DaNoQ@mail.gmail.com>
+Subject: Re: [PATCH v6 33/33] kselftest/riscv: kselftest for user mode cfi
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Mark Brown <broonie@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Conor Dooley <conor@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Christian Brauner <brauner@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees Cook <kees@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, alistair.francis@wdc.com, 
+	richard.henderson@linaro.org, jim.shu@sifive.com, andybnac@gmail.com, 
+	kito.cheng@sifive.com, charlie@rivosinc.com, atishp@rivosinc.com, 
+	evan@rivosinc.com, cleger@rivosinc.com, alexghiti@rivosinc.com, 
+	samitolvanen@google.com, rick.p.edgecombe@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-6.6-stable review patch.  If anyone has any objections, please let me know.
+On Sat, Oct 12, 2024 at 3:46=E2=80=AFAM Deepak Gupta <debug@rivosinc.com> w=
+rote:
+>
+> On Fri, Oct 11, 2024 at 07:43:30PM +0800, Zong Li wrote:
+> >On Fri, Oct 11, 2024 at 6:18=E2=80=AFPM Mark Brown <broonie@kernel.org> =
+wrote:
+> >>
+> >> On Fri, Oct 11, 2024 at 01:44:55PM +0800, Zong Li wrote:
+> >> > On Wed, Oct 9, 2024 at 7:46=E2=80=AFAM Deepak Gupta <debug@rivosinc.=
+com> wrote:
+> >>
+> >> > > +       if (si->si_code =3D=3D SEGV_CPERR) {
+> >>
+> >> > Hi Deepak,
+> >> > I got some errors when building this test, I suppose they should be
+> >> > fixed in the next version.
+> >>
+> >> > riscv_cfi_test.c: In function 'sigsegv_handler':
+> >> > riscv_cfi_test.c:17:28: error: 'SEGV_CPERR' undeclared (first use in
+> >> > this function); did you mean 'SEGV_ACCERR'?
+> >> >    17 |         if (si->si_code =3D=3D SEGV_CPERR) {
+> >> >       |                            ^~~~~~~~~~
+> >> >       |                            SEGV_ACCERR
+> >> >
+> >>
+> >> Did you run "make headers_install" prior to building kselftest to get
+> >> the current kernel's headers available for userspace builds?
+> >
+> >Yes, I have run "make header" and "make header_install" before
+> >building the kselftest. This error happens when I cross compiled it,
+> >perhaps I can help to check if it is missing some header files or
+> >header search path.
+>
+> That's wierd.
+>
+> It doesn't fail for me even if I do not do `make headers_install`. But I =
+am
+> building kernel and selftests with toolchain which supports shadow stack =
+and
+> landing pad. It's defined in `siginfo.h`. When I built toolchain, I did p=
+oint
+> it at the latest kernel headers. May be that's the trick.
+>
+> """
+>
+> $ grep -nir SEGV_CPERR /scratch/debug/linux/kbuild/usr/include/*
+> /scratch/debug/linux/kbuild/usr/include/asm-generic/siginfo.h:240:#define=
+ SEGV_CPERR    10      /* Control protection fault */
+>
+> $ grep -nir SEGV_CPERR /scratch/debug/open_src/sifive_cfi_toolchain/INSTA=
+LL_Sept18/sysroot/usr/*
+> /scratch/debug/open_src/sifive_cfi_toolchain/INSTALL_Sept18/sysroot/usr/i=
+nclude/asm-generic/siginfo.h:240:#define SEGV_CPERR    10      /* Control p=
+rotection fault */
+> /scratch/debug/open_src/sifive_cfi_toolchain/INSTALL_Sept18/sysroot/usr/i=
+nclude/bits/siginfo-consts.h:139:  SEGV_CPERR                  /* Control p=
+rotection fault.  */
+> /scratch/debug/open_src/sifive_cfi_toolchain/INSTALL_Sept18/sysroot/usr/i=
+nclude/bits/siginfo-consts.h:140:#  define SEGV_CPERR  SEGV_CPERR
+>
+> """
 
-------------------
+In my case, because the test files don't explicitly include siginfo.h,
+I assume it's expected that siginfo.h will be included through
+signal.h. Regarding the header search path, it will eventually locate
+signal.h in toolchain_path/sysroot/usr/include/. In my
+toolchain_path/sysroot/usr/include/signal.h, it doesn't include any
+signal.h; instead, signal.h will be included from
+toolchain_path/sysroot/usr/include/linux/signal.h or
+kernel_src/usr/include/linux/signal.h rather than
+toolchain/sysroot/usr/include/signal.h. I think that is why I lost the
+SEGV_CPERR definition. Is there any difference with you?
 
-From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-
-commit a0cc649353bb726d4aa0db60dce467432197b746 upstream.
-
-Adapt the rseq.c/rseq.h code to follow GNU C library changes introduced by:
-
-glibc commit 2e456ccf0c34 ("Linux: Make __rseq_size useful for feature detection (bug 31965)")
-
-Without this fix, rseq selftests for mm_cid fail:
-
-./run_param_test.sh
-Default parameters
-Running test spinlock
-Running compare-twice test spinlock
-Running mm_cid test spinlock
-Error: cpu id getter unavailable
-
-Fixes: 18c2355838e7 ("selftests/rseq: Implement rseq mm_cid field support")
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-CC: Boqun Feng <boqun.feng@gmail.com>
-CC: "Paul E. McKenney" <paulmck@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>
-CC: Carlos O'Donell <carlos@redhat.com>
-CC: Florian Weimer <fweimer@redhat.com>
-CC: linux-kselftest@vger.kernel.org
-CC: stable@vger.kernel.org
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- tools/testing/selftests/rseq/rseq.c |  110 ++++++++++++++++++++++++------------
- tools/testing/selftests/rseq/rseq.h |   10 ---
- 2 files changed, 77 insertions(+), 43 deletions(-)
-
---- a/tools/testing/selftests/rseq/rseq.c
-+++ b/tools/testing/selftests/rseq/rseq.c
-@@ -60,12 +60,6 @@ unsigned int rseq_size = -1U;
- /* Flags used during rseq registration.  */
- unsigned int rseq_flags;
- 
--/*
-- * rseq feature size supported by the kernel. 0 if the registration was
-- * unsuccessful.
-- */
--unsigned int rseq_feature_size = -1U;
--
- static int rseq_ownership;
- static int rseq_reg_success;	/* At least one rseq registration has succeded. */
- 
-@@ -111,6 +105,43 @@ int rseq_available(void)
- 	}
- }
- 
-+/* The rseq areas need to be at least 32 bytes. */
-+static
-+unsigned int get_rseq_min_alloc_size(void)
-+{
-+	unsigned int alloc_size = rseq_size;
-+
-+	if (alloc_size < ORIG_RSEQ_ALLOC_SIZE)
-+		alloc_size = ORIG_RSEQ_ALLOC_SIZE;
-+	return alloc_size;
-+}
-+
-+/*
-+ * Return the feature size supported by the kernel.
-+ *
-+ * Depending on the value returned by getauxval(AT_RSEQ_FEATURE_SIZE):
-+ *
-+ * 0:   Return ORIG_RSEQ_FEATURE_SIZE (20)
-+ * > 0: Return the value from getauxval(AT_RSEQ_FEATURE_SIZE).
-+ *
-+ * It should never return a value below ORIG_RSEQ_FEATURE_SIZE.
-+ */
-+static
-+unsigned int get_rseq_kernel_feature_size(void)
-+{
-+	unsigned long auxv_rseq_feature_size, auxv_rseq_align;
-+
-+	auxv_rseq_align = getauxval(AT_RSEQ_ALIGN);
-+	assert(!auxv_rseq_align || auxv_rseq_align <= RSEQ_THREAD_AREA_ALLOC_SIZE);
-+
-+	auxv_rseq_feature_size = getauxval(AT_RSEQ_FEATURE_SIZE);
-+	assert(!auxv_rseq_feature_size || auxv_rseq_feature_size <= RSEQ_THREAD_AREA_ALLOC_SIZE);
-+	if (auxv_rseq_feature_size)
-+		return auxv_rseq_feature_size;
-+	else
-+		return ORIG_RSEQ_FEATURE_SIZE;
-+}
-+
- int rseq_register_current_thread(void)
- {
- 	int rc;
-@@ -119,7 +150,7 @@ int rseq_register_current_thread(void)
- 		/* Treat libc's ownership as a successful registration. */
- 		return 0;
- 	}
--	rc = sys_rseq(&__rseq_abi, rseq_size, 0, RSEQ_SIG);
-+	rc = sys_rseq(&__rseq_abi, get_rseq_min_alloc_size(), 0, RSEQ_SIG);
- 	if (rc) {
- 		if (RSEQ_READ_ONCE(rseq_reg_success)) {
- 			/* Incoherent success/failure within process. */
-@@ -140,28 +171,12 @@ int rseq_unregister_current_thread(void)
- 		/* Treat libc's ownership as a successful unregistration. */
- 		return 0;
- 	}
--	rc = sys_rseq(&__rseq_abi, rseq_size, RSEQ_ABI_FLAG_UNREGISTER, RSEQ_SIG);
-+	rc = sys_rseq(&__rseq_abi, get_rseq_min_alloc_size(), RSEQ_ABI_FLAG_UNREGISTER, RSEQ_SIG);
- 	if (rc)
- 		return -1;
- 	return 0;
- }
- 
--static
--unsigned int get_rseq_feature_size(void)
--{
--	unsigned long auxv_rseq_feature_size, auxv_rseq_align;
--
--	auxv_rseq_align = getauxval(AT_RSEQ_ALIGN);
--	assert(!auxv_rseq_align || auxv_rseq_align <= RSEQ_THREAD_AREA_ALLOC_SIZE);
--
--	auxv_rseq_feature_size = getauxval(AT_RSEQ_FEATURE_SIZE);
--	assert(!auxv_rseq_feature_size || auxv_rseq_feature_size <= RSEQ_THREAD_AREA_ALLOC_SIZE);
--	if (auxv_rseq_feature_size)
--		return auxv_rseq_feature_size;
--	else
--		return ORIG_RSEQ_FEATURE_SIZE;
--}
--
- static __attribute__((constructor))
- void rseq_init(void)
- {
-@@ -178,28 +193,54 @@ void rseq_init(void)
- 	}
- 	if (libc_rseq_size_p && libc_rseq_offset_p && libc_rseq_flags_p &&
- 			*libc_rseq_size_p != 0) {
-+		unsigned int libc_rseq_size;
-+
- 		/* rseq registration owned by glibc */
- 		rseq_offset = *libc_rseq_offset_p;
--		rseq_size = *libc_rseq_size_p;
-+		libc_rseq_size = *libc_rseq_size_p;
- 		rseq_flags = *libc_rseq_flags_p;
--		rseq_feature_size = get_rseq_feature_size();
--		if (rseq_feature_size > rseq_size)
--			rseq_feature_size = rseq_size;
-+
-+		/*
-+		 * Previous versions of glibc expose the value
-+		 * 32 even though the kernel only supported 20
-+		 * bytes initially. Therefore treat 32 as a
-+		 * special-case. glibc 2.40 exposes a 20 bytes
-+		 * __rseq_size without using getauxval(3) to
-+		 * query the supported size, while still allocating a 32
-+		 * bytes area. Also treat 20 as a special-case.
-+		 *
-+		 * Special-cases are handled by using the following
-+		 * value as active feature set size:
-+		 *
-+		 *   rseq_size = min(32, get_rseq_kernel_feature_size())
-+		 */
-+		switch (libc_rseq_size) {
-+		case ORIG_RSEQ_FEATURE_SIZE:
-+			fallthrough;
-+		case ORIG_RSEQ_ALLOC_SIZE:
-+		{
-+			unsigned int rseq_kernel_feature_size = get_rseq_kernel_feature_size();
-+
-+			if (rseq_kernel_feature_size < ORIG_RSEQ_ALLOC_SIZE)
-+				rseq_size = rseq_kernel_feature_size;
-+			else
-+				rseq_size = ORIG_RSEQ_ALLOC_SIZE;
-+			break;
-+		}
-+		default:
-+			/* Otherwise just use the __rseq_size from libc as rseq_size. */
-+			rseq_size = libc_rseq_size;
-+			break;
-+		}
- 		return;
- 	}
- 	rseq_ownership = 1;
- 	if (!rseq_available()) {
- 		rseq_size = 0;
--		rseq_feature_size = 0;
- 		return;
- 	}
- 	rseq_offset = (void *)&__rseq_abi - rseq_thread_pointer();
- 	rseq_flags = 0;
--	rseq_feature_size = get_rseq_feature_size();
--	if (rseq_feature_size == ORIG_RSEQ_FEATURE_SIZE)
--		rseq_size = ORIG_RSEQ_ALLOC_SIZE;
--	else
--		rseq_size = RSEQ_THREAD_AREA_ALLOC_SIZE;
- }
- 
- static __attribute__((destructor))
-@@ -209,7 +250,6 @@ void rseq_exit(void)
- 		return;
- 	rseq_offset = 0;
- 	rseq_size = -1U;
--	rseq_feature_size = -1U;
- 	rseq_ownership = 0;
- }
- 
---- a/tools/testing/selftests/rseq/rseq.h
-+++ b/tools/testing/selftests/rseq/rseq.h
-@@ -68,12 +68,6 @@ extern unsigned int rseq_size;
- /* Flags used during rseq registration. */
- extern unsigned int rseq_flags;
- 
--/*
-- * rseq feature size supported by the kernel. 0 if the registration was
-- * unsuccessful.
-- */
--extern unsigned int rseq_feature_size;
--
- enum rseq_mo {
- 	RSEQ_MO_RELAXED = 0,
- 	RSEQ_MO_CONSUME = 1,	/* Unused */
-@@ -193,7 +187,7 @@ static inline uint32_t rseq_current_cpu(
- 
- static inline bool rseq_node_id_available(void)
- {
--	return (int) rseq_feature_size >= rseq_offsetofend(struct rseq_abi, node_id);
-+	return (int) rseq_size >= rseq_offsetofend(struct rseq_abi, node_id);
- }
- 
- /*
-@@ -207,7 +201,7 @@ static inline uint32_t rseq_current_node
- 
- static inline bool rseq_mm_cid_available(void)
- {
--	return (int) rseq_feature_size >= rseq_offsetofend(struct rseq_abi, mm_cid);
-+	return (int) rseq_size >= rseq_offsetofend(struct rseq_abi, mm_cid);
- }
- 
- static inline uint32_t rseq_current_mm_cid(void)
-
-
+>
 
