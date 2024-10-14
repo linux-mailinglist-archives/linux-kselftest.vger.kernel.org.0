@@ -1,63 +1,63 @@
-Return-Path: <linux-kselftest+bounces-19627-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19628-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B4CC99C793
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 12:53:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98C2699C796
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 12:53:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1AB1B28687F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 10:53:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25F121F22E26
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 10:53:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB53C19C557;
-	Mon, 14 Oct 2024 10:52:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67B5F19CC2F;
+	Mon, 14 Oct 2024 10:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="j4BLj0qM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hsBF7HOr"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD9791957F9;
-	Mon, 14 Oct 2024 10:52:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AAB61991A9;
+	Mon, 14 Oct 2024 10:52:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728903152; cv=none; b=nfwUjRUheBRErtgEEHEmtUnhuFrRptzOO21ynyHlEG89rdRp+Ma3dwDHl3owzOp51D2bSEP7qIFK3XnGyVe6RkGNF7l9Nw2fVJiJ8sqXGJ++wolIgaCse2bZuBPsLZjBsJgRD5QpLmu8+vW4d1mTLXFdE1ypaWvTEAWh923yF/w=
+	t=1728903163; cv=none; b=j4x4dMtaA3flP1ROjCtU8xxpNx0egnK28MxGTL0hSMa27S1fztEsy5MbMY2ln82DbJOaMz2HFHtCxC8CwRQYiyDeI2348AOMj8oxWhOTx9EH2eEKRT4TSLdnZyH+kPzoqUnebVWXs7wfVUIGJ1ujOnZ0fcG1ezSon6HqTpHA+4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728903152; c=relaxed/simple;
-	bh=i2BUc074sxqOtY3NfjpMV/uBIE8RPIDaUUPYU1B/5I8=;
+	s=arc-20240116; t=1728903163; c=relaxed/simple;
+	bh=kXv8d4bmAqytj6jlK2ekqNPPJg7x1LQP4jUhmX6vv3U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lec/CovKjL3i1rLQjOwHm6edSEAE6qff35AlvlnHGtCMmEimFAAg0MPCp5rkNTSbgzBOBKSkmO33J2VXGVSR3opc1Tc1rLjIYLFpJCicUDxVxbQLg+TWp9QXYfPd8ntAE/NklMkIalLE9gSn4gP5/aYZ77Mhx+g9VMRSW95heEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=j4BLj0qM; arc=none smtp.client-ip=198.175.65.13
+	 MIME-Version; b=TSfWnwOQE8JS0MGiM0kgSt4I7bB/lJAM8W5vR9LvtWn5kjR7bBHpr0Am3SLM1vu74ESTygZVAOkOXxub+NviS3+yk9mn4kE9mSk5rNbJ3M1ACTACcir2J7ilE3yQsCXLINZGECI7HVnX2zMZ0j0wozBdDqbNlP2HmONLDMwJpSI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hsBF7HOr; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1728903150; x=1760439150;
+  t=1728903161; x=1760439161;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=i2BUc074sxqOtY3NfjpMV/uBIE8RPIDaUUPYU1B/5I8=;
-  b=j4BLj0qMpRBkPftac2UmLdpkSspMYX4x3sc+1+yojxxCTof+o96keDC4
-   qI5lbIE1d3F+/2uGo4/Id7/sk4S42ldluPm20Cttdc5k5Z/hAAumKFcnz
-   sQBG5WWBhFcJtpPTECMndPUdH9Hur2NdUIdNPtFCteOfAlDmypzD6C9jc
-   N41P2zmW/T18CzDCrVaVThOxfWh02pCYJRlmZDzJ+gchBcRnrfA0m68WS
-   lkrp5X+hf3IK+DYXjEdaSlR1eDSYWgv182yebFK5imxHWuES7FBp9I2K9
-   UUJ8UeHfqF2ToKohDkQ7rinwWeANECKDwV0zy8x7kVtQipSfBhtzNOIR5
+  bh=kXv8d4bmAqytj6jlK2ekqNPPJg7x1LQP4jUhmX6vv3U=;
+  b=hsBF7HOrRWhZ12W3fUoYPvOV5XmipCziyn6RY3/VxOR0JH6MLM0pmXQW
+   /c3O8KtVk3HOae4IKN2szDXAt8JjyV6hl1YCEZFyu5eJe3zpAKXjCVQhs
+   b7JNMlm5lMlT16bQMTUVAu+tc7aRyNGjTp5AMC+LDXYw8grACA0CY4tUz
+   P4IeytN572L0GNLlDdsH3+Ok5Cz8E2JPAGMoBfZHNkDCBSgu4fmcngG1+
+   xD+m1J6koaJklCEr0M+hKBWHPOxV3k2sEfCV4GKEee2Jb1oVZJizAHICF
+   yKItVgfXfAQcZ1RSzensS0H6QX5dhEFMjqrU97ZZxjxFdHUGyeypZOnGZ
    Q==;
-X-CSE-ConnectionGUID: m1jlQQtSRyGcj8ePU3krSw==
-X-CSE-MsgGUID: iJJWmIQ+SPyQf6mAlLxIAA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="39366119"
+X-CSE-ConnectionGUID: +3TM7RBGRCe6ocwrxGPgag==
+X-CSE-MsgGUID: q9INA/fjSfea0bgpkIGZZw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="39366176"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="39366119"
+   d="scan'208";a="39366176"
 Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 03:52:30 -0700
-X-CSE-ConnectionGUID: 2IhgudLLT0aPIZ+OXjLoMg==
-X-CSE-MsgGUID: Mz1HusgqS1mBBEQYulo3fg==
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 03:52:40 -0700
+X-CSE-ConnectionGUID: MDZRgBxHQvKV4tDHT8G/EQ==
+X-CSE-MsgGUID: eGq9exb6TJ2kq7PGNqMIkw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,202,1725346800"; 
-   d="scan'208";a="77727407"
+   d="scan'208";a="77727421"
 Received: from ahunter6-mobl1.ger.corp.intel.com (HELO localhost.localdomain) ([10.245.115.59])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 03:52:20 -0700
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Oct 2024 03:52:30 -0700
 From: Adrian Hunter <adrian.hunter@intel.com>
 To: Peter Zijlstra <peterz@infradead.org>,
 	Sean Christopherson <seanjc@google.com>,
@@ -94,9 +94,9 @@ Cc: Ingo Molnar <mingo@redhat.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-perf-users@vger.kernel.org
-Subject: [PATCH V13 04/14] KVM: selftests: Add guest Intel PT test
-Date: Mon, 14 Oct 2024 13:51:14 +0300
-Message-ID: <20241014105124.24473-5-adrian.hunter@intel.com>
+Subject: [PATCH V13 05/14] perf/core: Add aux_pause, aux_resume, aux_start_paused
+Date: Mon, 14 Oct 2024 13:51:15 +0300
+Message-ID: <20241014105124.24473-6-adrian.hunter@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241014105124.24473-1-adrian.hunter@intel.com>
 References: <20241014105124.24473-1-adrian.hunter@intel.com>
@@ -109,429 +109,366 @@ MIME-Version: 1.0
 Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki, Business Identity Code: 0357606 - 4, Domiciled in Helsinki
 Content-Transfer-Encoding: 8bit
 
-Add a test that starts Intel PT traces on host and guest. The test requires
-support for Intel PT and having Host/Guest mode enabled i.e. kvm_intel
-module parameter pt_mode=1.
+Hardware traces, such as instruction traces, can produce a vast amount of
+trace data, so being able to reduce tracing to more specific circumstances
+can be useful.
+
+The ability to pause or resume tracing when another event happens, can do
+that.
+
+Add ability for an event to "pause" or "resume" AUX area tracing.
+
+Add aux_pause bit to perf_event_attr to indicate that, if the event
+happens, the associated AUX area tracing should be paused. Ditto
+aux_resume. Do not allow aux_pause and aux_resume to be set together.
+
+Add aux_start_paused bit to perf_event_attr to indicate to an AUX area
+event that it should start in a "paused" state.
+
+Add aux_paused to struct hw_perf_event for AUX area events to keep track of
+the "paused" state. aux_paused is initialized to aux_start_paused.
+
+Add PERF_EF_PAUSE and PERF_EF_RESUME modes for ->stop() and ->start()
+callbacks. Call as needed, during __perf_event_output(). Add
+aux_in_pause_resume to struct perf_buffer to prevent races with the NMI
+handler. Pause/resume in NMI context will miss out if it coincides with
+another pause/resume.
+
+To use aux_pause or aux_resume, an event must be in a group with the AUX
+area event as the group leader.
+
+Example (requires Intel PT and tools patches also):
+
+ $ perf record --kcore -e intel_pt/aux-action=start-paused/k,syscalls:sys_enter_newuname/aux-action=resume/,syscalls:sys_exit_newuname/aux-action=pause/ uname
+ Linux
+ [ perf record: Woken up 1 times to write data ]
+ [ perf record: Captured and wrote 0.043 MB perf.data ]
+ $ perf script --call-trace
+ uname   30805 [000] 24001.058782799: name: 0x7ffc9c1865b0
+ uname   30805 [000] 24001.058784424:  psb offs: 0
+ uname   30805 [000] 24001.058784424:  cbr: 39 freq: 3904 MHz (139%)
+ uname   30805 [000] 24001.058784629: ([kernel.kallsyms])        debug_smp_processor_id
+ uname   30805 [000] 24001.058784629: ([kernel.kallsyms])        __x64_sys_newuname
+ uname   30805 [000] 24001.058784629: ([kernel.kallsyms])            down_read
+ uname   30805 [000] 24001.058784629: ([kernel.kallsyms])                __cond_resched
+ uname   30805 [000] 24001.058784629: ([kernel.kallsyms])                preempt_count_add
+ uname   30805 [000] 24001.058784629: ([kernel.kallsyms])                    in_lock_functions
+ uname   30805 [000] 24001.058784629: ([kernel.kallsyms])                preempt_count_sub
+ uname   30805 [000] 24001.058784629: ([kernel.kallsyms])            up_read
+ uname   30805 [000] 24001.058784629: ([kernel.kallsyms])                preempt_count_add
+ uname   30805 [000] 24001.058784838: ([kernel.kallsyms])                    in_lock_functions
+ uname   30805 [000] 24001.058784838: ([kernel.kallsyms])                preempt_count_sub
+ uname   30805 [000] 24001.058784838: ([kernel.kallsyms])            _copy_to_user
+ uname   30805 [000] 24001.058784838: ([kernel.kallsyms])        syscall_exit_to_user_mode
+ uname   30805 [000] 24001.058784838: ([kernel.kallsyms])            syscall_exit_work
+ uname   30805 [000] 24001.058784838: ([kernel.kallsyms])                perf_syscall_exit
+ uname   30805 [000] 24001.058784838: ([kernel.kallsyms])                    debug_smp_processor_id
+ uname   30805 [000] 24001.058785046: ([kernel.kallsyms])                    perf_trace_buf_alloc
+ uname   30805 [000] 24001.058785046: ([kernel.kallsyms])                        perf_swevent_get_recursion_context
+ uname   30805 [000] 24001.058785046: ([kernel.kallsyms])                            debug_smp_processor_id
+ uname   30805 [000] 24001.058785046: ([kernel.kallsyms])                        debug_smp_processor_id
+ uname   30805 [000] 24001.058785046: ([kernel.kallsyms])                    perf_tp_event
+ uname   30805 [000] 24001.058785046: ([kernel.kallsyms])                        perf_trace_buf_update
+ uname   30805 [000] 24001.058785046: ([kernel.kallsyms])                            tracing_gen_ctx_irq_test
+ uname   30805 [000] 24001.058785046: ([kernel.kallsyms])                        perf_swevent_event
+ uname   30805 [000] 24001.058785046: ([kernel.kallsyms])                            __perf_event_account_interrupt
+ uname   30805 [000] 24001.058785046: ([kernel.kallsyms])                                __this_cpu_preempt_check
+ uname   30805 [000] 24001.058785046: ([kernel.kallsyms])                            perf_event_output_forward
+ uname   30805 [000] 24001.058785046: ([kernel.kallsyms])                                perf_event_aux_pause
+ uname   30805 [000] 24001.058785046: ([kernel.kallsyms])                                    ring_buffer_get
+ uname   30805 [000] 24001.058785046: ([kernel.kallsyms])                                        __rcu_read_lock
+ uname   30805 [000] 24001.058785046: ([kernel.kallsyms])                                        __rcu_read_unlock
+ uname   30805 [000] 24001.058785254: ([kernel.kallsyms])                                    pt_event_stop
+ uname   30805 [000] 24001.058785254: ([kernel.kallsyms])                                        debug_smp_processor_id
+ uname   30805 [000] 24001.058785254: ([kernel.kallsyms])                                        debug_smp_processor_id
+ uname   30805 [000] 24001.058785254: ([kernel.kallsyms])                                        native_write_msr
+ uname   30805 [000] 24001.058785463: ([kernel.kallsyms])                                        native_write_msr
+ uname   30805 [000] 24001.058785639: 0x0
 
 Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+Acked-by: James Clark <james.clark@arm.com>
 ---
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/include/x86_64/processor.h  |   1 +
- tools/testing/selftests/kvm/x86_64/intel_pt.c | 381 ++++++++++++++++++
- 3 files changed, 383 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/intel_pt.c
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 960cf6a77198..625222f348e4 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -79,6 +79,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/hyperv_features
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_ipi
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_svm_test
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_tlb_flush
-+TEST_GEN_PROGS_x86_64 += x86_64/intel_pt
- TEST_GEN_PROGS_x86_64 += x86_64/kvm_clock_test
- TEST_GEN_PROGS_x86_64 += x86_64/kvm_pv_test
- TEST_GEN_PROGS_x86_64 += x86_64/monitor_mwait_test
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index e247f99e0473..808a23ec4160 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -161,6 +161,7 @@ struct kvm_x86_cpu_feature {
- #define	X86_FEATURE_PCOMMIT		KVM_X86_CPU_FEATURE(0x7, 0, EBX, 22)
- #define	X86_FEATURE_CLFLUSHOPT		KVM_X86_CPU_FEATURE(0x7, 0, EBX, 23)
- #define	X86_FEATURE_CLWB		KVM_X86_CPU_FEATURE(0x7, 0, EBX, 24)
-+#define	X86_FEATURE_INTEL_PT		KVM_X86_CPU_FEATURE(0x7, 0, EBX, 25)
- #define	X86_FEATURE_UMIP		KVM_X86_CPU_FEATURE(0x7, 0, ECX, 2)
- #define	X86_FEATURE_PKU			KVM_X86_CPU_FEATURE(0x7, 0, ECX, 3)
- #define	X86_FEATURE_OSPKE		KVM_X86_CPU_FEATURE(0x7, 0, ECX, 4)
-diff --git a/tools/testing/selftests/kvm/x86_64/intel_pt.c b/tools/testing/selftests/kvm/x86_64/intel_pt.c
-new file mode 100644
-index 000000000000..94753b12936e
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/intel_pt.c
-@@ -0,0 +1,381 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KVM guest Intel PT test
-+ *
-+ * Copyright (C) 2024, Intel Corporation.
-+ */
-+#include <linux/sizes.h>
-+#include <linux/types.h>
-+#include <linux/bitops.h>
-+#include <linux/perf_event.h>
-+
-+#include <sched.h>
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <sys/mman.h>
-+#include <sys/ioctl.h>
-+#include <sys/syscall.h>
-+
-+#include "kvm_util.h"
-+#include "test_util.h"
-+#include "processor.h"
-+#include "ucall_common.h"
-+
-+#define MEM_GPA			SZ_256M
-+/* Set PT_NR_PAGES to 1 to avoid single range errata on some processors */
-+#define PT_NR_PAGES		1
-+
-+#define PT_CPUID_LEAVES		2
-+#define PT_CPUID_REGS_NUM	4 /* number of registers (eax, ebx, ecx, edx) */
-+
-+/* Capability-related code is from the Kernel Intel PT driver */
-+enum pt_capabilities {
-+	PT_CAP_max_subleaf = 0,
-+	PT_CAP_cr3_filtering,
-+	PT_CAP_psb_cyc,
-+	PT_CAP_ip_filtering,
-+	PT_CAP_mtc,
-+	PT_CAP_ptwrite,
-+	PT_CAP_power_event_trace,
-+	PT_CAP_event_trace,
-+	PT_CAP_tnt_disable,
-+	PT_CAP_topa_output,
-+	PT_CAP_topa_multiple_entries,
-+	PT_CAP_single_range_output,
-+	PT_CAP_output_subsys,
-+	PT_CAP_payloads_lip,
-+	PT_CAP_num_address_ranges,
-+	PT_CAP_mtc_periods,
-+	PT_CAP_cycle_thresholds,
-+	PT_CAP_psb_periods,
-+};
-+
-+#define PT_CAP(_n, _l, _r, _m)						\
-+	[PT_CAP_ ## _n] = { .name = __stringify(_n), .leaf = _l,	\
-+			    .reg = KVM_ ## _r, .mask = _m }
-+
-+static struct pt_cap_desc {
-+	const char	*name;
-+	u32		leaf;
-+	u8		reg;
-+	u32		mask;
-+} pt_caps[] = {
-+	PT_CAP(max_subleaf,		0, CPUID_EAX, 0xffffffff),
-+	PT_CAP(cr3_filtering,		0, CPUID_EBX, BIT(0)),
-+	PT_CAP(psb_cyc,			0, CPUID_EBX, BIT(1)),
-+	PT_CAP(ip_filtering,		0, CPUID_EBX, BIT(2)),
-+	PT_CAP(mtc,			0, CPUID_EBX, BIT(3)),
-+	PT_CAP(ptwrite,			0, CPUID_EBX, BIT(4)),
-+	PT_CAP(power_event_trace,	0, CPUID_EBX, BIT(5)),
-+	PT_CAP(event_trace,		0, CPUID_EBX, BIT(7)),
-+	PT_CAP(tnt_disable,		0, CPUID_EBX, BIT(8)),
-+	PT_CAP(topa_output,		0, CPUID_ECX, BIT(0)),
-+	PT_CAP(topa_multiple_entries,	0, CPUID_ECX, BIT(1)),
-+	PT_CAP(single_range_output,	0, CPUID_ECX, BIT(2)),
-+	PT_CAP(output_subsys,		0, CPUID_ECX, BIT(3)),
-+	PT_CAP(payloads_lip,		0, CPUID_ECX, BIT(31)),
-+	PT_CAP(num_address_ranges,	1, CPUID_EAX, 0x7),
-+	PT_CAP(mtc_periods,		1, CPUID_EAX, 0xffff0000),
-+	PT_CAP(cycle_thresholds,	1, CPUID_EBX, 0xffff),
-+	PT_CAP(psb_periods,		1, CPUID_EBX, 0xffff0000),
-+};
-+
-+static u32 intel_pt_validate_cap(u32 *caps, enum pt_capabilities capability)
-+{
-+	struct pt_cap_desc *cd = &pt_caps[capability];
-+	u32 c = caps[cd->leaf * PT_CPUID_REGS_NUM + cd->reg];
-+	unsigned int shift = __ffs(cd->mask);
-+
-+	return (c & cd->mask) >> shift;
-+}
-+
-+static int calc_psb_freq(u32 *caps, u64 *psb_freq)
-+{
-+	u64 allowed;
-+
-+	if (!(intel_pt_validate_cap(caps, PT_CAP_psb_cyc)))
-+		return 0; /* PSBFreq not supported */
-+
-+	allowed = intel_pt_validate_cap(caps, PT_CAP_psb_periods);
-+	if (!allowed)
-+		return -1;
-+
-+	/* Select biggest period */
-+	*psb_freq = __fls(allowed) << RTIT_CTL_PSB_FREQ_OFFSET;
-+
-+	return 0;
-+}
-+
-+static u64 guest_psb_freq(u32 *caps)
-+{
-+	u64 psb_freq = 0;
-+
-+	GUEST_ASSERT(!calc_psb_freq(caps, &psb_freq));
-+
-+	return psb_freq;
-+}
-+
-+static u64 host_psb_freq(u32 *caps)
-+{
-+	u64 psb_freq = 0;
-+
-+	TEST_ASSERT(!calc_psb_freq(caps, &psb_freq), "No valid PSBFreq");
-+
-+	return psb_freq;
-+}
-+
-+static void read_caps(u32 *caps)
-+{
-+	for (int i = 0; i < PT_CPUID_LEAVES; i++) {
-+		__cpuid(0x14, i,
-+			&caps[KVM_CPUID_EAX + i * PT_CPUID_REGS_NUM],
-+			&caps[KVM_CPUID_EBX + i * PT_CPUID_REGS_NUM],
-+			&caps[KVM_CPUID_ECX + i * PT_CPUID_REGS_NUM],
-+			&caps[KVM_CPUID_EDX + i * PT_CPUID_REGS_NUM]);
-+	}
-+}
-+
-+static void guest_code(void)
-+{
-+	u32 caps[PT_CPUID_REGS_NUM * PT_CPUID_LEAVES];
-+	u64 status;
-+
-+	GUEST_ASSERT(this_cpu_has(X86_FEATURE_INTEL_PT));
-+
-+	read_caps(caps);
-+
-+	/* Config PT buffer */
-+	wrmsr(MSR_IA32_RTIT_OUTPUT_MASK, PT_NR_PAGES * PAGE_SIZE - 1);
-+	wrmsr(MSR_IA32_RTIT_OUTPUT_BASE, MEM_GPA);
-+
-+	/* Start tracing */
-+	wrmsr(MSR_IA32_RTIT_CTL, RTIT_CTL_TRACEEN | RTIT_CTL_OS | RTIT_CTL_USR | RTIT_CTL_TSC_EN |
-+				 RTIT_CTL_BRANCH_EN | guest_psb_freq(caps));
-+
-+	GUEST_ASSERT(rdmsr(MSR_IA32_RTIT_CTL) & RTIT_CTL_TRACEEN);
-+
-+	/*
-+	 * Test repeated VM_Exit / VM-Entry. PAGE_SIZE to match aux_watermark,
-+	 * refer to the handlng of UCALL_SYNC.
-+	 */
-+	for (int i = 0; i < PAGE_SIZE; i++)
-+		GUEST_SYNC(i);
-+
-+	/* Stop tracing */
-+	wrmsr(MSR_IA32_RTIT_CTL, 0);
-+
-+	status = rdmsr(MSR_IA32_RTIT_STATUS);
-+
-+	GUEST_ASSERT(!(status & (RTIT_STATUS_ERROR | RTIT_STATUS_STOPPED)));
-+
-+	GUEST_DONE();
-+}
-+
-+static long perf_event_open(struct perf_event_attr *attr, pid_t pid, int cpu,
-+			    int group_fd, unsigned long flags)
-+{
-+	return syscall(__NR_perf_event_open, attr, pid, cpu, group_fd, flags);
-+}
-+
-+static int read_sysfs(const char *file_path, unsigned int *val)
-+{
-+	FILE *f = fopen(file_path, "r");
-+	int ret;
-+
-+	if (!f)
-+		return -1;
-+
-+	ret = fscanf(f, "%u", val);
-+
-+	fclose(f);
-+
-+	return ret == 1 ? 0 : -1;
-+}
-+
-+#define PT_CONFIG_PASS_THRU	1
-+
-+static int do_open_pt(u32 *caps, unsigned int type)
-+{
-+	struct perf_event_attr attr = {
-+		.size = sizeof(attr),
-+		.type = type,
-+		.config = PT_CONFIG_PASS_THRU | RTIT_CTL_BRANCH_EN | host_psb_freq(caps),
-+		.sample_period = 1,
-+		.sample_type = PERF_SAMPLE_IP | PERF_SAMPLE_TID | PERF_SAMPLE_CPU |
-+			       PERF_SAMPLE_TIME | PERF_SAMPLE_IDENTIFIER,
-+		.exclude_kernel = 1,
-+		.exclude_user = 0,
-+		.exclude_hv = 1,
-+		.sample_id_all = 1,
-+		.exclude_guest = 1,
-+		.aux_watermark = PAGE_SIZE,
-+	};
-+
-+	return perf_event_open(&attr, 0, -1, -1, 0);
-+}
-+
-+static int open_pt(u32 *caps)
-+{
-+	unsigned int type;
-+	int err;
-+
-+	err = read_sysfs("/sys/bus/event_source/devices/intel_pt/type", &type);
-+	if (err)
-+		return -1;
-+
-+	return do_open_pt(caps, type);
-+}
-+
-+#define PERF_HOST_BUF_SZ	(4 * PAGE_SIZE)
-+#define PERF_HOST_MMAP_SZ	(PERF_HOST_BUF_SZ + PAGE_SIZE)
-+#define PT_HOST_BUF_SZ		(2 * PAGE_SIZE)
-+
-+struct perf_info {
-+	int fd;
-+	void *perf_buf;
-+	void *pt_buf;
-+};
-+
-+static int perf_open(struct perf_info *pi)
-+{
-+	u32 caps[PT_CPUID_REGS_NUM * PT_CPUID_LEAVES];
-+	struct perf_event_mmap_page *pc;
-+
-+	read_caps(caps);
-+
-+	pi->fd = open_pt(caps);
-+	if (pi->fd < 0)
-+		goto out_err;
-+
-+	/* mmap host buffer and user page */
-+	pi->perf_buf = mmap(NULL, PERF_HOST_MMAP_SZ, PROT_READ | PROT_WRITE,
-+			    MAP_SHARED, pi->fd, 0);
-+	if (pi->perf_buf == MAP_FAILED)
-+		goto out_close;
-+
-+	pc = pi->perf_buf;
-+	pc->aux_offset = PERF_HOST_MMAP_SZ;
-+	pc->aux_size = PT_HOST_BUF_SZ;
-+
-+	/* mmap pt buffer */
-+	pi->pt_buf = mmap(NULL, PT_HOST_BUF_SZ, PROT_READ | PROT_WRITE,
-+			  MAP_SHARED, pi->fd, PERF_HOST_MMAP_SZ);
-+	if (pi->pt_buf == MAP_FAILED)
-+		goto out_munmap;
-+
-+	return 0;
-+
-+out_munmap:
-+	munmap(pi->perf_buf, PERF_HOST_MMAP_SZ);
-+out_close:
-+	close(pi->fd);
-+	pi->fd = -1;
-+out_err:
-+	TEST_FAIL("Failed to start Intel PT tracing on host");
-+	return -1;
-+}
-+
-+static void perf_close(struct perf_info *pi)
-+{
-+	if (pi->fd < 0)
-+		return;
-+
-+	munmap(pi->pt_buf, PT_HOST_BUF_SZ);
-+	munmap(pi->perf_buf, PERF_HOST_MMAP_SZ);
-+	close(pi->fd);
-+}
-+
-+static void perf_forward(struct perf_info *pi)
-+{
-+	volatile struct perf_event_mmap_page *pc = pi->perf_buf;
-+
-+	if (pi->fd < 0)
-+		return;
-+
-+	/* Must stop to ensure aux_head is up to date */
-+	ioctl(pi->fd, PERF_EVENT_IOC_DISABLE, 0);
-+
-+	/* Discard all trace data */
-+	pc->data_tail = pc->data_head;
-+	pc->aux_tail = pc->aux_head;
-+
-+	/* Start after setting aux_tail */
-+	ioctl(pi->fd, PERF_EVENT_IOC_ENABLE, 0);
-+}
-+
-+/* Use volatile to discourage the compiler from unrolling the loop */
-+volatile int loop_spin;
-+
-+static void run_vcpu(struct kvm_vcpu *vcpu, struct perf_info *pi)
-+{
-+	bool done = false;
-+	struct ucall uc;
-+
-+	while (!done) {
-+		vcpu_run(vcpu);
-+		TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
-+		switch (get_ucall(vcpu, &uc)) {
-+		case UCALL_PRINTF:
-+			pr_info("%s", uc.buffer);
-+			break;
-+		case UCALL_SYNC:
+
+Changes in V13:
+	Do aux_resume at the end of __perf_event_overflow() so as to trace
+	less of perf itself
+
+Changes in V12:
+	Rebase on current tip
+
+Changes in V11:
+	Make assignment to event->hw.aux_paused conditional on
+	(pmu->capabilities & PERF_PMU_CAP_AUX_PAUSE).
+
+Changes in V10:
+	Move aux_paused into a union within struct hw_perf_event.
+	Additional comment wrt PERF_EF_PAUSE/PERF_EF_RESUME.
+	Factor out has_aux_action() as an inline function.
+	Use scoped_guard for irqsave.
+	Move calls of perf_event_aux_pause() from __perf_event_output()
+	to __perf_event_overflow().
+
+Changes in V9:
+	Move aux_paused to struct hw_perf_event
+
+Changes in V6:
+	Removed READ/WRITE_ONCE from __perf_event_aux_pause()
+	Expanded comment about guarding against NMI
+
+Changes in V5:
+	Added James' Ack
+
+Changes in V4:
+	Rename aux_output_cfg -> aux_action
+	Reorder aux_action bits from:
+		aux_pause, aux_resume, aux_start_paused
+	to:
+		aux_start_paused, aux_pause, aux_resume
+	Fix aux_action bits __u64 -> __u32
+
+
+ include/linux/perf_event.h      | 28 ++++++++++++
+ include/uapi/linux/perf_event.h | 11 ++++-
+ kernel/events/core.c            | 75 +++++++++++++++++++++++++++++++--
+ kernel/events/internal.h        |  1 +
+ 4 files changed, 110 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+index fb908843f209..91b310052a7c 100644
+--- a/include/linux/perf_event.h
++++ b/include/linux/perf_event.h
+@@ -170,6 +170,12 @@ struct hw_perf_event {
+ 		};
+ 		struct { /* aux / Intel-PT */
+ 			u64		aux_config;
 +			/*
-+			 * Empty the buffer and spin to add trace data in ever
-+			 * increasing amounts, which will cause the host PMI to
-+			 * more likely happen somewhere sensitive prior to
-+			 * VM-Entry.
++			 * For AUX area events, aux_paused cannot be a state
++			 * flag because it can be updated asynchronously to
++			 * state.
 +			 */
-+			perf_forward(pi);
-+			for (int cnt = 0; cnt < uc.args[1]; cnt++)
-+				for (loop_spin = 0; loop_spin < 5; loop_spin++)
-+					cpu_relax();
-+			break;
-+		case UCALL_DONE:
-+			done = true;
-+			break;
-+		case UCALL_ABORT:
-+			REPORT_GUEST_ASSERT(uc);
-+			break;
-+		default:
-+			TEST_FAIL("Unknown ucall %lu exit reason: %s",
-+				  uc.cmd, exit_reason_str(vcpu->run->exit_reason));
-+			break;
++			unsigned int	aux_paused;
+ 		};
+ 		struct { /* software */
+ 			struct hrtimer	hrtimer;
+@@ -294,6 +300,7 @@ struct perf_event_pmu_context;
+ #define PERF_PMU_CAP_NO_EXCLUDE			0x0040
+ #define PERF_PMU_CAP_AUX_OUTPUT			0x0080
+ #define PERF_PMU_CAP_EXTENDED_HW_TYPE		0x0100
++#define PERF_PMU_CAP_AUX_PAUSE			0x0200
+ 
+ /**
+  * pmu::scope
+@@ -384,6 +391,8 @@ struct pmu {
+ #define PERF_EF_START	0x01		/* start the counter when adding    */
+ #define PERF_EF_RELOAD	0x02		/* reload the counter when starting */
+ #define PERF_EF_UPDATE	0x04		/* update the counter when stopping */
++#define PERF_EF_PAUSE	0x08		/* AUX area event, pause tracing */
++#define PERF_EF_RESUME	0x10		/* AUX area event, resume tracing */
+ 
+ 	/*
+ 	 * Adds/Removes a counter to/from the PMU, can be done inside a
+@@ -423,6 +432,18 @@ struct pmu {
+ 	 *
+ 	 * ->start() with PERF_EF_RELOAD will reprogram the counter
+ 	 *  value, must be preceded by a ->stop() with PERF_EF_UPDATE.
++	 *
++	 * ->stop() with PERF_EF_PAUSE will stop as simply as possible. Will not
++	 * overlap another ->stop() with PERF_EF_PAUSE nor ->start() with
++	 * PERF_EF_RESUME.
++	 *
++	 * ->start() with PERF_EF_RESUME will start as simply as possible but
++	 * only if the counter is not otherwise stopped. Will not overlap
++	 * another ->start() with PERF_EF_RESUME nor ->stop() with
++	 * PERF_EF_PAUSE.
++	 *
++	 * Notably, PERF_EF_PAUSE/PERF_EF_RESUME *can* be concurrent with other
++	 * ->stop()/->start() invocations, just not itself.
+ 	 */
+ 	void (*start)			(struct perf_event *event, int flags);
+ 	void (*stop)			(struct perf_event *event, int flags);
+@@ -1679,6 +1700,13 @@ static inline bool has_aux(struct perf_event *event)
+ 	return event->pmu->setup_aux;
+ }
+ 
++static inline bool has_aux_action(struct perf_event *event)
++{
++	return event->attr.aux_sample_size ||
++	       event->attr.aux_pause ||
++	       event->attr.aux_resume;
++}
++
+ static inline bool is_write_backward(struct perf_event *event)
+ {
+ 	return !!event->attr.write_backward;
+diff --git a/include/uapi/linux/perf_event.h b/include/uapi/linux/perf_event.h
+index 4842c36fdf80..0524d541d4e3 100644
+--- a/include/uapi/linux/perf_event.h
++++ b/include/uapi/linux/perf_event.h
+@@ -511,7 +511,16 @@ struct perf_event_attr {
+ 	__u16	sample_max_stack;
+ 	__u16	__reserved_2;
+ 	__u32	aux_sample_size;
+-	__u32	__reserved_3;
++
++	union {
++		__u32	aux_action;
++		struct {
++			__u32	aux_start_paused :  1, /* start AUX area tracing paused */
++				aux_pause        :  1, /* on overflow, pause AUX area tracing */
++				aux_resume       :  1, /* on overflow, resume AUX area tracing */
++				__reserved_3     : 29;
++		};
++	};
+ 
+ 	/*
+ 	 * User provided data if sigtrap=1, passed back to user via
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index e3589c4287cb..0e9cfe6f3535 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -2146,7 +2146,7 @@ static void perf_put_aux_event(struct perf_event *event)
+ 
+ static bool perf_need_aux_event(struct perf_event *event)
+ {
+-	return !!event->attr.aux_output || !!event->attr.aux_sample_size;
++	return event->attr.aux_output || has_aux_action(event);
+ }
+ 
+ static int perf_get_aux_event(struct perf_event *event,
+@@ -2171,6 +2171,10 @@ static int perf_get_aux_event(struct perf_event *event,
+ 	    !perf_aux_output_match(event, group_leader))
+ 		return 0;
+ 
++	if ((event->attr.aux_pause || event->attr.aux_resume) &&
++	    !(group_leader->pmu->capabilities & PERF_PMU_CAP_AUX_PAUSE))
++		return 0;
++
+ 	if (event->attr.aux_sample_size && !group_leader->pmu->snapshot_aux)
+ 		return 0;
+ 
+@@ -8016,6 +8020,49 @@ void perf_prepare_header(struct perf_event_header *header,
+ 	WARN_ON_ONCE(header->size & 7);
+ }
+ 
++static void __perf_event_aux_pause(struct perf_event *event, bool pause)
++{
++	if (pause) {
++		if (!event->hw.aux_paused) {
++			event->hw.aux_paused = 1;
++			event->pmu->stop(event, PERF_EF_PAUSE);
++		}
++	} else {
++		if (event->hw.aux_paused) {
++			event->hw.aux_paused = 0;
++			event->pmu->start(event, PERF_EF_RESUME);
 +		}
 +	}
 +}
 +
-+#define PT_CAP_SINGLE_RANGE_OUTPUT \
-+	KVM_X86_CPU_FEATURE(0x14, 0, ECX, 2)
-+
-+int main(int argc, char *argv[])
++static void perf_event_aux_pause(struct perf_event *event, bool pause)
 +{
-+	struct perf_info pi = {.fd = -1};
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
++	struct perf_buffer *rb;
 +
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++	if (WARN_ON_ONCE(!event))
++		return;
 +
-+	/*
-+	 * Guest X86_FEATURE_INTEL_PT depends on Intel PT support and kvm_intel
-+	 * module parameter pt_mode=1.
-+	 */
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_INTEL_PT));
++	rb = ring_buffer_get(event);
++	if (!rb)
++		return;
 +
-+	/*
-+	 * Only using single-range for now. Currently only BDW does not support it, but
-+	 * BDW also doesn't support PT in VMX operation anyway.
-+	 */
-+	TEST_REQUIRE(vcpu_cpuid_has(vcpu, PT_CAP_SINGLE_RANGE_OUTPUT));
++	scoped_guard (irqsave) {
++		/*
++		 * Guard against self-recursion here. Another event could trip
++		 * this same from NMI context.
++		 */
++		if (READ_ONCE(rb->aux_in_pause_resume))
++			break;
 +
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, MEM_GPA, 1, PT_NR_PAGES, 0);
-+
-+	perf_open(&pi);
-+
-+	run_vcpu(vcpu, &pi);
-+
-+	perf_close(&pi);
-+
-+	kvm_vm_free(vm);
-+
-+	return 0;
++		WRITE_ONCE(rb->aux_in_pause_resume, 1);
++		barrier();
++		__perf_event_aux_pause(event, pause);
++		barrier();
++		WRITE_ONCE(rb->aux_in_pause_resume, 0);
++	}
++	ring_buffer_put(rb);
 +}
++
+ static __always_inline int
+ __perf_event_output(struct perf_event *event,
+ 		    struct perf_sample_data *data,
+@@ -9818,9 +9865,12 @@ static int __perf_event_overflow(struct perf_event *event,
+ 
+ 	ret = __perf_event_account_interrupt(event, throttle);
+ 
++	if (event->attr.aux_pause)
++		perf_event_aux_pause(event->aux_event, true);
++
+ 	if (event->prog && event->prog->type == BPF_PROG_TYPE_PERF_EVENT &&
+ 	    !bpf_overflow_handler(event, data, regs))
+-		return ret;
++		goto out;
+ 
+ 	/*
+ 	 * XXX event_limit might not quite work as expected on inherited
+@@ -9882,6 +9932,9 @@ static int __perf_event_overflow(struct perf_event *event,
+ 		event->pending_wakeup = 1;
+ 		irq_work_queue(&event->pending_irq);
+ 	}
++out:
++	if (event->attr.aux_resume)
++		perf_event_aux_pause(event->aux_event, false);
+ 
+ 	return ret;
+ }
+@@ -12273,11 +12326,25 @@ perf_event_alloc(struct perf_event_attr *attr, int cpu,
+ 	}
+ 
+ 	if (event->attr.aux_output &&
+-	    !(pmu->capabilities & PERF_PMU_CAP_AUX_OUTPUT)) {
++	    (!(pmu->capabilities & PERF_PMU_CAP_AUX_OUTPUT) ||
++	     event->attr.aux_pause || event->attr.aux_resume)) {
+ 		err = -EOPNOTSUPP;
+ 		goto err_pmu;
+ 	}
+ 
++	if (event->attr.aux_pause && event->attr.aux_resume) {
++		err = -EINVAL;
++		goto err_pmu;
++	}
++
++	if (event->attr.aux_start_paused) {
++		if (!(pmu->capabilities & PERF_PMU_CAP_AUX_PAUSE)) {
++			err = -EOPNOTSUPP;
++			goto err_pmu;
++		}
++		event->hw.aux_paused = 1;
++	}
++
+ 	if (cgroup_fd != -1) {
+ 		err = perf_cgroup_connect(cgroup_fd, event, attr, group_leader);
+ 		if (err)
+@@ -13073,7 +13140,7 @@ perf_event_create_kernel_counter(struct perf_event_attr *attr, int cpu,
+ 	 * Grouping is not supported for kernel events, neither is 'AUX',
+ 	 * make sure the caller's intentions are adjusted.
+ 	 */
+-	if (attr->aux_output)
++	if (attr->aux_output || attr->aux_action)
+ 		return ERR_PTR(-EINVAL);
+ 
+ 	event = perf_event_alloc(attr, cpu, task, NULL, NULL,
+diff --git a/kernel/events/internal.h b/kernel/events/internal.h
+index e072d995d670..249288d82b8d 100644
+--- a/kernel/events/internal.h
++++ b/kernel/events/internal.h
+@@ -52,6 +52,7 @@ struct perf_buffer {
+ 	void				(*free_aux)(void *);
+ 	refcount_t			aux_refcount;
+ 	int				aux_in_sampling;
++	int				aux_in_pause_resume;
+ 	void				**aux_pages;
+ 	void				*aux_priv;
+ 
 -- 
 2.43.0
 
