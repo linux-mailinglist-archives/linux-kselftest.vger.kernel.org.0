@@ -1,109 +1,232 @@
-Return-Path: <linux-kselftest+bounces-19681-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19682-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 909F399D9BD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 00:23:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3423599D9D4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 00:38:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CEB81F23574
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 22:23:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 936571F2244C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 22:38:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E525158A09;
-	Mon, 14 Oct 2024 22:23:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 354371D1E62;
+	Mon, 14 Oct 2024 22:38:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dmscKdKd"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="VZZ4a7DI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD71158538
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 22:23:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4738E1CF2AF
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 22:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728944609; cv=none; b=O4mhVI932ZoXwuTpvPctqMsSvoD4F2NgTRsG7v0sVkSDQZ/GeMgsaXrHkEJ4riVKwS6HR8OTxtpgP4qIRrF3978fq2nc0Wg0UZB+Lo5cC39Yu3RfK/3CvvmXxJY7CnUmYpIX5BBtiOvHrTS2xVa57uJ6dR+4zBORxyK7AyI6rM0=
+	t=1728945508; cv=none; b=Gd7DaV/9TKiYRd2IJ8VcdkJi/o+NB718jEN8rDjntZonpzB9uOsBIry/I1vZ+xGegXKqcOK4o6deI4gQtVoxe3g2abfY4oLM88wh0WostfmCNUzxDUWUsqrGIQe5ui4MJiSH3Zjx7d7i8bm3tOH078/FXLa0Q6wyOd0cPzvyW0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728944609; c=relaxed/simple;
-	bh=gv0x2b2PoNf+TkwQtGQA+hFg+JPenw8viKr0DO6+Lrw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=KUPyO/7Zxx/tkubSskmnvOdGj22Do8O8uyDKMp/aDK1EXkQhKPHPTnsGb32Jk68ycBfOd6r7Cwcb9IEdXXceB9d76nXELd9CACCHAhZDiXBD19GDAh9zdSNotWw6brDmtFsUAXXTOp0qUHJ8a075LaG2RKAmxkx2r/GAtr+kirw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dmscKdKd; arc=none smtp.client-ip=209.85.128.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-6886cd07673so87061947b3.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 15:23:27 -0700 (PDT)
+	s=arc-20240116; t=1728945508; c=relaxed/simple;
+	bh=O8OKq8HDwbJjRTWzd1uS/ZHiUvAuLk/CNimbphejG5k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KSiZCVQ0znTjRk273gGIqTNtfvW1J9cWHM5VGCyRNWK/uF4GiNqYIzX4jVFIWx3618N7cx72kWmBcIe9XVk6CAtOhtJXDDu93twd9fadKPOi0pxaVJzJU1QVHkMrzN/DYtNPd8m/+TPqkfnyGVvxTspuMpLyUC44cXOAZCK5lEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=VZZ4a7DI; arc=none smtp.client-ip=209.85.166.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f41.google.com with SMTP id ca18e2360f4ac-8377fd76112so169844839f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 15:38:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1728944607; x=1729549407; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=04cHKHgrL7/J8cmYsPL4VJWOHoKjBPFN4M3VyEvV5R0=;
-        b=dmscKdKdFgr4vIWTzKuUpRr/TiJcXCjGaqTjdrm+niwpeDtiHbW65afu3m4uRbhg/+
-         9+WXKrWeOhLddjGcxl/44D9ppNphOQyYtnzy6iaDdK3RYkLriVacumNslrqHrFsHnXNt
-         ERPPhN5kytTwA3Zv39PDA4Fg34QARkOBTWwSWAqZudZsLrGM6/082rCpkG/ziXyopRo6
-         aa7vkHcF57N50vNqpR7iMJ52FJNXrDcnt78d3FE8XOdOxitnQEgAu65dnRzaOnO4kJ9Q
-         OOZdHqIWrGZwUFcbNJchK2coSwXMT6j3PUmTpW4KXueET75JJbkUJq/XmtTocxAE+MSA
-         W0QA==
+        d=linuxfoundation.org; s=google; t=1728945505; x=1729550305; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AIonu1LkVfLUVFewo4PfSaVbZJxpryIcr1kRznLAruM=;
+        b=VZZ4a7DIWxFBF0w8QLIdIo8HJb4VFhtbJBzwzfBqk2m3Vcwup/o5hZqVCFbfixo1QI
+         A5QfemGgqOtmsK68txPRIFCGDL9yilI+qvRdhhRPGe+y1yFnxlmC+ZoVOpg6FSnrDsoG
+         TmWeM/kVU7bji2IZFQaQgIhdhXrJ8DtEFd9go=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728944607; x=1729549407;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=04cHKHgrL7/J8cmYsPL4VJWOHoKjBPFN4M3VyEvV5R0=;
-        b=ListRxQcATho/6xVEsCF2f4LwbP7KYIox9FFhooTPJ4LehMSHOMz8zSXo0iwPEehAB
-         wM3eJIt2PtN5q75yzbJKPAYlIZVJLuJs4DgfjQhDWAmWNA7r/JeFLjvJnfOfXc92lyyk
-         +nDXA5LktFbY4IMMWRMI8T+OqDSuOk/8uR1eUZqjhgq7+Q0XUyX0yXzj7tqWEofKyt6L
-         8Z5n855AXmhVPLyyQ6gS1a3+VQX6/EYqap2cBsr3ewt8EQmB0jASB/miKWR1zLrHmpLr
-         CQLbyxi/DpdKSDlAfCigmDZdgmF6if6Nx8jBKBoUz4H4PkAfmichAVmKzawS6f1ifypC
-         As4A==
-X-Forwarded-Encrypted: i=1; AJvYcCWWnJBuhhvdEGPdxORbP/2ZTi7Kk/N0jcGKp6JYWwXJy6HEZovrDElcrqYmEJ6haYy+ALI4NZCY7Tk+EfWl2us=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLWReeSqOGgt5TzaM5yM0NyDhA/jPOQeVzdYZc2tEb+DmA/8T2
-	r+19pn25NTJKsHdtjrbzoT9SVLnKPvcnBCcQHAqzFhH62h8VGwoCOO8Sa2hETq27VsTKVwIt2va
-	uyg==
-X-Google-Smtp-Source: AGHT+IG1Ae3jO/kXIxxJfLv3WIvlsTh01ooR6ufsPDh2fil0948QVn7sffNeuOmPj+rxynNQ01OzSz8yDL0=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:9d:3983:ac13:c240])
- (user=seanjc job=sendgmr) by 2002:a05:690c:d8c:b0:6e2:a129:1620 with SMTP id
- 00721157ae682-6e347b2d7d9mr281187b3.3.1728944606659; Mon, 14 Oct 2024
- 15:23:26 -0700 (PDT)
-Date: Mon, 14 Oct 2024 15:23:25 -0700
-In-Reply-To: <20240905124107.6954-1-pratikrajesh.sampat@amd.com>
+        d=1e100.net; s=20230601; t=1728945505; x=1729550305;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AIonu1LkVfLUVFewo4PfSaVbZJxpryIcr1kRznLAruM=;
+        b=YptcjWUcC2vAvFb22vR3B9lJlPYtVApqdOweHLZg+KOFkjm7wbcDvnpW3jlOk6vhDZ
+         QVr9vJ0WMp4Ef8p0gwWMbXjYQ89c7HRF6jOBlciCVUGoNAA3pQwu+0DhARFlGrnjFAbe
+         t0LXtdn4KAUtilUEg+QOZbsIzNQSNAtS6KcWYMZGnUYWT2zXLqLf2lK9oZWFTmajpsC1
+         TT0XTzRpvLGSRzbdOX2kOC9/qUMwLEUqtfHJfAxJ88mkc/Lmz5cK6VauontDg/y42XiO
+         sOh7NEaKbVJ422my7rYLGBsnh/Tzqo9lDWc8WmRcRd/8095DJ9JzIBdUSfzqyTokrFnO
+         P1Pw==
+X-Forwarded-Encrypted: i=1; AJvYcCW5FB+33FkLV9hGvvh5s7tFKMu+jQf+wgN4nMInRqyk21QuR9D3lWoE6/B/lkHz+XPUdIMNYL5AYZOci9DfFUo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxoVcaebbWqWbUyR28WxNHijs5Edq6TDgrdPu1dP/WTezHNOWqs
+	3R3VyzzD+GHUEeCmAz8lB9SJKyxJbvuAb9lMAJ5lHgcGB2JPNgAA60ZcmQ2I3cY=
+X-Google-Smtp-Source: AGHT+IHpEqUp+akex3EK/CJOQyx8TJduGjR4UjuL/G45Ogs0SFpV2pbARlLAAZYTHhTjtTIubmr86g==
+X-Received: by 2002:a05:6e02:1a0b:b0:39f:5efe:ae73 with SMTP id e9e14a558f8ab-3a3b5f1deaamr118636665ab.5.1728945505169;
+        Mon, 14 Oct 2024 15:38:25 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dbec837620sm25823173.0.2024.10.14.15.38.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Oct 2024 15:38:24 -0700 (PDT)
+Message-ID: <0f79692e-ed68-462d-8ec7-955219116282@linuxfoundation.org>
+Date: Mon, 14 Oct 2024 16:38:23 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20240905124107.6954-1-pratikrajesh.sampat@amd.com>
-Message-ID: <Zw2Z3WUYjOZ1rP59@google.com>
-Subject: Re: [PATCH v3 0/9] SEV Kernel Selftests
-From: Sean Christopherson <seanjc@google.com>
-To: "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>
-Cc: kvm@vger.kernel.org, pbonzini@redhat.com, pgonda@google.com, 
-	thomas.lendacky@amd.com, michael.roth@amd.com, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: clone3: Use the capget and capset syscall
+ directly
+To: zhouyuhang <zhouyuhang1010@163.com>, brauner@kernel.org, shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ zhouyuhang <zhouyuhang@kylinos.cn>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20241010121612.2601444-1-zhouyuhang1010@163.com>
+ <5b471a5c-c99d-42a5-943d-bb253127a202@linuxfoundation.org>
+ <a2ab9671-5095-47bf-82cf-0e167320772f@163.com>
+ <b2e02494-0f22-476e-bb79-f3a133b7fa07@linuxfoundation.org>
+ <714162ff-a2f8-4fc6-91af-0ecd6376bc7f@163.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <714162ff-a2f8-4fc6-91af-0ecd6376bc7f@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 05, 2024, Pratik R. Sampat wrote:
-> This series primarily introduces SEV-SNP test for the kernel selftest
-> framework. It tests boot, ioctl, pre fault, and fallocate in various
-> combinations to exercise both positive and negative launch flow paths.
+On 10/12/24 02:28, zhouyuhang wrote:
 > 
-> Patch 1 - Adds a wrapper for the ioctl calls that decouple ioctl and
-> asserts, which enables the use of negative test cases. No functional
-> change intended.
-> Patch 2 - Extend the sev smoke tests to use the SNP specific ioctl
-> calls and sets up memory to boot a SNP guest VM
-> Patch 3 - Adds SNP to shutdown testing
-> Patch 4, 5 - Tests the ioctl path for SEV, SEV-ES and SNP
-> Patch 6 - Adds support for SNP in KVM_SEV_INIT2 tests
-> Patch 7,8,9 - Enable Prefault tests for SEV, SEV-ES and SNP
+> On 2024/10/11 22:21, Shuah Khan wrote:
+>> On 10/11/24 00:59, zhouyuhang wrote:
+>>>
+>>> On 2024/10/10 23:50, Shuah Khan wrote:
+>>>> On 10/10/24 06:16, zhouyuhang wrote:
+>>>>> From: zhouyuhang <zhouyuhang@kylinos.cn>
+>>>>>
+>>>>> The libcap commit aca076443591 ("Make cap_t operations thread safe.") added a
+>>>>> __u8 mutex at the beginning of the struct _cap_struct,it changes the offset of
+>>>>> the members in the structure that breaks the assumption made in the "struct libcap"
+>>>>> definition in clone3_cap_checkpoint_restore.c.So use the capget and capset syscall
+>>>>> directly and remove the libcap library dependency like the commit 663af70aabb7
+>>>>> ("bpf: selftests: Add helpers to directly use the capget and capset syscall") does.
+>>>>>
+>>>>
+>>>> NIT: grammar and comma spacing. Please fix those for readability.
+>>>> e.g: Change "struct _cap_struct,it" to "struct _cap_struct, it"
+>>>> Fix others as well.
+>>>>
+>>>
+>>> Thanks, I'll fix it in V2
+>>>
+>>>
+>>>>> Signed-off-by: zhouyuhang <zhouyuhang@kylinos.cn>
+>>>>> ---
+>>>>>   tools/testing/selftests/clone3/Makefile       |  1 -
+>>>>>   .../clone3/clone3_cap_checkpoint_restore.c    | 60 +++++++++----------
+>>>>>   2 files changed, 28 insertions(+), 33 deletions(-)
+>>>>>
+>>>>> diff --git a/tools/testing/selftests/clone3/Makefile b/tools/testing/selftests/clone3/Makefile
+>>>>> index 84832c369a2e..59d26e8da8d2 100644
+>>>>> --- a/tools/testing/selftests/clone3/Makefile
+>>>>> +++ b/tools/testing/selftests/clone3/Makefile
+>>>>> @@ -1,6 +1,5 @@
+>>>>>   # SPDX-License-Identifier: GPL-2.0
+>>>>>   CFLAGS += -g -std=gnu99 $(KHDR_INCLUDES)
+>>>>> -LDLIBS += -lcap
+>>>>>     TEST_GEN_PROGS := clone3 clone3_clear_sighand clone3_set_tid \
+>>>>>       clone3_cap_checkpoint_restore
+>>>>> diff --git a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+>>>>> index 3c196fa86c99..111912e2aead 100644
+>>>>> --- a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+>>>>> +++ b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+>>>>> @@ -15,7 +15,7 @@
+>>>>>   #include <stdio.h>
+>>>>>   #include <stdlib.h>
+>>>>>   #include <stdbool.h>
+>>>>> -#include <sys/capability.h>
+>>>>> +#include <linux/capability.h>
+>>>>>   #include <sys/prctl.h>
+>>>>>   #include <sys/syscall.h>
+>>>>>   #include <sys/types.h>
+>>>>> @@ -27,6 +27,13 @@
+>>>>>   #include "../kselftest_harness.h"
+>>>>>   #include "clone3_selftests.h"
+>>>>>   +#ifndef CAP_CHECKPOINT_RESTORE
+>>>>> +#define CAP_CHECKPOINT_RESTORE 40
+>>>>> +#endif
+>>>>> +
+>>>>
+>>>> Why is this necessary? This is defined in linux/capability.h.
+>>>>
+>>>>> +int capget(cap_user_header_t header, cap_user_data_t data);
+>>>>> +int capset(cap_user_header_t header, const cap_user_data_t data);
+>>>>
+>>>> In general prototypes such as these should be defined in header
+>>>> file. Why are we defining these here?
+>>>>
+>>>> These are defined in sys/capability.h
+>>>>
+>>>> I don't understand this change. You are removing sys/capability.h
+>>>> which requires you to add these defines here. This doesn't
+>>>> sound like a correct solution to me.
+>>>>
+>>>
+>>> I tested it on my machine without libcap-dev installed, the /usr/include/linux/capability.h
+>>>
+>>> is on this machine by default. Successfully compiled using #include <linux/capability.h>
+>>>
+>>> but not with #include <sys/capability.h>. This patch removes libcap library dependencies.
+>>>
+>>> And we don't use any part of sys/capability.h other than these two syscalls. So I think that's why it's necessary.
+>>
+>> You are changing the code to not include sys/capability.h
+>> What happens if sys/capability.h along with linux/capability.h
+>>
+>> Do you see problems?
+>>
+> 
+> I'm sorry, maybe I wasn't clear enough.
+> When we install the libcap library it will have the following output:
+> 
+> test@test:~/work/libcap$ sudo make install | grep capability
+> install -m 0644 include/sys/capability.h /usr/include/sys
+> install -m 0644 include/sys/capability.h /usr/include/sys
+> /usr/share/man/man5 capability.conf.5 \
+> 
+> It installs sys/capability.h in the correct location, but does not
+> 
+> install linux/capability.h, so sys/capability.h is bound to the libcap library
 
-There are three separate series here:
+It won't install inux/capability.h unless you run "make headers" in
+the kernel repo.
 
- 1. Smoke test support for SNP
- 2. Negative tests for SEV+
- 3. Prefault tests for SEV+
+> 
+> and they will either exist or disappear together. Now I want to remove
+> 
+> the dependency of the test on libcap library so I changed the code that it
+> 
+> does not contain sys/capability.h but instead linux/capability.h,
+> 
+> so that the test can compile successfully without libcap being installed,
+> 
+> these two syscalls are not declared in linux/capability.h(It is sufficient for test use except for these two syscalls)
+> 
+> so we need to declare them here. I think that's why the commit 663af70aabb7
+> 
+> ("bpf: selftests: Add helpers to directly use the capget and capset syscall") I refered to
+> 
+> does the same thing. As for your question "What happens if sys/capability.h along
+> 
+> with linux/capability.h", I haven't found the problem yet, I sincerely hope you can
+> 
+> help me improve this code. Thank you very much.
 
-#3 likely has a dependency on #1, and probably on #2 as well (for style if nothing
-else).  But that's really just an argument for focuing on #1 first, and the moving
-onto the others once that's ready to go.
+Try this:
+
+Run make headers in the kernel repo.
+Build without making any changes.
+Then add you changes and add linux/capability.h to include files
+
+Tell me what happens.
+
+The change you are making isn't correct. Because you don't want to
+define system calls locally in your source file.
+
+thanks,
+-- Shuah
 
