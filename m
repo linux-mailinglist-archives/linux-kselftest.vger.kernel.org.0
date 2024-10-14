@@ -1,125 +1,230 @@
-Return-Path: <linux-kselftest+bounces-19668-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19669-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C78799D587
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 19:22:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E8C099D5D4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 19:51:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A46FD1C22F59
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 17:22:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 724351C22EC8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 17:51:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A8471B85E4;
-	Mon, 14 Oct 2024 17:22:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BCBE1C728E;
+	Mon, 14 Oct 2024 17:51:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QWyROY0a"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=nik.wipper@gmx.de header.b="B4DX2fGQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 999C929A0;
-	Mon, 14 Oct 2024 17:22:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 702B41B85C0;
+	Mon, 14 Oct 2024 17:51:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728926522; cv=none; b=JHWSQFHt94bKzCHjTIgmyioni7gYtyCHc8gsU3b0DK+SJ2FV8oxp+7x5LNmQzSt682MJeeSEWEVm8+ZD6CKxdWNkwCRHPPkAjMmVJGxNrc/7vGhNq5fu1lhWaao7LAw84iUOXMZx694iwKBvewdH4vmUDNm5pvp+IZ/dOmjF9eM=
+	t=1728928266; cv=none; b=NGK4IaSfOceTMO9fnVOsTD4PaKgUHzPeMQuNRMWET9WUb+6Rxu5JZO6/lLVSCBv5Mz01T5MItoadQg80cXXYkjpbr+ts0C4EIAWkzyA4t6ZVSdFlW8GVYz5td8xXxDoN3j71DRYzTLVCLrr/VvhjAwrEw/oUczlUM2gIzPPc3gU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728926522; c=relaxed/simple;
-	bh=A0wIU0wbss796ESeJ1cO2gBHEngRLWGWi73Dp+fHP3g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cjP0mzlVtpNAqwHJuARcsOpC1ctwcje31nq3iDEPtQqFMN1P8bM8ljBbFMlBUVtr035EBGvRmiBu1hxrO/9/Nsher9OJPYTZ3+CshB5RPpGpUOnoDX6W787plBYk+nsDAiz/z3O1VA0BaW9ZgPSqvPL9yMZyzvwqwNwtmazHWSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QWyROY0a; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-539e63c8678so2102120e87.0;
-        Mon, 14 Oct 2024 10:22:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728926519; x=1729531319; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ojk1sFGNt5wipYN0VKoCuCaWbOyLE0HFi3RwNF3zwiE=;
-        b=QWyROY0apnSPtIr88kRbPveXLjbcV6FnUZ1hW5rQEcNTbl10x97gjjWP+0jR29H62m
-         AhmIgSYQtZmxzDZKfRbH9321UtM5Q3uxPgEhDr0B2xuilUmk/aVpSUsKdXTxrEYnPs4i
-         3lZLC8Jq0ryX/a0McbLkYfjGYsNRBaE+ZCOVnuxnHnFmbgEdTS+OTDq3NznEI/PD1BPC
-         4ExlE7DHTJ2Y2l9xT516hHNGD6nYz5z8ltKVE1IM+641iUfIiZYG0UcqpyYGPuyC7nhd
-         xBSjm/ZTJJFDlu7Fc5KXcM9H3pDOR06JeNK1wDsaP6oQGUJN1CeBhAfUoZwETA53wLuT
-         WOiA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728926519; x=1729531319;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ojk1sFGNt5wipYN0VKoCuCaWbOyLE0HFi3RwNF3zwiE=;
-        b=G/IKJruSDEZqoHaqVVEjXr6whmwCT5qIpSHSi+aJUDrBpb3lrLJ0Jt0wCGXZDV4SID
-         nr5/5yQC1l+LBLrI5tgSzt4Gc+0pAEKNXFEQllzg2MaHkb/hRTPzfJEj9ZII1IVSegKo
-         RHViOR4Unl/MJn+ykDsVFTpXBsndxNYNI7NZeze1y6Vh8sldRtdma/NkerLuW8nRpK49
-         MW0OXeM1FWPdKUq87Tbo+6sRM4Pg9xZS1nFTr90XDmLCYjLxK1NcDpo6cQTwExCFzL8f
-         sXM7QEUSuvYoFfbUJR2hzoocmMeQOfrjeAyEGs/oVQbg4eZ1sos+4fFAg3iYCPPUasIg
-         cgGg==
-X-Forwarded-Encrypted: i=1; AJvYcCUxNN1btRD4AEt9yp0zzxZWApLlLWBrC/otHTJ7lls6+tFh7/ojWlogeDuPth+TTgWpeNhD14GYIKJLxdOPxmdH@vger.kernel.org, AJvYcCXzIkCs/dgDOQC88vjI3NeuwuOzPVtGnCaK6qChMdBfAmJi81qBI9q68J0xP2vQZMBp0DoMHj/OJE87Lf0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy14EZXTePQCcabcJy+EgMmuNt8Bva898ic5PZMt3a6jJef1JPB
-	MUT6pxRliFn6uAmIdRk/Nv5tIx5MHumkIpb5fQR469dTIF+KuE+G
-X-Google-Smtp-Source: AGHT+IFMn9I47i07y9r52ikhp/svSnkYkY9XEbiUj9WO5bhzbbK+iw6V4uI7gkdixzlRKu6j/+y9Bg==
-X-Received: by 2002:a05:6512:3b26:b0:539:8a9a:4e63 with SMTP id 2adb3069b0e04-539e571ce0emr4181110e87.42.1728926518334;
-        Mon, 14 Oct 2024 10:21:58 -0700 (PDT)
-Received: from alessandro-pc.station (net-2-44-97-22.cust.vodafonedsl.it. [2.44.97.22])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d4b6cfa60sm11877859f8f.61.2024.10.14.10.21.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 14 Oct 2024 10:21:57 -0700 (PDT)
-From: Alessandro Zanni <alessandro.zanni87@gmail.com>
-To: shuah@kernel.org
-Cc: Alessandro Zanni <alessandro.zanni87@gmail.com>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	skhan@linuxfoundation.org,
-	anupnewsmail@gmail.com
-Subject: [PATCH v2] selftests/intel_pstate: fix operand expected
-Date: Mon, 14 Oct 2024 19:21:47 +0200
-Message-ID: <20241014172149.324639-1-alessandro.zanni87@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1728928266; c=relaxed/simple;
+	bh=I0X5zGKGyx41/TP8U0WUHo+BK84LLbMN01eqB8kLUkI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YgIbfTDJ6REGbr8mBakgfdHzMiAq9gdQEFUH2FvCkY45eEdBpluCRyUP9nyZNowfPXhYRRKq1B+kaWFaiBqF9gShthrPeytX8kT2KXH5wpIHFQ1PXA1U4j0tr+zbyt2lpSxsbmOgefidNV+tNDKGneSvN02cgeHD0wSiSTEn/Xw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=nik.wipper@gmx.de header.b=B4DX2fGQ; arc=none smtp.client-ip=212.227.17.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1728928220; x=1729533020; i=nik.wipper@gmx.de;
+	bh=a+RE15GmokJYWbGRjD6Dzb3yHSQxcePvP91ijU9kPxM=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=B4DX2fGQmMAmESqj/a76U78yAL+pLs3kl12YucIEka4+6e1yoHQXjqP8tVaWXlsX
+	 0j5ZdsVx+rmirDeh6YFgHOwDsaqqxAQZzfo9G9b6G3w8cCHX2BLUHwN56RQ9UShPS
+	 /lU1qbF6DEOMFOxROM9BT0CtOkp8hL8v3R4KRVF9dxu8NFWlJAUDZXkfI9RZxL1ub
+	 PA4iMdECzQXOPJY/B8lSBwAnzfL+/uFoXV3p6ctUxNqhHVTFBl0BtmDlj8AT7b9Bt
+	 N8D+qwxHtrGGrkYJGa1qXyiuqFJLPthF5xXO/kBGyvfinWwIoYCtEqC9b5CMCMgND
+	 42xMuGlEKabHhGIPrg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.178.21] ([31.17.149.238]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MOA3F-1tJpjO3geP-00KbpD; Mon, 14
+ Oct 2024 19:50:19 +0200
+Message-ID: <9ef935db-459a-4738-ab9a-4bd08828cb60@gmx.de>
+Date: Mon, 14 Oct 2024 19:50:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/7] KVM: x86: Implement Hyper-V's vCPU suspended state
+To: Vitaly Kuznetsov <vkuznets@redhat.com>, Nikolas Wipper <nikwip@amazon.de>
+Cc: Nicolas Saenz Julienne <nsaenz@amazon.com>,
+ Alexander Graf <graf@amazon.de>, James Gowans <jgowans@amazon.com>,
+ nh-open-source@amazon.com, Sean Christopherson <seanjc@google.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, x86@kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20241004140810.34231-1-nikwip@amazon.de>
+ <20241004140810.34231-3-nikwip@amazon.de> <875xq0gws8.fsf@redhat.com>
+Content-Language: en-US
+From: Nikolas Wipper <nik.wipper@gmx.de>
+In-Reply-To: <875xq0gws8.fsf@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:/vySEODhYTiiFir1ArY1mTcWrbhUiDrb1NaTr0ui5GF4cSuU9Z8
+ oQOCEpj1ugeh3L/EdX6ebrLdLaWgtNOxWQAqPwOAla70ur+CLzh1221eTDmxpLXy89QKMxW
+ kL+Obpe47DAIqV3bI9r96cvhQZ/Oj7ULPOGcVySmGeGA2HCUBSX/4NBoOotZrLt79LmaU+k
+ FsyzEk+mxGkERcQi4Y2qQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:cRrrVgdmKt4=;2xNp32HNEcGdz3sDtwm+XdtN7jn
+ PVj0Jea1rouhXFUlWEATGqYYbCl9LQVZiGIiFDgXeTnBOtNLGxiJGbwu8GocRCAatspwstS5j
+ /JbTQyJrTO5q8EQ5iRnMcdzwZPatGViA0VxY7ARVOZjc2l22Uwo8zQ8+pMSlkONICEwJ37/bT
+ I4E4DKFQgdJX2NYLXsCWVziSutD7F3tWQMQPPz9khDVNjX/zCqyGI2uBxAglFfq87l0iTsCq+
+ ToHS3/RjgE3CyLp3vZoCg/5p7NDEzkj/myPgzXh+klBdhQVgo0dRZqpadqx5+Gnty/JP9fanH
+ vzPsfaN5ajY/giT0agYVqLqPfehzmZZb9uciQ/MfAlpcvjNlXbe4Z8AssbBUT4WfUjf/Aruvw
+ MdjMBv3i58JqpKYZbfuieccf+82f8n8vOVD19ypCvkDaD9DVxUHypFr5EvQlAH7smXfMHGsF0
+ MjZXijMid5KbaKMJ9gC89jXqyiaw1hOyMwHdS/19QvzSXvBpTnlKgGbyJBhWViwVdlXBCyhCE
+ HH2ginj1vWeR/iCrKhYxcDEMvoTOU924sFRuFktFMZy4OBH+GOMe830WFTlaheES4AE1IPEPI
+ WYcsYY6wU5+JakhSGrOvKmXmWm7eD1ReV6wCxF+Y9Od+BaMyp+3Gbc453CWIbH7t36Q3I/cG0
+ tyyJ2ZyL/wDVbPpBodb45L9rH/K8vhrSqDif918pErm4waPBkWpqjHTsTdnJ8WBfIPsu0q3hr
+ LSBy4rWR3aDmV1ddxfCBmW/FbKi3Q5YI9T+Lh9xBf88YbVLMcz36xk/O4zkqTnRxU3w8gK9VI
+ 2IB6A+/g+N5Eal6B8fSG3cMsTG5kSg4jSoExX4B8t4A6I=
 
-This fix solves theses errors, when calling kselftest with
-targets "intel_pstate":
+On 10.10.24 10:57, Vitaly Kuznetsov wrote:
+> Nikolas Wipper <nikwip@amazon.de> writes:
+>> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm=
+_host.h
+>> index 46e0a466d7fb..7571ac578884 100644
+>> --- a/arch/x86/include/asm/kvm_host.h
+>> +++ b/arch/x86/include/asm/kvm_host.h
+>> @@ -695,6 +695,9 @@ struct kvm_vcpu_hv {
+>>  		u64 vm_id;
+>>  		u32 vp_id;
+>>  	} nested;
+>> +
+>> +	bool suspended;
+>> +	int waiting_on;
+>
+> I don't quite understand why we need 'suspended' at all. Isn't it always
+> suspended when 'waiting_on !=3D -1'? I can see we always update these tw=
+o
+> in pair.
+>
 
-./run.sh: line 90: / 1000: syntax error: operand expected (error token is "/ 1000")
+This is mainly for future proofing the implementation. You are right, this
+is currently not required, but it's nice to have a single flags, so that
+when the suspended state is used in a different context, the whole logic
+surrounding it still works.
 
-./run.sh: line 92: / 1000: syntax error: operand expected (error token is "/ 1000")
+> Also, I would suggest we use a more descriptive
+> name. 'waiting_on_vcpu_id', for example.
+>
 
-To error was found by running tests manually with the command:
-make kselftest TARGETS=intel_pstate
+Sounds good.
 
-Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
----
+>>  };
+>>
+>>  struct kvm_hypervisor_cpuid {
+>> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
+>> index 4f0a94346d00..6e7941ed25ae 100644
+>> --- a/arch/x86/kvm/hyperv.c
+>> +++ b/arch/x86/kvm/hyperv.c
+>> @@ -971,6 +971,7 @@ int kvm_hv_vcpu_init(struct kvm_vcpu *vcpu)
+>>
+>>  	vcpu->arch.hyperv =3D hv_vcpu;
+>>  	hv_vcpu->vcpu =3D vcpu;
+>> +	hv_vcpu->waiting_on =3D -1;
+>>
+>>  	synic_init(&hv_vcpu->synic);
+>>
+>> @@ -2915,3 +2916,32 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, stru=
+ct kvm_cpuid2 *cpuid,
+>>
+>>  	return 0;
+>>  }
+>> +
+>> +void kvm_hv_vcpu_suspend_tlb_flush(struct kvm_vcpu *vcpu, int vcpu_id)
+>
+> Can we make parameter's name 'waiting_on_vcpu_id' as well? Because as-is
+> I'm getting confused which CPU of these two is actually getting
+> suspended)
+>
 
-Notes:
-    v2: removed debug echos
+Yup, that would certainly help readability.
 
- tools/testing/selftests/intel_pstate/run.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+> Also, why do we need '_tlb_flush' in the name? The mechanism seems to be
+> fairly generic, it's just that we use it for TLB flushes.
+>
 
-diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
-index e7008f614ad7..0c1b6c1308a4 100755
---- a/tools/testing/selftests/intel_pstate/run.sh
-+++ b/tools/testing/selftests/intel_pstate/run.sh
-@@ -87,9 +87,9 @@ mkt_freq=${_mkt_freq}0
- 
- # Get the ranges from cpupower
- _min_freq=$(cpupower frequency-info -l | tail -1 | awk ' { print $1 } ')
--min_freq=$(($_min_freq / 1000))
-+min_freq=$((_min_freq / 1000))
- _max_freq=$(cpupower frequency-info -l | tail -1 | awk ' { print $2 } ')
--max_freq=$(($_max_freq / 1000))
-+max_freq=$((_max_freq / 1000))
- 
- 
- [ $EVALUATE_ONLY -eq 0 ] && for freq in `seq $max_freq -100 $min_freq`
--- 
-2.43.0
+The 'waiting_on' part is TLB flushing specific.
 
+>> +{
+>> +	/* waiting_on's store should happen before suspended's */
+>> +	WRITE_ONCE(vcpu->arch.hyperv->waiting_on, vcpu_id);
+>> +	WRITE_ONCE(vcpu->arch.hyperv->suspended, true);
+>> +}
+>> +
+>> +void kvm_hv_vcpu_unsuspend_tlb_flush(struct kvm_vcpu *vcpu)
+>
+> And here someone may expect this means 'unsuspend vcpu' but in reality
+> this means 'unsuspend all vCPUs which are waiting on 'vcpu'). I guess we
+> need a rename. How about
+>
+> void kvm_hv_unsuspend_vcpus(struct kvm_vcpu *waiting_on_vcpu)
+>
+> ?
+>
+
+Also sounds good.
+
+>> +{
+>> +	DECLARE_BITMAP(vcpu_mask, KVM_MAX_VCPUS);
+>> +	struct kvm_vcpu_hv *vcpu_hv;
+>> +	struct kvm_vcpu *v;
+>> +	unsigned long i;
+>> +
+>> +	kvm_for_each_vcpu(i, v, vcpu->kvm) {
+>> +		vcpu_hv =3D to_hv_vcpu(v);
+>> +
+>> +		if (kvm_hv_vcpu_suspended(v) &&
+>> +		    READ_ONCE(vcpu_hv->waiting_on) =3D=3D vcpu->vcpu_id) {
+>> +			/* waiting_on's store should happen before suspended's */
+>> +			WRITE_ONCE(v->arch.hyperv->waiting_on, -1);
+>> +			WRITE_ONCE(v->arch.hyperv->suspended, false);
+>> +			__set_bit(i, vcpu_mask);
+>> +		}
+>> +	}
+>> +
+>> +	kvm_make_vcpus_request_mask(vcpu->kvm, KVM_REQ_EVENT, vcpu_mask);
+>> +}
+>> diff --git a/arch/x86/kvm/hyperv.h b/arch/x86/kvm/hyperv.h
+>> index 913bfc96959c..a55832cea221 100644
+>> --- a/arch/x86/kvm/hyperv.h
+>> +++ b/arch/x86/kvm/hyperv.h
+>> @@ -265,6 +265,15 @@ static inline void kvm_hv_nested_transtion_tlb_flu=
+sh(struct kvm_vcpu *vcpu,
+>>  }
+>>
+>>  int kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu);
+>> +
+>> +static inline bool kvm_hv_vcpu_suspended(struct kvm_vcpu *vcpu)
+>> +{
+>> +	return vcpu->arch.hyperv_enabled &&
+>> +	       READ_ONCE(vcpu->arch.hyperv->suspended);
+>
+> I don't think READ_ONCE() means anything here, does it?
+>
+
+It does prevent compiler optimisations and is actually required[1]. Also
+it makes clear that this variable is shared, and may be accessed from
+remote CPUs.
+
+[1] https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0124r6.html#=
+Variable%20Access
+
+Nikolas
 
