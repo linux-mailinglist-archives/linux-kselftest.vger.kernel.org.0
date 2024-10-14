@@ -1,71 +1,71 @@
-Return-Path: <linux-kselftest+bounces-19678-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19679-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5D6099D9A5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 00:08:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A967299D9AA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 00:09:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6C5B1C213F5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 22:08:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 462DF1F236DF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 22:09:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC9271D31AF;
-	Mon, 14 Oct 2024 22:08:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADE381D220A;
+	Mon, 14 Oct 2024 22:09:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Il9SQWVh"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QCdeFQbJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D779143722
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 22:08:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 221B01474B7
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 22:09:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728943686; cv=none; b=To1MWRIn5Nq7FpX0V2Nywf1We7JH6kQoIoEdX+uW2nDMyoO4IEByQU+1jAZgvocMc+4OQiT/UV5GYAbTiRSlAMCtzlcf9C62dRr0g2JsurAISyA8LE9lFX7Ut7L9UC+PthLjrLQa9xrO1Vs4T6idp0SYwz3KZlNtGowYDb6l4Ew=
+	t=1728943759; cv=none; b=N1nNDWFDU7S8afURgVJT9bIfu1iCkBEN5RunodKs6hp7he4rPbbqzaiUHZa0mCZixtkt6WoEeK447arwxRZE6IFkOkgOOXdZY7Bu42OBlp+gr3u7ZSJgvQr84Vyovy9ufo9RCQuc48uXJWQMRrfexnyT5ulJLfn0O0k5bUGn6xM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728943686; c=relaxed/simple;
-	bh=fTKWSQXF0ypFNbAGzzmAXxs+vQUO0TtdrsoT5dchpDI=;
+	s=arc-20240116; t=1728943759; c=relaxed/simple;
+	bh=IoN2ym/fezho3R++5iArP0rzFinCh83Zm/Xd9RAA9RE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JgUElN54BgTdD/CY4VGYnW3Xd0EsDNoRypN8nef4Pu9jhslKNFINAN//XhNvwsG9WypKtwVjJXJf9E5M3k2XufqfP8GW8y1RuAUKyyUZdPslSJn0aOMbAZnm1E3RKD3SVQRGfhUzXxc221dUWp7Gm5iLF+y+2d+0IjGfi+PH0Yc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Il9SQWVh; arc=none smtp.client-ip=209.85.166.54
+	 In-Reply-To:Content-Type; b=NpNslL85aSAyiN3h5PDQWUcxdCGvkUaz4/BLuNrqvUZ8jW/vPAKhlYXFhiLNsGFGSNWSDm86yABHsmrkiqgS1iGSqfvTRdss1lUy5p9g6PvddUtGFnV26yuvLl53WYigGjh3kqKYSV24h19nk6RXpgNnTIbxSDMYMzrGFRPzU2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QCdeFQbJ; arc=none smtp.client-ip=209.85.166.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-8354cc1ab0cso171225239f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 15:08:03 -0700 (PDT)
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-8354b8df4c9so169083939f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 15:09:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1728943683; x=1729548483; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1728943757; x=1729548557; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6fZn3HVozUCHpAhBChYhgj2VZJQrei88clT/tksTBQE=;
-        b=Il9SQWVhQg/3nUHO+hFuKfjNm7gcAJYnnLurr+a+lunXBXJMbZDHZ4p2KIbkib1P0c
-         AqNw0XQdPPWUNB9TaTQqkmimHhfd39QsQb3vDi5Cy+ISaFC5etcTpx/29TXriJWvAtnC
-         DlFtvfBkJLXqXhs8WF0bCcxry9Ww7PS1L6zPY=
+        bh=V9dwyDNpcI2CKP85q7LmDN5/gxxFMH+zbq0M9yIwSLk=;
+        b=QCdeFQbJQ0viZRtqdGth/tNh0M54pM7BSwpVLgi63qwSfQzNKSzI1o+mWJonerKgK8
+         g1EqlumXLAjEdhIlCnuS3uMQJkduvxvX5aTUW5V4nhtmeLfxdbC21ejog9d9PvZspfQU
+         +so7A95+ajcqLPBSbApeXX/I8gd21naT3Cp04=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728943683; x=1729548483;
+        d=1e100.net; s=20230601; t=1728943757; x=1729548557;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6fZn3HVozUCHpAhBChYhgj2VZJQrei88clT/tksTBQE=;
-        b=D3Ds4NoxJ7Gp2i+92SD0eUy6uLvxst00QLCR/IkUGDObuQ+IgZtnCOw8BiNOgmZb2j
-         gzuFrSB6lTq+Il1aBNm0R6MJEgq+5HB9g9JJqtfSkJXaI3mOL+JvbRs86/ES52e7cIOZ
-         rgpLA4bHmonABMpvjwNUvYooKxMZKznE99WKpVQnWdMA+Y4+/CSwS9oUe+n5UYNK3wl4
-         bkxoKtNIbKgYMUk9D+WzWDZPDsZ9BVfLsMLsS1+YRukuuSSO6z4dhDXmGvR5/RytXbod
-         1ND1dUJZDJWcWBa2pX6yrIkFar0ichFr3zdW7DNE8awNEfRWeju4CEl2lypyErIWx59J
-         zKLA==
-X-Forwarded-Encrypted: i=1; AJvYcCXun6qxRuXH5zLe++/7u1IxjOaJSmejtG6lbtMoDbwQQHpUPkrtjoR+oDq2ZJGTlleFMEvVpCjl1lBMjz/imVs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwAJ902zxSMUl4iXLgU6V046gHyo2InMIU0546Q6+eNUS7vT95Q
-	ytnVJU6m4IKdLUIyKTqqfo7rEqulnNgNv++OguQ8pmtYfhI4CRXSh80ctoVv2aU=
-X-Google-Smtp-Source: AGHT+IEuDLbunmWHWlwlQRiIV3BbNDg9RT+R6jVm4OC3F9c7hmK3Ji+75kCKpzDyIE0dB4QOU+n1nw==
-X-Received: by 2002:a05:6602:6413:b0:835:359b:8a07 with SMTP id ca18e2360f4ac-837952203bdmr949334239f.16.1728943683193;
-        Mon, 14 Oct 2024 15:08:03 -0700 (PDT)
+        bh=V9dwyDNpcI2CKP85q7LmDN5/gxxFMH+zbq0M9yIwSLk=;
+        b=H3Qbz7Jp/Njs/VO631AIf/lZ0oQdXnle+XvTRwns7d/Td+Vh+XiQt9G4kKrx4FLFOH
+         mkSiMDO9untYV+jxwEUL1qyWCeQPP/7UweSOKsYQzd9vg6vutuym5yAeZDQvRVmOLRJ7
+         vWfgaEdrILL8yQXjpEaxwCp2zIWxoQv/WGLCziHIaDjMYxeN2pi0vYu1yIlqz9STsQuR
+         /x6HdiZ07whpTAYHWgbcDipda35biLvVtd/aMyhbny1+r+dk3bo1ZasOwu4udkwY0gPt
+         5lmHQCXW5Kogo9Ib6plzelCEyzRlEBGhuMXVhQYFF74TPGubbh2cgudKGRkaLvfJn2ny
+         gAng==
+X-Forwarded-Encrypted: i=1; AJvYcCXc66ohV5XzeAfPvYGW3COJixhFpn9PgOH9tGNoUMoywkUcALYS1G4zFh69RIMYIqroYkY4TXN7CYBY1bfd7U0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxd2we5XCeOkQ+Gx8dbchZ5Cc8UAwVt49qK6WezLKTqmBnp/cCF
+	dy1jtQ/HJBvRdcR+RXHBOIwAnUSDoGudGyLGG/HHvXWTz+Rl8lhTYUGxR0gsCrY=
+X-Google-Smtp-Source: AGHT+IFzjgPeJcnUWunnpkrcZpJhLGLQYeiI9hikhqjsBSfaiTa5/JLqQQ2w6k7ZaTiFxrdW7VGiUg==
+X-Received: by 2002:a05:6602:164a:b0:82c:fdc2:e25a with SMTP id ca18e2360f4ac-83a64bfd806mr926954639f.0.1728943757278;
+        Mon, 14 Oct 2024 15:09:17 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-83a8b2aa42asm446339f.21.2024.10.14.15.08.02
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dbec96340csm10151173.18.2024.10.14.15.09.16
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Oct 2024 15:08:02 -0700 (PDT)
-Message-ID: <606f8672-cd66-4828-99b9-2356c738acc2@linuxfoundation.org>
-Date: Mon, 14 Oct 2024 16:08:01 -0600
+        Mon, 14 Oct 2024 15:09:16 -0700 (PDT)
+Message-ID: <0cb46443-1f32-4fb2-90c4-6f9dc834601c@linuxfoundation.org>
+Date: Mon, 14 Oct 2024 16:09:16 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,64 +73,35 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: timers: Remove unneeded semicolon
+Subject: Re: [PATCH] selftests:timers: remove local CLOCKID defines
 To: John Stultz <jstultz@google.com>
-Cc: Chen Ni <nichen@iscas.ac.cn>, tglx@linutronix.de, sboyd@kernel.org,
- anna-maria@linutronix.de, frederic@kernel.org, shuah@kernel.org,
+Cc: tglx@linutronix.de, sboyd@kernel.org, shuah@kernel.org,
  linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  Shuah Khan <skhan@linuxfoundation.org>
-References: <20241010073707.4038081-1-nichen@iscas.ac.cn>
- <87492b3f-84d1-426f-ad71-7784a1c1dfc3@linuxfoundation.org>
- <CANDhNCr5X3gkSRR7cWZ13DDbepV3Nb1tQ5E3XuAaJx_5vZ=PCw@mail.gmail.com>
+References: <20241011225236.27677-1-skhan@linuxfoundation.org>
+ <CANDhNCo5q05xUgdXQaDfxUGbiKaV2mXmfttA-=oVrftBF0PERA@mail.gmail.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <CANDhNCr5X3gkSRR7cWZ13DDbepV3Nb1tQ5E3XuAaJx_5vZ=PCw@mail.gmail.com>
+In-Reply-To: <CANDhNCo5q05xUgdXQaDfxUGbiKaV2mXmfttA-=oVrftBF0PERA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 10/11/24 18:47, John Stultz wrote:
-> On Fri, Oct 11, 2024 at 4:00 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+On 10/11/24 18:49, John Stultz wrote:
+> On Fri, Oct 11, 2024 at 3:52 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
 >>
->> On 10/10/24 01:37, Chen Ni wrote:
->>> Remove unnecessary semicolons reported by Coccinelle/coccicheck and the
->>> semantic patch at scripts/coccinelle/misc/semicolon.cocci.
->>>
->>> Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
->>> ---
->>>    tools/testing/selftests/timers/set-timer-lat.c | 2 +-
->>>    1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/tools/testing/selftests/timers/set-timer-lat.c b/tools/testing/selftests/timers/set-timer-lat.c
->>> index 5365e9ae61c3..7a1a2382538c 100644
->>> --- a/tools/testing/selftests/timers/set-timer-lat.c
->>> +++ b/tools/testing/selftests/timers/set-timer-lat.c
->>> @@ -79,7 +79,7 @@ char *clockstring(int clockid)
->>>                return "CLOCK_BOOTTIME_ALARM";
->>>        case CLOCK_TAI:
->>>                return "CLOCK_TAI";
->>> -     };
->>> +     }
->>>        return "UNKNOWN_CLOCKID";
->>>    }
->>>
+>> timers tests defines CLOCKIDs locally. Remove all local CLOCKIDs except
+>> CLOCK_HWSPECIFIC and use defines from time.h header file.
 >>
->> Looks good to me.
+>> CLOCK_HWSPECIFIC and CLOCK_SGI_CYCLE are the same and CLOCK_SGI_CYCLE
+>> is deprecated,
 >>
->> John, I will apply this for next of you are okay with it.
+>> Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+> 
+> Thanks for doing this cleanup!
 > 
 > Acked-by: John Stultz <jstultz@google.com>
 
-Thank you. Applied linux-kselftest next for Linux 6.13-rc1.
-
-> 
->> Also I noticed clockstring() is defined in multiple tests.
->> Any thoughts on removing the duplicates and adding it to
->> a header file? This will add a dependency on another source
->> file, but might be good to remove the duplicate code.
-> 
-> Sure, no objections.
-
-Thanks. I will send patch in soon.
+Thank you. Applied to linux-kselftest next for Linux 6.13-rc1.
 
 thanks,
 -- Shuah
