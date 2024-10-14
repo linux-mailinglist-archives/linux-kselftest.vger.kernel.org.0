@@ -1,111 +1,125 @@
-Return-Path: <linux-kselftest+bounces-19667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19668-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E87499D556
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 19:10:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C78799D587
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 19:22:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8083284D93
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 17:10:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A46FD1C22F59
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 17:22:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4C7F1C3050;
-	Mon, 14 Oct 2024 17:10:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A8471B85E4;
+	Mon, 14 Oct 2024 17:22:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fZuGXBvf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QWyROY0a"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E071C3043;
-	Mon, 14 Oct 2024 17:10:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 999C929A0;
+	Mon, 14 Oct 2024 17:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728925831; cv=none; b=jAWd9hWdu+nD6kkA8y+sjdu/zLMQSigvN5DsKDKq/uft6j60j8yXz7sZB6qwNYOkoEjwrx+ZChQUJ1R6w9wj5bYVXSwT+MPyF2P/Ivm0FW4J7ln7boxI5EQEbwToxOZfSkIFTl0Lnk+vw+rRM0YTJlEWFxB2ueIyRWmBjLEGLPE=
+	t=1728926522; cv=none; b=JHWSQFHt94bKzCHjTIgmyioni7gYtyCHc8gsU3b0DK+SJ2FV8oxp+7x5LNmQzSt682MJeeSEWEVm8+ZD6CKxdWNkwCRHPPkAjMmVJGxNrc/7vGhNq5fu1lhWaao7LAw84iUOXMZx694iwKBvewdH4vmUDNm5pvp+IZ/dOmjF9eM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728925831; c=relaxed/simple;
-	bh=iLl0lXkXeALAMr5KDjF+8vkYFyZnHpji9UAQw4I8NLM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ld6kisKV+KGqo+BXNqB61tMsmjXeGDPFYFW++iBXJGaGHqBmXaeCxahyFbsrpuffq/4Y5z9C9m2BHzrUs9SdlCdXPS8ug5Fy1/zMqG3lTZObZjZ1hmJCXOQNkEH/VKBaauVZaAJ6rlQcvq1cJC7Iy8CcZp7IV0ejFD3XUuu8yp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fZuGXBvf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 932D4C4CEC3;
-	Mon, 14 Oct 2024 17:10:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728925831;
-	bh=iLl0lXkXeALAMr5KDjF+8vkYFyZnHpji9UAQw4I8NLM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fZuGXBvfqai+/3NsOa9W9cD3IlOY9aT3U0WbINyOpuWErGCK6ZB6IOUBzMOrcOcny
-	 pu72RD2Q/eOijBUJKudsa5AgJol2pWXeoLojf4MNniYLbSJgH2kEtVhDGVb6Gm14Df
-	 9EGatG41Z1BUkjfjmG1t0dtC3E9OVP/UsR4ZXtN7/cC9OYFti03Mmwc+YQYgMcx9FF
-	 id1TyF5286pt2Y3czQbj/ZxkcUQEN2KJW1lxao1NLV3WYoMqD/KKpW+g9w8uWA2Aqn
-	 /L7Px0nG8PKBofrF7r6MreT7d1B0i8Jz1iBY6w6RO2ZAzUeeOvYCehz+aQLkdHLfpI
-	 KopOxy2RDs1Dw==
-Date: Mon, 14 Oct 2024 18:10:23 +0100
-From: Will Deacon <will@kernel.org>
-To: Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: Joey Gouly <joey.gouly@arm.com>, linux-arm-kernel@lists.infradead.org,
-	nd@arm.com, akpm@linux-foundation.org, aneesh.kumar@kernel.org,
-	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
-	broonie@kernel.org, catalin.marinas@arm.com,
-	christophe.leroy@csgroup.eu, dave.hansen@linux.intel.com,
-	hpa@zytor.com, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
-	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
-	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
-	szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 19/30] arm64: add POE signal support
-Message-ID: <20241014171023.GA18295@willie-the-truck>
-References: <20240822151113.1479789-1-joey.gouly@arm.com>
- <20240822151113.1479789-20-joey.gouly@arm.com>
- <47e1537f-5b60-4541-aed1-a20e804c137d@arm.com>
- <20241009144301.GA12453@willie-the-truck>
+	s=arc-20240116; t=1728926522; c=relaxed/simple;
+	bh=A0wIU0wbss796ESeJ1cO2gBHEngRLWGWi73Dp+fHP3g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cjP0mzlVtpNAqwHJuARcsOpC1ctwcje31nq3iDEPtQqFMN1P8bM8ljBbFMlBUVtr035EBGvRmiBu1hxrO/9/Nsher9OJPYTZ3+CshB5RPpGpUOnoDX6W787plBYk+nsDAiz/z3O1VA0BaW9ZgPSqvPL9yMZyzvwqwNwtmazHWSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QWyROY0a; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-539e63c8678so2102120e87.0;
+        Mon, 14 Oct 2024 10:22:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1728926519; x=1729531319; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ojk1sFGNt5wipYN0VKoCuCaWbOyLE0HFi3RwNF3zwiE=;
+        b=QWyROY0apnSPtIr88kRbPveXLjbcV6FnUZ1hW5rQEcNTbl10x97gjjWP+0jR29H62m
+         AhmIgSYQtZmxzDZKfRbH9321UtM5Q3uxPgEhDr0B2xuilUmk/aVpSUsKdXTxrEYnPs4i
+         3lZLC8Jq0ryX/a0McbLkYfjGYsNRBaE+ZCOVnuxnHnFmbgEdTS+OTDq3NznEI/PD1BPC
+         4ExlE7DHTJ2Y2l9xT516hHNGD6nYz5z8ltKVE1IM+641iUfIiZYG0UcqpyYGPuyC7nhd
+         xBSjm/ZTJJFDlu7Fc5KXcM9H3pDOR06JeNK1wDsaP6oQGUJN1CeBhAfUoZwETA53wLuT
+         WOiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728926519; x=1729531319;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ojk1sFGNt5wipYN0VKoCuCaWbOyLE0HFi3RwNF3zwiE=;
+        b=G/IKJruSDEZqoHaqVVEjXr6whmwCT5qIpSHSi+aJUDrBpb3lrLJ0Jt0wCGXZDV4SID
+         nr5/5yQC1l+LBLrI5tgSzt4Gc+0pAEKNXFEQllzg2MaHkb/hRTPzfJEj9ZII1IVSegKo
+         RHViOR4Unl/MJn+ykDsVFTpXBsndxNYNI7NZeze1y6Vh8sldRtdma/NkerLuW8nRpK49
+         MW0OXeM1FWPdKUq87Tbo+6sRM4Pg9xZS1nFTr90XDmLCYjLxK1NcDpo6cQTwExCFzL8f
+         sXM7QEUSuvYoFfbUJR2hzoocmMeQOfrjeAyEGs/oVQbg4eZ1sos+4fFAg3iYCPPUasIg
+         cgGg==
+X-Forwarded-Encrypted: i=1; AJvYcCUxNN1btRD4AEt9yp0zzxZWApLlLWBrC/otHTJ7lls6+tFh7/ojWlogeDuPth+TTgWpeNhD14GYIKJLxdOPxmdH@vger.kernel.org, AJvYcCXzIkCs/dgDOQC88vjI3NeuwuOzPVtGnCaK6qChMdBfAmJi81qBI9q68J0xP2vQZMBp0DoMHj/OJE87Lf0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy14EZXTePQCcabcJy+EgMmuNt8Bva898ic5PZMt3a6jJef1JPB
+	MUT6pxRliFn6uAmIdRk/Nv5tIx5MHumkIpb5fQR469dTIF+KuE+G
+X-Google-Smtp-Source: AGHT+IFMn9I47i07y9r52ikhp/svSnkYkY9XEbiUj9WO5bhzbbK+iw6V4uI7gkdixzlRKu6j/+y9Bg==
+X-Received: by 2002:a05:6512:3b26:b0:539:8a9a:4e63 with SMTP id 2adb3069b0e04-539e571ce0emr4181110e87.42.1728926518334;
+        Mon, 14 Oct 2024 10:21:58 -0700 (PDT)
+Received: from alessandro-pc.station (net-2-44-97-22.cust.vodafonedsl.it. [2.44.97.22])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-37d4b6cfa60sm11877859f8f.61.2024.10.14.10.21.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Oct 2024 10:21:57 -0700 (PDT)
+From: Alessandro Zanni <alessandro.zanni87@gmail.com>
+To: shuah@kernel.org
+Cc: Alessandro Zanni <alessandro.zanni87@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	skhan@linuxfoundation.org,
+	anupnewsmail@gmail.com
+Subject: [PATCH v2] selftests/intel_pstate: fix operand expected
+Date: Mon, 14 Oct 2024 19:21:47 +0200
+Message-ID: <20241014172149.324639-1-alessandro.zanni87@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241009144301.GA12453@willie-the-truck>
-User-Agent: Mutt/1.10.1 (2018-07-13)
+Content-Transfer-Encoding: 8bit
 
-Kevin, Joey,
+This fix solves theses errors, when calling kselftest with
+targets "intel_pstate":
 
-On Wed, Oct 09, 2024 at 03:43:01PM +0100, Will Deacon wrote:
-> On Tue, Sep 24, 2024 at 01:27:58PM +0200, Kevin Brodsky wrote:
-> > On 22/08/2024 17:11, Joey Gouly wrote:
-> > > @@ -1178,6 +1237,9 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
-> > >  		sme_smstop();
-> > >  	}
-> > >  
-> > > +	if (system_supports_poe())
-> > > +		write_sysreg_s(POR_EL0_INIT, SYS_POR_EL0);
-> > 
-> > At the point where setup_return() is called, the signal frame has
-> > already been written to the user stack. In other words, we write to the
-> > user stack first, and then reset POR_EL0. This may be problematic,
-> > especially if we are using the alternate signal stack, which the
-> > interrupted POR_EL0 may not grant access to. In that situation uaccess
-> > will fail and we'll end up with a SIGSEGV.
-> > 
-> > This issue has already been discussed on the x86 side, and as it happens
-> > patches to reset PKRU early [1] have just landed. I don't think this is
-> > a blocker for getting this series landed, but we should try and align
-> > with x86. If there's no objection, I'm planning to work on a counterpart
-> > to the x86 series (resetting POR_EL0 early during signal delivery).
-> 
-> Did you get a chance to work on that? It would be great to land the
-> fixes for 6.12, if possible, so that the first kernel release with POE
-> support doesn't land with known issues.
+./run.sh: line 90: / 1000: syntax error: operand expected (error token is "/ 1000")
 
-Looking a little more at this, I think we have quite a weird behaviour
-on arm64 as it stands. It looks like we rely on the signal frame to hold
-the original POR_EL0 so, if for some reason we fail to allocate space
-for the POR context, I think we'll return back from the signal with
-POR_EL0_INIT. That seems bad?
+./run.sh: line 92: / 1000: syntax error: operand expected (error token is "/ 1000")
 
-Will
+To error was found by running tests manually with the command:
+make kselftest TARGETS=intel_pstate
+
+Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
+---
+
+Notes:
+    v2: removed debug echos
+
+ tools/testing/selftests/intel_pstate/run.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
+index e7008f614ad7..0c1b6c1308a4 100755
+--- a/tools/testing/selftests/intel_pstate/run.sh
++++ b/tools/testing/selftests/intel_pstate/run.sh
+@@ -87,9 +87,9 @@ mkt_freq=${_mkt_freq}0
+ 
+ # Get the ranges from cpupower
+ _min_freq=$(cpupower frequency-info -l | tail -1 | awk ' { print $1 } ')
+-min_freq=$(($_min_freq / 1000))
++min_freq=$((_min_freq / 1000))
+ _max_freq=$(cpupower frequency-info -l | tail -1 | awk ' { print $2 } ')
+-max_freq=$(($_max_freq / 1000))
++max_freq=$((_max_freq / 1000))
+ 
+ 
+ [ $EVALUATE_ONLY -eq 0 ] && for freq in `seq $max_freq -100 $min_freq`
+-- 
+2.43.0
+
 
