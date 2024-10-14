@@ -1,174 +1,137 @@
-Return-Path: <linux-kselftest+bounces-19677-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19678-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47FA799D9A1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 00:07:23 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5D6099D9A5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 00:08:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2FD0283250
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 22:07:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6C5B1C213F5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 22:08:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C77121D173E;
-	Mon, 14 Oct 2024 22:07:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC9271D31AF;
+	Mon, 14 Oct 2024 22:08:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SqWS0yis"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Il9SQWVh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482B813BC02;
-	Mon, 14 Oct 2024 22:07:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D779143722
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 22:08:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728943638; cv=none; b=mPJNlY4SnVKuzxWcUz4rlmfmAOTFMEiNUdjYE0YCuX1QFsnxykIwcmC3BmosipDCsaT/L3jDSzhPBLSnS1Wl25gHhE0N0mVlIBzagTK/IWESThnOwi93w4oFpquMKR3DHLdsih+2rMjlZPJ+SeCEVzh87MYIClryHK4130kTaIE=
+	t=1728943686; cv=none; b=To1MWRIn5Nq7FpX0V2Nywf1We7JH6kQoIoEdX+uW2nDMyoO4IEByQU+1jAZgvocMc+4OQiT/UV5GYAbTiRSlAMCtzlcf9C62dRr0g2JsurAISyA8LE9lFX7Ut7L9UC+PthLjrLQa9xrO1Vs4T6idp0SYwz3KZlNtGowYDb6l4Ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728943638; c=relaxed/simple;
-	bh=BXoqDheXy+2BwaKLV2FiDxisztcZ2Mr3gf7y1y0b2KY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SLi48oCQSrVv6knRh2wPZOZpU34wA8BQ4g0S1uBjZQtNsEZSnLYdZsJQPyOUrgYZTHsR3VZ+qUn8pGwipn323eK+TZUTsmUAkb4oU0zY3w67KznF50SYAr2iCKiRrKl9qHRGJxI5s7OpFlrizQwtpoD1lxr4cVPmtIl1xYeeC10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SqWS0yis; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2e2c6bc4840so3348757a91.2;
-        Mon, 14 Oct 2024 15:07:17 -0700 (PDT)
+	s=arc-20240116; t=1728943686; c=relaxed/simple;
+	bh=fTKWSQXF0ypFNbAGzzmAXxs+vQUO0TtdrsoT5dchpDI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JgUElN54BgTdD/CY4VGYnW3Xd0EsDNoRypN8nef4Pu9jhslKNFINAN//XhNvwsG9WypKtwVjJXJf9E5M3k2XufqfP8GW8y1RuAUKyyUZdPslSJn0aOMbAZnm1E3RKD3SVQRGfhUzXxc221dUWp7Gm5iLF+y+2d+0IjGfi+PH0Yc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Il9SQWVh; arc=none smtp.client-ip=209.85.166.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-8354cc1ab0cso171225239f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 15:08:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1728943636; x=1729548436; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=i8w6ffEpFO7SbSBhrFi9OhNa1QYyGwUObySt3ab3Ei0=;
-        b=SqWS0yis6JOBAhGq0V09lH4aqQ95YS0FHD49MBz8KPP/H7x8Zxtx9IkhzfoCS5LLRz
-         x5tiW1K2DEqzMsKbMqLUkX/ZIGQ0+TS5JGsvD6CpFHfsN76FrqU5xNtFhdxkbzuhiVQT
-         BjWeQH5IcAzx5mwG5M71nHbZJK2Cl55zeKvtTX+o2v7Zx5FIlgjfWbyKVUw81xgMi3DO
-         t2cMj5huQzwdg3o18D4oPuaUPC1dN9XNkcF3PP++WYAtzl3ZSA+vIvW322VgQSKlqyWu
-         xKtr3caSJsLrGxYV02oO60lVbUczUR6FAq/4InapBB8vR2j0B6pFpW5jRj911ybpVZOB
-         SqQg==
+        d=linuxfoundation.org; s=google; t=1728943683; x=1729548483; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6fZn3HVozUCHpAhBChYhgj2VZJQrei88clT/tksTBQE=;
+        b=Il9SQWVhQg/3nUHO+hFuKfjNm7gcAJYnnLurr+a+lunXBXJMbZDHZ4p2KIbkib1P0c
+         AqNw0XQdPPWUNB9TaTQqkmimHhfd39QsQb3vDi5Cy+ISaFC5etcTpx/29TXriJWvAtnC
+         DlFtvfBkJLXqXhs8WF0bCcxry9Ww7PS1L6zPY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728943636; x=1729548436;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=i8w6ffEpFO7SbSBhrFi9OhNa1QYyGwUObySt3ab3Ei0=;
-        b=ra7IvIheto1XwAK6Ql1hK0cT4RdpIrXX8n4Pf79kYGSPtrztRcSdHywlIplJjGDJcW
-         ByopkY/GIgg2aIzGb916+N9XF4W8wLJx78I5B+G2H2n0VpRGZGaTNeuGPqDNMvaiU0Ll
-         8tUmQkt/Tz/1VVx3kzqKOdGEQ8+HGl/mktknr61KwAeEFBlanHUQys1BVVMazwDz2qnd
-         Jlr8gBC0W6iT7CrA+7AoBREJ2dBfkGfGPfV0iprlxJpeYqAujmmyLxIEesmd/RgzYC+K
-         bLe3AMW1d2i36Cv5ziZVk+P9vlsUhg//wAIiSsKDFnJ+oaa/sX58Ehkyst6QbhPwxcD1
-         g94Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVnucGWM+BVtgWcdHyZtoRlm/zAvaYA5Hs/MUTx6Agc54R55L+gcRHH+2KdH3Z4AfiucBRYQl3Tv3ZfMJg=@vger.kernel.org, AJvYcCWxEMqZQkv5ptmm3DONIavVSyJYO6t6ZOPBK64nrLe/cWoL8w5Il5W1C6u8E8MYfK4+OazvKQJsBecZY6//RLTU@vger.kernel.org, AJvYcCXN5CQJ0yDhxAJXrOWeTYloSlhsVCBENQrGjfNg4d4w6jbrQGf41fSJPS0SaMZGhMi+Je6LQdyJ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5+qA6/aAgr4pX/jnvNKhtKC4DbA1zeYxbC7uV1C6fKToRf+AS
-	Uy5+NYS/Dq/U+4dyLfkOH6BlxvOik3gT/C1dkX7jXVu4RjMisqPcOEvzn3U0QBV/03PQDJuYMkf
-	I/PFU5GB+QIGZ3Cel2dd7juqBD8Q=
-X-Google-Smtp-Source: AGHT+IHkyDEUmmGGnyUt7sO+5LG4pdrQyOuHncFHLBQRb0Zc7Ja7f7NQho3LtKeKQZKMj2cJZacYqB1cIXzt/cm2gMw=
-X-Received: by 2002:a17:90a:a00f:b0:2e2:92fe:35d5 with SMTP id
- 98e67ed59e1d1-2e315356673mr12536398a91.31.1728943636516; Mon, 14 Oct 2024
- 15:07:16 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1728943683; x=1729548483;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6fZn3HVozUCHpAhBChYhgj2VZJQrei88clT/tksTBQE=;
+        b=D3Ds4NoxJ7Gp2i+92SD0eUy6uLvxst00QLCR/IkUGDObuQ+IgZtnCOw8BiNOgmZb2j
+         gzuFrSB6lTq+Il1aBNm0R6MJEgq+5HB9g9JJqtfSkJXaI3mOL+JvbRs86/ES52e7cIOZ
+         rgpLA4bHmonABMpvjwNUvYooKxMZKznE99WKpVQnWdMA+Y4+/CSwS9oUe+n5UYNK3wl4
+         bkxoKtNIbKgYMUk9D+WzWDZPDsZ9BVfLsMLsS1+YRukuuSSO6z4dhDXmGvR5/RytXbod
+         1ND1dUJZDJWcWBa2pX6yrIkFar0ichFr3zdW7DNE8awNEfRWeju4CEl2lypyErIWx59J
+         zKLA==
+X-Forwarded-Encrypted: i=1; AJvYcCXun6qxRuXH5zLe++/7u1IxjOaJSmejtG6lbtMoDbwQQHpUPkrtjoR+oDq2ZJGTlleFMEvVpCjl1lBMjz/imVs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAJ902zxSMUl4iXLgU6V046gHyo2InMIU0546Q6+eNUS7vT95Q
+	ytnVJU6m4IKdLUIyKTqqfo7rEqulnNgNv++OguQ8pmtYfhI4CRXSh80ctoVv2aU=
+X-Google-Smtp-Source: AGHT+IEuDLbunmWHWlwlQRiIV3BbNDg9RT+R6jVm4OC3F9c7hmK3Ji+75kCKpzDyIE0dB4QOU+n1nw==
+X-Received: by 2002:a05:6602:6413:b0:835:359b:8a07 with SMTP id ca18e2360f4ac-837952203bdmr949334239f.16.1728943683193;
+        Mon, 14 Oct 2024 15:08:03 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-83a8b2aa42asm446339f.21.2024.10.14.15.08.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 14 Oct 2024 15:08:02 -0700 (PDT)
+Message-ID: <606f8672-cd66-4828-99b9-2356c738acc2@linuxfoundation.org>
+Date: Mon, 14 Oct 2024 16:08:01 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241014213313.15100-1-leocstone@gmail.com>
-In-Reply-To: <20241014213313.15100-1-leocstone@gmail.com>
-From: Dmitry Safonov <0x7f454c46@gmail.com>
-Date: Mon, 14 Oct 2024 23:07:04 +0100
-Message-ID: <CAJwJo6anjg4rBDLhgHL+vVtQ0FTWvK089p3D_xNNmcDTrXRL+w@mail.gmail.com>
-Subject: Re: [RFC PATCH] selftest/tcp-ao: Add filter tests
-To: Leo Stone <leocstone@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, shuah@kernel.org, rdunlap@infradead.org, 
-	mnassiri@ciena.com, jiapeng.chong@linux.alibaba.com, colin.i.king@gmail.com, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, anupnewsmail@gmail.com, 
-	linux-kernel-mentees@lists.linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: timers: Remove unneeded semicolon
+To: John Stultz <jstultz@google.com>
+Cc: Chen Ni <nichen@iscas.ac.cn>, tglx@linutronix.de, sboyd@kernel.org,
+ anna-maria@linutronix.de, frederic@kernel.org, shuah@kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241010073707.4038081-1-nichen@iscas.ac.cn>
+ <87492b3f-84d1-426f-ad71-7784a1c1dfc3@linuxfoundation.org>
+ <CANDhNCr5X3gkSRR7cWZ13DDbepV3Nb1tQ5E3XuAaJx_5vZ=PCw@mail.gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <CANDhNCr5X3gkSRR7cWZ13DDbepV3Nb1tQ5E3XuAaJx_5vZ=PCw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Leo,
+On 10/11/24 18:47, John Stultz wrote:
+> On Fri, Oct 11, 2024 at 4:00 PM Shuah Khan <skhan@linuxfoundation.org> wrote:
+>>
+>> On 10/10/24 01:37, Chen Ni wrote:
+>>> Remove unnecessary semicolons reported by Coccinelle/coccicheck and the
+>>> semantic patch at scripts/coccinelle/misc/semicolon.cocci.
+>>>
+>>> Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
+>>> ---
+>>>    tools/testing/selftests/timers/set-timer-lat.c | 2 +-
+>>>    1 file changed, 1 insertion(+), 1 deletion(-)
+>>>
+>>> diff --git a/tools/testing/selftests/timers/set-timer-lat.c b/tools/testing/selftests/timers/set-timer-lat.c
+>>> index 5365e9ae61c3..7a1a2382538c 100644
+>>> --- a/tools/testing/selftests/timers/set-timer-lat.c
+>>> +++ b/tools/testing/selftests/timers/set-timer-lat.c
+>>> @@ -79,7 +79,7 @@ char *clockstring(int clockid)
+>>>                return "CLOCK_BOOTTIME_ALARM";
+>>>        case CLOCK_TAI:
+>>>                return "CLOCK_TAI";
+>>> -     };
+>>> +     }
+>>>        return "UNKNOWN_CLOCKID";
+>>>    }
+>>>
+>>
+>> Looks good to me.
+>>
+>> John, I will apply this for next of you are okay with it.
+> 
+> Acked-by: John Stultz <jstultz@google.com>
 
-On Mon, 14 Oct 2024 at 22:37, Leo Stone <leocstone@gmail.com> wrote:
->
-> Add tests that check if getsockopt(TCP_AO_GET_KEYS) returns the right
-> keys when using different filters.
->
-> Sample output:
->
-> > # ok 114 filter keys: by sndid, rcvid, address
-> > # ok 115 filter keys: by sndid, rcvid
-> > # ok 116 filter keys: by is_current
-> > # ok 117 filter keys: by is_rnext
->
-> Signed-off-by: Leo Stone <leocstone@gmail.com>
-> ---
-> This patch is meant to address the TODO in setsockopt-closed.c:
-> > /*
-> >  * TODO: check getsockopt(TCP_AO_GET_KEYS) with different filters
-> >  * returning proper nr & keys;
-> >  */
->
-> Is this a reasonable way to do these tests? If so, what cases should I
-> add?
+Thank you. Applied linux-kselftest next for Linux 6.13-rc1.
 
-Your change does look reasonable to me.
-I think you could add one more test here for passing
-(FILTER_TEST_NKEYS/2) to getsockopt() as tcp_ao_getsockopt::nkeys with
-get_all = 1, and check that the value in tcp_ao_getsockopt::nkeys
-after getsockopt() reflects the number of matched keys
-(FILTER_TEST_NKEYS).
+> 
+>> Also I noticed clockstring() is defined in multiple tests.
+>> Any thoughts on removing the duplicates and adding it to
+>> a header file? This will add a dependency on another source
+>> file, but might be good to remove the duplicate code.
+> 
+> Sure, no objections.
 
-See also minor nits inline.
+Thanks. I will send patch in soon.
 
-[..]
-> +static void filter_keys_checked(int sk, struct tcp_ao_getsockopt *filter,
-> +                               struct tcp_ao_getsockopt *expected,
-> +                               unsigned int nexpected, const char *tst)
-> +{
-> +       struct tcp_ao_getsockopt all_keys[FILTER_TEST_NKEYS] = {};
-> +       struct tcp_ao_getsockopt filtered_keys[FILTER_TEST_NKEYS] = {};
-> +       socklen_t len = sizeof(struct tcp_ao_getsockopt);
-> +
-> +       fetch_all_keys(sk, all_keys);
-> +       memcpy(&filtered_keys[0], filter, sizeof(struct tcp_ao_getsockopt));
-> +       filtered_keys[0].nkeys = FILTER_TEST_NKEYS;
-> +       if (getsockopt(sk, IPPROTO_TCP, TCP_AO_GET_KEYS, filtered_keys, &len))
-> +               test_error("getsockopt");
-
-I think the following two checks would be better s/test_error/test_fail/.
-The difference between _error() and _fail() is that for the later
-exit() is not called, which allows the person running the test to
-gather all "not okay" cases.
-So, in tcp_ao selftests I used _error() only for failures where
-nothing meaningful could be done afterwards, i.e. memory allocation or
-socket() creation.
-
-> +       if (filtered_keys[0].nkeys != nexpected)
-> +               test_error("wrong nr of keys, expected %u got %u", nexpected,
-> +                          filtered_keys[0].nkeys);
-> +       if (compare_mkts(expected, nexpected, filtered_keys, filtered_keys[0].nkeys))
-> +               test_error("got wrong keys back");
-
-^ in those two it seems to be better to do
-: test_fail("...")
-: goto out_close;
-
-which would allow to go through other "filter" and "duplicate"
-selftests even if one of the "filter" tests has failed.
-
-[..]
->  static void *client_fn(void *arg)
->  {
->         if (inet_pton(TEST_FAMILY, __TEST_CLIENT_IP(2), &tcp_md5_client) != 1)
->                 test_error("Can't convert ip address");
->         extend_tests();
->         einval_tests();
-> +       filter_tests();
->         duplicate_tests();
->         /*
->          * TODO: check getsockopt(TCP_AO_GET_KEYS) with different filters
-
-^ please, remove the related TODO comment, I think you just fixed it :-)
-
-Thank you for the patch,
-             Dmitry
+thanks,
+-- Shuah
 
