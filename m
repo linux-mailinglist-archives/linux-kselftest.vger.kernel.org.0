@@ -1,269 +1,227 @@
-Return-Path: <linux-kselftest+bounces-19670-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19671-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0498799D60D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 20:03:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FC8F99D638
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 20:15:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C69A28304E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 18:03:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BFBF01C21B19
+	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 18:15:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09BAB1C6F5F;
-	Mon, 14 Oct 2024 18:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 247911C9EBF;
+	Mon, 14 Oct 2024 18:15:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=nik.wipper@gmx.de header.b="IlA7C4ga"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YH7gdCz0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872671AB517;
-	Mon, 14 Oct 2024 18:02:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA3B11C8774
+	for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 18:15:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728928990; cv=none; b=kJUFn5M1BS4h8dWfi5y5XFpbyZv+8+TOdzFqw9M+wwpMAoV/IBEkMLgu+avZL81O+oF4gdb05/S3Q6kr8e46+V6NtSz2J5q+T4agVuqH51RTVQpwYXkLHqoSiSwkE98YqnwD4yBphi8IZVUc5g0XFgQZOywXOm45Rto3YLMfv/U=
+	t=1728929710; cv=none; b=UWMTfB9e9AwnA90m2gQw6RpbNxYKt3MqaEhxYu+jxSluibgwBV9MnZw4gMW/9tXD5L8W6jHoySrQj5dDAPdI5gFw/duARVXgentWU466fPFFMM4rYOeXLixb+NbolXDANeWqADpYv0P7YtNfQrpNmQYdY8Sq2aSBIEfZ0/Vp3pU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728928990; c=relaxed/simple;
-	bh=W8aMkgAZ+Y5ONq7bdlcIziDRwufOGxXYLU6KucxkSdk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cSooSUNVPWd8LncTfgMmXD8i9E24BRWAI2LKX5gGncWHDqwiSC5JuOlRURgfscYi7oH0o6ZSI/D7noQqYoTqyWugHZkJpCo1x1G+tkKlB++dLDZMfLL8NDeBhBJ2ethlMEtU9KsskIBFhIkBL0f3fqqdLY3r/34yonBstnPLI10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=nik.wipper@gmx.de header.b=IlA7C4ga; arc=none smtp.client-ip=212.227.15.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1728928941; x=1729533741; i=nik.wipper@gmx.de;
-	bh=U0SYz3/j59gLOPkk3ixXiF+VnTvfXVwcR8ulqTsSA3c=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=IlA7C4gaOZ13fVjR6zhXguXmC3ALqk28LnpQVCWF17BvCAiJktxl+EVZZwxhBZ8g
-	 AaQtFpfQxdL7/GpZ2ZciM9XLCxJ0ckwp6vtIxleM3IxGRlI1wY+K2WZzZJMdIByRY
-	 r0iz2AVtnNfi76rXnTTmpFT2boYSdnShQAa3u1oKvKIoHxsqk6Et884JKcGZ0CMf6
-	 ZbTqhx15httRI/N7epR9rGeHQBwzVoS0s/6PZk70rZiV0BpxeHZS08rQXkgilkvtO
-	 DFXBwDQRyh0imVExXcIQGu4+Ffv2b3WhE0/y1ciLcjrWfS7MqYq8X+0ODy+RovBu3
-	 rf6n9M5vVDpvJAyuKg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.178.21] ([31.17.149.238]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MFbRs-1tAreF1Dji-00DZ1v; Mon, 14
- Oct 2024 20:02:21 +0200
-Message-ID: <a5ed763f-beba-43e9-8846-0d140f030b94@gmx.de>
-Date: Mon, 14 Oct 2024 20:02:19 +0200
+	s=arc-20240116; t=1728929710; c=relaxed/simple;
+	bh=psGXUzJuH/L2z1/iTd15xLLLmgcDkiy//BOohqm6suo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QBaRrOtsXMqo3rhyMzwFi10Bbu4ayjCGDjHUFy9DxfKkWvBpliC+E6Ckm1BUTHHA2ZK8xYHV/773rLs4V7KqJcgpBvDiM9Rp9AfudjLbdE6Ya+Z1yfr+dogFt4unm1ICgwalNsm/yoJ4EbI1pfHazyRyZzmj/5CLz8bAxbgJDYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YH7gdCz0; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5c932b47552so25431a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 11:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1728929705; x=1729534505; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mNEJX4kqr9odUybTaFkTf23XVWJozLbeDB372EuR6j4=;
+        b=YH7gdCz0u4YI7kKWrwOV7823Ry8mfVTaUBgfPXEYBaTHPRQVL4alo8053TNv7BmVcI
+         O/ZhyIYjT4oh0Z8SEpTUgW/RikaUwDAmlJbt39BpAypJ4Ac5lzEtEdKf7H4e9aXEoLoo
+         xSPNnR5rK27S2rV86xpMuay0ksO6lHTdMM1qXQ3B8I3gpc3pfbKwHfTQ7LLLGdGGRQ+M
+         m3tjbAOTqBBSSWZk7WSddcJ+ZpLXT7GzleWVLp93/OtO4jNzr0cYvHH9jtKaM2oTUNZO
+         t4cUK2w5vTPHg4bm8oOypZIf3QV9IASfaoWuZB8D6AKOp93KCXidIUGsi9R5J9uInIof
+         eBDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728929705; x=1729534505;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mNEJX4kqr9odUybTaFkTf23XVWJozLbeDB372EuR6j4=;
+        b=W6acSyiJRINvlTH9ESI+UfO2ViPR53+F+TDgU7fe7idBvDBhf/25mq6QovDRNqSNL2
+         lbVtcInPWTex1HY3NmkpGhgCg69lCRIxsfwhHGNDnundG//kwo2VNFz35Uy88I7yT8fv
+         G084YCKr++NCyHmWGFS4mbt/yT/JznjT081im06qjjEEUx9c9TxLbWE+fRbqxlUW1q9S
+         iicne9WqsbxskDMJ09ALKq6CsuFzwYgDbjb2563DSKJJHh1rt7uIKdKNVjazACPaYyBs
+         V9TNhE3QLxDM8lbJcy7nf2lvBz+TVkKqXqTd/LW+f8OXpmI/IqwZBuPibwePSl/1TS1k
+         3bfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUcTw+SZ0VSSjnoPicZhq8Gq2XvJEW+2ZHg3nmATG4zfDVsfIVP4iesN8YP+qi8FSmOcGWZWQxdwHaUBtfLpEM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0sxcSHOWNASc74fOJn+AzJkHRkLEMdJnDjfRNrAOVyjOcXIeJ
+	OFWu7WZ15FLWWDMCjl3eYd4sXIu6d83OTG1sFPxcNZM+koVNNKfS/0om4d7uHiZTnmQIwupnULr
+	v2q9sm4o9y70kQhjXI5KczTMYEoNwfb8PokOp
+X-Google-Smtp-Source: AGHT+IEbkDzR+ThZoGvgYtCS7Y5gwEV3PkXHeMMP5MKP0m0Oi8H/8Bb2XOPnZQdihqJsksuw7ZM7VJ44A8HdzyHg+Ps=
+X-Received: by 2002:a05:6402:26c1:b0:5c2:5641:af79 with SMTP id
+ 4fb4d7f45d1cf-5c95b0bd39amr402722a12.0.1728929704710; Mon, 14 Oct 2024
+ 11:15:04 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/7] KVM: x86: Implement KVM_HYPERV_SET_TLB_FLUSH_INHIBIT
-To: Vitaly Kuznetsov <vkuznets@redhat.com>, Nikolas Wipper <nikwip@amazon.de>
-Cc: Nicolas Saenz Julienne <nsaenz@amazon.com>,
- Alexander Graf <graf@amazon.de>, James Gowans <jgowans@amazon.com>,
- nh-open-source@amazon.com, Sean Christopherson <seanjc@google.com>,
- Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, x86@kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20241004140810.34231-1-nikwip@amazon.de>
- <20241004140810.34231-6-nikwip@amazon.de> <878quwgwsh.fsf@redhat.com>
-Content-Language: en-US
-From: Nikolas Wipper <nik.wipper@gmx.de>
-In-Reply-To: <878quwgwsh.fsf@redhat.com>
-Content-Type: text/plain; charset=UTF-8
+References: <cover.1727440966.git.lorenzo.stoakes@oracle.com>
+ <a578ee9bb656234d3a19bf9e97c3012378d31a19.1727440966.git.lorenzo.stoakes@oracle.com>
+ <CAG48ez3ursoL-f=mYpV79Do18XPPt+MPPHNUBv6uFE1GhpOwSA@mail.gmail.com>
+ <868739d2-0869-462f-ac86-1a8d1dccb0a4@lucifer.local> <CAG48ez3vqbqyWb4bLdpqSUnhwqGo2OQetecNhEGPdCGDr94nbQ@mail.gmail.com>
+ <b483187b-5caa-4581-86b1-895184301cbb@lucifer.local>
+In-Reply-To: <b483187b-5caa-4581-86b1-895184301cbb@lucifer.local>
+From: Jann Horn <jannh@google.com>
+Date: Mon, 14 Oct 2024 20:14:26 +0200
+Message-ID: <CAG48ez0pCasCQ_=ALog7nseKnGci0o0LyQehV42J==gNAiXBVg@mail.gmail.com>
+Subject: Re: [RFC PATCH 3/4] mm: madvise: implement lightweight guard page mechanism
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Suren Baghdasaryan <surenb@google.com>, 
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Matthew Wilcox <willy@infradead.org>, 
+	Vlastimil Babka <vbabka@suse.cz>, "Paul E . McKenney" <paulmck@kernel.org>, 
+	David Hildenbrand <david@redhat.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	Muchun Song <muchun.song@linux.dev>, Richard Henderson <richard.henderson@linaro.org>, 
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>, Matt Turner <mattst88@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>, 
+	linux-alpha@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linux-arch@vger.kernel.org, 
+	Shuah Khan <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, linux-kselftest@vger.kernel.org, 
+	Sidhartha Kumar <sidhartha.kumar@oracle.com>, Vlastimil Babka <vbabka@suze.cz>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:s60EtNloQQs3KKmPfO5whu58P07Anq3AbqgtpcdlipizmYtJa0L
- gT0TvXEMaOvz2S4B4o+RjZx6i7YOWawKAh1pJZyWynMlUDltaaPLBvZ2uAaUx/oB25WsGv2
- ePiWX/9xkks88BZmYnQGPNwF0zDBHXdHpglHr3IqH1vG8VD4IwLPBnBqrVmwYypDm3zWstq
- CvQEZZxh2QDE2eacuyPcQ==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:eMD34Z6GK/A=;v3OxGWvUqPcm2kQ2aQWIAg0dzKo
- 6ceHpgNH5K4fc0yczDcuBHCMV5mU/UjP1OYjeoZY7XeDm+uGFUzW8v0I9Vzn2vO6UpO4IsclJ
- x1vjI9ZxkpE+d4qXFS2eMd//HPxRMCFTCf7GCFCPIkJOZ29XSAIqQUKSO5+AFO6jka+uIhaxW
- l1eRo/y6jkGJFjUVa+1qpspAydVTb3Stpat0YKpnLyyR39unOUmHgWkTpizgCd97i1B2G7tDV
- 9quugeIjEcMEN9hJnnGpTq34xnzUw9AXa18YHjYDBtbiLknat1yaHXbzJk34kq6RJDYZ0eNCX
- vKOi9l7MhlR9OplErxbQqS8Ao7dQQWEa737wafOyMgR3oVpQeedTgy81mY+kPYIpt452bgAFY
- YJ194Oft8SQZfzNfTjahBqZUPNpnzDjdl6+AaAtd+HPAvFkDI+87n0rfqsVv8UjCzNDAgSyNJ
- yWmpxbtfflfGz3LZ0cyucIs/BfD2dBSrP3PC7ypacP0t2mQ1WTkqIbauRRw22a2B/iNpLVAZD
- as13rBjsj/gG8eA5DRGC8ja2YssOMgd10uGvD4ZpoqQzcha2tMbeRWQaOHexE8qoila1dF654
- nGrLrgnEevHKlUBLEiizOQ3g+xQyRvrpO5AEr4xjP45bNtdMMWZeK+8B5zmyPoUJdgMGXvkNf
- 3pDrAI8OrMlMyGUd0N9wMk2hsaYxhK3hsPBEoSlkKZ8fE60zUw0HKAQ/OlSOuHMqv51dtyItS
- i7zrUcJXnIla/puuMXc7/K4uq/SooOGHZZhmXIb0M3kgpiT6Vj03RnU42GZmriUvL2GXlV9sh
- wmu7lJsgUcJ3Wj4ZW6YccBEQ==
 
-On 10.10.24 10:57, Vitaly Kuznetsov wrote:
-> Nikolas Wipper <nikwip@amazon.de> writes:
->> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm=
-_host.h
->> index 7571ac578884..ab3a9beb61a2 100644
->> --- a/arch/x86/include/asm/kvm_host.h
->> +++ b/arch/x86/include/asm/kvm_host.h
->> @@ -698,6 +698,8 @@ struct kvm_vcpu_hv {
->>
->>  	bool suspended;
->>  	int waiting_on;
->> +
->> +	int tlb_flush_inhibit;
+On Mon, Oct 14, 2024 at 7:02=E2=80=AFPM Lorenzo Stoakes
+<lorenzo.stoakes@oracle.com> wrote:
+> On Mon, Oct 14, 2024 at 05:56:50PM +0200, Jann Horn wrote:
+> > On Mon, Oct 14, 2024 at 1:09=E2=80=AFPM Lorenzo Stoakes <lorenzo.stoake=
+s@oracle.com> wrote:
+> > > On Fri, Oct 11, 2024 at 08:11:36PM +0200, Jann Horn wrote:
+> > > > On Fri, Sep 27, 2024 at 2:51=E2=80=AFPM Lorenzo Stoakes <lorenzo.st=
+oakes@oracle.com> wrote:
+> > > By being optimistic and simply having the user having to handle loopi=
+ng
+> > > which seems reasonable (again, it's weird if you're installing poison
+> > > markers and another thread could be racing you) we avoid all of that.
+> >
+> > I guess one case in which that could happen legitimately is if you
+> > race a MADV_POISON on the area 0x1ff000-0x200100 (first page is
+> > populated, second page is not, pmd entry corresponding to 0x200000 is
+> > clear) with a page fault at 0x200200? So you could have a scenario
+> > like:
+> >
+> > 1. MADV_POISON starts walk_page_range()
+> > 2. MADV_POISON sees non-zero, non-poison PTE at 0x1ff000, stops the wal=
+k
+> > 3. MADV_POISON does zap_page_range_single()
+> > 4. pagefault at 0x200200 happens and populates with a hugepage
+> > 5. MADV_POISON enters walk_page_range()
+> > 6. MADV_POISON splits the THP
+> > 7. MADV_POISON sees a populated PTE
 >
-> This is basically boolean, right? And we only make it 'int' to be able
-> to store 'u8' from the ioctl? This doesn't look very clean. Do you
-> envision anything but '1'/'0' in 'inhibit'? If not, maybe we can just
-> make it a flag (and e.g. extend 'flags' to be u32/u64)? This way we can
-> convert 'tlb_flush_inhibit' to a normal bool.
+> You really shouldn't be seeing page faults in the range you are setting u=
+p
+> poison markers for _at all_ :) it's something you'd do ahead of time.
+
+But that's not what happens in my example - the address where the
+fault happens (0x200200) *is not* in the address range that
+MADV_POISON is called on (0x1ff000-0x200100). The fault and the
+MADV_POISON are in different 4KiB pages. What causes the conflict is
+that the fault and the MADV_POISON overlap the same *2MiB region*
+(both are in the region 0x200000-0x400000), and so THP stuff can
+effectively cause "page faults in the range you are setting up poison
+markers for".
+
+> But of course it's possible some scenario could arise like that, that's
+> what the EAGAIN is for.
 >
+> I just really don't want to get into a realm of trying to prove absolutel=
+y
+> under all circumstances that we can't go on forever in a loop like that.
 
-Yes, inhibit would always be binary, so incorporating it into the flags
-sounds reasonable. Even with the current API, this could just be a bool
-(tlb_flush_inhibit =3D inhibit =3D=3D 1;)
+We can have a bailout on signal_pending() or something like that, and
+a cond_resched(). Then as far as I know, it won't really make a
+difference in behavior whether the loop is in the kernel or in
+userspace code that's following what the manpage tells it to do -
+either way, the program will loop until it either finishes its work or
+is interrupted by a signal, and either way it can get preempted.
+(Well, except under PREEMPT_NONE, but that is basically asking for
+long scheduling delays.)
 
->>  };
->>
->>  struct kvm_hypervisor_cpuid {
->> diff --git a/arch/x86/kvm/hyperv.c b/arch/x86/kvm/hyperv.c
->> index e68fbc0c7fc1..40ea8340838f 100644
->> --- a/arch/x86/kvm/hyperv.c
->> +++ b/arch/x86/kvm/hyperv.c
->> @@ -2137,6 +2137,9 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu=
-, struct kvm_hv_hcall *hc)
->>  		bitmap_zero(vcpu_mask, KVM_MAX_VCPUS);
->>
->>  		kvm_for_each_vcpu(i, v, kvm) {
->> +			if (READ_ONCE(v->arch.hyperv->tlb_flush_inhibit))
->> +				goto ret_suspend;
->> +
->>  			__set_bit(i, vcpu_mask);
->>  		}
->>  	} else if (!is_guest_mode(vcpu)) {
->> @@ -2148,6 +2151,9 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu=
-, struct kvm_hv_hcall *hc)
->>  				__clear_bit(i, vcpu_mask);
->>  				continue;
->>  			}
->> +
->> +			if (READ_ONCE(v->arch.hyperv->tlb_flush_inhibit))
->> +				goto ret_suspend;
->>  		}
->>  	} else {
->>  		struct kvm_vcpu_hv *hv_v;
->> @@ -2175,6 +2181,9 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu=
-, struct kvm_hv_hcall *hc)
->>  						    sparse_banks))
->>  				continue;
->>
->> +			if (READ_ONCE(v->arch.hyperv->tlb_flush_inhibit))
->> +				goto ret_suspend;
->> +
+And we do have other codepaths that have to loop endlessly if they
+keep racing with page table updates the wrong way, though I guess
+those loops are not going to always scan over a large address range
+over and over again...
+
+Maybe something like this would be good enough, and mirror what you'd
+otherwise tell userspace to do?
+
+
+@@ -1598,6 +1598,7 @@ int do_madvise(struct mm_struct *mm, unsigned
+long start, size_t len_in, int beh
+                return madvise_inject_error(behavior, start, start + len_in=
+);
+ #endif
+
++retry:
+        write =3D madvise_need_mmap_write(behavior);
+        if (write) {
+                if (mmap_write_lock_killable(mm))
+@@ -1627,6 +1628,12 @@ int do_madvise(struct mm_struct *mm, unsigned
+long start, size_t len_in, int beh
+        else
+                mmap_read_unlock(mm);
+
++       if (error =3D=3D <<<some special value>>>) {
++               if (!signal_pending(current))
++                       goto retry;
++               error =3D -ERESTARTNOINTR;
++       }
++
+        return error;
+ }
+
+Buuut, heh, actually, I just realized: You could even omit this and
+simply replace -EINTR with -ERESTARTNOINTR in your code as the error
+value, and then the kernel would automatically go back into the
+syscall for you after going through signal handing and such, without
+userspace noticing.
+https://lore.kernel.org/all/20121206220955.GZ4939@ZenIV.linux.org.uk/
+has some explanation on how this works. Basically it tells the
+architecture's syscall entry code to move the userspace instruction
+pointer back to the syscall instruction, so as soon as execution
+returns to userspace, the first userspace instruction that executes
+will immediately re-do the syscall. That might be the easiest way,
+even if it is maybe a *little* bit of an API abuse to use this thing
+without having a pending signal...
+
+
+> If you drop the lock for contention then you up the risk of that, it just
+> feels dangerous.
 >
-> These READ_ONCEs make me think I misunderstand something here, please
-> bear with me :-).
+> A userland program can however live with a 'if EAGAIN try again' situatio=
+n.
 >
-> Like we're trying to protect against 'tlb_flush_inhibit' being read
-> somewhere in the beginning of the function and want to generate real
-> memory accesses. But what happens if tlb_flush_inhibit changes right
-> _after_ we checked it here and _before_ we actuall do
-> kvm_make_vcpus_request_mask()? Wouldn't it be a problem? In case it
-> would, I think we need to reverse the order: do
-> kvm_make_vcpus_request_mask() anyway and after it go through vcpu_mask
-> checking whether any of the affected vCPUs has 'tlb_flush_inhibit' and
-> if it does, suspend the caller.
+> An alternative approach to this might be to try to take the VMA lock, but
+> given the fraught situation with locking elsewhere I wonder if we should.
 >
+> Also, you have to be realy unlucky with timing for this to happen, even i=
+n
+> the scenario you mention (where you'd have to be unlucky with alignment
+> too), unless you're _heavily_ page faulting in the range, either way a
+> userland loop checking EAGAIN doesn't seem unreasonable.
 
-The case you're describing is prevented through SRCU synchronisation in
-the ioctl. The hypercall actually holds a read side critical section
-during the whole of its execution, so when tlb_flush_inhibit changes
-after we read it, the ioctl would wait for the flushes to complete:
-
-vCPU 0                   | vCPU 1
-=2D------------------------+------------------------
-                         | hypercall enter
-                         | srcu_read_lock()
-ioctl enter              |
-                         | tlb_flush_inhibit read
-tlb_flush_inhibit write  |
-synchronize_srcu() start |
-                         | TLB flush reqs send
-                         | srcu_read_unlock()
-synchronize_srcu() end   |
-ioctl exit               |
-
->>  			__set_bit(i, vcpu_mask);
->>  		}
->>  	}
->> @@ -2193,6 +2202,9 @@ static u64 kvm_hv_flush_tlb(struct kvm_vcpu *vcpu=
-, struct kvm_hv_hcall *hc)
->>  	/* We always do full TLB flush, set 'Reps completed' =3D 'Rep Count' =
-*/
->>  	return (u64)HV_STATUS_SUCCESS |
->>  		((u64)hc->rep_cnt << HV_HYPERCALL_REP_COMP_OFFSET);
->> +ret_suspend:
->> +	kvm_hv_vcpu_suspend_tlb_flush(vcpu, v->vcpu_id);
->> +	return -EBUSY;
->>  }
->>
->>  static void kvm_hv_send_ipi_to_many(struct kvm *kvm, u32 vector,
->> @@ -2380,6 +2392,13 @@ static int kvm_hv_hypercall_complete(struct kvm_=
-vcpu *vcpu, u64 result)
->>  	u32 tlb_lock_count =3D 0;
->>  	int ret;
->>
->> +	/*
->> +	 * Reached when the hyper-call resulted in a suspension of the vCPU.
->> +	 * The instruction will be re-tried once the vCPU is unsuspended.
->> +	 */
->> +	if (kvm_hv_vcpu_suspended(vcpu))
->> +		return 1;
->> +
->>  	if (hv_result_success(result) && is_guest_mode(vcpu) &&
->>  	    kvm_hv_is_tlb_flush_hcall(vcpu) &&
->>  	    kvm_read_guest(vcpu->kvm, to_hv_vcpu(vcpu)->nested.pa_page_gpa,
->> @@ -2919,6 +2938,9 @@ int kvm_get_hv_cpuid(struct kvm_vcpu *vcpu, struc=
-t kvm_cpuid2 *cpuid,
->>
->>  void kvm_hv_vcpu_suspend_tlb_flush(struct kvm_vcpu *vcpu, int vcpu_id)
->>  {
->> +	RCU_LOCKDEP_WARN(!srcu_read_lock_held(&vcpu->kvm->srcu),
->> +			 "Suspicious Hyper-V TLB flush inhibit usage\n");
->> +
->>  	/* waiting_on's store should happen before suspended's */
->>  	WRITE_ONCE(vcpu->arch.hyperv->waiting_on, vcpu_id);
->>  	WRITE_ONCE(vcpu->arch.hyperv->suspended, true);
->> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
->> index 18d0a300e79a..1f925e32a927 100644
->> --- a/arch/x86/kvm/x86.c
->> +++ b/arch/x86/kvm/x86.c
->> @@ -4642,6 +4642,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm,=
- long ext)
->>  	case KVM_CAP_HYPERV_CPUID:
->>  	case KVM_CAP_HYPERV_ENFORCE_CPUID:
->>  	case KVM_CAP_SYS_HYPERV_CPUID:
->> +	case KVM_CAP_HYPERV_TLB_FLUSH_INHIBIT:
->>  #endif
->>  	case KVM_CAP_PCI_SEGMENT:
->>  	case KVM_CAP_DEBUGREGS:
->> @@ -5853,6 +5854,31 @@ static int kvm_vcpu_ioctl_enable_cap(struct kvm_=
-vcpu *vcpu,
->>  	}
->>  }
->>
->> +static int kvm_vcpu_ioctl_set_tlb_flush_inhibit(struct kvm_vcpu *vcpu,
->> +						struct kvm_hyperv_tlb_flush_inhibit *set)
->> +{
->> +	if (set->inhibit =3D=3D READ_ONCE(vcpu->arch.hyperv->tlb_flush_inhibi=
-t))
->> +		return 0;
->> +
->> +	WRITE_ONCE(vcpu->arch.hyperv->tlb_flush_inhibit, set->inhibit);
->
-> As you say before, vCPU ioctls are serialized and noone else sets
-> tlb_flush_inhibit, do I understand correctly that
-> READ_ONCE()/WRITE_ONCE() are redundant here?
->
-
-As mentioned before, since tlb_flush_inhibit is shared it needs
-these calls.
-
-Nikolas
+Yes, we could do -EINTR and document that for userspace, and as long
+as everyone using this properly reads the documentation, it will be
+fine. Though I imagine that from the userspace programmer perspective
+that's a weird API design - as in, if this error code always means I
+have to try again, why can't the kernel do that internally. It's kind
+of leaking an implementation detail into the UAPI.
 
