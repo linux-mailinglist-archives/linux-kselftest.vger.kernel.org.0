@@ -1,348 +1,257 @@
-Return-Path: <linux-kselftest+bounces-19750-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89F8899F298
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 18:22:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A876D99F29E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 18:23:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0724C1F21BFF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 16:22:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67B102831D0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 16:23:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0C921DD0C1;
-	Tue, 15 Oct 2024 16:22:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 912BE1EBA0A;
+	Tue, 15 Oct 2024 16:23:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Iu5rv6Sr"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="PQriDUIP";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ouEpbiDB"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81AF71714BE
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2024 16:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729009345; cv=none; b=ZKZDj6FxbwYsZaUwJ6ErfxpSmw7RPdVLHb+/+7SQOopg+4AFMnbZ6TG7P4B+CYxCcEU5ErwqXrZIYgN/V3S5rcViDIK7FdwYZbOGNc9wGTgHTC/nLbyb8sGnxAgNeEipC/seR52Wqi6sN1Brd+tQuYS8IdWySYlRDLVjGNKnWlg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729009345; c=relaxed/simple;
-	bh=pjhtjFni5E0oYauVMFJxw2/cRKimK2at950HXSmnLU4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ndWZESKauHU0gTgQ2W9NTqBmYnTI259s1yZacljfvo5Ue8ZFUp7SeXTcy3QRLihIOZ7Zb8tiK3DnTE5d/TbCClec7i/Uh+XhCEBSji43cLzMcbRny8GE0URlObyvkenzxO0ZnfQb5MMvMFyBX7zEwTRr5ShI5hK4V8CeYunYAXw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Iu5rv6Sr; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1729009342;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=D0ogSl2e+pzxm9DQxkr5ZhkXB5GDU2MP8w9r7SynvqI=;
-	b=Iu5rv6Sr44cddDEdEJ434fNMhr2tRTnySPwxN0cZD6gv9SB9RqIaXx7hdW6meUOIIbo32N
-	vYBl0JStoBG6AmjulB8pzJLvcchDTBZaTLUzq1LFelXDc5qt8/fF5KtB5qadcRZ6kVkw8Q
-	BgftHozrUgSWPlSlhRRXCJthnt44QQM=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-77-27DOY5NmMG24_CeUl3O-WA-1; Tue, 15 Oct 2024 12:22:21 -0400
-X-MC-Unique: 27DOY5NmMG24_CeUl3O-WA-1
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-834a9a3223aso59825139f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2024 09:22:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729009340; x=1729614140;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=D0ogSl2e+pzxm9DQxkr5ZhkXB5GDU2MP8w9r7SynvqI=;
-        b=SHFdb2vMs7NUcNRXv2p6miEAKo4ogB7/nos4Z4oOEyb1oU1IJj7zPk8QQr2WAaDZZF
-         Ow0sWVRcQrciHQ3Jah8d5u/U++mO90k2VP8ahJZOooZJtVRGbM7zY/p8U+3h2hqZLoSB
-         ZakGpFrw0x+fOwv4lLgtOWcgH4z5u+s8h/6pa+UUiNOp5nNvXPn5z3Phzs11PZERvFBh
-         J5q0NUhxrkPpD2L36RK/3FQ6hN93EoFwT0l0Gr4aQQTT0kYQnseZubMhAS9eWcOdjuAD
-         VwT1NSBAm3DLoxO7a2IGlNMUCiD+Q9hHN+KjGPJ2tCoL4FC6JAqCXjIS20pR+6SwF7lN
-         rGtw==
-X-Forwarded-Encrypted: i=1; AJvYcCWTkOQ+woJYsECimOQl8EahtIzZKAHsxQgAsc09V9y5Ja76Ej3wDF6uf/P+UdBMVCDMuy7/qSR9UuMtDbj++YI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDnnWGa2bsqpmGRkW0nJEzYtISGRCIM+FHDVXj7OsJf3d4wvrj
-	c5TC15oAsPIgE+bbcAlZw+1DxOJrZc/zukfcCZfEyi3a38B/9idWvtsvx8cwnuWiLWq1aBsI4rJ
-	KF1udIt0tL6TDFomkdydFJyZFj7IIbiFTvToCiiNMnE56WWPePbvb4mHCXkmzO9NPag==
-X-Received: by 2002:a05:6602:3352:b0:81f:86e1:5a84 with SMTP id ca18e2360f4ac-83792419c98mr345227339f.2.1729009340184;
-        Tue, 15 Oct 2024 09:22:20 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHSkc6Y2bSMoTB4zwDROjEeyJ5tTGduXy6mtiXimE0HBSzkJTAanaRw2GITeakEsvwM2yiPPA==
-X-Received: by 2002:a05:6602:3352:b0:81f:86e1:5a84 with SMTP id ca18e2360f4ac-83792419c98mr345226239f.2.1729009339749;
-        Tue, 15 Oct 2024 09:22:19 -0700 (PDT)
-Received: from redhat.com ([38.15.36.11])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-83a8b50d10dsm36606439f.40.2024.10.15.09.22.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2024 09:22:19 -0700 (PDT)
-Date: Tue, 15 Oct 2024 10:22:15 -0600
-From: Alex Williamson <alex.williamson@redhat.com>
-To: Yi Liu <yi.l.liu@intel.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>, "Tian, Kevin" <kevin.tian@intel.com>,
- "joro@8bytes.org" <joro@8bytes.org>, "baolu.lu@linux.intel.com"
- <baolu.lu@linux.intel.com>, "eric.auger@redhat.com"
- <eric.auger@redhat.com>, "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
- "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "chao.p.peng@linux.intel.com"
- <chao.p.peng@linux.intel.com>, "iommu@lists.linux.dev"
- <iommu@lists.linux.dev>, "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
- "vasant.hegde@amd.com" <vasant.hegde@amd.com>
-Subject: Re: [PATCH v3 3/4] vfio: Add
- VFIO_DEVICE_PASID_[AT|DE]TACH_IOMMUFD_PT
-Message-ID: <20241015102215.05cd16c7.alex.williamson@redhat.com>
-In-Reply-To: <2e5733a2-560e-4e8f-b547-ed75618afca5@intel.com>
-References: <20240912131729.14951-1-yi.l.liu@intel.com>
-	<20240912131729.14951-4-yi.l.liu@intel.com>
-	<BN9PR11MB5276D2D0EEAC2904EDB60B048C762@BN9PR11MB5276.namprd11.prod.outlook.com>
-	<20241001121126.GC1365916@nvidia.com>
-	<a435de20-2c25-46f5-a883-f10d425ef37e@intel.com>
-	<20241014094911.46fba20e.alex.williamson@redhat.com>
-	<2e5733a2-560e-4e8f-b547-ed75618afca5@intel.com>
-Organization: Red Hat
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01D613B284;
+	Tue, 15 Oct 2024 16:23:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729009400; cv=fail; b=G7ugnp+WrlxPIS3zvIlbjGD8ttCbbH6oeaUtA6sCTCeOx6HdXsXHqAxAbcJUn6hyMgcUp5Lel2a1RBFY6gDaRwB4eY7BUGrQkFPN6UTRZCufvLPKjkwlALxoAegF09f7G0CiD1s5AyCLVVxn5xqktt75cTA0rQp5OldoKEOozeA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729009400; c=relaxed/simple;
+	bh=Zs56j2kBQS4skFDnxfe7iq+X+GhZME+fkSFw+blRZo4=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=SOQOk2n37LK/VHw91OrKCflnCuiHpqQuYPk/3t4H1bjFsj4sWAdI6S6n9l2vZ6GaIqeXKCRu4d5wRVYWfMu28Cci6DeEITRnWFsJ8+ac5PVdJDVwOGJZwi6J8AIzLm+F3IU2DJXOhg9mx5S2sBXOzbMtqPzNfTHr81xHB/2mrl4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=PQriDUIP; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ouEpbiDB; arc=fail smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0333520.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49FF0aGM005033;
+	Tue, 15 Oct 2024 16:22:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-id:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	corp-2023-11-20; bh=Zs56j2kBQS4skFDnxfe7iq+X+GhZME+fkSFw+blRZo4=; b=
+	PQriDUIP7iBDxwHrRigL4FQ32ErYx86h12+bQBDrydfqDiRbvqzd+WXetQ76kOUF
+	zub3bPov0ODRkmDpMEQxeWOXj7KDmGsKqOGTSkSilXpXr1oe1o5yfwJ+HQSt6g1n
+	RDD6qTAZun9GoOL5OTB9Jk/4EpB+m6S09U0XH8ijpTJLAg/+ouRVDWzUmHz/iSQP
+	xA/eMtMUAPZi29xtkPmUglUBbj8cyddPJSPVJoygsDU4RItGx/qOHgLQSI8q5LLp
+	VOyuByCQnt63Wk4rFVO9m3EsuebcYfpQlasiosV2+pWMc93tartb0Id7kSQTc2er
+	qDLepGBMBu0YRi1kyFBUQQ==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427h5chuua-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 15 Oct 2024 16:22:30 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49FFWMTC010979;
+	Tue, 15 Oct 2024 16:22:29 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2172.outbound.protection.outlook.com [104.47.56.172])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjdytrn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 15 Oct 2024 16:22:29 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rST+yC0FNlYkYEE4SkNIMHqJtogdm7gwhPYwKk/+EwD4c5hzifVYm/39jkE+xUzRtMM0Sx7w3uARGZTpdQHQbSkzjgmx2ABO9eWDOQ8I0CbKEzWW1gobWcq/dVe0CZWN2nxG2C1uUwpRIGuRFEP6Xahh2PUiMq5etsso+sSHHX6RIp+drXfGa+4OTDzrEuEi10/++KFcB0V4BcsdxoFLVb3joD1Ll4LYCe7i8ou8gYZeVG122HYR/Ady1raKga0fhJFYhRIkYRMNmipGNUCmFakrLEFJ0jKsiWxv7Irf99DH2RAJ2I4htmXG/30vDGJtfztegRd0AHtWBgCEvdCtsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Zs56j2kBQS4skFDnxfe7iq+X+GhZME+fkSFw+blRZo4=;
+ b=pFenfkeORNK9X7Anq87hkABjk9IqMvr9MkL1UqfigkivfNsBwCBBAzBobXEVdzf5Dj1fDUQlxwjLvnowaOCev96F3kdGBFImNBK4j3BP/5HSX+7NuVG4OeQgynCE8Wy1bH+fKXSPxd+xestLs0FiQg82lRq2cVrCQLIACwIPAKLYtQwCTlFEIyKqttthPGxcCQO1ci5s9Y+fTanb9PXCFzpbmcA5XqzcDJVJXv/uM465Ft62KYW9dJ7aZpeDgO3PzWbDyiM6ePMworRgWg//j8iOTlo+pyJND0k/54r9+bRQrTfS/NeqyQsJk0j42zQtj1tzQfAU8Kc+gEcejO4EPQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Zs56j2kBQS4skFDnxfe7iq+X+GhZME+fkSFw+blRZo4=;
+ b=ouEpbiDBXrzpXs+cKpuB9+GYyKDg8pzIVdd8DxaekbSQwBc0Fsy45pODD/mr2ClpT2zpTh8zM4VBNz6mpiAjHD1WQ6LDmUrczdLtWD+Er5bv9jUkvyKJQX4RQWDvzaO+TuH2H2Y+qDeom4lRFGZzLHjKUjmzPasOxwGXd1aycc4=
+Received: from BY5PR10MB4129.namprd10.prod.outlook.com (2603:10b6:a03:210::21)
+ by PH0PR10MB4437.namprd10.prod.outlook.com (2603:10b6:510:3a::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.27; Tue, 15 Oct
+ 2024 16:22:24 +0000
+Received: from BY5PR10MB4129.namprd10.prod.outlook.com
+ ([fe80::3c5e:9043:1ca9:4c60]) by BY5PR10MB4129.namprd10.prod.outlook.com
+ ([fe80::3c5e:9043:1ca9:4c60%3]) with mapi id 15.20.8048.029; Tue, 15 Oct 2024
+ 16:22:24 +0000
+From: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: "davem@davemloft.net" <davem@davemloft.net>,
+        Liam Howlett
+	<liam.howlett@oracle.com>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "mingo@redhat.com"
+	<mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+        "vincent.guittot@linaro.org"
+	<vincent.guittot@linaro.org>,
+        "dietmar.eggemann@arm.com"
+	<dietmar.eggemann@arm.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "bsegall@google.com" <bsegall@google.com>,
+        "mgorman@suse.de"
+	<mgorman@suse.de>,
+        "vschneid@redhat.com" <vschneid@redhat.com>,
+        "jiri@resnulli.us" <jiri@resnulli.us>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>,
+        "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Pei Li
+	<peili.io@oracle.com>
+Subject: Re: [PATCH net-next v1 0/3] Threads support in proc connector
+Thread-Topic: [PATCH net-next v1 0/3] Threads support in proc connector
+Thread-Index: AQHbHZI9arudTUFlxEOVE5hfsdtRbrKH++8A//+QaIA=
+Date: Tue, 15 Oct 2024 16:22:24 +0000
+Message-ID: <1CCDA7B3-F43B-485A-9950-85AA272D79B1@oracle.com>
+References: <20241013170617.2139204-1-anjali.k.kulkarni@oracle.com>
+ <20241015090148.72e83f7f@kernel.org>
+In-Reply-To: <20241015090148.72e83f7f@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY5PR10MB4129:EE_|PH0PR10MB4437:EE_
+x-ms-office365-filtering-correlation-id: 029f70f6-71c1-4187-7dda-08dced358d84
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|1800799024|376014|7416014|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?TXd2SS85Q2FIYWd0ZzJUaFA2aW1GM3dmbjlNcFBBdTlCSW1FbnJNZ1BVSlJE?=
+ =?utf-8?B?M1pyZHBKdGtCSkozMnZzRjNJQnl3WElVSXgzSkovU3dMQnY2dWU2NHd0blFP?=
+ =?utf-8?B?T0JSYkQ2MHJ6QTNlR1hMeGJoakUzS1lmWlNTMUFnOUlCUkt5TnVVWVlWVFVi?=
+ =?utf-8?B?UmFreEpVeFNuZm5YTmtGaitvMldCd09lTGVaL2lQU2dyNUdkcnordHlRME5R?=
+ =?utf-8?B?T0w5RXZXODlwaUlKRzE0d1NCQjQxTSthc21EY1lURVZJZmhQenNYb1A2b0d6?=
+ =?utf-8?B?bFpkNnhKY2pKMkV4dFRyQVBPT3o5ZHdnNnU5cmRQenVGRUV1dmg0NXFNc2Fa?=
+ =?utf-8?B?NEdna3l3WTFxL0lUOEx1VkdUNmFlUEM4cTBzSnMrcXlOWXoyM094eU15Ry9M?=
+ =?utf-8?B?SlZPMmNzejZJRVhYQTRvUlBiRGRFS3ZRNnhqMDNMcEhQSHkvQ2tjVnlBOEVS?=
+ =?utf-8?B?c3ovd2FSSlVnZzh0ak1uZ1V3Yk5IdVg5WlRFOVA4Qjlpb0wvODNZZUt2UXpC?=
+ =?utf-8?B?U0JLK0JCK3ZoK1Y3SmJxeUZ1OG9lalNyd1NzM2FqZW9CcWdVYkxHZFVpN2Nz?=
+ =?utf-8?B?TFh2OTVwak11VkFyOXozZE9IZlk1NTNJbGF0YVNoWndLRkNOQm5ab0hYVlk3?=
+ =?utf-8?B?VGZObUZVU0RaV1FtbUlmM3B4eWlndHdEdlVsbnErOXVlcDY0YU1YWVZQU1lN?=
+ =?utf-8?B?SXRzSTVIVEV5REJvZ1J1WmRHQy9Sa3VtcW1mYkRoSGpkRTZSYmJ3RG9CcHZw?=
+ =?utf-8?B?WDliTmQrNUdXbHNtdm12TUc1ZzZodU5UMVF6azV0Nnk5aFRqQzBVN1ZZMkNx?=
+ =?utf-8?B?OEp5UjVJVnZSY3M3UlV0WEZFVTVqV0JzdDV5czU1WkQ5eHlmcmo5SCs1OFJp?=
+ =?utf-8?B?YURKR3V5TDB3ck9rTGx1U0k3MlZQS1RuQzF0K0lLZTZnZnUrQW5vbUh2dXdl?=
+ =?utf-8?B?OXlvVllIY1ZObXZ6N2NsdXR4Nk9FRDhlZHRFZ0Jzc2h4OU1FS20xTEhDeWsr?=
+ =?utf-8?B?QU9xc2ZYcmFNYVp5SEVlT1hqbkF5Y1Z5Y0ptQmVWY2RROGxqZUlBOEZENkxx?=
+ =?utf-8?B?RUZMMHk3MXV6Qm9OSjc3S2VLVWpVQzhiQzAwTkxaT0VUQncxYlhFTlFGYUhR?=
+ =?utf-8?B?d2VpS2laQXlQWCs2RFNYMVJFNWc3ZnF1Q2pOUHdHLzZsMy9DaGdheTFwZk9E?=
+ =?utf-8?B?eEhnVmYyNEZLblBTVEx3RjQ5V1I5c0djWDM2UXNYN2N0aGpNOEFxMEs3WmVK?=
+ =?utf-8?B?SzllbjVaNnFvYmZOenRvU25BK3hVbGNWaWw1SDlDTkNxRnFHaGU4Q2FlcFZw?=
+ =?utf-8?B?OXAzTExGWHZpNmRZZ3lqUU5GbXFTODBFa0tZNU9adEdOaVk4UlBObkdXQkRj?=
+ =?utf-8?B?UHpaYUdqUStZWFlnQ1IvRHBVV3BpWDJlN00yVXJwRWdMd2JObDFRdFprRmN2?=
+ =?utf-8?B?d1BwRGJXNnVGMG1jbDY1SmZjZWZIeUpkMHk3MnpiNjhUQkJ4V2V1T0NydmVU?=
+ =?utf-8?B?QTdwaStuWFhvZVRsdHNNSzU2aklxRjJiQVpzN0xTc3hqUkJZRGYwNS9ZUXp6?=
+ =?utf-8?B?dUJsa3dLSnRHZjdsbUt3a2s2dC8vYUhiN1pCSklPNTdWTFNHZFBhQzJzMjhs?=
+ =?utf-8?B?Yy9BUzJySUIvMjd2VFVRRUxUbXFEa0dqeHI1OXFVeHp1ZVk5a0lpckdpRUF6?=
+ =?utf-8?B?TnpucjZmb3Y5OVh0NU9ialBqUWVJNFlwSGZ5MXJXdlFDaFRZN25DOE1TK1dz?=
+ =?utf-8?Q?p+KNQ929FB+WjVSr78OHsqxQkr10kiv8SK3wvtQ?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4129.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?dzZXYUszRUYwTXY0QzRtSVQxSTBFZmQ5S0ZwK1phczd3VUdhbWRyRTRraEpP?=
+ =?utf-8?B?MDBXUFNCdkJjb1k4K0dWK2g0S3pvRVM0dC93NzJMWWl0RVdIbGtSeGxyZjF3?=
+ =?utf-8?B?cURWZENXNFU4RHl2b3BTWTN0ZU5NUTd4NTJnOThOMWJtYTVGVmFBUjNvZ0JQ?=
+ =?utf-8?B?aFU0ekdVbzczcjNpeE12U1pDZW9CUWtKRXlVSUphVllnMERqZG1rS0pCK01j?=
+ =?utf-8?B?YUdrWVhwWFI4TW5jeE5BQTBuZks3c1ZUUWdNODdKUWJpLzJSODRVRHo5bHBt?=
+ =?utf-8?B?T2RWRVg1YnpObXN0VDd4cUtTNUlzbGFoekQzdU5mc3pHcm1uQ3lEeTdnSGU4?=
+ =?utf-8?B?RWl2cVJ5cmhsM1Nhc2VHSDRsY1UyaWllSG53Z2dqaitncmVMUkZsSUFCZm1u?=
+ =?utf-8?B?ZEoxSzFnTHM1RVlmNlUxbXZseis5N2lwbnNtdU1kSElUR1l6R09mYUt6STNv?=
+ =?utf-8?B?cDhaMFFqY2IzYW9XemVJR3E0dzhuckpTRXphaFJpL1pZaHQwalRhZWdHaVJF?=
+ =?utf-8?B?d1dPNWo2MWlqeEpVMjByenpXd3JjOTRvUE16OGc0ZFFQUG5lajJNQ01iTnlH?=
+ =?utf-8?B?ZUMzbUhmT3luRGk5dFFoZDJxZjY1MWtKUC9UQWpPUE0wMFpiVDVtemNGeWFE?=
+ =?utf-8?B?N0c5MEhUNkVuU2ZCdmpTK2VjSENjekdtSHJFS0xyYmFoZ2tvdUV5dk1kVy9s?=
+ =?utf-8?B?QjkvdUJBL1BNTHVKUDdRcGxZMm0zZFhWa1hNZk5rT3RrYW94aUhCbS93M3h5?=
+ =?utf-8?B?MCtMOGpPcW10L0dDUG5oWUE2MVVhcGFCb3ZvSEIxMHhnVXo0eml2UGVuMmFY?=
+ =?utf-8?B?eDgycHVuUDJaYkFlNU5ZQ0xsZWU2Z3B4VHNCRE9mRVllbWdLSHZxY0xpUmdZ?=
+ =?utf-8?B?aDhlYmhpNk9vL3R3MFNIenRiWlJWSTdnaDgwRW45ZjRyKzFIWXJpSllRYzhU?=
+ =?utf-8?B?V2dWVXJLcTBCenhmKzd0NSt5Z0paT0Y2QUZZOVZsYUh6TG1qMG5NaXpDM1pj?=
+ =?utf-8?B?K1crUEdmQ0VRUS9jcENzMW5oMG43STJIaWVCdWhqNWg2bXU2RjJuWVErUnlS?=
+ =?utf-8?B?ZG1GeHo0eHpSbUdqZVcvMk1lTzJtNmc0c2V0ejU0ZVYwQ1lEZFh1Y2RCQm5w?=
+ =?utf-8?B?cGRLOWtrL2c0N1NhNk1KK1BIUjJLSFczNFg1T3dMTUhGREU0dkpwM2toL3Fv?=
+ =?utf-8?B?NjBtWTlCUlVNT2wrb0I4WitoQi83Rm9xTkJNS3FCQUl0U3djb0p3dUZGZVlQ?=
+ =?utf-8?B?ckw5UlM2WFI2dFJUT3ExV1UvcUQrUUNQeVZJaGVDaHA5azBSM0g5dUhTblVw?=
+ =?utf-8?B?dkhCUEpVc3VQZVF6RTVrWWRuVGRLZVhxV2Z1dCtic29zazVhSzBObWcxSzRj?=
+ =?utf-8?B?OC9RcXgvTGRIWFNWQWRqUTdkWTd6K0U4NVNKbTVaQlFDcEVCbDAwb2RnbG9O?=
+ =?utf-8?B?NnVpY0w1VlZVZmFBYjRMVjNYci9SM3NnaFFlQjVVeVcrL3JPSTZZOG5BRHht?=
+ =?utf-8?B?L2prdVZMaTJPbUNvZDBQcEdad0E0aUNLR2pwenY3bEw5eVQ0dy84VTN2Yy85?=
+ =?utf-8?B?MW53dHhzYnZGRml4VWN4RnkvY3BHeStHRmdjcCtjZnpmSDNUTS9CRncwQmkr?=
+ =?utf-8?B?aHRpaDVxbjJYMXNGV0FWSVJ1RUdWYjFFNFYrb3hBNXQwNG5udmdHZnFtZkcv?=
+ =?utf-8?B?N1VIcUhCZVNEWXU4TC96Q2ppY3BaeU1oTEpzM2VVakRYWldROFVFKyt2QU51?=
+ =?utf-8?B?NmhySmxQOUVrcjRHcVZpemtheWFyTWNYMnhuNkRQcEN3bzBGTWJUV0NtYzVB?=
+ =?utf-8?B?T0RNQWRBajIyU09rZVNVOWpFOFB0WUhLQkhXbWRqeTdKd0l2WS8rUVVObFRw?=
+ =?utf-8?B?QWdBcExqVlFpM2hrM01kRkdHVGhKWWNXcC9pY0hUYS8zQks5bVdKa3JHcXMv?=
+ =?utf-8?B?N0YzTHRuUHpGVU1kR2pUOXM3aWRFcFovaS9DWXB2clc1V0lVaTZKdUtBUW5L?=
+ =?utf-8?B?WHhnSEoyNC9leHNxWERmRy9PamhIVDArTk5ka0hjalQwMEJJV0lnUEhpemxh?=
+ =?utf-8?B?TTdCQXE5MStQQzhvamVycmQ5TWNRRTVpQnJzNExaUUVIOTY4WkRVaFI0c2N6?=
+ =?utf-8?B?a25XVjBoZ2N5TGhVOXlGS24reFR0K21kV1pjMHdCSVBpZ1NwODRvaGo2MXd6?=
+ =?utf-8?B?T1E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <A7C2D0B285FD1E4FAC69F876847E245A@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	hWLQhtpNeG3ZSXxrVF70XHz36wl/Zqi09qaylZSBfGl9qgBwJaz6Oh1BDPNQDnkgiF9evlOXnL3Bsb9Gaia3sbCHSm8JgS/wQRV+XMDxHmfNWm0LMae+qu/CvbOm2UF406Y5MeWnYIxuX2d2GKDrOpow4X8EL4GJIw4ApzaW8+NJSdXFl0qJbG/lksuMcyC3KC0p3Han7TrvvcLxM2JrCsQ/IPTNZ4RAjwBdxmK+piwU36dzjH9jbcI8KFFTEMP5+iawqwpB9thrTtw09sAXOpw20OpFmAMoSI+ftvMtGLhfzlMfxEs+1MS5l2j2ZSF3zt9xRtAjedb7cQzo6HLub/6oJKXb7ZLkVQ8hrnsxYU4hQf8L8KvgjAFGHRFLdlH4yccZTV2rTyCvne5DoI2Hv6I9AK//rjoZoN+4bmEWcI9oZLaK55XvVyE7CJB0rHEs/pTSL5683QqwGNfOvbdWxggjhoRm51bEtzWZnNVWT0TBP5Sp3z240moBUETTBizlW4bFTgGhIsLJsWLJKlv6W5yxrU9Zh23tXBUrhkwROYIrh2QWFFoIBmQnu0O0S8q9pkCRx7n27JZy+gcfetF1JePikvKGNEeXaqfxD9K19oo=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4129.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 029f70f6-71c1-4187-7dda-08dced358d84
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Oct 2024 16:22:24.2954
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 8F8Y6hpJm6jf62Vk2743/C5BSX39lBm+enWjarrtsIdOUc6w2hc0J/JdjoHM+ZSFVpHOX/9Geka2q8pDOV3D9+D8gzsPC58uqyRkQHGB0mU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR10MB4437
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_11,2024-10-15_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
+ adultscore=0 spamscore=0 mlxscore=0 suspectscore=0 bulkscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2409260000 definitions=main-2410150111
+X-Proofpoint-ORIG-GUID: qY6hK5bxBq2v0ZD2Yiw2f_PQlKG0D1Wi
+X-Proofpoint-GUID: qY6hK5bxBq2v0ZD2Yiw2f_PQlKG0D1Wi
 
-On Tue, 15 Oct 2024 19:07:52 +0800
-Yi Liu <yi.l.liu@intel.com> wrote:
-
-> On 2024/10/14 23:49, Alex Williamson wrote:
-> > On Sat, 12 Oct 2024 21:49:05 +0800
-> > Yi Liu <yi.l.liu@intel.com> wrote:
-> >   
-> >> On 2024/10/1 20:11, Jason Gunthorpe wrote:  
-> >>> On Mon, Sep 30, 2024 at 07:55:08AM +0000, Tian, Kevin wrote:
-> >>>      
-> >>>>> +struct vfio_device_pasid_attach_iommufd_pt {
-> >>>>> +	__u32	argsz;
-> >>>>> +	__u32	flags;
-> >>>>> +	__u32	pasid;
-> >>>>> +	__u32	pt_id;
-> >>>>> +};
-> >>>>> +
-> >>>>> +#define VFIO_DEVICE_PASID_ATTACH_IOMMUFD_PT	_IO(VFIO_TYPE,
-> >>>>> VFIO_BASE + 21)  
-> >>>>
-> >>>> Not sure whether this was discussed before. Does it make sense
-> >>>> to reuse the existing VFIO_DEVICE_ATTACH_IOMMUFD_PT
-> >>>> by introducing a new pasid field and a new flag bit?  
-> >>>
-> >>> Maybe? I don't have a strong feeling either way.
-> >>>
-> >>> There is somewhat less code if you reuse the ioctl at least  
-> >>
-> >> I had a rough memory that I was suggested to add a separate ioctl for
-> >> PASID. Let's see Alex's opinion.  
-> > 
-> > I don't recall any previous arguments for separate ioctls, but it seems
-> > to make a lot of sense to me to extend the existing ioctls with a flag
-> > to indicate pasid cscope and id.  Thanks,  
-> 
-> thanks for the confirmation. How about the below?
-> 
-> diff --git a/drivers/vfio/device_cdev.c b/drivers/vfio/device_cdev.c
-> index bb1817bd4ff3..c78533bce3c6 100644
-> --- a/drivers/vfio/device_cdev.c
-> +++ b/drivers/vfio/device_cdev.c
-> @@ -162,21 +162,34 @@ void vfio_df_unbind_iommufd(struct vfio_device_file *df)
->   int vfio_df_ioctl_attach_pt(struct vfio_device_file *df,
->   			    struct vfio_device_attach_iommufd_pt __user *arg)
->   {
-> -	struct vfio_device *device = df->device;
-> +	unsigned long minsz = offsetofend(
-> +			struct vfio_device_attach_iommufd_pt, pt_id);
->   	struct vfio_device_attach_iommufd_pt attach;
-> -	unsigned long minsz;
-> +	struct vfio_device *device = df->device;
-> +	u32 user_size;
->   	int ret;
-> 
-> -	minsz = offsetofend(struct vfio_device_attach_iommufd_pt, pt_id);
-> +	ret = get_user(user_size, (u32 __user *)arg);
-> +	if (ret)
-> +		return ret;
-> 
-> -	if (copy_from_user(&attach, arg, minsz))
-> -		return -EFAULT;
-> +	ret = copy_struct_from_user(&attach, sizeof(attach), arg, user_size);
-> +	if (ret)
-> +		return ret;
-
-I think this could break current users.  For better or worse, we don't
-currently have any requirements for the remainder of the user buffer,
-whereas copy_struct_from_user() returns an error for non-zero trailing
-bytes.  I think we need to monotonically increase the structure size,
-but maybe something more like below, using flags.  The expectation
-would be that if we add another flag that extends the structure, we'd
-test that flag after PASID and clobber xend to a new value further into
-the new structure.  We'd also add that flag to the flags mask, but we'd
-share the copy code.
-
-	if (attach.argsz < minsz)
-		return -EINVAL;
-
-	if (attach.flags & (~VFIO_DEVICE_ATTACH_PASID))
-		return -EINVAL;
-
-	if (attach.flags & VFIO_DEVICE_ATTACH_PASID)
-		xend = offsetofend(struct vfio_device_attach_iommufd_pt, pasid);
-
-	if (xend) {
-		if (attach.argsz < xend)
-			return -EINVAL;
-	
-		if (copy_from_user((void *)&attach + minsz,
-				    (void __user *)arg + minsz, xend - minsz))
-			return -EFAULT;
-	}
-
-Maybe there are still more elegant options available.
-
-We also generally try to label flags with FLAGS in the name, but it
-does get rather unwieldy, so I'm open to suggestions.  Thanks,
-
-Alex
-
-> 
-> -	if (attach.argsz < minsz || attach.flags)
-> +	if (attach.argsz < minsz || attach.flags & (~VFIO_DEVICE_ATTACH_PASID))
->   		return -EINVAL;
-> 
-> +	if ((attach.flags & VFIO_DEVICE_ATTACH_PASID) &&
-> +	    !device->ops->pasid_attach_ioas)
-> +		return -EOPNOTSUPP;
-> +
->   	mutex_lock(&device->dev_set->lock);
-> -	ret = device->ops->attach_ioas(device, &attach.pt_id);
-> +	if (attach.flags & VFIO_DEVICE_ATTACH_PASID)
-> +		ret = device->ops->pasid_attach_ioas(device, attach.pasid,
-> +						     &attach.pt_id);
-> +	else
-> +		ret = device->ops->attach_ioas(device, &attach.pt_id);
->   	if (ret)
->   		goto out_unlock;
-> 
-> @@ -198,20 +211,33 @@ int vfio_df_ioctl_attach_pt(struct vfio_device_file *df,
->   int vfio_df_ioctl_detach_pt(struct vfio_device_file *df,
->   			    struct vfio_device_detach_iommufd_pt __user *arg)
->   {
-> -	struct vfio_device *device = df->device;
-> +	unsigned long minsz =
-> +		offsetofend(struct vfio_device_detach_iommufd_pt, flags);
->   	struct vfio_device_detach_iommufd_pt detach;
-> -	unsigned long minsz;
-> +	struct vfio_device *device = df->device;
-> +	u32 user_size;
-> +	int ret;
-> 
-> -	minsz = offsetofend(struct vfio_device_detach_iommufd_pt, flags);
-> +	ret = get_user(user_size, (u32 __user *)arg);
-> +	if (ret)
-> +		return ret;
-> 
-> -	if (copy_from_user(&detach, arg, minsz))
-> -		return -EFAULT;
-> +	ret = copy_struct_from_user(&detach, sizeof(detach), arg, user_size);
-> +	if (ret)
-> +		return ret;
-> 
-> -	if (detach.argsz < minsz || detach.flags)
-> +	if (detach.argsz < minsz || detach.flags & (~VFIO_DEVICE_DETACH_PASID))
->   		return -EINVAL;
-> 
-> +	if ((detach.flags & VFIO_DEVICE_DETACH_PASID) &&
-> +	    !device->ops->pasid_detach_ioas)
-> +		return -EOPNOTSUPP;
-> +
->   	mutex_lock(&device->dev_set->lock);
-> -	device->ops->detach_ioas(device);
-> +	if (detach.flags & VFIO_DEVICE_DETACH_PASID)
-> +		device->ops->pasid_detach_ioas(device, detach.pasid);
-> +	else
-> +		device->ops->detach_ioas(device);
->   	mutex_unlock(&device->dev_set->lock);
-> 
->   	return 0;
-> diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
-> index 2b68e6cdf190..40b414e642f5 100644
-> --- a/include/uapi/linux/vfio.h
-> +++ b/include/uapi/linux/vfio.h
-> @@ -931,29 +931,34 @@ struct vfio_device_bind_iommufd {
->    * VFIO_DEVICE_ATTACH_IOMMUFD_PT - _IOW(VFIO_TYPE, VFIO_BASE + 19,
->    *					struct vfio_device_attach_iommufd_pt)
->    * @argsz:	User filled size of this data.
-> - * @flags:	Must be 0.
-> + * @flags:	Flags for attach.
->    * @pt_id:	Input the target id which can represent an ioas or a hwpt
->    *		allocated via iommufd subsystem.
->    *		Output the input ioas id or the attached hwpt id which could
->    *		be the specified hwpt itself or a hwpt automatically created
->    *		for the specified ioas by kernel during the attachment.
-> + * @pasid:	The pasid to be attached, only meaningful when
-> + *		VFIO_DEVICE_ATTACH_PASID is set in @flags
->    *
->    * Associate the device with an address space within the bound iommufd.
->    * Undo by VFIO_DEVICE_DETACH_IOMMUFD_PT or device fd close.  This is only
->    * allowed on cdev fds.
->    *
-> - * If a vfio device is currently attached to a valid hw_pagetable, without 
-> doing
-> - * a VFIO_DEVICE_DETACH_IOMMUFD_PT, a second VFIO_DEVICE_ATTACH_IOMMUFD_PT 
-> ioctl
-> - * passing in another hw_pagetable (hwpt) id is allowed. This action, also 
-> known
-> - * as a hw_pagetable replacement, will replace the device's currently attached
-> - * hw_pagetable with a new hw_pagetable corresponding to the given pt_id.
-> + * If a vfio device or a pasid of this device is currently attached to a valid
-> + * hw_pagetable (hwpt), without doing a VFIO_DEVICE_DETACH_IOMMUFD_PT, a 
-> second
-> + * VFIO_DEVICE_ATTACH_IOMMUFD_PT ioctl passing in another hwpt id is allowed.
-> + * This action, also known as a hw_pagetable replacement, will replace the
-> + * currently attached hwpt of the device or the pasid of this device with 
-> a new
-> + * hwpt corresponding to the given pt_id.
->    *
->    * Return: 0 on success, -errno on failure.
->    */
->   struct vfio_device_attach_iommufd_pt {
->   	__u32	argsz;
->   	__u32	flags;
-> +#define VFIO_DEVICE_ATTACH_PASID	(1 << 0)
->   	__u32	pt_id;
-> +	__u32	pasid;
->   };
-> 
->   #define VFIO_DEVICE_ATTACH_IOMMUFD_PT		_IO(VFIO_TYPE, VFIO_BASE + 19)
-> @@ -962,17 +967,21 @@ struct vfio_device_attach_iommufd_pt {
->    * VFIO_DEVICE_DETACH_IOMMUFD_PT - _IOW(VFIO_TYPE, VFIO_BASE + 20,
->    *					struct vfio_device_detach_iommufd_pt)
->    * @argsz:	User filled size of this data.
-> - * @flags:	Must be 0.
-> + * @flags:	Flags for detach.
-> + * @pasid:	The pasid to be detached, only meaningful when
-> + *		VFIO_DEVICE_DETACH_PASID is set in @flags
->    *
-> - * Remove the association of the device and its current associated address
-> - * space.  After it, the device should be in a blocking DMA state.  This 
-> is only
-> - * allowed on cdev fds.
-> + * Remove the association of the device or a pasid of the device and its 
-> current
-> + * associated address space.  After it, the device or the pasid should be in a
-> + * blocking DMA state.  This is only allowed on cdev fds.
->    *
->    * Return: 0 on success, -errno on failure.
->    */
->   struct vfio_device_detach_iommufd_pt {
->   	__u32	argsz;
->   	__u32	flags;
-> +#define VFIO_DEVICE_DETACH_PASID	(1 << 0)
-> +	__u32	pasid;
->   };
-> 
->   #define VFIO_DEVICE_DETACH_IOMMUFD_PT		_IO(VFIO_TYPE, VFIO_BASE + 20)
-
+DQoNCu+7v09uIDEwLzE1LzI0LCA5OjAyIEFNLCAiSmFrdWIgS2ljaW5za2kiIDxrdWJhQGtlcm5l
+bC5vcmcgPG1haWx0bzprdWJhQGtlcm5lbC5vcmc+PiB3cm90ZToNCg0KDQpPbiBTdW4sIDEzIE9j
+dCAyMDI0IDEwOjA2OjE0IC0wNzAwIEFuamFsaSBLdWxrYXJuaSB3cm90ZToNCj4gSG93ZXZlciwg
+Zm9yIHRocmVhZHMsIHdoZW4gaXQgZG9lcyBhIHB0aHJlYWRfZXhpdCgmZXhpdF9zdGF0dXMpIGNh
+bGwsIHRoZQ0KPiBrZXJuZWwgaXMgbm90IGF3YXJlIG9mIHRoZSBleGl0IHN0YXR1cyB3aXRoIHdo
+aWNoIHB0aHJlYWRfZXhpdCBpcyBjYWxsZWQuDQo+IEl0IGlzIHNlbnQgYnkgY2hpbGQgdGhyZWFk
+IHRvIHRoZSBwYXJlbnQgcHJvY2VzcywgaWYgaXQgaXMgd2FpdGluZyBpbg0KPiBwdGhyZWFkX2pv
+aW4oKS4gSGVuY2UsIGZvciBhIHRocmVhZCBleGl0aW5nIGFibm9ybWFsbHksIGtlcm5lbCBjYW5u
+b3QNCj4gc2VuZCBub3RpZmljYXRpb25zIHRvIGFueSBsaXN0ZW5pbmcgcHJvY2Vzc2VzLg0KDQoN
+CkkgcmVhbGx5IGRvbid0IHRoaW5rIHRoaXMgc2hvdWxkIGJlIGdvaW5nIHZpYSBuZXR3b3JraW5n
+Lg0KV2UgY2FuIGhlbHAgcmV2aWV3IHRoZSBuZXRsaW5rIGJpdHMsIGlmIGFueSwgYnV0IG90aGVy
+d2lzZSB3ZSBhcmUgZmFyDQpvdXRzaWRlIG9mIG91ciBjb21mb3J0IHpvbmUuIA0KDQoNCklPVyB3
+aGVuIHlvdSByZXBvc3QgcGxlYXNlIGRyb3AgdGhlIG5ldC1uZXh0IGRlc2lnbmF0aW9uIGFuZCB5
+b3UnbGwNCm5lZWQgdG8gZmluZCBzb21lb25lIGVsc2UgdG8gbWVyZ2UgdGhlc2UgcGF0Y2hlcywg
+b3Igc2VuZCBhIFBSIGRpcmVjdGx5DQp0byBMaW51cyBoaW1zZWxmIGR1cmluZyB0aGUgbWVyZ2Ug
+d2luZG93Lg0KDQpBTkpBTEk+IFRoYW5rIHlvdSEgSG93ZXZlciwgbG9va2luZyBhdCB0aGUgTUFJ
+TlRBSU5FUlMgZmlsZSwgZHJpdmVycy9jb25uZWN0b3IvIGlzIGxpc3RlZCB1bmRlciBORVRXT1JL
+SU5HIERSSVZFUlMuIEhlbmNlIHNlbmRpbmcgb24gbmV0LW5leHQgaXMgdGhlIG1vc3QgYXBwcm9w
+cmlhdGUgcGxhY2U/IA0KLS0gDQpwdy1ib3Q6IG5hcA0KDQoNCg0K
 
