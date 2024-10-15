@@ -1,71 +1,70 @@
-Return-Path: <linux-kselftest+bounces-19687-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19688-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8317799DA6B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 01:57:46 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3C8099DA83
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 02:06:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B56BE1C211D3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 14 Oct 2024 23:57:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2CC2282BD6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 00:06:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1FE01DAC89;
-	Mon, 14 Oct 2024 23:57:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B648A29;
+	Tue, 15 Oct 2024 00:06:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GL0I0fTR"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="byeyIuGM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
+Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7132F1D968F
-	for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 23:57:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA41B19A
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2024 00:05:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728950256; cv=none; b=W5+B/LcbrH74pBoOXc7zTBiuTbUWENBMRj6vih+Wa0RshmZbbEWb+uLSh/+Bkzbmm2nLwVvdo1fLf8uXbo+/OkuBoaSeO2pn+X6JxDBka3L6yp//l3YW5n25dKxoJ4NmsFBPxzVwp9hKUwRgNffR2i9ISNVA/FkScYJMDcm4uVY=
+	t=1728950761; cv=none; b=Tdvh3TL9DmIw7qdMJnDRzmedo0GQJHBpRp9TRSGohQcWPhRyhVr0WKWPxKCsUjGBKXaRg/yAqzYOCd1oLTWL4CIpOP/DGatBqz2+CQFcYsq0Z/bIBUd0QeK84UNG3XogybRwPlwvx2LeR8h+4pyoE55ns/TA7crMP9L7Pu1ke3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728950256; c=relaxed/simple;
-	bh=kX4pqCrBK2GblSEDcTU5YKeWhCLo2dn6mQFQ8uOZoV4=;
+	s=arc-20240116; t=1728950761; c=relaxed/simple;
+	bh=ZehjK1rwhKlSbWRcVkYC8kqDslvkx7/iyzRyA+OQZ8c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qvDhOZDkssv1U7pTLTfldcwQV9gHD0o/QjQtCtGCY9cm+yxvoSV3NjDkswvQFzeRWcZyF4E9EELtSE3NGO7TKfRAhMGoTS9KBkxjQm/10co9FoGlKCzyLESAU/6R2X14r0TWzTA9RtZc4z1eo+odr7WxHzuznWCuHkcYk8j/nmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GL0I0fTR; arc=none smtp.client-ip=209.85.166.45
+	 In-Reply-To:Content-Type; b=Qtnop9vyO/88ov7ho4c2sOl+Ez87KBKnAXqMTc/dK2JdAdglPZivfQrmHO0HH/sTdLTZDVqQaALlCkj4H5kUxBnWMDyMxvX7PoEqkPUhT21JcJqH0HrZ+OpN8dpiTIYnL1XEH53J77/xGmfuoIGnd2Zo7gtVKPPoh8u4iNZUoMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=byeyIuGM; arc=none smtp.client-ip=209.85.166.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-835464abfa7so160060639f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 16:57:34 -0700 (PDT)
+Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-8354851fbfaso231383239f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 17:05:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1728950253; x=1729555053; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1728950759; x=1729555559; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=1PKCpI9LOOmwcDFFAV3Q3WPcNRWD/uWDLb+81DiVqOg=;
-        b=GL0I0fTRc1O+Ueul+L+qosfHmt4i9W/7csSBM49WhloeM9rIU3dDMeiN0AGcU5TtQg
-         xVBJNSuUdx1sRATj5zvZ0jFSs29xl/kUD+e0y2EpTl9dN6KQ1WoLJawV0YNUX3jumi4m
-         /iiM/FKzuUVlXvNts17g8GvdsLOuJvvBJhYw4=
+        bh=2TwSGWYk37LzL+nB3Qm3Cccq9jA0yfLg7SdVrI2yTuI=;
+        b=byeyIuGMPm5tAdlcDfvC9Onc0kjkW+PQ578wqC9y8CNORMTu9UIDuqdapzR3sFn/1M
+         ivvRBdWEA//60NN5HnDdr775wMu8ieYrwVFeqO9Prk5aWD69rmrVqQlfedZafxyVQrO1
+         /5AApctqsRvVHkNgm2vP59kg6PvFZJ9C7lFYc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728950253; x=1729555053;
+        d=1e100.net; s=20230601; t=1728950759; x=1729555559;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1PKCpI9LOOmwcDFFAV3Q3WPcNRWD/uWDLb+81DiVqOg=;
-        b=muRKSBmnFSnb+Qirq7PxH0F54nXi6LN4hEaXfFB/cmEMs4zVeJG3Mwy63yV0xJ8GVn
-         soQg+mVfK8HAZuC8qfdKBbBGosONn/yfHnk8LgicVseih2sq1AEkm3VOWwqiucivRvH+
-         8lgIPhORWCrHk5z2eWqAh6kC7uAfn28O4megTQlRZjV7wRzE/ugu0z51msc843lYb7a8
-         dh+qmjvxvxUUzi+veAEaSajlnZQDnSVPRX+Knryc/dWC0NN+PQH//UeZ6zCjZ02/rJmY
-         5MsCBdrt5Q1BJpGzMCfIjsvUBqLR2oXwEJ0hunC/ZKpnLEjcHH6wN4AhGm1IhEaEc4+z
-         dVww==
-X-Forwarded-Encrypted: i=1; AJvYcCX8KMNJmdQZ4MOI7ckdHpZ85UpEn3j9ML9aevcp278mKky0NeMYJkUGStUarvmUFXXr8aE1B939u6P4ZonpQVI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0WXv/SDt0laTjMdmUcCj8WhUo8q/3vBH9ydLGlsvmeBK3mDjS
-	jGuyE5wEohczGGfmBdRQ7YoJABYdTRUrjWOQTfYrhHHecrZhZEatsJQZXquOAkM=
-X-Google-Smtp-Source: AGHT+IH0xfL3ktXtZPj3uGodNBsuzJgI8pNk8IlXd2ozjWhgU67nKyr9i4FfLS9KOvhHLZD6fluEQA==
-X-Received: by 2002:a05:6e02:18cd:b0:3a0:a71b:75e5 with SMTP id e9e14a558f8ab-3a3bcdb421amr71034295ab.7.1728950253468;
-        Mon, 14 Oct 2024 16:57:33 -0700 (PDT)
+        bh=2TwSGWYk37LzL+nB3Qm3Cccq9jA0yfLg7SdVrI2yTuI=;
+        b=Ktv4HGfKDg017DBS3tjSOmsxtBLy0iuxutA0K10M1FhDcZQfThrvUAPg2kpu1lwfsI
+         /9CQDDZQy5iBSZI4BNU3SesQb42gInyEgZJWI+3D4FwyHyJye+XjGSUFm0DTppiAj1MY
+         73l63MqBgVpQjVo9ZV7XgriLqoIBjd/ikj9wIrIt9yrwrGjWi1Pm8ENMLZ9js2msfzAF
+         yyO3iTTHImI4BvcBUoj72fbUO8m3qgWgljpN8R9zIS1X0owaFUkOQo5eBpWF6TtRfGie
+         gZRXnMD+a3PleG9sssdn94eS0CawKMxFZWJnxyCGhLCSsD3eD0sBRUlG1irQvHZgWy5+
+         T7yg==
+X-Gm-Message-State: AOJu0YwU1YbxljZjuVnY05LrUa5aKV7yRYzJH09RR7nt+b8kvavZwaB2
+	ZY/4j3SoYONyrua61FmCCqCMYCKdgHJATfzOorU8zhnx07JgXR+Tf5zEF0aI3e4=
+X-Google-Smtp-Source: AGHT+IGRqsQFDY3Ma0cJGFn2I+AneM+oWcFsIjl4jiCDBzYJaEobcPJEKkPQeLj5lCNCHDovZt411w==
+X-Received: by 2002:a05:6602:3fc6:b0:82a:4c58:e1e0 with SMTP id ca18e2360f4ac-837946843cbmr1166620739f.12.1728950758843;
+        Mon, 14 Oct 2024 17:05:58 -0700 (PDT)
 Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dbecc6a89asm45032173.173.2024.10.14.16.57.32
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-83a8b2aa095sm3961939f.19.2024.10.14.17.05.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Oct 2024 16:57:33 -0700 (PDT)
-Message-ID: <d0143933-5619-4824-ba83-85274e222479@linuxfoundation.org>
-Date: Mon, 14 Oct 2024 17:57:31 -0600
+        Mon, 14 Oct 2024 17:05:58 -0700 (PDT)
+Message-ID: <41d157fc-6413-4061-95af-518ec7b923f1@linuxfoundation.org>
+Date: Mon, 14 Oct 2024 18:05:57 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,73 +72,60 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 net-next] selftests: tc-testing: Fixed Typo error
-To: Karan Sanghavi <karansanghvi98@gmail.com>,
- Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>,
- Jiri Pirko <jiri@resnulli.us>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Karan Sanghavi <karansanghvi98@gamil.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <Zw1LvrSdnl5bS-uS@Emma>
+Subject: Re: [PATCH v2] selftests/intel_pstate: fix operand expected
+To: Alessandro Zanni <alessandro.zanni87@gmail.com>, shuah@kernel.org
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ anupnewsmail@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
+References: <20241014172149.324639-1-alessandro.zanni87@gmail.com>
 Content-Language: en-US
 From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <Zw1LvrSdnl5bS-uS@Emma>
+In-Reply-To: <20241014172149.324639-1-alessandro.zanni87@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 10/14/24 10:50, Karan Sanghavi wrote:
-> This commit combines two fixes for typographical errors
-> in the "name" fields of the JSON objects with IDs
-> "4319" and "4341" in the tc-testing selftests.
-> For the files tc-tests/filters/cgroup.json and
-> /tc-tests/filters/flow.json.
+On 10/14/24 11:21, Alessandro Zanni wrote:
+> This fix solves theses errors, when calling kselftest with
+> targets "intel_pstate":
 > 
-
-This is not the correct way to write change logs. There is no
-need to mention how two commits are combines.
-
-State the problem and sya what this patch does e.g:
-"Fix spelling errors in cgroup.json and flow.json"
-
-> v2:
-> - Combine two earlier patches into one
-> - Links to v1 of each patch
->    [1] https://lore.kernel.org/all/Zqp9asVA-q_OzDP-@Emma/
->    [2] https://lore.kernel.org/all/Zqp92oXa9joXk4T9@Emma/
+> ./run.sh: line 90: / 1000: syntax error: operand expected (error token is "/ 1000")
 > 
+> ./run.sh: line 92: / 1000: syntax error: operand expected (error token is "/ 1000")
 > 
-> Signed-off-by: Karan Sanghavi <karansanghvi98@gmail.com>
+> To error was found by running tests manually with the command:
+> make kselftest TARGETS=intel_pstate
+> 
+> Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
 > ---
->   tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json | 2 +-
->   tools/testing/selftests/tc-testing/tc-tests/filters/flow.json   | 2 +-
->   2 files changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json b/tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json
-> index 03723cf84..6897ff5ad 100644
-> --- a/tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json
-> +++ b/tools/testing/selftests/tc-testing/tc-tests/filters/cgroup.json
-> @@ -1189,7 +1189,7 @@
->       },
->       {
->           "id": "4319",
-> -        "name": "Replace cgroup filter with diffferent match",
-> +        "name": "Replace cgroup filter with different match",
->           "category": [
->               "filter",
->               "cgroup"
-> diff --git a/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json b/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
-> index 58189327f..996448afe 100644
-> --- a/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
-> +++ b/tools/testing/selftests/tc-testing/tc-tests/filters/flow.json
-> @@ -507,7 +507,7 @@
->       },
->       {
->           "id": "4341",
-> -        "name": "Add flow filter with muliple ops",
-> +        "name": "Add flow filter with multiple ops",
->           "category": [
->               "filter",
->               "flow"
+> Notes:
+>      v2: removed debug echos
+
+See my comments on your v1. It would help to wait a bit
+to send v2.
+
+I can't reproduce this problem on Linux 6.12-rc3.
+What's you environment like?
+
+> 
+>   tools/testing/selftests/intel_pstate/run.sh | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
+> index e7008f614ad7..0c1b6c1308a4 100755
+> --- a/tools/testing/selftests/intel_pstate/run.sh
+> +++ b/tools/testing/selftests/intel_pstate/run.sh
+> @@ -87,9 +87,9 @@ mkt_freq=${_mkt_freq}0
+>   
+>   # Get the ranges from cpupower
+>   _min_freq=$(cpupower frequency-info -l | tail -1 | awk ' { print $1 } ')
+> -min_freq=$(($_min_freq / 1000))
+> +min_freq=$((_min_freq / 1000))
+>   _max_freq=$(cpupower frequency-info -l | tail -1 | awk ' { print $2 } ')
+> -max_freq=$(($_max_freq / 1000))
+> +max_freq=$((_max_freq / 1000))
+>   
+>   
+>   [ $EVALUATE_ONLY -eq 0 ] && for freq in `seq $max_freq -100 $min_freq`
 
 thanks,
 -- Shuah
