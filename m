@@ -1,122 +1,161 @@
-Return-Path: <linux-kselftest+bounces-19733-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19734-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 846B699ED69
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 15:27:27 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A8BE99EDB0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 15:34:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B56F91C21043
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 13:27:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1521B1F24684
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 13:34:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48DC61FC7CF;
-	Tue, 15 Oct 2024 13:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92FBD1B21A3;
+	Tue, 15 Oct 2024 13:33:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FrKsNHUr"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tYL40ZDe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1783C1FC7CA;
-	Tue, 15 Oct 2024 13:26:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C245F1AF0DF;
+	Tue, 15 Oct 2024 13:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728998778; cv=none; b=g1U5SHNls26M+pZF4dMWAzFrvIP0vR1U3RG8BqEH7oxNcELRevSzZGP4pSwdIAu6ZyE2LccBMff+5jhsOK50vs+0qdB0V5ceOQR9BNDWAv3rXS3aaH2OogyCJg00HGuAsQxkS7STUtDsV2K+dWipieBneVgry+mFEIq3dmHVNNw=
+	t=1728999202; cv=none; b=mIWcaKDjXutUsksSW3WCaXPP5S2usFMgPz36aOBLDKxSMtiTxQcj2wb1tKocq2L7Xhq4hbjpH/U1RPgXOzPWYE7WbSgszNEG6dfJ5cbvGe54SCYpSlXnbzB/+MzjUkyVQZ6ZdggFXvyqtI7UhHFHH/Sw74bv8kW1VVNok+rJVZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728998778; c=relaxed/simple;
-	bh=oFFPT5mvvt/DlJJSCGR58VuLSdcKbAv5xgnJpcGR0tY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uv4ZWx8A83md4DDfKqrCr7P06qAgT2ZY7tbohlgHW1+aQsLXrkgey/G32+Wg6M5PbNAI3o/PtM9dUPJVCUPsT6WgftROGTeTquVfW3MNvdYem4TIIoncrCbuAThF8nH0sDl28J/W7hGsG2+Ui70Pg8MDFZ96n0ocXXzdDVZ/UGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FrKsNHUr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B3CCC4CECE;
-	Tue, 15 Oct 2024 13:26:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728998777;
-	bh=oFFPT5mvvt/DlJJSCGR58VuLSdcKbAv5xgnJpcGR0tY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FrKsNHUrBSbtPVikj1FML7vlz2mzC3ZXIoGIfrjrUd5GNlvj7byXhK69OID1comZ3
-	 ERsc0zdXy2HK9A2Z7G99T+h/RV2RmGFRkCXOSx8aShAqDswaIjUsafckOOSl1skiEU
-	 I2tf+OBx0u4OvVcY4HsF2UpTQUhJbpZzsK31x/FIIThfUQgmq8SNCnsUS81S2+rnJn
-	 JbezWxhO8+rA32VdG2XOwewpI/bX783q2XyJgeqNS477KHazRAG5kVkrecFNa/Tgu6
-	 T9M85n1LAvOk5DzGVWzOFVwwmW+vDtjPlBvN5IHs9Pu+Y+jgPolGy/RrDmde4Rw9M3
-	 Bn4LSqGCTRfig==
-Date: Tue, 15 Oct 2024 14:26:09 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Joey Gouly <joey.gouly@arm.com>
-Cc: Will Deacon <will@kernel.org>, Kevin Brodsky <kevin.brodsky@arm.com>,
-	linux-arm-kernel@lists.infradead.org, nd@arm.com,
-	akpm@linux-foundation.org, aneesh.kumar@kernel.org,
-	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
-	catalin.marinas@arm.com, christophe.leroy@csgroup.eu,
-	dave.hansen@linux.intel.com, hpa@zytor.com,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
-	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
-	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
-	szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 19/30] arm64: add POE signal support
-Message-ID: <e9eb6cf1-1ed4-45b0-85c1-39028728f952@sirena.org.uk>
-References: <20240822151113.1479789-1-joey.gouly@arm.com>
- <20240822151113.1479789-20-joey.gouly@arm.com>
- <47e1537f-5b60-4541-aed1-a20e804c137d@arm.com>
- <20241009144301.GA12453@willie-the-truck>
- <20241014171023.GA18295@willie-the-truck>
- <20241015095911.GA3777204@e124191.cambridge.arm.com>
- <20241015114116.GA19334@willie-the-truck>
- <20241015122529.GA3820764@e124191.cambridge.arm.com>
+	s=arc-20240116; t=1728999202; c=relaxed/simple;
+	bh=eKK3YJkzGUL7LoDYmFThBpuVhS3ay6wlYdhQIEW1sIo=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Cc:To:Subject:
+	 References:In-Reply-To; b=GskgxBPwplca8l2DBgaxIPRcE3GAYYL6WYTr8sNz1dl36d735Do+95JJrtVLZJ4UwnudRZ+U4etiNshVK9erpIkFoiLyM0oZ0S8pMdGgipl7BFVA0E3eFtliycU67XhVbhDFs6JEeM6rKwcKki/J08gXtqtpdt7a6+PE72PvFC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=tYL40ZDe; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49FCnnUl007216;
+	Tue, 15 Oct 2024 13:33:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=t4uLAP
+	lb3ElPca1lnSQXtBqmK2LFXQJJsi9UiaP00vs=; b=tYL40ZDeoKAgu6cmwb4YAy
+	3K4VGic7qGGG5JSVCLHgL3HonN+mmYVemlPRV8lt0L5Fhax6udIaAasjhGVVOC7A
+	rK35/VFYabvYIXCFrYaYhnHRb7xx+t6d94WQy2o85YQZOsE0YcJhICk782BxEh7f
+	Sx2EQseZe7KOAiwvu90NXPgVFjafxhosAWToh5Ixx0Rf8xeB9v15HWfUoRifRxs7
+	qhxr3eRb1w5Q6v+cxVdDz4NxW8baFPQqgj2hiOqIha8cCyD5aXf3GfEeIe2rO3V5
+	SeYSegx2qFki6jVCpIW3iCoRO/tEdKHh27YVgPvLu6RbGNF321wNFeB51usn08fg
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 429rr7r7e4-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 15 Oct 2024 13:33:15 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 49FDXF27028138;
+	Tue, 15 Oct 2024 13:33:15 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 429rr7r7e2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 15 Oct 2024 13:33:15 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 49FB7slr027464;
+	Tue, 15 Oct 2024 13:33:14 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4283txm54j-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 15 Oct 2024 13:33:13 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 49FDXAUs26673538
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 15 Oct 2024 13:33:10 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5918420043;
+	Tue, 15 Oct 2024 13:33:10 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 326AC20040;
+	Tue, 15 Oct 2024 13:33:10 +0000 (GMT)
+Received: from darkmoore (unknown [9.179.10.245])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 15 Oct 2024 13:33:10 +0000 (GMT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="VY579BsplRjShns6"
-Content-Disposition: inline
-In-Reply-To: <20241015122529.GA3820764@e124191.cambridge.arm.com>
-X-Cookie: New customers only.
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 15 Oct 2024 15:33:04 +0200
+Message-Id: <D4WF2493HS7M.QHC37L73T9L5@linux.ibm.com>
+From: "Christoph Schlameuss" <schlameuss@linux.ibm.com>
+Cc: <linux-s390@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        "Paolo
+ Bonzini" <pbonzini@redhat.com>,
+        "Shuah Khan" <shuah@kernel.org>,
+        "Christian
+ Borntraeger" <borntraeger@linux.ibm.com>,
+        "Claudio Imbrenda"
+ <imbrenda@linux.ibm.com>,
+        "David Hildenbrand" <david@redhat.com>
+To: "Janosch Frank" <frankja@linux.ibm.com>, <kvm@vger.kernel.org>
+Subject: Re: [PATCH v6 2/5] selftests: kvm: s390: Add uc_skey VM test case
+X-Mailer: aerc 0.18.2
+References: <20241015083744.761838-1-schlameuss@linux.ibm.com>
+ <20241015083744.761838-3-schlameuss@linux.ibm.com>
+ <b7246d28-612e-4f6d-81ba-53d9a28e325b@linux.ibm.com>
+In-Reply-To: <b7246d28-612e-4f6d-81ba-53d9a28e325b@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: P9p0DbDYRCMVEG5Jh83MR1mh9nnUGZXS
+X-Proofpoint-ORIG-GUID: ckCItoD9snFp9915_xadorp9gBJWAbNF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 suspectscore=0 adultscore=0 clxscore=1015 phishscore=0
+ impostorscore=0 malwarescore=0 spamscore=0 mlxscore=0 mlxlogscore=859
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410150092
 
+On Tue Oct 15, 2024 at 3:22 PM CEST, Janosch Frank wrote:
+> On 10/15/24 10:37 AM, Christoph Schlameuss wrote:
+> > Add a test case manipulating s390 storage keys from within the ucontrol
+> > VM.
+> >=20
+> > Storage key instruction (ISKE, SSKE and RRBE) intercepts and
+> > Keyless-subset facility are disabled on first use, where the skeys are
+> > setup by KVM in non ucontrol VMs.
+> >=20
+>
+> [...]
+>
+> > -/* verify SIEIC exit
+> > +/*
+> > + * Disable skey intercepts and rewind last instruction
+> > + * (KVM would init the skeys here)
+> > + */
+> > +static void uc_skey_enable(FIXTURE_DATA(uc_kvm) *self)
+> > +{
+> > +	struct kvm_s390_sie_block *sie_block =3D self->sie_block;
+> > +	int ilen =3D insn_length(sie_block->ipa >> 8);
+> > +	struct kvm_run *run =3D self->run;
+> > +
+> > +	/* disable KSS */
+> > +	sie_block->cpuflags &=3D ~CPUSTAT_KSS;
+> > +	/* disable skey inst interception */
+> > +	sie_block->ictl &=3D ~(ICTL_ISKE | ICTL_SSKE | ICTL_RRBE);
+> > +
+> > +	/* rewind to reexecute intercepted instruction */
+> > +	run->psw_addr =3D run->psw_addr - ilen;
+>
+> There's a very important detail between KSS and the SKEY ICTLs:
+> KSS is (mostly) nullifying i.e. the PSW points to the instruction that=20
+> caused the KSS exit.
+> ICTL intercepts are suppressing which means the PSW points after the=20
+> instruction and hence we need to rewind the PSW if we want to re-issue=20
+> the instruction.
+>
+> Re-winding on a KSS intercept makes the guest cpu execute the=20
+> instruction before the intercept producing instruction twice.
 
---VY579BsplRjShns6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Tue, Oct 15, 2024 at 01:25:29PM +0100, Joey Gouly wrote:
-> On Tue, Oct 15, 2024 at 12:41:16PM +0100, Will Deacon wrote:
-
-> > 	if (system_supports_poe() && err == 0 && user->poe_offset) {
-> > 		...
-
-> > which gives the wrong impression that the POR is somehow optional, even
-> > if the CPU supports POE. So we should drop that check of
-> > 'user->poe_offset' as it cannot be NULL here.
-
-> That was cargo culted (by me) from the rest of the function (apart from TPIDR2
-> and FPMR). I think Kevin is planning on sending his signal changes still, but
-> is on holiday, maybe he can remove the last part of the condition as part of
-> his series.
-
-That's there because the decisions about "should we save this thing" are
-taken in setup_sigframe_layout() and for a bunch of the extensions we
-suppress the saving if they're in some sort of default state (eg, when
-we don't have TIF_SVE set we don't output the SVE sigframe).
-
---VY579BsplRjShns6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmcObXAACgkQJNaLcl1U
-h9Buxgf7B6JxtnaQV7bcQdxU3W/45vjVnsJAj4oq+mBBFjqBV2314SqKcMSBrcJ1
-xE3cGR9A04qVmbrPzOkCkiHLXWFD6I/JAZP9eAZGwJXU0Jr8fJWBnXFqDEUdWstw
-XRJtiGFQkpdq/e0ijRt5DymHm18i/lEE/eg6Zi2o621Abzx9QNS+LMKkn9WpTOk8
-W/xOE+DMhh2zpccEJ8VU2HgFJxZ/EcqC/fgkBlJTTApUuvHNdhue2DyBAgzIIsoq
-2UYiKeiDTIkN07oUwJ7pRlftHSrLAZyM6WfK8+SZ2rQ1QzhTX8KUz5WzBw3BBpz5
-7nn2tj3oFNHFeCRd88yFJnu0JH0lIw==
-=yrSH
------END PGP SIGNATURE-----
-
---VY579BsplRjShns6--
+Oh, yes. You are right, I did mess that up in my cleanup. I will fix that.
+Here it does now only work since the KSS is not intercepted on the second
+invocation. But I am with you, it should only be executed once.
 
