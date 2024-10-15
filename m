@@ -1,138 +1,193 @@
-Return-Path: <linux-kselftest+bounces-19739-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19740-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84B5D99F090
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 17:02:56 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48ADD99F100
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 17:24:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACEBC1C2347B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 15:02:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B76C71F22B7F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 15:24:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 836FD1CB9E7;
-	Tue, 15 Oct 2024 15:01:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B31501B21A1;
+	Tue, 15 Oct 2024 15:23:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ODxZ3Ayk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8AB1CB9E0;
-	Tue, 15 Oct 2024 15:01:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7441B2193
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2024 15:23:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729004515; cv=none; b=Rfylwwrg0gykhH2hGVhkWUkj94GbZcDV8XJIcwiAOtpK73sQZVUoDhZ/UHVAIP3m0U8pya0fdSprYvytPty4DDEKgLiuNIVFlkVefhhzZ2AI/eGpzcaGFQMqXUaBFOYPairOD0e9klOGA4pi4PaSd8jErOBjDGVRysSlX/YBDL0=
+	t=1729005824; cv=none; b=eIe/zwqZ9pXbo2peqb3qxx9BN+QjOdcAfn25IlyBwv88dOPfl7xecVn+rku22C46ZuP18ojBU/H7cnPvnyFNxegqiHeJCft5cJZMiAIBcmFHIxSWB4C45ZzU+mneSAR+JqnYDiAsCBZAFtCIF3AYvqxy4eGj3b5CEirTCyNBxNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729004515; c=relaxed/simple;
-	bh=eJiYstpk1WK1R4lbmpBGfqhnbHP9qsBG/eF+PTVYAHk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KDRFTKxwXGdrAp4Xf36luVQl8NtF+EcBuoN7G/P62IijEOoOJ5yRiL+wtDSHbz2PCJAxjRcvG7RIH1BuWnXo1u8b1mATlcsRtFcZCmEpDbRZGz7lE0OJOXPVH0BFSjljaPeqn3GkaqbKRmEDxregeBT26L+LjQdQx9gyg1Em3qY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18141C4CEC6;
-	Tue, 15 Oct 2024 15:01:49 +0000 (UTC)
-Date: Tue, 15 Oct 2024 16:01:47 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Will Deacon <will@kernel.org>
-Cc: Joey Gouly <joey.gouly@arm.com>, Kevin Brodsky <kevin.brodsky@arm.com>,
-	linux-arm-kernel@lists.infradead.org, nd@arm.com,
-	akpm@linux-foundation.org, aneesh.kumar@kernel.org,
-	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
-	broonie@kernel.org, christophe.leroy@csgroup.eu,
-	dave.hansen@linux.intel.com, hpa@zytor.com,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
-	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
-	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
-	szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 19/30] arm64: add POE signal support
-Message-ID: <Zw6D2waVyIwYE7wd@arm.com>
-References: <20240822151113.1479789-1-joey.gouly@arm.com>
- <20240822151113.1479789-20-joey.gouly@arm.com>
- <47e1537f-5b60-4541-aed1-a20e804c137d@arm.com>
- <20241009144301.GA12453@willie-the-truck>
- <20241014171023.GA18295@willie-the-truck>
- <20241015095911.GA3777204@e124191.cambridge.arm.com>
- <20241015114116.GA19334@willie-the-truck>
+	s=arc-20240116; t=1729005824; c=relaxed/simple;
+	bh=ibOMGyy9MOm2vdzyRR7ujrHzgVMe6RdwJhby4PeTS5I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UCq5LabxRYPr4kXR1fi5SA8ajsr8aak3nEwE0sQ9btILUtnJk4MC1+/pfNexVqtE2KS870JA/Rfl4iZk1ZIG2QHO0HR4YqoFUwJgO0hL5MTCMYXHtstl/ubu2RHvLHcWF5sPqUIcBZqnQQk8jwajO92UD11M4JhEmEboFrab2fY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ODxZ3Ayk; arc=none smtp.client-ip=209.85.166.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-37636c3872bso17905905ab.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2024 08:23:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1729005822; x=1729610622; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SG9oZeCQixkQj/EuBdFW7/W28zFcKeJtf6zC5ywQazQ=;
+        b=ODxZ3Aykp08FkaNIp6FQq0r1Ec+al/BfnfFxAGkUjCFRAJOh/i/AYRkXM6+vNDFn4P
+         Elackh5TQpAGH8UKPAdU4WVoMhU0aplxfuzYxVbHAZ9Zf6sWCAxK046s2VPpnWCscHZ4
+         spoQKlT68hRah6wWAiFhvIGBbLsMpQZponEus=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729005822; x=1729610622;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SG9oZeCQixkQj/EuBdFW7/W28zFcKeJtf6zC5ywQazQ=;
+        b=ZujpNgdWib+Ugn18c61CFr/j0Ljet+cjvionJDGAKPNqiP9+ioCxA8wVm/M+jwJosD
+         rMkGt9Vz78SvEf4NXnXH1R5xdVQGTDIgR4mIk54dGAnj/FmqtpjMrSpAQV2UXyd00tPA
+         +fe+Vmf2qomGAeoFnCz/4LFEY+NE0/m0pj13OGkI6RQjIc3XdRw6QMqRe2Tw0WyYQ9cO
+         QILBAAcBZe87TTLJk7XLcYRlI32ZFCLa4Li7LDeN/JTnSY9WIGO8Wq3LnTGqiYF9hfEH
+         46zeCl+ii6Vpv53IqXoRtYj/t9cAF5LauCagcGmugslOsp5mAccYgFuOQ9ubOpF6EUJi
+         oz+g==
+X-Forwarded-Encrypted: i=1; AJvYcCXZkeAT6Pbig3/Zexg4niDFanCkSWzMes4GC0tHLp3XRcbZgW9/H23Z5SfDEY7hbMnAkQLQb2pOvxecf/TGAh8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy03beifMZ7D+pBq/e1stWQFcxrErGa6qryzboPXmNbUrOww2t9
+	CioZVCtimtFNuXWq1683AuMhrPwqXL14a2WSwRChbvIg9Ns+Gx79F/8vmWvAPpo=
+X-Google-Smtp-Source: AGHT+IF33hXmGihjl1zU+NN6M6a/vLnjZ7HgtQDtxpt7THx0iw4xm/mXlY9UgwvQ02qUwnubsqirpg==
+X-Received: by 2002:a05:6e02:198b:b0:3a0:9c20:8070 with SMTP id e9e14a558f8ab-3a3bcdf03f4mr83358245ab.20.1729005821916;
+        Tue, 15 Oct 2024 08:23:41 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a3d715e488sm3569555ab.83.2024.10.15.08.23.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Oct 2024 08:23:41 -0700 (PDT)
+Message-ID: <b82a25f8-e7a9-4a42-9a16-c2cda99feecd@linuxfoundation.org>
+Date: Tue, 15 Oct 2024 09:23:40 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241015114116.GA19334@willie-the-truck>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: clone3: Use the capget and capset syscall
+ directly
+To: zhouyuhang <zhouyuhang1010@163.com>, brauner@kernel.org, shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ zhouyuhang <zhouyuhang@kylinos.cn>
+References: <20241010121612.2601444-1-zhouyuhang1010@163.com>
+ <5b471a5c-c99d-42a5-943d-bb253127a202@linuxfoundation.org>
+ <a2ab9671-5095-47bf-82cf-0e167320772f@163.com>
+ <b2e02494-0f22-476e-bb79-f3a133b7fa07@linuxfoundation.org>
+ <714162ff-a2f8-4fc6-91af-0ecd6376bc7f@163.com>
+ <0f79692e-ed68-462d-8ec7-955219116282@linuxfoundation.org>
+ <5c4272c4-3f9c-4ce8-ba73-50b5f16ab605@163.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <5c4272c4-3f9c-4ce8-ba73-50b5f16ab605@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Oct 15, 2024 at 12:41:16PM +0100, Will Deacon wrote:
-> On Tue, Oct 15, 2024 at 10:59:11AM +0100, Joey Gouly wrote:
-> > On Mon, Oct 14, 2024 at 06:10:23PM +0100, Will Deacon wrote:
-> > > Looking a little more at this, I think we have quite a weird behaviour
-> > > on arm64 as it stands. It looks like we rely on the signal frame to hold
-> > > the original POR_EL0 so, if for some reason we fail to allocate space
-> > > for the POR context, I think we'll return back from the signal with
-> > > POR_EL0_INIT. That seems bad?
-> > 
-> > If we don't allocate space for POR_EL0, I think the program recieves SIGSGEV?
-> > 
-> > setup_sigframe_layout()
-> >         if (system_supports_poe()) {
-> >                 err = sigframe_alloc(user, &user->poe_offset,
-> >                                      sizeof(struct poe_context));
-> >                 if (err)
-> >                         return err;
-> >         }
-> > 
-> > Through get_sigframe() and setup_rt_frame(), that eventually hets here:
-> > 
-> > handle_signal()
-> > 	ret = setup_rt_frame(usig, ksig, oldset, regs);
-> > 
-> > 	[..]
-> > 
-> >         signal_setup_done(ret, ksig, test_thread_flag(TIF_SINGLESTEP));
-> > 
-> > void signal_setup_done(int failed, struct ksignal *ksig, int stepping)
-> > {
-> >         if (failed)
-> >                 force_sigsegv(ksig->sig);
-> >         else
-> >                 signal_delivered(ksig, stepping);
-> > }  
-> > 
-> > So I think it's "fine"?
+On 10/15/24 03:00, zhouyuhang wrote:
 > 
-> Ah, yes, sorry about that. I got confused by the conditional push in
-> setup_sigframe():
+
+[snip] for clarity.
+
+>>>>>> Why is this necessary? This is defined in linux/capability.h.
 > 
-> 	if (system_supports_poe() && err == 0 && user->poe_offset) {
-> 		...
+> Sorry for not noticing this before.
+> This is to be compatible with some older versions of linux/capability.h that do not define this macro.
 > 
-> which gives the wrong impression that the POR is somehow optional, even
-> if the CPU supports POE. So we should drop that check of
-> 'user->poe_offset' as it cannot be NULL here.
+>>>>>>
+>>>>>>> +int capget(cap_user_header_t header, cap_user_data_t data);
+>>>>>>> +int capset(cap_user_header_t header, const cap_user_data_t data);
+>>>>>>
+>>>>>> In general prototypes such as these should be defined in header
+>>>>>> file. Why are we defining these here?
+>>>>>>
+>>>>>> These are defined in sys/capability.h
+>>>>>>
+>>>>>> I don't understand this change. You are removing sys/capability.h
+>>>>>> which requires you to add these defines here. This doesn't
+>>>>>> sound like a correct solution to me.
+>>>>>>
+>>>>>
+>>>>> I tested it on my machine without libcap-dev installed, the /usr/include/linux/capability.h
+>>>>>
+>>>>> is on this machine by default. Successfully compiled using #include <linux/capability.h>
+>>>>>
+>>>>> but not with #include <sys/capability.h>. This patch removes libcap library dependencies.
+>>>>>
+>>>>> And we don't use any part of sys/capability.h other than these two syscalls. So I think that's why it's necessary.
+>>>>
+>>>> You are changing the code to not include sys/capability.h
+>>>> What happens if sys/capability.h along with linux/capability.h
+>>>>
+>>>> Do you see problems?
+>>>>
 
-I agree, we should remove this check as it's confusing.
 
-> We also still need to resolve Kevin's concern, which probably means
-> keeping the thread's original POR around someplace.
+>>>
+>>> I'm sorry, maybe I wasn't clear enough.
+>>> When we install the libcap library it will have the following output:
+>>>
+>>> test@test:~/work/libcap$ sudo make install | grep capability
+>>> install -m 0644 include/sys/capability.h /usr/include/sys
+>>> install -m 0644 include/sys/capability.h /usr/include/sys
+>>> /usr/share/man/man5 capability.conf.5 \
+>>>
+>>> It installs sys/capability.h in the correct location, but does not
+>>>
+>>> install linux/capability.h, so sys/capability.h is bound to the libcap library
+>>
+>> It won't install inux/capability.h unless you run "make headers" in
+>> the kernel repo.
+>>
+>>>
+>>> and they will either exist or disappear together. Now I want to remove
+>>>
+>>> the dependency of the test on libcap library so I changed the code that it
+>>>
+>>> does not contain sys/capability.h but instead linux/capability.h,
+>>>
+>>> so that the test can compile successfully without libcap being installed,
+>>>
+>>> these two syscalls are not declared in linux/capability.h(It is sufficient for test use except for these two syscalls)
+>>>
+>>> so we need to declare them here. I think that's why the commit 663af70aabb7
+>>>
+>>> ("bpf: selftests: Add helpers to directly use the capget and capset syscall") I refered to
+>>>
+>>> does the same thing. As for your question "What happens if sys/capability.h along
+>>>
+>>> with linux/capability.h", I haven't found the problem yet, I sincerely hope you can
+>>>
+>>> help me improve this code. Thank you very much.
+>>
+>> Try this:
+>>
+>> Run make headers in the kernel repo.
+>> Build without making any changes.
+>> Then add you changes and add linux/capability.h to include files
+>>
+>> Tell me what happens.
 
-If we fail to allocate context for POR_EL0 (or anything else), we'll
-deliver a SIGSEGV. I think it's quite likely that the SIGSEGV will also
-fail to allocate context we end up with a fatal SIGSEGV. Not sure the
-user can affect the allocation/layout, though it can change stack
-attributes where the frame is written.
+Try the above first.
 
-Assuming that the user tricks the kernel into failing to write the
-context but allows it to succeed on the resulting SIGSEGV, POR_EL0
-wouldn't have been reset and the SIGSEGV context will still have the
-original value. I don't think we need to do anything here for 6.12.
+>>
+>> The change you are making isn't correct. Because you don't want to
+>> define system calls locally in your source file.
+>>
+> 
+> Thanks, I see.
+> Maybe I should move them to a new header file and resend a patch.
 
-However, in for-next/core, we have gcs_signal_entry() called after
-resetting POR_EL0. If this fails, we can end up with a new POR_EL0 on
-sigreturn (subject to the above user toggling permissions). I think this
-needs to be fixed, POR_EL0 only reset when we know we are going to
-deliver the signal.
+No. Please see above. I would rather not see these defined at all
+locally.
 
--- 
-Catalin
+thanks,
+-- Shuah
 
