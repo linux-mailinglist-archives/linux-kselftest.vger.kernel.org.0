@@ -1,132 +1,118 @@
-Return-Path: <linux-kselftest+bounces-19688-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19689-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3C8099DA83
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 02:06:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F07899DAB9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 02:38:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2CC2282BD6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 00:06:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C20231F229EE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 00:38:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B648A29;
-	Tue, 15 Oct 2024 00:06:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8F4EBA4B;
+	Tue, 15 Oct 2024 00:38:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="byeyIuGM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K6aYkXW/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f42.google.com (mail-io1-f42.google.com [209.85.166.42])
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA41B19A
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2024 00:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFC3818E2A;
+	Tue, 15 Oct 2024 00:38:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728950761; cv=none; b=Tdvh3TL9DmIw7qdMJnDRzmedo0GQJHBpRp9TRSGohQcWPhRyhVr0WKWPxKCsUjGBKXaRg/yAqzYOCd1oLTWL4CIpOP/DGatBqz2+CQFcYsq0Z/bIBUd0QeK84UNG3XogybRwPlwvx2LeR8h+4pyoE55ns/TA7crMP9L7Pu1ke3Y=
+	t=1728952722; cv=none; b=Phuyy63iKuPvM39DjefZiRY3M1xsdO5r0ZKwyBdHivI0rajc2yMleOquTRdOnv1bFC/PuTu8cKnKq01nVPMfK+HBRWuvYqPSUI4XhFJ7b0afwjqbCytTyfRtppmPwSPFPsSxDjnGtpbPtMIZZgV+C2cnZl6uekrJXv1cap1vNK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728950761; c=relaxed/simple;
-	bh=ZehjK1rwhKlSbWRcVkYC8kqDslvkx7/iyzRyA+OQZ8c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Qtnop9vyO/88ov7ho4c2sOl+Ez87KBKnAXqMTc/dK2JdAdglPZivfQrmHO0HH/sTdLTZDVqQaALlCkj4H5kUxBnWMDyMxvX7PoEqkPUhT21JcJqH0HrZ+OpN8dpiTIYnL1XEH53J77/xGmfuoIGnd2Zo7gtVKPPoh8u4iNZUoMk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=byeyIuGM; arc=none smtp.client-ip=209.85.166.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f42.google.com with SMTP id ca18e2360f4ac-8354851fbfaso231383239f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 14 Oct 2024 17:05:59 -0700 (PDT)
+	s=arc-20240116; t=1728952722; c=relaxed/simple;
+	bh=pOAeSX8kJz50afBssThkJp87imIDyOBDRTPf+1RjHG4=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=ch90gwlPbeersnwmMY2bWt8SN+QQ5qJUtBsHHE/t2k6f6yCnDMgvNpZnIeaQkYj8dYfJ/Oc5H0QnysZjQc142d7iqMY0XfYGqNvZ+A9pRJBqLgb8qawwSaysozuwE2n6w4Cwa4U9FQousO8KZwW4XIGD2fVLaZc2cR/p1TXOtnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K6aYkXW/; arc=none smtp.client-ip=209.85.160.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qt1-f180.google.com with SMTP id d75a77b69052e-4603b835a1cso48741831cf.0;
+        Mon, 14 Oct 2024 17:38:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1728950759; x=1729555559; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2TwSGWYk37LzL+nB3Qm3Cccq9jA0yfLg7SdVrI2yTuI=;
-        b=byeyIuGMPm5tAdlcDfvC9Onc0kjkW+PQ578wqC9y8CNORMTu9UIDuqdapzR3sFn/1M
-         ivvRBdWEA//60NN5HnDdr775wMu8ieYrwVFeqO9Prk5aWD69rmrVqQlfedZafxyVQrO1
-         /5AApctqsRvVHkNgm2vP59kg6PvFZJ9C7lFYc=
+        d=gmail.com; s=20230601; t=1728952720; x=1729557520; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SQWJwOdFi41iaCsq3b3GQuRzgQ8nmghW67IzLzPlQ2w=;
+        b=K6aYkXW/VMzIK2QdbbQHkCgeOaM2VJ/iIFxrRZ7KVwZ48fcN533zrrLxGe+3dqIpzs
+         np1qt0pCiOqKAfmRwKkb9kdHAUec5DZ9Aof6xjVotG6JqsnJ3+Dws85eyc/KutE6/jY4
+         +KsvQ1Yk3B47BgYJ92WiJhwbpeejpYDkz0NxKSRJk3PEHO29Aw3fK8voRf+Pqt85IPeJ
+         DwLEJDpx/D4sU71Gx/v25BiVltPVI1XXgyfc6xlpDAUVFPKfDOSyU5zLqYcnQQgJzMbN
+         Rh/DxNMU4asnTq60iIHyHQZ4prcy+5eA92hN7ItSBYxY14oGrn/yBs2QBXWsS+crOHss
+         BuVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728950759; x=1729555559;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2TwSGWYk37LzL+nB3Qm3Cccq9jA0yfLg7SdVrI2yTuI=;
-        b=Ktv4HGfKDg017DBS3tjSOmsxtBLy0iuxutA0K10M1FhDcZQfThrvUAPg2kpu1lwfsI
-         /9CQDDZQy5iBSZI4BNU3SesQb42gInyEgZJWI+3D4FwyHyJye+XjGSUFm0DTppiAj1MY
-         73l63MqBgVpQjVo9ZV7XgriLqoIBjd/ikj9wIrIt9yrwrGjWi1Pm8ENMLZ9js2msfzAF
-         yyO3iTTHImI4BvcBUoj72fbUO8m3qgWgljpN8R9zIS1X0owaFUkOQo5eBpWF6TtRfGie
-         gZRXnMD+a3PleG9sssdn94eS0CawKMxFZWJnxyCGhLCSsD3eD0sBRUlG1irQvHZgWy5+
-         T7yg==
-X-Gm-Message-State: AOJu0YwU1YbxljZjuVnY05LrUa5aKV7yRYzJH09RR7nt+b8kvavZwaB2
-	ZY/4j3SoYONyrua61FmCCqCMYCKdgHJATfzOorU8zhnx07JgXR+Tf5zEF0aI3e4=
-X-Google-Smtp-Source: AGHT+IGRqsQFDY3Ma0cJGFn2I+AneM+oWcFsIjl4jiCDBzYJaEobcPJEKkPQeLj5lCNCHDovZt411w==
-X-Received: by 2002:a05:6602:3fc6:b0:82a:4c58:e1e0 with SMTP id ca18e2360f4ac-837946843cbmr1166620739f.12.1728950758843;
-        Mon, 14 Oct 2024 17:05:58 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-83a8b2aa095sm3961939f.19.2024.10.14.17.05.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 14 Oct 2024 17:05:58 -0700 (PDT)
-Message-ID: <41d157fc-6413-4061-95af-518ec7b923f1@linuxfoundation.org>
-Date: Mon, 14 Oct 2024 18:05:57 -0600
+        d=1e100.net; s=20230601; t=1728952720; x=1729557520;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=SQWJwOdFi41iaCsq3b3GQuRzgQ8nmghW67IzLzPlQ2w=;
+        b=DWzAUMnfMbqldtoK8+TRvw3RQI35ltTPZE+WIC5vUiwCr+LUnru3bYENnAJd1JE8Ly
+         Fcv18eTgA44n8CFvocGhr+bEGirFjfbcpKhs5yQzc2DV68txafNM1n/ewnUFz0OvvPop
+         Xf+O7uUqi4gHJJEC/o0AY/1dYjyNyIRTsW9eDrAUPGV2R8tt1U0JUKjzV4L6x1Xf57zZ
+         QTh429okkoQ5eNXsI78p5ou+XzB2Pc27mNfMgd0twKUsL7W+n1Lbf4M5Znxaef1+Ay/D
+         GRWh84iw3pachl0PwI5cP28ZF0Flkprwphn5cm5OSBlaq+VluOKF69ALMk/jO21fjFRL
+         Kasw==
+X-Forwarded-Encrypted: i=1; AJvYcCUMalLD0+HRV5DM507NAYqoajwtYrxrZT11Y/JTmmg/LJcCl//AdWnz4WdRhK2fRtcdb4POUA3OYfYgrnRDEPtU@vger.kernel.org, AJvYcCViutH69ZrwIAvprUlHBjsbPSXrjsXlbMTYbdxdiVu0tcWvqgPyJHn9moVjZkgPeVmh9cH+he/NQGqqRe4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx9spwW+62T8sqxIySTVNMwSpJBZlfdhmSQm56aF8323lL5gic/
+	p5JGt53SJSCLCDuK7blPbcGiqOCR9ayw8AF7Mc1DRnsIf5KAM0Zx
+X-Google-Smtp-Source: AGHT+IEoP077iNfP+W1cvf0GddfLzWqKR+2Nkpscrnepkcf/0XwTm7XIebaLPTK0xZuF+LahpPyYsA==
+X-Received: by 2002:a05:622a:110a:b0:45c:a613:65b7 with SMTP id d75a77b69052e-4604bb94e7cmr210071281cf.11.1728952719632;
+        Mon, 14 Oct 2024 17:38:39 -0700 (PDT)
+Received: from localhost (86.235.150.34.bc.googleusercontent.com. [34.150.235.86])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4607b378b34sm939441cf.67.2024.10.14.17.38.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 14 Oct 2024 17:38:38 -0700 (PDT)
+Date: Mon, 14 Oct 2024 20:38:38 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Gur Stavi <gur.stavi@huawei.com>, 
+ Gur Stavi <gur.stavi@huawei.com>
+Cc: netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <670db98e775a5_2e174229479@willemb.c.googlers.com.notmuch>
+In-Reply-To: <4f1a3c37dbef980ef044c4d2adf91c76e2eca14b.1728802323.git.gur.stavi@huawei.com>
+References: <cover.1728802323.git.gur.stavi@huawei.com>
+ <4f1a3c37dbef980ef044c4d2adf91c76e2eca14b.1728802323.git.gur.stavi@huawei.com>
+Subject: Re: [PATCH net-next v04 1/3] af_packet: allow fanout_add when socket
+ is not RUNNING
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftests/intel_pstate: fix operand expected
-To: Alessandro Zanni <alessandro.zanni87@gmail.com>, shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- anupnewsmail@gmail.com, Shuah Khan <skhan@linuxfoundation.org>
-References: <20241014172149.324639-1-alessandro.zanni87@gmail.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241014172149.324639-1-alessandro.zanni87@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
 
-On 10/14/24 11:21, Alessandro Zanni wrote:
-> This fix solves theses errors, when calling kselftest with
-> targets "intel_pstate":
+Gur Stavi wrote:
+> PACKET socket can retain its fanout membership through link down and up
+> and leave a fanout while closed regardless of link state.
+> However, socket was forbidden from joining a fanout while it was not
+> RUNNING.
 > 
-> ./run.sh: line 90: / 1000: syntax error: operand expected (error token is "/ 1000")
+> This patch allows PACKET socket to join fanout while not RUNNING.
 > 
-> ./run.sh: line 92: / 1000: syntax error: operand expected (error token is "/ 1000")
+> Socket can be RUNNING if it has a specified protocol. Either directly
+> from packet_create (being implicitly bound to any interface) or following
+> a successful bind. Socket RUNNING state is switched off if it is bound to
+> an interface that went down.
 > 
-> To error was found by running tests manually with the command:
-> make kselftest TARGETS=intel_pstate
+> Instead of the test for RUNNING, this patch adds a test that socket can
+> become RUNNING.
 > 
-> Signed-off-by: Alessandro Zanni <alessandro.zanni87@gmail.com>
-> ---
-> 
-> Notes:
->      v2: removed debug echos
+> Signed-off-by: Gur Stavi <gur.stavi@huawei.com>
 
-See my comments on your v1. It would help to wait a bit
-to send v2.
-
-I can't reproduce this problem on Linux 6.12-rc3.
-What's you environment like?
-
-> 
->   tools/testing/selftests/intel_pstate/run.sh | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/intel_pstate/run.sh b/tools/testing/selftests/intel_pstate/run.sh
-> index e7008f614ad7..0c1b6c1308a4 100755
-> --- a/tools/testing/selftests/intel_pstate/run.sh
-> +++ b/tools/testing/selftests/intel_pstate/run.sh
-> @@ -87,9 +87,9 @@ mkt_freq=${_mkt_freq}0
->   
->   # Get the ranges from cpupower
->   _min_freq=$(cpupower frequency-info -l | tail -1 | awk ' { print $1 } ')
-> -min_freq=$(($_min_freq / 1000))
-> +min_freq=$((_min_freq / 1000))
->   _max_freq=$(cpupower frequency-info -l | tail -1 | awk ' { print $2 } ')
-> -max_freq=$(($_max_freq / 1000))
-> +max_freq=$((_max_freq / 1000))
->   
->   
->   [ $EVALUATE_ONLY -eq 0 ] && for freq in `seq $max_freq -100 $min_freq`
-
-thanks,
--- Shuah
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 
