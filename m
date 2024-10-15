@@ -1,119 +1,126 @@
-Return-Path: <linux-kselftest+bounces-19706-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19707-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B8C999DF58
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 09:32:08 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6505C99E096
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 10:14:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 449551F222BA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 07:32:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 909151C21C0A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 08:14:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A56C2179972;
-	Tue, 15 Oct 2024 07:32:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A4F31C68AA;
+	Tue, 15 Oct 2024 08:14:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RdM8f/3x"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16D652AE94;
-	Tue, 15 Oct 2024 07:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 381821B85E3
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2024 08:14:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728977524; cv=none; b=qBtHtbHeSoy3ud8o/Q//oomgGDp1SB+QOOgbzR/pY31TqAkeHG7ygOF6ypeCzmo6f4VSWvUxGlcYTxqS7zhbdWTeZurf0CeQPT8GvL1bmyJ4iPTWif7V1Qsr/x6WFc3qJoPPJpWSGPwVSnUVHMTdI04fwM+2yaD3YuR8E94T6Ds=
+	t=1728980070; cv=none; b=l2CcOlSkUlX062o0fKCCvwFLoz/+xLjYt3QKMK611U1/pb3Ty3rRMPDW84J0shE2dr+CXAjDpku5JV0Nn5oRUPkFo1ccBQp8FAiQXa1MfxeiP9kTpStilCrgUtckYWgFVrlwWrYoL4X+frqug62E/LlxhWZRvL+FkftchHPiI1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728977524; c=relaxed/simple;
-	bh=XvC7Z8cSiXh6eCoO1h2M5BikZzrqcBMKoBxig6SJup4=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=pjBqR2TGLITHeAQVTP9dQlGEASje4cVXFhMXz+L1GXZ2YHNTzapSMcMzVftxwLjSiv1IT4/I3AyrARkBTUfBYjc9eflILo2Z2LDjgkUkiuee5RZ5KRZ7HhGiSStRXNjqfSFDwAhF8MPkfeFJZWxquumWTqVng6Z6ko9IMkQfXkk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.62])
-	by gateway (Coremail) with SMTP id _____8DxfWtuGg5nAggdAA--.41608S3;
-	Tue, 15 Oct 2024 15:31:58 +0800 (CST)
-Received: from [10.20.42.62] (unknown [10.20.42.62])
-	by front1 (Coremail) with SMTP id qMiowMDxL9ZsGg5ntKAqAA--.3118S3;
-	Tue, 15 Oct 2024 15:31:56 +0800 (CST)
-Subject: Re: [PATCH 4/4] kunit: qemu_configs: loongarch: Enable shutdown
-To: =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <thomas.weissschuh@linutronix.de>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Jiaxun Yang <jiaxun.yang@flygoat.com>,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow
- <davidgow@google.com>, Rae Moar <rmoar@google.com>
-Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <20241014-kunit-loongarch-v1-0-1699b2ad6099@linutronix.de>
- <20241014-kunit-loongarch-v1-4-1699b2ad6099@linutronix.de>
-From: maobibo <maobibo@loongson.cn>
-Message-ID: <1fde4047-45cf-f6f2-7fd4-f0d6eb5d6de3@loongson.cn>
-Date: Tue, 15 Oct 2024 15:31:37 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1728980070; c=relaxed/simple;
+	bh=huAJ1quTTVf9I7zIA1DxYzuxMyL3Ic5yTgUo81F9fW8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=t1heQES73pJ9KFahpiMrt7pT/Mg8pEndjKE6K1jUSjATg/HbbboLmXgC3q7H4Ij8+p7oEFtAx1WZAGrCdi6bzM/i6jzpN27qfAcmGY+bHopU35BUb0ghL10/I9TrP5eEyDLS+YlWka+5/HmIrMG4SxM4ZaJ+UswvYuacOZBt2hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RdM8f/3x; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1728980067;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ovmdFPXf/mk8R/1ge0kg1lpqUjDGEvD34K1g7jLLqgo=;
+	b=RdM8f/3xofD4HXBlwLi3I56XypEVMeqma3/u3fu5uMns2/1FHGfB6WvHaHBYofpmoSCuCW
+	gBv2AvGJUMm5ab7bWtNZovFy06I5m9TnGyynfWv8Ndx47hYYnMH4MQ0dY/uG9qo6R1CubN
+	rad+xq9Wk+iatKuvRtv2pg3qaToAOB0=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-140-ZWSnLXqIMP2BLqJBHK4unQ-1; Tue, 15 Oct 2024 04:14:26 -0400
+X-MC-Unique: ZWSnLXqIMP2BLqJBHK4unQ-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-431159f2864so26518935e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2024 01:14:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728980064; x=1729584864;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ovmdFPXf/mk8R/1ge0kg1lpqUjDGEvD34K1g7jLLqgo=;
+        b=sIvKQN7BQygFI5AShOCk/YnofONAv5goSSclDEZwefAz0be5/MddjdoxzoXjlUD0qN
+         wka/3zueK6QhN1abFFw/xqobL0Cui8kqAdfwOPjIF9hr+zzeCLERO9eicG2/1aMU1Xw5
+         wDfWQR4TLFJYS6tGYwKCmbZFrmce41/oaLhdIcCb2bf0ESCRrJszDM9GRhzJer34Mm4o
+         +yw+oe7Irji6u+chj1lRGXzZgwiZTI1a5tnnxKSmZ6CJj8paxPwG3GOyu7dHnD4rAhm/
+         lkc9hB08rGQZp7+jkyHFZXYE3D2qzsNkJE2O+g2AadsmAbuqCjjTPnmH5h2Lk9lzgoHY
+         rsmg==
+X-Gm-Message-State: AOJu0YzI+EU5aYdCmrG1XQv1t4Jzmez+sKXiLjCPic+NaEddXBw8U4lG
+	jALI2o00v6TrV/Xh5eOGGA811/AH6SuIlSydnD3jgN976LeWMC+4qnXi5JSrM/bqbMEuVgsDtNw
+	BOpbazErv6vtky4+jMW9jiOO+plvsHBbk0vCdmS9lXYF5BIbh+umvORnqQnkcwT7M1w==
+X-Received: by 2002:a05:600c:4ec7:b0:427:ff3b:7a20 with SMTP id 5b1f17b1804b1-4311df47618mr98786575e9.27.1728980064563;
+        Tue, 15 Oct 2024 01:14:24 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEQLgzwoml0dhiEu0fUCEh7JGHCpNVpyeXag9LTrZVLQNlOQxnNBGgh/VQejL3rJ8a4BvtE6A==
+X-Received: by 2002:a05:600c:4ec7:b0:427:ff3b:7a20 with SMTP id 5b1f17b1804b1-4311df47618mr98786325e9.27.1728980064088;
+        Tue, 15 Oct 2024 01:14:24 -0700 (PDT)
+Received: from [192.168.88.248] (146-241-22-245.dyn.eolo.it. [146.241.22.245])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43144c7982asm4255355e9.14.2024.10.15.01.14.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Oct 2024 01:14:23 -0700 (PDT)
+Message-ID: <85f5d99b-52cf-449d-93da-57e7504685e1@redhat.com>
+Date: Tue, 15 Oct 2024 10:14:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20241014-kunit-loongarch-v1-4-1699b2ad6099@linutronix.de>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 04/10] selftests: RED: Use defer for test cleanup
+To: Petr Machata <petrm@nvidia.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+ Benjamin Poirier <bpoirier@nvidia.com>, Hangbin Liu <liuhangbin@gmail.com>,
+ Vladimir Oltean <vladimir.oltean@nxp.com>, Ido Schimmel <idosch@nvidia.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>, mlxsw@nvidia.com
+References: <cover.1728473602.git.petrm@nvidia.com>
+ <4a9b24fa7e582bdf457b550bb27bb1e227f05b48.1728473602.git.petrm@nvidia.com>
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMDxL9ZsGg5ntKAqAA--.3118S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7CF43tF4rZr47JF4fZrWkAFc_yoW8XF1kpr
-	Z7ZF90gF1rGF1fXr4xGryqgFZ5WrsrArW2gFW3JryrurZ3Jw1rur18t3sFqasFga98tayF
-	qFZ2q3WYgF1UJacCm3ZEXasCq-sJn29KB7ZKAUJUUUUf529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPqb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	tVWrXwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-	xGrwCYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAK
-	I48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrV
-	AFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCI
-	c40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267
-	AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_
-	Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07j873
-	kUUUUU=
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <4a9b24fa7e582bdf457b550bb27bb1e227f05b48.1728473602.git.petrm@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Reviewed-by: Bibo Mao <maobibo@loongson.cn>
+On 10/9/24 14:06, Petr Machata wrote:
+> @@ -450,6 +415,7 @@ __do_ecn_test()
+>   
+>   	start_tcp_traffic $h1.$vlan $(ipaddr 1 $vlan) $(ipaddr 3 $vlan) \
+>   			  $h3_mac tos=0x01
+> +	defer stop_traffic $!
+>   	sleep 1
+>   
+>   	ecn_test_common "$name" "$get_nmarked" $vlan $limit
+> @@ -462,7 +428,6 @@ __do_ecn_test()
+>   	check_fail $? "UDP traffic went into backlog instead of being early-dropped"
+>   	log_test "TC $((vlan - 10)): $name backlog > limit: UDP early-dropped"
+>   
+> -	stop_traffic
+>   	sleep 1
 
-On 2024/10/14 下午7:36, Thomas Weißschuh wrote:
-> QEMU for LoongArch does not yet support shutdown/restart through ACPI.
-> Use the pvpanic driver to enable shutdowns.
-> This requires 9.1.0 for shutdown support in pvpanic, but that is the
-> requirement of kunit on LoongArch anyways.
-> 
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> ---
->   tools/testing/kunit/qemu_configs/loongarch.py | 5 ++++-
->   1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/kunit/qemu_configs/loongarch.py b/tools/testing/kunit/qemu_configs/loongarch.py
-> index e7bb7c07819677dfdefac012821a732555813cae..1d2b780fbd5c0bde20aa6a5cd1217d0b3b443a93 100644
-> --- a/tools/testing/kunit/qemu_configs/loongarch.py
-> +++ b/tools/testing/kunit/qemu_configs/loongarch.py
-> @@ -4,13 +4,16 @@ QEMU_ARCH = QemuArchParams(linux_arch='loongarch',
->   			   kconfig='''
->   CONFIG_EFI_STUB=n
->   CONFIG_PCI_HOST_GENERIC=y
-> +CONFIG_PVPANIC=y
-> +CONFIG_PVPANIC_PCI=y
->   CONFIG_SERIAL_8250=y
->   CONFIG_SERIAL_8250_CONSOLE=y
->   CONFIG_SERIAL_OF_PLATFORM=y
->   ''',
->   			   qemu_arch='loongarch64',
->   			   kernel_path='arch/loongarch/boot/vmlinux.elf',
-> -			   kernel_command_line='console=ttyS0',
-> +			   kernel_command_line='console=ttyS0 kunit_shutdown=poweroff',
->   			   extra_qemu_params=[
->   					   '-machine', 'virt',
-> +					   '-device', 'pvpanic-pci',
->   					   '-cpu', 'max',])
-> 
+I'm wodering what role/goal has the above 'sleep 1'?!? It looks like it 
+could/should be removed after moving the stop_traffic call to the 
+deferred cleanup.
+
+Other similar instances below.
+
+Cheers,
+
+Paolo
 
 
