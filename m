@@ -1,62 +1,72 @@
-Return-Path: <linux-kselftest+bounces-19728-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 105D899E9B7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 14:26:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09AD399EB54
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 15:05:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C3C6D28231B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 12:26:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31A461C231D5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 13:05:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B6981EF083;
-	Tue, 15 Oct 2024 12:25:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 973B41AF0A9;
+	Tue, 15 Oct 2024 13:05:46 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 016261EF951;
-	Tue, 15 Oct 2024 12:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 649631C07DB;
+	Tue, 15 Oct 2024 13:05:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728995141; cv=none; b=uXI96BUX5i7ngxkF7OQOs5PzDjtfzk3lMlvxoEJtxIBxcVJiUlI9jASiM45R0xWYF8AxyeqmES6TXneEkpxCJvzd8ulKSM1bjokXxVB055kvSQrreVLaDeTk7WsyrRQnT+h0NtxzReh/aiCjMx5QkjQOtLA3HvxyVNbSugvaap4=
+	t=1728997546; cv=none; b=usNFuBUxBrV9m9Ek6i+H5bEIlw3FZOMH/LbJU6KdotJPmf1+brzskWY5OvZQFDV1WWyCqHG6gj02EsA8QRqcs85DCRm0y6A0wqOZ+GTBXECFouItDJIjwyYXSPUOLZtfNU7hpzoT+V+TZoBWmdkiEor1deJZOf3rtv5oTf5NQ+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728995141; c=relaxed/simple;
-	bh=brxQTx+USHiG80Z+E2nETX6kpTSnq4YAUNf3YRhV1aE=;
+	s=arc-20240116; t=1728997546; c=relaxed/simple;
+	bh=gK4QnrS2Sm+VO7VdVB+g+vOjiZv1ni06CPOZFvH/IkI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TwxAU+SU4zPqaW6XWclY9MTiTwis8ANXt63/SlI91zu5UzDxc2LZDmp/xa36eanDGrUOWMYP6iCwFONdBzzkSMANabDsHVoavMubqyVZCd47ZLBqNPf98pB+QIOtnG65POJYeE64Y1sX+fCByeALT+A8D/gCxR0z4JFgiCHuYRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E0829DA7;
-	Tue, 15 Oct 2024 05:26:07 -0700 (PDT)
-Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 394F43F71E;
-	Tue, 15 Oct 2024 05:25:34 -0700 (PDT)
-Date: Tue, 15 Oct 2024 13:25:29 +0100
-From: Joey Gouly <joey.gouly@arm.com>
-To: Will Deacon <will@kernel.org>
-Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
-	linux-arm-kernel@lists.infradead.org, nd@arm.com,
-	akpm@linux-foundation.org, aneesh.kumar@kernel.org,
-	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
-	broonie@kernel.org, catalin.marinas@arm.com,
-	christophe.leroy@csgroup.eu, dave.hansen@linux.intel.com,
-	hpa@zytor.com, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
-	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
-	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
-	szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 19/30] arm64: add POE signal support
-Message-ID: <20241015122529.GA3820764@e124191.cambridge.arm.com>
-References: <20240822151113.1479789-1-joey.gouly@arm.com>
- <20240822151113.1479789-20-joey.gouly@arm.com>
- <47e1537f-5b60-4541-aed1-a20e804c137d@arm.com>
- <20241009144301.GA12453@willie-the-truck>
- <20241014171023.GA18295@willie-the-truck>
- <20241015095911.GA3777204@e124191.cambridge.arm.com>
- <20241015114116.GA19334@willie-the-truck>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ef+2CogbkcsYs0XuxO5/HeKmVSFxr95HKyJr7G1NeiS6x43uY0Kz0qfdnBqIKsMoixmIs1hXJlASq8j85cJvNQzZ79NMj5PuNpJ1GXLMgSMRPi3vWCRj7cokcyfVysRjuIZN806NK3o4e1I3lduvgqwQH2MliagmpdMSVi7RVmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25155C4CEC6;
+	Tue, 15 Oct 2024 13:05:39 +0000 (UTC)
+Date: Tue, 15 Oct 2024 14:05:37 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Marc Zyngier <maz@kernel.org>
+Cc: Nathan Chancellor <nathan@kernel.org>, Mark Brown <broonie@kernel.org>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, Kees Cook <kees@kernel.org>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	Ross Burton <ross.burton@arm.com>,
+	David Spickett <david.spickett@arm.com>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Wilco Dijkstra <wilco.dijkstra@arm.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v13 11/40] arm64/gcs: Provide basic EL2 setup to allow
+ GCS usage at EL0 and EL1
+Message-ID: <Zw5oofuDjuCemq19@arm.com>
+References: <20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org>
+ <20241001-arm64-gcs-v13-11-222b78d87eee@kernel.org>
+ <20241009204903.GA3353168@thelio-3990X>
+ <86msjc56mi.wl-maz@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,93 +75,32 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241015114116.GA19334@willie-the-truck>
+In-Reply-To: <86msjc56mi.wl-maz@kernel.org>
 
-On Tue, Oct 15, 2024 at 12:41:16PM +0100, Will Deacon wrote:
-> On Tue, Oct 15, 2024 at 10:59:11AM +0100, Joey Gouly wrote:
-> > On Mon, Oct 14, 2024 at 06:10:23PM +0100, Will Deacon wrote:
-> > > Kevin, Joey,
-> > > 
-> > > On Wed, Oct 09, 2024 at 03:43:01PM +0100, Will Deacon wrote:
-> > > > On Tue, Sep 24, 2024 at 01:27:58PM +0200, Kevin Brodsky wrote:
-> > > > > On 22/08/2024 17:11, Joey Gouly wrote:
-> > > > > > @@ -1178,6 +1237,9 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
-> > > > > >  		sme_smstop();
-> > > > > >  	}
-> > > > > >  
-> > > > > > +	if (system_supports_poe())
-> > > > > > +		write_sysreg_s(POR_EL0_INIT, SYS_POR_EL0);
-> > > > > 
-> > > > > At the point where setup_return() is called, the signal frame has
-> > > > > already been written to the user stack. In other words, we write to the
-> > > > > user stack first, and then reset POR_EL0. This may be problematic,
-> > > > > especially if we are using the alternate signal stack, which the
-> > > > > interrupted POR_EL0 may not grant access to. In that situation uaccess
-> > > > > will fail and we'll end up with a SIGSEGV.
-> > > > > 
-> > > > > This issue has already been discussed on the x86 side, and as it happens
-> > > > > patches to reset PKRU early [1] have just landed. I don't think this is
-> > > > > a blocker for getting this series landed, but we should try and align
-> > > > > with x86. If there's no objection, I'm planning to work on a counterpart
-> > > > > to the x86 series (resetting POR_EL0 early during signal delivery).
-> > > > 
-> > > > Did you get a chance to work on that? It would be great to land the
-> > > > fixes for 6.12, if possible, so that the first kernel release with POE
-> > > > support doesn't land with known issues.
-> > > 
-> > > Looking a little more at this, I think we have quite a weird behaviour
-> > > on arm64 as it stands. It looks like we rely on the signal frame to hold
-> > > the original POR_EL0 so, if for some reason we fail to allocate space
-> > > for the POR context, I think we'll return back from the signal with
-> > > POR_EL0_INIT. That seems bad?
-> > 
-> > If we don't allocate space for POR_EL0, I think the program recieves SIGSGEV?
-> > 
-> > setup_sigframe_layout()
-> >         if (system_supports_poe()) {
-> >                 err = sigframe_alloc(user, &user->poe_offset,
-> >                                      sizeof(struct poe_context));
-> >                 if (err)
-> >                         return err;
-> >         }
-> > 
-> > Through get_sigframe() and setup_rt_frame(), that eventually hets here:
-> > 
-> > handle_signal()
-> > 	ret = setup_rt_frame(usig, ksig, oldset, regs);
-> > 
-> > 	[..]
-> > 
-> >         signal_setup_done(ret, ksig, test_thread_flag(TIF_SINGLESTEP));
-> > 
-> > void signal_setup_done(int failed, struct ksignal *ksig, int stepping)                                                                                                                         
-> > {                                                                                                                                                                                              
-> >         if (failed)                                                                                                                                                                            
-> >                 force_sigsegv(ksig->sig);                                                                                                                                                      
-> >         else                                                                                                                                                                                   
-> >                 signal_delivered(ksig, stepping);                                                                                                                                              
-> > }  
-> > 
-> > So I think it's "fine"?
+On Thu, Oct 10, 2024 at 04:18:13PM +0100, Marc Zyngier wrote:
+> From 20c98d2647c11db1e40768f92c5998ff5d764a3a Mon Sep 17 00:00:00 2001
+> From: Marc Zyngier <maz@kernel.org>
+> Date: Thu, 10 Oct 2024 16:13:26 +0100
+> Subject: [PATCH] KVM: arm64: Shave a few bytes from the EL2 idmap code
 > 
-> Ah, yes, sorry about that. I got confused by the conditional push in
-> setup_sigframe():
+> Our idmap is becoming too big, to the point where it doesn't fit in
+> a 4kB page anymore.
 > 
-> 	if (system_supports_poe() && err == 0 && user->poe_offset) {
-> 		...
+> There are some low-hanging fruits though, such as the el2_init_state
+> horror that is expanded 3 times in the kernel. Let's at least limit
+> ourselves to two copies, which makes the kernel link again.
 > 
-> which gives the wrong impression that the POR is somehow optional, even
-> if the CPU supports POE. So we should drop that check of
-> 'user->poe_offset' as it cannot be NULL here.
+> At some point, we'll have to have a better way of doing this.
 > 
-> We also still need to resolve Kevin's concern, which probably means
-> keeping the thread's original POR around someplace.
+> Reported-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Link: https://lore.kernel.org/r/20241009204903.GA3353168@thelio-3990X
 
-That was cargo culted (by me) from the rest of the function (apart from TPIDR2
-and FPMR). I think Kevin is planning on sending his signal changes still, but
-is on holiday, maybe he can remove the last part of the condition as part of
-his series.
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
+Tested-by: Catalin Marinas <catalin.marinas@arm.com>
 
-Thanks,
-Joey
+Please merge it as a KVM fix if you can. Thanks.
+
+-- 
+Catalin
 
