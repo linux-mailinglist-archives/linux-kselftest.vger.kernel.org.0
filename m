@@ -1,85 +1,85 @@
-Return-Path: <linux-kselftest+bounces-19777-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19778-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 005D799F727
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 21:21:50 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 709CD99F749
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 21:27:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84F141C23816
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 19:21:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25C0428496B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 19:27:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B891F8199;
-	Tue, 15 Oct 2024 19:18:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D018615C145;
+	Tue, 15 Oct 2024 19:27:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="l3IujrR9";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="yg1qUcE2"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="RWMnsrJc";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="ZW6oSS8e"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB2C1F818E;
-	Tue, 15 Oct 2024 19:18:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED211F80C3;
+	Tue, 15 Oct 2024 19:27:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729019891; cv=fail; b=N1YJSYh/Frwc3fmfi74wdIiIq0X/bcHUMWOKj8M29kvij4s30eNC5ONektacPzD75xEubkKM1LYUAht5Ph8yDxBm7scoL9lbldqdSdDcyOuhYemkw3Oe2shUoMMk3B5aVatJorcTYGgG45DeZVejlSBjb01EurP9x+WvPrgwjBA=
+	t=1729020473; cv=fail; b=ErgbIJ1Gd9hvwVVWCXyDaj9H4rracgV3xCe13L0uKIzH0j5iuw04qs0+1eKfH/pBNGUEfZBtUkNGkQIn0Yfs5xmXSZIITnc7Ukhe/VXHhNlL48/oh6qEJE0H+JSE/5DAUInzmWKx3vYM3ojxhTFPh3PQ9Sy3VGNYRSMAENaYqXU=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729019891; c=relaxed/simple;
-	bh=X4LbpPCUxKH5Zmd4BdgH+jSajdZQwDwUVgMO8lY1dOM=;
+	s=arc-20240116; t=1729020473; c=relaxed/simple;
+	bh=Sn3qroUifQkc3uNNji/CZBTF82kYLQk6jjOZeujTzHw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=Uw2pAP9N18t1pzV8G5XTigJzJCZF8GqdOs+wyn2pEbTgBJrhwrw6qbkAmJ80yIjGwtTURvsJLlFUxpGWjs6e6KlQFhGV2ZqX9UD67dZsUN2qaowFiUcBzpCmn+0H3hNV2/J8xFzlCWAaC0xbtCiLNT3fieNyZz10Q7KpP6SS/0Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=l3IujrR9; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=yg1qUcE2; arc=fail smtp.client-ip=205.220.165.32
+	 Content-Disposition:In-Reply-To:MIME-Version; b=n+9V/K7QJP/doWa7rDgjd/0nyJYzNSoZqllurDyAKEiGfO/t4/ptdcT0+VZ+a9o6xlR9ao6wng3PE0qxExjFAwoWxAUHB92uIuly32AtCxoRsfNU/z7QtSpkWGm/DQ6VkIUpmvr7B+tylaLQciFDkd/A5Xjp02kyzB3/bCKDFo0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=RWMnsrJc; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=ZW6oSS8e; arc=fail smtp.client-ip=205.220.165.32
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0333521.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49FHtiVS001626;
-	Tue, 15 Oct 2024 19:17:01 GMT
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49FHtg2G019350;
+	Tue, 15 Oct 2024 19:27:30 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
 	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2023-11-20; bh=0vY5cYuz4er/ibsH4D
-	zI/B7RnNM68m5N1RoQOTxriAg=; b=l3IujrR9gOlYUh3Eme8yN+xRD9tuL3bMSM
-	MSuZLnRmr6Gnea7FOFdMf5yPxwyU4O1FFXpHmLiOj9y+I0PlKivmg8vMFHpmw+8a
-	9XpNGCWI9YqEw4EIRPDCPIaUPnoDEkiimSXWJWly1bwIrrASiNflAwhV8QCSjism
-	op+FjsSDd6Gh64MDCWxX6nGNHW4cPaA4bY3rSaGJEI8RRHlrG9UWFAeII+aygV+Z
-	38I3QuI28JXRyxrqRHNXqv6mFnk9mSTaJHGysdpptJC8eQiYutbd5CrtoRZmgYuQ
-	xQIme0ZQ9/2MauB8g6YvMQ1LHHwsbp69IFz3+R14OcPPWwsVzbGw==
+	:references:subject:to; s=corp-2023-11-20; bh=SMtLUdfDorpDx+76kX
+	QEmemsnG+2yGfoPNkTXBgG8p8=; b=RWMnsrJcZ/V8sLLRRI3l/tDpgmjwC6HLE/
+	L58woMJZIbKFm81VMKNLE39i/PMbNTWVa/8LGHugvKEBA9B1/esumEddNiTdmECI
+	uYjJxaJtnrNzTbrTkfS7C4Kkk91ykdJFTugZly1yyDMOf1TH/dnaqWFZbtC9b5a6
+	5GQIN1VueARkjs/5ogGsFmZFVoktoYZTnyJsovr5uk2mURihRa/XevoxSamuOjBV
+	r7m+zwjw72w5OnSA9UPYCaV+VN4+EaUqik3/+k5pplbclZN+ZR+CW16ClhkLn6w7
+	tpTAPUNPmjpHnroBk5xu2Fk7RNhUUAvHhCgD9wmGJdz8m+R7qMsw==
 Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427g1ahud8-1
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427gq7j25w-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 15 Oct 2024 19:17:00 +0000 (GMT)
+	Tue, 15 Oct 2024 19:27:29 +0000 (GMT)
 Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49FIxFTe010371;
-	Tue, 15 Oct 2024 19:16:59 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
-	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fje6mep-1
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49FICeKE011049;
+	Tue, 15 Oct 2024 19:27:28 GMT
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2177.outbound.protection.outlook.com [104.47.56.177])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fje72an-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 15 Oct 2024 19:16:59 +0000
+	Tue, 15 Oct 2024 19:27:28 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=X0BrT6teW3hP6BPDSMYhALs6wR5i501silxRkFaVV1M908L65B4Rhb6SVdBjj4GJ3Udnvypg2ns4QYC+riBfKKRi1iEmMpNjA0bcU6OMZ0fD3e6QKuegNhR8HIAwkGh67Dazrz59HpnTw3W9nL/FqXaEDRylaIMZkAqyIfbAi3HM8erbiC4+oe21+KNyZpnX5o7boMiAfJHmGB3wPOLfZYkYDwNCwQRTCdB9oC9hrBfHT67qoQspqYXfrpncZf82MFIUy2F8IAja/no7S3A3hG3drG9pp9whClZFMfTazwVwydTnBiOuNpb7aVMA9mlV4tOr+f/02ZotTWKsZLPxuQ==
+ b=SyDVB1HJx+d8uSJeMd2Ksl42u8ozwwb5x/yBreujLcL/h8u/mUS3TUTBtPUV2KJOn9fsHM6sxvHDxbfe+VpZu8SpNzZljS5e4H6qkl+FB7gDeB3vitlVkOVcW+ID+vrSYBfQHp67gtVFanwKrDBcylt93zO4ohZkqznDvMNHCiw5yO0GehQKP2D/Gr21rZgEX401Afr6nr3P2HJNRi33GHIiOskDUwkNs5LJJpbpnpVoftXzVJhCdfDnEqavna4wiR+kR9HuRGjyVI9wMmm4ivsjGHylm5ZgPNp7OyItPZafGOpikXHjc0hfGAX8SeM1W+Fz9QuLbXsT3xqlv4QvRQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0vY5cYuz4er/ibsH4DzI/B7RnNM68m5N1RoQOTxriAg=;
- b=xpRevIzBpFWyc8H3wFia4HkmCKeCZGKS3gkG2bgz8r1Udk56dSTlqLz/WAZy4cxUcHnKctQ7td1TN1XScfrJt5nLzHVHCa8IJJV1bxnY1xkisEX0pxzFxjjk151ngIUbDyni0ghL9BHAPjVM4S5BSb4FcajWy++H+PsCXTpmccnQopuDXvim274mCMC6pqMPLm4jOAzblI21eX/LkXvY3bZwRg238ueIZrTXuOlsPGtvX5GbuM8R7R40qp/8nHLNpa5NHhoIa0uIDiIpS77DLvDWjvWRj+yUjzG3bYqBQHsmHbM801YfK6vU5u//SdhF98Uw9Bof2ZvFo0469r+ueQ==
+ bh=SMtLUdfDorpDx+76kXQEmemsnG+2yGfoPNkTXBgG8p8=;
+ b=S6W4Zg3DAp/fqR/KZIy1YfmqjyxKiMSDYHBzT1qdWevLCFvewn/3YN0Zf80ZMkrLjw8qtzr8v2Lfp/BLftmYl/W1HFdRTlCRNfU61FOcxFhI8jKuW/Tqosshcr/P5aXLgJ6Lf+8cUcdE4ERIPzulsXVzgy+y5vqLRzgXRPPw8MmCZvMsx97F4wxXulECSom+PKZAUccItzhzMubhCpGxtPyQHjNA3+S0PORo2IoI5HuBz2vBLIWqRVg9DN5Sy7K3SPRMKtPzSKCUn2cMFkYo0GSdWTVEz9twZWlYm0gCkJo7ya60ZE44c9SxbFAB+F0bFeJ+m5AeP1E+S/RhZyUzOQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
  dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
  d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0vY5cYuz4er/ibsH4DzI/B7RnNM68m5N1RoQOTxriAg=;
- b=yg1qUcE2Z1kZQbeXNUdcjOe59OBEYVe00q+mO61WdHxiqHpe7lAASevAvjf1Nj+anKB6HLfYpz/PzYjBXB+z321zfqOAMGg26eSdNrFIermtX8u7HF0bWmFwFo7WZdjmnq5ePPQExmTkmNfJ20zWQ4uVAXQznKwgwKd+cMNAaWE=
+ bh=SMtLUdfDorpDx+76kXQEmemsnG+2yGfoPNkTXBgG8p8=;
+ b=ZW6oSS8eBDneVrsfguYNgpLrHuKd3HcpJvbFmnTgztCoztZDk1PIlbAvGlfX8tR5Udqigor9uibmQ/9FY079cfdfvy+Ql8cUuvVFWUTejHkMycRJI9ITD1McwfYu1esYetzQMN6dPOVnkSTygJuUiYHX6lEsz0QKEBs+lJWzpVs=
 Received: from DS0PR10MB7933.namprd10.prod.outlook.com (2603:10b6:8:1b8::15)
- by IA3PR10MB8116.namprd10.prod.outlook.com (2603:10b6:208:50b::15) with
+ by DS7PR10MB7228.namprd10.prod.outlook.com (2603:10b6:8:e3::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.27; Tue, 15 Oct
- 2024 19:16:56 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.26; Tue, 15 Oct
+ 2024 19:27:24 +0000
 Received: from DS0PR10MB7933.namprd10.prod.outlook.com
  ([fe80::2561:85b0:ae8f:9490]) by DS0PR10MB7933.namprd10.prod.outlook.com
  ([fe80::2561:85b0:ae8f:9490%7]) with mapi id 15.20.8069.016; Tue, 15 Oct 2024
- 19:16:56 +0000
-Date: Tue, 15 Oct 2024 15:16:25 -0400
+ 19:27:24 +0000
+Date: Tue, 15 Oct 2024 15:27:21 -0400
 From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
 To: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
@@ -90,17 +90,16 @@ Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
         akpm@linux-foundation.org, shuah@kernel.org,
         linux-kselftest@vger.kernel.org, peili.io@oracle.com
-Subject: Re: [PATCH net-next v2 2/3] connector/cn_proc: Kunit tests for
- threads hash table
-Message-ID: <cslvxh4obzmzbaekc52h4t3b2e4ru2kypvjy3545lucvw2jlmx@3wgym6gbgb2b>
+Subject: Re: [PATCH net-next v2 3/3] connector/cn_proc: Selftest for threads
+Message-ID: <36kdqgl425qzoqqbct4jusrzgpcn4cff62jaswcsrc4licalvp@f3okz2ygoww6>
 References: <20241015173014.1083069-1-anjali.k.kulkarni@oracle.com>
- <20241015173014.1083069-3-anjali.k.kulkarni@oracle.com>
+ <20241015173014.1083069-4-anjali.k.kulkarni@oracle.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241015173014.1083069-3-anjali.k.kulkarni@oracle.com>
+In-Reply-To: <20241015173014.1083069-4-anjali.k.kulkarni@oracle.com>
 User-Agent: NeoMutt/20240425
-X-ClientProxiedBy: YT3PR01CA0076.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:b01:84::19) To DS0PR10MB7933.namprd10.prod.outlook.com
+X-ClientProxiedBy: YT3PR01CA0023.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:86::28) To DS0PR10MB7933.namprd10.prod.outlook.com
  (2603:10b6:8:1b8::15)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -109,498 +108,400 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR10MB7933:EE_|IA3PR10MB8116:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63514feb-efb7-41f6-ecd8-08dced4dea11
+X-MS-TrafficTypeDiagnostic: DS0PR10MB7933:EE_|DS7PR10MB7228:EE_
+X-MS-Office365-Filtering-Correlation-Id: 91466901-2379-4088-d5bc-08dced4f65cc
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7416014;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?XdxBmsmbtOCAUjF/Wsuf+h0mSOsiGSGBF+gc5m3qE0H0B5dC2LxhexHTnwSx?=
- =?us-ascii?Q?/AKqeWBXxa887tMEzA9CZoYtWyTRGZoorHnz+hKN4jTnmNS2LPiX8rcYx+9d?=
- =?us-ascii?Q?e6Z/bnZBFtbPBCpeu+c1lQZF6Oa2ApRlKw9Cr3PSGul01kef6nMKrLudJU4C?=
- =?us-ascii?Q?/5PFwUf1+aN6c6WVczz2HF7imo/DOSxv1Hl+8P9eVTkgNtqZFj+l+2IMy78W?=
- =?us-ascii?Q?gKhvof2kBbrx+shmlXNLbUxAi5eoqLY21RCLupqGYNNvyKo0rqBZVvdFtOF0?=
- =?us-ascii?Q?YrvL/5QHwDBIaoVrBEUrZtFbQLyfdHaR6hI1IOU5THyPAZG1GVpQP4qoWSe/?=
- =?us-ascii?Q?MoDA696BZh81/XHPMVE3RQu48eof07lA/t91zES9hu2AJhGji6AxTZCPqkvG?=
- =?us-ascii?Q?xheQaVOuiF4nzCYc1Imt0aKcr7gEGplOUH0eU1g38VraTjwHu7R2ieeXxdI8?=
- =?us-ascii?Q?/dHnzIg0Ocmvw2+VUr7RmXJJc7Cnejey3awcUyOTy1EzkcNZHbJwHmQhbxzM?=
- =?us-ascii?Q?pFaWmGJuG21JBVgIgpEaA0sdtr2FLIEMZbIWGcdWRDp5z8qLZrZ3XQv7bfJq?=
- =?us-ascii?Q?lrz22KLD1kBuzxv7ir5bE5GRnsbb6tUxgNFckzdg1eaITOtWq2+xFo+J69C0?=
- =?us-ascii?Q?iyuwVU7wkPgZSWefSRlOp/gyugqtwtp47KbUbsIfsmK3LJanEKD/XqY3ZOan?=
- =?us-ascii?Q?unLiSZbFMbbFXmlJF6MHhUO3aaB8+eMj3iNXdVeXNR3F5pwu0DlFYPQYYm79?=
- =?us-ascii?Q?J9Vcmbf048nWfJWG2H5JuHiEahWUOnDghZCgA+S2U+hpqnCVfK5AxahK+eOP?=
- =?us-ascii?Q?h3zRSwXTYAoXVqhKDUrfgT1fz5SFTvmvcG6IZx8pd1Tg10HlVJB3EclqTL2G?=
- =?us-ascii?Q?TdaVl8aIk4n/UkrVWeZK5BgXaKsZGe55rZan/9JOalh/SbJmRg2EloRuNukJ?=
- =?us-ascii?Q?OYCa98me4QJYpPK6kWfrYrwB6IG7cnKbMr6jiBZTFl+2LhRcoGrjBSdfp/q8?=
- =?us-ascii?Q?PwmKDi1ZnV1DQRbZAS+Cu8Rp8K9Vsp8ODq9uLRgRkYRBD+dbX+ATwoQf0sEG?=
- =?us-ascii?Q?GkCTUxtNNgYOJO93CXVOIqo/JgJ5uRq88LCRitToY/KFn/9VNJ6n66fEQPLB?=
- =?us-ascii?Q?dL5/NYtBevLeu6C540pkO/DmEZc3EY7mET8frJpVpVz7CNtjd7Ds7jnhjFkb?=
- =?us-ascii?Q?kb3hC5ZAtyoIwL57AcUzkqjJ4AKKUzPfDdcQpePkS7iebu/xH5cGFH07103k?=
- =?us-ascii?Q?Jaiy3kOcGGiV25wwR/eGauvkaF00mUuBc6/CK5HXuQ=3D=3D?=
+	=?us-ascii?Q?EHV30oOAeMFirU3ZfYJTDHa3FZuT3HPD1+jOyIadpWHECdAcLS3AfKlCllSI?=
+ =?us-ascii?Q?tzT9Li51E8+LgCCmoQmg8piZ6YlWxGo5ueUJc6L5ncKY2uEVsFYrpIcnaoP9?=
+ =?us-ascii?Q?+rzD2+7eL8ncuOYvWatOl6ancmUwG2ptWoV/FGE6VmhkmU3CD+Wi27iq37uO?=
+ =?us-ascii?Q?g12OSwQexOoSEz3ZqPF7zxrTW9aoGo6EtA4ADW5DTvhXQQay9xMwJ1Hl2S5/?=
+ =?us-ascii?Q?xt/1arnfqpvKayTwu9axRLx6I6PlcMXh97MyeEsYD6yOkjs0D6Q6+tiIsgqf?=
+ =?us-ascii?Q?aKDlV01ZH/5mkW5PF60/hG2APX9lTahvrbgcZ5H1SQVW5G3MscW99mEnxN8G?=
+ =?us-ascii?Q?p1YGxcMoOomd0hitz5iEd33woKUC0Ed/Swmd8vgyDJxpZdelLvW32OHcfVm0?=
+ =?us-ascii?Q?+vVLRVk8V8i0VPnKHJU3gsVYHfxvxcTFNgpPTDEIZekrUKweWw4EraTjOMKM?=
+ =?us-ascii?Q?YGqcRpmkNyn9ayZtyWeiT6aZD9+kYElw3pCpakzWhJSV7S2/LLE00W2mi4tR?=
+ =?us-ascii?Q?NI+SzgDrtw78E5cEEJu1yTOreC5qfLhWD/IfvCHqnLnOVbbpPBqmPDa4+tno?=
+ =?us-ascii?Q?qOguhgEoqnHlSdYqdCyUiKXy1yU533rg7m5qqtS5TGJlNhUd1qLef5yIOK9K?=
+ =?us-ascii?Q?WWEws0boBJZ9G0Uj/g2qBFSHhvRj3ZqYm51aJhcjxNlv9+Q/pNE0hCeQyFqT?=
+ =?us-ascii?Q?oxHkzld7H8yNiSV4w8CiATpGO28IqdQFq633eKAHDaCFh++TyWe1RawcAMki?=
+ =?us-ascii?Q?qUxuS7NSGjcRBadKPmg8Ai3Ef23J0379wVAIDLXvaOkp6TNr3Ujgx4LG3W2B?=
+ =?us-ascii?Q?6Ebn23gBddAFtveCLWWde10GzyPRah8JXXNi58NseAqgpfX0kTn/yT5E/F/7?=
+ =?us-ascii?Q?7w490H6KE23GYrw0F1hdILODVRzB+yKVdK3cLNkKwhPnIVmDZUC1NTCqDjFq?=
+ =?us-ascii?Q?XahGPQsGMQfXBYAce16PlZRLISwRQRXoalrELaI7awRwOe4yweR735GAzYyV?=
+ =?us-ascii?Q?RCUtuY+suSnQ0yAMa41EVLbkQoAhcdvDSGDGEtss47bXnmHwT0ZIS7gvlWYz?=
+ =?us-ascii?Q?wTymKgPO0/7sL5oWDEonjhOhVAhLH5gxrEKdGe41gm/QcxiJ5zWJiBvens/5?=
+ =?us-ascii?Q?se3tacXZxA09M796nIhgTofefvGZAoTUUkMybif4pVJmJhQJDSXQpb4fAa4t?=
+ =?us-ascii?Q?gYJaR8f9qxHQiHhqjM7YPYoThXE70Y/Tm1S6OETq6j66h3TyoTT0ASRRnu90?=
+ =?us-ascii?Q?S7lJGx8KTzeOGmcznNqeJk0CDogZm44qblBM7hWaRQ=3D=3D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB7933.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR10MB7933.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?Q1YjYsp9kj9MJOGe38ZY1xENBpApO4YGZavCvps66DwCnLk2qJV+pTETTSpI?=
- =?us-ascii?Q?ZorwZbtuKBwY9L64Y0UCsnj7xblOZ/0A62onYSLd77cgvdPV0/47INCsbC9S?=
- =?us-ascii?Q?mZRVBnQlzIJ0LcSPykGD2Sa7dGRQu7sAEo91nGfVME3WWdncqx/xEmE4DMcb?=
- =?us-ascii?Q?bdhLXsow0IUqI3FRJiP4yzbhyNqeN47eKaTicl1pYBWdUo3KB8qEGGtkmdp4?=
- =?us-ascii?Q?XQVkbt800C1JGjWKYfI7fSVJZIQ1hBkHGtADO20KgABAWdNKZ+9T6cl1xbVQ?=
- =?us-ascii?Q?tV6/KFmj1G+AcCirStB+BoPEdI656QUtjOCJsZAjG9pKftIPDsZ+Ys/49c23?=
- =?us-ascii?Q?ZuEFh55a5OgralFRC0urNHuOBFmHUfFZBJoiLmJ6YTBOh5oK26Hi+3nOLbUD?=
- =?us-ascii?Q?W5jmaNNL5exbiXG+Bd7bmYLGCWr0Sq0mBm+Trs98kA+D9SCCVkH0dMf7uaH0?=
- =?us-ascii?Q?MtnAgbuQck1cTQeebivjgu6Wgw7QDnF3xmU4zTusoFcHixvTf3M1nL7podFL?=
- =?us-ascii?Q?xZexMPD7DJe3jUcxhBY+mfGa+XKSoJ3WGndbryCaOGIlFb4V8I+/R41Etf9+?=
- =?us-ascii?Q?4JpE2vSQpVSwEUNtH/ay2UgqyJYqrqnvY2k3REn1iXYkmP36iDfkMcFOR6a4?=
- =?us-ascii?Q?2Ob8u6U6o8G4oXwDS/iOqyx490PqSdxDfAaEg1w5KDc9cGIWlejR15gtmief?=
- =?us-ascii?Q?r48r7FnXmLYNnd8qnP8gkTnkxOeiDlUZD8+WXX6sINJI8vsDCja7fJ9EPGZF?=
- =?us-ascii?Q?4aDl1PsX08L/HEfFncONI7nzkn/Ohi+TXrjb6AgyUwPAldiZRDFrxiOkuWZW?=
- =?us-ascii?Q?2kOz7VNLuqgeF5vBOBHH0Xs6r/AEuXrHf9voJTHw6MxWR8nbHC3HLXHcUlYj?=
- =?us-ascii?Q?pkjFvUUNrBNzclqReTOJhliOD9dC9eDeTXHiZv4Ka70mfJv1Tsg6VAJAlhwJ?=
- =?us-ascii?Q?K/DRETmtkSj5LzXY9Rjrf+YA4lFd7Z/FZkaD4Dy2UPf9VCAhLqjGCSqvjFKN?=
- =?us-ascii?Q?qoBPVt6Fv+vTx/jV6fp60OY24OIIEXnzxIFqj2asbIHFqkAnlU58lDGcu/MX?=
- =?us-ascii?Q?WU4vqc25tDiAX/3tc4VbqMxaLlz/N+gqkj7WEfy43vGWRLbZasScKD5CHRpd?=
- =?us-ascii?Q?XLdlr5OEdGiT2N+TmaTBMZ0SnTGzY9pkHn28vK57mfMV5RIYb4orjw9fpOn+?=
- =?us-ascii?Q?9VKKYxw3hsTndmdIhX7mJiOzZrYb+A6pMUHQX/KFWefXYvXXGP9r1OdDQ2NU?=
- =?us-ascii?Q?SXdqaYoXFpPajj2Xa5xxGzed5C7jawHaKvWHYP2dWgYIn6o5jwpZ2bxq5nM+?=
- =?us-ascii?Q?ssfVb6cdMcc1c65ATGMeBglx5czfTw4VcNgikptUQ0uEurXK5nn22pSFBfam?=
- =?us-ascii?Q?8it7zlmomtGzdPu3eUD8aSmuGqNK1o5WJbjEFua2Br42u2SSRrUEYhras7oo?=
- =?us-ascii?Q?ul9mLTTawsJpwl9rKLkio2UuN4xtDfWjdmTEScQL7ehLqJAFItNANJgqodgL?=
- =?us-ascii?Q?Am5NnWglmPuz4Fc8XXnkUjShni2cZyB0jXHtVdnZxNqdXSl2AIxsdTI+zOQq?=
- =?us-ascii?Q?7ZZEsKkR/ca3ILArc9QIAPmGYoY+1xQnJBlyZbEeRCO+NKPR+t/+TAAKfIiw?=
- =?us-ascii?Q?/Q=3D=3D?=
+	=?us-ascii?Q?N5p+qtTHmp7437xVSn3nU9sjz5cGv5R0fx6i+DsmUC/2bnjhCoL6pNkroC//?=
+ =?us-ascii?Q?P5RFq3Sfqqe271OtEoWEj6EZQL6TH+QuZlrW1GkrQr1ihp59mo5rmujXNPKV?=
+ =?us-ascii?Q?Flpq/W8lNhs7qYzs6OIlbi3maXxmlYrYiUqTpMeKCQl3W4eC/O7YN6iaCuaE?=
+ =?us-ascii?Q?oWrBHu7ge08Y94XYMVk5eb6+CZPfh9eugjmUNvqk8ZdkKu5TdlOq0X18NRhR?=
+ =?us-ascii?Q?ImdyhzaY5u6a9yMV8cj3P4F3asBd0lms4BHB7NPstcAqcrCicWLoRQENAKIq?=
+ =?us-ascii?Q?aFBqQKLALeSmPC9jZ1RpgP5YGpgRcpQFOiF77xG4bGnwnP1p+muZKYsYqdfY?=
+ =?us-ascii?Q?PA95cLLoBfaS8ceQs7m07sd+Bns5li3oI+JReRenQpO4xf+M8hzt9CnjQOz5?=
+ =?us-ascii?Q?jmF8f0TEYVb3yb00kAmkirfbdBSmhqkb6dmBzMZMOHKOkf0vZUrNIrtX+6oW?=
+ =?us-ascii?Q?E5CViOG7ciZXABCKdgW/LLrrLR+90vCrXgjA3cKf2r9QIwhPSi1StMHmZ76K?=
+ =?us-ascii?Q?By1L6yiwYBNfEXxuSVqR5gnh7MXUiY+z8b1nzgV9e2XPO8wxzDXno3/57VAg?=
+ =?us-ascii?Q?+qQ7Oqmm4HV1BAt8MffzXwfDsR9Js36GKQZ02sn/oBrK2YfHf3tpvmhZDvl4?=
+ =?us-ascii?Q?SVe/ZXq5fgpgQj/Rnox9dVebtbPN2rkq59SVml4uxQJYEkUooSAxLPKn1wW3?=
+ =?us-ascii?Q?dfw3BMhgoBNjJegpHNXNejmgc6cXRXdK+TClNUOGKoW4fVOLRlH0hXq7VRj2?=
+ =?us-ascii?Q?+yND/Y7kTdLB4T0+NuL7JAJ+JIdKDU2whV1STFsw5pcCr2NrgqMZP2ccm+AI?=
+ =?us-ascii?Q?RSJTtEsDRT5lApnapCvarcfj7yMe7prQNd5Vk7ix1rE2sNDvra2JupyP8LE+?=
+ =?us-ascii?Q?YzpJ5pQUJsuspUhOJjHJGokUiGuNU4usznd1y7JSmcKRs0QeQs4b8ox/schA?=
+ =?us-ascii?Q?bl0VgeLpOpQJAMq7mrJaUPQ7hPXPbYuYdNaL+X9hoY/tmXD7Cxa1Q4rlVDWW?=
+ =?us-ascii?Q?yWCCS2+g3767tl5l5XueJwOG2DLB45Nr12nXz7WOPs7nVoJbe0e/GCyR1qLP?=
+ =?us-ascii?Q?HmGx2zGnkvVXVZQ/SrzDhpFRzfdYZ3rwYRhJWZEzVxQXCKn8t2JD1PrphsaG?=
+ =?us-ascii?Q?Vx6l29NWangkw3AoseKicFhFkcrn4e4I3TWtn9x4TF7ECDn6D2660iQuSAWX?=
+ =?us-ascii?Q?BiibK1tGo+MVq72RRHaxb8C929j6BU3/6aL+lIVTlaa3Ovfq1OOpZBoneun8?=
+ =?us-ascii?Q?cYRxtB1KwHGC/QZxO4l5RqaNt8NgsFPJW3Nitnl71zGnPDnYWq4CSoEBvop6?=
+ =?us-ascii?Q?Ksm2c3qOsCnENwRjfe/yswh4ugcfVVkZAhPI9rCxgF3oFtwg4PRc2EHbo+HW?=
+ =?us-ascii?Q?juQOpwcsbFqyWlv5pGFQMfEsvj4uoxBY5lDwveHACDcEstRPDwP1CPpBKDE/?=
+ =?us-ascii?Q?jOs85oTsrXxFY4E2+QDGcnPbea2BBg5v50t6tiJTwzQDPrI+Ls52XDD9JxVR?=
+ =?us-ascii?Q?Cq5yaQ5Mo/m+H+PZyXPuS/zG5GLVa9hMq/ogVrGTg7VkXGDZQh48DuIKaU+e?=
+ =?us-ascii?Q?BKW7TXyT5OrIW962YlOvxOYYcJxDSvYBBnKTjbUXb/l/FAwD5IJEaWKxpJ8H?=
+ =?us-ascii?Q?Rg=3D=3D?=
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	NEn7R0ZaPZh4ETmvs8YkUQr2MWWUUHcxYsYvE+bf0x3sLQ1icggoyj99sCmg/JWyFHbgNQSANuWEjJUuhlM52OgVIJwlRequCPidB9Cu0chveW6/BcB9rDGrRO9GM5Ea1rsgdY5FchVLVgT6WIyRTAEECzSol2cv0dpEK2nY1HbExP3JhczGcoB74eMkb3fCnZeGmfnAGDDGfGdsnND/LDEc7nSjGPWnhshVEnS9bf+xrxph7K85txgnypmvJCHD4/hu1Ly/g4LgaRONW+cY8zZOEALT1cdSaTxhRxyOoue0dnVO+FQCQfg0IVZEMHUtzRiBZYqOxAosrKvdwN9494F+fCSdKv6n0i8XFkjm5W92jsHWUBMW/WKE2G4Ak0Y4pEz/ORHYcNGyYaTzxWtbmtKbrn1ipy1OaAFcwTz6yfVUywtouZ+iT3jC9N/hPC8u542LJ5Uzry+NdlK6Dm+dI3NhkECh/pAc8tEYURkejNegJGXSiWy4JTGuVcfFEqa6eviIqP2Pf9I87zRkDJY5OsoK7HRSnf8hxNBXtbzsxAKzlIM100GX8ikMyjEZnMYYX7yKFbKZ9J7FkWobAKwZh812r/6Ona/6er0oN7+dn7g=
+	9Fi8BSFS444Ejh7Mpsv6w2Q4IVYIbsUk7VkwjptEBDxmVrOAogKNQpOx2es5uc7RQr14mJE0SgxxAoBQrvmPyzbI2KnCiDy9dkGghDencuMXasATvHbJzhzg8glIdu89MAX4vPFPeufkEoNX1PAXQh5Adwk4ypeQpgkHnXqSmW2V9wYChTzyKC7OwgDSAOrxSNq4FvaHYrn8DFrGG8TLeC4MxUtWwK3PHrpl6Zx+2ancX/X/Mv/mVu0OwzmbTQZ8iSzgSR4VS/CXBBU00kt/OutgmRm2wP55uulZL9nSqBs/qNGnyyhLckjKgEyLHs2w+43M18Ef1OvzYGgfOY1LXz+OPaYABAF4fLpNc0q5a0DH8faEjWnR1eiZ/sYeif9fUWhfDTrSZCVnnjINDGEnyyOk/yOUMvcZegFJlOr44M9rjiqi4nHpnno3gzpcKWdh1RN0r5OH0dPt6oXG9wjfpondGGHNe8qDKr6D2a81DZnOQyH7SwC6fYUy6LSfGAMU4lA+CgBXo6//q5IIB96WmERfZjTxj+dEwvkmIl7kYFSCNUmKyuHEOAhlTKDqk1Owz2NfyusCAOSB8Z8uVBj3eLu4CFQiLEwbou9feq+SsEg=
 X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63514feb-efb7-41f6-ecd8-08dced4dea11
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91466901-2379-4088-d5bc-08dced4f65cc
 X-MS-Exchange-CrossTenant-AuthSource: DS0PR10MB7933.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Oct 2024 19:16:55.6551
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Oct 2024 19:27:24.7182
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: L48touKgaIqs7/8jNLSHKQMdG6gP6INqqNwchC0t87K6C8Oy1HK6GHZy8U4zhyTlcUab/zidK6ese5QuwIurLA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA3PR10MB8116
+X-MS-Exchange-CrossTenant-UserPrincipalName: KtkwNRpXTgZqMlWJH5Q+7KfMENE7IKGy3CNPF774dVO1DT+LsP6kIhjAg7oUP9+5kJvIEjTnyEAwDnuMVJMa0w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR10MB7228
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_14,2024-10-15_01,2024-09-30_01
+ definitions=2024-10-15_15,2024-10-15_01,2024-09-30_01
 X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
  adultscore=0 spamscore=0 mlxscore=0 suspectscore=0 bulkscore=0
  mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2409260000 definitions=main-2410150129
-X-Proofpoint-GUID: rDfez8jCjouJt4m5Kfl0EhPksjUYCND0
-X-Proofpoint-ORIG-GUID: rDfez8jCjouJt4m5Kfl0EhPksjUYCND0
+ engine=8.12.0-2409260000 definitions=main-2410150130
+X-Proofpoint-ORIG-GUID: kMypuZ0BrNDoYnAmYgJ6ze4FpHosYSV9
+X-Proofpoint-GUID: kMypuZ0BrNDoYnAmYgJ6ze4FpHosYSV9
 
 * Anjali Kulkarni <anjali.k.kulkarni@oracle.com> [241015 13:30]:
-> Kunit tests to test hash table add, delete, duplicate add and delete.
-> Add following configs and compile kernel code:
+> Test to check if setting PROC_CN_MCAST_NOTIFY in proc connector API, allows
+> a thread's non-zero exit status to be returned to proc_filter.
 > 
-> CONFIG_CONNECTOR=y
-> CONFIG_PROC_EVENTS=y
-> CONFIG_NET=y
-> CONFIG_KUNIT=m
-> CONFIG_CN_HASH_KUNIT_TEST=m
+> The threads.c program creates 2 child threads. 1st thread handles signal
+> SIGSEGV, and 2nd thread needs to indicate some error condition (value 1)
+> to the kernel, instead of using pthread_exit() with 1.
 > 
-> To run kunit tests:
-> sudo modprobe cn_hash_test
+> In both cases, child sends notify_netlink_thread_exit(exit_code) to kernel,
+> to let kernel know it has exited abnormally with exit_code.
 > 
-> Output of kunit tests and hash table contents are displayed in
-> /var/log/messages (at KERN_DEBUG level).
+> Compile:
+>     make thread
+>     make proc_filter
+> To see non-zero exit notifications, run:
+>     ./proc_filter -f
+> Run threads code in another window:
+>     ./threads
+> Note the 2 child thread IDs reported above
+> Send SIGSEGV signal to the child handling SIGSEGV:
+>     kill -11 <child1-tid>
+> Watch the child 1 tid being notified with exit code 11 to proc_filter
+> Watch child 2 tid being notified with exit code 1 (value defined in code)
+> to proc_filter
 > 
 > Signed-off-by: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 > ---
->  drivers/connector/cn_hash.c   |  49 +++++++++-
->  drivers/connector/connector.c |  15 ++-
->  include/linux/connector.h     |   8 +-
->  lib/Kconfig.debug             |  17 ++++
->  lib/Makefile                  |   1 +
->  lib/cn_hash_test.c            | 167 ++++++++++++++++++++++++++++++++++
->  lib/cn_hash_test.h            |  12 +++
->  7 files changed, 264 insertions(+), 5 deletions(-)
->  create mode 100644 lib/cn_hash_test.c
->  create mode 100644 lib/cn_hash_test.h
+>  tools/testing/selftests/connector/Makefile    |  23 +++-
+>  .../testing/selftests/connector/proc_filter.c |   5 +
+>  tools/testing/selftests/connector/thread.c    | 116 ++++++++++++++++++
+>  .../selftests/connector/thread_filter.c       |  96 +++++++++++++++
+>  4 files changed, 239 insertions(+), 1 deletion(-)
+>  create mode 100644 tools/testing/selftests/connector/thread.c
+>  create mode 100644 tools/testing/selftests/connector/thread_filter.c
 > 
-> diff --git a/drivers/connector/cn_hash.c b/drivers/connector/cn_hash.c
-> index a0211cd99132..8f0eb6acb158 100644
-> --- a/drivers/connector/cn_hash.c
-> +++ b/drivers/connector/cn_hash.c
-> @@ -166,7 +166,7 @@ __u32 cn_hash_del_get_exval(struct cn_hash_dev *hdev, pid_t pid)
->  	return 0;
->  }
+> diff --git a/tools/testing/selftests/connector/Makefile b/tools/testing/selftests/connector/Makefile
+> index 92188b9bac5c..bf335826bc3b 100644
+> --- a/tools/testing/selftests/connector/Makefile
+> +++ b/tools/testing/selftests/connector/Makefile
+> @@ -1,5 +1,26 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> -CFLAGS += -Wall $(KHDR_INCLUDES)
+> +KERNEL="../../../.."
+> +
+> +CFLAGS += -Wall $(KHDR_INCLUDES) -I $(KERNEL)/include/uapi -I $(KERNEL)/include
+> +
+> +proc_filter: proc_filter.o
+> +	cc proc_filter.o -o proc_filter
+> +
+> +proc_filter.o: proc_filter.c
+> +	cc -c proc_filter.c -o proc_filter.o $(CFLAGS)
+> +
+> +thread: thread.o thread_filter.o
+> +	cc thread.o thread_filter.o -o thread
+> +
+> +thread.o: thread.c $(DEPS)
+> +		cc -c thread.c -o thread.o $(CFLAGS)
+> +
+> +thread_filter.o: thread_filter.c
+> +		cc -c thread_filter.c -o thread_filter.o $(CFLAGS)
+> +
+> +define EXTRA_CLEAN
+> +	rm *.o thread
+> +endef
 >  
-> -__u32 cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid)
-> +int cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid)
-
-Is this return type change supposed to be here?
-
->  {
->  	struct uexit_pid_hnode *hnode;
->  	__u32 excde;
-> @@ -189,7 +189,52 @@ __u32 cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid)
->  	return -EINVAL;
->  }
+>  TEST_GEN_PROGS = proc_filter
 >  
-> +int cn_hash_display_hlist(struct cn_hash_dev *hdev, pid_t pid, int max_len,
-> +				int *hkey, int *key_display)
-> +{
-> +	struct uexit_pid_hnode *hnode;
-> +	int key, count = 0;
-> +
-> +	mutex_lock(&hdev->uexit_hash_lock);
-> +	key = hash_min(pid, HASH_BITS(hdev->uexit_pid_htable));
-> +	pr_debug("Bucket: %d\n", key);
-> +
-> +	hlist_for_each_entry(hnode,
-> +			&hdev->uexit_pid_htable[key],
-> +			uexit_pid_hlist) {
-> +		if (key_display[key] != 1) {
-> +			if (hnode->uexit_pid_hlist.next == NULL)
-> +				pr_debug("pid %d ", hnode->pid);
-> +			else
-> +				pr_debug("pid %d --> ", hnode->pid);
-> +		}
-> +		count++;
-> +	}
-> +
-> +	mutex_unlock(&hdev->uexit_hash_lock);
-> +
-> +	if ((key_display[key] != 1) && !count)
-> +		pr_debug("(empty)\n");
-> +
-> +	pr_debug("\n");
-
-It seems like you maybe added an extra \n if you print the (empty) line
-above?
-
-> +
-> +	*hkey = key;
-> +
-> +	if (count > max_len) {
-> +		pr_err("%d entries in hlist for key %d, expected %d\n",
-> +				count, key, max_len);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  bool cn_hash_table_empty(struct cn_hash_dev *hdev)
->  {
-> -	return hash_empty(hdev->uexit_pid_htable);
-> +	bool is_empty;
-> +
-> +	is_empty = hash_empty(hdev->uexit_pid_htable);
-> +	pr_debug("Hash table is %s\n", (is_empty ? "empty" : "not empty"));
-> +
-> +	return is_empty;
-
-It seems odd to have this change in the kunit change.
-
->  }
-> diff --git a/drivers/connector/connector.c b/drivers/connector/connector.c
-> index 506e3cbedf85..28e60c8b0fdf 100644
-> --- a/drivers/connector/connector.c
-> +++ b/drivers/connector/connector.c
-> @@ -308,7 +308,7 @@ int cn_add_elem(__u32 uexit_code, pid_t pid)
->  }
->  EXPORT_SYMBOL_GPL(cn_add_elem);
->  
-> -__u32 cn_get_exval(pid_t pid)
-> +int cn_get_exval(pid_t pid)
->  {
->  	struct cn_dev *dev = &cdev;
->  	__u32 exval;
-> @@ -321,6 +321,19 @@ __u32 cn_get_exval(pid_t pid)
->  }
->  EXPORT_SYMBOL_GPL(cn_get_exval);
->  
-> +int cn_display_hlist(pid_t pid, int max_len, int *hkey,
-> +			int *key_display)
-
-This can probably be one line here.
-
-> +{
-> +	struct cn_dev *dev = &cdev;
-> +
-> +	if (!cn_already_initialized)
-> +		return 0;
-> +
-> +	return cn_hash_display_hlist(dev->hdev, pid, max_len,
-> +					hkey, key_display);
-> +}
-> +EXPORT_SYMBOL_GPL(cn_display_hlist);
-> +
->  bool cn_table_empty(void)
->  {
->  	struct cn_dev *dev = &cdev;
-> diff --git a/include/linux/connector.h b/include/linux/connector.h
-> index 094e1730a4f6..af801c5005e8 100644
-> --- a/include/linux/connector.h
-> +++ b/include/linux/connector.h
-> @@ -165,7 +165,7 @@ __u32 cn_hash_del_get_exval(struct cn_hash_dev *hdev, pid_t pid);
->  int cn_add_elem(__u32 uexit_code, pid_t pid);
->  int cn_del_elem(pid_t pid);
->  __u32 cn_del_get_exval(pid_t pid);
-> -__u32 cn_get_exval(pid_t pid);
-> +int cn_get_exval(pid_t pid);
->  
->  struct cn_hash_dev *cn_hash_alloc_dev(const char *name);
->  void cn_hash_free_dev(struct cn_hash_dev *hdev);
-> @@ -175,9 +175,13 @@ void cn_hash_free_elem(struct uexit_pid_hnode *elem);
->  int cn_hash_add_elem(struct cn_hash_dev *hdev, __u32 uexit_code, pid_t pid);
->  int cn_hash_del_elem(struct cn_hash_dev *hdev, pid_t pid);
->  __u32 cn_hash_del_get_exval(struct cn_hash_dev *hdev, pid_t pid);
-> -__u32 cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid);
-> +int cn_hash_get_exval(struct cn_hash_dev *hdev, pid_t pid);
-
-It seems like the change in type should be with another change or on its
-own?
-
->  
->  bool cn_table_empty(void);
->  bool cn_hash_table_empty(struct cn_hash_dev *hdev);
->  
-> +int cn_display_hlist(pid_t pid, int max_len, int *hkey, int *key_display);
-> +int cn_hash_display_hlist(struct cn_hash_dev *hdev, pid_t pid, int max_len,
-> +				int *hkey, int *key_display);
-> +
->  #endif				/* __CONNECTOR_H */
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index 7315f643817a..23599beb9bec 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -2705,6 +2705,23 @@ config HASHTABLE_KUNIT_TEST
->  
->  	  If unsure, say N.
->  
-> +config CONFIG_CN_HASH_KUNIT_TEST
-> +	tristate "KUnit Test for connector hashtable code" if !KUNIT_ALL_TESTS
-> +	depends on KUNIT
-> +	default KUNIT_ALL_TESTS
-> +	help
-> +	  This builds the hashtable KUnit test suite.
-> +	  It tests the basic functionality of the API defined in
-> +	  drivers/connector/cn_hash.c.
-> +	  CONFIG_CONNECTOR=y, CONFIG_PROC_EVENTS=y as well as CONFIG_NET=y
-> +	  needs to be enabled along with CONFIG_CN_HASH_KUNIT_TEST=m and
-> +	  CONFIG_KUNIT=m in .config file to compile and then test as a kernel
-> +	  module with "modprobe cn_hash_test".
-> +	  For more information on KUnit and unit tests in general please
-> +	  refer to the KUnit documentation in Documentation/dev-tools/kunit/.
-> +
-> +	  If unsure, say N.
-> +
->  config LINEAR_RANGES_TEST
->  	tristate "KUnit test for linear_ranges"
->  	depends on KUNIT
-> diff --git a/lib/Makefile b/lib/Makefile
-> index 811ba12c8cd0..2c59c82b0b18 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -379,6 +379,7 @@ obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
->  obj-$(CONFIG_SLUB_KUNIT_TEST) += slub_kunit.o
->  obj-$(CONFIG_MEMCPY_KUNIT_TEST) += memcpy_kunit.o
->  obj-$(CONFIG_IS_SIGNED_TYPE_KUNIT_TEST) += is_signed_type_kunit.o
-> +obj-$(CONFIG_CN_HASH_KUNIT_TEST) += cn_hash_test.o
->  CFLAGS_overflow_kunit.o = $(call cc-disable-warning, tautological-constant-out-of-range-compare)
->  obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
->  CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
-> diff --git a/lib/cn_hash_test.c b/lib/cn_hash_test.c
-> new file mode 100644
-> index 000000000000..78c39c0a0997
-> --- /dev/null
-> +++ b/lib/cn_hash_test.c
-> @@ -0,0 +1,167 @@
-> +// SPDX-License-Identifier: GPL-2.0
+> diff --git a/tools/testing/selftests/connector/proc_filter.c b/tools/testing/selftests/connector/proc_filter.c
+> index 4a825b997666..6fb4842894f8 100644
+> --- a/tools/testing/selftests/connector/proc_filter.c
+> +++ b/tools/testing/selftests/connector/proc_filter.c
+> @@ -1,4 +1,9 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
 > +/*
-> + * KUnit test for the connector threads hashtable code.
+> + * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 > + *
 > + * Copyright (c) 2024 Oracle and/or its affiliates.
-> + * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
 > + */
-> +#include <kunit/test.h>
+>  
+>  #include <sys/types.h>
+>  #include <sys/epoll.h>
+> diff --git a/tools/testing/selftests/connector/thread.c b/tools/testing/selftests/connector/thread.c
+> new file mode 100644
+> index 000000000000..8c9abf6115d6
+> --- /dev/null
+> +++ b/tools/testing/selftests/connector/thread.c
+> @@ -0,0 +1,116 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+> + *
+> + * Copyright (c) 2024 Oracle and/or its affiliates.
+> + */
 > +
-> +#include "cn_hash_test.h"
+> +#include <pthread.h>
+> +#include <stdio.h>
+> +#include <unistd.h>
+> +#include <stdlib.h>
+> +#include <signal.h>
 > +
-> +#define ARR_SIZE	4
-> +#define HASH_TABLE_LEN	1024
+> +/*
+> + * This code tests a thread exit notification when thread exits abnormally.
+> + * Normally, when a thread exits abnormally, the kernel is not aware of the
+> + * exit code. This is usually only conveyed from child to parent via the
+> + * pthread_exit() and pthread_join() calls. Sometimes, however, a parent
+> + * process cannot monitor all child processes via pthread_join(), particularly
+> + * when there is a huge amount of child processes. In this case, the parent
+> + * has created the child with PTHREAD_CREATE_DETACHED attribute.
+> + * To fix this problem, either when child wants to convey non-zero exit via
+> + * pthread_exit() or in a signal handler, the child can notify the kernel's
+> + * connector module it's exit status via a netlink call with new type
+> + * PROC_CN_MCAST_NOTIFY. (Implemented in the thread_filter.c file).
+> + * This will send the exit code from the child to the kernel, which the kernel
+> + * can later return to proc_filter program when the child actually exits.
+> + * To test this usecase:
+> + * Compile:
+> + *	make thread
+> + *	make proc_filter
+> + * To see non-zero exit notifications, run:
+> + *	./proc_filter -f
+> + * Start the threads code, creating 2 threads, in another window:
+> + *	./threads
+> + * Note the 2 child thread IDs reported above
+> + * Send SIGSEGV signal to the child handling SIGSEGV:
+> + *	kill -11 <child1-tid>
+> + * Watch the event being notified with exit code 11 to proc_filter
+> + * Watch child 2 tid being notified with exit code 1 (value defined in code)
+> + * to proc_filter
+> + */
 > +
-> +struct add_data {
-> +	pid_t pid;
-> +	int exit_val;
-> +	int key;
-> +};
+> +extern int notify_netlink_thread_exit(unsigned int exit_code);
 > +
-> +static struct add_data adata[ARR_SIZE];
-> +static int key_display[HASH_TABLE_LEN];
-> +
-> +static int cn_hash_init(struct kunit *test)
+> +static void sigsegvh(int sig)
 > +{
-> +	for (int i = 0; i < HASH_TABLE_LEN; i++)
-> +		key_display[i] = 0;
+> +	unsigned int exit_code = (unsigned int) sig;
+> +	/*
+> +	 * Send any non-zero value to get a notification. Here we are
+> +	 * sending the signal number for SIGSEGV which is 11
+> +	 */
+> +	notify_netlink_thread_exit(exit_code);
+> +}
 > +
+> +void *threadc1(void *ptr)
+> +{
+> +	signal(SIGSEGV, sigsegvh);
+> +	printf("Child 1 thread id %d, handling SIGSEGV\n", gettid());
+> +	sleep(20);
+> +	pthread_exit(NULL);
+> +}
+> +
+> +void *threadc2(void *ptr)
+> +{
+> +	int exit_val = 1;
+> +
+> +	printf("Child 2 thread id %d, wants to exit with value %d\n",
+> +			gettid(), exit_val);
+> +	sleep(2);
+> +	notify_netlink_thread_exit(exit_val);
+> +	pthread_exit(NULL);
+> +}
+> +
+> +int main(int argc, char **argv)
+> +{
+> +	pthread_t thread1, thread2;
+> +	pthread_attr_t attr1, attr2;
+> +	int ret;
+> +
+> +	ret = pthread_attr_init(&attr1);
+> +	if (ret != 0) {
+> +		perror("pthread_attr_init failed");
+> +		exit(ret);
+> +	}
+> +	ret = pthread_attr_setdetachstate(&attr1, PTHREAD_CREATE_DETACHED);
+> +	if (ret != 0) {
+> +		perror("pthread_attr_setdetachstate failed");
+> +		exit(ret);
+> +	}
+> +	ret = pthread_create(&thread1, &attr1, *threadc1, NULL);
+> +	if (ret != 0) {
+> +		perror("pthread_create failed");
+> +		exit(ret);
+> +	}
+> +
+> +	ret = pthread_attr_init(&attr2);
+> +	if (ret != 0) {
+> +		perror("pthread_attr_init failed");
+> +		exit(ret);
+> +	}
+> +	ret = pthread_attr_setdetachstate(&attr2, PTHREAD_CREATE_DETACHED);
+> +	if (ret != 0) {
+> +		perror("pthread_attr_setdetachstate failed");
+> +		exit(ret);
+> +	}
+> +	ret = pthread_create(&thread2, &attr2, *threadc2, NULL);
+> +	if (ret != 0) {
+> +		perror("pthread_create failed");
+> +		exit(ret);
+> +	}
+
+I expected the test to check for the correct value to be returned?
+Could you use pthread_join() and verify the same value is returned
+through the new mechanism, or will they not match?
+
+> +
+> +	/* Wait for children to exit or be killed */
+> +	sleep(30);
+> +	exit(0);
+> +}
+> diff --git a/tools/testing/selftests/connector/thread_filter.c b/tools/testing/selftests/connector/thread_filter.c
+> new file mode 100644
+> index 000000000000..3da740aa7537
+> --- /dev/null
+> +++ b/tools/testing/selftests/connector/thread_filter.c
+> @@ -0,0 +1,96 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+> + *
+> + * Copyright (c) 2024 Oracle and/or its affiliates.
+> + */
+> +
+> +#include <sys/types.h>
+> +#include <sys/epoll.h>
+> +#include <sys/socket.h>
+> +#include <linux/netlink.h>
+> +#include <linux/connector.h>
+> +#include <linux/cn_proc.h>
+> +
+> +#include <stddef.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +#include <strings.h>
+> +#include <errno.h>
+> +#include <signal.h>
+> +#include <string.h>
+> +
+> +#define NL_MESSAGE_SIZE (sizeof(struct nlmsghdr) + sizeof(struct cn_msg) + \
+> +			sizeof(struct proc_input))
+> +
+> +/*
+> + * Send PROC_CN_MCAST_NOTIFY type notification to the connector code in kernel.
+> + * This will send the exit_code specified by user to the connector layer, so
+> + * it can send a notification for that event to any listening process
+> + */
+> +int send_message(int nl_sock, unsigned int exit_code)
+> +{
+> +	char buff[NL_MESSAGE_SIZE];
+> +	struct nlmsghdr *hdr;
+> +	struct cn_msg *msg;
+> +
+> +	hdr = (struct nlmsghdr *)buff;
+> +	hdr->nlmsg_len = NL_MESSAGE_SIZE;
+> +	hdr->nlmsg_type = NLMSG_DONE;
+> +	hdr->nlmsg_flags = 0;
+> +	hdr->nlmsg_seq = 0;
+> +	hdr->nlmsg_pid = getpid();
+> +
+> +	msg = (struct cn_msg *)NLMSG_DATA(hdr);
+> +	msg->id.idx = CN_IDX_PROC;
+> +	msg->id.val = CN_VAL_PROC;
+> +	msg->seq = 0;
+> +	msg->ack = 0;
+> +	msg->flags = 0;
+> +
+> +	msg->len = sizeof(struct proc_input);
+> +	((struct proc_input *)msg->data)->mcast_op =
+> +		PROC_CN_MCAST_NOTIFY;
+> +	((struct proc_input *)msg->data)->uexit_code = exit_code;
+> +
+> +	if (send(nl_sock, hdr, hdr->nlmsg_len, 0) == -1) {
+> +		perror("send failed");
+> +		return -errno;
+> +	}
 > +	return 0;
 > +}
 > +
-> +static void cn_display_htable(struct kunit *test, int len)
+> +int notify_netlink_thread_exit(unsigned int exit_code)
 > +{
-> +	int i, err;
+> +	struct sockaddr_nl sa_nl;
+> +	int err = 0;
+> +	int nl_sock;
 > +
-> +	cn_hash_init(test);
+> +	nl_sock = socket(PF_NETLINK, SOCK_DGRAM, NETLINK_CONNECTOR);
 > +
-> +	pr_debug("\n");
-> +	pr_debug("Displaying hash table:\n");
-> +
-> +	for (i = 0; i < len; i++) {
-> +		err = cn_display_hlist(adata[i].pid, len, &adata[i].key,
-> +					key_display);
-> +		key_display[adata[i].key] = 1;
-> +		KUNIT_EXPECT_EQ(test, err, 0);
-> +	}
-> +}
-> +
-> +static void cn_hash_test_add(struct kunit *test)
-> +{
-> +	int err, i;
-> +	int exit_val;
-> +
-> +	adata[0].pid = 1;
-> +	adata[0].exit_val = 45;
-> +
-> +	adata[1].pid = 2;
-> +	adata[1].exit_val = 13;
-> +
-> +	adata[2].pid = 1024;
-> +	adata[2].exit_val = 16;
-> +
-> +	adata[3].pid = 1023;
-> +	adata[3].exit_val = 71;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(adata); i++) {
-> +		err = cn_add_elem(adata[i].exit_val, adata[i].pid);
-> +		KUNIT_EXPECT_EQ_MSG(test, 0, err,
-> +				"Adding pid %d returned err %d",
-> +				adata[i].pid, err);
-> +
-> +		exit_val = cn_get_exval(adata[i].pid);
-> +		KUNIT_EXPECT_EQ(test, adata[i].exit_val, exit_val);
+> +	if (nl_sock == -1) {
+> +		perror("socket failed");
+> +		return -errno;
 > +	}
 > +
-> +	cn_display_htable(test, ARRAY_SIZE(adata));
-> +}
+> +	bzero(&sa_nl, sizeof(sa_nl));
+> +	sa_nl.nl_family = AF_NETLINK;
+> +	sa_nl.nl_groups = CN_IDX_PROC;
+> +	sa_nl.nl_pid    = gettid();
 > +
-> +static void cn_hash_test_del(struct kunit *test)
-> +{
-> +	int i, err;
-> +	int exit_val;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(adata); i++) {
-> +		err = cn_del_elem(adata[i].pid);
-> +		KUNIT_EXPECT_EQ_MSG(test, 0, err,
-> +				"Deleting pid %d returned err %d",
-> +				adata[i].pid, err);
-> +
-> +		exit_val = cn_get_exval(adata[i].pid);
-> +		KUNIT_EXPECT_EQ(test, -EINVAL, exit_val);
+> +	if (bind(nl_sock, (struct sockaddr *)&sa_nl, sizeof(sa_nl)) == -1) {
+> +		perror("bind failed");
+> +		close(nl_sock);
+> +		return -errno;
 > +	}
 > +
-> +	cn_display_htable(test, ARRAY_SIZE(adata));
-> +	KUNIT_EXPECT_TRUE(test, cn_table_empty());
+> +	err = send_message(nl_sock, exit_code);
+> +
+> +	close(nl_sock);
+> +
+> +	if (err < 0)
+> +		return err;
+> +
+> +	return 0;
 > +}
-> +
-> +static void cn_hash_test_del_get_exval(struct kunit *test)
-> +{
-> +	int i, exval;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(adata); i++) {
-> +		exval = cn_del_get_exval(adata[i].pid);
-> +		KUNIT_EXPECT_EQ(test, adata[i].exit_val, exval);
-> +
-> +		cn_display_htable(test, ARRAY_SIZE(adata));
-> +	}
-> +
-> +	KUNIT_EXPECT_TRUE(test, cn_table_empty());
-> +}
-> +static void cn_hash_test_dup_add(struct kunit *test)
-> +{
-> +	int err, exit_val;
-> +
-> +	adata[0].pid = 10;
-> +	adata[0].exit_val = 21;
-> +
-> +	err = cn_add_elem(adata[0].exit_val, adata[0].pid);
-> +	KUNIT_EXPECT_EQ(test, 0, err);
-> +
-> +	exit_val = cn_get_exval(adata[0].pid);
-> +	KUNIT_EXPECT_EQ(test, 21, exit_val);
-> +
-> +	adata[1].pid = 10;
-> +	adata[1].exit_val = 12;
-> +
-> +	err = cn_add_elem(adata[1].exit_val, adata[1].pid);
-> +	KUNIT_EXPECT_EQ(test, -EEXIST, err);
-> +
-> +	exit_val = cn_get_exval(adata[1].pid);
-> +	KUNIT_EXPECT_EQ(test, 21, exit_val);
-> +
-> +	cn_display_htable(test, 1);
-> +}
-> +
-> +static void cn_hash_test_dup_del(struct kunit *test)
-> +{
-> +	int err;
-> +
-> +	err = cn_del_elem(adata[0].pid);
-> +	KUNIT_EXPECT_EQ(test, 0, err);
-> +
-> +	err = cn_del_elem(adata[0].pid);
-> +	KUNIT_EXPECT_EQ(test, -EINVAL, err);
-> +
-> +	KUNIT_EXPECT_TRUE(test, cn_table_empty());
-> +}
-> +
-> +static struct kunit_case cn_hashtable_test_cases[] = {
-> +	KUNIT_CASE(cn_hash_test_add),
-> +	KUNIT_CASE(cn_hash_test_del),
-> +	KUNIT_CASE(cn_hash_test_dup_add),
-> +	KUNIT_CASE(cn_hash_test_dup_del),
-> +	KUNIT_CASE(cn_hash_test_add),
-> +	KUNIT_CASE(cn_hash_test_del_get_exval),
-> +	{},
-> +};
-> +
-> +static struct kunit_suite cn_hashtable_test_module = {
-> +	.name = "cn_hashtable",
-> +	.init = cn_hash_init,
-> +	.test_cases = cn_hashtable_test_cases,
-> +};
-> +kunit_test_suite(cn_hashtable_test_module);
-> +
-> +MODULE_DESCRIPTION("KUnit test for the connector threads hashtable code");
-> +MODULE_LICENSE("GPL");
-> diff --git a/lib/cn_hash_test.h b/lib/cn_hash_test.h
-> new file mode 100644
-> index 000000000000..46fcda31b25c
-> --- /dev/null
-> +++ b/lib/cn_hash_test.h
-> @@ -0,0 +1,12 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
-> +/*
-> + * Copyright (c) 2024 Oracle and/or its affiliates.
-> + * Author: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
-> + */
-> +extern int cn_display_hlist(pid_t pid, int max_len, int *hkey,
-> +				int *key_display);
-> +extern int cn_del_elem(pid_t pid);
-> +extern int cn_add_elem(__u32 uexit_code, pid_t pid);
-> +extern __u32 cn_del_get_exval(pid_t pid);
-> +extern int cn_get_exval(pid_t pid);
-> +extern bool cn_table_empty(void);
-
-I think we are not adding externs to headers anymore.
-
 > -- 
 > 2.46.0
 > 
