@@ -1,124 +1,135 @@
-Return-Path: <linux-kselftest+bounces-19719-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19722-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C294199E298
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 11:15:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04A4F99E33D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 11:59:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6ECAF1F20F8B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 09:15:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 33B871C2228F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 09:59:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B913918991C;
-	Tue, 15 Oct 2024 09:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B7141E2821;
+	Tue, 15 Oct 2024 09:59:23 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A01F418035;
-	Tue, 15 Oct 2024 09:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6553317DFEC;
+	Tue, 15 Oct 2024 09:59:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728983740; cv=none; b=ci1c0gjetrWNqpqw5yD+CfU6JdQ2vGLgddC4TCbbbjWjgya8SznyX6neTY9Zx8TkkeF8p6b+ogSY6/QqfT9qbZk84fH/KD6B1VLO4U8/UlCukopTEkiR8ldT2an7U2MjMBlHlKfWGPP3VbJQqv31x9ME/U5mrjQ+0L9IH24hky0=
+	t=1728986363; cv=none; b=CwkHRpfFNF8MBtwr6W8Wi5AnY2dDmAe+KwZe6G3TCoWsVoTcjOfQzW5pWcTcUyaMJV0LfSPak/PQiaN6yN9x26ajM39G2DZ0zdqrRK541QpGVsQTYvxuZgJa4hKoUKJFu4+GKEB4XfGBjpwKpGNeoL63UpGBaZOcuY7VmuUjV2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728983740; c=relaxed/simple;
-	bh=CrfC+DKGXR7kRcsLQbFWSymUPaJylAZTT2Uka196tWI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ioDC7ZjgAB+B5H1P/eZsIeUa3L9vqsRe3ATJrDgqMFAw4eHKBSP8Q0ppGw+zb4RllTmgyR07MBClHgUL6H5RrDloSZnfTWOycN9DjpK4jEf5mb2U1PxkBT0aiKMhTHmmoJCQt9ZIKRI/0W3RHo4wSORLmR0DDTPXwBnnry0XtNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 014c91068ad611efa216b1d71e6e1362-20241015
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:5ee77643-f18f-4553-a220-202d0346f11b,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:82c5f88,CLOUDID:9781bf6be741a4c27f4ab9224d50864e,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,URL:1
-	1|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,S
-	PR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
-X-UUID: 014c91068ad611efa216b1d71e6e1362-20241015
-Received: from node2.com.cn [(10.44.16.197)] by mailgw.kylinos.cn
-	(envelope-from <luyun@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 199891051; Tue, 15 Oct 2024 17:15:22 +0800
-Received: from node2.com.cn (localhost [127.0.0.1])
-	by node2.com.cn (NSMail) with SMTP id EE8BFB8001A5;
-	Tue, 15 Oct 2024 17:15:21 +0800 (CST)
-X-ns-mid: postfix-670E32A9-8658841082
-Received: from localhost.localdomain (unknown [10.42.43.204])
-	by node2.com.cn (NSMail) with ESMTPA id 7A95EB8001A5;
-	Tue, 15 Oct 2024 09:15:21 +0000 (UTC)
-From: Yun Lu <luyun@kylinos.cn>
-To: jikos@kernel.org,
-	bentiss@kernel.org,
-	shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftest: hid: add the missing tests directory
-Date: Tue, 15 Oct 2024 17:15:20 +0800
-Message-Id: <20241015091520.2431150-1-luyun@kylinos.cn>
-X-Mailer: git-send-email 2.27.0
+	s=arc-20240116; t=1728986363; c=relaxed/simple;
+	bh=1RaCQuWH5s4AT7QPJwA17NMrH/oRCvf9JK37eD4b5S4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RyBo85PFjUi7x2lHLTdvc7YbK5rey9D0+CrVvbKOYrIFlL7+t+x3isfudBkciYQOILwSx+C8mvJOziOHom8ofX2WRHNDaiR9QcjFc9AabuNNxeVj+X7eGdnAmy5QbihJnl7ugV3zWWQwjwxt2JZhdThywFqZNBok3w5JX8NsLjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 577591007;
+	Tue, 15 Oct 2024 02:59:50 -0700 (PDT)
+Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A909B3F71E;
+	Tue, 15 Oct 2024 02:59:16 -0700 (PDT)
+Date: Tue, 15 Oct 2024 10:59:11 +0100
+From: Joey Gouly <joey.gouly@arm.com>
+To: Will Deacon <will@kernel.org>
+Cc: Kevin Brodsky <kevin.brodsky@arm.com>,
+	linux-arm-kernel@lists.infradead.org, nd@arm.com,
+	akpm@linux-foundation.org, aneesh.kumar@kernel.org,
+	aneesh.kumar@linux.ibm.com, anshuman.khandual@arm.com, bp@alien8.de,
+	broonie@kernel.org, catalin.marinas@arm.com,
+	christophe.leroy@csgroup.eu, dave.hansen@linux.intel.com,
+	hpa@zytor.com, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linuxppc-dev@lists.ozlabs.org, maz@kernel.org, mingo@redhat.com,
+	mpe@ellerman.id.au, naveen.n.rao@linux.ibm.com, npiggin@gmail.com,
+	oliver.upton@linux.dev, shuah@kernel.org, skhan@linuxfoundation.org,
+	szabolcs.nagy@arm.com, tglx@linutronix.de, x86@kernel.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 19/30] arm64: add POE signal support
+Message-ID: <20241015095911.GA3777204@e124191.cambridge.arm.com>
+References: <20240822151113.1479789-1-joey.gouly@arm.com>
+ <20240822151113.1479789-20-joey.gouly@arm.com>
+ <47e1537f-5b60-4541-aed1-a20e804c137d@arm.com>
+ <20241009144301.GA12453@willie-the-truck>
+ <20241014171023.GA18295@willie-the-truck>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241014171023.GA18295@willie-the-truck>
 
-Commit 160c826b4dd0 ("selftest: hid: add missing run-hid-tools-tests.sh")
-has added the run-hid-tools-tests.sh script for it to be installed, but
-I forgot to add the tests directory together.
+On Mon, Oct 14, 2024 at 06:10:23PM +0100, Will Deacon wrote:
+> Kevin, Joey,
+> 
+> On Wed, Oct 09, 2024 at 03:43:01PM +0100, Will Deacon wrote:
+> > On Tue, Sep 24, 2024 at 01:27:58PM +0200, Kevin Brodsky wrote:
+> > > On 22/08/2024 17:11, Joey Gouly wrote:
+> > > > @@ -1178,6 +1237,9 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
+> > > >  		sme_smstop();
+> > > >  	}
+> > > >  
+> > > > +	if (system_supports_poe())
+> > > > +		write_sysreg_s(POR_EL0_INIT, SYS_POR_EL0);
+> > > 
+> > > At the point where setup_return() is called, the signal frame has
+> > > already been written to the user stack. In other words, we write to the
+> > > user stack first, and then reset POR_EL0. This may be problematic,
+> > > especially if we are using the alternate signal stack, which the
+> > > interrupted POR_EL0 may not grant access to. In that situation uaccess
+> > > will fail and we'll end up with a SIGSEGV.
+> > > 
+> > > This issue has already been discussed on the x86 side, and as it happens
+> > > patches to reset PKRU early [1] have just landed. I don't think this is
+> > > a blocker for getting this series landed, but we should try and align
+> > > with x86. If there's no objection, I'm planning to work on a counterpart
+> > > to the x86 series (resetting POR_EL0 early during signal delivery).
+> > 
+> > Did you get a chance to work on that? It would be great to land the
+> > fixes for 6.12, if possible, so that the first kernel release with POE
+> > support doesn't land with known issues.
+> 
+> Looking a little more at this, I think we have quite a weird behaviour
+> on arm64 as it stands. It looks like we rely on the signal frame to hold
+> the original POR_EL0 so, if for some reason we fail to allocate space
+> for the POR context, I think we'll return back from the signal with
+> POR_EL0_INIT. That seems bad?
 
-If running the test case without the tests directory,  will results in
-the following error message:
+If we don't allocate space for POR_EL0, I think the program recieves SIGSGEV?
 
-    make -C tools/testing/selftests/ TARGETS=3Dhid install \
-	    INSTALL_PATH=3D$KSFT_INSTALL_PATH
-    cd $KSFT_INSTALL_PATH
-    ./run_kselftest.sh -t hid:hid-core.sh
+setup_sigframe_layout()
+        if (system_supports_poe()) {
+                err = sigframe_alloc(user, &user->poe_offset,
+                                     sizeof(struct poe_context));
+                if (err)
+                        return err;
+        }
 
-  /usr/lib/python3.11/site-packages/_pytest/config/__init__.py:331: Plugg=
-yTeardownRaisedWarning: A plugin raised an exception during an old-style =
-hookwrapper teardown.
-  Plugin: helpconfig, Hook: pytest_cmdline_parse
-  UsageError: usage: __main__.py [options] [file_or_dir] [file_or_dir] [.=
-..]
-  __main__.py: error: unrecognized arguments: --udevd
-    inifile: None
-    rootdir: /root/linux/kselftest_install/hid
+Through get_sigframe() and setup_rt_frame(), that eventually hets here:
 
-In fact, the run-hid-tools-tests.sh script uses the scripts in the tests
-directory to run tests. The tests directory also needs to be added to be
-installed.
+handle_signal()
+	ret = setup_rt_frame(usig, ksig, oldset, regs);
 
-v2: add the error message
+	[..]
 
-Fixes: ffb85d5c9e80 ("selftests: hid: import hid-tools hid-core tests")
-Cc: stable@vger.kernel.org
-Signed-off-by: Yun Lu <luyun@kylinos.cn>
----
- tools/testing/selftests/hid/Makefile | 1 +
- 1 file changed, 1 insertion(+)
+        signal_setup_done(ret, ksig, test_thread_flag(TIF_SINGLESTEP));
 
-diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftes=
-ts/hid/Makefile
-index 38ae31bb07b5..662209f5fabc 100644
---- a/tools/testing/selftests/hid/Makefile
-+++ b/tools/testing/selftests/hid/Makefile
-@@ -18,6 +18,7 @@ TEST_PROGS +=3D hid-usb_crash.sh
- TEST_PROGS +=3D hid-wacom.sh
-=20
- TEST_FILES :=3D run-hid-tools-tests.sh
-+TEST_FILES +=3D tests
-=20
- CXX ?=3D $(CROSS_COMPILE)g++
-=20
---=20
-2.27.0
+void signal_setup_done(int failed, struct ksignal *ksig, int stepping)                                                                                                                         
+{                                                                                                                                                                                              
+        if (failed)                                                                                                                                                                            
+                force_sigsegv(ksig->sig);                                                                                                                                                      
+        else                                                                                                                                                                                   
+                signal_delivered(ksig, stepping);                                                                                                                                              
+}  
 
+So I think it's "fine"?
+
+Thanks,
+Joey
 
