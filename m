@@ -1,514 +1,481 @@
-Return-Path: <linux-kselftest+bounces-19781-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19782-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41F9599F7B1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 22:00:51 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E9A399F8C5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 23:12:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C641E283136
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 20:00:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1DAD4B22DFB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 21:12:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6F191F76DF;
-	Tue, 15 Oct 2024 20:00:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB2B71F81A9;
+	Tue, 15 Oct 2024 21:12:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kz3oUPhA"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="V6tr5pUk";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="cYB+qv0y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88D651F818A
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2024 20:00:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729022435; cv=none; b=VNF4CSDu7a61Ea9V1l1U2KP0uhAOsCs/PEIkOJ042EfalOh7ryv62Jd822Utqqx6f72odI27aq7cXk0CRETCdIiuw/mpEFFLER5Cf0zsIVnoWqOO4hXLwpo9ukCP5bbaZAB3USIwd1phXnJn/UmglUsfcXymSeXmdtR153xGwI0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729022435; c=relaxed/simple;
-	bh=cjgf7fZ6fxbCRnIwsq59dZULAtQWYYYJDNg/Y1n8lEY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OmXNFdXHO2BvzouA3emlXtje1ri6DA6LFxjCLP9PT+93SAlTkAW5RoPgKl3Qn3zSTKjo7xHXwa9k6/sF54tHxYI37BLLHkG6brxJPH+D1N10Ycep/8WFQKt0KFJa24brprWdOsCbVAaET3aVgacGYjC/SXHaeOnlnRgGS3cYW6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=kz3oUPhA; arc=none smtp.client-ip=209.85.210.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-718062c1989so11029a34.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2024 13:00:33 -0700 (PDT)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E62D1F80BC;
+	Tue, 15 Oct 2024 21:12:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729026737; cv=fail; b=HiRB+NqxyYC6r0/PpZ/tGWXjrKw3Uo0Xcz+49iPqPEVidHy4ytVppn9Pb8s7EE8/Sa3l7yThfI/BuAch18ADi5fjIZ5KGD2Oh0NKUZfeoHJXEp2+xfxPFVExOOtTAEZDpF6M172V4nzzNxr74sMzU30BfKNBk9KAd6wOlbvhOfw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729026737; c=relaxed/simple;
+	bh=XLxohOsRoSbO1UGpSoaGQqC5TR99f2hDmPx6UfnMDec=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=YJFk0qUFsG2LLfjENIIeWACyEP2rG7WY3sW1UeB4qKXlKsjGlEJ6Y3y3bl9c8QW1C57zz+kbph7s+UXRuh9gTnHjt26TS+OWMroU4gw9oPzrscitTj8iDy6wWRpdKuc+C76IODMbvIHBDSbSSV0RvzvDe8UklJHoDUCyoNPfiaQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=V6tr5pUk; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=cYB+qv0y; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49FHtgH6019350;
+	Tue, 15 Oct 2024 21:11:49 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-id:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	corp-2023-11-20; bh=XLxohOsRoSbO1UGpSoaGQqC5TR99f2hDmPx6UfnMDec=; b=
+	V6tr5pUkUtibDY2adfmGBdT64Mwu4hmhHpJ/9tClLv8Xzxi7C6NeTO1s0l19JWoU
+	+Zzzmt++K8tnzKwZX92K3gdKOd5II+GicYA/j+jGwL9tnFtho7BWP5Ixha6IH1G2
+	IgFax4QQ89R9WyqUtxiGbXprWuV1dC5ncgbScfmAxxIN3dKkKJK4OCx9LBulwtOx
+	UOgr+KsaxFURZy7ZGnmaCRC0dOxvDwF8Ivbkp7qyyy6D2NlLVin+vgjhJJiWShfs
+	tvhpg6l2pAyi3MdMjPK3XNYMPEu6etR9hGUQ846DB4QNHE5/rYPbcPh8mCbKJiVV
+	/ZMfR52eUueNuQC8VHbBgQ==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427gq7j9ge-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 15 Oct 2024 21:11:49 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49FJjNiU036678;
+	Tue, 15 Oct 2024 21:11:47 GMT
+Received: from nam10-dm6-obe.outbound.protection.outlook.com (mail-dm6nam10lp2044.outbound.protection.outlook.com [104.47.58.44])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 427fjec6ax-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 15 Oct 2024 21:11:47 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=ufKpskyotCRdQDaSxqp6iQle0ji7dig2X+PK/Iuf4ds7m58mDjFWGTeTIcCFZXbdv4wCrv2XXG5jNv25PcFim8DURGJ4hd4rWkbekhm9IkxBN+or6bUKjjAV1KYLQLUdULg+7b9YEwcb1fXK9dDEvZbkVyK0IlpWJspmEMuziUfuLxqdPAGaFO/N1IiUkCPlmpYaREFoAug1xIyCcHJ/32GaLQp56DqtQKcOFb8jyLuDZ5KP7vyacZB6pnNb9g87mo6WqvPlybL2cSLRTe1d3dLLEq5xWcMW9+f4vdk+EG43QyfDLy8FyYVNzGyl63msTSz0/jN4N25Al7fBy10wTg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XLxohOsRoSbO1UGpSoaGQqC5TR99f2hDmPx6UfnMDec=;
+ b=MD4BluOzuhr+CactgiSCVG84xVNk5cRJ2yp1iUKybvGRCSQ6rdnETiWAz/fwN9xh6MQcjRfYw10EE+cLItWjhjKSncxqINUn/hxiCQwLrg7niGGjXgkmcYxdt/LFV694PE1fwdy3gX4i42NCMybfeeGxPJkiGGZfZMIRfVBdYHySNE/ljca4SdRdCokI6KRAvqU52B/108TtLPaJSR2TgEGxUmziUddlb04inIf0rFrvBJgSXIP7r8zGqx72V/rkGnsSDFTWp0NumB47OCGUiskOSuYSIapiNLM3lnTUlcm+j0UDPNTe6Uvi/ytvkHbd+bBOsYU0ZVGYt0Wnws6CLQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1729022432; x=1729627232; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x+NFu9pFnYL/Wg5GSs6A+HFmdxihVVocbF37KmhdNV4=;
-        b=kz3oUPhAp+dyQ7qGlT28jPfVLKgNINrfkD4DxDh/9zv7PnW12FGOFMQHYNW1sfbp8r
-         vSfZSxcU7bqsFFr/RPe9K1PL2ri8FV0am85m4p39Z5VNP7av4A/gKKHOM3bhOMzpkc/v
-         ciLCkMgQdka7KmBrJ2q/WUG5sRYVplpyvNK3A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729022432; x=1729627232;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x+NFu9pFnYL/Wg5GSs6A+HFmdxihVVocbF37KmhdNV4=;
-        b=hMCsX1TH8O8pZaQZkm4K7xShQsQdjdyasaGrjBFF1C5W0b1RGBEqgkueMIewQZpxIb
-         H27wyoJawXIwAgSOMMIzzbzCe0Gig5rRUDqMkDkOhZw9MFwJ2UOpF5J8u40wnLDeYZdC
-         vwH+um59NVwMK/WHwzP55lbOm8NkhFV+ZFeFimRS9Pwnew4Dls9Ctp4uJ8OxEtFNLAiJ
-         kLCaGP/+DAiW0cEl2I/a7e8m0AwP64j/8q8A4nbmowmtARtBKNeD8iMxeXEsFXBAp+Uh
-         mlOzO6QoJTSCcDnQx/+EN3TJniHAxVAqMuFSVUgH7ywaAalZA0/KmlwVq6wEUxCmJVHn
-         TpNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWO2V3KbO+Iicbp4GRzyG9EPrIwtPSKQ0IQ6Rm17R7OVYIKEZF2UFYCi4BtnrCEIYA9Xf4YlTteAVP5wR43Gc0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz53Z8Lty4NF2rBEI6OHKsgydHG3Lt9A7eucSjIBSKxMX9MgoQ7
-	TlDGRaoC7DGZGMja/L4KtCvJdTH8jBEfrqNcqBM3ut77wDps0jAG9nmylnmRZOnMb2s7a/mqJpH
-	L+pBKzSC8wYrJ/BruDQEcmZuaMUfXJb/6jcD0
-X-Google-Smtp-Source: AGHT+IH1S5utfvwpODzfC9epIfrxTAxik14I4f/mxwMdg+isPf9IbBIwtTXGpJ6BejuAzx97/uTs8jGADawbLpFjPuM=
-X-Received: by 2002:a05:6870:b28a:b0:278:8f5:a567 with SMTP id
- 586e51a60fabf-288f40219f5mr128308fac.5.1729022432351; Tue, 15 Oct 2024
- 13:00:32 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XLxohOsRoSbO1UGpSoaGQqC5TR99f2hDmPx6UfnMDec=;
+ b=cYB+qv0yPfuQn5mes4R1hyzGdUiawqJcbvVvg/piBBZaBaQuWH0zX/D3V2cIUiKuOSCubd8PSdgzfiaP0b3qBWbTRCyYdKRGPoP5WYWHE7gfv4+pYR7vpTYSdPu+u35+MK5sKk99VvrkZNIkpswKViToHSkFhxmL8FBRKKSv14Y=
+Received: from BY5PR10MB4129.namprd10.prod.outlook.com (2603:10b6:a03:210::21)
+ by MW5PR10MB5689.namprd10.prod.outlook.com (2603:10b6:303:19a::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8048.27; Tue, 15 Oct
+ 2024 21:11:41 +0000
+Received: from BY5PR10MB4129.namprd10.prod.outlook.com
+ ([fe80::3c5e:9043:1ca9:4c60]) by BY5PR10MB4129.namprd10.prod.outlook.com
+ ([fe80::3c5e:9043:1ca9:4c60%3]) with mapi id 15.20.8048.029; Tue, 15 Oct 2024
+ 21:11:41 +0000
+From: Anjali Kulkarni <anjali.k.kulkarni@oracle.com>
+To: Liam Howlett <liam.howlett@oracle.com>
+CC: "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com"
+	<edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "mingo@redhat.com"
+	<mingo@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+        "vincent.guittot@linaro.org"
+	<vincent.guittot@linaro.org>,
+        "dietmar.eggemann@arm.com"
+	<dietmar.eggemann@arm.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "bsegall@google.com" <bsegall@google.com>,
+        "mgorman@suse.de"
+	<mgorman@suse.de>,
+        "vschneid@redhat.com" <vschneid@redhat.com>,
+        "jiri@resnulli.us" <jiri@resnulli.us>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>,
+        "akpm@linux-foundation.org"
+	<akpm@linux-foundation.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Pei Li
+	<peili.io@oracle.com>
+Subject: Re: [PATCH net-next v2 2/3] connector/cn_proc: Kunit tests for
+ threads hash table
+Thread-Topic: [PATCH net-next v2 2/3] connector/cn_proc: Kunit tests for
+ threads hash table
+Thread-Index: AQHbHyfu44IaymN8Q0GKqlPJYtRS9bKILySAgAAgJwA=
+Date: Tue, 15 Oct 2024 21:11:41 +0000
+Message-ID: <E51FF97D-1051-41F6-82D4-EF1D87F444F6@oracle.com>
+References: <20241015173014.1083069-1-anjali.k.kulkarni@oracle.com>
+ <20241015173014.1083069-3-anjali.k.kulkarni@oracle.com>
+ <cslvxh4obzmzbaekc52h4t3b2e4ru2kypvjy3545lucvw2jlmx@3wgym6gbgb2b>
+In-Reply-To: <cslvxh4obzmzbaekc52h4t3b2e4ru2kypvjy3545lucvw2jlmx@3wgym6gbgb2b>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BY5PR10MB4129:EE_|MW5PR10MB5689:EE_
+x-ms-office365-filtering-correlation-id: 11dd166f-a486-4b3b-ad34-08dced5df707
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|7416014|10070799003|366016|1800799024|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?ZmhPVTJlSnB3RGFsUXJOUFVzbXdpUStaVWsrRUozcng4ajB6Nkh3WTBEMlJV?=
+ =?utf-8?B?U0VFVDlCMjhyMDZrNHZ6bjdUUmtYSGFwOGI5TFFxV29KdnFOZm5yV2I0WC9y?=
+ =?utf-8?B?cHF6Zi9RR1ZVTmY3aHNHK1pEczUxcXIxdXNZb1pUVGFkNDl2TmxqcjFZam5M?=
+ =?utf-8?B?aWhuc0dWQ2QxTzBBZkNMejN0Wmt5aXJmeGVOMWdEYTZ6dmU1bkRlWXBRWTBV?=
+ =?utf-8?B?S3VFSjY4ZHdEK3NKZTJxL041bmo3RTRoS2lRdmtBZHN1OEFPTWdhUkVvZVBS?=
+ =?utf-8?B?N0RaTHpaWjBnd1V5emk2QVBBUlNPZkg0TXRzcHkxTFZ6dVdtcXJzcnE5Tmpo?=
+ =?utf-8?B?YUhZUHlrTmdXK3lkNXpCQytmZVMyeEN2RXpZWTlLT3kzeks5RFBlNVk2Q2ha?=
+ =?utf-8?B?LzErMWVRdUJFVTlRMDVPSWpPUHJhWldKSEhNV2xDOGhTa21tZGM5MmEycHhD?=
+ =?utf-8?B?YlRLczlEWEt0M3FhRzZDUFVRKzNLWkJFMGZVanNNbEJzVGxSSElPUlBLOWVJ?=
+ =?utf-8?B?UFBQSDN3eUxpV29aZWhxRENSTEtwZ2FQNm81Q2pQS2JyRldPMkoxOTJDd1NR?=
+ =?utf-8?B?ckx1eU9NeDExdEZZRkxNbG1kemVPaDE2R040NDBwa0hzU2wzMWx6MjhPZFdV?=
+ =?utf-8?B?K3RCK1VOSktvT2dHamp1WE5OaUlDdlNzWCtrcjd0SVoyZGpWYklORUdoK1Ex?=
+ =?utf-8?B?aGpmaW5BdFRzVk9YbjFWd1dDbGtQRXFVUCtVSzNZUlRVMG42M1o2NWNHcXBG?=
+ =?utf-8?B?YWtkQk5QWFVRL0tHd3U0Zk8rVVpoWEw0di9rRktuM0tqNUZJazMyMlp6M2xI?=
+ =?utf-8?B?NXlYM252b1g3NDBWbnVYMmZUT0QrczdSZjJHVC9yQ1kwVFhGOUZJNDZqaXZG?=
+ =?utf-8?B?T1diNTdxbERLUHJZRHVxdHA3bWpLQm5Zam9BM044dXNZZDVja0FHYUdYRlBQ?=
+ =?utf-8?B?c1UzbFlJaVllaGhyUTNsS2FDdTZDSHBQN1B5elhFSWJIcU9OZi9zYWhHcSs0?=
+ =?utf-8?B?SGtBSzJPYzNrdngrUytQaFBRWTZUOUd6S3Q2UmtqcXJoNmhSTXZpZjRndUFI?=
+ =?utf-8?B?a3I2MC9nUFNJOWdZTFJTZ0JrYzBRcVBwQ3REa255djVjRW1YdzlsZ3BHQjIw?=
+ =?utf-8?B?TWExd3JQOXdQTjZoM1hYbUNzcFcva1FYMld6YVJPMi9ycGpURFVRSDh5YUdS?=
+ =?utf-8?B?aUFvU0tLU2hEbFdJYVd0V2VCTGpQT050dlhZK2h4YTBFU0FwS1NqZVcvRkxB?=
+ =?utf-8?B?dEEyNU5vQWU3WDlUOWRVaU54cnpYdmgvQk9aMmhvbUx1bGFpY1RaNGZjSVJN?=
+ =?utf-8?B?NGt3aHRTQjJZWjlGRlQ1cGQvK3crMHQrVnA1Q2F5T2VHTVMwOFFyRnpLVjND?=
+ =?utf-8?B?R1J5T3U2cEJ4a09nZHEvZHRmVFhEcGp4Smozby9yK0V3cW02TzArM0J4QmNq?=
+ =?utf-8?B?UDZ2ZEV6SUNtOXVCd1VZSnBZdi83UmIwdDBRMXk0UCtRMHZEZmNhNkFDUi9r?=
+ =?utf-8?B?cm5KdEMyaURYMUdKalVIUmlNQ1JUUTNxbjZuYVBrUFZ1ZllUZDJlWDM3WHZ1?=
+ =?utf-8?B?L1ZmSlY1ZitxY3NxdGwvVUxzM3Y0bEhIYy9CLzNZc2xGTkRCcGJtcFNoUktD?=
+ =?utf-8?B?TjBoTlJ2UllXZ0J2MWQ3ZDRjcXlKbm51YmVNUnUxZTFWZ2xxejI5YXA5akl6?=
+ =?utf-8?B?RjNBckNmL1FCS2lIUzIrRkdYS3d0dzYvVElzc1FsZ1VnTWdUbUEyeUJlK1J1?=
+ =?utf-8?B?Y2JpSzc1dGVJSWE0UzNqbEZoajN3UkM2T1BZU09PNTNhYWF5ak1YUUh0U3hh?=
+ =?utf-8?B?cGdpMzczZjJoeUh3UjJSZz09?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4129.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(10070799003)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?V3NjZkIxU29EMllMVXR1eUdweDc1aTc3clFBQnNqbStJSmJoZHc4SXlsU0ZB?=
+ =?utf-8?B?SzZjSWh6bGdkZlBmUlBjVXcxY2JNVGd4OGVpYTJCdVg3NXlpNGpaNjY0TGVV?=
+ =?utf-8?B?YitPMGNuVkpXcmE4K0ZpTWJEeXNmMHI1U0ptanFLSGdEdHRuVGszZG45cW5l?=
+ =?utf-8?B?ajkwYVFYWWdHNWRWU1VSOWp5bVh5TDJzN1YxS2Z2eWxFSDdIb1JRcFN6T0Jw?=
+ =?utf-8?B?TkFldStFQ3FNUGM0ZEtvZW5NNld3R0Y2UVZKOVRBaEZTTGFIRVJTV0RvcFlQ?=
+ =?utf-8?B?STE3UFJINXBYa3dPQXFUdHBtbGd0RWNGSFNBb1c0V3NjNjZIK1hIQloxb0ZB?=
+ =?utf-8?B?dWdpc3JvTklJR2VQQ25kbElGR1J0VzhYUnZkTXZ4RjJFU2ZGZmxGLzRSdmtM?=
+ =?utf-8?B?MVBBdDFVQ2h0QjZ0VG9kbm84dDVjYVJyQWpuQWlwWUUxOXpXeDBUUlZWYWVp?=
+ =?utf-8?B?TXJpVE5wQU9IVzFYVFpjWUxPL2dlY254UHdudTZoL3RaaFJBcGI1bW8wSHFZ?=
+ =?utf-8?B?M0hlTmdtUzdiMWZZanZjNGNuUWVrQXJmdW5XT2JzUWhuN2hQa0ExK0VyeFUv?=
+ =?utf-8?B?S2hydDhLSlljV2Z0Zm5QSTZlU0MvbUtZeGc4T2FsTXZKVHF3YjMvT1BlZ1lQ?=
+ =?utf-8?B?bUtkQkQxTndnYU1vcFFsNHR0blJ1WkxZMjNQb01iZ1dzWEM4SmllSUVZUm5I?=
+ =?utf-8?B?NG5ZVzdGVy9RVkt5UTJUR3VxSjVvMFFFSjhaN2dxSFREeFFhQzdrRjRiamdv?=
+ =?utf-8?B?ZC9SSFoyeVVMd2ZYWTFkWGU0YmdrNFB2Z1Y4eWpLZXZyNWpTNEFjeGwybGRk?=
+ =?utf-8?B?QzlJeDlXZG1GWUNTeDNBbWxyRjZnUzRDNFVadFcvdjVpSjhFdGNiMkxwbVFM?=
+ =?utf-8?B?a0ZSTG5HRFd2YVNUWG0ycFRjemorTmFaUTVmekFoZmtlZzFHZVcxWlQvdkw0?=
+ =?utf-8?B?eHFrNEVkcnQxajBaTHRCSStNTSs4aldnbXM3ZzhLQnRMdXlBUURhMEhXUmJU?=
+ =?utf-8?B?RFl6ZmRwWkpSTVFBWUdaYmhUb21GOW1GZXRHVGRFRFlBYWgzclJCNTUvL3FZ?=
+ =?utf-8?B?czRsNzhtcXd6NWJRTE1rRDFYdmlWV2QrUjBzOURBeUxRL1E0cDN0YlM4VGZy?=
+ =?utf-8?B?S2djOFpKUnNaM25Nd3V1ZlhnWEFGNjQ4bTBONTljTXFLUWI1OWl3bW0zQm1S?=
+ =?utf-8?B?c2k1ZExNS3dVdk1LbjVvTkVTdlhDYnpwazVManFzWWtETGR6QVJYbmgrZjJS?=
+ =?utf-8?B?eXFPWDlVc3g5MEpEWm1QNFZhdDJlcm5RVkN3RlRsV00rNngxcEJ1dFhBbzc2?=
+ =?utf-8?B?T29hMDk0Z0FZaWdzek5UcldJeTRiVUJGZm1uRk1sZEgwb2c5R2NaMnY2dUhT?=
+ =?utf-8?B?SHc3a2Iwb2U4Qjk0TWliQy9sQTRudGIzR3djWlo1YzdWc1VhVW9Sb28zR05E?=
+ =?utf-8?B?NWVpdHF1cVlwZlJzbG9zcmNDRytWMDNvbnM2ZWtnWFVlN1VIUmI4dlJQZDV6?=
+ =?utf-8?B?UndOSjBsUzZTdFdya2hNQVJQZVhyOTE5c1RYYzI2ZEI5TVdkMFVTcFNMeTVu?=
+ =?utf-8?B?M3drbml2TkluUU1vK0Q3djhURzJhZXBzQWozU2NkdlA0SklqTkVMY0NEU01k?=
+ =?utf-8?B?anR1RUhTbGlITDFxODY5ZEdoNDNBd2x6RmVzK1p2LzRxT055TTZGWVZBMS96?=
+ =?utf-8?B?OUk5Y0FpSkdVbHh4MFNsMWpSOHFYSlVvQkVFcFVaNURBTTZxN2NNZnhKdlZN?=
+ =?utf-8?B?V05UclNnYmtTT2F3eUlnaXVKNU5JMTd6SHhLK2NwcU1hMkpDaWZGR1lyalAr?=
+ =?utf-8?B?a24wbDVwYlVjMlhGQ1JXbnJFMm1sbDM4Vk5PMWVmWnlLU29ITGNlYVZ5SUtp?=
+ =?utf-8?B?ZndHWmNFNXRYZ1lMKzNJcWV6eS9qLzQ4Ym05YUoybXB1NlZTVndIU2twUUpV?=
+ =?utf-8?B?NVVkSWNEVEVjOXE1ck1WTkRySFhEVkpxOUJuVzlYREE3WmhWc25KUzEyV2l1?=
+ =?utf-8?B?L1ZIdFltQklaaDBnajhsTFR3SXM3R3BtakJFRHhwZnFrcGpxdi9lZWRDRDdL?=
+ =?utf-8?B?N3k3MDE4Yk5sTy9kMlpWZnQybVgyZHlPSWRTOFJMemNCYUZqTXkvallzdDk2?=
+ =?utf-8?B?ZTJaODF0QW1FV1ZZcFByOHFLcFpoMEhZejdBazJYRXFFd3Y2WWw1aUQzenZ2?=
+ =?utf-8?Q?puehxlOaWXI/cYjVjZdV+axcqr2EWxfWo+fMtWsSV8M6?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9530BB138A513649B5995A7C26B7DB3B@namprd10.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241008040942.1478931-1-jeffxu@chromium.org> <20241008040942.1478931-2-jeffxu@chromium.org>
-In-Reply-To: <20241008040942.1478931-2-jeffxu@chromium.org>
-From: Jeff Xu <jeffxu@chromium.org>
-Date: Tue, 15 Oct 2024 13:00:00 -0700
-Message-ID: <CABi2SkW=HSPG4whyZALgXekZJXupe7HP8Guy8kxEGuxVDN+xRw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] mseal: update mseal.rst
-To: akpm@linux-foundation.org, keescook@chromium.org, corbet@lwn.net
-Cc: jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, jannh@google.com, 
-	sroettger@google.com, pedro.falcato@gmail.com, 
-	linux-hardening@vger.kernel.org, willy@infradead.org, 
-	gregkh@linuxfoundation.org, torvalds@linux-foundation.org, 
-	deraadt@openbsd.org, usama.anjum@collabora.com, surenb@google.com, 
-	merimus@google.com, rdunlap@infradead.org, lorenzo.stoakes@oracle.com, 
-	Liam.Howlett@oracle.com, enh@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	q93AI1jcALLvbR5c+dY+JOx1T2fib1+y1jCYpaOqi6eGXGA6AIh190iVv2CYCsSK/Q57gx855lIch0N7EdhQox/MvqDWWDZH3YUPy7qY2JTlc4XlHCE/tC0QJTYr5Bk5wsjn8gRxY9M/d3twIjFP0Kyo2GPlPNp/69z0eEeN5hS6a6fdI1mccnSuKipw6pM18pnTMNyp/5L0ttv+MfOE8JF/yqKLQX1bjXyq3AzcPG+tQgEAKuGNCffL53tvOR88s4P0t8IKIvAeshd/7hepklbOjYIkDlX8A3agq7vzdkHmh6FV1/Sv/ZNB8d7lLtRfDUaCOTmge6kb/KGLha5LD5b6Hc4/t55AdBqZtMvnFlBItHBJadZzbih8pEl6dT2UugjCfeRjgCczZESl+qOuPp1qXEFfUtyVmG/24PDmV6dO9fIVwFJi+ITVJCEy61tReEeMlwoP0YTIjaU4Zpfq25RQw16+iOc72vNorIsVDq68UxoNSVhNxU6YUvbWoei2Lqe+7J6Z2Wa1yrJAx4PSbzXyoYZSJ/YIlTTG9NFS3mpgLykU2vpKOjQLPupQTp1ltnWfaw89cbQAdymToYflQHGuy7TSLtnl7zN8SDN2CPs=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4129.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11dd166f-a486-4b3b-ad34-08dced5df707
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Oct 2024 21:11:41.1386
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MDpnfbyUcUqlOg6Guk6+6ZjQjfyKD/MjiVnowP2hL/LodJWBNm1M+uxytyJzG/ymiYkzDhmQ9poxupGfUo6c2jVD70vQkz3c6YRZNHNESxw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR10MB5689
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-10-15_16,2024-10-15_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 bulkscore=0
+ spamscore=0 phishscore=0 malwarescore=0 mlxlogscore=999 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
+ definitions=main-2410150140
+X-Proofpoint-ORIG-GUID: zT-KG-QFiWZdY-dgqzFmVKUEXdASJ6zE
+X-Proofpoint-GUID: zT-KG-QFiWZdY-dgqzFmVKUEXdASJ6zE
 
-Hi Andrew,
-
-If there is no objection, please pull this v3 patch to mm-unstable.
-
-I believe I already responded to all comments related to this patch.
-
-This will keep mseal.rst up-to-date with current implementation of
-memory sealing.
-
-Thanks
--Jeff
-
-On Mon, Oct 7, 2024 at 9:09=E2=80=AFPM <jeffxu@chromium.org> wrote:
->
-> From: Jeff Xu <jeffxu@chromium.org>
->
-> Update doc after in-loop change: mprotect/madvise can have
-> partially updated and munmap is atomic.
->
-> Fix indentation and clarify some sections to improve readability.
->
-> Signed-off-by: Jeff Xu <jeffxu@chromium.org>
-> Fixes: df2a7df9a9aa ("mm/munmap: replace can_modify_mm with can_modify_vm=
-a")
-> Fixes: 4a2dd02b0916 ("mm/mprotect: replace can_modify_mm with can_modify_=
-vma")
-> Fixes: 38075679b5f1 ("mm/mremap: replace can_modify_mm with can_modify_vm=
-a")
-> Fixes: 23c57d1fa2b9 ("mseal: replace can_modify_mm_madv with a vma varian=
-t")
-> Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-> ---
->  Documentation/userspace-api/mseal.rst | 307 +++++++++++++-------------
->  1 file changed, 148 insertions(+), 159 deletions(-)
->
-> diff --git a/Documentation/userspace-api/mseal.rst b/Documentation/usersp=
-ace-api/mseal.rst
-> index 4132eec995a3..41102f74c5e2 100644
-> --- a/Documentation/userspace-api/mseal.rst
-> +++ b/Documentation/userspace-api/mseal.rst
-> @@ -23,177 +23,166 @@ applications can additionally seal security critica=
-l data at runtime.
->  A similar feature already exists in the XNU kernel with the
->  VM_FLAGS_PERMANENT flag [1] and on OpenBSD with the mimmutable syscall [=
-2].
->
-> -User API
-> -=3D=3D=3D=3D=3D=3D=3D=3D
-> -mseal()
-> ------------
-> -The mseal() syscall has the following signature:
-> -
-> -``int mseal(void addr, size_t len, unsigned long flags)``
-> -
-> -**addr/len**: virtual memory address range.
-> -
-> -The address range set by ``addr``/``len`` must meet:
-> -   - The start address must be in an allocated VMA.
-> -   - The start address must be page aligned.
-> -   - The end address (``addr`` + ``len``) must be in an allocated VMA.
-> -   - no gap (unallocated memory) between start and end address.
-> -
-> -The ``len`` will be paged aligned implicitly by the kernel.
-> -
-> -**flags**: reserved for future use.
-> -
-> -**return values**:
-> -
-> -- ``0``: Success.
-> -
-> -- ``-EINVAL``:
-> -    - Invalid input ``flags``.
-> -    - The start address (``addr``) is not page aligned.
-> -    - Address range (``addr`` + ``len``) overflow.
-> -
-> -- ``-ENOMEM``:
-> -    - The start address (``addr``) is not allocated.
-> -    - The end address (``addr`` + ``len``) is not allocated.
-> -    - A gap (unallocated memory) between start and end address.
-> -
-> -- ``-EPERM``:
-> -    - sealing is supported only on 64-bit CPUs, 32-bit is not supported.
-> -
-> -- For above error cases, users can expect the given memory range is
-> -  unmodified, i.e. no partial update.
-> -
-> -- There might be other internal errors/cases not listed here, e.g.
-> -  error during merging/splitting VMAs, or the process reaching the max
-> -  number of supported VMAs. In those cases, partial updates to the given
-> -  memory range could happen. However, those cases should be rare.
-> -
-> -**Blocked operations after sealing**:
-> -    Unmapping, moving to another location, and shrinking the size,
-> -    via munmap() and mremap(), can leave an empty space, therefore
-> -    can be replaced with a VMA with a new set of attributes.
-> -
-> -    Moving or expanding a different VMA into the current location,
-> -    via mremap().
-> -
-> -    Modifying a VMA via mmap(MAP_FIXED).
-> -
-> -    Size expansion, via mremap(), does not appear to pose any
-> -    specific risks to sealed VMAs. It is included anyway because
-> -    the use case is unclear. In any case, users can rely on
-> -    merging to expand a sealed VMA.
-> -
-> -    mprotect() and pkey_mprotect().
-> -
-> -    Some destructive madvice() behaviors (e.g. MADV_DONTNEED)
-> -    for anonymous memory, when users don't have write permission to the
-> -    memory. Those behaviors can alter region contents by discarding page=
-s,
-> -    effectively a memset(0) for anonymous memory.
-> -
-> -    Kernel will return -EPERM for blocked operations.
-> -
-> -    For blocked operations, one can expect the given address is unmodifi=
-ed,
-> -    i.e. no partial update. Note, this is different from existing mm
-> -    system call behaviors, where partial updates are made till an error =
-is
-> -    found and returned to userspace. To give an example:
-> -
-> -    Assume following code sequence:
-> -
-> -    - ptr =3D mmap(null, 8192, PROT_NONE);
-> -    - munmap(ptr + 4096, 4096);
-> -    - ret1 =3D mprotect(ptr, 8192, PROT_READ);
-> -    - mseal(ptr, 4096);
-> -    - ret2 =3D mprotect(ptr, 8192, PROT_NONE);
-> -
-> -    ret1 will be -ENOMEM, the page from ptr is updated to PROT_READ.
-> -
-> -    ret2 will be -EPERM, the page remains to be PROT_READ.
-> -
-> -**Note**:
-> -
-> -- mseal() only works on 64-bit CPUs, not 32-bit CPU.
-> -
-> -- users can call mseal() multiple times, mseal() on an already sealed me=
-mory
-> -  is a no-action (not error).
-> -
-> -- munseal() is not supported.
-> -
-> -Use cases:
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +SYSCALL
-> +=3D=3D=3D=3D=3D=3D=3D
-> +mseal syscall signature
-> +-----------------------
-> +   ``int mseal(void \* addr, size_t len, unsigned long flags)``
-> +
-> +   **addr**/**len**: virtual memory address range.
-> +      The address range set by **addr**/**len** must meet:
-> +         - The start address must be in an allocated VMA.
-> +         - The start address must be page aligned.
-> +         - The end address (**addr** + **len**) must be in an allocated =
-VMA.
-> +         - no gap (unallocated memory) between start and end address.
-> +
-> +      The ``len`` will be paged aligned implicitly by the kernel.
-> +
-> +   **flags**: reserved for future use.
-> +
-> +   **Return values**:
-> +      - **0**: Success.
-> +      - **-EINVAL**:
-> +         * Invalid input ``flags``.
-> +         * The start address (``addr``) is not page aligned.
-> +         * Address range (``addr`` + ``len``) overflow.
-> +      - **-ENOMEM**:
-> +         * The start address (``addr``) is not allocated.
-> +         * The end address (``addr`` + ``len``) is not allocated.
-> +         * A gap (unallocated memory) between start and end address.
-> +      - **-EPERM**:
-> +         * sealing is supported only on 64-bit CPUs, 32-bit is not suppo=
-rted.
-> +
-> +   **Note about error return**:
-> +      - For above error cases, users can expect the given memory range i=
-s
-> +        unmodified, i.e. no partial update.
-> +      - There might be other internal errors/cases not listed here, e.g.
-> +        error during merging/splitting VMAs, or the process reaching the=
- maximum
-> +        number of supported VMAs. In those cases, partial updates to the=
- given
-> +        memory range could happen. However, those cases should be rare.
-> +
-> +   **Architecture support**:
-> +      mseal only works on 64-bit CPUs, not 32-bit CPUs.
-> +
-> +   **Idempotent**:
-> +      users can call mseal multiple times. mseal on an already sealed me=
-mory
-> +      is a no-action (not error).
-> +
-> +   **no munseal**
-> +      Once mapping is sealed, it can't be unsealed. The kernel should ne=
-ver
-> +      have munseal, this is consistent with other sealing feature, e.g.
-> +      F_SEAL_SEAL for file.
-> +
-> +Blocked mm syscall for sealed mapping
-> +-------------------------------------
-> +   It might be important to note: **once the mapping is sealed, it will
-> +   stay in the process's memory until the process terminates**.
-> +
-> +   Example::
-> +
-> +         *ptr =3D mmap(0, 4096, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE, =
-0, 0);
-> +         rc =3D mseal(ptr, 4096, 0);
-> +         /* munmap will fail */
-> +         rc =3D munmap(ptr, 4096);
-> +         assert(rc < 0);
-> +
-> +   Blocked mm syscall:
-> +      - munmap
-> +      - mmap
-> +      - mremap
-> +      - mprotect and pkey_mprotect
-> +      - some destructive madvise behaviors: MADV_DONTNEED, MADV_FREE,
-> +        MADV_DONTNEED_LOCKED, MADV_FREE, MADV_DONTFORK, MADV_WIPEONFORK
-> +
-> +   The first set of syscalls to block is munmap, mremap, mmap. They can
-> +   either leave an empty space in the address space, therefore allowing
-> +   replacement with a new mapping with new set of attributes, or can
-> +   overwrite the existing mapping with another mapping.
-> +
-> +   mprotect and pkey_mprotect are blocked because they changes the
-> +   protection bits (RWX) of the mapping.
-> +
-> +   Certain destructive madvise behaviors, specifically MADV_DONTNEED,
-> +   MADV_FREE, MADV_DONTNEED_LOCKED, and MADV_WIPEONFORK, can introduce
-> +   risks when applied to anonymous memory by threads lacking write
-> +   permissions. Consequently, these operations are prohibited under such
-> +   conditions. The aforementioned behaviors have the potential to modify
-> +   region contents by discarding pages, effectively performing a memset(=
-0)
-> +   operation on the anonymous memory.
-> +
-> +   Kernel will return -EPERM for blocked syscalls.
-> +
-> +   When blocked syscall return -EPERM due to sealing, the memory regions=
- may
-> +   or may not be changed, depends on the syscall being blocked:
-> +
-> +      - munmap: munmap is atomic. If one of VMAs in the given range is
-> +        sealed, none of VMAs are updated.
-> +      - mprotect, pkey_mprotect, madvise: partial update might happen, e=
-.g.
-> +        when mprotect over multiple VMAs, mprotect might update the begi=
-nning
-> +        VMAs before reaching the sealed VMA and return -EPERM.
-> +      - mmap and mremap: undefined behavior.
-> +
-> +Use cases
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D
->  - glibc:
->    The dynamic linker, during loading ELF executables, can apply sealing =
-to
-> -  non-writable memory segments.
-> -
-> -- Chrome browser: protect some security sensitive data-structures.
-> +  mapping segments.
->
-> -Notes on which memory to seal:
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D
-> +- Chrome browser: protect some security sensitive data structures.
->
-> -It might be important to note that sealing changes the lifetime of a map=
-ping,
-> -i.e. the sealed mapping won=E2=80=99t be unmapped till the process termi=
-nates or the
-> -exec system call is invoked. Applications can apply sealing to any virtu=
-al
-> -memory region from userspace, but it is crucial to thoroughly analyze th=
-e
-> -mapping's lifetime prior to apply the sealing.
-> +When not to use mseal
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +Applications can apply sealing to any virtual memory region from userspa=
-ce,
-> +but it is *crucial to thoroughly analyze the mapping's lifetime* prior t=
-o
-> +apply the sealing. This is because the sealed mapping *won=E2=80=99t be =
-unmapped*
-> +until the process terminates or the exec system call is invoked.
->
->  For example:
-> +   - aio/shm
-> +     aio/shm can call mmap and  munmap on behalf of userspace, e.g.
-> +     ksys_shmdt() in shm.c. The lifetimes of those mapping are not tied =
-to
-> +     the lifetime of the process. If those memories are sealed from user=
-space,
-> +     then munmap will fail, causing leaks in VMA address space during th=
-e
-> +     lifetime of the process.
-> +
-> +   - ptr allocated by malloc (heap)
-> +     Don't use mseal on the memory ptr return from malloc().
-> +     malloc() is implemented by allocator, e.g. by glibc. Heap manager m=
-ight
-> +     allocate a ptr from brk or mapping created by mmap.
-> +     If an app calls mseal on a ptr returned from malloc(), this can aff=
-ect
-> +     the heap manager's ability to manage the mappings; the outcome is
-> +     non-deterministic.
-> +
-> +     Example::
-> +
-> +        ptr =3D malloc(size);
-> +        /* don't call mseal on ptr return from malloc. */
-> +        mseal(ptr, size);
-> +        /* free will success, allocator can't shrink heap lower than ptr=
- */
-> +        free(ptr);
-> +
-> +mseal doesn't block
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +In a nutshell, mseal blocks certain mm syscall from modifying some of VM=
-A's
-> +attributes, such as protection bits (RWX). Sealed mappings doesn't mean =
-the
-> +memory is immutable.
->
-> -- aio/shm
-> -
-> -  aio/shm can call mmap()/munmap() on behalf of userspace, e.g. ksys_shm=
-dt() in
-> -  shm.c. The lifetime of those mapping are not tied to the lifetime of t=
-he
-> -  process. If those memories are sealed from userspace, then munmap() wi=
-ll fail,
-> -  causing leaks in VMA address space during the lifetime of the process.
-> -
-> -- Brk (heap)
-> -
-> -  Currently, userspace applications can seal parts of the heap by callin=
-g
-> -  malloc() and mseal().
-> -  let's assume following calls from user space:
-> -
-> -  - ptr =3D malloc(size);
-> -  - mprotect(ptr, size, RO);
-> -  - mseal(ptr, size);
-> -  - free(ptr);
-> -
-> -  Technically, before mseal() is added, the user can change the protecti=
-on of
-> -  the heap by calling mprotect(RO). As long as the user changes the prot=
-ection
-> -  back to RW before free(), the memory range can be reused.
-> -
-> -  Adding mseal() into the picture, however, the heap is then sealed part=
-ially,
-> -  the user can still free it, but the memory remains to be RO. If the ad=
-dress
-> -  is re-used by the heap manager for another malloc, the process might c=
-rash
-> -  soon after. Therefore, it is important not to apply sealing to any mem=
-ory
-> -  that might get recycled.
-> -
-> -  Furthermore, even if the application never calls the free() for the pt=
-r,
-> -  the heap manager may invoke the brk system call to shrink the size of =
-the
-> -  heap. In the kernel, the brk-shrink will call munmap(). Consequently,
-> -  depending on the location of the ptr, the outcome of brk-shrink is
-> -  nondeterministic.
-> -
-> -
-> -Additional notes:
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->  As Jann Horn pointed out in [3], there are still a few ways to write
-> -to RO memory, which is, in a way, by design. Those cases are not covered
-> -by mseal(). If applications want to block such cases, sandbox tools (suc=
-h as
-> -seccomp, LSM, etc) might be considered.
-> +to RO memory, which is, in a way, by design. And those could be blocked
-> +by different security measures.
->
->  Those cases are:
->
-> -- Write to read-only memory through /proc/self/mem interface.
-> -- Write to read-only memory through ptrace (such as PTRACE_POKETEXT).
-> -- userfaultfd.
-> +   - Write to read-only memory through /proc/self/mem interface (FOLL_FO=
-RCE).
-> +   - Write to read-only memory through ptrace (such as PTRACE_POKETEXT).
-> +   - userfaultfd.
->
->  The idea that inspired this patch comes from Stephen R=C3=B6ttger=E2=80=
-=99s work in V8
->  CFI [4]. Chrome browser in ChromeOS will be the first user of this API.
->
-> -Reference:
-> -=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> -[1] https://github.com/apple-oss-distributions/xnu/blob/1031c584a5e37aff=
-177559b9f69dbd3c8c3fd30a/osfmk/mach/vm_statistics.h#L274
-> -
-> -[2] https://man.openbsd.org/mimmutable.2
-> -
-> -[3] https://lore.kernel.org/lkml/CAG48ez3ShUYey+ZAFsU2i1RpQn0a5eOs2hzQ42=
-6FkcgnfUGLvA@mail.gmail.com
-> -
-> -[4] https://docs.google.com/document/d/1O2jwK4dxI3nRcOJuPYkonhTkNQfbmwdv=
-xQMyXgeaRHo/edit#heading=3Dh.bvaojj9fu6hc
-> +Reference
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +- [1] https://github.com/apple-oss-distributions/xnu/blob/1031c584a5e37a=
-ff177559b9f69dbd3c8c3fd30a/osfmk/mach/vm_statistics.h#L274
-> +- [2] https://man.openbsd.org/mimmutable.2
-> +- [3] https://lore.kernel.org/lkml/CAG48ez3ShUYey+ZAFsU2i1RpQn0a5eOs2hzQ=
-426FkcgnfUGLvA@mail.gmail.com
-> +- [4] https://docs.google.com/document/d/1O2jwK4dxI3nRcOJuPYkonhTkNQfbmw=
-dvxQMyXgeaRHo/edit#heading=3Dh.bvaojj9fu6hc
-> --
-> 2.47.0.rc0.187.ge670bccf7e-goog
->
+DQoNCj4gT24gT2N0IDE1LCAyMDI0LCBhdCAxMjoxNuKAr1BNLCBMaWFtIEhvd2xldHQgPGxpYW0u
+aG93bGV0dEBvcmFjbGUuY29tPiB3cm90ZToNCj4gDQo+ICogQW5qYWxpIEt1bGthcm5pIDxhbmph
+bGkuay5rdWxrYXJuaUBvcmFjbGUuY29tPiBbMjQxMDE1IDEzOjMwXToNCj4+IEt1bml0IHRlc3Rz
+IHRvIHRlc3QgaGFzaCB0YWJsZSBhZGQsIGRlbGV0ZSwgZHVwbGljYXRlIGFkZCBhbmQgZGVsZXRl
+Lg0KPj4gQWRkIGZvbGxvd2luZyBjb25maWdzIGFuZCBjb21waWxlIGtlcm5lbCBjb2RlOg0KPj4g
+DQo+PiBDT05GSUdfQ09OTkVDVE9SPXkNCj4+IENPTkZJR19QUk9DX0VWRU5UUz15DQo+PiBDT05G
+SUdfTkVUPXkNCj4+IENPTkZJR19LVU5JVD1tDQo+PiBDT05GSUdfQ05fSEFTSF9LVU5JVF9URVNU
+PW0NCj4+IA0KPj4gVG8gcnVuIGt1bml0IHRlc3RzOg0KPj4gc3VkbyBtb2Rwcm9iZSBjbl9oYXNo
+X3Rlc3QNCj4+IA0KPj4gT3V0cHV0IG9mIGt1bml0IHRlc3RzIGFuZCBoYXNoIHRhYmxlIGNvbnRl
+bnRzIGFyZSBkaXNwbGF5ZWQgaW4NCj4+IC92YXIvbG9nL21lc3NhZ2VzIChhdCBLRVJOX0RFQlVH
+IGxldmVsKS4NCj4+IA0KPj4gU2lnbmVkLW9mZi1ieTogQW5qYWxpIEt1bGthcm5pIDxhbmphbGku
+ay5rdWxrYXJuaUBvcmFjbGUuY29tPg0KPj4gLS0tDQo+PiBkcml2ZXJzL2Nvbm5lY3Rvci9jbl9o
+YXNoLmMgICB8ICA0OSArKysrKysrKystDQo+PiBkcml2ZXJzL2Nvbm5lY3Rvci9jb25uZWN0b3Iu
+YyB8ICAxNSArKy0NCj4+IGluY2x1ZGUvbGludXgvY29ubmVjdG9yLmggICAgIHwgICA4ICstDQo+
+PiBsaWIvS2NvbmZpZy5kZWJ1ZyAgICAgICAgICAgICB8ICAxNyArKysrDQo+PiBsaWIvTWFrZWZp
+bGUgICAgICAgICAgICAgICAgICB8ICAgMSArDQo+PiBsaWIvY25faGFzaF90ZXN0LmMgICAgICAg
+ICAgICB8IDE2NyArKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrDQo+PiBsaWIvY25f
+aGFzaF90ZXN0LmggICAgICAgICAgICB8ICAxMiArKysNCj4+IDcgZmlsZXMgY2hhbmdlZCwgMjY0
+IGluc2VydGlvbnMoKyksIDUgZGVsZXRpb25zKC0pDQo+PiBjcmVhdGUgbW9kZSAxMDA2NDQgbGli
+L2NuX2hhc2hfdGVzdC5jDQo+PiBjcmVhdGUgbW9kZSAxMDA2NDQgbGliL2NuX2hhc2hfdGVzdC5o
+DQo+PiANCj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2Nvbm5lY3Rvci9jbl9oYXNoLmMgYi9kcml2
+ZXJzL2Nvbm5lY3Rvci9jbl9oYXNoLmMNCj4+IGluZGV4IGEwMjExY2Q5OTEzMi4uOGYwZWI2YWNi
+MTU4IDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9jb25uZWN0b3IvY25faGFzaC5jDQo+PiArKysg
+Yi9kcml2ZXJzL2Nvbm5lY3Rvci9jbl9oYXNoLmMNCj4+IEBAIC0xNjYsNyArMTY2LDcgQEAgX191
+MzIgY25faGFzaF9kZWxfZ2V0X2V4dmFsKHN0cnVjdCBjbl9oYXNoX2RldiAqaGRldiwgcGlkX3Qg
+cGlkKQ0KPj4gcmV0dXJuIDA7DQo+PiB9DQo+PiANCj4+IC1fX3UzMiBjbl9oYXNoX2dldF9leHZh
+bChzdHJ1Y3QgY25faGFzaF9kZXYgKmhkZXYsIHBpZF90IHBpZCkNCj4+ICtpbnQgY25faGFzaF9n
+ZXRfZXh2YWwoc3RydWN0IGNuX2hhc2hfZGV2ICpoZGV2LCBwaWRfdCBwaWQpDQo+IA0KPiBJcyB0
+aGlzIHJldHVybiB0eXBlIGNoYW5nZSBzdXBwb3NlZCB0byBiZSBoZXJlPw0KDQpZZXMsIGFjdHVh
+bGx5LCBJIGNoYW5nZWQgdGhpcyBmdW5jdGlvbiB0byByZXR1cm4gYW4gZXJyb3IgY29kZSBpbnN0
+ZWFkIG9mIGp1c3QNCmV4aXQgY29kZSBvciAwLCBidXQgcmViYXNlZCBhbmQgcHV0IHRoYXQgY2hh
+bmdlIGluIHRoZSBmaXJzdCBwYXRjaC4gSSB3aWxsDQptb3ZlIHRoaXMgdG8gdGhlIGZpcnN0IHBh
+dGNoLg0KDQo+IA0KPj4gew0KPj4gc3RydWN0IHVleGl0X3BpZF9obm9kZSAqaG5vZGU7DQo+PiBf
+X3UzMiBleGNkZTsNCj4+IEBAIC0xODksNyArMTg5LDUyIEBAIF9fdTMyIGNuX2hhc2hfZ2V0X2V4
+dmFsKHN0cnVjdCBjbl9oYXNoX2RldiAqaGRldiwgcGlkX3QgcGlkKQ0KPj4gcmV0dXJuIC1FSU5W
+QUw7DQo+PiB9DQo+PiANCj4+ICtpbnQgY25faGFzaF9kaXNwbGF5X2hsaXN0KHN0cnVjdCBjbl9o
+YXNoX2RldiAqaGRldiwgcGlkX3QgcGlkLCBpbnQgbWF4X2xlbiwNCj4+ICsgaW50ICpoa2V5LCBp
+bnQgKmtleV9kaXNwbGF5KQ0KPj4gK3sNCj4+ICsgc3RydWN0IHVleGl0X3BpZF9obm9kZSAqaG5v
+ZGU7DQo+PiArIGludCBrZXksIGNvdW50ID0gMDsNCj4+ICsNCj4+ICsgbXV0ZXhfbG9jaygmaGRl
+di0+dWV4aXRfaGFzaF9sb2NrKTsNCj4+ICsga2V5ID0gaGFzaF9taW4ocGlkLCBIQVNIX0JJVFMo
+aGRldi0+dWV4aXRfcGlkX2h0YWJsZSkpOw0KPj4gKyBwcl9kZWJ1ZygiQnVja2V0OiAlZFxuIiwg
+a2V5KTsNCj4+ICsNCj4+ICsgaGxpc3RfZm9yX2VhY2hfZW50cnkoaG5vZGUsDQo+PiArICZoZGV2
+LT51ZXhpdF9waWRfaHRhYmxlW2tleV0sDQo+PiArIHVleGl0X3BpZF9obGlzdCkgew0KPj4gKyBp
+ZiAoa2V5X2Rpc3BsYXlba2V5XSAhPSAxKSB7DQo+PiArIGlmIChobm9kZS0+dWV4aXRfcGlkX2hs
+aXN0Lm5leHQgPT0gTlVMTCkNCj4+ICsgcHJfZGVidWcoInBpZCAlZCAiLCBobm9kZS0+cGlkKTsN
+Cj4+ICsgZWxzZQ0KPj4gKyBwcl9kZWJ1ZygicGlkICVkIC0tPiAiLCBobm9kZS0+cGlkKTsNCj4+
+ICsgfQ0KPj4gKyBjb3VudCsrOw0KPj4gKyB9DQo+PiArDQo+PiArIG11dGV4X3VubG9jaygmaGRl
+di0+dWV4aXRfaGFzaF9sb2NrKTsNCj4+ICsNCj4+ICsgaWYgKChrZXlfZGlzcGxheVtrZXldICE9
+IDEpICYmICFjb3VudCkNCj4+ICsgcHJfZGVidWcoIihlbXB0eSlcbiIpOw0KPj4gKw0KPj4gKyBw
+cl9kZWJ1ZygiXG4iKTsNCj4gDQo+IEl0IHNlZW1zIGxpa2UgeW91IG1heWJlIGFkZGVkIGFuIGV4
+dHJhIFxuIGlmIHlvdSBwcmludCB0aGUgKGVtcHR5KSBsaW5lDQo+IGFib3ZlPw0KDQpZZXMsIHNv
+IGluIHRoZSBkaXNwbGF5IHlvdSBjYW4gc2VlIHRoZSBCdWNrZXRzIG1vcmUgY2xlYXJseSBkZWxp
+bmVhdGVkLg0KDQo+IA0KPj4gKw0KPj4gKyAqaGtleSA9IGtleTsNCj4+ICsNCj4+ICsgaWYgKGNv
+dW50ID4gbWF4X2xlbikgew0KPj4gKyBwcl9lcnIoIiVkIGVudHJpZXMgaW4gaGxpc3QgZm9yIGtl
+eSAlZCwgZXhwZWN0ZWQgJWRcbiIsDQo+PiArIGNvdW50LCBrZXksIG1heF9sZW4pOw0KPj4gKyBy
+ZXR1cm4gLUVJTlZBTDsNCj4+ICsgfQ0KPj4gKw0KPj4gKyByZXR1cm4gMDsNCj4+ICt9DQo+PiAr
+DQo+PiBib29sIGNuX2hhc2hfdGFibGVfZW1wdHkoc3RydWN0IGNuX2hhc2hfZGV2ICpoZGV2KQ0K
+Pj4gew0KPj4gLSByZXR1cm4gaGFzaF9lbXB0eShoZGV2LT51ZXhpdF9waWRfaHRhYmxlKTsNCj4+
+ICsgYm9vbCBpc19lbXB0eTsNCj4+ICsNCj4+ICsgaXNfZW1wdHkgPSBoYXNoX2VtcHR5KGhkZXYt
+PnVleGl0X3BpZF9odGFibGUpOw0KPj4gKyBwcl9kZWJ1ZygiSGFzaCB0YWJsZSBpcyAlc1xuIiwg
+KGlzX2VtcHR5ID8gImVtcHR5IiA6ICJub3QgZW1wdHkiKSk7DQo+PiArDQo+PiArIHJldHVybiBp
+c19lbXB0eTsNCj4gDQo+IEl0IHNlZW1zIG9kZCB0byBoYXZlIHRoaXMgY2hhbmdlIGluIHRoZSBr
+dW5pdCBjaGFuZ2UuDQoNCk9rLCB3aWxsIG1vdmUgdG8gdGhlIGZpcnN0IHBhdGNoLg0KDQo+IA0K
+Pj4gfQ0KPj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvY29ubmVjdG9yL2Nvbm5lY3Rvci5jIGIvZHJp
+dmVycy9jb25uZWN0b3IvY29ubmVjdG9yLmMNCj4+IGluZGV4IDUwNmUzY2JlZGY4NS4uMjhlNjBj
+OGIwZmRmIDEwMDY0NA0KPj4gLS0tIGEvZHJpdmVycy9jb25uZWN0b3IvY29ubmVjdG9yLmMNCj4+
+ICsrKyBiL2RyaXZlcnMvY29ubmVjdG9yL2Nvbm5lY3Rvci5jDQo+PiBAQCAtMzA4LDcgKzMwOCw3
+IEBAIGludCBjbl9hZGRfZWxlbShfX3UzMiB1ZXhpdF9jb2RlLCBwaWRfdCBwaWQpDQo+PiB9DQo+
+PiBFWFBPUlRfU1lNQk9MX0dQTChjbl9hZGRfZWxlbSk7DQo+PiANCj4+IC1fX3UzMiBjbl9nZXRf
+ZXh2YWwocGlkX3QgcGlkKQ0KPj4gK2ludCBjbl9nZXRfZXh2YWwocGlkX3QgcGlkKQ0KPj4gew0K
+Pj4gc3RydWN0IGNuX2RldiAqZGV2ID0gJmNkZXY7DQo+PiBfX3UzMiBleHZhbDsNCj4+IEBAIC0z
+MjEsNiArMzIxLDE5IEBAIF9fdTMyIGNuX2dldF9leHZhbChwaWRfdCBwaWQpDQo+PiB9DQo+PiBF
+WFBPUlRfU1lNQk9MX0dQTChjbl9nZXRfZXh2YWwpOw0KPj4gDQo+PiAraW50IGNuX2Rpc3BsYXlf
+aGxpc3QocGlkX3QgcGlkLCBpbnQgbWF4X2xlbiwgaW50ICpoa2V5LA0KPj4gKyBpbnQgKmtleV9k
+aXNwbGF5KQ0KPiANCj4gVGhpcyBjYW4gcHJvYmFibHkgYmUgb25lIGxpbmUgaGVyZS4NCg0KWWVz
+LCB3aWxsIGRvLg0KDQo+IA0KPj4gK3sNCj4+ICsgc3RydWN0IGNuX2RldiAqZGV2ID0gJmNkZXY7
+DQo+PiArDQo+PiArIGlmICghY25fYWxyZWFkeV9pbml0aWFsaXplZCkNCj4+ICsgcmV0dXJuIDA7
+DQo+PiArDQo+PiArIHJldHVybiBjbl9oYXNoX2Rpc3BsYXlfaGxpc3QoZGV2LT5oZGV2LCBwaWQs
+IG1heF9sZW4sDQo+PiArIGhrZXksIGtleV9kaXNwbGF5KTsNCj4+ICt9DQo+PiArRVhQT1JUX1NZ
+TUJPTF9HUEwoY25fZGlzcGxheV9obGlzdCk7DQo+PiArDQo+PiBib29sIGNuX3RhYmxlX2VtcHR5
+KHZvaWQpDQo+PiB7DQo+PiBzdHJ1Y3QgY25fZGV2ICpkZXYgPSAmY2RldjsNCj4+IGRpZmYgLS1n
+aXQgYS9pbmNsdWRlL2xpbnV4L2Nvbm5lY3Rvci5oIGIvaW5jbHVkZS9saW51eC9jb25uZWN0b3Iu
+aA0KPj4gaW5kZXggMDk0ZTE3MzBhNGY2Li5hZjgwMWM1MDA1ZTggMTAwNjQ0DQo+PiAtLS0gYS9p
+bmNsdWRlL2xpbnV4L2Nvbm5lY3Rvci5oDQo+PiArKysgYi9pbmNsdWRlL2xpbnV4L2Nvbm5lY3Rv
+ci5oDQo+PiBAQCAtMTY1LDcgKzE2NSw3IEBAIF9fdTMyIGNuX2hhc2hfZGVsX2dldF9leHZhbChz
+dHJ1Y3QgY25faGFzaF9kZXYgKmhkZXYsIHBpZF90IHBpZCk7DQo+PiBpbnQgY25fYWRkX2VsZW0o
+X191MzIgdWV4aXRfY29kZSwgcGlkX3QgcGlkKTsNCj4+IGludCBjbl9kZWxfZWxlbShwaWRfdCBw
+aWQpOw0KPj4gX191MzIgY25fZGVsX2dldF9leHZhbChwaWRfdCBwaWQpOw0KPj4gLV9fdTMyIGNu
+X2dldF9leHZhbChwaWRfdCBwaWQpOw0KPj4gK2ludCBjbl9nZXRfZXh2YWwocGlkX3QgcGlkKTsN
+Cj4+IA0KPj4gc3RydWN0IGNuX2hhc2hfZGV2ICpjbl9oYXNoX2FsbG9jX2Rldihjb25zdCBjaGFy
+ICpuYW1lKTsNCj4+IHZvaWQgY25faGFzaF9mcmVlX2RldihzdHJ1Y3QgY25faGFzaF9kZXYgKmhk
+ZXYpOw0KPj4gQEAgLTE3NSw5ICsxNzUsMTMgQEAgdm9pZCBjbl9oYXNoX2ZyZWVfZWxlbShzdHJ1
+Y3QgdWV4aXRfcGlkX2hub2RlICplbGVtKTsNCj4+IGludCBjbl9oYXNoX2FkZF9lbGVtKHN0cnVj
+dCBjbl9oYXNoX2RldiAqaGRldiwgX191MzIgdWV4aXRfY29kZSwgcGlkX3QgcGlkKTsNCj4+IGlu
+dCBjbl9oYXNoX2RlbF9lbGVtKHN0cnVjdCBjbl9oYXNoX2RldiAqaGRldiwgcGlkX3QgcGlkKTsN
+Cj4+IF9fdTMyIGNuX2hhc2hfZGVsX2dldF9leHZhbChzdHJ1Y3QgY25faGFzaF9kZXYgKmhkZXYs
+IHBpZF90IHBpZCk7DQo+PiAtX191MzIgY25faGFzaF9nZXRfZXh2YWwoc3RydWN0IGNuX2hhc2hf
+ZGV2ICpoZGV2LCBwaWRfdCBwaWQpOw0KPj4gK2ludCBjbl9oYXNoX2dldF9leHZhbChzdHJ1Y3Qg
+Y25faGFzaF9kZXYgKmhkZXYsIHBpZF90IHBpZCk7DQo+IA0KPiBJdCBzZWVtcyBsaWtlIHRoZSBj
+aGFuZ2UgaW4gdHlwZSBzaG91bGQgYmUgd2l0aCBhbm90aGVyIGNoYW5nZSBvciBvbiBpdHMNCj4g
+b3duPw0KDQpZZXMsIHNhbWUgcmVhc29uIEkgZ2F2ZSBhYm92ZSAtIGNoYW5nZWQgdGhpcyBmdW5j
+dGlvbiB0byByZXR1cm4gYW4gZXJyb3INCmNvZGUgaW5zdGVhZCBvZiBqdXN0IGV4aXQgY29kZSBv
+ciAwLCBidXQgcmViYXNlZCBhbmQgcHV0IHRoYXQgY2hhbmdlIGluIHRoZQ0KZmlyc3QgcGF0Y2gu
+IEkgd2lsbCBtb3ZlIHRoaXMgdG8gdGhlIGZpcnN0IHBhdGNoLg0KDQo+IA0KPj4gDQo+PiBib29s
+IGNuX3RhYmxlX2VtcHR5KHZvaWQpOw0KPj4gYm9vbCBjbl9oYXNoX3RhYmxlX2VtcHR5KHN0cnVj
+dCBjbl9oYXNoX2RldiAqaGRldik7DQo+PiANCj4+ICtpbnQgY25fZGlzcGxheV9obGlzdChwaWRf
+dCBwaWQsIGludCBtYXhfbGVuLCBpbnQgKmhrZXksIGludCAqa2V5X2Rpc3BsYXkpOw0KPj4gK2lu
+dCBjbl9oYXNoX2Rpc3BsYXlfaGxpc3Qoc3RydWN0IGNuX2hhc2hfZGV2ICpoZGV2LCBwaWRfdCBw
+aWQsIGludCBtYXhfbGVuLA0KPj4gKyBpbnQgKmhrZXksIGludCAqa2V5X2Rpc3BsYXkpOw0KPj4g
+Kw0KPj4gI2VuZGlmIC8qIF9fQ09OTkVDVE9SX0ggKi8NCj4+IGRpZmYgLS1naXQgYS9saWIvS2Nv
+bmZpZy5kZWJ1ZyBiL2xpYi9LY29uZmlnLmRlYnVnDQo+PiBpbmRleCA3MzE1ZjY0MzgxN2EuLjIz
+NTk5YmViOWJlYyAxMDA2NDQNCj4+IC0tLSBhL2xpYi9LY29uZmlnLmRlYnVnDQo+PiArKysgYi9s
+aWIvS2NvbmZpZy5kZWJ1Zw0KPj4gQEAgLTI3MDUsNiArMjcwNSwyMyBAQCBjb25maWcgSEFTSFRB
+QkxFX0tVTklUX1RFU1QNCj4+IA0KPj4gICBJZiB1bnN1cmUsIHNheSBOLg0KPj4gDQo+PiArY29u
+ZmlnIENPTkZJR19DTl9IQVNIX0tVTklUX1RFU1QNCj4+ICsgdHJpc3RhdGUgIktVbml0IFRlc3Qg
+Zm9yIGNvbm5lY3RvciBoYXNodGFibGUgY29kZSIgaWYgIUtVTklUX0FMTF9URVNUUw0KPj4gKyBk
+ZXBlbmRzIG9uIEtVTklUDQo+PiArIGRlZmF1bHQgS1VOSVRfQUxMX1RFU1RTDQo+PiArIGhlbHAN
+Cj4+ICsgICBUaGlzIGJ1aWxkcyB0aGUgaGFzaHRhYmxlIEtVbml0IHRlc3Qgc3VpdGUuDQo+PiAr
+ICAgSXQgdGVzdHMgdGhlIGJhc2ljIGZ1bmN0aW9uYWxpdHkgb2YgdGhlIEFQSSBkZWZpbmVkIGlu
+DQo+PiArICAgZHJpdmVycy9jb25uZWN0b3IvY25faGFzaC5jLg0KPj4gKyAgIENPTkZJR19DT05O
+RUNUT1I9eSwgQ09ORklHX1BST0NfRVZFTlRTPXkgYXMgd2VsbCBhcyBDT05GSUdfTkVUPXkNCj4+
+ICsgICBuZWVkcyB0byBiZSBlbmFibGVkIGFsb25nIHdpdGggQ09ORklHX0NOX0hBU0hfS1VOSVRf
+VEVTVD1tIGFuZA0KPj4gKyAgIENPTkZJR19LVU5JVD1tIGluIC5jb25maWcgZmlsZSB0byBjb21w
+aWxlIGFuZCB0aGVuIHRlc3QgYXMgYSBrZXJuZWwNCj4+ICsgICBtb2R1bGUgd2l0aCAibW9kcHJv
+YmUgY25faGFzaF90ZXN0Ii4NCj4+ICsgICBGb3IgbW9yZSBpbmZvcm1hdGlvbiBvbiBLVW5pdCBh
+bmQgdW5pdCB0ZXN0cyBpbiBnZW5lcmFsIHBsZWFzZQ0KPj4gKyAgIHJlZmVyIHRvIHRoZSBLVW5p
+dCBkb2N1bWVudGF0aW9uIGluIERvY3VtZW50YXRpb24vZGV2LXRvb2xzL2t1bml0Ly4NCj4+ICsN
+Cj4+ICsgICBJZiB1bnN1cmUsIHNheSBOLg0KPj4gKw0KPj4gY29uZmlnIExJTkVBUl9SQU5HRVNf
+VEVTVA0KPj4gdHJpc3RhdGUgIktVbml0IHRlc3QgZm9yIGxpbmVhcl9yYW5nZXMiDQo+PiBkZXBl
+bmRzIG9uIEtVTklUDQo+PiBkaWZmIC0tZ2l0IGEvbGliL01ha2VmaWxlIGIvbGliL01ha2VmaWxl
+DQo+PiBpbmRleCA4MTFiYTEyYzhjZDAuLjJjNTljODJiMGIxOCAxMDA2NDQNCj4+IC0tLSBhL2xp
+Yi9NYWtlZmlsZQ0KPj4gKysrIGIvbGliL01ha2VmaWxlDQo+PiBAQCAtMzc5LDYgKzM3OSw3IEBA
+IG9iai0kKENPTkZJR19DTURMSU5FX0tVTklUX1RFU1QpICs9IGNtZGxpbmVfa3VuaXQubw0KPj4g
+b2JqLSQoQ09ORklHX1NMVUJfS1VOSVRfVEVTVCkgKz0gc2x1Yl9rdW5pdC5vDQo+PiBvYmotJChD
+T05GSUdfTUVNQ1BZX0tVTklUX1RFU1QpICs9IG1lbWNweV9rdW5pdC5vDQo+PiBvYmotJChDT05G
+SUdfSVNfU0lHTkVEX1RZUEVfS1VOSVRfVEVTVCkgKz0gaXNfc2lnbmVkX3R5cGVfa3VuaXQubw0K
+Pj4gK29iai0kKENPTkZJR19DTl9IQVNIX0tVTklUX1RFU1QpICs9IGNuX2hhc2hfdGVzdC5vDQo+
+PiBDRkxBR1Nfb3ZlcmZsb3dfa3VuaXQubyA9ICQoY2FsbCBjYy1kaXNhYmxlLXdhcm5pbmcsIHRh
+dXRvbG9naWNhbC1jb25zdGFudC1vdXQtb2YtcmFuZ2UtY29tcGFyZSkNCj4+IG9iai0kKENPTkZJ
+R19PVkVSRkxPV19LVU5JVF9URVNUKSArPSBvdmVyZmxvd19rdW5pdC5vDQo+PiBDRkxBR1Nfc3Rh
+Y2tpbml0X2t1bml0Lm8gKz0gJChjYWxsIGNjLWRpc2FibGUtd2FybmluZywgc3dpdGNoLXVucmVh
+Y2hhYmxlKQ0KPj4gZGlmZiAtLWdpdCBhL2xpYi9jbl9oYXNoX3Rlc3QuYyBiL2xpYi9jbl9oYXNo
+X3Rlc3QuYw0KPj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4+IGluZGV4IDAwMDAwMDAwMDAwMC4u
+NzhjMzljMGEwOTk3DQo+PiAtLS0gL2Rldi9udWxsDQo+PiArKysgYi9saWIvY25faGFzaF90ZXN0
+LmMNCj4+IEBAIC0wLDAgKzEsMTY3IEBADQo+PiArLy8gU1BEWC1MaWNlbnNlLUlkZW50aWZpZXI6
+IEdQTC0yLjANCj4+ICsvKg0KPj4gKyAqIEtVbml0IHRlc3QgZm9yIHRoZSBjb25uZWN0b3IgdGhy
+ZWFkcyBoYXNodGFibGUgY29kZS4NCj4+ICsgKg0KPj4gKyAqIENvcHlyaWdodCAoYykgMjAyNCBP
+cmFjbGUgYW5kL29yIGl0cyBhZmZpbGlhdGVzLg0KPj4gKyAqIEF1dGhvcjogQW5qYWxpIEt1bGth
+cm5pIDxhbmphbGkuay5rdWxrYXJuaUBvcmFjbGUuY29tPg0KPj4gKyAqLw0KPj4gKyNpbmNsdWRl
+IDxrdW5pdC90ZXN0Lmg+DQo+PiArDQo+PiArI2luY2x1ZGUgImNuX2hhc2hfdGVzdC5oIg0KPj4g
+Kw0KPj4gKyNkZWZpbmUgQVJSX1NJWkUgNA0KPj4gKyNkZWZpbmUgSEFTSF9UQUJMRV9MRU4gMTAy
+NA0KPj4gKw0KPj4gK3N0cnVjdCBhZGRfZGF0YSB7DQo+PiArIHBpZF90IHBpZDsNCj4+ICsgaW50
+IGV4aXRfdmFsOw0KPj4gKyBpbnQga2V5Ow0KPj4gK307DQo+PiArDQo+PiArc3RhdGljIHN0cnVj
+dCBhZGRfZGF0YSBhZGF0YVtBUlJfU0laRV07DQo+PiArc3RhdGljIGludCBrZXlfZGlzcGxheVtI
+QVNIX1RBQkxFX0xFTl07DQo+PiArDQo+PiArc3RhdGljIGludCBjbl9oYXNoX2luaXQoc3RydWN0
+IGt1bml0ICp0ZXN0KQ0KPj4gK3sNCj4+ICsgZm9yIChpbnQgaSA9IDA7IGkgPCBIQVNIX1RBQkxF
+X0xFTjsgaSsrKQ0KPj4gKyBrZXlfZGlzcGxheVtpXSA9IDA7DQo+PiArDQo+PiArIHJldHVybiAw
+Ow0KPj4gK30NCj4+ICsNCj4+ICtzdGF0aWMgdm9pZCBjbl9kaXNwbGF5X2h0YWJsZShzdHJ1Y3Qg
+a3VuaXQgKnRlc3QsIGludCBsZW4pDQo+PiArew0KPj4gKyBpbnQgaSwgZXJyOw0KPj4gKw0KPj4g
+KyBjbl9oYXNoX2luaXQodGVzdCk7DQo+PiArDQo+PiArIHByX2RlYnVnKCJcbiIpOw0KPj4gKyBw
+cl9kZWJ1ZygiRGlzcGxheWluZyBoYXNoIHRhYmxlOlxuIik7DQo+PiArDQo+PiArIGZvciAoaSA9
+IDA7IGkgPCBsZW47IGkrKykgew0KPj4gKyBlcnIgPSBjbl9kaXNwbGF5X2hsaXN0KGFkYXRhW2ld
+LnBpZCwgbGVuLCAmYWRhdGFbaV0ua2V5LA0KPj4gKyBrZXlfZGlzcGxheSk7DQo+PiArIGtleV9k
+aXNwbGF5W2FkYXRhW2ldLmtleV0gPSAxOw0KPj4gKyBLVU5JVF9FWFBFQ1RfRVEodGVzdCwgZXJy
+LCAwKTsNCj4+ICsgfQ0KPj4gK30NCj4+ICsNCj4+ICtzdGF0aWMgdm9pZCBjbl9oYXNoX3Rlc3Rf
+YWRkKHN0cnVjdCBrdW5pdCAqdGVzdCkNCj4+ICt7DQo+PiArIGludCBlcnIsIGk7DQo+PiArIGlu
+dCBleGl0X3ZhbDsNCj4+ICsNCj4+ICsgYWRhdGFbMF0ucGlkID0gMTsNCj4+ICsgYWRhdGFbMF0u
+ZXhpdF92YWwgPSA0NTsNCj4+ICsNCj4+ICsgYWRhdGFbMV0ucGlkID0gMjsNCj4+ICsgYWRhdGFb
+MV0uZXhpdF92YWwgPSAxMzsNCj4+ICsNCj4+ICsgYWRhdGFbMl0ucGlkID0gMTAyNDsNCj4+ICsg
+YWRhdGFbMl0uZXhpdF92YWwgPSAxNjsNCj4+ICsNCj4+ICsgYWRhdGFbM10ucGlkID0gMTAyMzsN
+Cj4+ICsgYWRhdGFbM10uZXhpdF92YWwgPSA3MTsNCj4+ICsNCj4+ICsgZm9yIChpID0gMDsgaSA8
+IEFSUkFZX1NJWkUoYWRhdGEpOyBpKyspIHsNCj4+ICsgZXJyID0gY25fYWRkX2VsZW0oYWRhdGFb
+aV0uZXhpdF92YWwsIGFkYXRhW2ldLnBpZCk7DQo+PiArIEtVTklUX0VYUEVDVF9FUV9NU0codGVz
+dCwgMCwgZXJyLA0KPj4gKyAiQWRkaW5nIHBpZCAlZCByZXR1cm5lZCBlcnIgJWQiLA0KPj4gKyBh
+ZGF0YVtpXS5waWQsIGVycik7DQo+PiArDQo+PiArIGV4aXRfdmFsID0gY25fZ2V0X2V4dmFsKGFk
+YXRhW2ldLnBpZCk7DQo+PiArIEtVTklUX0VYUEVDVF9FUSh0ZXN0LCBhZGF0YVtpXS5leGl0X3Zh
+bCwgZXhpdF92YWwpOw0KPj4gKyB9DQo+PiArDQo+PiArIGNuX2Rpc3BsYXlfaHRhYmxlKHRlc3Qs
+IEFSUkFZX1NJWkUoYWRhdGEpKTsNCj4+ICt9DQo+PiArDQo+PiArc3RhdGljIHZvaWQgY25faGFz
+aF90ZXN0X2RlbChzdHJ1Y3Qga3VuaXQgKnRlc3QpDQo+PiArew0KPj4gKyBpbnQgaSwgZXJyOw0K
+Pj4gKyBpbnQgZXhpdF92YWw7DQo+PiArDQo+PiArIGZvciAoaSA9IDA7IGkgPCBBUlJBWV9TSVpF
+KGFkYXRhKTsgaSsrKSB7DQo+PiArIGVyciA9IGNuX2RlbF9lbGVtKGFkYXRhW2ldLnBpZCk7DQo+
+PiArIEtVTklUX0VYUEVDVF9FUV9NU0codGVzdCwgMCwgZXJyLA0KPj4gKyAiRGVsZXRpbmcgcGlk
+ICVkIHJldHVybmVkIGVyciAlZCIsDQo+PiArIGFkYXRhW2ldLnBpZCwgZXJyKTsNCj4+ICsNCj4+
+ICsgZXhpdF92YWwgPSBjbl9nZXRfZXh2YWwoYWRhdGFbaV0ucGlkKTsNCj4+ICsgS1VOSVRfRVhQ
+RUNUX0VRKHRlc3QsIC1FSU5WQUwsIGV4aXRfdmFsKTsNCj4+ICsgfQ0KPj4gKw0KPj4gKyBjbl9k
+aXNwbGF5X2h0YWJsZSh0ZXN0LCBBUlJBWV9TSVpFKGFkYXRhKSk7DQo+PiArIEtVTklUX0VYUEVD
+VF9UUlVFKHRlc3QsIGNuX3RhYmxlX2VtcHR5KCkpOw0KPj4gK30NCj4+ICsNCj4+ICtzdGF0aWMg
+dm9pZCBjbl9oYXNoX3Rlc3RfZGVsX2dldF9leHZhbChzdHJ1Y3Qga3VuaXQgKnRlc3QpDQo+PiAr
+ew0KPj4gKyBpbnQgaSwgZXh2YWw7DQo+PiArDQo+PiArIGZvciAoaSA9IDA7IGkgPCBBUlJBWV9T
+SVpFKGFkYXRhKTsgaSsrKSB7DQo+PiArIGV4dmFsID0gY25fZGVsX2dldF9leHZhbChhZGF0YVtp
+XS5waWQpOw0KPj4gKyBLVU5JVF9FWFBFQ1RfRVEodGVzdCwgYWRhdGFbaV0uZXhpdF92YWwsIGV4
+dmFsKTsNCj4+ICsNCj4+ICsgY25fZGlzcGxheV9odGFibGUodGVzdCwgQVJSQVlfU0laRShhZGF0
+YSkpOw0KPj4gKyB9DQo+PiArDQo+PiArIEtVTklUX0VYUEVDVF9UUlVFKHRlc3QsIGNuX3RhYmxl
+X2VtcHR5KCkpOw0KPj4gK30NCj4+ICtzdGF0aWMgdm9pZCBjbl9oYXNoX3Rlc3RfZHVwX2FkZChz
+dHJ1Y3Qga3VuaXQgKnRlc3QpDQo+PiArew0KPj4gKyBpbnQgZXJyLCBleGl0X3ZhbDsNCj4+ICsN
+Cj4+ICsgYWRhdGFbMF0ucGlkID0gMTA7DQo+PiArIGFkYXRhWzBdLmV4aXRfdmFsID0gMjE7DQo+
+PiArDQo+PiArIGVyciA9IGNuX2FkZF9lbGVtKGFkYXRhWzBdLmV4aXRfdmFsLCBhZGF0YVswXS5w
+aWQpOw0KPj4gKyBLVU5JVF9FWFBFQ1RfRVEodGVzdCwgMCwgZXJyKTsNCj4+ICsNCj4+ICsgZXhp
+dF92YWwgPSBjbl9nZXRfZXh2YWwoYWRhdGFbMF0ucGlkKTsNCj4+ICsgS1VOSVRfRVhQRUNUX0VR
+KHRlc3QsIDIxLCBleGl0X3ZhbCk7DQo+PiArDQo+PiArIGFkYXRhWzFdLnBpZCA9IDEwOw0KPj4g
+KyBhZGF0YVsxXS5leGl0X3ZhbCA9IDEyOw0KPj4gKw0KPj4gKyBlcnIgPSBjbl9hZGRfZWxlbShh
+ZGF0YVsxXS5leGl0X3ZhbCwgYWRhdGFbMV0ucGlkKTsNCj4+ICsgS1VOSVRfRVhQRUNUX0VRKHRl
+c3QsIC1FRVhJU1QsIGVycik7DQo+PiArDQo+PiArIGV4aXRfdmFsID0gY25fZ2V0X2V4dmFsKGFk
+YXRhWzFdLnBpZCk7DQo+PiArIEtVTklUX0VYUEVDVF9FUSh0ZXN0LCAyMSwgZXhpdF92YWwpOw0K
+Pj4gKw0KPj4gKyBjbl9kaXNwbGF5X2h0YWJsZSh0ZXN0LCAxKTsNCj4+ICt9DQo+PiArDQo+PiAr
+c3RhdGljIHZvaWQgY25faGFzaF90ZXN0X2R1cF9kZWwoc3RydWN0IGt1bml0ICp0ZXN0KQ0KPj4g
+K3sNCj4+ICsgaW50IGVycjsNCj4+ICsNCj4+ICsgZXJyID0gY25fZGVsX2VsZW0oYWRhdGFbMF0u
+cGlkKTsNCj4+ICsgS1VOSVRfRVhQRUNUX0VRKHRlc3QsIDAsIGVycik7DQo+PiArDQo+PiArIGVy
+ciA9IGNuX2RlbF9lbGVtKGFkYXRhWzBdLnBpZCk7DQo+PiArIEtVTklUX0VYUEVDVF9FUSh0ZXN0
+LCAtRUlOVkFMLCBlcnIpOw0KPj4gKw0KPj4gKyBLVU5JVF9FWFBFQ1RfVFJVRSh0ZXN0LCBjbl90
+YWJsZV9lbXB0eSgpKTsNCj4+ICt9DQo+PiArDQo+PiArc3RhdGljIHN0cnVjdCBrdW5pdF9jYXNl
+IGNuX2hhc2h0YWJsZV90ZXN0X2Nhc2VzW10gPSB7DQo+PiArIEtVTklUX0NBU0UoY25faGFzaF90
+ZXN0X2FkZCksDQo+PiArIEtVTklUX0NBU0UoY25faGFzaF90ZXN0X2RlbCksDQo+PiArIEtVTklU
+X0NBU0UoY25faGFzaF90ZXN0X2R1cF9hZGQpLA0KPj4gKyBLVU5JVF9DQVNFKGNuX2hhc2hfdGVz
+dF9kdXBfZGVsKSwNCj4+ICsgS1VOSVRfQ0FTRShjbl9oYXNoX3Rlc3RfYWRkKSwNCj4+ICsgS1VO
+SVRfQ0FTRShjbl9oYXNoX3Rlc3RfZGVsX2dldF9leHZhbCksDQo+PiArIHt9LA0KPj4gK307DQo+
+PiArDQo+PiArc3RhdGljIHN0cnVjdCBrdW5pdF9zdWl0ZSBjbl9oYXNodGFibGVfdGVzdF9tb2R1
+bGUgPSB7DQo+PiArIC5uYW1lID0gImNuX2hhc2h0YWJsZSIsDQo+PiArIC5pbml0ID0gY25faGFz
+aF9pbml0LA0KPj4gKyAudGVzdF9jYXNlcyA9IGNuX2hhc2h0YWJsZV90ZXN0X2Nhc2VzLA0KPj4g
+K307DQo+PiAra3VuaXRfdGVzdF9zdWl0ZShjbl9oYXNodGFibGVfdGVzdF9tb2R1bGUpOw0KPj4g
+Kw0KPj4gK01PRFVMRV9ERVNDUklQVElPTigiS1VuaXQgdGVzdCBmb3IgdGhlIGNvbm5lY3RvciB0
+aHJlYWRzIGhhc2h0YWJsZSBjb2RlIik7DQo+PiArTU9EVUxFX0xJQ0VOU0UoIkdQTCIpOw0KPj4g
+ZGlmZiAtLWdpdCBhL2xpYi9jbl9oYXNoX3Rlc3QuaCBiL2xpYi9jbl9oYXNoX3Rlc3QuaA0KPj4g
+bmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4+IGluZGV4IDAwMDAwMDAwMDAwMC4uNDZmY2RhMzFiMjVj
+DQo+PiAtLS0gL2Rldi9udWxsDQo+PiArKysgYi9saWIvY25faGFzaF90ZXN0LmgNCj4+IEBAIC0w
+LDAgKzEsMTIgQEANCj4+ICsvKiBTUERYLUxpY2Vuc2UtSWRlbnRpZmllcjogR1BMLTIuMCsgKi8N
+Cj4+ICsvKg0KPj4gKyAqIENvcHlyaWdodCAoYykgMjAyNCBPcmFjbGUgYW5kL29yIGl0cyBhZmZp
+bGlhdGVzLg0KPj4gKyAqIEF1dGhvcjogQW5qYWxpIEt1bGthcm5pIDxhbmphbGkuay5rdWxrYXJu
+aUBvcmFjbGUuY29tPg0KPj4gKyAqLw0KPj4gK2V4dGVybiBpbnQgY25fZGlzcGxheV9obGlzdChw
+aWRfdCBwaWQsIGludCBtYXhfbGVuLCBpbnQgKmhrZXksDQo+PiArIGludCAqa2V5X2Rpc3BsYXkp
+Ow0KPj4gK2V4dGVybiBpbnQgY25fZGVsX2VsZW0ocGlkX3QgcGlkKTsNCj4+ICtleHRlcm4gaW50
+IGNuX2FkZF9lbGVtKF9fdTMyIHVleGl0X2NvZGUsIHBpZF90IHBpZCk7DQo+PiArZXh0ZXJuIF9f
+dTMyIGNuX2RlbF9nZXRfZXh2YWwocGlkX3QgcGlkKTsNCj4+ICtleHRlcm4gaW50IGNuX2dldF9l
+eHZhbChwaWRfdCBwaWQpOw0KPj4gK2V4dGVybiBib29sIGNuX3RhYmxlX2VtcHR5KHZvaWQpOw0K
+PiANCj4gSSB0aGluayB3ZSBhcmUgbm90IGFkZGluZyBleHRlcm5zIHRvIGhlYWRlcnMgYW55bW9y
+ZS4NCg0KT2ssIHNob3VsZCBJIG1vdmUgaXQgdG8gdGhlIGNuX2hhc2hfdGVzdC5jIGZpbGUgdGhl
+bj8gVGhhdCBpcyB3aGF0IEkgaGFkDQppbml0aWFsbHkgYnV0IHRoZSBjaGVja3BhdGNoLnBsIGdh
+dmUgYSB3YXJuaW5nIHRvIG1vdmUgdG8gLmggZmlsZS4NCg0KPiANCj4+IC0tIA0KPj4gMi40Ni4w
+DQoNCg0K
 
