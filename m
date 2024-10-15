@@ -1,172 +1,149 @@
-Return-Path: <linux-kselftest+bounces-19708-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19709-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2A1199E0C8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 10:19:02 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CA0D99E0EF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 10:23:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B93951C21003
-	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 08:19:01 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60C72B258E2
+	for <lists+linux-kselftest@lfdr.de>; Tue, 15 Oct 2024 08:23:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 664BC1D9A6C;
-	Tue, 15 Oct 2024 08:18:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B7DD1D5AB4;
+	Tue, 15 Oct 2024 08:22:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e12uUUhH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fsj+jLUi"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7D301CACC9
-	for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2024 08:18:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 863D71CACEE
+	for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2024 08:22:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728980311; cv=none; b=P80JSUq4q24CKfN1bzeiN7tm1jD/iKbOCmZCI5aFA7XJlXQcnQm/Maj0xHWxXHM2yoclxNRZlJSilCNYxMig5o+YdRFvJmkczEc49HX3PejmvVqq1Z+FoFkwBsxnHyRQwCiRXtGxkSEWeDUIDP5hUm2y0b/Rg47LcrJKb39lvR0=
+	t=1728980577; cv=none; b=IGqqIeGB3RmeBMv5c0vhN3msqINKXg7GkI/DdaIoeNvAZ3iaMLlwl1P0SiLDyzL2l/9QFU9KFvgzXHBT19fP9SWFUDkY/psLKXHudugiwrDKEYMjojoYYeSQHVmHs4SodivUek8FGOXIl2Hd3WkIc1913zxpB5rOsSItRe8lVCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728980311; c=relaxed/simple;
-	bh=ZvCjhxA9HJtkjiVT2jrS8KFmWhTXeVw6tlAsxhIikfI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=UzRBjlJ0oFmpAVOyaGOOwo+0NfHPxgJxVvvZzg7h3LRqN8gzPfxNHMJ30tghi/fxrlnIuQyR/QvD4o+Kle2wMPL9CQ0Hd0YHS+cizgaSww9em4dFFVvg+yhtI0pRlSgqOCMPrqYWgSOZnQM6lIM7tyzYnCgpf5eRBXY7rxi8oj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e12uUUhH; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1728980577; c=relaxed/simple;
+	bh=cUwe0v7vBLeUuYtqFoHOZI44JFRnj3mCsTB1ARnQFBk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BVapp6pAUUAcaCZ/2DMdPVILNPNBsFydQQ6ukXRcS97Z96/aLw6VWbx+DT31GfDgLyreGwNq8At8ZfgSJpBPnaFWj1A+HPjoux3vaB5otf7vt1KhlynazpQOo8QrUSypngi1y9/Iqa+ehDDMG+mUBHqVNNYKc7/6oSFqqTc5nxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fsj+jLUi; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1728980308;
+	s=mimecast20190719; t=1728980574;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=wSzugHJUE0V5VnxcNgtSlLmUlo3tP8MuSc6Q2lgQWPQ=;
-	b=e12uUUhHAqI/PgeVtnf+pMUYSVrKNSSz0t6gHX/JVwGyjrOcbHlbd2BKchk80aJh9hjMnd
-	O9707dXwnSM8EmhAbCM4u5Jj19XMKR9hI6p8fGxLC9F1Ker29vThvybb6S9HV1ErtzXyKj
-	RRVyHIf/XSbK7y8z5IXHj9UpGJfsOLw=
-Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com
- [209.85.208.200]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=HZT5NqeAX+0TO6OTyvaLn7KXovdqFQioxNek5XGLyj4=;
+	b=fsj+jLUibGeRHi+7onQBnGM4NRiHJmIUmJTPRfs3ruBttivXIu9Ix8CY+db0mcO6sAjOsb
+	VggQrRRPK1I1OGc1I7+O8GYLy2FhaVY0LHsNRz5BMaCQaZ/XqZWj8KtrT1gG+mX405jXAl
+	eCabnuy6H16HScCo71YoLYAPsKLdlKA=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-695-zeaL-mNMMgGcRQQVBiZuMA-1; Tue, 15 Oct 2024 04:18:27 -0400
-X-MC-Unique: zeaL-mNMMgGcRQQVBiZuMA-1
-Received: by mail-lj1-f200.google.com with SMTP id 38308e7fff4ca-2fb58c0df21so7329651fa.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2024 01:18:27 -0700 (PDT)
+ us-mta-147-3QNaZYR8M8ythGzJ3gjATg-1; Tue, 15 Oct 2024 04:22:53 -0400
+X-MC-Unique: 3QNaZYR8M8ythGzJ3gjATg-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4311c47684aso24284935e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Oct 2024 01:22:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728980306; x=1729585106;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wSzugHJUE0V5VnxcNgtSlLmUlo3tP8MuSc6Q2lgQWPQ=;
-        b=i2qggdloKhQmmELyJotwbl+Rglq2Fe+MKLY04gyXtyAs3K13uFagp8HbRYAIbdhpDg
-         QDjYP3XnZ2MSbEvAsUWbW6Le8Krg7tNYm3a6PAS/l6p6J+rG+7RytMFgWlOqDy0bzlC2
-         ceNh/6czL/PuiiubUTPfVPZnQP3eLSF3VyVh+GyZFUUXdsVP0+xW9U7x7PLQTeIMbwoV
-         mi2NlpRSQ/7BIKIEQuQRIE/mGsbU6PyJ5ecq+1m4HfC2xJjgD6sBpkY/jj/hfuFRenBP
-         qw59j82e6LnXl0ZxDBxcpeuDdgtR7n+klzsinMgFeUF3W9lSnPfGOuYULpxDVKQyVotV
-         DRlA==
-X-Forwarded-Encrypted: i=1; AJvYcCUknK5UoTo1ArGYBY5q8Q2K27Z/nTO7BQSyRJ7e65PklvA/73oIe1rQXvpK5LVAUo2+fG8Mfe5xyS6Nq0A3fGI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyX4CsjPA4INV79AsECh6X8kXJqcIybmwT5RpwsS+mpBQVwyavS
-	EzSfFAuOZuZ8kuEEaoT8d1EsNySYX5uuXM5eGU40Ol6S4A4Q9feL8FnXVnhwm5Covtc4UVaDc0b
-	ocpji+JBlme4EDhKaxsn60UqweNye+25+Z6sNHaQi8nOBnE9KEBgiv5yeXkagArrJf50Ksv4vut
-	BAtebzObtqI/Klg5KHg4YXDFJclhVgtP/wC+ve+hypYIO2yOHVug==
-X-Received: by 2002:a05:6512:110c:b0:539:e65a:8a71 with SMTP id 2adb3069b0e04-539e65a8c28mr4531976e87.34.1728980305776;
-        Tue, 15 Oct 2024 01:18:25 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGM8egqE9jF4dTVTryZ5qbA3smtlVhU0CSpeShuRlF/pW2Bor/bfD2IwVw3AXprpgQ+VaOz1g==
-X-Received: by 2002:a05:6512:110c:b0:539:e65a:8a71 with SMTP id 2adb3069b0e04-539e65a8c28mr4531938e87.34.1728980305162;
-        Tue, 15 Oct 2024 01:18:25 -0700 (PDT)
-Received: from fedora (g2.ign.cz. [91.219.240.8])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9a2981765esm40175766b.129.2024.10.15.01.18.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 15 Oct 2024 01:18:24 -0700 (PDT)
-From: Vitaly Kuznetsov <vkuznets@redhat.com>
-To: Nikolas Wipper <nik.wipper@gmx.de>, Nikolas Wipper <nikwip@amazon.de>
-Cc: Nicolas Saenz Julienne <nsaenz@amazon.com>, Alexander Graf
- <graf@amazon.de>, James Gowans <jgowans@amazon.com>,
- nh-open-source@amazon.com, Sean Christopherson <seanjc@google.com>, Paolo
- Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo
- Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, x86@kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/7] KVM: x86: Implement Hyper-V's vCPU suspended state
-In-Reply-To: <9ef935db-459a-4738-ab9a-4bd08828cb60@gmx.de>
-References: <20241004140810.34231-1-nikwip@amazon.de>
- <20241004140810.34231-3-nikwip@amazon.de> <875xq0gws8.fsf@redhat.com>
- <9ef935db-459a-4738-ab9a-4bd08828cb60@gmx.de>
-Date: Tue, 15 Oct 2024 10:18:23 +0200
-Message-ID: <87h69dg4og.fsf@redhat.com>
+        d=1e100.net; s=20230601; t=1728980572; x=1729585372;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HZT5NqeAX+0TO6OTyvaLn7KXovdqFQioxNek5XGLyj4=;
+        b=qxXNBHSO93zelUUykKTx6r5NhexlV7CWXSErHawrp0j5zDBHVMpQCIIhT7LqBoWJyl
+         vDecKsdWkuNy6aONoegmMT4v5IeQ6n4OjdYA5lvGP2cG947Ir4qPYIavsyvpRjMH0T2I
+         IdAuHO5ac68FmUB5vFHrSER/FcPR5ekK9ebuVOH3LyF5fjeOxbtEkTYUzPcGDTXXoe3l
+         XQ0jG8fg5VxE/uBZwyqsdjR3rzy/SRvgxMXSoWgCkO219e4Zvf+G9DK+FZ0507HQyz85
+         wmurnrhMfN/qnftOifg8SlPxkYTJm1xXMg8TJTa+Jow0+vZ8t/MDNNzmOkdufnswq4s9
+         xDpA==
+X-Gm-Message-State: AOJu0YzZVPUIaIbaemSCZO05FCEgFIoUZuX8uoYzJ1LLrRW570Va8kek
+	QM4sYhyFDp2bG/NUJEWz4I1RReNAPGN9KP+4COwaggSWjejt+4Svjeip5qJaohwMMoWZyh/mjY5
+	fXqWHUfAygF5wKVZb3dj63sXF1ktF16QHOzBaXZaGBClWVAzlMzGLzdIphMP0vIAy1g==
+X-Received: by 2002:a05:600c:190f:b0:430:53f8:38bc with SMTP id 5b1f17b1804b1-431255dcb76mr84598515e9.12.1728980571896;
+        Tue, 15 Oct 2024 01:22:51 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGb9R0EruHHyWpo5DjDeKbICO+26yqisy6fvsgv2XfNXRWKW5oDvwU8eVyVBYf6OquOO+b6nA==
+X-Received: by 2002:a05:600c:190f:b0:430:53f8:38bc with SMTP id 5b1f17b1804b1-431255dcb76mr84598275e9.12.1728980571475;
+        Tue, 15 Oct 2024 01:22:51 -0700 (PDT)
+Received: from [192.168.88.248] (146-241-22-245.dyn.eolo.it. [146.241.22.245])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4313f56a583sm10390135e9.19.2024.10.15.01.22.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 15 Oct 2024 01:22:51 -0700 (PDT)
+Message-ID: <0b947dd2-5891-457c-8511-52781764857d@redhat.com>
+Date: Tue, 15 Oct 2024 10:22:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 01/10] selftests: net: lib: Introduce deferred
+ commands
+To: Petr Machata <petrm@nvidia.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+ Benjamin Poirier <bpoirier@nvidia.com>, Hangbin Liu <liuhangbin@gmail.com>,
+ Vladimir Oltean <vladimir.oltean@nxp.com>, Ido Schimmel <idosch@nvidia.com>,
+ Przemek Kitszel <przemyslaw.kitszel@intel.com>, mlxsw@nvidia.com
+References: <cover.1728473602.git.petrm@nvidia.com>
+ <5c0506e2d1bcdd513b9917716702c9bc5f656198.1728473602.git.petrm@nvidia.com>
+Content-Language: en-US
+From: Paolo Abeni <pabeni@redhat.com>
+In-Reply-To: <5c0506e2d1bcdd513b9917716702c9bc5f656198.1728473602.git.petrm@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Nikolas Wipper <nik.wipper@gmx.de> writes:
+Hi,
 
-> On 10.10.24 10:57, Vitaly Kuznetsov wrote:
+On 10/9/24 14:06, Petr Machata wrote:
+> diff --git a/tools/testing/selftests/net/lib/sh/defer.sh b/tools/testing/selftests/net/lib/sh/defer.sh
+> new file mode 100644
+> index 000000000000..8d205c3f0445
+> --- /dev/null
+> +++ b/tools/testing/selftests/net/lib/sh/defer.sh
+> @@ -0,0 +1,115 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +
+> +# map[(scope_id,track,cleanup_id) -> cleanup_command]
+> +# track={d=default | p=priority}
+> +declare -A __DEFER__JOBS
+> +
+> +# map[(scope_id,track) -> # cleanup_commands]
+> +declare -A __DEFER__NJOBS
+> +
+> +# scope_id of the topmost scope.
+> +__DEFER__SCOPE_ID=0
+> +
+> +__defer__ndefer_key()
+> +{
+> +	local track=$1; shift
 
-...
+Minor nit: IMHO the trailing shift is here a bit confusing: it let me 
+think about other arguments, which are not really expected.
 
->>>  int kvm_hv_vcpu_flush_tlb(struct kvm_vcpu *vcpu);
->>> +
->>> +static inline bool kvm_hv_vcpu_suspended(struct kvm_vcpu *vcpu)
->>> +{
->>> +	return vcpu->arch.hyperv_enabled &&
->>> +	       READ_ONCE(vcpu->arch.hyperv->suspended);
->>
->> I don't think READ_ONCE() means anything here, does it?
->>
->
-> It does prevent compiler optimisations and is actually required[1]. Also
-> it makes clear that this variable is shared, and may be accessed from
-> remote CPUs.
->
-> [1] https://www.open-std.org/jtc1/sc22/wg21/docs/papers/2018/p0124r6.html#Variable%20Access
+[...]
+> +__defer__schedule()
+> +{
+> +	local track=$1; shift
+> +	local ndefers=$(__defer__ndefers $track)
+> +	local ndefers_key=$(__defer__ndefer_key $track)
+> +	local defer_key=$(__defer__defer_key $track $ndefers)
+> +	local defer="$@"
+> +
+> +	__DEFER__JOBS[$defer_key]="$defer"
+> +	__DEFER__NJOBS[$ndefers_key]=$((${__DEFER__NJOBS[$ndefers_key]} + 1))
 
-It certainly does no harm but I think if we follow 'Loads from and
-stores to shared (but non-atomic) variables should be protected with the
-READ_ONCE(), WRITE_ONCE()' rule literally we will need to sprinkle them
-all over KVM/kernel ;-) And personally, this makes reading the code
-harder.
+'${__DEFER__NJOBS[$ndefers_key]}' is actually '$ndefers', right? If so 
+it would be better to reuse the avail variable.
 
-To my (very limited) knowledge, we really need READ_ONCE()s when we need
-to have some sort of a serialization, e.g. the moment when this read
-happens actually makes a difference. If we can e.g. use a local variable
-in the beginning of a function and replace all READ_ONCE()s with
-reading this local variable -- then we don't need READ_ONCE()s and are
-OK with possible compiler optimizations. Similar (reversed) thoughts go
-to WRITE_ONCE().
+Thanks,
 
-I think it's OK to keep them but it would be nice (not mandatory IMO,
-but nice) to have a comment describing which particular synchronization
-we are achieving (== the compiler optimization scenario we are protecting
-against). 
-
-In this particular case, kvm_hv_vcpu_suspended() is inline so I briefly
-looked at all kvm_hv_vcpu_suspended() call sites (there are three) in
-your series but couldn't think of a place where the READ_ONCE() makes a
-real difference. kvm_hv_hypercall_complete() looks pretty safe
-anyway. kvm_hv_vcpu_unsuspend_tlb_flush() will be simplified
-significantly if we merge 'suspended' with 'waiting_on': instead of 
-
-      kvm_for_each_vcpu(i, v, vcpu->kvm) {
-              vcpu_hv = to_hv_vcpu(v);
-
-              if (kvm_hv_vcpu_suspended(v) &&
-                  READ_ONCE(vcpu_hv->waiting_on) == vcpu->vcpu_id) {
-...
-
-you will have just
-
-      kvm_for_each_vcpu(i, v, vcpu->kvm) {
-              vcpu_hv = to_hv_vcpu(v);
-
-              if (vcpu_hv && vcpu_hv->waiting_on == vcpu->vcpu_id) {
-...
-(and yes, I also think that READ_ONCE() is superfluous here, as real
-(non-speculative) write below can't happen _before_ the check )
-
-The last one, kvm_vcpu_running(), should also be indifferent to
-READ_ONCE() in kvm_hv_vcpu_suspended(). I may had missed something, of
-course, but I hope you got my line of thought.
-
--- 
-Vitaly
+Paolo
 
 
