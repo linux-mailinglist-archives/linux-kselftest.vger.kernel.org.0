@@ -1,164 +1,163 @@
-Return-Path: <linux-kselftest+bounces-19821-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19822-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE8FA9A0224
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 09:09:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CD119A03F0
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 10:16:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2EB11C20A2C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 07:09:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EDD81C2A7C8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 08:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91DC61AE875;
-	Wed, 16 Oct 2024 07:09:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E73C1B6D0E;
+	Wed, 16 Oct 2024 08:16:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zra37f99"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="b8bqMKyq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE47D199956
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 07:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F9F118B473
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 08:16:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729062545; cv=none; b=UVo+76OhlDwTxK0li3m0qcCy8KEDokS9FrUGhszQPPTT0ltomJG4/AApcN4Qq4O30TZ/HLMQrKN56BDga2vDSx48+OWB5sQtJ3HBfQHsQdrtH2qk2OoCLIg55vc0L4PzxWsWHbeMa95UG2iMRJKSdoI2mCX2MRPiWww+sgVV41k=
+	t=1729066592; cv=none; b=N5QA34KsEaRntuy7RTRTqtzpUSyJ4ZgIYOTBPgKFUZWFYU6WbGyfgeGAs0PU8M8LgvK5owcZtUlyODlT2/CI8yPoOM51LMVX+8e6l6MHzMBPPRoUfam18vPe1ZiEUX7S1Y2oR5p3sEUK5UXE6nOkceMHY4cdbA/HjHvFCfT1AjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729062545; c=relaxed/simple;
-	bh=gcnOGBR9KP/UNGr3AkdELOzAOvVCqPN6A1wxZVJU840=;
+	s=arc-20240116; t=1729066592; c=relaxed/simple;
+	bh=aZzBS///BSglCO7bAgRb4LBHBRA4AAo0fMG96UUE6g8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lxY6iP7lojr5uOWN7idfGAQ+fSAhNIM9jbCqKyFFs2x9/vCNjbGx2+SrZfutpa3rJXcCurzcvkZ0Yl4Cv6TFVLmGWerIzGGXzzeCgOHDkMFvFesupWO+dt7IpN6pbTZ8fAw3n4lxis5GX0Qz7EuYNVHp6E4wHDPq/AiH+I1YW3w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zra37f99; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-539f4d8ef84so3767938e87.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 00:09:03 -0700 (PDT)
+	 To:Cc:Content-Type; b=YJ62srvIOuglYvgMQOeOhMYq7PyefCo84QCet7OdYbYLyu3arrSUTTPDSEjZzBwZYe7uWwBq5Hl12iPfxs35YB5CZRdHi7m8hIso+EhdVTnAaHR9MqJTk8r/p7jaiSNu1V3vzvl6aqF9WLe5Vxkh3vrKvmoI0edmHimqwyk9+KM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=b8bqMKyq; arc=none smtp.client-ip=209.85.166.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-3a3bd5a273bso124825ab.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 01:16:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1729062542; x=1729667342; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QCm13YryhPmYIK6474p+L4eQPIt7tXj7ERqjZjp8M3A=;
-        b=zra37f9928s/GFWLcEPvjgftC9OYQF614ZE7+0ShisCXcqx5k5rpx0yoHuTWo/rhUz
-         Tp9BcpEVTUe/vvoSRaAbGacoueGAN9jG/G6bDgi0LQXCdLzJcurutYS3Roh1Uyqa3k6I
-         EF/K0CS2dWtdQzM5vxxhqD7gj1IAeCht19XtTts3pn4xFLTVCtDBtADUu0NWrbDez4o7
-         ee1k62k3bM+91iWEKtViQzgyLXZqrdjAKgEJj/HY4xxxa9+sY93/DT03xINLkFudIHAM
-         DjHgfi2dqFj5DrtipRJHzI6Pp2eTpKZJC2Q+g7SmDc47u+vcGQyzA2gJ9Pzjob96zbyu
-         Z7vA==
+        d=google.com; s=20230601; t=1729066590; x=1729671390; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kgkFDlG4Cc94tDRNFfU395wBqz91HSfYstCHnXlDxso=;
+        b=b8bqMKyqok5lgpMedi8InEZeU1KSPReYZb0KhhDsg+K++DL54rn3XpgPeq1uEQYopT
+         lFZ6qBdadw7KMRLFDJL6U/+fSh85uwndwEcs7eNICEw9vGh6/ya60Iyn9elGPBMvORS/
+         8ViUO/cxaOq+DYhW86HxQ/FGNjNctZcbhZqPH+f2yLWUrzPhgZNRWcwcnnfbCXf0lmao
+         f7GfClFjq9OZA8vLEDUvIto53svS3nduUKPrbEOD+jr+0e3HDG8O8juhqRzIwZf6GhCv
+         6c3ulDqd9xR+WYFx59uTiQcZFLtrHLM+Tkf55KE4OL9LYk29KHksXNUaRwbThMTojK71
+         vELA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729062542; x=1729667342;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QCm13YryhPmYIK6474p+L4eQPIt7tXj7ERqjZjp8M3A=;
-        b=j6xFg3JyJ0eHJF3tL1Jk1nbCCNfAiDsAd9J8acHj+Pxu7GqOCDyGL9fKnXsQq7NF2B
-         NJ6maXIdNVZ7B6K//gAWrx+qj/OFfVEzrPtaia6/WGiW9xn8f62iNf/sCRTpwXsmDZ5J
-         nRAwfGttqWFGOuTa51afZ5gWUTxH/rgSqntfd6vmcqv3KRo5J//vhnrayTfQD8KyYBGb
-         C4KT8hruN92txjOwb4v4yl1p2+bmqsK2NImF8vvSC0qZPcOqeuBxFBZbnk6xPrPh8ybo
-         HQuAgFp+wkSEoBpdE+ecZJ6bUq7mtrAtRh5ksGRm5mZ8F2BSuGh8JImWjG9cGcSPnstM
-         npBA==
-X-Forwarded-Encrypted: i=1; AJvYcCX6V0RQwouUX0SlbVULc9qTiuaTLhDnZjAxx9dihMmKmza5Amy1AxzQczY019NZWOCT0DGZ1Wpaptqcm3bDYOs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhRDdQgMDMH718jr/z2U87mnvxq9PQAU5xH+X4TE7nRdwnfz9W
-	GDbR9ifs7/hn9mnxtGoJe0bsYK0BMAQbgt8aSY7llr6/HaCdJTnVx0/h+lZi7ym8H51+wUGbKf3
-	KK52ykwthCtF9aTBrD9j9mnwOFgM2OIplqZnmIQ==
-X-Google-Smtp-Source: AGHT+IEc3HtDZMgD9lYvHKiuP10mQcQTLlMzzROBzl6HIMjJA6RX3+ummOZE0ggSdNv9oAbjQQeiq5tKEojMcR8arwc=
-X-Received: by 2002:a05:6512:2248:b0:539:fcba:cc6d with SMTP id
- 2adb3069b0e04-539fcbacd7amr3773128e87.42.1729062541873; Wed, 16 Oct 2024
- 00:09:01 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1729066590; x=1729671390;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kgkFDlG4Cc94tDRNFfU395wBqz91HSfYstCHnXlDxso=;
+        b=YfTn15qQGB15hVh/4cQyAEl9uvxkZoiu8csLORJAdeOgPOehajvppSLu5nZwKRIZMF
+         JsEK1Aspuwb4gMGRUMjfbovBmEYtCTI7uqJPYHuR1J00p5SdBgyL9SbF/LP6007yRDXM
+         KtlgOtn2nPYj30CoDU8E9OVgFm/Rqid8rOaIjgUreddLPtGGCx9g1y7uuecyQtqYszca
+         HMuISHaiSEHVRKNbP7DMDojn9To7imF7TLfV0jR4zR+HepQFb3Nuq76RANo1Kkaweq03
+         CWCKmYCMr1MIZk6C/au5uwE4sN9RYjbHH4cxHWdM+HiGAK2Nn9kxQQ33jTLFOZiy3IJK
+         SaBw==
+X-Forwarded-Encrypted: i=1; AJvYcCWOD/OuG94/xb5kJe+6JRWe8zeN8w4lyiORyQWNTyvztegji/HMqzFgDiHgjdf91/bn+jXpzXleQhLq7DkloBg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSVm5HqHrX7Vb2z0RwjvouVW3jhol/mWrPS0SJaUT+spd5uaRW
+	l8U/isTNlgtW9SO3EyIuWFY+biwm/wNOHRe4eKtK4rw9HqwlphEHPKZBTg0uLyA2O+7/4UUV5qg
+	df+P2fXYFd6oYCbcQxAwZcD0VqBujjB0wq9Y9
+X-Google-Smtp-Source: AGHT+IHg8i8DFzH0lYUNHyBhvBQcinwiYGOJz+CRzHPKgnZGXVtSbC1G197aqoPM+MoZ1HbhHUg7l0fhpmH/BWsWz0k=
+X-Received: by 2002:a05:6e02:b22:b0:3a3:632e:efed with SMTP id
+ e9e14a558f8ab-3a3ddec7c68mr3406025ab.26.1729066589889; Wed, 16 Oct 2024
+ 01:16:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <88114b5c725bb3300a9599d3eeebded221a0b1f9.1728491453.git.nicolinc@nvidia.com>
- <CABQgh9Eaj_vy1=sS2Pf7RC7Vy5PopDfwoshECULEU-jK3JF_sQ@mail.gmail.com>
- <Zwn/4m8Ac0xEiJi8@Asurada-Nvidia> <CABQgh9Ft=xxJK-bjS6wCZ5BN4AiKtF9fzdBkevA3x2yb_4O4Kg@mail.gmail.com>
- <CABQgh9HP1M8GAXMwf0ZNn5EpMBAvJU3JLRWcN5H1wfGrqXSe1Q@mail.gmail.com>
- <Zw08z9TOFL57z07O@Asurada-Nvidia> <CABQgh9H-SB7q1v_XtWaO12K7jMMaq8Lj7F4kpDv9sJ5v-F6DZw@mail.gmail.com>
- <Zw3M/h1KYe9MjcZK@Asurada-Nvidia> <Zw64C7bQicoAmAM3@Asurada-Nvidia>
- <CABQgh9Fea006HPwVTAuxk7KGh-7-YbjRhoUttVo_iACjAbr0CQ@mail.gmail.com> <Zw9ijVgDlvRajsSY@Asurada-Nvidia>
-In-Reply-To: <Zw9ijVgDlvRajsSY@Asurada-Nvidia>
-From: Zhangfei Gao <zhangfei.gao@linaro.org>
-Date: Wed, 16 Oct 2024 15:08:49 +0800
-Message-ID: <CABQgh9GAyGNPz1KNCm3ZT9dtECdGyKU-L_aNnahY8K=RG7AODg@mail.gmail.com>
-Subject: Re: [PATCH v3 03/11] iommufd: Introduce IOMMUFD_OBJ_VIOMMU and its
- related struct
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: jgg@nvidia.com, kevin.tian@intel.com, will@kernel.org, joro@8bytes.org, 
-	suravee.suthikulpanit@amd.com, robin.murphy@arm.com, dwmw2@infradead.org, 
-	baolu.lu@linux.intel.com, shuah@kernel.org, linux-kernel@vger.kernel.org, 
-	iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-kselftest@vger.kernel.org, eric.auger@redhat.com, 
-	jean-philippe@linaro.org, mdf@kernel.org, mshavit@google.com, 
-	shameerali.kolothum.thodi@huawei.com, smostafa@google.com, yi.l.liu@intel.com, 
-	aik@amd.com, patches@lists.linux.dev
+References: <cover.1728643714.git.lorenzo.stoakes@oracle.com>
+ <8e7edaf2f648fb01a71def749f17f76c0502dee1.1728643714.git.lorenzo.stoakes@oracle.com>
+ <CAJuCfpHLGyrBWZ9JyJ5FdJQtGO1-tuUqHawjKX_mtwnAhSY6Ow@mail.gmail.com> <8c75620d-8920-4c19-8ebc-0f2b056d49fa@lucifer.local>
+In-Reply-To: <8c75620d-8920-4c19-8ebc-0f2b056d49fa@lucifer.local>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Wed, 16 Oct 2024 01:16:15 -0700
+Message-ID: <CAJuCfpFXCKAH+fc6=fg-nVC5tjpGG--Pvk4D2NOn-zdA1LXS=Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/3] pidfd: extend pidfd_get_pid() and de-duplicate pid lookup
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>, 
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 16 Oct 2024 at 14:52, Nicolin Chen <nicolinc@nvidia.com> wrote:
+On Tue, Oct 15, 2024 at 11:05=E2=80=AFPM Lorenzo Stoakes
+<lorenzo.stoakes@oracle.com> wrote:
 >
-> On Wed, Oct 16, 2024 at 09:56:51AM +0800, Zhangfei Gao wrote:
-> > On Wed, 16 Oct 2024 at 02:44, Nicolin Chen <nicolinc@nvidia.com> wrote:
-> > >
-> > > On Mon, Oct 14, 2024 at 07:01:40PM -0700, Nicolin Chen wrote:
-> > > > On Tue, Oct 15, 2024 at 09:15:01AM +0800, Zhangfei Gao wrote:
-> > > >
-> > > > > > > iommufd_device_bind
-> > > > > > > iommufd_device_attach
-> > > > > > > iommufd_vdevice_alloc_ioctl
-> > > > > > >
-> > > > > > > iommufd_device_detach
-> > > > > > > iommufd_device_unbind // refcount check fail
-> > > > > > > iommufd_vdevice_destroy ref--
-> > > > > >
-> > > > > > Things should be symmetric. As you suspected, vdevice should be
-> > > > > > destroyed before iommufd_device_detach.
-> > > > >
-> > > > > I am trying based on your for_iommufd_viommu_p2-v3 branch, do you have
-> > > > > this issue?
-> > > > > In checking whether close fd before unbind?
-> > > >
-> > > > Oops, my bad. I will provide a fix.
-> > >
-> > > This should fix the problem:
-> > >
-> > > ---------------------------------------------------------------------
-> > > diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-> > > index 5fd3dd420290..13100cfea29d 100644
-> > > --- a/drivers/iommu/iommufd/device.c
-> > > +++ b/drivers/iommu/iommufd/device.c
-> > > @@ -277,6 +277,11 @@ EXPORT_SYMBOL_NS_GPL(iommufd_ctx_has_group, IOMMUFD);
-> > >   */
-> > >  void iommufd_device_unbind(struct iommufd_device *idev)
+> On Tue, Oct 15, 2024 at 12:40:41PM -0700, Suren Baghdasaryan wrote:
+> [snip]
+> > > -struct pid *pidfd_get_pid(unsigned int fd, unsigned int *flags)
+> > > +struct pid *__pidfd_get_pid(unsigned int pidfd, bool pin_pid,
+> > > +                           bool allow_proc, unsigned int *flags,
+> > > +                           struct fd *fd)
 > > >  {
-> > > +       mutex_lock(&idev->igroup->lock);
-> > > +       /* idev->vdev object should be destroyed prior, yet just in case.. */
-> > > +       if (idev->vdev)
-> > > +               iommufd_object_remove(idev->ictx, NULL, idev->vdev->obj.id, 0);
-> > > +       mutex_unlock(&idev->igroup->lock);
-> > >         iommufd_object_destroy_user(idev->ictx, &idev->obj);
+> > > -       struct fd f;
+> > > +       struct file *file;
+> > >         struct pid *pid;
+> > > +       struct fd f =3D fdget(pidfd);
+> > >
+> > > -       f =3D fdget(fd);
+> > > -       if (!fd_file(f))
+> > > +       file =3D fd_file(f);
+> > > +       if (!file)
+> > >                 return ERR_PTR(-EBADF);
+> > >
+> > > -       pid =3D pidfd_pid(fd_file(f));
+> > > -       if (!IS_ERR(pid)) {
+> > > -               get_pid(pid);
+> > > -               *flags =3D fd_file(f)->f_flags;
+> > > +       pid =3D pidfd_pid(file);
+> > > +       /* If we allow opening a pidfd via /proc/<pid>, do so. */
+> > > +       if (IS_ERR(pid) && allow_proc)
+> > > +               pid =3D tgid_pidfd_to_pid(file);
+> > > +
+> > > +       if (IS_ERR(pid)) {
+> > > +               fdput(f);
+> > > +               return pid;
+> > >         }
+> > >
+> > > -       fdput(f);
+> > > +       if (pin_pid)
+> > > +               get_pid(pid);
+> > > +       else
+> > > +               WARN_ON_ONCE(!fd); /* Nothing to keep pid/pidfd aroun=
+d? */
+> > > +
+> > > +       if (flags)
+> > > +               *flags =3D file->f_flags;
+> > > +
+> > > +       /*
+> > > +        * If the user provides an fd output then it will handle decr=
+ementing
+> > > +        * its reference counter.
+> > > +        */
+> > > +       if (fd)
+> > > +               *fd =3D f;
+> > > +       else
+> > > +               /* Otherwise we release it. */
+> > > +               fdput(f);
+> > > +
+> > >         return pid;
 > > >  }
-> > >  EXPORT_SYMBOL_NS_GPL(iommufd_device_unbind, IOMMUFD);
-> > > ---------------------------------------------------------------------
 > >
-> > Not yet
-> > [  574.162112] Unable to handle kernel NULL pointer dereference at
-> > virtual address 0000000000000004
-> > [  574.261102] pc : iommufd_object_remove+0x7c/0x278
-> > [  574.265795] lr : iommufd_device_unbind+0x44/0x98
-> > in check
+> > There is an EXPORT_SYMBOL_GPL(pidfd_get_pid) right after this line. It
+> > should also be changed to EXPORT_SYMBOL_GPL(__pidfd_get_pid),
+> > otherwise __pidfd_get_pid() will not be exported. A module calling
+> > pidfd_get_pid() now inlined in the header file will try to call
+> > __pidfd_get_pid() and will have trouble resolving this symbol.
 >
-> Hmm, it's kinda odd it crashes inside iommufd_object_remove().
-> Did you happen to change something there?
+> Hmm hang on not there isn't? I don't see that anywhere?
+
+Doh! Sorry, I didn't realize the export was an out-of-tree Android
+change. Never mind...
+
 >
-> The added iommufd_object_remove() is equivalent to userspace
-> calling the destroy ioctl on the vDEVICE object.
->
-Yes, double confirmed, it can solve the issue.
-The guest can stop and run again
-
-The Null pointer may be caused by the added debug.
-
-Thanks Nico.
-
-> Nicolin
+> [snip]
 
