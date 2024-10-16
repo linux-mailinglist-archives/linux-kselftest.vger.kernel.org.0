@@ -1,352 +1,332 @@
-Return-Path: <linux-kselftest+bounces-19816-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19817-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0095D99FF84
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 05:30:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D94C9A00FE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 07:59:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B4D182867ED
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 03:30:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 720861C221C9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 05:59:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E50DF16F909;
-	Wed, 16 Oct 2024 03:30:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C2A218C331;
+	Wed, 16 Oct 2024 05:59:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XQTvUQTW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MOiVFytY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1053915B987;
-	Wed, 16 Oct 2024 03:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729049437; cv=fail; b=gljsubzIXN4om14muc/sO+QUiKBPYTbkHi0GFAKuPnUeVaCeD3WjU9LA0VjoZHHlEZWRpyE+SzIMbQ6CmgrITt5/FsJAVf6BeftPUxjkodC83zGugq0Qv3Ij5WKxznCmG/AYd4au5Q5zn4cI2qYmM+p2zpfOWTEr7rEBjMdIL8k=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729049437; c=relaxed/simple;
-	bh=WUxfx1KRDZn56EaN0EMLWvUiY6y6Yd1yr+SAKIdxeTg=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=EE/MooLmxhiDcHw5AVGNk/4hcDlMT33NEYcrGqqWHtIUuQS+j3K+jm1R7fb0Hdy9Nbnobb0cQEC00aiV9HhHOtyfXYsFweix3+SEA1PJWBhX2erpYcrvZP/uDNoe1XA8I9DqRawlGw2mhBcGXFpjBejJs+Bs5b0uRcG2hSg4YNQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XQTvUQTW; arc=fail smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729049436; x=1760585436;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=WUxfx1KRDZn56EaN0EMLWvUiY6y6Yd1yr+SAKIdxeTg=;
-  b=XQTvUQTWt5Q/4r7itWf8fThSXuhI+CrUw8/wx5OwaSAAQQhn0U34Ypci
-   mjviqo56Ce/EeMhsYkvHApz0xqnZuMIKcAkGxaH6+8ISPQU0xXf4/88i9
-   oy9siVZdWj4qyb/ONPd6WIXrY4gWBjANs7vvyXo9qRIMvbmZd6m9gQaA6
-   lJjxXdsStIc7of80rgnZCjvNgeKZt6WJFtRonGaZoD9FygITf4IPa9pd2
-   OHg+RzsKZdrWKoflOTPr5fimFMFiOJFAQFYmcYSFQI6C6IV8lsVqYk7Hw
-   ms2l51L7xkqbauht1HLWjJrYkBDFjDbyoHe+FGgYk7stUuTh8afhJpFDM
-   w==;
-X-CSE-ConnectionGUID: bCdVwbmbSoGJ80scVe+q6Q==
-X-CSE-MsgGUID: q+DeWu1fQgG6tDMD2fjAGw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11225"; a="28611308"
-X-IronPort-AV: E=Sophos;i="6.11,206,1725346800"; 
-   d="scan'208";a="28611308"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2024 20:30:35 -0700
-X-CSE-ConnectionGUID: xNArHigCTLiowD0q6htgkg==
-X-CSE-MsgGUID: jseBIrk8R9OYvNFfuKrMlA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,206,1725346800"; 
-   d="scan'208";a="78268762"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orviesa006.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 15 Oct 2024 20:30:35 -0700
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 15 Oct 2024 20:30:34 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39 via Frontend Transport; Tue, 15 Oct 2024 20:30:34 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.170)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.39; Tue, 15 Oct 2024 20:30:34 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=cmzP7HBkxSib7XsnH//tcpyjy8Q+9BEIJrX0xoEkA471veMmtJuDjTRYQJLkXpZxG44mZTeXBlq+85phBuKYIzNrZVPL5CL8yWLuJv4+rHFM91lI+K5tBxpeZrAl5rzD7EQQj+AEQ/L48H1AjRq0i59L5bhnnYNOnd9xiHggrEecSV9rZsVQYu6GrbvEE/uyewqKN4qBKljo2Tk5lYQmNUDlPnq/8XAWpy3TsZ2ToWUgQY7hBpu1i84dXkwldyaKA50BGVQuzoIZ8Ek3Oa2BJvdi1vqo+cKOuHtOlG0HzTGc67b00d71FMfZirH958XBrJDHW5mLx3dFWpJfjyUO9A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xC6NyslSgla1Zwdt29OLcODOzVELREl/cHyXnzBJLRw=;
- b=nKKilbLLGYOkg7V8jHZwu/IMcizPKFxBDgB/QzRvJqtX78Bw+ByVIZh/rT/0a9NmI79jeq93yYnWcalk6kW7AHgt8ZNh5SrDfFTHG8utYe8EDpqp5rqA6uViigMGXO+mFwxLukvU4fjdzXwLuzjaXBsmmD6BKzKWIeRE3OlmVyPd69n17W3/6Y3M5maOhMhMo0N2TPc9nUHryzGPBvzAS4X3YQZSL3nwNTuQfOpcv6ZlICVR2+4lEXbMJ79jaJmAp9sNoI5TJwwji0wvhRDLTrwNTRCwFplfxAkyI+JElfNihv5nLsIX1q2Sl/oMcVga6TnZ6KRAOrognJJ1Rh3xrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
- by CH0PR11MB5249.namprd11.prod.outlook.com (2603:10b6:610:e0::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18; Wed, 16 Oct
- 2024 03:30:31 +0000
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::d244:15cd:1060:941a]) by DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::d244:15cd:1060:941a%4]) with mapi id 15.20.8048.020; Wed, 16 Oct 2024
- 03:30:31 +0000
-Message-ID: <e76e4dec-f4d7-4a69-a670-88a2f4e10dd7@intel.com>
-Date: Wed, 16 Oct 2024 11:35:05 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/4] vfio: Add VFIO_DEVICE_PASID_[AT|DE]TACH_IOMMUFD_PT
-To: Alex Williamson <alex.williamson@redhat.com>
-CC: Jason Gunthorpe <jgg@nvidia.com>, "Tian, Kevin" <kevin.tian@intel.com>,
-	"joro@8bytes.org" <joro@8bytes.org>, "baolu.lu@linux.intel.com"
-	<baolu.lu@linux.intel.com>, "eric.auger@redhat.com" <eric.auger@redhat.com>,
-	"nicolinc@nvidia.com" <nicolinc@nvidia.com>, "kvm@vger.kernel.org"
-	<kvm@vger.kernel.org>, "chao.p.peng@linux.intel.com"
-	<chao.p.peng@linux.intel.com>, "iommu@lists.linux.dev"
-	<iommu@lists.linux.dev>, "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"vasant.hegde@amd.com" <vasant.hegde@amd.com>
-References: <20240912131729.14951-1-yi.l.liu@intel.com>
- <20240912131729.14951-4-yi.l.liu@intel.com>
- <BN9PR11MB5276D2D0EEAC2904EDB60B048C762@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20241001121126.GC1365916@nvidia.com>
- <a435de20-2c25-46f5-a883-f10d425ef37e@intel.com>
- <20241014094911.46fba20e.alex.williamson@redhat.com>
- <2e5733a2-560e-4e8f-b547-ed75618afca5@intel.com>
- <20241015102215.05cd16c7.alex.williamson@redhat.com>
-Content-Language: en-US
-From: Yi Liu <yi.l.liu@intel.com>
-In-Reply-To: <20241015102215.05cd16c7.alex.williamson@redhat.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: KL1PR01CA0131.apcprd01.prod.exchangelabs.com
- (2603:1096:820:4::23) To DS0PR11MB7529.namprd11.prod.outlook.com
- (2603:10b6:8:141::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF4E25221;
+	Wed, 16 Oct 2024 05:59:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729058348; cv=none; b=VpMAos8wPsKZ+MVXrZ9voq/LSN2nzpxwA0+YGMfcom6C2MpIY0CQcEr5DWwjfNMyI+cvR3gorPnTBrprKsA0kS1oHCRZ6/KEJa1XpfpIDy5Hnop6VSL3HP+Ce3xDVEMy5FsCtAdrcQUtYvukrXNwO2gtcn0yNgdQlN29fPkGBT0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729058348; c=relaxed/simple;
+	bh=0IOA15zRoe6/OrmFHBMCe+SQXioxlhZfzgGZUOT/ub0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=J5MYvFJcp0duirkD8lc/CcrAfVTlYzkfsCtv5nOUnW5E8MKgfm54169YYFClUf+yXKsCsF7txN5mFKB6JTMPSjO/7B07JYzj9BfVk4GLjac9jkFLLnc8Mj+s2QAefhXBx4SW2ApKIg5kzef6bBSfMb2EV/Uq/JqmalBgZ1ymCRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MOiVFytY; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-20c7ee8fe6bso44973435ad.2;
+        Tue, 15 Oct 2024 22:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729058346; x=1729663146; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QPuDG0q3hSSZ6Clb715o6VUtr6SxMF93McoY1IuChbw=;
+        b=MOiVFytYM7JTAhGQtN/Rk8aFKIKyhB7aVeNRAYiLgFhAmJxjZOeJi8stbAo13A4RUk
+         8yFDi2gAMTIhwax30BRcokFWlaXakZMNf/TMomW8I9v49BTgPi3dJydgNZAOAIwEBqvz
+         Ra0y40l5KteeETpAL+FCiJxKQSCvq+QX1dqTz0mKDMPpOpCjWYxY7DuYmOc7ux0++ghN
+         fBM8+UCa6KI+7vkhI0ICDkeyuIauRPhiSiEW0PfRlJpnV/Bul/2rw0EE0gcEKHtwk1Nz
+         R5U1WgYaxczEa4vb75coXRhozqcttHC4p/YOMdTRO8OpnycRnXgSz108A5mU3kmQB2tX
+         ruXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729058346; x=1729663146;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QPuDG0q3hSSZ6Clb715o6VUtr6SxMF93McoY1IuChbw=;
+        b=aUq0M7V1Z4KTI51y/UcWuQJ69pdCU8b4Kx08Hc+NWrEd3kNnFVIL/CW4VhxMIe1Z6c
+         hkA4zfSJdM26oIoUO6qQQlfWM55wmfeg1MKvIiGmIKhSfaJXeLWq0pirfLzJjQ64pM+H
+         d0GBKMmF9sZnBMwXZQInNGOMDhZuS2escg8z+bh3acphYwcrvQ+8JfdIuznW5WwDPONR
+         ogTgeCCeyfbPBXggqPppJQijrkXuwPx6FDS0SbQpw0Ji9YyZXSPtvsuh4mQCG7ru1fLx
+         o3BB0228/pMUNcT4vhmw77Emi7BAlOpWPNKQuglrXRo1qIiIpvy5kiN6Ku68Owf6ukYL
+         mZtg==
+X-Forwarded-Encrypted: i=1; AJvYcCU5B8NPaFIbjy5hdu1Y9DDnJiYQTzLm+B6NkNnHhPrLirYkOLqCrAgbQYZi+qDmG7Fcfl32wENN@vger.kernel.org, AJvYcCUjVIeVVBPMOk/ChCth3bXRVRUaNbzgbH4gKISXOqcb533GWate/fUnGP6Cs5L3QyHD+khP/6oAPD14+48uicau@vger.kernel.org, AJvYcCWVF347rXzJQPl5xXJJnJ1ABjlRw0SLsbP5m8u/MoXFzxAunn/DaWXWunc2ZyQB75BgKrI7tN2e3q6SJ9U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZI75m7O6PrLS/97qTJT3BnfkLEz+z+7ZwWWLmO8aiXVx7fS6C
+	tGSZ1FSepm5Gfq7gHycAkHdQKikILAQXbgAi6ypXNXz/UAq8aXyJ
+X-Google-Smtp-Source: AGHT+IEqCBmNjWKPdNxBClPBSkGETbCM0sxaz4ASty5qUt1SW57qn3/0UHvWnZRVzp0n10mPgwB9Rg==
+X-Received: by 2002:a17:902:d486:b0:20d:27f8:d72a with SMTP id d9443c01a7336-20d27f8d757mr30672145ad.61.1729058345784;
+        Tue, 15 Oct 2024 22:59:05 -0700 (PDT)
+Received: from tc.hsd1.or.comcast.net ([2601:1c2:c104:170:3f72:2cc4:3779:e19d])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-20d17f9d40esm21611265ad.73.2024.10.15.22.59.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Oct 2024 22:59:05 -0700 (PDT)
+From: Leo Stone <leocstone@gmail.com>
+To: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	0x7f454c46@gmail.com
+Cc: Leo Stone <leocstone@gmail.com>,
+	rdunlap@infradead.org,
+	mnassiri@ciena.com,
+	jiapeng.chong@linux.alibaba.com,
+	colin.i.king@gmail.com,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftest/tcp-ao: Add filter tests
+Date: Tue, 15 Oct 2024 22:51:52 -0700
+Message-ID: <20241016055823.21299-1-leocstone@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB7529:EE_|CH0PR11MB5249:EE_
-X-MS-Office365-Filtering-Correlation-Id: 42cce055-9cdb-40d9-e510-08dced92e31f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?YkJENHhHTmhiMzc1Q0Y4T1lsM0FIUXA5VHBHRG54dVl5NUZteFo0VE5ZSk5G?=
- =?utf-8?B?YnczM3hUdzhFS0N6K0c2WDZSRkRwV0NEanN4WHBQajREYklreTNNK093UEt5?=
- =?utf-8?B?QmNndEgycXc0U2VSSkhuRDhCYjM4azBwc2RZRFlzUkJHNnNlb3JLa0pTU05M?=
- =?utf-8?B?a0RmdXhjNkxDdk9VVHlpelRUZXl4TUQ3RVdvWnNoSW5nb1ZNMi9hT3ovVlJx?=
- =?utf-8?B?b3lMUjNKZW5vZ1BzQ0VGVjd2UjFpTXB1Qkhjb3lXMHhjVlhqb3NNRitHVGJq?=
- =?utf-8?B?ZVoyYmFZeGN0UmJNdlVhcU04QWhVbHBvWWZmTWcvOXFLaTk0N1JMbC9iR3hL?=
- =?utf-8?B?c01NcXdBZVo4WDB1bnNJVkpCQ0xONTFVL0J1Q2VlR0hvT2FVcXBSeDJWUjlp?=
- =?utf-8?B?RkUxSGpRWjVlb3QxUmUvcUxGZVV5SUNsY0VNaVVXVEVlVHU2U3B3WGJQNXla?=
- =?utf-8?B?UzJQd1YwZHJpSUlheTQ3b3YwUGFIeE40K3pMaFFXNHNvOUZHNXZSMmVQaldJ?=
- =?utf-8?B?R1dwWE9DWnkwRXExbThKZzcveFNBcFpUUUtQUkNIQTNYUjRycFFVdjJkS1ZO?=
- =?utf-8?B?K1ZrUk03K2lyWGJHL0xaMkZBUEwwZzlndzBxRzRUNnRxWEFlVTFjRGdwZEVs?=
- =?utf-8?B?bkFVRHAyNnk0S01NNndHamJ0WlJvNERoV1FnOWZpUUdzRWs5RE9sY29IVWhw?=
- =?utf-8?B?NzV3MXkweDN2WDluRm1uOTBReFBmb0l6aG5KRi9xN2UrNk9rRVZxeHhwM05h?=
- =?utf-8?B?cTVpLytwTU5iNDJuN1hWdTR1VlVZSHdVRFhXeitkbDNGNFFkUVl2b3Q5RmRz?=
- =?utf-8?B?blFYZHBrS0ZmRlVTVm5ZeEo0ekdzdUd2WERHRTF6Rm9LNFhkQ1JEc1FaQk5n?=
- =?utf-8?B?OXlDdmExb2JKaFpDcXBQR2ordVlXNUF4bEcyL2ZpU2oxUnJsL1c5Nmk1YnBN?=
- =?utf-8?B?Y0NaWFJWQ3hkV3VUNFpJdXJSdWpQaWJ4aXk4eVlPTHU4dVNyOEROc1Y3RzBm?=
- =?utf-8?B?bm9hOUMzLzVVRHNRVjlYdHJoaGpEcEp0bXdpK2libHduazFtV2dqcC9zbDVC?=
- =?utf-8?B?WHhqTTEzVTJjWkVoeGV5N3FBQmZoVzI2QTJ6RnJmNDliSkcyV210Ni9mbmgy?=
- =?utf-8?B?K203VTBZWW1ZeEZZZm5pbklmYWliaW9jU1NTdzcwUDlib2cwamNJR2kweWF5?=
- =?utf-8?B?anlYOU1OVm1qOGIrM2RnclZleTlOckllVDNiZnJVdWZyK3dmWXNyVGcya3Jv?=
- =?utf-8?B?KzJCRzVxZzB3TlBmUHpFMHlBUUs5VmI2dFJsWjNLbmg4NTJ2Ukh3MmlqQnFR?=
- =?utf-8?B?ZGh0UDd2a1J3Q1hmbGZqTFFyMWRaVnVHN2FYUGZzZUsyS1FOZUJWanQ4cXFx?=
- =?utf-8?B?YTQrMEVjblhpK2lHS0pqNmtCVEhHYWt6VDJpb1F6ZnRrSEJ1a2xsTzBoSEFq?=
- =?utf-8?B?NHRVZmswQ0FneDVudWJjc2V0cys1b3JvbDYyRUJvTGJkb3ZLWnZMZ3RRTE14?=
- =?utf-8?B?bzF4QnBrMzk1RGFiNmhVMUszMjBiRTZKOTdIRm9mQm80enAvMERJeFRvVWE5?=
- =?utf-8?B?L2JVSXJKL0pQMEpYcE00RWRCYis4VmVtbzllQ1F0VGRGWUJJMnFjVlRuQzUx?=
- =?utf-8?B?NWlXREo4Y3BkYWxLZHZxMGJJUy8xTFc2Y0xUZlIxY1ZtekFvNjROb1FJWmNW?=
- =?utf-8?B?VlBzSmliMHVNY0x2V1ZvaThkd1UxWFZlL0p1Tjdaa1ZyNVllcFN6QXdnPT0=?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UGVYV0YwQitRSFIxMHc2NFRxZmV3MzV1bnBZTFV4cnZsRDhNMmxha2QwYW5q?=
- =?utf-8?B?OWsyR3dyS0dtQWhCeER2aGVDVU1MTDZkY1NmVW5jNTJjekZBWjlSMU5hUnVS?=
- =?utf-8?B?bS9MR1FKVkc2RjQ5UGV6UVZVSVNvUTlVUEx4bmJETk9raU01N3VRRXpyMTJK?=
- =?utf-8?B?dGZ0dFlzUkx3cHhqNmh1TVUwWEJEZUpVSW9HaVBxU3pOWllvWkZYZWE5T3VI?=
- =?utf-8?B?NUExSUljSGgvQ2djV0NJT01xMFhoUkdGZWlMcG9ibENUWVBPQ2NUWnJpT0hk?=
- =?utf-8?B?NE1nQ2tLaE96bXBNb2RJUGsyQit3MTArdWpwVTNmRHlWUEoxN2ZWMGV0N2Ny?=
- =?utf-8?B?K0Q4Uzdid1BnQ0htY29RdUpHMEZWNkRZQ29TTm42amFXdmIvS3FzRlNMK3Rz?=
- =?utf-8?B?OWg5dm5yS09xSUg1Y2xiTXkrYnN2dm85UXJrZllHNlJBczNkZ0M3ZGdocUpz?=
- =?utf-8?B?bjc4M2I0TldwaFhsZVlhMEgvdFIwb1ZXMFJHWW40aVFDYTJnaVFGWjBXVGpE?=
- =?utf-8?B?dzdXRm0wcGZZcnVNOGlIMElpTFR0VlVjU0k1QlV5Z0U3bkxOYklyeVFCclEw?=
- =?utf-8?B?Z0tKSnlIajRST1N2ZjE1SEJMbFg3NVlOZm9yR3drQis1ZWxwQVFaU0hRait1?=
- =?utf-8?B?ZiszRmZpM1R4ZmN6S1RCV1hCK1hBWC9pUVNxRXVmUXZvNG5yM1p3M214R0c1?=
- =?utf-8?B?SWlhRVNNcmtxSW5Da0ptTXJ3dTAzUU56MWdYSnNWTU1lQ0lXMkcyMURDSUJI?=
- =?utf-8?B?ZFFTUThzeWJIV01udFJ2TEZGVDBnUGtTaWZIZHJxZmtSZWMxMnJUU1pKT01Q?=
- =?utf-8?B?dXZhNEhEQzhpZEFaS3pzV2hJQzc3QktHa1R4Q2pOT1JIYktTQys2YTlrNXJQ?=
- =?utf-8?B?bk5LQ0hpbCtMdFQ5Zjk0QjZDQW5veFJzMWE4bUV5allQbmtWMGhHaHI0U3lo?=
- =?utf-8?B?Q2Z5VmtUbExiS2FPZWxIeStNN1JFMkQxQ3JVbnB1RkxHSG82M1F0M3ptZ2JY?=
- =?utf-8?B?NzVqN0hObEVwWHhQOVFqdlpiMHg5QlBQTVlkZTBIUnpBdDdOcWlJNU1JYm9j?=
- =?utf-8?B?SWhsYk9sdlJZR2dHR3VEV2J0YnlKRmhRUWRIVEs5SWlNRmxLVjhzeE4weWF3?=
- =?utf-8?B?SExudUpuRDdWWS9IK0NOdzgweVRKNGd4MmlIdUVZNzBEaHo5R3FNR2VZVk9w?=
- =?utf-8?B?TCtxcHN4YWZjYWUzOUc1S0NaZDV2b0lBSWlqZ2diK05XVTU2a2dpVDcyRXJJ?=
- =?utf-8?B?WmpTRXFNcjFiQkh4MHV6OC9CV3FkanE0eHhvOHVKSUpiRElQRG1EVmNwSmVi?=
- =?utf-8?B?RHVpUjgxeHk3S0pTaXY0cjM5eTBxVldFSVF2Vjg2bkpVQzNGUVNvNlJmaXl3?=
- =?utf-8?B?dDl3UXRUTFdDK25TcFEwNlM4S1U2Y2VYWnBnK2lhRXVEOFVQS3VyVmFPZ0pO?=
- =?utf-8?B?OU9zK0YxaCthUTQ1Q1Jzd0hwc21hSzNwS093NVh0NEpvWXVtY2VmZC92OHFl?=
- =?utf-8?B?MENtVzZWeDh0ZlhiQzBKbjJSRmY3QThCQU9lUGNHa0lrRVZOcS92Z0Rjd3RN?=
- =?utf-8?B?czNHbjdUc1A5WDkxakxEeWdlRk1FWFh5RnQ0L3kvc1V2dnc5YkRYOXRobTdK?=
- =?utf-8?B?RDM5dDFKeUpHMU9BekRLMW9CWVdlNUFWZ1VNNzlvUjE1bEhYZFpxS1RIOEp0?=
- =?utf-8?B?ajY2VnYwT0c2N20wUUZSTDl0TWpTSFNRZEE3QUlqb3ZTZGttcU1Ga1dYZGZ4?=
- =?utf-8?B?WnFHdDRJUzI4b05UTHIwTU5xR2c3WlBNajdVUmI2c0NWc0hoc0RGQ05teHpP?=
- =?utf-8?B?TjhhMVpVN3Q5MmhVRGg5TWxKUXFmUEdrNjcxUFdXTDlVQXQrOVlyS0JrbnJN?=
- =?utf-8?B?QlpzVjAvcm02L0lUaHJZL3ppbTIzQURxcHlZMzJCbXFEZGh2UU4wbHQvUkFK?=
- =?utf-8?B?QUtsTCtlNU5BRjJHTXo0ZEh5TFNydmZja2lvVExxYjBFVVRWV3NreDdhanZS?=
- =?utf-8?B?VXp2WHVkKzl1ek1GTE9HZlNwaXRlZEFkZEROQ1lhcElONlRXLzJIdjV2YkNI?=
- =?utf-8?B?YTM1b1d1MjBjbkIrdmpvdXRLai94bHpmVlNaa2FlK2dLUUlYbEd5Y1dlUzha?=
- =?utf-8?Q?6cjDawVnq17w32+LY409TJHdo?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 42cce055-9cdb-40d9-e510-08dced92e31f
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2024 03:30:31.4381
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kvJl0MxA20+hCjf40a1vpYnuJOMM5/fFl3Es49RRH82YK7+E5zsZ7yxad5PrLE5FRURon8+bRHsgQlc6wwGfAQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR11MB5249
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 
-On 2024/10/16 00:22, Alex Williamson wrote:
-> On Tue, 15 Oct 2024 19:07:52 +0800
-> Yi Liu <yi.l.liu@intel.com> wrote:
-> 
->> On 2024/10/14 23:49, Alex Williamson wrote:
->>> On Sat, 12 Oct 2024 21:49:05 +0800
->>> Yi Liu <yi.l.liu@intel.com> wrote:
->>>    
->>>> On 2024/10/1 20:11, Jason Gunthorpe wrote:
->>>>> On Mon, Sep 30, 2024 at 07:55:08AM +0000, Tian, Kevin wrote:
->>>>>       
->>>>>>> +struct vfio_device_pasid_attach_iommufd_pt {
->>>>>>> +	__u32	argsz;
->>>>>>> +	__u32	flags;
->>>>>>> +	__u32	pasid;
->>>>>>> +	__u32	pt_id;
->>>>>>> +};
->>>>>>> +
->>>>>>> +#define VFIO_DEVICE_PASID_ATTACH_IOMMUFD_PT	_IO(VFIO_TYPE,
->>>>>>> VFIO_BASE + 21)
->>>>>>
->>>>>> Not sure whether this was discussed before. Does it make sense
->>>>>> to reuse the existing VFIO_DEVICE_ATTACH_IOMMUFD_PT
->>>>>> by introducing a new pasid field and a new flag bit?
->>>>>
->>>>> Maybe? I don't have a strong feeling either way.
->>>>>
->>>>> There is somewhat less code if you reuse the ioctl at least
->>>>
->>>> I had a rough memory that I was suggested to add a separate ioctl for
->>>> PASID. Let's see Alex's opinion.
->>>
->>> I don't recall any previous arguments for separate ioctls, but it seems
->>> to make a lot of sense to me to extend the existing ioctls with a flag
->>> to indicate pasid cscope and id.  Thanks,
->>
->> thanks for the confirmation. How about the below?
->>
->> diff --git a/drivers/vfio/device_cdev.c b/drivers/vfio/device_cdev.c
->> index bb1817bd4ff3..c78533bce3c6 100644
->> --- a/drivers/vfio/device_cdev.c
->> +++ b/drivers/vfio/device_cdev.c
->> @@ -162,21 +162,34 @@ void vfio_df_unbind_iommufd(struct vfio_device_file *df)
->>    int vfio_df_ioctl_attach_pt(struct vfio_device_file *df,
->>    			    struct vfio_device_attach_iommufd_pt __user *arg)
->>    {
->> -	struct vfio_device *device = df->device;
->> +	unsigned long minsz = offsetofend(
->> +			struct vfio_device_attach_iommufd_pt, pt_id);
->>    	struct vfio_device_attach_iommufd_pt attach;
->> -	unsigned long minsz;
->> +	struct vfio_device *device = df->device;
->> +	u32 user_size;
->>    	int ret;
->>
->> -	minsz = offsetofend(struct vfio_device_attach_iommufd_pt, pt_id);
->> +	ret = get_user(user_size, (u32 __user *)arg);
->> +	if (ret)
->> +		return ret;
->>
->> -	if (copy_from_user(&attach, arg, minsz))
->> -		return -EFAULT;
->> +	ret = copy_struct_from_user(&attach, sizeof(attach), arg, user_size);
->> +	if (ret)
->> +		return ret;
-> 
-> I think this could break current users. 
+Add tests that check if getsockopt(TCP_AO_GET_KEYS) returns the right
+keys when using different filters.
 
-not quite get here. My understanding is as the below:
+Sample output:
 
-If the current user (compiled with the existing uapi struct), it will
-provide less data that the new kernel knows. The copy_struct_from_user()
-would zero the trailing bytes. And such user won't set the new flag, so
-it should be fine.
+> # ok 114 filter keys: by sndid, rcvid, address
+> # ok 115 filter keys: by is_current
+> # ok 116 filter keys: by is_rnext
+> # ok 117 filter keys: by sndid, rcvid
+> # ok 118 filter keys: correct nkeys when in.nkeys < matched_keys
 
-So to me, the trailing bytes concern comes when user is compiled with the
-new uapi struct but running on an eld kernel (say <= 6.12).But the eld
-kernel uses copy_from_user(), so even there is non-zero trailing bytes in
-the user buffer, the eld kernel just ignores them. So this seems not an
-issue to me so far.
+Signed-off-by: Leo Stone <leocstone@gmail.com>
+---
+Changes in v2:
+- Changed 2 unnecessary test_error calls to test_fail
+- Added another test to make sure getsockopt returns the right nkeys
+  value when the input nkeys is smaller than the number of matching keys
+- Removed the TODO that this patch addresses
 
-> For better or worse, we don't
-> currently have any requirements for the remainder of the user buffer,
-> whereas copy_struct_from_user() returns an error for non-zero trailing
-> bytes.
+Thank you for your feedback.
+---
+ .../selftests/net/tcp_ao/setsockopt-closed.c  | 180 +++++++++++++++++-
+ 1 file changed, 175 insertions(+), 5 deletions(-)
 
-This seems to be a general requirement when using copy_struct_from_user().
-User needs to zero the fields that it does not intend to use. If there is
-no such requirement for user, then the trailing bytes can be a concern in
-the future but not this time as the existing kernel uses copy_from_user().
-
-> I think we need to monotonically increase the structure size,
-> but maybe something more like below, using flags.  The expectation
-> would be that if we add another flag that extends the structure, we'd
-> test that flag after PASID and clobber xend to a new value further into
-> the new structure.  We'd also add that flag to the flags mask, but we'd
-> share the copy code.
-
-agree, this share code might be needed for other path as well. Some macros
-I guess.
-
-> 
-> 	if (attach.argsz < minsz)
-> 		return -EINVAL;
-> 
-> 	if (attach.flags & (~VFIO_DEVICE_ATTACH_PASID))
-> 		return -EINVAL;
-> 
-> 	if (attach.flags & VFIO_DEVICE_ATTACH_PASID)
-> 		xend = offsetofend(struct vfio_device_attach_iommufd_pt, pasid);
-> 
-> 	if (xend) {
-> 		if (attach.argsz < xend)
-> 			return -EINVAL;
-> 	
-> 		if (copy_from_user((void *)&attach + minsz,
-> 				    (void __user *)arg + minsz, xend - minsz))
-> 			return -EFAULT;
-> 	}
-
-I think it might need to zero the trailing bytes if the user does not set
-the extended flag. is it?
-
-> Maybe there are still more elegant options available.
-> 
-> We also generally try to label flags with FLAGS in the name, but it
-> does get rather unwieldy, so I'm open to suggestions.  Thanks,
-
-There is already examples that new field added to a kernel-to-user uapi
-struct like the vfio_region_info::cap_offset and
-vfio_device_info::cap_offset. But it might be a little bit different
-with the case we face here as it's user-to-kernel struct. It's a time for
-you to set a rule for such extensions. :)
-
+diff --git a/tools/testing/selftests/net/tcp_ao/setsockopt-closed.c b/tools/testing/selftests/net/tcp_ao/setsockopt-closed.c
+index 084db4ecdff6..4bfa76c28e4e 100644
+--- a/tools/testing/selftests/net/tcp_ao/setsockopt-closed.c
++++ b/tools/testing/selftests/net/tcp_ao/setsockopt-closed.c
+@@ -6,6 +6,8 @@
+ 
+ static union tcp_addr tcp_md5_client;
+ 
++#define FILTER_TEST_NKEYS 16
++
+ static int test_port = 7788;
+ static void make_listen(int sk)
+ {
+@@ -813,23 +815,191 @@ static void duplicate_tests(void)
+ 	setsockopt_checked(sk, TCP_AO_ADD_KEY, &ao, EEXIST, "duplicate: SendID differs");
+ }
+ 
++
++static void fetch_all_keys(int sk, struct tcp_ao_getsockopt *keys)
++{
++	socklen_t optlen = sizeof(struct tcp_ao_getsockopt);
++
++	memset(keys, 0, sizeof(struct tcp_ao_getsockopt) * FILTER_TEST_NKEYS);
++	keys[0].get_all = 1;
++	keys[0].nkeys = FILTER_TEST_NKEYS;
++	if (getsockopt(sk, IPPROTO_TCP, TCP_AO_GET_KEYS, &keys[0], &optlen))
++		test_error("getsockopt");
++}
++
++static int prepare_test_keys(struct tcp_ao_getsockopt *keys)
++{
++	struct tcp_ao_add test_ao[FILTER_TEST_NKEYS];
++	u8 rcvid = 100, sndid = 100;
++	const char *test_password = "Test password number ";
++	char test_password_scratch[64] = {};
++	int sk = socket(test_family, SOCK_STREAM, IPPROTO_TCP);
++
++	if (sk < 0)
++		test_error("socket()");
++
++	for (int i = 0; i < FILTER_TEST_NKEYS; i++) {
++		snprintf(test_password_scratch, 64, "%s %d", test_password, i);
++		test_prepare_key(&test_ao[i], DEFAULT_TEST_ALGO, this_ip_dest, false, false,
++				 DEFAULT_TEST_PREFIX, 0, sndid++, rcvid++, 0, 0,
++				 strlen(test_password_scratch), test_password_scratch);
++	}
++	test_ao[0].set_current = 1;
++	test_ao[1].set_rnext = 1;
++	/* One key with a different addr and overlapping sndid, rcvid */
++	tcp_addr_to_sockaddr_in(&test_ao[2].addr, &this_ip_addr, 0);
++	test_ao[2].sndid = 100;
++	test_ao[2].rcvid = 100;
++
++	/* Add keys in a random order */
++	for (int i = 0; i < FILTER_TEST_NKEYS; i++) {
++		int randidx = rand() % (FILTER_TEST_NKEYS - i);
++
++		if (setsockopt(sk, IPPROTO_TCP, TCP_AO_ADD_KEY, &test_ao[randidx],
++			       sizeof(struct tcp_ao_add)))
++			test_error("setsockopt()");
++		memcpy(&test_ao[randidx], &test_ao[FILTER_TEST_NKEYS - 1 - i],
++				sizeof(struct tcp_ao_add));
++	}
++
++	fetch_all_keys(sk, keys);
++
++	return sk;
++}
++
++/* Assumes passwords are unique */
++static int compare_mkts(struct tcp_ao_getsockopt *expected, int nexpected,
++			struct tcp_ao_getsockopt *actual, int nactual)
++{
++	int matches = 0;
++
++	for (int i = 0; i < nexpected; i++) {
++		for (int j = 0; j < nactual; j++) {
++			if (memcmp(expected[i].key, actual[j].key, TCP_AO_MAXKEYLEN) == 0)
++				matches++;
++		}
++	}
++	return nexpected - matches;
++}
++
++static void filter_keys_checked(int sk, struct tcp_ao_getsockopt *filter,
++				struct tcp_ao_getsockopt *expected,
++				unsigned int nexpected, const char *tst)
++{
++	struct tcp_ao_getsockopt all_keys[FILTER_TEST_NKEYS] = {};
++	struct tcp_ao_getsockopt filtered_keys[FILTER_TEST_NKEYS] = {};
++	socklen_t len = sizeof(struct tcp_ao_getsockopt);
++
++	fetch_all_keys(sk, all_keys);
++	memcpy(&filtered_keys[0], filter, sizeof(struct tcp_ao_getsockopt));
++	filtered_keys[0].nkeys = FILTER_TEST_NKEYS;
++	if (getsockopt(sk, IPPROTO_TCP, TCP_AO_GET_KEYS, filtered_keys, &len))
++		test_error("getsockopt");
++	if (filtered_keys[0].nkeys != nexpected) {
++		test_fail("wrong nr of keys, expected %u got %u", nexpected,
++			  filtered_keys[0].nkeys);
++		goto out_close;
++	}
++	if (compare_mkts(expected, nexpected, filtered_keys, filtered_keys[0].nkeys)) {
++		test_fail("got wrong keys back");
++		goto out_close;
++	}
++	test_ok("filter keys: %s", tst);
++
++out_close:
++	close(sk);
++	memset(filter, 0, sizeof(struct tcp_ao_getsockopt));
++}
++
++static void filter_tests(void)
++{
++	struct tcp_ao_getsockopt original_keys[FILTER_TEST_NKEYS];
++	struct tcp_ao_getsockopt expected_keys[FILTER_TEST_NKEYS];
++	struct tcp_ao_getsockopt filter = {};
++	int sk, f, nmatches;
++	socklen_t len;
++
++	f = 2;
++	sk = prepare_test_keys(original_keys);
++	filter.rcvid = original_keys[f].rcvid;
++	filter.sndid = original_keys[f].sndid;
++	memcpy(&filter.addr, &original_keys[f].addr, sizeof(original_keys[f].addr));
++	filter.prefix = original_keys[f].prefix;
++	filter_keys_checked(sk, &filter, &original_keys[f], 1, "by sndid, rcvid, address");
++
++	f = -1;
++	sk = prepare_test_keys(original_keys);
++	for (int i = 0; i < original_keys[0].nkeys; i++) {
++		if (original_keys[i].is_current) {
++			f = i;
++			break;
++		}
++	}
++	if (f < 0)
++		test_error("No current key after adding one");
++	filter.is_current = 1;
++	filter_keys_checked(sk, &filter, &original_keys[f], 1, "by is_current");
++
++	f = -1;
++	sk = prepare_test_keys(original_keys);
++	for (int i = 0; i < original_keys[0].nkeys; i++) {
++		if (original_keys[i].is_rnext) {
++			f = i;
++			break;
++		}
++	}
++	if (f < 0)
++		test_error("No rnext key after adding one");
++	filter.is_rnext = 1;
++	filter_keys_checked(sk, &filter, &original_keys[f], 1, "by is_rnext");
++
++	f = -1;
++	nmatches = 0;
++	sk = prepare_test_keys(original_keys);
++	for (int i = 0; i < original_keys[0].nkeys; i++) {
++		if (original_keys[i].sndid == 100) {
++			f = i;
++			memcpy(&expected_keys[nmatches], &original_keys[i],
++			       sizeof(struct tcp_ao_getsockopt));
++			nmatches++;
++		}
++	}
++	if (f < 0)
++		test_error("No key for sndid 100");
++	if (nmatches != 2)
++		test_error("Should have 2 keys with sndid 100");
++	filter.rcvid = original_keys[f].rcvid;
++	filter.sndid = original_keys[f].sndid;
++	filter.addr.ss_family = test_family;
++	filter_keys_checked(sk, &filter, expected_keys, nmatches, "by sndid, rcvid");
++
++	sk = prepare_test_keys(original_keys);
++	filter.get_all = 1;
++	filter.nkeys = FILTER_TEST_NKEYS / 2;
++	len = sizeof(struct tcp_ao_getsockopt);
++	if (getsockopt(sk, IPPROTO_TCP, TCP_AO_GET_KEYS, &filter, &len))
++		test_error("getsockopt");
++	if (filter.nkeys == FILTER_TEST_NKEYS)
++		test_ok("filter keys: correct nkeys when in.nkeys < matched_keys");
++	else
++		test_fail("filter keys: wrong nkeys, expected %u got %u",
++			  FILTER_TEST_NKEYS, filter.nkeys);
++}
++
+ static void *client_fn(void *arg)
+ {
+ 	if (inet_pton(TEST_FAMILY, __TEST_CLIENT_IP(2), &tcp_md5_client) != 1)
+ 		test_error("Can't convert ip address");
+ 	extend_tests();
+ 	einval_tests();
++	filter_tests();
+ 	duplicate_tests();
+-	/*
+-	 * TODO: check getsockopt(TCP_AO_GET_KEYS) with different filters
+-	 * returning proper nr & keys;
+-	 */
+ 
+ 	return NULL;
+ }
+ 
+ int main(int argc, char *argv[])
+ {
+-	test_init(121, client_fn, NULL);
++	test_init(126, client_fn, NULL);
+ 	return 0;
+ }
 -- 
-Regards,
-Yi Liu
+2.43.0
+
 
