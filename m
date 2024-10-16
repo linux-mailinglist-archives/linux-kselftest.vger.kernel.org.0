@@ -1,71 +1,74 @@
-Return-Path: <linux-kselftest+bounces-19883-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19884-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3056A9A1577
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 00:00:55 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C29589A158C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 00:05:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADBE5B268E4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 22:00:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA1D61C219B7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 22:05:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C0221D3656;
-	Wed, 16 Oct 2024 21:59:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A71B01D2793;
+	Wed, 16 Oct 2024 22:05:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="SZpkp0aQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y1M6R6mT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 525791D359D
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 21:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAEAB18732A;
+	Wed, 16 Oct 2024 22:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729115954; cv=none; b=L2lhFKPbio/bCy05+RF1cxmcRtwljiQ1NuyUISIqJXh/oGD8lqtCwBbv4sw5FQ83AAL4FPfk01esKBLPblOftafm+qs30Xu33Hc9CXNohPPIeCq/VIcMqGPGpxXUz1UTDESKDWvmdXHDJrbJVjAd/6k3XYN+JGDiEIaytAtEQW4=
+	t=1729116312; cv=none; b=NrklBIwcJu+yXqSd4N09Lw6NvGrOYmRDB5BHpWr3cVacqGCnk04UWMKBaPCKzgDXbEpGllM98Kwvt6sRy2+snzs324TOY9rXdWNBU100sbWbxp5+vmO2XUg8PKgB8rdO59WEVvSz6t0xYD/seshHTZOgIs7wBotW2vZtZnW3sCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729115954; c=relaxed/simple;
-	bh=8qYHelQUjDoTybira0O9Q7Zj6yilO0u+xZOecQxQR8A=;
+	s=arc-20240116; t=1729116312; c=relaxed/simple;
+	bh=m+ov/kVs568rdAOKI4g86lXMj+F8r3CaFxVqeHbibgA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=by0MGn1N5hT15O1MHxn9I1Z2GPZ6PbiPBo6VCvnYZeoT2QjHJ2xroDO5QAHC37HCE8lqUCtyVcriRBqcaYYIxU5tEjTGsiIEy2BxBWZFqxnZh9mua+BJwZIgsWiJRWuI8GdfwTwo8SYHWbsrM4ukFdURgs1Psi+ovSYY9mMC4kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=SZpkp0aQ; arc=none smtp.client-ip=209.85.166.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-83aacecc8efso18965539f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 14:59:11 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=adoNUbSZvs46UJTZJAHdtdN++W6fqG4sjGfVAmasQ4t3/q5b3UhfRcvPYx8YghO2g21IZtWwl3FVwJxbx/PSnuSTdk/7qdwiYUhEPki+3sNOZQ9+cERP4Q2Ru4TIdc8VRpj8IpXnNAq/aenTIjibrdcixmjOk0XhqQ7kcgvYLHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y1M6R6mT; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-430558cddbeso1752575e9.1;
+        Wed, 16 Oct 2024 15:05:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1729115950; x=1729720750; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1729116309; x=1729721109; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=nKmb9Wl1EPVaTgFDnEvZmVVLPMr8CXfZoJTK+cdxx8k=;
-        b=SZpkp0aQ0wmscAoqCX51/Rtd77yvPbfpofdwArw9mVjk5LW6GMhWPdz0qOFDTQIFvf
-         BZjeLJOV6jzy1qR+tLP+MfVLgLnSB03oVkzYQ8pwmzUqyF+HsTo0z6L7TamQnbZaofqu
-         ozkAxCb45cn5tMGHnWf+irBLeJSThIW+t1y9Y=
+        bh=eib+0uxxctBnJ3GemeBl+zs6xNFdQY858TCAdBOxxas=;
+        b=Y1M6R6mTglD51wayjA3cjZkCwxWW9vbk1JVRbFKC7OAnwHbabSxDrgOTBGnKbl1kHc
+         NFbZvc9eteKcaL9dn7NKOj+f0/piRjcqasjwE50Q4Vfe+6fR4Nu8so6witJ9CApBxn+O
+         rLIpi06aX1v46ooO4BvGD+s2vVoBrViGeUx3EQa8TWln01ilYncfHh3aKiJx8uLtnG5g
+         /81v4fN0uZT+xQ4C1OTzQO/Nj7X07ItpkqxR631zky1cGhapkIu4ZbfLSnOjGRLY8kOq
+         40O+uKgTjPCZ8vrebllX4MzKSEGPmShR3ZEyyMZKfygz97w3hFT0HDBmsmIg3XomNAAH
+         6b7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729115950; x=1729720750;
+        d=1e100.net; s=20230601; t=1729116309; x=1729721109;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=nKmb9Wl1EPVaTgFDnEvZmVVLPMr8CXfZoJTK+cdxx8k=;
-        b=ZLq8R7P12PyHxeFRAkoUTfbV4rEzY2eEzFJHysH9zLDdWdXs3MztiQofsSpIB9nKIT
-         uuzUv/SNu1haFiJ/FR9768XfhY8jTcK963KX82QOpOLkk7cw7PGi4LuWOar7Tox25u9U
-         RQVeDTOGMR90Tw5uSn4y4sJCdmwfNuzZgBp8Z482q62bM06SA97GCThx8af6vID1wZMZ
-         fk1ci29YQxUYKaH0jnQdoQf/PiGdRScYWajFXi0jxKatcSGZzP4RDPB/A2UuVSKD7QnH
-         JQhTJTCr7w2teZIgF4xeq/4/vToRivjZq3y9yPcaPBjtvTNgtaEeblEc+vo/Su9Rm+H+
-         GWOw==
-X-Forwarded-Encrypted: i=1; AJvYcCW/Al5EHUtET1CQJLOeeQEi/5ndZ48jeUobVzxaOGmveZ8I/OYKT8gW72hn/wRBorJc8l40GAaFlE0/u6+0vUM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyf75srGVZJTEas7g5PD4hWe7DQSUiscKcOO8/9tyVPVUDl32GV
-	+IWbTvU6KGeqiuIMZd7bF+z7RGSIZuqwyRjAiLk7MDcQpyqB+ALW0oJ9vQoSppA=
-X-Google-Smtp-Source: AGHT+IEPRTO0e9QGvFwLCNnSf650+7rhXWqxmDc8PUGnLVGRYi1Npd/Q8UEd25NszhcXsxF1dwVEuQ==
-X-Received: by 2002:a05:6e02:1aaa:b0:3a2:6d54:33df with SMTP id e9e14a558f8ab-3a3e52a7266mr8993475ab.4.1729115950287;
-        Wed, 16 Oct 2024 14:59:10 -0700 (PDT)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dbecc68bcasm1049582173.159.2024.10.16.14.59.09
+        bh=eib+0uxxctBnJ3GemeBl+zs6xNFdQY858TCAdBOxxas=;
+        b=i6o3CkcUcB02Lf7ZFmrTfbOpLWVXlZtY3Iiyvp2J88W+HnSv1WxrbuviXE6/Kk7y6X
+         8ucRhCpWLGiI56R9Vlqh302wyhfd1m6JuZ60jOaC2Y/P3Eulx8rNW1iFLZ4LzB58QxOv
+         Z9QKOrvjnkEH5CujtFbpFEGNJKivloKJw/aMxzNh8pXzW9XNx30+PN50PWgZHGgliiWl
+         1nanTRzSPg5yeigaksd34U+0Nc1aHfuopRNqY0y9ldu2c44khLioDAWYi/Y8wZSC1hwZ
+         +aImncIXq5R9vEFe+XTVwI664N7kPRcU6zKfiZFOBVfksVMd9dl8XDI5Uh/4JaSZAu5Q
+         BeuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUAqstj06XUnKykWDwzwh2lEUi+XR4mF3q94vEawmX9tjPwEWfVEhLXCcnbRYt0mrMVfvuPohJSEQPZXzI5@vger.kernel.org, AJvYcCUpoqiMsxIA08wGB0xMDnQJ77nih4KFw0MMMfEere9jjSLC/Mf7VenQ3+HFSSDpJljvBySh9LwFZSvPEnY63GD+@vger.kernel.org, AJvYcCXlBU2CD4ARM18HdpoeQaMZlOq3dK/T13/9ZYL5ahrLQLsbqvC4DrPtdvpUef65Y2o4r/A=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyyzq9YH/Uy+wMy0kyMwJC13cjmP5dJENvZ1de2EFd6qi2lgaFN
+	55HO8MHiOW0rCmmDjQrv9A77mohDltK89F4Mbq3VZjToYd9xnMHv
+X-Google-Smtp-Source: AGHT+IFHS7yUP+gqPUlAOVcvDGP/scaJVzDVX481vwVPL2msLYF5ZPDnJxUh9Be2IAi4QJPe7zUGvA==
+X-Received: by 2002:a05:600c:474a:b0:431:4e33:98b6 with SMTP id 5b1f17b1804b1-431587174b4mr6592285e9.5.1729116308883;
+        Wed, 16 Oct 2024 15:05:08 -0700 (PDT)
+Received: from ?IPV6:2a02:8012:e013:0:f52b:f2f2:1fbe:f0ae? ([2a02:8012:e013:0:f52b:f2f2:1fbe:f0ae])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43158c3bcdasm6021755e9.17.2024.10.16.15.05.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Oct 2024 14:59:09 -0700 (PDT)
-Message-ID: <e5889240-8109-4b75-aa27-25a771c4edf0@linuxfoundation.org>
-Date: Wed, 16 Oct 2024 15:59:08 -0600
+        Wed, 16 Oct 2024 15:05:07 -0700 (PDT)
+Message-ID: <cea2040f-7214-41cb-9e9c-98895bf5a1ec@gmail.com>
+Date: Wed, 16 Oct 2024 23:05:04 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,81 +76,61 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] selftest: hid: add the missing tests directory
-To: Benjamin Tissoires <bentiss@kernel.org>, Yun Lu <luyun@kylinos.cn>
-Cc: jikos@kernel.org, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20241015091520.2431150-1-luyun@kylinos.cn>
- <4ioshjncgxafin7jcm7kne5fahp4l5nhk5664mnrdo7fgutgyn@jac5gopdyjty>
- <96ac2fd6-a885-4455-b0c9-91c514c8f3f5@linuxfoundation.org>
+Subject: Re: [PATCH 1/3] KVM: x86, vmx: Add function for event delivery error
+ generation
+To: Sean Christopherson <seanjc@google.com>, Ivan Orlov <iorlov@amazon.com>
+Cc: bp@alien8.de, dave.hansen@linux.intel.com, mingo@redhat.com,
+ pbonzini@redhat.com, shuah@kernel.org, tglx@linutronix.de, hpa@zytor.com,
+ kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, x86@kernel.org, jalliste@amazon.com,
+ nh-open-source@amazon.com, pdurrant@amazon.co.uk
+References: <20240927161657.68110-1-iorlov@amazon.com>
+ <20240927161657.68110-2-iorlov@amazon.com> <Zwmyzg5WiKKvySS1@google.com>
+ <20241015195227.GA18617@dev-dsk-iorlov-1b-d2eae488.eu-west-1.amazon.com>
+ <ZxAqscbrROD1_szG@google.com>
 Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <96ac2fd6-a885-4455-b0c9-91c514c8f3f5@linuxfoundation.org>
+From: Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <ZxAqscbrROD1_szG@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 10/16/24 09:08, Shuah Khan wrote:
-> On 10/16/24 02:27, Benjamin Tissoires wrote:
->> On Oct 15 2024, Yun Lu wrote:
->>> Commit 160c826b4dd0 ("selftest: hid: add missing run-hid-tools-tests.sh")
->>> has added the run-hid-tools-tests.sh script for it to be installed, but
->>> I forgot to add the tests directory together.
+On 10/16/24 22:05, Sean Christopherson wrote:
+> On Tue, Oct 15, 2024, Ivan Orlov wrote:
+>>>> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+>>>> index c67e448c6ebd..afd785e7f3a3 100644
+>>>> --- a/arch/x86/kvm/vmx/vmx.c
+>>>> +++ b/arch/x86/kvm/vmx/vmx.c
+>>>> @@ -6550,19 +6550,10 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
+>>>>   	     exit_reason.basic != EXIT_REASON_APIC_ACCESS &&
+>>>>   	     exit_reason.basic != EXIT_REASON_TASK_SWITCH &&
+>>>>   	     exit_reason.basic != EXIT_REASON_NOTIFY)) {
+>>>> -		int ndata = 3;
+>>>> +		gpa_t gpa = vmcs_read64(GUEST_PHYSICAL_ADDRESS);
+>>>> +		bool is_mmio = exit_reason.basic == EXIT_REASON_EPT_MISCONFIG;
 >>>
->>> If running the test case without the tests directory,  will results in
->>> the following error message:
->>>
->>>      make -C tools/testing/selftests/ TARGETS=hid install \
->>>         INSTALL_PATH=$KSFT_INSTALL_PATH
->>>      cd $KSFT_INSTALL_PATH
->>>      ./run_kselftest.sh -t hid:hid-core.sh
->>>
->>>    /usr/lib/python3.11/site-packages/_pytest/config/__init__.py:331: PluggyTeardownRaisedWarning: A plugin raised an exception during an old-style hookwrapper teardown.
->>>    Plugin: helpconfig, Hook: pytest_cmdline_parse
->>>    UsageError: usage: __main__.py [options] [file_or_dir] [file_or_dir] [...]
->>>    __main__.py: error: unrecognized arguments: --udevd
->>>      inifile: None
->>>      rootdir: /root/linux/kselftest_install/hid
->>>
->>> In fact, the run-hid-tools-tests.sh script uses the scripts in the tests
->>> directory to run tests. The tests directory also needs to be added to be
->>> installed.
->>>
-
-Yun Lu,
-The patch version information doesn't belong in the change log.
-You have to add it below the three dashes as shown below.
-Check submitting patches document for details.
-
----
-v2: add the error message
-
-  tools/testing/selftests/hid/Makefile | 1 +
-  1 file changed, 1 insertion(+)
-
-There is no need to send another version. I fixed
-it up.
-
->>> v2: add the error message
->>>
->>> Fixes: ffb85d5c9e80 ("selftests: hid: import hid-tools hid-core tests")
->>> Cc: stable@vger.kernel.org
->>> Signed-off-by: Yun Lu <luyun@kylinos.cn>
+>>> There's no need for is_mmio, just pass INVALID_GPA when the GPA isn't known.
 >>
->> Acked-by: Benjamin Tissoires <bentiss@kernel.org>
-
-Thank you.
-
->>
->> Shuah, I guess you'll want to take this one through your tree given that
->> you already took the run-hid-tools-tests.sh one?
->>
+>> Ah alright, then we definitely don't need an is_mmio field. I assume we
+>> can't do MMIO at GPA=0, right?
 > 
-> Yes. I will take this one. Thanks.
+> Wrong :-)
 > 
 
-Thanks for the patch. Applied to linux-kselftest fixes for next rc.
+Then getting rid of `is_mmio` will make distinguishing between vectoring 
+error due to MMIO with GPA=0 and non-mmio vectoring error quite hard for 
+the error reporti
 
-thanks,
--- Shuah
+Passing INVALID_GPA into the userspace due to non-mmio vectoring error 
+will change the existing internal.data order, but I can do it if it's 
+fine. Sorry for nitpicking :)
 
+>  From an architectural perspective, GPA=0 is not special in any way.  E.g. prior
+> to L1TF, Linux would happily use the page with PFN=0.
+> 
+
+Cool, didn't know about this vulnerability... Thanks for the explanation!
+
+-- 
+Kind regards,
+Ivan Orlov
 
