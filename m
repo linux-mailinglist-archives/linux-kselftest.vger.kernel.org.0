@@ -1,292 +1,237 @@
-Return-Path: <linux-kselftest+bounces-19823-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19824-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0F019A041B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 10:22:44 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F9969A0430
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 10:27:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71AEC1F24725
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 08:22:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 730D01C21EBA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 08:27:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6E241CBA16;
-	Wed, 16 Oct 2024 08:22:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6921D1CEADB;
+	Wed, 16 Oct 2024 08:27:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="AjHhyCgP";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="bzbwzIA9"
+	dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b="fc+pDScL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8792187850;
-	Wed, 16 Oct 2024 08:22:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729066956; cv=fail; b=sJmyV4Wp0BNpp/5Q08yu7TotAEZ7Dw/PIoVlC6Udldy3J9E1pE4GwriPKwiCfl3db938/39788QshdNT0j9pXHRFXrS7Poxb8VSPlseBUjVrXesHESNDKG8GP1XEAAya0lDkz9bwA6M7jKHIHoEANQ4JEgu8aRcSgb1TIERENqM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729066956; c=relaxed/simple;
-	bh=nr6kHqzeH+9rdxzwAJibzTRrlyrU4OsP3rIuMkNpm4Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=eoYDjFMclYQ0h+HArC+RI0N3ZFSOlcy1fOJQ1L5f/xPLzrW3+F2n/U+hFqXshZk5/lIbjq6oDtcXL2Twnl/Fp1/XyeNjVUlOBSWU+PgAZ6ajUtq6q0YVleAgMPAl6OCKKKFtqQOB1jSYez22CZDnq7Q3QMFGZTzmNkHpvTf4kao=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=AjHhyCgP; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=bzbwzIA9; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49G7feHV008120;
-	Wed, 16 Oct 2024 08:22:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2023-11-20; bh=VttJ3TO+/k6zUHiYUjeXbpHrCrM/qixQerKioasD5hk=; b=
-	AjHhyCgPcFjaeoZVOaiY1fnq03aM+5IBrfTUNbYldx7k3ckMjzCmR7hR/Q/OIiBR
-	6vqbaec4HPV8FaPdNNX2a+nsHJkrQIdpZ8IXvtOzsSKk6Hxkekd1K0c2JU5eQim8
-	iXDTDzDmCeRnd7c3aZgtTck5uRaQgW2yiT9RmASMAQmXRYE767GPDCO8g58KjYyS
-	flxNTkpe45NjQpWOjstt3NwzapkKycYzgOtj12ASID55ntc81FlhvruyjUb8kiSk
-	Adio3Ip9T6ghKo0yXRtA3ayGofr9G8L/WICjn91hLGFQ9X4KV+NsGq2kYGRAXLTt
-	cbRvvO/hgQhgn5VWoWHMfg==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 427gqt3572-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 16 Oct 2024 08:22:23 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 49G80MhV019899;
-	Wed, 16 Oct 2024 08:22:22 GMT
-Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2048.outbound.protection.outlook.com [104.47.51.48])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 427fj8hkwm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 16 Oct 2024 08:22:22 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wfWLLryBOIkEI5AD1v4HK3yrjFUB0NuucbcPDiK9osErGmTmXtSG4aRYi47tgNa9/dbpLndF2R9148ugynsGAAjRKaelvsR2WAb2sCsT0RExVuM0IiUrmRtNFAtXIhiXmSLsLRs4f2Ah+fvX1W8gFTu2K6Cm9oNdT7XGS+zRGMFTdFL8k+U2dR50J4zbew93kn0QaOtnRJoi8ot1YeWAbQKZdKevQav/ZvKAkdMsxWZFGxToKy3T+tnhXKpWlu4gba3c0TOZG9DJugGJ2waanxa3zEnAnofyIGBvN1z0HlAfUqwtIlMNtyAxI1+0jPmKzwfkYHKx2jx06HwQCLxMsQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VttJ3TO+/k6zUHiYUjeXbpHrCrM/qixQerKioasD5hk=;
- b=OEucopCXjArhPQOMZzX3xBVoMl4RllFaUHsOsog8X/HLvPWlQnhlX+rUIjHlM31iktgSZgXNnTji3useZCWTL4AmMeRFiAWTHrips7k4aMrO/raZfgcjX9VWB6VZu0xolcaugl3AKZhXwAHYX0GX+raOpJJmKps6OKCP9E4+eA7O94mtF0+ncOch4cv6U4Lxl4v7/qpAnr1vtlf0yj/8ip5+lleUPa5/mXbd0sSCCuM85YTd1DBP+HVNFkGYs7xdloOq/b9WdwgamEyMtF+Yk+EXAwmpCW0nnGOKnAlmfUCClKnBa6dqrOMcMbKAIYNfotIcTO9iThnZZLMxR/VCbQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9EB61862AE
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 08:27:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729067252; cv=none; b=V/0osQB5sc4BnhESTJuUqCJ3v7vsUnPA22OzrigfP4xbHxX5n2kcDDG7T7eX/h0mSAvJDrexPxyBWK4eyA8AI4TJbPblhdy7QoX0r77DdH0Ab9VTVlnHoCZ2+lcVpPa02PtYIuUx8jrDhJ1S1+307NN97jpnl1OGvbJOEiTwbKQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729067252; c=relaxed/simple;
+	bh=PVa+FJXTDWZeoxAqKHBZCp7maASc8TfoL8hAtOc6GlY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KVcAATNpfCdEGC3rmZIKF/zCVyU5ExABKLbO7AlZMabwfc2i48NZ1qdRUuhmjwuCNwO9ErcL90jO9Oa12p+/IAhDSbJBVVf5/saW/CweJ28IAoBuD5/WIc4DFhXYd6uH1oM/xWfCbvBOl0n6qeDm6V8UU33hd5WysjZ0Ny62XvM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20230601.gappssmtp.com header.i=@resnulli-us.20230601.gappssmtp.com header.b=fc+pDScL; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-4311c285bc9so46623305e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 01:27:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VttJ3TO+/k6zUHiYUjeXbpHrCrM/qixQerKioasD5hk=;
- b=bzbwzIA9/lItKSStB8cVv/Tl30q3GbuFlA1x8WMKC0ug9RAyHhLSdZyYhxAqzC31KYjbG26/XzdtUaaXp03Rlm9Idi3a5lyY2kt2OaGpSZKYeJ580XyZkanxTddUxV2jprAkOq+Gg6jTP7uZNa2UW5Zj6HAK6+3zKPc/rznZVps=
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com (2603:10b6:a03:3d0::5)
- by CH0PR10MB7500.namprd10.prod.outlook.com (2603:10b6:610:192::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.17; Wed, 16 Oct
- 2024 08:22:19 +0000
-Received: from SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e]) by SJ0PR10MB5613.namprd10.prod.outlook.com
- ([fe80::4239:cf6f:9caa:940e%5]) with mapi id 15.20.8069.016; Wed, 16 Oct 2024
- 08:22:19 +0000
-Date: Wed, 16 Oct 2024 09:22:15 +0100
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: Christian Brauner <christian@brauner.io>, Shuah Khan <shuah@kernel.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, pedro.falcato@gmail.com,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] pidfd: extend pidfd_get_pid() and de-duplicate
- pid lookup
-Message-ID: <2c783f7d-78d4-4d91-9999-12d7772b6272@lucifer.local>
-References: <cover.1728643714.git.lorenzo.stoakes@oracle.com>
- <8e7edaf2f648fb01a71def749f17f76c0502dee1.1728643714.git.lorenzo.stoakes@oracle.com>
- <CAJuCfpHLGyrBWZ9JyJ5FdJQtGO1-tuUqHawjKX_mtwnAhSY6Ow@mail.gmail.com>
- <8c75620d-8920-4c19-8ebc-0f2b056d49fa@lucifer.local>
- <CAJuCfpFXCKAH+fc6=fg-nVC5tjpGG--Pvk4D2NOn-zdA1LXS=Q@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpFXCKAH+fc6=fg-nVC5tjpGG--Pvk4D2NOn-zdA1LXS=Q@mail.gmail.com>
-X-ClientProxiedBy: LO3P265CA0011.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:bb::16) To SJ0PR10MB5613.namprd10.prod.outlook.com
- (2603:10b6:a03:3d0::5)
+        d=resnulli-us.20230601.gappssmtp.com; s=20230601; t=1729067249; x=1729672049; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=g28iCX0O5SYkdDCU+JsYvIfeHBkuIrm9r0ykt0NO+9k=;
+        b=fc+pDScL3abGiXe83W+w8fg/MkPF/zYvLkGkdEFW8s0DJVKIpsI0bTh64Mg1Jc5aSX
+         I3ixyF+LXBqW29D/5LFFfg19X6AXgQCowmDzsibLrowdCexaA3Bjoq9aM30grWFMVoAa
+         83MCYg/Tt/+NH04tX7iqt5GSk/uLyMut0HTvWIhvQL3+qE6tcYCk3UP/arzHiboKEKfI
+         ZnJnHuMJvHE0kvJP9aJ6o6Xj75b4PwIV2znhtUw4ZKd67RFPjshlLglLrIBifhzaD8xb
+         5Si4taiAfCOXgGcfEqPkzDS0fNRpMeHc/N77Vp5AQmvCWNc2erADVjGaMYjcWyYDTlXr
+         QAFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729067249; x=1729672049;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g28iCX0O5SYkdDCU+JsYvIfeHBkuIrm9r0ykt0NO+9k=;
+        b=b2IgjYtNVJOP561FhMBKs3MD2LIfxST0qT2SMQ1sbIrOw1ZIYlI4QQZCA/WIy/1TMf
+         nISF71ZoprgrwQqyfuCp6Pg6UThT8Riy0A/Mhonbywq23meJIhPACO84rQ84o4I9b1m+
+         LuoEjmMFt4D+HPpsP11/H0TQbjNNFNywss2jM5CqMS1iElaUtB4nP+c4u0z4JxJz63ev
+         QXuyYIU8LPoh3uMPPBCFjz7AifbXNaRVaU1of0DLwNIGvJvE/brpsCegWuHchm/xMJvu
+         Rnis/6rd8xbKl70GF8ftqtU0M/DW5aoMJM1uCV1N0Q3/M0uZS1bleAGA+//3kzN7wt29
+         sXow==
+X-Forwarded-Encrypted: i=1; AJvYcCUyBJ9dPUwPx1fTWSRURhPv4+1XTZo6v2OtVpAkDGF/BPjttju9tZI8etlqJ9fxXikOMEg1aWLk5HcQ1ExRkYE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEJHI4FMYwQ+9TpSpROKKxdbwIYAbNB+E+fECEFU52lnqxBDp9
+	P4uXjlLWrlO0K6VK4wX/CWopYBgFE77A5/ddDDkCExiIBT6m8algUlyyo+OX0pw=
+X-Google-Smtp-Source: AGHT+IERexqRaMF2wo6pgIqzaWfNekkvkAvO40P+daGklxVCAETU0FoDFC6Q5O/KGhVi2SAiAuuztQ==
+X-Received: by 2002:a05:600c:5122:b0:42f:8d36:855e with SMTP id 5b1f17b1804b1-4311deb5f47mr177561545e9.5.1729067248934;
+        Wed, 16 Oct 2024 01:27:28 -0700 (PDT)
+Received: from localhost ([193.47.165.251])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4314bf60fc4sm24841625e9.38.2024.10.16.01.27.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Oct 2024 01:27:28 -0700 (PDT)
+Date: Wed, 16 Oct 2024 10:27:24 +0200
+From: Jiri Pirko <jiri@resnulli.us>
+To: Antonio Quartulli <antonio@openvpn.net>
+Cc: Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, sd@queasysnail.net,
+	ryazanov.s.a@gmail.com, Andrew Lunn <andrew@lunn.ch>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	openvpn-devel@lists.sourceforge.net,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v9 04/23] ovpn: add basic interface
+ creation/destruction/management routines
+Message-ID: <Zw947Jb637o-I4RV@nanopsycho.orion>
+References: <20241016-b4-ovpn-v9-0-aabe9d225ad5@openvpn.net>
+ <20241016-b4-ovpn-v9-4-aabe9d225ad5@openvpn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR10MB5613:EE_|CH0PR10MB7500:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0904c9da-2bd3-4120-5e2c-08dcedbba6d1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|10070799003|7416014|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?YnZOMk1GSzBTRkozWEtRMUJlZVZleTNMWS90SVN3R2NXbGwzZFRPYzFMK3E0?=
- =?utf-8?B?RmhZSnZ0d0NvTUM0bGR4dHlBUDVFTURuMTFWTjd4VFZPNnNUeE9RVGgrUkkw?=
- =?utf-8?B?MUh4SkpzanZRN1UydmMxcXExaWVvWTN2VWVFR0RXbTl6V2hlNjRMc2FQc0lk?=
- =?utf-8?B?NmhXeldLVjl0ZDJOdjJEdzNRZFJDU0hRQlBnanFEcmx1K0g4eVowbzBVd2E4?=
- =?utf-8?B?N1U5Y2w1amJpSVVLaC9XNFNQa2lsS1RCZThCQ3RiU3pQdnJodmZRdWZSRDRh?=
- =?utf-8?B?ekNsOTd0bHNHengrcVRLRG1sMWFKMXkvRkIzd3FDTkpHaHJkLzlqYkJWMThJ?=
- =?utf-8?B?ZjJpOE9TT3JhUktYNG5Nb0U1bXR3VGJiSkMyYjdkOC9EbXh2bXlsb1ZZczN0?=
- =?utf-8?B?WUx6Q1BoNVJ1Y1pSN2p6alRUN1AwMDcxV2RtZEgxc0gwU0llSXRhUnc1M3lS?=
- =?utf-8?B?YklkVHFsYTRsdXdlYjJIYTZiVzlxMVZQVXc4ZVVYRm5pajBCY3A3OVFjNStS?=
- =?utf-8?B?b1lIREZMdUpkODg2Um9ONWlOSHdaMHVMOHV3UkRVRGs5RWVjTzVJVVF0QUpo?=
- =?utf-8?B?Y3RYVklYZS9Edk9KSGNGMWFBNXZMelNzZUQ3NHBmTzJaQlF0VExQL25sRmpq?=
- =?utf-8?B?VTVCbDUyMWgxMHFFUmRZTUlQdG1QcFVHa3ZlaXRJcFNMMThiaThsY3hobmR0?=
- =?utf-8?B?VnNObDVBK0pSemVtMlJpUzJ3cHRDQzBJejNlakoycERMUkhyZVJ4SUhjSGk0?=
- =?utf-8?B?dnlVdFdiQko4RDJlYlZrMzdGWmlRcTh1Tjc2aU1YNHc3VVVEZElOTkNFbDJW?=
- =?utf-8?B?cXVOMUJTT3M2N1A2dktDZEd5UURVVVFhc3J5bkNBOUVTd0hyR2lDejhJYXhF?=
- =?utf-8?B?dUhJYzMyNjVHQVZjT05SS2lMVG9IY2p0Z3JLN0orY2lPNlYycys2VlpmdnBq?=
- =?utf-8?B?dUpMYks5UXVwZndHdjFacjJ1WDI3VC9xN205VG1sRUZHN2NpV3JJK2JFRDFh?=
- =?utf-8?B?QitNbGgzZW1OUHJGampseW5PQ3JsbkV2TUdlWGJoZExNQkdReTg3d0FxbjdZ?=
- =?utf-8?B?OFZ4RW8rVEE2T3JxQWNNR1hMODNLNmxMTVNnVm9KRncvd2JpRE5qRFBkc0M0?=
- =?utf-8?B?ZFozMUtKMDBvYnhtQTgxTFVJaHEyZHpKdDRDNTJDemRtc3N0QzNTYkpLU2Nw?=
- =?utf-8?B?aUNRbTRwOStuTU5XRXBSZ0U3WCswSE5paldPclB0L2JWeThESnpMTk9ES2xw?=
- =?utf-8?B?UEY4T3dBTGJMRS9QcWloTlVTa3NpUEsvK1RodkdEMFl6bFZVOEQrYU4rT3lu?=
- =?utf-8?B?Nzlrdjh4OVVFeHJGa1B0bjRqY1VlU05uaHZGUk1xb2VWbTZBelh0YlBJQXNx?=
- =?utf-8?B?QVVLZHVVeDJsbVN6R3ZxMXg5b2Z4VHZkcXRiS3MwM052Wm9vRnRjM3o4UUhr?=
- =?utf-8?B?SVlidkFKbll4bytRb2EzS0RuVjc0b0ZaMVJmdmgxMnNWVmh2SlU1bHBlNEpw?=
- =?utf-8?B?SHl2TnA2elIrZlpsc3dzOW5KUG50blo0bU0zZ3U0ckVZR2FXemxiZ2s5WVpV?=
- =?utf-8?B?bzJQdlRYZnU3S0FzbHNHUTlzOUprbDNldXgveXp5Nms0bDIzV2hPUjlERWs3?=
- =?utf-8?B?ajBhMWkralc5cmxuQlRUN0J2VzFTVno0WkNRbHlSZis4dWtNTWJLWXpCZmRJ?=
- =?utf-8?B?Rm5oWXlwM0ZZQjNCdUsvNHN3TmlNc3p2UlZkNWZob0xjaW1ITmI5RzNRPT0=?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR10MB5613.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(7416014)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?TmdBc0tFd0YxdFhQNFUyMnZsSGFtMGlZMzk3RklPU3NvYTJqRU5TQWw5SmNI?=
- =?utf-8?B?eld0amdLMC8yQStEUmJZaVlIQkgwY0tSdzJwam5EZS9vWExKZ3pOYyszWTBS?=
- =?utf-8?B?WFNIWW80bkc1MFhoemxWYVVXcDlqMkJaNURQM1NjYUpVQ2NVODNKZ05vbzlU?=
- =?utf-8?B?TXcwWU9vTWZGcTVYVHhIa3l0WTRTUHhUYzJEVGZscWNBb2F0dEFuWktjZ0kx?=
- =?utf-8?B?MmdCNUNBVS96RmM1MGl1am5QdFpJdEZnZnlWSlNzMWJMa0lnTHNPWjBBUHJm?=
- =?utf-8?B?Qy80NGhGeVA2dDk5UVZUMk1IM3ZkZEZuK01yd0c5YzlpK0ZrZmFndzhEaURo?=
- =?utf-8?B?eldvZmJ1TjlLY092KzhzOFFNazdSLytoOFZvZWdOcmJSRjBsWXgxMlM0V0h2?=
- =?utf-8?B?bnp5Z1E4L3RsRDZnQU04Y2xJdjY4bW5GVHZHbG9kWkt2VG95MDg1SEprcHVK?=
- =?utf-8?B?UGdDY2xGRDBnMW9oV01mUElsNmRReUlsd0pUcVNONmVlNGttMnRVbklyMk1k?=
- =?utf-8?B?MGl2Vy9XMFhxY3JCdjRMUk1TUU9ESy9GQkdNeFNWd1VwMk9SbmNVNzdIUUhY?=
- =?utf-8?B?TFFrTU0wa3B1K25KbEs5ZGkxTXhZQVNUWnFnaXNVVGo3VTAzc0RLU2dZUU43?=
- =?utf-8?B?RzQzb2J3SzlJaCswSzlCYUpQOU1JV1RqbGd6dUg2UDlHbXFkU29MNXhYUkNP?=
- =?utf-8?B?M080elNDb09BN0sySW8wNE4xbDdQS0RnazVraGhpelBxR0JQRUN0WElLMVRH?=
- =?utf-8?B?ZWdsYmtPckdUazk0RFEvZ3ZiSDE4c0xLTHZERU1qeHk5bTMwS3Q2LzZpYmQr?=
- =?utf-8?B?YU1vb0plRXlGTTluZ1R2RlRNQ3UzY05DbHppMVpoNlRiWkVYQVdNRWlRQmtJ?=
- =?utf-8?B?d2RBMkVmbVpOclV1RG9VeEJXNGpFUTgzZHk5QWRRWTJEbk4zNUllU1FDalN4?=
- =?utf-8?B?cHVSVWg0RVVQcXlqQXNVekxNRnQ0aXQwM21yMVNZM0xJTGpORExjZnh6OW1a?=
- =?utf-8?B?a0gzdUl0VmZzRldIcitOYjFjOUlscFdWYkJ5Q2VVcW9kamlmODd1d0JjZGIr?=
- =?utf-8?B?T1hVUHlmQit1cWNNdlp5cTZ1dEdtSUdIb3Qwcy9vMXE1TmhJV3BicEY3eUU2?=
- =?utf-8?B?TkE1S0lNampaQi91RDVpMUxVNUVybTJqUTFIeWRzekNWcHk4Qkt1Q050SVBC?=
- =?utf-8?B?MGw4NTlpTlVDVzJ5NFN0NUViVzJESVh3NExaSU8zU3BFYmhUck9Hbnp0OStk?=
- =?utf-8?B?Z2RhMEZQOTZYUGI1RTRUYzF2eTNHU2I0WFhQUWxxbUpzaXFtU3R0NW4yN2pQ?=
- =?utf-8?B?WXAzYmc2aXREakJKQW1kTTJMTkVnMGgvQVR6UHBINVFYTlpFL2szRjBObkNq?=
- =?utf-8?B?UG1zVVpOd01YSGE2ZVdWdFpJYVBiNGI3OVExOEs5RGVqNWYvTHhRcFVFNXIz?=
- =?utf-8?B?UjlCVUZYTHBsQzFSa3llUlVjSGJhV0hpNnZUZWxqdFlqazQ0SDNNNzNHRjJG?=
- =?utf-8?B?NTg2d3diVDNYMmlGaWtKc0pZdGx6MFJvQ3ZhVk1zSEM3SmFIakl5VVdTWkox?=
- =?utf-8?B?Ym42MmNFVDhsNkJFMDBYbmhZcHd5UzF1L3JHUHdyWTdTVVNGUFVZMWJ5Z2pK?=
- =?utf-8?B?SU5tclRrbkdYeVBZS3lFa3VlRmUyZG1XbFFLbTY5c0taT3dBUWJmUDEwRHMx?=
- =?utf-8?B?bEIzdnVwZjdvYlRvZmxsb1RkbCtMZGFPTU9ocjIvSTJkOHZjU1UvT3JmQjVr?=
- =?utf-8?B?cklxUmY5dWNIcGJrQ2pDWjcydkhoSm1OUUtoeENOVXQ2TVNDdWUwVUlHd3dp?=
- =?utf-8?B?ckxJc25QTko4S0dHM296em5zYnJBbXZPZWZKL2sxMG8zUkU2TXplS3VkQWpp?=
- =?utf-8?B?aXdnQk0xVU5WZ2U4NExXd0I3NXVVU0lwNDhwbDRmQ3U1cjYwVU5RbE80bHVS?=
- =?utf-8?B?NFY4bVNZcm9HZDZvM0NLaWhzVHpzcFFITEVZMjh5Ui96Ym5sUnpIM2NRQUJ0?=
- =?utf-8?B?d3YrQndLNGJ2ZFl6N2Jhcm1LcC96cmhUWXdoVE1JMjJPUmEwTzI1YWNoM21o?=
- =?utf-8?B?TUE4YTNCTk9XWFk2a1krcG1RWFBnbjZveHMzS2xCZUpXRUNSZ0ZETktJWHpu?=
- =?utf-8?B?TUNNS0I5ZnE2U2JpSVdza2k0WTBQN25oZmp3YnVFYkRWeVNOZ1lnTGNoQTFs?=
- =?utf-8?B?aEx3QmRsTU5aM21ybU5iZGJ4ckZLajdTN1ZCeUVReWw3UExvS2t0TXFlTXN5?=
- =?utf-8?B?dXg5djU0SlJPRkc0aXNMS1lGZFRBPT0=?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	R6Oo8VfhhRFC/HpbetPl10EO7yAklUYOibc4idGRnvAyDZw6IsgKQf5FH4OBbei/7U19datRCrwSmEwQ6tqwHVmGF+4TpembLEquontof2LLipXihvHhfhVVcx9ciEcrSvOhV69SiACfmziZdoSKXP2/xEN/MpOzfLsQ7B3LGaaU6AqepJcLNj1YXsFyK+Z9wmgqSNGcIyv6yL3tmC74k5BzlBnTAgUfr+RFDw0ZGR7u30O8cz8c+yKsCHTj/HyG0FXPhC8CYLCYpQHcokgl0N+Eb753nzhxmiFH3VIp8Rm5ioK0N9iA36H1q9NgaBvKAcsalEgSSgntPogyxfIZPiWR0Z7d5yCaR+14h3ZRTIG+83856/BDEUSd8XFJ6oD8LcugMf7CR82gopx6FvpuLdVHDaC8KM3RdrFgfp3sljARvYFpCRSKgeM2iYIfY8FR36t0Ga52jKRFeeEzEdypbnGnTquA/q6Gf5xIMV3eDNkRTLUMb+GO28x3Pf2j2vJZ+XJicnc/tMiXKASvnOfxMOx9ZzAK57WcA2uuLT8lBrdcc056U04r/hDcoiVmw71sjBsJsKOXOCpCO7vfcci0+NT9VogtW2zLPAtHvZo+NSU=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0904c9da-2bd3-4120-5e2c-08dcedbba6d1
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR10MB5613.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2024 08:22:19.4354
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: C93c8logFnvHiWkoJca1FSPVwIXr2VubZXmUOF2RAM4CB4f1yE7h2MmtCZ+ftq+V9dLia+cork53BD9QNwLRax6XrQUCRJZbMW6Preq6EvI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB7500
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-16_06,2024-10-15_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 mlxscore=0 phishscore=0
- adultscore=0 bulkscore=0 suspectscore=0 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2409260000
- definitions=main-2410160054
-X-Proofpoint-GUID: SJ0tM6UY6FJl2n7pR2n6qh6tIpTA5ubt
-X-Proofpoint-ORIG-GUID: SJ0tM6UY6FJl2n7pR2n6qh6tIpTA5ubt
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241016-b4-ovpn-v9-4-aabe9d225ad5@openvpn.net>
 
-On Wed, Oct 16, 2024 at 01:16:15AM -0700, Suren Baghdasaryan wrote:
-> On Tue, Oct 15, 2024 at 11:05 PM Lorenzo Stoakes
-> <lorenzo.stoakes@oracle.com> wrote:
-> >
-> > On Tue, Oct 15, 2024 at 12:40:41PM -0700, Suren Baghdasaryan wrote:
-> > [snip]
-> > > > -struct pid *pidfd_get_pid(unsigned int fd, unsigned int *flags)
-> > > > +struct pid *__pidfd_get_pid(unsigned int pidfd, bool pin_pid,
-> > > > +                           bool allow_proc, unsigned int *flags,
-> > > > +                           struct fd *fd)
-> > > >  {
-> > > > -       struct fd f;
-> > > > +       struct file *file;
-> > > >         struct pid *pid;
-> > > > +       struct fd f = fdget(pidfd);
-> > > >
-> > > > -       f = fdget(fd);
-> > > > -       if (!fd_file(f))
-> > > > +       file = fd_file(f);
-> > > > +       if (!file)
-> > > >                 return ERR_PTR(-EBADF);
-> > > >
-> > > > -       pid = pidfd_pid(fd_file(f));
-> > > > -       if (!IS_ERR(pid)) {
-> > > > -               get_pid(pid);
-> > > > -               *flags = fd_file(f)->f_flags;
-> > > > +       pid = pidfd_pid(file);
-> > > > +       /* If we allow opening a pidfd via /proc/<pid>, do so. */
-> > > > +       if (IS_ERR(pid) && allow_proc)
-> > > > +               pid = tgid_pidfd_to_pid(file);
-> > > > +
-> > > > +       if (IS_ERR(pid)) {
-> > > > +               fdput(f);
-> > > > +               return pid;
-> > > >         }
-> > > >
-> > > > -       fdput(f);
-> > > > +       if (pin_pid)
-> > > > +               get_pid(pid);
-> > > > +       else
-> > > > +               WARN_ON_ONCE(!fd); /* Nothing to keep pid/pidfd around? */
-> > > > +
-> > > > +       if (flags)
-> > > > +               *flags = file->f_flags;
-> > > > +
-> > > > +       /*
-> > > > +        * If the user provides an fd output then it will handle decrementing
-> > > > +        * its reference counter.
-> > > > +        */
-> > > > +       if (fd)
-> > > > +               *fd = f;
-> > > > +       else
-> > > > +               /* Otherwise we release it. */
-> > > > +               fdput(f);
-> > > > +
-> > > >         return pid;
-> > > >  }
-> > >
-> > > There is an EXPORT_SYMBOL_GPL(pidfd_get_pid) right after this line. It
-> > > should also be changed to EXPORT_SYMBOL_GPL(__pidfd_get_pid),
-> > > otherwise __pidfd_get_pid() will not be exported. A module calling
-> > > pidfd_get_pid() now inlined in the header file will try to call
-> > > __pidfd_get_pid() and will have trouble resolving this symbol.
-> >
-> > Hmm hang on not there isn't? I don't see that anywhere?
+Wed, Oct 16, 2024 at 03:03:04AM CEST, antonio@openvpn.net wrote:
+>Add basic infrastructure for handling ovpn interfaces.
 >
-> Doh! Sorry, I didn't realize the export was an out-of-tree Android
-> change. Never mind...
-
-No probs :P just glad I didn't miss something in this series!
-
-Hey maybe a motivation to upstream some of this? ;)
-
+>Signed-off-by: Antonio Quartulli <antonio@openvpn.net>
+>---
+> drivers/net/ovpn/main.c       | 115 ++++++++++++++++++++++++++++++++++++++++--
+> drivers/net/ovpn/main.h       |   7 +++
+> drivers/net/ovpn/ovpnstruct.h |   8 +++
+> drivers/net/ovpn/packet.h     |  40 +++++++++++++++
+> include/uapi/linux/if_link.h  |  15 ++++++
+> 5 files changed, 180 insertions(+), 5 deletions(-)
 >
-> >
-> > [snip]
+>diff --git a/drivers/net/ovpn/main.c b/drivers/net/ovpn/main.c
+>index d5bdb0055f4dd3a6e32dc6e792bed1e7fd59e101..eead7677b8239eb3c48bb26ca95492d88512b8d4 100644
+>--- a/drivers/net/ovpn/main.c
+>+++ b/drivers/net/ovpn/main.c
+>@@ -10,18 +10,52 @@
+> #include <linux/genetlink.h>
+> #include <linux/module.h>
+> #include <linux/netdevice.h>
+>+#include <linux/inetdevice.h>
+>+#include <net/ip.h>
+> #include <net/rtnetlink.h>
+>-#include <uapi/linux/ovpn.h>
+>+#include <uapi/linux/if_arp.h>
+> 
+> #include "ovpnstruct.h"
+> #include "main.h"
+> #include "netlink.h"
+> #include "io.h"
+>+#include "packet.h"
+> 
+> /* Driver info */
+> #define DRV_DESCRIPTION	"OpenVPN data channel offload (ovpn)"
+> #define DRV_COPYRIGHT	"(C) 2020-2024 OpenVPN, Inc."
+> 
+>+static void ovpn_struct_free(struct net_device *net)
+>+{
+>+}
+>+
+>+static int ovpn_net_open(struct net_device *dev)
+>+{
+>+	netif_tx_start_all_queues(dev);
+>+	return 0;
+>+}
+>+
+>+static int ovpn_net_stop(struct net_device *dev)
+>+{
+>+	netif_tx_stop_all_queues(dev);
+>+	return 0;
+>+}
+>+
+>+static const struct net_device_ops ovpn_netdev_ops = {
+>+	.ndo_open		= ovpn_net_open,
+>+	.ndo_stop		= ovpn_net_stop,
+>+	.ndo_start_xmit		= ovpn_net_xmit,
+>+};
+>+
+>+static const struct device_type ovpn_type = {
+>+	.name = OVPN_FAMILY_NAME,
+>+};
+>+
+>+static const struct nla_policy ovpn_policy[IFLA_OVPN_MAX + 1] = {
+>+	[IFLA_OVPN_MODE] = NLA_POLICY_RANGE(NLA_U8, OVPN_MODE_P2P,
+>+					    OVPN_MODE_MP),
+>+};
+>+
+> /**
+>  * ovpn_dev_is_valid - check if the netdevice is of type 'ovpn'
+>  * @dev: the interface to check
+>@@ -33,16 +67,76 @@ bool ovpn_dev_is_valid(const struct net_device *dev)
+> 	return dev->netdev_ops->ndo_start_xmit == ovpn_net_xmit;
+> }
+> 
+>+static void ovpn_setup(struct net_device *dev)
+>+{
+>+	/* compute the overhead considering AEAD encryption */
+>+	const int overhead = sizeof(u32) + NONCE_WIRE_SIZE + 16 +
+>+			     sizeof(struct udphdr) +
+>+			     max(sizeof(struct ipv6hdr), sizeof(struct iphdr));
+>+
+>+	netdev_features_t feat = NETIF_F_SG | NETIF_F_HW_CSUM | NETIF_F_RXCSUM |
+>+				 NETIF_F_GSO | NETIF_F_GSO_SOFTWARE |
+>+				 NETIF_F_HIGHDMA;
+>+
+>+	dev->needs_free_netdev = true;
+>+
+>+	dev->pcpu_stat_type = NETDEV_PCPU_STAT_TSTATS;
+>+
+>+	dev->netdev_ops = &ovpn_netdev_ops;
+>+
+>+	dev->priv_destructor = ovpn_struct_free;
+>+
+>+	dev->hard_header_len = 0;
+>+	dev->addr_len = 0;
+>+	dev->mtu = ETH_DATA_LEN - overhead;
+>+	dev->min_mtu = IPV4_MIN_MTU;
+>+	dev->max_mtu = IP_MAX_MTU - overhead;
+>+
+>+	dev->type = ARPHRD_NONE;
+>+	dev->flags = IFF_POINTOPOINT | IFF_NOARP;
+>+	dev->priv_flags |= IFF_NO_QUEUE;
+>+
+>+	dev->lltx = true;
+>+	dev->features |= feat;
+>+	dev->hw_features |= feat;
+>+	dev->hw_enc_features |= feat;
+>+
+>+	dev->needed_headroom = OVPN_HEAD_ROOM;
+>+	dev->needed_tailroom = OVPN_MAX_PADDING;
+>+
+>+	SET_NETDEV_DEVTYPE(dev, &ovpn_type);
+>+}
+>+
+> static int ovpn_newlink(struct net *src_net, struct net_device *dev,
+> 			struct nlattr *tb[], struct nlattr *data[],
+> 			struct netlink_ext_ack *extack)
+> {
+>-	return -EOPNOTSUPP;
+>+	struct ovpn_struct *ovpn = netdev_priv(dev);
+>+	enum ovpn_mode mode = OVPN_MODE_P2P;
+>+
+>+	if (data && data[IFLA_OVPN_MODE]) {
+>+		mode = nla_get_u8(data[IFLA_OVPN_MODE]);
+
+Some sanity check perhaps? "validate" op is here for that purpose.
+
+
+>+		netdev_dbg(dev, "setting device mode: %u\n", mode);
+>+	}
+>+
+>+	ovpn->dev = dev;
+>+	ovpn->mode = mode;
+>+
+>+	/* turn carrier explicitly off after registration, this way state is
+>+	 * clearly defined
+>+	 */
+>+	netif_carrier_off(dev);
+>+
+>+	return register_netdevice(dev);
+
+[...]
 
