@@ -1,172 +1,110 @@
-Return-Path: <linux-kselftest+bounces-19880-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19881-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0BB219A13F4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 22:30:48 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 322EF9A1494
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 23:06:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8A831C224EA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 20:30:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B38F7B22796
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 21:06:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4838621A6EA;
-	Wed, 16 Oct 2024 20:28:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFAC11C4A28;
+	Wed, 16 Oct 2024 21:05:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="YoTWxlvb"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VNxerzC6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DB0219CAC
-	for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 20:28:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49D8A1B6CF4
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 21:05:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729110517; cv=none; b=fqFIHroYNKxGfsAamDBEqVAjlfsK+YOPLNWACKRoyAGccNcTw4HxlDJXlNTf7jheAb6latLYd9xdvzwrpD6T1Rp6l64JVHNc6D4SzFC2mDKcRQDyX/7J2FmI312j61c0PnEOj0vPLnQCk/WU4Qwzu4hGiVuBlizC5DyrPwHJHP4=
+	t=1729112757; cv=none; b=HaQHdiMjZPmZwizDQ8vmrzLz9mnsz6HzWxcv+XMAluh8rbiXsaWN5mDBdAiEsZMJ1Gm+uu7+A44AeognHteYsoD6VealrbMWOBxHY3/tYlWrJ2a1LakGB06zex6wOoT1TRmvlWrhR3ULRe5V7T3iSEEgURuBc70yf11mC9iffos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729110517; c=relaxed/simple;
-	bh=BsCzhPQdWowE8LOw5zBnSFi1XHB7Z9+iXM8KDjw1xGk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Fsxj748fjb/MjaOlqBSO94oonVVFMvm8q4mq3jMQElnC0DZCBeZPcJnBNlVP8KM8j88YvCGFrhznWhLCyHE8Lmg6qv8s4lS9tIxEAArSNZ4JoBsTnpwBBlxO+mbUqIY3w0SEx9WmSUZKzoEcc67G4J65CUHCZsVa7eobFHAARSw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=YoTWxlvb; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-7ea8ecacf16so159508a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 13:28:35 -0700 (PDT)
+	s=arc-20240116; t=1729112757; c=relaxed/simple;
+	bh=WZW00TKTaoemSd6JPBFYlmG2IMjRqCAXZEuW81RfWK8=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=d2fbpuQicQfDyA4QTcDTBnzKn+jSkiPuDsG6SBsfzMWVAS/TDJIhmQ+R0TczPmUkLY79j8PryOOEk1bQNZGqRBUG2FuZ8ayQ2KTTVBWUzEse5//f6yKKQoOeDcC9A0fLWUiIshdMn5VTekzdyiNbTKjJOmfgG6BR1tAckPSlTRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VNxerzC6; arc=none smtp.client-ip=209.85.128.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6e35d1d8c82so5925987b3.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 14:05:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1729110515; x=1729715315; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5WI0PfAqEvWugCZ5STUUK7Rk7SGo8azDpX4lf/J5+9s=;
-        b=YoTWxlvbWQ0wuT8aqiQmCAI/9aFKlFxuMC+E+kyw3n880nSLDhghfbRJkT7tP9PSnb
-         +MKIOiE3YSSvJC8qFR39tF86R5DnaBM/5a3knQNCPctIg+eoWpq9FLrE/BctsQDwl3XG
-         7srSpRWp6TqvGkjZabXHUiNzmeRRejx8UhZOZYhJ7olToooJvSks+gsnpb/GZvQywxvt
-         4cNa+GlVzLhOHy9SeibuB/LfGWonpqZ95ziKezEzb7hsfI7rNS5rmJEQtQ8FI2gM54vh
-         OyAxJYutDmlQBGGI5bsEsiJZRXXpK85CjcWC6aSBy6KUuxIf8zeYkGUSggAmcbHz44C7
-         PrMg==
+        d=google.com; s=20230601; t=1729112755; x=1729717555; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mc2AnrLM2UF0S090yPZTAZNfP2OSi9FUUhZDFa9DYsQ=;
+        b=VNxerzC6t86Yym04K1aLDj6fmY8rvympoix6EPXdefK7Kk8UuWLz85DhDdQwBigCC6
+         BziXr/ASvqBnecGBfYUhwOuiMsGGH6oWN9bnRp8354Dz/BbneCVB0HN2I0e1SZgBFr06
+         WyILTpfQeX7z4t0NgKadFfyAu2dWQFNmDAo41XpBCg4PX7xsaBMpWj5p8POgSlAXMC5b
+         25yGOmc7sZjyNdk8P5sr/Tjs7lcgAjjksfQDc/chg/TxvVHtoiTHeDH1uT0GMmx22gl8
+         JFFrrcL5aM4auvQ4X8OpSfXzTw4vY6vX572Zg2LH+d2Pn7e9xgHUYaar2h5nOtpgQhQM
+         uKgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729110515; x=1729715315;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5WI0PfAqEvWugCZ5STUUK7Rk7SGo8azDpX4lf/J5+9s=;
-        b=PgGZOu5COEWkyyMluGuRyZzqaalriNQXnfTZXUKhrBaxSl5QTnqYEcHW7OgxLfWw1S
-         F1xfJ/GuAJ5tDXPZnJPlIm176ZbmDsDX9FH4GoL13ydhIOkJL7sOI0qaxxWLMZ+XU7mS
-         v7eHjth5EReVQSkx6b+k85dyhPiv8Mnk7kFCg5a8jwNj1DEJ7wxZUFDy2+wLBZg4n898
-         3ltfQuChrhnHPJGbfbNMxYHfubnXDOpIuR0sU86ssBpQ5T3uNM4JMIBD+eGBxAMwvN8w
-         Ng/u4BM4yq46cvUEl/M/7HpGv23PxPGecjk7zpRdTfKQRHbA8DbZtYZhbyvMCggflvnf
-         AyLA==
-X-Forwarded-Encrypted: i=1; AJvYcCVzpCw+sRjWQ8XVRr5MjWcWlREeOryaTXxQintdUFwnJRrbP/mG6sU/cKbstgaAoLHpalGWJ8GZqoNFjn5dejg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySI99pQLPlzCcEwMe+/e+Zogm9FD5L1uf72bQH4YGrF+2jJOKZ
-	AwK86nhlUstzX/5rapGSXrI38iZnYb2OFfLIqZkme/JyCOyq2q8C2wTW332xbqs=
-X-Google-Smtp-Source: AGHT+IGcSXANWUtxTrqBQY826KCMZtK9Mvi3eTSETMPgwJlkMpZfT0sjFjvzgcJsn91FjGVwM3cBqA==
-X-Received: by 2002:a17:90b:802:b0:2e1:ce7b:6069 with SMTP id 98e67ed59e1d1-2e31538f1camr20096845a91.33.1729110515177;
-        Wed, 16 Oct 2024 13:28:35 -0700 (PDT)
-Received: from sw06.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e3e08f8f89sm228613a91.38.2024.10.16.13.28.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Oct 2024 13:28:34 -0700 (PDT)
-From: Samuel Holland <samuel.holland@sifive.com>
-To: Palmer Dabbelt <palmer@dabbelt.com>,
-	linux-riscv@lists.infradead.org
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Atish Patra <atishp@atishpatra.org>,
-	linux-kselftest@vger.kernel.org,
-	Rob Herring <robh+dt@kernel.org>,
-	"Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-	Shuah Khan <shuah@kernel.org>,
-	devicetree@vger.kernel.org,
-	Anup Patel <anup@brainfault.org>,
-	linux-kernel@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	kvm-riscv@lists.infradead.org,
-	Conor Dooley <conor@kernel.org>,
-	kasan-dev@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	Evgenii Stepanov <eugenis@google.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Samuel Holland <samuel.holland@sifive.com>
-Subject: [PATCH v5 10/10] KVM: riscv: selftests: Add Smnpm and Ssnpm to get-reg-list test
-Date: Wed, 16 Oct 2024 13:27:51 -0700
-Message-ID: <20241016202814.4061541-11-samuel.holland@sifive.com>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20241016202814.4061541-1-samuel.holland@sifive.com>
-References: <20241016202814.4061541-1-samuel.holland@sifive.com>
+        d=1e100.net; s=20230601; t=1729112755; x=1729717555;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mc2AnrLM2UF0S090yPZTAZNfP2OSi9FUUhZDFa9DYsQ=;
+        b=VIvII3utXNwpHER4zHeDUyeiv0M2YVxwuQx5FvH2m63PbxJsbe+C7OSTDyDh1yvs2H
+         roTDBejGtgBOZRJ7eEWCQfpcIfbzaPT0JUW+ky/7vmEzYiolIQeUaFiSL41y5KNp5X20
+         y7pxo/F1CM7sxwmjSXS/tkhdpy5vS0WURvTp56Mq4xg4481U3CAgLXTMrgiJnNVdE5iZ
+         Rt3w1UnqTXzAj6lFRAAo7eBgu3wQBY7VN9tGDtR4st+SmyX6MxnMeZBJvsnEyYN5NUrj
+         1+7R0Y7wiGwSBgupkDuL3yz6WLoTHciujJX5EtnYFkWBB+L/X5hBzyEfuwtoDpYFXYKu
+         rgmA==
+X-Forwarded-Encrypted: i=1; AJvYcCUhBEV1bs9BFbowXI46C5EpnoaY8tvANR1lkEE4MXp6nubf8fsIFHMQPFmBFnjIz9n4dW4BUo/20tkxJgvxRU0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzV5XVrHspChaHTQh/xcQtcUyJVZkk2UBj5ql4oR/Z7Rpi7PgdR
+	rIcBz+9ysqxuBoSMZEoj6euoczTcI8yNjAJ2BYYpy7RmiyzVuE853caW92CRgLeYp/X0ferunVf
+	oMw==
+X-Google-Smtp-Source: AGHT+IGkf38vmY/wJdMjW1LCURxYE7Ec+J9yr0i/d8iGrua/q+lp0G6QiUUZJgyY0LEomNIZeY0ALfUpKv0=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:9d:3983:ac13:c240])
+ (user=seanjc job=sendgmr) by 2002:a25:f407:0:b0:e1a:6bf9:aa83 with SMTP id
+ 3f1490d57ef6-e29782d5fa6mr5916276.3.1729112755243; Wed, 16 Oct 2024 14:05:55
+ -0700 (PDT)
+Date: Wed, 16 Oct 2024 14:05:53 -0700
+In-Reply-To: <20241015195227.GA18617@dev-dsk-iorlov-1b-d2eae488.eu-west-1.amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20240927161657.68110-1-iorlov@amazon.com> <20240927161657.68110-2-iorlov@amazon.com>
+ <Zwmyzg5WiKKvySS1@google.com> <20241015195227.GA18617@dev-dsk-iorlov-1b-d2eae488.eu-west-1.amazon.com>
+Message-ID: <ZxAqscbrROD1_szG@google.com>
+Subject: Re: [PATCH 1/3] KVM: x86, vmx: Add function for event delivery error generation
+From: Sean Christopherson <seanjc@google.com>
+To: Ivan Orlov <iorlov@amazon.com>
+Cc: bp@alien8.de, dave.hansen@linux.intel.com, mingo@redhat.com, 
+	pbonzini@redhat.com, shuah@kernel.org, tglx@linutronix.de, hpa@zytor.com, 
+	kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, x86@kernel.org, jalliste@amazon.com, 
+	nh-open-source@amazon.com, pdurrant@amazon.co.uk
+Content-Type: text/plain; charset="us-ascii"
 
-Add testing for the pointer masking extensions exposed to KVM guests.
+On Tue, Oct 15, 2024, Ivan Orlov wrote:
+> > > diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> > > index c67e448c6ebd..afd785e7f3a3 100644
+> > > --- a/arch/x86/kvm/vmx/vmx.c
+> > > +++ b/arch/x86/kvm/vmx/vmx.c
+> > > @@ -6550,19 +6550,10 @@ static int __vmx_handle_exit(struct kvm_vcpu *vcpu, fastpath_t exit_fastpath)
+> > >  	     exit_reason.basic != EXIT_REASON_APIC_ACCESS &&
+> > >  	     exit_reason.basic != EXIT_REASON_TASK_SWITCH &&
+> > >  	     exit_reason.basic != EXIT_REASON_NOTIFY)) {
+> > > -		int ndata = 3;
+> > > +		gpa_t gpa = vmcs_read64(GUEST_PHYSICAL_ADDRESS);
+> > > +		bool is_mmio = exit_reason.basic == EXIT_REASON_EPT_MISCONFIG;
+> > 
+> > There's no need for is_mmio, just pass INVALID_GPA when the GPA isn't known.
+> 
+> Ah alright, then we definitely don't need an is_mmio field. I assume we
+> can't do MMIO at GPA=0, right?
 
-Reviewed-by: Anup Patel <anup@brainfault.org>
-Signed-off-by: Samuel Holland <samuel.holland@sifive.com>
----
+Wrong :-)
 
-(no changes since v2)
-
-Changes in v2:
- - New patch for v2
-
- tools/testing/selftests/kvm/riscv/get-reg-list.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-index 8e34f7fa44e9..54ab484d0000 100644
---- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-@@ -41,9 +41,11 @@ bool filter_reg(__u64 reg)
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_I:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_M:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_V:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SMNPM:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SMSTATEEN:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SSAIA:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SSCOFPMF:
-+	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SSNPM:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SSTC:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVINVAL:
- 	case KVM_REG_RISCV_ISA_EXT | KVM_REG_RISCV_ISA_SINGLE | KVM_RISCV_ISA_EXT_SVNAPOT:
-@@ -414,9 +416,11 @@ static const char *isa_ext_single_id_to_str(__u64 reg_off)
- 		KVM_ISA_EXT_ARR(I),
- 		KVM_ISA_EXT_ARR(M),
- 		KVM_ISA_EXT_ARR(V),
-+		KVM_ISA_EXT_ARR(SMNPM),
- 		KVM_ISA_EXT_ARR(SMSTATEEN),
- 		KVM_ISA_EXT_ARR(SSAIA),
- 		KVM_ISA_EXT_ARR(SSCOFPMF),
-+		KVM_ISA_EXT_ARR(SSNPM),
- 		KVM_ISA_EXT_ARR(SSTC),
- 		KVM_ISA_EXT_ARR(SVINVAL),
- 		KVM_ISA_EXT_ARR(SVNAPOT),
-@@ -946,8 +950,10 @@ KVM_ISA_EXT_SUBLIST_CONFIG(aia, AIA);
- KVM_ISA_EXT_SUBLIST_CONFIG(fp_f, FP_F);
- KVM_ISA_EXT_SUBLIST_CONFIG(fp_d, FP_D);
- KVM_ISA_EXT_SIMPLE_CONFIG(h, H);
-+KVM_ISA_EXT_SIMPLE_CONFIG(smnpm, SMNPM);
- KVM_ISA_EXT_SUBLIST_CONFIG(smstateen, SMSTATEEN);
- KVM_ISA_EXT_SIMPLE_CONFIG(sscofpmf, SSCOFPMF);
-+KVM_ISA_EXT_SIMPLE_CONFIG(ssnpm, SSNPM);
- KVM_ISA_EXT_SIMPLE_CONFIG(sstc, SSTC);
- KVM_ISA_EXT_SIMPLE_CONFIG(svinval, SVINVAL);
- KVM_ISA_EXT_SIMPLE_CONFIG(svnapot, SVNAPOT);
-@@ -1009,8 +1015,10 @@ struct vcpu_reg_list *vcpu_configs[] = {
- 	&config_fp_f,
- 	&config_fp_d,
- 	&config_h,
-+	&config_smnpm,
- 	&config_smstateen,
- 	&config_sscofpmf,
-+	&config_ssnpm,
- 	&config_sstc,
- 	&config_svinval,
- 	&config_svnapot,
--- 
-2.45.1
-
+From an architectural perspective, GPA=0 is not special in any way.  E.g. prior
+to L1TF, Linux would happily use the page with PFN=0.
 
