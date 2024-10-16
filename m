@@ -1,74 +1,71 @@
-Return-Path: <linux-kselftest+bounces-19893-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19894-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E35D9A15EB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 00:54:01 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC9749A15FD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 01:10:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F00228500E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 22:54:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D230B2303A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 23:10:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B14D61D363F;
-	Wed, 16 Oct 2024 22:53:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 807501D4610;
+	Wed, 16 Oct 2024 23:10:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YIjPYUpy"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QUF3DFeE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com [209.85.166.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF39F9C1;
-	Wed, 16 Oct 2024 22:53:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79B671534E6
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 23:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729119237; cv=none; b=FeZC3VHTb7TDENPLluiZHXe1So2i+PgkxW2PtLCdiyKdzusCA5pGcUGjFkefJBYS7uUutZT//pC0Ash3Nc4K0Wlivo9iWiSau77PzQkLbMDz1RFp4naGdnAgfXfKkJphJfIy8WB2/oht/+aJi1LFGsa6+rND+RdM4G4B8E5xbik=
+	t=1729120224; cv=none; b=NEijnSA6OTaMIjPwe2edvadOWpdqMZm5rADYY+BIobPnin1fQ/zjvczE9hp61WnSXB0aVZIfe0P+Xmsx4dKVEYg3qL8SLHJ6xS6TlqoOiSA9i97jqmBrsMMUDBHU337c+R8OA7bMBgj6wpbuiFtrTSKQJKctLVX0r/aTT3rBpCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729119237; c=relaxed/simple;
-	bh=ZzgH6edon6973UkILs4hl4gx6y7cVOccuZjGRNkDDEk=;
+	s=arc-20240116; t=1729120224; c=relaxed/simple;
+	bh=CHvTjwAGzBeYZYp+VdXxHeL0nXva4h7kq/WfIdQA1kQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JCG23tmXNkzS4p5BNe2to0KU9fAh+uahAOrj9rIvwyYnTfWSgVIQ9om38qHxM9BdDvPzcejsY2ai1xdHt/BhISLY3/oR/AipsIHbYmLB2Gqdie+6piT2dRlXY0pREi+6Ce/l1sk4Zg/8ynOkkJgr/4cvjaB/tVZd1GNeCH1KQ8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YIjPYUpy; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2fb3da341c9so3585551fa.2;
-        Wed, 16 Oct 2024 15:53:55 -0700 (PDT)
+	 In-Reply-To:Content-Type; b=iMe9CXh6VUM0M9F5kl6AUvsFI6Z4htpbeFgeA7v3TWGtFILXzSxQm4sty5NI29VdHMOzXdsOTG04KbBgx0jxrWRkvy+JMa5itWpomdglZuAYt0+RBnAnuDs146jvpWK/zXUzuTOgwEeVHB5CFosCf+JEz2EWvNPh3QAYICKd4DY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QUF3DFeE; arc=none smtp.client-ip=209.85.166.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f169.google.com with SMTP id e9e14a558f8ab-3a3c00f2c75so1521455ab.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 16:10:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1729119234; x=1729724034; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1729120221; x=1729725021; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ga/CVT5W3GWQeZc8PFfRNTONvuq8BK53J6zZCa4F0Xs=;
-        b=YIjPYUpyCjwqg4gakIEIeyWtUKJ1fFO39ixSLsg3t0gzYKwUMtS4JGES7yM2hjjG1m
-         D28x9UTD2bLtrX1DZfc3fnpeEdWU07IOQAF8NmUOvkjsNIItoZVu8fZFlS31hEcp7tEi
-         cT6C6k6xeFjFFLni1WUufpm7SnqV+LViOwchnmfFl46zeTQCCL99qEl/9AAnizk0kUv9
-         W0Lk7Qfge5WNGj1Px3/qVlY2xS3m+jAY2f4DxlqKRlgJr1fa85KAHAPXBDQehO+msffJ
-         lZSRYWshDxqxjr/Yg9R9WxmOwN0swCQPUQLzv4AVG/FNhUkPFEzJvWgdMOCWmce7a46N
-         PHpQ==
+        bh=WXH/z1N1+QwsHO3qNzXKX0fwZbKnd4sF3AGH3jjCTok=;
+        b=QUF3DFeEsLrUmLxTcc3TySUUCILWNlIdFkML0F6Qvt9HggiOSC1tZmtKhJ70W5kG+Q
+         JRaqFhsFo/fGmFyPFz27xSYCXm66kMIgCGLS1rw1IsF43bE0Qd8p2Sfod4R36E9ZpqjC
+         mF0wvZb/p2JB1j9Nh44PC7FflXGf9mwD0NGOg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1729119234; x=1729724034;
+        d=1e100.net; s=20230601; t=1729120221; x=1729725021;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ga/CVT5W3GWQeZc8PFfRNTONvuq8BK53J6zZCa4F0Xs=;
-        b=WmlnJ+vAsEmPTfUXen14nr7yrlD0wnip9kMnNptOsBHAV+GdfmVd1bQni72m442eQh
-         6qkxxmubPUSEp1MgM+UCVmgORuRj6zTIT6ZXthQrL/eBAM6ojaDjBG7Py27DdiMHdm1G
-         0N4lH1SlYWVwffF+Mg2i9JgzsumG4HMlELI5iBJ8c8AFe0Mdn/tb9MHW71FVUQkt55VT
-         W1MJAQ7UkZpLTCQrwC9GfWXP4zg/4v61qzfZYQdo6+P94TZs/FevTgAOuBY2kQY6w84s
-         PPd5TBW31GiCGDHmaY8Sc6j9J39xvZe6t/qeFez2MeAuMuuehr8pZKaKaSqDrvddIr7t
-         KiHQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVaqSOdrPoc4nrJgEEhrXm8asHrSIe7Zlq1wFJZ1xVh7qKMu4C4nryTcElJmDhvNPZFYTPw8auxPcLjXv+M@vger.kernel.org, AJvYcCVdPSpxfRhT+geqjNMTFdmpjGnceeb36V7ffdgFjA5cZk+6C14+L36L4ZFTu3CqNPQ6g8I=@vger.kernel.org, AJvYcCXiNTu2USeSuUfEUhtCZOh6Vd+SU7HtKCU3q0DAmzts2X2jmEb3RDVP1Osq93LN0bO7/TGIzc8xXUTP6Gws4oCv@vger.kernel.org
-X-Gm-Message-State: AOJu0YxD3SoX0qAkxRGbsFgjb8ZAiYYVmAP7ptW257HIJtWQZZHVyrJl
-	f5hINK67t0InPkx7Xqbf7n0Gd2S1rHbqJgfZbbLtiJMJGvxrhq7/
-X-Google-Smtp-Source: AGHT+IFwU20AfuL0IjVDwUZCfNCYMwzvYSydiUwCAC8r43c3D1HNNKNbO2HiS99yRrFvIESYEmG8dg==
-X-Received: by 2002:a05:6512:694:b0:538:9e40:94b with SMTP id 2adb3069b0e04-539e54e82abmr7941535e87.19.1729119233501;
-        Wed, 16 Oct 2024 15:53:53 -0700 (PDT)
-Received: from ?IPV6:2a02:8012:e013:0:f52b:f2f2:1fbe:f0ae? ([2a02:8012:e013:0:f52b:f2f2:1fbe:f0ae])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43158c36b59sm6998575e9.7.2024.10.16.15.53.51
+        bh=WXH/z1N1+QwsHO3qNzXKX0fwZbKnd4sF3AGH3jjCTok=;
+        b=JSFE4wCYkuWHWzGw1CvzTrgw0ikDbvlrwOduj2sHuoH8fatgAJ/lePtgECHBgDhL9Z
+         W8jrSVE5aZnZdXCPu0QFg8jfS2JU4YdSE6v6vYcTI4WZE2/POx3lzwCBRwBYswIS8uLu
+         c2ZmwBOEGcyVP7/yYBBrXAKaZyATZHfrPkldEA3MBUE9jPZ5PlPsZx5YqSiJE6lvT+ry
+         Yfeqh2AsnXwz9FNKLMr4QhScr+6tXFk6zfyBoVfOrqW85Oul3YewY6jj/Vz0qzbyuoOQ
+         Kh/i3TFOmwt+l3WLyATSVRD7M3DzNyOQlQH5lHwCwlI5fvnUsueWumiHLzv1XzZMfK3q
+         EbLw==
+X-Forwarded-Encrypted: i=1; AJvYcCXieCpnARkvRFNlDwtNpLxOD7oPxNv9Obd3reW6sElHu2bqHAPct73f1qRzeh1I2W87Q8Fx9DVoa1fsfIsqzjA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwcMjqACbS8uzXriVzd3CGSzceHpl+R0zeVJSSevjeFy15AlVTO
+	8pLo5QIXnbSPEQf7l/GCMQR+WBOroT5A0wn0dmoSNI1Qq2pybIamGED/c/VmKPU=
+X-Google-Smtp-Source: AGHT+IFo+tAT1cJMODUyUUhycLVaulNah3VD4LoyM3xQaO53vA15Gr73EZfZkmdRqDAxzRRfVQ8ZCw==
+X-Received: by 2002:a05:6e02:1748:b0:3a2:7651:9867 with SMTP id e9e14a558f8ab-3a3bcdc637amr126855755ab.13.1729120221383;
+        Wed, 16 Oct 2024 16:10:21 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dbecc4247esm1092329173.126.2024.10.16.16.10.20
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Oct 2024 15:53:53 -0700 (PDT)
-Message-ID: <2b954265-9ec0-4ee6-99c8-6ac080687d02@gmail.com>
-Date: Wed, 16 Oct 2024 23:53:50 +0100
+        Wed, 16 Oct 2024 16:10:20 -0700 (PDT)
+Message-ID: <a0944037-e90a-4884-b12f-284b373a0d63@linuxfoundation.org>
+Date: Wed, 16 Oct 2024 17:10:20 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,151 +73,221 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] KVM: vmx, svm, mmu: Process MMIO during event
- delivery
-To: Sean Christopherson <seanjc@google.com>, Ivan Orlov <iorlov@amazon.com>
-Cc: bp@alien8.de, dave.hansen@linux.intel.com, mingo@redhat.com,
- pbonzini@redhat.com, shuah@kernel.org, tglx@linutronix.de, hpa@zytor.com,
- kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, x86@kernel.org, jalliste@amazon.com,
- nh-open-source@amazon.com, pdurrant@amazon.co.uk
-References: <20240927161657.68110-1-iorlov@amazon.com>
- <20240927161657.68110-3-iorlov@amazon.com> <Zwm9TmRpNY6EeGKu@google.com>
+Subject: Re: [PATCH v2] selftests: clone3: Use the capget and capset syscall
+ directly
+To: zhouyuhang <zhouyuhang1010@163.com>, brauner@kernel.org, shuah@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ zhouyuhang <zhouyuhang@kylinos.cn>, Shuah Khan <skhan@linuxfoundation.org>
+References: <20241015105955.126994-1-zhouyuhang1010@163.com>
+ <806bee31-d740-49c9-abe0-06820cfa7395@linuxfoundation.org>
+ <dea6d512-64c7-4ec1-a99d-6796e434c9a4@163.com>
 Content-Language: en-US
-From: Ivan Orlov <ivan.orlov0322@gmail.com>
-In-Reply-To: <Zwm9TmRpNY6EeGKu@google.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <dea6d512-64c7-4ec1-a99d-6796e434c9a4@163.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 10/12/24 01:05, Sean Christopherson wrote:
+On 10/16/24 03:18, zhouyuhang wrote:
 > 
->> +			 * without VMM intervention, so return a corresponding internal error
->> +			 * instead (otherwise, vCPU will fall into infinite loop trying to
->> +			 * deliver the event again and again).
->> +			 */
->> +			if (error_code & PFERR_EVT_DELIVERY) {
 > 
-> Hmm, I'm 99% certain handling error in this location is wrong, and I'm also pretty
-> sure it's unnecessary.  Or rather, the synthetic error code is unnecessary.
+> 在 2024/10/15 23:31, Shuah Khan 写道:
+>> On 10/15/24 04:59, zhouyuhang wrote:
+>>> From: zhouyuhang <zhouyuhang@kylinos.cn>
+>>>
+>>> The libcap commit aca076443591 ("Make cap_t operations thread safe.")
+>>> added a __u8 mutex at the beginning of the struct _cap_struct, it changes
+>>> the offset of the members in the structure that breaks the assumption
+>>> made in the "struct libcap" definition in clone3_cap_checkpoint_restore.c.
+>>> This will make the test fail. So use the capget and capset syscall
+>>> directly and remove the libcap library dependency like the
+>>> commit 663af70aabb7 ("bpf: selftests: Add helpers to directly use
+>>> the capget and capset syscall") does.
+>>>
+>>> Signed-off-by: zhouyuhang <zhouyuhang@kylinos.cn>
+>>> ---
+>>>   tools/testing/selftests/clone3/Makefile       |  1 -
+>>>   .../clone3/clone3_cap_checkpoint_restore.c    | 53 ++++++++-----------
+>>>   .../selftests/clone3/clone3_cap_helpers.h     | 23 ++++++++
+>>>   3 files changed, 44 insertions(+), 33 deletions(-)
+>>>   create mode 100644 tools/testing/selftests/clone3/clone3_cap_helpers.h
+>>>
+>>> diff --git a/tools/testing/selftests/clone3/Makefile b/tools/testing/selftests/clone3/Makefile
+>>> index 84832c369a2e..59d26e8da8d2 100644
+>>> --- a/tools/testing/selftests/clone3/Makefile
+>>> +++ b/tools/testing/selftests/clone3/Makefile
+>>> @@ -1,6 +1,5 @@
+>>>   # SPDX-License-Identifier: GPL-2.0
+>>>   CFLAGS += -g -std=gnu99 $(KHDR_INCLUDES)
+>>> -LDLIBS += -lcap
+>>>     TEST_GEN_PROGS := clone3 clone3_clear_sighand clone3_set_tid \
+>>>       clone3_cap_checkpoint_restore
+>>> diff --git a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+>>> index 3c196fa86c99..242088eeec88 100644
+>>> --- a/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+>>> +++ b/tools/testing/selftests/clone3/clone3_cap_checkpoint_restore.c
+>>> @@ -15,7 +15,6 @@
+>>>   #include <stdio.h>
+>>>   #include <stdlib.h>
+>>>   #include <stdbool.h>
+>>> -#include <sys/capability.h>
+>>>   #include <sys/prctl.h>
+>>>   #include <sys/syscall.h>
+>>>   #include <sys/types.h>
+>>> @@ -26,6 +25,7 @@
+>>>     #include "../kselftest_harness.h"
+>>>   #include "clone3_selftests.h"
+>>> +#include "clone3_cap_helpers.h"
+>>>     static void child_exit(int ret)
+>>>   {
+>>> @@ -87,47 +87,36 @@ static int test_clone3_set_tid(struct __test_metadata *_metadata,
+>>>       return ret;
+>>>   }
+>>>   -struct libcap {
+>>> -    struct __user_cap_header_struct hdr;
+>>> -    struct __user_cap_data_struct data[2];
+>>> -};
+>>> -
+>>>   static int set_capability(void)
+>>>   {
+>>> -    cap_value_t cap_values[] = { CAP_SETUID, CAP_SETGID };
+>>> -    struct libcap *cap;
+>>> -    int ret = -1;
+>>> -    cap_t caps;
+>>> -
+>>> -    caps = cap_get_proc();
+>>> -    if (!caps) {
+>>> -        perror("cap_get_proc");
+>>> +    struct __user_cap_data_struct data[2];
+>>> +    struct __user_cap_header_struct hdr = {
+>>> +        .version = _LINUX_CAPABILITY_VERSION_3,
+>>> +    };
+>>> +    __u32 cap0 = 1 << CAP_SETUID | 1 << CAP_SETGID;
+>>> +    __u32 cap1 = 1 << (CAP_CHECKPOINT_RESTORE - 32);
+>>> +    int ret;
+>>> +
+>>> +    ret = capget(&hdr, data);
+>>> +    if (ret) {
+>>> +        perror("capget");
+>>>           return -1;
+>>>       }
+>>>         /* Drop all capabilities */
+>>> -    if (cap_clear(caps)) {
+>>> -        perror("cap_clear");
+>>> -        goto out;
+>>> -    }
+>>> +    memset(&data, 0, sizeof(data));
+>>>   -    cap_set_flag(caps, CAP_EFFECTIVE, 2, cap_values, CAP_SET);
+>>> -    cap_set_flag(caps, CAP_PERMITTED, 2, cap_values, CAP_SET);
+>>> +    data[0].effective |= cap0;
+>>> +    data[0].permitted |= cap0;
+>>>   -    cap = (struct libcap *) caps;
+>>> +    data[1].effective |= cap1;
+>>> +    data[1].permitted |= cap1;
+>>>   -    /* 40 -> CAP_CHECKPOINT_RESTORE */
+>>> -    cap->data[1].effective |= 1 << (40 - 32);
+>>> -    cap->data[1].permitted |= 1 << (40 - 32);
+>>> -
+>>> -    if (cap_set_proc(caps)) {
+>>> -        perror("cap_set_proc");
+>>> -        goto out;
+>>> +    ret = capset(&hdr, data);
+>>> +    if (ret) {
+>>> +        perror("capset");
+>>> +        return -1;
+>>>       }
+>>> -    ret = 0;
+>>> -out:
+>>> -    if (cap_free(caps))
+>>> -        perror("cap_free");
+>>>       return ret;
+>>>   }
+>>>   diff --git a/tools/testing/selftests/clone3/clone3_cap_helpers.h b/tools/testing/selftests/clone3/clone3_cap_helpers.h
+>>> new file mode 100644
+>>> index 000000000000..3fa59ef68fb8
+>>> --- /dev/null
+>>> +++ b/tools/testing/selftests/clone3/clone3_cap_helpers.h
+>>> @@ -0,0 +1,23 @@
+>>> +/* SPDX-License-Identifier: GPL-2.0 */
+>>> +#ifndef __CLONE3_CAP_HELPERS_H
+>>> +#define __CLONE3_CAP_HELPERS_H
+>>> +
+>>> +#include <linux/capability.h>
+>>> +
+>>> +/*
+>>> + * Compatible with older version
+>>> + * header file without defined
+>>> + * CAP_CHECKPOINT_RESTORE.
+>>> + */
+>>> +#ifndef CAP_CHECKPOINT_RESTORE
+>>> +#define CAP_CHECKPOINT_RESTORE 40
+>>> +#endif
+>>> +
+>>> +/*
+>>> + * Removed the libcap library dependency.
+>>> + * So declare them here directly.
+>>> + */
+>>> +int capget(cap_user_header_t header, cap_user_data_t data);
+>>> +int capset(cap_user_header_t header, const cap_user_data_t data);
+>>
+>> Sorry you haven't addressed my comments on your v1 yet.
+>>
+>> I repeat that this is not the right direction to define system
+>> calls locally.
+>>
 > 
-> It's wrong because this path specifically handles "cached" MMIO, i.e. emulated
-> MMIO that is triggered by a special MMIO SPTE.  KVM should punt to userspace on
-> _any_ MMIO emulation.  KVM has gotten away with the flaw because SVM is completely
-> broken, and VMX can always generate reserved EPTEs.  But with SVM, on CPUs with
-> MAXPHYADDR=52, KVM can't generate a reserved #PF, i.e. can't do cached MMIO, and
-> so I'm pretty sure your test would fail on those CPUs since they'll never come
-> down this path.
+> I got it. I am willing to modify the code so that syscalls are not defined in local files,
+> but this would require including sys/capability.h which would not remove the
+> dependency on the libcap library. So, should we directly use syscalls or use the
+> libcap library function in the "set_capability" function, or do you have a better way.
+> I'd like to refer to your advice.
 > 
-
-Ah, alright, I see... Probably, I need to test the next version with 
-enable_mmio_caching=false as well.
-
-> Heh, though I bet the introduction of RET_PF_WRITE_PROTECTED has regressed shadow
-> paging on CPUs with PA52.
+>> Try this:
+>>
+>> Run make headers in the kernel repo.
+>> Build without making any changes.
+>> Then add you changes and add linux/capability.h to include files
+>>
+>> Tell me what happens.
+>>
+>> thanks,
+>> -- Shuah
 > 
-
-Is it because it doesn't process write-protected gfn correctly if it is 
-in MMIO range when mmio caching is disabled?
-
-> Anyways, the synthetic PFERR flag is unnecessary because the information is readily
-> available to {vmx,svm}_check_emulate_instruction().  Ha!  And EMULTYPE_WRITE_PF_TO_SP
-> means vendor code can even precisely identify MMIO.
+> I tried this, here are my steps.
 > 
+> Firstly, I ran 'make headers' in the kernel repo and it was successful.
+> Then I wasn't quite sure which path you were referring to as' build ',
 
-Hmm, do you mean EMULTYPE_PF? It looks like EMULTYPE_WRITE_PF_TO_SP has 
-nothing to do with MMIO...
+Sorry if what I said wasn't clear:
 
-I thought about processing the error in check_emulate_instruction as it 
-seems logical, however I hadn't found a way to detect MMIO without page 
-walking on SVM. I'll validate that EMULTYPE_PF gets set in all of the 
-MMIO cases and move the handling into this function in V2 if it works.
+- This test depends on libcap and yes you will have to install it.
+- Run ake headers in the kernel repo.
+- Build the test without your patch (changes)
+- If you don't have libcap, the test build will fail
+- Install libcap
+- Build and run.
 
-> I think another X86EMUL_* return type is needed, but that's better than a synthetic
-> #PF error code flag.
-> 
+Looks like you have done the above. Now:
 
-If I understand correctly, you suggest returning this new 
-X86EMUL_<something> code from {svm,vmx}_check_emulate_instruction and 
-process it in the common code, right? I agree that it's much better than 
-handling the error in MMU code. We are gonna return this return type 
-from vendor code and handle it in the common code this way, which is neat!
+- Add your patch without the local capget() and capset()
+   and without removing
 
->>   
->> -	/*
->> -	 * Note:
->> -	 * Do not try to fix EXIT_REASON_EPT_MISCONFIG if it caused by
->> -	 * delivery event since it indicates guest is accessing MMIO.
->> -	 * The vm-exit can be triggered again after return to guest that
->> -	 * will cause infinite loop.
->> -	 */
->>   	if ((vectoring_info & VECTORING_INFO_VALID_MASK) &&
->>   	    (exit_reason.basic != EXIT_REASON_EXCEPTION_NMI &&
->>   	     exit_reason.basic != EXIT_REASON_EPT_VIOLATION &&
->>   	     exit_reason.basic != EXIT_REASON_PML_FULL &&
->>   	     exit_reason.basic != EXIT_REASON_APIC_ACCESS &&
->>   	     exit_reason.basic != EXIT_REASON_TASK_SWITCH &&
->> -	     exit_reason.basic != EXIT_REASON_NOTIFY)) {
->> +	     exit_reason.basic != EXIT_REASON_NOTIFY &&
->> +	     exit_reason.basic != EXIT_REASON_EPT_MISCONFIG)) {
-> 
-> Changing the behavior of EPT_MISCONFIG belongs in a separate commit.
-> 
+> so I compiled and installed libcap, and also compiled test, all of which were successful.
 
-I will extract the vmx-specific changes into separate commit in V2, thanks!
+Why do you need to compile libcap? Is it because this latest
+change isn't available to install from the distro you are using?
 
-> Huh, and that's technically a bug fix.  If userspace _creates_ a memslot, KVM
-> doesn't eagerly zap MMIO SPTEs and instead relies on vcpu_match_mmio_gen() to
-> force kvm_mmu_page_fault() down the actual page fault path.  If the guest somehow
-> manages to generate an access to the new page while vectoring an event, KVM will
-> spuriously exit to userspace instead of trying to fault-in the new page.
-> 
-> It's _ridiculously_ contrived, but technically a bug.
-> 
+> Afterwards, I applied my patch and the test was successfully built and running.
+> I guess what you're trying to express may be that these system calls have already
+> been defined in sys/capability, and those defined in the local file are duplicated with it.
 
-That's amazing, I finally introduced an unintentional bugfix (usually 
-it's other way around) :D
+Correct. You don't need the local defines and in fact you should not
+define them locally.
 
-> Ugh, and the manual call to vmx_check_emulate_instruction() in handle_ept_misconfig()
-> is similarly flawed, though encountering that is even more contrived as that only
-> affects accesses from SGX enclaves.
-> 
-> Hmm, and looking at all of this, SVM doesn't take advantage of KVM_FAST_MMIO_BUS.
-> Unless I'm forgetting some fundamental incompatibility, SVM can do fast MMIO so
-> long as next_rip is valid.
-> 
-> Anyways, no need to deal with vmx_check_emulate_instruction() or fast MMIO, I'll
-> tackle that in a separate series.  But for this series, please do the EPT misconfig
-> in a separate patch from fixing SVM.  E.g. extract the helper, convert VMX to the
-> new flow, and then teach SVM to do the same.
-> 
+> So I included sys/capability.h and linux/capability.h and defined the system calls in the test,
+> but there were no errors.
 
-Hmm, implementing KVM_FAST_MMIO_BUS for SVM sounds like an interesting 
-thing to do, please let me know if I could help. By the way, why can't 
-we move the call to kvm_io_bus_write into the common code (e.g. MMU)? It 
-would remove the need of implementing KVM_FAST_MMIO_BUS specifically for 
-each vendor.
+Please don't define system calls locally. What happens if you don't?
 
->>   		gpa_t gpa = vmcs_read64(GUEST_PHYSICAL_ADDRESS);
->> -		bool is_mmio = exit_reason.basic == EXIT_REASON_EPT_MISCONFIG;
->> -
-> 
-> Blank newline after variable declarations.
-> 
->> -		kvm_prepare_ev_delivery_failure_exit(vcpu, gpa, is_mmio);
->> +		kvm_prepare_ev_delivery_failure_exit(vcpu, gpa, false);
->>   		return 0;
->>   	}
-> 
-> All in all, I think this is the basic gist?  Definitely feel free to propose a
-> better name than X86EMUL_UNHANDLEABLE_VECTORING.
-> 
-
-It sounds OK, but maybe something more precise would work, like 
-X86EMUL_VECTORING_IO_NEEDED (by analogy with X86EMUL_IO_NEEDED)?
-
-Thanks a lot for the review.
-
--- 
-Kind regards,
-Ivan Orlov
+thanks,
+-- Shuah
 
