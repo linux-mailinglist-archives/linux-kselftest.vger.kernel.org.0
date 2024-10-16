@@ -1,148 +1,285 @@
-Return-Path: <linux-kselftest+bounces-19851-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19852-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90A169A0DC1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 17:13:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23D629A0F69
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 18:11:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 00A1FB22D33
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 15:13:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42C051C228FC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 16:11:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC70620E022;
-	Wed, 16 Oct 2024 15:13:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF5D820F5DD;
+	Wed, 16 Oct 2024 16:11:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="HrSI/L49"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KRR6kG2s"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A82920C479;
-	Wed, 16 Oct 2024 15:13:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D29A20E000
+	for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 16:11:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729091612; cv=none; b=p+SHscH6TS6jux4mgAWqqArRxn0eglkwDl5/ldE3GGoaMhCk8YKEpTjhdVkdpeuh3zDqHhlkJlRWGzNKmLxNvefoX6MRVLglm83eIMqUZZunwG+/mO3N9DiWhmRFe1aSyy0I4CjS9Y2b9tItFzIy2wpO+FjBMApahYL3QtdqM9s=
+	t=1729095101; cv=none; b=mqYooDurAFOHvOTMw9RTAhRVGZ5CZyEcRDf2N8/x37Vgr3k6z1FjeZhu2vRDrJEwTVXKENu0V+d8xLdNAdxQM/WsDaZTkNx6CK3izc7UgahdlH4QI7SsNCuMmmaMkGVHyBrfOkFZQ2Osuq4iQqWy21bjiZbCALsmevBZT71vBQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729091612; c=relaxed/simple;
-	bh=UJ8ggy/guPk5ODfha+LUtcLHzrigURFvCoMg2PaOcwI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LVZNaXw7xNpeNUZxmHKESi8kQn7K9mRL5RcXDaME6qPrAYxliOh6+FAJRIaTCvBCjnGZ7A/xLrPMNlOpF8/U9ETZxe0utYG22Ns7lGlMSqB913XnycHLUBihTuwL+Ymz58tzXAVArTTjEFujpdh/BIGeHTgNYMtNWwFfFZcpgpE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=HrSI/L49; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=w+uVtfX6FHu96yZ2QZMN3UF9JXqrGlcCqEZWZLQTEY4=; b=HrSI/L49ZnZic/T9HN4H0WWr/H
-	GfKtbDHUemNbX4DgLfxmn5yHQapjAZTwTtVdA/zj/4gIP6XHSbko4CPqc86/+vdL8yRGTz9ua7DLD
-	ZpcfiEZ6sBP90XVIi3keHYCoApx39hD1SZhUGteUQF7cxMU+M1TvkQiE8IukuvXl4EBy3mOWhz+84
-	V38xLTXKZ83McTO4XsnNYujI9hT9zFNUfYTvfcgZwQmKxP9U1raDAABAkqu0adLhVT4TpNJYAU9oA
-	Wkvi/Buildn6OZOE4DzHbE49ZoMma0SKh6CjEsAjfPhdySj5+HEheAREkH6Z8LSB2YS0pcQtpBuiw
-	uJyvQOZA==;
-Received: from sslproxy07.your-server.de ([78.47.199.104])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1t15iH-0009nE-Ai; Wed, 16 Oct 2024 17:13:25 +0200
-Received: from [178.197.248.44] (helo=[192.168.1.114])
-	by sslproxy07.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1t15iF-00074n-2b;
-	Wed, 16 Oct 2024 17:13:23 +0200
-Message-ID: <6383a2fe-e18e-46c0-86d7-eec597d5ef9e@iogearbox.net>
-Date: Wed, 16 Oct 2024 17:13:22 +0200
+	s=arc-20240116; t=1729095101; c=relaxed/simple;
+	bh=ZJddraRpE2pxAFj6YJWK053D0DIiVolRxSMNqHcfirc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=fK0ikUuR4DnTOFsZv4ewOc6InAqeh+AHCJVIg6nsmFugcT+tlqTYIhxvRoyWbDd4L60OSr6teqNHqfYO275X5/D27G31Q9Ca4mFi8LJu+L9wKLRJ5i1nMUitB0Zdg4jC1V+jOV/EZ6CjM5EF0/URlsOjz18whwPnhZb9k4B+Jco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KRR6kG2s; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729095099;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rRMfjAF57X/SMNhOCLh40ENkceq08n9jyoxHKXUNIME=;
+	b=KRR6kG2sSR0+QdqG6JSPWxtatFUMyWCAGKIH/WE9MsOgA3WQj2RZ+Rg6gN9UU1JJRByos0
+	Xxjh72Np7e/pDCAq6lkKfX+mdVfWSbgD5e2np0PubWOD8JdkVbRxiVugMievfuZY37r4YR
+	3bWoip9T0MCMdTquwbOlNzQA7okLpuw=
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com
+ [209.85.166.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-619-VkC8_hfHP-Ww1JyGlGDvdw-1; Wed, 16 Oct 2024 12:11:38 -0400
+X-MC-Unique: VkC8_hfHP-Ww1JyGlGDvdw-1
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3a3b026f467so73705ab.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Oct 2024 09:11:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729095097; x=1729699897;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rRMfjAF57X/SMNhOCLh40ENkceq08n9jyoxHKXUNIME=;
+        b=hCQ7tgK/9t66J8phJChc7m6OdMvK5teB7+nvAgz19UkgRvIGLvdKycUMIRCt4ZCP6F
+         CFxOz4XyKekvz+G08hMbZkLmCevIAis0BjOctezMfYChPhP1kvrIWBVyWx2MzQ2Tm/ay
+         XK4L3aRV2LxUr2n3Hl5MWk8CiO8x1K0SJJhBC+KOliAqayDhdAZoCSVPlZGsvEno+rEv
+         fZkqxxYXUT3gWAD1rhD0H4U7rFfCL6K4U8ZMnfoWkGh0iAQFNtxKjMxeMYkRXcAO3qV0
+         +6PQC89l8P8vT0DyELtAvVgH28cEhWyEIcYYwQX9Cj5ne9J7RFdZz8jCCx62VfN9WL/6
+         hjRA==
+X-Forwarded-Encrypted: i=1; AJvYcCVY8IXWjLRvo2TV96OQSh91i8aILskUTxUqZUIGo3xf0YuXHbwl6eLkZdWpcCUfDFu7As5SPADqhCy9oCTHhzI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyu2NenLB4kaFNOCd6+lvPNUu/ACgcxy4isYTwqj7Bbd+K+XRSA
+	v14xZPfcdWqjYd7KgoBfiwtAipjmT6rh7iEk9Rh4IyJhFJnUx/ixGg/kPMdjOJDfD4VIthpa8h1
+	95mdv5vUFFGMRt1oRMy2zX/R8C/msyM4KmkHt2hgIY4lxvhc0Y+X+zZYO1Z5hPovVXQ==
+X-Received: by 2002:a05:6e02:1c29:b0:3a1:f549:7290 with SMTP id e9e14a558f8ab-3a3b6081a7bmr45946685ab.6.1729095097156;
+        Wed, 16 Oct 2024 09:11:37 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEh/7Dr6ZkhWvZq5ydO1Hmr+ALlfhIO2nfCJO3kMADakzeUcmW+0x6jUlunyH3mffBxiRVR7g==
+X-Received: by 2002:a05:6e02:1c29:b0:3a1:f549:7290 with SMTP id e9e14a558f8ab-3a3b6081a7bmr45946525ab.6.1729095096688;
+        Wed, 16 Oct 2024 09:11:36 -0700 (PDT)
+Received: from redhat.com ([38.15.36.11])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dbecb3a53csm862401173.96.2024.10.16.09.11.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 16 Oct 2024 09:11:36 -0700 (PDT)
+Date: Wed, 16 Oct 2024 10:11:34 -0600
+From: Alex Williamson <alex.williamson@redhat.com>
+To: Yi Liu <yi.l.liu@intel.com>
+Cc: Jason Gunthorpe <jgg@nvidia.com>, "Tian, Kevin" <kevin.tian@intel.com>,
+ "joro@8bytes.org" <joro@8bytes.org>, "baolu.lu@linux.intel.com"
+ <baolu.lu@linux.intel.com>, "eric.auger@redhat.com"
+ <eric.auger@redhat.com>, "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+ "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "chao.p.peng@linux.intel.com"
+ <chao.p.peng@linux.intel.com>, "iommu@lists.linux.dev"
+ <iommu@lists.linux.dev>, "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "vasant.hegde@amd.com" <vasant.hegde@amd.com>
+Subject: Re: [PATCH v3 3/4] vfio: Add
+ VFIO_DEVICE_PASID_[AT|DE]TACH_IOMMUFD_PT
+Message-ID: <20241016101134.0e13f7d7.alex.williamson@redhat.com>
+In-Reply-To: <e76e4dec-f4d7-4a69-a670-88a2f4e10dd7@intel.com>
+References: <20240912131729.14951-1-yi.l.liu@intel.com>
+	<20240912131729.14951-4-yi.l.liu@intel.com>
+	<BN9PR11MB5276D2D0EEAC2904EDB60B048C762@BN9PR11MB5276.namprd11.prod.outlook.com>
+	<20241001121126.GC1365916@nvidia.com>
+	<a435de20-2c25-46f5-a883-f10d425ef37e@intel.com>
+	<20241014094911.46fba20e.alex.williamson@redhat.com>
+	<2e5733a2-560e-4e8f-b547-ed75618afca5@intel.com>
+	<20241015102215.05cd16c7.alex.williamson@redhat.com>
+	<e76e4dec-f4d7-4a69-a670-88a2f4e10dd7@intel.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v1 1/2] bpf: fix link info netfilter flags to populate
- defrag flag
-To: Florian Westphal <fw@strlen.de>, Tyrone Wu <wudevelops@gmail.com>
-Cc: bpf@vger.kernel.org, pablo@netfilter.org, kadlec@netfilter.org,
- davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, andrii@kernel.org, eddyz87@gmail.com, mykolal@fb.com,
- ast@kernel.org, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, john.fastabend@gmail.com, kpsingh@kernel.org,
- sdf@fomichev.me, haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
- riel@surriel.com, shakeel.butt@linux.dev, netfilter-devel@vger.kernel.org,
- coreteam@netfilter.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-patches-bot@fb.com
-References: <20241011193252.178997-1-wudevelops@gmail.com>
- <Zw6JYuga41DyoVjt@strlen.de>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <Zw6JYuga41DyoVjt@strlen.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.10/27429/Wed Oct 16 10:34:11 2024)
 
-On 10/15/24 5:25 PM, Florian Westphal wrote:
-> Tyrone Wu <wudevelops@gmail.com> wrote:
->> This patch correctly populates the `bpf_link_info.netfilter.flags` field
->> when user passes the `BPF_F_NETFILTER_IP_DEFRAG` flag.
-> 
-> Indeed, thanks for fixing this.
-> Patch and testcase look good, but one nit:
-> 
->> Fixes: 84601d6ee68a ("bpf: add bpf_link support for BPF_NETFILTER programs")
-> 
-> BPF_F_NETFILTER_IP_DEFRAG flag was added in
-> 91721c2d02d3 ("netfilter: bpf: Support BPF_F_NETFILTER_IP_DEFRAG in netfilter link"), that was a bit later than the initial support.
-> 
-> Other than that,
-> Acked-by: Florian Westphal <fw@strlen.de>
+On Wed, 16 Oct 2024 11:35:05 +0800
+Yi Liu <yi.l.liu@intel.com> wrote:
 
-Thanks Florian & Tyrone, fixed up Fixes tag while applying.
+> On 2024/10/16 00:22, Alex Williamson wrote:
+> > On Tue, 15 Oct 2024 19:07:52 +0800
+> > Yi Liu <yi.l.liu@intel.com> wrote:
+> >   
+> >> On 2024/10/14 23:49, Alex Williamson wrote:  
+> >>> On Sat, 12 Oct 2024 21:49:05 +0800
+> >>> Yi Liu <yi.l.liu@intel.com> wrote:
+> >>>      
+> >>>> On 2024/10/1 20:11, Jason Gunthorpe wrote:  
+> >>>>> On Mon, Sep 30, 2024 at 07:55:08AM +0000, Tian, Kevin wrote:
+> >>>>>         
+> >>>>>>> +struct vfio_device_pasid_attach_iommufd_pt {
+> >>>>>>> +	__u32	argsz;
+> >>>>>>> +	__u32	flags;
+> >>>>>>> +	__u32	pasid;
+> >>>>>>> +	__u32	pt_id;
+> >>>>>>> +};
+> >>>>>>> +
+> >>>>>>> +#define VFIO_DEVICE_PASID_ATTACH_IOMMUFD_PT	_IO(VFIO_TYPE,
+> >>>>>>> VFIO_BASE + 21)  
+> >>>>>>
+> >>>>>> Not sure whether this was discussed before. Does it make sense
+> >>>>>> to reuse the existing VFIO_DEVICE_ATTACH_IOMMUFD_PT
+> >>>>>> by introducing a new pasid field and a new flag bit?  
+> >>>>>
+> >>>>> Maybe? I don't have a strong feeling either way.
+> >>>>>
+> >>>>> There is somewhat less code if you reuse the ioctl at least  
+> >>>>
+> >>>> I had a rough memory that I was suggested to add a separate ioctl for
+> >>>> PASID. Let's see Alex's opinion.  
+> >>>
+> >>> I don't recall any previous arguments for separate ioctls, but it seems
+> >>> to make a lot of sense to me to extend the existing ioctls with a flag
+> >>> to indicate pasid cscope and id.  Thanks,  
+> >>
+> >> thanks for the confirmation. How about the below?
+> >>
+> >> diff --git a/drivers/vfio/device_cdev.c b/drivers/vfio/device_cdev.c
+> >> index bb1817bd4ff3..c78533bce3c6 100644
+> >> --- a/drivers/vfio/device_cdev.c
+> >> +++ b/drivers/vfio/device_cdev.c
+> >> @@ -162,21 +162,34 @@ void vfio_df_unbind_iommufd(struct vfio_device_file *df)
+> >>    int vfio_df_ioctl_attach_pt(struct vfio_device_file *df,
+> >>    			    struct vfio_device_attach_iommufd_pt __user *arg)
+> >>    {
+> >> -	struct vfio_device *device = df->device;
+> >> +	unsigned long minsz = offsetofend(
+> >> +			struct vfio_device_attach_iommufd_pt, pt_id);
+> >>    	struct vfio_device_attach_iommufd_pt attach;
+> >> -	unsigned long minsz;
+> >> +	struct vfio_device *device = df->device;
+> >> +	u32 user_size;
+> >>    	int ret;
+> >>
+> >> -	minsz = offsetofend(struct vfio_device_attach_iommufd_pt, pt_id);
+> >> +	ret = get_user(user_size, (u32 __user *)arg);
+> >> +	if (ret)
+> >> +		return ret;
+> >>
+> >> -	if (copy_from_user(&attach, arg, minsz))
+> >> -		return -EFAULT;
+> >> +	ret = copy_struct_from_user(&attach, sizeof(attach), arg, user_size);
+> >> +	if (ret)
+> >> +		return ret;  
+> > 
+> > I think this could break current users.   
+> 
+> not quite get here. My understanding is as the below:
+> 
+> If the current user (compiled with the existing uapi struct), it will
+> provide less data that the new kernel knows. The copy_struct_from_user()
+> would zero the trailing bytes. And such user won't set the new flag, so
+> it should be fine.
+
+You're making an assumption that the user is passing exactly the
+existing struct size as argsz, which is not a requirement.  The user
+could allocate a buffer page, argsz might be 4K.
+ 
+> So to me, the trailing bytes concern comes when user is compiled with the
+> new uapi struct but running on an eld kernel (say <= 6.12).But the eld
+> kernel uses copy_from_user(), so even there is non-zero trailing bytes in
+> the user buffer, the eld kernel just ignores them. So this seems not an
+> issue to me so far.
+
+That's new userspace, old kernel.  I'm referencing an issue with old
+userspace, new kernel, where old userspace has no requirement that
+argsz is exactly the structure size, nor that the trailing bytes from
+the structure size to argsz are zero'd.
+ 
+> > For better or worse, we don't
+> > currently have any requirements for the remainder of the user buffer,
+> > whereas copy_struct_from_user() returns an error for non-zero trailing
+> > bytes.  
+> 
+> This seems to be a general requirement when using copy_struct_from_user().
+> User needs to zero the fields that it does not intend to use. If there is
+> no such requirement for user, then the trailing bytes can be a concern in
+> the future but not this time as the existing kernel uses copy_from_user().
+
+Exactly, the current implementation makes no requirement on trailing
+non-zero bytes, copy_struct_from_user() does.
+ 
+> > I think we need to monotonically increase the structure size,
+> > but maybe something more like below, using flags.  The expectation
+> > would be that if we add another flag that extends the structure, we'd
+> > test that flag after PASID and clobber xend to a new value further into
+> > the new structure.  We'd also add that flag to the flags mask, but we'd
+> > share the copy code.  
+> 
+> agree, this share code might be needed for other path as well. Some macros
+> I guess.
+> 
+> > 
+> > 	if (attach.argsz < minsz)
+> > 		return -EINVAL;
+> > 
+> > 	if (attach.flags & (~VFIO_DEVICE_ATTACH_PASID))
+> > 		return -EINVAL;
+> > 
+> > 	if (attach.flags & VFIO_DEVICE_ATTACH_PASID)
+> > 		xend = offsetofend(struct vfio_device_attach_iommufd_pt, pasid);
+> > 
+> > 	if (xend) {
+> > 		if (attach.argsz < xend)
+> > 			return -EINVAL;
+> > 	
+> > 		if (copy_from_user((void *)&attach + minsz,
+> > 				    (void __user *)arg + minsz, xend - minsz))
+> > 			return -EFAULT;
+> > 	}  
+> 
+> I think it might need to zero the trailing bytes if the user does not set
+> the extended flag. is it?
+
+We could zero initialize the attach structure for safety, but the kernel
+side code should also be driven by flags.  We should never look at a
+field beyond the base structure that isn't indicated by flags and copied
+from the user.
+
+> > Maybe there are still more elegant options available.
+> > 
+> > We also generally try to label flags with FLAGS in the name, but it
+> > does get rather unwieldy, so I'm open to suggestions.  Thanks,  
+> 
+> There is already examples that new field added to a kernel-to-user uapi
+> struct like the vfio_region_info::cap_offset and
+> vfio_device_info::cap_offset. But it might be a little bit different
+> with the case we face here as it's user-to-kernel struct. It's a time for
+> you to set a rule for such extensions. :)
+
+That's a returned structure, so it's a bit different, but the same
+philosophy, we don't break userspace.  In that case we used argsz as an
+output field and flags to indicate there are capabilities.  Old
+userspace ignores the flag and argsz semantics and continues to work.
+New userspace checks the flag, reallocs the buffer with argsz and
+retries.  This is however an example of userspace providing an argsz
+value that exceeds the ioctl structure, with no requirement to zero the
+buffer, though it is an output structure rather than the input
+structure here.
+
+I think the same holds here, our policy is to not break userspace.  We
+potentially do break userspace if we impose a requirement that the
+trailing buffer size must now be zero.  We have the flags field so that
+we don't need to blindly base the structure version on the size of the
+user buffer.  We should use the flags field to determine relevant and
+valid fields beyond the base structure without imposing new
+requirements to userspace.  Thanks,
+
+Alex
+
 
