@@ -1,190 +1,226 @@
-Return-Path: <linux-kselftest+bounces-19892-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-19893-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 128789A15E6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 00:52:09 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E35D9A15EB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 00:54:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3234B1C21AC6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 22:52:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F00228500E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Oct 2024 22:54:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 379DC1D356E;
-	Wed, 16 Oct 2024 22:52:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B14D61D363F;
+	Wed, 16 Oct 2024 22:53:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="uWJ2/B6w"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YIjPYUpy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2070.outbound.protection.outlook.com [40.107.220.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A94F7F9C1;
-	Wed, 16 Oct 2024 22:52:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.70
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729119124; cv=fail; b=q1wAUcwbfighK+/VyTPgsUO3D0YjbuLHE+MgUfm2bbfFFzF9DI39js4opQyxG0aFNwrdLII4Nq3BZ6hl0IKzaKmO28BM7ZP9gY1B/FQxoAQVRx5O6iEkrrOvd9f9QODuEcQrXpC+lxfUfIvvxc75l/Nq2bEFkAP5iXms0qxU7ng=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729119124; c=relaxed/simple;
-	bh=lJcchtt1JcN1yuL9Wj0EwsXdJj3His8Hoq9nB+NPvBs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=W/lwQXX73xtPq9y4FJKI7o1YoffBWzKIGQxrzym7g3rTsHJOuH1V/JzDdFHmsZu+ngPa4qKcI/kN62F0PibSntvzGxBZL3yQUYw6pXUHh2negBCzVNFUCgXet9FBfBAVYDbWL5NureTuZA1X8OQbympOGzakToxdgVqoCqYUU2o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=uWJ2/B6w; arc=fail smtp.client-ip=40.107.220.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nx6qFMrmGEaOGiso2IsQKSIte3xqtfUjI/6/4r4C6r1WNabdruEA9Hx2bXEopKG2VrwLFpTm6s0tT0pKn0mhTRL/BqyrJY+rfcUB2/Zp/Sk0VGjy07FTf8kpjjAlmmPeIbL2Q6yhX4LjaFRMj9m9iTcXx4RZFSJgtWdiA9D3jkuAgaBHA8gH0qZazZYdDTmg3GJywhQOVHGdF+mjkfG/sWIGNdlQFUDCCxDvP55yZz6svx/5x0Qrff/ZqU1I6MQY3NVRMUm86Bx1ZdNsUnRk3ZkSLqWrzWrP9UY23ux0WHGK+DHmGCCOPymaud9ORE55uweEe/iU8zBlh+oo6BJujA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zrMtYFAqXAG/p+3Ih3XmKzDfiU9QV6n+DCH6JEvvvdc=;
- b=oAPpSUSZu4JfaCuzDClkWUNp+iO7L0928PB85Ct1WxJKGHZHGNmkeG1WhnuExNtpMxJc5pwskTVlT7cHvA11vLZ308cQleo32KO+54PfmPZNl6KmU/ADn+RJB8euGylk3odJBp695f6f/21wEBgL5Kply2VBICCQNvPOCCzVIIw6QiILMzziJ5jpSzv1wKqcpA9311zwMWzgQOlx5L3+lYW08FRafddDSUuc/3utZaiMT/XnioYPrS7bZ4UtgrYebmzA9oe9MKcM+uNQmIEMANlfA3P84yWvIKplmj1ctlRjwDVnPhOEuPMsMVrCsXTbh0An+Z5r4jUmWmKqzdPOOw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zrMtYFAqXAG/p+3Ih3XmKzDfiU9QV6n+DCH6JEvvvdc=;
- b=uWJ2/B6wOTDNT2k90t3hR8uWWCiPXNKHQAFiUonEBJwMaRFbNC2NNsfLrrWkMpllJGtmyElpMwc/LisVuXtg7hEppyn/jzX+qr+V0JD39NJXbRa3mN5gRpcL3Dol6Be+HDfSIbO1+hdWyA9HVd9r50cjPF72GeVXZ3EaLyRm1tIA4BX2hl0EuKl/w82S1Gfi7icrAnokHhAYyRb2HeZzxi6aJON/4Go4HykV+hccsJIYFlrKYcpX/FvxACE0aG1dn4yZdpfzC/sdjl6mbvFL+ftpUpHQBI+zAeaHhRHEoYDKjs1kYHvB8g1/CmqhJHWFq2f+eWaboIqpy3ntv9Cg/w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MW6PR12MB8663.namprd12.prod.outlook.com (2603:10b6:303:240::9)
- by PH7PR12MB8040.namprd12.prod.outlook.com (2603:10b6:510:26b::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8069.18; Wed, 16 Oct
- 2024 22:51:59 +0000
-Received: from MW6PR12MB8663.namprd12.prod.outlook.com
- ([fe80::594:5be3:34d:77f]) by MW6PR12MB8663.namprd12.prod.outlook.com
- ([fe80::594:5be3:34d:77f%4]) with mapi id 15.20.8069.016; Wed, 16 Oct 2024
- 22:51:59 +0000
-Date: Wed, 16 Oct 2024 19:51:57 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Peter Xu <peterx@redhat.com>
-Cc: David Hildenbrand <david@redhat.com>,
-	Ackerley Tng <ackerleytng@google.com>, tabba@google.com,
-	quic_eberman@quicinc.com, roypat@amazon.co.uk, rientjes@google.com,
-	fvdl@google.com, jthoughton@google.com, seanjc@google.com,
-	pbonzini@redhat.com, zhiquan1.li@intel.com, fan.du@intel.com,
-	jun.miao@intel.com, isaku.yamahata@intel.com, muchun.song@linux.dev,
-	erdemaktas@google.com, vannapurve@google.com, qperret@google.com,
-	jhubbard@nvidia.com, willy@infradead.org, shuah@kernel.org,
-	brauner@kernel.org, bfoster@redhat.com, kent.overstreet@linux.dev,
-	pvorel@suse.cz, rppt@kernel.org, richard.weiyang@gmail.com,
-	anup@brainfault.org, haibo1.xu@intel.com, ajones@ventanamicro.com,
-	vkuznets@redhat.com, maciej.wieczor-retman@intel.com,
-	pgonda@google.com, oliver.upton@linux.dev,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 26/39] KVM: guest_memfd: Track faultability within a
- struct kvm_gmem_private
-Message-ID: <20241016225157.GQ3559746@nvidia.com>
-References: <cover.1726009989.git.ackerleytng@google.com>
- <bd163de3118b626d1005aa88e71ef2fb72f0be0f.1726009989.git.ackerleytng@google.com>
- <Zwf7k1wmPqEEaRxz@x1n>
- <diqz8quunrlw.fsf@ackerleytng-ctop.c.googlers.com>
- <Zw7f3YrzqnH-iWwf@x1n>
- <diqz1q0hndb3.fsf@ackerleytng-ctop.c.googlers.com>
- <1d243dde-2ddf-4875-890d-e6bb47931e40@redhat.com>
- <ZxAfET87vwVwuUfJ@x1n>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZxAfET87vwVwuUfJ@x1n>
-X-ClientProxiedBy: BN9PR03CA0343.namprd03.prod.outlook.com
- (2603:10b6:408:f6::18) To MW6PR12MB8663.namprd12.prod.outlook.com
- (2603:10b6:303:240::9)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEF39F9C1;
+	Wed, 16 Oct 2024 22:53:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1729119237; cv=none; b=FeZC3VHTb7TDENPLluiZHXe1So2i+PgkxW2PtLCdiyKdzusCA5pGcUGjFkefJBYS7uUutZT//pC0Ash3Nc4K0Wlivo9iWiSau77PzQkLbMDz1RFp4naGdnAgfXfKkJphJfIy8WB2/oht/+aJi1LFGsa6+rND+RdM4G4B8E5xbik=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1729119237; c=relaxed/simple;
+	bh=ZzgH6edon6973UkILs4hl4gx6y7cVOccuZjGRNkDDEk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JCG23tmXNkzS4p5BNe2to0KU9fAh+uahAOrj9rIvwyYnTfWSgVIQ9om38qHxM9BdDvPzcejsY2ai1xdHt/BhISLY3/oR/AipsIHbYmLB2Gqdie+6piT2dRlXY0pREi+6Ce/l1sk4Zg/8ynOkkJgr/4cvjaB/tVZd1GNeCH1KQ8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YIjPYUpy; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-2fb3da341c9so3585551fa.2;
+        Wed, 16 Oct 2024 15:53:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1729119234; x=1729724034; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ga/CVT5W3GWQeZc8PFfRNTONvuq8BK53J6zZCa4F0Xs=;
+        b=YIjPYUpyCjwqg4gakIEIeyWtUKJ1fFO39ixSLsg3t0gzYKwUMtS4JGES7yM2hjjG1m
+         D28x9UTD2bLtrX1DZfc3fnpeEdWU07IOQAF8NmUOvkjsNIItoZVu8fZFlS31hEcp7tEi
+         cT6C6k6xeFjFFLni1WUufpm7SnqV+LViOwchnmfFl46zeTQCCL99qEl/9AAnizk0kUv9
+         W0Lk7Qfge5WNGj1Px3/qVlY2xS3m+jAY2f4DxlqKRlgJr1fa85KAHAPXBDQehO+msffJ
+         lZSRYWshDxqxjr/Yg9R9WxmOwN0swCQPUQLzv4AVG/FNhUkPFEzJvWgdMOCWmce7a46N
+         PHpQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729119234; x=1729724034;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ga/CVT5W3GWQeZc8PFfRNTONvuq8BK53J6zZCa4F0Xs=;
+        b=WmlnJ+vAsEmPTfUXen14nr7yrlD0wnip9kMnNptOsBHAV+GdfmVd1bQni72m442eQh
+         6qkxxmubPUSEp1MgM+UCVmgORuRj6zTIT6ZXthQrL/eBAM6ojaDjBG7Py27DdiMHdm1G
+         0N4lH1SlYWVwffF+Mg2i9JgzsumG4HMlELI5iBJ8c8AFe0Mdn/tb9MHW71FVUQkt55VT
+         W1MJAQ7UkZpLTCQrwC9GfWXP4zg/4v61qzfZYQdo6+P94TZs/FevTgAOuBY2kQY6w84s
+         PPd5TBW31GiCGDHmaY8Sc6j9J39xvZe6t/qeFez2MeAuMuuehr8pZKaKaSqDrvddIr7t
+         KiHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVaqSOdrPoc4nrJgEEhrXm8asHrSIe7Zlq1wFJZ1xVh7qKMu4C4nryTcElJmDhvNPZFYTPw8auxPcLjXv+M@vger.kernel.org, AJvYcCVdPSpxfRhT+geqjNMTFdmpjGnceeb36V7ffdgFjA5cZk+6C14+L36L4ZFTu3CqNPQ6g8I=@vger.kernel.org, AJvYcCXiNTu2USeSuUfEUhtCZOh6Vd+SU7HtKCU3q0DAmzts2X2jmEb3RDVP1Osq93LN0bO7/TGIzc8xXUTP6Gws4oCv@vger.kernel.org
+X-Gm-Message-State: AOJu0YxD3SoX0qAkxRGbsFgjb8ZAiYYVmAP7ptW257HIJtWQZZHVyrJl
+	f5hINK67t0InPkx7Xqbf7n0Gd2S1rHbqJgfZbbLtiJMJGvxrhq7/
+X-Google-Smtp-Source: AGHT+IFwU20AfuL0IjVDwUZCfNCYMwzvYSydiUwCAC8r43c3D1HNNKNbO2HiS99yRrFvIESYEmG8dg==
+X-Received: by 2002:a05:6512:694:b0:538:9e40:94b with SMTP id 2adb3069b0e04-539e54e82abmr7941535e87.19.1729119233501;
+        Wed, 16 Oct 2024 15:53:53 -0700 (PDT)
+Received: from ?IPV6:2a02:8012:e013:0:f52b:f2f2:1fbe:f0ae? ([2a02:8012:e013:0:f52b:f2f2:1fbe:f0ae])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43158c36b59sm6998575e9.7.2024.10.16.15.53.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 16 Oct 2024 15:53:53 -0700 (PDT)
+Message-ID: <2b954265-9ec0-4ee6-99c8-6ac080687d02@gmail.com>
+Date: Wed, 16 Oct 2024 23:53:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW6PR12MB8663:EE_|PH7PR12MB8040:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7b2b9d2c-c089-478c-6a71-08dcee35247e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|7416014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?u0Px0LC2M3Sm49gVVs3pqst0Xu9+mnxBC5olf/dJzMiwPYqhwNcCJ/0iM5Nn?=
- =?us-ascii?Q?sEy2cUZ6RgrXIEe4tpLZBG4I4UArd9LV308NKu6JsaLZoI6cadbZCTV0oFcW?=
- =?us-ascii?Q?CqUim6sIPfR0Hft7MeBtVRna5Ulb8MBhoLR3zRd4RfGkdgYID8lk1SHVYxSC?=
- =?us-ascii?Q?Uhd3Td0O72Dj/j2AeQOKEgNTApmMifU921WvRuE8/jzcIZe34lzmtF2PXIQg?=
- =?us-ascii?Q?3ti+zzH04dq9jyGSRkXy0HmISlA4ZjA79Mb1oKCbLBVR6vXZXAbTpXN2OfDF?=
- =?us-ascii?Q?MhAaEJ7bOdu/sz7YL8gx2JFD4GDVLj+Ivb9rXyAt4L2xDIo3ZREULwvsVYQJ?=
- =?us-ascii?Q?kH43FIXiSyzfpP/s69QilZ+9qJMDLXi52JE/gUlI0F6U8wpoL0TuqXEbmDFa?=
- =?us-ascii?Q?iUmO6YQRiwzY3FsJg2/1GZ8wCglkyzcrqbaJiwm95WKiQM7peuczis+ZWwr8?=
- =?us-ascii?Q?5LVX+dlcO1+2seFoeYVPtTCZra8PUHJey1SdbPARJ3AlscJJ/V3jjnk7iC8c?=
- =?us-ascii?Q?fsIQxE9YTH/YNTV1aQiNrOXvev4lrfPnWyut+sHvpA0hWncIwlYIiswo5REB?=
- =?us-ascii?Q?xCQ+G+CVb81wSKHm1pI99cqjS0AgGrhVGUXqWyzeHKSisuch5gq5Hmz/biqG?=
- =?us-ascii?Q?ZN1R9mXcfoNEEobu72OCOqhXO8ilf1tsntU1au5kFT9J8TlnuwcTZy/UPr7u?=
- =?us-ascii?Q?pLCfTSS1xjZ770n4MtYlJ2viU6cC/04mSrrFzkbMzgmCltx46y5qT6C/k5V/?=
- =?us-ascii?Q?niJLtq4tceF1y0PHzEOXku5ZtPQOE5WsSd4Avwh1bAVMiN5IWPRM6vS8AAFw?=
- =?us-ascii?Q?gzB+MuhgyOqgROMkQyFRCLE0ZdWqNS3+eedJTocZq2ffgijKNRmmBbWbBHiC?=
- =?us-ascii?Q?T1y6YlzQvoDRcqsho0c7Zbw16uofJKT1S3FrbPEwpuVl9Eppz0GNEzI9HuvW?=
- =?us-ascii?Q?x0CHk5zU3Xzk/3gKQiKoH08rnY4PFkXa4ALFl0yAybkhpxicGBlknhyv4jwt?=
- =?us-ascii?Q?dtKFdn9DGcRap4lcoxXGER3lZUBtqeiXoOKihceJUc5EAKhb2PyjW/uJnKnR?=
- =?us-ascii?Q?CX1cbc7KzWT0xOxMQPoKlhncABrIlzqVpUaJXHfg6dge/sni7Ape1MK0GB0L?=
- =?us-ascii?Q?caCP1UuskUSOkCBErPoKQBIWYhyn+NIIKbkWJnfZzArwuOmf4nOS7uxggMP/?=
- =?us-ascii?Q?6yaGyHs8HeNqDYPPHfTCMA3EbWhEPqyUtHeLShPl7GSFCMbaE5fVrPkOrzwb?=
- =?us-ascii?Q?mArhgC/zoOsQGsPdSAk1nNNa0Mv/xm/QzFxXMvBrYnqDnoozGKQReaSpeIpl?=
- =?us-ascii?Q?nwxSNgL9xpJxhR/T/wy+MSsw?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW6PR12MB8663.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(7416014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?kSVXgeqBmR2jy6nTaa4aPIhRF3xncrvSiPpBIzPe4pFz/pZ7rQjCYhl34D8Z?=
- =?us-ascii?Q?36wAAtFnBKjSgniWvxm9wjTHYAq4+Pb4wKTVkgiBmXcBXOL7v64ebcUdBHUD?=
- =?us-ascii?Q?t1EG4LDbhe4Q91S8IqZR5LIHgPNLlMZZrq9Le5ZH0s5zGhanXpVJ/Ul2FzXV?=
- =?us-ascii?Q?e0p1jy/sXMY4O2tYHYGE6WZ4apkNsuPa/71iQX7N6iLBbcKzsNVStJ71haMD?=
- =?us-ascii?Q?V5qrnz9FTlIDpTiPNHbULDEd4nKInvaxjQjsXLq9GKbEVGsDmTAipMAniqHn?=
- =?us-ascii?Q?ZBrbutgyRJVwaPmmWldYxXZrn7nR8YOjYo206qQQq0YH5wm8hm4fJDurOEkR?=
- =?us-ascii?Q?ivTb/0dCwZBtIqe5QsGYBGvY4rwGgjIOR3FmmtcPMNINIhtWGMDIAkzs5ieP?=
- =?us-ascii?Q?nwujvbJrMxiYBRaQb7Z0EyuqJiUBuPA4KccFIIIeCz9OBnlJaKIpUSOL1F3U?=
- =?us-ascii?Q?QcjmAWSV5GC2tbcGgPi1R4VAY5p2w1r4HCzCaiVp/V31NQJcp5x3grVkzpns?=
- =?us-ascii?Q?D2nL5S1oCWQ34v2gSnPKTvy/Av2lQXewk34aZzG9sO9Ku/uF28s8M2zIgluz?=
- =?us-ascii?Q?0/QnQjNvMQX83VEsbeBuxgMKxB8M/sQ6HZ99iOLX+n0Cuu5fBCuoRXkmDUqH?=
- =?us-ascii?Q?jVs/6AVaN6rUYOdkcihBhwWmxQgYFJZdyqC4XorcffonA27RCab0nIa67tsE?=
- =?us-ascii?Q?mfnPTrBx4hGtu1Q/TihF052VdswhHpWgP3o6p0Y/84wOs3JbKUSACHOEaC2I?=
- =?us-ascii?Q?48WiRcGm4brOA1EU+xkfc2amxnEBROHGS4sGOjSs36BXdpwKJmDTMM2j9l+G?=
- =?us-ascii?Q?5LJ+98gnaChn7gE1dH/pyGhEuzTIsfigA7eNvakJpFNWzaPHFczU1RgNttKn?=
- =?us-ascii?Q?tgrv3eN+wlxYuou5mj7isU3Nj9pjbhHs9iDJmgFs2KMvCbQVEH8Tn7r5Rtpv?=
- =?us-ascii?Q?W86soRzKmuDKfzdJ6vPpvCYNbUkFLg3+3dVEukcTcyaeRYvEwKTFOIv2o+Qf?=
- =?us-ascii?Q?C0jYAm/0XBU1JzR4Tnt835J8zRDWLB7E7OP1OeN9wpMSwdSBUuBEf26YyCdr?=
- =?us-ascii?Q?Qf5FUWv5jADLEBde1vA58H4hc1rB6lNiwS+Q1iVF9VbUuLhX+V1hfy3my8hV?=
- =?us-ascii?Q?Mdc1kH5HAC7uaWvkH2LQLCZ2AagQhrnXYpJaXkVK7fpTIHs+BQDMygm+CNSu?=
- =?us-ascii?Q?1IdDBzS8ggfNTDDpfXvMtgjUHTt99DEf7f9XlHtX0XaAvT4ziMROxBKQCTNn?=
- =?us-ascii?Q?E45B+bJIGM+BmYrWN2eFSwk3Xhe0ooYTNEYRwQAv0B6FqpMInuNC91fpwzTd?=
- =?us-ascii?Q?S2/I/FmAfW2zBuSPxdBlqrZKZ++XVG17mTJ7AoIjYixnfs1gC1I4lFJL4qzs?=
- =?us-ascii?Q?KZVri2gsyJPPFJB5+gDjwfqwV2aa/U2dsuITI3zkUWE5NP6EJCqATnvOVxYb?=
- =?us-ascii?Q?rpGVUt4u+y2IazZLQTaSfOw0fQu72b1n/w6csuLNrRoaXsj/JF8Aw1gXFzfL?=
- =?us-ascii?Q?/HvGKbzvRggQslzbss+OsEPA4eQA5tNGQS0o8sZqcWwrqmkY6c9V/6T1R+nR?=
- =?us-ascii?Q?VRWVHVuyQKZOqslcK/E=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b2b9d2c-c089-478c-6a71-08dcee35247e
-X-MS-Exchange-CrossTenant-AuthSource: MW6PR12MB8663.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2024 22:51:59.4320
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mqqAQJUzNUz869fklmZzBVlThNn3F7bUtAZQL+vwX45CTKGihC9HKXxYvk4/1zJ7
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB8040
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] KVM: vmx, svm, mmu: Process MMIO during event
+ delivery
+To: Sean Christopherson <seanjc@google.com>, Ivan Orlov <iorlov@amazon.com>
+Cc: bp@alien8.de, dave.hansen@linux.intel.com, mingo@redhat.com,
+ pbonzini@redhat.com, shuah@kernel.org, tglx@linutronix.de, hpa@zytor.com,
+ kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, x86@kernel.org, jalliste@amazon.com,
+ nh-open-source@amazon.com, pdurrant@amazon.co.uk
+References: <20240927161657.68110-1-iorlov@amazon.com>
+ <20240927161657.68110-3-iorlov@amazon.com> <Zwm9TmRpNY6EeGKu@google.com>
+Content-Language: en-US
+From: Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <Zwm9TmRpNY6EeGKu@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 16, 2024 at 04:16:17PM -0400, Peter Xu wrote:
+On 10/12/24 01:05, Sean Christopherson wrote:
 > 
-> Is there chance that when !CoCo will be supported, then external modules
-> (e.g. VFIO) can reuse the old user mappings, just like before gmemfd?
+>> +			 * without VMM intervention, so return a corresponding internal error
+>> +			 * instead (otherwise, vCPU will fall into infinite loop trying to
+>> +			 * deliver the event again and again).
+>> +			 */
+>> +			if (error_code & PFERR_EVT_DELIVERY) {
 > 
-> To support CoCo, I understand gmem+offset is required all over the places.
-> However in a non-CoCo context, I wonder whether the other modules are
-> required to stick with gmem+offset, or they can reuse the old VA ways,
-> because how it works can fundamentally be the same as before, except that
-> the folios now will be managed by gmemfd.
+> Hmm, I'm 99% certain handling error in this location is wrong, and I'm also pretty
+> sure it's unnecessary.  Or rather, the synthetic error code is unnecessary.
+> 
+> It's wrong because this path specifically handles "cached" MMIO, i.e. emulated
+> MMIO that is triggered by a special MMIO SPTE.  KVM should punt to userspace on
+> _any_ MMIO emulation.  KVM has gotten away with the flaw because SVM is completely
+> broken, and VMX can always generate reserved EPTEs.  But with SVM, on CPUs with
+> MAXPHYADDR=52, KVM can't generate a reserved #PF, i.e. can't do cached MMIO, and
+> so I'm pretty sure your test would fail on those CPUs since they'll never come
+> down this path.
+> 
 
-My intention with iommufd was to see fd + offest as the "new" way
-to refer to all guest memory and discourage people from using VMA
-handles.
+Ah, alright, I see... Probably, I need to test the next version with 
+enable_mmio_caching=false as well.
 
-Jason
+> Heh, though I bet the introduction of RET_PF_WRITE_PROTECTED has regressed shadow
+> paging on CPUs with PA52.
+> 
+
+Is it because it doesn't process write-protected gfn correctly if it is 
+in MMIO range when mmio caching is disabled?
+
+> Anyways, the synthetic PFERR flag is unnecessary because the information is readily
+> available to {vmx,svm}_check_emulate_instruction().  Ha!  And EMULTYPE_WRITE_PF_TO_SP
+> means vendor code can even precisely identify MMIO.
+> 
+
+Hmm, do you mean EMULTYPE_PF? It looks like EMULTYPE_WRITE_PF_TO_SP has 
+nothing to do with MMIO...
+
+I thought about processing the error in check_emulate_instruction as it 
+seems logical, however I hadn't found a way to detect MMIO without page 
+walking on SVM. I'll validate that EMULTYPE_PF gets set in all of the 
+MMIO cases and move the handling into this function in V2 if it works.
+
+> I think another X86EMUL_* return type is needed, but that's better than a synthetic
+> #PF error code flag.
+> 
+
+If I understand correctly, you suggest returning this new 
+X86EMUL_<something> code from {svm,vmx}_check_emulate_instruction and 
+process it in the common code, right? I agree that it's much better than 
+handling the error in MMU code. We are gonna return this return type 
+from vendor code and handle it in the common code this way, which is neat!
+
+>>   
+>> -	/*
+>> -	 * Note:
+>> -	 * Do not try to fix EXIT_REASON_EPT_MISCONFIG if it caused by
+>> -	 * delivery event since it indicates guest is accessing MMIO.
+>> -	 * The vm-exit can be triggered again after return to guest that
+>> -	 * will cause infinite loop.
+>> -	 */
+>>   	if ((vectoring_info & VECTORING_INFO_VALID_MASK) &&
+>>   	    (exit_reason.basic != EXIT_REASON_EXCEPTION_NMI &&
+>>   	     exit_reason.basic != EXIT_REASON_EPT_VIOLATION &&
+>>   	     exit_reason.basic != EXIT_REASON_PML_FULL &&
+>>   	     exit_reason.basic != EXIT_REASON_APIC_ACCESS &&
+>>   	     exit_reason.basic != EXIT_REASON_TASK_SWITCH &&
+>> -	     exit_reason.basic != EXIT_REASON_NOTIFY)) {
+>> +	     exit_reason.basic != EXIT_REASON_NOTIFY &&
+>> +	     exit_reason.basic != EXIT_REASON_EPT_MISCONFIG)) {
+> 
+> Changing the behavior of EPT_MISCONFIG belongs in a separate commit.
+> 
+
+I will extract the vmx-specific changes into separate commit in V2, thanks!
+
+> Huh, and that's technically a bug fix.  If userspace _creates_ a memslot, KVM
+> doesn't eagerly zap MMIO SPTEs and instead relies on vcpu_match_mmio_gen() to
+> force kvm_mmu_page_fault() down the actual page fault path.  If the guest somehow
+> manages to generate an access to the new page while vectoring an event, KVM will
+> spuriously exit to userspace instead of trying to fault-in the new page.
+> 
+> It's _ridiculously_ contrived, but technically a bug.
+> 
+
+That's amazing, I finally introduced an unintentional bugfix (usually 
+it's other way around) :D
+
+> Ugh, and the manual call to vmx_check_emulate_instruction() in handle_ept_misconfig()
+> is similarly flawed, though encountering that is even more contrived as that only
+> affects accesses from SGX enclaves.
+> 
+> Hmm, and looking at all of this, SVM doesn't take advantage of KVM_FAST_MMIO_BUS.
+> Unless I'm forgetting some fundamental incompatibility, SVM can do fast MMIO so
+> long as next_rip is valid.
+> 
+> Anyways, no need to deal with vmx_check_emulate_instruction() or fast MMIO, I'll
+> tackle that in a separate series.  But for this series, please do the EPT misconfig
+> in a separate patch from fixing SVM.  E.g. extract the helper, convert VMX to the
+> new flow, and then teach SVM to do the same.
+> 
+
+Hmm, implementing KVM_FAST_MMIO_BUS for SVM sounds like an interesting 
+thing to do, please let me know if I could help. By the way, why can't 
+we move the call to kvm_io_bus_write into the common code (e.g. MMU)? It 
+would remove the need of implementing KVM_FAST_MMIO_BUS specifically for 
+each vendor.
+
+>>   		gpa_t gpa = vmcs_read64(GUEST_PHYSICAL_ADDRESS);
+>> -		bool is_mmio = exit_reason.basic == EXIT_REASON_EPT_MISCONFIG;
+>> -
+> 
+> Blank newline after variable declarations.
+> 
+>> -		kvm_prepare_ev_delivery_failure_exit(vcpu, gpa, is_mmio);
+>> +		kvm_prepare_ev_delivery_failure_exit(vcpu, gpa, false);
+>>   		return 0;
+>>   	}
+> 
+> All in all, I think this is the basic gist?  Definitely feel free to propose a
+> better name than X86EMUL_UNHANDLEABLE_VECTORING.
+> 
+
+It sounds OK, but maybe something more precise would work, like 
+X86EMUL_VECTORING_IO_NEEDED (by analogy with X86EMUL_IO_NEEDED)?
+
+Thanks a lot for the review.
+
+-- 
+Kind regards,
+Ivan Orlov
 
