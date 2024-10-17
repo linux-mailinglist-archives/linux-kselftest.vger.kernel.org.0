@@ -1,118 +1,139 @@
-Return-Path: <linux-kselftest+bounces-20053-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-20054-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E7269A2E6C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 22:22:57 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08D329A2E77
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 22:27:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F58C1C21A94
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 20:22:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8E01B20FA1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Oct 2024 20:27:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D6641DFD9B;
-	Thu, 17 Oct 2024 20:22:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2203227BBC;
+	Thu, 17 Oct 2024 20:27:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GQMUgsim"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZYzJStJq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 854411D07B0;
-	Thu, 17 Oct 2024 20:22:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D1F21D198
+	for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 20:27:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729196573; cv=none; b=mAw4SHo1CvOdbn/IpLOzE8kIL6+GICjrUQJYsAM47IZGuvFaP2jEQ6NnNA7nksJ/g0ljlvZIdjTEqNz8HKKdPkUM7x1xRfc7Jog68I5XCW1xzuzFeiydcTcpd4fd34QJYL0RzZm0QnyTpPEUznkrtzOLg6P75qYnkOM81WroRNU=
+	t=1729196846; cv=none; b=CgpjvbWg/yvyVb12Gh/K3yWxArXMLcGL5cFZKZzkxg2W62MlPJlWXTPXwXdBA6am773z+6iky4wNlyiANq706/qZjTmau6c/E0+nXgig4VQiIAoBgzC9Cylgq03O+3snrckk3qMYPnIJF/Z6RROPlfJYbidGbiMkcMzDtwBghAg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729196573; c=relaxed/simple;
-	bh=aiLEByOVnwOznKJHOUWBXqp2FuKLx82PDD5OULTXF+U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IfQcKenyvdiV4yDccn40jTtg6Mi1HOqnQGegXqQDSDnjrNmCKfYaAmwWonvuEYsBd7bEzOP3d4D+DMw41cSXNYsmd1Qjs3g1tDjVQhNFWEJA/Ty/BTkS9jj6uNlU3GAzibOSlhARMZfa84greeVtvB2npKzc4a30zeGBlvMXP9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GQMUgsim; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729196569; x=1760732569;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aiLEByOVnwOznKJHOUWBXqp2FuKLx82PDD5OULTXF+U=;
-  b=GQMUgsimNtpg5kYwy1DW7fZVhdlflETSTQDoL2KtZy5Akt0xN/L7HStG
-   XWFcncj5zWyfIHANzuMiZMo64KhfU6+7uMezV9XnG/SPlCGMTG/4zALBr
-   86zBeIBwkpXGXfViuqSRRf8KhaslnpbWyQERG290MKuMkkFnlh6/dyl3p
-   unyhO05MRvpCTXsUQw42S55jEQp8eru/v66V+MPuYwlwKfJDN6yFFxTgS
-   BH+irHJJKXSlzNcEkeLP0SyYC0JLy2aSFdVmixrKnvHdqbXQaei4g2AZZ
-   94X0EojMZvYQFssUNz2sxNqVn7tlwS6M7qyIzc+TEWf0EVvbTTuduMqGr
-   w==;
-X-CSE-ConnectionGUID: EUnMDDm2RLOrROj+8u4tGw==
-X-CSE-MsgGUID: NA65gI0CS3qxAlbv8evroA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="28497493"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="28497493"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2024 13:22:49 -0700
-X-CSE-ConnectionGUID: UqZb50TSRDiZHsUrZPYrnQ==
-X-CSE-MsgGUID: +kkSlPidR6SXJSmZY8eUbw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,211,1725346800"; 
-   d="scan'208";a="78804674"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 17 Oct 2024 13:22:47 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t1X1A-000MtK-0o;
-	Thu, 17 Oct 2024 20:22:44 +0000
-Date: Fri, 18 Oct 2024 04:22:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Li Zhijian <lizhijian@fujitsu.com>, linux-kselftest@vger.kernel.org,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-kernel@vger.kernel.org, Li Zhijian <lizhijian@fujitsu.com>
-Subject: Re: [PATCH 1/3] selftests: Add a few missing gitignore files
-Message-ID: <202410180306.uMloezUi-lkp@intel.com>
-References: <20241015010817.453539-1-lizhijian@fujitsu.com>
+	s=arc-20240116; t=1729196846; c=relaxed/simple;
+	bh=XQQrB+BqmcD4LcSj1KMeDy2opfoF996hSV6qgCl8kak=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MWNA25VdFfBTiMU2xjatxPbvcExTt2y2qRhaLwZB82bE7e/hq78iB1B92CX4GKC6TGylVpk7t7kT8n3fmmMax8BvCXgA6pbNf2Lnh82ZDqPnkIJ3F1Xfngsfnz5VedDsx+321sH7BXO/bltPJ4WoCNTB2itQCGjjCxwn4g3HZ20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZYzJStJq; arc=none smtp.client-ip=209.85.166.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-8323b555a6aso80710739f.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Oct 2024 13:27:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1729196840; x=1729801640; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0S5MPorG8STFHi4ZHKupmmCHSXBZxKErXkagXcshGng=;
+        b=ZYzJStJqb8QBz8xp4UUPqApOzSoa9HBP7GODeDAfS8laRUJgPVOf5bESi2ZMkFvGo5
+         7IdAnYtwRZTzjmHPG3BSMW4+KqkKoLnI9CDFPOPaWd8O8diqquqmj8R6/LOFkmE87s5b
+         uwLVT59wXfAkEojCH0+2ENv6RRIdd+VtC1N6U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729196840; x=1729801640;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0S5MPorG8STFHi4ZHKupmmCHSXBZxKErXkagXcshGng=;
+        b=HgR96IlL0FdfCMJRishYmnWgmr3c/vsaPRZtp1tMmnfxOI/g2S89IO4kVYHEOd9sVn
+         yZpBBZB9NzYW4NspYrainSwQtNlz29KFLOFSmUWBStQxwW67hUcVD+xRWjr6uQH0+e2p
+         /9YXesMo3jOIzaUoDOsJSqlNkUYmlV7RhPYadi/3/McrKQLaBHclugbYuX6zuze6D2Nt
+         oO4rAIxG9RcRmD0M/IIEai3Wh5AB0nSbP8l/K1MwQvngUVZWTmQZm3GuFuGCWbmL4L2o
+         8arLnJ2vfEw3z7TzNFKtXq6JQsat0W4KuYWQN3xc41U4SFU6LwjgPxoWAejfmgB/gtmk
+         aSjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXG5RnQn5oecjxVFbYB//8z6q3IjW9GD60VctFICbDU3KpYInmkGlXIN6J3wJtUNZylxUE5sX30l6Ok1yNAz2U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyWy8tQzvoZNILD9zvuOh4Acm6ucweEP6r5hCWgxywW0pVpN9h
+	9RL3MUehURardAmhKO66/lNsKwvAf2cMSmDsLLttOVh9Osu695Fc2CxO/bMh+do=
+X-Google-Smtp-Source: AGHT+IGDaL6jHQzbs+8GZfOyqS4uzH8LkR/xzgp5DkEAqRKTqgwzskUM+ylwLNVAshxcMDeXjcSh1Q==
+X-Received: by 2002:a05:6602:6007:b0:83a:b188:7a4d with SMTP id ca18e2360f4ac-83aba3054b7mr10651939f.0.1729196839721;
+        Thu, 17 Oct 2024 13:27:19 -0700 (PDT)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4dc10c67b05sm41578173.157.2024.10.17.13.27.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 17 Oct 2024 13:27:19 -0700 (PDT)
+Message-ID: <878d5f26-ef05-44f4-93e8-01f66088c0cc@linuxfoundation.org>
+Date: Thu, 17 Oct 2024 14:27:18 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241015010817.453539-1-lizhijian@fujitsu.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] kunit: qemu_configs: add LoongArch config
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow
+ <davidgow@google.com>, Rae Moar <rmoar@google.com>
+Cc: loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241014-kunit-loongarch-v1-0-1699b2ad6099@linutronix.de>
+ <20241014-kunit-loongarch-v1-2-1699b2ad6099@linutronix.de>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20241014-kunit-loongarch-v1-2-1699b2ad6099@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Li,
+Hi Thomas,
 
-kernel test robot noticed the following build warnings:
+On 10/14/24 05:36, Thomas Weißschuh wrote:
+> Add a basic config to run kunit tests on LoongArch.
+> This requires QEMU 9.1.0 or later for the necessary direct kernel boot
+> support.
+> 
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> ---
+>   tools/testing/kunit/qemu_configs/loongarch.py | 16 ++++++++++++++++
+>   1 file changed, 16 insertions(+)
+> 
+> diff --git a/tools/testing/kunit/qemu_configs/loongarch.py b/tools/testing/kunit/qemu_configs/loongarch.py
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..e7bb7c07819677dfdefac012821a732555813cae
+> --- /dev/null
+> +++ b/tools/testing/kunit/qemu_configs/loongarch.py
 
-[auto build test WARNING on shuah-kselftest/next]
-[also build test WARNING on shuah-kselftest/fixes rafael-pm/linux-next rafael-pm/bleeding-edge tiwai-sound/for-next tiwai-sound/for-linus netfilter-nf/main linus/master v6.12-rc3]
-[cannot apply to akpm-mm/mm-everything nf-next/master next-20241017]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Missing SPDX-License-Identifier.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Li-Zhijian/selftests-net-Fix-ns-XXXXXX-not-cleanup/20241015-091039
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
-patch link:    https://lore.kernel.org/r/20241015010817.453539-1-lizhijian%40fujitsu.com
-patch subject: [PATCH 1/3] selftests: Add a few missing gitignore files
-config: x86_64-kexec (https://download.01.org/0day-ci/archive/20241018/202410180306.uMloezUi-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241018/202410180306.uMloezUi-lkp@intel.com/reproduce)
+> @@ -0,0 +1,16 @@
+> +from ..qemu_config import QemuArchParams
+> +
+> +QEMU_ARCH = QemuArchParams(linux_arch='loongarch',
+> +			   kconfig='''
+> +CONFIG_EFI_STUB=n
+> +CONFIG_PCI_HOST_GENERIC=y
+> +CONFIG_SERIAL_8250=y
+> +CONFIG_SERIAL_8250_CONSOLE=y
+> +CONFIG_SERIAL_OF_PLATFORM=y
+> +''',
+> +			   qemu_arch='loongarch64',
+> +			   kernel_path='arch/loongarch/boot/vmlinux.elf',
+> +			   kernel_command_line='console=ttyS0',
+> +			   extra_qemu_params=[
+> +					   '-machine', 'virt',
+> +					   '-cpu', 'max',])
+> 
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202410180306.uMloezUi-lkp@intel.com/
+Please send v2 with all the reviewed by tags. If there
+is a resend 3.4 and 4/4 in this series, send them.
 
-All warnings (new ones prefixed by >>):
+thanks,
+-- Shuah
 
-   tools/testing/selftests/arm64/tags/.gitignore: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/arm64/tags/Makefile: warning: ignored by one of the .gitignore files
-   tools/testing/selftests/arm64/tags/tags_test.c: warning: ignored by one of the .gitignore files
->> tools/testing/selftests/mm/pkey_sighandler_tests.c: warning: ignored by one of the .gitignore files
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
